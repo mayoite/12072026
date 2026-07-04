@@ -59,7 +59,7 @@ export type Open3dProjectAction = {
 
 export function activeFloorOrThrow(project: Open3dProject) {
   const floor = project.floors.find((candidate) => candidate.id === project.activeFloorId);
-  if (!floor) throw new Error("No active floor in project");
+  if (!floor) throw new Error("Active floor not found");
   return floor;
 }
 

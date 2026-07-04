@@ -4,6 +4,7 @@ import type {
   Open3dWall,
   Open3dDisplayUnit,
 } from "../model/types";
+import { mmToDisplayValue, formatFeetAndInches } from "../model/units";
 
 /**
  * Summary of a project's current state for AI analysis.
@@ -314,8 +315,6 @@ export function createAiPrivacyNotice(): { privacy: string; retention: string } 
     retention: "AI-generated content is not stored. Each suggestion is independent and based on the current project state.",
   };
 }
-
-import { mmToDisplayValue, formatFeetAndInches } from "../model/units";
 
 /**
  * Formats a dimension string with explicit units.

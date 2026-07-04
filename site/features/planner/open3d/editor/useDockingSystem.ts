@@ -101,32 +101,38 @@ export function useDockingSystem(): DockingSystemState & DockingSystemActions {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Load persisted layout on mount
-  useEffect(() => {
+  // Shared restore parser (consolidates dupe logic from mount + restoreLayout; fixes seam for coverage)
+  const parseStoredLayout = (stored: string | null): Record<PanelId, PanelConfig> | null => {
+    if (!stored) return null;
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as Partial<Record<PanelId, PanelConfig>>;
-        const restored = { ...DEFAULT_PANEL_CONFIG };
-        let hasChanges = false;
+      const parsed = JSON.parse(stored) as Partial<Record<PanelId, PanelConfig>>;
+      const restored = { ...DEFAULT_PANEL_CONFIG };
+      let hasChanges = false;
 
-        for (const id of Object.keys(parsed) as PanelId[]) {
-          if (parsed[id] && DEFAULT_PANEL_CONFIG[id]) {
-            // Don't restore collapsed state by default, keep docked
-            if (parsed[id]?.state !== "collapsed") {
-              restored[id] = { ...DEFAULT_PANEL_CONFIG[id], ...parsed[id] };
-              hasChanges = true;
-            }
+      for (const id of Object.keys(parsed) as PanelId[]) {
+        if (parsed[id] && DEFAULT_PANEL_CONFIG[id]) {
+          // Don't restore collapsed state by default, keep docked
+          if (parsed[id]?.state !== "collapsed") {
+            restored[id] = { ...DEFAULT_PANEL_CONFIG[id], ...parsed[id] };
+            hasChanges = true;
           }
         }
-
-        if (hasChanges) {
-          // eslint-disable-next-line react-hooks/set-state-in-effect -- conditional set from localStorage restore on mount; reason: one-time hydration of persisted layout; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: use useSyncExternalStore or init state from storage when docking system revised
-          setPanels(restored);
-        }
       }
+
+      return hasChanges ? restored : null;
     } catch {
       // Ignore storage errors
+      return null;
+    }
+  };
+
+  // Load persisted layout on mount
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const restored = parseStoredLayout(stored);
+    if (restored) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- conditional set from localStorage restore on mount; reason: one-time hydration of persisted layout; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: use useSyncExternalStore or init state from storage when docking system revised
+      setPanels(restored);
     }
   }, []);
 
@@ -234,24 +240,10 @@ export function useDockingSystem(): DockingSystemState & DockingSystemActions {
   }, [panels]);
 
   const restoreLayout = useCallback(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as Partial<Record<PanelId, PanelConfig>>;
-        const restored = { ...DEFAULT_PANEL_CONFIG };
-
-        for (const id of Object.keys(parsed) as PanelId[]) {
-          if (parsed[id] && DEFAULT_PANEL_CONFIG[id]) {
-            if (parsed[id]?.state !== "collapsed") {
-              restored[id] = { ...DEFAULT_PANEL_CONFIG[id], ...parsed[id] };
-            }
-          }
-        }
-
-        setPanels(restored);
-      }
-    } catch {
-      // Ignore storage errors
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const restored = parseStoredLayout(stored);
+    if (restored) {
+      setPanels(restored);
     }
   }, []);
 

@@ -14,6 +14,11 @@ import type * as THREE from "three";
 
 type ThreeModule = typeof THREE;
 
+/** Shared error msg extraction (consolidates duplicated ternary for coverage + consistency). */
+function toErrorMessage(err: unknown, fallback: string): string {
+  return err instanceof Error ? err.message : fallback;
+}
+
 /**
  * Inner 3D viewer props.
  */
@@ -63,7 +68,7 @@ export function ThreeViewerInner({
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to load Three.js");
+          setError(toErrorMessage(err, "Failed to load Three.js"));
         }
       }
     }
@@ -182,7 +187,7 @@ export function ThreeViewerInner({
       };
     } catch (err) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- set error state from sync init catch inside effect setup; reason: cannot throw in effect, must surface to render fallback; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: extract init to async fn + useEffect cleanup or error boundary when 3d viewer refactored
-      setError(err instanceof Error ? err.message : "Failed to initialize Three.js");
+      setError(toErrorMessage(err, "Failed to initialize Three.js"));
     }
   }, [three, backgroundColor, enableShadows]);
 

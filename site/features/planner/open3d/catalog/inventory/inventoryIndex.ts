@@ -21,6 +21,7 @@ import type {
   Open3dRoomTag,
   Open3dStyleTag,
 } from "../catalogTypes";
+import { tokenize } from "../catalogClient";
 
 // ── Synonym map ──
 
@@ -52,29 +53,6 @@ function expandSynonyms(token: string): string[] {
     result.push(...synonyms);
   }
   return result;
-}
-
-// ── Tokenization ──
-
-const TOKEN_PATTERN = /[\wÀ-ÿ]+/g;
-
-function tokenize(text: string): string[] {
-  const tokens: string[] = [];
-  const matches = text.toLowerCase().match(TOKEN_PATTERN);
-  if (matches) {
-    for (const m of matches) {
-      if (m.length >= 2) {
-        tokens.push(m);
-        // Prefix tokens for typo tolerance (3-char minimum)
-        if (m.length > 3) {
-          for (let i = 3; i <= m.length; i++) {
-            tokens.push(m.slice(0, i));
-          }
-        }
-      }
-    }
-  }
-  return tokens;
 }
 
 // ── Relevance scoring ──

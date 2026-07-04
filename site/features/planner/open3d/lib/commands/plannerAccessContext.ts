@@ -1,7 +1,10 @@
 import { isCommandBlocked } from "./permission";
 
-export type PlannerAccessContext = "guest" | "authenticated" | "admin";
+// Consolidated: import canonical type from model to eliminate duplicate definition
+// (mirrors site/features/planner/model/plannerPermissions.ts)
+import type { PlannerAccessContext } from "@/features/planner/model/plannerPermissions";
 
+export type { PlannerAccessContext };
 export type PlannerCommandKey =
   | "draw-wall"
   | "cancel"

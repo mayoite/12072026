@@ -632,7 +632,7 @@ export function parseBlockDescriptor(
     return open3dErr<BlockDescriptor, Open3dDescriptorError>({
       kind: "invalid",
       code: "422.invalid",
-      fieldPath: "",
+      fieldPath: "slug:primitive",
       message: "BlockDescriptor input must be a JSON object",
       issues: [{ path: "", message: "expected object" }],
     });
@@ -707,7 +707,7 @@ export function freezeFreshDescriptor(
     return open3dErr<BlockDescriptor, Open3dDescriptorError>({
       kind: "invalid",
       code: "422.invalid",
-      fieldPath: "",
+      fieldPath: "slug:primitive",
       message: "BlockDescriptor input must be a JSON object",
       issues: [{ path: "", message: "expected object" }],
     });

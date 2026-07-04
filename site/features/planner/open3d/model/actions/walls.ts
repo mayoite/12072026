@@ -18,9 +18,9 @@ export function addOpen3dWall(
   idFactory: Open3dIdFactory,
   now = new Date().toISOString(),
 ): Open3dProject {
-  activeFloorOrThrow(project);
+  const activeFloor = activeFloorOrThrow(project);
   const floorIndex = project.floors.findIndex(
-    (floor) => floor.id === project.activeFloorId,
+    (floor) => floor.id === activeFloor.id,
   );
 
   const wall: Open3dWall = {

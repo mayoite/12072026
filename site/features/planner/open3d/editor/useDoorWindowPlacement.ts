@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import type { Open3dDoor, Open3dProject, Open3dWindow } from "../model/types";
-import { addDoor, addWindow, removeDoor, removeWindow, updateDoor, updateWindow } from "../model/operations/pureActions";
+import { removeDoor, removeWindow, updateDoor, updateWindow } from "../model/operations/pureActions";
 
 export type DoorType = Open3dDoor["type"];
 export type WindowType = Open3dWindow["type"];
@@ -61,13 +61,11 @@ export function useDoorWindowPlacement(project: Open3dProject | null) {
       if (!project) return null;
 
       if (placementMode.mode === "place-door") {
-        addDoor(project, wallId, clickPosition, placementMode.doorType);
-        // The caller should use result.project to update the project
+        // Note: addDoor/addWindow are pure (return result); call here was no-op seam (no reassignment), info returned for caller to apply. Removed dead call.
         return { wallId, position: clickPosition, type: placementMode.doorType };
       }
 
       if (placementMode.mode === "place-window") {
-        addWindow(project, wallId, clickPosition, placementMode.windowType);
         return { wallId, position: clickPosition, type: placementMode.windowType };
       }
 

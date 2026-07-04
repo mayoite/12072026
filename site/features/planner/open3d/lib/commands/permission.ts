@@ -1,25 +1,12 @@
 import type { PlannerAccessContext } from "./plannerAccessContext";
 import type { PlannerCommandKey } from "./plannerAccessContext";
 
-// Local permission types - mirrors site/features/planner/model/plannerPermissions.ts
-// Staging is isolated from site until promotion, so we duplicate the types here.
-export type PlannerActionKey =
-  | "view"
-  | "select"
-  | "mutate"
-  | "persist"
-  | "import"
-  | "export"
-  | "publish"
-  | "share";
+// Consolidated from canonical model (site/features/planner/model/plannerPermissions.ts)
+// Removed local duplicate type + blocked list const (exact match); use shared to dedup logic/strings.
+import type { PlannerActionKey } from "@/features/planner/model/plannerPermissions";
+import { PLANNER_GUEST_BLOCKED_ACTIONS } from "@/features/planner/model/plannerPermissions";
 
-const GUEST_BLOCKED_ACTIONS: readonly PlannerActionKey[] = [
-  "persist",
-  "import",
-  "export",
-  "publish",
-  "share",
-] as const;
+const GUEST_BLOCKED_ACTIONS: readonly PlannerActionKey[] = PLANNER_GUEST_BLOCKED_ACTIONS;
 
 /**
  * Maps command IDs to planner action keys.

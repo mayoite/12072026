@@ -202,3 +202,5 @@ export function addAllowedOrigin(pattern: string): void {
 export function getAllowedOrigins(): readonly string[] {
   return [...allowedOriginPatterns];
 }
+
+

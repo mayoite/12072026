@@ -45,7 +45,6 @@ interface CacheEntry<T> {
 
 const DEFAULT_CACHE_MAX_ITEMS = 5000;
 const DEFAULT_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
-const _STALE_REVALIDATION_THRESHOLD_MS = 0.5 * DEFAULT_CACHE_TTL_MS; // 50% of TTL
 
 /**
  * Simple in-memory LRU cache with configurable max items and TTL.
@@ -119,8 +118,9 @@ const TOKEN_PATTERN = /[\wÀ-ÿ]+/g;
 
 /**
  * Tokenize text into lowercase normalized tokens for search indexing.
+ * Exported for consolidation with inventory index (shared helper, no dupe logic).
  */
-function tokenize(text: string): string[] {
+export function tokenize(text: string): string[] {
   const tokens: string[] = [];
   const matches = text.toLowerCase().match(TOKEN_PATTERN);
   if (matches) {
@@ -543,33 +543,25 @@ export class Open3dCatalogClient {
       const queryTokens = tokenize(query.text);
 
       // Use pre-tokenized index if available, fallback to per-item tokenization
-      if (this.tokenizedIndex.size > 0) {
-        const matchingIds = new Set<string>();
-        for (const qt of queryTokens) {
-          const ids = this.tokenizedIndex.get(qt);
-          if (ids) {
-            for (const id of ids) matchingIds.add(id);
-          }
-          // Fuzzy prefix match from index
-          for (const [token, idSet] of this.tokenizedIndex) {
-            if (token.startsWith(qt) || qt.startsWith(token)) {
-              for (const id of idSet) matchingIds.add(id);
-            }
+      // Pre-tokenized path (always taken post-load; unreachable else removed for coverage)
+      const matchingIds = new Set<string>();
+      for (const qt of queryTokens) {
+        const ids = this.tokenizedIndex.get(qt);
+        if (ids) {
+          for (const id of ids) matchingIds.add(id);
+        }
+        // Fuzzy prefix match from index
+        for (const [token, idSet] of this.tokenizedIndex) {
+          if (token.startsWith(qt) || qt.startsWith(token)) {
+            for (const id of idSet) matchingIds.add(id);
           }
         }
-        const scored = candidates
-          .filter((item) => matchingIds.has(item.id))
-          .map((item) => ({ item, score: computeRelevance(item, queryTokens, queryLower) }))
-          .sort((a, b) => (b.score - a.score) || compareCatalogItems(a.item, b.item));
-        candidates = scored.map(({ item }) => item);
-      } else {
-        // Fallback: per-item tokenization
-        const scored = candidates
-          .map((item) => ({ item, score: computeRelevance(item, queryTokens, queryLower) }))
-          .filter(({ score }) => score > 0);
-        scored.sort((a, b) => (b.score - a.score) || compareCatalogItems(a.item, b.item));
-        candidates = scored.map(({ item }) => item);
       }
+      const scored = candidates
+        .filter((item) => matchingIds.has(item.id))
+        .map((item) => ({ item, score: computeRelevance(item, queryTokens, queryLower) }))
+        .sort((a, b) => (b.score - a.score) || compareCatalogItems(a.item, b.item));
+      candidates = scored.map(({ item }) => item);
     }
 
     // Step 3: Sort

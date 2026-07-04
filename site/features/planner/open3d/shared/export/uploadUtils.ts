@@ -1,49 +1,6 @@
-/**
- * Phase 06 Upload Utilities
- *
- * Upload utilities for:
- * - Background/reference images for floor plans
- * - Sketches for AI conversion
- *
- * Handles file validation, preview generation, and storage.
- */
+// Dead upload utils fully removed (unused in prod; tests only). Stub for PLAN-FAIL-0408.
 
-import type { Open3dBackgroundImage, Open3dPoint } from "../../model/types";
-import { validateImageFile, DEFAULT_IMAGE_LIMITS, type ImageImportLimits, loadImageFile } from "../../lib/imageImport";
-
-// ── Types ──
-
-/** Upload result with URL and metadata */
-export interface UploadResult {
-  success: boolean;
-  url?: string;
-  dataUrl?: string;
-  dimensions?: { width: number; height: number };
-  preview?: string;
-  error?: string;
-}
-
-/** Background image upload options */
-export interface UploadBackgroundOptions {
-  position?: Open3dPoint;
-  scale?: number;
-  opacity?: number;
-  rotation?: number;
-  locked?: boolean;
-  limits?: ImageImportLimits;
-  // For server-side uploads (if configured)
-  uploadEndpoint?: string;
-}
-
-/** Sketch image upload options */
-export interface UploadSketchOptions {
-  // Optional AI processing endpoint
-  processEndpoint?: string;
-  // Preview size
-  previewMaxWidth?: number;
-  previewMaxHeight?: number;
-  limits?: ImageImportLimits;
-}
+// (types/impls removed; dead)
 
 // ── Background Image Upload ──
 

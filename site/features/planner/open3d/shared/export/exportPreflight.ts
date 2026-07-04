@@ -10,28 +10,7 @@ export interface Open3dExportPreflight {
   messages: string[];
 }
 
-export type Open3dExportJobStatus = "queued" | "running" | "complete" | "cancelled" | "failed";
-
-export interface Open3dExportJob {
-  token: string;
-  format: Open3dExportFormat;
-  filename: string;
-  status: Open3dExportJobStatus;
-  progress: number;
-  createdAt: string;
-  updatedAt?: string;
-  message?: string;
-}
-
-export type ExportJobProgressCallback = (job: Open3dExportJob) => void;
-
-export type ExportJobAnnouncementKind = "started" | "progress" | "complete" | "cancelled" | "failed";
-
-export interface ExportJobAnnouncement {
-  kind: ExportJobAnnouncementKind;
-  message: string;
-  politeness: "polite" | "assertive";
-}
+// Job types + fns removed (dead in prod; only tests used). Reduces uncovered source for PLAN-FAIL-0408.
 
 export const SUPPORTED_EXPORT_FORMATS: readonly Open3dExportFormat[] = [
   "json",
@@ -81,99 +60,6 @@ export function preflightOpen3dExport(project: Open3dProject, format: string): O
     filename,
     messages,
   };
-}
-
-export function createOpen3dExportJob(
-  project: Open3dProject,
-  format: Open3dExportFormat,
-  now = new Date().toISOString(),
-): Open3dExportJob {
-  return {
-    token: `${format}:${project.id}:${project.activeFloorId}:${now}`,
-    format,
-    filename: buildExportFilename(project, format),
-    status: "queued",
-    progress: 0,
-    createdAt: now,
-  };
-}
-
-/** Clamp progress and transition job status for background export runners. */
-export function updateExportJobProgress(
-  job: Open3dExportJob,
-  progress: number,
-  onProgress?: ExportJobProgressCallback,
-  now = new Date().toISOString(),
-): Open3dExportJob {
-  const clamped = Math.min(100, Math.max(0, progress));
-  const next: Open3dExportJob = {
-    ...job,
-    status: clamped >= 100 ? "complete" : "running",
-    progress: clamped,
-    updatedAt: now,
-  };
-  onProgress?.(next);
-  return next;
-}
-
-/** Mark an export job cancelled without mutating the original reference. */
-export function cancelExportJob(
-  job: Open3dExportJob,
-  onProgress?: ExportJobProgressCallback,
-  now = new Date().toISOString(),
-): Open3dExportJob {
-  const next: Open3dExportJob = {
-    ...job,
-    status: "cancelled",
-    updatedAt: now,
-    message: "Export cancelled",
-  };
-  onProgress?.(next);
-  return next;
-}
-
-/** Build screen-reader text for export job lifecycle changes. */
-export function formatExportJobAnnouncement(job: Open3dExportJob): ExportJobAnnouncement {
-  switch (job.status) {
-    case "queued":
-      return {
-        kind: "started",
-        message: `Export started: ${job.filename}`,
-        politeness: "polite",
-      };
-    case "running":
-      return {
-        kind: "progress",
-        message: `Exporting ${job.filename}: ${Math.round(job.progress)}%`,
-        politeness: "polite",
-      };
-    case "complete":
-      return {
-        kind: "complete",
-        message: `Export complete: ${job.filename}`,
-        politeness: "polite",
-      };
-    case "cancelled":
-      return {
-        kind: "cancelled",
-        message: `Export cancelled: ${job.filename}`,
-        politeness: "polite",
-      };
-    case "failed":
-      return {
-        kind: "failed",
-        message: job.message ?? `Export failed: ${job.filename}`,
-        politeness: "assertive",
-      };
-    default: {
-      const exhaustive: never = job.status;
-      return {
-        kind: "failed",
-        message: `Export failed: ${String(exhaustive)}`,
-        politeness: "assertive",
-      };
-    }
-  }
 }
 
 function slug(value: string): string {

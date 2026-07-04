@@ -41,18 +41,19 @@ export function createOpen3dGuestProjectRepository(): Open3dGuestProjectReposito
         return { project: importOpen3dProjectJson(json), recoveredFromBackup: false };
       } catch (error: unknown) {
         const backup = backups.get(projectId);
+        const getErr = (e: unknown) => (e instanceof Error ? e.message : "Project data is invalid.");
         if (!backup) {
           return {
             project: null,
             recoveredFromBackup: false,
-            error: error instanceof Error ? error.message : "Project data is invalid.",
+            error: getErr(error),
           };
         }
         try {
           return {
             project: importOpen3dProjectJson(backup),
             recoveredFromBackup: true,
-            error: error instanceof Error ? error.message : "Project data is invalid.",
+            error: getErr(error),
           };
         } catch {
           return { project: null, recoveredFromBackup: false, error: "Project and backup data are invalid." };

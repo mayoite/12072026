@@ -5,7 +5,7 @@
  * on default planner load. The 3D view is only loaded when explicitly requested.
  */
 
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import type { ReactNode } from "react";
 import type { Open3dProject } from "../model/types";
 import styles from "./threeLazyViewer.module.css";
@@ -112,9 +112,6 @@ class ViewerErrorBoundary extends React.Component<
     return this.props.children;
   }
 }
-
-// Need to import React for the class component
-import React from "react";
 
 /**
  * Lazy3DViewer - A lazy-loading wrapper for the 3D viewer.

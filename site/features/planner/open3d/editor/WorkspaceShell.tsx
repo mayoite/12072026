@@ -5,8 +5,7 @@ import { useDockingSystem, type PanelId } from "./useDockingSystem";
 import { PanelContainer } from "./PanelContainer";
 import { TopBar } from "./TopBar";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";
-import type { Open3dDisplayUnit, Open3dProject } from "../model/types";
-import { useWorkspaceCanvas } from "./useWorkspaceCanvas";
+import type { Open3dDisplayUnit } from "../model/types";
 import styles from "./workspace.module.css";
 
 export interface WorkspaceShellProps {
@@ -119,23 +118,8 @@ export function WorkspaceShell({
     [controlledViewMode, onViewModeChange],
   );
 
-  // Handle panel close - collapse it
-  const handlePanelClose = useCallback(
-    (id: PanelId) => {
-      if (viewportTier === "small" && (id === "left" || id === "right")) {
-        setActivePanel(null);
-        return;
-      }
-      if (activePanel === id) {
-        setActivePanel(null);
-      }
-      toggleCollapse(id);
-    },
-    [activePanel, setActivePanel, toggleCollapse, viewportTier],
-  );
-
-  // Handle panel minimize - also collapse
-  const handlePanelMinimize = useCallback(
+  // Handle panel collapse (covers both close and minimize; small viewport special-case + active reset + toggle)
+  const handlePanelCollapse = useCallback(
     (id: PanelId) => {
       if (viewportTier === "small" && (id === "left" || id === "right")) {
         setActivePanel(null);
@@ -299,8 +283,8 @@ export function WorkspaceShell({
             isOpen={resolvePanelOpen("left")}
             onUndock={() => undock("left")}
             onDock={() => dock("left")}
-            onClose={() => handlePanelClose("left")}
-            onMinimize={() => handlePanelMinimize("left")}
+            onClose={() => handlePanelCollapse("left")}
+            onMinimize={() => handlePanelCollapse("left")}
             onMove={(x, y) => move("left", x, y)}
             onResize={(w, h) => resize("left", w, h)}
             onFocus={() => setFocusedPanel("left")}
@@ -329,8 +313,8 @@ export function WorkspaceShell({
             isOpen={resolvePanelOpen("right")}
             onUndock={() => undock("right")}
             onDock={() => dock("right")}
-            onClose={() => handlePanelClose("right")}
-            onMinimize={() => handlePanelMinimize("right")}
+            onClose={() => handlePanelCollapse("right")}
+            onMinimize={() => handlePanelCollapse("right")}
             onMove={(x, y) => move("right", x, y)}
             onResize={(w, h) => resize("right", w, h)}
             onFocus={() => setFocusedPanel("right")}
@@ -354,8 +338,8 @@ export function WorkspaceShell({
             isOpen={resolvePanelOpen("bottom")}
             onUndock={() => undock("bottom")}
             onDock={() => dock("bottom")}
-            onClose={() => handlePanelClose("bottom")}
-            onMinimize={() => handlePanelMinimize("bottom")}
+            onClose={() => handlePanelCollapse("bottom")}
+            onMinimize={() => handlePanelCollapse("bottom")}
             onMove={(x, y) => move("bottom", x, y)}
             onResize={(w, h) => resize("bottom", w, h)}
             onFocus={() => setFocusedPanel("bottom")}
@@ -395,29 +379,4 @@ export function WorkspaceShell({
   );
 }
 
-export type WorkspaceShellWithBootstrapProps = Omit<WorkspaceShellProps, "projectName"> & {
-  projectName?: string;
-  initialProject?: Open3dProject;
-};
 
-/**
- * Test/story helper: owns a single `useWorkspaceCanvas` instance and passes
- * derived `projectName` into layout-only `WorkspaceShell`.
- */
-export function WorkspaceShellWithBootstrap({
-  projectName: projectNameProp,
-  initialProject,
-  ...shellProps
-}: WorkspaceShellWithBootstrapProps) {
-  const canvas = useWorkspaceCanvas({
-    projectName: projectNameProp ?? "Untitled",
-    initialProject,
-  });
-
-  return (
-    <WorkspaceShell
-      {...shellProps}
-      projectName={canvas.project.name}
-    />
-  );
-}
