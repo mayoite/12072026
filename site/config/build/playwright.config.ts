@@ -1,0 +1,62 @@
+import { defineConfig, devices } from "@playwright/test";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { loadEnvLocal } = require("../../scripts/loadEnvLocal.cjs");
+
+loadEnvLocal();
+
+const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3000";
+const isCI = !!process.env.CI;
+
+export default defineConfig({
+  testDir: "../../tests",
+  testMatch: ["**/*.spec.ts", "**/*.spec.tsx"],
+  testIgnore: ["**/*.test.ts", "**/*.test.tsx"],
+  outputDir: "../../../results/test-results",
+  fullyParallel: true,
+  workers: isCI ? 2 : 2,
+  timeout: 60_000,
+
+  // DYNAMIC CI FIX: 0 retries locally for fast feedback, 2 retries in CI to prevent flaky pipeline failures.
+  retries: isCI ? 2 : 0,
+
+  // DYNAMIC REPORTER: 'list' for terminals, 'html' for CI UI, and ALWAYS 'json' for the Ops Portal telemetry.
+  reporter: [
+    ["list"],
+    ["html", { outputFolder: "../../../results/playwright-report", open: "never" }],
+    ["json", { outputFile: "../../../results/audits/raw-playwright.json" }]
+  ],
+
+  use: {
+    baseURL,
+    trace: "on-first-retry",
+    navigationTimeout: 60_000,
+    actionTimeout: 15_000,
+  },
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.02,
+      animations: "disabled",
+    },
+  },
+  snapshotPathTemplate: "{testDir}/{testFilePath}-snapshots/{arg}{ext}",
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
+  ],
+  webServer: process.env.PLAYWRIGHT_BASE_URL
+    ? undefined
+    : {
+      // NEXT.JS FIX: Test against the production build to prevent JIT compilation timeouts.
+      command: "pnpm run build && pnpm run start",
+      url: baseURL,
+      timeout: 120000,
+      // Only reuse the server locally. In CI, we always want a fresh build.
+      reuseExistingServer: !isCI,
+      env: {
+        ...process.env,
+        NEXT_PUBLIC_PLANNER_DEV_TOOLS: "true",
+      },
+    },
+});

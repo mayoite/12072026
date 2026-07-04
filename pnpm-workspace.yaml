@@ -1,0 +1,32 @@
+packages:
+  - site
+  - site/tech-stack-generator
+
+allowBuilds:
+  '@firebase/util': true
+  '@parcel/watcher': true
+  '@percy/core': false
+  '@swc/core': true
+  canvas: true
+  core-js: true
+  es5-ext: true
+  esbuild: true
+  protobufjs: false
+  sharp: true
+  unrs-resolver: true
+  workerd: true
+
+minimumReleaseAgeExclude:
+  - '@types/node@26.1.0'
+
+onlyBuiltDependencies:
+  - "@firebase/util"
+  - "@parcel/watcher"
+  - "@swc/core"
+  - canvas
+  - core-js
+  - es5-ext
+  - esbuild
+  - sharp
+  - unrs-resolver
+  - workerd

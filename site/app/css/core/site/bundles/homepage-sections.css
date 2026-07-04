@@ -1,0 +1,6 @@
+/* Homepage route (/) only — carousel, trust KPIs, projects band, planner demo chrome */
+@reference "../../../index.css";
+@import "../routes/home/showcase-carousel.css";
+@import "../routes/home/projects.css";
+/* PlannerHeroDemo + tools-band proof cells (was in homepage-only.css before Batch 1) */
+@import "../../planner/landing/planner-landing.css";

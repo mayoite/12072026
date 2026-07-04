@@ -1,0 +1,35 @@
+@import "tailwindcss";
+@import "./core/tokens/theme.css";
+@import "./core/typography/type.css";
+@import "./core/utilities/layout.css";
+@import "./core/utilities/colors.css";
+@import "./core/utilities/schemes.css";
+@import "./core/utilities/buttons.css";
+@import "./core/utilities/badges.css";
+@import "./core/utilities/nav.css";
+@import "./core/utilities/misc.css";
+
+@import "./core/layout/app-shell.css";
+@import "./core/layout/marketing.css";
+
+/* shell chrome */
+@import "./core/chrome/shell/footer.css";
+@import "./core/chrome/shell/assistant.css";
+@import "./core/chrome/shell/assistant-bot.css";
+@import "./core/chrome/shell/quick-contact.css";
+@import "./core/chrome/shell/site-fabs.css";
+@import "./core/chrome/shell/cta.css";
+@import "./core/chrome/shell/workspace.css";
+@import "./core/chrome/shell/portal.css";
+@import "./core/chrome/shell/admin.css";
+@import "./core/chrome/shell/admin-pages.css";
+@import "./core/chrome/shell/nav.css";
+
+@import "./base/animations.css";
+@import "./core/components/buttons.css";
+@import "./core/components/cards.css";
+@import "./core/components/stats.css";
+@import "./core/components/client-badge.css";
+@import "./core/components/nav.css";
+@import "./core/components/custom.css";
+@import "./core/components/missing-components.css";

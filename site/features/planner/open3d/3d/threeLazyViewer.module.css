@@ -1,0 +1,57 @@
+.loading,
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.loading {
+  background: var(--surface-soft);
+  color: var(--text-muted);
+}
+
+.error {
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.errorDetail {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.retryButton {
+  margin-top: 0.25rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-danger);
+  color: var(--text-inverse);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.retryButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.viewerRoot {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface-panel);
+}
+

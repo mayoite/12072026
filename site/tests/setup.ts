@@ -1,0 +1,103 @@
+import "@testing-library/jest-dom/vitest";
+import { webcrypto } from "node:crypto";
+import { afterEach, vi } from "vitest";
+import { cleanup } from "@testing-library/react";
+import { MockNextImage } from "./helpers/mockNextImage";
+import { MockNextLink } from "./helpers/mockNextLink";
+
+// happy-dom has no Web Crypto; Node's implementation is test-only (never bundled for browser).
+if (!globalThis.crypto?.subtle) {
+  Object.defineProperty(globalThis, "crypto", {
+    value: webcrypto,
+    configurable: true,
+  });
+}
+
+// Cleanup DOM after each test
+afterEach(() => {
+  cleanup();
+});
+
+// Mock Next.js font modules — they use Node APIs unavailable in happy-dom
+vi.mock("next/font/local", () => ({
+  default: () => ({ className: "mock-font", style: { fontFamily: "mock" } }),
+}));
+vi.mock("next/font/google", () => ({
+  Inter: () => ({ className: "mock-font", style: { fontFamily: "mock" } }),
+  Outfit: () => ({ className: "mock-font", style: { fontFamily: "mock" } }),
+}));
+
+// server-only is a no-op in tests
+vi.mock("server-only", () => ({}));
+
+vi.mock("next/image", () => ({
+  default: MockNextImage,
+}));
+
+vi.mock("next/link", () => ({
+  default: MockNextLink,
+}));
+
+import enMessages from "../i18n/messages/en.json";
+
+vi.mock("next-intl", () => {
+  const getNestedValue = (obj: any, path: string) => {
+    return path.split('.').reduce((acc: any, part: string) => acc && acc[part], obj);
+  };
+
+  return {
+    useTranslations: (namespace?: string) => (key: string, values?: any) => {
+      const fullKey = namespace ? `${namespace}.${key}` : key;
+      let text = getNestedValue(enMessages, fullKey) || fullKey;
+      if (typeof text === 'string' && values) {
+        Object.entries(values).forEach(([k, v]) => {
+          text = (text as string).replace(`{${k}}`, String(v));
+        });
+      }
+      return text;
+    },
+    getTranslations: async (namespace?: string) => (key: string, values?: any) => {
+      const fullKey = namespace ? `${namespace}.${key}` : key;
+      let text = getNestedValue(enMessages, fullKey) || fullKey;
+      if (typeof text === "string" && values) {
+        Object.entries(values).forEach(([k, v]) => {
+          text = (text as string).replace(`{${k}}`, String(v));
+        });
+      }
+      return text;
+    },
+    useLocale: () => "en",
+    NextIntlClientProvider: ({ children }: any) => children,
+  };
+});
+
+vi.mock("next-intl/server", () => ({
+    getTranslations: async (namespace?: string) => {
+      const t = (key: string, values?: any) => {
+        const fullKey = namespace ? `${namespace}.${key}` : key;
+        let text = fullKey as string;
+        if (values) {
+          Object.entries(values).forEach(([k, v]) => {
+            text = text.replace(`{${k}}`, String(v));
+          });
+        }
+        return text;
+      };
+      (t as typeof t & { raw: (key: string) => unknown }).raw = (key: string) => {
+        const fullKey = namespace ? `${namespace}.${key}` : key;
+        const parts = fullKey.split(".");
+        let current: unknown = enMessages;
+        for (const part of parts) {
+          if (current && typeof current === "object" && part in (current as Record<string, unknown>)) {
+            current = (current as Record<string, unknown>)[part];
+          } else {
+            return [];
+          }
+        }
+        return current;
+      };
+      return t;
+    },
+  getMessages: async () => enMessages,
+  getLocale: async () => "en",
+}));

@@ -1,0 +1,61 @@
+@media (width <= 64rem) {
+  .command-strip {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .proof-heading,
+  .command-actions,
+  .command-search {
+    width: 100%;
+  }
+
+  .command-search {
+    grid-template-columns: auto minmax(var(--shell-rail-w), 1fr);
+  }
+
+  .command-results {
+    grid-column: 1 / -1;
+    max-width: 100%;
+  }
+}
+
+@media (width <= 48rem) {
+  .command-strip,
+  .diagnostics {
+    padding-inline: var(--space-3);
+  }
+
+  .canvas-region {
+    padding: var(--space-2);
+  }
+
+  canvas {
+    min-height: calc(var(--space-16) * 3);
+  }
+
+  .diagnostics figure {
+    display: none;
+  }
+
+  .canvas-help {
+    top: var(--space-4);
+    left: var(--space-4);
+  }
+
+  .geometry-summary {
+    right: var(--space-4);
+    bottom: var(--space-4);
+    max-width: calc(100% - var(--space-8));
+  }
+}
+
+@media (width <= 40rem) {
+  .command-actions button kbd {
+    display: none;
+  }
+
+  .diagnostics {
+    align-items: flex-start;
+  }
+}

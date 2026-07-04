@@ -1,0 +1,198 @@
+.canvasPane {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  background: #11100f;
+}
+
+.commandStrip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(16rem, 19rem);
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 1rem;
+  background: #1b1a19;
+  color: #fff;
+}
+
+.commandHeading {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.commandHeading h2 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.commandHeading span {
+  color: #c9c4be;
+  font-size: 0.72rem;
+}
+
+.commandActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.commandButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #3f3a35;
+  border-radius: 0.35rem;
+  background: #2a2826;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.commandButton:hover {
+  background: #36322f;
+}
+
+.commandButton kbd {
+  color: #8ec5ff;
+  font-size: 0.7rem;
+}
+
+.commandSearch {
+  display: grid;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.commandSearch span {
+  color: #fff;
+  font-size: 0.72rem;
+}
+
+.commandSearch input {
+  width: 100%;
+  min-height: 1.6rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid #c6c0b8;
+  border-radius: 0.15rem;
+  background: #fff;
+  color: #111;
+  font: inherit;
+}
+
+.canvasRegion {
+  position: relative;
+  min-height: 0;
+  padding: 0.75rem;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(188, 182, 174, 0.22) 1px, transparent 1px),
+    linear-gradient(rgba(188, 182, 174, 0.22) 1px, transparent 1px),
+    #f6f3ee;
+  background-size: 2.75rem 2.75rem;
+}
+
+.canvasRegionGrid {
+  background-image:
+    linear-gradient(90deg, rgba(188, 182, 174, 0.22) 1px, transparent 1px),
+    linear-gradient(rgba(188, 182, 174, 0.22) 1px, transparent 1px);
+}
+
+.canvasSurface {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(181, 175, 168, 0.55);
+  border-radius: 0.2rem;
+  background:
+    linear-gradient(90deg, rgba(188, 182, 174, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(188, 182, 174, 0.08) 1px, transparent 1px),
+    #f7f4ef;
+  background-size: 3rem 3rem;
+  cursor: crosshair;
+}
+
+.canvasSurfaceThreeD {
+  cursor: default;
+}
+
+.canvasSurfacePan {
+  cursor: grab;
+}
+
+.canvasHelp {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 2;
+  max-width: min(28rem, calc(100% - 2rem));
+  padding: 0.5rem 0.7rem;
+  border: 1px solid rgba(207, 202, 196, 0.95);
+  border-radius: 0.35rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #7a7470;
+  font-size: 0.72rem;
+  box-shadow: 0 2px 6px rgba(26, 25, 24, 0.08);
+}
+
+.overlayStatus {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgba(207, 202, 196, 0.9);
+  border-radius: 0.35rem;
+  background: rgba(255, 255, 255, 0.88);
+  color: #65615c;
+  font-size: 0.72rem;
+}
+
+.bottomControls {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  border: 1px solid rgba(207, 202, 196, 0.9);
+  border-radius: 0.45rem;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.footerButton {
+  min-width: 3.1rem;
+  padding: 0.35rem 0.55rem;
+  border: 0;
+  border-radius: 0.3rem;
+  background: transparent;
+  color: #68635f;
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.footerButtonActive {
+  background: #1e4f84;
+  color: #fff;
+}
+
+@media (max-width: 64rem) {
+  .commandStrip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .commandSearch {
+    max-width: 18rem;
+  }
+}

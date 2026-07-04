@@ -1,0 +1,16 @@
+{
+  "projectId": "prj_zqvyCCD6oYor2bTFKZCnA7bzzNGJ",
+  "orgId": "team_Sma3haK2YgHL3m9cUJR50H8s",
+  "projectName": "oando-platform",
+  "settings": {
+    "createdAt": 1782707614233,
+    "framework": "nextjs",
+    "devCommand": null,
+    "installCommand": "corepack enable && cd .. && pnpm install --frozen-lockfile && cd site",
+    "buildCommand": "next build",
+    "outputDirectory": null,
+    "rootDirectory": "site",
+    "directoryListing": false,
+    "nodeVersion": "24.x"
+  }
+}

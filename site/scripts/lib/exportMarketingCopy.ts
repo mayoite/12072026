@@ -1,0 +1,68 @@
+/**
+ * One-shot export of marketing copy objects for i18n scaffold (Phase 4a).
+ * Run: npx tsx scripts/lib/exportMarketingCopy.ts
+ */
+import {
+  ABOUT_PAGE_COPY,
+  CAREER_PAGE_COPY,
+  CONTACT_PAGE_COPY,
+  DOWNLOADS_PAGE_COPY,
+  GALLERY_PAGE_COPY,
+  LEGAL_PAGE_COPY,
+  NEWS_PAGE_COPY,
+  PLANNING_PAGE_COPY,
+  PORTFOLIO_PAGE_COPY,
+  PRODUCTS_PAGE_COPY,
+  PROJECTS_PAGE_COPY,
+  SERVICE_PAGE_COPY,
+  SHOWROOMS_PAGE_COPY,
+  SOCIAL_PAGE_COPY,
+  SOLUTIONS_DELIVERY_STEPS,
+  SOLUTIONS_PAGE_COPY,
+  SUSTAINABILITY_PAGE_COPY,
+  TRACKING_PAGE_COPY,
+  TRUSTED_BY_PAGE_COPY,
+  SUPPORT_IVR_PAGE_COPY,
+} from "../../lib/site-data/routeCopy";
+import {
+  HOMEPAGE_BRAND_STATEMENT_CONTENT,
+  HOMEPAGE_COLLECTIONS_CONTENT,
+  HOMEPAGE_HERO_CONTENT,
+  HOMEPAGE_PLANNER_SUITE_CONTENT,
+  HOMEPAGE_SHOWCASE_CONTENT,
+  HOMEPAGE_TRUST_CONTENT,
+  HOMEPAGE_WHY_CHOOSE_US_CONTENT,
+} from "../../lib/site-data/homepage";
+
+const marketing = {
+  about: ABOUT_PAGE_COPY,
+  news: NEWS_PAGE_COPY,
+  legal: LEGAL_PAGE_COPY,
+  solutions: { ...SOLUTIONS_PAGE_COPY, deliverySteps: SOLUTIONS_DELIVERY_STEPS },
+  contact: CONTACT_PAGE_COPY,
+  products: PRODUCTS_PAGE_COPY,
+  career: CAREER_PAGE_COPY,
+  downloads: DOWNLOADS_PAGE_COPY,
+  gallery: GALLERY_PAGE_COPY,
+  planning: PLANNING_PAGE_COPY,
+  portfolio: PORTFOLIO_PAGE_COPY,
+  projects: PROJECTS_PAGE_COPY,
+  service: SERVICE_PAGE_COPY,
+  showrooms: SHOWROOMS_PAGE_COPY,
+  social: SOCIAL_PAGE_COPY,
+  sustainability: SUSTAINABILITY_PAGE_COPY,
+  tracking: TRACKING_PAGE_COPY,
+  trustedBy: TRUSTED_BY_PAGE_COPY,
+  supportIvr: SUPPORT_IVR_PAGE_COPY,
+  home: {
+    hero: HOMEPAGE_HERO_CONTENT,
+    plannerSuite: HOMEPAGE_PLANNER_SUITE_CONTENT,
+    trust: HOMEPAGE_TRUST_CONTENT,
+    brandStatement: HOMEPAGE_BRAND_STATEMENT_CONTENT,
+    collections: HOMEPAGE_COLLECTIONS_CONTENT,
+    whyChooseUs: HOMEPAGE_WHY_CHOOSE_US_CONTENT,
+    showcase: HOMEPAGE_SHOWCASE_CONTENT,
+  },
+};
+
+process.stdout.write(`${JSON.stringify(marketing, null, 2)}\n`);

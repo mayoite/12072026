@@ -1,0 +1,715 @@
+/* ─── Workflow step bar (right panel top) ─────────────────────────────────── */
+
+@keyframes pw-step-switch {
+  0% {
+    background-color: color-mix(in srgb, var(--color-primary) 22%, var(--surface-panel));
+    box-shadow:
+      var(--shadow-soft),
+      inset 0 0 0 0.0625rem color-mix(in srgb, var(--color-primary) 20%, transparent);
+  }
+
+  100% {
+    background-color: color-mix(in srgb, var(--color-primary) 16%, var(--surface-panel));
+    box-shadow:
+      var(--shadow-soft),
+      inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 14%, transparent);
+  }
+}
+
+.planner-workspace .pw-step-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  padding: var(--pw-panel-pad-lg);
+  border-bottom: 1px solid var(--border-soft);
+  background: color-mix(in srgb, var(--surface-soft) 94%, var(--surface-panel));
+}
+
+.planner-workspace .pw-step-bar__intro,
+.planner-workspace .pw-step-bar__intro-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.planner-workspace .pw-step-bar__intro-card {
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 16%, var(--border-soft));
+  border-radius: var(--radius-sm);
+  background: var(--surface-panel);
+  box-shadow: var(--shadow-soft);
+}
+
+.planner-workspace .pw-step-bar[data-intro="true"] {
+  gap: var(--space-3);
+  background: color-mix(in srgb, var(--color-primary) 5%, var(--surface-soft));
+  border-bottom-color: color-mix(in srgb, var(--color-primary) 14%, var(--border-soft));
+}
+
+.planner-workspace .pw-step-bar__eyebrow,
+.planner-workspace .pw-step-bar__summary,
+.planner-workspace .pw-step-bar__hint,
+.planner-workspace .pw-step-bar__steps-label {
+  margin: 0;
+}
+
+.planner-workspace .pw-step-bar__eyebrow {
+  color: var(--text-muted);
+}
+
+.planner-workspace .pw-step-bar[data-intro="true"] .pw-step-bar__eyebrow {
+  color: var(--text-strong);
+}
+
+.planner-workspace .pw-step-bar__summary {
+  color: var(--text-body);
+}
+
+.planner-workspace .pw-step-bar__hint {
+  color: var(--text-muted);
+  line-height: var(--pw-leading-copy);
+}
+
+.planner-workspace .pw-step-bar[data-intro="true"] .pw-step-bar__hint {
+  padding: var(--space-2) var(--space-3);
+  border: 1px dashed color-mix(in srgb, var(--color-primary) 22%, var(--border-soft));
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-primary) 4%, var(--surface-panel));
+  color: var(--text-body);
+}
+
+.planner-workspace .pw-step-bar__flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.planner-workspace .pw-step-bar__flow-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.planner-workspace .pw-step-bar__flow-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface-soft) 90%, var(--surface-panel));
+  font-size: var(--pw-text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--pw-letter-ui);
+  color: var(--text-body);
+}
+
+.planner-workspace .pw-step-bar__flow-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-4);
+  height: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--surface-soft));
+  font-size: var(--pw-text-2xs);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.planner-workspace .pw-step-bar__flow-arrow {
+  color: var(--text-subtle);
+  font-size: var(--pw-text-xs);
+  line-height: 1;
+}
+
+.planner-workspace .pw-step-bar[data-intro="true"] .pw-step-bar__steps-label {
+  color: var(--text-muted);
+}
+
+.planner-workspace .pw-step-bar__steps-label {
+  font-size: var(--pw-text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--pw-letter-label);
+  text-transform: none;
+  color: var(--text-subtle);
+}
+
+.planner-workspace .pw-step-bar__steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+
+.planner-workspace .pw-step-bar[data-compact="true"] .pw-step-bar__steps {
+  grid-template-columns: repeat(var(--pw-step-count, 3), minmax(0, 1fr));
+}
+
+.planner-workspace .pw-step-bar__btn {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: var(--control-height-xs);
+  padding: var(--space-3);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface-panel);
+  color: var(--text-muted);
+  text-align: left;
+  transition:
+    border-color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    opacity var(--motion-fast) var(--ease-standard),
+    transform var(--motion-fast) var(--ease-standard);
+}
+
+.planner-workspace .pw-step-bar__btn:not([data-active="true"]):not(:disabled):not([data-disabled="true"]) {
+  opacity: 0.78;
+  background: color-mix(in srgb, var(--surface-soft) 35%, var(--surface-panel));
+}
+
+.planner-workspace .pw-step-bar[data-compact="true"] .pw-step-bar__btn {
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: var(--space-2);
+}
+
+.planner-workspace .pw-step-bar__btn::before {
+  content: "";
+  position: absolute;
+  top: var(--space-2);
+  bottom: var(--space-2);
+  left: 0;
+  width: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  opacity: 0;
+  transform: scaleY(0.4);
+  transform-origin: center;
+  transition:
+    opacity var(--motion-fast) var(--ease-standard),
+    transform var(--motion-base) var(--ease-standard);
+}
+
+.planner-workspace .pw-step-bar__btn:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--color-primary) 35%, var(--border-soft));
+  color: var(--text-strong);
+  opacity: 1;
+  box-shadow: 0 1px 0.125rem var(--overlay-inverse-06);
+}
+
+.planner-workspace .pw-step-bar__btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.planner-workspace .pw-step-bar__btn[data-active="true"]:focus-visible {
+  box-shadow:
+    var(--focus-ring),
+    0 1px 0 color-mix(in srgb, var(--color-primary) 18%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.planner-workspace .pw-step-bar__btn[data-active="true"] {
+  z-index: 1;
+  border-color: color-mix(in srgb, var(--color-primary) 62%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-primary) 16%, var(--surface-panel));
+  color: var(--color-primary);
+  opacity: 1;
+  box-shadow:
+    var(--shadow-soft),
+    0 1px 0 color-mix(in srgb, var(--color-primary) 18%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.planner-workspace .pw-step-bar[data-switching] .pw-step-bar__btn[data-active="true"] {
+  animation: pw-step-switch var(--motion-base) var(--ease-standard);
+}
+
+.planner-workspace .pw-step-bar__btn[data-active="true"]::before {
+  opacity: 1;
+  transform: scaleY(1);
+  width: var(--space-2);
+}
+
+.planner-workspace .pw-step-bar[data-intro="true"] .pw-step-bar__steps {
+  gap: var(--space-3);
+}
+
+.planner-workspace .pw-step-bar[data-intro="true"] .pw-step-bar__btn[data-jumpable="true"] {
+  border-color: color-mix(in srgb, var(--color-primary) 24%, var(--border-soft));
+  background: color-mix(in srgb, var(--surface-panel) 92%, var(--surface-soft));
+}
+
+.planner-workspace .pw-step-bar[data-intro="true"] .pw-step-bar__btn[data-active="true"] {
+  box-shadow:
+    var(--shadow-soft),
+    0 1px 0 color-mix(in srgb, var(--color-primary) 18%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.planner-workspace .pw-step-bar__btn[data-done="true"]:not([data-active="true"]) {
+  border-color: color-mix(in srgb, var(--color-success) 22%, var(--border-soft));
+  color: var(--text-body);
+}
+
+.planner-workspace .pw-step-bar__btn:disabled,
+.planner-workspace .pw-step-bar__btn[data-disabled="true"] {
+  cursor: not-allowed;
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--border-soft) 85%, transparent);
+  background: color-mix(in srgb, var(--surface-soft) 72%, var(--surface-panel));
+  color: var(--text-subtle);
+  opacity: 0.72;
+  box-shadow: none;
+}
+
+.planner-workspace .pw-step-bar__btn:disabled:hover,
+.planner-workspace .pw-step-bar__btn[data-disabled="true"]:hover {
+  border-color: color-mix(in srgb, var(--border-soft) 85%, transparent);
+  color: var(--text-subtle);
+  box-shadow: none;
+}
+
+.planner-workspace .pw-step-bar__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: calc(var(--radius-sm) - 0.25rem);
+  border: 1px solid var(--border-soft);
+  background: var(--surface-soft);
+  color: inherit;
+  transition:
+    border-color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard),
+    transform var(--motion-base) var(--ease-standard);
+}
+
+.planner-workspace .pw-step-bar__btn[data-active="true"] .pw-step-bar__icon {
+  border-color: color-mix(in srgb, var(--color-primary) 45%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-primary) 20%, var(--surface-panel));
+  color: var(--color-primary);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.planner-workspace .pw-step-bar[data-switching] .pw-step-bar__btn[data-active="true"] .pw-step-bar__icon {
+  transform: scale(1.04);
+  transition: transform var(--motion-base) var(--ease-standard);
+}
+
+.planner-workspace .pw-step-bar__btn[data-done="true"]:not([data-active="true"]) .pw-step-bar__icon {
+  border-color: color-mix(in srgb, var(--color-success) 28%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-success) 10%, var(--surface-panel));
+  color: var(--color-success);
+}
+
+.planner-workspace .pw-step-bar__copy {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-1);
+}
+
+.planner-workspace .pw-step-bar__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  font-size: var(--pw-text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--pw-letter-ui);
+  line-height: 1.2;
+}
+
+.planner-workspace .pw-step-bar__index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--text-muted) 12%, var(--surface-soft));
+  font-size: 0.5625rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.planner-workspace .pw-step-bar__btn[data-active="true"] .pw-step-bar__index {
+  background: color-mix(in srgb, var(--color-primary) 22%, var(--surface-panel));
+  color: var(--color-primary);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+.planner-workspace .pw-step-bar__detail {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--text-body);
+  line-height: var(--pw-leading-copy);
+}
+
+.planner-workspace .pw-step-bar__btn[data-active="true"] .pw-step-bar__detail {
+  color: color-mix(in srgb, var(--color-primary) 42%, var(--text-body));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planner-workspace .pw-step-bar[data-switching] .pw-step-bar__btn[data-active="true"] {
+    animation: none;
+  }
+
+  .planner-workspace .pw-step-bar[data-switching] .pw-step-bar__btn[data-active="true"] .pw-step-bar__icon {
+    transform: none;
+  }
+}
+
+/* ─── Workflow guidance panel ─────────────────────────────────────────────── */
+
+.planner-workspace .pw-workflow-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  padding: var(--pw-panel-pad-lg);
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--surface-panel);
+}
+
+.planner-workspace .pw-workflow-guidance {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.planner-workspace .pw-workflow-head {
+  margin: 0;
+}
+
+.planner-workspace .pw-workflow-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-2);
+  margin: 0;
+  font-size: var(--pw-text-xs);
+  font-weight: 600;
+  letter-spacing: var(--pw-letter-ui);
+  line-height: var(--pw-leading-tight);
+  color: var(--text-muted);
+}
+
+.planner-workspace .pw-workflow-kicker > span:first-child::after {
+  content: ":";
+  margin-left: var(--space-1);
+}
+
+.planner-workspace .pw-workflow-step {
+  font-size: var(--pw-text-sm);
+  font-weight: var(--font-weight-copy-semibold);
+  letter-spacing: var(--pw-letter-tight);
+  color: var(--text-strong);
+}
+
+.planner-workspace .pw-workflow-hint {
+  margin: 0;
+  font-size: var(--pw-text-sm);
+  font-weight: 400;
+  line-height: var(--pw-leading-copy);
+  color: var(--text-body);
+}
+
+.planner-workspace .pw-workflow-compliance {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--surface-soft) 88%, var(--surface-panel));
+}
+
+.planner-workspace .pw-workflow-compliance-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.planner-workspace .pw-workflow-compliance-title {
+  margin: 0;
+  font-size: var(--pw-text-xs);
+  font-weight: 600;
+  letter-spacing: var(--pw-letter-label);
+  color: var(--text-muted);
+}
+
+.planner-workspace .pw-workflow-compliance-badge {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-soft);
+  background: var(--surface-panel);
+  font-size: var(--pw-text-2xs);
+  font-weight: 700;
+  letter-spacing: var(--pw-letter-ui);
+  color: var(--text-muted);
+}
+
+.planner-workspace .pw-workflow-compliance-badge[data-severity="ok"] {
+  border-color: color-mix(in srgb, var(--color-success) 28%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-success) 10%, var(--surface-panel));
+  color: var(--color-success);
+}
+
+.planner-workspace .pw-workflow-compliance-badge[data-severity="warning"] {
+  border-color: color-mix(in srgb, var(--color-warning) 30%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-warning) 10%, var(--surface-panel));
+  color: var(--text-body);
+}
+
+.planner-workspace .pw-workflow-compliance-badge[data-severity="critical"] {
+  border-color: color-mix(in srgb, var(--color-danger) 30%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-danger) 10%, var(--surface-panel));
+  color: var(--color-danger);
+}
+
+.planner-workspace .pw-workflow-findings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.planner-workspace .pw-workflow-finding {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: calc(var(--radius-sm) - 0.25rem);
+  font-size: var(--pw-text-xs);
+  line-height: var(--pw-leading-copy);
+}
+
+.planner-workspace .pw-workflow-finding__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-1);
+}
+
+.planner-workspace .pw-workflow-finding__text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.planner-workspace .pw-workflow-finding--critical {
+  border: 1px solid color-mix(in srgb, var(--color-danger) 28%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-danger) 8%, var(--surface-soft));
+  color: var(--color-danger);
+}
+
+.planner-workspace .pw-workflow-finding--warning {
+  border: 1px solid color-mix(in srgb, var(--color-warning) 28%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-warning) 8%, var(--surface-soft));
+  color: var(--text-body);
+}
+
+.planner-workspace .pw-workflow-ok {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: calc(var(--radius-sm) - 0.25rem);
+  border: 1px solid color-mix(in srgb, var(--color-success) 24%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-success) 8%, var(--surface-soft));
+  font-size: var(--pw-text-xs);
+  line-height: var(--pw-leading-copy);
+  color: var(--text-body);
+}
+
+.planner-workspace .pw-workflow-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-1);
+}
+
+.planner-workspace .pw-workflow-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--control-height-xs);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  font-size: var(--pw-text-sm);
+  font-weight: 600;
+  letter-spacing: var(--pw-letter-ui);
+  color: var(--text-inverse);
+  transition:
+    background-color var(--motion-fast) var(--ease-standard),
+    border-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.planner-workspace .pw-workflow-cta:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-primary) 24%, transparent);
+}
+
+.planner-workspace .pw-workflow-cta:disabled {
+  cursor: not-allowed;
+  border-color: var(--border-soft);
+  background: var(--surface-soft);
+  color: var(--text-subtle);
+  box-shadow: none;
+  opacity: 1;
+}
+
+.planner-workspace .pw-workflow-panel[data-export-blocked="true"] .pw-workflow-cta:disabled {
+  border-color: color-mix(in srgb, var(--color-danger) 22%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-danger) 6%, var(--surface-soft));
+  color: color-mix(in srgb, var(--color-danger) 72%, var(--text-subtle));
+}
+
+.planner-workspace .pw-workflow-cta--secondary {
+  border-color: var(--border-soft);
+  background: var(--surface-panel);
+  color: var(--text-body);
+  box-shadow: none;
+}
+
+.planner-workspace .pw-workflow-cta--secondary:hover:not(:disabled) {
+  background: var(--surface-hover);
+  border-color: var(--border-hover);
+}
+
+.planner-workspace .pw-workflow-blocker {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: calc(var(--space-1) * -1) 0 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: calc(var(--radius-sm) - 0.25rem);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 24%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-danger) 6%, var(--surface-soft));
+  font-size: var(--pw-text-xs);
+  line-height: var(--pw-leading-copy);
+  color: var(--color-danger);
+}
+
+/* Right panel step emphasis */
+.planner-workspace .pw-right-panel[data-step="draw"] .pw-step-bar {
+  gap: var(--space-3);
+  padding-block: var(--pw-panel-pad);
+}
+
+.planner-workspace .pw-right-panel[data-step="place"] .pw-step-bar {
+  padding-block: var(--pw-panel-pad-lg) var(--pw-panel-pad);
+}
+
+.planner-workspace .pw-right-panel[data-step="place"] .pw-workflow-panel[data-emphasis="soft"] {
+  gap: var(--space-3);
+  padding-block: var(--pw-panel-pad);
+}
+
+.planner-workspace .pw-right-panel[data-step="place"] .pwx-inspector[data-emphasis="soft"] .pwx-inspector-header {
+  background: color-mix(in srgb, var(--surface-soft) 92%, var(--surface-panel));
+}
+
+.planner-workspace .pw-workflow-panel[data-emphasis="muted"] .pw-workflow-compliance {
+  display: none;
+}
+
+.planner-workspace .pw-workflow-panel[data-emphasis="muted"] {
+  padding-block: var(--pw-panel-pad);
+  gap: var(--space-3);
+}
+
+.planner-workspace .pw-workflow-panel[data-emphasis="soft"] .pw-workflow-compliance {
+  opacity: 0.88;
+}
+
+.planner-workspace .pw-right-panel[data-step="draw"] .pwx-inspector[data-emphasis="muted"] {
+  flex: 0 1 auto;
+  opacity: 0.76;
+  border-top: 1px solid color-mix(in srgb, var(--border-soft) 80%, transparent);
+  background: color-mix(in srgb, var(--surface-soft) 90%, var(--surface-panel));
+}
+
+.planner-workspace .pw-right-panel[data-step="draw"] .pwx-inspector[data-emphasis="muted"] .pwx-inspector-header {
+  padding-block: var(--pw-panel-pad);
+}
+
+.planner-workspace .pw-right-panel[data-step="draw"] .pwx-inspector[data-emphasis="muted"] .pwx-inspector-section {
+  padding-block: var(--space-3);
+}
+
+.planner-workspace .pw-right-panel[data-step="draw"] .pwx-inspector[data-emphasis="muted"] .pwx-tip-list {
+  display: none;
+}
+
+.planner-workspace .pw-right-panel[data-step="place"] .pwx-inspector[data-emphasis="soft"] {
+  opacity: 0.92;
+}
+
+.planner-workspace .pw-right-panel[data-step="review"] .pw-step-bar {
+  gap: var(--space-3);
+  padding-block: var(--pw-panel-pad);
+}
+
+.planner-workspace .pw-right-panel[data-step="review"] .pw-workflow-panel[data-emphasis="prominent"] {
+  gap: var(--space-3);
+  padding-block: var(--pw-panel-pad);
+}
+
+.planner-workspace .pw-right-panel[data-step="review"] .pw-workflow-actions[data-role="export"] {
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 22%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--surface-panel));
+  box-shadow: var(--shadow-soft);
+}
+
+.planner-workspace .pw-right-panel[data-step="review"] .pw-workflow-cta:not(:disabled) {
+  box-shadow: var(--shadow-soft);
+}
+
+.planner-workspace .pw-right-panel[data-step="review"] .pwx-inspector[data-emphasis="prominent"] {
+  flex: 1 1 auto;
+  min-height: var(--space-16);
+  border-top: 1px solid color-mix(in srgb, var(--color-primary) 28%, var(--border-soft));
+  background: var(--surface-panel);
+  box-shadow: inset 0 var(--space-1) 0 color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.planner-workspace .pw-right-panel[data-step="review"] .pwx-inspector[data-emphasis="prominent"] .pwx-inspector-header {
+  background: color-mix(in srgb, var(--color-primary) 6%, var(--surface-panel));
+}

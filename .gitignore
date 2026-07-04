@@ -1,0 +1,78 @@
+# Dependencies (per-package: site + tech-stack-generator; small set at root wrapper)
+node_modules/
+site/node_modules/
+tech-stack-generator/node_modules/
+
+# Site build output
+site/.next/
+site/.swc/
+site/tsconfig.tsbuildinfo
+
+# Tech-stack generated static site output
+site/tech-stack-generated/*
+!site/tech-stack-generated/.gitkeep
+
+# Local environment files
+.env.local
+
+# Build and temporary output (legacy root patterns kept for safety)
+.next/
+.next-dev.log
+.swc/
+coverage/
+playwright-report/
+test-results/
+# Stale root copies of tool output (canonical paths: results/tests/, results/test-results/)
+tsc-errors.txt
+errors.txt
+scripts_errors.txt
+lint-results.json
+test-results.json
+test-results2.json
+test-output.txt
+scratch_*
+results/reviews/
+results/coverage-site/
+tsconfig.tsbuildinfo
+tmp/
+tmp-*.json
+
+# Local logs and temp state
+logs/
+supabase/.temp/
+.codex-runtime/
+docs-rendered/
+project-rendered/
+.worktrees/
+tmp/launch-smoke*/
+tmp
+archive/screenshots
+test-results
+.next
+.playwright-cli
+
+# Local scratch files
+.tmp-*.txt
+site/nul
+
+# Patch/reject artifacts
+*.png
+!/public/**/*.png
+!site/tests/e2e/**/*-snapshots/*.png
+features_diff.txt
+.blackboxcli/
+
+# Generated test/coverage artifacts under site/
+site/results/
+!site/results/cross-pack-handshakes.json
+!site/results/site-ui/
+!site/results/site-ui/route-matrix.csv
+results/
+!results/planner/**
+.claude/
+.vscode/extensions.json
+backups/
+.tmp/
+archive/
+remedyplan/
+results/

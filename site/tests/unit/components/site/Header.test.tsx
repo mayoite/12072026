@@ -1,0 +1,256 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { SiteHeader } from '@/components/site/Header';
+import { trackPlannerLaunchClicked, trackSiteSearchSubmitted } from '@/lib/analytics/siteEvents';
+
+// Mock phosphor icons
+vi.mock('@phosphor-icons/react', () => ({
+  CaretDown: () => <span data-testid="caret-icon" />,
+  List: () => <span data-testid="hamburger-icon" />,
+  MagnifyingGlass: () => <span data-testid="magnifier-icon" />,
+  Sparkle: () => <span data-testid="sparkle-icon" />,
+}));
+
+// Mock Logo
+vi.mock('@/components/ui/Logo', () => ({
+  OneAndOnlyLogo: () => <div data-testid="header-logo" />,
+}));
+
+// Mock MobileNavDrawer
+vi.mock('@/components/site/MobileNavDrawer', () => ({
+  MobileNavDrawer: ({ open, onClose }: any) => (
+    <div data-testid="mobile-drawer" data-open={open}>
+      <button onClick={onClose} data-testid="close-drawer">Close</button>
+    </div>
+  ),
+}));
+
+// Mock Navigation data
+vi.mock('@/lib/navigation', () => ({
+  NAV_CATEGORY_GROUP_ORDER: ['seating'],
+  NAV_CATEGORY_GROUPS: {
+    seating: { label: 'Seating Group', ids: ['chairs'] },
+  },
+  groupCategories: vi.fn((cats) => cats),
+}));
+
+vi.mock('@/lib/siteNav', () => ({
+  SITE_NAV_LINKS: [
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products', hasMega: true },
+  ],
+}));
+
+vi.mock('@/lib/analytics/siteEvents', () => ({
+  trackPlannerLaunchClicked: vi.fn(),
+  trackSiteSearchSubmitted: vi.fn(),
+}));
+
+const mockPush = vi.fn();
+vi.mock('next/navigation', () => ({
+  usePathname: () => '/products',
+  useRouter: () => ({
+    push: mockPush,
+  }),
+}));
+
+describe('SiteHeader Component', () => {
+  let mockFetch: any;
+
+  async function renderSettledHeader() {
+    const result = render(<SiteHeader />);
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith('/api/nav-categories/');
+    });
+    await act(async () => {});
+    return result;
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    mockFetch = vi.fn((url: string, _options?: any) => {
+      if (url.includes('/api/nav-categories/')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            groups: [
+              {
+                groupId: 'seating',
+                groupLabel: 'Seating Group',
+                items: [
+                  {
+                    id: 'chairs',
+                    name: 'Chairs',
+                    href: '/products/chairs',
+                    subcategories: [
+                      { id: 'task-chairs', name: 'Task chairs', href: '/products/chairs/task' },
+                      { id: 'cafe-chairs', name: 'Cafe chairs', href: '/products/chairs/cafe' }, // filtered to Others
+                    ],
+                  },
+                ],
+              },
+            ],
+          }),
+        });
+      }
+      if (url.includes('/api/nav-search/')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            results: [
+              { id: 'r1', title: 'Task Chair Premium', href: '/products/chairs/task', type: 'product', source: 'local' },
+            ],
+            rankingMode: 'local',
+          }),
+        });
+      }
+      return Promise.reject(new Error('Unknown Endpoint'));
+    });
+
+    global.fetch = mockFetch;
+  });
+
+  it('renders logo, nav links and fetch categories on mount', async () => {
+    await renderSettledHeader();
+
+    expect(screen.getByTestId('header-logo')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('href', '/');
+
+    // Verify categories fetched
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith('/api/nav-categories/');
+    });
+  });
+
+  it('opens and closes products mega menu on mouse enter/leave', async () => {
+    await renderSettledHeader();
+
+    // Wait for categories to load
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith('/api/nav-categories/');
+    });
+
+    const megaTrigger = screen.getByRole('button', { name: /Products/i });
+
+    // Hover to open
+    fireEvent.mouseEnter(megaTrigger);
+    expect(screen.getByText('Seating Group')).toBeInTheDocument();
+    expect(screen.getByText('Task chairs')).toBeInTheDocument();
+
+    // Leave trigger should schedule close
+    fireEvent.mouseLeave(megaTrigger);
+    await waitFor(() => {
+      expect(screen.queryByText('Seating Group')).toBeNull();
+    });
+  });
+
+  it('performs debounced search and displays results panel', async () => {
+    await renderSettledHeader();
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith('/api/nav-categories/');
+    });
+
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+
+    const searchInput = screen.getByPlaceholderText('AI search products...');
+    fireEvent.focus(searchInput);
+    
+    // Default quick links list
+    expect(screen.getByRole('link', { name: 'All Products' })).toBeInTheDocument();
+
+    fireEvent.change(searchInput, { target: { value: 'Task' } });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenLastCalledWith(
+        '/api/nav-search/',
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({ query: 'Task', limit: 8, context: 'header' }),
+        })
+      );
+    });
+
+    // Check result renders
+    await waitFor(() => {
+      expect(screen.getByRole('link', { name: /Task Chair Premium/i })).toBeInTheDocument();
+    });
+
+    // Click result hides panel
+    fireEvent.click(screen.getByRole('link', { name: /Task Chair Premium/i }));
+    expect(screen.queryByRole('link', { name: /Task Chair Premium/i })).toBeNull();
+
+    await act(async () => {});
+    vi.useRealTimers();
+  });
+
+  it('submits search form and redirects using resolved destination', async () => {
+    await renderSettledHeader();
+
+    const searchInput = screen.getByPlaceholderText('AI search products...');
+    fireEvent.change(searchInput, { target: { value: 'Premium' } });
+
+    // Submit form
+    const searchForm = screen.getByPlaceholderText('AI search products...').closest('form')!;
+    fireEvent.submit(searchForm);
+
+    await waitFor(() => {
+      expect(trackSiteSearchSubmitted).toHaveBeenCalledWith({
+        pathname: '/products',
+        surface: 'header',
+        queryLength: 7,
+        destination: '/products/chairs/task', // resolved from result
+      });
+      expect(mockPush).toHaveBeenCalledWith('/products/chairs/task');
+    }, { timeout: 2000 });
+  });
+
+  it('launches guided planner on click and tracks event', async () => {
+    const dispatchSpy = vi.spyOn(window, 'dispatchEvent');
+    await renderSettledHeader();
+
+    const plannerBtn = screen.getByRole('button', { name: 'Guided Planner' });
+    fireEvent.click(plannerBtn);
+
+    expect(trackPlannerLaunchClicked).toHaveBeenCalledWith({
+      pathname: '/products',
+      surface: 'header',
+    });
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'oando-assistant:open' })
+    );
+  });
+
+  it('triggers mobile nav drawer on hamburger click', async () => {
+    await renderSettledHeader();
+
+    const burgerBtn = screen.getByRole('button', { name: /Open menu/i });
+    fireEvent.click(burgerBtn);
+
+    const drawer = screen.getByTestId('mobile-drawer');
+    expect(drawer).toHaveAttribute('data-open', 'true');
+
+    // Close via close button in drawer
+    const closeBtn = screen.getByTestId('close-drawer');
+    fireEvent.click(closeBtn);
+    expect(drawer).toHaveAttribute('data-open', 'false');
+  });
+
+  it('adds shadow style class on page scroll', async () => {
+    await renderSettledHeader();
+
+    // Initially window.scrollY is 0
+    expect(screen.getByRole('banner')).not.toHaveClass('[box-shadow:var(--shadow-panel)]');
+
+    // Mock scrolling
+    window.scrollY = 20;
+    fireEvent.scroll(window);
+
+    expect(screen.getByRole('banner')).toHaveClass('[box-shadow:var(--shadow-panel)]');
+  });
+});

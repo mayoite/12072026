@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "description": "Playwright specs included in release:gate — paths relative to site/",
+  "specs": [
+    "tests/accessibility.spec.ts",
+    "tests/e2e/site-navigation-smoke.spec.ts",
+    "tests/e2e/planner-catalog.spec.ts",
+    "tests/e2e/planner-guest-workspace.spec.ts",
+    "tests/e2e/planner-custom-tools.spec.ts",
+    "tests/e2e/planner-chrome.spec.ts"
+  ],
+  "excluded": []
+}

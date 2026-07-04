@@ -1,0 +1,160 @@
+"use client";
+
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { CheckCircle2, DoorOpen, PencilRuler } from "lucide-react";
+
+import {
+  PLANNER_STEP_DETAILS,
+  PLANNER_STEPS,
+  PLANNER_STEP_LABELS,
+  type PlannerStep,
+} from "@/features/planner/editor/plannerStep";
+
+const STEP_ICONS: Record<PlannerStep, ReactNode> = {
+  draw: <PencilRuler size={13} aria-hidden />,
+  place: <DoorOpen size={13} aria-hidden />,
+  review: <CheckCircle2 size={13} aria-hidden />,
+};
+
+const TOOLBAR_BUTTON_CLASS = "min-w-[2.75rem] min-h-[2.75rem] focus-visible:ring-2 focus-visible:ring-blue-500 hover:bg-gray-100 rounded-lg transition-colors";
+
+interface PlannerStepBarProps {
+  current: PlannerStep;
+  disabledSteps?: Partial<Record<PlannerStep, boolean>>;
+  onChange: (step: PlannerStep) => void;
+  compact?: boolean;
+  showIntro?: boolean;
+}
+
+export function PlannerStepBar({
+  current,
+  disabledSteps = {},
+  onChange,
+  compact = false,
+  showIntro = false,
+}: PlannerStepBarProps) {
+  const currentIndex = PLANNER_STEPS.indexOf(current);
+  const introHintId = "pw-step-bar-intro-hint";
+  const [switchingStep, setSwitchingStep] = useState<PlannerStep | null>(null);
+  const previousStep = useRef(current);
+
+  useEffect(() => {
+    if (previousStep.current === current) return;
+    previousStep.current = current;
+    setSwitchingStep(current);
+    const timeoutId = window.setTimeout(() => setSwitchingStep(null), 300);
+    return () => window.clearTimeout(timeoutId);
+  }, [current]);
+
+  return (
+    <nav
+      className="pw-step-bar"
+      data-compact={compact || undefined}
+      data-intro={showIntro || undefined}
+      data-current={current}
+      data-switching={switchingStep ?? undefined}
+      aria-label="Planner workflow"
+      aria-describedby={showIntro ? introHintId : undefined}
+    >
+      {showIntro ? (
+        <div className="pw-step-bar__intro-card">
+          <p className="pw-step-bar__eyebrow">Welcome to your planner</p>
+          {!compact ? (
+            <>
+              <p className="pw-step-bar__summary">
+                Three quick stages: map your space, place furniture and openings, then review
+                measurements and export.
+              </p>
+              <ol className="pw-step-bar__flow" aria-label="Draw, Place, Review workflow">
+                {PLANNER_STEPS.map((step, index) => (
+                  <li key={step} className="pw-step-bar__flow-item">
+                    <span className="pw-step-bar__flow-chip">
+                      <span className="pw-step-bar__flow-index">{index + 1}</span>
+                      {PLANNER_STEP_LABELS[step]}
+                    </span>
+                    {index < PLANNER_STEPS.length - 1 ? (
+                      <span className="pw-step-bar__flow-arrow" aria-hidden>
+                        →
+                      </span>
+                    ) : null}
+                  </li>
+                ))}
+              </ol>
+            </>
+          ) : (
+            <p className="pw-step-bar__summary">
+              Draw → Place → Review — tap any step to jump; order is up to you.
+            </p>
+          )}
+          <p id={introHintId} className="pw-step-bar__hint">
+            {compact
+              ? "Steps are not locked. Tap Draw, Place, or Review anytime."
+              : "You are not locked into order. Click any step below to jump ahead or revisit an earlier stage."}
+          </p>
+        </div>
+      ) : (
+        <div className="pw-step-bar__intro">
+          <p className="pw-step-bar__eyebrow">Guided workflow</p>
+          {!compact ? (
+            <p className="pw-step-bar__summary">
+              Work through Draw, Place, and Review — or jump back anytime.
+            </p>
+          ) : null}
+        </div>
+      )}
+      <p className="pw-step-bar__steps-label">
+        {showIntro ? (compact ? "Jump to a step" : "Jump to any step") : "Steps"}
+      </p>
+      <div
+        className="pw-step-bar__steps"
+        style={{ ["--pw-step-count" as string]: String(PLANNER_STEPS.length) }}
+      >
+        {PLANNER_STEPS.map((step, index) => {
+          const isActive = step === current;
+          const isDone = index < currentIndex;
+          const isDisabled = Boolean(disabledSteps[step]);
+          const stepLabel = `${PLANNER_STEP_LABELS[step]}: ${PLANNER_STEP_DETAILS[step]}`;
+
+          return (
+            <button
+              key={step}
+              type="button"
+              className={`pw-step-bar__btn ${TOOLBAR_BUTTON_CLASS}`}
+              data-step={step}
+              data-active={isActive}
+              data-done={isDone}
+              data-disabled={isDisabled || undefined}
+              data-jumpable={showIntro && !isActive && !isDisabled ? true : undefined}
+              aria-current={isActive ? "step" : undefined}
+              aria-disabled={isDisabled}
+              aria-label={
+                isDisabled
+                  ? `${stepLabel} (unavailable)`
+                  : showIntro && !isActive
+                    ? `Jump to ${stepLabel}`
+                    : stepLabel
+              }
+              disabled={isDisabled}
+              onClick={() => {
+                if (!isDisabled) onChange(step);
+              }}
+            >
+              <span className="pw-step-bar__icon" aria-hidden>
+                {isDone ? <CheckCircle2 size={14} /> : STEP_ICONS[step]}
+              </span>
+              {!compact ? (
+                <span className="pw-step-bar__copy">
+                  <span className="pw-step-bar__label">
+                    <span className="pw-step-bar__index">{index + 1}</span>
+                    {PLANNER_STEP_LABELS[step]}
+                  </span>
+                  <span className="pw-step-bar__detail">{PLANNER_STEP_DETAILS[step]}</span>
+                </span>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}

@@ -1,0 +1,123 @@
+@import "../../app/css/index.css";
+
+
+/* Docs renderer aliases — map Tailwind brand/accent utilities to synced site tokens */
+@theme {
+  --color-brand-50: var(--color-ocean-boat-blue-50);
+  --color-brand-100: var(--color-ocean-boat-blue-100);
+  --color-brand-200: var(--color-ocean-boat-blue-200);
+  --color-brand-300: var(--color-ocean-boat-blue-300);
+  --color-brand-400: var(--color-ocean-boat-blue-400);
+  --color-brand-500: var(--color-ocean-boat-blue-500);
+  --color-brand-600: var(--color-ocean-boat-blue-600);
+  --color-brand-700: var(--color-ocean-boat-blue-700);
+  --color-brand-800: var(--color-ocean-boat-blue-800);
+  --color-brand-900: var(--color-ocean-boat-blue-900);
+  --color-accent-50: var(--color-bronze-50);
+  --color-accent-100: var(--color-bronze-100);
+  --color-accent-200: var(--color-bronze-200);
+  --color-accent-300: var(--color-bronze-300);
+  --color-accent-400: var(--color-bronze-400);
+  --color-accent-500: var(--color-bronze-500);
+  --color-accent-600: var(--color-bronze-600);
+  --color-accent-700: var(--color-bronze-700);
+  --color-accent-800: var(--color-bronze-800);
+  --color-accent-900: var(--color-bronze-900);
+  --font-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+
+  /* ── Docs semantic surface tokens (replaces raw gray-* classes) ── */
+  --color-docs-surface: var(--surface-page);
+  --color-docs-surface-raised: var(--surface-panel);
+  --color-docs-surface-strong: var(--surface-soft);
+  --color-docs-border: var(--border-soft);
+  --color-docs-border-hover: var(--border-hover);
+  --color-docs-text: var(--text-body);
+  --color-docs-text-strong: var(--text-heading);
+  --color-docs-text-muted: var(--text-muted);
+  --color-docs-text-subtle: var(--text-subtle);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--surface-canvas);
+    color: var(--text-body);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Phase 3A — Mobile overflow fix: tables & code blocks */
+  @media (width < 640px) {
+    pre,
+    code {
+      font-size: 0.75rem;
+      word-break: break-all;
+    }
+    table {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+@layer components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .card {
+    background: var(--surface-panel);
+    border: 0.0625rem solid var(--border-soft);
+    border-radius: var(--radius-lg, 0.75rem);
+    padding: 1.25rem;
+  }
+
+  .section-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.25rem;
+  }
+
+  .section-subheading {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Highlight.js — token-aligned syntax colors */
+.hljs {
+  background: var(--surface-soft);
+  color: var(--text-body);
+  border-radius: var(--radius-lg, 0.75rem);
+  padding: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  font-family: var(--font-mono);
+}
+
+.hljs-keyword {
+  color: var(--color-bronze-300);
+}
+
+.hljs-string {
+  color: var(--color-sustain-300);
+}
+
+.hljs-comment {
+  color: var(--text-subtle);
+  font-style: italic;
+}
+
+.hljs-title {
+  color: var(--color-primary);
+  font-weight: 500;
+}

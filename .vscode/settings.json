@@ -1,0 +1,51 @@
+{
+    "chat.agent.sandbox.autoApproveUnsandboxedCommands": true,
+    "chat.agent.sandbox.enabled": "off",
+    "chat.tools.terminal.enableAutoApprove": true,
+    "chat.tools.terminal.ignoreDefaultAutoApproveRules": true,
+    "chat.tools.global.autoApprove": true,
+    "chat.permissions.default": "autopilot",
+    "chat.autopilot.advanced.enabled": true,
+    "chat.tools.urls.autoApprove": {
+        "**/*": true
+    }  ,
+    "chat.tools.edits.autoApprove": {
+        "**/*": true
+    },
+    "chat.tools.terminal.autoApprove": {
+        "/.*/": true
+    },
+    "chat.tools.eligibleForAutoApproval": {
+        "runInTerminal": true,"terminalSelection": true
+    },
+    "security.workspace.trust.enabled": "true",
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "git.branchProtectionPrompt": "alwaysCommit",
+    "editor.unusualLineTerminators": "off",
+    "debug.onTaskErrors": "debugAnyway",
+    "[powershell]": {
+        "editor.defaultFormatter": "ms-vscode.js-debug",
+        "editor.defaultFoldingRangeProvider": "kiro.kiroAgent"
+    },
+    "github.copilot.completions.chat.enabled": true,
+    "typescript.tsdk": "site/node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "css.lint.unknownAtRules": "ignore",
+    "less.lint.unknownAtRules": "ignore",
+    "scss.lint.unknownAtRules": "ignore",
+    "vscode-edge-devtools.headless": false,
+    "terminal.explorerKind": "both",
+    "terminal.integrated.accessibleViewFocusOnCommandExecution": true,
+    "terminal.integrated.accessibleViewPreserveCursorPosition": true,
+    "terminal.integrated.allowedLinkSchemes": [
+        "file",
+        "http",
+        "https",
+        "mailto",
+        "vscode",
+        "vscode-insiders",
+        "*"
+    ],
+    "terminal.integrated.allowMnemonics": true,
+    "terminal.integrated.shellIntegration.environmentReporting": true,
+}

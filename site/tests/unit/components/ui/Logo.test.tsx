@@ -1,0 +1,34 @@
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { OneAndOnlyLogo } from '@/components/ui/Logo';
+
+describe('OneAndOnlyLogo Component', () => {
+  it('renders default orange variant logo correctly', () => {
+    render(<OneAndOnlyLogo />);
+
+    const img = screen.getByRole("img", { name: "One&Only Furniture" });
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('src', '/logo-v2.webp');
+    expect(img).toHaveAttribute('alt', 'One&Only Furniture');
+    expect(img).toHaveAttribute('width', '1024');
+    expect(img).toHaveAttribute('height', '263');
+    expect(img.getAttribute('data-priority')).toBe('true');
+    expect(img.getAttribute('data-unoptimized')).toBe('true');
+  });
+
+  it('renders white variant logo when variant is set to white', () => {
+    render(<OneAndOnlyLogo variant="white" />);
+
+    const img = screen.getByRole("img", { name: "One&Only Furniture" });
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('src', '/images/brand/logo-sharp-white.png');
+  });
+
+  it('applies custom className to wrapper', () => {
+    const { container } = render(<OneAndOnlyLogo className="custom-wrapper-class" />);
+
+    const wrapper = container.firstChild as HTMLElement;
+    expect(wrapper.className).toContain('custom-wrapper-class');
+    expect(wrapper.className).toContain('relative');
+  });
+});

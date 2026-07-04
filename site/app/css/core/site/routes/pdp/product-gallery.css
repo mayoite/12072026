@@ -1,0 +1,66 @@
+/* PDP product gallery — via app/css/core/site/bundles/pdp.css */
+
+.product-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.product-gallery__main {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-xl);
+  background: var(--surface-soft);
+  overflow: hidden;
+}
+
+.product-gallery__thumbs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: none;
+}
+
+.product-gallery__thumbs button {
+  flex-shrink: 0;
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 0.125rem solid transparent;
+  transition:
+    border-color var(--motion-base) var(--ease-standard),
+    opacity var(--motion-base) var(--ease-standard);
+}
+
+@media (width >= theme(--breakpoint-md)) {
+  .product-gallery__thumbs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
+  .product-gallery__thumbs button {
+    width: 5rem;
+    height: 5rem;
+  }
+}
+
+.product-gallery__thumb--active {
+  border-color: var(--color-primary);
+  opacity: 1;
+}
+
+.product-gallery__count {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  background: var(--hero-btn-secondary-shadow);
+  color: white;
+  font-size: 0.75rem;
+  border-radius: var(--radius-full);
+  padding: 0.125rem 0.5rem;
+  pointer-events: none;
+}

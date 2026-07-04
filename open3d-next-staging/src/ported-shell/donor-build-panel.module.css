@@ -1,0 +1,362 @@
+.panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  border-right: 1px solid var(--border-soft);
+  background: linear-gradient(180deg, #f8f6f2 0%, #f6f3ef 100%);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--border-soft);
+  background: #fff;
+}
+
+.tabButton {
+  min-height: 3.1rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #7c7670;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.tabButtonActive {
+  border-bottom-color: var(--color-primary);
+  background: #f6f9ff;
+  color: var(--text-strong);
+}
+
+.scrollArea {
+  min-height: 0;
+  overflow: auto;
+  padding: 0.75rem 0.7rem 1rem;
+}
+
+.stack {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.section {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-strong);
+  text-align: left;
+  cursor: pointer;
+}
+
+.sectionLabel {
+  font-size: 0.93rem;
+  font-weight: 700;
+}
+
+.sectionEyebrow {
+  color: #a1a19a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.sectionChevron {
+  color: #a7a39d;
+  font-size: 0.68rem;
+}
+
+.sectionBody {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.toolGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.toolCard,
+.primaryTool,
+.modeCard,
+.dualCard,
+.smallTile,
+.roomCard,
+.templateCard,
+.objectCard {
+  border: 1px solid var(--border-soft);
+  border-radius: 0.5rem;
+  background: #fff;
+  color: var(--text-strong);
+  font: inherit;
+  cursor: pointer;
+}
+
+.toolCard,
+.primaryTool {
+  display: grid;
+  align-content: start;
+  gap: 0.3rem;
+  text-align: left;
+}
+
+.toolCard {
+  min-height: 6.3rem;
+  padding: 0.75rem 0.75rem 0.7rem;
+}
+
+.toolCardActive {
+  border-color: var(--color-primary);
+  background: #edf4ff;
+  box-shadow: inset 0 0 0 1px rgba(30, 58, 95, 0.08);
+}
+
+.toolIcon,
+.primaryIcon,
+.modeIcon,
+.dualIcon,
+.roomIcon,
+.objectGlyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.toolIcon,
+.primaryIcon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.45rem;
+  background: var(--surface-muted);
+  font-size: 1rem;
+}
+
+.toolTitle,
+.primaryText strong,
+.roomTitle,
+.templateTitle,
+.objectTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.toolTitle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.toolKey {
+  color: #8d8a85;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.toolCopy,
+.primaryText span,
+.templateMeta,
+.objectMeta {
+  color: #8f8a84;
+  font-size: 0.69rem;
+  line-height: 1.2;
+}
+
+.primaryTool {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  padding: 0.8rem 0.78rem;
+  gap: 0.7rem;
+}
+
+.primaryToolCompact {
+  border-color: var(--border-soft);
+}
+
+.primaryText {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.primaryKey {
+  color: #8f8a84;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.modeGrid,
+.dualGrid,
+.roomTemplateGrid,
+.objectGrid {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.modeGrid,
+.dualGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.modeCard,
+.dualCard,
+.smallTile {
+  min-height: 5.1rem;
+  padding: 0.55rem 0.45rem;
+}
+
+.modeCard,
+.dualCard {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.modeCardActive,
+.dualCardActive,
+.smallTile:hover,
+.roomCard:hover,
+.templateCard:hover,
+.objectCard:hover {
+  border-color: var(--color-primary);
+  background: #f5f9ff;
+}
+
+.inputRow {
+  display: grid;
+  grid-template-columns: 5.2rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.inputLabel {
+  color: #55514d;
+  font-size: 0.69rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.input {
+  width: 100%;
+  min-width: 0;
+  min-height: 2rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #63615d;
+  border-radius: 0.35rem;
+  background: #4a4950;
+  color: #fff;
+  font: inherit;
+}
+
+.subsectionLabel {
+  color: #8f8a84;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.searchRow {
+  display: grid;
+}
+
+.search {
+  width: 100%;
+  min-height: 2.1rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.45rem;
+  background: #fff;
+  color: var(--text-strong);
+  font: inherit;
+}
+
+.roomCard,
+.templateCard,
+.objectCard {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.35rem;
+  padding: 0.65rem 0.55rem;
+  text-align: center;
+}
+
+.roomIcon,
+.objectGlyph {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.45rem;
+  background: var(--surface-muted);
+  font-size: 1.2rem;
+}
+
+.roomTitle {
+  font-size: 0.74rem;
+}
+
+.roomTemplateGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.templateCard {
+  min-height: 4.5rem;
+}
+
+.templateTitle {
+  font-size: 0.76rem;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip {
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--text-body);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.objectGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.objectCard {
+  min-height: 5.1rem;
+}
+
+@media (max-width: 72rem) {
+  .modeGrid,
+  .dualGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .toolGrid,
+  .roomTemplateGrid,
+  .objectGrid {
+    grid-template-columns: 1fr;
+  }
+}

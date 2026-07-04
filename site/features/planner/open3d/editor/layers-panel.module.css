@@ -1,0 +1,86 @@
+.layersPanel {
+  --lp-bg: var(--surface-panel);
+  --lp-border: var(--border-soft);
+  --lp-text: var(--text-strong);
+  --lp-text-muted: var(--text-muted);
+  --lp-accent: var(--color-primary);
+  --lp-accent-soft: color-mix(in srgb, var(--color-primary) 10%, var(--surface-panel));
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--lp-bg);
+  color: var(--lp-text);
+}
+
+.layersPanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--lp-border);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.layersPanelList {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-1);
+}
+
+.layerRow {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--lp-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.layerRow:hover,
+.layerRow:focus-visible {
+  background: var(--lp-accent-soft);
+  outline: none;
+}
+
+.layerRow[data-hidden="true"] {
+  opacity: 0.55;
+}
+
+.layerVisibilityBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-soft);
+  color: var(--lp-text-muted);
+  cursor: pointer;
+}
+
+.layerVisibilityBtn[data-visible="true"] {
+  color: var(--lp-accent);
+  border-color: color-mix(in srgb, var(--lp-accent) 35%, var(--lp-border));
+}
+
+.layerCount {
+  font-size: 0.75rem;
+  color: var(--lp-text-muted);
+}
+
+.layerLabel {
+  font-size: 0.8125rem;
+}

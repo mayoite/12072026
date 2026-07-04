@@ -1,0 +1,43 @@
+{
+  "contractSourcePath": "plans/site-ui-uniformity-10-file-plan/04-i18n-copy-migration.md",
+  "allMarketingNamespaces": [
+    "about",
+    "news",
+    "legal",
+    "solutions",
+    "contact",
+    "products",
+    "career",
+    "downloads",
+    "gallery",
+    "planning",
+    "portfolio",
+    "projects",
+    "service",
+    "showrooms",
+    "social",
+    "sustainability",
+    "tracking",
+    "trustedBy",
+    "supportIvr",
+    "home"
+  ],
+  "wave1Locales": ["en", "hi"],
+  "parityLocales": ["hi", "de", "es", "fr"],
+  "wave1Namespaces": ["home", "about", "contact", "products", "solutions"],
+  "batchAConsumerRoutes": ["about", "news", "legal"],
+  "deferredLocales": ["de", "es", "fr"],
+  "i18nConsumerPaths": [
+    "app/(site)/about/page.tsx",
+    "app/(site)/news/page.tsx",
+    "app/(site)/privacy/page.tsx",
+    "app/(site)/terms/page.tsx",
+    "app/(site)/imprint/page.tsx",
+    "app/(site)/refund-and-return-policy/page.tsx",
+    "app/(site)/solutions/page.tsx",
+    "app/(site)/contact/page.tsx",
+    "app/(site)/products/page.tsx",
+    "components/contact/ContactPageView.tsx",
+    "components/home/CategoryGrid.tsx"
+  ]
+}

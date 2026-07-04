@@ -1,0 +1,5 @@
+@import "../routes/catalog/cards.css";
+@import "../routes/catalog/filters.css";
+@import "../routes/catalog/summary.css";
+@import "../routes/catalog/mobile.css";
+@reference "../../../index.css";

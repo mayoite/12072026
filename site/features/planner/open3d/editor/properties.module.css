@@ -1,0 +1,335 @@
+/* Properties Panel Styles */
+
+/* CSS custom properties scoped to this module */
+.panel {
+  --prop-panel-bg: var(--surface-panel);
+  --prop-panel-border: var(--border-soft);
+  --prop-text-primary: var(--text-strong);
+  --prop-text-secondary: var(--text-body);
+  --prop-text-muted: var(--text-muted);
+  --prop-accent: var(--color-primary);
+  --prop-accent-subtle: var(--color-accent-soft);
+  --prop-surface-soft: var(--surface-soft);
+  --prop-surface-page: var(--surface-page);
+  --prop-focus-ring: var(--focus-ring);
+  --prop-radius-sm: var(--radius-sm);
+  --prop-radius-md: var(--radius-md);
+  --prop-shadow-float: var(--shadow-float);
+  --prop-space-1: var(--space-1);
+  --prop-space-2: var(--space-2);
+  --prop-space-3: var(--space-3);
+  --prop-space-4: var(--space-4);
+  --prop-space-5: var(--space-5);
+  --prop-danger: var(--color-danger);
+  --prop-danger-subtle: var(--color-danger-soft);
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--prop-panel-bg);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--prop-text-primary);
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--prop-space-5);
+  text-align: center;
+}
+
+.emptyIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--prop-space-4);
+  color: var(--prop-text-muted);
+  opacity: 0.6;
+}
+
+.emptyTitle {
+  margin: 0 0 var(--prop-space-2);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--prop-text-primary);
+}
+
+.emptyDescription {
+  margin: 0;
+  max-width: 200px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--prop-text-muted);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--prop-space-3);
+  padding: var(--prop-space-3) var(--prop-space-4);
+  border-bottom: 1px solid var(--prop-panel-border);
+  background: color-mix(in srgb, var(--prop-surface-soft) 92%, var(--prop-panel-bg));
+  flex-shrink: 0;
+}
+
+.headerContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.entityType {
+  display: inline-block;
+  padding: 2px var(--prop-space-2);
+  margin-bottom: var(--prop-space-1);
+  border-radius: var(--prop-radius-sm);
+  background: var(--prop-accent);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-inverse);
+}
+
+.entityName {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--prop-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--prop-space-1);
+  flex-shrink: 0;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--prop-panel-border);
+  border-radius: var(--prop-radius-sm);
+  background: var(--prop-panel-bg);
+  color: var(--prop-text-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.actionButton:hover {
+  background: var(--prop-surface-soft);
+  border-color: var(--border-hover);
+}
+
+.actionButton:focus-visible {
+  outline: none;
+  box-shadow: var(--prop-focus-ring);
+}
+
+.deleteButton:hover {
+  background: var(--prop-danger-subtle);
+  border-color: var(--prop-danger);
+  color: var(--prop-danger);
+}
+
+.lockButton[aria-pressed="true"] {
+  background: var(--prop-accent-subtle);
+  border-color: var(--prop-accent);
+  color: var(--prop-accent);
+}
+
+/* Content */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--prop-space-3) var(--prop-space-4);
+}
+
+/* Property Groups */
+.propertyGroup {
+  margin-bottom: var(--prop-space-4);
+}
+
+.propertyGroup:last-child {
+  margin-bottom: 0;
+}
+
+.groupTitle {
+  margin: 0 0 var(--prop-space-2);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--prop-text-muted);
+}
+
+/* Property Grid */
+.propertyGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--prop-space-3);
+}
+
+/* Field */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--prop-space-1);
+}
+
+.fieldLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--prop-text-secondary);
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--prop-space-1);
+}
+
+.fieldInput {
+  flex: 1;
+  min-width: 0;
+  padding: var(--prop-space-2);
+  border: 1px solid var(--prop-panel-border);
+  border-radius: var(--prop-radius-sm);
+  background: var(--prop-panel-bg);
+  font-size: 0.8125rem;
+  color: var(--prop-text-primary);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.fieldInput::placeholder {
+  color: var(--prop-text-muted);
+}
+
+.fieldInput:focus {
+  outline: none;
+  border-color: var(--prop-accent);
+  box-shadow: var(--prop-focus-ring);
+}
+
+.fieldInput:read-only {
+  background: var(--prop-surface-soft);
+  color: var(--prop-text-muted);
+  cursor: default;
+}
+
+.fieldInput[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.fieldInput[type="number"]::-webkit-outer-spin-button,
+.fieldInput[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.fieldUnit {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--prop-text-muted);
+  min-width: 24px;
+}
+
+/* Select */
+.fieldSelect {
+  flex: 1;
+  min-width: 0;
+  padding: var(--prop-space-2);
+  padding-right: var(--prop-space-5);
+  border: 1px solid var(--prop-panel-border);
+  border-radius: var(--prop-radius-sm);
+  background: var(--prop-panel-bg);
+  font-size: 0.8125rem;
+  color: var(--prop-text-primary);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6,9 12,15 18,9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--prop-space-2) center;
+}
+
+.fieldSelect:focus {
+  outline: none;
+  border-color: var(--prop-accent);
+  box-shadow: var(--prop-focus-ring);
+}
+
+/* Checkbox */
+.checkboxField {
+  display: flex;
+  align-items: center;
+  gap: var(--prop-space-2);
+}
+
+.fieldCheckbox {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--prop-panel-border);
+  border-radius: var(--prop-radius-sm);
+  background: var(--prop-panel-bg);
+  cursor: pointer;
+  appearance: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.fieldCheckbox:checked {
+  background: var(--prop-accent);
+  border-color: var(--prop-accent);
+  color: var(--text-inverse);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20,6 9,17 4,12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px;
+}
+
+.fieldCheckbox:focus-visible {
+  outline: none;
+  box-shadow: var(--prop-focus-ring);
+}
+
+.checkboxLabel {
+  font-size: 0.8125rem;
+  color: var(--prop-text-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .header {
+    padding: var(--prop-space-2) var(--prop-space-3);
+  }
+
+  .content {
+    padding: var(--prop-space-2) var(--prop-space-3);
+  }
+
+  .propertyGrid {
+    gap: var(--prop-space-2);
+  }
+}

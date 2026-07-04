@@ -1,0 +1,40 @@
+.diagnostics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  color: var(--text-inverse);
+  background: var(--surface-inverse);
+}
+
+.diagnostics > div,
+figure {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.diagnostics span,
+figcaption {
+  color: var(--text-inverse-subtle);
+  font-size: var(--type-label-size);
+  line-height: var(--type-leading-label);
+}
+
+figure {
+  margin: var(--space-0);
+}
+
+figure img,
+.asset-fallback {
+  width: var(--control-height-xs);
+  height: var(--control-height-xs);
+}
+
+.asset-fallback {
+  border: 2px solid var(--color-primary);
+  background: var(--surface-accent-wash);
+}

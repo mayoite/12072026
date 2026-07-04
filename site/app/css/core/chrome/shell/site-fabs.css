@@ -1,0 +1,86 @@
+/* Floating action buttons — explicit viewport anchoring (avoids missing dynamic Tailwind offsets). */
+
+:root {
+  --site-fab-bottom: calc(1.25rem + env(safe-area-inset-bottom, 0));
+  --site-fab-bottom-raised: calc(6.25rem + env(safe-area-inset-bottom, 0px));
+  --site-fab-clearance: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  --site-fab-side-left: 0px;
+  --site-fab-side-right: 0px;
+}
+
+@media (width >= theme(--breakpoint-sm)) {
+  :root {
+    --site-fab-side-left: 10.5rem;
+    --site-fab-side-right: 4.75rem;
+  }
+}
+
+html:has([data-cookie-consent-bar]) {
+  --site-fab-bottom-raised: calc(7.5rem + env(safe-area-inset-bottom, 0px));
+  --site-fab-clearance: calc(12rem + env(safe-area-inset-bottom, 0px));
+}
+
+@utility site-fab-anchor {
+  position: fixed;
+  z-index: 40;
+}
+
+@utility site-fab-anchor--left {
+  left: 0.75rem;
+  @media (width >= theme(--breakpoint-sm)) {
+    left: 1rem;
+  }
+}
+
+@utility site-fab-anchor--right {
+  right: 0.75rem;
+  @media (width >= theme(--breakpoint-sm)) {
+    right: 1.25rem;
+  }
+}
+
+@utility site-fab-anchor--inset-x {
+  left: 0.75rem;
+  right: 0.75rem;
+}
+
+@utility site-fab-anchor--bottom {
+  bottom: var(--site-fab-bottom);
+}
+
+@utility site-fab-anchor--bottom-raised {
+  bottom: var(--site-fab-bottom-raised);
+}
+
+@utility site-fab-anchor--panel {
+  bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+@utility site-fab-anchor--panel-raised {
+  bottom: calc(10.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+@utility site-fab-launcher {
+  display: inline-flex;
+  height: 3rem;
+  width: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 1.5rem 3rem -28px var(--overlay-inverse-35);
+  transition-property: transform, background-color, box-shadow;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-standard);
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@utility site-fab-launcher--assistant {
+  border: 0.0625rem solid var(--overlay-inverse-12);
+  background-color: var(--overlay-inverse-88, var(--color-ecru-950));
+  color: var(--text-inverse);
+  &:hover {
+    background-color: var(--color-primary);
+  }
+}

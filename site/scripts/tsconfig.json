@@ -1,0 +1,24 @@
+{
+  "extends": "../config/build/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/types/*": ["../config/database/types/*"],
+      "@/app/*": ["../app/*"],
+      "@/components/*": ["../components/*"],
+      "@/lib/site-data/*": ["../lib/site-data/*"],
+      "@/features/*": ["../features/*"],
+      "@/lib/*": ["../lib/*"],
+      "@/*": ["../*"]
+    },
+    "target": "ES2022",
+    "strict": false,
+    "allowJs": true,
+    "noEmit": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.js",
+    "**/*.mjs"
+  ]
+}

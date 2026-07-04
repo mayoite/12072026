@@ -1,0 +1,20 @@
+# Enforce LF on all platforms (GitHub docs: text eol=lf for cross-platform CI)
+# https://docs.github.com/en/get-started/git-basics/configuring-git-to-handle-line-endings
+* text=auto eol=lf
+
+# SQL migrations participate in tech-stack source hashing
+*.sql text eol=lf
+
+# Explicitly mark common binary/media files so Git doesn't attempt to normalize them
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.gz binary
+*.pdf binary
+
+# Ensure npm lock files and generated artifacts are treated as binary where appropriate
+package-lock.json text

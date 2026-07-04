@@ -1,0 +1,7 @@
+@import "../../chrome/shell/pdp.css";
+@import "../routes/pdp/detail.css";
+@import "../routes/pdp/cta.css";
+@import "../routes/product-viewer.css";
+@import "../routes/catalog/mobile.css";
+@import "../routes/pdp/product-gallery.css";
+@reference "../../../index.css";

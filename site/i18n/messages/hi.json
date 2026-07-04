@@ -1,0 +1,413 @@
+{
+  "common": {
+    "signIn": "साइन इन करें",
+    "signOut": "साइन आउट",
+    "guest": "अतिथि के रूप में जारी रखें",
+    "loading": "लोड हो रहा है...",
+    "error": "एक त्रुटि हुई"
+  },
+  "home": {
+    "title": "ओआंडो प्लेटफॉर्म",
+    "subtitle": "पेशेवर स्पेस प्लानिंग और डिज़ाइन टूल",
+    "getStarted": "शुरू करें",
+    "hero": {
+      "title": [
+        "Spaces that work",
+        "as hard as",
+        "your team"
+      ],
+      "kicker": "पैन-इंडिया · 2011 से",
+      "primaryCta": {
+        "label": "उत्पाद देखें",
+        "href": "/products"
+      },
+      "secondaryCta": {
+        "label": "कोटेशन अनुरोध",
+        "href": "/#contact"
+      },
+      "glassProof": {
+        "badge": "Trusted by",
+        "lead": "Executed over 400+ workplace projects since 2011 — Fortune 500 and growing teams.",
+        "support": "Serving India's biggest companies and government.",
+        "href": "/trusted-by",
+        "cta": "View clients"
+      }
+    },
+    "plannerSuite": {
+      "titleLead": "Oando",
+      "titleAccent": "Planner",
+      "description": "Sketch a floor, place catalog furniture, and export a layout before you quote.",
+      "loginHref": "/login/?next=%2Fplanner%2Fcanvas%2F",
+      "loginLabel": "Member login",
+      "overviewHref": "/planner",
+      "overviewLabel": "Learn more"
+    },
+    "trust": {
+      "logoLabel": "Selected organisations",
+      "logos": [
+        {
+          "name": "Titan",
+          "src": "/images/client-logos/Titan.png"
+        },
+        {
+          "name": "L&T",
+          "src": "/images/client-logos/LandT.png"
+        },
+        {
+          "name": "JSW",
+          "src": "/images/client-logos/JSW.png"
+        },
+        {
+          "name": "Tata Motors",
+          "src": "/images/client-logos/TataMotors.jpg"
+        },
+        {
+          "name": "Maruti Suzuki",
+          "src": "/images/client-logos/MarutiSuzuki.png"
+        },
+        {
+          "name": "HDFC",
+          "src": "/images/client-logos/HDFCLogo.jpg"
+        },
+        {
+          "name": "Canara Bank",
+          "src": "/images/client-logos/CanaraBank.jpg"
+        },
+        {
+          "name": "Franklin Templeton",
+          "src": "/images/client-logos/FranklinTempleton.jpg"
+        },
+        {
+          "name": "Hyundai",
+          "src": "/images/client-logos/HyundaiLogo.jpg"
+        },
+        {
+          "name": "IDBI Bank",
+          "src": "/images/client-logos/IDBIBankLogo.png"
+        },
+        {
+          "name": "Usha",
+          "src": "/images/client-logos/USHA.png"
+        },
+        {
+          "name": "Bihar Government",
+          "src": "/images/client-logos/BiharGovernment.jpg"
+        },
+        {
+          "name": "SAIL",
+          "src": "/images/client-logos/SAIL.png"
+        },
+        {
+          "name": "BIS",
+          "src": "/images/client-logos/BIS.jpg"
+        },
+        {
+          "name": "Sonalika",
+          "src": "/images/client-logos/Sonalika.jpg"
+        },
+        {
+          "name": "Survey of India",
+          "src": "/images/client-logos/SurveyofIndia.jpg"
+        },
+        {
+          "name": "CRI Pumps",
+          "src": "/images/client-logos/CRIPumps.jpg"
+        },
+        {
+          "name": "MECON",
+          "src": "/images/client-logos/MECON.jpg"
+        }
+      ],
+      "projectsCta": "View projects"
+    },
+    "brandStatement": {
+      "lead": "We have been designing and installing workplaces across India since 2011.",
+      "body": "Not just interiors, but working environments that help teams focus, collaborate, and stay productive. Built for organizations that cannot afford unclear planning or weak execution."
+    },
+    "collections": {
+      "titleLead": "Browse",
+      "titleAccent": "workspace categories",
+      "catalogCta": {
+        "label": "Browse full catalog",
+        "href": "/products"
+      },
+      "items": [
+        {
+          "name": "Seating",
+          "image": "/images/catalog/oando-seating--fluid-x/image-01.webp",
+          "href": "/products/seating"
+        },
+        {
+          "name": "Workstations",
+          "image": "/images/catalog/oando-workstations--deskpro/image-1.jpg",
+          "href": "/products/workstations"
+        },
+        {
+          "name": "Tables",
+          "image": "/images/products/meeting-table-10pax.webp",
+          "href": "/products/tables"
+        },
+        {
+          "name": "Storage",
+          "image": "/images/catalog/oando-storage--metal-storages/image-1.jpg",
+          "href": "/products/storages"
+        },
+        {
+          "name": "Soft Seating",
+          "image": "/images/products/softseating-solace-1.webp",
+          "href": "/products/soft-seating"
+        },
+        {
+          "name": "Education",
+          "image": "/images/products/chair-cafeteria.webp",
+          "href": "/products/education"
+        }
+      ]
+    },
+    "whyChooseUs": {
+      "titleLead": "We engineer",
+      "titleAccent": "workspaces"
+    },
+    "showcase": {
+      "sectionLabel": "Selected projects",
+      "sectionTitleLead": "Delivered for",
+      "sectionTitleAccent": "leading organizations",
+      "browseCta": {
+        "label": "View portfolio",
+        "href": "/portfolio"
+      },
+      "items": [
+        {
+          "id": "dmrc",
+          "name": "DMRC",
+          "label": "",
+          "image": "/images/projects/DMRC/hero.webp",
+          "link": "/portfolio"
+        },
+        {
+          "id": "titan",
+          "name": "Titan",
+          "label": "",
+          "image": "/images/projects/Titan/hero.webp",
+          "link": "/portfolio"
+        },
+        {
+          "id": "tvs",
+          "name": "TVS",
+          "label": "",
+          "image": "/images/projects/TVS/hero.webp",
+          "link": "/portfolio"
+        }
+      ]
+    }
+  },
+  "planner": {
+    "title": "स्पेस प्लानर",
+    "newProject": "नया प्रोजेक्ट",
+    "roomPresets": "कमरे के प्रीसेट",
+    "session": {
+      "title": "Plan Sessions",
+      "description": "Save into the shared planner workspace, keep a local draft close at hand, import a canonical planner document, or reopen the same plan in 3D.",
+      "saveCloud": "Save to Cloud",
+      "saveDraft": "Save Local Draft",
+      "saveAsNew": "Save as New Session",
+      "open3d": "Open in 3D Viewer",
+      "importJson": "Import Plan JSON",
+      "exportJson": "Export Plan JSON",
+      "savedPlans": "Saved Plans",
+      "noPlans": "No local draft or cloud plan yet.",
+      "delete": "Delete",
+      "rename": "Rename"
+    }
+  },
+  "about": {
+    "heroTitle": "वन एंड ओनली के बारे में",
+    "heroSubtitle": "हम व्यावहारिक, टिकाऊ और स्केलेबल वर्कस्पेस सिस्टम डिज़ाइन और डिलीवर करते हैं।",
+    "sectionKicker": "Who we are",
+    "sectionTitle": "A planning-first furniture partner for modern offices.",
+    "paragraphs": [
+      "We combine workplace planning, product selection, and execution support so teams can move from concept to handover with fewer delays and better outcomes.",
+      "Our projects cover ergonomic seating, modular workstations, meeting environments, storage, and support services tailored to enterprise and institutional needs.",
+      "Every engagement is managed for clarity: documented scope, practical timelines, and accountable after-sales support."
+    ],
+    "confidenceKicker": "Client confidence",
+    "confidenceTitle": "Trusted by enterprise and institutional teams.",
+    "confidenceCta": "View all clients",
+    "modelKicker": "Operating model",
+    "modelTitle": "One team from planning brief to post-installation support.",
+    "modelDescription": "We keep planning, sourcing, execution, and support connected so projects stay clear from early decisions through handover.",
+    "modelPillars": [
+      {
+        "title": "Planning-led recommendations",
+        "detail": "Category, budget, and layout decisions are tied to how teams actually use the space."
+      },
+      {
+        "title": "Execution clarity",
+        "detail": "Commercial scope, timelines, delivery coordination, and installation readiness stay visible throughout the project."
+      },
+      {
+        "title": "Support after handover",
+        "detail": "Warranty references, service routing, and follow-up support remain part of the same delivery relationship."
+      }
+    ],
+    "processKicker": "How we work",
+    "processTitle": "A practical sequence for office projects.",
+    "processSteps": [
+      {
+        "title": "Brief and site context",
+        "detail": "We map headcount, workspace type, commercial priorities, and the timing that matters for your team."
+      },
+      {
+        "title": "Specification and alignment",
+        "detail": "Products, finishes, and quantity mixes are translated into a clear planning and approval path."
+      },
+      {
+        "title": "Delivery and support",
+        "detail": "Installation, service routing, and after-sales follow-through stay connected to the original brief."
+      }
+    ],
+    "supportTitle": "Need planning or documentation before you decide?",
+    "supportDescription": "Use the planning or Resource Desk lanes when your team needs layout guidance, category packs, technical sheets, or a clearer next step before procurement.",
+    "supportPrimaryCta": "Request planning call",
+    "supportSecondaryCta": "Open Resource Desk"
+  },
+  "contact": {
+    "heroTitle": "संपर्क करें",
+    "heroSubtitle": "अपनी वर्कस्पेस आवश्यकता साझा करें और हमारी टीम अगले कदम बताएगी।",
+    "sectionTitle": "Office and support contacts",
+    "introTitle": "Start with the right team.",
+    "introDescription": "Share your requirement, timeline, or category mix. We will route it to the right planning or sales contact and respond with practical next steps.",
+    "resourceDeskLead": "Need category packs, technical sheets, or planning references first?",
+    "resourceDeskCta": "Use the Resource Desk",
+    "resourceDeskTail": "and we will send the right documentation set for your brief.",
+    "quickDeskKicker": "Fastest routing",
+    "quickDeskTitle": "Use the right lane from the start.",
+    "quickDeskDescription": "Planning discussions, document requests, and quote conversations move faster when the request reaches the right team first.",
+    "quickDeskPrimaryCta": "Open Resource Desk",
+    "quickDeskSecondaryCta": "Request planning call",
+    "offices": [
+      {
+        "title": "Corporate office",
+        "lines": [
+          "401, Jagat Trade Centre",
+          "Frazer Road",
+          "Patna - 800 013",
+          "India"
+        ]
+      },
+      {
+        "title": "Showroom",
+        "lines": [
+          "One and Only Furniture Pvt Ltd",
+          "Opp Patliputra Telephone Exchange",
+          "North Industrial Estate Road",
+          "Patna - 800 010",
+          "India"
+        ]
+      }
+    ]
+  },
+  "products": {
+  "heroSubtitle": "लाइव कैटलॉग से श्रेणियां ब्राउज़ करें और अपनी टीम के लिए सही मिक्स चुनें।",
+  "headlineLead": "वर्कस्पेस",
+  "headlineAccent": "उत्पाद",
+  "pillarsKicker": "इन श्रेणियों की वजह",
+  "pillarsTitleLead": "के लिए बने",
+  "pillarsTitleAccent": "वास्तविक कार्यालय वर्कफ़्लो",
+  "pillarsIntro": "हर श्रेणी को टिकाऊपन, स्पष्ट स्पेसिफिकेशन, और हैंडओवर के बाद सहायता के लिए चुना गया है, केवल प्रस्तुति के लिए नहीं।",
+  "pillars": [
+      {
+        "title": "Specification-led guidance",
+        "detail": "We map headcount, usage patterns, and budget so product choices are practical from day one.",
+        "icon": "check-circle"
+      },
+      {
+        "title": "Reliable timelines",
+        "detail": "Modular categories and structured planning help teams move from approval to installation with control.",
+        "icon": "clock"
+      },
+      {
+        "title": "After-sales confidence",
+        "detail": "Warranty coverage and service support are built into every proposal, not handled as an afterthought.",
+        "icon": "shield"
+      }
+    ]
+  },
+  "solutions": {
+    "metadataTitle": "Workspace Planning Approach",
+    "metadataDescription": "See how One&Only plans, specifies, and delivers workspace projects from brief to after-sales support.",
+    "heroTitle": "How we deliver workspace projects",
+    "heroTitleLead": "वर्कस्पेस",
+    "heroTitleAccent": "समाधान",
+    "heroSubtitle": "योजना से डिलीवरी तक — एक टीम, स्पष्ट समयरेखा, मापनीय परिणाम।",
+    "heroBackgroundImage": "/images/hero/hero-2.webp",
+    "deliveryKicker": "Delivery model",
+    "deliveryTitle": "Built for teams that need predictability and speed.",
+    "deliveryDescription": "Every project is managed through clear scope definition, practical planning outputs, and accountable on-site execution. The result is smoother approvals and fewer surprises during rollout.",
+    "deliveryMedia": {
+      "src": "/images/hero/dmrc-hero.webp",
+      "alt": "Workspace planning and delivery"
+    },
+    "stats": [
+      {
+        "value": "14+",
+        "label": "Years in workspace projects"
+      },
+      {
+        "value": "120+",
+        "label": "Projects delivered"
+      },
+      {
+        "value": "250+",
+        "label": "Client organizations served"
+      },
+      {
+        "value": "20+",
+        "label": "Cities supported"
+      }
+    ],
+    "processKicker": "Process detail",
+    "processTitle": "Three phases from brief to handover.",
+    "phaseLabelTemplate": "Phase {number}",
+    "planningKicker": "Start planning",
+    "planningTitle": "Discuss your project brief with our planning team.",
+    "planningDescription": "Share site details, timelines, and seat count. We will suggest a practical approach for products, layout, and execution.",
+    "planningPrimaryCta": "Request planning call",
+    "planningSecondaryCta": "Browse product categories",
+    "planningTertiaryCta": "Open Resource Desk",
+    "planningCtas": [
+      {
+        "label": "Request planning call",
+        "href": "/contact",
+        "variant": "primary"
+      },
+      {
+        "label": "Browse product categories",
+        "href": "/products",
+        "variant": "outline"
+      },
+      {
+        "label": "Open Resource Desk",
+        "href": "/downloads",
+        "variant": "outline"
+      }
+    ],
+    "deliverySteps": [
+      {
+        "title": "Brief and business requirements",
+        "detail": "We align on team structure, workflow priorities, budget range, and decision checkpoints.",
+        "image": "/images/catalog/oando-workstations--deskpro/image-1.jpg"
+      },
+      {
+        "title": "Layout, specification, and BOQ",
+        "detail": "Design options are translated into practical category selections and quantity plans for approval.",
+        "image": "/images/catalog/oando-tables--curvivo-meet/image-1.jpg"
+      },
+      {
+        "title": "Execution and handover support",
+        "detail": "Delivery, installation, and warranty onboarding are managed with clear communication and accountability.",
+        "image": "/images/catalog/oando-soft-seating--accent/image-1.jpg"
+      }
+    ]
+  }
+}

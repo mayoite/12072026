@@ -1,0 +1,240 @@
+/* Full-bleed workspace: body is h-dvh overflow-hidden (PlannerBodyTheme). */
+#main-content:has(.open3d-route-host) {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.open3d-route-host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--surface-page);
+  color: var(--text-strong);
+}
+
+.open3d-workspace-root {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+.open3d-canvas-with-rail {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--surface-soft) 88%, var(--surface-page));
+}
+
+.open3d-canvas-with-rail > .open3d-canvas-embedded {
+  flex: 1;
+  min-width: 0;
+}
+
+.open3d-canvas-embedded {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.open3d-canvas-embedded .canvas-region {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0;
+}
+
+.open3d-canvas-embedded[data-tool="select"] canvas,
+.open3d-canvas-embedded[data-tool="door"] canvas,
+.open3d-canvas-embedded[data-tool="window"] canvas,
+.open3d-canvas-embedded[data-tool="text"] canvas {
+  cursor: default;
+}
+
+.open3d-canvas-embedded[data-tool="pan"] canvas {
+  cursor: grab;
+}
+
+.open3d-canvas-embedded[data-tool="wall"] canvas {
+  cursor: crosshair;
+}
+
+.open3d-canvas-embedded canvas {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: none;
+  border-radius: 0;
+  touch-action: none;
+  cursor: crosshair;
+  display: block;
+}
+
+.open3d-canvas-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.open3d-canvas-empty strong {
+  color: var(--text-strong);
+  font-size: var(--type-body-size);
+  font-weight: var(--font-weight-medium);
+}
+
+.open3d-canvas-empty kbd {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-xs);
+  padding: 0 var(--space-1);
+  font-size: var(--type-label-size);
+  background: var(--surface-panel);
+}
+
+.open3d-canvas-embedded[data-pending-placement="true"] canvas {
+  cursor: cell;
+}
+
+.open3d-loading-shell {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: center;
+  padding: var(--space-8);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.open3d-loading-shell__bar {
+  width: min(18rem, 70vw);
+  height: 0.65rem;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--surface-soft) 80%, transparent) 0%,
+    color-mix(in srgb, var(--color-primary) 35%, var(--surface-panel)) 50%,
+    color-mix(in srgb, var(--surface-soft) 80%, transparent) 100%
+  );
+  background-size: 200% 100%;
+  animation: open3d-loading-shimmer 1.4s ease-in-out infinite;
+}
+
+.open3d-loading-shell__bar--short {
+  width: min(10rem, 45vw);
+  animation-delay: 0.2s;
+}
+
+.open3d-route-host--loading {
+  place-content: center;
+}
+
+.open3d-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-pill);
+  padding: 0 var(--space-2);
+  min-height: 1.375rem;
+  color: var(--text-body);
+  background: color-mix(in srgb, var(--surface-panel) 92%, transparent);
+  white-space: nowrap;
+  font-size: 0.6875rem;
+  line-height: 1.2;
+}
+
+.open3d-status-track {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.open3d-status-pill--accent {
+  border-color: color-mix(in srgb, var(--color-primary) 28%, transparent);
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--surface-panel));
+}
+
+.open3d-status-pill--placement {
+  border-color: color-mix(in srgb, var(--color-warning) 35%, transparent);
+  color: var(--color-warning);
+  background: color-mix(in srgb, var(--color-warning) 10%, var(--surface-panel));
+}
+
+.open3d-status-pill--muted {
+  color: var(--text-muted);
+}
+
+@keyframes open3d-loading-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .open3d-loading-shell__bar {
+    animation: none;
+  }
+}
+
+.open3d-canvas-placement-hint {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-4);
+  transform: translateX(-50%);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  color: var(--text-body);
+  background: var(--surface-glass-strong);
+  box-shadow: var(--shadow-soft);
+  font-size: var(--type-small-size);
+  pointer-events: none;
+}
+
+.open3d-palette-trigger {
+  min-height: var(--control-height-xs);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-3);
+  color: var(--text-body);
+  background: var(--surface-panel);
+  cursor: pointer;
+}
+
+.open3d-palette-trigger:hover {
+  background: var(--surface-soft);
+}
+
+.open3d-palette-trigger:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}

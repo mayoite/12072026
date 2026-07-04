@@ -1,0 +1,85 @@
+/**
+ * Shared server auth helpers used across all product surfaces (Planner, Configurator, CRM).
+ * Wraps Supabase auth and provides guest access functionality.
+ */
+import { redirect } from "next/navigation";
+import { createServerClient } from "@/platform/supabase/server";
+import { hasPublicSupabaseEnv } from "@/platform/supabase/env";
+import type { SharedSessionUser, PlannerRole } from "@/features/shared/auth/types";
+import { buildAccessRedirect } from "@/lib/auth/plannerRedirect";
+import { isAppAdmin } from "@/lib/auth/roles";
+
+function isNextDynamicServerUsageError(error: unknown): boolean {
+  const errorRecord =
+    error && typeof error === "object" ? (error as Record<string, unknown>) : null;
+  const digest = typeof errorRecord?.digest === "string" ? errorRecord.digest : "";
+  if (digest === "DYNAMIC_SERVER_USAGE") {
+    return true;
+  }
+
+  const message = error instanceof Error ? error.message : String(error);
+  return (
+    message.includes("Dynamic server usage") &&
+    message.includes("couldn't be rendered statically")
+  );
+}
+
+export async function getOptionalUser(): Promise<SharedSessionUser | null> {
+  // If Supabase env vars are not configured, there is no auth surface to query.
+  if (!hasPublicSupabaseEnv()) {
+    return null;
+  }
+
+  try {
+    const supabase = await createServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return null;
+    }
+
+    const isAdmin = isAppAdmin(user);
+
+    return {
+      id: user.id,
+      email: user.email || "",
+      name:
+        (user.user_metadata?.name as string | undefined) ??
+        (user.email ? user.email.split("@")[0] : undefined),
+      avatarUrl: user.user_metadata?.avatarUrl as string | undefined,
+      role: (isAdmin ? "owner" : "member") as PlannerRole,
+    };
+  } catch (error) {
+    if (isNextDynamicServerUsageError(error)) {
+      throw error;
+    }
+
+    // Session is invalid or expired.
+    console.error("getOptionalUser error:", error);
+    return null;
+  }
+}
+
+export async function requireAuthUser(
+  nextPath: string,
+  surface: "planner" | "configurator" | "crm" | "ops" | "admin" = "planner"
+): Promise<SharedSessionUser> {
+  const user = await getOptionalUser();
+
+  if (!user) {
+    const fallback = surface === "admin" ? "/admin" : undefined;
+    redirect(buildAccessRedirect(nextPath, fallback));
+  }
+
+  if ((surface === "crm" || surface === "ops") && (user.role === "guest" || user.role === "viewer")) {
+    redirect("/dashboard?error=unauthorized_access");
+  }
+
+  if (surface === "admin" && user.role !== "owner") {
+    redirect("/dashboard?error=unauthorized_admin_access");
+  }
+
+  return user;
+}

@@ -1,0 +1,44 @@
+{
+  "name": "oando-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter oando-site dev",
+    "dev:turbo": "pnpm --filter oando-site dev:turbo",
+    "check-sharp": "node scripts/check-sharp.js",
+    "build": "pnpm run check-sharp && pnpm --filter oando-site build && pnpm --filter oando-tech-stack-docs build",
+    "start": "pnpm --filter oando-site start",
+    "lint": "pnpm --filter oando-site lint",
+    "typecheck": "pnpm --filter oando-site typecheck",
+    "test": "pnpm --filter oando-site test",
+    "docs:sync:tech-stack": "node site/tech-stack-generator/scripts/generate.mjs && node site/tech-stack-generator/scripts/emit-renderer-data.mjs",
+    "docs:check:tech-stack": "node site/tech-stack-generator/scripts/check.mjs",
+    "docs:check:root-links": "node site/scripts/check-root-markdown-links.mjs",
+    "docs:gate:tech-stack": "node site/tech-stack-generator/scripts/gate.mjs",
+    "docs:typecheck:tech-stack": "pnpm --filter oando-tech-stack-docs typecheck",
+    "docs:test:tech-stack": "pnpm --filter oando-tech-stack-docs test",
+    "docs:build:tech-stack": "pnpm run docs:sync:tech-stack && pnpm run docs:typecheck:tech-stack && pnpm run build:tech-stack",
+    "docs:sync:all": "pnpm --filter oando-site docs:sync:all",
+    "release:gate": "turbo run release:gate",
+    "release:gate:fast": "turbo run release:gate:fast",
+    "lint:secrets": "secretlint \"**/*.{cjs,css,csv,html,js,json,jsx,md,mjs,ps1,py,sql,toml,ts,tsx,txt,yaml,yml}\" \".env*\" \".gitattributes\" \".gitignore\" \".npmrc\" \".vercelignore\"",
+    "vercel:preview": "vercel --yes",
+    "vercel:prod": "pnpm run release:gate && vercel --prod --yes",
+    "dev:tech-stack": "pnpm --filter oando-tech-stack-docs dev",
+    "build:tech-stack": "pnpm --filter oando-tech-stack-docs build",
+    "preview:tech-stack": "pnpm --filter oando-tech-stack-docs preview",
+    "typecheck:tech-stack": "pnpm --filter oando-tech-stack-docs typecheck",
+    "test:tech-stack": "pnpm --filter oando-tech-stack-docs test"
+  },
+  "devDependencies": {
+    "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",
+    "secretlint": "^13.0.2",
+    "ts-morph": "28.0.0",
+    "turbo": "latest",
+    "zod": "4.4.3"
+  }
+}

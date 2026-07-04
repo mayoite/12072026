@@ -1,0 +1,277 @@
+/* ── Product catalog styles ── */
+
+.catalog-card {
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border-width: 0.0625rem;
+  border-radius: var(--radius-lg);
+  border-color: var(--border-soft);
+  background: var(--surface-panel-strong);
+  box-shadow: var(--shadow-soft);
+  transition-property: transform, border-color, box-shadow;
+  transition-duration: var(--motion-base);
+  transition-timing-function: var(--ease-standard);
+}
+.catalog-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-float);
+}
+
+.catalog-card__compare {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: var(--radius-pill);
+  border-width: 1px;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  transition-property: color, background-color, border-color, opacity, transform;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-standard);
+  -webkit-backdrop-filter: blur(0.625rem);
+  backdrop-filter: blur(10px);
+}
+.catalog-card__compare--active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--text-inverse);
+}
+.catalog-card__compare--idle {
+  border-color: var(--overlay-panel-72);
+  background: var(--surface-glass-strong);
+  color: var(--text-body);
+  opacity: 0.9;
+  -webkit-backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(8px);
+}
+.catalog-card__compare--idle:hover {
+  opacity: 1;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+@utility catalog-card__media {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-soft);
+  background:
+    radial-gradient(
+      130% 110% at 50% 10%,
+      color-mix(in srgb, white 88%, var(--surface-muted)) 0%,
+      var(--surface-muted) 100%
+    );
+}
+
+@utility catalog-card__badge-row {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+@utility catalog-card__badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-soft);
+  background: var(--overlay-panel-92);
+  padding: 0.25rem 0.625rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  color: var(--text-body);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+@utility catalog-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  @media (width >= theme(--breakpoint-md)) { padding: 1.5rem; }
+}
+
+@utility catalog-card__topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+@utility catalog-card__eyebrow {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--text-subtle);
+}
+
+.catalog-card__description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  min-height: 3lh;
+}
+
+@utility catalog-card__pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-soft);
+  background: var(--surface-hover);
+  padding: 0.25rem 0.625rem;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-body);
+}
+
+.catalog-card__title {
+  font-size: 1.48rem;
+  line-height: 1.25;
+  color: var(--text-strong);
+  transition-property: color;
+  transition-duration: var(--motion-fast);
+}
+.group:hover .catalog-card__title { color: var(--color-primary); }
+
+@utility catalog-card__signal-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+@utility catalog-card__signal {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-soft);
+  background: var(--surface-hover);
+  padding: 0.25rem 0.625rem;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-body);
+}
+
+@utility catalog-card__fact-grid {
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@utility catalog-card__fact {
+  display: flex;
+  min-height: 4.875rem;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 1rem;
+  border: 1px solid var(--border-soft);
+  background: var(--surface-hover-soft);
+  padding: 0.75rem 0.875rem;
+}
+
+@utility catalog-card__fact-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+
+@utility catalog-card__fact-value {
+  font-size: 0.875rem;
+  line-height: 1.375;
+  color: var(--text-strong);
+}
+
+@utility catalog-card__actions {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-top: 1px solid var(--border-soft);
+  padding-top: 1rem;
+}
+
+.catalog-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-strong);
+  transition-property: color;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--ease-standard);
+}
+.group:hover .catalog-card__link { color: var(--color-primary); }
+
+.catalog-card--compact .catalog-card__media {
+  aspect-ratio: 1 / 1;
+}
+
+.catalog-card--compact .catalog-card__body {
+  gap: 0.625rem;
+  padding: 1.125rem 1.125rem 0.875rem;
+}
+
+.catalog-card--compact .catalog-card__body .typ-h3 {
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--type-letter-title);
+}
+
+.catalog-card--compact .catalog-card__meta {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
+.catalog-card--compact .catalog-card__footer {
+  padding: 0 1.125rem 1.125rem;
+}
+
+/* Products index — compact category tiles (homepage carousel keeps full size). */
+.home-collection-card--compact {
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-lg);
+}
+
+.home-collection-card--compact .home-collection-card__footer {
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+}
+
+@media (width >= theme(--breakpoint-md)) {
+  .home-collection-card--compact .home-collection-card__footer {
+    padding: 1rem 1.25rem;
+  }
+}
+
+.home-collection-card--compact .typ-overlay-title {
+  font-size: clamp(0.875rem, 0.84rem + 0.18vw, 1rem);
+  line-height: 1.15;
+}
+
+.home-collection-card--compact .home-collection-card__arrow {
+  height: 1.75rem;
+  width: 1.75rem;
+}
+
+.home-collection-card--compact:hover {
+  box-shadow: 0 0.75rem 1.75rem -22px color-mix(in srgb, var(--color-ocean-boat-blue-900) 24%, transparent);
+}
+
