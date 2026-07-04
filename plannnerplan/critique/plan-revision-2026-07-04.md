@@ -3,7 +3,9 @@
 Review covers the ten phase files in `plannnerplan/phases/` against
 `IMPLEMENTATION-DECISIONS.md`, `QUALITY-GATES.md`, `DESIGN-BENCHMARK-PROTOCOL.md`,
 `HANDOVER.md`, `FAILURESPLAN.md`, and `PACKAGES.md`. Cross-checked against
-`benchmarks/plan-revision-2026-07-04.md`.
+`plans/2026-07-04/benchmark.md`.
+
+Cross-refs: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`, `plans/2026-07-04/critique.md`, `plannnerplan/benchmarks/INDEX.md`.
 
 ## Coverage gaps
 
@@ -213,7 +215,7 @@ copy; Phase 10 §10-CLN-05 STAGING_PHASE_01A_RESIDUE scope drift.)
   1. Apply Top-5 fixes above in a single coordinated revision
      (one pass through IMPLEMENTATION-DECISIONS, Phase 02, Phase
      08, Phase 09, Phase 05).
-  2. Re-run `benchmarks/plan-revision-2026-07-04.md` with all
+  2. Re-run `plans/2026-07-04/benchmark.md` with all
      ten phases in scope (the current benchmark covers only
      governance files + Phase 01).
   3. Add Forbidden-action lines for each phase per the

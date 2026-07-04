@@ -26,7 +26,7 @@ import {
   buildTaxonomyPath,
   buildShortName,
   normalizeMaterial,
-  _normalizeColor,
+  normalizeColor,
   normalizeAssemblyType,
 } from "./catalogTaxonomy";
 import {

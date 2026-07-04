@@ -442,9 +442,12 @@ export class Open3dCatalogClient {
     const dimensionFilter = query.dimensionFilter;
     if (dimensionFilter) {
       const df = dimensionFilter;
-      const minW = df.minWidthMm, maxW = df.maxWidthMm;
-      const minD = df.minDepthMm, maxD = df.maxDepthMm;
-      const minH = df.minHeightMm, maxH = df.maxHeightMm;
+      const minW = df.minWidthMm ?? null;
+      const maxW = df.maxWidthMm ?? null;
+      const minD = df.minDepthMm ?? null;
+      const maxD = df.maxDepthMm ?? null;
+      const minH = df.minHeightMm ?? null;
+      const maxH = df.maxHeightMm ?? null;
       candidates = candidates.filter((i) => {
         const { widthMm, depthMm, heightMm } = i.dimensions;
         return (minW === null || widthMm >= minW)
@@ -466,9 +469,10 @@ export class Open3dCatalogClient {
 
     const configurabilityFilter = query.configurabilityFilter;
     if (configurabilityFilter && configurabilityFilter.length > 0) {
-      candidates = candidates.filter((item) =>
-        item.configurability !== null && configurabilityFilter.includes(item.configurability),
-      );
+      candidates = candidates.filter((item) => {
+        const configurability = item.configurability ?? null;
+        return configurability !== null && configurabilityFilter.includes(configurability);
+      });
     }
 
     const mountingFilter = query.mountingFilter;

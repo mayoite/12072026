@@ -10,6 +10,7 @@ import {
   Map,
   Package,
   Palette,
+  PenSquare,
   Settings,
   Shapes,
   Users,
@@ -70,7 +71,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     ],
   },
   {
-    title: "Catalog",
+    title: "Catalog Assets",
     items: [
       {
         href: "/admin/catalog",
@@ -89,6 +90,13 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         label: "Workspace library",
         description: "Static workspace element library (read-only browse)",
         icon: Library,
+      },
+      {
+        href: "/admin/svg-editor",
+        label: "SVG block editor",
+        description:
+          "Puck-managed block descriptors (fixed, configurable, parametric) — Phase 04",
+        icon: PenSquare,
       },
     ],
   },
@@ -159,8 +167,8 @@ export const ADMIN_HUB_SECTIONS: { title: string; items: AdminNavItem[] }[] = [
     items: ADMIN_NAV_GROUPS.find((g) => g.title === "Planner")?.items ?? [],
   },
   {
-    title: "Catalog & library",
-    items: ADMIN_NAV_GROUPS.find((g) => g.title === "Catalog")?.items ?? [],
+    title: "Catalog assets",
+    items: ADMIN_NAV_GROUPS.find((g) => g.title === "Catalog Assets")?.items ?? [],
   },
   {
     title: "CRM & ops",

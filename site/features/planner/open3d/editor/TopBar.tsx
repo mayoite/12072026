@@ -3,6 +3,7 @@
 import { useCallback, useState, type MouseEvent } from "react";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";
 import type { Open3dDisplayUnit } from "../model/types";
+import type { PanelId } from "./useDockingSystem";
 import styles from "./workspace.module.css";
 
 export interface TopBarProps {
@@ -42,6 +43,12 @@ export interface TopBarProps {
   onUndo?: () => void;
   /** Called when redo is triggered */
   onRedo?: () => void;
+  /** Active small-screen side panel */
+  activePanel?: Extract<PanelId, "left" | "right"> | null;
+  /** Called when the inventory panel toggle is triggered */
+  onToggleLeftPanel?: () => void;
+  /** Called when the properties panel toggle is triggered */
+  onToggleRightPanel?: () => void;
 }
 
 export function TopBar({
@@ -63,6 +70,9 @@ export function TopBar({
   canRedo = false,
   onUndo,
   onRedo,
+  activePanel = null,
+  onToggleLeftPanel,
+  onToggleRightPanel,
 }: TopBarProps) {
   const showPersistenceActions = accessContext !== "guest";
   const showGuestActions = accessContext === "guest";
@@ -234,6 +244,35 @@ export function TopBar({
 
       {/* Right actions */}
       <div className={styles.actions}>
+        {(onToggleLeftPanel || onToggleRightPanel) && (
+          <div className={styles.mobilePanelActions} role="group" aria-label="Panel toggles">
+            {onToggleLeftPanel && (
+              <button
+                type="button"
+                className={`${styles.btn} ${styles.mobilePanelBtn}`}
+                data-active={activePanel === "left"}
+                aria-pressed={activePanel === "left"}
+                aria-label="Toggle inventory panel"
+                onClick={onToggleLeftPanel}
+              >
+                Inventory
+              </button>
+            )}
+            {onToggleRightPanel && (
+              <button
+                type="button"
+                className={`${styles.btn} ${styles.mobilePanelBtn}`}
+                data-active={activePanel === "right"}
+                aria-pressed={activePanel === "right"}
+                aria-label="Toggle properties panel"
+                onClick={onToggleRightPanel}
+              >
+                Properties
+              </button>
+            )}
+          </div>
+        )}
+
         <div className={styles.historyActions} role="group" aria-label="History">
           <button
             type="button"

@@ -8,8 +8,11 @@ export type Open3dNativeHostProps = {
 };
 
 /**
- * Native Open3D planner host — renders in-site modules under
- * `features/planner/open3d/` (no iframe, no separate package).
+ * Live planner host for the `features/planner/open3d/` tree.
+ *
+ * The route is "native" in the sense that it runs in-site with no iframe or
+ * separate package, but the current implementation is still a hybrid:
+ * Fabric-backed 2-D editing plus Three/r3f 3-D viewing.
  */
 export function Open3dNativeHost({ guestMode = false, planId }: Open3dNativeHostProps) {
   return (

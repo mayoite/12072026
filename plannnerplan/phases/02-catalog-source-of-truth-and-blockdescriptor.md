@@ -14,6 +14,11 @@ Codify the `BlockDescriptor` Zod schema as the single contract between admin (wr
 - `D:\new\plannnerplan\phases\01-engine-lock-and-workspace-bootstrap.md` — install context (zod present)
 - `D:\new\CONTENTS.md` — `features/planner/open3d/catalog/svg/` location
 
+## Schema anchoring (per BP-02 in plans/2026-07-04/benchmark.md)
+- `@zod-schema: features/planner/open3d/catalog/svg/svgTypes.ts`
+- The schema is the **single contract** consumed by Phase 03 generator, Phase 04 admin editor, and Phase 06 descriptor loader (no forks; traceability via XX-XXX-NN IDs).
+- Cross-ref design spec + benchmark for single-source rule (avoids PLAN-FAIL-0406). Provisional per 2026-07-04 Global Standard.
+
 ## Scope
 In scope: defining Zod `BlockDescriptor` schema, identity rules, geometry contract, mounting contract, theme-token-only cartography, snapshot immutability marker, scope-typed `Open3dDescriptorError` taxonomy, the `svgBlockDescriptorLoader` reader at `site/block-descriptors/`.
 

@@ -2,7 +2,9 @@
 
 Locked packages for the **`open3d-next-staging`** Next 16 + React 19 workspace and the broader oando.co.in planner stack (2026-07-04). This is the read-only ground truth for what we install, what we defer, and why. Any change here is a `plannnerplan/` wide change.
 
-> Read with: `AGENTS.md`, `Readme.md`, `plannnerplan/IMPLEMENTATION-DECISIONS.md`, `plannnerplan/phases/conversion/benchmark.md`.
+Global Standard filter applies (per `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md` §6 and `plannnerplan/IMPLEMENTATION-DECISIONS.md` §"Global Standard Framework (Binding)"): every package decision must cite at least one principle from the 2026-07-04 benchmark report (`plans/2026-07-04/benchmark.md`); anti-copy attestation + benchmark justification required for changes.
+
+> Read with: `AGENTS.md`, `Readme.md`, `plannnerplan/IMPLEMENTATION-DECISIONS.md`, `plans/2026-07-04/benchmark.md`, `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`.
 
 ## Tiering
 

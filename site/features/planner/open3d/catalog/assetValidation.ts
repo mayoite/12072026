@@ -151,9 +151,10 @@ export function isAssetUrlExpired(
   generatedAtMs: number | undefined,
   ttlMs: number = DEFAULT_ASSET_TTL_MS,
 ): boolean {
-  if (generatedAtMs === null) return false;
+  const generated = generatedAtMs ?? null;
+  if (generated === null) return false;
   const now = Date.now();
-  return now - generatedAtMs > ttlMs;
+  return now - generated > ttlMs;
 }
 
 // ── Asset resolution ──

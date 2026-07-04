@@ -15,6 +15,12 @@ Server-render saved `BlockDescriptor` JSON via `@puckeditor/core`'s `<Puck.Rende
 - `D:\new\plannnerplan\phases\03-svg-pipeline-implementation.md` — SVG/PNG outputs consumed
 - `D:\new\plannnerplan\phases\04-admin-portal-svg-editor.md` — `puckBlockRegistry.ts` produced
 
+## Performance budgets and Anti-copy rule (per BP-05 in plans/2026-07-04/benchmark.md; cross-ref design spec)
+- ≤ 1 `<Puck.Render>` mount per admin/portal route (hard constraint); cite benchmark.
+- No internet-visible trade dress from Planner 5D, Floorplanner, AutoCAD Web, Figma, or Sketchfab (per DESIGN-BENCHMARK-PROTOCOL.md §"Anti-copy rule").
+- §"Decision log" cites `plans/2026-07-04/benchmark.md` for anti-copy verification.
+- REC-01 (Figma minimize) + REJ-02/REJ-05 apply; provisional UI/GS gate added per task.
+
 ## Scope
 In scope: index + slug routes under `site/app/(site)/portal/svg-catalog/`, RSC server-render via `getPuckData(slug)` reading `site/block-descriptors/{slug}.json`, registry import alias shared with admin, OG/SEO metadata, 404 path, pillbar chrome, roving-focus + live-region a11y, server-render round-trip test, type-checked registry import lint.
 Out of scope: Puck editor hydration (read-only portal), Supabase persistence (Phase 08), export/3D lazy (Phase 09), public member actions (Phase 06 reads the same descriptors at consumer side).
@@ -124,7 +130,9 @@ Single registry import path: `features/planner/admin/puckBlockRegistry.ts` (cano
 - SVG with `role="img"` + `aria-label`; `<title>` and `<desc>` already required by Phase 03 sanitization.
 
 ### Decision log
+- 2026-07-04 — Anti-copy verification per `plans/2026-07-04/benchmark.md` (BP-05) and DESIGN-BENCHMARK-PROTOCOL.md: no internet-visible trade dress from 5-product refs (Planner 5D, Floorplanner, AutoCAD Web, Figma, Sketchfab); only semantic tokens from `site/app/css/`. Owner: UI agent.
 - 2026-07-04 — Decision: portal mounts `<Puck.Render mode="preview">`, never `<Puck>` editor. Reason: portal is read-only; Puck editor bundle ships in admin only. Alternatives: portal mounts full Puck with `editable={false}` — rejected (larger bundle, same risk surface). Owner: UI agent.
 - 2026-07-04 — Decision: PNG thumbs served exclusively from R2 CDN. Reason: IMPLEMENTATION-DECISIONS dual-output rule; PNGs are CDN-cached imagery, not runtime-served. Alternatives: base64-embed in descriptor — rejected for size. Owner: UI agent.
 - 2026-07-04 — Decision: cache key `[slug, registry-version, schemaVersion]`. Reason: registry or schema drift must invalidate, idle save does not. Alternatives: time-only TTL — rejected (stale renders). Owner: UI agent.
 - 2026-07-04 — Decision: registry import alias is one line, not a parallel copy. Reason: drift between admin and portal registries is the single largest regression risk. Alternatives: separate registry namespaces — rejected (re-introduces the drift). Owner: UI agent.
+- Cross-ref BP-05/RECs/REJs + design: plans/2026-07-04/benchmark.md, docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md (no donor visual debt).

@@ -6,7 +6,7 @@
  */
 
 import type { Open3dProject, Open3dFloor, Open3dDisplayUnit } from "../model/types";
-import { _createOpen3dProject, createRectangularRoomProject } from "../model/project";
+import { createOpen3dProject, createRectangularRoomProject } from "../model/project";
 
 /**
  * Sketch-to-plan request options.

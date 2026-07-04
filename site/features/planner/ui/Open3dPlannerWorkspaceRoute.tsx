@@ -14,7 +14,7 @@ const Open3dPlannerHost = dynamic(
   { loading: () => <PlannerSkeleton />, ssr: false },
 );
 
-/** Production Open3D workspace — live `/planner/guest` and `/planner/canvas`. */
+/** Production hybrid workspace under the `open3d/` feature tree — live `/planner/guest` and `/planner/canvas`. */
 export function Open3dPlannerWorkspaceRoute({
   guestMode = false,
   planId,

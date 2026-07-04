@@ -6,7 +6,7 @@
  */
 
 import { lazy, Suspense } from "react";
-import type { ReactNode, _ComponentType } from "react";
+import type { ReactNode } from "react";
 import type { Open3dProject } from "../model/types";
 import styles from "./threeLazyViewer.module.css";
 

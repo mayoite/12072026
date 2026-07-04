@@ -49,6 +49,7 @@ Manifest includes: source path (e.g. `site/features/planner/open3d/`), destinati
 - 10-ROUTE-06 Rollback rehearsal: flag flip simulating production-path verification, routes swap back to Fabric within ≤ 30 s of flip; rollback evidence preserved in `results/planner/phase-10/rollback/`.
 - 10-ROUTE-07 Promotion manifest template: source path, destination path, SHA-256 hash, donor revision, approval evidence; one manifest per route slice.
 - 10-ROUTE-08 Auth behavior verified separately for guest / member / admin: each user class gets correct route visibility under each flag.
+- 10-ROUTE-09 UI/GS gates (per design + benchmark): verify REC-01 minimize, RECs 02-04, anti-copy, no REJ patterns, Global Standard attestation in handover manifest (Phase 05/04/06 surfaces).
 
 ### Cleanup (10-CLN)
 - 10-CLN-01 Grep search before any archive removal: under `site/features/planner/` and `site/scripts/` import graph proves zero live references to `_archive/fabric/` paths; evidence saved under `results/planner/phase-10/cleanup/grep.txt`.
@@ -88,6 +89,7 @@ Manifest includes: source path (e.g. `site/features/planner/open3d/`), destinati
 ### Forbidden actions
 - Do NOT delete `OOPlanner/`, `open3d-next-staging/`, or `site/_archive/fabric/` before manifest signatures.
 - Do NOT undo the locked package set; any package change requires IMPLEMENTATION-DECISIONS amendment first.
+- UI/GS: no donor visual debt (REJs); Global Standard Gate must pass before cleanup/handover (BP cross-refs + design).
 - Do NOT commit migrations (or any code) that delete the JSON-on-disk layer while Phase 08 Supabase dual-read evidence is unsigned.
 - Do NOT flip to default-on for `/admin/*` or `/portal/*` without a signed promotion manifest and active rollback drill.
 - Do NOT commit anything from this phase (orchestrator owns commits per HANDOVER.md).
@@ -143,3 +145,4 @@ Manifest includes: source path (e.g. `site/features/planner/open3d/`), destinati
 - 2026-07-04 — Decision: archive removal gated on grep evidence + signed decision log. Reason: HANDOVER.md forbids silent deletions; restoration procedure must be reproducible. Alternatives: codify removals in CA-only — rejected because grep evidence is the cheapest audit. Owner: Coordinator agent.
 - 2026-07-04 — Decision: cohort id tenant-scoped and hashed in pilot telemetry. Reason: anti-PII rule plus leak protection. Alternatives: pseudonymized hash alone — accepted but supplemented with tenant scope. Owner: Coordinator agent.
 - 2026-07-04 — Decision: production-path verification requires manifest signature. Reason: IMPLEMENTATION-DECISIONS promotion rule; without manifest, no merge. Alternatives: branch-protection rule only — rejected as not auditable. Owner: Coordinator agent.
+- 2026-07-04 Provisional UI/GS gates + REC/REJ/BP-01..07 + design cross-refs incorporated per plan revision task. See plans/2026-07-04/benchmark.md and design spec.

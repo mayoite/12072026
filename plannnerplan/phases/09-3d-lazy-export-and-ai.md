@@ -17,6 +17,13 @@ Mount Three.js r185 + @react-three/fiber ONLY on explicit user activation (no de
 - `D:\new\PACKAGES.md` — three/`@react-three/fiber` pin rationale, json-render reserved
 - `D:\new\CONTENTS.md` — repo map
 
+## 3D engine paths (per BP-07 in plans/2026-07-04/benchmark.md; cross-ref design spec)
+- Assert `three ^0.185.1` + `@react-three/fiber` are the only 3D paths.
+- `@vercel-labs/json-render` is inactive until a binding path-projection brief.
+- `drei` remains Tier-2 reserved until re-evaluated (per PACKAGES.md §"Tier-1 deferred").
+- `## 3D engine paths` lists `three ^0.185.1` and `@react-three/fiber`; `drei` explicitly marked Tier-2 reserved with `revisit date: TBD`.
+- REC-05 + REJ cross-refs; provisional notes.
+
 ## Scope
 In scope: `features/planner/3d/Lazy3DViewer.tsx` with editor-side dynamic import of three + r3f, single `three@^0.185.1` resolve across `site/`, view-state category for 2D/3D camera preserved across mode switches, missing-asset placeholder + labeled fallback, `exportUtils.ts` reusing `scripts/generate-svg.mjs` API for SVG with `@resvg/resvg-js` PNG (and copy-of-fixture byte invariants), print-safe PDF title block with display-unit preservation, DXF writer for walls / openings / furniture / dimensions, multi-floor export packaging, deterministic file naming `[project-name]-[floor]-[format]` with optional user suffix, Tier-3 reservation document for json-render including privacy/retention and prompt/data boundary.
 
@@ -143,3 +150,4 @@ AI activation is blocked behind a server-owned endpoint, Zod-validated payload, 
 - 2026-07-04 — Decision: exportUtils.ts reuses `runPipeline` rather than building a second symbol system. Reason: Phase 03 is the source of truth for descriptor → SVG/PNG. Alternatives: separate export-only renderer — rejected, doubles symbol maintenance and risks drift. Owner: 3D agent.
 - 2026-07-04 — Decision: json-render reserved Tier-3 with documented contract before any activation. Reason: PACKAGES.md rejects stealth activation; HANDOVER.md forbids current enablement. Alternatives: opt-in pre-activation ad-hoc — rejected because privacy contract must be author-signed. Owner: 3D agent.
 - 2026-07-04 — Decision: deterministic naming `[project-name]-[floor]-[format]` with user suffix sanitization. Reason: stable archive for CAD handoff; kebab-case to satisfy tooling. Alternatives: free-form filenames — rejected, breaks deterministic archive search. Owner: 3D agent.
+- Provisional: BP-07 3D paths + REC-05 + design/benchmark cross-refs added; no donor visual debt.

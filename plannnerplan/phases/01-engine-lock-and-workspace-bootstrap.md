@@ -21,6 +21,7 @@ Out of scope: Mantine install, Theme wiring, _archive/fabric/ cleanup, route swa
 
 ## Checklist
 ### Install (01-INST)
+- 01-INST-00 `fabric@7.4.0` exact pin sourced verbatim from PACKAGES.md §"Tier-1 locked > Engine"; Phase 01 rollback criteria cross-references `PLAN-FAIL-0401` by ID (per BP-01 in plans/2026-07-04/benchmark.md).
 - 01-INST-01 `fabric@7.4.0` pinned in `site/package.json` (no `^`, no `~`); resolve succeeds.
 - 01-INST-02 `three@^0.185.1` + `@types/three@^0.185.0` already present — verify entry, do not duplicate-edit.
 - 01-INST-03 `@react-three/fiber` added with version aligned to three peer (`latest` per PACKAGES.md; pin resolved at install gate).
@@ -56,6 +57,7 @@ Out of scope: Mantine install, Theme wiring, _archive/fabric/ cleanup, route swa
 ## Phase governance
 ### Forbidden actions
 - Do NOT install Mantine (`@mantine/*`) in this phase — locked-deferred per PACKAGES.md.
+- Cross-link to FAILURESPLAN.md for rollback on PLAN-FAIL-0401 (per BP-01 in plans/2026-07-04/benchmark.md and design spec); 01-INST-00 asserts fabric@7.4.0 pin.
 - Do NOT add a second theme/token system; AGENTS.md authority chain forbids parallel themes.
 - Do NOT delete or rewrite `_archive/fabric/` mirrors; Phase 10 owns cleanup.
 - Do NOT bump Fabric to 7.4.1+ or Three.js past 0.185.x without IMPLEMENTATION-DECISIONS amendment.
@@ -72,8 +74,9 @@ Out of scope: Mantine install, Theme wiring, _archive/fabric/ cleanup, route swa
 
 ### Rollback criteria
 - Two or more peer-dep warnings escalated to errors → abort and re-plan install order in Phase 01 revision.
-- Fabric version in installed tree ≠ 7.4.0 → abort (lock pin violated).
+- Fabric version in installed tree ≠ 7.4.0 → abort (lock pin violated); cross-ref PLAN-FAIL-0401 in FAILURESPLAN.md (per BP-01).
 - Vitest smoke shows new failures not present pre-install → abort and roll back lockfile.
+- PLAN-FAIL-0401 triggered → abort per FAILURESPLAN.md cross-link in checklist 01-INST-00.
 
 ### Risk register
 - Risk: peer-dep conflict between `three` 0.185 and a stale `@react-three/fiber` resolved by lock resolution. Mitigation: install r3f in the same transaction; capture resolved versions in HANDOVER.md.
@@ -110,3 +113,4 @@ Out of scope: Mantine install, Theme wiring, _archive/fabric/ cleanup, route swa
 - 2026-07-04 — Decision: pin Fabric 7.4.0 strict (no semver) to defeat accidental upgrade. Reason: IMPLEMENTATION-DECISIONS locks rolled engine. Alternatives: `^7.4.0` for minor flexibility — rejected (the lockfile already provides the protection and the pin must be auditable in one line). Owner: Build agent.
 - 2026-07-04 — Decision: install `@vercel-labs/json-render` but mark inactive. Reason: Tier-3 reserved per PACKAGES.md (marketing-only, opt-in). Alternatives: defer install to a future phase — rejected because the orchestrator wants one atomic transaction. Owner: Build agent.
 - 2026-07-04 — Decision: AGENTS.md link-only edit to point at Warp Rule 1. Reason: authority chain must be visible without re-stating rule content. Alternatives: no edit — rejected because IMPLEMENTATION-DECISIONS mandates the cross-reference. Owner: Build agent.
+- Cross-ref: BP-01 / RECs in plans/2026-07-04/benchmark.md + design spec docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md (provisional alignment). No donor visual debt.

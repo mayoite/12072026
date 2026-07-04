@@ -46,15 +46,16 @@ export function configuratorHeightCmFromMixedUnit(
   value: number | undefined,
   fallbackCm = 75,
 ): number {
-  if (!Number.isFinite(value) || value === null || value <= 0) {
+  const numeric = value ?? null;
+  if (numeric === null || !Number.isFinite(numeric) || numeric <= 0) {
     return fallbackCm;
   }
 
-  if (value > CONFIGURATOR_HEIGHT_MM_THRESHOLD) {
-    return value / MM_PER_CM;
+  if (numeric > CONFIGURATOR_HEIGHT_MM_THRESHOLD) {
+    return numeric / MM_PER_CM;
   }
 
-  return value;
+  return numeric;
 }
 
 /**
@@ -67,11 +68,12 @@ export function canonicalDimensionsFromCatalogCm(params: {
   seatHeightCm?: number;
   weightKg?: number;
 }): Open3dCatalogDimensions {
+  const seatHeightCm = params.seatHeightCm ?? null;
   return {
     widthMm: canonicalMmFromCatalogCm(params.widthCm),
     depthMm: canonicalMmFromCatalogCm(params.depthCm),
     heightMm: canonicalMmFromCatalogCm(params.heightCm ?? 75),
-    seatHeightMm: params.seatHeightCm !== null ? canonicalMmFromCatalogCm(params.seatHeightCm) : undefined,
+    seatHeightMm: seatHeightCm !== null ? canonicalMmFromCatalogCm(seatHeightCm) : undefined,
     weightKg: params.weightKg,
   };
 }
@@ -169,7 +171,8 @@ export function validateDimensions(dimensions: Open3dCatalogDimensions): {
   if (dimensions.heightMm > 100000) {
     errors.push("heightMm exceeds maximum reasonable value (100000 mm)");
   }
-  if (dimensions.weightKg !== null && (!Number.isFinite(dimensions.weightKg) || dimensions.weightKg < 0)) {
+  const weightKg = dimensions.weightKg ?? null;
+  if (weightKg !== null && (!Number.isFinite(weightKg) || weightKg < 0)) {
     errors.push("weightKg must be a non-negative finite number");
   }
   return { valid: errors.length === 0, errors };

@@ -4,10 +4,10 @@ Date: 2026-07-04
 
 ## Authority order
 
-1. Warp Rule 1 (top) — all commands, tests, sub-agents may run without explicit per-call permission.
-2. AGENTS.md internal rules apply within documents.
-3. This file (IMPLEMENTATION-DECISIONS) is the planner project's source-of-truth.
-4. Phase files (plannnerplan/phases/**) bind to this file; conflicts go here.
+1. Repository and system instructions.
+2. `AGENTS.md` internal rules.
+3. This file (`IMPLEMENTATION-DECISIONS.md`) is the planner project's source-of-truth.
+4. Phase files (`plannnerplan/phases/**`) bind to this file; conflicts go here.
 
 ## Non-negotiable release dimensions
 
@@ -108,3 +108,42 @@ Invalid or off-screen preferences recover to safe default without changing docum
 - Guest-claim copy/move semantics and backup retention.
 - Pilot cohort, telemetry boundaries, kill-switch owner, soak duration.
 - ~~R2 bucket name for PNG thumbs (`site-block-thumbs/...`).~~ **Resolved 2026-07-04**: R2 bucket `site-block-thumbs/` is approved by the coordinator and locked across Phases 03, 04, 05, 08, and 10 (see each phase's checklist for the per-phase ownership line). Approved by: Coordinator agent on 2026-07-04. Reason: aligns with the dual-output rule (SVG → public/svg-catalog/, PNG → R2 `site-block-thumbs/`) and uses the existing `catalog_snapshot_upload_r2.ts` helper. Cross-link: `FAILURESPLAN.md` §'Active failure IDs' / §'Resolution history' — PLAN-FAIL-0407 (Resolved 2026-07-04, Coordinator agent).
+
+## Global Standard Framework (Binding)
+
+Every package, SVG pipeline, feature, and UI decision **must** cite at least one principle from the 2026-07-04 benchmark report.
+
+Anti-copy rule is release-blocking: only semantic tokens from `site/app/css/`. No donor or competitor trade dress, exact geometry, palettes, or composition without documented justification + dated benchmark report.
+
+5-product reference model is mandatory for any UI/UX/SVG/feature benchmarker.
+
+Global Standard Gate (new in QUALITY-GATES.md): Before "Implemented" on relevant work:
+1. Fresh dated benchmark report exists.
+2. Independent UI review (REVIEW-WORKFLOW) signed off.
+3. Anti-copy + pattern attestation in Decision Log.
+
+Applies to Phases 03, 04, 05, 06, 10 and all package/SVG/feature changes.
+
+## UI/UX Standards (Intensified)
+
+- **Minimize UI & Panel Grammar** (Figma UI3): Explicit hide/collapse/minimize on every panel. Small-screen = overlay + backdrop + one-active-panel. Matches current WorkspaceShell/PanelContainer/TopBar work.
+- **Inventory & Search** (Sketchfab): Cursor-only pagination (≤24 items), facets (category, license, state, staffpicked, downloadable). p95 budgets per QUALITY-GATES.
+- **Non-Canvas Command/Error Surface** (AutoCAD Web): Docked or contextual, keyboard + live regions.
+- **Catalogue-first + 2D↔3D Continuity** (Planner 5D + Floorplanner): Default layout starts with inventory. Recoverable transitions.
+- **Per-object Properties** (Floorplanner): Double-click or equivalent for extended properties.
+- Small-screen/hybrid panel wiring is baseline — future changes must evolve it, not regress it.
+
+Phases 04/05/06/10 must add "UI Global Standards Gate" checklist items.
+
+## SVG/Features/Packages Mandates
+
+- Strict Option A lock for SVG: `@flatten-js/core` → `polygon-clipping` → `svgo` → `@resvg/resvg-js`. No deviations without new benchmark justification.
+- Contract with Phase 02: Generated SVG/PNG must match `BlockDescriptor` geometry and `resolveBlocks()` output (explicit + synthesised paths). ViewBox, dimensions, and IDs deterministic.
+- Global Standard + UI/UX compliance for generated assets and previews.
+- Catalogue-first + search parity (Sketchfab) for inventory.
+- Locked packages with "Global Standard Package Review" gate (benchmark justification + anti-copy attestation required for any change).
+- Tier-2 re-evaluation before activation in Phase 06/09.
+
+## Decision Log (2026-07-04 Global Standard Revision)
+
+- D2026-07-04-GS-01: Added binding Global Standard Framework, UI/UX Standards (Intensified), SVG/Features/Packages Mandates per approved design spec. Reality sync with Phase 02 resolver test (25/25), hybrid routes, small-screen panel work. Provisional pending live site validation after tests and site up (design §16). Cross-refs to benchmark report, FAILURESPLAN, QUALITY-GATES, REVIEW-WORKFLOW.

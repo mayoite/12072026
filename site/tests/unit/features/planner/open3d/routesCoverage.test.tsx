@@ -1,5 +1,7 @@
 /**
- * Site planner route and layout coverage (production paths under site/app/planner).
+ * Site planner route and layout coverage for the current split:
+ * `/planner/guest` and `/planner/canvas` mount Open3dPlannerWorkspaceRoute,
+ * while `/planner/open3d` remains the pilot route on Open3dPlannerHost.
  */
 
 import { cleanup, render, screen } from "@testing-library/react";
@@ -69,13 +71,13 @@ describe("site planner routes", () => {
     expect(screen.getByRole("heading", { name: /workspace planner/i })).toBeInTheDocument();
   });
 
-  it("wires guest route to Open3dPlannerWorkspaceRoute", async () => {
+  it("wires guest route to Open3dPlannerWorkspaceRoute on the live hybrid planner route", async () => {
     const { default: PlannerGuestPage } = await import("@/app/planner/(workspace)/guest/page");
     render(<PlannerGuestPage />);
     expect(screen.getByTestId("open3d-planner-route")).toHaveTextContent("guest");
   });
 
-  it("wires canvas route to Open3dPlannerWorkspaceRoute with plan id", async () => {
+  it("wires canvas route to Open3dPlannerWorkspaceRoute with plan id on the live hybrid planner route", async () => {
     const { default: PlannerCanvasPage } = await import("@/app/planner/(workspace)/canvas/page");
     render(
       await PlannerCanvasPage({
@@ -85,7 +87,7 @@ describe("site planner routes", () => {
     expect(screen.getByTestId("open3d-planner-route")).toHaveTextContent("alpha-plan");
   });
 
-  it("mounts native Open3D host on pilot route", async () => {
+  it("mounts Open3dPlannerHost on the pilot /planner/open3d route", async () => {
     const { default: Open3dPage } = await import("@/app/planner/open3d/page");
     render(
       await Open3dPage({

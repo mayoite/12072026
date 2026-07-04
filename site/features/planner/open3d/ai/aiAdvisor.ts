@@ -2,10 +2,10 @@ import type {
   Open3dProject,
   Open3dFloor,
   Open3dWall,
-  _Open3dDoor,
-  _Open3dWindow,
-  _Open3dFurnitureItem,
-  _Open3dRoom,
+  Open3dDoor,
+  Open3dWindow,
+  Open3dFurnitureItem,
+  Open3dRoom,
   Open3dDisplayUnit,
 } from "../model/types";
 

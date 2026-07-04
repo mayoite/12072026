@@ -19,7 +19,9 @@ In scope: `site/scripts/generate-svg.mjs`, six pipeline steps, three fixture blo
 
 Out of scope: `fabric.loadSVGFromString` runtime calls (this phase produces SVG strings; runtime mounting is a later consumer concern), Mantine helpers, second export symbol system, PNG thumbs written to `public/svg-catalog/`.
 
-## Architecture
+## Architecture (per BP-03 in plans/2026-07-04/benchmark.md; cross-ref design spec docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md)
+Pipeline order: `JSON → @flatten-js/core (measure) → polygon-clipping (Martinez booleans) → svgo → write public/svg-catalog/{slug}.svg | fabric.loadSVGFromString → @resvg/resvg-js → R2 bucket (per IMPLEMENTATION-DECISIONS.md){slug}.png`
+
 ```mermaid
 flowchart LR
     A[BlockDescriptor JSON] --> B[Step 1 @flatten-js/core: measure]
@@ -34,9 +36,20 @@ flowchart LR
 
 The script exposes a module API `runPipeline(descriptor)`. No DOM, no Fabric runtime, no `fabric.loadSVGFromString`. Fabric consumption is the runtime's responsibility in Phase 05 / Phase 06 wiring.
 
+Package pins (locked per BP-03):
+- `@flatten-js/core`
+- `polygon-clipping`
+- `svgo`
+- `@resvg/resvg-js`
+- `fabric@7.4.0` (cross Phase 01)
+
 ## Checklist
 ### Script (03-SVG)
 - 03-SVG-01 Script file: `site/scripts/generate-svg.mjs` (ESM; Node 20 LTS declared in script shebang).
+- 03-SVG-PKG-01 Pins (per BP-03): `@flatten-js/core`, `polygon-clipping`, `svgo`, `@resvg/resvg-js`, `fabric@7.4.0` each appear in checklist with reference.
+- 03-SVG-UI-01: Generated assets pass global standard visual review (no donor/competitor composition).
+- 03-SVG-FEAT-01: SVG output feeds `svgBlockDescriptorLoader` cleanly; resolver contract.
+- 03-SVG-GS-01: Anti-copy attestation + 5-product citation in Decision Log.
 - 03-SVG-02 Step 1 — `@flatten-js/core`: compute perimeter, closest-point, segment length, bbox; passed-through input shape matches descriptor `viewBox`.
 - 03-SVG-03 Step 2 — `polygon-clipping`: union, difference, intersection selectable by descriptor `variant` tag; Martinez algorithm.
 - 03-SVG-04 Step 3 — assemble `d=` paths deterministically (no `Date.now()`, no `Math.random()`); stable viewBox assertion `{x, y, width, height}` finite and equal to descriptor.
@@ -106,6 +119,20 @@ The script exposes a module API `runPipeline(descriptor)`. No DOM, no Fabric run
 - Golden drift: 0%.
 - Sanitization negative-case pass rate: 100% (12/12).
 - PNG aspect invariant: 100%.
+
+## 2026-07-04 Global Standard Updates (Provisional)
+
+Per design: Strict Option A enforcement, resolver contract (BlockDescriptor + resolveBlocks() match for explicit/synthesised), global standard + UI/UX compliance for assets (anti-copy, semantic tokens), p95 perf.
+
+New checklists:
+- 03-SVG-UI-01: Generated assets pass global standard visual review (no donor/competitor composition).
+- 03-SVG-FEAT-01: SVG output feeds `svgBlockDescriptorLoader` cleanly; resolver contract.
+- 03-SVG-PKG-01: All pipeline packages from locked Tier-1 set; Global Standard Package Review gate.
+- 03-SVG-GS-01: Anti-copy attestation + 5-product citation in Decision Log.
+
+Global Standard Gate applies (see QUALITY-GATES.md). Provisional pending tests + site up.
+
+Cross-ref: IMPLEMENTATION-DECISIONS.md §SVG/Features/Packages Mandates, FAILURESPLAN.md PLAN-FAIL-0418.
 
 ### Dependencies
 - `@flatten-js/core`, `polygon-clipping`, `svgo`, `@resvg/resvg-js` (Phase 01).

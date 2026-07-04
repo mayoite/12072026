@@ -7,25 +7,31 @@ export type ImportGraphNode = {
   id: string;
   path: string;
   imports: string[];
-  stack: "fabric-legacy" | "open3d-native" | "iframe-embed" | "shared-site";
+  stack: "fabric-legacy" | "open3d-hybrid" | "open3d-native" | "iframe-embed" | "shared-site";
 };
 
 /**
  * Production route import graph (2026-07-04).
- * Live guest/canvas on deployable Fabric; native Open3D pilot at /planner/open3d only.
+ * Live guest/canvas mount the hybrid Open3D workspace route; explicit /planner/fabric/* routes remain legacy fallback.
  */
 export const PRODUCTION_IMPORT_GRAPH: readonly ImportGraphNode[] = [
   {
     id: "route-guest",
     path: "site/app/planner/(workspace)/guest/page.tsx",
-    imports: ["@/features/planner/ui/PlannerWorkspaceRoute"],
-    stack: "fabric-legacy",
+    imports: ["@/features/planner/ui/Open3dPlannerWorkspaceRoute"],
+    stack: "open3d-hybrid",
   },
   {
     id: "route-canvas",
     path: "site/app/planner/(workspace)/canvas/page.tsx",
-    imports: ["@/features/planner/ui/PlannerWorkspaceRoute"],
-    stack: "fabric-legacy",
+    imports: ["@/features/planner/ui/Open3dPlannerWorkspaceRoute"],
+    stack: "open3d-hybrid",
+  },
+  {
+    id: "workspace-route-open3d",
+    path: "site/features/planner/ui/Open3dPlannerWorkspaceRoute.tsx",
+    imports: ["@/features/planner/ui/Open3dPlannerHost"],
+    stack: "open3d-hybrid",
   },
   {
     id: "route-fabric-guest",
@@ -73,12 +79,11 @@ export function open3dNativeRoutes(): string[] {
   return PRODUCTION_IMPORT_GRAPH.filter((n) => n.stack === "open3d-native").map((n) => n.id);
 }
 
-/** Phase 08 exit: Fabric retirement blocked while guest/canvas import PlannerWorkspaceRoute. */
+export function open3dHybridRoutes(): string[] {
+  return PRODUCTION_IMPORT_GRAPH.filter((n) => n.stack === "open3d-hybrid").map((n) => n.id);
+}
+
+/** Phase 08 exit: Fabric retirement is still blocked while explicit fallback routes exist. */
 export function fabricRetirementBlocked(): boolean {
-  const liveFabric = PRODUCTION_IMPORT_GRAPH.filter(
-    (n) =>
-      n.stack === "fabric-legacy" &&
-      (n.id === "route-guest" || n.id === "route-canvas"),
-  );
-  return liveFabric.length > 0;
+  return PRODUCTION_IMPORT_GRAPH.some((n) => n.stack === "fabric-legacy");
 }

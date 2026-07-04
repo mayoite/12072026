@@ -119,6 +119,7 @@ export function WorkspaceShell({
     move,
     resize,
     saveLayout,
+    setActivePanel,
     setFocusedPanel,
   } = useDockingSystem();
 
@@ -133,21 +134,34 @@ export function WorkspaceShell({
     [controlledViewMode, onViewModeChange],
   );
 
-
   // Handle panel close - collapse it
   const handlePanelClose = useCallback(
     (id: PanelId) => {
+      if (viewportTier === "small" && (id === "left" || id === "right")) {
+        setActivePanel(null);
+        return;
+      }
+      if (activePanel === id) {
+        setActivePanel(null);
+      }
       toggleCollapse(id);
     },
-    [toggleCollapse],
+    [activePanel, setActivePanel, toggleCollapse, viewportTier],
   );
 
   // Handle panel minimize - also collapse
   const handlePanelMinimize = useCallback(
     (id: PanelId) => {
+      if (viewportTier === "small" && (id === "left" || id === "right")) {
+        setActivePanel(null);
+        return;
+      }
+      if (activePanel === id) {
+        setActivePanel(null);
+      }
       toggleCollapse(id);
     },
-    [toggleCollapse],
+    [activePanel, setActivePanel, toggleCollapse, viewportTier],
   );
 
   // Handle keyboard focus navigation
@@ -194,11 +208,46 @@ export function WorkspaceShell({
     return () => clearTimeout(timeoutId);
   }, [panels, saveLayout]);
 
+  useEffect(() => {
+    if (viewportTier !== "small" && activePanel !== null) {
+      setActivePanel(null);
+    }
+  }, [activePanel, setActivePanel, viewportTier]);
+
+  useEffect(() => {
+    if (activePanel && panels[activePanel].state === "collapsed") {
+      setActivePanel(null);
+    }
+  }, [activePanel, panels, setActivePanel]);
+
   const panelTitles: Record<PanelId, string> = {
     left: "Inventory",
     right: "Properties",
     bottom: "Output",
   };
+
+  const handleSidePanelToggle = useCallback(
+    (id: Extract<PanelId, "left" | "right">) => {
+      if (panels[id].state === "collapsed") {
+        toggleCollapse(id);
+      }
+      setActivePanel((current) => (current === id ? null : id));
+    },
+    [panels, setActivePanel, toggleCollapse],
+  );
+
+  const resolvePanelOpen = useCallback(
+    (id: PanelId) => {
+      if (panels[id].state === "collapsed") {
+        return false;
+      }
+      if (viewportTier !== "small" || id === "bottom") {
+        return true;
+      }
+      return activePanel === id;
+    },
+    [activePanel, panels, viewportTier],
+  );
 
   const shellStyle: React.CSSProperties | undefined = fillParent ? { height: "100%" } : undefined;
 
@@ -231,10 +280,22 @@ export function WorkspaceShell({
         canRedo={canRedo}
         onUndo={onUndo}
         onRedo={onRedo}
+        activePanel={viewportTier === "small" ? activePanel : null}
+        onToggleLeftPanel={leftPanel ? () => handleSidePanelToggle("left") : undefined}
+        onToggleRightPanel={rightPanel ? () => handleSidePanelToggle("right") : undefined}
       />
 
       {/* Main workspace with panels */}
       <div className={styles.workspace} data-viewport={viewportTier}>
+        {viewportTier === "small" && (activePanel === "left" || activePanel === "right") && (
+          <button
+            type="button"
+            className={styles.panelBackdrop}
+            aria-label="Dismiss side panel"
+            onClick={() => setActivePanel(null)}
+          />
+        )}
+
         {/* Left panel - Inventory */}
         {leftPanel && (
           <PanelContainer
@@ -246,7 +307,7 @@ export function WorkspaceShell({
             x={panels.left.x}
             y={panels.left.y}
             zIndex={panels.left.zIndex}
-            isOpen={panels.left.state !== "collapsed"}
+            isOpen={resolvePanelOpen("left")}
             onUndock={() => undock("left")}
             onDock={() => dock("left")}
             onClose={() => handlePanelClose("left")}
@@ -276,7 +337,7 @@ export function WorkspaceShell({
             x={panels.right.x}
             y={panels.right.y}
             zIndex={panels.right.zIndex}
-            isOpen={panels.right.state !== "collapsed"}
+            isOpen={resolvePanelOpen("right")}
             onUndock={() => undock("right")}
             onDock={() => dock("right")}
             onClose={() => handlePanelClose("right")}
@@ -301,7 +362,7 @@ export function WorkspaceShell({
             x={panels.bottom.x}
             y={panels.bottom.y}
             zIndex={panels.bottom.zIndex}
-            isOpen={panels.bottom.state !== "collapsed"}
+            isOpen={resolvePanelOpen("bottom")}
             onUndock={() => undock("bottom")}
             onDock={() => dock("bottom")}
             onClose={() => handlePanelClose("bottom")}

@@ -15,7 +15,6 @@
 const BLOCKED_ELEMENTS = new Set([
   "script",
   "foreignObject",
-  "use", // can reference external content
   "iframe",
   "embed",
   "object",
@@ -45,8 +44,6 @@ const BLOCKED_ATTRIBUTES = new Set([
   "onresize",
   "ondrag",
   "ondrop",
-  "href",
-  "xlink:href",
   "xlink:type",
   "xlink:role",
   "xlink:arcrole",
@@ -61,6 +58,16 @@ const BLOCKED_ATTRIBUTES = new Set([
 const UNSAFE_PROTOCOLS = /^(javascript|data|vbscript):/i;
 const URL_REFERENCE = /url\(\s*['"]?\s*([^'")\s]+)[^)]*\)/i;
 const MAX_SVG_BYTES = 100_000;
+const MAX_ATTRIBUTE_BYTES = 4_096;
+const URL_REFERENCE_ATTRIBUTES = new Set(["href", "xlink:href"]);
+
+function utf8ByteLength(value: string): number {
+  return new TextEncoder().encode(value).length;
+}
+
+function isFragmentReference(value: string): boolean {
+  return value.trim().startsWith("#");
+}
 
 // ── Sanitization result ──
 
@@ -81,8 +88,8 @@ export interface SvgSanitizationResult {
  * Rules:
  * - No script elements
  * - No event handler attributes
- * - No external references (href, xlink:href)
- * - No foreignObject, iframe, embed, object, use
+ * - No unsafe external references; fragment-only hrefs remain allowed
+ * - No foreignObject, iframe, embed, object
  * - No javascript:/data: protocols in attributes
  * - Namespace must be http://www.w3.org/2000/svg
  */
@@ -137,6 +144,18 @@ export function sanitizeSvg(svg: string): SvgSanitizationResult {
       issues.push(`contains blocked attribute: ${attrName}`);
       return { safe: false, sanitized: "", issues };
     }
+    if (utf8ByteLength(attrValue) > MAX_ATTRIBUTE_BYTES) {
+      issues.push(`contains oversized attribute value: ${attrName}`);
+      return { safe: false, sanitized: "", issues };
+    }
+    if (URL_REFERENCE_ATTRIBUTES.has(attrName)) {
+      const trimmed = attrValue.trim();
+      if (!isFragmentReference(trimmed)) {
+        issues.push(`contains unsafe URL reference: ${trimmed.slice(0, 50)}`);
+        return { safe: false, sanitized: "", issues };
+      }
+      continue;
+    }
     if (UNSAFE_PROTOCOLS.test(attrValue.trim())) {
       issues.push(`contains unsafe protocol in attribute: ${attrValue.slice(0, 50)}`);
       return { safe: false, sanitized: "", issues };
@@ -164,7 +183,7 @@ export function sanitizeSvg(svg: string): SvgSanitizationResult {
     issues.push("missing standard SVG namespace");
   }
 
-  // Quick check for forbidden elements (if/embed/object/use)
+  // Quick check for forbidden elements (iframe/embed/object)
   for (const el of BLOCKED_ELEMENTS) {
     if (el === "script" || el === "foreignObject") continue; // already checked above
     const pattern = new RegExp(`<\\s*${el}[\\s>/]`, "i");

@@ -167,6 +167,30 @@ describe("02-BLOCK-DESCRIPTOR: structural validation", () => {
     }
   });
 
+  it("parses a configurable descriptor with boundsMm and no sizeOptions", () => {
+    const input = withChecksum({
+      ...configurableDescriptor(),
+      configurable: {
+        sizingType: "parametric",
+        boundsMm: {
+          widthMm: [1200, 1800] as [number, number],
+          depthMm: [500, 900] as [number, number],
+        },
+      },
+    });
+    const result = parseBlockDescriptor(input);
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.variant).toBe("configurable");
+      if (result.value.variant === "configurable") {
+        expect(result.value.configurable.sizingType).toBe("parametric");
+        expect(result.value.configurable.sizeOptions).toBeUndefined();
+        expect(result.value.configurable.boundsMm?.widthMm).toEqual([1200, 1800]);
+        expect(result.value.configurable.boundsMm?.depthMm).toEqual([500, 900]);
+      }
+    }
+  });
+
   it("parses a parametric descriptor with parameterSchema and mountingPoints", () => {
     const input = withChecksum(parametricDescriptor());
     const result = parseBlockDescriptor(input);
@@ -247,6 +271,20 @@ describe("02-BLOCK-DESCRIPTOR: structural validation", () => {
     const result = parseBlockDescriptor({});
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.error.kind).toBe("invalid");
+  });
+
+  it("rejects an object with no schemaVersion", () => {
+    const input = withChecksum({
+      ...fixedDescriptor(),
+      schemaVersion: undefined,
+    });
+    const result = parseBlockDescriptor(input);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.kind).toBe("invalid");
+      expect(result.error.fieldPath).toBe("schemaVersion");
+      expect(result.error.issues[0]?.message).toContain("schemaVersion must be a string");
+    }
   });
 
   it("rejects non-object input", () => {

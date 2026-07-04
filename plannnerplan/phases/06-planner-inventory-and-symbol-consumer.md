@@ -15,6 +15,12 @@ Wire the planner consumer (`features/planner/open3d/catalog/svg/`) to the same d
 - `D:\new\plannnerplan\phases\03-svg-pipeline-implementation.md` — vendor load ordering read by Loader
 - `D:\new\plannnerplan\phases\04-admin-portal-svg-editor.md` — descriptor producer
 
+## Catalog contract (per BP-06 in plans/2026-07-04/benchmark.md; cross-ref design spec)
+- Bind `features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts` as the single consumer (loader bind).
+- Search contract (search parity): Sketchfab's `search_models` cursor-only pagination with explicit page-cap (≤ 24) and filter facets `category`, `license`, `animated`/state flag, `staffpicked`/`favourite`, `downloadable`/`runtime-available`.
+- p95 budget line cites QUALITY-GATES: `p95 ≤ 200 ms at 1,000 records; ≤ 200 ms at 10,000`.
+- REC-02 (Sketchfab) + REC-04 (Planner 5D catalogue-first) + REJ-04 incorporated. Provisional notes added.
+
 ## Scope
 In scope: `svgBlockDescriptorLoader.ts` at `features/planner/open3d/catalog/svg/`, in-memory LRU with TTL 60s, `useOpen3dSvgCatalog()` hook, `Open3dCatalogClient.search()` filter parity (room/style/material/configurability), recents LRU (50 items, dedupe by `catalogId+variantId`), first-run inventory (featured + recents + categories), deterministic sort + stable tie-break, anchor-plane contract, theme-token visuals, degraded-asset placeability, roving focus reused from Puck registry, fixture gallery at `fixtures/svg-floors.json`, performance assertions.
 Out of scope: adding new hand-maintained entries to `svgSymbols.ts`, editing Phase 03 vendor load ordering, Supabase tier (Phase 08), export round-trips (Phase 09), admin write path (Phase 04).
@@ -73,6 +79,7 @@ Single registry path. Loader key shape `[slug, schemaVersion]`. Background reval
 ## Phase governance
 ### Forbidden actions
 - Do NOT mutate `svgSymbols.ts` to add new hand-maintained entries — descriptors are the only forward path. (Edits to existing entries are PATCHES, not additions.)
+- REC/REJ compliance: no REJ-01/REJ-04 patterns; cite benchmark/design for BP-06 (provisional).
 - Do NOT break vendor load ordering of `scripts/generate-svg.mjs` output — consumer reads descriptors in the order Phase 03 emits them.
 - Do NOT write SVG/PNG outputs from this phase; this phase consumes them.
 - Do NOT expose fallback path as an admin feature — fallback is a consumer-side resilience choice, not a product feature.

@@ -130,6 +130,18 @@
   gap: var(--space-1);
 }
 
+.mobilePanelActions {
+  display: none;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.mobilePanelBtn[data-active="true"] {
+  background: var(--ws-accent);
+  border-color: var(--ws-accent);
+  color: var(--text-inverse);
+}
+
 .saveStatus {
   display: inline-flex;
   align-items: center;
@@ -172,6 +184,10 @@
 .workspace[data-viewport="small"] {
   grid-template-columns: 1fr;
   grid-template-areas: "canvas";
+}
+
+.panelBackdrop {
+  display: none;
 }
 
 /* Canvas area */
@@ -573,6 +589,21 @@
 
   .brandTitle {
     font-size: 0.875rem;
+  }
+
+  .mobilePanelActions {
+    display: inline-flex;
+  }
+
+  .panelBackdrop {
+    position: absolute;
+    inset: 0;
+    z-index: calc(var(--ws-z-floating) - 1);
+    display: block;
+    padding: 0;
+    border: 0;
+    background: var(--overlay-inverse-35);
+    cursor: pointer;
   }
 
   .panelLeft,

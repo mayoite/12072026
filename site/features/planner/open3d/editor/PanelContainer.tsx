@@ -242,6 +242,7 @@ export function PanelContainer({
       } ${id === "bottom" ? styles.panelBottom : ""}`}
       data-state={state}
       data-panel-id={id}
+      data-open={isOpen ? "true" : "false"}
       style={panelStyle}
     >
       {/* Title bar */}

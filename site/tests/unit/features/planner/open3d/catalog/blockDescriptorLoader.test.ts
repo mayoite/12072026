@@ -245,6 +245,16 @@ describe("02-LOADER: storage boundary", () => {
     expect(slugs).toEqual(["chaise", "side-table"]);
   });
 
+  it("loadAll skips a .json-named directory that is not a regular file", () => {
+    const chaise = freezeWithChecksum(1700000000);
+    writeFileSync(path.join(tmpDir, "chaise.json"), JSON.stringify(chaise));
+    mkdirSync(path.join(tmpDir, "folder.json"), { recursive: true });
+
+    const all = loadAll({ dir: tmpDir, forceReload: true });
+    expect(all).toHaveLength(1);
+    expect(all[0]?.slug).toBe("chaise");
+  });
+
   it("loadAll caches results for repeat reads within the same directory", () => {
     const chaise = freezeWithChecksum(1700000000);
     writeFileSync(path.join(tmpDir, "chaise.json"), JSON.stringify(chaise));

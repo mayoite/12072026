@@ -70,3 +70,7 @@ Immutable advisory reports (`plannnerplan/benchmarks/phase-NN-...md`) are dated 
 3. If acceptance decisions depend on stale findings, create a new dated benchmark report.
 
 This preserves the historical record while ensuring current decisions are based on current truth.
+
+## 2026-07-04 Global Standard Revision Note
+
+Mandatory 5-product + anti-copy checks now required for UI/SVG/feature work per Global Standard Gate (QUALITY-GATES.md) and IMPLEMENTATION-DECISIONS.md Global Standard Framework. Cross-ref design spec and benchmark report. Provisional pending live site validation after tests and site up (design §16).

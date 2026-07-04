@@ -2,6 +2,40 @@
 
 ## 2026-07-04
 
+### Planner route naming correction
+
+- Scope: planner route/docs truth for `site/features/planner/open3d/` versus `site/features/planner/_archive/fabric/`.
+- Root cause: repo comments and READMEs described the live `/planner/guest` and `/planner/canvas` stack as "native Open3D", while the actual implementation is a hybrid route: Fabric-backed 2-D canvas inside the `open3d/` tree plus Three/r3f 3-D view.
+- Correction: updated route comments and planner READMEs to distinguish the live hybrid planner from the legacy top-level Fabric fallback routes under `/planner/fabric/*`.
+- Verified: documentation/comments now align with the live host chain in `site/features/planner/ui/Open3dPlannerWorkspaceRoute.tsx`, `site/features/planner/open3d/ui/Open3dNativeHost.tsx`, and `site/features/planner/open3d/editor/OOPlannerWorkspace.tsx`.
+- Skipped: runtime route swap, typecheck, build, Playwright, and broader planner UI validation.
+
+### Phase 04 admin SVG persistence restore
+
+- Scope: `site/features/planner/admin/svg-editor/persistBlockDescriptor.ts` and focused admin/catalog SVG tests.
+- Root cause: the writer rejected explicit temp-directory overrides and exposed a `listBlockDescriptors` signature mismatch, so the restored admin persistence tests never reached the atomic-write path.
+- Correction: allow explicit override directories for isolated test writes and accept the loader options shape in `listBlockDescriptors`.
+- Verified: `pnpm --dir site exec vitest run tests/unit/features/planner/open3d/catalog/blocksResolver.test.ts tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts tests/unit/admin/svg-editor/persistBlockDescriptor.test.ts tests/unit/admin/svg-editor/puckBlockRegistry.test.ts tests/unit/admin/svg-editor/svgPipelineRunner.test.ts` exit 0; 6 files, 116 tests passed.
+- Skipped: typecheck, build, Playwright, and broader planner suites outside the restored admin/catalog SVG slice.
+
+### Phase 03 generator restore smoke
+
+- Scope: `site/scripts/generate-svg.mjs` and `site/package.json` wiring.
+- Verified: `pnpm --filter oando-site run scripts:generate-svg` reaches the CLI usage path through `tsx` and loads the restored script without a runtime import failure.
+- Skipped: fixture-driven execution (`--fixture chaise|side-table|sectional|missing-geometry`) to avoid writing generated SVG outputs outside the owned restore slice.
+
+### Phase 03 asset restore
+
+- Scope: restore the Phase 03 generate-svg fixture/golden baseline only.
+- Verified: restored `site/scripts/generate-svg/_fixtures/{chaise,side-table,sectional,missing-geometry}.json`, `site/scripts/generate-svg/__goldens__/{chaise,side-table,sectional}-golden.svg`, and `site/public/svg-catalog/{chaise-lounge-001,side-table-001,sectional-sofa-001,missing-geom-fallback-001}.svg`.
+- Skipped: generator execution, tests, lint, typecheck, build, Playwright, and any non-asset files outside the owned Phase 03 asset set.
+
+### Phase 03 sanitizer test harness
+
+- Scope: dedicated sanitizer coverage file under `site/scripts/generate-svg/`.
+- Verified: `pnpm --dir site exec node --import tsx --test scripts/generate-svg/sanitize.test.mjs` exit 0.
+- Skipped: `npm run test -- site/scripts/generate-svg/sanitize.test.mjs` because the repo Vitest config excludes `scripts/**`; the direct Node test harness was the reliable path for this owned file.
+
 ### Native Open3D not deployable — live routes restored to Fabric
 
 - Scope: `/planner/guest`, `/planner/canvas` briefly wired to native `Open3dPlannerWorkspaceRoute` (2026-07-04).
@@ -143,6 +177,38 @@
 - Blocker: need explicit permission to run at least the relevant OOPlanner test command and preferably the Phase 01B coverage command to verify the new test and measure the remaining coverage failure.
 
 ### Agent Close Without Permission
+
+### 2026-07-04 Plannerplan Global Standard Revision — Governance Files Update (this task)
+
+- Scope: Verified and ensured binding sections per 2026-07-04 design spec in governance files (plannnerplan/ + moved plans/2026-07-04/HANDOVER.md).
+- Sections ensured/updated: Global Standard Framework (Binding), UI/UX Standards (Intensified), SVG/Features/Packages Mandates, D2026-07-04-GS-01 in IMPLEMENTATION-DECISIONS.md; Global Standard Gate (Binding) full in QUALITY-GATES.md; 2026-07-04 Global Standard Revision Note in DESIGN-BENCHMARK-PROTOCOL.md; Intensification for Global Standard Revision in REVIEW-WORKFLOW.md (plannnerplan/benchmarks/); 2026-07-04 Revision — Global Standard Intensification + PLAN-FAIL-0414..0420 + critique-derived in FAILURESPLAN.md; full 2026-07-04 Global Standard Revision section (key updates, critique merge, phase status, open items, evidence, provisional, modified files, revisit) in HANDOVER.md (plans/2026-07-04/).
+- Edits: Adapted for moved structure (HANDOVER); small alignment of provisional phrasing and typo fix ("globalstandard"); no new content beyond task; used search_replace + post-edit grep/read verification.
+- Evidence: All sections present and cross-referenced before/after edits (grep hits for headers + full section reads). No terminal cmds used. Per AGENTS.md: evidence first, smallest changes, verified.
+- Status: Completed for this sub-task. Provisional overall (per design §16) pending site-up + live validation. No blockers for these doc updates.
+- Skipped: No commands (per task "use file tools"); no changes to phases, code, results, or other files; no destructive; root Failures.md entry added only for log per AGENTS "Log" gate before finish.
+
+**Supporting updates / cross-links / design / evidence / cleanup (this agent continuation)**:
+- PACKAGES.md: added Global Standard filter note + design/benchmark cross-refs; fixed stale benchmark path ref. Verified: grep hits for filter + paths.
+- plannnerplan/benchmarks/INDEX.md: updated to document archived stale (01a/01b/03a files retained in place, no stale/ subdir; archive-over-delete), current structure (plans/2026-07-04/ active revision docs + plans/archive/2026-07-04/, plannnerplan/ retains phases/gov/bench/critique), added cross-refs to design/benchmark/critique. Cleanup note corrected to accurate (refs purged, files kept). Verified: post-edit read + grep.
+- Design spec (`docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`): updated Status + added detailed "Progress (supporting updates 2026-07-04)" section marking governance/phases/cross-refs/PACKAGES/INDEX/evidence; expanded "Note on structure" with exact current (plans/2026-07-04/ + archive/); listed skips, BP alignment (none missing), suggested results/ evidence; added cross-refs section. Verified by read_file.
+- Cross-refs ensured (grep verified no remaining `benchmarks/plan-revision-2026-07-04.md`; design/benchmark/critique linked in PACKAGES, INDEX, design, plans/2026-07-04/* (benchmark/critique/HANDOVER), plannnerplan/phases/* (all 7 BPs), FAILURESPLAN, stubs, archive READMEs).
+- Cleaned old refs/duplicates: updated plannnerplan/plan/2026-07-04/critique.md stub + plannnerplan/benchmarks/plan-revision stub to note cleaned (no active refs to plannnerplan/plan/ per grep post); retained dir/file per archive-over-delete. No dir creation/deletes.
+- Align benchmark: confirmed all BP-01 to BP-07 present+content in phases (grep); updated all BP cites to canonical `plans/2026-07-04/benchmark.md`; added anti-copy decision log entry in phase 05 to satisfy BP-05 acceptance criteria; cross to design added in several.
+- Todo: used todo_write for tracking (steps marked completed/verified); noted completion in design progress + this Failures entry.
+- Evidence: all via file tools (list_dir, read_file x many, grep x many post-edit for verification). Suggested results locations: results/planner/phase-01/ (existing resolver etc), results/planner/phase-04/ (SVG tests), results/planner/global-standard-revision/ (for future doc+crossref gate artifacts if created). No new result files written.
+- Verification order (per AGENTS Honesty): re-read AGENTS.md/Readme.md/docs/Lockedfiles/ReadmeLocked.md/START.md/Failures.md/testing-handbook.md first; live file state via grep/read after each edit batch; no stale notes trusted.
+- Risks/Skips logged: file-tools-only (no terminal per instruction → no fresh test evidence generated here; relied on pre-existing in results/ + Failures); structure finalizing (e.g. consolidate duplicate critique content between plannnerplan/critique/ and plans/2026-07-04/critique.md , or rm plannnerplan/plan/ dir) proposed only, not executed; no DOC-MAP or root HANDOVER broad updates (min necessary); no code changes.
+- Per AGENTS Done: match ask (supporting only), verified (grep/read), logged here, report follows. No bypasses. Re-read docs on task.
+
+### 2026-07-04 Plannerplan Global Standard Revision — Archive Finalization (this independent sub-task)
+
+- Scope: Finalize archive of revision documents from plans/2026-07-04/ (the 5 files: benchmark.md, critique.md, HANDOVER.md, idiothandver.md, open3d-test-error-follow-up.md) into plans/archive/2026-07-04/ ; ensure content present (write dup only for the 3 missing); create clear README.md summarizing what/why (archive-over-delete + user "move it to a folder archive make a folder"); update ONLY cross-refs in design spec + plannnerplan/benchmarks/INDEX.md to point to archived; verify exclusively via list_dir + grep + reads; log here; all per AGENTS.md.
+- Actions (file tools only): re-read key docs (AGENTS.md, docs/Lockedfiles/ReadmeLocked.md, Readme.md, START.md, Failures.md) first; list_dir on plans/ + plans/archive/ + root; read all 5 source files + partial archive + design + INDEX (multiple passes); write only the 3 missing to archive/ (benchmark/critique already present, no dup); write clear README to plans/archive/2026-07-04/README.md ; search_replace (smallest path updates only) on the 2 allowed files; post-edit list_dir + grep for verification (titles present in archive, paths now archive/ in target files, no remaining plans/2026 paths for the 5 in the 2 files).
+- Evidence: list_dir showed plans/2026-07-04/ still has all 5; plans/archive/2026-07-04/ now has all 5 + README; grep for titles hit all 5 in archive/; grep for "plans/archive/2026-07-04/" hit 5 times in INDEX and 5 in design (all updated refs); no matches for plans/2026-07-04/ + specific filenames in the 2 files post-edit; full content reads pre/post.
+- Status: completed. Matches ask exactly. No extra scope/files/edits.
+- Skipped (per explicit task + AGENTS min necessary + no terminal policy): no edits to any other files (e.g. no plannnerplan/ other, no plans/archive/ parent README, no Failures cross-refs cleanup, no originals in plans/2026-07-04/ touched/deleted); no terminal/run/test/build (even if allowed); did not re-benchmark or validate content beyond title grep + existence; left historical notes in Failures/design as-is (smallest); no site/ ; did not check subdir AGENTS (none listed in list_dir of plans/).
+- Blockers: none for this doc-archive step. Provisional notes remain in design/README.
+- Per AGENTS: evidence first (live list/grep/read), honesty (skipped declared), archive-over-delete followed (dupe + leave original), re-reads done, gates (Failures read pre-edit + log here), report will detail.
 
 - Scope: subagent coordination after test-correction delegation.
 - Failure: closed agent `019f2886-a281-7411-983a-1fc0a4b3ccc8` without asking the user first.

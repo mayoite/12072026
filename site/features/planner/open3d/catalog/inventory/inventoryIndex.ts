@@ -254,24 +254,32 @@ export class InventorySearchIndex {
     const assetReadinessFilter = new Set(options.assetReadiness ?? []);
     const dim = options.dimensionFilter;
 
+    const configurability = (item: Open3dCatalogItem) => item.configurability ?? null;
     return this.items.filter((item) => {
       if (options.category && item.category !== options.category) return false;
       if (roomFilter.size > 0 && !item.roomTags.some((tag) => roomFilter.has(tag))) return false;
       if (styleFilter.size > 0 && !item.styleTags.some((tag) => styleFilter.has(tag))) return false;
       if (materialFilter.size > 0 && !materialFilter.has(item.material.normalizedMaterial.toLowerCase())) return false;
       if (availabilityFilter.size > 0 && !availabilityFilter.has(item.availability)) return false;
-      if (configurabilityFilter.size > 0 && (item.configurability === null || !configurabilityFilter.has(item.configurability))) return false;
+      const itemConfigurability = configurability(item);
+      if (configurabilityFilter.size > 0 && (itemConfigurability === null || !configurabilityFilter.has(itemConfigurability))) return false;
       if (mountingFilter.size > 0 && !(item.mounting ?? ["floor"]).some((mounting) => mountingFilter.has(mounting))) return false;
       if (assetReadinessFilter.size > 0 && !(item.assetReadiness ?? ["ready"]).some((state) => assetReadinessFilter.has(state))) return false;
       // Dimension range filter
       if (dim) {
         const { widthMm, depthMm, heightMm } = item.dimensions;
-        if (dim.minWidthMm !== null && widthMm < dim.minWidthMm) return false;
-        if (dim.maxWidthMm !== null && widthMm > dim.maxWidthMm) return false;
-        if (dim.minDepthMm !== null && depthMm < dim.minDepthMm) return false;
-        if (dim.maxDepthMm !== null && depthMm > dim.maxDepthMm) return false;
-        if (dim.minHeightMm !== null && heightMm < dim.minHeightMm) return false;
-        if (dim.maxHeightMm !== null && heightMm > dim.maxHeightMm) return false;
+        const minW = dim.minWidthMm ?? null;
+        const maxW = dim.maxWidthMm ?? null;
+        const minD = dim.minDepthMm ?? null;
+        const maxD = dim.maxDepthMm ?? null;
+        const minH = dim.minHeightMm ?? null;
+        const maxH = dim.maxHeightMm ?? null;
+        if (minW !== null && widthMm < minW) return false;
+        if (maxW !== null && widthMm > maxW) return false;
+        if (minD !== null && depthMm < minD) return false;
+        if (maxD !== null && depthMm > maxD) return false;
+        if (minH !== null && heightMm < minH) return false;
+        if (maxH !== null && heightMm > maxH) return false;
       }
       return true;
     });

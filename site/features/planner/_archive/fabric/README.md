@@ -1,7 +1,12 @@
 # Fabric planner archive (deprecated)
 
 **Deprecated:** 2026-07-03  
-**Replaced by:** `site/features/planner/open3d/` (native Open3D host on `/planner/guest` and `/planner/canvas`)
+**Replaced by:** `site/features/planner/open3d/` (live hybrid planner on `/planner/guest` and `/planner/canvas`)
+
+Important distinction:
+
+- this archive is the **old top-level Fabric planner route**
+- it is **not** the same thing as the Fabric-backed 2-D canvas still used inside `site/features/planner/open3d/canvas-fabric/`
 
 ## Contents
 

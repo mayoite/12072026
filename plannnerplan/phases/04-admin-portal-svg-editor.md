@@ -14,6 +14,17 @@ Surface a Puck visual editor at `/admin/svg-editor` (list + new) and `/admin/svg
 - `D:\new\plannnerplan\phases\02-catalog-source-of-truth-and-blockdescriptor.md` — schema & error taxonomy consumed
 - `D:\new\plannnerplan\phases\03-svg-pipeline-implementation.md` — pipeline invocation contract
 
+## Allowed component packages (per BP-04 in plans/2026-07-04/benchmark.md; cross-ref design spec)
+- `@puckeditor/core`
+- `@ark-ui/react`
+- `react-aria-components`
+- `zod`
+- `@phosphor-icons/react`
+- `@vercel-labs/json-render` (listed as inactive)
+
+## Disallowed in this phase
+- `@radix-ui/react-*` (Radix retained as fallback only, not for Phase 04 chrome; REJ-06 Mantine forbidden)
+
 ## Scope
 In scope: routes `/admin/svg-editor` and `/admin/svg-editor/[id]`, integration into existing `AdminShell.tsx` + `features/planner/admin/adminNav.ts` under the "Catalog Assets" group label, `puckBlockRegistry.ts`, `POST /api/admin/svg-editor`, atomic write to `site/block-descriptors/{slug}.{n}.json` with rotation, shell-out to Phase 03, R2 PNG upload, Ark UI primitives wrapped as Puck blocks, `react-aria-components` gap-fills, 422 error mapping.
 
@@ -77,10 +88,18 @@ Editor mounts a single `<Puck>` instance per admin route; portal mounts `<Puck.R
 ## Phase governance
 ### Forbidden actions
 - Do NOT auto-create admin blocks from anonymous traffic — gate is `withAuth(['admin'])` only.
+- Do NOT use packages outside allowed list (BP-04): enforce `@puckeditor/core`, `@ark-ui/react`, `react-aria-components`, `zod`, `@phosphor-icons/react`, (`@vercel-labs/json-render` inactive). Disallow `@radix-ui/react-*` for chrome (REJs from benchmark apply).
 - Do NOT auto-rename existing blocks on slug change — create a new slug instead (avoid shadowing existing descriptors).
 - Do NOT bypass Zod validation on save — even if capture is "trusted internal", still parse at the API boundary.
 - Do NOT mount `<Puck>` without registering its config in `puckBlockRegistry.ts` — empty registry breaks layout fallbacks.
 - Do NOT activate `@vercel-labs/json-render` — Tier-3 reserved until explicit user signal.
+
+### Accessibility (per BP-04)
+- Enforce WCAG for Puck/Ark UI components.
+- Keyboard navigation, ARIA, contrast per global standard.
+- Cross-ref QUALITY-GATES accessibility tests.
+- REC-01 (Figma Minimize UI): every panel declares hide/collapse/minimize affordances; REC-03 (AutoCAD command surface) for non-canvas errors.
+- UI/GS gate: Global Standard + anti-copy per benchmark; no donor visual debt (REJ-05 exact Figma pixel sizes forbidden). Provisional.
 
 ### Phase entry checklist
 - Phase 02 schema and 422 mapper stable.
@@ -130,3 +149,4 @@ Editor mounts a single `<Puck>` instance per admin route; portal mounts `<Puck.R
 - 2026-07-04 — Decision: spawn wrapper uses `execFile` (not `spawn` arg array directly) to avoid shell injection. Reason: defense-in-depth even though inputs are descriptor-driven. Alternatives: keep `spawn` with escaped args — rejected for clarity. Owner: UI agent.
 - 2026-07-04 — Decision: slug change creates a new descriptor, never renames in place. Reason: descriptors are content-addressed and renames hide shadow-write semantics. Alternatives: shadow via tombstone file — rejected as complexity-leak. Owner: UI agent.
 - 2026-07-04 — Decision: removed-task lint guard pattern prevents stealth admin expansions under `/planner/*`. Reason: future contributors could add a `puckBlock` to a planner route and bypass auth. Alternatives: rely on code review — rejected. Owner: UI agent.
+- 2026-07-04 Provisional: REC-01/REC-03 + REJ-05/REJ-06 incorporated; UI/GS gates added; cross-ref plans/2026-07-04/benchmark.md + design spec. No donor visual debt. Global Standard Gate applies (see QUALITY-GATES.md).

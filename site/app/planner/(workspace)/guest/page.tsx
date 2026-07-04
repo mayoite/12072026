@@ -2,7 +2,7 @@ import { Open3dPlannerWorkspaceRoute } from "@/features/planner/ui/Open3dPlanner
 
 export const dynamic = "force-dynamic";
 
-/** Live guest workspace — native Open3D planner. Fabric fallback: /planner/fabric/guest */
+/** Live guest workspace — hybrid planner route (`open3d/` tree, Fabric-backed 2-D + Three 3-D). Legacy fallback: /planner/fabric/guest */
 export default function PlannerGuestRoute() {
   return <Open3dPlannerWorkspaceRoute guestMode />;
 }

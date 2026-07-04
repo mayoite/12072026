@@ -2,7 +2,7 @@
 
 pnpm monorepo for `oando.co.in`. Next.js in `site/`.
 
-**Active:** `site/features/planner/` + `site/app/planner/` (Fabric + r3f).
+**Active:** `site/features/planner/` + `site/app/planner/` (hybrid planner: Fabric-backed 2D canvas + Three/r3f 3D view).
 
 ## Which doc to open
 

@@ -1,6 +1,14 @@
-# Open3D native planner (production)
+# Open3D planner route (production hybrid)
 
-This directory is the **production source of truth** for the Open3D-to-React planner that replaces the archived Fabric stack.
+This directory is the **production source of truth** for the live planner route.
+
+Despite the `open3d/` folder name, the live planner is currently a **hybrid** stack:
+
+- 2-D editing uses the Fabric-backed [`canvas-fabric/`](D:/oandO04072026/site/features/planner/open3d/canvas-fabric)
+- 3-D viewing uses the Three/r3f [`3d/`](D:/oandO04072026/site/features/planner/open3d/3d)
+- route composition, chrome, catalog, persistence, and commands live under this `open3d/` tree
+
+This replaces the old top-level Fabric workspace routes, but it does **not** mean Fabric is absent from the live planner implementation.
 
 ## Layout
 
@@ -24,10 +32,12 @@ pnpm --filter oando-site run test:planner
 |-------|--------|
 | `/planner/guest` | `site/app/planner/(workspace)/guest/page.tsx` → `Open3dPlannerHost` |
 | `/planner/canvas` | `site/app/planner/(workspace)/canvas/page.tsx` → `Open3dPlannerHost` |
-| `/planner/fabric/*` | Fabric fallback → `_archive/fabric/` |
+| `/planner/fabric/*` | legacy top-level Fabric fallback → `_archive/fabric/` |
 | `/planner/open3d` | Redirect to guest or canvas |
 
-Host chain: `Open3dPlannerHost` → `ui/Open3dNativeHost` → `editor/OOPlannerWorkspace`.
+Host chain: `Open3dPlannerHost` → `ui/Open3dNativeHost` → `editor/OOPlannerWorkspace` → `canvas-fabric/FeasibilityCanvas` (2-D) or `3d/ThreeLazyViewer` (3-D).
+
+`/planner/fabric/*` refers to the archived legacy workspace shell, not the Fabric-backed canvas that is still embedded inside the live hybrid planner.
 
 ## Archive mirrors
 

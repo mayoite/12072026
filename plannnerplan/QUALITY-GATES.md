@@ -9,7 +9,7 @@ Authority: every phase in `plannnerplan/phases/` must satisfy the applicable gat
 | 01 | Engine locks enforced; Fabric 7.4.0 + Three.js r185+r3f verified | All implementation/UI gates |
 | 02 | Catalog domain + Zod BlockDescriptor survived round-trip | Final inventory UI |
 | 03 | Generate-svg script + 3 fixture blocks (union/difference/intersection) | Docking/final visuals in 06 |
-| 04 | Admin editor mounts Puck; descripters validate via Zod | Browser soak, full a11y |
+| 04 | Admin editor mounts Puck; descriptors validate via Zod | Browser soak, full a11y |
 | 05 | Portal Puck.Render renders 3 saved blocks server-side | Lazy 3D, export |
 | 06 | Planner svgBlockDescriptorLoader wired; search parity | Final panel chrome |
 | 07 | withAuth admin gate; permission matrix enforced | Member persistence UX |
@@ -62,6 +62,23 @@ Deferred means NOT passed. Earlier phases may reach `Implemented`; release depen
 - Primary-agent acceptance/rejection decisions recorded.
 - Binding design brief exists before implementation.
 - Donor visual patterns retained need explicit justification.
+
+### Global Standard Gate (Binding)
+- Fresh dated benchmark report exists (per DESIGN-BENCHMARK-PROTOCOL.md and 2026-07-04 benchmark report).
+- Independent UI review (per REVIEW-WORKFLOW) signed off on global standard + UI/UX/SVG/features/packages compliance.
+- Anti-copy + pattern attestation in Decision Log (cite specific principles from benchmark report).
+- Applies to Phases 03, 04, 05, 06, 10 and any package/SVG/feature/UI changes.
+- "Implemented" only after gate; "Verified" requires live site validation.
+- Cross-refs: IMPLEMENTATION-DECISIONS.md §Global Standard Framework, UI/UX Standards, SVG/Features/Packages Mandates.
+- Provisional pending live site validation after tests and site up (design §16).
+
+**Critique merge note (2026-07-04)**: Incorporated from critique:
+- Error taxonomy gates now require sticky suffixes for 409 (hashMismatch, lockBusy, saveConflict) and 422 for versionMismatch (not 404).
+- Forbidden actions strengthened per phase omissions list (e.g., no shell:true in Phase 04, no base64 PNG inline in Phase 05).
+- Status vocab hygiene enforced (no "Removed-task" labels).
+- Phase 10 residue (STAGING_PHASE_01A_RESIDUE) excised.
+- Service key leak in Phase 07: use regex pattern, not single env var.
+See updated FAILURESPLAN and phases for details.
 
 ### Accessibility tests
 - Keyboard reachability for every command.

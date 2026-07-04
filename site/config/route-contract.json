@@ -40,6 +40,15 @@
     "/buddy-planner/editor",
     "/buddy-planner/t/"
   ],
+  "_phase04_admin_routes": {
+    "_status": "phase-04 admin portal svg-editor routes",
+    "_auth": "withAuth(['admin']) — Phase 04 widens; pre-Phase 07 route-level reuse `site/lib/api/withAuth.ts`",
+    "_persistence": "atomic-rename JSON /api/admin/svg-editor/route.ts → site/block-descriptors/{slug}.json",
+    "list": "/admin/svg-editor",
+    "editById": "/admin/svg-editor/[id]",
+    "createStub": "/admin/svg-editor/new",
+    "apiPost": "/api/admin/svg-editor"
+  },
   "publicGuestRoutes": [
     "/choose-product?mode=guest",
     "/planner/guest",
