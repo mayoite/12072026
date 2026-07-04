@@ -68,7 +68,7 @@ a p95 figure. Seven of ten phases have ≥ 3 rollback criteria; Phase
 4. **`IMPLEMENTATION-DECISIONS.md` §96 vs Phase 03 §03-SVG-08,
    Phase 04 §04-ADMIN-08, Phase 05 §05-PORT-06, Phase 08 §08-PERS-07,
    Phase 10 §10-CLN-06 — R2 bucket name.** IMPLEMENTATION-DECISIONS
-   lists `site-block-thumbs/` under "still requiring explicit owner
+   lists `<bucket per IMPLEMENTATION-DECISIONS.md>` under "still requiring explicit owner
    approval", while every downstream phase locks the name as final.
    **Resolution**: either move the bucket name out of "needs
    approval" in IMPLEMENTATION-DECISIONS, or have every phase cite
@@ -158,8 +158,8 @@ a typo.
   Phase 06's loader reading the pointer rather than per-version
   files. Phase 06 §06-INV-03 does not name the pointer.
 - **R2 vs public distinction** — consistent. SVG → `public/svg-catalog/`;
-  PNG → R2 `site-block-thumbs/`. Phase 05 §05-PORT-04 declares a
-  CDN URL `https://cdn.oando.co.in/site-block-thumbs/{slug}.png`;
+  PNG → R2 `<bucket per IMPLEMENTATION-DECISIONS.md>`. Phase 05 §05-PORT-04 declares a
+  CDN URL `https://cdn.oando.co.in/<bucket per IMPLEMENTATION-DECISIONS.md>/{slug}.png`;
   no phase contradicts this.
 - **`status` vocab contract** — HANDOVER.md mirrors I-D vocabulary
   and every phase Status header matches.
@@ -172,7 +172,7 @@ a typo.
    preserve the existing value; document in Decision log.
 
 2. **`plannnerplan/IMPLEMENTATION-DECISIONS.md` §96**
-   — R2 bucket name `site-block-thumbs/` listed as still-needs-
+   — R2 bucket name `<bucket per IMPLEMENTATION-DECISIONS.md>` listed as still-needs-
    approval while every downstream phase locks it. Fix: move out
    of "still requiring explicit owner approval" or have all five
    downstream phases cite the approving owner/date.

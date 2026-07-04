@@ -56,7 +56,7 @@ Manifest includes: source path (e.g. `site/features/planner/open3d/`), destinati
 - 10-CLN-03 `OOPlanner/` and `open3d-next-staging/` are NOT deleted until production acceptance + manifest signed; they remain as immutable donor snapshots.
 - 10-CLN-04 Asset classification table: product images / 3D assets stay in R2 (not git); runtime / editor assets may move to `site/public/` or CDN; classification reviewed before any cleanup.
 - 10-CLN-05 Phase 01A STAGING_PHASE_RESIDUE cleanup is no longer required; the residue list has no remaining items after the 2026-07-04 plan revision rewrites removed the legacy ID. No artifact preconditions are referenced.
-- 10-CLN-06 Asset allowlist / CSP review against admin R2 bucket URL `site-block-thumbs/`; CSP tightened if `frame-ancestors` or similar was relaxed during the admin rollout.
+- 10-CLN-06 Asset allowlist / CSP review against admin R2 bucket URL per IMPLEMENTATION-DECISIONS.md; CSP tightened if `frame-ancestors` or similar was relaxed during the admin rollout.
 - 10-CLN-07 Decision log: every archive removal gets entry with permission, retirement reason, and restore procedure; documented in `HANDOVER.md`.
 
 ### Handover (10-HAND)
@@ -129,7 +129,7 @@ Manifest includes: source path (e.g. `site/features/planner/open3d/`), destinati
 
 ### Security considerations
 - Feature flag rules emit no PII in telemetry events; cohort id is hashed.
-- Admin R2 bucket URL `site-block-thumbs/` is allowlisted in CSP; review ensures CSP is unchanged or tightened, never relaxed.
+- Admin R2 bucket URL per IMPLEMENTATION-DECISIONS.md is allowlisted in CSP; review ensures CSP is unchanged or tightened, never relaxed.
 - Auth behavior verified for every cohort; no admin impersonation risk during pilot.
 - Archive removal is reversible: every retired path has a restore procedure in `HANDOVER.md`.
 

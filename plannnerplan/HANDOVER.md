@@ -31,7 +31,7 @@ Date: 2026-07-04
 
 ## Architecture snapshot
 
-Admin JSON → Zod BlockDescriptor validated → `scripts/generate-svg.mjs` runs Option A pipeline (`@flatten-js/core` → `polygon-clipping` → `svgo` → `@resvg/resvg-js`) → outputs to `public/svg-catalog/{slug}.svg` (small, runtime-served) + R2 `site-block-thumbs/{slug}.png` (CDN-cached imagery) → portal `<Puck.Render>` mounts at `/portal/svg-catalog/[slug]` → planner `features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts` reads registered descriptors → catalog/symbol consumers update.
+Admin JSON → Zod BlockDescriptor validated → `scripts/generate-svg.mjs` runs Option A pipeline (`@flatten-js/core` → `polygon-clipping` → `svgo` → `@resvg/resvg-js`) → outputs to `public/svg-catalog/{slug}.svg` (small, runtime-served) + R2 `<bucket per IMPLEMENTATION-DECISIONS.md>/{slug}.png` (CDN-cached imagery) → portal `<Puck.Render>` mounts at `/portal/svg-catalog/[slug]` → planner `features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts` reads registered descriptors → catalog/symbol consumers update.
 
 ## Modified files (this session)
 
@@ -47,6 +47,7 @@ Admin JSON → Zod BlockDescriptor validated → `scripts/generate-svg.mjs` runs
 - `scripts/generate-svg.mjs` skeleton.
 - Zod `BlockDescriptor` schema location to be confirmed in Phase 02 — recommend `features/planner/open3d/catalog/svg/svgTypes.ts`.
 - R2 bucket name to be confirmed by persistence agent for Phase 08 migration evidence.
+- **Phase 00 status (2026-07-04T11:40Z)**: R2 authority consolidated (PLAN-FAIL-0410 Resolved). Remaining blocker is PLAN-FAIL-0411 — `any` in `site/scripts/*` and `eslint-disable-next-line` in `site/components/*` and a planner hook/view. Resolution path: narrow exception inventory under AGENTS.md type-safety rules, OR scope-reset the §00-PRE-02 scan (these are scripts/UI, not converted-planner code). See `benchmarks/phase-00-precheck.md`.
 
 ## Upcoming execution (next prompt cycle)
 

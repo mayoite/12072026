@@ -32,7 +32,7 @@ flowchart TB
     H -->|invalid| I[Open3dDescriptorError.invalid → 422 with field path]
     H -->|valid| J[Atomic rename site/block-descriptors/{slug}.{n}.json]
     J --> K[scripts/generate-svg.mjs runPipeline]
-    K --> L[catalog_snapshot_upload_r2.ts → site-block-thumbs/{slug}.png]
+    K --> L[catalog_snapshot_upload_r2.ts → <bucket per IMPLEMENTATION-DECISIONS.md>/{slug}.png]
     L --> M[Descriptor + thumb URL returned]
 ```
 
@@ -117,7 +117,7 @@ Editor mounts a single `<Puck>` instance per admin route; portal mounts `<Puck.R
 ### Security considerations
 - All admin routes enforce `withAuth(['admin'])`; non-admin roles get 401 or 403, never a partial render.
 - Save action rejects payloads > 256 KB at the API boundary (DoS guard).
-- R2 upload uses scoped credentials: a per-directory token with `site-block-thumbs/` write-only.
+- R2 upload uses scoped credentials: a per-directory token with per IMPLEMENTATION-DECISIONS.md write-only.
 - Zod schema is the only path to persistence; `any` payload cannot reach disk.
 
 ### Accessibility considerations

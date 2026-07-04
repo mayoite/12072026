@@ -1,12 +1,30 @@
 # Handover — active backlog
 
-**Last updated:** 2026-06-30
+**Last updated:** 2026-07-04 (planner phase-01 executor, BLOCK on typecheck)
+**Planner authority:** `plannnerplan/IMPLEMENTATION-DECISIONS.md`. Phase-01 deadlines → `plannnerplan/phases/01-engine-lock-and-workspace-bootstrap.md`.
 
 **Owns:** session status and priority backlog only. Full blocker list → [`Failures.md`](Failures.md). Commands → [`START.md`](START.md). Which doc to open → [`docs/Lockedfiles/ReadmeLocked.md`](docs/Lockedfiles/ReadmeLocked.md).
 
-**Git:** `main` — verify live before trusting; Vitest CI batch fix is **local uncommitted** as of this update.
+**Git:** `main` — verify live before trusting; Vitest CI batch fix is **local uncommitted** as of this update; `site/package.json` + `pnpm-lock.yaml` carry Phase 01 Tier-1 install + strict-pin edits (local uncommitted).
 
 ---
+
+## Phase 01 — Engine Lock & Workspace Bootstrap (Planner plan, NEW section)
+
+**Status:** **Blocked on typecheck** (per `plannnerplan/FAILURESPLAN.md` PLAN-FAIL-0412, opened 2026-07-04 by Phase 01 executor).
+
+**What is done (Implemented part):**
+
+- Tier-1 lockstep install: 9/9 packages installed in `site/` (`@flatten-js/core`, `polygon-clipping`, `svgo`, `@resvg/resvg-js`, `@puckeditor/core`, `@ark-ui/react`, `react-aria-components`, `zod`, `@phosphor-icons/react`). `@vercel-labs/json-render` deferred (not in npm registry; option A unblock). `fabric` re-pinned to strict `7.4.0` (no caret). `three` bumped `^0.185.0` → `^0.185.1`. Lockfile sync exit 0. Evidence: `results/planner/phase-01/install/`.
+- PLAN-FAIL-0401 → Resolved 2026-07-04 (Phase 01 executor).
+
+**What is blocked (not Implemented until typecheck clean):**
+
+- `pnpm --filter oando-site run typecheck` exit 2. 27 pre-existing planner-type errors in `features/planner/open3d/{3d,ai,catalog}/` (TS2724 private re-export `_Open3d*`; TS18048 `Open3dConfigurability|undefined` and `value|undefined`). Errors pre-date this install (no Tier-1 package added by Phase 01 is imported by any of those files). All Phase 01 exit-gate checkpoints in §01-VERI cannot be claimed until typecheck is green. Captured: `results/planner/phase-01/typecheck/typecheck-run.json`.
+- Lint (`pnpm --filter oando-site run lint --max-warnings=0`) **skipped** — per AGENTS.md "Skipped = say skipped"; running lint over a typecheck-failing tree would mislead.
+- Vitest smoke (`pnpm --filter oando-site run test:planner`) **skipped** for the same reason.
+
+**Next step (requires owner decision):** planner agent fixes pre-existing planner-type debt under `site/features/planner/open3d/` (out of Phase 01 scope; Phase 06/03 own this surface). After typecheck is green, return to Phase 01 executor for lint → vitest smoke → Implemented → Verified in staging.
 
 ## Open (priority order)
 

@@ -23,7 +23,7 @@ In scope:
 1. Verify the 5 governance markdown files are present and untouched.
 2. Verify `pnpm-lock.yaml` is committed and not regenerable from spec drift.
 3. Verify forbidden patterns are absent from the working tree (`any`, `@ts-ignore`, `@ts-nocheck`, ESLint `disable` directives, pnpm `--no-frozen-lockfile` traces, Mantine imports, competitor trade-dress assets).
-4. Verify R2 bucket `site-block-thumbs/` authority is recorded in `IMPLEMENTATION-DECISIONS.md`.
+4. Verify R2 bucket `<bucket per IMPLEMENTATION-DECISIONS.md>/` authority is recorded in `IMPLEMENTATION-DECISIONS.md`.
 5. Verify `pnpm-workspace.yaml` and `turbo.json` reflect the locked package set.
 6. Produce `benchmarks/phase-00-precheck.md` with exit-summary table.
 7. Move `plannnerplan/` from git `D` (deleted in working tree, present in `HEAD`) to clean on `main`.
@@ -60,7 +60,7 @@ Out of scope:
 
 - **§00-PRE-01** `pnpm-lock.yaml` is present, working-tree-mtime matches committed SHA, and is not in a dirty state (`git status` clean for that path). Score: pass/fail.
 - **§00-PRE-02** Forbidden-pattern grep returns 0 hits across `site/`, `open3d-floorplan/`, `open3d-next-staging/`, `scripts/`, `docs/` for: `\bany\b` in `: any`/`as any`/`Record<string, any>` positions inside TS; `@ts-ignore`; `@ts-nocheck`; `eslint-disable`; `--no-frozen-lockfile`; `from 'mantine'`; competitor trade-dress strings. Score: hit count.
-- **§00-PRE-03** R2 bucket string `'site-block-thumbs/'` appears in `IMPLEMENTATION-DECISIONS.md` exactly once and is absent from phase files (verified via `grep -l`). Score: pass/fail.
+- **§00-PRE-03** R2 bucket string `'<bucket per IMPLEMENTATION-DECISIONS.md>/'` appears in `IMPLEMENTATION-DECISIONS.md` exactly once and is absent from phase files (verified via `grep -l`). Score: pass/fail.
 - **§00-PRE-04** All 10 new phase files exist under `plannnerplan/phases/` (00..10 mapped verbatim), and all 5 governance files exist at `plannnerplan/` root. Score: pass/fail.
 - **§00-PRE-05** `pnpm-workspace.yaml` and `turbo.json` parses to valid YAML/JSON and enumerates a non-empty member-set. Score: pass/fail.
 - **§00-PRE-06** Working tree shows `D … plannnerplan/` entries in unstaged (or staged) state — confirming deletion of legacy plans — and new package is staged/untracked; one commit lands the new package on `main`. Score: pass/fail.
@@ -71,7 +71,7 @@ Score table appended to `benchmarks/phase-00-precheck.md`. Phase 01 cannot begin
 
 If §00-PRE-02 surfaces a forbidden pattern, do not proceed: log the path + line + pattern, add a `FAILURESPLAN` entry `FP-00XX` with status `Deferred/blocked`, and exit the phase with `Status: Deferred/blocked`.
 
-If §00-PRE-03 surfaces scattered R2 bucket authority (the `'site-block-thumbs/'` string appearing in more than one markdown file or in any TS), exit and require a follow-up edit pass that consolidates authority before any Phase 01+ work.
+If §00-PRE-03 surfaces scattered R2 bucket authority (the `'<bucket per IMPLEMENTATION-DECISIONS.md>/'` string appearing in more than one markdown file or in any TS), exit and require a follow-up edit pass that consolidates authority before any Phase 01+ work.
 
 If §00-PRE-06 surfaces a dirty working tree beyond the planned delete+copy, refuse to commit using `-a`; require explicit `git add plannnerplan/`.
 

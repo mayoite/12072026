@@ -31,7 +31,7 @@ flowchart LR
     D -->|missing asset| E[Placeholder + labeled fallback]
     A --> F[Export menu] --> G[exportUtils.ts]
     G --> H[scripts/generate-svg.mjs runPipeline reused]
-    H --> I[R2 site-block-thumbs for PNG]
+    H --> I[R2 <bucket per IMPLEMENTATION-DECISIONS.md> for PNG]
     G --> J[PDF writer print-safe title block]
     G --> K[DXF writer walls/openings/furniture/dimensions]
     G --> L[ZIP packaging floor-N files]

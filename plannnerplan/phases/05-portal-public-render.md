@@ -27,7 +27,7 @@ flowchart LR
     C -->|invalid| D[Open3dDescriptorError.invalid → 404 page with NotFound component]
     C -->|valid| E[<Puck.Render config=puckBlockRegistry data=savedJson />]
     E --> F[SVG inline from /cdn/svg-catalog/{slug}.svg]
-    E --> G[PNG thumb from /cdn/site-block-thumbs/{slug}.png]
+    E --> G[PNG thumb from /cdn/<bucket per IMPLEMENTATION-DECISIONS.md>/{slug}.png]
     H[GET /portal/svg-catalog index] --> I[loadAll → slug cards grid]
 ```
 
@@ -40,7 +40,7 @@ Single registry import path: `features/planner/admin/puckBlockRegistry.ts` (cano
 - 05-PORT-03 `getPuckData(slug)` reads `site/block-descriptors/{slug}.json` via `svgBlockDescriptorLoader.tryLoad`, returning `Result<puckData, Open3dDescriptorError>`.
 - 05-PORT-04 Registry import: `puckBlockRegistry.ts` shared with Phase 04 (canonical path `features/planner/admin/puckBlockRegistry.ts`); portal alias at `site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts` is one import line — no forked registry and no `as any` cast. (See IMPLEMENTATION-DECISIONS §\"Module paths\".)
 - 05-PORT-05 `<Puck.Render config={registry} data={savedJson} />` mounts at the slug path; `mode="preview"` (no edit affordances).
-- 05-PORT-06 Image optimization: PNG thumb via R2 CDN URL at `https://cdn.oando.co.in/site-block-thumbs/{slug}.png`, `next/image` with remote-pattern allowlist for the CDN host.
+- 05-PORT-06 Image optimization: PNG thumb via R2 CDN URL at `https://cdn.oando.co.in/<bucket per IMPLEMENTATION-DECISIONS.md>/{slug}.png`, `next/image` with remote-pattern allowlist for the CDN host.
 - 05-PORT-07 SVG inline served from `public/svg-catalog/{slug}.svg` — no second fetch, no re-render pipeline on portal mount.
 - 05-PORT-08 Catalog metadata: 404 page when `slug` missing or descriptor invalid; 200 with `NotFound` component on `Open3dDescriptorError.notFound`.
 - 05-PORT-09 `generateMetadata` per slug: title, description, OG image = same PNG thumb; `robots: { index: true, follow: true }`, draft flag always `false`.

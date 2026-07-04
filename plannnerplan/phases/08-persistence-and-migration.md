@@ -7,7 +7,7 @@ Status: Planned
 Ship JSON-on-disk descriptor persistence for v1 with atomic-rename version rotation and an explicit Supabase-table migration plan that only promotes behind dual-read evidence. The persistence layer is the durable bridge between admin (Phase 04 writes) and planner/portal consumers (Phase 05/06 reads); it must survive concurrent writes, partial-state failures, and silent schema drift without ever overwriting canonical geometry.
 
 ## Inputs to read
-- `D:\new\plannnerplan\IMPLEMENTATION-DECISIONS.md` — JSON-on-disk v1, R2 bucket `site-block-thumbs/`, migration policy
+- `D:\new\plannnerplan\IMPLEMENTATION-DECISIONS.md` — JSON-on-disk v1, R2 bucket per IMPLEMENTATION-DECISIONS.md, migration policy
 - `D:\new\plannnerplan\QUALITY-GATES.md` — atomic-rename gate, dual-read gate, snapshot immutability
 - `D:\new\plannnerplan\FAILURESPLAN.md` — PLAN-FAIL-0409 ownership (Supabase table deferred)
 - `D:\new\plannnerplan\phases\02-catalog-source-of-truth-and-blockdescriptor.md` — Zod source-of-truth and snapshot hash contract
@@ -32,7 +32,7 @@ flowchart LR
     G --> H[fs.rename to {slug}.latest.json]
     H -->|fail| I[Restore {slug}.{n}.json from buffer]
     H -->|ok| J[Release lock]
-    J --> K[catalog_snapshot_upload_r2.ts -> site-block-thumbs/{slug}.png]
+    J --> K[catalog_snapshot_upload_r2.ts -> <bucket per IMPLEMENTATION-DECISIONS.md>/{slug}.png]
     K --> L[site/block-descriptors/_archive/ rolls {slug}.{n-5..n-1}.json (exclusive of live n)]
 ```
 

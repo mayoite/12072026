@@ -28,9 +28,9 @@ flowchart LR
     D --> E[Step 4 svgo: optimize paths]
     E --> F[Step 5 write public/svg-catalog/{slug}.svg idempotent]
     F --> G[Step 6 @resvg/resvg-js: render PNG thumb]
-    G --> H[Step 7 catalog_snapshot_upload_r2.ts → R2 site-block-thumbs/{slug}.png]
+    G --> H[Step 7 catalog_snapshot_upload_r2.ts → R2 <bucket per IMPLEMENTATION-DECISIONS.md>/{slug}.png]
     H --> I[Returns svg:string, thumbBuffer:Buffer, dimensions:{w,h}]
-```
+}
 
 The script exposes a module API `runPipeline(descriptor)`. No DOM, no Fabric runtime, no `fabric.loadSVGFromString`. Fabric consumption is the runtime's responsibility in Phase 05 / Phase 06 wiring.
 
@@ -43,7 +43,7 @@ The script exposes a module API `runPipeline(descriptor)`. No DOM, no Fabric run
 - 03-SVG-05 Step 4 — `svgo` runs (preset-safe): no ID rewriting, no class removals that observers depend on, no `<style>` swallowing.
 - 03-SVG-06 Step 5 — write `public/svg-catalog/{slug}.svg` idempotent (content-addressed; same input → same bytes).
 - 03-SVG-07 Step 6 — `@resvg/resvg-js` render PNG thumb; `width × height × DPI` matches viewBox aspect invariant.
-- 03-SVG-08 Step 7 — PNG thumb uploaded via existing `catalog_snapshot_upload_r2.ts` helper into bucket `site-block-thumbs/`; NOT written to `public/svg-catalog/`.
+- 03-SVG-08 Step 7 — PNG thumb uploaded via existing `catalog_snapshot_upload_r2.ts` helper into the bucket designated by `IMPLEMENTATION-DECISIONS.md` (see Decisions §Owner-approved authorities); NOT written to `public/svg-catalog/`.
 - 03-SVG-09 Module exports `runPipeline(descriptor) → { svg: string, thumbBuffer: Buffer, dimensions: { width: number, height: number } }`.
 
 ### Fixtures (03-FIX)
@@ -80,7 +80,7 @@ The script exposes a module API `runPipeline(descriptor)`. No DOM, no Fabric run
 ## Phase governance
 ### Forbidden actions
 - Do NOT call `fabric.loadSVGFromString` in this script (runtime responsibility). Touch Fabric only to read the existing canvas instance at admin-time wiring in Phase 04.
-- Do NOT write PNG thumbs to `public/svg-catalog/`; PNGs go to R2 (`site-block-thumbs/`).
+- Do NOT write PNG thumbs to `public/svg-catalog/`; PNGs go to R2 (bucket per `IMPLEMENTATION-DECISIONS.md`).
 - Do NOT introduce a second export-only symbol system; the descriptor is the source of truth.
 - Do NOT randomize SVG output; vg output must be deterministic for golden fixture equality.
 - Do NOT skip sanitization steps; PNG/SVG output is user-facing and CDN-served.
@@ -120,7 +120,7 @@ The script exposes a module API `runPipeline(descriptor)`. No DOM, no Fabric run
 
 ### Security considerations
 - SVG sanitization gates script, event handlers, foreignObject, javascript: hrefs.
-- R2 bucket name locked to `site-block-thumbs/` (no path traversal via slug).
+- R2 bucket name is the one locked in `IMPLEMENTATION-DECISIONS.md` (no path traversal via slug).
 - SLUG → path: kebab-case regex enforced; reject any descriptor whose slug doesn't match `^[a-z][a-z0-9-]{1,63}$`.
 
 ### Accessibility considerations
@@ -132,3 +132,4 @@ The script exposes a module API `runPipeline(descriptor)`. No DOM, no Fabric run
 - 2026-07-04 — Decision: Option A pipeline locked. Reason: PACKAGES.md skip-rationale review rejects paper.js / svg.js / svg-path-commander; Martinez is the only sound public-domain boolean algorithm; `@resvg/resvg-js` avoids Chromium in build scripts. Alternatives: Option B (Playwright + Chromium for PNGs) — rejected due to speed and runtime cost; reserved for explicit permission case. Owner: SVG agent.
 - 2026-07-04 — Decision: PNG thumbs on R2 only, not `public/svg-catalog/`. Reason: IMPLEMENTATION-DECISIONS dual-output rule; CDN-cached imagery separation from runtime-served small SVG. Alternatives: co-locate under `public/` — rejected to avoid runtime diff churn. Owner: SVG agent.
 - 2026-07-04 — Decision: golden diff tolerance 0.1% per fixture. Reason: floating-point formatting variation across OS locales must not break CI yet must catch real regressions. Alternatives: 0% (exact match) — rejected as flaky; 1% — rejected as masking. Owner: SVG agent.
+- 2026-07-04 — Decision: phase files cite bucket ownership by file (`IMPLEMENTATION-DECISIONS.md`) rather than the bucket literal. Reason: §00-PRE-03 consolidation; avoid drift across phases. Alternatives: embed bucket literal in every phase — rejected (re-introduces scattered authority). Owner: SVG agent.

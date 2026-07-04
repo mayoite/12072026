@@ -32,7 +32,7 @@ FACT-03 QUALITY-GATES.md sets the coverage target at 95% with a 90% hard floor f
 
 FACT-04 HANDOVER.md still lists every phase as `Planned` and includes `PLAN-FAIL-0401` though `01-INST-04` is scheduled to install the locked set on the first execution cycle. There is no staging or production-path promotion entry yet, which matches the rubric that "lack of permission to run a check allows `Implemented`, never `Verified`/`Accepted`".
 
-FACT-05 FAILURESPLAN.md re-IDs failure indexes into the 4xxx range and ties PLAN-FAIL-0406 (Block descriptor Zod schema not exported alongside admin) to Phase 02, PLAN-FAIL-0408 (pervasive coverage floor in OOPlanner ~58%) to Phase 06, and PLAN-FAIL-0409 (no Supabase `block_descriptors` table) to Phase 08 deferred. The cross-phase blockers correctly flag that PNG thumbs must route to R2 `site-block-thumbs/`, NOT `public/svg-catalog/`.
+FACT-05 FAILURESPLAN.md re-IDs failure indexes into the 4xxx range and ties PLAN-FAIL-0406 (Block descriptor Zod schema not exported alongside admin) to Phase 02, PLAN-FAIL-0408 (pervasive coverage floor in OOPlanner ~58%) to Phase 06, and PLAN-FAIL-0409 (no Supabase `block_descriptors` table) to Phase 08 deferred. The cross-phase blockers correctly flag that PNG thumbs must route to R2 `<R2 bucket identifier; see IMPLEMENTATION-DECISIONS.md>`, NOT `public/svg-catalog/`.
 
 FACT-06 DESIGN-BENCHMARK-PROTOCOL.md §"Mandate" forbids reproducing donor visual composition, panel arrangement, styling, or information hierarchy unless current evidence independently supports it. This benchmark is the first advisory report following the rewrite of the protocol on 2026-07-04 14:53Z.
 
@@ -79,7 +79,7 @@ BP-02
 BP-03
 - Phase: 03 (SVG pipeline Option A)
 - Target section: §"Architecture" and §"Source-quality gate"
-- Proposal: declare the pipeline order `JSON → @flatten-js/core (measure) → polygon-clipping (Martinez booleans) → svgo → write public/svg-catalog/{slug}.svg | fabric.loadSVGFromString → @resvg/resvg-js → R2 site-block-thumbs/{slug}.png`; pin each of {`@flatten-js/core`, `polygon-clipping`, `svgo`, `@resvg/resvg-js`, `fabric` 7.4.0} to a version-locked single line
+- Proposal: declare the pipeline order `JSON → @flatten-js/core (measure) → polygon-clipping (Martinez booleans) → svgo → write public/svg-catalog/{slug}.svg | fabric.loadSVGFromString → @resvg/resvg-js → R2 bucket (per IMPLEMENTATION-DECISIONS.md){slug}.png`; pin each of {`@flatten-js/core`, `polygon-clipping`, `svgo`, `@resvg/resvg-js`, `fabric` 7.4.0} to a version-locked single line
 - Reason: PACKAGES.md locks these as Option A. Phase 03 must not silently drop a step or substitute `svg-path-commander` (the only Tier-1 candidate rejection in PACKAGES.md §"Skip rationale")
 - Acceptance: first 5-line block in §"Architecture" equals the pipeline order above; `@flatten-js/core`, `polygon-clipping`, `svgo`, `@resvg/resvg-js` each appear in §"Checklist" with at least one reference
 
