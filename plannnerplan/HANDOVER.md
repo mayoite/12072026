@@ -1,38 +1,62 @@
-# Planner Handover
+# Planner Handover (Live)
 
-Date: 2026-07-03  
-Current phase: **05 not accepted; 07 route swap rolled back on live paths; 08 prep**
+Date: 2026-07-04
 
-## Production routes (plan-aligned)
+## Current status at a glance
 
-| Route | Stack | Status |
-|-------|-------|--------|
-| `/planner/guest`, `/planner/canvas` | **Fabric** (`PlannerWorkspaceRoute`) | **Deployable production** |
-| `/planner/open3d` | **Native Open3D** (`Open3dPlannerHost`) | Pilot only — not deploy-ready |
-| `/planner/fabric/*` | Fabric mirror | Rollback drill |
+| Item | Status |
+|---|---|
+| Engines locked | Fabric 7.4.0 (2D), Three.js r185 + r3f (3D) |
+| New packages | `pnpm add` not yet run for SVG pipeline + admin panel set |
+| Admin SVG-editor | Planned (`/admin/svg-editor`, gated by `withAuth`) |
+| Portal preview | Planned (`/portal/svg-catalog/[slug]`) |
+| Planner consumer | Planned (`svgBlockDescriptorLoader`) |
+| Block descriptor persistence | JSON-on-disk v1; R2 PNG thumbs |
+| Live routes | /planner/guest + /planner/canvas = Fabric (deploy); /planner/open3d = pilot; /planner/fabric/* = rollback drill |
 
-**Why:** Native Open3D failed deploy-readiness (no external Phase 05 gate, incomplete workflows). Fabric restored 2026-07-04 per operator decision. Native work continues at `/planner/open3d` only.
+## Phase status table
 
-## Build paths
+| Phase | Status | Owner |
+|---|---|---|
+| 01 Engine Lock & Workspace Bootstrap | Planned | Build |
+| 02 Catalog Source of Truth + BlockDescriptor | Planned | Catalog |
+| 03 SVG Pipeline (Option A) | Planned | SVG |
+| 04 Admin Portal SVG Editor | Planned | UI |
+| 05 Portal Public Render | Planned | UI |
+| 06 Planner Inventory + Symbol Consumer | Planned | Planner |
+| 07 Auth and Permissions | Planned | Identity |
+| 08 Persistence and Migration | Planned | Persistence |
+| 09 3D Lazy, Export, AI | Planned | 3D |
+| 10 Route Swap, Cleanup, Handover | Planned | Coordinator |
 
-| Role | Path |
-|------|------|
-| Native Open3D modules | `site/features/planner/open3d/` |
-| Unit tests | `site/tests/unit/features/planner/open3d/` |
-| Fabric production editor | `site/features/planner/_archive/fabric/` (aliased as `@/features/planner/editor`) |
-| Theme / CSS | `site/app/css/core/planner/`, `site/app/css/ooplanner/` |
+## Architecture snapshot
 
-## Open blockers (from plannnerplan)
+Admin JSON → Zod BlockDescriptor validated → `scripts/generate-svg.mjs` runs Option A pipeline (`@flatten-js/core` → `polygon-clipping` → `svgo` → `@resvg/resvg-js`) → outputs to `public/svg-catalog/{slug}.svg` (small, runtime-served) + R2 `site-block-thumbs/{slug}.png` (CDN-cached imagery) → portal `<Puck.Render>` mounts at `/portal/svg-catalog/[slug]` → planner `features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts` reads registered descriptors → catalog/symbol consumers update.
 
-1. **Phase 05** — workspace UI not accepted; browser/visual/a11y evidence missing.
-2. **Coverage** — ~58% vs 90% hard floor (`FAILURESPLAN.md`, `phases/05/evidence.md`).
-3. **Phase 07 MET** — route swap reverted on live paths; promotion manifest open.
-4. **Native UI** — `OOPlannerWorkspace` uses one `useWorkspaceCanvas` document; canvas, properties, 3D, and undo share that state (2026-07-03).
+## Modified files (this session)
 
-## Next (per plan)
+- `IMPLEMENTATION-DECISIONS.md` — locked package set, route map
+- `QUALITY-GATES.md` — coverage, accessibility, performance gates
+- `DESIGN-BENCHMARK-PROTOCOL.md` — benchmark protocol (refreshed)
+- `FAILURESPLAN.md` — failure index (re-id to 4xxx range)
+- `HANDOVER.md` (this file) — live status
 
-1. Finish Phase 05 on `site/features/planner/open3d/` only; gate from site.
-2. Browser/visual/a11y evidence before any live route swap.
-3. Re-swap guest/canvas only after Phase 05 + 07 exit gates pass.
+## Open items
 
-Evidence: `plannnerplan/phases/05/evidence.md`, `plannnerplan/07-route-swap-and-fallback-control.md`
+- pnpm add for the locked package set.
+- `scripts/generate-svg.mjs` skeleton.
+- Zod `BlockDescriptor` schema location to be confirmed in Phase 02 — recommend `features/planner/open3d/catalog/svg/svgTypes.ts`.
+- R2 bucket name to be confirmed by persistence agent for Phase 08 migration evidence.
+
+## Upcoming execution (next prompt cycle)
+
+- Phase 01 install sequence (single `pnpm add --filter oando-site fabric@7.4.0 three @react-three/fiber @flatten-js/core polygon-clipping svgo @resvg/resvg-js @puckeditor/core @ark-ui/react react-aria-components zod @phosphor-icons/react @vercel-labs/json-render`).
+- Phase 02 first author: BlockDescriptor Zod schema and `Open3dCatalogClient` adaption.
+- Phase 03 `scripts/generate-svg.mjs` minimum-viable script with 3 fixture blocks.
+
+## Forbidden without explicit ask
+
+- Do NOT commit in `D:\new` (work happens in `D:\oandO04072026`).
+- Do NOT delete `_archive/fabric/` mirrors (Phase 10 cleanup gate).
+- Do NOT enable `@vercel-labs/json-render` yet — Tier-3 reserved, install but inactive.
+- Do NOT add Mantine — Plan-Mantine question resolved as deferred.

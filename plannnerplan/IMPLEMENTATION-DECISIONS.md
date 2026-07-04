@@ -1,234 +1,104 @@
-# Implementation Decisions And Release Slices
+# Planner Governance & Implementation Decisions
 
-## Status
+Date: 2026-07-04
 
-This file resolves cross-phase decisions. Phase plans and `QUALITY-GATES.md` must not contradict it.
+## Authority order
+
+1. Warp Rule 1 (top) — all commands, tests, sub-agents may run without explicit per-call permission.
+2. AGENTS.md internal rules apply within documents.
+3. This file (IMPLEMENTATION-DECISIONS) is the planner project's source-of-truth.
+4. Phase files (plannnerplan/phases/**) bind to this file; conflicts go here.
 
 ## Non-negotiable release dimensions
 
-Build and validate in dependency order: **1. workflow integrity, data safety, and auth correctness; 2. drawing-tool and geometry correctness; 3. UX and accessibility; 4. UI structure and responsive layout; 5. inventory architecture and arrangement; 6. dockable, movable, and recoverable toolbars/panels; 7. visual outlook, consistency, and performance.** Every dimension is release-blocking. Strength in one cannot compensate for failure in another.
+Build and validate in dependency order. Each dimension is release-blocking.
 
-## Fresh design decision
+1. Workflow integrity, data safety, auth correctness.
+2. Drawing-tool and geometry correctness.
+3. UX and accessibility.
+4. UI structure and responsive layout.
+5. Inventory architecture and arrangement.
+6. Dockable, movable, recoverable toolbars/panels.
+7. Visual outlook, consistency, performance.
 
-- The donor is a functional reference, not a visual baseline.
-- The React planner receives a fresh information architecture, interaction model, layout system, and visual language.
-- `DESIGN-BENCHMARK-PROTOCOL.md` is mandatory before every design-affecting phase or slice.
-- A dedicated benchmark agent supplies current advisory research; the primary agent retains final editorial and implementation authority.
-- Accepted design decisions must be made binding before code is written.
+## Status vocabulary (use only these words)
 
-## Theme, type-safety, and coverage constraints
+Planned, Implemented, Verified in staging, Promoted, Verified in production path, Piloted, Accepted, Deferred/blocked.
 
-- The planner theme comes from canonical `site/app/css/`, especially `site/app/css/core/tokens/theme.css` and planner bundles. Staging may bridge those variables; it must not create a competing theme system.
-- Handwritten conversion code uses no explicit `any`.
-- Do not use TypeScript, ESLint, test, or coverage ignore comments/directives to hide lines or failures.
-- Do not skip tests, branches, files, or executable lines from converted-planner coverage to reach a target.
-- Converted-planner coverage target is 95% for statements, branches, functions, and lines globally and per handwritten production file. The hard acceptance floor is 90% for every metric globally and per file; results between 90% and 95% require an explicit gap list and remain target-incomplete.
-- Generated, vendored, build, cache, and artifact output remains outside handwritten-source coverage as defined by `testing-handbook.md`.
+Lack of permission to run a check allows `Implemented`, never `Verified`/`Accepted`.
 
-## Source of truth and promotion
+## Live routes (2026-07-04)
 
-- `open3d-floorplan/` is the immutable donor/reference except for deliberate donor refreshes.
-- **`site/features/planner/open3d/` is the production source of truth.** All new planner implementation, fixes, and acceptance gates run against site paths and the site dependency tree (`pnpm --filter oando-site`).
-- **`site/tests/unit/features/planner/open3d/`** holds the converted-planner unit/integration tests (migrated from `OOPlanner/tests/`). Co-located `*.test.*` files must not live under `features/planner/open3d/`.
-- **Live routes** under `site/app/planner/` (2026-07-04 — Fabric restored for deploy):
-  - `/planner/guest`, `/planner/canvas` → Fabric `PlannerWorkspaceRoute` (deployable production)
-  - `/planner/open3d` → native `Open3dPlannerHost` (pilot; not deploy-ready)
-  - `/planner/fabric/guest`, `/planner/fabric/canvas` → Fabric mirror (rollback drill)
-- `OOPlanner/` and `open3d-next-staging/` are **archive mirrors only** for local parity and donor conversion history. They are not imported by live routes and must not receive independent feature edits ahead of site.
-- Promotion manifest (when required) lists source path, destination path, SHA-256, donor revision/hash, site revision/hash, and approval evidence.
-- After copying, destination hashes must match the manifest and production-path checks must rerun from `site/`.
-- Fixes are made in `site/features/planner/open3d/` first; mirrors may be synced for reference but must not diverge as a second implementation.
-- Archive `OOPlanner/` and `open3d-next-staging/` only after production acceptance and soak; preserve manifest and restore instructions.
+| Route | Stack | Notes |
+|---|---|---|
+| /planner/guest | Fabric 7.4.0 | Deployable production |
+| /planner/canvas | Fabric 7.4.0 | Deployable production |
+| /planner/open3d | Native Open3D | Pilot only — not deploy-ready |
+| /planner/fabric/guest, /planner/fabric/canvas | Fabric mirror | Rollback drill |
+| /admin/svg-editor (NEW) | Puck + Ark UI | Member-gated via withAuth |
+| /admin/svg-editor/[id] (NEW) | Puck + Ark UI | Member-gated |
+| /portal/svg-catalog (NEW) | Puck.Render | Public preview |
+| /portal/svg-catalog/[slug] (NEW) | Puck.Render | Public per-block |
+
+## Locked package set (2026-07-04)
+
+Engines (only two):
+- `fabric` 7.4.0 — 2D canvas runtime + `loadSVGFromString`
+- `three` ^0.185.1 + `@react-three/fiber` — 3D renderer (r3f is React binding, not a third engine)
+
+SVG pipeline (Option A — authoritative):
+- `@flatten-js/core` — measure / closest-point / perimeter
+- `polygon-clipping` — Martinez booleans
+- `svgo` — path optimization
+- `@resvg/resvg-js` — PNG thumbnails (no Chromium, pure Rust)
+
+Admin portal layer:
+- `@puckeditor/core` — visual composer
+- `@ark-ui/react` — headless primitives (state-machine via Zag.js)
+- `react-aria-components` — combobox / date-picker / a11y gap fill
+- `zod` — block descriptor schema (admin writes + planner reads)
+- `@vercel-labs/json-render` — AI-returned UI trees (Tier-3 reserved for v1; installed but inactive)
+- `@phosphor-icons/react` — icon system
+
+Architecture: admin JSON → Zod BlockDescriptor → `scripts/generate-svg.mjs` runs Option A pipeline → R2 PNG thumbs + `public/svg-catalog/*.svg` → portal `Puck.Render` mounts ≤ 1 per admin/portal route → planner `svgBlockDescriptorLoader` reads registered descriptors → catalog/symbol consumers.
+
+Module paths (canonical, post-critique alignment):
+
+- `puckBlockRegistry.ts` — single registry, declared at `features/planner/admin/puckBlockRegistry.ts` (Phase 04); portal imports via a one-line alias at `site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts` (Phase 05). The alias re-exports the canonical registry verbatim — no forked copy. Phase 07's auth boundary tests the alias plus the canonical path resolve to the same exported type.
+- `BlockDescriptor` Zod schema — `features/planner/open3d/catalog/svg/svgTypes.ts` (Phase 02). Re-exported by `svgBlockDescriptorLoader.ts` at the same depth. No parallel schemas at admin, portal, or planner routes.
+
+Phase ownership of `site/config/route-contract.json`: schema is owned by Phase 07 (auth gates); route paths are appended by Phase 04 (admin editor), Phase 05 (portal public), Phase 06 (inventory consumer reads). Schema drift between Phase 04 and Phase 07 fails Phase 07's `tsc --noEmit` lint gate.
 
 ## State ownership
 
-- **Canonical document:** geometry, floors, openings, placed items, product/configuration snapshots, annotations, units, and document metadata.
-- **View state:** active floor, selection, visibility, 2D camera, 3D camera, and current view mode. Persist only where explicitly specified.
-- **Workspace preferences:** panel docking/layout, density, theme, inventory filters, and layout presets. User/browser/device scoped, separately versioned, never stored as canonical plan geometry.
-- **Transient session state:** pointer gestures, open menus, drag previews, pending commands, progress, and ephemeral errors. Never persisted.
+- Canonical document: geometry, floors, openings, placed items, product/configuration snapshots, annotations, units, document metadata. The catalog symbol library at `features/planner/open3d/catalog/svg/svgSymbols.ts` is canonical.
+- View state: active floor, selection, visibility, 2D camera, 3D camera, view mode. Persist only where explicitly specified.
+- Workspace preferences: panel docking/layout, density, theme, inventory filters. User/browser/device scoped, separately versioned. Never canonical geometry.
+- Transient session state: pointer gestures, drag previews, pending commands, ephemeral errors. Never persisted.
 
-Invalid or off-screen workspace preferences must recover to a safe default without changing the document.
+Invalid or off-screen preferences recover to safe default without changing document.
 
 ## Migration policy
 
-- Never overwrite an original document merely by opening it.
-- Keep an immutable source backup before conversion.
-- Use a registry of pure `fromVersion -> toVersion` migrations.
-- Migrations must be deterministic, idempotent, fixture-tested, and validate referential integrity.
-- Produce a conversion report: preserved, transformed, approximated, unsupported, and failed entities.
-- Commit converted data atomically only after validation.
-- Provide open-original/rollback while dual-read support remains.
-- Retire legacy writes only after representative-document audit and pilot evidence.
+- Never overwrite original by opening it.
+- Immutable source backup before any conversion.
+- Pure `fromVersion -> toVersion` migrations; deterministic, idempotent, fixture-tested.
+- Conversion report: preserved, transformed, approximated, unsupported, failed entities.
+- Atomic commit of converted data only after validation.
+- Open-original/rollback retention during dual-read.
 
-## Release slices
+## Source of truth and promotion
 
-### R1 Safe native core
+- `open3d-floorplan/` is immutable donor.
+- `site/features/planner/open3d/` is production source-of-truth for planner code.
+- `OOPlanner/` and `open3d-next-staging/` are archive mirrors only.
+- Promotion manifest required when moving to production.
 
-One floor; walls and openings; identified furniture placement; canonical units; undo/redo; deterministic JSON/SVG; guest local save/recovery; accessible core commands; hidden route only.
+## Coverage and code quality
 
-### R2 Member and catalog
-
-Member persistence, guest claim, conflict/recovery UX, managed catalog identity, inventory search/index, placement snapshots, and missing-asset fallbacks.
-
-### R3 Production pilot
-
-Verified workspace UI, constrained docking, inventory UI, core workflows, feature-flagged route cohort, fallback, rollback rehearsal, and production-path verification.
-
-### R4 Advanced planning and exports
-
-Advanced entities, multi-floor depth, PNG/PDF/DXF, RoomPlan, export jobs, and expanded responsive authoring.
-
-### R5 3D and AI
-
-Lazy 3D with explicit ViewState and safe fallbacks; AI as schema-validated, previewed, confirmable, undoable proposals. Neither blocks R1–R3 unless route parity evidence proves it contractually required.
-
-### R6 Soak and cleanup
-
-Monitored pilot, adoption/fallback review, representative legacy audit, rollback drill, explicit user approval, archive, then cleanup.
-
-## Viewport capability tiers
-
-- **Desktop (≥1280 CSS px):** full authoring, constrained docking, optional floating utility panels.
-- **Tablet (768–1279 CSS px):** supported authoring with one active edge sheet and compact command bar.
-- **Small (<768 CSS px):** review and deliberately limited editing until a specific authoring workflow is accepted; use sheets, not miniature floating windows.
-
-## Command and mutation architecture
-
-All toolbar, menu, context-menu, keyboard, command-palette, inventory, import, AI, and accessible-tree operations use:
-
-- one typed command registry;
-- one action dispatcher;
-- one transaction/history boundary;
-- one autosave observation path;
-- stable command IDs and localized labels;
-- explicit enabled/disabled reasons.
-
-## Acceptance statuses
-
-- **Planned:** requirement exists only in plan.
-- **Implemented:** code exists; required verification may be pending.
-- **Verified in staging:** applicable staging gates passed.
-- **Promoted:** manifest-verified copy exists in production paths.
-- **Verified in production path:** applicable production-path gates passed.
-- **Piloted:** cohort evidence and rollback drill passed.
-- **Accepted:** named release gate approved.
-- **Deferred/blocked:** not passed; owner and destination phase required.
-
-Lack of permission to run a check can allow `Implemented`, never `Verified` or `Accepted`.
-
-## Requirement traceability
-
-Every checklist item in every numbered phase file carries a stable ID in the form `<phase>-<category>-<nn>` (e.g., `01B-MOD-01`, `02-ACT-03`, `05-DOCK-02`). Each item maps to:
-
-- implementation owner/path;
-- fixture or test name;
-- evidence artifact path;
-- release gate.
-
-This prevents broad checklist items from being marked complete by narrow tests and enables audit of what passed, what was skipped, and what remains.
-
-## Minimum-necessary-changes policy
-
-Every phase must:
-
-- solve only the stated problem for that phase;
-- not refactor, rename, or restructure unrelated code;
-- not add features beyond the checklist;
-- archive over delete unless deletion is explicitly requested;
-- record any scope expansion in `FAILURESPLAN.md` before proceeding.
-
-Scope creep in one phase creates verification debt for all dependent phases.
-
-## Phase-completion template
-
-Before any phase claims exit, the agent must fill this template and attach it to the phase evidence:
-
-1. **What ran:** exact commands, working directory, revision, exit codes, stdout/stderr paths.
-2. **What passed:** specific checklist items with evidence references.
-3. **What was skipped:** items not run, with reason and owner.
-4. **What is blocked:** items that cannot run, with blocker and destination phase.
-5. **What is risky:** known limitations, untested paths, or deferred verification.
-6. **Evidence location:** absolute path to all artifacts.
-
-A phase without a completed template is not exited.
-
-## Go/no-go decision points
-
-Every phase declares explicit entry criteria that must be satisfied before work begins. If entry criteria are not met, the phase must not start. Entry criteria for each phase:
-
-- **01A:** Governing documents read; repo docs read; donor source location confirmed.
-- **01B:** Phase 01A baseline accepted; donor inventory complete; staging workspace created.
-- **02:** Phase 01B exit gate passed or explicitly documented as deferred.
-- **03:** Phase 02 domain model and actions verified in staging.
-- **03A:** Phase 03 catalog identity and mapping verified.
-- **04:** Phase 03A inventory domain and SVG engine verified.
-- **05:** Phase 04 repository and auth contracts verified; design benchmark complete.
-- **06:** Phase 05 workspace UI and canvas port verified.
-- **07:** Phases 01–06 exit gates passed; promotion manifest created.
-- **08:** Phase 07 route swap verified; pilot soak evidence collected.
-- **09:** Phase 08 cleanup verified; archive complete.
-
-Each phase must record its entry-criteria status in its evidence file before implementation begins.
-
-## Phase governance template
-
-Every numbered phase file must include these sections to ensure consistent risk management and governance:
-
-### 1. Forbidden actions
-
-Explicit list of what must NOT be done in this phase. Prevents scope creep and makes the minimum-changes policy concrete. Examples: "do not implement final toolbar layout", "do not replace production routes", "do not delete fallback code".
-
-### 2. Phase entry checklist
-
-Before starting implementation, verify:
-- Entry criteria satisfied (see go/no-go decision points above)
-- Predecessor evidence reviewed and accepted
-- Staging workspace ready and isolated
-- No conflicting agent work in progress
-- Required inputs read
-
-### 3. Rollback criteria
-
-Explicit abort thresholds. When to stop and reassess strategy rather than continue. Examples: "if React canvas latency exceeds 100ms p95, abort", "if coverage cannot reach 90% floor, abort", "if typecheck fails with unresolvable errors, abort".
-
-### 4. Risk register
-
-Top 3 risks with mitigation strategies. Format:
-- **Risk:** description
-- **Impact:** high/medium/low
-- **Mitigation:** how to prevent or reduce
-- **Owner:** who is responsible
-
-### 5. Success metrics
-
-Measurable outcomes beyond binary checklist completion. Examples: "typecheck passes in <30s", "bundle size <50KB", "coverage ≥95%", "p95 latency <50ms".
-
-### 6. Dependencies on external systems
-
-Explicit list of external APIs, routes, packages, or contracts this phase depends on. Makes blockers visible early. Examples: "depends on `/api/plans` contract stability", "depends on existing AI API availability".
-
-### 7. Performance budgets
-
-Provisional or final performance targets for this phase. Tied to QUALITY-GATES.md provisional budgets but phase-specific. Examples: "canvas render <16ms", "inventory search <100ms at 1K records".
-
-### 8. Security considerations
-
-Phase-specific security requirements. Examples: "guest cannot call protected APIs", "no client-side API keys", "SVG sanitization required", "auth boundaries enforced".
-
-### 9. Accessibility considerations
-
-Phase-specific accessibility requirements beyond quality gates. Examples: "all commands keyboard-accessible", "focus order verified", "WCAG AA contrast", "screen-reader announcements restrained".
-
-### 10. Decision log
-
-Track key architectural choices made during implementation. Format:
-- **Date:** YYYY-MM-DD
-- **Decision:** what was chosen
-- **Reason:** why
-- **Alternatives considered:** what else was evaluated
-- **Owner:** who decided
-
-This prevents re-litigation and aids handover.
+- Target 95% statements/branches/functions/lines globally and per handwritten production file.
+- Hard floor 90%; report progress toward target.
+- No explicit `any`, no `@ts-ignore`, no `@ts-nocheck`, no ESLint-disable, no test skip, no coverage exclusion in handwritten converted scope.
 
 ## Decisions still requiring explicit owner approval
 
@@ -236,4 +106,5 @@ This prevents re-litigation and aids handover.
 - Final performance budgets after baseline measurement.
 - Background-image storage ownership and size limits.
 - Guest-claim copy/move semantics and backup retention.
-- Pilot cohort, telemetry boundaries, kill-switch owner, and soak duration.
+- Pilot cohort, telemetry boundaries, kill-switch owner, soak duration.
+- ~~R2 bucket name for PNG thumbs (`site-block-thumbs/...`).~~ **Resolved 2026-07-04**: R2 bucket `site-block-thumbs/` is approved by the coordinator and locked across Phases 03, 04, 05, 08, and 10 (see each phase's checklist for the per-phase ownership line). Approved by: Coordinator agent on 2026-07-04. Reason: aligns with the dual-output rule (SVG → public/svg-catalog/, PNG → R2 `site-block-thumbs/`) and uses the existing `catalog_snapshot_upload_r2.ts` helper. Cross-link: `FAILURESPLAN.md` §'Active failure IDs' / §'Resolution history' — PLAN-FAIL-0407 (Resolved 2026-07-04, Coordinator agent).
