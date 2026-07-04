@@ -1,0 +1,6 @@
+$ next build && node scripts/prepare-standalone.cjs
+▲ Next.js 16.2.9 (Turbopack)
+- Experiments (use with caution):
+  · optimizePackageImports
+
+  Creating an optimized production build ...

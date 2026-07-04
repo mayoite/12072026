@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { createClient } from '@/lib/supabase/client';
 import { apiPath, browserApiFetch } from '@/lib/api/browserApi';
  
 import { Save, UploadCloud, AlertCircle } from 'lucide-react';
@@ -18,18 +17,23 @@ export function ThemeEditor() {
   const [activeTab, setActiveTab] = useState<TabType>('woods');
   const [loading, setLoading] = useState(true);
   const [isPublishing, setIsPublishing] = useState(false);
-  
-  const supabase = createClient();
 
   useEffect(() => {
- 
     async function loadThemes() {
-      const { data, error: _error } = await supabase.from('block_themes').select('*').order('created_at', { ascending: false });
-      if (data) setThemes(data);
-      setLoading(false);
+      try {
+        const res = await browserApiFetch(apiPath('/api/admin/themes'));
+        const data = await res.json();
+        if (data.success && Array.isArray(data.themes)) {
+          setThemes(data.themes);
+        }
+      } catch (_err) {
+        setThemes([]);
+      } finally {
+        setLoading(false);
+      }
     }
     loadThemes();
-  }, [supabase]);
+  }, []);
 
   if (loading) {
     return <div className="animate-pulse h-96 bg-slate-100 rounded-xl" />;
@@ -38,7 +42,6 @@ export function ThemeEditor() {
   const handlePublish = async () => {
     setIsPublishing(true);
     try {
-      // For Phase 5 v1, we push a mocked premium token set to prove the pipeline works
       const dummyTokens = {
         "wsSurfaceBase": "var(--color-ecru-300)",
         "wsSurfaceGrain": "var(--color-ecru-400)",
@@ -56,7 +59,6 @@ export function ThemeEditor() {
       if (data.success) {
         alert(`Success! Theme deployed to Edge CDN:\n${data.url}`);
       } else {
- 
         alert(`Error publishing: ${data.error}`);
       }
     } catch (_err) {
@@ -68,7 +70,6 @@ export function ThemeEditor() {
 
   return (
     <div className="grid grid-cols-12 gap-8">
-      {/* Sidebar List */}
       <div className="col-span-3 space-y-4">
         <button className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium shadow-sm hover:bg-blue-700 transition">
           + Create New Theme
@@ -87,7 +88,6 @@ export function ThemeEditor() {
         </div>
       </div>
 
-      {/* Editor Area */}
       <div className="col-span-9">
          <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
             <div className="border-b border-slate-200 bg-slate-50 p-4 flex justify-between items-center">
@@ -107,7 +107,6 @@ export function ThemeEditor() {
                </div>
             </div>
             
-            {/* Tabs */}
             <div className="flex border-b border-slate-200 px-4">
                {['woods', 'metals', 'fabrics', 'lighting'].map(tab => (
                  <button 
@@ -120,7 +119,6 @@ export function ThemeEditor() {
                ))}
             </div>
 
-            {/* Token Editor Body */}
             <div className="p-6 min-h-[31.25rem]">
                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex gap-3 text-blue-800">
                   <AlertCircle size={20} className="shrink-0" />

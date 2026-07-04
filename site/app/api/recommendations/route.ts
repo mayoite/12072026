@@ -8,6 +8,7 @@ import {
   createAnonymousUserId,
   normalizeAnonymousUserId,
 } from "@/lib/tracking/anonymousUserId";
+import { fetchViewedProducts } from "@/lib/tracking/userHistoryRepository";
 
 type RecommendationsPayload = {
   userId?: string;
@@ -38,13 +39,7 @@ function getBearerToken(req: NextRequest): string | null {
   return match[1].trim();
 }
 
-function isMissingUserHistoryTable(message: string): boolean {
-  const normalized = message.toLowerCase();
-  return (
-    normalized.includes("could not find the table") &&
-    normalized.includes("public.user_history")
-  );
-}
+
 
 function getBudgetEstimate(product: Product): string {
   const range = product.metadata?.priceRange;
@@ -177,19 +172,7 @@ export async function POST(req: NextRequest) {
     }
 
     const supabaseAdmin = createSupabaseAuthAdminClient();
-    const { data, error } = await supabaseAdmin
-      .from("user_history")
-      .select("viewed_products")
-      .eq("user_id", userId)
-      .maybeSingle();
-
-    if (error && !isMissingUserHistoryTable(error.message)) {
-      console.error("[recommendations] user_history error:", error.message);
-    }
-
-    const viewedProducts = Array.isArray(data?.viewed_products)
-      ? data.viewed_products.filter((item): item is string => typeof item === "string")
-      : [];
+    const viewedProducts = await fetchViewedProducts(supabaseAdmin, userId);
 
     if (viewedProducts.length === 0) {
       return NextResponse.json({

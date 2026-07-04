@@ -29,6 +29,7 @@ import {
   blockDescriptorToRenderProps,
   puckComponentName,
   SUPPORTED_PUCK_BLOCK_VARIANTS,
+  getPuckData,
 } from "@/features/planner/admin/svg-editor/puckBlockRegistry";
 
 describe("04-PUCK-REGISTRY: registry completeness", () => {
@@ -236,3 +237,30 @@ describe("04-PUCK-REGISTRY: Puck config surfaces shape compatible with @puckedit
     expect(distinctNames.size).toBe(3);
   });
 });
+
+describe("04-TEST-05: getPuckData adapter for Puck/Render (registry + portal)", () => {
+  it("getPuckData returns root + content shaped for puckConfig using blockDescriptorToRenderProps", () => {
+    const desc: any = {
+      slug: "test-get",
+      variant: "fixed",
+      schemaVersion: "2026-07-04.v2",
+      id: "11111111-1111-4111-8111-111111111111",
+      sourceProvenance: "native",
+      geometry: { widthMm: 100, depthMm: 100, heightMm: 100 },
+      viewBox: { x: 0, y: 0, width: 100, height: 100 },
+      mounting: ["floor"],
+      themeTokens: { currentColor: "currentColor" },
+      rovingFocus: [],
+      liveAnnouncementCategories: ["status"],
+      fixed: { sizingType: "fixed" },
+      checksum: "0".repeat(64),
+      generatedAt: 1,
+    };
+    const data = getPuckData(desc);
+    expect(data.root.props.title).toBe("test-get");
+    expect(data.content).toHaveLength(1);
+    expect(data.content[0].type).toBe("BlockFixed");
+    expect(data.content[0].props.slug).toBe("test-get");
+  });
+});
+

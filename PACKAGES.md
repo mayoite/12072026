@@ -4,6 +4,8 @@ Locked packages for the **`open3d-next-staging`** Next 16 + React 19 workspace a
 
 Global Standard filter applies (per `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md` §6 and `plannnerplan/IMPLEMENTATION-DECISIONS.md` §"Global Standard Framework (Binding)"): every package decision must cite at least one principle from the 2026-07-04 benchmark report (`plans/2026-07-04/benchmark.md`); anti-copy attestation + benchmark justification required for changes.
 
+<!-- GS justification (0420/0415/0416): Tier-1/2/any package changes require fresh benchmark cite (design §6), anti-copy, REVIEW-WORKFLOW GS-SCORE + artifacts before I-D/PACKAGES/phase update. Enforced via Global Standard Gate + Package Review procedure. See phases/04/05/06 enforcement checklists, I-D, FAILURESPLAN. Provisional (design §16). -->
+
 > Read with: `AGENTS.md`, `Readme.md`, `plannnerplan/IMPLEMENTATION-DECISIONS.md`, `plans/2026-07-04/benchmark.md`, `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`.
 
 ## Tiering
@@ -133,6 +135,16 @@ The toolbar atoms are Ark UI primitives. Admins compose them through Puck JSON i
 1. **Mantine?** Proposed in earlier research at +`@mantine/hooks` only to dodge the Tailwind v4 PostCSS namespace collision. Still waiting on user signal before pinning to Tier-1 host packages. AGENTS.md scope says `site/` ships the token layer for planner; if you say yes, `@mantine/hooks` is the only Tier-1 hook we'd allow in Phase 01A.
 2. **Kit tier (fabric-editor-kit, Pascal Editor, drei)** — none in Phase 01A. Step 2 plan should pick from these if (and only if) the chosen toolkit earns its place. Recommendation so far: build a thin homegrown block tree on Puck + Ark UI, only adopt a fuller kit if its leverage shows up in a real screen.
 3. **Fabric JS v7 backwards-compat plan** — when v8 lands, what is the lift? Watch release notes; defer until then.
+
+## Global Standard Package Review Gate (0420 enforcement + 0415 benchmark gate)
+Per I-D §"Global Standard Package Review" + design spec §6 + QUALITY-GATES:
+- Any change to locked set, Tier move (e.g. drei Tier-2 in Phase 06), or pin update requires:
+  1. Dated benchmark report cite (plans/2026-07-04/benchmark.md BP relevant, e.g. BP-04/06 for admin/3D pkgs).
+  2. Anti-copy attestation (semantic tokens only; 5-product model).
+  3. Agent review workflow execution (REVIEW-WORKFLOW GS-SCORE for packages) + signed artifacts.
+- Justification MUST be added to this file (comment or table note) + I-D Decision Log + affected phase (04/05/06) before edit.
+- "Global Standard Package Review" is release-blocking; no bypass. Tracked in FAILURESPLAN PLAN-FAIL-0420/0415/0419.
+Provisional (design §16). See plannnerplan/IMPLEMENTATION-DECISIONS.md for procedure.
 
 ## Evidence
 

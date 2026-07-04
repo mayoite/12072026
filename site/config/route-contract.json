@@ -44,10 +44,22 @@
     "_status": "phase-04 admin portal svg-editor routes",
     "_auth": "withAuth(['admin']) — Phase 04 widens; pre-Phase 07 route-level reuse `site/lib/api/withAuth.ts`",
     "_persistence": "atomic-rename JSON /api/admin/svg-editor/route.ts → site/block-descriptors/{slug}.json",
+    "_canonical": "site/features/planner/admin/svg-editor/puckBlockRegistry.tsx (GS locked; see I-D + registry.tsx; PLAN-FAIL-0403/0417)",
+    "_gs": "BP-04/BP-05, design §7/11, anti-copy (DESIGN-BENCHMARK-PROTOCOL.md), I-D module paths, full impl: pages use loader+registry+Puck/Render (no any; static verified)",
+    "_impl": "04-ADMIN-01/02 + 05-PORT-01/02 + api + alias + getPuckData full routes 2026-07-04 (TDD tests + RSC + withAuth + loader + atomic + runner + Render)",
     "list": "/admin/svg-editor",
     "editById": "/admin/svg-editor/[id]",
     "createStub": "/admin/svg-editor/new",
     "apiPost": "/api/admin/svg-editor"
+  },
+  "_phase05_portal_svg_routes": {
+    "_status": "phase-05 portal public svg-catalog + Puck.Render",
+    "_auth": "public (under protected /portal prefix); read-only",
+    "_render": "<Render config from one-line alias reexport of canonical puckBlockRegistry; 1 mount per route (BP-05)",
+    "_gs": "BP-05, design §7/9, anti-copy (no donor), I-D (verbatim alias), PLAN-FAIL-0404",
+    "index": "/portal/svg-catalog",
+    "bySlug": "/portal/svg-catalog/[slug]",
+    "alias": "site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts (one-line: export * from admin registry)"
   },
   "publicGuestRoutes": [
     "/choose-product?mode=guest",

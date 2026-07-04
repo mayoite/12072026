@@ -181,7 +181,7 @@ export function ThreeViewerInner({
         }
       };
     } catch (err) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- set error state from sync init catch inside effect setup; reason: cannot throw in effect, must surface to render fallback; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: extract init to async fn + useEffect cleanup or error boundary when 3d viewer refactored
       setError(err instanceof Error ? err.message : "Failed to initialize Three.js");
     }
   }, [three, backgroundColor, enableShadows]);

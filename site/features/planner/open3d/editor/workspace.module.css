@@ -186,6 +186,10 @@
   grid-template-areas: "canvas";
 }
 
+/* .panelBackdrop + .mobilePanelActions (see also .mobilePanelBtn) for small-screen (viewportTier==="small").
+ * Per PLAN-FAIL-0414 + Figma minimize (REC-01). GS: design §7, plans/2026-07-04/benchmark.md BP-04/BP-05 + anti-copy + 5-product.
+ * Canonical: paired with WorkspaceShell.tsx activePanel/setActivePanel + TopBar. Locked with global in planner-responsive.css.
+ */
 .panelBackdrop {
   display: none;
 }

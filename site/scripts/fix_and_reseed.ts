@@ -52,7 +52,9 @@ async function fix() {
         await sql.unsafe(stmt + ';');
         ok++;
       } catch (e: unknown) {
-        console.error(`  → Error: ${(e as any).message?.split('\n')[0]}`);
+        // narrow unknown to Error shape for .message (runtime from sql); reason: postgres/sql error objects are unknown at catch; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: central typed error util in platform or scripts/lib + update call sites
+        const message = e instanceof Error ? e.message : String(e);
+        console.error(`  → Error: ${message.split('\n')[0]}`);
         fail++;
       }
     }

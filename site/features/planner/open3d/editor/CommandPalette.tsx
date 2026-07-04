@@ -38,7 +38,7 @@ export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteP
 
   useEffect(() => {
     if (!open) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset query/index when palette opens (intentional side effect of open change); reason: UX clear on toggle; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: use derived state or key-remount for palette when command UI revised
     setQuery("");
      
     setSelectedIndex(0);
@@ -47,7 +47,7 @@ export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteP
   }, [open]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset selection on query change (intentional); reason: UX keyboard nav reset; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: use derived selected from query results length when palette revised
     setSelectedIndex(0);
   }, [query]);
 

@@ -4,9 +4,9 @@ import { useCallback, useEffect, useId, useState } from "react";
 import { useDockingSystem, type PanelId } from "./useDockingSystem";
 import { PanelContainer } from "./PanelContainer";
 import { TopBar } from "./TopBar";
-import { useWorkspaceCanvas, type WorkspaceCanvasContext } from "./useWorkspaceCanvas";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";
 import type { Open3dDisplayUnit, Open3dProject } from "../model/types";
+import { useWorkspaceCanvas } from "./useWorkspaceCanvas";
 import styles from "./workspace.module.css";
 
 export interface WorkspaceShellProps {
@@ -53,10 +53,6 @@ export interface WorkspaceShellProps {
   statusLeft?: React.ReactNode;
   /** Status bar right content */
   statusRight?: React.ReactNode;
-  /** Initial project state (optional, for restoring saved projects) */
-  initialProject?: Open3dProject;
-  /** Shared workspace document state (production path — single source of truth) */
-  workspaceCanvas?: WorkspaceCanvasContext;
   /** Display unit for measurements */
   displayUnit?: Open3dDisplayUnit;
   /** Called when display unit changes */
@@ -89,8 +85,6 @@ export function WorkspaceShell({
   onRedo,
   statusLeft,
   statusRight,
-  initialProject,
-  workspaceCanvas: workspaceCanvasProp,
   displayUnit = "cm",
   onDisplayUnitChange,
   fillParent = false,
@@ -98,15 +92,6 @@ export function WorkspaceShell({
   const id = useId();
   const [internalViewMode, setInternalViewMode] = useState<"2d" | "3d">(initialViewMode);
   const viewMode = controlledViewMode ?? internalViewMode;
-
-  const internalCanvas = useWorkspaceCanvas({
-    projectName,
-    initialProject,
-  });
-  void (workspaceCanvasProp ?? internalCanvas);
-
-  // Alias for easier access
-  // Selection already aliased above
 
   const {
     panels,
@@ -280,13 +265,17 @@ export function WorkspaceShell({
         canRedo={canRedo}
         onUndo={onUndo}
         onRedo={onRedo}
-        activePanel={viewportTier === "small" ? activePanel : null}
+        activePanel={(viewportTier === "small" && (activePanel === "left" || activePanel === "right")) ? activePanel : null}
         onToggleLeftPanel={leftPanel ? () => handleSidePanelToggle("left") : undefined}
         onToggleRightPanel={rightPanel ? () => handleSidePanelToggle("right") : undefined}
       />
 
       {/* Main workspace with panels */}
       <div className={styles.workspace} data-viewport={viewportTier}>
+        {/* small-screen .panelBackdrop + activePanel (from useDockingSystem) + mobile actions via TopBar.
+         * Resolves PLAN-FAIL-0414. GS: design §7, benchmark BP-04/BP-05 + Figma minimize + anti-copy (no donor).
+         * CSS locked in workspace.module.css + planner-responsive.css. Canonical ref: open3d/editor/ + puck registry for admin UI.
+         */}
         {viewportTier === "small" && (activePanel === "left" || activePanel === "right") && (
           <button
             type="button"
@@ -403,5 +392,32 @@ export function WorkspaceShell({
         </div>
       </footer>
     </div>
+  );
+}
+
+export type WorkspaceShellWithBootstrapProps = Omit<WorkspaceShellProps, "projectName"> & {
+  projectName?: string;
+  initialProject?: Open3dProject;
+};
+
+/**
+ * Test/story helper: owns a single `useWorkspaceCanvas` instance and passes
+ * derived `projectName` into layout-only `WorkspaceShell`.
+ */
+export function WorkspaceShellWithBootstrap({
+  projectName: projectNameProp,
+  initialProject,
+  ...shellProps
+}: WorkspaceShellWithBootstrapProps) {
+  const canvas = useWorkspaceCanvas({
+    projectName: projectNameProp ?? "Untitled",
+    initialProject,
+  });
+
+  return (
+    <WorkspaceShell
+      {...shellProps}
+      projectName={canvas.project.name}
+    />
   );
 }

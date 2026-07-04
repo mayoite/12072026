@@ -334,7 +334,9 @@ async function downloadProductAssets(product: ScrapedProduct): Promise<void> {
         product.images.push(localPath);
       }
     } catch (err: unknown) {
-      console.warn(`      ⚠️ Failed to download image: ${srcUrl} — ${(err as any).message}`);
+      // narrow unknown for download error; reason: fetch/fs err unknown at boundary; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: shared error narrowing util
+      const message = err instanceof Error ? err.message : String(err);
+      console.warn(`      ⚠️ Failed to download image: ${srcUrl} — ${message}`);
     }
   }
 
@@ -376,7 +378,9 @@ async function main() {
           `      ✅ ${products.map((p) => p.name).join(", ")} — ${products[0].imageSourceUrls.length} images, ${Object.keys(products[0].dimensions).length} dims`
         );
       } catch (err: unknown) {
-        console.error(`      ❌ Failed to scrape ${slug}: ${(err as any).message}`);
+        // narrow unknown for scrape error; reason: puppeteer/page err unknown at boundary; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: shared error narrowing util
+        const message = err instanceof Error ? err.message : String(err);
+        console.error(`      ❌ Failed to scrape ${slug}: ${message}`);
       }
 
       // Polite delay between requests
@@ -398,7 +402,9 @@ async function main() {
       downloaded++;
       process.stdout.write(`\r  Downloaded ${downloaded}/${allProducts.length}: ${product.name.padEnd(40)}`);
     } catch (err: unknown) {
-      console.error(`\n  ❌ Asset download failed for ${product.name}: ${(err as any).message}`);
+      // narrow unknown for asset dl error; reason: network/fs err unknown; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: shared error narrowing util
+      const message = err instanceof Error ? err.message : String(err);
+      console.error(`\n  ❌ Asset download failed for ${product.name}: ${message}`);
     }
   }
 

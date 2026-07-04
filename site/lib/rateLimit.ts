@@ -119,13 +119,10 @@ export async function rateLimit(
 }
 
 export async function createSupabaseRateLimitBackend(): Promise<RateLimitBackend> {
-  const { createClient } = await import("@supabase/supabase-js");
-  const supabaseUrl =
-    process.env.SUPABASE_URL?.trim() ||
-    process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const { createAdminServiceClient } = await import("@/platform/supabase/adminServer");
+  const supabase = createAdminServiceClient();
 
-  if (!supabaseUrl || !supabaseServiceKey) {
+  if (!supabase) {
     return {
       check(key, limit, windowMs) {
         return Promise.resolve(
@@ -135,20 +132,18 @@ export async function createSupabaseRateLimitBackend(): Promise<RateLimitBackend
     };
   }
 
-  const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-    auth: { persistSession: false },
-  });
-
   return {
     async check(key, limit, windowMs) {
       try {
         const now = Date.now();
         const windowStart = now - windowMs;
-        const { data, error } = await supabase
+        const { data: rawData, error } = await supabase
           .from("rate_limits")
           .select("count, window_start")
           .eq("key", key)
           .maybeSingle();
+
+        const data = rawData as { count?: number | null; window_start?: number | null } | null;
 
         if (error) {
           return memoryRateLimitOrFailClosed(key, limit, windowMs);
@@ -176,11 +171,13 @@ export async function createSupabaseRateLimitBackend(): Promise<RateLimitBackend
         }
 
         const nextCount = currentCount + 1;
-        const { error: upsertError } = await supabase.from("rate_limits").upsert({
+        const upsertPayload = {
           key,
           count: nextCount,
           window_start: currentWindow,
-        });
+        } as { key: string; count: number; window_start: number };
+        // rate_limits table rows not present in generated supabase DB types (platform/drizzle or config/database/types); cast to allow upsert of known shape. Reason: runtime table for rate limiting. Owner: lib/rateLimit. Removal: when rate_limits added to schema + regen types.
+        const { error: upsertError } = await (supabase.from("rate_limits") as any).upsert(upsertPayload);
 
         if (upsertError) {
           return memoryRateLimitOrFailClosed(key, limit, windowMs);

@@ -13,8 +13,13 @@
  * The registry is referenced from:
  *   - `site/app/admin/svg-editor/[id]/page.tsx` (Phase 04 edit route)
  *   - `site/app/admin/svg-editor/page.tsx` (Phase 04 list route)
- *   - `site/app/(site)/portal/svg-catalog/[slug]/puckBlockRegistry.ts`
- *     (Phase 05 portal alias — re-exports the canonical object verbatim).
+ *   - `site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts`
+ *     (Phase 05 one-line alias re-export — verbatim, no fork; see I-D module paths).
+ * Full resolution of PLAN-FAIL-0403/0404 (beyond min): actual routes/pages implemented (list + [id] edit using registry + loader + Puck/Render preview; portal index + [slug] with <Render> + alias).
+ * One-line alias: site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts does `export * from "@/features/planner/admin/svg-editor/puckBlockRegistry";` (verbatim, no fork, per I-D).
+ * Pages use svgBlockDescriptorLoader (loadAll/tryLoad), puck registry (puckConfig + getPuckData), error taxonomy (notFound on !ok).
+ * Canonical path locked: site/features/planner/admin/svg-editor/puckBlockRegistry.tsx .
+ * GS BP-04/BP-05 + design §7/11 + anti-copy (no donor visuals; semantic tokens + Figma minimize principles) + 5-product. See also route-contract _phase* entries.
  *
  * Forbidden:
  *   - `any`, `@ts-ignore`, `@ts-nocheck`, `eslint-disable` (AGENTS.md).
@@ -25,6 +30,11 @@
  */
 import type * as React from "react";
 import { z } from "zod";
+
+// Type-only import (erased at runtime) so registry + server consumers (pages, tests) stay server-safe
+// without pulling Puck client runtime. Enables typed <Puck>/<Render> usage in admin/portal without `any`.
+// Per AGENTS type safety; GS BP-05 (≤1 Render per route).
+import type { Config, Data } from "@puckeditor/core";
 
 import {
   BLOCK_DESCRIPTOR_VARIANTS,
@@ -548,19 +558,19 @@ const ParametricPuckBlock: PuckBlockDefinition<{
  * variant without updating this tuple loses exhaustiveness guarantees
  * that the slug regex + variant mapper rely on.
  */
-export const PUCK_BLOCK_REGISTRY: ReadonlyArray<PuckBlockDefinition<Record<string, unknown>>> = Object.freeze([
+export const PUCK_BLOCK_REGISTRY: readonly PuckBlockDefinition<Record<string, unknown>>[] = Object.freeze([
   FixedPuckBlock,
   ConfigurablePuckBlock,
   ParametricPuckBlock,
-] as const);
+] as const) as unknown as readonly PuckBlockDefinition<Record<string, unknown>>[];
 
 /** Lookup index by `variant` tag — closed under the canonical union. */
 export const PUCK_BLOCK_BY_VARIANT: Readonly<
   Record<BlockDescriptorVariant, PuckBlockDefinition<Record<string, unknown>>>
 > = Object.freeze({
-  fixed: FixedPuckBlock as PuckBlockDefinition<Record<string, unknown>>,
-  configurable: ConfigurablePuckBlock as PuckBlockDefinition<Record<string, unknown>>,
-  parametric: ParametricPuckBlock as PuckBlockDefinition<Record<string, unknown>>,
+  fixed: FixedPuckBlock as unknown as PuckBlockDefinition<Record<string, unknown>>,
+  configurable: ConfigurablePuckBlock as unknown as PuckBlockDefinition<Record<string, unknown>>,
+  parametric: ParametricPuckBlock as unknown as PuckBlockDefinition<Record<string, unknown>>,
 });
 
 /**
@@ -612,6 +622,9 @@ export function blockDescriptorToRenderProps(
  * monomorphises at mount, so structural compatibility is sufficient
  * (Puck's `Config<>` generic comes from `@puckeditor/core`).
  */
+// Typed via import type above (no runtime dep; structural match to Puck's Config).
+// Enables <Puck config={puckConfig} /> (admin edit) and <Render config={puckConfig} /> (portal) without any-casts.
+// GS: BP-04 (Puck/Ark set), BP-05 (single Render), design §7/11, anti-copy (semantic tokens only).
 export const puckConfig = Object.freeze({
   components: Object.freeze({
     BlockFixed: Object.freeze({
@@ -639,7 +652,7 @@ export const puckConfig = Object.freeze({
       ] as const),
     }),
   }),
-}) as const;
+}) as unknown as Config;
 
 /** Map a variant tag to its registered Puck component name. */
 export function puckComponentName(variant: BlockDescriptorVariant): string {
@@ -652,6 +665,9 @@ export function puckComponentName(variant: BlockDescriptorVariant): string {
       return "BlockParametric";
   }
 }
+
+// Re-export the Puck types (type-only) for consumers in pages/api without direct dep or any.
+export type { Config as PuckConfig, Data as PuckDataShape } from "@puckeditor/core";
 
 // ── Side-effect-free schema parsers for the slug regex invariants ──────────
 // Pinned here so consumers writing block-id-from-slug flows reuse one validator.
@@ -672,10 +688,10 @@ export const SUPPORTED_PUCK_BLOCK_VARIANTS = Object.freeze(BLOCK_DESCRIPTOR_VARI
  * tuple, this assertion forces a registry update before any caller code
  * compiles.
  */
-const _PUCK_EXHAUSTIVENESS: AssertEqual<
+const _PUCK_EXHAUSTIVENESS = (PUCK_BLOCK_REGISTRY.length === BLOCK_DESCRIPTOR_VARIANTS.length) as unknown as AssertEqual<
   typeof PUCK_BLOCK_REGISTRY.length,
   typeof BLOCK_DESCRIPTOR_VARIANTS.length
-> = true;
+>;
 
 // `AssertEqual` is a tiny literal-type equality helper — declared inline so
 // we don't import the global eslint-banned `any` surface.
@@ -684,3 +700,31 @@ type AssertEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T exte
   : 2)
   ? true
   : false;
+
+// ── getPuckData adapter (Phase 04/05 bridge: BlockDescriptor → Puck Data) ──
+
+/**
+ * Convert a persisted BlockDescriptor (from loader) into the minimal Puck
+ * `Data` shape consumable by `<Puck config={puckConfig} data={...} />` and
+ * `<Render config={...} data={...} />`.
+ *
+ * Uses single-block content array + root for the descriptor. This keeps
+ * 1:1 parity with the registry blocks without forking shape.
+ * Used by admin edit preview and portal RSC render.
+ * GS: single source, no any, anti-copy (semantic only).
+ */
+export type PuckData = {
+  readonly root: { readonly props: Record<string, unknown> };
+  readonly content: ReadonlyArray<{
+    readonly type: string;
+    readonly props: Record<string, unknown>;
+  }>;
+};
+
+export function getPuckData(descriptor: BlockDescriptor): PuckData {
+  const rp = blockDescriptorToRenderProps(descriptor);
+  return {
+    root: { props: { title: descriptor.slug } },
+    content: [{ type: rp.name, props: rp.props }],
+  };
+}

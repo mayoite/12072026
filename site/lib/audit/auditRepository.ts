@@ -1,4 +1,4 @@
-import { db } from '@/platform/drizzle/db'
+import { adminDb } from '@/platform/drizzle/adminDb'
 import { auditEvents } from '@/platform/drizzle/schema'
 
 export interface AuditEventRow {
@@ -11,7 +11,7 @@ export interface AuditEventRow {
 }
 
 export async function insertEvent(row: AuditEventRow): Promise<void> {
-  await db.insert(auditEvents).values({
+  await adminDb.insert(auditEvents).values({
     teamId: row.team_id,
     actorId: row.actor_id,
     action: row.action,

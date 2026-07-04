@@ -30,3 +30,21 @@ describe("workspaceStatusLabels", () => {
     expect(formatAutosaveStatus("unsaved", false)).toBe("Unsaved changes");
   });
 });
+
+// TDD addition for full switch/branch coverage on status labels
+describe("workspaceStatusLabels full branches (TDD)", () => {
+  it("covers all autosave statuses", () => {
+    expect(formatAutosaveStatus("saving", false)).toBe("Saving…");
+    expect(formatAutosaveStatus("saved", false)).toBe("Saved");
+    expect(formatAutosaveStatus("unsaved", true)).toBe("Unsaved draft");
+    expect(formatAutosaveStatus("error", true)).toBe("Save failed");
+    expect(formatAutosaveStatus("idle", false)).toBe("Ready");
+    expect(formatAutosaveStatus("idle" as any, true)).toBe("Guest session");
+  });
+
+  it("covers selection multi and snap variants", () => {
+    expect(formatSelectionStatus({ type: "door", ids: ["d1", "d2"] })).toBe("2 doors selected");
+    expect(formatSnapStatus("grid")).toBe("Snap: grid");
+    expect(formatSnapStatus("endpoint")).toBe("Snap: endpoint");
+  });
+});

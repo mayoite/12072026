@@ -5,6 +5,10 @@
  * typo tolerance, zero-result recovery, and deterministic ranking.
  *
  * Performance: search p95 <100ms at 1K records.
+ *
+ * Wired to svgBlockDescriptorLoader (via catalogClient items) for Phase 06:
+ * catalogue-first (descriptors primary), search parity (cursor/facets), resolver (blocks).
+ * Fixed wiring: InventoryPanel now loads from client.getAll() post loadDescriptors. Cites BP-06, design §9/10, GS, PLAN-FAIL-0405/0419.
  */
 
 import type {

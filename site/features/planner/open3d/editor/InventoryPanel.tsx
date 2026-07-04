@@ -28,10 +28,15 @@ import { INVENTORY_CATEGORIES, INVENTORY_ROOM_GROUPS } from "../catalog/inventor
 import { InventorySearchIndex, type InventorySearchOptions, type InventorySearchResult } from "../catalog/inventory/inventoryIndex";
 import type { Open3dCatalogItem } from "../catalog/catalogTypes";
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
+import { Open3dCatalogClient } from "../catalog/catalogClient";
 import styles from "./inventory.module.css";
 
 // Create singleton search index instance
 const searchIndex = new InventorySearchIndex();
+
+// Wiring for PLAN-FAIL-0405/0419: inventory consumer calls svgBlockDescriptorLoader via catalogClient (catalogue-first primary descriptors, resolver blocks, search parity facets).
+// Cites: BP-06, design §9/10 (Features: catalogue-first + Sketchfab cursor/facet parity), GS, phase-06.
+const inventoryClientRef: { current: Open3dCatalogClient | null } = { current: null };
 
 export interface InventoryPanelProps {
   /** Initial panel state */
@@ -76,9 +81,15 @@ export function InventoryPanel({
   );
 
   // Load catalog items into search index when the source changes
+  // Fixed inventory wiring (PLAN-FAIL-0405/0419): await loader, prefer loaderItems (catalogue-first primary) for searchIndex; resolver/blocks via client.
   useEffect(() => {
-    searchIndex.load(indexedItems);
-  }, [indexedItems]);
+    if (!inventoryClientRef.current) inventoryClientRef.current = new Open3dCatalogClient();
+    void inventoryClientRef.current.loadDescriptorsFromLoader().then(() => {
+      const loaderItems = inventoryClientRef.current!.getAll();
+      const sourceItems = loaderItems.length > 0 ? loaderItems : (catalogItems && catalogItems.length > 0 ? catalogItems : OPEN3D_DEMO_CATALOG_ITEMS);
+      searchIndex.load(sourceItems);
+    });
+  }, [catalogItems]);
 
   // Handle search when query changes
   useEffect(() => {
@@ -102,7 +113,7 @@ export function InventoryPanel({
     }
 
     const results = searchIndex.search(state.searchQuery, options);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- update search results derived from state change inside effect; reason: searchIndex is non-reactive dep; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: memoize search or move to useMemo when inventory search stabilized
     setSearchResults(results);
     setFocusedIndex(-1);
     onSearch?.(state.searchQuery);
@@ -498,7 +509,7 @@ export function InventoryPanel({
             >
               <div className={styles.itemThumbnail}>
                 {item.assets.previewImageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
+                  // eslint-disable-next-line @next/next/no-img-element -- native img for R2 preview thumbnails in virtual list (external urls, lazy, no known intrinsic size at render); reason: avoids next/image layout constraints + domain config for dynamic catalog assets; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: switch to next/image + sizes or remotePatterns when asset ui standardized
               <img
                     src={item.assets.previewImageUrl}
                     alt=""

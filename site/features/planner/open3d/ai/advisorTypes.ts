@@ -6,7 +6,7 @@
  * - space-suggest: Generates structured layout suggestions from seat count/purpose
  */
 
-import type { Open3dDisplayUnit } from "../model/types";
+// (Open3dDisplayUnit import removed: was unused)
 
 /**
  * Chat message structure for advisor conversations.

@@ -262,6 +262,14 @@ export interface Open3dCatalogItem {
   provenance: Open3dCatalogProvenance;
   /** Whether this is a 2D-only architectural symbol (like electrical/plumbing symbols) */
   symbolOnly: boolean;
+
+  // Sketchfab search parity facets (added for catalogue-first; BP-06 / design §9-10 / REC-02/04 / PLAN-FAIL-0419)
+  // license, animated, staffPicked, favourite, downloadable per search_models contract.
+  license?: string;
+  animated?: boolean;
+  staffPicked?: boolean;
+  favourite?: boolean;
+  downloadable?: boolean;
 }
 
 // ── Immutable placed-configuration snapshot ──
@@ -391,6 +399,14 @@ export interface Open3dCatalogSearchQuery {
   cursor?: string;
   /** Page size (default 20 for search, 50 for browse) */
   pageSize?: number;
+
+  // Sketchfab parity facets (BP-06 / design §9-10 / REC-02/04; search_models cursor + facets)
+  // Catalogue-first (REC-04): these + cursor used in inventory via loader primary descriptors.
+  licenseFilter?: string[];
+  animatedFilter?: boolean;
+  staffPicked?: boolean;
+  favourite?: boolean;
+  downloadable?: boolean;
 }
 
 export interface Open3dCatalogSearchResult {

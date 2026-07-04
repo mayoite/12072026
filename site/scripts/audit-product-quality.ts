@@ -82,8 +82,9 @@ function toCompatProduct(product: Product): CompatProduct {
     name: product.name,
     description: product.description || "",
     flagshipImage: product.flagship_image || "",
-    sceneImages: Array.isArray((product as any).scene_images) ? (product as any).scene_images : [],
-    variants: Array.isArray((product as any).variants) ? ((product as any).variants as ProductVariant[]) : [],
+    // shape cast for legacy/row fields not on CompatProduct; reason: db row has snake_case extras (scene_images, variants); owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: when CompatProduct or audit input includes them or mapper used
+    sceneImages: Array.isArray((product as { scene_images?: unknown }).scene_images) ? (product as { scene_images?: unknown }).scene_images : [],
+    variants: Array.isArray((product as { variants?: unknown }).variants) ? ((product as { variants?: unknown }).variants as ProductVariant[]) : [],
     detailedInfo: {
       overview: product.description || "",
       features: specsFeatures,

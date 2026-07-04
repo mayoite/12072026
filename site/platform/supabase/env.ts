@@ -22,6 +22,11 @@ export function hasPublicSupabaseEnv(): boolean {
   return Boolean(getOptionalPublicSupabaseEnv());
 }
 
+/** Safe to call in server components or middleware without throwing. */
+export function isSupabaseConfigAvailable(): boolean {
+  return hasPublicSupabaseEnv();
+}
+
 export function getPublicSupabaseEnv(): PublicSupabaseEnv {
   return {
     url: readEnv("NEXT_PUBLIC_SUPABASE_URL", process.env.NEXT_PUBLIC_SUPABASE_URL),

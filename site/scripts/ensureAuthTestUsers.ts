@@ -1,6 +1,7 @@
 import { config as loadEnv } from "dotenv";
 import { createSupabaseAdminClient } from "@/platform/supabase/supabaseAdmin";
 import { getE2EAuthEnv, getE2EAuthSeedEnv } from "@/lib/auth/e2eAuthEnv";
+import type { User } from "@supabase/supabase-js";
 
 loadEnv({ path: ".env.local", override: false, quiet: true });
 loadEnv({ override: false, quiet: true });
@@ -24,7 +25,7 @@ async function ensureSupabaseUser(
     }
 
     const existing = list.data.users.find(
-      (u: any) => u.email?.toLowerCase() === user.email.toLowerCase(),
+      (u: User) => u.email?.toLowerCase() === user.email.toLowerCase(),
     );
 
     if (!existing) {

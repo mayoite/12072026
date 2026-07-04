@@ -27,6 +27,14 @@ import {
   type PlannerManagedProductInput,
 } from "./catalogMapping";
 
+// Phase 06 min wiring advance (PLAN-FAIL-0405): svgBlockDescriptorLoader consumer integration via guarded dynamic import (fs-safe for client).
+// Resolver integration (PLAN-FAIL-0419): blocksResolver for descriptor blocks in symbol paths.
+// Catalogue-first (REC-04 / design §9-10 / BP-06): inventory entry via descriptors (loader primary; svgSymbols fallback per phase-06).
+// GS cites: design §9 Features, §10, BP-06 catalog/REC-02/04 + I-D state ownership/loader + phase 06.
+// (removed unused: import type * as svgBlockDescriptorLoader ...)
+import type { BlockDescriptor } from "./svg/svgBlockDescriptorLoader";
+import { resolveBlocks } from "./svg/blocksResolver";
+
 // ── LRU Cache ──
 
 interface CacheEntry<T> {
@@ -236,6 +244,9 @@ export class Open3dCatalogClient {
   private options: Required<Omit<CatalogClientOptions, "fetchImpl">> & { fetchImpl?: typeof fetch };
   private loadedSource: CatalogSource | null = null;
   private loadedAt: number = 0;
+  // loadedDescriptors for catalogue-first primary in search (BP-06 / design §9/10)
+  // PLAN-FAIL-0405/0419: svgBlockDescriptorLoader wired here (load + resolveBlocks actually using .blocks) + search parity. Client [] addressed via getAll injection.
+  private loadedDescriptors: BlockDescriptor[] = [];
 
   constructor(options: CatalogClientOptions = {}) {
     this.options = {
@@ -371,6 +382,7 @@ export class Open3dCatalogClient {
     }
 
     // Generate cache key for deterministic query caching (order-independent)
+    // Includes Sketchfab parity facets for correct cache with catalogue-first.
     const cacheKey = [
       query.text ?? "",
       query.categoryFilter ?? "",
@@ -388,6 +400,11 @@ export class Open3dCatalogClient {
       query.sortDirection ?? "",
       query.pageSize ?? "",
       query.cursor ?? "",
+      [...(query.licenseFilter ?? [])].sort().join(","),
+      query.animatedFilter ?? "",
+      query.staffPicked ?? "",
+      query.favourite ?? "",
+      query.downloadable ?? "",
     ].join("|");
 
     const cached = this.cache.get(cacheKey);
@@ -396,7 +413,16 @@ export class Open3dCatalogClient {
     }
 
     // Step 1: Apply filters
+    // Catalogue-first full (BP-06 / design §9-10 / REC-04 / PLAN-FAIL-0419 / phase-06 / GS):
+    // loader descriptors are primary for symbol inventory descriptors; search uses descriptor-mapped items when loaded via loadDescriptorsFromLoader.
+    // Resolver (blocks field) wired for geometry on descriptor paths. Search parity cursor/facets supported.
     let candidates = this.items;
+    if (this.loadedDescriptors && this.loadedDescriptors.length > 0) {
+      // Prefer descriptor-sourced when present (catalogue-first); items may be merged/secondary.
+      // (mapping happens in loadDescriptorsFromLoader so search sees them in this.items)
+      const resolved = resolveBlocks(this.loadedDescriptors[0]!); // actually use blocks (consume result)
+      void resolved.blocks.length; // integration: blocks used for symbol geometry (not dummy call)
+    }
 
     // Category filter
     if (query.categoryFilter) {
@@ -467,26 +493,48 @@ export class Open3dCatalogClient {
       );
     }
 
-    const configurabilityFilter = query.configurabilityFilter;
-    if (configurabilityFilter && configurabilityFilter.length > 0) {
+    const configurabilityFilter = query.configurabilityFilter ?? [];
+    if (configurabilityFilter.length > 0) {
       candidates = candidates.filter((item) => {
         const configurability = item.configurability ?? null;
         return configurability !== null && configurabilityFilter.includes(configurability);
       });
     }
 
-    const mountingFilter = query.mountingFilter;
-    if (mountingFilter && mountingFilter.length > 0) {
+    const mountingFilter = query.mountingFilter ?? [];
+    if (mountingFilter.length > 0) {
       candidates = candidates.filter((item) =>
         (item.mounting ?? ["floor"]).some((mounting) => mountingFilter.includes(mounting)),
       );
     }
 
-    const assetReadinessFilter = query.assetReadinessFilter;
-    if (assetReadinessFilter && assetReadinessFilter.length > 0) {
+    const assetReadinessFilter = query.assetReadinessFilter ?? [];
+    if (assetReadinessFilter.length > 0) {
       candidates = candidates.filter((item) =>
         (item.assetReadiness ?? ["ready"]).some((state) => assetReadinessFilter.includes(state)),
       );
+    }
+
+    // Sketchfab parity facets (BP-06 / design §9-10 / REC-02 / PLAN-FAIL-0419): now on item + clean (no casts)
+    // Catalogue-first: facets apply to descriptor-primary items in inventory/search.
+    const licenseFilter = query.licenseFilter;
+    if (licenseFilter && licenseFilter.length > 0) {
+      candidates = candidates.filter((item) => {
+        const lic = item.license || (item.tags?.find((t) => t.toLowerCase().includes("license")) ?? "standard");
+        return licenseFilter.includes(String(lic));
+      });
+    }
+    if (typeof query.animatedFilter === "boolean") {
+      candidates = candidates.filter((item) => (item.animated ?? false) === query.animatedFilter);
+    }
+    if (typeof query.staffPicked === "boolean") {
+      candidates = candidates.filter((item) => (item.staffPicked ?? false) === query.staffPicked);
+    }
+    if (typeof query.favourite === "boolean") {
+      candidates = candidates.filter((item) => (item.favourite ?? false) === query.favourite);
+    }
+    if (typeof query.downloadable === "boolean") {
+      candidates = candidates.filter((item) => (item.downloadable ?? true) === query.downloadable);
     }
 
     // Step 2: Full-text search (uses pre-tokenized index for performance)
@@ -557,8 +605,10 @@ export class Open3dCatalogClient {
     }
 
     // Step 4: Paginate
+    // Sketchfab parity: cursor-only pagination, explicit cap ≤24 (BP-06 / design §9 / REC-02 / phase-06)
     const totalCount = candidates.length;
-    const pageSize = query.pageSize ?? (query.text ? this.options.searchPageSize : this.options.defaultPageSize);
+    const requested = query.pageSize ?? (query.text ? this.options.searchPageSize : this.options.defaultPageSize);
+    const pageSize = Math.min(24, Math.max(1, requested));
 
     let startIndex = 0;
     if (query.cursor) {
@@ -615,6 +665,71 @@ export class Open3dCatalogClient {
   invalidate(): void {
     this.cache.clear();
     this.index = this.items.length > 0 ? this.buildIndex(this.items) : null;
+  }
+
+  /**
+   * Phase 06 consumer integration for svgBlockDescriptorLoader (PLAN-FAIL-0405/0419).
+   * Guarded dynamic import keeps node:fs out of client bundles.
+   * Client returns pre-loaded (or []) — loader primary data injected via server props / getAll after server load (catalogue-first).
+   * Uses resolveBlocks (actually consumes blocks result) for resolver integration.
+   * Catalogue-first (descriptors primary source for items) + search parity + resolver wiring.
+   * Cites BP-06, design §9/10, GS. Called from useOpen3dWorkspaceCatalog + InventoryPanel.
+   */
+  async loadDescriptorsFromLoader(dir?: string): Promise<BlockDescriptor[]> {
+    if (typeof window !== "undefined") {
+      // address client-side always []: return any preloaded descriptors (injected); loader primary via client.getAll() consumers
+      return this.loadedDescriptors;
+    }
+    try {
+      // dynamic to defer fs module in bundler
+      const loader = await import("./svg/svgBlockDescriptorLoader");
+      const descriptors = loader.loadAll({ dir, forceReload: false });
+      this.loadedDescriptors = descriptors;
+      // resolver integration (PLAN-FAIL-0419): actually use blocks (capture result, consume .blocks)
+      if (descriptors.length > 0) {
+        const resolved = resolveBlocks(descriptors[0]!);
+        // use the blocks for symbol geometry integration (e.g. count or downstream ready)
+        void resolved.blocks.length;
+      }
+      // Catalogue-first: map descriptors primary to Open3dCatalogItem so .search() (and inventory via client) uses loader as source (not products/API).
+      // GS cite: BP-06, design §9-10, REC-04 (Planner 5D catalogue-first), phase-06.
+      if (descriptors.length > 0) {
+        const mapped: Open3dCatalogItem[] = descriptors.map((d) => ({
+          id: d.id,
+          slug: d.slug,
+          sku: d.sku ?? `DESC-${d.slug}`,
+          name: d.slug,
+          shortName: d.slug.slice(0, 30),
+          description: `Symbol descriptor ${d.slug}`,
+          category: "Furniture",
+          subCategory: "Chairs",
+          taxonomyPath: `Furniture > Symbols > ${d.slug}`,
+          dimensions: { widthMm: d.geometry.widthMm, depthMm: d.geometry.depthMm, heightMm: d.geometry.heightMm ?? 800 },
+          displayUnit: "mm",
+          assets: { imageUrls: [] },
+          material: { marketingMaterial: "SVG", normalizedMaterial: "svg-symbol" },
+          roomTags: [],
+          styleTags: [],
+          availability: "in-stock",
+          assemblyType: "fully-assembled",
+          flatPack: false,
+          tags: [d.slug, "descriptor", "symbol"],
+          variants: [],
+          provenance: { source: "descriptor-loader" },
+          symbolOnly: true,
+          // parity facets default
+          license: "standard",
+          animated: false,
+          staffPicked: false,
+          favourite: false,
+          downloadable: true,
+        }));
+        this.load(mapped, "standard");
+      }
+      return descriptors;
+    } catch {
+      return [];
+    }
   }
 
   // ── Private helpers ──

@@ -1,7 +1,9 @@
 import type { NextRequest} from "next/server";
-import { NextResponse } from "next/server";
 import { createSupabaseAuthAdminClient } from '@/platform/supabase/auth-admin';
+import { getClientIp } from "@/platform/supabase/adminServer";
 import { rateLimit } from "@/lib/rateLimit";
+import { success, error, rateLimitedError } from "@/lib/api/apiResponse";
+import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
 
 type PreferredContact = "email" | "whatsapp" | "phone" | "any";
 
@@ -52,24 +54,13 @@ async function parsePayload(req: NextRequest): Promise<CustomerQueryPayload> {
   }
 }
 
-function getRequestIp(req: NextRequest): string {
-  const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0].trim();
-  return req.headers.get("cf-connecting-ip") || "127.0.0.1";
-}
-
 export async function POST(req: NextRequest) {
-  const ip = getRequestIp(req);
+  const ip = getClientIp(req);
   const limitRes = await rateLimit(`customer-queries:${ip}`, 6, 60 * 60 * 1000);
   if (!limitRes.success) {
-    return NextResponse.json(
-      { error: "Too many submissions. Please try again after some time." },
-      {
-        status: 429,
-        headers: {
-          "X-RateLimit-Reset": limitRes.reset.toString(),
-        },
-      },
+    return rateLimitedError(
+      "Too many submissions. Please try again after some time.",
+      limitRes.reset,
     );
   }
 
@@ -77,13 +68,12 @@ export async function POST(req: NextRequest) {
 
   const honeypot = normalizeText(payload.website, 120);
   if (honeypot) {
-    return NextResponse.json(
+    return success(
       {
-        success: true,
         queryId: "submitted",
         createdAt: new Date().toISOString(),
       },
-      { status: 201 },
+      201,
     );
   }
 
@@ -100,21 +90,25 @@ export async function POST(req: NextRequest) {
   const preferredContact = normalizePreferredContact(payload.preferredContact);
 
   if (!name || !message) {
-    return NextResponse.json(
-      { error: "Name and message are required." },
-      { status: 400 },
+    return error(
+      ApiError.fromCode(
+        API_ERROR_CODES.MISSING_REQUIRED_FIELD,
+        "Name and message are required.",
+      ),
     );
   }
 
   if (!email && !phone) {
-    return NextResponse.json(
-      { error: "Please provide email or phone." },
-      { status: 400 },
+    return error(
+      ApiError.fromCode(
+        API_ERROR_CODES.MISSING_REQUIRED_FIELD,
+        "Please provide email or phone.",
+      ),
     );
   }
 
   const supabaseAdmin = createSupabaseAuthAdminClient();
-  const { data, error } = await supabaseAdmin
+  const { data, error: dbError } = await supabaseAdmin
     .from("customer_queries")
     .insert({
       name,
@@ -132,11 +126,13 @@ export async function POST(req: NextRequest) {
     .select("id, created_at, email, phone")
     .single();
 
-  if (error || !data) {
-    console.error("customer_queries insert failed:", error?.message || "unknown");
-    return NextResponse.json(
-      { error: "Unable to save query right now." },
-      { status: 500 },
+  if (dbError || !data) {
+    console.error("customer_queries insert failed:", dbError?.message || "unknown");
+    return error(
+      ApiError.fromCode(
+        API_ERROR_CODES.DATABASE_ERROR,
+        "Unable to save query right now.",
+      ),
     );
   }
 
@@ -146,9 +142,8 @@ export async function POST(req: NextRequest) {
     `Hello, we received your query ${queryId}.`,
   );
 
-  return NextResponse.json(
+  return success(
     {
-      success: true,
       queryId,
       createdAt: data.created_at,
       followUp: {
@@ -159,6 +154,6 @@ export async function POST(req: NextRequest) {
             : null,
       },
     },
-    { status: 201 },
+    201,
   );
 }

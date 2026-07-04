@@ -19,7 +19,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   createAdminServiceClient,
   isMissingTableError,
-} from "@/app/api/admin/_lib/server";
+} from "@/platform/supabase/adminServer";
 import { furnitureCatalog, categoryLabels } from "@/features/planner/store/catalogData";
 import { normalizePlannerManagedProductRow } from "@/features/planner/store/plannerManagedProductsShared";
 import { buildConfiguratorRow } from "@/lib/catalog/configuratorCatalogPayload";

@@ -121,7 +121,7 @@ export function useDockingSystem(): DockingSystemState & DockingSystemActions {
         }
 
         if (hasChanges) {
-          // eslint-disable-next-line react-hooks/set-state-in-effect
+          // eslint-disable-next-line react-hooks/set-state-in-effect -- conditional set from localStorage restore on mount; reason: one-time hydration of persisted layout; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: use useSyncExternalStore or init state from storage when docking system revised
           setPanels(restored);
         }
       }

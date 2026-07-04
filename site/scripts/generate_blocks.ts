@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { buildBlock2D } from '@/lib/catalog/blocks2d';
+import { buildBlock2D, type BasePrim } from '@/lib/catalog/blocks2d';
 
 const REPO_ROOT = path.resolve(__dirname, '../..');
 
@@ -46,7 +46,8 @@ function parseWorkstations() {
   const csvData = fs.readFileSync(csvPath, 'utf8');
   
   const lines = csvData.split('\n');
-  const blocks: any[] = [];
+  interface ParsedBlock { name: string; seaters: number; length: number; depth: number; isSharing: boolean; }
+  const blocks: ParsedBlock[] = [];
   let currentMode = 'NS'; 
   
   for (const line of lines) {
@@ -71,7 +72,7 @@ function parseWorkstations() {
       });
     } else if (line.trim().startsWith(',,1350') || line.trim().startsWith(',,1500')) {
       const length = parseInt(line.split(',')[2], 10);
-      const prev: any = blocks[blocks.length - 1];
+      const prev: ParsedBlock | undefined = blocks[blocks.length - 1];
       if (prev) {
         blocks.push({
           name: `${prev.name.split(' (')[0]} (${length}mm)`,
@@ -100,7 +101,7 @@ for (const data of blocksData) {
       system: data.isSharing ? 'partition' : 'none',
       seaterOptions: [data.seaters]
     }
-  } as any;
+  } as Parameters<typeof buildBlock2D>[0];
   
   const block = buildBlock2D(product, { selection: { seaters: data.seaters, length: data.length, depth: data.depth } });
   if (block) {
@@ -109,7 +110,7 @@ for (const data of blocksData) {
 }
 
 // Add some standalone blocks
-const extraProduct = { id: 'ped', name: 'Pedestal', category_id: 'storage', sizingType: 'discrete' } as any;
+const extraProduct: Parameters<typeof buildBlock2D>[0] = { id: 'ped', name: 'Pedestal', category_id: 'storage', sizingType: 'discrete' } as Parameters<typeof buildBlock2D>[0];
 const extraBlock = buildBlock2D(extraProduct, { selection: { length: 400, depth: 500 } });
 if (extraBlock) blocks.push({ name: 'Mobile Pedestal', block: extraBlock });
 
@@ -118,7 +119,7 @@ if (!fs.existsSync(resultsDir)) {
   fs.mkdirSync(resultsDir, { recursive: true });
 }
 
-function primToSvg(p: any): string {
+function primToSvg(p: BasePrim): string {
   const shadow = p.shadowColor ? ` filter="drop-shadow(0 ${p.shadowOffsetY || 0}px ${p.shadowBlur || 0}px ${p.shadowColor})"` : "";
   const transform = p.rotation ? ` transform="rotate(${p.rotation} ${p.offsetX || 0} ${p.offsetY || 0})"` : "";
   const baseAttr = `${shadow}${transform}`;

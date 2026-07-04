@@ -13,7 +13,7 @@ param(
     [switch] $NoInstall             # skip site-test (which needs full install)
 )
 
-$repoRoot = "D:\OOFPLWeb"
+$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 $siteRoot = Join-Path $repoRoot "site"
 $wrapper  = Join-Path $PSScriptRoot "run-evidence-cmd.ps1"
 
@@ -49,4 +49,4 @@ Write-Host ""
 Write-Host "Phase summary:"
 Write-Host "  Phase: $Phase"
 Write-Host "  Fails: $($fails -join ', ' | ForEach-Object { $_ })"
-Write-Host "  Output: D:\OOFPLWeb\results\$($c.module)\$Phase\"
+Write-Host "  Output: $repoRoot\results\$($c.module)\$Phase\"

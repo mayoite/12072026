@@ -17,7 +17,7 @@ export function KpiCounter({ value, className = "typ-stat text-primary" }: KpiCo
 
   useEffect(() => {
     if (reduceMotion) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional set on mount/reduce for animation skip; reason: avoid initial 0 render + respect user motion pref; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: refactor to useLayoutEffect + ref or CSS transition when animation policy updated
       setDisplayValue(value);
       return;
     }

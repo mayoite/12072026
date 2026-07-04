@@ -23,7 +23,7 @@
  * succeed; the SVG/PNG artefact is a cache for portal render).
  */
 
-import { execFile, type ExecException } from "node:child_process";
+import { execFile, type ExecException, type ExecFileException } from "node:child_process";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
@@ -152,8 +152,9 @@ export function runSvgPipeline(
         timeout: timeoutMs,
         maxBuffer: maxStderrBytes,
         windowsHide: true,
+        encoding: "utf8",
       },
-      (error: ExecException | null, stdout: string, stderr: string) => {
+      (error: ExecFileException | null, stdout: string, stderr: string) => {
         const durationMs = Date.now() - startedAt;
         if (error) {
           if (error.killed && error.signal === "SIGTERM") {

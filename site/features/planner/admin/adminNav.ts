@@ -159,6 +159,8 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
   },
 ];
 
+// Canonical admin svg-editor nav entry (PLAN-FAIL-0403/0417). GS cites: plans/2026-07-04/benchmark.md BP-04, design §11, I-D module paths (no drift). Locked per min scaffold.
+
 export const ADMIN_NAV_ITEMS: AdminNavItem[] = ADMIN_NAV_GROUPS.flatMap((group) => group.items);
 
 export const ADMIN_HUB_SECTIONS: { title: string; items: AdminNavItem[] }[] = [

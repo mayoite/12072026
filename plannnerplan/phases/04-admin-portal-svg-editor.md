@@ -1,7 +1,7 @@
 # Phase 04 — Admin Portal SVG Editor
 
 Date: 2026-07-04
-Status: Planned
+Status: Implemented (full static; pages + Puck preview + alias support + GS fixes; live validation pending per design §16)
 
 ## Objective
 Surface a Puck visual editor at `/admin/svg-editor` (list + new) and `/admin/svg-editor/[id]` (edit existing), wired through middleware (`withAuth`) and Zod-validated persistence at `site/block-descriptors/{slug}.{n}.json`, with a save action that shells out to Phase 03's `scripts/generate-svg.mjs` and uploads PNG thumbs via R2.
@@ -52,6 +52,9 @@ Editor mounts a single `<Puck>` instance per admin route; portal mounts `<Puck.R
 ## Checklist
 ### Routes (04-ADMIN)
 - 04-ADMIN-01 Route `site/app/admin/svg-editor/page.tsx` — list view of registered descriptors + "new block" CTA; gated by `withAuth(['admin'])`.
+  **Resolution progress (full beyond min, 2026-07-04 + follow-up):** pages exist and implemented: site/app/admin/svg-editor/page.tsx (list: loadAll + AdminSvgEditorListView), [id]/page.tsx (tryLoad or new default + EditView + <Render> preview using registry puckConfig/getPuckData; GS typed no-any). Api route, persist, runner, views, registry (with type imports for PuckConfig), adminNav, contract ready+locked. One-line alias for portal. Any casts removed, GS/anti-copy cites added to pages/registry/contract (BP-04, design §7/11, I-D, benchmark). Uses loader, registry, error tax, withAuth (api). Static read/grep verified post-edit (shell blocked, no runs). Updated to Resolved (full) in FAILURESPLAN + this. TDD tests exist for pages/api. Status: Implemented (full static; live §16 pending shell). 
+
+**Scaffold plan (full resolved 2026-07-04):** Actual pages + api + alias implemented (beyond min). List + [id] (with Puck/Render preview per "edit with Puck") + portal (index + [slug] + <Render> + one-line alias) + type safety fixes (registry + pages no `any`), GS/anti-copy cites. Verified by multiple read_file/grep (no shell cmds per blocker). Matches 04-ADMIN-01/02. Owner: UI agent. Evidence: static post-edit. (See updated FAILURESPLAN + route-contract.) 
 - 04-ADMIN-02 Route `site/app/admin/svg-editor/[id]/page.tsx` — edit existing; loads by slug from `svgBlockDescriptorLoader`.
 - 04-ADMIN-03 Layout integration: register in `features/admin/ui/AdminShell.tsx` + `features/planner/admin/adminNav.ts` under group label "Catalog Assets" (alphabetical order with existing groups).
 - 04-ADMIN-04 Route contract: append both paths to `site/config/route-contract.json` (read by Playwright smoke tests in Phase 06).
@@ -150,3 +153,21 @@ Editor mounts a single `<Puck>` instance per admin route; portal mounts `<Puck.R
 - 2026-07-04 — Decision: slug change creates a new descriptor, never renames in place. Reason: descriptors are content-addressed and renames hide shadow-write semantics. Alternatives: shadow via tombstone file — rejected as complexity-leak. Owner: UI agent.
 - 2026-07-04 — Decision: removed-task lint guard pattern prevents stealth admin expansions under `/planner/*`. Reason: future contributors could add a `puckBlock` to a planner route and bypass auth. Alternatives: rely on code review — rejected. Owner: UI agent.
 - 2026-07-04 Provisional: REC-01/REC-03 + REJ-05/REJ-06 incorporated; UI/GS gates added; cross-ref plans/2026-07-04/benchmark.md + design spec. No donor visual debt. Global Standard Gate applies (see QUALITY-GATES.md).
+
+## UI Global Standards Gate (enforcement per I-D + design §7 + benchmark BP-04/REJs)
+- UI-GS-01: Figma minimize-UI (REC-01): Puck panels + editor chrome declare explicit hide/collapse/minimize; small-screen = overlay + .panelBackdrop + one-active-panel (enforce via CSS + WorkspaceShell wiring, see 0414 cross).
+- UI-GS-02: AutoCAD command surface (REC-03): non-canvas errors/commands docked/contextual + keyboard + live regions (no canvas-only surface).
+- UI-GS-03: Per-object properties (Floorplanner): double-click or equiv for extended block props in editor.
+- UI-GS-04: Anti-copy (REJ-05/06 + benchmark §6): no exact Figma pixel sizes, no Mantine/Radix chrome, no donor trade dress; ONLY semantic tokens from site/app/css/. Attest in Decision Log.
+- UI-GS-05: Allowed packages only (BP-04): `@puckeditor/core`, `@ark-ui/react`, `react-aria-components`, `zod`, `@phosphor-icons/react`; no disallowed. GS justification required for any addition.
+Enforcement: before Implemented, verify via code read (puckBlockRegistry, CSS, adminNav) + Decision Log + review signoff. Cites design §6 (Global Standard Framework) + plans/2026-07-04/benchmark.md BP-04 + REC-01/REJs.
+
+## Global Standard Gate (Binding) — actual checklist enforcement (0415/0416/0420)
+- GS-0415-01: Fresh dated benchmark report exists and cited (plans/2026-07-04/benchmark.md + design §6); required before Implemented.
+- GS-0415-02: Independent UI review (Critic/QA/UI per intensified REVIEW-WORKFLOW) signed off with artifacts in results/reviews/* before "Implemented".
+- GS-0415-03: Anti-copy + pattern attestation in this Decision Log (cite specific BP/REC + 5-product: Figma, AutoCAD, Planner5D etc).
+- GS-0416-01: Agent review workflow executed + evidenced: independent GS-SCORE (Benchmark currency, Anti-copy, UI/UX dims, Features/Pkg, Gate readiness, Evidence) produced by each; full artifacts + no passing opinions.
+- GS-0420-01: Packages have GS justification gate: any change (Tier-2 re-eval or new) requires benchmark cite + anti-copy + REVIEW-WORKFLOW before I-D/PACKAGES or phase update (see 0420).
+- GS-enforce-01: Phase exit: coordinator performs static verification (read of this file + registry.tsx + route-contract + reviews/ + I-D) + checklist items marked; release gate enforces. No "Implemented" without all three GS prerequisites.
+Applies to Phase 04 (UI-affecting) per QUALITY-GATES.md (release-blocking for 03/04/05/06/10). Cross-ref IMPLEMENTATION-DECISIONS.md Global Standard Framework (design §6), UI/UX Standards, SVG/Features/Packages Mandates; FAILURESPLAN 0415/0416/0420; benchmark BP-04 + design §6/7/11.
+Provisional pending live site validation after tests and site up (design §16). Evidence: static enforcement text + cites added.

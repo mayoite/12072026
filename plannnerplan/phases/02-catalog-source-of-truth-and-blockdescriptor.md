@@ -74,6 +74,7 @@ Single source-of-truth file: `site/features/planner/open3d/catalog/svg/svgTypes.
 
 ## Exit gate
 - Schema compiles; `vite build` of `oando-site` succeeds.
+**2026-07-04 GS progress (file tools):** blocks field + BlockDescriptorBlockSchema added (PLAN-FAIL-0413/0406 resolved); exported via loader (alongside admin). All schema edits cite BP-02 from benchmark + design spec. Loader reexport + catalog/index wiring partial for 0405. Verified post by read/grep. Single source rule preserved (no admin schema fork). Cites Global Standard Framework in I-D.
 - Round-trip test (02-TEST-01) green across all three variants.
 - Snapshot irregularity tests (02-TEST-02) green; the four variants of `Open3dDescriptorError` map to the correct HTTP shape.
 - Single grep verifies only one schema source-of-truth file.

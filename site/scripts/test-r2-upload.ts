@@ -29,9 +29,13 @@ async function testUpload() {
     await s3.send(new PutObjectCommand(params));
     console.log("SUCCESS! The key worked!");
   } catch (error: unknown) {
+    // narrow unknown for aws-sdk error shape; reason: catch boundary from s3.send unknown; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: when error typing from @aws-sdk added to this test script or shared util
+    const e = error as { name?: string; message?: string };
+    const name = error instanceof Error ? error.name : String(e.name ?? "Error");
+    const message = error instanceof Error ? error.message : String(e.message ?? error);
     console.error("\nFAILED. Cloudflare rejected the token:");
-    console.error(`Error Name: ${(error as any).name}`);
-    console.error(`Message: ${(error as any).message}`);
+    console.error(`Error Name: ${name}`);
+    console.error(`Message: ${message}`);
   }
 }
 

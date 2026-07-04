@@ -5,6 +5,7 @@ import { createSupabaseAuthAdminClient } from "@/platform/supabase/auth-admin";
 import { createServerClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
+import { API_ERROR_CODES } from "@/lib/api/ApiError";
 
 vi.mock("@/platform/supabase/auth-admin", () => ({
   createSupabaseAuthAdminClient: vi.fn(),
@@ -63,12 +64,16 @@ describe("app/api/customer-queries/manage/route.ts", () => {
     } as never);
     const res = await GET(new NextRequest("http://localhost/api/customer-queries/manage"));
     expect(res.status).toBe(401);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.AUTH_REQUIRED);
   });
 
   it("GET returns query items for admin session", async () => {
     const res = await GET(new NextRequest("http://localhost/api/customer-queries/manage"));
     expect(res.status).toBe(200);
     const body = await res.json();
+    expect(body.success).toBe(true);
     expect(body.items).toEqual([{ id: "q1" }]);
   });
 
@@ -80,6 +85,9 @@ describe("app/api/customer-queries/manage/route.ts", () => {
     });
     const res = await PATCH(req);
     expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.MISSING_REQUIRED_FIELD);
   });
 
   it("PATCH updates query for authorized admin", async () => {
@@ -95,6 +103,7 @@ describe("app/api/customer-queries/manage/route.ts", () => {
     const res = await PATCH(req);
     expect(res.status).toBe(200);
     const body = await res.json();
+    expect(body.success).toBe(true);
     expect(body.item.status).toBe("closed");
   });
 });

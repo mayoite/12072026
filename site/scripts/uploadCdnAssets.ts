@@ -64,8 +64,12 @@ function walkFiles(absDir: string, relPrefix: string): string[] {
         walk(entryAbs, entryRel);
         continue;
       }
-      if (entry.isFile() && (entry as any).size > 0) {
-        files.push(path.posix.join(relPrefix, entryRel).replace(/^\/+/, ""));
+      if (entry.isFile()) {
+        // use stat for size (Dirent from withFileTypes has no .size); reason: correct fs api instead of any cast; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: n/a (correct impl)
+        const st = fs.statSync(entryAbs);
+        if (st.size > 0) {
+          files.push(path.posix.join(relPrefix, entryRel).replace(/^\/+/, ""));
+        }
       }
     }
   }

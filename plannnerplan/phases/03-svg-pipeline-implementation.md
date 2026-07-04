@@ -78,6 +78,7 @@ Package pins (locked per BP-03):
 
 ### Verification (03-VERI)
 - 03-VERI-01 Pipeline runs against all three fixtures end-to-end with `pnpm run scripts:generate-svg -- --fixture chaise` exit code 0.
+**2026-07-04 GS progress (file tools):** PLAN-FAIL-0402 resolved (script present). 0418: Strict Option A + resolver contract (blocks via resolveBlocks, generatedAt freeze) + anti-copy enforced directly in site/scripts/generate-svg.mjs (header + runPipeline). Verified post-edit read_file + grep. Cites BP-03 + design §8 (resolver contract, semantic tokens only from site/app/css/). Phase 03 checklist 03-SVG-FEAT-01 / 03-SVG-GS-01 / 03-SVG-PKG-01 now backed by code. (See FAILURESPLAN 0418 update.)
 - 03-VERI-02 Golden diff ≤ 0.1% per fixture is the single exit-gate assertion; explicit-gate promotion is a separate operational step that does not relax the 0.1% cap.
 - 03-VERI-03 R2 upload idempotency: second run with same fixture yields the same CDN URL.
 

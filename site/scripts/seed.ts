@@ -74,10 +74,13 @@ async function seed() {
             await sql.unsafe(statement + ';');
             successCount++;
         } catch (err: unknown) {
-            if ((err as any).code === '23505' || (err as any).message?.includes('duplicate key')) {
+            // narrow unknown for pg .code / .message; reason: sql errors from unsafe() carry code at runtime but typed as unknown; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: central typed PostgresError + util when added to platform/drizzle or scripts
+            const e = err as { code?: string; message?: string };
+            const msg = err instanceof Error ? err.message : String(err);
+            if (e.code === '23505' || msg.includes('duplicate key')) {
                 skipCount++; // Already exists, skip
             } else {
-                console.error(`Error: ${(err as any).message}\n  → ${statement.substring(0, 100)}`);
+                console.error(`Error: ${msg}\n  → ${statement.substring(0, 100)}`);
                 errorCount++;
             }
         }
@@ -88,6 +91,8 @@ async function seed() {
 }
 
 seed().catch(err => {
-    console.error('Fatal:', (err as any).message);
+    // narrow unknown for fatal; reason/owner/removal: same as above (PLAN-FAIL-0411)
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('Fatal:', msg);
     process.exit(1);
 });

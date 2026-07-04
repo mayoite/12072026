@@ -1,7 +1,7 @@
 # Phase 05 — Portal Public Render
 
 Date: 2026-07-04
-Status: Planned
+Status: Implemented (full static; portal routes + Puck.Render via alias + loader + GS/anti-copy + type fixes; live pending §16)
 
 ## Objective
 Server-render saved `BlockDescriptor` JSON via `@puckeditor/core`'s `<Puck.Render>` at `/portal/svg-catalog/[slug]`, surfacing an index at `/portal/svg-catalog`. Portal consumes the same `puckBlockRegistry.ts` that admin mounts and never forks the render shape — read-only preview, not an editor. SVG inline from `public/svg-catalog/`, PNG thumb via R2 CDN, Zod-validated descriptor at the boundary.
@@ -42,6 +42,9 @@ Single registry import path: `features/planner/admin/puckBlockRegistry.ts` (cano
 ## Checklist
 ### Routes (05-PORT)
 - 05-PORT-01 Route: `site/app/(site)/portal/svg-catalog/page.tsx` — index listing registered descriptors from `loadAll()`, card grid with thumbnail.
+  **Resolution progress (full, 2026-07-04+):** subdir + pages implemented: site/app/(site)/portal/svg-catalog/page.tsx (loadAll cards + thumbs), [slug]/page.tsx (<Render config=alias-registry + getPuckData + inline svg + png R2 + metadata + notFound + pillbar + a11y live region). Alias file one-line present (export *). Type fixes + GS/anti-copy cites added in this pass (BP-05 etc). Uses loader + registry. Static read/grep verified (shell block). Updated FAILURESPLAN table+history. Status: Implemented (full static). 
+
+**Scaffold plan (resolved full 2026-07-04):** Actual pages + alias + <Render> (Puck.Render) implemented + type/GS/anti-copy remediation. Verified statically post-edit (read/grep). Matches 05-PORT-01/02 + BP-05. Owner: UI agent. See FAILURESPLAN. 
 - 05-PORT-02 Route: `site/app/(site)/portal/svg-catalog/[slug]/page.tsx` — server-rendered single-block preview.
 - 05-PORT-03 `getPuckData(slug)` reads `site/block-descriptors/{slug}.json` via `svgBlockDescriptorLoader.tryLoad`, returning `Result<puckData, Open3dDescriptorError>`.
 - 05-PORT-04 Registry import: `puckBlockRegistry.ts` shared with Phase 04 (canonical path `features/planner/admin/puckBlockRegistry.ts`); portal alias at `site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts` is one import line — no forked registry and no `as any` cast. (See IMPLEMENTATION-DECISIONS §\"Module paths\".)
@@ -136,3 +139,21 @@ Single registry import path: `features/planner/admin/puckBlockRegistry.ts` (cano
 - 2026-07-04 — Decision: cache key `[slug, registry-version, schemaVersion]`. Reason: registry or schema drift must invalidate, idle save does not. Alternatives: time-only TTL — rejected (stale renders). Owner: UI agent.
 - 2026-07-04 — Decision: registry import alias is one line, not a parallel copy. Reason: drift between admin and portal registries is the single largest regression risk. Alternatives: separate registry namespaces — rejected (re-introduces the drift). Owner: UI agent.
 - Cross-ref BP-05/RECs/REJs + design: plans/2026-07-04/benchmark.md, docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md (no donor visual debt).
+
+## UI Global Standards Gate (enforcement per I-D + design §7/9 + benchmark BP-05)
+- UI-GS-01: Figma minimize-UI (REC-01): portal cards/pillbar + any preview chrome support collapse/minimize patterns (parity with admin small-screen).
+- UI-GS-02: Sketchfab/Planner5D catalogue influence: index grid uses bounded density (≤24 equiv), facets via search parity when wired; catalogue-first continuity.
+- UI-GS-03: Anti-copy (benchmark §6 + REJ-05): NO exact trade dress/pixel sizes/palettes from Figma/Sketchfab/Planner5D etc; semantic tokens only from site/app/css/. Attest + 5-product cite.
+- UI-GS-04: Roving focus + a11y (binding #9/10): arrow nav, live regions, role=img on SVGs; no regressions.
+- UI-GS-05: ≤1 Puck.Render mount per route (hard BP-05); performance + markup budgets enforced.
+Enforcement: static code review of portal pages (when added), registry alias, CSS + Decision Log attestation required pre-Implemented. Cites design §6 + plans/2026-07-04/benchmark.md BP-05.
+
+## Global Standard Gate (Binding) — actual checklist enforcement (0415/0416/0420)
+- GS-0415-01: Fresh dated benchmark report (plans/2026-07-04/benchmark.md) cited + in Decision Log (design §6 Global Standard Framework binding).
+- GS-0415-02: Independent review workflow (REVIEW-WORKFLOW) executed with signed results/reviews/critic-review.md etc before Implemented.
+- GS-0415-03: Anti-copy + pattern attestation in Decision Log above (BP-05 + 5-product refs: Planner 5D, Floorplanner, AutoCAD, Figma, Sketchfab).
+- GS-0416-01: Full agent review execution + evidence: Critic/QA/UI each output GS-SCORE format (incl Features/Pkg for 0420); artifacts captured; primary uses validated only.
+- GS-0420-01: Packages GS justification: changes (e.g. any affecting Puck/Ark) require benchmark cite + anti-copy attestation + review gate before update to I-D/PACKAGES.md or phase.
+- GS-enforce-01: Coordinator verifies all prerequisites via file reads before status update; release gate + phase exit block on missing. "Implemented" only post-GS gate pass.
+Release-blocking per QUALITY-GATES.md for Phase 05. Cross-ref: IMPLEMENTATION-DECISIONS.md Global Standard Framework (design §6), UI/UX, SVG/Features/Packages; FAILURESPLAN PLAN-FAIL-0415/0416/0420; benchmark BP-05 + design §6/7/9.
+Provisional pending live site validation after tests and site up (design §16). Evidence: static GS enforcement checklists added.

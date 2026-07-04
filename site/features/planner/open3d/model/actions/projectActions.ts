@@ -57,9 +57,9 @@ export type Open3dProjectAction = {
       };
 }[Open3dEntityCollection];
 
-function activeFloorOrThrow(project: Open3dProject) {
+export function activeFloorOrThrow(project: Open3dProject) {
   const floor = project.floors.find((candidate) => candidate.id === project.activeFloorId);
-  if (!floor) throw new Error("Open3D project has no active floor.");
+  if (!floor) throw new Error("No active floor in project");
   return floor;
 }
 

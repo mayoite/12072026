@@ -6,6 +6,7 @@ import { rateLimit } from "@/lib/rateLimit";
 import { createServerClient } from "@/lib/supabase/server";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 import { userBelongsToTeam } from "@/lib/audit/teamAccess";
+import { API_ERROR_CODES } from "@/lib/api/ApiError";
 
 vi.mock("@/lib/audit/teamAccess", () => ({
   isAuditTeamId: (value: string) =>
@@ -55,37 +56,56 @@ describe("app/api/audit/route.ts", () => {
       body: JSON.stringify(body),
     });
 
-  it("returns 429 when rate limited", async () => {
+  it("returns 429 envelope when rate limited", async () => {
     vi.mocked(rateLimit).mockResolvedValue({ success: false, reset: 99 });
     const res = await POST(createReq({}));
     expect(res.status).toBe(429);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.RATE_LIMIT_EXCEEDED);
+    expect(body.error.message).toBe("Too many requests");
+    expect(res.headers.get("X-RateLimit-Reset")).toBe("99");
   });
 
-  it("returns 401 when unauthenticated", async () => {
+  it("returns 401 envelope when unauthenticated", async () => {
     mockSupabase.auth.getUser.mockResolvedValue({ data: { user: null }, error: null });
     const res = await POST(createReq({ team_id: TEAM_ID, action: "update", target_type: "plan" }));
     expect(res.status).toBe(401);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.AUTH_REQUIRED);
+    expect(body.error.message).toBe("Unauthorized");
   });
 
-  it("returns 403 when CSRF is invalid", async () => {
+  it("returns 403 envelope when CSRF is invalid", async () => {
     vi.mocked(validateCsrfRequest).mockResolvedValue(false);
     const res = await POST(createReq({ team_id: TEAM_ID, action: "update", target_type: "plan" }));
     expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.INSUFFICIENT_PERMISSIONS);
+    expect(body.error.message).toBe("Invalid or missing CSRF token");
   });
 
-  it("returns 400 when required fields are missing", async () => {
+  it("returns 400 envelope when required fields are missing", async () => {
     const res = await POST(createReq({ team_id: "t1" }));
     expect(res.status).toBe(400);
     const body = await res.json();
-    expect(body.error).toBe("Missing required fields");
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.MISSING_REQUIRED_FIELD);
+    expect(body.error.message).toBe("Missing required fields");
   });
 
-  it("returns 400 when team_id is not a valid uuid", async () => {
+  it("returns 400 envelope when team_id is not a valid uuid", async () => {
     const res = await POST(createReq({ team_id: "team-abc", action: "update", target_type: "plan" }));
     expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.INVALID_INPUT);
+    expect(body.error.message).toBe("Invalid team_id");
   });
 
-  it("returns 403 when user is not a team member", async () => {
+  it("returns 403 envelope when user is not a team member", async () => {
     vi.mocked(userBelongsToTeam).mockResolvedValueOnce(false);
     const res = await POST(
       createReq({
@@ -95,6 +115,10 @@ describe("app/api/audit/route.ts", () => {
       }),
     );
     expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.INSUFFICIENT_PERMISSIONS);
+    expect(body.error.message).toBe("Forbidden");
     expect(insertEvent).not.toHaveBeenCalled();
   });
 
@@ -118,6 +142,8 @@ describe("app/api/audit/route.ts", () => {
     );
 
     expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.success).toBe(true);
     expect(userBelongsToTeam).not.toHaveBeenCalled();
     expect(insertEvent).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -128,7 +154,7 @@ describe("app/api/audit/route.ts", () => {
     );
   });
 
-  it("returns 500 when persistence fails", async () => {
+  it("returns 500 envelope when persistence fails", async () => {
     vi.mocked(insertEvent).mockRejectedValueOnce(new Error("db unavailable"));
     const res = await POST(
       createReq({
@@ -139,10 +165,12 @@ describe("app/api/audit/route.ts", () => {
     );
     expect(res.status).toBe(500);
     const body = await res.json();
-    expect(body.error).toBe("Failed to record audit event");
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.INTERNAL_ERROR);
+    expect(body.error.message).toBe("Failed to record audit event");
   });
 
-  it("records audit event and returns success", async () => {
+  it("records audit event and returns success envelope", async () => {
     const res = await POST(
       createReq({
         team_id: ` ${TEAM_ID} `,

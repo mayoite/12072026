@@ -83,7 +83,7 @@ export function Hero({
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- set once after mount to gate motion reveal (prevents flash); reason: motionReady state for framer initial; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: hoist to useState initializer or layout effect when hero animation revised
     setMotionReady(true);
   }, []);
 

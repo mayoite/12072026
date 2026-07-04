@@ -111,3 +111,28 @@ describe("useDoorWindowPlacement", () => {
     });
   });
 });
+
+// TDD RED first: added cases exercising handle + edit/update before any source change
+describe("useDoorWindowPlacement TDD full (placement, edit, update)", () => {
+  let project: ReturnType<typeof createOpen3dProject>;
+
+  beforeEach(() => {
+    project = createOpen3dProject({ name: "TDD DoorWin" });
+  });
+
+  it("cancels and resets hover/selected", () => {
+    const { result } = renderHook(() => useDoorWindowPlacement(project));
+    act(() => result.current.startWindowPlacement("sliding"));
+    act(() => result.current.handleWallHover("w99", 0.25));
+    act(() => result.current.cancelPlacement());
+    expect(result.current.placementMode).toEqual({ mode: "select" });
+    expect(result.current.hoverPosition).toBeNull();
+  });
+
+  it("update/delete fns return transformed projects", () => {
+    const { result } = renderHook(() => useDoorWindowPlacement(project));
+    const p = createOpen3dProject({ name: "p" });
+    expect(result.current.updateWindowProperties(p, "x", { height: 1200 })).toBeDefined();
+    expect(result.current.deleteDoor(p, "d1")).toBeDefined();
+  });
+});

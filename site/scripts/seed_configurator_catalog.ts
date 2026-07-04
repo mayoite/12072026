@@ -9,6 +9,7 @@ import { config } from "dotenv";
 import { resolve } from "node:path";
 import { readFileSync } from "node:fs";
 import postgres from "postgres";
+import type { Sql } from "postgres";
 import { buildOandoSeedProducts } from "@/lib/catalog/seed/oandoCatalog";
 import { productToRow } from "@/lib/catalog/configuratorCatalog";
 
@@ -50,16 +51,17 @@ async function main() {
       // 2) Upsert the seed (idempotent on slug).
       const rows = buildOandoSeedProducts().map(productToRow);
       for (const r of rows) {
-        await (sql as any)`
+        // direct sql template (no any); json() accepts serializable from row type; reason: matching sibling seed_planner script pattern; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: n/a once postgres lib types accepted at call (or explicit overload)
+        await sql`
           insert into public.configurator_products
             (slug, name, category, family, brand_name, sizing_type, workstation,
              size_options, default_footprint, derived_rules, materials,
              thumbnail_url, model_3d_url, description, active)
           values
             (${r.slug}, ${r.name}, ${r.category}, ${r.family}, ${r.brand_name},
-             ${r.sizing_type}, ${r.workstation as object}, ${sql.json(r.size_options as any)},
-             ${r.default_footprint as object}, ${r.derived_rules as any},
-             ${r.materials as any}, ${r.thumbnail_url}, ${r.model_3d_url}, ${r.description}, true)
+             ${r.sizing_type}, ${r.workstation}, ${sql.json(r.size_options)},
+             ${r.default_footprint}, ${r.derived_rules},
+             ${r.materials}, ${r.thumbnail_url}, ${r.model_3d_url}, ${r.description}, true)
           on conflict (slug) do update set
             name = excluded.name,
             category = excluded.category,

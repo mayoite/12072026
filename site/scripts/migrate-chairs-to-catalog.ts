@@ -12,7 +12,7 @@ import fs from "fs";
 import path from "path";
 import sharp from "sharp";
 import { config } from "dotenv";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 config({ path: ".env.local" });
 
@@ -136,7 +136,7 @@ async function main() {
 }
 
 async function updateProducts(
-  supabase: any,
+  supabase: SupabaseClient,
   products: Array<{ id: string; images: string[] | null; image_url: string | null }>,
   pathMap: Record<string, string>
 ) {
@@ -164,7 +164,8 @@ async function updateProducts(
     }
 
     if (changed) {
-      const updatePayload: any = {};
+      // payload shape matches table columns; reason: dynamic update keys, typed at call; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: when products table row type centralized
+      const updatePayload: Record<string, unknown> = {};
       if (newImageUrl !== product.image_url) updatePayload.image_url = newImageUrl;
       if (newImages) updatePayload.images = newImages;
 

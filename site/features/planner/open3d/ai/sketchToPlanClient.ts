@@ -5,7 +5,7 @@
  * to editable floor plan geometry through the AI service.
  */
 
-import type { Open3dProject, Open3dFloor, Open3dDisplayUnit } from "../model/types";
+// (removed unused type import for Open3d* )
 
 /**
  * Request parameters for sketch-to-plan conversion.

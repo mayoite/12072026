@@ -21,7 +21,7 @@
 
 import type {
   BlockDescriptor,
-  BlockDescriptorMountingPoint,
+  MountingPoint,
   BlockDescriptorViewBox,
 } from "./svgTypes";
 import { MountPlaneSchema } from "./svgTypes";
@@ -41,7 +41,7 @@ export interface ResolvedBlock {
   /** Same value as `depth` in mm. Exposed for the 2-D rendering surface. */
   height: number;
   /** Optional explicit mounting anchor. */
-  mounting?: BlockDescriptorMountingPoint;
+  mounting?: MountingPoint;
   /** True iff this row came from one of the descriptor's `blocks` array entries. */
   source: "explicit" | "synthesised";
 }
@@ -78,7 +78,9 @@ export function resolveBlocks(descriptor: BlockDescriptor): ResolvedBlocks {
     height: descriptor.viewBox.height,
   };
 
-  const explicitBlocks = (descriptor as { blocks?: unknown }).blocks;
+  // Typed access now (post 0413 schema extension); no unknown cast at boundary.
+  // Cites Global Standard BP-02 (resolver contract with schema) + PLAN-FAIL-0413 removal condition met.
+  const explicitBlocks = descriptor.blocks;
   if (Array.isArray(explicitBlocks) && explicitBlocks.length > 0) {
     const normalised = explicitBlocks.flatMap((entry, index) =>
       normaliseExplicitBlock(entry, index, viewBox),
@@ -198,7 +200,7 @@ function synthesisedBlockFromGeometry(
   // to the viewBox itself so polygon callers always get at least one ring.
   const width = clampPositive(descriptor.geometry.widthMm);
   const depth = clampPositive(descriptor.geometry.depthMm);
-  const mount: BlockDescriptorMountingPoint | undefined = pickPrimaryMounting(descriptor);
+  const mount: MountingPoint | undefined = pickPrimaryMounting(descriptor);
 
   // Validate against viewBox; oversized geometry is allowed (caller clamps).
   return {
@@ -215,7 +217,7 @@ function synthesisedBlockFromGeometry(
 
 function pickPrimaryMounting(
   descriptor: BlockDescriptor,
-): BlockDescriptorMountingPoint | undefined {
+): MountingPoint | undefined {
   const fromMounting = descriptor.mounting?.[0];
   if (!fromMounting) return undefined;
   const parsed = MountPlaneSchema.safeParse(fromMounting);
@@ -223,7 +225,7 @@ function pickPrimaryMounting(
   return { plane: parsed.data, offset: { x: 0, y: 0 } };
 }
 
-function normaliseMounting(value: unknown): BlockDescriptorMountingPoint | undefined {
+function normaliseMounting(value: unknown): MountingPoint | undefined {
   if (!value || typeof value !== "object") return undefined;
   const candidate = value as { plane?: unknown; offset?: unknown };
   const planeParsed = MountPlaneSchema.safeParse(candidate.plane);

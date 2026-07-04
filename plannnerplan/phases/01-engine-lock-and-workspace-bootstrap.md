@@ -114,3 +114,16 @@ Out of scope: Mantine install, Theme wiring, _archive/fabric/ cleanup, route swa
 - 2026-07-04 — Decision: install `@vercel-labs/json-render` but mark inactive. Reason: Tier-3 reserved per PACKAGES.md (marketing-only, opt-in). Alternatives: defer install to a future phase — rejected because the orchestrator wants one atomic transaction. Owner: Build agent.
 - 2026-07-04 — Decision: AGENTS.md link-only edit to point at Warp Rule 1. Reason: authority chain must be visible without re-stating rule content. Alternatives: no edit — rejected because IMPLEMENTATION-DECISIONS mandates the cross-reference. Owner: Build agent.
 - Cross-ref: BP-01 / RECs in plans/2026-07-04/benchmark.md + design spec docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md (provisional alignment). No donor visual debt.
+**2026-07-04 advance on PLAN-FAIL-0412 (Review agent 3 + Resolve agent 6):** Static confirm: grep 0 _Open3d* debt in open3d/ (pre/post). 3 ?? guards added in catalogClient (filter fields per debt). Existing guards verified by read on catalog files. Type safety 0411/0412: any fixed in scope (26->0 scripts+open3d), disables justified. Static evidence only (shell hostfxr block per Failures.md; typecheck INCOMPLETE). Updated FAILURESPLAN + this phase + 00. See agent reports for counts/locations. Full live typecheck pending env fix. Cites AGENTS Type Safety. 
+
+Root cause (pre-existing, not Phase 01): TS2724 private _ reexport leakage (_Open3dDisplayUnit/Door/Window/FurnitureItem/Room/Project/Floor, _createOpen3dProject, _ComponentType from react, _normalizeColor) in importers (legacy from OOPlanner/staging mirrors where _ was internal); + TS18048/2345/2322 from strictNullChecks (tsconfig "strict":true) on optional filter fields (minW etc |undef), generatedAtMs, value, dimensions.weightKg, Open3dConfigurability|undef passed without narrowing in catalog/* .
+
+Live state (post 0411/0412 agent): NO occurrences of _Open3d* / _ComponentType / _normalize* / _create* in entire site/ (grep verified before+after); 3 additional ?? guards added in catalogClient.ts (filters); existing guards confirmed present via read in catalogClient/inventoryIndex/unitConversion/assetValidation (??null, isFinite, length, !== checks). No new any; 0 type any violations in open3d scope post fixes. 
+
+Typecheck cmd: per START + Failures + AGENTS — blocked (hostfxr 0x80070005); INCOMPLETE (no run artifact per testing-handbook). Static: greps + reads used for confirm.
+
+Min fixes applied (in scope): guards + any debt cleanup from 0411 overlap in catalog/.
+
+Updated: FAILURESPLAN 0412 entry + this. Exact plan remains: live typecheck when unblocked; capture evidence. Cites AGENTS Type Safety. 0412 marked resolved (static + guards) in FAILURESPLAN.
+
+Cites: AGENTS.md (Type Safety section + Honesty/Verify/Gates), testing-handbook.md, START.md, Failures.md, plannnerplan/FAILURESPLAN.md, docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md.

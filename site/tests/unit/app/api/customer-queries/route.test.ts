@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import { POST } from "@/app/api/customer-queries/route";
 import { createSupabaseAuthAdminClient } from "@/platform/supabase/auth-admin";
 import { rateLimit } from "@/lib/rateLimit";
+import { API_ERROR_CODES } from "@/lib/api/ApiError";
 
 vi.mock("@/platform/supabase/auth-admin", () => ({
   createSupabaseAuthAdminClient: vi.fn(),
@@ -51,20 +52,28 @@ describe("app/api/customer-queries/route.ts", () => {
     vi.mocked(rateLimit).mockResolvedValue({ success: false, reset: 100 });
     const res = await POST(createReq({ name: "A", message: "Hi", email: "a@b.com" }));
     expect(res.status).toBe(429);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.RATE_LIMIT_EXCEEDED);
+    expect(res.headers.get("X-RateLimit-Reset")).toBe("100");
   });
 
   it("returns 400 when name or message is missing", async () => {
     const res = await POST(createReq({ email: "a@b.com" }));
     expect(res.status).toBe(400);
     const body = await res.json();
-    expect(body.error).toBe("Name and message are required.");
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.MISSING_REQUIRED_FIELD);
+    expect(body.error.message).toBe("Name and message are required.");
   });
 
   it("returns 400 when neither email nor phone is provided", async () => {
     const res = await POST(createReq({ name: "Alex", message: "Need chairs" }));
     expect(res.status).toBe(400);
     const body = await res.json();
-    expect(body.error).toBe("Please provide email or phone.");
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe(API_ERROR_CODES.MISSING_REQUIRED_FIELD);
+    expect(body.error.message).toBe("Please provide email or phone.");
   });
 
   it("creates query and returns follow-up links", async () => {
@@ -83,5 +92,21 @@ describe("app/api/customer-queries/route.ts", () => {
     expect(body.followUp.email).toContain("mailto:user@example.com");
     expect(body.followUp.whatsapp).toContain("https://wa.me/919876543210");
     expect(mockSupabase.from).toHaveBeenCalledWith("customer_queries");
+  });
+
+  it("returns honeypot success without persisting", async () => {
+    const res = await POST(
+      createReq({
+        name: "Bot",
+        message: "spam",
+        email: "bot@evil.com",
+        website: "http://spam.example",
+      }),
+    );
+    expect(res.status).toBe(201);
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(body.queryId).toBe("submitted");
+    expect(mockSupabase.from).not.toHaveBeenCalled();
   });
 });

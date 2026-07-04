@@ -22,6 +22,7 @@ import { withAuth } from "@/lib/api/withAuth";
 import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
 import { success, error } from "@/lib/api/apiResponse";
 import { CatalogAdvisorRequestSchema } from "@/lib/api/schemas";
+import { isMissingUserHistoryTable } from "@/lib/tracking/userHistoryRepository";
 
 type ProductLite = Awaited<ReturnType<typeof getProductsFresh>>[number];
 type AdvisorClientConfig = {
@@ -299,14 +300,6 @@ function normalizeRecommendation(
         ? sanitizeAdvisorPriceText(source.budgetEstimate, parsePriceRange(product?.metadata?.priceRange))
         : parsePriceRange(product?.metadata?.priceRange),
   };
-}
-
-function isMissingUserHistoryTable(message: string): boolean {
-  const normalized = message.toLowerCase();
-  return (
-    normalized.includes("could not find the table") &&
-    normalized.includes("public.user_history")
-  );
 }
 
 function isAbortLikeError(error: unknown): boolean {

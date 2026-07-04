@@ -64,7 +64,7 @@ Architecture: admin JSON → Zod BlockDescriptor → `scripts/generate-svg.mjs` 
 
 Module paths (canonical, post-critique alignment):
 
-- `puckBlockRegistry.ts` — single registry, declared at `features/planner/admin/puckBlockRegistry.ts` (Phase 04); portal imports via a one-line alias at `site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts` (Phase 05). The alias re-exports the canonical registry verbatim — no forked copy. Phase 07's auth boundary tests the alias plus the canonical path resolve to the same exported type.
+- `puckBlockRegistry` — single registry, declared at `site/features/planner/admin/svg-editor/puckBlockRegistry.tsx` (Phase 04); portal imports via a one-line alias at `site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts` (Phase 05). The alias re-exports the canonical registry verbatim — no forked copy. Phase 07's auth boundary tests the alias plus the canonical path resolve to the same exported type. (GS filter: no drift allowed; cite benchmark + anti-copy + 5-product for UI: plans/2026-07-04/benchmark.md BP-04/BP-05 + design §7/11 + anti-copy rule.)
 - `BlockDescriptor` Zod schema — `features/planner/open3d/catalog/svg/svgTypes.ts` (Phase 02). Re-exported by `svgBlockDescriptorLoader.ts` at the same depth. No parallel schemas at admin, portal, or planner routes.
 
 Phase ownership of `site/config/route-contract.json`: schema is owned by Phase 07 (auth gates); route paths are appended by Phase 04 (admin editor), Phase 05 (portal public), Phase 06 (inventory consumer reads). Schema drift between Phase 04 and Phase 07 fails Phase 07's `tsc --noEmit` lint gate.
@@ -117,6 +117,8 @@ Anti-copy rule is release-blocking: only semantic tokens from `site/app/css/`. N
 
 5-product reference model is mandatory for any UI/UX/SVG/feature benchmarker.
 
+<!-- GS justification (0415 enforced benchmark gate + 0420 packages gate): per design spec §6/10 + benchmark BP-01..07 + QUALITY-GATES Global Standard Gate; every change (e.g. Tier-2 like drei) requires fresh report + anti-copy + review per REVIEW-WORKFLOW before any I-D/PACKAGES update. 0415/0420 tracked in FAILURESPLAN. Provisional per design §16. -->
+
 Global Standard Gate (new in QUALITY-GATES.md): Before "Implemented" on relevant work:
 1. Fresh dated benchmark report exists.
 2. Independent UI review (REVIEW-WORKFLOW) signed off.
@@ -144,6 +146,14 @@ Phases 04/05/06/10 must add "UI Global Standards Gate" checklist items.
 - Locked packages with "Global Standard Package Review" gate (benchmark justification + anti-copy attestation required for any change).
 - Tier-2 re-evaluation before activation in Phase 06/09.
 
+### Global Standard Package Review (enforcement for 0420 + 0415)
+Procedure (static + gate enforced; cite design spec §6 + benchmark):
+1. Before any I-D/PACKAGES edit or Tier change (incl. drei, fabric pin): produce/update dated benchmark report citing relevant BP/REC (e.g. BP-04/06).
+2. Run agent review workflow (REVIEW-WORKFLOW) with explicit GS-SCORE on packages/features.
+3. Add anti-copy attestation + 5-product justification + design §6 cite to Decision Log here + PACKAGES.md + affected phase.
+4. Phase/I-D update only after checklist pass (see phases/04/05/06 Global Standard Gate sections).
+No silent changes; justification gate is release-blocking per QUALITY-GATES. Tracked PLAN-FAIL-0420/0415. Provisional (design §16).
+
 ## Decision Log (2026-07-04 Global Standard Revision)
 
-- D2026-07-04-GS-01: Added binding Global Standard Framework, UI/UX Standards (Intensified), SVG/Features/Packages Mandates per approved design spec. Reality sync with Phase 02 resolver test (25/25), hybrid routes, small-screen panel work. Provisional pending live site validation after tests and site up (design §16). Cross-refs to benchmark report, FAILURESPLAN, QUALITY-GATES, REVIEW-WORKFLOW.
+- D2026-07-04-GS-01: Added binding Global Standard Framework (design §6) + UI/UX + Mandates + Package Review procedure. 2026-07-04 8-agent dispatch + this impl: phases 04/05/06 now have actual UI GS Gate + Global Standard Gate (Binding) enforcement checklists (0415/16/20); I-D/PACKAGES strengthened with explicit justification gate steps + design §6 cites. GS 0415/16/19/20 advanced to static enforcement (doc+code checks). All provisional (shell block + design §16 live). See FAILURESPLAN + phases + benchmark. Cross-refs: design §6, plans/2026-07-04/benchmark.md BP-*.

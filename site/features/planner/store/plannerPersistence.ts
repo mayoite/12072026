@@ -14,7 +14,7 @@
  */
 
 import { and, asc, count, desc, eq, ilike, or, sql, type SQL } from "drizzle-orm";
-import { db } from "@/platform/drizzle/db";
+import { adminDb } from "@/platform/drizzle/adminDb";
 import { isPlannerDatabaseUrlConfigured } from "@/platform/drizzle/plannerDatabaseUrl";
 import { plans } from "@/platform/drizzle/schema";
 import type { PlannerDocument } from "@/features/planner/model/plannerDocument";
@@ -173,13 +173,13 @@ export async function savePlannerDocument(
 
     let rows: PlanRow[];
     if (documentId) {
-      rows = await db
+      rows = await adminDb
         .update(plans)
         .set(values)
         .where(eq(plans.id, documentId))
         .returning();
     } else {
-      rows = await db.insert(plans).values(values).returning();
+      rows = await adminDb.insert(plans).values(values).returning();
     }
 
     const savedRow = rows[0];
@@ -221,7 +221,7 @@ export async function loadPlannerDocument(
   | { success: false; error: PlannerPersistenceError }
 > {
   try {
-    const rows = await db
+    const rows = await adminDb
       .select()
       .from(plans)
       .where(
@@ -265,7 +265,7 @@ export async function listPlannerDocuments(
   | { success: false; error: PlannerPersistenceError }
 > {
   try {
-    const rows = await db
+    const rows = await adminDb
       .select()
       .from(plans)
       .where(eq(plans.userId, userId))
@@ -302,7 +302,7 @@ export async function listPlannerDocumentSummaries(
   | { success: false; error: PlannerPersistenceError }
 > {
   try {
-    const rows = await db
+    const rows = await adminDb
       .select(plannerSummarySelect)
       .from(plans)
       .where(eq(plans.userId, userId))
@@ -337,7 +337,7 @@ export async function deletePlannerDocument(
   | { success: false; error: PlannerPersistenceError }
 > {
   try {
-    await db.delete(plans).where(eq(plans.id, documentId));
+    await adminDb.delete(plans).where(eq(plans.id, documentId));
     return { success: true };
   } catch (error) {
     if (error instanceof PlannerPersistenceError) {
@@ -493,13 +493,13 @@ export async function listPlannerDocumentsAdmin(
     const orderBy = options.sortOrder === "asc" ? asc(sortColumn) : desc(sortColumn);
 
     const countQuery = whereClause
-      ? db.select({ total: count() }).from(plans).where(whereClause)
-      : db.select({ total: count() }).from(plans);
+      ? adminDb.select({ total: count() }).from(plans).where(whereClause)
+      : adminDb.select({ total: count() }).from(plans);
     const [{ total }] = await countQuery;
 
     const rowsQuery = whereClause
-      ? db.select(plannerSummarySelect).from(plans).where(whereClause).orderBy(orderBy).limit(limit).offset(offset)
-      : db.select(plannerSummarySelect).from(plans).orderBy(orderBy).limit(limit).offset(offset);
+      ? adminDb.select(plannerSummarySelect).from(plans).where(whereClause).orderBy(orderBy).limit(limit).offset(offset)
+      : adminDb.select(plannerSummarySelect).from(plans).orderBy(orderBy).limit(limit).offset(offset);
     const rows = await rowsQuery;
 
     return {
@@ -529,7 +529,7 @@ export async function loadPlannerDocumentAdmin(
   | { success: false; error: PlannerPersistenceError }
 > {
   try {
-    const rows = await db.select().from(plans).where(eq(plans.id, documentId)).limit(1);
+    const rows = await adminDb.select().from(plans).where(eq(plans.id, documentId)).limit(1);
     const row = rows[0];
     if (!row) {
       throw new PlannerPersistenceError("Document not found", "NOT_FOUND");
@@ -586,7 +586,7 @@ export async function patchPlannerDocumentAdmin(
       return { success: false, error: saved.error };
     }
 
-    const rows = await db.select().from(plans).where(eq(plans.id, documentId)).limit(1);
+    const rows = await adminDb.select().from(plans).where(eq(plans.id, documentId)).limit(1);
     const row = rows[0];
     if (!row) {
       throw new PlannerPersistenceError("Document not found after update", "SAVE_FAILED");
@@ -626,7 +626,7 @@ export async function listPlannerAnalyticsRows(days: number): Promise<
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - days);
 
-    const rows = await db
+    const rows = await adminDb
       .select()
       .from(plans)
       .where(sql`${plans.createdAt} >= ${cutoff}`)

@@ -1,10 +1,11 @@
-import { NextResponse } from 'next/server'
 import { insertEvent } from '@/lib/audit/auditRepository'
 import { isAuditTeamId, userBelongsToTeam } from '@/lib/audit/teamAccess'
 import { isAppAdmin } from '@/lib/auth/roles'
 import { rateLimit } from "@/lib/rateLimit"
 import { createServerClient } from "@/lib/supabase/server"
 import { validateCsrfRequest } from "@/lib/security/csrf"
+import { success, error, rateLimitedError } from "@/lib/api/apiResponse"
+import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError"
 
 function getRequestIp(req: Request): string {
   const forwarded = req.headers.get("x-forwarded-for")
@@ -17,24 +18,24 @@ export async function POST(req: Request) {
     const ip = getRequestIp(req)
     const limitRes = await rateLimit(`audit:${ip}`, 30, 60 * 1000)
     if (!limitRes.success) {
-      return NextResponse.json(
-        { error: 'Too many requests' },
-        { status: 429, headers: { 'X-RateLimit-Reset': limitRes.reset.toString() } }
-      )
+      return rateLimitedError('Too many requests', limitRes.reset)
     }
 
     const supabase = await createServerClient()
     const { data: authData, error: authError } = await supabase.auth.getUser()
     const userId = authData.user?.id?.trim() || ""
     if (authError || !userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return error(new ApiError(401, API_ERROR_CODES.AUTH_REQUIRED, 'Unauthorized'))
     }
 
     const isCsrfValid = await validateCsrfRequest(req);
     if (!isCsrfValid) {
-      return NextResponse.json(
-        { error: "Invalid or missing CSRF token" },
-        { status: 403 },
+      return error(
+        new ApiError(
+          403,
+          API_ERROR_CODES.INSUFFICIENT_PERMISSIONS,
+          "Invalid or missing CSRF token",
+        ),
       );
     }
 
@@ -46,12 +47,20 @@ export async function POST(req: Request) {
       typeof action !== "string" ||
       typeof target_type !== "string"
     ) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+      return error(
+        new ApiError(
+          400,
+          API_ERROR_CODES.MISSING_REQUIRED_FIELD,
+          'Missing required fields',
+        ),
+      )
     }
 
     const normalizedTeamId = team_id.trim().slice(0, 120)
     if (!normalizedTeamId || !isAuditTeamId(normalizedTeamId)) {
-      return NextResponse.json({ error: 'Invalid team_id' }, { status: 400 })
+      return error(
+        new ApiError(400, API_ERROR_CODES.INVALID_INPUT, 'Invalid team_id'),
+      )
     }
 
     const actor = authData.user
@@ -59,7 +68,9 @@ export async function POST(req: Request) {
     if (!isAdmin) {
       const isMember = await userBelongsToTeam(userId, normalizedTeamId)
       if (!isMember) {
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+        return error(
+          new ApiError(403, API_ERROR_CODES.INSUFFICIENT_PERMISSIONS, 'Forbidden'),
+        )
       }
     }
 
@@ -72,9 +83,15 @@ export async function POST(req: Request) {
       metadata: metadata && typeof metadata === "object" ? metadata : {}
     })
 
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('[POST /api/audit] error:', error)
-    return NextResponse.json({ error: 'Failed to record audit event' }, { status: 500 })
+    return success({})
+  } catch (err) {
+    console.error('[POST /api/audit] error:', err)
+    return error(
+      new ApiError(
+        500,
+        API_ERROR_CODES.INTERNAL_ERROR,
+        'Failed to record audit event',
+      ),
+    )
   }
 }

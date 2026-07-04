@@ -333,4 +333,54 @@ describe("02-LOADER: storage boundary", () => {
     const kinds = new Set(cases.map((c) => c.kind));
     expect(kinds).toEqual(new Set(["invalid", "notFound", "versionMismatch", "hashMismatch"]));
   });
+
+  // TDD cycle (loader tryLoad/parse): write test first targeting uncovered parseBlockDescriptor branches
+  // (non-object after JSON.parse, schemaVersion typeof !== string). These hit early returns before zod/hash.
+  // RED phase: if parseBlockDescriptor lacked the !object / typeof string guards, accessing .schemaVersion or
+  // schema checks would throw or return wrong error kind; test would fail on shape/kind. Verified via source read.
+  it("tryLoad surfaces invalid (via parseBlockDescriptor) when JSON parses to non-object primitive", () => {
+    mkdirSync(tmpDir, { recursive: true });
+    writeFileSync(path.join(tmpDir, "primitive.json"), JSON.stringify(null));
+    const result = tryLoad("primitive", { dir: tmpDir });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.kind).toBe("invalid");
+      expect(result.error.fieldPath).toBe("slug:primitive");
+    }
+  });
+
+  it("tryLoad surfaces invalid when JSON parses to non-object (number) hitting parse early guard", () => {
+    mkdirSync(tmpDir, { recursive: true });
+    writeFileSync(path.join(tmpDir, "num.json"), "42");
+    const result = tryLoad("num", { dir: tmpDir });
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error.kind).toBe("invalid");
+  });
+
+  it("tryLoad surfaces invalid (parse path) when schemaVersion present but not string type", () => {
+    mkdirSync(tmpDir, { recursive: true });
+    const bad = {
+      ...freezeWithChecksum(1700000000),
+      schemaVersion: 123, // wrong type, hits typeof !== 'string' guard in parse
+    };
+    writeFileSync(path.join(tmpDir, "badversiontype.json"), JSON.stringify(bad));
+    const result = tryLoad("badversiontype", { dir: tmpDir });
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error.kind).toBe("invalid");
+  });
+
+  // TDD repeat cycle (loader tryLoad/parse + loadAll): added after first cycle. Targets loadAll skipping !ok from parseBlockDescriptor,
+  // and array json (non-object) path. RED verification: without the continue on !result.ok in loadAll or guards in parse,
+  // would either include bad entry or throw; test asserts only valids loaded.
+  it("loadAll skips entries that fail parseBlockDescriptor (e.g. non-object json or schema fail) and only returns valid", () => {
+    mkdirSync(tmpDir, { recursive: true });
+    const good = freezeWithChecksum(1700000000);
+    writeFileSync(path.join(tmpDir, "good.json"), JSON.stringify(good));
+    // non-object after parse -> parse err -> skipped
+    writeFileSync(path.join(tmpDir, "array.json"), "[]");
+    writeFileSync(path.join(tmpDir, "null.json"), "null");
+    const all = loadAll({ dir: tmpDir, forceReload: true });
+    expect(all).toHaveLength(1);
+    expect(all[0]?.slug).toBe("good");
+  });
 });

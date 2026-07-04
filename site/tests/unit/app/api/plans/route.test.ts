@@ -30,20 +30,12 @@ vi.mock("@/features/planner/store/plannerPublish", () => ({
 // Provide a stable mocked performance.now
 vi.stubGlobal('performance', { now: vi.fn(() => 1000) });
 
-vi.mock("@/lib/api/routeObservability", async (_importOriginal) => {
-  return {
-    applyPlannerRouteTelemetry: vi.fn((res, telemetry) => {
-      res.headers.set("x-mock-telemetry", JSON.stringify(telemetry));
-      return res;
-    }),
-    jsonWithPlannerRouteTelemetry: vi.fn((data, telemetry) => {
-      // In tests, NextResponse.json is just Response.json
-      const res = Response.json(data);
-      res.headers.set("x-mock-telemetry", JSON.stringify(telemetry));
-      return res;
-    }),
-  };
-});
+vi.mock("@/lib/api/routeObservability", () => ({
+  applyPlannerRouteTelemetry: vi.fn((res, telemetry) => {
+    res.headers.set("x-mock-telemetry", JSON.stringify(telemetry));
+    return res;
+  }),
+}));
 
 describe("Plans API Route", () => {
   let mockSupabase: any;
@@ -74,7 +66,9 @@ describe("Plans API Route", () => {
       const res = await GET(req);
       expect(res.status).toBe(429);
       const data = await res.json();
-      expect(data.error).toBe("Too many requests");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("RATE_LIMIT_EXCEEDED");
+      expect(data.error.message).toBe("Too many requests");
       expect(res.headers.get("X-RateLimit-Reset")).toBe("999");
       expect(rateLimit).toHaveBeenCalledWith("plans:get:10.0.0.1", 20, 60000);
       
@@ -105,7 +99,9 @@ describe("Plans API Route", () => {
       const res = await GET(req);
       expect(res.status).toBe(401);
       const data = await res.json();
-      expect(data.error).toBe("Authentication required");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("AUTH_REQUIRED");
+      expect(data.error.message).toBe("Authentication required");
     });
 
     it("should return 500 if listPlannerDocumentsFromStore throws an Error", async () => {
@@ -114,7 +110,9 @@ describe("Plans API Route", () => {
       const res = await GET(req);
       expect(res.status).toBe(500);
       const data = await res.json();
-      expect(data.error).toBe("Failed to list plans: DB failure");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("INTERNAL_ERROR");
+      expect(data.error.message).toBe("Failed to list plans: DB failure");
     });
 
     it("should return 500 if listPlannerDocumentsFromStore throws a string", async () => {
@@ -123,7 +121,9 @@ describe("Plans API Route", () => {
       const res = await GET(req);
       expect(res.status).toBe(500);
       const data = await res.json();
-      expect(data.error).toBe("Failed to list plans: String error");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("INTERNAL_ERROR");
+      expect(data.error.message).toBe("Failed to list plans: String error");
     });
 
     it("should return 200 with documents on success", async () => {
@@ -132,6 +132,7 @@ describe("Plans API Route", () => {
       const res = await GET(req);
       expect(res.status).toBe(200);
       const data = await res.json();
+      expect(data.success).toBe(true);
       expect(data.documents).toEqual([{ id: "doc1" }, { id: "doc2" }]);
       const telemetry = JSON.parse(res.headers.get("x-mock-telemetry")!);
       expect(telemetry.rowCount).toBe(2);
@@ -146,7 +147,9 @@ describe("Plans API Route", () => {
       const res = await POST(req);
       expect(res.status).toBe(429);
       const data = await res.json();
-      expect(data.error).toBe("Too many requests");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("RATE_LIMIT_EXCEEDED");
+      expect(data.error.message).toBe("Too many requests");
     });
 
     it("should return 403 if CSRF validation fails", async () => {
@@ -155,7 +158,9 @@ describe("Plans API Route", () => {
       const res = await POST(req);
       expect(res.status).toBe(403);
       const data = await res.json();
-      expect(data.error).toBe("Invalid or missing CSRF token");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("INSUFFICIENT_PERMISSIONS");
+      expect(data.error.message).toBe("Invalid or missing CSRF token");
     });
 
     it("should handle empty/invalid JSON body gracefully", async () => {
@@ -164,7 +169,9 @@ describe("Plans API Route", () => {
       const res = await POST(req);
       expect(res.status).toBe(400);
       const data = await res.json();
-      expect(data.error).toBe("Plan id is required");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("MISSING_REQUIRED_FIELD");
+      expect(data.error.message).toBe("Plan id is required");
     });
 
     it("should return 400 if id is missing", async () => {
@@ -172,7 +179,9 @@ describe("Plans API Route", () => {
       const res = await POST(req);
       expect(res.status).toBe(400);
       const data = await res.json();
-      expect(data.error).toBe("Plan id is required");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("MISSING_REQUIRED_FIELD");
+      expect(data.error.message).toBe("Plan id is required");
     });
 
     it("should return 400 if projectName is missing", async () => {
@@ -180,7 +189,9 @@ describe("Plans API Route", () => {
       const res = await POST(req);
       expect(res.status).toBe(400);
       const data = await res.json();
-      expect(data.error).toBe("Project name is required");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("MISSING_REQUIRED_FIELD");
+      expect(data.error.message).toBe("Project name is required");
     });
 
     it("should return 400 if data is missing", async () => {
@@ -188,7 +199,9 @@ describe("Plans API Route", () => {
       const res = await POST(req);
       expect(res.status).toBe(400);
       const data = await res.json();
-      expect(data.error).toBe("Plan data is required");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("MISSING_REQUIRED_FIELD");
+      expect(data.error.message).toBe("Plan data is required");
     });
 
     it("should return 400 if data is not an object", async () => {
@@ -196,7 +209,9 @@ describe("Plans API Route", () => {
       const res = await POST(req);
       expect(res.status).toBe(400);
       const data = await res.json();
-      expect(data.error).toBe("Plan data is required");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("MISSING_REQUIRED_FIELD");
+      expect(data.error.message).toBe("Plan data is required");
     });
 
     it("should return 401 if authentication fails", async () => {
@@ -205,7 +220,9 @@ describe("Plans API Route", () => {
       const res = await POST(req);
       expect(res.status).toBe(401);
       const data = await res.json();
-      expect(data.error).toBe("Authentication required to publish to portal");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("AUTH_REQUIRED");
+      expect(data.error.message).toBe("Authentication required to publish to portal");
     });
 
     it("should populate publishData with arrays if properties are missing, and save draft status", async () => {
@@ -272,7 +289,9 @@ describe("Plans API Route", () => {
       const res = await POST(req);
       expect(res.status).toBe(500);
       const data = await res.json();
-      expect(data.error).toBe("Failed to publish plan: Save failed");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("INTERNAL_ERROR");
+      expect(data.error.message).toBe("Failed to publish plan: Save failed");
     });
 
     it("should return 500 if savePlannerDocumentToStore throws a non-Error string", async () => {
@@ -281,7 +300,9 @@ describe("Plans API Route", () => {
       const res = await POST(req);
       expect(res.status).toBe(500);
       const data = await res.json();
-      expect(data.error).toBe("Failed to publish plan: Save error string");
+      expect(data.success).toBe(false);
+      expect(data.error.code).toBe("INTERNAL_ERROR");
+      expect(data.error.message).toBe("Failed to publish plan: Save error string");
     });
   });
 });

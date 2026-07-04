@@ -1,5 +1,4 @@
 import type { NextRequest} from "next/server";
-import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
 import {
   buildPlannerDocumentFromPortalPublishData,
@@ -11,7 +10,9 @@ import {
 } from "@/features/planner/store/plannerSaves";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
-import { applyPlannerRouteTelemetry, jsonWithPlannerRouteTelemetry } from "@/lib/api/routeObservability";
+import { applyPlannerRouteTelemetry } from "@/lib/api/routeObservability";
+import { success, error, rateLimitedError } from "@/lib/api/apiResponse";
+import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
 
 type PublishBody = {
   id?: string;
@@ -41,10 +42,7 @@ export async function GET(req: NextRequest) {
   const limitRes = await rateLimit(`plans:get:${ip}`, 20, 60 * 1000);
   if (!limitRes.success) {
     return applyPlannerRouteTelemetry(
-      NextResponse.json(
-        { error: "Too many requests" },
-        { status: 429, headers: { "X-RateLimit-Reset": limitRes.reset.toString() } },
-      ),
+      rateLimitedError("Too many requests", limitRes.reset),
       { ...telemetry(), rowCount: 0 },
     );
   }
@@ -55,24 +53,25 @@ export async function GET(req: NextRequest) {
 
   if (!userId) {
     return applyPlannerRouteTelemetry(
-      NextResponse.json({ error: "Authentication required" }, { status: 401 }),
+      error(ApiError.fromCode(API_ERROR_CODES.AUTH_REQUIRED, "Authentication required")),
       { ...telemetry(), rowCount: 0 },
     );
   }
 
   try {
     const documents = await listPlannerDocumentsFromStore({ userId });
-    return jsonWithPlannerRouteTelemetry(
-      { documents },
+    return applyPlannerRouteTelemetry(
+      success({ documents }),
       { ...telemetry(), rowCount: documents.length, source: "drizzle_plans" },
     );
-  } catch (error) {
+  } catch (err) {
     return applyPlannerRouteTelemetry(
-      NextResponse.json(
-        {
-          error: `Failed to list plans: ${error instanceof Error ? error.message : String(error)}`,
-        },
-        { status: 500 },
+      error(
+        new ApiError(
+          500,
+          API_ERROR_CODES.INTERNAL_ERROR,
+          `Failed to list plans: ${err instanceof Error ? err.message : String(err)}`,
+        ),
       ),
       { ...telemetry(), rowCount: 0, source: "drizzle_plans" },
     );
@@ -92,10 +91,7 @@ export async function POST(req: NextRequest) {
   const limitRes = await rateLimit(`plans:post:${ip}`, 15, 60 * 1000);
   if (!limitRes.success) {
     return applyPlannerRouteTelemetry(
-      NextResponse.json(
-        { error: "Too many requests" },
-        { status: 429, headers: { "X-RateLimit-Reset": limitRes.reset.toString() } },
-      ),
+      rateLimitedError("Too many requests", limitRes.reset),
       { ...telemetry(), rowCount: 0 },
     );
   }
@@ -103,7 +99,12 @@ export async function POST(req: NextRequest) {
   const isCsrfValid = await validateCsrfRequest(req);
   if (!isCsrfValid) {
     return applyPlannerRouteTelemetry(
-      NextResponse.json({ error: "Invalid or missing CSRF token" }, { status: 403 }),
+      error(
+        ApiError.fromCode(
+          API_ERROR_CODES.INSUFFICIENT_PERMISSIONS,
+          "Invalid or missing CSRF token",
+        ),
+      ),
       { ...telemetry(), rowCount: 0 },
     );
   }
@@ -115,19 +116,19 @@ export async function POST(req: NextRequest) {
 
   if (!id) {
     return applyPlannerRouteTelemetry(
-      NextResponse.json({ error: "Plan id is required" }, { status: 400 }),
+      error(ApiError.fromCode(API_ERROR_CODES.MISSING_REQUIRED_FIELD, "Plan id is required")),
       { ...telemetry(), rowCount: 0 },
     );
   }
   if (!projectName) {
     return applyPlannerRouteTelemetry(
-      NextResponse.json({ error: "Project name is required" }, { status: 400 }),
+      error(ApiError.fromCode(API_ERROR_CODES.MISSING_REQUIRED_FIELD, "Project name is required")),
       { ...telemetry(), rowCount: 0 },
     );
   }
   if (!data || typeof data !== "object") {
     return applyPlannerRouteTelemetry(
-      NextResponse.json({ error: "Plan data is required" }, { status: 400 }),
+      error(ApiError.fromCode(API_ERROR_CODES.MISSING_REQUIRED_FIELD, "Plan data is required")),
       { ...telemetry(), rowCount: 0 },
     );
   }
@@ -139,9 +140,11 @@ export async function POST(req: NextRequest) {
 
   if (!userId) {
     return applyPlannerRouteTelemetry(
-      NextResponse.json(
-        { error: "Authentication required to publish to portal" },
-        { status: 401 },
+      error(
+        ApiError.fromCode(
+          API_ERROR_CODES.AUTH_REQUIRED,
+          "Authentication required to publish to portal",
+        ),
       ),
       { ...telemetry(), rowCount: 0 },
     );
@@ -168,26 +171,26 @@ export async function POST(req: NextRequest) {
       userId,
       saveId: id,
     });
-  } catch (error) {
+  } catch (err) {
     return applyPlannerRouteTelemetry(
-      NextResponse.json(
-        {
-          error: `Failed to publish plan: ${
-            error instanceof Error ? error.message : String(error)
+      error(
+        new ApiError(
+          500,
+          API_ERROR_CODES.INTERNAL_ERROR,
+          `Failed to publish plan: ${
+            err instanceof Error ? err.message : String(err)
           }`,
-        },
-        { status: 500 },
+        ),
       ),
       { ...telemetry(), rowCount: 0, source: "drizzle_plans" },
     );
   }
 
-  return jsonWithPlannerRouteTelemetry(
-    {
-      success: true,
+  return applyPlannerRouteTelemetry(
+    success({
       id,
       portalPath: `/portal/${id}`,
-    },
+    }),
     { ...telemetry(), rowCount: 1, source: "drizzle_plans" },
   );
 }

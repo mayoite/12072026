@@ -1,11 +1,13 @@
 import { timingSafeEqual } from "crypto";
 import type { NextRequest} from "next/server";
-import { NextResponse } from "next/server";
 import { createSupabaseAuthAdminClient } from '@/platform/supabase/auth-admin';
+import { getClientIp } from "@/platform/supabase/adminServer";
 import { createServerClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 import { isAppAdmin } from "@/lib/auth/roles";
+import { success, error, rateLimitedError } from "@/lib/api/apiResponse";
+import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
 
 type QueryStatus = "new" | "in_progress" | "closed" | "spam";
 type FollowUpChannel = "email" | "whatsapp" | "phone" | "none";
@@ -29,12 +31,6 @@ const allowedFollowUpChannels: FollowUpChannel[] = [
 function normalizeText(value: unknown, max = 5000): string {
   if (typeof value !== "string") return "";
   return value.trim().slice(0, max);
-}
-
-function getRequestIp(req: NextRequest): string {
-  const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0].trim();
-  return req.headers.get("cf-connecting-ip") || "127.0.0.1";
 }
 
 function safeTokenEquals(provided: string, required: string): boolean {
@@ -72,19 +68,18 @@ async function isAuthorized(req: NextRequest): Promise<boolean> {
 
 async function ensureAuthorized(req: NextRequest) {
   if (!(await isAuthorized(req))) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return error(
+      ApiError.fromCode(API_ERROR_CODES.AUTH_REQUIRED, "Unauthorized"),
+    );
   }
   return null;
 }
 
 export async function GET(req: NextRequest) {
-  const ip = getRequestIp(req);
+  const ip = getClientIp(req);
   const limitRes = await rateLimit(`customer-queries-manage:get:${ip}`, 30, 60 * 1000);
   if (!limitRes.success) {
-    return NextResponse.json(
-      { error: "Too many requests" },
-      { status: 429, headers: { "X-RateLimit-Reset": limitRes.reset.toString() } },
-    );
+    return rateLimitedError("Too many requests", limitRes.reset);
   }
 
   const unauthorized = await ensureAuthorized(req);
@@ -110,27 +105,34 @@ export async function GET(req: NextRequest) {
       query = query.eq("status", statusFilter);
     }
 
-    const { data, error } = await query;
-    if (error) {
-      console.error("customer_queries list failed:", error.message);
-      return NextResponse.json({ error: "Unable to load queries." }, { status: 500 });
+    const { data, error: dbError } = await query;
+    if (dbError) {
+      console.error("customer_queries list failed:", dbError.message);
+      return error(
+        ApiError.fromCode(
+          API_ERROR_CODES.DATABASE_ERROR,
+          "Unable to load queries.",
+        ),
+      );
     }
 
-    return NextResponse.json({ items: data ?? [] });
-  } catch (error) {
-    console.error("customer_queries list exception:", error);
-    return NextResponse.json({ error: "Unable to load queries." }, { status: 500 });
+    return success({ items: data ?? [] });
+  } catch (err) {
+    console.error("customer_queries list exception:", err);
+    return error(
+      ApiError.fromCode(
+        API_ERROR_CODES.DATABASE_ERROR,
+        "Unable to load queries.",
+      ),
+    );
   }
 }
 
 export async function PATCH(req: NextRequest) {
-  const ip = getRequestIp(req);
+  const ip = getClientIp(req);
   const limitRes = await rateLimit(`customer-queries-manage:patch:${ip}`, 20, 60 * 1000);
   if (!limitRes.success) {
-    return NextResponse.json(
-      { error: "Too many requests" },
-      { status: 429, headers: { "X-RateLimit-Reset": limitRes.reset.toString() } },
-    );
+    return rateLimitedError("Too many requests", limitRes.reset);
   }
 
   const unauthorized = await ensureAuthorized(req);
@@ -138,9 +140,11 @@ export async function PATCH(req: NextRequest) {
 
   const isCsrfValid = await validateCsrfRequest(req);
   if (!isCsrfValid) {
-    return NextResponse.json(
-      { error: "Invalid or missing CSRF token" },
-      { status: 403 },
+    return error(
+      ApiError.fromCode(
+        API_ERROR_CODES.INSUFFICIENT_PERMISSIONS,
+        "Invalid or missing CSRF token",
+      ),
     );
   }
 
@@ -161,23 +165,29 @@ export async function PATCH(req: NextRequest) {
   const followUpNotes = normalizeText(payload.followUpNotes, 2000);
 
   if (!id) {
-    return NextResponse.json({ error: "Missing query id." }, { status: 400 });
+    return error(
+      ApiError.fromCode(API_ERROR_CODES.MISSING_REQUIRED_FIELD, "Missing query id."),
+    );
   }
 
   if (!allowedStatuses.includes(status)) {
-    return NextResponse.json({ error: "Invalid status." }, { status: 400 });
+    return error(
+      ApiError.fromCode(API_ERROR_CODES.VALIDATION_ERROR, "Invalid status."),
+    );
   }
 
   if (!allowedFollowUpChannels.includes(followUpChannel)) {
-    return NextResponse.json(
-      { error: "Invalid follow-up channel." },
-      { status: 400 },
+    return error(
+      ApiError.fromCode(
+        API_ERROR_CODES.VALIDATION_ERROR,
+        "Invalid follow-up channel.",
+      ),
     );
   }
 
   try {
     const supabaseAdmin = createSupabaseAuthAdminClient();
-    const { data, error } = await supabaseAdmin
+    const { data, error: dbError } = await supabaseAdmin
       .from("customer_queries")
       .update({
         status,
@@ -191,14 +201,24 @@ export async function PATCH(req: NextRequest) {
       )
       .single();
 
-    if (error) {
-      console.error("customer_queries update failed:", error.message);
-      return NextResponse.json({ error: "Unable to update query." }, { status: 500 });
+    if (dbError) {
+      console.error("customer_queries update failed:", dbError.message);
+      return error(
+        ApiError.fromCode(
+          API_ERROR_CODES.DATABASE_ERROR,
+          "Unable to update query.",
+        ),
+      );
     }
 
-    return NextResponse.json({ item: data });
-  } catch (error) {
-    console.error("customer_queries update exception:", error);
-    return NextResponse.json({ error: "Unable to update query." }, { status: 500 });
+    return success({ item: data });
+  } catch (err) {
+    console.error("customer_queries update exception:", err);
+    return error(
+      ApiError.fromCode(
+        API_ERROR_CODES.DATABASE_ERROR,
+        "Unable to update query.",
+      ),
+    );
   }
 }

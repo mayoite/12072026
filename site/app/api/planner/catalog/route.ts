@@ -8,7 +8,7 @@
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
-import { isMissingTableError } from "@/app/api/admin/_lib/server";
+import { isMissingTableError } from "@/platform/supabase/adminServer";
 import { success, error } from "@/lib/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
 import {

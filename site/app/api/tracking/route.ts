@@ -1,7 +1,8 @@
-import type { NextRequest} from "next/server";
-import { NextResponse } from "next/server";
+import type { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createSupabaseAuthAdminClient } from '@/platform/supabase/auth-admin';
+import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
+import { success, error, rateLimitedError } from "@/lib/api/apiResponse";
 import { rateLimit } from '@/lib/rateLimit';
 import {
   createAnonymousUserId,
@@ -11,6 +12,10 @@ import {
   TRACKING_ANON_COOKIE,
   TRACKING_ANON_COOKIE_MAX_AGE_SECONDS,
 } from "@/lib/tracking/trackingCookie";
+import {
+  fetchViewedProducts,
+  upsertViewedProducts,
+} from "@/lib/tracking/userHistoryRepository";
 
 type TrackingPayload = {
   productId?: string;
@@ -39,22 +44,12 @@ function normalizeId(value: unknown): string {
   return value.trim();
 }
 
-function isMissingUserHistoryTable(message: string): boolean {
-  const normalized = message.toLowerCase();
-  return (
-    (normalized.includes("could not find the table") ||
-      normalized.includes('relation "public.user_history" does not exist')) &&
-    normalized.includes("user_history")
-  );
-}
-
 function trackingNoopResponse(
   userId: string,
   productId: string,
   viewedProducts = [productId],
 ) {
-  return NextResponse.json({
-    success: true,
+  return success({
     tracked: false,
     userId,
     viewedProducts,
@@ -107,10 +102,7 @@ export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
   const rl = await rateLimit(`tracking:${ip}`, 30, 60000);
   if (!rl.success) {
-    return NextResponse.json(
-      { error: "Too many requests" },
-      { status: 429, headers: { "Retry-After": String(Math.ceil((rl.reset - Date.now()) / 1000)) } }
-    );
+    return rateLimitedError("Too many requests", rl.reset);
   }
 
   try {
@@ -118,7 +110,9 @@ export async function POST(req: NextRequest) {
     const productId = normalizeId(payload.productId);
 
     if (!productId) {
-      return NextResponse.json({ error: "Missing productId" }, { status: 400 });
+      return error(
+        new ApiError(400, API_ERROR_CODES.VALIDATION_ERROR, "Missing productId"),
+      );
     }
 
     const { userId, newAnonId } = await resolveUserId(req);
@@ -136,47 +130,20 @@ export async function POST(req: NextRequest) {
       return withAnonCookie(trackingNoopResponse(userId, productId), newAnonId);
     }
 
-    const { data, error } = await supabaseAdmin
-      .from("user_history")
-      .select("viewed_products")
-      .eq("user_id", userId)
-      .maybeSingle();
-
-    if (error && !isMissingUserHistoryTable(error.message)) {
-      console.error("Supabase fetch error:", error.message);
-    }
-
-    const existing = Array.isArray(data?.viewed_products)
-      ? data.viewed_products.filter((item): item is string => typeof item === "string")
-      : [];
-
+    const existing = await fetchViewedProducts(supabaseAdmin, userId);
     const withoutDuplicate = existing.filter((item) => item !== productId);
     const viewedProducts = [...withoutDuplicate, productId].slice(-10);
 
-    const { error: upsertError } = await supabaseAdmin
-      .from("user_history")
-      .upsert(
-        {
-          user_id: userId,
-          viewed_products: viewedProducts,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: "user_id" },
-      );
-
-    if (upsertError) {
-      if (isMissingUserHistoryTable(upsertError.message)) {
-        return withAnonCookie(trackingNoopResponse(userId, productId, viewedProducts), newAnonId);
-      }
+    const upsertResult = await upsertViewedProducts(supabaseAdmin, userId, viewedProducts);
+    if (!upsertResult.ok) {
       return withAnonCookie(trackingNoopResponse(userId, productId, viewedProducts), newAnonId);
     }
 
-    return withAnonCookie(
-      NextResponse.json({ success: true, userId, viewedProducts }),
-      newAnonId,
-    );
+    return withAnonCookie(success({ userId, viewedProducts }), newAnonId);
   } catch (err) {
     console.error("Tracking API Error:", err);
-    return NextResponse.json({ error: "Tracking failed" }, { status: 500 });
+    return error(
+      new ApiError(500, API_ERROR_CODES.INTERNAL_ERROR, "Tracking failed"),
+    );
   }
 }

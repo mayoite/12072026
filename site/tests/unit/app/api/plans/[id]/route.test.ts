@@ -30,7 +30,6 @@ vi.mock("@/lib/security/csrf", () => ({
 
 vi.mock("@/lib/api/routeObservability", () => ({
   applyPlannerRouteTelemetry: vi.fn((res) => res),
-  jsonWithPlannerRouteTelemetry: vi.fn((data) => Response.json(data)),
 }));
 
 const routeContext = { params: Promise.resolve({ id: "plan-1" }) };
@@ -54,12 +53,20 @@ describe("app/api/plans/[id]/route.ts", () => {
     mockSupabase.auth.getUser.mockResolvedValue({ data: { user: null } });
     const res = await GET(new NextRequest("http://localhost/api/plans/plan-1"), routeContext);
     expect(res.status).toBe(401);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe("AUTH_REQUIRED");
+    expect(body.error.message).toBe("Authentication required");
   });
 
   it("GET returns 404 when plan is missing", async () => {
     vi.mocked(loadPlannerDocumentFromStore).mockResolvedValue(null);
     const res = await GET(new NextRequest("http://localhost/api/plans/plan-1"), routeContext);
     expect(res.status).toBe(404);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe("RESOURCE_NOT_FOUND");
+    expect(body.error.message).toBe("Plan not found");
   });
 
   it("GET returns document when found", async () => {
@@ -67,6 +74,7 @@ describe("app/api/plans/[id]/route.ts", () => {
     const res = await GET(new NextRequest("http://localhost/api/plans/plan-1"), routeContext);
     expect(res.status).toBe(200);
     const body = await res.json();
+    expect(body.success).toBe(true);
     expect(body.document.id).toBe("plan-1");
   });
 
@@ -79,6 +87,10 @@ describe("app/api/plans/[id]/route.ts", () => {
     });
     const res = await PUT(req, routeContext);
     expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe("INSUFFICIENT_PERMISSIONS");
+    expect(body.error.message).toBe("Invalid or missing CSRF token");
   });
 
   it("DELETE returns 404 when plan does not exist", async () => {
@@ -86,6 +98,10 @@ describe("app/api/plans/[id]/route.ts", () => {
     const req = new NextRequest("http://localhost/api/plans/plan-1", { method: "DELETE" });
     const res = await DELETE(req, routeContext);
     expect(res.status).toBe(404);
+    const body = await res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe("RESOURCE_NOT_FOUND");
+    expect(body.error.message).toBe("Plan not found");
     expect(deletePlannerDocumentFromStore).not.toHaveBeenCalled();
   });
 
@@ -97,6 +113,7 @@ describe("app/api/plans/[id]/route.ts", () => {
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.success).toBe(true);
+    expect(body.source).toBe("drizzle_plans");
     expect(savePlannerDocumentToStore).not.toHaveBeenCalled();
   });
 });

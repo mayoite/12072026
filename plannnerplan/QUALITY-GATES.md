@@ -69,8 +69,11 @@ Deferred means NOT passed. Earlier phases may reach `Implemented`; release depen
 - Anti-copy + pattern attestation in Decision Log (cite specific principles from benchmark report).
 - Applies to Phases 03, 04, 05, 06, 10 and any package/SVG/feature/UI changes.
 - "Implemented" only after gate; "Verified" requires live site validation.
+- Enforced GS benchmark gate (0415): release gate + phase exits must check the three prerequisites above for UI-affecting work; no bypass.
 - Cross-refs: IMPLEMENTATION-DECISIONS.md §Global Standard Framework, UI/UX Standards, SVG/Features/Packages Mandates.
 - Provisional pending live site validation after tests and site up (design §16).
+
+**Note (GS items 0415/0416/0419/0420)**: Agent review workflow (0416) per intensified REVIEW-WORKFLOW; features catalogue-first/search parity (0419) per phase-06; packages GS gate (0420) per I-D + PACKAGES.md. All tracked in FAILURESPLAN.md.
 
 **Critique merge note (2026-07-04)**: Incorporated from critique:
 - Error taxonomy gates now require sticky suffixes for 409 (hashMismatch, lockBusy, saveConflict) and 422 for versionMismatch (not 404).

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 const require = createRequire(import.meta.url);
 require("./loadEnvLocal.cjs").loadEnvLocal();
@@ -131,7 +131,7 @@ async function withRetry<T>(
 }
 
 async function fetchAllRows(
-  client: any,
+  client: SupabaseClient,
   table: string,
   maxRetries: number,
 ): Promise<{ rows: unknown[]; pages: number }> {

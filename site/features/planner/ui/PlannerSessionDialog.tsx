@@ -331,13 +331,13 @@ export function PlannerSessionDialog({
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <h2 className={SESSION_SECTION_TITLE_CLASS}>{SESSION_STRINGS.savedPlans}</h2>
-                    <p className={SESSION_SECTION_NOTE_CLASS}>{plans.length === 0 ? SESSION_STRINGS.noPlans : `${plans.length} session${plans.length === 1 ? "" : "s"} available.`}</p>
+                    <p className={SESSION_SECTION_NOTE_CLASS}>{plans.length === 0 ? SESSION_STRINGS.noPlans : `Last 4 of ${plans.length} session${plans.length === 1 ? "" : "s"} available.`}</p>
                   </div>
                   {isBusy ? <Loader2 className={cn(SESSION_ICON_CLASS, "animate-spin text-[color:var(--planner-primary)]")} /> : null}
                 </div>
                 <div className="pwx-session-list mt-4">
                   {plans.length === 0 ? <div className={SESSION_EMPTY_STATE_CLASS}>Save the current planner to create your first session.</div> : null}
-                  {plans.map((plan) => (
+                  {plans.slice(-4).map((plan) => (
                     <div key={`${plan.accessMode ?? "owner"}:${plan.source}:${plan.id}`} className="pwx-session-item group" data-active={plan.isActive}>
                       <div className="min-w-0 flex-1 text-left">
                         <div className="flex flex-wrap items-center gap-2">
@@ -464,7 +464,7 @@ export function PlannerSessionDialog({
                     <p className={SESSION_SECTION_TITLE_CLASS}>Admin Cloud Saves</p>
                     <div className="pwx-session-list mt-3">
                       {adminCloudPlans.length === 0 ? <div className={SESSION_EMPTY_STATE_CLASS}>No admin-visible cloud plans found.</div> : null}
-                      {adminCloudPlans.map((plan) => (
+                      {adminCloudPlans.slice(-4).map((plan) => (
                         <button key={`admin:${plan.id}`} type="button" onClick={() => onLoadPlan(plan)} className="pwx-session-item pwx-session-item--compact w-full text-left" data-active={false}>
                           <div className={SESSION_CARD_TITLE_CLASS}>{plan.name}</div>
                           <div className={cn("mt-1", SESSION_CARD_META_CLASS)}>{plan.ownerLabel ?? "Unknown owner"} | {plan.updatedAtLabel ?? "No timestamp"}</div>

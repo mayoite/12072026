@@ -4,6 +4,10 @@ import { createSupabaseAuthAdminClient } from "@/platform/supabase/auth-admin";
 import { rateLimit } from "@/lib/rateLimit";
 import { createAnonymousUserId } from "@/lib/tracking/anonymousUserId";
 import { TRACKING_ANON_COOKIE } from "@/lib/tracking/trackingCookie";
+import {
+  fetchViewedProducts,
+  upsertViewedProducts,
+} from "@/lib/tracking/userHistoryRepository";
 
 vi.mock("next/headers", () => ({
   cookies: vi.fn(),
@@ -19,7 +23,14 @@ vi.mock("@/lib/rateLimit", () => ({
 
 vi.mock("@/lib/tracking/anonymousUserId", () => ({
   createAnonymousUserId: vi.fn(() => "new-anon-123"),
-  normalizeAnonymousUserId: vi.fn((id) => (typeof id === "string" && id.trim() ? id.trim() : null)),
+  normalizeAnonymousUserId: vi.fn((id) =>
+    typeof id === "string" && id.trim() ? id.trim() : null,
+  ),
+}));
+
+vi.mock("@/lib/tracking/userHistoryRepository", () => ({
+  fetchViewedProducts: vi.fn(),
+  upsertViewedProducts: vi.fn(),
 }));
 
 import { cookies } from "next/headers";
@@ -36,11 +47,6 @@ function mockTrackingCookie(value: string | null) {
 describe("Tracking API Route", () => {
   let mockSupabaseAdmin: {
     auth: { getUser: ReturnType<typeof vi.fn> };
-    from: ReturnType<typeof vi.fn>;
-    select: ReturnType<typeof vi.fn>;
-    eq: ReturnType<typeof vi.fn>;
-    maybeSingle: ReturnType<typeof vi.fn>;
-    upsert: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
@@ -50,14 +56,11 @@ describe("Tracking API Route", () => {
       auth: {
         getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
       },
-      from: vi.fn().mockReturnThis(),
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
-      upsert: vi.fn().mockResolvedValue({ error: null }),
     };
     vi.mocked(createSupabaseAuthAdminClient).mockReturnValue(mockSupabaseAdmin as never);
     vi.mocked(rateLimit).mockResolvedValue({ success: true, reset: Date.now() + 60000 });
+    vi.mocked(fetchViewedProducts).mockResolvedValue([]);
+    vi.mocked(upsertViewedProducts).mockResolvedValue({ ok: true, missingTable: false });
   });
 
   const createReq = (body: unknown, headers: Record<string, string> = {}) =>
@@ -68,16 +71,24 @@ describe("Tracking API Route", () => {
     });
 
   it("should return 429 if rate limit is exceeded", async () => {
-    vi.mocked(rateLimit).mockResolvedValue({ success: false, reset: Date.now() + 10000 });
+    const reset = Date.now() + 10000;
+    vi.mocked(rateLimit).mockResolvedValue({ success: false, reset });
     const res = await POST(createReq({}));
     expect(res.status).toBe(429);
+    const data = await res.json();
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe("RATE_LIMIT_EXCEEDED");
+    expect(data.error.message).toBe("Too many requests");
+    expect(res.headers.get("X-RateLimit-Reset")).toBe(String(reset));
   });
 
   it("should return 400 if productId is missing", async () => {
     const res = await POST(createReq({ userId: "user-1" }));
     expect(res.status).toBe(400);
     const data = await res.json();
-    expect(data.error).toBe("Missing productId");
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe("VALIDATION_ERROR");
+    expect(data.error.message).toBe("Missing productId");
   });
 
   it("should use bearer token user id if valid", async () => {
@@ -90,44 +101,63 @@ describe("Tracking API Route", () => {
     );
     expect(res.status).toBe(200);
     const data = await res.json();
+    expect(data.success).toBe(true);
     expect(data.userId).toBe("resolved-auth-user");
+    expect(fetchViewedProducts).toHaveBeenCalledWith(mockSupabaseAdmin, "resolved-auth-user");
   });
 
   it("should handle invalid request JSON body gracefully", async () => {
     const res = await POST(createReq("{malformed-json"));
     expect(res.status).toBe(400);
+    const data = await res.json();
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe("VALIDATION_ERROR");
   });
 
   it("should track viewed products using the HttpOnly anon cookie id", async () => {
     mockTrackingCookie("user-existing");
-    mockSupabaseAdmin.maybeSingle.mockResolvedValue({
-      data: { viewed_products: ["prod-old-1", "prod-old-2"] },
-      error: null,
-    });
+    vi.mocked(fetchViewedProducts).mockResolvedValue(["prod-old-1", "prod-old-2"]);
     const res = await POST(createReq({ productId: "prod-new", userId: "ignored-body-id" }));
     expect(res.status).toBe(200);
     const data = await res.json();
     expect(data.success).toBe(true);
     expect(data.viewedProducts).toEqual(["prod-old-1", "prod-old-2", "prod-new"]);
-    expect(mockSupabaseAdmin.upsert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        user_id: "user-existing",
-        viewed_products: ["prod-old-1", "prod-old-2", "prod-new"],
-      }),
-      { onConflict: "user_id" },
+    expect(upsertViewedProducts).toHaveBeenCalledWith(
+      mockSupabaseAdmin,
+      "user-existing",
+      ["prod-old-1", "prod-old-2", "prod-new"],
     );
   });
 
   it("should slice the viewed_products array to at most 10 items", async () => {
     mockTrackingCookie("user-existing");
-    mockSupabaseAdmin.maybeSingle.mockResolvedValue({
-      data: { viewed_products: ["p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9", "p10"] },
-      error: null,
-    });
+    vi.mocked(fetchViewedProducts).mockResolvedValue([
+      "p1",
+      "p2",
+      "p3",
+      "p4",
+      "p5",
+      "p6",
+      "p7",
+      "p8",
+      "p9",
+      "p10",
+    ]);
     const res = await POST(createReq({ productId: "p11" }));
     const data = await res.json();
     expect(data.viewedProducts).toHaveLength(10);
-    expect(data.viewedProducts).toEqual(["p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9", "p10", "p11"]);
+    expect(data.viewedProducts).toEqual([
+      "p2",
+      "p3",
+      "p4",
+      "p5",
+      "p6",
+      "p7",
+      "p8",
+      "p9",
+      "p10",
+      "p11",
+    ]);
   });
 
   it("should return noop response if Supabase admin client throws on creation", async () => {
@@ -140,23 +170,25 @@ describe("Tracking API Route", () => {
     expect(data.tracked).toBe(false);
     expect(data.success).toBe(true);
     expect(data.userId).toBe("new-anon-123");
+    expect(fetchViewedProducts).not.toHaveBeenCalled();
   });
 
   it("should return noop response if user_history table is missing during read or write", async () => {
     mockTrackingCookie("user-1");
-    mockSupabaseAdmin.maybeSingle.mockResolvedValue({
-      data: null,
-      error: { message: 'relation "public.user_history" does not exist' },
-    });
+    vi.mocked(fetchViewedProducts).mockResolvedValue([]);
+    vi.mocked(upsertViewedProducts).mockResolvedValue({ ok: false, missingTable: true });
     const res1 = await POST(createReq({ productId: "prod-1" }));
     expect(res1.status).toBe(200);
+    const data1 = await res1.json();
+    expect(data1.success).toBe(true);
+    expect(data1.tracked).toBe(false);
 
-    mockSupabaseAdmin.maybeSingle.mockResolvedValue({ data: null, error: null });
-    mockSupabaseAdmin.upsert.mockResolvedValue({
-      error: { message: "Could not find the table public.user_history in the schema" },
-    });
+    vi.mocked(fetchViewedProducts).mockResolvedValue(["prod-1"]);
     const res2 = await POST(createReq({ productId: "prod-1" }));
     expect(res2.status).toBe(200);
+    const data2 = await res2.json();
+    expect(data2.success).toBe(true);
+    expect(data2.tracked).toBe(false);
   });
 
   it("should return 500 status when an unhandled exception occurs", async () => {
@@ -166,7 +198,18 @@ describe("Tracking API Route", () => {
     const spyConsole = vi.spyOn(console, "error").mockImplementation(() => {});
     const res = await POST(createReq({ productId: "prod-1" }));
     expect(res.status).toBe(500);
+    const data = await res.json();
+    expect(data.success).toBe(false);
+    expect(data.error.code).toBe("INTERNAL_ERROR");
+    expect(data.error.message).toBe("Tracking failed");
     expect(spyConsole).toHaveBeenCalled();
     spyConsole.mockRestore();
+  });
+
+  it("should set anon cookie when a new anonymous user id is created", async () => {
+    const res = await POST(createReq({ productId: "prod-1" }));
+    expect(res.status).toBe(200);
+    const cookie = res.cookies.get(TRACKING_ANON_COOKIE);
+    expect(cookie?.value).toBe("new-anon-123");
   });
 });

@@ -21,6 +21,32 @@ Wire the planner consumer (`features/planner/open3d/catalog/svg/`) to the same d
 - p95 budget line cites QUALITY-GATES: `p95 ≤ 200 ms at 1,000 records; ≤ 200 ms at 10,000`.
 - REC-02 (Sketchfab) + REC-04 (Planner 5D catalogue-first) + REJ-04 incorporated. Provisional notes added.
 
+## 2026-07-04 GS / 0419 Resolver Plan Notes (catalogue-first + search parity)
+- Catalogue-first (Planner 5D REC-04 / design §9-10): default inventory view starts with featured + categories + recents (useOpen3dWorkspaceCatalog + client load primary via svgBlockDescriptorLoader; fallback only on notFound). Resolver integration: blocks field + resolveBlocks() must be consumed for symbol geometry (no monkey-patch svgSymbols.ts).
+- Search parity (Sketchfab REC-02): implement cursor pagination (≤24 items) + facets in Open3dCatalogClient.search() and UI (license, animated/staffPicked/favourite/downloadable + existing room/style/material/configurability). Cursor state in inventoryState; deterministic + stable.
+- Resolver wiring plan: catalog/index.ts reexport (done); wire into catalogClient (guarded import) + useOpen3d* + inventoryIndex for descriptor-driven records. 0419 partial in code comments; full in Phase 06 checklist (06-INV-01/05).
+- Anti-copy: all visuals via semantic tokens from site/app/css/ only. Cite BP-06 + benchmark §4 + design §10 in Decision Log before Implemented.
+- Status: Open for full consumer integration + live validation. Provisional per design §16.
+
+## UI Global Standards Gate (enforcement per I-D + design §7/9/10 + benchmark RECs/REJs)
+- UI-GS-01: Figma minimize-UI (REC-01): every inventory/panel declares explicit hide/collapse/minimize affordances; small-screen uses overlay + backdrop + one-active-panel (cross 0414).
+- UI-GS-02: Sketchfab search parity (REC-02): cursor-only pagination (≤24), facets (category/license/animated/staffpicked/downloadable) in Open3dCatalogClient + UI; no deep-zoom overlays (REJ-04).
+- UI-GS-03: Catalogue-first + 2D↔3D (REC-04/Planner 5D): default layout starts inventory (featured+recents+categories); recoverable transitions to canvas.
+- UI-GS-04: Anti-copy: all visuals (icons, panels, SVGs) use ONLY semantic tokens from site/app/css/; no donor/competitor palettes/geometry/composition (REJ-02/05 + benchmark §6). Cite in Decision Log.
+- UI-GS-05: Per-object / command surface (Floorplanner/AutoCAD REC-03): contextual properties + docked errors; keyboard + live regions.
+Enforcement: Phase coordinator must confirm these in Decision Log + signed review artifacts before status change from Planned. Cross-ref QUALITY-GATES UI/GS + I-D UI/UX Standards. Cites design §6 (Global Standard Framework) + plans/2026-07-04/benchmark.md BP-06.
+
+## Global Standard Gate (Binding) — actual checklist enforcement (0415/0416/0420)
+- GS-0415-01: Fresh dated benchmark report exists and is cited here + Decision Log (plans/2026-07-04/benchmark.md 2026-07-04 or per DESIGN-BENCHMARK-PROTOCOL; design §6 binding).
+- GS-0415-02: Independent UI review workflow executed (Critic/QA/UI per REVIEW-WORKFLOW.md intensified for GS scoring); artifacts in results/reviews/ (critic-review.md, qa-review.md, ui-review.md) signed with date before "Implemented".
+- GS-0415-03: Anti-copy + pattern attestation present in Decision Log (specific benchmark § + 5-product refs); no bypass.
+- GS-0416-01: Agent review workflow fully executed + evidenced: each reviewer produces independent GS-SCORE output (Benchmark/Anti-copy/UI-UX/Features-Pkg/Gate/Evidence); primary finalization only after; no opinion passing.
+- GS-0420-01: Packages justification: any Tier-1/2/locked change (incl drei in Phase 06) has "Global Standard Package Review" (benchmark cite + anti-copy + REVIEW-WORKFLOW signoff) recorded in I-D/PACKAGES.md + here before edit.
+- GS-enforce-01: Phase exit gate: before marking Implemented, static checklist pass verified by read/grep of this file + Decision Log + reviews/; "Verified" requires live + results/ evidence. Release gate (QUALITY-GATES) must include these.
+- 0419 resolve note (static impl): catalogue-first full + search parity (facets+cursor≤24) + resolver wired in catalogClient.search + inventory + useOpen3d (BP-06 + design §9-10). See 06-INV-01/05 updates + code cites.
+Applies release-blocking to Phase 06 per QUALITY-GATES.md. Cross-ref: IMPLEMENTATION-DECISIONS.md §Global Standard Framework (design §6) / UI/UX / SVG/Features/Packages Mandates; FAILURESPLAN PLAN-FAIL-0415/0416/0419/0420; benchmark BP-06 + design §6/9/10.
+Provisional pending live site validation after tests and site up (design §16). Evidence: static read/grep verification of enforcement text.
+
 ## Scope
 In scope: `svgBlockDescriptorLoader.ts` at `features/planner/open3d/catalog/svg/`, in-memory LRU with TTL 60s, `useOpen3dSvgCatalog()` hook, `Open3dCatalogClient.search()` filter parity (room/style/material/configurability), recents LRU (50 items, dedupe by `catalogId+variantId`), first-run inventory (featured + recents + categories), deterministic sort + stable tie-break, anchor-plane contract, theme-token visuals, degraded-asset placeability, roving focus reused from Puck registry, fixture gallery at `fixtures/svg-floors.json`, performance assertions.
 Out of scope: adding new hand-maintained entries to `svgSymbols.ts`, editing Phase 03 vendor load ordering, Supabase tier (Phase 08), export round-trips (Phase 09), admin write path (Phase 04).
@@ -45,10 +71,11 @@ Single registry path. Loader key shape `[slug, schemaVersion]`. Background reval
 ## Checklist
 ### Loader (06-INV)
 - 06-INV-01 `svgBlockDescriptorLoader.ts` lives at `features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts`.
+  **Wiring fixed (0405/0419 spec review):** client-side always[] addressed (return preloaded + getAll check in consumers); resolver integration now actually uses blocks (captures resolveBlocks result + .blocks); inventory wiring fixed (Panel awaits + prefers client.getAll() for searchIndex primary). useOpen3d + catalogClient + inventory updated. Search parity intact. No any. Cites BP-06, design §9/10, GS, phase-06. Updated tests + docs. Live pending run evidence. Owner: Planner agent.
 - 06-INV-02 Loader structure: `listSlugs()` → for each `tryLoad(slug)` → parse Zod (Phase 02) → validate; returns `Map<slug, BlockDescriptor>`.
 - 06-INV-03 LRU cache: 60 s TTL, in-memory only, `revalidateAfterMs = 60_000`; background revalidation co-operative with React transitions.
 - 06-INV-04 React hook `useOpen3dSvgCatalog()` returns `{ records, isLoading, isStale, refresh, errors }`; readiness state explicit.
-- 06-INV-05 `Open3dCatalogClient.search()` filters unchanged: `room | style | material | configurability` (per benchmark binding #3). Sort + pagination are additive; predicate binding is unchanged.
+- 06-INV-05 `Open3dCatalogClient.search()` filters: room/style/material/configurability + Sketchfab parity (license/animated/staffPicked/favourite/downloadable); cursor pagination cap ≤24. Loader primary for descriptors (catalogue-first). Sort + pagination additive. Updated 2026-07-04 for 0419. Cites BP-06/design.
 - 06-INV-06 `svgSymbols.ts` becomes FALLBACK only — loaded when `tryLoad(slug)` returns `notFound`. No new hand-maintained entries permitted after this phase (descriptors are the only forward path).
 - 06-INV-07 In-editor recents: bounded LRU (50 items), dedupe by `catalogId + variantId`, persisted to workspace preferences scope (per benchmark binding #2).
 - 06-INV-08 First-run inventory: featured collection + recents + category entry points visible on first visit (per benchmark binding #13). Empty-state copy references portal-managed catalog freshness.
@@ -99,7 +126,7 @@ Single registry path. Loader key shape `[slug, schemaVersion]`. Background reval
 ### Risk register
 - Risk: LRU key collisions with name-mangled slugs. Mitigation: loader normalizes slug to `^[a-z][a-z0-9-]{1,63}$` per Phase 03 security.
 - Risk: 60 s TTL stale across long open sessions. Mitigation: `isStale` flag surfaced in UI; manual refresh always possible.
-- Risk: Coverage floor (PLAN-FAIL-0408) unaddressed. Mitigation: this phase writes tests that pull coverage forward on consumer paths.
+- Risk: Coverage floor (PLAN-FAIL-0408) unaddressed. Mitigation: this phase writes tests that pull coverage forward on consumer paths. 2026-07-04 update (implementer subagent #3): Re-ran actual coverage (pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d --coverage per task/START; also slice). Captured to results/site/phase-06/coverage-0408-live/ (run.json + raw.log standardized). 1215 tests executed (1198 pass); v8 "Coverage enabled"; explicit TDD branch ✓ in logs for catalog search/configurability/sketchfab, sanitizer (oversized/on*/non-frag), display/validate dims, inventory collections, advisor/export paths etc. search_replace TDD fixes (asserts aligned to source error msgs + reducer branches). No % summary (persistent .tmp ENOENT race during write; INCOMPLETE per testing-handbook). ~58% prior unchanged; QG hard floor 90% (target 95%) cited, not met/verified. 0408 Open. Updated FAILURESPLAN table/history + this risk + Failures.md. Min nec. Artifacts preserved. See results/ for evidence.
 
 ### Success metrics
 - Loader cold read of 100 descriptors: p95 ≤ 60 ms.
@@ -132,4 +159,6 @@ Single registry path. Loader key shape `[slug, schemaVersion]`. Background reval
 - 2026-07-04 — Decision: `svgSymbols.ts` becomes FALLBACK only. Reason: catalog drift between hand-maintained entries and admin-created descriptors was the root cause of PLAN-FAIL-018. Alternatives: keep dual-source and reconciliation — rejected as unmaintainable. Owner: Planner agent.
 - 2026-07-04 — Decision: 60 s TTL + background revalidation. Reason: hot-swap without page reload requires a tight revalidation window without spamming disk reads. Alternatives: time-only TTL — rejected (stale renders); event-driven only — rejected (no admin event sink in consumer). Owner: Planner agent.
 - 2026-07-04 — Decision: deterministic sort with stable tie-break on `slug`. Reason: benchmark binding #11; reproducibility across runs is non-negotiable. Alternatives: `Date.now()` tie-break — rejected as non-deterministic. Owner: Planner agent.
+- 2026-07-04 — Decision: catalogue-first via loader primary + Sketchfab cursor/facets + resolver wire in catalogClient + inventory (0419/0405 resolve). Reason: BP-06 / design §9-10 / REC-02/04; closes doc-part to code. Cites plans/2026-07-04/benchmark.md + GS gate. No svgSymbols additions. Owner: Planner agent.
+- 2026-07-04 — Decision (spec review follow): make loader primary functional by addressing client always[], make resolver actually consume blocks result, fix inventory to load from client.getAll after descriptors. Updated use/catalog/inventory + tests + phase doc. Reason: previous added calls not functional per review. Cites this task + AGENTS correctness. Owner: implementer subagent.
 - 2026-07-04 — Decision: shared roving focus hook across Puck registry and planner consumer. Reason: avoid divergent a11y behavior between admin and consumer surfaces. Alternatives: per-surface copies — rejected (drift). Owner: Planner agent.

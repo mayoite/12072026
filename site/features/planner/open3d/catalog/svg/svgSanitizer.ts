@@ -114,8 +114,8 @@ export function sanitizeSvg(svg: string): SvgSanitizationResult {
     return { safe: false, sanitized: "", issues };
   }
 
-  // Check for foreignObject
-  if (/<\s*foreignObject[\s>]/i.test(svg)) {
+  // Check for foreignObject (covers <foreignObject>, <foreignObject/>, <foreignObject > etc)
+  if (/<\s*foreignObject[\s>/]/i.test(svg)) {
     issues.push("contains <foreignObject> element");
     return { safe: false, sanitized: "", issues };
   }

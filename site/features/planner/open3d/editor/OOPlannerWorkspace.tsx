@@ -314,7 +314,6 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
         projectName={workspaceCanvas.project.name}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
-        workspaceCanvas={workspaceCanvas}
         displayUnit={displayUnit}
         onDisplayUnitChange={setDisplayUnit}
         isModified={autosave.isModified}

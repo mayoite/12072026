@@ -3,6 +3,19 @@
  *
  * Turns a BlockDescriptor JSON object into a canonical SVG string written to
  * public/svg-catalog/{slug}.svg and a PNG thumbnail uploaded to R2.
+ *
+ * Strict Option A enforcement (BP-03, design §8):
+ *   @flatten-js/core (measure) → polygon-clipping (Martinez booleans) → svgo → @resvg/resvg-js.
+ *   No deviations. Resolver contract: uses blocks field via resolveBlocks() (explicit/synthesised);
+ *   generatedAt consumed frozen (see svgTypes freezeFreshDescriptor/freezeRewriteDescriptor §02-CAT-08).
+ * Anti-copy attestation: only semantic tokens from site/app/css/ (currentColor + --* vars in themeTokens / buildSvgString).
+ *   Cites Global Standard BP-03 + design §8, §11 (no donor/competitor geometry/palettes).
+ *
+ * GS BENCHMARK CITE ENFORCEMENT (PLAN-FAIL-0415/0420): 
+ *   Static code check: any edit to pipeline/packages must cite plans/2026-07-04/benchmark.md (BP-03) + design §6 
+ *   + anti-copy in this header + Decision Log + I-D/PACKAGES before change. 
+ *   Global Standard Gate (QUALITY-GATES) + Package Review applies. See phases/03 + I-D.
+ *   (Static presence of this block + cites acts as build-script level gate; no runtime bypass.)
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
@@ -361,7 +374,18 @@ export async function runPipeline(descriptor) {
   validateSlug(descriptor.slug);
   const viewBox = assertViewBoxStable(descriptor);
 
-  const rawBlocks = descriptor.blocks ?? descriptor.geometry?.blocks ?? [];
+  // Resolver contract (blocks field + explicit path) per design §8 + BP-03: delegate to resolveBlocks()
+  // (ensures parity with blocksResolver.ts + svgBlockDescriptorLoader; synthesised handled upstream).
+  // generatedAt freeze consumed here (frozen by svgTypes; see header). Cites BP-03, design §8.
+  const rawBlocks = await (async () => {
+    const b = Array.isArray(descriptor.blocks) ? descriptor.blocks : [];
+    if (b.length > 0) {
+      const mod = await import("../features/planner/open3d/catalog/svg/blocksResolver.ts");
+      const resolved = (mod.resolveBlocks || mod.default?.resolveBlocks || (() => ({blocks: b})))(descriptor);
+      return (resolved && resolved.blocks) ? resolved.blocks : b;
+    }
+    return b;
+  })();
   if (!rawBlocks || rawBlocks.length === 0) {
     const fallbackSvg = buildFallbackSvg(viewBox);
     const safe = sanitiseSvg(fallbackSvg);

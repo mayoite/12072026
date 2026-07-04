@@ -54,6 +54,7 @@ export {
   BlockDescriptorThemeTokensSchema,
   BlockDescriptorVec2Schema,
   BlockDescriptorViewBoxSchema,
+  BlockDescriptorBlockSchema,
   BLOCK_DESCRIPTOR_VARIANTS,
   MountPlaneSchema,
   MountingPointSchema,
@@ -71,6 +72,7 @@ export {
   type BlockDescriptorParametric,
   type BlockDescriptorVariant,
   type BlockDescriptorViewBox,
+  type BlockDescriptorBlock,
   type MountPlane,
   type MountingPoint,
 } from "./svgTypes";

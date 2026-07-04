@@ -253,6 +253,23 @@ export const MountingPointSchema = z.object({
 /** Parametric mounting control point. */
 export type MountingPoint = z.infer<typeof MountingPointSchema>;
 
+/**
+ * Optional explicit blocks array on BlockDescriptor (handoff 02→06, PLAN-FAIL-0413).
+ * Provides per-block rects for resolver + Phase 03 polygon ops (instead of single synthesised).
+ * Cites Global Standard benchmark BP-02 (schema source-of-truth) + design §2, §8 (resolver contract).
+ */
+export const BlockDescriptorBlockSchema = z.object({
+  id: z.string().optional(),
+  x: z.number().finite(),
+  y: z.number().finite(),
+  width: z.number().finite().positive(),
+  depth: z.number().finite().positive(),
+  height: z.number().finite().positive().optional(),
+  mounting: MountingPointSchema.optional(),
+});
+/** Single block rect in a descriptor's explicit blocks list (mm coords relative to viewBox). */
+export type BlockDescriptorBlock = z.infer<typeof BlockDescriptorBlockSchema>;
+
 export const BlockDescriptorGeometrySchema = z.object({
   widthMm: z.number().finite().positive(),
   depthMm: z.number().finite().positive(),
@@ -332,6 +349,8 @@ const BlockDescriptorCommonBaseSchema = z.object({
   viewBox: BlockDescriptorViewBoxSchema,
   mounting: z.array(MountPlaneSchema).min(1, "mounting must list at least one plane"),
   mountingPoints: z.array(MountingPointSchema).optional(),
+  /** Optional explicit blocks for resolver contract (PLAN-FAIL-0413 / 0406). See BlockDescriptorBlockSchema. Cites BP-02 schema parity + Phase 06 loader. */
+  blocks: z.array(BlockDescriptorBlockSchema).optional(),
   themeTokens: BlockDescriptorThemeTokensSchema,
   rovingFocus: z.array(BlockDescriptorRovingFocusEntrySchema),
   liveAnnouncementCategories: z

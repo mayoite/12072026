@@ -1,41 +1,16 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import { rateLimit } from "@/lib/rateLimit";
-import type { Database } from "@/lib/supabase/types";
 import { resolveAuthContext } from "@/lib/api/withAuth";
 import { ApiError } from "@/lib/api/ApiError";
+import {
+  createAdminServiceClient,
+  getClientIp,
+  isMissingTableError,
+} from "@/platform/supabase/adminServer";
 
-function readOptionalServiceEnv() {
-  const url =
-    process.env.SUPABASE_URL?.trim() ||
-    process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ||
-    "";
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() || "";
-
-  if (!url || !serviceRoleKey) {
-    return null;
-  }
-
-  return { url, serviceRoleKey };
-}
-
-export function createAdminServiceClient() {
-  const env = readOptionalServiceEnv();
-  if (!env) return null;
-
-  return createClient<Database>(env.url, env.serviceRoleKey, {
-    auth: { persistSession: false },
-  });
-}
-
-export function getClientIp(req: NextRequest): string {
-  return (
-    req.headers.get("cf-connecting-ip") ||
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    "127.0.0.1"
-  );
-}
+/** @deprecated Import from `@/platform/supabase/adminServer` instead. */
+export { createAdminServiceClient, getClientIp, isMissingTableError };
 
 export async function enforceAdminRateLimit(
   req: NextRequest,
@@ -67,13 +42,4 @@ export async function requireAdminSession(): Promise<NextResponse | null> {
     }
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-}
-
-export function isMissingTableError(message: string | undefined): boolean {
-  const normalized = (message || "").toLowerCase();
-  return (
-    normalized.includes("does not exist") ||
-    normalized.includes("could not find the table") ||
-    normalized.includes("permission denied")
-  );
 }

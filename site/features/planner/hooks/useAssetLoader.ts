@@ -5,7 +5,7 @@ import { useLoader } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import type { GLTF } from "three-stdlib";
-import { Matrix4, Mesh, type BufferGeometry, type Material } from "three";
+import { Matrix4, Mesh, type BufferGeometry, type Material, type Object3D } from "three";
 import { loadPlannerCatalog } from "@/features/planner/shared/catalog/catalogAdapter";
 import type { CatalogItem } from "@/features/planner/shared/catalog/types";
 
@@ -71,8 +71,7 @@ function extractAssetPrimitives(gltf: GLTF): LoadedAssetPrimitive[] {
   const rootInverse = new Matrix4().copy(gltf.scene.matrixWorld).invert();
   const primitives: LoadedAssetPrimitive[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  gltf.scene.traverse((node: import("three").Object3D) => {
+  gltf.scene.traverse((node: Object3D) => {
     if (!(node instanceof Mesh) || !node.geometry) {
       return;
     }
