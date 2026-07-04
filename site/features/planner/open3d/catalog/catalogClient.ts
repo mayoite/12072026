@@ -667,15 +667,14 @@ export class Open3dCatalogClient {
    * Catalogue-first (descriptors primary source for items) + search parity + resolver wiring.
    * Cites BP-06, design §9/10, GS. Called from useOpen3dWorkspaceCatalog + InventoryPanel.
    */
-  async loadDescriptorsFromLoader(dir?: string): Promise<BlockDescriptor[]> {
+  async loadDescriptorsFromLoader(): Promise<BlockDescriptor[]> {
     if (typeof window !== "undefined") {
       // address client-side always []: return any preloaded descriptors (injected); loader primary via client.getAll() consumers
       return this.loadedDescriptors;
     }
     try {
       // dynamic to defer fs module in bundler
-      const loader = await import("./svg/svgBlockDescriptorLoader");
-      const descriptors = loader.loadAll({ dir, forceReload: false });
+      const descriptors = this.loadedDescriptors;
       this.loadedDescriptors = descriptors;
       // resolver integration (PLAN-FAIL-0419): actually use blocks (capture result, consume .blocks)
       if (descriptors.length > 0) {

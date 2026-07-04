@@ -7,6 +7,21 @@ export type CanvasTool =
   | "text"
   | "pan";
 
+export type PlannerToolPhase =
+  | "inactive"
+  | "armed"
+  | "drawing"
+  | "transforming"
+  | "committing"
+  | "cancelled"
+  | "failed";
+
+export interface PlannerToolState {
+  tool: CanvasTool;
+  phase: PlannerToolPhase;
+  error?: string;
+}
+
 export const CANVAS_TOOL_SHORTCUTS: Record<CanvasTool, string> = {
   select: "V",
   wall: "W",

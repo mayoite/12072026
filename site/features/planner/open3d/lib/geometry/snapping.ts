@@ -64,6 +64,7 @@ export function snapDrawingPoint(input: {
   gridMm?: number;
   screenTolerancePx?: number;
 }): SnapResult {
+  // Complex snap (endpoint+grid+angle) simplified comments only; core retained (used by canvas).
   if (input.suppress) return { point: input.raw, kind: "none" };
 
   const toleranceMm = (input.screenTolerancePx ?? 12) / input.zoom;

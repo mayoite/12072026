@@ -7,6 +7,7 @@ describe("routeChromeRules", () => {
     expect(resolveRouteChromeMode("/dashboard")).toEqual({ header: "hidden", footer: "hidden" });
     expect(resolveRouteChromeMode("/planner/canvas")).toEqual({ header: "hidden", footer: "hidden" });
     expect(resolveRouteChromeMode("/planner/guest")).toEqual({ header: "hidden", footer: "hidden" });
+    expect(resolveRouteChromeMode("/planner/open3d")).toEqual({ header: "hidden", footer: "hidden" });
   });
 
   it("shows login footer tools only on login routes", () => {

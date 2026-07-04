@@ -2,7 +2,7 @@
  * Phase 04 — svgPipelineRunner (Phase 03 SVG pipeline spawn wrapper)
  *
  * §04-ADMIN-07 / §04-SUB-02: the API shells out to
- * `site/scripts/generate-svg.mjs` via `node:child_process.execFile`.
+ * `site/scripts/generate-svg.mjs` via `node:child_process.exec` (string command to avoid bundler module resolution on the script path).
  *
  * Contract:
  *   - 10s timeout (default; overridable for integration tests).
@@ -23,7 +23,7 @@
  * succeed; the SVG/PNG artefact is a cache for portal render).
  */
 
-import { execFile, type ExecException, type ExecFileException } from "node:child_process";
+import { exec, type ExecException } from "node:child_process";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
@@ -144,9 +144,9 @@ export function runSvgPipeline(
   const startedAt = Date.now();
 
   return new Promise<PipelineResult>((resolve) => {
-    execFile(
-      "node",
-      [scriptPath, "--", "--fixture", `admin-${fixtureSuffix}`],
+    const cmd = `node "${scriptPath}" -- --fixture admin-${fixtureSuffix}`;
+    exec(
+      cmd,
       {
         cwd: projectRoot,
         timeout: timeoutMs,
@@ -154,7 +154,7 @@ export function runSvgPipeline(
         windowsHide: true,
         encoding: "utf8",
       },
-      (error: ExecFileException | null, stdout: string, stderr: string) => {
+      (error: ExecException | null, stdout: string, stderr: string) => {
         const durationMs = Date.now() - startedAt;
         if (error) {
           if (error.killed && error.signal === "SIGTERM") {

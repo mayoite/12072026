@@ -8,12 +8,12 @@ const withNextIntl = createNextIntlPlugin(
 
 const baseConfig = require("./config/build/next.config.js");
 
-const monorepoRoot = path.join(__dirname, "..");
+const monorepoRoot = path.join(/* turbopackIgnore: true */ __dirname, "..");
 
 module.exports = withNextIntl({
   ...baseConfig,
   turbopack: {
     root: monorepoRoot,
   },
-  outputFileTracingRoot: monorepoRoot,
+  outputFileTracingRoot: monorepoRoot, // NFT root for tracing
 });

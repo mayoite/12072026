@@ -5,24 +5,24 @@
 }
 
 .shell {
-  --ws-shell-bg: var(--surface-page);
-  --ws-panel-bg: var(--surface-panel);
-  --ws-panel-border: var(--border-soft);
-  --ws-header-bg: var(--surface-panel);
-  --ws-status-bg: color-mix(in srgb, var(--surface-panel) 94%, var(--surface-soft));
-  --ws-text-primary: var(--text-strong);
-  --ws-text-secondary: var(--text-body);
-  --ws-text-muted: var(--text-muted);
-  --ws-accent: var(--color-primary);
-  --ws-shadow-float: var(--shadow-float);
+  --ws-shell-bg: var(--planner-surface-canvas);
+  --ws-panel-bg: var(--planner-surface-panel);
+  --ws-panel-border: var(--planner-border-default);
+  --ws-header-bg: var(--planner-surface-panel);
+  --ws-status-bg: color-mix(in srgb, var(--planner-surface-panel) 94%, var(--planner-surface-subtle));
+  --ws-text-primary: var(--planner-text-primary);
+  --ws-text-secondary: var(--planner-text-secondary);
+  --ws-text-muted: var(--planner-text-muted);
+  --ws-accent: var(--planner-accent);
+  --ws-shadow-float: var(--planner-shadow-floating);
   --ws-shadow-panel: inset 0 1px 0 color-mix(in srgb, var(--ws-panel-border) 55%, transparent);
-  --ws-z-panel: 55;
-  --ws-z-rail: 60;
-  --ws-z-topbar: 70;
-  --ws-z-floating: 100;
-  --ws-control-h: 2.25rem;
-  --ws-header-h: 3.5rem;
-  --ws-rail-w: 3.25rem;
+  --ws-z-panel: var(--planner-z-panel);
+  --ws-z-rail: var(--planner-z-rail);
+  --ws-z-topbar: var(--planner-z-topbar);
+  --ws-z-floating: var(--planner-z-floating);
+  --ws-control-h: var(--planner-control-height);
+  --ws-header-h: var(--planner-header-height);
+  --ws-rail-w: var(--planner-tool-rail-width);
 
   display: grid;
   width: 100%;
@@ -42,15 +42,15 @@
 }
 
 .shell[data-viewport="small"] {
-  --ws-panel-width: 280px;
+  --ws-panel-width: var(--planner-panel-width-small);
 }
 
 .shell[data-viewport="tablet"] {
-  --ws-panel-width: 300px;
+  --ws-panel-width: var(--planner-panel-width-tablet);
 }
 
 .shell[data-viewport="desktop"] {
-  --ws-panel-width: 310px;
+  --ws-panel-width: var(--planner-panel-width-desktop);
 }
 
 /* Header / Top bar */
@@ -142,6 +142,16 @@
   color: var(--text-inverse);
 }
 
+.canvasModeLabel {
+  margin-inline-start: var(--space-1);
+}
+
+@media (width < 48rem) {
+  .canvasModeLabel {
+    display: none;
+  }
+}
+
 .saveStatus {
   display: inline-flex;
   align-items: center;
@@ -218,7 +228,10 @@
   overflow: hidden;
   background: var(--ws-panel-bg);
   box-shadow: var(--ws-shadow-panel);
-  transition: width 0.2s ease-out, transform 0.2s ease-out, opacity 0.15s ease-out;
+  transition:
+    width var(--planner-motion-panel) var(--planner-motion-easing),
+    transform var(--planner-motion-panel) var(--planner-motion-easing),
+    opacity var(--planner-motion-fast) var(--planner-motion-easing);
 }
 
 .panelLeft {
@@ -229,7 +242,7 @@
 
 .panelRight {
   grid-area: right;
-  width: 290px;
+  width: var(--planner-properties-width);
   border-left: 1px solid var(--ws-panel-border);
 }
 
@@ -556,7 +569,7 @@
 }
 
 /* Responsive adjustments */
-@media (width < 900px) {
+@media (width < 56.25rem) {
   .header {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-2);
@@ -581,14 +594,18 @@
   }
 }
 
-@media (width < 768px) {
+@media (width < 48rem) {
   .shell {
     grid-template-rows: auto 1fr auto;
   }
 
   .header {
     min-height: 3rem;
-    padding: var(--space-2);
+    padding:
+      calc(var(--space-2) + var(--planner-safe-top))
+      calc(var(--space-2) + var(--planner-safe-right))
+      var(--space-2)
+      calc(var(--space-2) + var(--planner-safe-left));
   }
 
   .brandTitle {
@@ -617,9 +634,9 @@
     bottom: 0;
     z-index: var(--ws-z-floating);
     width: calc(100% - var(--space-4));
-    max-width: 320px;
+    max-width: var(--planner-panel-width-mobile-max);
     transform: translateX(-100%);
-    transition: transform 0.2s ease-out;
+    transition: transform var(--planner-motion-panel) var(--planner-motion-easing);
   }
 
   .panelRight {
@@ -639,18 +656,22 @@
   }
 
   .status {
-    padding: var(--space-1) var(--space-2);
+    padding:
+      var(--space-1)
+      calc(var(--space-2) + var(--planner-safe-right))
+      calc(var(--space-1) + var(--planner-safe-bottom))
+      calc(var(--space-2) + var(--planner-safe-left));
     font-size: 0.6875rem;
   }
 }
 
-@media (width >= 768px) and (width < 1280px) {
+@media (width >= 48rem) and (width < 80rem) {
   .panelLeft {
-    width: 300px;
+    width: var(--planner-panel-width-tablet);
   }
 
   .panelRight {
-    width: 280px;
+    width: var(--planner-properties-width);
   }
 }
 

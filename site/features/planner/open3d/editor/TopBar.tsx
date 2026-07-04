@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState, type MouseEvent } from "react";
+import { CornersIn, CornersOut } from "@phosphor-icons/react";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";
 import type { Open3dDisplayUnit } from "../model/types";
 import type { PanelId } from "./useDockingSystem";
@@ -49,6 +50,10 @@ export interface TopBarProps {
   onToggleLeftPanel?: () => void;
   /** Called when the properties panel toggle is triggered */
   onToggleRightPanel?: () => void;
+  /** Whether side panels are hidden to maximize the canvas */
+  isCanvasMaximized?: boolean;
+  /** Toggle canvas-maximized mode */
+  onToggleCanvasMaximized?: () => void;
 }
 
 export function TopBar({
@@ -73,6 +78,8 @@ export function TopBar({
   activePanel = null,
   onToggleLeftPanel,
   onToggleRightPanel,
+  isCanvasMaximized = false,
+  onToggleCanvasMaximized,
 }: TopBarProps) {
   const showPersistenceActions = accessContext !== "guest";
   const showGuestActions = accessContext === "guest";
@@ -244,6 +251,21 @@ export function TopBar({
 
       {/* Right actions */}
       <div className={styles.actions}>
+        {onToggleCanvasMaximized && (
+          <button
+            type="button"
+            className={styles.btn}
+            aria-pressed={isCanvasMaximized}
+            aria-label={isCanvasMaximized ? "Restore workspace panels" : "Maximize canvas"}
+            onClick={onToggleCanvasMaximized}
+          >
+            {isCanvasMaximized ? <CornersIn aria-hidden="true" /> : <CornersOut aria-hidden="true" />}
+            <span className={styles.canvasModeLabel}>
+              {isCanvasMaximized ? "Restore" : "Focus"}
+            </span>
+          </button>
+        )}
+
         {(onToggleLeftPanel || onToggleRightPanel) && (
           <div className={styles.mobilePanelActions} role="group" aria-label="Panel toggles">
             {onToggleLeftPanel && (

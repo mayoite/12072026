@@ -18,6 +18,8 @@ export interface CanvasSelection {
   ids: string[];
 }
 
+export type PlannerSelection = CanvasSelection;
+
 export interface WorkspaceCanvasContext {
   /** Current project state */
   project: Open3dProject;

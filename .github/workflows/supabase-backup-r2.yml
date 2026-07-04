@@ -1,0 +1,72 @@
+name: Supabase backup to R2
+
+on:
+  schedule:
+    - cron: "15 2 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: supabase-backup-r2
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+
+      - name: Install PostgreSQL client (pg_dump 17)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl ca-certificates
+          curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /usr/share/keyrings/postgresql.gpg
+          echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-17
+          pg_dump --version
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+
+      - name: Install dependencies
+        run: cd .. && pnpm install --frozen-lockfile
+
+      - name: Supabase pg_dump → R2
+        env:
+          PRODUCTS_DATABASE_URL: ${{ secrets.PRODUCTS_DATABASE_URL }}
+          SUPABASE_AUTH_DATABASE_URL: ${{ secrets.SUPABASE_AUTH_DATABASE_URL }}
+          CLOULDFLARE_S3_URL: ${{ secrets.CLOULDFLARE_S3_URL }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOULD_ACCESS_KEY_ID: ${{ secrets.CLOULD_ACCESS_KEY_ID }}
+          CLOULDFLARE_S3_SECRET_ACCESS_KEY: ${{ secrets.CLOULDFLARE_S3_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_CATALOG_BUCKET: ${{ secrets.CLOUDFLARE_R2_CATALOG_BUCKET }}
+        run: pnpm run backup:supabase:r2
+
+      - name: Catalog snapshot → R2
+        env:
+          PRODUCTS_DATABASE_URL: ${{ secrets.PRODUCTS_DATABASE_URL }}
+          CLOULDFLARE_S3_URL: ${{ secrets.CLOULDFLARE_S3_URL }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOULD_ACCESS_KEY_ID: ${{ secrets.CLOULD_ACCESS_KEY_ID }}
+          CLOULDFLARE_S3_SECRET_ACCESS_KEY: ${{ secrets.CLOULDFLARE_S3_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_CATALOG_BUCKET: ${{ secrets.CLOUDFLARE_R2_CATALOG_BUCKET }}
+        run: pnpm run catalog:snapshot:r2
+
+      - name: Repo archive → R2
+        env:
+          CLOULDFLARE_S3_URL: ${{ secrets.CLOULDFLARE_S3_URL }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOULD_ACCESS_KEY_ID: ${{ secrets.CLOULD_ACCESS_KEY_ID }}
+          CLOULDFLARE_S3_SECRET_ACCESS_KEY: ${{ secrets.CLOULDFLARE_S3_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_CATALOG_BUCKET: ${{ secrets.CLOUDFLARE_R2_CATALOG_BUCKET }}
+        run: pnpm run repo:backup:r2

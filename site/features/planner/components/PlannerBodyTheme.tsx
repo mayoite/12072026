@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useViewportHeight } from "@/features/planner/hooks/useViewportHeight";
 
-const WORKSPACE_PREFIXES = ["/planner/canvas", "/planner/guest"];
+const WORKSPACE_PREFIXES = ["/planner/canvas", "/planner/guest", "/planner/open3d"];
 
 function usesWorkspaceShell(pathname: string): boolean {
   const normalized = pathname.replace(/\/$/, "") || "/";

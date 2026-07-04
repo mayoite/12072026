@@ -83,13 +83,14 @@ export function InventoryPanel({
   // Load catalog items into search index when the source changes
   // Fixed inventory wiring (PLAN-FAIL-0405/0419): await loader, prefer loaderItems (catalogue-first primary) for searchIndex; resolver/blocks via client.
   useEffect(() => {
+    searchIndex.load(indexedItems);
     if (!inventoryClientRef.current) inventoryClientRef.current = new Open3dCatalogClient();
     void inventoryClientRef.current.loadDescriptorsFromLoader().then(() => {
       const loaderItems = inventoryClientRef.current!.getAll();
-      const sourceItems = loaderItems.length > 0 ? loaderItems : (catalogItems && catalogItems.length > 0 ? catalogItems : OPEN3D_DEMO_CATALOG_ITEMS);
+      const sourceItems = loaderItems.length > 0 ? loaderItems : indexedItems;
       searchIndex.load(sourceItems);
     });
-  }, [catalogItems]);
+  }, [indexedItems]);
 
   // Handle search when query changes
   useEffect(() => {

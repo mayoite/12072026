@@ -1,0 +1,52 @@
+name: Release gate (full)
+
+on:
+  schedule:
+    - cron: "30 3 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+concurrency:
+  group: release-gate-full
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm --filter oando-site run test:browsers:install
+
+      - name: Release gate (full)
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          PRODUCTS_DATABASE_URL: ${{ secrets.PRODUCTS_DATABASE_URL }}
+        run: pnpm run release:gate 2>&1 | tee site/results/phase10-release-gate.log
+
+      - name: Upload gate logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-gate-logs
+          path: |
+            site/results/phase10-release-gate.log
+            site/results/phase*.log
+          if-no-files-found: ignore

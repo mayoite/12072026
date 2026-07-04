@@ -1,5 +1,5 @@
 const path = require("path");
-const { loadEnvLocal } = require("../../scripts/loadEnvLocal.cjs");
+const { loadEnvLocal } = require(/* turbopackIgnore: true */ "../../scripts/loadEnvLocal.cjs");
 
 loadEnvLocal();
 
@@ -57,14 +57,14 @@ if (parsedAssetBaseUrl) {
 const fs = require("fs");
 
 const findRepoRoot = (dir) => {
-  if (fs.existsSync(path.join(dir, "node_modules", "next"))) return dir;
+  if (fs.existsSync(path.join(/* turbopackIgnore: true */ dir, "node_modules", "next"))) return dir;
   const parent = path.dirname(dir);
   return parent === dir ? dir : findRepoRoot(parent);
 };
 
-const siteRoot = path.join(__dirname, "..", "..");
-const plannerEditorArchive = path.join(siteRoot, "features/planner/_archive/fabric/editor");
-const plannerCanvasArchive = path.join(siteRoot, "features/planner/_archive/fabric/canvas-fabric");
+const siteRoot = path.join(/* turbopackIgnore: true */ __dirname, "..", "..");
+const plannerEditorArchive = path.join(/* turbopackIgnore: true */ siteRoot, "features/planner/_archive/fabric/editor");
+const plannerCanvasArchive = path.join(/* turbopackIgnore: true */ siteRoot, "features/planner/_archive/fabric/canvas-fabric");
 const plannerArchiveAliases = {
   "@/features/planner/editor": plannerEditorArchive,
   "@/features/planner/canvas-fabric": plannerCanvasArchive,
@@ -273,7 +273,7 @@ const nextConfig = {
     return config;
   },
   turbopack: {
-    root: findRepoRoot(__dirname),
+    root: findRepoRoot(/* turbopackIgnore: true */ __dirname),
     resolveAlias: plannerArchiveAliases,
   },
 };

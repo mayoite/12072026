@@ -1,43 +1,28 @@
-import type { Open3dBackgroundImage, Open3dPoint } from "../model/types";
+export const SUPPORTED_IMAGE_TYPES: string[] = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+];
 
-/**
- * Supported image types for background/reference images.
- */
-export const SUPPORTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-
-/**
- * Import limits for images.
- */
 export interface ImageImportLimits {
-  /** Maximum file size in bytes (default 10MB) */
   maxFileSizeBytes: number;
-  /** Maximum image width in pixels */
   maxWidthPx: number;
-  /** Maximum image height in pixels */
   maxHeightPx: number;
 }
 
-/**
- * Default import limits.
- */
 export const DEFAULT_IMAGE_LIMITS: ImageImportLimits = {
-  maxFileSizeBytes: 10 * 1024 * 1024, // 10MB
-  maxWidthPx: 8000,
-  maxHeightPx: 8000,
+  maxFileSizeBytes: 10 * 1024 * 1024, // 10MB default
+  maxWidthPx: 4096,
+  maxHeightPx: 4096,
 };
 
-/**
- * Validation result for image import.
- */
 export interface ImageValidationResult {
   valid: boolean;
   errors: string[];
   warnings: string[];
 }
 
-/**
- * Parsed image data ready for import.
- */
 export interface ParsedImage {
   dataUrl: string;
   width: number;
@@ -47,12 +32,17 @@ export interface ParsedImage {
   fileSize: number;
 }
 
-/**
- * Validates a File object for import.
- * @param file - The file to validate
- * @param limits - Optional custom limits
- * @returns Validation result
- */
+export interface BackgroundImage {
+  dataUrl: string;
+  width: number;
+  height: number;
+  position: { x: number; y: number };
+  scale: number;
+  opacity: number;
+  rotation: number;
+  locked: boolean;
+}
+
 export function validateImageFile(
   file: File,
   limits: ImageImportLimits = DEFAULT_IMAGE_LIMITS,
@@ -60,18 +50,12 @@ export function validateImageFile(
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  // Check file type
   if (!SUPPORTED_IMAGE_TYPES.includes(file.type)) {
-    errors.push(
-      `Unsupported file type: ${file.type}. Supported types: ${SUPPORTED_IMAGE_TYPES.join(", ")}`,
-    );
+    errors.push(`Unsupported file type: ${file.type}`);
   }
 
-  // Check file size
   if (file.size > limits.maxFileSizeBytes) {
-    errors.push(
-      `File too large: ${(file.size / 1024 / 1024).toFixed(2)}MB (max ${limits.maxFileSizeBytes / 1024 / 1024}MB)`,
-    );
+    errors.push(`File too large: ${file.size} bytes (max ${limits.maxFileSizeBytes})`);
   }
 
   return {
@@ -81,17 +65,10 @@ export function validateImageFile(
   };
 }
 
-/**
- * Loads an image file and returns its data URL and dimensions.
- * @param file - The file to load
- * @param limits - Optional custom limits
- * @returns Parsed image or error
- */
 export async function loadImageFile(
   file: File,
   limits: ImageImportLimits = DEFAULT_IMAGE_LIMITS,
 ): Promise<{ image: ParsedImage | null; error: string | null }> {
-  // Validate first
   const validation = validateImageFile(file, limits);
   if (!validation.valid) {
     return { image: null, error: validation.errors.join("; ") };
@@ -107,14 +84,12 @@ export async function loadImageFile(
         return;
       }
 
-      // Get dimensions
       const img = new Image();
       img.onload = () => {
-        // Check dimensions
         if (img.width > limits.maxWidthPx || img.height > limits.maxHeightPx) {
           resolve({
             image: null,
-            error: `Image too large: ${img.width}x${img.height}px (max ${limits.maxWidthPx}x${limits.maxHeightPx}px)`,
+            error: `Image dimensions too large: ${img.width}x${img.height}`,
           });
           return;
         }
@@ -147,73 +122,35 @@ export async function loadImageFile(
   });
 }
 
-/**
- * Options for creating a background image from imported data.
- */
-export interface CreateBackgroundImageOptions {
-  /** The parsed image data */
+export function createBackgroundImage(options: {
   image: ParsedImage;
-  /** Position on the canvas (default: center) */
-  position?: Open3dPoint;
-  /** Scale factor (default: 1) */
+  position?: { x: number; y: number };
   scale?: number;
-  /** Opacity (default: 1) */
   opacity?: number;
-  /** Rotation in degrees (default: 0) */
   rotation?: number;
-  /** Whether the image is locked (default: false) */
   locked?: boolean;
-}
-
-/**
- * Creates a background image from parsed image data.
- * @param options - Options for creating the background image
- * @returns The background image object
- */
-export function createBackgroundImage(options: CreateBackgroundImageOptions): Open3dBackgroundImage {
-  const { image, position = { x: 0, y: 0 }, scale = 1, opacity = 1, rotation = 0, locked = false } = options;
-
+}): BackgroundImage {
   return {
-    dataUrl: image.dataUrl,
-    position,
-    scale,
-    opacity,
-    rotation,
-    locked,
+    dataUrl: options.image.dataUrl,
+    width: options.image.width,
+    height: options.image.height,
+    position: options.position || { x: 0, y: 0 },
+    scale: options.scale ?? 1,
+    opacity: options.opacity ?? 1,
+    rotation: options.rotation ?? 0,
+    locked: options.locked ?? false,
   };
 }
 
-/**
- * Imports an image file as a background image.
- * @param file - The file to import
- * @param options - Optional import options
- * @returns Result with background image or error
- */
 export async function importImageAsBackground(
   file: File,
-  options: {
-    position?: Open3dPoint;
-    scale?: number;
-    opacity?: number;
-    rotation?: number;
-    locked?: boolean;
-    limits?: ImageImportLimits;
-  } = {},
-): Promise<{ backgroundImage: Open3dBackgroundImage | null; error: string | null }> {
-  const { image, error } = await loadImageFile(file, options.limits);
-
-  if (!image) {
-    return { backgroundImage: null, error };
+  limits?: ImageImportLimits,
+): Promise<{ backgroundImage: BackgroundImage | null; error: string | null }> {
+  const loadResult = await loadImageFile(file, limits);
+  if (loadResult.error || !loadResult.image) {
+    return { backgroundImage: null, error: loadResult.error || "Failed to load image" };
   }
 
-  const backgroundImage = createBackgroundImage({
-    image,
-    position: options.position,
-    scale: options.scale,
-    opacity: options.opacity,
-    rotation: options.rotation,
-    locked: options.locked,
-  });
-
-  return { backgroundImage, error: null };
+  const bg = createBackgroundImage({ image: loadResult.image });
+  return { backgroundImage: bg, error: null };
 }

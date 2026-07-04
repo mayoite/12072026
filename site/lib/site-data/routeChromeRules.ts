@@ -35,6 +35,7 @@ const LOGIN_PREFIXES = [
 const CAD_PREFIXES = [
   "/planner/canvas",
   "/planner/guest",
+  "/planner/open3d",
   "/oando-planner/canvas",
   "/planners",
   "/planner-blueprint",

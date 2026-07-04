@@ -40,6 +40,82 @@
   background: color-mix(in srgb, var(--surface-soft) 88%, var(--surface-page));
 }
 
+.open3d-first-use {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: var(--planner-z-panel);
+  width: min(28rem, calc(100% - var(--space-8)));
+  padding: var(--space-6);
+  border: 1px solid var(--planner-border-default);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--planner-surface-panel) 94%, transparent);
+  box-shadow: var(--planner-shadow-floating);
+  color: var(--planner-text-secondary);
+  text-align: center;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(0.75rem);
+}
+
+.open3d-first-use h2,
+.open3d-first-use p {
+  margin: 0;
+}
+
+.open3d-first-use h2 {
+  margin-block: var(--space-1) var(--space-2);
+  color: var(--planner-text-primary);
+  font-family: var(--font-display);
+  font-size: var(--type-title-sm-size);
+}
+
+.open3d-first-use__eyebrow {
+  color: var(--planner-accent);
+  font-size: var(--type-label-size);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--type-letter-label);
+  text-transform: uppercase;
+}
+
+.open3d-first-use__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.open3d-first-use__actions button {
+  min-height: var(--planner-control-height);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--planner-border-default);
+  border-radius: var(--radius-pill);
+  background: var(--planner-surface-panel);
+  color: var(--planner-text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.open3d-first-use__actions button:hover,
+.open3d-first-use__actions button:focus-visible {
+  border-color: var(--planner-accent);
+  outline: none;
+}
+
+@media (width < 48rem) {
+  .open3d-first-use {
+    padding: var(--space-4);
+  }
+
+  .open3d-first-use__actions {
+    flex-direction: column;
+  }
+
+  .open3d-first-use__actions button {
+    min-height: var(--planner-touch-target);
+  }
+}
+
 .open3d-canvas-with-rail > .open3d-canvas-embedded {
   flex: 1;
   min-width: 0;

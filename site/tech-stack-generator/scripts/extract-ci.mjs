@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createNormalizedRecord } from './normalized-record.mjs'
@@ -48,6 +48,10 @@ function extractPnpmVersion(text) {
 export function extractCiRecords({ repoRoot = defaultRepoRoot } = {}) {
   const workflowDir = path.join(repoRoot, '.github', 'workflows')
   const records = []
+
+  if (!existsSync(workflowDir)) {
+    return records
+  }
 
   for (const fileName of readdirSync(workflowDir).sort()) {
     if (!fileName.endsWith('.yml') && !fileName.endsWith('.yaml')) continue

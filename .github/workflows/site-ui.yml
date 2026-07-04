@@ -1,0 +1,91 @@
+name: Site UI
+
+on:
+  pull_request:
+    branches: [main, master]
+    paths:
+      - "site/app/(site)/**"
+      - "site/components/home/**"
+      - "site/app/css/**"
+      - "site/i18n/**"
+      - "site/scripts/check-site-page-shell.mjs"
+      - "site/scripts/check-homepage-dialect.mjs"
+      - "site/scripts/check-marketing-copy-source.mjs"
+      - "site/scripts/check-marketing-inline-style.mjs"
+      - "site/scripts/check-i18n-key-parity.mjs"
+      - "site/scripts/generate-site-ui-route-matrix.mjs"
+      - "site/tests/e2e/site-*.spec.ts"
+      - "site/tests/e2e/site-ui-helpers.ts"
+      - "site/tests/e2e/**/*-snapshots/**"
+      - ".github/workflows/site-ui.yml"
+  push:
+    branches: [main, master]
+    paths:
+      - "site/app/(site)/**"
+      - "site/components/home/**"
+      - "site/app/css/**"
+      - "site/i18n/**"
+      - "site/scripts/check-site-page-shell.mjs"
+      - "site/scripts/check-homepage-dialect.mjs"
+      - "site/scripts/check-marketing-copy-source.mjs"
+      - "site/scripts/check-marketing-inline-style.mjs"
+      - "site/scripts/check-i18n-key-parity.mjs"
+      - "site/scripts/generate-site-ui-route-matrix.mjs"
+      - "site/tests/e2e/site-*.spec.ts"
+      - "site/tests/e2e/site-ui-helpers.ts"
+      - "site/tests/e2e/**/*-snapshots/**"
+      - ".github/workflows/site-ui.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: site-ui-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  site-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: site
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: .
+
+      - name: Generate route matrix
+        run: pnpm --filter oando-site run site-ui:matrix
+        working-directory: .
+
+      - name: Site UI checks
+        run: pnpm --filter oando-site run check:site-ui
+        working-directory: .
+
+      - name: Install Playwright Chromium
+        run: pnpm --filter oando-site run test:browsers:install
+        working-directory: .
+
+      - name: Site UI E2E (wave 1 + 2)
+        run: pnpm --filter oando-site run test:site-ui 2>&1 | tee site/results/site-ui-e2e.log
+        working-directory: .
+        env:
+          CI: "true"
+
+      - name: Upload site-ui log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-ui-e2e-log
+          path: site/results/site-ui-e2e.log
+          if-no-files-found: ignore

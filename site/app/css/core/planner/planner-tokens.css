@@ -1,0 +1,45 @@
+/* Planner semantic contract. Components consume these tokens, never palette values directly. */
+:root {
+  --planner-surface-canvas: var(--surface-page);
+  --planner-surface-panel: var(--surface-panel);
+  --planner-surface-subtle: var(--surface-soft);
+  --planner-border-default: var(--border-soft);
+  --planner-text-primary: var(--text-strong);
+  --planner-text-secondary: var(--text-body);
+  --planner-text-muted: var(--text-muted);
+  --planner-accent: var(--color-primary);
+  --planner-focus-ring: var(--color-primary);
+  --planner-shadow-floating: var(--shadow-float);
+
+  --planner-control-height: 2.25rem;
+  --planner-touch-target: 2.75rem;
+  --planner-header-height: 3.5rem;
+  --planner-status-height: 2.25rem;
+  --planner-tool-rail-width: 3.25rem;
+  --planner-panel-width-small: 17.5rem;
+  --planner-panel-width-tablet: 18.75rem;
+  --planner-panel-width-desktop: 19.375rem;
+  --planner-properties-width: 18.125rem;
+  --planner-panel-width-mobile-max: 20rem;
+  --planner-safe-top: env(safe-area-inset-top, 0px);
+  --planner-safe-right: env(safe-area-inset-right, 0px);
+  --planner-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --planner-safe-left: env(safe-area-inset-left, 0px);
+
+  --planner-motion-fast: 150ms;
+  --planner-motion-panel: 200ms;
+  --planner-motion-easing: ease-out;
+
+  --planner-z-backdrop: 50;
+  --planner-z-panel: 55;
+  --planner-z-rail: 60;
+  --planner-z-topbar: 70;
+  --planner-z-floating: 100;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --planner-motion-fast: 0ms;
+    --planner-motion-panel: 0ms;
+  }
+}

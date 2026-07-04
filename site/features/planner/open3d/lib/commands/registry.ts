@@ -21,12 +21,22 @@ export interface FeasibilityCommandContext {
   resetZoom: () => void;
 }
 
-export interface FeasibilityCommand {
-  id: FeasibilityCommandId;
+export interface PlannerCommand<
+  TId extends string,
+  TContext,
+  TOutcome,
+> {
+  id: TId;
   label: string;
   shortcut: string;
-  execute: (context: FeasibilityCommandContext) => CommandOutcome;
+  execute: (context: TContext) => TOutcome;
 }
+
+export type FeasibilityCommand = PlannerCommand<
+  FeasibilityCommandId,
+  FeasibilityCommandContext,
+  CommandOutcome
+>;
 
 /**
  * Core drawing/navigation commands (Phase 01 set).

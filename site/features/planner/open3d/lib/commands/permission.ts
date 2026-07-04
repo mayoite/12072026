@@ -44,10 +44,4 @@ export function isCommandBlocked(
   return false;
 }
 
-/**
- * Returns the planner action key associated with a command.
- * Useful for debugging or more granular permission checks.
- */
-export function getPlannerActionForCommand(commandKey: PlannerCommandKey): PlannerActionKey {
-  return COMMAND_TO_ACTION_MAP[commandKey];
-}
+// getPlannerActionForCommand removed (dead export, unused in prod). Cleaned for PLAN-FAIL-0408.

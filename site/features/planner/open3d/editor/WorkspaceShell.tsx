@@ -90,6 +90,7 @@ export function WorkspaceShell({
 }: WorkspaceShellProps) {
   const id = useId();
   const [internalViewMode, setInternalViewMode] = useState<"2d" | "3d">(initialViewMode);
+  const [isCanvasMaximized, setIsCanvasMaximized] = useState(false);
   const viewMode = controlledViewMode ?? internalViewMode;
 
   const {
@@ -207,6 +208,9 @@ export function WorkspaceShell({
 
   const resolvePanelOpen = useCallback(
     (id: PanelId) => {
+      if (isCanvasMaximized) {
+        return false;
+      }
       if (panels[id].state === "collapsed") {
         return false;
       }
@@ -215,18 +219,21 @@ export function WorkspaceShell({
       }
       return activePanel === id;
     },
-    [activePanel, panels, viewportTier],
+    [activePanel, isCanvasMaximized, panels, viewportTier],
   );
 
-  const shellStyle: React.CSSProperties | undefined = fillParent ? { height: "100%" } : undefined;
+  const handleCanvasMaximizedToggle = useCallback(() => {
+    setActivePanel(null);
+    setIsCanvasMaximized((current) => !current);
+  }, [setActivePanel]);
 
   return (
     <div
       className={styles.shell}
       data-viewport={viewportTier}
       data-panel-active={activePanel}
+      data-canvas-maximized={isCanvasMaximized}
       data-fill-parent={fillParent ? "true" : undefined}
-      style={shellStyle}
       id={`workspace-shell-${id.replace(/:/g, "")}`}
     >
       {/* Top bar */}
@@ -252,6 +259,8 @@ export function WorkspaceShell({
         activePanel={(viewportTier === "small" && (activePanel === "left" || activePanel === "right")) ? activePanel : null}
         onToggleLeftPanel={leftPanel ? () => handleSidePanelToggle("left") : undefined}
         onToggleRightPanel={rightPanel ? () => handleSidePanelToggle("right") : undefined}
+        isCanvasMaximized={isCanvasMaximized}
+        onToggleCanvasMaximized={handleCanvasMaximizedToggle}
       />
 
       {/* Main workspace with panels */}
@@ -378,5 +387,4 @@ export function WorkspaceShell({
     </div>
   );
 }
-
 

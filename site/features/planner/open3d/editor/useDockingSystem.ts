@@ -68,10 +68,15 @@ const DEFAULT_PANEL_CONFIG: Record<PanelId, PanelConfig> = {
   },
 };
 
+export const PLANNER_VIEWPORT_BREAKPOINTS = {
+  smallMax: 768,
+  tabletMax: 1280,
+} as const;
+
 function getViewportTier(): ViewportTier {
   if (typeof window === "undefined") return "desktop";
-  if (window.innerWidth < 768) return "small";
-  if (window.innerWidth < 1280) return "tablet";
+  if (window.innerWidth < PLANNER_VIEWPORT_BREAKPOINTS.smallMax) return "small";
+  if (window.innerWidth < PLANNER_VIEWPORT_BREAKPOINTS.tabletMax) return "tablet";
   return "desktop";
 }
 

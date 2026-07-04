@@ -12,6 +12,7 @@ import { importOpen3dProjectJson } from "../persistence/projectJson";
 import { parseOpen3dSessionSnapshot } from "../persistence/open3dSession";
 import { useOpen3dWorkspaceAutosave } from "../persistence/useOpen3dWorkspaceAutosave";
 import { setActiveFloor } from "../model/operations/pureActions";
+import { createRectangularRoomProject } from "../model/project";
 import { preflightOpen3dExport } from "../shared/export/exportPreflight";
 import { downloadJSON, downloadSVG } from "../shared/export/exportUtils";
 import { useOpen3dWorkspaceCatalog } from "../catalog/useOpen3dWorkspaceCatalog";
@@ -120,6 +121,24 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
     () => resolveSelectedEntity(workspaceCanvas.selection, workspaceCanvas.activeFloor),
     [workspaceCanvas.activeFloor, workspaceCanvas.selection],
   );
+  const isCanvasEmpty = activeFloor
+    ? activeFloor.walls.length === 0 &&
+      activeFloor.rooms.length === 0 &&
+      activeFloor.doors.length === 0 &&
+      activeFloor.windows.length === 0 &&
+      activeFloor.furniture.length === 0
+    : true;
+
+  const handleStartTemplate = useCallback(() => {
+    workspaceCanvas.replaceProject(
+      createRectangularRoomProject({
+        name: workspaceCanvas.project.name,
+        widthMm: 5000,
+        depthMm: 4000,
+      }),
+    );
+    setWorkspaceMessage("Created a 5 m × 4 m starter room.");
+  }, [workspaceCanvas]);
 
   const handleUpdateEntity = useCallback(
     (collection: Open3dEntityCollection, id: string, updates: Record<string, unknown>) => {
@@ -412,6 +431,24 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
               onPlaceAtPoint={handlePlaceAtPoint}
               onStatusChange={setCanvasStatus}
             />
+            {isCanvasEmpty && (
+              <section className="open3d-first-use" aria-label="Start your plan">
+                <p className="open3d-first-use__eyebrow">Start your plan</p>
+                <h2>Set up the first room</h2>
+                <p>Draw freely, begin with a measured room, or import an existing plan.</p>
+                <div className="open3d-first-use__actions">
+                  <button type="button" onClick={() => setTool("wall")}>
+                    Draw walls
+                  </button>
+                  <button type="button" onClick={handleStartTemplate}>
+                    Use 5 m × 4 m room
+                  </button>
+                  <button type="button" onClick={handleImportClick}>
+                    Import plan
+                  </button>
+                </div>
+              </section>
+            )}
           </div>
         ) : (
           <Lazy3DViewer projectData={workspaceCanvas.project} />

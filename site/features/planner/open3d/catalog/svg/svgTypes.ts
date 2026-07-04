@@ -7,7 +7,7 @@
 
 import type { Open3dCatalogDimensions, Open3dCatalogCategory } from "../catalogTypes";
 import { z } from "zod";
-import { createHash } from "node:crypto";
+import { sha256Hex } from "./sha256";
 
 // ── SVG symbol geometry ──
 
@@ -466,7 +466,7 @@ export function computeBlockDescriptorChecksum(raw: unknown): string {
   // diverge from the digest declared alongside it.
   const stripped = stripChecksumDeep(raw);
   const payload = JSON.stringify(canonicalizeBlockDescriptorInput(stripped));
-  return createHash("sha256").update(payload, "utf8").digest("hex");
+  return sha256Hex(payload);
 }
 
 function stripChecksumDeep(value: unknown): unknown {

@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createNormalizedRecord } from './normalized-record.mjs'
@@ -8,8 +8,14 @@ const defaultRepoRoot = path.resolve(scriptDir, '..', '..', '..')
 const CONFIG_PATH = '.github/dependabot.yml'
 
 export function extractDependabotRecords({ repoRoot = defaultRepoRoot } = {}) {
-  const text = readFileSync(path.join(repoRoot, CONFIG_PATH), 'utf8')
   const records = []
+  const configPath = path.join(repoRoot, CONFIG_PATH)
+
+  if (!existsSync(configPath)) {
+    return records
+  }
+
+  const text = readFileSync(configPath, 'utf8')
 
   const ecosystemMatches = [...text.matchAll(/package-ecosystem:\s*"([^"]+)"/g)]
   ecosystemMatches.forEach((match, index) => {

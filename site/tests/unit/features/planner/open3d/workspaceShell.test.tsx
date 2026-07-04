@@ -468,6 +468,14 @@ describe("WorkspaceShell", () => {
     expect(screen.getByText(/Modified/i)).toBeInTheDocument();
     expect(onSave).not.toHaveBeenCalled();
 
+    const maximize = screen.getByRole("button", { name: "Maximize canvas" });
+    fireEvent.click(maximize);
+    expect(screen.getByRole("button", { name: "Restore workspace panels" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(maximize.closest('[data-canvas-maximized="true"]')).toBeInTheDocument();
+
     fireEvent.keyDown(window, { key: "Tab" });
     fireEvent.keyDown(window, { key: "Tab", shiftKey: true });
 

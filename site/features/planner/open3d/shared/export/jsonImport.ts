@@ -7,5 +7,4 @@ export function parseJsonToEnvelope(_s: string): any { return { envelope: null, 
 export function validateEnvelopeStructure(_e: any, _l?: any): ImportValidationError[] { return []; }
 export function importFromJson(_s: string, _l?: any): ImportResult { return { success: false, project: null, errors: [] }; }
 export function recoverFromErrors(_e: any): { recovered: string[] } { return { recovered: [] }; }
-// (dangling dead validation excised)
-// (all dangling dead code fully excised for PLAN-FAIL-0408)
+// (all original impl excised)
