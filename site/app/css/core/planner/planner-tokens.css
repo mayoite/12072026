@@ -8,7 +8,14 @@
   --planner-text-secondary: var(--text-body);
   --planner-text-muted: var(--text-muted);
   --planner-accent: var(--color-primary);
+  --planner-accent-hover: var(--color-primary-hover);
+  --planner-accent-soft: color-mix(in srgb, var(--color-primary) 12%, var(--surface-panel));
+  --planner-accent-strong: var(--color-primary);
   --planner-focus-ring: var(--color-primary);
+  /* Compat shim — migrate consumers off --planner-primary* in UI-1 */
+  --planner-primary: var(--planner-accent);
+  --planner-primary-hover: var(--planner-accent-hover);
+  --planner-primary-soft: var(--planner-accent-soft);
   --planner-shadow-floating: var(--shadow-float);
 
   --planner-control-height: 2.25rem;
@@ -35,6 +42,7 @@
   --planner-z-rail: 60;
   --planner-z-topbar: 70;
   --planner-z-floating: 100;
+  --planner-font-size-detail: 0.75rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

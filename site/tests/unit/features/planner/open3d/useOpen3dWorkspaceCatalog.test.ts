@@ -1,7 +1,19 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createElement, type PropsWithChildren } from "react";
 
 import { useOpen3dWorkspaceCatalog } from "@/features/planner/open3d/catalog/useOpen3dWorkspaceCatalog";
+
+function renderCatalogHook() {
+  const client = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  const wrapper = ({ children }: PropsWithChildren) => (
+    createElement(QueryClientProvider, { client }, children)
+  );
+  return renderHook(() => useOpen3dWorkspaceCatalog(), { wrapper });
+}
 
 describe("useOpen3dWorkspaceCatalog", () => {
   beforeEach(() => {
@@ -42,7 +54,7 @@ describe("useOpen3dWorkspaceCatalog", () => {
       }),
     );
 
-    const { result } = renderHook(() => useOpen3dWorkspaceCatalog());
+    const { result } = renderCatalogHook();
 
     await waitFor(() => {
       expect(result.current.status).toBe("ready");
@@ -55,12 +67,21 @@ describe("useOpen3dWorkspaceCatalog", () => {
   });
 
   // TDD cycle 6 for hook: initial state before effect settles (loading + isLoading)
-  it("starts in loading state with isLoading true and demo items initially", () => {
-    const { result } = renderHook(() => useOpen3dWorkspaceCatalog());
+  it("starts in loading state with isLoading true and demo items initially", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ items: [] }),
+      }),
+    );
+    const { result } = renderCatalogHook();
     expect(result.current.status).toBe("loading");
     expect(result.current.isLoading).toBe(true);  // GREEN
     // demo items present initially (overwritten on load)
     expect(result.current.items.length).toBeGreaterThan(0);
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    vi.unstubAllGlobals();
   });
 
   // TDD cycle 7 for hook: fallback path when loadFromApi returns empty (covers catch? and length==0)
@@ -73,7 +94,7 @@ describe("useOpen3dWorkspaceCatalog", () => {
       }),
     );
 
-    const { result } = renderHook(() => useOpen3dWorkspaceCatalog());
+    const { result } = renderCatalogHook();
 
     await waitFor(() => {
       expect(result.current.status).not.toBe("loading");
@@ -95,7 +116,7 @@ describe("useOpen3dWorkspaceCatalog", () => {
         json: async () => ({ items: [] }),
       }),
     );
-    const { result } = renderHook(() => useOpen3dWorkspaceCatalog());
+    const { result } = renderCatalogHook();
     await waitFor(() => expect(result.current.status).not.toBe("loading"));
     expect(result.current.resolveItem("nonexistent-xyz")).toBeUndefined();  // GREEN
     vi.unstubAllGlobals();
@@ -106,7 +127,7 @@ describe("useOpen3dWorkspaceCatalog", () => {
     const liveItem = { id: "ldr-1", slug: "ldr-1", sku: "LDR-1", name: "Loader Item", shortName: "LDR", description: "d", category: "Furniture", subCategory: "Chairs", taxonomyPath: "Furniture > Symbols > ldr", dimensions: { widthMm: 100, depthMm: 100, heightMm: 100 }, displayUnit: "mm", assets: { imageUrls: [] }, material: { marketingMaterial: "SVG", normalizedMaterial: "svg-symbol" }, roomTags: [], styleTags: [], availability: "in-stock", assemblyType: "fully-assembled", flatPack: false, tags: ["descriptor"], variants: [], provenance: { source: "descriptor-loader" }, symbolOnly: true } as any;
     const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ items: [liveItem] }) });
     vi.stubGlobal("fetch", fetchMock);
-    const { result } = renderHook(() => useOpen3dWorkspaceCatalog());
+    const { result } = renderCatalogHook();
     await waitFor(() => expect(result.current.status).not.toBe("loading"));
     // loader call happened (primary path exercised even if client returns [])
     expect(result.current.items.length).toBeGreaterThan(0);

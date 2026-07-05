@@ -1,4 +1,6 @@
 export * from "./catalogTypes";
+export * from "./catalogQuery";
+export * from "./catalogSearch";
 export * from "./proofCatalog";
 export * from "./placementAction";
 

@@ -1,14 +1,29 @@
 # Documentation Map
 
-**Last updated:** 2026-06-30
+**Last updated:** 2026-07-05
 
-**Owns:** index of reference docs. Which doc to open → `docs/Lockedfiles/ReadmeLocked.md`.
+**Owns:** index of reference docs. Which doc to open → `docs/Lockedfiles/conduct/ReadmeLocked.md`.
 
 ## Lockedfiles
 
-- `docs/Lockedfiles/AgentsLocked.md` — frozen `AGENTS.md` conduct snapshot
-- `docs/Lockedfiles/ReadmeLocked.md` — frozen doc-routing layer
-- `docs/Lockedfiles/TestingLocked.md` — frozen `TESTING.md` artifact contract
+**Index:** [`docs/Lockedfiles/INDEX.md`](docs/Lockedfiles/INDEX.md) — domain map (`<module>/current.md` + `proposed.md`).
+
+```
+docs/Lockedfiles/
+├── INDEX.md
+├── conduct/          ← frozen conduct snapshots (AgentsLocked, ReadmeLocked, TestingLocked, TestingHandbookLocked)
+├── ui/
+│   └── MODULE-UI-CONTRACT-Locked.md
+├── planner/          ← current.md · proposed.md
+├── admin/
+├── site/
+├── …                 ← one folder per domain module (see INDEX.md)
+└── DomainTruthLocked.md  ← redirect → INDEX.md
+```
+
+- **Conduct snapshots** — `docs/Lockedfiles/conduct/` (`AgentsLocked.md`, `ReadmeLocked.md`, `TestingLocked.md`, `TestingHandbookLocked.md`)
+- **Module UI contract (locked)** — `docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md`
+- **Domain truth (per module)** — `docs/Lockedfiles/<module>/current.md` + `proposed.md` (e.g. `planner/`, `admin/`, `architecture/`)
 
 ## Root doc chain
 
@@ -24,12 +39,18 @@
 
 ## Architecture
 
-- `docs/architecture/CSS-SOLUTION.md` — Concrete CSS operating model and migration order
-- `docs/architecture/COMPONENT_ARCHITECTURE.md` — Component layers
-- `docs/architecture/DATA_FLOW.md` — Data flow overview
-- `docs/architecture/DEPLOYMENT.md` — Deployment notes
-- `docs/architecture/SYSTEM_OVERVIEW.md` — **redirect** → `COMPONENT_ARCHITECTURE.md`, `DATA_FLOW.md`
-- `docs/architecture/STRUCTURE_GUIDELINES.md` — **redirect** → `CSS-SOLUTION.md`, `AGENTS.md`
+- [`docs/architecture/README.md`](docs/architecture/README.md) — **start here**; expert matrix and authority stack
+- [`docs/architecture/MODULE-LAYOUT.md`](docs/architecture/MODULE-LAYOUT.md) — Where routes, features, components, and CSS live
+- [`docs/architecture/MODULE-UI-CONTRACT.md`](docs/architecture/MODULE-UI-CONTRACT.md) — Module UI contract (live); locked: `docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md`
+- [`docs/architecture/ADMIN-UI-CONTRACT.md`](docs/architecture/ADMIN-UI-CONTRACT.md) — Admin UI rules (proposed; UI-2)
+- [`docs/architecture/CSS-SOLUTION.md`](docs/architecture/CSS-SOLUTION.md) — CSS operating model
+- [`docs/architecture/SITE-MARKETING-UI-CONTRACT.md`](docs/architecture/SITE-MARKETING-UI-CONTRACT.md) — Marketing (UI-3 deferred)
+- [`docs/architecture/COMPONENT_ARCHITECTURE.md`](docs/architecture/COMPONENT_ARCHITECTURE.md) — Component map (current + proposed §)
+- [`docs/architecture/DATA_FLOW.md`](docs/architecture/DATA_FLOW.md) — Flows §1–4 legacy; §5–6 open3d + SVG
+- [`docs/architecture/DEPLOYMENT.md`](docs/architecture/DEPLOYMENT.md) — Deployment notes
+- [`docs/architecture/SYSTEM_OVERVIEW.md`](docs/architecture/SYSTEM_OVERVIEW.md) — **redirect** → `COMPONENT_ARCHITECTURE.md`, `DATA_FLOW.md`
+- [`docs/architecture/STRUCTURE_GUIDELINES.md`](docs/architecture/STRUCTURE_GUIDELINES.md) — **redirect** → `CSS-SOLUTION.md`, `AGENTS.md`
+- **Locked baseline** — `docs/Lockedfiles/architecture/current.md` + `proposed.md`
 
 ## API
 

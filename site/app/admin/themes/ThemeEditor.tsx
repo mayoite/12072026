@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { apiPath, browserApiFetch } from '@/lib/api/browserApi';
- 
+
 import { Save, UploadCloud, AlertCircle } from 'lucide-react';
 
 interface ThemeRow {
@@ -11,6 +11,8 @@ interface ThemeRow {
 }
 
 type TabType = 'woods' | 'metals' | 'fabrics' | 'lighting';
+
+const THEME_TABS: TabType[] = ['woods', 'metals', 'fabrics', 'lighting'];
 
 export function ThemeEditor() {
   const [themes, setThemes] = useState<ThemeRow[]>([]);
@@ -36,7 +38,7 @@ export function ThemeEditor() {
   }, []);
 
   if (loading) {
-    return <div className="animate-pulse h-96 bg-slate-100 rounded-xl" />;
+    return <div className="admin-panel h-96 animate-pulse bg-subtle" aria-hidden />;
   }
 
   const handlePublish = async () => {
@@ -48,13 +50,13 @@ export function ThemeEditor() {
         "wsEdgeBanding": "var(--color-ecru-500)",
         "shadowColorHeavy": "var(--shadow-tint-pdp-28)"
       };
-      
+
       const res = await browserApiFetch(apiPath('/api/admin/themes/publish'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ themeName: 'premium-light', tokens: dummyTokens })
       });
-      
+
       const data = await res.json();
       if (data.success) {
         alert(`Success! Theme deployed to Edge CDN:\n${data.url}`);
@@ -69,71 +71,77 @@ export function ThemeEditor() {
   };
 
   return (
-    <div className="grid grid-cols-12 gap-8">
-      <div className="col-span-3 space-y-4">
-        <button className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium shadow-sm hover:bg-blue-700 transition">
+    <div className="admin-theme-layout">
+      <aside className="space-y-4">
+        <button type="button" className="admin-btn admin-btn--primary admin-btn--block">
           + Create New Theme
         </button>
-        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+        <div className="admin-panel overflow-hidden">
           {themes.length === 0 ? (
-            <div className="p-4 text-sm text-slate-500">No themes found in database. Please run the Supabase migration.</div>
+            <div className="admin-empty">No themes found in database. Please run the Supabase migration.</div>
           ) : (
-             themes.map(t => (
-               <div key={t.id} className="p-4 border-b border-slate-100 hover:bg-slate-50 cursor-pointer flex justify-between items-center transition">
-                 <span className="font-medium text-slate-800">{t.name}</span>
-                 {t.is_active && <span className="bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded-full font-medium">Live</span>}
-               </div>
-             ))
+            themes.map((t) => (
+              <div key={t.id} className="admin-theme-list-item">
+                <span className="font-medium text-strong">{t.name}</span>
+                {t.is_active ? <span className="admin-badge admin-badge--active">Live</span> : null}
+              </div>
+            ))
           )}
         </div>
-      </div>
+      </aside>
 
-      <div className="col-span-9">
-         <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-            <div className="border-b border-slate-200 bg-slate-50 p-4 flex justify-between items-center">
-               <h2 className="text-lg font-semibold text-slate-800">Edit Theme Tokens</h2>
-               <div className="flex gap-3">
-                  <button className="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 flex items-center gap-2 transition">
-                    <Save size={16} /> Save Draft
-                  </button>
-                  <button 
-                    onClick={handlePublish}
-                    disabled={isPublishing}
-                    className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium shadow-sm hover:bg-emerald-700 flex items-center gap-2 transition disabled:opacity-50"
-                  >
-                    <UploadCloud size={16} /> 
-                    {isPublishing ? "Publishing..." : "Publish to Planners"}
-                  </button>
-               </div>
-            </div>
-            
-            <div className="flex border-b border-slate-200 px-4">
-               {['woods', 'metals', 'fabrics', 'lighting'].map(tab => (
-                 <button 
-                   key={tab}
-                   onClick={() => setActiveTab(tab as TabType)}
-                   className={`px-6 py-4 text-sm font-medium capitalize border-b-2 transition-colors ${activeTab === tab ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
-                 >
-                   {tab}
-                 </button>
-               ))}
-            </div>
+      <section className="admin-panel overflow-hidden">
+        <div className="admin-panel__header flex flex-wrap items-center justify-between gap-3 !py-4">
+          <h2 className="m-0 text-lg font-semibold text-strong">Edit Theme Tokens</h2>
+          <div className="flex flex-wrap gap-3">
+            <button type="button" className="admin-btn admin-btn--outline">
+              <Save size={16} aria-hidden />
+              Save Draft
+            </button>
+            <button
+              type="button"
+              onClick={handlePublish}
+              disabled={isPublishing}
+              className="admin-btn admin-btn--success"
+            >
+              <UploadCloud size={16} aria-hidden />
+              {isPublishing ? "Publishing..." : "Publish to Planners"}
+            </button>
+          </div>
+        </div>
 
-            <div className="p-6 min-h-[31.25rem]">
-               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex gap-3 text-blue-800">
-                  <AlertCircle size={20} className="shrink-0" />
-                  <p className="text-sm">
-                    <strong>Architecture Note:</strong> Modifying these tokens will update the 3D meshes and 2D canvas dynamically across Buddy Planner and Oando Planner.
-                  </p>
-               </div>
+        <div className="admin-tabs" role="tablist" aria-label="Material categories">
+          {THEME_TABS.map((tab) => {
+            const selected = activeTab === tab;
+            return (
+              <button
+                key={tab}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                onClick={() => setActiveTab(tab)}
+                className={`admin-tabs__tab${selected ? " admin-tabs__tab--active" : ""}`}
+              >
+                {tab}
+              </button>
+            );
+          })}
+        </div>
 
-               <div className="flex flex-col items-center justify-center h-64 text-slate-400">
-                 <p className="italic">Material property editor UI components will render here...</p>
-                 <p className="text-sm mt-2">Waiting for Database Sync to populate JSON dictionary.</p>
-               </div>
-            </div>
-         </div>
-      </div>
+        <div className="p-6 min-h-[31.25rem]">
+          <div className="admin-alert admin-alert--info mb-6 flex gap-3">
+            <AlertCircle size={20} className="shrink-0" aria-hidden />
+            <p className="m-0 text-sm">
+              <strong>Architecture Note:</strong> Modifying these tokens will update the 3D meshes and 2D canvas dynamically across Buddy Planner and Oando Planner.
+            </p>
+          </div>
+
+          <div className="flex min-h-64 flex-col items-center justify-center text-muted">
+            <p className="m-0 italic">Material property editor UI components will render here...</p>
+            <p className="mt-2 text-sm">Waiting for Database Sync to populate JSON dictionary.</p>
+          </div>
+        </div>
+      </section>
     </div>
-  )
+  );
 }

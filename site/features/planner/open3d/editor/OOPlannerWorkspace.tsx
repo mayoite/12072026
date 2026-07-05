@@ -22,7 +22,12 @@ import { InventoryPanel } from "./InventoryPanel";
 import { LayersPanel } from "./LayersPanel";
 import { PropertiesPanel } from "./PropertiesPanel";
 import { WorkspaceShell } from "./WorkspaceShell";
-import type { CanvasTool } from "./canvasTool";
+import {
+  CANVAS_TOOL_GUIDANCE,
+  CANVAS_TOOL_SHORTCUTS,
+  runtimeToolFor,
+  type PlannerTool,
+} from "./canvasTool";
 import { DEFAULT_LAYER_VISIBILITY, type Open3dLayerVisibility } from "./layerVisibility";
 import { useWorkspaceKeyboard } from "./useWorkspaceKeyboard";
 import { useWorkspaceCanvas } from "./useWorkspaceCanvas";
@@ -97,7 +102,7 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
   }, [guestMode, planId]);
 
   const [viewMode, setViewMode] = useState<"2d" | "3d">("2d");
-  const [activeTool, setActiveTool] = useState<CanvasTool>("wall");
+  const [activeTool, setActiveTool] = useState<PlannerTool>("wall");
   const [displayUnit, setDisplayUnit] = useState<Open3dDisplayUnit>("cm");
   const [layerVisibility, setLayerVisibility] = useState<Open3dLayerVisibility>(
     DEFAULT_LAYER_VISIBILITY,
@@ -106,6 +111,7 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
   const [pendingCatalogItemId, setPendingCatalogItemId] = useState<string | null>(null);
   const [canvasStatus, setCanvasStatus] = useState<CanvasStatusSnapshot | null>(null);
   const [workspaceMessage, setWorkspaceMessage] = useState<string | null>(null);
+  const armedToolRef = useRef<PlannerTool>("wall");
 
   const pendingCatalogItem = useMemo(
     () => (pendingCatalogItemId ? catalog.resolveItem(pendingCatalogItemId) : undefined),
@@ -157,10 +163,11 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
     [workspaceCanvas],
   );
 
-  const setTool = useCallback((tool: CanvasTool) => {
+  const setTool = useCallback((tool: PlannerTool) => {
     setActiveTool(tool);
+    armedToolRef.current = tool;
     setPendingCatalogItemId(null);
-    canvasRef.current?.setTool(tool);
+    canvasRef.current?.setTool(runtimeToolFor(tool));
   }, []);
 
   const toggleView = useCallback(() => {
@@ -179,7 +186,8 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
 
   const handleInventoryPlace = useCallback((itemId: string) => {
     setPendingCatalogItemId(itemId);
-    setActiveTool("select");
+    setActiveTool("placement");
+    armedToolRef.current = "placement";
     canvasRef.current?.setTool("select");
   }, []);
 
@@ -295,6 +303,16 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
       setPendingCatalogItemId(null);
       canvasRef.current?.cancel();
     },
+    commit: () => setWorkspaceMessage("Complete the current point or value to commit."),
+    beginTemporaryPan: () => {
+      canvasRef.current?.setTool("pan");
+      setActiveTool("pan");
+    },
+    endTemporaryPan: () => {
+      const armedTool = armedToolRef.current;
+      setActiveTool(armedTool);
+      canvasRef.current?.setTool(runtimeToolFor(armedTool));
+    },
   });
 
   const measurementLabel =
@@ -380,6 +398,9 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
             <span className="open3d-status-pill open3d-status-pill--accent">
               {formatToolStatus(activeTool, viewMode)}
             </span>
+            <span className="open3d-status-pill">
+              {CANVAS_TOOL_SHORTCUTS[activeTool]} · {CANVAS_TOOL_GUIDANCE[activeTool]}
+            </span>
             {measurementLabel ? (
               <span className="open3d-status-pill">{measurementLabel}</span>
             ) : null}
@@ -422,7 +443,7 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
             <FeasibilityCanvas
               ref={canvasRef}
               variant="embedded"
-              activeTool={activeTool}
+              activeTool={runtimeToolFor(activeTool)}
               layerVisibility={layerVisibility}
               delegateKeyboard
               workspaceCanvas={workspaceCanvas}
@@ -431,6 +452,10 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
               onPlaceAtPoint={handlePlaceAtPoint}
               onStatusChange={setCanvasStatus}
             />
+            <aside className="open3d-tool-guidance" aria-live="polite">
+              <strong>{formatToolStatus(activeTool, viewMode)}</strong>
+              <span>{CANVAS_TOOL_GUIDANCE[activeTool]}</span>
+            </aside>
             {isCanvasEmpty && (
               <section className="open3d-first-use" aria-label="Start your plan">
                 <p className="open3d-first-use__eyebrow">Start your plan</p>

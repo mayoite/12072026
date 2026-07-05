@@ -1,13 +1,13 @@
 # Structure guidelines (redirect)
 
-**Status:** Superseded — this file is a pointer only.
-
-Use these docs instead:
+**Status:** Superseded — pointer only. Do not extend this file.  
+**Authority:** [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md) → [`README.md`](README.md)  
+**Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
 
 | Topic | Doc |
 |-------|-----|
-| CSS ownership, migration order, site-data location | [`CSS-SOLUTION.md`](CSS-SOLUTION.md) |
-| Feature module layout | [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md) |
-| Agent rules (`site/lib/site-data/`, Drizzle, i18n) | [`../../AGENTS.md`](../../AGENTS.md) |
-
-Do not add new content here; extend the replacement docs above.
+| **Where new code goes** | [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) |
+| CSS ownership | [`CSS-SOLUTION.md`](CSS-SOLUTION.md) |
+| C4 / feature map | [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md) |
+| UI contract | [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) |
+| Agent rules | [`../../AGENTS.md`](../../AGENTS.md) |

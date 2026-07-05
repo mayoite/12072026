@@ -4,6 +4,7 @@ import type { SvgBlockDefinitionV1 } from "@/features/planner/admin/svg-editor/s
 import { SvgBlockDefinitionV1Schema } from "@/features/planner/admin/svg-editor/svgBlockSchemas";
 import { sha256Hex } from "./sha256";
 import { sanitizeAndOptimizeSvg } from "./svgServerSanitizer";
+import type { ZodIssue } from "zod";
 
 export const SVG_COMPILER_VERSION = "svg-block-v1";
 
@@ -47,11 +48,40 @@ export interface CompiledSvgBlockV1 {
   readonly compilerVersion: typeof SVG_COMPILER_VERSION;
 }
 
+export interface SvgCompileDiagnostic {
+  readonly code: string;
+  readonly severity: "error";
+  readonly path: string;
+  readonly message: string;
+}
+
+export class SvgCompileError extends Error {
+  constructor(readonly diagnostics: readonly SvgCompileDiagnostic[]) {
+    super("SVG definition failed validation");
+    this.name = "SvgCompileError";
+  }
+}
+
+function toDiagnostic(issue: ZodIssue): SvgCompileDiagnostic {
+  return {
+    code: `schema.${issue.code}`,
+    severity: "error",
+    path: issue.path.map(String).join("."),
+    message: issue.message,
+  };
+}
+
 export function compileSvgBlockV1(input: unknown): CompiledSvgBlockV1 {
-  const definition = SvgBlockDefinitionV1Schema.parse(input);
+  const parsed = SvgBlockDefinitionV1Schema.safeParse(input);
+  if (!parsed.success) {
+    const diagnostics = parsed.error.issues.map(toDiagnostic).sort((left, right) =>
+      left.path.localeCompare(right.path) || left.code.localeCompare(right.code) || left.message.localeCompare(right.message));
+    throw new SvgCompileError(Object.freeze(diagnostics));
+  }
+  const definition = parsed.data;
   const namespace = `${definition.typeId}-v1`;
   const viewBox = definition.viewBox;
-  const body = [...definition.parts].sort((a, b) => a.id.localeCompare(b)).map((part) => compilePart(part, namespace)).join("");
+  const body = [...definition.parts].sort((a, b) => a.id.localeCompare(b.id)).map((part) => compilePart(part, namespace)).join("");
   const description = definition.accessibility.description ? `<desc id="${namespace}-desc">${escape(definition.accessibility.description)}</desc>` : "";
   const labelledBy = `${namespace}-title${description ? ` ${namespace}-desc` : ""}`;
   const raw = `<svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="${labelledBy}" role="img" viewBox="${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}"><title id="${namespace}-title">${escape(definition.accessibility.title)}</title>${description}${body}</svg>`;

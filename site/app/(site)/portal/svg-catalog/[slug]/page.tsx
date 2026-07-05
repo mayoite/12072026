@@ -95,7 +95,7 @@ export default async function SvgCatalogSlugPage({
 
       <section aria-label="Puck render" className="my-4 border p-3">
         {/* <Render> (Puck.Render per task/phase) using alias + registry. 1 mount per route (BP-05). 
-           GS: plans/2026-07-04/benchmark.md BP-05 + anti-copy rule (DESIGN-BENCHMARK-PROTOCOL + design §9), I-D module paths (no fork), loader.tryLoad, error taxonomy (notFound). 
+           GS-BP-05 · handover-routing.md · anti-copy · design §9 · I-D module paths 
            No donor trade dress; semantic + roving a11y per benchmark. */}
         <Render config={puckConfig as unknown as PuckConfig} data={data as unknown as PuckDataShape} />
       </section>

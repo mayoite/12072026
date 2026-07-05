@@ -38,10 +38,6 @@ const CAD_PREFIXES = [
   "/planner/open3d",
   "/oando-planner/canvas",
   "/planners",
-  "/planner-blueprint",
-  "/planner1",
-  "/planner-lab",
-  "/draw",
   "/buddy-planner/editor",
 ];
 

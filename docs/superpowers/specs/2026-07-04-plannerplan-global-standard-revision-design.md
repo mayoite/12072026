@@ -4,19 +4,19 @@
 **Status**: Design approved (core) — UI/UX, SVG generation, features, and packages details provisional pending live site validation. 
 
 **Progress (supporting updates 2026-07-04)**: 
-- Governance: Global Standard Framework, UI/UX Standards, SVG/Features/Packages Mandates added to IMPLEMENTATION-DECISIONS.md; Global Standard Gate added to QUALITY-GATES.md; REVIEW-WORKFLOW intensified; FAILURESPLAN updated with 0414+ (cross-ref design §6,8).
+- Governance: Global Standard Framework, UI/UX Standards, SVG/Features/Packages Mandates added to 2026-07-05_implementation-decisions.md; Global Standard Gate added to 2026-07-05_quality-gates.md; REVIEW-WORKFLOW intensified; FAILURESPLAN updated with 0414+ (cross-ref design §6,8).
 - Phases: BP-01..BP-07 incorporated (see plannnerplan/phases/01-*.md through 09-*.md with headings + contract details; verified by grep).
-- Cross-refs standardized: BP cites in plannnerplan/phases/ point to `plans/2026-07-04/benchmark.md` (active working revision copy); immutable dated copies live in `plans/archive/2026-07-04/benchmark.md` per DESIGN-BENCHMARK-PROTOCOL.md stale-evidence policy (see also plans/archive/README.md). Critique refs use `plannnerplan/critique/plan-revision-2026-07-04.md` + `plans/2026-07-04/critique.md` (or archive equivalent). Design, benchmark, critique cross-linked in PACKAGES.md (references active `plans/2026-07-04/benchmark.md`), INDEX.md, HANDOVER.md, FAILURESPLAN.md, phases, etc. Structure of plans/archive/2026-07-04/ (full content of all 5 + README) + plans/2026-07-04/ (working copies) and plannnerplan/ (phases/00-10, benchmarks/INDEX + stubs, governance incl. FAILURESPLAN.md, retained plan/ stub) aligned (verified via list_dir + grep post-fix).
-- Supporting: PACKAGES.md references active benchmark path for global standard filter; `plannnerplan/benchmarks/INDEX.md` refreshed for archived stale + new structure (plans/archive/2026-07-04/ finalized).
+- Cross-refs standardized: BP cites in plannnerplan/phases/ point to `plans/2026-07-04/benchmark.md` (active working revision copy); immutable dated copies live in `plans/archive/2026-07-04_global-standard-revision/benchmark.md` per 2026-07-05_design-benchmark-protocol.md stale-evidence policy (see also plans/archive/README.md). Critique refs use `plannnerplan/critique/plan-revision-2026-07-04.md` + `plans/2026-07-04/critique.md` (or archive equivalent). Design, benchmark, critique cross-linked in PACKAGES.md (references active `plans/2026-07-04/benchmark.md`), INDEX.md, HANDOVER.md, FAILURESPLAN.md, phases, etc. Structure of plans/archive/2026-07-04_global-standard-revision/ (full content of all 5 + README) + plans/2026-07-04/ (working copies) and plannnerplan/ (phases/00-10, benchmarks/INDEX + stubs, governance incl. FAILURESPLAN.md, retained plan/ stub) aligned (verified via list_dir + grep post-fix).
+- Supporting: PACKAGES.md references active benchmark path for global standard filter; `plannnerplan/benchmarks/INDEX.md` refreshed for archived stale + new structure (plans/archive/2026-07-04_global-standard-revision/ finalized).
 - Evidence: All updates verified post-edit via read_file + grep (no terminal runs). Current tests referenced from Failures.md (e.g. blocksResolver 25/25, 116 admin SVG tests). Suggested evidence location: results/planner/phase-*/ (or new results/planner/global-standard-revision/ for doc gates).
 - Structure note below. No new files created; min necessary edits only.
 - Skips: No live site validation / re-benchmark / terminal commands / tests executed (per task: file tools only). No BP items were missing (all 7 referenced + content aligned in phases).
 - Revisit after tests + site up still applies.
 
 **Note on structure (2026-07-04 current)**: 
-- Revision documents (benchmark.md, critique.md, HANDOVER.md, idiothandver.md, open3d-test-error-follow-up.md) archived/finalized in `plans/archive/2026-07-04/`.
-- Archive: `plans/archive/2026-07-04/` (full content of all 5; originals retained in plans/2026-07-04/ per archive-over-delete).
-- `plannnerplan/` retains phases/, other benchmarks (local execution + INDEX + stubs), critique/plan-revision-2026-07-04.md, governance files, DESIGN-BENCHMARK-PROTOCOL.md etc.
+- Revision documents (benchmark.md, critique.md, HANDOVER.md, idiothandver.md, open3d-test-error-follow-up.md) archived/finalized in `plans/archive/2026-07-04_global-standard-revision/`.
+- Archive: `plans/archive/2026-07-04_global-standard-revision/` (full content of all 5; originals retained in plans/2026-07-04/ per archive-over-delete).
+- `plannnerplan/` retains phases/, other benchmarks (local execution + INDEX + stubs), critique/plan-revision-2026-07-04.md, governance files, 2026-07-05_design-benchmark-protocol.md etc.
 - `plannnerplan/plan/2026-07-04/` retained as move-stub (archive preference; no active cross-refs).
 - See `plannnerplan/benchmarks/INDEX.md` and `plans/archive/README.md` for routing.
 - plannnerplan/plan/ dir + old plan-revision stubs kept for history (no delete).
@@ -24,7 +24,7 @@
 **Cross-refs (ensured)**: This design is referenced from HANDOVER.md (plans/ and plannnerplan/ remnants), FAILURESPLAN.md, PACKAGES.md (updated), INDEX.md (updated), phases (via benchmark), and itself. Benchmark and critique cross-linked throughout. See also root HANDOVER.md, DOC-MAP.md (consider future), Failures.md.
 
 **Authors**: Grok (brainstorming session)  
-**Authority**: Builds on `plannnerplan/IMPLEMENTATION-DECISIONS.md`, `DESIGN-BENCHMARK-PROTOCOL.md`, `QUALITY-GATES.md`, 2026-07-04 benchmark report (`plans/archive/2026-07-04/benchmark.md`), and critique (`plannnerplan/critique/plan-revision-2026-07-04.md`).
+**Authority**: Builds on `plannnerplan/2026-07-05_implementation-decisions.md`, `2026-07-05_design-benchmark-protocol.md`, `2026-07-05_quality-gates.md`, 2026-07-04 benchmark report (`plans/archive/2026-07-04_global-standard-revision/benchmark.md`), and critique (`plannnerplan/critique/plan-revision-2026-07-04.md`).
 
 ## 1. Executive Summary
 
@@ -66,8 +66,8 @@ Exploration of `plannnerplan/` (all files), root docs (Readme.md, AGENTS.md, STA
 ## 4. Scope and Boundaries (Hybrid 1+2)
 
 **In (delta + embedded standards):**
-- Governance files: HANDOVER.md, FAILURESPLAN.md, IMPLEMENTATION-DECISIONS.md (intensified).
-- QUALITY-GATES.md and DESIGN-BENCHMARK-PROTOCOL.md (new Global Standard Gate).
+- Governance files: HANDOVER.md, FAILURESPLAN.md, 2026-07-05_implementation-decisions.md (intensified).
+- 2026-07-05_quality-gates.md and 2026-07-05_design-benchmark-protocol.md (new Global Standard Gate).
 - Selective phase updates: 02 (resolver contract), 03 (SVG gen), 04 (admin), 05 (portal), 06 (inventory/features), 10 (route swap + handover).
 - New/expanded cross-cutting: Global Standard Framework, UI/UX Standards, Workflow & Benchmark Enforcement.
 
@@ -87,14 +87,14 @@ Exploration of `plannnerplan/` (all files), root docs (Readme.md, AGENTS.md, STA
 
 ## 6. Global Standard Framework (Intensified)
 
-New primary section in `IMPLEMENTATION-DECISIONS.md`:
+New primary section in `2026-07-05_implementation-decisions.md`:
 
 **"Global Standard Framework (Binding)"**
 
 - Every package, SVG pipeline, feature, and UI decision **must** cite at least one principle from the 2026-07-04 benchmark report.
 - Anti-copy rule is release-blocking: only semantic tokens from `site/app/css/`. No donor or competitor trade dress, exact geometry, palettes, or composition without documented justification + dated benchmark report.
 - 5-product reference model is mandatory for any UI/UX/SVG/feature benchmarker.
-- Global Standard Gate (new in QUALITY-GATES.md): Before "Implemented" on relevant work:
+- Global Standard Gate (new in 2026-07-05_quality-gates.md): Before "Implemented" on relevant work:
   1. Fresh dated benchmark report exists.
   2. Independent UI review (REVIEW-WORKFLOW) signed off.
   3. Anti-copy + pattern attestation in Decision Log.
@@ -103,7 +103,7 @@ Applies to Phases 03, 04, 05, 06, 10 and all package/SVG/feature changes.
 
 ## 7. UI/UX Standards (Intensified)
 
-Expanded binding section in IMPLEMENTATION-DECISIONS.md (cross-referenced in phases):
+Expanded binding section in 2026-07-05_implementation-decisions.md (cross-referenced in phases):
 
 - **Minimize UI & Panel Grammar** (Figma UI3): Explicit hide/collapse/minimize on every panel. Small-screen = overlay + backdrop + one-active-panel. Matches current WorkspaceShell/PanelContainer/TopBar work.
 - **Inventory & Search** (Sketchfab): Cursor-only pagination (≤24 items), facets (category, license, state, staffpicked, downloadable). p95 budgets per QUALITY-GATES.
@@ -171,19 +171,19 @@ Locked set filtered through global standard:
   - New for SVG/features/packages drift.
 - "2026-07-04 Revision — Global Standard Intensification" subsection.
 
-**IMPLEMENTATION-DECISIONS.md**:
+**2026-07-05_implementation-decisions.md**:
 - R2 bucket locked with owner/date.
 - Canonical paths locked (puckBlockRegistry + alias).
 - New "Global Standard Framework", "UI/UX Standards", "SVG/Features/Packages Mandates" sections (binding).
 - Package set explicitly filtered.
 
-**QUALITY-GATES.md & DESIGN-BENCHMARK-PROTOCOL.md**:
+**2026-07-05_quality-gates.md & 2026-07-05_design-benchmark-protocol.md**:
 - New "Global Standard Gate".
 - Protocol updates for mandatory 5-product + anti-copy checks on UI/SVG/feature work.
 
 ## 12. Workflow and Benchmark Enforcement
 
-- Intensify `REVIEW-WORKFLOW.md`: Critic → QA → UI reviews must explicitly score against global standard + UI/UX/SVG/features/packages rules. No opinion passing between agents.
+- Intensify `2026-07-05_review-workflow.md`: Critic → QA → UI reviews must explicitly score against global standard + UI/UX/SVG/features/packages rules. No opinion passing between agents.
 - Every UI/SVG/feature/package change requires dated benchmark report before primary agent finalization.
 - Evidence capture (results/...) mandatory; "Implemented" only after gate.
 - Agent handoff pattern (as in prior work) documented.

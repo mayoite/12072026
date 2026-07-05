@@ -14,4 +14,11 @@ describe("SVG package boundaries", () => {
       expect(source).toMatch(/^import "server-only";/);
     }
   });
+
+  it("marks raster and persistence modules server-only", () => {
+    for (const file of ["svgArtifactCompiler.server.ts", "svgRevisionRepository.server.ts"]) {
+      const source = readFileSync(path.resolve(process.cwd(), "features/planner/admin/svg-editor", file), "utf8");
+      expect(source).toMatch(/^import "server-only";/);
+    }
+  });
 });

@@ -1,5 +1,12 @@
 # Component Architecture
 
+**Status:** Live map (refresh after 1A/1B acceptance)  
+**Authority:** `plann/REVISION-2026-07-05.md` → [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) → **this file**  
+**Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
+**Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
+
+---
+
 ## C4 Container Diagram
 
 ```mermaid
@@ -11,27 +18,31 @@ flowchart TB
         APIRoutes["API Routes\napp/api/"]
 
         subgraph Features["Feature Modules"]
-            Planner["features/planner/\n2D/3D planner"]
+            Open3d["features/planner/open3d/\nPilot workspace"]
+            PlannerLegacy["features/planner/_archive/fabric/\nLegacy Fabric shell"]
+            AdminFeat["features/planner/admin/\nSVG editor, catalog admin"]
             Catalog["features/catalog/\nProduct catalog"]
-            Shared["features/shared/\nAuth, dashboard, analytics"]
+            Shared["features/shared/\nAuth, dashboard"]
             CRM["features/crm/\nBusiness stats"]
         end
 
         subgraph Platform["Platform Layer"]
-            SupabaseClient["platform/supabase/\nAuth + data client"]
-            DrizzleDB["platform/drizzle/\nORM + schema"]
+            SupabaseClient["platform/supabase/"]
+            DrizzleDB["platform/drizzle/"]
         end
 
         subgraph Lib["Shared Libraries"]
-            Auth["lib/auth/\nSession helpers"]
-            Security["lib/security/\nXSS/CSRF utils"]
-            CatalogLib["lib/catalog/\nCatalog utilities"]
-            SEO["lib/analytics/\nSEO helpers"]
+            Auth["lib/auth/"]
+            Security["lib/security/"]
+            CatalogLib["lib/catalog/"]
         end
     end
 
-    SiteRoutes --> Features
-    PlannerRoutes --> Planner
+    SiteRoutes --> Catalog
+    SiteRoutes --> Shared
+    PlannerRoutes --> Open3d
+    PlannerRoutes --> PlannerLegacy
+    AdminRoutes --> AdminFeat
     AdminRoutes --> APIRoutes
     APIRoutes --> Platform
     Features --> Platform
@@ -40,69 +51,118 @@ flowchart TB
     Platform --> Postgres[(PostgreSQL)]
 ```
 
-## Feature Modules
+---
 
-### features/planner/
+## Current (on disk today)
 
-The planner is the core product — a dual-mode 2D/3D workspace design tool.
+### Planner — dual reality
 
-**Sub-modules:**
-- `canvas-fabric/` — Fabric.js 2D canvas (FloorplanCanvas, RoomPresetsModal)
-- `3d/` — Three.js 3D viewer (Planner3DViewer, viewerMaterials)
-- `editor/` — Workspace shell (PlannerWorkspace, PlannerLeftPanel, inspector)
-- `store/` — Zustand stores (plannerStore, plannerUIStore, workspaceStore)
-- `persistence/` — Draft/save/cloud sync (plannerDraft, plannerSaves, cloudPlanHydration)
-- `catalog/` — Planner-specific catalog (shapeTypeRegistry, placementCatalogResolver)
-- `model/` — Document model (plannerDocument, plannerManagedProduct)
-- `lib/` — Utilities (featureFlags, measurements, fabricDocumentBridge)
-- `hooks/` — React hooks (usePlannerSession, usePlannerFabricAutosave)
+| Route | Entry | Stack |
+|-------|-------|-------|
+| `/planner/open3d` | `app/planner/open3d/page.tsx` → `Open3dPlannerHost` | **Phase 1A pilot** — sole promotion target |
+| `/planner/guest`, `/planner/canvas` | `app/planner/(workspace)/*` → `Open3dPlannerHost` | Deployable hybrid; Phase 2 promotion decision |
+| `/planner/fabric/*` | Archive fallback | `_archive/fabric/` |
 
-**Architecture:** Zustand drives state → Fabric renders 2D → document model feeds 3D viewer via React Three Fiber.
+**Production source tree:** `site/features/planner/open3d/` (per `AGENTS.md` — not `OOPlanner/` or `open3d-next-staging/`)
 
-### features/catalog/
+#### Open3d module tree (canonical)
 
-Product catalog with hierarchical categories, filtering, and image management.
+| Subfolder | Role |
+|-----------|------|
+| `editor/` | Workspace chrome — `OOPlannerWorkspace`, panels, `useWorkspaceCanvas`, `*.module.css` |
+| `ui/` | `Open3dNativeHost` — route host adapters |
+| `canvas-fabric/` | 2D Fabric canvas (embedded in hybrid) |
+| `3d/` | Three.js / r3f lazy viewer |
+| `model/` | `Open3dProject`, actions, invariants |
+| `store/` | History (zundo), selection, workspace preferences |
+| `lib/commands/` | `PlannerCommand` + `executePlannerCommand` |
+| `persistence/` | `guestProjectRepository`, `projectJson`, autosave |
+| `catalog/` | Workspace catalog, SVG block loader (consumer) |
+| `shared/` | Export/import, document bridge |
+| `ai/` | Advisor, sketch-to-plan |
 
-**Key files:**
-- `categories.ts` — Category tree, labels, descriptions
-- `imageMetadata.ts` — Image asset metadata and resolution
-- `getProducts.ts` — Product fetching and normalization
+**Host chain:** `Open3dPlannerHost` (`features/planner/ui/` shim) → `ui/Open3dNativeHost` → `editor/OOPlannerWorkspace` → canvas or 3D viewer.
 
-### features/shared/
+**Command seam (honest):** `executePlannerCommand` exists and is tested in unit tests, but **`useWorkspaceCanvas` still dispatches via `dispatchOpen3dAction` directly** — 1A P0 is to route document mutations through the command layer. `plannerCommandWiring.test.ts` is red until wired.
 
-Cross-feature modules shared between planner, configurator, and site.
+### Planner — legacy (frozen)
 
-**Sub-modules:**
-- `auth/` — AuthProvider, LoginPage, SignupPage, session types
-- `dashboard/` — DashboardClient for authenticated user views
-- `analytics/` — KPI tracking types and event definitions
+| Path | Status |
+|------|--------|
+| `features/planner/editor/` (root) | **Frozen** — no new files |
+| `features/planner/store/`, `model/` (root) | **Frozen** — migrate to `open3d/` |
+| `features/planner/_archive/fabric/` | Legacy Fabric shell — vitest aliases here |
 
-## Platform Layer
+Do not extend root `features/planner/editor/` for Phase 1. See [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md).
 
-### platform/supabase/
+### Admin
 
-Supabase client configuration for browser and server contexts.
+| Area | Path |
+|------|------|
+| Routes | `app/admin/**` — `[id]` hosts `<Render>` preview today |
+| SVG pipeline UI | `features/planner/admin/svg-editor/` |
+| Catalog admin views | `features/planner/admin/*` |
 
-- `client.ts` — Browser client (createBrowserClient)
-- `server.ts` — SSR client (createServerClient with cookie handling)
-- `auth-admin.ts` — Admin client for server-side auth operations
-- `env.ts` — Environment variable validation
-- `safe.ts` — Retry wrapper for Supabase operations
+**On disk:** `puckBlockRegistry.tsx` defines Puck config; edit view is JSON + field rows; **`app/admin/svg-editor/[id]/page.tsx` mounts `<Render>` only** — not full `<Puck onPublish=…>`. Full mount is **1B**.
 
-### platform/drizzle/
+**Compile (honest):** publish API uses `svgPipelineRunner` (exec `generate-svg.mjs`); in-process `svgCompiler.server.ts` exists for tests — **dual path open** until 1B unifies.
 
-Drizzle ORM for direct PostgreSQL access (DigitalOcean managed DB).
+Contracts: Zod descriptors, `puckBlockRegistry`, server compilers (`svgCompiler.server.ts`, `svgArtifactCompiler.server.ts`). No SVG.js in Phase 1 (Option A).
 
-- `schema.ts` — Table definitions (profiles, plans, teams, audit_events)
-- `db.ts` — Connection pooling with lazy initialization
+### Marketing
 
-## API Layer
+| Area | Path |
+|------|------|
+| Homepage sections | `components/home/` |
+| Site chrome | `components/site/` |
+| Planner landing | `features/planner/landing/` |
 
-Route groups:
-- `app/api/plans/` — Plan CRUD operations
-- `app/api/admin/catalog/` — Catalog management (3 variants: standard, buddy, configurator)
-- `app/api/customer-queries/` — Customer inquiry submission
-- `app/api/recommendations/` — AI-powered product recommendations
-- `app/api/tracking/` — Analytics event tracking
-- `app/api/audit/` — Audit trail logging
-- `app/api/ai-advisor/` — AI layout assistance
+UI contract deferred to UI-3 — [`SITE-MARKETING-UI-CONTRACT.md`](SITE-MARKETING-UI-CONTRACT.md).
+
+### Catalog, shared, platform
+
+| Module | Path | Role |
+|--------|------|------|
+| Catalog | `features/catalog/` | Categories, images, `getProducts.ts` |
+| Shared | `features/shared/` | Auth, dashboard, analytics |
+| Supabase | `platform/supabase/` | Browser + server clients, auth-admin |
+| Drizzle | `platform/drizzle/` | Profiles, plans, teams, audit_events |
+
+---
+
+## Proposed (Phase 1 target)
+
+Per `plann/REVISION-2026-07-05.md`:
+
+| Change | Target |
+|--------|--------|
+| **1A** | `/planner/open3d` pilot accepted — `PlannerCommand` wired in `useWorkspaceCanvas`, selection, save/reload, Phosphor chrome |
+| **1B** | Admin full `<Puck>` publish → unified compile → disk descriptors → open3d catalog loader (Option A, no SVG.js) |
+| **Phase 2** | Guest/canvas promotion decision — not before 1A+1B |
+| **UI** | Layer → surface → module; [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) on every new editor module |
+| **Fabric** | Stays in hybrid until explicit promotion; no second canvas engine |
+| **Hosts** | `Open3dPlannerHost` re-export from `open3d/ui/`; thin `app/planner/open3d/` only |
+
+**Expert review:** Optional after 1A for C4 security boundaries (client vs server-only SVG).
+
+---
+
+## API Layer (selected)
+
+| Group | Purpose |
+|-------|---------|
+| `app/api/plans/` | Plan CRUD |
+| `app/api/admin/catalog/` | Catalog management |
+| `app/api/admin/svg-editor/` | Block descriptor compile/persist (1B) |
+| `app/api/admin/themes/` | Theme tokens publish |
+| `app/api/customer-queries/` | Inquiries |
+| `app/api/ai-advisor/` | Layout assistance |
+
+---
+
+## Related docs
+
+- [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — placement rules
+- [`DATA_FLOW.md`](DATA_FLOW.md) — §5 open3d save, §6 SVG publish
+- [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md)
+- [`ADMIN-UI-CONTRACT.md`](ADMIN-UI-CONTRACT.md)

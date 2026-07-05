@@ -1,7 +1,7 @@
 # Handover — active backlog
 
 **Last updated:** 2026-07-04 (planner phase-01 executor, BLOCK on typecheck)
-**Planner authority:** `plannnerplan/IMPLEMENTATION-DECISIONS.md`. Phase-01 deadlines → `plannnerplan/phases/01-engine-lock-and-workspace-bootstrap.md`.
+**Planner authority:** `plans/2026-07-05_phase1-execution/implementation-decisions.md`. Routing: `plans/2026-07-05_phase1-execution/handover-routing.md`. Phase specs → `archive/plans/2026-07-05_phase1-execution/phases/`.
 
 **Owns:** session status and priority backlog only. Full blocker list → [`Failures.md`](Failures.md). Commands → [`START.md`](START.md). Which doc to open → [`docs/Lockedfiles/ReadmeLocked.md`](docs/Lockedfiles/ReadmeLocked.md).
 
@@ -11,7 +11,7 @@
 
 ## Phase 01 — Engine Lock & Workspace Bootstrap (Planner plan, NEW section)
 
-**Status:** **Blocked on typecheck** (per `plannnerplan/FAILURESPLAN.md` PLAN-FAIL-0412, opened 2026-07-04 by Phase 01 executor).
+**Status:** **Blocked on typecheck** (per Failures.md active section — PLAN-FAIL-0412 now Resolved; see Failures.md / resolved-failures.md). (Consolidated 2026-07-05: only 2 failure files.)
 
 **What is done (Implemented part):**
 

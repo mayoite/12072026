@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import type { CanvasTool } from "./canvasTool";
+import { useEffect, useRef } from "react";
+import type { PlannerTool } from "./canvasTool";
 import { CANVAS_TOOL_SHORTCUTS } from "./canvasTool";
 
 function isEditableTarget(target: EventTarget | null): boolean {
@@ -16,18 +16,22 @@ function isEditableTarget(target: EventTarget | null): boolean {
 }
 
 export interface WorkspaceKeyboardHandlers {
-  setTool: (tool: CanvasTool) => void;
+  setTool: (tool: PlannerTool) => void;
   toggleView: () => void;
   openPalette: () => void;
   undo: () => void;
   redo: () => void;
   cancel: () => void;
+  commit?: () => void;
+  beginTemporaryPan?: () => void;
+  endTemporaryPan?: () => void;
   deleteSelection?: () => void;
   enabled?: boolean;
 }
 
 export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void {
   const { enabled = true } = handlers;
+  const spacePanActive = useRef(false);
 
   useEffect(() => {
     if (!enabled) return;
@@ -37,6 +41,13 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
 
       const key = event.key.toLowerCase();
       const mod = event.ctrlKey || event.metaKey;
+
+      if (event.code === "Space" && !mod && !event.repeat) {
+        event.preventDefault();
+        spacePanActive.current = true;
+        handlers.beginTemporaryPan?.();
+        return;
+      }
 
       if (mod && key === "k") {
         event.preventDefault();
@@ -56,21 +67,33 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
         return;
       }
 
+      if (key === "r" && !mod) {
+        event.preventDefault();
+        handlers.setTool("room");
+        return;
+      }
+
       if (key === "w" && !mod) {
         event.preventDefault();
         handlers.setTool("wall");
         return;
       }
 
-      if (key === "d" && !mod) {
+      if (key === "o" && !mod) {
         event.preventDefault();
-        handlers.setTool("door");
+        handlers.setTool("opening");
         return;
       }
 
-      if ((key === "t" || key === "n") && !mod) {
+      if (key === "d" && !mod) {
         event.preventDefault();
-        handlers.setTool(key === "n" ? "text" : "window");
+        handlers.setTool("dimension");
+        return;
+      }
+
+      if (key === "p" && !mod) {
+        event.preventDefault();
+        handlers.setTool("placement");
         return;
       }
 
@@ -81,7 +104,14 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
       }
 
       if (event.key === "Escape") {
+        event.preventDefault();
         handlers.cancel();
+        return;
+      }
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handlers.commit?.();
         return;
       }
 
@@ -103,14 +133,25 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
       }
     };
 
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.code !== "Space" || !spacePanActive.current) return;
+      event.preventDefault();
+      spacePanActive.current = false;
+      handlers.endTemporaryPan?.();
+    };
+
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
   }, [enabled, handlers]);
 }
 
-export function toolFromShortcutKey(key: string): CanvasTool | null {
+export function toolFromShortcutKey(key: string): PlannerTool | null {
   const normalized = key.toUpperCase();
-  const entries = Object.entries(CANVAS_TOOL_SHORTCUTS) as Array<[CanvasTool, string]>;
+  const entries = Object.entries(CANVAS_TOOL_SHORTCUTS) as Array<[PlannerTool, string]>;
   const match = entries.find(([, shortcut]) => shortcut.toUpperCase() === normalized);
   return match?.[0] ?? null;
 }

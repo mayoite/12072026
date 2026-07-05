@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import "@/app/css/core/planner/open3d.css";
+import "@/app/css/core/planner/bundles/open3d-workspace.css";
 
 export const metadata: Metadata = {
   title: "Open3D Planner | One&Only",

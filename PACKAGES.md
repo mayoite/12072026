@@ -2,11 +2,11 @@
 
 Locked packages for the **`open3d-next-staging`** Next 16 + React 19 workspace and the broader oando.co.in planner stack (2026-07-04). This is the read-only ground truth for what we install, what we defer, and why. Any change here is a `plannnerplan/` wide change.
 
-Global Standard filter applies (per `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md` §6 and `plannnerplan/IMPLEMENTATION-DECISIONS.md` §"Global Standard Framework (Binding)"): every package decision must cite at least one principle from the 2026-07-04 benchmark report (`plans/2026-07-04/benchmark.md`); anti-copy attestation + benchmark justification required for changes.
+Global Standard filter applies (per `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md` §6 and `plans/2026-07-05_phase1-execution/implementation-decisions.md` §"Global Standard Framework (Binding)"): every package decision must cite at least one principle from the Phase 0 benchmark (`plans/2026-07-04_global-standard-revision/benchmark-summary.md`); anti-copy attestation + benchmark justification required for changes.
 
 <!-- GS justification (0420/0415/0416): Tier-1/2/any package changes require fresh benchmark cite (design §6), anti-copy, REVIEW-WORKFLOW GS-SCORE + artifacts before I-D/PACKAGES/phase update. Enforced via Global Standard Gate + Package Review procedure. See phases/04/05/06 enforcement checklists, I-D, FAILURESPLAN. Provisional (design §16). -->
 
-> Read with: `AGENTS.md`, `Readme.md`, `plannnerplan/IMPLEMENTATION-DECISIONS.md`, `plans/2026-07-04/benchmark.md`, `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`.
+> Read with: `AGENTS.md`, `Readme.md`, `plans/2026-07-05_phase1-execution/implementation-decisions.md`, `plans/2026-07-04_global-standard-revision/benchmark-summary.md`, `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`.
 
 ## Tiering
 
@@ -139,7 +139,7 @@ The toolbar atoms are Ark UI primitives. Admins compose them through Puck JSON i
 ## Global Standard Package Review Gate (0420 enforcement + 0415 benchmark gate)
 Per I-D §"Global Standard Package Review" + design spec §6 + QUALITY-GATES:
 - Any change to locked set, Tier move (e.g. drei Tier-2 in Phase 06), or pin update requires:
-  1. Dated benchmark report cite (plans/2026-07-04/benchmark.md BP relevant, e.g. BP-04/06 for admin/3D pkgs).
+  1. Dated benchmark report cite (`plans/2026-07-04_global-standard-revision/benchmark-summary.md` or `plans/archive/2026-07-04_global-standard-revision/benchmark.md` BP relevant, e.g. BP-04/06 for admin/3D pkgs).
   2. Anti-copy attestation (semantic tokens only; 5-product model).
   3. Agent review workflow execution (REVIEW-WORKFLOW GS-SCORE for packages) + signed artifacts.
 - Justification MUST be added to this file (comment or table note) + I-D Decision Log + affected phase (04/05/06) before edit.

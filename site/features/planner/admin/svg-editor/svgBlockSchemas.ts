@@ -85,7 +85,48 @@ export const SvgBlockDefinitionV1Schema = z.object({
   variants: z.array(SvgVariantV1Schema).max(100).default([]),
   mounting: z.array(SvgMountingV1Schema).max(20).default([]),
   accessibility: z.object({ title: z.string().trim().min(1).max(200), description: z.string().max(1_000).optional() }).strict(),
-}).strict();
+}).strict().superRefine((definition, context) => {
+  const parameterIds = new Set(definition.parameters.map(({ id }) => id));
+  const duplicate = <T extends { id: string }>(items: T[], path: string) => {
+    const seen = new Set<string>();
+    for (const [index, item] of items.entries()) {
+      if (seen.has(item.id)) {
+        context.addIssue({ code: "custom", path: [path, index, "id"], message: `duplicate id "${item.id}"` });
+      }
+      seen.add(item.id);
+    }
+  };
+  duplicate(definition.parts, "parts");
+  duplicate(definition.parameters, "parameters");
+  duplicate(definition.actions, "actions");
+  duplicate(definition.constraints, "constraints");
+  duplicate(definition.variants, "variants");
+  for (const [index, reference] of definition.actions.entries()) {
+    for (const parameterId of reference.parameterIds) {
+      if (!parameterIds.has(parameterId)) {
+        context.addIssue({
+          code: "custom",
+          path: ["actions", index, "parameterIds"],
+          message: `unknown parameter "${parameterId}"`,
+        });
+      }
+    }
+  }
+  for (const [index, reference] of definition.constraints.entries()) {
+    for (const parameterId of reference.parameterIds) {
+      if (!parameterIds.has(parameterId)) {
+        context.addIssue({ code: "custom", path: ["constraints", index, "parameterIds"], message: `unknown parameter "${parameterId}"` });
+      }
+    }
+  }
+  for (const [index, variant] of definition.variants.entries()) {
+    for (const parameterId of Object.keys(variant.parameterValues)) {
+      if (!parameterIds.has(parameterId)) {
+        context.addIssue({ code: "custom", path: ["variants", index, "parameterValues", parameterId], message: `unknown parameter "${parameterId}"` });
+      }
+    }
+  }
+});
 
 export const BlockDefinitionV1Schema = SvgBlockDefinitionV1Schema;
 
@@ -111,8 +152,21 @@ export const PublishedRevisionV1Schema = z.object({
   definitionVersion: z.number().int().positive(),
   compilerVersion: z.string().min(1),
   sourceRevision: z.number().int().nonnegative(),
-  artifactChecksums: z.object({ descriptor: ChecksumSchema, svg: ChecksumSchema }).strict(),
-  validation: z.object({ valid: z.literal(true), diagnostics: z.array(z.string()) }).strict(),
+  artifactChecksums: z.object({
+    descriptor: ChecksumSchema,
+    svg: ChecksumSchema,
+    png: ChecksumSchema,
+    thumbnails: z.record(z.string(), ChecksumSchema),
+  }).strict(),
+  validation: z.object({
+    valid: z.literal(true),
+    diagnostics: z.array(z.object({
+      code: z.string().min(1),
+      severity: z.enum(["error", "warning"]),
+      path: z.string(),
+      message: z.string().min(1),
+    }).strict()),
+  }).strict(),
   actorId: z.string().min(1),
   publishedAt: z.string().datetime(),
   reason: z.string().trim().min(1).max(500),

@@ -13,7 +13,7 @@
  *     `site/scripts/generate-svg/_fixtures/` and the script invoked with
  *     `-- --fixture {name}`. The script outputs to
  *     `site/public/svg-catalog/{slug}.svg` and uploads PNG to R2
- *     (`site-block-thumbs/` per IMPLEMENTATION-DECISIONS.md §110).
+ *     (`site-block-thumbs/` per implementation-decisions.md §110).
  *
  * Authority: Phase 03 script owns the pipeline. Phase 04 calls it but never
  * edits it (AGENTS.md §Scope: don't auto-create or modify Phase 03 territory).

@@ -1,5 +1,3 @@
-export type AdvisorPricingMode = "band" | "on-request";
-
 export type AdvisorRecommendation = {
   productUrlKey?: string;
   productId: string;
@@ -43,7 +41,7 @@ export type AdvisorResult = {
   summary: string;
   nextActions?: string[];
   warnings?: string[];
-  pricingMode?: AdvisorPricingMode;
+  pricingMode?: "band" | "on-request";
   fallbackUsed?: boolean;
 };
 

@@ -45,12 +45,13 @@
   /* Touch target — WCAG 2.5.5 minimum (44px) */
   --pw-touch-target: 2.75rem;
   /* Legacy planner component tokens (--planner-*) mapped to site theme */
-  --planner-primary: var(--color-primary);
-  --planner-primary-hover: var(--color-primary-hover);
-  --planner-primary-soft: color-mix(in srgb, var(--color-primary) 12%, var(--surface-panel));
-  --planner-accent: var(--color-accent);
-  --planner-accent-soft: var(--surface-accent-wash);
-  --planner-accent-strong: var(--text-brand);
+  --planner-accent: var(--color-primary);
+  --planner-accent-hover: var(--color-primary-hover);
+  --planner-accent-soft: color-mix(in srgb, var(--color-primary) 12%, var(--surface-panel));
+  --planner-accent-strong: var(--color-primary);
+  --planner-primary: var(--planner-accent);
+  --planner-primary-hover: var(--planner-accent-hover);
+  --planner-primary-soft: var(--planner-accent-soft);
   --planner-border-soft: var(--border-soft);
   --planner-border-hover: var(--border-hover);
   --planner-panel: var(--surface-panel);

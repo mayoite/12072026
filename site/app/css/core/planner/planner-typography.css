@@ -128,7 +128,7 @@
   font-weight: 600;
   letter-spacing: var(--pw-letter-label);
   text-transform: none;
-  color: #5f6368;
+  color: var(--text-muted);
 }
 
 .planner-workspace .pw-catalog-card-name {

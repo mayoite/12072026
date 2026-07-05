@@ -32,8 +32,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: var(--planner-control-target, 2.5rem);
+  height: var(--planner-control-target, 2.5rem);
   padding: 0;
   border: 1px solid transparent;
   border-radius: var(--radius-md, 0.5rem);
@@ -65,6 +65,34 @@
 .toolBtn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+:global([data-planner-density="compact"]) .toolBtn {
+  --planner-control-target: 2rem;
+}
+
+@media (pointer: coarse) {
+  .toolBtn {
+    --planner-control-target: var(--planner-touch-target, 2.75rem);
+  }
+}
+
+@media (forced-colors: active) {
+  .toolBtn {
+    border-color: ButtonBorder;
+  }
+
+  .toolBtn[data-active="true"] {
+    color: HighlightText;
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+}
+
+@media print {
+  .rail {
+    display: none;
+  }
 }
 
 .shortcut {

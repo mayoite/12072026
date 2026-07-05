@@ -1,14 +1,14 @@
 # System overview (redirect)
 
-**Status:** Superseded — this file is a pointer only.
-
-Use these docs instead:
+**Status:** Superseded — pointer only. Do not extend this file.  
+**Authority:** [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md) → [`README.md`](README.md)  
+**Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
 
 | Topic | Doc |
 |-------|-----|
-| Component layers, C4, feature modules | [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md) |
-| Request/data sequences | [`DATA_FLOW.md`](DATA_FLOW.md) |
-| CSS and folder policy | [`CSS-SOLUTION.md`](CSS-SOLUTION.md) |
+| **Where new code goes** | [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) |
+| Components / C4 | [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md) |
+| Data flows (§5 open3d, §6 SVG) | [`DATA_FLOW.md`](DATA_FLOW.md) |
+| CSS policy | [`CSS-SOLUTION.md`](CSS-SOLUTION.md) |
+| UI contract | [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) |
 | Repo orientation | [`../../Readme.md`](../../Readme.md) |
-
-Do not add new content here; extend the replacement docs above.

@@ -6,7 +6,7 @@ pnpm monorepo for `oando.co.in`. Next.js in `site/`.
 
 ## Which doc to open
 
-→ **`docs/Lockedfiles/ReadmeLocked.md`** (locked). Repo facts and app paths continue below.
+→ **`docs/Lockedfiles/conduct/ReadmeLocked.md`** (locked). Repo facts and app paths continue below.
 
 ## Layout
 
@@ -20,6 +20,8 @@ repo-root/          ← pnpm workspace wrapper (package.json, pnpm-lock.yaml)
 ```
 
 Inside `site/`: `app/` · `features/planner/` · `components/` · `lib/` · `tests/` · `scripts/` · `platform/` · `config/` · `results/`
+
+**Where code goes:** [`docs/architecture/MODULE-LAYOUT.md`](docs/architecture/MODULE-LAYOUT.md) · **Architecture index:** [`docs/architecture/README.md`](docs/architecture/README.md)
 
 ## Environment
 
@@ -59,7 +61,7 @@ Copy `.env.example` → repo-root `.env.local`. Minimum keys: `NEXT_PUBLIC_SUPAB
 - **Site:** `site/app/css/core/site/bundles/*` per layout.
 - **Planner:** `site/app/css/core/planner/bundles/*` for workspace styling.
 
-See `docs/architecture/CSS-SOLUTION.md` for the CSS operating model and folder policy.
+CSS operating model: [`docs/architecture/CSS-SOLUTION.md`](docs/architecture/CSS-SOLUTION.md). Module folders and ownership: [`docs/architecture/MODULE-LAYOUT.md`](docs/architecture/MODULE-LAYOUT.md) · [`docs/architecture/README.md`](docs/architecture/README.md).
 
 ## Assets & CDN
 

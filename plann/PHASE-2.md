@@ -1,11 +1,14 @@
 # Phase 2 - Composable Admin System, Mobile Editing, 3D, and Promotion
 
-Status: Planned
-Depends on: Phase 1 accepted on one unchanged revision
+Status: Planned  
+Depends on: **Phase 1A + 1B** accepted on one unchanged revision (per [`REVISION-2026-07-05.md`](REVISION-2026-07-05.md) Decision 4)  
+Authority: [`START.md`](START.md) · [`PHASE-1.md`](PHASE-1.md) · [`docs/architecture/README.md`](../docs/architecture/README.md)
 
 ## Outcome
 
-A globally competitive planner with full mobile editing, production-grade 3D continuity, advanced composable SVG families, immutable publication, accessibility completion, performance hardening, and controlled promotion to shared routes.
+A globally competitive planner with full mobile editing, production-grade 3D continuity, advanced composable SVG families, immutable publication (including Supabase revisions per Phase 08), accessibility completion, performance hardening, and controlled promotion to shared routes.
+
+**Promotion order (locked):** `/planner/open3d` (Phase 1) → `/planner/guest` → `/planner/canvas`. Guest and canvas remain unchanged until Phase 2 gates pass.
 
 ## 1. Lego-Like Admin Composition
 
@@ -22,6 +25,7 @@ A globally competitive planner with full mobile editing, production-grade 3D con
 - [ ] Reject cycles, unresolved references, incompatible constraints, and unreachable variants.
 - [ ] Add semantic style-token selection instead of arbitrary CSS.
 - [ ] Add insertion points, anchors, clearance, collision, and orientation editing.
+- [ ] Migrate dual descriptor models (`BlockDescriptor` + `SvgBlockDefinitionV1`) to single authority.
 
 ## 2. Admin Preview and Publishing
 
@@ -32,7 +36,7 @@ A globally competitive planner with full mobile editing, production-grade 3D con
 - [ ] Add draft, review, published, deprecated, and archived states.
 - [ ] Add role permissions for edit, approve, publish, rollback, archive, token editing, SVG editing, asset replacement, and migration.
 - [ ] Add optimistic concurrency using revision IDs.
-- [ ] Add immutable published revisions.
+- [ ] Add immutable published revisions (Supabase — Phase 08 migration).
 - [ ] Add atomic active-revision pointers.
 - [ ] Add version comparison, clone, import, export, migration preview, and rollback.
 - [ ] Preserve unknown and deprecated blocks as recoverable placeholders.
@@ -83,7 +87,7 @@ A globally competitive planner with full mobile editing, production-grade 3D con
 - [ ] Announce tool, command, selection, validation, save, and publication states.
 - [ ] Provide a synchronized accessible object/layer representation of canvas content.
 - [ ] Support non-pointer geometry editing through numeric controls.
-- [ ] Define focus order: top bar -> tools -> canvas alternative -> panels -> status.
+- [ ] Define focus order: top bar → tools → canvas alternative → panels → status.
 - [ ] Restore focus to invoking controls.
 - [ ] Never use color as the only status indicator.
 - [ ] Support reduced motion.
@@ -109,7 +113,9 @@ A globally competitive planner with full mobile editing, production-grade 3D con
 
 ## 8. Promotion
 
-- [ ] Accept Open3D Phase 2 on one unchanged revision.
+Prerequisite: Phase 1A + 1B sign-off on one revision. Promote shell and command layer from `features/planner/open3d/` per [`MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md).
+
+- [ ] Accept Open3D Phase 1 (1A + 1B) on one unchanged revision.
 - [ ] Promote the shared shell and command layer to `/planner/guest`.
 - [ ] Verify guest restrictions and persistence boundaries.
 - [ ] Verify onboarding and rollback.

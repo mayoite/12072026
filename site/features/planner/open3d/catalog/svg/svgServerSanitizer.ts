@@ -15,16 +15,24 @@ export function sanitizeAndOptimizeSvg(svg: string): string {
       USE_PROFILES: { svg: true, svgFilters: false },
       ALLOWED_TAGS,
       ALLOWED_ATTR,
+      ADD_ATTR: ["role"],
       FORBID_TAGS: ["script", "style", "foreignObject", "filter", "image"],
       FORBID_ATTR: ["style"],
     });
-    if (purifier.removed.length > 0) {
+    const unsafeRemoval = purifier.removed.some((removal) => {
+      if ("attribute" in removal) return true;
+      if ("element" in removal) {
+        return removal.element.nodeName.toLowerCase() !== "body";
+      }
+      return true;
+    });
+    if (unsafeRemoval) {
       throw new Error("SVG sanitization rejected or changed unsafe markup");
     }
     return optimize(sanitized, {
       multipass: false,
       plugins: [
-        { name: "preset-default", params: { overrides: { cleanupIds: false, removeViewBox: false } } },
+        { name: "preset-default", params: { overrides: { cleanupIds: false } } },
         "sortAttrs",
       ],
     }).data.trim();

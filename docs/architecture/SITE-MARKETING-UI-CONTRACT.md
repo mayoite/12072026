@@ -1,10 +1,32 @@
 # Site marketing UI contract
 
+> **⏸ DEFERRED — UI-3 only.** Do not prioritize marketing dialect migration ahead of **1A** (`/planner/open3d`) or **1B** (SVG publish). This doc is **reference** for future marketing work.
+
+**Status:** Reference (execution priority **UI-3** — post-1A)  
+**Authority:** `plann/REVISION-2026-07-05.md` → `plann/UI-PLAN-REVISED-2026-07-05.md` → [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) → **this file**  
+**Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
+**Placement:** [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — marketing UI in `components/`, not `features/planner/open3d/`  
+**Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
+
 **Source of truth:** homepage (`/`) for visual language; `app/(site)/solutions/page.tsx` for inner-page structure.
 
 **Matrix:** `results/site-ui/route-matrix.csv` (regenerate: `node site/scripts/generate-site-ui-route-matrix.mjs`).
 
 **Primitives (Phase 2b):** `@/components/home/layout` — `HomeMarketingLayout`, `HomeSection`, `HomeSectionInner`.
+
+---
+
+## Current vs proposed
+
+| Area | Current | Proposed (UI-3) |
+|------|---------|-----------------|
+| Outer shell | Mostly `HomeMarketingLayout` on `(site)` routes | Complete dialect cleanup |
+| Section titles | Mix of `home-heading` and `typ-section` | `home-heading` canonical |
+| Legacy `scheme-page` | Few remaining routes | Migrate to solutions-like template |
+| Enforcement | `check:site-ui:dialect` warn | `SITE_UI_DIALECT_MODE=error` at Phase 10 |
+| Token reuse | Independent marketing palette | Reuse semantic tokens only; no new palette |
+
+**Not in scope for 1A/1B:** marketing rewrite, cross-surface UI sprint, Option F design system.
 
 ---
 
@@ -82,7 +104,6 @@ Map legacy `shell-card` / `scheme-panel` marketing grids to home-section content
 | `HomeMarketingLayout` | All `(site)` marketing pages | `data-testid="home-marketing-layout"` |
 | `SiteWorkspaceShell` | access, choose-product, dashboard | Phase 6 — homepage tokens, not full marketing layout |
 | `HomeCatalogLayout` | `/products/*`, `/compare`, `/quote-cart` | `HomeMarketingLayout` + white section band + header offset |
-| `HomeCatalogLayout` | products lane | Phase 7 |
 | `SiteErrorShell` | offline, not-found | unchanged |
 
 ---
@@ -117,6 +138,8 @@ Legal pages (`/privacy`, `/terms`, `/imprint`, `/refund-and-return-policy`) foll
 - **Retire over time:** `contact-shell` as primary layout; legal-only modifiers folded into `HomeSection`
 - **Do not** rename `home-section--*` to `surface-section-*`
 
+See [`CSS-SOLUTION.md`](CSS-SOLUTION.md) for folder ownership.
+
 ---
 
 ## Matrix mapping (Phase 1)
@@ -142,7 +165,7 @@ Rules live in `site/lib/site-data/routeChromeRules.ts`; `RouteChrome.tsx` consum
 | `/login` (no `next` query) | hidden | login-tools (bot + WhatsApp) |
 | `/login?next=…`, `/oando-planner/login`, `/buddy-planner/login` | full (when `next` present on `/login`) | login-tools |
 | `/access`, `/choose-product`, `/dashboard`, `/portal/*`, `/admin` | hidden | hidden |
-| `/planner/canvas`, `/planner/guest`, `/buddy-planner/editor`, `/buddy-planner/t/*`, other CAD prefixes | hidden | hidden |
+| `/planner/canvas`, `/planner/guest`, **`/planner/open3d`**, `/buddy-planner/editor`, `/buddy-planner/t/*`, other CAD prefixes | hidden | hidden |
 | `/oando-planner`, `/buddy-planner` (marketing landings) | full | full |
 | All other `(site)` marketing routes | full | full (marquee + footer + consent + bot) |
 
@@ -157,12 +180,6 @@ Rules live in `site/lib/site-data/routeChromeRules.ts`; `RouteChrome.tsx` consum
 | 4a | `en.json` — 20 marketing namespaces + `workspace` | committed via `i18n:sync:marketing` |
 | 4b | `hi.json` wave1: home, about, contact, products, solutions | `i18n:sync:hi-wave1` + `check:i18n:parity` |
 | 4c | de / es / fr | **deferred** — dated entry in `Failures.md` |
-
-**Wave 1 consumers** (no `routeCopy` import): about, news, legal routes, solutions, contact, products (`CategoryGrid`).
-
-**Metadata:** Wave 1 contact/products use `generateMetadata` + `getTranslations`. Remaining routes still use `routeMetadata.ts` until metadata namespace migration.
-
-**Homepage blocks:** `homepage.ts` remains source for `/` components; subset mirrored under `home` namespace in `en.json` for parity scaffold.
 
 ---
 
@@ -219,3 +236,11 @@ import {
   HomeSectionInner,
 } from "@/components/home/layout";
 ```
+
+---
+
+## References
+
+- [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — `components/` vs `features/`
+- [`CSS-SOLUTION.md`](CSS-SOLUTION.md) — site bundle ownership
+- `plann/UI-PLAN-REVISED-2026-07-05.md` — UI-3 sequencing

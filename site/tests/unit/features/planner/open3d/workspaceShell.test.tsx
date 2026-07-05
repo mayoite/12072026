@@ -15,6 +15,7 @@ import {
 import { useDockingSystem } from "@/features/planner/open3d/editor/useDockingSystem";
 import { useDoorWindowPlacement } from "@/features/planner/open3d/editor/useDoorWindowPlacement";
 import { useWorkspaceKeyboard, toolFromShortcutKey } from "@/features/planner/open3d/editor/useWorkspaceKeyboard";
+import { runtimeToolFor } from "@/features/planner/open3d/editor/canvasTool";
 import { createOpen3dProject } from "@/features/planner/open3d/model/project";
 import type { Open3dWall } from "@/features/planner/open3d/model/types";
 
@@ -496,12 +497,21 @@ describe("TDD editor coverage additions", () => {
   describe("toolFromShortcutKey (keyboard)", () => {
     it("maps shortcut keys to tools", () => {
       expect(toolFromShortcutKey("v")).toBe("select");
+      expect(toolFromShortcutKey("r")).toBe("room");
       expect(toolFromShortcutKey("w")).toBe("wall");
-      expect(toolFromShortcutKey("d")).toBe("door");
-      expect(toolFromShortcutKey("t")).toBe("window");
-      expect(toolFromShortcutKey("n")).toBe("text");
+      expect(toolFromShortcutKey("o")).toBe("opening");
+      expect(toolFromShortcutKey("d")).toBe("dimension");
+      expect(toolFromShortcutKey("p")).toBe("placement");
       expect(toolFromShortcutKey("h")).toBe("pan");
       expect(toolFromShortcutKey("?")).toBeNull();
+    });
+
+    it("maps semantic tools onto the existing canvas runtime", () => {
+      expect(runtimeToolFor("room")).toBe("wall");
+      expect(runtimeToolFor("opening")).toBe("door");
+      expect(runtimeToolFor("dimension")).toBe("text");
+      expect(runtimeToolFor("placement")).toBe("select");
+      expect(runtimeToolFor("pan")).toBe("pan");
     });
   });
 

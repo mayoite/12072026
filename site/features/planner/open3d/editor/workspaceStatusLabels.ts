@@ -1,4 +1,4 @@
-import type { CanvasTool } from "./canvasTool";
+import type { PlannerTool } from "./canvasTool";
 import { CANVAS_TOOL_LABELS } from "./canvasTool";
 import type { SnapKind } from "../lib/geometry/snapping";
 import type { CanvasSelection } from "./useWorkspaceCanvas";
@@ -12,7 +12,7 @@ const SELECTION_LABELS: Record<Exclude<CanvasSelection["type"], "none">, string>
   room: "Room",
 };
 
-export function formatToolStatus(tool: CanvasTool, viewMode: "2d" | "3d"): string {
+export function formatToolStatus(tool: PlannerTool, viewMode: "2d" | "3d"): string {
   return `${CANVAS_TOOL_LABELS[tool]} · ${viewMode.toUpperCase()}`;
 }
 

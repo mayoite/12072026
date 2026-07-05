@@ -40,6 +40,49 @@
   background: color-mix(in srgb, var(--surface-soft) 88%, var(--surface-page));
 }
 
+.open3d-tool-guidance {
+  position: absolute;
+  inset-block-start: var(--space-3);
+  inset-inline-start: calc(var(--planner-tool-rail-width) + var(--space-3));
+  z-index: var(--planner-z-floating);
+  display: grid;
+  max-width: min(28rem, calc(100% - var(--planner-tool-rail-width) - var(--space-6)));
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--planner-border-default);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--planner-surface-panel) 92%, transparent);
+  box-shadow: var(--planner-shadow-floating);
+  color: var(--planner-text-secondary);
+  font-size: var(--planner-font-size-detail);
+  pointer-events: none;
+}
+
+.open3d-tool-guidance strong {
+  color: var(--planner-text-primary);
+}
+
+@media (pointer: coarse) {
+  .open3d-tool-guidance {
+    inset-block-start: var(--space-2);
+    inset-inline-start: calc(var(--planner-tool-rail-width) + var(--space-2));
+  }
+}
+
+@media (forced-colors: active) {
+  .open3d-tool-guidance {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+  }
+}
+
+@media print {
+  .open3d-tool-guidance {
+    display: none;
+  }
+}
+
 .open3d-first-use {
   position: absolute;
   top: 50%;

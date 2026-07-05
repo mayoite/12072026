@@ -18,7 +18,7 @@ import { addFurniture } from "../model/operations/pureActions";
 
 // ── Placement options ──
 
-export interface PlacementOptions {
+export interface PlannerPlacementPayload {
   /** How the placement was triggered */
   placedFrom: "click" | "drag" | "api" | "import";
   /** Position override (defaults to {0,0} for API/import, center for click/drag) */
@@ -35,7 +35,8 @@ export interface PlacementOptions {
   locked?: boolean;
 }
 
-export type PlacementOverrides = Omit<PlacementOptions, "placedFrom">;
+export type PlacementOptions = PlannerPlacementPayload;
+export type PlacementOverrides = Omit<PlannerPlacementPayload, "placedFrom">;
 
 export interface ProjectPlacementResult {
   snapshot: Open3dPlacedConfiguration;
@@ -77,6 +78,30 @@ function generatePlacementId(): string {
   return `plc-${Date.now().toString(36)}-${randomIdSegment()}`;
 }
 
+function finite(value: number, field: string): number {
+  if (!Number.isFinite(value)) throw new Error(`${field} must be finite.`);
+  return value;
+}
+
+export function validatePlannerPlacementPayload(
+  payload: PlannerPlacementPayload,
+): PlannerPlacementPayload {
+  const position = payload.position ?? { x: 0, y: 0 };
+  const scale = payload.scale ?? { x: 1, y: 1, z: 1 };
+  finite(position.x, "position.x");
+  finite(position.y, "position.y");
+  finite(payload.rotation ?? 0, "rotation");
+  for (const [axis, value] of Object.entries(scale)) {
+    finite(value, `scale.${axis}`);
+    if (value <= 0) throw new Error(`scale.${axis} must be greater than zero.`);
+  }
+  return {
+    ...payload,
+    position: { ...position },
+    scale: { ...scale },
+  };
+}
+
 // ── Placement action ──
 
 /**
@@ -98,6 +123,7 @@ export function placeCatalogItem(
   variant: Open3dCatalogVariant | null,
   options: PlacementOptions = { placedFrom: "click" },
 ): Open3dPlacedConfiguration {
+  options = validatePlannerPlacementPayload(options);
   const placementId = generatePlacementId();
   const placedAt = new Date().toISOString();
 

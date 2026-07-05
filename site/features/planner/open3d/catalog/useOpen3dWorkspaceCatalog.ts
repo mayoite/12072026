@@ -1,17 +1,25 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { Open3dCatalogClient } from "./catalogClient";
 import type { Open3dCatalogItem } from "./catalogTypes";
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "../editor/demoCatalogItems";
+import { loadOpen3dCatalog, OPEN3D_CATALOG_QUERY_KEY } from "./catalogQuery";
 
 // Catalogue-first (BP-06 / design §9-10 / REC-04 / phase-06 / 0419): loader primary via client for descriptors (fallback to API/demo).
 // Resolver blocks wired through catalogClient.loadDescriptorsFromLoader + resolveBlocks.
 // Search parity (cursor, license/animated/staffPicked etc) flows to inventory.
 // GS: BP-06 + design §9 (catalogue-first, resolver), §10. Full Phase 06 integration.
 
-export type Open3dWorkspaceCatalogStatus = "loading" | "ready" | "fallback";
+export type Open3dWorkspaceCatalogStatus =
+  | "loading"
+  | "ready"
+  | "fallback"
+  | "stale"
+  | "offline"
+  | "error";
 
 export function useOpen3dWorkspaceCatalog() {
   const clientRef = useRef<Open3dCatalogClient | null>(null);
@@ -19,44 +27,25 @@ export function useOpen3dWorkspaceCatalog() {
     clientRef.current = new Open3dCatalogClient();
   }
 
-  const [items, setItems] = useState<Open3dCatalogItem[]>(OPEN3D_DEMO_CATALOG_ITEMS);
-  const [status, setStatus] = useState<Open3dWorkspaceCatalogStatus>("loading");
-
-  useEffect(() => {
-    const client = clientRef.current;
-    if (!client) return;
-
-    let cancelled = false;
-
-    // Catalogue-first: try loader primary descriptors first (populates client items for search); fallback API/demo.
-    // Address client [] return: always check getAll() after loadDescriptors (preloaded or server path sets items); primary functional.
-    void client.loadDescriptorsFromLoader()
-      .then(() => {
-        if (cancelled) return;
-        const fromDesc = client.getAll();
-        if (fromDesc.length > 0) {
-          setItems(fromDesc);
-          setStatus("ready");
-          return;
-        }
-        // fallback to API
-        return client.loadFromApi("configurator", 200).then((loaded) => {
-          if (cancelled) return;
-          setItems(loaded.length > 0 ? loaded : OPEN3D_DEMO_CATALOG_ITEMS);
-          setStatus(loaded.length > 0 ? "ready" : "fallback");
-        });
-      })
-      .catch(() => {
-        if (cancelled) return;
-        client.load(OPEN3D_DEMO_CATALOG_ITEMS, "configurator");
-        setItems(OPEN3D_DEMO_CATALOG_ITEMS);
-        setStatus("fallback");
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const query = useQuery({
+    queryKey: OPEN3D_CATALOG_QUERY_KEY,
+    queryFn: (context) => loadOpen3dCatalog(clientRef.current!, context),
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+  const items = query.data?.items ?? OPEN3D_DEMO_CATALOG_ITEMS;
+  const offline = typeof navigator !== "undefined" && navigator.onLine === false;
+  const status: Open3dWorkspaceCatalogStatus = offline
+    ? "offline"
+    : query.isError
+      ? "error"
+      : query.isPending
+        ? "loading"
+        : query.isFetching
+          ? "stale"
+          : query.data.source === "fallback"
+            ? "fallback"
+            : "ready";
 
   const resolveItem = useCallback(
     (id: string): Open3dCatalogItem | undefined =>
@@ -68,6 +57,9 @@ export function useOpen3dWorkspaceCatalog() {
     items,
     status,
     resolveItem,
-    isLoading: status === "loading",
+    isLoading: query.isPending,
+    isStale: query.isStale,
+    error: query.error,
+    retry: query.refetch,
   };
 }

@@ -439,11 +439,7 @@ export function TopBar({
       {/* Click outside handler */}
       {(showExportMenu || showImportMenu || showUnitMenu || showFloorMenu) && (
         <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 50,
-          }}
+          className={styles.menuDismissLayer}
           onClick={handleDocumentClick}
           aria-hidden="true"
         />

@@ -301,7 +301,7 @@
 
 /* .panelBackdrop + .mobilePanelActions for small-screen panels (Figma minimize REC-01, UI/UX std).
  * Added per PLAN-FAIL-0414 resolution (min). Canonical support in planner-responsive + open3d/editor/workspace.module.css.
- * GS cites: design §7, plans/2026-07-04/benchmark.md BP-04/BP-05, anti-copy (semantic tokens only from site/app/css/), 5-product UI model.
+ * GS-BP-04/BP-05 · handover-routing.md · design §7 · anti-copy · semantic tokens from site/app/css/
  * Matches WorkspaceShell activePanel + viewportTier==="small" + TopBar mobile actions.
  * Locked path ref: site/features/planner/open3d/editor/WorkspaceShell.tsx + useDockingSystem.ts
  */

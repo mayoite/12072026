@@ -1,9 +1,12 @@
 # Planner Global UI and SVG Master Plan
 
-Status: Approved planning baseline
-Execution model: Two phases
-Pilot route: `/planner/open3d`
-Promotion routes: `/planner/guest`, then `/planner/canvas`
+Status: Approved planning baseline  
+**Revision:** [`REVISION-2026-07-05.md`](REVISION-2026-07-05.md) — SVG Option A, Phase 1A/1B split (locks conflicts with pre-2026-07-05 text)  
+Execution model: Two phases (Phase 1 = 1A shell + 1B SVG path per revision)  
+Pilot route: `/planner/open3d`  
+Promotion routes: `/planner/guest`, then `/planner/canvas` (Phase 2 only)
+
+**Architecture cross-refs:** [`docs/architecture/README.md`](../docs/architecture/README.md) · [`MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md) · [`MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md) · [`docs/Lockedfiles/INDEX.md`](../docs/Lockedfiles/INDEX.md)
 
 ## 1. Objective
 
@@ -140,18 +143,19 @@ Requirements:
 
 ### SVG and Admin Packages
 
-- `@puckeditor/core`: registered block composition, fields, nested slots, permissions, preview, and migrations.
-- `@svgdotjs/svg.js`: admin-only SVG construction and manipulation.
-- `@svgdotjs/svg.select.js`: admin-only selection controls.
-- `@svgdotjs/svg.resize.js`: admin-only resize controls.
-- `@flatten-js/core`: geometry validation, containment, intersections, and offsets.
-- `polygon-clipping`: approved polygon boolean operations.
-- `dompurify`: direct dependency for parsed SVG sanitization before optimization.
+Authority: **`PACKAGES.md` Option A** + [`REVISION-2026-07-05.md`](REVISION-2026-07-05.md). SVG.js is not part of Phase 1.
+
+- `@puckeditor/core`: registered block composition, fields, nested slots, permissions, preview, and migrations (admin + portal only).
+- `@flatten-js/core`: geometry validation, containment, intersections, and offsets (server pipeline).
+- `polygon-clipping`: approved polygon boolean operations (server pipeline).
+- `dompurify`: parsed SVG sanitization before optimization (server).
 - `svgo`: locked server-only optimization.
 - `@resvg/resvg-js`: canonical server SVG-to-PNG rendering.
 - `sharp`: server thumbnail derivatives and metadata inspection.
 
-SVG.js and its plugins must never enter planner production chunks.
+**Deferred (not Phase 1):** `@svgdotjs/svg.js` and selection/resize plugins — visual DOM authoring only if a proven gap remains after Puck + schema fields; must not enter planner chunks. **On disk today:** `@svgdotjs/*` may still appear in `site/package.json` until import-graph cleanup removes them (per revision).
+
+Admin compiler, sanitizer, resvg, and Sharp must never enter planner production chunks. Server pipeline code lives under `features/planner/open3d/catalog/svg/` and `features/planner/admin/svg-editor/` — see [`MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md) § Data & descriptors.
 
 ### Explicitly Excluded
 
@@ -233,28 +237,30 @@ Only fields marked `customerEditable` reach the planner. Admin-only values never
 ## 8. Canonical Pipeline
 
 ```text
-Puck admin composition
+Puck admin composition (fields + preview)
   -> Zod validation and normalization
   -> constraint and geometry validation
-  -> deterministic SVG compilation
+  -> deterministic server SVG compilation (Option A)
   -> parsed allowlist and DOMPurify sanitization
   -> locked SVGO optimization
   -> structural and visual comparison
   -> resvg canonical PNG render
   -> Sharp thumbnail derivatives
-  -> immutable Supabase revision and artifact metadata
+  -> disk descriptor persist + R2 artifact metadata
+  -> (Phase 08) immutable Supabase revision pointer
   -> Fabric planner adapter and Three asset adapter
 ```
 
 ### Boundary Rules
 
-- Admin browser: Puck, SVG.js adapter, controls, preview, and local validation.
+- Admin browser: Puck, field controls, preview, and local validation only — no server compiler in client bundles.
 - Server: authoritative validation, compiler, sanitization, SVGO, resvg, Sharp, checksums, persistence, and publication.
-- Planner browser: compiled SVG plus minimal validated customer parameter schema.
-- Supabase stores versioned descriptors, revision metadata, validation reports, and artifact references.
+- Planner browser: compiled SVG plus minimal validated customer parameter schema (`plannerSvgAdapter` projection).
+- Phase 1B: disk `block-descriptors/` + R2 thumbs; Supabase revision table follows Phase 08 migration (`PLAN-FAIL-0409`).
+- Dual compile (`generate-svg.mjs` exec + `svgCompiler.server.ts` in-process) **must unify in 1B** — single module authority; script becomes thin CLI.
 - Storage does not replace sanitization.
 - Node-only packages never pass through client-reachable modules.
-- Runtime objects from Puck, SVG.js, Fabric, or Three are never persisted.
+- Runtime objects from Puck, Fabric, or Three are never persisted.
 - Identical input produces byte-identical canonical SVG.
 
 ## 9. Publishing and Governance
@@ -299,7 +305,7 @@ Draft -> Validate -> Preview -> Approve -> Publish
 - Identical descriptors produce byte-identical canonical SVG.
 - Publishing conflicts never overwrite newer revisions.
 - Unknown block versions remain recoverable.
-- Initial 2D loading excludes Puck, SVG.js, admin compiler, and 3D code.
+- Initial 2D loading excludes Puck, admin compiler, resvg, Sharp, SVGO, and 3D code.
 - Desktop canvas remains at least 60% of workspace width at 1440px with both panels open.
 - First usable 2D canvas is at most 2.5 seconds on agreed baseline hardware.
 - Baseline 3D scene becomes interactive within 4 seconds after activation.
@@ -310,6 +316,8 @@ Draft -> Validate -> Preview -> Approve -> Publish
 
 ## 12. Execution
 
-Execute `PHASE-1.md`, pass every Phase 1 gate, then execute `PHASE-2.md`.
+Read [`REVISION-2026-07-05.md`](REVISION-2026-07-05.md) first. Execute **Phase 1A** then **Phase 1B** in [`PHASE-1.md`](PHASE-1.md), pass each track's gates, then execute [`PHASE-2.md`](PHASE-2.md).
 
-Update `HANDOVER.md` after every completed checklist group. Do not mark work verified without evidence from one unchanged revision.
+Place new open3d code per [`MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md). New UI modules per [`MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md). Domain snapshots: [`docs/Lockedfiles/INDEX.md`](../docs/Lockedfiles/INDEX.md).
+
+Update [`HANDOVER.md`](HANDOVER.md) after every completed checklist group. Do not mark work verified without evidence from one unchanged revision under `results/<module>/<phase>/<cmd>/`.

@@ -1,105 +1,141 @@
 # Planner Overhaul Handover
 
-Status: Phase 1 foundation in progress
-Revision: Record before execution
-Active phase: Phase 1
-Active route: `/planner/open3d`
+Status: Phase 1 in progress — **1A** (open3d shell) active; **1B** (SVG path) queued  
+Revision: **2026-07-05** — [`REVISION-2026-07-05.md`](REVISION-2026-07-05.md)  
+Active phase: Phase 1A  
+Active route: `/planner/open3d`  
 Rollback path: Existing Open3D route and explicit Fabric fallback routes
+
+## Authority stack
+
+```text
+REVISION-2026-07-05.md
+  → PACKAGES.md + plans/2026-07-05_phase1-execution/implementation-decisions.md
+  → plann/START.md, PHASE-1.md, PHASE-2.md (this file)
+  → docs/architecture/MODULE-LAYOUT.md (where new code goes)
+  → docs/architecture/MODULE-UI-CONTRACT.md (surface anti-drift)
+  → docs/Lockedfiles/INDEX.md (module current/proposed pairs)
+```
+
+| Doc | Role |
+|-----|------|
+| [`docs/architecture/README.md`](../docs/architecture/README.md) | Architecture index — open first for layout, CSS, data flow |
+| [`docs/architecture/MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md) | New code → `features/planner/open3d/`; thin `app/` routes |
+| [`docs/architecture/MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md) | Layer → surface → module; `lint:ui` gates |
+| [`docs/Lockedfiles/INDEX.md`](../docs/Lockedfiles/INDEX.md) | Domain snapshots (`<module>/current` / `proposed`) |
 
 ## Objective
 
-Deliver the professional One&Only planner and the safe Lego-like SVG block system defined in `START.md`, using the two execution phases without changing engine ownership or document compatibility.
+Deliver the professional One&Only planner (**1A**) and the safe Lego-like SVG block system (**1B**) per `START.md` and `REVISION-2026-07-05.md`, without changing engine ownership or document compatibility.
 
-## Completed
+## Completed (planning + partial implementation)
 
-- [x] Master architecture defined.
-- [x] Global benchmark principles defined.
-- [x] Package ownership defined.
-- [x] CSS and no-hardcoding contract defined.
-- [x] SVG security and publication model defined.
+- [x] Master architecture defined — see [`docs/architecture/README.md`](../docs/architecture/README.md).
+- [x] Global benchmark principles defined (`START.md` §3).
+- [x] Plan revision locked (Option A SVG, 1A/1B split).
+- [x] CSS and no-hardcoding contract defined (`MODULE-UI-CONTRACT.md`).
+- [x] SVG security and publication model defined (server compiler path).
 - [x] Phase 1 and Phase 2 checklists created.
-- [x] Phase 1 route containment: `/planner/open3d` now uses workspace body and chrome rules.
-- [x] Phase 1 semantic token foundation: shared planner surface, control, panel, motion, and z-index tokens.
-- [x] Phase 1 responsive foundation: safe-area spacing, shared viewport thresholds, tokenized panel sizing, and reduced-motion timing.
-- [x] Inventory fallback index initializes synchronously before asynchronous descriptor replacement.
-- [x] Versioned workspace preference schema with safe corrupt-state recovery.
+- [x] **UI/TEST workflow:** Expert plans + coordinator revisions filed.
+- [x] **UI-0 (partial):** ThemeEditor on admin tokens; open3d layout imports `open3d-workspace.css` bundle; `lint:ui` + `lint:ui:strict` scripts exist.
+- [x] Phase 1 route containment: `/planner/open3d` workspace + chrome rules (tests in repo).
+- [x] Phase 1 semantic token foundation.
+- [x] Phase 1 responsive foundation.
+- [x] Inventory fallback index synchronous before async descriptor replacement.
+- [x] Versioned workspace preference schema with corrupt-state recovery.
 - [x] Explicit planner tool lifecycle and semantic panel contracts.
+- [x] `PlannerCommand` type + `executePlannerCommand` (unit-tested); registry and permission scaffolding.
+- [x] SVG compiler module, sanitizer, resvg, Sharp, boundary tests (1B foundation).
+- [x] Puck registry + `Render` preview on admin svg-editor and portal svg-catalog routes.
 
-## Verified
+## Not accepted (honest blockers)
 
-- Commands: Focused Vitest route/workspace tests; TypeScript typecheck; live HTTP route request.
-- Evidence: `results/site/planner-phase-1/route-shell-tests/`, `responsive-shell-tests-rerun/`, `workspace-preferences-tests/`, and corresponding `typecheck-*` directories.
-- Viewports: 390x844 live containment check plus prior 1329x912 desktop baseline.
-- Workflows: `/planner/open3d` returns HTTP 200, receives planner workspace classes, contains the planner workspace, and has no page-width overflow.
+### 1A — Open3D shell
 
-Focused tests and typecheck pass. Production build, accessibility gates, package installation, Supabase migration, and publication checks have not run for this phase.
+- [ ] **P0:** Route all document mutations through `executePlannerCommand` — `useWorkspaceCanvas` still calls `dispatchOpen3dAction` directly.
+- [ ] **P1:** Phosphor-only chrome — emoji icons remain in `inventoryTaxonomy.ts`; partial Phosphor adoption in tool rail / top bar only.
+- [ ] **P1:** Bottom command / status surface (REC-03), command palette (`Ctrl/Cmd+K`), catalog search cap ≤24.
+- [ ] Full draw → save → reload acceptance workflow (§11A in `PHASE-1.md`).
+- [ ] **UI-1 L1 shell** not signed off — `lint:ui:strict` not in `release:gate:fast`.
 
-## Package Decisions
+### 1B — SVG production path
 
-Adopted:
+- [ ] Full `<Puck>` mount on `/admin/svg-editor/[id]` with `onPublish` → API (today: JSON edit view + `Render` preview only).
+- [ ] Unify exec `generate-svg.mjs` and in-process `svgCompiler.server.ts` (dual compile path remains).
+- [ ] Three reference blocks published end-to-end (definitions + compiler tests exist; no live publish).
+- [ ] Supabase revision table — **deferred Phase 08** (`PLAN-FAIL-0409`); disk JSON OK for 1B interim.
 
-- Existing Fabric and Three engine ownership.
-- Puck and Zod for registered admin composition.
-- Admin-only SVG.js with selection and resize plugins.
-- DOMPurify before SVGO.
-- Flatten.js and polygon-clipping for approved geometry.
-- resvg and Sharp for server output.
-- Supabase-backed immutable revision metadata and artifact references.
+## Verified (from repo; re-run before sign-off)
+
+| Check | Status | Notes |
+|-------|--------|-------|
+| Route shell / workspace tests | Present | `site/tests/unit/features/planner/open3d/workspaceShell.test.tsx` and related |
+| `PlannerCommand` unit tests | Pass (when run) | `phase1CommandCatalog.test.ts` — command layer only, not UI wiring |
+| Typecheck | Not re-run this session | Capture fresh evidence under `results/<module>/<phase>/<cmd>/` before acceptance |
+| `@svgdotjs/*` in `site/package.json` | **Still present** | Deferred per revision; remove when import graph confirms unused |
+| Evidence artifacts | **Stale / missing** | Prior `results/site/planner-phase-1/*` paths not verified on disk — re-capture before claiming pass |
+
+Do not mark 1A or 1B accepted without evidence from one unchanged revision per `AGENTS.md`.
+
+## Execution plans (2026-07-05)
+
+| Plan | Authority |
+|------|-----------|
+| Coordinator revision | [`REVISION-2026-07-05.md`](REVISION-2026-07-05.md) |
+| UI | [`UI-PLAN-REVISED-2026-07-05.md`](UI-PLAN-REVISED-2026-07-05.md) |
+| Module contract | [`docs/architecture/MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md) |
+| Module layout | [`docs/architecture/MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md) |
+| Doc revision batch | [`DOC-REVISION-2026-07-05.md`](DOC-REVISION-2026-07-05.md) |
+| Locked modules | [`docs/Lockedfiles/INDEX.md`](../docs/Lockedfiles/INDEX.md) | **Composer subagent drafts → coordinator revises → agent executes.**  
+Anti-drift: **layer → surface → module**; new open3d code only under `features/planner/open3d/` per `MODULE-LAYOUT.md`.
+
+## Package decisions
+
+Adopted (aligned with `PACKAGES.md` + revision):
+
+- Fabric and Three engine ownership.
+- Puck and Zod for admin composition.
+- **Option A:** flatten-js, polygon-clipping, svgo, resvg, sharp, DOMPurify (server).
+- Phosphor for planner chrome (enforcement open).
+- Disk `block-descriptors/` + R2 thumbs for Phase 1B publish.
 
 Deferred:
 
-- Exact package versions until dependency and license review.
-- Exact Supabase schema until Phase 1 interface review.
+- `@svgdotjs/*` — not Phase 1; **still in `site/package.json`** until confirmed unused and removed.
+- Supabase revision table — Phase 08 (`PLAN-FAIL-0409`).
+- Full geometry constraint engine — beyond reference fixtures until 1B hardening.
 
 Rejected:
 
 - Second canvas engine.
 - Second page builder.
+- SVG.js in Phase 1 production pipeline.
 - Arbitrary scripts, CSS, URLs, executable formulas, or unrestricted SVG.
-- SVG authoring packages in planner bundles.
+- SVG authoring / compiler packages in planner bundles.
 
-## Open Risks
+## Open risks
 
-- SVG.js/Fabric overlap: owner Phase 1; blocked unless package boundaries prove admin-only isolation.
-- Parametric constraint conflicts: owner Phase 2; publication must fail on ambiguity.
-- SVGO structural changes: owner Phase 1; blocked unless locked plugins pass visual and structural tests.
-- Native renderer limits: owner Phase 1; resvg and Sharp remain server-only with safety limits.
-- Route promotion risk: owner Phase 2; guest/canvas remain unchanged until Open3D acceptance.
+- Dual descriptor models (`BlockDescriptor` vs `SvgBlockDefinitionV1`) — owner 1B; adapter at publish.
+- Dual compile path (exec script vs in-process) — owner 1B; unify before publish sign-off.
+- Parametric constraint conflicts — owner Phase 2.
+- Route promotion — guest/canvas unchanged until Phase 2 after **1A + 1B** on one revision.
 
-## Next Action
+## Next action
 
-Define the command and selection contracts, then route the first document mutation through them.
+**1A P0:** Wire `executePlannerCommand` through `useWorkspaceCanvas` and every other document mutation surface; add `plannerCommandWiring.test.ts`.
 
-## Handover Update Template
+**UI-1 L1:** `planner / L1 / shell` — frame before inventory module (`MODULE-UI-CONTRACT.md` § Layers).
 
-```md
-Status:
-Revision:
-Active phase:
-Active route:
-Rollback path:
+**TEST-1:** Red `plannerCommandWiring.test.ts` + `open3dIconPolicy.test.ts` alongside P0 wire.
 
-## Completed
-- Checklist IDs only
+**1B P0 (after 1A P0):** Mount full `<Puck>` on admin svg-editor; unify compile path.
 
-## Verified
-- Command:
-- Evidence:
-- Viewports:
-- Workflows:
+**Lock:** Enable `lint:ui:strict` in `release:gate:fast` when UI-1 shell acceptance passes.
 
-## Package Decisions
-- Adopted:
-- Deferred:
-- Rejected:
+## Research (2026-07-05)
 
-## Open Risks
-- Risk / owner / blocking condition
+`RESEARCH-2026-07-05-synthesis.md` (entry). Revision implements synthesis P0 decisions. Research files are reference only — not execution authority.
 
-## Next Action
-- One decision-free implementation item
-```
-
-## Preservation Statement
+## Preservation statement
 
 Fabric remains the 2D engine. Three/r3f/drei remain the 3D stack. Existing documents, package locks, repository governance, and rollback routes remain preserved until verified implementation explicitly changes their status.

@@ -16,7 +16,7 @@ Mirrors `site/features/planner/` top-level names where the Open3D slice has code
 
 - `editor/`, `canvas-fabric/`, `catalog/`, `model/`, `3d/`, `shared/`, `lib/`, `ai/`, `persistence/`, `store/`, `ui/`, `cleanup/`
 
-See `plannnerplan/phases/07/structure-mirror.md` for the full before/after mapping.
+See `archive/plans/2026-07-05_phase1-execution/phases/07-auth-and-permissions.md` for the full before/after mapping.
 
 ## Tests
 
@@ -33,7 +33,7 @@ pnpm --filter oando-site run test:planner
 | `/planner/guest` | `site/app/planner/(workspace)/guest/page.tsx` → `Open3dPlannerHost` |
 | `/planner/canvas` | `site/app/planner/(workspace)/canvas/page.tsx` → `Open3dPlannerHost` |
 | `/planner/fabric/*` | legacy top-level Fabric fallback → `_archive/fabric/` |
-| `/planner/open3d` | Redirect to guest or canvas |
+| `/planner/open3d` | `site/app/planner/open3d/page.tsx` → `Open3dPlannerHost` (1A pilot shell) |
 
 Host chain: `Open3dPlannerHost` → `ui/Open3dNativeHost` → `editor/OOPlannerWorkspace` → `canvas-fabric/FeasibilityCanvas` (2-D) or `3d/ThreeLazyViewer` (3-D).
 
