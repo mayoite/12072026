@@ -1,0 +1,952 @@
+score,text
+222,"{""role"":""tool"",""content"":[{""type"":""tool-result"",""toolCallId"":""tool_9d25dfea-c7c4-4321-b49f-61426dc3dad"",""toolName"":""Glob"",""result"":""Result of search in 'D:\\oandO04072026' (total 41 files):\n- ../.\\docs\\Lockedfiles\\ui-execution\\proposed.md\n- ../.\\docs\\Lockedfiles\\planner\\proposed.md\n- ../.\\docs\\Lockedfiles\\documentation\\proposed.md\n- ../.\\docs\\Lockedfiles\\architecture\\proposed.md\n- ../.\\docs\\Lockedfiles\\dependencies-engines\\current.md\n- ../.\\docs\\Lockedfiles\\ui\\MODULE-UI-CONTRACT-Locked.md\n- ../.\\docs\\Lockedfiles\\ReadmeLocked.md\n- ../.\\docs\\Lockedfiles\\DomainTruthLocked.md\n- ../.\\docs\\Lockedfiles\\conduct\\ReadmeLocked.md\n- ../.\\docs\\Lockedfiles\\domain\\INDEX.md\n- ../.\\docs\\Lockedfiles\\INDEX.md\n- ../.\\docs\\Lockedfiles\\architecture\\current.md\n- ../.\\docs\\Lockedfiles\\tests\\proposed.md\n- ../.\\docs\\Lockedfiles\\ui-execution\\current.md\n- ../.\\docs\\Lockedfiles\\dependencies-engines\\proposed.md\n- ../.\\docs\\Lockedfiles\\tech-stack\\current.md\n- ../.\\docs\\Lockedfiles\\documentation\\current.md\n- ../.\\docs\\Lockedfiles\\platform-api\\proposed.md\n- ../.\\docs\\Lockedfiles\\platform-api\\current.md\n- ../.\\docs\\Locked"
+71," | [`../../plann/DOC-REVISION-2026-07-05.md`](../../plann/DOC-REVISION-2026-07-05.md) |
++
++## Product revision (live, not duplicated)
++
++| Doc | Path |
++|-----|------|
++| Plan revision | [`../../plann/REVISION-2026-07-05.md`](../../plann/REVISION-2026-07-05.md) |
++| UI execution | [`../../plann/UI-PLAN-REVISED-2026-07-05.md`](../../plann/UI-PLAN-REVISED-2026-07-05.md) |
++| Test execution | [`../../plann/TEST-PLAN-REVISED-2026-07-05.md`](../../plann/TEST-PLAN-REVISED-2026-07-05.md) |
++
++---
++
++## Module pairs
++
++| Module | Current | Proposed |
++|--------|---------|----------|
++| Repo shell | [repo-shell/current.md](repo-shell/current.md) | [repo-shell/proposed.md](repo-shell/proposed.md) |
++| Site | [site/current.md](site/current.md) | [site/proposed.md](site/proposed.md) |
++| Planner | [planner/current.md](planner/current.md) | [planner/proposed.md](planner/proposed.md) |
++| Admin | [admin/current.md](admin/current.md) | [admin/proposed.md](admin/proposed.md) |
++| CRM | [crm/current.md](crm/current.md) | [crm/proposed.md](crm/proposed.md) |
++| Ops | [ops/current.md](ops/current.md) | [ops/proposed.md](ops/proposed.md) |
++| Auth | [auth/current.md](auth/current.md) | [auth/proposed."
+71," | [`../../plann/DOC-REVISION-2026-07-05.md`](../../plann/DOC-REVISION-2026-07-05.md) |
+
+## Product revision (live, not duplicated)
+
+| Doc | Path |
+|-----|------|
+| Plan revision | [`../../plann/REVISION-2026-07-05.md`](../../plann/REVISION-2026-07-05.md) |
+| UI execution | [`../../plann/UI-PLAN-REVISED-2026-07-05.md`](../../plann/UI-PLAN-REVISED-2026-07-05.md) |
+| Test execution | [`../../plann/TEST-PLAN-REVISED-2026-07-05.md`](../../plann/TEST-PLAN-REVISED-2026-07-05.md) |
+
+---
+
+## Module pairs
+
+| Module | Current | Proposed |
+|--------|---------|----------|
+| Repo shell | [repo-shell/current.md](repo-shell/current.md) | [repo-shell/proposed.md](repo-shell/proposed.md) |
+| Site | [site/current.md](site/current.md) | [site/proposed.md](site/proposed.md) |
+| Planner | [planner/current.md](planner/current.md) | [planner/proposed.md](planner/proposed.md) |
+| Admin | [admin/current.md](admin/current.md) | [admin/proposed.md](admin/proposed.md) |
+| CRM | [crm/current.md](crm/current.md) | [crm/proposed.md](crm/proposed.md) |
+| Ops | [ops/current.md](ops/current.md) | [ops/proposed.md](ops/proposed.md) |
+| Auth | [auth/current.md](auth/current.md) | [auth/proposed.md](auth/proposed.md) "
+68," locks 1A/1B + Option A |
+-| Repo shell | [repo-shell-current.md](repo-shell-current.md) | [repo-shell-proposed.md](repo-shell-proposed.md) |
+-| Site | [site-current.md](site-current.md) | [site-proposed.md](site-proposed.md) |
+-| Planner | [planner-current.md](planner-current.md) | [planner-proposed.md](planner-proposed.md) |
+-| Admin | [admin-current.md](admin-current.md) | [admin-proposed.md](admin-proposed.md) |
+-| CRM | [crm-current.md](crm-current.md) | [crm-proposed.md](crm-proposed.md) |
+-| Ops | [ops-current.md](ops-current.md) | [ops-proposed.md](ops-proposed.md) |
+-| Auth | [auth-current.md](auth-current.md) | [auth-proposed.md](auth-proposed.md) |
+-| Database | [database-current.md](database-current.md) | [database-proposed.md](database-proposed.md) |
+-| SVG pipeline | [svg-pipeline-current.md](svg-pipeline-current.md) | [svg-pipeline-proposed.md](svg-pipeline-proposed.md) |
+-| Tech-stack | [tech-stack-current.md](tech-stack-current.md) | [tech-stack-proposed.md](tech-stack-proposed.md) |
+-| Tests | [tests-current.md](tests-current.md) | [tests-proposed.md](tests-proposed.md) |
+-| Platform & API | [platform-api-current.md](platform-api-current.md) | [platfor"
+65," | [`../../plann/DOC-REVISION-2026-07-05.md`](../../plann/DOC-REVISION-2026-07-05.md) |\n\n## Product revision (live, not duplicated)\n\n| Doc | Path |\n|-----|------|\n| Plan revision | [`../../plann/REVISION-2026-07-05.md`](../../plann/REVISION-2026-07-05.md) |\n| UI execution | [`../../plann/UI-PLAN-REVISED-2026-07-05.md`](../../plann/UI-PLAN-REVISED-2026-07-05.md) |\n| Test execution | [`../../plann/TEST-PLAN-REVISED-2026-07-05.md`](../../plann/TEST-PLAN-REVISED-2026-07-05.md) |\n\n---\n\n## Module pairs\n\n| Module | Current | Proposed |\n|--------|---------|----------|\n| Repo shell | [repo-shell/current.md](repo-shell/current.md) | [repo-shell/proposed.md](repo-shell/proposed.md) |\n| Site | [site/current.md](site/current.md) | [site/proposed.md](site/proposed.md) |\n| Planner | [planner/current.md](planner/current.md) | [planner/proposed.md](planner/proposed.md) |\n| Admin | [admin/current.md](admin/current.md) | [admin/proposed.md](admin/proposed.md) |\n| CRM | [crm/current.md](crm/current.md) | [crm/proposed.md](crm/proposed.md) |\n| Ops | [ops/current.md](ops/current.md) | [ops/proposed.md](ops/proposed.md) |\n| Auth | [auth/current.md](auth/current.md) | [auth/proposed."
+64," | [`../../plann/DOC-REVISION-2026-07-05.md`](../../plann/DOC-REVISION-2026-07-05.md) |\n\n## Product revision (live, not duplicated)\n\n| Doc | Path |\n|-----|------|\n    30|| Plan revision | [`../../plann/REVISION-2026-07-05.md`](../../plann/REVISION-2026-07-05.md) |\n| UI execution | [`../../plann/UI-PLAN-REVISED-2026-07-05.md`](../../plann/UI-PLAN-REVISED-2026-07-05.md) |\n| Test execution | [`../../plann/TEST-PLAN-REVISED-2026-07-05.md`](../../plann/TEST-PLAN-REVISED-2026-07-05.md) |\n\n---\n\n## Module pairs\n\n| Module | Current | Proposed |\n|--------|---------|----------|\n    40|| Repo shell | [repo-shell/current.md](repo-shell/current.md) | [repo-shell/proposed.md](repo-shell/proposed.md) |\n| Site | [site/current.md](site/current.md) | [site/proposed.md](site/proposed.md) |\n| Planner | [planner/current.md](planner/current.md) | [planner/proposed.md](planner/proposed.md) |\n| Admin | [admin/current.md](admin/current.md) | [admin/proposed.md](admin/proposed.md) |\n| CRM | [crm/current.md](crm/current.md) | [crm/proposed.md](crm/proposed.md) |\n| Ops | [ops/current.md](ops/current.md) | [ops/proposed.md](ops/proposed.md) |\n| Auth | [auth/current.md](auth/current.md) | ["
+57,"{""role"":""tool"",""content"":[{""type"":""tool-result"",""toolCallId"":""tool_f9504508-924e-4173-b139-d7ca610b563"",""toolName"":""Read"",""result"":{""role"":""user"",""message"":{""content"":[{""type"":""text"",""text"":""<timestamp>Sunday, Jul 5, 2026, 11:14 AM (UTC+5:30)</timestamp>\n<user_query>\nYou are a domain documentation auditor for Oando at D:\\oandO04072026.\n\n**Task:** Produce REVISED markdown for ALL `docs/Lockedfiles/domain/*-current.md` and `*-proposed.md` pairs (16 domains + INDEX content).\n\n**New locked structure (coordinator will apply):** Each domain moves to `docs/Lockedfiles/<module>/current.md` and `proposed.md` e.g. `docs/Lockedfiles/planner/current.md`.\n\n**Domains:** repo-shell, site, planner, admin, crm, ops, auth, database, svg-pipeline, tech-stack, tests, platform-api, documentation, dependencies-engines, ui-execution, architecture\n\n**For each *-current.md:**\n- Table: Topic | On disk today | Paths\n- Packages (on disk) table from site/package.json where relevant\n- Summary / Strengths / Weaknesses prose\n- Audit disk: features/planner/open3d/, routes, REVISION alignment\n\n**For each *-proposed.md:**\n- Table: Topic | Policy | Paths | Docs\n- Packages (proposed per plan)\n- Poi"
+54," locks 1A/1B + Option A |
+| Repo shell | [repo-shell-current.md](repo-shell-current.md) | [repo-shell-proposed.md](repo-shell-proposed.md) |
+| Site | [site-current.md](site-current.md) | [site-proposed.md](site-proposed.md) |
+| Planner | [planner-current.md](planner-current.md) | [planner-proposed.md](planner-proposed.md) |
+| Admin | [admin-current.md](admin-current.md) | [admin-proposed.md](admin-proposed.md) |
+| CRM | [crm-current.md](crm-current.md) | [crm-proposed.md](crm-proposed.md) |
+| Ops | [ops-current.md](ops-current.md) | [ops-proposed.md](ops-proposed.md) |
+| Auth | [auth-current.md](auth-current.md) | [auth-proposed.md](auth-proposed.md) |
+| Database | [database-current.md](database-current.md) | [database-proposed.md](database-proposed.md) |
+| SVG pipeline | [svg-pipeline-current.md](svg-pipeline-current.md) | [svg-pipeline-proposed.md](svg-pipeline-proposed.md) |
+| Tech-stack | [tech-stack-current.md](tech-stack-current.md) | [tech-stack-proposed.md](tech-stack-proposed.md) |
+| Tests | [tests-current.md](tests-current.md) | [tests-proposed.md](tests-proposed.md) |
+| Platform & API | [platform-api-current.md](platform-api-current.md) | [platform-api-proposed.md](platf"
+53," follow when current and proposed conflict. |
+
+## Pairs
+
+| Domain | Current | Proposed |
+|--------|---------|----------|
+| Repo shell | [repo-shell-current.md](repo-shell-current.md) | [repo-shell-proposed.md](repo-shell-proposed.md) |
+| Site | [site-current.md](site-current.md) | [site-proposed.md](site-proposed.md) |
+| Planner | [planner-current.md](planner-current.md) | [planner-proposed.md](planner-proposed.md) |
+| Admin | [admin-current.md](admin-current.md) | [admin-proposed.md](admin-proposed.md) |
+| CRM | [crm-current.md](crm-current.md) | [crm-proposed.md](crm-proposed.md) |
+| Ops | [ops-current.md](ops-current.md) | [ops-proposed.md](ops-proposed.md) |
+| Auth | [auth-current.md](auth-current.md) | [auth-proposed.md](auth-proposed.md) |
+| Database | [database-current.md](database-current.md) | [database-proposed.md](database-proposed.md) |
+| SVG pipeline | [svg-pipeline-current.md](svg-pipeline-current.md) | [svg-pipeline-proposed.md](svg-pipeline-proposed.md) |
+| Tech-stack | [tech-stack-current.md](tech-stack-current.md) | [tech-stack-proposed.md](tech-stack-proposed.md) |
+| Tests | [tests-current.md](tests-current.md) | [tests-proposed.md](tests-proposed"
+53," follow when current and proposed conflict. |
++
++## Pairs
++
++| Domain | Current | Proposed |
++|--------|---------|----------|
++| Repo shell | [repo-shell-current.md](repo-shell-current.md) | [repo-shell-proposed.md](repo-shell-proposed.md) |
++| Site | [site-current.md](site-current.md) | [site-proposed.md](site-proposed.md) |
++| Planner | [planner-current.md](planner-current.md) | [planner-proposed.md](planner-proposed.md) |
++| Admin | [admin-current.md](admin-current.md) | [admin-proposed.md](admin-proposed.md) |
++| CRM | [crm-current.md](crm-current.md) | [crm-proposed.md](crm-proposed.md) |
++| Ops | [ops-current.md](ops-current.md) | [ops-proposed.md](ops-proposed.md) |
++| Auth | [auth-current.md](auth-current.md) | [auth-proposed.md](auth-proposed.md) |
++| Database | [database-current.md](database-current.md) | [database-proposed.md](database-proposed.md) |
++| SVG pipeline | [svg-pipeline-current.md](svg-pipeline-current.md) | [svg-pipeline-proposed.md](svg-pipeline-proposed.md) |
++| Tech-stack | [tech-stack-current.md](tech-stack-current.md) | [tech-stack-proposed.md](tech-stack-proposed.md) |
++| Tests | [tests-current.md](tests-current.md) | [tests-proposed.md](tests-proposed"
+53," follow when current and proposed conflict. |
+
+## Pairs
+
+| Domain | Current | Proposed |
+|--------|---------|----------|
+| Repo shell | [repo-shell-current.md](repo-shell-current.md) | [repo-shell-proposed.md](repo-shell-proposed.md) |
+| Site | [site-current.md](site-current.md) | [site-proposed.md](site-proposed.md) |
+| Planner | [planner-current.md](planner-current.md) | [planner-proposed.md](planner-proposed.md) |
+| Admin | [admin-current.md](admin-current.md) | [admin-proposed.md](admin-proposed.md) |
+| CRM | [crm-current.md](crm-current.md) | [crm-proposed.md](crm-proposed.md) |
+| Ops | [ops-current.md](ops-current.md) | [ops-proposed.md](ops-proposed.md) |
+| Auth | [auth-current.md](auth-current.md) | [auth-proposed.md](auth-proposed.md) |
+| Database | [database-current.md](database-current.md) | [database-proposed.md](database-proposed.md) |
+| SVG pipeline | [svg-pipeline-current.md](svg-pipeline-current.md) | [svg-pipeline-proposed.md](svg-pipeline-proposed.md) |
+| Tech-stack | [tech-stack-current.md](tech-stack-current.md) | [tech-stack-proposed.md](tech-stack-proposed.md) |
+| Tests | [tests-current.md](tests-current.md) | [tests-proposed.md](tests-proposed.md) |
+| Platfor"
+53," locks 1A/1B + Option A |
+| Repo shell | [repo-shell-current.md](repo-shell-current.md) | [repo-shell-proposed.md](repo-shell-proposed.md) |
+| Site | [site-current.md](site-current.md) | [site-proposed.md](site-proposed.md) |
+| Planner | [planner-current.md](planner-current.md) | [planner-proposed.md](planner-proposed.md) |
+| Admin | [admin-current.md](admin-current.md) | [admin-proposed.md](admin-proposed.md) |
+| CRM | [crm-current.md](crm-current.md) | [crm-proposed.md](crm-proposed.md) |
+| Ops | [ops-current.md](ops-current.md) | [ops-proposed.md](ops-proposed.md) |
+| Auth | [auth-current.md](auth-current.md) | [auth-proposed.md](auth-proposed.md) |
+| Database | [database-current.md](database-current.md) | [database-proposed.md](database-proposed.md) |
+| SVG pipeline | [svg-pipeline-current.md](svg-pipeline-current.md) | [svg-pipeline-proposed.md](svg-pipeline-proposed.md) |
+| Tech-stack | [tech-stack-current.md](tech-stack-current.md) | [tech-stack-proposed.md](tech-stack-proposed.md) |
+| Tests | [tests-current.md](tests-current.md) | [tests-proposed.md](tests-proposed.md) |
+| Platform & API | [platform-api-current.md](platform-api-current.md) | [platform-api-propos"
+52,"#RM plannnerplan/benchmarks/01a-benchmark.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01a-benchmark.md
+RM plannnerplan/benchmarks/01b-accessibility-audit.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01b-accessibility-audit.md
+RM plannnerplan/benchmarks/01b-accessibility-reconciliation.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01b-accessibility-reconciliation.md
+RM plannnerplan/benchmarks/01b-benchmark-ui-workflow.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01b-benchmark-ui-workflow.md
+RM plannnerplan/benchmarks/01b-benchmark.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01b-benchmark.md
+RM plannnerplan/benchmarks/01b-brief.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01b-brief.md
+RM plannnerplan/benchmarks/03a-benchmark.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/03a-benchmark.md
+RM plannnerplan/benchmarks/03a-brief.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/03a-brief.md
+RM plannnerplan/benchmarks/blocksResolver-test-additions-2026-07-04.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/blocksResolver-test-additions-2026"
+49,"%RD plannnerplan/benchmarks/01a-benchmark.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01a-benchmark.md
+RD plannnerplan/benchmarks/01b-accessibility-audit.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01b-accessibility-audit.md
+RD plannnerplan/benchmarks/01b-accessibility-reconciliation.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01b-accessibility-reconciliation.md
+RD plannnerplan/benchmarks/01b-benchmark-ui-workflow.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01b-benchmark-ui-workflow.md
+RD plannnerplan/benchmarks/01b-benchmark.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01b-benchmark.md
+RD plannnerplan/benchmarks/01b-brief.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/01b-brief.md
+RD plannnerplan/benchmarks/03a-benchmark.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/03a-benchmark.md
+RD plannnerplan/benchmarks/03a-brief.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/03a-brief.md
+RD plannnerplan/benchmarks/blocksResolver-test-additions-2026-07-04.md -> archive/plannnerplan-2026-07-05-consolidation/benchmarks/blocksResolver-test-additi"
+30,"#---
+pid: 30516
+cwd: ""D:\\oandO04072026""
+command: ""$repo = \""D:\\oandO04072026\""\n$files = Get-ChildItem $repo -Recurse -File -Include *.md,*.ts,*.tsx,*.mjs,*.css -ErrorAction SilentlyContinue |\n  Where-Object { $_.FullName -notmatch '\\\\node_modules\\\\|\\\\\\.git\\\\|\\\\archive\\\\|\\\\plannnerplan\\\\|\\\\critic\\\\|\\\\plans\\\\archive\\\\' }\n\n$replacements = [ordered]@{\n  'plans/planner Phase0/REVISION-03-HANDOVER.md' = 'plans/2026-07-04_global-standard-revision/2026-07-04_handover-summary.md'\n  'plans/planner Phase0/REVISION-02-CRITIQUE.md' = 'plans/2026-07-04_global-standard-revision/2026-07-04_critique-summary.md'\n  'plans/planner Phase0/REVISION-01-BENCHMARK.md' = 'plans/2026-07-04_global-standard-revision/2026-07-04_benchmark-summary.md'\n  'plans/planner Phase0/' = 'plans/2026-07-04_global-standard-revision/'\n  'plans/planner Phase0' = 'plans/2026-07-04_global-standard-revision'\n  'plans/planner Phase1/IMPLEMENTATION-DECISIONS.md' = 'plans/2026-07-05_phase1-execution/2026-07-05_implementation-decisions.md'\n  'plans/planner Phase1/QUALITY-GATES.md' = 'plans/2026-07-05_phase1-execution/2026-07-05_quality-gates.md'\n  'plans/planner Phase1/DESIGN-BENCHMARK-PROTOC"
+30,"!$repo = ""D:\oandO04072026""
+$files = Get-ChildItem $repo -Recurse -File -Include *.md,*.ts,*.tsx,*.mjs,*.css -ErrorAction SilentlyContinue |
+  Where-Object { $_.FullName -notmatch '\\node_modules\\|\\\.git\\|\\archive\\|\\plannnerplan\\|\\critic\\|\\plans\\archive\\' }
+
+$replacements = [ordered]@{
+  'plans/planner Phase0/REVISION-03-HANDOVER.md' = 'plans/2026-07-04_global-standard-revision/2026-07-04_handover-summary.md'
+  'plans/planner Phase0/REVISION-02-CRITIQUE.md' = 'plans/2026-07-04_global-standard-revision/2026-07-04_critique-summary.md'
+  'plans/planner Phase0/REVISION-01-BENCHMARK.md' = 'plans/2026-07-04_global-standard-revision/2026-07-04_benchmark-summary.md'
+  'plans/planner Phase0/' = 'plans/2026-07-04_global-standard-revision/'
+  'plans/planner Phase0' = 'plans/2026-07-04_global-standard-revision'
+  'plans/planner Phase1/IMPLEMENTATION-DECISIONS.md' = 'plans/2026-07-05_phase1-execution/2026-07-05_implementation-decisions.md'
+  'plans/planner Phase1/QUALITY-GATES.md' = 'plans/2026-07-05_phase1-execution/2026-07-05_quality-gates.md'
+  'plans/planner Phase1/DESIGN-BENCHMARK-PROTOCOL.md' = 'plans/2026-07-05_phase1-execution/2026-07-05_design-benchmark-protocol.md'
+  'plan"
+27," D plannnerplan/FAILURESPLAN.md
+D  plannnerplan/HANDOVER.md
+D  plannnerplan/benchmarks/01a-benchmark.md
+D  plannnerplan/benchmarks/01b-accessibility-audit.md
+D  plannnerplan/benchmarks/01b-accessibility-reconciliation.md
+D  plannnerplan/benchmarks/01b-benchmark-ui-workflow.md
+D  plannnerplan/benchmarks/01b-benchmark.md
+D  plannnerplan/benchmarks/01b-brief.md
+D  plannnerplan/benchmarks/03a-benchmark.md
+D  plannnerplan/benchmarks/03a-brief.md
+ D plannnerplan/benchmarks/INDEX.md
+D  plannnerplan/benchmarks/blocksResolver-test-additions-2026-07-04.md
+D  plannnerplan/benchmarks/conversion-execution-benchmark.md
+D  plannnerplan/benchmarks/phase-00-precheck.md
+D  plannnerplan/benchmarks/phase-05-benchmark.md
+D  plannnerplan/benchmarks/phase-06-benchmark.md
+D  plannnerplan/benchmarks/plan-revision-2026-07-04.md
+D  plannnerplan/idiothandver.md
+D  plannnerplan/open3d-test-error-follow-up.md
+D  plannnerplan/phases/00-governance-baseline-and-precheck.md
+D  plannnerplan/phases/01-engine-lock-and-workspace-bootstrap.md
+D  plannnerplan/phases/02-catalog-source-of-truth-and-blockdescriptor.md
+D  plannnerplan/phases/03-svg-pipeline-implementation.md
+D  plannnerplan/phases/04-a"
+27," start here
+  repo-shell-current.md    repo-shell-proposed.md
+  site-current.md          site-proposed.md
+  planner-current.md       planner-proposed.md
+  admin-current.md         admin-proposed.md
+  crm-current.md           crm-proposed.md
+  ops-current.md           ops-proposed.md
+  auth-current.md          auth-proposed.md
+  database-current.md      database-proposed.md
+  svg-pipeline-current.md  svg-pipeline-proposed.md
+  tech-stack-current.md    tech-stack-proposed.md
+  tests-current.md         tests-proposed.md
+  platform-api-current.md  platform-api-proposed.md
+  documentation-current.md documentation-proposed.md
+```
+
+- **`*-current.md`** "
+26,"""$repo = ""D:\oandO04072026""
+$files = @(
+  Get-ChildItem ""$repo\plans\2026-07-04_global-standard-revision"" -Filter *.md
+  Get-ChildItem ""$repo\plans\2026-07-05_phase1-execution"" -Filter *.md
+  Get-ChildItem ""$repo\plans\archive"" -Recurse -Filter *.md
+  Get-Item ""$repo\AGENTS.md"",""$repo\HANDOVER.md"",""$repo\Failures.md"",""$repo\PACKAGES.md"",""$repo\resolved-failures.md""
+  Get-ChildItem ""$repo\site"" -Recurse -Include *.ts,*.tsx,*.mjs,*.css -File | Where-Object { $_.FullName -notmatch 'node_modules' }
+)
+
+$repl = [ordered]@{
+  'plans/2026-07-04_global-standard-revision/2026-07-04_benchmark-summary.md' = 'plans/2026-07-04_global-standard-revision/benchmark-summary.md'
+  'plans/2026-07-04_global-standard-revision/2026-07-04_critique-summary.md' = 'plans/2026-07-04_global-standard-revision/critique-summary.md'
+  'plans/2026-07-04_global-standard-revision/2026-07-04_handover-summary.md' = 'plans/2026-07-04_global-standard-revision/handover-summary.md'
+  'plans/2026-07-05_phase1-execution/2026-07-04_critique-expanded.md' = 'plans/2026-07-04_global-standard-revision/critique-expanded.md'
+  'plans/2026-07-05_phase1-execution/2026-07-05_handover-routing.md' = 'plans/2026-07-05_phase1-execution/han"
+25,"RM plannnerplan/critique/plan-revision-2026-07-04.md -> plannnerplan/CRITIQUE-2026-07-04.md
+ M plannnerplan/DESIGN-BENCHMARK-PROTOCOL.md
+ D plannnerplan/FAILURESPLAN.md
+D  plannnerplan/HANDOVER.md
+ M plannnerplan/IMPLEMENTATION-DECISIONS.md
+ M plannnerplan/QUALITY-GATES.md
+RM plannnerplan/benchmarks/REVIEW-WORKFLOW.md -> plannnerplan/REVIEW-WORKFLOW.md
+D  plannnerplan/benchmarks/01a-benchmark.md
+D  plannnerplan/benchmarks/01b-accessibility-audit.md
+D  plannnerplan/benchmarks/01b-accessibility-reconciliation.md
+D  plannnerplan/benchmarks/01b-benchmark-ui-workflow.md
+D  plannnerplan/benchmarks/01b-benchmark.md
+D  plannnerplan/benchmarks/01b-brief.md
+D  plannnerplan/benchmarks/03a-benchmark.md
+D  plannnerplan/benchmarks/03a-brief.md
+ D plannnerplan/benchmarks/INDEX.md
+D  plannnerplan/benchmarks/blocksResolver-test-additions-2026-07-04.md
+D  plannnerplan/benchmarks/conversion-execution-benchmark.md
+D  plannnerplan/benchmarks/phase-00-precheck.md
+D  plannnerplan/benchmarks/phase-05-benchmark.md
+D  plannnerplan/benchmarks/phase-06-benchmark.md
+D  plannnerplan/benchmarks/plan-revision-2026-07-04.md
+D  plannnerplan/idiothandver.md
+D  plannnerplan/open3d-test-error-follow-up.md
+D  plannnerp"
+22,"$
+FullName                                                                                                               
+--------                                                                                                               
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks                                              
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\phases                                                  
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\stubs                                                   
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\README.md                                               
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks\01a-benchmark.md                             
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks\01b-accessibility-audit.md                   
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks\01b-accessibility-reconciliation.md          
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks\01b-benchmark-ui-workflow.md      "
+21,"
+FullName                                                                                                               
+--------                                                                                                               
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\README.md                                               
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks\01a-benchmark.md                             
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks\01b-accessibility-audit.md                   
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks\01b-accessibility-reconciliation.md          
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks\01b-benchmark-ui-workflow.md                 
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks\01b-benchmark.md                             
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks\01b-brief.md                                 
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\benchmarks\03a-benchmark.md                   "
+21,"MISSING: D:\oandO04072026\critic
+=== D:\oandO04072026\plans\archive ===
+
+FullName                                                                                              
+--------                                                                                              
+D:\oandO04072026\plans\archive\README.md                                                              
+=== D:\oandO04072026\archive\plans\planner Phase1 ===
+D:\oandO04072026\archive\plans\planner Phase1\benchmarks\01a-benchmark.md                             
+D:\oandO04072026\archive\plans\planner Phase1\benchmarks\01b-accessibility-audit.md                   
+D:\oandO04072026\archive\plans\planner Phase1\benchmarks\01b-accessibility-reconciliation.md          
+D:\oandO04072026\archive\plans\planner Phase1\benchmarks\01b-benchmark-ui-workflow.md                 
+D:\oandO04072026\archive\plans\planner Phase1\benchmarks\01b-benchmark.md                             
+D:\oandO04072026\archive\plans\planner Phase1\benchmarks\01b-brief.md                                 
+D:\oandO04072026\archive\plans\planner Phase1\benchmarks\03a-benchmark.md                             
+D:\oandO04072026\archive\plan"
+20,"$p0 = ""D:\oandO04072026\plans\2026-07-04_global-standard-revision""
+$p1 = ""D:\oandO04072026\plans\2026-07-05_phase1-execution""
+$arch = ""D:\oandO04072026\plans\archive\2026-07-04_global-standard-revision""
+
+# Phase 0 summaries
+Rename-Item ""$p0\2026-07-04_benchmark-summary.md"" ""benchmark-summary.md""
+Rename-Item ""$p0\2026-07-04_critique-summary.md"" ""critique-summary.md""
+Rename-Item ""$p0\2026-07-04_handover-summary.md"" ""handover-summary.md""
+Move-Item ""$p1\2026-07-04_critique-expanded.md"" ""$p0\critique-expanded.md""
+
+# Phase 1 docs
+@(
+  @(""2026-07-05_plan-foundation.md"",""plan-foundation.md""),
+  @(""2026-07-05_plan-delivery.md"",""plan-delivery.md""),
+  @(""2026-07-05_plan-closeout.md"",""plan-closeout.md""),
+  @(""2026-07-05_benchmark-foundation.md"",""benchmark-foundation.md""),
+  @(""2026-07-05_benchmark-delivery.md"",""benchmark-delivery.md""),
+  @(""2026-07-05_benchmark-governance.md"",""benchmark-governance.md""),
+  @(""2026-07-05_implementation-decisions.md"",""implementation-decisions.md""),
+  @(""2026-07-05_quality-gates.md"",""quality-gates.md""),
+  @(""2026-07-05_design-benchmark-protocol.md"",""design-benchmark-protocol.md""),
+  @(""2026-07-05_review-workflow.md"",""review-workflow.md""),
+  @(""2026-07-05_handover"
+20,"--- a/D:\oandO04072026\docs\Lockedfiles\domain\INDEX.md
++++ b/D:\oandO04072026\docs\Lockedfiles\domain\INDEX.md
+@@ -29,9 +29,10 @@
+ | Documentation | [documentation-current.md](documentation-current.md) | [documentation-proposed.md](documentation-proposed.md) |
+ | **Dependencies & engines** | [dependencies-engines-current.md](dependencies-engines-current.md) | [dependencies-engines-proposed.md](dependencies-engines-proposed.md) |
+ | **UI execution & anti-drift** | [ui-execution-current.md](ui-execution-current.md) | [ui-execution-proposed.md](ui-execution-proposed.md) |
++| **Architecture docs** | [architecture-current.md](architecture-current.md) | [architecture-proposed.md](architecture-proposed.md) |
+ 
+ **Module contract (locked):** [`../UI-MODULE-CONTRACT-Locked.md`](../UI-MODULE-CONTRACT-Locked.md)  
+-**Live mirror:** `docs/architecture/MODULE-UI-CONTRACT.md`
++**Architecture index (live):** [`../../architecture/README.md`](../../architecture/README.md)
+ 
+ ## Quick open
+ 2"
+20,"--- a/D:\oandO04072026\docs\Lockedfiles\domain\INDEX.md
++++ b/D:\oandO04072026\docs\Lockedfiles\domain\INDEX.md
+@@ -28,7 +28,11 @@
+ | Platform & API | [platform-api-current.md](platform-api-current.md) | [platform-api-proposed.md](platform-api-proposed.md) |
+ | Documentation | [documentation-current.md](documentation-current.md) | [documentation-proposed.md](documentation-proposed.md) |
+ | **Dependencies & engines** | [dependencies-engines-current.md](dependencies-engines-current.md) | [dependencies-engines-proposed.md](dependencies-engines-proposed.md) |
++| **UI execution & anti-drift** | [ui-execution-current.md](ui-execution-current.md) | [ui-execution-proposed.md](ui-execution-proposed.md) |
+ 
++**Module contract (locked):** [`../UI-MODULE-CONTRACT-Locked.md`](../UI-MODULE-CONTRACT-Locked.md)  
++**Live mirror:** `docs/architecture/MODULE-UI-CONTRACT.md`
++
+ ## Quick open
+ 
+ | Task | Open |2"
+19,"{""role"":""user"",""message"":{""content"":[{""type"":""text"",""text"":""<timestamp>Sunday, Jul 5, 2026, 11:14 AM (UTC+5:30)</timestamp>\n<user_query>\nYou are a domain documentation auditor for Oando at D:\\oandO04072026.\n\n**Task:** Produce REVISED markdown for ALL `docs/Lockedfiles/domain/*-current.md` and `*-proposed.md` pairs (16 domains + INDEX content).\n\n**New locked structure (coordinator will apply):** Each domain moves to `docs/Lockedfiles/<module>/current.md` and `proposed.md` e.g. `docs/Lockedfiles/planner/current.md`.\n\n**Domains:** repo-shell, site, planner, admin, crm, ops, auth, database, svg-pipeline, tech-stack, tests, platform-api, documentation, dependencies-engines, ui-execution, architecture\n\n**For each *-current.md:**\n- Table: Topic | On disk today | Paths\n- Packages (on disk) table from site/package.json where relevant\n- Summary / Strengths / Weaknesses prose\n- Audit disk: features/planner/open3d/, routes, REVISION alignment\n\n**For each *-proposed.md:**\n- Table: Topic | Policy | Paths | Docs\n- Packages (proposed per plan)\n- Point to MODULE-LAYOUT.md, MODULE-UI-CONTRACT.md, architecture README\n\n**Also produce:** `docs/Lockedfiles/INDEX.md` (new root index"
+19,"
+You are a domain documentation auditor for Oando at D:\oandO04072026.
+
+**Task:** Produce REVISED markdown for ALL `docs/Lockedfiles/domain/*-current.md` and `*-proposed.md` pairs (16 domains + INDEX content).
+
+**New locked structure (coordinator will apply):** Each domain moves to `docs/Lockedfiles/<module>/current.md` and `proposed.md` e.g. `docs/Lockedfiles/planner/current.md`.
+
+**Domains:** repo-shell, site, planner, admin, crm, ops, auth, database, svg-pipeline, tech-stack, tests, platform-api, documentation, dependencies-engines, ui-execution, architecture
+
+**For each *-current.md:**
+- Table: Topic | On disk today | Paths
+- Packages (on disk) table from site/package.json where relevant
+- Summary / Strengths / Weaknesses prose
+- Audit disk: features/planner/open3d/, routes, REVISION alignment
+
+**For each *-proposed.md:**
+- Table: Topic | Policy | Paths | Docs
+- Packages (proposed per plan)
+- Point to MODULE-LAYOUT.md, MODULE-UI-CONTRACT.md, architecture README
+
+**Also produce:** `docs/Lockedfiles/INDEX.md` (new root index for module subdirs) replacing flat domain/INDEX.md
+
+**Authority:** plann/REVISION-2026-07-05.md, PACKAGES.md, UI/TEST revised plans
+
+**Format:** For each mod"
+18,"$root = ""D:\oandO04072026\plans""
+# Folders
+Rename-Item ""$root\planner Phase0"" ""2026-07-04_global-standard-revision""
+Rename-Item ""$root\planner Phase1"" ""2026-07-05_phase1-execution""
+Rename-Item ""$root\archive\2026-07-04"" ""2026-07-04_global-standard-revision""
+
+$p0 = ""$root\2026-07-04_global-standard-revision""
+Rename-Item ""$p0\REVISION-01-BENCHMARK.md"" ""2026-07-04_benchmark-summary.md""
+Rename-Item ""$p0\REVISION-02-CRITIQUE.md"" ""2026-07-04_critique-summary.md""
+Rename-Item ""$p0\REVISION-03-HANDOVER.md"" ""2026-07-04_handover-summary.md""
+
+$arch = ""$root\archive\2026-07-04_global-standard-revision""
+@(
+  @(""benchmark.md"",""2026-07-04_benchmark.md""),
+  @(""critique.md"",""2026-07-04_critique.md""),
+  @(""HANDOVER.md"",""2026-07-04_handover.md""),
+  @(""idiothandver.md"",""2026-07-04_idiothandver.md""),
+  @(""open3d-test-error-follow-up.md"",""2026-07-04_open3d-test-follow-up.md"")
+) | ForEach-Object { Rename-Item ""$arch\$($_[0])"" $_[1] }
+
+$p1 = ""$root\2026-07-05_phase1-execution""
+@(
+  @(""PLAN-01-FOUNDATION.md"",""2026-07-05_plan-foundation.md""),
+  @(""PLAN-02-DELIVERY.md"",""2026-07-05_plan-delivery.md""),
+  @(""PLAN-03-CLOSEOUT.md"",""2026-07-05_plan-closeout.md""),
+  @(""BENCHMARK-01-FOUNDATION.md"",""2026-07-05_benchma"
+18,"--- a/D:\oandO04072026\docs\Lockedfiles\domain\INDEX.md
++++ b/D:\oandO04072026\docs\Lockedfiles\domain\INDEX.md
+@@ -27,6 +27,7 @@
+ | Tests | [tests-current.md](tests-current.md) | [tests-proposed.md](tests-proposed.md) |
+ | Platform & API | [platform-api-current.md](platform-api-current.md) | [platform-api-proposed.md](platform-api-proposed.md) |
+ | Documentation | [documentation-current.md](documentation-current.md) | [documentation-proposed.md](documentation-proposed.md) |
++| **Dependencies & engines** | [dependencies-engines-current.md](dependencies-engines-current.md) | [dependencies-engines-proposed.md](dependencies-engines-proposed.md) |
+ 
+ ## Quick open
+ 2"
+16,"--- a/D:\oandO04072026\plann\START.md
++++ b/D:\oandO04072026\plann\START.md
+@@ -318,6 +318,6 @@
+ 
+ Read [`REVISION-2026-07-05.md`](REVISION-2026-07-05.md) first. Execute **Phase 1A** then **Phase 1B** in [`PHASE-1.md`](PHASE-1.md), pass each track's gates, then execute [`PHASE-2.md`](PHASE-2.md).
+ 
+-Place new open3d code per [`MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md). New UI modules per [`MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md). Domain snapshots: [`docs/Lockedfiles/domain/INDEX.md`](../docs/Lockedfiles/domain/INDEX.md).
++Place new open3d code per [`MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md). New UI modules per [`MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md). Domain snapshots: [`docs/Lockedfiles/INDEX.md`](../docs/Lockedfiles/INDEX.md).
+ 
+ Update [`HANDOVER.md`](HANDOVER.md) after every completed checklist group. Do not mark work verified without evidence from one unchanged revision under `results/<module>/<phase>/<cmd>/`.2"
+14,"8--- a/D:\oandO04072026\plannnerplan\benchmarks\REVIEW-WORKFLOW.md
++++ b/D:\oandO04072026\plannnerplan\benchmarks\REVIEW-WORKFLOW.md
+@@ -1,91 +1,85 @@
+ # Benchmark Review Workflow
+ 
+-Date: 2026-07-04
++Date: 2026-07-05
+ 
+-Use this workflow after execution has produced a plan revision, benchmark refresh, or phase brief update.
++Use after a plan slice, benchmark refresh, or phase update.
+ 
++---
++
+ ## Sequence
+ 
+-1. Execution completes for the plan slice.
+-2. Critic agent reviews the executed output against the benchmark corpus.
+-3. QA agent reviews the same output independently.
+-4. UI agent reviews the same output independently.
+-5. Primary agent finalization.
++1. Execution finishes.
++2. Critic reviews against the three benchmark files + live evidence.
++3. QA reviews independently.
++4. UI reviews independently.
++5. Primary agent finalizes.
+ 
++---
++
+ ## Agent rules
+ 
+-- Each agent reads the current benchmark corpus and the live plan docs directly after execution.
+-- Each agent also performs its own current search or evidence check as needed for the task.
+-- Each agent returns an independent opinion only.
+-- Do not pass one agent's opinion to the next agent.
+-- Do not merge or summariz"
+14,"The user prefers renaming plan folders and documents to use a `date_comment` pattern.
+
+Phase0 and Phase1 folders will use `YYYY-MM-DD_name` format. Documents inside will be renamed to `YYYY-MM-DD_benchmark.md`, `critique.md`, `handover.md`, and `plan-foundation.md`.
+
+Phase1 documents will also follow the `YYYY-MM-DD_name` pattern. PLAN-02-DELIVERY becomes `2026-07-05_plan-delivery.md`. PLAN-03-CLOSEOUT becomes `2026-07-05_plan-closeout.md`. BENCHMARK-01-DELIVERY becomes `2026-07-05_benchmark-delivery.md`. BENCHMARK-02-GOVERNANCE becomes `2026-07-05_benchmark-governance.md`. DESIGN-BENCHMARK-PROTOCOL becomes `2026-07-05_design-benchmark-protocol.md`. HANDOVER becomes `2026-07-05_handover.md`.
+
+Three more Phase1 documents will be renamed: IMPLEMENTATION-DECISIONS becomes `2026-07-05_implementation-decisions.md`, QUALITY-GATES becomes `2026-07-05_quality-gates.md`, and REVIEW-WORKFLOW becomes `2026-07-05_review-workflow.md`. A simpler naming convention is being considered to avoid redundancy, since the folder already contains the date.
+
+The archive folder `plans/archive/2026-07-04/` will be renamed to `2026-07-04_global-standard-revision/`. The gitignored archive mirror `archive/plans"
+14,"$p1 = ""D:\oandO04072026\plans\2026-07-05_phase1-execution""
+$files = Get-ChildItem $p1 -Filter *.md
+$repl = @{
+  'plans/planner Phase0/REVISION-01-BENCHMARK.md' = 'plans/2026-07-04_global-standard-revision/2026-07-04_benchmark-summary.md'
+  'plans/planner Phase0/REVISION-02-CRITIQUE.md' = 'plans/2026-07-04_global-standard-revision/2026-07-04_critique-summary.md'
+  'plans/planner Phase0/REVISION-03-HANDOVER.md' = 'plans/2026-07-04_global-standard-revision/2026-07-04_handover-summary.md'
+  'plans/planner Phase0/' = 'plans/2026-07-04_global-standard-revision/'
+  'plans/planner Phase1/' = 'plans/2026-07-05_phase1-execution/'
+  'archive/plans/planner Phase1/' = 'archive/plans/2026-07-05_phase1-execution/'
+  'plans/archive/2026-07-04/' = 'plans/archive/2026-07-04_global-standard-revision/'
+  'plans/archive/2026-07-04/benchmark.md' = 'plans/archive/2026-07-04_global-standard-revision/2026-07-04_benchmark.md'
+  'PLAN-01-FOUNDATION.md' = '2026-07-05_plan-foundation.md'
+  'PLAN-02-DELIVERY.md' = '2026-07-05_plan-delivery.md'
+  'PLAN-03-CLOSEOUT.md' = '2026-07-05_plan-closeout.md'
+  'BENCHMARK-01-FOUNDATION.md' = '2026-07-05_benchmark-foundation.md'
+  'BENCHMARK-02-DELIVERY.md' = '2026-07-05_b"
+14,"Move-Item : Cannot find path 'D:\oandO04072026\plannnerplan\benchmarks\BENCHMARK-01-FOUNDATION.md' because it does not 
+exist.
+At line:2 char:1
++ Move-Item ""$root\benchmarks\BENCHMARK-01-FOUNDATION.md"" ""$root\"" -For ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\oandO0407202...1-FOUNDATION.md:String) [Move-Item], ItemNotFoundExce 
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.MoveItemCommand
+ 
+Move-Item : Cannot find path 'D:\oandO04072026\plannnerplan\benchmarks\BENCHMARK-02-DELIVERY.md' because it does not 
+exist.
+At line:3 char:1
++ Move-Item ""$root\benchmarks\BENCHMARK-02-DELIVERY.md"" ""$root\"" -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\oandO0407202...-02-DELIVERY.md:String) [Move-Item], ItemNotFoundExce 
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.MoveItemCommand
+ 
+Move-Item : Cannot find path 'D:\oandO04072026\plannnerplan\benchmarks\BENCHMARK-03-GOVERNANCE.md' because it does not 
+exist.
+At line:4 char:1
++ Move-Item ""$ro"
+14," banner in SITE-MARKETING contract |
+ | Enforcement | `lint:ui` warn | `lint:ui:strict` in `release:gate:fast` after UI-1 shell |
+ 
+-Full snapshot: [`../Lockedfiles/domain/architecture-current.md`](../Lockedfiles/domain/architecture-current.md) / [`architecture-proposed.md`](../Lockedfiles/domain/architecture-proposed.md).
++Full snapshot: [`../Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) / [`proposed.md`](../Lockedfiles/architecture/proposed.md).
+ 
+ ---
+ 2"
+13,"
+FullName                                                                                                               
+--------                                                                                                               
+D:\oandO04072026\archive\2026-07-04                                                                                    
+D:\oandO04072026\archive\admin-buddy-catalog                                                                           
+D:\oandO04072026\archive\documents-legacy-vite-build                                                                   
+D:\oandO04072026\archive\failures-2026-07-05-consolidation                                                             
+D:\oandO04072026\archive\open3d-floorplan-docs                                                                         
+D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation                                                         
+D:\oandO04072026\archive\plans                                                                                         
+D:\oandO04072026\archive\pre-staging-open3d-react-2026-07-03                                                 "
+13," UI review sequence for plan revisions; each pass is independent.
+
+## Archived stale plan files (per user request + AGENTS.md archive-over-delete)
+
+The following imported OOFPLWeb advisory docs are archived/stale (references purged from active INDEX per stale-evidence policy and 2026-07-04 global standard revision). They are superseded by `plans/archive/2026-07-04/benchmark.md` and local execution benchmarks. Files remain physically in this `plannnerplan/benchmarks/` directory (no `stale/` subdir populated; archive-over-delete preferred over move/delete).
+
+- 01a-benchmark.md, 01b-*.md, 03a-*.md series (pre-revision advisory docs, now stale).
+
+See git log or directory contents for full traceability. No purge of files themselves.
+
+## Local execution benchmarks
+
+- `conversion-execution-benchmark.md` - conversion-plan execution benchmark.
+- `phase-05-benchmark.md` - portal/public render benchmark.
+- `phase-06-benchmark.md` - inventory and symbol-consumer benchmark.
+
+## Stale plan files cleanup note
+References to stale imported advisory docs purged from active INDEX as part of the global standard revision (see design spec). Files retained in `plannnerplan/benchmarks/` for traceability ("
+13," benchmark, critique, handover summaries. Archive: `plans/archive/2026-07-04/`.
++Active handover: `plans/2026-07-04_global-standard-revision/2026-07-04_handover-summary.md`.
+ 
+-**Plans:** `PLAN-01-FOUNDATION.md`, `PLAN-02-DELIVERY.md`, `PLAN-03-CLOSEOUT.md`.
++**Phase 0 (governance revision):** `plans/2026-07-04_global-standard-revision/`. Archive: `plans/archive/2026-07-04_global-standard-revision/`.
+ 
+-**Benchmarks:** `BENCHMARK-01-FOUNDATION.md`, `BENCHMARK-02-DELIVERY.md`, `BENCHMARK-03-GOVERNANCE.md`.
++**Phase 1 (execution):** `plans/2026-07-05_phase1-execution/`.
+ 
+-**Review:** `REVIEW-WORKFLOW.md`.
++**Plans:** `2026-07-05_plan-foundation.md`, `2026-07-05_plan-delivery.md`, `2026-07-05_plan-closeout.md`.
+ 
++**Benchmarks:** `2026-07-05_benchmark-foundation.md`, `2026-07-05_benchmark-delivery.md`, `2026-07-05_benchmark-governance.md`.
++
++**Review:** `2026-07-05_review-workflow.md`.
++
++**Governance:** `2026-07-05_implementation-decisions.md`, `2026-07-05_quality-gates.md`, `2026-07-05_design-benchmark-protocol.md`.
++
+ **Failures:** root `Failures.md`, `resolved-failures.md`.
+ 
+-**Archive:** `archive/plans/planner Phase1/` (`phases/`, `benchmarks/`, `stubs/`, `failures/`). Phase 0"
+12,"10 numbering; this phase slots ahead of `01-engine-lock-and-workspace-bootstrap`.
+-
+-## Scope
+-
+-In scope:
+-
+-1. Verify the 5 governance markdown files are present and untouched.
+-2. Verify `pnpm-lock.yaml` is committed and not regenerable from spec drift.
+-3. Verify forbidden patterns are absent from the working tree (`any`, `@ts-ignore`, `@ts-nocheck`, ESLint `disable` directives, pnpm `--no-frozen-lockfile` traces, Mantine imports, competitor trade-dress assets).
+-4. Verify R2 bucket `<bucket per IMPLEMENTATION-DECISIONS.md>/` authority is recorded in `IMPLEMENTATION-DECISIONS.md`.
+-5. Verify `pnpm-workspace.yaml` and `turbo.json` reflect the locked package set.
+-6. Produce `benchmarks/phase-00-precheck.md` with exit-summary table.
+-7. Move `plannnerplan/` from git `D` (deleted in working tree, present in `HEAD`) to clean on `main`.
+-8. Commit the new plan package as a separate commit before Phase 01 starts.
+-
+-Out of scope:
+-
+-- Any `package.json` change, lockfile mutation, or `pnpm install`.
+-- Any `pnpm-workspace.yaml` member change.
+-- Any feature code, route, or admin/portal UI work.
+-- Phase 01 work (workspace dir, `pnpm install`, engine lockfile pin).
+-
+-## Forbidden / Al"
+12,"Move-Item : Cannot find path 'D:\oandO04072026\plannnerplan\benchmarks\BENCHMARK-01-FOUNDATION.md' because it does not 
+exist.
+At line:2 char:1
++ Move-Item ""$root\benchmarks\BENCHMARK-01-FOUNDATION.md"" ""$root\"" -For ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\oandO0407202...1-FOUNDATION.md:String) [Move-Item], ItemNotFoundExce 
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.MoveItemCommand
+ 
+Move-Item : Cannot find path 'D:\oandO04072026\plannnerplan\benchmarks\BENCHMARK-02-DELIVERY.md' because it does not 
+exist.
+At line:3 char:1
++ Move-Item ""$root\benchmarks\BENCHMARK-02-DELIVERY.md"" ""$root\"" -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\oandO0407202...-02-DELIVERY.md:String) [Move-Item], ItemNotFoundExce 
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.MoveItemCommand
+ 
+Move-Item : Cannot find path 'D:\oandO04072026\plannnerplan\benchmarks\BENCHMARK-03-GOVERNANCE.md' because it does not 
+exist.
+At line:4 char:1
++ Move-Item ""$roo"
+12,"--- a/D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\README.md
++++ b/D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation\README.md
+@@ -2,24 +2,19 @@
+ 
+ Date: 2026-07-05
+ 
+-Stubs and superseded specs moved here during the 3-file plan + 3-file benchmark merge.
++Flat archive. All superseded phase and benchmark files are in this folder only.
+ 
+ ## Active docs (use these)
+ 
+-**Plans:** `plannnerplan/PLAN-01-FOUNDATION.md`, `PLAN-02-DELIVERY.md`, `PLAN-03-CLOSEOUT.md`
++All in `plannnerplan/` root:
+ 
+-**Benchmarks:** `plannnerplan/benchmarks/BENCHMARK-01-FOUNDATION.md`, `BENCHMARK-02-DELIVERY.md`, `BENCHMARK-03-GOVERNANCE.md`, `REVIEW-WORKFLOW.md`
++- `PLAN-01-FOUNDATION.md`, `PLAN-02-DELIVERY.md`, `PLAN-03-CLOSEOUT.md`
++- `BENCHMARK-01-FOUNDATION.md`, `BENCHMARK-02-DELIVERY.md`, `BENCHMARK-03-GOVERNANCE.md`
++- `REVIEW-WORKFLOW.md`, `IMPLEMENTATION-DECISIONS.md`, `QUALITY-GATES.md`, `DESIGN-BENCHMARK-PROTOCOL.md`
++- `HANDOVER.md` (routing), `CRITIQUE-2026-07-04.md`
+ 
+-**Failures:** root `Failures.md`, `resolved-failures.md`
++Failures: root `Failures.md`, `resolved-failures.md`.
+ 
+-**Handover:** `plans/2026-07-04/HANDOVER.md`
++Handover detail: `plans/2026-07-04/H"
+12," locks 1A/1B + Option A |
+ | Repo shell | [repo-shell-current.md](repo-shell-current.md) | [repo-shell-proposed.md](repo-shell-proposed.md) |
+ | Site | [site-current.md](site-current.md) | [site-proposed.md](site-proposed.md) |
+ | Planner | [planner-current.md](planner-current.md) | [planner-proposed.md](planner-proposed.md) |2"
+11,"# Benchmark Corpus Index
+
+Date: 2026-07-04
+
+This folder is append-only by design. Do not edit benchmark reports in place; add a new dated report or correction note when evidence changes.
+
+Cross-refs: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md` (approved design + structure note), `plans/archive/2026-07-04/benchmark.md` (plan-revision benchmark), `plans/archive/2026-07-04/critique.md`, `plannnerplan/critique/plan-revision-2026-07-04.md`, `plannnerplan/IMPLEMENTATION-DECISIONS.md`.
+
+## Current structure (2026-07-04 Global Standard Revision)
+- Revision docs (benchmark, critique, HANDOVER, idiothandver, follow-up) archived in `plans/archive/2026-07-04/` (finalized per plan; originals remain in plans/2026-07-04/ for transitional refs).
+- Archive copies: `plans/archive/2026-07-04/` (see this archive/README.md).
+- `plannnerplan/` retains: `phases/`, governance (`IMPLEMENTATION-DECISIONS.md`, `QUALITY-GATES.md`, `DESIGN-BENCHMARK-PROTOCOL.md`, `FAILURESPLAN.md`, `HANDOVER.md` stub), `critique/plan-revision-2026-07-04.md`, `benchmarks/` (local execution + this INDEX + plan-revision stub for history).
+- `plannnerplan/plan/2026-07-04/` retained as move-st"
+11,"
+fatal: not under version control, source=plannnerplan/benchmarks/BENCHMARK-01-FOUNDATION.md, destination=plannnerplan/BENCHMARK-01-FOUNDATION.md
+fatal: not under version control, source=plannnerplan/benchmarks/BENCHMARK-02-DELIVERY.md, destination=plannnerplan/BENCHMARK-02-DELIVERY.md
+fatal: not under version control, source=plannnerplan/benchmarks/BENCHMARK-03-GOVERNANCE.md, destination=plannnerplan/BENCHMARK-03-GOVERNANCE.md
+fatal: not under version control, source=plannnerplan/phases/README.md, destination=plannnerplan/archive/phases-README.md
+fatal: not under version control, source=plannnerplan/plan/README.md, destination=plannnerplan/archive/plan-README.md
+
+FullName                                                  
+--------                                                  
+D:\oandO04072026\plannnerplan\archive                     
+D:\oandO04072026\plannnerplan\CRITIQUE-2026-07-04.md      
+D:\oandO04072026\plannnerplan\DESIGN-BENCHMARK-PROTOCOL.md
+D:\oandO04072026\plannnerplan\HANDOVER.md                 
+D:\oandO04072026\plannnerplan\IMPLEMENTATION-DECISIONS.md 
+D:\oandO04072026\plannnerplan\PLAN-01-FOUNDATION.md       
+D:\oandO04072026\plannnerplan\PLAN-02-DELIVERY"
+11,"$root = ""D:\oandO04072026\plannnerplan""
+New-Item -ItemType Directory -Force -Path ""$root\archive"" | Out-Null
+git mv ""$root\benchmarks\BENCHMARK-01-FOUNDATION.md"" ""$root\BENCHMARK-01-FOUNDATION.md""
+git mv ""$root\benchmarks\BENCHMARK-02-DELIVERY.md"" ""$root\BENCHMARK-02-DELIVERY.md""
+git mv ""$root\benchmarks\BENCHMARK-03-GOVERNANCE.md"" ""$root\BENCHMARK-03-GOVERNANCE.md""
+git mv ""$root\benchmarks\REVIEW-WORKFLOW.md"" ""$root\REVIEW-WORKFLOW.md""
+git mv ""$root\critique\plan-revision-2026-07-04.md"" ""$root\CRITIQUE-2026-07-04.md""
+if (Test-Path ""$root\phases\README.md"") { git mv ""$root\phases\README.md"" ""$root\archive\phases-README.md"" }
+if (Test-Path ""$root\plan\README.md"") { git mv ""$root\plan\README.md"" ""$root\archive\plan-README.md"" }
+Remove-Item -Recurse -Force ""$root\benchmarks"" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force ""$root\critique"" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force ""$root\phases"" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force ""$root\plan"" -ErrorAction SilentlyContinue
+Get-ChildItem -Recurse $root | Select-Object FullName"
+11,"--- a/D:\oandO04072026\docs\Lockedfiles\domain\documentation-proposed.md
++++ b/D:\oandO04072026\docs\Lockedfiles\domain\documentation-proposed.md
+@@ -10,6 +10,7 @@
+ | Locked snapshots | Update only when intentionally locking a version | `docs/Lockedfiles/` |
+ | Domain map | Paired `*-current.md` / `*-proposed.md` per domain; index at `domain/INDEX.md` | `docs/Lockedfiles/domain/` |
+ | UI anti-drift | Module contract + `ui-execution` pair; strict `lint:ui` after UI-1 shell | `UI-MODULE-CONTRACT-Locked.md`, `ui-execution-*.md` |
++| Architecture docs | `architecture` pair; index at `docs/architecture/README.md` | `architecture-*.md` |
+ | Doc routing | `ReadmeLocked.md` "
+11,"--- a/D:\oandO04072026\docs\Lockedfiles\domain\documentation-proposed.md
++++ b/D:\oandO04072026\docs\Lockedfiles\domain\documentation-proposed.md
+@@ -9,6 +9,7 @@
+ | Gates | **Two files only:** `Failures.md` (active), `resolved-failures.md` (history) | root |
+ | Locked snapshots | Update only when intentionally locking a version | `docs/Lockedfiles/` |
+ | Domain map | Paired `*-current.md` / `*-proposed.md` per domain; index at `domain/INDEX.md` | `docs/Lockedfiles/domain/` |
++| UI anti-drift | Module contract + `ui-execution` pair; strict `lint:ui` after UI-1 shell | `UI-MODULE-CONTRACT-Locked.md`, `ui-execution-*.md` |
+ | Doc routing | `ReadmeLocked.md` "
+11,"--- a/D:\oandO04072026\docs\Lockedfiles\ui\MODULE-UI-CONTRACT-Locked.md
++++ b/D:\oandO04072026\docs\Lockedfiles\ui\MODULE-UI-CONTRACT-Locked.md
+@@ -96,5 +96,6 @@
+ |------|------|
+ | UI phases | `plann/UI-PLAN-REVISED-2026-07-05.md` |
+ | Test gates | `plann/TEST-PLAN-REVISED-2026-07-05.md` |
+-| Domain pair | `docs/Lockedfiles/domain/ui-execution-*.md` |
++| Domain pair | `docs/Lockedfiles/ui-execution/` |
++| Locked UI contract | `docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md` |
+ | Lint script | `site/scripts/lint-ui-contract.mjs` |2"
+10,"--- a/D:\oandO04072026\plannnerplan\benchmarks\conversion-execution-benchmark.md
++++ b/D:\oandO04072026\plannnerplan\benchmarks\conversion-execution-benchmark.md
+@@ -1,203 +1,5 @@
+-# Conversion Execution Benchmark
++# Moved
+ 
+-Date: 2026-07-03  
+-Web-source access date: 2026-07-03  
+-Status: immutable advisory report. The primary agent decides what becomes binding.
++Merged into `benchmarks/BENCHMARK-01-FOUNDATION.md` (conversion section).
+ 
+-## Scope and evidence reviewed
+-
+-This benchmark governs conversion of the donor planner into the React/Next.js staging implementation, with special protection for UI, UX, and workflow. It addresses drawing workflows, pointer/cancel/snap feedback, command architecture, canonical site-theme integration, accessibility, and the required 95% coverage gate.
+-
+-Local evidence reviewed:
+-
+-- `DESIGN-BENCHMARK-PROTOCOL.md`
+-- current execution plans, especially Phase 01A, Phase 01B, Phase 05, and `QUALITY-GATES.md`
+-- `evidence/01a-baseline.md`
+-- `REFERENCE-EXECUTION-BENCHMARK-01B-2026-07-03.md`
+-- current staging UI: `app/page.tsx`, `app/styles.css`, `FeasibilityCanvas.tsx`, command registry, snapping logic, and feasibility tests
+-
+-Products reviewed "
+10,"'# Benchmark Review Workflow
+
+Date: 2026-07-04
+
+Use this workflow after execution has produced a plan revision, benchmark refresh, or phase brief update.
+
+## Sequence
+
+1. Execution completes for the plan slice.
+2. Critic agent reviews the executed output against the benchmark corpus.
+3. QA agent reviews the same output independently.
+4. UI agent reviews the same output independently.
+5. Primary agent finalization.
+
+## Agent rules
+
+- Each agent reads the current benchmark corpus and the live plan docs directly after execution.
+- Each agent also performs its own current search or evidence check as needed for the task.
+- Each agent returns an independent opinion only.
+- Do not pass one agent's opinion to the next agent.
+- Do not merge or summarize reviewer opinions until they reach the primary agent.
+
+## Primary-agent rule
+
+The primary agent receives all three independent reviews after they complete, incorporates only the findings that survive validation, and then finalizes the plan.
+
+## Scope
+
+This workflow applies to:
+
+- `plannnerplan/benchmarks/*`
+- `plannnerplan/HANDOVER.md`
+- `plannnerplan/FAILURESPLAN.md`
+- `plannnerplan/IMPLEMENTATION-DECISIONS.md`
+- `plannnerplan/QUALITY-GATES"
+10,"# Benchmark Review Workflow
+
+Date: 2026-07-04
+
+Use this workflow after execution has produced a plan revision, benchmark refresh, or phase brief update.
+
+## Sequence
+
+1. Execution completes for the plan slice.
+2. Critic agent reviews the executed output against the benchmark corpus.
+3. QA agent reviews the same output independently.
+4. UI agent reviews the same output independently.
+5. Primary agent finalization.
+
+## Agent rules
+
+- Each agent reads the current benchmark corpus and the live plan docs directly after execution.
+- Each agent also performs its own current search or evidence check as needed for the task.
+- Each agent returns an independent opinion only.
+- Do not pass one agent's opinion to the next agent.
+- Do not merge or summarize reviewer opinions until they reach the primary agent.
+
+## Primary-agent rule
+
+The primary agent receives all three independent reviews after they complete, incorporates only the findings that survive validation, and then finalizes the plan.
+
+## Scope
+
+This workflow applies to:
+
+- `plannnerplan/benchmarks/*`
+- `plannnerplan/HANDOVER.md`
+- `plannnerplan/FAILURESPLAN.md`
+- `plannnerplan/IMPLEMENTATION-DECISIONS.md`
+- `plannnerplan/QUALITY-GATES."
+10,"Proceeding with the plan. Locked files will be organized by module in subdirectories. The user's preference for this structure will be maintained.
+
+Launching four Composer subagents in parallel for batches A through D. A coordinator revision pass will follow. Then the revised files will be applied. The locked file directory will be flattened into module-wise subdirectories under docs/Lockedfiles/. Scope pushing back remains the right approach.
+
+The locked files will be grouped into subdirectories for each module. These include conduct, ui, planner, admin, site, architecture, ui-execution, dependencies-engines, and repo-shell. A main INDEX.md will sit at the root of docs/Lockedfiles/.
+
+The locked files will be placed directly under docs/Lockedfiles/ as planner/current.md, admin/current.md, and so on. The subagent launch begins now. Once the agents finish, the coordinator will revise the outputs, apply the documentation, and then migrate the locked files into their new module subdirectories while updating all internal references.
+
+Subagents will run on the composer-2.5 model. A revision document will grant the coordinator authority. The locked file migration will create subdirectorie"
+10,"# Benchmark Review Workflow
+
+Date: 2026-07-05
+
+Use after a plan slice, benchmark refresh, or phase update.
+
+---
+
+## Sequence
+
+1. Execution finishes.
+2. Critic reviews against the three benchmark files + live evidence.
+3. QA reviews independently.
+4. UI reviews independently.
+5. Primary agent finalizes.
+
+---
+
+## Agent rules
+
+- Read `2026-07-05_benchmark-foundation.md`, `2026-07-05_benchmark-delivery.md`, `2026-07-05_benchmark-governance.md`, and the matching plan file (`PLAN-01` / `02` / `03`).
+- Read root `Failures.md` before gates.
+- Each agent returns one independent opinion.
+- Do not pass opinions between agents.
+- Primary merges only after all three finish.
+
+---
+
+## Primary agent
+
+Receives three reviews. Keeps validated findings only. Updates plan status and `resolved-failures.md` when items close.
+
+---
+
+## Scope
+
+- `plans/2026-07-05_phase1-execution/2026-07-05_benchmark-*.md`
+- `plans/2026-07-05_phase1-execution/PLAN-*.md`
+- `plans/2026-07-05_phase1-execution/2026-07-05_handover-routing.md`
+- `plans/2026-07-05_phase1-execution/2026-07-05_implementation-decisions.md`
+- `plans/2026-07-05_phase1-execution/2026-07-05_quality-gates.md`
+- `plans/2026-07-05_phase1-execution/2026-07-0"
+10,"
+FullName                                                           
+--------                                                           
+D:\oandO04072026\plannnerplan\benchmarks                           
+D:\oandO04072026\plannnerplan\critique                             
+D:\oandO04072026\plannnerplan\phases                               
+D:\oandO04072026\plannnerplan\plan                                 
+D:\oandO04072026\plannnerplan\DESIGN-BENCHMARK-PROTOCOL.md         
+D:\oandO04072026\plannnerplan\HANDOVER.md                          
+D:\oandO04072026\plannnerplan\IMPLEMENTATION-DECISIONS.md          
+D:\oandO04072026\plannnerplan\PLAN-01-FOUNDATION.md                
+D:\oandO04072026\plannnerplan\PLAN-02-DELIVERY.md                  
+D:\oandO04072026\plannnerplan\PLAN-03-CLOSEOUT.md                  
+D:\oandO04072026\plannnerplan\QUALITY-GATES.md                     
+D:\oandO04072026\plannnerplan\benchmarks\BENCHMARK-01-FOUNDATION.md
+D:\oandO04072026\plannnerplan\benchmarks\BENCHMARK-02-DELIVERY.md  
+D:\oandO04072026\plannnerplan\benchmarks\BENCHMARK-03-GOVERNANCE.md
+D:\oandO04072026\plannnerplan\benchmarks\REVIEW-WORKFLOW.md        
+D:\oandO04072026\plannner"
+10,"# Benchmark Review Workflow
+
+Date: 2026-07-05
+
+Use after a plan slice, benchmark refresh, or phase update.
+
+---
+
+## Sequence
+
+1. Execution finishes.
+2. Critic reviews against the three benchmark files + live evidence.
+3. QA reviews independently.
+4. UI reviews independently.
+5. Primary agent finalizes.
+
+---
+
+## Agent rules
+
+- Read `benchmark-foundation.md`, `benchmark-delivery.md`, `benchmark-governance.md`, and the matching plan file (`plan-foundation.md` / `plan-delivery.md` / `plan-closeout.md`).
+- Read root `Failures.md` before gates.
+- Each agent returns one independent opinion.
+- Do not pass opinions between agents.
+- Primary merges only after all three finish.
+
+---
+
+## Primary agent
+
+Receives three reviews. Keeps validated findings only. Updates plan status and `resolved-failures.md` when items close.
+
+---
+
+## Scope
+
+- `plans/2026-07-05_phase1-execution/2026-07-05_benchmark-*.md`
+- `plans/2026-07-05_phase1-execution/PLAN-*.md`
+- `plans/2026-07-05_phase1-execution/handover-routing.md`
+- `plans/2026-07-05_phase1-execution/implementation-decisions.md`
+- `plans/2026-07-05_phase1-execution/quality-gates.md`
+- `plans/2026-07-05_phase1-execution/design-benchmark-protocol.md`
+- Root"
+10,"
+$archive = ""D:\oandO04072026\archive\plannnerplan-2026-07-05-consolidation""
+New-Item -ItemType Directory -Force -Path ""$archive\phases"", ""$archive\benchmarks"", ""$archive\stubs"" | Out-Null
+$phaseStubs = Get-ChildItem ""D:\oandO04072026\plannnerplan\phases\*.md""
+foreach ($f in $phaseStubs) { git mv $f.FullName ""$archive\phases\$($f.Name)"" }
+$benchStubs = @(
+  ""01a-benchmark.md"",""01b-benchmark.md"",""03a-benchmark.md"",""01b-brief.md"",""03a-brief.md"",
+  ""01b-accessibility-audit.md"",""01b-accessibility-reconciliation.md"",""01b-benchmark-ui-workflow.md"",
+  ""phase-00-precheck.md"",""phase-05-benchmark.md"",""phase-06-benchmark.md"",
+  ""conversion-execution-benchmark.md"",""blocksResolver-test-additions-2026-07-04.md"",""plan-revision-2026-07-04.md""
+)
+foreach ($name in $benchStubs) {
+  $src = ""D:\oandO04072026\plannnerplan\benchmarks\$name""
+  if (Test-Path $src) { git mv $src ""$archive\benchmarks\$name"" }
+}
+$rootStubs = @(""HANDOVER.md"",""idiothandver.md"",""open3d-test-error-follow-up.md"")
+foreach ($name in $rootStubs) {
+  $src = ""D:\oandO04072026\plannnerplan\$name""
+  if (Test-Path $src) { git mv $src ""$archive\stubs\$name"" }
+}
+if (Test-Path ""D:\oandO04072026\plannnerplan\plan\2026-07-04\critique.md"") {
+  "
+10," Revision 01 Benchmark (2026-07-04)
++# 2026-07-04_benchmark-summary
+ 
+-Phase 0 = governance and global-standard revision. Maps to execution **Phase 00** in `PLAN-01-FOUNDATION.md`. Not Phase 01a (that label is an old benchmark doc id only).
++Phase 0 = governance and global-standard revision. Maps to execution **Phase 00** in `2026-07-05_plan-foundation.md`.
+ 
+-Date: 2026-07-04. Immutable advisory. Supersedes split `benchmark.md`.
++Date: 2026-07-04. Immutable advisory.
+ 
+-Authority: `plans/planner Phase1/DESIGN-BENCHMARK-PROTOCOL.md`, `IMPLEMENTATION-DECISIONS.md`, `PACKAGES.md`.
++Authority: `plans/2026-07-05_phase1-execution/2026-07-05_design-benchmark-protocol.md`, `2026-07-05_implementation-decisions.md`, `PACKAGES.md`.
+ 
+ Design spec: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`.
+ 
+-Full text: `plans/archive/2026-07-04/benchmark.md`.
++Full text: `plans/archive/2026-07-04_global-standard-revision/2026-07-04_benchmark.md`.
+ 
+ ---
+ 2"
+10," redirect stubs only until links updated.\n\ndocs\\architecture\\COMPONENT_ARCHITECTURE.md\n  6:**Locked pair:** `docs/Lockedfiles/domain/architecture-*.md`\n</workspace_result>""}]}],""id"":""tool_2e22ed2f-aae4-44bd-9dbc-2c919fc5f4c"",""providerOptions"":{""cursor"":{""highLevelToolCallResult"":{""output"":{""success"":{""pattern"":""Lockedfiles/domain|domain/.*-current|domain/.*-proposed"",""path"":""D:\\oandO04072026"",""outputMode"":""content"",""workspaceResults"":{""D:\\oandO04072026"":{""content"":{""matches"":[{""file"":""docs\\Lockedfiles\\domain\\INDEX.md"",""matches"":[{""lineNumber"":7,""content"":""Old flat layout `domain/*-current.md` / `*-proposed.md` moved to `<module>/current.md` and `<module>/proposed.md`.""}]},{""file"":""plann\\DOC-REVISION-2026-07-05.md"",""matches"":[{""lineNumber"":29,""content"":""**Deprecated:** flat `docs/Lockedfiles/domain/*` "
+10,"@*7""PLAN-01-FOUNDATION.md"",""2026-07-05_plan-foundation.md""*3""PLAN-02-DELIVERY.md"",""2026-07-05_plan-delivery.md""*3""PLAN-03-CLOSEOUT.md"",""2026-07-05_plan-closeout.md""*A""BENCHMARK-01-FOUNDATION.md"",""2026-07-05_benchmark-foundation.md""*=""BENCHMARK-02-DELIVERY.md"",""2026-07-05_benchmark-delivery.md""*A""BENCHMARK-03-GOVERNANCE.md"",""2026-07-05_benchmark-governance.md""*:""CRITIQUE-2026-07-04.md"",""2026-07-04_critique-expanded.md""*H""DESIGN-BENCHMARK-PROTOCOL.md"",""2026-07-05_design-benchmark-protocol.md""*.""HANDOVER.md"",""2026-07-05_handover-routing.md""*F""IMPLEMENTATION-DECISIONS.md"",""2026-07-05_implementation-decisions.md""*0""QUALITY-GATES.md"",""2026-07-05_quality-gates.md""*4""REVIEW-WORKFLOW.md"",""2026-07-05_review-workflow.md""*"

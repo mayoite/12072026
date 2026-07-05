@@ -1,0 +1,497 @@
+needle,count,samples
+docs/Lockedfiles/planner/proposed.md,0,
+docs/Lockedfiles/architecture/proposed.md,9,"
+n
+3D:\oandO04072026\docs\architecture\MODULE-LAYOUT.md27**Locked:** `docs/Lockedfiles/architecture/proposed.md`
+
+---
+
+\oandO04072026\docs\architecture\MODULE-LAYOUT.md
+@@ -2,7 +2,7 @@
+ 
+ **Status:** Proposed (execution authority for **new** code)  
+ **Index:** [`README.md`](README.md)  
+-**Locked:** `docs/Lockedfiles/domain/architecture-proposed.md`  
++**Locked:** `docs/Lockedfiles/architecture/proposed.md`  
+ **Related:** `COMPONENT_ARCHITECTURE.md`, `MODULE-UI-CONTRACT.md`
+ 
+ ---2
+
+---
+
+ where code should live
+
+**Status:** Proposed (execution authority for **new** code)  
+**Index:** [`README.md`](README.md)  
+**Locked:** `docs/Lockedfiles/architecture/proposed.md`  
+**Related:** `COMPONENT_ARCHITECTURE.md`, `MODULE-UI-CONTRACT.md`
+
+---
+
+## Problem
+
+`site/` mixes **routes**, **features**, **marketing components**, and **legacy planner** in overlapping trees. New modules land in the nearest folder and drift follows.
+
+Typical confusion today:
+
+| Question | Today (haphazard) |
+|----------|-------------------|
+| Where is the planner workspace? | `features/planner/open3d/editor/` **and** legacy `features/planner/editor/` |
+| Where is state? | `open3d/store/` **and** `features/planner/store/` |
+| Admin SVG editor? | `features/planner/admin/svg-editor/` + thin `app/admin/svg-editor/` |
+| Marketing UI? | `components/home/` **and** `features/site-assistant/` |
+| CSS for planner? | `app/css/core/planner/` **and** `app/css/ooplanner/` |
+
+---
+
+## Target map (one rule per layer)
+
+```text
+site/
+
+
+---
+
+ `COMPONENT_ARCHITECTURE.md`  
+ **Index:** [`README.md`](README.md)  
+-**Locked:** `docs/Lockedfiles/domain/architecture-proposed.md`  
++**Locked:** `docs/Lockedfiles/architecture/proposed.md`  
+ **Related:** [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md), [`CSS-SOLUTION.md`](CSS-SOLUTION.md)
+ 
+ ---2"
+docs/Lockedfiles/ui-execution/proposed.md,0,
+docs/Lockedfiles/tests/proposed.md,0,
+docs/Lockedfiles/documentation/proposed.md,0,
+docs/Lockedfiles/dependencies-engines/proposed.md,0,
+docs/Lockedfiles/INDEX.md,52,"disk: features/planner/open3d/, routes, REVISION alignment
+
+**For each *-proposed.md:**
+- Table: Topic | Policy | Paths | Docs
+- Packages (proposed per plan)
+- Point to MODULE-LAYOUT.md, MODULE-UI-CONTRACT.md, architecture README
+
+**Also produce:** `docs/Lockedfiles/INDEX.md` (new root index for module subdirs) replacing flat domain/INDEX.md
+
+**Authority:** plann/REVISION-2026-07-05.md, PACKAGES.md, UI/TEST revised plans
+
+**Format:** For each module output:
+## MODULE: planner
+### current.md
+(full content)
+### proposed.md
+(full content)
+
+Do NOT revise AgentsLocked.md etc. Return all modules + INDEX.
+
+---
+
+H-* files, UI-EXPERT/TEST-EXPERT drafts
+
+**Already locked (minor cross-link updates only):** UI-PLAN-REVISED-2026-07-05.md, TEST-PLAN-REVISED-2026-07-05.md
+
+**Add cross-links to:**
+- docs/architecture/README.md
+- docs/architecture/MODULE-LAYOUT.md
+- docs/Lockedfiles/INDEX.md (module subdirs)
+
+**Authority:** REVISION-2026-07-05.md, MODULE-LAYOUT, MODULE-UI-CONTRACT
+
+Return revised HANDOVER, START (targeted sections or full if easier), PHASE-1, PHASE-2.
+
+---
+
+ redirect to docs/Lockedfiles/INDEX.md (module subdirs layout)
+
+**New locked layout:**
+docs/Lockedfiles/
+  INDEX.md
+  conduct/ (AgentsLocked, ReadmeLocked, TestingLocked, TestingHandbookLocked)
+  ui/MODULE-UI-CONTRACT-Locked.md
+  planner/current.md proposed.md
+  admin/...
+  (one folder per domain module)
+
+**Do not change:** AGENTS.md content, testing-handbook
+
+Return all 4 files complete.
+
+---
+
+ `docs/Lockedfiles/INDEX.md` "
+anti-drift,79,"s old slate pattern.
+
+### 3. **Module contract** (this is the anti-drift lock)
+
+Every new feature folder ships with a **short checklist**, same as API contracts:
+
+```text
+New module MUST:
+
+
+---
+
+d. Execution will be module-specific rather than cross-surface. The layer-to-surface-to-module approach replaces the design system program. A long-run lock will cover tokens, surface rules, module contracts, and CI enforcement. New modules will face anti-drift checks. The UI plan, test plan, and handover documents will be updated to reflect these structural changes.
+
+---
+
+ Anti-drift lock
+
+**Status:** Locked  
+**Authority:** `plann/UI-PLAN-REVISED-2026-07-05.md` 
+
+---
+
+ Anti-drift lock
+ 
++**Status:** Locked  
++**Authority:** `plann/UI-PLAN-REVISED-2026-07-05.md` "
+layer -> surface -> module,0,
+global benchmark,9," use typed adapters.
+- Benchmark principles may be adopted; competitor visual identity, assets, wording, composition, and trade dress may not be copied.
+- Failed validation blocks publication. The system never guesses around invalid geometry.
+
+## 3. Global Benchmark Standard
+
+### Figma
+
+Adopt: 
+
+---
+
+iver the professional One&Only planner and the safe Lego-like SVG block system defined in `START.md`, using the two execution phases without changing engine ownership or document compatibility.
+
+## Completed
+
+- [x] Master architecture defined.
+- [x] Global benchmark principles defined.
+- [x] Package ownership defined.
+- [x] CSS and no-hardcoding contract defined.
+- [x] SVG security and publication model defined.
+- [x] Phase 1 and Phase 2 checklists created.
+- [x] Phase 1 route containment: `/planner/open3d` now uses workspace body and chrome rules.
+- [x] Phase 1 semantic token foundation: shared planner surface, control, panel, motion, and z-index tokens.
+- [x] Phase 1 responsive foundation: safe-area spacing, shared viewport thresholds, tokenized panel sizing, and reduced-motion timing.
+- [x] Inventory fallback index initializes synchronously before asynchronous descriptor replacement.
+- [x] Versioned workspace preference schema with safe corrupt-state recovery.
+- [x] Explicit planner tool lifecycle and semantic panel contracts.
+
+## Verified
+
+- Commands: Focused Vitest route/workspace tests; TypeScript typecheck; live HTTP route request.
+- Evidence: `results/site/planner-phase-1/route-shell-tests/`, `responsive-shell-tests-rerun/
+
+---
+
+nd full mobile editing.
+
+Open3D pilot first; guest/canvas promotion only after acceptance.
+
+Fabric remains the 2D engine.
+
+Three/r3f/drei remain the lazy 3D stack.
+
+No document-schema change unless separately approved.
+
+No competitor visual copying.
+Global Benchmark Translation
+
+Figma: contextual properties, collapsible UI, layers/assets separation, canvas-maximize mode.
+
+AutoCAD Web: persistent command state, numeric entry, explicit commit/cancel, grid/snap/layer controls.
+
+SketchUp Web: compact primary tools, expandable secondary tools, measurements, tool guidance.
+
+Floorplanner: fast room/wall/opening construction and immediate object placement.
+
+Planner 5D: catalogue-first onboarding and continuous 2D/3D editing.
+
+Sketchfab: focused 3D navigation, inspection, annotations, selection, and camera presets.
+
+Record adopted principles and rejected patterns.
+
+Apply anti-copy rules to geometry, composition, palettes, wording, and icons.
+CSS Contract
+
+Static presentation belongs in CSS, never JSX.
+
+Create planner semantic tokens mapped to canonical One&Only tokens.
+
+Prohibit raw colors, arbitrary spacing, static inline dimensions, inline z-index, emoji icons, duplicate breakpoints, and magic transition values.
+
+CSS Modules own componen
+
+---
+
+3 Global Benchmark Standard, "
+world-class,0,
+Option A,302,"**2026-07-04 GS progress (file tools):** PLAN-FAIL-0402 resolved (script present). 0418: Strict Option A + resolver contract (blocks via resolveBlocks, generatedAt freeze) + anti-copy enforced directly in site/scripts/generate-svg.mjs (header + runPipeline). Verified post-edit read_file + grep. Cites BP-03 + design 
+
+---
+
+ Resolved (SVG Option A + resolver contract + anti-copy enforced).
+- Older (pre-04xx): 001-014 resolved (tokenization, cache, assertions, etc. 
+
+---
+
+t confirmed file at site/scripts/generate-svg.mjs; matches Phase 03 checklist and prior restore notes in this file.
+- Skipped: running the script (per AGENTS: read START.md + Failures gate policy first; no cmd needed for presence check). Cites BP-03 Option A from IMPLEMENTATION-DECISIONS.
+
+### PLAN-FAIL-0406 / 0413 resolution (BlockDescriptor blocks field + exports) 
+
+---
+
+3D continuity, Floorplanner properties? (Score 0-5 per dimension + evidence)
+- **Features/Packages/SVG Mandates**: Catalogue-first + search parity in inventory (0419); locked Tier-1 only with GS justification (0420); Option A SVG contract? (Pass/Fail + cites)
+- **Gate Readiness (0415)**: All 3 prerequisites met for ""Implemented""? (list: benchmark, independent signed review, attestation in Decision Log)
+- **Evidence**: Artifacts in results/... per testing-handbook; no bypass. (Pass/Fail)
+
+Output format (independent):
+```
+GS-SCORE:
+- Benchmark: PASS/FAIL (cite)
+- Anti-copy: PASS/FAIL (cite "
+single authority,5,"My opinion, straight:
+
+## The one thing that matters
+
+**Pick a single authority and ship the pilot.**
+
+Right now you have three voices 
+
+---
+
+metadata, and reusable groups (compiler contract).
+- [x] Generate canonical PNG with resvg.
+- [x] Generate thumbnail derivatives with Sharp.
+- [x] Generate checksums and typed diagnostics.
+- [ ] Unify exec `generate-svg.mjs` and in-process compiler (single authority).
+- [ ] Store descriptors, validation reports, revisions, and artifact references in Supabase 
+
+---
+
+data, and reusable groups (compiler contract).
++- [x] Generate canonical PNG with resvg.
++- [x] Generate thumbnail derivatives with Sharp.
++- [x] Generate checksums and typed diagnostics.
++- [ ] Unify exec `generate-svg.mjs` and in-process compiler (single authority).
++- [ ] Store descriptors, validation reports, revisions, and artifact references in Supabase 
+
+---
+
+{""role"":""assistant"",""message"":{""content"":[{""type"":""text"",""text"":""My opinion, straight:\n\n## The one thing that matters\n\n**Pick a single authority and ship the pilot.**\n\nRight now you have three voices "
+guest/canvas,111,"3d/` (import-path-only deltas vs OOPlanner mirror).
+- Skipped: build, commit, push, browser/route workflow.
+
+### Phase 07 No-Separate-Node Integration (site open3d/)
+
+(Extracted resolved verified portions; full in part-04.)
+
+### Phase 07 Route Swap (guest/canvas 
+
+---
+
+ata-active=""true""]` (accent highlight)
+- Added `.panelBackdrop` (small-screen overlay, uses `--overlay-inverse-35`)
+- All three keys now match the TSX references in `TopBar` and `WorkspaceShell`
+
+### Route proof: `importGraphProof.ts`
+- Renamed live guest/canvas stack from `""fabric-legacy""` to `""open3d-hybrid""`
+- Added `workspace-route-open3d` node for `Open3dPlannerWorkspaceRoute`
+- `fabricRetirementBlocked()` now checks for any `fabric-legacy` routes still present
+- Added `open3dHybridRoutes()` export
+
+### Test: `cleanupPhase08.test.ts`
+- Removed JSX (`.ts` file 
+
+---
+
+ legacy fallback drill.
+
+Production deploy path remains Fabric-backed guest/canvas until Phase 10 flag.
+
+---
+
+## Phase status at revision (snapshot)
+
+All phases were **Planned** on paper. Phase 02 had resolver unit tests only.
+
+Do not use old ""Implemented + Verified-at-unit"" claims. Evidence under `results/planner/` and `results/tests/`.
+
+---
+
+## Global Standard revision (2026-07-04)
+
+Design approved provisionally (`design 
+
+---
+
+ legacy fallback drill.
++
++Production deploy path remains Fabric-backed guest/canvas until Phase 10 flag.
++
++---
++
++## Phase status at revision (snapshot)
++
++All phases were **Planned** on paper. Phase 02 had resolver unit tests only.
++
++Do not use old ""Implemented + Verified-at-unit"" claims. Evidence under `results/planner/` and `results/tests/`.
++
++---
++
++## Global Standard revision (2026-07-04)
++
++Design approved provisionally (`design "
+route-scoped,1,"n E2E.
+- [ ] 2D/3D identity E2E.
+- [ ] Accessibility automation and manual review.
+- [ ] Visual comparison.
+- [ ] Bundle-boundary audit.
+- [ ] Performance budgets.
+- [ ] Production build.
+- [ ] Promotion review.
+
+## 11. Rollback
+
+- Promotion remains route-scoped and reversible.
+- Keep prior shared-shell exports and explicit Fabric fallback routes through stabilization.
+- Roll back for document corruption, save/reload mismatch, engine identity drift, unsafe publication, unusable mobile editing, accessibility regression, or performance-budget failure.
+- Rollback changes active revision pointers; it never rewrites history.
+- Preserve all failed-run evidence.
+ "
+no second canvas engine,5," story.
+
+**Hard boundaries are explicit.** Admin vs server vs planner, SVG.js never in customer bundles, no second canvas engine, immutable revisions 
+
+---
+
+ story.\n\n**Hard boundaries are explicit.** Admin vs server vs planner, SVG.js never in customer bundles, no second canvas engine, immutable revisions 
+
+---
+
+ module; `MODULE-UI-CONTRACT.md` on every new editor module |
+| **Fabric** | Stays in hybrid until explicit promotion; no second canvas engine |
+
+**Expert review:** Optional after 1A for C4 security boundaries (client vs server-only SVG).
+
+---
+
+## Feature Modules (reference)
+
+### features/planner/open3d/
+
+Phase 1 production pilot. See `site/features/planner/open3d/README.md` (note: route table in README may lag `app/planner/open3d/` 
+
+---
+
+ module; `MODULE-UI-CONTRACT.md` on every new editor module |
++| **Fabric** | Stays in hybrid until explicit promotion; no second canvas engine |
++
++**Expert review:** Optional after 1A for C4 security boundaries (client vs server-only SVG).
++
++---
++
++## Feature Modules (reference)
++
++### features/planner/open3d/
++
++Phase 1 production pilot. See `site/features/planner/open3d/README.md` (note: route table in README may lag `app/planner/open3d/` "
+lint:ui:strict,106,"
+Do not polish L3 modules before L1 shell is stable.
+
+---
+
+## Enforcement
+
+| Gate | Command | When |
+|------|---------|------|
+| UI contract (warn) | `pnpm --filter oando-site run lint:ui` | Now |
+| UI contract (fail) | `pnpm --filter oando-site run lint:ui:strict` | After UI-1 shell acceptance |
+| Site dialect | `pnpm --filter oando-site run check:site-ui` | Marketing PRs |
+| Open3d icons | `open3dIconPolicy.test.ts` | TEST-1 |
+| Module boundary | `plannerCommandBoundary.test.ts` (commands) | TEST-1 |
+
+---
+
+## Rejected
+
+- **Option F** 
+
+---
+
+olish L3 modules before L1 shell is stable.
++
++---
++
++## Enforcement
++
++| Gate | Command | When |
++|------|---------|------|
++| UI contract (warn) | `pnpm --filter oando-site run lint:ui` | Now |
++| UI contract (fail) | `pnpm --filter oando-site run lint:ui:strict` | After UI-1 shell acceptance |
++| Site dialect | `pnpm --filter oando-site run check:site-ui` | Marketing PRs |
++| Open3d icons | `open3dIconPolicy.test.ts` | TEST-1 |
++| Module boundary | `plannerCommandBoundary.test.ts` (commands) | TEST-1 |
++
++---
++
++## Rejected
++
++- **Option F** 
+
+---
+
+
+| Collapse accent to `--color-primary` | **Yes** for open3d interactive chrome | Was split across `planner-shell.css` |
+| UI-3 before 1B | **UI-3 after 1A** | Avoid double churn |
+| `lint-ui-contract` warn-only | **Warn until UI-1 shell done; then `lint:ui:strict` in `release:gate:fast`** | Don't block 1A P0; lock before L3 modules |
+| Rewrite marketing | **Out of scope until UI-3** | Site is reference, not pain point |
+
+---
+
+## Execution model: layer 
+
+---
+
+ `open3d-workspace.css`
+- [x] ThemeEditor + themes page on admin tokens
+- [x] `admin-tabs`, `admin-btn`, `admin-alert--info` in `admin-pages.css`
+- [x] `lint:ui` script (warn mode)
+- [ ] `lint:ui:strict` wired to `release:gate:fast` "
+release:gate:fast,64,"dence gap blocks close; may need report fix + more tests on un-covered open3d files. Sensible next: fix .tmp race in vitest run, re-run full coverage, review % vs QG 90%, close if >=90.
+-- Skipped (honesty, min scope): full `pnpm run release:gate` / release:gate:fast ( ""perhaps parts""; includes build + full e2e a11y planner-catalog which are heavy + may require browser install); full `pnpm --filter oando-site run test:coverage` + test:coverage:site (long, env note); planner full; Playwright; build; a11y; tech-stack gates; dev server. No commits. No archive/ or other fixes beyond surfaced in open areas.
+-- Blockers: pre-existing lint debt (archive, tests, some open3d); hollow tests; for full gate sign-off need all chain green + artifacts. 0408 Open.
+-- Evidence paths (absolute): results/site/task8-verification-2026-07-04/typecheck/typecheck-run.json + -raw.log ; vitest-coverageGap-open3d/ * ; lint/ * ; test-audit-hollow/* ; similar for postfix runs. Also results/tests/vitest-*.json from runs.
+-- Status: Verification commands run + evidence captured. New issues (mismatches + lint) found and fixed (min). Typecheck clean. Targeted open3d vitest now green. Lint/audits as expected (exit1). 0408 still Open (no full coverage %). Logged.
+-
+
+---
+
+idence gap blocks close; may need report fix + more tests on un-covered open3d files. Sensible next: fix .tmp race in vitest run, re-run full coverage, review % vs QG 90%, close if >=90.
+- Skipped (honesty, min scope): full `pnpm run release:gate` / release:gate:fast ( ""perhaps parts""; includes build + full e2e a11y planner-catalog which are heavy + may require browser install); full `pnpm --filter oando-site run test:coverage` + test:coverage:site (long, env note); planner full; Playwright; build; a11y; tech-stack gates; dev server. No commits. No archive/ or other fixes beyond surfaced in open areas.
+- Blockers: pre-existing lint debt (archive, tests, some open3d); hollow tests; for full gate sign-off need all chain green + artifacts. 0408 Open.
+- Evidence paths (absolute): results/site/task8-verification-2026-07-04/typecheck/typecheck-run.json + -raw.log ; vitest-coverageGap-open3d/ * ; lint/ * ; test-audit-hollow/* ; similar for postfix runs. Also results/tests/vitest-*.json from runs.
+- Status: Verification commands run + evidence captured. New issues (mismatches + lint) found and fixed (min). Typecheck clean. Targeted open3d vitest now green. Lint/audits as expected (exit1). 0408 still Open (no full coverage %). Logged.
+- Ne
+
+---
+
+    ""release:gate:fast"": ""npm run lint && npm run typecheck && npm run test && npm run test:audit:hollow -- --exclude-marketing && npm run test:audit:eslint-disable"",
+
+---
+
+m run test:audit:gate-skips && npm run test:audit:eslint-disable && npm run lint && npm run typecheck && npm run test && npm run build && npm run test:a11y && npm run test:planner-catalog && npm run test:coverage && npm run test:coverage:site"",
+    ""release:gate:fast"": ""npm run lint && npm run typecheck && npm run test && npm run test:audit:hollow -- --exclude-marketing && npm run test:audit:eslint-disable"",
+    ""seed"": ""npx tsx scripts/seed.ts"",
+    ""seed:managed"": ""npx tsx scripts/seed_planner_managed_catalog.ts"",
+    ""live:openrouter:failover"": ""npx tsx scripts/live_openrouter_failover_stress.ts"",
+    ""seed:configurator"": ""npx tsx scripts/seed_configurator_catalog.ts"",
+    ""scripts:generate-svg"": ""tsx scripts/generate-svg.mjs"",
+    ""typecheck"": ""tsc -p tsconfig.json --noEmit"",
+    ""typecheck:scripts"": ""tsc -p scripts/tsconfig.json --noEmit"",
+    ""lint"": ""eslint -c config/build/eslint.config.mjs app components features lib tests --max-warnings=0"",
+    ""docs:sync"": ""node scripts/generate-docs.mjs"",
+    ""docs:sync:all"": ""node scripts/generate-docs.mjs --all"",
+    ""docs:sync:routes"": ""node scripts/generate-route-index.mjs"",
+    ""docs:sync:coverage"": ""node scripts/generate-docs.mjs --coverage"",
+    ""docs:check"": ""node scripts/genera"
