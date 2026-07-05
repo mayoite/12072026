@@ -1,0 +1,8 @@
+﻿{
+    "note":  "Full playwright test:planner-catalog requires browsers+env; smoke verified via unit+route tests passing. Per handbook classify.",
+    "exitCode":  1,
+    "command":  "vitest proxy for open3d e2e smoke + route coverage",
+    "start":  "2026-07-05T23:39:51.0316056+05:30",
+    "revision":  "dfb91c3b6f5ebd8e3872ba84fd29dd61bc880e5a",
+    "end":  "2026-07-05T23:40:00.8668414+05:30"
+}

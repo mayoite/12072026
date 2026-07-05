@@ -1,0 +1,13 @@
+﻿{
+    "name":  "typecheck-bench-1a",
+    "module":  "planner",
+    "phase":  "phase-1a",
+    "command":  "pnpm run typecheck",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Benchmarker subagent",
+    "startUtc":  "2026-07-05T23:54:59.5189321+05:30",
+    "endUtc":  "2026-07-05T23:55:08.2266477+05:30",
+    "durationSec":  8.708,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\phase-1a\\typecheck-bench-1a\\typecheck-bench-1a-raw.log"
+}

@@ -1,0 +1,167 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx > open3d FeasibilityCanvas > renders the command workflow and catalog proof 40ms
+ Γ£ô tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx > open3d FeasibilityCanvas > runs toolbar and keyboard commands 45ms
+ Γ£ô tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx > open3d FeasibilityCanvas > draws, previews, cancels, and undoes a wall 32ms
+ Γ£ô tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx > open3d FeasibilityCanvas > commits wall geometry through workspace canvas history 9ms
+ Γ£ô tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx > open3d FeasibilityCanvas > supports dimension tool (two-point measurement) and room/wall alias + enter commit (task6) 5ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > useWorkspaceCanvas > creates a project, dispatches actions, and supports undo/redo 17ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > useWorkspaceCanvas > updates selection and applies direct project updates 2ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > useCanvasDrawing > draws a wall when the segment exceeds the minimum length 9ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > useDockingSystem > docks, undocks, collapses, moves, resizes, and persists layout 4ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > useDockingSystem > restores layout from localStorage on mount 1ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > TopBar > fires view, unit, export, and import callbacks and shows save status 42ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > PanelContainer > handles dock, undock, minimize, close, resize, and focus 10ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > InventoryPanel > searches sample inventory and selects an item 115ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > PropertiesPanel > shows empty state and wall properties for a selection 10ms
+node.exe : stderr | tests/unit/features/planner/open3d/workspaceShell.test.tsx > OOPlannerWorkspace (TDD) > professional workspace: topbar has project/save/floor/units/2d3d/undo/redo/save + structured menus for import/export/prefs; panels separate catalogue/layers; canvas-max (GS: Figma REC-01 minimize, catalogue-first REC-04, 2026-07-04 benchmark)
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (stderr | tests/...7-04 benchmark):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+An update to OOPlannerWorkspace inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > WorkspaceShell > renders panels, status bar, and toolbar actions 1153ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > TDD editor coverage additions > toolFromShortcutKey (keyboard) > maps shortcut keys to tools 1ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > TDD editor coverage additions > toolFromShortcutKey (keyboard) > maps semantic tools onto the existing canvas runtime 0ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > TDD editor coverage additions > useDoorWindowPlacement additional branches (TDD) > handleWallClick returns result for door and window modes (exercises placement branches) 2ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > TDD editor coverage additions > useDoorWindowPlacement additional branches (TDD) > edit modes, update/delete and get* cover edit branches 2ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > TDD editor coverage additions > useDoorWindowPlacement additional branches (TDD) > cancel from placing resets state 1ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > TDD editor coverage additions > useDockingSystem viewport + reset (TDD) > detects small viewport tier and handles mobile activePanel logic 1ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > TDD editor coverage additions > useDockingSystem viewport + reset (TDD) > reset and full cycle covers default restore branches 1ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > TDD editor coverage additions > PropertiesPanel more entities (TDD) > renders door and furniture properties (covers render* branches) 15ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > TDD editor coverage additions > TopBar guest + more (TDD) > hides persist actions for guest accessContext 3ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > static planner hardcoding audit (passing gate for task 3) > passes static presentation hardcoding audit (no raw hex or duplicated visual in JSX; cursor moved to css module) 3ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > OOPlannerWorkspace (TDD) > renders loading then workspace shell for guest (covers hydration + shell wiring) 19ms
+ ├ù tests/unit/features/planner/open3d/workspaceShell.test.tsx > OOPlannerWorkspace (TDD) > professional workspace: topbar has project/save/floor/units/2d3d/undo/redo/save + structured menus for import/export/prefs; panels separate catalogue/layers; canvas-max (GS: Figma REC-01 minimize, catalogue-first REC-04, 2026-07-04 benchmark) 13ms
+   ΓåÆ Unable to find an accessible element with the role "button" and name `/save/i`
+
+Here are the accessible roles:
+
+  status:
+
+  Name "":
+  [36m<div[39m
+    [33mclass[39m=[32m"open3d-loading-shell"[39m
+    [33mrole[39m=[32m"status"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-busy[39m=[32m"true"[39m
+      [33maria-label[39m=[32m"Loading planner"[39m
+      [33mclass[39m=[32m"open3d-route-host open3d-route-host--loading"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"open3d-loading-shell"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"open3d-loading-shell__bar"[39m
+        [36m/>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"open3d-loading-shell__bar open3d-loading-shell__bar--short"[39m
+        [36m/>[39m
+        [36m<p>[39m
+          [0mRestoring your floor planΓÇª[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ Γ£ô tests/unit/features/planner/open3d/workspaceShell.test.tsx > OOPlannerWorkspace (TDD) > docking persists valid panel ratios to workspace prefs schema (task5) 1ms
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 1 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/workspaceShell.test.tsx > OOPlannerWorkspace (TDD) > professional workspace: topbar has project/save/floor/units/2d3d/undo/redo/save + structured menus for import/export/prefs; panels separate catalogue/layers; canvas-max (GS: Figma REC-01 minimize, catalogue-first REC-04, 2026-07-04 benchmark)
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name `/save/i`
+
+Here are the accessible roles:
+
+  status:
+
+  Name "":
+  [36m<div[39m
+    [33mclass[39m=[32m"open3d-loading-shell"[39m
+    [33mrole[39m=[32m"status"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-busy[39m=[32m"true"[39m
+      [33maria-label[39m=[32m"Loading planner"[39m
+      [33mclass[39m=[32m"open3d-route-host open3d-route-host--loading"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"open3d-loading-shell"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"open3d-loading-shell__bar"[39m
+        [36m/>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"open3d-loading-shell__bar open3d-loading-shell__bar--short"[39m
+        [36m/>[39m
+        [36m<p>[39m
+          [0mRestoring your floor planΓÇª[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ Γ¥» Object.getElementError ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:37:19
+ Γ¥» ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ Γ¥» ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ Γ¥» ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ Γ¥» tests/unit/features/planner/open3d/workspaceShell.test.tsx:703:19
+    701|     const brand = screen.queryByText(/Untitled|Plan/i) || screen.queryΓÇª
+    702|     expect(brand || screen.getByText('Untitled Project')).toBeTruthy();
+    703|     expect(screen.getByRole("button", { name: /save/i })).toBeInTheDocΓÇª
+       |                   ^
+    704|     // structured menus (import/export/prefs)
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 27 passed (28)
+   Start at  23:29:47
+   Duration  7.78s (transform 666ms, setup 639ms, import 5.62s, tests 1.56s, environment 876ms)
+
+    705|     expect(screen.getByRole("button", { name: /export/i })).toBeInTheDΓÇª
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/1]ΓÄ»
+
+undefined
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run tests/unit/features/planner/open3d/workspaceShell.test.tsx tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx --config vitest.site.config.ts "--reporter=verbose"
+

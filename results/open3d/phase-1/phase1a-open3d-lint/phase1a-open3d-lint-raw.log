@@ -1,0 +1,18 @@
+﻿node.exe : 
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Oops! Something went wrong! :(
+
+ESLint: 9.39.4
+
+No files matching the pattern "site/features/planner/open3d/editor/useDockingSystem.ts" were found.
+Please check for typing mistakes in the pattern.
+
+undefined
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 2: eslint site/features/planner/open3d/editor/useDockingSystem.ts site/features/planner/open3d/editor/TopBar.tsx site/features/planner/open3d/editor/InventoryPanel.tsx site/features/planner/open3d/canvas-fabric/FeasibilityCanvas.tsx site/features/planner/open3d/editor/PropertiesPanel.tsx site/features/planner/open3d/editor/OOPlannerWorkspace.tsx "--max-warnings=100"
+

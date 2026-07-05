@@ -1,0 +1,13 @@
+﻿{
+    "name":  "phase1a-open3d-typecheck",
+    "module":  "open3d",
+    "phase":  "phase-1",
+    "command":  "pnpm --filter oando-site exec tsc --noEmit -p site/tsconfig.json --skipLibCheck 2\u003e\u00261 | Out-String -Width 4096",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-05T23:27:21.4018295+05:30",
+    "endUtc":  "2026-07-05T23:27:22.2460353+05:30",
+    "durationSec":  0.844,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\open3d\\phase-1\\phase1a-open3d-typecheck\\phase1a-open3d-typecheck-raw.log"
+}

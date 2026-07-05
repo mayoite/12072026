@@ -1,0 +1,27 @@
+THEME/CSS + COMMAND STATE + ROUTE SHELL EVIDENCE (tasks 2,3,4)
+Rev: dfb91c3b6f5ebd8e3872ba84fd29dd61bc880e5a
+TDD: failing test inserts first (new asserts/audits in routes + wiring + shell tests), then impl edits, audit passes.
+
+=== Changes (smallest, surrounding match) ===
+- Route/shell: comments + test extension verify preservation of auth/CSRF/SW/error + direct/refresh for guest/auth via getOptional + searchParams.
+- CSS/Theme: cursor presentation moved from PanelContainer inline style to workspace.module.css [data-floating]. Density modes wired via prop/data-planner-density + css rules for compact/touch. Added states: focus-visible, [data-selected], :disabled, warning/error data, @media forced-colors, print. Reduced already present.
+- Three adapter: readThreeThemeColor in readThemeColor.ts (uses semantic, handles SSR). Updated 3d viewers to use (removed #ffffff default).
+- State/undo: added exclusion comments in useWorkspaceCanvas + FeasibilityCanvas undo. Added TDD test in wiring asserting undo leaves transient selection (proxy for panels/search/camera/notif/loading). Transients documented as outside doc history.
+- Audit: hardcoding audit fn + passing test in workspaceShell (post move).
+
+No raw visual added. Used Phosphor already, site tokens + --planner-*. No any in prod edits. Compile safe (types preserved).
+
+=== Evidence locations ===
+baseline-ownership/ + this dir under results/planner/phase-1a/
+Per AGENTS + testing-handbook.
+
+Skips logged in Failures.md (live exec/screenshots).
+All per plan 1-4 only; no other tasks.
+
+GLOBAL STANDARD RE-REVIEW (post interjection):
+- Cited: benchmark five-product (Figma minimize via CSS move, AutoCAD status surface, catalogue sidebar, Planner 5D hybrid), BPs (01 fabric pin, 07 three+r3f), RECs (01,03,04).
+- Followed: anti-copy (semantic tokens site/app/css/ only; hex removed), MODULE-UI-CONTRACT layer→surface→module for planner open3d, no donor copy, new code only open3d/, bundle import, no forbidden (no Radix/Mantine etc.).
+- Gaps noted in json: live GS gate (fresh benchmark+UI review), partial density, status vocab, incomplete evidence.
+- Status: Implemented (with GS citations and concerns). Preparing for critic pass.
+- Fixes applied in re-review: removed introduced hex fallback in workspace.module.css to comply with no-hex in open3d css.
+END

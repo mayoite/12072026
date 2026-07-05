@@ -1,0 +1,81 @@
+{
+  "command": "baseline-capture (static analysis + file reads; no exec due to tool constraints; live playwright capture skipped per no-shell)",
+  "cwd": "d:/oandO04072026",
+  "module": "planner",
+  "phase": "phase-1a",
+  "cmd": "baseline-ownership",
+  "revision": "dfb91c3b6f5ebd8e3872ba84fd29dd61bc880e5a",
+  "branch": "exec/phase1-execute-2026-07-05",
+  "dirtyWorktree": "unknown (no git status exec available; .git/HEAD read, no obvious uncommitted markers from file scan)",
+  "dirtyNote": "Starting point for Executing Agent 1 Phase 1A tasks 1-4 only. Origin remote ayushonmicrosoft/oandO04072026. No changes to OOFPL*.",
+  "operator": "exec-agent-1",
+  "startedAt": "2026-07-05T12:00:00Z",
+  "durationSeconds": 0,
+  "exitCode": 0,
+  "rawLog": "results/planner/phase-1a/baseline-ownership/baseline-ownership-raw.txt",
+  "structuredResults": "results/planner/phase-1a/baseline-ownership/baseline-ownership-run.json",
+  "screenshots": {
+    "note": "Live capture requires running dev + playwright script (site/scripts/take-planner-screenshot.mjs targets guest not open3d; extended for 1440x900,1024x768,768x1024,390x844 needed). Used code inspection for DOM. Skipped live; see Failures.md",
+    "viewports": ["1440x900", "1024x768", "768x1024", "390x844"],
+    "capturedVia": "analysis"
+  },
+  "domIdentity": {
+    "root": "div.open3d-route-host[role='main'][aria-label='Planner workspace'] > Open3dNativeHost > OOPlannerWorkspace > div.open3d-workspace-root > WorkspaceShell > grid shell + canvas or 3d + panels",
+    "keyComponents": [
+      "TopBar (project name, units, 2d/3d, undo/redo, save)",
+      "CanvasToolRail",
+      "FeasibilityCanvas (2d) or Lazy3DViewer (3d)",
+      "InventoryPanel (left, search, catalog)",
+      "PropertiesPanel (right)",
+      "LayersPanel (bottom)",
+      "CommandPalette",
+      "status pills"
+    ],
+    "frameworkOverlays": "none observed in source; react aria, three, fabric internals"
+  },
+  "consoleOutput": "No unexpected errors in source paths; loading uses setHydrated timeout; workspaceMessage transient.",
+  "failedRequests": "None in route or component; catalog uses react-query fallback; autosave local.",
+  "interactionPerf": {
+    "note": "Bundle perf not measured live. See next build chunks. Keyboard via useWorkspaceKeyboard, Space temp pan implemented.",
+    "current": "useState for viewMode/activeTool/layerVisibility/palette/pending; derived from workspaceCanvas.project"
+  },
+  "bundle": {
+    "entry": "site/app/planner/open3d/page.tsx -> Open3dPlannerHost -> Open3dNativeHost -> OOPlannerWorkspace + dynamic?",
+    "deps": ["three", "@react-three/fiber", "fabric (via canvas-fabric)", "@phosphor-icons/react", "zustand (indirect)", "react-aria-components"],
+    "css": "app/css/core/planner/bundles/open3d-workspace.css + open3d.css + editor/*.module.css"
+  },
+  "inventory": {
+    "controls": [
+      "CanvasToolRail: wall, opening, dimension, placement, pan, select, 2d/3d toggle",
+      "TopBar: floor selector, units dropdown (mm/cm/m/in/ft-in), undo/redo, save, export, import, view toggle",
+      "InventoryPanel: search input, category/room filters, density toggle, place drag/click",
+      "PropertiesPanel: numeric inputs for dims/transform, select, delete, lock?",
+      "LayersPanel: visibility toggles per entity type",
+      "CommandPalette: search commands (Ctrl+K)",
+      "Keyboard: Space temp pan, Esc cancel, Enter commit (pending full)"
+    ],
+    "packages": ["@phosphor-icons/react (icons)", "three + r3f (3d)", "fabric (2d canvas)", "zod (schemas/prefs)", "react-aria (search/a11y in catalog)"],
+    "tokens": "var(--planner-*) from planner-tokens.css + site core/theme.css ; no raw hex in modules",
+    "inlineStyles": "dynamic only (docking positions/sizes in PanelContainer, bg in ThreeLazyViewer); static moved/audited to css",
+    "rawValues": "in model defaults (wall 150mm/2400h), pureActions (door sizes), canvas (defaults); data not visual",
+    "breakpoints": "PLANNER_VIEWPORT_BREAKPOINTS smallMax:768 tabletMax:1280 in useDockingSystem; css media + data-viewport; planner-tokens responsive widths",
+    "routeChrome": "parent app/planner/layout.tsx provides errorboundary, sw, csrf, routechrome (hidden per rules for workspace); open3d specific layout thin + open3d-workspace.css; route-contract open3dPilot; lib/site-data/routeChromeRules hides for /planner/open3d"
+  },
+  "stateOwnership": {
+    "canonicalDocument": "Open3dProject + Open3dHistoryState (store/history.ts) + execute via plannerCommand only; floors/entities only",
+    "view": "viewMode (2d/3d), transform/zoom/pan in canvas, camera in ThreeViewerInner (local state)",
+    "workspacePreference": "PlannerWorkspacePreferencesV1 (density, units, lastView, grid/snap, panelRatios, collapsed) in store/workspacePreferences.ts (schema+parse); docking in useDockingSystem localStorage; not yet wired to prefs fully",
+    "engine": "FeasibilityCanvas internal (drawingState, snap, transform), Three (scene/camera/renderer), useRoomElements/useDoorWindowPlacement",
+    "transient": "activeTool, layerVisibility, paletteOpen, pendingCatalogItemId, canvasStatus, workspaceMessage (notifications), searchQuery in InventoryPanel, isLoading (catalog/hydrated), commandSearch in canvas"
+  },
+  "noteOnSeparation": "Document history strictly project only. Transients live in component/useState or panel local. No leakage observed into updateProject paths. Task4 pending implementation will add explicit guards/tests.",
+  "classification": "BASELINE RECORDED (analysis); live screenshots/perf/DOM console pending exec run. See Failures.md for capture skip.",
+  "skips": ["live playwright screenshot at 4 viewports", "browser console/failed req capture", "perf numbers (no build run)"],
+  "globalStandardReview": {
+    "benchmarkCites": "Five-product: Figma UI3 minimize-UI (css modules move from JSX), Sketchfab facets/search in catalog inventory, AutoCAD bottom status (status bar in shell), Catalogue-first (inventory sidebar), Planner5D 2D-3D (open3d hybrid). BP-01 fabric@7.4.0 pin confirmed in package.json. BP-07 three+r3f only (used in 3d/). REC-03 AutoCAD command surface (status). REC-04 catalogue-first. Anti-copy: only semantic --planner-* / site/app/css/ tokens, no donor hex/palettes/trade dress (fixed one introduced fallback).",
+    "followed": "layer→surface→module per MODULE-UI-CONTRACT (L0 tokens, L1 shell css, L3 editor modules). New code only site/features/planner/open3d/. No Tailwind in open3d tsx. Phosphor icons. Bundle open3d-workspace.css. No cross-surface copy.",
+    "gaps": "No fresh dated benchmark report run this pass. No independent UI review yet (prepare for critic). Hard floor coverage not live-verified here (open per Failures 0408). Density wiring partial (L3 support added but prefs not loaded). Status vocab in internal todos used 'pending' (fix to Planned/Implemented). Live evidence incomplete.",
+    "attestation": "Anti-copy + GS principles followed in all edits. No donor visual identity copied. For Phase 1A shell only (Puck/REC-01/05 later).",
+    "status": "Implemented (with concerns for GS gate)"
+  }
+}

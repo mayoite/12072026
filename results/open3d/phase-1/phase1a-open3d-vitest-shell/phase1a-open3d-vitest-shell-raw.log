@@ -1,0 +1,54 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx > open3d FeasibilityCanvas > renders the command workflow and catalog proof 36ms
+ Γ£ô tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx > open3d FeasibilityCanvas > runs toolbar and keyboard commands 43ms
+ Γ£ô tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx > open3d FeasibilityCanvas > draws, previews, cancels, and undoes a wall 26ms
+ Γ£ô tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx > open3d FeasibilityCanvas > commits wall geometry through workspace canvas history 8ms
+ Γ£ô tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx > open3d FeasibilityCanvas > supports dimension tool (two-point measurement) and room/wall alias + enter commit (task6) 4ms
+ Γ£ô tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts > useOpen3dWorkspaceCatalog > loads live catalog items from the configurator API 87ms
+ Γ£ô tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts > useOpen3dWorkspaceCatalog > starts in loading state with isLoading true and demo items initially 81ms
+ Γ£ô tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts > useOpen3dWorkspaceCatalog > falls back to demo items and status fallback when API returns no items 67ms
+ Γ£ô tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts > useOpen3dWorkspaceCatalog > resolveItem returns undefined for unknown id after load 67ms
+ Γ£ô tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts > useOpen3dWorkspaceCatalog > calls loadDescriptorsFromLoader for catalogue-first primary before api fallback 71ms
+node.exe : 
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Suites 1 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/workspaceShell.test.tsx [ tests/unit/features/planner/open3d/workspaceShell.test.tsx ]
+Error: Transform failed with 1 error:
+D:/oandO04072026/site/tests/unit/features/planner/open3d/workspaceShell.test.tsx:680:0: ERROR: Unexpected "}"
+  Plugin: vite:esbuild
+  File: D:/oandO04072026/site/tests/unit/features/planner/open3d/workspaceShell.test.tsx:680:0
+  
+  Unexpected "}"
+  678|    });
+  679|  });
+  680|  });
+     |  ^
+  681|  
+  682|  describe("OOPlannerWorkspace (TDD)", () => {
+  
+ Γ¥» failureErrorWithLog ../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:1467:15
+ Γ¥» ../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:736:50
+ Γ¥» responseCallbacks.<computed> ../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:603:9
+ Γ¥» handleIncomingPacket ../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:658:12
+ Γ¥» Socket.readFromStdout ../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:581:7
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/1]ΓÄ»
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  10 passed (10)
+   Start at  23:28:58
+   Duration  2.07s (transform 482ms, setup 1.68s, import 525ms, tests 495ms, environment 1.81s)
+
+undefined
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run tests/unit/features/planner/open3d/workspaceShell.test.tsx tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts --config vitest.site.config.ts "--reporter=verbose"
+

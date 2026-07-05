@@ -1,0 +1,13 @@
+﻿{
+    "name":  "phase1a-open3d-lint2",
+    "module":  "open3d",
+    "phase":  "phase-1",
+    "command":  "pnpm --filter oando-site exec eslint features/planner/open3d/editor/useDockingSystem.ts features/planner/open3d/editor/TopBar.tsx features/planner/open3d/editor/InventoryPanel.tsx features/planner/open3d/canvas-fabric/FeasibilityCanvas.tsx features/planner/open3d/editor/PropertiesPanel.tsx features/planner/open3d/editor/OOPlannerWorkspace.tsx --max-warnings=100 2\u003e\u00261 | Out-String -Width 4096",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-05T23:28:48.2943782+05:30",
+    "endUtc":  "2026-07-05T23:28:49.2546212+05:30",
+    "durationSec":  0.96,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\open3d\\phase-1\\phase1a-open3d-lint2\\phase1a-open3d-lint2-raw.log"
+}
