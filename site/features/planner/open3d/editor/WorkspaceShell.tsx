@@ -58,6 +58,10 @@ export interface WorkspaceShellProps {
   onDisplayUnitChange?: (unit: Open3dDisplayUnit) => void;
   /** When true, shell fills parent height instead of viewport height */
   fillParent?: boolean;
+  /** Density mode from workspace prefs (compact | touch) */
+  density?: "compact" | "touch";
+  /** Forward density toggle (wired from TopBar prefs per task5/GS REC-01) */
+  onToggleDensity?: () => void;
 }
 
 export function WorkspaceShell({
@@ -87,6 +91,8 @@ export function WorkspaceShell({
   displayUnit = "cm",
   onDisplayUnitChange,
   fillParent = false,
+  density = "compact",
+  onToggleDensity,
 }: WorkspaceShellProps) {
   const id = useId();
   const [internalViewMode, setInternalViewMode] = useState<"2d" | "3d">(initialViewMode);
@@ -234,6 +240,7 @@ export function WorkspaceShell({
       data-panel-active={activePanel}
       data-canvas-maximized={isCanvasMaximized}
       data-fill-parent={fillParent ? "true" : undefined}
+      data-planner-density={density}
       id={`workspace-shell-${id.replace(/:/g, "")}`}
     >
       {/* Top bar */}
@@ -261,6 +268,8 @@ export function WorkspaceShell({
         onToggleRightPanel={rightPanel ? () => handleSidePanelToggle("right") : undefined}
         isCanvasMaximized={isCanvasMaximized}
         onToggleCanvasMaximized={handleCanvasMaximizedToggle}
+        density={density}
+        onToggleDensity={onToggleDensity}
       />
 
       {/* Main workspace with panels */}

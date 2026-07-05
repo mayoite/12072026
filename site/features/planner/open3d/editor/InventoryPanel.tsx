@@ -10,6 +10,7 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
+import { SearchField, Input, Label, ListBox, ListBoxItem, Text } from "react-aria-components";
 import type {
   InventoryPanelState,
   InventoryCommand,
@@ -26,18 +27,14 @@ import {
 } from "../catalog/inventory/inventoryState";
 import { INVENTORY_CATEGORIES, INVENTORY_ROOM_GROUPS } from "../catalog/inventory/inventoryTaxonomy";
 import { InventoryIcon } from "./inventoryIcons";
-import { InventorySearchIndex, type InventorySearchOptions, type InventorySearchResult } from "../catalog/inventory/inventoryIndex";
-import { OPEN3D_CATALOG_RESULT_CAP, capCatalogResults } from "../catalog/catalogSearch";
+import { OPEN3D_CATALOG_RESULT_CAP, capCatalogResults, rankCatalogItems } from "../catalog/catalogSearch";
 import type { Open3dCatalogItem } from "../catalog/catalogTypes";
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
 import { Open3dCatalogClient } from "../catalog/catalogClient";
 import styles from "./inventory.module.css";
 
-// Create singleton search index instance
-const searchIndex = new InventorySearchIndex();
-
 // Wiring for PLAN-FAIL-0405/0419: inventory consumer calls svgBlockDescriptorLoader via catalogClient (catalogue-first primary descriptors, resolver blocks, search parity facets).
-// Cites: BP-06, design §9/10 (Features: catalogue-first + Sketchfab cursor/facet parity), GS, phase-06.
+// Cites: BP-06, design §9/10 (Features: catalogue-first + Sketchfab cursor/facet parity), GS, phase-06. Fuse for local rank, RAC owns a11y.
 const inventoryClientRef: { current: Open3dCatalogClient | null } = { current: null };
 
 export interface InventoryPanelProps {
@@ -53,6 +50,8 @@ export interface InventoryPanelProps {
   catalogItems?: Open3dCatalogItem[];
   /** Whether the panel is loading */
   isLoading?: boolean;
+  /** Catalog lifecycle status (RQ owns remote; Fuse local rank; RAC a11y) */
+  catalogStatus?: "loading" | "ready" | "fallback" | "stale" | "offline" | "error";
 }
 
 export function InventoryPanel({
@@ -62,17 +61,12 @@ export function InventoryPanel({
   onSearch,
   catalogItems,
   isLoading = false,
+  catalogStatus = "ready",
 }: InventoryPanelProps) {
   const id = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [state, setState] = useState<InventoryPanelState>(initialState ?? defaultInventoryPanelState());
   const [collections, setCollections] = useState<InventoryCollectionsState>(defaultCollectionsState());
-  const [searchResults, setSearchResults] = useState<InventorySearchResult>({
-    items: [],
-    totalCount: 0,
-    query: "",
-    relaxed: false,
-  });
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(["furniture"]));
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
@@ -82,45 +76,17 @@ export function InventoryPanel({
     [catalogItems],
   );
 
-  // Load catalog items into search index when the source changes
-  // Fixed inventory wiring (PLAN-FAIL-0405/0419): await loader, prefer loaderItems (catalogue-first primary) for searchIndex; resolver/blocks via client.
+  // Catalogue loading: React Query (in hook) owns remote; here local Fuse ranking (after server filter) + RAC for search/collection.
+  // GS cite: BP-06 svgBlockDescriptorLoader consumer + search parity; REC-02 Sketchfab cursor cap<=24; REC-04 catalogue-first sidebar; anti-copy: semantic tokens only.
   useEffect(() => {
-    searchIndex.load(indexedItems);
     if (!inventoryClientRef.current) inventoryClientRef.current = new Open3dCatalogClient();
-    void inventoryClientRef.current.loadDescriptorsFromLoader().then(() => {
-      const loaderItems = inventoryClientRef.current!.getAll();
-      const sourceItems = loaderItems.length > 0 ? loaderItems : indexedItems;
-      searchIndex.load(sourceItems);
-    });
+    void inventoryClientRef.current.loadDescriptorsFromLoader();
   }, [indexedItems]);
 
-  // Handle search when query changes
   useEffect(() => {
-    const options: InventorySearchOptions = {
-      pageSize: OPEN3D_CATALOG_RESULT_CAP,
-      typoTolerance: true,
-    };
-
-    // Add category filter if selected
-    if (state.selectedCategoryId) {
-      const category = INVENTORY_CATEGORIES.find((c) => c.id === state.selectedCategoryId);
-      if (category) {
-        options.category = category.catalogCategory;
-      }
-    }
-
-    // Add room filter if selected
-    const roomGroup = INVENTORY_ROOM_GROUPS.find((r) => r.id === state.selectedRoomGroupId);
-    if (roomGroup && roomGroup.roomTags.length > 0) {
-      options.roomTags = roomGroup.roomTags as Open3dCatalogItem["roomTags"];
-    }
-
-    const results = searchIndex.search(state.searchQuery, options);
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- update search results derived from state change inside effect; reason: searchIndex is non-reactive dep; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: memoize search or move to useMemo when inventory search stabilized
-    setSearchResults(results);
     setFocusedIndex(-1);
     onSearch?.(state.searchQuery);
-  }, [state.searchQuery, state.selectedCategoryId, state.selectedRoomGroupId, onSearch]);
+  }, [state.searchQuery, onSearch]);
 
   // Dispatch command to update state
   const dispatch = useCallback((command: InventoryCommand) => {
@@ -238,10 +204,45 @@ export function InventoryPanel({
     dispatch({ type: "RESET_FILTERS" });
   }, [dispatch]);
 
-  // Keyboard navigation
+  // Fuse + displayed computed early for keyboard closure order (TS block scope)
+  // GS: Fuse local rank, RAC a11y.
+  const searchResultsItems = useMemo(() => {
+    let base = indexedItems;
+    if (state.selectedCategoryId) {
+      const category = INVENTORY_CATEGORIES.find((c) => c.id === state.selectedCategoryId);
+      if (category?.catalogCategory) {
+        base = base.filter((it) => it.category === category.catalogCategory);
+      }
+    }
+    const roomGroup = INVENTORY_ROOM_GROUPS.find((r) => r.id === state.selectedRoomGroupId);
+    if (roomGroup && roomGroup.roomTags.length > 0) {
+      const tags = roomGroup.roomTags as string[];
+      base = base.filter((it) => it.roomTags?.some((t) => tags.includes(t)));
+    }
+    const ranked = rankCatalogItems(base, state.searchQuery || "");
+    return capCatalogResults(ranked, OPEN3D_CATALOG_RESULT_CAP);
+  }, [indexedItems, state.searchQuery, state.selectedCategoryId, state.selectedRoomGroupId]);
+
+  const displayedItems = useMemo(() => {
+    let items = searchResultsItems;
+    if (state.selectedSubCategoryId) {
+      const category = INVENTORY_CATEGORIES.find((c) => c.id === state.selectedCategoryId);
+      const subCategory = category?.subCategories.find((s) => s.id === state.selectedSubCategoryId);
+      if (subCategory) {
+        items = items.filter((item) =>
+          subCategory.filterTags.some((tag) =>
+            item.tags.some((t) => t.toLowerCase().includes(tag.toLowerCase())),
+          ),
+        );
+      }
+    }
+    return capCatalogResults(items, OPEN3D_CATALOG_RESULT_CAP);
+  }, [searchResultsItems, state.selectedCategoryId, state.selectedSubCategoryId]);
+
+  // Keyboard navigation (RAC will own more in full, here kept for compat during transition)
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
-      const items = searchResults.items;
+      const items = displayedItems;  // post filter/rank
 
       switch (event.key) {
         case "ArrowDown":
@@ -276,29 +277,8 @@ export function InventoryPanel({
           break;
       }
     },
-    [searchResults.items, focusedIndex, handleItemClick, handleClearSearch, state.searchQuery],
+    [displayedItems, focusedIndex, handleItemClick, handleClearSearch, state.searchQuery],
   );
-
-  // Filter items for display
-  const displayedItems = useMemo(() => {
-    let items = searchResults.items;
-
-    // Apply subcategory filter
-    if (state.selectedSubCategoryId) {
-      const category = INVENTORY_CATEGORIES.find((c) => c.id === state.selectedCategoryId);
-      const subCategory = category?.subCategories.find((s) => s.id === state.selectedSubCategoryId);
-      if (subCategory) {
-        items = items.filter((item) =>
-          subCategory.filterTags.some((tag) =>
-            item.tags.some((t) => t.toLowerCase().includes(tag.toLowerCase())),
-          ),
-        );
-      }
-    }
-
-    // REC-02: never render more than the catalogue cap, regardless of upstream page size.
-    return capCatalogResults(items);
-  }, [searchResults.items, state.selectedCategoryId, state.selectedSubCategoryId]);
 
   // Get recent items from collections
   const recentItems = useMemo(() => {
@@ -327,18 +307,21 @@ export function InventoryPanel({
       onKeyDown={handleKeyDown}
       id={`inventory-panel-${id.replace(/:/g, "")}`}
     >
-      {/* Search */}
+      {/* Search - React Aria SearchField owns accessible search behavior (task7) */}
       <div className={styles.searchSection}>
-        <div className={styles.searchWrapper}>
+        <SearchField
+          value={state.searchQuery}
+          onChange={(val) => dispatch({ type: "SET_SEARCH_QUERY", query: val })}
+          className={styles.searchWrapper}
+          aria-label="Search inventory"
+        >
+          <Label className="sr-only">Search catalogue</Label>
           <SearchIcon className={styles.searchIcon} />
-          <input
+          <Input
             ref={searchInputRef}
             type="search"
             className={styles.searchInput}
-            placeholder="Search furniture..."
-            value={state.searchQuery}
-            onChange={handleSearchChange}
-            aria-label="Search inventory"
+            placeholder="Search furniture (Fuse + RAC)"
           />
           {state.searchQuery && (
             <button
@@ -350,7 +333,7 @@ export function InventoryPanel({
               <ClearIcon />
             </button>
           )}
-        </div>
+        </SearchField>
       </div>
 
       {/* Quick filters - Room groups */}
@@ -467,17 +450,27 @@ export function InventoryPanel({
         <span className={styles.resultsCount}>
           {displayedItems.length} item{displayedItems.length !== 1 ? "s" : ""}
         </span>
-        {searchResults.relaxed && (
-          <span className={styles.relaxedBadge}>Expanded</span>
-        )}
       </div>
 
-      {/* Loading state */}
-      {isLoading ? (
+      {/* Loading/skeleton/empty/stale/offline/error/retry states (task7): RQ owns lifecycle, Fuse post-filter rank, RAC a11y+collection. GS: REC-02 cap<=24, REC-04 cat-first, BP-06 */}
+      {isLoading || catalogStatus === "loading" ? (
         <div className={styles.loadingState}>
           <div className={styles.loadingSpinner} />
           <span>Loading inventory...</span>
+          {/* skeleton */}
+          <div className={styles.skeleton} />
         </div>
+      ) : catalogStatus === "error" ? (
+        <div className={styles.emptyState} data-state="error">
+          <p>Error loading catalog.</p>
+          <button type="button" className={styles.emptyAction} onClick={() => window.location.reload()}>Retry</button>
+        </div>
+      ) : catalogStatus === "offline" || catalogStatus === "fallback" ? (
+        <div className={styles.emptyState} data-state="offline">
+          <p>Offline / fallback catalog</p>
+        </div>
+      ) : catalogStatus === "stale" ? (
+        <div className={styles.emptyState}><span>Stale — refreshing…</span></div>
       ) : displayedItems.length === 0 ? (
         /* Empty state */
         <div className={styles.emptyState}>
@@ -496,24 +489,27 @@ export function InventoryPanel({
           )}
         </div>
       ) : (
-        /* Item grid */
-        <div
+        /* Item grid - React Aria ListBox owns accessible collection + keyboard behavior (task7, REC-02) */
+        <ListBox
           className={styles.itemGrid}
-          role="listbox"
           aria-label="Inventory items"
-          aria-activedescendant={focusedIndex >= 0 ? `item-${searchResults.items[focusedIndex]?.id}` : undefined}
+          selectionMode="single"
+          selectedKeys={selectedItemId ? [selectedItemId] : []}
+          onSelectionChange={(keys) => {
+            const id = Array.from(keys as Set<string>)[0];
+            if (id) {
+              const found = displayedItems.find((i) => i.id === id);
+              if (found) handleItemClick(found);
+            }
+          }}
         >
           {displayedItems.map((item, index) => (
-            <button
+            <ListBoxItem
               key={item.id}
-              type="button"
-              id={`item-${item.id}`}
-              role="option"
+              id={item.id}
+              textValue={item.name}
               className={`${styles.itemCard} ${selectedItemId === item.id ? styles.itemCardSelected : ""} ${focusedIndex === index ? styles.itemCardFocused : ""}`}
-              onClick={() => handleItemClick(item)}
-              onDoubleClick={(e) => handleItemDoubleClick(item, e)}
-              aria-selected={selectedItemId === item.id ? "true" : "false"}
-              aria-label={`${item.name}, ${item.dimensions.widthMm / 1000}m x ${item.dimensions.depthMm / 1000}m`}
+              onAction={() => handleItemClick(item)}
             >
               <div className={styles.itemThumbnail}>
                 {item.assets.previewImageUrl ? (
@@ -556,9 +552,9 @@ export function InventoryPanel({
               >
                 <FavoriteIcon filled={isInventoryFavorite(collections, item.id)} />
               </span>
-            </button>
+            </ListBoxItem>
           ))}
-        </div>
+        </ListBox>
       )}
     </div>
   );

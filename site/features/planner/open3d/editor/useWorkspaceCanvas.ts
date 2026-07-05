@@ -83,6 +83,12 @@ export function useWorkspaceCanvas(
   // Selection state (transient — never recorded in document history/undo).
   const [selection, setSelection] = useState<CanvasSelection>({ type: "none", ids: [] });
 
+  // Task 4 foundation: panels, search, loading, camera (3d transform), notifications
+  // live in caller (OOPlannerWorkspace, FeasibilityCanvas, InventoryPanel, Three*).
+  // Document undo/redo/replace ONLY mutate history.present (Open3dProject).
+  // Transients are never passed to runCommand / executePlannerCommand.
+  // GS: clean canonical doc vs transient ownership (no drift); follows benchmark anti-drift + clean state per Phase 1A.
+
   // Document is derived from history; the two can never drift.
   const project = history.present;
 

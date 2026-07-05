@@ -11,6 +11,7 @@ import styles from "./threeViewerInner.module.css";
 import type { PerspectiveCamera, Scene, WebGLRenderer } from "three";
 
 import type * as THREE from "three";
+import { readThreeThemeColor } from "../shared/readThemeColor";
 
 type ThreeModule = typeof THREE;
 
@@ -44,7 +45,7 @@ export function ThreeViewerInner({
   projectData: _projectData,
   enableShadows = true,
   enableControls: _enableControls,
-  backgroundColor = "#ffffff",
+  backgroundColor = readThreeThemeColor("--surface-page", "#ffffff"),
   onReady,
 }: ThreeViewerInnerProps): React.JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);

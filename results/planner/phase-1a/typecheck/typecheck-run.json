@@ -1,16 +1,9 @@
-{
-  "command": "pnpm run typecheck  (pnpm --filter oando-site typecheck -> tsc -p tsconfig.json --noEmit)",
-  "cwd": "d:/oandO04072026",
-  "module": "planner",
-  "phase": "phase-1a",
-  "cmd": "typecheck",
-  "revision": "587bd909c5f4f37d221f7e8c60c98e5ce696df97",
-  "branch": "main",
-  "dirtyWorktree": true,
-  "operator": "kiro-agent",
-  "exitCode": 0,
-  "rawLog": "results/planner/phase-1a/typecheck/typecheck-raw.log",
-  "scope": "Full site TS project (tsconfig.json). Confirms the new document.update command variant, updateOpen3dProject helper, and the useWorkspaceCanvas single-source-of-truth refactor are type-safe with no new any usage.",
-  "consoleDiagnostics": "None. tsc emitted no errors.",
-  "classification": "PASS"
+﻿{
+    "phase":  "1a",
+    "exitCode":  0,
+    "command":  "pnpm --filter oando-site exec tsc --noEmit -p tsconfig.json --skipLibCheck",
+    "start":  "2026-07-05T23:37:03.1112422+05:30",
+    "revision":  "dfb91c3b6f5ebd8e3872ba84fd29dd61bc880e5a",
+    "end":  "2026-07-05T23:37:24.3881588+05:30",
+    "module":  "planner-open3d"
 }

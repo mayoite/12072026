@@ -67,6 +67,8 @@ export function updateEntityInProject(
   if (floorIndex === -1) return project;
 
   const floor = project.floors[floorIndex];
+  const target = (floor[collection] as Array<{ id: string; locked?: boolean }>).find((i) => i.id === id);
+  if (target && target.locked) return project; // locked reject through helpers (task7; every surface: props, canvas, direct)
   const updatedFloor = mapEntityCollection(floor, collection, (items) =>
     items.map((item) => (item.id === id ? { ...item, ...updates } : item)),
   );
@@ -85,6 +87,8 @@ export function deleteEntityFromProject(
   if (floorIndex === -1) return project;
 
   const floor = project.floors[floorIndex];
+  const target = (floor[collection] as Array<{ id: string; locked?: boolean }>).find((i) => i.id === id);
+  if (target && target.locked) return project; // locked reject
   const updatedFloor = mapEntityCollection(floor, collection, (items) =>
     items.filter((item) => item.id !== id),
   );

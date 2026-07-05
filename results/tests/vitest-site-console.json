@@ -1,8 +1,16 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-05T15:17:35.610Z",
-  "consoleCount": 0,
-  "stderrCount": 0,
+  "generatedAt": "2026-07-05T18:25:11.121Z",
+  "consoleCount": 1,
+  "stderrCount": 1,
   "stdoutCount": 0,
-  "entries": []
+  "entries": [
+    {
+      "content": "An update to OOPlannerWorkspace inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act\n",
+      "taskId": "-1462849714_10_1",
+      "time": 1783275911107,
+      "type": "stderr",
+      "testName": "OOPlannerWorkspace (TDD) > professional workspace: topbar has project/save/floor/units/2d3d/undo/redo/save + structured menus for import/export/prefs; panels separate catalogue/layers; canvas-max (GS: Figma REC-01 minimize, catalogue-first REC-04, 2026-07-04 benchmark)"
+    }
+  ]
 }

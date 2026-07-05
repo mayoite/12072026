@@ -225,8 +225,6 @@ export function PanelContainer({
         height: id === "bottom" ? height : "100%",
       };
 
-  const titleBarStyle: React.CSSProperties = { cursor: isFloating ? "move" : "default" };
-
   return (
     <aside
       ref={panelRef}
@@ -249,8 +247,8 @@ export function PanelContainer({
       <div
         ref={titleBarRef}
         className={styles.panelTitleBar}
+        data-floating={isFloating ? "true" : "false"}
         onMouseDown={handleTitleMouseDown}
-        style={titleBarStyle}
       >
         <h3 className={styles.panelTitle}>{title}</h3>
         <div className={styles.panelActions}>

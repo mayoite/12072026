@@ -55,7 +55,7 @@ export const CANVAS_TOOL_GUIDANCE: Record<PlannerTool, string> = {
   select: "Click an object to inspect it. Delete removes the selection.",
   pan: "Drag to move the drawing. Release Space to restore the armed tool.",
   room: "Click corners to outline a room. Enter accepts; Escape cancels.",
-  wall: "Click start and end points. Alt temporarily bypasses snapping.",
+  wall: "Click start and end points. Alt temporarily bypasses snapping. (Shift+click multi; Space pan)",
   opening: "Click a wall to add an opening.",
   dimension: "Pick two points to annotate a measured span.",
   placement: "Choose a catalogue item, then click the canvas to place it.",

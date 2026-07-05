@@ -28,4 +28,16 @@ describe("planner workspace preferences", () => {
       DEFAULT_PLANNER_WORKSPACE_PREFERENCES.panelRatios,
     );
   });
+
+  it("panelRatios default support >=60% canvas width at 1440px (task5; GS: REC-01 Figma minimize-UI, REC-04 catalogue-first sidebar, no donor px widths)", () => {
+    const ratios = DEFAULT_PLANNER_WORKSPACE_PREFERENCES.panelRatios;
+    // simulate 1440 avail ~1320 (margin for rail+chrome); total side <=~0.345 to guarantee 60%
+    const avail = 1320;
+    const leftW = Math.round(avail * ratios.catalogue);
+    const rightW = Math.round(avail * ratios.properties);
+    const canvasW = 1440 - (leftW + rightW + 120); // rail+header margins
+    expect(canvasW).toBeGreaterThanOrEqual(Math.round(1440 * 0.6));
+    expect(ratios.catalogue).toBeLessThanOrEqual(0.18);
+    expect(ratios.properties).toBeLessThanOrEqual(0.18);
+  });
 });

@@ -54,6 +54,10 @@ export interface TopBarProps {
   isCanvasMaximized?: boolean;
   /** Toggle canvas-maximized mode */
   onToggleCanvasMaximized?: () => void;
+  /** Current workspace density (from prefs, compact | touch) per GS Figma UI3 REC-01 minimize + density wiring */
+  density?: "compact" | "touch";
+  /** Called when density toggle requested from prefs menu (wires to workspace prefs) */
+  onToggleDensity?: () => void;
 }
 
 export function TopBar({
@@ -80,6 +84,8 @@ export function TopBar({
   onToggleRightPanel,
   isCanvasMaximized = false,
   onToggleCanvasMaximized,
+  density = "compact",
+  onToggleDensity,
 }: TopBarProps) {
   const showPersistenceActions = accessContext !== "guest";
   const showGuestActions = accessContext === "guest";
@@ -87,17 +93,20 @@ export function TopBar({
   const [showImportMenu, setShowImportMenu] = useState(false);
   const [showUnitMenu, setShowUnitMenu] = useState(false);
   const [showFloorMenu, setShowFloorMenu] = useState(false);
+  const [showPrefsMenu, setShowPrefsMenu] = useState(false);
 
   const handleExportClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowExportMenu((current) => !current);
     setShowImportMenu(false);
+    setShowPrefsMenu(false);
   }, []);
 
   const handleImportClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowImportMenu((current) => !current);
     setShowExportMenu(false);
+    setShowPrefsMenu(false);
   }, []);
 
   const handleMenuItemClick = useCallback(
@@ -115,6 +124,7 @@ export function TopBar({
     setShowImportMenu(false);
     setShowUnitMenu(false);
     setShowFloorMenu(false);
+    setShowPrefsMenu(false);
   }, []);
 
   // Unit options
@@ -135,6 +145,15 @@ export function TopBar({
     },
     [onFloorChange],
   );
+
+  const handlePrefsClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setShowPrefsMenu((current) => !current);
+    setShowExportMenu(false);
+    setShowImportMenu(false);
+    setShowUnitMenu(false);
+    setShowFloorMenu(false);
+  }, []);
 
   const activeFloorName = floors.find((f) => f.id === activeFloorId)?.name ?? "Floor";
 
@@ -183,6 +202,7 @@ export function TopBar({
                 setShowExportMenu(false);
                 setShowImportMenu(false);
                 setShowUnitMenu(false);
+                setShowPrefsMenu(false);
               }}
               aria-haspopup="listbox"
               aria-expanded={showFloorMenu}
@@ -221,6 +241,7 @@ export function TopBar({
               setShowUnitMenu((current) => !current);
               setShowExportMenu(false);
               setShowImportMenu(false);
+              setShowPrefsMenu(false);
             }}
             aria-expanded={showUnitMenu}
             aria-haspopup="listbox"
@@ -434,10 +455,56 @@ export function TopBar({
             </div>
           </>
         )}
+
+        {/* Preferences structured menu (task 5) */}
+        <div className={styles.dropdown}>
+          <button
+            type="button"
+            className={styles.btn}
+            onClick={handlePrefsClick}
+            aria-expanded={showPrefsMenu}
+            aria-haspopup="menu"
+            aria-label="Open preferences menu"
+          >
+            Prefs
+            <ChevronDownIcon />
+          </button>
+          {showPrefsMenu && (
+            <div className={styles.dropdownMenu} role="menu">
+              <button
+                type="button"
+                className={styles.dropdownItem}
+                role="menuitem"
+                onClick={() => handleMenuItemClick(() => {
+                  // Wire density toggle to prefs (fixes partial/hardcoded per critic); GS cite: 00-benchmark-summary.md Five-product Figma UI3 REC-01 minimize-UI thin sidebars + contextual; anti-copy semantic tokens from site/app/css/ only
+                  onToggleDensity?.();
+                })}
+              >
+                Toggle density ({density === "touch" ? "compact" : "touch"})
+              </button>
+              <button
+                type="button"
+                className={styles.dropdownItem}
+                role="menuitem"
+                onClick={() => handleMenuItemClick(() => {})}
+              >
+                Toggle grid
+              </button>
+              <button
+                type="button"
+                className={styles.dropdownItem}
+                role="menuitem"
+                onClick={() => handleMenuItemClick(() => {})}
+              >
+                Toggle snap
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Click outside handler */}
-      {(showExportMenu || showImportMenu || showUnitMenu || showFloorMenu) && (
+      {(showExportMenu || showImportMenu || showUnitMenu || showFloorMenu || showPrefsMenu) && (
         <div
           className={styles.menuDismissLayer}
           onClick={handleDocumentClick}

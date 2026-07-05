@@ -53,6 +53,69 @@
   --ws-panel-width: var(--planner-panel-width-desktop);
 }
 
+/* Density modes (compact/touch) per task 3; GS cite: Figma UI3 REC-01 minimize-UI + MODULE-UI-CONTRACT layer→surface→module for planner open3d L1/L3; anti-copy tokens only per 00-benchmark-summary.md */
+.shell[data-planner-density="compact"] {
+  --ws-control-h: 2rem;
+  font-size: 0.8125rem;
+}
+
+.shell[data-planner-density="touch"] {
+  --ws-control-h: 2.75rem;
+  font-size: 0.9375rem;
+}
+
+/* Additional states: focus, selected, disabled, warning, error, forced-colors, print */
+.shell :focus-visible {
+  outline: 2px solid var(--planner-focus-ring);
+  outline-offset: 2px;
+}
+
+.shell [data-selected="true"],
+.shell [aria-selected="true"] {
+  background: var(--planner-accent-soft);
+  border-color: var(--planner-accent);
+}
+
+.shell button:disabled,
+.shell [aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.shell [data-state="warning"],
+.shell .open3d-status-pill--warning {
+  color: var(--color-warning);
+  border-color: color-mix(in srgb, var(--color-warning) 40%, transparent);
+}
+
+.shell [data-state="error"],
+.shell .open3d-status-pill--error {
+  color: var(--color-error-red);
+  border-color: color-mix(in srgb, var(--color-error-red) 40%, transparent);
+}
+
+@media (forced-colors: active) {
+  .shell {
+    border: 1px solid CanvasText;
+  }
+  .shell [data-selected="true"] {
+    background: Highlight;
+    color: HighlightText;
+  }
+}
+
+@media print {
+  .shell {
+    background: white;
+    color: black;
+    box-shadow: none;
+  }
+  .shell header,
+  .shell footer {
+    display: none;
+  }
+}
+
 /* Header / Top bar */
 .header {
   grid-area: header;
@@ -262,6 +325,11 @@
   border-bottom: 1px solid var(--ws-panel-border);
   background: color-mix(in srgb, var(--surface-soft) 92%, var(--ws-panel-bg));
   flex-shrink: 0;
+  cursor: default;
+}
+
+.panelTitleBar[data-floating="true"] {
+  cursor: move;
 }
 
 .panelBottom {

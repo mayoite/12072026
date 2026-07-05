@@ -169,6 +169,32 @@ describe("useWorkspaceCanvas routes every mutation through executePlannerCommand
     expect(result.current.activeFloor.furniture[0].rotation).toBe(45);
   });
 
+  // TDD for task 4: prove document undo excludes panels/search/loading/camera/notifications
+  it("document undo/redo leaves transient non-document state (selection example; panels/search/camera/notif excluded by ownership)", () => {
+    const { result } = renderHook(() =>
+      useWorkspaceCanvas({ initialProject: projectWithFurniture(false) }),
+    );
+
+    act(() => {
+      result.current.setSelection({ type: "furniture", ids: ["chair"] });
+      result.current.dispatch({
+        type: "update",
+        collection: "furniture",
+        id: "chair",
+        updates: { rotation: 90 },
+      });
+    });
+    expect(result.current.selection.type).toBe("furniture");
+    expect(result.current.canUndo).toBe(true);
+
+    act(() => {
+      result.current.undo();
+    });
+    // selection (transient) is not cleared by document undo; panels/search/loading/camera/notifications live outside history
+    expect(result.current.selection.type).toBe("furniture");
+    expect(result.current.activeFloor.furniture[0].rotation).toBe(0);
+  });
+
   it("replaceProject resets history and clears selection", () => {
     const { result } = renderHook(() =>
       useWorkspaceCanvas({ initialProject: projectWithFurniture(false) }),

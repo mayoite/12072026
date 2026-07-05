@@ -4,7 +4,7 @@ import {
   PLANNER_COLOR_TOKENS,
 } from "./themeColorTokens";
 
-function normalizeTokenName(variableName: string): string {
+export function normalizeTokenName(variableName: string): string {
   return variableName.startsWith("--") ? variableName : `--${variableName}`;
 }
 
@@ -94,4 +94,21 @@ export function readFallbackPaintColors(category: string): FallbackPaintColors {
     fill: readThemeColor(tokens.fill),
     stroke: readThemeColor(tokens.stroke),
   };
+}
+
+/**
+ * Three theme adapter for semantic colors (task 3).
+ * Returns CSS var ref or resolved string safe for THREE.Color.
+ * Never hardcodes hex here; caller falls back to token.
+ * GS cite: BP-07 three + r3f only (Phase 09 but applied); anti-copy only site/app/css/ semantic tokens per 00-benchmark-summary.md + benchmark five-product (Planner 5D 2D↔3D).
+ */
+export function readThreeThemeColor(token: string, fallback: string = "#ffffff"): string {
+  if (typeof document === "undefined") {
+    return `var(${normalizeTokenName(token)}, ${fallback})`;
+  }
+  try {
+    return readThemeColor(token);
+  } catch {
+    return fallback;
+  }
 }

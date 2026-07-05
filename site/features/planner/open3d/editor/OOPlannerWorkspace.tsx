@@ -46,6 +46,10 @@ import type { Open3dDisplayUnit, Open3dPoint } from "../model/types";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";
 import type { Open3dEntityCollection } from "../model/actions/projectActions";
 import type { PaletteCommandHandlers } from "../lib/commands/paletteCommands";
+import {
+  parsePlannerWorkspacePreferences,
+  DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
+} from "../store/workspacePreferences";
 
 export type OOPlannerWorkspaceProps = {
   guestMode: boolean;
@@ -113,6 +117,18 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
   const [workspaceMessage, setWorkspaceMessage] = useState<string | null>(null);
   const armedToolRef = useRef<PlannerTool>("wall");
 
+  // Density wired from workspace prefs (not hardcoded); GS: Figma UI3 REC-01 minimize UI, thin sidebars, contextual; benchmark 00 + anti-copy semantic only site/app/css/; fixes critic density/prefs partial + task5
+  const [density, setDensity] = useState<"compact" | "touch">(() => {
+    if (typeof window === "undefined") return DEFAULT_PLANNER_WORKSPACE_PREFERENCES.density;
+    try {
+      const raw = localStorage.getItem("open3d-workspace-preferences");
+      const prefs = parsePlannerWorkspacePreferences(raw ? JSON.parse(raw) : null);
+      return prefs.density;
+    } catch {
+      return DEFAULT_PLANNER_WORKSPACE_PREFERENCES.density;
+    }
+  });
+
   const pendingCatalogItem = useMemo(
     () => (pendingCatalogItemId ? catalog.resolveItem(pendingCatalogItemId) : undefined),
     [catalog, pendingCatalogItemId],
@@ -134,6 +150,21 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
       activeFloor.windows.length === 0 &&
       activeFloor.furniture.length === 0
     : true;
+
+  const toggleDensity = useCallback(() => {
+    setDensity((current) => {
+      const next = current === "compact" ? "touch" : "compact";
+      try {
+        const raw = localStorage.getItem("open3d-workspace-preferences");
+        const base = parsePlannerWorkspacePreferences(raw ? JSON.parse(raw) : null);
+        const updated = { ...base, density: next };
+        localStorage.setItem("open3d-workspace-preferences", JSON.stringify(updated));
+      } catch {
+        // ignore storage (matches useDocking pattern)
+      }
+      return next;
+    });
+  }, []);
 
   const handleStartTemplate = useCallback(() => {
     workspaceCanvas.replaceProject(
@@ -288,7 +319,13 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
         setPendingCatalogItemId(null);
         canvasRef.current?.cancel();
       },
+      commit: () => {
+        // Enter commits; delegate to canvas for drawing states (task6)
+        canvasRef.current?.commit?.();
+      },
       zoomReset: () => canvasRef.current?.resetZoom(),
+      // fit available for canvas-max / bounds restore (task6)
+      fit: () => canvasRef.current?.fitToView?.(),
     }),
     [runRedo, runUndo, setTool, toggleView],
   );
@@ -303,7 +340,10 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
       setPendingCatalogItemId(null);
       canvasRef.current?.cancel();
     },
-    commit: () => setWorkspaceMessage("Complete the current point or value to commit."),
+    commit: () => {
+      // delegate to canvas commit for drawing (wall/room/dim); numeric handled in props (task6)
+      canvasRef.current?.commit?.();
+    },
     beginTemporaryPan: () => {
       canvasRef.current?.setTool("pan");
       setActiveTool("pan");
@@ -366,10 +406,13 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
         floors={workspaceCanvas.project.floors.map((floor) => ({ id: floor.id, name: floor.name }))}
         activeFloorId={workspaceCanvas.project.activeFloorId}
         fillParent
+        density={density}
+        onToggleDensity={toggleDensity}
         leftPanel={
           <InventoryPanel
             catalogItems={catalog.items}
             isLoading={catalog.isLoading}
+            catalogStatus={catalog.status}
             onItemPlace={(itemId) => handleInventoryPlace(itemId)}
           />
         }

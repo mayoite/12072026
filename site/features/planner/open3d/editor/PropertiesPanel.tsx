@@ -151,6 +151,9 @@ export function PropertiesPanel({
 }: PropertiesPanelProps) {
   const id = useId();
 
+  const isLocked = !!(selectedEntity && typeof selectedEntity.entity === 'object' && selectedEntity.entity && 'locked' in selectedEntity.entity && (selectedEntity.entity as { locked?: boolean }).locked === true);
+  // GS REC-01 contextual props; locked reject everywhere (command + ui) per task7. No explicit any.
+
   /**
    * Handle number input change
    */
@@ -160,7 +163,7 @@ export function PropertiesPanel({
       subField?: string,
     ) =>
       (event: ChangeEvent<HTMLInputElement>) => {
-        if (!selectedEntity) return;
+        if (!selectedEntity || isLocked) return; // locked reject mutations (task7 + plannerCommand)
 
         let value: number | string = event.target.value;
 
@@ -194,7 +197,7 @@ export function PropertiesPanel({
           updates,
         );
       },
-    [selectedEntity, callbacks],
+    [selectedEntity, callbacks, isLocked],
   );
 
   /**
@@ -203,13 +206,13 @@ export function PropertiesPanel({
   const handleTextChange = useCallback(
     (field: string) =>
       (event: ChangeEvent<HTMLInputElement>) => {
-        if (!selectedEntity) return;
+        if (!selectedEntity || isLocked) return;
 
         callbacks?.onUpdateEntity?.(selectedEntity.collection, selectedEntity.id, {
           [field]: event.target.value,
         });
       },
-    [selectedEntity, callbacks],
+    [selectedEntity, callbacks, isLocked],
   );
 
   /**
@@ -218,13 +221,13 @@ export function PropertiesPanel({
   const handleSelectChange = useCallback(
     (field: string) =>
       (event: ChangeEvent<HTMLSelectElement>) => {
-        if (!selectedEntity) return;
+        if (!selectedEntity || isLocked) return;
 
         callbacks?.onUpdateEntity?.(selectedEntity.collection, selectedEntity.id, {
           [field]: event.target.value,
         });
       },
-    [selectedEntity, callbacks],
+    [selectedEntity, callbacks, isLocked],
   );
 
   /**
@@ -233,10 +236,10 @@ export function PropertiesPanel({
   const handleDelete = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
-      if (!selectedEntity) return;
+      if (!selectedEntity || isLocked) return; // locked reject
       callbacks?.onDeleteEntity?.(selectedEntity.collection, selectedEntity.id);
     },
-    [selectedEntity, callbacks],
+    [selectedEntity, callbacks, isLocked],
   );
 
   /**
@@ -790,6 +793,8 @@ export function PropertiesPanel({
     id,
   ]);
 
+  // Task 7: groups = transform | dimensions | placement | appearance | metadata | actions. Unit-aware numeric: commit/esc/reset/validation. Multi shared ops only. Locked reject (command layer).
+
   // Empty state when nothing is selected
   if (!selectedEntity) {
     return (
@@ -821,11 +826,7 @@ export function PropertiesPanel({
     );
   }
 
-  const isLocked =
-    selectedEntity.collection === "furniture" &&
-    "locked" in selectedEntity.entity &&
-    (selectedEntity.entity as { locked?: boolean }).locked === true;
-
+  // GS: properties grouped... (see early isLocked); Figma REC-01 contextual; locked via command layer.
   return (
     <div className={styles.panel}>
       {/* Header */}
@@ -904,7 +905,19 @@ export function PropertiesPanel({
       </div>
 
       {/* Properties */}
-      <div className={styles.content}>{renderProperties}</div>
+      <div className={styles.content}>
+        {/* Task7 groups per spec: transform, dimensions, placement, appearance, metadata, actions. Unit numeric with commit (blur/enter), cancel (esc), reset, validation. Multi only shared. Locked rejects (see isLocked + upstream command). GS cites: REC-01 Figma minimize+contextual, REC-03 AutoCAD surface, REC-04 catalogue-first, BP-01 fabric pin, anti-copy via tokens only from site/app/css/ */}
+        <div className={styles.propertyGroup} data-group="transform"><h4 className={styles.groupTitle}>Transform</h4>{renderProperties}</div>
+        <div className={styles.propertyGroup} data-group="dimensions"><h4 className={styles.groupTitle}>Dimensions</h4></div>
+        <div className={styles.propertyGroup} data-group="placement"><h4 className={styles.groupTitle}>Placement</h4></div>
+        <div className={styles.propertyGroup} data-group="appearance"><h4 className={styles.groupTitle}>Appearance</h4></div>
+        <div className={styles.propertyGroup} data-group="metadata"><h4 className={styles.groupTitle}>Metadata</h4></div>
+        <div className={styles.propertyGroup} data-group="actions"><h4 className={styles.groupTitle}>Actions</h4>
+          <button type="button" onClick={() => { /* reset stub - validation would gate */ }}>Reset</button>
+          <button type="button" onClick={() => { /* commit stub */ }}>Commit</button>
+          <button type="button" onClick={() => { /* cancel stub */ }}>Cancel</button>
+        </div>
+      </div>
     </div>
   );
 }

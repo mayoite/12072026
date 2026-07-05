@@ -38,8 +38,8 @@ export const DEFAULT_PLANNER_WORKSPACE_PREFERENCES: PlannerWorkspacePreferencesV
   snapEnabled: true,
   deviceTier: "desktop",
   panelRatios: {
-    catalogue: 0.24,
-    properties: 0.23,
+    catalogue: 0.17,
+    properties: 0.17,
   },
   collapsedPanels: [],
 };

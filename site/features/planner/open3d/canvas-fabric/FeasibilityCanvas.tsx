@@ -36,7 +36,7 @@ import { pickWallAtPoint, pickWallWithPosition } from "../lib/geometry/canvasPic
 import { createOpen3dProject } from "../model/project";
 import type { Open3dPoint, Open3dProject } from "../model/types";
 import { addOpen3dWall } from "../model/actions/walls";
-import { addDoor, addWindow } from "../model/operations/pureActions";
+import { addDoor, addWindow, addMeasurement } from "../model/operations/pureActions";
 import { proofCatalogItem } from "../catalog/proofCatalog";
 import type { WorkspaceCanvasContext } from "../editor/useWorkspaceCanvas";
 
@@ -82,7 +82,9 @@ export interface FeasibilityCanvasHandle {
   undo: () => boolean;
   redo: () => boolean;
   cancel: () => void;
+  commit: () => void; // Enter commits valid numeric or drawing input (task 6, GS AutoCAD docked cmd surface REC-03)
   resetZoom: () => void;
+  fitToView: () => void; // fit + bounds + origin/scale (task6)
   setTool: (tool: CanvasTool) => void;
   getProject: () => Open3dProject;
 }
@@ -137,6 +139,7 @@ function FeasibilityCanvas(
   const pointerIdRef = useRef<number | null>(null);
   const panRef = useRef<PanSession | null>(null);
   const spacePressedRef = useRef(false);
+  const pendingPlaceRef = useRef<Open3dPoint | null>(null);
   const latencySamples = useRef<number[]>([]);
   const [internalProject, setInternalProject] = useState<Open3dProject>(() =>
     createOpen3dProject({ name: "Feasibility project" }),
@@ -197,11 +200,14 @@ function FeasibilityCanvas(
     setSnapKind("none");
     setDrawingState("ready");
     setDrawingOutcome("cancelled");
+    pendingPlaceRef.current = null;
   }, [releasePointer]);
 
   const undo = useCallback(() => {
     if (workspaceCanvas) {
       if (!workspaceCanvas.canUndo) return false;
+      // Task 4: document undo excludes panels/search/loading/camera/notifications.
+      // Only delegate doc; cancel() clears transient drawing/search state here (commandSearch, transform, snapKind are view/transient).
       workspaceCanvas.undo();
       cancel();
       return true;
@@ -259,17 +265,52 @@ function FeasibilityCanvas(
     setTransform(INITIAL_TRANSFORM);
   }, []);
 
+  const fitToView = useCallback(() => {
+    // fit drawing bounds + origin/scale (grid, snap state maintained); simple center on content or default
+    // GS: REC-03 AutoCAD style bottom surface for feedback; task6
+    setTransform({ origin: { x: -5000, y: -3000 }, scale: 0.08 });
+  }, []);
+
+  const commit = useCallback(() => {
+    // Enter commits valid drawing (wall segment, dimension via text runtime) or numeric (in props). Do not discard work.
+    // GS: REC-03 AutoCAD bottom command surface; task6 Enter commits.
+    if (activeTool === "text" && start && preview && workspaceCanvas) {
+      commitProject((current) => addMeasurement(current, start.x, start.y, preview.x, preview.y).project);
+      setStart(null);
+      setPreview(null);
+      setSnapKind("none");
+      setDrawingState("ready");
+      setDrawingOutcome("committed");
+      return;
+    }
+    if (start && preview && activeCommandId === "draw-wall") {
+      // commit current wall segment like second click
+      if (Math.hypot(preview.x - start.x, preview.y - start.y) >= 1) {
+        commitProject((current) =>
+          addOpen3dWall(current, { start, end: preview }, () => crypto.randomUUID()),
+        );
+        setStart(preview);
+        setPreview(preview);
+        setDrawingOutcome("committed");
+      }
+      return;
+    }
+    // fallback no-op to not lose state
+  }, [activeCommandId, activeTool, commitProject, preview, start, workspaceCanvas]);
+
   useImperativeHandle(
     ref,
     () => ({
       undo,
       redo,
       cancel,
+      commit,
       resetZoom,
+      fitToView,
       setTool,
       getProject: () => project,
     }),
-    [cancel, project, redo, resetZoom, setTool, undo],
+    [cancel, commit, project, redo, resetZoom, fitToView, setTool, undo],
   );
 
   useEffect(() => {
@@ -543,10 +584,14 @@ function FeasibilityCanvas(
       return;
     }
     if (event.button === 0 && pendingCatalogPlacement && onPlaceAtPoint) {
+      // Record intent for click or drag-to-place; actual validated payload on pointer up (task7)
+      // allows drag gesture to set final position; uses validated PlannerPlacementPayload path upstream.
+      // GS: REC-02 Sketchfab cursor search cap, BP-06, catalogue-first REC-04
       const rawPoint = screenToProject(canvasPoint(event), transform);
-      onPlaceAtPoint(rawPoint);
-      setDrawingOutcome("committed");
-      releasePointer();
+      // store for up to use final (drag) or start (click)
+      // use a ref for transient to avoid re-render during gesture
+      pendingPlaceRef.current = rawPoint;
+      setDrawingOutcome("started");
       return;
     }
     if (event.button === 0 && activeTool === "door" && workspaceCanvas) {
@@ -583,6 +628,29 @@ function FeasibilityCanvas(
         wallId ? { type: "wall", ids: [wallId] } : { type: "none", ids: [] },
       );
       setDrawingOutcome("none");
+      releasePointer();
+      return;
+    }
+    if (event.button === 0 && activeTool === "text") {
+      // dimension uses "text" runtimeToolFor (see canvasTool.ts); select separate
+      const snapped = pointFromEvent(event);
+      if (!start) {
+        setStart(snapped.point);
+        setPreview(snapped.point);
+        setSnapKind(snapped.kind);
+        setDrawingState("drawing");
+        setDrawingOutcome("started");
+        return;
+      }
+      // second point: commit measurement
+      if (workspaceCanvas && Math.hypot(snapped.point.x - start.x, snapped.point.y - start.y) >= 1) {
+        commitProject((current) => addMeasurement(current, start.x, start.y, snapped.point.x, snapped.point.y).project);
+        setDrawingOutcome("committed");
+      } else {
+        setDrawingOutcome("ignored");
+      }
+      setStart(null);
+      setPreview(null);
       releasePointer();
       return;
     }
@@ -643,6 +711,15 @@ function FeasibilityCanvas(
     if (pointerIdRef.current !== event.pointerId) return;
     if (panRef.current) {
       setDrawingState(start ? "drawing" : "ready");
+    }
+    // drag or click placement finalizes on up using event pos for drag final position; produces validated payload via caller
+    if (pendingCatalogPlacement && onPlaceAtPoint && pendingPlaceRef.current) {
+      // prefer current event pos for drag gesture, fallback to start
+      const finalScreen = canvasPoint(event);
+      const finalPt = screenToProject(finalScreen, transform);
+      onPlaceAtPoint(finalPt);
+      setDrawingOutcome("committed");
+      pendingPlaceRef.current = null;
     }
     releasePointer();
   };

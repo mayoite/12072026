@@ -9,6 +9,7 @@ import React, { lazy, Suspense } from "react";
 import type { ReactNode } from "react";
 import type { Open3dProject } from "../model/types";
 import styles from "./threeLazyViewer.module.css";
+import { readThreeThemeColor } from "../shared/readThemeColor";
 
 /**
  * Loading fallback component for lazy-loaded 3D viewer.
@@ -66,7 +67,7 @@ export interface Lazy3DViewerProps {
   /** Enable orbit controls (default: true) */
   enableControls?: boolean;
   /** Background color */
-  backgroundColor?: string;
+  backgroundColor?: string; // prefer semantic via readThreeThemeColor
 }
 
 // Lazy-loaded 3D viewer component
@@ -136,13 +137,14 @@ export function Lazy3DViewer(props: Lazy3DViewerProps): React.JSX.Element {
     loadingMessage = "Loading 3D viewer...",
     enableShadows = true,
     enableControls = true,
-    backgroundColor = "#ffffff",
+    backgroundColor,
   } = props;
 
+  const resolvedBg = backgroundColor ?? readThreeThemeColor("--surface-page", "#ffffff");
   return (
     <div
       className={`${styles.viewerRoot} ${className || ""}`}
-      style={{ backgroundColor }}
+      style={{ backgroundColor: resolvedBg }}
     >
       <ViewerErrorBoundary onError={onError}>
         <Suspense fallback={<ViewerLoadingFallback message={loadingMessage} />}>

@@ -2,6 +2,11 @@
 
 import { useCallback, useEffect, useState, type Dispatch, type SetStateAction } from "react";
 
+import {
+  parsePlannerWorkspacePreferences,
+  DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
+} from "../store/workspacePreferences";
+
 export type PanelId = "left" | "right" | "bottom";
 export type PanelState = "docked" | "floating" | "collapsed";
 export type ViewportTier = "desktop" | "tablet" | "small";
@@ -37,12 +42,15 @@ interface DockingSystemActions {
 }
 
 const STORAGE_KEY = "open3d-workspace-docking";
+const PREFS_STORAGE_KEY = "open3d-workspace-preferences";
+
+// GS: Figma UI3 REC-01 (minimize UI on panels), catalogue-first REC-04 (separate catalogue sidebar); persist ratios in workspace prefs per task5 / 02-PHASE-1; use semantic tokens only, anti-copy from 00-benchmark-summary.md
 
 const DEFAULT_PANEL_CONFIG: Record<PanelId, PanelConfig> = {
   left: {
     id: "left",
     state: "docked",
-    width: 310,
+    width: 260, // thinner per GS 00-benchmark Figma UI3 REC-01 minimize-UI + thin sidebars (catalogue-first)
     height: 0, // 0 means fill remaining height
     x: 0,
     y: 0,
@@ -51,7 +59,7 @@ const DEFAULT_PANEL_CONFIG: Record<PanelId, PanelConfig> = {
   right: {
     id: "right",
     state: "docked",
-    width: 290,
+    width: 240, // contextual properties thin
     height: 0,
     x: 0,
     y: 0,
@@ -82,6 +90,31 @@ function getViewportTier(): ViewportTier {
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
+}
+
+function getAvailableForPanels(): number {
+  if (typeof window === "undefined") return 1000;
+  return Math.max(600, window.innerWidth - 120); // leave for canvas >=60% + rail
+}
+
+function ratiosToWidths(ratios: { catalogue: number; properties: number }): { left: number; right: number } {
+  const avail = getAvailableForPanels();
+  // Enforce >=60% canvas at 1440px (and scaled): total side panels <=~35% of avail (GS REC-01 Figma minimize-UI on panels; REC-04 catalogue-first; task5 spec + CSS minmax(60%))
+  const maxSideRatio = 0.175;
+  return {
+    left: clamp(Math.round(avail * ratios.catalogue), 200, Math.floor(avail * maxSideRatio)),
+    right: clamp(Math.round(avail * ratios.properties), 200, Math.floor(avail * maxSideRatio)),
+  };
+}
+
+function widthsToRatios(leftW: number, rightW: number): { catalogue: number; properties: number } {
+  const avail = getAvailableForPanels();
+  const totalRatio = (leftW + rightW) / avail;
+  const safe = totalRatio > 0.35 ? 0.35 / totalRatio : 1;
+  return {
+    catalogue: clamp((leftW / avail) * safe, 0.15, 0.18),
+    properties: clamp((rightW / avail) * safe, 0.15, 0.18),
+  };
 }
 
 export function useDockingSystem(): DockingSystemState & DockingSystemActions {
@@ -138,6 +171,22 @@ export function useDockingSystem(): DockingSystemState & DockingSystemActions {
     if (restored) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- conditional set from localStorage restore on mount; reason: one-time hydration of persisted layout; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: use useSyncExternalStore or init state from storage when docking system revised
       setPanels(restored);
+    } else {
+      // Task 5: seed from workspace prefs panelRatios if present (valid per schema)
+      try {
+        const prefsRaw = localStorage.getItem(PREFS_STORAGE_KEY);
+        if (prefsRaw) {
+          const prefs = parsePlannerWorkspacePreferences(JSON.parse(prefsRaw));
+          const ws = ratiosToWidths(prefs.panelRatios);
+          setPanels((cur) => ({
+            ...cur,
+            left: { ...cur.left, width: ws.left },
+            right: { ...cur.right, width: ws.right },
+          }));
+        }
+      } catch {
+        // ignore
+      }
     }
   }, []);
 
@@ -208,14 +257,35 @@ export function useDockingSystem(): DockingSystemState & DockingSystemActions {
       const maxWidth = window.innerWidth - 40;
       const maxHeight = window.innerHeight - 120;
 
-      setPanels((current) => ({
-        ...current,
-        [panelId]: {
-          ...current[panelId],
-          width: clamp(width, minWidth, maxWidth),
-          height: clamp(height, minHeight, maxHeight),
-        },
-      }));
+      setPanels((current) => {
+        let nextW = clamp(width, minWidth, maxWidth);
+        const nextH = clamp(height, minHeight, maxHeight);
+        // Enforce canvas >=60% at desktop widths (task5); total left+right <=40% avail (GS: REC-01 minimize UI panels; REC-04 catalogue sidebar; BP-01 fabric pinned; anti-copy semantic tokens)
+        const avail = Math.max(600, window.innerWidth - 120);
+        const other = panelId === "left" ? current.right.width : (panelId === "right" ? current.left.width : 0);
+        const thisSide = panelId === "left" || panelId === "right" ? nextW : 0;
+        if ((thisSide + other) > avail * 0.35) {
+          nextW = Math.max(200, Math.floor((avail * 0.35) - other));
+        }
+        const next = {
+          ...current,
+          [panelId]: {
+            ...current[panelId],
+            width: nextW,
+            height: nextH,
+          },
+        };
+        // Persist ratios on resize for workspace prefs (task5)
+        try {
+          const ratios = widthsToRatios(next.left.width, next.right.width);
+          const prefs = parsePlannerWorkspacePreferences({
+            ...DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
+            panelRatios: ratios,
+          });
+          localStorage.setItem(PREFS_STORAGE_KEY, JSON.stringify(prefs));
+        } catch { /* ignore storage quota / parse (expected in private mode) */ }
+        return next;
+      });
     },
     [],
   );
@@ -239,9 +309,14 @@ export function useDockingSystem(): DockingSystemState & DockingSystemActions {
         }
       }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
-    } catch {
-      // Ignore storage errors
-    }
+      // Task 5: also persist valid panel ratios as workspace preferences (GS: REC-01 minimize, no Figma px; ratios clamped 0.15-0.4 per schema; catalogue sidebar first)
+      const ratios = widthsToRatios(panels.left.width, panels.right.width);
+      const prefs = parsePlannerWorkspacePreferences({
+        ...DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
+        panelRatios: ratios,
+      });
+      localStorage.setItem(PREFS_STORAGE_KEY, JSON.stringify(prefs));
+    } catch { /* ignore storage (task5 persist ratios; expected diagnostic) */ }
   }, [panels]);
 
   const restoreLayout = useCallback(() => {
