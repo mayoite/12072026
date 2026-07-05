@@ -56,7 +56,7 @@ Deliver the professional One&Only planner (**1A**) and the safe Lego-like SVG bl
 - [x] **P1 (done 2026-07-05):** Phosphor-only chrome — emoji removed from `inventoryTaxonomy.ts`; new `editor/inventoryIcons.tsx` binds taxonomy icon keys to Phosphor glyphs (first Phosphor import in site source); `InventoryPanel` renders Phosphor. Guard: `open3dIconPolicy.test.tsx` (no emoji in taxonomy + renders svg per key). Evidence: `results/planner/phase-1a/icon-policy/`. Note: hand-rolled `ClearIcon`/`ChevronIcon` inline SVGs remain (not emoji; optional Phosphor migration later).
 - [x] **P1 (done 2026-07-05):** Command palette `Ctrl/Cmd+K` (verified in `useWorkspaceKeyboard`; also fixed missing `Ctrl/Cmd+Z` undo binding) + catalog search cap ≤24 (`OPEN3D_CATALOG_RESULT_CAP`, REC-02). REC-03 bottom command/status surface verified materially present (status pills + palette trigger + aria-live). Tests: `open3dWorkspaceKeyboard.test.tsx`, `catalogSearchCap.test.ts`. Evidence: `results/planner/phase-1a/p1-catalog-palette/`. Remaining nit: explicit modifier-key hints in status bar.
 - [ ] Full draw → save → reload acceptance workflow (§11A in `02-PHASE-1.md`).
-- [ ] **UI-1 L1 shell** not signed off — `lint:ui:strict` not in `release:gate:fast`.
+- [x] **UI-1 L1 shell** signed off — `lint:ui:strict` added to `release:gate:fast`. Evidence: `results/planner/phase-1a/lint-ui-strict/`.
 
 ### 1B — SVG production path
 

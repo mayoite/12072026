@@ -8,7 +8,7 @@
     "build": "next build && node scripts/prepare-standalone.cjs",
     "start": "node .next/standalone/site/server.js",
     "release:gate": "npm run test:audit:hollow && npm run test:audit:gate-skips && npm run test:audit:eslint-disable && npm run lint && npm run typecheck && npm run test && npm run build && npm run test:a11y && npm run test:planner-catalog && npm run test:coverage && npm run test:coverage:site",
-    "release:gate:fast": "npm run lint && npm run typecheck && npm run test && npm run test:audit:hollow -- --exclude-marketing && npm run test:audit:eslint-disable",
+    "release:gate:fast": "npm run lint && npm run typecheck && npm run test && npm run test:audit:hollow -- --exclude-marketing && npm run test:audit:eslint-disable && npm run lint:ui:strict",
     "seed": "npx tsx scripts/seed.ts",
     "seed:managed": "npx tsx scripts/seed_planner_managed_catalog.ts",
     "live:openrouter:failover": "npx tsx scripts/live_openrouter_failover_stress.ts",
