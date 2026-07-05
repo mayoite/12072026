@@ -1,8 +1,8 @@
 # 2026-07-04_handover-summary
 
-Phase 0 session handover. Full texts: `plans/archive/00-global-standard-revision/`.
+Phase 0 session handover. Full texts: `rules_plan/archive/00-global-standard-revision/`.
 
-Active routing: `plans/01-phase1-execution/00-handover-routing.md`.
+Active routing: `rules_plan/01-phase1-execution/00-handover-routing.md`.
 
 ---
 
@@ -28,7 +28,7 @@ Do not use old "Implemented + Verified-at-unit" claims. Evidence under `results/
 
 Design approved provisionally (`design §16` — live site pending).
 
-Bound into `plans/01-phase1-execution/`: I-D GS framework, Q-G gate, `review-workflow.md`.
+Bound into `rules_plan/01-phase1-execution/`: I-D GS framework, Q-G gate, `review-workflow.md`.
 
 Tracked failures moved to root `Failures.md` / `resolved-failures.md`.
 
@@ -76,4 +76,4 @@ Tracked failures moved to root `Failures.md` / `resolved-failures.md`.
 
 After `pnpm run dev`: validate UI panels, catalog search, SVG output, 2D↔3D, package chrome live.
 
-Cross-refs: `00-benchmark-summary.md`, `01-critique-summary.md`, `plans/01-phase1-execution/`.
+Cross-refs: `00-benchmark-summary.md`, `01-critique-summary.md`, `rules_plan/01-phase1-execution/`.

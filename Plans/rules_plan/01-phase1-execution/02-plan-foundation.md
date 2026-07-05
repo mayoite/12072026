@@ -25,7 +25,7 @@ Blockers: `PLAN-FAIL-0408` (coverage) is cross-phase. See root `Failures.md`.
 
 **Goal:** Lock governance before code.
 
-**Done:** Five governance files exist. `phase-00-precheck.md` PASS. Lockfile clean. R2 authority in I-D. `plans/01-phase1-execution/` on `main`.
+**Done:** Five governance files exist. `phase-00-precheck.md` PASS. Lockfile clean. R2 authority in I-D. `Plans/rules_plan/01-phase1-execution/` is the live governance path.
 
 **Left:** Flip status to Accepted. One commit boundary before Phase 01 if not already signed.
 

@@ -6,7 +6,7 @@ Execution model: Two phases (Phase 1 = 1A shell + 1B SVG path per revision)
 Pilot route: `/planner/open3d`  
 Promotion routes: `/planner/guest`, then `/planner/canvas` (Phase 2 only)
 
-**Architecture cross-refs:** [`docs/architecture/README.md`](../docs/architecture/README.md) · [`MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md) · [`MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md) · [`docs/Lockedfiles/INDEX.md`](../docs/Lockedfiles/INDEX.md)
+**Architecture cross-refs:** [`docs/architecture/README.md`](../../docs/architecture/README.md) · [`MODULE-LAYOUT.md`](../../docs/architecture/MODULE-LAYOUT.md) · [`MODULE-UI-CONTRACT.md`](../../docs/architecture/MODULE-UI-CONTRACT.md) · [`docs/Lockedfiles/INDEX.md`](../../docs/Lockedfiles/INDEX.md)
 
 ## 1. Objective
 
@@ -155,7 +155,7 @@ Authority: **`PACKAGES.md` Option A** + [`00-REVISION.md`](00-REVISION.md). SVG.
 
 **Deferred (not Phase 1):** `@svgdotjs/svg.js` and selection/resize plugins — visual DOM authoring only if a proven gap remains after Puck + schema fields; must not enter planner chunks. **On disk today:** `@svgdotjs/*` may still appear in `site/package.json` until import-graph cleanup removes them (per revision).
 
-Admin compiler, sanitizer, resvg, and Sharp must never enter planner production chunks. Server pipeline code lives under `features/planner/open3d/catalog/svg/` and `features/planner/admin/svg-editor/` — see [`MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md) § Data & descriptors.
+Admin compiler, sanitizer, resvg, and Sharp must never enter planner production chunks. Server pipeline code lives under `features/planner/open3d/catalog/svg/` and `features/planner/admin/svg-editor/` — see [`MODULE-LAYOUT.md`](../../docs/architecture/MODULE-LAYOUT.md) § Data & descriptors.
 
 ### Explicitly Excluded
 
@@ -318,6 +318,6 @@ Draft -> Validate -> Preview -> Approve -> Publish
 
 Read [`00-REVISION.md`](00-REVISION.md) first. Execute **Phase 1A** then **Phase 1B** in [`02-PHASE-1.md`](02-PHASE-1.md), pass each track's gates, then execute [`03-PHASE-2.md`](03-PHASE-2.md).
 
-Place new open3d code per [`MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md). New UI modules per [`MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md). Domain snapshots: [`docs/Lockedfiles/INDEX.md`](../docs/Lockedfiles/INDEX.md).
+Place new open3d code per [`MODULE-LAYOUT.md`](../../docs/architecture/MODULE-LAYOUT.md). New UI modules per [`MODULE-UI-CONTRACT.md`](../../docs/architecture/MODULE-UI-CONTRACT.md). Domain snapshots: [`docs/Lockedfiles/INDEX.md`](../../docs/Lockedfiles/INDEX.md).
 
 Update [`04-HANDOVER.md`](04-HANDOVER.md) after every completed checklist group. Do not mark work verified without evidence from one unchanged revision under `results/<module>/<phase>/<cmd>/`.

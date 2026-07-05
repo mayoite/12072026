@@ -2,7 +2,7 @@
 
 **Status:** Complete (2026-07-05) — all batches applied; plan files renamed to `00-`…`09-` (see [`README.md`](README.md))  
 **Workflow:** Composer subagent batch → **this file** (revision calls) → executor/parent apply  
-**Does not replace:** `plann/00-REVISION.md` (product decisions)
+**Does not replace:** `fn_plan/00-REVISION.md` (product decisions)
 
 ---
 
@@ -53,7 +53,7 @@ docs/Lockedfiles/
 | C | `04-HANDOVER`, `01-START`, `02-PHASE-1`, `03-PHASE-2` | [Batch C](c4445117-051b-4e72-bfd9-f8ed738fb48b) | **Applied** |
 | D | Readme, DOC-MAP, ReadmeLocked | [Batch D](232dd56a-e3cb-434a-8dd4-fe22ee403178) | **Applied** |
 | **Executor** | Links, UI contract sync, planner/tests/ui-execution | [Doc executor](5763436a-5a22-4db3-baf4-9c0bd05def01) | **Applied** |
-| **Structure** | `Lockedfiles/<module>/` subdirs + `plann/README.md` | Parent | **Done** |
+| **Structure** | `Lockedfiles/<module>/` subdirs + `Plans/README.md` | Parent | **Done** |
 
 ---
 
@@ -61,7 +61,7 @@ docs/Lockedfiles/
 
 1. Batch D — routing  
 2. Batch A — architecture  
-3. Batch C — plann execution  
+3. Batch C — fn_plan execution  
 4. Batch B — locked module files  
 5. Move conduct + ui; delete `domain/` stubs after link sweep  
 6. `docs:sync` — **not** in this pass unless user asks  
@@ -77,6 +77,6 @@ docs/Lockedfiles/
 - [x] `domain/` redirect only (stubs remain — intentional)
 - [x] All architecture docs link MODULE-LAYOUT + README + INDEX
 - [x] Stale `Lockedfiles/domain/` links swept (2 intentional stubs only)
-- [x] `plann/` files numbered `00-`…`09-`; cross-refs updated
+- [x] `fn_plan/` files numbered `00-`…`09-`; cross-refs updated
 - [x] `planner/proposed.md` points at `features/planner/open3d/`
 - [x] `ReadmeLocked.md` lists module subdirs

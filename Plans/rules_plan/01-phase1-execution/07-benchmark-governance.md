@@ -4,7 +4,7 @@ Date: 2026-07-05
 
 Merged from plan-revision and Global Standard notes.
 
-Primary report: `plans/00-global-standard-revision/00-benchmark-summary.md`. Full text: `plans/archive/00-global-standard-revision/benchmark.md`.
+Primary report: `rules_plan/00-global-standard-revision/00-benchmark-summary.md`. Full text: `rules_plan/archive/00-global-standard-revision/benchmark.md`.
 
 Design: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`.
 

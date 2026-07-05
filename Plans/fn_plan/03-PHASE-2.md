@@ -2,7 +2,7 @@
 
 Status: Planned  
 Depends on: **Phase 1A + 1B** accepted on one unchanged revision (per [`00-REVISION.md`](00-REVISION.md) Decision 4)  
-Authority: [`01-START.md`](01-START.md) · [`02-PHASE-1.md`](02-PHASE-1.md) · [`docs/architecture/README.md`](../docs/architecture/README.md)
+Authority: [`01-START.md`](01-START.md) · [`02-PHASE-1.md`](02-PHASE-1.md) · [`docs/architecture/README.md`](../../docs/architecture/README.md)
 
 ## Outcome
 
@@ -113,7 +113,7 @@ A globally competitive planner with full mobile editing, production-grade 3D con
 
 ## 8. Promotion
 
-Prerequisite: Phase 1A + 1B sign-off on one revision. Promote shell and command layer from `features/planner/open3d/` per [`MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md).
+Prerequisite: Phase 1A + 1B sign-off on one revision. Promote shell and command layer from `features/planner/open3d/` per [`MODULE-LAYOUT.md`](../../docs/architecture/MODULE-LAYOUT.md).
 
 - [ ] Accept Open3D Phase 1 (1A + 1B) on one unchanged revision.
 - [ ] Promote the shared shell and command layer to `/planner/guest`.

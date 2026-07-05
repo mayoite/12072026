@@ -22,11 +22,11 @@ Open files **top to bottom** for execution authority. `RESEARCH-*` files are ref
 
 | Need | Open |
 |------|------|
-| Where code goes | [`docs/architecture/MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md) |
-| UI anti-drift | [`docs/architecture/MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md) |
-| Domain snapshots | [`docs/Lockedfiles/INDEX.md`](../docs/Lockedfiles/INDEX.md) |
+| Where code goes | [`docs/architecture/MODULE-LAYOUT.md`](../../docs/architecture/MODULE-LAYOUT.md) |
+| UI anti-drift | [`docs/architecture/MODULE-UI-CONTRACT.md`](../../docs/architecture/MODULE-UI-CONTRACT.md) |
+| Domain snapshots | [`docs/Lockedfiles/INDEX.md`](../../docs/Lockedfiles/INDEX.md) |
 | Package pins | repo-root `PACKAGES.md` |
-| Governance (pins, GS, gates) | [`plans/README.md`](../plans/README.md) → `01-implementation-decisions.md` |
+| Governance (pins, GS, gates) | [`rules_plan/README.md`](../rules_plan/README.md) → `01-implementation-decisions.md` |
 
 ## Research (not execution)
 

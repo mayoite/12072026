@@ -4,7 +4,7 @@ Status: In progress — **1A** (shell) then **1B** (SVG path) per [`00-REVISION.
 Depends on: [`01-START.md`](01-START.md)  
 Promotion target: `/planner/open3d` only (guest/canvas remain Phase 2)
 
-**Layout:** new open3d code → [`docs/architecture/MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md) · **UI:** [`MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md) · **Domain:** [`docs/Lockedfiles/INDEX.md`](../docs/Lockedfiles/INDEX.md)
+**Layout:** new open3d code → [`docs/architecture/MODULE-LAYOUT.md`](../../docs/architecture/MODULE-LAYOUT.md) · **UI:** [`MODULE-UI-CONTRACT.md`](../../docs/architecture/MODULE-UI-CONTRACT.md) · **Domain:** [`docs/Lockedfiles/INDEX.md`](../../docs/Lockedfiles/INDEX.md)
 
 ## Outcome
 

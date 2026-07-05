@@ -1,7 +1,7 @@
 # Governance plans — read in order
 
 **Baseline:** 2026-07-05  
-**Product execution** lives in [`plann/README.md`](../plann/README.md) — open that for day-to-day 1A/1B work.  
+**Product execution** lives in [`fn_plan/README.md`](../fn_plan/README.md) — open that for day-to-day 1A/1B work.  
 **This folder** holds binding governance: benchmarks, implementation decisions, quality gates.
 
 ## Packs (top → bottom)
@@ -51,10 +51,10 @@
 
 ```text
 PACKAGES.md
-  → plans/01-phase1-execution/01-implementation-decisions.md
-  → plans/00-global-standard-revision/00-benchmark-summary.md
-  → plann/00-REVISION.md (product sequencing — overrides conflicting plann text)
-  → plann/01-START.md … 04-HANDOVER.md
+  → rules_plan/01-phase1-execution/01-implementation-decisions.md
+  → rules_plan/00-global-standard-revision/00-benchmark-summary.md
+  → fn_plan/00-REVISION.md (product sequencing — overrides conflicting execution text)
+  → fn_plan/01-START.md … 04-HANDOVER.md
 ```
 
-When `plann/` and `PACKAGES.md` conflict on SVG tooling, **PACKAGES.md wins**.
+When `fn_plan/` and `PACKAGES.md` conflict on SVG tooling, **PACKAGES.md wins**.

@@ -1,10 +1,10 @@
 # critique-summary
 
-Phase 0 governance critique. Full text: `plans/archive/00-global-standard-revision/critique.md`.
+Phase 0 governance critique. Full text: `rules_plan/archive/00-global-standard-revision/critique.md`.
 
-Expanded review: `plans/archive/00-global-standard-revision/critic/` (01–09).
+Expanded review: `rules_plan/archive/00-global-standard-revision/critic/` (01–09).
 
-Expanded copy: `plans/00-global-standard-revision/03-03-critique-expanded.md`.
+Expanded copy: `rules_plan/00-global-standard-revision/03-critique-expanded.md`.
 
 ---
 

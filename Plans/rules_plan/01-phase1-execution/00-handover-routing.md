@@ -1,8 +1,8 @@
 # Planner handover routing
 
-Date: 2026-07-05. **Start here** for all planner plan paths. Index: [`../README.md`](../README.md).
+Date: 2026-07-05. **Start here** for all planner plan paths. Index: [`../../README.md`](../../README.md).
 
-## Phase 0 — `plans/00-global-standard-revision/`
+## Phase 0 — `rules_plan/00-global-standard-revision/`
 
 | # | File | Role |
 |---|------|------|
@@ -11,23 +11,23 @@ Date: 2026-07-05. **Start here** for all planner plan paths. Index: [`../README.
 | 02 | `02-handover-summary.md` | Session handover |
 | 03 | `03-critique-expanded.md` | Full critique copy |
 
-Archive (immutable): `plans/archive/00-global-standard-revision/`.
+Archive (immutable): `rules_plan/archive/00-global-standard-revision/`.
 
-## Phase 1 — `plans/01-phase1-execution/`
+## Phase 1 — `rules_plan/01-phase1-execution/`
 
 | # | File | Role |
 |---|------|------|
-| 00 | `00-00-handover-routing.md` | This file — route map |
-| 01 | `01-01-implementation-decisions.md` | **Binding** decisions |
-| 02 | `02-02-plan-foundation.md` | Phases 00–03 |
-| 03 | `03-03-plan-delivery.md` | Phases 04–07 |
-| 04 | `04-04-plan-closeout.md` | Phases 08–10 |
-| 05 | `05-05-benchmark-foundation.md` | Benchmarks 00–03 |
-| 06 | `06-06-benchmark-delivery.md` | Benchmarks 04–07 |
-| 07 | `07-07-benchmark-governance.md` | Benchmarks 08–10 |
-| 08 | `08-08-quality-gates.md` | Gates |
-| 09 | `09-09-design-benchmark-protocol.md` | Benchmark protocol |
-| 10 | `10-10-review-workflow.md` | Review workflow |
+| 00 | `00-handover-routing.md` | This file — route map |
+| 01 | `01-implementation-decisions.md` | **Binding** decisions |
+| 02 | `02-plan-foundation.md` | Phases 00–03 |
+| 03 | `03-plan-delivery.md` | Phases 04–07 |
+| 04 | `04-plan-closeout.md` | Phases 08–10 |
+| 05 | `05-benchmark-foundation.md` | Benchmarks 00–03 |
+| 06 | `06-benchmark-delivery.md` | Benchmarks 04–07 |
+| 07 | `07-benchmark-governance.md` | Benchmarks 08–10 |
+| 08 | `08-quality-gates.md` | Gates |
+| 09 | `09-design-benchmark-protocol.md` | Benchmark protocol |
+| 10 | `10-review-workflow.md` | Review workflow |
 
 Failures: root `Failures.md`, `resolved-failures.md`.
 

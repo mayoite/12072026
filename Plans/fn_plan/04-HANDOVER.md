@@ -10,8 +10,8 @@ Rollback path: Existing Open3D route and explicit Fabric fallback routes
 
 ```text
 00-REVISION.md
-  → PACKAGES.md + plans/01-phase1-execution/01-implementation-decisions.md
-  → plann/01-START.md, 02-PHASE-1.md, 03-PHASE-2.md (this file)
+  → PACKAGES.md + rules_plan/01-phase1-execution/01-implementation-decisions.md
+  → fn_plan/01-START.md, 02-PHASE-1.md, 03-PHASE-2.md (this file)
   → docs/architecture/MODULE-LAYOUT.md (where new code goes)
   → docs/architecture/MODULE-UI-CONTRACT.md (surface anti-drift)
   → docs/Lockedfiles/INDEX.md (module current/proposed pairs)
@@ -19,10 +19,10 @@ Rollback path: Existing Open3D route and explicit Fabric fallback routes
 
 | Doc | Role |
 |-----|------|
-| [`docs/architecture/README.md`](../docs/architecture/README.md) | Architecture index — open first for layout, CSS, data flow |
-| [`docs/architecture/MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md) | New code → `features/planner/open3d/`; thin `app/` routes |
-| [`docs/architecture/MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md) | Layer → surface → module; `lint:ui` gates |
-| [`docs/Lockedfiles/INDEX.md`](../docs/Lockedfiles/INDEX.md) | Domain snapshots (`<module>/current` / `proposed`) |
+| [`docs/architecture/README.md`](../../docs/architecture/README.md) | Architecture index — open first for layout, CSS, data flow |
+| [`docs/architecture/MODULE-LAYOUT.md`](../../docs/architecture/MODULE-LAYOUT.md) | New code → `features/planner/open3d/`; thin `app/` routes |
+| [`docs/architecture/MODULE-UI-CONTRACT.md`](../../docs/architecture/MODULE-UI-CONTRACT.md) | Layer → surface → module; `lint:ui` gates |
+| [`docs/Lockedfiles/INDEX.md`](../../docs/Lockedfiles/INDEX.md) | Domain snapshots (`<module>/current` / `proposed`) |
 
 ## Objective
 
@@ -30,7 +30,7 @@ Deliver the professional One&Only planner (**1A**) and the safe Lego-like SVG bl
 
 ## Completed (planning + partial implementation)
 
-- [x] Master architecture defined — see [`docs/architecture/README.md`](../docs/architecture/README.md).
+- [x] Master architecture defined — see [`docs/architecture/README.md`](../../docs/architecture/README.md).
 - [x] Global benchmark principles defined (`01-START.md` §3).
 - [x] Plan revision locked (Option A SVG, 1A/1B split).
 - [x] CSS and no-hardcoding contract defined (`MODULE-UI-CONTRACT.md`).
@@ -83,11 +83,11 @@ Do not mark 1A or 1B accepted without evidence from one unchanged revision per `
 |------|-----------|
 | Coordinator revision | [`00-REVISION.md`](00-REVISION.md) |
 | UI | [`06-UI-PLAN.md`](06-UI-PLAN.md) |
-| Module contract | [`docs/architecture/MODULE-UI-CONTRACT.md`](../docs/architecture/MODULE-UI-CONTRACT.md) |
-| Module layout | [`docs/architecture/MODULE-LAYOUT.md`](../docs/architecture/MODULE-LAYOUT.md) |
+| Module contract | [`docs/architecture/MODULE-UI-CONTRACT.md`](../../docs/architecture/MODULE-UI-CONTRACT.md) |
+| Module layout | [`docs/architecture/MODULE-LAYOUT.md`](../../docs/architecture/MODULE-LAYOUT.md) |
 | Doc revision batch | [`09-DOC-REVISION.md`](09-DOC-REVISION.md) |
 | Tests | [`08-TEST-PLAN.md`](08-TEST-PLAN.md) |
-| Locked modules | [`docs/Lockedfiles/INDEX.md`](../docs/Lockedfiles/INDEX.md) |
+| Locked modules | [`docs/Lockedfiles/INDEX.md`](../../docs/Lockedfiles/INDEX.md) |
 
 **Workflow:** Composer subagent drafts → coordinator revises → agent executes.  
 **Anti-drift:** layer → surface → module; new open3d code only under `features/planner/open3d/` per `MODULE-LAYOUT.md`.

@@ -3,9 +3,9 @@
 Review covers archived phase specs in `archive/plans/2026-07-05_phase1-execution/phases/` against
 `implementation-decisions.md`, `quality-gates.md`, `design-benchmark-protocol.md`,
 `handover-routing.md`, `FAILURESPLAN.md`, and `PACKAGES.md`. Cross-checked against
-`plans/00-global-standard-revision/00-00-benchmark-summary.md`.
+`rules_plan/00-global-standard-revision/00-benchmark-summary.md`.
 
-Cross-refs: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`, `plans/00-global-standard-revision/01-01-critique-summary.md`, `plans/archive/00-global-standard-revision/critic/` (expanded review), `benchmark-governance.md`.
+Cross-refs: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`, `rules_plan/00-global-standard-revision/01-critique-summary.md`, `rules_plan/archive/00-global-standard-revision/critic/` (expanded review), `benchmark-governance.md`.
 
 ## Coverage gaps
 
