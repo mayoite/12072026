@@ -8,7 +8,6 @@ import { render, screen } from "@testing-library/react";
 import { notFound } from "next/navigation";
 import SvgCatalogSlugPage, { generateMetadata } from "@/app/(site)/portal/svg-catalog/[slug]/page";
 import * as loader from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
-import * as registry from "@/app/(site)/portal/svg-catalog/puckBlockRegistry";
 
 vi.mock("next/navigation", () => ({ notFound: vi.fn(() => { throw new Error("404"); }) }));
 
@@ -61,5 +60,20 @@ describe("app/(site)/portal/svg-catalog/[slug]/page.tsx", () => {
     const meta = await generateMetadata({ params: Promise.resolve({ slug: "x" }) });
     expect(meta.title).toMatch(/x/);
     expect(meta.openGraph?.images).toBeTruthy();
+  });
+
+  it("05-PORT-09: generateMetadata OG image references R2/CDN thumb bucket, not public/svg-catalog", async () => {
+    const desc = { slug: "x", schemaVersion: "2026-07-04.v2", variant: "fixed" } as any;
+    (loader.tryLoad as any).mockReturnValue({ ok: true, value: desc });
+    const meta = await generateMetadata({ params: Promise.resolve({ slug: "x" }) });
+    const images = meta.openGraph?.images;
+    const image = Array.isArray(images) ? images[0] : images;
+    const url = typeof image === "object" && image !== null && "url" in image ? String(image.url) : String(image);
+    // Must resolve to the R2 thumb bucket (either the direct r2.cloudflarestorage.com
+    // account host, or the CDN fallback that fronts the same "site-block-thumbs" bucket)
+    // — never the on-disk public/svg-catalog/ SVG source path.
+    expect(url).toMatch(/site-block-thumbs\/x\.png$/);
+    expect(url).not.toMatch(/public\/svg-catalog/);
+    expect(url).not.toMatch(/\/svg-catalog\/.*\.svg$/);
   });
 });

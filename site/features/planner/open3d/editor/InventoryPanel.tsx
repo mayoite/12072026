@@ -27,6 +27,7 @@ import {
 import { INVENTORY_CATEGORIES, INVENTORY_ROOM_GROUPS } from "../catalog/inventory/inventoryTaxonomy";
 import { InventoryIcon } from "./inventoryIcons";
 import { InventorySearchIndex, type InventorySearchOptions, type InventorySearchResult } from "../catalog/inventory/inventoryIndex";
+import { OPEN3D_CATALOG_RESULT_CAP, capCatalogResults } from "../catalog/catalogSearch";
 import type { Open3dCatalogItem } from "../catalog/catalogTypes";
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
 import { Open3dCatalogClient } from "../catalog/catalogClient";
@@ -96,7 +97,7 @@ export function InventoryPanel({
   // Handle search when query changes
   useEffect(() => {
     const options: InventorySearchOptions = {
-      pageSize: 50,
+      pageSize: OPEN3D_CATALOG_RESULT_CAP,
       typoTolerance: true,
     };
 
@@ -295,7 +296,8 @@ export function InventoryPanel({
       }
     }
 
-    return items;
+    // REC-02: never render more than the catalogue cap, regardless of upstream page size.
+    return capCatalogResults(items);
   }, [searchResults.items, state.selectedCategoryId, state.selectedSubCategoryId]);
 
   // Get recent items from collections

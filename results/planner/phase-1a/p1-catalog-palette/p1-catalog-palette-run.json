@@ -1,0 +1,24 @@
+{
+  "command": "pnpm exec vitest run catalogSearchCap.test.ts open3dWorkspaceKeyboard.test.tsx open3dIconPolicy.test.tsx plannerCommandWiring.test.tsx workspaceShell.test.tsx --config vitest.site.config.ts --reporter=verbose",
+  "cwd": "d:/oandO04072026/site",
+  "module": "planner",
+  "phase": "phase-1a",
+  "cmd": "p1-catalog-palette",
+  "revision": "587bd909c5f4f37d221f7e8c60c98e5ce696df97",
+  "branch": "main",
+  "dirtyWorktree": true,
+  "operator": "kiro-agent",
+  "exitCode": 0,
+  "rawLog": "results/planner/phase-1a/p1-catalog-palette/p1-catalog-palette-raw.log",
+  "totals": { "files": 5, "filesPassed": 5, "tests": 40, "testsPassed": 40, "testsFailed": 0, "skipped": 0 },
+  "supporting": {
+    "typecheck": "pnpm run typecheck exit 0",
+    "lintScoped": "eslint on useWorkspaceKeyboard.ts, catalogSearch.ts, catalogSearchCap.test.ts, open3dWorkspaceKeyboard.test.tsx exit 0"
+  },
+  "items": [
+    "REC-02 catalogue cap \u226424: added OPEN3D_CATALOG_RESULT_CAP=24 + capCatalogResults() in catalogSearch.ts; InventoryPanel search pageSize 50 -> 24 and displayedItems capped. Test: catalogSearchCap.test.ts (4).",
+    "Command palette Ctrl/Cmd+K: verified existing binding in useWorkspaceKeyboard (mod+k -> openPalette). Also fixed a real gap: Ctrl/Cmd+Z undo was never bound (only redo existed) -> added mod+z (no shift) -> undo. Test: open3dWorkspaceKeyboard.test.tsx (4).",
+    "REC-03 bottom command/status surface: VERIFIED materially present (status bar shows active tool shortcut + guidance, measurement label, zoom, selection, placement, catalog + autosave status; 'Commands (Ctrl+K)' palette trigger; aria-live regions). Minor gap: no explicit modifier-key hints; not implemented to avoid guessing design. No code change."
+  ],
+  "classification": "PASS"
+}

@@ -41,7 +41,7 @@ Promotion target: `/planner/open3d` only (guest/canvas remain Phase 2)
 - [x] Define named panel, motion, z-index, touch, focus, and safe-area tokens.
 - [x] Open3d route imports `open3d-workspace.css` bundle (UI-0).
 - [ ] Move static presentation from JSX into CSS Modules (audit open).
-- [ ] Remove emoji controls and use Phosphor icons — **partial:** tool rail / top bar use Phosphor; `inventoryTaxonomy.ts` still uses emoji.
+- [x] Remove emoji controls and use Phosphor icons — `inventoryTaxonomy.ts` emoji (6 categories + 9 room groups) replaced with stable Phosphor icon keys; new `editor/inventoryIcons.tsx` maps keys → Phosphor glyphs; `InventoryPanel` renders them. Guarded by `open3dIconPolicy.test.tsx`. Evidence: `results/planner/phase-1a/icon-policy/`.
 - [ ] Remove raw visual values and duplicated responsive rules.
 - [ ] Add compact and touch density modes.
 - [ ] Add reduced-motion, forced-colors, print, focus, selected, disabled, warning, and error states.
@@ -75,8 +75,8 @@ Promotion target: `/planner/open3d` only (guest/canvas remain Phase 2)
 - [ ] Implement select, pan, room, wall, opening, dimension, and placement states.
 - [ ] `Escape` cancels uncommitted work.
 - [ ] `Enter` commits valid numeric or drawing input.
-- [ ] `Space` temporarily pans without losing the armed tool.
-- [ ] Display active tool, shortcut, modifiers, and measurement input.
+- [x] `Space` temporarily pans without losing the armed tool (implemented in `useWorkspaceKeyboard` begin/endTemporaryPan; not yet covered by a dedicated test).
+- [x] Display active tool, shortcut, and measurement input (status bar pills in `OOPlannerWorkspace`); explicit modifier-key hints still pending (nit).
 - [ ] Add grid, origin, scale, zoom, fit, snap state, and drawing bounds.
 - [ ] Add first-use actions: draw room, start from template, import floorplan.
 - [ ] Explain invalid operations without discarding recoverable work.

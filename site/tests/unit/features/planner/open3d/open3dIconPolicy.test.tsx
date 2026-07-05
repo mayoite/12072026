@@ -31,10 +31,27 @@ const ALLOWED_ICON_NAMES: readonly InventoryIconName[] = [
   "car",
 ];
 
-// Emoji / pictograph ranges. Deliberately excludes typographic punctuation
-// (en dash, ampersand) that legitimately appears in labels.
-const EMOJI_PATTERN =
-  /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE00}-\u{FE0F}\u{1F1E6}-\u{1F1FF}]/u;
+// Emoji / pictograph code-point ranges. Scanned per code point (rather than a
+// regex character class) to avoid combining-character pitfalls and to keep the
+// intent explicit. Deliberately excludes typographic punctuation (en dash,
+// ampersand) and variation selectors that legitimately appear in labels.
+const EMOJI_RANGES: ReadonlyArray<readonly [number, number]> = [
+  [0x1f000, 0x1faff],
+  [0x2600, 0x27bf],
+  [0x2b00, 0x2bff],
+  [0x1f1e6, 0x1f1ff],
+];
+
+function containsEmoji(value: string): boolean {
+  for (const char of value) {
+    const code = char.codePointAt(0);
+    if (code === undefined) continue;
+    if (EMOJI_RANGES.some(([start, end]) => code >= start && code <= end)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 afterEach(() => {
   cleanup();
@@ -55,7 +72,7 @@ describe("inventory taxonomy icon policy", () => {
 
   it("carries no emoji in taxonomy icon fields or labels", () => {
     const serialized = JSON.stringify([INVENTORY_CATEGORIES, INVENTORY_ROOM_GROUPS]);
-    expect(EMOJI_PATTERN.test(serialized)).toBe(false);
+    expect(containsEmoji(serialized)).toBe(false);
   });
 });
 

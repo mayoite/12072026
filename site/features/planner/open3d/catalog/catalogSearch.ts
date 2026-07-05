@@ -2,6 +2,25 @@ import Fuse from "fuse.js";
 
 import type { Open3dCatalogItem } from "./catalogTypes";
 
+/**
+ * Maximum catalogue results surfaced to the planner at once (REC-02,
+ * `00-REVISION.md` Decision 2 / `02-PHASE-1.md` §1A). Keeps the catalogue grid
+ * scannable and bounds render cost; deeper browsing happens through filters and
+ * categories rather than an unbounded result list.
+ */
+export const OPEN3D_CATALOG_RESULT_CAP = 24;
+
+/**
+ * Clamp a result list to the catalogue cap. Non-mutating; returns the input
+ * unchanged when already within the cap.
+ */
+export function capCatalogResults<T>(
+  items: readonly T[],
+  cap: number = OPEN3D_CATALOG_RESULT_CAP,
+): T[] {
+  return items.length > cap ? items.slice(0, cap) : [...items];
+}
+
 export interface PlannerCatalogCollectionItem {
   key: string;
   textValue: string;

@@ -1,0 +1,55 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+node.exe : stderr | tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 
+04-PIPELINE-RUNNER: timeout and maxBuffer contracts > returns 
+writeFixtureError when the per-call fixture cannot be written
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (stderr | tests/...nnot be written 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[DEBUG] writeFileSync ref function writeFileSync(path, data, options) {
+  options = g
+
+ Γåô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: timeout and maxBuffer contracts > DEFAULT_TIMEOUT_MS is 10_000 (Phase 04 ┬º04-SUB-02 contract)
+ Γåô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: timeout and maxBuffer contracts > DEFAULT_MAX_STDERR_BYTES is 1_000_000 (Phase 04 ┬º04-SUB-02 contract)
+ Γåô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: timeout and maxBuffer contracts > returns scriptUnavailable when generate-svg.mjs is missing
+ ├ù tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: timeout and maxBuffer contracts > returns writeFixtureError when the per-call fixture cannot be written 111ms
+   ΓåÆ expected true to be false // Object.is equality
+ Γåô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: timeout and maxBuffer contracts > returns timeoutError when the child process is killed by SIGTERM
+ Γåô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: timeout and maxBuffer contracts > returns nonZeroExit with truncated stderr when stderr exceeds the max buffer
+ Γåô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: descriptor input is shape-respecting > rejects inputs that don't carry a slug (TypeScript narrowed by caller)
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 1 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 
+04-PIPELINE-RUNNER: timeout and maxBuffer contracts > returns 
+writeFixtureError when the per-call fixture cannot be written
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ Γ¥» tests/unit/admin/svg-editor/svgPipelineRunner.test.ts:156:25
+    154|         timeoutMs: 1000,
+    155|       });
+    156|       expect(result.ok).toBe(false);
+       |                         ^
+    157|       if (result.ok) return;
+    158|       expect(result.reason).toBe("writeFixtureError");
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/1]ΓÄ
+»
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 skipped (7)
+   Start at  20:43:58
+   Duration  1.67s (transform 129ms, setup 387ms, import 145ms, tests 113ms, environment 684ms)
+

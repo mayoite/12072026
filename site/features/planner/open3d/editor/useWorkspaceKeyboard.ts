@@ -131,6 +131,12 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
         handlers.redo();
         return;
       }
+
+      if (mod && key === "z" && !event.shiftKey) {
+        event.preventDefault();
+        handlers.undo();
+        return;
+      }
     };
 
     const onKeyUp = (event: KeyboardEvent) => {

@@ -53,8 +53,8 @@ Deliver the professional One&Only planner (**1A**) and the safe Lego-like SVG bl
 ### 1A — Open3D shell
 
 - [x] **P0 (done 2026-07-05):** Route all document mutations through `executePlannerCommand`. `useWorkspaceCanvas` now treats history as the single source of truth (`project = history.present`) and routes `dispatch`/`undo`/`redo`/`updateProject` through the command layer via a `runCommand` seam; added a `document.update` command variant + `updateOpen3dProject` history helper. Locked items are now rejected through `dispatch` (previously ungated). Tests: `plannerCommandWiring.test.tsx`. Evidence: `results/planner/phase-1a/{vitest-command-wiring,typecheck,lint-scoped}/`.
-- [ ] **P1:** Phosphor-only chrome — emoji icons remain in `inventoryTaxonomy.ts`; partial Phosphor adoption in tool rail / top bar only.
-- [ ] **P1:** Bottom command / status surface (REC-03), command palette (`Ctrl/Cmd+K`), catalog search cap ≤24.
+- [x] **P1 (done 2026-07-05):** Phosphor-only chrome — emoji removed from `inventoryTaxonomy.ts`; new `editor/inventoryIcons.tsx` binds taxonomy icon keys to Phosphor glyphs (first Phosphor import in site source); `InventoryPanel` renders Phosphor. Guard: `open3dIconPolicy.test.tsx` (no emoji in taxonomy + renders svg per key). Evidence: `results/planner/phase-1a/icon-policy/`. Note: hand-rolled `ClearIcon`/`ChevronIcon` inline SVGs remain (not emoji; optional Phosphor migration later).
+- [x] **P1 (done 2026-07-05):** Command palette `Ctrl/Cmd+K` (verified in `useWorkspaceKeyboard`; also fixed missing `Ctrl/Cmd+Z` undo binding) + catalog search cap ≤24 (`OPEN3D_CATALOG_RESULT_CAP`, REC-02). REC-03 bottom command/status surface verified materially present (status pills + palette trigger + aria-live). Tests: `open3dWorkspaceKeyboard.test.tsx`, `catalogSearchCap.test.ts`. Evidence: `results/planner/phase-1a/p1-catalog-palette/`. Remaining nit: explicit modifier-key hints in status bar.
 - [ ] Full draw → save → reload acceptance workflow (§11A in `02-PHASE-1.md`).
 - [ ] **UI-1 L1 shell** not signed off — `lint:ui:strict` not in `release:gate:fast`.
 
@@ -128,7 +128,11 @@ Rejected:
 
 **1A P0:** ~~Wire `executePlannerCommand` through `useWorkspaceCanvas`~~ — **done 2026-07-05** (`plannerCommandWiring.test.tsx`, evidence under `results/planner/phase-1a/`).
 
-**1A P1 (now next):** Phosphor-only chrome — replace emoji controls in `inventoryTaxonomy.ts`; add `open3dIconPolicy.test.ts` guard. Then bottom command/status surface (REC-03), command palette (`Ctrl/Cmd+K`), catalog search cap ≤24.
+**1A P1 icons:** ~~replace emoji controls in `inventoryTaxonomy.ts`; add icon-policy guard~~ — **done 2026-07-05** (`open3dIconPolicy.test.tsx`, `results/planner/phase-1a/icon-policy/`).
+
+**1A P1:** ~~command palette, catalog cap ≤24, REC-03 status surface~~ — **done 2026-07-05** (`results/planner/phase-1a/p1-catalog-palette/`).
+
+**1A (now next):** §6 canvas tool states (select/pan/room/wall/opening/dimension/placement) + Escape/Enter/Space semantics end-to-end; §11A full draw → opening → place → edit → undo/redo → save → reload acceptance workflow; then the CSS hardcoding audit gate.
 
 **UI-1 L1:** `planner / L1 / shell` — frame before inventory module (`MODULE-UI-CONTRACT.md` § Layers).
 

@@ -1,37 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-05T15:10:53.126Z",
-  "consoleCount": 4,
-  "stderrCount": 1,
-  "stdoutCount": 3,
-  "entries": [
-    {
-      "content": "[phase-03a-benchmark-exceed] inventory search 1K p95=5.969ms stretch=50ms\n",
-      "taskId": "1827493543_5_5_0",
-      "time": 1783264247201,
-      "type": "stdout",
-      "testName": "03A-INV: Search Index > large inventory benchmarks > meets 1K search p95 budget under 100ms"
-    },
-    {
-      "content": "[advisorActions] revertLastSuggestion not fully implemented\n",
-      "taskId": "-1419440871_13_1",
-      "time": 1783264247442,
-      "type": "stderr",
-      "testName": "AI Advisor Actions (TDD: apply errors, preview, revert, layout branches) > previewSuggestionActions and revert cover layout and warn path"
-    },
-    {
-      "content": "[phase-03a-benchmark-exceed] inventory search 10K p95=51.185ms stretch=100ms\n",
-      "taskId": "1827493543_5_5_1",
-      "time": 1783264248217,
-      "type": "stdout",
-      "testName": "03A-INV: Search Index > large inventory benchmarks > meets 10K search p95 budget under 200ms"
-    },
-    {
-      "content": "[phase-03a-benchmark-exceed] SVG symbol generation p95=0.021ms stretch=5ms\n",
-      "taskId": "1827493543_5_5_2",
-      "time": 1783264248219,
-      "type": "stdout",
-      "testName": "03A-INV: Search Index > large inventory benchmarks > meets SVG symbol generation budget under 10ms p95"
-    }
-  ]
+  "generatedAt": "2026-07-05T15:17:35.610Z",
+  "consoleCount": 0,
+  "stderrCount": 0,
+  "stdoutCount": 0,
+  "entries": []
 }

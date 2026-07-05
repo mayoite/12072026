@@ -3,11 +3,14 @@
  * loadAll() -> card grid with thumbs (R2 PNG) + links to slug.
  * RSC. a11y roving + live region per spec.
  * GS: BP-05 (anti-copy, 1 Render), design §7/9, I-D; uses loader + alias for registry (no fork).
+ *
+ * Roving-focus keyboard nav lives in the client boundary `SvgCatalogGrid.tsx`
+ * (ArrowUp/Down/Left/Right + Home/End, WAI-ARIA roving tabindex) since RSC
+ * pages cannot own DOM focus state.
  */
 
-import Link from "next/link";
-import Image from "next/image";
 import { loadAll } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+import { SvgCatalogGrid } from "./SvgCatalogGrid";
 
 const THUMB_BUCKET = "site-block-thumbs";
 
@@ -37,31 +40,14 @@ export default async function SvgCatalogIndex() {
       {descriptors.length === 0 ? (
         <p>No blocks published yet.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4" role="list">
-          {descriptors.map((d) => (
-            <Link
-              key={d.slug}
-              href={`/portal/svg-catalog/${d.slug}`}
-              className="block border rounded p-3 hover:bg-muted"
-              role="listitem"
-            >
-              <div className="mb-2">
-                <Image
-                  src={thumbUrl(d.slug)}
-                  alt={`${d.slug} thumbnail`}
-                  width={240}
-                  height={120}
-                  className="w-full h-auto"
-                />
-              </div>
-              <div>
-                <code>{d.slug}</code>
-                <span className="ml-2 text-xs opacity-70">{d.variant}</span>
-              </div>
-              <div className="text-xs text-muted">v{d.schemaVersion}</div>
-            </Link>
-          ))}
-        </div>
+        <SvgCatalogGrid
+          cards={descriptors.map((d) => ({
+            slug: d.slug,
+            variant: d.variant,
+            schemaVersion: d.schemaVersion,
+            thumbUrl: thumbUrl(d.slug),
+          }))}
+        />
       )}
     </div>
   );
