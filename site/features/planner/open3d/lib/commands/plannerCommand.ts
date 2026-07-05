@@ -9,11 +9,17 @@ import {
   redoOpen3dAction,
   type Open3dHistoryState,
   undoOpen3dAction,
+  updateOpen3dProject,
 } from "../../store/history";
 
 export type PlannerCommand =
   | { type: "document.apply"; action: Open3dProjectAction; now?: string }
   | { type: "document.transaction"; actions: readonly Open3dProjectAction[]; now?: string }
+  | {
+      type: "document.update";
+      updater: (project: Open3dProject) => Open3dProject;
+      now?: string;
+    }
   | { type: "history.undo" }
   | { type: "history.redo" };
 
@@ -49,6 +55,11 @@ export function executePlannerCommand(
   }
   if (command.type === "history.redo") {
     const next = redoOpen3dAction(history);
+    return { status: next === history ? "noop" : "applied", history: next };
+  }
+
+  if (command.type === "document.update") {
+    const next = updateOpen3dProject(history, command.updater, command.now);
     return { status: next === history ? "noop" : "applied", history: next };
   }
 

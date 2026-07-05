@@ -374,6 +374,9 @@ describe("02-LOADER: storage boundary", () => {
   // would either include bad entry or throw; test asserts only valids loaded.
   it("loadAll skips entries that fail parseBlockDescriptor (e.g. non-object json or schema fail) and only returns valid", () => {
     mkdirSync(tmpDir, { recursive: true });
+    // freezeWithChecksum produces a descriptor with slug "chaise" (from baseFixture/freezeWithChecksum).
+    // Writing it to "good.json" exercises the filename-slug decoupling: loadAll reads it via
+    // tryLoad("good", ...), parses the body, and returns the descriptor whose slug is "chaise".
     const good = freezeWithChecksum(1700000000);
     writeFileSync(path.join(tmpDir, "good.json"), JSON.stringify(good));
     // non-object after parse -> parse err -> skipped
@@ -381,6 +384,7 @@ describe("02-LOADER: storage boundary", () => {
     writeFileSync(path.join(tmpDir, "null.json"), "null");
     const all = loadAll({ dir: tmpDir, forceReload: true });
     expect(all).toHaveLength(1);
-    expect(all[0]?.slug).toBe("good");
+    // The descriptor body's slug is "chaise" regardless of the filename "good.json".
+    expect(all[0]?.slug).toBe("chaise");
   });
 });

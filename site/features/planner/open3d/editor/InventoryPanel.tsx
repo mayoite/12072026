@@ -25,6 +25,7 @@ import {
   isInventoryFavorite,
 } from "../catalog/inventory/inventoryState";
 import { INVENTORY_CATEGORIES, INVENTORY_ROOM_GROUPS } from "../catalog/inventory/inventoryTaxonomy";
+import { InventoryIcon } from "./inventoryIcons";
 import { InventorySearchIndex, type InventorySearchOptions, type InventorySearchResult } from "../catalog/inventory/inventoryIndex";
 import type { Open3dCatalogItem } from "../catalog/catalogTypes";
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
@@ -360,7 +361,9 @@ export function InventoryPanel({
             onClick={() => handleRoomFilterClick(room.id)}
             aria-pressed={state.selectedRoomGroupId === room.id ? "true" : "false"}
           >
-            <span className={styles.filterChipIcon}>{room.icon}</span>
+            <span className={styles.filterChipIcon}>
+              <InventoryIcon name={room.icon} />
+            </span>
             <span className={styles.filterChipLabel}>{room.label}</span>
           </button>
         ))}
@@ -391,7 +394,9 @@ export function InventoryPanel({
                 aria-expanded={expandedCategories.has(category.id) ? "true" : "false"}
                 aria-pressed={state.selectedCategoryId === category.id ? "true" : "false"}
               >
-                <span className={styles.categoryIcon}>{category.icon}</span>
+                <span className={styles.categoryIcon}>
+                  <InventoryIcon name={category.icon} />
+                </span>
                 <span className={styles.categoryLabel}>{category.label}</span>
                 {category.subCategories.length > 0 && (
                   <span className={`${styles.categoryChevron} ${expandedCategories.has(category.id) ? styles.categoryChevronOpen : ""}`}>

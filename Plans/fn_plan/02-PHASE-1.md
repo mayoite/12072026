@@ -53,8 +53,8 @@ Promotion target: `/planner/open3d` only (guest/canvas remain Phase 2)
 - [x] Define `PlannerCommand` type and `executePlannerCommand` (unit-tested).
 - [x] Define `PlannerToolState`.
 - [x] Define `PlannerSelection` type (`store/selection.ts`).
-- [ ] **P0:** Route all document mutations through `executePlannerCommand` — canvas hook still calls `dispatchOpen3dAction` directly.
-- [ ] Restrict zundo history to successful document commands (enforced in command layer; not wired through all surfaces).
+- [x] **P0:** Route all document mutations through `executePlannerCommand` — `useWorkspaceCanvas` now derives the document from `history.present` and routes `dispatch`/`undo`/`redo`/`updateProject` through the command layer (new `document.update` variant). Evidence: `results/planner/phase-1a/vitest-command-wiring/`.
+- [x] Restrict history to successful document commands (command layer is the sole write seam; locked-item mutations now rejected through `dispatch`, proven by `plannerCommandWiring.test.tsx`).
 - [ ] Exclude panels, search, loading, camera, and notifications from document undo.
 - [x] Add preference schema versioning and corrupt-state recovery.
 - [x] Preserve document data when preferences fail validation.

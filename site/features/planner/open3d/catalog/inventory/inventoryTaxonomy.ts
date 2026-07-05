@@ -14,6 +14,30 @@ import type {
   Open3dStyleTag,
 } from "../catalogTypes";
 
+// ── Icon keys ──
+
+/**
+ * Stable, presentation-free icon keys. Each maps to a Phosphor glyph in
+ * `editor/inventoryIcons.tsx`. The taxonomy stays a pure data module (no JSX,
+ * no emoji); rendering is the component's concern. Phosphor is the exclusive
+ * planner icon system per `01-START.md` §5 and `00-REVISION.md` Decision 3.
+ */
+export type InventoryIconName =
+  | "armchair"
+  | "lightbulb"
+  | "image"
+  | "plant"
+  | "fork-knife"
+  | "ruler"
+  | "house"
+  | "couch"
+  | "bed"
+  | "cooking-pot"
+  | "shower"
+  | "briefcase"
+  | "tree"
+  | "car";
+
 // ── Stable category IDs ──
 
 export type InventoryCategoryId = string;
@@ -31,8 +55,8 @@ export interface InventoryCategory {
   sortOrder: number;
   /** Whether this category is expanded by default */
   defaultExpanded: boolean;
-  /** Icon/emoji for quick visual identification */
-  icon: string;
+  /** Phosphor icon key (see `editor/inventoryIcons.tsx`) for quick visual identification */
+  icon: InventoryIconName;
 }
 
 export interface InventorySubCategory {
@@ -52,7 +76,7 @@ export const INVENTORY_CATEGORIES: InventoryCategory[] = [
     label: "Furniture",
     sortOrder: 1,
     defaultExpanded: true,
-    icon: "🪑",
+    icon: "armchair",
     subCategories: [
       { id: "sofas", label: "Sofas & Sectionals", filterTags: ["sofa", "sectional", "loveseat"], sortOrder: 1 },
       { id: "chairs", label: "Chairs", filterTags: ["chair", "seat", "stool"], sortOrder: 2 },
@@ -68,7 +92,7 @@ export const INVENTORY_CATEGORIES: InventoryCategory[] = [
     label: "Lighting",
     sortOrder: 2,
     defaultExpanded: false,
-    icon: "💡",
+    icon: "lightbulb",
     subCategories: [
       { id: "ceiling", label: "Ceiling Lights", filterTags: ["ceiling", "chandelier", "pendant"], sortOrder: 1 },
       { id: "floor", label: "Floor Lamps", filterTags: ["floor", "lamp"], sortOrder: 2 },
@@ -81,7 +105,7 @@ export const INVENTORY_CATEGORIES: InventoryCategory[] = [
     label: "Decor",
     sortOrder: 3,
     defaultExpanded: false,
-    icon: "🖼️",
+    icon: "image",
     subCategories: [
       { id: "rugs", label: "Rugs", filterTags: ["rug"], sortOrder: 1 },
       { id: "plants", label: "Plants", filterTags: ["plant"], sortOrder: 2 },
@@ -94,7 +118,7 @@ export const INVENTORY_CATEGORIES: InventoryCategory[] = [
     label: "Outdoor",
     sortOrder: 4,
     defaultExpanded: false,
-    icon: "🌿",
+    icon: "plant",
     subCategories: [
       { id: "patio", label: "Patio Furniture", filterTags: ["patio", "outdoor"], sortOrder: 1 },
       { id: "grills", label: "BBQ & Fire Pits", filterTags: ["bbq", "grill", "fire"], sortOrder: 2 },
@@ -106,7 +130,7 @@ export const INVENTORY_CATEGORIES: InventoryCategory[] = [
     label: "Kitchen & Dining",
     sortOrder: 5,
     defaultExpanded: false,
-    icon: "🍽️",
+    icon: "fork-knife",
     subCategories: [
       { id: "dining", label: "Dining", filterTags: ["dining", "table", "chair"], sortOrder: 1 },
       { id: "kitchen", label: "Kitchen", filterTags: ["kitchen", "cook"], sortOrder: 2 },
@@ -118,7 +142,7 @@ export const INVENTORY_CATEGORIES: InventoryCategory[] = [
     label: "Symbols",
     sortOrder: 6,
     defaultExpanded: false,
-    icon: "📐",
+    icon: "ruler",
     subCategories: [
       { id: "electrical", label: "Electrical", filterTags: ["electrical"], sortOrder: 1 },
       { id: "plumbing", label: "Plumbing", filterTags: ["plumbing"], sortOrder: 2 },
@@ -132,19 +156,19 @@ export interface InventoryRoomGroup {
   id: string;
   label: string;
   roomTags: Open3dRoomTag[];
-  icon: string;
+  icon: InventoryIconName;
 }
 
 export const INVENTORY_ROOM_GROUPS: InventoryRoomGroup[] = [
-  { id: "all-rooms", label: "All Rooms", roomTags: [], icon: "🏠" },
-  { id: "living", label: "Living Room", roomTags: ["Living Room"], icon: "🛋️" },
-  { id: "bedroom", label: "Bedroom", roomTags: ["Bedroom"], icon: "🛏️" },
-  { id: "kitchen", label: "Kitchen", roomTags: ["Kitchen"], icon: "🍳" },
-  { id: "bathroom", label: "Bathroom", roomTags: ["Bathroom"], icon: "🚿" },
-  { id: "office", label: "Office", roomTags: ["Office"], icon: "💼" },
-  { id: "dining", label: "Dining", roomTags: ["Dining"], icon: "🍽️" },
-  { id: "outdoor", label: "Outdoor", roomTags: ["Outdoor"], icon: "🌳" },
-  { id: "garage", label: "Garage", roomTags: ["Garage"], icon: "🚗" },
+  { id: "all-rooms", label: "All Rooms", roomTags: [], icon: "house" },
+  { id: "living", label: "Living Room", roomTags: ["Living Room"], icon: "couch" },
+  { id: "bedroom", label: "Bedroom", roomTags: ["Bedroom"], icon: "bed" },
+  { id: "kitchen", label: "Kitchen", roomTags: ["Kitchen"], icon: "cooking-pot" },
+  { id: "bathroom", label: "Bathroom", roomTags: ["Bathroom"], icon: "shower" },
+  { id: "office", label: "Office", roomTags: ["Office"], icon: "briefcase" },
+  { id: "dining", label: "Dining", roomTags: ["Dining"], icon: "fork-knife" },
+  { id: "outdoor", label: "Outdoor", roomTags: ["Outdoor"], icon: "tree" },
+  { id: "garage", label: "Garage", roomTags: ["Garage"], icon: "car" },
 ];
 
 // ── Style filter groups ──

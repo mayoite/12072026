@@ -70,7 +70,7 @@ export default async function AdminSvgEditorDetailPage({
   return (
     <div>
       <AdminSvgEditorEditView
-        slug={descriptor.slug}
+        slug={slug}
         descriptor={descriptor}
         updatedAtLabel={updatedAtLabel}
       />

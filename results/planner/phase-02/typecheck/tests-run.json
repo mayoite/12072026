@@ -1,0 +1,35 @@
+{
+  "phase": "02",
+  "label": "BlockDescriptor Schema + Loader — unit tests",
+  "date": "2026-07-05",
+  "command": "pnpm vitest run tests/unit/features/planner/open3d/catalog/ --reporter=verbose",
+  "cwd": "D:/oandO04072026/site",
+  "revision": "HEAD",
+  "exitCode": 0,
+  "result": "PASS",
+  "summary": {
+    "testFiles": 3,
+    "tests": 127,
+    "passed": 127,
+    "failed": 0,
+    "skipped": 0
+  },
+  "testFiles": [
+    "tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts",
+    "tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts",
+    "tests/unit/features/planner/open3d/catalog/blocksResolver.test.ts"
+  ],
+  "fix": {
+    "file": "tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts",
+    "test": "loadAll skips entries that fail parseBlockDescriptor (e.g. non-object json or schema fail) and only returns valid",
+    "issue": "Test wrote a fixture with slug='chaise' to good.json but asserted all[0]?.slug === 'good'. The loader returns the descriptor's slug from its JSON body, not from the filename. Fixed assertion to 'chaise'.",
+    "rootCause": "Incorrect expectation in the TDD repeat-cycle test — filename does not determine slug; JSON body does."
+  },
+  "checks": {
+    "02-CAT-01": "PASS — schema exports verified by 36 blockDescriptor tests",
+    "02-LOAD-01": "PASS — loadAll/loadBySlug/tryLoad verified by 22 loader tests",
+    "02-ERR-01": "PASS — all four Open3dDescriptorError kinds exercised (invalid/notFound/versionMismatch/hashMismatch)",
+    "parseFresh": "PASS — freezeFreshDescriptor tests (stamps generatedAt, idempotent, refuses hex tokens)",
+    "parseExisting": "PASS — freezeRewriteDescriptor + parseBlockDescriptor round-trip tests"
+  }
+}

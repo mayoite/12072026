@@ -1,10 +1,10 @@
 # benchmark-summary
 
-Phase 0 = governance and global-standard revision. Maps to execution **Phase 00** in `plan-foundation.md`.
+Phase 0 = governance and global-standard revision. Maps to execution **Phase 00** in `rules_plan/01-phase1-execution/02-plan-foundation.md`.
 
-Date: 2026-07-04. Immutable advisory.
+Date: 2026-07-04. Active benchmark reference. Advisory only; not execution authority.
 
-Authority: `rules_plan/01-phase1-execution/09-design-benchmark-protocol.md`, `rules_plan/01-phase1-execution/01-implementation-decisions.md`, `PACKAGES.md`.
+Referenced by live governance: `rules_plan/01-phase1-execution/09-design-benchmark-protocol.md`, `rules_plan/01-phase1-execution/01-implementation-decisions.md`, `PACKAGES.md`.
 
 Design spec: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`.
 

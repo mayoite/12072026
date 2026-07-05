@@ -1,5 +1,7 @@
 # critique-summary
 
+Historical critique snapshot. Reference-only; verify current status in implementation decisions, `Failures.md`, and live evidence.
+
 Phase 0 governance critique. Full text: `rules_plan/archive/00-global-standard-revision/critique.md`.
 
 Expanded review: `rules_plan/archive/00-global-standard-revision/critic/` (01–09).
@@ -42,7 +44,7 @@ From `critic/08` and `09`:
 
 ---
 
-## Current status (2026-07-05)
+## Status at critique time (2026-07-05)
 
 | Original blocker | Now |
 |------------------|-----|

@@ -69,6 +69,35 @@ export function redoOpen3dAction(history: Open3dHistoryState): Open3dHistoryStat
   };
 }
 
+/**
+ * Apply a functional updater to the current document and record it in history.
+ *
+ * Used for canvas interactions (wall/opening geometry, placement, entity edits)
+ * that are not expressible as a single {@link Open3dProjectAction}. Timestamp
+ * stamping mirrors the action reducer: if the updater did not change
+ * `updatedAt`, it is stamped so every recorded mutation advances the clock.
+ * Returns the same history reference when the updater is a no-op so callers can
+ * skip re-renders.
+ */
+export function updateOpen3dProject(
+  history: Open3dHistoryState,
+  updater: (project: Open3dProject) => Open3dProject,
+  now?: string,
+): Open3dHistoryState {
+  const updated = updater(history.present);
+  if (updated === history.present) return history;
+  const stamped =
+    updated.updatedAt === history.present.updatedAt
+      ? { ...updated, updatedAt: now ?? new Date().toISOString() }
+      : updated;
+  return {
+    past: [...history.past, history.present],
+    present: stamped,
+    future: [],
+    dragStart: null,
+  };
+}
+
 export function beginOpen3dDrag(history: Open3dHistoryState): Open3dHistoryState {
   return { ...history, dragStart: history.present };
 }

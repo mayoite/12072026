@@ -52,7 +52,7 @@ Deliver the professional One&Only planner (**1A**) and the safe Lego-like SVG bl
 
 ### 1A — Open3D shell
 
-- [ ] **P0:** Route all document mutations through `executePlannerCommand` — `useWorkspaceCanvas` still calls `dispatchOpen3dAction` directly.
+- [x] **P0 (done 2026-07-05):** Route all document mutations through `executePlannerCommand`. `useWorkspaceCanvas` now treats history as the single source of truth (`project = history.present`) and routes `dispatch`/`undo`/`redo`/`updateProject` through the command layer via a `runCommand` seam; added a `document.update` command variant + `updateOpen3dProject` history helper. Locked items are now rejected through `dispatch` (previously ungated). Tests: `plannerCommandWiring.test.tsx`. Evidence: `results/planner/phase-1a/{vitest-command-wiring,typecheck,lint-scoped}/`.
 - [ ] **P1:** Phosphor-only chrome — emoji icons remain in `inventoryTaxonomy.ts`; partial Phosphor adoption in tool rail / top bar only.
 - [ ] **P1:** Bottom command / status surface (REC-03), command palette (`Ctrl/Cmd+K`), catalog search cap ≤24.
 - [ ] Full draw → save → reload acceptance workflow (§11A in `02-PHASE-1.md`).
@@ -70,8 +70,9 @@ Deliver the professional One&Only planner (**1A**) and the safe Lego-like SVG bl
 | Check | Status | Notes |
 |-------|--------|-------|
 | Route shell / workspace tests | Present | `site/tests/unit/features/planner/open3d/workspaceShell.test.tsx` and related |
-| `PlannerCommand` unit tests | Pass (when run) | `phase1CommandCatalog.test.ts` — command layer only, not UI wiring |
-| Typecheck | Not re-run this session | Capture fresh evidence under `results/<module>/<phase>/<cmd>/` before acceptance |
+| `PlannerCommand` unit tests | Pass | `phase1CommandCatalog.test.ts` (6) + `plannerCommandWiring.test.tsx` (7) — command layer **and** UI hook wiring (33 total with `workspaceShell.test.tsx`); `results/planner/phase-1a/vitest-command-wiring/` |
+| Typecheck | Pass (2026-07-05, rev 587bd909) | `pnpm run typecheck` exit 0; `results/planner/phase-1a/typecheck/` |
+| Repo-wide lint | **Fail (pre-existing, unrelated)** | 130 errors in svg-editor/catalog/portal tests etc.; touched files pass scoped lint (`results/planner/phase-1a/lint-scoped/`). Tracked as `Failures.md` PLAN-FAIL-0410 |
 | `@svgdotjs/*` in `site/package.json` | **Still present** | Deferred per revision; remove when import graph confirms unused |
 | Evidence artifacts | **Stale / missing** | Prior `results/site/planner-phase-1/*` paths not verified on disk — re-capture before claiming pass |
 
@@ -125,11 +126,11 @@ Rejected:
 
 ## Next action
 
-**1A P0:** Wire `executePlannerCommand` through `useWorkspaceCanvas` and every other document mutation surface; add `plannerCommandWiring.test.ts`.
+**1A P0:** ~~Wire `executePlannerCommand` through `useWorkspaceCanvas`~~ — **done 2026-07-05** (`plannerCommandWiring.test.tsx`, evidence under `results/planner/phase-1a/`).
+
+**1A P1 (now next):** Phosphor-only chrome — replace emoji controls in `inventoryTaxonomy.ts`; add `open3dIconPolicy.test.ts` guard. Then bottom command/status surface (REC-03), command palette (`Ctrl/Cmd+K`), catalog search cap ≤24.
 
 **UI-1 L1:** `planner / L1 / shell` — frame before inventory module (`MODULE-UI-CONTRACT.md` § Layers).
-
-**TEST-1:** Red `plannerCommandWiring.test.ts` + `open3dIconPolicy.test.ts` alongside P0 wire.
 
 **1B P0 (after 1A P0):** Mount full `<Puck>` on admin svg-editor; unify compile path.
 

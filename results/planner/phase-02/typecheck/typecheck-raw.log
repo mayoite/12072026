@@ -1,0 +1,8 @@
+﻿node.exe : $ tsc -p tsconfig.json --noEmit
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ tsc -p tsconfig.json --noEmit:String) [], RemoteExcep 
+   tion
+    + FullyQualifiedErrorId : NativeCommandError
+ 

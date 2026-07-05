@@ -1,18 +1,20 @@
 # 2026-07-04_handover-summary
 
+Historical session handover. Reference-only; not a live routing or status authority.
+
 Phase 0 session handover. Full texts: `rules_plan/archive/00-global-standard-revision/`.
 
 Active routing: `rules_plan/01-phase1-execution/00-handover-routing.md`.
 
 ---
 
-## Routes (still true)
+## Routes at handover time
 
 - `/planner/guest` and `/planner/canvas` — live hybrid (`Open3dPlannerWorkspaceRoute`).
 - `/planner/open3d` — pilot (`Open3dPlannerHost`).
 - `/planner/fabric/*` — legacy fallback drill.
 
-Production deploy path remains Fabric-backed guest/canvas until Phase 10 flag.
+Historical note: this handover still carried a Fabric-backed framing for guest/canvas. Current route files show `/planner/guest` and `/planner/canvas` already route through `Open3dPlannerWorkspaceRoute`; use `rules_plan/01-phase1-execution/00-handover-routing.md` plus the live route files as authority.
 
 ---
 
@@ -52,7 +54,7 @@ Tracked failures moved to root `Failures.md` / `resolved-failures.md`.
 
 ---
 
-## Open items then (many progressed)
+## Open items at handover time
 
 - `pnpm add` locked package set.
 - `generate-svg.mjs` — script now exists (0402 resolved).

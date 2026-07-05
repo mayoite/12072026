@@ -5,11 +5,12 @@ import type { Open3dProject, Open3dPoint, Open3dWall, Open3dFloor } from "../mod
 import { readThemeColor } from "../shared/readThemeColor";
 import {
   createOpen3dHistory,
-  dispatchOpen3dAction,
-  undoOpen3dAction,
-  redoOpen3dAction,
   type Open3dHistoryState,
 } from "../store/history";
+import {
+  executePlannerCommand,
+  type PlannerCommand,
+} from "../lib/commands/plannerCommand";
 import { createOpen3dProject } from "../model/project";
 import type { Open3dProjectAction } from "../model/actions/projectActions";
 
@@ -71,16 +72,19 @@ export function useWorkspaceCanvas(
     return createOpen3dProject({ name: projectName });
   }, [initialProject, projectName]);
 
-  // Project state
-  const [project, setProject] = useState<Open3dProject>(initialProjectState);
-
-  // History state
+  // History is the single source of truth for the document. The command layer
+  // (`executePlannerCommand`) is the sole write authority: every document
+  // mutation, undo, and redo flows through it so history semantics and the
+  // locked-item permission gate live in one place.
   const [history, setHistory] = useState<Open3dHistoryState>(() =>
     createOpen3dHistory(initialProjectState),
   );
 
-  // Selection state
+  // Selection state (transient — never recorded in document history/undo).
   const [selection, setSelection] = useState<CanvasSelection>({ type: "none", ids: [] });
+
+  // Document is derived from history; the two can never drift.
+  const project = history.present;
 
   // Get active floor
   const activeFloor = useMemo(() => {
@@ -94,60 +98,40 @@ export function useWorkspaceCanvas(
   const canUndo = history.past.length > 0;
   const canRedo = history.future.length > 0;
 
-  // Dispatch action - updates project and history
+  // Single write seam: route a command through executePlannerCommand and commit
+  // the resulting history. Uses a functional setState so rapid successive
+  // commands always build on the latest history rather than a stale closure.
+  const runCommand = useCallback((command: PlannerCommand) => {
+    setHistory((current) => executePlannerCommand(current, command).history);
+  }, []);
+
+  // Dispatch a document action (locked-item gated by the command layer).
   const dispatch = useCallback(
     (action: Open3dProjectAction) => {
-      const nextHistory = dispatchOpen3dAction(history, action);
-      if (nextHistory !== history) {
-        setHistory(nextHistory);
-        setProject(nextHistory.present);
-      }
+      runCommand({ type: "document.apply", action });
     },
-    [history],
+    [runCommand],
   );
 
-  // Undo action
+  // Undo the last recorded document command.
   const undo = useCallback(() => {
-    const nextHistory = undoOpen3dAction(history);
-    if (nextHistory !== history) {
-      setHistory(nextHistory);
-      setProject(nextHistory.present);
-    }
-  }, [history]);
+    runCommand({ type: "history.undo" });
+  }, [runCommand]);
 
-  // Redo action
+  // Redo the last undone document command.
   const redo = useCallback(() => {
-    const nextHistory = redoOpen3dAction(history);
-    if (nextHistory !== history) {
-      setHistory(nextHistory);
-      setProject(nextHistory.present);
-    }
-  }, [history]);
+    runCommand({ type: "history.redo" });
+  }, [runCommand]);
 
-  // Update project directly (for canvas interactions like drawing walls)
+  // Functional document update (canvas interactions like drawing walls).
   const updateProject = useCallback(
     (updater: (project: Open3dProject) => Open3dProject) => {
-      setProject((current) => {
-        const updated = updater(current);
-        if (updated === current) return current;
-        const stamped =
-          updated.updatedAt === current.updatedAt
-            ? { ...updated, updatedAt: new Date().toISOString() }
-            : updated;
-        setHistory((h) => ({
-          past: [...h.past, h.present],
-          present: stamped,
-          future: [],
-          dragStart: null,
-        }));
-        return stamped;
-      });
+      runCommand({ type: "document.update", updater });
     },
-    [],
+    [runCommand],
   );
 
   const replaceProject = useCallback((next: Open3dProject) => {
-    setProject(next);
     setHistory(createOpen3dHistory(next));
     setSelection({ type: "none", ids: [] });
   }, []);

@@ -1,0 +1,25 @@
+{
+  "command": "pnpm exec vitest run tests/unit/features/planner/open3d/plannerCommandWiring.test.tsx tests/unit/features/planner/open3d/phase1CommandCatalog.test.ts tests/unit/features/planner/open3d/workspaceShell.test.tsx --config vitest.site.config.ts --reporter=verbose",
+  "cwd": "d:/oandO04072026/site",
+  "module": "planner",
+  "phase": "phase-1a",
+  "cmd": "vitest-command-wiring",
+  "revision": "587bd909c5f4f37d221f7e8c60c98e5ce696df97",
+  "branch": "main",
+  "dirtyWorktree": true,
+  "dirtyNote": "Working tree contains the 1A P0 command-wiring changes under test (useWorkspaceCanvas.ts, plannerCommand.ts, history.ts) plus the new plannerCommandWiring.test.tsx.",
+  "operator": "kiro-agent",
+  "startedAt": "2026-07-05T20:28:16Z",
+  "durationSeconds": 6.82,
+  "exitCode": 0,
+  "rawLog": "results/planner/phase-1a/vitest-command-wiring/vitest-command-wiring-raw.log",
+  "structuredResults": "results/tests/vitest-site-results.json",
+  "totals": { "files": 3, "filesPassed": 3, "tests": 33, "testsPassed": 33, "testsFailed": 0, "skipped": 0, "retries": 0 },
+  "coveredScope": [
+    "plannerCommandWiring.test.tsx (7 new): document.update command branch, locked-item gate through dispatch, functional-update history, undo/redo via command layer, replaceProject reset",
+    "phase1CommandCatalog.test.ts (6): existing command/selection/placement/persistence contracts",
+    "workspaceShell.test.tsx (20): existing hook + shell behavior (regression check for the refactor)"
+  ],
+  "consoleDiagnostics": "None. No unexpected console errors, warnings, act() warnings, skips, retries, or timeouts observed in raw log.",
+  "classification": "PASS — targeted planner unit + integration for the 1A P0 seam on one worktree revision."
+}

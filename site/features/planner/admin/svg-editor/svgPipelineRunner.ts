@@ -125,6 +125,8 @@ export function runSvgPipeline(
 
   try {
     mkdirSync(fixturesDir, { recursive: true });
+    // eslint-disable-next-line no-console
+    console.error("[DEBUG] writeFileSync ref", writeFileSync.toString().slice(0, 60));
     writeFileSync(fixturePath, `${JSON.stringify(descriptor, null, 2)}\n`, {
       encoding: "utf8",
     });

@@ -1,11 +1,13 @@
 # Plan Critique — 2026-07-04
 
-Review covers archived phase specs in `archive/plans/2026-07-05_phase1-execution/phases/` against
+Historical expanded critique of archived phase specs. Reference-only.
+
+Review covers archived phase specs in `archive/plans/planner Phase1/phases/` against
 `implementation-decisions.md`, `quality-gates.md`, `design-benchmark-protocol.md`,
-`handover-routing.md`, `FAILURESPLAN.md`, and `PACKAGES.md`. Cross-checked against
+`handover-routing.md`, `Failures.md`, and `PACKAGES.md`. Cross-checked against
 `rules_plan/00-global-standard-revision/00-benchmark-summary.md`.
 
-Cross-refs: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`, `rules_plan/00-global-standard-revision/01-critique-summary.md`, `rules_plan/archive/00-global-standard-revision/critic/` (expanded review), `benchmark-governance.md`.
+Cross-refs: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`, `rules_plan/00-global-standard-revision/01-critique-summary.md`, `rules_plan/archive/00-global-standard-revision/critic/` (expanded review), `rules_plan/01-phase1-execution/07-benchmark-governance.md`.
 
 ## Coverage gaps
 
@@ -26,8 +28,9 @@ dated `Decision log` entry. Real holes are narrow but locally sharp:
   invites honest-customer confusion. DXF-only label is safer.
 - **Phase 10 §10-CLN-05** — references `STAGING_PHASE_01A_RESIDUE`
   from an earlier Phase 01A which is not present in any current
-  phase file or in `FAILURESPLAN.md`. Treat as out-of-band artifact
-  until reconciliation is recorded in `FAILURESPLAN.md`.
+  phase file or in live `Failures.md` (older notes may use a
+  legacy failures filename). Treat as out-of-band artifact until
+  reconciliation is recorded in `Failures.md`.
 - **Phase 07 §07-TEST-04** — names
   `process.env.SUPABASE_SERVICE_KEY` as the leak signal, but the
   variable name is repo-dependent. The gate should be expressed
@@ -95,7 +98,7 @@ a p95 figure. Seven of ten phases have ≥ 3 rollback criteria; Phase
   let it consume checklist slots for v1 delivery.
 - **Phase 10 §10-CLN-05** references
   `STAGING_PHASE_01A_RESIDUE` from an unmodeled cycle. Either bring
-  it into scope (FAILURESPLAN entry) or excise the reference.
+  it into scope (`Failures.md` entry) or excise the reference.
 - **Phase 04 §04-ADMIN-04** appends both editor paths to
   `site/config/route-contract.json`; that contract file is
   authoritative in Phase 07 / Phase 06 and Phase 04 must not own
@@ -137,7 +140,7 @@ currently absent:
 
 Confirmed via grep: no `wip`, `todo`, `drafting`, `STUB`,
 `NOT_STARTED`, `FIXME`, `TBD`, or `XX-XX` literals in
-`plans/01-phase1-execution/phases/`. Every `Status:` header reads `Planned`.
+`archive/plans/planner Phase1/phases/`. Every `Status:` header reads `Planned`.
 `implementation-decisions.md` §24 vocabulary is followed verbatim
 in Decision logs and Exit gates. One minor surface label drift:
 "Removed-task" in Phase 04 §04-ADMIN-12 is non-vocabulary and likely
@@ -148,9 +151,10 @@ a typo.
 - **PACKAGES.md locked set** — every phase that imports a runtime
   package reconciles cleanly with PACKAGES.md Tier-1.
 - **`puckBlockRegistry.ts`** — Phase 04 owns declaration at
-  `features/planner/admin/puckBlockRegistry.ts` (reasoned from
-  Phase 04's narrative). Phase 05 references a re-export alias
-  at `site/admin/puckBlockRegistry.ts`. Two different paths.
+  `site/features/planner/admin/svg-editor/puckBlockRegistry.tsx`.
+  Phase 05 references a re-export alias at
+  `site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts`. Two
+  different paths.
   **Resolution**: pick one canonical path or document the alias
   relationship in `implementation-decisions.md`.
 - **JSON-on-disk location** — `site/block-descriptors/` is
@@ -168,41 +172,42 @@ a typo.
 
 ## Top 5 priority fixes (most impactful first)
 
-1. **`plans/01-phase1-execution/phases/02-catalog-source-of-truth-and-blockdescriptor.md` §02-CAT-08**
+1. **`archive/plans/planner Phase1/phases/02-catalog-source-of-truth-and-blockdescriptor.md` §02-CAT-08**
    — `generatedAt` rule contradicts §08-PERS-05 idempotency claim.
    Fix: stamp `generatedAt` once on first parse; subsequent parses
    preserve the existing value; document in Decision log.
 
-2. **`plans/01-phase1-execution/01-implementation-decisions.md` §96**
+2. **`rules_plan/01-phase1-execution/01-implementation-decisions.md` §96**
    — R2 bucket name `<bucket per implementation-decisions.md>` listed as still-needs-
    approval while every downstream phase locks it. Fix: move out
    of "still requiring explicit owner approval" or have all five
    downstream phases cite the approving owner/date.
 
-3. **`plans/01-phase1-execution/phases/02-catalog-source-of-truth-and-blockdescriptor.md` §02-ERR-01**
+3. **`archive/plans/planner Phase1/phases/02-catalog-source-of-truth-and-blockdescriptor.md` §02-ERR-01**
    — three competing 409 sources (`hashMismatch`, `lockBusy`,
    `save_conflict`) with overlapping semantics. Fix: introduce
    error-code sticky suffixes and reserve `probe_token` for the
    save-conflict variant.
 
-4. **`plans/01-phase1-execution/phases/08-persistence-and-migration.md` §08-PERS-10**
+4. **`archive/plans/planner Phase1/phases/08-persistence-and-migration.md` §08-PERS-10**
    — `.versionMismatch` mapped to HTTP `404`; should be `422` (or
    `400`). Fix: change mapping and surface `Open3dDescriptorError.versionMismatch`
    as a parse-time input rejection.
 
-5. **`plans/01-phase1-execution/phases/05-portal-public-render.md` §05-PORT-04**
-   — registry alias path (`site/admin/puckBlockRegistry.ts` vs
-   Phase 04's author location) drifts across files. Fix: document
-   the alias path in `implementation-decisions.md` or merge the
-   paths, then have Phase 07's registry import type-check both.
+5. **`archive/plans/planner Phase1/phases/05-portal-public-render.md` §05-PORT-04**
+   — registry alias path (`site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts`
+   vs `site/features/planner/admin/svg-editor/puckBlockRegistry.tsx`)
+   drifts across files. Fix: document the alias path in
+   `implementation-decisions.md` or merge the paths, then have
+   Phase 07's registry import type-check both.
 
 (Runner-up gaps worth sequencing after these five: Phase 07
 §07-AUTH-04 anonymous-vs-planner split; Phase 09 §09-EXP-05 DXF/DWF
 copy; Phase 10 §10-CLN-05 STAGING_PHASE_01A_RESIDUE scope drift.)
 
-## Acceptance recommendations
+## Review-time acceptance recommendation
 
-- **Verdict**: revise.
+- **Review-time verdict**: revise.
 - **Reason**: structural coverage is complete; the ten phases
   reconcile cleanly with PACKAGES.md and the locking decisions in
   `implementation-decisions.md`. The blockers are five small,
@@ -215,7 +220,7 @@ copy; Phase 10 §10-CLN-05 STAGING_PHASE_01A_RESIDUE scope drift.)
   1. Apply Top-5 fixes above in a single coordinated revision
      (one pass through IMPLEMENTATION-DECISIONS, Phase 02, Phase
      08, Phase 09, Phase 05).
-  2. Re-run `plans/2026-07-04/benchmark.md` with all
+  2. Re-run `archive/plans/2026-07-04/source/benchmark.md` with all
      ten phases in scope (the current benchmark covers only
      governance files + Phase 01).
   3. Add Forbidden-action lines for each phase per the

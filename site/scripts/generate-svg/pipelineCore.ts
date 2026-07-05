@@ -1,0 +1,323 @@
+/**
+ * site/scripts/generate-svg/pipelineCore.ts
+ *
+ * Pure, testable core of the Phase 03 SVG pipeline.
+ *
+ * Exports the polygon-ops, SVG assembly, and sanitizer steps that
+ * generate-svg.mjs uses at runtime. Separated so Vitest can import
+ * and exercise them without pulling in the R2 client, resvg, or the
+ * auto-executing main() from generate-svg.mjs.
+ *
+ * Phase 03 gate: 03-TEST-01 golden round-trip tests import from here.
+ * Anti-copy: uses site/app/css/ semantic tokens only (currentColor + --* vars).
+ * No hardcoded hex, no donor geometry.
+ *
+ * GS cite: GS-BP-03 · plans/01-phase1-execution/00-handover-routing.md · design §8.
+ */
+
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
+
+// Resolve __dirname in ES-module context.
+const _require = createRequire(import.meta.url);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// ── External deps (required via CJS bridge — same pattern as generate-svg.mjs) ──
+
+const polygonClipping = _require("polygon-clipping") as {
+  union: typeof import("polygon-clipping").union;
+  intersection: typeof import("polygon-clipping").intersection;
+  difference: typeof import("polygon-clipping").difference;
+  xor: typeof import("polygon-clipping").xor;
+};
+
+const svgo = _require("svgo") as typeof import("svgo");
+
+// ── Public error class (mirrors generate-svg.mjs) ─────────────────────────────
+
+export class Open3dPipelineError extends Error {
+  public readonly code: string;
+  constructor(code: string, message: string) {
+    super(message);
+    this.code = code;
+    this.name = "Open3dPipelineError";
+  }
+}
+
+// ── Sanitizer (same logic as generate-svg.mjs sanitiseSvg) ───────────────────
+
+const MAX_ATTR_SIZE = 4096;
+
+/**
+ * Sanitize an SVG string; throws Open3dPipelineError for unsafe content.
+ * Mirrors generate-svg.mjs sanitiseSvg exactly.
+ */
+export function sanitiseSvg(svg: string): string {
+  let result = svg;
+
+  result = result.replace(/<script[\s\S]*?<\/script>/gi, "");
+  result = result.replace(/<script[\s\S]*?\/>/gi, "");
+  result = result.replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, "");
+  result = result.replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, "");
+  result = result.replace(/<foreignObject[\s\S]*?\/>/gi, "");
+
+  if (/href\s*=\s*["']?\s*javascript:/i.test(result)) {
+    throw new Open3dPipelineError("malformedSvg", "Sanitisation failed: javascript: href found in SVG");
+  }
+
+  const externalUseMatch = result.match(
+    /<(?:use|image)[\s\S]*?(?:href|xlink:href)\s*=\s*["']([a-zA-Z][a-zA-Z0-9.+-]*:\/\/[^'"]+)["']/gi,
+  );
+  if (externalUseMatch) {
+    for (const match of externalUseMatch) {
+      const urlMatch = match.match(/["']([a-zA-Z][a-zA-Z0-9.+-]*:\/\/[^'"]+)["']/i);
+      const url = urlMatch ? urlMatch[1] : "";
+      const scheme = url.includes(":") ? url.slice(0, url.indexOf(":") + 1) : "";
+      const ALLOWED: string[] = ["https:", "http:", "data:image/png;base64", "data:image/svg+xml;"];
+      if (!ALLOWED.includes(scheme)) {
+        throw new Open3dPipelineError(
+          "malformedSvg",
+          `Sanitisation failed: disallowed external reference in ${match.slice(0, 80)}`,
+        );
+      }
+    }
+  }
+
+  const attrMatch = result.match(/([a-zA-Z_:][a-zA-Z0-9_:.\-]*)\s*=\s*(["'])([\s\S]*?)\2/g);
+  if (attrMatch) {
+    for (const attr of attrMatch) {
+      const val = attr.match(/=\s*(["'])([\s\S]*?)\1/)?.[2] ?? "";
+      if (val.length > MAX_ATTR_SIZE) {
+        throw new Open3dPipelineError(
+          "malformedSvg",
+          `Sanitisation failed: attribute value exceeds ${MAX_ATTR_SIZE} bytes`,
+        );
+      }
+    }
+  }
+
+  return result;
+}
+
+// ── Slug / viewBox validation ─────────────────────────────────────────────────
+
+const SLUG_RE = /^[a-z][a-z0-9-]{1,63}$/;
+
+export function validateSlug(slug: string): void {
+  if (!SLUG_RE.test(slug)) {
+    throw new Open3dPipelineError(
+      "invalid",
+      `Slug "${slug}" does not match required pattern ^[a-z][a-z0-9-]{1,63}$`,
+    );
+  }
+}
+
+export interface ViewBox { x: number; y: number; width: number; height: number }
+
+export function assertViewBoxStable(descriptor: { viewBox?: unknown }): ViewBox {
+  const vb = descriptor.viewBox as Record<string, unknown> | undefined;
+  if (!vb) throw new Open3dPipelineError("invalid", "Descriptor missing viewBox");
+  const { x, y, width, height } = vb as { x: unknown; y: unknown; width: unknown; height: unknown };
+  if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(width) || !Number.isFinite(height)) {
+    throw new Open3dPipelineError("invalid", "viewBox contains non-finite values");
+  }
+  if ((width as number) <= 0 || (height as number) <= 0) {
+    throw new Open3dPipelineError("invalid", "viewBox width/height must be positive");
+  }
+  return { x: x as number, y: y as number, width: width as number, height: height as number };
+}
+
+// ── Boolean operations (mirrors generate-svg.mjs applyBooleanOp) ─────────────
+
+type PolygonRing = [number, number][];
+type Polygon = PolygonRing[];
+
+const OP_MAP = {
+  union: polygonClipping.union,
+  intersection: polygonClipping.intersection,
+  difference: polygonClipping.difference,
+  xor: polygonClipping.xor,
+} as const;
+
+export type BooleanVariant = keyof typeof OP_MAP;
+
+export function applyBooleanOp(polygons: Polygon[], variant: BooleanVariant): PolygonRing[] {
+  if (polygons.length === 0) {
+    throw new Open3dPipelineError("invalid", "No polygons for boolean operation");
+  }
+  const op = OP_MAP[variant];
+  if (!op) {
+    throw new Open3dPipelineError("invalid", `Unknown boolean variant "${variant}"`);
+  }
+  if (polygons.length === 1) {
+    if (variant === "difference") {
+      throw new Open3dPipelineError("invalid", "difference variant requires at least two polygons");
+    }
+    const result = (op as typeof polygonClipping.union)([[polygons[0]!]]);
+    return Array.isArray(result) && result.length > 0 ? (result[0] as PolygonRing[]) : [];
+  }
+  let acc: ReturnType<typeof polygonClipping.union> = [[polygons[0]!]];
+  for (let i = 1; i < polygons.length; i++) {
+    const next: [[number, number][][]] = [[polygons[i]!]];
+    const merged = (op as typeof polygonClipping.union)(acc, next);
+    if (!Array.isArray(merged) || merged.length === 0) {
+      throw new Open3dPipelineError("invalid", `Boolean op "${variant}" produced empty result at index ${i}`);
+    }
+    acc = merged;
+  }
+  return Array.isArray(acc) && acc.length > 0 ? (acc[0] as PolygonRing[]) : [];
+}
+
+// ── Path construction ─────────────────────────────────────────────────────────
+
+function fmt(n: number): string {
+  return parseFloat(n.toFixed(4)).toString();
+}
+
+export function polygonsToPath(rings: PolygonRing[][]): string {
+  if (!Array.isArray(rings) || rings.length === 0) return "";
+  const parts: string[] = [];
+  for (const ring of rings) {
+    if (!Array.isArray(ring) || ring.length === 0) continue;
+    const flatPts = (ring as [number, number][]).flat();
+    if (flatPts.length < 2) continue;
+    const moveCmd = `M ${fmt(flatPts[0]!)} ${fmt(flatPts[1]!)}`;
+    const lineCmds: string[] = [];
+    for (let i = 2; i < flatPts.length; i += 2) {
+      lineCmds.push(`L ${fmt(flatPts[i]!)} ${fmt(flatPts[i + 1]!)}`);
+    }
+    lineCmds.push("Z");
+    parts.push([moveCmd, ...lineCmds].join(" "));
+  }
+  return parts.join(" ");
+}
+
+// ── SVG assembly (mirrors generate-svg.mjs buildSvgString) ──────────────────
+
+function escXml(str: string): string {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+export interface ThemeTokens {
+  "fill-primary"?: string;
+  "stroke-accent"?: string;
+  [key: string]: string | undefined;
+}
+
+export function buildSvgString(
+  slug: string,
+  viewBox: ViewBox,
+  dPath: string,
+  themeTokens: ThemeTokens | undefined,
+  title: string | undefined,
+  desc: string | undefined,
+  variant: string | undefined,
+): string {
+  const titleAttr = `<title>${escXml(title ?? slug)}</title>`;
+  const descAttr = desc ? `<desc>${escXml(desc)}</desc>` : "";
+  const tokens = themeTokens ?? {};
+  const fillAttr = tokens["fill-primary"]
+    ? ` fill="${escXml(tokens["fill-primary"])}"`
+    : ` fill="currentColor"`;
+  const strokeAttr = tokens["stroke-accent"]
+    ? ` stroke="${escXml(tokens["stroke-accent"])}"`
+    : "";
+  const classAttr = slug ? ` class="${slug}"` : "";
+  const variantAttr = variant ? ` data-block-variant="${escXml(variant)}"` : "";
+  const vb = `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}"${variantAttr}>`,
+    titleAttr,
+    descAttr,
+    `<g>`,
+    `<path d="${dPath}"${fillAttr}${strokeAttr}${classAttr}/>`,
+    `</g>`,
+    `</svg>`,
+  ].join("\n");
+}
+
+// ── SVGO optimization ─────────────────────────────────────────────────────────
+
+const SVGO_CONFIG = { plugins: [], multipass: true };
+
+export async function optimiseSvg(svg: string): Promise<string> {
+  const result = await svgo.optimize(svg, SVGO_CONFIG);
+  return result.data;
+}
+
+// ── Block → polygon conversion ────────────────────────────────────────────────
+
+export interface BlockRect { x: number; y: number; width: number; height: number }
+
+export function blockToPolygon(b: BlockRect): Polygon {
+  return [
+    [b.x, b.y],
+    [b.x + b.width, b.y],
+    [b.x + b.width, b.y + b.height],
+    [b.x, b.y + b.height],
+  ];
+}
+
+// ── Full pipeline (SVG-only, no file I/O, no R2, no PNG) ─────────────────────
+
+export interface PipelineDescriptor {
+  slug: string;
+  name?: string;
+  description?: string;
+  variant?: string;
+  viewBox: { x: number; y: number; width: number; height: number };
+  blocks?: BlockRect[];
+  themeTokens?: ThemeTokens;
+}
+
+/** Fallback cross-hatched SVG for descriptors with no blocks (§03-FIX-05). */
+export function buildFallbackSvg(viewBox: ViewBox): string {
+  const vb = `0 0 ${viewBox.width} ${viewBox.height}`;
+  const FALLBACK_D_PATH = "M 10 10 L 90 90 M 90 10 L 10 90 M 50 10 L 50 90 M 10 50 L 90 50";
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}">`,
+    `<title>Fallback - geometry missing</title>`,
+    `<desc>Block geometry not provided; cross-hatched fallback rendered.</desc>`,
+    `<path d="${FALLBACK_D_PATH}" fill="none" stroke="currentColor" stroke-width="2"/>`,
+    `</svg>`,
+  ].join("");
+}
+
+/**
+ * Run the pipeline up to and including SVGO + sanitizer.
+ * Does NOT write files, render PNG, or upload to R2.
+ * Used by golden round-trip tests (03-TEST-01).
+ */
+export async function runPipelineCore(descriptor: PipelineDescriptor): Promise<string> {
+  validateSlug(descriptor.slug);
+  const viewBox = assertViewBoxStable(descriptor);
+
+  const rawBlocks = Array.isArray(descriptor.blocks) ? descriptor.blocks : [];
+  if (rawBlocks.length === 0) {
+    const fallback = buildFallbackSvg(viewBox);
+    return sanitiseSvg(fallback);
+  }
+
+  const polygons: Polygon[] = rawBlocks.map(blockToPolygon);
+  const variant = (descriptor.variant ?? "union") as BooleanVariant;
+  const resultPolygons = applyBooleanOp(polygons, variant);
+  const dPath = polygonsToPath(resultPolygons as unknown as PolygonRing[][]);
+
+  const assembled = buildSvgString(
+    descriptor.slug,
+    viewBox,
+    dPath,
+    descriptor.themeTokens,
+    descriptor.name,
+    descriptor.description,
+    descriptor.variant,
+  );
+
+  const optimised = await optimiseSvg(assembled);
+  return sanitiseSvg(optimised);
+}

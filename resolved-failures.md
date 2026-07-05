@@ -360,3 +360,17 @@ Shell and pnpm/node gates runnable. Evidence: `results/shell/2026-07-04/pnpm-ver
 ### 2026-07-04 source-only fixes (lib/commands + persistence + 3d) for PLAN-FAIL-0408 — 2026-07-04
 - Deduped PlannerAccessContext, PLANNER_GUEST_BLOCKED_ACTIONS; removed dead 3d barrel exports; toErrorMessage/getErr helpers.
 - Status: 0408 still Open (source cleanups; no numeric coverage).
+
+## 2026-07-05 — Phase 03 stale golden fixtures
+
+**Scope:** `site/scripts/generate-svg/__goldens__/{chaise,side-table,sectional}-golden.svg` were pinned to an obsolete SVG shape (`<style>` custom-property block, minified path commands) that never matched the shipped `generate-svg.mjs` / `pipelineCore.ts` `buildSvgString()` output (`<title>`/`<desc>`/`<g><path ... stroke=.../></g>`, unminified `M x y L x y ... Z` path commands). `03-TEST-01` golden round-trip test (`svgPipelineGolden.test.ts`) failed on all three fixtures with byte-diff.
+
+**Root cause:** Goldens were generated once from an earlier draft of `buildSvgString` and never regenerated after the function was rewritten; `site/public/svg-catalog/*.svg` (the real pipeline output already on disk) matched the current code exactly, confirming the code was correct and the goldens were the drifted artifact.
+
+**Fix:** Regenerated the three golden `.svg` files from the verified current pipeline output (byte-identical to `site/public/svg-catalog/*.svg`). No production code changed.
+
+**Verification:** `pnpm exec vitest run tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts tests/unit/features/planner/open3d/catalog/blocksResolver.test.ts tests/unit/features/planner/open3d/catalog/svgPipelineGolden.test.ts` — 156 tests passed, exit code 0. Evidence: `results/open3d/phase02-03/vitest/vitest-run.json` + `vitest-raw.log`. Sanitizer suite (`node --test scripts/generate-svg/sanitize.test.mjs`) — 8/8 passed, exit code 0.
+
+**Phase 02 status:** Loader + schema + resolver tests fully green (127/127) — no code changes needed, checklist items `02-CAT-01`, `02-LOAD-01`, `02-ERR-01` confirmed passing.
+
+**Phase 03 status:** Three golden fixture blocks (union/difference/intersection) confirmed present and passing; sanitizer-on-output and semantic-token gates (`03-SVG-GS-01`) confirmed passing.
