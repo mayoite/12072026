@@ -1,7 +1,7 @@
 # Architecture docs — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`plann/REVISION-2026-07-05.md`](../../../plann/REVISION-2026-07-05.md) — update live docs after **1A** / **1B** evidence only
+**Authority:** [`plann/00-REVISION.md`](../../../plann/00-REVISION.md) — update live docs after **1A** / **1B** evidence only
 
 ## Cross-links
 
@@ -51,7 +51,7 @@ docs/architecture/README.md          ← open first
 
 ## Authority
 
-1. `plann/REVISION-2026-07-05.md`
+1. `plann/00-REVISION.md`
 2. `docs/Lockedfiles/architecture/proposed.md` (this file)
 3. `docs/architecture/README.md`
 4. Individual architecture docs

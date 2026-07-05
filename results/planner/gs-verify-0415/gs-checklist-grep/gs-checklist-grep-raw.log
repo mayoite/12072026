@@ -1,0 +1,10 @@
+﻿Invoke-Expression : At line:1 char:15
++ ... ndstr /s /i " GS-0415 GS-0416 GS-0419 GS-0420 Global Standard Gate\ p ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The string is missing the terminator: ".
+At D:\oandO04072026\scripts\run-evidence-cmd.ps1:49 char:9
++     & { Invoke-Expression $Command } *>&1 | Out-File -FilePath $tmp - ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ParserError: (:) [Invoke-Expression], ParseException
+    + FullyQualifiedErrorId : TerminatorExpectedAtEndOfString,Microsoft.PowerShell.Commands.InvokeExpressionCommand
+ 

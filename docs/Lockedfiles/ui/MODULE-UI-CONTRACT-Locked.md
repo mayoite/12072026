@@ -4,7 +4,7 @@
 
 **Live file:** `docs/architecture/MODULE-UI-CONTRACT.md`. Update this copy only when intentionally locking a new baseline.
 
-**Authority stack:** `plann/REVISION-2026-07-05.md` → `plann/UI-PLAN-REVISED-2026-07-05.md` → **this file** → `docs/architecture/CSS-SOLUTION.md`
+**Authority stack:** `plann/00-REVISION.md` → `plann/06-UI-PLAN.md` → **this file** → `docs/architecture/CSS-SOLUTION.md`
 
 **Problem:** New modules copy the nearest TSX and reintroduce `slate-*`, hex, or a third dialect.
 
@@ -82,7 +82,7 @@ Every new UI module under the path roots above **must** satisfy:
 - [ ] No raw Tailwind palette classes in TSX
 - [ ] No `#hex` or `rgb()` / `hsl()` in open3d `*.module.css` (tokens only)
 - [ ] No new `--planner-primary*` usage (use `--planner-accent*`; primary is compat shim only)
-- [ ] Icons: Phosphor in `open3d/`; Lucide in admin (per `REVISION-2026-07-05.md` Decision 3)
+- [ ] Icons: Phosphor in `open3d/`; Lucide in admin (per `00-REVISION.md` Decision 3)
 - [ ] Repeated pattern (3×) → extract to `app/css/core/components/` before a fourth copy
 - [ ] `pnpm run lint:ui` passes (strict after UI-1 shell lands)
 
@@ -98,7 +98,7 @@ Every new UI module under the path roots above **must** satisfy:
 | Open3d icons | `open3dIconPolicy.test.ts` | TEST-1 (planned) |
 | Module boundary | `plannerCommandBoundary.test.ts` | TEST-1 |
 
-See `plann/TEST-PLAN-REVISED-2026-07-05.md` for full gate matrix.
+See `plann/08-TEST-PLAN.md` for full gate matrix.
 
 ---
 
@@ -120,6 +120,6 @@ See `plann/TEST-PLAN-REVISED-2026-07-05.md` for full gate matrix.
 - `docs/architecture/ADMIN-UI-CONTRACT.md` — admin surface detail (UI-2)
 - `docs/architecture/SITE-MARKETING-UI-CONTRACT.md` — marketing reference (UI-3)
 - `docs/Lockedfiles/ui-execution/` — domain pair
-- `plann/UI-PLAN-REVISED-2026-07-05.md` — phased execution
-- `plann/TEST-PLAN-REVISED-2026-07-05.md` — test gates
+- `plann/06-UI-PLAN.md` — phased execution
+- `plann/08-TEST-PLAN.md` — test gates
 - `site/scripts/lint-ui-contract.mjs` — automated checks

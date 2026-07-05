@@ -1,7 +1,7 @@
 # Documentation — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`plann/REVISION-2026-07-05.md`](../../../plann/REVISION-2026-07-05.md) — refresh locked snapshots after each acceptance gate
+**Authority:** [`plann/00-REVISION.md`](../../../plann/00-REVISION.md) — refresh locked snapshots after each acceptance gate
 
 ## Cross-links
 
@@ -17,7 +17,7 @@
 | Topic | Policy | Paths | Docs |
 |--------|--------|-------|------|
 | Conduct | Always re-read `AGENTS.md`; user message wins | root | `AGENTS.md` |
-| Session | Two handovers OK for different lanes — do not merge blindly | root `HANDOVER.md` + `plann/HANDOVER.md` | `handover-routing.md` |
+| Session | Two handovers OK for different lanes — do not merge blindly | root `HANDOVER.md` + `plann/04-HANDOVER.md` | `handover-routing.md` |
 | Gates | **Two files only:** `Failures.md` (active), `resolved-failures.md` (history) | root | `Failures.md` |
 | Locked snapshots | Update only when intentionally locking a version | `docs/Lockedfiles/` | `INDEX.md` |
 | Domain map | `<module>/current.md` + `proposed.md` | `docs/Lockedfiles/` | this index |
@@ -25,7 +25,7 @@
 | Module layout | New code placement | `MODULE-LAYOUT.md` | revision |
 | Doc routing | `conduct/ReadmeLocked.md` — which doc to open per task | Lockedfiles | `ReadmeLocked.md` |
 | Admin workflow | Keep `ADMIN_workflow.md` in sync with `adminNav.ts` | root | `ADMIN_workflow.md` |
-| Planner authority | `REVISION-2026-07-05.md` → `START.md` / `PHASE-1.md` | `plann/` | revision |
+| Planner authority | `00-REVISION.md` → `01-START.md` / `02-PHASE-1.md` | `plann/` | revision |
 | SVG authority | Option A per revision + `PACKAGES.md` | `plann/`, `PACKAGES.md` | Decision 1 |
 
 ## Packages (proposed per plan)
@@ -33,10 +33,10 @@
 | Doc | Update when |
 |-----|-------------|
 | `PACKAGES.md` | Any Tier move — benchmark + Package Review gate |
-| `plann/START.md` §5 | Planner runtime table sync |
+| `plann/01-START.md` §5 | Planner runtime table sync |
 | `dependencies-engines/proposed.md` | After `package.json` cleanup PR |
 | Domain `<module>/current.md` | Each lock baseline — packages section mirrors disk |
 | `ADMIN_workflow.md` | Route or admin package surface changes |
-| `plann/HANDOVER.md` | After **1A** or **1B** evidence sign-off only |
+| `plann/04-HANDOVER.md` | After **1A** or **1B** evidence sign-off only |
 
 Docs do not add npm deps — they must track `site/package.json` honestly.

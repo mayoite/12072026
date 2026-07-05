@@ -1,7 +1,7 @@
 # Site — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`plann/REVISION-2026-07-05.md`](../../../plann/REVISION-2026-07-05.md) — site stays separate from planner engine graph; **1B** owns portal svg-catalog publish seam
+**Authority:** [`plann/00-REVISION.md`](../../../plann/00-REVISION.md) — site stays separate from planner engine graph; **1B** owns portal svg-catalog publish seam
 
 ## Cross-links
 
@@ -19,7 +19,7 @@
 |--------|--------|-------|------|
 | Marketing | Routes thin; copy in `site-data`; semantic CSS tokens only (no hex in components) | `site/app/(site)/`, `site/components/`, `site/lib/site-data/` | `SITE-MARKETING-UI-CONTRACT.md` |
 | Member | Authenticated member surfaces; not admin | `site/app/(site)/dashboard/` | `Readme.md` |
-| Portal | Member/guest plan views; SVG catalog is public Puck `Render` preview (≤1 per route) | `site/app/(site)/portal/` | `plans/2026-07-05_phase1-execution/benchmark-delivery.md` |
+| Portal | Member/guest plan views; SVG catalog is public Puck `Render` preview (≤1 per route) | `site/app/(site)/portal/` | `plans/01-phase1-execution/06-benchmark-delivery.md` |
 | Site catalog | Products DB via Drizzle; path strings in DB only | `site/features/catalog/`, `site/lib/catalog/` | `docs/database/SCHEMA.md` |
 | i18n | Locale JSON is source; async page tests use `nextIntlServerEnMock` | `site/i18n/` | `TESTING.md` |
 | CSS | Single token source `core/tokens/theme.css` | `site/app/css/core/site/bundles/*` | `CSS-SOLUTION.md` |

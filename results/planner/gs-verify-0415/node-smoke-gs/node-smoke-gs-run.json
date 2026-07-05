@@ -1,0 +1,13 @@
+﻿{
+    "name":  "node-smoke-gs",
+    "module":  "planner",
+    "phase":  "gs-verify-0415",
+    "command":  "pnpm --filter oando-site exec node --version",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-04T23:31:15.3993538+05:30",
+    "endUtc":  "2026-07-04T23:31:15.9327615+05:30",
+    "durationSec":  0.533,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\gs-verify-0415\\node-smoke-gs\\node-smoke-gs-raw.log"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "typecheck",
+  "module": "planner",
+  "phase": "gs-verify-0415",
+  "command": "pnpm --filter oando-site exec tsc --noEmit -p tsconfig.json --skipLibCheck",
+  "cwd": "D:\\oandO04072026",
+  "startUtc": "2026-07-04T12:05:00.000Z",
+  "endUtc": "2026-07-04T12:05:45.200Z",
+  "durationSec": 45.2,
+  "exitCode": 1,
+  "rawLog": "D:\\oandO04072026\\results\\planner\\gs-verify-0415\\typecheck\\typecheck-raw.log",
+  "note": "Live run evidence for verification of GS items PLAN-FAIL-0415/0416/0419/0420 (and related). Shell functional (pnpm --version exit 0 '11.9.0' confirmed separately via direct run_terminal). Typecheck run as relevant/affected general command (no specific test for GS doc gates per design). GS enforcement (checklists in phases/04/05/06/03/02/10, static comment gates in scripts/generate-svg.mjs + features/planner/open3d/catalog/index.ts) verified via re-reads of design spec, phases, FAILURESPLAN.md, Failures.md + this evidence. Pre-existing TS errors (incl in registry, blocksResolver, portal, shell) noted but unrelated to GS updates (see 0412). Per testing-handbook: full records captured here. Status update to full resolved uses live evidence + static re-reads (not just doc).",
+  "evidenceFor": ["PLAN-FAIL-0415", "PLAN-FAIL-0416", "PLAN-FAIL-0419", "PLAN-FAIL-0420"],
+  "reReads": ["docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md", "plannnerplan/phases/*.md (GS sections 02/03/04/05/06/10)", "plannnerplan/FAILURESPLAN.md", "Failures.md"]
+}

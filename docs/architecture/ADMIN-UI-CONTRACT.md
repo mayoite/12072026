@@ -1,7 +1,7 @@
 # Admin UI contract (proposed)
 
 **Status:** Proposed — enforce in **UI-2** (1B)  
-**Authority:** `plann/REVISION-2026-07-05.md` → `plann/UI-PLAN-REVISED-2026-07-05.md` → [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) → **this file** → `admin-pages.css`  
+**Authority:** `plann/00-REVISION.md` → `plann/06-UI-PLAN.md` → [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) → **this file** → `admin-pages.css`  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — routes in `app/admin/`, views in `features/planner/admin/`  
 **Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
@@ -86,7 +86,7 @@ Enforced by `pnpm run lint:ui` / `lint:ui:strict`.
 
 ## Icons
 
-**Lucide** (`lucide-react`) for admin chrome. Do not use Phosphor in admin (planner exclusive per `REVISION-2026-07-05.md` Decision 3).
+**Lucide** (`lucide-react`) for admin chrome. Do not use Phosphor in admin (planner exclusive per `00-REVISION.md` Decision 3).
 
 ---
 
@@ -135,4 +135,4 @@ Admin layout must set `data-admin-layout` and load `admin-pages.css` via site ad
 
 - [`CSS-SOLUTION.md`](CSS-SOLUTION.md) — admin bundle ownership
 - [`DATA_FLOW.md`](DATA_FLOW.md) §6 — SVG publish sequence
-- `plann/TEST-PLAN-REVISED-2026-07-05.md` — TEST-2 admin gates
+- `plann/08-TEST-PLAN.md` — TEST-2 admin gates

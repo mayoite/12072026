@@ -1,0 +1,13 @@
+﻿{
+    "name":  "pnpm-version-unblock",
+    "module":  "shell",
+    "phase":  "2026-07-04",
+    "command":  "pnpm --version",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-04T23:24:34.5639305+05:30",
+    "endUtc":  "2026-07-04T23:24:34.8291551+05:30",
+    "durationSec":  0.265,
+    "exitCode":  null,
+    "rawLog":  "D:\\oandO04072026\\results\\shell\\2026-07-04\\pnpm-version-unblock\\pnpm-version-unblock-raw.log"
+}

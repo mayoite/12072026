@@ -78,3 +78,10 @@ Dead-code removal in open3d export/persistence/3d/editor/catalog/model/ai is don
 ---
 
 All other PLAN-FAIL items are resolved. See `resolved-failures.md`.
+
+---
+
+## Skips
+
+- Requested archive move for `backups` / `results` was not performed; only `.gitignore` entries were removed. `backups/` was not present in the workspace at the time of the check, and `results/` was left in place to avoid guessing at a relocation target.
+- 2026-07-05: No tests or Playwright runs were performed for the `.gitignore` change that unignored `tmp/`, `archive/`, and `results/` paths; this task only required config edits, and Playwright runs require explicit user permission.

@@ -1,7 +1,7 @@
 # Locked files — module index
 
 **Baseline:** 2026-07-05  
-**Layout:** One folder per module; `current.md` = on disk today; `proposed.md` = target per `plann/REVISION-2026-07-05.md`
+**Layout:** One folder per module; `current.md` = on disk today; `proposed.md` = target per `plann/00-REVISION.md`
 
 ---
 
@@ -21,15 +21,16 @@
 | Module UI contract | [`ui/MODULE-UI-CONTRACT-Locked.md`](ui/MODULE-UI-CONTRACT-Locked.md) | [`../architecture/MODULE-UI-CONTRACT.md`](../architecture/MODULE-UI-CONTRACT.md) |
 | Architecture index | — | [`../architecture/README.md`](../architecture/README.md) |
 | Module placement | — | [`../architecture/MODULE-LAYOUT.md`](../architecture/MODULE-LAYOUT.md) |
-| Doc revision log | — | [`../../plann/DOC-REVISION-2026-07-05.md`](../../plann/DOC-REVISION-2026-07-05.md) |
+| Doc revision log | — | [`../../plann/09-DOC-REVISION.md`](../../plann/09-DOC-REVISION.md) |
 
 ## Product revision (live, not duplicated)
 
 | Doc | Path |
 |-----|------|
-| Plan revision | [`../../plann/REVISION-2026-07-05.md`](../../plann/REVISION-2026-07-05.md) |
-| UI execution | [`../../plann/UI-PLAN-REVISED-2026-07-05.md`](../../plann/UI-PLAN-REVISED-2026-07-05.md) |
-| Test execution | [`../../plann/TEST-PLAN-REVISED-2026-07-05.md`](../../plann/TEST-PLAN-REVISED-2026-07-05.md) |
+| **Execution index** | [`../../plann/README.md`](../../plann/README.md) |
+| Plan revision | [`../../plann/00-REVISION.md`](../../plann/00-REVISION.md) |
+| UI execution | [`../../plann/06-UI-PLAN.md`](../../plann/06-UI-PLAN.md) |
+| Test execution | [`../../plann/08-TEST-PLAN.md`](../../plann/08-TEST-PLAN.md) |
 
 ---
 
@@ -62,7 +63,7 @@
 |------|------|
 | New UI module | `ui/MODULE-UI-CONTRACT-Locked.md` + `architecture/MODULE-LAYOUT.md` |
 | Where code goes | `../architecture/MODULE-LAYOUT.md` |
-| Planner pilot | `planner/proposed.md` + `plann/PHASE-1.md` |
+| Planner pilot | `planner/proposed.md` + `plann/02-PHASE-1.md` |
 | Package change | `PACKAGES.md` + `dependencies-engines/proposed.md` |
 
 Update module `current.md` / `proposed.md` only when intentionally locking a new baseline.

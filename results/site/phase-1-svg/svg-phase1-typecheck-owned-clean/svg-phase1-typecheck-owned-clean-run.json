@@ -1,0 +1,13 @@
+﻿{
+    "name":  "svg-phase1-typecheck-owned-clean",
+    "module":  "site",
+    "phase":  "phase-1-svg",
+    "command":  "pnpm run typecheck",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-05T08:24:22.9032490+05:30",
+    "endUtc":  "2026-07-05T08:24:31.9152138+05:30",
+    "durationSec":  9.012,
+    "exitCode":  2,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\phase-1-svg\\svg-phase1-typecheck-owned-clean\\svg-phase1-typecheck-owned-clean-raw.log"
+}

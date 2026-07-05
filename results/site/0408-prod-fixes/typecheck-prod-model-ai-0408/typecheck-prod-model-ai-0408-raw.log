@@ -1,0 +1,16 @@
+﻿node.exe : $ tsc -p tsconfig.json --noEmit
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ tsc -p tsconfig.json --noEmit:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+features/planner/open3d/editor/WorkspaceShell.tsx(286,28): error TS2552: Cannot find name 'handlePanelClose'. Did you mean 'handlePanelCollapse'?
+features/planner/open3d/editor/WorkspaceShell.tsx(287,31): error TS2304: Cannot find name 'handlePanelMinimize'.
+features/planner/open3d/editor/WorkspaceShell.tsx(316,28): error TS2552: Cannot find name 'handlePanelClose'. Did you mean 'handlePanelCollapse'?
+features/planner/open3d/editor/WorkspaceShell.tsx(317,31): error TS2304: Cannot find name 'handlePanelMinimize'.
+features/planner/open3d/editor/WorkspaceShell.tsx(341,28): error TS2552: Cannot find name 'handlePanelClose'. Did you mean 'handlePanelCollapse'?
+features/planner/open3d/editor/WorkspaceShell.tsx(342,31): error TS2304: Cannot find name 'handlePanelMinimize'.
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] oando-site@0.1.0 typecheck: `tsc -p tsconfig.json --noEmit`
+Exit status 2

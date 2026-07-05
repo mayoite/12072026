@@ -1,0 +1,1377 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+      Coverage enabled with v8
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts (22 tests | 1 failed) 151ms
+     Γ£ô tryLoad returns a typed descriptor on a fresh fixture file 22ms
+     Γ£ô tryLoad emits notFound when the JSON file is missing 2ms
+     Γ£ô tryLoad emits invalid when the JSON file body is malformed 4ms
+     Γ£ô tryLoad rejects slugs that don't match the kebab regex (defensive early) 2ms
+     Γ£ô tryLoad rejects slugs that contain path-traversal characters 2ms
+     Γ£ô tryLoad rejects slugs with absolute paths 2ms
+     Γ£ô tryLoad rejects injected path components 2ms
+     Γ£ô tryLoad rejects a non-`.json` extension 3ms
+     Γ£ô tryLoad surfaces hashMismatch when the on-disk body is mutated after first write 11ms
+     Γ£ô tryLoad surfaces versionMismatch when the schemaVersion does not match the pinned literal 6ms
+     Γ£ô loadBySlug throws with HTTP-shape prefix when the descriptor cannot be loaded 5ms
+     Γ£ô loadBySlug returns the typed descriptor when present 7ms
+     Γ£ô loadAll returns empty array when the directory does not exist 2ms
+     Γ£ô loadAll reads every .json file in the directory, skips malformed entries 16ms
+     Γ£ô loadAll skips a .json-named directory that is not a regular file 7ms
+     Γ£ô loadAll caches results for repeat reads within the same directory 6ms
+     Γ£ô clearLoaderCache forces a fresh read on the next loadAll 11ms
+     Γ£ô Open3dDescriptorError union covers all four canonical kinds 2ms
+     Γ£ô tryLoad surfaces invalid (via parseBlockDescriptor) when JSON parses to non-object primitive 3ms
+     Γ£ô tryLoad surfaces invalid when JSON parses to non-object (number) hitting parse early guard 3ms
+     Γ£ô tryLoad surfaces invalid (parse path) when schemaVersion present but not string type 5ms
+     ├ù loadAll skips entries that fail parseBlockDescriptor (e.g. non-object json or schema fail) and only returns valid 22ms
+node.exe : stderr | tests/unit/features/planner/open3d/threeLazy.test.tsx > Lazy3DViewer > lazy-loads the inner viewer 
+and calls onReady
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (stderr | tests/...d calls onReady:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see 
+https://vitest.dev/api/vi#vi-spyon for examples.
+
+ Γ¥» tests/unit/features/planner/open3d/threeViewerInner.test.tsx (5 tests | 1 failed) 578ms
+     ├ù shows loading state then mounts the WebGL container 219ms
+     Γ£ô renders an error panel when scene initialization fails 149ms
+     Γ£ô disposes renderer and scene resources on unmount 49ms
+     Γ£ô renders with shadow maps enabled and without an onReady callback 72ms
+     Γ£ô cancels Three.js loading when unmounted early 83ms
+ Γ£ô tests/unit/features/planner/open3d/threeLazy.test.tsx (2 tests) 439ms
+     Γ£ô lazy-loads the inner viewer and calls onReady  428ms
+ Γ£ô tests/unit/features/planner/open3d/catalog/blocksResolver.test.ts (69 tests) 90ms
+ Γ£ô tests/unit/features/planner/open3d/doorWindowPlacement.test.ts (11 tests) 78ms
+ Γ£ô tests/unit/features/planner/open3d/sketchToPlan.test.ts (21 tests) 668ms
+ Γ£ô tests/unit/features/planner/open3d/persistence/topBarGuest.test.tsx (2 tests) 105ms
+ Γ¥» tests/unit/features/planner/open3d/modelOperations.test.ts (69 tests | 2 failed) 93ms
+     Γ£ô adds a wall 5ms
+     Γ£ô removes a wall and cascades doors/windows 2ms
+     Γ£ô updates a wall 1ms
+     Γ£ô moves wall endpoints 2ms
+     Γ£ô moves a wall parallel 1ms
+     Γ£ô splits a wall and reassigns openings 1ms
+     Γ£ô splits a wall with openings on both sides of the split point 1ms
+     Γ£ô splits a wall moving a door to the new wall and keeping a window on the old wall 1ms
+     Γ£ô rejects split at extremes 2ms
+     Γ£ô duplicates a wall 1ms
+     Γ£ô throws for missing wall 3ms
+     Γ£ô adds doors with defaults 1ms
+     Γ£ô removes, updates, and duplicates doors 2ms
+     ├ù throws for missing door 15ms
+     Γ£ô adds windows with defaults 1ms
+     Γ£ô removes, updates, and duplicates windows 2ms
+     ├ù throws for missing window 1ms
+     Γ£ô adds, moves, rotates, scales, and duplicates furniture 2ms
+     Γ£ô locks and unlocks furniture 1ms
+     Γ£ô removes and updates furniture 1ms
+     Γ£ô throws for missing furniture 2ms
+     Γ£ô adds, moves, updates, and removes stairs 1ms
+     Γ£ô throws for missing stair 1ms
+     Γ£ô adds, moves, updates, and removes columns 1ms
+     Γ£ô adds square columns 1ms
+     Γ£ô throws for missing column 1ms
+     Γ£ô removes any element by id with cascade for walls 1ms
+     Γ£ô adds a floor and sets it active 1ms
+     Γ£ô copies current floor layout 0ms
+     Γ£ô removes a floor and switches active 1ms
+     Γ£ô removes a non-active floor without changing active 1ms
+     Γ£ô rejects removing the only floor 0ms
+     Γ£ô sets active floor 1ms
+     Γ£ô updates project name and display unit 1ms
+     Γ£ô adds, moves, and removes guides 1ms
+     Γ£ô throws for missing guide 1ms
+     Γ£ô adds and removes measurements 1ms
+     Γ£ô adds, updates, and removes annotations 1ms
+     Γ£ô throws for missing annotation 1ms
+     Γ£ô adds, updates, moves, and removes text annotations 1ms
+     Γ£ô throws for missing text annotation 0ms
+     Γ£ô sets and updates background image 1ms
+     Γ£ô throws updating non-existent background image 0ms
+     Γ£ô creates and removes groups 1ms
+     Γ£ô rejects groups with fewer than 2 elements 0ms
+     Γ£ô ungroups by element ids 0ms
+     Γ£ô createGroup filters out groups that become too small 1ms
+     Γ£ô updates a room 0ms
+     Γ£ô throws for missing room 0ms
+     Γ£ô imports floor data into active floor 1ms
+     Γ£ô imports floor with stairs and columns into active floor 0ms
+     Γ£ô throws when active floor is missing 0ms
+     Γ£ô does not mutate the original project 1ms
+     Γ£ô updates timestamp on every mutating action 1ms
+     Γ£ô creates initial state 2ms
+     Γ£ô pushes and undoes 2ms
+     Γ£ô redoes 1ms
+     Γ£ô clears future on new push 0ms
+     Γ£ô truncates past at maxHistory 0ms
+     Γ£ô updates present without pushing 1ms
+     Γ£ô jumps to history index 2ms
+     Γ£ô returns history entries 1ms
+     Γ£ô no-op on undo/redo when not available 0ms
+     Γ£ô validates envelopes 1ms
+     Γ£ô creates envelope v1 0ms
+     Γ£ô migrates through registered migrations 1ms
+     Γ£ô fails when no migration path 0ms
+     Γ£ô fails when migration throws 0ms
+     Γ£ô returns registered migrations 0ms
+ Γ¥» tests/unit/features/planner/open3d/exportPhase06.test.ts (0 test)
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts (0 test)
+AggregateError: 
+    at internalConnectMultiple (node:net:1193:18)
+    at afterConnectMultiple (node:net:1783:7) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:3000
+        at createConnectionError (node:net:1746:14)
+        at afterConnectMultiple (node:net:1776:16) {
+      errno: -4078,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 3000
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:3000
+        at createConnectionError (node:net:1746:14)
+        at afterConnectMultiple (node:net:1776:16) {
+      errno: -4078,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 3000
+    }
+  ]
+}
+ Γ£ô tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts (5 tests) 454ms
+ Γ¥» tests/unit/features/planner/open3d/cleanupPhase08.test.ts (7 tests | 1 failed) 8152ms
+     Γ£ô keeps product catalog assets off git public paths 2ms
+     Γ£ô lists runtime textures eligible for CDN copy only 1ms
+     ├ù wires the live guest and canvas routes to the hybrid open3d workspace 5017ms
+     Γ£ô keeps explicit Fabric fallback routes on the legacy planner workspace  3054ms
+     Γ£ô keeps /planner/open3d on the pilot host route 70ms
+     Γ£ô preserves iframe embed node until explicit retirement 1ms
+     Γ£ô records live hybrid routes separately from explicit Fabric fallbacks 2ms
+ Γ£ô tests/unit/features/planner/open3d/imageImport.test.ts (13 tests) 330ms
+ Γ¥» tests/unit/features/planner/open3d/jsonExport.test.ts (0 test)
+stdout | tests/unit/features/planner/open3d/svgInventory.test.ts > 03A-INV: Search Index > large inventory benchmarks > meets 1K search p95 budget under 100ms
+[phase-03a-benchmark-exceed] inventory search 1K p95=59.419ms stretch=50ms
+
+ Γ£ô tests/unit/features/planner/open3d/uploadUtils.test.ts (18 tests) 42ms
+ Γ£ô tests/unit/features/planner/open3d/catalog.test.ts (189 tests) 532ms
+ Γ£ô tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx (4 tests) 1068ms
+     Γ£ô runs toolbar and keyboard commands  465ms
+ Γ£ô tests/unit/features/planner/open3d/domain.test.ts (16 tests) 40ms
+ Γ£ô tests/unit/features/planner/open3d/roomElements.test.ts (14 tests) 82ms
+ Γ£ô tests/unit/features/planner/open3d/svgFixtureGallery.test.ts (2 tests) 17ms
+ Γ£ô tests/unit/features/planner/open3d/persistence/persistence.test.ts (9 tests) 25ms
+ Γ£ô tests/unit/features/planner/open3d/persistence/persistenceErrors.test.ts (85 tests) 46ms
+ Γ£ô tests/unit/features/planner/open3d/plannerDocumentBridge.test.ts (14 tests) 18ms
+ Γ¥» tests/unit/features/planner/open3d/exportOptionalDeps.test.ts (1 test | 1 failed) 17ms
+     ├ù returns null when jspdf and dxf-writer cannot be loaded 11ms
+ Γ¥» tests/unit/features/planner/open3d/zeroCoverageModules.test.ts (3 tests | 1 failed) 207ms
+     ├ù exports valid projects and rejects empty envelopes 16ms
+     Γ£ô summarizes project state and validates proposals 6ms
+     Γ£ô validates requests and runs the placeholder conversion pipeline 178ms
+stdout | tests/unit/features/planner/open3d/svgInventory.test.ts > 03A-INV: Search Index > large inventory benchmarks > meets 10K search p95 budget under 200ms
+[phase-03a-benchmark-exceed] inventory search 10K p95=175.396ms stretch=100ms
+
+stdout | tests/unit/features/planner/open3d/svgInventory.test.ts > 03A-INV: Search Index > large inventory benchmarks > meets SVG symbol generation budget under 10ms p95
+[phase-03a-benchmark-exceed] SVG symbol generation p95=0.010ms stretch=5ms
+
+ Γ£ô tests/unit/features/planner/open3d/svgInventory.test.ts (114 tests) 5199ms
+       Γ£ô meets 1K search p95 budget under 100ms  585ms
+       Γ£ô meets 10K search p95 budget under 200ms  4455ms
+ Γ£ô tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts (36 tests) 223ms
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > permission gate check p95 under 1ms
+[phase-04-benchmark] permission gate p95=0.001ms budget=1ms
+
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > member document load p95 under 500ms with mocked API
+[phase-04-benchmark] member load p95=0.011ms budget=500ms
+
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > member cloud save p95 under 2s with mocked API
+[phase-04-benchmark] member save p95=0.046ms budget=2000ms
+
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > guest-to-member promotion save p95 under 2s with mocked repository
+[phase-04-benchmark] promotion save p95=0.009ms budget=2000ms
+
+ Γ£ô tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts (4 tests) 52ms
+ Γ£ô tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts (40 tests) 175ms
+ Γ£ô tests/unit/features/planner/open3d/persistence/permissions.test.ts (40 tests) 29ms
+ Γ¥» tests/unit/features/planner/open3d/workspaceShell.test.tsx (19 tests | 1 failed) 3112ms
+     Γ£ô creates a project, dispatches actions, and supports undo/redo 45ms
+     Γ£ô updates selection and applies direct project updates 6ms
+     Γ£ô draws a wall when the segment exceeds the minimum length 21ms
+     Γ£ô docks, undocks, collapses, moves, resizes, and persists layout 10ms
+     Γ£ô restores layout from localStorage on mount 4ms
+     Γ£ô fires view, unit, export, and import callbacks and shows save status 174ms
+     Γ£ô handles dock, undock, minimize, close, resize, and focus 81ms
+     ├ù searches sample inventory and selects an item 1072ms
+     Γ£ô shows empty state and wall properties for a selection 190ms
+     Γ£ô renders panels, status bar, and toolbar actions  1345ms
+       Γ£ô maps shortcut keys to tools 1ms
+       Γ£ô handleWallClick returns result for door and window modes (exercises placement branches) 4ms
+       Γ£ô edit modes, update/delete and get* cover edit branches 5ms
+       Γ£ô cancel from placing resets state 3ms
+       Γ£ô detects small viewport tier and handles mobile activePanel logic 2ms
+       Γ£ô reset and full cycle covers default restore branches 39ms
+       Γ£ô renders door and furniture properties (covers render* branches) 44ms
+       Γ£ô hides persist actions for guest accessContext 41ms
+     Γ£ô renders loading then workspace shell for guest (covers hydration + shell wiring) 13ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceStatusLabels.test.ts (6 tests) 12ms
+ Γ£ô tests/unit/features/planner/open3d/aiAdvisor.test.ts (21 tests) 22ms
+ Γ£ô tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts (15 tests) 50ms
+ Γ£ô tests/unit/features/planner/open3d/feasibility.test.ts (5 tests) 33ms
+ Γ£ô tests/unit/features/planner/open3d/donorParity.test.ts (4 tests) 26ms
+ Γ£ô tests/unit/features/planner/open3d/open3dSession.test.ts (1 test) 19ms
+ Γ£ô tests/unit/features/planner/open3d/advisorCoverage.test.ts (9 tests) 57ms
+ Γ£ô tests/unit/features/planner/open3d/routesCoverage.test.tsx (6 tests) 1184ms
+     Γ£ô wires canvas route to Open3dPlannerWorkspaceRoute with plan id on the live hybrid planner route  366ms
+     Γ£ô renders known feature slug pages and rejects unknown slugs  527ms
+Failed to parse file:///D:/oandO04072026/site/features/planner/open3d/shared/export/jsonImport.ts. Excluding it from 
+coverage.
+ Error [RollupError]: Expected '{', got 'interface'
+    at getRollupError 
+(file:///D:/oandO04072026/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/parseAst.js:317:41)
+    at convertProgram 
+(file:///D:/oandO04072026/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/parseAst.js:1132:26)
+    at parseAstAsync 
+(file:///D:/oandO04072026/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/parseAst.js:2122:106)
+    at V8CoverageProvider.remapCoverage (file:///D:/oandO04072026/node_modules/.pnpm/@vitest+coverage-v8@4.1.9_vitest@4
+.1.9/node_modules/@vitest/coverage-v8/dist/provider.js:133:10)
+    at file:///D:/oandO04072026/node_modules/.pnpm/@vitest+coverage-v8@4.1.9_vitest@4.1.9/node_modules/@vitest/coverage
+-v8/dist/provider.js:119:23
+    at async Promise.all (index 6)
+    at V8CoverageProvider.getCoverageMapForUncoveredFiles (file:///D:/oandO04072026/node_modules/.pnpm/@vitest+coverage
+-v8@4.1.9_vitest@4.1.9/node_modules/@vitest/coverage-v8/dist/provider.js:109:4)
+    at V8CoverageProvider.generateCoverage (file:///D:/oandO04072026/node_modules/.pnpm/@vitest+coverage-v8@4.1.9_vites
+t@4.1.9/node_modules/@vitest/coverage-v8/dist/provider.js:56:29)
+    at file:///D:/oandO04072026/node_modules/.pnpm/vitest@4.1.9_@opentelemetry_6b76d51fbf5fbbc10a83bc5800c35246/node_mo
+dules/vitest/dist/chunks/cli-api.24X8XwN1.js:13604:23
+    at file:///D:/oandO04072026/node_modules/.pnpm/vitest@4.1.9_@opentelemetry_6b76d51fbf5fbbc10a83bc5800c35246/node_mo
+dules/vitest/dist/chunks/cli-api.24X8XwN1.js:13617:11 {
+  code: 'PARSE_ERROR',
+  pos: 152
+}
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Suites 3 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts [ tests/unit/features/planner/open3d/coverageGap.test.ts 
+]
+ FAIL  tests/unit/features/planner/open3d/exportPhase06.test.ts [ 
+tests/unit/features/planner/open3d/exportPhase06.test.ts ]
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts [ tests/unit/features/planner/open3d/jsonExport.test.ts ]
+Error: Transform failed with 1 error:
+D:/oandO04072026/site/features/planner/open3d/shared/export/jsonImport.ts:15:2: ERROR: Unexpected "}"
+  Plugin: vite:esbuild
+  File: D:/oandO04072026/site/features/planner/open3d/shared/export/jsonImport.ts:15:2
+  
+  Unexpected "}"
+  13 |        severity: "error",
+  14 |      });
+  15 |    }
+     |    ^
+  16 |  
+  17 |    // Validate floors
+  
+ Γ¥» failureErrorWithLog ../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:1467:15
+ Γ¥» ../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:736:50
+ Γ¥» responseCallbacks.<computed> ../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:603:9
+ Γ¥» handleIncomingPacket ../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:658:12
+ Γ¥» Socket.readFromStdout ../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:581:7
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/11]ΓÄ»
+
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 8 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/cleanupPhase08.test.ts > Phase 08 import graph proof > wires the live guest 
+and canvas routes to the hybrid open3d workspace
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ Γ¥» tests/unit/features/planner/open3d/cleanupPhase08.test.ts:92:3
+     90|   });
+     91|
+     92|   it("wires the live guest and canvas routes to the hybrid open3d workΓÇª
+       |   ^
+     93|     const { default: PlannerGuestPage } = await import("@/app/planner/ΓÇª
+     94|     const { default: PlannerCanvasPage } = await import("@/app/plannerΓÇª
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/exportOptionalDeps.test.ts > export optional dependency failures > returns 
+null when jspdf and dxf-writer cannot be loaded
+TypeError: exportAsPDF is not a function
+ Γ¥» tests/unit/features/planner/open3d/exportOptionalDeps.test.ts:39:18
+     37|
+     38|   it("returns null when jspdf and dxf-writer cannot be loaded", async ΓÇª
+     39|     expect(await exportAsPDF(project())).toBeNull();
+       |                  ^
+     40|     expect(await exportAsDXF(project())).toBeNull();
+     41|   });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[3/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/modelOperations.test.ts > pureActions ├óΓé¼ΓÇ¥ door operations > throws for 
+missing door
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ Γ¥» tests/unit/features/planner/open3d/modelOperations.test.ts:231:48
+    229|   it("throws for missing door", () => {
+    230|     const p = room();
+    231|     expect(() => updateDoor(p, "missing", {})).toThrow("Door missing nΓÇª
+       |                                                ^
+    232|     expect(() => duplicateDoor(p, "missing")).toThrow("Door missing noΓÇª
+    233|   });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[4/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/modelOperations.test.ts > pureActions ├óΓé¼ΓÇ¥ window operations > throws 
+for missing window
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ Γ¥» tests/unit/features/planner/open3d/modelOperations.test.ts:258:50
+    256|   it("throws for missing window", () => {
+    257|     const p = room();
+    258|     expect(() => updateWindow(p, "missing", {})).toThrow("Window missiΓÇª
+       |                                                  ^
+    259|     expect(() => duplicateWindow(p, "missing")).toThrow("Window missinΓÇª
+    260|   });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[5/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/threeViewerInner.test.tsx > ThreeViewerInner > shows loading state then 
+mounts the WebGL container
+AssertionError: expected null to be truthy
+
+- Expected:
+true
+
++ Received:
+null
+
+ Γ¥» tests/unit/features/planner/open3d/threeViewerInner.test.tsx:122:72
+    120|     });
+    121|
+    122|     expect(container.querySelector("div[style*='min-height: 400px']"))ΓÇª
+       |                                                                        ^
+    123|   });
+    124|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[6/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/workspaceShell.test.tsx > InventoryPanel > searches sample inventory and 
+selects an item
+TestingLibraryElementError: Unable to find role="option" and name `/Executive Standing Desk, 1\.6m/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Inventory panel"[39m
+      [33mclass[39m=[32m"_panel_ae4f14"[39m
+      [33mid[39m=[32m"inventory-panel-_r_0_"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_searchSection_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_searchWrapper_ae4f14"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"_searchIcon_ae4f14"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"11"[39m
+              [33mcy[39m=[32m"11"[39m
+              [33mr[39m=[32m"8"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m21 21-4.35-4.35"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<input[39m
+            [33maria-label[39m=[32m"Search inventory"[39m
+            [33mclass[39m=[32m"_searchInput_ae4f14"[39m
+            [33mplaceholder[39m=[32m"Search furniture..."[39m
+            [33mtype[39m=[32m"search"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_quickFilters_ae4f14"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒÅá[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mAll Rooms[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒ¢ï∩╕Å[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mLiving Room[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒ¢Å∩╕Å[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mBedroom[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒì│[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mKitchen[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒÜ┐[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mBathroom[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_categoriesSection_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_sectionHeader_ae4f14"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_sectionTitle_ae4f14"[39m
+          [36m>[39m
+            [0mCategories[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<nav[39m
+          [33maria-label[39m=[32m"Inventory categories"[39m
+          [33mclass[39m=[32m"_categoryList_ae4f14"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"true"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒ¬æ[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mFurniture[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 _categoryChevronOpen_ae4f14"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"_subCategoryList_ae4f14"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mSofas & Sectionals[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mChairs[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mTables[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mDesks & Workstations[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mStorage[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mBeds[0m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒÆí[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mLighting[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒû╝∩╕Å[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mDecor[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒî┐[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mOutdoor[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒì╜∩╕Å[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mKitchen & Dining[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒôÉ[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mSymbols[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</nav>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_resultsInfo_ae4f14"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"_resultsCount_ae4f14"[39m
+        [36m>[39m
+          [0m0[0m
+          [0m item[0m
+          [0ms[0m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_emptyState_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_emptyIcon_ae4f14"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"48"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.5"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"48"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M21 21-10.5 10.5M21 21-10.5-10.5M21 21-18-18M3 3l18 18M3 21l18-18"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</div>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"_emptyText_ae4f14"[39m
+        [36m>[39m
+          [0mNo items found[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Inventory panel"[39m
+      [33mclass[39m=[32m"_panel_ae4f14"[39m
+      [33mid[39m=[32m"inventory-panel-_r_0_"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_searchSection_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_searchWrapper_ae4f14"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"_searchIcon_ae4f14"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"11"[39m
+              [33mcy[39m=[32m"11"[39m
+              [33mr[39m=[32m"8"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m21 21-4.35-4.35"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<input[39m
+            [33maria-label[39m=[32m"Search inventory"[39m
+            [33mclass[39m=[32m"_searchInput_ae4f14"[39m
+            [33mplaceholder[39m=[32m"Search furniture..."[39m
+            [33mtype[39m=[32m"search"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_quickFilters_ae4f14"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒÅá[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mAll Rooms[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒ¢ï∩╕Å[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mLiving Room[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒ¢Å∩╕Å[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mBedroom[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒì│[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mKitchen[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒÜ┐[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mBathroom[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_categoriesSection_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_sectionHeader_ae4f14"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_sectionTitle_ae4f14"[39m
+          [36m>[39m
+            [0mCategories[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<nav[39m
+          [33maria-label[39m=[32m"Inventory categories"[39m
+          [33mclass[39m=[32m"_categoryList_ae4f14"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"true"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒ¬æ[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mFurniture[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 _categoryChevronOpen_ae4f14"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"_subCategoryList_ae4f14"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mSofas & Sectionals[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mChairs[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mTables[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mDesks & Workstations[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mStorage[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mBeds[0m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒÆí[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mLighting[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒû╝∩╕Å[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mDecor[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒî┐[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mOutdoor[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒì╜∩╕Å[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mKitchen & Dining[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒôÉ[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mSymbols[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</nav>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_resultsInfo_ae4f14"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"_resultsCount_ae4f14"[39m
+        [36m>[39m
+          [0m0[0m
+          [0m item[0m
+          [0ms[0m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_emptyState_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_emptyIcon_ae4f14"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"48"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.5"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"48"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M21 21-10.5 10.5M21 21-10.5-10.5M21 21-18-18M3 3l18 18M3 21l18-18"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</div>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"_emptyText_ae4f14"[39m
+        [36m>[39m
+          [0mNo items found[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+
+ Test Files  10 failed | 29 passed (39)
+      Tests  8 failed | 893 passed (901)
+   Start at  23:44:59
+   Duration  45.79s (transform 133.75s, setup 51.91s, import 143.12s, tests 23.43s, environment 56.15s)
+
+[36m</body>[39m
+ Γ¥» waitForWrapper 
+../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ Γ¥» ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ Γ¥» tests/unit/features/planner/open3d/workspaceShell.test.tsx:364:37
+    362|     render(<InventoryPanel onItemSelect={onItemSelect} onSearch={onSeaΓÇª
+    363|
+    364|     const itemOption = await screen.findByRole("option", {
+       |                                     ^
+    365|       name: /Executive Standing Desk, 1\.6m/i,
+    366|     });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[7/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/zeroCoverageModules.test.ts > jsonExport module > exports valid projects and 
+rejects empty envelopes
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/zeroCoverageModules.test.ts:36:28
+     34|
+     35|     const result = exportToJson(project, { pretty: true });
+     36|     expect(result.success).toBe(true);
+       |                            ^
+     37|     expect(result.envelope.project.name).toBe("JSON Export");
+     38|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[8/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts > 02-LOADER: storage boundary > 
+loadAll skips entries that fail parseBlockDescriptor (e.g. non-object json or schema fail) and only returns valid
+AssertionError: expected 'chaise' to be 'good' // Object.is equality
+
+Expected: "good"
+Received: "chaise"
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:384:26
+    382|     const all = loadAll({ dir: tmpDir, forceReload: true });
+    383|     expect(all).toHaveLength(1);
+    384|     expect(all[0]?.slug).toBe("good");
+       |                          ^
+    385|   });
+    386| });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[9/11]ΓÄ»
+
+JSON report written to D:/oandO04072026/results/tests/vitest-results.json
+undefined
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run tests/unit/features/planner/open3d --coverage --config vitest.config.ts "--pool=threads"

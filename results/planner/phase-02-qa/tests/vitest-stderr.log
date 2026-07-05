@@ -1,0 +1,246 @@
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 15 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts > 02-BLOCK-DESCRIPTOR: structural validation > parses a fixed descriptor into a typed value
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts:148:23
+    146|     const input = withChecksum({ ...fixedDescriptor() });
+    147|     const result = parseBlockDescriptor(input);
+    148|     expect(result.ok).toBe(true);
+       |                       ^
+    149|     if (result.ok) {
+    150|       expect(result.value.variant).toBe("fixed");
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts > 02-BLOCK-DESCRIPTOR: structural validation > parses a configurable descriptor with sizeOptions
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts:160:23
+    158|     const input = withChecksum(configurableDescriptor());
+    159|     const result = parseBlockDescriptor(input);
+    160|     expect(result.ok).toBe(true);
+       |                       ^
+    161|     if (result.ok) {
+    162|       expect(result.value.variant).toBe("configurable");
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts > 02-BLOCK-DESCRIPTOR: structural validation > parses a parametric descriptor with parameterSchema and mountingPoints
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts:173:23
+    171|     const input = withChecksum(parametricDescriptor());
+    172|     const result = parseBlockDescriptor(input);
+    173|     expect(result.ok).toBe(true);
+       |                       ^
+    174|     if (result.ok) {
+    175|       expect(result.value.variant).toBe("parametric");
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[3/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts > 02-BLOCK-DESCRIPTOR: version + checksum guards > emits hashMismatch when generatedAt is mutated after first write (┬º02-CAT-11 annex)
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts:299:27
+    297|     // First-write path stamps generatedAt and computes checksum.
+    298|     const firstFresh = freezeFreshDescriptor(fixedDescriptor(), () => ΓÇª
+    299|     expect(firstFresh.ok).toBe(true);
+       |                           ^
+    300|     if (!firstFresh.ok) throw new Error("first freeze failed");
+    301|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[4/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts > 02-BLOCK-DESCRIPTOR: idempotent replay > parsing the same descriptor twice yields identical value + fingerprint
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts:321:24
+    319|     const resultA = parseBlockDescriptor(input);
+    320|     const resultB = parseBlockDescriptor(input);
+    321|     expect(resultA.ok).toBe(true);
+       |                        ^
+    322|     expect(resultB.ok).toBe(true);
+    323|     if (resultA.ok && resultB.ok) {
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[5/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts > 02-BLOCK-DESCRIPTOR: idempotent replay > freezeFreshDescriptor stamps generatedAt exactly once per input
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts:331:24
+    329|   it("freezeFreshDescriptor stamps generatedAt exactly once per input"ΓÇª
+    330|     const stamped = freezeFreshDescriptor(fixedDescriptor(), () => 170ΓÇª
+    331|     expect(stamped.ok).toBe(true);
+       |                        ^
+    332|     if (!stamped.ok) return;
+    333|     expect(stamped.value.generatedAt).toBe(1700000000);
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[6/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts > 02-BLOCK-DESCRIPTOR: idempotent replay > freezeFreshDescriptor does not overwrite an existing generatedAt
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts:340:24
+    338|     const preset = { ...fixedDescriptor(), generatedAt: 1600000000 };
+    339|     const stamped = freezeFreshDescriptor(preset, () => 1800000000);
+    340|     expect(stamped.ok).toBe(true);
+       |                        ^
+    341|     if (!stamped.ok) return;
+    342|     expect(stamped.value.generatedAt).toBe(1600000000); // preserved, ΓÇª
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[7/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts > 02-BLOCK-DESCRIPTOR: variant exhaustiveness > consumer-side exhaustive switch compiles for the BlockDescriptor union
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts:374:23
+    372|   it("consumer-side exhaustive switch compiles for the BlockDescriptorΓÇª
+    373|     const result = parseBlockDescriptor(withChecksum(fixedDescriptor()ΓÇª
+    374|     expect(result.ok).toBe(true);
+       |                       ^
+    375|     if (!result.ok) return;
+    376|     const tag: string = result.value.variant;
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[8/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts > 02-LOADER: storage boundary > tryLoad returns a typed descriptor on a fresh fixture file
+Error: fixture freeze failed
+ Γ¥» freezeWithChecksum tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:66:24
+     64|     () => seed,
+     65|   );
+     66|   if (!fresh.ok) throw new Error("fixture freeze failed");
+       |                        ^
+     67|   return fresh.value;
+     68| }
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:88:24
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[9/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts > 02-LOADER: storage boundary > tryLoad surfaces hashMismatch when the on-disk body is mutated after first write
+Error: fixture freeze failed
+ Γ¥» freezeWithChecksum tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:66:24
+     64|     () => seed,
+     65|   );
+     66|   if (!fresh.ok) throw new Error("fixture freeze failed");
+       |                        ^
+     67|   return fresh.value;
+     68| }
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:161:24
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[10/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts > 02-LOADER: storage boundary > tryLoad surfaces versionMismatch when the schemaVersion does not match the pinned literal
+Error: fixture freeze failed
+ Γ¥» freezeWithChecksum tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:66:24
+     64|     () => seed,
+     65|   );
+     66|   if (!fresh.ok) throw new Error("fixture freeze failed");
+       |                        ^
+     67|   return fresh.value;
+     68| }
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:178:24
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[11/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts > 02-LOADER: storage boundary > loadBySlug returns the typed descriptor when present
+Error: fixture freeze failed
+ Γ¥» freezeWithChecksum tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:66:24
+     64|     () => seed,
+     65|   );
+     66|   if (!fresh.ok) throw new Error("fixture freeze failed");
+       |                        ^
+     67|   return fresh.value;
+     68| }
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:200:24
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[12/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts > 02-LOADER: storage boundary > loadAll reads every .json file in the directory, skips malformed entries
+Error: fixture freeze failed
+ Γ¥» freezeWithChecksum tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:66:24
+     64|     () => seed,
+     65|   );
+     66|   if (!fresh.ok) throw new Error("fixture freeze failed");
+       |                        ^
+     67|   return fresh.value;
+     68| }
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:215:20
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[13/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts > 02-LOADER: storage boundary > loadAll caches results for repeat reads within the same directory
+Error: fixture freeze failed
+ Γ¥» freezeWithChecksum tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:66:24
+     64|     () => seed,
+     65|   );
+     66|   if (!fresh.ok) throw new Error("fixture freeze failed");
+       |                        ^
+     67|   return fresh.value;
+     68| }
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:249:20
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[14/15]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts > 02-LOADER: storage boundary > clearLoaderCache forces a fresh read on the next loadAll
+Error: fixture freeze failed
+ Γ¥» freezeWithChecksum tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:66:24
+     64|     () => seed,
+     65|   );
+     66|   if (!fresh.ok) throw new Error("fixture freeze failed");
+       |                        ^
+     67|   return fresh.value;
+     68| }
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:261:20
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[15/15]ΓÄ»
+

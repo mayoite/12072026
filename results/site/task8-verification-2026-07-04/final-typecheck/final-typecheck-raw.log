@@ -1,0 +1,15 @@
+﻿node.exe : $ tsc -p tsconfig.json --noEmit
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ tsc -p tsconfig.json --noEmit:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+features/planner/open3d/ai/aiAdvisor.ts(13,16): error TS2304: Cannot find name 'Open3dDisplayUnit'.
+features/planner/open3d/ai/aiAdvisor.ts(80,10): error TS2304: Cannot find name 'Open3dDisplayUnit'.
+features/planner/open3d/ai/aiAdvisor.ts(272,21): error TS2304: Cannot find name 'Open3dDisplayUnit'.
+features/planner/open3d/ai/aiAdvisor.ts(325,64): error TS2304: Cannot find name 'Open3dDisplayUnit'.
+features/planner/open3d/ai/aiAdvisor.ts(331,28): error TS2304: Cannot find name 'Open3dDisplayUnit'.
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] oando-site@0.1.0 typecheck: `tsc -p tsconfig.json --noEmit`
+Exit status 2

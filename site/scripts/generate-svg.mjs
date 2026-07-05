@@ -12,7 +12,7 @@
  *   Cites Global Standard BP-03 + design §8, §11 (no donor/competitor geometry/palettes).
  *
  * GS BENCHMARK CITE ENFORCEMENT (PLAN-FAIL-0415/0420): 
- *   GS-BP-03 · plans/2026-07-05_phase1-execution/handover-routing.md · design §6
+ *   GS-BP-03 · plans/01-phase1-execution/00-handover-routing.md · design §6
  *   + anti-copy in this header + Decision Log + I-D/PACKAGES before change. 
  *   Global Standard Gate (QUALITY-GATES) + Package Review applies. See phases/03 + I-D.
  *   (Static presence of this block + cites acts as build-script level gate; no runtime bypass.)

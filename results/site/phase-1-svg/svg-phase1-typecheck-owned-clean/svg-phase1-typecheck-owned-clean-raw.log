@@ -1,0 +1,15 @@
+﻿pnpm : $ pnpm --filter oando-site typecheck
+At line:1 char:1
++ pnpm run typecheck
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ pnpm --filter oando-site typecheck:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+$ tsc -p tsconfig.json --noEmit
+features/planner/open3d/canvas-fabric/FeasibilityCanvas.tsx(75,13): error TS2322: Type '"room" | "opening" | "dimension" | "placement"' is not assignable to type 'never'.
+  Type '"room"' is not assignable to type 'never'.
+features/planner/open3d/catalog/useOpen3dWorkspaceCatalog.ts(50,19): error TS2552: Cannot find name 'Open3dCatalogItem'. Did you mean 'Open3dCatalogClient'?
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] oando-site@0.1.0 typecheck: `tsc -p tsconfig.json --noEmit`
+Exit status 2
+[ELIFECYCLE] Command failed with exit code 2.

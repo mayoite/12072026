@@ -1,0 +1,13 @@
+﻿{
+    "name":  "canvas-maximize-tests",
+    "module":  "site",
+    "phase":  "planner-phase-1",
+    "command":  "pnpm exec vitest run tests/unit/features/planner/open3d/workspaceShell.test.tsx",
+    "cwd":  "D:\\oandO04072026\\site",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-05T01:51:56.8559931+05:30",
+    "endUtc":  "2026-07-05T01:52:05.2827399+05:30",
+    "durationSec":  8.427,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\planner-phase-1\\canvas-maximize-tests\\canvas-maximize-tests-raw.log"
+}

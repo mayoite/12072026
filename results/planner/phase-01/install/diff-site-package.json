@@ -1,0 +1,36 @@
+diff --git a/site/package.json b/site/package.json
+index 0095730..6412aaa 100644
+--- a/site/package.json
++++ b/site/package.json
+@@ -130,6 +130,7 @@
+   "dependencies": {
+     "@aws-sdk/client-s3": "^3.1071.0",
+     "@fancyapps/ui": "^6.1.14",
++    "@flatten-js/core": "^1.6.12",
+     "@gltf-transform/core": "^4.1.1",
+     "@gltf-transform/extensions": "^4.1.1",
+     "@google/generative-ai": "^0.24.1",
+@@ -143,6 +144,7 @@
+     "@radix-ui/react-tooltip": "^1.2.10",
+     "@react-three/drei": "^10.7.7",
+     "@react-three/fiber": "^9.6.1",
++    "@resvg/resvg-js": "^2.6.2",
+     "@supabase/ssr": "^0.12.0",
+     "@supabase/supabase-js": "^2.108.2",
+     "@tanstack/react-query": "^5.101.0",
+@@ -172,6 +174,7 @@
+     "papaparse": "^5.5.3",
+     "pdf-lib": "^1.17.1",
+     "pdfjs-dist": "^6.0.227",
++    "polygon-clipping": "^0.15.7",
+     "postgres": "^3.4.9",
+     "react": "^19.0.0",
+     "react-dom": "^19.0.0",
+@@ -181,6 +184,7 @@
+     "server-only": "^0.0.1",
+     "sharp": "^0.35.2",
+     "sonner": "^2.0.7",
++    "svgo": "^4.0.1",
+     "swiper": "^12.2.0",
+     "tailwind-merge": "^3.6.0",
+     "three": "^0.185.0",

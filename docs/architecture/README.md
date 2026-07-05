@@ -1,7 +1,7 @@
 # Architecture docs — index
 
 **Status:** Live index (update with each architecture revision)  
-**Authority:** `plann/REVISION-2026-07-05.md` → [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md) → files in this folder  
+**Authority:** `plann/00-REVISION.md` → [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md) → files in this folder  
 **Placement:** [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — start here for new code  
 **Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
 
@@ -19,8 +19,8 @@
 | **Where code lives (C4, modules)** | [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md) |
 | **Request / save / publish flows** | [`DATA_FLOW.md`](DATA_FLOW.md) |
 | **Deploy / infra** | [`DEPLOYMENT.md`](DEPLOYMENT.md) |
-| **Phased UI execution** | `plann/UI-PLAN-REVISED-2026-07-05.md` |
-| **Phased test gates** | `plann/TEST-PLAN-REVISED-2026-07-05.md` |
+| **Phased UI execution** | `plann/06-UI-PLAN.md` |
+| **Phased test gates** | `plann/08-TEST-PLAN.md` |
 
 Redirects (do not extend): [`STRUCTURE_GUIDELINES.md`](STRUCTURE_GUIDELINES.md), [`SYSTEM_OVERVIEW.md`](SYSTEM_OVERVIEW.md).
 
@@ -29,9 +29,9 @@ Redirects (do not extend): [`STRUCTURE_GUIDELINES.md`](STRUCTURE_GUIDELINES.md),
 ## Authority stack
 
 ```text
-plann/REVISION-2026-07-05.md          (1A open3d pilot, 1B SVG Option A, no SVG.js Phase 1)
-  → plann/UI-PLAN-REVISED-2026-07-05.md
-  → plann/TEST-PLAN-REVISED-2026-07-05.md
+plann/00-REVISION.md          (1A open3d pilot, 1B SVG Option A, no SVG.js Phase 1)
+  → plann/06-UI-PLAN.md
+  → plann/08-TEST-PLAN.md
   → docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md
   → docs/architecture/MODULE-LAYOUT.md      (where code goes)
   → docs/architecture/MODULE-UI-CONTRACT.md (surface + lint contract)

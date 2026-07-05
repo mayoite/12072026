@@ -1,0 +1,37 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+      Coverage enabled with v8
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts (0 test)
+node.exe : 
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Suites 1 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts [ tests/unit/features/planner/open3d/coverageGap.test.ts 
+]
+ReferenceError: BLOCK_DESCRIPTOR_SCHEMA_VERSION is not defined
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2774:20
+    2772|
+    2773| describe("SVG Types Validation TDD ΓÇö parse/freeze/checksum/error pathsΓÇª
+    2774|   const SCHEMA_V = BLOCK_DESCRIPTOR_SCHEMA_VERSION;
+       |                    ^
+    2775|
+    2776|   it("parseBlockDescriptor: non-object, versionMismatch, structural inΓÇª
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/1]ΓÄ»
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  23:37:17
+   Duration  1.91s (transform 419ms, setup 270ms, import 0ms, tests 0ms, environment 280ms)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-site-results.json
+undefined
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run tests/unit/features/planner/open3d/coverageGap.test.ts --config vitest.site.config.ts --coverage

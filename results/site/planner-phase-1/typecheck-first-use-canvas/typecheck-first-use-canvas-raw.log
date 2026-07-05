@@ -1,0 +1,25 @@
+﻿pnpm : $ tsc -p tsconfig.json --noEmit
+At line:1 char:1
++ pnpm run typecheck
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ tsc -p tsconfig.json --noEmit:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+features/planner/open3d/shared/export/uploadUtils.ts(13,12): error TS2304: Cannot find name 'UploadBackgroundOptions'.
+features/planner/open3d/shared/export/uploadUtils.ts(14,12): error TS2304: Cannot find name 'UploadResult'.
+features/planner/open3d/shared/export/uploadUtils.ts(16,22): error TS2304: Cannot find name 'validateImageFile'.
+features/planner/open3d/shared/export/uploadUtils.ts(27,34): error TS2304: Cannot find name 'loadImageFile'.
+features/planner/open3d/shared/export/uploadUtils.ts(46,70): error TS2304: Cannot find name 'UploadResult'.
+features/planner/open3d/shared/export/uploadUtils.ts(82,17): error TS2304: Cannot find name 'UploadResult'.
+features/planner/open3d/shared/export/uploadUtils.ts(83,12): error TS2304: Cannot find name 'UploadBackgroundOptions'.
+features/planner/open3d/shared/export/uploadUtils.ts(84,4): error TS2304: Cannot find name 'Open3dBackgroundImage'.
+features/planner/open3d/shared/export/uploadUtils.ts(104,12): error TS2304: Cannot find name 'UploadBackgroundOptions'.
+features/planner/open3d/shared/export/uploadUtils.ts(105,31): error TS2304: Cannot find name 'Open3dBackgroundImage'.
+features/planner/open3d/shared/export/uploadUtils.ts(124,12): error TS2304: Cannot find name 'UploadSketchOptions'.
+features/planner/open3d/shared/export/uploadUtils.ts(125,12): error TS2304: Cannot find name 'UploadResult'.
+features/planner/open3d/shared/export/uploadUtils.ts(128,8): error TS2304: Cannot find name 'DEFAULT_IMAGE_LIMITS'.
+features/planner/open3d/shared/export/uploadUtils.ts(132,22): error TS2304: Cannot find name 'validateImageFile'.
+features/planner/open3d/shared/export/uploadUtils.ts(138,34): error TS2304: Cannot find name 'loadImageFile'.
+features/planner/open3d/shared/export/uploadUtils.ts(168,12): error TS2304: Cannot find name 'UploadResult'.
+features/planner/open3d/shared/export/uploadUtils.ts(276,12): error TS2304: Cannot find name 'UploadResult'.
+[ELIFECYCLE] Command failed with exit code 2.

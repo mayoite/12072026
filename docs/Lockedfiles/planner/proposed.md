@@ -1,27 +1,27 @@
 # Planner — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** `plann/REVISION-2026-07-05.md` · [`docs/architecture/MODULE-LAYOUT.md`](../../architecture/MODULE-LAYOUT.md) · [`docs/architecture/README.md`](../../architecture/README.md)
+**Authority:** `plann/00-REVISION.md` · [`docs/architecture/MODULE-LAYOUT.md`](../../architecture/MODULE-LAYOUT.md) · [`docs/architecture/README.md`](../../architecture/README.md)
 
 | Topic | Policy | Paths | Docs |
 |--------|--------|-------|------|
-| Phase split | **1A** = Open3D shell on pilot route; **1B** = SVG publish path — do not block 1A on full Puck publish | `site/features/planner/open3d/` | `plann/REVISION-2026-07-05.md` Decision 2 |
+| Phase split | **1A** = Open3D shell on pilot route; **1B** = SVG publish path — do not block 1A on full Puck publish | `site/features/planner/open3d/` | `plann/00-REVISION.md` Decision 2 |
 | Production routes | `/planner/guest`, `/planner/canvas` remain deployable Fabric until Open3D promoted (Phase 2) | Fabric archive + workspace routes | `implementation-decisions.md` |
-| Pilot route | `/planner/open3d` — **real pilot** (`site/app/planner/open3d/page.tsx` → `Open3dPlannerHost`); sole Phase 1 promotion target; not deploy-ready until 1A acceptance | `site/features/planner/open3d/` | `plann/PHASE-1.md`, `open3d/README.md` |
+| Pilot route | `/planner/open3d` — **real pilot** (`site/app/planner/open3d/page.tsx` → `Open3dPlannerHost`); sole Phase 1 promotion target; not deploy-ready until 1A acceptance | `site/features/planner/open3d/` | `plann/02-PHASE-1.md`, `open3d/README.md` |
 | Rollback | Explicit Fabric mirror routes kept through stabilization | `_archive/fabric/` | `implementation-decisions.md` |
 | Marketing | Marketing only; not workspace | `features/planner/landing/` | — |
 | Code ownership | Production code under `site/features/planner/`; `OOPlanner/`, `open3d-next-staging/` are lab/archive mirrors only | `site/features/planner/open3d/` | `AGENTS.md`, `MODULE-LAYOUT.md` |
-| Engines | Only Fabric + Three/r3f; no second canvas library | `PACKAGES.md` | `plann/START.md` §5 |
-| Commands | **P0:** All document mutations through typed `PlannerCommand` + `executePlannerCommand`; zundo on document commands only — **wiring gap:** `useWorkspaceCanvas` still calls `dispatchOpen3dAction` directly | `open3d/lib/commands/` | `plann/PHASE-1.md` §4, `plann/HANDOVER.md` |
-| CSS | Semantic `--planner-*` tokens; static presentation in CSS Modules | `site/app/css/core/planner/` | `plann/START.md` §4 |
+| Engines | Only Fabric + Three/r3f; no second canvas library | `PACKAGES.md` | `plann/01-START.md` §5 |
+| Commands | **P0:** All document mutations through typed `PlannerCommand` + `executePlannerCommand`; zundo on document commands only — **wiring gap:** `useWorkspaceCanvas` still calls `dispatchOpen3dAction` directly | `open3d/lib/commands/` | `plann/02-PHASE-1.md` §4, `plann/04-HANDOVER.md` |
+| CSS | Semantic `--planner-*` tokens; static presentation in CSS Modules | `site/app/css/core/planner/` | `plann/01-START.md` §4 |
 | UI execution | **Layer → surface → module**; module contract; no cross-surface sprint | open3d editor | [`ui/MODULE-UI-CONTRACT-Locked.md`](../ui/MODULE-UI-CONTRACT-Locked.md), [`ui-execution/proposed.md`](../ui-execution/proposed.md) |
 | UI benchmark | Bottom command surface; catalog ≤24; Phosphor-only planner chrome; inventory left / layers contextual | open3d editor | `benchmark-summary.md` REC-02/03 |
 | Plans | UI/SVG acceptance → `plann/`; executor pins → `implementation-decisions.md` | `plann/`, `plans/` | `handover-routing.md` |
-| Promotion | Guest/canvas unchanged until Phase 2 after **1A + 1B** on one revision | — | `REVISION-2026-07-05.md` |
+| Promotion | Guest/canvas unchanged until Phase 2 after **1A + 1B** on one revision | — | `00-REVISION.md` |
 
 ## Packages (proposed per plan)
 
-**Authority:** `plann/REVISION-2026-07-05.md` · **1A** = shell · **1B** = catalog SVG consume only in planner chunks
+**Authority:** `plann/00-REVISION.md` · **1A** = shell · **1B** = catalog SVG consume only in planner chunks
 
 | Package | Phase | Policy |
 |---------|-------|--------|

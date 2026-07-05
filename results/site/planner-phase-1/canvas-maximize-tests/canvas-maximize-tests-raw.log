@@ -1,0 +1,12 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ ✓ tests/unit/features/planner/open3d/workspaceShell.test.tsx (19 tests) 1277ms
+     ✓ renders panels, status bar, and toolbar actions  1121ms
+
+ Test Files  1 passed (1)
+      Tests  19 passed (19)
+   Start at  01:51:57
+   Duration  7.26s (transform 474ms, setup 405ms, import 4.96s, tests 1.28s, environment 417ms)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-results.json

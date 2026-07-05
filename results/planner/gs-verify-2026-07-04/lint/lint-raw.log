@@ -1,0 +1,149 @@
+﻿node.exe : $ eslint -c config/build/eslint.config.mjs app components features lib tests --max-warnings=0
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ eslint -c con...-max-warnings=0:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+D:\oandO04072026\site\app\(site)\portal\svg-catalog\[slug]\page.tsx
+  114:9  error  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\oandO04072026\site\app\admin\svg-editor\[id]\page.tsx
+  63:61  error  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+D:\oandO04072026\site\app\admin\svg-editor\[id]\page.tsx:63:61
+  61 |   }
+  62 |
+> 63 |   const updatedAtLabel = new Date(descriptor.generatedAt ?? Date.now())
+     |                                                             ^^^^^^^^^^ Cannot call impure function
+  64 |     .toISOString()
+  65 |     .replace("T", " ")
+  66 |     .replace(/\..*$/, "");  react-hooks/purity
+
+D:\oandO04072026\site\app\api\admin\themes\route.ts
+  11:19  error  'error' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\app\api\tracking\route.ts
+  2:1  error  All imports in the declaration are only used as types. Use `import type`  @typescript-eslint/consistent-type-imports
+
+D:\oandO04072026\site\features\planner\_archive\fabric\canvas-fabric\lib\helpers.ts
+  113:28  error  Expected '===' and instead saw '=='                                                eqeqeq
+  116:30  error  Expected '===' and instead saw '=='                                                eqeqeq
+  126:35  error  Expected '===' and instead saw '=='                                                eqeqeq
+  128:50  error  Expected '===' and instead saw '=='                                                eqeqeq
+  128:80  error  Expected '===' and instead saw '=='                                                eqeqeq
+  227:47  error  Expected '!==' and instead saw '!='                                                eqeqeq
+  254:17  error  Expected '===' and instead saw '=='                                                eqeqeq
+  264:11  error  'radius' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  271:13  error  'width' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  303:24  error  Expected '===' and instead saw '=='                                                eqeqeq
+
+D:\oandO04072026\site\features\planner\_archive\fabric\editor\PlannerCanvasStage.tsx
+  55:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\oandO04072026\site\features\planner\_archive\fabric\editor\PlannerCanvasStage.tsx:55:7
+  53 |   useEffect(() => {
+  54 |     if (shapeCount > 0) {
+> 55 |       setEmptyCanvasDismissed(false);
+     |       ^^^^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  56 |     }
+  57 |   }, [shapeCount]);
+  58 |  react-hooks/set-state-in-effect
+
+D:\oandO04072026\site\features\planner\admin\svg-editor\puckBlockRegistry.tsx
+  32:1   error  All imports in the declaration are only used as types. Use `import type`  @typescript-eslint/consistent-type-imports
+  37:23  error  'Data' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\features\planner\open3d\ai\advisorTypes.ts
+  9:15  error  'Open3dDisplayUnit' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\features\planner\open3d\ai\aiAdvisor.ts
+  5:3  error  'Open3dDoor' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  6:3  error  'Open3dWindow' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  7:3  error  'Open3dFurnitureItem' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  8:3  error  'Open3dRoom' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\features\planner\open3d\ai\sketchToPlan.ts
+  9:10  error  'createOpen3dProject' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\features\planner\open3d\ai\sketchToPlanClient.ts
+  8:15  error  'Open3dProject' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  8:30  error  'Open3dFloor' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  8:43  error  'Open3dDisplayUnit' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\features\planner\open3d\catalog\catalogClient.ts
+   34:18  error  'svgBlockDescriptorLoader' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  423:38  error  Forbidden non-null assertion                                                                @typescript-eslint/no-non-null-assertion
+  690:40  error  Forbidden non-null assertion                                                                @typescript-eslint/no-non-null-assertion
+
+D:\oandO04072026\site\features\planner\open3d\catalog\catalogMapping.ts
+  29:3  error  'normalizeColor' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\features\planner\open3d\catalog\svg\svgBlockDescriptorLoader.ts
+  24:3  error  'BLOCK_DESCRIPTOR_SCHEMA_VERSION' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  26:3  error  'Open3dDescriptorErrorKindSchema' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\features\planner\open3d\editor\InventoryPanel.tsx
+  88:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+D:\oandO04072026\site\tests\unit\admin\svg-editor\svgPipelineRunner.test.ts
+   16:48  error  `import()` type annotations are forbidden  @typescript-eslint/consistent-type-imports
+   19:46  error  `import()` type annotations are forbidden  @typescript-eslint/consistent-type-imports
+   27:46  error  `import()` type annotations are forbidden  @typescript-eslint/consistent-type-imports
+  256:27  error  A `require()` style import is forbidden    @typescript-eslint/no-require-imports
+  256:56  error  `import()` type annotations are forbidden  @typescript-eslint/consistent-type-imports
+
+D:\oandO04072026\site\tests\unit\app\(site)\portal\svg-catalog\[slug]\page.test.tsx
+  11:13  error  'registry' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\tests\unit\app\api\admin\svg-editor\route.test.ts
+   18:10  error  'ApiError' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+   18:20  error  'API_ERROR_CODES' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  173:9   error  'violations' is never reassigned. Use 'const' instead                              prefer-const
+
+D:\oandO04072026\site\tests\unit\features\planner\open3d\catalog.test.ts
+  188:3  error  'ROOM_TAGS' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  189:3  error  'STYLE_TAGS' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\tests\unit\features\planner\open3d\coverageGap.test.ts
+    26:3   error  'freezeRewriteDescriptor' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+    43:3   error  'isSupportedExportFormat' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+    49:3   error  'getFloorBounds' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+    50:3   error  'exportAsJSON' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+    56:3   error  'importFromJSONWithRecovery' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+    65:45  error  'DEFAULT_IMPORT_LIMITS' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+    94:51  error  'AdvisorContext' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+   162:34  error  'Open3dCatalogVariant' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  1552:11  error  'originalSetItem' is assigned a value but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  2332:30  error  'rotateOpen3dFurniture' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\tests\unit\features\planner\open3d\imageImport.test.ts
+  3:3  error  'SUPPORTED_IMAGE_TYPES' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\tests\unit\features\planner\open3d\modelOperations.test.ts
+  1:32  error  'vi' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+  2:58  error  'Open3dPoint' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  2:71  error  'Open3dWall' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  6:3   error  'createOpen3dSceneEnvelope' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\tests\unit\features\planner\open3d\svgInventory.test.ts
+  801:32  error  `import()` type annotations are forbidden  @typescript-eslint/consistent-type-imports
+
+D:\oandO04072026\site\tests\unit\features\planner\open3d\workspaceShell.test.tsx
+  17:10  error  'useWorkspaceKeyboard' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+Γ£û 61 problems (61 errors, 0 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] oando-site@0.1.0 lint: `eslint -c config/build/eslint.config.mjs app components features lib tests --max-warnings=0`
+Exit status 1

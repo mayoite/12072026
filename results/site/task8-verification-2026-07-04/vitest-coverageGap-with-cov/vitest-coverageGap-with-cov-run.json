@@ -1,0 +1,13 @@
+﻿{
+    "name":  "vitest-coverageGap-with-cov",
+    "module":  "site",
+    "phase":  "task8-verification-2026-07-04",
+    "command":  "pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/coverageGap.test.ts --config vitest.site.config.ts --coverage",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-04T23:37:16.3892244+05:30",
+    "endUtc":  "2026-07-04T23:37:19.9756335+05:30",
+    "durationSec":  3.586,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\task8-verification-2026-07-04\\vitest-coverageGap-with-cov\\vitest-coverageGap-with-cov-raw.log"
+}

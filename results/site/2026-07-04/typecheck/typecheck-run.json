@@ -1,0 +1,13 @@
+﻿{
+    "name":  "typecheck",
+    "module":  "site",
+    "phase":  "2026-07-04",
+    "command":  "pnpm --filter oando-site run typecheck",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-04T23:32:49.8036256+05:30",
+    "endUtc":  "2026-07-04T23:32:56.6562897+05:30",
+    "durationSec":  6.853,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\2026-07-04\\typecheck\\typecheck-raw.log"
+}

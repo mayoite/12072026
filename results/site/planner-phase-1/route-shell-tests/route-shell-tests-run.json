@@ -1,0 +1,13 @@
+﻿{
+    "name":  "route-shell-tests",
+    "module":  "site",
+    "phase":  "planner-phase-1",
+    "command":  "pnpm exec vitest run tests/unit/lib/site-data/routeChromeRules.test.ts tests/unit/features/planner/components/PlannerBodyTheme.test.tsx",
+    "cwd":  "D:\\oandO04072026\\site",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-05T01:38:00.5812891+05:30",
+    "endUtc":  "2026-07-05T01:38:03.4792703+05:30",
+    "durationSec":  2.898,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\planner-phase-1\\route-shell-tests\\route-shell-tests-raw.log"
+}

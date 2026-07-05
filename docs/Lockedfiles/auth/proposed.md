@@ -1,7 +1,7 @@
 # Auth — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`plann/REVISION-2026-07-05.md`](../../../plann/REVISION-2026-07-05.md) — guest/canvas promotion is **Phase 2** after 1A+1B accepted
+**Authority:** [`plann/00-REVISION.md`](../../../plann/00-REVISION.md) — guest/canvas promotion is **Phase 2** after 1A+1B accepted
 
 ## Cross-links
 

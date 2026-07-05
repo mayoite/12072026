@@ -1,0 +1,46 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.9 [39m[90mD:/oandO04072026/site[39m
+
+[90mstdout[2m | tests/unit/features/planner/open3d/catalog/debug.test.ts[2m > [22m[2mDEBUG: print parse errors[2m > [22m[2mshows the actual fix-descriptor error
+[22m[39mDEBUG_FIXTURE_ERRORS {
+  "kind": "hashMismatch",
+  "code": "409.hash_mismatch",
+  "fieldPath": "checksum",
+  "message": "BlockDescriptor content checksum mismatch; descriptor has been mutated after the original write",
+  "expected": "0ec970b71dbdf58cd2e8d4f1d449aef136fc7b1fbc457029d9c9bb62fca5dc61",
+  "actual": "588cd701114fecf493b31a3f1813ac6469187d096e1187904ffd99017884cf6f"
+}
+
+ [31m├ù[39m tests/unit/features/planner/open3d/catalog/debug.test.ts[2m > [22mDEBUG: print parse errors[2m > [22mshows the actual fix-descriptor error[32m 11[2mms[22m[39m
+[31m   ΓåÆ expected false to be true // Object.is equality[39m
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 1 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/debug.test.ts > DEBUG: print parse errors > shows the actual fix-descriptor error
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/debug.test.ts:40:23
+     38|       console.log("DEBUG_FIXTURE_ERRORS", JSON.stringify(result.error,ΓÇª
+     39|     }
+     40|     expect(result.ok).toBe(true);
+       |                       ^
+     41|   });
+     42| });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/1]ΓÄ»
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m   Start at [22m 17:45:19
+[2m   Duration [22m 1.65s[2m (transform 133ms, setup 549ms, import 127ms, tests 13ms, environment 711ms)[22m
+
+undefined
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run tests/unit/features/planner/open3d/catalog/debug.test.ts "--reporter=verbose" --config vitest.site.config.ts

@@ -1,0 +1,65 @@
+{
+  "phase": "03",
+  "cmd": "pipeline",
+  "timestamp": "2026-07-04T12:11:00Z",
+  "exitCode": 0,
+  "fixtures": [
+    {
+      "name": "chaise",
+      "slug": "chaise-lounge-001",
+      "variant": "union",
+      "exitCode": 0,
+      "svgBytes": 357,
+      "pngBytes": 8485,
+      "dimensions": { "width": 800, "height": 1600 },
+      "r2Url": null,
+      "note": "R2 skipped — credentials absent"
+    },
+    {
+      "name": "side-table",
+      "slug": "side-table-001",
+      "variant": "difference",
+      "exitCode": 0,
+      "svgBytes": 396,
+      "pngBytes": 3960,
+      "dimensions": { "width": 600, "height": 600 },
+      "r2Url": null,
+      "note": "R2 skipped — credentials absent"
+    },
+    {
+      "name": "sectional",
+      "slug": "sectional-sofa-001",
+      "variant": "intersection",
+      "exitCode": 0,
+      "svgBytes": 364,
+      "pngBytes": 26103,
+      "dimensions": { "width": 2800, "height": 1800 },
+      "r2Url": null,
+      "note": "R2 skipped — credentials absent"
+    },
+    {
+      "name": "missing-geometry",
+      "slug": "missing-geom-fallback-001",
+      "variant": "union",
+      "exitCode": 8,
+      "svgBytes": 335,
+      "pngBytes": 2085,
+      "dimensions": { "width": 200, "height": 200 },
+      "r2Url": null,
+      "note": "Cross-hatched fallback per §03-FIX-05 — exit code 8 expected"
+    }
+  ],
+  "forbiddenPatternCheck": {
+    "fabricLoadSVGFromString": false,
+    "pngToPublicDir": false,
+    "secondSymbolSystem": false,
+    "nonDeterministicSvg": false,
+    "sanitizationSkipped": false
+  },
+  "svgFilesProduced": [
+    "public/svg-catalog/chaise-lounge-001.svg",
+    "public/svg-catalog/side-table-001.svg",
+    "public/svg-catalog/sectional-sofa-001.svg",
+    "public/svg-catalog/missing-geom-fallback-001.svg"
+  ]
+}

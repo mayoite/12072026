@@ -1,0 +1,19 @@
+﻿node.exe : $ node scripts/audit-hollow-tests.mjs
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ node scripts/audit-hollow-tests.mjs:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+audit-hollow-tests: 8 issue(s)
+  tests/unit/app/(site)/portal/svg-catalog/[slug]/page.test.tsx ΓÇö sole-truthy
+  tests/unit/app/api/admin/svg-editor/route.test.ts ΓÇö sole-truthy
+  tests/unit/features/planner/open3d/coverageGap.test.ts ΓÇö sole-truthy
+  tests/unit/features/planner/open3d/domain.test.ts ΓÇö sole-truthy
+  tests/unit/features/planner/open3d/exportPhase06.test.ts ΓÇö sole-truthy
+  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts ΓÇö sole-truthy
+  tests/unit/features/planner/open3d/uploadUtils.test.ts ΓÇö sole-truthy
+  tests/unit/features/planner/open3d/workspaceShell.test.tsx ΓÇö sole-truthy
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] oando-site@0.1.0 test:audit:hollow: `node scripts/audit-hollow-tests.mjs`
+Exit status 1

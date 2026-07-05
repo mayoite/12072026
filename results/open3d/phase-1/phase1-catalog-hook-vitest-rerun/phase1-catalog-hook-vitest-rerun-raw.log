@@ -1,0 +1,38 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ ✓ tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts (5 tests) 319ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  08:24:36
+   Duration  1.76s (transform 212ms, setup 366ms, import 303ms, tests 319ms, environment 491ms)
+
+pnpm : DOMException [AbortError]: The operation was aborted.
+At line:1 char:1
++ pnpm exec vitest run tests/unit/features/planner/open3d/useOpen3dWork ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (DOMException [A...on was aborted.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+    at Fetch.onAsyncTaskManagerAbort 
+(file:///D:/oandO04072026/node_modules/.pnpm/happy-dom@20.10.6/node_modules/happy-dom/lib/fetch/Fetch.js:546:23)
+    at Object.<anonymous> 
+(file:///D:/oandO04072026/node_modules/.pnpm/happy-dom@20.10.6/node_modules/happy-dom/lib/fetch/Fetch.js:416:101)
+    at AsyncTaskManager.abortAll (file:///D:/oandO04072026/node_modules/.pnpm/happy-dom@20.10.6/node_modules/happy-dom/
+lib/async-task-manager/AsyncTaskManager.js:292:30)
+    at AsyncTaskManager.abort (file:///D:/oandO04072026/node_modules/.pnpm/happy-dom@20.10.6/node_modules/happy-dom/lib
+/async-task-manager/AsyncTaskManager.js:52:21)
+    at DetachedBrowserFrame.abort (file:///D:/oandO04072026/node_modules/.pnpm/happy-dom@20.10.6/node_modules/happy-dom
+/lib/browser/detached-browser/DetachedBrowserFrame.js:112:58)
+    at DetachedWindowAPI.abort (file:///D:/oandO04072026/node_modules/.pnpm/happy-dom@20.10.6/node_modules/happy-dom/li
+b/window/DetachedWindowAPI.js:51:35)
+    at teardownWindow (file:///D:/oandO04072026/node_modules/.pnpm/vitest@4.1.9_@opentelemetry_6b76d51fbf5fbbc10a83bc58
+00c35246/node_modules/vitest/dist/chunks/index.DC7d2Pf8.js:331:22)
+    at Object.teardown (file:///D:/oandO04072026/node_modules/.pnpm/vitest@4.1.9_@opentelemetry_6b76d51fbf5fbbc10a83bc5
+800c35246/node_modules/vitest/dist/chunks/index.DC7d2Pf8.js:392:10)
+    at file:///D:/oandO04072026/node_modules/.pnpm/vitest@4.1.9_@opentelemetry_6b76d51fbf5fbbc10a83bc5800c35246/node_mo
+dules/vitest/dist/chunks/base.BE3cXZj3.js:168:65
+    at Traces.$ (file:///D:/oandO04072026/node_modules/.pnpm/vitest@4.1.9_@opentelemetry_6b76d51fbf5fbbc10a83bc5800c352
+46/node_modules/vitest/dist/chunks/traces.DT5aQ62U.js:142:27)
+JSON report written to D:/oandO04072026/results/tests/vitest-site-results.json

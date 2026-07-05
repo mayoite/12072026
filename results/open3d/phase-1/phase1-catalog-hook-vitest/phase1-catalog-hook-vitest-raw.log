@@ -1,0 +1,175 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ ❯ tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts (5 tests | 5 failed) 18ms
+     × loads live catalog items from the configurator API 12ms
+     × starts in loading state with isLoading true and demo items initially 1ms
+     × falls back to demo items and status fallback when API returns no items 1ms
+     × resolveItem returns undefined for unknown id after load 1ms
+     × calls loadDescriptorsFromLoader for catalogue-first primary before api fallback 1ms
+pnpm : 
+At line:1 char:1
++ pnpm exec vitest run tests/unit/features/planner/open3d/useOpen3dWork ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts > useOpen3dWorkspaceCatalog > loads live 
+catalog items from the configurator API
+Error: No QueryClient set, use QueryClientProvider to set one
+ ❯ useQueryClient ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/s
+rc/QueryClientProvider.tsx:18:10
+ ❯ useBaseQuery ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/src
+/useBaseQuery.ts:54:17
+ ❯ useQuery ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/src/use
+Query.ts:46:9
+ ❯ useOpen3dWorkspaceCatalog features/planner/open3d/catalog/useOpen3dWorkspaceCatalog.ts:29:17
+     27|   }
+     28|
+     29|   const query = useQuery({
+       |                 ^
+     30|     queryKey: OPEN3D_CATALOG_QUERY_KEY,
+     31|     queryFn: (context) => loadOpen3dCatalog(clientRef.current!, contex…
+ ❯ tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts:45:41
+ ❯ TestComponent ../node_modules/.pnpm/@testing-library+react@16.3_11d2d49f5a29711711a9ee76b83cb539/node_modules/@testi
+ng-library/react/dist/pure.js:330:27
+ ❯ Object.react_stack_bottom_frame 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25904:20
+ ❯ renderWithHooks 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:7662:22
+ ❯ updateFunctionComponent 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:10166:19
+ ❯ beginWork 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:11778:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts > useOpen3dWorkspaceCatalog > starts in 
+loading state with isLoading true and demo items initially
+Error: No QueryClient set, use QueryClientProvider to set one
+ ❯ useQueryClient ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/s
+rc/QueryClientProvider.tsx:18:10
+ ❯ useBaseQuery ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/src
+/useBaseQuery.ts:54:17
+ ❯ useQuery ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/src/use
+Query.ts:46:9
+ ❯ useOpen3dWorkspaceCatalog features/planner/open3d/catalog/useOpen3dWorkspaceCatalog.ts:29:17
+     27|   }
+     28|
+     29|   const query = useQuery({
+       |                 ^
+     30|     queryKey: OPEN3D_CATALOG_QUERY_KEY,
+     31|     queryFn: (context) => loadOpen3dCatalog(clientRef.current!, contex…
+ ❯ tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts:59:41
+ ❯ TestComponent ../node_modules/.pnpm/@testing-library+react@16.3_11d2d49f5a29711711a9ee76b83cb539/node_modules/@testi
+ng-library/react/dist/pure.js:330:27
+ ❯ Object.react_stack_bottom_frame 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25904:20
+ ❯ renderWithHooks 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:7662:22
+ ❯ updateFunctionComponent 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:10166:19
+ ❯ beginWork 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:11778:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts > useOpen3dWorkspaceCatalog > falls back 
+to demo items and status fallback when API returns no items
+Error: No QueryClient set, use QueryClientProvider to set one
+ ❯ useQueryClient ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/s
+rc/QueryClientProvider.tsx:18:10
+ ❯ useBaseQuery ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/src
+/useBaseQuery.ts:54:17
+ ❯ useQuery ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/src/use
+Query.ts:46:9
+ ❯ useOpen3dWorkspaceCatalog features/planner/open3d/catalog/useOpen3dWorkspaceCatalog.ts:29:17
+     27|   }
+     28|
+     29|   const query = useQuery({
+       |                 ^
+     30|     queryKey: OPEN3D_CATALOG_QUERY_KEY,
+     31|     queryFn: (context) => loadOpen3dCatalog(clientRef.current!, contex…
+ ❯ tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts:76:41
+ ❯ TestComponent ../node_modules/.pnpm/@testing-library+react@16.3_11d2d49f5a29711711a9ee76b83cb539/node_modules/@testi
+ng-library/react/dist/pure.js:330:27
+ ❯ Object.react_stack_bottom_frame 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25904:20
+ ❯ renderWithHooks 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:7662:22
+ ❯ updateFunctionComponent 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:10166:19
+ ❯ beginWork 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:11778:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts > useOpen3dWorkspaceCatalog > resolveItem 
+returns undefined for unknown id after load
+Error: No QueryClient set, use QueryClientProvider to set one
+ ❯ useQueryClient ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/s
+rc/QueryClientProvider.tsx:18:10
+ ❯ useBaseQuery ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/src
+/useBaseQuery.ts:54:17
+ ❯ useQuery ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/src/use
+Query.ts:46:9
+ ❯ useOpen3dWorkspaceCatalog features/planner/open3d/catalog/useOpen3dWorkspaceCatalog.ts:29:17
+     27|   }
+     28|
+     29|   const query = useQuery({
+       |                 ^
+     30|     queryKey: OPEN3D_CATALOG_QUERY_KEY,
+     31|     queryFn: (context) => loadOpen3dCatalog(clientRef.current!, contex…
+ ❯ tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts:98:41
+ ❯ TestComponent ../node_modules/.pnpm/@testing-library+react@16.3_11d2d49f5a29711711a9ee76b83cb539/node_modules/@testi
+ng-library/react/dist/pure.js:330:27
+ ❯ Object.react_stack_bottom_frame 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25904:20
+ ❯ renderWithHooks 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:7662:22
+ ❯ updateFunctionComponent 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:10166:19
+ ❯ beginWork 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:11778:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts > useOpen3dWorkspaceCatalog > calls 
+loadDescriptorsFromLoader for catalogue-first primary before api fallback
+Error: No QueryClient set, use QueryClientProvider to set one
+ ❯ useQueryClient ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/s
+rc/QueryClientProvider.tsx:18:10
+ ❯ useBaseQuery ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/src
+/useBaseQuery.ts:54:17
+ ❯ useQuery ../node_modules/.pnpm/@tanstack+react-query@5.101.1_react@19.2.7/node_modules/@tanstack/react-query/src/use
+Query.ts:46:9
+ ❯ useOpen3dWorkspaceCatalog features/planner/open3d/catalog/useOpen3dWorkspaceCatalog.ts:29:17
+     27|   }
+     28|
+     29|   const query = useQuery({
+       |                 ^
+     30|     queryKey: OPEN3D_CATALOG_QUERY_KEY,
+     31|     queryFn: (context) => loadOpen3dCatalog(clientRef.current!, contex…
+ ❯ tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts:109:41
+ ❯ TestComponent ../node_modules/.pnpm/@testing-library+react@16.3_11d2d49f5a29711711a9ee76b83cb539/node_modules/@testi
+ng-library/react/dist/pure.js:330:27
+ ❯ Object.react_stack_bottom_frame 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25904:20
+ ❯ renderWithHooks 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:7662:22
+ ❯ updateFunctionComponent 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:10166:19
+ ❯ beginWork 
+../node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:11778:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  08:24:07
+   Duration  1.06s (transform 161ms, setup 256ms, import 249ms, tests 18ms, environment 271ms)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-site-results.json

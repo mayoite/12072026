@@ -1,0 +1,60 @@
+
+D:\oandO04072026\site\features\planner\_archive\fabric\canvas-fabric\lib\helpers.ts
+  113:28  error  Expected '===' and instead saw '=='                                                eqeqeq
+  116:30  error  Expected '===' and instead saw '=='                                                eqeqeq
+  126:35  error  Expected '===' and instead saw '=='                                                eqeqeq
+  128:50  error  Expected '===' and instead saw '=='                                                eqeqeq
+  128:80  error  Expected '===' and instead saw '=='                                                eqeqeq
+  227:47  error  Expected '!==' and instead saw '!='                                                eqeqeq
+  254:17  error  Expected '===' and instead saw '=='                                                eqeqeq
+  264:11  error  'radius' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  271:13  error  'width' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  303:24  error  Expected '===' and instead saw '=='                                                eqeqeq
+
+D:\oandO04072026\site\features\planner\_archive\fabric\editor\PlannerCanvasStage.tsx
+  55:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\oandO04072026\site\features\planner\_archive\fabric\editor\PlannerCanvasStage.tsx:55:7
+  53 |   useEffect(() => {
+  54 |     if (shapeCount > 0) {
+> 55 |       setEmptyCanvasDismissed(false);
+     |       ^^^^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  56 |     }
+  57 |   }, [shapeCount]);
+  58 |  react-hooks/set-state-in-effect
+
+D:\oandO04072026\site\features\planner\open3d\catalog\svg\svgBlockDescriptorLoader.ts
+  24:3  error  'BLOCK_DESCRIPTOR_SCHEMA_VERSION' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  26:3  error  'Open3dDescriptorErrorKindSchema' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\tests\unit\features\planner\open3d\catalog.test.ts
+  188:3  error  'ROOM_TAGS' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  189:3  error  'STYLE_TAGS' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\tests\unit\features\planner\open3d\coverageGap.test.ts
+    85:34  error  'Open3dCatalogVariant' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  1411:11  error  'originalSetItem' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\tests\unit\features\planner\open3d\imageImport.test.ts
+  3:3  error  'SUPPORTED_IMAGE_TYPES' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\tests\unit\features\planner\open3d\modelOperations.test.ts
+  1:32  error  'vi' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+  2:58  error  'Open3dPoint' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  2:71  error  'Open3dWall' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  6:3   error  'createOpen3dSceneEnvelope' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\tests\unit\features\planner\open3d\svgInventory.test.ts
+  801:32  error  `import()` type annotations are forbidden  @typescript-eslint/consistent-type-imports
+
+Γ£û 23 problems (23 errors, 0 warnings)
+
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] oando-site@0.1.0 lint: `eslint -c config/build/eslint.config.mjs app components features lib tests --max-warnings=0 "--max-warnings=0"`
+Exit status 1

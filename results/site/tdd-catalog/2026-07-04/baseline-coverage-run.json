@@ -1,0 +1,1 @@
+{"command":"pnpm --filter oando-site exec vitest run site/tests/unit/features/planner/open3d/coverageGap.test.ts -t \"Catalog Client\" --config vitest.site.config.ts --coverage","phase":"tdd-catalog","status":"baseline","timestamp":"2026-07-04","note":"Baseline to show missing coverage for loadDescriptors etc before TDD test add. Per testing-handbook.md evidence."}

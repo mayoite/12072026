@@ -1,0 +1,13 @@
+﻿{
+    "name":  "typecheck-route-token-foundation",
+    "module":  "site",
+    "phase":  "planner-phase-1",
+    "command":  "pnpm run typecheck",
+    "cwd":  "D:\\oandO04072026\\site",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-05T01:40:09.9623243+05:30",
+    "endUtc":  "2026-07-05T01:40:28.8352982+05:30",
+    "durationSec":  18.873,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\planner-phase-1\\typecheck-route-token-foundation\\typecheck-route-token-foundation-raw.log"
+}

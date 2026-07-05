@@ -1,0 +1,13 @@
+﻿{
+    "name":  "coverage-0408-live",
+    "module":  "planner",
+    "phase":  "2026-07-04",
+    "command":  "pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/coverageGap.test.ts --coverage --config vitest.site.config.ts --no-watch --reporter=verbose",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-04T23:33:56.3243522+05:30",
+    "endUtc":  "2026-07-04T23:34:00.7234038+05:30",
+    "durationSec":  4.399,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\2026-07-04\\coverage-0408-live\\coverage-0408-live-raw.log"
+}

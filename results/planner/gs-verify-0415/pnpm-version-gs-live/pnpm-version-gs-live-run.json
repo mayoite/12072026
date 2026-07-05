@@ -1,0 +1,13 @@
+﻿{
+    "name":  "pnpm-version-gs-live",
+    "module":  "planner",
+    "phase":  "gs-verify-0415",
+    "command":  "pnpm --version",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-04T23:30:21.6698821+05:30",
+    "endUtc":  "2026-07-04T23:30:22.2332456+05:30",
+    "durationSec":  0.563,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\gs-verify-0415\\pnpm-version-gs-live\\pnpm-version-gs-live-raw.log"
+}

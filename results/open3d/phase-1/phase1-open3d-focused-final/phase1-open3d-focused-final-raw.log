@@ -1,0 +1,15 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ ✓ tests/unit/features/planner/open3d/persistence/persistence.test.ts (9 tests) 26ms
+ ✓ tests/unit/features/planner/open3d/phase1CommandCatalog.test.ts (6 tests) 29ms
+ ✓ tests/unit/features/planner/open3d/domain.test.ts (16 tests) 31ms
+ ✓ tests/unit/features/planner/open3d/catalog.test.ts (189 tests) 92ms
+ ✓ tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts (5 tests) 368ms
+
+ Test Files  5 passed (5)
+      Tests  225 passed (225)
+   Start at  08:27:00
+   Duration  2.00s (transform 1.16s, setup 1.67s, import 1.52s, tests 547ms, environment 2.64s)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-site-results.json

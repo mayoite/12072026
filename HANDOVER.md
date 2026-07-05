@@ -1,7 +1,7 @@
 # Handover — active backlog
 
 **Last updated:** 2026-07-04 (planner phase-01 executor, BLOCK on typecheck)
-**Planner authority:** `plans/2026-07-05_phase1-execution/implementation-decisions.md`. Routing: `plans/2026-07-05_phase1-execution/handover-routing.md`. Phase specs → `archive/plans/2026-07-05_phase1-execution/phases/`.
+**Planner authority:** `plans/01-phase1-execution/01-implementation-decisions.md`. Routing: `plans/01-phase1-execution/00-handover-routing.md`. Phase specs → `archive/plans/2026-07-05_phase1-execution/phases/`.
 
 **Owns:** session status and priority backlog only. Full blocker list → [`Failures.md`](Failures.md). Commands → [`START.md`](START.md). Which doc to open → [`docs/Lockedfiles/ReadmeLocked.md`](docs/Lockedfiles/ReadmeLocked.md).
 

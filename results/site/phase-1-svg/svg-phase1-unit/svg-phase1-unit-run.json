@@ -1,0 +1,13 @@
+﻿{
+    "name":  "svg-phase1-unit",
+    "module":  "site",
+    "phase":  "phase-1-svg",
+    "command":  "pnpm exec vitest run tests/unit/admin/svg-editor tests/unit/features/planner/open3d/svgCompiler.test.ts tests/unit/features/planner/open3d/svgFixtureGallery.test.ts tests/unit/features/planner/open3d/svgInventory.test.ts",
+    "cwd":  "D:\\oandO04072026\\site",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-05T08:22:09.5724140+05:30",
+    "endUtc":  "2026-07-05T08:22:15.7165353+05:30",
+    "durationSec":  6.144,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\phase-1-svg\\svg-phase1-unit\\svg-phase1-unit-raw.log"
+}

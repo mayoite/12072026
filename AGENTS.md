@@ -55,7 +55,7 @@ All test, lint, typecheck, build, Playwright, accessibility, coverage, and audit
 
 - Smallest change that solves the task; archive over delete; no silent unrelated fixes.
 - No commit, push, publish, migrate apply, or destructive ops without ask.
-- **Open3D planner:** production code lives in `site/features/planner/open3d/` (site deps). Governance plans live in `plans/2026-07-05_phase1-execution/`. `OOPlanner/` and `open3d-next-staging/` are lab/archive mirrors — not separate pnpm workspace packages.
+- **Open3D planner:** production code lives in `site/features/planner/open3d/` (site deps). Governance plans live in `plans/01-phase1-execution/`. `OOPlanner/` and `open3d-next-staging/` are lab/archive mirrors — not separate pnpm workspace packages.
 
 ## Done
 

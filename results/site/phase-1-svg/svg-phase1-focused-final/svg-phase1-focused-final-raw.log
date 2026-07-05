@@ -1,0 +1,15 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ ✓ tests/unit/admin/svg-editor/svgPackageBoundaries.test.ts (3 tests) 7ms
+ ✓ tests/unit/admin/svg-editor/svgFoundation.test.ts (2 tests) 11ms
+ ✓ tests/unit/features/planner/open3d/svgCompiler.test.ts (3 tests) 170ms
+ ✓ tests/unit/admin/svg-editor/svgPhase1Completion.test.ts (5 tests) 474ms
+     ✓ renders canonical PNG and deterministic Sharp derivatives  459ms
+
+ Test Files  4 passed (4)
+      Tests  13 passed (13)
+   Start at  08:24:00
+   Duration  3.67s (transform 332ms, setup 1.62s, import 3.96s, tests 662ms, environment 2.18s)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-results.json

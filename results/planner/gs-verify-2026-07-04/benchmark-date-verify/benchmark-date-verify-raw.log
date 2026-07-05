@@ -1,0 +1,20 @@
+﻿# Benchmark Report â€” OOFPLWeb Planner Plan Revision
+
+Date authored: 2026-07-04
+Authority: DESIGN-BENCHMARK-PROTOCOL.md, IMPLEMENTATION-DECISIONS.md, PACKAGES.md.
+Coverage scope: governance source-of-truth files (IMPLEMENTATION-DECISIONS, QUALITY-GATES, DESIGN-BENCHMARK-PROTOCOL, HANDOVER, FAILURESPLAN, PACKAGES) plus Phase 01 â€” Engine Lock & Workspace Bootstrap.
+
+Coverage caveat (binding on a future audit): Phases 02â€“10 (`plannnerplan/phases/02â€¦10â€¦md`) and the parallel `benchmarks/` and `critique/` reports were not authored yet at the time this benchmark ran (3 execution agents running concurrently; only `01-engine-lock-and-workspace-bootstrap.md` was on disk). Binding proposals for those phases are framed as "incorporate on first author / revise on file drop"; a re-run benchmark is warranted after the execution agents commit. This report honors DESIGN-BENCHMARK-PROTOCOL.md Â§"Stale-evidence policy" â€” it is dated and additive, never overwritten.
+
+Cross-refs: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md` (global standard filter, UI/UX, BP context), `plans/2026-07-04/critique.md`, `plannnerplan/IMPLEMENTATION-DECISIONS.md`, `plannnerplan/benchmarks/INDEX.md`, `PACKAGES.md`.
+
+## 1. Five-product comparison
+
+Five leading products whose interaction principles inform the OOFPLWeb plan suite. All citations carry an access date of 2026-07-04.
+
+1. Planner 5D (floor-planning/interior-design). Applicable principle: catalogue-first sidebar with room-by-room progression, 2Dâ†”3D continuity, large merged-material library displayed with material-and-color customization, and AI-assisted entry paths that compose from existing geometry rather than generate cold start. Citation: support.planner5d.com/en/articles/5876855-catalogue-menu-web and planner5d.com/blog/ai-studio-interior-design-workflow (docs dated 2026-01-27 through 2026-05-19, accessed 2026-07-04).
+
+2. Floorplanner (floor-planning/interior-design, 2021 editor refresh). Applicable principle: mandatory canvas-to-chrome ratio with the tools in a single sidebar plus per-object floating handles and an extended-properties double-click affordance; the post-2021 refresh explicitly reorganized because a growing feature set had accumulated in illogical places â€” the same risk the OOFPLWeb portal faces. Citation: orooloo.com/blog-new-redesign-for-floorplanner-2021 and cdn.floorplanner.com/static/brochures/FloorplannerManualEN.pdf (accessed 2026-07-04).
+
+3. AutoCAD Web â€” autocad-web (CAD/spatial-authoring). Applicable principle: workspace-as-named-bundle of palette/ribbon/command-window state with docking, anchoring, floating, and auto-hide behavior; the AccessÂ·ible Command Line docked at the bottom is the strongest reference for a non-canvas error/prompt surface. Citation: autodesk.com/products/autocad-web/features and help.autodesk.com/cloudhelp/2026/ENU/AutoCAD-Core/files/GUID-D550C560-FDC0-4A68-A56C-52C98C3DD0A6.htm (current 2026 product help, accessed 2026-07-04).
+

@@ -60,7 +60,7 @@ Your `site/package.json` stack is **mostly at or within one patch of npm latest*
 
 ---
 
-## Top 5 Recommendations for `plann/START.md` Package Section
+## Top 5 Recommendations for `plann/01-START.md` Package Section
 
 1. **Document the server pipeline boundary explicitly:** `@flatten-js/core` + boolean ops → `svgo` → `dompurify`/`isomorphic-dompurify` → `@resvg/resvg-js` → `sharp`; mark each as `server-only` vs `client-only` with `serverExternalPackages: ['@resvg/resvg-js', 'sharp']`.
 2. **Schedule `polygon-clipping` review** — benchmark swap to `martinez-polygon-clipping@0.8.1` (drop-in GeoJSON arrays) before Phase 1 closeout; keep `polygon-clipping` only if parity tests pass.

@@ -1,0 +1,13 @@
+﻿{
+    "name":  "vitest-catalog-prod-sources-verify",
+    "module":  "site",
+    "phase":  "phase-06",
+    "command":  "pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/catalog.test.ts --config vitest.site.config.ts",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-04T23:43:16.8498870+05:30",
+    "endUtc":  "2026-07-04T23:43:29.1504236+05:30",
+    "durationSec":  12.301,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\phase-06\\vitest-catalog-prod-sources-verify\\vitest-catalog-prod-sources-verify-raw.log"
+}

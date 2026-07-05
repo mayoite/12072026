@@ -1,0 +1,501 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+      Coverage enabled with v8
+
+node.exe : stderr | tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Actions (TDD: apply errors, 
+preview, revert, layout branches) > previewSuggestionActions and revert cover layout and warn path
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (stderr | tests/...t and warn path:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[advisorActions] revertLastSuggestion not fully implemented
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts (259 tests | 11 failed) 316ms
+     Γ£ô builds gallery with expected entry count 11ms
+     Γ£ô each entry has valid SVG markup 1ms
+     Γ£ô covers all theme variants 1ms
+     Γ£ô covers multiple categories 0ms
+     Γ£ô includes rotated entries 0ms
+     Γ£ô viewBox is a valid string 1ms
+     Γ£ô placeCatalogItem with all options 2ms
+     Γ£ô placeCatalogItem defaults 0ms
+     Γ£ô placeCatalogItem with item that has no variants 0ms
+     Γ£ô clickToPlace creates correct snapshot 0ms
+     Γ£ô dragToPlace creates correct snapshot 0ms
+     Γ£ô apiPlace creates correct snapshot 0ms
+     Γ£ô apiPlace with no overrides 0ms
+     Γ£ô verifyPlacementIdentity returns true for matching 0ms
+     Γ£ô verifyPlacementIdentity returns false for mismatched 0ms
+     Γ£ô generates unique IDs across batch 0ms
+     Γ£ô placeCatalogItemInProject preserves overrides and unrelated furniture 1ms
+     Γ£ô getAll returns loaded items 2ms
+     Γ£ô getById returns item or null 1ms
+     Γ£ô getBySlug case-insensitive 1ms
+     Γ£ô getBySku case-insensitive 1ms
+     Γ£ô getByCategory returns matching items 1ms
+     Γ£ô getByRoom returns matching items 2ms
+     Γ£ô getByStyle returns matching items 2ms
+     Γ£ô search with text query 5ms
+     Γ£ô search with category filter 2ms
+     Γ£ô search with room filter 1ms
+     Γ£ô search with style filter 1ms
+     Γ£ô search with material filter 1ms
+     Γ£ô search with color filter 1ms
+     Γ£ô search with dimension filter 1ms
+     Γ£ô search with dimension filter depth and height 2ms
+     Γ£ô search with availability filter 1ms
+     Γ£ô search with sort order name-asc 1ms
+     Γ£ô search with sort order name-desc 1ms
+     Γ£ô search with sort order price-asc 1ms
+     Γ£ô search with sort order price-desc 1ms
+     Γ£ô search with sort order newest 1ms
+     Γ£ô search pagination with cursor 1ms
+     Γ£ô search with invalid cursor defaults to start 1ms
+     Γ£ô search caches results 2ms
+     Γ£ô search on empty catalog returns empty 1ms
+     Γ£ô isLoaded returns correct state 1ms
+     Γ£ô getSource returns loaded source 1ms
+     Γ£ô invalidate clears cache and rebuilds index 3ms
+     Γ£ô getById/getBySlug/getBySku return null on unloaded client 1ms
+     Γ£ô exact SKU match appears in results 5ms
+     Γ£ô loadFromApi rejects missing fetch and failed responses 3ms
+     Γ£ô search falls back to per-item tokenization when index is empty 1ms
+     Γ£ô loadDescriptorsFromLoader returns [] on client (addresses always []) without throwing 1ms
+     Γ£ô search integrates resolver blocks when descriptors path taken (uses .blocks result) 1ms
+     Γ£ô search supports Sketchfab parity facets (license/animated/staffPicked) per 0419 fix 1ms
+     Γ£ô addRecentItem deduplicates by SKU 1ms
+     Γ£ô addRecentItem enforces max count 1ms
+     Γ£ô clearRecentItems empties list 0ms
+     Γ£ô addFavoriteItem prevents duplicates 0ms
+     Γ£ô addFavoriteItem enforces max count (evicts oldest) 15ms
+     Γ£ô removeFavoriteItem removes by catalogId 17ms
+     Γ£ô getFavoritesByCategory filters correctly 0ms
+     Γ£ô migrateRecentItemsSchema is a no-op at current version 0ms
+     Γ£ô migrateFavoritesSchema is a no-op at current version 0ms
+     Γ£ô defaultInventoryPanelState returns expected shape 0ms
+     Γ£ô reduceInventoryCommand handles all command types 1ms
+     Γ£ô reduceInventoryCommand PLACE_ITEM returns state unchanged 0ms
+     ├ù reduceInventoryCommand handles mode, focus, scroll, range, and announcements 15ms
+     Γ£ô collections: project recents and variant-aware recents 1ms
+     Γ£ô collections: add and remove recent 1ms
+     Γ£ô collections: favorites add/remove/check 0ms
+     Γ£ô collections: upsert and item management 1ms
+     Γ£ô collections: add to nonexistent collection is no-op 0ms
+     Γ£ô collections: remove from nonexistent collection is no-op 0ms
+     Γ£ô INVENTORY_PANEL_CONTRACT has expected shape 0ms
+     Γ£ô reduceInventoryCommand SET_SEARCH_QUERY whitespace-only keeps current mode (browse branch) 0ms
+     Γ£ô addInventoryRecent frequent sorts by useCount desc then itemId then variant for ties 0ms
+     Γ£ô addInventoryFavorite uses stableUnique + sort for favorites list 0ms
+     Γ£ô rejects empty input 0ms
+     Γ£ô rejects non-string input 0ms
+     Γ£ô rejects oversized SVG 1ms
+     Γ£ô rejects malformed SVG without root element 1ms
+     Γ£ô rejects script elements 1ms
+     Γ£ô rejects foreignObject 0ms
+     Γ£ô rejects entity declarations 0ms
+     Γ£ô rejects event handler attributes 0ms
+     Γ£ô rejects onclick 0ms
+     Γ£ô rejects href attributes 1ms
+     Γ£ô rejects javascript: protocol 0ms
+     Γ£ô rejects data: protocol in attributes 0ms
+     Γ£ô rejects use element (external reference) 0ms
+     Γ£ô rejects iframe element 0ms
+     Γ£ô rejects embed element 0ms
+     Γ£ô rejects object element 0ms
+     Γ£ô rejects unsafe url() reference in style 0ms
+     Γ£ô allows safe internal url(#id) reference 0ms
+     Γ£ô passes valid SVG 0ms
+     Γ£ô warns about missing namespace but still passes 0ms
+     Γ£ô isSvgSafe shorthand works 0ms
+     Γ£ô configuratorHeightCmFromMixedUnit with undefined 0ms
+     Γ£ô configuratorHeightCmFromMixedUnit with 0 0ms
+     Γ£ô configuratorHeightCmFromMixedUnit with negative 0ms
+     Γ£ô configuratorHeightCmFromMixedUnit with NaN 0ms
+     Γ£ô configuratorHeightCmFromMixedUnit with Infinity 0ms
+     Γ£ô configuratorHeightCmFromMixedUnit with value > threshold (mm) 0ms
+     Γ£ô configuratorHeightCmFromMixedUnit with value <= threshold (cm) 0ms
+     Γ£ô configuratorHeightCmFromMixedUnit custom fallback 0ms
+     Γ£ô displayDimensions mm format 0ms
+     Γ£ô displayDimensions cm format 0ms
+     Γ£ô displayDimensions m format 0ms
+     Γ£ô displayDimensions in format 0ms
+     Γ£ô displayDimensions ft-in format 0ms
+     Γ£ô displayDimensions with zero height omits height 0ms
+     Γ£ô displayFtInFromCanonicalMm formats correctly 0ms
+     Γ£ô displayInFromCanonicalMm converts correctly 0ms
+     Γ£ô displayMFromCanonicalMm converts correctly 0ms
+     Γ£ô buildAccessibleName formats correctly 0ms
+     Γ£ô renderSvgSymbol with all themes 1ms
+     Γ£ô renderSvgSymbol with rotation values 0ms
+     Γ£ô getCachedSvgSymbol caches and retrieves 0ms
+     Γ£ô clearSvgCache empties cache 0ms
+     Γ£ô getSvgSymbolDimensionAgreement returns valid viewBox 0ms
+     Γ£ô generateSymbol with all known subcategories 0ms
+     Γ£ô generateSymbol with unknown subcategory falls back 0ms
+     Γ£ô render uses deterministic generatedAt value 0ms
+     Γ£ô generates ID without crypto.randomUUID (getRandomValues fallback) 1ms
+     Γ£ô generates ID when crypto exists without randomUUID or getRandomValues 0ms
+     Γ£ô generates ID without crypto at all (randomSuffix fallback) 0ms
+     Γ£ô search with empty query returns all filtered items 4ms
+     Γ£ô search with text returns relevant items 4ms
+     Γ£ô search with category filter 2ms
+     Γ£ô search with room filter 1ms
+     Γ£ô search with style filter 1ms
+     Γ£ô search with material filter 1ms
+     Γ£ô search with availability filter 2ms
+     Γ£ô typo tolerance triggers on zero results with long query 24ms
+     Γ£ô typo tolerance disabled 8ms
+     Γ£ô minScore filters low-relevance results 8ms
+     Γ£ô suggest returns matching items 1ms
+     Γ£ô suggest with short query returns empty 1ms
+     Γ£ô suggest returns tag matches 1ms
+     Γ£ô search applies dimension range filters (min/max width/depth/height) and fuzzy prefix score path 1ms
+     Γ£ô search scores exact SKU high and expands synonyms; filter handles null config + defaults 1ms
+     Γ£ô mapPlannerManagedProductToCatalogItem returns null for missing id 0ms
+     Γ£ô mapPlannerManagedProductToCatalogItem returns null for missing name 0ms
+     Γ£ô mapPlannerManagedProductToCatalogItem returns null for zero dimensions 0ms
+     Γ£ô mapPlannerManagedProductToCatalogItem succeeds with valid input 1ms
+     Γ£ô mapConfiguratorProductToCatalogItem returns null for missing slug 1ms
+     Γ£ô mapConfiguratorProductToCatalogItem parametric sizing 1ms
+     Γ£ô mapConfiguratorProductToCatalogItem L-shape parametric 0ms
+     Γ£ô mapConfiguratorProductToCatalogItem discrete sizing 0ms
+     Γ£ô mapConfiguratorProductToCatalogItem defaultFootprint fallback 0ms
+     Γ£ô mapConfiguratorProductToCatalogItem returns null for no dimensions 0ms
+     Γ£ô resolveSubCategory extracts from series name 0ms
+     Γ£ô resolveSubCategory extracts from family 0ms
+     Γ£ô resolveSubCategory falls back to category matching 0ms
+     Γ£ô resolveAvailabilityStatus returns discontinued for inactive 0ms
+     Γ£ô resolveAvailabilityStatus returns in-stock for active 0ms
+     Γ£ô migrateRecentItemsSchema upgrades old schema version 0ms
+     Γ£ô migrateFavoritesSchema upgrades old schema version 0ms
+     Γ£ô safeRead handles corrupted JSON gracefully 0ms
+     Γ£ô safeWrite handles full localStorage gracefully 1ms
+     Γ£ô maps advisor error codes (RED phase: initial) 0ms
+     ├ù requestAdvisorChat hits rate limit, service unavailable, generic http error, and network catch 4ms
+     Γ£ô requestAdvisorChat covers invalid input throws (caught), max messages, generic error, network catch 1ms
+     Γ£ô requestSpaceSuggest covers validation fail + api error path + success 1ms
+     Γ£ô applySuggestion (client) + validateLayout cover error branches and warnings 1ms
+     Γ£ô resolveAdvisorProviderChain returns default 0ms
+     ├ù applySuggestion and applyLayoutToProject hit no-floor, no-project, unsupported, layout validation fail 2ms
+     Γ£ô previewSuggestionActions and revert cover layout and warn path 2ms
+     ├ù applyLayoutToProject skips when no floorId 2ms
+     Γ£ô convertSketchToPlan covers all validateRequest branches + idle error return 1ms
+     Γ£ô convertSketchToPlan parses preview, fallback, error, unknown status + network catch 1ms
+     Γ£ô convertSketchToPlanWithProgress reports states for preview and fallback 1ms
+     Γ£ô sketch helpers, accept/reject, isAvailable, estimate, recovery messages 0ms
+     Γ£ô catches unsafe URL in second-pass attribute scan 0ms
+     Γ£ô catches vbscript protocol 0ms
+     Γ£ô catches custom on-event attribute (ontouchstart) 0ms
+     Γ£ô handles unquoted attribute values 0ms
+     Γ£ô getCachedSvgSymbol with scale parameter 0ms
+     Γ£ô getCachedSvgSymbol with invalid rotation/scale uses defaults 0ms
+     Γ£ô getCachedSvgSymbol with unknown theme falls back to light 0ms
+     Γ£ô cache eviction works at scale 2ms
+     Γ£ô displayDimensions with unknown unit falls back to cm 0ms
+     Γ£ô LRU cache evicts when at capacity 1ms
+     Γ£ô gs: catalogue-first loader primary + Sketchfab facets + cursor cap + resolver wire (BP-06 / design ┬º9-10 / 0419) 0ms
+     Γ£ô stale cache triggers revalidation 32ms
+     Γ£ô rejects widthMm exceeding 100000 1ms
+     Γ£ô rejects depthMm exceeding 100000 0ms
+     Γ£ô rejects heightMm exceeding 100000 0ms
+     Γ£ô rejects invalid weightKg 0ms
+     Γ£ô validateAssetUrl rejects non-https URL 0ms
+     Γ£ô validateAssetUrl rejects empty string 0ms
+     Γ£ô validateAssetUrls validates multiple URLs 0ms
+     Γ£ô configurator parametric with empty length options falls through to null 0ms
+     Γ£ô configurator parametric with invalid values returns null 0ms
+     Γ£ô configurator discrete with zero-area options skips them 0ms
+     Γ£ô configurator with non-parametric sizingType and seatCount path 0ms
+     Γ£ô handles localStorage being undefined 0ms
+     Γ£ô catches blocked attribute via regex scan (xlink:href in nested element) 0ms
+     Γ£ô catches formaction in the attribute regex loop 0ms
+     Γ£ô second-pass catches data: protocol in quoted value 0ms
+     Γ£ô second-pass catches url() with external reference in style value 0ms
+     Γ£ô attribute scan catches xlink:title via matchAll loop 0ms
+     Γ£ô quoted-value scan catches data protocol in single-quoted attributes 0ms
+     Γ£ô attribute scan catches xlink:show through matchAll blocked-attribute path 0ms
+     Γ£ô renderSvgSymbol with sofa has multiple shapes 0ms
+     Γ£ô bed symbol with headboard shapes 0ms
+     Γ£ô storage symbol generation 0ms
+     Γ£ô plants symbol (circle shape) 0ms
+     Γ£ô addFloor with copyCurrentLayout copies walls from active floor 0ms
+     Γ£ô importFloorData merges stairs and columns 0ms
+     Γ£ô LRU cache has() returns false for expired entries 22ms
+     Γ£ô configurator non-parametric non-discrete with defaultFootprint 0ms
+     Γ£ô configurator parametric with sharing=sharing doubles depth 0ms
+     Γ£ô configurator with all metadata fields 0ms
+     Γ£ô symbol with very small dimensions 0ms
+     Γ£ô symbol with very large dimensions 0ms
+     Γ£ô getCachedSvgSymbol reuses cached entry 0ms
+     Γ£ô default symbol for unknown category handles edge case 0ms
+     Γ£ô search exercises configurability/mounting/assetReadiness filter branches + sketchfab parity 1ms
+     Γ£ô loadFromApi success normalizes envelope + items (hits map/filter/?? paths) 0ms
+     Γ£ô text search hits computeRelevance tag/name/desc/fuzzy + compareNewest 0ms
+     Γ£ô addInventoryRecent hits frequent useCount tie + id sort, variant null/undef handling 0ms
+     Γ£ô upsert uses stableUniqueItemIds (dedupe + locale sort) 0ms
+     Γ£ô placeCatalogItemInProject exercises furniture map override + variant ?? chains 0ms
+     Γ£ô generatePlacementId crypto fallback path (no uuid/getRandomValues) 0ms
+     Γ£ô crypto===undefined fully hits randomSuffix outer else (placement logic) 0ms
+     Γ£ô placeCatalogItemInProject map/?? + variant null path 0ms
+     Γ£ô addOpen3dFurniture throws catalog/scale errors 0ms
+     Γ£ô addOpen3d* opening errors (wall, pos, width, length) 0ms
+     Γ£ô projectActions duplicate add, !source dup return orig, wall delete cascade 0ms
+     ├ù addOpen3dWall no active floor + transaction reduce + move update 4ms
+     ├ù inspectOpen3dProject + assert cover duplicate/invalid/missing-active/missing-wall 1ms
+     Γ£ô validateAssetUrl accepts all relative forms; https only after allowlist 0ms
+     Γ£ô resolveAssetUrl + isAssetUrlExpired cover ?? / if paths 0ms
+     Γ£ô add/getAllowedOrigins and origin match exercised 0ms
+     Γ£ô displayDimensions covers cm/m/in/ft-in + mm fallback 0ms
+     Γ£ô canonicalDimensionsFromCatalogCm + configuratorHeight branches + buildAccessible 0ms
+     Γ£ô validateDimensions hits zero/neg/inf/weight paths 0ms
+     Γ£ô oversized attr value, on* prefix, non-fragment href, poster blocked 0ms
+     Γ£ô INVENTORY_CATEGORIES exports 6 categories with subCategories and stable ids 0ms
+     Γ£ô INVENTORY_ROOM_GROUPS has all-rooms empty + specific room tags 0ms
+     Γ£ô INVENTORY_STYLE_GROUPS provides all-styles + modern etc 0ms
+     Γ£ô INVENTORY_SORT_OPTIONS and DENSITY_OPTIONS define keys used in state 0ms
+     Γ£ô loadDescriptorsFromLoader returns [] immediately when window defined (client guard branch) 0ms
+     Γ£ô hits dynamic startsWith('on') branch for 'blocked event attribute' message 0ms
+     Γ£ô missing namespace pushes warn issue but returns safe:true + original 0ms
+     ├ù isSvgSafe delegates and returns correct bools 1ms
+     Γ£ô oversized attribute value triggers specific issue (MAX_ATTRIBUTE_BYTES) 0ms
+     ├ù fallback produces valid render output with crosshatch, reason, aria 1ms
+     Γ£ô generateSymbol normalizes non-positive dims to 1 and renders 0ms
+     Γ£ô symbol using label path includes <text> in svg 0ms
+     Γ£ô parseBlockDescriptor: non-object, versionMismatch, structural invalid, hashMismatch paths 6ms
+     Γ£ô canonicalizeBlockDescriptorInput sorts keys recursively; compute checksum 64hex 0ms
+     Γ£ô toOpen3dDescriptorErrorHttp covers kinds; freezeFresh stamps generatedAt 1ms
+     Γ£ô RED-VERIFY: buildExportFilename + preflight ready/blocked/unsupported exercise slug + geometry check 0ms
+   ├ù GREEN: updateExportJobProgress clamps + status transition + formatExportJobAnnouncement all paths + formats (TDD cycle 2) 1ms
+     Γ£ô json export/import roundtrip + error paths (no floors, bad floorId, recover) 1ms
+     ├ù importUtils detect/auto/roomplan/error + preflight unsupported/blocked 1ms
+     ├ù upload utils: formatFileSize, validateUpload, revoke, preview (pure paths) 3ms
+     Γ£ô more preflight blocked no-geometry non-json + job cancel announce 0ms
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 11 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > 
+reduceInventoryCommand handles mode, focus, scroll, range, and announcements
+AssertionError: expected 'search' to be 'browse' // Object.is equality
+
+Expected: "browse"
+Received: "search"
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:818:24
+    816|     state = reduceInventoryCommand(state, { type: "SET_SEARCH_QUERY", ΓÇª
+    817|     expect(state.searchQuery).toBe("   ");
+    818|     expect(state.mode).toBe("browse"); // per reducer: whitespace-onlyΓÇª
+       |                        ^
+    819|
+    820|     const beforeFavorites = state;
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Clients & Actions (TDD error paths, chat, 
+parsing) > requestAdvisorChat hits rate limit, service unavailable, generic http error, and network catch
+AssertionError: expected 'Too many requests. Please wait a momeΓÇª' to contain 'temporarily unavailable'
+
+Expected: "temporarily unavailable"
+Received: "Too many requests. Please wait a moment and try again."
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:1641:27
+    1639|     const chat503 = await requestAdvisorChat([{ role: "user", content:ΓÇª
+    1640|     expect(chat503.success).toBe(false);
+    1641|     expect(chat503.error).toContain("temporarily unavailable");
+       |                           ^
+    1642|   });
+    1643|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Actions (TDD: apply errors, preview, 
+revert, layout branches) > applySuggestion and applyLayoutToProject hit no-floor, no-project, unsupported, layout 
+validation fail
+AssertionError: expected 'Open3D project has no active floor.' to contain 'No active floor'
+
+Expected: "No active floor"
+Received: "Open3D project has no active floor."
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:1720:30
+    1718|     const noFloorRes = await applySuggestion({ type: "placement", descΓÇª
+    1719|     expect(noFloorRes.success).toBe(false);
+    1720|     expect(noFloorRes.error).toContain("No active floor");
+       |                              ^
+    1721|
+    1722|     const noProjPlace = await applySuggestion({ type: "placement", desΓÇª
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[3/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Actions (TDD: apply errors, preview, 
+revert, layout branches) > applyLayoutToProject skips when no floorId
+Error: Open3D project has no active floor.
+ Γ¥» activeFloorOrThrow features/planner/open3d/model/actions/projectActions.ts:62:21
+     60| function activeFloorOrThrow(project: Open3dProject) {
+     61|   const floor = project.floors.find((candidate) => candidate.id === prΓÇª
+     62|   if (!floor) throw new Error("Open3D project has no active floor.");
+       |                     ^
+     63|   return floor;
+     64| }
+ Γ¥» applyOpen3dProjectAction features/planner/open3d/model/actions/projectActions.ts:71:23
+ Γ¥» features/planner/open3d/model/actions/projectActions.ts:120:26
+ Γ¥» applyOpen3dProjectTransaction features/planner/open3d/model/actions/projectActions.ts:119:18
+ Γ¥» applyLayoutToProject features/planner/open3d/ai/advisorActions.ts:149:26
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:1751:17
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[4/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > Model Actions + Invariants error paths + map (TDD for 
+model/actions/* uncovered) > addOpen3dWall no active floor + transaction reduce + move update
+AssertionError: expected { id: 'p1', name: 'P', ΓÇª(5) } to be { id: 'p1', name: 'P', ΓÇª(5) } // Object.is equality
+
+- Expected
++ Received
+
+@@ -36,7 +36,7 @@
+        "windows": [],
+      },
+    ],
+    "id": "p1",
+    "name": "P",
+-   "updatedAt": "t",
++   "updatedAt": "2026-07-04T17:59:22.125Z",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2546:19
+    2544|     expect(tx.floors[0].furniture.length).toBe(1); // green: reduce caΓÇª
+    2545|     const moved = moveOpen3dEntity(proj, "furniture", "no", { x: 5, y:ΓÇª
+    2546|     expect(moved).toBe(proj); // green: update on absent id is no-op rΓÇª
+       |                   ^
+    2547|   });
+    2548|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[5/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > Model Actions + Invariants error paths + map (TDD for 
+model/actions/* uncovered) > inspectOpen3dProject + assert cover duplicate/invalid/missing-active/missing-wall
+AssertionError: expected 'duplicate-id' to be 'missing-wall' // Object.is equality
+
+Expected: "missing-wall"
+Received: "duplicate-id"
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2563:52
+    2561|     expect(inspectOpen3dProject(noActive)[0].code).toBe("missing-activΓÇª
+    2562|     const missWall = { ...dupProj, floors: [{ ...dupProj.floors[0], doΓÇª
+    2563|     expect(inspectOpen3dProject(missWall)[0].code).toBe("missing-wall"ΓÇª
+       |                                                    ^
+    2564|   });
+    2565| });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[6/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer TDD ΓÇö on* event msg + ns warn + 
+isSvgSafe + oversized attr (RED first) > isSvgSafe delegates and returns correct bools
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2721:35
+    2719|     const badForeign = '<svg xmlns="http://www.w3.org/2000/svg"><foreiΓÇª
+    2720|     expect(isSvgSafe(good)).toBe(true);
+    2721|     expect(isSvgSafe(badForeign)).toBe(false);
+       |                                   ^
+    2722|   });
+    2723|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[7/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Fallback TDD ΓÇö generateFallbackSvg direct (test 
+first) > fallback produces valid render output with crosshatch, reason, aria
+AssertionError: expected '<?xml version="1.0" encoding="UTF-8"?ΓÇª' to contain 'cross'
+
+- Expected
++ Received
+
+- cross
++ <?xml version="1.0" encoding="UTF-8"?>
++ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" width="42cm" height="30cm" role="img" 
+aria-label="Missing symbol: MissingFixture (symbol absent in catalog)">
++   <title>Missing: MissingFixture</title>
++   <desc>symbol absent in catalog</desc>
++   <rect x="2" y="2" width="416" height="296" fill="var(--svg-theme-fallback-fill, var(--color-warning-soft, 
+var(--surface-status-bad)))" stroke="currentColor" stroke-width="2px" opacity="0.7" />
++   <line x1="4" y1="4" x2="416" y2="296" stroke="currentColor" stroke-width="1px" opacity="0.8" />
++   <line x1="416" y1="4" x2="4" y2="296" stroke="currentColor" stroke-width="1px" opacity="0.8" />
++   <text x="210" y="150" dominant-baseline="middle" text-anchor="middle" font-size="30px" fill="currentColor" 
+opacity="0.9">?</text>
++ </svg>
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2739:21
+    2737|     expect(out.svg).toContain("<?xml");
+    2738|     expect(out.svg).toContain("<svg");
+    2739|     expect(out.svg).toContain("cross"); // lines for hatch
+       |                     ^
+    2740|     expect(out.svg).toContain("Missing: MissingFixture");
+    2741|     expect(out.svg).toContain("symbol absent in catalog");
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[8/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > GREEN: updateExportJobProgress clamps + status 
+transition + formatExportJobAnnouncement all paths + formats (TDD cycle 2)
+AssertionError: expected '123 cm' to be '12.34 cm' // Object.is equality
+
+Expected: "12.34 cm"
+Received: "123 cm"
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2875:41
+    2873|   expect(formatExportJobAnnouncement(canc).kind).toBe("cancelled");
+    2874|   expect(formatExportJobAnnouncement({ ...job, status: "failed" as anyΓÇª
+    2875|   expect(formatMeasurement(1234, "cm")).toBe("12.34 cm");
+       |                                         ^
+    2876|   expect(formatMeasurement(1234, "m")).toBe("1.234 m");
+    2877|   expect(formatMeasurement(1234, "in")).toBe("48.58 in");
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[9/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > Export shared TDD roundtrips + errors + upload + 
+preflight more (cycles 3+) > importUtils detect/auto/roomplan/error + preflight unsupported/blocked
+AssertionError: expected 'unknown' to be 'json' // Object.is equality
+
+Expected: "json"
+Received: "unknown"
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2906:59
+    2904|     expect(detectFormat('{"walls":[],"doors":[],"sections":[]}').formaΓÇª
+    2905|     expect(detectFormat('{"type":"open3d-floorplan-project","project":ΓÇª
+    2906|     expect(detectFormat('{"floors":[],"id":"x"}').format).toBe("json");
+       |                                                           ^
+    2907|     expect(detectFormat("{}").format).toBe("unknown");
+    2908|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[10/11]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > Export shared TDD roundtrips + errors + upload + 
+preflight more (cycles 3+) > upload utils: formatFileSize, validateUpload, revoke, preview (pure paths)
+AssertionError: expected 'data:image/png;base64,iVBORw0KGgoAAAAΓÇª' to contain 'data:image/jpeg'
+
+Expected: "data:image/jpeg"
+Received: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU
+5ErkJggg=="
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2933:18
+    2931|
+    2932|     const prev = await generatePreview("data:image/png;base64,iVBORw0KΓÇª
+    2933|     expect(prev).toContain("data:image/jpeg");
+       |                  ^
+    2934|   });
+    2935|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[11/11]ΓÄ»
+
+
+ Test Files  1 failed (1)
+      Tests  11 failed | 248 passed (259)
+   Start at  23:29:20
+   Duration  4.39s (transform 503ms, setup 336ms, import 593ms, tests 316ms, environment 310ms)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-results.json

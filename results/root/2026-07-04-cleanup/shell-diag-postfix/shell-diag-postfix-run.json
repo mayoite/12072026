@@ -1,0 +1,13 @@
+﻿{
+    "name":  "shell-diag-postfix",
+    "module":  "root",
+    "phase":  "2026-07-04-cleanup",
+    "command":  "pnpm --version; node --version; echo \u0027Shell functional confirmed for cleanup task - 2026-07-04 doc cleanup\u0027",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-04T23:24:13.5689051+05:30",
+    "endUtc":  "2026-07-04T23:24:13.7894180+05:30",
+    "durationSec":  0.221,
+    "exitCode":  null,
+    "rawLog":  "D:\\oandO04072026\\results\\root\\2026-07-04-cleanup\\shell-diag-postfix\\shell-diag-postfix-raw.log"
+}

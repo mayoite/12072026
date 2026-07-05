@@ -1,0 +1,1097 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+      Coverage enabled with v8
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts (22 tests | 2 failed) 305ms
+     Γ£ô tryLoad returns a typed descriptor on a fresh fixture file 28ms
+     Γ£ô tryLoad emits notFound when the JSON file is missing 3ms
+     Γ£ô tryLoad emits invalid when the JSON file body is malformed 6ms
+     Γ£ô tryLoad rejects slugs that don't match the kebab regex (defensive early) 2ms
+     Γ£ô tryLoad rejects slugs that contain path-traversal characters 2ms
+     Γ£ô tryLoad rejects slugs with absolute paths 2ms
+     Γ£ô tryLoad rejects injected path components 1ms
+     Γ£ô tryLoad rejects a non-`.json` extension 9ms
+     Γ£ô tryLoad surfaces hashMismatch when the on-disk body is mutated after first write 8ms
+     Γ£ô tryLoad surfaces versionMismatch when the schemaVersion does not match the pinned literal 7ms
+     Γ£ô loadBySlug throws with HTTP-shape prefix when the descriptor cannot be loaded 6ms
+     Γ£ô loadBySlug returns the typed descriptor when present 28ms
+     Γ£ô loadAll returns empty array when the directory does not exist 2ms
+     Γ£ô loadAll reads every .json file in the directory, skips malformed entries 40ms
+     Γ£ô loadAll skips a .json-named directory that is not a regular file 33ms
+     Γ£ô loadAll caches results for repeat reads within the same directory 8ms
+     Γ£ô clearLoaderCache forces a fresh read on the next loadAll 12ms
+     Γ£ô Open3dDescriptorError union covers all four canonical kinds 3ms
+     ├ù tryLoad surfaces invalid (via parseBlockDescriptor) when JSON parses to non-object primitive 26ms
+     Γ£ô tryLoad surfaces invalid when JSON parses to non-object (number) hitting parse early guard 3ms
+     Γ£ô tryLoad surfaces invalid (parse path) when schemaVersion present but not string type 47ms
+     ├ù loadAll skips entries that fail parseBlockDescriptor (e.g. non-object json or schema fail) and only returns valid 19ms
+node.exe : AggregateError: 
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (AggregateError: :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+    at internalConnectMultiple (node:net:1193:18)
+    at afterConnectMultiple (node:net:1783:7) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:3000
+        at createConnectionError (node:net:1746:14)
+        at afterConnectMultiple (node:net:1776:16) {
+      errno: -4078,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 3000
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:3000
+        at createConnectionError (node:net:1746:14)
+        at afterConnectMultiple (node:net:1776:16) {
+      errno: -4078,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 3000
+    }
+  ]
+}
+ Γ£ô tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts (5 tests) 557ms
+ Γ¥» tests/unit/features/planner/open3d/workspaceShell.test.tsx (19 tests | 2 failed) 2686ms
+     Γ£ô creates a project, dispatches actions, and supports undo/redo 44ms
+     Γ£ô updates selection and applies direct project updates 4ms
+     Γ£ô draws a wall when the segment exceeds the minimum length 16ms
+     Γ£ô docks, undocks, collapses, moves, resizes, and persists layout 6ms
+     Γ£ô restores layout from localStorage on mount 2ms
+     Γ£ô fires view, unit, export, and import callbacks and shows save status 126ms
+     Γ£ô handles dock, undock, minimize, close, resize, and focus 42ms
+     ├ù searches sample inventory and selects an item 1080ms
+     Γ£ô shows empty state and wall properties for a selection 47ms
+     Γ£ô renders panels, status bar, and toolbar actions  1160ms
+       Γ£ô maps shortcut keys to tools 1ms
+       Γ£ô handleWallClick returns result for door and window modes (exercises placement branches) 4ms
+       ├ù edit modes, update/delete and get* cover edit branches 9ms
+       Γ£ô cancel from placing resets state 20ms
+       Γ£ô detects small viewport tier and handles mobile activePanel logic 3ms
+       Γ£ô reset and full cycle covers default restore branches 3ms
+       Γ£ô renders door and furniture properties (covers render* branches) 68ms
+       Γ£ô hides persist actions for guest accessContext 30ms
+     Γ£ô renders loading then workspace shell for guest (covers hydration + shell wiring) 11ms
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 4 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/workspaceShell.test.tsx > InventoryPanel > searches sample inventory and 
+selects an item
+TestingLibraryElementError: Unable to find role="option" and name `/Executive Standing Desk, 1\.6m/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Inventory panel"[39m
+      [33mclass[39m=[32m"_panel_ae4f14"[39m
+      [33mid[39m=[32m"inventory-panel-_r_0_"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_searchSection_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_searchWrapper_ae4f14"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"_searchIcon_ae4f14"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"11"[39m
+              [33mcy[39m=[32m"11"[39m
+              [33mr[39m=[32m"8"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m21 21-4.35-4.35"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<input[39m
+            [33maria-label[39m=[32m"Search inventory"[39m
+            [33mclass[39m=[32m"_searchInput_ae4f14"[39m
+            [33mplaceholder[39m=[32m"Search furniture..."[39m
+            [33mtype[39m=[32m"search"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_quickFilters_ae4f14"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒÅá[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mAll Rooms[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒ¢ï∩╕Å[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mLiving Room[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒ¢Å∩╕Å[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mBedroom[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒì│[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mKitchen[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒÜ┐[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mBathroom[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_categoriesSection_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_sectionHeader_ae4f14"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_sectionTitle_ae4f14"[39m
+          [36m>[39m
+            [0mCategories[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<nav[39m
+          [33maria-label[39m=[32m"Inventory categories"[39m
+          [33mclass[39m=[32m"_categoryList_ae4f14"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"true"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒ¬æ[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mFurniture[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 _categoryChevronOpen_ae4f14"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"_subCategoryList_ae4f14"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mSofas & Sectionals[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mChairs[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mTables[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mDesks & Workstations[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mStorage[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mBeds[0m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒÆí[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mLighting[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒû╝∩╕Å[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mDecor[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒî┐[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mOutdoor[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒì╜∩╕Å[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mKitchen & Dining[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒôÉ[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mSymbols[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</nav>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_resultsInfo_ae4f14"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"_resultsCount_ae4f14"[39m
+        [36m>[39m
+          [0m0[0m
+          [0m item[0m
+          [0ms[0m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_emptyState_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_emptyIcon_ae4f14"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"48"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.5"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"48"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M21 21-10.5 10.5M21 21-10.5-10.5M21 21-18-18M3 3l18 18M3 21l18-18"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</div>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"_emptyText_ae4f14"[39m
+        [36m>[39m
+          [0mNo items found[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Inventory panel"[39m
+      [33mclass[39m=[32m"_panel_ae4f14"[39m
+      [33mid[39m=[32m"inventory-panel-_r_0_"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_searchSection_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_searchWrapper_ae4f14"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"_searchIcon_ae4f14"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"11"[39m
+              [33mcy[39m=[32m"11"[39m
+              [33mr[39m=[32m"8"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m21 21-4.35-4.35"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<input[39m
+            [33maria-label[39m=[32m"Search inventory"[39m
+            [33mclass[39m=[32m"_searchInput_ae4f14"[39m
+            [33mplaceholder[39m=[32m"Search furniture..."[39m
+            [33mtype[39m=[32m"search"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_quickFilters_ae4f14"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒÅá[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mAll Rooms[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒ¢ï∩╕Å[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mLiving Room[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒ¢Å∩╕Å[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mBedroom[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒì│[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mKitchen[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [0m≡ƒÜ┐[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mBathroom[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_categoriesSection_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_sectionHeader_ae4f14"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_sectionTitle_ae4f14"[39m
+          [36m>[39m
+            [0mCategories[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<nav[39m
+          [33maria-label[39m=[32m"Inventory categories"[39m
+          [33mclass[39m=[32m"_categoryList_ae4f14"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"true"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒ¬æ[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mFurniture[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 _categoryChevronOpen_ae4f14"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"_subCategoryList_ae4f14"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mSofas & Sectionals[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mChairs[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mTables[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mDesks & Workstations[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mStorage[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33maria-pressed[39m=[32m"false"[39m
+                [33mclass[39m=[32m"_subCategoryButton_ae4f14 "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mBeds[0m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒÆí[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mLighting[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒû╝∩╕Å[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mDecor[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒî┐[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mOutdoor[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒì╜∩╕Å[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mKitchen & Dining[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_categoryItem_ae4f14"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-pressed[39m=[32m"false"[39m
+              [33mclass[39m=[32m"_categoryButton_ae4f14 "[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryIcon_ae4f14"[39m
+              [36m>[39m
+                [0m≡ƒôÉ[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryLabel_ae4f14"[39m
+              [36m>[39m
+                [0mSymbols[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_categoryChevron_ae4f14 "[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"12"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"12"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m6 9 6 6 6-6"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</nav>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_resultsInfo_ae4f14"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"_resultsCount_ae4f14"[39m
+        [36m>[39m
+          [0m0[0m
+          [0m item[0m
+          [0ms[0m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_emptyState_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_emptyIcon_ae4f14"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"48"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.5"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"48"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M21 21-10.5 10.5M21 21-10.5-10.5M21 21-18-18M3 3l18 18M3 21l18-18"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</div>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"_emptyText_ae4f14"[39m
+        [36m>[39m
+          [0mNo items found[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ Γ¥» waitForWrapper 
+../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ Γ¥» ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ Γ¥» tests/unit/features/planner/open3d/workspaceShell.test.tsx:364:37
+    362|     render(<InventoryPanel onItemSelect={onItemSelect} onSearch={onSeaΓÇª
+    363|
+    364|     const itemOption = await screen.findByRole("option", {
+       |                                     ^
+    365|       name: /Executive Standing Desk, 1\.6m/i,
+    366|     });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/4]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/workspaceShell.test.tsx > TDD editor coverage additions > 
+useDoorWindowPlacement additional branches (TDD) > edit modes, update/delete and get* cover edit branches
+Error: Door d1 not found
+ Γ¥» updateDoor features/planner/open3d/model/operations/pureActions.ts:261:20
+    259|   const floor = getActiveFloor(p);
+    260|   const door = floor.doors.find((d) => d.id === id);
+    261|   if (!door) throw new Error(`Door ${id} not found`);
+       |                    ^
+    262|   Object.assign(door, updates);
+    263|   return {
+ Γ¥» Object.updateDoorProperties features/planner/open3d/editor/useDoorWindowPlacement.ts:98:14
+ Γ¥» tests/unit/features/planner/open3d/workspaceShell.test.tsx:539:38
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/4]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts > 02-LOADER: storage boundary > 
+tryLoad surfaces invalid (via parseBlockDescriptor) when JSON parses to non-object primitive
+AssertionError: expected '' to be 'slug:primitive' // Object.is equality
+
+- Expected
++ Received
+
+- slug:primitive
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:348:38
+    346|     if (!result.ok) {
+    347|       expect(result.error.kind).toBe("invalid");
+    348|       expect(result.error.fieldPath).toBe("slug:primitive");
+       |                                      ^
+    349|     }
+    350|   });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[3/4]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts > 02-LOADER: storage boundary > 
+loadAll skips entries that fail parseBlockDescriptor (e.g. non-object json or schema fail) and only returns valid
+AssertionError: expected 'chaise' to be 'good' // Object.is equality
+
+Expected: "good"
+Received: "chaise"
+
+ Γ¥» tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts:384:26
+    382|     const all = loadAll({ dir: tmpDir, forceReload: true });
+    383|     expect(all).toHaveLength(1);
+    384|     expect(all[0]?.slug).toBe("good");
+       |                          ^
+    385|   });
+    386| });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[4/4]ΓÄ»
+
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  4 failed | 42 passed (46)
+   Start at  23:39:28
+   Duration  21.37s (transform 8.03s, setup 2.69s, import 8.71s, tests 3.55s, environment 3.84s)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-results.json
+undefined
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts tests/unit/features/planner/open3d/WorkspaceShell.test.tsx tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts --coverage --no-watch

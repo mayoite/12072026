@@ -77,15 +77,37 @@ Index: [`docs/audit/README.md`](docs/audit/README.md)
 
 Legacy comprehensive audit (2026-06-20): not on disk — use [`docs/audit/README.md`](docs/audit/README.md); historical runs in `archive/results/audits/`.
 
-## Plans
+## Governance plans (`plans/`)
 
-- `plans/README.md` — plan index
-- `plans/tech-stack-generator-7-file-plan/` — active tech-stack generator pack (2026-06-30)
+Binding pins, benchmarks, gates — [`plans/README.md`](plans/README.md):
+
+| # | Pack | Role |
+|---|------|------|
+| 00 | `plans/00-global-standard-revision/` | Phase 0 GS benchmark + critique |
+| 01 | `plans/01-phase1-execution/` | Implementation decisions, plan slices, quality gates |
+
+**Start:** `plans/01-phase1-execution/00-handover-routing.md` · **Binding:** `01-implementation-decisions.md`
+
+Historical phase specs stay at `archive/plans/2026-07-05_phase1-execution/` (repo archive — not renamed).
+
+## Other plan packets
+
 - `archive/plans/done/database-consolidation-3-file-plan/` — 2 Supabase + R2 packet
 - `archive/plans/done/tech-stack-docs-3-file-plan/` — tech-stack docs packet
 - `archive/plans/done/planner-unified-3-file-plan/` — canonical planner packet
 - `archive/plans/done/sketch-to-plan-3-file-plan/` — sketch-to-plan packet
 - `archive/plans/wip/` — superseded multi-file packets
+
+## Planner execution (`plann/`)
+
+Read in order — [`plann/README.md`](plann/README.md):
+
+| # | File | Role |
+|---|------|------|
+| 00 | `plann/00-REVISION.md` | Product decisions (Option A, 1A/1B) |
+| 01–04 | `01-START` … `04-HANDOVER` | Commands, phases, session status |
+| 05–08 | Expert drafts + `06-UI-PLAN` / `08-TEST-PLAN` | UI + test execution authority |
+| 09 | `plann/09-DOC-REVISION.md` | Doc batch coordinator log |
 
 ## Feature documentation
 

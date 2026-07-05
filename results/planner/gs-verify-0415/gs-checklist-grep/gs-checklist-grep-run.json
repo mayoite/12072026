@@ -1,0 +1,13 @@
+﻿{
+    "name":  "gs-checklist-grep",
+    "module":  "planner",
+    "phase":  "gs-verify-0415",
+    "command":  "findstr /s /i \" GS-0415 GS-0416 GS-0419 GS-0420 Global Standard Gate\\ plannnerplan\\\\phases\\\\*.md",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-04T23:30:59.7163768+05:30",
+    "endUtc":  "2026-07-04T23:30:59.7852191+05:30",
+    "durationSec":  0.069,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\gs-verify-0415\\gs-checklist-grep\\gs-checklist-grep-raw.log"
+}

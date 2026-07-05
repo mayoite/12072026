@@ -1,0 +1,8 @@
+﻿pnpm : $ pnpm --filter oando-site typecheck
+At line:1 char:1
++ pnpm run typecheck
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ pnpm --filter oando-site typecheck:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+$ tsc -p tsconfig.json --noEmit

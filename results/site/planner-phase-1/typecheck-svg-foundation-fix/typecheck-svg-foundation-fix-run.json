@@ -1,0 +1,13 @@
+﻿{
+    "name":  "typecheck-svg-foundation-fix",
+    "module":  "site",
+    "phase":  "planner-phase-1",
+    "command":  "pnpm run typecheck",
+    "cwd":  "D:\\oandO04072026\\site",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-05T08:16:04.6803959+05:30",
+    "endUtc":  "2026-07-05T08:16:21.1127678+05:30",
+    "durationSec":  16.432,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\planner-phase-1\\typecheck-svg-foundation-fix\\typecheck-svg-foundation-fix-raw.log"
+}

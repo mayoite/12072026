@@ -1,7 +1,7 @@
 # CRM — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`plann/REVISION-2026-07-05.md`](../../../plann/REVISION-2026-07-05.md) — CRM persistence is **post-1B**; not blocking 1A or 1B
+**Authority:** [`plann/00-REVISION.md`](../../../plann/00-REVISION.md) — CRM persistence is **post-1B**; not blocking 1A or 1B
 
 ## Cross-links
 

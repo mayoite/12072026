@@ -1,0 +1,13 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ ✓ tests/unit/features/planner/components/PlannerBodyTheme.test.tsx (2 tests) 19ms
+ ✓ tests/unit/features/planner/open3d/workspaceShell.test.tsx (19 tests) 1263ms
+     ✓ renders panels, status bar, and toolbar actions  1120ms
+
+ Test Files  2 passed (2)
+      Tests  21 passed (21)
+   Start at  01:45:32
+   Duration  3.03s (transform 618ms, setup 855ms, import 678ms, tests 1.28s, environment 1.05s)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-results.json

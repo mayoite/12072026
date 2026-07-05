@@ -247,7 +247,7 @@ PHASE-2 §9 already states: **2.5s first usable 2D**, **4s 3D after activation**
 
 ---
 
-## Gaps to Add to `plann/PHASE-1.md`
+## Gaps to Add to `plann/02-PHASE-1.md`
 
 | Gap | Suggested addition |
 |-----|-------------------|
@@ -264,7 +264,7 @@ PHASE-2 §9 already states: **2.5s first usable 2D**, **4s 3D after activation**
 
 ---
 
-## Gaps to Add to `plann/PHASE-2.md`
+## Gaps to Add to `plann/03-PHASE-2.md`
 
 | Gap | Suggested addition |
 |-----|-------------------|

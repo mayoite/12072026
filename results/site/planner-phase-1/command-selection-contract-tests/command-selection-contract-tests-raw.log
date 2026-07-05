@@ -1,0 +1,12 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ ✓ tests/unit/features/planner/open3d/workspacePreferences.test.ts (2 tests) 7ms
+ ✓ tests/unit/features/planner/open3d/domain.test.ts (16 tests) 28ms
+
+ Test Files  2 passed (2)
+      Tests  18 passed (18)
+   Start at  01:50:48
+   Duration  1.98s (transform 319ms, setup 1.43s, import 368ms, tests 35ms, environment 1.48s)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-results.json

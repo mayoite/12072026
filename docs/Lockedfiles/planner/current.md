@@ -5,14 +5,14 @@
 | Topic | On disk today | Paths | Docs |
 |--------|---------------|-------|------|
 | Production routes | `/planner/guest`, `/planner/canvas` — Fabric 7.4 | `site/app/planner/(workspace)/`, `features/planner/_archive/fabric/` | `implementation-decisions.md` |
-| Pilot route | `/planner/open3d` — native Open3D shell (`app/planner/open3d/page.tsx` → `Open3dPlannerHost`) | `site/features/planner/open3d/` | `plann/PHASE-1.md`, `open3d/README.md` |
+| Pilot route | `/planner/open3d` — native Open3D shell (`app/planner/open3d/page.tsx` → `Open3dPlannerHost`) | `site/features/planner/open3d/` | `plann/02-PHASE-1.md`, `open3d/README.md` |
 | Rollback | `/planner/fabric/guest`, `…/canvas` | Fabric archive | `implementation-decisions.md` |
 | Marketing | `/planner`, `/planner/features`, `/planner/help` | `features/planner/landing/` | — |
 | Code ownership | `open3d/` active pilot; Fabric in `_archive/fabric/` | `site/features/planner/` | `AGENTS.md` |
-| Engines | Fabric 2D + Three/r3f 3D | `PACKAGES.md` | `plann/START.md` §5 |
-| Commands | `plannerCommand.ts` exists; some mutations still via `updateProject` | `open3d/lib/commands/` | `plann/PHASE-1.md` §4 |
-| CSS | Planner tokens + open3d workspace bundles | `site/app/css/core/planner/` | `plann/START.md` §4 |
-| Plans | `plann/` product lane + `plans/2026-07-05_phase1-execution/` governance | `plann/`, `plans/` | `plann/HANDOVER.md` |
+| Engines | Fabric 2D + Three/r3f 3D | `PACKAGES.md` | `plann/01-START.md` §5 |
+| Commands | `plannerCommand.ts` exists; some mutations still via `updateProject` | `open3d/lib/commands/` | `plann/02-PHASE-1.md` §4 |
+| CSS | Planner tokens + open3d workspace bundles | `site/app/css/core/planner/` | `plann/01-START.md` §4 |
+| Plans | `plann/` product lane + `plans/01-phase1-execution/` governance | `plann/`, `plans/` | `plann/04-HANDOVER.md` |
 
 ## Packages (on disk)
 
@@ -50,4 +50,4 @@ Clear ownership under `site/features/planner/open3d/` with explicit rollback Fab
 
 ## Weaknesses
 
-`PlannerCommand` is defined but not authoritative — mutations still bypass it in places, so undo/history and audit story stay weak. Chrome uses mixed icon strategies and some unicode affordances that read amateur next to the benchmark target. Panel IA (inventory vs layers vs properties) does not yet match Floorplanner/Figma patterns from `plann/START.md`. Open3D is not deploy-ready and must not be confused with guest/canvas stability. Fabric archive aliasing in tests adds mental overhead for contributors.
+`PlannerCommand` is defined but not authoritative — mutations still bypass it in places, so undo/history and audit story stay weak. Chrome uses mixed icon strategies and some unicode affordances that read amateur next to the benchmark target. Panel IA (inventory vs layers vs properties) does not yet match Floorplanner/Figma patterns from `plann/01-START.md`. Open3D is not deploy-ready and must not be confused with guest/canvas stability. Fabric archive aliasing in tests adds mental overhead for contributors.

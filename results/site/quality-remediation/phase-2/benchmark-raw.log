@@ -1,0 +1,48 @@
+﻿[RUN] Phase 2a benchmark slice — live execution after shell fix
+Operator: Implementer subagent (post-shell-fix)
+Date: 2026-07-04
+Command: pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/svgInventory.test.ts tests/unit/features/planner/open3d/catalog.test.ts tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts -t "benchmark|perf|performance|large inventory|Phase 04" --passWithNoTests
+Cwd: D:\oandO04072026
+Start: 2026-07-04T23:25:00.9669503+05:30
+Exit: 0
+Duration: ~7.53s
+
+--- RAW OUTPUT ---
+ RUN  v4.1.9 D:/oandO04072026/site
+
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > permission gate check p95 under 1ms
+[phase-04-benchmark] permission gate p95=0.001ms budget=1ms
+
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > member document load p95 under 500ms with mocked API
+[phase-04-benchmark] member load p95=0.017ms budget=500ms
+
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > member cloud save p95 under 2s with mocked API
+[phase-04-benchmark] member save p95=0.012ms budget=2000ms
+
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > guest-to-member promotion save p95 under 2s with mocked repository
+[phase-04-benchmark] promotion save p95=0.016ms budget=2000ms
+
+ ✓ tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts (4 tests) 27ms
+stdout | tests/unit/features/planner/open3d/svgInventory.test.ts > 03A-INV: Search Index > large inventory benchmarks > meets 1K search p95 budget under 100ms
+[phase-03a-benchmark-exceed] inventory search 1K p95=52.104ms stretch=50ms
+
+ ✓ tests/unit/features/planner/open3d/catalog.test.ts (189 tests | 188 skipped) 83ms
+stdout | tests/unit/features/planner/open3d/svgInventory.test.ts > 03A-INV: Search Index > large inventory benchmarks > meets 10K search p95 budget under 200ms
+[phase-03a-benchmark-exceed] inventory search 10K p95=84.917ms stretch=100ms
+
+stdout | tests/unit/features/planner/open3d/svgInventory.test.ts > 03A-INV: Search Index > large inventory benchmarks > meets SVG symbol generation budget under 10ms p95
+[phase-03a-benchmark-exceed] SVG symbol generation p95=0.022ms stretch=5ms
+
+ ✓ tests/unit/features/planner/open3d/svgInventory.test.ts (114 tests | 111 skipped) 2721ms
+       ✓ meets 1K search p95 budget under 100ms  552ms
+       ✓ meets 10K search p95 budget under 200ms  2160ms
+
+ Test Files  3 passed (3)
+      Tests  8 passed | 299 skipped (307)
+   Start at  23:24:24
+   Duration  7.53s (transform 5.72s, setup 2.62s, import 6.01s, tests 2.83s, environment 3.67s)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-results.json
+--- END OUTPUT ---
+
+Note: 8 perf/benchmark tests executed and passed (phase04Perf:4, svgInventory benchmark suites). catalog.test had no matches for the -t filter (or skipped inside). All within budgets per logs (some using stretch). Per AGENTS/testing-handbook: this is live evidence for phase-2a slice. Shell fixed (pnpm/node work, vitest runs).

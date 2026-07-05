@@ -12,15 +12,15 @@
 | Evidence | **INCOMPLETE** if exit code, stdout/stderr, or artifacts missing; capture under `results/<module>/<phase>/<cmd>/` | `results/` | `TestingHandbookLocked.md` |
 | Coverage | **90% hard floor**, 95% target on handwritten production | coverage reports in `results/` | `quality-gates.md` |
 | Release gate | `release:gate` = lint + typecheck + test + build + a11y + planner-catalog E2E + coverage ×2 | `package.json` | `Failures.md` |
-| UI contract | `lint:ui` now (warn); `lint:ui:strict` in `release:gate:fast` after UI-1 shell | `lint-ui-contract.mjs` | `TEST-PLAN-REVISED-2026-07-05.md` |
-| Command catalog | Keep `phase1CommandCatalog.test.ts`; add `plannerCommandWiring.test.ts` when P0 wire lands | `site/tests/unit/features/planner/open3d/` | `plann/HANDOVER.md` |
+| UI contract | `lint:ui` now (warn); `lint:ui:strict` in `release:gate:fast` after UI-1 shell | `lint-ui-contract.mjs` | `08-TEST-PLAN.md` |
+| Command catalog | Keep `phase1CommandCatalog.test.ts`; add `plannerCommandWiring.test.ts` when P0 wire lands | `site/tests/unit/features/planner/open3d/` | `plann/04-HANDOVER.md` |
 | Icon policy | Add `open3dIconPolicy.test.ts` (TEST-1) — Phosphor-only, no Lucide/emoji in open3d chrome | `site/tests/unit/features/planner/open3d/` | `MODULE-UI-CONTRACT.md` |
-| SVG gates | Boundary, determinism, malicious fixtures before publish claims | `tests/unit/admin/svg-editor/` | `plann/PHASE-1.md` §12 |
+| SVG gates | Boundary, determinism, malicious fixtures before publish claims | `tests/unit/admin/svg-editor/` | `plann/02-PHASE-1.md` §12 |
 | Inventory | Refresh via `pnpm run docs:sync` — INVENTORY must match disk | `INVENTORY.md` | `tests/CONTENTS.md` |
 
 ## Packages (proposed per plan)
 
-**Authority:** `plann/REVISION-2026-07-05.md` + `quality-gates.md`
+**Authority:** `plann/00-REVISION.md` + `quality-gates.md`
 
 | Package | Phase | Policy |
 |---------|-------|--------|

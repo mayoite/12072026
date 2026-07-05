@@ -1,0 +1,7 @@
+﻿pnpm : $ tsc -p tsconfig.json --noEmit
+At line:1 char:1
++ pnpm run typecheck
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ tsc -p tsconfig.json --noEmit:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

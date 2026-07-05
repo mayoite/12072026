@@ -20,7 +20,8 @@ Don't load every file each task. Open the one that matches:
 - **Where new code goes** — `docs/architecture/MODULE-LAYOUT.md`
 - **UI module contract (anti-drift)** — `docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md` + `ui-execution/`
 - **Architecture docs** — `docs/architecture/README.md` + `architecture/current.md` / `proposed.md`
-- **Doc revision log** — `plann/DOC-REVISION-2026-07-05.md`
+- **Doc revision log** — `plann/09-DOC-REVISION.md`
+- **Planner plans (execution order)** — `plann/README.md`
 - **Locked reference copies** — `docs/Lockedfiles/conduct/` + `INDEX.md` (`DomainTruthLocked.md` → redirect)
 
 ## Doc layers

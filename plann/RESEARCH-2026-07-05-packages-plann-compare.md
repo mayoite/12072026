@@ -4,7 +4,7 @@ Date: 2026-07-05
 
 # Planner Stack Package Research (2025–2026)
 
-**Executive summary:** The on-disk stack is largely current on npm as of July 2026. `fabric@7.4.0`, `three@0.185.1`, Puck `0.22.0`, Ark UI `5.37.2`, React Aria `1.19.0`, SVGO `4.0.1`, and Zod `4.4.3` are all at or near latest. The biggest governance gap is not versions but **pipeline architecture**: `plann/START.md` mandates Puck → compiler → DOMPurify → SVGO → resvg → Sharp with **admin-only SVG.js**, while locked **PACKAGES.md Option A** explicitly **skips SVG.js** and omits DOMPurify/Sharp from the SVG path. `site/package.json` already installs both models plus excluded packages (`@xyflow/react`, GSAP, Lucide, Swiper).
+**Executive summary:** The on-disk stack is largely current on npm as of July 2026. `fabric@7.4.0`, `three@0.185.1`, Puck `0.22.0`, Ark UI `5.37.2`, React Aria `1.19.0`, SVGO `4.0.1`, and Zod `4.4.3` are all at or near latest. The biggest governance gap is not versions but **pipeline architecture**: `plann/01-START.md` mandates Puck → compiler → DOMPurify → SVGO → resvg → Sharp with **admin-only SVG.js**, while locked **PACKAGES.md Option A** explicitly **skips SVG.js** and omits DOMPurify/Sharp from the SVG path. `site/package.json` already installs both models plus excluded packages (`@xyflow/react`, GSAP, Lucide, Swiper).
 
 *Sources: npm registry queries run 2026-07-05; web citations below. Bright Data MCP returned 401 (unauthenticated); registry + public npm/GitHub docs used instead.*
 
@@ -52,7 +52,7 @@ Date: 2026-07-05
 
 ## 2. Comparison table
 
-| Package | plann (`START.md`) | PACKAGES.md | package.json | Latest | Match? | Action |
+| Package | plann (`01-START.md`) | PACKAGES.md | package.json | Latest | Match? | Action |
 |---|---|---|---|---|---|---|
 | **fabric** | 7.4, 2D engine | Tier-1 `7.4.0` | `7.4.0` | 7.4.0 | ✅ | Keep exact pin; document v8 watch (PACKAGES open Q3) |
 | **three** | 3D engine | Tier-1 `^0.185.1` | `^0.185.1` | 0.185.1 | ✅ | Pin in PACKAGES (currently float) |
@@ -87,7 +87,7 @@ Date: 2026-07-05
 
 ## 3. Conflicts: plann SVG pipeline vs PACKAGES Option A
 
-### plann canonical pipeline (`START.md` §8)
+### plann canonical pipeline (`01-START.md` §8)
 
 ```text
 Puck admin → Zod → geometry validation → deterministic SVG compile
@@ -117,13 +117,13 @@ Explicit skip: **`@svgdotjs/svg.js`** — “browser-only and redundant with fab
 | **Publication** | Immutable `PublishedRevision`, checksums, rollback | `scripts/generate-svg.mjs` → public/ + R2 | Both patterns emerging in code |
 | **Security posture** | Allowlists + DOMPurify + “SVGO is not sanitization” | SVGO normalize only | Needs unified doc |
 
-**Net:** `implementation-decisions.md` and `PACKAGES.md` are aligned with each other on Option A, but **`plann/START.md` is a superset** that adds SVG.js, DOMPurify, Sharp, and a richer publish contract. `site/package.json` follows the **plann superset** (SVG.js + DOMPurify + Sharp already present), which **violates PACKAGES skip rationale** unless a Global Standard Package Review re-opens SVG.js with benchmark cite per I-D §149–155.
+**Net:** `implementation-decisions.md` and `PACKAGES.md` are aligned with each other on Option A, but **`plann/01-START.md` is a superset** that adds SVG.js, DOMPurify, Sharp, and a richer publish contract. `site/package.json` follows the **plann superset** (SVG.js + DOMPurify + Sharp already present), which **violates PACKAGES skip rationale** unless a Global Standard Package Review re-opens SVG.js with benchmark cite per I-D §149–155.
 
 ---
 
 ## 4. Top 5 risks
 
-1. **Dual SVG architecture without a merge decision** — Engineers can implement either JSON→`d=` (Option A) or Puck→SVG.js→compiler (plann). That splits tests, security fixtures, and determinism proofs ([PACKAGES.md skip of SVG.js](https://github.com/...) vs [plann §8 pipeline](file://plann/START.md)).
+1. **Dual SVG architecture without a merge decision** — Engineers can implement either JSON→`d=` (Option A) or Puck→SVG.js→compiler (plann). That splits tests, security fixtures, and determinism proofs ([PACKAGES.md skip of SVG.js](https://github.com/...) vs [plann §8 pipeline](file://plann/01-START.md)).
 
 2. **`polygon-clipping@0.15.7` maintenance gap** — Last publish Dec 2023 ([npm](https://www.npmjs.com/package/polygon-clipping)); active Martinez fork at 0.8.1 Dec 2025 ([martinez-polygon-clipping](https://www.npmjs.com/package/martinez-polygon-clipping)). Boolean ops are safety-critical for openings/walls.
 
@@ -131,25 +131,25 @@ Explicit skip: **`@svgdotjs/svg.js`** — “browser-only and redundant with fab
 
 4. **Excluded packages already in dependency tree** — `@xyflow/react`, GSAP, Lucide, Swiper in `package.json` conflict with [UI Expert Brief exclusions](file://archive/docs/acceptance/UI%20Expert%20Planner%20ayushOverhaul%20Brief.md) and plann §5. Easy accidental import into `/planner/open3d`.
 
-5. **Tier drift: drei + framer-motion** — plann locks both; PACKAGES defers drei (Tier-2) and framer-motion (Tier-3). Installed today anyway — undermines Global Standard Package Review gate ([implementation-decisions.md](file://plans/2026-07-05_phase1-execution/implementation-decisions.md) §149).
+5. **Tier drift: drei + framer-motion** — plann locks both; PACKAGES defers drei (Tier-2) and framer-motion (Tier-3). Installed today anyway — undermines Global Standard Package Review gate ([implementation-decisions.md](file://plans/01-phase1-execution/01-implementation-decisions.md) §149).
 
 ---
 
 ## 5. Top 5 edits for `plann/`
 
-1. **`START.md` §5 — Add explicit authority line:**  
+1. **`01-START.md` §5 — Add explicit authority line:**  
    *“When `PACKAGES.md` Option A and this document conflict, `implementation-decisions.md` + PACKAGES govern install pins; this document governs UX boundaries. SVG.js requires an approved Package Review (benchmark + anti-copy) before Phase 1 §8 checklist completion.”*
 
-2. **`START.md` §8 — Reconcile pipeline with Option A:**  
+2. **`01-START.md` §8 — Reconcile pipeline with Option A:**  
    Either (A) adopt JSON→`d=` as compile input and demote SVG.js to optional visual aid only, or (B) formally supersede Option A skip with a dated decision log entry and updated PACKAGES table. Do not leave both as “approved baseline.”
 
-3. **`PHASE-1.md` §8–9 — Split checklist by boundary:**  
+3. **`02-PHASE-1.md` §8–9 — Split checklist by boundary:**  
    Add explicit rows: “DOMPurify server path uses `isomorphic-dompurify`”, “SVGO config hash locked”, “bundle audit fails if `svgo`, `@resvg/resvg-js`, `sharp`, `isomorphic-dompurify` appear in planner client graph”, “SVG.js absent from `/planner/open3d` chunk.”
 
-4. **`PHASE-1.md` §3 — Icon exclusion enforcement:**  
+4. **`02-PHASE-1.md` §3 — Icon exclusion enforcement:**  
    Tie “Remove emoji controls and use Phosphor” to “no `lucide-react` imports under `site/features/planner/`” (brief exclusion). Add static import audit gate.
 
-5. **`START.md` §5 — Align tier table with PACKAGES:**  
+5. **`01-START.md` §5 — Align tier table with PACKAGES:**  
    Mark `@react-three/drei` and `framer-motion` with the same Tier as PACKAGES *or* file a Package Review to promote them. Note `polygon-clipping` stale status and require boolean-op benchmark before reference blocks (§10).
 
 ---
@@ -170,7 +170,7 @@ Explicit skip: **`@svgdotjs/svg.js`** — “browser-only and redundant with fab
 - [react-aria-components (npm)](https://www.npmjs.com/package/react-aria-components) / [v1.19.0](https://react-aria.adobe.com/releases/v1-19-0)
 - [Zod v4](https://zod.dev/v4) / [v4.0.0 release PR](https://github.com/colinhacks/zod/pull/4844)
 - [zundo v2.3.0](https://github.com/charkour/zundo/releases/tag/v2.3.0)
-- On-disk: `plann/START.md`, `plann/PHASE-1.md`, `PACKAGES.md`, `site/package.json`, `plans/2026-07-05_phase1-execution/implementation-decisions.md`, UI Expert Brief
+- On-disk: `plann/01-START.md`, `plann/02-PHASE-1.md`, `PACKAGES.md`, `site/package.json`, `plans/01-phase1-execution/01-implementation-decisions.md`, UI Expert Brief
 - npm registry queries executed 2026-07-05 (authoritative latest versions in tables above)
 
 [REDACTED]

@@ -1,0 +1,13 @@
+﻿{
+    "name":  "test-coverage-planner-0408",
+    "module":  "planner",
+    "phase":  "0408-verification-2026-07-04",
+    "command":  "pnpm --filter oando-site run test:coverage",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-04T23:47:06.1980548+05:30",
+    "endUtc":  "2026-07-04T23:51:25.2453652+05:30",
+    "durationSec":  259.047,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\0408-verification-2026-07-04\\test-coverage-planner-0408\\test-coverage-planner-0408-raw.log"
+}

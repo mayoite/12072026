@@ -1,7 +1,7 @@
 # Data Flow Diagrams
 
 **Status:** Live reference — verify §5–6 against code before 1A/1B sign-off  
-**Authority:** `plann/REVISION-2026-07-05.md` → **this file**  
+**Authority:** `plann/00-REVISION.md` → **this file**  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) · [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md)  
 **Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
@@ -234,7 +234,7 @@ sequenceDiagram
 
 ## §6. SVG block publish — admin → planner catalog (1B target)
 
-**Authority:** Option A — no SVG.js in production path (`plann/REVISION-2026-07-05.md`)
+**Authority:** Option A — no SVG.js in production path (`plann/00-REVISION.md`)
 
 ### On disk today vs 1B target
 
@@ -410,4 +410,4 @@ sequenceDiagram
 
 - [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md) — module map
 - [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — where code lives
-- `plann/TEST-PLAN-REVISED-2026-07-05.md` — TEST-1 / TEST-2 gates
+- `plann/08-TEST-PLAN.md` — TEST-1 / TEST-2 gates

@@ -1,0 +1,5 @@
+BASELINE RUN (pre any new test add) for RED verification of missing coverage on descriptor loading paths etc.
+Command to be executed: pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/coverageGap.test.ts --config vitest.site.config.ts -t "Catalog Client" --passWithNoTests
+Note: per AGENTS + testing-handbook: full stdout/stderr must be preserved. This log will be updated post-execution. Current time 2026-07-04. Evidence for TDD cycle 1 start.
+
+[BASELINE EXECUTE START] Using run_terminal for pnpm command as specified.

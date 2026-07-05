@@ -1,7 +1,7 @@
 # Module UI Contract — Anti-drift lock
 
 **Status:** Locked  
-**Authority:** `plann/REVISION-2026-07-05.md` → `plann/UI-PLAN-REVISED-2026-07-05.md` → **this file** → [`CSS-SOLUTION.md`](CSS-SOLUTION.md)  
+**Authority:** `plann/00-REVISION.md` → `plann/06-UI-PLAN.md` → **this file** → [`CSS-SOLUTION.md`](CSS-SOLUTION.md)  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — path roots below must match  
 **Locked copy:** [`docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md`](../Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md)  
@@ -83,7 +83,7 @@ Every new UI module under the path roots above **must** satisfy:
 - [ ] No raw Tailwind palette classes in TSX
 - [ ] No `#hex` or `rgb()` / `hsl()` in open3d `*.module.css` (tokens only)
 - [ ] No new `--planner-primary*` usage (use `--planner-accent*`; primary is compat shim only)
-- [ ] Icons: Phosphor in `open3d/`; Lucide in admin (per `REVISION-2026-07-05.md` Decision 3)
+- [ ] Icons: Phosphor in `open3d/`; Lucide in admin (per `00-REVISION.md` Decision 3)
 - [ ] Repeated pattern (3×) → extract to `app/css/core/components/` before a fourth copy
 - [ ] `pnpm run lint:ui` passes (strict after UI-1 shell lands)
 
@@ -100,7 +100,7 @@ Every new UI module under the path roots above **must** satisfy:
 | Command boundary | `plannerCommandBoundary.test.ts` | TEST-1 |
 | Command wiring | `plannerCommandWiring.test.ts` | TEST-1 — **fails until `useWorkspaceCanvas` uses `executePlannerCommand`** |
 
-See `plann/TEST-PLAN-REVISED-2026-07-05.md` for full gate matrix.
+See `plann/08-TEST-PLAN.md` for full gate matrix.
 
 ---
 
@@ -121,6 +121,6 @@ See `plann/TEST-PLAN-REVISED-2026-07-05.md` for full gate matrix.
 - [`CSS-SOLUTION.md`](CSS-SOLUTION.md) — folder ownership
 - [`ADMIN-UI-CONTRACT.md`](ADMIN-UI-CONTRACT.md) — admin surface detail (UI-2)
 - [`SITE-MARKETING-UI-CONTRACT.md`](SITE-MARKETING-UI-CONTRACT.md) — marketing reference (UI-3)
-- `plann/UI-PLAN-REVISED-2026-07-05.md` — phased execution
-- `plann/TEST-PLAN-REVISED-2026-07-05.md` — test gates
+- `plann/06-UI-PLAN.md` — phased execution
+- `plann/08-TEST-PLAN.md` — test gates
 - `site/scripts/lint-ui-contract.mjs` — automated checks

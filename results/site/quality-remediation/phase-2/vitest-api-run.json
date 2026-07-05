@@ -1,0 +1,20 @@
+{
+  "name": "vitest-api",
+  "module": "site",
+  "phase": "quality-remediation/phase-2",
+  "slice": "phase-2a",
+  "command": "pnpm --dir site exec vitest run tests/unit/app/api/",
+  "cwd": "D:\\oandO04072026\\site",
+  "operator": "Agent 5 (benchmark/verification)",
+  "startUtc": "2026-07-04T00:00:00.000Z",
+  "endUtc": "2026-07-04T00:00:00.000Z",
+  "durationSec": 0,
+  "exitCode": null,
+  "status": "BLOCKED",
+  "blocker": "hostfxr.dll load failure (HRESULT 0x80070005) — shell cannot spawn processes",
+  "rawLog": "results/site/quality-remediation/phase-2/vitest-api-raw.log",
+  "testScope": "site/tests/unit/app/api/**",
+  "testFileCount": 43,
+  "skipped": true,
+  "notes": "Exit code not captured; gate INCOMPLETE per testing-handbook.md"
+}

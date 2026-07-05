@@ -1,7 +1,7 @@
 # Tech-stack — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`plann/REVISION-2026-07-05.md`](../../../plann/REVISION-2026-07-05.md) — regen when `PACKAGES.md` or major site deps change
+**Authority:** [`plann/00-REVISION.md`](../../../plann/00-REVISION.md) — regen when `PACKAGES.md` or major site deps change
 
 ## Cross-links
 

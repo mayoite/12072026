@@ -1,0 +1,26 @@
+﻿{
+  "name": "benchmark",
+  "module": "site",
+  "phase": "quality-remediation/phase-2",
+  "slice": "phase-2a",
+  "command": "pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/svgInventory.test.ts tests/unit/features/planner/open3d/catalog.test.ts tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts -t \"benchmark|perf|performance|large inventory|Phase 04\" --passWithNoTests",
+  "cwd": "D:\\oandO04072026",
+  "operator": "Implementer subagent (post-shell-fix update per task)",
+  "startUtc": "2026-07-04T23:25:08.6124927+05:30",
+  "endUtc": "2026-07-04T23:25:08.6124927+05:30",
+  "durationSec": 7.53,
+  "exitCode": 0,
+  "status": "PASSED",
+  "shellStatus": "fixed (pnpm/node/vitest functional; user confirmed powershell fix)",
+  "blocker": null,
+  "rawLog": "results/site/quality-remediation/phase-2/benchmark-raw.log",
+  "applicable": true,
+  "benchmarkTestFiles": [
+    "tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts",
+    "tests/unit/features/planner/open3d/svgInventory.test.ts",
+    "tests/unit/features/planner/open3d/catalog.test.ts"
+  ],
+  "testsRun": "8 passed | 299 skipped",
+  "skipped": false,
+  "notes": "Shell blocker removed. Live run after fix: 8 benchmark/perf tests passed (phase04Perf budgets all green; svgInventory large inventory benchmarks green within stretch budgets; catalog matched 0 for filter but file present). Evidence captured per handbook. Gate slice now executable. See Failures.md update."
+}

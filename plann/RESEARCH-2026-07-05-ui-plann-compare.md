@@ -6,7 +6,7 @@ Research covers 2024–2026 patterns from official product docs and help centers
 
 ## Executive Summary
 
-Current leading web CAD/floor-planner UX converges on **canvas-first chrome**, **contextual side panels**, **persistent command/measurement feedback**, and **catalogue-first placement** — all already captured in `plann/START.md` §3 and the ayush brief. The biggest 2024–2026 shifts are **Figma UI3’s minimize-UI + selection-driven properties** ([Figma Help](https://help.figma.com/hc/en-us/articles/23954856027159-Navigating-UI3)), **AutoCAD Web’s bottom-docked command surface** ([Autodesk](https://help.autodesk.com/cloudhelp/ENU/AutoCAD-Web-Help/files/Drafting-and-Creating/AutoCAD_Web_Help_Drafting_and_Creating_Command_Line_html.html)), and **Planner 5D’s catalogue-left + 2D/3D toggler** ([Planner 5D Help](https://support.planner5d.com/en/articles/5876855-catalogue-menu-web)). On-disk code has solid token/shell/catalog foundations but **does not yet match** PHASE-1 checklists for command dispatch, panel resizing, layers IA, emoji removal, or SVG pipeline completion.
+Current leading web CAD/floor-planner UX converges on **canvas-first chrome**, **contextual side panels**, **persistent command/measurement feedback**, and **catalogue-first placement** — all already captured in `plann/01-START.md` §3 and the ayush brief. The biggest 2024–2026 shifts are **Figma UI3’s minimize-UI + selection-driven properties** ([Figma Help](https://help.figma.com/hc/en-us/articles/23954856027159-Navigating-UI3)), **AutoCAD Web’s bottom-docked command surface** ([Autodesk](https://help.autodesk.com/cloudhelp/ENU/AutoCAD-Web-Help/files/Drafting-and-Creating/AutoCAD_Web_Help_Drafting_and_Creating_Command_Line_html.html)), and **Planner 5D’s catalogue-left + 2D/3D toggler** ([Planner 5D Help](https://support.planner5d.com/en/articles/5876855-catalogue-menu-web)). On-disk code has solid token/shell/catalog foundations but **does not yet match** PHASE-1 checklists for command dispatch, panel resizing, layers IA, emoji removal, or SVG pipeline completion.
 
 ---
 
@@ -75,7 +75,7 @@ Current leading web CAD/floor-planner UX converges on **canvas-first chrome**, *
 | Selection, inspection, annotations, camera presets via API ([Sketchfab Blog](https://sketchfab.com/blogs/community/learn-to-code-with-the-sketchfab-viewer-api-part-2-controlling-the-camera/)) | Native Sketchfab annotation hotspot visuals |
 | Progressive disclosure; loading/recovery states ([devfab.io](https://www.devfab.io/guide/camera/)) | |
 
-**Verdict:** START §3 Sketchfab block is **correct**. **REC-02** (cursor search, cap ≤24) is a **catalog UX** adoption from Sketchfab’s facet/search discipline — not yet in `plann/PHASE-*.md`.
+**Verdict:** START §3 Sketchfab block is **correct**. **REC-02** (cursor search, cap ≤24) is a **catalog UX** adoption from Sketchfab’s facet/search discipline — not yet in `plann/02-PHASE-1.md` or `03-PHASE-2.md`.
 
 ---
 
@@ -183,6 +183,6 @@ Current leading web CAD/floor-planner UX converges on **canvas-first chrome**, *
 - [How to Use 3D Mode – Planner 5D Help](https://support.planner5d.com/en/articles/15112460-how-to-use-3d-mode)
 - [Sketchfab Viewer API – Functions](https://sketchfab.com/developers/viewer/functions)
 - [Sketchfab Viewer API – Examples](https://sketchfab.com/developers/viewer/examples)
-- On-disk: `plann/START.md`, `PHASE-1.md`, `PHASE-2.md`, `HANDOVER.md`, `plans/2026-07-04_global-standard-revision/benchmark-summary.md`, `site/features/planner/open3d/editor/*`
+- On-disk: `plann/01-START.md`, `02-PHASE-1.md`, `03-PHASE-2.md`, `04-HANDOVER.md`, `plans/00-global-standard-revision/00-benchmark-summary.md`, `site/features/planner/open3d/editor/*`
 
 [REDACTED]

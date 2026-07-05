@@ -1,0 +1,11 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ Γ£ô tests/unit/admin/svg-editor/puckBlockRegistry.test.ts (24 tests) 33ms
+
+ Test Files  1 passed (1)
+      Tests  24 passed (24)
+   Start at  23:43:58
+   Duration  4.45s (transform 936ms, setup 1.13s, import 935ms, tests 33ms, environment 1.36s)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-site-results.json

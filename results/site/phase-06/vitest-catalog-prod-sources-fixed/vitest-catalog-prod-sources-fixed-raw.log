@@ -1,0 +1,11 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/catalog.test.ts (189 tests) 323ms
+
+ Test Files  1 passed (1)
+      Tests  189 passed (189)
+   Start at  23:43:59
+   Duration  7.31s (transform 3.63s, setup 2.22s, import 2.39s, tests 323ms, environment 1.40s)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-site-results.json

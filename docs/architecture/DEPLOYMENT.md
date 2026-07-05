@@ -112,7 +112,7 @@ flowchart LR
 - `pnpm --filter oando-site run test:e2e` — Playwright E2E tests pass (permissioned)
 - `pnpm --filter oando-site run build` — Production build succeeds
 
-See `plann/TEST-PLAN-REVISED-2026-07-05.md` for PR vs nightly vs pre-promotion tiers.
+See `plann/08-TEST-PLAN.md` for PR vs nightly vs pre-promotion tiers.
 
 **Phase 1 pilot route:** `/planner/open3d` — E2E evidence via `test:open3d` when policy allows.
 

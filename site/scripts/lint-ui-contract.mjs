@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * UI contract lint — warn-only until UI-0 lands across admin + open3d.
- * See plann/UI-PLAN-REVISED-2026-07-05.md
+ * See plann/06-UI-PLAN.md
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";

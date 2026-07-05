@@ -4,8 +4,8 @@ Cross-agent conclusions from four research runs. Full reports in sibling `RESEAR
 
 ## Authority
 
-- **Product execution:** `plann/REVISION-2026-07-05.md` (sequencing), then `START.md`, `PHASE-1.md`, `PHASE-2.md`, `HANDOVER.md`
-- **Governance pins:** `PACKAGES.md`, `plans/2026-07-05_phase1-execution/implementation-decisions.md`
+- **Product execution:** `plann/00-REVISION.md` (sequencing), then `01-START.md`, `02-PHASE-1.md`, `03-PHASE-2.md`, `04-HANDOVER.md`
+- **Governance pins:** `PACKAGES.md`, `plans/01-phase1-execution/01-implementation-decisions.md`
 - **When they conflict:** `PACKAGES.md` / I-D win on pins; revision wins on Phase 1A vs 1B order
 
 ## Unified verdict
@@ -14,7 +14,7 @@ Cross-agent conclusions from four research runs. Full reports in sibling `RESEAR
 
 ## P0 decisions
 
-1. **SVG architecture** — **Locked Option A** per [`REVISION-2026-07-05.md`](REVISION-2026-07-05.md); `plann/START.md` amended.
+1. **SVG architecture** — **Locked Option A** per [`00-REVISION.md`](00-REVISION.md); `plann/01-START.md` amended.
 2. **Wire `PlannerCommand`** — 1A blocker; shell polish secondary.
 3. **Bundle boundaries** — no server-only or banned packages in `/planner/open3d` chunks.
 

@@ -1,7 +1,7 @@
 # Repo shell — current (locked)
 
 **Baseline:** 2026-07-05  
-**Revision alignment:** Per [`plann/REVISION-2026-07-05.md`](../../../plann/REVISION-2026-07-05.md), Phase **1A** and **1B** are **not accepted** — this file describes on-disk repo layout only.
+**Revision alignment:** Per [`plann/00-REVISION.md`](../../../plann/00-REVISION.md), Phase **1A** and **1B** are **not accepted** — this file describes on-disk repo layout only.
 
 ## Cross-links
 
@@ -20,7 +20,7 @@
 | Deploy | Vercel project `oando-platform`; Root Directory = `site` | `site/vercel.json` (`buildCommand`: `cd .. && pnpm run build`) |
 | Env | Repo-root `.env.local` loaded by scripts | `.env.example`, `site/scripts/loadEnvLocal.cjs` |
 | Evidence | Test/lint output under `results/<module>/…` | `results/`, `testing-handbook.md` |
-| Governance | Conduct + gates at root; product plan in `plann/` | `AGENTS.md`, `Failures.md`, `plann/START.md` |
+| Governance | Conduct + gates at root; product plan in `plann/` | `AGENTS.md`, `Failures.md`, `plann/01-START.md` |
 
 ## Packages (on disk)
 

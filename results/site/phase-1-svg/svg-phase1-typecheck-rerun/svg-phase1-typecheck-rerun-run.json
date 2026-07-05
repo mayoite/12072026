@@ -1,0 +1,13 @@
+﻿{
+    "name":  "svg-phase1-typecheck-rerun",
+    "module":  "site",
+    "phase":  "phase-1-svg",
+    "command":  "pnpm run typecheck",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-05T08:23:19.0351634+05:30",
+    "endUtc":  "2026-07-05T08:23:29.6757999+05:30",
+    "durationSec":  10.641,
+    "exitCode":  2,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\phase-1-svg\\svg-phase1-typecheck-rerun\\svg-phase1-typecheck-rerun-raw.log"
+}

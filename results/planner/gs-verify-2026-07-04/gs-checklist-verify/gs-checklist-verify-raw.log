@@ -1,0 +1,46 @@
+﻿
+plannnerplan\phases\04-admin-portal-svg-editor.md:165:## Global Standard Gate (Binding) — actual checklist enforcement 
+(0415/0416/0420)
+plannnerplan\phases\04-admin-portal-svg-editor.md:166:- GS-0415-01: Fresh dated benchmark report exists and cited 
+(plans/2026-07-04/benchmark.md + design §6); required before Implemented.
+plannnerplan\phases\04-admin-portal-svg-editor.md:167:- GS-0415-02: Independent UI review (Critic/QA/UI per 
+intensified REVIEW-WORKFLOW) signed off with artifacts in results/reviews/* before "Implemented".
+plannnerplan\phases\04-admin-portal-svg-editor.md:168:- GS-0415-03: Anti-copy + pattern attestation in this Decision 
+Log (cite specific BP/REC + 5-product: Figma, AutoCAD, Planner5D etc).
+plannnerplan\phases\04-admin-portal-svg-editor.md:169:- GS-0416-01: Agent review workflow executed + evidenced: 
+independent GS-SCORE (Benchmark currency, Anti-copy, UI/UX dims, Features/Pkg, Gate readiness, Evidence) produced by 
+each; full artifacts + no passing opinions.
+plannnerplan\phases\04-admin-portal-svg-editor.md:170:- GS-0420-01: Packages have GS justification gate: any change 
+(Tier-2 re-eval or new) requires benchmark cite + anti-copy + REVIEW-WORKFLOW before I-D/PACKAGES or phase update (see 
+0420).
+plannnerplan\phases\05-portal-public-render.md:151:## Global Standard Gate (Binding) — actual checklist enforcement 
+(0415/0416/0420)
+plannnerplan\phases\05-portal-public-render.md:152:- GS-0415-01: Fresh dated benchmark report 
+(plans/2026-07-04/benchmark.md) cited + in Decision Log (design §6 Global Standard Framework binding).
+plannnerplan\phases\05-portal-public-render.md:153:- GS-0415-02: Independent review workflow (REVIEW-WORKFLOW) 
+executed with signed results/reviews/critic-review.md etc before Implemented.
+plannnerplan\phases\05-portal-public-render.md:154:- GS-0415-03: Anti-copy + pattern attestation in Decision Log above 
+(BP-05 + 5-product refs: Planner 5D, Floorplanner, AutoCAD, Figma, Sketchfab).
+plannnerplan\phases\05-portal-public-render.md:155:- GS-0416-01: Full agent review execution + evidence: Critic/QA/UI 
+each output GS-SCORE format (incl Features/Pkg for 0420); artifacts captured; primary uses validated only.
+plannnerplan\phases\05-portal-public-render.md:156:- GS-0420-01: Packages GS justification: changes (e.g. any 
+affecting Puck/Ark) require benchmark cite + anti-copy attestation + review gate before update to I-D/PACKAGES.md or 
+phase.
+plannnerplan\phases\06-planner-inventory-and-symbol-consumer.md:39:## Global Standard Gate (Binding) — actual 
+checklist enforcement (0415/0416/0420)
+plannnerplan\phases\06-planner-inventory-and-symbol-consumer.md:40:- GS-0415-01: Fresh dated benchmark report exists 
+and is cited here + Decision Log (plans/2026-07-04/benchmark.md 2026-07-04 or per DESIGN-BENCHMARK-PROTOCOL; design §6 
+binding).
+plannnerplan\phases\06-planner-inventory-and-symbol-consumer.md:41:- GS-0415-02: Independent UI review workflow 
+executed (Critic/QA/UI per REVIEW-WORKFLOW.md intensified for GS scoring); artifacts in results/reviews/ 
+(critic-review.md, qa-review.md, ui-review.md) signed with date before "Implemented".
+plannnerplan\phases\06-planner-inventory-and-symbol-consumer.md:42:- GS-0415-03: Anti-copy + pattern attestation 
+present in Decision Log (specific benchmark § + 5-product refs); no bypass.
+plannnerplan\phases\06-planner-inventory-and-symbol-consumer.md:43:- GS-0416-01: Agent review workflow fully executed 
++ evidenced: each reviewer produces independent GS-SCORE output 
+(Benchmark/Anti-copy/UI-UX/Features-Pkg/Gate/Evidence); primary finalization only after; no opinion passing.
+plannnerplan\phases\06-planner-inventory-and-symbol-consumer.md:44:- GS-0420-01: Packages justification: any 
+Tier-1/2/locked change (incl drei in Phase 06) has "Global Standard Package Review" (benchmark cite + anti-copy + 
+REVIEW-WORKFLOW signoff) recorded in I-D/PACKAGES.md + here before edit.
+
+

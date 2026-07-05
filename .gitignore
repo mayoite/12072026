@@ -31,10 +31,7 @@ test-results.json
 test-results2.json
 test-output.txt
 scratch_*
-results/reviews/
-results/coverage-site/
 tsconfig.tsbuildinfo
-tmp/
 tmp-*.json
 
 # Local logs and temp state
@@ -45,8 +42,6 @@ docs-rendered/
 project-rendered/
 .worktrees/
 tmp/launch-smoke*/
-tmp
-archive/screenshots
 test-results
 .next
 .playwright-cli
@@ -63,16 +58,6 @@ features_diff.txt
 .blackboxcli/
 
 # Generated test/coverage artifacts under site/
-site/results/
-!site/results/cross-pack-handshakes.json
-!site/results/site-ui/
-!site/results/site-ui/route-matrix.csv
-results/
-!results/planner/**
 .claude/
 .vscode/extensions.json
-backups/
-.tmp/
-archive/
 remedyplan/
-results/

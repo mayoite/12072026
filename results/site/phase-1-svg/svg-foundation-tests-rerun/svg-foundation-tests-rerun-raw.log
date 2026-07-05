@@ -1,0 +1,55 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ ✓ tests/unit/admin/svg-editor/svgPackageBoundaries.test.ts (2 tests) 6ms
+ ✓ tests/unit/admin/svg-editor/svgFoundation.test.ts (2 tests) 9ms
+ ❯ tests/unit/features/planner/open3d/svgCompiler.test.ts (3 tests | 2 failed) 115ms
+     × produces byte-identical canonical SVG and checksums 85ms
+     × namespaces semantic IDs and preserves accessibility metadata 12ms
+     ✓ rejects executable markup before SVGO can optimize it 16ms
+pnpm : 
+At line:1 char:1
++ pnpm exec vitest run tests/unit/admin/svg-editor/svgFoundation.test.t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/features/planner/open3d/svgCompiler.test.ts > server SVG compiler > produces byte-identical 
+canonical SVG and checksums
+Error: SVG sanitization rejected or changed unsafe markup
+ ❯ sanitizeAndOptimizeSvg features/planner/open3d/catalog/svg/svgServerSanitizer.ts:22:13
+     20|     });
+     21|     if (purifier.removed.length > 0) {
+     22|       throw new Error("SVG sanitization rejected or changed unsafe mar…
+       |             ^
+     23|     }
+     24|     return optimize(sanitized, {
+ ❯ Module.compileSvgBlockV1 features/planner/open3d/catalog/svg/svgCompiler.server.ts:58:15
+ ❯ tests/unit/features/planner/open3d/svgCompiler.test.ts:19:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/unit/features/planner/open3d/svgCompiler.test.ts > server SVG compiler > namespaces semantic IDs and 
+preserves accessibility metadata
+Error: SVG sanitization rejected or changed unsafe markup
+ ❯ sanitizeAndOptimizeSvg features/planner/open3d/catalog/svg/svgServerSanitizer.ts:22:13
+     20|     });
+     21|     if (purifier.removed.length > 0) {
+     22|       throw new Error("SVG sanitization rejected or changed unsafe mar…
+       |             ^
+     23|     }
+     24|     return optimize(sanitized, {
+ ❯ Module.compileSvgBlockV1 features/planner/open3d/catalog/svg/svgCompiler.server.ts:58:15
+ ❯ tests/unit/features/planner/open3d/svgCompiler.test.ts:23:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  2 failed | 5 passed (7)
+   Start at  01:53:04
+   Duration  2.98s (transform 255ms, setup 1.44s, import 1.68s, tests 130ms, environment 1.71s)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-results.json

@@ -1,0 +1,13 @@
+﻿{
+    "name":  "phase1-catalog-hook-vitest-rerun",
+    "module":  "open3d",
+    "phase":  "phase-1",
+    "command":  "pnpm exec vitest run tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts --config vitest.site.config.ts",
+    "cwd":  "D:\\oandO04072026\\site",
+    "operator":  "Codex",
+    "startUtc":  "2026-07-05T08:24:34.8581505+05:30",
+    "endUtc":  "2026-07-05T08:24:38.0425414+05:30",
+    "durationSec":  3.184,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\open3d\\phase-1\\phase1-catalog-hook-vitest-rerun\\phase1-catalog-hook-vitest-rerun-raw.log"
+}

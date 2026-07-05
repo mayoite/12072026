@@ -1,7 +1,7 @@
 # Repo shell — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`plann/REVISION-2026-07-05.md`](../../../plann/REVISION-2026-07-05.md) — **1A / 1B acceptance pending evidence**
+**Authority:** [`plann/00-REVISION.md`](../../../plann/00-REVISION.md) — **1A / 1B acceptance pending evidence**
 
 ## Cross-links
 
