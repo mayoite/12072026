@@ -69,34 +69,45 @@ export default async function AdminSvgEditorDetailPage({
     .replace("T", " ")
     .replace(/\..*$/, "");
 
-  // Server action: onPublish from Puck calls this; it directly invokes persist + pipeline per task.
-  // Captures descriptor from render for roundtrip merge. Returns err shape for client UX recovery.
-  async function publishViaPuck(puckDataFromEditor: PuckDataShape): Promise<void | { success?: boolean; error?: string }> {
-    "use server";
-    // GS: BP-04, BP-05, anti-copy. onPublish path for 1B admin UX (draft/preview, validation fail/recover).
-    const input = puckEditorDataToDescriptorInput(descriptor, puckDataFromEditor);
-    const persistResult = persistBlockDescriptor(input);
-    if (!persistResult.ok) {
-      return { error: `${persistResult.error.code}: ${persistResult.error.message}` };
-    }
-    try {
-      // runSvgPipeline (or unified later); non-fatal if thumb fails (descriptor persisted).
-      await runSvgPipeline(persistResult.descriptor);
-    } catch {
-      /* best-effort */
-    }
-    return { success: true };
-  }
-
   return (
     <div>
       <AdminSvgEditorEditView
         slug={slug}
         descriptor={descriptor}
         updatedAtLabel={updatedAtLabel}
-        onPublishAction={publishViaPuck}
+        onPublishAction={(puckDataFromEditor) => publishViaPuck(slug, puckDataFromEditor)}
       />
       {/* Full Puck editor now inside EditView (with live preview from registry render fns). No separate <Render> here (BP-05). */}
     </div>
   );
+}
+
+// Server action extracted (critical fix for unstable identity/closure).
+// Accepts slug + data, re-loads descriptor inside to avoid capturing from render scope.
+// Matches suggestion: dedicated 'use server' logic, stable across renders.
+async function publishViaPuck(slug: string, puckDataFromEditor: PuckDataShape): Promise<void | { success?: boolean; error?: string }> {
+  "use server";
+  let descriptor: BlockDescriptor;
+  if (slug === "new") {
+    descriptor = makeNewDefault();
+  } else {
+    const result = tryLoad(slug);
+    if (!result.ok) {
+      return { error: `not found` };
+    }
+    descriptor = result.value;
+  }
+  // GS: BP-04, BP-05, anti-copy. onPublish path for 1B admin UX (draft/preview, validation fail/recover).
+  const input = puckEditorDataToDescriptorInput(descriptor, puckDataFromEditor);
+  const persistResult = persistBlockDescriptor(input);
+  if (!persistResult.ok) {
+    return { error: `${persistResult.error.code}: ${persistResult.error.message}` };
+  }
+  try {
+    // runSvgPipeline (or unified later); non-fatal if thumb fails (descriptor persisted).
+    await runSvgPipeline(persistResult.descriptor);
+  } catch {
+    /* best-effort */
+  }
+  return { success: true };
 }
