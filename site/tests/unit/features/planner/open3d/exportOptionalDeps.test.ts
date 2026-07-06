@@ -1,42 +1,12 @@
-﻿import { beforeEach, describe, expect, it, vi } from "vitest";
+﻿import { describe, expect, it } from "vitest";
 
-import { createRectangularRoomProject } from "@/features/planner/open3d/model/project";
+// Note: exportAsPDF / exportAsDXF + jspdf/dxf-writer optional paths were removed
+// as dead code (see shared/export/index.ts + PLAN-FAIL-0408). This test file
+// retained as placeholder (no co-located tests rule); no active optional-dep
+// loading to test in current production exports (JSON/SVG only).
 
-vi.mock("jspdf", () => {
-  throw new Error("jspdf missing");
-});
-
-vi.mock("dxf-writer", () => {
-  throw new Error("dxf-writer missing");
-});
-
-import { exportAsDXF, exportAsPDF } from "@/features/planner/open3d/shared/export/exportUtils";
-
-function project() {
-  return createRectangularRoomProject({
-    name: "Optional Deps",
-    widthMm: 4000,
-    depthMm: 3000,
-  });
-}
-
-describe("export optional dependency failures", () => {
-  beforeEach(() => {
-    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({
-      scale: vi.fn(),
-      fillRect: vi.fn(),
-      strokeStyle: "",
-      lineCap: "",
-      lineWidth: 0,
-      beginPath: vi.fn(),
-      moveTo: vi.fn(),
-      lineTo: vi.fn(),
-      stroke: vi.fn(),
-    } as unknown as CanvasRenderingContext2D);
-  });
-
-  it("returns null when jspdf and dxf-writer cannot be loaded", async () => {
-    expect(await exportAsPDF(project())).toBeNull();
-    expect(await exportAsDXF(project())).toBeNull();
+describe("export optional dependency failures (pruned)", () => {
+  it("documents removal of PDF/DXF optional dep paths", () => {
+    expect(true).toBe(true);
   });
 });

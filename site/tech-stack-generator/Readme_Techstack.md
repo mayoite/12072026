@@ -58,4 +58,5 @@ Current result on 2026-06-27:
 - Keep the source package name `tech-stack-generator`
 - Keep the build output path `../Documents/tech-stack-generated/`
 - Regenerate source-backed docs from repo root with `pnpm run docs:sync:tech-stack`; do not hand-edit `Documents/data/` or `src/generated-data/`
+- Governance, Superpowers & Tooling section (added to src/pages/Workflows.tsx) posts the /using-superpowers GS process, anti-copy, evidence, chrome-devtools MCP, and skills (design/review/check-work/figma-*) — see Workflows.tsx and root README.md. Follow AGENTS.md + superpowers spec.
 - If the test suite expands, update this walkthrough and the package README together

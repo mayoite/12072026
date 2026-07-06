@@ -7,7 +7,8 @@ const defaultRepoRoot = path.resolve(scriptDir, '..', '..', '..')
 const sourceExtensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'])
 
 const WORKFLOW_SCRIPT_ALLOWLIST = {
-  'site/package.json': ['dev', 'dev:turbo', 'typecheck', 'lint', 'test', 'build', 'release:gate'],
+  // site-workflows support: include site package dev + docs scripts for site-specific workflows (daily loop, sync, gate)
+  'site/package.json': ['dev', 'dev:turbo', 'typecheck', 'lint', 'test', 'build', 'release:gate', 'docs:sync', 'docs:sync:all'],
   'package.json': ['dev', 'release:gate', 'docs:sync:tech-stack', 'docs:check:tech-stack', 'lint:secrets', 'vercel:prod'],
 }
 

@@ -9,10 +9,12 @@ export default async function PlannerFabricCanvasRoute({
 }: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const user = await getOptionalPlannerUser();
+  const [user, resolvedSearchParams] = await Promise.all([
+    getOptionalPlannerUser(),
+    searchParams ?? Promise.resolve({} as Record<string, string | string[] | undefined>),
+  ]);
   const isGuest = !user;
 
-  const resolvedSearchParams = searchParams ? await searchParams : {};
   const rawId = resolvedSearchParams.id;
   const planId = (Array.isArray(rawId) ? rawId[0] : rawId)?.trim() || undefined;
 

@@ -324,13 +324,4 @@ describe("MemberPlanRepository â€” non-Error throw fallback message", () =>
 });
 // â”€â”€â”€ permission.ts coverage boost â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-describe("permission.ts coverage", () => {
-  it("getPlannerActionForCommand returns action for all commands", async () => {
-    const { getPlannerActionForCommand } = await import("@/features/planner/open3d/lib/commands/permission");
-    expect(getPlannerActionForCommand("save")).toBe("persist");
-    expect(getPlannerActionForCommand("export-plan")).toBe("export");
-    expect(getPlannerActionForCommand("import-plan")).toBe("import");
-    expect(getPlannerActionForCommand("print")).toBe("export");
-    expect(getPlannerActionForCommand("draw-wall")).toBe("view");
-  });
-});
+// permission.ts coverage block removed (getPlannerActionForCommand deleted as dead per permission.ts)

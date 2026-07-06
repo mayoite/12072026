@@ -128,7 +128,7 @@
   font-weight: 600;
   letter-spacing: var(--pw-letter-label);
   text-transform: none;
-  color: var(--text-muted);
+  color: #3F5168; /* hardcoded light-mode hex for WCAG AA (>=4.5:1) on white per regression in Failures.md / sku test */
 }
 
 .planner-workspace .pw-catalog-card-name {

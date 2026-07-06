@@ -37,7 +37,7 @@ See [`COVERAGE-REPORT.md`](./COVERAGE-REPORT.md) for the current file-wise cover
 
 ## Documentation Sections
 
-The site includes 12 documentation pages:
+The site includes 12+ documentation pages (revised for site workflow excellence under /using-superpowers):
 
 1. **Overview** — Landing page with tech stack summary, key technologies, and navigation
 2. **Tech Stack** — All 40+ dependencies grouped by category with versions and roles
@@ -50,7 +50,9 @@ The site includes 12 documentation pages:
 9. **Deployment** — Vercel CI/CD pipeline, release:gate steps, environment variables
 10. **Security** — Auth, RLS, secrets management, rate limiting, secret scanning
 11. **Performance** — Server components, image optimization, 3D performance, Web Vitals
-12. **Workflows** — Git flow, daily dev loop, commit conventions, common task guides
+12. **Workflows** — Git flow, daily dev loop, commit conventions, common task guides, **+ prominent "Governance, Superpowers & Tooling" section**
+
+**Governance, Superpowers & Tooling (in Workflows.tsx)**: Documents /using-superpowers (GS process, anti-copy rule, evidence-first), /chrome-devtools MCP (inspection, a11y audits, screenshots), and chosen skills (design, review, check-work, figma-*, etc.) as decided in the 1b-5phase plan + superpowers spec (2026-07-04). Uses GS lens; refers to AGENTS.md, Plans/, docs/superpowers/. Posted here for transparency. Mermaid diagram included. Updated per task (min change, no generated edits).
 
 ## Features
 
