@@ -8,7 +8,7 @@ Prior: `executive-summary.md` from completed earlier phases this run — **if an
 
 `/implement` · Scope: Phase 1B SVG — Puck mount, compiler unification, reference blocks, publish path · Repo: `D:\oandO04072026` · Gates: `results/planner/phase-1b/`
 
-Reports → `Plans/1b-5phase-agent-workflow/01-repair-agent/`
+Reports → `Agents workflow/01-repair-agent/`
 
 Read `AGENTS.md`, `Plans/01-execution/core/02-PHASE-1.md`. One root-cause cluster; minimal diff.
 
@@ -18,7 +18,7 @@ Read `AGENTS.md`, `Plans/01-execution/core/02-PHASE-1.md`. One root-cause cluste
 
 `/check-work` · Scope: Phase 1B gates · Gate module: `results/planner/phase-1b/` · Prior: if any
 
-Reports → `Plans/1b-5phase-agent-workflow/02-benchmarker/`
+Reports → `Agents workflow/02-benchmarker/`
 
 Name gate bundle (e.g. `1b-final-tests`, `1b-typecheck`). Cite exit codes and `*-run.json` paths. INCOMPLETE if skipped.
 
@@ -28,7 +28,7 @@ Name gate bundle (e.g. `1b-final-tests`, `1b-typecheck`). Cite exit codes and `*
 
 `/review` · chrome-devtools · Playwright a11y · Surfaces: `/planner/open3d`, `admin/svg-editor` · Prior: if any
 
-Reports → `Plans/1b-5phase-agent-workflow/03-critic/`
+Reports → `Agents workflow/03-critic/`
 
 Review before UI changes. Real tool output or skip in `failures.md`. Actionable findings for phase 4.
 
@@ -38,7 +38,7 @@ Review before UI changes. Real tool output or skip in `failures.md`. Actionable 
 
 Surfaces: `/planner/open3d`, `admin/svg-editor` · Prior: if any — read `03-critic/`
 
-Reports → `Plans/1b-5phase-agent-workflow/04-ui-expert/`
+Reports → `Agents workflow/04-ui-expert/`
 
 UI contract + REC-01. Address critic findings in scope. Implement only if this run includes fixes.
 
@@ -48,6 +48,6 @@ UI contract + REC-01. Address critic findings in scope. Implement only if this r
 
 Goal: Complete Phase 1B SVG publish for 3 variants · Authority: `Plans/01-execution/core/02-PHASE-1.md` · Prior: if any
 
-Reports → `Plans/1b-5phase-agent-workflow/05-planner/`
+Reports → `Agents workflow/05-planner/`
 
 Execution plan — tasks, gates, evidence, risks. Not setup-only. `Revision: <sha>` + next action.

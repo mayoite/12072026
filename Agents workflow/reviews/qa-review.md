@@ -9,10 +9,10 @@
 - `plannnerplan/2026-07-05_quality-gates.md` (full)  
 
 **Additional inspected (read_file, grep, list_dir):**  
-- `plannnerplan/FAILURESPLAN.md` (full), `plans/2026-07-04/HANDOVER.md` (full; note plannnerplan/HANDOVER.md is redirect stub), `plannnerplan/phases/*.md` (all 11), `Plans/1b-5phase-agent-workflow/reviews/critic-review.md`  
+- `plannnerplan/FAILURESPLAN.md` (full), `plans/2026-07-04/HANDOVER.md` (full; note plannnerplan/HANDOVER.md is redirect stub), `plannnerplan/phases/*.md` (all 11), `Agents workflow/reviews/critic-review.md`  
 - New test: `site/tests/unit/features/planner/open3d/catalog/blocksResolver.test.ts` (full, 1022 lines)  
 - Core impl: `site/features/planner/open3d/catalog/svg/{blocksResolver.ts, svgTypes.ts, svgBlockDescriptorLoader.ts}`  
-- Evidence dirs: `results/` (root), `results/planner/*`, `results/tests/`, `Plans/1b-5phase-agent-workflow/reviews/` (absence of `results/qa/`), `site/block-descriptors/` (empty)  
+- Evidence dirs: `results/` (root), `results/planner/*`, `results/tests/`, `Agents workflow/reviews/` (absence of `results/qa/`), `site/block-descriptors/` (empty)  
 - Cross-refs: `Failures.md`, `testing-handbook.md`, `AGENTS.md`, `Readme.md`, `START.md`, `docs/Lockedfiles/ReadmeLocked.md`, `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`, `plannnerplan/benchmarks/INDEX.md` + phase-00-precheck.md  
 - Phase evidence: `results/planner/phase-01/typecheck/typecheck-run.json`, `results/planner/phase-02/tests/vitest-output.txt`, `results/planner/phase-02-qa/tests/vitest-stdout.log`, `results/tests/vitest-results.json`  
 **Method:** Read-only per AGENTS.md (re-read AGENTS/ReadmeLocked/START/Failures/testing-handbook first; no terminal commands, no code edits, no runs). All claims checked against live FS state via list_dir/read/grep. Falsifiable assertions prioritized. 
@@ -43,7 +43,7 @@ The QA review identifies systemic non-compliance with `plannnerplan/2026-07-05_q
 
 ### Issue 4 -- Severity: bug
 - File: plannnerplan/2026-07-05_quality-gates.md:59-69 (Global Standard Gate (Binding) + "Applies to Phases 03, 04, 05, 06, 10"), plannnerplan/2026-07-05_implementation-decisions.md:113-119 + 129-130 ("Phases 04/05/06/10 must add 'UI Global Standards Gate' checklist items"), plannnerplan/phases/03-*.md:133, 04-*.md:152, 06-*.md (Decision logs cite "UI/GS gates added" + benchmark), results/ (no dedicated GS review artifacts)
-- Description: Gate is release-blocking: requires "Fresh dated benchmark report exists. Independent UI review (REVIEW-WORKFLOW) signed off. Anti-copy + pattern attestation in Decision Log." Before "Implemented". Phases contain provisional notes and BP cites (benchmark.md §4 BP-01..07) but no explicit `## UI Global Standards Gate` subsection or full checklist items (Figma minimize-UI, Sketchfab cursor, AutoCAD command, catalogue-first, anti-copy attestation citing specific benchmark §). `Plans/1b-5phase-agent-workflow/reviews/` has only critic-review.md; no signed GS/UI artifacts. PLAN-FAIL-0415/0416 remain Open in FAILURESPLAN. `plans/2026-07-04/benchmark.md:136-139` anti-copy check and §7 table incomplete for later phases.
+- Description: Gate is release-blocking: requires "Fresh dated benchmark report exists. Independent UI review (REVIEW-WORKFLOW) signed off. Anti-copy + pattern attestation in Decision Log." Before "Implemented". Phases contain provisional notes and BP cites (benchmark.md §4 BP-01..07) but no explicit `## UI Global Standards Gate` subsection or full checklist items (Figma minimize-UI, Sketchfab cursor, AutoCAD command, catalogue-first, anti-copy attestation citing specific benchmark §). `Agents workflow/reviews/` has only critic-review.md; no signed GS/UI artifacts. PLAN-FAIL-0415/0416 remain Open in FAILURESPLAN. `plans/2026-07-04/benchmark.md:136-139` anti-copy check and §7 table incomplete for later phases.
 - Suggestion: Add explicit dedicated `## UI Global Standards Gate` + `## Global Standard Gate` subsections with traceable items to phases 03/04/05/06/10 before any status advance. Produce independent review artifacts under results/ per REVIEW-WORKFLOW. Treat as blocker per Q-G; cite benchmark date + § sections in Decision logs.
 - Status: open
 
@@ -103,14 +103,14 @@ The QA review identifies systemic non-compliance with `plannnerplan/2026-07-05_q
 
 ### Issue 14 -- Severity: suggestion
 - File: plans/2026-07-04/benchmark.md:140-160 (date stamp + stale-evidence policy), plannnerplan/benchmarks/INDEX.md + docs/superpowers/specs/... (cross-refs), results/ (no new dated artifacts for this review)
-- Description: Benchmark is dated 2026-07-04 and additive per its §8. Multiple docs reference it (or archived copy). This QA review produces new dated artifact under Plans/1b-5phase-agent-workflow/reviews/ but no re-benchmark run or updated benchmark report. Cross-phase coherence table (§7) remains partial.
-- Suggestion: After fixes, author dated follow-up benchmark or note "QA review 2026-07-04 applied; see Plans/1b-5phase-agent-workflow/reviews/qa-review.md". Update INDEX + design progress.
+- Description: Benchmark is dated 2026-07-04 and additive per its §8. Multiple docs reference it (or archived copy). This QA review produces new dated artifact under Agents workflow/reviews/ but no re-benchmark run or updated benchmark report. Cross-phase coherence table (§7) remains partial.
+- Suggestion: After fixes, author dated follow-up benchmark or note "QA review 2026-07-04 applied; see Agents workflow/reviews/qa-review.md". Update INDEX + design progress.
 - Status: open
 
 ## Evidence Locations Checked (selected)
 
 - Claimed: results/qa/resolver/... → does not exist (list_dir).
-- Present: results/planner/phase-01/typecheck/typecheck-run.json (27 errors, PLAN-FAIL-0412), results/planner/phase-02/tests/vitest-output.txt (8 fails in blockDescriptor.test), results/planner/phase-02-qa/* (logs), results/tests/vitest-*.json (17 fails overall), Plans/1b-5phase-agent-workflow/reviews/critic-review.md.
+- Present: results/planner/phase-01/typecheck/typecheck-run.json (27 errors, PLAN-FAIL-0412), results/planner/phase-02/tests/vitest-output.txt (8 fails in blockDescriptor.test), results/planner/phase-02-qa/* (logs), results/tests/vitest-*.json (17 fails overall), Agents workflow/reviews/critic-review.md.
 - Sources: blocksResolver.ts:82 (cast), svgTypes.ts (no blocks field, full schema 329-420), loader.ts:134 (flat .json), blocksResolver.test.ts (full coverage of cases but seam-dependent).
 - Governance: benchmark.md:FACT-02/03/04/08 (vocab, coverage, HANDOVER Planned, rollback cross-link gaps), I-D:26-29/67/113-119/129 (vocab, registry path, GS), Q-G:20-30/59-69/110-124 (floors, GS gate, exit, test layers).
 - Phase status: all plannnerplan/phases/*:4 = "Status: Planned" (grep); only HANDOVER/FAILURES override Phase 02.
@@ -127,4 +127,4 @@ The QA review identifies systemic non-compliance with `plannnerplan/2026-07-05_q
 
 ---
 
-*This file written per task (Plans/1b-5phase-agent-workflow/reviews/qa-review.md). No other files modified. Per AGENTS: re-read docs, evidence-first, skips declared (no runs/commands), minimum necessary (only this review file), correctness before style. Blockers/skips noted here and should be logged to Failures.md by owner if required for ship.*
+*This file written per task (Agents workflow/reviews/qa-review.md). No other files modified. Per AGENTS: re-read docs, evidence-first, skips declared (no runs/commands), minimum necessary (only this review file), correctness before style. Blockers/skips noted here and should be logged to Failures.md by owner if required for ship.*

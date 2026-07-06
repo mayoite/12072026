@@ -14,7 +14,7 @@
 - UI impl: `site/features/planner/open3d/editor/{WorkspaceShell.tsx, PanelContainer.tsx, TopBar.tsx, OOPlannerWorkspace.tsx, useDockingSystem.ts, InventoryPanel.tsx, PropertiesPanel.tsx, workspace.module.css, inventory.module.css}`, `site/features/planner/open3d/catalog/{useOpen3dWorkspaceCatalog.ts, inventory/inventoryIndex.ts, inventory/inventoryState.ts, svg/svgBlockDescriptorLoader.ts, svg/svgTypes.ts}`  
 - Admin/portal: `site/features/planner/admin/svg-editor/{AdminSvgEditorEditView.tsx, AdminSvgEditorListView.tsx, puckBlockRegistry.tsx}`, `site/features/planner/portal/{PortalPageView.tsx, PortalPlanPageView.tsx}`, `site/app/{planner/open3d/{page,layout}.tsx, (site)/portal/..., admin/}` (no page.tsx under admin/svg-editor/*)  
 - CSS/tokens: `site/app/css/core/tokens/theme.css`, `site/app/css/core/planner/{planner-responsive.css, bundles/open3d-workspace.css, planner-shell.css}`, `site/features/planner/open3d/editor/workspace.module.css` (full relevant sections)  
-- Cross-refs: `Failures.md`, `testing-handbook.md`, `AGENTS.md`, `Readme.md`, `docs/Lockedfiles/ReadmeLocked.md`, `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`, `Plans/1b-5phase-agent-workflow/reviews/critic-review.md`, `Plans/1b-5phase-agent-workflow/reviews/qa-review.md`  
+- Cross-refs: `Failures.md`, `testing-handbook.md`, `AGENTS.md`, `Readme.md`, `docs/Lockedfiles/ReadmeLocked.md`, `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`, `Agents workflow/reviews/critic-review.md`, `Agents workflow/reviews/qa-review.md`  
 - Structure: `site/features/planner/open3d/` (full), `site/app/admin/svg-editor/[id]/` (absent page files), live routes per IMPLEMENTATION-DECISIONS §"Live routes"  
 **Method:** Read-only per AGENTS.md (re-read AGENTS/ReadmeLocked/Readme/START first; no terminal/run commands, no edits except the mandated write of this file). All claims are falsifiable via FS reads/greps. Citations use exact § and approx line from the 3 mandatory docs + live file:line.
 
@@ -97,5 +97,5 @@ Evidence integrity: All inspection used read_file/grep/list_dir only (no runs, n
 
 ---
 
-**Exact output path:** Plans/1b-5phase-agent-workflow/reviews/ui-review.md  
+**Exact output path:** Agents workflow/reviews/ui-review.md  
 **One-sentence verdict:** The UI/UX review documents 10 specific issues (primarily missing routes/integration, incomplete panel recovery/keyboard/search parity vs benchmark RECs and I-D §113-130, and Global Standard Gate tracking gaps) with all citations traceable to the three mandatory docs and live component files; work is directionally correct on Figma-style panels but not shippable or "Implemented" without the fixes and signed gates.
