@@ -2,12 +2,12 @@
 
 ## Why this folder exists
 
-Vite + React mini-site in `site/tech-stack-generator/`; build output is written to `site/tech-stack-docs/`.
+Vite + React mini-site in `site/tech-stack-generator/` (stays in site/); focus enhanced for site-workflows. Build output to `site/tech-stack-docs/` (see vite.config.ts).
 
 ## What is here
 
 - src/ — pages and data
-- vite.config.ts — outDir `Documents/tech-stack-generated`
+- vite.config.ts — outDir set to `../tech-stack-docs`, base `/tech-stack-docs/`
 
 ## See also
 

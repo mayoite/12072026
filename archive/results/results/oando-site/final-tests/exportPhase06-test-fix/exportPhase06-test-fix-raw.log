@@ -1,0 +1,64 @@
+﻿
+ RUN  v4.1.9 D:/.grok/worktrees/oando04072026/new/site
+
+ Γ¥» tests/unit/features/planner/open3d/exportPhase06.test.ts (5 tests | 2 failed) 18ms
+     Γ£ô lists supported formats and correctly identifies supported/unsupported 1ms
+     Γ£ô preflights and builds filename for live formats 1ms
+     ├ù exports JSON/SVG and roundtrips JSON using live fns 8ms
+     Γ£ô uses formatMeasurement and getFloorBounds 1ms
+     ├ù imports from JSON and recovers 4ms
+node.exe : 
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 2 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/exportPhase06.test.ts > Phase 06 JSON and SVG exports (live subset) > 
+exports JSON/SVG and roundtrips JSON using live fns
+Error: Missing theme token: --color-block-wall
+ Γ¥» readThemeColor features/planner/open3d/shared/readThemeColor.ts:19:11
+     17|   const value = getComputedStyle(document.documentElement).getPropertyΓÇª
+     18|   if (!value) {
+     19|     throw new Error(`Missing theme token: ${name}`);
+       |           ^
+     20|   }
+     21|   return value;
+ Γ¥» readExportPaintColors features/planner/open3d/shared/readThemeColor.ts:67:17
+ Γ¥» exportAsSVG features/planner/open3d/shared/export/exportUtils.ts:190:18
+ Γ¥» tests/unit/features/planner/open3d/exportPhase06.test.ts:84:15
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/2]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/exportPhase06.test.ts > Phase 06 import (live) > imports from JSON and 
+recovers
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/exportPhase06.test.ts:102:25
+    100|     const json = exportAsJSON(p);
+    101|     const res = importFromJSON(json);
+    102|     expect(res.success).toBe(true);
+       |                         ^
+    103|     const bad = importFromJSONWithRecovery("{broken");
+    104|     expect(bad.success).toBe(false);
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/2]ΓÄ»
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 passed (5)
+   Start at  19:03:56
+   Duration  3.06s (transform 200ms, setup 1.11s, import 100ms, tests 18ms, environment 1.47s)
+
+JSON report written to D:/.grok/worktrees/oando04072026/new/results/tests/vitest-site-results.json
+undefined
+D:\.grok\worktrees\oando04072026\new\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run tests/unit/features/planner/open3d/exportPhase06.test.ts --config vitest.site.config.ts

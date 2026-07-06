@@ -1,0 +1,776 @@
+﻿
+ RUN  v4.1.9 D:/.grok/worktrees/oando04072026/new/site
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts (39 tests | 32 failed) 35ms
+     ├ù returns true for a valid document 7ms
+     Γ£ô returns false when id is missing 1ms
+     Γ£ô returns false when sceneJson is missing 0ms
+     Γ£ô returns false when name is missing 0ms
+     Γ£ô returns false for null 0ms
+     Γ£ô returns false for a non-object primitive 0ms
+     ├ù returns ok with document on 200 4ms
+     ├ù includes Authorization header when token is present 1ms
+     ├ù returns unauthenticated on 401 2ms
+     ├ù returns forbidden on 403 1ms
+     ├ù returns not-found on 404 1ms
+     ├ù returns network on unexpected non-ok status 1ms
+     ├ù returns corrupt when body.document fails the type guard 1ms
+     ├ù returns network on fetch throw 1ms
+     ├ù returns ok with document on 200 1ms
+     ├ù returns unauthenticated on 401 1ms
+     ├ù returns conflict on 409 1ms
+     ├ù returns network when response body has no valid document 0ms
+     ├ù returns network on fetch throw 0ms
+     ├ù returns ok with mapped summaries on 200 1ms
+     ├ù handles empty documents array 1ms
+     ├ù handles missing documents key gracefully 0ms
+     ├ù returns unauthenticated on 401 0ms
+     ├ù returns network on non-ok status 0ms
+     ├ù returns network on fetch throw 0ms
+     ├ù returns ok on 200 0ms
+     ├ù returns ok on 204 1ms
+     ├ù returns unauthenticated on 401 1ms
+     ├ù returns not-found on 404 1ms
+     ├ù returns network on non-ok status 1ms
+     ├ù returns network on fetch throw 1ms
+     ├ù URL-encodes saveId with special characters 0ms
+     ├ù returns network on non-ok HTTP status (5xx) 1ms
+     ├ù returns network on 503 1ms
+     Γ£ô uses empty string fallback when document id is missing 0ms
+     Γ£ô uses 'Untitled' fallback when document name is missing 0ms
+     ├ù load: uses 'Network error' when thrown value is not an Error instance 0ms
+     ├ù save: uses 'Network error' when thrown value is not an Error instance 0ms
+     ├ù delete: uses 'Network error' when thrown value is not an Error instance 0ms
+node.exe : 
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 32 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > isStagingPlannerDocument > 
+returns true for a valid document
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:46:49
+     44| describe("isStagingPlannerDocument", () => {
+     45|   it("returns true for a valid document", () => {
+     46|     expect(isStagingPlannerDocument(makeDoc())).toBe(true);
+       |                                                 ^
+     47|   });
+     48|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > 
+returns ok with document on 200
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok', document: { ΓÇª(4) } }
+
+- Expected
++ Received
+
+  {
+-   "document": {
+-     "id": "abc-123",
+-     "name": "Test Plan",
+-     "sceneJson": "{}",
+-     "unit_system": "metric",
+-   },
+-   "status": "ok",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:83:20
+     81|     const repo = createMemberPlanRepository(noToken, fetch);
+     82|     const result = await repo.load("abc-123");
+     83|     expect(result).toEqual({ status: "ok", document: doc });
+       |                    ^
+     84|     expect(fetch).toHaveBeenCalledWith(
+     85|       "/api/plans/abc-123",
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > 
+includes Authorization header when token is present
+TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:94:23
+     92|     const repo = createMemberPlanRepository(withToken, fetch);
+     93|     await repo.load("abc-123");
+     94|     const [, init] = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]ΓÇª
+       |                       ^
+     95|     expect((init.headers as Record<string, string>)["Authorization"]).ΓÇª
+     96|   });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[3/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > 
+returns unauthenticated on 401
+AssertionError: expected { status: 'network' } to deeply equal { status: 'unauthenticated' }
+
+- Expected
++ Received
+
+  {
+-   "status": "unauthenticated",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:100:34
+     98|   it("returns unauthenticated on 401", async () => {
+     99|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    100|     expect(await repo.load("x")).toEqual({ status: "unauthenticated" }ΓÇª
+       |                                  ^
+    101|   });
+    102|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[4/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > 
+returns forbidden on 403
+AssertionError: expected { status: 'network' } to deeply equal { status: 'forbidden' }
+
+- Expected
++ Received
+
+  {
+-   "status": "forbidden",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:105:34
+    103|   it("returns forbidden on 403", async () => {
+    104|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    105|     expect(await repo.load("x")).toEqual({ status: "forbidden" });
+       |                                  ^
+    106|   });
+    107|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[5/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > 
+returns not-found on 404
+AssertionError: expected { status: 'network' } to deeply equal { status: 'not-found' }
+
+- Expected
++ Received
+
+  {
+-   "status": "not-found",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:110:34
+    108|   it("returns not-found on 404", async () => {
+    109|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    110|     expect(await repo.load("x")).toEqual({ status: "not-found" });
+       |                                  ^
+    111|   });
+    112|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[6/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > 
+returns network on unexpected non-ok status
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "HTTP 500",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:115:34
+    113|   it("returns network on unexpected non-ok status", async () => {
+    114|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    115|     expect(await repo.load("x")).toEqual({ status: "network", message:ΓÇª
+       |                                  ^
+    116|   });
+    117|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[7/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > 
+returns corrupt when body.document fails the type guard
+AssertionError: expected { status: 'network' } to deeply equal { status: 'corrupt', raw: { id: 'x' } }
+
+- Expected
++ Received
+
+  {
+-   "raw": {
+-     "id": "x",
+-   },
+-   "status": "corrupt",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:122:20
+    120|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    121|     const result = await repo.load("x");
+    122|     expect(result).toEqual({ status: "corrupt", raw: badDoc });
+       |                    ^
+    123|   });
+    124|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[8/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > 
+returns network on fetch throw
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Connection refused",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:127:34
+    125|   it("returns network on fetch throw", async () => {
+    126|     const repo = createMemberPlanRepository(noToken, throwingFetch("CoΓÇª
+    127|     expect(await repo.load("x")).toEqual({ status: "network", message:ΓÇª
+       |                                  ^
+    128|   });
+    129| });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[9/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save > 
+returns ok with document on 200
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok', document: { ΓÇª(5) } }
+
+- Expected
++ Received
+
+  {
+-   "document": {
+-     "id": "abc-123",
+-     "name": "Test Plan",
+-     "sceneJson": "{}",
+-     "unit_system": "metric",
+-     "updated_at": "2024-01-01T00:00:00Z",
+-   },
+-   "status": "ok",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:141:20
+    139|     const repo = createMemberPlanRepository(noToken, fetch);
+    140|     const result = await repo.save(doc);
+    141|     expect(result).toEqual({ status: "ok", document: savedDoc });
+       |                    ^
+    142|     const [url, init] = (fetch as ReturnType<typeof vi.fn>).mock.callsΓÇª
+    143|     expect(url).toBe("/api/plans/abc-123");
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[10/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save > 
+returns unauthenticated on 401
+AssertionError: expected { status: 'network' } to deeply equal { status: 'unauthenticated' }
+
+- Expected
++ Received
+
+  {
+-   "status": "unauthenticated",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:150:34
+    148|   it("returns unauthenticated on 401", async () => {
+    149|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    150|     expect(await repo.save(doc)).toEqual({ status: "unauthenticated" }ΓÇª
+       |                                  ^
+    151|   });
+    152|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[11/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save > 
+returns conflict on 409
+AssertionError: expected { status: 'network' } to deeply equal { status: 'conflict' }
+
+- Expected
++ Received
+
+  {
+-   "status": "conflict",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:155:34
+    153|   it("returns conflict on 409", async () => {
+    154|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    155|     expect(await repo.save(doc)).toEqual({ status: "conflict" });
+       |                                  ^
+    156|   });
+    157|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[12/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save > 
+returns network when response body has no valid document
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Missing document in response",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:160:34
+    158|   it("returns network when response body has no valid document", asyncΓÇª
+    159|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    160|     expect(await repo.save(doc)).toEqual({ status: "network", message:ΓÇª
+       |                                  ^
+    161|   });
+    162|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[13/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save > 
+returns network on fetch throw
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Timeout",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:165:34
+    163|   it("returns network on fetch throw", async () => {
+    164|     const repo = createMemberPlanRepository(noToken, throwingFetch("TiΓÇª
+    165|     expect(await repo.save(doc)).toEqual({ status: "network", message:ΓÇª
+       |                                  ^
+    166|   });
+    167| });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[14/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > 
+returns ok with mapped summaries on 200
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok', summaries: [ ΓÇª(2) ] }
+
+- Expected
++ Received
+
+  {
+-   "status": "ok",
+-   "summaries": [
+-     {
+-       "id": "1",
+-       "name": "Plan A",
+-       "updated_at": "2024-06-01T00:00:00Z",
+-     },
+-     {
+-       "id": "2",
+-       "name": "Plan B",
+-       "updated_at": undefined,
+-     },
+-   ],
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:180:20
+    178|     const repo = createMemberPlanRepository(noToken, fetch);
+    179|     const result = await repo.list();
+    180|     expect(result).toEqual({
+       |                    ^
+    181|       status: "ok",
+    182|       summaries: [
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[15/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > 
+handles empty documents array
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok', summaries: [] }
+
+- Expected
++ Received
+
+  {
+-   "status": "ok",
+-   "summaries": [],
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:192:20
+    190|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    191|     const result = await repo.list();
+    192|     expect(result).toEqual({ status: "ok", summaries: [] });
+       |                    ^
+    193|   });
+    194|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[16/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > 
+handles missing documents key gracefully
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok', summaries: [] }
+
+- Expected
++ Received
+
+  {
+-   "status": "ok",
+-   "summaries": [],
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:198:20
+    196|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    197|     const result = await repo.list();
+    198|     expect(result).toEqual({ status: "ok", summaries: [] });
+       |                    ^
+    199|   });
+    200|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[17/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > 
+returns unauthenticated on 401
+AssertionError: expected { status: 'network' } to deeply equal { status: 'unauthenticated' }
+
+- Expected
++ Received
+
+  {
+-   "status": "unauthenticated",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:203:31
+    201|   it("returns unauthenticated on 401", async () => {
+    202|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    203|     expect(await repo.list()).toEqual({ status: "unauthenticated" });
+       |                               ^
+    204|   });
+    205|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[18/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > 
+returns network on non-ok status
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "HTTP 503",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:208:31
+    206|   it("returns network on non-ok status", async () => {
+    207|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    208|     expect(await repo.list()).toEqual({ status: "network", message: "HΓÇª
+       |                               ^
+    209|   });
+    210|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[19/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > 
+returns network on fetch throw
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "DNS failure",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:213:31
+    211|   it("returns network on fetch throw", async () => {
+    212|     const repo = createMemberPlanRepository(noToken, throwingFetch("DNΓÇª
+    213|     expect(await repo.list()).toEqual({ status: "network", message: "DΓÇª
+       |                               ^
+    214|   });
+    215| });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[20/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > 
+returns ok on 200
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok' }
+
+- Expected
++ Received
+
+  {
+-   "status": "ok",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:223:42
+    221|     const fetch = makeFetch(mockResponse(200));
+    222|     const repo = createMemberPlanRepository(noToken, fetch);
+    223|     expect(await repo.delete("abc-123")).toEqual({ status: "ok" });
+       |                                          ^
+    224|     const [url, init] = (fetch as ReturnType<typeof vi.fn>).mock.callsΓÇª
+    225|     expect(url).toBe("/api/plans/abc-123");
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[21/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > 
+returns ok on 204
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok' }
+
+- Expected
++ Received
+
+  {
+-   "status": "ok",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:231:36
+    229|   it("returns ok on 204", async () => {
+    230|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    231|     expect(await repo.delete("x")).toEqual({ status: "ok" });
+       |                                    ^
+    232|   });
+    233|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[22/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > 
+returns unauthenticated on 401
+AssertionError: expected { status: 'network' } to deeply equal { status: 'unauthenticated' }
+
+- Expected
++ Received
+
+  {
+-   "status": "unauthenticated",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:236:36
+    234|   it("returns unauthenticated on 401", async () => {
+    235|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    236|     expect(await repo.delete("x")).toEqual({ status: "unauthenticated"ΓÇª
+       |                                    ^
+    237|   });
+    238|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[23/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > 
+returns not-found on 404
+AssertionError: expected { status: 'network' } to deeply equal { status: 'not-found' }
+
+- Expected
++ Received
+
+  {
+-   "status": "not-found",
++   "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:241:36
+    239|   it("returns not-found on 404", async () => {
+    240|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    241|     expect(await repo.delete("x")).toEqual({ status: "not-found" });
+       |                                    ^
+    242|   });
+    243|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[24/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > 
+returns network on non-ok status
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "HTTP 500",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:246:36
+    244|   it("returns network on non-ok status", async () => {
+    245|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    246|     expect(await repo.delete("x")).toEqual({ status: "network", messagΓÇª
+       |                                    ^
+    247|   });
+    248|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[25/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > 
+returns network on fetch throw
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Socket closed",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:251:36
+    249|   it("returns network on fetch throw", async () => {
+    250|     const repo = createMemberPlanRepository(noToken, throwingFetch("SoΓÇª
+    251|     expect(await repo.delete("x")).toEqual({ status: "network", messagΓÇª
+       |                                    ^
+    252|   });
+    253|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[26/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > 
+URL-encodes saveId with special characters
+TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:258:20
+    256|     const repo = createMemberPlanRepository(noToken, fetch);
+    257|     await repo.delete("plan/with spaces");
+    258|     const [url] = (fetch as ReturnType<typeof vi.fn>).mock.calls[0] asΓÇª
+       |                    ^
+    259|     expect(url).toBe("/api/plans/plan%2Fwith%20spaces");
+    260|   });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[27/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save 
+├óΓé¼ΓÇ¥ additional branch coverage > returns network on non-ok HTTP status (5xx)
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "HTTP 500",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:270:34
+
+ Test Files  1 failed (1)
+      Tests  32 failed | 7 passed (39)
+   Start at  19:07:25
+   Duration  3.25s (transform 163ms, setup 1.30s, import 50ms, tests 35ms, environment 1.44s)
+
+    268|   it("returns network on non-ok HTTP status (5xx)", async () => {
+    269|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    270|     expect(await repo.save(doc)).toEqual({ status: "network", message:ΓÇª
+       |                                  ^
+    271|   });
+    272|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[28/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save 
+├óΓé¼ΓÇ¥ additional branch coverage > returns network on 503
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "HTTP 503",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:275:34
+    273|   it("returns network on 503", async () => {
+    274|     const repo = createMemberPlanRepository(noToken, makeFetch(mockResΓÇª
+    275|     expect(await repo.save(doc)).toEqual({ status: "network", message:ΓÇª
+       |                                  ^
+    276|   });
+    277| });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[29/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository ├óΓé¼ΓÇ¥ 
+non-Error throw fallback message > load: uses 'Network error' when thrown value is not an Error instance
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Network error",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:312:34
+    310|   it("load: uses 'Network error' when thrown value is not an Error insΓÇª
+    311|     const repo = createMemberPlanRepository(noToken, nonErrorFetch());
+    312|     expect(await repo.load("x")).toEqual({ status: "network", message:ΓÇª
+       |                                  ^
+    313|   });
+    314|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[30/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository ├óΓé¼ΓÇ¥ 
+non-Error throw fallback message > save: uses 'Network error' when thrown value is not an Error instance
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Network error",
+    "status": "network",
+  }
+
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:317:40
+    315|   it("save: uses 'Network error' when thrown value is not an Error insΓÇª
+    316|     const repo = createMemberPlanRepository(noToken, nonErrorFetch());
+    317|     expect(await repo.save(makeDoc())).toEqual({ status: "network", meΓÇª
+       |                                        ^
+    318|   });
+    319|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[31/32]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository ├óΓé¼ΓÇ¥ 
+non-Error throw fallback message > delete: uses 'Network error' when thrown value is not an Error instance
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', ΓÇª(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Network error",
+    "status": "network",
+  }
+
+JSON report written to D:/.grok/worktrees/oando04072026/new/results/tests/vitest-site-results.json
+ Γ¥» tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:322:36
+    320|   it("delete: uses 'Network error' when thrown value is not an Error iΓÇª
+    321|     const repo = createMemberPlanRepository(noToken, nonErrorFetch());
+    322|     expect(await repo.delete("x")).toEqual({ status: "network", messagΓÇª
+       |                                    ^
+    323|   });
+    324| });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[32/32]ΓÄ»
+
+undefined
+D:\.grok\worktrees\oando04072026\new\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts --config vitest.site.config.ts

@@ -1,6 +1,6 @@
 # Phase 1 - Open3D Foundation and SVG Production Path
 
-Status: In progress — **1A** (shell) then **1B** (SVG path) per [`00-REVISION.md`](00-REVISION.md)  
+Status: **1A COMPLETE**, **1B COMPLETE** (via 5-phase agent workflow + checklist verification; see `phase1-checklist.md` and `archive/1b-5phase-agent-workflow/`) per [`00-REVISION.md`](00-REVISION.md)  
 Depends on: [`01-START.md`](01-START.md)  
 Promotion target: `/planner/open3d` only (guest/canvas remain Phase 2)
 

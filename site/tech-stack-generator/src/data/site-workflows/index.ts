@@ -19,6 +19,27 @@ export type SiteWorkflowModule = {
 
 export const siteWorkflowModules: Record<string, SiteWorkflowModule> = {
   // Populated by sub-agents and edits. See subdirs.
+  'marketing-site': {
+    slug: 'marketing-site',
+    title: 'Marketing Site',
+    walkthrough: 'See walkthrough.md',
+    currentSituation: 'See current-situation.md',
+    goal: 'See goal.md'
+  },
+  'site-planner-integration': {
+    slug: 'site-planner-integration',
+    title: 'Site ↔ Planner Integration',
+    walkthrough: 'See walkthrough.md',
+    currentSituation: 'See current-situation.md',
+    goal: 'See goal.md'
+  },
+  'release-qa-site': {
+    slug: 'release-qa-site',
+    title: 'Release & QA Site',
+    walkthrough: 'See walkthrough.md',
+    currentSituation: 'See current-situation.md',
+    goal: 'See goal.md'
+  }
 };
 
 export default siteWorkflowModules;

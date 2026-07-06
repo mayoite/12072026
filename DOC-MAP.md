@@ -94,11 +94,11 @@ Historical phase specs stay at `archive/Plans/2026-07-05_phase1-execution/` (rep
 
 Agent narrative outputs (observations, work-done, failures, executive-summary + PLAN) live under:
 
-- `Agents_work/1b-5phase-agent-workflow/` — current canonical (5 phases + PLAN.md)
-- `Agents_work/` (reviews/, benchmark/, checklists/, notes/)
+- `archive/1b-5phase-agent-workflow/` — archived 1b-5phase agent workflow (5 phases + PLAN.md)
+- `archive/Agents_work/` (reviews/, benchmark/, checklists/, notes/)
 - First-pass reports preserved in `archive/1b-5phase-first-pass/` and `archive/recovery-reconcile-*`
 
-See `Plans/README.md`, `Agents_work/README.md`, and `AGENTS.md` (narratives ≠ gate evidence; evidence stays in `results/`).
+See `Plans/README.md`, `archive/Agents_work/README.md`, and `AGENTS.md` (narratives ≠ gate evidence; evidence stays in `results/`).
 
 ## Other plan packets
 
@@ -123,6 +123,6 @@ Old paths referenced in archives/recovery data only.
 
 ## Tech-stack site
 
-- `tech-stack-generator/` — Vite render shell for tech-stack documentation
+- `tech-stack-generator/` (under site/) — Vite render shell for tech-stack + site-workflows documentation (builds to `site/tech-stack-docs/`, served at `/tech-stack-docs/`)
 - Commands: **`START.md`** (Tech-stack docs)
 - Audit: `docs/audit/tech-stack-generator/`

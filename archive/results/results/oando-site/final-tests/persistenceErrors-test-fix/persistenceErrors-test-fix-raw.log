@@ -1,0 +1,11 @@
+﻿
+ RUN  v4.1.9 D:/.grok/worktrees/oando04072026/new/site
+
+ Γ£ô tests/unit/features/planner/open3d/persistence/persistenceErrors.test.ts (6 tests) 3ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  18:59:59
+   Duration  953ms (transform 58ms, setup 359ms, import 14ms, tests 3ms, environment 416ms)
+
+JSON report written to D:/.grok/worktrees/oando04072026/new/results/tests/vitest-site-results.json

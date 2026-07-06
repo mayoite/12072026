@@ -178,7 +178,7 @@ function WorkflowScreenshot({ desc, moduleId }: { desc: string; moduleId: string
       </div>
       <div className="p-4 text-xs leading-relaxed text-muted bg-[repeating-linear-gradient(45deg,var(--surface-soft),var(--surface-soft)_4px,var(--surface-panel)_4px,var(--surface-panel)_8px)] min-h-[92px] flex items-center justify-center text-center">
         <div>
-          <div className="font-semibold text-docs-text mb-1 tracking-tight">📸 {desc}</div>
+          <div className="font-semibold text-heading mb-1 tracking-tight">📸 {desc}</div>
           <div className="text-[10px] opacity-70">Illustrative — captured via chrome-devtools / Playwright in actual gates (see results/)</div>
         </div>
       </div>
@@ -211,7 +211,7 @@ export function Workflows() {
         </div>
 
         <p className="text-sm text-muted mb-6">
-          All development follows the <strong>Global Standard (GS)</strong> framework. Significant work <strong>starts with <code className="text-brand-300">/using-superpowers</code></strong> (GS process, anti-copy, evidence). Chrome-devtools MCP and specialized skills (design, review, check-work, figma-*) are used throughout per the superpowers spec, 1b-5phase-agent-workflow plan, and AGENTS.md. Evidence is non-negotiable.
+          All development follows the <strong>Global Standard (GS)</strong> framework. Significant work <strong>starts with <code className="text-brand-300">/using-superpowers</code></strong> (GS process, anti-copy, evidence). Chrome-devtools MCP and specialized skills (design, review, check-work, figma-*) are used throughout per the superpowers spec, archived 1b-5phase-agent-workflow plan, and AGENTS.md. Evidence is non-negotiable.
         </p>
 
         <div className="mb-6">
@@ -242,7 +242,7 @@ export function Workflows() {
               <li>Full MCP toolset: navigate_page, take_screenshot, lighthouse_audit, take_snapshot, evaluate_script, list/get console &amp; network, a11y via lighthouse + axe patterns.</li>
               <li>Critic/review phases: visual anti-copy review, focus/contrast/ARIA audits, DOM inspection, performance traces.</li>
               <li>Screenshots + audit JSON preserved as evidence (never truncated/bypassed per testing-handbook).</li>
-              <li>Used alongside Playwright a11y in 04-critic (see 1b-5phase-agent-workflow/PLAN.md + PROMPTS.md).</li>
+              <li>Used alongside Playwright a11y in 04-critic (see archive/1b-5phase-agent-workflow/ + reports).</li>
               <li>mcps/chrome-devtools/tools/ (29+ JSON schemas) + integration in review skill.</li>
             </ul>
           </div>
@@ -250,7 +250,7 @@ export function Workflows() {
 
         <CollapsibleSection title="Chosen Skills (design, review, check-work, figma-*, etc. — as decided in plan)" badge="Sequential Workflows" defaultOpen>
           <p className="text-xs text-muted mb-3">
-            Per Plans/workflows/.../PROMPTS.md, Agents_work/1b-5phase-agent-workflow/PLAN.md and superpowers design: agents are dispatched with exact skills. All read AGENTS.md first. GS gate applies before "Implemented".
+            Per archived 1b-5phase-agent-workflow/ reports (see archive/1b-5phase-agent-workflow/) and superpowers design: agents dispatched with exact skills (design, figma-generate-library, review, etc.). All read AGENTS.md first. GS gate applies before "Implemented". (Sequential 5-phase workflows and old Plans/workflows/ superseded; current site-workflows live in generator data.)
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             {chosenSkills.map(skill => (
@@ -467,7 +467,7 @@ Co-Authored-By: Oz <oz-agent@warp.dev>"`}
                     'inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border transition-all whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/50',
                     isActive
                       ? 'bg-brand-500/15 text-brand-400 border-brand-500/40 shadow-sm'
-                      : 'bg-panel hover:bg-panel-strong border-docs-border text-docs-text hover:text-heading'
+                      : 'bg-panel hover:bg-panel-strong border-docs-border text-heading hover:text-heading'
                   ].join(' ')}
                 >
                   <Icon size={15} className={isActive ? 'text-brand-400' : 'text-subtle'} />

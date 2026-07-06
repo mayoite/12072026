@@ -114,7 +114,7 @@ Phase 1 is **two acceptance tracks**. Do not block 1A on full SVG publication.
 - Guest/canvas shell promotion
 - Full Supabase revision persistence
 - Merging `AdminCatalogManager` and svg-editor
-- Bulk edits to `archive/plans/` or more archive moves
+- Bulk edits to `archive/Plans/` or more archive moves
 - Treating `docs/Lockedfiles/<module>/proposed.md` as law before this revision propagates
 
 ---

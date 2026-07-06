@@ -6,8 +6,8 @@ This file is the quick operating guide for `site/tech-stack-generator/`.
 
 - Separate Vite app inside the Oando repo
 - Source of the interactive tech-stack docs site
-- Build output lands in `../Documents/tech-stack-generated/`
-- Generated JSON/markdown snapshots land in `../Documents/data/` and `../Documents/markdown/` (owned by `pnpm run docs:sync:tech-stack` at repo root)
+- Build output lands in `site/tech-stack-docs/` (served at `/tech-stack-docs/`, incl. enhanced site-workflows)
+- Generated data snapshots under `site/tech-stack-generated/` (via emit scripts)
 
 ## First Run
 
@@ -24,7 +24,7 @@ On Windows PowerShell, use `npm.cmd` instead of `npm` if needed.
 ## Package Scripts
 
 - `npm run dev` - start the docs site
-- `npm run build` - typecheck and build to `../Documents/tech-stack-generated/`
+- `npm run build` - typecheck and build to `site/tech-stack-docs/` (served at `/tech-stack-docs/`)
 - `npm run preview` - preview the built site
 - `npm run typecheck` - TypeScript check only
 - `npm run test` - Vitest suite
@@ -36,7 +36,7 @@ On Windows PowerShell, use `npm.cmd` instead of `npm` if needed.
 Current package test coverage is intentionally small and checks the package wiring:
 
 1. Read the package Vite config from disk.
-2. Confirm `outDir` still points at `../Documents/tech-stack-generated/`.
+2. Confirm `outDir` points at `../tech-stack-docs` and base is `/tech-stack-docs/`.
 3. Verify the tech stack data arrays are present and valid.
 
 Current result on 2026-06-27:
@@ -55,8 +55,8 @@ Current result on 2026-06-27:
 
 ## Update Rules
 
-- Keep the source package name `tech-stack-generator`
-- Keep the build output path `../Documents/tech-stack-generated/`
-- Regenerate source-backed docs from repo root with `pnpm run docs:sync:tech-stack`; do not hand-edit `Documents/data/` or `src/generated-data/`
+- Keep the source under `site/tech-stack-generator/` (stays in site/ as requested)
+- Build output now in root `/site-workflow` (configurable in vite.config.ts)
+- Use `npm run build` (or root sync if still wired) to regenerate; the site-workflows modules are part of the Workflows section.
 - Governance, Superpowers & Tooling section (added to src/pages/Workflows.tsx) posts the /using-superpowers GS process, anti-copy, evidence, chrome-devtools MCP, and skills (design/review/check-work/figma-*) — see Workflows.tsx and root README.md. Follow AGENTS.md + superpowers spec.
 - If the test suite expands, update this walkthrough and the package README together

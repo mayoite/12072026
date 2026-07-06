@@ -19,6 +19,8 @@ Detail was merged from archived phase specs. See `archive/plans/2026-07-05_phase
 
 Blockers: `PLAN-FAIL-0408` (coverage) is cross-phase. See root `Failures.md`.
 
+**Phase 1 note:** 1A shell + 1B SVG production path complete (details: `Plans/01-execution/core/phase1-checklist.md`, `archive/1b-5phase-agent-workflow/`). Foundation/delivery docs record the plan; execution status tracked in checklist + agent reports.
+
 ---
 
 ## Phase 00 — Governance baseline

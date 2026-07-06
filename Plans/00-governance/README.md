@@ -11,7 +11,7 @@
 | 00 | [`00-global-standard-revision/`](00-global-standard-revision/) | Phase 0 — Global Standard benchmark + critique (2026-07-04) |
 | 01 | [`01-phase1-execution/`](01-phase1-execution/) | Phase 1 — pins, gates, plan slices, review workflow |
 
-**Archive (immutable):** `archive/plans/` at repo root (historical phase specs and benchmark reports — not renamed)
+**Archive (immutable):** `archive/Plans/` at repo root (historical phase specs and benchmark reports — not renamed)
 
 ---
 

@@ -1,17 +1,7 @@
-import nextDynamic from "next/dynamic";
-
+import { Open3dPlannerHost } from "@/features/planner/ui/Open3dPlannerHost";
 import { getOptionalPlannerUser } from "@/lib/auth/plannerSession";
-import { PlannerSkeleton } from "@/features/planner/ui/PlannerSkeleton";
 
 export const dynamic = "force-dynamic";
-
-const Open3dPlannerHost = nextDynamic(
-  () =>
-    import("@/features/planner/ui/Open3dPlannerHost").then((mod) => ({
-      default: mod.Open3dPlannerHost,
-    })),
-  { loading: () => <PlannerSkeleton />, ssr: false },
-);
 
 /**
  * Native Open3D pilot route — not the default guest/canvas entry.
@@ -27,12 +17,10 @@ export default async function Open3dPlannerRoute({
 }: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const [user, resolvedSearchParams] = await Promise.all([
-    getOptionalPlannerUser(),
-    searchParams ?? Promise.resolve({} as Record<string, string | string[] | undefined>),
-  ]);
+  const user = await getOptionalPlannerUser();
   const isGuest = !user;
 
+  const resolvedSearchParams = searchParams ? await searchParams : {};
   const rawId = resolvedSearchParams.id;
   const planId = (Array.isArray(rawId) ? rawId[0] : rawId)?.trim() || undefined;
 

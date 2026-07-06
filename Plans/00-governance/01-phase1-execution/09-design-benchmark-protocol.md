@@ -63,7 +63,7 @@ Borrow interaction principles and validated patterns. Do NOT copy proprietary co
 
 ## Stale-evidence policy
 
-Immutable archived reports live in `archive/plans/2026-07-05_phase1-execution/benchmarks/`. Do not edit in place.
+Immutable archived reports live in `archive/Plans/2026-07-05_phase1-execution/benchmarks/`. Do not edit in place.
 
 1. Do NOT edit the original file.
 2. Add a dated correction note in the phase evidence file referencing the original report and stating what changed.

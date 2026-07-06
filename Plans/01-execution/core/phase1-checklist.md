@@ -149,7 +149,7 @@ Extracted from Plans/01-execution/core/02-PHASE-1.md. Status based on subagent e
 - [x] Production build.
 - [x] A11y tests.
 
-**Phase 1B � COMPLETE via 5-phase agent workflow (2026-07-06). All 1B items completed per reports in Plans/1b-5phase-agent-workflow/. 1A COMPLETE per last 10 commits (59480be to fe7f7fa): 1A shell, UI fixes, gates, svg-catalog, tests, commands, docs updates. Evidence captured. GS benchmark and reviews done. See PLAN.md and agent reports. Last 10 tasks checked and completed via workflow.**
+**Phase 1B � COMPLETE via 5-phase agent workflow (2026-07-06). All 1B items completed per reports in archive/1b-5phase-agent-workflow/. 1A COMPLETE per last 10 commits (59480be to fe7f7fa): 1A shell, UI fixes, gates, svg-catalog, tests, commands, docs updates. Evidence captured. GS benchmark and reviews done. See PLAN.md and agent reports. Last 10 tasks checked and completed via workflow.**
 
 ### Execution protocol (custom from prior)
 - 2 executing agents (general + Next.js expert) parallel on task groups.
@@ -165,4 +165,4 @@ Extracted from Plans/01-execution/core/02-PHASE-1.md. Status based on subagent e
 - [x] Rollback criteria.
 - [x] Preserve evidence.
 
-**Overall: 1A complete. 1B COMPLETE via 5-phase agent workflow. All items marked done. Reports in Plans/1b-5phase-agent-workflow/. Evidence in results/. GS followed. Workflow setup complete (worktree, .grok moved inside repo, gitignore updated).**
+**Overall: 1A complete. 1B COMPLETE via 5-phase agent workflow. All items marked done. Reports in archive/1b-5phase-agent-workflow/. Evidence in results/. GS followed. Workflow setup complete (worktree, .grok moved inside repo, gitignore updated).**

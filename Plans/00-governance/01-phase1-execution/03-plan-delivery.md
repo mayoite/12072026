@@ -12,10 +12,12 @@ Detail was merged from archived phase specs. See `archive/plans/2026-07-05_phase
 
 | Phase | Status | What is left |
 |-------|--------|--------------|
-| 04 | Implemented (static) | Live §16 validation. Signed reviews in `Agents workflow/reviews/`. |
+| 04 | Implemented (static) | Live §16 validation. Signed reviews in `archive/1b-5phase-agent-workflow/reviews/`. |
 | 05 | Implemented (static) | Live §16 validation. Playwright when Phase 05 engine ready. |
 | 06 | Planned | Full consumer wiring. Cursor search ≤24. Coverage floor for 0408. |
 | 07 | Planned | Permission matrix. `withAuth` widen. Guest toolbar blocks. |
+
+**Note (post 1B):** Phase 1A/1B foundation complete per `02-PHASE-1.md`, `phase1-checklist.md`, and archived agent reports. Remaining are Phase 2+ items. 1B SVG path delivered via agent sets 01-05.
 
 Blockers: `PLAN-FAIL-0408` open. `PLAN-FAIL-003`/`004` deferred until Phase 05 engine.
 
@@ -27,7 +29,7 @@ Blockers: `PLAN-FAIL-0408` open. `PLAN-FAIL-003`/`004` deferred until Phase 05 e
 
 **Done:** Pages at `/admin/svg-editor`. Registry alias. Type-safe Puck. GS cites in code.
 
-**Left:** Dev-server walkthrough. Review artifacts under `Agents workflow/reviews/`. Mark Verified after live proof.
+**Left:** Dev-server walkthrough. Review artifacts under `archive/1b-5phase-agent-workflow/reviews/`. Mark Verified after live proof.
 
 **Checks:** `04-ADMIN-01` list route · `04-ADMIN-02` edit + Render · `04-ADMIN-09` 422 taxonomy.
 

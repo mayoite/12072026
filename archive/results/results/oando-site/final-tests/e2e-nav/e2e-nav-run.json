@@ -1,0 +1,13 @@
+﻿{
+    "name":  "e2e-nav",
+    "module":  "oando-site",
+    "phase":  "final-tests",
+    "command":  "pnpm --filter oando-site run test:e2e:nav",
+    "cwd":  "D:\\.grok\\worktrees\\oando04072026\\new",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-06T18:48:28.8486503+05:30",
+    "endUtc":  "2026-07-06T18:49:17.8769700+05:30",
+    "durationSec":  49.028,
+    "exitCode":  1,
+    "rawLog":  "D:\\.grok\\worktrees\\oando04072026\\new\\results\\oando-site\\final-tests\\e2e-nav\\e2e-nav-raw.log"
+}

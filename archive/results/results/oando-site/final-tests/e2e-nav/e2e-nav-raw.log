@@ -1,0 +1,75 @@
+﻿node.exe : $ npm run test:clean && playwright test -c config/build/playwright.config.ts 
+tests/e2e/site-navigation-smoke.spec.ts tests/e2e/navigation-smoke.spec.ts
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ npm run test:...n-smoke.spec.ts:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+> oando-site@0.1.0 test:clean
+> node scripts/clean-test-artifacts.mjs
+
+clean-test-artifacts: no stale root artifacts
+[WebServer] $ next build && node scripts/prepare-standalone.cjs
+[WebServer] Turbopack build encountered 1 warnings:
+[WebServer] ./site/next.config.js
+[WebServer] Encountered unexpected file in NFT list
+[WebServer] A file was traced that indicates that the whole project was traced unintentionally. Somewhere in the 
+import trace below, there are:
+[WebServer] - filesystem operations (like path.join, path.resolve or fs.readFile), or
+[WebServer] - very dynamic requires (like require('./' + foo)).
+[WebServer] To resolve this, you can
+[WebServer] - remove them if possible, or
+[WebServer] - only use them in development, or
+[WebServer] - make sure they are statically scoped to some subfolder: path.join(process.cwd(), 'data', bar), or
+[WebServer] - add ignore comments: path.join(/*turbopackIgnore: true*/ process.cwd(), bar)
+[WebServer] 
+[WebServer] Import trace:
+[WebServer]   App Route:
+[WebServer]     ./site/next.config.js
+[WebServer]     ./site/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts
+[WebServer]     ./site/features/planner/admin/svg-editor/persistBlockDescriptor.ts
+[WebServer]     ./site/app/api/admin/svg-editor/route.ts
+[WebServer] 
+[WebServer] 
+[WebServer] 
+[WebServer] > Build error occurred
+[WebServer] Error: Turbopack build failed with 1 errors:
+[WebServer] ./site/features/planner/admin/svg-editor/svgPipelineRunner.ts:123:10
+[WebServer] Module not found: Can't resolve <dynamic>
+[WebServer]   121 |
+[WebServer]   122 |   // In-process (unified): dynamic import of thin script module calling canonical compiler.
+[WebServer] > 123 |   return import(`file://${scriptPath.replace(/\\/g, "/")}`)
+[WebServer]       |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[WebServer]   124 |     .then((mod) => {
+[WebServer]   125 |       const runP = mod.runPipeline || mod.default?.runPipeline;
+[WebServer]   126 |       if (typeof runP !== "function") throw new Error("runPipeline export missing");
+[WebServer] 
+[WebServer] 
+[WebServer] 
+[WebServer] Import traces:
+[WebServer]   #1 [App Route]:
+[WebServer]     ./site/features/planner/admin/svg-editor/svgPipelineRunner.ts
+[WebServer]     ./site/app/api/admin/svg-editor/route.ts
+[WebServer] 
+[WebServer]   #2 [Server Component]:
+[WebServer]     ./site/features/planner/admin/svg-editor/svgPipelineRunner.ts
+[WebServer]     ./site/app/admin/svg-editor/[id]/page.tsx
+[WebServer] 
+[WebServer]   #3 [App Route]:
+[WebServer]     ./site/features/planner/admin/svg-editor/svgPipelineRunner.ts
+[WebServer]     ./site/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts
+[WebServer]     ./site/features/planner/admin/svg-editor/persistBlockDescriptor.ts
+[WebServer]     ./site/app/api/admin/svg-editor/route.ts
+[WebServer] 
+[WebServer] https://nextjs.org/docs/messages/module-not-found
+[WebServer] 
+[WebServer] 
+[WebServer]     at <unknown> (./site/features/planner/admin/svg-editor/svgPipelineRunner.ts:123:10)
+[WebServer]     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+Error: Process from config.webServer was not able to start. Exit code: 1
+
+D:\.grok\worktrees\oando04072026\new\site:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] oando-site@0.1.0 test:e2e:nav: `npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/site-navigation-smoke.spec.ts tests/e2e/navigation-smoke.spec.ts`
+Exit status 1

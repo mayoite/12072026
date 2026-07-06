@@ -4,7 +4,7 @@ Date: 2026-07-05
 
 Authority: `01-implementation-decisions.md` · gates: `08-quality-gates.md` · failures: root `Failures.md`
 
-Detail was merged from archived phase specs. See `archive/plans/2026-07-05_phase1-execution/phases/`.
+Detail was merged from archived phase specs. See `archive/Plans/planner Phase1/phases/`.
 
 ---
 

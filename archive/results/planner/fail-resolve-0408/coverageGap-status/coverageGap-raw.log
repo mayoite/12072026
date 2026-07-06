@@ -1,0 +1,402 @@
+﻿
+ RUN  v4.1.9 D:/.grok/worktrees/oando04072026/new/site
+
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Fixture Gallery > builds gallery with expected entry count 10ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Fixture Gallery > each entry has valid SVG markup 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Fixture Gallery > covers all theme variants 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Fixture Gallery > covers multiple categories 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Fixture Gallery > includes rotated entries 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Fixture Gallery > viewBox is a valid string 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action > placeCatalogItem with all options 2ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action > placeCatalogItem defaults 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action > placeCatalogItem with item that has no variants 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action > clickToPlace creates correct snapshot 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action > dragToPlace creates correct snapshot 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action > apiPlace creates correct snapshot 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action > apiPlace with no overrides 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action > verifyPlacementIdentity returns true for matching 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action > verifyPlacementIdentity returns false for mismatched 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action > generates unique IDs across batch 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action > placeCatalogItemInProject preserves overrides and unrelated furniture 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > getAll returns loaded items 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > getById returns item or null 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > getBySlug case-insensitive 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > getBySku case-insensitive 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > getByCategory returns matching items 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > getByRoom returns matching items 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > getByStyle returns matching items 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with text query 2ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with category filter 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with room filter 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with style filter 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with material filter 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with color filter 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with dimension filter 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with dimension filter depth and height 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with availability filter 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with sort order name-asc 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with sort order name-desc 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with sort order price-asc 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with sort order price-desc 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with sort order newest 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search pagination with cursor 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search with invalid cursor defaults to start 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search caches results 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search on empty catalog returns empty 4ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > isLoaded returns correct state 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > getSource returns loaded source 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > invalidate clears cache and rebuilds index 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > getById/getBySlug/getBySku return null on unloaded client 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > exact SKU match appears in results 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > loadFromApi rejects missing fetch and failed responses 3ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search falls back to per-item tokenization when index is empty 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > loadDescriptorsFromLoader returns [] on client (addresses always []) without throwing 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search integrates resolver blocks when descriptors path taken (uses .blocks result) 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ coverage gaps > search supports Sketchfab parity facets (license/animated/staffPicked) per 0419 fix 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ coverage gaps > addRecentItem deduplicates by SKU 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ coverage gaps > addRecentItem enforces max count 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ coverage gaps > clearRecentItems empties list 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ coverage gaps > addFavoriteItem prevents duplicates 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ coverage gaps > addFavoriteItem enforces max count (evicts oldest) 12ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ coverage gaps > removeFavoriteItem removes by catalogId 11ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ coverage gaps > getFavoritesByCategory filters correctly 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ coverage gaps > migrateRecentItemsSchema is a no-op at current version 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ coverage gaps > migrateFavoritesSchema is a no-op at current version 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > defaultInventoryPanelState returns expected shape 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > reduceInventoryCommand handles all command types 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > reduceInventoryCommand PLACE_ITEM returns state unchanged 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > reduceInventoryCommand handles mode, focus, scroll, range, and announcements 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > collections: project recents and variant-aware recents 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > collections: add and remove recent 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > collections: favorites add/remove/check 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > collections: upsert and item management 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > collections: add to nonexistent collection is no-op 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > collections: remove from nonexistent collection is no-op 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > INVENTORY_PANEL_CONTRACT has expected shape 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > reduceInventoryCommand SET_SEARCH_QUERY whitespace-only keeps current mode (browse branch) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > addInventoryRecent frequent sorts by useCount desc then itemId then variant for ties 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory State ├óΓé¼ΓÇ¥ coverage gaps > addInventoryFavorite uses stableUnique + sort for favorites list 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects empty input 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects non-string input 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects oversized SVG 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects malformed SVG without root element 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects script elements 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects foreignObject 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects entity declarations 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects event handler attributes 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects onclick 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects href attributes 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects javascript: protocol 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects data: protocol in attributes 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects use element (external reference) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects iframe element 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects embed element 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects object element 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > rejects unsafe url() reference in style 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > allows safe internal url(#id) reference 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > passes valid SVG 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > warns about missing namespace but still passes 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ coverage gaps > isSvgSafe shorthand works 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > configuratorHeightCmFromMixedUnit with undefined 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > configuratorHeightCmFromMixedUnit with 0 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > configuratorHeightCmFromMixedUnit with negative 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > configuratorHeightCmFromMixedUnit with NaN 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > configuratorHeightCmFromMixedUnit with Infinity 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > configuratorHeightCmFromMixedUnit with value > threshold (mm) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > configuratorHeightCmFromMixedUnit with value <= threshold (cm) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > configuratorHeightCmFromMixedUnit custom fallback 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > displayDimensions mm format 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > displayDimensions cm format 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > displayDimensions m format 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > displayDimensions in format 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > displayDimensions ft-in format 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > displayDimensions with zero height omits height 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > displayFtInFromCanonicalMm formats correctly 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > displayInFromCanonicalMm converts correctly 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > displayMFromCanonicalMm converts correctly 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ coverage gaps > buildAccessibleName formats correctly 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ coverage gaps > renderSvgSymbol with all themes 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ coverage gaps > renderSvgSymbol with rotation values 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ coverage gaps > getCachedSvgSymbol caches and retrieves 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ coverage gaps > clearSvgCache empties cache 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ coverage gaps > getSvgSymbolDimensionAgreement returns valid viewBox 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ coverage gaps > generateSymbol with all known subcategories 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ coverage gaps > generateSymbol with unknown subcategory falls back 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ coverage gaps > render uses deterministic generatedAt value 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action ├óΓé¼ΓÇ¥ crypto branches > generates ID without crypto.randomUUID (getRandomValues fallback) 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action ├óΓé¼ΓÇ¥ crypto branches > generates ID when crypto exists without randomUUID or getRandomValues 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action ├óΓé¼ΓÇ¥ crypto branches > generates ID without crypto at all (randomSuffix fallback) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > search with empty query returns all filtered items 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > search with text returns relevant items 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > search with category filter 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > search with room filter 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > search with style filter 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > search with material filter 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > search with availability filter 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > typo tolerance triggers on zero results with long query 6ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > typo tolerance disabled 2ms
+cmd.exe : stderr | tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Actions (TDD: apply errors, 
+preview, revert, layout branches) > previewSuggestionActions and revert cover layout and warn path
+At line:1 char:309
++ ... esolve-0408/coverageGap-status | Out-Null; & cmd /c $cmd 2>&1 | Out-F ...
++                                                ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (stderr | tests/...t and warn path:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[advisorActions] revertLastSuggestion not fully implemented
+
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > minScore filters low-relevance results 3ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > suggest returns matching items 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > suggest with short query returns empty 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > suggest returns tag matches 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > search applies dimension range filters (min/max width/depth/height) and fuzzy prefix score path 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Index ├óΓé¼ΓÇ¥ coverage gaps > search scores exact SKU high and expands synonyms; filter handles null config + defaults 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > mapPlannerManagedProductToCatalogItem returns null for missing id 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > mapPlannerManagedProductToCatalogItem returns null for missing name 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > mapPlannerManagedProductToCatalogItem returns null for zero dimensions 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > mapPlannerManagedProductToCatalogItem succeeds with valid input 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > mapConfiguratorProductToCatalogItem returns null for missing slug 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > mapConfiguratorProductToCatalogItem parametric sizing 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > mapConfiguratorProductToCatalogItem L-shape parametric 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > mapConfiguratorProductToCatalogItem discrete sizing 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > mapConfiguratorProductToCatalogItem defaultFootprint fallback 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > mapConfiguratorProductToCatalogItem returns null for no dimensions 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > resolveSubCategory extracts from series name 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > resolveSubCategory extracts from family 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > resolveSubCategory falls back to category matching 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > resolveAvailabilityStatus returns discontinued for inactive 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ coverage gaps > resolveAvailabilityStatus returns in-stock for active 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ localStorage branches > migrateRecentItemsSchema upgrades old schema version 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ localStorage branches > migrateFavoritesSchema upgrades old schema version 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ localStorage branches > safeRead handles corrupted JSON gracefully 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ localStorage branches > safeWrite handles full localStorage gracefully 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Clients & Actions (TDD error paths, chat, parsing) > maps advisor error codes (RED phase: initial) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Clients & Actions (TDD error paths, chat, parsing) > requestAdvisorChat hits rate limit, service unavailable, generic http error, and network catch 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Clients & Actions (TDD error paths, chat, parsing) > requestAdvisorChat covers invalid input throws (caught), max messages, generic error, network catch 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Clients & Actions (TDD error paths, chat, parsing) > requestSpaceSuggest covers validation fail + api error path + success 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Clients & Actions (TDD error paths, chat, parsing) > applySuggestion (client) + validateLayout cover error branches and warnings 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Clients & Actions (TDD error paths, chat, parsing) > resolveAdvisorProviderChain returns default 0ms
+ ├ù tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Actions (TDD: apply errors, preview, revert, layout branches) > applySuggestion and applyLayoutToProject hit no-floor, no-project, unsupported, layout validation fail 7ms
+   ΓåÆ expected 'Active floor not found' to contain 'No active floor in project'
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Actions (TDD: apply errors, preview, revert, layout branches) > previewSuggestionActions and revert cover layout and warn path 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Actions (TDD: apply errors, preview, revert, layout branches) > applyLayoutToProject skips when no floorId 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Sketch-to-Plan Client (TDD: validation errors, response parsing, progress, fallbacks) > convertSketchToPlan covers all validateRequest branches + idle error return 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Sketch-to-Plan Client (TDD: validation errors, response parsing, progress, fallbacks) > convertSketchToPlan parses preview, fallback, error, unknown status + network catch 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Sketch-to-Plan Client (TDD: validation errors, response parsing, progress, fallbacks) > convertSketchToPlanWithProgress reports states for preview and fallback 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Sketch-to-Plan Client (TDD: validation errors, response parsing, progress, fallbacks) > sketch helpers, accept/reject, isAvailable, estimate, recovery messages 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ remaining branches > catches unsafe URL in second-pass attribute scan 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ remaining branches > catches vbscript protocol 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ remaining branches > catches custom on-event attribute (ontouchstart) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ remaining branches > handles unquoted attribute values 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ cache eviction and edge cases > getCachedSvgSymbol with scale parameter 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ cache eviction and edge cases > getCachedSvgSymbol with invalid rotation/scale uses defaults 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ cache eviction and edge cases > getCachedSvgSymbol with unknown theme falls back to light 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ cache eviction and edge cases > cache eviction works at scale 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ remaining lines > displayDimensions with unknown unit falls back to cm 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ remaining function coverage > LRU cache evicts when at capacity 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ remaining function coverage > gs: catalogue-first loader primary + Sketchfab facets + cursor cap + resolver wire (BP-06 / design ┬º9-10 / 0419) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ remaining function coverage > stale cache triggers revalidation 31ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ validateDimensions max bounds > rejects widthMm exceeding 100000 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ validateDimensions max bounds > rejects depthMm exceeding 100000 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ validateDimensions max bounds > rejects heightMm exceeding 100000 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ├óΓé¼ΓÇ¥ validateDimensions max bounds > rejects invalid weightKg 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Asset Validation ├óΓé¼ΓÇ¥ coverage gaps > validateAssetUrl rejects non-https URL 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Asset Validation ├óΓé¼ΓÇ¥ coverage gaps > validateAssetUrl rejects empty string 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Asset Validation ├óΓé¼ΓÇ¥ coverage gaps > validateAssetUrls validates multiple URLs 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ remaining branches > configurator parametric with empty length options falls through to null 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ remaining branches > configurator parametric with invalid values returns null 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ remaining branches > configurator discrete with zero-area options skips them 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ remaining branches > configurator with non-parametric sizingType and seatCount path 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Recent Favorites ├óΓé¼ΓÇ¥ localStorage undefined > handles localStorage being undefined 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ deep branch coverage > catches blocked attribute via regex scan (xlink:href in nested element) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ deep branch coverage > catches formaction in the attribute regex loop 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ deep branch coverage > second-pass catches data: protocol in quoted value 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ deep branch coverage > second-pass catches url() with external reference in style value 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ deep branch coverage > attribute scan catches xlink:title via matchAll loop 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ deep branch coverage > quoted-value scan catches data protocol in single-quoted attributes 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ├óΓé¼ΓÇ¥ deep branch coverage > attribute scan catches xlink:show through matchAll blocked-attribute path 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ deep branch coverage > renderSvgSymbol with sofa has multiple shapes 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ deep branch coverage > bed symbol with headboard shapes 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ deep branch coverage > storage symbol generation 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ deep branch coverage > plants symbol (circle shape) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Pure Actions ├óΓé¼ΓÇ¥ remaining branches > addFloor with copyCurrentLayout copies walls from active floor 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Pure Actions ├óΓé¼ΓÇ¥ remaining branches > importFloorData merges stairs and columns 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ├óΓé¼ΓÇ¥ uncovered functions > LRU cache has() returns false for expired entries 29ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ deep coverage > configurator non-parametric non-discrete with defaultFootprint 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ deep coverage > configurator parametric with sharing=sharing doubles depth 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Mapping ├óΓé¼ΓÇ¥ deep coverage > configurator with all metadata fields 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ cache eviction edge case > symbol with very small dimensions 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ cache eviction edge case > symbol with very large dimensions 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ cache eviction edge case > getCachedSvgSymbol reuses cached entry 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols ├óΓé¼ΓÇ¥ cache eviction edge case > default symbol for unknown category handles edge case 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ΓÇö search/filter additional (PLAN-FAIL-0408) > search exercises configurability/mounting/assetReadiness filter branches + sketchfab parity 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ΓÇö search/filter additional (PLAN-FAIL-0408) > loadFromApi success normalizes envelope + items (hits map/filter/?? paths) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ΓÇö search/filter additional (PLAN-FAIL-0408) > text search hits computeRelevance tag/name/desc/fuzzy + compareNewest 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory collections ΓÇö tie/unique/variant branches (PLAN-FAIL-0408) > addInventoryRecent hits frequent useCount tie + id sort, variant null/undef handling 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory collections ΓÇö tie/unique/variant branches (PLAN-FAIL-0408) > upsert uses stableUniqueItemIds (dedupe + locale sort) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action ΓÇö crypto fallback + project map ?? (PLAN-FAIL-0408) > placeCatalogItemInProject exercises furniture map override + variant ?? chains 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement Action ΓÇö crypto fallback + project map ?? (PLAN-FAIL-0408) > generatePlacementId crypto fallback path (no uuid/getRandomValues) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement crypto + ?? logic (TDD cycles for placementAction uncovered) > crypto===undefined fully hits randomSuffix outer else (placement logic) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Placement crypto + ?? logic (TDD cycles for placementAction uncovered) > placeCatalogItemInProject map/?? + variant null path 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Model Actions + Invariants error paths + map (TDD for model/actions/* uncovered) > addOpen3dFurniture throws catalog/scale errors 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Model Actions + Invariants error paths + map (TDD for model/actions/* uncovered) > addOpen3d* opening errors (wall, pos, width, length) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Model Actions + Invariants error paths + map (TDD for model/actions/* uncovered) > projectActions duplicate add, !source dup return orig, wall delete cascade 0ms
+ ├ù tests/unit/features/planner/open3d/coverageGap.test.ts > Model Actions + Invariants error paths + map (TDD for model/actions/* uncovered) > addOpen3dWall no active floor + transaction reduce + move update 1ms
+   ΓåÆ expected [Function] to throw error including 'No active floor in project' but got 'Active floor not found'
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Model Actions + Invariants error paths + map (TDD for model/actions/* uncovered) > inspectOpen3dProject + assert cover duplicate/invalid/missing-active/missing-wall 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Asset Validation ΓÇö relative/resolve/expire/allow (PLAN-FAIL-0408) > validateAssetUrl accepts all relative forms; https only after allowlist 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Asset Validation ΓÇö relative/resolve/expire/allow (PLAN-FAIL-0408) > resolveAssetUrl + isAssetUrlExpired cover ?? / if paths 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Asset Validation ΓÇö relative/resolve/expire/allow (PLAN-FAIL-0408) > add/getAllowedOrigins and origin match exercised 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ΓÇö display/canonical/config/validate edges (PLAN-FAIL-0408) > displayDimensions covers cm/m/in/ft-in + mm fallback 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ΓÇö display/canonical/config/validate edges (PLAN-FAIL-0408) > canonicalDimensionsFromCatalogCm + configuratorHeight branches + buildAccessible 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Unit Conversion ΓÇö display/canonical/config/validate edges (PLAN-FAIL-0408) > validateDimensions hits zero/neg/inf/weight paths 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer ΓÇö attr size/on-prefix/nonfrag (PLAN-FAIL-0408) > oversized attr value, on* prefix, non-fragment href, poster blocked 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Taxonomy ΓÇö categories/rooms/styles/sorts/density (TDD) > INVENTORY_CATEGORIES exports 6 categories with subCategories and stable ids 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Taxonomy ΓÇö categories/rooms/styles/sorts/density (TDD) > INVENTORY_ROOM_GROUPS has all-rooms empty + specific room tags 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Taxonomy ΓÇö categories/rooms/styles/sorts/density (TDD) > INVENTORY_STYLE_GROUPS provides all-styles + modern etc 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Inventory Taxonomy ΓÇö categories/rooms/styles/sorts/density (TDD) > INVENTORY_SORT_OPTIONS and DENSITY_OPTIONS define keys used in state 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Catalog Client ΓÇö TDD loadDescriptorsFromLoader (window/client guard) > loadDescriptorsFromLoader returns [] immediately when window defined (client guard branch) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer TDD ΓÇö on* event msg + ns warn + isSvgSafe + oversized attr (RED first) > hits dynamic startsWith('on') branch for 'blocked event attribute' message 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer TDD ΓÇö on* event msg + ns warn + isSvgSafe + oversized attr (RED first) > missing namespace pushes warn issue but returns safe:true + original 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer TDD ΓÇö on* event msg + ns warn + isSvgSafe + oversized attr (RED first) > isSvgSafe delegates and returns correct bools 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Sanitizer TDD ΓÇö on* event msg + ns warn + isSvgSafe + oversized attr (RED first) > oversized attribute value triggers specific issue (MAX_ATTRIBUTE_BYTES) 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Fallback TDD ΓÇö generateFallbackSvg direct (test first) > fallback produces valid render output with crosshatch, reason, aria 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols TDD ΓÇö normalize edge, label render, resolve sub (test first) > generateSymbol normalizes non-positive dims to 1 and renders 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Symbols TDD ΓÇö normalize edge, label render, resolve sub (test first) > symbol using label path includes <text> in svg 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Types Validation TDD ΓÇö parse/freeze/checksum/error paths (RED test first) > parseBlockDescriptor: non-object, versionMismatch, structural invalid, hashMismatch paths 3ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Types Validation TDD ΓÇö parse/freeze/checksum/error paths (RED test first) > canonicalizeBlockDescriptorInput sorts keys recursively; compute checksum 64hex 0ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > SVG Types Validation TDD ΓÇö parse/freeze/checksum/error paths (RED test first) > toOpen3dDescriptorErrorHttp covers kinds; freezeFresh stamps generatedAt 1ms
+ Γ£ô tests/unit/features/planner/open3d/coverageGap.test.ts > Export shared ΓÇö TDD preflight + format utils (formatMeasurement, formatArea, preflight statuses) > RED-VERIFY: buildExportFilename + preflight ready/blocked/unsupported exercise slug + geometry check 0ms
+ ├ù tests/unit/features/planner/open3d/coverageGap.test.ts > GREEN: updateExportJobProgress clamps + status transition + formatExportJobAnnouncement all paths + formats (TDD cycle 2) 0ms
+   ΓåÆ createOpen3dExportJob is not a function
+ ├ù tests/unit/features/planner/open3d/coverageGap.test.ts > Export shared TDD roundtrips + errors + upload + preflight more (cycles 3+) > json export/import roundtrip + error paths (no floors, bad floorId, recover) 1ms
+   ΓåÆ expected false to be true // Object.is equality
+ ├ù tests/unit/features/planner/open3d/coverageGap.test.ts > Export shared TDD roundtrips + errors + upload + preflight more (cycles 3+) > importUtils detect/auto/roomplan/error + preflight unsupported/blocked 0ms
+   ΓåÆ expected 'unknown' to be 'roomplan' // Object.is equality
+ ├ù tests/unit/features/planner/open3d/coverageGap.test.ts > Export shared TDD roundtrips + errors + upload + preflight more (cycles 3+) > upload utils: formatFileSize, validateUpload, revoke, preview (pure paths) 0ms
+   ΓåÆ expected '0 B' to be '10 B' // Object.is equality
+ ├ù tests/unit/features/planner/open3d/coverageGap.test.ts > Export shared TDD roundtrips + errors + upload + preflight more (cycles 3+) > more preflight blocked no-geometry non-json + job cancel announce 0ms
+   ΓåÆ createOpen3dExportJob is not a function
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 7 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Actions (TDD: apply errors, preview, 
+revert, layout branches) > applySuggestion and applyLayoutToProject hit no-floor, no-project, unsupported, layout 
+validation fail
+AssertionError: expected 'Active floor not found' to contain 'No active floor in project'
+
+Expected: "No active floor in project"
+Received: "Active floor not found"
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:1722:30
+    1720|     const noFloorRes = await applySuggestion({ type: "placement", descΓÇª
+    1721|     expect(noFloorRes.success).toBe(false);
+    1722|     expect(noFloorRes.error).toContain("No active floor in project");
+       |                              ^
+    1723|
+    1724|     const noProjPlace = await applySuggestion({ type: "placement", desΓÇª
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/7]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > Model Actions + Invariants error paths + map (TDD for 
+model/actions/* uncovered) > addOpen3dWall no active floor + transaction reduce + move update
+AssertionError: expected [Function] to throw error including 'No active floor in project' but got 'Active floor not 
+found'
+
+Expected: "No active floor in project"
+Received: "Active floor not found"
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2543:96
+    2541|   it("addOpen3dWall no active floor + transaction reduce + move updateΓÇª
+
+ Test Files  1 failed (1)
+      Tests  7 failed | 252 passed (259)
+   Start at  18:36:08
+   Duration  2.00s (transform 361ms, setup 578ms, import 418ms, tests 201ms, environment 562ms)
+
+    2542|     const badProj = { ...makeBaseProject(), activeFloorId: "no" };
+    2543|     expect(() => addOpen3dWall(badProj, { start: { x: 0, y: 0 }, end: ΓÇª
+       |                                                                                                ^
+    2544|     const proj = makeBaseProject();
+    2545|     const tx = applyOpen3dProjectTransaction(proj, [
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/7]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > GREEN: updateExportJobProgress clamps + status 
+transition + formatExportJobAnnouncement all paths + formats (TDD cycle 2)
+TypeError: createOpen3dExportJob is not a function
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2872:15
+    2870| it("GREEN: updateExportJobProgress clamps + status transition + formatΓÇª
+    2871|   const baseProj = { id: "pj", activeFloorId: "f", floors: [{ id: "f",ΓÇª
+    2872|   const job = createOpen3dExportJob(baseProj, "png");
+       |               ^
+    2873|   const p50 = updateExportJobProgress(job, 50);
+    2874|   expect(p50.progress).toBe(50);
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[3/7]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > Export shared TDD roundtrips + errors + upload + 
+preflight more (cycles 3+) > json export/import roundtrip + error paths (no floors, bad floorId, recover)
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2897:25
+
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[4/7]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > Export shared TDD roundtrips + errors + upload + 
+preflight more (cycles 3+) > importUtils detect/auto/roomplan/error + preflight unsupported/blocked
+AssertionError: expected 'unknown' to be 'roomplan' // Object.is equality
+
+Expected: "roomplan"
+Received: "unknown"
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2913:74
+    2911|
+    2912|   it("importUtils detect/auto/roomplan/error + preflight unsupported/bΓÇª
+    2913|     expect(detectFormat('{"walls":[],"doors":[],"sections":[]}').formaΓÇª
+       |                                                                          ^
+    2914|     expect(detectFormat('{"type":"open3d-floorplan-project","project":ΓÇª
+    2915|     expect(detectFormat('{"floors":[],"id":"x","name":"x"}').format).tΓÇª
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[5/7]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > Export shared TDD roundtrips + errors + upload + 
+preflight more (cycles 3+) > upload utils: formatFileSize, validateUpload, revoke, preview (pure paths)
+AssertionError: expected '0 B' to be '10 B' // Object.is equality
+
+Expected: "10 B"
+Received: "0 B"
+
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2930:32
+    2928|
+    2929|   it("upload utils: formatFileSize, validateUpload, revoke, preview (pΓÇª
+    2930|     expect(formatFileSize(10)).toBe("10 B");
+       |                                ^
+    2931|     expect(formatFileSize(2048)).toContain("KB");
+    2932|     expect(formatFileSize(3 * 1024 * 1024)).toContain("MB");
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[6/7]ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/coverageGap.test.ts > Export shared TDD roundtrips + errors + upload + 
+preflight more (cycles 3+) > more preflight blocked no-geometry non-json + job cancel announce
+TypeError: createOpen3dExportJob is not a function
+ Γ¥» tests/unit/features/planner/open3d/coverageGap.test.ts:2951:15
+    2949|     expect(b.messages[0]).toContain("no exportable geometry");
+    2950|
+    2951|     const j = createOpen3dExportJob(emptyGeo, "pdf");
+       |               ^
+    2952|     const c = cancelExportJob(j);
+    2953|     expect(c.status).toBe("cancelled");
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[7/7]ΓÄ»
+
+undefined
+D:\.grok\worktrees\oando04072026\new\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run tests/unit/features/planner/open3d/coverageGap.test.ts --no-coverage "--reporter=verbose"

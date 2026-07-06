@@ -1,0 +1,10 @@
+﻿{
+    "endUtc":  "2026-07-06T18:39:11.7108885+05:30",
+    "exitCode":  0,
+    "module":  "planner",
+    "rawLog":  "results/planner/fail-resolve-0408/coverageGap-status3/coverageGap-raw.log",
+    "startUtc":  "2026-07-06T18:39:08.7258923+05:30",
+    "name":  "coverageGap-status3",
+    "command":  "pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/coverageGap.test.ts --no-coverage --reporter=dot --passWithNoTests",
+    "phase":  "fail-resolve-0408"
+}

@@ -72,9 +72,9 @@ GS-SCORE:
 
 **Reviews (agent output):**
 
-- `Agents workflow/reviews/critic-review.md`
-- `Agents workflow/reviews/qa-review.md`
-- `Agents workflow/reviews/ui-review.md`
+- `archive/1b-5phase-agent-workflow/reviews/critic-review.md`
+- `archive/1b-5phase-agent-workflow/reviews/qa-review.md`
+- `archive/1b-5phase-agent-workflow/reviews/ui-review.md`
 
 **Gate evidence:** `results/<module>/<phase>/<cmd>/` with `*-run.json` + `*-raw.log` per `testing-handbook.md`.
 

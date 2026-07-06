@@ -14,7 +14,7 @@ Append-only. Add a dated note when evidence changes.
 
 **Binding:** `Cmd/Ctrl+K` palette. Same command IDs everywhere. Measurements visible. Tier-based responsive layout. One Puck.Render per route. Anti-copy from `site/app/css/` only.
 
-Evidence: `archive/plans/2026-07-05_phase1-execution/benchmarks/phase-05-benchmark.md`.
+Evidence: `archive/Plans/planner Phase1/benchmarks/phase-05-benchmark.md`.
 
 ---
 
@@ -22,7 +22,7 @@ Evidence: `archive/plans/2026-07-05_phase1-execution/benchmarks/phase-05-benchma
 
 **Binding:** Upload limits upfront. One AI job. Scale before AI. Preview→confirm→commit. Background jobs with cancel. Lazy 3D. Server-only keys. Catalogue-first. Cursor ≤24.
 
-Evidence: `archive/plans/2026-07-05_phase1-execution/benchmarks/phase-06-benchmark.md`.
+Evidence: `archive/Plans/planner Phase1/benchmarks/phase-06-benchmark.md`.
 
 ---
 
@@ -30,7 +30,7 @@ Evidence: `archive/plans/2026-07-05_phase1-execution/benchmarks/phase-06-benchma
 
 Tests expanded. Full % needs live coverage (0408 open).
 
-Evidence: `archive/plans/2026-07-05_phase1-execution/benchmarks/blocksResolver-test-additions-2026-07-04.md`.
+Evidence: `archive/Plans/planner Phase1/benchmarks/blocksResolver-test-additions-2026-07-04.md`.
 
 ---
 

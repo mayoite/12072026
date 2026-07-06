@@ -72,34 +72,19 @@ Also relevant: `tests/unit/features/planner/open3d/coverageGap.test.ts` has 7 pr
 
 **Next:** dedicated lint-cleanup pass (many are `--fix`-able unused imports / `prefer-const`); re-run `pnpm run lint` to zero before any full Phase 1A gate sign-off.
 
-### REACT-BP-CRITICAL-1-3 — 2026-07-06 (scoped fixes applied)
-**Status:** Addressed in this task (CRITICAL async-parallel + bundle-dynamic only) · full gate not run
-**Scope:** Top 3 CRITICAL from results/react-best-practices-review.md (in worktree):
-- async-parallel/defer-await for user+searchParams in planner workspace pages.
-- async-parallel in catalogQuery.ts (descriptor+API).
-- bundle-dynamic-imports for Open3dPlannerHost on direct /open3d route.
+### TECH-REV-2026-07-06 (transient — tech-stack-generator revision)
 
-**Files touched (min necessary, production only):** 
-- site/app/planner/open3d/page.tsx
-- site/app/planner/(workspace)/canvas/page.tsx
-- site/app/planner/(workspace)/fabric/canvas/page.tsx
-- site/features/planner/open3d/catalog/catalogQuery.ts
+**Status:** Completed in-session (no new failure opened)
 
-**Evidence runs (via scripts/run-evidence-cmd.ps1 per START/AGENTS/testing-handbook):**
-- results/site/react-best-practices-fix/typecheck/ (exit 0, tsc --noEmit clean)
-- results/site/react-best-practices-fix/lint-scoped/ (exit 0 on exactly the 4 files; used site's eslint.config + --max-warnings=0)
+**Scope:** site/tech-stack-generator site-workflows support + theme sync to core/tokens/theme.css + utilities (no isolated)
 
-**Skips / notes (per AGENTS.md Honesty + Test Evidence + Scope):**
-- Did not run full `pnpm run lint` (pre-existing ~130 unrelated errors per active PLAN-FAIL-0410; would pollute evidence).
-- Did not run full `pnpm run typecheck` from root outside filter (scoped used).
-- No tests, no build, no coverage, no playwright (out of scope for "quick typecheck/lint via evidence script if possible").
-- Overwrote evidence artifacts on re-runs of same <name> (policy prefers distinct names for historical; latest is passing).
-- One latent @typescript-eslint/consistent-type-imports surfaced+fixed during scoped lint on catalogQuery (changed value import of Open3dCatalogClient to type-only; pre-existing in original, not caused by parallel logic).
-- Review report source was in worktree results/; main D:\oandO04072026 state used for edits (per user).
-- No changes to non-listed files, no docs created, no unrelated refactors.
-- route segment `export const dynamic` preserved alongside nextDynamic alias import (no scope creep).
-- Parallel in catalogQuery always kicks API (tradeoff for no-waterfall on fallback path); client state re-asserted for descriptors to preserve semantics/side-effects.
+**What ran (evidence captured under results/tech-stack-generator/revision/):**
+- emit-renderer-data (populated siteWorkflowRecords)
+- typecheck (tech)
+- test:tech-stack (exit 0, data-loaders exercised)
+- build (Vite, exit 0)
+- check-theme-alignment (exit 0)
 
-**Blockers:** None for this scoped task. Full release gate (per Failures) still blocked on coverage floor + pre-existing lint. Next step for test-writer: add unit test for loadOpen3dCatalog parallel paths + e2e timing if needed.
+**Skipped (per AGENTS minimum + scope):** full `docs:gate:tech-stack`, release:gate, playwright (tech has none), coverage (not required for this), root lint (pre-existing unrelated). No heavy gate before ship per Failures read.
 
-**Log per AGENTS "Done":** Skips and evidence paths recorded here. Work matches ask exactly.
+**No blockers.** All evidence preserved. Per testing-handbook + START.md. (Logged for honesty; not a persistent PLAN-FAIL)

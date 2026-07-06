@@ -1,0 +1,12 @@
+﻿node.exe : $ turbo run release:gate:fast
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ turbo run release:gate:fast:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ΓÇó turbo 2.10.3
+  x Missing tasks in project
+  `->   x Could not find task `release:gate:fast` in project
+
+[ELIFECYCLE] Command failed with exit code 1.

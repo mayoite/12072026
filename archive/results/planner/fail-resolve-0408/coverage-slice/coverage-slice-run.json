@@ -1,0 +1,10 @@
+﻿{
+    "endUtc":  "2026-07-06T18:40:06.5005720+05:30",
+    "exitCode":  0,
+    "module":  "planner",
+    "rawLog":  "results/planner/fail-resolve-0408/coverage-slice/coverage-slice-raw.log",
+    "startUtc":  "2026-07-06T18:40:00.5426688+05:30",
+    "name":  "coverage-slice",
+    "command":  "pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/coverageGap.test.ts --coverage --config vitest.config.ts --reporter=dot",
+    "phase":  "fail-resolve-0408"
+}

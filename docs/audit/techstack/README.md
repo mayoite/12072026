@@ -1,7 +1,7 @@
 # Tech-stack static audit
 
 **Date:** 2026-07-01  
-**Scope:** `site/tech-stack-generator/`, `site/tech-stack-docs/`, root `docs:gate:tech-stack`
+**Scope:** `site/tech-stack-generator/` (stays in site/), builds to `site/tech-stack-docs/` (served at `/tech-stack-docs/`), root `docs:gate:tech-stack`
 
 ## Static review
 

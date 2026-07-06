@@ -1,4 +1,6 @@
-# Oando Platform — Tech Stack Documentation
+# Oando Platform — Site Workflow / Tech Stack Documentation
+
+(Source generator stays in `site/`; build output to `site/tech-stack-docs/` (served at `/tech-stack-docs/`). Full docs site with enhanced site-workflows section.)
 
 A standalone, modifiable documentation site showcasing the entire technology stack, architecture, workflows, and development processes of the **Oando Platform** (a furniture company platform at `oando.co.in` featuring a 2D/3D room planner, product catalog, CRM, and admin dashboard).
 
@@ -21,7 +23,7 @@ Open http://localhost:5173 in your browser.
 | Script | Description |
 |--------|-------------|
 | `npm run dev` | Start Vite dev server with HMR |
-| `npm run build` | Type-check + production build to `../Documents/tech-stack-generated/` |
+| `npm run build` | Type-check + production build to `site/tech-stack-docs/` (full tech stack docs incl. site-workflows) |
 | `npm run preview` | Preview the production build locally |
 | `npm run typecheck` | Run TypeScript compiler in check mode |
 | `npm run test` | Run the Vitest package suite |

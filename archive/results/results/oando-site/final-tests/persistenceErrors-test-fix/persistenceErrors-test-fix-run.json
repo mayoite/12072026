@@ -1,0 +1,13 @@
+﻿{
+    "name":  "persistenceErrors-test-fix",
+    "module":  "oando-site",
+    "phase":  "final-tests",
+    "command":  "pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/persistence/persistenceErrors.test.ts --config vitest.site.config.ts",
+    "cwd":  "D:\\.grok\\worktrees\\oando04072026\\new",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-06T18:59:58.5091313+05:30",
+    "endUtc":  "2026-07-06T19:00:00.5239605+05:30",
+    "durationSec":  2.015,
+    "exitCode":  0,
+    "rawLog":  "D:\\.grok\\worktrees\\oando04072026\\new\\results\\oando-site\\final-tests\\persistenceErrors-test-fix\\persistenceErrors-test-fix-raw.log"
+}

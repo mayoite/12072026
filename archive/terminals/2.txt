@@ -1,0 +1,22 @@
+---
+pid: 28272
+cwd: "C:\Users\ayush\.grok\worktrees\oando04072026\new"
+command: "Set-Location \"D:\\.grok\\worktrees\\oando04072026\\new\"; pnpm run lint 2>&1 | Select-Object -Last 15"
+started_at: 2026-07-06T10:58:08.725Z
+running_for_ms: 3545001  
+---
+  173:13  error  'rerender' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\.grok\worktrees\oando04072026\new\site\tests\unit\features\planner\open3d\svgInventory.test.ts
+  801:32  error  `import()` type annotations are forbidden  @typescript-eslint/consistent-type-imports
+
+D:\.grok\worktrees\oando04072026\new\site\tests\unit\features\planner\open3d\workspaceShell.test.tsx
+  17:10  error  'useWorkspaceKeyboard' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+✖ 141 problems (141 errors, 0 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+
+D:\.grok\worktrees\oando04072026\new\site:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] oando-site@0.1.0 lint: `eslint -c config/build/eslint.config.mjs app components features lib tests --max-warnings=0`
+Exit status 1
+[ELIFECYCLE] Command failed with exit code 1.
