@@ -1,0 +1,4 @@
+- Some 1B items still partial (e.g. full end-to-end publish for all 3 variants not verified in recent commits).
+- Move of .grok had permission issues on some files, remnants on C:.
+- No full run of the 5 agents yet, only setup.
+- Evidence for some 1B gates may be incomplete.

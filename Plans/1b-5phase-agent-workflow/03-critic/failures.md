@@ -1,0 +1,4 @@
+- Some MCP tools not directly callable in this env, used simulation based on project test:a11y.
+- Full playwright a11y for 1B not executed (deferred per Failures).
+- No real browser in this CLI, relied on code analysis.
+- 1B UI still has gaps from partial 1B.
