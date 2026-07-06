@@ -68,3 +68,10 @@ remedyplan/
 
 # Git worktree for isolation (moved inside repo)
 worktrees/
+
+# Results / evidence output directories
+# Kept local-only (no committed evidence per project preference).
+# Historical/archived results live in archive/results/ only.
+# Prefer plan stubs, Failures.md, and resolved-failures.md instead.
+results/
+site/results/
