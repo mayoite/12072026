@@ -2,7 +2,7 @@
 
 Extracted from Plans/01-execution/core/02-PHASE-1.md. Status based on subagent execution (2026-07-05/06) in D:\oandO04072026 (ayushonmicrosoft remote). OOFPL05072026 aside.
 
-**Phase 1A — Open3D shell (pilot) — COMPLETE**
+**Phase 1A ï¿½ Open3D shell (pilot) ï¿½ COMPLETE**
 
 ### 1. Baseline and Ownership
 - [x] Capture 1440x900, 1024x768, 768x1024, and 390x844 screenshots.
@@ -75,7 +75,7 @@ Extracted from Plans/01-execution/core/02-PHASE-1.md. Status based on subagent e
 - [x] Multi-selection exposes only valid shared operations.
 - [x] Locked items reject mutations through every command surface.
 
-### 11A — Shell acceptance (required for 1A sign-off)
+### 11A ï¿½ Shell acceptance (required for 1A sign-off)
 - [x] Complete: draw room ? add opening ? place item ? edit dimensions ? undo/redo ? save ? reload.
 - [x] Complete keyboard equivalent through layers, commands, and numeric controls.
 - [x] Existing documents remain compatible.
@@ -84,7 +84,7 @@ Extracted from Plans/01-execution/core/02-PHASE-1.md. Status based on subagent e
 - [x] Evidence captured under esults/<module>/<phase>/<cmd>/.
 - [x] Warnings, retries, skips, and expected diagnostics are classified.
 
-### 12A — Phase 1A gates
+### 12A ï¿½ Phase 1A gates
 - [x] Planner style audit.
 - [x] Lint.
 - [x] Typecheck.
@@ -93,11 +93,11 @@ Extracted from Plans/01-execution/core/02-PHASE-1.md. Status based on subagent e
 - [x] Route chrome/navigation E2E.
 - [x] Browser validation at baseline viewports.
 
-**Phase 1A — COMPLETE**
+**Phase 1A ï¿½ COMPLETE**
 
 ---
 
-## Phase 1B — SVG production path (partial, not blocking 1A)
+## Phase 1B ï¿½ SVG production path (partial, not blocking 1A)
 
 ### 8. SVG Block Foundation
 - [x] Add DOMPurify as a direct dependency.
@@ -111,15 +111,15 @@ Extracted from Plans/01-execution/core/02-PHASE-1.md. Status based on subagent e
 
 ### 9. Deterministic SVG Pipeline
 - [x] Build normalization.
-- [ ] Build validation.
+- [x] Build validation. (per phase-02-03-benchmark.md golden round-trip + tests; 29/29 + 156/156 green; see results/planner/phase-1b/ and results/open3d/phase02-03/)
 - [x] Build compilation.
 - [x] Add allowlists.
 - [x] Sanitize.
-- [ ] Lock SVGO.
+- [x] Lock SVGO. (wired in generate-svg.mjs per benchmark; sanitizer tests 8/8)
 - [x] Preserve metadata.
 - [x] Generate PNG/thumbnails.
 - [x] Generate checksums.
-- [ ] Unify compiler.
+- [ ] Unify compiler. (in-progress per 1B benchmarks; see phase-1b/1b-* evidence)
 - [ ] Store in Supabase (deferred).
 - [x] Prove no Node packages in client.
 
@@ -135,21 +135,21 @@ Extracted from Plans/01-execution/core/02-PHASE-1.md. Status based on subagent e
 - [ ] Thumbnail on R2.
 - [ ] Reload.
 
-### 11B — SVG path acceptance
+### 11B ï¿½ SVG path acceptance
 - [ ] Identical descriptors byte-identical.
 - [ ] Malicious fail.
 - [ ] Match outputs.
 - [ ] Immutable revisions.
 - [ ] No authoring packages in planner.
 
-### 12B — Phase 1B gates
+### 12B ï¿½ Phase 1B gates
 - [ ] SVG security.
 - [ ] Determinism tests.
 - [ ] Route tests.
 - [ ] Production build.
 - [ ] A11y tests.
 
-**Phase 1B — Partial**
+**Phase 1B ï¿½ Partial**
 
 ---
 
