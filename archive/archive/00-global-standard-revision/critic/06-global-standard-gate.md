@@ -60,7 +60,7 @@ flowchart TD
 
 ## What "Independent UI Review" Means Here
 
-The three subagents (Critic / QA / UI) that produced `results/reviews/*.md` are the first execution of the required independent review for the 2026-07-04 global standard revision.
+The three subagents (Critic / QA / UI) that produced `Plans/1b-5phase-agent-workflow/reviews/*.md` are the first execution of the required independent review for the 2026-07-04 global standard revision.
 
 However:
 - The reviews are **not yet** referenced from the phase Decision Logs with signed-off dates.
@@ -90,7 +90,7 @@ Current state:
    ```
    ## Global Standard Gate (Binding)
    - Fresh dated benchmark: plans/2026-07-04/benchmark.md (2026-07-04)
-   - Independent review: results/reviews/critic-review.md + qa-review.md + ui-review.md
+   - Independent review: Plans/1b-5phase-agent-workflow/reviews/critic-review.md + qa-review.md + ui-review.md
    - Anti-copy attestation: [link or note]
    ```
 2. After fixes to the top seams, produce a new dated benchmark run (or delta) and place it under `plannnerplan/benchmarks/`.

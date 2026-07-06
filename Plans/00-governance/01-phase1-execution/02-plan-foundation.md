@@ -14,7 +14,7 @@ Detail was merged from archived phase specs. See `archive/plans/2026-07-05_phase
 |-------|--------|--------------|
 | 00 | Precheck done | Mark Accepted after commit hygiene on `main`. |
 | 01 | Done (2026-07-05) | Fabric 7.4.0 pin confirmed. Typecheck exit 0. |
-| 02 | **Verified (2026-07-05)** | Checklist green — schema/loader/resolver 127/127 tests pass, exit 0. See `results/planner/benchmark/phase-02-03-benchmark.md`. |
+| 02 | **Verified (2026-07-05)** | Checklist green — schema/loader/resolver 127/127 tests pass, exit 0. See `results/planner/benchmark/phase-02-03-benchmark.md (agent narrative; legacy location — gate evidence in `results/open3d/phase02-03/`)`. |
 | 03 | **Verified (2026-07-05)** | Three golden fixtures (union/difference/intersection) pass 29/29; stale goldens found + regenerated, no code change. Sanitizer suite 8/8 pass. See `resolved-failures.md`. |
 
 Blockers: `PLAN-FAIL-0408` (coverage) is cross-phase. See root `Failures.md`.
@@ -55,7 +55,7 @@ Blockers: `PLAN-FAIL-0408` (coverage) is cross-phase. See root `Failures.md`.
 
 **Checks:** ☑ `02-CAT-01` schema export · ☑ `02-LOAD-01` loadAll/loadBySlug/tryLoad · ☑ `02-ERR-01` error union.
 
-**Evidence:** `results/planner/benchmark/phase-02-03-benchmark.md`, `results/open3d/phase02-03/vitest/vitest-run.json`.
+**Evidence:** `results/planner/benchmark/phase-02-03-benchmark.md (agent narrative; legacy location — gate evidence in `results/open3d/phase02-03/`)`, `results/open3d/phase02-03/vitest/vitest-run.json`.
 
 ---
 
@@ -69,7 +69,7 @@ Blockers: `PLAN-FAIL-0408` (coverage) is cross-phase. See root `Failures.md`.
 
 **Checks:** ☑ `03-SVG-01` six pipeline steps · ☑ `03-SVG-GS-01` semantic tokens only · ☑ `03-TEST-01` golden round-trip.
 
-**Evidence:** `results/planner/benchmark/phase-02-03-benchmark.md`, `resolved-failures.md` § "2026-07-05 — Phase 03 stale golden fixtures", `results/open3d/phase02-03/vitest/vitest-run.json`.
+**Evidence:** `results/planner/benchmark/phase-02-03-benchmark.md (agent narrative; legacy location — gate evidence in `results/open3d/phase02-03/`)`, `resolved-failures.md` § "2026-07-05 — Phase 03 stale golden fixtures", `results/open3d/phase02-03/vitest/vitest-run.json`.
 
 ---
 

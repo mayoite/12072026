@@ -124,7 +124,7 @@ All P0 items closed with verifiable evidence. Phase 02 (and dependent early phas
    ```
    ## Global Standard Gate (Binding)
    - [ ] Fresh benchmark reference: plans/2026-07-04/benchmark.md + this critic package
-   - [ ] Independent review sign-off (results/reviews/ or critic/ files)
+   - [ ] Independent review sign-off (Plans/1b-5phase-agent-workflow/reviews/ or critic/ files)
    - [ ] Anti-copy + pattern attestation in Decision Log
    - [ ] All UI/SVG/feature changes cite at least one principle from the 5-product model
    ```
@@ -138,7 +138,7 @@ All P0 items closed with verifiable evidence. Phase 02 (and dependent early phas
 ### Cross-Cutting: Re-Review & Sign-off
 After P0-1 to P0-5:
 1. Run Critic / QA / UI reviews (use the prompts prepared in `plannnerplan/benchmarks/blocksResolver-test-additions-2026-07-04.md` or the REVIEW-WORKFLOW).
-2. Produce or update `results/reviews/critic-review.md`, `qa-review.md`, `ui-review.md` (or add to critic/ folder).
+2. Produce or update `Plans/1b-5phase-agent-workflow/reviews/critic-review.md`, `qa-review.md`, `ui-review.md` (or add to critic/ folder).
 3. Update `critic/01-executive-summary.md` and `08-recommendations-roadmap.md` with "P0 closed" markers + dates.
 4. Run a fresh (or delta) benchmark if material changes occurred.
 5. Only then allow Phase 02 status to advance.
@@ -160,7 +160,7 @@ Use the same 4-sub-agent pattern that was successful for the resolver tests (Syn
 - Artifacts go under `results/<module>/<phase>/...` (never root).
 - After any change that affects tests: run the specific resolver test + full `test:coverage`.
 - Before claiming any item "done": invoke `check-work` or `verification-before-completion` skill.
-- All review work should produce or reference files in `critic/` or `results/reviews/`.
+- All review work should produce or reference files in `critic/` or `Plans/1b-5phase-agent-workflow/reviews/`.
 
 ## Verification Checklists (per P0 item)
 See the "Done when" bullets above + the success criteria at the bottom of `08-recommendations-roadmap.md`.

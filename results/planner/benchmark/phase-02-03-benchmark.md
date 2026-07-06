@@ -3,7 +3,7 @@
 **Date:** 2026-07-05  
 **Benchmarker Agent:** Kiro (Benchmarker role)  
 **Scope:** Phase 02 (Catalog domain + Zod BlockDescriptor) and Phase 03 (SVG pipeline)  
-**Authority:** `Plans/rules_plan/01-phase1-execution/09-design-benchmark-protocol.md`, `08-quality-gates.md`, `00-global-standard-revision/00-benchmark-summary.md`  
+**Authority:** `Plans/00-governance/01-phase1-execution/09-design-benchmark-protocol.md`, `08-quality-gates.md`, `Plans/00-governance/00-global-standard-revision/00-benchmark-summary.md`  
 **Typecheck command:** `pnpm run typecheck` (from `D:\oandO04072026\site`)  
 **Typecheck exit code:** 0 (clean)  
 

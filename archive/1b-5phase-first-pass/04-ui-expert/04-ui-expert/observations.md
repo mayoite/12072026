@@ -1,0 +1,4 @@
+- UI in 1B (Puck editor, admin surfaces) follows REC-01 minimize but can be improved for density and accessibility.
+- Last commits added UI fixes for 1A, but 1B catalog and editor need polish.
+- No hex, semantic tokens used.
+- Worktree setup doesn't affect UI.

@@ -52,7 +52,7 @@ Principles only. No trade-dress copy. Canvas dominant. Site CSS tokens.
 - Phase 03 (`generate-svg.mjs` / `pipelineCore.ts` pipeline): 29/29 golden round-trip tests green, exit 0; sanitizer suite 8/8, exit 0. Checks ☑ `03-SVG-01` · ☑ `03-SVG-GS-01` · ☑ `03-TEST-01`.
 - Finding: the three pinned golden `.svg` fixtures (`chaise`, `side-table`, `sectional`) were stale — byte-pinned to a pre-rewrite draft of `buildSvgString()`. Live pipeline output was confirmed correct against `site/public/svg-catalog/*.svg` (already-generated artifacts matching current code exactly); goldens were regenerated, no production code changed.
 
-Evidence: `results/planner/benchmark/phase-02-03-benchmark.md` (updated), `results/open3d/phase02-03/vitest/vitest-run.json` + `vitest-raw.log`, `resolved-failures.md` § "2026-07-05 — Phase 03 stale golden fixtures".
+Evidence: benchmark narrative `results/planner/benchmark/phase-02-03-benchmark.md`; gates `results/open3d/phase02-03/vitest/vitest-run.json` + `vitest-raw.log`; `resolved-failures.md` § "2026-07-05 — Phase 03 stale golden fixtures".
 
 ---
 

@@ -1,7 +1,7 @@
-# Draft execution index
+# 02-proposed — preserved agent consolidation
 
-**Status:** Draft — not live authority.
+Agent-produced execution consolidation (2026-07). Read before changing live plans.
 
-Consolidation attempt for scattered `plann/` and legacy `archive/plans/` fragments. Kept for reference; do not execute ahead of [`../01-execution/core/`](../01-execution/core/) or [`../00-governance/`](../00-governance/).
+Not live authority — execute from [`Plans/01-execution/core/`](../../../Plans/01-execution/core/). Gates and pins: [`Plans/00-governance/`](../../../Plans/00-governance/).
 
-**Read order (if reviewing):** [`00-EXECUTION-INDEX.md`](00-EXECUTION-INDEX.md) → `01` … `10`.
+**Read order:** [`00-EXECUTION-INDEX.md`](00-EXECUTION-INDEX.md) → `01` … `10`.

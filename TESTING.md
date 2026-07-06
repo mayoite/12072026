@@ -31,6 +31,18 @@ All active test, lint, typecheck, build, Playwright, accessibility, coverage, an
 
 Enforced by `vitest.shared.ts`, `vitest.config.ts`, `vitest.site.config.ts`, `config/build/playwright.config.ts`, `tests/root-configs.test.ts`.
 
+## Agent output (not gate evidence)
+
+Do not put agent reports or review markdown in `results/`.
+
+| Output | Location |
+|--------|----------|
+| Workflow phase reports | `Plans/<workflow-slug>/01-repair-agent/` … `05-planner/` |
+| Independent reviews | `Agents workflow/reviews/` |
+| Legacy benchmark narrative | `results/planner/benchmark/phase-02-03-benchmark.md` |
+
+Gate runs only: `results/<module>/<phase>/<cmd>/`.
+
 ## Stale root artifacts
 
 `pnpm --filter oando-site run test:clean` (also `pretest`) removes wrong-cwd dumps at repo root: `tsc-errors.txt`, `errors.txt`, `lint-results.json`, `test-results.json`, `scratch_*`, `test-results/`, `playwright-report/`, `coverage/`. `.gitignore` covers the same.

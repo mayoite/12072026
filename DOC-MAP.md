@@ -86,7 +86,7 @@ Binding pins, benchmarks, gates, and execution — [`Plans/README.md`](Plans/REA
 | 00 | `Plans/00-governance/` | Phase 0 GS benchmark + Phase 1 pins, gates, review workflow |
 | 01 | `Plans/01-execution/` | Day-to-day Phase 1A/1B execution (`core/`, `specialists/`, `research/`) |
 | — | `Plans/workflows/sequential-5-phase-agent/` | 5-phase agent dispatch workflow |
-| — | `Plans/1b-5phase-agent-workflow/` | Phase 1B run (`PLAN.md`, `PROMPTS.md`, agent reports, `reviews/`) |
+| — | `Agents workflow/` | Phase 1B run (`PLAN.md`, `PROMPTS.md`, agent reports, `reviews/`) |
 | — | `Plans/meta/` | Coordinator notes (`SUBAGENT-NOTES.md`) — reference only |
 
 **Start:** `Plans/00-governance/01-phase1-execution/00-handover-routing.md` · **Binding:** `01-implementation-decisions.md` · **Execute:** `Plans/01-execution/core/02-PHASE-1.md`
@@ -104,7 +104,7 @@ Gate evidence only — `*-run.json` + `*-raw.log` per `TESTING.md` / `testing-ha
 | `results/planner/phase-1b/` | Phase 1B gates |
 | `results/open3d/` | Open3D / SVG pipeline gates |
 
-**Agent output (not gates):** workflow reports → `Plans/<slug>/NN-<role>/`; independent reviews → `Plans/1b-5phase-agent-workflow/reviews/`. Legacy benchmark narrative: `results/planner/benchmark/phase-02-03-benchmark.md`.
+**Agent output (not gates):** workflow reports → `Plans/<slug>/NN-<role>/`; independent reviews → `Agents workflow/reviews/`. Legacy benchmark narrative: `results/planner/benchmark/phase-02-03-benchmark.md`.
 
 ## Other plan packets
 

@@ -8,7 +8,8 @@ Start here.
 |--------|------|
 | [`00-governance/`](00-governance/) | Binding pins, benchmarks, quality gates, review workflow |
 | [`01-execution/`](01-execution/) | Day-to-day Phase 1A/1B work and promotion sequencing |
-| [`02-proposed/`](02-proposed/) | Draft consolidation — reference only, not live authority |
+| [`Agents workflow/`](../Agents workflow/) | Phase 1B run — `PLAN.md`, `PROMPTS.md`, agent reports |
+| [`workflows/sequential-5-phase-agent/`](workflows/sequential-5-phase-agent/) | 5-phase sequential agent workflow |
 | [`meta/`](meta/) | Coordinator notes — reference only |
 
 Use `01-execution/` to do the work.
@@ -53,6 +54,7 @@ Open `00-governance/` when you need:
 ## What not to do
 
 - Do not treat `01-execution/research/` or `meta/` as execution authority.
-- Do not treat `02-proposed/` as live authority.
+- Do not delete agent work — `archive/plans/02-proposed/`, `Agents workflow/`, workflow run folders are preserved.
+- Do not treat archived `02-proposed/` as live execution authority.
 - Do not merge analysis notes into live plan files without an explicit decision.
 - Do not let execution docs override governance docs on package pins, gates, or standards.

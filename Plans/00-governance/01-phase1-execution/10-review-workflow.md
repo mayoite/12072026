@@ -70,11 +70,13 @@ GS-SCORE:
 
 ## Artifacts (required before Implemented)
 
-- `results/reviews/critic-review.md`
-- `results/reviews/qa-review.md`
-- `results/reviews/ui-review.md`
+**Reviews (agent output):**
 
-Or `results/planner/phase-*/` with `*-run.json` + `*-raw.log` per `testing-handbook.md`.
+- `Agents workflow/reviews/critic-review.md`
+- `Agents workflow/reviews/qa-review.md`
+- `Agents workflow/reviews/ui-review.md`
+
+**Gate evidence:** `results/<module>/<phase>/<cmd>/` with `*-run.json` + `*-raw.log` per `testing-handbook.md`.
 
 Shell-blocked runs are INCOMPLETE. Log in `Failures.md`.
 
