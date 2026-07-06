@@ -8,7 +8,7 @@ No other files are authoritative.
 
 Read this file first for gate policy.
 
-Evidence lives under `results/<module>/<phase>/<cmd>/` per `testing-handbook.md`.
+Evidence lives under `results/<module>/<phase>/<cmd>/` per `testing-handbook.md`. Historical evidence in `archive/results/` is kept (archive over delete; no bulk removal).
 
 Skipped items must be declared. Shell works; gates are runnable.
 

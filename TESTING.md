@@ -41,6 +41,8 @@ Do not put agent reports or review markdown in `results/`.
 | Independent reviews | `archive/1b-5phase-agent-workflow/reviews/` |
 | Legacy benchmark narrative | `results/planner/benchmark/phase-02-03-benchmark.md` |
 
+Historical/archived gate evidence lives under `archive/results/` only and is kept (archive over delete; see .gitignore and AGENTS.md).
+
 Gate runs only: `results/<module>/<phase>/<cmd>/`.
 
 ## Stale root artifacts

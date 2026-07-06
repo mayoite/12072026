@@ -85,7 +85,7 @@ Install, dev server, and all other commands: **`START.md`**.
 
 ## Test evidence
 
-All test, lint, typecheck, build, Playwright, accessibility, coverage, and audit runs are captured under repo-root `results/<module>/<phase>/<cmd>/` in the standardized `<cmd>-run.json` + `<cmd>-raw.log` format (never to the repo root, `E:`, or any other drive path). `testing-handbook.md` is the mandatory output-integrity policy. A test run is incomplete if exit status, stdout/stderr, warnings, skips, or required artifacts are missing. Reporters and evidence must not be deleted, suppressed, or bypassed before review.
+All test, lint, typecheck, build, Playwright, accessibility, coverage, and audit runs are captured under repo-root `results/<module>/<phase>/<cmd>/` in the standardized `<cmd>-run.json` + `<cmd>-raw.log` format (never to the repo root, `E:`, or any other drive path). `testing-handbook.md` is the mandatory output-integrity policy. A test run is incomplete if exit status, stdout/stderr, warnings, skips, or required artifacts are missing. Reporters and evidence must not be deleted, suppressed, or bypassed before review. archive/results/ historical artifacts are kept (per archive over delete).
 
 TypeScript `any` is prohibited in handwritten production, planner, script, and configuration code except for a documented, narrow, temporary exception. Tests/mocks and generated or tool-owned output are exempt only within the scope defined by the handbook.
 

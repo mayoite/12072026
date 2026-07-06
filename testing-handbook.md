@@ -62,7 +62,7 @@ Prohibited examples:
 - cleaning artifacts after a run but before evidence review;
 - treating skipped, timed-out, interrupted, or blocked checks as passed.
 
-Cleaning is allowed only before a new run or after evidence has been reviewed and archived.
+Cleaning is allowed only before a new run or after evidence has been reviewed and archived. Historical evidence under archive/results/ is kept (archive over delete; no removal of archived run logs).
 
 ## Expected Diagnostics
 
