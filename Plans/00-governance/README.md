@@ -1,7 +1,7 @@
 # Governance plans — read in order
 
 **Baseline:** 2026-07-05  
-**Product execution** lives in [`fn_plan/README.md`](../fn_plan/README.md) — open that for day-to-day 1A/1B work.  
+**Product execution** lives in [`01-execution/README.md`](../01-execution/README.md) — open that for day-to-day 1A/1B work.  
 **This folder** holds binding governance: benchmarks, implementation decisions, quality gates.
 
 ## Packs (top → bottom)
@@ -11,8 +11,7 @@
 | 00 | [`00-global-standard-revision/`](00-global-standard-revision/) | Phase 0 — Global Standard benchmark + critique (2026-07-04) |
 | 01 | [`01-phase1-execution/`](01-phase1-execution/) | Phase 1 — pins, gates, plan slices, review workflow |
 
-**Archive (immutable):** [`archive/00-global-standard-revision/`](archive/00-global-standard-revision/)  
-**Historical phase specs:** `archive/plans/2026-07-05_phase1-execution/phases/` (repo `archive/` — not renamed)
+**Archive (immutable):** `archive/plans/` at repo root (historical phase specs and benchmark reports — not renamed)
 
 ---
 
@@ -51,10 +50,10 @@
 
 ```text
 PACKAGES.md
-  → rules_plan/01-phase1-execution/01-implementation-decisions.md
-  → rules_plan/00-global-standard-revision/00-benchmark-summary.md
-  → fn_plan/00-REVISION.md (product sequencing — overrides conflicting execution text)
-  → fn_plan/01-START.md … 04-HANDOVER.md
+  → 00-governance/01-phase1-execution/01-implementation-decisions.md
+  → 00-governance/00-global-standard-revision/00-benchmark-summary.md
+  → 01-execution/core/00-REVISION.md (product sequencing — overrides conflicting execution text)
+  → 01-execution/core/01-START.md … 04-HANDOVER.md
 ```
 
-When `fn_plan/` and `PACKAGES.md` conflict on SVG tooling, **PACKAGES.md wins**.
+When `01-execution/` and `PACKAGES.md` conflict on SVG tooling, **PACKAGES.md wins**.

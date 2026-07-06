@@ -2,9 +2,9 @@
 
 Historical session handover. Reference-only; not a live routing or status authority.
 
-Phase 0 session handover. Full texts: `rules_plan/archive/00-global-standard-revision/`.
+Phase 0 session handover. Full texts: `archive/plans/00-global-standard-revision/`.
 
-Active routing: `rules_plan/01-phase1-execution/00-handover-routing.md`.
+Active routing: `00-governance/01-phase1-execution/00-handover-routing.md`.
 
 ---
 
@@ -14,7 +14,7 @@ Active routing: `rules_plan/01-phase1-execution/00-handover-routing.md`.
 - `/planner/open3d` — pilot (`Open3dPlannerHost`).
 - `/planner/fabric/*` — legacy fallback drill.
 
-Historical note: this handover still carried a Fabric-backed framing for guest/canvas. Current route files show `/planner/guest` and `/planner/canvas` already route through `Open3dPlannerWorkspaceRoute`; use `rules_plan/01-phase1-execution/00-handover-routing.md` plus the live route files as authority.
+Historical note: this handover still carried a Fabric-backed framing for guest/canvas. Current route files show `/planner/guest` and `/planner/canvas` already route through `Open3dPlannerWorkspaceRoute`; use `00-governance/01-phase1-execution/00-handover-routing.md` plus the live route files as authority.
 
 ---
 
@@ -30,7 +30,7 @@ Do not use old "Implemented + Verified-at-unit" claims. Evidence under `results/
 
 Design approved provisionally (`design §16` — live site pending).
 
-Bound into `rules_plan/01-phase1-execution/`: I-D GS framework, Q-G gate, `review-workflow.md`.
+Bound into `00-governance/01-phase1-execution/`: I-D GS framework, Q-G gate, `review-workflow.md`.
 
 Tracked failures moved to root `Failures.md` / `resolved-failures.md`.
 
@@ -78,4 +78,4 @@ Tracked failures moved to root `Failures.md` / `resolved-failures.md`.
 
 After `pnpm run dev`: validate UI panels, catalog search, SVG output, 2D↔3D, package chrome live.
 
-Cross-refs: `00-benchmark-summary.md`, `01-critique-summary.md`, `rules_plan/01-phase1-execution/`.
+Cross-refs: `00-benchmark-summary.md`, `01-critique-summary.md`, `00-governance/01-phase1-execution/`.

@@ -2,11 +2,11 @@
 
 Historical critique snapshot. Reference-only; verify current status in implementation decisions, `Failures.md`, and live evidence.
 
-Phase 0 governance critique. Full text: `rules_plan/archive/00-global-standard-revision/critique.md`.
+Phase 0 governance critique. Full text: `archive/plans/00-global-standard-revision/critique.md`.
 
-Expanded review: `rules_plan/archive/00-global-standard-revision/critic/` (01–09).
+Expanded review: `archive/plans/00-global-standard-revision/critic/` (01–09).
 
-Expanded copy: `rules_plan/00-global-standard-revision/03-critique-expanded.md`.
+Expanded copy: `00-governance/00-global-standard-revision/03-critique-expanded.md`.
 
 ---
 

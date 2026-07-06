@@ -2,7 +2,7 @@
 
 **Status:** Complete (2026-07-05) — all batches applied; plan files renamed to `00-`…`09-` (see [`README.md`](README.md))  
 **Workflow:** Composer subagent batch → **this file** (revision calls) → executor/parent apply  
-**Does not replace:** `fn_plan/00-REVISION.md` (product decisions)
+**Does not replace:** `01-execution/core/00-REVISION.md` (product decisions)
 
 ---
 
@@ -77,6 +77,6 @@ docs/Lockedfiles/
 - [x] `domain/` redirect only (stubs remain — intentional)
 - [x] All architecture docs link MODULE-LAYOUT + README + INDEX
 - [x] Stale `Lockedfiles/domain/` links swept (2 intentional stubs only)
-- [x] `fn_plan/` files numbered `00-`…`09-`; cross-refs updated
+- [x] `01-execution/` files numbered `00-`…`09-`; cross-refs updated
 - [x] `planner/proposed.md` points at `features/planner/open3d/`
 - [x] `ReadmeLocked.md` lists module subdirs

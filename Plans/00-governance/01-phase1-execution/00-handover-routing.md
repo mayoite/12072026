@@ -2,7 +2,7 @@
 
 Date: 2026-07-05. **Start here** for all planner plan paths. Index: [`../../README.md`](../../README.md).
 
-## Phase 0 — `rules_plan/00-global-standard-revision/`
+## Phase 0 — `00-governance/00-global-standard-revision/`
 
 | # | File | Role |
 |---|------|------|
@@ -11,9 +11,9 @@ Date: 2026-07-05. **Start here** for all planner plan paths. Index: [`../../READ
 | 02 | `02-handover-summary.md` | Session handover |
 | 03 | `03-critique-expanded.md` | Full critique copy |
 
-Archive (immutable): `rules_plan/archive/00-global-standard-revision/`.
+Archive (immutable): `archive/plans/00-global-standard-revision/`.
 
-## Phase 1 — `rules_plan/01-phase1-execution/`
+## Phase 1 — `00-governance/01-phase1-execution/`
 
 | # | File | Role |
 |---|------|------|

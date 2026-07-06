@@ -16,7 +16,7 @@ repo-root/          ← pnpm workspace wrapper (package.json, pnpm-lock.yaml)
 ├── tech-stack-generator/  ← Vite source (oando-tech-stack-docs); build output — see `tech-stack-generator/README.md`
 ├── docs/           ← reference docs (architecture, api, audit)
 ├── archive/        ← historical outputs + `archive/migrationdocs/`
-└── plans/          ← planning notes
+└── Plans/          ← governance + execution plans (see Plans/README.md)
 ```
 
 Inside `site/`: `app/` · `features/planner/` · `components/` · `lib/` · `tests/` · `scripts/` · `platform/` · `config/` · `results/`

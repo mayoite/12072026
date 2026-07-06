@@ -5,9 +5,9 @@ Historical expanded critique of archived phase specs. Reference-only.
 Review covers archived phase specs in `archive/plans/planner Phase1/phases/` against
 `implementation-decisions.md`, `quality-gates.md`, `design-benchmark-protocol.md`,
 `handover-routing.md`, `Failures.md`, and `PACKAGES.md`. Cross-checked against
-`rules_plan/00-global-standard-revision/00-benchmark-summary.md`.
+`00-governance/00-global-standard-revision/00-benchmark-summary.md`.
 
-Cross-refs: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`, `rules_plan/00-global-standard-revision/01-critique-summary.md`, `rules_plan/archive/00-global-standard-revision/critic/` (expanded review), `rules_plan/01-phase1-execution/07-benchmark-governance.md`.
+Cross-refs: `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`, `00-governance/00-global-standard-revision/01-critique-summary.md`, `archive/plans/00-global-standard-revision/critic/` (expanded review), `00-governance/01-phase1-execution/07-benchmark-governance.md`.
 
 ## Coverage gaps
 
@@ -177,7 +177,7 @@ a typo.
    Fix: stamp `generatedAt` once on first parse; subsequent parses
    preserve the existing value; document in Decision log.
 
-2. **`rules_plan/01-phase1-execution/01-implementation-decisions.md` §96**
+2. **`00-governance/01-phase1-execution/01-implementation-decisions.md` §96**
    — R2 bucket name `<bucket per implementation-decisions.md>` listed as still-needs-
    approval while every downstream phase locks it. Fix: move out
    of "still requiring explicit owner approval" or have all five

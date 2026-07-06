@@ -10,8 +10,8 @@ Rollback path: Existing Open3D route and explicit Fabric fallback routes
 
 ```text
 00-REVISION.md
-  → PACKAGES.md + rules_plan/01-phase1-execution/01-implementation-decisions.md
-  → fn_plan/01-START.md, 02-PHASE-1.md, 03-PHASE-2.md (this file)
+  → PACKAGES.md + 00-governance/01-phase1-execution/01-implementation-decisions.md
+  → 01-execution/core/01-START.md, 02-PHASE-1.md, 03-PHASE-2.md (this file)
   → docs/architecture/MODULE-LAYOUT.md (where new code goes)
   → docs/architecture/MODULE-UI-CONTRACT.md (surface anti-drift)
   → docs/Lockedfiles/INDEX.md (module current/proposed pairs)

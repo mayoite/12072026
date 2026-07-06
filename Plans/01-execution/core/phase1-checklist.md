@@ -1,8 +1,8 @@
-ï»¿# Phase 1 Checklist (Separate)
+# Phase 1 Checklist (Separate)
 
-Extracted from Plans/fn_plan/02-PHASE-1.md. Status based on subagent execution (2026-07-05/06) in D:\oandO04072026 (ayushonmicrosoft remote). OOFPL05072026 aside.
+Extracted from Plans/01-execution/core/02-PHASE-1.md. Status based on subagent execution (2026-07-05/06) in D:\oandO04072026 (ayushonmicrosoft remote). OOFPL05072026 aside.
 
-**Phase 1A â€” Open3D shell (pilot) â€” COMPLETE**
+**Phase 1A — Open3D shell (pilot) — COMPLETE**
 
 ### 1. Baseline and Ownership
 - [x] Capture 1440x900, 1024x768, 768x1024, and 390x844 screenshots.
@@ -75,8 +75,8 @@ Extracted from Plans/fn_plan/02-PHASE-1.md. Status based on subagent execution (
 - [x] Multi-selection exposes only valid shared operations.
 - [x] Locked items reject mutations through every command surface.
 
-### 11A â€” Shell acceptance (required for 1A sign-off)
-- [x] Complete: draw room â†’ add opening â†’ place item â†’ edit dimensions â†’ undo/redo â†’ save â†’ reload.
+### 11A — Shell acceptance (required for 1A sign-off)
+- [x] Complete: draw room ? add opening ? place item ? edit dimensions ? undo/redo ? save ? reload.
 - [x] Complete keyboard equivalent through layers, commands, and numeric controls.
 - [x] Existing documents remain compatible.
 - [x] All static presentation passes the hardcoding audit.
@@ -84,7 +84,7 @@ Extracted from Plans/fn_plan/02-PHASE-1.md. Status based on subagent execution (
 - [x] Evidence captured under esults/<module>/<phase>/<cmd>/.
 - [x] Warnings, retries, skips, and expected diagnostics are classified.
 
-### 12A â€” Phase 1A gates
+### 12A — Phase 1A gates
 - [x] Planner style audit.
 - [x] Lint.
 - [x] Typecheck.
@@ -93,11 +93,11 @@ Extracted from Plans/fn_plan/02-PHASE-1.md. Status based on subagent execution (
 - [x] Route chrome/navigation E2E.
 - [x] Browser validation at baseline viewports.
 
-**Phase 1A â€” COMPLETE**
+**Phase 1A — COMPLETE**
 
 ---
 
-## Phase 1B â€” SVG production path (partial, not blocking 1A)
+## Phase 1B — SVG production path (partial, not blocking 1A)
 
 ### 8. SVG Block Foundation
 - [x] Add DOMPurify as a direct dependency.
@@ -135,21 +135,21 @@ Extracted from Plans/fn_plan/02-PHASE-1.md. Status based on subagent execution (
 - [ ] Thumbnail on R2.
 - [ ] Reload.
 
-### 11B â€” SVG path acceptance
+### 11B — SVG path acceptance
 - [ ] Identical descriptors byte-identical.
 - [ ] Malicious fail.
 - [ ] Match outputs.
 - [ ] Immutable revisions.
 - [ ] No authoring packages in planner.
 
-### 12B â€” Phase 1B gates
+### 12B — Phase 1B gates
 - [ ] SVG security.
 - [ ] Determinism tests.
 - [ ] Route tests.
 - [ ] Production build.
 - [ ] A11y tests.
 
-**Phase 1B â€” Partial**
+**Phase 1B — Partial**
 
 ---
 

@@ -2,17 +2,17 @@
 
 **Status:** Locked coordinator decisions  
 **Supersedes:** Conflicting lines in `01-START.md` §5/§8 and `04-HANDOVER.md` package list (pre-revision)  
-**Does not replace:** `PACKAGES.md`, `rules_plan/01-phase1-execution/01-implementation-decisions.md` — aligns `fn_plan/` to them
+**Does not replace:** `PACKAGES.md`, `00-governance/01-phase1-execution/01-implementation-decisions.md` — aligns `01-execution/` to them
 
 ## Authority stack (after this revision)
 
 1. User message + `AGENTS.md`
 2. `PACKAGES.md` + `implementation-decisions.md` (pins, routes, Option A)
-3. **`fn_plan/00-REVISION.md`** (this file — product sequencing)
-4. `fn_plan/01-START.md`, `02-PHASE-1.md`, `03-PHASE-2.md`, `04-HANDOVER.md`
+3. **`01-execution/core/00-REVISION.md`** (this file — product sequencing)
+4. `01-execution/core/01-START.md`, `02-PHASE-1.md`, `03-PHASE-2.md`, `04-HANDOVER.md`
 5. `docs/Lockedfiles/<module>/proposed.md` (snapshot; refresh after plan edits)
 
-When `fn_plan/` and `PACKAGES.md` conflict on SVG tooling, **PACKAGES.md wins**.
+When `01-execution/` and `PACKAGES.md` conflict on SVG tooling, **PACKAGES.md wins**.
 
 ---
 
@@ -114,7 +114,7 @@ Phase 1 is **two acceptance tracks**. Do not block 1A on full SVG publication.
 - Guest/canvas shell promotion
 - Full Supabase revision persistence
 - Merging `AdminCatalogManager` and svg-editor
-- Bulk edits to `rules_plan/archive/` or more archive moves
+- Bulk edits to `archive/plans/` or more archive moves
 - Treating `docs/Lockedfiles/<module>/proposed.md` as law before this revision propagates
 
 ---
@@ -123,7 +123,7 @@ Phase 1 is **two acceptance tracks**. Do not block 1A on full SVG publication.
 
 ```text
 1. This revision (done)
-2. Patched fn_plan/01-START.md, PHASE-1.md, HANDOVER.md
+2. Patched 01-execution/core/01-START.md, PHASE-1.md, HANDOVER.md
 3. Refresh domain *-proposed.md from fn_plan (optional same session)
 4. Code: PlannerCommand (1A) → Puck mount + unified compile (1B)
 5. Update HANDOVER.md with evidence after each checklist group

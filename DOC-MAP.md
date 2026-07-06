@@ -77,16 +77,17 @@ Index: [`docs/audit/README.md`](docs/audit/README.md)
 
 Legacy comprehensive audit (2026-06-20): not on disk — use [`docs/audit/README.md`](docs/audit/README.md); historical runs in `archive/results/audits/`.
 
-## Governance plans (`plans/`)
+## Plans (`Plans/`)
 
-Binding pins, benchmarks, gates — [`plans/README.md`](plans/README.md):
+Binding pins, benchmarks, gates, and execution — [`Plans/README.md`](Plans/README.md):
 
 | # | Pack | Role |
 |---|------|------|
-| 00 | `plans/00-global-standard-revision/` | Phase 0 GS benchmark + critique |
-| 01 | `plans/01-phase1-execution/` | Implementation decisions, plan slices, quality gates |
+| 00 | `Plans/00-governance/` | Phase 0 GS benchmark + Phase 1 pins, gates, review workflow |
+| 01 | `Plans/01-execution/` | Day-to-day Phase 1A/1B execution (`core/`, `specialists/`, `research/`) |
+| 02 | `Plans/02-proposed/` | Draft consolidation — reference only |
 
-**Start:** `plans/01-phase1-execution/00-handover-routing.md` · **Binding:** `01-implementation-decisions.md`
+**Start:** `Plans/00-governance/01-phase1-execution/00-handover-routing.md` · **Binding:** `01-implementation-decisions.md` · **Execute:** `Plans/01-execution/core/02-PHASE-1.md`
 
 Historical phase specs stay at `archive/plans/2026-07-05_phase1-execution/` (repo archive — not renamed).
 
