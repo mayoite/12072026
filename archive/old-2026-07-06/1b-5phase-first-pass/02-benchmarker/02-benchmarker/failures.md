@@ -1,0 +1,4 @@
+- Coverage floor (PLAN-FAIL-0408) still open, no full test:coverage.
+- Some 12B gates (a11y, prod build) not run.
+- .grok move had partial permission issues on C: remnants.
+- No full sequential agent run yet.

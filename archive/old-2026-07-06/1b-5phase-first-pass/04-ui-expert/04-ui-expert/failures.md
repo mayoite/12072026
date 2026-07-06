@@ -1,0 +1,3 @@
+- Some UI components in 1B could use more testing for mobile.
+- Critic phase not yet run for deep a11y audit.
+- No live browser verification in this setup.

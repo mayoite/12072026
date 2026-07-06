@@ -38,7 +38,7 @@ Do not put agent reports or review markdown in `results/`.
 | Output | Location |
 |--------|----------|
 | Workflow phase reports | `Plans/<workflow-slug>/01-repair-agent/` … `05-planner/` |
-| Independent reviews | `Agents workflow/reviews/` |
+| Independent reviews | `Plans/1b-5phase-agent-workflow/reviews/` |
 | Legacy benchmark narrative | `results/planner/benchmark/phase-02-03-benchmark.md` |
 
 Gate runs only: `results/<module>/<phase>/<cmd>/`.

@@ -1,6 +1,6 @@
 # Documentation Map
 
-**Last updated:** 2026-07-06
+**Last updated:** 2026-07-05
 
 **Owns:** index of reference docs. Which doc to open → `docs/Lockedfiles/conduct/ReadmeLocked.md`.
 
@@ -85,45 +85,34 @@ Binding pins, benchmarks, gates, and execution — [`Plans/README.md`](Plans/REA
 |---|------|------|
 | 00 | `Plans/00-governance/` | Phase 0 GS benchmark + Phase 1 pins, gates, review workflow |
 | 01 | `Plans/01-execution/` | Day-to-day Phase 1A/1B execution (`core/`, `specialists/`, `research/`) |
-| — | `Plans/workflows/sequential-5-phase-agent/` | 5-phase agent dispatch workflow |
-| — | `Agents workflow/` | Phase 1B run (`PLAN.md`, `PROMPTS.md`, agent reports, `reviews/`) |
-| — | `Plans/meta/` | Coordinator notes (`SUBAGENT-NOTES.md`) — reference only |
 
 **Start:** `Plans/00-governance/01-phase1-execution/00-handover-routing.md` · **Binding:** `01-implementation-decisions.md` · **Execute:** `Plans/01-execution/core/02-PHASE-1.md`
 
-Historical: `archive/plans/2026-07-05_phase1-execution/`, `archive/plans/02-proposed/` (preserved, not live authority).
+Historical phase specs stay at `archive/Plans/2026-07-05_phase1-execution/` (repo archive — not renamed). Agent consolidation: `archive/Plans/02-proposed/` (preserved, not live authority).
 
-## Results (`results/`)
+## Agent workflow artifacts (1B)
 
-Gate evidence only — `*-run.json` + `*-raw.log` per `TESTING.md` / `testing-handbook.md`.
+Agent narrative outputs (observations, work-done, failures, executive-summary + PLAN) live under:
 
-| Module | Examples |
-|--------|----------|
-| `results/tests/` | Vitest JSON, console artifacts |
-| `results/planner/phase-1a/` | Phase 1A gates |
-| `results/planner/phase-1b/` | Phase 1B gates |
-| `results/open3d/` | Open3D / SVG pipeline gates |
+- `Agents_work/1b-5phase-agent-workflow/` — current canonical (5 phases + PLAN.md)
+- `Agents_work/` (reviews/, benchmark/, checklists/, notes/)
+- First-pass reports preserved in `archive/1b-5phase-first-pass/` and `archive/recovery-reconcile-*`
 
-**Agent output (not gates):** workflow reports → `Plans/<slug>/NN-<role>/`; independent reviews → `Agents workflow/reviews/`. Legacy benchmark narrative: `results/planner/benchmark/phase-02-03-benchmark.md`.
+See `Plans/README.md`, `Agents_work/README.md`, and `AGENTS.md` (narratives ≠ gate evidence; evidence stays in `results/`).
 
 ## Other plan packets
 
-- `archive/plans/done/database-consolidation-3-file-plan/` — 2 Supabase + R2 packet
-- `archive/plans/done/tech-stack-docs-3-file-plan/` — tech-stack docs packet
-- `archive/plans/done/planner-unified-3-file-plan/` — canonical planner packet
-- `archive/plans/done/sketch-to-plan-3-file-plan/` — sketch-to-plan packet
-- `archive/plans/wip/` — superseded multi-file packets
+- `archive/Plans/done/database-consolidation-3-file-plan/` — 2 Supabase + R2 packet
+- `archive/Plans/done/tech-stack-docs-3-file-plan/` — tech-stack docs packet
+- `archive/Plans/done/planner-unified-3-file-plan/` — canonical planner packet
+- `archive/Plans/done/sketch-to-plan-3-file-plan/` — sketch-to-plan packet
+- `archive/Plans/wip/` — superseded multi-file packets
 
-## Planner execution (`plann/`)
+## Planner execution (historical `plann/`)
 
-Read in order — [`plann/README.md`](plann/README.md):
+**Historical** — renamed/consolidated into `Plans/`. See [`Plans/README.md`](Plans/README.md) for current.
 
-| # | File | Role |
-|---|------|------|
-| 00 | `plann/00-REVISION.md` | Product decisions (Option A, 1A/1B) |
-| 01–04 | `01-START` … `04-HANDOVER` | Commands, phases, session status |
-| 05–08 | Expert drafts + `06-UI-PLAN` / `08-TEST-PLAN` | UI + test execution authority |
-| 09 | `plann/09-DOC-REVISION.md` | Doc batch coordinator log |
+Old paths referenced in archives/recovery data only.
 
 ## Feature documentation
 

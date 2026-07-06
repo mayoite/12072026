@@ -206,7 +206,7 @@ Remaining resolved history from Failures.md moved here per user. All non active 
 
 ---
 
-*Full verbatim extracts were provided by the 8 agents in resolved-failures-part-*.md (now archived to `archive/plans/2026-07-05_phase1-execution/failures/resolved-md-slices/` after merge).*
+*Full verbatim extracts were provided by the 8 agents in resolved-failures-part-*.md (now archived to `archive/Plans/2026-07-05_phase1-execution/failures/resolved-md-slices/` after merge).*
 *Coordinator removed matching blocks from Failures.md and applied fixes to summary sections.*
 
 **End of merged resolved archive.**

@@ -15,7 +15,7 @@ Context: branch `orchestrator/hotfixes-2026-07-04`, recent updates to plan docum
 - Read-only analysis (AGENTS.md compliant).
 - Structured findings with severity, citations, suggestions.
 - Heavy use of diagrams (Mermaid) for relationships, flows, gates, and risks.
-- Builds on `Plans/1b-5phase-agent-workflow/reviews/critic-review.md` (relocated from `results/reviews/`).
+- Builds directly on the single-file `results/reviews/critic-review.md` but split into focused, detailed documents.
 
 ## Document Index
 

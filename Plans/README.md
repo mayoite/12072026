@@ -8,9 +8,10 @@ Start here.
 |--------|------|
 | [`00-governance/`](00-governance/) | Binding pins, benchmarks, quality gates, review workflow |
 | [`01-execution/`](01-execution/) | Day-to-day Phase 1A/1B work and promotion sequencing |
-| [`Agents workflow/`](../Agents workflow/) | Phase 1B run — `PLAN.md`, `PROMPTS.md`, agent reports |
-| [`workflows/sequential-5-phase-agent/`](workflows/sequential-5-phase-agent/) | 5-phase sequential agent workflow |
+| [`../Agents_work/1b-5phase-agent-workflow/`](../Agents_work/1b-5phase-agent-workflow/) | Phase 1B five-agent run — `PLAN.md` + 4-file agent reports (01-repair through 05-planner) |
+| [`Plan_06072026/`](Plan_06072026/) | Reconciled from C:\oando06072026forrecovery — execution contract + 02-09 domain plans (SVG, evidence, lockedfiles, routes etc.) |
 | [`meta/`](meta/) | Coordinator notes — reference only |
+| [`../Agents_work/`](../Agents_work/) | Preserved agent output — reviews, narratives, notes |
 
 Use `01-execution/` to do the work.
 Use `00-governance/` to resolve conflicts, gates, and standards.
@@ -53,8 +54,9 @@ Open `00-governance/` when you need:
 
 ## What not to do
 
-- Do not treat `01-execution/research/` or `meta/` as execution authority.
-- Do not delete agent work — `archive/plans/02-proposed/`, `Agents workflow/`, workflow run folders are preserved.
+- Do not treat `01-execution/research/`, `meta/`, or `Agents_work/` as execution authority for gates.
+- Gate command evidence stays in `results/` (`TESTING.md`); agent narratives go in `Agents_work/`.
+- Do not delete agent work — `archive/Plans/02-proposed/`, `Agents_work/`, and `archive/*recovery-reconcile*` are preserved. Agent reports consolidated under `Agents_work/1b-5phase-agent-workflow/`.
 - Do not treat archived `02-proposed/` as live execution authority.
 - Do not merge analysis notes into live plan files without an explicit decision.
 - Do not let execution docs override governance docs on package pins, gates, or standards.
