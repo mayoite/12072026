@@ -8,6 +8,8 @@ pnpm monorepo for `oando.co.in`. Next.js in `site/`.
 
 → **`docs/Lockedfiles/conduct/ReadmeLocked.md`** (locked). Repo facts and app paths continue below.
 
+→ **Active lane / session status & handover** — [`Plans/01-execution/core/04-HANDOVER.md`](Plans/01-execution/core/04-HANDOVER.md) (live status, blockers, next actions, and promotion state).
+
 ## Layout
 
 ```
@@ -16,7 +18,7 @@ repo-root/          ← pnpm workspace wrapper (package.json, pnpm-lock.yaml)
 ├── tech-stack-generator/  ← Vite source (oando-tech-stack-docs); build output — see `tech-stack-generator/README.md`
 ├── docs/           ← reference docs (architecture, api, audit)
 ├── archive/        ← historical outputs + `archive/migrationdocs/`
-├── Plans/          ← governance + execution plans (see Plans/README.md)
+├── Plans/          ← governance + execution plans (see Plans/README.md; active session status in `01-execution/core/04-HANDOVER.md`)
 └── archive/1b-5phase-agent-workflow/ (and archive/Agents_work/) ← archived 1b-5phase agent workflow reports, reviews, benchmarks (narratives only; evidence in results/)
 ```
 
@@ -93,5 +95,5 @@ http://localhost:3000 · guest planner `/planner/guest/`
 
 TypeScript **6.x**. Dev: `next dev --webpack`. Vercel Root Directory = `site`. Test output: repo-root `results/` (detail **`TESTING.md`**; locked copy **`docs/Lockedfiles/TestingLocked.md`**).
 
-Other reference: `docs/architecture/`, `docs/api/ROUTE-INDEX.md`, `docs/audit/`.
+Other reference: `docs/architecture/`, `docs/api/ROUTE-INDEX.md`, `docs/audit/`, `Plans/01-execution/core/04-HANDOVER.md` (session status).
 

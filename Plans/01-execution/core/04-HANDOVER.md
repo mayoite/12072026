@@ -1,10 +1,23 @@
 # Planner Overhaul Handover
 
-Status: Phase 1 in progress — **1A** (open3d shell) active; **1B** (SVG path) queued  
-Revision: **2026-07-05** — [`00-REVISION.md`](00-REVISION.md)  
-Active phase: Phase 1A  
-Active route: `/planner/open3d`  
+**Status (2026-07-06):** Phase 1 execution + major cleanup/archiving complete. Exec branch `exec/phase1-execute-2026-07-05` pushed to `main`. Worktree snapshot backed up to `C:\oandO04072026`. Active authority now on main.  
+Revision: **2026-07-06** (post a1b87fb + 900715d)  
+Active phase: Post-1A/1B cleanup & archive reconciliation (1A/1B core delivered via prior agent work + this session)  
+Active route: `/planner/open3d` (per prior)  
 Rollback path: Existing Open3D route and explicit Fabric fallback routes
+
+**Recent session work (this worktree + push to main):**
+- Archived completed/superseded plans and root folders (Agents_work/, results/, old 1b-5phase, sequential workflows, Plan_06072026, etc.) to `archive/`.
+- Implemented site-workflows-plan in `site/tech-stack-generator` (modules + enhanced Workflows.tsx + superpowers/GS section).
+- Aligned tech-stack paths (renamed package to oando-site-workflow-docs; docs + next.config + START.md now use `site/tech-stack-docs` / `/tech-stack-docs/` consistently).
+- Phase 1 reconciliation: updated 02-PHASE-1.md, delivery/foundation docs, phase1-checklist.md, refs to point to archive/.
+- Added `results/` + `site/results/` to `.gitignore` (local-only evidence going forward).
+- Full mirror copy of worktree to `C:\oandO04072026` as backup.
+- Pushed `exec/phase1-execute-2026-07-05` (containing a1b87fb + archive work) to remote `main`.
+- Local `main` fast-forwarded to a1b87fb in source checkouts.
+- Fixed uncommitted state in main source (reset --hard origin/main after prior syncs).
+
+See `Plans/pending-cleanup.md` for full archive list. Plans/README.md and active 00-governance/01-phase1-execution/ + 01-execution/core/ remain the live authority.
 
 ## Authority stack
 
@@ -48,22 +61,50 @@ Deliver the professional One&Only planner (**1A**) and the safe Lego-like SVG bl
 - [x] SVG compiler module, sanitizer, resvg, Sharp, boundary tests (1B foundation).
 - [x] Puck registry + `Render` preview on admin svg-editor and portal svg-catalog routes.
 
-## Not accepted (honest blockers)
+## Not accepted (honest blockers) — 1A/1B core
 
-### 1A — Open3D shell
+(See prior entries for 1A P0/P1 command wiring, icons, palette — delivered 2026-07-05 via agent workflow.)
 
-- [x] **P0 (done 2026-07-05):** Route all document mutations through `executePlannerCommand`. `useWorkspaceCanvas` now treats history as the single source of truth (`project = history.present`) and routes `dispatch`/`undo`/`redo`/`updateProject` through the command layer via a `runCommand` seam; added a `document.update` command variant + `updateOpen3dProject` history helper. Locked items are now rejected through `dispatch` (previously ungated). Tests: `plannerCommandWiring.test.tsx`. Evidence: `results/planner/phase-1a/{vitest-command-wiring,typecheck,lint-scoped}/`.
-- [x] **P1 (done 2026-07-05):** Phosphor-only chrome — emoji removed from `inventoryTaxonomy.ts`; new `editor/inventoryIcons.tsx` binds taxonomy icon keys to Phosphor glyphs (first Phosphor import in site source); `InventoryPanel` renders Phosphor. Guard: `open3dIconPolicy.test.tsx` (no emoji in taxonomy + renders svg per key). Evidence: `results/planner/phase-1a/icon-policy/`. Note: hand-rolled `ClearIcon`/`ChevronIcon` inline SVGs remain (not emoji; optional Phosphor migration later).
-- [x] **P1 (done 2026-07-05):** Command palette `Ctrl/Cmd+K` (verified in `useWorkspaceKeyboard`; also fixed missing `Ctrl/Cmd+Z` undo binding) + catalog search cap ≤24 (`OPEN3D_CATALOG_RESULT_CAP`, REC-02). REC-03 bottom command/status surface verified materially present (status pills + palette trigger + aria-live). Tests: `open3dWorkspaceKeyboard.test.tsx`, `catalogSearchCap.test.ts`. Evidence: `results/planner/phase-1a/p1-catalog-palette/`. Remaining nit: explicit modifier-key hints in status bar.
 - [ ] Full draw → save → reload acceptance workflow (§11A in `02-PHASE-1.md`).
-- [x] **UI-1 L1 shell** signed off — `lint:ui:strict` added to `release:gate:fast`. Evidence: `results/planner/phase-1a/lint-ui-strict/`.
+- [ ] Full `<Puck>` mount on `/admin/svg-editor/[id]` with `onPublish` → API.
+- [ ] Unify exec `generate-svg.mjs` and in-process `svgCompiler.server.ts`.
+- [ ] Three reference blocks published end-to-end.
+- [ ] Supabase revision table — deferred (PLAN-FAIL-0409).
 
-### 1B — SVG production path
+**Note (2026-07-06):** 1A/1B foundation delivered via prior 5-phase agent work + this session's reconciliation. Focus of this exec phase shifted to cleanup/archiving (see below). Open items remain tracked in `02-PHASE-1.md` and `Failures.md`.
 
-- [ ] Full `<Puck>` mount on `/admin/svg-editor/[id]` with `onPublish` → API (today: JSON edit view + `Render` preview only).
-- [ ] Unify exec `generate-svg.mjs` and in-process `svgCompiler.server.ts` (dual compile path remains).
-- [ ] Three reference blocks published end-to-end (definitions + compiler tests exist; no live publish).
-- [ ] Supabase revision table — **deferred Phase 08** (`PLAN-FAIL-0409`); disk JSON OK for 1B interim.
+## Cleanup & Archiving Handover (2026-07-06 session)
+
+**Work performed (worktree `exec/phase1-execute-2026-07-05` → pushed to main):**
+
+- Archived all completed/superseded material per user direction and `pending-cleanup.md`:
+  - Root folders: `Agents_work/`, `results/`, `mcps/`, `terminals/`, `open3d-floorplan/`, `open3d-next-staging/`, `agent-tools/`, `worktrees/` (some already moved).
+  - Plans: `Plan_06072026/`, `00-governance/00-global-standard-revision/`, `01-execution/research/`, `01-execution/specialists/`, `1b-5phase-agent-workflow/` (dupe), `workflows/sequential-5-phase-agent/`, etc. → `archive/Plans/`.
+  - Old results and first-pass reports moved to `archive/`.
+- Preserved active authority: `Plans/00-governance/01-phase1-execution/`, `Plans/01-execution/core/`, recent stubs.
+- Site workflows: Full implementation of `site-workflows-plan-2026-07.md` inside `site/tech-stack-generator` (7 modules with walkthrough/current/goal, enhanced Workflows.tsx + GS/superpowers section, theme sync).
+- Tech-stack alignment: Package renamed `oando-site-workflow-docs`; all references (docs, next.config rewrites, START.md, DOC-MAP, etc.) updated from old `site_workflow_output` to `site/tech-stack-docs` / `/tech-stack-docs/`. Build refreshed.
+- Phase 1 docs reconciled: Status updated in `02-PHASE-1.md`, delivery/foundation/closeout, `phase1-checklist.md`. All stale `Plans/1b-5phase...` / `Agents_work/` refs changed to `archive/`.
+- `.gitignore`: Added `results/` + `site/results/` (local-only going forward; historical only in `archive/`).
+- Git hygiene: Big reorg commit (900715d), gitignore follow-up (a1b87fb). Pushed to remote main. Local main in sources fast-forwarded/reset to a1b87fb.
+- Backup: Full mirror of this worktree folder copied to `C:\oandO04072026` (robocopy /MIR /E, ~200k+ files including node_modules; .git worktree pointer included).
+- Uncommitted state in main source cleaned (reset --hard origin/main after syncs).
+
+**State at handover:**
+- Remote `main` and local main in source checkouts: a1b87fb.
+- Worktree still on `exec/phase1-execute-2026-07-05` (can be deleted or kept for reference).
+- `C:\oandO04072026` is a standalone backup copy of the post-cleanup state.
+- All evidence of old results moved to archive/ (no new results/ evidence committed per prior preference).
+- Plans/README.md and pending-cleanup.md updated.
+
+**Verification notes:**
+- Archived items are only under `archive/Plans/` and root `archive/`.
+- Live `Plans/` contains only active + stubs.
+- Tech-stack generator builds cleanly (typecheck + vite).
+- Main site typecheck passes; full lint still has pre-existing issues (PLAN-FAIL-0410, out of scope).
+- No secrets introduced in new commits (one historical archived result file was removed from tree before push).
+
+This session completes the user-directed cleanup phase on top of prior 1A/1B delivery. Next work should start from current `main` (or fresh worktree from main).
 
 ## Verified (from repo; re-run before sign-off)
 
@@ -124,21 +165,23 @@ Rejected:
 - Parametric constraint conflicts — owner Phase 2.
 - Route promotion — guest/canvas unchanged until Phase 2 after **1A + 1B** on one revision.
 
-## Next action
+## Next action (post-2026-07-06 handover)
 
-**1A P0:** ~~Wire `executePlannerCommand` through `useWorkspaceCanvas`~~ — **done 2026-07-05** (`plannerCommandWiring.test.tsx`, evidence under `results/planner/phase-1a/`).
+**Cleanup phase complete.** All user-directed archiving, site-workflows implementation, tech-stack alignment, .gitignore update, push to main, and backup copy performed.
 
-**1A P1 icons:** ~~replace emoji controls in `inventoryTaxonomy.ts`; add icon-policy guard~~ — **done 2026-07-05** (`open3dIconPolicy.test.tsx`, `results/planner/phase-1a/icon-policy/`).
+**Resume from here:**
+- Start any new Phase 1/2 work from current `main` (a1b87fb) or a fresh worktree.
+- Remaining 1A/1B items (tool states, full acceptance flow, Puck publish, reference blocks) tracked in `02-PHASE-1.md`, `03-plan-delivery.md`, and `Failures.md`.
+- Live Plans authority: `00-governance/01-phase1-execution/` + `01-execution/core/`.
+- Use the backup at `C:\oandO04072026` if the main source needs recovery.
+- Re-run typecheck/lint/build on main source before further heavy work.
+- Next governance items (coverage floor, pre-existing lint) still open in `Failures.md`.
 
-**1A P1:** ~~command palette, catalog cap ≤24, REC-03 status surface~~ — **done 2026-07-05** (`results/planner/phase-1a/p1-catalog-palette/`).
+**1A (next when resuming):** §6 canvas tool states + full §11A acceptance; CSS hardcoding audit.
+**1B P0:** Full Puck on admin + unify compile path.
+**Lock:** `lint:ui:strict` in gate when UI-1 shell is accepted.
 
-**1A (now next):** §6 canvas tool states (select/pan/room/wall/opening/dimension/placement) + Escape/Enter/Space semantics end-to-end; §11A full draw → opening → place → edit → undo/redo → save → reload acceptance workflow; then the CSS hardcoding audit gate.
-
-**UI-1 L1:** `planner / L1 / shell` — frame before inventory module (`MODULE-UI-CONTRACT.md` § Layers).
-
-**1B P0 (after 1A P0):** Mount full `<Puck>` on admin svg-editor; unify compile path.
-
-**Lock:** Enable `lint:ui:strict` in `release:gate:fast` when UI-1 shell acceptance passes.
+**Preservation:** All prior 1A/1B P0/P1 deliveries (command wiring, icons, palette) from 2026-07-05 remain in place. No engine or document compatibility changes in this session.
 
 ## Research (2026-07-05)
 
