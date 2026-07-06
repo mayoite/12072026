@@ -1,0 +1,13 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ Γ£ô tests/unit/admin/svg-editor/svgPhase1Completion.test.ts (11 tests) 1023ms
+     Γ£ô renders canonical PNG and deterministic Sharp derivatives  389ms
+     Γ£ô full end-to-end: admin draft/preview (V1 compile), publish/revision (disk via persist), planner 2D placement (resolver), thumb png, reload for fixed+configurable+parametric refs  450ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  09:17:33
+   Duration  3.21s (transform 156ms, setup 294ms, import 1.35s, tests 1.02s, environment 358ms)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-site-results.json

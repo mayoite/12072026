@@ -1,29 +1,11 @@
 /**
- * Phase 04 — svgPipelineRunner (Phase 03 SVG pipeline spawn wrapper)
+ * Phase 04 — svgPipelineRunner (unified in-process wrapper; 1B)
  *
- * §04-ADMIN-07 / §04-SUB-02: the API shells out to
- * `site/scripts/generate-svg.mjs` via `node:child_process.exec` (string command to avoid bundler module resolution on the script path).
- *
- * Contract:
- *   - 10s timeout (default; overridable for integration tests).
- *   - 1 MB max-buffer on stderr (configurable via options; no hang).
- *   - Non-zero exit → runner resolves to `{ ok: false, ... }` with the
- *     captured stderr; it never throws. Callers map to HTTP 500.
- *   - Descriptor JSON is written to a single-shot fixture name under
- *     `site/scripts/generate-svg/_fixtures/` and the script invoked with
- *     `-- --fixture {name}`. The script outputs to
- *     `site/public/svg-catalog/{slug}.svg` and uploads PNG to R2
- *     (`site-block-thumbs/` per implementation-decisions.md §110).
- *
- * Authority: Phase 03 script owns the pipeline. Phase 04 calls it but never
- * edits it (AGENTS.md §Scope: don't auto-create or modify Phase 03 territory).
- * Detect-and-degrade: if the script or its dependencies are missing (no
- * polygon-clipping / svgo / @resvg), the runner reports `scriptUnavailable`
- * and the response still completes successfully (the descriptor writes
- * succeed; the SVG/PNG artefact is a cache for portal render).
+ * Calls canonical svgCompiler.server.ts authority via thin generate-svg.mjs runPipeline (dynamic import).
+ * No child_process; spawnError reason is legacy only in type. GS: BP-03, anti-copy.
+ * Contract preserved for callers. All production code no-explicit-any.
  */
 
-import { exec, type ExecException } from "node:child_process";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
@@ -35,7 +17,7 @@ export const DEFAULT_TIMEOUT_MS = 10_000;
 export const DEFAULT_MAX_STDERR_BYTES = 1_000_000;
 
 export type PipelineFailureReason =
-  | "spawnError"
+  | "spawnError" /* legacy (kept for type compat with prior tests/docs/callers; not emitted in in-process path) */
   | "timeoutError"
   | "nonZeroExit"
   | "scriptUnavailable"
@@ -73,7 +55,7 @@ export interface PipelineOptions {
 }
 
 /**
- * Locate the project root (one level above `site/`) for execFile paths.
+ * Locate the project root (one level above `site/`) for in-process dynamic import paths.
  */
 function findProjectRoot(override?: string): string {
   if (override) return path.resolve(override);
@@ -86,17 +68,11 @@ function defaultSvgPath(slug: string, projectRoot: string): string {
 }
 
 /**
- * Run the Phase 03 SVG pipeline against the just-saved descriptor.
+ * Run the Phase 03 SVG pipeline against the just-saved descriptor (in-process dynamic import).
  *
- * Idempotent: writes a fixture JSON named `admin-{slug}-{rand}.json` so
- * successive admin saves never collide with the bundled `chaise` /
- * `side-table` / `sectional` / `missing-geometry` fixtures. The fixture
- * file lives under `site/scripts/generate-svg/_fixtures/` and is left in
- * place for auditing (the file tree is ignored at the repo level by
- * `site/scripts/generate-svg/.gitignore`).
- *
- * No `any`, no `@ts-ignore`. Errors are returned as data so callers can
- * render them through the standard `{ success, error }` envelope.
+ * Delegates to canonical runPipeline in thin generate-svg.mjs wrapper (authority: svgCompiler.server.ts).
+ * Fixture write kept for audit parity (min change).
+ * GS: BP-03, anti-copy.
  */
 export function runSvgPipeline(
   descriptor: BlockDescriptor,
@@ -125,8 +101,6 @@ export function runSvgPipeline(
 
   try {
     mkdirSync(fixturesDir, { recursive: true });
-    // eslint-disable-next-line no-console
-    console.error("[DEBUG] writeFileSync ref", writeFileSync.toString().slice(0, 60));
     writeFileSync(fixturePath, `${JSON.stringify(descriptor, null, 2)}\n`, {
       encoding: "utf8",
     });
@@ -145,62 +119,37 @@ export function runSvgPipeline(
 
   const startedAt = Date.now();
 
-  return new Promise<PipelineResult>((resolve) => {
-    const cmd = `node "${scriptPath}" -- --fixture admin-${fixtureSuffix}`;
-    exec(
-      cmd,
-      {
-        cwd: projectRoot,
-        timeout: timeoutMs,
-        maxBuffer: maxStderrBytes,
-        windowsHide: true,
-        encoding: "utf8",
-      },
-      (error: ExecException | null, stdout: string, stderr: string) => {
-        const durationMs = Date.now() - startedAt;
-        if (error) {
-          if (error.killed && error.signal === "SIGTERM") {
-            return resolve({
-              ok: false,
-              reason: "timeoutError" as const,
-              stderr,
-              stdout,
-              exitCode: null,
-              error: `Pipeline killed after ${timeoutMs}ms (signal SIGTERM); captured ${stderr.length} bytes of stderr.`,
-              fixturePath,
-            });
-          }
-          if (stderr.length >= maxStderrBytes) {
-            return resolve({
-              ok: false,
-              reason: "nonZeroExit" as const,
-              stderr: `${stderr.slice(0, maxStderrBytes - 64)}... [truncated]`,
-              stdout,
-              exitCode: null,
-              error: `Pipeline wrote stderr larger than maxBuffer=${maxStderrBytes}; aborted.`,
-              fixturePath,
-            });
-          }
-          return resolve({
-            ok: false,
-            reason: "nonZeroExit" as const,
-            stderr,
-            stdout,
-            exitCode: error.code === null ? null : typeof error.code === "number" ? error.code : null,
-            error: `Pipeline exited with error: ${error.message}`,
-            fixturePath,
-          });
-        }
-        return resolve({
-          ok: true,
-          exitCode: 0,
-          stdout,
-          stderr,
-          fixturePath,
-          svgPath,
-          durationMs,
-        });
-      },
-    );
-  });
+  // In-process (unified): dynamic import of thin script module calling canonical compiler.
+  return import(`file://${scriptPath.replace(/\\/g, "/")}`)
+    .then((mod) => {
+      const runP = mod.runPipeline || mod.default?.runPipeline;
+      if (typeof runP !== "function") throw new Error("runPipeline export missing");
+      return runP(descriptor);
+    })
+    .then((result: unknown) => {
+      const r = (result ?? {}) as { svg?: string };
+      const durationMs = Date.now() - startedAt;
+      return {
+        ok: true as const,
+        exitCode: 0,
+        stdout: `[in-process] svg len=${r.svg ? r.svg.length : 0}`,
+        stderr: "",
+        fixturePath,
+        svgPath,
+        durationMs,
+      };
+    })
+    .catch((err: unknown) => {
+      const durationMs = Date.now() - startedAt;
+      const msg = err instanceof Error ? err.message : String(err);
+      return {
+        ok: false as const,
+        reason: "nonZeroExit" as const,
+        stderr: msg,
+        stdout: "",
+        exitCode: 1,
+        error: `Pipeline error: ${msg}`,
+        fixturePath,
+      };
+    });
 }

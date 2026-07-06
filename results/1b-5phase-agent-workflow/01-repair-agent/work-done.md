@@ -1,0 +1,6 @@
+- Inspected last 10 git commits for pending tasks in 1B.
+- Reviewed code in site/features/planner for 1B items.
+- Ensured .grok and worktree are inside repo.
+- Added worktrees/ and .grok/ to .gitignore.
+- Restructured folders to 01-05 for sequential workflow.
+- Created this report structure.

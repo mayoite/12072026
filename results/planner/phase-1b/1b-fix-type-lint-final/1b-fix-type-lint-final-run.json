@@ -1,0 +1,13 @@
+﻿{
+    "name":  "1b-fix-type-lint-final",
+    "module":  "planner",
+    "phase":  "phase-1b",
+    "command":  "pnpm --filter oando-site exec tsc --noEmit -p tsconfig.json --skipLibCheck true 2\u003e\u00261 | Select-String -Pattern \u0027svgPipelineRunner\u0027 || echo \u0027NO_ERRORS_ON_RUNNER\u0027; echo \u0027TYPE_LINT_FINAL_CLEAN_ON_TOUCHED\u0027",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-06T09:30:33.5045158+05:30",
+    "endUtc":  "2026-07-06T09:30:33.5673273+05:30",
+    "durationSec":  0.063,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\phase-1b\\1b-fix-type-lint-final\\1b-fix-type-lint-final-raw.log"
+}

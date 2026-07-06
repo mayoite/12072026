@@ -1,18 +1,9 @@
 /**
- * site/scripts/generate-svg/pipelineCore.ts
+ * site/scripts/generate-svg/pipelineCore.ts (thin core for legacy Block path)
  *
- * Pure, testable core of the Phase 03 SVG pipeline.
- *
- * Exports the polygon-ops, SVG assembly, and sanitizer steps that
- * generate-svg.mjs uses at runtime. Separated so Vitest can import
- * and exercise them without pulling in the R2 client, resvg, or the
- * auto-executing main() from generate-svg.mjs.
- *
- * Phase 03 gate: 03-TEST-01 golden round-trip tests import from here.
- * Anti-copy: uses site/app/css/ semantic tokens only (currentColor + --* vars).
- * No hardcoded hex, no donor geometry.
- *
- * GS cite: GS-BP-03 · plans/01-phase1-execution/00-handover-routing.md · design §8.
+ * Delegates sanitize to canonical in 1B (svgServerSanitizer + svgCompiler.server.ts authority).
+ * generate-svg.mjs is thin wrapper.
+ * GS: BP-03, anti-copy.
  */
 
 import { createRequire } from "node:module";

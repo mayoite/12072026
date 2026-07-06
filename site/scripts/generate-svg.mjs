@@ -268,14 +268,10 @@ function fmt(n) {
   return parseFloat(n.toFixed(4)).toString();
 }
 
-async function loadSvgoConfig() {
-  return require("./generate-svg/svgo.config.cjs");
-}
-
-async function optimiseSvg(svg) {
-  const config = await loadSvgoConfig();
-  const result = await svgo.optimize(svg, config);
-  return result.data;
+// Thin: delegate optimize/sanitize to canonical (svgServerSanitizer.ts + locked svgo.config). svgCompiler.server.ts authority.
+async function optimiseAndSanitize(svg) {
+  const { sanitizeAndOptimizeSvg } = await import("../features/planner/open3d/catalog/svg/svgServerSanitizer.ts");
+  return sanitizeAndOptimizeSvg(svg);
 }
 
 const FALLBACK_D_PATH = "M 10 10 L 90 90 M 90 10 L 10 90 M 50 10 L 50 90 M 10 50 L 90 50";
@@ -388,7 +384,7 @@ export async function runPipeline(descriptor) {
   })();
   if (!rawBlocks || rawBlocks.length === 0) {
     const fallbackSvg = buildFallbackSvg(viewBox);
-    const safe = sanitiseSvg(fallbackSvg);
+    const safe = await optimiseAndSanitize(fallbackSvg);
     writeSvg(descriptor.slug, safe);
     return {
       svg: safe,
@@ -420,8 +416,7 @@ export async function runPipeline(descriptor) {
     descriptor.description,
     descriptor.variant,
   );
-  const optimised = await optimiseSvg(assembled);
-  const safe = sanitiseSvg(optimised);
+  const safe = await optimiseAndSanitize(assembled); // canonical authority path (unify)
 
   writeSvg(descriptor.slug, safe);
 

@@ -41,6 +41,7 @@ supabase/.temp/
 docs-rendered/
 project-rendered/
 .worktrees/
+worktrees/
 tmp/launch-smoke*/
 test-results
 .next
@@ -61,3 +62,9 @@ features_diff.txt
 .claude/
 .vscode/extensions.json
 remedyplan/
+
+# Grok local config and sessions moved into repo (no C: drive work)
+.grok/
+
+# Git worktree for isolation (moved inside repo)
+worktrees/

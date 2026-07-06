@@ -1,0 +1,8 @@
+﻿
+ Γ£ô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts (5 tests) 18ms
+     Γ£ô renders canonical PNG and deterministic Sharp derivatives  447ms
+ Test Files  2 passed (2)
+      Tests  16 passed (16)
+VITEST_DONE
+
+

@@ -1,0 +1,25 @@
+﻿
+
+ RUN  v4.1.9 D:/oandO04072026/site
+
+node.exe : No test files found, exiting with code 1
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (No test files found, exiting with code 1:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+filter: scripts/generate-svg/sanitize.test.mjs
+include: tests/**/*.test.ts, tests/**/*.test.tsx
+exclude:  **/node_modules/**, archive/**, .next/**, tech-stack-docs/**, results/**, scripts/**
+
+JSON report written to D:/oandO04072026/results/tests/vitest-site-results.json
+undefined
+D:\oandO04072026\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run 
+scripts/generate-svg/sanitize.test.mjs --no-watch --config vitest.site.config.ts
+
+DONE
+
+

@@ -1,0 +1,14 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ Γ£ô tests/unit/admin/svg-editor/svgPhase1Completion.test.ts (11 tests | 8 skipped) 441ms
+     Γ£ô renders canonical PNG and deterministic Sharp derivatives  416ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed | 8 skipped (11)
+   Start at  09:30:18
+   Duration  2.81s (transform 125ms, setup 329ms, import 1.38s, tests 441ms, environment 474ms)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-site-results.json
+
+VERIFY_DETERMINISM_DONE

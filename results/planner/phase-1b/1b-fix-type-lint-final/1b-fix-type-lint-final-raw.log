@@ -1,0 +1,10 @@
+﻿Invoke-Expression : At line:1 char:131
++ ... eck true 2>&1 | Select-String -Pattern 'svgPipelineRunner' || echo 'N ...
++                                                                ~~
+The token '||' is not a valid statement separator in this version.
+At D:\oandO04072026\scripts\run-evidence-cmd.ps1:49 char:9
++     & { Invoke-Expression $Command } *>&1 | Out-File -FilePath $tmp - ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ParserError: (:) [Invoke-Expression], ParseException
+    + FullyQualifiedErrorId : InvalidEndOfLine,Microsoft.PowerShell.Commands.InvokeExpressionCommand
+ 

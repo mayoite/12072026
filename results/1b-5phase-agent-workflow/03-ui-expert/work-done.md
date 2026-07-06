@@ -1,0 +1,4 @@
+- Reviewed UI code in site/features/planner/admin/svg-editor and open3d.
+- Suggested improvements for thin panels, better a11y in Puck.
+- Updated plan folder structure for clarity.
+- Ensured reports follow format.

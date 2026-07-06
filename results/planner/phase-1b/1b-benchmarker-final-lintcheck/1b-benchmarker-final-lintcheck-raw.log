@@ -1,0 +1,7 @@
+﻿
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 2: eslint --format compact 
+features/planner/admin/svg-editor/AdminSvgEditorEditView.tsx features/planner/admin/svg-editor/svgPipelineRunner.ts 
+features/planner/open3d/catalog/svg/svgCompiler.server.ts
+LINT_1B_FILES_CHECK_DONE
+
+

@@ -6,6 +6,7 @@ import { sha256Hex } from "./sha256";
 import { sanitizeAndOptimizeSvg } from "./svgServerSanitizer";
 import type { ZodIssue } from "zod";
 
+// GS: BP-03 (pipeline), REC-04 (catalogue), anti-copy (tokens from site/app/css only; no hex). svgCompiler.server.ts is single authority (unifies with generate-svg.mjs thin wrapper). Reference fixtures validation only.
 export const SVG_COMPILER_VERSION = "svg-block-v1";
 
 function escape(value: string): string {
@@ -79,6 +80,15 @@ export function compileSvgBlockV1(input: unknown): CompiledSvgBlockV1 {
     throw new SvgCompileError(Object.freeze(diagnostics));
   }
   const definition = parsed.data;
+
+  // Full geometry + constraint validation (reference fixtures only, per 1B).
+  const geoDiags = validateGeometry(definition);
+  const conDiags = validateConstraints(definition);
+  if (geoDiags.length || conDiags.length) {
+    const all = [...geoDiags, ...conDiags].sort((left, right) => left.path.localeCompare(right.path) || left.message.localeCompare(right.message));
+    throw new SvgCompileError(Object.freeze(all));
+  }
+
   const namespace = `${definition.typeId}-v1`;
   const viewBox = definition.viewBox;
   const body = [...definition.parts].sort((a, b) => a.id.localeCompare(b.id)).map((part) => compilePart(part, namespace)).join("");
@@ -93,4 +103,42 @@ export function compileSvgBlockV1(input: unknown): CompiledSvgBlockV1 {
     svgChecksum: sha256Hex(svg),
     compilerVersion: SVG_COMPILER_VERSION,
   };
+}
+
+// Geometry validation for ref fixtures: parts must be inside viewBox, finite/positive (schema helps).
+function validateGeometry(def: SvgBlockDefinitionV1): SvgCompileDiagnostic[] {
+  const diags: SvgCompileDiagnostic[] = [];
+  const vb = def.viewBox;
+  const vbx2 = vb.x + vb.width;
+  const vby2 = vb.y + vb.height;
+  for (const part of def.parts) {
+    if (!part.visible) continue;
+    if (part.kind === "rect") {
+      if (part.x < vb.x || part.y < vb.y || part.x + part.width > vbx2 || part.y + part.height > vby2) {
+        diags.push({ code: "geometry.outOfViewBox", severity: "error", path: `parts.${part.id}`, message: "rect must lie inside viewBox" });
+      }
+    } else if (part.kind === "circle") {
+      if (part.cx - part.r < vb.x || part.cy - part.r < vb.y || part.cx + part.r > vbx2 || part.cy + part.r > vby2) {
+        diags.push({ code: "geometry.outOfViewBox", severity: "error", path: `parts.${part.id}`, message: "circle must lie inside viewBox" });
+      }
+    }
+  }
+  return diags;
+}
+
+// Constraint validation (ref fixtures): e.g. max on number params.
+function validateConstraints(def: SvgBlockDefinitionV1): SvgCompileDiagnostic[] {
+  const diags: SvgCompileDiagnostic[] = [];
+  const paramById = new Map(def.parameters.map(p => [p.id, p]));
+  for (const c of def.constraints) {
+    if (c.kind === "maximum") {
+      for (const pid of c.parameterIds) {
+        const p = paramById.get(pid);
+        if (p && typeof p.defaultValue === "number" && typeof c.value === "number" && p.defaultValue > c.value) {
+          diags.push({ code: "constraint.violation", severity: "error", path: `parameters.${pid}.defaultValue`, message: `exceeds maximum ${c.value}` });
+        }
+      }
+    }
+  }
+  return diags;
 }

@@ -1,9 +1,12 @@
 /**
- * 04-ADMIN-02: /admin/svg-editor/[id] edit (or /new).
+ * 04-ADMIN-02 + 1B P0: /admin/svg-editor/[id] edit (or /new).
  * Loads via svgBlockDescriptorLoader.tryLoad (or defaults for "new").
- * Renders AdminSvgEditorEditView (JSON + fields) + Puck preview mount using puckConfig + getPuckData.
- * Gated by parent admin layout.
- * RSC + client islands for edit form.
+ * Renders AdminSvgEditorEditView now mounting full <Puck config onPublish> (replaces JSON + Render preview).
+ * onPublish server action calls persistBlockDescriptor + runSvgPipeline.
+ * Gated by parent admin layout. RSC + client Puck.
+ *
+ * GS: BP-04 (Puck+Ark+RAC chrome only — no Radix), BP-05 (≤1 Render/route; this route now uses Puck editor),
+ * REC-01, anti-copy (semantic tokens site/app/css/ only; no hex), 5-product model.
  */
 
 import { notFound } from "next/navigation";
@@ -13,12 +16,13 @@ import {
   type BlockDescriptor,
 } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
 import {
-  puckConfig,
-  getPuckData,
-  type PuckConfig,
+  puckEditorDataToDescriptorInput,
   type PuckDataShape,
 } from "@/features/planner/admin/svg-editor/puckBlockRegistry";
-import { Render } from "@puckeditor/core";
+import {
+  persistBlockDescriptor,
+} from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
+import { runSvgPipeline } from "@/features/planner/admin/svg-editor/svgPipelineRunner";
 
 // Default stub for /new — matches registry defaults shape (minimal valid fixed)
 function makeNewDefault(): BlockDescriptor {
@@ -65,7 +69,24 @@ export default async function AdminSvgEditorDetailPage({
     .replace("T", " ")
     .replace(/\..*$/, "");
 
-  const puckData = getPuckData(descriptor);
+  // Server action: onPublish from Puck calls this; it directly invokes persist + pipeline per task.
+  // Captures descriptor from render for roundtrip merge. Returns err shape for client UX recovery.
+  async function publishViaPuck(puckDataFromEditor: PuckDataShape): Promise<void | { success?: boolean; error?: string }> {
+    "use server";
+    // GS: BP-04, BP-05, anti-copy. onPublish path for 1B admin UX (draft/preview, validation fail/recover).
+    const input = puckEditorDataToDescriptorInput(descriptor, puckDataFromEditor);
+    const persistResult = persistBlockDescriptor(input);
+    if (!persistResult.ok) {
+      return { error: `${persistResult.error.code}: ${persistResult.error.message}` };
+    }
+    try {
+      // runSvgPipeline (or unified later); non-fatal if thumb fails (descriptor persisted).
+      await runSvgPipeline(persistResult.descriptor);
+    } catch {
+      /* best-effort */
+    }
+    return { success: true };
+  }
 
   return (
     <div>
@@ -73,19 +94,9 @@ export default async function AdminSvgEditorDetailPage({
         slug={slug}
         descriptor={descriptor}
         updatedAtLabel={updatedAtLabel}
+        onPublishAction={publishViaPuck}
       />
-
-      {/* 04-ADMIN-02 Puck mount for visual preview (config from registry).
-         Admin edit uses registry-driven Render (Puck.Render equiv) + EditView json for descriptor metadata.
-         Full <Puck config=... onPublish=...> editor can mount here for visual block props (per phase spec "edit with Puck").
-         GS BP-04 (allowed pkgs), BP-05 (1 Render/route hard), design §7/11, I-D, anti-copy (semantic tokens, no donor trade-dress), 5-product model.
-         Uses loader.tryLoad + registry; error taxonomy via notFound. */}
-      <section aria-label="Puck preview" className="mt-6 border-t pt-4">
-        <h2 className="text-sm font-medium mb-2">Live render preview (Puck)</h2>
-        <div className="rounded border bg-panel p-3">
-          <Render config={puckConfig as unknown as PuckConfig} data={puckData as unknown as PuckDataShape} />
-        </div>
-      </section>
+      {/* Full Puck editor now inside EditView (with live preview from registry render fns). No separate <Render> here (BP-05). */}
     </div>
   );
 }

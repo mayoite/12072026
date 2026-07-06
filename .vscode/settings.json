@@ -48,4 +48,7 @@
     ],
     "terminal.integrated.allowMnemonics": true,
     "terminal.integrated.shellIntegration.environmentReporting": true,
+    "terminal.integrated.env.windows": {
+        "GROK_HOME": "D:\\.grok"
+    }
 }

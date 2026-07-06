@@ -28,13 +28,16 @@
  *     `BlockDescriptorThemeTokensSchema` (§02-CAT-07).
  *   - Donor trade-dress (Puck UI panel labels are owned by O&O Admin).
  */
-import type * as React from "react";
 import { z } from "zod";
-
-// Type-only import (erased at runtime) so registry + server consumers (pages, tests) stay server-safe
-// without pulling Puck client runtime. Enables typed <Puck>/<Render> usage in admin/portal without `any`.
-// Per AGENTS type safety; GS BP-05 (≤1 Render per route).
+import type * as React from "react";
 import type { Config, Data } from "@puckeditor/core";
+
+// Align with Puck runtime types (Data) for <Puck data> / onPublish compatibility.
+// PuckData aliases internal Data; Puck* names re-exported at bottom (BP-05, server-safe).
+export type PuckData = Data;
+
+// Type-only (erased). Enables <Puck>/<Render> usage typed without `any`. Re-export pulls the types.
+// Per AGENTS; GS BP-05, BP-04.
 
 import {
   BLOCK_DESCRIPTOR_VARIANTS,
@@ -652,7 +655,7 @@ export const puckConfig = Object.freeze({
       ] as const),
     }),
   }),
-}) as unknown as Config;
+}) as unknown as import("@puckeditor/core").Config;
 
 /** Map a variant tag to its registered Puck component name. */
 export function puckComponentName(variant: BlockDescriptorVariant): string {
@@ -713,18 +716,88 @@ type AssertEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T exte
  * Used by admin edit preview and portal RSC render.
  * GS: single source, no any, anti-copy (semantic only).
  */
-export type PuckData = {
-  readonly root: { readonly props: Record<string, unknown> };
-  readonly content: ReadonlyArray<{
-    readonly type: string;
-    readonly props: Record<string, unknown>;
-  }>;
-};
-
 export function getPuckData(descriptor: BlockDescriptor): PuckData {
   const rp = blockDescriptorToRenderProps(descriptor);
   return {
     root: { props: { title: descriptor.slug } },
     content: [{ type: rp.name, props: rp.props }],
+  } as PuckData;
+}
+
+// ── Admin editor roundtrip adapters (for full <Puck> mount on /admin/svg-editor/[id]) ──
+
+/**
+ * Convert descriptor to full Puck Data for the admin <Puck> editor (not the minimal Render path).
+ * Populates all registered editable fields (identity, geometry, viewBox, mounting, theme, a11y + variant)
+ * so the sidebar fields are prefilled for compose/draft.
+ * getPuckData remains minimal for <Render> (BP-05 ≤1 Render/route).
+ * GS: BP-04, BP-05, REC-01 (Figma minimize via Puck panels), anti-copy (semantic tokens only, no hex).
+ */
+export function getPuckEditorData(descriptor: BlockDescriptor): PuckData {
+  const rp = blockDescriptorToRenderProps(descriptor);
+  const baseProps: Record<string, unknown> = {
+    slug: descriptor.slug,
+    sku: descriptor.sku ?? "",
+    sourceProvenance: descriptor.sourceProvenance,
+    createdBy: descriptor.createdBy ?? "",
+    geometry: { ...descriptor.geometry },
+    viewBox: { ...descriptor.viewBox },
+    mounting: [...descriptor.mounting],
+    themeTokens: { ...descriptor.themeTokens },
+    rovingFocus: [...descriptor.rovingFocus],
+    liveAnnouncementCategories: [...descriptor.liveAnnouncementCategories],
   };
+  if (descriptor.mountingPoints && descriptor.mountingPoints.length > 0) {
+    baseProps.mountingPoints = [...descriptor.mountingPoints];
+  }
+  if (descriptor.variant === "configurable") {
+    const c = descriptor as BlockDescriptorConfigurable;
+    baseProps.configurable = { ...c.configurable };
+  } else if (descriptor.variant === "parametric") {
+    const p = descriptor as BlockDescriptorParametric;
+    baseProps.parametric = { ...p.parametric };
+    // mountingPoints required for parametric; already handled above if present
+  }
+  return {
+    root: { props: { title: descriptor.slug } },
+    content: [{ type: rp.name, props: baseProps }],
+  } as PuckData;
+}
+
+/**
+ * Convert Puck-published data (from onPublish) back to a descriptor-shaped input for persist.
+ * Merges edited puck block props over the original base (preserves id, schemaVersion, checksum recomputed by freeze).
+ * Used inside server action wired to onPublish.
+ * GS: BP-04 Puck admin only; validation via registry schema + persist.
+ */
+export function puckEditorDataToDescriptorInput(
+  original: BlockDescriptor,
+  editorData: PuckData,
+): unknown {
+  const blockProps = (editorData.content?.[0]?.props ?? {}) as Record<string, unknown>;
+  const updated: Record<string, unknown> = {
+    ...original,
+    slug: (blockProps.slug as string) ?? original.slug,
+    sku: (blockProps.sku as string | undefined) ?? original.sku,
+    sourceProvenance: (blockProps.sourceProvenance as BlockDescriptor["sourceProvenance"]) ?? original.sourceProvenance,
+    createdBy: (blockProps.createdBy as string | undefined) ?? original.createdBy,
+    geometry: (blockProps.geometry as BlockDescriptor["geometry"]) ?? original.geometry,
+    viewBox: (blockProps.viewBox as BlockDescriptor["viewBox"]) ?? original.viewBox,
+    mounting: (blockProps.mounting as BlockDescriptor["mounting"]) ?? original.mounting,
+    themeTokens: (blockProps.themeTokens as BlockDescriptor["themeTokens"]) ?? original.themeTokens,
+    rovingFocus: (blockProps.rovingFocus as BlockDescriptor["rovingFocus"]) ?? original.rovingFocus,
+    liveAnnouncementCategories:
+      (blockProps.liveAnnouncementCategories as BlockDescriptor["liveAnnouncementCategories"]) ?? original.liveAnnouncementCategories,
+  };
+  if (blockProps.mountingPoints) {
+    (updated as Record<string, unknown>).mountingPoints = blockProps.mountingPoints;
+  }
+  if (original.variant === "configurable" && blockProps.configurable) {
+    (updated as Record<string, unknown>).configurable = blockProps.configurable;
+  } else if (original.variant === "parametric" && blockProps.parametric) {
+    (updated as Record<string, unknown>).parametric = blockProps.parametric;
+  }
+  // Let persist + freezeFreshDescriptor recompute generatedAt/checksum/idempotent handling.
+  delete (updated as Record<string, unknown>).checksum;
+  return updated;
 }

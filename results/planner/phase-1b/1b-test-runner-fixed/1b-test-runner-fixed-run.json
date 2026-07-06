@@ -1,0 +1,13 @@
+﻿{
+    "name":  "1b-test-runner-fixed",
+    "module":  "planner",
+    "phase":  "phase-1b",
+    "command":  "pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/svgPipelineRunner.test.ts --no-watch --config vitest.site.config.ts",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-06T09:18:11.7278934+05:30",
+    "endUtc":  "2026-07-06T09:18:14.1486907+05:30",
+    "durationSec":  2.421,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\phase-1b\\1b-test-runner-fixed\\1b-test-runner-fixed-raw.log"
+}

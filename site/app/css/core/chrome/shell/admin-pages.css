@@ -610,3 +610,17 @@
   font-size: var(--type-small-size);
   line-height: 1.5;
 }
+
+/* REC-01 (Figma minimize-UI on every Puck panel): thin contextual container for admin svg-editor Puck surface.
+   No bloat; semantic tokens/vars from site/app/css only (anti-copy). Thin pad/border; Puck panels sit in clean surface.
+   details/summary provides collapse affordance for non-contextual cartography. */
+[data-admin-layout] .admin-puck-editor {
+  border: 1px solid var(--border-soft);
+  background: var(--surface-panel);
+  padding: 0.5rem;
+}
+
+[data-admin-layout] .admin-page__section details summary {
+  font-weight: var(--font-weight-copy-semibold);
+  color: var(--text-heading);
+}

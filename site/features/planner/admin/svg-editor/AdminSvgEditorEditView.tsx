@@ -1,28 +1,23 @@
 "use client";
 
 /**
- * Phase 04 — Admin SVG Editor per-slug edit view.
+ * Phase 04 — Admin SVG Editor per-slug edit view (now full Puck mount for 1B).
  *
- * §04-ADMIN-02: route `site/app/admin/svg-editor/[id]/page.tsx` loads the
- * canonical descriptor by slug via {@link tryLoad} (Phase 02 loader) and
- * surfaces the variant's render component from {@link blockDescriptorToRenderProps}.
+ * §04-ADMIN-02 + 1B P0: mounts <Puck config={puckConfig} data={editorData} onPublish={...} />
+ * for visual compose/draft/preview using registry fields. onPublish calls (via server action)
+ * persistBlockDescriptor + runSvgPipeline. Replaces JSON textarea + separate Render preview only.
+ * Supports validation failure (422 etc) + recovery UX via alerts + Puck live state.
  *
- * Functionality for the initial Phase 04 release:
- *   - Display every persisted BlockDescriptor's field set read-only.
- *   - Provide a JSON editor for advanced edits (themeTokens / rovingFocus etc.).
- *   - Wire a `Save` button that POSTs to {@link POST_URL} with the current
- *     payload; the API path is gated by `withAuth(['admin'])` and persists
- *     through {@link persistBlockDescriptor}.
- *
- * No `any`, no `@ts-ignore`, no Mantine, no `eslint-disable`. Theme tokens
- * are remediated through the upstream `parseBlockDescriptor` so any hex
- * literal is rejected with HTTP 422 (§02-CAT-07).
+ * GS: BP-04 (Puck+Ark+RAC only, no Radix), BP-05 (≤1 explicit Render/route; Puck editor ok),
+ * REC-01 (Figma minimize-UI on Puck panels), REC-05 (json-render inactive), anti-copy
+ * (semantic tokens from site/app/css/ only; no hex in tsx; no donor trade-dress).
+ * 5-product refs (Planner5D cat, Figma thin/contextual).
  */
 
 import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 
 import type {
   BlockDescriptor,
@@ -31,8 +26,15 @@ import type {
 import {
   blockDescriptorToRenderProps,
   puckComponentName,
+  getPuckEditorData,
+  puckEditorDataToDescriptorInput,
+  puckConfig,
 } from "./puckBlockRegistry";
+import { Puck } from "@puckeditor/core";
+import type { PuckDataShape } from "./puckBlockRegistry";
 
+// Note: direct persist/runner now via server action passed from RSC page (onPublish calls them).
+// Legacy POST kept for compat in alerts only; 1B prefers the action path.
 const POST_URL = "/api/admin/svg-editor";
 
 interface FormState {
@@ -113,10 +115,6 @@ function buildFieldRows(
   return rows;
 }
 
-function formatDescriptorForEditor(descriptor: BlockDescriptor): string {
-  return JSON.stringify(descriptor, null, 2);
-}
-
 function buildErrorFromResponse(
   status: number,
   body: { error?: { code?: string; message?: string; details?: Record<string, unknown> } } | null,
@@ -132,83 +130,92 @@ export interface AdminSvgEditorEditViewProps {
   readonly slug: string;
   readonly descriptor: BlockDescriptor;
   readonly updatedAtLabel: string;
+  /** Server action (or async fn) wired by page RSC so onPublish can call persistBlockDescriptor + runSvgPipeline directly. */
+  readonly onPublishAction?: (data: PuckDataShape) => Promise<void | { success?: boolean; error?: string }>;
 }
 
 export function AdminSvgEditorEditView({
   slug,
   descriptor,
   updatedAtLabel,
+  onPublishAction,
 }: AdminSvgEditorEditViewProps) {
   const router = useRouter();
   const renderProps = useMemo(() => blockDescriptorToRenderProps(descriptor), [descriptor]);
+  const editorData = useMemo(() => getPuckEditorData(descriptor), [descriptor]);
+
+  // Simplified state: Puck manages draft/compose state + live preview.
+  // Only track submit + validation err/success for admin UX (failure + recovery).
   const [formState, setFormState] = useState<FormState>(() => ({
     ...INITIAL_FORM_STATE,
-    payloadText: formatDescriptorForEditor(descriptor),
+    payloadText: "", // legacy json unused after Puck replace; kept for type compat in min change
   }));
 
-  const handleChange = useCallback((next: string) => {
-    setFormState((previous) => ({
-      ...previous,
-      payloadText: next,
-      errorMessage: null,
-      successMessage: null,
-    }));
-  }, []);
-
-  const handleSave = useCallback(async () => {
-    setFormState((previous) => ({
-      ...previous,
-      submitting: true,
-      errorMessage: null,
-      successMessage: null,
-    }));
-
-    let payload: unknown;
-    try {
-      payload = JSON.parse(formState.payloadText);
-    } catch (parseError) {
-      const message =
-        parseError instanceof Error ? parseError.message : String(parseError);
+  const handlePublish = useCallback(
+    async (data: PuckDataShape) => {
       setFormState((previous) => ({
         ...previous,
-        submitting: false,
-        errorMessage: `Editor payload is not valid JSON: ${message}`,
+        submitting: true,
+        errorMessage: null,
+        successMessage: null,
       }));
-      return;
-    }
 
-    try {
-      const response = await fetch(POST_URL, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const body = (await response.json().catch(() => null)) as
-        | { success?: boolean; descriptor?: BlockDescriptor; error?: { code?: string; message?: string; details?: Record<string, unknown> } }
-        | null;
-      if (!response.ok) {
+      try {
+        if (onPublishAction) {
+          // Preferred 1B path: server action calls persistBlockDescriptor + runSvgPipeline directly.
+          const result = await onPublishAction(data);
+          if (result && (result as unknown as { error?: string }).error) {
+            setFormState((previous) => ({
+              ...previous,
+              submitting: false,
+              errorMessage: String((result as unknown as { error?: string }).error),
+            }));
+            return;
+          }
+          setFormState((previous) => ({
+            ...previous,
+            submitting: false,
+            successMessage: `Published via Puck “${slug}” at ${updatedAtLabel}.`,
+          }));
+          router.refresh();
+          return;
+        }
+
+        // Fallback (pre-1B or tests): reconstruct + POST (still exercises api persist+runner)
+        const payload = puckEditorDataToDescriptorInput(descriptor, data);
+        const response = await fetch(POST_URL, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const body = (await response.json().catch(() => null)) as
+          | { success?: boolean; descriptor?: BlockDescriptor; error?: { code?: string; message?: string; details?: Record<string, unknown> } }
+          | null;
+        if (!response.ok) {
+          setFormState((previous) => ({
+            ...previous,
+            submitting: false,
+            errorMessage: buildErrorFromResponse(response.status, body),
+          }));
+          return;
+        }
         setFormState((previous) => ({
           ...previous,
           submitting: false,
-          errorMessage: buildErrorFromResponse(response.status, body),
+          successMessage: `Saved descriptor “${body?.descriptor?.slug ?? slug}” at ${updatedAtLabel}.`,
         }));
-        return;
+        router.refresh();
+      } catch (networkError) {
+        const message = networkError instanceof Error ? networkError.message : String(networkError);
+        setFormState((previous) => ({
+          ...previous,
+          submitting: false,
+          errorMessage: `Network error: ${message}`,
+        }));
       }
-      setFormState((previous) => ({
-        ...previous,
-        submitting: false,
-        successMessage: `Saved descriptor “${body?.descriptor?.slug ?? slug}” at ${updatedAtLabel}.`,
-      }));
-      router.refresh();
-    } catch (networkError) {
-      const message = networkError instanceof Error ? networkError.message : String(networkError);
-      setFormState((previous) => ({
-        ...previous,
-        submitting: false,
-        errorMessage: `Network error: ${message}`,
-      }));
-    }
-  }, [formState.payloadText, router, slug, updatedAtLabel]);
+    },
+    [onPublishAction, descriptor, router, slug, updatedAtLabel],
+  );
 
   const rows = useMemo(() => buildFieldRows(descriptor), [descriptor]);
 
@@ -230,17 +237,7 @@ export function AdminSvgEditorEditView({
             <code className="admin-page__checksum">{descriptor.checksum.slice(0, 16)}…</code>
           </p>
         </div>
-        <div className="admin-page__actions">
-          <button
-            type="button"
-            className="btn-primary inline-flex items-center gap-2 px-3 py-2 text-sm"
-            onClick={() => void handleSave()}
-            disabled={formState.submitting}
-          >
-            <Save size={14} aria-hidden />
-            {formState.submitting ? "Saving…" : "Save"}
-          </button>
-        </div>
+        {/* No header Save: Puck editor owns publish (REC-01 minimize + contextual). Header is identity only. */}
       </header>
 
       <section
@@ -279,54 +276,36 @@ export function AdminSvgEditorEditView({
       ) : null}
 
       <section aria-label="Field cartography" className="admin-page__section">
-        <h2 className="admin-page__section-title">Field cartography</h2>
-        <dl className="admin-page__field-list">
-          {rows.map((row) => (
-            <div key={row.key} className="admin-page__field-row">
-              <dt>
-                <code>{row.key}</code>
-              </dt>
-              <dd>
-                <code>{row.value}</code>
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <details>
+          <summary className="admin-page__section-title">Field cartography (minimize)</summary>
+          <dl className="admin-page__field-list">
+            {rows.map((row) => (
+              <div key={row.key} className="admin-page__field-row">
+                <dt>
+                  <code>{row.key}</code>
+                </dt>
+                <dd>
+                  <code>{row.value}</code>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </details>
       </section>
 
-      <section aria-label="Advanced JSON editor" className="admin-page__section">
-        <h2 className="admin-page__section-title">Advanced JSON editor</h2>
-        <p className="admin-page__copy">
-          Edit the BlockDescriptor JSON directly. Saving POSTs to{" "}
-          <code>{POST_URL}</code> (gated by <code>withAuth(['admin'])</code>);
-          the Zod schema rejects hex theme tokens, mismatched UUIDs, and
-          unsupported variant tags with HTTP 422.
-        </p>
-        <textarea
-          className="admin-page__json-editor"
-          value={formState.payloadText}
-          onChange={(event) => handleChange(event.target.value)}
-          spellCheck={false}
-          rows={20}
-          aria-label="BlockDescriptor JSON"
-        />
-        <div className="admin-page__actions">
-          <button
-            type="button"
-            className="btn-outline inline-flex items-center gap-2 px-3 py-2 text-sm"
-            onClick={() => handleChange(formatDescriptorForEditor(descriptor))}
-            disabled={formState.submitting}
-          >
-            Reset to loaded JSON
-          </button>
-          <button
-            type="button"
-            className="btn-primary inline-flex items-center gap-2 px-3 py-2 text-sm"
-            onClick={() => void handleSave()}
-            disabled={formState.submitting}
-          >
-            <Save size={14} aria-hidden /> Save changes
-          </button>
+      {/* Full Puck editor mount replaces the JSON textarea + separate Render preview (1B P0).
+         Puck uses registry puckConfig (fields + renders), editorData for full editable props.
+         onPublish wires to persist + pipeline via action (or fallback). Live preview in Puck canvas.
+         Validation failures surface in alerts for recovery (edit in place, re-publish).
+         GS: BP-04, BP-05, REC-01 (Figma minimize-UI: thin/contextual/no extra chrome in Puck panels), anti-copy (semantic only). */}
+      <section aria-label="Puck block editor" className="admin-page__section">
+        <h2 className="admin-page__section-title">Block editor (Puck)</h2>
+        <div className="admin-puck-editor">
+          <Puck
+            config={puckConfig}
+            data={editorData}
+            onPublish={handlePublish}
+          />
         </div>
       </section>
     </div>

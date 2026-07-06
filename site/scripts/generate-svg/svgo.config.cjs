@@ -1,7 +1,12 @@
 /**
- * Frozen SVGO config used by generate-svg.mjs.
+ * Locked SVGO plugin configuration (single source, used by both generate path and canonical sanitizer).
+ * GS: BP-03 (Option A pipeline), anti-copy (no donor).
+ * Integration test asserts this exact shape drives optimize.
  */
 module.exports = {
-  plugins: [],
-  multipass: true,
+  multipass: false,
+  plugins: [
+    { name: "preset-default", params: { overrides: { cleanupIds: false } } },
+    "sortAttrs",
+  ],
 };

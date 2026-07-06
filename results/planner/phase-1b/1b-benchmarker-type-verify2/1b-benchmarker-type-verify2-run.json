@@ -1,0 +1,13 @@
+﻿{
+    "name":  "1b-benchmarker-type-verify2",
+    "module":  "planner",
+    "phase":  "phase-1b",
+    "command":  "pnpm --filter oando-site exec tsc --noEmit -p tsconfig.json --skipLibCheck 2\u003e\u00261 | Select-String -Pattern \u0027error TS|AdminSvgEditor|svgPipelineRunner|svgCompiler.server|svgServerSanitizer\u0027 | Select-Object -First 5; echo \u0027TYPECHECK_VERIFY_DONE\u0027",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-06T09:40:37.6979621+05:30",
+    "endUtc":  "2026-07-06T09:40:44.5624055+05:30",
+    "durationSec":  6.864,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\phase-1b\\1b-benchmarker-type-verify2\\1b-benchmarker-type-verify2-raw.log"
+}

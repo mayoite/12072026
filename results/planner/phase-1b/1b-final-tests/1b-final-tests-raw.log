@@ -1,0 +1,14 @@
+﻿
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ Γ£ô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts (5 tests) 22ms
+ Γ£ô tests/unit/admin/svg-editor/svgPhase1Completion.test.ts (11 tests) 1162ms
+     Γ£ô renders canonical PNG and deterministic Sharp derivatives  458ms
+     Γ£ô full end-to-end: admin draft/preview (V1 compile), publish/revision (disk via persist), planner 2D placement (resolver), thumb png, reload for fixed+configurable+parametric refs  497ms
+
+ Test Files  2 passed (2)
+      Tests  16 passed (16)
+   Start at  09:20:08
+   Duration  3.92s (transform 295ms, setup 874ms, import 1.87s, tests 1.18s, environment 849ms)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-site-results.json

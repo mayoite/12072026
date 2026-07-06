@@ -1,0 +1,24 @@
+﻿ M Failures.md
+ M Plans/fn_plan/phase1-checklist.md
+ M results/tests/vitest-console.json
+ M results/tests/vitest-results.json
+ M results/tests/vitest-site-console.json
+ M results/tests/vitest-site-results.json
+ M site/app/admin/svg-editor/[id]/page.tsx
+ M site/app/css/core/chrome/shell/admin-pages.css
+ M site/features/planner/admin/svg-editor/AdminSvgEditorEditView.tsx
+ M site/features/planner/admin/svg-editor/puckBlockRegistry.tsx
+ M site/features/planner/admin/svg-editor/svgPipelineRunner.ts
+ M site/features/planner/open3d/catalog/svg/svgCompiler.server.ts
+ M site/features/planner/open3d/catalog/svg/svgServerSanitizer.ts
+ M site/scripts/generate-svg.mjs
+ M site/scripts/generate-svg/pipelineCore.ts
+ M site/scripts/generate-svg/svgo.config.cjs
+ M site/tests/unit/admin/svg-editor/svgPhase1Completion.test.ts
+ M site/tests/unit/admin/svg-editor/svgPipelineRunner.test.ts
+ M site/tests/unit/app/admin/svg-editor/[id]/page.test.tsx
+?? results/planner/phase-1b/
+exec/phase1-execute-2026-07-05
+59480be docs: add separate Phase 1 checklist (1A complete, 1B partial) per plan
+96d2be7 feat(planner): complete Phase 1A Open3D shell per plan, GS, reviews; UI fixes, density, gates, evidence
+626678d feat(planner): complete Phase 1A Open3D shell implementation, UI improvements, gates per fn_plan/02-PHASE-1.md and global standards

@@ -1,0 +1,14 @@
+﻿
+app/admin/svg-editor/[id]/page.tsx(77,63): error TS2345: Argument of type 'Data' is not assignable to parameter of 
+type 'PuckData'.
+features/planner/admin/svg-editor/AdminSvgEditorEditView.tsx(184,69): error TS2345: Argument of type 'Data' is not 
+assignable to parameter of type 'PuckData'.
+features/planner/admin/svg-editor/puckBlockRegistry.tsx(653,18): error TS2304: Cannot find name 'Config'.
+Invoke-Expression : The term '-eq' is not recognized as the name of a cmdlet, function, script file, or operable 
+program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At D:\oandO04072026\scripts\run-evidence-cmd.ps1:49 char:9
++     & { Invoke-Expression $Command } *>&1 | Out-File -FilePath $tmp - ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (-eq:String) [Invoke-Expression], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException,Microsoft.PowerShell.Commands.InvokeExpressionCommand
+ 

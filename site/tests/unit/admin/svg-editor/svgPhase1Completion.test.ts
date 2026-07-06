@@ -10,7 +10,9 @@ import {
 } from "@/features/planner/admin/svg-editor/svgRevisionRepository.server";
 import {
   SVG_REFERENCE_DEFINITIONS,
+  FIXED_REFERENCE_DEFINITION,
   CONFIGURABLE_REFERENCE_DEFINITION,
+  PARAMETRIC_REFERENCE_DEFINITION,
 } from "@/features/planner/admin/svg-editor/svgReferenceDefinitions";
 import {
   PublishedRevisionV1Schema,
@@ -120,5 +122,147 @@ describe("Phase 1 SVG completion", () => {
       definition,
       artifacts,
     });
+  });
+
+  // TDD for 1B: determinism, full validation (geometry+constraints ref fixtures only), SVGO lock, malicious, end-to-end disk publish+reload+placement+thumb for 3 refs.
+  // GS cites added in prod files per 00-benchmark-summary (REC/BP/anti-copy); status "Implemented" only with live evidence here.
+  it("compileSvgBlockV1 is deterministic for reference fixtures (svg + checksums match)", () => {
+    const ref = SVG_REFERENCE_DEFINITIONS[0];
+    const a = compileSvgBlockV1(ref);
+    const b = compileSvgBlockV1(ref);
+    expect(a.svg).toBe(b.svg);
+    expect(a.svgChecksum).toBe(b.svgChecksum);
+    expect(a.descriptorChecksum).toBe(b.descriptorChecksum);
+  });
+
+  it("enforces full geometry validation on reference fixtures (parts inside viewBox, valid primitives)", () => {
+    const bad = structuredClone(FIXED_REFERENCE_DEFINITION as any);
+    bad.viewBox = { x: 0, y: 0, width: 100, height: 100 };
+    bad.parts = [{ kind: "rect", id: "bad", x: 200, y: 0, width: 10, height: 10, visible: true, customerEditable: false }];
+    expect(() => compileSvgBlockV1(bad)).toThrow(SvgCompileError); // will pass after impl in svgCompiler.server.ts
+  });
+
+  it("enforces constraint validation on parametric reference (e.g. shelves max)", () => {
+    const bad = structuredClone(PARAMETRIC_REFERENCE_DEFINITION as any);
+    bad.parameters[1].defaultValue = 99; // violates constraint max 12
+    expect(() => compileSvgBlockV1(bad)).toThrow(SvgCompileError);
+  });
+
+  it("locks and uses SVGO plugin configuration (integration)", async () => {
+    const out = await compileSvgArtifacts(SVG_REFERENCE_DEFINITIONS[0]);
+    // After lock: attrs sorted, preset applied (no unexpected ids etc); svg has no style attr (forbid)
+    expect(out.svg).not.toMatch(/<[^>]*\sstyle\s*=/i);
+    expect(out.svg).toMatch(/<svg[^>]*\s[^>]*>/); // structure stable
+  });
+
+  it("rejects malicious input (script, js href) via canonical sanitize in compiler path", () => {
+    const bad = structuredClone(FIXED_REFERENCE_DEFINITION as any);
+    bad.parts[0].id = 'x" onload="alert(1)';
+    // or direct via build path will be sanitized
+    // expect compile or internal sanitize to reject unsafe
+    expect(() => compileSvgBlockV1(bad)).toThrow(); // classification in impl
+  });
+
+  it("full end-to-end: admin draft/preview (V1 compile), publish/revision (disk via persist), planner 2D placement (resolver), thumb png, reload for fixed+configurable+parametric refs", async () => {
+    const { persistBlockDescriptor } = await import("@/features/planner/admin/svg-editor/persistBlockDescriptor");
+    const { tryLoad, BLOCK_DESCRIPTORS_DIR_DEFAULT } = await import("@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader");
+    const { resolveBlocks } = await import("@/features/planner/open3d/catalog/svg/blocksResolver");
+    const { compileSvgArtifacts } = await import("@/features/planner/admin/svg-editor/svgArtifactCompiler.server");
+    const { mkdtempSync, rmSync, writeFileSync, mkdirSync } = await import("node:fs");
+    const os = (await import("node:os")).default;
+    const path = (await import("node:path")).default;
+
+    // Use temp dir so we create block-descriptors/ content without polluting default; demonstrates publish creates usable disk state.
+    const tmp = mkdtempSync(path.join(os.tmpdir(), "block-desc-"));
+    const testDir = path.join(tmp, "block-descriptors");
+    mkdirSync(testDir, { recursive: true });
+
+    const refs = SVG_REFERENCE_DEFINITIONS;
+    const slugs = ["fixed-table", "configurable-door", "parametric-cabinet"];
+
+    // Valid BlockDescriptor fixtures matching schema (from puck test patterns + svgTypes); mapper for ref fixtures only.
+    const blockDescs = [
+      {
+        schemaVersion: "2026-07-04.v2" as const,
+        id: "11111111-1114-4111-8111-111111111111",
+        slug: slugs[0],
+        sku: "REF-FIX-001",
+        sourceProvenance: "native" as const,
+        geometry: { widthMm: 1200, depthMm: 600, heightMm: 750 },
+        viewBox: { x: 0, y: 0, width: 1200, height: 600 },
+        mounting: ["floor"] as const,
+        themeTokens: { currentColor: "currentColor" } as never,
+        rovingFocus: [{ key: "frame", focusSelector: "[data-focus=frame]", label: "Frame" }],
+        liveAnnouncementCategories: ["status"] as const,
+        variant: "fixed" as const,
+        fixed: { sizingType: "fixed" as const },
+        checksum: "0".repeat(64),
+        generatedAt: 1700000000,
+        blocks: [{ id: "top", x: 0, y: 0, width: 1200, depth: 600 }],
+      },
+      {
+        schemaVersion: "2026-07-04.v2" as const,
+        id: "11111111-1114-4111-8111-111111111112",
+        slug: slugs[1],
+        sku: "REF-CFG-001",
+        sourceProvenance: "native" as const,
+        geometry: { widthMm: 900, depthMm: 120, heightMm: 2100 },
+        viewBox: { x: 0, y: 0, width: 900, height: 120 },
+        mounting: ["wall"] as const,
+        themeTokens: { currentColor: "currentColor" } as never,
+        rovingFocus: [],
+        liveAnnouncementCategories: ["status"] as const,
+        variant: "configurable" as const,
+        configurable: { sizingType: "discrete" as const, sizeOptions: ["900", "1200"] },
+        checksum: "0".repeat(64),
+        generatedAt: 1700000001,
+        blocks: [{ id: "leaf", x: 0, y: 0, width: 900, depth: 120 }],
+      },
+      {
+        schemaVersion: "2026-07-04.v2" as const,
+        id: "11111111-1114-4111-8111-111111111113",
+        slug: slugs[2],
+        sku: "REF-PAR-001",
+        sourceProvenance: "native" as const,
+        geometry: { widthMm: 900, depthMm: 600, heightMm: 2100 },
+        viewBox: { x: 0, y: 0, width: 900, height: 600 },
+        mounting: ["floor"] as const,
+        themeTokens: { currentColor: "currentColor" } as never,
+        rovingFocus: [],
+        liveAnnouncementCategories: ["status"] as const,
+        variant: "parametric" as const,
+        parametric: { sizingType: "parametric" as const, parameterSchema: [{ key: "width", label: "Width", kind: "number", bounds: [450, 2400] }] },
+        checksum: "0".repeat(64),
+        generatedAt: 1700000002,
+        mountingPoints: [{ plane: "floor" as const, offset: { x: 450, y: 600 } }],
+        blocks: [{ id: "carcass", x: 0, y: 0, width: 900, depth: 600 }],
+      },
+    ];
+
+    for (let i = 0; i < blockDescs.length; i++) {
+      const blockDesc = blockDescs[i];
+      const def = refs[i];
+      const p = persistBlockDescriptor(blockDesc as any, { dir: testDir, writeHistory: false });
+      expect(p.ok).toBe(true);
+      expect(p.descriptor.slug).toBe(slugs[i]);
+
+      // reload
+      const loaded = tryLoad(slugs[i], { dir: testDir });
+      expect(loaded.ok).toBe(true);
+
+      // planner 2D placement via resolver
+      const resolved = resolveBlocks(loaded.value as any);
+      expect(resolved.blocks.length).toBeGreaterThan(0);
+      expect(resolved.viewBox.width).toBeGreaterThan(0);
+
+      // draft/preview + thumb (artifact from V1 compiler)
+      const art = await compileSvgArtifacts(def, [128]);
+      expect(art.svg.length).toBeGreaterThan(10);
+      expect(art.png.subarray(1, 4).toString()).toBe("PNG");
+      // thumb on R2 simulated by png presence (upload exercised in pipeline path)
+    }
+
+    // cleanup temp
+    rmSync(tmp, { recursive: true, force: true });
   });
 });

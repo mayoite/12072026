@@ -1,0 +1,13 @@
+﻿{
+    "name":  "1b-sanitize-test2",
+    "module":  "planner",
+    "phase":  "phase-1b",
+    "command":  "pnpm --filter oando-site exec vitest run scripts/generate-svg/sanitize.test.mjs --no-watch --config vitest.site.config.ts 2\u003e\u00261 | Out-String | Select-String -Pattern \u0027✓|✕|pass|SVGO|error\u0027 -Context 0 | Select -First 20 ; echo \u0027DONE\u0027",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-06T09:19:51.1809513+05:30",
+    "endUtc":  "2026-07-06T09:19:52.4745377+05:30",
+    "durationSec":  1.294,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\phase-1b\\1b-sanitize-test2\\1b-sanitize-test2-raw.log"
+}

@@ -1,0 +1,13 @@
+﻿{
+    "name":  "ui-1b-baseline-lint",
+    "module":  "planner",
+    "phase":  "phase-1b",
+    "command":  "pnpm --filter oando-site exec eslint site/features/planner/admin/svg-editor/AdminSvgEditorEditView.tsx site/app/admin/svg-editor/[id]/page.tsx site/features/planner/admin/svg-editor/AdminSvgEditorListView.tsx --max-warnings=50 2\u003e\u00261 | Out-String ; echo \u0027LINT_UI_DONE\u0027",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "UI-expert subagent",
+    "startUtc":  "2026-07-06T09:36:33.6161265+05:30",
+    "endUtc":  "2026-07-06T09:36:34.6489511+05:30",
+    "durationSec":  1.033,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\phase-1b\\ui-1b-baseline-lint\\ui-1b-baseline-lint-raw.log"
+}

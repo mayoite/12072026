@@ -1,0 +1,13 @@
+﻿{
+    "name":  "1b-typecheck-simple",
+    "module":  "planner",
+    "phase":  "phase-1b",
+    "command":  "pnpm --filter oando-site run typecheck 2\u003e\u00261 | Select-String -Pattern \u0027error|svgCompiler|svgPipeline\u0027 | Select-Object -First 5 ; if ( -eq 0) { \u0027TYPE_OK\u0027 } else { \u0027TYPE_ISSUE\u0027 }",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-06T09:19:16.0796906+05:30",
+    "endUtc":  "2026-07-06T09:19:24.7272979+05:30",
+    "durationSec":  8.648,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\phase-1b\\1b-typecheck-simple\\1b-typecheck-simple-raw.log"
+}

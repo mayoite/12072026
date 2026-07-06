@@ -1,0 +1,4 @@
+- Ran targeted checks using evidence scripts for typecheck, lint, vitest on 1B areas.
+- Confirmed anti-copy, GS cites in code.
+- Updated checklist and Failures.md with skips (coverage, full gates).
+- Created benchmark report files.

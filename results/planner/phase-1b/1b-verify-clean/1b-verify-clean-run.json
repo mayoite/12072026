@@ -1,0 +1,13 @@
+﻿{
+    "name":  "1b-verify-clean",
+    "module":  "planner",
+    "phase":  "phase-1b",
+    "command":  "pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/svgPipelineRunner.test.ts --no-watch --config vitest.site.config.ts 2\u003e\u00261 | Select-String -Pattern \u0027passed|Tests .* passed\u0027 ; echo \u0027CLEAN_EXIT_VERIFY\u0027",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-06T09:30:41.9604582+05:30",
+    "endUtc":  "2026-07-06T09:30:44.5403307+05:30",
+    "durationSec":  2.58,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\planner\\phase-1b\\1b-verify-clean\\1b-verify-clean-raw.log"
+}
