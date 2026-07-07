@@ -13,6 +13,7 @@
     "seed:managed": "npx tsx scripts/seed_planner_managed_catalog.ts",
     "live:openrouter:failover": "npx tsx scripts/live_openrouter_failover_stress.ts",
     "seed:configurator": "npx tsx scripts/seed_configurator_catalog.ts",
+    "seed:block-descriptors": "npx tsx scripts/seed-block-descriptors.ts",
     "scripts:generate-svg": "tsx scripts/generate-svg.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "typecheck:scripts": "tsc -p scripts/tsconfig.json --noEmit",

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "2026-07-04.v2",
+  "id": "f81e3a1b-16f4-4000-8000-000000000001",
+  "slug": "chaise-lounge-001",
+  "sku": "OFL-CHS-001",
+  "sourceProvenance": "native",
+  "createdBy": "seed-block-descriptors",
+  "geometry": {
+    "widthMm": 800,
+    "depthMm": 1600,
+    "heightMm": 420
+  },
+  "viewBox": {
+    "x": 0,
+    "y": 0,
+    "width": 800,
+    "height": 1600
+  },
+  "mounting": [
+    "floor"
+  ],
+  "blocks": [
+    {
+      "id": "seat-block",
+      "x": 0,
+      "y": 400,
+      "width": 800,
+      "depth": 1200
+    },
+    {
+      "id": "backrest-block",
+      "x": 0,
+      "y": 0,
+      "width": 800,
+      "depth": 420
+    }
+  ],
+  "themeTokens": {
+    "currentColor": "currentColor",
+    "--fill-primary": "var(--color-surface-raised)"
+  },
+  "rovingFocus": [
+    {
+      "key": "focus-chaise-seat",
+      "focusSelector": "#seat-block",
+      "label": "Seat area"
+    },
+    {
+      "key": "focus-chaise-backrest",
+      "focusSelector": "#backrest-block",
+      "label": "Backrest"
+    }
+  ],
+  "liveAnnouncementCategories": [
+    "status"
+  ],
+  "generatedAt": 1751631000,
+  "checksum": "7ee5a7402b163fa161133a7fad441540ba5af1dd750538d8ab1f08c423ab6ea8",
+  "variant": "fixed",
+  "fixed": {
+    "sizingType": "fixed"
+  }
+}

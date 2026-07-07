@@ -747,7 +747,29 @@ export class Open3dCatalogClient {
    */
   async loadDescriptorsFromLoader(): Promise<BlockDescriptor[]> {
     if (typeof window !== "undefined") {
-      // address client-side always []: return any preloaded descriptors (injected); loader primary via client.getAll() consumers
+      const fetcher = this.options.fetchImpl ?? globalThis.fetch;
+      if (typeof fetcher === "function") {
+        try {
+          const url = `${this.options.apiBasePath}/api/planner/catalog/svg-blocks`;
+          const response = await fetcher(url);
+          if (response.ok) {
+            const envelope = (await response.json()) as CatalogApiEnvelope;
+            const rawItems = Array.isArray(envelope.items)
+              ? envelope.items
+              : Array.isArray(envelope.data?.items)
+                ? envelope.data.items
+                : [];
+            const items = rawItems
+              .map((raw) => this.normalizeApiItem(raw, "standard"))
+              .filter((item): item is Open3dCatalogItem => item !== null);
+            if (items.length > 0) {
+              this.load(items, "standard");
+            }
+          }
+        } catch {
+          // fall through to any preloaded descriptors
+        }
+      }
       return this.loadedDescriptors;
     }
     try {

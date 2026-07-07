@@ -8,6 +8,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
+
+import { resolvePublicDir } from "@/lib/paths/sitePackageRoot.server";
 import { Render } from "@puckeditor/core";
 import {
   tryLoad,
@@ -24,7 +26,7 @@ import {
 } from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
 
 function readInlineSvg(slug: string): string | null {
-  const p = path.resolve(process.cwd(), "site", "public", "svg-catalog", `${slug}.svg`);
+  const p = path.join(resolvePublicDir(), "svg-catalog", `${slug}.svg`);
   if (!existsSync(p)) return null;
   try {
     return readFileSync(p, "utf8");

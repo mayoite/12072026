@@ -20,6 +20,8 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 
+import { resolveBlockDescriptorsDir } from "@/lib/paths/sitePackageRoot";
+
 import {
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
   BLOCK_DESCRIPTOR_SLUG_REGEX,
@@ -77,12 +79,8 @@ export {
   type MountingPoint,
 } from "./svgTypes";
 
-/** Default loader directory pinned to repo-root `site/block-descriptors/`. */
-export const BLOCK_DESCRIPTORS_DIR_DEFAULT = path.resolve(
-  process.cwd(),
-  "site",
-  "block-descriptors",
-);
+/** Default loader directory pinned to `site/block-descriptors/` (cwd-safe). */
+export const BLOCK_DESCRIPTORS_DIR_DEFAULT = resolveBlockDescriptorsDir();
 
 /** Type guard for `unknown` inputs at the loader boundary (JSON.parse). */
 function isPromiseLikeRejectReason(value: unknown): value is { message: string } {

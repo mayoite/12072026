@@ -17,8 +17,11 @@ export async function loadOpen3dCatalog(
 ): Promise<Open3dCatalogQueryData> {
   if (context?.signal.aborted) throw new DOMException("Aborted", "AbortError");
   await client.loadDescriptorsFromLoader();
-  const descriptors = client.getAll();
-  if (descriptors.length > 0) return { items: descriptors, source: "remote" };
+  const allItems = client.getAll();
+  const hasSvgBlocks = allItems.some(
+    (item) => item.provenance?.source === "descriptor-loader",
+  );
+  if (hasSvgBlocks) return { items: allItems, source: "remote" };
 
   const loaded = await client.loadFromApi("configurator", 200);
   if (loaded.length > 0) return { items: loaded, source: "remote" };
