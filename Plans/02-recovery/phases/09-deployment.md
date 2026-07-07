@@ -7,6 +7,7 @@ Goal: prove local deployability.
 - Deployment.
 - Build config.
 - Release gate.
+- Bundler proof.
 
 ## Allowed Scope
 
@@ -19,6 +20,7 @@ Goal: prove local deployability.
 1. Deploying.
 2. Secret edits.
 3. Ignoring lint or type errors.
+4. Replacing webpack with Turbopack during recovery.
 
 ## Initial Commands
 
@@ -36,15 +38,37 @@ pnpm run release:gate
 
 Run release gate only after blockers are credible.
 
+## Turbopack Spike
+
+Do not replace `next dev --webpack` during step 2.
+
+Turbopack review is deferred until:
+
+1. Lint is credible.
+2. Typecheck is credible.
+3. Build is credible.
+
+Spike goals:
+
+1. Compare webpack and Turbopack behavior.
+2. Check CSS Module behavior.
+3. Check custom webpack/plugin assumptions.
+4. Check bundle analysis needs.
+5. Record whether migration is safe.
+
+Package bundling review belongs here only after live bundle proof.
+
 ## Exit Evidence
 
 1. Lint result.
 2. Typecheck result.
 3. Build result.
 4. Release gate result, only if run.
+5. Turbopack spike result, only if run.
 
 ## Stop Conditions
 
 1. Lint still has broad failures.
 2. Typecheck fails outside current scope.
 3. Build depends on missing env.
+4. Bundler change is needed before baseline is stable.

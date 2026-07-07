@@ -9,6 +9,7 @@ Goal: stop UI drift at the rules layer.
 - Admin styling rules.
 - Planner styling rules.
 - Design-to-code intake rules.
+- React authoring rules.
 
 ## Allowed Scope
 
@@ -24,6 +25,7 @@ Goal: stop UI drift at the rules layer.
 3. New CSS mirrors under `features/`, `lib/`, `data/`, or `api/`.
 4. Code Connect mappings.
 5. Design-tool package additions.
+6. React Compiler enablement.
 
 ## Read First
 
@@ -32,6 +34,26 @@ Goal: stop UI drift at the rules layer.
 3. `docs/architecture/MODULE-LAYOUT.md`
 4. `docs/architecture/MODULE-UI-CONTRACT.md`
 5. `docs/architecture/DESIGN-SYSTEM-INTAKE.md`
+
+## React Authoring Rules
+
+Keep this as authoring guidance.
+
+Do not claim React Compiler is enabled.
+
+Write compiler-compatible code:
+
+1. Keep render logic pure.
+2. Derive values during render when possible.
+3. Use Effects only for external systems.
+4. Do not set synchronous derived state in Effects.
+5. Use `useEffectEvent` only for non-reactive logic called from Effects.
+
+Memoization rule:
+
+1. Do not add `useMemo`, `useCallback`, or `memo` by habit.
+2. Use them only for measured cost or stable identity needs.
+3. Do not broadly remove existing memoization during recovery.
 
 ## Token Map
 
@@ -95,6 +117,7 @@ pnpm --filter oando-site run lint:ui:strict
 3. `lint:ui:strict` result, if run.
 4. Known TSX styling violations.
 5. Design intake rule decision.
+6. React authoring rule decision.
 
 ## Likely Failures
 
@@ -103,6 +126,8 @@ pnpm --filter oando-site run lint:ui:strict
 3. Admin palette drift.
 4. Legacy `ooplanner` usage.
 5. Ad hoc motion values in TSX.
+6. Derived state pushed through Effects.
+7. Habitual memoization.
 
 ## Stop Conditions
 
@@ -111,3 +136,4 @@ pnpm --filter oando-site run lint:ui:strict
 3. Lint output is incomplete.
 4. Figma work needs Code Connect before component homes are stable.
 5. Penpot exports require SVG import or asset policy decisions.
+6. Fix requires enabling React Compiler.

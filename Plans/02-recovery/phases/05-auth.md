@@ -7,6 +7,7 @@ Goal: prove guest, member, and admin route gates.
 - Auth.
 - Middleware.
 - Route gates.
+- Server Function auth checks.
 
 ## Allowed Scope
 
@@ -19,6 +20,22 @@ Goal: prove guest, member, and admin route gates.
 1. Provider replacement.
 2. Secret changes.
 3. Database migration.
+4. Treating Server Functions as private only because they live on the server.
+
+## Server Function Rule
+
+Every mutation must verify auth and authorization.
+
+Do not rely on file location as security.
+
+Server Functions can be invoked from client flows.
+
+For auth-sensitive mutations, record:
+
+1. Caller role.
+2. Required permission.
+3. Failure behavior.
+4. Redirect or error path.
 
 ## Initial Proof
 
@@ -40,9 +57,11 @@ pnpm --filter oando-site run typecheck
 1. Route matrix result.
 2. Auth failure buckets.
 3. Env blockers, if any.
+4. Mutation auth matrix, if touched.
 
 ## Stop Conditions
 
 1. Missing env blocks proof.
 2. Auth behavior is a product decision.
 3. Fix requires database migration.
+4. Mutation ownership is unclear.
