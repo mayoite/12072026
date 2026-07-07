@@ -1,6 +1,6 @@
 # 01 Truth Reset And Package Policy
 
-Goal: decide allowed packages from live imports.
+Goal: audit package state from live manifests and imports.
 
 ## Modules
 
@@ -14,8 +14,8 @@ Goal: decide allowed packages from live imports.
 1. `package.json`
 2. `site/package.json`
 3. `pnpm-lock.yaml`
-4. `PACKAGES.md`
-5. `Plans/02-recovery/*`
+4. `PACKAGES.md` documentation only
+5. `Plans/02-recovery/*` documentation only
 
 ## Hard No-Go Scope
 
@@ -24,6 +24,7 @@ Goal: decide allowed packages from live imports.
 3. Package upgrade without explicit reason.
 4. Engine change without live import proof.
 5. `optimizePackageImports` changes without measured bundle need.
+6. `pnpm add`, `pnpm remove`, or lockfile rewrites.
 
 ## Read First
 
@@ -37,8 +38,9 @@ Goal: decide allowed packages from live imports.
 ```powershell
 rg -n "@svgdotjs|lucide-react|motion|framer-motion|@react-three/drei|@mantine|fabric-editor-kit|@tiptap|@vercel-labs/json-render|@phosphor-icons|@ark-ui|react-aria-components|@puckeditor|figma" site package.json pnpm-lock.yaml PACKAGES.md
 rg -n "fabric|three|@react-three/fiber|@react-three/drei|optimizePackageImports|turbopack|webpack" site package.json pnpm-lock.yaml PACKAGES.md START.md
-pnpm install --frozen-lockfile
 ```
+
+Do not run install in this phase unless the user explicitly asks.
 
 ## Engine Policy
 
@@ -65,6 +67,13 @@ Use `optimizePackageImports` only after a proven heavy named-export package crea
 4. Install result, if run.
 5. Engine keep/audit/defer table.
 6. Package decision log.
+
+## Artifact Path
+
+```text
+results/packages/01-truth-reset-package-policy/import-census/import-census-run.json
+results/packages/01-truth-reset-package-policy/import-census/import-census-raw.log
+```
 
 ## Package Census Table
 
@@ -107,3 +116,4 @@ No import proof means no removal.
 2. Removal touches planner, SVG, or admin runtime.
 3. Install fails for registry or engine reasons.
 4. Engine change is requested without live import proof.
+5. A package action is needed.

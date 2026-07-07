@@ -30,6 +30,13 @@ pnpm run typecheck
 pnpm run build
 ```
 
+## Artifact Path
+
+```text
+results/deployment/09-deployment/<cmd>/<cmd>-run.json
+results/deployment/09-deployment/<cmd>/<cmd>-raw.log
+```
+
 ## Env And Build Matrix
 
 Record:

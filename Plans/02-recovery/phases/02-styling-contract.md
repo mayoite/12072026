@@ -129,7 +129,15 @@ Record:
 
 ```powershell
 pnpm --filter oando-site run lint:ui
-pnpm --filter oando-site run lint:ui:strict
+```
+
+Run `lint:ui:strict` only after UI-1 shell acceptance or explicit approval.
+
+## Artifact Path
+
+```text
+results/ui/02-styling-contract/lint-ui/lint-ui-run.json
+results/ui/02-styling-contract/lint-ui/lint-ui-raw.log
 ```
 
 ## Exit Evidence

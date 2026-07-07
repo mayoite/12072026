@@ -1,158 +1,90 @@
 # Packages
 
-Locked packages for the **`open3d-next-staging`** Next 16 + React 19 workspace and the broader oando.co.in planner stack (2026-07-04). This is the read-only ground truth for what we install, what we defer, and why. Any change here is a `plannnerplan/` wide change.
+Date: 2026-07-07
 
-Global Standard filter applies (per `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md` §6 and `plans/01-phase1-execution/01-implementation-decisions.md` §"Global Standard Framework (Binding)"): every package decision must cite at least one principle from the Phase 0 benchmark (`plans/00-global-standard-revision/00-benchmark-summary.md`); anti-copy attestation + benchmark justification required for changes.
+Status: recovery policy.
 
-<!-- GS justification (0420/0415/0416): Tier-1/2/any package changes require fresh benchmark cite (design §6), anti-copy, REVIEW-WORKFLOW GS-SCORE + artifacts before I-D/PACKAGES/phase update. Enforced via Global Standard Gate + Package Review procedure. See phases/04/05/06 enforcement checklists, I-D, FAILURESPLAN. Provisional (design §16). -->
+Rule: manifests and imports beat this file.
 
-> Read with: `AGENTS.md`, `Readme.md`, `plans/01-phase1-execution/01-implementation-decisions.md`, `plans/00-global-standard-revision/00-benchmark-summary.md`, `docs/superpowers/specs/2026-07-04-plannerplan-global-standard-revision-design.md`.
+This file is not install permission.
 
-## Tiering
+No package is added, removed, upgraded, or pinned without explicit scope and live proof.
 
-| Tier | Meaning | Install gate |
-| --- | --- | --- |
-| **Tier-1 locked** | Installing now; locked reasons on the line | `pnpm add` allowed today |
-| **Tier-1 deferred** | Lock-deferred; pinned version kept in `package.json` table but not installed until Step 2 owns it | `pnpm add` only with explicit ask |
-| **Tier-2 candidate** | Recommendation + alternatives; no install yet | Decision gate is the next plan |
-| **Tier-3 reserved** | Marketing / one-off surfaces only | Opt-in only |
+## Status Labels
 
-Every locked line carries: package, version pin (or "float"), rationale, alternative considered, and the explicit reason that alternative was skipped. No claims without proof.
+| Status | Meaning |
+| --- | --- |
+| `installed` | Present in a live manifest or lockfile. |
+| `candidate` | Proposed, but not approved for install. |
+| `deferred` | Not part of recovery unless a later phase proves need. |
+| `unknown` | Must be verified by manifest and import census. |
+| `keep-out` | Do not adopt unless explicitly approved later. |
 
-## Tier-1 locked
+## Current Recovery Decisions
 
-### Engine (canvas + 3D)
-
-| Package | Pin | Role |
-| --- | --- | --- |
-| `three` | `^0.185.1` | WebGL/WebGPU renderer; already in `package.json` |
-| `@types/three` | `^0.185.0` | TS types; already in `package.json` |
-| `@react-three/fiber` | decimal place TBD in Step 2 | React renderer on top of three.js; r3f layer is open from prior research |
-
-**Skip rationale:**
-- Two graph `.svelte.ts` rune files in donor were tried but won't port — Svelte 5 runes are donor-specific. Fine-grained state lives in signal libraries instead, and only when Step 2 needs them.
-- `@pmndrs/uikit` considered; skipped — assumption-driven UI controls without our token system. We keep raw primitives so tokens flow through CSS variables.
-
-### SVG pipeline (Option A — locked)
-
-The pipeline shape:
-
-```
-JSON spec → @flatten-js/core (measure) + polygon-clipping (booleans)
-  → assemble d= → svgo → write public/
-  → fabric.loadSVGFromString(canvas) → @resvg/resvg-js renders catalog PNG thumbs
-```
-
-| Package | Role | Why this one |
-| --- | --- | --- |
-| `@flatten-js/core` | segment / closest-point / area / perimeter helpers | Mature, small, geometry-first API; the maths we reach for repeatedly |
-| `polygon-clipping` | boolean ops on multi-polygons (Martinez algorithm) | Battle-tested for union / difference / intersection / xor; the only sound public-domain option |
-| `svgo` | per-output path optimization | Standard, well-maintained, Node-native |
-| `@resvg/resvg-js` | catalog PNG thumbs | Pure Rust renderer, no Chromium, clean Node embedding |
-| `fabric` (current: `7.4.0`) | canvas runtime + `loadSVGFromString` | Already the canvas engine |
-
-**Skip rationale:**
-- `svg-path-commander` — looked useful for editing `d=` strings, but we build `d=` ourselves and `svgo` already normalizes. One fewer dep.
-- `@svgdotjs/svg.js` — browser-only and redundant with `fabric`.
-- `paper.js` — overkill; we'd write a subset of what `@flatten-js/core` already gives.
-- Playwright/Puppeteer in build scripts — **not blocked** by the AGENTS.md test rule (that rule is about test execution, not build scripts). `@resvg/resvg-js` is still preferred for thumbnail generation because it's faster and doesn't require a browser runtime, but Playwright/Puppeteer in `scripts/generate-svg.mjs` is allowed with explicit permission for the build script itself.
-
-### Icons
-
-| Package | Pin | Role |
-| --- | --- | --- |
-| `@phosphor-icons/react` | `^2.1.10` | Icon system; preferred over Lucide for tone / weight flexibility |
-
-**Skip rationale:**
-- `lucide-react` — fine, but Phosphor's weight variants (thin/light/regular/bold/duotone/fill) map cleanly to density tiers; Lucide is stroke-only.
-
-### Framework / runtime
-
-`next ^16.2.9`, `react ^19.0.0`, `react-dom ^19.0.0` — already locked.
-
-## Tier-1 locked (SVG pipeline)
-
-| Package | Pin | Role | Status |
+| Package or tool | Status | Recovery decision | Proof required |
 | --- | --- | --- | --- |
-| `@flatten-js/core` | latest | segment / closest-point / area / perimeter helpers | **INSTALLING NOW** |
-| `polygon-clipping` | latest | boolean ops on multi-polygons (Martinez algorithm) | **INSTALLING NOW** |
-| `svgo` | latest | per-output path optimization | **INSTALLING NOW** |
-| `@resvg/resvg-js` | latest | catalog PNG thumbs | **INSTALLING NOW** |
+| `fabric` | unknown | Likely keep as 2D planner engine. | Manifest, imports, planner tests. |
+| `three` | unknown | Likely keep as 3D runtime engine. | Manifest, imports, viewer tests. |
+| `@react-three/fiber` | unknown | Likely keep as React binding for Three. | Manifest, imports, viewer tests. |
+| `@react-three/drei` | unknown | Audit only. | Import proof and viewer need. |
+| `@phosphor-icons/react` | unknown | Audit as preferred icon set. | Manifest, imports, icon policy check. |
+| `lucide-react` | unknown | Remove only after replacement proof. | Import census. |
+| `framer-motion` | unknown | Audit as possible animation layer. | Import census and CSS/motion boundary. |
+| `motion` | unknown | Remove only after import proof. | Import census. |
+| `@ark-ui/react` | unknown | Audit as admin/planner primitive candidate. | Manifest, imports, component inventory. |
+| `react-aria-components` | unknown | Audit for Ark gaps only. | Manifest, imports, component inventory. |
+| `@puckeditor/core` | unknown | Audit for admin composition. | Manifest, imports, route proof. |
+| `@vercel-labs/json-render` | unknown | Audit. | Manifest, imports, current use. |
+| `zod` | unknown | Audit for schemas. | Manifest, imports, schema owner. |
+| `@flatten-js/core` | unknown | Audit for current SVG compiler path. | Manifest, imports, compiler tests. |
+| `polygon-clipping` | unknown | Audit for current SVG compiler path. | Manifest, imports, compiler tests. |
+| `svgo` | unknown | Audit for SVG optimization path. | Manifest, imports, compiler tests. |
+| `@resvg/resvg-js` | unknown | Audit for thumbnail rendering path. | Manifest, imports, compiler tests. |
+| `@svgdotjs/*` | unknown | Defer or remove after proof. | SVG authority decision and imports. |
+| `mantine` | keep-out | Keep out during recovery. | Explicit later approval. |
+| `fabric-editor-kit` | keep-out | Keep out during recovery. | Explicit later approval. |
+| Penpot | candidate | Preferred free design workflow. No package by default. | Export policy and asset review. |
+| Figma | deferred | Optional later for specific files or Code Connect. | Stable components and published Figma library. |
+| SVGR | deferred | Not a recovery engine. | Later explicit SVG phase only. |
+| SVG sprite | deferred | Not a recovery engine. | Later explicit SVG phase only. |
 
-Implementation: `scripts/generate-svg.mjs` will use these packages to generate SVGs from JSON specs and render PNG thumbnails.
+## Phase 01 Package Census
 
-## Tier-1 deferred (Step 2 / Phase ownership)
+Phase 01 must record:
 
-| Package | Status | Owner step | Reason deferred |
-| --- | --- | --- | --- |
-| `@mantine/core` + `@mantine/hooks` + `@mantine/notifications` + `@mantine/modals` + `@mantine/spotlight` + `@mantine/dropzone` + `@mantine/form` + `@mantine/charts` + `@mantine/tiptap` | Optional Tier-1 | Step 2 chrome | Mantine's PostCSS namespace layered Tailwind v4 + `@tailwindcss/postcss` only after Step-2 wires the multi-CSS split (`site/app/css/core/planner/bundles/*` mirror). To avoid namespace collision risk in Phase 01A, only `@mantine/hooks` is allowed if user signals yes |
-| `fabric-editor-kit` | Reserved Tier-2 | Phase 03A / Phase 05 | Single-maintainer (`tskonda-dev`), bus-factor risk; useful layer once Step 2 needs editor chrome we don't want to hand-roll |
-| `drei` (React-Three fiber ecosystem helpers) | Reserved Tier-2 | Phase 06 3D | Helpers are nice but Step 2 doesn't need them; revisit when 3D proof-of-view lands |
+1. Root manifest status.
+2. Site manifest status.
+3. Lockfile status.
+4. Exact import locations.
+5. Runtime owner.
+6. Decision: `installed`, `candidate`, `deferred`, `unknown`, or `keep-out`.
 
-## Tier-1 locked (Planner toolbars + admin panel)
+No import proof means no removal.
 
-| Package | Pin | Role | Status |
-| --- | --- | --- | --- |
-| `@ark-ui/react` | latest | headless primitives — state-machine powered, 45+ components | **INSTALLING NOW** |
-| `react-aria-components` | latest | combobox / date picker / virtualized listbox gaps | **INSTALLING NOW** |
-| `@puckeditor/core` | latest | admin visual editor → JSON → React tree | **INSTALLING NOW** |
-| `@vercel-labs/json-render` | latest | AI-agent-returned UI trees | **INSTALLING NOW** |
-| `zod` | latest | schema for the block descriptors | **INSTALLING NOW** |
+No benchmark note means no adoption.
 
-### Architecture
+No explicit approval means no install.
 
-```
-admin operator writes JSON → app/uploads/*.json
-       ↓
-<Puck> editor mounts an editor in /admin/<surface>/edit
-       ↓
-publish → save JSON (puck.data) + components.name list (puck.config)
-       ↓
-public render: <Puck.Render config={registry} data={json} />
-       ↓
-registry entries = Ark UI primitives wrapped as Puck blocks
-```
+## Engine Policy
 
-The toolbar atoms are Ark UI primitives. Admins compose them through Puck JSON in the panel. That's the split that buys "more modular and admin-driven".
+Current recovery stance:
 
-### Skipped
+1. Do not change engines during package audit.
+2. Keep Fabric/Three/R3F only if manifests and imports prove current use.
+3. Keep current SVG compiler path for recovery.
+4. Defer SVGR and sprites.
+5. Keep Penpot as workflow only.
+6. Defer Figma Code Connect out of recovery.
+7. Defer Turbopack replacement to deployment spike only.
 
-- `@radix-ui/react-*` — kept as fallback baseline. Ark UI is more modular (state-machine per primitive) and has broader component coverage at the same granularity.
-- `Builder.io` — commercial SaaS, lock-in, recurring cost. Rejected.
-- `grapesjs` — HTML-first, not React-friendly. Rejected.
-- `react-jsonschema-form` — forms only, not full layouts. Puck handles layout; rjsf may be added later for form-specific needs.
+## Refuse
 
-## Tier-3 reserved
+Refuse:
 
-| Package | Reserved for | Why deferred |
-| --- | --- | --- |
-| `figma-exporter` (Chrtyaka) | Marketing landing pages only | Output is Figma-styled components; planner chrome is out of scope; we will not gate Step 2 on this |
-| `motion` / `framer-motion` | Animations | Add when a tool rail needs entrance/exit animation; current Step 2 chrome is graceful-degrade only |
-| `@tiptap/*` | Rich text | Step 5+ notes annotations |
-
-## Open questions
-
-1. **Mantine?** Proposed in earlier research at +`@mantine/hooks` only to dodge the Tailwind v4 PostCSS namespace collision. Still waiting on user signal before pinning to Tier-1 host packages. AGENTS.md scope says `site/` ships the token layer for planner; if you say yes, `@mantine/hooks` is the only Tier-1 hook we'd allow in Phase 01A.
-2. **Kit tier (fabric-editor-kit, Pascal Editor, drei)** — none in Phase 01A. Step 2 plan should pick from these if (and only if) the chosen toolkit earns its place. Recommendation so far: build a thin homegrown block tree on Puck + Ark UI, only adopt a fuller kit if its leverage shows up in a real screen.
-3. **Fabric JS v7 backwards-compat plan** — when v8 lands, what is the lift? Watch release notes; defer until then.
-
-## Global Standard Package Review Gate (0420 enforcement + 0415 benchmark gate)
-Per I-D §"Global Standard Package Review" + design spec §6 + QUALITY-GATES:
-- Any change to locked set, Tier move (e.g. drei Tier-2 in Phase 06), or pin update requires:
-  1. Dated benchmark report cite (`plans/00-global-standard-revision/00-benchmark-summary.md` or `plans/archive/00-global-standard-revision/benchmark.md` BP relevant, e.g. BP-04/06 for admin/3D pkgs).
-  2. Anti-copy attestation (semantic tokens only; 5-product model).
-  3. Agent review workflow execution (REVIEW-WORKFLOW GS-SCORE for packages) + signed artifacts.
-- Justification MUST be added to this file (comment or table note) + I-D Decision Log + affected phase (04/05/06) before edit.
-- "Global Standard Package Review" is release-blocking; no bypass. Tracked in FAILURESPLAN PLAN-FAIL-0420/0415/0419.
-Provisional (design §16). See plannnerplan/IMPLEMENTATION-DECISIONS.md for procedure.
-
-## Evidence
-
-Reasoning sources for this doc (research notes kept under `plannnerplan/` and conversations referenced from the campaign log):
-- `@ark-ui/react` v5.36.2 — Chakra Systems Inc., MIT, 824.4K weekly DLs, 609 versions, state-machine powered via Zag.js. Source: `https://ark-ui.com/`, npm registry.
-- `@puckeditor/core` — Measured Co., MIT, ~12.8K stars. Source: `https://github.com/puckeditor/puck`.
-- `react-aria-components` — Adobe, Apache 2.0, WAI-ARIA reference.
-- `@radix-ui/react-*` primitives — WorkOS, MIT, ~18K stars, individual packages per component.
-- `@headlessui/react` — Tailwind Labs, MIT, ~28K stars, smaller component set (~16).
-
-If a claim in this doc can't be traced back to the registry or a screenshot you can show, treat it as suspect.
+1. `latest` pins without a version decision.
+2. `INSTALLING NOW` claims without manifest proof.
+3. Package additions hidden inside repair work.
+4. Package removals without import proof.
+5. Mantine or `fabric-editor-kit` adoption during recovery.
+6. Storybook-first design-system work during recovery.

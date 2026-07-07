@@ -10,8 +10,10 @@ Status: in-principle execution index for step 2. Detailed work lives in phase fi
 
 1. Read `01-module-baseline.md`.
 2. Read `02-recovery-plan.md`.
-3. Read the active phase file under `phases/`.
-4. Work one phase at a time.
+3. Complete `phases/00-start.md`.
+4. Complete `phases/00b-contradiction-register.md`.
+5. Read the active phase file under `phases/`.
+6. Work one phase at a time.
 
 ## Work Loop
 
@@ -21,7 +23,7 @@ Status: in-principle execution index for step 2. Detailed work lives in phase fi
 4. Edit only allowed files.
 5. Run scoped checks.
 6. Record pass, fail, or skipped.
-7. Commit and push only after a safe meaningful block.
+7. Commit or push only when explicitly asked.
 8. Update handover notes.
 
 Incomplete evidence stays incomplete.
@@ -47,13 +49,20 @@ Incomplete evidence stays incomplete.
 | Phase | Execution file |
 | --- | --- |
 | 00 Start | `phases/00-start.md` |
+| 00b Contradiction register | `phases/00b-contradiction-register.md` |
 | 01 Truth reset and package policy | `phases/01-truth-reset-package-policy.md` |
 | 02 Styling contract | `phases/02-styling-contract.md` |
 | 02b Site UI baseline | `phases/02b-site-ui-baseline.md` |
+| 02c Minimum auth/DB proof | `phases/02c-minimum-auth-db-proof.md` |
 | 03 Admin SVG editor | `phases/03-admin-svg-editor.md` |
 | 03b SVG pipeline | `phases/03b-svg-pipeline.md` |
-| 04 Planner Open3D | `phases/04-planner-open3d.md` |
-| 04b Design tool readiness | `phases/04b-code-connect-readiness.md` |
+| 04 Planner Open3D overview | `phases/04-planner-open3d.md` |
+| 04a Planner command seam | `phases/04a-planner-command-seam.md` |
+| 04b Planner persistence and JSON | `phases/04b-planner-persistence-json.md` |
+| 04c Planner viewer boundary | `phases/04c-planner-viewer-boundary.md` |
+| 04d Planner SVG consumer | `phases/04d-planner-svg-consumer.md` |
+| 04e Planner browser journey | `phases/04e-planner-browser-journey.md` |
+| 04f Design intake readiness | `phases/04f-design-intake-readiness.md` |
 | 05 Auth | `phases/05-auth.md` |
 | 06 Database | `phases/06-database.md` |
 | 07 CRM | `phases/07-crm.md` |

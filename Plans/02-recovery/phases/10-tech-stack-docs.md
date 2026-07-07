@@ -26,6 +26,13 @@ pnpm run docs:sync:tech-stack
 pnpm run docs:gate:tech-stack
 ```
 
+## Artifact Path
+
+```text
+results/tech-stack-docs/10-tech-stack-docs/<cmd>/<cmd>-run.json
+results/tech-stack-docs/10-tech-stack-docs/<cmd>/<cmd>-raw.log
+```
+
 ## Source Truth Manifest
 
 Before regeneration, record:

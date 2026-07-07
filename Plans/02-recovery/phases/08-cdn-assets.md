@@ -28,6 +28,13 @@ Goal: prove asset source of truth.
 rg -n "asset-cdn|R2|cdn|svg-catalog|public/cdn" site docs Readme.md START.md
 ```
 
+## Artifact Path
+
+```text
+results/assets/08-cdn-assets/asset-inventory/asset-inventory-run.json
+results/assets/08-cdn-assets/asset-inventory/asset-inventory-raw.log
+```
+
 ## Asset Manifest Standard
 
 Maintain an immutable asset view:

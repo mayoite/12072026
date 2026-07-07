@@ -1,6 +1,6 @@
 # 03 Admin SVG Editor
 
-Goal: fix the first admin SVG lint cluster.
+Goal: fix the first admin SVG lint cluster only.
 
 ## Modules
 
@@ -18,6 +18,7 @@ Goal: fix the first admin SVG lint cluster.
 1. Planner runtime behavior outside SVG consumer boundary.
 2. Broad admin redesign.
 3. Package removal.
+4. Publish/save/compiler semantics.
 
 ## Read First
 
@@ -32,18 +33,25 @@ pnpm --filter oando-site exec eslint -c config/build/eslint.config.mjs features/
 pnpm --filter oando-site run typecheck
 ```
 
+## Artifact Path
+
+```text
+results/admin-svg/03-admin-svg-editor/eslint-admin-svg/eslint-admin-svg-run.json
+results/admin-svg/03-admin-svg-editor/eslint-admin-svg/eslint-admin-svg-raw.log
+```
+
 ## Exit Evidence
 
 1. Scoped lint result.
 2. Typecheck result, if run.
 3. Exact remaining admin SVG failures.
-4. Admin route matrix, if route behavior is touched.
-5. Auth gate proof, if route behavior is touched.
-6. Publish/save matrix, if persistence is touched.
+4. Confirmation that publish/save/compiler semantics were not touched.
 
 ## Admin Functionality Matrix
 
 Route existence is not functionality.
+
+Use this matrix only if route behavior is explicitly in scope.
 
 Record:
 

@@ -27,6 +27,13 @@ rg -n "crm|lead|customer|contact|opportunity" site/app site/features site/lib si
 pnpm --filter oando-site run typecheck
 ```
 
+## Artifact Path
+
+```text
+results/crm/07-crm/crm-inventory/crm-inventory-run.json
+results/crm/07-crm/crm-inventory/crm-inventory-raw.log
+```
+
 ## First Decision
 
 1. Real and repair now.

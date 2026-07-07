@@ -31,6 +31,13 @@ pnpm run docs:check:root-links
 rg -n "passed|green|deployable|complete|fixed|TODO|Grok|gpt5.5|oandO04072026" Plans docs Readme.md START.md Failures.md PACKAGES.md
 ```
 
+## Artifact Path
+
+```text
+results/docs/11-docs/doc-claim-audit/doc-claim-audit-run.json
+results/docs/11-docs/doc-claim-audit/doc-claim-audit-raw.log
+```
+
 ## Contradiction Register
 
 Record:

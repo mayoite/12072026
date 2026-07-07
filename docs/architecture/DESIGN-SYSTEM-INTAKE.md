@@ -196,7 +196,7 @@ It does not:
 4. Work on unpublished Figma parts.
 5. Stabilize moving component paths.
 
-Use Code Connect only after:
+Use Code Connect only after recovery, and only after:
 
 1. Component homes are stable.
 2. Components are exported clearly.

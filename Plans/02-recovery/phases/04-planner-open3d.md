@@ -1,6 +1,10 @@
 # 04 Planner Open3D
 
-Goal: repair product-core Open3D slices.
+Goal: define planner Open3D slice order and hard acceptance.
+
+This file is an overview.
+
+Implementation must use slice files `04a` through `04e`.
 
 ## Modules
 
@@ -13,9 +17,9 @@ Goal: repair product-core Open3D slices.
 
 ## Allowed Scope
 
-1. `site/features/planner/open3d`
-2. `site/app/planner`
-3. Direct Open3D tests
+1. Planning and slice selection.
+2. `site/features/planner/open3d` only through slice files.
+3. `site/app/planner` only through slice files.
 
 ## Hard No-Go Scope
 
@@ -70,7 +74,7 @@ Planner repair must protect:
 
 ## Journey Evidence
 
-At least one Open3D journey should eventually prove:
+No "planner repaired" claim without this journey:
 
 1. Open planner.
 2. Edit.
@@ -79,6 +83,21 @@ At least one Open3D journey should eventually prove:
 5. Reload.
 6. Export.
 7. Verify console output.
+
+## Slice Order
+
+1. `04a-planner-command-seam.md`
+2. `04b-planner-persistence-json.md`
+3. `04c-planner-viewer-boundary.md`
+4. `04d-planner-svg-consumer.md`
+5. `04e-planner-browser-journey.md`
+
+## Artifact Path
+
+```text
+results/planner/04-planner-open3d/slice-selection/slice-selection-run.json
+results/planner/04-planner-open3d/slice-selection/slice-selection-raw.log
+```
 
 ## Initial Commands
 
@@ -100,12 +119,9 @@ pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d --co
 
 ## Exit Evidence
 
-1. One repaired slice.
-2. Scoped test result.
-3. Remaining failure bucket.
-4. Browser smoke result, when relevant.
-5. Server/client boundary decision, when touched.
-6. Data-loss and round-trip decision, when touched.
+1. Selected slice.
+2. Reason for slice order.
+3. Known blockers.
 
 ## Stop Conditions
 

@@ -30,6 +30,13 @@ rg -n "svgPipelineRunner|svgCompiler|svg-catalog|SVGR|sprite|@svgdotjs" site
 pnpm --filter oando-site exec eslint -c config/build/eslint.config.mjs features/planner/open3d/catalog/svg --max-warnings=0
 ```
 
+## Artifact Path
+
+```text
+results/svg/03b-svg-pipeline/svg-authority/svg-authority-run.json
+results/svg/03b-svg-pipeline/svg-authority/svg-authority-raw.log
+```
+
 ## Decision Required
 
 Recovery target:
@@ -42,23 +49,25 @@ Default decision for recovery:
 
 1. Keep the current compiler path as the only recovery target.
 2. Unify exec and in-process compile paths behind one authority.
-3. Treat SVGR and sprite as later delivery choices, not recovery engines.
+3. Defer SVGR and sprite unless a later explicit phase approves them.
 
-SVGR is allowed later only for trusted developer-owned UI SVG components.
+SVGR is not adopted in recovery.
 
-SVG sprite is allowed later only for repeated static symbols.
+SVG sprite is not adopted in recovery.
 
 ## Security And Determinism Criteria
 
 The SVG pipeline needs:
 
-1. Sanitizer boundary.
-2. Input schema.
-3. Deterministic output.
-4. Checksum or content hash.
-5. Atomic publish.
-6. Compile failure rollback.
-7. Runtime schema contract.
+1. Publish authorization.
+2. Sanitizer boundary.
+3. Input schema.
+4. Schema validation.
+5. Deterministic output.
+6. Checksum or content hash.
+7. Atomic publish.
+8. Compile failure rollback.
+9. Runtime schema contract.
 
 Malicious SVG corpus should include:
 
@@ -76,9 +85,10 @@ Malicious SVG corpus should include:
 3. Compiler to public/runtime path.
 4. Remaining ambiguity.
 5. Explicit SVGR/sprite defer decision.
-6. Malicious corpus result, when tests exist.
+6. Malicious corpus result or blocking missing-test note.
 7. Checksum or deterministic output proof.
 8. Atomic publish proof or blocker.
+9. Publish authz proof or blocker.
 
 ## Stop Conditions
 

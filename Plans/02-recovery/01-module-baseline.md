@@ -45,19 +45,19 @@ Rule: live checks beat old docs.
 
 | Package | Decision | Proof needed |
 | --- | --- | --- |
-| `fabric` | Keep. 2D engine. | Import census and planner tests. |
-| `three` | Keep. 3D engine. | Import census and viewer tests. |
-| `@react-three/fiber` | Keep. React 3D binding. | Import census and viewer tests. |
+| `fabric` | Likely keep. 2D engine. | Manifest proof, import census, and planner tests. |
+| `three` | Likely keep. 3D engine. | Manifest proof, import census, and viewer tests. |
+| `@react-three/fiber` | Likely keep. React 3D binding. | Manifest proof, import census, and viewer tests. |
 | `@react-three/drei` | Audit. | Decide if it is real runtime dependency or drift. |
-| `@ark-ui/react` | Keep. Admin and planner primitive candidate. | Component inventory. |
-| `react-aria-components` | Keep only for Ark gaps. | Component inventory. |
-| `@puckeditor/core` | Keep for admin composition if current admin still uses it. | Admin import and route proof. |
-| `@phosphor-icons/react` | Keep. Preferred icon set. | Icon policy check. |
-| `framer-motion` | Keep as animation layer. | Import census and CSS/motion boundary review. |
+| `@ark-ui/react` | Audit as admin/planner primitive candidate. | Manifest proof and component inventory. |
+| `react-aria-components` | Audit for Ark gaps only. | Manifest proof and component inventory. |
+| `@puckeditor/core` | Audit for admin composition. | Admin import and route proof. |
+| `@phosphor-icons/react` | Audit as preferred icon set. | Manifest proof and icon policy check. |
+| `framer-motion` | Audit as possible animation layer. | Import census and CSS/motion boundary review. |
 | `motion` | Remove only after proof. | Import census. |
 | `lucide-react` | Remove gradually after proof. | Import census and replacement plan. |
-| `mantine` | Keep out. | Ensure no imports. |
-| `fabric-editor-kit` | Keep out. | Ensure no imports. |
+| `mantine` | Keep out during recovery. | Ensure no imports. |
+| `fabric-editor-kit` | Keep out during recovery. | Ensure no imports. |
 | `@svgdotjs/*` | Remove unless SVG manager needs it. | SVG pipeline decision. |
 | SVGR | Consider for trusted developer SVG components. | Needs SVG authority decision first. |
 | SVG sprite | Consider for compiled/static symbols. | Needs SVG authority decision first. |

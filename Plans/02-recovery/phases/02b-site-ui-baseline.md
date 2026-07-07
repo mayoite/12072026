@@ -1,8 +1,10 @@
 # 02b Site UI Baseline
 
-Goal: create a route-by-route site UI baseline after styling rules are stable.
+Goal: create a route-by-route site UI baseline only when it blocks current repair or release proof.
 
 This is not a polish phase.
+
+This phase is conditional and timeboxed.
 
 ## Entry Condition
 
@@ -12,6 +14,7 @@ Run only after Phase 02 has:
 2. TSX boundary rules.
 3. Design intake rules.
 4. `lint:ui` result or known blocker.
+5. A stated reason why Site UI blocks current work.
 
 ## Modules
 
@@ -55,11 +58,16 @@ Record one row per route:
 
 ```powershell
 rg -n "export default|metadata|generateMetadata" "site/app/(site)" site/components site/lib/site-data
-pnpm --filter oando-site run test:a11y
-pnpm --filter oando-site run test:e2e:nav
 ```
 
 Run browser checks only when the server and env are ready.
+
+## Artifact Path
+
+```text
+results/site-ui/02b-site-ui-baseline/route-inventory/route-inventory-run.json
+results/site-ui/02b-site-ui-baseline/route-inventory/route-inventory-raw.log
+```
 
 ## Exit Evidence
 
@@ -75,3 +83,4 @@ Run browser checks only when the server and env are ready.
 2. Dev server or env blocks browser proof.
 3. Fix would become page polish.
 4. Route data source is unclear.
+5. Inventory exceeds the timebox without a blocker decision.

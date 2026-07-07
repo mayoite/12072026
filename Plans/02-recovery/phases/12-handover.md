@@ -31,6 +31,13 @@ Record each gate:
 | Artifact | Path under `results/` |
 | Status | Pass, fail, skipped, or incomplete |
 
+## Artifact Path
+
+```text
+results/handover/12-handover/evidence-index/evidence-index-run.json
+results/handover/12-handover/evidence-index/evidence-index-raw.log
+```
+
 ## Do Not Say
 
 1. "Fixed" unless the check passed.

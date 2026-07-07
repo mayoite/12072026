@@ -73,6 +73,13 @@ pnpm --filter oando-site exec node scripts/validate-launch-env.mjs
 pnpm --filter oando-site run db:test
 ```
 
+## Artifact Path
+
+```text
+results/database/06-database/db-proof/db-proof-run.json
+results/database/06-database/db-proof/db-proof-raw.log
+```
+
 ## Exit Evidence
 
 1. Env validation result.

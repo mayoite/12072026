@@ -44,6 +44,13 @@ rg -n "middleware|admin|guest|member|auth" site/app site/features site/lib
 pnpm --filter oando-site run typecheck
 ```
 
+## Artifact Path
+
+```text
+results/auth/05-auth/route-matrix/route-matrix-run.json
+results/auth/05-auth/route-matrix/route-matrix-raw.log
+```
+
 ## Route Matrix
 
 1. Guest planner.

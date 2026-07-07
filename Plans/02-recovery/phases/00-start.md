@@ -2,6 +2,10 @@
 
 Goal: freeze the working baseline before repairs.
 
+Phase 00 is mandatory.
+
+No implementation starts until this phase records branch, commit, dirty state, blockers, and selected next phase.
+
 ## Entry Condition
 
 - Current repo is `D:\codex07072026`.
@@ -32,6 +36,7 @@ git log -5 --oneline
 3. Dirty or clean state.
 4. Open blockers.
 5. Next selected phase.
+6. Whether `gpt5.5.md` claims were rechecked locally or treated as signal only.
 
 ## Phase Decision Record
 
@@ -49,12 +54,20 @@ Gate evidence must land under `results/<module>/<phase>/<cmd>/`.
 
 Narrative without artifacts is not release-grade evidence.
 
+## Artifact Path
+
+```text
+results/repo/00-start/<cmd>/<cmd>-run.json
+results/repo/00-start/<cmd>/<cmd>-raw.log
+```
+
 ## Do Not Do
 
 1. Do not repair code in this phase.
 2. Do not stage `.env.local`.
 3. Do not claim old evidence still applies.
 4. Do not call a phase complete without a decision record.
+5. Do not start implementation before `00b-contradiction-register.md`.
 
 ## Stop Conditions
 
