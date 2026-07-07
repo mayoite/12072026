@@ -5,7 +5,7 @@ export const SITE_NAV_LINKS = [
   { label: "Products", href: "/products", hasMega: true },
   { label: "Solutions", href: "/solutions" },
   { label: "Projects", href: "/projects" },
-  { label: "Planner", href: PRODUCT_SUITE.planner.routes.landing },
+  { label: "Planner", href: "/planner" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "Trusted", href: "/trusted-by" },
   { label: "About", href: "/about" },

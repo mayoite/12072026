@@ -1,5 +1,5 @@
-import { Open3dPlannerHost } from "@/features/planner/ui/Open3dPlannerHost";
 import { getOptionalPlannerUser } from "@/lib/auth/plannerSession";
+import { Open3dPlannerHost } from "@/features/planner/ui/Open3dPlannerHost";
 
 export const dynamic = "force-dynamic";
 

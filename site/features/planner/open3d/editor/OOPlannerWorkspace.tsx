@@ -1,6 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ChangeEvent,
+} from "react";
+import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
 import { Lazy3DViewer } from "../3d/ThreeLazyViewer";
 import {
   FeasibilityCanvas,
@@ -28,7 +37,10 @@ import {
   runtimeToolFor,
   type PlannerTool,
 } from "./canvasTool";
-import { DEFAULT_LAYER_VISIBILITY, type Open3dLayerVisibility } from "./layerVisibility";
+import {
+  DEFAULT_LAYER_VISIBILITY,
+  type Open3dLayerVisibility,
+} from "./layerVisibility";
 import { useWorkspaceKeyboard } from "./useWorkspaceKeyboard";
 import { useWorkspaceCanvas } from "./useWorkspaceCanvas";
 import {
@@ -42,6 +54,7 @@ import {
   formatSnapStatus,
   formatToolStatus,
 } from "./workspaceStatusLabels";
+import { summarizeFloorMetrics } from "./workspacePlanMetrics";
 import type { Open3dDisplayUnit, Open3dPoint } from "../model/types";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";
 import type { Open3dEntityCollection } from "../model/actions/projectActions";
@@ -56,13 +69,28 @@ export type OOPlannerWorkspaceProps = {
   planId?: string;
 };
 
-export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProps) {
-  const accessContext: PlannerAccessContext = guestMode ? "guest" : "authenticated";
+export function OOPlannerWorkspace({
+  guestMode,
+  planId,
+}: OOPlannerWorkspaceProps) {
+  const accessContext: PlannerAccessContext = guestMode
+    ? "guest"
+    : "authenticated";
   const projectName = planId ? `Plan ${planId}` : "Untitled plan";
   const canvasRef = useRef<FeasibilityCanvasHandle>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
-  const workspaceCanvas = useWorkspaceCanvas({ projectName });
-  const [hydrated, setHydrated] = useState(false);
+  const workspaceCanvas = useWorkspaceCanvas({
+    projectName,
+    initialProject: guestMode
+      ? createRectangularRoomProject({
+          name: projectName,
+          widthMm: 5000,
+          depthMm: 4000,
+        })
+      : undefined,
+  });
+  // Immediate hydrated: avoids blocking render/restore waterfall; first paint uses default project, restore applies async if present.
+  const [hydrated] = useState(true);
   const replaceProjectRef = useRef(workspaceCanvas.replaceProject);
   useLayoutEffect(() => {
     replaceProjectRef.current = workspaceCanvas.replaceProject;
@@ -82,28 +110,35 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
 
   useEffect(() => {
     let cancelled = false;
-    const timeoutId = window.setTimeout(() => {
-      if (!cancelled) setHydrated(true);
-    }, 4000);
 
-    void restoreSnapshotRef
-      .current()
-      .then((restored) => {
-        if (cancelled || !restored) return;
+    void (async () => {
+      const restored = await restoreSnapshotRef.current();
+      if (cancelled) return;
+
+      if (restored) {
         replaceProjectRef.current(restored);
-      })
-      .finally(() => {
-        if (!cancelled) {
-          window.clearTimeout(timeoutId);
-          setHydrated(true);
-        }
-      });
+        return;
+      }
+
+      const { pendingBootstrapLayout, setPendingBootstrapLayout } =
+        usePlannerWorkspaceStore.getState();
+      if (!pendingBootstrapLayout) return;
+
+      const { room } = pendingBootstrapLayout;
+      replaceProjectRef.current(
+        createRectangularRoomProject({
+          name: room?.label || projectName || "Starter plan",
+          widthMm: room?.widthMm ?? 5000,
+          depthMm: room?.depthMm ?? 4000,
+        }),
+      );
+      setPendingBootstrapLayout(null);
+    })();
 
     return () => {
       cancelled = true;
-      window.clearTimeout(timeoutId);
     };
-  }, [guestMode, planId]);
+  }, [guestMode, planId, projectName]);
 
   const [viewMode, setViewMode] = useState<"2d" | "3d">("2d");
   const [activeTool, setActiveTool] = useState<PlannerTool>("wall");
@@ -112,25 +147,37 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
     DEFAULT_LAYER_VISIBILITY,
   );
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const [pendingCatalogItemId, setPendingCatalogItemId] = useState<string | null>(null);
-  const [canvasStatus, setCanvasStatus] = useState<CanvasStatusSnapshot | null>(null);
+  const [pendingCatalogItemId, setPendingCatalogItemId] = useState<
+    string | null
+  >(null);
+  const [canvasStatus, setCanvasStatus] = useState<CanvasStatusSnapshot | null>(
+    null,
+  );
   const [workspaceMessage, setWorkspaceMessage] = useState<string | null>(null);
   const armedToolRef = useRef<PlannerTool>("wall");
 
   // Density wired from workspace prefs (not hardcoded); GS: Figma UI3 REC-01 minimize UI, thin sidebars, contextual; benchmark 00 + anti-copy semantic only site/app/css/; fixes critic density/prefs partial + task5
-  const [density, setDensity] = useState<"compact" | "touch">(() => {
-    if (typeof window === "undefined") return DEFAULT_PLANNER_WORKSPACE_PREFERENCES.density;
+  const [density, setDensity] = useState<"compact" | "touch">(
+    DEFAULT_PLANNER_WORKSPACE_PREFERENCES.density,
+  );
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     try {
       const raw = localStorage.getItem("open3d-workspace-preferences");
-      const prefs = parsePlannerWorkspacePreferences(raw ? JSON.parse(raw) : null);
-      return prefs.density;
+      const prefs = parsePlannerWorkspacePreferences(
+        raw ? JSON.parse(raw) : null,
+      );
+      setTimeout(() => setDensity(prefs.density), 0);
     } catch {
-      return DEFAULT_PLANNER_WORKSPACE_PREFERENCES.density;
+      // keep default
     }
-  });
+  }, []);
 
   const pendingCatalogItem = useMemo(
-    () => (pendingCatalogItemId ? catalog.resolveItem(pendingCatalogItemId) : undefined),
+    () =>
+      pendingCatalogItemId
+        ? catalog.resolveItem(pendingCatalogItemId)
+        : undefined,
     [catalog, pendingCatalogItemId],
   );
 
@@ -140,7 +187,11 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
     ) ?? workspaceCanvas.project.floors[0];
 
   const selectedEntity = useMemo(
-    () => resolveSelectedEntity(workspaceCanvas.selection, workspaceCanvas.activeFloor),
+    () =>
+      resolveSelectedEntity(
+        workspaceCanvas.selection,
+        workspaceCanvas.activeFloor,
+      ),
     [workspaceCanvas.activeFloor, workspaceCanvas.selection],
   );
   const isCanvasEmpty = activeFloor
@@ -156,9 +207,14 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
       const next = current === "compact" ? "touch" : "compact";
       try {
         const raw = localStorage.getItem("open3d-workspace-preferences");
-        const base = parsePlannerWorkspacePreferences(raw ? JSON.parse(raw) : null);
+        const base = parsePlannerWorkspacePreferences(
+          raw ? JSON.parse(raw) : null,
+        );
         const updated = { ...base, density: next };
-        localStorage.setItem("open3d-workspace-preferences", JSON.stringify(updated));
+        localStorage.setItem(
+          "open3d-workspace-preferences",
+          JSON.stringify(updated),
+        );
       } catch {
         // ignore storage (matches useDocking pattern)
       }
@@ -178,7 +234,11 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
   }, [workspaceCanvas]);
 
   const handleUpdateEntity = useCallback(
-    (collection: Open3dEntityCollection, id: string, updates: Record<string, unknown>) => {
+    (
+      collection: Open3dEntityCollection,
+      id: string,
+      updates: Record<string, unknown>,
+    ) => {
       workspaceCanvas.updateProject((project) =>
         updateEntityInProject(project, collection, id, updates),
       );
@@ -188,7 +248,9 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
 
   const handleDeleteEntity = useCallback(
     (collection: Open3dEntityCollection, id: string) => {
-      workspaceCanvas.updateProject((project) => deleteEntityFromProject(project, collection, id));
+      workspaceCanvas.updateProject((project) =>
+        deleteEntityFromProject(project, collection, id),
+      );
       workspaceCanvas.setSelection({ type: "none", ids: [] });
     },
     [workspaceCanvas],
@@ -230,11 +292,12 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
         setPendingCatalogItemId(null);
         return;
       }
-      workspaceCanvas.updateProject((project) =>
-        placeCatalogItemInProject(project, item, null, {
-          placedFrom: "click",
-          position: point,
-        }).result.project,
+      workspaceCanvas.updateProject(
+        (project) =>
+          placeCatalogItemInProject(project, item, null, {
+            placedFrom: "click",
+            position: point,
+          }).result.project,
       );
       setPendingCatalogItemId(null);
       setWorkspaceMessage(`Placed ${item.shortName ?? item.name}`);
@@ -244,7 +307,9 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
 
   const handleFloorChange = useCallback(
     (floorId: string) => {
-      workspaceCanvas.updateProject((project) => setActiveFloor(project, floorId).project);
+      workspaceCanvas.updateProject(
+        (project) => setActiveFloor(project, floorId).project,
+      );
     },
     [workspaceCanvas],
   );
@@ -258,7 +323,9 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
     (format = "json") => {
       const check = preflightOpen3dExport(workspaceCanvas.project, format);
       if (check.status !== "ready") {
-        setWorkspaceMessage(check.messages[0] ?? `Export unavailable for ${format}`);
+        setWorkspaceMessage(
+          check.messages[0] ?? `Export unavailable for ${format}`,
+        );
         return;
       }
       if (format === "json") {
@@ -271,7 +338,9 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
         setWorkspaceMessage(`Exported ${check.filename}`);
         return;
       }
-      setWorkspaceMessage(`${format.toUpperCase()} export is coming soon — use JSON or SVG for now.`);
+      setWorkspaceMessage(
+        `${format.toUpperCase()} export is coming soon — use JSON or SVG for now.`,
+      );
     },
     [workspaceCanvas.project],
   );
@@ -290,11 +359,14 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
       reader.onload = () => {
         try {
           const raw = String(reader.result ?? "");
-          const restored = parseOpen3dSessionSnapshot(raw) ?? importOpen3dProjectJson(raw);
+          const restored =
+            parseOpen3dSessionSnapshot(raw) ?? importOpen3dProjectJson(raw);
           workspaceCanvas.replaceProject(restored);
           setWorkspaceMessage(`Imported ${file.name}`);
         } catch {
-          setWorkspaceMessage("Could not import that file. Use an Open3D plan JSON export.");
+          setWorkspaceMessage(
+            "Could not import that file. Use an Open3D plan JSON export.",
+          );
         }
       };
       reader.readAsText(file);
@@ -356,15 +428,21 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
   });
 
   const measurementLabel =
-    canvasStatus?.previewLengthMm !== null && canvasStatus?.previewLengthMm !== undefined
+    canvasStatus?.previewLengthMm !== null &&
+    canvasStatus?.previewLengthMm !== undefined
       ? `${canvasStatus.previewLengthMm} mm`
       : formatSnapStatus(canvasStatus?.snapKind ?? "none");
 
   const selectionLabel = formatSelectionStatus(workspaceCanvas.selection);
+  const planMetrics = summarizeFloorMetrics(activeFloor);
 
   if (!hydrated) {
     return (
-      <div className="open3d-route-host open3d-route-host--loading" aria-busy="true" aria-label="Loading planner">
+      <div
+        className="open3d-route-host open3d-route-host--loading"
+        aria-busy="true"
+        aria-label="Loading planner"
+      >
         <div className="open3d-loading-shell" role="status">
           <div className="open3d-loading-shell__bar" />
           <div className="open3d-loading-shell__bar open3d-loading-shell__bar--short" />
@@ -403,7 +481,10 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
         onExport={(format) => handleExport(format ?? "json")}
         onImport={handleImportClick}
         onFloorChange={handleFloorChange}
-        floors={workspaceCanvas.project.floors.map((floor) => ({ id: floor.id, name: floor.name }))}
+        floors={workspaceCanvas.project.floors.map((floor) => ({
+          id: floor.id,
+          name: floor.name,
+        }))}
         activeFloorId={workspaceCanvas.project.activeFloorId}
         fillParent
         density={density}
@@ -411,9 +492,11 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
         leftPanel={
           <InventoryPanel
             catalogItems={catalog.items}
-            isLoading={catalog.isLoading}
+            isLoading={catalog.isLoading && catalog.items.length === 0}
             catalogStatus={catalog.status}
-            onItemPlace={(itemId) => handleInventoryPlace(itemId)}
+            onItemPlace={(itemId) => {
+              handleInventoryPlace(itemId);
+            }}
           />
         }
         rightPanel={
@@ -423,7 +506,8 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
             callbacks={{
               onUpdateEntity: handleUpdateEntity,
               onDeleteEntity: handleDeleteEntity,
-              onDeselect: () => workspaceCanvas.setSelection({ type: "none", ids: [] }),
+              onDeselect: () =>
+                workspaceCanvas.setSelection({ type: "none", ids: [] }),
             }}
           />
         }
@@ -436,26 +520,33 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
             />
           ) : null
         }
+        planMetrics={planMetrics}
         statusLeft={
-          <div className="open3d-status-track">
+          <div className="open3d-status-track" tabIndex={0}>
             <span className="open3d-status-pill open3d-status-pill--accent">
               {formatToolStatus(activeTool, viewMode)}
             </span>
             <span className="open3d-status-pill">
-              {CANVAS_TOOL_SHORTCUTS[activeTool]} · {CANVAS_TOOL_GUIDANCE[activeTool]}
+              {CANVAS_TOOL_SHORTCUTS[activeTool]} ·{" "}
+              {CANVAS_TOOL_GUIDANCE[activeTool]}
             </span>
             {measurementLabel ? (
               <span className="open3d-status-pill">{measurementLabel}</span>
             ) : null}
             {canvasStatus ? (
-              <span className="open3d-status-pill">Zoom {canvasStatus.zoomPercent}%</span>
+              <span className="open3d-status-pill">
+                Zoom {canvasStatus.zoomPercent}%
+              </span>
             ) : null}
             {selectionLabel ? (
-              <span className="open3d-status-pill open3d-status-pill--accent">{selectionLabel}</span>
+              <span className="open3d-status-pill open3d-status-pill--accent">
+                {selectionLabel}
+              </span>
             ) : null}
             {pendingCatalogItem ? (
               <span className="open3d-status-pill open3d-status-pill--placement">
-                Placing {pendingCatalogItem.shortName ?? pendingCatalogItem.name}
+                Placing{" "}
+                {pendingCatalogItem.shortName ?? pendingCatalogItem.name}
               </span>
             ) : null}
             <span className="open3d-status-pill open3d-status-pill--muted">
@@ -471,8 +562,14 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
           </div>
         }
         statusRight={
-          <button type="button" className="open3d-palette-trigger" onClick={() => setPaletteOpen(true)}>
-            Commands (Ctrl+K)
+          <button
+            type="button"
+            className="open3d-palette-trigger"
+            onClick={() => setPaletteOpen(true)}
+            aria-label="Open command palette (Ctrl+K)"
+          >
+            <span className="open3d-palette-trigger__long">Commands (Ctrl+K)</span>
+            <span className="open3d-palette-trigger__short">Commands</span>
           </button>
         }
       >
@@ -491,7 +588,11 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
               delegateKeyboard
               workspaceCanvas={workspaceCanvas}
               pendingCatalogPlacement={pendingCatalogItemId !== null}
-              placementItemLabel={pendingCatalogItem?.shortName ?? pendingCatalogItem?.name ?? null}
+              placementItemLabel={
+                pendingCatalogItem?.shortName ??
+                pendingCatalogItem?.name ??
+                null
+              }
               onPlaceAtPoint={handlePlaceAtPoint}
               onStatusChange={setCanvasStatus}
             />
@@ -500,10 +601,16 @@ export function OOPlannerWorkspace({ guestMode, planId }: OOPlannerWorkspaceProp
               <span>{CANVAS_TOOL_GUIDANCE[activeTool]}</span>
             </aside>
             {isCanvasEmpty && (
-              <section className="open3d-first-use" aria-label="Start your plan">
+              <section
+                className="open3d-first-use"
+                aria-label="Start your plan"
+              >
                 <p className="open3d-first-use__eyebrow">Start your plan</p>
                 <h2>Set up the first room</h2>
-                <p>Draw freely, begin with a measured room, or import an existing plan.</p>
+                <p>
+                  Draw freely, begin with a measured room, or import an existing
+                  plan.
+                </p>
                 <div className="open3d-first-use__actions">
                   <button type="button" onClick={() => setTool("wall")}>
                     Draw walls

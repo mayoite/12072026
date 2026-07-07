@@ -1,7 +1,6 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-export const PLANNER_PRIMARY_CANVAS =
-  '[data-testid="planner-2d-canvas"] canvas[data-fabric="main"]';
+export const PLANNER_PRIMARY_CANVAS = '[data-testid="planner-2d-canvas"] canvas';
 
 async function primaryCanvas(page: Page): Promise<Locator> {
   return page.locator(PLANNER_PRIMARY_CANVAS);
@@ -26,7 +25,7 @@ function plannerToolNamePattern(toolName: string): RegExp {
 
 export function plannerToolButton(page: Page, toolName: string): Locator {
   return page
-    .getByRole("navigation", { name: "Drawing tools" })
+    .getByRole("group", { name: "Drawing tools" })
     .getByRole("button", { name: plannerToolNamePattern(toolName) });
 }
 

@@ -13,7 +13,7 @@ import { ciscoSans, helveticaNeue } from "@/lib/fonts";
 import { SITE_URL } from "@/lib/siteUrl";
 import { buildGlobalJsonLd, buildSiteMetadata } from "@/lib/analytics/seo";
 import { SITE_VIEWPORT } from "@/lib/siteViewport";
-import { RouteChrome } from "@/components/site/RouteChrome";
+import { RouteChromeSuspense } from "@/components/site/RouteChromeSuspense";
 import { MaintenanceBanner } from "@/components/site/MaintenanceBanner";
 import { sanitizeJsonForScript } from "@/lib/security/sanitize";
 import { ServiceWorkerRegister } from "@/components/pwa/ServiceWorkerRegister";
@@ -34,7 +34,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { messages, lang } = await getSiteLayoutContext();
+  const { messages, locale, lang } = await getSiteLayoutContext();
   return (
     <html
       lang={lang}
@@ -60,12 +60,12 @@ export default async function RootLayout({
           Skip to main content
         </a>
         <SiteErrorBoundary>
-          <NextIntlClientProvider messages={messages}>
+          <NextIntlClientProvider locale={locale} messages={messages}>
             <QueryProvider>
               <MaintenanceBanner />
-              <RouteChrome position="top" />
+              <RouteChromeSuspense position="top" />
               <main id="main-content">{children}</main>
-              <RouteChrome position="bottom" />
+              <RouteChromeSuspense position="bottom" />
             </QueryProvider>
           </NextIntlClientProvider>
         </SiteErrorBoundary>

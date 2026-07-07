@@ -9,7 +9,7 @@ import { PlannerCanvasEnhancements } from "@/features/planner/ui/PlannerCanvasEn
 
 const PlannerWorkspace = dynamic(
   () =>
-    import("@/features/planner/editor/PlannerWorkspace").then((mod) => ({
+    import("@/features/planner/_archive/fabric/editor/PlannerWorkspace").then((mod) => ({
       default: mod.PlannerWorkspace,
     })),
   { loading: () => <PlannerSkeleton />, ssr: false },

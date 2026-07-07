@@ -24,16 +24,7 @@ import {
 } from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
 import { runSvgPipeline } from "@/features/planner/admin/svg-editor/svgPipelineRunner";
 import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
-
-function buildThumbUrl(slug: string): string {
-  const accountId = (process.env.CLOUDFLARE_ACCOUNT_ID || "").trim();
-  const bucket = "site-block-thumbs";
-  if (accountId) {
-    return `https://${accountId}.r2.cloudflarestorage.com/${bucket}/${slug}.png`;
-  }
-  // Fallback matches generate-svg behavior; production sets the env.
-  return `https://cdn.oando.co.in/${bucket}/${slug}.png`;
-}
+import { buildBlockThumbPngUrl } from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
 
 async function handleSvgEditorPost(req: NextRequest) {
   let payload: unknown;
@@ -74,13 +65,13 @@ async function handleSvgEditorPost(req: NextRequest) {
   try {
     const pipeline = await runSvgPipeline(descriptor);
     if (pipeline.ok) {
-      thumb = buildThumbUrl(descriptor.slug);
+      thumb = buildBlockThumbPngUrl(descriptor.slug);
     } else {
       // Best-effort: descriptor persisted; thumb may be stale or unavailable.
-      thumb = buildThumbUrl(descriptor.slug);
+      thumb = buildBlockThumbPngUrl(descriptor.slug);
     }
   } catch {
-    thumb = buildThumbUrl(descriptor.slug);
+    thumb = buildBlockThumbPngUrl(descriptor.slug);
   }
 
   return success({ descriptor: persistResult.descriptor, thumb });

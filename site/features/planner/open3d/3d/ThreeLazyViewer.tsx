@@ -144,6 +144,7 @@ export function Lazy3DViewer(props: Lazy3DViewerProps): React.JSX.Element {
   return (
     <div
       className={`${styles.viewerRoot} ${className || ""}`}
+      data-testid="planner-3d-canvas"
       style={{ backgroundColor: resolvedBg }}
     >
       <ViewerErrorBoundary onError={onError}>

@@ -6,6 +6,7 @@ import { PanelContainer } from "./PanelContainer";
 import { TopBar } from "./TopBar";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";
 import type { Open3dDisplayUnit } from "../model/types";
+import type { WorkspacePlanMetrics } from "./workspacePlanMetrics";
 import styles from "./workspace.module.css";
 
 export interface WorkspaceShellProps {
@@ -62,6 +63,8 @@ export interface WorkspaceShellProps {
   density?: "compact" | "touch";
   /** Forward density toggle (wired from TopBar prefs per task5/GS REC-01) */
   onToggleDensity?: () => void;
+  /** Flat plan metrics for status bar contract (E2E + operator glance) */
+  planMetrics?: WorkspacePlanMetrics;
 }
 
 export function WorkspaceShell({
@@ -93,6 +96,7 @@ export function WorkspaceShell({
   fillParent = false,
   density = "compact",
   onToggleDensity,
+  planMetrics,
 }: WorkspaceShellProps) {
   const id = useId();
   const [internalViewMode, setInternalViewMode] = useState<"2d" | "3d">(initialViewMode);
@@ -369,7 +373,15 @@ export function WorkspaceShell({
       </div>
 
       {/* Status bar */}
-      <footer className={styles.status}>
+      <footer className={`${styles.status} pw-status-bar`}>
+        {planMetrics ? (
+          <>
+            <span>{planMetrics.objects} objects</span>
+            <span>{planMetrics.walls} walls</span>
+            <span>{planMetrics.furniture} furniture</span>
+            <span>Floor {planMetrics.floorLabel}</span>
+          </>
+        ) : null}
         <div className={styles.statusLeft}>
           {statusLeft ?? (
             <>

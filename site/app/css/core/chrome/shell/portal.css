@@ -189,3 +189,42 @@
   background: var(--surface-page);
 }
 
+/* SVG catalog: crisp vector + retina PNG previews on mobile */
+.portal-svg-catalog .svg-catalog-thumb-wrap,
+.portal-svg-detail .svg-catalog-thumb-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--surface-soft);
+}
+
+.portal-svg-catalog .svg-catalog-thumb,
+.portal-svg-detail .svg-catalog-thumb {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.portal-svg-catalog .svg-catalog-thumb--vector,
+.portal-svg-detail .svg-catalog-vector svg,
+.portal-svg-detail .svg-catalog-vector {
+  shape-rendering: geometricPrecision;
+}
+
+.portal-svg-detail .svg-inline svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  shape-rendering: geometricPrecision;
+}
+
+@media (max-width: 640px) {
+  .portal-svg-catalog .svg-catalog-thumb-wrap {
+    min-height: 8rem;
+  }
+}
+

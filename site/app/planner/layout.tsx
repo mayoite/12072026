@@ -4,15 +4,11 @@ import "@/app/css/core/site/bundles/site-surfaces.css";
 import "@/app/css/core/planner/bundles/marketing.css";
 import "@/app/css/core/site/bundles/site-marketing.css";
 import "@/app/css/core/site/bundles/footer.css";
-import QueryProvider from "@/app/(site)/providers/QueryProvider";
-import { RouteChrome } from "@/components/site/RouteChrome";
 import { MaintenanceBanner } from "@/components/site/MaintenanceBanner";
 import { ciscoSans, helveticaNeue } from "@/lib/fonts";
 import { getSiteLayoutContext } from "@/lib/layout/siteLayoutContext";
-import { ThemeProvider } from "@/lib/theme/ThemeProvider";
 import { SITE_VIEWPORT } from "@/lib/siteViewport";
-import { PlannerBodyTheme } from "@/features/planner/components/PlannerBodyTheme";
-import { PlannerErrorBoundary } from "@/features/planner/editor/PlannerErrorBoundary";
+import { PlannerLayoutShell } from "@/features/planner/components/PlannerLayoutShell";
 import { ServiceWorkerRegister } from "@/components/pwa/ServiceWorkerRegister";
 import { CsrfBootstrap } from "@/components/security/CsrfBootstrap";
 import { NextIntlClientProvider } from "next-intl";
@@ -24,7 +20,7 @@ export default async function PlannerRootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { messages, lang } = await getSiteLayoutContext();
+  const { messages, locale, lang } = await getSiteLayoutContext();
   return (
     <html
       lang={lang}
@@ -44,18 +40,9 @@ export default async function PlannerRootLayout({
         >
           Skip to main content
         </a>
-        <NextIntlClientProvider messages={messages}>
-          <QueryProvider>
-            <ThemeProvider>
-              <PlannerBodyTheme />
-              <MaintenanceBanner />
-              <RouteChrome position="top" />
-              <main id="main-content">
-                <PlannerErrorBoundary label="Planner">{children}</PlannerErrorBoundary>
-              </main>
-              <RouteChrome position="bottom" />
-            </ThemeProvider>
-          </QueryProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <MaintenanceBanner />
+          <PlannerLayoutShell>{children}</PlannerLayoutShell>
         </NextIntlClientProvider>
       </body>
     </html>

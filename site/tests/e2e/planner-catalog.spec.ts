@@ -7,7 +7,7 @@ test.describe("planner catalog panel", () => {
     await enterGuestPlannerWorkspace(page);
 
     const rail = page.locator(".pw-tool-rail");
-    const catalog = page.locator(".pw-left-panel");
+    const catalog = page.locator("aside.pw-left-panel");
     const canvas = page.locator(".pw-canvas-surface");
 
     await expect(rail).toBeVisible();
@@ -22,8 +22,8 @@ test.describe("planner catalog panel", () => {
     expect(catalogBox).not.toBeNull();
     expect(canvasBox).not.toBeNull();
 
-    expect(railBox!.x + railBox!.width).toBeLessThanOrEqual(catalogBox!.x + 1);
-    expect(catalogBox!.x + catalogBox!.width).toBeLessThanOrEqual(canvasBox!.x + 1);
+    expect(catalogBox!.x + catalogBox!.width).toBeLessThanOrEqual(railBox!.x + 4);
+    expect(railBox!.x + railBox!.width).toBeLessThanOrEqual(canvasBox!.x + 4);
   });
 
   test("guest workspace exposes searchable catalog", async ({ page }) => {

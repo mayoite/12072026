@@ -428,7 +428,9 @@ function FeasibilityCanvas(
     const canvas = canvasRef.current;
     if (!canvas) return;
     const context = canvas.getContext("2d");
-    if (!context) return;
+    if (!context) {
+      throw new Error("Failed to get 2D rendering context for FeasibilityCanvas. Planner canvas cannot render.");
+    }
     const ratio = window.devicePixelRatio || 1;
     canvas.width = Math.round(canvasSize.width * ratio);
     canvas.height = Math.round(canvasSize.height * ratio);
@@ -732,7 +734,11 @@ function FeasibilityCanvas(
   };
 
   const canvasRegion = (
-    <section className="canvas-region" aria-label="Drawing canvas">
+    <section
+      className="canvas-region pw-canvas-surface"
+      aria-label="Drawing canvas"
+      data-testid="planner-2d-canvas"
+    >
       <canvas
         ref={canvasRef}
         tabIndex={0}

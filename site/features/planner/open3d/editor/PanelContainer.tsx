@@ -237,7 +237,9 @@ export function PanelContainer({
       onBlur={handleBlur}
       className={`${styles.panel} ${id === "left" ? styles.panelLeft : ""} ${
         id === "right" ? styles.panelRight : ""
-      } ${id === "bottom" ? styles.panelBottom : ""}`}
+      } ${id === "bottom" ? styles.panelBottom : ""} ${
+        id === "left" ? "pw-left-panel" : ""
+      }`}
       data-state={state}
       data-panel-id={id}
       data-open={isOpen ? "true" : "false"}

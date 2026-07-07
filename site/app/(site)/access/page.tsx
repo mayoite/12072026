@@ -23,6 +23,7 @@ export default async function AccessRoute({
   }
 
   const guestHref = "/choose-product?mode=guest";
+  const requiresAdmin = nextPath === "/admin" || nextPath.startsWith("/admin/");
   const t = await getTranslations("workspace");
 
   return (
@@ -40,7 +41,7 @@ export default async function AccessRoute({
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-center p-8 lg:p-12">
-          <AccessForm nextPath={nextPath} guestHref={guestHref} />
+          <AccessForm nextPath={nextPath} guestHref={guestHref} requiresAdmin={requiresAdmin} />
         </div>
       </div>
 

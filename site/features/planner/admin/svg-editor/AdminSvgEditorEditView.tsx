@@ -31,6 +31,7 @@ import {
   puckConfig,
 } from "./puckBlockRegistry";
 import { Puck } from "@puckeditor/core";
+import "@puckeditor/core/puck.css";
 import type { PuckDataShape } from "./puckBlockRegistry";
 
 // Note: direct persist/runner now via server action passed from RSC page (onPublish calls them).

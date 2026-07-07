@@ -13,6 +13,9 @@ import {
   type GroupedCategory,
 } from "@/lib/navigation";
 import { SITE_NAV_LINKS } from "@/lib/siteNav";
+
+/** Frozen at module load so SSR and client hydration always see the same nav order. */
+const HEADER_NAV_LINKS = [...SITE_NAV_LINKS];
 import { MobileNavDrawer } from "@/components/site/MobileNavDrawer";
 import {
   trackPlannerLaunchClicked,
@@ -368,8 +371,9 @@ export function SiteHeader() {
             <nav
               className="site-header__desktop-nav"
               aria-label="Primary navigation"
+              suppressHydrationWarning
             >
-              {SITE_NAV_LINKS.map((link) => {
+              {HEADER_NAV_LINKS.map((link) => {
                 const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
                 const hasMega = "hasMega" in link && link.hasMega;
 

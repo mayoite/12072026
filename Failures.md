@@ -88,3 +88,30 @@ Also relevant: `tests/unit/features/planner/open3d/coverageGap.test.ts` has 7 pr
 **Skipped (per AGENTS minimum + scope):** full `docs:gate:tech-stack`, release:gate, playwright (tech has none), coverage (not required for this), root lint (pre-existing unrelated). No heavy gate before ship per Failures read.
 
 **No blockers.** All evidence preserved. Per testing-handbook + START.md. (Logged for honesty; not a persistent PLAN-FAIL)
+
+### Transient — 2026-07-07 impl c034b9c7 (planner open audit fixes)
+**Status:** Completed in-session (no new persistent PLAN-FAIL opened)
+**What ran (evidence in results/planner/impl-fix/):**
+- eslint scoped (targets only; exit 0)
+- tsc check (targets; exit 0)
+- prettier --check/--write (exit 0)
+**Skipped (per AGENTS min necessary + scope):** full root lint/type (pre-existing unrelated per PLAN-FAIL-0410), playwright/e2e, coverage, dev server, release:gate. Only files required for "planner opens" fixes + fmt/lint/type per explicit task. No archive/layout/catalog refactors.
+**Logged for honesty.** (Move to resolved-failures only if permanent.)
+
+### Transient — 2026-07-07 planner/svg/mobile rescue (subagent-assisted)
+**Status:** Completed in-session (no new persistent PLAN-FAIL opened)
+**Root cause fixed:** `site/app/planner/open3d/page.tsx` used `next/dynamic({ ssr: false })` inside a Server Component → 500 on `/planner/open3d/` and poisoned planner chunk graph. Reverted to direct `Open3dPlannerHost` import.
+**Also fixed:** portal `srcSet` on `next/image` (typecheck fail) → native `<img>` for retina R2 thumbs; SVG pipeline now renders 512w + 1024w `@2x` via Resvg (no Sharp downscale); mobile CSS for workspace + admin Puck.
+**What ran:** `pnpm run typecheck` (exit 0); vitest admin svg-editor 68/68; portal svg-catalog 9/9; HTTP `/planner/guest/` + `/planner/open3d/` 200; `/admin/svg-editor/` 307 auth (expected).
+**Skipped:** full root lint (PLAN-FAIL-0410 pre-existing), playwright e2e, coverage, release:gate.
+**Follow-up for user:** log in at `/access` then open `/admin/svg-editor/`; re-publish SVG blocks to regenerate R2 thumbs at new resolution.
+
+### Transient — 2026-07-07 planner catalog + SVG a11y rescue
+**Status:** Completed in-session (no new persistent PLAN-FAIL opened)
+**Root causes fixed:**
+- `InventoryPanel` treated `catalogStatus === "fallback"` as a full-panel blocker → demo/offline catalog never rendered (search, Add buttons, empty state all broken).
+- Catalog browser used `role="list"` while E2E contract expects `region` named "Catalog browser"; `listitem` on `<article>` without a list parent triggered critical axe violations.
+- E2E canvas helper queried `navigation` named "Drawing tools" but rail exposes `group` inside `nav` labeled "Canvas tools".
+- Top bar `brandSub` / `saveStatus` success text failed WCAG AA contrast on small type.
+**What ran:** `pnpm run typecheck` (exit 0); vitest svg-preview + svgPhase1Completion + portal svg-catalog 20/20; playwright `planner-catalog.spec.ts` 2/2 + `planner-guest-workspace.spec.ts` 11/11 (chromium, localhost:3000).
+**Skipped:** full root lint (PLAN-FAIL-0410 pre-existing), coverage, release:gate, remaining planner e2e suites (chrome, canvas-trust, j3–j6, etc.).

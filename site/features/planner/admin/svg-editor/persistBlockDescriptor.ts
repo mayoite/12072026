@@ -220,35 +220,69 @@ export function persistBlockDescriptor(
       },
     };
   }
-  // We use freezeFreshDescriptor to stamp generatedAt on first write only;
-  // for rewrite-against-existing we could chain freezeRewriteDescriptor,
-  // but the admin editor flow always presents a fresh draft so we stick
-  // with the freeze path. Conservative contract wins over speculative
-  // feature surface.
+  if (typeof shape.slug !== "string") {
+    return {
+      ok: false,
+      error: {
+        reason: "invalid",
+        code: "422.invalid",
+        fieldPath: "slug",
+        message: "BlockDescriptor slug is required",
+      },
+    };
+  }
+  const slugCheck = sanitizeSlug(shape.slug);
+  if (!slugCheck.ok) {
+    return slugCheck satisfies PersistFailure as PersistFailure;
+  }
+  const slug = slugCheck.value;
+  const canonicalPath = path.resolve(dir, `${slug}.json`);
+  const replaced = existsSync(canonicalPath);
+
+  let shapeForFreeze: Record<string, unknown> = shape;
+  if (replaced) {
+    try {
+      const previousRaw = readFileSync(canonicalPath, "utf8");
+      const previousParsed = parseBlockDescriptor(JSON.parse(previousRaw) as unknown);
+      if (previousParsed.ok) {
+        const previousGeneratedAt = previousParsed.value.generatedAt;
+        if (
+          typeof shape.generatedAt === "number" &&
+          shape.generatedAt !== previousGeneratedAt
+        ) {
+          return {
+            ok: false,
+            error: {
+              reason: "hashMismatch",
+              code: "409.hash_mismatch",
+              fieldPath: "generatedAt",
+              message: `BlockDescriptor generatedAt mutation refused; previously frozen at ${String(previousGeneratedAt ?? 0)}`,
+            },
+          };
+        }
+        shapeForFreeze = {
+          ...shape,
+          generatedAt: previousGeneratedAt,
+        };
+      }
+    } catch {
+      // Best-effort read of prior canonical file; freeze path still validates output.
+    }
+  }
+
   const clock = options.clock ?? (() => Math.floor(Date.now()));
-  const frozen = freezeFreshDescriptor(shape, clock);
+  const frozen = freezeFreshDescriptor(shapeForFreeze, clock);
   if (!frozen.ok) {
     return { ok: false, error: coerceOpen3dError(frozen.error) };
   }
   const descriptor = frozen.value;
 
-  // Validate the slug off the parsed descriptor (this also catches
-  // discriminated-union survivors that lack schema validity).
-  const slugCheck = sanitizeSlug(descriptor.slug);
-  if (!slugCheck.ok) {
-    return slugCheck satisfies PersistFailure as PersistFailure;
-  }
-  const slug = slugCheck.value;
-
-  // Round-trip verify: the freshly frozen body must re-parse cleanly.
   const reparse = parseBlockDescriptor(descriptor);
   if (!reparse.ok) {
     return { ok: false, error: coerceOpen3dError(reparse.error) };
   }
 
-  const canonicalPath = path.resolve(dir, `${slug}.json`);
   const tempPath = buildTempPath(slug, dir);
-  const replaced = existsSync(canonicalPath);
   const body = canonicalJsonStringify(descriptor);
 
   let historyPath = canonicalPath;

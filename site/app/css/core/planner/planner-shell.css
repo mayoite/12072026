@@ -692,3 +692,73 @@
     animation: none;
   }
 }
+
+/* Onboarding surfaces (ProjectSetupGate / StartingPointStep) */
+.pw-starting-point-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  width: 100%;
+  min-height: var(--planner-touch-target, 2.75rem);
+  padding: var(--space-4);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface-panel);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
+}
+
+.pw-starting-point-btn:hover,
+.pw-starting-point-btn:focus-visible {
+  border-color: var(--color-primary);
+  background: var(--surface-soft);
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.pw-starting-point-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--planner-touch-target, 2.75rem);
+  height: var(--planner-touch-target, 2.75rem);
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--surface-panel));
+  color: var(--color-primary);
+}
+
+.planner-setup-overlay {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding:
+    calc(var(--space-4) + env(safe-area-inset-top, 0px))
+    calc(var(--space-4) + env(safe-area-inset-right, 0px))
+    calc(var(--space-4) + env(safe-area-inset-bottom, 0px))
+    calc(var(--space-4) + env(safe-area-inset-left, 0px));
+}
+
+.planner-setup-overlay > div {
+  max-height: none;
+}
+
+@media (width < 48rem) {
+  .pw-starting-point-btn {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .planner-setup-overlay > div {
+    width: 100%;
+    max-width: 100%;
+    border-radius: var(--radius-lg);
+  }
+
+  .planner-setup-overlay aside,
+  .planner-setup-overlay form {
+    padding: var(--space-5);
+  }
+}

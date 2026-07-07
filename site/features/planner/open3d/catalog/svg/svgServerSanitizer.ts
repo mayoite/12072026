@@ -11,7 +11,7 @@ const requireCjs = createRequire(import.meta.url);
 const lockedSvgoConfig = requireCjs("../../../../../scripts/generate-svg/svgo.config.cjs");
 
 const ALLOWED_TAGS = ["svg", "title", "desc", "g", "defs", "symbol", "use", "path", "rect", "circle", "ellipse", "line", "polyline", "polygon", "text"];
-const ALLOWED_ATTR = ["xmlns", "viewBox", "id", "role", "aria-labelledby", "x", "y", "x1", "y1", "x2", "y2", "cx", "cy", "r", "rx", "ry", "width", "height", "d", "points", "fill", "stroke", "stroke-width", "opacity", "href"];
+const ALLOWED_ATTR = ["xmlns", "viewBox", "id", "role", "aria-labelledby", "shape-rendering", "vector-effect", "x", "y", "x1", "y1", "x2", "y2", "cx", "cy", "r", "rx", "ry", "width", "height", "d", "points", "fill", "stroke", "stroke-width", "opacity", "href"];
 
 export function sanitizeAndOptimizeSvg(svg: string): string {
   const window = new JSDOM("").window;

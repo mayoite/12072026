@@ -71,7 +71,7 @@ export function CanvasToolRail({
   };
 
   return (
-    <nav className={styles.rail} aria-label="Canvas tools">
+    <nav className={`${styles.rail} pw-tool-rail`} aria-label="Canvas tools">
       <div className={styles.group} role="group" aria-label="Navigation tools">
         {renderTool("select")}
         {renderTool("pan")}

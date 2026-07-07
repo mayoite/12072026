@@ -9,6 +9,8 @@ import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
 const PREVIEW_MAX_W = 52;
 const PREVIEW_MAX_H = 36;
 const PREVIEW_PADDING = 40;
+/** Render SVG at 2x CSS size for retina clarity. */
+const PREVIEW_RENDER_SCALE = 2;
 
 interface CatalogBlockPreviewProps {
   item: CatalogItem;
@@ -40,7 +42,11 @@ export function CatalogBlockPreview({ item }: CatalogBlockPreviewProps) {
 
   const previewSvg = useMemo(() => {
     if (!block?.prims.length) return null;
-    return sizePreviewSvg(blockToSvg(block, PREVIEW_PADDING), previewW, previewH);
+    return sizePreviewSvg(
+      blockToSvg(block, PREVIEW_PADDING),
+      previewW * PREVIEW_RENDER_SCALE,
+      previewH * PREVIEW_RENDER_SCALE,
+    );
   }, [block, previewW, previewH]);
 
   if (!previewSvg) {

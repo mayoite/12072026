@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, memo } from "react";
 import type { Open3dFloor } from "../model/types";
 import {
   summarizeFloorLayers,
@@ -18,7 +18,7 @@ export interface LayersPanelProps {
   onSelectElement?: (id: string, category: Open3dLayerCategory) => void;
 }
 
-export function LayersPanel({
+export const LayersPanel = memo(function LayersPanel({
   floor,
   visibility,
   onVisibilityChange,
@@ -44,7 +44,11 @@ export function LayersPanel({
         {categories.map((category) => {
           const visible = visibility[category.key];
           return (
-            <div key={category.key} className={styles.layerRow} data-hidden={!visible}>
+            <div
+              key={category.key}
+              className={styles.layerRow}
+              data-hidden={!visible}
+            >
               <button
                 type="button"
                 className={styles.layerVisibilityBtn}
@@ -63,4 +67,4 @@ export function LayersPanel({
       </div>
     </section>
   );
-}
+});

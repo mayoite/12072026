@@ -4,9 +4,8 @@ import { useEffect, useState, type ReactNode } from "react";
 
 import { ProjectSetupStep } from "./ProjectSetupStep";
 import { StartingPointStep } from "./StartingPointStep";
-import {
-  isProjectSetupCompleteInStorage,
-} from "./projectSetup";
+import { isProjectSetupCompleteInStorage } from "./projectSetup";
+import { PlannerSkeleton } from "@/features/planner/ui/PlannerSkeleton";
 
 type ProjectSetupGateProps = {
   guestMode?: boolean;
@@ -18,15 +17,21 @@ type ProjectSetupGateProps = {
  * Blocks the canvas until project setup is complete.
  * Requires persisted metadata — a stale localStorage flag alone is not enough.
  */
-export function ProjectSetupGate({ guestMode = false, planId, children }: ProjectSetupGateProps) {
+export function ProjectSetupGate({
+  guestMode = false,
+  planId,
+  children,
+}: ProjectSetupGateProps) {
   const [isFullyComplete, setIsFullyComplete] = useState(false);
-  const [wizardStep, setWizardStep] = useState<"metadata" | "startingPoint">("metadata");
+  const [wizardStep, setWizardStep] = useState<"metadata" | "startingPoint">(
+    "metadata",
+  );
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
-    // Defer state update to avoid synchronous setState inside useEffect warning
+
+    // Defer via timeout (avoids direct setState-in-effect report); post-mount hydration for gate skeleton.
     const timer = setTimeout(() => {
       setIsHydrated(true);
       if (isProjectSetupCompleteInStorage(guestMode, planId)) {
@@ -36,19 +41,21 @@ export function ProjectSetupGate({ guestMode = false, planId, children }: Projec
     return () => clearTimeout(timer);
   }, [guestMode, planId]);
 
-  if (!isHydrated) return null;
+  if (!isHydrated) {
+    return <PlannerSkeleton />;
+  }
 
-  if (isFullyComplete) {
+  if (guestMode || isFullyComplete) {
     return <>{children}</>;
   }
 
   // Step 1: Collect Project Metadata
   if (wizardStep === "metadata") {
     return (
-      <ProjectSetupStep 
-        guestMode={guestMode} 
-        planId={planId} 
-        onComplete={() => setWizardStep("startingPoint")} 
+      <ProjectSetupStep
+        guestMode={guestMode}
+        planId={planId}
+        onComplete={() => setWizardStep("startingPoint")}
       />
     );
   }
@@ -56,10 +63,10 @@ export function ProjectSetupGate({ guestMode = false, planId, children }: Projec
   // Step 2: Choose Starting Point
   if (wizardStep === "startingPoint") {
     return (
-      <StartingPointStep 
-        guestMode={guestMode} 
-        planId={planId} 
-        onComplete={() => setIsFullyComplete(true)} 
+      <StartingPointStep
+        guestMode={guestMode}
+        planId={planId}
+        onComplete={() => setIsFullyComplete(true)}
       />
     );
   }

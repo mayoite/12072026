@@ -153,6 +153,8 @@ describe("Phase 1 SVG completion", () => {
     // After lock: attrs sorted, preset applied (no unexpected ids etc); svg has no style attr (forbid)
     expect(out.svg).not.toMatch(/<[^>]*\sstyle\s*=/i);
     expect(out.svg).toMatch(/<svg[^>]*\s[^>]*>/); // structure stable
+    expect(out.svg).toContain('shape-rendering="geometricPrecision"');
+    expect(out.thumbnails.map(({ width }) => width)).toEqual([128, 256, 512]);
   });
 
   it("rejects malicious input (script, js href) via canonical sanitize in compiler path", () => {

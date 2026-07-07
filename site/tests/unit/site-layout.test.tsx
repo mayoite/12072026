@@ -3,7 +3,7 @@ import { expect, test, vi } from "vitest";
 import RootLayout from "@/app/(site)/layout";
 
 vi.mock("@/lib/layout/siteLayoutContext", () => ({
-  getSiteLayoutContext: vi.fn().mockResolvedValue({ messages: {}, lang: "en-IN" }),
+  getSiteLayoutContext: vi.fn().mockResolvedValue({ messages: {}, locale: "en", lang: "en-IN" }),
 }));
 
 test("RootLayout renders with children", async () => {

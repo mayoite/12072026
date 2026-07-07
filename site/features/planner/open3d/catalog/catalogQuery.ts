@@ -1,7 +1,7 @@
 import type { QueryFunctionContext } from "@tanstack/react-query";
 
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "../editor/demoCatalogItems";
-import { Open3dCatalogClient } from "./catalogClient";
+import type { Open3dCatalogClient } from "./catalogClient";
 import type { Open3dCatalogItem } from "./catalogTypes";
 
 export const OPEN3D_CATALOG_QUERY_KEY = ["open3d", "catalog"] as const;

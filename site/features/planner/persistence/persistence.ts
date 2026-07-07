@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Planner workspace — IndexedDB persistence for autosave and history.
  */
@@ -32,7 +34,10 @@ export function clearGuestPlanClaimed(): void {
   window.localStorage.removeItem(GUEST_CLAIMED_KEY);
 }
 
-export function getPlannerProjectId(guestMode: boolean, planId?: string): string {
+export function getPlannerProjectId(
+  guestMode: boolean,
+  planId?: string,
+): string {
   if (guestMode) return GUEST_PROJECT_ID;
   const trimmed = planId?.trim();
   return trimmed ? `${MEMBER_PROJECT_ID}:${trimmed}` : MEMBER_PROJECT_ID;
@@ -65,8 +70,12 @@ export async function migrateGuestProjectToMember(
   if (typeof window === "undefined") return "skipped";
 
   const alreadyClaimed = isGuestPlanClaimed();
-  const guest = await persistence.loadProject(GUEST_PROJECT_ID).catch(() => undefined);
-  const member = await persistence.loadProject(MEMBER_PROJECT_ID).catch(() => undefined);
+  const guest = await persistence
+    .loadProject(GUEST_PROJECT_ID)
+    .catch(() => undefined);
+  const member = await persistence
+    .loadProject(MEMBER_PROJECT_ID)
+    .catch(() => undefined);
 
   if (!shouldMigrateGuestPlan(guest, member, alreadyClaimed)) {
     if (guest?.snapshot && (member?.snapshot || alreadyClaimed)) {
@@ -82,7 +91,8 @@ export async function migrateGuestProjectToMember(
   const now = Date.now();
   await persistence.saveProject({
     id: MEMBER_PROJECT_ID,
-    name: guest.name && guest.name !== GUEST_PROJECT_ID ? guest.name : "My layout",
+    name:
+      guest.name && guest.name !== GUEST_PROJECT_ID ? guest.name : "My layout",
     createdAt: guest.createdAt || now,
     updatedAt: now,
     snapshot: guest.snapshot,
@@ -126,12 +136,16 @@ function openDBConnection(name: string): Promise<IDBDatabase> {
       const db = (event.target as IDBOpenDBRequest).result;
 
       if (!db.objectStoreNames.contains(STORE_PROJECTS)) {
-        const projectStore = db.createObjectStore(STORE_PROJECTS, { keyPath: "id" });
+        const projectStore = db.createObjectStore(STORE_PROJECTS, {
+          keyPath: "id",
+        });
         projectStore.createIndex("updatedAt", "updatedAt", { unique: false });
       }
 
       if (!db.objectStoreNames.contains(STORE_HISTORY)) {
-        const historyStore = db.createObjectStore(STORE_HISTORY, { keyPath: "id" });
+        const historyStore = db.createObjectStore(STORE_HISTORY, {
+          keyPath: "id",
+        });
         historyStore.createIndex("projectId", "projectId", { unique: false });
         historyStore.createIndex("timestamp", "timestamp", { unique: false });
       }
@@ -147,11 +161,14 @@ async function migrateLegacyIndexedDbIfNeeded(): Promise<void> {
   try {
     const legacyDb = await openDBConnection(LEGACY_DB_NAME);
     const legacyTx = legacyDb.transaction(STORE_PROJECTS, "readonly");
-    const legacyProjects = await new Promise<PlannerProject[]>((resolve, reject) => {
-      const request = legacyTx.objectStore(STORE_PROJECTS).getAll();
-      request.onsuccess = () => resolve((request.result as PlannerProject[]) ?? []);
-      request.onerror = () => reject(request.error);
-    });
+    const legacyProjects = await new Promise<PlannerProject[]>(
+      (resolve, reject) => {
+        const request = legacyTx.objectStore(STORE_PROJECTS).getAll();
+        request.onsuccess = () =>
+          resolve((request.result as PlannerProject[]) ?? []);
+        request.onerror = () => reject(request.error);
+      },
+    );
     legacyDb.close();
 
     if (legacyProjects.length > 0) {
@@ -199,7 +216,9 @@ export async function saveProject(project: PlannerProject): Promise<void> {
   });
 }
 
-export async function loadProject(id: string): Promise<PlannerProject | undefined> {
+export async function loadProject(
+  id: string,
+): Promise<PlannerProject | undefined> {
   const db = await openDB();
   const tx = db.transaction(STORE_PROJECTS, "readonly");
   const request = tx.objectStore(STORE_PROJECTS).get(id);
@@ -215,7 +234,8 @@ export async function listProjects(): Promise<PlannerProject[]> {
   const index = tx.objectStore(STORE_PROJECTS).index("updatedAt");
   const request = index.getAll();
   return new Promise((resolve, reject) => {
-    request.onsuccess = () => resolve((request.result as PlannerProject[]).reverse());
+    request.onsuccess = () =>
+      resolve((request.result as PlannerProject[]).reverse());
     request.onerror = () => reject(request.error);
   });
 }
@@ -255,7 +275,9 @@ export async function saveHistoryEntry(entry: HistoryEntry): Promise<void> {
   const index = store.index("projectId");
   const request = index.getAll(IDBKeyRange.only(entry.projectId));
   request.onsuccess = () => {
-    const entries = (request.result as HistoryEntry[]).sort((a, b) => b.timestamp - a.timestamp);
+    const entries = (request.result as HistoryEntry[]).sort(
+      (a, b) => b.timestamp - a.timestamp,
+    );
     for (let i = MAX_HISTORY; i < entries.length; i++) {
       store.delete(entries[i].id);
     }
@@ -267,21 +289,27 @@ export async function saveHistoryEntry(entry: HistoryEntry): Promise<void> {
   });
 }
 
-export async function getProjectHistory(projectId: string): Promise<HistoryEntry[]> {
+export async function getProjectHistory(
+  projectId: string,
+): Promise<HistoryEntry[]> {
   const db = await openDB();
   const tx = db.transaction(STORE_HISTORY, "readonly");
   const index = tx.objectStore(STORE_HISTORY).index("projectId");
   const request = index.getAll(IDBKeyRange.only(projectId));
   return new Promise((resolve, reject) => {
     request.onsuccess = () => {
-      const entries = (request.result as HistoryEntry[]).sort((a, b) => b.timestamp - a.timestamp);
+      const entries = (request.result as HistoryEntry[]).sort(
+        (a, b) => b.timestamp - a.timestamp,
+      );
       resolve(entries);
     };
     request.onerror = () => reject(request.error);
   });
 }
 
-export async function restoreFromHistory(entryId: string): Promise<HistoryEntry | undefined> {
+export async function restoreFromHistory(
+  entryId: string,
+): Promise<HistoryEntry | undefined> {
   const db = await openDB();
   const tx = db.transaction(STORE_HISTORY, "readonly");
   const request = tx.objectStore(STORE_HISTORY).get(entryId);
@@ -294,7 +322,11 @@ export async function restoreFromHistory(entryId: string): Promise<HistoryEntry 
 // ─── Auto-save Hook Logic ───────────────────────────────────────────────────
 
 type AutoSaverCallbacks = {
-  onSaved?: (event: { projectId: string; updatedAt: number; snapshot: string }) => void;
+  onSaved?: (event: {
+    projectId: string;
+    updatedAt: number;
+    snapshot: string;
+  }) => void;
   onError?: (error: unknown) => void;
 };
 
@@ -302,7 +334,10 @@ type AutoSaverCallbacks = {
  * Creates a debounced auto-save function.
  * Call with project data on every store change.
  */
-export function createAutoSaver(projectId: string, callbacks: AutoSaverCallbacks = {}) {
+export function createAutoSaver(
+  projectId: string,
+  callbacks: AutoSaverCallbacks = {},
+) {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   let lastSaved = 0;
   let active = true;
@@ -393,7 +428,12 @@ export function decodeShareLink(url: string): string | null {
     const parsed = JSON.parse(decoded);
     if (typeof parsed !== "object" || parsed === null) return null;
     // Must have a recognizable document structure
-    if (!("version" in parsed) && !("store" in parsed) && !("document" in parsed)) return null;
+    if (
+      !("version" in parsed) &&
+      !("store" in parsed) &&
+      !("document" in parsed)
+    )
+      return null;
     return decoded;
   } catch {
     return null;

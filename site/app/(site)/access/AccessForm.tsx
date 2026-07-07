@@ -14,9 +14,10 @@ import { loginWithSupabase } from "@/lib/auth/supabaseServerActions";
 interface AccessFormProps {
   nextPath: string;
   guestHref: string;
+  requiresAdmin?: boolean;
 }
 
-export function AccessForm({ nextPath, guestHref }: AccessFormProps) {
+export function AccessForm({ nextPath, guestHref, requiresAdmin = false }: AccessFormProps) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
@@ -59,7 +60,9 @@ export function AccessForm({ nextPath, guestHref }: AccessFormProps) {
           Welcome to Oando
         </h2>
         <p className="mt-3 text-sm text-[var(--text-muted)]">
-          Sign in to access your workspace, or continue as a guest to explore.
+          {requiresAdmin
+            ? "Sign in with a platform admin account to open the admin console."
+            : "Sign in to access your workspace, or continue as a guest to explore."}
         </p>
       </div>
 
