@@ -1,10 +1,5 @@
 # Plans
 
-## User coments
-1. Added Research.md on 7th July 2026 at 20:40 PM IST
-2. Added pending-clean.md up claimed to by Grok on 7th July 2026 at 20:40 PM IST
-
-## Orginal text
 Start here.
 
 ## Layout
