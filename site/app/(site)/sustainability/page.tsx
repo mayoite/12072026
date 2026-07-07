@@ -2,6 +2,7 @@ import Image from "next/image";
 import {
   EditorialArrowLink,
 } from "@/components/site/EditorialRoute";
+import { HomeMarketingLayout } from "@/components/home/layout";
 import { SUSTAINABILITY_PAGE_COPY } from "@/lib/site-data/routeCopy";
 import { SUSTAINABILITY_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
 
@@ -9,6 +10,7 @@ export const metadata = SUSTAINABILITY_PAGE_METADATA;
 
 export default function SustainabilityPage() {
   return (
+    <HomeMarketingLayout>
     <div className="bg-[var(--surface-page)]">
       <section className="grid pt-16 lg:min-h-[42rem] lg:grid-cols-[0.85fr_1.15fr]">
         <div className="flex items-center px-7 py-14 md:px-14 lg:px-16">
@@ -71,5 +73,6 @@ export default function SustainabilityPage() {
         </div>
       </section>
     </div>
+    </HomeMarketingLayout>
   );
 }

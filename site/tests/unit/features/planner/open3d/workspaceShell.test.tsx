@@ -538,7 +538,8 @@ describe("TDD editor coverage additions", () => {
       expect(toolFromShortcutKey("r")).toBe("room");
       expect(toolFromShortcutKey("w")).toBe("wall");
       expect(toolFromShortcutKey("o")).toBe("opening");
-      expect(toolFromShortcutKey("d")).toBe("dimension");
+      expect(toolFromShortcutKey("d")).toBe("door");
+      expect(toolFromShortcutKey("m")).toBe("dimension");
       expect(toolFromShortcutKey("p")).toBe("placement");
       expect(toolFromShortcutKey("h")).toBe("pan");
       expect(toolFromShortcutKey("?")).toBeNull();

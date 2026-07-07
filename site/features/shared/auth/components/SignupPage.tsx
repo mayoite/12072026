@@ -77,20 +77,20 @@ export function SignupForm({ onSuccess }: { onSuccess?: () => void }) {
       <div className="flex flex-col items-center text-center">
         <span
           aria-hidden="true"
-          className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-green-50 text-green-600 dark:bg-green-950/40 dark:text-green-400"
+          className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-success-soft text-success dark:bg-green-950/40 dark:text-green-400"
         >
           <CheckCircle2 size={24} />
         </span>
-        <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">
+        <h1 className="text-2xl font-semibold tracking-tight text-heading dark:text-gray-100">
           Check your inbox
         </h1>
-        <p className="mt-2 text-ui-13 text-gray-500 dark:text-gray-400">
+        <p className="mt-2 text-ui-13 text-muted dark:text-subtle">
           We sent a verification link to{' '}
-          <span className="font-medium text-gray-700 dark:text-gray-200">{email}</span>.
+          <span className="font-medium text-body dark:text-inverse-muted">{email}</span>.
           Click it to finish setting up your account.
         </p>
         <div className="mt-6 w-full border-t border-gray-100 pt-5 dark:border-gray-800">
-          <p className="mb-1 text-ui-11 text-gray-500 dark:text-gray-400">
+          <p className="mb-1 text-ui-11 text-muted dark:text-subtle">
             Didn&apos;t get the email? Check your spam folder or resend:
           </p>
           <ResendVerificationButton email={email} />
@@ -133,7 +133,7 @@ export function SignupForm({ onSuccess }: { onSuccess?: () => void }) {
         <div className="space-y-1.5">
           <label
             htmlFor="signup-password"
-            className="block text-ui-13 font-medium text-gray-700 dark:text-gray-300"
+            className="block text-ui-13 font-medium text-body dark:text-inverse-muted"
           >
             Password
           </label>
@@ -152,7 +152,7 @@ export function SignupForm({ onSuccess }: { onSuccess?: () => void }) {
           />
           <p
             id="signup-password-hint"
-            className="text-ui-11 text-gray-500 dark:text-gray-400"
+            className="text-ui-11 text-muted dark:text-subtle"
           >
             8+ characters.
           </p>
@@ -176,13 +176,13 @@ export function SignupForm({ onSuccess }: { onSuccess?: () => void }) {
           {busy ? 'Creating account…' : 'Create account'}
         </Button>
 
-        <p className="text-center text-ui-11 leading-relaxed text-gray-500 dark:text-gray-400">
+        <p className="text-center text-ui-11 leading-relaxed text-muted dark:text-subtle">
           By creating an account you agree to our{' '}
           <Link
             href="/terms"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-gray-700 dark:hover:text-gray-300"
+            className="underline hover:text-body dark:hover:text-inverse-muted"
           >
             Terms
           </Link>{' '}
@@ -191,7 +191,7 @@ export function SignupForm({ onSuccess }: { onSuccess?: () => void }) {
             href="/privacy"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-gray-700 dark:hover:text-gray-300"
+            className="underline hover:text-body dark:hover:text-inverse-muted"
           >
             Privacy Policy
           </Link>
@@ -227,7 +227,7 @@ export function SignupPage() {
 
       <AuthLinks>
         <span />
-        <span className="text-gray-400 dark:text-gray-600">
+        <span className="text-subtle dark:text-muted">
           Already have an account?{' '}
           <Link
             href="/login"

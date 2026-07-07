@@ -7,15 +7,16 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 
 import { POST } from "@/app/api/admin/svg-editor/route";
+import type * as PersistBlockDescriptor from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
 
 vi.mock("@/lib/api/withAuth", () => ({
   withAuth: (handler: (req: NextRequest) => Promise<Response>) => handler,
 }));
 
 vi.mock("@/features/planner/admin/svg-editor/persistBlockDescriptor", async () => {
-  const actual = await vi.importActual<
-    typeof import("@/features/planner/admin/svg-editor/persistBlockDescriptor")
-  >("@/features/planner/admin/svg-editor/persistBlockDescriptor");
+  const actual = await vi.importActual<typeof PersistBlockDescriptor>(
+    "@/features/planner/admin/svg-editor/persistBlockDescriptor",
+  );
   return {
     ...actual,
     persistBlockDescriptor: vi.fn(),

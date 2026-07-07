@@ -39,7 +39,7 @@ export function HomeFAQ() {
                       id={btnId}
                       aria-expanded={isOpen}
                       aria-controls={panelId}
-                      className="flex w-full items-center justify-between gap-4 py-1 text-left transition-colors duration-200 hover:text-strong"
+                      className="flex w-full items-center justify-between gap-4 py-1 text-start transition-colors duration-200 hover:text-strong"
                       onClick={() => setOpen(isOpen ? null : index)}
                     >
                       <span className="home-faq-question">

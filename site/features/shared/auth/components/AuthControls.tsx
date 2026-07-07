@@ -26,10 +26,10 @@ const buttonVariants: Record<ButtonVariant, string> = {
   primary:
     "bg-[color:var(--color-blueprint)] text-white hover:bg-[color:var(--color-blueprint-strong)] focus-visible:ring-[color:var(--color-blueprint)]",
   secondary:
-    "border border-[color:var(--color-paper-line)] bg-[color:var(--color-paper-raised)] text-gray-700 hover:bg-[color:var(--color-paper-sunken)] focus-visible:ring-[color:var(--color-blueprint)] dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800/50",
+    "border border-[color:var(--color-paper-line)] bg-[color:var(--color-paper-raised)] text-body hover:bg-[color:var(--color-paper-sunken)] focus-visible:ring-[color:var(--color-blueprint)] dark:border-strong dark:bg-inverse dark:text-inverse-muted dark:hover:bg-inverse/50",
   danger: "bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500",
   ghost:
-    "text-gray-700 hover:bg-[color:var(--color-paper-sunken)] focus-visible:ring-[color:var(--color-blueprint)] dark:text-gray-200 dark:hover:bg-gray-800",
+    "text-body hover:bg-[color:var(--color-paper-sunken)] focus-visible:ring-[color:var(--color-blueprint)] dark:text-inverse-muted dark:hover:bg-inverse",
 };
 
 const controlSizes: Record<ControlSize, string> = {
@@ -38,7 +38,7 @@ const controlSizes: Record<ControlSize, string> = {
 };
 
 const inputBase =
-  "block w-full rounded border bg-[color:var(--color-paper-raised)] text-gray-900 placeholder:text-gray-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[color:var(--color-blueprint)] disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-[color:var(--color-paper-sunken)] dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus-visible:ring-offset-gray-900 dark:disabled:bg-gray-800";
+  "block w-full rounded border bg-[color:var(--color-paper-raised)] text-heading placeholder:text-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[color:var(--color-blueprint)] disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-[color:var(--color-paper-sunken)] dark:bg-inverse dark:text-gray-100 dark:placeholder:text-muted dark:focus-visible:ring-offset-gray-900 dark:disabled:bg-inverse";
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { variant = "secondary", size = "md", leftIcon, rightIcon, className, children, ...rest },
@@ -67,7 +67,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       aria-invalid={invalid || undefined}
       className={cx(
         inputBase,
-        invalid ? "border-red-500 focus-visible:ring-red-500" : "border-[color:var(--color-paper-line)] dark:border-gray-700",
+        invalid ? "border-accent focus-visible:ring-red-500" : "border-[color:var(--color-paper-line)] dark:border-strong",
         size === "sm" ? "px-2 py-1 text-ui-11" : "px-2.5 py-1.5 text-ui-13",
         className,
       )}

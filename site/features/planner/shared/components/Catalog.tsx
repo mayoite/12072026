@@ -14,10 +14,10 @@ export function Catalog({ items, onSelect, className = "" }: CatalogProps) {
       {items.map((item) => (
         <div
           key={item.id}
-          className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border border-gray-200 bg-white transition-all hover:border-blue-500 hover:shadow-md"
+          className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border border-soft bg-white transition-all hover:border-accent hover:shadow-md"
           onClick={() => onSelect?.(item)}
         >
-          <div className="relative aspect-square w-full overflow-hidden bg-gray-50">
+          <div className="relative aspect-square w-full overflow-hidden bg-page">
             {item.thumbnail || item.imageUrl ? (
               <Image
                 src={item.thumbnail || item.imageUrl || ""}
@@ -27,26 +27,26 @@ export function Catalog({ items, onSelect, className = "" }: CatalogProps) {
                 unoptimized
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-gray-400">
+              <div className="flex h-full w-full items-center justify-center text-subtle">
                 No Image
               </div>
             )}
           </div>
           <div className="flex flex-1 flex-col p-3">
-            <h3 className="line-clamp-1 text-sm font-medium text-gray-900">
+            <h3 className="line-clamp-1 text-sm font-medium text-heading">
               {item.name}
             </h3>
             {item.category && (
-              <p className="text-xs text-gray-500">{item.category}</p>
+              <p className="text-xs text-muted">{item.category}</p>
             )}
             <div className="mt-auto pt-2">
-              <div className="flex items-center gap-1 text-xs text-gray-600 tabular-nums">
+              <div className="flex items-center gap-1 text-xs text-muted tabular-nums">
                 <span>{item.dimensions.widthMm}</span>
-                <span className="text-gray-400">×</span>
+                <span className="text-subtle">×</span>
                 <span>{item.dimensions.depthMm}</span>
-                <span className="text-gray-400">×</span>
+                <span className="text-subtle">×</span>
                 <span>{item.dimensions.heightMm}</span>
-                <span className="ml-1 text-gray-400">mm</span>
+                <span className="ml-1 text-subtle">mm</span>
               </div>
             </div>
           </div>

@@ -25,7 +25,7 @@ export function HotspotImage({ src, alt, hotspots }: HotspotImageProps) {
 
   return (
     <div
-      className="relative w-full h-[37.5rem] overflow-hidden bg-soft group"
+      className="relative w-full h-[24rem] md:h-[37.5rem] overflow-hidden bg-soft group"
       style={{ contentVisibility: "auto", containIntrinsicSize: "auto 600px" }}
     >
       <Image
@@ -75,7 +75,7 @@ export function HotspotImage({ src, alt, hotspots }: HotspotImageProps) {
                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute left-1/2 -translate-x-1/2 bottom-12 w-64 scheme-panel p-4 z-20 pointer-events-auto text-left"
+                className="absolute left-1/2 -translate-x-1/2 bottom-12 w-64 scheme-panel p-4 z-20 pointer-events-auto text-start"
               >
                 {hotspot.title && (
                   <h4 className="font-medium text-lg mb-1">

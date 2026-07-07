@@ -28,14 +28,14 @@ describe('app/(site)/dashboard/page.tsx', () => {
   it('redirects unauthenticated users to access', async () => {
     vi.mocked(getOptionalUser).mockResolvedValue(null);
 
-    await expect(DashboardPage()).rejects.toThrow('NEXT_REDIRECT');
+    await expect(DashboardPage({ searchParams: Promise.resolve({}) })).rejects.toThrow('NEXT_REDIRECT');
     expect(redirect).toHaveBeenCalledWith('/access?next=%2Fdashboard');
   });
 
   it('renders dashboard for authenticated users', async () => {
     vi.mocked(getOptionalUser).mockResolvedValue({ email: 'user@example.com' } as never);
 
-    const page = await DashboardPage();
+    const page = await DashboardPage({ searchParams: Promise.resolve({}) });
     render(page);
 
     expect(screen.getByTestId('dashboard-client')).toHaveTextContent('user@example.com');

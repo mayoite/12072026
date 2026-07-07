@@ -12,11 +12,11 @@ Detail was merged from archived phase specs. See `archive/Plans/planner Phase1/p
 
 | Phase | Status | What is left |
 |-------|--------|--------------|
-| 08 | Implemented, verification pending | Browser soak (`0412`, user-owned; no further agent probe attempts). Supabase table (`0409` deferred). |
+| 08 | Implemented, verification pending | Playwright soak (user-owned). Supabase table (`0409` deferred). |
 | 09 | Planned | Lazy 3D. Export SVG/PNG/PDF/DXF. AI advisor jobs. Background progress UI. |
 | 10 | Planned | Feature flag pilot. Rollback drill ≤30s. Archive cleanup manifest. Handover doc. |
 
-Blockers: `PLAN-FAIL-0409` deferred (Phase 08 table). Route swap stays behind flag until Phase 10 sign-off. Release gates `0408`/`0410`/`0413` remain open.
+Blockers: `PLAN-FAIL-0409` deferred (Phase 08 table). Route swap stays behind flag until Phase 10 sign-off. Release gate `0408` coverage + `release:gate` remain open (`0410`/`0413`/`0412` HTTP closed).
 
 Evidence for Phase 08 is committed under `results/site/phase-08/` (vitest, http-probe, dual-read).
 
@@ -28,7 +28,7 @@ Evidence for Phase 08 is committed under `results/site/phase-08/` (vitest, http-
 
 **Done:** `O_EXCL` lock with `409.lock_busy`. Versioned `{slug}.{n}.json` + `.latest.json` pointer. Loader snapshot reads. Rolling `_archive/` retention. Disk dual-read harness. Route maps sticky 409 codes.
 
-**Left:** Browser soak (`0412`). Supabase `block_descriptors` migration (`PLAN-FAIL-0409` deferred).
+**Left:** Playwright soak (user-owned). Supabase `block_descriptors` migration (`PLAN-FAIL-0409` deferred).
 
 **Checks:** `08-PERS-04` lock timeout · `08-PERS-10` versionMismatch → 422 · dual-read evidence before Verified.
 

@@ -56,7 +56,7 @@ describe('domain extractors (plan 02)', () => {
 
   it('extracts theme token and CSS sync records', () => {
     const records = extractThemeRecords({ repoRoot })
-    expect(records.some((record) => record.sourcePath === 'site/app/css/core/tokens/theme.css')).toBe(true)
+    expect(records.some((record) => record.sourcePath === 'site/app/css/core/theme.css')).toBe(true)
     expect(records.some((record) => record.sourceKind === 'theme-token-file')).toBe(true)
   })
 })

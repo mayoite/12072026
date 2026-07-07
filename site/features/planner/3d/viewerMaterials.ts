@@ -3,7 +3,7 @@
  *
  * WebGL cannot read CSS custom properties, so the FOCSS design tokens used
  * here are mirrored as hex values with their source token names attached.
- * Source of truth: `app/css/core/tokens/theme.css`.
+ * Source of truth: `app/css/core/theme.css`.
  *
  * All materials are cached and all geometries are unit-sized singletons that
  * meshes scale, so a 100+ item scene shares a handful of GPU resources and

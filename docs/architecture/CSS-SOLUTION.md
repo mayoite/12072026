@@ -49,16 +49,15 @@ theme.css → surface bundles → @utility/component CSS → CSS modules (open3d
 
 | Path | Role |
 |------|------|
-| `app/css/index.css` | Entrypoint |
-| `app/css/core/tokens/` | Theme variables and design constants |
-| `app/css/base/` | Global resets and primitives |
-| `app/css/core/components/` | Reusable component styles (extract on 3rd use) |
-| `app/css/core/utilities/` | Reusable utility helpers |
-| `app/css/core/site/` | Site-specific bundles |
-| `app/css/core/planner/` | Planner bundles (`open3d-workspace.css`, etc.) |
-| `app/css/core/chrome/` | Shell-level UI (nav, footer, admin-pages) |
+| `app/css/index.css` | Entrypoint (shared `core/` fundamentals only) |
+| `app/css/core/theme.css` | `@theme` tokens |
+| `app/css/core/utilities/*.css` | Typography, animations, layout/color/scheme utilities (split by use, ≤350 lines each) |
+| `app/css/core/components/*.css` | Shared component styles (extract on 3rd use) |
+| `app/css/core/locked/site/` | Site surface — flat `*.css` + `index.css` |
+| `app/css/core/locked/admin/` | Admin surface — flat `*.css` + `index.css` |
+| `app/css/core/locked/planner/` | Planner surface — flat `*.css`; `marketing.css` / `open3d-workspace.css` entries |
 
-**Legacy:** `app/css/ooplanner/` — no new files; fold into `core/planner/` during UI-1.
+**Legacy:** `app/css/ooplanner/` — folded into `core/locked/planner/workspace-*.css` (2026-07-07).
 
 ---
 
@@ -66,7 +65,7 @@ theme.css → surface bundles → @utility/component CSS → CSS modules (open3d
 
 | Area | Current | Proposed |
 |------|---------|----------|
-| Open3d pilot | Mixed `ooplanner/` + `core/planner/` | Single `open3d-workspace.css` bundle via `app/planner/open3d/layout.tsx` |
+| Open3d pilot | Single `open3d-workspace.css` in `core/locked/planner/` | via `app/planner/open3d/layout.tsx` |
 | Admin | Some raw Tailwind palette on older routes | `admin-pages.css` primitives + `lint:ui` |
 | Marketing | `home-*` + legacy `scheme-*` dialects | UI-3 migration per SITE-MARKETING contract |
 | Enforcement | `lint:ui` warn | `lint:ui:strict` after UI-1 shell |
@@ -127,7 +126,7 @@ New feature modules are the main drift vector. Enforcement lives in:
 - **`plann/06-UI-PLAN.md`** — phased execution (UI-0 → UI-3)
 - **`site/scripts/lint-ui-contract.mjs`** — `lint:ui` / `lint:ui:strict`
 
-Do not adopt a full design-system program (Storybook-first) before 1A+1B; extract primitives to `core/components/` after the third repeated pattern.
+Do not adopt a full design-system program (Storybook-first) before 1A+1B; extract primitives to `core/components/*.css` after the third repeated pattern.
 
 ---
 

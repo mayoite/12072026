@@ -1,4 +1,5 @@
-/* ── Badges ── */
+
+/* â”€â”€ Badges â”€â”€ */
 @utility badge-accent {
   display: inline-flex;
   align-items: center;
@@ -43,7 +44,7 @@
   color: var(--text-body);
 }
 
-/* ── Link with arrow ── */
+/* â”€â”€ Link with arrow â”€â”€ */
 .link-arrow {
   display: inline-flex;
   align-items: center;
@@ -57,14 +58,14 @@
   transition-timing-function: var(--ease-standard);
 }
 .link-arrow::after {
-  content: "→";
+  content: "â†’";
   display: inline-block;
   transition: transform var(--motion-fast) var(--ease-standard);
 }
 .link-arrow:hover { color: var(--color-primary-hover); }
 .link-arrow:hover::after { transform: translateX(0.1875rem); }
 
-/* ── Card lift ── */
+/* â”€â”€ Card lift â”€â”€ */
 .card-lift {
   transition-property: transform, box-shadow;
   transition-duration: var(--motion-base);
@@ -75,7 +76,7 @@
   box-shadow: var(--shadow-lift);
 }
 
-/* ── Stats block ── */
+/* â”€â”€ Stats block â”€â”€ */
 @utility stats-block {
   display: grid;
 }
@@ -88,4 +89,3 @@
   color: var(--text-muted);
   line-height: 1.3;
 }
-

@@ -1,4 +1,5 @@
-/* ── Site header ── */
+
+/* â”€â”€ Site header â”€â”€ */
 @utility site-header__desktop-nav {
   display: none;
   align-items: center;
@@ -16,7 +17,7 @@
   @media (width >= theme(--breakpoint-sm)) { display: block; }
 }
 
-/* ── Site footer ── */
+/* â”€â”€ Site footer â”€â”€ */
 @utility site-footer {
   background: linear-gradient(180deg, var(--surface-inverse) 0%,
     color-mix(in srgb, var(--surface-inverse) 94%, var(--color-primary) 6%) 100%);
@@ -102,14 +103,14 @@
   min-width: 0;
 }
 
-/* ── Section divider ── */
+/* â”€â”€ Section divider â”€â”€ */
 @utility section-divider {
   border-bottom: 0.0625rem solid var(--border-soft);
   padding-bottom: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
-/* ── Reveal on scroll ── */
+/* â”€â”€ Reveal on scroll â”€â”€ */
 @utility reveal-on-scroll {
   opacity: 0;
   transform: translateY(1.25rem);
@@ -119,11 +120,11 @@
   &.visible { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Surface overlays (additional) ── */
+/* â”€â”€ Surface overlays (additional) â”€â”€ */
 @utility surface-overlay-24 { background: var(--overlay-inverse-24); }
 @utility surface-overlay-inverse-12 { background: var(--overlay-inverse-12); }
 
-/* ── Animations ── */
+/* â”€â”€ Animations â”€â”€ */
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -140,7 +141,7 @@
   animation: marquee-reverse 30s linear infinite;
 }
 
-/* ── Swiper custom nav buttons ── */
+/* â”€â”€ Swiper custom nav buttons â”€â”€ */
 @utility swiper-button-prev-custom {
   cursor: pointer;
   -webkit-user-select: none;
@@ -152,7 +153,7 @@
   user-select: none;
 }
 
-/* ── Skeleton loading ── */
+/* â”€â”€ Skeleton loading â”€â”€ */
 @utility skeleton {
   background: linear-gradient(90deg, var(--surface-muted) 25%, var(--surface-hover) 50%, var(--surface-muted) 75%);
   background-size: 200% 100%;
@@ -164,7 +165,7 @@
   100% { background-position: -200% 0; }
 }
 
-/* ── Home section base ── */
+/* â”€â”€ Home section base â”€â”€ */
 @utility home-section {
   width: 100%;
 }

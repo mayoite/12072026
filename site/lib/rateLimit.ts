@@ -177,7 +177,15 @@ export async function createSupabaseRateLimitBackend(): Promise<RateLimitBackend
           window_start: currentWindow,
         } as { key: string; count: number; window_start: number };
         // rate_limits table rows not present in generated supabase DB types (platform/drizzle or config/database/types); cast to allow upsert of known shape. Reason: runtime table for rate limiting. Owner: lib/rateLimit. Removal: when rate_limits added to schema + regen types.
-        const { error: upsertError } = await (supabase.from("rate_limits") as any).upsert(upsertPayload);
+        type RateLimitsUpsertClient = {
+          upsert: (payload: {
+            key: string;
+            count: number;
+            window_start: number;
+          }) => Promise<{ error: unknown }>;
+        };
+        const rateLimitsTable = supabase.from("rate_limits") as unknown as RateLimitsUpsertClient;
+        const { error: upsertError } = await rateLimitsTable.upsert(upsertPayload);
 
         if (upsertError) {
           return memoryRateLimitOrFailClosed(key, limit, windowMs);

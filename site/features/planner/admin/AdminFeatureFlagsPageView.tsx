@@ -98,7 +98,7 @@ export default function AdminFeatureFlagsPageView() {
       </div>
 
       {error ? (
-        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+        <div className="mb-4 rounded-xl border border-accent bg-danger-soft p-4 text-sm text-red-700" role="alert">
           {error}
         </div>
       ) : null}

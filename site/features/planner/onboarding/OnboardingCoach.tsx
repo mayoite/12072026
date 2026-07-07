@@ -145,21 +145,21 @@ export function OnboardingCoach({
           <button
             type="button"
             onClick={handleSkip}
-            className="absolute right-4 top-4 text-sm text-gray-500"
+            className="absolute right-4 top-4 text-sm text-muted"
             aria-label="Skip onboarding"
           >
             Skip
           </button>
           <div className="flex flex-1 flex-col items-center justify-center text-center">
-            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-brand">
               <Icon size={48} strokeWidth={1.75} aria-hidden />
             </div>
-            <h2 className="text-[1.125rem] font-bold text-gray-900">{mobileStep.title}</h2>
-            <p className="mt-2 max-w-[16.25rem] text-sm leading-6 text-gray-500">{mobileStep.description}</p>
+            <h2 className="text-[1.125rem] font-bold text-heading">{mobileStep.title}</h2>
+            <p className="mt-2 max-w-[16.25rem] text-sm leading-6 text-muted">{mobileStep.description}</p>
             <button
               type="button"
               onClick={mobileLast ? handleComplete : () => setCurrentStep((stepIndex) => stepIndex + 1)}
-              className="mt-8 min-h-[2.75rem] rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white"
+              className="mt-8 min-h-[2.75rem] rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-white"
             >
               {mobileLast ? "Get started" : "Next"}
             </button>
@@ -168,7 +168,7 @@ export function OnboardingCoach({
             {mobileSteps.map((item, index) => (
               <span
                 key={item.title}
-                className={`h-1.5 w-1.5 rounded-full ${index === mobileStepIndex ? "bg-blue-600" : "bg-gray-300"}`}
+                className={`h-1.5 w-1.5 rounded-full ${index === mobileStepIndex ? "bg-primary" : "bg-gray-300"}`}
                 aria-hidden
               />
             ))}

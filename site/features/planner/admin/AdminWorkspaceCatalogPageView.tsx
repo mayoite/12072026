@@ -98,7 +98,7 @@ export default function AdminWorkspaceCatalogPageView() {
       <p className="mb-3 text-sm text-muted">{items.length} items</p>
 
       <div className="overflow-hidden rounded-xl border border-soft bg-panel">
-        <table className="w-full min-w-[50rem] text-left text-sm">
+        <table className="w-full min-w-[50rem] text-start text-sm">
           <thead className="border-b border-soft bg-subtle/50 text-xs uppercase tracking-wide text-soft">
             <tr>
               <th className="px-4 py-3">SKU / ID</th>
@@ -155,9 +155,9 @@ export function AdminCanvasConfigSection() {
       <table className="w-full text-sm">
         <thead className="border-b border-soft text-xs uppercase text-soft">
           <tr>
-            <th className="px-4 py-2 text-left">Group</th>
-            <th className="px-4 py-2 text-left">Parameter</th>
-            <th className="px-4 py-2 text-left">Value</th>
+            <th className="px-4 py-2 text-start">Group</th>
+            <th className="px-4 py-2 text-start">Parameter</th>
+            <th className="px-4 py-2 text-start">Value</th>
           </tr>
         </thead>
         <tbody>

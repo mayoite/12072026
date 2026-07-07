@@ -25,7 +25,7 @@ export function Tooltip({
       <ArkTooltip.Trigger asChild>{children}</ArkTooltip.Trigger>
       <ArkTooltip.Positioner>
         <ArkTooltip.Content
-          className="hidden md:block animate-in fade-in-0 zoom-in-95 rounded bg-gray-900 px-2 py-1.5 text-xs text-white"
+          className="hidden md:block animate-in fade-in-0 zoom-in-95 rounded bg-inverse px-2 py-1.5 text-xs text-white"
           style={{ zIndex: Z.tooltip }}
         >
           <span className="inline-flex items-center gap-2">

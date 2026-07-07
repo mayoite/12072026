@@ -93,7 +93,7 @@ describe("Phase 08 import graph proof", () => {
     const { default: PlannerGuestPage } = await import("@/app/planner/(workspace)/guest/page");
     const { default: PlannerCanvasPage } = await import("@/app/planner/(workspace)/canvas/page");
 
-    render(createElement(PlannerGuestPage));
+    render(await PlannerGuestPage({ searchParams: Promise.resolve({}) }));
     expect(screen.getByTestId("open3d-workspace-route")).toHaveTextContent("guest");
 
     cleanup();

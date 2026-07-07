@@ -15,10 +15,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextRequest } from "next/server";
 import { POST } from "@/app/api/admin/svg-editor/route";
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
+import type * as SvgBlockDescriptorLoader from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
 
 vi.mock("@/lib/api/withAuth", () => ({
-  withAuth: (handler: any, _opts: any) => handler,
+  withAuth: (
+    handler: (req: NextRequest, ctx: unknown) => Promise<Response>,
+    _opts: unknown,
+  ) => handler,
 }));
 
 vi.mock("@/features/planner/admin/svg-editor/persistBlockDescriptor", () => ({
@@ -31,7 +34,9 @@ vi.mock("@/features/planner/admin/svg-editor/svgPipelineRunner", () => ({
 }));
 
 vi.mock("@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader", async () => {
-  const actual = await vi.importActual<any>("@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader");
+  const actual = await vi.importActual<typeof SvgBlockDescriptorLoader>(
+    "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader",
+  );
   return { ...actual, clearLoaderCache: vi.fn() };
 });
 

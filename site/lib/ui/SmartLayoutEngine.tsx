@@ -116,7 +116,7 @@ export function SmartLayoutPanel({
 
   return (
     <div
-      className="fixed z-50 bottom-6 left-6 w-[23.75rem] max-h-[32.5rem] rounded-xl border shadow-2xl overflow-hidden flex flex-col"
+      className="fixed z-50 bottom-6 left-6 w-[23.75rem] max-w-[calc(100vw-2rem)] max-h-[32.5rem] rounded-xl border shadow-2xl overflow-hidden flex flex-col"
       style={{
         background: "var(--surface-page, var(--color-white-50))",
         borderColor: "var(--border-soft, var(--color-bronze-100))",
@@ -160,16 +160,16 @@ export function SmartLayoutPanel({
             <button
               key={tmpl.id}
               onClick={() => setSelectedId(tmpl.id)}
-              className={`w-full text-left p-3 rounded-lg border transition-all ${
+              className={`w-full text-start p-3 rounded-lg border transition-all ${
                 selectedId === tmpl.id
                   ? "ring-2 ring-[var(--color-primary,var(--color-ecru-500))] border-[var(--color-primary,var(--color-ecru-500))]"
-                  : "hover:border-gray-300"
+                  : "hover:border-muted"
               }`}
               style={{ borderColor: selectedId === tmpl.id ? undefined : "var(--border-soft, var(--color-bronze-100))" }}
             >
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded flex items-center justify-center bg-gray-100 flex-shrink-0">
-                  <IconComponent size={16} className="text-gray-600" />
+                <div className="w-8 h-8 rounded flex items-center justify-center bg-soft flex-shrink-0">
+                  <IconComponent size={16} className="text-muted" />
                 </div>
                 <div>
                   <div className="text-xs font-semibold" style={{ color: "var(--text-strong, var(--color-ecru-950))" }}>
@@ -179,10 +179,10 @@ export function SmartLayoutPanel({
                     {tmpl.description}
                   </div>
                   <div className="flex items-center gap-2 mt-1.5">
-                    <span className="text-[0.625rem] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
+                    <span className="text-[0.625rem] px-1.5 py-0.5 rounded bg-soft text-muted">
                       {tmpl.teamSize.min}–{tmpl.teamSize.max} people
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-soft text-muted">
                       {tmpl.sqftPerPerson} ft²/person
                     </span>
                   </div>

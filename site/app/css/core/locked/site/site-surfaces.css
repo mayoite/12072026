@@ -1,0 +1,4 @@
+/* Shared marketing primitives — ContactTeaser, route landings */
+@reference "../../../index.css";
+@import "./home-base.css";
+@import "./home-type-fallback.css";

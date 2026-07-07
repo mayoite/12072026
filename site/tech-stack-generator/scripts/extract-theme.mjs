@@ -5,7 +5,7 @@ import { createNormalizedRecord } from './normalized-record.mjs'
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const defaultRepoRoot = path.resolve(scriptDir, '..', '..', '..')
-const THEME_PATH = 'site/app/css/core/tokens/theme.css'
+const THEME_PATH = 'site/app/css/core/theme.css'
 
 export function extractThemeRecords({ repoRoot = defaultRepoRoot } = {}) {
   const records = []

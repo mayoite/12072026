@@ -114,10 +114,10 @@ export function VisualIVR() {
     };
 
     return (
-        <div className="w-full max-w-4xl mx-auto min-h-[31.25rem] bg-neutral-50 border border-neutral-200 p-8 md:p-12 shadow-sm rounded-none">
+        <div className="w-full max-w-4xl mx-auto min-h-[31.25rem] bg-page border border-soft p-8 md:p-12 shadow-sm rounded-none">
             {/* Header / Breadcrumbs */}
             <div className="mb-8 flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm text-neutral-500">
+                <div className="flex items-center gap-2 text-sm text-muted">
                     {path.length > 1 && (
                         <button onClick={handleBack} className="flex items-center gap-1 hover:text-primary transition-colors">
                             <ArrowLeft className="w-4 h-4" /> Back
@@ -126,14 +126,14 @@ export function VisualIVR() {
                     {path.length > 1 && <span className="text-neutral-300">|</span>}
                     <div className="flex items-center gap-2">
                         {path.map((node, idx) => (
-                            <span key={node.id} className={idx === path.length - 1 ? "font-semibold text-neutral-900" : ""}>
+                            <span key={node.id} className={idx === path.length - 1 ? "font-semibold text-heading" : ""}>
                                 {node.label} {(idx < path.length - 1) && <span className="text-neutral-300 mx-1">/</span>}
                             </span>
                         ))}
                     </div>
                 </div>
                 {path.length > 1 && (
-                    <button onClick={handleReset} className="text-xs uppercase tracking-wider text-neutral-400 hover:text-primary transition-colors">
+                    <button onClick={handleReset} className="text-xs uppercase tracking-wider text-subtle hover:text-primary transition-colors">
                         Start Over
                     </button>
                 )}
@@ -148,8 +148,8 @@ export function VisualIVR() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
                 >
-                    <h2 className="text-3xl md:text-4xl font-light mb-2 text-neutral-900">{currentNode.label}</h2>
-                    <p className="text-lg text-neutral-500 font-light mb-10">{currentNode.description || "Please select an option below:"}</p>
+                    <h2 className="text-3xl md:text-4xl font-light mb-2 text-heading">{currentNode.label}</h2>
+                    <p className="text-lg text-muted font-light mb-10">{currentNode.description || "Please select an option below:"}</p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Recursive Options */}
@@ -157,17 +157,17 @@ export function VisualIVR() {
                             <button
                                 key={option.id}
                                 onClick={() => handleSelect(option)}
-                                className="group text-left p-6 bg-white border border-neutral-200 hover:border-primary hover:shadow-md transition-all duration-300 flex items-start gap-4"
+                                className="group text-start p-6 bg-white border border-soft hover:border-primary hover:shadow-md transition-all duration-300 flex items-start gap-4"
                             >
-                                <div className={`p-3 bg-neutral-100 group-hover:bg-primary group-hover:text-white transition-colors`}>
+                                <div className={`p-3 bg-soft group-hover:bg-primary group-hover:text-white transition-colors`}>
                                     {option.icon || <ArrowRight className="w-5 h-5" />}
                                 </div>
                                 <div>
-                                    <h3 className="font-medium text-lg text-neutral-900 group-hover:text-primary transition-colors">
+                                    <h3 className="font-medium text-lg text-heading group-hover:text-primary transition-colors">
                                         {option.label}
                                     </h3>
                                     {option.description && (
-                                        <p className="text-sm text-neutral-500 font-light mt-1">
+                                        <p className="text-sm text-muted font-light mt-1">
                                             {option.description}
                                         </p>
                                     )}
@@ -183,17 +183,17 @@ export function VisualIVR() {
                                     {currentNode.action.type === 'link' && <ArrowRight className="w-12 h-12 text-primary stroke-1" />}
                                     {currentNode.action.type === 'info' && <Info className="w-12 h-12 text-primary stroke-1" />}
 
-                                    <h3 className="text-2xl font-medium text-neutral-900">
+                                    <h3 className="text-2xl font-medium text-heading">
                                         {currentNode.action.value}
                                     </h3>
                                     {currentNode.action.detail && (
-                                        <p className="text-neutral-500 font-light text-lg">
+                                        <p className="text-muted font-light text-lg">
                                             {currentNode.action.detail}
                                         </p>
                                     )}
 
                                     {currentNode.action.type === 'link' && (
-                                        <a href={currentNode.action.value} className="inline-block mt-4 px-8 py-3 bg-neutral-900 text-white hover:bg-black transition-colors">
+                                        <a href={currentNode.action.value} className="inline-block mt-4 px-8 py-3 bg-inverse text-white hover:bg-black transition-colors">
                                             Go to Page
                                         </a>
                                     )}

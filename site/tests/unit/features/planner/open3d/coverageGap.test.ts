@@ -565,9 +565,11 @@ describe("Catalog Client â€” coverage gaps", () => {
 
   // Proper tests for 0405/0419 loader wiring fixes (TDD updated): client [], resolver actually uses blocks, search parity, primary path
   it("loadDescriptorsFromLoader returns [] on client (addresses always []) without throwing", async () => {
-    const c = new Open3dCatalogClient();
+    const fetchMock = vi.fn().mockResolvedValue({ ok: false });
+    const c = new Open3dCatalogClient({ fetchImpl: fetchMock });
     const res = await c.loadDescriptorsFromLoader();
     expect(Array.isArray(res)).toBe(true);
+    expect(res).toEqual([]);
   });
 
   it("search integrates resolver blocks when descriptors path taken (uses .blocks result)", () => {
@@ -2656,20 +2658,20 @@ describe("Inventory Taxonomy — categories/rooms/styles/sorts/density (TDD)", (
 // Test name clear, real behavior, ONE thing only.
 describe("Catalog Client — TDD loadDescriptorsFromLoader (window/client guard)", () => {
   it("loadDescriptorsFromLoader returns [] immediately when window defined (client guard branch)", async () => {
-    const client = new Open3dCatalogClient();
-    // Simulate client: set window
-    const origWindow = (globalThis as any).window;
+    const client = new Open3dCatalogClient({
+      fetchImpl: vi.fn().mockResolvedValue({ ok: false }),
+    });
+    const origWindow = (globalThis as { window?: unknown }).window;
     try {
-      (globalThis as any).window = {};
+      (globalThis as { window?: unknown }).window = {};
       const result = await client.loadDescriptorsFromLoader();
-      expect(result).toEqual([]); // corrected - existing code passes (GREEN)
-      // also loadedDescriptors remains [], no crash
+      expect(result).toEqual([]);
       expect(client.getAll().length).toBeGreaterThanOrEqual(0);
     } finally {
       if (origWindow === undefined) {
-        delete (globalThis as any).window;
+        delete (globalThis as { window?: unknown }).window;
       } else {
-        (globalThis as any).window = origWindow;
+        (globalThis as { window?: unknown }).window = origWindow;
       }
     }
   });

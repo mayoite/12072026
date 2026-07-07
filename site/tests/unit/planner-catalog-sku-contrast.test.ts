@@ -20,10 +20,11 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 const REPO_SITE_ROOT = path.resolve(__dirname, "..", "..");
+const REPO_ROOT = path.resolve(REPO_SITE_ROOT, "..");
 
 const CSS_FILES = [
-  "app/css/core/planner/planner-typography.css",
-  "app/css/core/planner/planner-catalog.css",
+  "archive/site/app/css/_archive/2026-07-07-css-restructure/core-planner/planner-typography.css",
+  "archive/site/app/css/_archive/2026-07-07-css-restructure/core-planner/planner-catalog.css",
 ] as const;
 
 /** Parse the body of every `<selector>{...}` block that targets `.pw-catalog-card-sku`. */
@@ -81,7 +82,7 @@ function contrastRatio(fg: [number, number, number], bg: [number, number, number
 describe(".pw-catalog-card-sku contrast (regression for Failures.md 2026-06-25)", () => {
   for (const relPath of CSS_FILES) {
     describe(relPath, () => {
-      const css = readFileSync(path.join(REPO_SITE_ROOT, relPath), "utf8");
+      const css = readFileSync(path.join(REPO_ROOT, relPath), "utf8");
       const bodies = extractSkuRuleBodies(css);
 
       it("declares at least one .pw-catalog-card-sku rule", () => {

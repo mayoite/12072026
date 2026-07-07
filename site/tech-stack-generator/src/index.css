@@ -1,12 +1,23 @@
-@import "../../app/css/core/tokens/theme.css";
-@import "../../app/css/core/typography/type.css";
+@import "../../app/css/core/theme.css";
+@import "../../app/css/core/utilities/animations.css";
+@import "../../app/css/core/utilities/typography.css";
 @import "../../app/css/core/utilities/layout.css";
 @import "../../app/css/core/utilities/colors.css";
 @import "../../app/css/core/utilities/schemes.css";
+@import "../../app/css/core/utilities/buttons.css";
+@import "../../app/css/core/utilities/badges.css";
+@import "../../app/css/core/utilities/nav.css";
+@import "../../app/css/core/utilities/misc.css";
+@import "../../app/css/core/components/buttons.css";
 @import "../../app/css/core/components/cards.css";
+@import "../../app/css/core/components/stats.css";
+@import "../../app/css/core/components/client-badge.css";
+@import "../../app/css/core/components/nav.css";
+@import "../../app/css/core/components/custom.css";
+@import "../../app/css/core/components/missing-components.css";
 
 
-/* World-class static site: direct use of site/app/css/core/tokens/theme.css, utilities, colors, typography for consistency (no isolated theme).
+/* World-class static site: direct use of site/app/css/core/{theme,utilities/*,components/*}.css for consistency (no isolated theme).
    Direct core imports (no full site chrome bundles). Brand/accent/docs- aliases map to main tokens (ocean/bronze/surface/text from theme + utilities).
    Use native site utilities (text-heading, bg-panel, text-muted, scheme-border) in new code. Per approved plan, AGENTS.md, CSS-SOLUTION.md. */
 @theme {

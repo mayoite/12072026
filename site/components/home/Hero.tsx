@@ -134,7 +134,7 @@ export function Hero({
           className={
             isSmall
               ? `home-hero__layout relative z-10 min-h-full justify-center py-16 md:py-20 ${contentClassName}`.trim()
-              : "container flex h-full flex-col items-start justify-center pb-20 pt-32 text-left"
+              : "container flex h-full flex-col items-start justify-center pb-20 pt-32 text-start"
           }
         >
           <motion.div
@@ -143,16 +143,16 @@ export function Hero({
             animate={motionReady ? "visible" : false}
             className={
               isSmall
-                ? "w-full max-w-[44rem] space-y-5 text-left lg:justify-self-start"
-                : "w-full max-w-[44rem] self-start space-y-7 text-left"
+                ? "w-full max-w-[44rem] space-y-5 text-start lg:justify-self-start"
+                : "w-full max-w-[44rem] self-start space-y-7 text-start"
             }
           >
             <motion.div variants={titleVariants} className="overflow-hidden">
               <h1
                 className={
                   isSmall
-                    ? "home-hero-title-route text-inverse text-left"
-                    : "hero-title home-hero-title-default text-inverse text-left"
+                    ? "home-hero-title-route text-inverse text-start"
+                    : "hero-title home-hero-title-default text-inverse text-start"
                 }
               >
                 {title || (
@@ -169,7 +169,7 @@ export function Hero({
             {subtitle && (
               <motion.p
                 variants={titleVariants}
-                className="hero-subtitle text-inverse-body max-w-3xl text-left"
+                className="hero-subtitle text-inverse-body max-w-3xl text-start"
               >
                 {subtitle}
               </motion.p>

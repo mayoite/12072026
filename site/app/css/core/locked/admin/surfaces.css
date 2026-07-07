@@ -1,0 +1,4 @@
+/* Shared marketing primitives for admin CMS surfaces */
+@reference "../../../index.css";
+@import "../site/home-base.css";
+@import "../site/home-type-fallback.css";

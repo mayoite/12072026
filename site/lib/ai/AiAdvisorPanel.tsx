@@ -77,8 +77,8 @@ export function AiAdvisorPanel({
     <div
       className={`fixed z-50 flex flex-col rounded-xl border shadow-2xl overflow-hidden ${
         position === "bottom-right"
-          ? "bottom-6 right-6 w-[23.75rem] h-[32.5rem]"
-          : "bottom-6 right-80 w-[22.5rem] h-[30rem]"
+          ? "bottom-6 right-6 w-[23.75rem] h-[32.5rem] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-2rem)]"
+          : "bottom-6 right-80 w-[22.5rem] h-[30rem] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-2rem)]"
       }`}
       style={{
         background: "var(--surface-page, var(--color-white-50))",
@@ -128,7 +128,7 @@ export function AiAdvisorPanel({
                 <button
                   key={prompt}
                   onClick={() => handleQuickPrompt(prompt)}
-                  className="w-full text-left text-xs px-3 py-2 rounded-lg border transition-colors hover:border-[var(--color-primary)]"
+                  className="w-full text-start text-xs px-3 py-2 rounded-lg border transition-colors hover:border-[var(--color-primary)]"
                   style={{
                     borderColor: "var(--border-soft, var(--color-bronze-100))",
                     color: "var(--text-body, var(--color-bronze-900))",
@@ -172,7 +172,7 @@ export function AiAdvisorPanel({
           </div>
         )}
         {error && (
-          <div className="text-xs px-3 py-2 rounded-lg bg-red-50 text-red-600">
+          <div className="text-xs px-3 py-2 rounded-lg bg-danger-soft text-danger">
             {error}
           </div>
         )}

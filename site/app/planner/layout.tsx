@@ -1,9 +1,6 @@
 import type { Viewport } from "next";
 import "@/app/(site)/globals.css";
-import "@/app/css/core/site/bundles/site-surfaces.css";
-import "@/app/css/core/planner/bundles/marketing.css";
-import "@/app/css/core/site/bundles/site-marketing.css";
-import "@/app/css/core/site/bundles/footer.css";
+import "@/app/css/core/locked/site/index.css";
 import { MaintenanceBanner } from "@/components/site/MaintenanceBanner";
 import { ciscoSans, helveticaNeue } from "@/lib/fonts";
 import { getSiteLayoutContext } from "@/lib/layout/siteLayoutContext";

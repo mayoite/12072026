@@ -1,4 +1,5 @@
-/* ── Text color utilities ──
+
+/* â”€â”€ Text color utilities â”€â”€
    Complete mirror of the --text-* token set so `text-*` is the single
    inline-ink system (scheme-* stays for surface/panel composition).
    See docs/plans/04-DESIGN-SYSTEM-AND-THEME.md for the active color-application contract. */
@@ -16,7 +17,7 @@
 @utility text-inverse-subtle { color: var(--text-inverse-subtle); }
 @utility text-primary { color: var(--color-primary); }
 
-/* ── Background utilities ── */
+/* â”€â”€ Background utilities â”€â”€ */
 @utility bg-page { background-color: var(--surface-page); }
 @utility bg-primary { background-color: var(--color-primary); }
 @utility bg-primary-hover { background-color: var(--color-primary-hover); }
@@ -31,7 +32,7 @@
 @utility bg-inverse-soft { background-color: var(--surface-inverse-soft); }
 @utility bg-scrim { background-color: var(--scrim-black-40); }
 
-/* ── Border color utilities ── */
+/* â”€â”€ Border color utilities â”€â”€ */
 @utility border-soft { border-color: var(--border-soft); }
 @utility border-muted { border-color: var(--border-muted); }
 @utility border-strong { border-color: var(--border-strong); }
@@ -40,14 +41,14 @@
 @utility border-theme-soft { border-color: var(--border-soft); }
 @utility border-theme-inverse { border-color: var(--border-inverse); }
 
-/* ── Shadow utilities ── */
+/* â”€â”€ Shadow utilities â”€â”€ */
 @utility shadow-theme-soft { box-shadow: var(--shadow-soft); }
 @utility shadow-theme-panel { box-shadow: var(--shadow-panel); }
 @utility shadow-theme-lift { box-shadow: var(--shadow-lift); }
 @utility shadow-theme-float { box-shadow: var(--shadow-float); }
 @utility shadow-shell-float { box-shadow: 0 1.875rem 3.375rem -32px var(--overlay-inverse-35); }
 
-/* ── Surface overlays ── */
+/* â”€â”€ Surface overlays â”€â”€ */
 @utility surface-canvas-soft { background: var(--surface-canvas-soft); }
 @utility surface-overlay-08 { background: var(--overlay-panel-08); }
 @utility surface-overlay-12 { background: var(--overlay-panel-12); }
@@ -55,32 +56,36 @@
 @utility surface-overlay-95 { background: var(--overlay-panel-95); }
 @utility surface-overlay-72 { background: var(--overlay-panel-72); }
 
-/* ── Status ── */
+/* â”€â”€ Status â”€â”€ */
 @utility text-success { color: var(--color-success); }
 @utility text-warning { color: var(--color-warning); }
 @utility text-danger { color: var(--color-danger); }
 @utility bg-success-soft { background-color: var(--surface-status-ok); }
+@utility bg-warning-soft { background-color: var(--color-warning-soft); }
 @utility bg-danger-soft { background-color: var(--surface-status-bad); }
+@utility bg-success { background-color: var(--color-success); }
+@utility bg-warning { background-color: var(--color-warning); }
+@utility bg-danger { background-color: var(--color-danger); }
 
-/* ── Sustainability ── */
+/* â”€â”€ Sustainability â”€â”€ */
 @utility text-sustain { color: var(--text-sustain); }
 @utility bg-sustain-soft { background-color: var(--surface-sustain-soft); }
 @utility bg-sustain-soft-strong { background-color: var(--surface-sustain-soft-strong); }
 
-/* ── Radius aliases ── */
+/* â”€â”€ Radius aliases â”€â”€ */
 @utility rounded-blob { border-radius: var(--radius-blob); }
 @utility rounded-huge { border-radius: var(--radius-huge); }
 @utility rounded-giant { border-radius: var(--radius-giant); }
 
-/* ── Form controls ── */
+/* â”€â”€ Form controls â”€â”€ */
 @utility accent-heading { accent-color: var(--text-heading); }
 
-/* ── Focus ring ── */
+/* â”€â”€ Focus ring â”€â”€ */
 @utility focus-ring-theme {
   &:focus-visible { box-shadow: var(--focus-ring); }
 }
 
-/* ── Hover states ── */
+/* â”€â”€ Hover states â”€â”€ */
 @utility hover-border-primary {
   &:hover { border-color: var(--color-primary); }
 }
@@ -88,10 +93,9 @@
   &:hover { background: var(--surface-hover-soft); }
 }
 
-/* ── Scrollbar ── */
+/* â”€â”€ Scrollbar â”€â”€ */
 @utility scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar { display: none; }
 }
-

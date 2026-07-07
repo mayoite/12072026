@@ -97,7 +97,7 @@ export default function AdminAnalyticsPageView() {
       </div>
 
       {error ? (
-        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+        <div className="mb-4 rounded-xl border border-accent bg-danger-soft p-4 text-sm text-red-700" role="alert">
           {error}
         </div>
       ) : null}
@@ -155,7 +155,7 @@ export default function AdminAnalyticsPageView() {
           <section className="rounded-xl border border-soft bg-panel p-4">
             <h2 className="text-sm font-semibold text-strong">Plans created</h2>
             <div className="mt-3 overflow-x-auto">
-              <table className="w-full min-w-[28rem] text-left text-sm">
+              <table className="w-full min-w-[28rem] text-start text-sm">
                 <thead className="text-xs uppercase tracking-wide text-soft">
                   <tr>
                     <th className="px-2 py-2 font-medium">Date</th>

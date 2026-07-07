@@ -476,7 +476,7 @@ export default function AdminPlansPageView() {
 
       {error ? (
 
-        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+        <div className="mb-4 rounded-xl border border-accent bg-danger-soft p-4 text-sm text-red-700" role="alert">
 
           {error}
 
@@ -520,7 +520,7 @@ export default function AdminPlansPageView() {
 
         <div className="overflow-hidden rounded-xl border border-soft bg-panel">
 
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-start text-sm">
 
             <thead className="border-b border-soft bg-subtle text-xs uppercase tracking-wide text-soft">
 

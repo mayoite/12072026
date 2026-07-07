@@ -3,32 +3,11 @@ import { render, screen } from "@testing-library/react";
 import fs from "node:fs/promises";
 import PortfolioPage from "@/app/(site)/portfolio/page";
 
-vi.mock("@/components/home/Hero", () => ({
-  Hero: (props: any) => (
-    <div
-      data-testid="hero"
-      data-show-button={String(props.showButton)}
-      data-background-image={props.backgroundImage}
-    />
-  ),
-}));
-
-vi.mock("@/components/shared/ContactTeaser", () => ({
-  ContactTeaser: () => <div data-testid="contact-teaser" />,
-}));
-
 vi.mock("@/lib/site-data/routeMetadata", () => ({
   PORTFOLIO_PAGE_METADATA: {},
 }));
 
 vi.mock("@/lib/site-data/routeCopy", () => ({
-  PORTFOLIO_PAGE_COPY: {
-    heroTitle: "Portfolio",
-    heroSubtitle: "Real delivery photos grouped by client projects.",
-    eyebrow: "Project gallery",
-    title: "Excellence.",
-    totalTemplate: "{clients} clients - {photos} photos",
-  },
   PORTFOLIO_CLIENTS: [
     { id: "alpha", folder: "Alpha Team", name: "Alpha Team", location: "Patna", summary: "Alpha summary" },
     { id: "beta", folder: "Beta", name: "Beta", location: "Delhi", summary: "Beta summary" },
@@ -57,15 +36,9 @@ describe("PortfolioPage", () => {
     const jsx = await PortfolioPage();
     render(jsx);
 
-    expect(screen.getByTestId("hero")).toHaveAttribute("data-show-button", "false");
-    expect(screen.getByTestId("hero")).toHaveAttribute(
-      "data-background-image",
-      "/images/hero/titan-patna-hq.webp",
-    );
-    expect(screen.getByTestId("contact-teaser")).toBeInTheDocument();
-    expect(screen.getByText("Project gallery")).toBeInTheDocument();
-    expect(screen.getByText("Excellence.")).toBeInTheDocument();
-    expect(screen.getByText("2 clients - 5 photos")).toBeInTheDocument();
+    expect(screen.getByTestId("home-marketing-layout")).toBeInTheDocument();
+    expect(screen.getByText(/Spaces we/i)).toBeInTheDocument();
+    expect(screen.getByText(/delivered/i)).toBeInTheDocument();
 
     const normalizePath = (value: string) => value.replaceAll("\\", "/");
     expect(normalizePath(String(mockedReaddir.mock.calls[0]?.[0]))).toContain(
@@ -96,8 +69,7 @@ describe("PortfolioPage", () => {
     const jsx = await PortfolioPage();
     render(jsx);
 
-    expect(screen.getByTestId("hero")).toBeInTheDocument();
-    expect(screen.getByText("0 clients - 0 photos")).toBeInTheDocument();
+    expect(screen.getByTestId("home-marketing-layout")).toBeInTheDocument();
     expect(screen.queryAllByRole("article")).toHaveLength(0);
   });
 });

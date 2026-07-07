@@ -34,7 +34,6 @@ import { WorkspaceShell } from "./WorkspaceShell";
 import {
   CANVAS_TOOL_GUIDANCE,
   CANVAS_TOOL_SHORTCUTS,
-  runtimeToolFor,
   type PlannerTool,
 } from "./canvasTool";
 import {
@@ -260,7 +259,7 @@ export function OOPlannerWorkspace({
     setActiveTool(tool);
     armedToolRef.current = tool;
     setPendingCatalogItemId(null);
-    canvasRef.current?.setTool(runtimeToolFor(tool));
+    canvasRef.current?.setTool(tool);
   }, []);
 
   const toggleView = useCallback(() => {
@@ -281,7 +280,7 @@ export function OOPlannerWorkspace({
     setPendingCatalogItemId(itemId);
     setActiveTool("placement");
     armedToolRef.current = "placement";
-    canvasRef.current?.setTool("select");
+    canvasRef.current?.setTool("placement");
   }, []);
 
   const handlePlaceAtPoint = useCallback(
@@ -423,7 +422,7 @@ export function OOPlannerWorkspace({
     endTemporaryPan: () => {
       const armedTool = armedToolRef.current;
       setActiveTool(armedTool);
-      canvasRef.current?.setTool(runtimeToolFor(armedTool));
+      canvasRef.current?.setTool(armedTool);
     },
   });
 
@@ -583,7 +582,7 @@ export function OOPlannerWorkspace({
             <FeasibilityCanvas
               ref={canvasRef}
               variant="embedded"
-              activeTool={runtimeToolFor(activeTool)}
+              activeTool={activeTool}
               layerVisibility={layerVisibility}
               delegateKeyboard
               workspaceCanvas={workspaceCanvas}

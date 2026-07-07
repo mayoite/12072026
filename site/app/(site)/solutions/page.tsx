@@ -1,6 +1,8 @@
+import { getTranslations } from "next-intl/server";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
+import { HomeMarketingLayout } from "@/components/home/layout";
 import { SOLUTIONS_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
 
 export const metadata = SOLUTIONS_PAGE_METADATA;
@@ -32,8 +34,11 @@ const process = [
   },
 ] as const;
 
-export default function SolutionsPage() {
+export default async function SolutionsPage() {
+  await getTranslations("solutions");
+
   return (
+    <HomeMarketingLayout>
     <div className="min-h-screen overflow-x-hidden bg-[var(--surface-page)]">
       <section className="border-b border-[var(--border-soft)] bg-[var(--surface-page)] pb-12 pt-[calc(4rem+3rem)] md:pb-16 md:pt-[calc(4rem+4rem)]">
         <div className="home-shell-xl">
@@ -114,5 +119,6 @@ export default function SolutionsPage() {
         </div>
       </section>
     </div>
+    </HomeMarketingLayout>
   );
 }

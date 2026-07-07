@@ -119,7 +119,7 @@ describe("ThreeViewerInner", () => {
       expect(renderCalls).toHaveBeenCalled();
     });
 
-    expect(container.querySelector("div[style*='min-height: 400px']")).toBeTruthy();
+    expect(screen.getByTestId("three-viewer-container")).toBeInTheDocument();
   });
 
   it("renders an error panel when scene initialization fails", async () => {

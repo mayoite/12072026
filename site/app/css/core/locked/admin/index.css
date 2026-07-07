@@ -1,0 +1,5 @@
+/* Admin surface — layout imports this file only */
+@reference "../../../index.css";
+@import "./admin.css";
+@import "./admin-pages.css";
+@import "./surfaces.css";

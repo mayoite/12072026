@@ -185,8 +185,8 @@ export function Architecture() {
 │   ├── catalog/
 │   └── crm/
 ├── css/                  # Global CSS (tokens, bundles)
-│   ├── core/tokens/theme.css
-│   └── core/planner/bundles/
+│   ├── core/theme.css, utilities.css, components.css
+│   └── core/locked/{site,admin,planner}/
 └── layout.tsx            # Root layout`}
             />
             <p className="text-sm text-docs-text-subtle">
@@ -328,14 +328,15 @@ export const config = {
           <div className="space-y-3 text-sm text-docs-text-muted">
             <p>
               CSS is organized into a token-driven system with no hex colors in components. All colors come from 
-              <code className="text-brand-400 bg-docs-surface px-1 rounded">app/css/core/tokens/theme.css</code>.
+              <code className="text-brand-400 bg-docs-surface px-1 rounded">app/css/core/theme.css</code>.
             </p>
             <ul className="space-y-1.5 list-disc list-inside text-docs-text-subtle">
-              <li><strong className="text-docs-text">Base:</strong> <code className="text-brand-400">app/css/base/</code> — global primitives (animations, resets)</li>
-              <li><strong className="text-docs-text">Tokens:</strong> <code className="text-brand-400">app/css/core/tokens/theme.css</code> — single source of truth</li>
+              <li><strong className="text-docs-text">Base:</strong> <code className="text-brand-400">app/css/core/</code> — theme.css, utilities.css, components.css</li>
+              <li><strong className="text-docs-text">Tokens:</strong> <code className="text-brand-400">app/css/core/theme.css</code> — single source of truth</li>
               <li><strong className="text-docs-text">Entry:</strong> <code className="text-brand-400">globals.css</code> → <code className="text-brand-400">app/css/index.css</code></li>
-              <li><strong className="text-docs-text">Site bundles:</strong> <code className="text-brand-400">app/css/core/site/bundles/*</code> per layout</li>
-              <li><strong className="text-docs-text">Planner bundles:</strong> <code className="text-brand-400">app/css/core/planner/bundles/*</code></li>
+              <li><strong className="text-docs-text">Site:</strong> <code className="text-brand-400">app/css/core/locked/site/*</code> per layout</li>
+              <li><strong className="text-docs-text">Admin:</strong> <code className="text-brand-400">app/css/core/locked/admin/*</code></li>
+              <li><strong className="text-docs-text">Planner:</strong> <code className="text-brand-400">app/css/core/locked/planner/*</code></li>
             </ul>
           </div>
         </CollapsibleSection>

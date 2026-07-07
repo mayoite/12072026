@@ -27,7 +27,7 @@ export function AiAdvisorChat({ onApplySuggestion, isOpen = false, onClose }: Ai
 
   return (
     <div
-      className="pw-drawer pw-ai-floating-chat fixed bottom-4 right-4 flex h-[30rem] w-80 flex-col rounded-xl"
+      className="pw-drawer pw-ai-floating-chat fixed bottom-4 right-4 flex h-[30rem] max-h-[calc(100vh-2rem)] w-80 flex-col rounded-xl"
       style={{ zIndex: Z.toolbar }}
       role="dialog"
       aria-label="AI Layout Advisor"

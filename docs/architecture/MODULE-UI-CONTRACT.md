@@ -20,7 +20,7 @@ Tokens (single vocabulary)
       → CI gates (drift fails the build)
 ```
 
-**Not** an upfront Storybook program (**Option F rejected**). Primitives extract to `app/css/core/components/` only after the **third** copy-paste.
+**Not** an upfront Storybook program (**Option F rejected**). Primitives extract to `app/css/core/components/*.css` only after the **third** copy-paste.
 
 ---
 
@@ -66,7 +66,7 @@ Guest/canvas shells: **Phase 2** promotion only.
 
 | Surface | Layout / entry must import |
 |---------|---------------------------|
-| Open3d pilot (`/planner/open3d`) | `app/css/core/planner/bundles/open3d-workspace.css` via `app/planner/open3d/layout.tsx` |
+| Open3d pilot (`/planner/open3d`) | `app/css/core/locked/planner/open3d-workspace.css` via `app/planner/open3d/layout.tsx` |
 | Admin | `data-admin-layout` shell + `admin-pages.css` (via admin layout) |
 | Site | `app/css/index.css` (site layout) |
 
@@ -84,7 +84,7 @@ Every new UI module under the path roots above **must** satisfy:
 - [ ] No `#hex` or `rgb()` / `hsl()` in open3d `*.module.css` (tokens only)
 - [ ] No new `--planner-primary*` usage (use `--planner-accent*`; primary is compat shim only)
 - [ ] Icons: Phosphor in `open3d/`; Lucide in admin (per `00-REVISION.md` Decision 3)
-- [ ] Repeated pattern (3×) → extract to `app/css/core/components/` before a fourth copy
+- [ ] Repeated pattern (3×) → extract to `app/css/core/components/*.css` before a fourth copy
 - [ ] `pnpm run lint:ui` passes (strict after UI-1 shell lands)
 
 ---

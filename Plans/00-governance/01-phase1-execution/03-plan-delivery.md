@@ -14,8 +14,8 @@ Detail was merged from archived phase specs. See `archive/plans/2026-07-05_phase
 |-------|--------|--------------|
 | 04 | Implemented, verification pending | Live §16 validation. Signed reviews in `archive/1b-5phase-agent-workflow/reviews/`. |
 | 05 | Implemented, verification pending | Live §16 validation. Playwright when Phase 05 engine ready. |
-| 06 | Implemented, verification pending | Browser soak (`0412`). Coverage floor for `0408` when scheduled. |
-| 07 | Implemented, verification pending | Cross-matrix browser soak (`0412`). Middleware widen if needed. |
+| 06 | Implemented, verification pending | Coverage floor (`0408`). Playwright soak (user-owned). |
+| 07 | Implemented, verification pending | Cross-matrix Playwright soak (user-owned). Middleware widen if needed. |
 
 **Note (post 1B):** Phase 1A/1B foundation complete per `02-PHASE-1.md`, `phase1-checklist.md`, and archived agent reports. Remaining are Phase 2+ items. 1B SVG path delivered via agent sets 01-05.
 
@@ -53,7 +53,7 @@ Blockers: `PLAN-FAIL-0408` open. `PLAN-FAIL-003`/`004` deferred until Phase 05 e
 
 **Done:** `useOpen3dSvgCatalog` in `InventoryPanel`. Loader bind. Facet tests. HTTP probe disk↔API sync.
 
-**Left:** Browser soak (`0412`). 90% coverage proof (`0408`). Live portal→planner UX sign-off.
+**Left:** 90% coverage proof (`0408`). Playwright soak (user-owned). Live portal→planner UX sign-off.
 
 **Checks:** `06-INV-01` loader path · `06-INV-05` search facets + cursor ≤24 · `06-TEST-01` corrupt/absent/present.
 
@@ -65,7 +65,7 @@ Blockers: `PLAN-FAIL-0408` open. `PLAN-FAIL-003`/`004` deferred until Phase 05 e
 
 **Done:** `plannerPermissions.ts` matrix aligned with `route-contract.json`. Guest command blocking. Admin route static guard. `07-AUTH-09` additive auth codes vs descriptor 422 taxonomy.
 
-**Left:** Cross-matrix browser soak (`0412`). Optional middleware widen.
+**Left:** Cross-matrix Playwright soak (user-owned). Optional middleware widen.
 
 **Checks:** `07-AUTH-01` matrix table · `07-AUTH-04` guest blocked actions · `07-AUTH-09` 422 mapper additive.
 

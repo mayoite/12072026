@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { EditorialArrowLink } from "@/components/site/EditorialRoute";
+import { HomeMarketingLayout } from "@/components/home/layout";
 import { TRUSTED_BY_STATS } from "@/lib/site-data/proof";
 import { buildPageMetadata } from "@/lib/site-data/seo";
 import { SITE_URL } from "@/lib/siteUrl";
@@ -22,6 +23,7 @@ export default async function AboutPage() {
   const pillars = t.raw("modelPillars") as AboutPillar[];
 
   return (
+    <HomeMarketingLayout>
     <div className="bg-[var(--surface-page)]">
       <section className="pt-16">
         <div className="grid min-h-[42rem] lg:grid-cols-[0.95fr_1.05fr]">
@@ -121,5 +123,6 @@ export default async function AboutPage() {
         </div>
       </section>
     </div>
+    </HomeMarketingLayout>
   );
 }

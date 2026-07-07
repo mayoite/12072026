@@ -93,6 +93,10 @@ export function useDoorWindowPlacement(project: Open3dProject | null) {
   // Update door properties
   const updateDoorProperties = useCallback(
     (updatedProject: Open3dProject, doorId: string, updates: Partial<Open3dDoor>): Open3dProject => {
+      const floor = updatedProject.floors.find((f) => f.id === updatedProject.activeFloorId);
+      if (!floor?.doors.some((door) => door.id === doorId)) {
+        return updatedProject;
+      }
       return updateDoor(updatedProject, doorId, updates).project;
     },
     [],
@@ -101,6 +105,10 @@ export function useDoorWindowPlacement(project: Open3dProject | null) {
   // Update window properties
   const updateWindowProperties = useCallback(
     (updatedProject: Open3dProject, windowId: string, updates: Partial<Open3dWindow>): Open3dProject => {
+      const floor = updatedProject.floors.find((f) => f.id === updatedProject.activeFloorId);
+      if (!floor?.windows.some((window) => window.id === windowId)) {
+        return updatedProject;
+      }
       return updateWindow(updatedProject, windowId, updates).project;
     },
     [],

@@ -22,18 +22,18 @@ export function SuspendedPage() {
   return (
     <AuthShell documentTitle="Account suspended">
       <div className="flex flex-col items-center text-center">
-        <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400">
+        <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-danger dark:bg-red-950/40 dark:text-red-400">
           <ShieldAlert size={22} aria-hidden="true" />
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">
+        <h1 className="text-2xl font-semibold tracking-tight text-heading dark:text-gray-100">
           Your account is suspended
         </h1>
-        <p className="mt-3 text-ui-13 text-gray-600 dark:text-gray-300">
+        <p className="mt-3 text-ui-13 text-muted dark:text-inverse-muted">
           A platform administrator has temporarily blocked sign-in for
           your account. Your data and team memberships are preserved
           and will be available again if the suspension is lifted.
         </p>
-        <p className="mt-3 text-ui-13 text-gray-600 dark:text-gray-300">
+        <p className="mt-3 text-ui-13 text-muted dark:text-inverse-muted">
           If this looks wrong, please contact whoever manages your
           Buddycraft account at your organisation. They can reach a
           platform admin to review the decision.
@@ -41,7 +41,7 @@ export function SuspendedPage() {
         <div className="mt-6 flex flex-col gap-2 w-full">
           <Link
             href="/login"
-            className="inline-flex items-center justify-center rounded-md border border-[color:var(--color-paper-line)] dark:border-gray-700 px-3 py-2 text-ui-13 text-gray-700 dark:text-gray-200 hover:bg-[color:var(--color-paper-sunken)] dark:hover:bg-gray-800"
+            className="inline-flex items-center justify-center rounded-md border border-[color:var(--color-paper-line)] dark:border-strong px-3 py-2 text-ui-13 text-body dark:text-inverse-muted hover:bg-[color:var(--color-paper-sunken)] dark:hover:bg-inverse"
           >
             Back to sign in
           </Link>

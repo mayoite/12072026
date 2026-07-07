@@ -250,7 +250,7 @@ export function AdvancedBot() {
             <div className="assistant-log space-y-3">
               {step === 0 && (
                 <div className="space-y-3">
-                  <p className="text-neutral-800">
+                  <p className="text-strong">
                     Which product family or project type is this for?
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -271,7 +271,7 @@ export function AdvancedBot() {
 
               {step === 1 && (
                 <div className="space-y-3">
-                  <p className="text-neutral-800">
+                  <p className="text-strong">
                     Roughly how many seats or units do you need?
                   </p>
                   <input
@@ -288,7 +288,7 @@ export function AdvancedBot() {
 
               {step === 2 && (
                 <div className="space-y-3">
-                  <p className="text-neutral-800">
+                  <p className="text-strong">
                     Tell us about your company and project timing.
                   </p>
                   <input
@@ -341,7 +341,7 @@ export function AdvancedBot() {
 
               {step === 3 && (
                 <div className="space-y-3">
-                  <p className="text-neutral-800">How should we contact you?</p>
+                  <p className="text-strong">How should we contact you?</p>
                   <div className="flex gap-2">
                     {contactMethodOptions.map((option) => (
                       <button
@@ -376,7 +376,7 @@ export function AdvancedBot() {
 
               {step === 4 && (
                 <div className="space-y-3">
-                  <p className="text-neutral-800">
+                  <p className="text-strong">
                     Any additional notes or special requirements?
                   </p>
                   <textarea
@@ -392,7 +392,7 @@ export function AdvancedBot() {
                     <p className="assistant-result-title">
                       Preview of what we receive:
                     </p>
-                    <pre className="assistant-result-body whitespace-pre-wrap text-[0.625rem] text-neutral-700">
+                    <pre className="assistant-result-body whitespace-pre-wrap text-[0.625rem] text-body">
                       {summary}
                     </pre>
                   </div>
@@ -418,10 +418,10 @@ export function AdvancedBot() {
               )}
             </div>
 
-            <div className="flex items-center justify-between border-t border-neutral-200 px-4 py-3">
+            <div className="flex items-center justify-between border-t border-soft px-4 py-3">
               <button
                 onClick={handleBack}
-                className="text-xs font-semibold uppercase tracking-wide text-neutral-600 transition-colors hover:text-neutral-900 assistant-focus-ring"
+                className="text-xs font-semibold uppercase tracking-wide text-neutral-600 transition-colors hover:text-heading assistant-focus-ring"
               >
                 {step === 0 ? "Close" : "Back"}
               </button>
@@ -442,7 +442,7 @@ export function AdvancedBot() {
               {step === 4 && (
                 <button
                   onClick={resetBot}
-                  className="text-xs font-semibold uppercase tracking-wide text-neutral-500 transition-colors hover:text-neutral-800 assistant-focus-ring"
+                  className="text-xs font-semibold uppercase tracking-wide text-muted transition-colors hover:text-strong assistant-focus-ring"
                 >
                   Start over
                 </button>

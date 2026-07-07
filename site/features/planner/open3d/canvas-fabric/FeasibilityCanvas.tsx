@@ -13,7 +13,7 @@ import {
   type WheelEvent as ReactWheelEvent,
 } from "react";
 
-import type { CanvasTool } from "../editor/canvasTool";
+import type { PlannerTool } from "../editor/canvasTool";
 import {
   DEFAULT_LAYER_VISIBILITY,
   type Open3dLayerVisibility,
@@ -36,7 +36,12 @@ import { pickWallAtPoint, pickWallWithPosition } from "../lib/geometry/canvasPic
 import { createOpen3dProject } from "../model/project";
 import type { Open3dPoint, Open3dProject } from "../model/types";
 import { addOpen3dWall } from "../model/actions/walls";
-import { addDoor, addWindow, addMeasurement } from "../model/operations/pureActions";
+import {
+  addDoor,
+  addMeasurement,
+  addRectangularRoom,
+  addWindow,
+} from "../model/operations/pureActions";
 import { proofCatalogItem } from "../catalog/proofCatalog";
 import type { WorkspaceCanvasContext } from "../editor/useWorkspaceCanvas";
 
@@ -61,11 +66,15 @@ function canvasPoint(
   return { x: event.clientX - rect.left, y: event.clientY - rect.top };
 }
 
-function toolToCommandId(tool: CanvasTool): FeasibilityCommandId | null {
+function toolToCommandId(tool: PlannerTool): FeasibilityCommandId | null {
   switch (tool) {
     case "wall":
       return "draw-wall";
     case "select":
+    case "room":
+    case "opening":
+    case "dimension":
+    case "placement":
     case "door":
     case "window":
     case "text":
@@ -78,6 +87,36 @@ function toolToCommandId(tool: CanvasTool): FeasibilityCommandId | null {
   }
 }
 
+function getRoomPolygon(
+  roomWallIds: string[],
+  wallById: Map<string, { start: Open3dPoint; end: Open3dPoint }>,
+): Open3dPoint[] {
+  const polygon = roomWallIds
+    .map((wallId) => wallById.get(wallId)?.start)
+    .filter((point): point is Open3dPoint => point !== undefined);
+  return polygon.length >= 3 ? polygon : [];
+}
+
+function pointInPolygon(point: Open3dPoint, polygon: Open3dPoint[]): boolean {
+  let inside = false;
+  for (
+    let index = 0, previousIndex = polygon.length - 1;
+    index < polygon.length;
+    previousIndex = index++
+  ) {
+    const currentPoint = polygon[index];
+    const previousPoint = polygon[previousIndex];
+    const intersects =
+      (currentPoint.y > point.y) !== (previousPoint.y > point.y)
+      && point.x
+        < ((previousPoint.x - currentPoint.x) * (point.y - currentPoint.y))
+          / (previousPoint.y - currentPoint.y)
+          + currentPoint.x;
+    if (intersects) inside = !inside;
+  }
+  return inside;
+}
+
 export interface FeasibilityCanvasHandle {
   undo: () => boolean;
   redo: () => boolean;
@@ -85,7 +124,7 @@ export interface FeasibilityCanvasHandle {
   commit: () => void; // Enter commits valid numeric or drawing input (task 6, GS AutoCAD docked cmd surface REC-03)
   resetZoom: () => void;
   fitToView: () => void; // fit + bounds + origin/scale (task6)
-  setTool: (tool: CanvasTool) => void;
+  setTool: (tool: PlannerTool) => void;
   getProject: () => Open3dProject;
 }
 
@@ -93,7 +132,7 @@ export type FeasibilityCanvasVariant = "proof" | "embedded";
 
 export interface CanvasStatusSnapshot {
   snapKind: SnapKind;
-  activeTool: CanvasTool;
+  activeTool: PlannerTool;
   drawingState: DrawingState;
   wallCount: number;
   previewLengthMm: number | null;
@@ -101,7 +140,7 @@ export interface CanvasStatusSnapshot {
 }
 
 export interface FeasibilityCanvasProps {
-  activeTool?: CanvasTool;
+  activeTool?: PlannerTool;
   layerVisibility?: Open3dLayerVisibility;
   /** Proof slice shows command strip and diagnostics; embedded fills the workspace shell. */
   variant?: FeasibilityCanvasVariant;
@@ -156,7 +195,7 @@ function FeasibilityCanvas(
   const [activeCommandId, setActiveCommandId] = useState<FeasibilityCommandId>(
     toolToCommandId(activeToolProp) ?? "draw-wall",
   );
-  const [activeTool, setActiveTool] = useState<CanvasTool>(activeToolProp);
+  const [activeTool, setActiveTool] = useState<PlannerTool>(activeToolProp);
   const [drawingState, setDrawingState] = useState<DrawingState>("ready");
   const [drawingOutcome, setDrawingOutcome] = useState<DrawingOutcome>("none");
   const [commandSearch, setCommandSearch] = useState("");
@@ -164,6 +203,12 @@ function FeasibilityCanvas(
   const project = workspaceCanvas?.project ?? internalProject;
   const selectedWallIds = useMemo(() => {
     if (workspaceCanvas?.selection.type === "wall") {
+      return new Set(workspaceCanvas.selection.ids);
+    }
+    return new Set<string>();
+  }, [workspaceCanvas?.selection.ids, workspaceCanvas?.selection.type]);
+  const selectedRoomIds = useMemo(() => {
+    if (workspaceCanvas?.selection.type === "room") {
       return new Set(workspaceCanvas.selection.ids);
     }
     return new Set<string>();
@@ -250,13 +295,13 @@ function FeasibilityCanvas(
     [internalProject, workspaceCanvas],
   );
 
-  const setTool = useCallback((tool: CanvasTool) => {
+  const setTool = useCallback((tool: PlannerTool) => {
     setActiveTool(tool);
     const commandId = toolToCommandId(tool);
     if (commandId) {
       setActiveCommandId(commandId);
     }
-    if (tool !== "wall") {
+    if (tool !== "wall" && tool !== "room") {
       cancel();
     }
   }, [cancel]);
@@ -274,13 +319,26 @@ function FeasibilityCanvas(
   const commit = useCallback(() => {
     // Enter commits valid drawing (wall segment, dimension via text runtime) or numeric (in props). Do not discard work.
     // GS: REC-03 AutoCAD bottom command surface; task6 Enter commits.
-    if (activeTool === "text" && start && preview && workspaceCanvas) {
+    if ((activeTool === "dimension" || activeTool === "text") && start && preview && workspaceCanvas) {
       commitProject((current) => addMeasurement(current, start.x, start.y, preview.x, preview.y).project);
       setStart(null);
       setPreview(null);
       setSnapKind("none");
       setDrawingState("ready");
       setDrawingOutcome("committed");
+      return;
+    }
+    if (activeTool === "room" && start && preview) {
+      if (Math.abs(preview.x - start.x) >= 1 && Math.abs(preview.y - start.y) >= 1) {
+        commitProject((current) =>
+          addRectangularRoom(current, start, preview, { idFactory: () => crypto.randomUUID() }).project,
+        );
+        setStart(null);
+        setPreview(null);
+        setSnapKind("none");
+        setDrawingState("ready");
+        setDrawingOutcome("committed");
+      }
       return;
     }
     if (start && preview && activeCommandId === "draw-wall") {
@@ -316,7 +374,9 @@ function FeasibilityCanvas(
   useEffect(() => {
     setActiveTool(activeToolProp);
     const commandId = toolToCommandId(activeToolProp);
-    if (commandId) setActiveCommandId(commandId);
+    if (commandId) {
+      setActiveCommandId(commandId);
+    }
   }, [activeToolProp]);
 
   useEffect(() => {
@@ -462,6 +522,26 @@ function FeasibilityCanvas(
     }
     context.lineCap = "round";
     const wallById = new Map(activeFloor.walls.map((wall) => [wall.id, wall]));
+    if (layerVisibility.rooms) {
+      for (const room of activeFloor.rooms) {
+        const polygon = getRoomPolygon(room.walls, wallById);
+        if (polygon.length < 3) continue;
+        context.fillStyle = room.color ?? tokens.getPropertyValue("--surface-accent-wash").trim();
+        context.globalAlpha = selectedRoomIds.has(room.id) ? 0.32 : 0.18;
+        context.beginPath();
+        polygon.forEach((point, index) => {
+          const screenPoint = projectToScreen(point, transform);
+          if (index === 0) {
+            context.moveTo(screenPoint.x, screenPoint.y);
+            return;
+          }
+          context.lineTo(screenPoint.x, screenPoint.y);
+        });
+        context.closePath();
+        context.fill();
+        context.globalAlpha = 1;
+      }
+    }
     if (layerVisibility.walls) {
       for (const wall of activeFloor.walls) {
         const a = projectToScreen(wall.start, transform);
@@ -539,14 +619,17 @@ function FeasibilityCanvas(
   }, [
     activeFloor.doors,
     activeFloor.furniture,
+    activeFloor.rooms,
     activeFloor.walls,
     activeFloor.windows,
     canvasSize,
     layerVisibility.doors,
     layerVisibility.furniture,
+    layerVisibility.rooms,
     layerVisibility.walls,
     layerVisibility.windows,
     preview,
+    selectedRoomIds,
     selectedWallIds,
     snapKind,
     start,
@@ -596,7 +679,7 @@ function FeasibilityCanvas(
       setDrawingOutcome("started");
       return;
     }
-    if (event.button === 0 && activeTool === "door" && workspaceCanvas) {
+    if (event.button === 0 && (activeTool === "opening" || activeTool === "door") && workspaceCanvas) {
       const rawPoint = screenToProject(canvasPoint(event), transform);
       const pickToleranceMm = Math.max(80, 180 / transform.scale);
       const pick = pickWallWithPosition(rawPoint, activeFloor.walls, pickToleranceMm);
@@ -626,15 +709,22 @@ function FeasibilityCanvas(
       const raw = screenToProject(canvasPoint(event), transform);
       const pickToleranceMm = Math.max(80, 180 / transform.scale);
       const wallId = pickWallAtPoint(raw, activeFloor.walls, pickToleranceMm);
+      const wallById = new Map(activeFloor.walls.map((wall) => [wall.id, wall]));
+      const room = activeFloor.rooms.find((candidate) =>
+        pointInPolygon(raw, getRoomPolygon(candidate.walls, wallById)),
+      );
       workspaceCanvas.setSelection(
-        wallId ? { type: "wall", ids: [wallId] } : { type: "none", ids: [] },
+        wallId
+          ? { type: "wall", ids: [wallId] }
+          : room
+            ? { type: "room", ids: [room.id] }
+            : { type: "none", ids: [] },
       );
       setDrawingOutcome("none");
       releasePointer();
       return;
     }
-    if (event.button === 0 && activeTool === "text") {
-      // dimension uses "text" runtimeToolFor (see canvasTool.ts); select separate
+    if (event.button === 0 && (activeTool === "dimension" || activeTool === "text")) {
       const snapped = pointFromEvent(event);
       if (!start) {
         setStart(snapped.point);
@@ -653,6 +743,31 @@ function FeasibilityCanvas(
       }
       setStart(null);
       setPreview(null);
+      releasePointer();
+      return;
+    }
+    if (event.button === 0 && activeTool === "room") {
+      const snapped = pointFromEvent(event);
+      if (!start) {
+        setStart(snapped.point);
+        setPreview(snapped.point);
+        setSnapKind(snapped.kind);
+        setDrawingState("drawing");
+        setDrawingOutcome("started");
+        return;
+      }
+      if (Math.abs(snapped.point.x - start.x) < 1 || Math.abs(snapped.point.y - start.y) < 1) {
+        setDrawingOutcome("ignored");
+        return;
+      }
+      commitProject((current) =>
+        addRectangularRoom(current, start, snapped.point, { idFactory: () => crypto.randomUUID() }).project,
+      );
+      setStart(null);
+      setPreview(null);
+      setSnapKind("none");
+      setDrawingState("ready");
+      setDrawingOutcome("committed");
       releasePointer();
       return;
     }

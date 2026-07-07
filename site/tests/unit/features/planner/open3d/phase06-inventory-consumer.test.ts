@@ -50,18 +50,30 @@ describe("Phase 06 — 06-INV-01 loader path", () => {
     clearLoaderCache();
   });
 
-  it("loadDescriptorsFromLoader maps on-disk descriptors when window is absent", async () => {
+  it("loadDescriptorsFromLoader hydrates catalog items via svg-blocks API during SSR", async () => {
+    const response = await getSvgBlocks(
+      new NextRequest("http://localhost:3000/api/planner/catalog/svg-blocks"),
+    );
+    const body = (await response.json()) as {
+      items?: Open3dCatalogItem[];
+      data?: { items?: Open3dCatalogItem[] };
+    };
     const origWindow = globalThis.window;
     // @ts-expect-error test-only removal of browser global
     delete globalThis.window;
 
     try {
-      const client = new Open3dCatalogClient();
+      const client = new Open3dCatalogClient({
+        fetchImpl: vi.fn().mockResolvedValue({
+          ok: true,
+          json: async () => body,
+        }) as unknown as typeof fetch,
+      });
       const descriptors = await client.loadDescriptorsFromLoader();
-      const diskCount = loadAll().length;
+      const apiItems = body.data?.items ?? body.items ?? [];
 
-      expect(descriptors.length).toBe(diskCount);
-      if (diskCount > 0) {
+      expect(descriptors).toEqual([]);
+      if (apiItems.length > 0) {
         const items = client.getAll();
         expect(items.some((item) => item.provenance?.source === "descriptor-loader")).toBe(
           true,

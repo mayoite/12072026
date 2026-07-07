@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { Open3dCatalogClient } from "./catalogClient";
@@ -26,16 +26,17 @@ export function useOpen3dWorkspaceCatalog() {
   if (clientRef.current === null) {
     clientRef.current = new Open3dCatalogClient();
   }
+  const client = clientRef.current;
 
   const query = useQuery({
     queryKey: OPEN3D_CATALOG_QUERY_KEY,
-    queryFn: (context) => loadOpen3dCatalog(clientRef.current!, context),
+    queryFn: (context) => loadOpen3dCatalog(client, context),
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });
-  const remoteItems = query.data?.items ?? [];
-  const items =
-    remoteItems.length > 0
+  const items = useMemo(() => {
+    const remoteItems = query.data?.items ?? [];
+    return remoteItems.length > 0
       ? [
           ...remoteItems,
           ...OPEN3D_DEMO_CATALOG_ITEMS.filter(
@@ -43,6 +44,7 @@ export function useOpen3dWorkspaceCatalog() {
           ),
         ]
       : OPEN3D_DEMO_CATALOG_ITEMS;
+  }, [query.data?.items]);
   const offline = typeof navigator !== "undefined" && navigator.onLine === false;
   const status: Open3dWorkspaceCatalogStatus = offline
     ? "offline"
@@ -77,7 +79,7 @@ export function useOpen3dWorkspaceCatalog() {
     tick();
     const intervalId = window.setInterval(tick, 60_000);
     return () => window.clearInterval(intervalId);
-  }, [offline, query.isFetching, query.refetch]);
+  }, [offline, query]);
 
   return {
     items,

@@ -1,0 +1,5 @@
+/* Homepage route (/) only — carousel, trust KPIs, projects band, planner demo chrome */
+@reference "../../../index.css";
+@import "./home-showcase-carousel.css";
+@import "./home-projects.css";
+@import "../planner/landing-planner-landing.css";

@@ -1,4 +1,5 @@
-/* ── Buttons ── */
+
+/* â”€â”€ Buttons â”€â”€ */
 @utility btn-primary {
   display: inline-flex;
   align-items: center;
@@ -95,7 +96,7 @@
   &:focus-visible { box-shadow: var(--focus-ring); outline: none; }
 }
 
-/* ── Home buttons (dark-bg variants) ── */
+/* â”€â”€ Home buttons (dark-bg variants) â”€â”€ */
 @utility home-btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -121,4 +122,3 @@
   &:active { transform: translateY(1px); }
   &:focus-visible { box-shadow: var(--focus-ring); outline: none; }
 }
-

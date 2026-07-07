@@ -13,8 +13,8 @@ vi.mock("@/lib/auth/plannerSession", () => ({
   getOptionalPlannerUser,
 }));
 
-vi.mock("@/features/planner/ui/Open3dPlannerHost", () => ({
-  Open3dPlannerHost: ({
+vi.mock("@/features/planner/ui/Open3dPlannerWorkspaceRoute", () => ({
+  Open3dPlannerWorkspaceRoute: ({
     guestMode = false,
     planId,
   }: {

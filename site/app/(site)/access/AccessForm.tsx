@@ -92,7 +92,7 @@ export function AccessForm({ nextPath, guestHref, requiresAdmin = false }: Acces
         </div>
 
         {error && (
-          <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+          <div className="p-3 text-sm text-danger bg-danger-soft border border-accent rounded-md">
             {error}
           </div>
         )}
@@ -114,7 +114,7 @@ export function AccessForm({ nextPath, guestHref, requiresAdmin = false }: Acces
           </p>
           <Link
             href={guestHref}
-            className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--border-strong)] bg-white px-8 text-sm font-medium transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 text-[var(--text-strong)] w-full shadow-sm"
+            className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--border-strong)] bg-white px-8 text-sm font-medium transition-colors hover:bg-page focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 text-[var(--text-strong)] w-full shadow-sm"
           >
             Continue as Guest
           </Link>

@@ -1,0 +1,22 @@
+{
+    "command":  "pnpm --filter oando-site exec tsc --noEmit --pretty false",
+    "workdir":  "D:\\OandO07072026\\site",
+    "revision":  "68ad647ab2b751ce5c7f42339dbbf02059a5dbfc",
+    "branch":  "main",
+    "dirty":  [
+                  " M ../Plans/02-recovery/04-world-standard-product-vision.md",
+                  " M features/planner/open3d/canvas-fabric/FeasibilityCanvas.tsx",
+                  " M features/planner/open3d/editor/OOPlannerWorkspace.tsx",
+                  " M features/planner/open3d/model/operations/pureActions.ts",
+                  " M tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx",
+                  "?? ../Plans/00-governance/00-website-target-short.md",
+                  "?? ../Plans/00-governance/00-website-target.md",
+                  "?? ../archive/results/results/audits/",
+                  "?? ../results/planner/phase-1a/"
+              ],
+    "start":  "2026-07-07T21:03:11.0505280+05:30",
+    "end":  "2026-07-07T21:03:29.3954376+05:30",
+    "durationSeconds":  18.345,
+    "exitCode":  0,
+    "rawLog":  "D:\\OandO07072026\\results\\planner\\phase-1a\\typecheck-room-tool\\typecheck-room-tool-raw.log"
+}

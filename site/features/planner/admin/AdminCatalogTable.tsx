@@ -47,7 +47,7 @@ export function AdminCatalogTable({
               <th>Category</th>
               <th>Size / type</th>
               <th>Status</th>
-              <th className="text-right">Actions</th>
+              <th className="text-end">Actions</th>
             </tr>
           </thead>
           <tbody>

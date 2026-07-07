@@ -108,8 +108,10 @@ export function runSvgPipeline(
   const svgPath = defaultSvgPath(descriptor.slug, projectRoot);
   const fixtureSuffix = `${descriptor.slug}.${Math.random().toString(36).slice(2, 10)}`;
   const fixturePath = path.resolve(fixturesDir, `admin-${fixtureSuffix}.json`);
-  const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
-  const maxStderrBytes = options.maxStderrBytes ?? DEFAULT_MAX_STDERR_BYTES;
+  const _timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  const _maxStderrBytes = options.maxStderrBytes ?? DEFAULT_MAX_STDERR_BYTES;
+  void _timeoutMs;
+  void _maxStderrBytes;
 
   if (!existsSync(scriptPath)) {
     return Promise.resolve({
@@ -176,7 +178,8 @@ export function runSvgPipeline(
       };
     })
     .catch((err: unknown) => {
-      const durationMs = Date.now() - startedAt;
+      const _durationMs = Date.now() - startedAt;
+      void _durationMs;
       const msg = err instanceof Error ? err.message : String(err);
       return {
         ok: false as const,

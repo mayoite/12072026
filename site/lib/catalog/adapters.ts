@@ -2,6 +2,30 @@ import { normalizeAssetList, normalizeAssetPath } from "@/lib/assetPaths";
 import { normalizeCatalogProductId } from "@/lib/uuid/normalizeUuid";
 import type { CompatProduct, Product } from "./types";
 
+export function isMissingTableError(message: string, tableName?: string): boolean {
+  const normalized = (message || "").toLowerCase();
+  if (!normalized) return false;
+
+  const table = tableName?.toLowerCase();
+  if (table) {
+    if (normalized.includes(`${table} not found`) || normalized.includes(`public.${table} not found`)) {
+      return true;
+    }
+    if (normalized.includes(`table ${table}`) && normalized.includes("not found")) {
+      return true;
+    }
+    if (normalized.includes(`relation ${table}`) && normalized.includes("does not exist")) {
+      return true;
+    }
+  }
+
+  return (
+    normalized.includes("does not exist") ||
+    normalized.includes("could not find the table") ||
+    normalized.includes("schema cache")
+  );
+}
+
 export function normalizeProducts(rows: Product[]): Product[] {
   return (rows ?? []).map((product) => ({
     ...product,

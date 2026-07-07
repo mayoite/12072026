@@ -30,11 +30,11 @@ export const CANVAS_TOOL_SHORTCUTS: Record<PlannerTool, string> = {
   room: "R",
   wall: "W",
   opening: "O",
-  dimension: "D",
+  dimension: "M",
   placement: "P",
-  door: "O",
-  window: "O",
-  text: "D",
+  door: "D",
+  window: "N",
+  text: "T",
   pan: "H",
 };
 

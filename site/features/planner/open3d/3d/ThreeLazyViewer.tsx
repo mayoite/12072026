@@ -162,4 +162,49 @@ export function Lazy3DViewer(props: Lazy3DViewerProps): React.JSX.Element {
   );
 }
 
-// isWebGLSupported / isDeviceCapable / checkCanLoad3D + PreloadCheckResult removed (dead exports, never called in prod). Clean for PLAN-FAIL-0408.
+// Capability probes used by unit tests and preload guards.
+export interface PreloadCheckResult {
+  canLoad: boolean;
+  reasons: string[];
+}
+
+export function isWebGLSupported(): boolean {
+  if (typeof window === "undefined" || typeof document === "undefined") return false;
+
+  try {
+    const canvas = document.createElement("canvas");
+    const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    return gl !== null && gl !== undefined;
+  } catch {
+    return false;
+  }
+}
+
+export function isDeviceCapable(): boolean {
+  if (typeof window === "undefined" || typeof navigator === "undefined") return false;
+
+  const cores = navigator.hardwareConcurrency ?? 0;
+  if (cores < 2) return false;
+
+  const memory = (navigator as { deviceMemory?: number }).deviceMemory ?? Infinity;
+  if (memory < 2) return false;
+
+  return true;
+}
+
+export function checkCanLoad3D(): PreloadCheckResult {
+  const reasons: string[] = [];
+
+  if (!isWebGLSupported()) {
+    reasons.push("WebGL is not supported in this browser");
+  }
+
+  if (!isDeviceCapable()) {
+    reasons.push("Device does not meet minimum requirements");
+  }
+
+  return {
+    canLoad: reasons.length === 0,
+    reasons,
+  };
+}

@@ -1,6 +1,0 @@
-/* Shared marketing layout + cross-route home utilities — (site) layout + planner chrome */
-@import "../routes/home/layout-fallback.css";
-@import "../routes/home/sections.css";
-@import "../routes/home/extras.css";
-@import "../routes/home/showcase-shared.css";
-@import "../routes/home/marketing-interactions.css";

@@ -6,7 +6,7 @@ export function MaintenanceBanner() {
   return (
     <div
       role="status"
-      className="border-b border-amber-500/40 bg-amber-500/15 px-4 py-2 text-center text-sm font-medium text-amber-950 dark:text-amber-100"
+      className="border-b border-accent/40 bg-warning/15 px-4 py-2 text-center text-sm font-medium text-amber-950 dark:text-amber-100"
     >
       {maintenanceModeLabel()}
     </div>

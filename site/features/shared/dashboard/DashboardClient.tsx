@@ -94,7 +94,7 @@ export function DashboardClient({ userEmail, accessError }: DashboardClientProps
 
       <div className="workspace-hub__frame mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-8">
         {accessErrorMessage(accessError) ? (
-          <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-sm leading-6 text-strong" role="alert">
+          <div className="rounded-2xl border border-accent/30 bg-warning/10 px-5 py-4 text-sm leading-6 text-strong" role="alert">
             {accessErrorMessage(accessError)}
           </div>
         ) : null}

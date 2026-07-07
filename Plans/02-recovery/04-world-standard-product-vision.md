@@ -8,7 +8,7 @@ Repo: `D:\OandO07072026`
 
 ## Short Description
 
-We are building a premium carpet, flooring, and interior-planning website.
+We are building a premium office furniture and workspace solutions website.
 
 The website should include:
 
@@ -43,7 +43,7 @@ The site should:
 | User | Ideal outcome |
 | --- | --- |
 | Visitor | Understands quality, products, use cases, and next action within seconds. |
-| Homeowner | Can visualize carpet/flooring in a room without needing technical skill. |
+| Buyer/facilities team | Can visualize office furniture, workstations, seating, storage, and layouts without needing technical skill. |
 | Architect/designer | Can inspect materials, dimensions, layout constraints, and export/share plans. |
 | Sales/admin | Can manage catalog, SVG blocks, customers, leads, quotes, and assets without developer help. |
 | Developer/operator | Can prove build, lint, tests, console, deploy, and data safety with artifacts. |
@@ -164,7 +164,7 @@ The planner should eventually support:
 2. 3D viewing with Three/R3F.
 3. SVG catalog block placement.
 4. Room/product dimensions.
-5. Material and carpet selection.
+5. Furniture, finish, and workspace-system selection.
 6. Guest planning.
 7. Member save/load.
 8. Admin-managed catalog content.

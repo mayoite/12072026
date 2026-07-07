@@ -1,4 +1,0 @@
-/* Shared marketing primitives — ContactTeaser, route landings, planner chrome */
-@reference "../../../index.css";
-@import "../routes/home/base.css";
-@import "../routes/home/type-fallback.css";

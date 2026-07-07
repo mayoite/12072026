@@ -149,13 +149,13 @@ export default function AdminPlanDetailPageView() {
       ) : null}
 
       {error ? (
-        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+        <div className="mb-4 rounded-xl border border-accent bg-danger-soft p-4 text-sm text-red-700" role="alert">
           {error}
         </div>
       ) : null}
 
       {statusMessage ? (
-        <div className="mb-4 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800" role="status">
+        <div className="mb-4 rounded-xl border border-accent bg-success-soft p-4 text-sm text-green-800" role="status">
           <Check size={14} className="mr-1 inline" aria-hidden />
           {statusMessage}
         </div>

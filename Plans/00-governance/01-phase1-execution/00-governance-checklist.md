@@ -1,6 +1,6 @@
 # Phase checklist (00–10)
 
-Date: 2026-07-07 (stop boundary)
+Date: 2026-07-08 (stop boundary)
 
 **Planner work:** repo-root [`Plans.md`](../../../Plans.md) · conduct: [`AGENTS.md`](../../../AGENTS.md) · open items: [`00Failures.md`](00Failures.md)
 
@@ -14,12 +14,12 @@ Date: 2026-07-07 (stop boundary)
 |--------|------|------|
 | 00 | precheck 7/7 | Accepted sign-off |
 | 01–03 | primary checks | — |
-| 04–08 | Implemented, verification pending | `0412` browser soak (no further agent attempts); release `0408`/`0410`/`0413` |
+| 04–08 | Implemented, verification pending | `0408` coverage · Playwright soak (user-owned) · `release:gate` |
 | 09–10 | not started | — |
 
-PLAN-FAIL open: `0408` · `0410` · `0412` · `0413` — see [`00Failures.md`](00Failures.md)
+PLAN-FAIL open: `0408` only — see [`00Failures.md`](00Failures.md). Closed this session: `0410` lint · `0412` HTTP runtime probe · `0413` full Vitest (4812/4812).
 
-**Session evidence (2026-07-07):** `results/` tracked in git — `results/site/phase-04|05|06|07|08/` (vitest + probes); `results/site/release-gates/runtime-0412/` (failed probe, no retry). Not **Verified in staging** until `0412` closes with user proof.
+**Session evidence (2026-07-08):** `results/site/phase-0413/vitest/` · `results/site/release-gates/runtime-0412/` (pass). Phases 04–08 not **Verified in staging** until user sign-off; Playwright soak remains user-owned.
 
 ---
 
@@ -78,7 +78,8 @@ PLAN-FAIL open: `0408` · `0410` · `0412` · `0413` — see [`00Failures.md`](0
 - [ ] `10-FLAG-01` · [ ] `10-ROLL-01` · [ ] `10-HAND-01`
 
 ### Release only (not per phase slice)
-- [ ] `0408` coverage · `0410` lint · `0413` full vitest · `0412` browser
+- [x] `0410` lint (0 errors) · [x] `0413` full vitest (4812/4812) · [x] `0412` HTTP runtime probe
+- [ ] `0408` coverage floor · Playwright browser soak (user-owned) · `release:gate`
 
 ---
 

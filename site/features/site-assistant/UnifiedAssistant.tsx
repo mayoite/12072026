@@ -577,7 +577,7 @@ export function UnifiedAssistant() {
 
             <div className="assistant-log">
               {guidedSubmittedId ? (
-                <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                <div className="rounded-xl border border-accent bg-success-soft p-4">
                   <p className="mb-1 flex items-center gap-2 text-sm font-semibold text-emerald-900">
                     <CheckCircle2 className="h-4 w-4" />
                     {GUIDED_PLANNER_COPY.submittedTitle}
@@ -607,7 +607,7 @@ export function UnifiedAssistant() {
                 <div className="space-y-4">
                   {guidedStep === 0 ? (
                     <>
-                      <p className="text-sm text-neutral-700">{GUIDED_PLANNER_COPY.stepOneIntro}</p>
+                      <p className="text-sm text-body">{GUIDED_PLANNER_COPY.stepOneIntro}</p>
                       <div className={ASSISTANT_CHIP_GROUP_CLASS}>
                         {(Object.keys(USE_CASE_LABEL) as UseCase[]).map((key) => (
                           <button
@@ -632,7 +632,7 @@ export function UnifiedAssistant() {
 
                   {guidedStep === 1 ? (
                     <>
-                      <p className="text-sm text-neutral-700">{GUIDED_PLANNER_COPY.stepTwoIntro}</p>
+                      <p className="text-sm text-body">{GUIDED_PLANNER_COPY.stepTwoIntro}</p>
                       <input
                         type="text"
                         placeholder={GUIDED_PLANNER_COPY.placeholders.company}
@@ -678,7 +678,7 @@ export function UnifiedAssistant() {
 
                   {guidedStep === 2 ? (
                     <>
-                      <p className="text-sm text-neutral-700">{GUIDED_PLANNER_COPY.stepThreeIntro}</p>
+                      <p className="text-sm text-body">{GUIDED_PLANNER_COPY.stepThreeIntro}</p>
                       <input
                         type="text"
                         placeholder={GUIDED_PLANNER_COPY.placeholders.name}
@@ -703,7 +703,7 @@ export function UnifiedAssistant() {
                     </>
                   ) : null}
 
-                  {guidedError ? <p className="text-sm text-red-600" aria-live="polite">{guidedError}</p> : null}
+                  {guidedError ? <p className="text-sm text-danger" aria-live="polite">{guidedError}</p> : null}
 
                   <div className={ASSISTANT_MODAL_ACTION_ROW_CLASS}>
                     <button
@@ -843,7 +843,7 @@ export function UnifiedAssistant() {
                               ? AI_CHATBOT_COPY.bandLabel
                               : AI_CHATBOT_COPY.totalLabel}
                           </p>
-                          <p className="mt-1 text-sm font-semibold text-neutral-900">
+                          <p className="mt-1 text-sm font-semibold text-heading">
                             {message.result.totalBudget}
                           </p>
                         </div>
@@ -867,7 +867,7 @@ export function UnifiedAssistant() {
                             className="assistant-result-card"
                           >
                             <div className="mb-1 flex items-start justify-between gap-2">
-                              <p className="text-sm font-semibold text-neutral-900">
+                              <p className="text-sm font-semibold text-heading">
                                 {item.productName}
                               </p>
                               <Link
@@ -877,7 +877,7 @@ export function UnifiedAssistant() {
                                 View
                               </Link>
                             </div>
-                            <p className="text-xs text-neutral-700">{item.why}</p>
+                            <p className="text-xs text-body">{item.why}</p>
                           </div>
                         ))}
 
@@ -886,7 +886,7 @@ export function UnifiedAssistant() {
                             <p className="assistant-result-title">
                               {AI_CHATBOT_COPY.nextActionsTitle}
                             </p>
-                            <div className="assistant-result-body text-neutral-700">
+                            <div className="assistant-result-body text-body">
                               {message.result.nextActions.map((action) => (
                                 <p key={action}>{action}</p>
                               ))}
@@ -950,7 +950,7 @@ export function UnifiedAssistant() {
                   {AI_CHATBOT_COPY.send}
                 </button>
               </form>
-              {aiError ? <p className="mt-2 text-xs text-red-600" aria-live="polite">{aiError}</p> : null}
+              {aiError ? <p className="mt-2 text-xs text-danger" aria-live="polite">{aiError}</p> : null}
             </div>
           </div>
         </div>

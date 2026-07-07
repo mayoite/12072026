@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "@/app/css/core/site/bundles/homepage-sections.css";
+import "@/app/css/core/locked/site/homepage-sections.css";
 import { HomepageHero } from "@/components/home/HomepageHero";
 import { HomeMarketingLayout } from "@/components/home/layout";
 import { PartnershipBanner } from "@/components/home/PartnershipBanner";

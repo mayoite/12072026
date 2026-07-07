@@ -113,7 +113,7 @@ const SESSION_MESSAGE_LABEL_CLASS = "pwx-session-message-label";
 const SESSION_EMPTY_STATE_CLASS = "pwx-session-empty-state";
 const SESSION_ICON_CLASS = "h-4 w-4";
 const SESSION_TINY_ICON_CLASS = "h-3 w-3";
-const SESSION_STATUS_DOT_CLASS = "h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse";
+const SESSION_STATUS_DOT_CLASS = "h-1.5 w-1.5 rounded-full bg-warning animate-pulse";
 const SESSION_STRINGS = {
   title: "Plan Sessions",
   description:
@@ -342,7 +342,7 @@ export function PlannerSessionDialog({
                   {plans.length === 0 ? <div className={SESSION_EMPTY_STATE_CLASS}>Save the current planner to create your first session.</div> : null}
                   {plans.slice(-4).map((plan) => (
                     <div key={`${plan.accessMode ?? "owner"}:${plan.source}:${plan.id}`} className="pwx-session-item group" data-active={plan.isActive}>
-                      <div className="min-w-0 flex-1 text-left">
+                      <div className="min-w-0 flex-1 text-start">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="pwx-session-item-meta" data-tone={plan.source === "cloud" ? "cloud" : "draft"}>
                             {plan.source === "cloud" ? plan.accessMode === "admin" ? "Admin Cloud Save" : "Cloud Save" : "Local Draft"}
@@ -390,7 +390,7 @@ export function PlannerSessionDialog({
                             </button>
                           </div>
                         ) : (
-                          <button type="button" onClick={() => onLoadPlan(plan)} className={cn("mt-2 block w-full truncate text-left", SESSION_PLAN_TITLE_CLASS)}>
+                          <button type="button" onClick={() => onLoadPlan(plan)} className={cn("mt-2 block w-full truncate text-start", SESSION_PLAN_TITLE_CLASS)}>
                             {plan.name}
                           </button>
                         )}
@@ -468,7 +468,7 @@ export function PlannerSessionDialog({
                     <div className="pwx-session-list mt-3">
                       {adminCloudPlans.length === 0 ? <div className={SESSION_EMPTY_STATE_CLASS}>No admin-visible cloud plans found.</div> : null}
                       {adminCloudPlans.slice(-4).map((plan) => (
-                        <button key={`admin:${plan.id}`} type="button" onClick={() => onLoadPlan(plan)} className="pwx-session-item pwx-session-item--compact w-full text-left" data-active={false}>
+                        <button key={`admin:${plan.id}`} type="button" onClick={() => onLoadPlan(plan)} className="pwx-session-item pwx-session-item--compact w-full text-start" data-active={false}>
                           <div className={SESSION_CARD_TITLE_CLASS}>{plan.name}</div>
                           <div className={cn("mt-1", SESSION_CARD_META_CLASS)}>{plan.ownerLabel ?? "Unknown owner"} | {plan.updatedAtLabel ?? "No timestamp"}</div>
                           {plan.detail ? <div className={cn("mt-1", SESSION_CARD_DETAIL_CLASS)}>{plan.detail}</div> : null}

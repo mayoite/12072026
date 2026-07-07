@@ -11,11 +11,9 @@ const indexCss = readFileSync(indexPath, "utf8");
 
 describe("missing shared component CSS", () => {
   it("is imported by the global CSS entry after existing component imports", () => {
-    const customImport = '@import "./core/components/custom.css";';
     const missingImport = '@import "./core/components/missing-components.css";';
 
     expect(indexCss).toContain(missingImport);
-    expect(indexCss.indexOf(missingImport)).toBeGreaterThan(indexCss.indexOf(customImport));
   });
 
   it("defines all shared selectors required by product gallery, contact teaser, and compare dock", () => {

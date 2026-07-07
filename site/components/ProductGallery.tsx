@@ -48,10 +48,10 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
             aria-label={`Show gallery image ${idx + 1} of ${images.length} for ${productName}`}
             aria-pressed={safeIndex === idx}
             className={clsx(
-              "relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border-2 bg-neutral-100 transition-all outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 md:h-20 md:w-20",
+              "relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border-2 bg-soft transition-all outline-none focus-visible:ring-2 focus-visible:ring-strong focus-visible:ring-offset-2 md:h-20 md:w-20",
               safeIndex === idx
-                ? "product-gallery__thumb--active border-neutral-900 opacity-100"
-                : "border-transparent opacity-60 hover:opacity-100 hover:border-neutral-300",
+                ? "product-gallery__thumb--active border-strong opacity-100"
+                : "border-transparent opacity-60 hover:opacity-100 hover:border-muted",
             )}
             title={`View ${productName} image ${idx + 1}`}
           >

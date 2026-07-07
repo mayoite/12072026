@@ -19,7 +19,7 @@ describe("AdminDashboardPageView", () => {
 
     // Hub sections titles
     expect(screen.getByRole("heading", { name: /Planner operations/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /Catalog & library/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Catalog assets/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /CRM & ops/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2, name: "Platform" })).toBeInTheDocument();
 

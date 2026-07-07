@@ -1,9 +1,8 @@
-﻿import { describe, expect, it, vi, beforeEach } from "vitest";
-import type { Open3dProject, Open3dPlannerSceneEnvelope, Open3dPoint, Open3dWall } from "@/features/planner/open3d/model/types";
+﻿import { describe, expect, it, beforeEach } from "vitest";
+import type { Open3dProject, Open3dPlannerSceneEnvelope } from "@/features/planner/open3d/model/types";
 import {
   createOpen3dProject,
   createRectangularRoomProject,
-  createOpen3dSceneEnvelope,
 } from "@/features/planner/open3d/model/project";
 import {
   addWall,

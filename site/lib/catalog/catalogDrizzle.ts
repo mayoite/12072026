@@ -18,6 +18,16 @@ function logCatalogDbUnavailable(context: string, error: unknown): void {
   console.error(`[${context}] Catalog DB unavailable:`, error);
 }
 
+function isMissingCatalogTableError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error ?? "");
+  const normalized = message.toLowerCase();
+  return (
+    normalized.includes("does not exist") ||
+    normalized.includes("could not find the table") ||
+    normalized.includes("relation") && normalized.includes("does not exist")
+  );
+}
+
 const IS_PRODUCTION_BUILD = process.env.NEXT_PHASE === "phase-production-build";
 
 function rowToProduct(row: typeof catalogProducts.$inferSelect): Product {
@@ -44,6 +54,9 @@ export async function fetchCatalogProductsLive(): Promise<Product[] | null> {
       .orderBy(asc(catalogProducts.name));
     return rows.map(rowToProduct);
   } catch (error) {
+    if (!isMissingCatalogTableError(error)) {
+      throw error;
+    }
     logCatalogDbUnavailable("fetchCatalogProductsLive", error);
     return null;
   }

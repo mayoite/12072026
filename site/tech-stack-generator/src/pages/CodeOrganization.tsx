@@ -99,7 +99,7 @@ function getConventions() {
     },
     {
       title: 'No Hex in Components',
-      desc: 'All colors come from app/css/core/tokens/theme.css. Components reference CSS variables or Tailwind tokens, never raw hex.',
+      desc: 'All colors come from app/css/core/theme.css. Components reference CSS variables or Tailwind tokens, never raw hex.',
     },
     {
       title: 'TypeScript Strict',

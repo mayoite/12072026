@@ -48,7 +48,7 @@ export function AccordionSection({
     <div className="border-b border-soft last:border-0">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 text-left group"
+        className="w-full flex items-center justify-between px-4 py-3 text-start group"
         aria-expanded={open}
       >
         <span className="filter-ui-heading group-hover:text-heading transition-colors flex items-center gap-2">

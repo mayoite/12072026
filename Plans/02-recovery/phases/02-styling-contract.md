@@ -59,13 +59,13 @@ Memoization rule:
 
 | Token type | Source |
 | --- | --- |
-| Global theme tokens | `site/app/css/core/tokens/theme.css` |
-| Typography utilities | `site/app/css/core/typography/type.css` |
-| Planner tokens | `site/app/css/core/planner/planner-tokens.css` |
-| Planner typography | `site/app/css/core/planner/planner-typography.css` |
-| Shared components | `site/app/css/core/components` |
-| Shared utilities | `site/app/css/core/utilities` |
-| Admin shell | `site/app/css/core/chrome/shell/admin-pages.css` |
+| Global theme tokens | `site/app/css/core/theme.css` |
+| Typography utilities | `site/app/css/core/utilities/typography.css` |
+| Planner tokens | `site/app/css/core/locked/planner/planner-tokens.css` |
+| Planner typography | (archived — fabric era) |
+| Shared components | `site/app/css/core/components/*.css` |
+| Shared utilities | `site/app/css/core/utilities/*.css` |
+| Admin shell | `site/app/css/core/locked/admin/admin-pages.css` |
 
 ## TSX Boundary
 

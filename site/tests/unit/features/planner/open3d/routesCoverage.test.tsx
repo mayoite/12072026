@@ -73,7 +73,7 @@ describe("site planner routes", () => {
 
   it("wires guest route to Open3dPlannerWorkspaceRoute on the live hybrid planner route", async () => {
     const { default: PlannerGuestPage } = await import("@/app/planner/(workspace)/guest/page");
-    render(<PlannerGuestPage />);
+    render(await PlannerGuestPage({ searchParams: Promise.resolve({}) }));
     expect(screen.getByTestId("open3d-planner-route")).toHaveTextContent("guest");
   });
 
@@ -119,8 +119,9 @@ describe("site planner routes", () => {
     // auth with planId (sim refresh with id)
     const auth = await Open3dPage({ searchParams: Promise.resolve({ id: "plan-42" }) });
     // render to prove mount without stripping chrome
-    render(guest);
+    const { unmount } = render(guest);
     expect(screen.getByTestId("open3d-planner-host")).toHaveTextContent("guest");
+    unmount();
     render(auth);
     expect(screen.getByTestId("open3d-planner-host")).toHaveTextContent("plan-42");
     // boundaries preserved by parent layout contract (tested via import of planner layout)

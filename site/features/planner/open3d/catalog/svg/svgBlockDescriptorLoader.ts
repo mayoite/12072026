@@ -31,9 +31,7 @@ import {
 } from "./descriptorPointer";
 
 import {
-  BLOCK_DESCRIPTOR_SCHEMA_VERSION,
   BLOCK_DESCRIPTOR_SLUG_REGEX,
-  Open3dDescriptorErrorKindSchema,
   parseBlockDescriptor,
   toOpen3dDescriptorErrorHttp,
   type Open3dDescriptorError,

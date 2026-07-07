@@ -14,8 +14,8 @@ describe("PlannerGuestRoute", () => {
     expect(dynamic).toBe("force-dynamic");
   });
 
-  it("renders Open3dPlannerWorkspaceRoute with guestMode true", () => {
-    render(<PlannerGuestRoute />);
+  it("renders Open3dPlannerWorkspaceRoute with guestMode true", async () => {
+    render(await PlannerGuestRoute({ searchParams: Promise.resolve({}) }));
     const host = screen.getByTestId("open3d-planner-route");
     expect(host).toBeInTheDocument();
     expect(host).toHaveAttribute("data-guest-mode", "true");

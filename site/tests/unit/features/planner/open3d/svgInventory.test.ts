@@ -798,7 +798,7 @@ it("finds by exact name", () => {
     }
 
     function warmupSearch(
-      idx: InstanceType<typeof import("../src/catalog/inventory/inventoryIndex").InventorySearchIndex>,
+      idx: InventorySearchIndex,
       query: string,
       iterations = 5,
     ) {

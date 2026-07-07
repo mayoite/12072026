@@ -20,7 +20,7 @@ Typical confusion today:
 | Where is state? | `open3d/store/` **and** `features/planner/store/` |
 | Admin SVG editor? | `features/planner/admin/svg-editor/` + thin `app/admin/svg-editor/` |
 | Marketing UI? | `components/home/` **and** `features/site-assistant/` |
-| CSS for planner? | `app/css/core/planner/` **and** `app/css/ooplanner/` |
+| CSS for planner? | `app/css/core/locked/planner/` (`open3d-workspace.css`, `workspace-*.css`) |
 
 ---
 
@@ -187,7 +187,7 @@ Dual models until migration: `BlockDescriptor` (loader consumer) + `SvgBlockDefi
 | Dual planner trees (`planner/editor` vs `open3d/editor`) | New code → `open3d/` only; archive root `editor/` | **Now** |
 | `useWorkspaceCanvas` bypasses `PlannerCommand` | Wire `executePlannerCommand` in dispatch path | **1A P0** |
 | `features/planner/ui` vs `open3d/ui` | Merge hosts into `open3d/ui/`; `planner/ui` becomes re-export shim | 1A |
-| `app/css/ooplanner/` legacy | Fold into `core/planner/` bundles; no new files in ooplanner | UI-1 |
+| `app/css/ooplanner/` | Folded into `core/locked/planner/workspace-*.css` | Done (2026-07-07) |
 | `components/` vs `features/shared/components` | Marketing → `components/`; auth badges → `features/shared/` | Ongoing |
 | Admin Puck | Preview-only `<Render>` on `[id]` | Full `<Puck>` in 1B |
 | Dual SVG compile paths | Single module authority behind publish API | 1B |

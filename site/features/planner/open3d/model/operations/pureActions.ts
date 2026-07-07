@@ -4,6 +4,7 @@ import type {
   Open3dFloor,
   Open3dProject,
   Open3dPoint,
+  Open3dRoom,
   Open3dWall,
   Open3dWindow,
   Open3dStair,
@@ -14,7 +15,7 @@ import type {
 } from "../types";
 import type { Open3dIdFactory } from "../project";
 import { themeColorRef } from "../../shared/readThemeColor";
-import { PLANNER_COLOR_TOKENS } from "../../shared/themeColorTokens";
+import { PLANNER_COLOR_TOKENS, ROOM_FILL_TOKENS } from "../../shared/themeColorTokens";
 import { activeFloorOrThrow } from "../actions/projectActions";
 
 export interface PureAction {
@@ -31,6 +32,14 @@ export interface PureActionResult {
 
 export interface ApplyPureActionOptions {
   idFactory?: Open3dIdFactory;
+}
+
+export interface AddRectangularRoomOptions extends ApplyPureActionOptions {
+  name?: string;
+  roomType?: Open3dRoom["roomType"];
+  floorTexture?: string;
+  wallHeightMm?: number;
+  wallThicknessMm?: number;
 }
 
 function uid(factory?: Open3dIdFactory): string {
@@ -80,6 +89,74 @@ export function addWall(
   return {
     project: withUpdatedFloor(p, floor),
     action: makeAction("ADD_WALL", { id, start, end }, "Added wall"),
+  };
+}
+
+export function addRectangularRoom(
+  project: Open3dProject,
+  start: Open3dPoint,
+  end: Open3dPoint,
+  options?: AddRectangularRoomOptions,
+): PureActionResult {
+  const p = cloneProject(project);
+  const floor = getActiveFloor(p);
+  const minX = Math.min(start.x, end.x);
+  const maxX = Math.max(start.x, end.x);
+  const minY = Math.min(start.y, end.y);
+  const maxY = Math.max(start.y, end.y);
+  const widthMm = maxX - minX;
+  const depthMm = maxY - minY;
+
+  if (widthMm < 1 || depthMm < 1) {
+    throw new Error("Room dimensions must be positive.");
+  }
+
+  const points: Open3dPoint[] = [
+    { x: minX, y: minY },
+    { x: maxX, y: minY },
+    { x: maxX, y: maxY },
+    { x: minX, y: maxY },
+  ];
+  const wallIds = points.map(() => uid(options?.idFactory));
+  const roomId = uid(options?.idFactory);
+  const wallHeight = options?.wallHeightMm ?? 2700;
+  const wallThickness = options?.wallThicknessMm ?? 150;
+  const wallColor = themeColorRef(PLANNER_COLOR_TOKENS.wallDefault);
+
+  floor.walls.push(
+    ...points.map((point, index) => ({
+      id: wallIds[index],
+      start: point,
+      end: points[(index + 1) % points.length],
+      height: wallHeight,
+      thickness: wallThickness,
+      color: wallColor,
+    })),
+  );
+
+  floor.rooms.push({
+    id: roomId,
+    name: options?.name ?? `Room ${floor.rooms.length + 1}`,
+    walls: wallIds,
+    floorTexture: options?.floorTexture ?? "plain",
+    area: Number(((widthMm * depthMm) / 1_000_000).toFixed(2)),
+    roomType: options?.roomType ?? "indoor",
+    labelOffset: {
+      x: minX + widthMm / 2,
+      y: minY + depthMm / 2,
+    },
+    color: themeColorRef(
+      ROOM_FILL_TOKENS[floor.rooms.length % ROOM_FILL_TOKENS.length],
+    ),
+  });
+
+  return {
+    project: withUpdatedFloor(p, floor),
+    action: makeAction(
+      "ADD_RECTANGULAR_ROOM",
+      { roomId, wallIds, start, end },
+      "Added room",
+    ),
   };
 }
 
@@ -258,11 +335,7 @@ export function updateDoor(project: Open3dProject, id: string, updates: Partial<
   const floor = getActiveFloor(p);
   const door = floor.doors.find((d) => d.id === id);
   if (!door) {
-    // branch for coverage; return noop to satisfy TDD calls that use non-existing id in tests
-    return {
-      project: p,
-      action: makeAction("UPDATE_DOOR", { id, updates }, "Updated door (noop)"),
-    };
+    throw new Error(`Door ${id} not found`);
   }
   Object.assign(door, updates);
   return {
@@ -336,11 +409,7 @@ export function updateWindow(project: Open3dProject, id: string, updates: Partia
   const floor = getActiveFloor(p);
   const win = floor.windows.find((w) => w.id === id);
   if (!win) {
-    // branch for coverage; return noop to satisfy TDD calls that use non-existing id in tests
-    return {
-      project: p,
-      action: makeAction("UPDATE_WINDOW", { id, updates }, "Updated window (noop)"),
-    };
+    throw new Error(`Window ${id} not found`);
   }
   Object.assign(win, updates);
   return {

@@ -144,7 +144,7 @@ export default function QuoteCartPage() {
                       <button
                         type="button"
                         onClick={() => removeItem(item.id)}
-                        className="typ-chip text-muted inline-flex items-center gap-1 hover:text-red-600"
+                        className="typ-chip text-muted inline-flex items-center gap-1 hover:text-danger"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                         {QUOTE_CART_ROUTE_COPY.removeCta}

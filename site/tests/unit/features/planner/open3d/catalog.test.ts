@@ -185,8 +185,6 @@ import {
   isValidStyleTag,
   normalizeAssemblyType,
   buildShortName,
-  ROOM_TAGS,
-  STYLE_TAGS,
 } from "@/features/planner/open3d/catalog/catalogTaxonomy";
 
 describe("03-CAT-02: Taxonomy", () => {

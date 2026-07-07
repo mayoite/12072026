@@ -71,23 +71,23 @@ export default function PortalPlanPageView({ document }: PortalPlanPageViewProps
           <dl className="mt-4 space-y-3 text-sm">
             <div className="flex items-start justify-between gap-4">
               <dt className="text-muted">Room</dt>
-              <dd className="text-right text-strong">{document.roomWidthMm} × {document.roomDepthMm} mm</dd>
+              <dd className="text-end text-strong">{document.roomWidthMm} × {document.roomDepthMm} mm</dd>
             </div>
             <div className="flex items-start justify-between gap-4">
               <dt className="text-muted">Items</dt>
-              <dd className="text-right text-strong">{document.itemCount}</dd>
+              <dd className="text-end text-strong">{document.itemCount}</dd>
             </div>
             <div className="flex items-start justify-between gap-4">
               <dt className="text-muted">Seat target</dt>
-              <dd className="text-right text-strong">{document.seatTarget}</dd>
+              <dd className="text-end text-strong">{document.seatTarget}</dd>
             </div>
             <div className="flex items-start justify-between gap-4">
               <dt className="text-muted">Units</dt>
-              <dd className="text-right text-strong">{document.unitSystem}</dd>
+              <dd className="text-end text-strong">{document.unitSystem}</dd>
             </div>
             <div className="flex items-start justify-between gap-4">
               <dt className="text-muted">Status</dt>
-              <dd className="text-right text-strong">{document.status}</dd>
+              <dd className="text-end text-strong">{document.status}</dd>
             </div>
           </dl>
         </div>
@@ -97,21 +97,21 @@ export default function PortalPlanPageView({ document }: PortalPlanPageViewProps
           <dl className="mt-4 space-y-3 text-sm">
             <div className="flex items-start justify-between gap-4">
               <dt className="text-muted">Canonical scene</dt>
-              <dd className="text-right text-strong">{scene ? "Present" : "Missing"}</dd>
+              <dd className="text-end text-strong">{scene ? "Present" : "Missing"}</dd>
             </div>
             <div className="flex items-start justify-between gap-4">
               <dt className="text-muted">Room envelope</dt>
-              <dd className="text-right text-strong">
+              <dd className="text-end text-strong">
                 {scene ? `${scene.room.widthMm} × ${scene.room.depthMm} mm` : "Unknown"}
               </dd>
             </div>
             <div className="flex items-start justify-between gap-4">
               <dt className="text-muted">Scene items</dt>
-              <dd className="text-right text-strong">{items.length}</dd>
+              <dd className="text-end text-strong">{items.length}</dd>
             </div>
             <div className="flex items-start justify-between gap-4">
               <dt className="text-muted">Snapshot source</dt>
-              <dd className="text-right text-strong">
+              <dd className="text-end text-strong">
                 {scene?.fabricSnapshot ? "Fabric" : "None"}
               </dd>
             </div>
@@ -137,7 +137,7 @@ export default function PortalPlanPageView({ document }: PortalPlanPageViewProps
                   <p className="truncate font-medium text-strong">{item.name}</p>
                   <p className="mt-1 text-muted">{item.category}</p>
                 </div>
-                <div className="shrink-0 text-right text-muted">
+                <div className="shrink-0 text-end text-muted">
                   <p>{item.sizeMm.widthMm} × {item.sizeMm.depthMm} mm</p>
                   <p className="mt-1">Rot {Math.round(item.rotationDeg)}°</p>
                 </div>

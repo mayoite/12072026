@@ -5,7 +5,7 @@
  * Using /using-superpowers (GS): anti-copy, evidence, 5-product alignment for site user journeys.
  * Each module has: walkthrough (with instructions, diagrams, images), current-situation, goal.
  * 
- * Theme synced to main site/app/css/core/tokens.
+ * Theme synced to main site/app/css/core/theme.css.
  * Diagrams: Mermaid. Images: via chrome-devtools captures.
  */
 

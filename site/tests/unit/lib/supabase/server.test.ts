@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { createServerClient } from "@/lib/supabase/server";
 import { createServerClient as createSSRClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { getPublicSupabaseEnv } from "@/lib/supabase/env";
+import { getPublicSupabaseEnv } from "@/platform/supabase/env";
 
 vi.mock("@supabase/ssr", () => ({
   createServerClient: vi.fn(),
@@ -19,7 +19,7 @@ vi.mock("next/headers", () => {
   };
 });
 
-vi.mock("@/lib/supabase/env", () => ({
+vi.mock("@/platform/supabase/env", () => ({
   getPublicSupabaseEnv: vi.fn(() => ({
     url: "https://mock-server.supabase.co",
     anonKey: "mock-anon-key",

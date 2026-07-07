@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { createBrowserClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import { getPublicSupabaseEnv, getOptionalPublicSupabaseEnv } from "@/lib/supabase/env";
+import { getPublicSupabaseEnv, getOptionalPublicSupabaseEnv } from "@/platform/supabase/env";
 
 vi.mock("@supabase/ssr", () => ({
   createBrowserClient: vi.fn((url, anonKey) => ({
@@ -23,7 +23,7 @@ vi.mock("@supabase/supabase-js", () => ({
   })),
 }));
 
-vi.mock("@/lib/supabase/env", () => ({
+vi.mock("@/platform/supabase/env", () => ({
   getPublicSupabaseEnv: vi.fn(),
   getOptionalPublicSupabaseEnv: vi.fn(),
 }));

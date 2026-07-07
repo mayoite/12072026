@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import "@/app/css/core/site/bundles/footer.css";
-import "@/app/css/core/site/bundles/contact.css";
-import "@/app/css/core/site/bundles/site-marketing.css";
-import "@/app/css/core/site/bundles/workspace-hub.css";
-import "@/app/css/core/site/bundles/legal.css";
-import "@/app/css/core/site/bundles/error.css";
+import "@/app/css/core/locked/site/index.css";
+import "@/app/css/core/locked/site/footer.css";
+import "@/app/css/core/locked/site/contact.css";
+import "@/app/css/core/locked/site/site-marketing.css";
+import "@/app/css/core/locked/site/workspace-hub.css";
+import "@/app/css/core/locked/site/legal.css";
+import "@/app/css/core/locked/site/error.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getSiteLayoutContext } from "@/lib/layout/siteLayoutContext";
 import QueryProvider from "@/app/(site)/providers/QueryProvider";

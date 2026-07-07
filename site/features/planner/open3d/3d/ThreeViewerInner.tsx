@@ -212,6 +212,8 @@ export function ThreeViewerInner({
   }
 
   return (
-    <div ref={containerRef} className={styles.viewerRoot} />
+    <div className={styles.container} data-testid="three-viewer-container">
+      <div ref={containerRef} className={styles.viewerRoot} />
+    </div>
   );
 }

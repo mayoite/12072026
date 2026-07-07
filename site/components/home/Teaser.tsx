@@ -46,7 +46,7 @@ export function Teaser({
             reversed ? "md:flex-row-reverse" : "md:flex-row",
           )}
         >
-          <div className={cn("w-full space-y-8 md:w-1/2", reversed ? "md:text-right" : "md:text-left")}>
+          <div className={cn("w-full space-y-8 md:w-1/2", reversed ? "md:text-end" : "md:text-start")}>
             {subtitle && (
               <Reveal>
                 <div className="mb-4 flex items-center gap-4">

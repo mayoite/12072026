@@ -34,7 +34,7 @@ export function AuthShell({
       <header className="px-6 pt-6 sm:pt-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-2.5 font-semibold tracking-tight text-gray-900 dark:text-gray-100"
+          className="inline-flex items-center gap-2.5 font-semibold tracking-tight text-heading dark:text-gray-100"
         >
           {/* Compass-rose monogram — matches LandingNav and DemoBanner so
               the visual identity carries through every public surface. */}
@@ -47,7 +47,7 @@ export function AuthShell({
       </header>
       <main className="flex-1 flex items-start justify-center px-6 pt-10 pb-12 sm:pt-16">
         <div className="w-full max-w-md">
-          <div className="rounded-md border border-[color:var(--color-paper-line)] bg-[color:var(--color-paper-raised)] p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900/80">
+          <div className="rounded-md border border-[color:var(--color-paper-line)] bg-[color:var(--color-paper-raised)] p-8 shadow-sm dark:border-gray-800 dark:bg-inverse/80">
             {children}
           </div>
         </div>
@@ -65,10 +65,10 @@ export function AuthHeading({
 }) {
   return (
     <div className="mb-6 space-y-1.5">
-      <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">
+      <h1 className="text-2xl font-semibold tracking-tight text-heading dark:text-gray-100">
         {title}
       </h1>
-      <p className="text-ui-13 text-gray-500 dark:text-gray-400">{subtitle}</p>
+      <p className="text-ui-13 text-muted dark:text-subtle">{subtitle}</p>
     </div>
   )
 }
@@ -86,7 +86,7 @@ export function AuthFieldLabel({
     <div className="space-y-1.5">
       <label
         htmlFor={htmlFor}
-        className="block text-ui-13 font-medium text-gray-700 dark:text-gray-300"
+        className="block text-ui-13 font-medium text-body dark:text-inverse-muted"
       >
         {label}
       </label>
@@ -100,7 +100,7 @@ export function AuthErrorBanner({ id, message }: { id: string; message: string }
     <div
       id={id}
       role="alert"
-      className="mb-4 flex items-start gap-2.5 rounded-md border border-red-200 border-l-4 border-l-red-500 bg-red-50 px-3 py-2.5 text-ui-13 text-red-800 dark:border-red-900/60 dark:border-l-red-500 dark:bg-red-950/40 dark:text-red-200"
+      className="mb-4 flex items-start gap-2.5 rounded-md border border-accent border-l-4 border-l-red-500 bg-danger-soft px-3 py-2.5 text-ui-13 text-red-800 dark:border-red-900/60 dark:border-l-red-500 dark:bg-red-950/40 dark:text-red-200"
     >
       <AlertCircle size={16} className="mt-0.5 flex-shrink-0" aria-hidden="true" />
       <span>{message}</span>

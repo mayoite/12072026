@@ -135,7 +135,7 @@ const siteWorkflowModules: SiteWorkflowModule[] = [
       steps: [
         { num: 1, title: 'Entry points', instruction: 'Marketing CTAs link to /planner/guest/. Shared CSS tokens ensure visual continuity.', cmd: '—' },
         { num: 2, title: 'Catalog bridge', instruction: 'Use lib/catalog + platform data. Never duplicate product facts in site-data.', cmd: 'pnpm run catalog:ingest' },
-        { num: 3, title: 'Theme sync', instruction: 'site/tech-stack-generator syncs css from site/app/css. Verify in generated-css/.', mermaid: `flowchart TB\n  Tokens[site/app/css/core/tokens] --> Site[Marketing]\n  Tokens --> Planner[features/planner]\n  Tokens --> TechDocs[tech-stack-generator]` },
+        { num: 3, title: 'Theme sync', instruction: 'site/tech-stack-generator syncs css from site/app/css. Verify in tech-stack-generated/css/.', mermaid: `flowchart TB\n  Tokens[site/app/css/core/theme.css] --> Site[Marketing]\n  Tokens --> Planner[features/planner]\n  Tokens --> TechDocs[tech-stack-generator]` },
         { num: 4, title: 'Visual QA screenshot', instruction: 'Capture hero CTA + planner embed side-by-side for anti-copy validation.', screenshotDesc: 'Side-by-side: marketing card leading into planner canvas with matching bronze/ocean accents' },
       ]
     },

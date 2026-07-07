@@ -1,10 +1,11 @@
+
 /* ==========================================================================
-   THEME UTILITIES — Tailwind v4 @utility format
+   THEME UTILITIES â€” Tailwind v4 @utility format
    Semantic text, surface, border, shadow, scheme, and layout helpers.
    All values via var() from theme-tokens.css
    ========================================================================== */
 
-/* ── Containers ── */
+/* â”€â”€ Containers â”€â”€ */
 @utility container {
   margin-inline: auto;
   padding-inline: 1.5rem;
@@ -12,7 +13,7 @@
   max-width: 105rem;
 }
 
-/* EXCEPTIONAL USE ONLY — prefer container (1680px) */
+/* EXCEPTIONAL USE ONLY â€” prefer container (1680px) */
 @utility container-wide {
   margin-inline: auto;
   padding-inline: 1.5rem;
@@ -41,10 +42,9 @@
   @media (width >= theme(--breakpoint-md)) { padding-inline: 2.5rem; }
 }
 
-/* ── Section vertical rhythm ──
+/* â”€â”€ Section vertical rhythm â”€â”€
    Canonical top-level <section> padding. Replaces ad-hoc py-* values.
    See docs/plans/04-DESIGN-SYSTEM-AND-THEME.md for the active section-rhythm contract. */
 @utility section-y    { padding-block: var(--section-space-md); }
 @utility section-y-sm { padding-block: var(--section-space-sm); }
 @utility section-y-lg { padding-block: var(--section-space-lg); }
-

@@ -151,7 +151,7 @@ export default function AdminInventoryPageView({ csv, generatedAt, rowCount }: P
             Showing {filtered.length} of {rows.length}
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[48rem] text-left text-sm">
+            <table className="w-full min-w-[48rem] text-start text-sm">
               <thead className="border-b border-soft bg-subtle text-xs uppercase tracking-wide text-soft">
                 <tr>
                   <th className="px-4 py-3 font-medium">Kind</th>

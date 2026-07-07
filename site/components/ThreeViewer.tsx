@@ -32,9 +32,9 @@ class ThreeErrorBoundary extends Component<{ children: ReactNode; fallback?: Rea
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="flex h-full min-h-[20rem] flex-col items-center justify-center bg-zinc-900/5 text-zinc-400 p-6 text-center border border-dashed border-zinc-300 rounded-xl">
-            <p className="text-sm font-semibold text-zinc-600">3D Preview unavailable</p>
-            <p className="text-xs text-zinc-500 mt-1">An error occurred loading the 3D model.</p>
+          <div className="flex h-full min-h-[20rem] flex-col items-center justify-center bg-inverse/5 text-subtle p-6 text-center border border-dashed border-muted rounded-xl">
+            <p className="text-sm font-semibold text-muted">3D Preview unavailable</p>
+            <p className="text-xs text-muted mt-1">An error occurred loading the 3D model.</p>
           </div>
         )
       );

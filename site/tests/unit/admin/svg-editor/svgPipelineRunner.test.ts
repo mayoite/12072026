@@ -12,11 +12,13 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type * as ChildProcess from "node:child_process";
+import type * as NodeFs from "node:fs";
 const mockState = vi.hoisted(() => ({
-  originalFsWriteFileSync: undefined as typeof import("node:fs").writeFileSync | undefined,
+  originalFsWriteFileSync: undefined as NodeFs.writeFileSync | undefined,
 }));
 vi.mock("node:child_process", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("node:child_process")>();
+  const actual = await importOriginal<typeof ChildProcess>();
   return {
     ...actual,
     default: actual,
@@ -24,7 +26,7 @@ vi.mock("node:child_process", async (importOriginal) => {
   };
 });
 vi.mock("node:fs", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("node:fs")>();
+  const actual = await importOriginal<typeof NodeFs>();
   mockState.originalFsWriteFileSync = actual.writeFileSync;
   return {
     ...actual,
@@ -37,6 +39,7 @@ import {
   existsSync,
   mkdirSync,
   writeFileSync,
+  readdirSync,
 } from "node:fs";
 import * as childProcess from "node:child_process";
 import path from "node:path";
@@ -145,7 +148,7 @@ describe("04-PIPELINE-RUNNER: core contracts (1B in-process unified)", () => {
 
   it("returns writeFixtureError when the per-call fixture cannot be written", async () => {
     const projectRoot = createPipelineProjectRoot();
-    const writeSpy = vi.mocked(writeFileSync).mockImplementation(() => {
+    vi.mocked(writeFileSync).mockImplementation(() => {
       throw new Error("disk full");
     });
     try {
@@ -185,7 +188,5 @@ describe("04-PIPELINE-RUNNER: descriptor input is shape-respecting", () => {
 
 function readdirSyncSafe(target: string): string[] {
   if (!existsSync(target)) return [];
-  // Lazy import to dodge the import ordering in scope above.
-  const { readdirSync } = require("node:fs") as typeof import("node:fs");
   return readdirSync(target);
 }

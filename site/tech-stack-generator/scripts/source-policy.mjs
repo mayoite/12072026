@@ -71,7 +71,7 @@ export const sourcePolicy = {
   },
   theme: {
     precedence: [
-      { sourceKind: 'theme-token-file', label: 'site/app/css/core/tokens/theme.css', mode: 'design-tokens' },
+      { sourceKind: 'theme-token-file', label: 'site/app/css/core/theme.css', mode: 'design-tokens' },
       { sourceKind: 'generated-css-manifest', label: 'site/tech-stack-generated/css/manifest.json', mode: 'sync-output' },
     ],
     conflictMode: 'reject-mismatch',

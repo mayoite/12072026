@@ -1,6 +1,5 @@
 ﻿import { describe, expect, it, vi, beforeEach } from "vitest";
 import {
-  SUPPORTED_IMAGE_TYPES,
   DEFAULT_IMAGE_LIMITS,
   validateImageFile,
   loadImageFile,

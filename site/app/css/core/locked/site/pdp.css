@@ -1,0 +1,7 @@
+@import "./shell-pdp.css";
+@import "./pdp-detail.css";
+@import "./pdp-cta.css";
+@import "./product-viewer.css";
+@import "./catalog-mobile.css";
+@import "./pdp-product-gallery.css";
+@reference "../../../index.css";

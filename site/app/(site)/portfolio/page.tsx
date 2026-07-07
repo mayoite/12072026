@@ -5,6 +5,7 @@ import {
   EditorialCta,
   EditorialHero,
 } from "@/components/site/EditorialRoute";
+import { HomeMarketingLayout } from "@/components/home/layout";
 import { PORTFOLIO_CLIENTS } from "@/lib/site-data/routeCopy";
 import { PORTFOLIO_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
 
@@ -40,6 +41,7 @@ export default async function PortfolioPage() {
   const portfolio = await buildPortfolioData();
 
   return (
+    <HomeMarketingLayout>
     <div className="bg-[var(--surface-page)]">
       <EditorialHero lead="Spaces we’ve" accent="delivered." />
 
@@ -56,7 +58,7 @@ export default async function PortfolioPage() {
                 <p className="page-copy max-w-2xl text-body md:justify-self-end">{client.summary}</p>
               </div>
 
-              <div className="grid h-[34rem] grid-cols-2 grid-rows-2 gap-3 md:grid-cols-12">
+              <div className="grid h-[24rem] grid-cols-2 grid-rows-2 gap-3 md:h-[34rem] md:grid-cols-12">
                 <div className="relative col-span-2 row-span-1 overflow-hidden md:col-span-7 md:row-span-2">
                   <Image
                     src={client.photos[0]}
@@ -93,5 +95,6 @@ export default async function PortfolioPage() {
         label="Start a conversation"
       />
     </div>
+    </HomeMarketingLayout>
   );
 }

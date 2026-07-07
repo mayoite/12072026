@@ -106,7 +106,7 @@ const siteFolders = {
   "app/css": {
     title: "Shared CSS (FOCSS)",
     why: "Single design system for site + planner. Tokens and bundles avoid hardcoded colors in TSX.",
-    contains: ["base/ — animations, resets", "core/tokens/ — @theme source of truth", "core/site/ — marketing bundles", "core/planner/ — workspace chrome, side panels, and bundles"],
+    contains: ["core/theme.css, utilities.css, components.css", "core/locked/site|admin|planner — surface modules"],
     see: ["docs/architecture/CSS-SOLUTION.md", "docs/architecture/COMPONENT_ARCHITECTURE.md"],
   },
   "app/css/base": {
@@ -117,20 +117,17 @@ const siteFolders = {
   "app/css/core": {
     title: "FOCSS core layers",
     why: "Tokens, utilities, chrome, and per-surface bundles (site vs planner).",
-    contains: ["tokens/ — theme.css", "chrome/ — shell chrome", "site/bundles/ — homepage, catalog, etc.", "planner/ — direct planner CSS files and bundles", "utilities/, typography/, layout/"],
+    contains: ["Flat base files at core/ root", "locked/ — site, admin, planner modules only"],
   },
-  "app/css/core/planner": {
-    title: "Planner CSS",
-    why: "Workspace-specific CSS for the planner editor, side panels, and bundle entrypoints.",
+  "app/css/core/locked/planner": {
+    title: "Planner CSS (locked surface)",
+    why: "Workspace-specific CSS for the planner editor — flat files under locked/planner/.",
     contains: [
-      "bundles/ — workspace.css and marketing.css imports",
-      "planner-shell.css, planner-canvas-layout.css, planner-controls.css",
-      "planner-overlays.css, planner-catalog.css, planner-responsive.css",
-      "planner-typography.css, editor-chrome.css, fabric-* files",
-      "session-dialog.css, side-panels.css, workspace.css",
-      "landing/ — planner landing CSS",
+      "marketing.css, open3d-workspace.css — layout entry bundles",
+      "planner-tokens.css, planner-shell.css, open3d.css — workspace base leaves",
+      "marketing-*, landing-* — marketing and landing leaf styles",
     ],
-    rules: ["Import through bundles/workspace.css or bundles/marketing.css", "Keep planner-only selectors under .planner-workspace"],
+    rules: ["Import through marketing.css or open3d-workspace.css from layouts", "Keep planner-only selectors under .planner-workspace"],
   },
   "app/planner": {
     title: "Planner routes",

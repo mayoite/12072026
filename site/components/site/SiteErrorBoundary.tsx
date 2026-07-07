@@ -51,7 +51,7 @@ export class SiteErrorBoundary extends Component<
     }
 
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--color-ocean-boat-blue-900)] to-[var(--color-ocean-boat-blue-850)] text-white p-6 fontFamily-sans">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--color-ocean-boat-blue-900)] to-[var(--color-ocean-boat-blue-850)] p-6 text-white font-sans">
         <div className="relative w-full max-w-lg overflow-hidden rounded-3xl bg-white/5 p-8 text-center shadow-2xl backdrop-blur-xl border border-white/10">
           {/* Decorative glowing background elements */}
           <div className="absolute -left-12 -top-12 h-40 w-40 rounded-full bg-primary/20 blur-3xl" />
@@ -83,7 +83,7 @@ export class SiteErrorBoundary extends Component<
           </p>
 
           {this.state.error?.message && (
-            <div className="mt-4 rounded-xl bg-black/30 p-3 text-left font-mono text-xs text-white/50 border border-white/5 max-h-32 overflow-auto">
+            <div className="mt-4 rounded-xl bg-black/30 p-3 text-start font-mono text-xs text-white/50 border border-white/5 max-h-32 overflow-auto">
               <code>{this.state.error.message}</code>
             </div>
           )}

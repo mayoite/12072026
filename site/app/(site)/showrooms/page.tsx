@@ -4,6 +4,7 @@ import {
   EditorialCta,
   EditorialHero,
 } from "@/components/site/EditorialRoute";
+import { HomeMarketingLayout } from "@/components/home/layout";
 import { SHOWROOMS_HIGHLIGHTS } from "@/lib/site-data/routeCopy";
 import { SHOWROOMS_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
 
@@ -11,6 +12,7 @@ export const metadata = SHOWROOMS_PAGE_METADATA;
 
 export default function ShowroomsPage() {
   return (
+    <HomeMarketingLayout>
     <div className="bg-[var(--surface-page)]">
       <EditorialHero lead="See how work" accent="comes together." />
 
@@ -81,5 +83,6 @@ export default function ShowroomsPage() {
         label="Book a visit"
       />
     </div>
+    </HomeMarketingLayout>
   );
 }

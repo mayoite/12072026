@@ -43,7 +43,7 @@ export function StartingPointStep({ guestMode = false, planId, onComplete }: Sta
             <div className="pw-starting-point-icon">
               <PencilLine className="h-6 w-6" aria-hidden="true" />
             </div>
-            <div className="text-left">
+            <div className="text-start">
               <div className="font-semibold text-[color:var(--text-strong)]">Start from Scratch</div>
               <div className="text-xs text-[color:var(--text-muted)] leading-tight mt-1">
                 We'll generate a basic room outline based on your {metadata?.floorAreaSqFt || 2000} SqFt size. You can adjust the walls later.

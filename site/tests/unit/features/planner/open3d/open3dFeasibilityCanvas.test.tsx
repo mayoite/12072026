@@ -32,6 +32,7 @@ const context = {
   moveTo: vi.fn(),
   lineTo: vi.fn(),
   stroke: vi.fn(),
+  closePath: vi.fn(),
   setLineDash: vi.fn(),
   arc: vi.fn(),
   fill: vi.fn(),
@@ -149,7 +150,7 @@ describe("open3d FeasibilityCanvas", () => {
 
   it("supports dimension tool (two-point measurement) and room/wall alias + enter commit (task6)", () => {
     const { result } = renderHook(() => useWorkspaceCanvas({ projectName: "DimTest" }));
-    const { rerender } = render(
+    render(
       <FeasibilityCanvas
         variant="embedded"
         activeTool="dimension"
@@ -168,9 +169,32 @@ describe("open3d FeasibilityCanvas", () => {
     expect(result.current.activeFloor.measurements.length).toBeGreaterThanOrEqual(0);
   });
 
+  it("creates a real room instead of falling back to wall-only drawing", () => {
+    const { result } = renderHook(() => useWorkspaceCanvas({ projectName: "RoomTest" }));
+    render(
+      <FeasibilityCanvas
+        variant="embedded"
+        activeTool="room"
+        delegateKeyboard
+        workspaceCanvas={result.current}
+      />,
+    );
+    const canvas = screen.getByLabelText("Floor plan drawing surface");
+
+    fireEvent.pointerDown(canvas, { pointerId: 21, clientX: 100, clientY: 100, button: 0 });
+    fireEvent.pointerUp(canvas, { pointerId: 21, clientX: 100, clientY: 100 });
+    fireEvent.pointerMove(canvas, { pointerId: 22, clientX: 340, clientY: 280 });
+    fireEvent.pointerDown(canvas, { pointerId: 22, clientX: 340, clientY: 280, button: 0 });
+    fireEvent.pointerUp(canvas, { pointerId: 22, clientX: 340, clientY: 280 });
+
+    expect(result.current.activeFloor.rooms).toHaveLength(1);
+    expect(result.current.activeFloor.walls).toHaveLength(4);
+    expect(result.current.activeFloor.rooms[0]?.area).toBeGreaterThan(0);
+  });
+
   it("supports click and drag placement producing validated PlannerPlacementPayload via onPlace (task7; GS: REC-02 Sketchfab cap, BP-06 loader consumer, Fuse+RAC)", () => {
     const onPlace = vi.fn();
-    const { rerender } = render(
+    render(
       <FeasibilityCanvas
         variant="embedded"
         activeTool="select"

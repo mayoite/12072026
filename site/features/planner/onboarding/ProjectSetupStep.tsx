@@ -36,7 +36,7 @@ const SETUP_FIELD_SHELL =
 const SETUP_FIELD_LABEL =
   "shrink-0 text-[0.8125rem] font-semibold text-[color:var(--text-body)]";
 const SETUP_FIELD_INPUT =
-  "min-w-0 flex-1 border-none bg-transparent text-right text-[0.9375rem] font-medium text-[color:var(--text-strong)] outline-none";
+  "min-w-0 flex-1 border-none bg-transparent text-end text-[0.9375rem] font-medium text-[color:var(--text-strong)] outline-none";
 const SETUP_FIELDSET =
   "rounded-[var(--radius-md)] border border-[color:var(--border-soft)] bg-[color:var(--surface-soft)] p-4";
 

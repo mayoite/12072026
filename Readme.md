@@ -58,11 +58,12 @@ Copy `.env.example` → repo-root `.env.local`. Minimum keys: `NEXT_PUBLIC_SUPAB
 
 ## CSS
 
-- **Base:** `site/app/css/base/` for global primitives such as `animations.css`.
-- **Tokens:** `site/app/css/core/tokens/theme.css` is the single source; no hex in components.
-- **Entry:** `globals.css` -> `site/app/css/index.css` (base + foundation + `core/chrome` shell).
-- **Site:** `site/app/css/core/site/bundles/*` per layout.
-- **Planner:** `site/app/css/core/planner/bundles/*` for workspace styling.
+- **Base:** `site/app/css/core/animations.css` for global animation primitives.
+- **Tokens:** `site/app/css/core/theme.css` is the single source; no hex in components.
+- **Entry:** `globals.css` -> `site/app/css/index.css` imports `core/theme.css`, `core/utilities/*.css`, `core/components/*.css`.
+- **Site:** `site/app/css/core/locked/site/` — flat `*.css` + `index.css` per layout.
+- **Admin:** `site/app/css/core/locked/admin/` — flat `*.css` + `index.css`.
+- **Planner:** `site/app/css/core/locked/planner/` — flat `*.css`; `marketing.css` / `open3d-workspace.css` entry bundles.
 
 CSS operating model: [`docs/architecture/CSS-SOLUTION.md`](docs/architecture/CSS-SOLUTION.md). Module folders and ownership: [`docs/architecture/MODULE-LAYOUT.md`](docs/architecture/MODULE-LAYOUT.md) · [`docs/architecture/README.md`](docs/architecture/README.md).
 

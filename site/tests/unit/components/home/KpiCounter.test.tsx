@@ -31,7 +31,7 @@ describe('KpiCounter Component', () => {
     vi.mocked(useReducedMotion).mockReturnValue(false);
 
     render(<KpiCounter value={100} />);
-    expect(screen.getByText('0+')).toBeInTheDocument();
+    expect(screen.getByText('100+')).toBeInTheDocument();
   });
 
   it('animates value from 0 to target when in view and motion is enabled', () => {

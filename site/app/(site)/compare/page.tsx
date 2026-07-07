@@ -247,7 +247,7 @@ export default async function ComparePage({
             <table className="min-w-[47.5rem] w-full border-collapse bg-[var(--surface-page)]">
               <thead>
                 <tr>
-                  <th className="typ-cta w-56 border-b border-[var(--border-soft)] bg-[var(--surface-soft)] px-4 py-4 text-left text-strong">
+                  <th className="typ-cta w-56 border-b border-[var(--border-soft)] bg-[var(--surface-soft)] px-4 py-4 text-start text-strong">
                     Specification
                   </th>
                   {items.map((item) => {
@@ -259,7 +259,7 @@ export default async function ComparePage({
                     return (
                       <th
                         key={item.product.id}
-                        className="border-b border-l border-[var(--border-soft)] px-4 py-4 text-left align-top"
+                        className="border-b border-l border-[var(--border-soft)] px-4 py-4 text-start align-top"
                       >
                         <Link href={productHref} className="block">
                           <div className="relative mb-3 aspect-[4/3] overflow-hidden border border-[var(--border-soft)] bg-[var(--surface-soft)]">

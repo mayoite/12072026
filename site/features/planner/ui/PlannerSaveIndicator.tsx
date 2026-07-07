@@ -4,7 +4,7 @@ import { Cloud, CloudOff, Loader2 } from "lucide-react";
 
 import type { PlannerEnvelopeStatus, PlannerSaveStatus } from "../hooks/usePlannerFabricAutosave";
 
-const TOOLBAR_BUTTON_CLASS = "min-w-[2.75rem] min-h-[2.75rem] focus-visible:ring-2 focus-visible:ring-blue-500 hover:bg-gray-100 rounded-lg transition-colors";
+const TOOLBAR_BUTTON_CLASS = "min-w-[2.75rem] min-h-[2.75rem] focus-visible:ring-2 focus-visible:ring-blue-500 hover:bg-soft rounded-lg transition-colors";
 
 function formatRelativeTime(iso: string): string {
   const diffMs = Date.now() - new Date(iso).getTime();

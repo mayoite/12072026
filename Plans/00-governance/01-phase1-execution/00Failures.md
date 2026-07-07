@@ -1,6 +1,6 @@
 # Planner failures rollup (phases 00–08)
 
-Date: 2026-07-07 (stop boundary)
+Date: 2026-07-08 (stop boundary)
 
 Planner view only. Root [`Failures.md`](../../../Failures.md) stays authoritative for gate policy.
 
@@ -26,36 +26,36 @@ Planner view only. Root [`Failures.md`](../../../Failures.md) stays authoritativ
 
 ### `PLAN-FAIL-0410` — Repo-wide lint
 
-- **Open:** `pnpm run lint` still fails (baseline ~130 errors; partial cleanup in progress).
-- **Why:** Repo-wide lint has not been cleaned to exit zero on current tree.
-- **Resolution:** Dedicated lint pass; fix errors; re-run lint to exit zero.
-- **Resolved:** No
+- **Open:** —
+- **Why:** `pnpm run lint` failed with ~130 ESLint errors on prior tree.
+- **Resolution:** Fixed unused imports/vars, hook deps, `import()` types, `any` cast; `pnpm run lint` exit 0 (2026-07-07).
+- **Resolved:** Yes
 
 ---
 
 ### `PLAN-FAIL-0412` — Browser / runtime proof
 
-- **Open:** Admin, portal, and planner routes lack user browser verification.
-- **Why:** One runtime probe failed (`results/site/release-gates/runtime-0412/`); user directed **no further 0412 attempts** this session.
-- **Resolution:** User-owned browser soak or explicit re-request; do not re-run `phase0412-runtime-probe.mjs` without override.
-- **Resolved:** No
+- **Open:** —
+- **Why:** HTTP runtime probe failed on stale dev server (500 on all routes).
+- **Resolution:** `catalogClient` SSR fix + clean `.next`; `phase0412-runtime-probe.mjs` pass (2026-07-08). Evidence: `results/site/release-gates/runtime-0412/`.
+- **Resolved:** Yes (HTTP probe). Playwright soak still user-owned.
 
 ---
 
 ### `PLAN-FAIL-0413` — Full Vitest suite
 
-- **Open:** Full `pnpm run test` has no completed passing run on record.
-- **Why:** Prior run had ~125 failures; stub restoration and `adminDb` mock fix reduced bucket size; full suite not re-run to completion this session.
-- **Resolution:** Re-run full suite to completion; triage remaining buckets; capture `vitest-run.json`.
-- **Resolved:** No (partial: `planner-store-plannerPersistence.test.ts` 15/15 pass after `adminDb` mock fix)
+- **Open:** —
+- **Why:** Prior full run had 37 failures (down from ≥115).
+- **Resolution:** Debugging pass fixed route wiring, Three.js, marketing shell, Supabase mocks, pureActions; full run 4812/4812 pass.
+- **Resolved:** Yes
 
 ---
 
 ### Phase 04–08 — Verified in staging
 
 - **Open:** Phases 04–08 remain **Implemented, verification pending** — not staging verified.
-- **Why:** Vitest + HTTP probe evidence is on record under `results/site/phase-04|05|06|07|08/`; browser soak `0412` open.
-- **Resolution:** User sign-off on live routes when ready; close `0412` only with explicit browser proof.
+- **Why:** Vitest + per-phase HTTP probes on record under `results/site/phase-04|05|06|07|08/`; release HTTP probe pass (`0412`). Playwright soak still user-owned for **Accepted**.
+- **Resolution:** User sign-off on live routes when ready.
 - **Resolved:** No
 
 ---
@@ -73,7 +73,7 @@ Planner view only. Root [`Failures.md`](../../../Failures.md) stays authoritativ
 
 - **Open:** Release gate and Playwright E2E have not been run to completion.
 - **Why:** `AGENTS.md` defers full gates until user request or release ship claim.
-- **Resolution:** Run `pnpm run release:gate` after `0410`, `0413`, and `0408` improve.
+- **Resolution:** Run `pnpm run release:gate` after `0408` coverage proof (`0410`/`0413`/`0412` HTTP closed).
 - **Resolved:** No
 
 ---

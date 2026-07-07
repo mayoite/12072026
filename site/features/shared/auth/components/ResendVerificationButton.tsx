@@ -17,7 +17,7 @@ export function ResendVerificationButton({ email }: { email: string }) {
   };
 
   if (sent) {
-    return <p className="text-sm text-green-600">Verification email sent!</p>;
+    return <p className="text-sm text-success">Verification email sent!</p>;
   }
 
   return (

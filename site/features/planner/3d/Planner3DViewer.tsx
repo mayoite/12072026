@@ -719,13 +719,13 @@ export function Planner3DViewer({ document, className }: Planner3DViewerProps) {
       )}
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[color:var(--surface-inverse)] to-transparent" />
-      <div className="pointer-events-none absolute bottom-4 right-4 h-20 w-20 rounded-xl border border-gray-200 bg-white/80 p-2 text-[0.625rem] font-semibold shadow-sm" style={{ zIndex: Z.canvasOverlay }}>
-        <span className="absolute left-1/2 top-2 h-12 w-0.5 -translate-x-1/2 bg-green-500" />
-        <span className="absolute left-1/2 top-2 -translate-x-1/2 text-green-600">Y</span>
-        <span className="absolute bottom-5 left-4 h-0.5 w-10 rotate-[-25deg] bg-red-500" />
-        <span className="absolute bottom-7 right-3 text-red-600">X</span>
-        <span className="absolute bottom-5 right-5 h-0.5 w-9 rotate-45 bg-blue-500" />
-        <span className="absolute bottom-2 left-5 text-blue-600">Z</span>
+      <div className="pointer-events-none absolute bottom-4 right-4 h-20 w-20 rounded-xl border border-soft bg-white/80 p-2 text-[0.625rem] font-semibold shadow-sm" style={{ zIndex: Z.canvasOverlay }}>
+        <span className="absolute left-1/2 top-2 h-12 w-0.5 -translate-x-1/2 bg-success" />
+        <span className="absolute left-1/2 top-2 -translate-x-1/2 text-success">Y</span>
+        <span className="absolute bottom-5 left-4 h-0.5 w-10 rotate-[-25deg] bg-danger" />
+        <span className="absolute bottom-7 right-3 text-danger">X</span>
+        <span className="absolute bottom-5 right-5 h-0.5 w-9 rotate-45 bg-primary" />
+        <span className="absolute bottom-2 left-5 text-brand">Z</span>
       </div>
 
       <div className="absolute bottom-4 left-4 flex gap-2" style={{ zIndex: Z.canvasOverlay }}>

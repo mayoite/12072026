@@ -30,7 +30,7 @@
  */
 import type { z } from "zod";
 import type * as React from "react";
-import type { Config, Data } from "@puckeditor/core";
+import type { Config as PuckConfigType, Data } from "@puckeditor/core";
 
 // Align with Puck runtime types (Data) for <Puck data> / onPublish compatibility.
 // PuckData aliases internal Data; Puck* names re-exported at bottom (BP-05, server-safe).
@@ -658,7 +658,7 @@ export const puckConfig = Object.freeze({
       ] as const),
     }),
   }),
-}) as unknown as import("@puckeditor/core").Config;
+}) as unknown as PuckConfigType;
 
 /** Map a variant tag to its registered Puck component name. */
 export function puckComponentName(variant: BlockDescriptorVariant): string {

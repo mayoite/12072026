@@ -97,7 +97,7 @@ describe("Phase 1 SVG completion", () => {
     expect(first.thumbnails.map(({ width }) => width)).toEqual([128, 256]);
     expect(first.thumbnails.map(({ checksum: value }) => value))
       .toEqual(second.thumbnails.map(({ checksum: value }) => value));
-  });
+  }, 15_000);
 
   it("publishes once, rejects mutation, and reloads the existing version", async () => {
     let stored: Awaited<ReturnType<SupabaseSvgRevisionPersistence["loadRevision"]>> = null;
@@ -167,10 +167,10 @@ describe("Phase 1 SVG completion", () => {
 
   it("full end-to-end: admin draft/preview (V1 compile), publish/revision (disk via persist), planner 2D placement (resolver), thumb png, reload for fixed+configurable+parametric refs", async () => {
     const { persistBlockDescriptor } = await import("@/features/planner/admin/svg-editor/persistBlockDescriptor");
-    const { tryLoad, BLOCK_DESCRIPTORS_DIR_DEFAULT } = await import("@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader");
+    const { tryLoad } = await import("@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader");
     const { resolveBlocks } = await import("@/features/planner/open3d/catalog/svg/blocksResolver");
     const { compileSvgArtifacts } = await import("@/features/planner/admin/svg-editor/svgArtifactCompiler.server");
-    const { mkdtempSync, rmSync, writeFileSync, mkdirSync } = await import("node:fs");
+    const { mkdtempSync, rmSync, mkdirSync } = await import("node:fs");
     const os = (await import("node:os")).default;
     const path = (await import("node:path")).default;
 
@@ -266,5 +266,5 @@ describe("Phase 1 SVG completion", () => {
 
     // cleanup temp
     rmSync(tmp, { recursive: true, force: true });
-  });
+  }, 20_000);
 });

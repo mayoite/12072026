@@ -32,7 +32,7 @@ import {
 // Catalogue-first (REC-04 / design §9-10 / BP-06): inventory entry via descriptors (loader primary; svgSymbols fallback per phase-06).
 // GS cites: design §9 Features, §10, BP-06 catalog/REC-02/04 + I-D state ownership/loader + phase 06.
 // (removed unused: import type * as svgBlockDescriptorLoader ...)
-import type { BlockDescriptor } from "./svg/svgBlockDescriptorLoader";
+import type { BlockDescriptor } from "./svg/svgTypes";
 import { resolveBlocks } from "./svg/blocksResolver";
 
 // ── LRU Cache ──
@@ -746,89 +746,53 @@ export class Open3dCatalogClient {
    * Cites BP-06, design §9/10, GS. Called from useOpen3dWorkspaceCatalog + InventoryPanel.
    */
   async loadDescriptorsFromLoader(): Promise<BlockDescriptor[]> {
-    if (typeof window !== "undefined") {
-      const fetcher = this.options.fetchImpl ?? globalThis.fetch;
-      if (typeof fetcher === "function") {
-        try {
-          const url = `${this.options.apiBasePath}/api/planner/catalog/svg-blocks`;
-          const response = await fetcher(url);
-          if (response.ok) {
-            const envelope = (await response.json()) as CatalogApiEnvelope;
-            const rawItems = Array.isArray(envelope.items)
-              ? envelope.items
-              : Array.isArray(envelope.data?.items)
-                ? envelope.data.items
-                : [];
-            const items = rawItems
-              .map((raw) => this.normalizeApiItem(raw, "standard"))
-              .filter((item): item is Open3dCatalogItem => item !== null);
-            if (items.length > 0) {
-              this.load(items, "standard");
-            }
-          }
-        } catch {
-          // fall through to any preloaded descriptors
-        }
-      }
+    const fetcher = this.options.fetchImpl ?? globalThis.fetch;
+    if (typeof fetcher !== "function") {
       return this.loadedDescriptors;
     }
+
     try {
-      // dynamic to defer fs module in client bundles (06-INV-01)
-      const { loadAll } = await import("./svg/svgBlockDescriptorLoader");
-      const descriptors = loadAll();
-      this.loadedDescriptors = descriptors;
-      // resolver integration (PLAN-FAIL-0419): actually use blocks (capture result, consume .blocks)
-      if (descriptors.length > 0) {
-        const resolved = resolveBlocks(descriptors[0] as BlockDescriptor);
-        // use the blocks for symbol geometry integration (e.g. count or downstream ready)
-        void resolved.blocks.length;
+      const response = await fetcher(this.resolveSvgBlocksUrl());
+      if (!response.ok) {
+        return this.loadedDescriptors;
       }
-      // Catalogue-first: map descriptors primary to Open3dCatalogItem so .search() (and inventory via client) uses loader as source (not products/API).
-      // GS cite: BP-06, design §9-10, REC-04 (Planner 5D catalogue-first), phase-06.
-      if (descriptors.length > 0) {
-        const mapped: Open3dCatalogItem[] = descriptors.map((d) => ({
-          id: d.id,
-          slug: d.slug,
-          sku: d.sku ?? `DESC-${d.slug}`,
-          name: d.slug,
-          shortName: d.slug.slice(0, 30),
-          description: `Symbol descriptor ${d.slug}`,
-          category: "Furniture",
-          subCategory: "Chairs",
-          taxonomyPath: `Furniture > Symbols > ${d.slug}`,
-          dimensions: {
-            widthMm: d.geometry.widthMm,
-            depthMm: d.geometry.depthMm,
-            heightMm: d.geometry.heightMm ?? 800,
-          },
-          displayUnit: "mm",
-          assets: { imageUrls: [] },
-          material: {
-            marketingMaterial: "SVG",
-            normalizedMaterial: "svg-symbol",
-          },
-          roomTags: [],
-          styleTags: [],
-          availability: "in-stock",
-          assemblyType: "fully-assembled",
-          flatPack: false,
-          tags: [d.slug, "descriptor", "symbol"],
-          variants: [],
-          provenance: { source: "descriptor-loader" },
-          symbolOnly: true,
-          // parity facets default
-          license: "standard",
-          animated: false,
-          staffPicked: false,
-          favourite: false,
-          downloadable: true,
-        }));
-        this.load(mapped, "standard");
+
+      const envelope = (await response.json()) as CatalogApiEnvelope;
+      const rawItems = Array.isArray(envelope.items)
+        ? envelope.items
+        : Array.isArray(envelope.data?.items)
+          ? envelope.data.items
+          : [];
+      const items = rawItems
+        .map((raw) => this.normalizeApiItem(raw, "standard"))
+        .filter((item): item is Open3dCatalogItem => item !== null);
+      if (items.length > 0) {
+        this.load(items, "standard");
       }
-      return descriptors;
     } catch {
-      return [];
+      // fall through to any preloaded descriptors
     }
+
+    return this.loadedDescriptors;
+  }
+
+  private resolveSvgBlocksUrl(): string {
+    const prefix = this.options.apiBasePath.replace(/\/$/, "");
+    const path = `${prefix}/api/planner/catalog/svg-blocks`;
+    if (prefix.startsWith("http")) {
+      return path;
+    }
+    if (typeof window !== "undefined") {
+      return path;
+    }
+    const envOrigin = (
+      process.env.NEXT_PUBLIC_SITE_URL ??
+      process.env.SITE_URL ??
+      "http://localhost:3000"
+    )
+      .trim()
+      .replace(/\/$/, "");
+    return `${envOrigin}${path}`;
   }
 
   // ── Private helpers ──

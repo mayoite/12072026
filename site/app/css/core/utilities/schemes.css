@@ -1,4 +1,5 @@
-/* ── Scheme: page & section backgrounds (match homepage section tokens) ── */
+
+/* â”€â”€ Scheme: page & section backgrounds (match homepage section tokens) â”€â”€ */
 @utility scheme-page {
   background: linear-gradient(
     180deg,
@@ -33,7 +34,7 @@
   color: var(--text-inverse);
 }
 
-/* ── Scheme: panels ── */
+/* â”€â”€ Scheme: panels â”€â”€ */
 @utility scheme-panel {
   background: var(--surface-panel-strong);
   border-color: var(--border-soft);
@@ -51,14 +52,14 @@
   box-shadow: var(--shadow-inverse);
 }
 
-/* ── Scheme: borders ── */
+/* â”€â”€ Scheme: borders â”€â”€ */
 @utility scheme-border { border-color: var(--border-soft); }
 @utility scheme-border-soft { border-color: var(--border-muted); }
 @utility scheme-border-brand-soft { border-color: var(--border-accent); }
 @utility scheme-border-inverse { border-color: var(--border-inverse); }
 @utility scheme-accent-wash { background-color: var(--surface-accent-wash); }
 
-/* ── Footer scheme ── */
+/* â”€â”€ Footer scheme â”€â”€ */
 @utility site-footer__link {
   color: var(--text-inverse-muted);
   &:hover { color: var(--text-inverse-body); }
@@ -72,4 +73,3 @@
   color: var(--text-inverse-muted);
   &:hover { color: var(--text-inverse-body); }
 }
-

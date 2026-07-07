@@ -25,9 +25,9 @@ const SKIP_DIRS = new Set([
 
 /** Base / token CSS — design-system foundation, excluded from hardcoding audit. */
 const BASE_CSS_PREFIXES = [
-  "app/css/base/",
-  "app/css/core/tokens/",
-  "app/css/core/typography/type.css",
+  "app/css/core/theme.css",
+  "app/css/core/utilities/",
+  "app/css/core/components/",
   "app/(site)/globals.css",
 ];
 
