@@ -1,0 +1,155 @@
+---
+pid: 13688
+cwd: "D:\oandO04072026"
+command: "cd \"D:\\oandO04072026\\site\"; $env:PLAYWRIGHT_BASE_URL=\"http://localhost:3000\"; pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/planner-catalog.spec.ts tests/e2e/planner-guest-workspace.spec.ts --grep \"catalog search|searchable catalog|overlap\" --project=chromium 2>&1"
+started_at: 2026-07-06T20:13:13.485Z
+running_for_ms: 19365008 
+---
+
+Running 4 tests using 2 workers
+
+(node:13940) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:18152) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › tests\e2e\planner-catalog.spec.ts:6:7 › planner catalog panel › desktop rail, catalog, and canvas do not overlap (13.4s)
+  ✘  2 [chromium] › tests\e2e\planner-catalog.spec.ts:29:7 › planner catalog panel › guest workspace exposes searchable catalog (28.7s)
+(node:30040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:129:7 › a11y — key flows › inventory at scale (catalog search + results) has no critical or serious a11y violations (5.4s)
+  ✘  3 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:49:7 › Planner guest workspace — plan 06 UI bar › catalog search filters elements (22.0s)
+
+
+  1) [chromium] › tests\e2e\planner-catalog.spec.ts:29:7 › planner catalog panel › guest workspace exposes searchable catalog 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('region', { name: 'Catalog browser' }).getByRole('button', { name: /Add .* to canvas/i }).first()
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for getByRole('region', { name: 'Catalog browser' }).getByRole('button', { name: /Add .* to canvas/i }).first()
+
+
+      47 |         .getByRole("button", { name: /Add .* to canvas/i })
+      48 |         .first(),
+    > 49 |     ).toBeVisible({
+         |       ^
+      50 |       timeout: 15_000,
+      51 |     });
+      52 |   });
+        at D:\oandO04072026\site\tests\e2e\planner-catalog.spec.ts:49:7
+
+    Error Context: ..\results\test-results\e2e-planner-catalog-planne-b3718--exposes-searchable-catalog-chromium\error-context.md
+
+  2) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:49:7 › Planner guest workspace — plan 06 UI bar › catalog search filters elements 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/No elements found/i)
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText(/No elements found/i)
+
+
+      52 |     await expect(page.getByRole("button", { name: /Add .* to canvas/i })).toBeVisible();
+      53 |     await search.fill("zzzznotfound");
+    > 54 |     await expect(page.getByText(/No elements found/i)).toBeVisible();
+         |                                                        ^
+      55 |   });
+      56 |
+      57 |   test("status bar shows plan metrics", async ({ page }) => {
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:54:56
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-b2f60-log-search-filters-elements-chromium\error-context.md
+
+  3) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:129:7 › a11y — key flows › inventory at scale (catalog search + results) has no critical or serious a11y violations 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 58
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+    +     "help": "Elements must meet minimum color contrast ratio thresholds",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=playwright",
+    +     "id": "color-contrast",
+    +     "impact": "serious",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#f5f3f0",
+    +               "contrastRatio": 3.1,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#9d876c",
+    +               "fontSize": "8.3pt (11px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 3.1 (foreground color: #9d876c, background color: #f5f3f0, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<span class=\"workspace_brandSub__AKhsk\">Unsaved changes</span>",
+    +                 "target": Array [
+    +                   ".workspace_brandSub__AKhsk",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 3.1 (foreground color: #9d876c, background color: #f5f3f0, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<span class=\"workspace_brandSub__AKhsk\">Unsaved changes</span>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".workspace_brandSub__AKhsk",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.color",
+    +       "wcag2aa",
+    +       "wcag143",
+    +       "TTv5",
+    +       "TT13.c",
+    +       "EN-301-549",
+    +       "EN-9.1.4.3",
+    +       "ACT",
+    +       "RGAAv4",
+    +       "RGAA-3.2.1",
+    +     ],
+    +   },
+    + ]
+
+      146 |       (violation) => violation.impact === "critical" || violation.impact === "serious",
+      147 |     );
+    > 148 |     expect(blocking).toEqual([]);
+          |                      ^
+      149 |   });
+      150 |
+      151 |   test.describe("small screen", () => {
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:148:22
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-95c72--or-serious-a11y-violations-chromium\error-context.md
+
+  3 failed
+    [chromium] › tests\e2e\planner-catalog.spec.ts:29:7 › planner catalog panel › guest workspace exposes searchable catalog 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:49:7 › Planner guest workspace — plan 06 UI bar › catalog search filters elements 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:129:7 › a11y — key flows › inventory at scale (catalog search + results) has no critical or serious a11y violations 
+  1 passed (36.5s)

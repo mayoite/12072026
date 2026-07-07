@@ -1,0 +1,2344 @@
+---
+pid: 31880
+cwd: "D:\oandO04072026"
+command: "Set-Location D:\\oandO04072026\\site; pnpm exec vitest run --config vitest.config.ts tests/unit/features/planner/open3d 2>&1"
+started_at: 2026-07-06T19:10:57.178Z
+running_for_ms: 100000   
+---
+
+ RUN  v4.1.9 D:/oandO04072026/site
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts (18 tests | 11 failed) 54ms
+     ✓ rejects invalid background uploads 5ms
+     × uploads a background image client-side and builds a background object 13ms
+     × uploads sketch images and completes the background workflow 3ms
+     × uploads to configured endpoints 2ms
+     ✓ generates scaled previews from data URLs 1ms
+     ✓ falls back when preview image fails to load 1ms
+     × validates uploads and formats file sizes 2ms
+     ✓ rejects invalid upload types and oversized files 1ms
+     × handles server upload failures and AI processing fallbacks 2ms
+     × uploads with XHR progress and handles network errors 2ms
+     × revokes blob URLs only 3ms
+     × handles upload network failures and invalid XHR responses 4ms
+     ✓ returns preview fallback when canvas context is unavailable 1ms
+     × reports AI processing catch errors while keeping local preview 2ms
+     ✓ returns an error when image loading fails client-side 1ms
+     × creates background images with optional scale and opacity 2ms
+     ✓ scales previews using width and height constraints 1ms
+     × handles thrown fetch errors during server upload 2ms
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts (39 tests | 32 failed) 80ms
+     × returns true for a valid document 15ms
+     ✓ returns false when id is missing 1ms
+     ✓ returns false when sceneJson is missing 1ms
+     ✓ returns false when name is missing 0ms
+     ✓ returns false for null 1ms
+     ✓ returns false for a non-object primitive 0ms
+     × returns ok with document on 200 7ms
+     × includes Authorization header when token is present 2ms
+     × returns unauthenticated on 401 2ms
+     × returns forbidden on 403 2ms
+     × returns not-found on 404 1ms
+     × returns network on unexpected non-ok status 1ms
+     × returns corrupt when body.document fails the type guard 2ms
+     × returns network on fetch throw 1ms
+     × returns ok with document on 200 2ms
+     × returns unauthenticated on 401 1ms
+     × returns conflict on 409 1ms
+     × returns network when response body has no valid document 1ms
+     × returns network on fetch throw 1ms
+     × returns ok with mapped summaries on 200 2ms
+     × handles empty documents array 2ms
+     × handles missing documents key gracefully 2ms
+     × returns unauthenticated on 401 1ms
+     × returns network on non-ok status 1ms
+     × returns network on fetch throw 3ms
+     × returns ok on 200 2ms
+     × returns ok on 204 2ms
+     × returns unauthenticated on 401 2ms
+     × returns not-found on 404 1ms
+     × returns network on non-ok status 1ms
+     × returns network on fetch throw 1ms
+     × URL-encodes saveId with special characters 1ms
+     × returns network on non-ok HTTP status (5xx) 1ms
+     × returns network on 503 1ms
+     ✓ uses empty string fallback when document id is missing 0ms
+     ✓ uses 'Untitled' fallback when document name is missing 1ms
+     × load: uses 'Network error' when thrown value is not an Error instance 2ms
+     × save: uses 'Network error' when thrown value is not an Error instance 1ms
+     × delete: uses 'Network error' when thrown value is not an Error instance 2ms
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts (15 tests | 13 failed) 44ms
+     × calls repository.save once and returns ok with saveId 10ms
+     ✓ returns empty immediately when project is null 1ms
+     × returns unauthenticated when repository returns unauthenticated 7ms
+     × returns network with message when repository returns network failure 1ms
+     × returns conflict when repository returns conflict 1ms
+     × returns forbidden when repository returns forbidden 1ms
+     × returns network with "Unknown error" when repository omits a message 6ms
+       ✓ never calls fetch when project is null (early-return path) 2ms
+       × never calls fetch directly even when saving â€” only the repository abstraction is invoked 1ms
+       × uses idFactory when project.id is empty 1ms
+       × uses idFactory when project.id is whitespace-only 1ms
+       × preserves existing project id and does not call idFactory 1ms
+       × saved document.sceneJson is valid JSON that round-trips back to the project 1ms
+     × uses default idFactory (crypto.randomUUID) when project.id is empty and no idFactory provided 1ms
+     × uses "My plan" when project name is null or undefined 1ms
+ ✓ tests/unit/features/planner/open3d/persistence/permissions.test.ts (40 tests) 42ms
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts (25 tests | 22 failed) 58ms
+     × exports a valid project to JSON envelope 13ms
+     × exports pretty-printed JSON when requested 4ms
+     ✓ exports compact JSON by default 4ms
+     × filters to single floor when floorId is provided 2ms
+     × fails for empty project 6ms
+     × fails for project without id or name 3ms
+     × fails when floorId does not exist 2ms
+     × round-trips through JSON correctly 2ms
+     × parses valid JSON string 1ms
+     × rejects empty input 2ms
+     ✓ rejects invalid JSON 0ms
+     × rejects JSON exceeding size limit 1ms
+     ✓ validates envelope structure 1ms
+     × rejects missing type 1ms
+     × rejects wrong type 1ms
+     × rejects invalid version 1ms
+     × rejects unsupported units 1ms
+     × warns on invalid displayUnit 1ms
+     × rejects too many floors 1ms
+     × imports valid JSON successfully 1ms
+     × returns errors for invalid JSON 1ms
+     × round-trips correctly 1ms
+     × sets default displayUnit when missing 0ms
+     × assigns IDs to floors without IDs 0ms
+     × leaves valid envelope unchanged 3ms
+ ✓ tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts (22 tests) 142ms
+ ✓ tests/unit/features/planner/open3d/catalog/blockDescriptor.test.ts (36 tests) 103ms
+ ✓ tests/unit/features/planner/open3d/catalog/blocksResolver.test.ts (69 tests) 87ms
+ ❯ tests/unit/features/planner/open3d/modelOperations.test.ts (69 tests | 2 failed) 116ms
+     ✓ adds a wall 9ms
+     ✓ removes a wall and cascades doors/windows 3ms
+     ✓ updates a wall 1ms
+     ✓ moves wall endpoints 4ms
+     ✓ moves a wall parallel 1ms
+     ✓ splits a wall and reassigns openings 2ms
+     ✓ splits a wall with openings on both sides of the split point 1ms
+     ✓ splits a wall moving a door to the new wall and keeping a window on the old wall 1ms
+     ✓ rejects split at extremes 3ms
+     ✓ duplicates a wall 1ms
+     ✓ throws for missing wall 2ms
+     ✓ adds doors with defaults 1ms
+     ✓ removes, updates, and duplicates doors 2ms
+     × throws for missing door 27ms
+     ✓ adds windows with defaults 1ms
+     ✓ removes, updates, and duplicates windows 1ms
+     × throws for missing window 1ms
+     ✓ adds, moves, rotates, scales, and duplicates furniture 2ms
+     ✓ locks and unlocks furniture 1ms
+     ✓ removes and updates furniture 1ms
+     ✓ throws for missing furniture 2ms
+     ✓ adds, moves, updates, and removes stairs 1ms
+     ✓ throws for missing stair 1ms
+     ✓ adds, moves, updates, and removes columns 1ms
+     ✓ adds square columns 0ms
+     ✓ throws for missing column 1ms
+     ✓ removes any element by id with cascade for walls 1ms
+     ✓ adds a floor and sets it active 1ms
+     ✓ copies current floor layout 0ms
+     ✓ removes a floor and switches active 1ms
+     ✓ removes a non-active floor without changing active 1ms
+     ✓ rejects removing the only floor 0ms
+     ✓ sets active floor 0ms
+     ✓ updates project name and display unit 1ms
+     ✓ adds, moves, and removes guides 1ms
+     ✓ throws for missing guide 1ms
+     ✓ adds and removes measurements 2ms
+     ✓ adds, updates, and removes annotations 2ms
+     ✓ throws for missing annotation 1ms
+     ✓ adds, updates, moves, and removes text annotations 2ms
+     ✓ throws for missing text annotation 1ms
+     ✓ sets and updates background image 1ms
+     ✓ throws updating non-existent background image 1ms
+     ✓ creates and removes groups 1ms
+     ✓ rejects groups with fewer than 2 elements 1ms
+     ✓ ungroups by element ids 5ms
+     ✓ createGroup filters out groups that become too small 1ms
+     ✓ updates a room 0ms
+     ✓ throws for missing room 0ms
+     ✓ imports floor data into active floor 2ms
+     ✓ imports floor with stairs and columns into active floor 1ms
+     ✓ throws when active floor is missing 1ms
+     ✓ does not mutate the original project 0ms
+     ✓ updates timestamp on every mutating action 1ms
+     ✓ creates initial state 1ms
+     ✓ pushes and undoes 1ms
+     ✓ redoes 1ms
+     ✓ clears future on new push 1ms
+     ✓ truncates past at maxHistory 1ms
+     ✓ updates present without pushing 0ms
+     ✓ jumps to history index 1ms
+     ✓ returns history entries 1ms
+     ✓ no-op on undo/redo when not available 0ms
+     ✓ validates envelopes 1ms
+     ✓ creates envelope v1 0ms
+     ✓ migrates through registered migrations 1ms
+     ✓ fails when no migration path 0ms
+     ✓ fails when migration throws 0ms
+     ✓ returns registered migrations 0ms
+stdout | tests/unit/features/planner/open3d/catalog/svgPipelineGolden.test.ts > 03-SVG-01: performance budget (p95 ≤ 200ms per fixture) > chaise: single pipeline run completes within 200ms
+[phase-03-perf] chaise pipeline elapsed=0.60ms budget=200ms
+
+stdout | tests/unit/features/planner/open3d/catalog/svgPipelineGolden.test.ts > 03-SVG-01: performance budget (p95 ≤ 200ms per fixture) > side-table: single pipeline run completes within 200ms
+[phase-03-perf] side-table pipeline elapsed=1.78ms budget=200ms
+
+stdout | tests/unit/features/planner/open3d/catalog/svgPipelineGolden.test.ts > 03-SVG-01: performance budget (p95 ≤ 200ms per fixture) > sectional: single pipeline run completes within 200ms
+[phase-03-perf] sectional pipeline elapsed=0.93ms budget=200ms
+
+ ✓ tests/unit/features/planner/open3d/catalog/svgPipelineGolden.test.ts (29 tests) 171ms
+ ✓ tests/unit/features/planner/open3d/domain.test.ts (16 tests) 73ms
+ ✓ tests/unit/features/planner/open3d/catalog.test.ts (189 tests) 378ms
+stdout | tests/unit/features/planner/open3d/svgInventory.test.ts > 03A-INV: Search Index > large inventory benchmarks > meets 1K search p95 budget under 100ms
+[phase-03a-benchmark-exceed] inventory search 1K p95=15.815ms stretch=50ms
+
+stderr | tests/unit/features/planner/open3d/coverageGap.test.ts > AI Advisor Actions (TDD: apply errors, preview, revert, layout branches) > previewSuggestionActions and revert cover layout and warn path
+[advisorActions] revertLastSuggestion not fully implemented
+
+ ✓ tests/unit/features/planner/open3d/coverageGap.test.ts (254 tests) 641ms
+ ✓ tests/unit/features/planner/open3d/aiAdvisor.test.ts (21 tests) 24ms
+ ✓ tests/unit/features/planner/open3d/plannerDocumentBridge.test.ts (14 tests) 27ms
+ ✓ tests/unit/features/planner/open3d/advisorCoverage.test.ts (9 tests) 33ms
+ ✓ tests/unit/features/planner/open3d/persistence/persistence.test.ts (9 tests) 74ms
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > permission gate check p95 under 1ms
+[phase-04-benchmark] permission gate p95=0.000ms budget=1ms
+
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > member document load p95 under 500ms with mocked API
+[phase-04-benchmark] member load p95=0.004ms budget=500ms
+
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > member cloud save p95 under 2s with mocked API
+[phase-04-benchmark] member save p95=0.002ms budget=2000ms
+
+stdout | tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts > Phase 04 persistence performance budgets > guest-to-member promotion save p95 under 2s with mocked repository
+[phase-04-benchmark] promotion save p95=0.004ms budget=2000ms
+
+ ✓ tests/unit/features/planner/open3d/persistence/phase04Perf.test.ts (4 tests) 21ms
+ ✓ tests/unit/features/planner/open3d/plannerCommandWiring.test.tsx (8 tests) 99ms
+ ✓ tests/unit/features/planner/open3d/sketchToPlan.test.ts (21 tests) 733ms
+ ✓ tests/unit/features/planner/open3d/imageImport.test.ts (13 tests) 80ms
+stdout | tests/unit/features/planner/open3d/svgInventory.test.ts > 03A-INV: Search Index > large inventory benchmarks > meets 10K search p95 budget under 200ms
+[phase-03a-benchmark-exceed] inventory search 10K p95=77.836ms stretch=100ms
+
+stdout | tests/unit/features/planner/open3d/svgInventory.test.ts > 03A-INV: Search Index > large inventory benchmarks > meets SVG symbol generation budget under 10ms p95
+[phase-03a-benchmark-exceed] SVG symbol generation p95=0.026ms stretch=5ms
+
+ ✓ tests/unit/features/planner/open3d/svgInventory.test.ts (114 tests) 2625ms
+       ✓ meets 10K search p95 budget under 200ms  2196ms
+ ✓ tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx (6 tests) 586ms
+ ❯ tests/unit/features/planner/open3d/threeViewerInner.test.tsx (5 tests | 1 failed) 314ms
+     × shows loading state then mounts the WebGL container 117ms
+     ✓ renders an error panel when scene initialization fails 65ms
+     ✓ disposes renderer and scene resources on unmount 72ms
+     ✓ renders with shadow maps enabled and without an onReady callback 48ms
+     ✓ cancels Three.js loading when unmounted early 5ms
+ ✓ tests/unit/features/planner/open3d/phase1CommandCatalog.test.ts (6 tests) 49ms
+ ✓ tests/unit/features/planner/open3d/roomElements.test.ts (14 tests) 97ms
+ ✓ tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts (5 tests) 489ms
+ ✓ tests/unit/features/planner/open3d/doorWindowPlacement.test.ts (11 tests) 80ms
+ ❯ tests/unit/features/planner/open3d/zeroCoverageModules.test.ts (3 tests | 1 failed) 142ms
+     × exports valid projects and rejects empty envelopes 21ms
+     ✓ summarizes project state and validates proposals 3ms
+     ✓ validates requests and runs the placeholder conversion pipeline 111ms
+ ✓ tests/unit/features/planner/open3d/feasibility.test.ts (5 tests) 36ms
+ ❯ tests/unit/features/planner/open3d/donorParity.test.ts (4 tests | 1 failed) 36ms
+     ✓ builds searchable palette commands with donor tool shortcuts 6ms
+     ✓ dispatches palette actions through handlers 5ms
+     ✓ summarizes floor layers and toggles visibility 4ms
+     × maps donor shortcut keys to canvas tools 14ms
+stderr | tests/unit/features/planner/open3d/cleanupPhase08.test.ts > Phase 08 import graph proof > wires the live guest and canvas routes to the hybrid open3d workspace
+<PlannerGuestRoute> is an async Client Component. Only Server Components can be async at the moment. This error is often caused by accidentally adding `'use client'` to a module that was originally written for the server.
+ ✓ tests/unit/features/planner/open3d/workspaceStatusLabels.test.ts (6 tests) 14ms
+
+stderr | tests/unit/features/planner/open3d/cleanupPhase08.test.ts > Phase 08 import graph proof > wires the live guest and canvas routes to the hybrid open3d workspace
+A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | tests/unit/features/planner/open3d/cleanupPhase08.test.ts > Phase 08 import graph proof > wires the live guest and canvas routes to the hybrid open3d workspace
+A component suspended inside an `act` scope, but the `act` call was not awaited. When testing React components that depend on asynchronous data, you must await the result:
+
+await act(() => ...)
+
+ ✓ tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx (4 tests) 70ms
+stderr | tests/unit/features/planner/open3d/cleanupPhase08.test.ts > Phase 08 import graph proof > keeps /planner/open3d on the pilot host route
+Received `true` for a non-boolean attribute `jsx`.
+
+If you want to write it to the DOM, pass a string instead: jsx="true" or jsx={value.toString()}.
+ ❯ tests/unit/features/planner/open3d/cleanupPhase08.test.ts (7 tests | 2 failed) 1048ms
+
+     ✓ keeps product catalog assets off git public paths 4ms
+     ✓ lists runtime textures eligible for CDN copy only 1ms
+     × wires the live guest and canvas routes to the hybrid open3d workspace 794ms
+     ✓ keeps explicit Fabric fallback routes on the legacy planner workspace 102ms
+     × keeps /planner/open3d on the pilot host route 131ms
+     ✓ preserves iframe embed node until explicit retirement 1ms
+     ✓ records live hybrid routes separately from explicit Fabric fallbacks 5ms
+ ❯ tests/unit/features/planner/open3d/threeLazy.test.tsx (2 tests | 1 failed) 388ms
+     × reports WebGL and device capability 9ms
+     ✓ lazy-loads the inner viewer and calls onReady  373ms
+ ✓ tests/unit/features/planner/open3d/exportPhase06.test.ts (3 tests) 14ms
+stderr | tests/unit/features/planner/open3d/threeLazy.test.tsx > Lazy3DViewer > lazy-loads the inner viewer and calls onReady
+[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.
+
+ ✓ tests/unit/features/planner/open3d/persistence/persistenceErrors.test.ts (6 tests) 15ms
+ ✓ tests/unit/features/planner/open3d/workspacePreferences.test.ts (3 tests) 14ms
+ ✓ tests/unit/features/planner/open3d/svgFixtureGallery.test.ts (2 tests) 34ms
+ ✓ tests/unit/features/planner/open3d/catalogSearchCap.test.ts (4 tests) 10ms
+ ✓ tests/unit/features/planner/open3d/open3dSession.test.ts (1 test) 11ms
+ ✓ tests/unit/features/planner/open3d/exportOptionalDeps.test.ts (1 test) 6ms
+ ✓ tests/unit/features/planner/open3d/svgCompiler.test.ts (3 tests) 292ms
+ ✓ tests/unit/features/planner/open3d/open3dIconPolicy.test.tsx (5 tests) 61ms
+stderr | tests/unit/features/planner/open3d/routesCoverage.test.tsx > site planner routes > wires guest route to Open3dPlannerWorkspaceRoute on the live hybrid planner route
+<PlannerGuestRoute> is an async Client Component. Only Server Components can be async at the moment. This error is often caused by accidentally adding `'use client'` to a module that was originally written for the server.
+ ✓ tests/unit/features/planner/open3d/persistence/topBarGuest.test.tsx (2 tests) 52ms
+
+stderr | tests/unit/features/planner/open3d/routesCoverage.test.tsx > site planner routes > wires guest route to Open3dPlannerWorkspaceRoute on the live hybrid planner route
+A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | tests/unit/features/planner/open3d/routesCoverage.test.tsx > site planner routes > wires guest route to Open3dPlannerWorkspaceRoute on the live hybrid planner route
+A component suspended inside an `act` scope, but the `act` call was not awaited. When testing React components that depend on asynchronous data, you must await the result:
+
+await act(() => ...)
+
+stderr | tests/unit/features/planner/open3d/routesCoverage.test.tsx > site planner routes > mounts Open3dPlannerHost on the pilot /planner/open3d route
+Received `true` for a non-boolean attribute `jsx`.
+
+If you want to write it to the DOM, pass a string instead: jsx="true" or jsx={value.toString()}.
+ ❯ tests/unit/features/planner/open3d/routesCoverage.test.tsx (7 tests | 3 failed) 361ms
+
+     ✓ exports workspace layout metadata and renders children 22ms
+     ✓ renders the help marketing page 56ms
+     × wires guest route to Open3dPlannerWorkspaceRoute on the live hybrid planner route 9ms
+     ✓ wires canvas route to Open3dPlannerWorkspaceRoute with plan id on the live hybrid planner route 103ms
+     × mounts Open3dPlannerHost on the pilot /planner/open3d route 22ms
+     ✓ renders known feature slug pages and rejects unknown slugs 141ms
+     × preserves authentication, CSRF, service worker, and error boundaries on direct navigation and refresh for guest and authenticated users on /planner/open3d 5ms
+ ✓ tests/unit/features/planner/open3d/workspaceShell.test.tsx (24 tests) 1398ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 89 ⎯⎯⎯⎯⎯⎯⎯
+
+     ✓ renders panels, status bar, and toolbar actions  1131ms
+ FAIL  tests/unit/features/planner/open3d/cleanupPhase08.test.ts > Phase 08 import graph proof > wires the live guest and canvas routes to the hybrid open3d workspace
+TestingLibraryElementError: Unable to find an element by: [data-testid="open3d-workspace-route"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div />
+</body>
+ ❯ Object.getElementError ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/unit/features/planner/open3d/cleanupPhase08.test.ts:97:19
+     95|
+     96|     render(createElement(PlannerGuestPage));
+     97|     expect(screen.getByTestId("open3d-workspace-route")).toHaveTextCon…
+       |                   ^
+     98|
+     99|     cleanup();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/cleanupPhase08.test.ts > Phase 08 import graph proof > keeps /planner/open3d on the pilot host route
+TestingLibraryElementError: Unable to find an element by: [data-testid="open3d-pilot-route"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      aria-label="Loading planner..."
+      class="flex h-full w-full overflow-hidden"
+      role="status"
+    >
+      <div
+        class="flex w-12 shrink-0 flex-col gap-2 border-r border-[color:var(--border-soft)] bg-[color:var(--surface-page)] p-2"
+      >
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+      </div>
+      <div
+        class="flex-1 flex flex-col"
+      >
+        <div
+          class="flex h-12 items-center gap-3 border-b border-[color:var(--border-soft)] px-4"
+        >
+          <div
+            class="h-6 w-32 rounded shimmer"
+          />
+          <div
+            class="h-6 w-20 rounded shimmer"
+          />
+          <div
+            class="flex-1"
+          />
+          <div
+            class="h-8 w-24 rounded-lg shimmer"
+          />
+          <div
+            class="h-8 w-24 rounded-lg shimmer"
+          />
+        </div>
+        <div
+          class="relative flex-1 bg-[color:var(--surface-canvas)]"
+        >
+          <div
+            class="absolute inset-0 opacity-20"
+            style="background-image: radial-gradient(circle, var(--text-muted) 0.0625rem, transparent 0.0625rem); background-size: 1.5rem 1.5rem;"
+          />
+          <div
+            class="absolute inset-0 flex items-center justify-center"
+          >
+            <div
+              class="flex flex-col items-center gap-3"
+            >
+              <div
+                class="h-16 w-16 rounded-xl shimmer"
+              />
+              <div
+                class="h-4 w-40 rounded shimmer"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="w-64 flex-shrink-0 border-l border-[var(--border-soft,var(--color-bronze-100))] bg-[var(--surface-page,var(--color-white-100))] p-4 flex flex-col gap-3"
+      >
+        <div
+          class="h-5 w-24 rounded shimmer"
+        />
+        <div
+          class="h-32 w-full rounded-lg shimmer"
+        />
+        <div
+          class="h-5 w-20 rounded shimmer"
+        />
+        <div
+          class="h-8 w-full rounded shimmer"
+        />
+        <div
+          class="h-8 w-full rounded shimmer"
+        />
+        <div
+          class="h-8 w-full rounded shimmer"
+        />
+        <div
+          class="flex-1"
+        />
+        <div
+          class="h-10 w-full rounded-lg shimmer"
+        />
+      </div>
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/unit/features/planner/open3d/cleanupPhase08.test.ts:134:19
+    132|       }),
+    133|     );
+    134|     expect(screen.getByTestId("open3d-pilot-route")).toHaveTextContent…
+       |                   ^
+    135|   });
+    136|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/donorParity.test.ts > donor parity — keyboard shortcuts > maps donor shortcut keys to canvas tools
+AssertionError: expected 'dimension' to be 'door' // Object.is equality
+
+Expected: "door"
+Received: "dimension"
+
+ ❯ tests/unit/features/planner/open3d/donorParity.test.ts:76:38
+     74|     expect(toolFromShortcutKey("v")).toBe("select");
+     75|     expect(toolFromShortcutKey("W")).toBe("wall");
+     76|     expect(toolFromShortcutKey("d")).toBe("door");
+       |                                      ^
+     77|     expect(toolFromShortcutKey("h")).toBe("pan");
+     78|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonExport > exports a valid project to JSON envelope
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:30:28
+     28|     const p = room();
+     29|     const result = exportToJson(p);
+     30|     expect(result.success).toBe(true);
+       |                            ^
+     31|     expect(result.envelope.type).toBe("open3d-floorplan-project");
+     32|     expect(result.envelope.version).toBe(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonExport > exports pretty-printed JSON when requested
+AssertionError: expected '{}' to contain '\n'
+
+- Expected
++ Received
+
+-
+-
++
+ {}
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:42:21
+     40|     const result = exportToJson(p, { pretty: true });
+     41|     const jsonStr = envelopeToJsonString(result.envelope, true);
+     42|     expect(jsonStr).toContain("\n");
+       |                     ^
+     43|     expect(jsonStr).toContain("  ");
+     44|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonExport > filters to single floor when floorId is provided
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:58:28
+     56|     const floorId = p.floors[0].id;
+     57|     const result = exportToJson(p, { floorId });
+     58|     expect(result.success).toBe(true);
+       |                            ^
+     59|     expect(result.envelope.project.floors).toHaveLength(1);
+     60|     expect(result.envelope.project.floors[0].id).toBe(floorId);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonExport > fails for empty project
+AssertionError: expected 'dead' to contain 'no floors'
+
+Expected: "no floors"
+Received: "dead"
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:68:26
+     66|     const result = exportToJson(empty);
+     67|     expect(result.success).toBe(false);
+     68|     expect(result.error).toContain("no floors");
+       |                          ^
+     69|   });
+     70|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonExport > fails for project without id or name
+AssertionError: expected 'dead' to contain 'id and name'
+
+Expected: "id and name"
+Received: "dead"
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:76:26
+     74|     const result = exportToJson(invalid as never);
+     75|     expect(result.success).toBe(false);
+     76|     expect(result.error).toContain("id and name");
+       |                          ^
+     77|   });
+     78|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonExport > fails when floorId does not exist
+AssertionError: expected 'dead' to contain 'not found'
+
+Expected: "not found"
+Received: "dead"
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:83:26
+     81|     const result = exportToJson(p, { floorId: "nonexistent" });
+     82|     expect(result.success).toBe(false);
+     83|     expect(result.error).toContain("not found");
+       |                          ^
+     84|   });
+     85|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonExport > round-trips through JSON correctly
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:89:34
+     87|     const p = room();
+     88|     const exportResult = exportToJson(p);
+     89|     expect(exportResult.success).toBe(true);
+       |                                  ^
+     90|     const jsonStr = envelopeToJsonString(exportResult.envelope, true);
+     91|     const importResult = importFromJson(jsonStr);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > parses valid JSON string
+TypeError: Cannot read properties of null (reading 'type')
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:108:20
+    106|     expect(parseError).toBeNull();
+    107|     expect(parsed).toBeDefined();
+    108|     expect(parsed!.type).toBe("open3d-floorplan-project");
+       |                    ^
+    109|   });
+    110|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > rejects empty input
+AssertionError: the given combination of arguments (null and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:114:24
+    112|     const { envelope, parseError } = parseJsonToEnvelope("");
+    113|     expect(envelope).toBeNull();
+    114|     expect(parseError).toContain("non-empty");
+       |                        ^
+    115|   });
+    116|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > rejects JSON exceeding size limit
+AssertionError: the given combination of arguments (null and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:127:24
+    125|     const { envelope, parseError } = parseJsonToEnvelope(largeJson);
+    126|     expect(envelope).toBeNull();
+    127|     expect(parseError).toContain("exceeds maximum size");
+       |                        ^
+    128|   });
+    129|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > rejects missing type
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:141:51
+    139|     const envelopeCopy = { ...envelope, type: undefined };
+    140|     const errors = validateEnvelopeStructure(envelopeCopy as never);
+    141|     expect(errors.some((e) => e.path === "type")).toBe(true);
+       |                                                   ^
+    142|   });
+    143|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > rejects wrong type
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:149:84
+    147|     envelopeAny.type = "something-else";
+    148|     const errors = validateEnvelopeStructure(envelopeAny as never);
+    149|     expect(errors.some((e) => e.path === "type" && e.message.includes(…
+       |                                                                                    ^
+    150|   });
+    151|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > rejects invalid version
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:157:54
+    155|     envelopeAny.version = -1;
+    156|     const errors = validateEnvelopeStructure(envelopeAny as never);
+    157|     expect(errors.some((e) => e.path === "version")).toBe(true);
+       |                                                      ^
+    158|   });
+    159|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > rejects unsupported units
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:165:52
+    163|     envelopeAny.units = "inches";
+    164|     const errors = validateEnvelopeStructure(envelopeAny as never);
+    165|     expect(errors.some((e) => e.path === "units")).toBe(true);
+       |                                                    ^
+    166|   });
+    167|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > warns on invalid displayUnit
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ fals Test Files  11 failed | 36 passed (47)
+      Tests  89 failed | 1084 passed (1173)
+   Start at  00:40:58
+   Duration  17.88s (transform 16.73s, setup 33.27s, import 51.53s, tests 11.32s, environment 53.79s)
+
+JSON report written to D:/oandO04072026/results/tests/vitest-results.json
+e
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:172:86
+    170|     envelope.displayUnit = "invalid" as never;
+    171|     const errors = validateEnvelopeStructure(envelope);
+    172|     expect(errors.some((e) => e.path === "displayUnit" && e.severity =…
+       |                                                                                      ^
+    173|   });
+    174|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > rejects too many floors
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:184:87
+    182|     envelope.project.floors = extraFloors as never;
+    183|     const errors = validateEnvelopeStructure(envelope);
+    184|     expect(errors.some((e) => e.path === "floors" && e.message.include…
+       |                                                                                       ^
+    185|   });
+    186|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > imports valid JSON successfully
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:192:28
+    190|     const jsonStr = JSON.stringify(envelope);
+    191|     const result = importFromJson(jsonStr);
+    192|     expect(result.success).toBe(true);
+       |                            ^
+    193|     expect(result.project).not.toBeNull();
+    194|     expect(result.errors).toHaveLength(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > returns errors for invalid JSON
+AssertionError: expected 0 to be greater than 0
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:201:34
+    199|     expect(result.success).toBe(false);
+    200|     expect(result.project).toBeNull();
+    201|     expect(result.errors.length).toBeGreaterThan(0);
+       |                                  ^
+    202|   });
+    203|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > jsonImport > round-trips correctly
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:209:28
+    207|     const jsonStr = JSON.stringify(envelope, null, 2);
+    208|     const result = importFromJson(jsonStr);
+    209|     expect(result.success).toBe(true);
+       |                            ^
+    210|     expect(result.project).not.toBeNull();
+    211|     expect(result.project!.id).toBe(p.id);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > recoverFromErrors > sets default displayUnit when missing
+TypeError: Cannot read properties of undefined (reading 'displayUnit')
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:222:22
+    220|     envelope.displayUnit = undefined as never;
+    221|     const { envelope: recovered, recovered: messages } = recoverFromEr…
+    222|     expect(recovered.displayUnit).toBe("mm");
+       |                      ^
+    223|     expect(messages).toContain("Set default displayUnit to mm");
+    224|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > recoverFromErrors > assigns IDs to floors without IDs
+TypeError: Cannot read properties of undefined (reading 'project')
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:230:22
+    228|     envelope.project.floors[0].id = "";
+    229|     const { envelope: recovered, recovered: messages } = recoverFromEr…
+    230|     expect(recovered.project.floors[0].id).toBe("floor-recovered-0");
+       |                      ^
+    231|     expect(messages.some((m) => m.includes("Assigned ID"))).toBe(true);
+    232|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/jsonExport.test.ts > recoverFromErrors > leaves valid envelope unchanged
+AssertionError: expected undefined to deeply equal { …(6) }
+
+- Expected:
+{
+  "displayUnit": "mm",
+  "project": {
+    "activeFloorId": "floor",
+    "createdAt": "2026-07-03T00:00:00.000Z",
+    "displayUnit": "mm",
+    "floors": [
+      {
+        "annotations": [],
+        "columns": [],
+        "doors": [],
+        "furniture": [],
+        "groups": [],
+        "guides": [],
+        "id": "floor",
+        "level": 0,
+        "measurements": [],
+        "name": "Ground Floor",
+        "rooms": [],
+        "stairs": [],
+        "textAnnotations": [],
+        "walls": [
+          {
+            "color": "var(--text-inverse-body)",
+            "end": {
+              "x": 6000,
+              "y": 0,
+            },
+            "height": 2700,
+            "id": "wall-1",
+            "start": {
+              "x": 0,
+              "y": 0,
+            },
+            "thickness": 150,
+          },
+          {
+            "color": "var(--text-inverse-body)",
+            "end": {
+              "x": 6000,
+              "y": 4000,
+            },
+            "height": 2700,
+            "id": "wall-2",
+            "start": {
+              "x": 6000,
+              "y": 0,
+            },
+            "thickness": 150,
+          },
+          {
+            "color": "var(--text-inverse-body)",
+            "end": {
+              "x": 0,
+              "y": 4000,
+            },
+            "height": 2700,
+            "id": "wall-3",
+            "start": {
+              "x": 6000,
+              "y": 4000,
+            },
+            "thickness": 150,
+          },
+          {
+            "color": "var(--text-inverse-body)",
+            "end": {
+              "x": 0,
+              "y": 0,
+            },
+            "height": 2700,
+            "id": "wall-4",
+            "start": {
+              "x": 0,
+              "y": 4000,
+            },
+            "thickness": 150,
+          },
+        ],
+        "windows": [],
+      },
+    ],
+    "id": "project",
+    "name": "Untitled Project",
+    "updatedAt": "2026-07-03T00:00:00.000Z",
+  },
+  "source": "native-open3d",
+  "type": "open3d-floorplan-project",
+  "units": "mm",
+  "version": 1,
+}
+
++ Received:
+undefined
+
+ ❯ tests/unit/features/planner/open3d/jsonExport.test.ts:237:23
+    235|     const envelope = createOpen3dSceneEnvelope(room());
+    236|     const { envelope: recovered, recovered: messages } = recoverFromEr…
+    237|     expect(recovered).toEqual(envelope);
+       |                       ^
+    238|     expect(messages).toHaveLength(0);
+    239|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/modelOperations.test.ts > pureActions â€” door operations > throws for missing door
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ tests/unit/features/planner/open3d/modelOperations.test.ts:231:48
+    229|   it("throws for missing door", () => {
+    230|     const p = room();
+    231|     expect(() => updateDoor(p, "missing", {})).toThrow("Door missing n…
+       |                                                ^
+    232|     expect(() => duplicateDoor(p, "missing")).toThrow("Door missing no…
+    233|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/modelOperations.test.ts > pureActions â€” window operations > throws for missing window
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ tests/unit/features/planner/open3d/modelOperations.test.ts:258:50
+    256|   it("throws for missing window", () => {
+    257|     const p = room();
+    258|     expect(() => updateWindow(p, "missing", {})).toThrow("Window missi…
+       |                                                  ^
+    259|     expect(() => duplicateWindow(p, "missing")).toThrow("Window missin…
+    260|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/routesCoverage.test.tsx > site planner routes > wires guest route to Open3dPlannerWorkspaceRoute on the live hybrid planner route
+TestingLibraryElementError: Unable to find an element by: [data-testid="open3d-planner-route"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div />
+</body>
+ ❯ Object.getElementError ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/unit/features/planner/open3d/routesCoverage.test.tsx:77:19
+     75|     const { default: PlannerGuestPage } = await import("@/app/planner/…
+     76|     render(<PlannerGuestPage />);
+     77|     expect(screen.getByTestId("open3d-planner-route")).toHaveTextConte…
+       |                   ^
+     78|   });
+     79|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/routesCoverage.test.tsx > site planner routes > mounts Open3dPlannerHost on the pilot /planner/open3d route
+TestingLibraryElementError: Unable to find an element by: [data-testid="open3d-planner-host"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      aria-label="Loading planner..."
+      class="flex h-full w-full overflow-hidden"
+      role="status"
+    >
+      <div
+        class="flex w-12 shrink-0 flex-col gap-2 border-r border-[color:var(--border-soft)] bg-[color:var(--surface-page)] p-2"
+      >
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+        <div
+          class="h-8 w-8 rounded-lg shimmer"
+        />
+      </div>
+      <div
+        class="flex-1 flex flex-col"
+      >
+        <div
+          class="flex h-12 items-center gap-3 border-b border-[color:var(--border-soft)] px-4"
+        >
+          <div
+            class="h-6 w-32 rounded shimmer"
+          />
+          <div
+            class="h-6 w-20 rounded shimmer"
+          />
+          <div
+            class="flex-1"
+          />
+          <div
+            class="h-8 w-24 rounded-lg shimmer"
+          />
+          <div
+            class="h-8 w-24 rounded-lg shimmer"
+          />
+        </div>
+        <div
+          class="relative flex-1 bg-[color:var(--surface-canvas)]"
+        >
+          <div
+            class="absolute inset-0 opacity-20"
+            style="background-image: radial-gradient(circle, var(--text-muted) 0.0625rem, transparent 0.0625rem); background-size: 1.5rem 1.5rem;"
+          />
+          <div
+            class="absolute inset-0 flex items-center justify-center"
+          >
+            <div
+              class="flex flex-col items-center gap-3"
+            >
+              <div
+                class="h-16 w-16 rounded-xl shimmer"
+              />
+              <div
+                class="h-4 w-40 rounded shimmer"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="w-64 flex-shrink-0 border-l border-[var(--border-soft,var(--color-bronze-100))] bg-[var(--surface-page,var(--color-white-100))] p-4 flex flex-col gap-3"
+      >
+        <div
+          class="h-5 w-24 rounded shimmer"
+        />
+        <div
+          class="h-32 w-full rounded-lg shimmer"
+        />
+        <div
+          class="h-5 w-20 rounded shimmer"
+        />
+        <div
+          class="h-8 w-full rounded shimmer"
+        />
+        <div
+          class="h-8 w-full rounded shimmer"
+        />
+        <div
+          class="h-8 w-full rounded shimmer"
+        />
+        <div
+          class="flex-1"
+        />
+        <div
+          class="h-10 w-full rounded-lg shimmer"
+        />
+      </div>
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/unit/features/planner/open3d/routesCoverage.test.tsx:97:19
+     95|       }),
+     96|     );
+     97|     expect(screen.getByTestId("open3d-planner-host")).toHaveTextConten…
+       |                   ^
+     98|   });
+     99|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/routesCoverage.test.tsx > site planner routes > preserves authentication, CSRF, service worker, and error boundaries on direct navigation and refresh for guest and authenticated users on /planner/open3d
+TestingLibraryElementError: Found multiple elements by: [data-testid="open3d-planner-host"]
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<div
+  data-testid="open3d-planner-host"
+>
+  guest
+</div>
+
+Ignored nodes: comments, script, style
+<div
+  data-testid="open3d-planner-host"
+>
+  guest
+   plan-42
+</div>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      data-testid="open3d-planner-host"
+    >
+      guest
+    </div>
+  </div>
+  <div>
+    <div
+      data-testid="open3d-planner-host"
+    >
+      guest
+       plan-42
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getElementError ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ❯ getMultipleElementsFoundError ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ❯ ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/unit/features/planner/open3d/routesCoverage.test.tsx:125:19
+    123|     expect(screen.getByTestId("open3d-planner-host")).toHaveTextConten…
+    124|     render(auth);
+    125|     expect(screen.getByTestId("open3d-planner-host")).toHaveTextConten…
+       |                   ^
+    126|     // boundaries preserved by parent layout contract (tested via impo…
+    127|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/threeLazy.test.tsx > three-lazy capability checks > reports WebGL and device capability
+TypeError: isWebGLSupported is not a function
+ ❯ tests/unit/features/planner/open3d/threeLazy.test.tsx:35:19
+     33| describe("three-lazy capability checks", () => {
+     34|   it("reports WebGL and device capability", () => {
+     35|     expect(typeof isWebGLSupported()).toBe("boolean");
+       |                   ^
+     36|     expect(typeof isDeviceCapable()).toBe("boolean");
+     37|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[31/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/threeViewerInner.test.tsx > ThreeViewerInner > shows loading state then mounts the WebGL container
+AssertionError: expected null to be truthy
+
+- Expected:
+true
+
++ Received:
+null
+
+ ❯ tests/unit/features/planner/open3d/threeViewerInner.test.tsx:122:72
+    120|     });
+    121|
+    122|     expect(container.querySelector("div[style*='min-height: 400px']"))…
+       |                                                                        ^
+    123|   });
+    124|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[32/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/uploadUtils.test.ts > upload utilities > uploads a background image client-side and builds a background object
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts:80:28
+     78|     });
+     79|
+     80|     expect(upload.success).toBe(true);
+       |                            ^
+     81|     expect(upload.dataUrl).toContain("data:image");
+     82|     expect(upload.dimensions?.width).toBeGreaterThan(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[33/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/uploadUtils.test.ts > upload utilities > uploads sketch images and completes the background workflow
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts:99:28
+     97|       previewMaxHeight: 200,
+     98|     });
+     99|     expect(sketch.success).toBe(true);
+       |                            ^
+    100|     expect(sketch.preview).toContain("data:image");
+    101|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[34/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/uploadUtils.test.ts > upload utilities > uploads to configured endpoints
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts:124:34
+    122|       uploadEndpoint: "/api/upload",
+    123|     });
+    124|     expect(serverUpload.success).toBe(true);
+       |                                  ^
+    125|     expect(serverUpload.url).toContain("cdn.example.com");
+    126|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[35/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/uploadUtils.test.ts > upload utilities > validates uploads and formats file sizes
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts:151:40
+    149|   it("validates uploads and formats file sizes", () => {
+    150|     const file = makePngFile();
+    151|     expect(validateUpload(file).valid).toBe(true);
+       |                                        ^
+    152|     expect(formatFileSize(512)).toBe("512 B");
+    153|     expect(formatFileSize(2048)).toBe("2.0 KB");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[36/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/uploadUtils.test.ts > upload utilities > handles server upload failures and AI processing fallbacks
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts:178:32
+    176|
+    177|     const aiFallback = await uploadSketchImage(file, { processEndpoint…
+    178|     expect(aiFallback.success).toBe(true);
+       |                                ^
+    179|     expect(aiFallback.error).toContain("AI processing failed");
+    180|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[37/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/uploadUtils.test.ts > upload utilities > uploads with XHR progress and handles network errors
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts:199:24
+    197|     const progress: number[] = [];
+    198|     const ok = await uploadWithProgress(makePngFile(), "/api/upload", …
+    199|     expect(ok.success).toBe(true);
+       |                        ^
+    200|     expect(progress).toEqual([50]);
+    201|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[38/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/uploadUtils.test.ts > upload utilities > revokes blob URLs only
+AssertionError: expected "revokeObjectURL" to be called with arguments: [ 'blob:temp' ]
+
+Number of calls: 0
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts:215:20
+    213|     const revoke = vi.spyOn(URL, "revokeObjectURL").mockImplementation…
+    214|     revokeObjectUrl("blob:temp");
+    215|     expect(revoke).toHaveBeenCalledWith("blob:temp");
+       |                    ^
+    216|     revokeObjectUrl("https://example.com/image.png");
+    217|     expect(revoke).toHaveBeenCalledTimes(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/uploadUtils.test.ts > upload utilities > handles upload network failures and invalid XHR responses
+AssertionError: expected 'dead' to contain 'network down'
+
+Expected: "network down"
+Received: "dead"
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts:229:26
+    227|     const failed = await uploadBackgroundImage(makePngFile(), { upload…
+    228|     expect(failed.success).toBe(false);
+    229|     expect(failed.error).toContain("network down");
+       |                          ^
+    230|
+    231|     class BadResponseXHR {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[40/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/uploadUtils.test.ts > upload utilities > reports AI processing catch errors while keeping local preview
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts:269:28
+    267|     );
+    268|     const sketch = await uploadSketchImage(makePngFile(), { processEnd…
+    269|     expect(sketch.success).toBe(true);
+       |                            ^
+    270|     expect(sketch.error).toBeTruthy();
+    271|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[41/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/uploadUtils.test.ts > upload utilities > creates background images with optional scale and opacity
+AssertionError: expected undefined to be 2 // Object.is equality
+
+- Expected:
+2
+
++ Received:
+undefined
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts:291:23
+    289|       { scale: 2, opacity: 0.25 },
+    290|     );
+    291|     expect(bg?.scale).toBe(2);
+       |                       ^
+    292|     expect(bg?.opacity).toBe(0.25);
+    293|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[42/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/uploadUtils.test.ts > upload utilities > handles thrown fetch errors during server upload
+AssertionError: expected 'dead' to contain 'network down'
+
+Expected: "network down"
+Received: "dead"
+
+ ❯ tests/unit/features/planner/open3d/uploadUtils.test.ts:318:26
+    316|     const failed = await uploadBackgroundImage(makePngFile(), { upload…
+    317|     expect(failed.success).toBe(false);
+    318|     expect(failed.error).toContain("network down");
+       |                          ^
+    319|   });
+    320| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[43/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/zeroCoverageModules.test.ts > jsonExport module > exports valid projects and rejects empty envelopes
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/zeroCoverageModules.test.ts:36:28
+     34|
+     35|     const result = exportToJson(project, { pretty: true });
+     36|     expect(result.success).toBe(true);
+       |                            ^
+     37|     expect(result.envelope.project.name).toBe("JSON Export");
+     38|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[44/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession > calls repository.save once and returns ok with saveId
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:47:23
+     45|     const result = await promoteGuestSession(project, repo);
+     46|
+     47|     expect(repo.save).toHaveBeenCalledOnce();
+       |                       ^
+     48|     expect(result.status).toBe("ok");
+     49|     if (result.status === "ok") {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[45/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession > returns unauthenticated when repository returns unauthenticated
+AssertionError: expected 'empty' to be 'unauthenticated' // Object.is equality
+
+Expected: "unauthenticated"
+Received: "empty"
+
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:69:27
+     67|     const repo = repoReturning({ status: "unauthenticated" });
+     68|     const result = await promoteGuestSession(makeProject(), repo);
+     69|     expect(result.status).toBe("unauthenticated");
+       |                           ^
+     70|   });
+     71|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[46/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession > returns network with message when repository returns network failure
+AssertionError: expected 'empty' to be 'network' // Object.is equality
+
+Expected: "network"
+Received: "empty"
+
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:76:27
+     74|     const repo = repoReturning({ status: "network", message: "timeout"…
+     75|     const result = await promoteGuestSession(makeProject(), repo);
+     76|     expect(result.status).toBe("network");
+       |                           ^
+     77|     if (result.status === "network") {
+     78|       expect(result.message).toBe("timeout");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[47/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession > returns conflict when repository returns conflict
+AssertionError: expected 'empty' to be 'conflict' // Object.is equality
+
+Expected: "conflict"
+Received: "empty"
+
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:86:27
+     84|     const repo = repoReturning({ status: "conflict" });
+     85|     const result = await promoteGuestSession(makeProject(), repo);
+     86|     expect(result.status).toBe("conflict");
+       |                           ^
+     87|   });
+     88|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[48/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession > returns forbidden when repository returns forbidden
+AssertionError: expected 'empty' to be 'forbidden' // Object.is equality
+
+Expected: "forbidden"
+Received: "empty"
+
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:92:27
+     90|     const repo = repoReturning({ status: "forbidden" });
+     91|     const result = await promoteGuestSession(makeProject(), repo);
+     92|     expect(result.status).toBe("forbidden");
+       |                           ^
+     93|   });
+     94|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[49/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession > returns network with "Unknown error" when repository omits a message
+AssertionError: expected { status: 'empty' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Unknown error",
+-   "status": "network",
++   "status": "empty",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:103:20
+    101|     };
+    102|     const result = await promoteGuestSession(makeProject(), repo);
+    103|     expect(result).toEqual({ status: "network", message: "Unknown erro…
+       |                    ^
+    104|   });
+    105|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[50/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession > no-guest-API-call fixture > never calls fetch directly even when saving â€” only the repository abstraction is invoked
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:138:24
+    136|
+    137|       // The repository is the abstraction boundary: save is called on…
+    138|       expect(mockSave).toHaveBeenCalledOnce();
+       |                        ^
+    139|       // fetch itself is never called from within promoteGuestSession
+    140|       expect(fetchSpy).not.toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[51/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession > ID generation > uses idFactory when project.id is empty
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:161:25
+    159|       const result = await promoteGuestSession(project, repo, idFactor…
+    160|
+    161|       expect(idFactory).toHaveBeenCalledOnce();
+       |                         ^
+    162|       expect(result.status).toBe("ok");
+    163|       if (result.status === "ok") {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[52/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession > ID generation > uses idFactory when project.id is whitespace-only
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:183:25
+    181|       await promoteGuestSession(project, repo, idFactory);
+    182|
+    183|       expect(idFactory).toHaveBeenCalledOnce();
+       |                         ^
+    184|     });
+    185|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[53/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession > ID generation > preserves existing project id and does not call idFactory
+AssertionError: expected 'empty' to be 'ok' // Object.is equality
+
+Expected: "ok"
+Received: "empty"
+
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:197:29
+    195|
+    196|       expect(idFactory).not.toHaveBeenCalled();
+    197|       expect(result.status).toBe("ok");
+       |                             ^
+    198|       if (result.status === "ok") {
+    199|         expect(result.saveId).toBe(project.id);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[54/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession > sceneJson > saved document.sceneJson is valid JSON that round-trips back to the project
+AssertionError: expected undefined to be defined
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:222:27
+    220|       await promoteGuestSession(project, repo);
+    221|
+    222|       expect(capturedDoc).toBeDefined();
+       |                           ^
+    223|       const roundTripped = importOpen3dProjectJson(capturedDoc!.sceneJ…
+    224|       expect(roundTripped).toEqual(project);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[55/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession â€” default idFactory branch > uses default idFactory (crypto.randomUUID) when project.id is empty and no idFactory provided
+AssertionError: expected 'empty' to be 'ok' // Object.is equality
+
+Expected: "ok"
+Received: "empty"
+
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:249:27
+    247|     const result = await promoteGuestSession(project, repo);
+    248|
+    249|     expect(result.status).toBe("ok");
+       |                           ^
+    250|     if (result.status === "ok") {
+    251|       // The id should be a non-empty UUID generated by crypto.randomU…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[56/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts > promoteGuestSession â€” name fallback branch > uses "My plan" when project name is null or undefined
+AssertionError: expected undefined to be 'My plan' // Object.is equality
+
+- Expected:
+"My plan"
+
++ Received:
+undefined
+
+ ❯ tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts:278:31
+    276|     await promoteGuestSession(project, repo);
+    277|
+    278|     expect(capturedDoc?.name).toBe("My plan");
+       |                               ^
+    279|   });
+    280| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[57/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > isStagingPlannerDocument > returns true for a valid document
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:46:49
+     44| describe("isStagingPlannerDocument", () => {
+     45|   it("returns true for a valid document", () => {
+     46|     expect(isStagingPlannerDocument(makeDoc())).toBe(true);
+       |                                                 ^
+     47|   });
+     48|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[58/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > returns ok with document on 200
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok', document: { …(4) } }
+
+- Expected
++ Received
+
+  {
+-   "document": {
+-     "id": "abc-123",
+-     "name": "Test Plan",
+-     "sceneJson": "{}",
+-     "unit_system": "metric",
+-   },
+-   "status": "ok",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:83:20
+     81|     const repo = createMemberPlanRepository(noToken, fetch);
+     82|     const result = await repo.load("abc-123");
+     83|     expect(result).toEqual({ status: "ok", document: doc });
+       |                    ^
+     84|     expect(fetch).toHaveBeenCalledWith(
+     85|       "/api/plans/abc-123",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[59/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > includes Authorization header when token is present
+TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:94:23
+     92|     const repo = createMemberPlanRepository(withToken, fetch);
+     93|     await repo.load("abc-123");
+     94|     const [, init] = (fetch as ReturnType<typeof vi.fn>).mock.calls[0]…
+       |                       ^
+     95|     expect((init.headers as Record<string, string>)["Authorization"]).…
+     96|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[60/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > returns unauthenticated on 401
+AssertionError: expected { status: 'network' } to deeply equal { status: 'unauthenticated' }
+
+- Expected
++ Received
+
+  {
+-   "status": "unauthenticated",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:100:34
+     98|   it("returns unauthenticated on 401", async () => {
+     99|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    100|     expect(await repo.load("x")).toEqual({ status: "unauthenticated" }…
+       |                                  ^
+    101|   });
+    102|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[61/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > returns forbidden on 403
+AssertionError: expected { status: 'network' } to deeply equal { status: 'forbidden' }
+
+- Expected
++ Received
+
+  {
+-   "status": "forbidden",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:105:34
+    103|   it("returns forbidden on 403", async () => {
+    104|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    105|     expect(await repo.load("x")).toEqual({ status: "forbidden" });
+       |                                  ^
+    106|   });
+    107|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[62/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > returns not-found on 404
+AssertionError: expected { status: 'network' } to deeply equal { status: 'not-found' }
+
+- Expected
++ Received
+
+  {
+-   "status": "not-found",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:110:34
+    108|   it("returns not-found on 404", async () => {
+    109|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    110|     expect(await repo.load("x")).toEqual({ status: "not-found" });
+       |                                  ^
+    111|   });
+    112|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[63/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > returns network on unexpected non-ok status
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "HTTP 500",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:115:34
+    113|   it("returns network on unexpected non-ok status", async () => {
+    114|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    115|     expect(await repo.load("x")).toEqual({ status: "network", message:…
+       |                                  ^
+    116|   });
+    117|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[64/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > returns corrupt when body.document fails the type guard
+AssertionError: expected { status: 'network' } to deeply equal { status: 'corrupt', raw: { id: 'x' } }
+
+- Expected
++ Received
+
+  {
+-   "raw": {
+-     "id": "x",
+-   },
+-   "status": "corrupt",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:122:20
+    120|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    121|     const result = await repo.load("x");
+    122|     expect(result).toEqual({ status: "corrupt", raw: badDoc });
+       |                    ^
+    123|   });
+    124|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[65/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.load > returns network on fetch throw
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Connection refused",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:127:34
+    125|   it("returns network on fetch throw", async () => {
+    126|     const repo = createMemberPlanRepository(noToken, throwingFetch("Co…
+    127|     expect(await repo.load("x")).toEqual({ status: "network", message:…
+       |                                  ^
+    128|   });
+    129| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[66/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save > returns ok with document on 200
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok', document: { …(5) } }
+
+- Expected
++ Received
+
+  {
+-   "document": {
+-     "id": "abc-123",
+-     "name": "Test Plan",
+-     "sceneJson": "{}",
+-     "unit_system": "metric",
+-     "updated_at": "2024-01-01T00:00:00Z",
+-   },
+-   "status": "ok",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:141:20
+    139|     const repo = createMemberPlanRepository(noToken, fetch);
+    140|     const result = await repo.save(doc);
+    141|     expect(result).toEqual({ status: "ok", document: savedDoc });
+       |                    ^
+    142|     const [url, init] = (fetch as ReturnType<typeof vi.fn>).mock.calls…
+    143|     expect(url).toBe("/api/plans/abc-123");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[67/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save > returns unauthenticated on 401
+AssertionError: expected { status: 'network' } to deeply equal { status: 'unauthenticated' }
+
+- Expected
++ Received
+
+  {
+-   "status": "unauthenticated",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:150:34
+    148|   it("returns unauthenticated on 401", async () => {
+    149|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    150|     expect(await repo.save(doc)).toEqual({ status: "unauthenticated" }…
+       |                                  ^
+    151|   });
+    152|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[68/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save > returns conflict on 409
+AssertionError: expected { status: 'network' } to deeply equal { status: 'conflict' }
+
+- Expected
++ Received
+
+  {
+-   "status": "conflict",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:155:34
+    153|   it("returns conflict on 409", async () => {
+    154|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    155|     expect(await repo.save(doc)).toEqual({ status: "conflict" });
+       |                                  ^
+    156|   });
+    157|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[69/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save > returns network when response body has no valid document
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Missing document in response",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:160:34
+    158|   it("returns network when response body has no valid document", async…
+    159|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    160|     expect(await repo.save(doc)).toEqual({ status: "network", message:…
+       |                                  ^
+    161|   });
+    162|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[70/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save > returns network on fetch throw
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Timeout",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:165:34
+    163|   it("returns network on fetch throw", async () => {
+    164|     const repo = createMemberPlanRepository(noToken, throwingFetch("Ti…
+    165|     expect(await repo.save(doc)).toEqual({ status: "network", message:…
+       |                                  ^
+    166|   });
+    167| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[71/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > returns ok with mapped summaries on 200
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok', summaries: [ …(2) ] }
+
+- Expected
++ Received
+
+  {
+-   "status": "ok",
+-   "summaries": [
+-     {
+-       "id": "1",
+-       "name": "Plan A",
+-       "updated_at": "2024-06-01T00:00:00Z",
+-     },
+-     {
+-       "id": "2",
+-       "name": "Plan B",
+-       "updated_at": undefined,
+-     },
+-   ],
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:180:20
+    178|     const repo = createMemberPlanRepository(noToken, fetch);
+    179|     const result = await repo.list();
+    180|     expect(result).toEqual({
+       |                    ^
+    181|       status: "ok",
+    182|       summaries: [
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[72/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > handles empty documents array
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok', summaries: [] }
+
+- Expected
++ Received
+
+  {
+-   "status": "ok",
+-   "summaries": [],
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:192:20
+    190|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    191|     const result = await repo.list();
+    192|     expect(result).toEqual({ status: "ok", summaries: [] });
+       |                    ^
+    193|   });
+    194|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[73/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > handles missing documents key gracefully
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok', summaries: [] }
+
+- Expected
++ Received
+
+  {
+-   "status": "ok",
+-   "summaries": [],
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:198:20
+    196|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    197|     const result = await repo.list();
+    198|     expect(result).toEqual({ status: "ok", summaries: [] });
+       |                    ^
+    199|   });
+    200|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[74/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > returns unauthenticated on 401
+AssertionError: expected { status: 'network' } to deeply equal { status: 'unauthenticated' }
+
+- Expected
++ Received
+
+  {
+-   "status": "unauthenticated",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:203:31
+    201|   it("returns unauthenticated on 401", async () => {
+    202|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    203|     expect(await repo.list()).toEqual({ status: "unauthenticated" });
+       |                               ^
+    204|   });
+    205|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[75/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > returns network on non-ok status
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "HTTP 503",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:208:31
+    206|   it("returns network on non-ok status", async () => {
+    207|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    208|     expect(await repo.list()).toEqual({ status: "network", message: "H…
+       |                               ^
+    209|   });
+    210|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[76/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.list > returns network on fetch throw
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "DNS failure",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:213:31
+    211|   it("returns network on fetch throw", async () => {
+    212|     const repo = createMemberPlanRepository(noToken, throwingFetch("DN…
+    213|     expect(await repo.list()).toEqual({ status: "network", message: "D…
+       |                               ^
+    214|   });
+    215| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[77/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > returns ok on 200
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok' }
+
+- Expected
++ Received
+
+  {
+-   "status": "ok",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:223:42
+    221|     const fetch = makeFetch(mockResponse(200));
+    222|     const repo = createMemberPlanRepository(noToken, fetch);
+    223|     expect(await repo.delete("abc-123")).toEqual({ status: "ok" });
+       |                                          ^
+    224|     const [url, init] = (fetch as ReturnType<typeof vi.fn>).mock.calls…
+    225|     expect(url).toBe("/api/plans/abc-123");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[78/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > returns ok on 204
+AssertionError: expected { status: 'network' } to deeply equal { status: 'ok' }
+
+- Expected
++ Received
+
+  {
+-   "status": "ok",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:231:36
+    229|   it("returns ok on 204", async () => {
+    230|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    231|     expect(await repo.delete("x")).toEqual({ status: "ok" });
+       |                                    ^
+    232|   });
+    233|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[79/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > returns unauthenticated on 401
+AssertionError: expected { status: 'network' } to deeply equal { status: 'unauthenticated' }
+
+- Expected
++ Received
+
+  {
+-   "status": "unauthenticated",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:236:36
+    234|   it("returns unauthenticated on 401", async () => {
+    235|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    236|     expect(await repo.delete("x")).toEqual({ status: "unauthenticated"…
+       |                                    ^
+    237|   });
+    238|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[80/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > returns not-found on 404
+AssertionError: expected { status: 'network' } to deeply equal { status: 'not-found' }
+
+- Expected
++ Received
+
+  {
+-   "status": "not-found",
++   "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:241:36
+    239|   it("returns not-found on 404", async () => {
+    240|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    241|     expect(await repo.delete("x")).toEqual({ status: "not-found" });
+       |                                    ^
+    242|   });
+    243|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[81/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > returns network on non-ok status
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "HTTP 500",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:246:36
+    244|   it("returns network on non-ok status", async () => {
+    245|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    246|     expect(await repo.delete("x")).toEqual({ status: "network", messag…
+       |                                    ^
+    247|   });
+    248|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[82/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > returns network on fetch throw
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Socket closed",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:251:36
+    249|   it("returns network on fetch throw", async () => {
+    250|     const repo = createMemberPlanRepository(noToken, throwingFetch("So…
+    251|     expect(await repo.delete("x")).toEqual({ status: "network", messag…
+       |                                    ^
+    252|   });
+    253|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[83/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.delete > URL-encodes saveId with special characters
+TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:258:20
+    256|     const repo = createMemberPlanRepository(noToken, fetch);
+    257|     await repo.delete("plan/with spaces");
+    258|     const [url] = (fetch as ReturnType<typeof vi.fn>).mock.calls[0] as…
+       |                    ^
+    259|     expect(url).toBe("/api/plans/plan%2Fwith%20spaces");
+    260|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[84/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save â€” additional branch coverage > returns network on non-ok HTTP status (5xx)
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "HTTP 500",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:270:34
+    268|   it("returns network on non-ok HTTP status (5xx)", async () => {
+    269|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    270|     expect(await repo.save(doc)).toEqual({ status: "network", message:…
+       |                                  ^
+    271|   });
+    272|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[85/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository.save â€” additional branch coverage > returns network on 503
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "HTTP 503",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:275:34
+    273|   it("returns network on 503", async () => {
+    274|     const repo = createMemberPlanRepository(noToken, makeFetch(mockRes…
+    275|     expect(await repo.save(doc)).toEqual({ status: "network", message:…
+       |                                  ^
+    276|   });
+    277| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[86/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository â€” non-Error throw fallback message > load: uses 'Network error' when thrown value is not an Error instance
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Network error",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:312:34
+    310|   it("load: uses 'Network error' when thrown value is not an Error ins…
+    311|     const repo = createMemberPlanRepository(noToken, nonErrorFetch());
+    312|     expect(await repo.load("x")).toEqual({ status: "network", message:…
+       |                                  ^
+    313|   });
+    314|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[87/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository â€” non-Error throw fallback message > save: uses 'Network error' when thrown value is not an Error instance
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Network error",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:317:40
+    315|   it("save: uses 'Network error' when thrown value is not an Error ins…
+    316|     const repo = createMemberPlanRepository(noToken, nonErrorFetch());
+    317|     expect(await repo.save(makeDoc())).toEqual({ status: "network", me…
+       |                                        ^
+    318|   });
+    319|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[88/89]⎯
+
+ FAIL  tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts > MemberPlanRepository â€” non-Error throw fallback message > delete: uses 'Network error' when thrown value is not an Error instance
+AssertionError: expected { status: 'network' } to deeply equal { status: 'network', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "message": "Network error",
+    "status": "network",
+  }
+
+ ❯ tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts:322:36
+    320|   it("delete: uses 'Network error' when thrown value is not an Error i…
+    321|     const repo = createMemberPlanRepository(noToken, nonErrorFetch());
+    322|     expect(await repo.delete("x")).toEqual({ status: "network", messag…
+       |                                    ^
+    323|   });
+    324| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[89/89]⎯
+

@@ -1,0 +1,9 @@
+---
+pid: 30268
+cwd: "D:\oandO04072026"
+command: "cd D:\\oandO04072026; pnpm run typecheck"
+started_at: 2026-07-06T19:13:29.277Z
+running_for_ms: 210011   
+---
+$ pnpm --filter oando-site typecheck
+$ tsc -p tsconfig.json --noEmit

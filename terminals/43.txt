@@ -1,0 +1,67 @@
+---
+pid: 14072
+cwd: "D:\oandO04072026"
+command: "$cutoff = (Get-Date).AddHours(-12)
+$deleted = @(); $kept = @(); $errors = @()
+Write-Host \"Now: $(Get-Date) | Cutoff: $cutoff\"
+
+function Remove-Tree($path) {
+  if (-not (Test-Path $path)) { return }
+  try {
+    Remove-Item -LiteralPath $path -Recurse -Force -ErrorAction Stop
+    $script:deleted += $path
+  } catch {
+    $script:errors += \"$path :: $($_.Exception.Message)\"
+  }
+}
+
+function Process-WorktreeRoot($root) {
+  if (-not (Test-Path $root)) { return }
+  Get-ChildItem $root -Directory | ForEach-Object {
+    $proj = $_
+    $children = @(Get-ChildItem $proj.FullName -Directory -EA SilentlyContinue)
+    if ($children.Count -gt 0) {
+      foreach ($child in $children) {
+        if ($child.LastWriteTime -lt $cutoff) {
+          Remove-Tree $child.FullName
+        } else {
+          $kept += \"$($child.FullName) [$($child.LastWriteTime)]\"
+        }
+      }
+      # drop empty project shell
+      $remaining = @(Get-ChildItem $proj.FullName -Force -EA SilentlyContinue)
+      if ($remaining.Count -eq 0) { Remove-Tree $proj.FullName }
+    } elseif ($proj.LastWriteTime -lt $cutoff) {
+      Remove-Tree $proj.FullName
+    } else {
+      $kept += \"$($proj.FullName) [$($proj.LastWriteTime)]\"
+    }
+  }
+}
+
+Process-WorktreeRoot \"C:\\Users\\ayush\\.grok\\worktrees\"
+Process-WorktreeRoot \"D:\\.grok\\worktrees\"
+
+# stale session dirs for removed worktree paths
+@(
+  \"C:\\Users\\ayush\\.grok\\sessions\",
+  \"D:\\.grok\\sessions\"
+) | ForEach-Object {
+  if (Test-Path $_) {
+    Get-ChildItem $_ -Directory | ForEach-Object {
+      if ($_.LastWriteTime -lt $cutoff -and $_.Name -match 'worktrees') {
+        Remove-Tree $_.FullName
+      }
+    }
+  }
+}
+
+git -C \"D:\\oandO04072026\" worktree prune 2>&1
+
+Write-Host \"`nDELETED ($($deleted.Count)):\"; $deleted | ForEach-Object { Write-Host \"  $_\" }
+Write-Host \"`nKEPT:\"; $kept | ForEach-Object { Write-Host \"  $_\" }
+if ($errors.Count) { Write-Host \"`nERRORS:\"; $errors | ForEach-Object { Write-Host \"  $_\" } }"
+started_at: 2026-07-07T01:35:45.356Z
+running_for_ms: 10004    
+---
+Now: 07/07/2026 07:05:45 | Cutoff: 07/06/2026 19:05:45

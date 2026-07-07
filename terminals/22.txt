@@ -1,0 +1,604 @@
+---
+pid: 22472
+cwd: "D:\oandO04072026"
+command: "cd \"D:\\oandO04072026\\site\"; $env:PLAYWRIGHT_BASE_URL=\"http://localhost:3000\"; pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/planner-guest-workspace.spec.ts tests/e2e/planner-catalog.spec.ts --project=chromium 2>&1"
+started_at: 2026-07-06T19:55:49.782Z
+running_for_ms: 20410003 
+---
+
+Running 13 tests using 2 workers
+
+(node:7644) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:10668) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 [chromium] › tests\e2e\planner-catalog.spec.ts:6:7 › planner catalog panel › desktop rail, catalog, and canvas do not overlap (7.4s)
+(node:23348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   3 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:20:7 › Planner guest workspace — plan 06 UI bar › loads canvas chrome with history, view modes, and catalog (7.5s)
+  ✘   2 [chromium] › tests\e2e\planner-catalog.spec.ts:29:7 › planner catalog panel › guest workspace exposes searchable catalog (17.4s)
+(node:1420) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   4 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:29:7 › Planner guest workspace — plan 06 UI bar › Start from Scratch seeds a perimeter shell with no furniture (17.5s)
+(node:33600) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   5 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:49:7 › Planner guest workspace — plan 06 UI bar › catalog search filters elements (16.6s)
+(node:23772) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   6 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:57:7 › Planner guest workspace — plan 06 UI bar › status bar shows plan metrics (6.8s)
+(node:4688) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:77:5 › planner landing exceeds generic benchmark proof points (576ms)
+  ✘   9 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:84:7 › a11y — key flows › empty state / setup gate has no critical or serious a11y violations (3.4s)
+(node:23952) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   7 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:63:7 › Planner guest workspace — plan 06 UI bar › view mode toggles without error (17.9s)
+(node:9780) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  10 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:106:7 › a11y — key flows › complex plan (walls + furniture) has no critical or serious a11y violations (16.6s)
+(node:17836) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  11 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:134:7 › a11y — key flows › inventory at scale (catalog search + results) has no critical or serious a11y violations (17.0s)
+(node:7456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  13 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:176:9 › a11y — key flows › small screen › small screen workspace with plan has no critical a11y violations (6.2s)
+  ✘  12 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:159:9 › a11y — key flows › small screen › small screen empty state / setup has no critical a11y violations (21.0s)
+
+
+  1) [chromium] › tests\e2e\planner-catalog.spec.ts:6:7 › planner catalog panel › desktop rail, catalog, and canvas do not overlap 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.pw-tool-rail')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('.pw-tool-rail')
+
+
+      11 |     const canvas = page.locator(".pw-canvas-surface");
+      12 |
+    > 13 |     await expect(rail).toBeVisible();
+         |                        ^
+      14 |     await expect(catalog).toBeVisible();
+      15 |     await expect(canvas).toBeVisible();
+      16 |
+        at D:\oandO04072026\site\tests\e2e\planner-catalog.spec.ts:13:24
+
+    Error Context: ..\results\test-results\e2e-planner-catalog-planne-01264-g-and-canvas-do-not-overlap-chromium\error-context.md
+
+  2) [chromium] › tests\e2e\planner-catalog.spec.ts:29:7 › planner catalog panel › guest workspace exposes searchable catalog 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.pw-catalog-card, [data-catalog-item], .catalog-panel .pw-catalog-panel__item').first()
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('.pw-catalog-card, [data-catalog-item], .catalog-panel .pw-catalog-panel__item').first()
+
+
+      33 |     await expect(
+      34 |       page.locator('.pw-catalog-card, [data-catalog-item], .catalog-panel .pw-catalog-panel__item').first(),
+    > 35 |     ).toBeVisible({ timeout: 15_000 });
+         |       ^
+      36 |
+      37 |     const search = page.getByLabel("Search catalog elements");
+      38 |     await expect(search).toBeVisible();
+        at D:\oandO04072026\site\tests\e2e\planner-catalog.spec.ts:35:7
+
+    Error Context: ..\results\test-results\e2e-planner-catalog-planne-b3718--exposes-searchable-catalog-chromium\error-context.md
+
+  3) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:29:7 › Planner guest workspace — plan 06 UI bar › Start from Scratch seeds a perimeter shell with no furniture 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.pw-status-bar > span').filter({ hasText: /objects/ })
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('.pw-status-bar > span').filter({ hasText: /objects/ })
+
+
+      28 |
+      29 |   test("Start from Scratch seeds a perimeter shell with no furniture", async ({ page }) => {
+    > 30 |     await expect(page.locator(".pw-status-bar > span").filter({ hasText: /objects/ })).toBeVisible({
+         |                                                                                        ^
+      31 |       timeout: 15_000,
+      32 |     });
+      33 |
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:30:88
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-067fb-ter-shell-with-no-furniture-chromium\error-context.md
+
+  4) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:49:7 › Planner guest workspace — plan 06 UI bar › catalog search filters elements 
+
+    TimeoutError: locator.fill: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Search catalog elements')
+
+
+      49 |   test("catalog search filters elements", async ({ page }) => {
+      50 |     const search = page.getByLabel("Search catalog elements");
+    > 51 |     await search.fill("meeting");
+         |                  ^
+      52 |     await expect(page.getByRole("button", { name: /Add .* to canvas/i })).toBeVisible();
+      53 |     await search.fill("zzzznotfound");
+      54 |     await expect(page.getByText(/No elements found/i)).toBeVisible();
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:51:18
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-b2f60-log-search-filters-elements-chromium\error-context.md
+
+  5) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:57:7 › Planner guest workspace — plan 06 UI bar › status bar shows plan metrics 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.pw-status-bar')
+    Expected pattern: /objects/i
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('.pw-status-bar')
+
+
+      57 |   test("status bar shows plan metrics", async ({ page }) => {
+      58 |     const statusBar = page.locator(".pw-status-bar");
+    > 59 |     await expect(statusBar).toContainText(/objects/i);
+         |                             ^
+      60 |     await expect(statusBar).toContainText(/Floor/i);
+      61 |   });
+      62 |
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:59:29
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-791c9-atus-bar-shows-plan-metrics-chromium\error-context.md
+
+  6) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:63:7 › Planner guest workspace — plan 06 UI bar › view mode toggles without error 
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Split' })
+
+
+      62 |
+      63 |   test("view mode toggles without error", async ({ page }) => {
+    > 64 |     await page.getByRole("button", { name: "Split" }).click();
+         |                                                       ^
+      65 |     await expect(page.locator(".pw-split-view")).toBeVisible({ timeout: 10_000 });
+      66 |     await expect(page.locator(".pw-split-pane--3d canvas")).toBeVisible({ timeout: 20_000 });
+      67 |
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:64:55
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-491b8--mode-toggles-without-error-chromium\error-context.md
+
+  7) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:84:7 › a11y — key flows › empty state / setup gate has no critical or serious a11y violations 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 93
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+    +     "help": "Elements must meet minimum color contrast ratio thresholds",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=playwright",
+    +     "id": "color-contrast",
+    +     "impact": "serious",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#f5f3f0",
+    +               "contrastRatio": 3.1,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#9d876c",
+    +               "fontSize": "8.3pt (11px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 3.1 (foreground color: #9d876c, background color: #f5f3f0, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<span class=\"workspace_brandSub__AKhsk\">Unsaved changes</span>",
+    +                 "target": Array [
+    +                   ".workspace_brandSub__AKhsk",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 3.1 (foreground color: #9d876c, background color: #f5f3f0, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<span class=\"workspace_brandSub__AKhsk\">Unsaved changes</span>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".workspace_brandSub__AKhsk",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#f3f1ed",
+    +               "contrastRatio": 3.04,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#9d876c",
+    +               "fontSize": "8.3pt (11px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 3.04 (foreground color: #9d876c, background color: #f3f1ed, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<div class=\"workspace_saveStatus__WGFrY\" data-modified=\"true\" data-synced=\"false\"><span aria-hidden=\"true\">●</span> Modified</div>",
+    +                 "target": Array [
+    +                   ".workspace_saveStatus__WGFrY",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 3.04 (foreground color: #9d876c, background color: #f3f1ed, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<div class=\"workspace_saveStatus__WGFrY\" data-modified=\"true\" data-synced=\"false\"><span aria-hidden=\"true\">●</span> Modified</div>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".workspace_saveStatus__WGFrY",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.color",
+    +       "wcag2aa",
+    +       "wcag143",
+    +       "TTv5",
+    +       "TT13.c",
+    +       "EN-301-549",
+    +       "EN-9.1.4.3",
+    +       "ACT",
+    +       "RGAAv4",
+    +       "RGAA-3.2.1",
+    +     ],
+    +   },
+    + ]
+
+      101 |       (violation) => violation.impact === "critical" || violation.impact === "serious",
+      102 |     );
+    > 103 |     expect(blocking).toEqual([]);
+          |                      ^
+      104 |   });
+      105 |
+      106 |   test("complex plan (walls + furniture) has no critical or serious a11y violations", async ({ page }) => {
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:103:22
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-96e89--or-serious-a11y-violations-chromium\error-context.md
+
+  8) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:106:7 › a11y — key flows › complex plan (walls + furniture) has no critical or serious a11y violations 
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('navigation', { name: 'Drawing tools' }).getByRole('button', { name: /^Wall(?: \(|$)/ })
+
+
+       at e2e\plannerCanvasHelpers.ts:93
+
+      91 | export async function selectPlannerTool(page: Page, toolName: string): Promise<void> {
+      92 |   const button = plannerToolButton(page, toolName);
+    > 93 |   await button.click();
+         |                ^
+      94 |   await expect(button).toHaveAttribute("aria-pressed", "true", { timeout: 5_000 });
+      95 |   await waitForPlannerCanvas(page);
+      96 |   await page.waitForTimeout(150);
+        at selectPlannerTool (D:\oandO04072026\site\tests\e2e\plannerCanvasHelpers.ts:93:16)
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:111:28
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-453e0--or-serious-a11y-violations-chromium\error-context.md
+
+  9) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:134:7 › a11y — key flows › inventory at scale (catalog search + results) has no critical or serious a11y violations 
+
+    TimeoutError: locator.fill: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Search catalog elements')
+
+
+      137 |
+      138 |     const search = page.getByLabel("Search catalog elements");
+    > 139 |     await search.fill("meeting"); // term expected to return multiple results in seeded guest catalog
+          |                  ^
+      140 |     await page.waitForTimeout(500); // allow filter
+      141 |
+      142 |     // Ensure results list or empty state is present (scale test exercises the list UI)
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:139:18
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-95c72--or-serious-a11y-violations-chromium\error-context.md
+
+  10) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:159:9 › a11y — key flows › small screen › small screen empty state / setup has no critical a11y violations 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 108
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+    +     "help": "Elements must meet minimum color contrast ratio thresholds",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=playwright",
+    +     "id": "color-contrast",
+    +     "impact": "serious",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#e9eff5",
+    +               "contrastRatio": 3.82,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#4a7ca8",
+    +               "fontSize": "8.3pt (11px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 3.82 (foreground color: #4a7ca8, background color: #e9eff5, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<div class=\"workspace_saveStatus__WGFrY\" data-modified=\"false\" data-synced=\"true\"><span aria-hidden=\"true\">✓</span> Saved</div>",
+    +                 "target": Array [
+    +                   ".workspace_saveStatus__WGFrY",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 3.82 (foreground color: #4a7ca8, background color: #e9eff5, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<div class=\"workspace_saveStatus__WGFrY\" data-modified=\"false\" data-synced=\"true\"><span aria-hidden=\"true\">✓</span> Saved</div>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".workspace_saveStatus__WGFrY",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.color",
+    +       "wcag2aa",
+    +       "wcag143",
+    +       "TTv5",
+    +       "TT13.c",
+    +       "EN-301-549",
+    +       "EN-9.1.4.3",
+    +       "ACT",
+    +       "RGAAv4",
+    +       "RGAA-3.2.1",
+    +     ],
+    +   },
+    +   Object {
+    +     "description": "Ensure elements that have scrollable content are accessible by keyboard in Safari",
+    +     "help": "Scrollable region must have keyboard access",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/scrollable-region-focusable?application=playwright",
+    +     "id": "scrollable-region-focusable",
+    +     "impact": "serious",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": null,
+    +             "id": "focusable-content",
+    +             "impact": "serious",
+    +             "message": "Element should have focusable content",
+    +             "relatedNodes": Array [],
+    +           },
+    +           Object {
+    +             "data": null,
+    +             "id": "focusable-element",
+    +             "impact": "serious",
+    +             "message": "Element should be focusable",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element should have focusable content
+    +   Element should be focusable",
+    +         "html": "<div class=\"open3d-status-track\">",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".open3d-status-track",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.keyboard",
+    +       "wcag2a",
+    +       "wcag211",
+    +       "wcag213",
+    +       "TTv5",
+    +       "TT4.a",
+    +       "EN-301-549",
+    +       "EN-9.2.1.1",
+    +       "EN-9.2.1.3",
+    +       "RGAAv4",
+    +       "RGAA-7.3.2",
+    +     ],
+    +   },
+    + ]
+
+      171 |         (violation) => violation.impact === "critical" || violation.impact === "serious",
+      172 |       );
+    > 173 |       expect(blocking).toEqual([]);
+          |                        ^
+      174 |     });
+      175 |
+      176 |     test("small screen workspace with plan has no critical a11y violations", async ({ page }) => {
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:173:24
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-38a17-no-critical-a11y-violations-chromium\error-context.md
+
+  11) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:176:9 › a11y — key flows › small screen › small screen workspace with plan has no critical a11y violations 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 108
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+    +     "help": "Elements must meet minimum color contrast ratio thresholds",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=playwright",
+    +     "id": "color-contrast",
+    +     "impact": "serious",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#f3f1ed",
+    +               "contrastRatio": 3.04,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#9d876c",
+    +               "fontSize": "8.3pt (11px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 3.04 (foreground color: #9d876c, background color: #f3f1ed, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<div class=\"workspace_saveStatus__WGFrY\" data-modified=\"true\" data-synced=\"false\"><span aria-hidden=\"true\">●</span> Modified</div>",
+    +                 "target": Array [
+    +                   ".workspace_saveStatus__WGFrY",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 3.04 (foreground color: #9d876c, background color: #f3f1ed, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<div class=\"workspace_saveStatus__WGFrY\" data-modified=\"true\" data-synced=\"false\"><span aria-hidden=\"true\">●</span> Modified</div>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".workspace_saveStatus__WGFrY",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.color",
+    +       "wcag2aa",
+    +       "wcag143",
+    +       "TTv5",
+    +       "TT13.c",
+    +       "EN-301-549",
+    +       "EN-9.1.4.3",
+    +       "ACT",
+    +       "RGAAv4",
+    +       "RGAA-3.2.1",
+    +     ],
+    +   },
+    +   Object {
+    +     "description": "Ensure elements that have scrollable content are accessible by keyboard in Safari",
+    +     "help": "Scrollable region must have keyboard access",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/scrollable-region-focusable?application=playwright",
+    +     "id": "scrollable-region-focusable",
+    +     "impact": "serious",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": null,
+    +             "id": "focusable-content",
+    +             "impact": "serious",
+    +             "message": "Element should have focusable content",
+    +             "relatedNodes": Array [],
+    +           },
+    +           Object {
+    +             "data": null,
+    +             "id": "focusable-element",
+    +             "impact": "serious",
+    +             "message": "Element should be focusable",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element should have focusable content
+    +   Element should be focusable",
+    +         "html": "<div class=\"open3d-status-track\">",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".open3d-status-track",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.keyboard",
+    +       "wcag2a",
+    +       "wcag211",
+    +       "wcag213",
+    +       "TTv5",
+    +       "TT4.a",
+    +       "EN-301-549",
+    +       "EN-9.2.1.1",
+    +       "EN-9.2.1.3",
+    +       "RGAAv4",
+    +       "RGAA-7.3.2",
+    +     ],
+    +   },
+    + ]
+
+      185 |         (violation) => violation.impact === "critical" || violation.impact === "serious",
+      186 |       );
+    > 187 |       expect(blocking).toEqual([]);
+          |                        ^
+      188 |     });
+      189 |   });
+      190 | });
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:187:24
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-3b999-no-critical-a11y-violations-chromium\error-context.md
+
+  11 failed
+    [chromium] › tests\e2e\planner-catalog.spec.ts:6:7 › planner catalog panel › desktop rail, catalog, and canvas do not overlap 
+    [chromium] › tests\e2e\planner-catalog.spec.ts:29:7 › planner catalog panel › guest workspace exposes searchable catalog 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:29:7 › Planner guest workspace — plan 06 UI bar › Start from Scratch seeds a perimeter shell with no furniture 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:49:7 › Planner guest workspace — plan 06 UI bar › catalog search filters elements 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:57:7 › Planner guest workspace — plan 06 UI bar › status bar shows plan metrics 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:63:7 › Planner guest workspace — plan 06 UI bar › view mode toggles without error 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:84:7 › a11y — key flows › empty state / setup gate has no critical or serious a11y violations 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:106:7 › a11y — key flows › complex plan (walls + furniture) has no critical or serious a11y violations 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:134:7 › a11y — key flows › inventory at scale (catalog search + results) has no critical or serious a11y violations 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:159:9 › a11y — key flows › small screen › small screen empty state / setup has no critical a11y violations 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:176:9 › a11y — key flows › small screen › small screen workspace with plan has no critical a11y violations 
+  2 passed (1.4m)

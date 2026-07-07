@@ -1,0 +1,44 @@
+---
+pid: 7952
+cwd: "D:\oandO04072026"
+command: "cd \"D:\\oandO04072026\\site\"; $env:PLAYWRIGHT_BASE_URL=\"http://localhost:3000\"; pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/planner-guest-workspace.spec.ts --grep \"loads canvas chrome\" --project=chromium 2>&1"
+started_at: 2026-07-06T19:35:02.243Z
+running_for_ms: 21655012 
+---
+
+Running 1 test using 1 worker
+
+(node:23400) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:20:7 › Planner guest workspace — plan 06 UI bar › loads canvas chrome with history, view modes, and catalog (50.3s)
+
+
+  1) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:20:7 › Planner guest workspace — plan 06 UI bar › loads canvas chrome with history, view modes, and catalog 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.pw-topbar')
+    Expected: visible
+    Timeout: 25000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 25000ms
+      - waiting for locator('.pw-topbar')
+
+
+       at e2e\guestProjectSetup.ts:65
+
+      63 |   }
+      64 |
+    > 65 |   await expect(topbar).toBeVisible({ timeout: 25_000 });
+         |                        ^
+      66 | }
+      67 |
+        at enterGuestPlannerWorkspace (D:\oandO04072026\site\tests\e2e\guestProjectSetup.ts:65:24)
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:17:5
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-7b702-tory-view-modes-and-catalog-chromium\error-context.md
+
+  1 failed
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:20:7 › Planner guest workspace — plan 06 UI bar › loads canvas chrome with history, view modes, and catalog 

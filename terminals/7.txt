@@ -1,0 +1,7 @@
+---
+pid: 9856
+cwd: "D:\oandO04072026"
+command: "Start-Sleep -Seconds 45"
+started_at: 2026-07-06T19:14:13.650Z
+running_for_ms: 170003   
+---

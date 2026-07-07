@@ -1,0 +1,124 @@
+---
+pid: 9552
+cwd: "D:\oandO04072026"
+command: "cd \"D:\\oandO04072026\\site\"; $env:PLAYWRIGHT_BASE_URL=\"http://localhost:3000\"; pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/planner-catalog.spec.ts tests/e2e/planner-guest-workspace.spec.ts --grep \"catalog search|searchable catalog|overlap|loads canvas\" --project=chromium 2>&1"
+started_at: 2026-07-06T20:10:15.665Z
+running_for_ms: 19540002 
+---
+
+Running 5 tests using 2 workers
+
+(node:33784) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:10460) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [chromium] › tests\e2e\planner-catalog.spec.ts:6:7 › planner catalog panel › desktop rail, catalog, and canvas do not overlap (10.7s)
+(node:8356) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:20:7 › Planner guest workspace — plan 06 UI bar › loads canvas chrome with history, view modes, and catalog (11.6s)
+  ✘  1 [chromium] › tests\e2e\planner-catalog.spec.ts:29:7 › planner catalog panel › guest workspace exposes searchable catalog (25.6s)
+(node:13648) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:49:7 › Planner guest workspace — plan 06 UI bar › catalog search filters elements (7.9s)
+  ✘  5 [chromium] › tests\e2e\planner-guest-workspace.spec.ts:129:7 › a11y — key flows › inventory at scale (catalog search + results) has no critical or serious a11y violations (11.9s)
+
+
+  1) [chromium] › tests\e2e\planner-catalog.spec.ts:6:7 › planner catalog panel › desktop rail, catalog, and canvas do not overlap 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 260
+    Received:    308
+
+      24 |
+      25 |     expect(catalogBox!.x + catalogBox!.width).toBeLessThanOrEqual(railBox!.x + 4);
+    > 26 |     expect(railBox!.x + railBox!.width).toBeLessThanOrEqual(canvasBox!.x + 4);
+         |                                         ^
+      27 |   });
+      28 |
+      29 |   test("guest workspace exposes searchable catalog", async ({ page }) => {
+        at D:\oandO04072026\site\tests\e2e\planner-catalog.spec.ts:26:41
+
+    Error Context: ..\results\test-results\e2e-planner-catalog-planne-01264-g-and-canvas-do-not-overlap-chromium\error-context.md
+
+  2) [chromium] › tests\e2e\planner-catalog.spec.ts:29:7 › planner catalog panel › guest workspace exposes searchable catalog 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.pw-catalog-card, [data-catalog-item], .catalog-panel .pw-catalog-panel__item').first()
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('.pw-catalog-card, [data-catalog-item], .catalog-panel .pw-catalog-panel__item').first()
+
+
+      33 |     await expect(
+      34 |       page.locator('.pw-catalog-card, [data-catalog-item], .catalog-panel .pw-catalog-panel__item').first(),
+    > 35 |     ).toBeVisible({ timeout: 15_000 });
+         |       ^
+      36 |
+      37 |     const search = page.getByLabel("Search catalog elements");
+      38 |     await expect(search).toBeVisible();
+        at D:\oandO04072026\site\tests\e2e\planner-catalog.spec.ts:35:7
+
+    Error Context: ..\results\test-results\e2e-planner-catalog-planne-b3718--exposes-searchable-catalog-chromium\error-context.md
+
+  3) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:49:7 › Planner guest workspace — plan 06 UI bar › catalog search filters elements 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: /Add .* to canvas/i })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByRole('button', { name: /Add .* to canvas/i })
+
+
+      50 |     const search = page.getByLabel("Search catalog elements");
+      51 |     await search.fill("meeting");
+    > 52 |     await expect(page.getByRole("button", { name: /Add .* to canvas/i })).toBeVisible();
+         |                                                                           ^
+      53 |     await search.fill("zzzznotfound");
+      54 |     await expect(page.getByText(/No elements found/i)).toBeVisible();
+      55 |   });
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:52:75
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-b2f60-log-search-filters-elements-chromium\error-context.md
+
+  4) [chromium] › tests\e2e\planner-guest-workspace.spec.ts:129:7 › a11y — key flows › inventory at scale (catalog search + results) has no critical or serious a11y violations 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: /Add .* to canvas/i }).first().or(getByText(/No elements found/i))
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByRole('button', { name: /Add .* to canvas/i }).first().or(getByText(/No elements found/i))
+
+
+      137 |     // Ensure results list or empty state is present (scale test exercises the list UI)
+      138 |     const resultsOrEmpty = page.getByRole("button", { name: /Add .* to canvas/i }).first().or(page.getByText(/No elements found/i));
+    > 139 |     await expect(resultsOrEmpty).toBeVisible({ timeout: 10_000 });
+          |                                  ^
+      140 |
+      141 |     const results = await new AxeBuilder({ page })
+      142 |       .withTags(["wcag2a", "wcag2aa"])
+        at D:\oandO04072026\site\tests\e2e\planner-guest-workspace.spec.ts:139:34
+
+    Error Context: ..\results\test-results\e2e-planner-guest-workspac-95c72--or-serious-a11y-violations-chromium\error-context.md
+
+  4 failed
+    [chromium] › tests\e2e\planner-catalog.spec.ts:6:7 › planner catalog panel › desktop rail, catalog, and canvas do not overlap 
+    [chromium] › tests\e2e\planner-catalog.spec.ts:29:7 › planner catalog panel › guest workspace exposes searchable catalog 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:49:7 › Planner guest workspace — plan 06 UI bar › catalog search filters elements 
+    [chromium] › tests\e2e\planner-guest-workspace.spec.ts:129:7 › a11y — key flows › inventory at scale (catalog search + results) has no critical or serious a11y violations 
+  1 passed (39.2s)

@@ -1,0 +1,8 @@
+---
+pid: 13696
+cwd: "D:\oandO04072026"
+command: "cd D:\\oandO04072026; git worktree remove --force \"C:/Users/ayush/.grok/worktrees/oando04072026/2026-07-06-3514577b\" 2>&1; git worktree remove --force \"D:/.grok/worktrees/oando04072026/2026-07-06-1b620983\" 2>&1; git worktree remove --force \"D:/.grok/worktrees/oando04072026/new\" 2>&1; git worktree list"
+started_at: 2026-07-07T01:05:35.148Z
+running_for_ms: 1825012  
+---
+D:/oandO04072026 c7a345b [execute-plan/c71e7812-pr-3-resolve-doc-evid]

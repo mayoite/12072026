@@ -1,0 +1,7 @@
+---
+pid: 21740
+cwd: "D:\oandO04072026"
+command: "Start-Sleep -Seconds 30"
+started_at: 2026-07-06T19:13:47.907Z
+running_for_ms: 195008   
+---

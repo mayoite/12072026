@@ -1,0 +1,20 @@
+---
+pid: 20328
+cwd: "D:\oandO04072026"
+command: "cd D:\\oandO04072026\\site; $env:PLAYWRIGHT_BASE_URL=\"http://localhost:3000\"; 1..5 | ForEach-Object { Write-Host \"Run $_\"; pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/planner-catalog.spec.ts:6 --project=chromium --retries=0 2>&1 | Select-String -Pattern \"passed|failed|Error\" }"
+started_at: 2026-07-06T20:23:51.279Z
+running_for_ms: 18725001 
+---
+Run 1
+
+  1 passed (3.5s)
+Run 2
+  1 passed (2.1s)
+Run 3
+  1 passed (2.2s)
+Run 4
+  1 passed (3.9s)
+Run 5
+  1 passed (2.2s)
+
+

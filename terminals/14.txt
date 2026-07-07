@@ -1,0 +1,17 @@
+---
+pid: 6796
+cwd: "D:\oandO04072026"
+command: "cd \"D:\\oandO04072026\\site\"; pnpm exec vitest run tests/unit/features/planner/open3d/workspaceShell.test.tsx tests/unit/features/planner/onboarding/StartingPointStep.test.tsx tests/unit/app/admin/svg-editor/page.test.tsx --reporter=dot 2>&1"
+started_at: 2026-07-06T19:16:41.243Z
+running_for_ms: 19999    
+---
+
+ RUN  v4.1.9 D:/oandO04072026/site
+
+···························
+
+ Test Files  3 passed (3)
+      Tests  27 passed (27)
+   Start at  00:46:43
+   Duration  15.32s (transform 2.11s, setup 1.80s, import 12.49s, tests 1.78s, environment 2.76s)
+
