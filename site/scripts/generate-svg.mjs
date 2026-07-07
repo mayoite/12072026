@@ -26,6 +26,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { createR2CatalogClient, contentTypeForKey } from "../lib/storage/r2Catalog.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
 const require = createRequire(import.meta.url);
 
 try {
@@ -57,8 +58,6 @@ try {
 }
 
 const THUMBS_BUCKET = "site-block-thumbs";
-const SVG_RASTER_PREVIEW_WIDTH = 512;
-const SVG_RASTER_RETINA_WIDTH = 1024;
 
 export class Open3dPipelineError extends Error {
   constructor(code, message) {
@@ -272,7 +271,7 @@ function fmt(n) {
 
 // Thin: delegate optimize/sanitize to canonical (svgServerSanitizer.ts + locked svgo.config). svgCompiler.server.ts authority.
 async function optimiseAndSanitize(svg) {
-  const { sanitizeAndOptimizeSvg } = await import("../features/planner/open3d/catalog/svg/svgServerSanitizer.ts");
+  const { sanitizeAndOptimizeSvg } = await import(new URL("../features/planner/open3d/catalog/svg/svgServerSanitizer.ts", import.meta.url).href);
   return sanitizeAndOptimizeSvg(svg);
 }
 
@@ -281,7 +280,7 @@ const FALLBACK_D_PATH = "M 10 10 L 90 90 M 90 10 L 10 90 M 50 10 L 50 90 M 10 50
 function buildFallbackSvg(viewBox) {
   const vb = `0 0 ${viewBox.width} ${viewBox.height}`;
   return [
-    `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}">`,
     `<title>Fallback - geometry missing</title>`,
     `<desc>Block geometry not provided; cross-hatched fallback rendered.</desc>`,
     `<path d="${FALLBACK_D_PATH}" fill="none" stroke="currentColor" stroke-width="2"/>`,
@@ -305,7 +304,7 @@ function buildSvgString(slug, viewBox, dPath, themeTokens, title, desc, variant)
 
   const vb = `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
   return [
-    `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}"${variantAttr}>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}"${variantAttr}>`,
     titleAttr,
     descAttr,
     `<g>`,
@@ -323,16 +322,12 @@ function escXml(str) {
     .replace(/"/g, "&quot;");
 }
 
-function renderPngAtWidth(svgString, width) {
+function renderPng(svgString) {
   const Resvg = resvg.Resvg;
   const img = new Resvg(svgString, {
-    fitTo: { mode: "width", value: width },
+    fitTo: { mode: "original" },
   });
   return img.render().asPng();
-}
-
-function renderPng(svgString) {
-  return renderPngAtWidth(svgString, SVG_RASTER_PREVIEW_WIDTH);
 }
 
 function writeSvg(slug, svgString) {
@@ -343,8 +338,9 @@ function writeSvg(slug, svgString) {
   return outPath;
 }
 
-async function uploadPngToR2(slug, pngBuffer, key = `${slug}.png`) {
+async function uploadPngToR2(slug, pngBuffer) {
   const client = createR2CatalogClient();
+  const key = `${slug}.png`;
   await client.send(
     new PutObjectCommand({
       Bucket: THUMBS_BUCKET,
@@ -381,7 +377,7 @@ export async function runPipeline(descriptor) {
   const rawBlocks = await (async () => {
     const b = Array.isArray(descriptor.blocks) ? descriptor.blocks : [];
     if (b.length > 0) {
-      const mod = await import("../features/planner/open3d/catalog/svg/blocksResolver.ts");
+      const mod = await import(new URL("../features/planner/open3d/catalog/svg/blocksResolver.ts", import.meta.url).href);
       const resolved = (mod.resolveBlocks || mod.default?.resolveBlocks || (() => ({blocks: b})))(descriptor);
       return (resolved && resolved.blocks) ? resolved.blocks : b;
     }
@@ -426,12 +422,10 @@ export async function runPipeline(descriptor) {
   writeSvg(descriptor.slug, safe);
 
   const thumbBuffer = renderPng(safe);
-  const thumbRetinaBuffer = renderPngAtWidth(safe, SVG_RASTER_RETINA_WIDTH);
 
   let r2Url = null;
   try {
     r2Url = await uploadPngToR2(descriptor.slug, thumbBuffer);
-    await uploadPngToR2(descriptor.slug, thumbRetinaBuffer, `${descriptor.slug}@2x.png`);
   } catch (r2err) {
     console.warn(
       `[generate-svg] R2 upload skipped (credentials absent or network error): ${r2err.message}`,
@@ -496,7 +490,9 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error("[generate-svg] Unhandled error:", err);
-  process.exit(1);
-});
+if (process.argv[1] === __filename) {
+  main().catch((err) => {
+    console.error("[generate-svg] Unhandled error:", err);
+    process.exit(1);
+  });
+}

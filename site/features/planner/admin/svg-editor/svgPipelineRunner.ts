@@ -59,8 +59,14 @@ export interface PipelineOptions {
  */
 function findProjectRoot(override?: string): string {
   if (override) return path.resolve(override);
+  const cwd = process.cwd();
+  // Support standalone: prepare-standalone.cjs copies under .next/standalone/site/scripts when full source tree absent.
+  const stand = path.resolve(cwd, ".next", "standalone");
+  if (existsSync(path.join(stand, "site", "scripts", "generate-svg.mjs"))) {
+    return stand;
+  }
   // jsconfig-style resolution: assume cwd is `site/`. Tests can override.
-  return path.resolve(process.cwd(), "..");
+  return path.resolve(cwd, "..");
 }
 
 function defaultSvgPath(slug: string, projectRoot: string): string {
@@ -101,8 +107,8 @@ export function runSvgPipeline(
   const svgPath = defaultSvgPath(descriptor.slug, projectRoot);
   const fixtureSuffix = `${descriptor.slug}.${Math.random().toString(36).slice(2, 10)}`;
   const fixturePath = path.resolve(fixturesDir, `admin-${fixtureSuffix}.json`);
-  const _timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
-  const _maxStderrBytes = options.maxStderrBytes ?? DEFAULT_MAX_STDERR_BYTES;
+  const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  const maxStderrBytes = options.maxStderrBytes ?? DEFAULT_MAX_STDERR_BYTES;
 
   if (!existsSync(scriptPath)) {
     return Promise.resolve({
@@ -138,10 +144,7 @@ export function runSvgPipeline(
   const startedAt = Date.now();
 
   // In-process (unified): dynamic import of thin script module calling canonical compiler.
-  // turbopackIgnore + webpackIgnore to keep bundler from static-resolving computed file:// path (fixes build for planner + all modules).
-  return import(
-    /* turbopackIgnore: true */ /* webpackIgnore: true */ `file://${scriptPath.replace(/\\/g, "/")}`
-  )
+  return import(`file://${scriptPath.replace(/\\/g, "/")}`)
     .then((mod) => {
       const runP = mod.runPipeline || mod.default?.runPipeline;
       if (typeof runP !== "function")
@@ -162,7 +165,7 @@ export function runSvgPipeline(
       };
     })
     .catch((err: unknown) => {
-      const _durationMs = Date.now() - startedAt;
+      const durationMs = Date.now() - startedAt;
       const msg = err instanceof Error ? err.message : String(err);
       return {
         ok: false as const,

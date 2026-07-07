@@ -52,6 +52,8 @@ export default tsEslint.config(
       "**/logs/**",
       "**/backup/**",
       "**/docs/**",
+      "**/_archive/**",
+      "**/archive/**",
       "**/project/**",
       "**/supabase/.temp/**",
       "**/*.rej",

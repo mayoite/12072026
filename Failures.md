@@ -8,7 +8,7 @@ No other files are authoritative.
 
 Read this file first for gate policy.
 
-Evidence lives under `results/<module>/<phase>/<cmd>/` per `testing-handbook.md`. Historical evidence in `archive/results/` is kept (archive over delete; no bulk removal).
+Evidence lives under `results/<module>/<phase>/<cmd>/` per `testing-handbook.md`.
 
 Skipped items must be declared. Shell works; gates are runnable.
 
@@ -89,29 +89,26 @@ Also relevant: `tests/unit/features/planner/open3d/coverageGap.test.ts` has 7 pr
 
 **No blockers.** All evidence preserved. Per testing-handbook + START.md. (Logged for honesty; not a persistent PLAN-FAIL)
 
-### Transient — 2026-07-07 impl c034b9c7 (planner open audit fixes)
-**Status:** Completed in-session (no new persistent PLAN-FAIL opened)
-**What ran (evidence in results/planner/impl-fix/):**
-- eslint scoped (targets only; exit 0)
-- tsc check (targets; exit 0)
-- prettier --check/--write (exit 0)
-**Skipped (per AGENTS min necessary + scope):** full root lint/type (pre-existing unrelated per PLAN-FAIL-0410), playwright/e2e, coverage, dev server, release:gate. Only files required for "planner opens" fixes + fmt/lint/type per explicit task. No archive/layout/catalog refactors.
-**Logged for honesty.** (Move to resolved-failures only if permanent.)
+### PR-VERIFY-c71e7812 (transient — standalone runtime fix for generate-svg)
 
-### Transient — 2026-07-07 planner/svg/mobile rescue (subagent-assisted)
-**Status:** Completed in-session (no new persistent PLAN-FAIL opened)
-**Root cause fixed:** `site/app/planner/open3d/page.tsx` used `next/dynamic({ ssr: false })` inside a Server Component → 500 on `/planner/open3d/` and poisoned planner chunk graph. Reverted to direct `Open3dPlannerHost` import.
-**Also fixed:** portal `srcSet` on `next/image` (typecheck fail) → native `<img>` for retina R2 thumbs; SVG pipeline now renders 512w + 1024w `@2x` via Resvg (no Sharp downscale); mobile CSS for workspace + admin Puck.
-**What ran:** `pnpm run typecheck` (exit 0); vitest admin svg-editor 68/68; portal svg-catalog 9/9; HTTP `/planner/guest/` + `/planner/open3d/` 200; `/admin/svg-editor/` 307 auth (expected).
-**Skipped:** full root lint (PLAN-FAIL-0410 pre-existing), playwright e2e, coverage, release:gate.
-**Follow-up for user:** log in at `/access` then open `/admin/svg-editor/`; re-publish SVG blocks to regenerate R2 thumbs at new resolution.
+**Status:** Completed (no new failure; this PR's verification only)
 
-### Transient — 2026-07-07 planner catalog + SVG a11y rescue
-**Status:** Completed in-session (no new persistent PLAN-FAIL opened)
-**Root causes fixed:**
-- `InventoryPanel` treated `catalogStatus === "fallback"` as a full-panel blocker → demo/offline catalog never rendered (search, Add buttons, empty state all broken).
-- Catalog browser used `role="list"` while E2E contract expects `region` named "Catalog browser"; `listitem` on `<article>` without a list parent triggered critical axe violations.
-- E2E canvas helper queried `navigation` named "Drawing tools" but rail exposes `group` inside `nav` labeled "Canvas tools".
-- Top bar `brandSub` / `saveStatus` success text failed WCAG AA contrast on small type.
-**What ran:** `pnpm run typecheck` (exit 0); vitest svg-preview + svgPhase1Completion + portal svg-catalog 20/20; playwright `planner-catalog.spec.ts` 2/2 + `planner-guest-workspace.spec.ts` 11/11 (chromium, localhost:3000).
-**Skipped:** full root lint (PLAN-FAIL-0410 pre-existing), coverage, release:gate, remaining planner e2e suites (chrome, canvas-trust, j3–j6, etc.).
+**Scope:** site/scripts/prepare-standalone.cjs + site/features/planner/admin/svg-editor/svgPipelineRunner.ts (copy script/_fixtures + path support for standalone deploys)
+
+**What ran (evidence under results/site/pr-c71e7812/ ):**
+- git checkout (branch)
+- read required: AGENTS.md, Readme.md, START.md, Failures.md (re-read before gates), TESTING.md, testing-handbook.md, docs/Lockedfiles/...
+- read target files + generate-svg.mjs + related for root cause
+- edits (prepare + runner) + git diff verify
+- prettier --write + --check (exit 0 post)
+- lint-scoped (runner: pre-existing 3 unused only, no new from our code; cjs out of eslint scope)
+- typecheck (site/scripts + targeted runner: exit 0 for clean build of change; pre-existing in other scripts)
+- manual evidence wrappers for all per handbook (no bypass)
+
+**Skipped (per AGENTS min scope + no heavy gate):** full pnpm run lint (pre-existing unrelated), release:gate, build (needs env+heavy, not required for script fix), coverage, playwright, typecheck full without skipLib. No commit/push. No output fetch on other subagents. No extra files created.
+
+**Files changed (final after fmt):** site/scripts/prepare-standalone.cjs , site/features/planner/admin/svg-editor/svgPipelineRunner.ts
+**Key decision:** chose copy in prepare + minimal path support in runner (smaller than refactor to static import which wouldn't eliminate side-effect or fixture write path issues without more edits).
+**Verification:** git diff; all evidence files present; typecheck exit0; prettier clean; our code adds no new lint/type issues.
+
+**No blockers.** Logged per AGENTS Done + Honesty.

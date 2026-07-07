@@ -32,7 +32,9 @@ function copyRecursive(src, dest) {
 }
 
 if (!fs.existsSync(standaloneRoot)) {
-  console.log("[prepare-standalone] No .next/standalone output — skipping (not a standalone build).");
+  console.log(
+    "[prepare-standalone] No .next/standalone output — skipping (not a standalone build).",
+  );
   process.exit(0);
 }
 
@@ -42,4 +44,20 @@ if (fs.existsSync(standaloneSiteRoot)) {
   copyRecursive(staticSrc, staticSiteDest);
   copyRecursive(publicSrc, publicSiteDest);
 }
+
+// Copy generate-svg.mjs + _fixtures into standalone for runtime (svgPipelineRunner dynamic import + fixture write in prod deploys without full source tree).
+const genSrc = path.join(siteRoot, "scripts", "generate-svg.mjs");
+const fixSrc = path.join(siteRoot, "scripts", "generate-svg", "_fixtures");
+const copyGen = (base) => {
+  if (!fs.existsSync(genSrc)) return;
+  const sDest = path.join(base, "site", "scripts", "generate-svg.mjs");
+  fs.mkdirSync(path.dirname(sDest), { recursive: true });
+  fs.copyFileSync(genSrc, sDest);
+  copyRecursive(
+    fixSrc,
+    path.join(base, "site", "scripts", "generate-svg", "_fixtures"),
+  );
+};
+copyGen(standaloneRoot);
+if (fs.existsSync(standaloneSiteRoot)) copyGen(standaloneSiteRoot);
 console.log("[prepare-standalone] Copied static assets into .next/standalone");
