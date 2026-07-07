@@ -103,6 +103,28 @@ Flow:
 6. Translate design output into repo conventions.
 7. Validate visually before claiming parity.
 
+## Penpot Intake Checklist
+
+1. Design source is named.
+2. Visual reference is stored or linked.
+3. SVG exports are reviewed before import.
+4. Design values map to repo tokens.
+5. Missing tokens are added to the correct CSS layer.
+6. Component home follows `MODULE-LAYOUT.md`.
+7. No hardcoded visual values enter TSX.
+
+## Token Compliance Gate
+
+Record:
+
+| Item | Evidence |
+| --- | --- |
+| Token source | File path |
+| Violating TSX files | `rg` or lint output |
+| CSS owner | CSS layer path |
+| Design reference | Screenshot, Penpot export, or written reference |
+| Drift decision | Fix now, defer, or refuse |
+
 ## Initial Commands
 
 ```powershell
@@ -118,6 +140,7 @@ pnpm --filter oando-site run lint:ui:strict
 4. Known TSX styling violations.
 5. Design intake rule decision.
 6. React authoring rule decision.
+7. Token compliance record.
 
 ## Likely Failures
 

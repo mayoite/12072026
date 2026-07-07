@@ -26,15 +26,30 @@ pnpm run docs:sync:tech-stack
 pnpm run docs:gate:tech-stack
 ```
 
+## Source Truth Manifest
+
+Before regeneration, record:
+
+| Field | Required |
+| --- | --- |
+| Source module | Package, CSS, admin, planner, auth, DB, CRM, CDN, deploy |
+| Truth source | Live code, command, or doc |
+| Last evidence | Artifact path or missing |
+| Safe to generate | Yes, no, or defer |
+
+Generated docs must not become source truth.
+
 ## Exit Evidence
 
 1. Generator check result.
 2. Sync result.
 3. Gate result.
 4. Unrelated churn list.
+5. Source-truth manifest.
 
 ## Stop Conditions
 
 1. Generator output conflicts with source truth.
 2. Link checks fail broadly.
 3. Regeneration includes unrelated churn.
+4. Source truth is missing.

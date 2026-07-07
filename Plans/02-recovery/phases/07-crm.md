@@ -33,15 +33,40 @@ pnpm --filter oando-site run typecheck
 2. Placeholder and defer.
 3. Partial and split.
 
+## Domain And Access Baseline
+
+Before feature repair, define:
+
+1. CRM entities.
+2. PII fields.
+3. Admin roles.
+4. Member access, if any.
+5. Database owner.
+6. API owner.
+7. Audit/logging need.
+
+## CRM Matrix
+
+| Field | Required |
+| --- | --- |
+| Entity | Lead, customer, contact, opportunity, or other |
+| Route/API | Path |
+| Data source | DB table or service |
+| PII | Yes or no |
+| Allowed roles | Role list |
+| Evidence | Inventory command or skipped reason |
+
 ## Exit Evidence
 
 1. Route inventory.
 2. API inventory.
 3. DB dependency list.
 4. Keep/trim/defer decision.
+5. PII/access decision.
 
 ## Stop Conditions
 
 1. Product scope is unclear.
 2. Auth or DB blocks proof.
 3. Tests do not exist and behavior is unclear.
+4. PII handling is unclear.

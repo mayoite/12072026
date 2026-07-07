@@ -52,12 +52,29 @@ pnpm --filter oando-site run typecheck
 4. Admin SVG editor.
 5. CRM route.
 
+## ASVS/Session Matrix
+
+Use ASVS and session-management checks as benchmark guidance.
+
+Record:
+
+| Field | Required |
+| --- | --- |
+| Route or mutation | Path or function |
+| Actor | Guest, member, admin, service |
+| Authn required | Yes or no |
+| Authz rule | Role or ownership rule |
+| Session/cookie concern | Present, absent, or not applicable |
+| Failure behavior | Redirect, 401, 403, or safe error |
+| Evidence | Command, browser artifact, or skipped reason |
+
 ## Exit Evidence
 
 1. Route matrix result.
 2. Auth failure buckets.
 3. Env blockers, if any.
 4. Mutation auth matrix, if touched.
+5. Cookie/session review, if auth behavior is touched.
 
 ## Stop Conditions
 

@@ -37,6 +37,35 @@ Every mutation path must state:
 
 Do not add new catalog or planner SQL through Supabase HTTP clients.
 
+## Migration And Transaction Policy
+
+Migrations are explicit-scope work only.
+
+Before any migration:
+
+1. Identify schema owner.
+2. Identify affected DB.
+3. Generate or locate SQL.
+4. Define rollback or recovery path.
+5. Confirm data backup policy.
+6. Get explicit approval.
+
+Transaction rule:
+
+1. Multi-step writes need a transaction or a documented reason.
+2. Partial writes must be recoverable.
+3. Failed publish/save paths must leave consistent state.
+
+## RLS Policy Map
+
+Record table-level access:
+
+| Table/domain | DB | RLS expected | Server auth check | Evidence |
+| --- | --- | --- | --- | --- |
+| Planner projects | Admin DB | Unknown until checked | Required | Pending |
+| Catalog/products | Products DB | Unknown until checked | Required | Pending |
+| CRM data | Admin DB | Unknown until checked | Required | Pending |
+
 ## Initial Commands
 
 ```powershell
@@ -52,6 +81,7 @@ pnpm --filter oando-site run db:test
 4. Admin DB ownership.
 5. Migration risk, if any.
 6. Mutation auth and DB ownership, if touched.
+7. RLS matrix, if table access is reviewed.
 
 ## Stop Conditions
 

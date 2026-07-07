@@ -15,6 +15,21 @@ Every handover must include:
 7. Checks skipped.
 8. Open risks.
 9. Next smallest step.
+10. Contradictions left open.
+11. Refusals and deferrals.
+
+## Evidence Index
+
+Record each gate:
+
+| Field | Required |
+| --- | --- |
+| Module | Module name |
+| Phase | Phase file |
+| Command | Exact command |
+| Exit code | Numeric, skipped, or incomplete |
+| Artifact | Path under `results/` |
+| Status | Pass, fail, skipped, or incomplete |
 
 ## Do Not Say
 
@@ -28,3 +43,4 @@ Every handover must include:
 1. Evidence is incomplete.
 2. Dirty files are unexplained.
 3. Next step is not clear.
+4. Contradictions are hidden.

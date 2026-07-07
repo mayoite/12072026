@@ -49,6 +49,7 @@ Incomplete evidence stays incomplete.
 | 00 Start | `phases/00-start.md` |
 | 01 Truth reset and package policy | `phases/01-truth-reset-package-policy.md` |
 | 02 Styling contract | `phases/02-styling-contract.md` |
+| 02b Site UI baseline | `phases/02b-site-ui-baseline.md` |
 | 03 Admin SVG editor | `phases/03-admin-svg-editor.md` |
 | 03b SVG pipeline | `phases/03b-svg-pipeline.md` |
 | 04 Planner Open3D | `phases/04-planner-open3d.md` |

@@ -33,11 +33,28 @@ git log -5 --oneline
 4. Open blockers.
 5. Next selected phase.
 
+## Phase Decision Record
+
+Every phase must record:
+
+| Field | Required |
+| --- | --- |
+| Standard | The rule or benchmark being applied |
+| Owner | Module owner or current agent |
+| Evidence | Exact command, exit code, and artifact path |
+| Refusal | What was refused or deferred |
+| Next step | The next smallest action |
+
+Gate evidence must land under `results/<module>/<phase>/<cmd>/`.
+
+Narrative without artifacts is not release-grade evidence.
+
 ## Do Not Do
 
 1. Do not repair code in this phase.
 2. Do not stage `.env.local`.
 3. Do not claim old evidence still applies.
+4. Do not call a phase complete without a decision record.
 
 ## Stop Conditions
 

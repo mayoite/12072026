@@ -48,6 +48,27 @@ SVGR is allowed later only for trusted developer-owned UI SVG components.
 
 SVG sprite is allowed later only for repeated static symbols.
 
+## Security And Determinism Criteria
+
+The SVG pipeline needs:
+
+1. Sanitizer boundary.
+2. Input schema.
+3. Deterministic output.
+4. Checksum or content hash.
+5. Atomic publish.
+6. Compile failure rollback.
+7. Runtime schema contract.
+
+Malicious SVG corpus should include:
+
+1. Script tags.
+2. Event handlers.
+3. External references.
+4. ForeignObject.
+5. Oversized paths.
+6. Invalid XML.
+
 ## Exit Evidence
 
 1. SVG authority decision.
@@ -55,9 +76,13 @@ SVG sprite is allowed later only for repeated static symbols.
 3. Compiler to public/runtime path.
 4. Remaining ambiguity.
 5. Explicit SVGR/sprite defer decision.
+6. Malicious corpus result, when tests exist.
+7. Checksum or deterministic output proof.
+8. Atomic publish proof or blocker.
 
 ## Stop Conditions
 
 1. Two authorities remain.
 2. Publish path is unclear.
 3. Runtime consumer expects a different schema.
+4. Compile failure can leave partial publish state.

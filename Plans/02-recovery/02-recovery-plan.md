@@ -26,6 +26,7 @@ Status: in-principle plan for step 2. Revise when live checks disagree.
 | 00 | `phases/00-start.md` | Freeze the working baseline. |
 | 01 | `phases/01-truth-reset-package-policy.md` | Decide allowed packages from live imports. |
 | 02 | `phases/02-styling-contract.md` | Stop UI drift at the rules layer. |
+| 02b | `phases/02b-site-ui-baseline.md` | Create route-by-route site UI baseline after styling rules. |
 | 03 | `phases/03-admin-svg-editor.md` | Fix the first admin SVG lint cluster. |
 | 03b | `phases/03b-svg-pipeline.md` | Clarify SVG editor, compiler, publish, and runtime authority. |
 | 04 | `phases/04-planner-open3d.md` | Repair product-core Open3D slices. |
@@ -44,10 +45,11 @@ Status: in-principle plan for step 2. Revise when live checks disagree.
 1. Start with phase 00.
 2. Then run phase 01.
 3. Then run phase 02.
-4. Then fix phase 03.
-5. Then decide phase 03b before planner SVG work.
-6. Then enter planner slices.
-7. Defer phase 04b until component homes stop moving.
+4. Then run phase 02b if site UI proof is needed.
+5. Then fix phase 03.
+6. Then decide phase 03b before planner SVG work.
+7. Then enter planner slices.
+8. Defer phase 04b until component homes stop moving.
 
 This order is not final law.
 

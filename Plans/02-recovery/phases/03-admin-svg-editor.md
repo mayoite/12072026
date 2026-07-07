@@ -37,6 +37,23 @@ pnpm --filter oando-site run typecheck
 1. Scoped lint result.
 2. Typecheck result, if run.
 3. Exact remaining admin SVG failures.
+4. Admin route matrix, if route behavior is touched.
+5. Auth gate proof, if route behavior is touched.
+6. Publish/save matrix, if persistence is touched.
+
+## Admin Functionality Matrix
+
+Route existence is not functionality.
+
+Record:
+
+| Field | Required |
+| --- | --- |
+| Route | Admin URL |
+| Role | Guest, member, admin |
+| Expected gate | Redirect, deny, or allow |
+| Save behavior | None, draft, publish, or blocked |
+| Evidence | Command, browser artifact, or skipped reason |
 
 ## Likely Failures
 
@@ -50,3 +67,4 @@ pnpm --filter oando-site run typecheck
 1. Lint fix changes SVG semantics.
 2. Admin auth gate blocks verification.
 3. Typecheck failure is outside admin SVG scope.
+4. Admin role behavior is unknown.

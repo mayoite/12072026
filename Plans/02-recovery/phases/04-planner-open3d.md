@@ -56,6 +56,30 @@ React rules:
 2. Derived planner state should be computed in render or model/store code when possible.
 3. Do not add memoization by habit.
 
+## Product Invariants
+
+Planner repair must protect:
+
+1. No silent data loss.
+2. Undo/redo remains coherent.
+3. Save/reload round trip preserves project data.
+4. Export can be reloaded or validated.
+5. Guest and member persistence do not cross.
+6. Command seam owns mutations where designed.
+7. Client-only engines stay client-side.
+
+## Journey Evidence
+
+At least one Open3D journey should eventually prove:
+
+1. Open planner.
+2. Edit.
+3. Undo.
+4. Save.
+5. Reload.
+6. Export.
+7. Verify console output.
+
 ## Initial Commands
 
 ```powershell
@@ -81,6 +105,7 @@ pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d --co
 3. Remaining failure bucket.
 4. Browser smoke result, when relevant.
 5. Server/client boundary decision, when touched.
+6. Data-loss and round-trip decision, when touched.
 
 ## Stop Conditions
 

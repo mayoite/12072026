@@ -30,6 +30,22 @@ pnpm run typecheck
 pnpm run build
 ```
 
+## Env And Build Matrix
+
+Record:
+
+| Field | Required |
+| --- | --- |
+| Revision | Commit hash |
+| Env file | `.env.local`, CI, Vercel, or other |
+| Command | Exact command |
+| Exit code | Numeric |
+| Artifact path | `results/<module>/<phase>/<cmd>/...` |
+| Warnings | Classified or blocker |
+| Skips | Reason |
+
+All deployability claims require one unchanged revision.
+
 ## Release Gate
 
 ```powershell
@@ -65,6 +81,7 @@ Package bundling review belongs here only after live bundle proof.
 3. Build result.
 4. Release gate result, only if run.
 5. Turbopack spike result, only if run.
+6. Env matrix and build matrix.
 
 ## Stop Conditions
 

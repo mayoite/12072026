@@ -64,6 +64,35 @@ Use `optimizePackageImports` only after a proven heavy named-export package crea
 3. Keep/remove/audit/defer decisions.
 4. Install result, if run.
 5. Engine keep/audit/defer table.
+6. Package decision log.
+
+## Package Census Table
+
+Record this for each package under review:
+
+| Field | Required |
+| --- | --- |
+| Package | Package name |
+| Manifest | Root, site, or both |
+| Lockfile | Present or absent |
+| Imports | Exact import locations |
+| Runtime owner | Module using it |
+| Decision | Keep, audit, remove, or defer |
+| Evidence | Command and artifact path |
+
+No import proof means no removal.
+
+## Engine Matrix
+
+| Engine | Recovery decision | Evidence required |
+| --- | --- | --- |
+| Fabric | Keep | Planner 2D import and scoped tests |
+| Three | Keep | 3D viewer import and scoped tests |
+| React Three Fiber | Keep | React 3D binding import and viewer tests |
+| Drei | Audit/defer | Import proof and viewer need |
+| Current SVG compiler | Keep for recovery | Compile path and publish contract |
+| Penpot | Workflow only | Export policy, no package by default |
+| Turbopack | Defer | Phase 09 spike after credible gates |
 
 ## Likely Failures
 
