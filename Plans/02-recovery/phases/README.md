@@ -12,7 +12,7 @@ Use one file at a time.
 4. `03-admin-svg-editor.md`
 5. `03b-svg-pipeline.md`
 6. `04-planner-open3d.md`
-7. `04b-code-connect-readiness.md` deferred
+7. `04b-code-connect-readiness.md` deferred; Penpot first
 8. `05-auth.md`
 9. `06-database.md`
 10. `07-crm.md`

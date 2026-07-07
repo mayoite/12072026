@@ -1,33 +1,73 @@
-# Figma Design System Rules
+# Design System Intake
 
-Status: recovery guidance for Figma-to-code work.
+Status: recovery guidance for design-to-code work.
+
+Primary design tool: Penpot first.
+
+Figma and Code Connect are optional later.
 
 Authority: `MODULE-UI-CONTRACT.md`, `CSS-SOLUTION.md`, and `MODULE-LAYOUT.md`.
 
-This repo is not Figma-ready yet.
+This repo is not design-system-ready yet.
 
-These rules define the target intake contract. They do not claim Code Connect mappings exist.
+These rules define the target intake contract. They do not claim Penpot, Figma, or Code Connect integrations exist.
 
 ## Tool Truth
 
-- Figma plugin tools may be available in Codex.
-- The `create_design_system_rules` helper is not guaranteed to be exposed.
-- If that helper is unavailable, write and review rules manually in this doc.
-- Do not claim a Figma MCP call ran unless it actually ran.
-- Code Connect needs published Figma library components.
-- Code Connect may require an Organization or Enterprise Figma plan.
+- Penpot is the preferred free design tool.
+- Penpot is open-source and SVG/CSS-friendly.
+- Figma remains optional if a specific Figma file or team workflow requires it.
+- Figma Code Connect is a later mapping layer, not a recovery engine.
+- Do not claim any design-tool API call ran unless it actually ran.
+- Do not add design-tool packages without import proof and a clear workflow.
 
-## Required Figma Intake Flow
+## Required Design Intake Flow
 
-Use this flow for every Figma-driven code change:
+Use this flow for every design-driven code change:
 
-1. Get design context for the exact node.
-2. Get or keep a screenshot reference.
+1. Identify the exact design source.
+2. Export or capture a visual reference.
+3. Export assets as SVG or image files only when needed.
+4. Map design values to repo tokens.
+5. Identify existing repo components before creating new ones.
+6. Translate the design into repo conventions.
+7. Put visual styling in CSS, not TSX.
+8. Validate against the visual reference before claiming parity.
+
+If the design source is ambiguous, stop and ask.
+
+## Penpot First
+
+Use Penpot first for:
+
+1. Free design-system drafting.
+2. UI layout exploration.
+3. SVG-friendly asset work.
+4. Open design documentation.
+5. Developer-readable CSS and SVG handoff.
+
+Penpot recovery target:
+
+1. Components and tokens documented in repo docs.
+2. Exported SVG assets reviewed before import.
+3. No direct package dependency unless proven necessary.
+4. No claim of automatic sync unless a real workflow exists.
+
+## Optional Figma Path
+
+Use Figma only when:
+
+1. The user provides a Figma file.
+2. A collaborator requires Figma.
+3. Code Connect is explicitly needed later.
+4. A Figma-specific asset or design exists.
+
+Figma intake rules:
+
+1. Use exact node context.
+2. Keep a screenshot reference.
 3. Map Figma values to repo tokens.
-4. Identify existing repo components before creating new ones.
-5. Translate generated code into repo conventions.
-6. Put visual styling in CSS, not TSX.
-7. Validate against the screenshot before claiming visual parity.
+4. Do not treat generated Figma code as final repo code.
 
 If a Figma URL has no `node-id`, stop and ask for a node-specific URL.
 
@@ -104,9 +144,10 @@ Do not place planner or admin product UI in generic marketing components.
 
 ## Asset Handling
 
-- Use Figma-provided assets only when the Figma tool returns real asset URLs.
-- Store downloaded assets in the owning asset path.
-- Do not add icon packages because a Figma design uses an icon.
+- Prefer SVG for vector assets.
+- Review exported SVG before importing.
+- Store downloaded or exported assets in the owning asset path.
+- Do not add icon packages because a design uses an icon.
 - Do not create placeholders when real assets are available.
 - Do not upload or delete CDN assets without explicit approval.
 
@@ -143,7 +184,9 @@ Sprites are not a publish authority.
 
 ## Code Connect Policy
 
-Code Connect is a mapping layer.
+Code Connect is optional and Figma-specific.
+
+It maps published Figma library components to existing code components.
 
 It does not:
 
@@ -166,7 +209,7 @@ Do not map unstable admin or Open3D components during recovery.
 
 Refuse:
 
-1. "Figma-ready" claims today.
+1. "Design-system-ready" claims today.
 2. Code Connect on unstable component paths.
 3. Storybook-first design-system work during step 2.
 4. New icon packages without import proof.
@@ -174,6 +217,6 @@ Refuse:
 
 Defer:
 
-1. Marketing Figma workflow until UI-3.
-2. Code Connect until after stable component homes.
+1. Figma Code Connect until after stable component homes.
+2. Marketing design migration until UI-3.
 3. SVGR or sprite adoption until SVG authority is proven.

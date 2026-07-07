@@ -61,7 +61,8 @@ Rule: live checks beat old docs.
 | `@svgdotjs/*` | Remove unless SVG manager needs it. | SVG pipeline decision. |
 | SVGR | Consider for trusted developer SVG components. | Needs SVG authority decision first. |
 | SVG sprite | Consider for compiled/static symbols. | Needs SVG authority decision first. |
-| Figma | Add only with clear workflow and package need. | Design-system and Code Connect plan. |
+| Penpot | Preferred free design tool. No package by default. | Design-system intake and SVG export policy. |
+| Figma | Optional later for specific files or Code Connect. | Stable component paths and published Figma components. |
 
 ## Unknowns
 

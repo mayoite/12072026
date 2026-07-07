@@ -8,7 +8,7 @@ Goal: stop UI drift at the rules layer.
 - Site UI shell.
 - Admin styling rules.
 - Planner styling rules.
-- Figma-to-code intake rules.
+- Design-to-code intake rules.
 
 ## Allowed Scope
 
@@ -23,6 +23,7 @@ Goal: stop UI drift at the rules layer.
 2. Hardcoded fonts, colors, spacing, size, or motion in TSX.
 3. New CSS mirrors under `features/`, `lib/`, `data/`, or `api/`.
 4. Code Connect mappings.
+5. Design-tool package additions.
 
 ## Read First
 
@@ -30,7 +31,7 @@ Goal: stop UI drift at the rules layer.
 2. `docs/architecture/CSS-SOLUTION.md`
 3. `docs/architecture/MODULE-LAYOUT.md`
 4. `docs/architecture/MODULE-UI-CONTRACT.md`
-5. `docs/architecture/FIGMA-DESIGN-SYSTEM-RULES.md`
+5. `docs/architecture/DESIGN-SYSTEM-INTAKE.md`
 
 ## Token Map
 
@@ -60,20 +61,25 @@ Do not hardcode these in TSX:
 6. Box shadow values.
 7. Animation duration, easing, distance, or delay.
 
-## Figma Intake
+## Design Intake
 
-This phase defines Figma-to-code rules only.
+This phase defines design-to-code rules only.
 
 It does not create Code Connect mappings.
 
+Penpot is first.
+
+Figma is optional later.
+
 Flow:
 
-1. Get exact Figma node context.
-2. Keep a screenshot reference.
-3. Map values to repo tokens.
-4. Reuse existing components.
-5. Translate generated code into repo conventions.
-6. Validate visually before claiming parity.
+1. Identify the exact design source.
+2. Keep a visual reference.
+3. Export SVG or image assets only when needed.
+4. Map values to repo tokens.
+5. Reuse existing components.
+6. Translate design output into repo conventions.
+7. Validate visually before claiming parity.
 
 ## Initial Commands
 
@@ -88,7 +94,7 @@ pnpm --filter oando-site run lint:ui:strict
 2. `lint:ui` result.
 3. `lint:ui:strict` result, if run.
 4. Known TSX styling violations.
-5. Figma intake rule decision.
+5. Design intake rule decision.
 
 ## Likely Failures
 
@@ -104,3 +110,4 @@ pnpm --filter oando-site run lint:ui:strict
 2. Styling rule conflicts with product intent.
 3. Lint output is incomplete.
 4. Figma work needs Code Connect before component homes are stable.
+5. Penpot exports require SVG import or asset policy decisions.

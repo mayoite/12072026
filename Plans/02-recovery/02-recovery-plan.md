@@ -29,7 +29,7 @@ Status: in-principle plan for step 2. Revise when live checks disagree.
 | 03 | `phases/03-admin-svg-editor.md` | Fix the first admin SVG lint cluster. |
 | 03b | `phases/03b-svg-pipeline.md` | Clarify SVG editor, compiler, publish, and runtime authority. |
 | 04 | `phases/04-planner-open3d.md` | Repair product-core Open3D slices. |
-| 04b | `phases/04b-code-connect-readiness.md` | Prepare Code Connect only after stable component homes. |
+| 04b | `phases/04b-code-connect-readiness.md` | Prepare Penpot-first design workflow and defer Code Connect. |
 | 05 | `phases/05-auth.md` | Prove guest, member, and admin route gates. |
 | 06 | `phases/06-database.md` | Prove DB env, Drizzle ownership, and safe access. |
 | 07 | `phases/07-crm.md` | Decide real CRM scope before repair. |
@@ -63,7 +63,7 @@ Change it if live evidence proves another blocker is earlier.
 | Admin | Make admin routes and views honest. | Which flows are real. |
 | SVG | Pick one authority for editor, compiler, publish, runtime. | SVGR, sprite, or current compiler path. |
 | Planner Open3D | Fix product-core slices with evidence. | Which failure bucket comes first. |
-| Figma/Code Connect | Prepare mappings only after component paths stabilize. | Which components are stable and published. |
+| Design tools | Use Penpot first and defer Figma Code Connect. | Which components are stable and which assets need export policy. |
 | Auth | Prove guest/member/admin gates. | Route matrix. |
 | Database | Prove Drizzle and env paths. | Read-only proof before any migration. |
 | CRM | Decide real scope. | Keep, trim, or defer. |
