@@ -14,10 +14,11 @@ import {
 import { normalizeCatalogProductId } from "@/lib/uuid/normalizeUuid";
 import type { CategoryRow, Product } from "./types";
 
-function isMissingRelationError(error: unknown): boolean {
-  const message = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
-  return message.includes("does not exist") || message.includes("42p01");
+function logCatalogDbUnavailable(context: string, error: unknown): void {
+  console.error(`[${context}] Catalog DB unavailable:`, error);
 }
+
+const IS_PRODUCTION_BUILD = process.env.NEXT_PHASE === "phase-production-build";
 
 function rowToProduct(row: typeof catalogProducts.$inferSelect): Product {
   const slug = String(row.slug ?? "").trim();
@@ -30,7 +31,7 @@ function rowToProduct(row: typeof catalogProducts.$inferSelect): Product {
 }
 
 export function canQueryCatalogDatabase(): boolean {
-  return isProductsDatabaseConfigured();
+  return isProductsDatabaseConfigured() && !IS_PRODUCTION_BUILD;
 }
 
 export async function fetchCatalogProductsLive(): Promise<Product[] | null> {
@@ -43,8 +44,8 @@ export async function fetchCatalogProductsLive(): Promise<Product[] | null> {
       .orderBy(asc(catalogProducts.name));
     return rows.map(rowToProduct);
   } catch (error) {
-    if (isMissingRelationError(error)) return null;
-    throw error;
+    logCatalogDbUnavailable("fetchCatalogProductsLive", error);
+    return null;
   }
 }
 
@@ -61,8 +62,8 @@ export async function fetchCatalogProductsByCategoryLive(
       .orderBy(asc(catalogProducts.name));
     return rows.map(rowToProduct);
   } catch (error) {
-    if (isMissingRelationError(error)) return null;
-    throw error;
+    logCatalogDbUnavailable("fetchCatalogProductsByCategoryLive", error);
+    return null;
   }
 }
 
@@ -77,8 +78,8 @@ export async function fetchCatalogProductBySlugLive(slug: string): Promise<Produ
       .limit(1);
     return rows[0] ? rowToProduct(rows[0]) : null;
   } catch (error) {
-    if (isMissingRelationError(error)) return null;
-    throw error;
+    logCatalogDbUnavailable("fetchCatalogProductBySlugLive", error);
+    return null;
   }
 }
 
@@ -98,8 +99,8 @@ export async function fetchCatalogCategoryIdsLive(): Promise<string[] | null> {
       ),
     ];
   } catch (error) {
-    if (isMissingRelationError(error)) return null;
-    throw error;
+    logCatalogDbUnavailable("fetchCatalogCategoryIdsLive", error);
+    return null;
   }
 }
 
@@ -109,8 +110,8 @@ export async function fetchCatalogCategoriesLive(): Promise<CategoryRow[] | null
   try {
     return await productsDb.select().from(catalogCategories);
   } catch (error) {
-    if (isMissingRelationError(error)) return null;
-    throw error;
+    logCatalogDbUnavailable("fetchCatalogCategoriesLive", error);
+    return null;
   }
 }
 
@@ -149,8 +150,8 @@ export async function fetchCatalogSlugAliasLive(
       .limit(1);
     return rows[0] ?? null;
   } catch (error) {
-    if (isMissingRelationError(error)) return null;
-    throw error;
+    logCatalogDbUnavailable("fetchCatalogSlugAliasLive", error);
+    return null;
   }
 }
 
@@ -176,8 +177,8 @@ export async function fetchCatalogProductsSlugFieldsByCategoryLive(
       metadata: (row.metadata ?? null) as Product["metadata"],
     }));
   } catch (error) {
-    if (isMissingRelationError(error)) return null;
-    throw error;
+    logCatalogDbUnavailable("fetchCatalogProductsSlugFieldsByCategoryLive", error);
+    return null;
   }
 }
 
@@ -208,8 +209,8 @@ export async function fetchBusinessStatsActiveLive(): Promise<BusinessStatsRow |
       as_of_date: String(row.as_of_date ?? ""),
     };
   } catch (error) {
-    if (isMissingRelationError(error)) return null;
-    throw error;
+    logCatalogDbUnavailable("fetchBusinessStatsActiveLive", error);
+    return null;
   }
 }
 
@@ -231,8 +232,8 @@ export async function fetchCatalogProductSpecsRowsLive(
       specs: (row.specs ?? null) as Record<string, unknown> | null,
     }));
   } catch (error) {
-    if (isMissingRelationError(error)) return null;
-    throw error;
+    logCatalogDbUnavailable("fetchCatalogProductSpecsRowsLive", error);
+    return null;
   }
 }
 
@@ -260,7 +261,7 @@ export async function fetchCatalogProductImageRowsLive(
       .where(inArray(catalogProductImages.product_id, productIds))
       .orderBy(asc(catalogProductImages.sort_order));
   } catch (error) {
-    if (isMissingRelationError(error)) return null;
-    throw error;
+    logCatalogDbUnavailable("fetchCatalogProductImageRowsLive", error);
+    return null;
   }
 }

@@ -8,6 +8,7 @@
 
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
 
@@ -144,7 +145,17 @@ export function runSvgPipeline(
   const startedAt = Date.now();
 
   // In-process (unified): dynamic import of thin script module calling canonical compiler.
-  return import(`file://${scriptPath.replace(/\\/g, "/")}`)
+  const importModule = new Function(
+    "specifier",
+    'return import(specifier);',
+  ) as (specifier: string) => Promise<{
+    runPipeline?: (descriptor: BlockDescriptor) => Promise<unknown>;
+    default?: {
+      runPipeline?: (descriptor: BlockDescriptor) => Promise<unknown>;
+    };
+  }>;
+
+  return importModule(pathToFileURL(scriptPath).href)
     .then((mod) => {
       const runP = mod.runPipeline || mod.default?.runPipeline;
       if (typeof runP !== "function")

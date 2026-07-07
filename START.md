@@ -11,7 +11,7 @@ pnpm install
 copy .env.example .env.local   # then fill keys at repo root
 ```
 
-Env is loaded from repo-root `.env.local` via `site/scripts/loadEnvLocal.cjs` (Next, Playwright, scripts).
+Env is loaded from repo-root `.env.local` via `site/scripts/loadEnvLocal.cjs` (Next, Playwright, scripts). `pnpm run start` also loads it before the standalone server boots if the file exists.
 
 Check required keys:
 
@@ -163,4 +163,3 @@ Invoke-RestMethod -Uri "http://localhost:3000/api/planner/catalog/"
 ## See also
 
 `Readme.md` · `TESTING.md` · `Failures.md` · `OPERATIONS_RUNBOOK.md` · `.env.example`
-
