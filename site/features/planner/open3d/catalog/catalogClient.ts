@@ -773,8 +773,9 @@ export class Open3dCatalogClient {
       return this.loadedDescriptors;
     }
     try {
-      // dynamic to defer fs module in bundler
-      const descriptors = this.loadedDescriptors;
+      // dynamic to defer fs module in client bundles (06-INV-01)
+      const { loadAll } = await import("./svg/svgBlockDescriptorLoader");
+      const descriptors = loadAll();
       this.loadedDescriptors = descriptors;
       // resolver integration (PLAN-FAIL-0419): actually use blocks (capture result, consume .blocks)
       if (descriptors.length > 0) {
@@ -898,6 +899,7 @@ export class Open3dCatalogClient {
     raw: unknown,
     source: CatalogSource,
   ): Open3dCatalogItem | null {
+    if (!raw || typeof raw !== "object") return null;
     if (this.isOpen3dCatalogItem(raw)) return raw;
     return source === "configurator"
       ? mapConfiguratorProductToCatalogItem(raw as ConfiguratorProductInput)

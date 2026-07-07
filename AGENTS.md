@@ -27,6 +27,14 @@
 - Commands → `START.md`; run only when policy allows and the task requires them.
 - Test evidence and output integrity → `testing-handbook.md`.
 
+## Browser / E2E (agent default)
+
+- Do **not** run Playwright, `test:e2e*`, `test:a11y`, `test:site-ui`, `release:gate`, or browser automation on every slice unless the user explicitly asks or a ship/release claim requires it.
+- Do **not** start `pnpm run dev` or use browser tools only to explore UI when Vitest, typecheck, or HTTP/API probes are enough for the task.
+- Default agent verification: targeted Vitest, typecheck/lint when in scope, and lightweight live probes (e.g. `curl` to routes/APIs) with artifacts under `results/`.
+- Browser walkthrough and full E2E remain **user- or release-gate-owned** for `Verified in staging`, `Verified in production path`, and `Accepted` on UI routes (`PLAN-FAIL-0412` until closed).
+- When browser/E2E is skipped, say so explicitly; recommend `Implemented, verification pending` — never `Verified` or `Accepted` without live proof.
+
 ## Test Evidence Integrity
 
 All test, lint, typecheck, build, Playwright, accessibility, coverage, and audit runs are captured under repo-root `results/<module>/<phase>/<cmd>/` in the standardized `<cmd>-run.json` + `<cmd>-raw.log` format (never to the repo root, `E:`, or any other drive path).
@@ -56,6 +64,7 @@ All test, lint, typecheck, build, Playwright, accessibility, coverage, and audit
 - Smallest change that solves the task; archive over delete; archive/results/ historical evidence kept (no deletes from archive/); no silent unrelated fixes.
 - No commit, push, publish, migrate apply, or destructive ops without ask.
 - **Open3D planner:** production code lives in `site/features/planner/open3d/` (site deps). `OOPlanner/` and `open3d-next-staging/` are lab/archive mirrors — not separate pnpm workspace packages.
+- **Planner authority chain:** `Plans/00-governance/01-phase1-execution/01-implementation-decisions.md` restates this file's authority order for planner work; the `.cursor/rules/planner-governance.mdc` Cursor rule inherits from that doc and does not override it. If a Cursor rule is not loaded, the implementation-decisions doc still binds.
 
 ## Done
 

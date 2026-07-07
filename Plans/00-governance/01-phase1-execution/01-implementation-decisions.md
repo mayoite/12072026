@@ -5,9 +5,12 @@ Date: 2026-07-04
 ## Authority order
 
 1. Repository and system instructions.
-2. `AGENTS.md` internal rules.
+2. `AGENTS.md` internal rules (supersedes all other rules, Cursor rules, and skills when they conflict).
 3. This file (`01-implementation-decisions.md`) is the planner project's source-of-truth.
 4. Phase plans bind here. Active: `02-plan-foundation.md`, `03-plan-delivery.md`, `04-plan-closeout.md`. Full specs: `archive/plans/2026-07-05_phase1-execution/phases/`.
+5. `08-quality-gates.md` · `09-design-benchmark-protocol.md` · `10-review-workflow.md` · root `Failures.md` and `resolved-failures.md`.
+
+The `.cursor/rules/planner-governance.mdc` rule restates this order for Cursor agents but does not declare its own authority; it inherits from this file and defers to `AGENTS.md` on conflict.
 
 ## Non-negotiable release dimensions
 

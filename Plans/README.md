@@ -59,9 +59,22 @@ Open `00-governance/` when you need:
 - route or contract governance
 - conflict resolution between plan docs
 
+## Install
+
+1. Copy `.cursor/rules/planner-governance.mdc` into your repo `.cursor/rules/`.
+2. Copy `prompts/*` into your repo `plans/` folder or any prompt folder you prefer.
+3. In Cursor, open the prompt file you want and run it in Agent mode unless the file is a review prompt.
+
 ## What not to do
 
 - Do not treat historical/completed plans (now archived to `archive/Plans/`) as live authority.
 - Gate command evidence stays in `results/` (`TESTING.md`).
 - Do not let execution docs override governance docs on package pins, gates, or standards.
 - Completed/superseded plans are archived without stubs in Plans/.
+
+## Mode guide
+
+- Execution prompts: Agent mode + terminal.
+- Delivery or checkout: Agent mode + browser/dev server.
+- Review prompts: Read-only / Ask mode.
+- Finalizer: Agent mode after all 3 reviews exist.

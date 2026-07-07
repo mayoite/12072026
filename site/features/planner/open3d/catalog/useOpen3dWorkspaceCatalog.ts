@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { Open3dCatalogClient } from "./catalogClient";
@@ -62,6 +62,23 @@ export function useOpen3dWorkspaceCatalog() {
     [items],
   );
 
+  // TTL stale UX (06-INV): background refresh when catalog data is past half TTL.
+  useEffect(() => {
+    if (typeof window === "undefined" || offline) return;
+    const client = clientRef.current;
+    if (!client) return;
+
+    const tick = () => {
+      if (client.shouldRevalidate() && !query.isFetching) {
+        void query.refetch();
+      }
+    };
+
+    tick();
+    const intervalId = window.setInterval(tick, 60_000);
+    return () => window.clearInterval(intervalId);
+  }, [offline, query.isFetching, query.refetch]);
+
   return {
     items,
     status,
@@ -72,3 +89,6 @@ export function useOpen3dWorkspaceCatalog() {
     retry: query.refetch,
   };
 }
+
+/** Phase 06 plan alias — catalogue-first SVG descriptor consumer hook. */
+export const useOpen3dSvgCatalog = useOpen3dWorkspaceCatalog;

@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createElement, type PropsWithChildren } from "react";
 
 import { useOpen3dWorkspaceCatalog } from "@/features/planner/open3d/catalog/useOpen3dWorkspaceCatalog";
+import type { Open3dCatalogItem } from "@/features/planner/open3d/catalog/catalogTypes";
 
 function renderCatalogHook() {
   const client = new QueryClient({
@@ -60,7 +61,7 @@ describe("useOpen3dWorkspaceCatalog", () => {
       expect(result.current.status).toBe("ready");
     });
 
-    expect(result.current.items).toHaveLength(1);
+    expect(result.current.items.some((item) => item.id === "ws-1")).toBe(true);
     expect(result.current.resolveItem("ws-1")?.name).toBe("2 Seater Workstation");
 
     vi.unstubAllGlobals();
@@ -124,7 +125,30 @@ describe("useOpen3dWorkspaceCatalog", () => {
 
   // TDD for 0405/0419 loader primary wiring fix: call loadDescriptorsFromLoader (primary), check getAll path after (addresses [] return); falls to api
   it("calls loadDescriptorsFromLoader for catalogue-first primary before api fallback", async () => {
-    const liveItem = { id: "ldr-1", slug: "ldr-1", sku: "LDR-1", name: "Loader Item", shortName: "LDR", description: "d", category: "Furniture", subCategory: "Chairs", taxonomyPath: "Furniture > Symbols > ldr", dimensions: { widthMm: 100, depthMm: 100, heightMm: 100 }, displayUnit: "mm", assets: { imageUrls: [] }, material: { marketingMaterial: "SVG", normalizedMaterial: "svg-symbol" }, roomTags: [], styleTags: [], availability: "in-stock", assemblyType: "fully-assembled", flatPack: false, tags: ["descriptor"], variants: [], provenance: { source: "descriptor-loader" }, symbolOnly: true } as any;
+    const liveItem: Open3dCatalogItem = {
+      id: "ldr-1",
+      slug: "ldr-1",
+      sku: "LDR-1",
+      name: "Loader Item",
+      shortName: "LDR",
+      description: "d",
+      category: "Furniture",
+      subCategory: "Chairs",
+      taxonomyPath: "Furniture > Symbols > ldr",
+      dimensions: { widthMm: 100, depthMm: 100, heightMm: 100 },
+      displayUnit: "mm",
+      assets: { imageUrls: [] },
+      material: { marketingMaterial: "SVG", normalizedMaterial: "svg-symbol" },
+      roomTags: [],
+      styleTags: [],
+      availability: "in-stock",
+      assemblyType: "fully-assembled",
+      flatPack: false,
+      tags: ["descriptor"],
+      variants: [],
+      provenance: { source: "descriptor-loader" },
+      symbolOnly: true,
+    };
     const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ items: [liveItem] }) });
     vi.stubGlobal("fetch", fetchMock);
     const { result } = renderCatalogHook();

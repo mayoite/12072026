@@ -15,16 +15,54 @@
  */
 
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { withAuth } from "@/lib/api/withAuth";
-import { success, error } from "@/lib/api/apiResponse";
+import { success } from "@/lib/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
 import {
   persistBlockDescriptor,
   parseAdminPayload,
+  type PersistError,
 } from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
 import { runSvgPipeline } from "@/features/planner/admin/svg-editor/svgPipelineRunner";
 import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
 import { buildBlockThumbPngUrl } from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
+import {
+  toOpen3dDescriptorErrorHttp,
+  type Open3dDescriptorError,
+} from "@/features/planner/open3d/catalog/svg/svgTypes";
+
+function descriptorErrorResponse(descriptorError: Open3dDescriptorError): NextResponse {
+  const http = toOpen3dDescriptorErrorHttp(descriptorError);
+  return NextResponse.json(
+    {
+      success: false,
+      error: {
+        ...http.body,
+        ...(descriptorError.kind === "invalid"
+          ? { issues: descriptorError.issues }
+          : {}),
+      },
+    },
+    { status: http.status },
+  );
+}
+
+function persistErrorResponse(persistError: PersistError): NextResponse {
+  const status = persistError.reason === "hashMismatch" ? 409 : 422;
+  return NextResponse.json(
+    {
+      success: false,
+      error: {
+        code: persistError.code,
+        fieldPath: persistError.fieldPath,
+        message: persistError.message,
+        ...(persistError.issues ? { issues: persistError.issues } : {}),
+      },
+    },
+    { status },
+  );
+}
 
 async function handleSvgEditorPost(req: NextRequest) {
   let payload: unknown;
@@ -37,16 +75,7 @@ async function handleSvgEditorPost(req: NextRequest) {
   // Phase 02/04 Zod boundary (re-uses parseAdminPayload which calls freeze + schema)
   const parsed = parseAdminPayload(payload);
   if (!parsed.ok) {
-    // 422 taxonomy per 04-ADMIN-09 and Phase 02 mapper
-    const e = parsed.error;
-    return error(
-      new ApiError(
-        422,
-        API_ERROR_CODES.INVALID_INPUT,
-        e.message || "BlockDescriptor validation failed",
-        { fieldPath: e.fieldPath, issues: (e as { issues?: unknown }).issues as Record<string, unknown> | undefined }
-      )
-    );
+    return descriptorErrorResponse(parsed.error);
   }
 
   const descriptor: BlockDescriptor = parsed.value;
@@ -54,9 +83,7 @@ async function handleSvgEditorPost(req: NextRequest) {
   // Atomic write (04-ADMIN-06)
   const persistResult = persistBlockDescriptor(descriptor, { writeHistory: true });
   if (!persistResult.ok) {
-    const pe = persistResult.error;
-    const status = pe.reason === "versionMismatch" || pe.reason === "hashMismatch" ? 409 : 422;
-    return error(new ApiError(status, API_ERROR_CODES.INVALID_INPUT, pe.message, { fieldPath: pe.fieldPath }));
+    return persistErrorResponse(persistResult.error);
   }
 
   // Shell Phase 03 + R2 side effect (generate-svg.mjs inside runner does PNG + uploadPngToR2)

@@ -147,7 +147,7 @@ describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
     const res = await POST(req as any, {} as any);
     const body = await res.json();
 
-    expect(runSvgPipeline).toHaveBeenCalledWith(validDescriptor, expect.any(Object));
+    expect(runSvgPipeline).toHaveBeenCalledWith(validDescriptor);
     expect(body.thumb).toMatch(/site-block-thumbs|cdn/);
   });
 
