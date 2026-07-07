@@ -59,7 +59,7 @@ vi.mock('next-intl/middleware', () => {
   };
 });
 
-import { isPlannerGuestAllowedPath, isProtectedPath, hasSessionAuthCookies, proxy, buildContentSecurityPolicy, isCanvasHeavyPath } from '../proxy';
+import { isPlannerGuestAllowedPath, isPublicPortalSvgCatalogPath, isProtectedPath, hasSessionAuthCookies, proxy, buildContentSecurityPolicy, isCanvasHeavyPath } from '../proxy';
 import { NextRequest } from 'next/server';
 import { PLANNER_GUEST_COOKIE } from '../lib/auth/constants';
 
@@ -89,6 +89,16 @@ describe('proxy.ts', () => {
 
     it('should return true for /portal/123', () => {
       expect(isProtectedPath('/portal/123')).toBe(true);
+    });
+
+    it('should return false for public Phase 05 /portal/svg-catalog index', () => {
+      expect(isPublicPortalSvgCatalogPath('/portal/svg-catalog')).toBe(true);
+      expect(isProtectedPath('/portal/svg-catalog')).toBe(false);
+    });
+
+    it('should return false for public Phase 05 /portal/svg-catalog/[slug]', () => {
+      expect(isPublicPortalSvgCatalogPath('/portal/svg-catalog/side-table-001')).toBe(true);
+      expect(isProtectedPath('/portal/svg-catalog/side-table-001')).toBe(false);
     });
 
     it('should return true for /admin', () => {
@@ -146,6 +156,13 @@ describe('proxy.ts', () => {
       const response = await proxy(request as unknown as NextRequest);
       expect(response.status).toBe(307);
       expect(response.headers.get('location')).toContain('/access');
+    });
+
+    it('should allow unauthenticated users on public /portal/svg-catalog (Phase 05)', async () => {
+      const request = new NextRequest('http://localhost/portal/svg-catalog');
+      const response = await proxy(request as unknown as NextRequest);
+      expect(response.status).toBe(200);
+      expect(response.headers.get('location')).toBeNull();
     });
 
     it('should allow protected paths when Supabase auth cookies are present', async () => {

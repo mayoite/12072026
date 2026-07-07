@@ -2,7 +2,7 @@
 
 Date: 2026-07-05
 
-Authority: `01-implementation-decisions.md` · gates: `08-quality-gates.md` · failures: root `Failures.md`
+Authority: `AGENTS.md` · planner pins: `01-implementation-decisions.md` · failures: `Failures.md`
 
 Detail was merged from archived phase specs. See `archive/plans/2026-07-05_phase1-execution/phases/`.
 
@@ -27,11 +27,13 @@ Blockers: `PLAN-FAIL-0408` (coverage) is cross-phase. See root `Failures.md`.
 
 **Goal:** Lock governance before code.
 
-**Done:** Five governance files exist. `phase-00-precheck.md` PASS. Lockfile clean. R2 authority in I-D. `Plans/00-governance/01-phase1-execution/` is the live governance path.
+**Checklist:** [`00-governance-checklist.md`](00-governance-checklist.md) · **Routing:** [`Plans.md`](../../../Plans.md)
 
-**Left:** Flip status to Accepted. One commit boundary before Phase 01 if not already signed.
+**Done:** Governance pack complete. `phase-00-precheck.md` PASS (2026-07-04). Lockfile clean. R2 authority in I-D. `Plans/00-governance/01-phase1-execution/` is the live governance path.
 
-**Checks:** `00-PRE-01` lockfile · `00-PRE-04` files present · `00-PRE-06` git clean · forbidden-pattern scan.
+**Left:** Re-run §7–§8; flip status to **Accepted** when `00-PRE-06` green + sign-off.
+
+**Checks:** `00-PRE-*` in consolidated checklist §7.
 
 ---
 

@@ -56,8 +56,20 @@ function auditStaticPresentationInOpen3d() {
   }
   return violations;
 }
+const { mockCatalogHook } = vi.hoisted(() => ({
+  mockCatalogHook: () => ({
+    items: [],
+    isLoading: false,
+    status: "ready" as const,
+    resolveItem: () => null,
+    isStale: false,
+    error: null,
+    retry: vi.fn(),
+  }),
+}));
 vi.mock("@/features/planner/open3d/catalog/useOpen3dWorkspaceCatalog", () => ({
-  useOpen3dWorkspaceCatalog: () => ({ items: [], isLoading: false, status: "ready", resolveItem: () => null }),
+  useOpen3dWorkspaceCatalog: mockCatalogHook,
+  useOpen3dSvgCatalog: mockCatalogHook,
 }));
 vi.mock("@/features/planner/open3d/persistence/useOpen3dWorkspaceAutosave", () => ({
   useOpen3dWorkspaceAutosave: () => ({ status: "idle", isModified: false, isSynced: true, schedulePersist: vi.fn(), restoreSnapshot: async () => null }),
@@ -389,15 +401,15 @@ describe("InventoryPanel", () => {
 
     render(<InventoryPanel onItemSelect={onItemSelect} onSearch={onSearch} />);
 
-    // Updated for RAC ListBoxItem (owns collection); find by text/name
-    const itemOption = await screen.findByText(/Executive Standing Desk/i);
+    // Card title + empty-state CTA can both mention the item name — target the grid card label.
+    const [itemOption] = await screen.findAllByText(/Executive Standing Desk/i);
     fireEvent.click(itemOption);
     expect(onItemSelect).toHaveBeenCalledWith(
       expect.objectContaining({ id: "sample-desk-1" }),
       null,
     );
 
-    const search = screen.getByLabelText("Search inventory");
+    const search = screen.getByLabelText(/Search catalog elements/i);
     fireEvent.change(search, { target: { value: "desk" } });
     await waitFor(() => {
       expect(onSearch).toHaveBeenCalledWith("desk");

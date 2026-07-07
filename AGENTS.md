@@ -35,6 +35,14 @@
 - Browser walkthrough and full E2E remain **user- or release-gate-owned** for `Verified in staging`, `Verified in production path`, and `Accepted` on UI routes (`PLAN-FAIL-0412` until closed).
 - When browser/E2E is skipped, say so explicitly; recommend `Implemented, verification pending` — never `Verified` or `Accepted` without live proof.
 
+## Test runs (agent default)
+
+- Do **not** run the full test suite after each planner phase or slice (`pnpm run test`, `test:coverage`, repo-wide Vitest) unless the user explicitly asks or a ship/release claim requires it.
+- Run **only targeted tests** for the changed surface (specific Vitest files or patterns tied to the slice check IDs).
+- Typecheck/lint the touched package when in scope — not whole-repo gates on every phase exit.
+- Full suite, coverage floor proof, and `release:gate` are **user- or release-gate-owned** (`PLAN-FAIL-0413`, `PLAN-FAIL-0408` until closed).
+- When the full suite is skipped, say so explicitly; `Implemented, verification pending` is allowed — never claim all tests green without a completed run and artifacts.
+
 ## Test Evidence Integrity
 
 All test, lint, typecheck, build, Playwright, accessibility, coverage, and audit runs are captured under repo-root `results/<module>/<phase>/<cmd>/` in the standardized `<cmd>-run.json` + `<cmd>-raw.log` format (never to the repo root, `E:`, or any other drive path).
@@ -64,7 +72,6 @@ All test, lint, typecheck, build, Playwright, accessibility, coverage, and audit
 - Smallest change that solves the task; archive over delete; archive/results/ historical evidence kept (no deletes from archive/); no silent unrelated fixes.
 - No commit, push, publish, migrate apply, or destructive ops without ask.
 - **Open3D planner:** production code lives in `site/features/planner/open3d/` (site deps). `OOPlanner/` and `open3d-next-staging/` are lab/archive mirrors — not separate pnpm workspace packages.
-- **Planner authority chain:** `Plans/00-governance/01-phase1-execution/01-implementation-decisions.md` restates this file's authority order for planner work; the `.cursor/rules/planner-governance.mdc` Cursor rule inherits from that doc and does not override it. If a Cursor rule is not loaded, the implementation-decisions doc still binds.
 
 ## Done
 

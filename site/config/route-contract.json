@@ -61,6 +61,17 @@
     "bySlug": "/portal/svg-catalog/[slug]",
     "alias": "site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts (one-line: export * from admin registry)"
   },
+  "_phase07_auth_matrix": {
+    "_status": "phase-07 planner guest/member/admin permission matrix",
+    "_canonical": "site/features/planner/model/plannerPermissions.ts",
+    "_commandRegistry": "site/features/planner/open3d/lib/commands/plannerAccessContext.ts",
+    "_apiAuth": "site/lib/api/withAuth.ts + site/app/api/admin/_lib/server.ts requireAdminSession",
+    "_guestAllowedActions": ["view", "select"],
+    "_guestBlockedActions": ["persist", "import", "export", "publish", "share"],
+    "_guestBlockedCommands": ["save", "export-plan", "import-plan", "open-file", "print"],
+    "_descriptor422Codes": ["422.invalid", "422.version_mismatch"],
+    "_authApiCodes": ["AUTH_REQUIRED", "INSUFFICIENT_PERMISSIONS"]
+  },
   "publicGuestRoutes": [
     "/choose-product?mode=guest",
     "/planner/guest",

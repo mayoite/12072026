@@ -3,7 +3,7 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createElement, type PropsWithChildren } from "react";
 
-import { useOpen3dWorkspaceCatalog } from "@/features/planner/open3d/catalog/useOpen3dWorkspaceCatalog";
+import { useOpen3dWorkspaceCatalog, useOpen3dSvgCatalog } from "@/features/planner/open3d/catalog/useOpen3dWorkspaceCatalog";
 import type { Open3dCatalogItem } from "@/features/planner/open3d/catalog/catalogTypes";
 
 function renderCatalogHook() {
@@ -19,6 +19,10 @@ function renderCatalogHook() {
 describe("useOpen3dWorkspaceCatalog", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+  });
+
+  it("exports useOpen3dSvgCatalog as the Phase 06 plan alias", () => {
+    expect(useOpen3dSvgCatalog).toBe(useOpen3dWorkspaceCatalog);
   });
 
   it("loads live catalog items from the configurator API", async () => {

@@ -3,6 +3,10 @@ export * from "./catalogQuery";
 export * from "./catalogSearch";
 export * from "./proofCatalog";
 export * from "./placementAction";
+export {
+  useOpen3dWorkspaceCatalog,
+  useOpen3dSvgCatalog,
+} from "./useOpen3dWorkspaceCatalog";
 
 // Full wiring for PLAN-FAIL-0405/0419 fixed: loader reexport enables consumers (catalogClient.loadDescriptorsFromLoader + mapping + resolveBlocks using blocks; useOpen3dWorkspaceCatalog; inventory/InventoryPanel).
 // catalogue-first (descriptors primary), search parity (cursor/facets), resolver blocks wiring. Client [] addressed, inventory now consumes getAll.

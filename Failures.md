@@ -20,6 +20,7 @@ Skipped items must be declared. Shell works; gates are runnable.
 
 - Read this file before running release gates (`START.md` → `pnpm run release:gate`).
 - **Agent default:** do not run Playwright, browser automation, or full E2E on every task; prefer targeted Vitest, typecheck, and HTTP/API probes (`AGENTS.md` §Browser / E2E). Full browser/E2E is for explicit user request, release gate, or closing `PLAN-FAIL-0412` — not routine slice work.
+- **Agent default:** do not run the full test suite or `test:coverage` after each planner phase/slice; run only Vitest files/patterns for the changed surface unless the user asks or a release/ship claim requires it (`AGENTS.md` §Test runs; `PLAN-FAIL-0413`, `0408`).
 - Coverage hard floor: **90%** statements/branches/functions/lines globally and per handwritten production file (`plans/2026-07-05_phase1-execution/quality-gates.md`). Target **95%**.
 - A passing assertion count with missing console output or artifacts is **INCOMPLETE**, not passed.
 - Log blockers and skips here; move resolved items to `resolved-failures.md`.

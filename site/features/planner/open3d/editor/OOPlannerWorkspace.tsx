@@ -24,7 +24,7 @@ import { setActiveFloor } from "../model/operations/pureActions";
 import { createRectangularRoomProject } from "../model/project";
 import { preflightOpen3dExport } from "../shared/export/exportPreflight";
 import { downloadJSON, downloadSVG } from "../shared/export/exportUtils";
-import { useOpen3dWorkspaceCatalog } from "../catalog/useOpen3dWorkspaceCatalog";
+import { useOpen3dSvgCatalog } from "../catalog/useOpen3dWorkspaceCatalog";
 import { CanvasToolRail } from "./CanvasToolRail";
 import { CommandPalette } from "./CommandPalette";
 import { InventoryPanel } from "./InventoryPanel";
@@ -102,7 +102,7 @@ export function OOPlannerWorkspace({
     planId,
     { hydrated },
   );
-  const catalog = useOpen3dWorkspaceCatalog();
+  const catalog = useOpen3dSvgCatalog();
   const restoreSnapshotRef = useRef(autosave.restoreSnapshot);
   useLayoutEffect(() => {
     restoreSnapshotRef.current = autosave.restoreSnapshot;

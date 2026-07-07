@@ -42,15 +42,13 @@ import {
 } from "../catalog/catalogSearch";
 import type { Open3dCatalogItem } from "../catalog/catalogTypes";
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
-import { Open3dCatalogClient } from "../catalog/catalogClient";
 import { isSvgAssetUrl } from "../catalog/svg/svgPreviewAssets";
+import { useOpen3dSvgCatalog } from "../catalog/useOpen3dWorkspaceCatalog";
 import styles from "./inventory.module.css";
 
 // Wiring for PLAN-FAIL-0405/0419: inventory consumer calls svgBlockDescriptorLoader via catalogClient (catalogue-first primary descriptors, resolver blocks, search parity facets).
+// Phase 06: useOpen3dSvgCatalog in panel when catalogItems prop is omitted; workspace may still pass live items.
 // Cites: BP-06, design §9/10 (Features: catalogue-first + Sketchfab cursor/facet parity), GS, phase-06. Fuse for local rank, RAC owns a11y.
-const inventoryClientRef: { current: Open3dCatalogClient | null } = {
-  current: null,
-};
 
 export interface InventoryPanelProps {
   /** Initial panel state */
@@ -90,6 +88,8 @@ export const InventoryPanel = memo(function InventoryPanel({
 }: InventoryPanelProps) {
   const id = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const hasExternalCatalog = catalogItems !== undefined;
+  const svgCatalog = useOpen3dSvgCatalog();
   const [state, setState] = useState<InventoryPanelState>(
     initialState ?? defaultInventoryPanelState(),
   );
@@ -102,21 +102,21 @@ export const InventoryPanel = memo(function InventoryPanel({
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
 
-  const indexedItems = useMemo(
-    () =>
-      catalogItems && catalogItems.length > 0
-        ? catalogItems
-        : OPEN3D_DEMO_CATALOG_ITEMS,
-    [catalogItems],
-  );
+  const indexedItems = useMemo(() => {
+    if (hasExternalCatalog) {
+      return catalogItems!.length > 0 ? catalogItems! : OPEN3D_DEMO_CATALOG_ITEMS;
+    }
+    return svgCatalog.items.length > 0
+      ? svgCatalog.items
+      : OPEN3D_DEMO_CATALOG_ITEMS;
+  }, [hasExternalCatalog, catalogItems, svgCatalog.items]);
+
+  const effectiveStatus = hasExternalCatalog ? catalogStatus : svgCatalog.status;
+  const effectiveLoading = hasExternalCatalog
+    ? isLoading
+    : svgCatalog.isLoading && svgCatalog.items.length === 0;
 
   // Catalogue loading: React Query (in hook) owns remote; here local Fuse ranking (after server filter) + RAC for search/collection.
-  // GS cite: BP-06 svgBlockDescriptorLoader consumer + search parity; REC-02 Sketchfab cursor cap<=24; REC-04 catalogue-first sidebar; anti-copy: semantic tokens only.
-  useEffect(() => {
-    if (!inventoryClientRef.current)
-      inventoryClientRef.current = new Open3dCatalogClient();
-    void inventoryClientRef.current.loadDescriptorsFromLoader();
-  }, [indexedItems]);
 
   useEffect(() => {
     setFocusedIndex(-1);
@@ -536,19 +536,19 @@ export const InventoryPanel = memo(function InventoryPanel({
         <span className={styles.resultsCount}>
           {displayedItems.length} item{displayedItems.length !== 1 ? "s" : ""}
         </span>
-        {catalogStatus === "stale" ? (
+        {effectiveStatus === "stale" ? (
           <span className={styles.resultsStatus} aria-live="polite">
             Refreshing…
           </span>
-        ) : catalogStatus === "offline" ? (
+        ) : effectiveStatus === "offline" ? (
           <span className={styles.resultsStatus}>Offline</span>
-        ) : catalogStatus === "fallback" ? (
+        ) : effectiveStatus === "fallback" ? (
           <span className={styles.resultsStatus}>Offline catalog</span>
         ) : null}
       </div>
 
       {/* Loading/empty/grid — lifecycle badges above stay visible; never replace results (E2E + REC-04). */}
-      {(isLoading || catalogStatus === "loading") &&
+      {(effectiveLoading || effectiveStatus === "loading") &&
       displayedItems.length === 0 &&
       indexedItems.length === 0 ? (
         <div className={styles.loadingState}>
@@ -556,7 +556,7 @@ export const InventoryPanel = memo(function InventoryPanel({
           <span>Loading inventory...</span>
           <div className={styles.skeleton} />
         </div>
-      ) : catalogStatus === "error" && displayedItems.length === 0 ? (
+      ) : effectiveStatus === "error" && displayedItems.length === 0 ? (
         <section className={styles.emptyState} aria-label="Catalog browser" data-state="error">
           <p>Error loading catalog.</p>
           <button
