@@ -1,0 +1,13 @@
+﻿
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/planner-model-plannerPermissions.test.ts (2 tests) 6ms
+ Γ£ô tests/unit/features/planner/open3d/persistence/permissions.test.ts (40 tests) 14ms
+ Γ£ô tests/unit/features/planner/open3d/phase07-auth-permissions.test.ts (7 tests) 14ms
+
+ Test Files  3 passed (3)
+      Tests  49 passed (49)
+   Start at  18:23:56
+   Duration  2.14s (transform 481ms, setup 2.03s, import 385ms, tests 35ms, environment 2.53s)
+
+JSON report written to D:/OandO07072026/results/tests/vitest-results.json

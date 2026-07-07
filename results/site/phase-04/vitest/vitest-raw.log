@@ -1,0 +1,23 @@
+﻿
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/admin/svg-editor/svgPackageBoundaries.test.ts (3 tests) 10ms
+ Γ£ô tests/unit/app/admin/svg-editor/page.test.tsx (1 test) 40ms
+ Γ£ô tests/unit/admin/svg-editor/svgFoundation.test.ts (2 tests) 21ms
+ Γ£ô tests/unit/admin/svg-editor/puckBlockRegistry.test.ts (24 tests) 21ms
+ Γ£ô tests/unit/app/admin/svg-editor/[id]/page.test.tsx (4 tests) 49ms
+ Γ£ô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts (5 tests) 88ms
+ Γ£ô tests/unit/app/api/admin/svg-editor/route.test.ts (6 tests) 20ms
+ Γ£ô tests/unit/app/api/admin/svg-editor/phase04-admin-taxonomy.test.ts (2 tests) 21ms
+ Γ£ô tests/unit/admin/svg-editor/persistBlockDescriptor.test.ts (13 tests) 122ms
+ Γ£ô tests/unit/admin/svg-editor/svgPhase1Completion.test.ts (11 tests) 4431ms
+     Γ£ô renders canonical PNG and deterministic Sharp derivatives  1738ms
+     Γ£ô locks and uses SVGO plugin configuration (integration)  986ms
+     Γ£ô full end-to-end: admin draft/preview (V1 compile), publish/revision (disk via persist), planner 2D placement (resolver), thumb png, reload for fixed+configurable+parametric refs  1651ms
+
+ Test Files  10 passed (10)
+      Tests  71 passed (71)
+   Start at  17:54:05
+   Duration  10.60s (transform 2.46s, setup 9.84s, import 6.49s, tests 4.82s, environment 15.65s)
+
+JSON report written to D:/OandO07072026/results/tests/vitest-site-results.json

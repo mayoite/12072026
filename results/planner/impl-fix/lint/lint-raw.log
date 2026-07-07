@@ -1,0 +1,1 @@
+ESLint scoped run on planner fixes: exit 0 for targets (see json). Pre-existing issues in panels (unused vars, set-state-in-effect in Inventory) not touched (unrelated to task, per AGENTS min + Failures.md).

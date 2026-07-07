@@ -1,0 +1,64 @@
+﻿Γû▓ Next.js 16.2.9 (Turbopack)
+- Experiments (use with caution):
+  ┬╖ optimizePackageImports
+
+  Creating an optimized production build ...
+node.exe : Turbopack build encountered 1 warnings:
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Turbopack build encountered 1 warnings::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+./site/next.config.js
+Encountered unexpected file in NFT list
+A file was traced that indicates that the whole project was traced unintentionally. Somewhere in the import trace 
+below, there are:
+- filesystem operations (like path.join, path.resolve or fs.readFile), or
+- very dynamic requires (like require('./' + foo)).
+To resolve this, you can
+- remove them if possible, or
+- only use them in development, or
+- make sure they are statically scoped to some subfolder: path.join(process.cwd(), 'data', bar), or
+- add ignore comments: path.join(/*turbopackIgnore: true*/ process.cwd(), bar)
+
+Import trace:
+  App Route:
+    ./site/next.config.js
+    ./site/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts
+    ./site/features/planner/admin/svg-editor/persistBlockDescriptor.ts
+    ./site/app/api/admin/svg-editor/route.ts
+
+
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./site/app/planner/open3d/page.tsx:7:27
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+  [90m 5 |[0m [36mexport[0m [36mconst[0m dynamic = [32m"force-dynamic"[0m;
+  [90m 6 |[0m
+[31m[1m>[0m [90m 7 |[0m [36mconst[0m [33mOpen3dPlannerHost[0m = nextDynamic(
+  [90m   |[0m                           [31m[1m^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 8 |[0m   () => [36mimport[0m([32m"@/features/planner/ui/Open3dPlannerHost"[0m).then((mod) => 
+({ [36mdefault[0m: mod.[33mOp...[0m
+  [90m   |[0m 
+[31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 9 |[0m   { loading: () => <[33mPlannerSkeleton[0m />, ssr: [36mfalse[0m },
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m10 |[0m );
+  [90m   |[0m [31m[1m^[0m
+  [90m11 |[0m
+  [90m12 |[0m /**
+  [90m13 |[0m  * [33mNative[0m [33mOpen3D[0m pilot route ΓÇö not the [36mdefault[0m guest/canvas entry.
+
+Ecmascript file had an error
+
+Import trace:
+  App Route:
+    ./site/app/planner/open3d/page.tsx
+    ./site/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts
+    ./site/features/planner/admin/svg-editor/persistBlockDescriptor.ts
+    ./site/app/api/admin/svg-editor/route.ts
+
+
+    at <unknown> (./site/app/planner/open3d/page.tsx:7:27)

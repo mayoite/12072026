@@ -104,7 +104,8 @@ export const InventoryPanel = memo(function InventoryPanel({
 
   const indexedItems = useMemo(() => {
     if (hasExternalCatalog) {
-      return catalogItems!.length > 0 ? catalogItems! : OPEN3D_DEMO_CATALOG_ITEMS;
+      const external = catalogItems ?? [];
+      return external.length > 0 ? external : OPEN3D_DEMO_CATALOG_ITEMS;
     }
     return svgCatalog.items.length > 0
       ? svgCatalog.items
@@ -119,7 +120,6 @@ export const InventoryPanel = memo(function InventoryPanel({
   // Catalogue loading: React Query (in hook) owns remote; here local Fuse ranking (after server filter) + RAC for search/collection.
 
   useEffect(() => {
-    setFocusedIndex(-1);
     onSearch?.(state.searchQuery);
   }, [state.searchQuery, onSearch]);
 
@@ -129,15 +129,16 @@ export const InventoryPanel = memo(function InventoryPanel({
   }, []);
 
   // Handle search input change
-  const handleSearchChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch({ type: "SET_SEARCH_QUERY", query: event.target.value });
+  const handleSearchValueChange = useCallback(
+    (query: string) => {
+      setFocusedIndex(-1);
+      dispatch({ type: "SET_SEARCH_QUERY", query });
     },
     [dispatch],
   );
 
-  // Clear search
   const handleClearSearch = useCallback(() => {
+    setFocusedIndex(-1);
     dispatch({ type: "CLEAR_SEARCH" });
     searchInputRef.current?.focus();
   }, [dispatch]);
@@ -380,7 +381,7 @@ export const InventoryPanel = memo(function InventoryPanel({
       <div className={styles.searchSection}>
         <SearchField
           value={state.searchQuery}
-          onChange={(val) => dispatch({ type: "SET_SEARCH_QUERY", query: val })}
+          onChange={handleSearchValueChange}
           className={styles.searchWrapper}
           aria-label="Search catalog elements"
         >
@@ -595,6 +596,7 @@ export const InventoryPanel = memo(function InventoryPanel({
                 <article
                   className={`pw-catalog-card ${styles.itemCard} ${selectedItemId === item.id ? styles.itemCardSelected : ""} ${focusedIndex === index ? styles.itemCardFocused : ""}`}
                   onClick={() => handleItemClick(item)}
+                  onDoubleClick={(event) => handleItemDoubleClick(item, event)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") handleItemClick(item);
                   }}

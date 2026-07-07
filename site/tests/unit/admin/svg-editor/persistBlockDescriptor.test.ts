@@ -79,7 +79,7 @@ afterEach(() => {
 });
 
 describe("04-PERSIST: schema acceptance surface", () => {
-  it("accepts a well-formed fixed descriptor and writes it to {slug}.json", () => {
+  it("accepts a well-formed fixed descriptor and writes versioned files", () => {
     const input = fixedDescriptorFixture();
     const result = persistBlockDescriptor(input, {
       dir: workDir,
@@ -89,7 +89,7 @@ describe("04-PERSIST: schema acceptance surface", () => {
     if (!result.ok) return;
     expect(result.descriptor.slug).toBe("chaise");
     expect(result.descriptor.variant).toBe("fixed");
-    expect(result.path).toBe(path.resolve(workDir, "chaise.json"));
+    expect(result.path).toBe(path.resolve(workDir, "chaise.1.json"));
     expect(result.replaced).toBe(false);
     expect(existsSync(result.path)).toBe(true);
   });
@@ -173,7 +173,7 @@ describe("04-PERSIST: atomic-rename behaviour", () => {
     expect(entries.some((entry) => entry.startsWith(".chaise.tmp-"))).toBe(false);
   });
 
-  it("writes a rotation history file when writeHistory option is true", () => {
+  it("writes archive retention and versioned files when writeHistory option is true", () => {
     const result = persistBlockDescriptor(fixedDescriptorFixture(), {
       dir: workDir,
       clock: () => 1700000000,
@@ -183,11 +183,11 @@ describe("04-PERSIST: atomic-rename behaviour", () => {
     if (!result.ok) return;
 
     const entries = readdirSync(workDir);
-    const historyEntries = entries.filter(
-      (entry) => entry.startsWith("chaise.1700000000-") && entry.endsWith(".json"),
-    );
-    expect(historyEntries).toHaveLength(1);
-    expect(result.historyPath).toContain("chaise.1700000000-");
+    expect(entries).toContain("chaise.json");
+    expect(entries).toContain("chaise.1.json");
+    expect(entries).toContain("chaise.latest.json");
+    expect(result.version).toBe(1);
+    expect(result.historyPath).toContain("chaise.latest.json");
   });
 
   it("parses the written JSON back through the canonical Zod schema", () => {

@@ -1,0 +1,13 @@
+﻿{
+    "name":  "site-build-full",
+    "module":  "site",
+    "phase":  "build",
+    "command":  "cd \u0027D:\\oandO04072026\u0027; pnpm --filter oando-site build",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-06T22:16:08.5933550+05:30",
+    "endUtc":  "2026-07-06T22:16:11.8899384+05:30",
+    "durationSec":  3.297,
+    "exitCode":  1,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\build\\site-build-full\\site-build-full-raw.log"
+}

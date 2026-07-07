@@ -1,0 +1,9 @@
+=== PLAN-FAIL-0412 runtime probe @ 2026-07-07T13:20:36.792Z ===
+pass=false
+adminEditor status=200 pass=true
+portalCatalog status=200 pass=true
+portalSlug status=200 pass=true
+plannerGuest status=500 pass=false
+plannerOpen3d status=500 pass=false
+adminApi=500
+catalogApi=500

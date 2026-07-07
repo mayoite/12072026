@@ -1,34 +1,26 @@
 /**
- * Phase 04 — persistBlockDescriptor (atomic JSON-on-disk writer)
+ * Phase 04 + 08 — persistBlockDescriptor (versioned JSON-on-disk writer)
  *
- * §04-ADMIN-06: API parses BlockDescriptor via Zod → atomic rename
- * `site/block-descriptors/{slug}.json` so concurrent readers never observe a
- * partial state. Optional rotation (`.{n}.json` history) is recorded in the
- * same atomic op sequence but the loader always reads `{slug}.json`.
- *
- * Authority: Phase 02 §02-LOAD README forbids parallel write helpers in
- * admin/portal/planner routes. This file is a thin I/O wrapper that calls
- * the canonical `freezeFreshDescriptor` and the canonical schema parser;
- * no `any`, no `@ts-ignore`, no eslint-disable.
- *
- * I/O boundaries:
- *   - The temp file path is constructed under the loader dir to avoid
- *     cross-volume rename failure on Windows-NTFS / Linux.
- *   - `renameSync` (not `rename` async) keeps the swap atomic from the
- *     OS's perspective; the caller awaits the sync result.
- *   - On rollback, the previous file is restored verbatim. The rollback
- *     is itself an atomic-rename of the prior version back into place.
+ * §04-ADMIN-06 / §08-PERS-02..12:
+ *   - `{slug}.{n}.json` rotation with `{slug}.latest.json` pointer
+ *   - `O_EXCL` advisory lock (`409.lock_busy`)
+ *   - Atomic rename + fsync; legacy `{slug}.json` mirror for transition
+ *   - Rolling `_archive/` retention and post-write dual-read verification
  */
 
 import {
+  closeSync,
+  copyFileSync,
+  existsSync,
+  fsyncSync,
   mkdirSync,
+  openSync,
   readFileSync,
   renameSync,
   rmSync,
-  statSync,
   unlinkSync,
   writeFileSync,
-  existsSync,
+  writeSync,
 } from "node:fs";
 import path from "node:path";
 
@@ -50,14 +42,31 @@ import {
   loadAll as loaderLoadAll,
 } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
 
+import { retainDescriptorArchive } from "./descriptorArchive";
+import {
+  acquireDescriptorLock,
+  type AcquireDescriptorLockOptions,
+} from "./descriptorLock";
+import {
+  buildPointer,
+  legacyDescriptorPath,
+  readLatestPointer,
+  resolveCurrentVersion,
+  versionedDescriptorPath,
+  writeLatestPointer,
+} from "@/features/planner/open3d/catalog/svg/descriptorPointer";
+import { verifyDualRead, writeDualReadEvidence } from "./dualReadHarness";
+
 /** Reasons surfaced to the per-route `withAuth` envelope. */
 export type PersistErrorReason =
   | "invalid"
   | "versionMismatch"
   | "hashMismatch"
+  | "lockBusy"
   | "ioError"
   | "pathEscape"
-  | "existsAfterAtomicRename";
+  | "existsAfterAtomicRename"
+  | "dualReadMismatch";
 
 export interface PersistError {
   readonly reason: PersistErrorReason;
@@ -70,12 +79,16 @@ export interface PersistError {
 export interface PersistSuccess {
   readonly ok: true;
   readonly descriptor: BlockDescriptor;
-  /** Absolute path of the canonical file written this run. */
+  /** Absolute path of the versioned file written this run. */
   readonly path: string;
-  /** History path slot` {slug}.{generatedAt}.json` written this run. */
+  /** Pointer path updated this run. */
   readonly historyPath: string;
-  /** True iff a prior canonical file was replaced. */
+  /** True iff a prior version existed. */
   readonly replaced: boolean;
+  /** Monotonic version number committed this run. */
+  readonly version: number;
+  /** Dual-read evidence path when captureDualReadEvidence is enabled. */
+  readonly dualReadEvidencePath?: string;
 }
 
 export interface PersistFailure {
@@ -90,15 +103,17 @@ export interface PersistOptions {
   dir?: string;
   /** Stamp a deterministic `generatedAt` (useful for tests). */
   clock?: () => number;
-  /**
-   * When true (default false) the writer also emits a history file at
-   * `{slug}.{generatedAt}.json` so the rotation pattern is preserved. Skip
-   * history in tests to keep the file tree minimal.
-   */
+  /** Retain rolling archive copies (default true). */
+  writeArchive?: boolean;
+  /** @deprecated Use writeArchive. */
   writeHistory?: boolean;
+  /** Capture dual-read evidence under results/site/phase-08/dual-read/. */
+  captureDualReadEvidence?: boolean;
+  /** Optional results root override for dual-read evidence. */
+  dualReadResultsRoot?: string;
+  lock?: AcquireDescriptorLockOptions;
 }
 
-/** Output regex helper (mirrors BLOCK_DESCRIPTOR_SLUG_REGEX so we never drift). */
 function sanitizeSlug(slug: string): Open3dResult<string, PersistError> {
   if (typeof slug !== "string") {
     return {
@@ -139,45 +154,56 @@ function coerceOpen3dError(error: Open3dDescriptorError): PersistError {
   };
 }
 
-function buildHistoryPath(slug: string, generatedAt: number, dir: string): string {
-  // generatedAt is an integer; a wide-random suffix avoids cross-write
-  // collisions when two operators use the same clock value.
-  const suffix = randomBytes(4).toString("hex");
-  return path.resolve(dir, `${slug}.${generatedAt}-${suffix}.json`);
-}
-
-function buildTempPath(slug: string, dir: string): string {
+function buildTempPath(slug: string, dir: string, nextVersion: number): string {
   const suffix = randomBytes(8).toString("hex");
-  return path.resolve(dir, `.${slug}.tmp-${suffix}`);
+  return path.resolve(dir, `.${slug}.${nextVersion}.tmp-${suffix}`);
 }
 
-/**
- * Production writes stay pinned to the canonical descriptor directory.
- * Test-only overrides may point at isolated temp folders.
- */
 function ensureDir(dir?: string): Open3dResult<string, PersistError> {
   if (typeof dir === "string" && dir.length > 0) {
     return { ok: true, value: path.resolve(dir) };
   }
-
   return { ok: true, value: path.resolve(BLOCK_DESCRIPTORS_DIR_DEFAULT) };
 }
 
-/**
- * Atomically persist a `BlockDescriptor` to `site/block-descriptors/{slug}.json`.
- *
- * Steps:
- *   1. Sanitize slug against the canonical regex.
- *   2. Parse + freeze the input through the Phase 02 canonical surface
- *      (`parseBlockDescriptor`, `freezeFreshDescriptor`).
- *   3. Write the canonical JSON to a `.tmp-{random}` sibling file.
- *   4. Atomically rename the temp file over `{slug}.json`.
- *   5. Optionally write a `{slug}.{generatedAt}-{rand}.json` history file.
- *   6. Clear the loader cache so subsequent reads see the new file.
- *
- * Concurrent invocations serialize through `renameSync` on POSIX
- * (atomic), and on Windows NTFS via MoveFileEx semantics.
- */
+function readCurrentRaw(slug: string, dir: string): string | null {
+  const pointer = readLatestPointer(slug, dir);
+  if (pointer) {
+    const versioned = versionedDescriptorPath(slug, pointer.n, dir);
+    if (existsSync(versioned)) return readFileSync(versioned, "utf8");
+  }
+  const legacy = legacyDescriptorPath(slug, dir);
+  if (!existsSync(legacy)) return null;
+  return readFileSync(legacy, "utf8");
+}
+
+function writeAtomicUtf8(targetPath: string, body: string): void {
+  const fd = openSync(targetPath, "wx");
+  try {
+    writeSync(fd, body);
+    fsyncSync(fd);
+  } finally {
+    closeSync(fd);
+  }
+}
+
+function canonicalJsonStringify(value: BlockDescriptor): string {
+  return JSON.stringify(sortObjectKeys(value));
+}
+
+function sortObjectKeys(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(sortObjectKeys);
+  if (value && typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    const sorted: Record<string, unknown> = {};
+    for (const key of Object.keys(record).sort()) {
+      sorted[key] = sortObjectKeys(record[key]);
+    }
+    return sorted;
+  }
+  return value;
+}
+
 export function persistBlockDescriptor(
   input: unknown,
   options: PersistOptions = {},
@@ -189,7 +215,6 @@ export function persistBlockDescriptor(
   const dir = dirResult.value;
   mkdirSync(dir, { recursive: true });
 
-  // Step 1 + Step 2: schema-side validation (Phase 02 surface).
   if (!input || typeof input !== "object") {
     return {
       ok: false,
@@ -236,13 +261,21 @@ export function persistBlockDescriptor(
     return slugCheck satisfies PersistFailure as PersistFailure;
   }
   const slug = slugCheck.value;
-  const canonicalPath = path.resolve(dir, `${slug}.json`);
-  const replaced = existsSync(canonicalPath);
+
+  const lockResult = acquireDescriptorLock(slug, dir, options.lock);
+  if (!lockResult.ok) {
+    return { ok: false, error: lockResult.error };
+  }
+  const releaseLock = lockResult.handle.release;
+
+  const currentVersion = resolveCurrentVersion(slug, dir);
+  const replaced = currentVersion > 0;
+  const previousRaw = readCurrentRaw(slug, dir);
+  const rollbackBuffer: string | null = previousRaw;
 
   let shapeForFreeze: Record<string, unknown> = shape;
-  if (replaced) {
+  if (previousRaw) {
     try {
-      const previousRaw = readFileSync(canonicalPath, "utf8");
       const previousParsed = parseBlockDescriptor(JSON.parse(previousRaw) as unknown);
       if (previousParsed.ok) {
         const previousGeneratedAt = previousParsed.value.generatedAt;
@@ -250,6 +283,7 @@ export function persistBlockDescriptor(
           typeof shape.generatedAt === "number" &&
           shape.generatedAt !== previousGeneratedAt
         ) {
+          releaseLock();
           return {
             ok: false,
             error: {
@@ -273,37 +307,55 @@ export function persistBlockDescriptor(
   const clock = options.clock ?? (() => Math.floor(Date.now()));
   const frozen = freezeFreshDescriptor(shapeForFreeze, clock);
   if (!frozen.ok) {
+    releaseLock();
     return { ok: false, error: coerceOpen3dError(frozen.error) };
   }
   const descriptor = frozen.value;
 
   const reparse = parseBlockDescriptor(descriptor);
   if (!reparse.ok) {
+    releaseLock();
     return { ok: false, error: coerceOpen3dError(reparse.error) };
   }
 
-  const tempPath = buildTempPath(slug, dir);
-  const body = canonicalJsonStringify(descriptor);
+  const nextVersion = currentVersion + 1;
+  const versionedPath = versionedDescriptorPath(slug, nextVersion, dir);
+  const legacyPath = legacyDescriptorPath(slug, dir);
+  const tempPath = buildTempPath(slug, dir, nextVersion);
+  const body = `${canonicalJsonStringify(descriptor)}\n`;
 
-  let historyPath = canonicalPath;
   try {
-    writeFileSync(tempPath, `${body}\n`, { encoding: "utf8", flag: "wx" });
-    renameSync(tempPath, canonicalPath);
-    if (replaced) {
-      // previous file already swapped out by renameSync; nothing to clean.
-    }
-    if (options.writeHistory) {
-      historyPath = buildHistoryPath(slug, descriptor.generatedAt ?? 0, dir);
-      writeFileSync(historyPath, `${body}\n`, { encoding: "utf8", flag: "wx" });
+    writeAtomicUtf8(tempPath, body);
+    renameSync(tempPath, versionedPath);
+    copyFileSync(versionedPath, legacyPath);
+    writeLatestPointer(
+      buildPointer(slug, nextVersion, descriptor.checksum),
+      dir,
+    );
+    if (options.writeArchive !== false && options.writeHistory !== false) {
+      retainDescriptorArchive(slug, dir, nextVersion);
     }
   } catch (cause) {
     const detail = cause instanceof Error ? cause.message : String(cause);
-    // Best-effort cleanup; missing temp file is harmless.
     try {
       if (existsSync(tempPath)) rmSync(tempPath, { force: true });
     } catch {
       /* ignore */
     }
+    if (rollbackBuffer && currentVersion > 0) {
+      try {
+        const versionedCurrent = versionedDescriptorPath(slug, currentVersion, dir);
+        const rollbackTarget = existsSync(versionedCurrent)
+          ? versionedCurrent
+          : legacyPath;
+        const rollbackTemp = `${rollbackTarget}.rollback-${randomBytes(4).toString("hex")}`;
+        writeFileSync(rollbackTemp, rollbackBuffer, "utf8");
+        renameSync(rollbackTemp, rollbackTarget);
+      } catch {
+        // Rollback is best-effort; original error still surfaces.
+      }
+    }
+    releaseLock();
     return {
       ok: false,
       error: {
@@ -315,24 +367,42 @@ export function persistBlockDescriptor(
     };
   }
 
-  // Invalidate loader cache so the new descriptor is observable.
   clearLoaderCache();
+  const dualRead = verifyDualRead({ slug, dir, expected: descriptor });
+  if (!dualRead.pass) {
+    releaseLock();
+    return {
+      ok: false,
+      error: {
+        reason: "dualReadMismatch",
+        code: "500.dual_read",
+        fieldPath: `slug:${slug}`,
+        message: `Dual-read verification failed for "${slug}" after persist`,
+      },
+    };
+  }
+
+  let dualReadEvidencePath: string | undefined;
+  if (options.captureDualReadEvidence) {
+    dualReadEvidencePath = writeDualReadEvidence(
+      dualRead,
+      options.dualReadResultsRoot,
+    );
+  }
+
+  releaseLock();
 
   return {
     ok: true,
     descriptor,
-    path: canonicalPath,
-    historyPath,
+    path: versionedPath,
+    historyPath: path.resolve(dir, `${slug}.latest.json`),
     replaced,
+    version: nextVersion,
+    dualReadEvidencePath,
   };
 }
 
-/**
- * Compose `freezeFreshDescriptor` + parseBlockDescriptor so callers (the
- * API route handler) can validate the admin payload against the canonical
- * schema before persisting. Returns a typed `Open3dResult`-shaped envelope
- * so route handlers thread it through `toOpen3dDescriptorErrorHttp`.
- */
 export function parseAdminPayload(input: unknown): Open3dResult<
   BlockDescriptor,
   Open3dDescriptorError
@@ -355,58 +425,29 @@ export function parseAdminPayload(input: unknown): Open3dResult<
   return parseBlockDescriptor(frozen.value);
 }
 
-/**
- * Convenience: list all known descriptors via the canonical loader. Pure
- * pass-through so the API route can call a single, narrow surface; the
- * pass-through also clears the loader cache after `persistBlockDescriptor`
- * has already invalidated it.
- */
 export function listBlockDescriptors(
   options?: string | { dir?: string; forceReload?: boolean },
 ): BlockDescriptor[] {
   if (typeof options === "string") {
     return loaderLoadAll({ dir: options });
   }
-
   return loaderLoadAll(options);
 }
 
-/**
- * Read the previously-saved raw JSON for a slug before a save (used by
- * tests that need to confirm history rotation, not by the live API path).
- */
 export function readPersistedRaw(slug: string, dir?: string): string | null {
-  const target = path.resolve(dir ?? BLOCK_DESCRIPTORS_DIR_DEFAULT, `${slug}.json`);
-  if (!existsSync(target)) return null;
-  const stats = statSync(target);
-  if (!stats.isFile()) return null;
-  return readFileSync(target, "utf8");
+  return readCurrentRaw(slug, dir ?? BLOCK_DESCRIPTORS_DIR_DEFAULT);
 }
 
-/**
- * Re-export an explicit cleanup helper for tests (the `unlink` of an
- * exported artifact). Production callers never need this.
- */
 export function unlinkBlockDescriptor(slug: string, dir?: string): void {
-  const target = path.resolve(dir ?? BLOCK_DESCRIPTORS_DIR_DEFAULT, `${slug}.json`);
-  if (!existsSync(target)) return;
-  unlinkSync(target);
-}
-
-/** Canonical JSON: keys sorted, `BigInt` → number (admin never persists BI). */
-function canonicalJsonStringify(value: BlockDescriptor): string {
-  return JSON.stringify(sortObjectKeys(value));
-}
-
-function sortObjectKeys(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(sortObjectKeys);
-  if (value && typeof value === "object") {
-    const record = value as Record<string, unknown>;
-    const sorted: Record<string, unknown> = {};
-    for (const key of Object.keys(record).sort()) {
-      sorted[key] = sortObjectKeys(record[key]);
-    }
-    return sorted;
+  const targetDir = dir ?? BLOCK_DESCRIPTORS_DIR_DEFAULT;
+  const legacy = legacyDescriptorPath(slug, targetDir);
+  if (existsSync(legacy)) unlinkSync(legacy);
+  const pointer = readLatestPointer(slug, targetDir);
+  if (pointer) {
+    const versioned = versionedDescriptorPath(slug, pointer.n, targetDir);
+    if (existsSync(versioned)) unlinkSync(versioned);
+    unlinkSync(path.resolve(targetDir, `${slug}.latest.json`));
   }
-  return value;
 }
+
+export { resolveCurrentVersion, readLatestPointer, versionedDescriptorPath };

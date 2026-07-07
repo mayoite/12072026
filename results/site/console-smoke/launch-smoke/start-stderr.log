@@ -1,0 +1,12 @@
+$ pnpm --filter oando-site start
+$ node scripts/startStandalone.cjs
+⨯ The requested resource isn't a valid image for /images/catalog/oando-seating--fluid-x/image-01.webp received null
+⨯ The requested resource isn't a valid image for /images/products/meeting-table-10pax.webp received null
+⨯ The requested resource isn't a valid image for /images/products/softseating-solace-1.webp received null
+⨯ The requested resource isn't a valid image for /images/products/chair-cafeteria.webp received null
+⨯ The requested resource isn't a valid image for /images/catalog/oando-seating--fluid-x/image-01.webp received null
+⨯ The requested resource isn't a valid image for /images/products/meeting-table-10pax.webp received null
+⨯ The requested resource isn't a valid image for /images/products/softseating-solace-1.webp received null
+⨯ The requested resource isn't a valid image for /images/products/chair-cafeteria.webp received null
+⨯ The requested resource isn't a valid image for /images/catalog/oando-seating--fluid-x/image-01.webp received null
+⨯ The requested resource isn't a valid image for /images/products/meeting-table-10pax.webp received null

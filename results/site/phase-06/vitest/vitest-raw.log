@@ -1,0 +1,12 @@
+﻿
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/phase06-inventory-consumer.test.ts (8 tests) 55ms
+ Γ£ô tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts (6 tests) 427ms
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  18:14:48
+   Duration  2.60s (transform 617ms, setup 1.35s, import 864ms, tests 482ms, environment 1.62s)
+
+JSON report written to D:/OandO07072026/results/tests/vitest-results.json

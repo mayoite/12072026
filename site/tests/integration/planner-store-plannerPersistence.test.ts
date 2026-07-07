@@ -9,8 +9,8 @@ const dbMocks = vi.hoisted(() => ({
   delete: vi.fn(),
 }));
 
-vi.mock("@/platform/drizzle/db", () => ({
-  db: dbMocks,
+vi.mock("@/platform/drizzle/adminDb", () => ({
+  adminDb: dbMocks,
 }));
 
 import {

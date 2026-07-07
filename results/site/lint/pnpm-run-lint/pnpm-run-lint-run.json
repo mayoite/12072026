@@ -1,0 +1,6 @@
+﻿{
+    "timestamp":  "2026-07-07T11:04:20.4525736+05:30",
+    "exitCode":  1,
+    "command":  "pnpm run lint",
+    "cwd":  "D:\\oandO04072026"
+}

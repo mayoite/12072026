@@ -1,3 +1,11 @@
+function rotateRight(value: number, count: number): number {
+  return (value >>> count) | (value << (32 - count));
+}
+
+function u32(words: Uint32Array, index: number): number {
+  return words[index] ?? 0;
+}
+
 const ROUND_CONSTANTS = new Uint32Array([
   0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
   0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -13,10 +21,6 @@ const INITIAL_HASH = new Uint32Array([
   0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
   0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
 ]);
-
-function rotateRight(value: number, count: number): number {
-  return (value >>> count) | (value << (32 - count));
-}
 
 /** Dependency-free synchronous SHA-256 for shared browser/server descriptor validation. */
 export function sha256Hex(input: string): string {
@@ -39,39 +43,49 @@ export function sha256Hex(input: string): string {
       words[index] = view.getUint32(offset + index * 4, false);
     }
     for (let index = 16; index < 64; index += 1) {
-      const left = words[index - 15]!;
-      const right = words[index - 2]!;
+      const left = u32(words, index - 15);
+      const right = u32(words, index - 2);
       const sigma0 = rotateRight(left, 7) ^ rotateRight(left, 18) ^ (left >>> 3);
       const sigma1 = rotateRight(right, 17) ^ rotateRight(right, 19) ^ (right >>> 10);
-      words[index] = (words[index - 16]! + sigma0 + words[index - 7]! + sigma1) >>> 0;
+      words[index] =
+        (u32(words, index - 16) + sigma0 + u32(words, index - 7) + sigma1) >>> 0;
     }
 
-    let [a, b, c, d, e, f, g, h] = hash;
+    let a = u32(hash, 0);
+    let b = u32(hash, 1);
+    let c = u32(hash, 2);
+    let d = u32(hash, 3);
+    let e = u32(hash, 4);
+    let f = u32(hash, 5);
+    let g = u32(hash, 6);
+    let h = u32(hash, 7);
+
     for (let index = 0; index < 64; index += 1) {
-      const sum1 = rotateRight(e!, 6) ^ rotateRight(e!, 11) ^ rotateRight(e!, 25);
-      const choice = (e! & f!) ^ (~e! & g!);
-      const temporary1 = (h! + sum1 + choice + ROUND_CONSTANTS[index]! + words[index]!) >>> 0;
-      const sum0 = rotateRight(a!, 2) ^ rotateRight(a!, 13) ^ rotateRight(a!, 22);
-      const majority = (a! & b!) ^ (a! & c!) ^ (b! & c!);
+      const sum1 = rotateRight(e, 6) ^ rotateRight(e, 11) ^ rotateRight(e, 25);
+      const choice = (e & f) ^ (~e & g);
+      const temporary1 =
+        (h + sum1 + choice + u32(ROUND_CONSTANTS, index) + u32(words, index)) >>> 0;
+      const sum0 = rotateRight(a, 2) ^ rotateRight(a, 13) ^ rotateRight(a, 22);
+      const majority = (a & b) ^ (a & c) ^ (b & c);
       const temporary2 = (sum0 + majority) >>> 0;
       h = g;
       g = f;
       f = e;
-      e = (d! + temporary1) >>> 0;
+      e = (d + temporary1) >>> 0;
       d = c;
       c = b;
       b = a;
       a = (temporary1 + temporary2) >>> 0;
     }
 
-    hash[0] = (hash[0]! + a!) >>> 0;
-    hash[1] = (hash[1]! + b!) >>> 0;
-    hash[2] = (hash[2]! + c!) >>> 0;
-    hash[3] = (hash[3]! + d!) >>> 0;
-    hash[4] = (hash[4]! + e!) >>> 0;
-    hash[5] = (hash[5]! + f!) >>> 0;
-    hash[6] = (hash[6]! + g!) >>> 0;
-    hash[7] = (hash[7]! + h!) >>> 0;
+    hash[0] = (u32(hash, 0) + a) >>> 0;
+    hash[1] = (u32(hash, 1) + b) >>> 0;
+    hash[2] = (u32(hash, 2) + c) >>> 0;
+    hash[3] = (u32(hash, 3) + d) >>> 0;
+    hash[4] = (u32(hash, 4) + e) >>> 0;
+    hash[5] = (u32(hash, 5) + f) >>> 0;
+    hash[6] = (u32(hash, 6) + g) >>> 0;
+    hash[7] = (u32(hash, 7) + h) >>> 0;
   }
 
   return Array.from(hash, (word) => word.toString(16).padStart(8, "0")).join("");

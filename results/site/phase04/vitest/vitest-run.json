@@ -1,0 +1,23 @@
+{
+  "module": "site",
+  "phase": "phase04",
+  "command": "pnpm exec vitest run tests/unit/app/admin/svg-editor tests/unit/app/api/admin/svg-editor tests/unit/admin/svg-editor --config vitest.site.config.ts",
+  "cwd": "site",
+  "revision": "e8f307c43c82f160cacce0d94b0a0f70fa6d1006",
+  "dirtyWorktree": true,
+  "operator": "cursor-agent",
+  "startedAt": "2026-07-07T17:34:52+05:30",
+  "endedAt": "2026-07-07T17:35:02+05:30",
+  "exitCode": 0,
+  "summary": {
+    "testFiles": 10,
+    "testsPassed": 71,
+    "testsFailed": 0,
+    "testsSkipped": 0
+  },
+  "artifacts": {
+    "rawLog": "results/site/phase04/vitest/vitest-raw.log",
+    "structuredReport": "results/tests/vitest-site-results.json"
+  },
+  "checkIds": ["04-ADMIN-01", "04-ADMIN-02", "04-ADMIN-09"]
+}

@@ -1,0 +1,4 @@
+=== Phase 06 inventory probe @ 2026-07-07T12:42:01.461Z ===
+06-INV-01 svg-blocks status=200 count=4 pass=true
+06-TEST-01 sync disk=4 api=4 match=true
+portal/chaise-lounge-001 status=200 slugInHtml=true

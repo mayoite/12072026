@@ -1,0 +1,181 @@
+﻿Γû▓ Next.js 16.2.9 (Turbopack)
+- Experiments (use with caution):
+  ┬╖ optimizePackageImports
+
+  Creating an optimized production build ...
+node.exe : Turbopack build encountered 1 warnings:
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Turbopack build encountered 1 warnings::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+./site/next.config.js
+Encountered unexpected file in NFT list
+A file was traced that indicates that the whole project was traced unintentionally. Somewhere in the import trace 
+below, there are:
+- filesystem operations (like path.join, path.resolve or fs.readFile), or
+- very dynamic requires (like require('./' + foo)).
+To resolve this, you can
+- remove them if possible, or
+- only use them in development, or
+- make sure they are statically scoped to some subfolder: path.join(process.cwd(), 'data', bar), or
+- add ignore comments: path.join(/*turbopackIgnore: true*/ process.cwd(), bar)
+
+Import trace:
+  App Route:
+    ./site/next.config.js
+    ./site/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts
+    ./site/features/planner/admin/svg-editor/persistBlockDescriptor.ts
+    ./site/app/api/admin/svg-editor/route.ts
+
+
+Γ£ô Compiled successfully in 14.0s
+  Running TypeScript ...
+  Finished TypeScript in 16.7s ...
+  Collecting page data using 15 workers ...
+ΓÜá Using edge runtime on a page currently disables static generation for that page
+  Generating static pages using 15 workers (0/367) ...
+  Generating static pages using 15 workers (91/367) 
+  Generating static pages using 15 workers (183/367) 
+  Generating static pages using 15 workers (275/367) 
+Γ£ô Generating static pages using 15 workers (367/367) in 46s
+  Finalizing page optimization ...
+
+Route (app)                               Revalidate  Expire
+Γöî ╞Æ /
+Γö£ Γùï /_not-found
+Γö£ ╞Æ /about
+Γö£ ╞Æ /access
+Γö£ ╞Æ /admin
+Γö£ ╞Æ /admin/analytics
+Γö£ ╞Æ /admin/buddy-catalog
+Γö£ ╞Æ /admin/catalog
+Γö£ ╞Æ /admin/crm
+Γö£ ╞Æ /admin/crm/clients
+Γö£ ╞Æ /admin/crm/projects
+Γö£ ╞Æ /admin/crm/projects/[id]
+Γö£ ╞Æ /admin/crm/quotes
+Γö£ ╞Æ /admin/customer-queries
+Γö£ ╞Æ /admin/features
+Γö£ ╞Æ /admin/inventory
+Γö£ ╞Æ /admin/planner-catalog
+Γö£ ╞Æ /admin/plans
+Γö£ ╞Æ /admin/plans/[id]
+Γö£ ╞Æ /admin/settings
+Γö£ ╞Æ /admin/svg-editor
+Γö£ ╞Æ /admin/svg-editor/[id]
+Γö£ ╞Æ /admin/themes
+Γö£ ╞Æ /admin/workspace-catalog
+Γö£ ╞Æ /api/admin/analytics
+Γö£ ╞Æ /api/admin/buddy-catalog
+Γö£ ╞Æ /api/admin/buddy-catalog/[id]
+Γö£ ╞Æ /api/admin/catalog
+Γö£ ╞Æ /api/admin/catalog/[id]
+Γö£ ╞Æ /api/admin/catalogs/[type]
+Γö£ ╞Æ /api/admin/catalogs/[type]/[id]
+Γö£ ╞Æ /api/admin/configurator-catalog/[id]
+Γö£ ╞Æ /api/admin/features
+Γö£ ╞Æ /api/admin/planner-catalog
+Γö£ ╞Æ /api/admin/plans
+Γö£ ╞Æ /api/admin/plans/[id]
+Γö£ ╞Æ /api/admin/svg-editor
+Γö£ ╞Æ /api/admin/themes
+Γö£ ╞Æ /api/admin/themes/publish
+Γö£ ╞Æ /api/ai-advisor
+Γö£ ╞Æ /api/ai-assist
+Γö£ ╞Æ /api/ai/advisor
+Γö£ ╞Æ /api/audit
+Γö£ ╞Æ /api/business-stats
+Γö£ ╞Æ /api/categories
+Γö£ ╞Æ /api/configurator/smart-wizard
+Γö£ ╞Æ /api/csrf
+Γö£ ╞Æ /api/customer-queries
+Γö£ ╞Æ /api/customer-queries/manage
+Γö£ ╞Æ /api/dev-tools/lighthouse
+Γö£ ╞Æ /api/filter
+Γö£ ╞Æ /api/generate-alt
+Γö£ ╞Æ /api/log-error
+Γö£ ╞Æ /api/nav-categories
+Γö£ ╞Æ /api/nav-search
+Γö£ ╞Æ /api/planner/ai-advisor
+Γö£ ╞Æ /api/planner/catalog
+Γö£ ╞Æ /api/planner/catalog/configurator
+Γö£ ╞Æ /api/planner/sketch-to-plan
+Γö£ ╞Æ /api/plans
+Γö£ ╞Æ /api/plans/[id]
+Γö£ ╞Æ /api/products
+Γö£ ╞Æ /api/products/filter
+Γö£ ╞Æ /api/recommendations
+Γö£ ╞Æ /api/theme/active
+Γö£ ╞Æ /api/theme/manage
+Γö£ ╞Æ /api/tracking
+Γö£ ╞Æ /brochure
+Γö£ ╞Æ /career
+Γö£ ╞Æ /catalog
+Γö£ ╞Æ /choose-product
+Γö£ ╞Æ /compare
+Γö£ ╞Æ /contact
+Γö£ ╞Æ /crm
+Γö£ ╞Æ /crm/clients
+Γö£ ╞Æ /crm/projects
+Γö£ ╞Æ /crm/projects/[id]
+Γö£ ╞Æ /crm/quotes
+Γö£ ╞Æ /dashboard
+Γö£ ╞Æ /download-brochure
+Γö£ ╞Æ /downloads
+Γö£ ╞Æ /gallery
+Γö£ Γùï /icon-12o0cb.png
+Γö£ ╞Æ /imprint
+Γö£ ╞Æ /login
+Γö£ ╞Æ /news
+Γö£ ╞Æ /offline
+Γö£ ╞Æ /opengraph-image-12o0cb
+Γö£ ╞Æ /ops
+Γö£ ╞Æ /ops/customer-queries
+Γö£ ╞Æ /planner
+Γö£ ╞Æ /planner/canvas
+Γö£ ╞Æ /planner/fabric/canvas
+Γö£ ╞Æ /planner/fabric/guest
+Γö£ ╞Æ /planner/features
+Γö£ ╞Æ /planner/features/[slug]
+Γö£ ╞Æ /planner/guest
+Γö£ ╞Æ /planner/help
+Γö£ ╞Æ /planner/open3d
+Γö£ ╞Æ /planning
+Γö£ ╞Æ /portal
+Γö£ ╞Æ /portal/[id]
+Γö£ ╞Æ /portal/guest
+Γö£ ╞Æ /portal/guest/view/[id]
+Γö£ ╞Æ /portal/svg-catalog
+Γö£ ╞Æ /portal/svg-catalog/[slug]
+Γö£ ╞Æ /portfolio
+Γö£ ╞Æ /privacy
+Γö£ ╞Æ /products
+Γö£ ╞Æ /products/[category]
+Γö£ ╞Æ /products/[category]/[product]
+Γö£ ╞Æ /products/category/[slug]
+Γö£ ╞Æ /projects
+Γö£ ╞Æ /quote-cart
+Γö£ ╞Æ /refund-and-return-policy
+Γö£ ╞Æ /repo-store
+Γö£ ╞Æ /service
+Γö£ ╞Æ /showrooms
+Γö£ Γùï /sitemap.xml                                  5m      1y
+Γö£ ╞Æ /social
+Γö£ ╞Æ /solutions
+Γö£ ╞Æ /solutions/[category]
+Γö£ ╞Æ /support-ivr
+Γö£ ╞Æ /sustainability
+Γö£ ╞Æ /templates
+Γö£ ╞Æ /terms
+Γö£ ╞Æ /tracking
+Γö£ ╞Æ /trusted-by
+Γöö ╞Æ /twitter-image-12o0cb
+
+
+╞Æ Proxy (Middleware)
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+

@@ -1,0 +1,24 @@
+{
+  "module": "site",
+  "phase": "phase06",
+  "command": "pnpm exec vitest run tests/unit/features/planner/open3d/phase06-inventory-consumer.test.ts tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts tests/unit/features/planner/open3d/catalogSearchCap.test.ts tests/unit/features/planner/open3d/catalog/blocksResolver.test.ts --config vitest.site.config.ts",
+  "cwd": "site",
+  "revision": "e8f307c43c82f160cacce0d94b0a0f70fa6d1006",
+  "dirtyWorktree": true,
+  "operator": "cursor-agent",
+  "startedAt": "2026-07-07T17:28:25+05:30",
+  "endedAt": "2026-07-07T17:28:28+05:30",
+  "durationMs": 2890,
+  "exitCode": 0,
+  "summary": {
+    "testFiles": 4,
+    "testsPassed": 86,
+    "testsFailed": 0,
+    "testsSkipped": 0
+  },
+  "artifacts": {
+    "rawLog": "results/site/phase06/vitest/vitest-raw.log",
+    "structuredReport": "results/tests/vitest-site-results.json"
+  },
+  "checkIds": ["06-INV-01", "06-INV-05", "06-TEST-01"]
+}

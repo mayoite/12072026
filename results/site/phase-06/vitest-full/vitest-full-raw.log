@@ -1,0 +1,419 @@
+﻿
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γåô tests/unit/features/planner/open3d/useOpen3dWorkspaceCatalog.test.ts (6 tests | 6 skipped)
+ Γåô tests/unit/features/planner/open3d/phase06-inventory-consumer.test.ts (8 tests | 8 skipped)
+ Γ¥» tests/unit/features/planner/open3d/workspaceShell.test.tsx (24 tests | 1 failed | 23 skipped) 1103ms
+     Γåô creates a project, dispatches actions, and supports undo/redo
+     Γåô updates selection and applies direct project updates
+     Γåô draws a wall when the segment exceeds the minimum length
+     Γåô docks, undocks, collapses, moves, resizes, and persists layout
+     Γåô restores layout from localStorage on mount
+     Γåô fires view, unit, export, and import callbacks and shows save status
+     Γåô handles dock, undock, minimize, close, resize, and focus
+     ├ù searches sample inventory and selects an item 1097ms
+     Γåô shows empty state and wall properties for a selection
+     Γåô renders panels, status bar, and toolbar actions
+       Γåô maps shortcut keys to tools
+       Γåô maps semantic tools onto the existing canvas runtime
+       Γåô handleWallClick returns result for door and window modes (exercises placement branches)
+       Γåô edit modes, update/delete and get* cover edit branches
+       Γåô cancel from placing resets state
+       Γåô detects small viewport tier and handles mobile activePanel logic
+       Γåô reset and full cycle covers default restore branches
+       Γåô renders door and furniture properties (covers render* branches)
+       Γåô groups properties into transform/dimensions/placement/appearance/metadata/actions; supports unit numeric commit/cancel/reset/validation + multi-sel shared + locked reject (task7; GS REC-01/03/04, BP-01, anti-copy semantic)
+       Γåô hides persist actions for guest accessContext
+     Γåô passes static presentation hardcoding audit (no raw hex or duplicated visual in JSX; cursor moved to css module)
+     Γåô renders loading then workspace shell for guest (covers hydration + shell wiring)
+     Γåô professional workspace: topbar has project/save/floor/units/2d3d/undo/redo/save + structured menus for import/export/prefs; panels separate catalogue/layers; canvas-max (GS: Figma REC-01 minimize, catalogue-first REC-04, 2026-07-04 benchmark)
+     Γåô docking persists valid panel ratios to workspace prefs schema (task5)
+node.exe : 
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 1 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/unit/features/planner/open3d/workspaceShell.test.tsx > InventoryPanel > searches sample inventory and 
+selects an item
+TestingLibraryElementError: Found multiple elements with the text: /Executive Standing Desk/i
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+[36m<span[39m
+  [33mclass[39m=[32m"_itemName_ae4f14"[39m
+[36m>[39m
+  [0mExecutive Standing Desk[0m
+[36m</span>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"Add Executive Standing Desk to canvas"[39m
+  [33mclass[39m=[32m"_emptyAction_ae4f14"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m>[39m
+  [0mAdd [0m
+  [0mExecutive Standing Desk[0m
+  [0m to canvas[0m
+[36m</button>[39m
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or 
+`findAllByText`)).
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Inventory panel"[39m
+      [33mclass[39m=[32m"_panel_ae4f14"[39m
+      [33mid[39m=[32m"inventory-panel-_r_0_"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_searchSection_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_searchWrapper_ae4f14"[39m
+          [33mdata-empty[39m=[32m"true"[39m
+          [33mdata-rac[39m=[32m""[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"sr-only"[39m
+            [33mfor[39m=[32m"react-aria-_r_1_"[39m
+            [33mid[39m=[32m"react-aria-_r_2_"[39m
+          [36m>[39m
+            [0mSearch catalog elements[0m
+          [36m</label>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"_searchIcon_ae4f14"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"11"[39m
+              [33mcy[39m=[32m"11"[39m
+              [33mr[39m=[32m"8"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m21 21-4.35-4.35"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<input[39m
+            [33maria-label[39m=[32m"Search catalog elements"[39m
+            [33maria-labelledby[39m=[32m"react-aria-_r_1_ react-aria-_r_2_"[39m
+            [33mclass[39m=[32m"_searchInput_ae4f14"[39m
+            [33mdata-rac[39m=[32m""[39m
+            [33mid[39m=[32m"react-aria-_r_1_"[39m
+            [33mplaceholder[39m=[32m"Search furniture (Fuse + RAC)"[39m
+            [33mtabindex[39m=[32m"0"[39m
+            [33mtitle[39m=[32m""[39m
+            [33mtype[39m=[32m"search"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_quickFilters_ae4f14"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mfill[39m=[32m"currentColor"[39m
+              [33mheight[39m=[32m"1em"[39m
+              [33mviewBox[39m=[32m"0 0 256 256"[39m
+              [33mwidth[39m=[32m"1em"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,
+0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,
+8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mAll Rooms[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mfill[39m=[32m"currentColor"[39m
+              [33mheight[39m=[32m"1em"[39m
+              [33mviewBox[39m=[32m"0 0 256 256"[39m
+              [33mwidth[39m=[32m"1em"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M240,106.17V72a16,16,0,0,0-16-16H32A16,16,0,0,0,16,72v34.17A16,16,0,0,0,8,120v48a16,1
+6,0,0,0,16,16h8v16a8,8,0,0,0,16,0V184H208v16a8,8,0,0,0,16,0V184h8a16,16,0,0,0,16-16V120A16,16,0,0,0,240,106.17ZM224,104
+h-8a16,16,0,0,0-16,16v16H136V72h88ZM120,72v64H56V120a16,16,0,0,0-16-16H32V72Zm112,96H24V120H40v24a8,8,0,0,0,8,8H208a8,8
+,0,0,0,8-8V120h16Z"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mLiving Room[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mfill[39m=[32m"currentColor"[39m
+              [33mheight[39m=[32m"1em"[39m
+              [33mviewBox[39m=[32m"0 0 256 256"[39m
+              [33mwidth[39m=[32m"1em"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M216,72H32V48a8,8,0,0,0-16,0V208a8,8,0,0,0,16,0V176H240v32a8,8,0,0,0,16,0V112A40,40,0
+,0,0,216,72ZM32,88h72v72H32Zm88,72V88h96a24,24,0,0,1,24,24v48Z"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mBedroom[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mfill[39m=[32m"currentColor"[39m
+              [33mheight[39m=[32m"1em"[39m
+              [33mviewBox[39m=[32m"0 0 256 256"[39m
+              [33mwidth[39m=[32m"1em"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+        ...
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Inventory panel"[39m
+      [33mclass[39m=[32m"_panel_ae4f14"[39m
+      [33mid[39m=[32m"inventory-panel-_r_0_"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_searchSection_ae4f14"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_searchWrapper_ae4f14"[39m
+          [33mdata-empty[39m=[32m"true"[39m
+          [33mdata-rac[39m=[32m""[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"sr-only"[39m
+            [33mfor[39m=[32m"react-aria-_r_1_"[39m
+            [33mid[39m=[32m"react-aria-_r_2_"[39m
+          [36m>[39m
+            [0mSearch catalog elements[0m
+          [36m</label>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"_searchIcon_ae4f14"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"11"[39m
+              [33mcy[39m=[32m"11"[39m
+              [33mr[39m=[32m"8"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m21 21-4.35-4.35"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<input[39m
+            [33maria-label[39m=[32m"Search catalog elements"[39m
+            [33maria-labelledby[39m=[32m"react-aria-_r_1_ react-aria-_r_2_"[39m
+            [33mclass[39m=[32m"_searchInput_ae4f14"[39m
+            [33mdata-rac[39m=[32m""[39m
+            [33mid[39m=[32m"react-aria-_r_1_"[39m
+            [33mplaceholder[39m=[32m"Search furniture (Fuse + RAC)"[39m
+            [33mtabindex[39m=[32m"0"[39m
+            [33mtitle[39m=[32m""[39m
+            [33mtype[39m=[32m"search"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_quickFilters_ae4f14"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mfill[39m=[32m"currentColor"[39m
+              [33mheight[39m=[32m"1em"[39m
+              [33mviewBox[39m=[32m"0 0 256 256"[39m
+              [33mwidth[39m=[32m"1em"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,
+0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,
+8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mAll Rooms[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mfill[39m=[32m"currentColor"[39m
+              [33mheight[39m=[32m"1em"[39m
+              [33mviewBox[39m=[32m"0 0 256 256"[39m
+              [33mwidth[39m=[32m"1em"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M240,106.17V72a16,16,0,0,0-16-16H32A16,16,0,0,0,16,72v34.17A16,16,0,0,0,8,120v48a16,1
+6,0,0,0,16,16h8v16a8,8,0,0,0,16,0V184H208v16a8,8,0,0,0,16,0V184h8a16,16,0,0,0,16-16V120A16,16,0,0,0,240,106.17ZM224,104
+h-8a16,16,0,0,0-16,16v16H136V72h88ZM120,72v64H56V120a16,16,0,0,0-16-16H32V72Zm112,96H24V120H40v24a8,8,0,0,0,8,8H208a8,8
+,0,0,0,8-8V120h16Z"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mLiving Room[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mfill[39m=[32m"currentColor"[39m
+              [33mheight[39m=[32m"1em"[39m
+              [33mviewBox[39m=[32m"0 0 256 256"[39m
+              [33mwidth[39m=[32m"1em"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M216,72H32V48a8,8,0,0,0-16,0V208a8,8,0,0,0,16,0V176H240v32a8,8,0,0,0,16,0V112A40,40,0
+,0,0,216,72ZM32,88h72v72H32Zm88,72V88h96a24,24,0,0,1,24,24v48Z"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipLabel_ae4f14"[39m
+          [36m>[39m
+            [0mBedroom[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+
+          [33maria-pressed[39m=[32m"false"[39m
+          [33mclass[39m=[32m"_filterChip_ae4f14 "[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"_filterChipIcon_ae4f14"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mfill[39m=[32m"currentColor"[39m
+              [33mheight[39m=[32m"1em"[39m
+              [33mviewBox[39m=[32m"0 0 256 256"[39m
+              [33mwidth[39m=[32m"1em"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+        ...
+ Γ¥» waitForWrapper 
+../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ Γ¥» ../node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ Γ¥» tests/unit/features/planner/open3d/workspaceShell.test.tsx:405:37
+    403|
+    404|     // Updated for RAC ListBoxItem (owns collection); find by text/name
+    405|     const itemOption = await screen.findByText(/Executive Standing DesΓÇª
+       |                                     ^
+    406|     fireEvent.click(itemOption);
+    407|     expect(onItemSelect).toHaveBeenCalledWith(
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/1]ΓÄ»
+
+ Test Files  1 failed | 2 skipped (3)
+      Tests  1 failed | 37 skipped (38)
+   Start at  18:12:22
+   Duration  15.45s (transform 2.04s, setup 2.02s, import 13.88s, tests 1.10s, environment 2.47s)
+
+JSON report written to D:/OandO07072026/results/tests/vitest-results.json

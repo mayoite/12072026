@@ -170,7 +170,7 @@ describe("04-TEST-06 lint guard (source scan)", () => {
     const fs = await import("node:fs");
     const path = await import("node:path");
     const plannerRoot = path.resolve(process.cwd(), "site/features/planner");
-    let violations: string[] = [];
+    const violations: string[] = [];
     function scan(dir: string) {
       if (!fs.existsSync(dir)) return;
       for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {

@@ -1,0 +1,74 @@
+{
+  "base": "http://localhost:3000",
+  "capturedAt": "2026-07-07T13:20:36.792Z",
+  "checkIds": [
+    "PLAN-FAIL-0412"
+  ],
+  "routes": {
+    "adminEditor": {
+      "path": "/admin/svg-editor",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "ok": true,
+      "hasHtml": true,
+      "bodyLength": 77055,
+      "checkId": "0412-admin",
+      "pass": true
+    },
+    "portalCatalog": {
+      "path": "/portal/svg-catalog",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "ok": true,
+      "hasHtml": true,
+      "bodyLength": 74119,
+      "checkId": "0412-portal",
+      "pass": true
+    },
+    "portalSlug": {
+      "path": "/portal/svg-catalog/chaise-lounge-001",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "ok": true,
+      "hasHtml": true,
+      "bodyLength": 74542,
+      "checkId": "0412-portal-slug",
+      "pass": true
+    },
+    "plannerGuest": {
+      "path": "/planner/guest",
+      "status": 500,
+      "contentType": "text/html; charset=utf-8",
+      "ok": false,
+      "hasHtml": true,
+      "bodyLength": 11915,
+      "checkId": "0412-planner-guest",
+      "pass": false
+    },
+    "plannerOpen3d": {
+      "path": "/planner/open3d",
+      "status": 500,
+      "contentType": "text/html; charset=utf-8",
+      "ok": false,
+      "hasHtml": true,
+      "bodyLength": 11915,
+      "checkId": "0412-planner-open3d",
+      "pass": false
+    }
+  },
+  "apis": {
+    "adminSvgEditorPost": {
+      "status": 500,
+      "authBlocked": false,
+      "pass": false,
+      "code": null
+    },
+    "catalogSvgBlocks": {
+      "status": 500,
+      "pass": false,
+      "itemCount": 0
+    }
+  },
+  "pass": false,
+  "note": "HTTP/runtime probe for admin, portal, and planner surfaces. Full browser soak remains user-owned for Accepted."
+}

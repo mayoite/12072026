@@ -1,0 +1,13 @@
+﻿{
+    "name":  "typecheck-svg-pipeline-runner-fix",
+    "module":  "site",
+    "phase":  "build-fix",
+    "command":  "cd \u0027D:\\\\oandO04072026\\\\site\u0027; pnpm exec tsc --noEmit -p tsconfig.json --skipLibCheck 2\u003e\u00261 | Select-String -Pattern \u0027svgPipelineRunner|error TS\u0027 -Context 1 -SimpleMatch | Out-String",
+    "cwd":  "D:\\oandO04072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-06T22:18:32.9989350+05:30",
+    "endUtc":  "2026-07-06T22:18:58.8181319+05:30",
+    "durationSec":  25.819,
+    "exitCode":  0,
+    "rawLog":  "D:\\oandO04072026\\results\\site\\build-fix\\typecheck-svg-pipeline-runner-fix\\typecheck-svg-pipeline-runner-fix-raw.log"
+}

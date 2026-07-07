@@ -1,0 +1,9 @@
+﻿=== Phase 05 portal route probe @ 2026-07-07T12:29:47.973Z ===
+base=http://localhost:3000 slug=side-table-001
+05-PORT-01 GET /portal/svg-catalog status=200 pass=true
+05-PORT-02 GET /portal/svg-catalog/side-table-001 status=200 pass=true
+05-PORT-09 og:image=https://78e07661362639e5e9008dadd85a3f2d.r2.cloudflarestorage.com/site-block-thumbs/side-table-001.png pass=true
+indexChecks={"hasTitle":true,"hasLiveRegion":true,"noBase64Png":true}
+slugChecks={"hasSlugHeading":true,"hasPuckSection":true,"hasThumbSection":true,"noBase64Png":true,"ogImage":"https://78e07661362639e5e9008dadd85a3f2d.r2.cloudflarestorage.com/site-block-thumbs/side-table-001.png","ogImageIsR2":true}
+
+Wrote D:\OandO07072026\results\site\phase-05\http-probe\http-probe-evidence.json

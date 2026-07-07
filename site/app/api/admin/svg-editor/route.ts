@@ -49,11 +49,22 @@ function descriptorErrorResponse(descriptorError: Open3dDescriptorError): NextRe
 }
 
 function persistErrorResponse(persistError: PersistError): NextResponse {
-  const status = persistError.reason === "hashMismatch" ? 409 : 422;
+  const status =
+    persistError.reason === "hashMismatch" || persistError.reason === "lockBusy"
+      ? 409
+      : persistError.reason === "ioError" || persistError.reason === "dualReadMismatch"
+        ? 500
+        : 422;
   return NextResponse.json(
     {
       success: false,
       error: {
+        error:
+          persistError.reason === "lockBusy"
+            ? "lock_busy"
+            : persistError.reason === "hashMismatch"
+              ? "hash_mismatch"
+              : persistError.reason,
         code: persistError.code,
         fieldPath: persistError.fieldPath,
         message: persistError.message,
@@ -81,7 +92,7 @@ async function handleSvgEditorPost(req: NextRequest) {
   const descriptor: BlockDescriptor = parsed.value;
 
   // Atomic write (04-ADMIN-06)
-  const persistResult = persistBlockDescriptor(descriptor, { writeHistory: true });
+  const persistResult = persistBlockDescriptor(descriptor);
   if (!persistResult.ok) {
     return persistErrorResponse(persistResult.error);
   }

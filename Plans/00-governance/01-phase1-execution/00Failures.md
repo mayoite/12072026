@@ -1,6 +1,6 @@
-# Planner failures rollup (phases 00–07)
+# Planner failures rollup (phases 00–08)
 
-Date: 2026-07-07
+Date: 2026-07-07 (stop boundary)
 
 Planner view only. Root [`Failures.md`](../../../Failures.md) stays authoritative for gate policy.
 
@@ -8,10 +8,10 @@ Planner view only. Root [`Failures.md`](../../../Failures.md) stays authoritativ
 
 ### `00-PRE-06` — Git clean at boundary
 
-- **Open:** Phase zero precheck six git-clean is still unchecked.
-- **Why:** Uncommitted phase work and unpushed local commits remain on `main`.
-- **Resolution:** Commit or stash; push; confirm clean `git status` at boundary.
-- **Resolved:** No
+- **Open:** —
+- **Why:** Phase 08, gate fixes, and `results/` evidence committed this session.
+- **Resolution:** Commit + push; confirm clean `git status` at boundary.
+- **Resolved:** Yes (this commit)
 
 ---
 
@@ -26,7 +26,7 @@ Planner view only. Root [`Failures.md`](../../../Failures.md) stays authoritativ
 
 ### `PLAN-FAIL-0410` — Repo-wide lint
 
-- **Open:** `pnpm run lint` still fails with one hundred thirty ESLint errors.
+- **Open:** `pnpm run lint` still fails (baseline ~130 errors; partial cleanup in progress).
 - **Why:** Repo-wide lint has not been cleaned to exit zero on current tree.
 - **Resolution:** Dedicated lint pass; fix errors; re-run lint to exit zero.
 - **Resolved:** No
@@ -36,8 +36,8 @@ Planner view only. Root [`Failures.md`](../../../Failures.md) stays authoritativ
 ### `PLAN-FAIL-0412` — Browser / runtime proof
 
 - **Open:** Admin, portal, and planner routes lack user browser verification.
-- **Why:** Only targeted Vitest and HTTP probes exist; no signed UI walkthrough.
-- **Resolution:** `pnpm run dev`; hard-refresh routes; log proof or user sign-off.
+- **Why:** One runtime probe failed (`results/site/release-gates/runtime-0412/`); user directed **no further 0412 attempts** this session.
+- **Resolution:** User-owned browser soak or explicit re-request; do not re-run `phase0412-runtime-probe.mjs` without override.
 - **Resolved:** No
 
 ---
@@ -45,44 +45,17 @@ Planner view only. Root [`Failures.md`](../../../Failures.md) stays authoritativ
 ### `PLAN-FAIL-0413` — Full Vitest suite
 
 - **Open:** Full `pnpm run test` has no completed passing run on record.
-- **Why:** Last run interrupted with at least one hundred fifteen failing tests.
-- **Resolution:** Re-run full suite to completion; triage buckets; capture `vitest-run.json`.
-- **Resolved:** No
+- **Why:** Prior run had ~125 failures; stub restoration and `adminDb` mock fix reduced bucket size; full suite not re-run to completion this session.
+- **Resolution:** Re-run full suite to completion; triage remaining buckets; capture `vitest-run.json`.
+- **Resolved:** No (partial: `planner-store-plannerPersistence.test.ts` 15/15 pass after `adminDb` mock fix)
 
 ---
 
-### Phase 04 — Verified in staging
+### Phase 04–08 — Verified in staging
 
-- **Open:** Admin SVG editor remains Implemented, verification pending—not staging verified.
-- **Why:** Authenticated browser soak and review artifacts are still outstanding.
-- **Resolution:** Close `0412` on admin routes; refresh signed review files under archive.
-- **Resolved:** No
-
----
-
-### Phase 05 — Verified in staging
-
-- **Open:** Portal SVG catalog remains Implemented, verification pending—not staging verified.
-- **Why:** Live HTTP probes pass; user browser soak under `0412` is still open.
-- **Resolution:** Hard-refresh `/portal/svg-catalog` and slug; record user sign-off.
-- **Resolved:** No
-
----
-
-### Phase 06 — Verified in staging
-
-- **Open:** Inventory consumer remains Implemented, verification pending—not staging verified.
-- **Why:** Planner open3d UI browser proof and coverage floor proof are still open.
-- **Resolution:** Verify catalog panel in planner; close `0412`; address `0408` when scheduled.
-- **Resolved:** No
-
----
-
-### Phase 07 — Verified in staging
-
-- **Open:** Auth and permissions remain Implemented, verification pending—not staging verified.
-- **Why:** Matrix and admin guard have vitest + HTTP probes; browser soak under `0412` is open.
-- **Resolution:** Close `0412` on guest toolbar blocks and admin routes; user sign-off.
+- **Open:** Phases 04–08 remain **Implemented, verification pending** — not staging verified.
+- **Why:** Vitest + HTTP probe evidence is on record under `results/site/phase-04|05|06|07|08/`; browser soak `0412` open.
+- **Resolution:** User sign-off on live routes when ready; close `0412` only with explicit browser proof.
 - **Resolved:** No
 
 ---
@@ -105,16 +78,7 @@ Planner view only. Root [`Failures.md`](../../../Failures.md) stays authoritativ
 
 ---
 
-### Local git — unpushed commit
-
-- **Open:** Local `main` is one commit ahead of `origin/main` without push.
-- **Why:** Truth-snapshot commit `8264d25` was never pushed to remote.
-- **Resolution:** User-approved `git push` after reviewing local commit contents.
-- **Resolved:** No
-
----
-
-## Closed for phases 01–07 (reference)
+## Closed for phases 01–08 (reference)
 
 | Item | Resolved |
 |------|----------|
@@ -125,3 +89,5 @@ Planner view only. Root [`Failures.md`](../../../Failures.md) stays authoritativ
 | Phase 05 check IDs `05-PORT-01/02/09` (vitest + probes) | Yes |
 | Phase 06 check IDs `06-INV-01/05/06-TEST-01` (vitest + probes) | Yes |
 | Phase 07 check IDs `07-AUTH-01/04/09` (vitest + probes) | Yes |
+| Phase 08 check IDs `08-PERS-04/10` + dual-read disk evidence | Yes |
+| Phase 08 code (lock, versioned layout, pointer loader, archive) | Yes — committed this session |

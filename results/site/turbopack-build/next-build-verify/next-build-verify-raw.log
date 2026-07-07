@@ -1,0 +1,226 @@
+﻿Γû▓ Next.js 16.2.9 (Turbopack)
+- Experiments (use with caution):
+  ┬╖ optimizePackageImports
+
+  Creating an optimized production build ...
+node.exe : Turbopack build encountered 1 warnings:
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Turbopack build encountered 1 warnings::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+./site/next.config.js
+Encountered unexpected file in NFT list
+A file was traced that indicates that the whole project was traced unintentionally. Somewhere in the import trace 
+below, there are:
+- filesystem operations (like path.join, path.resolve or fs.readFile), or
+- very dynamic requires (like require('./' + foo)).
+To resolve this, you can
+- remove them if possible, or
+- only use them in development, or
+- make sure they are statically scoped to some subfolder: path.join(process.cwd(), 'data', bar), or
+- add ignore comments: path.join(/*turbopackIgnore: true*/ process.cwd(), bar)
+
+Import trace:
+  App Route:
+    ./site/next.config.js
+    ./site/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts
+    ./site/features/planner/admin/svg-editor/persistBlockDescriptor.ts
+    ./site/app/api/admin/svg-editor/route.ts
+
+
+Γ£ô Compiled successfully in 12.7s
+  Running TypeScript ...
+  Finished TypeScript in 13.0s ...
+  Collecting page data using 15 workers ...
+ΓÜá Using edge runtime on a page currently disables static generation for that page
+  Generating static pages using 15 workers (0/367) ...
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] failed: Failed query: select "id", "name", "description", "canonical_id" from "catalog_categories" params:
+  Generating static pages using 15 workers (91/367) 
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] Catalog DB error (attempt 1/1): Failed query: select "id", "name", "description", "canonical_id" from 
+"catalog_categories" params:
+[getCatalog] failed: Failed query: select "id", "name", "description", "canonical_id" from "catalog_categories" params:
+[getProducts] Catalog DB unavailable: Error: Failed query: select "id", "name", "slug", "category", "category_id", 
+"performance_tier", "flagship_image", "description", "scene_images", "variants", "detailed_info", "metadata", "specs", 
+"series_id", "series_name", "created_at", "images", "alt_text", "3d_model", "canonical_category_id", 
+"canonical_series_id", "canonical_slug_v2", "canonical_subcategory_id", "canonical_subcategory_label", 
+"normalized_name_key" from "catalog_products" order by "catalog_products"."name" asc
+params: 
+    at et.queryWithCache (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:39759)
+    at async (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:42322)
+    at async u (D:\oandO04072026\site\.next\server\chunks\ssr\_0lw-7vz._.js:8:46114)
+    at async t (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__0_vj872._.js:1:15581)
+    at async (D:\oandO04072026\site\.next\server\chunks\ssr\_0lw-7vz._.js:8:28684)
+    at async y (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__0_vj872._.js:1:17178)
+    at async o (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__0epl7-e._.js:3:9610) {
+  query: 'select "id", "name", "slug", "category", "category_id", "performance_tier", "flagship_image", "description", 
+"scene_images", "variants", "detailed_info", "metadata", "specs", "series_id", "series_name", "created_at", "images", 
+"alt_text", "3d_model", "canonical_category_id", "canonical_series_id", "canonical_slug_v2", 
+"canonical_subcategory_id", "canonical_subcategory_label", "normalized_name_key" from "catalog_products" order by 
+"catalog_products"."name" asc',
+  params: [],
+  [cause]: i: (EMAXCONNSESSION) max clients reached in session mode - max clients are limited to pool_size: 15
+      at ad (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:2292)
+      at <unknown> (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3216)
+      at Socket.aS (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3220) {
+    code: 'XX000',
+    severity_local: 'FATAL'
+  }
+}
+[product_specs] Drizzle read failed; falling back to products.specs Error: Failed query: select "product_id", "specs" 
+from "catalog_product_specs" where "catalog_product_specs"."product_id" in ($1)
+params: 0e0c7001-110f-48a8-9d41-56316cc80c20
+    at et.queryWithCache (D:\oandO04072026\site\.next\server\chunks\ssr\_1fd-v3x._.js:28:39759)
+    at async (D:\oandO04072026\site\.next\server\chunks\ssr\_1fd-v3x._.js:28:42322)
+    at async C (D:\oandO04072026\site\.next\server\chunks\ssr\_05c97iq._.js:1:5396)
+    at async p (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:14730)
+    at async O (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:21531) {
+  query: 'select "product_id", "specs" from "catalog_product_specs" where "catalog_product_specs"."product_id" in 
+($1)',
+  params: [ '0e0c7001-110f-48a8-9d41-56316cc80c20' ],
+  [cause]: i: (EMAXCONNSESSION) max clients reached in session mode - max clients are limited to pool_size: 15
+      at ad (D:\oandO04072026\site\.next\server\chunks\ssr\_1fd-v3x._.js:4:2292)
+      at <unknown> (D:\oandO04072026\site\.next\server\chunks\ssr\_1fd-v3x._.js:4:3216)
+      at Socket.aS (D:\oandO04072026\site\.next\server\chunks\ssr\_1fd-v3x._.js:4:3220) {
+    code: 'XX000',
+    severity_local: 'FATAL'
+  }
+}
+[product_specs] Drizzle read failed; falling back to products.specs Error: Failed query: select "product_id", "specs" 
+from "catalog_product_specs" where "catalog_product_specs"."product_id" in ($1)
+params: b1e0743b-8552-5b58-bf05-fa54e6065bbb
+    at et.queryWithCache (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:39759)
+    at async (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:42322)
+    at async C (D:\oandO04072026\site\.next\server\chunks\ssr\_05c97iq._.js:1:5396)
+    at async p (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:14730)
+    at async O (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:21531) {
+  query: 'select "product_id", "specs" from "catalog_product_specs" where "catalog_product_specs"."product_id" in 
+($1)',
+  params: [ 'b1e0743b-8552-5b58-bf05-fa54e6065bbb' ],
+  [cause]: i: (EMAXCONNSESSION) max clients reached in session mode - max clients are limited to pool_size: 15
+      at ad (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:2292)
+      at <unknown> (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3216)
+      at Socket.aS (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3220) {
+    code: 'XX000',
+    severity_local: 'FATAL'
+  }
+}
+[product_specs] Drizzle read failed; falling back to products.specs Error: Failed query: select "product_id", "specs" 
+from "catalog_product_specs" where "catalog_product_specs"."product_id" in ($1)
+params: 9d2d7b99-8507-433a-8cca-aa7832bfd15c
+    at et.queryWithCache (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:39759)
+    at async (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:42322)
+    at async C (D:\oandO04072026\site\.next\server\chunks\ssr\_0lw-7vz._.js:8:48789)
+    at async p (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:14730)
+    at async O (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:21531) {
+  query: 'select "product_id", "specs" from "catalog_product_specs" where "catalog_product_specs"."product_id" in 
+($1)',
+  params: [ '9d2d7b99-8507-433a-8cca-aa7832bfd15c' ],
+  [cause]: i: (EMAXCONNSESSION) max clients reached in session mode - max clients are limited to pool_size: 15
+      at ad (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:2292)
+      at <unknown> (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3216)
+      at Socket.aS (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3220) {
+    code: 'XX000',
+    severity_local: 'FATAL'
+  }
+}
+[product_specs] Drizzle read failed; falling back to products.specs Error: Failed query: select "product_id", "specs" 
+from "catalog_product_specs" where "catalog_product_specs"."product_id" in ($1)
+params: fcbf5cee-1a46-5e7c-9059-910b1209b9bb
+    at et.queryWithCache (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:39759)
+    at async (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:42322)
+    at async C (D:\oandO04072026\site\.next\server\chunks\ssr\_0lw-7vz._.js:8:48789)
+    at async p (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:14730)
+    at async O (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:21531) {
+  query: 'select "product_id", "specs" from "catalog_product_specs" where "catalog_product_specs"."product_id" in 
+($1)',
+  params: [ 'fcbf5cee-1a46-5e7c-9059-910b1209b9bb' ],
+  [cause]: i: (EMAXCONNSESSION) max clients reached in session mode - max clients are limited to pool_size: 15
+      at ad (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:2292)
+      at <unknown> (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3216)
+      at Socket.aS (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3220) {
+    code: 'XX000',
+    severity_local: 'FATAL'
+  }
+}
+[product_specs] Drizzle read failed; falling back to products.specs Error: Failed query: select "product_id", "specs" 
+from "catalog_product_specs" where "catalog_product_specs"."product_id" in ($1)
+params: b0c66698-6fc5-5887-ae6f-73be3552c8bf
+    at et.queryWithCache (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:39759)
+    at async (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:42322)
+    at async C (D:\oandO04072026\site\.next\server\chunks\ssr\_05c97iq._.js:1:5396)
+    at async p (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:14730)
+    at async O (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:21531) {
+  query: 'select "product_id", "specs" from "catalog_product_specs" where "catalog_product_specs"."product_id" in 
+($1)',
+  params: [ 'b0c66698-6fc5-5887-ae6f-73be3552c8bf' ],
+  [cause]: i: (EMAXCONNSESSION) max clients reached in session mode - max clients are limited to pool_size: 15
+      at ad (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:2292)
+      at <unknown> (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3216)
+      at Socket.aS (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3220) {
+    code: 'XX000',
+    severity_local: 'FATAL'
+  }
+}
+[product_specs] Drizzle read failed; falling back to products.specs Error: Failed query: select "product_id", "specs" 
+from "catalog_product_specs" where "catalog_product_specs"."product_id" in ($1)
+params: 3ecf14dc-6c1b-5f3c-a392-5ff7ca421f1c
+    at et.queryWithCache (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:39759)
+    at async (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:28:42322)
+    at async C (D:\oandO04072026\site\.next\server\chunks\ssr\_05c97iq._.js:1:5396)
+    at async p (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:14730)
+    at async O (D:\oandO04072026\site\.next\server\chunks\ssr\[root-of-the-server]__06ec9cc._.js:1:21531) {
+  query: 'select "product_id", "specs" from "catalog_product_specs" where "catalog_product_specs"."product_id" in 
+($1)',
+  params: [ '3ecf14dc-6c1b-5f3c-a392-5ff7ca421f1c' ],
+  [cause]: i: (EMAXCONNSESSION) max clients reached in session mode - max clients are limited to pool_size: 15
+      at ad (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:2292)
+      at <unknown> (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3216)
+      at Socket.aS (D:\oandO04072026\site\.next\server\chunks\ssr\_1xbucpr._.js:4:3220) {
+    code: 'XX000',
+    severity_local: 'FATAL'
+  }
+}
+  Generating static pages using 15 workers (183/367) 
+  Generating static pages using 15 workers (275/367) 
+Γ£ô Generating static pages using 15 workers (367/367) in 50s
+  Finalizing page optimization ...
+
+> Build error occurred
+Error: ENOENT: no such file or directory, open 
+'D:\oandO04072026\site\.next\static\EsIGVxtww2DzAB-QV8vzr\_ssgManifest.js'
+    at ignore-listed frames {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\oandO04072026\\site\\.next\\static\\EsIGVxtww2DzAB-QV8vzr\\_ssgManifest.js'
+}

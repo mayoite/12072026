@@ -1,6 +1,6 @@
 # Phase checklist (00–10)
 
-Date: 2026-07-07 (rev session 07)
+Date: 2026-07-07 (stop boundary)
 
 **Planner work:** repo-root [`Plans.md`](../../../Plans.md) · conduct: [`AGENTS.md`](../../../AGENTS.md) · open items: [`00Failures.md`](00Failures.md)
 
@@ -12,15 +12,14 @@ Date: 2026-07-07 (rev session 07)
 
 | Phases | Done | Open |
 |--------|------|------|
-| 00 | precheck 6/7 | `00-PRE-06` git clean, Accepted sign-off |
+| 00 | precheck 7/7 | Accepted sign-off |
 | 01–03 | primary checks | — |
-| 04–06 | Implemented, verification pending | `0412` browser soak; release `0408`/`0410`/`0413` |
-| 07 | Implemented, verification pending | cross-matrix live soak; `0412` |
-| 08–10 | not started | — |
+| 04–08 | Implemented, verification pending | `0412` browser soak (no further agent attempts); release `0408`/`0410`/`0413` |
+| 09–10 | not started | — |
 
 PLAN-FAIL open: `0408` · `0410` · `0412` · `0413` — see [`00Failures.md`](00Failures.md)
 
-**Session evidence (2026-07-07):** `results/site/phase-04|05|06|07/` (vitest + http-probe); not **Verified in staging** until `0412` closes.
+**Session evidence (2026-07-07):** `results/` tracked in git — `results/site/phase-04|05|06|07|08/` (vitest + probes); `results/site/release-gates/runtime-0412/` (failed probe, no retry). Not **Verified in staging** until `0412` closes with user proof.
 
 ---
 
@@ -33,7 +32,7 @@ PLAN-FAIL open: `0408` · `0410` · `0412` · `0413` — see [`00Failures.md`](0
 | `00-PRE-03` | Workspace + validate-launch-env | ☑ |
 | `00-PRE-04` | Governance pack on disk | ☑ |
 | `00-PRE-05` | R2 bucket in I-D | ☑ |
-| `00-PRE-06` | Git clean at boundary | ☐ |
+| `00-PRE-06` | Git clean at boundary | ☑ |
 | `00-PRE-07` | `AGENTS.md` is conduct authority | ☑ |
 
 ---
@@ -67,8 +66,10 @@ PLAN-FAIL open: `0408` · `0410` · `0412` · `0413` — see [`00Failures.md`](0
 - [x] `07-AUTH-01` · [x] `07-AUTH-04` · [x] `07-AUTH-09`
 - Evidence: `results/site/phase-07/vitest/` (49/49) · `results/site/phase-07/http-probe/`
 
-### 08 — Persistence · Planned
-- [ ] `08-PERS-04` · [ ] `08-PERS-10` · dual-read · `0409` deferred
+### 08 — Persistence · Implemented, verification pending
+- [x] `08-PERS-04` · [x] `08-PERS-10` · [x] dual-read (disk-only)
+- Evidence: `results/site/phase-08/vitest/` (53/53) · `results/site/phase-08/http-probe/` · `results/site/phase-08/dual-read/`
+- Deferred: `0409` Supabase `block_descriptors` table
 
 ### 09 — 3D / export / AI · Planned
 - [ ] `09-3D-01` · [ ] `09-EXP-04` · [ ] `09-AI-03`

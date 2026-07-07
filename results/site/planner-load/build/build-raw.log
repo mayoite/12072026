@@ -1,0 +1,69 @@
+﻿Γû▓ Next.js 16.2.9 (Turbopack)
+- Experiments (use with caution):
+  ┬╖ optimizePackageImports
+
+  Creating an optimized production build ...
+node.exe : Turbopack build encountered 1 warnings:
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Turbopack build encountered 1 warnings::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+./site/next.config.js
+Encountered unexpected file in NFT list
+A file was traced that indicates that the whole project was traced unintentionally. Somewhere in the import trace 
+below, there are:
+- filesystem operations (like path.join, path.resolve or fs.readFile), or
+- very dynamic requires (like require('./' + foo)).
+To resolve this, you can
+- remove them if possible, or
+- only use them in development, or
+- make sure they are statically scoped to some subfolder: path.join(process.cwd(), 'data', bar), or
+- add ignore comments: path.join(/*turbopackIgnore: true*/ process.cwd(), bar)
+
+Import trace:
+  App Route:
+    ./site/next.config.js
+    ./site/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts
+    ./site/features/planner/admin/svg-editor/persistBlockDescriptor.ts
+    ./site/app/api/admin/svg-editor/route.ts
+
+
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./site/features/planner/admin/svg-editor/svgPipelineRunner.ts:123:10
+Module not found: Can't resolve <dynamic>
+  [90m121 |[0m
+  [90m122 |[0m   [90m// In-process (unified): dynamic import of thin script module calling canonical compiler.[0m
+[31m[1m>[0m [90m123 |[0m   [36mreturn[0m [36mimport[0m([32m`file://[0m${scriptPath.replace([35m/\\/g[0m, 
+[32m"/"[0m)[32m}`[0m)
+  [90m    |[0m          [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m124 |[0m     .then((mod) => {
+  [90m125 |[0m       [36mconst[0m runP = mod.runPipeline || mod.[36mdefault[0m?.runPipeline;
+  [90m126 |[0m       [36mif[0m ([36mtypeof[0m runP !== [32m"function"[0m) [36mthrow[0m [36mnew[0m 
+[33mError[0m([32m"runPipeline export missing"[0m);
+
+
+
+Import traces:
+  #1 [App Route]:
+    ./site/features/planner/admin/svg-editor/svgPipelineRunner.ts
+    ./site/app/api/admin/svg-editor/route.ts
+
+  #2 [Server Component]:
+    ./site/features/planner/admin/svg-editor/svgPipelineRunner.ts
+    ./site/app/admin/svg-editor/[id]/page.tsx
+
+  #3 [App Route]:
+    ./site/features/planner/admin/svg-editor/svgPipelineRunner.ts
+    ./site/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts
+    ./site/features/planner/admin/svg-editor/persistBlockDescriptor.ts
+    ./site/app/api/admin/svg-editor/route.ts
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./site/features/planner/admin/svg-editor/svgPipelineRunner.ts:123:10)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)

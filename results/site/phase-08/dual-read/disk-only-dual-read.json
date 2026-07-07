@@ -1,0 +1,17 @@
+{
+  "capturedAt": "2026-07-07T13:09:27.022Z",
+  "checkIds": [
+    "08-PERS-09",
+    "dual-read"
+  ],
+  "pass": true,
+  "disk": {
+    "enabled": true,
+    "source": "site/block-descriptors"
+  },
+  "mirror": {
+    "enabled": false,
+    "deferred": "PLAN-FAIL-0409"
+  },
+  "note": "Vitest-backed disk dual-read; Supabase mirror not promoted."
+}

@@ -1,0 +1,220 @@
+﻿node.exe : $ pnpm --filter oando-site lint
+At C:\Program Files\nodejs\pnpm.ps1:16 char:5
++     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ pnpm --filter oando-site lint:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+$ eslint -c config/build/eslint.config.mjs app components features lib tests --max-warnings=0
+
+D:\OandO07072026\site\features\planner\admin\svg-editor\persistBlockDescriptor.ts
+   21:3  error  'statSync' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  275:7  error  'rollbackBuffer' is never reassigned. Use 'const' instead                   prefer-const
+
+D:\OandO07072026\site\features\planner\admin\svg-editor\puckBlockRegistry.tsx
+   31:1   error  All imports in the declaration are only used as types. Use `import type`  @typescript-eslint/consistent-type-imports
+   33:15  error  'Config' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  661:18  error  `import()` type annotations are forbidden                                 @typescript-eslint/consistent-type-imports
+
+D:\OandO07072026\site\features\planner\admin\svg-editor\svgPipelineRunner.ts
+  111:9   error  'timeoutMs' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  112:9   error  'maxStderrBytes' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  179:13  error  'durationMs' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+
+D:\OandO07072026\site\features\planner\open3d\catalog\catalogMapping.ts
+  29:3  error  'normalizeColor' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\OandO07072026\site\features\planner\open3d\catalog\svg\sha256.ts
+  42:20  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  43:21  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  46:23  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  46:53  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  51:32  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  51:53  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  51:75  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  52:23  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  52:28  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  52:36  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  52:41  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  53:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  53:48  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  53:74  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  54:32  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  54:53  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  54:75  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  55:25  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  55:30  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  55:37  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  55:42  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  55:49  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  55:54  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  60:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  67:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  67:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  68:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  68:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  69:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  69:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  70:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  70:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  71:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  71:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  72:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  72:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  73:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  73:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  74:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  74:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+D:\OandO07072026\site\features\planner\open3d\catalog\svg\svgBlockDescriptorLoader.ts
+  34:3  error  'BLOCK_DESCRIPTOR_SCHEMA_VERSION' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  36:3  error  'Open3dDescriptorErrorKindSchema' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\OandO07072026\site\features\planner\open3d\catalog\useOpen3dWorkspaceCatalog.ts
+  32:45  error  Forbidden non-null assertion                                                                                                                                                            @typescript-eslint/no-non-null-assertion
+  37:9   error  The 'items' conditional could make the dependencies of useCallback Hook (at line 62) change on every render. To fix this, wrap the initialization of 'items' in its own useMemo() Hook  react-hooks/exhaustive-deps
+  80:6   error  React Hook useEffect has a missing dependency: 'query'. Either include it or remove the dependency array                                                                                react-hooks/exhaustive-deps
+
+D:\OandO07072026\site\features\planner\open3d\editor\InventoryPanel.tsx
+  107:14  error  Forbidden non-null assertion                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-non-null-assertion
+  107:41  error  Forbidden non-null assertion                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-non-null-assertion
+  122:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\OandO07072026\site\features\planner\open3d\editor\InventoryPanel.tsx:122:5
+  120 |
+  121 |   useEffect(() => {
+> 122 |     setFocusedIndex(-1);
+      |     ^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  123 |     onSearch?.(state.searchQuery);
+  124 |   }, [state.searchQuery, onSearch]);
+  125 |  react-hooks/set-state-in-effect
+  132:9   error  'handleSearchChange' is assigned a value but never used. Allowed unused vars must match /^_/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  205:9   error  'handleItemDoubleClick' is assigned a value but never used. Allowed unused vars must match /^_/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+
+D:\OandO07072026\site\features\planner\open3d\persistence\guestPromotion.ts
+  2:15  error  'Open3dProject' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  4:15  error  'MemberPlanRepository' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  7:47  error  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+  7:56  error  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+  7:66  error  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+
+D:\OandO07072026\site\features\planner\open3d\persistence\memberPlanRepository.ts
+  2:15  error  'StagingPlannerDocument' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  3:23  error  Unexpected any. Specify a different type                                                  @typescript-eslint/no-explicit-any
+  3:50  error  Unexpected any. Specify a different type                                                  @typescript-eslint/no-explicit-any
+  4:26  error  Unexpected any. Specify a different type                                                  @typescript-eslint/no-explicit-any
+  4:56  error  Unexpected any. Specify a different type                                                  @typescript-eslint/no-explicit-any
+  6:26  error  Unexpected any. Specify a different type                                                  @typescript-eslint/no-explicit-any
+  6:58  error  Unexpected any. Specify a different type                                                  @typescript-eslint/no-explicit-any
+  7:88  error  Unexpected any. Specify a different type                                                  @typescript-eslint/no-explicit-any
+
+D:\OandO07072026\site\features\planner\open3d\shared\export\importUtils.ts
+   6:76  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   7:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   7:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   7:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   8:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   8:67  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  10:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  10:51  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\OandO07072026\site\features\planner\open3d\shared\export\jsonExport.ts
+  2:61  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  4:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  4:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  5:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\OandO07072026\site\features\planner\open3d\shared\export\jsonImport.ts
+  3:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  6:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  7:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  7:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  8:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  9:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\OandO07072026\site\features\planner\open3d\shared\export\uploadUtils.ts
+   2:96   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   3:55   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   3:140  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   4:128  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   5:50   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   5:59   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   6:53   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   6:62   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   6:73   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   7:54   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   7:63   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   7:82   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   8:46   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   8:55   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  11:46   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  11:69   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  12:36   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  12:45   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  12:56   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\OandO07072026\site\lib\rateLimit.ts
+  180:79  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\OandO07072026\site\lib\ui\Slot.tsx
+  16:22  error  Expected '!==' and instead saw '!='  eqeqeq
+
+D:\OandO07072026\site\tests\unit\admin\svg-editor\svgPhase1Completion.test.ts
+  170:22  error  'BLOCK_DESCRIPTORS_DIR_DEFAULT' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  173:34  error  'writeFileSync' is assigned a value but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+
+D:\OandO07072026\site\tests\unit\admin\svg-editor\svgPipelineRunner.test.ts
+   16:48  error  `import()` type annotations are forbidden                                            @typescript-eslint/consistent-type-imports
+   19:46  error  `import()` type annotations are forbidden                                            @typescript-eslint/consistent-type-imports
+   27:46  error  `import()` type annotations are forbidden                                            @typescript-eslint/consistent-type-imports
+  148:11  error  'writeSpy' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  189:27  error  A `require()` style import is forbidden                                              @typescript-eslint/no-require-imports
+  189:56  error  `import()` type annotations are forbidden                                            @typescript-eslint/consistent-type-imports
+
+D:\OandO07072026\site\tests\unit\app\api\admin\svg-editor\phase04-admin-taxonomy.test.ts
+  17:12  error  `import()` type annotations are forbidden  @typescript-eslint/consistent-type-imports
+
+D:\OandO07072026\site\tests\unit\app\api\admin\svg-editor\route.test.ts
+   18:10  error  'ApiError' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+   18:20  error  'API_ERROR_CODES' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  173:9   error  'violations' is never reassigned. Use 'const' instead                              prefer-const
+
+D:\OandO07072026\site\tests\unit\features\planner\open3d\catalog.test.ts
+  188:3  error  'ROOM_TAGS' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  189:3  error  'STYLE_TAGS' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\OandO07072026\site\tests\unit\features\planner\open3d\imageImport.test.ts
+  3:3  error  'SUPPORTED_IMAGE_TYPES' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\OandO07072026\site\tests\unit\features\planner\open3d\modelOperations.test.ts
+  1:32  error  'vi' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+  2:58  error  'Open3dPoint' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  2:71  error  'Open3dWall' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  6:3   error  'createOpen3dSceneEnvelope' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\OandO07072026\site\tests\unit\features\planner\open3d\open3dFeasibilityCanvas.test.tsx
+  152:13  error  'rerender' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  173:13  error  'rerender' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\OandO07072026\site\tests\unit\features\planner\open3d\phase08-persistence.test.ts
+  11:3  error  'readFileSync' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\OandO07072026\site\tests\unit\features\planner\open3d\svgInventory.test.ts
+  801:32  error  `import()` type annotations are forbidden  @typescript-eslint/consistent-type-imports
+
+D:\OandO07072026\site\tests\unit\features\planner\open3d\workspaceShell.test.tsx
+  17:10  error  'useWorkspaceKeyboard' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+Γ£û 135 problems (135 errors, 0 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+
+D:\OandO07072026\site:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] oando-site@0.1.0 lint: `eslint -c config/build/eslint.config.mjs app components features lib tests --max-warnings=0`
+Exit status 1
+[ELIFECYCLE] Command failed with exit code 1.

@@ -1,0 +1,13 @@
+﻿{
+    "name":  "vitest",
+    "module":  "site",
+    "phase":  "phase-08",
+    "command":  "pnpm exec vitest run tests/unit/features/planner/open3d/phase08-persistence.test.ts tests/unit/admin/svg-editor/persistBlockDescriptor.test.ts tests/unit/features/planner/open3d/catalog/blockDescriptorLoader.test.ts tests/unit/app/api/admin/svg-editor/route.test.ts --config vitest.config.ts",
+    "cwd":  "D:\\OandO07072026\\site",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-07T18:39:16.6148955+05:30",
+    "endUtc":  "2026-07-07T18:39:19.6201506+05:30",
+    "durationSec":  3.005,
+    "exitCode":  0,
+    "rawLog":  "D:\\OandO07072026\\results\\site\\phase-08\\vitest\\vitest-raw.log"
+}

@@ -72,6 +72,17 @@
     "_descriptor422Codes": ["422.invalid", "422.version_mismatch"],
     "_authApiCodes": ["AUTH_REQUIRED", "INSUFFICIENT_PERMISSIONS"]
   },
+  "_phase08_persistence": {
+    "_status": "phase-08 versioned JSON-on-disk persistence",
+    "_writer": "site/features/planner/admin/svg-editor/persistBlockDescriptor.ts",
+    "_loader": "site/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader.ts",
+    "_layout": "{slug}.{n}.json + {slug}.latest.json pointer + legacy {slug}.json mirror",
+    "_lock": "O_EXCL {slug}.lock, 30s timeout → 409.lock_busy",
+    "_errors": ["422.version_mismatch", "409.hash_mismatch", "409.lock_busy"],
+    "_archive": "site/block-descriptors/_archive/ rolling 5 versions",
+    "_dualRead": "results/site/phase-08/dual-read/ (disk-only until PLAN-FAIL-0409)",
+    "_deferred": "PLAN-FAIL-0409 Supabase block_descriptors table"
+  },
   "publicGuestRoutes": [
     "/choose-product?mode=guest",
     "/planner/guest",

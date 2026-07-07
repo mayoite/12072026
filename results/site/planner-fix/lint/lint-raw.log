@@ -1,0 +1,42 @@
+﻿
+D:\oandO04072026\site\features\planner\admin\svg-editor\svgPipelineRunner.ts
+  104:9   error  'timeoutMs' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  105:9   error  'maxStderrBytes' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  165:13  error  'durationMs' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+
+D:\oandO04072026\site\features\planner\open3d\editor\OOPlannerWorkspace.tsx
+  102:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\oandO04072026\site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:102:5
+  100 |     let cancelled = false;
+  101 |     // Immediate hydration for guest to avoid blocking "open"; restore is best-effort.
+> 102 |     setHydrated(true);
+      |     ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  103 |
+  104 |     void restoreSnapshotRef.current().then((restored) => {
+  105 |       if (cancelled || !restored) return;  react-hooks/set-state-in-effect
+  141:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\oandO04072026\site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:141:7
+  139 |         raw ? JSON.parse(raw) : null,
+  140 |       );
+> 141 |       setDensity(prefs.density);
+      |       ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  142 |     } catch {
+  143 |       // keep default
+  144 |     }                                                                                                                     react-hooks/set-state-in-effect
+
+Γ£û 5 problems (5 errors, 0 warnings)
+

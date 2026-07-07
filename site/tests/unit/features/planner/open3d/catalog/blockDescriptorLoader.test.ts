@@ -210,7 +210,29 @@ describe("02-LOADER: storage boundary", () => {
     expect(all).toEqual([]);
   });
 
-  it("loadAll reads every .json file in the directory, skips malformed entries", () => {
+  it("tryLoad resolves descriptors through {slug}.latest.json pointer", () => {
+    const descriptor = freezeWithChecksum(1700000000);
+    mkdirSync(tmpDir, { recursive: true });
+    writeFileSync(path.join(tmpDir, "chaise.1.json"), JSON.stringify(descriptor));
+    writeFileSync(
+      path.join(tmpDir, "chaise.latest.json"),
+      JSON.stringify({
+        slug: "chaise",
+        n: 1,
+        checksum: descriptor.checksum,
+        schemaVersion: BLOCK_DESCRIPTOR_SCHEMA_VERSION,
+      }),
+    );
+
+    const result = tryLoad("chaise", { dir: tmpDir });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.slug).toBe("chaise");
+      expect(result.value.checksum).toBe(descriptor.checksum);
+    }
+  });
+
+  it("loadAll reads every legacy or pointer-backed slug", () => {
     // chaise = valid
     const chaise = freezeWithChecksum(1700000000);
     writeFileSync(path.join(tmpDir, "chaise.json"), JSON.stringify(chaise));

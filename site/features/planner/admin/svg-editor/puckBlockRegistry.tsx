@@ -28,7 +28,7 @@
  *     `BlockDescriptorThemeTokensSchema` (§02-CAT-07).
  *   - Donor trade-dress (Puck UI panel labels are owned by O&O Admin).
  */
-import { z } from "zod";
+import type { z } from "zod";
 import type * as React from "react";
 import type { Config, Data } from "@puckeditor/core";
 

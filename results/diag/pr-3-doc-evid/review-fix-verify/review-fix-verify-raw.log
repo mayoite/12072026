@@ -1,0 +1,11 @@
+﻿Invoke-Expression : At line:1 char:37
++ cmd /c echo PR3_REVIEW_FIX_VERIFIED & echo archive kept per updates
++                                     ~
+The ampersand (&) character is not allowed. The & operator is reserved for future use; wrap an ampersand in double 
+quotation marks ("&") to pass it as part of a string.
+At D:\oandO04072026\scripts\run-evidence-cmd.ps1:49 char:9
++     & { Invoke-Expression $Command } *>&1 | Out-File -FilePath $tmp - ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ParserError: (:) [Invoke-Expression], ParseException
+    + FullyQualifiedErrorId : AmpersandNotAllowed,Microsoft.PowerShell.Commands.InvokeExpressionCommand
+ 

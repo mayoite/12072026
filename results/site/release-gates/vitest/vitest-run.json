@@ -1,0 +1,13 @@
+﻿{
+    "name":  "vitest",
+    "module":  "site",
+    "phase":  "release-gates",
+    "command":  "pnpm run test",
+    "cwd":  "D:\\OandO07072026",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-07T18:49:46.5628118+05:30",
+    "endUtc":  "2026-07-07T18:54:29.1488585+05:30",
+    "durationSec":  282.586,
+    "exitCode":  1,
+    "rawLog":  "D:\\OandO07072026\\results\\site\\release-gates\\vitest\\vitest-raw.log"
+}

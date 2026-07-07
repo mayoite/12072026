@@ -1,0 +1,13 @@
+﻿{
+    "name":  "vitest",
+    "module":  "site",
+    "phase":  "phase-05",
+    "command":  "pnpm exec vitest run tests/unit/app --config vitest.site.config.ts -t portal/svg-catalog; pnpm exec vitest run tests/proxy.test.ts",
+    "cwd":  "D:\\OandO07072026\\site",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-07T17:59:46.4426616+05:30",
+    "endUtc":  "2026-07-07T18:00:57.5917737+05:30",
+    "durationSec":  71.149,
+    "exitCode":  0,
+    "rawLog":  "D:\\OandO07072026\\results\\site\\phase-05\\vitest\\vitest-raw.log"
+}

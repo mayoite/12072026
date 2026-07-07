@@ -1,0 +1,13 @@
+﻿{
+    "name":  "http-probe",
+    "module":  "site",
+    "phase":  "phase-05",
+    "command":  "node scripts/phase05-portal-route-probe.mjs",
+    "cwd":  "D:\\OandO07072026\\site",
+    "operator":  "Oz agent (Warp CLI session)",
+    "startUtc":  "2026-07-07T17:59:47.8877616+05:30",
+    "endUtc":  "2026-07-07T18:00:06.6438574+05:30",
+    "durationSec":  18.756,
+    "exitCode":  0,
+    "rawLog":  "D:\\OandO07072026\\results\\site\\phase-05\\http-probe\\http-probe-raw.log"
+}

@@ -23,6 +23,14 @@ import path from "node:path";
 import { resolveBlockDescriptorsDir } from "@/lib/paths/sitePackageRoot";
 
 import {
+  isLatestPointerFilename,
+  isLegacyDescriptorFilename,
+  isVersionedDescriptorFilename,
+  resolveDescriptorReadPath,
+  slugFromLatestPointerFilename,
+} from "./descriptorPointer";
+
+import {
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
   BLOCK_DESCRIPTOR_SLUG_REGEX,
   Open3dDescriptorErrorKindSchema,
@@ -129,9 +137,9 @@ function readDescriptorFile(
   slug: string,
   dir: string,
 ): Open3dResult<string, Open3dDescriptorError> {
-  let resolved: string;
+  let resolved: string | null;
   try {
-    resolved = path.resolve(dir, `${slug}.json`);
+    resolved = resolveDescriptorReadPath(slug, dir);
   } catch {
     return {
       ok: false,
@@ -144,8 +152,23 @@ function readDescriptorFile(
       },
     };
   }
+  if (!resolved) {
+    return {
+      ok: false,
+      error: {
+        kind: "notFound",
+        code: "404.not_found",
+        fieldPath: `slug:${slug}`,
+        message: `Block descriptor "${slug}" not found in ${dir}`,
+        slug,
+      },
+    };
+  }
   const dirNormalized = path.resolve(dir);
-  if (!resolved.startsWith(dirNormalized + path.sep) && resolved !== dirNormalized) {
+  if (
+    !resolved.startsWith(dirNormalized + path.sep) &&
+    resolved !== dirNormalized
+  ) {
     return {
       ok: false,
       error: {
@@ -154,18 +177,6 @@ function readDescriptorFile(
         fieldPath: "slug",
         message: `slug "${slug}" escapes the loader directory`,
         issues: [{ path: "slug", message: "path traversal attempt rejected" }],
-      },
-    };
-  }
-  if (!existsSync(resolved)) {
-    return {
-      ok: false,
-      error: {
-        kind: "notFound",
-        code: "404.not_found",
-        fieldPath: `slug:${slug}`,
-        message: `Block descriptor "${slug}" not found at ${resolved}`,
-        slug,
       },
     };
   }
@@ -317,12 +328,26 @@ export function loadAll(
   }
   const entries: string[] = readdirSync(dir);
   const descriptors = new Map<string, BlockDescriptor>();
+  const slugs = new Set<string>();
+
   for (const entry of entries) {
-    if (!entry.endsWith(".json")) continue;
-    const candidate = entry.slice(0, -".json".length);
-    const result = tryLoad(candidate, { dir });
+    if (isLatestPointerFilename(entry)) {
+      const slug = slugFromLatestPointerFilename(entry);
+      if (slug) slugs.add(slug);
+      continue;
+    }
+    if (
+      isLegacyDescriptorFilename(entry) &&
+      !isVersionedDescriptorFilename(entry)
+    ) {
+      slugs.add(entry.slice(0, -".json".length));
+    }
+  }
+
+  for (const slug of slugs) {
+    const result = tryLoad(slug, { dir });
     if (!result.ok) continue;
-    descriptors.set(candidate, result.value);
+    descriptors.set(result.value.slug, result.value);
   }
   loadAllCache = { descriptors, dir };
   return Array.from(descriptors.values());

@@ -1,4 +1,9 @@
-# Dependencies (per-package: site + tech-stack-generator; small set at root wrapper)
+# Phase 08 generated descriptor artifacts (seed JSON fixtures remain tracked)
+site/block-descriptors/**/*.lock
+site/block-descriptors/**/*.latest.json
+site/block-descriptors/_archive/
+site/block-descriptors/*.*.json
+
 node_modules/
 site/node_modules/
 tech-stack-generator/node_modules/
@@ -68,10 +73,3 @@ remedyplan/
 
 # Git worktree for isolation (moved inside repo)
 worktrees/
-
-# Results / evidence output directories
-# Kept local-only (no committed evidence per project preference).
-# Historical/archived results live in archive/results/ only.
-# Prefer plan stubs, Failures.md, and resolved-failures.md instead.
-results/
-site/results/

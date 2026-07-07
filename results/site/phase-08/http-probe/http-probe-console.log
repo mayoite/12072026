@@ -1,0 +1,14 @@
+=== Phase 08 persistence probe @ 2026-07-07T13:09:27.022Z ===
+exitCode=0
+pass=true
+RUN  v4.1.9 D:/OandO07072026/site
+
+ ✓ tests/unit/admin/svg-editor/persistBlockDescriptor.test.ts (13 tests) 81ms
+ ✓ tests/unit/features/planner/open3d/phase08-persistence.test.ts (11 tests) 217ms
+
+ Test Files  2 passed (2)
+      Tests  24 passed (24)
+   Start at  18:39:28
+   Duration  1.45s (transform 234ms, setup 782ms, import 344ms, tests 298ms, environment 967ms)
+
+JSON report written to D:/OandO07072026/results/tests/vitest-results.json

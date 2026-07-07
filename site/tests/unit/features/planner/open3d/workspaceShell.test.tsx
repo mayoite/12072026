@@ -14,7 +14,7 @@ import {
 } from "@/features/planner/open3d/editor/useWorkspaceCanvas";
 import { useDockingSystem } from "@/features/planner/open3d/editor/useDockingSystem";
 import { useDoorWindowPlacement } from "@/features/planner/open3d/editor/useDoorWindowPlacement";
-import { useWorkspaceKeyboard, toolFromShortcutKey } from "@/features/planner/open3d/editor/useWorkspaceKeyboard";
+import { toolFromShortcutKey } from "@/features/planner/open3d/editor/useWorkspaceKeyboard";
 import { runtimeToolFor } from "@/features/planner/open3d/editor/canvasTool";
 import { createOpen3dProject } from "@/features/planner/open3d/model/project";
 import type { Open3dWall } from "@/features/planner/open3d/model/types";
