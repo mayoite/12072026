@@ -1,16 +1,16 @@
-# World-Standard Product Vision
+# World-Standard Website Vision
 
 Date: 2026-07-07
 
-Status: in-principle product vision for recovery. Not final law.
+Status: in-principle website vision for recovery. Not final law.
 
 Repo: `D:\OandO07072026`
 
 ## Short Description
 
-We are building a premium carpet, flooring, and interior-planning platform.
+We are building a premium carpet, flooring, and interior-planning website.
 
-It should combine:
+The website should include:
 
 1. A high-trust marketing site.
 2. A fast 2D/3D room planner.
@@ -19,11 +19,13 @@ It should combine:
 5. A real CRM and operations layer.
 6. A clean deployment and evidence system.
 
-The target is not "a website with a planner".
+The target is a website with serious integrated modules.
 
-The target is a sales, design, planning, and operations platform.
+The website is the main product surface.
 
-## Product Goal
+Planner, admin, SVG, CRM, CDN, auth, database, and deployment are supporting modules inside that website system.
+
+## Website Goal
 
 Help customers and operators move from idea to quote to project with minimum confusion.
 
@@ -270,7 +272,7 @@ Answer: no document should be removed before Phase 00b.
 
 ## Ideal End State
 
-The ideal Oando platform is:
+The ideal Oando website is:
 
 1. Premium enough to build trust.
 2. Fast enough to use daily.
