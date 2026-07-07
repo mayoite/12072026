@@ -19,6 +19,7 @@ Don't load every file each task. Open the one that matches:
 - **Domain map (current vs proposed)** — `docs/Lockedfiles/INDEX.md` → `<module>/current.md` + `proposed.md`
 - **Where new code goes** — `docs/architecture/MODULE-LAYOUT.md`
 - **UI module contract (anti-drift)** — `docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md` + `ui-execution/`
+- **Figma-to-code / design-system intake** — `docs/architecture/FIGMA-DESIGN-SYSTEM-RULES.md`
 - **Architecture docs** — `docs/architecture/README.md` + `architecture/current.md` / `proposed.md`
 - **Doc revision log** — `plann/09-DOC-REVISION.md`
 - **Planner plans (execution order)** — `plann/README.md`

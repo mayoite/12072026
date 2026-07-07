@@ -14,6 +14,7 @@
 | **Where new code goes** | [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) |
 | **New UI module (any surface)** | [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) → [`ui/MODULE-UI-CONTRACT-Locked.md`](../Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md) |
 | **CSS folder / tokens / Tailwind role** | [`CSS-SOLUTION.md`](CSS-SOLUTION.md) |
+| **Figma-to-code and design-system intake** | [`FIGMA-DESIGN-SYSTEM-RULES.md`](FIGMA-DESIGN-SYSTEM-RULES.md) |
 | **Admin page or svg-editor** | [`ADMIN-UI-CONTRACT.md`](ADMIN-UI-CONTRACT.md) (UI-2) + MODULE-UI-CONTRACT |
 | **Marketing / homepage** | [`SITE-MARKETING-UI-CONTRACT.md`](SITE-MARKETING-UI-CONTRACT.md) — **UI-3 deferred** |
 | **Where code lives (C4, modules)** | [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md) |
@@ -35,6 +36,7 @@ plann/00-REVISION.md          (1A open3d pilot, 1B SVG Option A, no SVG.js Phase
   → docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md
   → docs/architecture/MODULE-LAYOUT.md      (where code goes)
   → docs/architecture/MODULE-UI-CONTRACT.md (surface + lint contract)
+  → docs/architecture/FIGMA-DESIGN-SYSTEM-RULES.md (Figma intake)
   → surface contracts (ADMIN-*, SITE-MARKETING-*)
   → CSS-SOLUTION.md (folder ownership)
 ```
@@ -77,6 +79,7 @@ Full snapshot: locked pair above.
 | **MODULE-LAYOUT** | No | Coordinator + disk audit; optional for large folder moves |
 | **MODULE-UI-CONTRACT** | No (locked) | Coordinator + `lint:ui` already defined |
 | **CSS-SOLUTION** | No | Folder policy is stable |
+| **FIGMA-DESIGN-SYSTEM-RULES** | Optional | Use when Figma intake or Code Connect readiness changes |
 | **COMPONENT_ARCHITECTURE** | **Optional** | C4 polish or security boundary review after 1A code refresh |
 | **DATA_FLOW — §5 open3d save** | No | Verify from `persistence/` + `plannerCommandWiring.test.ts` |
 | **DATA_FLOW — §6 SVG publish** | **Yes (1B)** | Security sequence (sanitize → compile → persist) before publish sign-off |

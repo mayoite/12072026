@@ -12,14 +12,15 @@ Use one file at a time.
 4. `03-admin-svg-editor.md`
 5. `03b-svg-pipeline.md`
 6. `04-planner-open3d.md`
-7. `05-auth.md`
-8. `06-database.md`
-9. `07-crm.md`
-10. `08-cdn-assets.md`
-11. `09-deployment.md`
-12. `10-tech-stack-docs.md`
-13. `11-docs.md`
-14. `12-handover.md`
+7. `04b-code-connect-readiness.md` deferred
+8. `05-auth.md`
+9. `06-database.md`
+10. `07-crm.md`
+11. `08-cdn-assets.md`
+12. `09-deployment.md`
+13. `10-tech-stack-docs.md`
+14. `11-docs.md`
+15. `12-handover.md`
 
 This order is not final law.
 

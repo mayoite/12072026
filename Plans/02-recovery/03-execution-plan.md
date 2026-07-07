@@ -52,6 +52,7 @@ Incomplete evidence stays incomplete.
 | 03 Admin SVG editor | `phases/03-admin-svg-editor.md` |
 | 03b SVG pipeline | `phases/03b-svg-pipeline.md` |
 | 04 Planner Open3D | `phases/04-planner-open3d.md` |
+| 04b Code Connect readiness | `phases/04b-code-connect-readiness.md` |
 | 05 Auth | `phases/05-auth.md` |
 | 06 Database | `phases/06-database.md` |
 | 07 CRM | `phases/07-crm.md` |
