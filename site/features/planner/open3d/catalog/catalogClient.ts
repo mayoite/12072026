@@ -55,7 +55,10 @@ class LRUCache<T> {
   private ttlMs: number;
   private staleThresholdMs: number;
 
-  constructor(maxItems = DEFAULT_CACHE_MAX_ITEMS, ttlMs = DEFAULT_CACHE_TTL_MS) {
+  constructor(
+    maxItems = DEFAULT_CACHE_MAX_ITEMS,
+    ttlMs = DEFAULT_CACHE_TTL_MS,
+  ) {
     this.maxItems = maxItems;
     this.ttlMs = ttlMs;
     this.staleThresholdMs = ttlMs * 0.5;
@@ -145,7 +148,11 @@ export function tokenize(text: string): string[] {
  * Ranking: exact SKU match (100) > exact name match (80) > tag match (50) >
  * description match (30) > fuzzy token match (10 per token).
  */
-function computeRelevance(item: Open3dCatalogItem, queryTokens: string[], queryLower: string): number {
+function computeRelevance(
+  item: Open3dCatalogItem,
+  queryTokens: string[],
+  queryLower: string,
+): number {
   let score = 0;
 
   // Exact SKU match
@@ -164,7 +171,11 @@ function computeRelevance(item: Open3dCatalogItem, queryTokens: string[], queryL
   }
 
   // Token matching
-  const itemTokens = new Set(tokenize(`${item.name} ${item.description} ${item.tags.join(" ")} ${item.sku}`));
+  const itemTokens = new Set(
+    tokenize(
+      `${item.name} ${item.description} ${item.tags.join(" ")} ${item.sku}`,
+    ),
+  );
   for (const qt of queryTokens) {
     if (itemTokens.has(qt)) {
       // Tag match
@@ -197,10 +208,15 @@ function computeRelevance(item: Open3dCatalogItem, queryTokens: string[], queryL
   return score;
 }
 
-function compareCatalogItems(a: Open3dCatalogItem, b: Open3dCatalogItem): number {
-  return a.name.localeCompare(b.name)
-    || a.sku.localeCompare(b.sku)
-    || a.id.localeCompare(b.id);
+function compareCatalogItems(
+  a: Open3dCatalogItem,
+  b: Open3dCatalogItem,
+): number {
+  return (
+    a.name.localeCompare(b.name) ||
+    a.sku.localeCompare(b.sku) ||
+    a.id.localeCompare(b.id)
+  );
 }
 
 function compareNewest(a: Open3dCatalogItem, b: Open3dCatalogItem): number {
@@ -208,7 +224,7 @@ function compareNewest(a: Open3dCatalogItem, b: Open3dCatalogItem): number {
   const right = Date.parse(b.provenance.importedAt ?? "");
   const safeLeft = Number.isFinite(left) ? left : 0;
   const safeRight = Number.isFinite(right) ? right : 0;
-  return (safeRight - safeLeft) || compareCatalogItems(a, b);
+  return safeRight - safeLeft || compareCatalogItems(a, b);
 }
 
 // ── Catalog Client ──
@@ -241,7 +257,9 @@ export class Open3dCatalogClient {
   private index: Open3dCatalogIndex | null = null;
   private tokenizedIndex: Map<string, Set<string>> = new Map(); // Pre-tokenized for search
   private cache: LRUCache<Open3dCatalogSearchResult>;
-  private options: Required<Omit<CatalogClientOptions, "fetchImpl">> & { fetchImpl?: typeof fetch };
+  private options: Required<Omit<CatalogClientOptions, "fetchImpl">> & {
+    fetchImpl?: typeof fetch;
+  };
   private loadedSource: CatalogSource | null = null;
   private loadedAt: number = 0;
   // loadedDescriptors for catalogue-first primary in search (BP-06 / design §9/10)
@@ -257,7 +275,10 @@ export class Open3dCatalogClient {
       fetchImpl: options.fetchImpl,
       apiBasePath: options.apiBasePath ?? "",
     };
-    this.cache = new LRUCache(this.options.maxCacheItems, this.options.cacheTtlMs);
+    this.cache = new LRUCache(
+      this.options.maxCacheItems,
+      this.options.cacheTtlMs,
+    );
   }
 
   /**
@@ -274,7 +295,9 @@ export class Open3dCatalogClient {
     // Pre-tokenize all items once for search (PLAN-FAIL-012)
     this.tokenizedIndex.clear();
     for (const item of items) {
-      const tokens = tokenize(`${item.name} ${item.description} ${item.tags.join(" ")} ${item.sku}`);
+      const tokens = tokenize(
+        `${item.name} ${item.description} ${item.tags.join(" ")} ${item.sku}`,
+      );
       for (const token of tokens) {
         if (!this.tokenizedIndex.has(token)) {
           this.tokenizedIndex.set(token, new Set());
@@ -287,22 +310,26 @@ export class Open3dCatalogClient {
   /**
    * Fetch, normalize, and load catalog items from the planner catalog API.
    */
-  async loadFromApi(source: CatalogSource, limit = 200): Promise<Open3dCatalogItem[]> {
+  async loadFromApi(
+    source: CatalogSource,
+    limit = 200,
+  ): Promise<Open3dCatalogItem[]> {
     const fetcher = this.options.fetchImpl ?? globalThis.fetch;
     if (typeof fetcher !== "function") {
       throw new Error("Catalog API loading requires fetch");
     }
 
-    const path = source === "configurator"
-      ? "/api/planner/catalog/configurator"
-      : "/api/planner/catalog";
+    const path =
+      source === "configurator"
+        ? "/api/planner/catalog/configurator"
+        : "/api/planner/catalog";
     const url = `${this.options.apiBasePath}${path}?limit=${encodeURIComponent(String(limit))}`;
     const response = await fetcher(url);
     if (!response.ok) {
       throw new Error(`Catalog API request failed: ${response.status}`);
     }
 
-    const envelope = await response.json() as CatalogApiEnvelope;
+    const envelope = (await response.json()) as CatalogApiEnvelope;
     const rawItems = Array.isArray(envelope.items)
       ? envelope.items
       : Array.isArray(envelope.data?.items)
@@ -378,7 +405,13 @@ export class Open3dCatalogClient {
     const startedAt = performance.now();
 
     if (!this.index || this.items.length === 0) {
-      return { items: [], totalCount: 0, nextCursor: null, hasMore: false, tookMs: 0 };
+      return {
+        items: [],
+        totalCount: 0,
+        nextCursor: null,
+        hasMore: false,
+        tookMs: 0,
+      };
     }
 
     // Generate cache key for deterministic query caching (order-independent)
@@ -394,7 +427,9 @@ export class Open3dCatalogClient {
       [...(query.configurabilityFilter ?? [])].sort().join(","),
       [...(query.mountingFilter ?? [])].sort().join(","),
       [...(query.assetReadinessFilter ?? [])].sort().join(","),
-      query.dimensionFilter ? `${query.dimensionFilter.minWidthMm ?? ""}-${query.dimensionFilter.maxWidthMm ?? ""}-${query.dimensionFilter.minDepthMm ?? ""}-${query.dimensionFilter.maxDepthMm ?? ""}-${query.dimensionFilter.minHeightMm ?? ""}-${query.dimensionFilter.maxHeightMm ?? ""}` : "",
+      query.dimensionFilter
+        ? `${query.dimensionFilter.minWidthMm ?? ""}-${query.dimensionFilter.maxWidthMm ?? ""}-${query.dimensionFilter.minDepthMm ?? ""}-${query.dimensionFilter.maxDepthMm ?? ""}-${query.dimensionFilter.minHeightMm ?? ""}-${query.dimensionFilter.maxHeightMm ?? ""}`
+        : "",
       query.sortOrder ?? "",
       query.sortField ?? "",
       query.sortDirection ?? "",
@@ -420,13 +455,17 @@ export class Open3dCatalogClient {
     if (this.loadedDescriptors && this.loadedDescriptors.length > 0) {
       // Prefer descriptor-sourced when present (catalogue-first); items may be merged/secondary.
       // (mapping happens in loadDescriptorsFromLoader so search sees them in this.items)
-      const resolved = resolveBlocks(this.loadedDescriptors[0]!); // actually use blocks (consume result)
+      const resolved = resolveBlocks(
+        this.loadedDescriptors[0] as BlockDescriptor,
+      ); // actually use blocks (consume result); narrowed by length guard above
       void resolved.blocks.length; // integration: blocks used for symbol geometry (not dummy call)
     }
 
     // Category filter
     if (query.categoryFilter) {
-      candidates = candidates.filter((item) => item.category === query.categoryFilter);
+      candidates = candidates.filter(
+        (item) => item.category === query.categoryFilter,
+      );
     }
 
     // Room filter
@@ -460,7 +499,8 @@ export class Open3dCatalogClient {
       const filters = colorFilter.map((c) => c.toLowerCase());
       candidates = candidates.filter(
         (item) =>
-          item.color && filters.includes(item.color.normalizedFamily.toLowerCase()),
+          item.color &&
+          filters.includes(item.color.normalizedFamily.toLowerCase()),
       );
     }
 
@@ -476,12 +516,14 @@ export class Open3dCatalogClient {
       const maxH = df.maxHeightMm ?? null;
       candidates = candidates.filter((i) => {
         const { widthMm, depthMm, heightMm } = i.dimensions;
-        return (minW === null || widthMm >= minW)
-          && (maxW === null || widthMm <= maxW)
-          && (minD === null || depthMm >= minD)
-          && (maxD === null || depthMm <= maxD)
-          && (minH === null || heightMm >= minH)
-          && (maxH === null || heightMm <= maxH);
+        return (
+          (minW === null || widthMm >= minW) &&
+          (maxW === null || widthMm <= maxW) &&
+          (minD === null || depthMm >= minD) &&
+          (maxD === null || depthMm <= maxD) &&
+          (minH === null || heightMm >= minH) &&
+          (maxH === null || heightMm <= maxH)
+        );
       });
     }
 
@@ -497,21 +539,28 @@ export class Open3dCatalogClient {
     if (configurabilityFilter.length > 0) {
       candidates = candidates.filter((item) => {
         const configurability = item.configurability ?? null;
-        return configurability !== null && configurabilityFilter.includes(configurability);
+        return (
+          configurability !== null &&
+          configurabilityFilter.includes(configurability)
+        );
       });
     }
 
     const mountingFilter = query.mountingFilter ?? [];
     if (mountingFilter.length > 0) {
       candidates = candidates.filter((item) =>
-        (item.mounting ?? ["floor"]).some((mounting) => mountingFilter.includes(mounting)),
+        (item.mounting ?? ["floor"]).some((mounting) =>
+          mountingFilter.includes(mounting),
+        ),
       );
     }
 
     const assetReadinessFilter = query.assetReadinessFilter ?? [];
     if (assetReadinessFilter.length > 0) {
       candidates = candidates.filter((item) =>
-        (item.assetReadiness ?? ["ready"]).some((state) => assetReadinessFilter.includes(state)),
+        (item.assetReadiness ?? ["ready"]).some((state) =>
+          assetReadinessFilter.includes(state),
+        ),
       );
     }
 
@@ -520,21 +569,32 @@ export class Open3dCatalogClient {
     const licenseFilter = query.licenseFilter;
     if (licenseFilter && licenseFilter.length > 0) {
       candidates = candidates.filter((item) => {
-        const lic = item.license || (item.tags?.find((t) => t.toLowerCase().includes("license")) ?? "standard");
+        const lic =
+          item.license ||
+          (item.tags?.find((t) => t.toLowerCase().includes("license")) ??
+            "standard");
         return licenseFilter.includes(String(lic));
       });
     }
     if (typeof query.animatedFilter === "boolean") {
-      candidates = candidates.filter((item) => (item.animated ?? false) === query.animatedFilter);
+      candidates = candidates.filter(
+        (item) => (item.animated ?? false) === query.animatedFilter,
+      );
     }
     if (typeof query.staffPicked === "boolean") {
-      candidates = candidates.filter((item) => (item.staffPicked ?? false) === query.staffPicked);
+      candidates = candidates.filter(
+        (item) => (item.staffPicked ?? false) === query.staffPicked,
+      );
     }
     if (typeof query.favourite === "boolean") {
-      candidates = candidates.filter((item) => (item.favourite ?? false) === query.favourite);
+      candidates = candidates.filter(
+        (item) => (item.favourite ?? false) === query.favourite,
+      );
     }
     if (typeof query.downloadable === "boolean") {
-      candidates = candidates.filter((item) => (item.downloadable ?? true) === query.downloadable);
+      candidates = candidates.filter(
+        (item) => (item.downloadable ?? true) === query.downloadable,
+      );
     }
 
     // Step 2: Full-text search (uses pre-tokenized index for performance)
@@ -559,21 +619,31 @@ export class Open3dCatalogClient {
       }
       const scored = candidates
         .filter((item) => matchingIds.has(item.id))
-        .map((item) => ({ item, score: computeRelevance(item, queryTokens, queryLower) }))
-        .sort((a, b) => (b.score - a.score) || compareCatalogItems(a.item, b.item));
+        .map((item) => ({
+          item,
+          score: computeRelevance(item, queryTokens, queryLower),
+        }))
+        .sort(
+          (a, b) => b.score - a.score || compareCatalogItems(a.item, b.item),
+        );
       candidates = scored.map(({ item }) => item);
     }
 
     // Step 3: Sort
-    const sortField = query.sortField ?? (
-      query.sortOrder === "name-asc" || query.sortOrder === "name-desc" ? "name"
-        : query.sortOrder === "price-asc" || query.sortOrder === "price-desc" ? "price"
-          : query.sortOrder === "newest" ? "newest"
-            : "relevance"
-    );
-    const sortDirection = query.sortDirection ?? (
-      query.sortOrder === "name-desc" || query.sortOrder === "price-desc" ? "desc" : "asc"
-    );
+    const sortField =
+      query.sortField ??
+      (query.sortOrder === "name-asc" || query.sortOrder === "name-desc"
+        ? "name"
+        : query.sortOrder === "price-asc" || query.sortOrder === "price-desc"
+          ? "price"
+          : query.sortOrder === "newest"
+            ? "newest"
+            : "relevance");
+    const sortDirection =
+      query.sortDirection ??
+      (query.sortOrder === "name-desc" || query.sortOrder === "price-desc"
+        ? "desc"
+        : "asc");
 
     if (sortField !== "relevance") {
       const sorted = [...candidates];
@@ -583,7 +653,11 @@ export class Open3dCatalogClient {
           if (sortDirection === "desc") sorted.reverse();
           break;
         case "price":
-          sorted.sort((a, b) => ((a.pricing?.price ?? 0) - (b.pricing?.price ?? 0)) || compareCatalogItems(a, b));
+          sorted.sort(
+            (a, b) =>
+              (a.pricing?.price ?? 0) - (b.pricing?.price ?? 0) ||
+              compareCatalogItems(a, b),
+          );
           if (sortDirection === "desc") sorted.reverse();
           break;
         case "newest":
@@ -599,7 +673,9 @@ export class Open3dCatalogClient {
     // Step 4: Paginate
     // Sketchfab parity: cursor-only pagination, explicit cap ≤24 (BP-06 / design §9 / REC-02 / phase-06)
     const totalCount = candidates.length;
-    const requested = query.pageSize ?? (query.text ? this.options.searchPageSize : this.options.defaultPageSize);
+    const requested =
+      query.pageSize ??
+      (query.text ? this.options.searchPageSize : this.options.defaultPageSize);
     const pageSize = Math.min(24, Math.max(1, requested));
 
     let startIndex = 0;
@@ -648,7 +724,9 @@ export class Open3dCatalogClient {
    * should be refreshed in the background by the UI/runtime boundary.
    */
   shouldRevalidate(now = Date.now()): boolean {
-    return this.loadedAt > 0 && now - this.loadedAt > this.options.cacheTtlMs * 0.5;
+    return (
+      this.loadedAt > 0 && now - this.loadedAt > this.options.cacheTtlMs * 0.5
+    );
   }
 
   /**
@@ -669,7 +747,29 @@ export class Open3dCatalogClient {
    */
   async loadDescriptorsFromLoader(): Promise<BlockDescriptor[]> {
     if (typeof window !== "undefined") {
-      // address client-side always []: return any preloaded descriptors (injected); loader primary via client.getAll() consumers
+      const fetcher = this.options.fetchImpl ?? globalThis.fetch;
+      if (typeof fetcher === "function") {
+        try {
+          const url = `${this.options.apiBasePath}/api/planner/catalog/svg-blocks`;
+          const response = await fetcher(url);
+          if (response.ok) {
+            const envelope = (await response.json()) as CatalogApiEnvelope;
+            const rawItems = Array.isArray(envelope.items)
+              ? envelope.items
+              : Array.isArray(envelope.data?.items)
+                ? envelope.data.items
+                : [];
+            const items = rawItems
+              .map((raw) => this.normalizeApiItem(raw, "standard"))
+              .filter((item): item is Open3dCatalogItem => item !== null);
+            if (items.length > 0) {
+              this.load(items, "standard");
+            }
+          }
+        } catch {
+          // fall through to any preloaded descriptors
+        }
+      }
       return this.loadedDescriptors;
     }
     try {
@@ -678,7 +778,7 @@ export class Open3dCatalogClient {
       this.loadedDescriptors = descriptors;
       // resolver integration (PLAN-FAIL-0419): actually use blocks (capture result, consume .blocks)
       if (descriptors.length > 0) {
-        const resolved = resolveBlocks(descriptors[0]!);
+        const resolved = resolveBlocks(descriptors[0] as BlockDescriptor);
         // use the blocks for symbol geometry integration (e.g. count or downstream ready)
         void resolved.blocks.length;
       }
@@ -695,10 +795,17 @@ export class Open3dCatalogClient {
           category: "Furniture",
           subCategory: "Chairs",
           taxonomyPath: `Furniture > Symbols > ${d.slug}`,
-          dimensions: { widthMm: d.geometry.widthMm, depthMm: d.geometry.depthMm, heightMm: d.geometry.heightMm ?? 800 },
+          dimensions: {
+            widthMm: d.geometry.widthMm,
+            depthMm: d.geometry.depthMm,
+            heightMm: d.geometry.heightMm ?? 800,
+          },
           displayUnit: "mm",
           assets: { imageUrls: [] },
-          material: { marketingMaterial: "SVG", normalizedMaterial: "svg-symbol" },
+          material: {
+            marketingMaterial: "SVG",
+            normalizedMaterial: "svg-symbol",
+          },
           roomTags: [],
           styleTags: [],
           availability: "in-stock",
@@ -764,7 +871,9 @@ export class Open3dCatalogClient {
       }
 
       // Full-text index
-      const tokens = tokenize(`${item.name} ${item.description} ${item.tags.join(" ")} ${item.sku}`);
+      const tokens = tokenize(
+        `${item.name} ${item.description} ${item.tags.join(" ")} ${item.sku}`,
+      );
       for (const token of tokens) {
         if (!textIndex.has(token)) textIndex.set(token, new Set());
         textIndex.get(token)?.add(item.id);
@@ -785,30 +894,37 @@ export class Open3dCatalogClient {
     };
   }
 
-  private normalizeApiItem(raw: unknown, source: CatalogSource): Open3dCatalogItem | null {
+  private normalizeApiItem(
+    raw: unknown,
+    source: CatalogSource,
+  ): Open3dCatalogItem | null {
     if (this.isOpen3dCatalogItem(raw)) return raw;
     return source === "configurator"
       ? mapConfiguratorProductToCatalogItem(raw as ConfiguratorProductInput)
-      : mapPlannerManagedProductToCatalogItem(raw as PlannerManagedProductInput);
+      : mapPlannerManagedProductToCatalogItem(
+          raw as PlannerManagedProductInput,
+        );
   }
 
   private isOpen3dCatalogItem(raw: unknown): raw is Open3dCatalogItem {
     if (!raw || typeof raw !== "object") return false;
     const item = raw as Partial<Open3dCatalogItem>;
-    return typeof item.id === "string"
-      && typeof item.slug === "string"
-      && typeof item.sku === "string"
-      && typeof item.name === "string"
-      && typeof item.category === "string"
-      && typeof item.subCategory === "string"
-      && typeof item.taxonomyPath === "string"
-      && typeof item.dimensions?.widthMm === "number"
-      && typeof item.dimensions.depthMm === "number"
-      && typeof item.dimensions.heightMm === "number"
-      && Array.isArray(item.roomTags)
-      && Array.isArray(item.styleTags)
-      && Array.isArray(item.tags)
-      && Array.isArray(item.variants)
-      && typeof item.provenance?.source === "string";
+    return (
+      typeof item.id === "string" &&
+      typeof item.slug === "string" &&
+      typeof item.sku === "string" &&
+      typeof item.name === "string" &&
+      typeof item.category === "string" &&
+      typeof item.subCategory === "string" &&
+      typeof item.taxonomyPath === "string" &&
+      typeof item.dimensions?.widthMm === "number" &&
+      typeof item.dimensions.depthMm === "number" &&
+      typeof item.dimensions.heightMm === "number" &&
+      Array.isArray(item.roomTags) &&
+      Array.isArray(item.styleTags) &&
+      Array.isArray(item.tags) &&
+      Array.isArray(item.variants) &&
+      typeof item.provenance?.source === "string"
+    );
   }
 }

@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import type { Open3dProject, Open3dPoint, Open3dWall, Open3dFloor } from "../model/types";
+import type {
+  Open3dProject,
+  Open3dPoint,
+  Open3dWall,
+  Open3dFloor,
+} from "../model/types";
 import { readThemeColor } from "../shared/readThemeColor";
-import {
-  createOpen3dHistory,
-  type Open3dHistoryState,
-} from "../store/history";
+import { createOpen3dHistory, type Open3dHistoryState } from "../store/history";
 import {
   executePlannerCommand,
   type PlannerCommand,
@@ -81,7 +83,10 @@ export function useWorkspaceCanvas(
   );
 
   // Selection state (transient — never recorded in document history/undo).
-  const [selection, setSelection] = useState<CanvasSelection>({ type: "none", ids: [] });
+  const [selection, setSelection] = useState<CanvasSelection>({
+    type: "none",
+    ids: [],
+  });
 
   // Task 4 foundation: panels, search, loading, camera (3d transform), notifications
   // live in caller (OOPlannerWorkspace, FeasibilityCanvas, InventoryPanel, Three*).
@@ -142,20 +147,38 @@ export function useWorkspaceCanvas(
     setSelection({ type: "none", ids: [] });
   }, []);
 
-  return {
-    project,
-    activeFloor,
-    history,
-    selection,
-    canUndo,
-    canRedo,
-    dispatch,
-    undo,
-    redo,
-    setSelection,
-    updateProject,
-    replaceProject,
-  };
+  // Memoize context value for stable ref (prevents rerender storms in consumers per react-bp audit)
+  const context = useMemo<WorkspaceCanvasContext>(
+    () => ({
+      project,
+      activeFloor,
+      history,
+      selection,
+      canUndo,
+      canRedo,
+      dispatch,
+      undo,
+      redo,
+      setSelection,
+      updateProject,
+      replaceProject,
+    }),
+    [
+      project,
+      activeFloor,
+      history,
+      selection,
+      canUndo,
+      canRedo,
+      dispatch,
+      undo,
+      redo,
+      setSelection,
+      updateProject,
+      replaceProject,
+    ],
+  );
+  return context;
 }
 
 /**
@@ -190,9 +213,7 @@ export function useCanvasDrawing(initialProject?: Open3dProject) {
         return {
           ...project,
           floors: project.floors.map((f) =>
-            f.id === floor.id
-              ? { ...f, walls: [...f.walls, newWall] }
-              : f,
+            f.id === floor.id ? { ...f, walls: [...f.walls, newWall] } : f,
           ),
         };
       });

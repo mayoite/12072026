@@ -1,3 +1,5 @@
+"use client";
+
 import { PencilLine } from "lucide-react";
 import { buildShellOnlyLayout } from "@/features/planner/ai/spaceSuggest";
 import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
@@ -22,7 +24,7 @@ export function StartingPointStep({ guestMode = false, planId, onComplete }: Sta
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-6 sm:p-8 animate-in fade-in zoom-in-95 duration-500">
+    <div className="flex-1 flex items-center justify-center overflow-x-hidden p-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] pt-[calc(1rem+env(safe-area-inset-top,0px))] sm:p-8 animate-in fade-in zoom-in-95 duration-500">
       <div className="w-full max-w-2xl mx-auto space-y-6">
         <div className="text-center space-y-2">
           <h1 className="typ-h2 text-[color:var(--text-strong)]">Let's get started</h1>
@@ -39,7 +41,7 @@ export function StartingPointStep({ guestMode = false, planId, onComplete }: Sta
             className="pw-starting-point-btn"
           >
             <div className="pw-starting-point-icon">
-              <PencilLine className="h-6 w-6 text-indigo-500" />
+              <PencilLine className="h-6 w-6" aria-hidden="true" />
             </div>
             <div className="text-left">
               <div className="font-semibold text-[color:var(--text-strong)]">Start from Scratch</div>

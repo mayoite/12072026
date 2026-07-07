@@ -618,9 +618,90 @@
   border: 1px solid var(--border-soft);
   background: var(--surface-panel);
   padding: 0.5rem;
+  overflow: hidden;
+}
+
+[data-admin-layout] .block-preview {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  shape-rendering: geometricPrecision;
 }
 
 [data-admin-layout] .admin-page__section details summary {
   font-weight: var(--font-weight-copy-semibold);
   color: var(--text-heading);
+}
+
+@media (width < 48rem) {
+  [data-admin-layout] .admin-page {
+    max-width: 100%;
+    padding:
+      calc(1rem + env(safe-area-inset-top, 0px))
+      calc(1rem + env(safe-area-inset-right, 0px))
+      calc(1.5rem + env(safe-area-inset-bottom, 0px))
+      calc(1rem + env(safe-area-inset-left, 0px));
+    overflow-x: hidden;
+  }
+
+  [data-admin-layout] .admin-page__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  [data-admin-layout] .admin-page__title {
+    font-size: clamp(1.25rem, 1.1rem + 2vw, 1.55rem);
+    overflow-wrap: anywhere;
+  }
+
+  [data-admin-layout] .admin-page__meta,
+  [data-admin-layout] .admin-page__copy {
+    overflow-wrap: anywhere;
+  }
+
+  [data-admin-layout] .admin-page__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  [data-admin-layout] .admin-btn,
+  [data-admin-layout] .admin-field__input,
+  [data-admin-layout] .admin-field select {
+    min-height: 2.75rem;
+  }
+
+  [data-admin-layout] .admin-icon-btn {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+
+  [data-admin-layout] .admin-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  [data-admin-layout] .admin-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  [data-admin-layout] .admin-tabs__tab {
+    flex-shrink: 0;
+    min-height: 2.75rem;
+  }
+
+  [data-admin-layout] .admin-puck-editor {
+    margin-inline: -0.25rem;
+    padding: 0;
+    border-radius: var(--radius-md);
+    min-height: min(72dvh, 36rem);
+  }
+
+  [data-admin-layout] .admin-page__section details summary {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+  }
 }

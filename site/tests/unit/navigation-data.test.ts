@@ -36,10 +36,16 @@ describe("SITE_NAV_LINKS", () => {
     expect(match?.href).toBe("/about");
   });
 
+  it("contains Projects page", () => {
+    const match = SITE_NAV_LINKS.find((l) => l.label === "Projects");
+    expect(match).toBeDefined();
+    expect(match?.href).toBe("/projects");
+  });
+
   it("contains Planner page", () => {
     const match = SITE_NAV_LINKS.find((l) => l.label === "Planner");
     expect(match).toBeDefined();
-    expect(match?.href).toMatch(/^\//);
+    expect(match?.href).toBe("/planner");
   });
 
   it("contains Solutions page", () => {

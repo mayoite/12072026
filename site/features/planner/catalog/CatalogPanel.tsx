@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * CatalogPanel — 3-layer catalog browser for the planner left sidebar.
  *
@@ -5,8 +7,6 @@
  * Layer 2: Sub-category chips
  * Layer 3: 2-column item cards with thumbnails and add-to-canvas
  */
-
-"use client";
 
 import { useCallback, useMemo, useState } from "react";
 import { Clock, Plus, Search, X } from "lucide-react";

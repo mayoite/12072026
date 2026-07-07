@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "2026-07-04.v2",
+  "id": "f81e3a1b-16f4-4000-8000-000000000004",
+  "slug": "missing-geom-fallback-001",
+  "sku": "OFL-FBK-001",
+  "sourceProvenance": "native",
+  "createdBy": "seed-block-descriptors",
+  "geometry": {
+    "widthMm": 200,
+    "depthMm": 200,
+    "heightMm": 200
+  },
+  "viewBox": {
+    "x": 0,
+    "y": 0,
+    "width": 200,
+    "height": 200
+  },
+  "mounting": [
+    "floor"
+  ],
+  "themeTokens": {
+    "currentColor": "currentColor",
+    "--fill-primary": "var(--color-surface-raised)"
+  },
+  "rovingFocus": [],
+  "liveAnnouncementCategories": [
+    "status"
+  ],
+  "generatedAt": 1751631003,
+  "checksum": "5c0410c897366e5f8f99a7271f25f042baebf54f4fb6282953648dda4eb07f54",
+  "variant": "fixed",
+  "fixed": {
+    "sizingType": "fixed"
+  }
+}

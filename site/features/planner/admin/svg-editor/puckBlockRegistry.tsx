@@ -257,6 +257,7 @@ function FixedBlockRender({ slug, sku }: FixedRenderProps): React.ReactNode {
       role="img"
       aria-label={`Block descriptor "${slug}" (fixed)`}
       viewBox="0 0 200 100"
+      shapeRendering="geometricPrecision"
       className="block-preview block-preview--fixed"
       data-block-variant="fixed"
     >
@@ -315,6 +316,7 @@ function ConfigurableBlockRender({
       role="img"
       aria-label={`Block descriptor "${slug}" (configurable, ${sizingType}, ${optionCount} options)`}
       viewBox="0 0 220 110"
+      shapeRendering="geometricPrecision"
       className="block-preview block-preview--configurable"
       data-block-variant="configurable"
     >
@@ -370,6 +372,7 @@ function ParametricBlockRender({
       role="img"
       aria-label={`Block descriptor "${slug}" (parametric, ${parameterCount} parameters)`}
       viewBox="0 0 220 110"
+      shapeRendering="geometricPrecision"
       className="block-preview block-preview--parametric"
       data-block-variant="parametric"
     >

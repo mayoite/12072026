@@ -9,17 +9,19 @@
  * pages cannot own DOM focus state.
  */
 
+import { existsSync } from "node:fs";
+import path from "node:path";
+
 import { loadAll } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+import {
+  buildBlockThumbPngUrl,
+  buildSvgCatalogPublicUrl,
+} from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
 import { SvgCatalogGrid } from "./SvgCatalogGrid";
 
-const THUMB_BUCKET = "site-block-thumbs";
-
-function thumbUrl(slug: string): string {
-  const account = (process.env.CLOUDFLARE_ACCOUNT_ID || "").trim();
-  if (account) {
-    return `https://${account}.r2.cloudflarestorage.com/${THUMB_BUCKET}/${slug}.png`;
-  }
-  return `https://cdn.oando.co.in/${THUMB_BUCKET}/${slug}.png`;
+function resolveSvgPublicUrl(slug: string): string | undefined {
+  const svgPath = path.resolve(process.cwd(), "public", "svg-catalog", `${slug}.svg`);
+  return existsSync(svgPath) ? buildSvgCatalogPublicUrl(slug) : undefined;
 }
 
 export default async function SvgCatalogIndex() {
@@ -45,7 +47,8 @@ export default async function SvgCatalogIndex() {
             slug: d.slug,
             variant: d.variant,
             schemaVersion: d.schemaVersion,
-            thumbUrl: thumbUrl(d.slug),
+            thumbUrl: buildBlockThumbPngUrl(d.slug),
+            svgUrl: resolveSvgPublicUrl(d.slug),
           }))}
         />
       )}

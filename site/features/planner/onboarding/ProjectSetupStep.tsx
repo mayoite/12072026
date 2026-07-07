@@ -119,7 +119,10 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-[color:var(--surface-inverse)]/88 p-4 backdrop-blur-sm" style={{ zIndex: Z.panel }}>
+    <div
+      className="planner-setup-overlay fixed inset-0 flex items-center justify-center bg-[color:var(--surface-inverse)]/88 backdrop-blur-sm"
+      style={{ zIndex: Z.panel }}
+    >
       <div className="grid w-full max-w-5xl overflow-hidden rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] bg-[color:var(--surface-panel-strong)] shadow-[var(--shadow-soft)] lg:grid-cols-[1fr_1.05fr]">
         <aside className="flex flex-col justify-between gap-8 border-b border-[color:var(--border-soft)] bg-[color:var(--surface-accent-wash)] p-8 lg:border-b-0 lg:border-r">
           <div>

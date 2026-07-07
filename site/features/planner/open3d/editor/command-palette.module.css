@@ -119,3 +119,35 @@
   color: var(--cp-text-muted);
   font-family: var(--font-mono, ui-monospace, monospace);
 }
+
+@media (width < 48rem) {
+  .commandPaletteOverlay {
+    align-items: stretch;
+    padding:
+      calc(var(--planner-safe-top, 0px) + var(--space-2))
+      calc(var(--planner-safe-right, 0px) + var(--space-2))
+      calc(var(--planner-safe-bottom, 0px) + var(--space-2))
+      calc(var(--planner-safe-left, 0px) + var(--space-2));
+  }
+
+  .commandPalettePanel {
+    width: 100%;
+    max-height: min(
+      32rem,
+      calc(100dvh - var(--planner-safe-top, 0px) - var(--planner-safe-bottom, 0px) - var(--space-4))
+    );
+  }
+
+  .commandPaletteHint {
+    display: none;
+  }
+
+  .commandPaletteItem {
+    min-height: var(--planner-touch-target, 2.75rem);
+    padding-block: var(--space-3);
+  }
+
+  .commandPaletteSearch input {
+    min-height: var(--planner-touch-target, 2.75rem);
+  }
+}

@@ -30,6 +30,7 @@
   min-height: 0;
   overflow: hidden;
 }
+
 .open3d-canvas-with-rail {
   display: flex;
   flex-direction: row;
@@ -38,6 +39,57 @@
   min-height: 0;
   overflow: hidden;
   background: color-mix(in srgb, var(--surface-soft) 88%, var(--surface-page));
+}
+
+@media (width < 48rem) {
+  .open3d-workspace-root {
+    overflow-x: hidden;
+  }
+
+  .open3d-canvas-with-rail {
+    flex-direction: column;
+  }
+
+  .open3d-canvas-with-rail > .open3d-canvas-embedded {
+    order: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .open3d-tool-guidance {
+    display: none;
+  }
+
+  .open3d-status-track {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+
+  .open3d-status-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .open3d-status-pill {
+    flex-shrink: 0;
+  }
+
+  .open3d-palette-trigger {
+    min-height: var(--planner-touch-target);
+    min-width: var(--planner-touch-target);
+    padding: var(--space-2) var(--space-3);
+    white-space: nowrap;
+  }
+
+  .open3d-palette-trigger__long {
+    display: none;
+  }
+
+  .open3d-palette-trigger__short {
+    display: inline;
+  }
 }
 
 .open3d-tool-guidance {
@@ -356,4 +408,8 @@
 .open3d-palette-trigger:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
+}
+
+.open3d-palette-trigger__short {
+  display: none;
 }

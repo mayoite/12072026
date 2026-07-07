@@ -94,7 +94,7 @@ export function compileSvgBlockV1(input: unknown): CompiledSvgBlockV1 {
   const body = [...definition.parts].sort((a, b) => a.id.localeCompare(b.id)).map((part) => compilePart(part, namespace)).join("");
   const description = definition.accessibility.description ? `<desc id="${namespace}-desc">${escape(definition.accessibility.description)}</desc>` : "";
   const labelledBy = `${namespace}-title${description ? ` ${namespace}-desc` : ""}`;
-  const raw = `<svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="${labelledBy}" role="img" viewBox="${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}"><title id="${namespace}-title">${escape(definition.accessibility.title)}</title>${description}${body}</svg>`;
+  const raw = `<svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="${labelledBy}" role="img" shape-rendering="geometricPrecision" viewBox="${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}"><title id="${namespace}-title">${escape(definition.accessibility.title)}</title>${description}${body}</svg>`;
   const svg = sanitizeAndOptimizeSvg(raw);
   const canonicalDescriptor = JSON.stringify(canonicalize(definition));
   return {

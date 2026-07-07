@@ -15,14 +15,17 @@
  */
 
 import Link from "next/link";
-import Image from "next/image";
 import { useCallback, useRef, useState, type KeyboardEvent } from "react";
+
+import { buildBlockThumbSrcSet } from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
 
 export interface SvgCatalogCard {
   readonly slug: string;
   readonly variant: string;
   readonly schemaVersion: string;
   readonly thumbUrl: string;
+  /** Prefer vector preview when the compiled SVG exists on disk. */
+  readonly svgUrl?: string;
 }
 
 export function SvgCatalogGrid({
@@ -90,14 +93,32 @@ export function SvgCatalogGrid({
           tabIndex={index === focusedIndex ? 0 : -1}
           onFocus={() => setFocusedIndex(index)}
         >
-          <div className="mb-2">
-            <Image
-              src={card.thumbUrl}
-              alt={`${card.slug} thumbnail`}
-              width={240}
-              height={120}
-              className="w-full h-auto"
-            />
+          <div className="mb-2 svg-catalog-thumb-wrap">
+            {card.svgUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element -- vector catalog preview; next/image rasterizes SVGs
+              <img
+                src={card.svgUrl}
+                alt={`${card.slug} vector preview`}
+                width={512}
+                height={256}
+                className="svg-catalog-thumb svg-catalog-thumb--vector w-full h-auto"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element -- retina R2 thumbs need explicit srcSet; next/image omits srcSet
+              <img
+                src={card.thumbUrl}
+                srcSet={buildBlockThumbSrcSet(card.slug)}
+                alt={`${card.slug} thumbnail`}
+                width={512}
+                height={256}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 240px"
+                className="svg-catalog-thumb w-full h-auto"
+                loading="lazy"
+                decoding="async"
+              />
+            )}
           </div>
           <div>
             <code>{card.slug}</code>

@@ -7,6 +7,7 @@ import {
   type ChangeEvent,
   type KeyboardEvent,
   type MouseEvent,
+  memo,
 } from "react";
 import type {
   Open3dEntityCollection,
@@ -144,24 +145,27 @@ function calculateWallLength(
 /**
  * PropertiesPanel Component
  */
-export function PropertiesPanel({
+export const PropertiesPanel = memo(function PropertiesPanel({
   selectedEntity,
   callbacks,
   displayUnit = "mm",
 }: PropertiesPanelProps) {
   const id = useId();
 
-  const isLocked = !!(selectedEntity && typeof selectedEntity.entity === 'object' && selectedEntity.entity && 'locked' in selectedEntity.entity && (selectedEntity.entity as { locked?: boolean }).locked === true);
+  const isLocked = !!(
+    selectedEntity &&
+    typeof selectedEntity.entity === "object" &&
+    selectedEntity.entity &&
+    "locked" in selectedEntity.entity &&
+    (selectedEntity.entity as { locked?: boolean }).locked === true
+  );
   // GS REC-01 contextual props; locked reject everywhere (command + ui) per task7. No explicit any.
 
   /**
    * Handle number input change
    */
   const handleNumberChange = useCallback(
-    (
-      field: string,
-      subField?: string,
-    ) =>
+    (field: string, subField?: string) =>
       (event: ChangeEvent<HTMLInputElement>) => {
         if (!selectedEntity || isLocked) return; // locked reject mutations (task7 + plannerCommand)
 
@@ -179,7 +183,9 @@ export function PropertiesPanel({
 
         if (subField) {
           // Nested field (e.g., position.x)
-          const existingNested = selectedEntity.entity[field as keyof SelectedEntity["entity"]] as unknown as Record<string, unknown> | undefined;
+          const existingNested = selectedEntity.entity[
+            field as keyof SelectedEntity["entity"]
+          ] as unknown as Record<string, unknown> | undefined;
           updates = {
             [field]: {
               ...(existingNested || {}),
@@ -204,14 +210,17 @@ export function PropertiesPanel({
    * Handle text input change
    */
   const handleTextChange = useCallback(
-    (field: string) =>
-      (event: ChangeEvent<HTMLInputElement>) => {
-        if (!selectedEntity || isLocked) return;
+    (field: string) => (event: ChangeEvent<HTMLInputElement>) => {
+      if (!selectedEntity || isLocked) return;
 
-        callbacks?.onUpdateEntity?.(selectedEntity.collection, selectedEntity.id, {
+      callbacks?.onUpdateEntity?.(
+        selectedEntity.collection,
+        selectedEntity.id,
+        {
           [field]: event.target.value,
-        });
-      },
+        },
+      );
+    },
     [selectedEntity, callbacks, isLocked],
   );
 
@@ -219,14 +228,17 @@ export function PropertiesPanel({
    * Handle select change
    */
   const handleSelectChange = useCallback(
-    (field: string) =>
-      (event: ChangeEvent<HTMLSelectElement>) => {
-        if (!selectedEntity || isLocked) return;
+    (field: string) => (event: ChangeEvent<HTMLSelectElement>) => {
+      if (!selectedEntity || isLocked) return;
 
-        callbacks?.onUpdateEntity?.(selectedEntity.collection, selectedEntity.id, {
+      callbacks?.onUpdateEntity?.(
+        selectedEntity.collection,
+        selectedEntity.id,
+        {
           [field]: event.target.value,
-        });
-      },
+        },
+      );
+    },
     [selectedEntity, callbacks, isLocked],
   );
 
@@ -257,19 +269,27 @@ export function PropertiesPanel({
   /**
    * Handle keyboard navigation within inputs
    */
-  const handleKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
-    // Enter to confirm, Escape to blur
-    if (event.key === "Escape") {
-      (event.target as HTMLInputElement).blur();
-    }
-  }, []);
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      // Enter to confirm, Escape to blur
+      if (event.key === "Escape") {
+        (event.target as HTMLInputElement).blur();
+      }
+    },
+    [],
+  );
 
   /**
    * Render wall properties
    */
   const renderWallProperties = useCallback(
     (entity: SelectedEntity["entity"]) => {
-      const wall = entity as { start: { x: number; y: number }; end: { x: number; y: number }; thickness: number; height: number };
+      const wall = entity as {
+        start: { x: number; y: number };
+        end: { x: number; y: number };
+        thickness: number;
+        height: number;
+      };
       const length = calculateWallLength(wall.start, wall.end);
 
       return (
@@ -355,7 +375,14 @@ export function PropertiesPanel({
    */
   const renderDoorProperties = useCallback(
     (entity: SelectedEntity["entity"]) => {
-      const door = entity as { position: number; width: number; height: number; type: string; swingDirection: string; flipSide: boolean };
+      const door = entity as {
+        position: number;
+        width: number;
+        height: number;
+        type: string;
+        swingDirection: string;
+        flipSide: boolean;
+      };
 
       return (
         <>
@@ -426,9 +453,13 @@ export function PropertiesPanel({
                 checked={door.flipSide}
                 onChange={(checked) => {
                   if (selectedEntity) {
-                    callbacks?.onUpdateEntity?.(selectedEntity.collection, selectedEntity.id, {
-                      flipSide: checked,
-                    });
+                    callbacks?.onUpdateEntity?.(
+                      selectedEntity.collection,
+                      selectedEntity.id,
+                      {
+                        flipSide: checked,
+                      },
+                    );
                   }
                 }}
               />
@@ -437,7 +468,15 @@ export function PropertiesPanel({
         </>
       );
     },
-    [id, displayUnit, handleNumberChange, handleSelectChange, handleKeyDown, selectedEntity, callbacks],
+    [
+      id,
+      displayUnit,
+      handleNumberChange,
+      handleSelectChange,
+      handleKeyDown,
+      selectedEntity,
+      callbacks,
+    ],
   );
 
   /**
@@ -445,7 +484,13 @@ export function PropertiesPanel({
    */
   const renderWindowProperties = useCallback(
     (entity: SelectedEntity["entity"]) => {
-      const window = entity as { position: number; width: number; height: number; sillHeight: number; type: string };
+      const window = entity as {
+        position: number;
+        width: number;
+        height: number;
+        sillHeight: number;
+        type: string;
+      };
 
       return (
         <>
@@ -610,7 +655,9 @@ export function PropertiesPanel({
               </div>
             </div>
           )}
-          {(furniture.catalogId || furniture.sourceSlug || furniture.sourceSku) && (
+          {(furniture.catalogId ||
+            furniture.sourceSlug ||
+            furniture.sourceSku) && (
             <div className={styles.propertyGroup}>
               <h4 className={styles.groupTitle}>Catalog Info</h4>
               <div className={styles.propertyGrid}>
@@ -907,20 +954,53 @@ export function PropertiesPanel({
       {/* Properties */}
       <div className={styles.content}>
         {/* Task7 groups per spec: transform, dimensions, placement, appearance, metadata, actions. Unit numeric with commit (blur/enter), cancel (esc), reset, validation. Multi only shared. Locked rejects (see isLocked + upstream command). GS cites: REC-01 Figma minimize+contextual, REC-03 AutoCAD surface, REC-04 catalogue-first, BP-01 fabric pin, anti-copy via tokens only from site/app/css/ */}
-        <div className={styles.propertyGroup} data-group="transform"><h4 className={styles.groupTitle}>Transform</h4>{renderProperties}</div>
-        <div className={styles.propertyGroup} data-group="dimensions"><h4 className={styles.groupTitle}>Dimensions</h4></div>
-        <div className={styles.propertyGroup} data-group="placement"><h4 className={styles.groupTitle}>Placement</h4></div>
-        <div className={styles.propertyGroup} data-group="appearance"><h4 className={styles.groupTitle}>Appearance</h4></div>
-        <div className={styles.propertyGroup} data-group="metadata"><h4 className={styles.groupTitle}>Metadata</h4></div>
-        <div className={styles.propertyGroup} data-group="actions"><h4 className={styles.groupTitle}>Actions</h4>
-          <button type="button" onClick={() => { /* reset stub - validation would gate */ }}>Reset</button>
-          <button type="button" onClick={() => { /* commit stub */ }}>Commit</button>
-          <button type="button" onClick={() => { /* cancel stub */ }}>Cancel</button>
+        <div className={styles.propertyGroup} data-group="transform">
+          <h4 className={styles.groupTitle}>Transform</h4>
+          {renderProperties}
+        </div>
+        <div className={styles.propertyGroup} data-group="dimensions">
+          <h4 className={styles.groupTitle}>Dimensions</h4>
+        </div>
+        <div className={styles.propertyGroup} data-group="placement">
+          <h4 className={styles.groupTitle}>Placement</h4>
+        </div>
+        <div className={styles.propertyGroup} data-group="appearance">
+          <h4 className={styles.groupTitle}>Appearance</h4>
+        </div>
+        <div className={styles.propertyGroup} data-group="metadata">
+          <h4 className={styles.groupTitle}>Metadata</h4>
+        </div>
+        <div className={styles.propertyGroup} data-group="actions">
+          <h4 className={styles.groupTitle}>Actions</h4>
+          <button
+            type="button"
+            onClick={() => {
+              /* reset stub - validation would gate */
+            }}
+          >
+            Reset
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              /* commit stub */
+            }}
+          >
+            Commit
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              /* cancel stub */
+            }}
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
   );
-}
+});
 
 /**
  * Property field component for number/text inputs

@@ -1,6 +1,6 @@
 "use client";
 
-import * as Dialog from "@radix-ui/react-dialog";
+import { Dialog } from "@ark-ui/react/dialog";
 import { useMemo, useState } from "react";
 import {
   BadgeCheck,
@@ -284,9 +284,12 @@ export function PlannerSessionDialog({
   }
 
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="pwx-session-overlay pwx-session-backdrop" />
+    <Dialog.Root
+      open={open}
+      onOpenChange={(details) => onOpenChange(details.open)}
+    >
+      <Dialog.Backdrop className="pwx-session-overlay pwx-session-backdrop" />
+      <Dialog.Positioner>
         <Dialog.Content className="pwx-session-dialog">
           <div className="pwx-session-header">
             <div className="pwx-session-header__content">
@@ -317,11 +320,11 @@ export function PlannerSessionDialog({
                   {SESSION_STRINGS.description}
                 </Dialog.Description>
               </div>
-              <Dialog.Close asChild>
+              <Dialog.CloseTrigger asChild>
                 <button type="button" className="pwx-session-close" aria-label="Close session dialog">
                   <X className={SESSION_ICON_CLASS} />
                 </button>
-              </Dialog.Close>
+              </Dialog.CloseTrigger>
             </div>
           </div>
 
@@ -520,7 +523,7 @@ export function PlannerSessionDialog({
             ) : null}
           </div>
         </Dialog.Content>
-      </Dialog.Portal>
+      </Dialog.Positioner>
     </Dialog.Root>
   );
 }

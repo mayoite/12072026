@@ -64,7 +64,13 @@ function findProjectRoot(override?: string): string {
 }
 
 function defaultSvgPath(slug: string, projectRoot: string): string {
-  return path.resolve(projectRoot, "site", "public", "svg-catalog", `${slug}.svg`);
+  return path.resolve(
+    projectRoot,
+    "site",
+    "public",
+    "svg-catalog",
+    `${slug}.svg`,
+  );
 }
 
 /**
@@ -79,13 +85,24 @@ export function runSvgPipeline(
   options: PipelineOptions = {},
 ): Promise<PipelineResult> {
   const projectRoot = findProjectRoot(options.projectRoot);
-  const scriptPath = path.resolve(projectRoot, "site", "scripts", "generate-svg.mjs");
-  const fixturesDir = path.resolve(projectRoot, "site", "scripts", "generate-svg", "_fixtures");
+  const scriptPath = path.resolve(
+    projectRoot,
+    "site",
+    "scripts",
+    "generate-svg.mjs",
+  );
+  const fixturesDir = path.resolve(
+    projectRoot,
+    "site",
+    "scripts",
+    "generate-svg",
+    "_fixtures",
+  );
   const svgPath = defaultSvgPath(descriptor.slug, projectRoot);
   const fixtureSuffix = `${descriptor.slug}.${Math.random().toString(36).slice(2, 10)}`;
   const fixturePath = path.resolve(fixturesDir, `admin-${fixtureSuffix}.json`);
-  const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
-  const maxStderrBytes = options.maxStderrBytes ?? DEFAULT_MAX_STDERR_BYTES;
+  const _timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  const _maxStderrBytes = options.maxStderrBytes ?? DEFAULT_MAX_STDERR_BYTES;
 
   if (!existsSync(scriptPath)) {
     return Promise.resolve({
@@ -105,7 +122,8 @@ export function runSvgPipeline(
       encoding: "utf8",
     });
   } catch (writeError) {
-    const message = writeError instanceof Error ? writeError.message : String(writeError);
+    const message =
+      writeError instanceof Error ? writeError.message : String(writeError);
     return Promise.resolve({
       ok: false,
       reason: "writeFixtureError" as const,
@@ -120,10 +138,14 @@ export function runSvgPipeline(
   const startedAt = Date.now();
 
   // In-process (unified): dynamic import of thin script module calling canonical compiler.
-  return import(`file://${scriptPath.replace(/\\/g, "/")}`)
+  // turbopackIgnore + webpackIgnore to keep bundler from static-resolving computed file:// path (fixes build for planner + all modules).
+  return import(
+    /* turbopackIgnore: true */ /* webpackIgnore: true */ `file://${scriptPath.replace(/\\/g, "/")}`
+  )
     .then((mod) => {
       const runP = mod.runPipeline || mod.default?.runPipeline;
-      if (typeof runP !== "function") throw new Error("runPipeline export missing");
+      if (typeof runP !== "function")
+        throw new Error("runPipeline export missing");
       return runP(descriptor);
     })
     .then((result: unknown) => {
@@ -140,7 +162,7 @@ export function runSvgPipeline(
       };
     })
     .catch((err: unknown) => {
-      const durationMs = Date.now() - startedAt;
+      const _durationMs = Date.now() - startedAt;
       const msg = err instanceof Error ? err.message : String(err);
       return {
         ok: false as const,

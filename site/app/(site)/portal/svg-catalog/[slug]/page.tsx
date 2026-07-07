@@ -6,9 +6,10 @@
 
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Image from "next/image";
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
+
+import { resolvePublicDir } from "@/lib/paths/sitePackageRoot.server";
 import { Render } from "@puckeditor/core";
 import {
   tryLoad,
@@ -19,19 +20,13 @@ import {
   type PuckConfig,
   type PuckDataShape,
 } from "../puckBlockRegistry";
-
-const THUMB_BUCKET = "site-block-thumbs";
-
-function buildPngUrl(slug: string): string {
-  const account = (process.env.CLOUDFLARE_ACCOUNT_ID || "").trim();
-  if (account) {
-    return `https://${account}.r2.cloudflarestorage.com/${THUMB_BUCKET}/${slug}.png`;
-  }
-  return `https://cdn.oando.co.in/${THUMB_BUCKET}/${slug}.png`;
-}
+import {
+  buildBlockThumbPngUrl,
+  buildBlockThumbSrcSet,
+} from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
 
 function readInlineSvg(slug: string): string | null {
-  const p = path.resolve(process.cwd(), "site", "public", "svg-catalog", `${slug}.svg`);
+  const p = path.join(resolvePublicDir(), "svg-catalog", `${slug}.svg`);
   if (!existsSync(p)) return null;
   try {
     return readFileSync(p, "utf8");
@@ -51,7 +46,7 @@ export async function generateMetadata({
     return { title: "Not found | SVG catalog", robots: { index: false } };
   }
   const d = result.value;
-  const png = buildPngUrl(slug);
+  const png = buildBlockThumbPngUrl(slug);
   return {
     title: `${d.slug} | SVG catalog`,
     description: `Puck-rendered ${d.variant} block descriptor (schema ${d.schemaVersion})`,
@@ -76,7 +71,8 @@ export default async function SvgCatalogSlugPage({
 
   const data = getPuckData(descriptor);
   const inlineSvg = readInlineSvg(slug);
-  const pngUrl = buildPngUrl(slug);
+  const pngUrl = buildBlockThumbPngUrl(slug);
+  const pngSrcSet = buildBlockThumbSrcSet(slug);
 
   // pillbar versions
   const registryVersion = "registry-2026-07-04";
@@ -105,19 +101,25 @@ export default async function SvgCatalogSlugPage({
           <h2 className="text-sm">SVG</h2>
           <div
             dangerouslySetInnerHTML={{ __html: inlineSvg }}
-            className="svg-inline"
+            className="svg-inline svg-catalog-vector"
             // role/img + aria from Phase 03 sanitize + descriptor.title
           />
         </section>
       )}
 
       <section aria-label="PNG thumb">
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element -- retina R2 thumbs need explicit srcSet */}
+        <img
           src={pngUrl}
+          srcSet={pngSrcSet}
           alt={`${slug} thumbnail`}
-          width={320}
-          height={160}
+          width={512}
+          height={256}
+          sizes="(max-width: 640px) 100vw, 512px"
+          className="svg-catalog-thumb"
           style={{ maxWidth: "100%", height: "auto" }}
+          loading="lazy"
+          decoding="async"
         />
       </section>
 

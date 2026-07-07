@@ -3,18 +3,31 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import React from "react";
 import { PlannerSessionDialog } from "@/features/planner/ui/PlannerSessionDialog";
 
-// Mock radix dialog
-vi.mock("@radix-ui/react-dialog", () => {
-  return {
-    Root: ({ children, open }: any) => <div data-testid="dialog-root" data-open={open}>{children}</div>,
-    Trigger: ({ children }: any) => <div data-testid="dialog-trigger">{children}</div>,
-    Portal: ({ children }: any) => <div data-testid="dialog-portal">{children}</div>,
-    Overlay: ({ className }: any) => <div className={className} data-testid="dialog-overlay" />,
-    Content: ({ children, className }: any) => <div className={className} data-testid="dialog-content">{children}</div>,
-    Title: ({ children, className }: any) => <h3 className={className}>{children}</h3>,
-    Description: ({ children, className }: any) => <p className={className}>{children}</p>,
-    Close: ({ children }: any) => <div data-testid="dialog-close">{children}</div>,
+vi.mock("@ark-ui/react/dialog", () => {
+  const Dialog = {
+    Root: ({ children, open }: { children: React.ReactNode; open?: boolean }) => (
+      <div data-testid="dialog-root" data-open={open}>{children}</div>
+    ),
+    Backdrop: ({ className }: { className?: string }) => (
+      <div className={className} data-testid="dialog-backdrop" />
+    ),
+    Positioner: ({ children }: { children: React.ReactNode }) => (
+      <div data-testid="dialog-positioner">{children}</div>
+    ),
+    Content: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+      <div className={className} data-testid="dialog-content">{children}</div>
+    ),
+    Title: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+      <h3 className={className}>{children}</h3>
+    ),
+    Description: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+      <p className={className}>{children}</p>
+    ),
+    CloseTrigger: ({ children }: { children: React.ReactNode }) => (
+      <div data-testid="dialog-close">{children}</div>
+    ),
   };
+  return { Dialog };
 });
 
 describe("PlannerSessionDialog", () => {

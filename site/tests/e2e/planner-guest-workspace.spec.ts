@@ -19,11 +19,10 @@ test.describe("Planner guest workspace — plan 06 UI bar", () => {
 
   test("loads canvas chrome with history, view modes, and catalog", async ({ page }) => {
     await expect(page.getByRole("group", { name: "Canvas history" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Undo" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "2D", exact: true })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Split" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "3D", exact: true })).toBeVisible();
-    await expect(page.getByLabel("Search catalog elements")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Undo", exact: true })).toBeVisible();
+    await expect(page.getByRole("radio", { name: "2D", exact: true })).toBeVisible();
+    await expect(page.getByRole("radio", { name: "3D", exact: true })).toBeVisible();
+    await expect(page.getByRole("searchbox", { name: /Search catalog elements/i })).toBeVisible();
     await expect(page.locator(PLANNER_PRIMARY_CANVAS)).toBeVisible();
   });
 
@@ -62,15 +61,10 @@ test.describe("Planner guest workspace — plan 06 UI bar", () => {
   });
 
   test("view mode toggles without error", async ({ page }) => {
-    await page.getByRole("button", { name: "Split" }).click();
-    await expect(page.locator(".pw-split-view")).toBeVisible({ timeout: 10_000 });
-    await expect(page.locator(".pw-split-pane--3d canvas")).toBeVisible({ timeout: 20_000 });
+    await page.getByRole("radio", { name: "3D", exact: true }).click();
+    await expect(page.getByTestId("planner-3d-canvas")).toBeVisible({ timeout: 20_000 });
 
-    await page.getByRole("button", { name: "3D", exact: true }).click();
-    await expect(page.locator(".pw-split-view")).toHaveCount(0);
-    await expect(page.getByTestId("planner-3d-canvas").locator("canvas")).toBeVisible({ timeout: 20_000 });
-
-    await page.getByRole("button", { name: "2D", exact: true }).click();
+    await page.getByRole("radio", { name: "2D", exact: true }).click();
     await expect(page.locator(PLANNER_PRIMARY_CANVAS)).toBeVisible();
   });
 });
@@ -115,7 +109,7 @@ test.describe("a11y — key flows", () => {
     await dragOnCanvas(page, { rx: 0.8, ry: 0.8 }, { rx: 0.2, ry: 0.8 });
     await dragOnCanvas(page, { rx: 0.2, ry: 0.8 }, { rx: 0.2, ry: 0.2 });
 
-    await selectPlannerTool(page, "Furniture");
+    await selectPlannerTool(page, "Place");
     await clickOnCanvas(page, 0.4, 0.4);
     await clickOnCanvas(page, 0.6, 0.5);
     await clickOnCanvas(page, 0.5, 0.6);

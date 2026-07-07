@@ -158,7 +158,7 @@ export function TopBar({
   const activeFloorName = floors.find((f) => f.id === activeFloorId)?.name ?? "Floor";
 
   return (
-    <header className={styles.header}>
+    <header className={`pw-topbar ${styles.header}`} aria-label="Planner workspace">
       {/* Brand / Project name */}
       <div className={styles.brand}>
         <h1 className={styles.brandTitle}>{projectName}</h1>
@@ -316,7 +316,7 @@ export function TopBar({
           </div>
         )}
 
-        <div className={styles.historyActions} role="group" aria-label="History">
+        <div className={styles.historyActions} role="group" aria-label="Canvas history">
           <button
             type="button"
             className={styles.btn}

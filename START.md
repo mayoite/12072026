@@ -74,7 +74,7 @@ cd site
 pnpm exec vitest run tests/unit/offlineStorage.test.ts --config vitest.site.config.ts
 ```
 
-Artifact paths: **`TESTING.md`**.
+Artifact paths: repo-root `results/` (see **`TESTING.md`**); archive/results/ kept for history (archive over delete).
 
 ---
 

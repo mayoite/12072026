@@ -11,6 +11,7 @@ import { WORKSPACE_HUB_SECTIONS, type WorkspaceHubItem } from "./workspaceHub";
 
 interface DashboardClientProps {
   userEmail: string;
+  accessError?: string;
 }
 
 function readPlannerDraftCount(): number {
@@ -53,7 +54,14 @@ function HubCard({ item }: { item: WorkspaceHubItem }) {
   );
 }
 
-export function DashboardClient({ userEmail }: DashboardClientProps) {
+function accessErrorMessage(code: string | undefined): string | null {
+  if (code === "unauthorized_admin_access") {
+    return "Your account is signed in, but it does not have platform admin access. Ask an owner to grant the admin role in Supabase app_metadata.role = \"admin\", then sign in again.";
+  }
+  return null;
+}
+
+export function DashboardClient({ userEmail, accessError }: DashboardClientProps) {
   const router = useRouter();
   const [plannerDraftCount] = useState(() => readPlannerDraftCount());
   const [isSigningOut, setIsSigningOut] = useState(false);
@@ -85,6 +93,11 @@ export function DashboardClient({ userEmail }: DashboardClientProps) {
       <GlobalNavHeader />
 
       <div className="workspace-hub__frame mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-8">
+        {accessErrorMessage(accessError) ? (
+          <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-sm leading-6 text-strong" role="alert">
+            {accessErrorMessage(accessError)}
+          </div>
+        ) : null}
         <header className="workspace-hub__hero rounded-[2rem] border p-8 lg:p-10">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl">

@@ -222,7 +222,7 @@ export function buildSvgString(
   const variantAttr = variant ? ` data-block-variant="${escXml(variant)}"` : "";
   const vb = `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
   return [
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}"${variantAttr}>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}"${variantAttr}>`,
     titleAttr,
     descAttr,
     `<g>`,
@@ -271,7 +271,7 @@ export function buildFallbackSvg(viewBox: ViewBox): string {
   const vb = `0 0 ${viewBox.width} ${viewBox.height}`;
   const FALLBACK_D_PATH = "M 10 10 L 90 90 M 90 10 L 10 90 M 50 10 L 50 90 M 10 50 L 90 50";
   return [
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}">`,
     `<title>Fallback - geometry missing</title>`,
     `<desc>Block geometry not provided; cross-hatched fallback rendered.</desc>`,
     `<path d="${FALLBACK_D_PATH}" fill="none" stroke="currentColor" stroke-width="2"/>`,

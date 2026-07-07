@@ -53,7 +53,7 @@ All test, lint, typecheck, build, Playwright, accessibility, coverage, and audit
 
 ## Scope
 
-- Smallest change that solves the task; archive over delete; no silent unrelated fixes.
+- Smallest change that solves the task; archive over delete; archive/results/ historical evidence kept (no deletes from archive/); no silent unrelated fixes.
 - No commit, push, publish, migrate apply, or destructive ops without ask.
 - **Open3D planner:** production code lives in `site/features/planner/open3d/` (site deps). `OOPlanner/` and `open3d-next-staging/` are lab/archive mirrors — not separate pnpm workspace packages.
 

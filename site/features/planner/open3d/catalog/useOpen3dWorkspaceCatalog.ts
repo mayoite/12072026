@@ -33,7 +33,16 @@ export function useOpen3dWorkspaceCatalog() {
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });
-  const items = query.data?.items ?? OPEN3D_DEMO_CATALOG_ITEMS;
+  const remoteItems = query.data?.items ?? [];
+  const items =
+    remoteItems.length > 0
+      ? [
+          ...remoteItems,
+          ...OPEN3D_DEMO_CATALOG_ITEMS.filter(
+            (seed) => !remoteItems.some((item) => item.id === seed.id),
+          ),
+        ]
+      : OPEN3D_DEMO_CATALOG_ITEMS;
   const offline = typeof navigator !== "undefined" && navigator.onLine === false;
   const status: Open3dWorkspaceCatalogStatus = offline
     ? "offline"

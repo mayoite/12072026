@@ -166,7 +166,7 @@
   letter-spacing: 0.03em;
   line-height: 1.35;
   text-transform: uppercase;
-  color: var(--color-warning);
+  color: color-mix(in srgb, var(--color-warning) 55%, var(--text-heading));
   white-space: nowrap;
 }
 
@@ -231,15 +231,15 @@
 }
 
 .saveStatus[data-modified="true"] {
-  background: color-mix(in srgb, var(--color-warning) 12%, var(--ws-panel-bg));
-  border-color: color-mix(in srgb, var(--color-warning) 30%, transparent);
-  color: var(--color-warning);
+  background: color-mix(in srgb, var(--color-warning) 18%, var(--ws-panel-bg));
+  border-color: color-mix(in srgb, var(--color-warning) 45%, var(--border-strong));
+  color: var(--text-strong);
 }
 
 .saveStatus[data-synced="true"] {
   background: color-mix(in srgb, var(--color-success) 12%, var(--ws-panel-bg));
   border-color: color-mix(in srgb, var(--color-success) 30%, transparent);
-  color: var(--color-success);
+  color: color-mix(in srgb, var(--color-success) 55%, var(--text-heading));
 }
 
 /* Workspace area with panels */
@@ -678,6 +678,7 @@
 @media (width < 48rem) {
   .shell {
     grid-template-rows: auto 1fr auto;
+    overflow-x: hidden;
   }
 
   .header {
@@ -687,10 +688,44 @@
       calc(var(--space-2) + var(--planner-safe-right))
       var(--space-2)
       calc(var(--space-2) + var(--planner-safe-left));
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "brand"
+      "center"
+      "actions";
+  }
+
+  .brand {
+    grid-area: brand;
+  }
+
+  .center {
+    grid-area: center;
+  }
+
+  .actions {
+    grid-area: actions;
   }
 
   .brandTitle {
     font-size: 0.875rem;
+  }
+
+  .btn,
+  .viewToggleBtn,
+  .mobilePanelBtn,
+  .dropdownItem {
+    min-height: var(--planner-touch-target);
+  }
+
+  .viewToggleBtn,
+  .mobilePanelBtn {
+    min-width: var(--planner-touch-target);
+  }
+
+  .panelActionBtn {
+    width: var(--planner-touch-target);
+    height: var(--planner-touch-target);
   }
 
   .mobilePanelActions {
@@ -743,6 +778,36 @@
       calc(var(--space-1) + var(--planner-safe-bottom))
       calc(var(--space-2) + var(--planner-safe-left));
     font-size: 0.6875rem;
+    overflow-x: hidden;
+  }
+
+  .statusLeft,
+  .statusRight {
+    min-width: 0;
+  }
+}
+
+/* Narrow phones (~375px): hide non-essential chrome; panels stay drawer-based */
+@media (width < 23.4375rem) {
+  .historyActions,
+  .saveStatus,
+  .brandSub {
+    display: none;
+  }
+
+  .actions .dropdown:not(:last-of-type) {
+    display: none;
+  }
+
+  .btn,
+  .mobilePanelBtn {
+    padding-inline: var(--space-2);
+    font-size: 0.75rem;
+  }
+
+  .center .btn {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 }
 
