@@ -374,3 +374,21 @@ Shell and pnpm/node gates runnable. Evidence: `results/shell/2026-07-04/pnpm-ver
 **Phase 02 status:** Loader + schema + resolver tests fully green (127/127) — no code changes needed, checklist items `02-CAT-01`, `02-LOAD-01`, `02-ERR-01` confirmed passing.
 
 **Phase 03 status:** Three golden fixture blocks (union/difference/intersection) confirmed present and passing; sanitizer-on-output and semantic-token gates (`03-SVG-GS-01`) confirmed passing.
+
+## 2026-07-07 — Failures.md truth-reset (archive + planner/SVG merge)
+
+**Archive:** Prior root `Failures.md` moved to `archive/failures/2026-07-07-pre-truth-reset/Failures.md`. Replaced with truth snapshot on `main` @ `76f39a5`.
+
+### Transient session notes (removed from active Failures.md)
+
+- **TECH-REV-2026-07-06** — tech-stack-generator revision; evidence under `results/tech-stack-generator/revision/`; no persistent blocker.
+- **PR-VERIFY-c71e7812** — standalone runtime (`prepare-standalone.cjs`, `svgPipelineRunner.ts`); committed on `main` as `76f39a5`.
+
+### Planner + SVG descriptor pipeline (code landed on `main`)
+
+- Merged `execute-plan/c71e7812-pr-3-resolve-doc-evid` → `main` (`8f4f0fa`): `InventoryPanel` catalog fix, `site/block-descriptors/`, portal/admin/planner wiring, `/api/planner/catalog/svg-blocks`, cwd-safe paths.
+- **Runtime/browser proof** remains open as **PLAN-FAIL-0412** in active `Failures.md`.
+
+### Stale active note corrected
+
+- **`coverageGap.test.ts` export-job block:** Prior `Failures.md` claimed 7 failures; live run 2026-07-07 on `main` — **254/254 pass**. Removed from PLAN-FAIL-0410 scope.

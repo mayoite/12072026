@@ -1,7 +1,0 @@
----
-pid: 8188
-cwd: "D:\oandO04072026"
-command: "Start-Sleep -Seconds 90"
-started_at: 2026-07-06T19:14:59.712Z
-running_for_ms: 120007   
----
