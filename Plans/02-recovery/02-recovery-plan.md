@@ -19,32 +19,37 @@ Status: in-principle plan for step 2. Revise when live checks disagree.
 - Do not hide skipped or failed checks.
 - Do not remove packages, run migrations, upload assets, deploy, or delete evidence without explicit scope.
 
-## Phase Map
+## Phase Files
 
-| Phase | Goal | Modules in scope | Entry condition | Exit evidence | Do not do |
-| --- | --- | --- | --- | --- | --- |
-| 00 Start | Freeze the working baseline. | Repo, docs, evidence rules. | Clean or understood working tree. | `git status --short --branch`, current commit, open failures listed. | Do not repair code yet. |
-| 01 Truth reset and package policy | Decide allowed packages from live imports. | Package policy, docs. | Baseline recorded. | Import census, package decisions, no unsupported removal. | Do not remove runtime packages without proof. |
-| 02 Styling contract | Stop UI drift at the rules layer. | CSS/Tailwind, site UI shell, admin styling rules, planner styling rules. | Package policy is not blocking lint. | `lint:ui` result and clear styling rules. | Do not polish pages before the contract is stable. |
-| 03 Admin and SVG | Fix first admin SVG lint cluster and clarify SVG authority. | Admin, SVG editor, SVG pipeline. | Styling rules known. | Scoped lint result, SVG path decision draft. | Do not introduce a second SVG system. |
-| 04 Planner Open3D | Repair product-core failures in small slices. | Planner Open3D, SVG consumer, persistence, export, upload, viewer. | Package and SVG boundaries are known enough. | Targeted tests and browser smoke per slice. | Do not edit legacy planner paths unless migration is scoped. |
-| 05 Auth and database | Prove gates and data access before admin/CRM sign-off. | Auth, DB, route middleware, Drizzle paths. | Planner needs are known. | Route matrix, env validation, read-only DB proof. | Do not run migrations unless separately approved. |
-| 06 CRM and CDN/assets | Decide what is real and what is placeholder. | CRM, asset scripts, R2/CDN, catalog references. | Auth and DB truth exist. | Route/API inventory, CDN audit signal. | Do not upload or delete assets without approval. |
-| 07 Deployment proof | Prove local deployability. | Lint, typecheck, build, release gate readiness. | Major lint and type failures are cleared. | lint, typecheck, build results with evidence. | Do not claim deployable without build evidence. |
-| 08 Tech-stack docs and docs cleanup | Make docs match source truth. | Tech-stack docs, Plans, locked copies when intentional. | Source modules stable enough. | docs checks and updated handover. | Do not regenerate docs from unstable source truth. |
-| Handover | Leave the next worker a true state. | All touched modules. | Current block is stopped or complete. | Summary, commands, exit codes, skipped checks, risks, next step. | Do not bury failures in narrative. |
+| Phase | File | Goal |
+| --- | --- | --- |
+| 00 | `phases/00-start.md` | Freeze the working baseline. |
+| 01 | `phases/01-truth-reset-package-policy.md` | Decide allowed packages from live imports. |
+| 02 | `phases/02-styling-contract.md` | Stop UI drift at the rules layer. |
+| 03 | `phases/03-admin-svg-editor.md` | Fix the first admin SVG lint cluster. |
+| 03b | `phases/03b-svg-pipeline.md` | Clarify SVG editor, compiler, publish, and runtime authority. |
+| 04 | `phases/04-planner-open3d.md` | Repair product-core Open3D slices. |
+| 05 | `phases/05-auth.md` | Prove guest, member, and admin route gates. |
+| 06 | `phases/06-database.md` | Prove DB env, Drizzle ownership, and safe access. |
+| 07 | `phases/07-crm.md` | Decide real CRM scope before repair. |
+| 08 | `phases/08-cdn-assets.md` | Prove asset source of truth. |
+| 09 | `phases/09-deployment.md` | Prove local deployability. |
+| 10 | `phases/10-tech-stack-docs.md` | Regenerate docs only after source truth stabilizes. |
+| 11 | `phases/11-docs.md` | Make docs match repaired truth. |
+| 12 | `phases/12-handover.md` | Leave the next worker a true state. |
 
 ## Preferred Order
 
 1. Start with phase 00.
 2. Then run phase 01.
 3. Then run phase 02.
-4. Then fix phase 03 admin SVG lint cluster.
-5. Then enter planner slices.
+4. Then fix phase 03.
+5. Then decide phase 03b before planner SVG work.
+6. Then enter planner slices.
 
 This order is not final law.
 
-Change the order if live evidence proves another blocker is earlier.
+Change it if live evidence proves another blocker is earlier.
 
 ## Module Strategy
 
@@ -60,13 +65,18 @@ Change the order if live evidence proves another blocker is earlier.
 | Database | Prove Drizzle and env paths. | Read-only proof before any migration. |
 | CRM | Decide real scope. | Keep, trim, or defer. |
 | CDN/assets | Prove source of truth. | Local, cloud, and DB ownership. |
-| Deployment | Prove build path. | Do lint/typecheck/build before release gate. |
+| Deployment | Prove build path. | Lint/typecheck/build before release gate. |
 | Tech-stack docs | Regenerate after source truth stabilizes. | Which generator outputs are authoritative. |
 | Docs | Remove stale claims. | Live docs first, locked copies only when intentionally frozen. |
 
 ## Current Priority
 
-Start with package policy, then CSS/Tailwind, then admin SVG editor.
+Start with:
+
+1. `phases/00-start.md`
+2. `phases/01-truth-reset-package-policy.md`
+3. `phases/02-styling-contract.md`
+4. `phases/03-admin-svg-editor.md`
 
 Reason:
 
@@ -86,21 +96,3 @@ Stop and report if:
 6. A database migration would be required.
 7. A remote push fails.
 8. A destructive operation is needed.
-
-## Refuse Or Defer
-
-Refuse:
-
-1. Deployable claims without live build and gate proof.
-2. Clean claims without exit codes and logs.
-3. Package removals without import proof.
-4. Migration or upload work hidden inside repair work.
-5. Broad CRM repair before CRM scope is proven.
-
-Defer:
-
-1. Tech-stack doc regeneration until source truth is stable.
-2. Site polish until CSS rules are stable.
-3. Release gate until lint, typecheck, and key tests are credible.
-4. SVGR or SVG sprite adoption until SVG authority is chosen.
-5. Locked-doc sync until live docs settle.
