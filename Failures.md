@@ -25,27 +25,31 @@ Skipped items must be declared. Shell works; gates are runnable.
 
 ---
 
-## Truth snapshot (2026-07-07, rev `76f39a5`)
+## Truth snapshot (2026-07-07, rev `8264d25`)
 
-**Verified this session (live):**
+**Verified (live evidence):**
+
+| Check | Result | Evidence |
+|-------|--------|----------|
+| `pnpm --filter oando-site run typecheck` | pass | `results/site/truth-reset-2026-07-07/typecheck/typecheck-raw.log` |
+| `.env.local` via `loadEnvLocal.cjs` | loads | `SUPABASE_URL`, `PRODUCTS_DATABASE_URL` set |
+| `seed-block-descriptors.ts` | 4 descriptors + `loadAll` OK | prior session |
+| Targeted vitest (catalog/svg) | 27/27 + `coverageGap` 254/254 | prior session |
+| Planner/SVG on `main` | merged + standalone patches | `8f4f0fa`, `76f39a5`; docs `8264d25` |
+| `terminals/` agent logs | removed from repo | commit `8264d25` (local; **not pushed**) |
+
+**INCOMPLETE / failed:**
 
 | Check | Result |
 |-------|--------|
-| `pnpm --filter oando-site run typecheck` | pass |
-| `seed-block-descriptors.ts` | 4 descriptors written + `loadAll` OK |
-| `blockDescriptorLoader.test.ts` + `svgPreviewAssets.test.ts` | 27/27 pass |
-| `coverageGap.test.ts` | 254/254 pass (was stale in prior Failures.md) |
-| `validate-launch-env.mjs` | required public/server env present |
-| Planner/SVG code on `main` | merged (`8f4f0fa`, `76f39a5`); block-descriptors on disk |
+| `pnpm run test` with `.env.local` | **INCOMPLETE** — run interrupted; no final Vitest summary line |
+| Failures observed before interrupt | **≥115** failed tests across **≥22** files (persistence, jsonExport, guestPromotion, memberPlanRepository, marketing pages, Three.js lazy paths) |
+| `pnpm run lint` | fail — **130** errors |
+| Full `test:coverage` | not run |
+| Browser UI proof | not user-verified |
+| `release:gate` / Playwright E2E | not run |
 
-**Not verified (INCOMPLETE):**
-
-| Check | Result |
-|-------|--------|
-| Browser: `/planner/guest/`, `/portal/svg-catalog`, `/admin/svg-editor` | no signed-off live UI proof with user |
-| `pnpm run lint` | fail — **130** errors (see PLAN-FAIL-0410) |
-| Full `test:coverage` + artifacts | not run this session (see PLAN-FAIL-0408) |
-| `release:gate` / Playwright E2E | not run this session |
+**Local git:** `main` **ahead 1** of `origin/main` (`8264d25` Failures archive + terminal removal).
 
 ---
 
@@ -53,46 +57,21 @@ Skipped items must be declared. Shell works; gates are runnable.
 
 ### PLAN-FAIL-0408 — Open (coverage floor)
 
-**Status:** Open · INCOMPLETE (no live floor proof on current `main`)
+**Status:** Open · INCOMPLETE (no live floor proof on `8264d25`)
 
-**Scope:** Site coverage floor not met. Interim focus **80%** site coverage; hard floor remains **90%** per quality gates.
+**Scope:** Site coverage floor not met. Interim focus **80%** site coverage; hard floor remains **90%**.
 
-**Priority source areas:**
-
-- `site/lib/site-data/`
-- `site/lib/catalog/`
-- `site/features/catalog/`
-- Site assistant
-- Ops
-- `site/features/ai/` (ai advisor)
-
-**Blockers:**
-
-- No numeric coverage % from a full `pnpm --filter oando-site run test:coverage` with complete artifacts under `results/<module>/<phase>/<cmd>/`.
-
-**Next:**
-
-1. Run coverage with evidence wrapper per `START.md` / `testing-handbook.md`.
-2. Review per-file %; close here when floor met; log resolution in `resolved-failures.md`.
+**Next:** `pnpm --filter oando-site run test:coverage` with full artifacts under `results/<module>/<phase>/<cmd>/`.
 
 ---
 
 ### PLAN-FAIL-0410 — Open (repo-wide lint)
 
-**Status:** Open · verified 2026-07-07 on `main` @ `76f39a5`
+**Status:** Open · verified 2026-07-07
 
-**Scope:** `pnpm run lint` exits **1** with **130** ESLint errors (`site` app/components/features/lib/tests).
+**Scope:** `pnpm run lint` exits **1** with **130** ESLint errors.
 
-**Known hotspots (from prior triage; re-run lint for current file list):**
-
-- `app/(site)/portal/svg-catalog/[slug]/` + tests — type-imports, `no-require-imports`, unused symbols
-- `app/api/admin/svg-editor/route` tests — unused imports, `prefer-const`
-- `tests/unit/features/planner/open3d/` — unused vars, import annotations
-- `features/planner/open3d/editor/InventoryPanel.tsx` — `no-non-null-assertion` on `inventoryClientRef.current!`
-
-**Correction:** `coverageGap.test.ts` is **green** (254/254) on current `main`; do not treat export-job asserts as an active lint/test blocker.
-
-**Next:** dedicated lint-cleanup pass; re-run `pnpm run lint` to zero before Phase 1 / release gate sign-off.
+**Next:** dedicated lint-cleanup pass; re-run to zero before release gate sign-off.
 
 ---
 
@@ -100,35 +79,36 @@ Skipped items must be declared. Shell works; gates are runnable.
 
 **Status:** Open · INCOMPLETE
 
-**Scope:** Planner catalog, SVG portal, and admin SVG editor **not browser-verified** with the user after merge of PR-3 + standalone patches to `main`.
+**Scope:** Planner guest, SVG portal, admin SVG editor **not browser-verified** with user after merge to `main`.
 
-**Code landed (not the same as UI proof):**
+**Code on `main`:** block-descriptors, catalog panel fix, svg-blocks API, standalone SVG scripts.
 
-- `site/block-descriptors/` seeded (4 JSON)
-- `InventoryPanel` — `fallback` is a badge, not a full-panel blocker
-- `/api/planner/catalog/svg-blocks` + cwd-safe descriptor paths
-- Standalone SVG: `prepare-standalone.cjs`, `svgPipelineRunner.ts`, `generate-svg.mjs` (`76f39a5`)
-
-**Blockers:**
-
-- No fresh Playwright or manual browser sign-off on:
-  - http://localhost:3000/planner/guest/ (catalog cards, search, Add)
-  - http://localhost:3000/portal/svg-catalog/ (4 blocks)
-  - http://localhost:3000/admin/svg-editor/ (list after `/access` login)
-- Admin may need session; R2 thumbs may need re-publish after login.
-
-**Next:**
-
-1. `pnpm run dev` from repo root; hard-refresh routes above.
-2. Capture evidence or log specific UI failures here with repro steps.
-3. Close when user confirms working or file follow-up defects as new PLAN-FAIL items.
+**Next:** `pnpm run dev` + hard-refresh the three routes; log repro or close on user sign-off.
 
 ---
 
-### HOUSEKEEPING-2026-07-07 — Staged repo cleanup (non-gate)
+### PLAN-FAIL-0413 — Open (full Vitest suite)
 
-**Status:** Open · low priority
+**Status:** Open · INCOMPLETE (2026-07-07, `.env.local` loaded via `loadEnvLocal.cjs`)
 
-**Scope:** `terminals/` removal staged (`git rm`, 44 files) but **not committed**; remote `main` still contains terminal logs from `4fffa51`.
+**Scope:** Full `pnpm run test` did not complete to a final summary; partial log shows widespread failures.
 
-**Next:** commit + push removal, or restore if logs were intentional.
+**Hotspot files (partial log):**
+
+- `tests/integration/planner-store-plannerPersistence.test.ts` (12/15 failed)
+- `tests/unit/features/planner/open3d/persistence/memberPlanRepository.test.ts` (32/39 failed)
+- `tests/unit/features/planner/open3d/jsonExport.test.ts` (22/25 failed)
+- `tests/unit/features/planner/open3d/persistence/guestPromotion.test.ts` (13/15 failed)
+- `tests/unit/features/planner/open3d/uploadUtils.test.ts` (11/18 failed)
+- Marketing page tests: showrooms, portfolio, solutions
+- Three.js lazy/viewer tests
+
+**Prior signal:** `ECONNREFUSED :3000` in earlier run (dev server not up during unit suite).
+
+**Evidence:** `results/site/truth-reset-2026-07-07/vitest/vitest-raw.log` (truncated; no exit summary).
+
+**Next:**
+
+1. Re-run full suite with `.env.local` to completion; capture `vitest-run.json` + raw log per handbook.
+2. Triage persistence/DB vs marketing vs Three.js buckets.
+3. Close or split into owned PLAN-FAIL items per root cause.

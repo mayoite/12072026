@@ -392,3 +392,7 @@ Shell and pnpm/node gates runnable. Evidence: `results/shell/2026-07-04/pnpm-ver
 ### Stale active note corrected
 
 - **`coverageGap.test.ts` export-job block:** Prior `Failures.md` claimed 7 failures; live run 2026-07-07 on `main` — **254/254 pass**. Removed from PLAN-FAIL-0410 scope.
+
+### HOUSEKEEPING-2026-07-07 — terminal logs removed
+
+- Agent `terminals/` logs removed from repo in commit `8264d25` (44 tracked files deleted). No longer an active housekeeping item.
