@@ -17,7 +17,8 @@
 - [x] ParametricBuilder hooks + unit tests
 - [x] Wire catalog place → modular flag + multi-part 3D (`geometryMode` / `createSceneObjectFromNode`)
 - [x] 2D modular footprint via `resolveFurniture2DFootprint`
-- [ ] Optional GLB export from modular group (later)
+- [x] Modular GLB **plan** helper (policy-safe path; binary export later)
+- [ ] Binary GLB write (GLTFExporter / gltf-transform)
 
 ## 03 Canvas / document / 3D
 - [x] `buildOpen3dSceneNodes` pure adapter + tests

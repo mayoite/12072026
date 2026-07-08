@@ -1,0 +1,32 @@
+{
+  "slice": "dead path hygiene: useCanvasDrawing + open3d canvas-fabric imports",
+  "date": "2026-07-09",
+  "decision": "A — confirm no production callers; keep export + unit test; document FeasibilityCanvas owns walls",
+  "findings": {
+    "useCanvasDrawing": {
+      "definedIn": "site/features/planner/open3d/editor/useWorkspaceCanvas.ts",
+      "productionCallers": [],
+      "testCallers": [
+        "site/tests/unit/features/planner/open3d/workspaceShell.test.tsx (describe useCanvasDrawing)"
+      ],
+      "editorIndexExport": false,
+      "liveWallPath": "FeasibilityCanvas uses addOpen3dWall + newEntityId (not useCanvasDrawing)",
+      "newEntityId": "already applied in addWall (crypto-ids-residual); no further code change",
+      "action": "JSDoc only: dead production path; walls via FeasibilityCanvas"
+    },
+    "open3dCanvasFabricImports": {
+      "deadImportsOfArchivedCanvasFabric": [],
+      "liveImports": [
+        "OOPlannerWorkspace.tsx → ../canvas-fabric-stage (FurnitureFabricLayer, flag) — intentional stage path, not _archive/fabric/canvas-fabric"
+      ],
+      "note": "No site/features/planner/open3d file imports @/features/planner/canvas-fabric"
+    }
+  },
+  "codeChanges": [
+    "useWorkspaceCanvas.ts: useCanvasDrawing JSDoc → dead production path / FeasibilityCanvas note"
+  ],
+  "notDone": [
+    "Did not delete useCanvasDrawing body (still unit-tested; not broken)",
+    "Did not add new unit test (existing workspaceShell useCanvasDrawing suite covers export)"
+  ]
+}

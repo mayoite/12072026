@@ -183,8 +183,9 @@ export function useWorkspaceCanvas(
 }
 
 /**
- * Hook for canvas that needs wall drawing capabilities.
- * This combines the workspace canvas context with canvas-specific state.
+ * Dead production path (kept for unit coverage / possible reuse).
+ * Live open3d wall drawing uses FeasibilityCanvas + addOpen3dWall / newEntityId —
+ * not this hook. Only caller: workspaceShell.test.tsx.
  */
 export function useCanvasDrawing(initialProject?: Open3dProject) {
   const canvas = useWorkspaceCanvas({
