@@ -74,3 +74,17 @@ export const CRM_DEMO_QUOTES: Quote[] = [
 export function isCrmDemoModeEnabled(): boolean {
   return process.env.NEXT_PUBLIC_CRM_DEMO_MODE === "1";
 }
+
+export function getDemoUserId(): string | null {
+  if (typeof window === "undefined" || !window.localStorage) {
+    return null;
+  }
+  return window.localStorage.getItem("crm-demo-user");
+}
+
+export function setDemoUserId(id: string): void {
+  if (typeof window === "undefined" || !window.localStorage) {
+    return;
+  }
+  window.localStorage.setItem("crm-demo-user", id);
+}

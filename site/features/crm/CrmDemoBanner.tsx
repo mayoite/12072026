@@ -1,6 +1,6 @@
 "use client";
 
-import { isCrmDemoModeEnabled } from "@/features/crm/stores/crmDemoSeed";
+import { isCrmDemoModeEnabled, setDemoUserId } from "@/features/crm/stores/crmDemoSeed";
 
 export function CrmDemoBanner() {
   if (!isCrmDemoModeEnabled()) return null;
@@ -20,15 +20,8 @@ export function CrmDemoBanner() {
         <div className="flex gap-2 mt-2">
           <button
             onClick={() => {
-              const currentUserId = window.localStorage.getItem("crm-demo-user");
-              if (currentUserId) {
-                const newId = parseInt(currentUserId) + 1;
-                window.localStorage.setItem("crm-demo-user", newId.toString());
-                alert(`User ID updated to ${newId}. Refresh page to load new demo data.`);
-              } else {
-                window.localStorage.setItem("crm-demo-user", "2");
-                alert("Set user ID to 2. Refresh page to load new demo data.");
-              }
+              setDemoUserId("2");
+              alert("User switched to Alice (2). Refresh page to load new demo data.");
             }}
             className="px-3 py-1 bg-amber-600 text-white rounded text-xs hover:bg-amber-700"
           >
@@ -36,14 +29,8 @@ export function CrmDemoBanner() {
           </button>
           <button
             onClick={() => {
-              const currentUserId = window.localStorage.getItem("crm-demo-user");
-              if (currentUserId) {
-                const newId = 1;
-                window.localStorage.setItem("crm-demo-user", newId.toString());
-                alert(`User ID updated to ${newId}. Refresh page to load new demo data.`);
-              } else {
-                alert("No user ID set. Refresh page to load default demo data.");
-              }
+              setDemoUserId("1");
+              alert("User switched to Bob (1). Refresh page to load new demo data.");
             }}
             className="px-3 py-1 bg-amber-600 text-white rounded text-xs hover:bg-amber-700"
           >
