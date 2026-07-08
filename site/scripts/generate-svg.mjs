@@ -21,6 +21,21 @@ export async function runPipeline(descriptor) {
     throw new Error("runPipeline requires descriptor.slug");
   }
 
+  // S1: normalize admin BlockDescriptor (depth/fixed) → pipeline IR (height/boolean).
+  const normalizeUrl = pathToFileURL(
+    path.join(
+      __dirname,
+      "..",
+      "features",
+      "planner",
+      "asset-engine",
+      "svg",
+      "normalizeDescriptorForPipeline.ts",
+    ),
+  ).href;
+  const { normalizeDescriptorForPipeline } = await import(normalizeUrl);
+  const normalized = normalizeDescriptorForPipeline(descriptor);
+
   const coreUrl = pathToFileURL(
     path.join(__dirname, "generate-svg", "pipelineCore.ts"),
   ).href;
@@ -30,15 +45,16 @@ export async function runPipeline(descriptor) {
     throw new Error("runPipelineCore export missing from pipelineCore.ts");
   }
 
-  const svg = await runPipelineCore(descriptor);
+  // S2–S3: compile + sanitize + optimise
+  const svg = await runPipelineCore(normalized);
 
-  // site/scripts → site/public/svg-catalog
+  // S4: write public catalog SVG
   const outDir = path.resolve(__dirname, "..", "public", "svg-catalog");
   mkdirSync(outDir, { recursive: true });
-  const svgPath = path.join(outDir, `${descriptor.slug}.svg`);
+  const svgPath = path.join(outDir, `${normalized.slug}.svg`);
   writeFileSync(svgPath, `${svg}\n`, "utf8");
 
-  return { svg, svgPath };
+  return { svg, svgPath, normalized };
 }
 
 export default { runPipeline };

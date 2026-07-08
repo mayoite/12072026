@@ -58,7 +58,7 @@ describe("modularCabinetV0GlbExport — plan-only, policy-safe", () => {
 
     expect(plan.kind).toBe("modular-cabinet-v0");
     expect(plan.binaryExportStatus).toBe("plan-only");
-    expect(plan.binaryExportNote).toMatch(/Binary GLB not written/i);
+    expect(plan.binaryExportNote).toMatch(/metadata only|exportModularGlbBinary/i);
     expect(plan.partCount).toBe(1);
     expect(plan.parts).toHaveLength(1);
     expect(plan.parts[0]?.name).toBe("carcass");

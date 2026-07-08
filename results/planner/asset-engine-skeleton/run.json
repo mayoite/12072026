@@ -1,0 +1,29 @@
+{
+  "slice": "asset-engine skeletons ordered (SVG S0–S7 + mesh G0–G8)",
+  "date": "2026-07-09",
+  "honest": {
+    "svgDualCompiler": "publish uses pipelineCore; V1 svgCompiler.server is tests/artifacts only",
+    "viewerGlbLoad": "planned — open3d still procedural only",
+    "pngThumbs": "stub on publish (URL only)"
+  },
+  "implementedThisSlice": [
+    "S1 normalizeDescriptorForPipeline",
+    "runSvgCompileStages",
+    "generate-svg.mjs wires S1 before pipelineCore",
+    "G5 exportModularCabinetV0GlbBinary + G6 validate",
+    "runModularMeshStages G1–G6"
+  ],
+  "vitest": {
+    "command": "npx vitest run tests/unit/features/planner/asset-engine",
+    "tests": 11,
+    "failed": 0,
+    "skipped": 0
+  },
+  "cliProof": {
+    "command": "tsx scripts/generate-svg.mjs block-descriptors/side-table-001.json",
+    "exit": 0,
+    "outputBytes": 480,
+    "path": "site/public/svg-catalog/side-table-001.svg",
+    "note": "Admin-shaped BlockDescriptor now compiles (was IR mismatch before S1)"
+  }
+}

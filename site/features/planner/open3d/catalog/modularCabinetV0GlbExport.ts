@@ -21,6 +21,10 @@ import {
 const DOOR_THICKNESS_MM = 18;
 const MM = 0.001;
 
+/**
+ * plan-only: this pure helper never writes bytes.
+ * binary: use asset-engine/mesh/exportModularGlbBinary (GLTFExporter + validate).
+ */
 export type ModularCabinetV0GlbBinaryStatus = "plan-only";
 
 /** One box part in metres (Y-up), matching generateCabinetV0Mesh layout. */
@@ -31,8 +35,8 @@ export interface ModularCabinetV0PartPlan {
 }
 
 /**
- * Pure mesh metadata plan for a future GLB writer.
- * Does not emit binary; does not touch designer static paths.
+ * Pure mesh metadata plan (G4). Binary bytes are G5 in asset-engine (exportModularGlbBinary).
+ * Does not touch designer static paths.
  */
 export interface ModularCabinetV0GlbPlan {
   kind: "modular-cabinet-v0";
@@ -44,8 +48,7 @@ export interface ModularCabinetV0GlbPlan {
   relativePath: string;
   binaryExportStatus: ModularCabinetV0GlbBinaryStatus;
   /**
-   * Binary export needs client GLTFExporter or gltf-transform Document write;
-   * this skeleton intentionally returns plan metadata only.
+   * Pure plan never writes GLB. Call exportModularCabinetV0GlbBinary for ArrayBuffer.
    */
   binaryExportNote: string;
 }
@@ -57,8 +60,9 @@ export interface ModularCabinetV0GeneratedAssetPathResult {
 }
 
 const BINARY_EXPORT_NOTE =
-  "Binary GLB not written in this skeleton. Use GLTFExporter (three-stdlib) or " +
-  "@gltf-transform/core later; upload must land under catalog-assets/generated/ only.";
+  "This plan is metadata only (G4). Binary export: " +
+  "features/planner/asset-engine/mesh/exportModularGlbBinary.ts (G5). " +
+  "Upload still must land under catalog-assets/generated/ only.";
 
 /** Stable, filesystem-safe slug for generated modular cabinet GLB names. */
 export function modularCabinetV0GeneratedSlug(

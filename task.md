@@ -10,6 +10,9 @@
 - [x] Restore `site/scripts/generate-svg.mjs` → `runPipeline` + write `public/svg-catalog`
 - [x] CLI smoke: fixtures → `public/svg-catalog/*.svg` (`results/planner/svg-cli-smoke/`)
 - [x] Puck publish fail-closed: pipeline before persist (`publishDescriptorWithPipeline`)
+- [x] **Asset-engine SVG skeleton ordered** (`asset-engine/stages.ts` S0–S7) — dual compiler still honest partial
+- [x] **S1 normalize** BlockDescriptor depth/fixed → pipeline IR; admin side-table compiles
+- [ ] Unify pipelineCore + svgCompiler.server (single compile authority)
 - [ ] Full admin UI publish browser smoke when ready
 
 ## 02 Generate mesh (must-do modular)
@@ -17,8 +20,10 @@
 - [x] ParametricBuilder hooks + unit tests
 - [x] Wire catalog place → modular flag + multi-part 3D (`geometryMode` / `createSceneObjectFromNode`)
 - [x] 2D modular footprint via `resolveFurniture2DFootprint`
-- [x] Modular GLB **plan** helper (policy-safe path; binary export later)
-- [ ] Binary GLB write (GLTFExporter / gltf-transform)
+- [x] Modular GLB **plan** helper (policy-safe path)
+- [x] **Asset-engine mesh skeleton ordered** (G0–G8); G5 binary GLB in-memory + G6 validate
+- [ ] G8 open3d viewer load of generated GLB URL (still procedural)
+- [ ] Upload modular GLB to storage on publish
 
 ## 03 Canvas / document / 3D
 - [x] `buildOpen3dSceneNodes` pure adapter + tests

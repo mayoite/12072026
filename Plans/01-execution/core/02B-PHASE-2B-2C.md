@@ -109,17 +109,26 @@ Currently, block descriptors are persisted to `site/block-descriptors/` on disk.
 
 ### 2C.3 — Product Type Pipelines (system-generated first)
 
+**Skeleton authority (2026-07-09):** ordered stages live under `site/features/planner/asset-engine/` (`stages.ts` + README). Dual SVG compilers and G8 viewer GLB load are **not** claimed done.
+
 **P0 must-do — modular / parametric (choose every component → good mesh/GLB):**
 - [ ] Admin chooses components (carcass, doors, top, legs, hardware style) + W/D/H + materials in Puck
 - [ ] Server stores structured JSON only for default path
-- [ ] 2D: `ParametricBuilder` (and successors) footprint from options
-- [ ] 3D: generate mesh / optional export GLB from same options — **designers do not hand-author 100 GLBs**
+- [x] 2D: `ParametricBuilder` / `resolveFurniture2DFootprint` + modular footprint — **partial (cabinet-v0)**
+- [x] 3D runtime mesh from options — **partial (cabinet-v0 + box)**
+- [x] Optional binary GLB in-memory + validate — **G5/G6** (`exportModularCabinetV0GlbBinary`); upload + viewer load open
 - [ ] Extend beyond boxes: L/U, door/drawer faces, part library quality bar (“good GLB/mesh”)
+
+**SVG compile path (skeleton):**
+- [x] S1 normalize admin `BlockDescriptor` → pipeline IR (`normalizeDescriptorForPipeline`)
+- [x] S2–S4 live via `pipelineCore` + `generate-svg.mjs` (CLI proved admin side-table)
+- [ ] Unify dual compiler (`pipelineCore` vs `svgCompiler.server` V1)
+- [ ] S5 PNG thumbs on publish
 
 **P1 — Extruded (SVG → system-generated 3D only):**
 - [ ] Admin uploads SVG outline + thickness + material
-- [ ] `GlbExtruderPreview` + upload under `catalog-assets/generated/`
-- [ ] Server validates generated GLB (`validateGlbAsset`)
+- [x] `GlbExtruderPreview` + upload helper under `catalog-assets/generated/` — **partial admin island**
+- [x] `validateGlbAsset` exists; wired on modular G5 export (not yet on extrude publish)
 - [x] Designer static GLB upload path **removed** (policy + `glbAssetPolicy` + Zod)
 
 **No P2 static/designer GLB.** Do not reintroduce hand-authored product GLBs.
