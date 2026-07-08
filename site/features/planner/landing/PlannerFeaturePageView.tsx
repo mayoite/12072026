@@ -41,18 +41,18 @@ export function PlannerFeaturePageView({ slug }: { slug: PlannerFeatureSlug }) {
             ]}
           />
 
-          <header className="grid items-center gap-10 border-b border-theme-soft pb-12 lg:grid-cols-[1.05fr_0.95fr]">
+          <header className="grid gap-10 border-b border-theme-soft pb-12 lg:grid-cols-[1.05fr_0.95fr]">
             <div className="max-w-2xl">
-              <div className="scheme-accent-wash mb-6 flex h-14 w-14 items-center justify-center rounded-2xl text-[color:var(--color-accent-strong)]">
+              <div className="scheme-accent-wash mb-6 h-14 w-14 rounded-2xl text-[color:var(--color-accent-strong)]">
                 <Icon className="h-6 w-6" aria-hidden="true" />
               </div>
               <p className="typ-eyebrow text-[color:var(--color-bronze-500)]">{feature.tagline}</p>
               <h1 className="home-heading mt-3">{feature.title}</h1>
-              <p className="page-copy-sm mt-4 text-muted">{feature.summary}</p>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
+              <p className="page-copy-sm text-muted">{feature.summary}</p>
+              <div className="mt-8 flex-wrap gap-3">
                 <Link
                   href={feature.tryPath}
-                  className="btn-primary typ-cta inline-flex items-center gap-2 px-6 py-3"
+                  className="btn-primary typ-cta inline-flex gap-2 px-6 py-3"
                 >
                   {PLANNER_HERO.primaryCta.label}
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -78,9 +78,9 @@ export function PlannerFeaturePageView({ slug }: { slug: PlannerFeatureSlug }) {
             </h2>
             <ul className="mt-6 grid gap-4 sm:grid-cols-2">
               {feature.bullets.map((bullet) => (
-                <li key={bullet} className="shell-card flex items-start gap-3 p-5">
+                <li key={bullet} className="shell-card items-start gap-3 p-5">
                   <span
-                    className="scheme-accent-wash mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[color:var(--color-accent-strong)]"
+                    className="scheme-accent-wash mt-0.5 h-6 w-6 shrink-0 rounded-full text-[color:var(--color-accent-strong)]"
                     aria-hidden="true"
                   >
                     <Check className="h-3.5 w-3.5" />
@@ -93,13 +93,13 @@ export function PlannerFeaturePageView({ slug }: { slug: PlannerFeatureSlug }) {
 
           {related.length > 0 && (
             <section aria-labelledby="feature-related" className="border-t border-theme-soft py-12">
-              <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+              <div className="mb-6 flex-wrap items-end gap-4">
                 <h2 id="feature-related" className="typ-subsection-title">
                   Works well <span className="text-accent-italic">with</span>
                 </h2>
                 <Link
                   href="/planner/features/"
-                  className="typ-label inline-flex shrink-0 items-center gap-2 text-muted transition-colors hover:text-strong"
+                  className="typ-label inline-flex shrink-0 gap-2 text-muted transition-colors hover:text-strong"
                 >
                   View all features
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -110,8 +110,8 @@ export function PlannerFeaturePageView({ slug }: { slug: PlannerFeatureSlug }) {
                   const RelatedIcon = item.icon;
                   return (
                     <Link key={item.slug} href={`/planner/features/${item.slug}/`} className="pfp-card group">
-                      <div className="flex items-center gap-3">
-                        <span className="scheme-accent-wash flex h-10 w-10 items-center justify-center rounded-xl text-[color:var(--color-accent-strong)]">
+                      <div className="gap-3">
+                        <span className="scheme-accent-wash h-10 w-10 rounded-xl text-[color:var(--color-accent-strong)]">
                           <RelatedIcon className="h-5 w-5" aria-hidden="true" />
                         </span>
                         <div>
@@ -120,7 +120,7 @@ export function PlannerFeaturePageView({ slug }: { slug: PlannerFeatureSlug }) {
                         </div>
                       </div>
                       <p className="page-copy-sm text-muted">{item.summary}</p>
-                      <span className="typ-label inline-flex items-center gap-1.5 text-[color:var(--color-bronze-500)] transition-all group-hover:gap-2.5">
+                      <span className="typ-label inline-flex gap-1.5 text-[color:var(--color-bronze-500)] transition-all group-hover:gap-2.5">
                         Learn more
                         <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                       </span>
@@ -131,7 +131,7 @@ export function PlannerFeaturePageView({ slug }: { slug: PlannerFeatureSlug }) {
             </section>
           )}
 
-          <nav aria-label="Feature pages" className="flex flex-wrap justify-between gap-3 border-t border-theme-soft py-8">
+          <nav aria-label="Feature pages" className="flex-wrap gap-3 border-t border-theme-soft py-8">
             {previous ? (
               <Link href={`/planner/features/${previous.slug}/`} className="pfp-card-link typ-label">
                 <ArrowLeft className="h-4 w-4" aria-hidden="true" />

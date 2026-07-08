@@ -1,4 +1,13 @@
 /* Full-bleed workspace: body is h-dvh overflow-hidden (PlannerBodyTheme). */
+html:has(body.planner-workspace) {
+  overflow: hidden !important;
+}
+
+body.planner-workspace {
+  overflow: hidden !important;
+  width: 100vw;
+  height: 100dvh;
+}
 #main-content:has(.open3d-route-host) {
   display: flex;
   flex-direction: column;

@@ -136,26 +136,26 @@ export default function AdminPlanDetailPageView() {
 
   return (
     <div className="mx-auto max-w-5xl p-6 md:p-8">
-      <Link href="/admin/plans" className="mb-4 inline-flex items-center gap-2 text-sm text-muted hover:text-strong">
+      <Link href="/admin/plans" className="inline-flex gap-2 text-sm text-muted hover:text-strong">
         <ArrowLeft size={14} aria-hidden />
         Back to plans
       </Link>
 
       {loading ? (
-        <div className="flex items-center gap-2 text-sm text-muted">
+        <div className="gap-2 text-sm text-muted">
           <Loader2 size={16} className="animate-spin" aria-hidden />
           Loading plan…
         </div>
       ) : null}
 
       {error ? (
-        <div className="mb-4 rounded-xl border border-accent bg-danger-soft p-4 text-sm text-red-700" role="alert">
+        <div className="rounded-xl border border-accent bg-danger-soft text-sm text-red-700" role="alert">
           {error}
         </div>
       ) : null}
 
       {statusMessage ? (
-        <div className="mb-4 rounded-xl border border-accent bg-success-soft p-4 text-sm text-green-800" role="status">
+        <div className="rounded-xl border border-accent bg-success-soft text-sm text-green-800" role="status">
           <Check size={14} className="mr-1 inline" aria-hidden />
           {statusMessage}
         </div>
@@ -169,10 +169,10 @@ export default function AdminPlanDetailPageView() {
             <p className="mt-2 text-sm text-muted">
               {plan.project_name ?? "No project"} · {plan.client_name ?? "No client"} · Updated {formatTimestamp(plan.updated_at)}
             </p>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="flex-wrap gap-2">
               <Link
                 href={buildPlannerCanvasHref(plan.id)}
-                className="btn-primary inline-flex items-center gap-2"
+                className="btn-primary inline-flex gap-2"
               >
                 <ExternalLink size={14} aria-hidden />
                 Open in canvas
@@ -205,48 +205,48 @@ export default function AdminPlanDetailPageView() {
           </header>
 
           <section className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-xl border border-soft bg-panel p-4">
+            <div className="rounded-xl border border-soft bg-panel">
               <h2 className="text-sm font-semibold text-strong">Document summary</h2>
               <dl className="mt-3 space-y-2 text-sm">
-                <div className="flex justify-between gap-4">
+                <div className="gap-4">
                   <dt className="text-muted">Room</dt>
                   <dd>{plan.room_width_mm} × {plan.room_depth_mm} mm</dd>
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="gap-4">
                   <dt className="text-muted">Items</dt>
                   <dd>{plan.item_count}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="gap-4">
                   <dt className="text-muted">Seat target</dt>
                   <dd>{plan.seat_target}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="gap-4">
                   <dt className="text-muted">Units</dt>
                   <dd>{plan.unit_system}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="gap-4">
                   <dt className="text-muted">Status</dt>
                   <dd>{plan.status}</dd>
                 </div>
               </dl>
             </div>
 
-            <div className="rounded-xl border border-soft bg-panel p-4">
+            <div className="rounded-xl border border-soft bg-panel">
               <h2 className="text-sm font-semibold text-strong">Fabric scene readiness</h2>
               <dl className="mt-3 space-y-2 text-sm">
-                <div className="flex justify-between gap-4">
+                <div className="gap-4">
                   <dt className="text-muted">Canonical scene</dt>
                   <dd>{readiness.hasScene ? "Present" : "Missing"}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="gap-4">
                   <dt className="text-muted">Fabric snapshot</dt>
                   <dd>{readiness.hasFabricSnapshot ? "Present" : "Missing"}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="gap-4">
                   <dt className="text-muted">Scene items</dt>
                   <dd>{readiness.itemCount}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="gap-4">
                   <dt className="text-muted">Scene room</dt>
                   <dd>{readiness.roomLabel}</dd>
                 </div>
@@ -255,11 +255,11 @@ export default function AdminPlanDetailPageView() {
           </section>
 
           {scene?.items?.length ? (
-            <section className="rounded-xl border border-soft bg-panel p-4">
+            <section className="rounded-xl border border-soft bg-panel">
               <h2 className="text-sm font-semibold text-strong">Scene items</h2>
               <ul className="mt-3 divide-y divide-soft text-sm">
                 {scene.items.slice(0, 12).map((item) => (
-                  <li key={item.id} className="flex items-center justify-between gap-4 py-2">
+                  <li key={item.id} className="gap-4 py-2">
                     <span className="text-strong">{item.name}</span>
                     <span className="text-muted">
                       {item.category} · {item.sizeMm.widthMm} × {item.sizeMm.depthMm} mm
@@ -273,9 +273,9 @@ export default function AdminPlanDetailPageView() {
             </section>
           ) : null}
 
-          <section className="rounded-xl border border-soft bg-panel p-4">
+          <section className="rounded-xl border border-soft bg-panel">
             <h2 className="text-sm font-semibold text-strong">Scene JSON</h2>
-            <pre className="mt-3 max-h-80 overflow-auto rounded-lg bg-subtle p-3 text-xs text-muted">
+            <pre className="mt-3 max-h-80 rounded-lg bg-subtle p-3 text-xs text-muted">
               {JSON.stringify(plan.scene_json, null, 2)}
             </pre>
           </section>

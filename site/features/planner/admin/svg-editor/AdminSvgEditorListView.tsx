@@ -93,7 +93,7 @@ export function AdminSvgEditorListView({
         <div className="admin-page__actions">
           <Link
             href="/admin/svg-editor/new"
-            className="btn-primary inline-flex items-center gap-2 px-3 py-2 text-sm"
+            className="btn-primary inline-flex gap-2 px-3 py-2 text-sm"
           >
             <Plus size={14} />
             New block
@@ -166,7 +166,7 @@ export function AdminSvgEditorListView({
                   <td>
                     <Link
                       href={`/admin/svg-editor/${d.slug}`}
-                      className="btn-outline inline-flex items-center gap-2 px-3 py-1.5 text-xs"
+                      className="btn-outline inline-flex gap-2 px-3 py-1.5 text-xs"
                     >
                       <RefreshCw size={12} aria-hidden />
                       Edit

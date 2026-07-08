@@ -77,7 +77,7 @@ export default function AdminFeatureFlagsPageView() {
 
   return (
     <div className="mx-auto max-w-5xl p-6 md:p-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="mb-6 flex-wrap gap-3">
         <div>
           <p className="text-xs uppercase tracking-wide text-soft">Planner toolbar</p>
           <h1 className="text-2xl font-semibold text-strong">Feature flags</h1>
@@ -88,7 +88,7 @@ export default function AdminFeatureFlagsPageView() {
         </div>
         <button
           type="button"
-          className="btn-outline inline-flex items-center gap-2 px-3 py-2 text-sm"
+          className="btn-outline inline-flex gap-2 px-3 py-2 text-sm"
           onClick={() => void loadFlags()}
           disabled={loading}
         >
@@ -98,13 +98,13 @@ export default function AdminFeatureFlagsPageView() {
       </div>
 
       {error ? (
-        <div className="mb-4 rounded-xl border border-accent bg-danger-soft p-4 text-sm text-red-700" role="alert">
+        <div className="rounded-xl border border-accent bg-danger-soft text-sm text-red-700" role="alert">
           {error}
         </div>
       ) : null}
 
       {loading && !flags ? (
-        <div className="flex items-center gap-2 text-sm text-muted">
+        <div className="gap-2 text-sm text-muted">
           <Loader2 size={16} className="animate-spin" aria-hidden />
           Loading flags…
         </div>
@@ -120,7 +120,7 @@ export default function AdminFeatureFlagsPageView() {
                   const enabled = flags?.[flag.name] ?? flag.defaultValue;
                   const busy = pendingKey === flag.name;
                   return (
-                    <li key={flag.name} className="flex items-center justify-between gap-4 px-4 py-3">
+                    <li key={flag.name} className="gap-4 px-4 py-3">
                       <div>
                         <p className="font-medium text-strong">{flag.description}</p>
                         <p className="text-xs text-soft">{flag.name}</p>
@@ -130,16 +130,12 @@ export default function AdminFeatureFlagsPageView() {
                         role="switch"
                         aria-checked={enabled}
                         aria-label={`${flag.description} ${enabled ? "enabled" : "disabled"}`}
-                        className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors ${
-                          enabled ? "bg-primary" : "bg-soft"
-                        } ${busy ? "opacity-60" : ""}`}
+                        className={`inline-flex h-7 w-12 shrink-0 rounded-full transition-colors ${ enabled ? "bg-primary" : "bg-soft" } ${busy ? "opacity-60" : ""}`}
                         disabled={busy || !flags}
                         onClick={() => void toggleFlag(flag.name, !enabled)}
                       >
                         <span
-                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
-                            enabled ? "translate-x-6" : "translate-x-1"
-                          }`}
+                          className={`h-5 w-5 transform rounded-full shadow transition-transform ${ enabled ? "translate-x-6" : "translate-x-1" }`}
                         />
                       </button>
                     </li>

@@ -18,7 +18,7 @@ export function PlannerHistoryControls({
 }: PlannerHistoryControlsProps) {
   return (
     <div
-      className="sticky top-0 flex items-center gap-1"
+      className="sticky top-0 gap-1"
       role="toolbar"
       aria-label="Canvas history"
       style={{ zIndex: Z.toolbar }}

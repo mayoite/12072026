@@ -55,8 +55,8 @@ export function PlannerFloorplanHero() {
             animate="visible"
           >
             <h1 className="home-hero-title-homepage planner-landing-hero__title">
-              <span className="block overflow-hidden">
-                <motion.span className="inline-block" variants={titleVariants}>
+              <span className="">
+                <motion.span className="" variants={titleVariants}>
                   {titleLead}
                   <span className="text-accent-italic-on-dark">{titleAccent}</span>
                 </motion.span>

@@ -28,10 +28,10 @@ export function SplitViewLayout({ view, children2D, children3D, onClose3D }: Spl
 
   if (isMobile && view === "3d") {
     return (
-      <div className="pw-view-stack h-full w-full min-h-0 overflow-hidden">
+      <div className="pw-view-stack">
         {children2D}
         <BottomSheet open onClose={onClose3D ?? (() => undefined)} title="3D View">
-          <div className="h-[calc(90dvh-56px)] min-h-0 w-full">
+          <div className="h-[calc(90dvh-56px)]">
             {shouldRender3D ? children3D : null}
           </div>
         </BottomSheet>
@@ -42,10 +42,10 @@ export function SplitViewLayout({ view, children2D, children3D, onClose3D }: Spl
   if (view === "split") {
     if (isMobile) {
       return (
-        <div className="pw-view-stack h-full w-full min-h-0 overflow-hidden">
+        <div className="pw-view-stack">
           {children2D}
           <BottomSheet open onClose={onClose3D ?? (() => undefined)} title="3D View">
-            <div className="h-[calc(90dvh-56px)] min-h-0 w-full">
+            <div className="h-[calc(90dvh-56px)]">
               {shouldRender3D ? children3D : null}
             </div>
           </BottomSheet>
@@ -54,12 +54,12 @@ export function SplitViewLayout({ view, children2D, children3D, onClose3D }: Spl
     }
 
     return (
-      <PanelGroup orientation="horizontal" className="pw-split-view h-full w-full min-h-0 overflow-hidden">
-        <Panel defaultSize={60} minSize={30} className="pw-split-pane pw-split-pane--2d h-full min-w-[18.75rem] min-h-0">
+      <PanelGroup orientation="horizontal" className="pw-split-view">
+        <Panel defaultSize={60} minSize={30} className="pw-split-pane pw-split-pane--2d min-w-[18.75rem]">
           {children2D}
         </Panel>
         <PanelResizeHandle className="pw-split-divider w-1 shrink-0 cursor-col-resize bg-muted hover:bg-gray-300" />
-        <Panel defaultSize={40} minSize={30} className="pw-split-pane pw-split-pane--3d h-full min-w-[300px] min-h-0">
+        <Panel defaultSize={40} minSize={30} className="pw-split-pane pw-split-pane--3d min-w-[300px]">
           {shouldRender3D ? children3D : null}
         </Panel>
       </PanelGroup>
@@ -67,7 +67,7 @@ export function SplitViewLayout({ view, children2D, children3D, onClose3D }: Spl
   }
 
   return (
-    <div className="pw-view-stack h-full w-full min-h-0 overflow-hidden">
+    <div className="pw-view-stack">
       <div
         className="pw-view-stack__pane pw-view-stack__pane--2d"
         data-active={view === "2d" || undefined}

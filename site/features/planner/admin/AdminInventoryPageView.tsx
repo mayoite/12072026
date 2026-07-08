@@ -106,11 +106,11 @@ export default function AdminInventoryPageView({ csv, generatedAt, rowCount }: P
         </p>
       </div>
 
-      <div className="mb-4 flex flex-wrap gap-3">
+      <div className="flex-wrap gap-3">
         <input
           type="search"
           placeholder="Search route, file, summary…"
-          className="min-w-[16rem] flex-1 rounded-lg border border-soft bg-panel px-3 py-2 text-sm"
+          className="min-w-[16rem] rounded-lg border border-soft bg-panel px-3 py-2 text-sm"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />
@@ -146,12 +146,12 @@ export default function AdminInventoryPageView({ csv, generatedAt, rowCount }: P
           <code className="text-xs">results/app-pages-inventory.csv</code>.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-soft bg-panel">
+        <div className="rounded-xl border border-soft bg-panel">
           <div className="border-b border-soft px-4 py-3 text-sm text-muted">
             Showing {filtered.length} of {rows.length}
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[48rem] text-start text-sm">
+            <table className="min-w-[48rem] text-start text-sm">
               <thead className="border-b border-soft bg-subtle text-xs uppercase tracking-wide text-soft">
                 <tr>
                   <th className="px-4 py-3 font-medium">Kind</th>

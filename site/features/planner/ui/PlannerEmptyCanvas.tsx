@@ -22,7 +22,7 @@ export function PlannerEmptyCanvas({
 }: PlannerEmptyCanvasProps) {
   return (
     <div
-      className="pw-empty-canvas pointer-events-none absolute inset-0 flex items-center justify-center p-4"
+      className="pw-empty-canvas pointer-events-none"
       role="region"
       aria-label="Empty canvas guidance"
     >

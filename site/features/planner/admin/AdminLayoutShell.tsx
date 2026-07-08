@@ -147,7 +147,7 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
           />
         ) : null}
 
-        <div className="shell-admin-main min-w-0">{children}</div>
+        <div className="shell-admin-main">{children}</div>
       </div>
     </div>
   );

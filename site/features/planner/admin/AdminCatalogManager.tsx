@@ -271,7 +271,7 @@ export function AdminCatalogManager({
         <div className="admin-page__actions">
           <button
             type="button"
-            className="btn-outline inline-flex items-center gap-2 px-3 py-2 text-sm"
+            className="btn-outline inline-flex gap-2 px-3 py-2 text-sm"
             onClick={() => void loadItems()}
             disabled={loading}
           >
@@ -280,7 +280,7 @@ export function AdminCatalogManager({
           </button>
           <button
             type="button"
-            className="btn-primary inline-flex items-center gap-2 px-3 py-2 text-sm"
+            className="btn-primary inline-flex gap-2 px-3 py-2 text-sm"
             onClick={openCreate}
             disabled={readOnly}
           >
@@ -305,7 +305,7 @@ export function AdminCatalogManager({
 
       <div className="admin-toolbar">
         <AdminField label="Search" className="admin-field--search">
-          <div className="relative min-w-[12.5rem]">
+          <div className="min-w-[12.5rem]">
             <Search size={14} className="admin-field__search-icon" />
             <AdminTextInput
               value={search}
@@ -352,7 +352,7 @@ export function AdminCatalogManager({
       </div>
 
       {loading && items.length === 0 ? (
-        <div className="flex items-center gap-2 text-sm text-muted">
+        <div className="gap-2 text-sm text-muted">
           <Loader2 size={16} className="animate-spin" />
           Loading catalog...
         </div>

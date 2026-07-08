@@ -83,19 +83,19 @@ export function OnboardingTooltips({ disabled = false }: OnboardingTooltipsProps
   if (!current) return null;
 
   return (
-    <div className="onboarding-tooltips pointer-events-none absolute inset-0" style={{ zIndex: Z.tooltip }}>
+    <div className="onboarding-tooltips pointer-events-none" style={{ zIndex: Z.tooltip }}>
       <div
-        className="onboarding-tooltip pointer-events-auto absolute"
+        className="onboarding-tooltip pointer-events-auto"
         style={{
           ...current.position,
           transform: current.position.top === "50%" ? "translateY(-50%)" : undefined,
         }}
       >
-        <div className="flex flex-col gap-2 rounded-xl border border-soft bg-panel px-4 py-3 shadow-lg">
+        <div className="gap-2 rounded-xl border border-soft bg-panel px-4 py-3 shadow-lg">
           <p className="text-sm font-medium text-default">
             {current.text}
           </p>
-          <div className="flex items-center gap-3">
+          <div className="gap-3">
             <button
               type="button"
               onClick={handleNext}
@@ -111,13 +111,11 @@ export function OnboardingTooltips({ disabled = false }: OnboardingTooltipsProps
               Skip
             </button>
           </div>
-          <div className="mt-1 flex gap-1">
+          <div className="mt-1 gap-1">
             {STEPS.map((_, i) => (
               <div
                 key={i}
-                className={`h-1 w-4 rounded-full ${
-                  i === step ? "bg-[var(--color-primary)]" : "bg-soft/30"
-                }`}
+                className={`h-1 w-4 rounded-full ${ i === step ? "bg-[var(--color-primary)]" : "bg-soft/30" }`}
               />
             ))}
           </div>

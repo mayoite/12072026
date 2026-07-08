@@ -9,11 +9,11 @@ export type PlannerBreadcrumbItem = {
 export function PlannerBreadcrumbs({ items }: { items: PlannerBreadcrumbItem[] }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-8">
-      <ol className="flex flex-wrap items-center gap-2 text-muted">
+      <ol className="flex-wrap gap-2 text-muted">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (
-            <li key={item.label} className="flex items-center gap-2">
+            <li key={item.label} className="gap-2">
               {index > 0 && (
                 <span aria-hidden="true" className="text-subtle">
                   /

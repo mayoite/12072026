@@ -120,24 +120,24 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
 
   return (
     <div
-      className="planner-setup-overlay fixed inset-0 flex items-center justify-center bg-[color:var(--surface-inverse)]/88 backdrop-blur-sm"
+      className="planner-setup-overlay bg-[color:var(--surface-inverse)]/88 backdrop-blur-sm"
       style={{ zIndex: Z.panel }}
     >
-      <div className="grid w-full max-w-5xl overflow-hidden rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] bg-[color:var(--surface-panel-strong)] shadow-[var(--shadow-soft)] lg:grid-cols-[1fr_1.05fr]">
-        <aside className="flex flex-col justify-between gap-8 border-b border-[color:var(--border-soft)] bg-[color:var(--surface-accent-wash)] p-8 lg:border-b-0 lg:border-r">
+      <div className="grid max-w-5xl rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] bg-[color:var(--surface-panel-strong)] shadow-[var(--shadow-soft)] lg:grid-cols-[1fr_1.05fr]">
+        <aside className="gap-8 border-b border-[color:var(--border-soft)] bg-[color:var(--surface-accent-wash)] p-8 lg:border-b-0 lg:border-r">
           <div>
             <p className="typ-eyebrow text-[color:var(--color-bronze-500)]">Project setup</p>
             <h1 className="typ-h2 mt-3 text-[color:var(--text-strong)]">
               Set up your space in <span className="text-accent-italic">30 seconds</span>
             </h1>
-            <p className="page-copy-sm mt-4 max-w-md text-[color:var(--text-muted)]">
+            <p className="page-copy-sm max-w-md text-[color:var(--text-muted)]">
               Add the basics once. We size the grid and tailor the planner to this layout.
             </p>
           </div>
 
           <ul className="space-y-3">
-            <li className="flex items-start gap-3">
-              <span className="scheme-accent-wash flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[color:var(--color-primary)]">
+            <li className="items-start gap-3">
+              <span className="scheme-accent-wash h-10 w-10 shrink-0 rounded-xl text-[color:var(--color-primary)]">
                 <Building2 className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
@@ -145,8 +145,8 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                 <p className="typ-caption-lg text-[color:var(--text-muted)]">Local cities and seat counts.</p>
               </div>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="scheme-accent-wash flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[color:var(--color-primary)]">
+            <li className="items-start gap-3">
+              <span className="scheme-accent-wash h-10 w-10 shrink-0 rounded-xl text-[color:var(--color-primary)]">
                 <Ruler className="h-5 w-5" aria-hidden="true" />
               </span>
               <div>
@@ -158,7 +158,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
         </aside>
 
         <form
-          className="flex flex-col gap-5 p-8"
+          className="gap-5 p-8"
           onSubmit={handleSubmit}
           aria-label="Project setup"
           aria-busy={!isHydrated}
@@ -185,9 +185,9 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
               <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-city">
                 City
               </label>
-              <div className="relative flex-1">
+              <div className="">
                 <MapPin
-                  className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-muted)]"
+                  className="pointer-events-none left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-muted)]"
                   aria-hidden="true"
                 />
                 <select
@@ -238,11 +238,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                 return (
                   <label
                     key={option.value}
-                    className={`flex cursor-pointer flex-col rounded-[var(--radius-lg)] border px-3 py-3 transition-colors ${
-                      selected
-                        ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]"
-                        : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]"
-                    }`}
+                    className={`cursor-pointer rounded-[var(--radius-lg)] border px-3 py-3 transition-colors ${ selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]" }`}
                   >
                     <input
                       type="radio"
@@ -274,7 +270,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
 
           <button
             type="submit"
-            className="btn-primary typ-cta mt-auto inline-flex items-center justify-center gap-2 px-6 py-3"
+            className="btn-primary typ-cta mt-auto inline-flex gap-2 px-6 py-3"
             disabled={!isHydrated}
             aria-label={isHydrated ? "Start placing furniture" : "Preparing workspace"}
           >

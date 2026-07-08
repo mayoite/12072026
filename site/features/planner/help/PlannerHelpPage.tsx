@@ -36,20 +36,20 @@ export function PlannerHelpPage() {
             items={[{ label: "Planner", href: "/planner/" }, { label: "Help" }]}
           />
 
-          <div className="mb-10 flex flex-col gap-6 border-b border-theme-soft pb-8 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mb-10 gap-6 border-b border-theme-soft pb-8 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl">
               <p className="typ-eyebrow text-[color:var(--color-bronze-500)]">Help center</p>
               <h1 className="home-heading mt-3">
                 Workspace planner <span className="text-accent-italic">guide</span>
               </h1>
-              <p className="page-copy-sm mt-4 text-muted">
+              <p className="page-copy-sm text-muted">
                 Everything you need to draw, furnish, measure, and export a client-ready floor plan.
               </p>
             </div>
-            <div className="w-full max-w-md">
-              <div className="relative">
+            <div className="max-w-md">
+              <div className="">
                 <Search
-                  className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
+                  className="pointer-events-none left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
                   aria-hidden="true"
                 />
                 <input
@@ -58,7 +58,7 @@ export function PlannerHelpPage() {
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search help…"
                   aria-label="Search help topics"
-                  className="typ-body-sm w-full rounded-full border border-soft bg-panel py-3 pl-11 pr-4 text-strong outline-none focus-ring-theme"
+                  className="typ-body-sm rounded-full border border-soft bg-panel py-3 pl-11 pr-4 text-strong outline-none focus-ring-theme"
                 />
               </div>
               <p aria-live="polite" className="typ-micro mt-2 pl-4 text-subtle">
@@ -70,7 +70,7 @@ export function PlannerHelpPage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((section) => (
               <article key={section.id} id={section.id} className="pfp-card scroll-mt-24">
-                <div className="flex items-start justify-between gap-2">
+                <div className="items-start gap-2">
                   <h2 className="typ-h3 text-strong">{section.title}</h2>
                   <a
                     href={`#${section.id}`}

@@ -303,7 +303,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
             type="button"
             onClick={() => void handleDownload()}
             disabled={downloadState === "loading" || vectorExportBlocked}
-            className="btn-primary flex flex-1 items-center justify-center gap-2 px-4 py-2.5 text-sm disabled:opacity-70"
+            className="btn-primary gap-2 px-4 py-2.5 text-sm disabled:opacity-70"
           >
             {downloadState === "loading" && <Loader2 size={14} className="animate-spin" aria-hidden />}
             {downloadState === "success" && <Check size={14} aria-hidden />}
@@ -313,7 +313,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
           <button
             type="button"
             onClick={handleCopyLink}
-            className="btn-outline flex items-center gap-1.5 px-4 py-2.5 text-sm"
+            className="btn-outline gap-1.5 px-4 py-2.5 text-sm"
           >
             {linkCopied ? <Check size={14} aria-hidden /> : <Link2 size={14} aria-hidden />}
             {linkCopied ? EXPORT_STRINGS.linkCopied : EXPORT_STRINGS.copyLink}

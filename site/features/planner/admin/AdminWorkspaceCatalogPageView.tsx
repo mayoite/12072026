@@ -37,7 +37,7 @@ export default function AdminWorkspaceCatalogPageView() {
   );
 
   return (
-    <div className="mx-auto max-w-7xl p-4 md:p-8">
+    <div className="mx-auto max-w-7xl md:p-8">
       <div className="mb-6">
         <p className="text-xs uppercase tracking-wide text-soft">Static ingest</p>
         <h1 className="text-2xl font-semibold text-strong">Workspace element library</h1>
@@ -64,22 +64,22 @@ export default function AdminWorkspaceCatalogPageView() {
         </p>
       </div>
 
-      <div className="mb-4 flex flex-wrap gap-3 rounded-xl border border-soft bg-panel p-4">
-        <label className="min-w-[12.5rem] flex-1">
-          <span className="mb-1 block text-xs font-medium text-muted">Search</span>
-          <div className="relative">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-soft" />
+      <div className="flex-wrap gap-3 rounded-xl border border-soft bg-panel">
+        <label className="min-w-[12.5rem]">
+          <span className="mb-1 text-xs font-medium text-muted">Search</span>
+          <div className="">
+            <Search size={14} className="left-3 top-1/2 -translate-y-1/2 text-soft" />
             <input
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-lg border border-soft bg-panel py-2 pl-9 pr-3 text-sm"
+              className="rounded-lg border border-soft bg-panel py-2 pl-9 pr-3 text-sm"
               placeholder="SKU, name, id…"
             />
           </div>
         </label>
         <label>
-          <span className="mb-1 block text-xs font-medium text-muted">Category</span>
+          <span className="mb-1 text-xs font-medium text-muted">Category</span>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
@@ -97,8 +97,8 @@ export default function AdminWorkspaceCatalogPageView() {
 
       <p className="mb-3 text-sm text-muted">{items.length} items</p>
 
-      <div className="overflow-hidden rounded-xl border border-soft bg-panel">
-        <table className="w-full min-w-[50rem] text-start text-sm">
+      <div className="rounded-xl border border-soft bg-panel">
+        <table className="min-w-[50rem] text-start text-sm">
           <thead className="border-b border-soft bg-subtle/50 text-xs uppercase tracking-wide text-soft">
             <tr>
               <th className="px-4 py-3">SKU / ID</th>
@@ -152,7 +152,7 @@ export function AdminCanvasConfigSection() {
           From <code>config/planner-canvas.json</code> — edit in repo and redeploy to change bounds, scale, and viewport.
         </p>
       </header>
-      <table className="w-full text-sm">
+      <table className="text-sm">
         <thead className="border-b border-soft text-xs uppercase text-soft">
           <tr>
             <th className="px-4 py-2 text-start">Group</th>

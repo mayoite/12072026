@@ -90,7 +90,7 @@ export function AdminCatalogTable({
                     </span>
                   </td>
                   <td>
-                    <div className="flex justify-end gap-1">
+                    <div className="justify-end gap-1">
                       <button
                         type="button"
                         className="admin-icon-btn"
@@ -130,7 +130,7 @@ export function AdminCatalogTable({
         </table>
       </div>
       {isStandard && total > 50 ? (
-        <div className="flex items-center justify-between border-t border-soft px-4 py-3 text-sm">
+        <div className="border-t border-soft px-4 py-3 text-sm">
           <button
             type="button"
             className="btn-outline px-3 py-1"

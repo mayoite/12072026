@@ -1,12 +1,12 @@
 export function PlannerLayoutGraphic({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`home-planner-graphic flex shrink-0 items-center justify-center rounded-huge border border-soft bg-hover p-4 ${className}`}
+      className={`home-planner-graphic shrink-0 rounded-huge border border-soft bg-hover ${className}`}
       aria-hidden="true"
     >
       <svg
         viewBox="0 0 160 120"
-        className="home-planner-graphic__svg h-full w-full max-h-24 max-w-32 text-primary"
+        className="home-planner-graphic__svg max-h-24 max-w-32 text-primary"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >

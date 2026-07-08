@@ -24,7 +24,7 @@ export default function PortalPlanPageView({ document }: PortalPlanPageViewProps
           <p className="mt-3 text-sm leading-6 text-muted">
             This plan is missing, inaccessible, or does not belong to the current member account.
           </p>
-          <div className="mt-5 flex flex-wrap gap-3">
+          <div className="mt-5 flex-wrap gap-3">
             <Link href="/portal/" className="btn-outline px-4 py-2 text-sm">
               Back to portal
             </Link>
@@ -55,7 +55,7 @@ export default function PortalPlanPageView({ document }: PortalPlanPageViewProps
           {document.projectName ?? document.clientName ?? "Saved workspace layout"} · Updated {formatTimestamp(document.updatedAt ?? document.createdAt)}
         </p>
 
-        <div className="mt-5 flex flex-wrap gap-3">
+        <div className="mt-5 flex-wrap gap-3">
           <Link href={`/planner/canvas/?id=${encodeURIComponent(document.id ?? "")}`} className="btn-primary px-4 py-2 text-sm">
             Open in planner
           </Link>
@@ -68,24 +68,24 @@ export default function PortalPlanPageView({ document }: PortalPlanPageViewProps
       <section className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded-[1.35rem] border border-soft bg-panel p-5">
           <h2 className="text-lg font-semibold text-strong">Document summary</h2>
-          <dl className="mt-4 space-y-3 text-sm">
-            <div className="flex items-start justify-between gap-4">
+          <dl className="space-y-3 text-sm">
+            <div className="items-start gap-4">
               <dt className="text-muted">Room</dt>
               <dd className="text-end text-strong">{document.roomWidthMm} × {document.roomDepthMm} mm</dd>
             </div>
-            <div className="flex items-start justify-between gap-4">
+            <div className="items-start gap-4">
               <dt className="text-muted">Items</dt>
               <dd className="text-end text-strong">{document.itemCount}</dd>
             </div>
-            <div className="flex items-start justify-between gap-4">
+            <div className="items-start gap-4">
               <dt className="text-muted">Seat target</dt>
               <dd className="text-end text-strong">{document.seatTarget}</dd>
             </div>
-            <div className="flex items-start justify-between gap-4">
+            <div className="items-start gap-4">
               <dt className="text-muted">Units</dt>
               <dd className="text-end text-strong">{document.unitSystem}</dd>
             </div>
-            <div className="flex items-start justify-between gap-4">
+            <div className="items-start gap-4">
               <dt className="text-muted">Status</dt>
               <dd className="text-end text-strong">{document.status}</dd>
             </div>
@@ -94,22 +94,22 @@ export default function PortalPlanPageView({ document }: PortalPlanPageViewProps
 
         <div className="rounded-[1.35rem] border border-soft bg-panel p-5">
           <h2 className="text-lg font-semibold text-strong">Scene readiness</h2>
-          <dl className="mt-4 space-y-3 text-sm">
-            <div className="flex items-start justify-between gap-4">
+          <dl className="space-y-3 text-sm">
+            <div className="items-start gap-4">
               <dt className="text-muted">Canonical scene</dt>
               <dd className="text-end text-strong">{scene ? "Present" : "Missing"}</dd>
             </div>
-            <div className="flex items-start justify-between gap-4">
+            <div className="items-start gap-4">
               <dt className="text-muted">Room envelope</dt>
               <dd className="text-end text-strong">
                 {scene ? `${scene.room.widthMm} × ${scene.room.depthMm} mm` : "Unknown"}
               </dd>
             </div>
-            <div className="flex items-start justify-between gap-4">
+            <div className="items-start gap-4">
               <dt className="text-muted">Scene items</dt>
               <dd className="text-end text-strong">{items.length}</dd>
             </div>
-            <div className="flex items-start justify-between gap-4">
+            <div className="items-start gap-4">
               <dt className="text-muted">Snapshot source</dt>
               <dd className="text-end text-strong">
                 {scene?.fabricSnapshot ? "Fabric" : "None"}
@@ -120,7 +120,7 @@ export default function PortalPlanPageView({ document }: PortalPlanPageViewProps
       </section>
 
       <section className="mt-6 rounded-[1.35rem] border border-soft bg-panel p-5">
-        <div className="flex items-center justify-between gap-3">
+        <div className="gap-3">
           <h2 className="text-lg font-semibold text-strong">Placed items</h2>
           <span className="rounded-full border border-soft px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-soft">
             {items.length} entries
@@ -128,12 +128,12 @@ export default function PortalPlanPageView({ document }: PortalPlanPageViewProps
         </div>
 
         {items.length === 0 ? (
-          <p className="mt-4 text-sm text-muted">No scene items were found in this saved document.</p>
+          <p className="text-sm text-muted">No scene items were found in this saved document.</p>
         ) : (
-          <ul className="mt-4 divide-y divide-soft">
+          <ul className="divide-y divide-soft">
             {items.slice(0, 16).map((item) => (
-              <li key={item.id} className="flex items-start justify-between gap-4 py-3 text-sm">
-                <div className="min-w-0">
+              <li key={item.id} className="items-start gap-4 py-3 text-sm">
+                <div className="">
                   <p className="truncate font-medium text-strong">{item.name}</p>
                   <p className="mt-1 text-muted">{item.category}</p>
                 </div>

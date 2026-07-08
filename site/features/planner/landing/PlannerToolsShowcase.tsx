@@ -95,12 +95,12 @@ export function PlannerToolsShowcase({
       }
     >
       <div className="home-shell-xl">
-        <div className="home-tools-panel grid items-center gap-8 md:gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(18.75rem,1.08fr)] lg:gap-12">
+        <div className="home-tools-panel grid gap-8 md:gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(18.75rem,1.08fr)] lg:gap-12">
           <motion.div className="home-tools-panel__copy" variants={staggerContainer} {...motionProps}>
             <motion.div variants={staggerItem} className="space-y-0">
               {variant === "homepage" ? (
                 <motion.div
-                  className="mb-4 flex items-center gap-2.5"
+                  className="gap-2.5"
                   animate={reduceMotion ? undefined : { opacity: [0.72, 1, 0.72] }}
                   transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
                 >
@@ -108,7 +108,7 @@ export function PlannerToolsShowcase({
                   <p className="home-kicker text-inverse-muted">{kicker}</p>
                 </motion.div>
               ) : (
-                <p className="home-kicker mb-4 text-inverse-muted">{kicker}</p>
+                <p className="home-kicker text-inverse-muted">{kicker}</p>
               )}
 
               <HeadingTag className={headingClass}>
@@ -122,7 +122,7 @@ export function PlannerToolsShowcase({
                 <motion.div variants={staggerItem} className="home-actions mt-8">
                   <Link
                     href={primaryCta.href}
-                    className="btn-hero-primary btn-primary inline-flex items-center gap-2 shadow-theme-panel"
+                    className="btn-hero-primary btn-primary inline-flex gap-2 shadow-theme-panel"
                   >
                     {primaryCta.label}
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -130,7 +130,7 @@ export function PlannerToolsShowcase({
                   {secondaryCta ? (
                     <Link
                       href={secondaryCta.href}
-                      className="btn-hero-secondary inline-flex items-center gap-2 shadow-theme-panel"
+                      className="btn-hero-secondary inline-flex gap-2 shadow-theme-panel"
                     >
                       {secondaryCta.label}
                     </Link>
@@ -145,10 +145,10 @@ export function PlannerToolsShowcase({
                 >
                   <Link
                     href={primaryCta.href}
-                    className="home-tool-card home-tool-card--dark home-tool-card--animated home-tool-card--row group inline-flex w-full max-w-md"
+                    className="home-tool-card home-tool-card--dark home-tool-card--animated home-tool-card--row group inline-flex max-w-md"
                   >
-                    <div className="home-tool-card__body min-w-0 flex-1">
-                      <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <div className="home-tool-card__body">
+                      <div className="mb-2 flex-wrap gap-x-3 gap-y-1">
                         <h3 className="home-tool-title--dark">Oando Planner</h3>
                         <span className="home-tool-badge home-tool-badge--dark home-tool-badge--inline">
                           Flagship
@@ -177,7 +177,7 @@ export function PlannerToolsShowcase({
           <div className="home-tools-panel__diagram home-floorplan-showcase">
             <Link
               href={demoHref}
-              className="home-tools-floor-demo group block"
+              className="home-tools-floor-demo group"
               aria-label={demoAriaLabel}
               data-testid={demoTestId}
             >

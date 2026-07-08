@@ -50,10 +50,10 @@ export function PlannerSketchRecoveryPanel({
 
   return (
     <div
-      className="fixed right-4 top-20 w-[min(34rem,calc(100vw-2rem))] rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-2xl backdrop-blur dark:border-slate-700 dark:bg-slate-950/95"
+      className="right-4 top-20 w-[min(34rem,calc(100vw-2rem))] rounded-2xl border border-slate-200 bg-white/95 shadow-2xl backdrop-blur dark:border-slate-700 dark:bg-slate-950/95"
       style={{ zIndex: Z.panel }}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="items-start gap-3">
         <div>
           <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
             Sketch recovery
@@ -86,12 +86,12 @@ export function PlannerSketchRecoveryPanel({
         </div>
       ) : null}
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="flex-wrap gap-2">
         {isPreview ? (
           <>
             <button
               type="button"
-              className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+              className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
               onClick={onAccept}
             >
               Accept preview
@@ -109,7 +109,7 @@ export function PlannerSketchRecoveryPanel({
           <>
             <button
               type="button"
-              className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+              className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
               onClick={onTraceManual}
             >
               Trace manually

@@ -246,13 +246,7 @@ export function AiAdvisorChatPane({
         {messages.map((msg) => (
           <div key={msg.id} className="pw-ai-chat-row" data-role={msg.role}>
             <div
-              className={`pw-ai-chat-bubble ${
-                msg.role === "user"
-                  ? "pw-ai-chat-bubble--user"
-                  : msg.role === "system"
-                    ? "pw-ai-chat-bubble--system"
-                    : "pw-ai-chat-bubble--assistant"
-              }`}
+              className={`pw-ai-chat-bubble ${ msg.role === "user" ? "pw-ai-chat-bubble--user" : msg.role === "system" ? "pw-ai-chat-bubble--system" : "pw-ai-chat-bubble--assistant" }`}
             >
               <p>{msg.content}</p>
               {msg.suggestion ? (

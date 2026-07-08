@@ -91,25 +91,43 @@ async function handleSvgEditorPost(req: NextRequest) {
 
   const descriptor: BlockDescriptor = parsed.value;
 
-  // Atomic write (04-ADMIN-06)
-  const persistResult = persistBlockDescriptor(descriptor);
-  if (!persistResult.ok) {
-    return persistErrorResponse(persistResult.error);
-  }
-
-  // Shell Phase 03 + R2 side effect (generate-svg.mjs inside runner does PNG + uploadPngToR2)
-  // catalog_snapshot name treated as generic R2 reference per clarification.
+  // Shell Phase 03 Compilation Gate (Run BEFORE persist to prevent silent corruption)
   let thumb: string | undefined;
   try {
     const pipeline = await runSvgPipeline(descriptor);
-    if (pipeline.ok) {
-      thumb = buildBlockThumbPngUrl(descriptor.slug);
-    } else {
-      // Best-effort: descriptor persisted; thumb may be stale or unavailable.
-      thumb = buildBlockThumbPngUrl(descriptor.slug);
+    if (!pipeline.ok) {
+      // If compiler fails (e.g. invalid SVG geometry), we reject immediately.
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: "compiler_failed",
+            message: "Backend SVG compilation failed. Check geometries.",
+            details: pipeline.error,
+          }
+        },
+        { status: 422 }
+      );
     }
-  } catch {
     thumb = buildBlockThumbPngUrl(descriptor.slug);
+  } catch (err) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: {
+          code: "compiler_exception",
+          message: "A fatal error occurred during SVG compilation.",
+          details: String(err),
+        }
+      },
+      { status: 500 }
+    );
+  }
+
+  // Atomic write (04-ADMIN-06) - Only runs if compilation succeeds
+  const persistResult = persistBlockDescriptor(descriptor);
+  if (!persistResult.ok) {
+    return persistErrorResponse(persistResult.error);
   }
 
   return success({ descriptor: persistResult.descriptor, thumb });

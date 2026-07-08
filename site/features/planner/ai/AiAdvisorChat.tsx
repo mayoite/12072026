@@ -27,13 +27,13 @@ export function AiAdvisorChat({ onApplySuggestion, isOpen = false, onClose }: Ai
 
   return (
     <div
-      className="pw-drawer pw-ai-floating-chat fixed bottom-4 right-4 flex h-[30rem] max-h-[calc(100vh-2rem)] w-80 flex-col rounded-xl"
+      className="pw-drawer pw-ai-floating-chat bottom-4 right-4 h-[30rem] max-h-[calc(100vh-2rem)] w-80 rounded-xl"
       style={{ zIndex: Z.toolbar }}
       role="dialog"
       aria-label="AI Layout Advisor"
     >
-      <div className="pw-drawer-header flex items-center justify-between px-3.5 py-2.5">
-        <div className="flex items-center gap-2.5">
+      <div className="pw-drawer-header px-3.5 py-2.5">
+        <div className="gap-2.5">
           <span className="pw-ai-chat-avatar" aria-hidden>
             <Sparkles size={13} />
           </span>

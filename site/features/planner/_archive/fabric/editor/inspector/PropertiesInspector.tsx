@@ -62,7 +62,7 @@ export function PropertiesInspector({ editor, step = "review" }: PropertiesInspe
         {data ? (
           <button
             type="button"
-            className="pw-icon-btn text-danger flex items-center gap-1 text-xs"
+            className="pw-icon-btn text-danger gap-1 text-xs"
             onClick={() => app.deleteSelection()}
             title="Delete selected"
           >
@@ -74,7 +74,7 @@ export function PropertiesInspector({ editor, step = "review" }: PropertiesInspe
       {data ? (
         <div className="pwx-inspector-body custom-scrollbar">
           <div className="pwx-inspector-section">
-            <div className="flex items-center justify-between gap-2">
+            <div className="gap-2">
               <div>
                 <p className="typ-label text-muted mb-1">Type</p>
                 <p className="text-sm text-strong">{data.type}</p>
@@ -169,7 +169,7 @@ export function PropertiesInspector({ editor, step = "review" }: PropertiesInspe
               Click a desk, zone, wall, or room on the plan to inspect it here.
             </p>
           </div>
-          <div className="mt-4">
+          <div className="">
             <p className="typ-label text-muted">Quick tips</p>
             <ul className="pwx-tip-list">
               {INSPECTOR_TIPS.map((tip, index) => (

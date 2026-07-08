@@ -69,7 +69,7 @@ export function Fabric2DWith3DSync({
   }, [refitCanvasSoon, viewMode]);
 
   return (
-    <div className="relative flex h-full min-h-0 w-full flex-col fabric-canvas-host">
+    <div className="fabric-canvas-host">
       <PlannerToolFabricSync />
       <RoomPresetsOnOpen />
       <FabricCanvasWorkspace />

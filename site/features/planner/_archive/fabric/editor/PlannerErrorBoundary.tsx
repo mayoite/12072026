@@ -46,7 +46,7 @@ export class PlannerErrorBoundary extends Component<
     if (!this.state.hasError) return this.props.children;
 
     return (
-      <div className="surface-inverse flex h-full min-h-[20rem] items-center justify-center px-6">
+      <div className="surface-inverse min-h-[20rem] px-6">
         <div className="planner-viewer-surface max-w-md rounded-[1.35rem] border border-warning px-5 py-4 text-center">
           <div className="typ-caption font-semibold uppercase tracking-[0.16em] text-warning">
             {this.props.label ?? "Planner"} unavailable
@@ -63,7 +63,7 @@ export class PlannerErrorBoundary extends Component<
           <button
             type="button"
             onClick={this.handleReset}
-            className="btn-primary mt-4 px-4 py-2 text-sm"
+            className="btn-primary px-4 py-2 text-sm"
           >
             Try again
           </button>

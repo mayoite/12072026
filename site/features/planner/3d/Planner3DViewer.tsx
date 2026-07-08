@@ -597,7 +597,7 @@ class ThreeCanvasErrorBoundary extends Component<{ children: ReactNode; fallback
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="surface-inverse flex h-full min-h-[26.25rem] items-center justify-center px-6">
+          <div className="surface-inverse min-h-[26.25rem] px-6">
             <div className="planner-viewer-surface max-w-md rounded-[1.35rem] border border-warning px-5 py-4 text-center">
               <div className="typ-caption font-semibold uppercase tracking-[0.16em] text-warning">WebGL render crash</div>
               <div className="mt-2 typ-caption-lg text-body">
@@ -663,14 +663,14 @@ export function Planner3DViewer({ document, className }: Planner3DViewerProps) {
   return (
     <div
       ref={viewerRef}
-      className={`pw-viewer-canvas relative h-full min-h-0 w-full overflow-hidden rounded-[2rem] border border-theme-soft bg-[var(--text-inverse)] shadow-theme-float ${className ?? ""}`}
+      className={`pw-viewer-canvas rounded-[2rem] border border-theme-soft bg-[var(--text-inverse)] shadow-theme-float ${className ?? ""}`}
       data-testid="planner-3d-viewer"
       data-webgl-status={webglProbe.ok ? "ready" : "fallback"}
     >
       {webglProbe.ok ? (
         <Suspense
           fallback={
-            <div className="surface-inverse flex h-full min-h-[420px] items-center justify-center">
+            <div className="surface-inverse min-h-[420px]">
               <div className="planner-viewer-chip rounded-full px-4 py-2 typ-caption font-semibold uppercase tracking-[0.22em] text-body">
                 Preparing 3D scene
               </div>
@@ -687,7 +687,7 @@ export function Planner3DViewer({ document, className }: Planner3DViewerProps) {
                 powerPreference: "high-performance",
                 preserveDrawingBuffer: true,
               }}
-              className="h-full min-h-0 w-full"
+              className=""
               data-testid="planner-3d-canvas"
               onCreated={({ gl }) => {
                 // BUG-02: capture renderer so dispose() is called on the right instance.
@@ -706,7 +706,7 @@ export function Planner3DViewer({ document, className }: Planner3DViewerProps) {
         </Suspense>
       ) : (
         <div
-          className="surface-inverse flex h-full min-h-[420px] items-center justify-center px-6"
+          className="surface-inverse min-h-[420px] px-6"
           data-testid="planner-3d-fallback"
         >
           <div className="planner-viewer-surface max-w-md rounded-[1.35rem] border border-warning px-5 py-4 text-center">
@@ -718,22 +718,22 @@ export function Planner3DViewer({ document, className }: Planner3DViewerProps) {
         </div>
       )}
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[color:var(--surface-inverse)] to-transparent" />
-      <div className="pointer-events-none absolute bottom-4 right-4 h-20 w-20 rounded-xl border border-soft bg-white/80 p-2 text-[0.625rem] font-semibold shadow-sm" style={{ zIndex: Z.canvasOverlay }}>
-        <span className="absolute left-1/2 top-2 h-12 w-0.5 -translate-x-1/2 bg-success" />
-        <span className="absolute left-1/2 top-2 -translate-x-1/2 text-success">Y</span>
-        <span className="absolute bottom-5 left-4 h-0.5 w-10 rotate-[-25deg] bg-danger" />
-        <span className="absolute bottom-7 right-3 text-danger">X</span>
-        <span className="absolute bottom-5 right-5 h-0.5 w-9 rotate-45 bg-primary" />
-        <span className="absolute bottom-2 left-5 text-brand">Z</span>
+      <div className="pointer-events-none inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[color:var(--surface-inverse)] to-transparent" />
+      <div className="pointer-events-none bottom-4 right-4 h-20 w-20 rounded-xl border border-soft bg-white/80 text-[0.625rem] font-semibold shadow-sm" style={{ zIndex: Z.canvasOverlay }}>
+        <span className="left-1/2 top-2 h-12 w-0.5 -translate-x-1/2 bg-success" />
+        <span className="left-1/2 top-2 -translate-x-1/2 text-success">Y</span>
+        <span className="bottom-5 left-4 h-0.5 w-10 rotate-[-25deg] bg-danger" />
+        <span className="bottom-7 right-3 text-danger">X</span>
+        <span className="bottom-5 right-5 h-0.5 w-9 rotate-45 bg-primary" />
+        <span className="bottom-2 left-5 text-brand">Z</span>
       </div>
 
-      <div className="absolute bottom-4 left-4 flex gap-2" style={{ zIndex: Z.canvasOverlay }}>
+      <div className="bottom-4 left-4 gap-2" style={{ zIndex: Z.canvasOverlay }}>
         <button
           type="button"
           aria-pressed={cameraMode === "orbit"}
           onClick={() => setCameraMode("orbit")}
-          className={`planner-viewer-chip flex items-center gap-2 rounded-full px-4 py-2 typ-caption font-semibold uppercase tracking-[0.18em] transition ${cameraMode === "orbit" ? "planner-viewer-chip-active" : "hover:border-[color:var(--planner-border-hover)] hover:text-strong"}`}
+          className={`planner-viewer-chip gap-2 rounded-full px-4 py-2 typ-caption font-semibold uppercase tracking-[0.18em] transition ${cameraMode === "orbit" ? "planner-viewer-chip-active" : "hover:border-[color:var(--planner-border-hover)] hover:text-strong"}`}
         >
           <Eye className="h-4 w-4" /> Orbit
         </button>
@@ -741,13 +741,13 @@ export function Planner3DViewer({ document, className }: Planner3DViewerProps) {
           type="button"
           aria-pressed={cameraMode === "walk"}
           onClick={() => setCameraMode("walk")}
-          className={`planner-viewer-chip flex items-center gap-2 rounded-full px-4 py-2 typ-caption font-semibold uppercase tracking-[0.18em] transition ${cameraMode === "walk" ? "planner-viewer-chip-active" : "hover:border-[color:var(--planner-border-hover)] hover:text-strong"}`}
+          className={`planner-viewer-chip gap-2 rounded-full px-4 py-2 typ-caption font-semibold uppercase tracking-[0.18em] transition ${cameraMode === "walk" ? "planner-viewer-chip-active" : "hover:border-[color:var(--planner-border-hover)] hover:text-strong"}`}
         >
           <User className="h-4 w-4" /> Walk
         </button>
       </div>
 
-      <div className="absolute left-4 top-4 flex max-w-[20rem] flex-col gap-2" style={{ zIndex: Z.canvasOverlay }}>
+      <div className="left-4 top-4 max-w-[20rem] gap-2" style={{ zIndex: Z.canvasOverlay }}>
         <div className="planner-viewer-surface rounded-[1.35rem] border border-theme-soft px-4 py-3">
           <div className="typ-caption font-semibold uppercase tracking-[0.18em] text-muted">
             {cameraMode === "orbit" ? "Orbit camera" : "Walk camera"}

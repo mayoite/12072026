@@ -15,7 +15,7 @@ export function ViewToggle({ activeView, onToggle }: ViewToggleProps) {
     <div
       role="tablist"
       aria-label="View mode"
-      className="flex h-9 items-center border-b border-[color:var(--border-soft)]"
+      className="h-9 border-b border-[color:var(--border-soft)]"
     >
       <button
         type="button"
@@ -23,14 +23,12 @@ export function ViewToggle({ activeView, onToggle }: ViewToggleProps) {
         aria-label="Show 2D plan"
         aria-selected={activeView === "2d"}
         onClick={() => onToggle("2d")}
-        className={`relative flex h-full items-center gap-1.5 px-4 text-xs font-medium transition-colors ${
-          activeView === "2d" ? "text-strong" : "text-muted"
-        }`}
+        className={`gap-1.5 px-4 text-xs font-medium transition-colors ${ activeView === "2d" ? "text-strong" : "text-muted" }`}
       >
         <PenTool size={13} />
         2D Plan
         {activeView === "2d" && (
-          <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[color:var(--color-primary)]" />
+          <span className="bottom-0 left-0 right-0 h-0.5 bg-[color:var(--color-primary)]" />
         )}
       </button>
       <button
@@ -39,14 +37,12 @@ export function ViewToggle({ activeView, onToggle }: ViewToggleProps) {
         aria-label="Show 3D view"
         aria-selected={activeView === "3d"}
         onClick={() => onToggle("3d")}
-        className={`relative flex h-full items-center gap-1.5 px-4 text-xs font-medium transition-colors ${
-          activeView === "3d" ? "text-strong" : "text-muted"
-        }`}
+        className={`gap-1.5 px-4 text-xs font-medium transition-colors ${ activeView === "3d" ? "text-strong" : "text-muted" }`}
       >
         <Box size={13} />
         3D View
         {activeView === "3d" && (
-          <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[color:var(--color-primary)]" />
+          <span className="bottom-0 left-0 right-0 h-0.5 bg-[color:var(--color-primary)]" />
         )}
       </button>
     </div>

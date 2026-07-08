@@ -32,12 +32,12 @@ export function PlannerSubTopBar({
         <Tooltip content={viewMode === "split" ? "Close 3D View" : "Open 3D View"} side="bottom">
           <button
             type="button"
-            className={`hidden md:block pw-segment-btn ${TOOLBAR_BUTTON_CLASS}`}
+            className={`md:block pw-segment-btn ${TOOLBAR_BUTTON_CLASS}`}
             data-active={viewMode === "split"}
             aria-pressed={viewMode === "split"}
             onClick={() => onViewModeChange(viewMode === "split" ? "2d" : "split")}
           >
-            <span className="inline-flex items-center gap-1.5">
+            <span className="inline-flex gap-1.5">
               <Box size={14} aria-hidden />
               3D View
             </span>

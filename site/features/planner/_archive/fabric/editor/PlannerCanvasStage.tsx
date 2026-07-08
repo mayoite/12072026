@@ -57,11 +57,11 @@ export function PlannerCanvasStage({
   }, [shapeCount]);
 
   return (
-    <section className="pw-canvas-stage absolute inset-x-0 top-12 bottom-16 md:static">
-      <div className="pw-canvas-stage-inner flex flex-col md:flex-row w-full h-full" style={{ touchAction: "none" }}>
+    <section className="pw-canvas-stage inset-x-0 top-12 bottom-16 md:static">
+      <div className="pw-canvas-stage-inner md:flex-row" style={{ touchAction: "none" }}>
         {toolRail}
         <section className="pw-canvas-area" aria-label="Workspace canvas">
-        <div className="pw-canvas-body flex-1 flex flex-col" data-view-mode={viewMode}>
+        <div className="pw-canvas-body" data-view-mode={viewMode}>
           <div ref={chromeLayerRef} className="pw-canvas-chrome-layer">
             {plannerChromeHost}
           </div>
@@ -74,7 +74,7 @@ export function PlannerCanvasStage({
             onDrop={handleCanvasDrop}
           >
             <div
-              className="pw-canvas-engine pw-fabric-container flex h-full min-h-0 w-full flex-col"
+              className="pw-canvas-engine pw-fabric-container"
               data-testid="planner-2d-canvas"
             >
               <SplitViewLayout

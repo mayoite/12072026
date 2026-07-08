@@ -24,14 +24,14 @@ export function PlannerLandingPage() {
           viewport={{ once: true, margin: "-90px" }}
           transition={{ duration: 0.7, ease: MOTION_EASE }}
         >
-          <div className="mb-10 flex items-end justify-between gap-4">
+          <div className="mb-10 items-end gap-4">
             <h2 className="home-heading">
               Built for{" "}
               <span className="text-accent-italic">office teams</span>
             </h2>
             <Link
               href={PLANNER_HERO.featuresCta.href}
-              className="typ-label inline-flex shrink-0 items-center gap-2 text-muted hover:text-strong"
+              className="typ-label inline-flex shrink-0 gap-2 text-muted hover:text-strong"
             >
               {PLANNER_HERO.featuresCta.label}
               <ArrowRight size={14} weight="bold" />
@@ -48,9 +48,9 @@ export function PlannerLandingPage() {
               const Icon = PLANNER_LANDING_ICONS[feature.slug];
               return (
                 <motion.div key={feature.slug} variants={staggerItem}>
-                  <Link href={feature.href} className="block h-full">
+                  <Link href={feature.href} className="">
                     <motion.div
-                      className="home-tool-card home-why-card group flex h-full flex-col items-center text-center"
+                      className="home-tool-card home-why-card group text-center"
                       variants={hoverLift}
                       initial="rest"
                       whileHover="hover"
@@ -92,7 +92,7 @@ export function PlannerLandingPage() {
           >
             {PLANNER_STEPS.map((item) => (
               <motion.div key={item.step} variants={staggerItem}>
-                <article className="home-tool-card h-full p-5 text-center">
+                <article className="home-tool-card p-5 text-center">
                   <p className="planner-landing-step__num">{item.step}</p>
                   <h3 className="typ-h3 mt-3 text-strong">{item.title}</h3>
                 </article>

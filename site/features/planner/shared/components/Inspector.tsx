@@ -21,16 +21,16 @@ export function Inspector({
 }: InspectorProps) {
   if (!selectedItem) {
     return (
-      <div className={`flex h-full w-full items-center justify-center p-4 text-sm text-muted ${className}`}>
+      <div className={`text-sm text-muted ${className}`}>
         No item selected
       </div>
     );
   }
 
   return (
-    <div className={`flex flex-col gap-6 p-4 ${className}`}>
+    <div className={`gap-6 ${className}`}>
       {/* Header Info */}
-      <div className="flex flex-col gap-1 border-b border-soft pb-4">
+      <div className="gap-1 border-b border-soft pb-4">
         <h2 className="text-base font-semibold text-heading">{selectedItem.name}</h2>
         <p className="text-xs text-muted">{selectedItem.category}</p>
       </div>
@@ -38,7 +38,7 @@ export function Inspector({
       {/* Properties Grid using CSS Subgrid */}
       <div className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-3">
         {/* Dimensions - Readonly */}
-        <div className="col-span-2 grid grid-cols-subgrid items-center">
+        <div className="col-span-2 grid grid-cols-subgrid">
           <span className="text-xs font-medium text-muted">Size (W×D×H)</span>
           <div className="text-sm tabular-nums text-heading">
             {selectedItem.dimensions.widthMm} × {selectedItem.dimensions.depthMm} × {selectedItem.dimensions.heightMm} mm
@@ -48,7 +48,7 @@ export function Inspector({
         {/* Position */}
         <div className="col-span-2 grid grid-cols-subgrid items-start pt-2">
           <span className="mt-1 text-xs font-medium text-muted">Position</span>
-          <div className="flex flex-col gap-2">
+          <div className="gap-2">
             <InspectorInput label="X" defaultValue="0" ref={positionXRef} />
             <InspectorInput label="Y" defaultValue="0" ref={positionYRef} />
             <InspectorInput label="Z" defaultValue="0" ref={positionZRef} />
@@ -58,7 +58,7 @@ export function Inspector({
         {/* Rotation */}
         <div className="col-span-2 grid grid-cols-subgrid items-start pt-2">
           <span className="mt-1 text-xs font-medium text-muted">Rotation</span>
-          <div className="flex flex-col gap-2">
+          <div className="gap-2">
             <InspectorInput label="Y°" defaultValue="0" ref={rotationYRef} />
           </div>
         </div>
@@ -75,14 +75,14 @@ interface InspectorInputProps extends React.InputHTMLAttributes<HTMLInputElement
 const InspectorInput = forwardRef<HTMLInputElement, InspectorInputProps>(
   ({ label, className = "", ...props }, ref) => {
     return (
-      <div className="flex items-center gap-2">
+      <div className="gap-2">
         <label className="w-4 text-xs font-medium text-subtle">{label}</label>
         <input
           ref={ref}
           type="number"
           step="any"
           aria-label={label}
-          className={`h-7 w-full rounded border border-soft bg-white px-2 py-1 text-xs tabular-nums text-heading transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-blue-500 ${className}`}
+          className={`h-7 rounded border border-soft px-2 py-1 text-xs tabular-nums text-heading transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-blue-500 ${className}`}
           {...props}
         />
       </div>

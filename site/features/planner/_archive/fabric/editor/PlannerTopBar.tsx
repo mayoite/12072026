@@ -79,12 +79,12 @@ export function PlannerTopBar({
   }, [menuOpen]);
 
   return (
-    <header className="pw-topbar h-12 min-h-12 p-0 md:h-auto md:min-h-[var(--pw-topbar-h)]" aria-label="Planner workspace">
-      <div className="flex md:hidden h-12 w-full items-center justify-between border-b border-soft bg-panel px-2">
+    <header className="pw-topbar h-12 min-h-12 md:h-auto md:min-h-[var(--pw-topbar-h)]" aria-label="Planner workspace">
+      <div className="md:hidden h-12 border-b border-soft bg-panel px-2">
         <Tooltip content="Open plan menu" side="bottom">
           <button
             type="button"
-            className={`inline-flex items-center justify-center ${TOOLBAR_BUTTON_CLASS}`}
+            className={`inline-flex ${TOOLBAR_BUTTON_CLASS}`}
             onClick={onOpenSession}
             aria-label="Open plan menu"
           >
@@ -92,7 +92,7 @@ export function PlannerTopBar({
           </button>
         </Tooltip>
         <p className="truncate max-w-[8.75rem] text-sm font-medium">{planName.trim() || "Workspace Planner"}</p>
-        <div className="relative flex items-center gap-1" ref={menuRef}>
+        <div className="gap-1" ref={menuRef}>
           <Tooltip content="Save draft" side="bottom">
             <button
               type="button"
@@ -105,7 +105,7 @@ export function PlannerTopBar({
           <Tooltip content="More actions" side="bottom">
             <button
               type="button"
-              className={`inline-flex items-center justify-center ${TOOLBAR_BUTTON_CLASS}`}
+              className={`inline-flex ${TOOLBAR_BUTTON_CLASS}`}
               aria-expanded={menuOpen}
               aria-haspopup="menu"
               aria-label="More actions"
@@ -130,7 +130,7 @@ export function PlannerTopBar({
         </div>
       </div>
 
-      <div className="hidden md:contents">
+      <div className="md:contents">
       <div className="pw-topbar-brand">
         <Link href="/" className="pw-topbar-logo-link" aria-label="One&Only — home">
           <OneAndOnlyLogo
@@ -138,7 +138,7 @@ export function PlannerTopBar({
             className="pw-topbar-logo"
           />
         </Link>
-        <div className="min-w-0">
+        <div className="">
           <p className="pw-topbar-title">{planName.trim() || "Workspace Planner"}</p>
           <p className="pw-topbar-sub">
             {guestMode ? "Guest session — saves in this browser" : "Your layout workspace"}
@@ -158,9 +158,9 @@ export function PlannerTopBar({
       </div>
 
       <div className="pw-topbar-actions">
-        <div className="pw-topbar-actions-primary flex items-center gap-2">
+        <div className="pw-topbar-actions-primary gap-2">
           {!isOnline && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 typ-caption font-semibold uppercase tracking-[0.1em] text-amber-600 dark:text-amber-400">
+            <span className="inline-flex gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 typ-caption font-semibold uppercase tracking-[0.1em] text-amber-600 dark:text-amber-400">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
               Offline
             </span>

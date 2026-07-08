@@ -110,14 +110,14 @@ export function PlannerSaveIndicator({
         <button
           type="button"
           onClick={onRetry}
-          className={`flex items-center gap-2 ${TOOLBAR_BUTTON_CLASS}`}
+          className={`gap-2 ${TOOLBAR_BUTTON_CLASS}`}
           aria-label="Save failed, click to retry"
         >
           {content}
           <span>Retry</span>
         </button>
       ) : (
-        <span className="flex items-center gap-2">{content}</span>
+        <span className="gap-2">{content}</span>
       )}
     </div>
   );

@@ -293,8 +293,8 @@ export function PlannerSessionDialog({
         <Dialog.Content className="pwx-session-dialog">
           <div className="pwx-session-header">
             <div className="pwx-session-header__content">
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-2">
+              <div className="">
+                <div className="flex-wrap gap-2">
                   <span className="pwx-session-chip" data-tone="session">Session Hub</span>
                     <span className="pwx-session-chip" data-tone={isOnline ? "online" : "offline"}>
                       {!isOnline ? (
@@ -331,19 +331,19 @@ export function PlannerSessionDialog({
           <div className="pwx-session-body">
             <div className="pwx-session-layout">
               <section className="pwx-session-section">
-                <div className="flex items-center justify-between gap-3">
+                <div className="gap-3">
                   <div>
                     <h2 className={SESSION_SECTION_TITLE_CLASS}>{SESSION_STRINGS.savedPlans}</h2>
                     <p className={SESSION_SECTION_NOTE_CLASS}>{plans.length === 0 ? SESSION_STRINGS.noPlans : `Last 4 of ${plans.length} session${plans.length === 1 ? "" : "s"} available.`}</p>
                   </div>
                   {isBusy ? <Loader2 className={cn(SESSION_ICON_CLASS, "animate-spin text-[color:var(--planner-primary)]")} /> : null}
                 </div>
-                <div className="pwx-session-list mt-4">
+                <div className="pwx-session-list">
                   {plans.length === 0 ? <div className={SESSION_EMPTY_STATE_CLASS}>Save the current planner to create your first session.</div> : null}
                   {plans.slice(-4).map((plan) => (
                     <div key={`${plan.accessMode ?? "owner"}:${plan.source}:${plan.id}`} className="pwx-session-item group" data-active={plan.isActive}>
-                      <div className="min-w-0 flex-1 text-start">
-                        <div className="flex flex-wrap items-center gap-2">
+                      <div className="text-start">
+                        <div className="flex-wrap gap-2">
                           <span className="pwx-session-item-meta" data-tone={plan.source === "cloud" ? "cloud" : "draft"}>
                             {plan.source === "cloud" ? plan.accessMode === "admin" ? "Admin Cloud Save" : "Cloud Save" : "Local Draft"}
                           </span>
@@ -354,7 +354,7 @@ export function PlannerSessionDialog({
                           ) : null}
                         </div>
                         {editingPlanId === plan.id ? (
-                          <div className="mt-2 flex items-center gap-2">
+                          <div className="mt-2 gap-2">
                             <input
                               value={renameValue}
                               onChange={(event) => setRenameValue(event.target.value)}
@@ -400,7 +400,7 @@ export function PlannerSessionDialog({
                         {plan.detail ? <p className={cn("mt-1", SESSION_CARD_DETAIL_CLASS)}>{plan.detail}</p> : null}
                         {plan.statusLabel ? <p className="mt-1 typ-caption uppercase tracking-[0.1em] text-[color:var(--planner-primary)]">{plan.statusLabel}</p> : null}
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="gap-2">
                         <button type="button" onClick={() => onLoadPlan(plan)} disabled={isBusy || editingPlanId === plan.id} className={sessionIconButtonClass("surface")} aria-label={`Load ${plan.name}`}>
                           <FolderOpen className={SESSION_ICON_CLASS} />
                         </button>
@@ -468,7 +468,7 @@ export function PlannerSessionDialog({
                     <div className="pwx-session-list mt-3">
                       {adminCloudPlans.length === 0 ? <div className={SESSION_EMPTY_STATE_CLASS}>No admin-visible cloud plans found.</div> : null}
                       {adminCloudPlans.slice(-4).map((plan) => (
-                        <button key={`admin:${plan.id}`} type="button" onClick={() => onLoadPlan(plan)} className="pwx-session-item pwx-session-item--compact w-full text-start" data-active={false}>
+                        <button key={`admin:${plan.id}`} type="button" onClick={() => onLoadPlan(plan)} className="pwx-session-item pwx-session-item--compact text-start" data-active={false}>
                           <div className={SESSION_CARD_TITLE_CLASS}>{plan.name}</div>
                           <div className={cn("mt-1", SESSION_CARD_META_CLASS)}>{plan.ownerLabel ?? "Unknown owner"} | {plan.updatedAtLabel ?? "No timestamp"}</div>
                           {plan.detail ? <div className={cn("mt-1", SESSION_CARD_DETAIL_CLASS)}>{plan.detail}</div> : null}
@@ -491,24 +491,24 @@ export function PlannerSessionDialog({
                       ))}
                     </div>
                     <textarea value={draft.description} onChange={(event) => setDraft((current) => ({ ...current, description: event.target.value }))} className={cn(sessionFieldClass("compact"), "pwx-session-textarea--compact mt-3 w-full")} placeholder="Description" />
-                    <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                    <div className="mt-3 flex-wrap gap-3">
                       <label className="pwx-session-checkbox-label"><input type="checkbox" checked={draft.active} onChange={(event) => setDraft((current) => ({ ...current, active: event.target.checked }))} /> Active in planner catalog</label>
-                      <div className="flex flex-wrap items-center gap-2">
+                      <div className="flex-wrap gap-2">
                         {draft.id ? <button type="button" onClick={() => setDraft(emptyDraft())} className={secondary}>Reset</button> : null}
                         <button type="button" onClick={() => void (async () => { if (!onUpsertManagedProduct) return; await onUpsertManagedProduct(draftToWrite(draft)); setDraft(emptyDraft()); })()} disabled={isBusy || !draft.name.trim()} className={primary}><Save className={SESSION_ICON_CLASS} /> {draft.id ? "Update Product" : "Create Product"}</button>
                       </div>
                     </div>
-                    <div className="mt-4 space-y-3">
+                    <div className="space-y-3">
                       {managedProducts.length === 0 ? <div className={SESSION_EMPTY_STATE_CLASS}>No planner-managed products found yet.</div> : null}
                       {managedProducts.map((product) => (
                         <div key={product.id} className="pwx-session-item pwx-session-item--compact">
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="min-w-0">
+                          <div className="items-start gap-3">
+                            <div className="">
                               <div className={SESSION_CARD_TITLE_CLASS}>{product.name}</div>
                               <div className={cn("mt-1", SESSION_CARD_META_CLASS)}>{product.slug} | {product.active ? "Active" : "Archived"}</div>
                               <div className={cn("mt-1", SESSION_CARD_DETAIL_CLASS)}>{product.category_name} | {product.series_name} | INR {product.price.toLocaleString("en-IN")}</div>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="gap-2">
                               <button type="button" onClick={() => setDraft(draftFromProduct(product))} disabled={isBusy} className={sessionIconButtonClass("surface-strong")} aria-label={`Edit ${product.name}`}><Pencil className={SESSION_ICON_CLASS} /></button>
                               <button type="button" onClick={() => void onUpsertManagedProduct?.(rowToWrite(product, !product.active))} disabled={isBusy} className={sessionIconButtonClass("surface-strong")} aria-label={product.active ? `Archive ${product.name}` : `Activate ${product.name}`}><ShieldCheck className={SESSION_ICON_CLASS} /></button>
                               {onDeleteManagedProduct ? <button type="button" onClick={() => void onDeleteManagedProduct(product.id)} disabled={isBusy} className={sessionIconButtonClass("danger")} aria-label={`Delete ${product.name}`}><Trash2 className={SESSION_ICON_CLASS} /></button> : null}

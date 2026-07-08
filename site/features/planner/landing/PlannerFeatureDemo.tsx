@@ -206,7 +206,7 @@ const DEMOS: Record<string, () => ReactElement> = {
 function DemoStepIndicator() {
   return (
     <div
-      className="flex flex-col gap-2 rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] bg-[color:var(--surface-panel-strong)] px-4 py-3"
+      className="gap-2 rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] bg-[color:var(--surface-panel-strong)] px-4 py-3"
       aria-hidden="true"
     >
       <p className="typ-micro font-semibold uppercase tracking-[0.08em] text-[color:var(--text-muted)]">
@@ -218,23 +218,15 @@ function DemoStepIndicator() {
           return (
             <li
               key={step.id}
-              className={`flex items-center gap-2 rounded-[var(--radius-lg)] border px-3 py-2 ${
-                isActive
-                  ? "border-[color:color-mix(in_srgb,var(--color-primary)_40%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]"
-                  : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]"
-              }`}
+              className={`gap-2 rounded-[var(--radius-lg)] border px-3 py-2 ${ isActive ? "border-[color:color-mix(in_srgb,var(--color-primary)_40%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]" }`}
             >
               <span
-                className={`typ-micro font-bold ${
-                  isActive ? "text-[color:var(--color-primary)]" : "text-[color:var(--color-bronze-500)]"
-                }`}
+                className={`typ-micro font-bold ${ isActive ? "text-[color:var(--color-primary)]" : "text-[color:var(--color-bronze-500)]" }`}
               >
                 {step.id}
               </span>
               <span
-                className={`typ-label ${
-                  isActive ? "text-[color:var(--text-strong)]" : "text-[color:var(--text-muted)]"
-                }`}
+                className={`typ-label ${ isActive ? "text-[color:var(--text-strong)]" : "text-[color:var(--text-muted)]" }`}
               >
                 {step.label}
               </span>
@@ -261,7 +253,7 @@ export function PlannerFeatureDemo({ slug }: { slug: PlannerFeatureSlug }) {
   const Demo = DEMOS[slug];
   if (!Demo) return null;
   return (
-    <div className="flex flex-col overflow-hidden rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] shadow-[var(--shadow-soft)]">
+    <div className="rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] shadow-[var(--shadow-soft)]">
       <div className="p-3 pb-0">
         <DemoStepIndicator />
       </div>

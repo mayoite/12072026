@@ -607,11 +607,7 @@ export const InventoryPanel = memo(function InventoryPanel({
                   <img
                     src={item.assets.previewImageUrl}
                     alt=""
-                    className={`${styles.itemImage}${
-                      isSvgAssetUrl(item.assets.previewImageUrl)
-                        ? ` ${styles.itemImageVector}`
-                        : ""
-                    }`}
+                    className={`${styles.itemImage}${ isSvgAssetUrl(item.assets.previewImageUrl) ? ` ${styles.itemImageVector}` : "" }`}
                     width={256}
                     height={256}
                     loading="lazy"

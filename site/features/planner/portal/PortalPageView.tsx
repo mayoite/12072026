@@ -29,7 +29,7 @@ export default function PortalPageView({
         <p className="shell-portal-table-meta mt-3 max-w-3xl">
           Review saved workspace layouts, reopen them in the planner, and share the current room setup with your team.
         </p>
-        <div className="mt-5 flex flex-wrap gap-3">
+        <div className="mt-5 flex-wrap gap-3">
           <Link href="/planner/canvas/" className="shell-portal-button-primary">
             Open planner
           </Link>
@@ -57,7 +57,7 @@ export default function PortalPageView({
         </section>
       ) : (
         <section className="mt-6">
-          <div className="mb-4 flex items-center justify-between gap-3">
+          <div className="gap-3">
             <div>
               <h2 className="shell-portal-table-header">Saved layouts</h2>
               <p className="shell-portal-table-meta">
@@ -69,8 +69,8 @@ export default function PortalPageView({
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {plans.map((plan) => (
               <article key={plan.id} className="shell-portal-grid-card p-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0">
+                <div className="items-start gap-4">
+                  <div className="">
                     <p className="shell-portal-table-label">Workspace plan</p>
                     <h3 className="shell-portal-table-header mt-2 truncate">{plan.name}</h3>
                     <p className="shell-portal-table-meta mt-1 truncate">
@@ -95,7 +95,7 @@ export default function PortalPageView({
                   </div>
                 </dl>
 
-                <div className="mt-5 flex flex-wrap gap-2">
+                <div className="mt-5 flex-wrap gap-2">
                   <Link href={`/portal/${plan.id}`} className="shell-portal-button-primary">
                     View details
                   </Link>

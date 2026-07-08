@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 export function AdminFieldGroup({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <fieldset className="space-y-3 rounded-lg border border-soft bg-subtle/40 p-4">
+    <fieldset className="space-y-3 rounded-lg border border-soft bg-subtle/40">
       <legend className="px-1 text-xs font-semibold uppercase tracking-wide text-soft">{title}</legend>
       {children}
     </fieldset>
@@ -26,7 +26,7 @@ export function AdminField({
     <label className={`admin-field${className ? ` ${className}` : ""}`}>
       <span className="admin-field__label">{label}</span>
       {children}
-      {hint ? <span className="block text-xs text-soft">{hint}</span> : null}
+      {hint ? <span className="text-xs text-soft">{hint}</span> : null}
     </label>
   );
 }
@@ -76,7 +76,7 @@ export function AdminCheckbox({
   disabled?: boolean;
 }) {
   return (
-    <label className="flex cursor-pointer items-center gap-2 text-sm text-strong">
+    <label className="cursor-pointer gap-2 text-sm text-strong">
       <input
         type="checkbox"
         className="h-4 w-4 rounded border-soft"

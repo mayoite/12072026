@@ -310,7 +310,7 @@ export default function AdminPlansPageView() {
 
     <div className="mx-auto max-w-6xl p-6 md:p-8">
 
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="mb-6 flex-wrap gap-3">
 
         <div>
 
@@ -330,7 +330,7 @@ export default function AdminPlansPageView() {
 
           type="button"
 
-          className="btn-outline inline-flex items-center gap-2"
+          className="btn-outline inline-flex gap-2"
 
           onClick={() => void loadPlans()}
 
@@ -348,15 +348,15 @@ export default function AdminPlansPageView() {
 
 
 
-      <div className="mb-4 flex flex-wrap items-end gap-3 rounded-xl border border-soft bg-panel p-4">
+      <div className="flex-wrap items-end gap-3 rounded-xl border border-soft bg-panel">
 
-        <label className="flex min-w-[12rem] flex-1 flex-col gap-1 text-sm">
+        <label className="min-w-[12rem] gap-1 text-sm">
 
           <span className="text-xs uppercase tracking-wide text-soft">Search</span>
 
-          <span className="relative">
+          <span className="">
 
-            <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-soft" aria-hidden />
+            <Search size={14} className="pointer-events-none left-3 top-1/2 -translate-y-1/2 text-soft" aria-hidden />
 
             <input
 
@@ -368,7 +368,7 @@ export default function AdminPlansPageView() {
 
               placeholder="Title, project, client…"
 
-              className="w-full rounded-lg border border-soft bg-subtle py-2 pl-9 pr-3 text-sm"
+              className="rounded-lg border border-soft bg-subtle py-2 pl-9 pr-3 text-sm"
 
             />
 
@@ -376,7 +376,7 @@ export default function AdminPlansPageView() {
 
         </label>
 
-        <label className="flex flex-col gap-1 text-sm">
+        <label className="gap-1 text-sm">
 
           <span className="text-xs uppercase tracking-wide text-soft">Status</span>
 
@@ -404,7 +404,7 @@ export default function AdminPlansPageView() {
 
         </label>
 
-        <label className="flex flex-col gap-1 text-sm">
+        <label className="gap-1 text-sm">
 
           <span className="text-xs uppercase tracking-wide text-soft">Sort</span>
 
@@ -464,7 +464,7 @@ export default function AdminPlansPageView() {
 
       {source === "unconfigured" ? (
 
-        <div className="rounded-xl border border-soft bg-panel p-4 text-sm text-muted">
+        <div className="rounded-xl border border-soft bg-panel text-sm text-muted">
 
           Database storage is not configured. Plan review will appear here once persistence is enabled.
 
@@ -476,7 +476,7 @@ export default function AdminPlansPageView() {
 
       {error ? (
 
-        <div className="mb-4 rounded-xl border border-accent bg-danger-soft p-4 text-sm text-red-700" role="alert">
+        <div className="rounded-xl border border-accent bg-danger-soft text-sm text-red-700" role="alert">
 
           {error}
 
@@ -500,7 +500,7 @@ export default function AdminPlansPageView() {
 
       {loading ? (
 
-        <div className="flex items-center gap-2 text-sm text-muted">
+        <div className="gap-2 text-sm text-muted">
 
           <Loader2 size={16} className="animate-spin" aria-hidden />
 
@@ -518,9 +518,9 @@ export default function AdminPlansPageView() {
 
       ) : (
 
-        <div className="overflow-hidden rounded-xl border border-soft bg-panel">
+        <div className="rounded-xl border border-soft bg-panel">
 
-          <table className="w-full text-start text-sm">
+          <table className="text-start text-sm">
 
             <thead className="border-b border-soft bg-subtle text-xs uppercase tracking-wide text-soft">
 
@@ -586,7 +586,7 @@ export default function AdminPlansPageView() {
 
                       href={buildPlannerCanvasHref(plan.id)}
 
-                      className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                      className="inline-flex gap-1 text-sm font-medium text-primary hover:underline"
 
                     >
 

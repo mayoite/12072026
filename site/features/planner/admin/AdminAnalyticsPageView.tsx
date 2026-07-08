@@ -63,7 +63,7 @@ export default function AdminAnalyticsPageView() {
 
   return (
     <div className="mx-auto max-w-6xl p-6 md:p-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="mb-6 flex-wrap gap-3">
         <div>
           <p className="text-xs uppercase tracking-wide text-soft">Planner usage</p>
           <h1 className="text-2xl font-semibold text-strong">Analytics</h1>
@@ -72,7 +72,7 @@ export default function AdminAnalyticsPageView() {
           </p>
           {data?.source ? <p className="mt-1 text-xs text-soft">Source: {data.source}</p> : null}
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex-wrap gap-2">
           <select
             className="rounded-lg border border-soft bg-panel px-3 py-2 text-sm"
             value={period}
@@ -86,7 +86,7 @@ export default function AdminAnalyticsPageView() {
           </select>
           <button
             type="button"
-            className="btn-outline inline-flex items-center gap-2 px-3 py-2 text-sm"
+            className="btn-outline inline-flex gap-2 px-3 py-2 text-sm"
             onClick={() => void loadAnalytics()}
             disabled={loading}
           >
@@ -97,39 +97,39 @@ export default function AdminAnalyticsPageView() {
       </div>
 
       {error ? (
-        <div className="mb-4 rounded-xl border border-accent bg-danger-soft p-4 text-sm text-red-700" role="alert">
+        <div className="rounded-xl border border-accent bg-danger-soft text-sm text-red-700" role="alert">
           {error}
         </div>
       ) : null}
 
       {loading && !data ? (
-        <div className="flex items-center gap-2 text-sm text-muted">
+        <div className="gap-2 text-sm text-muted">
           <Loader2 size={16} className="animate-spin" aria-hidden />
           Loading analytics…
         </div>
       ) : data ? (
         <div className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-xl border border-soft bg-panel p-4">
+            <div className="rounded-xl border border-soft bg-panel">
               <p className="text-xs uppercase tracking-wide text-soft">Total plans</p>
               <p className="mt-1 text-2xl font-semibold text-strong">{data.summary.totalPlans}</p>
             </div>
-            <div className="rounded-xl border border-soft bg-panel p-4">
+            <div className="rounded-xl border border-soft bg-panel">
               <p className="text-xs uppercase tracking-wide text-soft">Avg items / plan</p>
               <p className="mt-1 text-2xl font-semibold text-strong">{data.summary.avgItems}</p>
             </div>
-            <div className="rounded-xl border border-soft bg-panel p-4">
+            <div className="rounded-xl border border-soft bg-panel">
               <p className="text-xs uppercase tracking-wide text-soft">Avg area (m²)</p>
               <p className="mt-1 text-2xl font-semibold text-strong">{data.summary.avgArea}</p>
             </div>
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <section className="rounded-xl border border-soft bg-panel p-4">
+            <section className="rounded-xl border border-soft bg-panel">
               <h2 className="text-sm font-semibold text-strong">Top furniture</h2>
               <ul className="mt-3 divide-y divide-soft text-sm">
                 {data.topFurniture.map((item) => (
-                  <li key={item.name} className="flex items-center justify-between gap-4 py-2">
+                  <li key={item.name} className="gap-4 py-2">
                     <span>{item.name}</span>
                     <span className="text-muted">
                       {item.category} · {item.count}
@@ -139,11 +139,11 @@ export default function AdminAnalyticsPageView() {
               </ul>
             </section>
 
-            <section className="rounded-xl border border-soft bg-panel p-4">
+            <section className="rounded-xl border border-soft bg-panel">
               <h2 className="text-sm font-semibold text-strong">Export breakdown</h2>
               <ul className="mt-3 divide-y divide-soft text-sm">
                 {data.exports.map((row) => (
-                  <li key={row.format} className="flex items-center justify-between gap-4 py-2">
+                  <li key={row.format} className="gap-4 py-2">
                     <span>{row.format}</span>
                     <span className="text-muted">{row.count}</span>
                   </li>
@@ -152,10 +152,10 @@ export default function AdminAnalyticsPageView() {
             </section>
           </div>
 
-          <section className="rounded-xl border border-soft bg-panel p-4">
+          <section className="rounded-xl border border-soft bg-panel">
             <h2 className="text-sm font-semibold text-strong">Plans created</h2>
             <div className="mt-3 overflow-x-auto">
-              <table className="w-full min-w-[28rem] text-start text-sm">
+              <table className="min-w-[28rem] text-start text-sm">
                 <thead className="text-xs uppercase tracking-wide text-soft">
                   <tr>
                     <th className="px-2 py-2 font-medium">Date</th>

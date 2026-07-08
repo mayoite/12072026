@@ -10,14 +10,14 @@ interface CatalogProps {
 
 export function Catalog({ items, onSelect, className = "" }: CatalogProps) {
   return (
-    <div className={`grid grid-cols-2 gap-4 p-4 ${className}`}>
+    <div className={`grid grid-cols-2 gap-4 ${className}`}>
       {items.map((item) => (
         <div
           key={item.id}
-          className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border border-soft bg-white transition-all hover:border-accent hover:shadow-md"
+          className="group cursor-pointer rounded-lg border border-soft transition-all hover:border-accent hover:shadow-md"
           onClick={() => onSelect?.(item)}
         >
-          <div className="relative aspect-square w-full overflow-hidden bg-page">
+          <div className="aspect-square bg-page">
             {item.thumbnail || item.imageUrl ? (
               <Image
                 src={item.thumbnail || item.imageUrl || ""}
@@ -27,12 +27,12 @@ export function Catalog({ items, onSelect, className = "" }: CatalogProps) {
                 unoptimized
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-subtle">
+              <div className="text-subtle">
                 No Image
               </div>
             )}
           </div>
-          <div className="flex flex-1 flex-col p-3">
+          <div className="p-3">
             <h3 className="line-clamp-1 text-sm font-medium text-heading">
               {item.name}
             </h3>
@@ -40,7 +40,7 @@ export function Catalog({ items, onSelect, className = "" }: CatalogProps) {
               <p className="text-xs text-muted">{item.category}</p>
             )}
             <div className="mt-auto pt-2">
-              <div className="flex items-center gap-1 text-xs text-muted tabular-nums">
+              <div className="gap-1 text-xs text-muted tabular-nums">
                 <span>{item.dimensions.widthMm}</span>
                 <span className="text-subtle">×</span>
                 <span>{item.dimensions.depthMm}</span>

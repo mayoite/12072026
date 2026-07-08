@@ -48,17 +48,13 @@ export default function AdminSettingsPageView() {
               <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-soft">{group.group}</h3>
               <ul className="space-y-1">
                 {group.flags.map((flag) => (
-                  <li key={flag.name} className="flex items-center justify-between gap-4 text-sm">
+                  <li key={flag.name} className="gap-4 text-sm">
                     <span>
                       <code className="text-xs">{flag.name}</code>
                       <span className="ml-2 text-muted">{flag.description}</span>
                     </span>
                     <span
-                      className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                        DEFAULT_FLAGS[flag.name as FeatureFlagName]
-                          ? "bg-green-100 text-green-800"
-                          : "bg-subtle text-soft"
-                      }`}
+                      className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${ DEFAULT_FLAGS[flag.name as FeatureFlagName] ? "bg-green-100 text-green-800" : "bg-subtle text-soft" }`}
                     >
                       {DEFAULT_FLAGS[flag.name as FeatureFlagName] ? "on" : "off"}
                     </span>
@@ -85,7 +81,7 @@ export default function AdminSettingsPageView() {
         </ul>
       </section>
 
-      <section className="rounded-xl border border-soft bg-panel p-4">
+      <section className="rounded-xl border border-soft bg-panel">
         <h2 className="text-sm font-semibold text-strong">Catalog data paths</h2>
         <ul className="mt-3 space-y-2 text-sm text-muted">
           <li>
@@ -110,7 +106,7 @@ export default function AdminSettingsPageView() {
             Guest planner library — static + configurator + managed (hydrated at runtime)
           </li>
           <li>
-            <Link href="/admin/inventory" className="inline-flex items-center gap-1 text-primary hover:underline">
+            <Link href="/admin/inventory" className="inline-flex gap-1 text-primary hover:underline">
               Route inventory <ExternalLink size={12} />
             </Link>{" "}
             — app routes and API map (not product stock)

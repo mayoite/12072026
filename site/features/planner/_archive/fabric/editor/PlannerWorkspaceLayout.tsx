@@ -52,13 +52,13 @@ export function PlannerWorkspaceLayout({
       <h1 className="sr-only">Workspace Planner</h1>
       {!isOnline && (
         <div
-          className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 text-white text-xs font-semibold py-2 px-4 flex items-center justify-between shadow-md border-b border-orange-600/20 relative motion-reduce:animate-none animate-pulse"
+          className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 text-xs font-semibold py-2 px-4 shadow-md border-b border-orange-600/20 motion-reduce:animate-none animate-pulse"
           style={{ zIndex: Z.toast }}
         >
-          <div className="flex items-center gap-2">
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+          <div className="gap-2">
+            <span className="h-2 w-2">
+              <span className="animate-ping inline-flex rounded-full opacity-75"></span>
+              <span className="inline-flex rounded-full h-2 w-2"></span>
             </span>
             <span>
               Offline Mode: Saving changes to transactionally-safe IndexedDB. Changes will sync to cloud when connection is restored.
@@ -67,7 +67,7 @@ export function PlannerWorkspaceLayout({
           <button 
             type="button" 
             onClick={() => window.location.reload()} 
-            className="bg-white/20 hover:bg-white/30 text-white rounded px-2.5 py-0.5 text-[0.625rem] uppercase font-bold transition-all border border-white/20"
+            className="bg-white/20 hover:bg-white/30 rounded px-2.5 py-0.5 text-[0.625rem] uppercase font-bold transition-all border border-white/20"
           >
             Check Status
           </button>
@@ -97,7 +97,7 @@ export function PlannerWorkspaceLayout({
           />
         ) : null}
 
-        <div className="hidden lg:col-start-1 lg:row-start-2 lg:flex lg:w-[var(--pw-rail-w)] lg:min-w-0 lg:overflow-hidden">
+        <div className="lg:col-start-1 lg:row-start-2 lg:flex lg:w-[var(--pw-rail-w)] lg:min-w-0 lg:overflow-hidden">
           {toolRail}
         </div>
         

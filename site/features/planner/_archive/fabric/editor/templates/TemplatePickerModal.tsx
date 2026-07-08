@@ -190,7 +190,7 @@ export function TemplatePickerModal({ isOpen, onClose, onApply }: TemplatePicker
         <button type="button" onClick={onClose} className="pwx-ghost-btn">
           Skip — start blank
         </button>
-        <p className="flex-1 text-center text-[0.625rem] text-soft">
+        <p className="text-center text-[0.625rem] text-soft">
           {selected
             ? `${selected.name} · ${selected.shapes.length} elements`
             : "Pick a template, or skip for a blank canvas"}
@@ -199,7 +199,7 @@ export function TemplatePickerModal({ isOpen, onClose, onApply }: TemplatePicker
           type="button"
           onClick={handleApply}
           disabled={!selected}
-          className="btn-primary flex items-center gap-1.5 px-4 py-2 text-xs disabled:opacity-40"
+          className="btn-primary gap-1.5 px-4 py-2 text-xs disabled:opacity-40"
         >
           Apply template <ArrowRight size={12} aria-hidden />
         </button>

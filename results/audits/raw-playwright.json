@@ -88,10 +88,9 @@
         "ANTIGRAVITY_CSRF_TOKEN": "86e379ce-2934-4af8-bd58-74971744ef5f",
         "ANTIGRAVITY_EDITOR_APP_ROOT": "c:\\Users\\ayush\\AppData\\Local\\Programs\\Antigravity IDE\\resources\\app",
         "ANTIGRAVITY_LS_ADDRESS": "localhost:56387",
-        "ANTIGRAVITY_SOURCE_METADATA": "{\"tool\":{\"conversationId\":\"2e0e9942-a4c3-4a40-ac27-c9e8ed2952c3\",\"stepIndex\":316,\"toolCall\":{\"id\":\"tsu4fe2e\",\"name\":\"run_command\",\"argumentsJson\":\"{\\\"CommandLine\\\":\\\"npx playwright test -c config/build/playwright.config.ts tests/e2e/planner-shell-100dvh.spec.ts\\\",\\\"Cwd\\\":\\\"d:\\\\\\\\OandO07072026\\\\\\\\site\\\",\\\"WaitMsBeforeAsync\\\":20000,\\\"toolAction\\\":\\\"Running the E2E test with the config\\\",\\\"toolSummary\\\":\\\"Run E2E test\\\"}\",\"thinkingSignature\":\"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\",\"originalName\":\"run_command\"}}}",
+        "ANTIGRAVITY_SOURCE_METADATA": "{\"tool\":{\"conversationId\":\"2e0e9942-a4c3-4a40-ac27-c9e8ed2952c3\",\"stepIndex\":457,\"toolCall\":{\"id\":\"4o3o9n08\",\"name\":\"run_command\",\"argumentsJson\":\"{\\\"CommandLine\\\":\\\"npm run test:planner ; npx playwright test -c config/build/playwright.config.ts tests/e2e/planner-shell-100dvh.spec.ts\\\",\\\"Cwd\\\":\\\"d:\\\\\\\\OandO07072026\\\\\\\\site\\\",\\\"WaitMsBeforeAsync\\\":20000,\\\"toolAction\\\":\\\"Running tests to verify the Master Pivot\\\",\\\"toolSummary\\\":\\\"Run verification tests\\\"}\",\"thinkingSignature\":\"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\",\"originalName\":\"run_command\"}}}",
         "ANTIGRAVITY_TRAJECTORY_ID": "41eb0460-ba70-4939-aa81-68d4bd6d5fd1",
         "APPDATA": "C:\\Users\\ayush\\AppData\\Roaming",
-        "BROWSERSLIST_IGNORE_OLD_DATA": "true",
         "CHROME_CRASHPAD_PIPE_NAME": "\\\\.\\pipe\\crashpad_20920_JZYJBSBFGLJNTWFZ",
         "CLOOUDFLARE_SECRET_API_TOKEN": "cfat_fJfmqd0xx8dfdCYJ8mSusBp6b9kpiSsWEh5go3Hva4b6bc7d",
         "CLOUDFLARE_ACCOUNT_ID": "78e07661362639e5e9008dadd85a3f2d",
@@ -229,7 +228,7 @@
           "specs": [
             {
               "title": "Route /planner/guest/ should enforce 100dvh and overflow hidden",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -242,48 +241,18 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 3989,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36",
-                        "location": {
-                          "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
-                          "column": 36,
-                          "line": 34
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 32 |\u001b[39m\n \u001b[90m 33 |\u001b[39m       \u001b[90m// Assertions to verify no scrolling at the root frame\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 34 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mhtmlOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 35 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mbodyOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 36 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mscrollHeight)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(metrics\u001b[33m.\u001b[39minnerHeight)\u001b[33m;\u001b[39m\n \u001b[90m 37 |\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
-                            "column": 36,
-                            "line": 34
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n\n  32 |\n  33 |       // Assertions to verify no scrolling at the root frame\n> 34 |       expect(metrics.htmlOverflow).toBe(\"hidden\");\n     |                                    ^\n  35 |       expect(metrics.bodyOverflow).toBe(\"hidden\");\n  36 |       expect(metrics.scrollHeight).toBeLessThanOrEqual(metrics.innerHeight);\n  37 |\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 3607,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-08T04:57:38.810Z",
+                      "startTime": "2026-07-08T05:11:04.871Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "D:\\OandO07072026\\results\\test-results\\e2e-planner-shell-100dvh-P-3e85e--100dvh-and-overflow-hidden-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
-                        "column": 36,
-                        "line": 34
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "b972d3d7d23d57c7fc18-97e4641b7b322904c121",
@@ -293,7 +262,7 @@
             },
             {
               "title": "Route /planner/canvas/ should enforce 100dvh and overflow hidden",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -304,50 +273,20 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 2912,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36",
-                        "location": {
-                          "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
-                          "column": 36,
-                          "line": 34
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 32 |\u001b[39m\n \u001b[90m 33 |\u001b[39m       \u001b[90m// Assertions to verify no scrolling at the root frame\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 34 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mhtmlOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 35 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mbodyOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 36 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mscrollHeight)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(metrics\u001b[33m.\u001b[39minnerHeight)\u001b[33m;\u001b[39m\n \u001b[90m 37 |\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
-                            "column": 36,
-                            "line": 34
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n\n  32 |\n  33 |       // Assertions to verify no scrolling at the root frame\n> 34 |       expect(metrics.htmlOverflow).toBe(\"hidden\");\n     |                                    ^\n  35 |       expect(metrics.bodyOverflow).toBe(\"hidden\");\n  36 |       expect(metrics.scrollHeight).toBeLessThanOrEqual(metrics.innerHeight);\n  37 |\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 2655,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-08T04:57:43.403Z",
+                      "startTime": "2026-07-08T05:11:08.653Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "D:\\OandO07072026\\results\\test-results\\e2e-planner-shell-100dvh-P-1c5d6--100dvh-and-overflow-hidden-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
-                        "column": 36,
-                        "line": 34
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "b972d3d7d23d57c7fc18-28368bd7b492adbccb60",
@@ -357,7 +296,7 @@
             },
             {
               "title": "Route /planner/open3d/ should enforce 100dvh and overflow hidden",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -370,48 +309,18 @@
                     {
                       "workerIndex": 1,
                       "parallelIndex": 1,
-                      "status": "failed",
-                      "duration": 4020,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36",
-                        "location": {
-                          "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
-                          "column": 36,
-                          "line": 34
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 32 |\u001b[39m\n \u001b[90m 33 |\u001b[39m       \u001b[90m// Assertions to verify no scrolling at the root frame\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 34 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mhtmlOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 35 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mbodyOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 36 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mscrollHeight)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(metrics\u001b[33m.\u001b[39minnerHeight)\u001b[33m;\u001b[39m\n \u001b[90m 37 |\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
-                            "column": 36,
-                            "line": 34
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n\n  32 |\n  33 |       // Assertions to verify no scrolling at the root frame\n> 34 |       expect(metrics.htmlOverflow).toBe(\"hidden\");\n     |                                    ^\n  35 |       expect(metrics.bodyOverflow).toBe(\"hidden\");\n  36 |       expect(metrics.scrollHeight).toBeLessThanOrEqual(metrics.innerHeight);\n  37 |\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 3607,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-08T04:57:38.810Z",
+                      "startTime": "2026-07-08T05:11:04.874Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "D:\\OandO07072026\\results\\test-results\\e2e-planner-shell-100dvh-P-ee1d4--100dvh-and-overflow-hidden-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
-                        "column": 36,
-                        "line": 34
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "b972d3d7d23d57c7fc18-3b66a6035913136a1eb0",
@@ -426,11 +335,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-07-08T04:56:45.151Z",
-    "duration": 61534.878000000004,
-    "expected": 0,
+    "startTime": "2026-07-08T05:10:12.062Z",
+    "duration": 59543.558,
+    "expected": 3,
     "skipped": 0,
-    "unexpected": 3,
+    "unexpected": 0,
     "flaky": 0
   }
 }

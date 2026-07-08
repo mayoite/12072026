@@ -35,24 +35,20 @@ export function BottomSheet({
     <>
       <button
         type="button"
-        className={`fixed inset-0 bg-black/40 transition-opacity duration-300 md:hidden ${
-          open ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        className={`bg-black/40 transition-opacity duration-300 md:hidden ${ open ? "opacity-100" : "pointer-events-none opacity-0" }`}
         style={{ zIndex: Z.panel - 1 }}
         aria-label="Close bottom sheet"
         onClick={onClose}
       />
       <section
-        className={`fixed bottom-0 left-0 right-0 max-h-[90dvh] w-full rounded-t-2xl bg-white pb-[env(safe-area-inset-bottom)] shadow-2xl transition-transform duration-300 md:hidden ${
-          open ? "translate-y-0" : "pointer-events-none translate-y-full"
-        }`}
+        className={`bottom-0 left-0 right-0 max-h-[90dvh] rounded-t-2xl pb-[env(safe-area-inset-bottom)] shadow-2xl transition-transform duration-300 md:hidden ${ open ? "translate-y-0" : "pointer-events-none translate-y-full" }`}
         style={{ zIndex: Z.panel }}
         role="dialog"
         aria-modal="true"
         aria-hidden={!open}
         aria-labelledby={title ? titleId : undefined}
       >
-        <div className="flex justify-center py-3">
+        <div className="py-3">
           <span className="h-1 w-10 rounded-full bg-gray-300" aria-hidden />
         </div>
         {title ? (
@@ -60,7 +56,7 @@ export function BottomSheet({
             {title}
           </h2>
         ) : null}
-        <div className="max-h-[calc(90dvh-56px)] overflow-y-auto overscroll-contain">
+        <div className="max-h-[calc(90dvh-56px)] overscroll-contain">
           {children}
         </div>
       </section>

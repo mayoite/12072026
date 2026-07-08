@@ -117,7 +117,7 @@ export function PlannerMobileDock({
                       <button
                         key={tool.id}
                         type="button"
-                        className="pw-mobile-dock-btn flex flex-col items-center justify-center gap-1 rounded-xl border border-soft bg-panel p-3"
+                        className="pw-mobile-dock-btn gap-1 rounded-xl border border-soft bg-panel p-3"
                         data-active={active}
                         onClick={() => handleSelect(tool.toolId, tool.plannerTool)}
                         aria-pressed={active}

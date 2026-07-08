@@ -383,7 +383,7 @@ export function PlannerWorkspaceContent({ guestMode = false, planId }: PlannerWo
 
   const canvas3D = (
     <Suspense fallback={<PlannerSkeleton />}>
-      <div className="pw-viewer-host h-full min-h-0 w-full">
+      <div className="pw-viewer-host">
         <PlannerErrorBoundary label="3D Viewer">
           <Planner3DViewer document={currentPlannerDocument} />
         </PlannerErrorBoundary>
@@ -541,14 +541,14 @@ export function PlannerWorkspaceContent({ guestMode = false, planId }: PlannerWo
         ref={importInputRef}
         type="file"
         accept="application/json,.json"
-        className="hidden"
+        className=""
         onChange={(e) => handleImportFileChange(e, planName)}
       />
       <input
         ref={floorPlanInputRef}
         type="file"
         accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
-        className="hidden"
+        className=""
         onChange={handleFloorPlanFileChange}
       />
       <PlannerWorkspaceLayout

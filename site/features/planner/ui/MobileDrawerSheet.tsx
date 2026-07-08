@@ -30,16 +30,16 @@ export function MobileDrawerSheet({
       <Drawer.Trigger asChild>{trigger}</Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay
-          className="fixed inset-0 bg-[color:var(--overlay-inverse-35)] backdrop-blur-sm"
+          className="bg-[color:var(--overlay-inverse-35)] backdrop-blur-sm"
           style={{ zIndex: Z.panel }}
         />
         <Drawer.Content
-          className="fixed bottom-0 left-0 right-0 flex flex-col bg-panel border-t border-theme-soft rounded-t-[1.6rem] shadow-theme-float backdrop-blur-xl"
+          className="bottom-0 left-0 right-0 bg-panel border-t border-theme-soft rounded-t-[1.6rem] shadow-theme-float backdrop-blur-xl"
           style={{ maxHeight: "85svh", zIndex: Z.panel }}
           aria-label={title}
         >
           {/* Drag handle */}
-          <div className="flex justify-center pt-3 pb-2 shrink-0">
+          <div className="pt-3 pb-2 shrink-0">
             <div className="w-10 h-1 rounded-full bg-[color:var(--planner-border-strong)] opacity-70" aria-hidden="true" />
           </div>
 
@@ -51,7 +51,7 @@ export function MobileDrawerSheet({
           </div>
 
           {/* Scrollable content */}
-          <div className="overflow-y-auto flex-1 overscroll-contain">
+          <div className="overscroll-contain">
             {children}
           </div>
         </Drawer.Content>

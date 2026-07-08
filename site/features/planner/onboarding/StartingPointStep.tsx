@@ -24,8 +24,8 @@ export function StartingPointStep({ guestMode = false, planId, onComplete }: Sta
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center overflow-x-hidden p-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] pt-[calc(1rem+env(safe-area-inset-top,0px))] sm:p-8 animate-in fade-in zoom-in-95 duration-500">
-      <div className="w-full max-w-2xl mx-auto space-y-6">
+    <div className="pb-[calc(1rem+env(safe-area-inset-bottom,0px))] pt-[calc(1rem+env(safe-area-inset-top,0px))] sm:p-8 animate-in fade-in zoom-in-95 duration-500">
+      <div className="max-w-2xl mx-auto space-y-6">
         <div className="text-center space-y-2">
           <h1 className="typ-h2 text-[color:var(--text-strong)]">Let's get started</h1>
           <p className="typ-body text-[color:var(--text-muted)] max-w-md mx-auto">

@@ -23,11 +23,11 @@ import {
 
 function JsonFieldMessage({ error }: { error?: string }) {
   if (!error) {
-    return <span className="block text-xs text-soft">Valid JSON.</span>;
+    return <span className="text-xs text-soft">Valid JSON.</span>;
   }
 
   return (
-    <span className="block text-xs text-danger" role="alert">
+    <span className="text-xs text-danger" role="alert">
       {error}
     </span>
   );
@@ -256,7 +256,7 @@ function ConfiguratorCatalogForm({
         </AdminField>
 
         <div className="rounded-lg border border-soft bg-panel p-3">
-          <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex-wrap items-start gap-3">
             <div className="space-y-1">
               <p className="text-sm font-medium text-strong">Advanced JSON sizing data</p>
               <p className="text-xs text-muted">
@@ -266,7 +266,7 @@ function ConfiguratorCatalogForm({
             </div>
             <button
               type="button"
-              className="btn-outline inline-flex items-center gap-2 px-3 py-2 text-sm"
+              className="btn-outline inline-flex gap-2 px-3 py-2 text-sm"
               onClick={onToggleAdvancedJson}
               aria-expanded={showAdvancedJson}
             >
@@ -447,7 +447,7 @@ export function AdminCatalogEditorDrawer({
           </button>
           <button
             type="button"
-            className="btn-primary inline-flex items-center gap-2 px-4 py-2 text-sm"
+            className="btn-primary inline-flex gap-2 px-4 py-2 text-sm"
             disabled={readOnly || saving}
             onClick={() => void onSave()}
           >
