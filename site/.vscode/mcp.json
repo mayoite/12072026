@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "Sentry": {
+      "url": "https://mcp.sentry.dev/mcp/one-and-only-furniture-private/javascript-react",
+      "type": "http"
+    }
+  }
+}

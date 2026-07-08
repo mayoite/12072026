@@ -6,6 +6,7 @@ allowBuilds:
   '@firebase/util': true
   '@parcel/watcher': true
   '@percy/core': false
+  '@sentry/cli': true
   '@swc/core': true
   canvas: true
   core-js: true
