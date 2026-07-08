@@ -12,6 +12,7 @@
 - **Scope:** Smallest possible change. No silent fixes.
 - **Format:** Exact canonical casing. Relative links only.
 - **Content:** Exact files to modify. No implementation code unless architectural.
+- **Respect Git Rules:** Follow the "Git & Workspace Rules (User Standing Instructions)" from `../AGENTS.md` (direct repo only; no worktrees ever; ask before any commit/push).
 
 ## 4. Verification
 - **Evidence:** Explicitly state the verification strategy (commands and `results/` paths).

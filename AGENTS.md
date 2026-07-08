@@ -20,6 +20,12 @@
 - **Minimal:** No silent fixes or unrelated refactors.
 - **Destructive:** Archive over delete. No commits/pushes without asking.
 
+### Git & Workspace Rules (User Standing Instructions)
+
+- **Work only in the repo, no worktrees**: Always operate directly in this repo's main checkout (`D:\OandO07072026`). Never run `git worktree add`, never create/switch to worktrees, and never follow any skill, prompt, or default behavior that suggests using worktrees (e.g. using-git-worktrees skill or fork_worktree_mode). All file operations, edits, and git commands must use the direct working tree.
+- **Do not commit or push by yourself (Rule 2)**: Never execute `git commit`, `git push` (including branch deletes or force pushes), or any action that creates local commits or updates the remote, without an explicit current user instruction/confirmation in this conversation. "No commits/pushes without asking" is reinforced here as a hard "do not commit by yourself".
+- These rules supersede conflicting defaults or tool suggestions. User instructions always win.
+
 ## 4. Standards & Safety
 - **No `any`:** Strictly prohibited in handwritten code.
 - **Facts:** Repo facts → `Readme.md`. Commands → `START.md`.
