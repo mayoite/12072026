@@ -2,6 +2,7 @@ import type { Open3dProject } from "../model/types";
 import type { StagingPlannerDocument } from "./plannerDocumentTypes";
 import type { MemberPlanRepository, SaveResult } from "./memberPlanRepository";
 import { exportOpen3dProjectJson } from "./projectJson";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 export type PromoteGuestResult =
   | { status: "ok"; document: StagingPlannerDocument; saveId: string }
@@ -21,7 +22,7 @@ export type PromoteGuestResult =
 export async function promoteGuestSession(
   inMemoryProject: Open3dProject | null,
   repository: MemberPlanRepository,
-  idFactory: () => string = () => crypto.randomUUID(),
+  idFactory: () => string = newEntityId,
 ): Promise<PromoteGuestResult> {
   if (!inMemoryProject) return { status: "empty" };
 

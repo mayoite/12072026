@@ -17,6 +17,7 @@ import type { Open3dIdFactory } from "../project";
 import { themeColorRef } from "../../shared/readThemeColor";
 import { PLANNER_COLOR_TOKENS, ROOM_FILL_TOKENS } from "../../shared/themeColorTokens";
 import { activeFloorOrThrow } from "../actions/projectActions";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 export interface PureAction {
   type: string;
@@ -43,7 +44,7 @@ export interface AddRectangularRoomOptions extends ApplyPureActionOptions {
 }
 
 function uid(factory?: Open3dIdFactory): string {
-  return factory?.() ?? globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2);
+  return factory?.() ?? newEntityId();
 }
 
 function cloneProject(p: Open3dProject): Open3dProject {

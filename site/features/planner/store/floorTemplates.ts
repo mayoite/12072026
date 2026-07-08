@@ -1,5 +1,5 @@
 ﻿import type { Wall, Room, DoorItem, WindowItem, FurnitureItem } from "./plannerStore";
-import { v4 as uuid } from "uuid";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 export interface FloorTemplate {
   id: string;
@@ -261,10 +261,10 @@ export const floorTemplates: FloorTemplate[] = [
 
 export function instantiateTemplate(template: FloorTemplate) {
   return {
-    walls: template.walls.map((w) => ({ ...w, id: uuid() })),
-    rooms: template.rooms.map((r) => ({ ...r, id: uuid() })),
-    doors: template.doors.map((d) => ({ ...d, id: uuid() })),
-    windows: template.windows.map((w) => ({ ...w, id: uuid() })),
-    furniture: template.furniture.map((f, i) => ({ ...f, id: uuid(), zIndex: i })),
+    walls: template.walls.map((w) => ({ ...w, id: newEntityId() })),
+    rooms: template.rooms.map((r) => ({ ...r, id: newEntityId() })),
+    doors: template.doors.map((d) => ({ ...d, id: newEntityId() })),
+    windows: template.windows.map((w) => ({ ...w, id: newEntityId() })),
+    furniture: template.furniture.map((f, i) => ({ ...f, id: newEntityId(), zIndex: i })),
   };
 }

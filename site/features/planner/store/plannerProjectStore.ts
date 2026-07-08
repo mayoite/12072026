@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { v4 as uuid } from "uuid";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 import { buildProjectSaveData, normalizeLoadedProjectData } from "./plannerProjectData";
 import { buildClearedPlannerState } from "./plannerStateUtils";
 import {
@@ -28,7 +28,7 @@ function safeSetItem(key: string, value: string): boolean {
 }
 
 migrateOldProjects({
-  generateId: uuid,
+  generateId: newEntityId,
   persist: safeSetItem,
 });
 
@@ -92,7 +92,7 @@ export const usePlannerProjectStore = create<ProjectState>((set, get) => ({
         thumbnail,
       });
 
-      const projectKey = get().currentProjectKey || uuid();
+      const projectKey = get().currentProjectKey || newEntityId();
       const index = getProjectIndex();
       const existing = index.find((p) => p.id === projectKey);
 
@@ -193,7 +193,7 @@ export const usePlannerProjectStore = create<ProjectState>((set, get) => ({
     const data = localStorage.getItem(`planner-project-${currentKey}`);
     if (!data) return;
     const parsed = JSON.parse(data);
-    const newKey = uuid();
+    const newKey = newEntityId();
     const index = getProjectIndex();
     index.push({
       id: newKey,

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { v4 as uuid } from "uuid";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 import { createZone } from "./plannerEntityFactories";
 import { applyConnectedWallUpdates, buildConnectedWallUpdates, buildSplitWalls } from "./plannerWallEditUtils";
 import { dist } from "./plannerStoreGeometry";
@@ -101,7 +101,7 @@ export const usePlannerGeometryStore = create<GeometryState>((set, get) => ({
   wallDimensionUnit: "cm",
 
   addWall: (start, end) => {
-    const wall: Wall = { id: uuid(), start, end, thickness: 8, color: "var(--border-soft)" };
+    const wall: Wall = { id: newEntityId(), start, end, thickness: 8, color: "var(--border-soft)" };
     set((s) => ({ walls: [...s.walls, wall] }));
   },
 
@@ -186,7 +186,7 @@ export const usePlannerGeometryStore = create<GeometryState>((set, get) => ({
     const s = get();
     const wall = s.walls.find((w) => w.id === wallId);
     if (!wall) return;
-    const [seg1, seg2] = buildSplitWalls(wall, point, uuid);
+    const [seg1, seg2] = buildSplitWalls(wall, point, newEntityId);
     set((prev) => ({
       walls: [...prev.walls.filter((w) => w.id !== wallId), seg1, seg2],
     }));
@@ -194,7 +194,7 @@ export const usePlannerGeometryStore = create<GeometryState>((set, get) => ({
 
   addRoom: (points, name) => {
     const room: Room = {
-      id: uuid(),
+      id: newEntityId(),
       points,
       name,
       color: `hsl(${Math.random() * 360}, 50%, 85%)`,
@@ -214,7 +214,7 @@ export const usePlannerGeometryStore = create<GeometryState>((set, get) => ({
   },
 
   addDoor: (wallId, position, width) => {
-    const door: DoorItem = { id: uuid(), x: 0, y: 0, rotation: 0, wallId, position, width, swing: 90, style: "single" };
+    const door: DoorItem = { id: newEntityId(), x: 0, y: 0, rotation: 0, wallId, position, width, swing: 90, style: "single" };
     set((s) => ({ doors: [...s.doors, door] }));
   },
 
@@ -229,7 +229,7 @@ export const usePlannerGeometryStore = create<GeometryState>((set, get) => ({
   },
 
   addWindow: (wallId, position, width) => {
-    const window: WindowItem = { id: uuid(), x: 0, y: 0, rotation: 0, wallId, position, width, style: "casement" };
+    const window: WindowItem = { id: newEntityId(), x: 0, y: 0, rotation: 0, wallId, position, width, style: "casement" };
     set((s) => ({ windows: [...s.windows, window] }));
   },
 
@@ -244,7 +244,7 @@ export const usePlannerGeometryStore = create<GeometryState>((set, get) => ({
   },
 
   addZone: (points, name, type) => {
-    const zone = createZone(uuid(), points, name, type, ZONE_COLORS);
+    const zone = createZone(newEntityId(), points, name, type, ZONE_COLORS);
     set((s) => ({ zones: [...s.zones, zone], drawingZone: [] }));
   },
 
@@ -271,7 +271,7 @@ export const usePlannerGeometryStore = create<GeometryState>((set, get) => ({
   setActiveZoneType: (type) => set({ activeZoneType: type }),
 
   addMeasurement: (start, end) => {
-    const measurement = { id: uuid(), start, end, label: "" };
+    const measurement = { id: newEntityId(), start, end, label: "" };
     set((s) => ({ measurements: [...s.measurements, measurement] }));
   },
 
@@ -286,7 +286,7 @@ export const usePlannerGeometryStore = create<GeometryState>((set, get) => ({
   },
 
   addStructuralElement: (type, points) => {
-    const element = { id: uuid(), type, points };
+    const element = { id: newEntityId(), type, points };
     set((s) => ({ structuralElements: [...s.structuralElements, element] }));
   },
 

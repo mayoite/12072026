@@ -4,6 +4,7 @@ import {
   logPlannerSchemaValidationFailure,
 } from "./plannerDocumentLogging";
 import { toPlannerJsonSafe } from "./plannerJsonSafe";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 export const PLANNER_DOCUMENT_SCHEMA_VERSION = 1 as const;
 export const PLANNER_ENQUIRY_PAYLOAD_SCHEMA_VERSION = 1 as const;
@@ -546,11 +547,7 @@ function logPlannerDocumentParseFailure(context: string, error: unknown, data: u
 }
 
 function newPlannerDocumentId(): string {
-  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
-    return crypto.randomUUID();
-  }
-
-  return `00000000-0000-4000-8000-${Math.random().toString(16).slice(2, 14).padEnd(12, "0")}`;
+  return newEntityId();
 }
 
 function buildSafeFallbackPlannerDocument(source?: Record<string, unknown> | null): PlannerDocument {
@@ -759,7 +756,7 @@ export function plannerDocumentToSaveRow(
   },
 ): PlannerSaveWrite {
   const normalized = plannerDocumentSchema.parse(document);
-  const id = params.id ?? normalized.id ?? crypto.randomUUID();
+  const id = params.id ?? normalized.id ?? newEntityId();
 
   const saveRow: Record<string, unknown> = {
     id,
@@ -793,7 +790,7 @@ export function summarizePlannerDocument(document: PlannerDocument) {
   const normalized = plannerDocumentSchema.parse(document);
   const timestamp = new Date().toISOString();
   return {
-    id: normalized.id ?? crypto.randomUUID(),
+    id: normalized.id ?? newEntityId(),
     name: normalized.name,
     project_name: normalized.projectName,
     client_name: normalized.clientName,

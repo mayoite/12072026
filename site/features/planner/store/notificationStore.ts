@@ -9,7 +9,7 @@
  * For shared analytics events see features/shared/analytics/types.ts.
  */
 import { create } from "zustand";
-import { v4 as uuid } from "uuid";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 export type NotificationSeverity = "info" | "success" | "warning" | "error";
 export type NotificationCategory =
@@ -71,7 +71,7 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
   unreadCount: 0,
 
   addNotification(params) {
-    const id = uuid();
+    const id = newEntityId();
     const notification: PlannerNotification = {
       ...params,
       id,

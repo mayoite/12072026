@@ -10,6 +10,7 @@ import type {
   Zone,
 } from "@/features/planner/store/plannerStore";
 import { deleteSnapshotsFor, getLatestSnapshot, getSnapshotCount } from "./versioning";
+import { newEntityId } from "./newEntityId";
 
 export interface ProjectIndexEntry {
   id: string;
@@ -64,11 +65,7 @@ interface SavedPlanPayload {
 }
 
 function generateProjectId(): string {
-  if (typeof crypto !== "undefined" && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-
-  return `planner-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  return newEntityId();
 }
 
 function safeParseJson<T>(raw: string | null): T | null {

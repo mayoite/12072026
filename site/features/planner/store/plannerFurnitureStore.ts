@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { v4 as uuid } from "uuid";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 import { bringFurnitureItemToFront, buildFurnitureBatch, sendFurnitureItemToBack } from "./plannerFurnitureOrdering";
 import { applyFurnitureBatchUpdates, toggleSelectedIdInList } from "./plannerMutationUtils";
 import type { FurnitureItem } from "./plannerTypes";
@@ -57,7 +57,7 @@ export const usePlannerFurnitureStore = create<FurnitureState>((set, get) => ({
   selectedIds: [],
 
   addFurniture: (item) => {
-    const newItem: FurnitureItem = { ...item, id: uuid(), zIndex: get().furniture.length };
+    const newItem: FurnitureItem = { ...item, id: newEntityId(), zIndex: get().furniture.length };
     set((s) => {
       const furniture = [...s.furniture, newItem];
       return {
@@ -69,7 +69,7 @@ export const usePlannerFurnitureStore = create<FurnitureState>((set, get) => ({
 
   addFurnitureBatch: (items) => {
     const s = get();
-    const newItems = buildFurnitureBatch(s.furniture, items, uuid);
+    const newItems = buildFurnitureBatch(s.furniture, items, newEntityId);
     set((st) => {
       const furniture = [...st.furniture, ...newItems];
       return {

@@ -1,8 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-let uuidCounter = 0;
-vi.mock("uuid", () => ({
-  v4: () => `furniture-uuid-${++uuidCounter}`,
+let entityIdCounter = 0;
+vi.mock("@/features/planner/lib/newEntityId", () => ({
+  newEntityId: () => `furniture-uuid-${++entityIdCounter}`,
+  isEntityUuid: () => true,
 }));
 
 import {
@@ -86,7 +87,7 @@ function facade() {
 
 describe("plannerStore facade", () => {
   beforeEach(() => {
-    uuidCounter = 0;
+    entityIdCounter = 0;
     resetDomainStores();
     // Do not call setTool / usePlannerStore.setState here — Zustand merge drops facade getters.
   });

@@ -6,11 +6,12 @@ import type {
 } from "./types";
 import { themeColorRef } from "../shared/readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "../shared/themeColorTokens";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 export type Open3dIdFactory = () => string;
 
 function defaultIdFactory(): string {
-  return globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2);
+  return newEntityId();
 }
 
 export interface CreateOpen3dProjectOptions {

@@ -20,6 +20,7 @@ import type {
 } from "../../model/types";
 import { themeColorRef } from "../readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "../themeColorTokens";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 import {
   importFromJson,
   parseJsonToEnvelope,
@@ -92,10 +93,10 @@ export function importFromJSONWithRecovery(
 const ROOMPLAN_TO_MM = 1000;
 
 /**
- * Generate a unique ID for imported elements.
+ * Generate a unique ID for imported elements (crypto.randomUUID only).
  */
 function generateId(): string {
-  return Math.random().toString(36).substring(2, 10);
+  return newEntityId();
 }
 
 /**

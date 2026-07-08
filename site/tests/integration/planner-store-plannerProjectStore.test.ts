@@ -1,8 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-let uuidCounter = 0;
-vi.mock("uuid", () => ({
-  v4: () => `project-uuid-${++uuidCounter}`,
+let entityIdCounter = 0;
+vi.mock("@/features/planner/lib/newEntityId", () => ({
+  newEntityId: () => `project-uuid-${++entityIdCounter}`,
+  isEntityUuid: () => true,
 }));
 
 import { usePlannerGeometryStore } from "@/features/planner/store/plannerGeometryStore";
@@ -97,7 +98,7 @@ const baseFurniture: Omit<FurnitureItem, "id" | "zIndex"> = {
 
 describe("plannerProjectStore", () => {
   beforeEach(() => {
-    uuidCounter = 0;
+    entityIdCounter = 0;
     Object.defineProperty(window, "localStorage", {
       value: createMemoryStorage(),
       configurable: true,

@@ -1,6 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("uuid", () => ({ v4: () => "mock-uuid-" + Math.random().toString(36).slice(2, 8) }));
+let entityIdCounter = 0;
+vi.mock("@/features/planner/lib/newEntityId", () => ({
+  newEntityId: () => `mock-entity-${++entityIdCounter}`,
+  isEntityUuid: () => true,
+}));
 
 import { usePlannerGeometryStore } from "@/features/planner/store/plannerGeometryStore";
 
@@ -21,6 +25,7 @@ function resetStore() {
 
 describe("plannerGeometryStore", () => {
   beforeEach(() => {
+    entityIdCounter = 0;
     resetStore();
   });
 

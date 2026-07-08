@@ -1,6 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("uuid", () => ({ v4: () => "mock-uuid-" + Math.random().toString(36).slice(2, 8) }));
+let entityIdCounter = 0;
+vi.mock("@/features/planner/lib/newEntityId", () => ({
+  newEntityId: () => `mock-entity-${++entityIdCounter}`,
+  isEntityUuid: () => true,
+}));
 
 import { usePlannerFurnitureStore } from "@/features/planner/store/plannerFurnitureStore";
 import type { FurnitureItem } from "@/features/planner/store/plannerTypes";
@@ -29,6 +33,7 @@ const baseFurniture: Omit<FurnitureItem, "id" | "zIndex"> = {
 
 describe("plannerFurnitureStore", () => {
   beforeEach(() => {
+    entityIdCounter = 0;
     resetStore();
   });
 

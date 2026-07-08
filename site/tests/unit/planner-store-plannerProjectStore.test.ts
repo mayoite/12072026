@@ -4,8 +4,9 @@ import { usePlannerGeometryStore } from "@/features/planner/store/plannerGeometr
 import { usePlannerUIStore } from "@/features/planner/store/plannerUIStore";
 import type { PlannerDocument } from "@/features/planner/store/plannerTypes";
 
-vi.mock("uuid", () => ({
-  v4: () => "mock-uuid"
+vi.mock("@/features/planner/lib/newEntityId", () => ({
+  newEntityId: () => "mock-uuid",
+  isEntityUuid: () => true,
 }));
 
 describe("plannerProjectStore", () => {

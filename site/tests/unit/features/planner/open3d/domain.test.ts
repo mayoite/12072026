@@ -77,8 +77,10 @@ describe("project model and units", () => {
     expect(createOpen3dSceneEnvelope(rectangular).project).toBe(rectangular);
     const originalCrypto = globalThis.crypto;
     vi.stubGlobal("crypto", {});
-    expect(createOpen3dProject().id).toBeTruthy();
-    expect(createRectangularRoomProject({ widthMm: 1, depthMm: 1 }).floors[0].walls).toHaveLength(4);
+    expect(() => createOpen3dProject()).toThrow(/crypto\.randomUUID is required/);
+    expect(() => createRectangularRoomProject({ widthMm: 1, depthMm: 1 })).toThrow(
+      /crypto\.randomUUID is required/,
+    );
     vi.stubGlobal("crypto", originalCrypto);
   });
 

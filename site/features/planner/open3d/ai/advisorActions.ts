@@ -20,6 +20,7 @@ import { themeColorRef } from "../shared/readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "../shared/themeColorTokens";
 import type { AdvisorSuggestion, SpaceSuggestLayout } from "./advisorTypes";
 import { validateLayout } from "./advisorClient";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 /**
  * Result of applying a suggestion.
@@ -29,13 +30,6 @@ export interface ApplySuggestionActionResult {
   applied: boolean;
   error?: string;
   previewActions?: Open3dProjectAction[];
-}
-
-/**
- * Generates a unique entity ID.
- */
-function generateEntityId(prefix: string): string {
-  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
 /**
@@ -60,7 +54,7 @@ function createFurnitureFromLayout(
   item: { catalogItemId: string; label: string; x: number; y: number; rotation?: number },
 ): Open3dFurnitureItem {
   return {
-    id: generateEntityId("furniture"),
+    id: newEntityId(),
     catalogId: item.catalogItemId,
     position: { x: item.x, y: item.y },
     rotation: item.rotation ?? 0,
@@ -77,7 +71,7 @@ function createWallFromLayout(
   heightMm = 2800,
 ): Open3dWall {
   return {
-    id: generateEntityId("wall"),
+    id: newEntityId(),
     start: { x: wall.x, y: wall.y },
     end: { x: wall.endX, y: wall.endY },
     height: heightMm,
@@ -93,7 +87,7 @@ function createRoomFromLayout(
   room: { label: string; x: number; y: number; widthMm: number; depthMm: number },
 ): Open3dRoom {
   return {
-    id: generateEntityId("room"),
+    id: newEntityId(),
     name: room.label,
     walls: [],
     floorTexture: "default",
@@ -171,7 +165,7 @@ function applyPlacementSuggestion(
   // For placement suggestions, we need catalog info from the description
   // This is a simplified implementation
   const furniture: Open3dFurnitureItem = {
-    id: generateEntityId("furniture"),
+    id: newEntityId(),
     catalogId: suggestion.type === "placement" ? "desk-standard" : "generic",
     position: { x: 0, y: 0 }, // Would be extracted from suggestion details
     rotation: 0,

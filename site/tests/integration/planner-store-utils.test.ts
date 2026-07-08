@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("uuid", () => ({ v4: () => "uuid-fixed-1" }));
+vi.mock("@/features/planner/lib/newEntityId", () => ({
+  newEntityId: () => "uuid-fixed-1",
+  isEntityUuid: () => true,
+}));
 
 import { floorTemplates } from "@/features/planner/store/floorTemplates";
 import {

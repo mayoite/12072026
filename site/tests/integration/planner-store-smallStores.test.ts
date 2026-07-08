@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("uuid", () => ({ v4: () => "notification-uuid-1" }));
+vi.mock("@/features/planner/lib/newEntityId", () => ({
+  newEntityId: () => "notification-uuid-1",
+  isEntityUuid: () => true,
+}));
 
 import { useToastStore } from "@/features/planner/store/toastStore";
 import {
