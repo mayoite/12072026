@@ -236,7 +236,7 @@ describe("createSceneObjectFromNode mesh paths", () => {
     expect(object.type).toBe("Group");
   });
 
-  it("keeps non-modular furniture as centered BoxGeometry mesh", () => {
+  it("routes non-modular furniture through ParametricBuilder box mesh", () => {
     const object = createSceneObjectFromNode(
       THREE,
       {
@@ -255,6 +255,8 @@ describe("createSceneObjectFromNode mesh paths", () => {
 
     expect(object.type).toBe("Mesh");
     expect(object.userData.entityId).toBe("entity-box");
+    expect(object.userData.entitySource).toBe("parametric-box");
+    expect(object.userData.meshSource).toBe("procedural");
     expect(object.children).toHaveLength(0);
     expect(object.position.y).toBeCloseTo(0.375);
     expect(object.position.x).toBeCloseTo(2);
@@ -337,6 +339,7 @@ describe("modular place → scene node → mesh factory (integration)", () => {
 
     expect(boxObject.type).toBe("Mesh");
     expect(boxObject.userData.entityId).toBe(placedBox.id);
+    expect(boxObject.userData.entitySource).toBe("parametric-box");
     expect(boxObject.children).toHaveLength(0);
     expect(boxObject.userData.geometryMode).toBeUndefined();
   });

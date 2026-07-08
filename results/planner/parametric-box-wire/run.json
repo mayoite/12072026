@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "scenario": "parametric-box-wire",
+  "cwd": "D:\\OandO07072026\\site",
+  "timestamp": "2026-07-09T03:03:04.000Z",
+  "command": "npx vitest run tests/unit/features/planner/open3d/modularPlaceMesh.test.ts --reporter=verbose",
+  "testFiles": [
+    "tests/unit/features/planner/open3d/modularPlaceMesh.test.ts"
+  ],
+  "status": "pass",
+  "exitCode": 0,
+  "results": {
+    "testFiles": 1,
+    "tests": 10,
+    "passed": 10,
+    "failed": 0
+  },
+  "summary": "Non-modular furniture box path uses ParametricBuilder.generate3DMesh; userData.entitySource=parametric-box. Modular and wall BoxGeometry paths unchanged.",
+  "change": {
+    "createSceneObjectFromNode": "furniture + W/D/H → ParametricBuilder.generate3DMesh",
+    "parametricBuilder.generate3DMesh": "accepts geometry-only input (no full BlockDescriptor required)",
+    "assert": "object.userData.entitySource === 'parametric-box'"
+  },
+  "artifacts": {
+    "rawLog": "results/planner/parametric-box-wire/vitest-raw.log"
+  }
+}

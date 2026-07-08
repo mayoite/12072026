@@ -53,6 +53,17 @@
 - Full parametric component library (L/U, hardware) is not this skeleton.
 - V1 `SvgBlockDefinitionV1` is not rewritten into pipelineCore (reference-only).
 
+## CLI smoke (fixtures only)
+
+Deterministic batch — **only** `scripts/generate-svg/_fixtures/*.json` (sorted). Does **not** run `block-descriptors/` admin seeds (avoids unpredictable catalog overwrites).
+
+| Command (from `site/`) | Scope |
+|------------------------|--------|
+| `pnpm run scripts:smoke:svg` | single fixture (`chaise.json`) |
+| `pnpm run scripts:smoke:svg:batch` | all `_fixtures/*.json` via `scripts/smoke-svg-fixtures.mjs` |
+| `pnpm run scripts:generate-svg -- path/to/descriptor.json` | one arbitrary descriptor |
+
 ## Tests
 
 - `site/tests/unit/features/planner/asset-engine/`
+

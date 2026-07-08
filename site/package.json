@@ -16,6 +16,7 @@
     "seed:block-descriptors": "npx tsx scripts/seed-block-descriptors.ts",
     "scripts:generate-svg": "tsx scripts/generate-svg.mjs",
     "scripts:smoke:svg": "tsx scripts/generate-svg.mjs scripts/generate-svg/_fixtures/chaise.json",
+    "scripts:smoke:svg:batch": "tsx scripts/smoke-svg-fixtures.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "typecheck:scripts": "tsc -p scripts/tsconfig.json --noEmit",
     "lint": "eslint -c config/build/eslint.config.mjs app components features lib tests --max-warnings=0",

@@ -60,8 +60,14 @@ export const ParametricBuilder = {
 
   /**
    * Box mesh in metres (Y-up). Prefer modularCabinetV0 for multi-part products.
+   * Accepts full parametric descriptors or geometry-only input from scene nodes.
    */
-  generate3DMesh(descriptor: BlockDescriptorParametric): THREE.Mesh {
+  generate3DMesh(descriptor: {
+    geometry: Pick<
+      BlockDescriptorParametric["geometry"],
+      "widthMm" | "heightMm" | "depthMm"
+    >;
+  }): THREE.Mesh {
     const { widthMm, heightMm, depthMm } = descriptor.geometry;
     const geometry = new THREE.BoxGeometry(
       widthMm * MM,

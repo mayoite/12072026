@@ -140,8 +140,9 @@ export const MESH_GLB_STAGES: readonly AssetStage[] = [
     name: "Runtime THREE mesh (no document THREE)",
     status: "partial",
     produces: "THREE.Group | Mesh for viewer rebuild",
-    entry: "createSceneObjectFromNode → generateCabinetV0Mesh | BoxGeometry",
-    note: "ParametricBuilder.generate3DMesh is real code with no production caller.",
+    entry:
+      "createSceneObjectFromNode → generateCabinetV0Mesh | ParametricBuilder.generate3DMesh | wall BoxGeometry",
+    note: "Non-modular furniture with W/D/H uses ParametricBuilder.generate3DMesh (entitySource parametric-box).",
   },
   {
     id: "mesh-g4-part-plan",

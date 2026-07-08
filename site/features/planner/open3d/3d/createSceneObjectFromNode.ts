@@ -1,6 +1,7 @@
 /**
  * Pure scene-object factory for Open3dSceneNode → THREE Object3D.
  * Modular furniture uses generateCabinetV0Mesh (no designer GLB, no THREE on document).
+ * Non-modular furniture box uses ParametricBuilder.generate3DMesh when W/D/H are available.
  * System-generated GLB is loaded asynchronously by the viewer (see loadGeneratedGlbObject);
  * this factory always builds the procedural fallback immediately.
  */
@@ -10,6 +11,7 @@ import {
   defaultCabinetV0Options,
   generateCabinetV0Mesh,
 } from "../catalog/modularCabinetV0";
+import { ParametricBuilder } from "../catalog/parametricBuilder";
 import { mmToMeters, type Open3dSceneNode } from "./buildOpen3dSceneNodes";
 
 type ThreeModule = typeof THREE;
@@ -26,8 +28,19 @@ function applyShadowFlags(
   });
 }
 
+function hasPositiveDimensions(node: Open3dSceneNode): boolean {
+  return (
+    Number.isFinite(node.widthMm) &&
+    Number.isFinite(node.depthMm) &&
+    Number.isFinite(node.heightMm) &&
+    node.widthMm > 0 &&
+    node.depthMm > 0 &&
+    node.heightMm > 0
+  );
+}
+
 /**
- * Build a wall box or furniture object (box / modular-cabinet-v0 group).
+ * Build a wall box or furniture object (parametric box / modular-cabinet-v0 group).
  * Pose matches plan mm → world metres (Y-up, plan Y → world Z).
  * Does not load GLB (sync path); use loadGeneratedGlbObject for async replace.
  */
@@ -67,6 +80,35 @@ export function createSceneObjectFromNode(
     return meshGroup;
   }
 
+  // Non-modular furniture: ParametricBuilder box mesh (entitySource parametric-box).
+  if (node.kind === "furniture" && hasPositiveDimensions(node)) {
+    const mesh = ParametricBuilder.generate3DMesh({
+      geometry: {
+        widthMm: node.widthMm,
+        heightMm: node.heightMm,
+        depthMm: node.depthMm,
+      },
+    });
+    mesh.name = node.id;
+    mesh.userData = {
+      ...mesh.userData,
+      entityId: node.id,
+      kind: node.kind,
+      meshSource: "procedural",
+    };
+    // generate3DMesh sets y = h/2; place plan x/y → world x/z and rotation.
+    mesh.position.set(
+      mmToMeters(node.xMm),
+      mesh.position.y,
+      mmToMeters(node.yMm),
+    );
+    mesh.rotation.y = -node.rotation;
+    mesh.castShadow = castShadow;
+    mesh.receiveShadow = castShadow;
+    return mesh;
+  }
+
+  // Walls (and any furniture missing dimensions): local BoxGeometry fallback.
   const w = mmToMeters(node.widthMm);
   const d = mmToMeters(node.depthMm);
   const h = mmToMeters(node.heightMm);
