@@ -7,6 +7,12 @@ import { GLTFExporter } from "three-stdlib";
 import type { ShapePath } from "three";
 import type { SVGResult } from "three-stdlib";
 
+/**
+ * Browser binary SVG→GLB extrude (admin island).
+ * Pure plan/path metadata (no THREE): asset-engine/mesh/extrudeSvgPlan.ts
+ * (buildExtrudeSvgPlan / exportExtrudeSvgToGeneratedAssetPath).
+ */
+
 export interface GlbExtruderPreviewProps {
   /** The SVG path data or raw SVG string */
   svgString: string;

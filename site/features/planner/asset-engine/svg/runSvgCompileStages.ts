@@ -1,6 +1,9 @@
 /**
  * Ordered SVG compile stages (S1 → S2 → S3). No disk I/O.
  * S4 write is generate-svg.mjs; S6 persist is publishDescriptorWithPipeline.
+ *
+ * Publish authority: normalizeDescriptorForPipeline + pipelineCore.
+ * See compileAuthority.ts. V1 (svgCompiler.server) is reference-only.
  */
 
 import {
@@ -49,7 +52,7 @@ function toPipelineDescriptor(
 
 /**
  * S1 normalize → S2/S3 pipelineCore (compile + sanitize + optimise).
- * Single entry for tests and future publish wiring.
+ * Shared implementation; publish callers use {@link compileSvgForPublish}.
  */
 export async function runSvgCompileStages(
   rawDescriptor: unknown,

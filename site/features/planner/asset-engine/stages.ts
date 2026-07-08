@@ -26,8 +26,8 @@ export interface AssetStage {
 }
 
 /**
- * SVG making — intended single authority order (Option A).
- * Live publish still uses pipelineCore; V1 compiler is parallel/tests.
+ * SVG making — single publish authority: pipelineCore + normalize (asset-engine).
+ * THE entry: compileSvgForPublish. V1 is compileAuthority "v1-reference-only".
  */
 export const SVG_STAGES: readonly AssetStage[] = [
   {
@@ -46,25 +46,28 @@ export const SVG_STAGES: readonly AssetStage[] = [
     status: "implemented",
     produces: "PipelineDescriptor (height blocks + boolean variant)",
     entry: "asset-engine/svg/normalizeDescriptorForPipeline.ts",
-    note: "Maps BlockDescriptor depth→height and fixed/configurable→union|difference.",
+    note: "PUBLISH authority S1. Also re-run on S4 generate-svg.mjs path.",
   },
   {
     id: "svg-s2-compile",
     order: 2,
     name: "Compile geometry → SVG string",
-    status: "partial",
+    status: "implemented",
     produces: "SVG markup",
-    entry: "scripts/generate-svg/pipelineCore.ts (LIVE) | svgCompiler.server.ts (V1/tests)",
-    note: "DUAL COMPILER DEBT: publish uses pipelineCore only. V1 is not publish authority.",
+    entry:
+      "compileSvgForPublish (publish authority entry) → runSvgCompileStages → pipelineCore",
+    note:
+      "PUBLISH AUTHORITY ENTRY: compileSvgForPublish (asset-engine/svg/compileSvgForPublish.ts). " +
+      "Authority tag pipelineCore+normalize. V1 svgCompiler.server is v1-reference-only (not deleted).",
   },
   {
     id: "svg-s3-sanitize-optimize",
     order: 3,
     name: "Sanitize + optimise SVG",
-    status: "partial",
+    status: "implemented",
     produces: "safe SVG string",
-    entry: "pipelineCore sanitiseSvg + empty-plugin SVGO | svgServerSanitizer DOMPurify path",
-    note: "Two sanitizer stacks; production path is pipelineCore regex+SVGO.",
+    entry: "pipelineCore sanitiseSvg + SVGO via compileSvgForPublish",
+    note: "V1 still has svgServerSanitizer DOMPurify path for reference compile only.",
   },
   {
     id: "svg-s4-write-public",
@@ -72,7 +75,7 @@ export const SVG_STAGES: readonly AssetStage[] = [
     name: "Write public/svg-catalog/{slug}.svg",
     status: "implemented",
     produces: "disk SVG path",
-    entry: "scripts/generate-svg.mjs runPipeline",
+    entry: "runSvgPipeline → scripts/generate-svg.mjs runPipeline (S1 normalize on path)",
   },
   {
     id: "svg-s5-artifacts-png",
@@ -89,8 +92,8 @@ export const SVG_STAGES: readonly AssetStage[] = [
     name: "Persist descriptor after compile ok",
     status: "implemented",
     produces: "versioned block-descriptors JSON",
-    entry: "publishDescriptorWithPipeline → persistBlockDescriptor",
-    note: "Disk only; Supabase is 2C planned.",
+    entry: "publishDescriptorWithPipeline → compileSvgForPublish → runSvgPipeline → persistBlockDescriptor",
+    note: "Disk only; Supabase is 2C planned. Fail-closed: S1–S3 then S4 then persist.",
   },
   {
     id: "svg-s7-catalog-consume",
@@ -170,18 +173,23 @@ export const MESH_GLB_STAGES: readonly AssetStage[] = [
     order: 7,
     name: "P1 SVG outline → extrude → GLB",
     status: "partial",
-    produces: "blob GLB in admin preview",
-    entry: "GlbExtruderPreview + optional uploadAsset",
-    note: "Admin island only; not open3d place→viewer load path.",
+    produces: "plan + blob GLB in admin preview",
+    entry: "extrudeSvgPlan (pure) + GlbExtruderPreview + optional uploadAsset",
+    note: "Pure plan under catalog-assets/generated/; binary still admin island; not open3d place→viewer load path.",
   },
   {
     id: "mesh-g8-viewer-load-glb",
     order: 8,
     name: "Open3d 3D load generated GLB URL",
-    status: "planned",
+    status: "partial",
     produces: "viewer mesh from system GLB",
-    entry: "(none — viewer is procedural only)",
-    note: "ThreeViewerInner never loads meshUrl/glbUrl.",
+    entry:
+      "shouldLoadGlb + loadGeneratedGlbObject + ThreeViewerInner async replace",
+    note:
+      "G8 agent landed (partial): ThreeViewerInner loads policy-allowed generatedGlbUrl via " +
+      "loadGeneratedGlbObject after procedural default. Place leaves URL unset; stampFurnitureGeneratedGlb " +
+      "is opt-in after G5. Not full product: no shared cache, no scale-to-fit, no browser smoke, " +
+      "no auto-upload on publish. Load failure keeps procedural mesh.",
   },
 ] as const;
 

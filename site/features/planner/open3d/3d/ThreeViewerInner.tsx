@@ -14,9 +14,18 @@ import type {
 } from "three";
 
 import type * as THREE from "three";
+import { shouldLoadGlb } from "@/features/planner/lib/glbAssetPolicy";
 import { readThreeThemeColor } from "../shared/readThemeColor";
 import { buildOpen3dSceneNodes } from "./buildOpen3dSceneNodes";
-import { addNodesToGroup } from "./createSceneObjectFromNode";
+import {
+  addNodesToGroup,
+  disposeAndRemoveObject,
+} from "./createSceneObjectFromNode";
+import {
+  createDefaultGltfUrlLoader,
+  loadGeneratedGlbObject,
+  type GltfUrlLoader,
+} from "./loadGeneratedGlbObject";
 
 type ThreeModule = typeof THREE;
 
@@ -191,9 +200,11 @@ export function ThreeViewerInner({
     }
   }, [three, backgroundColor, enableShadows]);
 
-  // Rebuild document meshes when project changes
+  // Rebuild document meshes when project changes.
+  // Procedural meshes first; then async policy-allowed generated GLB replace.
   useEffect(() => {
     if (!three || !contentGroupRef.current || !projectData) return;
+    let cancelled = false;
     const THREE = three;
     const group = contentGroupRef.current;
     clearContentGroup(group, THREE);
@@ -203,7 +214,53 @@ export function ThreeViewerInner({
       activeFloorId:
         projectData.activeFloorId ?? projectData.floors[0]?.id ?? "",
     });
+    // Immediate procedural path (modular | box) — default when no URL or load fails.
     addNodesToGroup(THREE, group, nodes, enableShadows);
+
+    const nodesNeedingGlb = nodes.filter(
+      (node) =>
+        node.kind === "furniture" && shouldLoadGlb(node.generatedGlbUrl),
+    );
+
+    if (nodesNeedingGlb.length === 0) {
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    void (async () => {
+      let loadGltf: GltfUrlLoader;
+      try {
+        loadGltf = await createDefaultGltfUrlLoader();
+      } catch {
+        // Keep procedural meshes if loader cannot be constructed.
+        return;
+      }
+      if (cancelled) return;
+
+      for (const node of nodesNeedingGlb) {
+        if (cancelled) return;
+        const glbObject = await loadGeneratedGlbObject(
+          THREE,
+          node,
+          enableShadows,
+          loadGltf,
+        );
+        if (cancelled || glbObject == null) continue;
+
+        const existing = group.children.find(
+          (child) => child.userData.entityId === node.id,
+        );
+        if (existing) {
+          disposeAndRemoveObject(THREE, existing);
+        }
+        group.add(glbObject);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [three, projectData, enableShadows]);
 
   if (error) {

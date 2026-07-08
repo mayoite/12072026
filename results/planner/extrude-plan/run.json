@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "scenario": "extrude-plan",
+  "cwd": "D:\\OandO07072026\\site",
+  "timestamp": "2026-07-09T02:51:36.0000000Z",
+  "command": "npx vitest run tests/unit/features/planner/asset-engine/extrudeSvgPlan.test.ts --reporter=verbose",
+  "testFiles": [
+    "tests/unit/features/planner/asset-engine/extrudeSvgPlan.test.ts"
+  ],
+  "implementation": {
+    "module": "site/features/planner/asset-engine/mesh/extrudeSvgPlan.ts",
+    "exports": [
+      "buildExtrudeSvgPlan",
+      "buildExtrudeSvgPlanFromPath",
+      "buildExtrudeSvgPlanFromRect",
+      "exportExtrudeSvgToGeneratedAssetPath",
+      "extrudeSvgGeneratedRelativePath",
+      "extrudeSvgGeneratedSlug",
+      "buildExtrudeSvgPartPlans",
+      "simpleRectPathD"
+    ],
+    "binaryGlb": false,
+    "binaryExportStatus": "plan-only",
+    "policy": "catalog-assets/generated/ only (assertNoDesignerStaticGlb on plan path)",
+    "mirrors": "GlbExtruderPreview inputs (svgPath/rect, thicknessMm default 30, color default #ffffff)",
+    "note": "P1 skeleton: pure plan + part metadata only. Binary remains GlbExtruderPreview admin island."
+  },
+  "results": {
+    "testFiles": 1,
+    "tests": 8,
+    "passed": 8,
+    "failed": 0
+  },
+  "exitCode": 0,
+  "status": "pass",
+  "summary": "8 tests passed: extrude SVG plan-only under catalog-assets/generated/ with policy assert + path/rect profiles",
+  "artifacts": {
+    "rawLog": "results/planner/extrude-plan/vitest-raw.log"
+  }
+}

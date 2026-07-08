@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
 import { runSvgCompileStages } from "@/features/planner/asset-engine/svg/runSvgCompileStages";
 
 // tests/unit/features/planner/asset-engine → site/
@@ -22,6 +23,25 @@ describe("runSvgCompileStages (SVG S1–S3)", () => {
     expect(result.svg).toContain("<svg");
     expect(result.svg).toContain("path");
     expect(result.svg.length).toBeGreaterThan(80);
+  });
+
+  it("admin side-table via runSvgCompileStages still works (authority gate)", async () => {
+    const adminPath = path.join(siteRoot, "block-descriptors", "side-table-001.json");
+    const raw = JSON.parse(readFileSync(adminPath, "utf8")) as unknown;
+
+    const viaStages = await runSvgCompileStages(raw);
+    const viaPublish = await compileSvgForPublish(raw);
+
+    expect(viaStages.ok).toBe(true);
+    expect(viaPublish.ok).toBe(true);
+    if (!viaStages.ok || !viaPublish.ok) return;
+
+    expect(viaPublish.stages).toEqual(viaStages.stages);
+    expect(viaPublish.svg).toBe(viaStages.svg);
+    expect(viaPublish.normalized.slug).toBe("side-table-001");
+    expect(viaPublish.normalized.blocks.length).toBe(5);
+    expect(viaPublish.normalized.variant).toBe("difference");
+    expect(viaPublish.svg.length).toBeGreaterThan(80);
   });
 
   it("compiles legacy CLI fixture without regression", async () => {

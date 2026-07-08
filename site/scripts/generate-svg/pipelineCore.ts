@@ -1,8 +1,10 @@
 /**
- * site/scripts/generate-svg/pipelineCore.ts (thin core for legacy Block path)
+ * site/scripts/generate-svg/pipelineCore.ts
  *
- * Delegates sanitize to canonical in 1B (svgServerSanitizer + svgCompiler.server.ts authority).
- * generate-svg.mjs is thin wrapper.
+ * LIVE publish compile core (S2/S3): boolean BlockDescriptor IR → SVG string
+ * (sanitize + optimise). Paired with asset-engine normalizeDescriptorForPipeline (S1).
+ * generate-svg.mjs is the thin CLI/write wrapper; compileSvgForPublish is the
+ * no-I/O publish entry. V1 svgCompiler.server is reference-only — not this path.
  * GS: BP-03, anti-copy.
  */
 

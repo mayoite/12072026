@@ -26,12 +26,44 @@ export {
   type SvgCompileStagesResult,
 } from "./svg/runSvgCompileStages";
 
+export { compileSvgForPublish } from "./svg/compileSvgForPublish";
+
+export {
+  COMPILE_AUTHORITY,
+  PUBLISH_COMPILE_AUTHORITY,
+  V1_COMPILE_AUTHORITY,
+  PUBLISH_SVG_COMPILE_STAGES,
+  type PublishCompileAuthority,
+  type V1CompileAuthority,
+  type PublishSvgCompileStageId,
+} from "./svg/compileAuthority";
+
 export {
   exportModularCabinetV0GlbBinary,
   type ModularGlbBinaryResult,
 } from "./mesh/exportModularGlbBinary";
 
 export {
+  stampFurnitureGeneratedGlb,
+  attachGeneratedGlbToFurniture,
+} from "./mesh/stampFurnitureGeneratedGlb";
+
+export {
   runModularMeshStages,
   type MeshStagesResult,
 } from "./mesh/runMeshStages";
+
+/** P1 pure SVG extrude plan (path/rect → catalog-assets/generated/ metadata). */
+export {
+  buildExtrudeSvgPlan,
+  buildExtrudeSvgPlanFromPath,
+  buildExtrudeSvgPlanFromRect,
+  exportExtrudeSvgToGeneratedAssetPath,
+  extrudeSvgGeneratedRelativePath,
+  extrudeSvgGeneratedSlug,
+  simpleRectPathD,
+  type ExtrudeSvgGlbPlan,
+  type ExtrudeSvgPlanInput,
+  type ExtrudeSvgPartPlan,
+  type ExtrudeSvgProfile,
+} from "./mesh/extrudeSvgPlan";

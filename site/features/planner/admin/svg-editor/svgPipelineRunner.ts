@@ -1,9 +1,10 @@
 /**
  * Phase 04 — svgPipelineRunner (unified in-process wrapper; 1B)
  *
- * Calls canonical svgCompiler.server.ts authority via thin generate-svg.mjs runPipeline (dynamic import).
- * No child_process; spawnError reason is legacy only in type. GS: BP-03, anti-copy.
- * Contract preserved for callers. All production code no-explicit-any.
+ * Publish authority: pipelineCore + normalize (asset-engine), via thin
+ * generate-svg.mjs `runPipeline` (dynamic import). NOT svgCompiler.server (V1
+ * is reference-only). No child_process; spawnError reason is legacy only in type.
+ * GS: BP-03, anti-copy. Contract preserved for callers. No explicit any.
  */
 
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
@@ -83,9 +84,11 @@ function defaultSvgPath(slug: string, projectRoot: string): string {
 /**
  * Run the Phase 03 SVG pipeline against the just-saved descriptor (in-process dynamic import).
  *
- * Delegates to canonical runPipeline in thin generate-svg.mjs wrapper (authority: svgCompiler.server.ts).
- * Fixture write kept for audit parity (min change).
- * GS: BP-03, anti-copy.
+ * Delegates to generate-svg.mjs `runPipeline`, which normalizes (S1) then
+ * pipelineCore (S2/S3) and writes public SVG (S4). Publish compile authority
+ * is pipelineCore+normalize — same path as asset-engine `compileSvgForPublish`
+ * for S1–S3 (CLI also writes disk). V1 svgCompiler.server is not on this wire.
+ * Fixture write kept for audit parity (min change). GS: BP-03, anti-copy.
  */
 export function runSvgPipeline(
   descriptor: BlockDescriptor,
@@ -146,7 +149,7 @@ export function runSvgPipeline(
 
   const startedAt = Date.now();
 
-  // In-process (unified): dynamic import of thin script module calling canonical compiler.
+  // In-process: dynamic import of thin generate-svg.mjs → normalize + pipelineCore.
   const importModule = new Function(
     "specifier",
     'return import(specifier);',

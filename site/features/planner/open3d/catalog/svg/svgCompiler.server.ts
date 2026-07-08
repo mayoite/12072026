@@ -6,7 +6,12 @@ import { sha256Hex } from "./sha256";
 import { sanitizeAndOptimizeSvg } from "./svgServerSanitizer";
 import type { ZodIssue } from "zod";
 
-// GS: BP-03 (pipeline), REC-04 (catalogue), anti-copy (tokens from site/app/css only; no hex). svgCompiler.server.ts is single authority (unifies with generate-svg.mjs thin wrapper). Reference fixtures validation only.
+// GS: BP-03 (pipeline), REC-04 (catalogue), anti-copy (tokens from site/app/css only; no hex).
+// NOT publish authority. Live publish = pipelineCore + normalize (asset-engine).
+// This module is V1 SvgBlockDefinition reference/tests only.
+// Marker string matches asset-engine/svg/compileAuthority.ts V1_COMPILE_AUTHORITY.
+export const compileAuthority = "v1-reference-only" as const;
+
 export const SVG_COMPILER_VERSION = "svg-block-v1";
 
 function escape(value: string): string {

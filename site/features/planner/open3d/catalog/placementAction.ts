@@ -261,6 +261,14 @@ export function verifyPlacementIdentity(
  * consumers observe the same project stream as other mutations. The inserted
  * furniture is then enriched with immutable source identity from the placement
  * snapshot for BOQ/quote/export/AI traceability.
+ *
+ * Modular cabinet-v0: stamps `geometryMode` + `modularOptions` only.
+ * Leaves `generatedGlbUrl` unset so the product default stays procedural mesh.
+ * After `exportModularCabinetV0GlbBinary` (and optional upload under
+ * catalog-assets/generated/), stamp the path for future G8 with:
+ *   stampFurnitureGeneratedGlb(furniture, result.relativePath)
+ *   // alias: attachGeneratedGlbToFurniture
+ * from `features/planner/asset-engine` (mesh/stampFurnitureGeneratedGlb).
  */
 export function placeCatalogItemInProject(
   project: Open3dProject,
@@ -298,6 +306,8 @@ export function placeCatalogItemInProject(
               sourceSku: snapshot.variantIdentity?.sku ?? snapshot.productIdentity.sku,
               ...(geometryMode !== undefined ? { geometryMode } : {}),
               ...(modularOptions !== undefined ? { modularOptions } : {}),
+              // generatedGlbUrl intentionally omitted — procedural default;
+              // stamp after G5 export via stampFurnitureGeneratedGlb.
             }
           : furniture
       )),

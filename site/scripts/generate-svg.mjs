@@ -1,6 +1,13 @@
 /**
- * Thin SVG publish entry for admin pipeline runner + CLI.
- * Authority: generate-svg/pipelineCore.ts (boolean BlockDescriptor path).
+ * Thin SVG publish entry for admin pipeline runner + CLI (S1–S4 + disk).
+ *
+ * Publish authority: pipelineCore+normalize
+ *   S1 normalizeDescriptorForPipeline (asset-engine)
+ *   S2/S3 pipelineCore.ts
+ *   S4 write public/svg-catalog
+ *
+ * No-I/O publish compile API: asset-engine compileSvgForPublish (same S1–S3).
+ * V1 svgCompiler.server is v1-reference-only — not used here.
  *
  * Usage:
  *   pnpm --filter oando-site run scripts:generate-svg

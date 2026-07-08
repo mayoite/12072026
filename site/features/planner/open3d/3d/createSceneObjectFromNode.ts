@@ -1,6 +1,8 @@
 /**
  * Pure scene-object factory for Open3dSceneNode → THREE Object3D.
  * Modular furniture uses generateCabinetV0Mesh (no designer GLB, no THREE on document).
+ * System-generated GLB is loaded asynchronously by the viewer (see loadGeneratedGlbObject);
+ * this factory always builds the procedural fallback immediately.
  */
 
 import type * as THREE from "three";
@@ -27,6 +29,7 @@ function applyShadowFlags(
 /**
  * Build a wall box or furniture object (box / modular-cabinet-v0 group).
  * Pose matches plan mm → world metres (Y-up, plan Y → world Z).
+ * Does not load GLB (sync path); use loadGeneratedGlbObject for async replace.
  */
 export function createSceneObjectFromNode(
   THREE: ThreeModule,
@@ -51,6 +54,7 @@ export function createSceneObjectFromNode(
       entityId: node.id,
       kind: node.kind,
       geometryMode: "modular-cabinet-v0",
+      meshSource: "procedural",
     };
     // Group origin is floor (carcass already at h/2); box path uses centered mesh at h/2.
     meshGroup.position.set(
@@ -77,6 +81,7 @@ export function createSceneObjectFromNode(
   mesh.name = node.id;
   mesh.userData.entityId = node.id;
   mesh.userData.kind = node.kind;
+  mesh.userData.meshSource = "procedural";
   mesh.position.set(mmToMeters(node.xMm), h / 2, mmToMeters(node.yMm));
   mesh.rotation.y = -node.rotation;
   mesh.castShadow = castShadow;
@@ -94,4 +99,24 @@ export function addNodesToGroup(
   for (const node of nodes) {
     group.add(createSceneObjectFromNode(THREE, node, castShadow));
   }
+}
+
+/**
+ * Dispose geometries/materials under an object and remove from parent if present.
+ */
+export function disposeAndRemoveObject(
+  THREE: ThreeModule,
+  object: THREE.Object3D,
+): void {
+  if (object.parent) {
+    object.parent.remove(object);
+  }
+  object.traverse((child) => {
+    if (!(child instanceof THREE.Mesh)) return;
+    child.geometry.dispose();
+    const materials = Array.isArray(child.material)
+      ? child.material
+      : [child.material];
+    materials.forEach((material) => material.dispose());
+  });
 }

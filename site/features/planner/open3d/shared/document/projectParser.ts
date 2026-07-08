@@ -2,6 +2,7 @@ import type {
   Open3dDisplayUnit, Open3dFloor, Open3dPlannerSceneEnvelope, Open3dProject,
 } from "../../model/types";
 import { assertOpen3dProject } from "../../model/invariants";
+import { assertNoDesignerStaticGlb } from "@/features/planner/lib/glbAssetPolicy";
 
 const DISPLAY_UNITS: readonly string[] = ["mm", "cm", "m", "in", "ft-in"];
 
@@ -122,6 +123,19 @@ function floor(value: unknown, path: string): Open3dFloor {
       ...(furniture.modularOptions === undefined
         ? {}
         : { modularOptions: parseModularOptions(furniture.modularOptions, `${itemPath}.modularOptions`) }),
+      ...(furniture.generatedGlbUrl === undefined
+        ? {}
+        : (() => {
+            const generatedGlbUrl = stringValue(
+              furniture.generatedGlbUrl,
+              `${itemPath}.generatedGlbUrl`,
+            );
+            assertNoDesignerStaticGlb(
+              generatedGlbUrl,
+              `${itemPath}.generatedGlbUrl`,
+            );
+            return { generatedGlbUrl };
+          })()),
     };
   };
   const emptyOrRecords = <T>(key: string, parser: (raw: unknown, itemPath: string) => T): T[] =>

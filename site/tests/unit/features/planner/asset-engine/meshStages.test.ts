@@ -21,9 +21,10 @@ describe("asset-engine stage registry", () => {
     }
   });
 
-  it("does not claim viewer GLB load is implemented", () => {
+  it("marks viewer GLB load as partial (async skeleton)", () => {
     const load = listMeshGlbStages().find((s) => s.id === "mesh-g8-viewer-load-glb");
-    expect(load?.status).toBe("planned");
+    expect(load?.status).toBe("partial");
+    expect(load?.entry).toMatch(/shouldLoadGlb|loadGeneratedGlbObject/i);
   });
 });
 

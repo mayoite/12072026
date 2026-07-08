@@ -78,7 +78,9 @@ function exportGroupToGlbArrayBuffer(group: THREE.Object3D): Promise<ArrayBuffer
 
 /**
  * Ordered mesh export: options → plan → runtime mesh → binary GLB → validate.
- * Does not write disk or upload; caller owns G7 storage.
+ * Does not write disk or upload; caller owns storage upload.
+ * To attach the policy path on furniture for G8, call
+ * `stampFurnitureGeneratedGlb(item, result.relativePath)` after a successful export.
  */
 export async function exportModularCabinetV0GlbBinary(
   partialOptions?: Partial<ModularCabinetV0Options>,

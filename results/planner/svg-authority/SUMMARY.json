@@ -1,0 +1,41 @@
+{
+  "slice": "svg-authority-unify-publish",
+  "date": "2026-07-09",
+  "publishAuthority": "pipelineCore+normalize",
+  "publishEntry": "site/features/planner/asset-engine/svg/compileSvgForPublish.ts",
+  "stages": ["svg-s1-normalize", "svg-s2-compile", "svg-s3-sanitize-optimize"],
+  "v1": {
+    "compileAuthority": "v1-reference-only",
+    "entry": "site/features/planner/open3d/catalog/svg/svgCompiler.server.ts",
+    "deleted": false
+  },
+  "tests": {
+    "vitest": {
+      "files": 8,
+      "passed": 41,
+      "failed": 0,
+      "skipped": 0,
+      "log": "results/planner/svg-authority/vitest-authority.log"
+    },
+    "nodeSanitize": {
+      "passed": 8,
+      "failed": 0,
+      "log": "results/planner/svg-authority/sanitize-node.log"
+    }
+  },
+  "filesTouched": [
+    "site/features/planner/asset-engine/svg/compileAuthority.ts",
+    "site/features/planner/asset-engine/svg/compileSvgForPublish.ts",
+    "site/features/planner/asset-engine/svg/runSvgCompileStages.ts",
+    "site/features/planner/asset-engine/index.ts",
+    "site/features/planner/asset-engine/stages.ts",
+    "site/features/planner/asset-engine/README.md",
+    "site/features/planner/admin/svg-editor/svgPipelineRunner.ts",
+    "site/features/planner/admin/svg-editor/publishDescriptorWithPipeline.ts",
+    "site/features/planner/open3d/catalog/svg/svgCompiler.server.ts",
+    "site/scripts/generate-svg/pipelineCore.ts",
+    "site/scripts/generate-svg.mjs",
+    "site/tests/unit/features/planner/asset-engine/compileAuthority.test.ts",
+    "task.md"
+  ]
+}

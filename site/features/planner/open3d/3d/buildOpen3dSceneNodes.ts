@@ -3,6 +3,10 @@
  * Document remains source of truth; nodes carry entity ids for continuity.
  */
 
+import {
+  resolveFurnitureGlbUrl,
+  shouldLoadGlb,
+} from "@/features/planner/lib/glbAssetPolicy";
 import type {
   Open3dFloor,
   Open3dFurnitureGeometryMode,
@@ -32,6 +36,11 @@ export interface Open3dSceneNode {
   /** Pass-through for modular multi-part mesh (no THREE on document). */
   readonly geometryMode?: Open3dFurnitureGeometryMode;
   readonly modularOptions?: Open3dModularCabinetV0Options;
+  /**
+   * Resolved system-generated GLB candidate (generatedGlbUrl | glbUrl | meshUrl).
+   * Viewer loads only when shouldLoadGlb(url) is true.
+   */
+  readonly generatedGlbUrl?: string;
 }
 
 const DEFAULT_FURNITURE_W = 800;
@@ -91,6 +100,10 @@ export function buildOpen3dSceneNodes(
       (item.depth ?? DEFAULT_FURNITURE_D) * (item.scale?.y ?? 1);
     const heightMm =
       (item.height ?? DEFAULT_FURNITURE_H) * (item.scale?.z ?? 1);
+    const resolvedGlb = resolveFurnitureGlbUrl(item);
+    // Only attach URLs that policy allows; designer static never reaches the loader.
+    const loadableGlb =
+      resolvedGlb !== null && shouldLoadGlb(resolvedGlb) ? resolvedGlb : null;
     nodes.push({
       id: item.id,
       kind: "furniture",
@@ -108,6 +121,7 @@ export function buildOpen3dSceneNodes(
       ...(item.modularOptions !== undefined
         ? { modularOptions: { ...item.modularOptions } }
         : {}),
+      ...(loadableGlb !== null ? { generatedGlbUrl: loadableGlb } : {}),
     });
   }
 

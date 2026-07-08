@@ -81,6 +81,17 @@ export interface Open3dFurnitureItem {
   geometryMode?: Open3dFurnitureGeometryMode;
   /** Required when geometryMode is modular-cabinet-v0. */
   modularOptions?: Open3dModularCabinetV0Options;
+  /**
+   * System-generated GLB URL (catalog-assets/generated/* or blob:).
+   * Place leaves unset (procedural default). Stamp after G5 via
+   * stampFurnitureGeneratedGlb / attachGeneratedGlbToFurniture.
+   * Viewer (G8 partial): async GLTF load when shouldLoadGlb allows; else procedural.
+   */
+  generatedGlbUrl?: string;
+  /** Optional catalog/legacy mesh URL — only loaded if policy allows. */
+  meshUrl?: string;
+  /** Optional GLB URL alias — only loaded if policy allows. */
+  glbUrl?: string;
 }
 
 export interface Open3dStair {

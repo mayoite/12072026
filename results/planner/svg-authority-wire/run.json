@@ -1,0 +1,34 @@
+{
+  "slice": "svg-authority-wire",
+  "date": "2026-07-09",
+  "task": "Wire publishDescriptorWithPipeline → compileSvgForPublish / runSvgCompileStages (S1–S3) then runSvgPipeline (S4)",
+  "passed": true,
+  "exitCode": 0,
+  "command": "pnpm --dir site exec vitest run tests/unit/admin/svg-editor/publishDescriptorWithPipeline.test.ts tests/unit/features/planner/asset-engine/runSvgCompileStages.test.ts --config vitest.config.ts --reporter=verbose",
+  "cwd": "D:\\OandO07072026",
+  "tests": 9,
+  "failed": 0,
+  "skipped": 0,
+  "rawLog": "results/planner/svg-authority-wire/vitest-raw.log",
+  "implemented": [
+    "compileSvgForPublish.ts → runSvgCompileStages (S1–S3, no I/O)",
+    "publishDescriptorWithPipeline: parse → compileSvgForPublish → runSvgPipeline (S4) → persist",
+    "S1 normalize already on generate-svg.mjs S4 path",
+    "stages.ts entries/notes updated for publish gate",
+    "unit: admin side-table via runSvgCompileStages + compileSvgForPublish parity"
+  ],
+  "honest": {
+    "s4": "still runSvgPipeline / generate-svg.mjs for disk write",
+    "dualCompiler": "V1 svgCompiler.server still not publish authority",
+    "s2s3Status": "remain partial (dual stacks); publish wire uses pipelineCore path"
+  },
+  "files": [
+    "site/features/planner/asset-engine/svg/compileSvgForPublish.ts",
+    "site/features/planner/admin/svg-editor/publishDescriptorWithPipeline.ts",
+    "site/features/planner/asset-engine/stages.ts",
+    "site/features/planner/asset-engine/index.ts",
+    "site/features/planner/asset-engine/README.md",
+    "site/tests/unit/admin/svg-editor/publishDescriptorWithPipeline.test.ts",
+    "site/tests/unit/features/planner/asset-engine/runSvgCompileStages.test.ts"
+  ]
+}

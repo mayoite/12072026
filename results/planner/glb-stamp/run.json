@@ -1,0 +1,31 @@
+﻿{
+  "schemaVersion": 1,
+  "scenario": "glb-stamp",
+  "cwd": "D:\\OandO07072026\\site",
+  "timestamp": "2026-07-08T21:22:12.936Z",
+  "command": "npx vitest run tests/unit/features/planner/asset-engine/stampFurnitureGeneratedGlb.test.ts tests/unit/features/planner/lib/glbAssetPolicy.test.ts --reporter=verbose",
+  "testFiles": [
+    "tests/unit/features/planner/asset-engine/stampFurnitureGeneratedGlb.test.ts",
+    "tests/unit/features/planner/lib/glbAssetPolicy.test.ts"
+  ],
+  "implementation": {
+    "helper": "site/features/planner/asset-engine/mesh/stampFurnitureGeneratedGlb.ts",
+    "exports": ["stampFurnitureGeneratedGlb", "attachGeneratedGlbToFurniture"],
+    "furnitureField": "generatedGlbUrl",
+    "policy": "isSystemGeneratedGlbUrl + assertNoDesignerStaticGlb",
+    "placeCatalogItemInProject": "leaves generatedGlbUrl unset (procedural default); document stamp after G5 export",
+    "g8": "viewer load still planned; stamp bridges path string only"
+  },
+  "results": {
+    "testFiles": 2,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0
+  },
+  "exitCode": 0,
+  "status": "pass",
+  "summary": "7 tests passed: stampFurnitureGeneratedGlb + isSystemGeneratedGlbUrl allow/reject + place leaves glb unset",
+  "artifacts": {
+    "rawLog": "results/planner/glb-stamp/vitest-raw.log"
+  }
+}

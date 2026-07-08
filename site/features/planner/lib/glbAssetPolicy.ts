@@ -45,3 +45,41 @@ export function assertNoDesignerStaticGlb(
     throw new Error(`${fieldLabel}: ${reason}`);
   }
 }
+
+/** Sources that may carry a GLB URL on furniture / scene nodes. */
+export interface FurnitureGlbUrlSources {
+  readonly generatedGlbUrl?: string | null;
+  readonly glbUrl?: string | null;
+  readonly meshUrl?: string | null;
+}
+
+/**
+ * Prefer generatedGlbUrl, then glbUrl, then meshUrl.
+ * Returns trimmed non-empty string or null (does not apply policy).
+ */
+export function resolveFurnitureGlbUrl(
+  sources: FurnitureGlbUrlSources,
+): string | null {
+  const candidates = [
+    sources.generatedGlbUrl,
+    sources.glbUrl,
+    sources.meshUrl,
+  ];
+  for (const candidate of candidates) {
+    if (candidate == null) continue;
+    const trimmed = candidate.trim();
+    if (trimmed) return trimmed;
+  }
+  return null;
+}
+
+/**
+ * True only when a non-empty URL is policy-allowed for viewer load
+ * (catalog-assets/generated/* or blob:). Rejects designer static URLs.
+ */
+export function shouldLoadGlb(url: string | null | undefined): boolean {
+  if (url == null) return false;
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+  return isSystemGeneratedGlbUrl(trimmed);
+}

@@ -7,19 +7,27 @@
 | # | Stage | Status |
 |---|--------|--------|
 | S0 | Validate Zod BlockDescriptor | partial |
-| S1 | **Normalize** depth→height, variant→boolean | **implemented** |
-| S2 | Compile → SVG string | partial (live = `pipelineCore`; V1 = tests only) |
-| S3 | Sanitize + optimise | partial (dual stacks) |
+| S1 | **Normalize** depth→height, variant→boolean | **implemented** (publish authority) |
+| S2 | Compile → SVG string | **implemented** (publish = `pipelineCore`) |
+| S3 | Sanitize + optimise | **implemented** (publish path in pipelineCore) |
 | S4 | Write `public/svg-catalog/{slug}.svg` | implemented |
 | S5 | PNG thumbs | stub (URL only on publish) |
 | S6 | Persist descriptor (fail-closed after compile) | implemented (disk) |
 | S7 | Catalog consume | partial |
 
-**Entry for ordered compile (no I/O):** `runSvgCompileStages(rawDescriptor)`.
+### Publish authority (single)
 
-**Dual compiler debt (not fixed yet):**  
-Publish → `generate-svg.mjs` → `pipelineCore`.  
-`svgCompiler.server.ts` (V1) is a second compiler used by tests/artifacts — **not** the live publish authority. Unifying them is a later slice, not claimed done.
+**`pipelineCore+normalize`** — see `svg/compileAuthority.ts`.
+
+| Role | Entry |
+|------|--------|
+| **THE publish compile API (no I/O)** | `compileSvgForPublish(raw)` → `runSvgCompileStages` |
+| Normalize (S1) | `normalizeDescriptorForPipeline` |
+| Compile + sanitize (S2/S3) | `scripts/generate-svg/pipelineCore.ts` |
+| CLI / admin write (S1–S4) | `generate-svg.mjs` `runPipeline` (already normalizes) |
+| Admin wire | `publishDescriptorWithPipeline` → `compileSvgForPublish` then `runSvgPipeline` |
+
+**V1 retained (not deleted):** `svgCompiler.server.ts` exports `compileAuthority: "v1-reference-only"`. Used by V1 unit/golden tests only — **not** on the publish wire. Full rewrite of V1 into pipelineCore is out of scope for this slice.
 
 ## Mesh / GLB making (order)
 
@@ -43,6 +51,7 @@ Publish → `generate-svg.mjs` → `pipelineCore`.
 - Open3d 3D **does not load** `glbUrl` / `meshUrl`; it rebuilds procedural mesh.
 - Supabase persist / CDN upload of modular GLB is not wired as automatic publish.
 - Full parametric component library (L/U, hardware) is not this skeleton.
+- V1 `SvgBlockDefinitionV1` is not rewritten into pipelineCore (reference-only).
 
 ## Tests
 

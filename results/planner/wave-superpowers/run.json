@@ -1,0 +1,30 @@
+{
+  "slice": "superpowers wave — no agent cap",
+  "date": "2026-07-09",
+  "agents": [
+    "svg-authority",
+    "svg-authority-wire",
+    "g8-viewer-glb",
+    "glb-stamp",
+    "extrude-plan",
+    "status-planner"
+  ],
+  "vitest": {
+    "tests": 159,
+    "failed": 0,
+    "skipped": 0,
+    "files": 29
+  },
+  "landed": {
+    "svgPublishAuthority": "compileSvgForPublish (pipelineCore+normalize); V1 = v1-reference-only",
+    "publishOrder": "parse → compileSvgForPublish → runSvgPipeline S4 → persist",
+    "g8": "partial — async GLB load for policy-allowed URLs; procedural fallback",
+    "stamp": "stampFurnitureGeneratedGlb for G5 path → document field",
+    "extrudePlan": "pure G7 plan (no browser)"
+  },
+  "notClaimed": [
+    "V1 compiler rewritten into pipelineCore",
+    "auto-upload modular GLB on publish",
+    "browser smoke of G8 with real GLTFLoader"
+  ]
+}
