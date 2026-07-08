@@ -52,7 +52,7 @@ export function GlbExtruderPreview({
       const group = new THREE.Group();
       
       for (const path of svgData.paths) {
-        const shapes = SVGLoader.createShapes(path);
+        const shapes = SVGLoader.createShapes(path as any);
         
         for (const shape of shapes) {
           const geometry = new THREE.ExtrudeGeometry(shape, {

@@ -41,3 +41,7 @@
 3. **Log:** Are blockers logged in `Failures.md`?
 4. **Report:** State exactly what ran, what failed, and the next step.
 
+
+## 8. Master Plan Alignment
+- **Read Master Plans First:** Before proposing an implementation_plan.md, always check for a Plans/ or documentation directory. You must strictly follow the sequential phases outlined in the master blueprints. Do not skip phases or jump to feature work if foundational refactors (e.g., Phase 2A before Phase 2B) are pending.
+- **Strict Task Checklists:** Always create a task.md checklist starting from 00 (Setup/Verification) that maps exactly to the master plan's phases.

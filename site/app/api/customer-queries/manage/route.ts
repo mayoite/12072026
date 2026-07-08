@@ -6,8 +6,8 @@ import { createServerClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 import { isAppAdmin } from "@/lib/auth/roles";
-import { success, error, rateLimitedError } from "@/lib/api/apiResponse";
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
+import { success, error, rateLimitedError } from "@/features/shared/api/apiResponse";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 
 type QueryStatus = "new" | "in_progress" | "closed" | "spam";
 type FollowUpChannel = "email" | "whatsapp" | "phone" | "none";

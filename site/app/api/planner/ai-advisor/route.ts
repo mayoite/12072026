@@ -22,10 +22,10 @@ import type { NextResponse } from "next/server";
 import { type NextRequest } from "next/server";
 import { AI_ADVISOR_PLANNER_ID } from "@/features/planner/ai/aiAdvisorConfig";
 import { CHAT_ADVISOR_SYSTEM_PROMPT } from "@/features/planner/ai/prompts";
-import { withAuth } from "@/lib/api/withAuth";
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
-import { success, error, validationError } from "@/lib/api/apiResponse";
-import { PlannerAdvisorRequestSchema } from "@/lib/api/schemas";
+import { withAuth } from "@/features/shared/api/withAuth";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
+import { success, error, validationError } from "@/features/shared/api/apiResponse";
+import { PlannerAdvisorRequestSchema } from "@/features/shared/api/schemas";
 
 type NormalizedContext = {
   planner?: "oando" | "buddy" | "unified";

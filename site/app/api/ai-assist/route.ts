@@ -17,10 +17,10 @@
 
 import type { NextRequest } from "next/server";
 import type { NextResponse } from "next/server";
-import { withAuth } from "@/lib/api/withAuth";
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
-import { success, error, validationError } from "@/lib/api/apiResponse";
-import { AiAssistRequestSchema } from "@/lib/api/schemas";
+import { withAuth } from "@/features/shared/api/withAuth";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
+import { success, error, validationError } from "@/features/shared/api/apiResponse";
+import { AiAssistRequestSchema } from "@/features/shared/api/schemas";
 import {
   requestProviderText,
   resolveProviderChain,

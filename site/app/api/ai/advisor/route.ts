@@ -17,9 +17,9 @@
 
 import type { NextRequest } from "next/server";
 import type { NextResponse } from "next/server";
-import { withAuth } from "@/lib/api/withAuth";
-import { success, validationError } from "@/lib/api/apiResponse";
-import { LegacyAdvisorRequestSchema } from "@/lib/api/schemas";
+import { withAuth } from "@/features/shared/api/withAuth";
+import { success, validationError } from "@/features/shared/api/apiResponse";
+import { LegacyAdvisorRequestSchema } from "@/features/shared/api/schemas";
 
 type AdvisorSuggestion = {
   type: "layout";

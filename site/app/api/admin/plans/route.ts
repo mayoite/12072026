@@ -16,7 +16,7 @@ import {
 import {
   applyPlannerRouteTelemetry,
   jsonWithPlannerRouteTelemetry,
-} from "@/lib/api/routeObservability";
+} from "@/features/shared/api/routeObservability";
 
 function parseInteger(value: string | null, fallback: number) {
   const parsed = Number.parseInt(value || "", 10);

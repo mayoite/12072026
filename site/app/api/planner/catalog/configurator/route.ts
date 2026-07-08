@@ -11,9 +11,9 @@ import { createServerClient } from "@/lib/supabase/server";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 import { isMissingTableError } from "@/platform/supabase/adminServer";
 import { productToCatalogItem } from "@/features/planner/catalog/configuratorProductCatalogBridge";
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
-import { success, error } from "@/lib/api/apiResponse";
-import { applyPlannerRouteTelemetry } from "@/lib/api/routeObservability";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
+import { success, error } from "@/features/shared/api/apiResponse";
+import { applyPlannerRouteTelemetry } from "@/features/shared/api/routeObservability";
 import { rowToProduct, type ConfiguratorProductRow } from "@/lib/catalog/configuratorCatalog";
 
 export async function GET(req: NextRequest) {

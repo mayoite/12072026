@@ -6,11 +6,11 @@
  */
 
 import type { NextRequest } from "next/server";
-import { withAuth } from "@/lib/api/withAuth";
+import { withAuth } from "@/features/shared/api/withAuth";
 import {
   createConfiguratorCatalog,
   listConfiguratorCatalog,
-} from "@/lib/api/catalogAdminHandlers";
+} from "@/features/planner/admin/api/catalogAdminHandlers";
 
 /** @deprecated List configurator catalog items. Prefer `/api/admin/catalogs/configurator`. */
 export const GET = withAuth(

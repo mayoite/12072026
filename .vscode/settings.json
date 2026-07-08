@@ -8,7 +8,7 @@
     "chat.autopilot.advanced.enabled": true,
     "chat.tools.urls.autoApprove": {
         "**/*": true
-    }  ,
+    },
     "chat.tools.edits.autoApprove": {
         "**/*": true
     },
@@ -16,7 +16,8 @@
         "/.*/": true
     },
     "chat.tools.eligibleForAutoApproval": {
-        "runInTerminal": true,"terminalSelection": true
+        "runInTerminal": true,
+        "terminalSelection": true
     },
     "security.workspace.trust.enabled": "true",
     "terminal.integrated.defaultProfile.windows": "PowerShell",
@@ -25,7 +26,6 @@
     "debug.onTaskErrors": "debugAnyway",
     "[powershell]": {
         "editor.defaultFormatter": "ms-vscode.js-debug",
-        "editor.defaultFoldingRangeProvider": "kiro.kiroAgent"
     },
     "github.copilot.completions.chat.enabled": true,
     "typescript.tsdk": "site/node_modules/typescript/lib",
@@ -44,11 +44,8 @@
         "mailto",
         "vscode",
         "vscode-insiders",
-        "*"
     ],
     "terminal.integrated.allowMnemonics": true,
     "terminal.integrated.shellIntegration.environmentReporting": true,
-    "terminal.integrated.env.windows": {
-        "GROK_HOME": "D:\\.grok"
-    }
+    "terminal.integrated.env.windows": {}
 }

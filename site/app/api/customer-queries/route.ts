@@ -2,8 +2,8 @@ import type { NextRequest} from "next/server";
 import { createSupabaseAuthAdminClient } from '@/platform/supabase/auth-admin';
 import { getClientIp } from "@/platform/supabase/adminServer";
 import { rateLimit } from "@/lib/rateLimit";
-import { success, error, rateLimitedError } from "@/lib/api/apiResponse";
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
+import { success, error, rateLimitedError } from "@/features/shared/api/apiResponse";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 
 type PreferredContact = "email" | "whatsapp" | "phone" | "any";
 

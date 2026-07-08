@@ -18,7 +18,7 @@ import {
   SketchToPlanRouteErrorSchema,
   SketchToPlanRouteResponseSchema,
   type SketchRecoveryReason,
-} from "@/lib/api/schemas";
+} from "@/features/shared/api/schemas";
 import type { PlannerToolBinding } from "./plannerKeyboardShortcuts";
 
 const subscribeToPlannerToolVisibility = () => () => {};

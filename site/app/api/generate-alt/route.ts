@@ -1,7 +1,7 @@
 import type { NextRequest} from "next/server";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import { withAuth } from "@/lib/api/withAuth";
+import { withAuth } from "@/features/shared/api/withAuth";
 import { env } from "@/lib/env.server";
 
 type CategoryConfig = { label: string; avoid: string[] };

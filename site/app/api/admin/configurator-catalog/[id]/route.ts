@@ -6,11 +6,11 @@
  */
 
 import type { NextRequest } from "next/server";
-import { withAuth } from "@/lib/api/withAuth";
+import { withAuth } from "@/features/shared/api/withAuth";
 import {
   deleteConfiguratorCatalog,
   patchConfiguratorCatalog,
-} from "@/lib/api/catalogAdminHandlers";
+} from "@/features/planner/admin/api/catalogAdminHandlers";
 
 type RouteContext = {
   params: Promise<{ id: string }>;

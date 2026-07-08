@@ -1,6 +1,6 @@
 "use client";
 
-import { Dialog } from "@ark-ui/react/dialog";
+import { Modal, ModalOverlay, Dialog, Heading, Button as RACButton } from "react-aria-components";
 import { useMemo, useState } from "react";
 import {
   BadgeCheck,
@@ -284,14 +284,12 @@ export function PlannerSessionDialog({
   }
 
   return (
-    <Dialog.Root
-      open={open}
-      onOpenChange={(details) => onOpenChange(details.open)}
-    >
-      <Dialog.Backdrop className="pwx-session-overlay pwx-session-backdrop" />
-      <Dialog.Positioner>
-        <Dialog.Content className="pwx-session-dialog">
-          <div className="pwx-session-header">
+    <ModalOverlay isOpen={open} onOpenChange={onOpenChange} className="pwx-session-overlay pwx-session-backdrop">
+      <Modal className="pwx-session-dialog">
+        <Dialog role="dialog" className="outline-none">
+          {({ close }) => (
+            <>
+              <div className="pwx-session-header">
             <div className="pwx-session-header__content">
               <div className="">
                 <div className="flex-wrap gap-2">
@@ -315,16 +313,14 @@ export function PlannerSessionDialog({
                     </span>
                   ) : null}
                 </div>
-                <Dialog.Title className="mt-3 typ-h3 text-[color:var(--planner-text-strong)]">{SESSION_STRINGS.title}</Dialog.Title>
-                <Dialog.Description className="mt-2 max-w-3xl typ-caption-lg leading-6 text-muted">
+                <Heading slot="title" className="mt-3 typ-h3 text-[color:var(--planner-text-strong)]">{SESSION_STRINGS.title}</Heading>
+                <p className="mt-2 max-w-3xl typ-caption-lg leading-6 text-muted">
                   {SESSION_STRINGS.description}
-                </Dialog.Description>
+                </p>
               </div>
-              <Dialog.CloseTrigger asChild>
-                <button type="button" className="pwx-session-close" aria-label="Close session dialog">
-                  <X className={SESSION_ICON_CLASS} />
-                </button>
-              </Dialog.CloseTrigger>
+              <RACButton onPress={close} className="pwx-session-close" aria-label="Close session dialog">
+                <X className={SESSION_ICON_CLASS} />
+              </RACButton>
             </div>
           </div>
 
@@ -522,8 +518,10 @@ export function PlannerSessionDialog({
               </section>
             ) : null}
           </div>
-        </Dialog.Content>
-      </Dialog.Positioner>
-    </Dialog.Root>
+            </>
+          )}
+        </Dialog>
+      </Modal>
+    </ModalOverlay>
   );
 }

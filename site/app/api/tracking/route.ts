@@ -1,8 +1,8 @@
 import type { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createSupabaseAuthAdminClient } from '@/platform/supabase/auth-admin';
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
-import { success, error, rateLimitedError } from "@/lib/api/apiResponse";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
+import { success, error, rateLimitedError } from "@/features/shared/api/apiResponse";
 import { rateLimit } from '@/lib/rateLimit';
 import {
   createAnonymousUserId,

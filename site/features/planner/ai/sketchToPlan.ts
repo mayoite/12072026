@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 
-import { SketchToPlanResponseSchema, type SketchRecoveryReason } from "@/lib/api/schemas";
+import { SketchToPlanResponseSchema, type SketchRecoveryReason } from "@/features/shared/api/schemas";
 import { resolveProviderChain } from "@/lib/ai/providerChain";
 
 export type SketchToPlanRequest = {

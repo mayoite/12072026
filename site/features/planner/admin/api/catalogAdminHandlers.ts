@@ -23,8 +23,8 @@ import {
 import { furnitureCatalog, categoryLabels } from "@/features/planner/store/catalogData";
 import { normalizePlannerManagedProductRow } from "@/features/planner/store/plannerManagedProductsShared";
 import { buildConfiguratorRow } from "@/lib/catalog/configuratorCatalogPayload";
-import { ApiError, API_ERROR_CODES } from "./ApiError";
-import { success, error, validationError } from "./apiResponse";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
+import { success, error, validationError } from "@/features/shared/api/apiResponse";
 import {
   ConfiguratorActiveToggleSchema,
   ConfiguratorCatalogListQuerySchema,
@@ -32,7 +32,7 @@ import {
   CreateStandardCatalogItemSchema,
   PatchStandardCatalogItemSchema,
   StandardCatalogListQuerySchema,
-} from "./schemas";
+} from "@/features/shared/api/schemas";
 
 /** Catalog type discriminator for the parameterized route. */
 export type CatalogType = "standard" | "configurator" | "buddy";

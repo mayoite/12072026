@@ -1,9 +1,9 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import { withAuth } from "@/lib/api/withAuth";
-import { validationError } from "@/lib/api/apiResponse";
-import { FilterRankSchema } from "@/lib/api/schemas";
+import { withAuth } from "@/features/shared/api/withAuth";
+import { validationError } from "@/features/shared/api/apiResponse";
+import { FilterRankSchema } from "@/features/shared/api/schemas";
 import { getProducts } from "@/features/catalog/getProducts";
 import type { Product } from "@/lib/catalog/types";
 import { env } from "@/lib/env.server";

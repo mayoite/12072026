@@ -9,13 +9,13 @@ import type { NextRequest } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 import { isMissingTableError } from "@/platform/supabase/adminServer";
-import { success, error } from "@/lib/api/apiResponse";
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
+import { success, error } from "@/features/shared/api/apiResponse";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import {
   managedProductRowToCatalogItem,
 } from "@/features/planner/catalog/managedProductCatalogBridge";
 import { normalizePlannerManagedProductRow } from "@/features/planner/catalog/plannerManagedProductsShared";
-import { applyPlannerRouteTelemetry } from "@/lib/api/routeObservability";
+import { applyPlannerRouteTelemetry } from "@/features/shared/api/routeObservability";
 
 export async function GET(req: NextRequest) {
   const rateError = await enforcePublicApiRateLimit(req, "planner-catalog:get", 30);

@@ -4,12 +4,12 @@
 
 import type { NextRequest, NextResponse } from "next/server";
 
-import { withAuth } from "@/lib/api/withAuth";
-import { error, success, validationError } from "@/lib/api/apiResponse";
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
+import { withAuth } from "@/features/shared/api/withAuth";
+import { error, success, validationError } from "@/features/shared/api/apiResponse";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import {
   SketchToPlanRequestSchema,
-} from "@/lib/api/schemas";
+} from "@/features/shared/api/schemas";
 import {
   classifySketchConversionError,
   requestSketchToPlan,

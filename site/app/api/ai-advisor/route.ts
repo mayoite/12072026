@@ -18,10 +18,10 @@ import {
   type AdvisorStreamEvent,
   type ConfiguratorAdvisorContext,
 } from '@/features/ai/aiAdvisor';
-import { withAuth } from "@/lib/api/withAuth";
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
-import { success, error } from "@/lib/api/apiResponse";
-import { CatalogAdvisorRequestSchema } from "@/lib/api/schemas";
+import { withAuth } from "@/features/shared/api/withAuth";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
+import { success, error } from "@/features/shared/api/apiResponse";
+import { CatalogAdvisorRequestSchema } from "@/features/shared/api/schemas";
 import { isMissingUserHistoryTable } from "@/lib/tracking/userHistoryRepository";
 
 type ProductLite = Awaited<ReturnType<typeof getProductsFresh>>[number];

@@ -15,7 +15,7 @@ import {
 import {
   applyPlannerRouteTelemetry,
   jsonWithPlannerRouteTelemetry,
-} from "@/lib/api/routeObservability";
+} from "@/features/shared/api/routeObservability";
 
 type RouteContext = {
   params: Promise<{ id: string }>;

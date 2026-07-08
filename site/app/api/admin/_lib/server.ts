@@ -1,8 +1,8 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { rateLimit } from "@/lib/rateLimit";
-import { resolveAuthContext } from "@/lib/api/withAuth";
-import { ApiError } from "@/lib/api/ApiError";
+import { resolveAuthContext } from "@/features/shared/api/withAuth";
+import { ApiError } from "@/features/shared/api/ApiError";
 import {
   createAdminServiceClient,
   getClientIp,

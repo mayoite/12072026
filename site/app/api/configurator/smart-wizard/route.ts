@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { withAuth } from '@/lib/api/withAuth'
+import { withAuth } from '@/features/shared/api/withAuth'
 import {
   requestProviderText,
   resolveProviderChain,

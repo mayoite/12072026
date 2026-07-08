@@ -7,11 +7,11 @@
  */
 
 import type { NextRequest } from "next/server";
-import { withAuth } from "@/lib/api/withAuth";
+import { withAuth } from "@/features/shared/api/withAuth";
 import {
   createStandardCatalog,
   listStandardCatalog,
-} from "@/lib/api/catalogAdminHandlers";
+} from "@/features/planner/admin/api/catalogAdminHandlers";
 
 /** @deprecated List standard catalog items. Prefer `/api/admin/catalogs/standard`. */
 export const GET = withAuth(

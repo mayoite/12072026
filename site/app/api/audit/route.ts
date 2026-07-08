@@ -4,8 +4,8 @@ import { isAppAdmin } from '@/lib/auth/roles'
 import { rateLimit } from "@/lib/rateLimit"
 import { createServerClient } from "@/lib/supabase/server"
 import { validateCsrfRequest } from "@/lib/security/csrf"
-import { success, error, rateLimitedError } from "@/lib/api/apiResponse"
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError"
+import { success, error, rateLimitedError } from "@/features/shared/api/apiResponse"
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError"
 
 function getRequestIp(req: Request): string {
   const forwarded = req.headers.get("x-forwarded-for")

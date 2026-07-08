@@ -7,9 +7,9 @@
 
 import type { NextRequest } from "next/server";
 import type { NextResponse } from "next/server";
-import { withAuth } from "@/lib/api/withAuth";
-import { success } from "@/lib/api/apiResponse";
-import { ApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
+import { withAuth } from "@/features/shared/api/withAuth";
+import { success } from "@/features/shared/api/apiResponse";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import {
   createAdminServiceClient,
   isMissingTableError,
