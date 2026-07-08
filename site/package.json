@@ -132,13 +132,13 @@
     "// docs:* scripts restored for CONTENTS.md + inventory regeneration; use docs:sync or docs:sync:all.": ""
   },
   "dependencies": {
-    "@ark-ui/react": "5.37.2",
     "@aws-sdk/client-s3": "^3.1071.0",
     "@fancyapps/ui": "^6.1.14",
     "@flatten-js/core": "^1.6.12",
     "@gltf-transform/core": "^4.1.1",
     "@gltf-transform/extensions": "^4.1.1",
     "@google/generative-ai": "^0.24.1",
+    "@google/model-viewer": "^4.3.1",
     "@gsap/react": "^2.1.2",
     "@phosphor-icons/react": "^2.1.10",
     "@puckeditor/core": "0.22.0",

@@ -1,5 +1,0 @@
-=== Phase 07 auth probe @ 2026-07-07T12:53:54.370Z ===
-admin POST status=403 code=INSUFFICIENT_PERMISSIONS
-authBlocked=true
-notDescriptor422=true
-staticGuard=true

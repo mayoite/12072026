@@ -1,6 +1,0 @@
-﻿features/planner/admin/svg-editor/svgPipelineRunner.ts 75ms
-features/planner/onboarding/ProjectSetupGate.tsx 11ms
-features/planner/open3d/editor/OOPlannerWorkspace.tsx 38ms
-features/planner/open3d/catalog/catalogClient.ts 64ms
-features/planner/open3d/catalog/catalogQuery.ts 4ms (unchanged)
-features/planner/persistence/persistence.ts 25ms

@@ -203,6 +203,8 @@ const nextConfig = {
       { source: "/buddy-planner/login", destination: "/login/", permanent: true },
       { source: "/buddy-planner/:path*", destination: "/planner/canvas/", permanent: true },
       { source: "/oando-planner/:path*", destination: "/planner/", permanent: true },
+      { source: "/planner/fabric", destination: "/planner/open3d/", permanent: true },
+      { source: "/planner/fabric/:path*", destination: "/planner/open3d/", permanent: true },
     ];
   },
   async headers() {

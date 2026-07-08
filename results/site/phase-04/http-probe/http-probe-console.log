@@ -1,7 +1,0 @@
-=== Phase 04 admin route probe @ 2026-07-07T12:25:12.587Z ===
-base=http://localhost:3000
-04-ADMIN-01 GET /admin/svg-editor status=200 location=
-04-ADMIN-02 GET /admin/svg-editor/new status=200 location=
-04-ADMIN-02 GET /admin/svg-editor/chaise status=200 location=
-04-ADMIN-09 POST /api/admin/svg-editor status=403 location=
-summary={"listRouteNot404":true,"editNewNot404":true,"apiNot404":true}

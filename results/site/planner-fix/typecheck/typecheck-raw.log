@@ -1,5 +1,0 @@
-﻿app/planner/open3d/page.tsx(1,8): error TS2395: Individual declarations in merged declaration 'dynamic' must be all exported or all local.
-app/planner/open3d/page.tsx(1,8): error TS2440: Import declaration conflicts with local declaration of 'dynamic'.
-app/planner/open3d/page.tsx(5,14): error TS2395: Individual declarations in merged declaration 'dynamic' must be all exported or all local.
-app/planner/open3d/page.tsx(7,27): error TS2349: This expression is not callable.
-  Type 'String' has no call signatures.

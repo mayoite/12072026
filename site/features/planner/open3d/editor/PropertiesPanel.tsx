@@ -1005,6 +1005,8 @@ export const PropertiesPanel = memo(function PropertiesPanel({
 /**
  * Property field component for number/text inputs
  */
+import { NumberField, Label, Input, Group, Select, Button, Popover, ListBox, ListBoxItem } from "react-aria-components";
+
 interface PropertyFieldProps {
   id: string;
   label: string;
@@ -1028,28 +1030,52 @@ function PropertyField({
   min,
   max,
 }: PropertyFieldProps) {
-  return (
-    <div className={styles.field}>
-      <label htmlFor={id} className={styles.fieldLabel}>
-        {label}
-      </label>
-      <div className={styles.inputWrapper}>
-        <input
-          id={id}
-          type="number"
-          className={styles.fieldInput}
-          value={value}
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-          readOnly={readOnly}
-          min={min}
-          max={max}
-          step={min !== undefined || max !== undefined ? 1 : "any"}
-          aria-label={`${label}${unit ? ` in ${unit}` : ""}`}
-        />
-        {unit && <span className={styles.fieldUnit}>{unit}</span>}
+  // Use React Aria NumberField for numeric strictness and accessibility
+  const numValue = typeof value === "string" ? parseFloat(value) : value;
+
+  if (typeof value === "string" && isNaN(numValue)) {
+    // Fallback to text input for non-numeric fields (like name, color)
+    return (
+      <div className={styles.field}>
+        <label htmlFor={id} className={styles.fieldLabel}>
+          {label}
+        </label>
+        <div className={styles.inputWrapper}>
+          <input
+            id={id}
+            type="text"
+            className={styles.fieldInput}
+            value={value}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            readOnly={readOnly}
+          />
+        </div>
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <NumberField
+      className={styles.field}
+      value={isNaN(numValue) ? undefined : numValue}
+      onChange={(v) => {
+        if (onChange) {
+          onChange({ target: { value: String(v) } } as unknown as ChangeEvent<HTMLInputElement>);
+        }
+      }}
+      onKeyDown={onKeyDown as any}
+      isReadOnly={readOnly}
+      minValue={min}
+      maxValue={max}
+      formatOptions={{ maximumFractionDigits: 2 }}
+    >
+      <Label className={styles.fieldLabel}>{label}</Label>
+      <Group className={styles.inputWrapper}>
+        <Input className={styles.fieldInput} id={id} />
+        {unit && <span className={styles.fieldUnit}>{unit}</span>}
+      </Group>
+    </NumberField>
   );
 }
 
@@ -1072,24 +1098,29 @@ function PropertySelect({
   onChange,
 }: PropertySelectProps) {
   return (
-    <div className={styles.field}>
-      <label htmlFor={id} className={styles.fieldLabel}>
-        {label}
-      </label>
-      <select
-        id={id}
-        className={styles.fieldSelect}
-        value={value}
-        onChange={onChange}
-        aria-label={label}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <Select
+      className={styles.field}
+      selectedKey={value}
+      onSelectionChange={(key) => {
+        if (onChange) {
+          onChange({ target: { value: String(key) } } as unknown as ChangeEvent<HTMLSelectElement>);
+        }
+      }}
+    >
+      <Label className={styles.fieldLabel}>{label}</Label>
+      <Button className={styles.fieldSelect} id={id}>
+        {options.find(o => o.value === value)?.label || "Select..."}
+      </Button>
+      <Popover>
+        <ListBox className={styles.dropdownMenu}>
+          {options.map((option) => (
+            <ListBoxItem key={option.value} id={option.value} className={styles.dropdownItem}>
+              {option.label}
+            </ListBoxItem>
+          ))}
+        </ListBox>
+      </Popover>
+    </Select>
   );
 }
 

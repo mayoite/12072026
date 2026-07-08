@@ -1,9 +1,0 @@
-HTTP/1.1 308 Permanent Redirect
-location: /api/admin/svg-editor/
-Refresh: 0;url=/api/admin/svg-editor/
-Date: Tue, 07 Jul 2026 12:05:47 GMT
-Connection: keep-alive
-Keep-Alive: timeout=5
-Transfer-Encoding: chunked
-
-/api/admin/svg-editor/

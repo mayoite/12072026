@@ -231,6 +231,19 @@ const A11Y_FIELDS: PuckFields = {
   },
 } as const;
 
+const ASSET_FIELDS: PuckFields = {
+  "assets.glbUrl": {
+    type: "text",
+    label: "GLB URL",
+    placeholder: "https://storage.oando.com/models/sofa.glb",
+  },
+  "assets.svgUrl": {
+    type: "text",
+    label: "SVG URL",
+    placeholder: "https://storage.oando.com/models/sofa.svg",
+  },
+} as const;
+
 // ── Block-level composer helpers ───────────────────────────────────────────
 
 /** Combine multiple field maps preserving stable key ordering. */
@@ -423,6 +436,7 @@ const FixedPuckFields = chainFields(
   MOUNTING_FIELDS,
   THEME_FIELDS,
   A11Y_FIELDS,
+  ASSET_FIELDS,
 );
 
 /** Schema slice for the Puck editor view-model; mirrors the variant subset. */
@@ -438,6 +452,7 @@ const FixedEditorSchema = BlockDescriptorFixedSchema.pick({
   themeTokens: true,
   rovingFocus: true,
   liveAnnouncementCategories: true,
+  assets: true,
 });
 
 const FixedPuckBlock: PuckBlockDefinition<{ slug: string; sku?: string }> = {
@@ -750,6 +765,9 @@ export function getPuckEditorData(descriptor: BlockDescriptor): PuckData {
     rovingFocus: [...descriptor.rovingFocus],
     liveAnnouncementCategories: [...descriptor.liveAnnouncementCategories],
   };
+  if (descriptor.variant === "fixed" && "assets" in descriptor && descriptor.assets) {
+    baseProps.assets = { ...descriptor.assets };
+  }
   if (descriptor.mountingPoints && descriptor.mountingPoints.length > 0) {
     baseProps.mountingPoints = [...descriptor.mountingPoints];
   }
@@ -794,6 +812,9 @@ export function puckEditorDataToDescriptorInput(
   };
   if (blockProps.mountingPoints) {
     (updated as Record<string, unknown>).mountingPoints = blockProps.mountingPoints;
+  }
+  if (original.variant === "fixed" && blockProps.assets) {
+    (updated as Record<string, unknown>).assets = blockProps.assets;
   }
   if (original.variant === "configurable" && blockProps.configurable) {
     (updated as Record<string, unknown>).configurable = blockProps.configurable;

@@ -1,9 +1,0 @@
-﻿Phase 04 live probe — 2026-07-07 (dev server http://localhost:3000)
-
-admin-list: HTTP 200 final → http://localhost:3000/access/?next=%2Fadmin%2Fsvg-editor%2F (admin auth gate; requiresAdmin=true)
-admin-edit-existing: HTTP 200 final → http://localhost:3000/access/?next=%2Fadmin%2Fsvg-editor%2Fsectional-sofa-001%2F
-admin-edit-new: (same auth redirect pattern expected)
-api-post-unauth: HTTP 403 {"success":false,"error":{"code":"INSUFFICIENT_PERMISSIONS","message":"Invalid or missing CSRF token"}}
-public-svg-blocks: HTTP 200 — 4 descriptor items (portal→planner bridge sanity)
-
-INCOMPLETE for Verified: no admin session / browser Puck mount proof (E2E_SUPABASE_ADMIN_* missing in shell env).

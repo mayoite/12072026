@@ -1,141 +1,66 @@
-# 00 — Plan revision (2026-07-05)
+# 00 — Plan revision (2026-07-08)
 
 **Status:** Locked coordinator decisions  
-**Supersedes:** Conflicting lines in `01-START.md` §5/§8 and `04-HANDOVER.md` package list (pre-revision)  
-**Does not replace:** `PACKAGES.md`, `00-governance/01-phase1-execution/01-implementation-decisions.md` — aligns `01-execution/` to them
+**Supersedes:** The original 2026-07-05 revision, `01-START.md` §5/§8, and the legacy SVG Option A architecture.
 
 ## Authority stack (after this revision)
 
 1. User message + `AGENTS.md`
-2. `PACKAGES.md` + `implementation-decisions.md` (pins, routes, Option A)
-3. **`01-execution/core/00-REVISION.md`** (this file — product sequencing)
-4. `01-execution/core/01-START.md`, `02-PHASE-1.md`, `03-PHASE-2.md`, `04-HANDOVER.md`
-5. `docs/Lockedfiles/<module>/proposed.md` (snapshot; refresh after plan edits)
-
-When `01-execution/` and `PACKAGES.md` conflict on SVG tooling, **PACKAGES.md wins**.
+2. **`01-execution/core/INDEX.md`** (Active execution roadmap)
+3. **`01-execution/core/00-REVISION.md`** (This file — architectural product rules)
+4. `01-execution/core/05-MASTER-PIVOT-PLAN.md` (Locked baseline)
+5. `01-execution/core/06-PHASE-2-UI-ASSET-PIVOT.md` (Active phase plan)
 
 ---
 
-## Decision 1 — SVG pipeline (Option A)
+## Decision 1 — The Asset Pipeline (Killing the Backend Compiler)
 
-**Call:** Lock **Option A** for Phase 1. No SVG.js in the production path.
+**Call:** The server-side geometry math compiler (`generate-svg.mjs`, `flatten-js`, `svgo`) is **DEAD** and removed from the repository. The server is now a dumb pipe that exclusively validates and persists JSON (via Zod).
 
-```text
-Puck admin fields → Zod (SvgBlockDefinitionV1 / BlockDescriptor)
-  → server deterministic compiler (svgCompiler.server.ts)
-  → DOMPurify allowlist + SVGO
-  → resvg PNG + Sharp thumbnails
-  → disk persist (block-descriptors/) + R2 thumbs
-  → planner reads compiled SVG + customerEditable params only
-```
+**The New Pipeline:**
+We support two client-side rendering strategies driven by the `BlockDescriptor` JSON:
+1. **Parametric Engine (For Custom Furniture):** The Admin inputs dimensional bounds (W/D/H) via Puck. The client dynamically generates 3D meshes (via Three.js) and 2D procedural SVG footprints based solely on the JSON. Zero asset uploads.
+2. **Dual-Asset Strategy (For Static/Branded Decor):** The Admin uploads a highly detailed `.glb` model and a simple `.svg` footprint directly via Puck. The client renders the files directly with zero mathematical processing.
 
-| Item | Phase 1 | Notes |
+| Item | Status | Notes |
 |------|---------|--------|
-| `@puckeditor/core` | Yes | Admin compose + portal `Render`; mount full `<Puck>` in 1B |
-| `@svgdotjs/*` | **No** | Deferred Tier-2; not required for Option A; remove from `package.json` when unused |
-| `@flatten-js/core`, `polygon-clipping`, `svgo`, `@resvg/resvg-js`, `sharp` | Yes | Server / script pipeline |
-| `dompurify` | Yes | Server sanitizer (`svgServerSanitizer.ts`) |
-| Dual compile (exec `generate-svg.mjs` + in-process) | **Unify in 1B** | One module authority; script becomes thin CLI |
-
-Supabase immutable revisions: **Phase 08** (PLAN-FAIL-0409). Phase 1B may use disk JSON + revision interface tests until migration lands.
+| `@puckeditor/core` | Yes | Mounted in Admin for JSON configuration and direct asset URL uploads. |
+| `generate-svg.mjs` | **DELETED** | Server no longer processes SVG math. |
+| `flatten-js`, `polygon-clipping`, `svgo` | **DELETED** | Removed from backend requirements. |
 
 ---
 
-## Decision 2 — Phase 1 split (1A then 1B)
+## Decision 2 — UI Component Strategy (React Aria + Vanilla)
 
-Phase 1 is **two acceptance tracks**. Do not block 1A on full SVG publication.
+**Call:** We are eliminating component bloat and event-listener conflicts by adopting React Aria for complex components and Vanilla React for simple ones. Ark UI and Radix UI are officially marked for purging.
 
-### Phase 1A — Open3D shell (pilot)
-
-**Goal:** Professional `/planner/open3d` workspace worth piloting.
-
-| Priority | Work |
-|----------|------|
-| P0 | Wire `PlannerCommand` for all document mutations |
-| P0 | Selection contract + zundo scope |
-| P1 | Phosphor-only planner chrome; remove emoji/unicode controls |
-| P1 | Bottom command / status surface (REC-03) |
-| P1 | Catalog search cap ≤24 (REC-02) |
-| P1 | Command palette (`Ctrl/Cmd+K`) |
-| P2 | CSS hardcoding audit; panels IA (inventory left; layers contextual) |
-
-**1A acceptance:** room → opening → place → edit → undo/redo → save → reload on `/planner/open3d`; route containment; tokens; no page scroll; evidence under `results/`.
-
-**Explicitly not 1A gates:** full Puck editor, Supabase revision table, guest/canvas promotion.
-
-### Phase 1B — SVG production path
-
-**Goal:** Prove admin → publish → planner catalog for three reference variants.
-
-| Priority | Work |
-|----------|------|
-| P0 | Mount `<Puck>` on `/admin/svg-editor/[id]`; `onPublish` → API |
-| P0 | Unify compile path behind API |
-| P1 | Publish ≠ save; compile failure blocks publish |
-| P1 | Bridge `SvgBlockDefinitionV1` → catalog consumer (`BlockDescriptor` adapter until single model) |
-| P2 | Three reference blocks end-to-end (fixed, configurable door, parametric cabinet) |
-
-**1B acceptance:** §8–10 reference block checklist + determinism/security tests + boundary audit.
+| Surface | Strategy |
+|---------|----------|
+| Planner Module | **React Aria Components.** The standard for desktop-grade keyboard accessibility and strict number fields. To be implemented phase-wise. |
+| Global Shell, Landing, Marketing | **Pure Vanilla React.** Zero-dependency components powered entirely by `app-shell.css`. Radix and Ark are banned. |
+| Tailwind CSS | **DELETED.** 648 dead utility classes purged. `app-shell.css` is the sole source of truth for the UI layout. |
 
 ---
 
-## Decision 3 — Icons
-
-| Surface | Call |
-|---------|------|
-| Planner (`/planner/open3d`, guest, canvas) | **Phosphor only** (`@phosphor-icons/react`) |
-| Admin CMS (catalog, svg-editor, CRM chrome) | **Lucide allowed** — intentional; not a planner violation |
-
----
-
-## Decision 4 — Routes and promotion
+## Decision 3 — Routes and promotion
 
 | Route | Call |
 |-------|------|
-| `/planner/open3d` | Sole Phase 1 promotion target |
-| `/planner/guest`, `/planner/canvas` | Unchanged until **Phase 2** after 1A+1B accepted on one revision |
-| `/admin/svg-editor`, `/portal/svg-catalog` | In scope for **1B** |
-
----
-
-## Decision 5 — Dual descriptor models (honest)
-
-| Model | Role until migration |
-|-------|---------------------|
-| `BlockDescriptor` (`svgTypes.ts`) | Open3D catalog loader consumer today |
-| `SvgBlockDefinitionV1` (`svgBlockSchemas.ts`) | Admin/compiler authority for new work |
-| Bridge | Publish adapter emits loader-compatible JSON in 1B; single-model migration is explicit follow-up |
-
----
-
-## Decision 6 — What we are not doing now
-
-- SVG.js visual authoring
-- Guest/canvas shell promotion
-- Full Supabase revision persistence
-- Merging `AdminCatalogManager` and svg-editor
-- Bulk edits to `archive/Plans/` or more archive moves
-- Treating `docs/Lockedfiles/<module>/proposed.md` as law before this revision propagates
+| `/planner/open3d` | The unified 2D/3D workspace. Customers start in 2D (`FeasibilityCanvas`) and seamlessly toggle to 3D. Must respect `100dvh` and strict `overflow: hidden` constraints. |
+| `/planner/fabric` (Archive) | **DEPRECATED.** The isolated 2D-only sandbox is being retired to focus all efforts on the unified Open3D shell. |
+| `/admin/svg-editor` | Transformed from a JSON text box into a visual Puck configuration tool for JSON/Asset management. |
 
 ---
 
 ## Execution order (for agents)
 
 ```text
-1. This revision (done)
-2. Patched 01-execution/core/01-START.md, PHASE-1.md, HANDOVER.md
-3. Refresh domain *-proposed.md from fn_plan (optional same session)
-4. Code: PlannerCommand (1A) → Puck mount + unified compile (1B)
-5. Update HANDOVER.md with evidence after each checklist group
+1. This revision (Locked)
+2. Execute Phase 2 Part 1: Install `react-aria-components` and migrate the Planner UI (TopBar, CommandPalette).
+3. Execute Phase 2 Part 2: Puck Editor UI updates for Option B (GLB/SVG uploads).
+4. Close Phase 2 and lock Verification tests.
 ```
 
 ---
 
-## Research alignment
-
-Agrees with `RESEARCH-2026-07-05-synthesis.md` P0: SVG authority, `PlannerCommand`, bundle boundaries.  
-Defers Phase 1 §8–10 as **1B**, not blocking **1A**.
-
----
-
-*Locked 2026-07-05. Next revision only when evidence changes pins or acceptance scope.*
+*Locked 2026-07-08. React Aria and the Client-Side Asset Pipeline are now the architectural standard.*

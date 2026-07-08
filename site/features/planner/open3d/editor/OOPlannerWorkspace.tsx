@@ -15,7 +15,7 @@ import {
   FeasibilityCanvas,
   type FeasibilityCanvasHandle,
   type CanvasStatusSnapshot,
-} from "../canvas-fabric/FeasibilityCanvas";
+} from "../canvas-feasibility/FeasibilityCanvas";
 import { placeCatalogItemInProject } from "../catalog/placementAction";
 import { importOpen3dProjectJson } from "../persistence/projectJson";
 import { parseOpen3dSessionSnapshot } from "../persistence/open3dSession";

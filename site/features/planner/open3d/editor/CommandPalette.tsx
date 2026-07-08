@@ -9,6 +9,7 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import { ModalOverlay, Modal, Dialog } from "react-aria-components";
 import {
   buildPaletteCommands,
   filterPaletteCommands,
@@ -38,16 +39,13 @@ export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteP
 
   useEffect(() => {
     if (!open) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset query/index when palette opens (intentional side effect of open change); reason: UX clear on toggle; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: use derived state or key-remount for palette when command UI revised
     setQuery("");
-     
     setSelectedIndex(0);
     const frame = requestAnimationFrame(() => inputRef.current?.focus());
     return () => cancelAnimationFrame(frame);
   }, [open]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset selection on query change (intentional); reason: UX keyboard nav reset; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: use derived selected from query results length when palette revised
     setSelectedIndex(0);
   }, [query]);
 
@@ -85,68 +83,60 @@ export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteP
     [execute, onOpenChange, results, selectedIndex],
   );
 
-  if (!open) return null;
-
   return (
-    <div
+    <ModalOverlay
+      isOpen={open}
+      onOpenChange={onOpenChange}
       className={styles.commandPaletteOverlay}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Command palette"
-      onClick={() => onOpenChange(false)}
-      onKeyDown={(event) => {
-        if (event.key === "Escape") onOpenChange(false);
-      }}
+      isDismissable
     >
-      <div
-        className={styles.commandPalettePanel}
-        onClick={(event) => event.stopPropagation()}
-        onKeyDown={(event) => event.stopPropagation()}
-      >
-        <div className={styles.commandPaletteSearch}>
-          <label className="sr-only" htmlFor={`${id}-palette-search`}>
-            Search commands
-          </label>
-          <input
-            ref={inputRef}
-            id={`${id}-palette-search`}
-            type="search"
-            value={query}
-            placeholder="Search tools and actions…"
-            autoComplete="off"
-            spellCheck={false}
-            onChange={(event) => setQuery(event.currentTarget.value)}
-            onKeyDown={onKeyDown}
-          />
-          <span className={styles.commandPaletteHint}>Esc to close</span>
-        </div>
-        <div className={styles.commandPaletteResults} role="listbox" aria-label="Command results">
-          {results.length === 0 ? (
-            <p className={styles.commandPaletteEmpty}>No matching commands</p>
-          ) : (
-            results.map((command, index) => (
-              <button
-                key={command.id}
-                type="button"
-                className={styles.commandPaletteItem}
-                data-active={index === selectedIndex}
-                role="option"
-                aria-selected={index === selectedIndex}
-                onMouseEnter={() => setSelectedIndex(index)}
-                onClick={() => execute(command)}
-              >
-                <span className={styles.commandPaletteItemMeta}>
-                  <span className={styles.commandPaletteItemLabel}>{command.label}</span>
-                  <span className={styles.commandPaletteItemCategory}>{command.categoryLabel}</span>
-                </span>
-                {command.shortcut ? (
-                  <kbd className={styles.commandPaletteShortcut}>{command.shortcut}</kbd>
-                ) : null}
-              </button>
-            ))
-          )}
-        </div>
-      </div>
-    </div>
+      <Modal className={styles.commandPalettePanel}>
+        <Dialog aria-label="Command palette" className="outline-none">
+          <div className={styles.commandPaletteSearch}>
+            <label className="sr-only" htmlFor={`${id}-palette-search`}>
+              Search commands
+            </label>
+            <input
+              ref={inputRef}
+              id={`${id}-palette-search`}
+              type="search"
+              value={query}
+              placeholder="Search tools and actions…"
+              autoComplete="off"
+              spellCheck={false}
+              onChange={(event) => setQuery(event.currentTarget.value)}
+              onKeyDown={onKeyDown}
+            />
+            <span className={styles.commandPaletteHint}>Esc to close</span>
+          </div>
+          <div className={styles.commandPaletteResults} role="listbox" aria-label="Command results">
+            {results.length === 0 ? (
+              <p className={styles.commandPaletteEmpty}>No matching commands</p>
+            ) : (
+              results.map((command, index) => (
+                <button
+                  key={command.id}
+                  type="button"
+                  className={styles.commandPaletteItem}
+                  data-active={index === selectedIndex}
+                  role="option"
+                  aria-selected={index === selectedIndex}
+                  onMouseEnter={() => setSelectedIndex(index)}
+                  onClick={() => execute(command)}
+                >
+                  <span className={styles.commandPaletteItemMeta}>
+                    <span className={styles.commandPaletteItemLabel}>{command.label}</span>
+                    <span className={styles.commandPaletteItemCategory}>{command.categoryLabel}</span>
+                  </span>
+                  {command.shortcut ? (
+                    <kbd className={styles.commandPaletteShortcut}>{command.shortcut}</kbd>
+                  ) : null}
+                </button>
+              ))
+            )}
+          </div>
+        </Dialog>
+      </Modal>
+    </ModalOverlay>
   );
 }

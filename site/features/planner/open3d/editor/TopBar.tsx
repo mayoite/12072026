@@ -1,62 +1,38 @@
 "use client";
 
-import { useCallback, useState, type MouseEvent } from "react";
+import { useCallback, type MouseEvent } from "react";
 import { CornersIn, CornersOut } from "@phosphor-icons/react";
+import { MenuTrigger, Button, Popover, Menu, MenuItem } from "react-aria-components";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";
 import type { Open3dDisplayUnit } from "../model/types";
 import type { PanelId } from "./useDockingSystem";
 import styles from "./workspace.module.css";
 
 export interface TopBarProps {
-  /** Guest sessions must not expose persist/import/export actions in the UI */
   accessContext?: PlannerAccessContext;
-  /** Project name */
   projectName: string;
-  /** Whether the project has unsaved changes */
   isModified?: boolean;
-  /** Whether the project is synced/saved */
   isSynced?: boolean;
-  /** Current view mode */
   viewMode: "2d" | "3d";
-  /** Available floors */
   floors?: Array<{ id: string; name: string }>;
-  /** Currently active floor ID */
   activeFloorId?: string;
-  /** Current display unit */
   displayUnit?: Open3dDisplayUnit;
-  /** Called when view mode changes */
   onViewModeChange?: (mode: "2d" | "3d") => void;
-  /** Called when floor selection changes */
   onFloorChange?: (floorId: string) => void;
-  /** Called when display unit changes */
   onDisplayUnitChange?: (unit: Open3dDisplayUnit) => void;
-  /** Called when save is triggered */
   onSave?: () => void;
-  /** Called when export is triggered (format: json, svg, png, pdf) */
   onExport?: (format?: string) => void;
-  /** Called when import is triggered */
   onImport?: () => void;
-  /** Whether undo is available */
   canUndo?: boolean;
-  /** Whether redo is available */
   canRedo?: boolean;
-  /** Called when undo is triggered */
   onUndo?: () => void;
-  /** Called when redo is triggered */
   onRedo?: () => void;
-  /** Active small-screen side panel */
   activePanel?: Extract<PanelId, "left" | "right"> | null;
-  /** Called when the inventory panel toggle is triggered */
   onToggleLeftPanel?: () => void;
-  /** Called when the properties panel toggle is triggered */
   onToggleRightPanel?: () => void;
-  /** Whether side panels are hidden to maximize the canvas */
   isCanvasMaximized?: boolean;
-  /** Toggle canvas-maximized mode */
   onToggleCanvasMaximized?: () => void;
-  /** Current workspace density (from prefs, compact | touch) per GS Figma UI3 REC-01 minimize + density wiring */
   density?: "compact" | "touch";
-  /** Called when density toggle requested from prefs menu (wires to workspace prefs) */
   onToggleDensity?: () => void;
 }
 
@@ -89,83 +65,17 @@ export function TopBar({
 }: TopBarProps) {
   const showPersistenceActions = accessContext !== "guest";
   const showGuestActions = accessContext === "guest";
-  const [showExportMenu, setShowExportMenu] = useState(false);
-  const [showImportMenu, setShowImportMenu] = useState(false);
-  const [showUnitMenu, setShowUnitMenu] = useState(false);
-  const [showFloorMenu, setShowFloorMenu] = useState(false);
-  const [showPrefsMenu, setShowPrefsMenu] = useState(false);
 
-  const handleExportClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    setShowExportMenu((current) => !current);
-    setShowImportMenu(false);
-    setShowPrefsMenu(false);
-  }, []);
-
-  const handleImportClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    setShowImportMenu((current) => !current);
-    setShowExportMenu(false);
-    setShowPrefsMenu(false);
-  }, []);
-
-  const handleMenuItemClick = useCallback(
-    (action: () => void) => {
-      action();
-      setShowExportMenu(false);
-      setShowImportMenu(false);
-    },
-    [],
-  );
-
-  // Close menus when clicking outside
-  const handleDocumentClick = useCallback(() => {
-    setShowExportMenu(false);
-    setShowImportMenu(false);
-    setShowUnitMenu(false);
-    setShowFloorMenu(false);
-    setShowPrefsMenu(false);
-  }, []);
-
-  // Unit options
   const unitOptions: Open3dDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
-
-  const handleUnitSelect = useCallback(
-    (unit: Open3dDisplayUnit) => {
-      onDisplayUnitChange?.(unit);
-      setShowUnitMenu(false);
-    },
-    [onDisplayUnitChange],
-  );
-
-  const handleFloorSelect = useCallback(
-    (floorId: string) => {
-      onFloorChange?.(floorId);
-      setShowFloorMenu(false);
-    },
-    [onFloorChange],
-  );
-
-  const handlePrefsClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    setShowPrefsMenu((current) => !current);
-    setShowExportMenu(false);
-    setShowImportMenu(false);
-    setShowUnitMenu(false);
-    setShowFloorMenu(false);
-  }, []);
-
   const activeFloorName = floors.find((f) => f.id === activeFloorId)?.name ?? "Floor";
 
   return (
     <header className={`pw-topbar ${styles.header}`} aria-label="Planner workspace">
-      {/* Brand / Project name */}
       <div className={styles.brand}>
         <h1 className={styles.brandTitle}>{projectName}</h1>
         {isModified && <span className={styles.brandSub}>Unsaved changes</span>}
       </div>
 
-      {/* Center area - view controls */}
       <div className={styles.center}>
         <div className={styles.viewToggle} role="radiogroup" aria-label="View mode">
           <button
@@ -190,87 +100,55 @@ export function TopBar({
           </button>
         </div>
 
-        {/* Floors dropdown */}
         {floors.length > 0 && (
-          <div className={styles.dropdown}>
-            <button
-              type="button"
-              className={styles.btn}
-              onClick={(event) => {
-                event.stopPropagation();
-                setShowFloorMenu((current) => !current);
-                setShowExportMenu(false);
-                setShowImportMenu(false);
-                setShowUnitMenu(false);
-                setShowPrefsMenu(false);
-              }}
-              aria-haspopup="listbox"
-              aria-expanded={showFloorMenu}
-              aria-label={`Active floor: ${activeFloorName}`}
-            >
+          <MenuTrigger>
+            <Button className={styles.btn} aria-label={`Active floor: ${activeFloorName}`}>
               {activeFloorName}
               <ChevronDownIcon />
-            </button>
-            {showFloorMenu && (
-              <div className={styles.dropdownMenu} role="listbox" aria-label="Select floor">
+            </Button>
+            <Popover placement="bottom start">
+              <Menu
+                className={styles.dropdownMenu}
+                onAction={(key) => onFloorChange?.(key as string)}
+              >
                 {floors.map((floor) => (
-                  <button
+                  <MenuItem
                     key={floor.id}
-                    type="button"
+                    id={floor.id}
                     className={styles.dropdownItem}
-                    data-selected={floor.id === activeFloorId}
-                    onClick={() => handleFloorSelect(floor.id)}
-                    role="option"
-                    aria-selected={floor.id === activeFloorId}
                   >
                     {floor.name}
-                  </button>
+                  </MenuItem>
                 ))}
-              </div>
-            )}
-          </div>
+              </Menu>
+            </Popover>
+          </MenuTrigger>
         )}
 
-        {/* Unit dropdown */}
-        <div className={styles.dropdown}>
-          <button
-            type="button"
-            className={styles.btn}
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowUnitMenu((current) => !current);
-              setShowExportMenu(false);
-              setShowImportMenu(false);
-              setShowPrefsMenu(false);
-            }}
-            aria-expanded={showUnitMenu}
-            aria-haspopup="listbox"
-            aria-label={`Display unit: ${displayUnit}`}
-          >
+        <MenuTrigger>
+          <Button className={styles.btn} aria-label={`Display unit: ${displayUnit}`}>
             {displayUnit}
             <ChevronDownIcon />
-          </button>
-          {showUnitMenu && (
-            <div className={styles.dropdownMenu} role="listbox" aria-label="Select display unit">
+          </Button>
+          <Popover placement="bottom start">
+            <Menu
+              className={styles.dropdownMenu}
+              onAction={(key) => onDisplayUnitChange?.(key as Open3dDisplayUnit)}
+            >
               {unitOptions.map((unit) => (
-                <button
+                <MenuItem
                   key={unit}
-                  type="button"
+                  id={unit}
                   className={styles.dropdownItem}
-                  data-selected={unit === displayUnit}
-                  onClick={() => handleUnitSelect(unit)}
-                  role="option"
-                  aria-selected={unit === displayUnit}
                 >
                   {unit}
-                </button>
+                </MenuItem>
               ))}
-            </div>
-          )}
-        </div>
+            </Menu>
+          </Popover>
+        </MenuTrigger>
       </div>
 
-      {/* Right actions */}
       <div className={styles.actions}>
         {onToggleCanvasMaximized && (
           <button
@@ -337,7 +215,6 @@ export function TopBar({
           </button>
         </div>
 
-        {/* Save status indicator */}
         <div
           className={styles.saveStatus}
           data-modified={isModified}
@@ -370,152 +247,73 @@ export function TopBar({
 
         {showPersistenceActions && (
           <>
-            {/* Import button */}
-            <div className={styles.dropdown}>
-              <button
-                type="button"
-                className={styles.btn}
-                onClick={handleImportClick}
-                aria-expanded={showImportMenu}
-                aria-haspopup="menu"
-              >
+            <MenuTrigger>
+              <Button className={styles.btn}>
                 Import
                 <ChevronDownIcon />
-              </button>
-              {showImportMenu && (
-                <div className={styles.dropdownMenu} role="menu">
-                  <button
-                    type="button"
-                    className={styles.dropdownItem}
-                    onClick={() => handleMenuItemClick(onImport ?? (() => {}))}
-                    role="menuitem"
-                  >
+              </Button>
+              <Popover placement="bottom end">
+                <Menu
+                  className={styles.dropdownMenu}
+                  onAction={(key) => {
+                    if (key === "file" && onImport) onImport();
+                  }}
+                >
+                  <MenuItem id="file" className={styles.dropdownItem}>
                     Import from file...
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.dropdownItem}
-                    onClick={() => handleMenuItemClick(() => {})}
-                    role="menuitem"
-                  >
+                  </MenuItem>
+                  <MenuItem id="url" className={styles.dropdownItem}>
                     Import from URL...
-                  </button>
-                </div>
-              )}
-            </div>
+                  </MenuItem>
+                </Menu>
+              </Popover>
+            </MenuTrigger>
 
-            {/* Export button */}
-            <div className={styles.dropdown}>
-              <button
-                type="button"
-                className={styles.btn}
-                onClick={handleExportClick}
-                aria-expanded={showExportMenu}
-                aria-haspopup="menu"
-              >
+            <MenuTrigger>
+              <Button className={styles.btn}>
                 Export
                 <ChevronDownIcon />
-              </button>
-              {showExportMenu && (
-                <div className={styles.dropdownMenu} role="menu">
-                  <button
-                    type="button"
-                    className={styles.dropdownItem}
-                    onClick={() => handleMenuItemClick(() => onExport?.("json"))}
-                    role="menuitem"
-                  >
-                    Export as JSON
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.dropdownItem}
-                    onClick={() => handleMenuItemClick(() => onExport?.("svg"))}
-                    role="menuitem"
-                  >
-                    Export as SVG
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.dropdownItem}
-                    onClick={() => handleMenuItemClick(() => onExport?.("pdf"))}
-                    role="menuitem"
-                  >
-                    Export as PDF
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.dropdownItem}
-                    onClick={() => handleMenuItemClick(() => onExport?.("png"))}
-                    role="menuitem"
-                  >
-                    Export as PNG
-                  </button>
-                </div>
-              )}
-            </div>
+              </Button>
+              <Popover placement="bottom end">
+                <Menu
+                  className={styles.dropdownMenu}
+                  onAction={(key) => onExport?.(key as string)}
+                >
+                  <MenuItem id="json" className={styles.dropdownItem}>Export as JSON</MenuItem>
+                  <MenuItem id="svg" className={styles.dropdownItem}>Export as SVG</MenuItem>
+                  <MenuItem id="pdf" className={styles.dropdownItem}>Export as PDF</MenuItem>
+                  <MenuItem id="png" className={styles.dropdownItem}>Export as PNG</MenuItem>
+                </Menu>
+              </Popover>
+            </MenuTrigger>
           </>
         )}
 
-        {/* Preferences structured menu (task 5) */}
-        <div className={styles.dropdown}>
-          <button
-            type="button"
-            className={styles.btn}
-            onClick={handlePrefsClick}
-            aria-expanded={showPrefsMenu}
-            aria-haspopup="menu"
-            aria-label="Open preferences menu"
-          >
+        <MenuTrigger>
+          <Button className={styles.btn} aria-label="Open preferences menu">
             Prefs
             <ChevronDownIcon />
-          </button>
-          {showPrefsMenu && (
-            <div className={styles.dropdownMenu} role="menu">
-              <button
-                type="button"
-                className={styles.dropdownItem}
-                role="menuitem"
-                onClick={() => handleMenuItemClick(() => {
-                  // Wire density toggle to prefs (fixes partial/hardcoded per critic); GS cite: 00-benchmark-summary.md Five-product Figma UI3 REC-01 minimize-UI thin sidebars + contextual; anti-copy semantic tokens from site/app/css/ only
-                  onToggleDensity?.();
-                })}
-              >
+          </Button>
+          <Popover placement="bottom end">
+            <Menu
+              className={styles.dropdownMenu}
+              onAction={(key) => {
+                if (key === "density") onToggleDensity?.();
+              }}
+            >
+              <MenuItem id="density" className={styles.dropdownItem}>
                 Toggle density ({density === "touch" ? "compact" : "touch"})
-              </button>
-              <button
-                type="button"
-                className={styles.dropdownItem}
-                role="menuitem"
-                onClick={() => handleMenuItemClick(() => {})}
-              >
-                Toggle grid
-              </button>
-              <button
-                type="button"
-                className={styles.dropdownItem}
-                role="menuitem"
-                onClick={() => handleMenuItemClick(() => {})}
-              >
-                Toggle snap
-              </button>
-            </div>
-          )}
-        </div>
+              </MenuItem>
+              <MenuItem id="grid" className={styles.dropdownItem}>Toggle grid</MenuItem>
+              <MenuItem id="snap" className={styles.dropdownItem}>Toggle snap</MenuItem>
+            </Menu>
+          </Popover>
+        </MenuTrigger>
       </div>
-
-      {/* Click outside handler */}
-      {(showExportMenu || showImportMenu || showUnitMenu || showFloorMenu || showPrefsMenu) && (
-        <div
-          className={styles.menuDismissLayer}
-          onClick={handleDocumentClick}
-          aria-hidden="true"
-        />
-      )}
     </header>
   );
 }
 
-// Simple chevron icon
 function ChevronDownIcon() {
   return (
     <svg

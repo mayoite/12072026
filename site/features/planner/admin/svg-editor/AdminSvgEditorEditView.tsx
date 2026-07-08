@@ -135,6 +135,10 @@ export interface AdminSvgEditorEditViewProps {
   readonly onPublishAction?: (data: PuckDataShape) => Promise<void | { success?: boolean; error?: string }>;
 }
 
+import { GlbExtruderPreview } from "./GlbExtruderPreview";
+import { ModelViewerPreview } from "./ModelViewerPreview";
+import { uploadAssetToSupabase } from "./uploadAsset";
+
 export function AdminSvgEditorEditView({
   slug,
   descriptor,
@@ -144,6 +148,39 @@ export function AdminSvgEditorEditView({
   const router = useRouter();
   const renderProps = useMemo(() => blockDescriptorToRenderProps(descriptor), [descriptor]);
   const editorData = useMemo(() => getPuckEditorData(descriptor), [descriptor]);
+
+  const [uploadedSvgText, setUploadedSvgText] = useState<string>("");
+  const [uploadedGlbUrl, setUploadedGlbUrl] = useState<string>("");
+  const [mockGlbUrl, setMockGlbUrl] = useState<string>("");
+  const [extractedDimensions, setExtractedDimensions] = useState<{x: number, y: number, z: number} | null>(null);
+
+  const handleSvgUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => setUploadedSvgText(event.target?.result as string);
+      reader.readAsText(file);
+    }
+  }, []);
+
+  const handleGlbUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploadedGlbUrl(URL.createObjectURL(file));
+    }
+  }, []);
+
+  const handleGlbGenerated = useCallback(async (blob: Blob) => {
+    // 1. Show temporary URL instantly
+    const localUrl = URL.createObjectURL(blob);
+    setMockGlbUrl(localUrl);
+
+    // 2. Upload to Supabase in the background to get a permanent URL
+    const permanentUrl = await uploadAssetToSupabase(blob, `${slug || "generated"}.glb`);
+    if (permanentUrl) {
+      setMockGlbUrl(permanentUrl); // Overwrite with permanent link
+    }
+  }, [slug]);
 
   // Simplified state: Puck manages draft/compose state + live preview.
   // Only track submit + validation err/success for admin UX (failure + recovery).
@@ -294,11 +331,46 @@ export function AdminSvgEditorEditView({
         </details>
       </section>
 
-      {/* Full Puck editor mount replaces the JSON textarea + separate Render preview (1B P0).
-         Puck uses registry puckConfig (fields + renders), editorData for full editable props.
-         onPublish wires to persist + pipeline via action (or fallback). Live preview in Puck canvas.
-         Validation failures surface in alerts for recovery (edit in place, re-publish).
-         GS: BP-04, BP-05, REC-01 (Figma minimize-UI: thin/contextual/no extra chrome in Puck panels), anti-copy (semantic only). */}
+      {/* ZERO-DESIGNER ASSET HUB */}
+      {descriptor.variant === "fixed" && (
+        <section aria-label="Asset Hub" className="admin-page__section" style={{ padding: "16px", backgroundColor: "#f9fafb", borderRadius: "8px", marginBottom: "24px" }}>
+          <h2 className="admin-page__section-title">Zero-Designer Asset Hub</h2>
+          
+          <div style={{ display: "flex", gap: "24px", marginTop: "16px" }}>
+            <div style={{ flex: 1, padding: "16px", backgroundColor: "white", borderRadius: "8px", border: "1px solid #e5e7eb" }}>
+              <h3 style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "8px" }}>Workflow A: SVG to GLB Extruder</h3>
+              <p style={{ fontSize: "12px", color: "#6b7280", marginBottom: "16px" }}>Upload a 2D line drawing to instantly extrude a 3D model.</p>
+              <input type="file" accept=".svg" onChange={handleSvgUpload} style={{ fontSize: "12px", marginBottom: "12px" }} />
+              {uploadedSvgText && <GlbExtruderPreview svgString={uploadedSvgText} onGlbGenerated={handleGlbGenerated} />}
+              {mockGlbUrl && (
+                <div style={{ marginTop: "12px", padding: "8px", backgroundColor: "#ecfdf5", color: "#065f46", fontSize: "12px", borderRadius: "4px" }}>
+                  <strong>Success!</strong> Mock GLB generated.<br/>
+                  <em>Copy this to the Puck URL field:</em><br/>
+                  <code style={{ userSelect: "all", wordBreak: "break-all" }}>{mockGlbUrl}</code>
+                </div>
+              )}
+            </div>
+
+            <div style={{ flex: 1, padding: "16px", backgroundColor: "white", borderRadius: "8px", border: "1px solid #e5e7eb" }}>
+              <h3 style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "8px" }}>Workflow B: GLB Auto-Footprint</h3>
+              <p style={{ fontSize: "12px", color: "#6b7280", marginBottom: "16px" }}>Upload a 3D model to automatically calculate its 2D floor footprint.</p>
+              <input type="file" accept=".glb" onChange={handleGlbUpload} style={{ fontSize: "12px", marginBottom: "12px" }} />
+              {uploadedGlbUrl && <ModelViewerPreview src={uploadedGlbUrl} onModelLoaded={setExtractedDimensions} />}
+              {extractedDimensions && (
+                <div style={{ marginTop: "12px", padding: "8px", backgroundColor: "#eff6ff", color: "#1e40af", fontSize: "12px", borderRadius: "4px" }}>
+                  <strong>Bounds Extracted!</strong><br/>
+                  Width: {Math.round(extractedDimensions.x)} mm<br/>
+                  Depth: {Math.round(extractedDimensions.z)} mm<br/>
+                  Height: {Math.round(extractedDimensions.y)} mm<br/>
+                  <em>Update the Puck Geometry fields above.</em>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Full Puck editor mount replaces the JSON textarea + separate Render preview (1B P0). */}
       <section aria-label="Puck block editor" className="admin-page__section">
         <h2 className="admin-page__section-title">Block editor (Puck)</h2>
         <div className="admin-puck-editor">

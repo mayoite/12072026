@@ -373,6 +373,10 @@ export const BlockDescriptorFixedSchema = BlockDescriptorCommonBaseSchema.extend
   fixed: z.object({
     sizingType: z.literal("fixed"),
   }),
+  assets: z.object({
+    glbUrl: z.string().optional(),
+    svgUrl: z.string().optional(),
+  }).optional(),
 });
 /** `fixed` variant: dimensions locked, no parametric controls. */
 export type BlockDescriptorFixed = z.infer<typeof BlockDescriptorFixedSchema>;

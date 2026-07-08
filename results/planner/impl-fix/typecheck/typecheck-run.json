@@ -1,1 +1,0 @@
-{"command":"pnpm run typecheck (via tsc scoped check)","exitCode":0,"note":"no TS errors in edited planner files (open3d/page.tsx name collision fixed by renaming dynamicImport; context memo etc type safe)","files":"gate, workspace, canvas hook, panels, open3d page","timestamp":"2026-07-07"}
