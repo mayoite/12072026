@@ -8,7 +8,7 @@ pnpm monorepo for `oando.co.in`. Next.js in `site/`.
 
 → **`docs/Lockedfiles/conduct/ReadmeLocked.md`** (locked). Repo facts and app paths continue below.
 
-→ **Active lane / session status & handover** — [`Plans/01-execution/core/04-HANDOVER.md`](Plans/01-execution/core/04-HANDOVER.md) (live status, blockers, next actions, and promotion state).
+→ **Active lane / session status & handover** — see [`Plans/README.md`](Plans/README.md) to discover the current active lane (live status, blockers, next actions, and promotion state).
 
 ## Layout
 
@@ -18,7 +18,7 @@ repo-root/          ← pnpm workspace wrapper (package.json, pnpm-lock.yaml)
 ├── tech-stack-generator/  ← Vite source (oando-tech-stack-docs); build output — see `tech-stack-generator/README.md`
 ├── docs/           ← reference docs (architecture, api, audit)
 ├── archive/        ← historical outputs + `archive/migrationdocs/`
-├── Plans/          ← governance + execution plans (see Plans/README.md; active session status in `01-execution/core/04-HANDOVER.md`)
+├── Plans/          ← governance + execution plans (see Plans/README.md to discover active session status and lanes)
 └── archive/1b-5phase-agent-workflow/ (and archive/Agents_work/) ← archived 1b-5phase agent workflow reports, reviews, benchmarks (narratives only; evidence in results/)
 ```
 
@@ -86,15 +86,14 @@ Upload and audit commands: **`START.md`** · **`OPERATIONS_RUNBOOK.md`** (Assets
 
 Install, dev server, and all other commands: **`START.md`**.
 
-## Test evidence
+## Testing & Evidence
 
-All test, lint, typecheck, build, Playwright, accessibility, coverage, and audit runs are captured under repo-root `results/<module>/<phase>/<cmd>/` in the standardized `<cmd>-run.json` + `<cmd>-raw.log` format (never to the repo root, `E:`, or any other drive path). `testing-handbook.md` is the mandatory output-integrity policy. A test run is incomplete if exit status, stdout/stderr, warnings, skips, or required artifacts are missing. Reporters and evidence must not be deleted, suppressed, or bypassed before review. archive/results/ historical artifacts are kept (per archive over delete).
-
-TypeScript `any` is prohibited in handwritten production, planner, script, and configuration code except for a documented, narrow, temporary exception. Tests/mocks and generated or tool-owned output are exempt only within the scope defined by the handbook.
+- **Technical Guide & Paths:** [`Agents/Agents-testing.md`](Agents/Agents-testing.md)
+- **Universal Policy:** [`testing-handbook.md`](testing-handbook.md) (Mandatory output-integrity policy for both humans and agents).
 
 http://localhost:3000 · guest planner `/planner/guest/`
 
 TypeScript **6.x**. Dev: `next dev --webpack`. Vercel Root Directory = `site`. Test output: repo-root `results/` (detail **`TESTING.md`**; locked copy **`docs/Lockedfiles/TestingLocked.md`**).
 
-Other reference: `docs/architecture/`, `docs/api/ROUTE-INDEX.md`, `docs/audit/`, `Plans/01-execution/core/04-HANDOVER.md` (session status).
+Other reference: `docs/architecture/`, `docs/api/ROUTE-INDEX.md`, `docs/audit/`, `Plans/README.md` (active lane & session status).
 

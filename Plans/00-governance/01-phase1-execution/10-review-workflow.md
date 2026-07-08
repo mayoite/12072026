@@ -34,16 +34,16 @@ Receives three reviews. Keeps validated findings only. Updates plan status and `
 
 ## Scope
 
-- `00-governance/01-phase1-execution/05-benchmark-foundation.md`
-- `00-governance/01-phase1-execution/06-benchmark-delivery.md`
-- `00-governance/01-phase1-execution/07-benchmark-governance.md`
-- `00-governance/01-phase1-execution/02-plan-foundation.md`
-- `00-governance/01-phase1-execution/03-plan-delivery.md`
-- `00-governance/01-phase1-execution/04-plan-closeout.md`
-- `00-governance/01-phase1-execution/00-handover-routing.md`
-- `00-governance/01-phase1-execution/01-implementation-decisions.md`
-- `00-governance/01-phase1-execution/08-quality-gates.md`
-- `00-governance/01-phase1-execution/09-design-benchmark-protocol.md`
+- `Plans/00-governance/01-phase1-execution/05-benchmark-foundation.md`
+- `Plans/00-governance/01-phase1-execution/06-benchmark-delivery.md`
+- `Plans/00-governance/01-phase1-execution/07-benchmark-governance.md`
+- `Plans/00-governance/01-phase1-execution/02-plan-foundation.md`
+- `Plans/00-governance/01-phase1-execution/03-plan-delivery.md`
+- `Plans/00-governance/01-phase1-execution/04-plan-closeout.md`
+- `Plans/00-governance/01-phase1-execution/00-handover-routing.md`
+- `Plans/00-governance/01-phase1-execution/01-implementation-decisions.md`
+- `Plans/00-governance/01-phase1-execution/08-quality-gates.md`
+- `Plans/00-governance/01-phase1-execution/09-design-benchmark-protocol.md`
 - Root `Failures.md` and `resolved-failures.md`
 
 Does not replace repo `AGENTS.md`.

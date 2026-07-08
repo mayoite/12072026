@@ -2,17 +2,14 @@
   "config": {
     "argv": [
       "C:\\Program Files\\nodejs\\node.exe",
-      "D:\\oandO04072026\\node_modules\\.pnpm\\@playwright+test@1.61.1\\node_modules\\@playwright\\test\\cli.js",
+      "D:\\OandO07072026\\site\\node_modules\\@playwright\\test\\cli.js",
       "test",
       "-c",
       "config/build/playwright.config.ts",
-      "tests/e2e/planner-catalog.spec.ts",
-      "tests/e2e/planner-guest-workspace.spec.ts",
-      "--project=chromium",
-      "--retries=0"
+      "tests/e2e/planner-shell-100dvh.spec.ts"
     ],
-    "configFile": "D:\\oandO04072026\\site\\config\\build\\playwright.config.ts",
-    "rootDir": "D:/oandO04072026/site/tests",
+    "configFile": "D:\\OandO07072026\\site\\config\\build\\playwright.config.ts",
+    "rootDir": "D:/OandO07072026/site/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": true,
@@ -28,7 +25,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "D:/oandO04072026/results/test-results",
+        "outputDir": "D:/OandO07072026/results/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -36,7 +33,7 @@
         },
         "id": "chromium",
         "name": "chromium",
-        "testDir": "D:/oandO04072026/site/tests",
+        "testDir": "D:/OandO07072026/site/tests",
         "testIgnore": [
           "**/*.test.ts",
           "**/*.test.tsx"
@@ -78,25 +75,161 @@
     "updateSourceMethod": "patch",
     "version": "1.61.1",
     "workers": 2,
-    "webServer": null
+    "webServer": {
+      "command": "pnpm run build && pnpm run start",
+      "url": "http://localhost:3000",
+      "timeout": 120000,
+      "reuseExistingServer": true,
+      "env": {
+        "ADMIN_EMAILS": "ayush@oando.co.in,mayoite@gmail.com",
+        "ADMIN_TOKEN": "ayush@123",
+        "ALLUSERSPROFILE": "C:\\ProgramData",
+        "ANTIGRAVITY_AGENT": "1",
+        "ANTIGRAVITY_CSRF_TOKEN": "86e379ce-2934-4af8-bd58-74971744ef5f",
+        "ANTIGRAVITY_EDITOR_APP_ROOT": "c:\\Users\\ayush\\AppData\\Local\\Programs\\Antigravity IDE\\resources\\app",
+        "ANTIGRAVITY_LS_ADDRESS": "localhost:56387",
+        "ANTIGRAVITY_SOURCE_METADATA": "{\"tool\":{\"conversationId\":\"2e0e9942-a4c3-4a40-ac27-c9e8ed2952c3\",\"stepIndex\":316,\"toolCall\":{\"id\":\"tsu4fe2e\",\"name\":\"run_command\",\"argumentsJson\":\"{\\\"CommandLine\\\":\\\"npx playwright test -c config/build/playwright.config.ts tests/e2e/planner-shell-100dvh.spec.ts\\\",\\\"Cwd\\\":\\\"d:\\\\\\\\OandO07072026\\\\\\\\site\\\",\\\"WaitMsBeforeAsync\\\":20000,\\\"toolAction\\\":\\\"Running the E2E test with the config\\\",\\\"toolSummary\\\":\\\"Run E2E test\\\"}\",\"thinkingSignature\":\"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\",\"originalName\":\"run_command\"}}}",
+        "ANTIGRAVITY_TRAJECTORY_ID": "41eb0460-ba70-4939-aa81-68d4bd6d5fd1",
+        "APPDATA": "C:\\Users\\ayush\\AppData\\Roaming",
+        "BROWSERSLIST_IGNORE_OLD_DATA": "true",
+        "CHROME_CRASHPAD_PIPE_NAME": "\\\\.\\pipe\\crashpad_20920_JZYJBSBFGLJNTWFZ",
+        "CLOOUDFLARE_SECRET_API_TOKEN": "cfat_fJfmqd0xx8dfdCYJ8mSusBp6b9kpiSsWEh5go3Hva4b6bc7d",
+        "CLOUDFLARE_ACCOUNT_ID": "78e07661362639e5e9008dadd85a3f2d",
+        "CLOUDFLARE_API_TOKEN": "cfat_5yWbikAUupxDBxlrWjQIYMugJuKETYujJa8GkdMddb127818",
+        "CLOUDFLARE_R2_BUCKET": "oando-asset-cdn",
+        "CLOUDFLARE_R2_CATALOG_BUCKET": "oando-asset-cdn",
+        "CLOUDFLARE_SECRET_Authorization": "Bearer cfat_fJfmqd0xx8dfdCYJ8mSusBp6b9kpiSsWEh5go3Hva4b6bc7d",
+        "CLOULDFLARE_S3_API_TOKEN": "cfut_Ui2FgqKyXaeSGoco3iod4BFQYNpErkB9HuabNstb972708de",
+        "CLOULDFLARE_S3_SECRET_ACCESS_KEY": "85dc8340347f36549b6bcab3f990aa4a568535e28e51fa1323ce2166ecde00d7",
+        "CLOULDFLARE_S3_URL": "https://78e07661362639e5e9008dadd85a3f2d.r2.cloudflarestorage.com",
+        "CLOULDFLARE_URL": "https://api.cloudflare.com/client/v4/accounts/78e07661362639e5e9008dadd85a3f2d/tokens/verify",
+        "CLOULD_ACCESS_KEY_ID": "5816ae9ac9f574a9fd4f8e2b2c31d3bd",
+        "COLOR": "0",
+        "CommonProgramFiles": "C:\\Program Files\\Common Files",
+        "CommonProgramFiles(x86)": "C:\\Program Files (x86)\\Common Files",
+        "CommonProgramW6432": "C:\\Program Files\\Common Files",
+        "COMPUTERNAME": "AYUSH_2",
+        "ComSpec": "C:\\WINDOWS\\system32\\cmd.exe",
+        "CUSTOMER_QUERIES_ADMIN_TOKEN": "ayush@123",
+        "DriverData": "C:\\Windows\\System32\\Drivers\\DriverData",
+        "E2E_SUPABASE_ADMIN_EMAIL": "ayush@oando.co.in",
+        "E2E_SUPABASE_ADMIN_PASSWORD": "ayush@123",
+        "E2E_SUPABASE_USER_EMAIL": "ayush1@oando.co.in",
+        "E2E_SUPABASE_USER_PASSWORD": "ayush@123",
+        "EDITOR": "C:\\WINDOWS\\notepad.exe",
+        "EFC_11672_1262719628": "1",
+        "EFC_11672_1592913036": "1",
+        "EFC_11672_2283032206": "1",
+        "EFC_11672_2397410445": "1",
+        "EFC_11672_2775293581": "1",
+        "EFC_11672_3789132940": "1",
+        "EFC_11672_4126798990": "1",
+        "EMAIL_FROM": "One&Only <onboarding@resend.dev>",
+        "FPS_BROWSER_APP_PROFILE_STRING": "Internet Explorer",
+        "FPS_BROWSER_USER_PROFILE_STRING": "Default",
+        "GROK_HOME": "D:\\.grok",
+        "HOME": "C:\\Users\\ayush",
+        "HOMEDRIVE": "C:",
+        "HOMEPATH": "\\Users\\ayush",
+        "INIT_CWD": "D:\\OandO07072026\\site",
+        "LOCALAPPDATA": "C:\\Users\\ayush\\AppData\\Local",
+        "LOGONSERVER": "\\\\AYUSH_2",
+        "NEXT_ADMIN_PUBLISHABLE_KEY": "sb_publishable_9dl2Po6XHcNVqT_x792yRA_r4Gmzv57",
+        "NEXT_ADMIN_SUPABASE_ANON_KEY": "sb_publishable_9dl2Po6XHcNVqT_x792yRA_r4Gmzv57",
+        "NEXT_ADMIN_SUPABASE_URL": "https://rxzpznmxbaoxpikowmfc.supabase.co",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_wXLhbZHb_bpRSNfUvYYAxw_rf462Wt4",
+        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_wXLhbZHb_bpRSNfUvYYAxw_rf462Wt4",
+        "NEXT_PUBLIC_SUPABASE_URL": "https://erpweaiypimorcunaimz.supabase.co",
+        "NODE": "C:\\Program Files\\nodejs\\node.exe",
+        "NODE_PATH": "D:\\OandO07072026\\node_modules\\.pnpm\\@playwright+test@1.61.1\\node_modules\\@playwright\\test\\node_modules;D:\\OandO07072026\\node_modules\\.pnpm\\@playwright+test@1.61.1\\node_modules;D:\\OandO07072026\\node_modules\\.pnpm\\node_modules",
+        "npm_command": "exec",
+        "npm_config_cache": "C:\\Users\\ayush\\AppData\\Local\\npm-cache",
+        "npm_config_globalconfig": "C:\\Users\\ayush\\AppData\\Roaming\\npm\\etc\\npmrc",
+        "npm_config_global_prefix": "C:\\Users\\ayush\\AppData\\Roaming\\npm",
+        "npm_config_init_module": "C:\\Users\\ayush\\.npm-init.js",
+        "npm_config_local_prefix": "D:\\OandO07072026\\site",
+        "npm_config_node_gyp": "C:\\Program Files\\nodejs\\node_modules\\npm\\node_modules\\node-gyp\\bin\\node-gyp.js",
+        "npm_config_noproxy": "",
+        "npm_config_npm_version": "11.13.0",
+        "npm_config_prefix": "C:\\Users\\ayush\\AppData\\Roaming\\npm",
+        "npm_config_userconfig": "C:\\Users\\ayush\\.npmrc",
+        "npm_config_user_agent": "npm/11.13.0 node/v24.16.0 win32 x64 workspaces/false",
+        "npm_execpath": "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+        "npm_lifecycle_event": "npx",
+        "npm_lifecycle_script": "playwright",
+        "npm_node_execpath": "C:\\Program Files\\nodejs\\node.exe",
+        "npm_package_json": "D:\\OandO07072026\\site\\package.json",
+        "npm_package_name": "oando-site",
+        "npm_package_version": "0.1.0",
+        "NUMBER_OF_PROCESSORS": "16",
+        "OneDrive": "D:\\OneDrive - One and Only Furniture Private Limited",
+        "OneDriveCommercial": "D:\\OneDrive - One and Only Furniture Private Limited",
+        "OPENROUTER_API_KEY_BACKUP": "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",
+        "OPENROUTER_API_KEY_PRIMARY": "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",
+        "OPENROUTER_BASE_URL": "https://openrouter.ai/api/v1",
+        "OPENROUTER_MODEL": "openrouter/free",
+        "OPS_PORTAL_PASSWORD": "ayush@123",
+        "OPS_PORTAL_USER": "ayush@oando.co.in",
+        "OS": "Windows_NT",
+        "PATH": "D:\\OandO07072026\\site\\node_modules\\.bin;D:\\OandO07072026\\site\\node_modules\\.bin;D:\\OandO07072026\\node_modules\\.bin;D:\\node_modules\\.bin;C:\\Program Files\\nodejs\\node_modules\\npm\\node_modules\\@npmcli\\run-script\\lib\\node-gyp-bin;C:/Users/ayush/.gemini/antigravity-ide/bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Git\\cmd;C:\\Program Files\\GitHub CLI\\;C:\\Users\\ayush\\AppData\\Local\\Programs\\Python\\Python312;C:\\Users\\ayush\\AppData\\Local\\Programs\\Python\\Python312\\Scripts;C:\\Users\\ayush\\AppData\\Local\\Programs\\Python\\Python312;C:\\Users\\ayush\\AppData\\Local\\Programs\\Python\\Python312\\Scripts;C:\\Users\\ayush\\AppData\\Local\\Programs\\Python\\Python312\\Scripts\\;C:\\Users\\ayush\\AppData\\Local\\Programs\\Python\\Python312\\;C:\\Users\\ayush\\AppData\\Local\\Programs\\Python\\Launcher\\;C:\\Users\\ayush\\.local\\bin;C:\\Users\\ayush\\.grok\\bin;C:\\Users\\ayush\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\ayush\\AppData\\Roaming\\npm;C:\\Users\\ayush\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\ayush\\AppData\\Local\\Microsoft\\WinGet\\Packages\\DigitalOcean.Doctl_Microsoft.Winget.Source_8wekyb3d8bbwe;C:\\Users\\ayush\\AppData\\Local\\Microsoft\\WinGet\\Packages\\PHP.PHP.8.3_Microsoft.Winget.Source_8wekyb3d8bbwe;C:\\Users\\ayush\\AppData\\Local\\Programs\\Antigravity IDE\\bin;C:\\Users\\ayush\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;d:\\antigravity\\scripts",
+        "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JSE;.WSF;.WSH;.MSC;.CPL",
+        "PROCESSOR_ARCHITECTURE": "AMD64",
+        "PROCESSOR_IDENTIFIER": "AMD64 Family 26 Model 96 Stepping 0, AuthenticAMD",
+        "PROCESSOR_LEVEL": "26",
+        "PROCESSOR_REVISION": "6000",
+        "PRODUCTS_DATABASE_URL": "postgresql://postgres.erpweaiypimorcunaimz:Buddy%40%230212202@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres",
+        "ProgramData": "C:\\ProgramData",
+        "ProgramFiles": "C:\\Program Files",
+        "ProgramFiles(x86)": "C:\\Program Files (x86)",
+        "ProgramW6432": "C:\\Program Files",
+        "PROMPT": "$P$G",
+        "PSModulePath": "D:\\OneDrive - One and Only Furniture Private Limited\\Documents\\WindowsPowerShell\\Modules;C:\\Program Files\\WindowsPowerShell\\Modules;C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules",
+        "PUBLIC": "C:\\Users\\Public",
+        "RESELLS_API_KEY": "mr_3430f4c20f5aa30d1b0d12addf9d0d2d6d83ab1d5f1f27c4b1e55d6c9da7875d",
+        "SESSIONNAME": "Console",
+        "STAFF_NOTIFY_EMAIL": "ayush@oando.co",
+        "SUPABASE_ADMIN_SERVICE_ROLE_KEY": "sb_secret_Kppg908wKJdBVl4JT74_5A_I0QrgLQe",
+        "SUPABASE_AUTH_DATABASE_URL": "postgresql://postgres.rxzpznmxbaoxpikowmfc:Buddy%40%230212202@aws-1-ap-south-1.pooler.supabase.com:5432/postgres",
+        "SUPABASE_AUTH_URL": "https://rxzpznmxbaoxpikowmfc.supabase.co",
+        "SUPABASE_SERVICE_ROLE_KEY": "sb_secret_KeHVnbIDsAWas9uhmPCl1w_2lU9amU6",
+        "SUPABASE_URL": "https://erpweaiypimorcunaimz.supabase.co",
+        "SystemDrive": "C:",
+        "SystemRoot": "C:\\WINDOWS",
+        "TEMP": "C:\\Users\\ayush\\AppData\\Local\\Temp",
+        "TMP": "C:\\Users\\ayush\\AppData\\Local\\Temp",
+        "TOKEN_NAME": "yellow-rice-eb86",
+        "USERDOMAIN": "AYUSH_2",
+        "USERDOMAIN_ROAMINGPROFILE": "AYUSH_2",
+        "USERNAME": "ayush",
+        "USERPROFILE": "C:\\Users\\ayush",
+        "VSCODE_CODE_CACHE_PATH": "C:\\Users\\ayush\\AppData\\Roaming\\Antigravity IDE\\CachedData\\e0b7a2bcf575cfba10528c4e7c10bd3ce2d7769a",
+        "VSCODE_CWD": "C:\\Users\\ayush\\AppData\\Local\\Programs\\Antigravity IDE",
+        "VSCODE_IPC_HOOK": "\\\\.\\pipe\\5243f22a-1.107.0-main-sock",
+        "VSCODE_NLS_CONFIG": "{\"userLocale\":\"en-us\",\"osLocale\":\"en-us\",\"resolvedLanguage\":\"en\",\"defaultMessagesFile\":\"C:\\\\Users\\\\ayush\\\\AppData\\\\Local\\\\Programs\\\\Antigravity IDE\\\\resources\\\\app\\\\out\\\\nls.messages.json\",\"locale\":\"en-us\",\"availableLanguages\":{}}",
+        "VSCODE_PID": "20920",
+        "windir": "C:\\WINDOWS",
+        "XAI_API_KEY": "xai-dHdqIBC5TiKmNVUZ16Hqw5s5ke1J2rOj04pyJeqtXTy6cN96TSegEdHCXW4soGtbY2z8dmraS0kLHMFI",
+        "NEXT_PUBLIC_PLANNER_DEV_TOOLS": "true"
+      }
+    }
   },
   "suites": [
     {
-      "title": "e2e\\planner-catalog.spec.ts",
-      "file": "e2e/planner-catalog.spec.ts",
+      "title": "e2e\\planner-shell-100dvh.spec.ts",
+      "file": "e2e/planner-shell-100dvh.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "planner catalog panel",
-          "file": "e2e/planner-catalog.spec.ts",
+          "title": "Planner Shell 100dvh Layout constraints",
+          "file": "e2e/planner-shell-100dvh.spec.ts",
           "line": 5,
           "column": 6,
           "specs": [
             {
-              "title": "desktop rail, catalog, and canvas do not overlap",
-              "ok": true,
+              "title": "Route /planner/guest/ should enforce 100dvh and overflow hidden",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -109,468 +242,182 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3851,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-06T20:24:45.644Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "30c619d2b75659d22827-b84d5ece012aced1749d",
-              "file": "e2e/planner-catalog.spec.ts",
-              "line": 6,
-              "column": 7
-            },
-            {
-              "title": "guest workspace exposes searchable catalog",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 3872,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-06T20:24:45.633Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "30c619d2b75659d22827-ab5cfd31886fb1824a8c",
-              "file": "e2e/planner-catalog.spec.ts",
-              "line": 29,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "e2e\\planner-guest-workspace.spec.ts",
-      "file": "e2e/planner-guest-workspace.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "planner landing exceeds generic benchmark proof points",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 456,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-07-06T20:24:54.821Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "2c5b026a0357ab747363-70c8ef8d20c32a90d3aa",
-          "file": "e2e/planner-guest-workspace.spec.ts",
-          "line": 72,
-          "column": 5
-        }
-      ],
-      "suites": [
-        {
-          "title": "Planner guest workspace — plan 06 UI bar",
-          "file": "e2e/planner-guest-workspace.spec.ts",
-          "line": 15,
-          "column": 6,
-          "specs": [
-            {
-              "title": "loads canvas chrome with history, view modes, and catalog",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3313,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-06T20:24:49.695Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "2c5b026a0357ab747363-0d959eeff6d26fd03ad6",
-              "file": "e2e/planner-guest-workspace.spec.ts",
-              "line": 20,
-              "column": 7
-            },
-            {
-              "title": "Start from Scratch seeds a perimeter shell with no furniture",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 3311,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-06T20:24:49.715Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "2c5b026a0357ab747363-cedd5ce308c49d0023e9",
-              "file": "e2e/planner-guest-workspace.spec.ts",
-              "line": 29,
-              "column": 7
-            },
-            {
-              "title": "catalog search filters elements",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1777,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-06T20:24:53.027Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "2c5b026a0357ab747363-42c4b64d58ea459afad8",
-              "file": "e2e/planner-guest-workspace.spec.ts",
-              "line": 49,
-              "column": 7
-            },
-            {
-              "title": "status bar shows plan metrics",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1653,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-06T20:24:53.043Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "2c5b026a0357ab747363-cbccd5243add0a43ba0c",
-              "file": "e2e/planner-guest-workspace.spec.ts",
-              "line": 57,
-              "column": 7
-            },
-            {
-              "title": "view mode toggles without error",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 5037,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-06T20:24:54.714Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "2c5b026a0357ab747363-395096281f0f9e32bbce",
-              "file": "e2e/planner-guest-workspace.spec.ts",
-              "line": 63,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "a11y — key flows",
-          "file": "e2e/planner-guest-workspace.spec.ts",
-          "line": 78,
-          "column": 6,
-          "specs": [
-            {
-              "title": "empty state / setup gate has no critical or serious a11y violations",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3956,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-06T20:24:55.288Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "2c5b026a0357ab747363-e89769ba650271626342",
-              "file": "e2e/planner-guest-workspace.spec.ts",
-              "line": 79,
-              "column": 7
-            },
-            {
-              "title": "complex plan (walls + furniture) has no critical or serious a11y violations",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 7172,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-06T20:24:59.258Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "2c5b026a0357ab747363-ae01b14db0cac5d484ff",
-              "file": "e2e/planner-guest-workspace.spec.ts",
-              "line": 101,
-              "column": 7
-            },
-            {
-              "title": "inventory at scale (catalog search + results) has no critical or serious a11y violations",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 5077,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-07-06T20:24:59.765Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "2c5b026a0357ab747363-5ab181466ad31b0f59f9",
-              "file": "e2e/planner-guest-workspace.spec.ts",
-              "line": 129,
-              "column": 7
-            }
-          ],
-          "suites": [
-            {
-              "title": "small screen",
-              "file": "e2e/planner-guest-workspace.spec.ts",
-              "line": 151,
-              "column": 8,
-              "specs": [
-                {
-                  "title": "small screen empty state / setup has no critical a11y violations",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 60000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
+                      "status": "failed",
+                      "duration": 3989,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36",
+                        "location": {
+                          "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
+                          "column": 36,
+                          "line": 34
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 32 |\u001b[39m\n \u001b[90m 33 |\u001b[39m       \u001b[90m// Assertions to verify no scrolling at the root frame\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 34 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mhtmlOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 35 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mbodyOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 36 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mscrollHeight)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(metrics\u001b[33m.\u001b[39minnerHeight)\u001b[33m;\u001b[39m\n \u001b[90m 37 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
                         {
-                          "workerIndex": 1,
-                          "parallelIndex": 1,
-                          "status": "passed",
-                          "duration": 20724,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2026-07-06T20:25:04.855Z",
-                          "annotations": [],
-                          "attachments": []
+                          "location": {
+                            "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
+                            "column": 36,
+                            "line": 34
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n\n  32 |\n  33 |       // Assertions to verify no scrolling at the root frame\n> 34 |       expect(metrics.htmlOverflow).toBe(\"hidden\");\n     |                                    ^\n  35 |       expect(metrics.bodyOverflow).toBe(\"hidden\");\n  36 |       expect(metrics.scrollHeight).toBeLessThanOrEqual(metrics.innerHeight);\n  37 |\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36"
                         }
                       ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "2c5b026a0357ab747363-c9f8bb64f26c5dd49c19",
-                  "file": "e2e/planner-guest-workspace.spec.ts",
-                  "line": 154,
-                  "column": 9
-                },
-                {
-                  "title": "small screen workspace with plan has no critical a11y violations",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 60000,
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-08T04:57:38.810Z",
                       "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
+                      "attachments": [
                         {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 3500,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2026-07-06T20:25:06.443Z",
-                          "annotations": [],
-                          "attachments": []
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\OandO07072026\\results\\test-results\\e2e-planner-shell-100dvh-P-3e85e--100dvh-and-overflow-hidden-chromium\\error-context.md"
                         }
                       ],
-                      "status": "expected"
+                      "errorLocation": {
+                        "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
+                        "column": 36,
+                        "line": 34
+                      }
                     }
                   ],
-                  "id": "2c5b026a0357ab747363-551429fb9cb1b5bbdb16",
-                  "file": "e2e/planner-guest-workspace.spec.ts",
-                  "line": 171,
-                  "column": 9
+                  "status": "unexpected"
                 }
-              ]
+              ],
+              "id": "b972d3d7d23d57c7fc18-97e4641b7b322904c121",
+              "file": "e2e/planner-shell-100dvh.spec.ts",
+              "line": 17,
+              "column": 9
+            },
+            {
+              "title": "Route /planner/canvas/ should enforce 100dvh and overflow hidden",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 2912,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36",
+                        "location": {
+                          "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
+                          "column": 36,
+                          "line": 34
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 32 |\u001b[39m\n \u001b[90m 33 |\u001b[39m       \u001b[90m// Assertions to verify no scrolling at the root frame\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 34 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mhtmlOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 35 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mbodyOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 36 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mscrollHeight)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(metrics\u001b[33m.\u001b[39minnerHeight)\u001b[33m;\u001b[39m\n \u001b[90m 37 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
+                            "column": 36,
+                            "line": 34
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n\n  32 |\n  33 |       // Assertions to verify no scrolling at the root frame\n> 34 |       expect(metrics.htmlOverflow).toBe(\"hidden\");\n     |                                    ^\n  35 |       expect(metrics.bodyOverflow).toBe(\"hidden\");\n  36 |       expect(metrics.scrollHeight).toBeLessThanOrEqual(metrics.innerHeight);\n  37 |\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-08T04:57:43.403Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\OandO07072026\\results\\test-results\\e2e-planner-shell-100dvh-P-1c5d6--100dvh-and-overflow-hidden-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
+                        "column": 36,
+                        "line": 34
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b972d3d7d23d57c7fc18-28368bd7b492adbccb60",
+              "file": "e2e/planner-shell-100dvh.spec.ts",
+              "line": 17,
+              "column": 9
+            },
+            {
+              "title": "Route /planner/open3d/ should enforce 100dvh and overflow hidden",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 4020,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36",
+                        "location": {
+                          "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
+                          "column": 36,
+                          "line": 34
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 32 |\u001b[39m\n \u001b[90m 33 |\u001b[39m       \u001b[90m// Assertions to verify no scrolling at the root frame\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 34 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mhtmlOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 35 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mbodyOverflow)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"hidden\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 36 |\u001b[39m       expect(metrics\u001b[33m.\u001b[39mscrollHeight)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(metrics\u001b[33m.\u001b[39minnerHeight)\u001b[33m;\u001b[39m\n \u001b[90m 37 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
+                            "column": 36,
+                            "line": 34
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"hidden\u001b[7m auto\u001b[27m\"\u001b[39m\n\n  32 |\n  33 |       // Assertions to verify no scrolling at the root frame\n> 34 |       expect(metrics.htmlOverflow).toBe(\"hidden\");\n     |                                    ^\n  35 |       expect(metrics.bodyOverflow).toBe(\"hidden\");\n  36 |       expect(metrics.scrollHeight).toBeLessThanOrEqual(metrics.innerHeight);\n  37 |\n    at D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts:34:36"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-08T04:57:38.810Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\OandO07072026\\results\\test-results\\e2e-planner-shell-100dvh-P-ee1d4--100dvh-and-overflow-hidden-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\OandO07072026\\site\\tests\\e2e\\planner-shell-100dvh.spec.ts",
+                        "column": 36,
+                        "line": 34
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b972d3d7d23d57c7fc18-3b66a6035913136a1eb0",
+              "file": "e2e/planner-shell-100dvh.spec.ts",
+              "line": 17,
+              "column": 9
             }
           ]
         }
@@ -579,11 +426,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-07-06T20:24:45.039Z",
-    "duration": 40637.121999999996,
-    "expected": 13,
+    "startTime": "2026-07-08T04:56:45.151Z",
+    "duration": 61534.878000000004,
+    "expected": 0,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 3,
     "flaky": 0
   }
 }

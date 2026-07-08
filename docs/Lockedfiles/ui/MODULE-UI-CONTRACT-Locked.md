@@ -4,7 +4,7 @@
 
 **Live file:** `docs/architecture/MODULE-UI-CONTRACT.md`. Update this copy only when intentionally locking a new baseline.
 
-**Authority stack:** `plann/00-REVISION.md` → `plann/06-UI-PLAN.md` → **this file** → `docs/architecture/CSS-SOLUTION.md`
+**Authority stack:** `Plans/01-execution/core/00-REVISION.md` → `archive/Plans/01-execution/specialists/06-UI-PLAN.md` (historical) → **this file** → `docs/architecture/CSS-SOLUTION.md`
 
 **Problem:** New modules copy the nearest TSX and reintroduce `slate-*`, hex, or a third dialect.
 
@@ -19,7 +19,7 @@ Tokens (single vocabulary)
       → CI gates (drift fails the build)
 ```
 
-**Not** an upfront Storybook program (**Option F rejected**). Primitives extract to `app/css/core/components/` only after the **third** copy-paste.
+**Not** an upfront Storybook program (**Option F rejected**). Primitives extract to `site/app/css/core/components/` only after the **third** copy-paste.
 
 ---
 
@@ -54,8 +54,8 @@ Guest/canvas shells: **Phase 2** promotion only.
 | Surface | Path roots | TSX | CSS |
 |---------|------------|-----|-----|
 | **Planner open3d** | `features/planner/open3d/**` | Structure + behavior only; **no Tailwind utilities** | `*.module.css` with `var(--planner-*)` / `var(--surface-*)` only |
-| **Admin** | `app/admin/**`, `features/planner/admin/**` | Semantic utilities (`text-strong`, `bg-panel`, `border-soft`) + `admin-*` classes | No `slate-*` / `blue-*` / `zinc-*` / `gray-*` / `emerald-*` palette |
-| **Site marketing** | `app/(site)/**`, `components/**` | `typ-*`, scheme utilities; layout Tailwind OK | Route bundles in `app/css/core/site/` |
+| **Admin** | `site/app/admin/**`, `site/features/planner/admin/**` | Semantic utilities (`text-strong`, `bg-panel`, `border-soft`) + `admin-*` classes | No `slate-*` / `blue-*` / `zinc-*` / `gray-*` / `emerald-*` palette |
+| **Site marketing** | `site/app/(site)/**`, `site/components/**` | `typ-*`, scheme utilities; layout Tailwind OK | Route bundles in `site/app/css/core/locked/` |
 
 **Cross-surface copy-paste is forbidden.** Admin does not import open3d modules; planner does not copy admin Tailwind patterns.
 
@@ -65,9 +65,9 @@ Guest/canvas shells: **Phase 2** promotion only.
 
 | Surface | Layout / entry must import |
 |---------|---------------------------|
-| Open3d pilot | `app/css/core/planner/bundles/open3d-workspace.css` via `app/planner/open3d/layout.tsx` |
+| Open3d pilot | `site/app/css/core/locked/planner/open3d-workspace.css` via `site/app/planner/open3d/layout.tsx` |
 | Admin | `data-admin-layout` shell + `admin-pages.css` (via admin layout) |
-| Site | `app/css/index.css` (site layout) |
+| Site | `site/app/css/index.css` (site layout) |
 
 New open3d editor modules **do not** add their own `@import` of `index.css` or palette files.
 
@@ -83,7 +83,7 @@ Every new UI module under the path roots above **must** satisfy:
 - [ ] No `#hex` or `rgb()` / `hsl()` in open3d `*.module.css` (tokens only)
 - [ ] No new `--planner-primary*` usage (use `--planner-accent*`; primary is compat shim only)
 - [ ] Icons: Phosphor in `open3d/`; Lucide in admin (per `00-REVISION.md` Decision 3)
-- [ ] Repeated pattern (3×) → extract to `app/css/core/components/` before a fourth copy
+- [ ] Repeated pattern (3×) → extract to `site/app/css/core/components/` before a fourth copy
 - [ ] `pnpm run lint:ui` passes (strict after UI-1 shell lands)
 
 ---
@@ -98,7 +98,7 @@ Every new UI module under the path roots above **must** satisfy:
 | Open3d icons | `open3dIconPolicy.test.ts` | TEST-1 (planned) |
 | Module boundary | `plannerCommandBoundary.test.ts` | TEST-1 |
 
-See `plann/08-TEST-PLAN.md` for full gate matrix.
+See `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` for full gate matrix.
 
 ---
 
@@ -120,6 +120,6 @@ See `plann/08-TEST-PLAN.md` for full gate matrix.
 - `docs/architecture/ADMIN-UI-CONTRACT.md` — admin surface detail (UI-2)
 - `docs/architecture/SITE-MARKETING-UI-CONTRACT.md` — marketing reference (UI-3)
 - `docs/Lockedfiles/ui-execution/` — domain pair
-- `plann/06-UI-PLAN.md` — phased execution
-- `plann/08-TEST-PLAN.md` — test gates
+- `archive/Plans/01-execution/specialists/06-UI-PLAN.md` — phased execution
+- `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` — test gates
 - `site/scripts/lint-ui-contract.mjs` — automated checks

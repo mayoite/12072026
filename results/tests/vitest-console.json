@@ -1,445 +1,372 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T18:39:19.375Z",
-  "consoleCount": 63,
-  "stderrCount": 53,
+  "generatedAt": "2026-07-08T04:54:32.769Z",
+  "consoleCount": 53,
+  "stderrCount": 43,
   "stdoutCount": 10,
   "entries": [
     {
-      "content": "[getCatalog] failed: Missing catalog_categories or catalog_products\n",
-      "taskId": "-546679193_0_1",
-      "time": 1783449320518,
-      "type": "stderr",
-      "testName": "catalog tree > falls back to local products when Drizzle returns null rows"
-    },
-    {
-      "content": "[getCatalog] Catalog DB error (attempt 1/3): fetch failed: network timeout\n",
-      "taskId": "-546679193_0_4",
-      "time": 1783449320586,
-      "type": "stderr",
-      "testName": "catalog tree > retries transient fetch failures before succeeding"
-    },
-    {
-      "content": "[phase-03a-benchmark-exceed] inventory search 1K p95=12.549ms stretch=50ms\n",
+      "content": "[phase-03a-benchmark-exceed] inventory search 1K p95=18.063ms stretch=50ms\n",
       "taskId": "1827493543_5_5_0",
-      "time": 1783449320747,
+      "time": 1783486304576,
       "type": "stdout",
       "testName": "03A-INV: Search Index > large inventory benchmarks > meets 1K search p95 budget under 100ms"
     },
     {
-      "content": "[phase-03a-benchmark-exceed] inventory search 10K p95=109.153ms stretch=100ms\n",
+      "content": "[phase-03a-benchmark-exceed] inventory search 10K p95=108.893ms stretch=100ms\n",
       "taskId": "1827493543_5_5_1",
-      "time": 1783449323039,
+      "time": 1783486307518,
       "type": "stdout",
       "testName": "03A-INV: Search Index > large inventory benchmarks > meets 10K search p95 budget under 200ms"
     },
     {
-      "content": "[phase-03a-benchmark-exceed] SVG symbol generation p95=0.027ms stretch=5ms\n",
+      "content": "[phase-03a-benchmark-exceed] SVG symbol generation p95=0.057ms stretch=5ms\n",
       "taskId": "1827493543_5_5_2",
-      "time": 1783449323041,
+      "time": 1783486307522,
       "type": "stdout",
       "testName": "03A-INV: Search Index > large inventory benchmarks > meets SVG symbol generation budget under 10ms p95"
     },
     {
-      "content": "[advisorActions] revertLastSuggestion not fully implemented\n",
-      "taskId": "-1419440871_13_1",
-      "time": 1783449328440,
-      "type": "stderr",
-      "testName": "AI Advisor Actions (TDD: apply errors, preview, revert, layout branches) > previewSuggestionActions and revert cover layout and warn path"
-    },
-    {
       "content": "[vitest] The vi.fn() mock did not use 'function' or 'class' in its implementation, see https://vitest.dev/api/vi#vi-spyon for examples.\n",
       "taskId": "-1306664677_1_0",
-      "time": 1783449337933,
+      "time": 1783486311008,
       "type": "stderr",
       "testName": "Lazy3DViewer > lazy-loads the inner viewer and calls onReady"
     },
     {
-      "content": "[surface] Failed to transmit error stack to endpoint: DOMException [NetworkError]: Failed to execute \"fetch()\" on \"Window\" with URL \"http://localhost:3000/api/log-error\": The operation was aborted.\n    at Fetch.onError (file:///D:/OandO07072026/node_modules/.pnpm/happy-dom@20.10.6/node_modules/happy-dom/lib/fetch/Fetch.js:540:21)\n    at ClientRequest.emit (node:events:521:24)\n    at emitErrorEvent (node:_http_client:109:11)\n    at Socket.socketErrorListener (node:_http_client:593:5)\n    at Socket.emit (node:events:509:28)\n    at emitErrorNT (node:internal/streams/destroy:170:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n    at processTicksAndRejections (node:internal/process/task_queues:90:21)\n[planner] Failed to transmit error stack to endpoint: DOMException [NetworkError]: Failed to execute \"fetch()\" on \"Window\" with URL \"http://localhost:3000/api/log-error\": The operation was aborted.\n    at Fetch.onError (file:///D:/OandO07072026/node_modules/.pnpm/happy-dom@20.10.6/node_modules/happy-dom/lib/fetch/Fetch.js:540:21)\n    at ClientRequest.emit (node:events:521:24)\n    at emitErrorEvent (node:_http_client:109:11)\n    at Socket.socketErrorListener (node:_http_client:593:5)\n    at Socket.emit (node:events:509:28)\n    at emitErrorNT (node:internal/streams/destroy:170:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n    at processTicksAndRejections (node:internal/process/task_queues:90:21)\n[planner] Failed to transmit error stack to endpoint: DOMException [NetworkError]: Failed to execute \"fetch()\" on \"Window\" with URL \"http://localhost:3000/api/log-error\": The operation was aborted.\n    at Fetch.onError (file:///D:/OandO07072026/node_modules/.pnpm/happy-dom@20.10.6/node_modules/happy-dom/lib/fetch/Fetch.js:540:21)\n    at ClientRequest.emit (node:events:521:24)\n    at emitErrorEvent (node:_http_client:109:11)\n    at Socket.socketErrorListener (node:_http_client:593:5)\n    at Socket.emit (node:events:509:28)\n    at emitErrorNT (node:internal/streams/destroy:170:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n    at processTicksAndRejections (node:internal/process/task_queues:90:21)\n",
-      "taskId": "logClientError (D:\\OandO07072026\\site\\lib\\errorLogger.ts:53:13)",
-      "time": 1783449346929,
+      "content": "[3D viewer] Failed to transmit error stack to endpoint: DOMException [NetworkError]: Failed to execute \"fetch()\" on \"Window\" with URL \"http://localhost:3000/api/log-error\": \n    at Fetch.onError (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/happy-dom@20.10.6/node_modules/\u001b[4mhappy-dom\u001b[24m/lib/fetch/Fetch.js:540:21)\n\u001b[90m    at ClientRequest.emit (node:events:521:24)\u001b[39m\n\u001b[90m    at emitErrorEvent (node:_http_client:109:11)\u001b[39m\n\u001b[90m    at Socket.socketErrorListener (node:_http_client:593:5)\u001b[39m\n\u001b[90m    at Socket.emit (node:events:509:28)\u001b[39m\n\u001b[90m    at emitErrorNT (node:internal/streams/destroy:170:8)\u001b[39m\n\u001b[90m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\u001b[39m\n\u001b[90m    at processTicksAndRejections (node:internal/process/task_queues:90:21)\u001b[39m\n",
+      "taskId": "-240413137",
+      "time": 1783486316050,
       "type": "stderr"
     },
     {
-      "content": "[3D viewer] Failed to transmit error stack to endpoint: DOMException [NetworkError]: Failed to execute \"fetch()\" on \"Window\" with URL \"http://localhost:3000/api/log-error/\": The operation was aborted.\n    at Fetch.onError (file:///D:/OandO07072026/node_modules/.pnpm/happy-dom@20.10.6/node_modules/happy-dom/lib/fetch/Fetch.js:540:21)\n    at ClientRequest.emit (node:events:521:24)\n    at emitErrorEvent (node:_http_client:109:11)\n    at Socket.socketErrorListener (node:_http_client:593:5)\n    at Socket.emit (node:events:509:28)\n    at emitErrorNT (node:internal/streams/destroy:170:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n    at processTicksAndRejections (node:internal/process/task_queues:90:21)\n[planner] Failed to transmit error stack to endpoint: DOMException [NetworkError]: Failed to execute \"fetch()\" on \"Window\" with URL \"http://localhost:3000/api/log-error/\": The operation was aborted.\n    at Fetch.onError (file:///D:/OandO07072026/node_modules/.pnpm/happy-dom@20.10.6/node_modules/happy-dom/lib/fetch/Fetch.js:540:21)\n    at ClientRequest.emit (node:events:521:24)\n    at emitErrorEvent (node:_http_client:109:11)\n    at Socket.socketErrorListener (node:_http_client:593:5)\n    at Socket.emit (node:events:509:28)\n    at emitErrorNT (node:internal/streams/destroy:170:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n    at processTicksAndRejections (node:internal/process/task_queues:90:21)\n",
-      "taskId": "logClientError (D:\\OandO07072026\\site\\lib\\errorLogger.ts:53:13)",
-      "time": 1783449346933,
+      "content": "[planner] Failed to transmit error stack to endpoint: DOMException [NetworkError]: Failed to execute \"fetch()\" on \"Window\" with URL \"http://localhost:3000/api/log-error\": \n    at Fetch.onError (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/happy-dom@20.10.6/node_modules/\u001b[4mhappy-dom\u001b[24m/lib/fetch/Fetch.js:540:21)\n\u001b[90m    at ClientRequest.emit (node:events:521:24)\u001b[39m\n\u001b[90m    at emitErrorEvent (node:_http_client:109:11)\u001b[39m\n\u001b[90m    at Socket.socketErrorListener (node:_http_client:593:5)\u001b[39m\n\u001b[90m    at Socket.emit (node:events:509:28)\u001b[39m\n\u001b[90m    at emitErrorNT (node:internal/streams/destroy:170:8)\u001b[39m\n\u001b[90m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\u001b[39m\n\u001b[90m    at processTicksAndRejections (node:internal/process/task_queues:90:21)\u001b[39m\n",
+      "taskId": "-240413137",
+      "time": 1783486316055,
       "type": "stderr"
     },
     {
-      "content": "Received `false` for a non-boolean attribute `initial`.\n\nIf you want to write it to the DOM, pass a string instead: initial=\"false\" or initial={value.toString()}.\n\nIf you used to conditionally omit it with initial={condition && value}, pass initial={condition ? value : undefined} instead.\nReceived `false` for a non-boolean attribute `animate`.\n\nIf you want to write it to the DOM, pass a string instead: animate=\"false\" or animate={value.toString()}.\n\nIf you used to conditionally omit it with animate={condition && value}, pass animate={condition ? value : undefined} instead.\n",
-      "taskId": "1213909917_0_0",
-      "time": 1783449351761,
-      "type": "stderr",
-      "testName": "Hero Component > renders default title and button correctly"
+      "content": "[surface] Failed to transmit error stack to endpoint: DOMException [NetworkError]: Failed to execute \"fetch()\" on \"Window\" with URL \"http://localhost:3000/api/log-error\": \n    at Fetch.onError (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/happy-dom@20.10.6/node_modules/\u001b[4mhappy-dom\u001b[24m/lib/fetch/Fetch.js:540:21)\n\u001b[90m    at ClientRequest.emit (node:events:521:24)\u001b[39m\n\u001b[90m    at emitErrorEvent (node:_http_client:109:11)\u001b[39m\n\u001b[90m    at Socket.socketErrorListener (node:_http_client:593:5)\u001b[39m\n\u001b[90m    at Socket.emit (node:events:509:28)\u001b[39m\n\u001b[90m    at emitErrorNT (node:internal/streams/destroy:170:8)\u001b[39m\n\u001b[90m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\u001b[39m\n\u001b[90m    at processTicksAndRejections (node:internal/process/task_queues:90:21)\u001b[39m\n",
+      "taskId": "-240413137",
+      "time": 1783486316058,
+      "type": "stderr"
     },
     {
-      "content": "Received `false` for a non-boolean attribute `initial`.\n\nIf you want to write it to the DOM, pass a string instead: initial=\"false\" or initial={value.toString()}.\n\nIf you used to conditionally omit it with initial={condition && value}, pass initial={condition ? value : undefined} instead.\n",
-      "taskId": "273295302_0_2",
-      "time": 1783449354181,
-      "type": "stderr",
-      "testName": "PlannerHeroDemo > does not set up interval for cycling state when reduced motion is enabled"
+      "content": "[planner] Failed to transmit error stack to endpoint: DOMException [NetworkError]: Failed to execute \"fetch()\" on \"Window\" with URL \"http://localhost:3000/api/log-error\": \n    at Fetch.onError (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/happy-dom@20.10.6/node_modules/\u001b[4mhappy-dom\u001b[24m/lib/fetch/Fetch.js:540:21)\n\u001b[90m    at ClientRequest.emit (node:events:521:24)\u001b[39m\n\u001b[90m    at emitErrorEvent (node:_http_client:109:11)\u001b[39m\n\u001b[90m    at Socket.socketErrorListener (node:_http_client:593:5)\u001b[39m\n\u001b[90m    at Socket.emit (node:events:509:28)\u001b[39m\n\u001b[90m    at emitErrorNT (node:internal/streams/destroy:170:8)\u001b[39m\n\u001b[90m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\u001b[39m\n\u001b[90m    at processTicksAndRejections (node:internal/process/task_queues:90:21)\u001b[39m\n",
+      "taskId": "-240413137",
+      "time": 1783486316060,
+      "type": "stderr"
     },
     {
-      "content": "[phase-03-perf] chaise pipeline elapsed=0.58ms budget=200ms\n",
+      "content": "[planner] Failed to transmit error stack to endpoint: DOMException [NetworkError]: Failed to execute \"fetch()\" on \"Window\" with URL \"http://localhost:3000/api/log-error\": \n    at Fetch.onError (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/happy-dom@20.10.6/node_modules/\u001b[4mhappy-dom\u001b[24m/lib/fetch/Fetch.js:540:21)\n\u001b[90m    at ClientRequest.emit (node:events:521:24)\u001b[39m\n\u001b[90m    at emitErrorEvent (node:_http_client:109:11)\u001b[39m\n\u001b[90m    at Socket.socketErrorListener (node:_http_client:593:5)\u001b[39m\n\u001b[90m    at Socket.emit (node:events:509:28)\u001b[39m\n\u001b[90m    at emitErrorNT (node:internal/streams/destroy:170:8)\u001b[39m\n\u001b[90m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\u001b[39m\n\u001b[90m    at processTicksAndRejections (node:internal/process/task_queues:90:21)\u001b[39m\n",
+      "taskId": "-240413137",
+      "time": 1783486316063,
+      "type": "stderr"
+    },
+    {
+      "content": "[advisorActions] revertLastSuggestion not fully implemented\n",
+      "taskId": "-1419440871_13_1",
+      "time": 1783486318240,
+      "type": "stderr",
+      "testName": "AI Advisor Actions (TDD: apply errors, preview, revert, layout branches) > previewSuggestionActions and revert cover layout and warn path"
+    },
+    {
+      "content": "[phase-03-perf] chaise pipeline elapsed=1.02ms budget=200ms\n",
       "taskId": "1700676388_6_0",
-      "time": 1783449362027,
+      "time": 1783486326088,
       "type": "stdout",
       "testName": "03-SVG-01: performance budget (p95 ≤ 200ms per fixture) > chaise: single pipeline run completes within 200ms"
     },
     {
-      "content": "[phase-03-perf] side-table pipeline elapsed=0.82ms budget=200ms\n",
+      "content": "[phase-03-perf] side-table pipeline elapsed=1.28ms budget=200ms\n",
       "taskId": "1700676388_6_1",
-      "time": 1783449362030,
+      "time": 1783486326091,
       "type": "stdout",
       "testName": "03-SVG-01: performance budget (p95 ≤ 200ms per fixture) > side-table: single pipeline run completes within 200ms"
     },
     {
-      "content": "[phase-03-perf] sectional pipeline elapsed=0.59ms budget=200ms\n",
+      "content": "[phase-03-perf] sectional pipeline elapsed=0.62ms budget=200ms\n",
       "taskId": "1700676388_6_2",
-      "time": 1783449362031,
+      "time": 1783486326093,
       "type": "stdout",
       "testName": "03-SVG-01: performance budget (p95 ≤ 200ms per fixture) > sectional: single pipeline run completes within 200ms"
     },
     {
-      "content": "React does not recognize the `whileInView` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whileinview` instead. If you accidentally passed it from a parent component, remove it from the DOM element.\n",
-      "taskId": "628316140_0_0",
-      "time": 1783449374994,
+      "content": "Received `false` for a non-boolean attribute `initial`.\n\nIf you want to write it to the DOM, pass a string instead: initial=\"false\" or initial={value.toString()}.\n\nIf you used to conditionally omit it with initial={condition && value}, pass initial={condition ? value : undefined} instead.\n",
+      "taskId": "273295302_0_2",
+      "time": 1783486330843,
       "type": "stderr",
-      "testName": "PlannerFeaturesHubPage > renders homepage marketing shell, hero content, features, and steps"
-    },
-    {
-      "content": "An update to LayerVisibilityPanel inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act\n",
-      "taskId": "146826350_0_0",
-      "time": 1783449386264,
-      "type": "stderr",
-      "testName": "LayerVisibilityPanel > renders layer rows and toggles visibility"
-    },
-    {
-      "content": "Planner autosave failed: Error: Disk full\n    at D:/OandO07072026/site/tests/unit/features/planner/hooks/usePlannerFabricAutosave.test.tsx:109:21\n    at D:\\OandO07072026\\node_modules\\.pnpm\\@testing-library+react@16.3_11d2d49f5a29711711a9ee76b83cb539\\node_modules\\@testing-library\\react\\dist\\act-compat.js:47:24\n    at process.env.NODE_ENV.exports.act (D:\\OandO07072026\\node_modules\\.pnpm\\react@19.2.7\\node_modules\\react\\cjs\\react.development.js:814:22)\n    at Proxy.<anonymous> (D:\\OandO07072026\\node_modules\\.pnpm\\@testing-library+react@16.3_11d2d49f5a29711711a9ee76b83cb539\\node_modules\\@testing-library\\react\\dist\\act-compat.js:46:25)\n    at D:/OandO07072026/site/tests/unit/features/planner/hooks/usePlannerFabricAutosave.test.tsx:108:5\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n",
-      "taskId": "2004539550_0_3",
-      "time": 1783449386616,
-      "type": "stderr",
-      "testName": "usePlannerFabricAutosave > updates status to error when saver onError callback is fired"
-    },
-    {
-      "content": "An update to PropertiesInspector inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act\n",
-      "taskId": "1683070595_0_1",
-      "time": 1783449393034,
-      "type": "stderr",
-      "testName": "PropertiesInspector > renders Fabric selection dimensions"
+      "testName": "PlannerHeroDemo > does not set up interval for cycling state when reduced motion is enabled"
     },
     {
       "content": "THREE.WARNING: Multiple instances of Three.js being imported.\n",
       "taskId": "462048289",
-      "time": 1783449393181,
+      "time": 1783486333783,
       "type": "stderr"
+    },
+    {
+      "content": "React does not recognize the `whileInView` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whileinview` instead. If you accidentally passed it from a parent component, remove it from the DOM element.\n",
+      "taskId": "628316140_0_0",
+      "time": 1783486344435,
+      "type": "stderr",
+      "testName": "PlannerFeaturesHubPage > renders homepage marketing shell, hero content, features, and steps"
+    },
+    {
+      "content": "An update to PropertiesInspector inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act\n",
+      "taskId": "1683070595_0_1",
+      "time": 1783486356265,
+      "type": "stderr",
+      "testName": "PropertiesInspector > renders Fabric selection dimensions"
+    },
+    {
+      "content": "[planner:document] validation failed {\n  context: \u001b[32m'parsePlannerDocumentImport'\u001b[39m,\n  issueCount: \u001b[33m2\u001b[39m,\n  issues: [\n    {\n      path: \u001b[32m'schemaVersion'\u001b[39m,\n      code: \u001b[32m'invalid_value'\u001b[39m,\n      message: \u001b[32m'Invalid input: expected 1'\u001b[39m,\n      received: \u001b[90mundefined\u001b[39m,\n      sample: \u001b[36m[Object]\u001b[39m\n    },\n    {\n      path: \u001b[32m'name'\u001b[39m,\n      code: \u001b[32m'invalid_type'\u001b[39m,\n      message: \u001b[32m'Invalid input: expected string, received undefined'\u001b[39m,\n      received: \u001b[90mundefined\u001b[39m,\n      sample: \u001b[90mundefined\u001b[39m\n    }\n  ],\n  summary: {\n    id: \u001b[90mundefined\u001b[39m,\n    name: \u001b[90mundefined\u001b[39m,\n    title: \u001b[90mundefined\u001b[39m,\n    hasProjectName: \u001b[33mfalse\u001b[39m,\n    hasClientName: \u001b[33mfalse\u001b[39m,\n    hasPreparedBy: \u001b[33mfalse\u001b[39m,\n    roomWidthMm: \u001b[90mundefined\u001b[39m,\n    roomDepthMm: \u001b[90mundefined\u001b[39m,\n    seatTarget: \u001b[90mundefined\u001b[39m,\n    unitSystem: \u001b[90mundefined\u001b[39m,\n    itemCount: \u001b[90mundefined\u001b[39m,\n    status: \u001b[90mundefined\u001b[39m,\n    schemaVersion: \u001b[33m99\u001b[39m,\n    sceneJson: { kind: \u001b[32m'undefined'\u001b[39m }\n  },\n  envelopeIssueCount: \u001b[33m3\u001b[39m,\n  saveRowIssueCount: \u001b[33m3\u001b[39m,\n  documentIssueCount: \u001b[33m2\u001b[39m,\n  errorPreview: [\n    \u001b[32m'type: Invalid input: expected \"planner-document\"'\u001b[39m,\n    \u001b[32m'schemaVersion: Invalid input: expected 1'\u001b[39m,\n    \u001b[32m'document: Invalid input: expected object, received undefined'\u001b[39m,\n    \u001b[32m'id: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'created_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'updated_at: Invalid input: expected string, received undefined'\u001b[39m\n  ]\n}\n",
+      "taskId": "-1385116064_0_5_1",
+      "time": 1783486357319,
+      "type": "stderr",
+      "testName": "plannerDocument - additional coverage > parsePlannerDocumentImport > fails for invalid input"
+    },
+    {
+      "content": "[planner:document] validation failed {\n  context: \u001b[32m'normalizePlannerDocument(loose-fallback)'\u001b[39m,\n  issueCount: \u001b[33m1\u001b[39m,\n  issues: [\n    {\n      path: \u001b[32m'status'\u001b[39m,\n      code: \u001b[32m'invalid_value'\u001b[39m,\n      message: \u001b[32m'Invalid option: expected one of \"draft\"|\"active\"|\"archived\"'\u001b[39m,\n      received: \u001b[90mundefined\u001b[39m,\n      sample: \u001b[36m[Object]\u001b[39m\n    }\n  ],\n  summary: {\n    id: \u001b[90mundefined\u001b[39m,\n    name: { kind: \u001b[32m'string'\u001b[39m, length: \u001b[33m4\u001b[39m, redacted: \u001b[33mtrue\u001b[39m },\n    title: { kind: \u001b[32m'string'\u001b[39m, length: \u001b[33m4\u001b[39m, redacted: \u001b[33mtrue\u001b[39m },\n    hasProjectName: \u001b[33mfalse\u001b[39m,\n    hasClientName: \u001b[33mfalse\u001b[39m,\n    hasPreparedBy: \u001b[33mfalse\u001b[39m,\n    roomWidthMm: \u001b[90mundefined\u001b[39m,\n    roomDepthMm: \u001b[90mundefined\u001b[39m,\n    seatTarget: \u001b[90mundefined\u001b[39m,\n    unitSystem: \u001b[90mundefined\u001b[39m,\n    itemCount: \u001b[90mundefined\u001b[39m,\n    status: \u001b[32m'unknown-status'\u001b[39m,\n    schemaVersion: \u001b[90mundefined\u001b[39m,\n    sceneJson: { kind: \u001b[32m'object'\u001b[39m, keyCount: \u001b[33m0\u001b[39m, keys: [], redacted: \u001b[33mtrue\u001b[39m }\n  },\n  envelopeIssueCount: \u001b[33m2\u001b[39m,\n  saveRowIssueCount: \u001b[33m3\u001b[39m\n}\n",
+      "taskId": "-1385116064_0_6_5",
+      "time": 1783486357333,
+      "type": "stderr",
+      "testName": "plannerDocument - additional coverage > normalizePlannerDocument edge cases > coerces unknown status to draft"
+    },
+    {
+      "content": "Received `true` for a non-boolean attribute `jsx`.\n\nIf you want to write it to the DOM, pass a string instead: jsx=\"true\" or jsx={value.toString()}.\n",
+      "taskId": "368234805_0_0",
+      "time": 1783486358486,
+      "type": "stderr",
+      "testName": "PlannerSkeleton > renders with shimmer elements"
+    },
+    {
+      "content": "React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.\nReact does not recognize the `whileInView` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whileinview` instead. If you accidentally passed it from a parent component, remove it from the DOM element.\n",
+      "taskId": "2006224813_0_0",
+      "time": 1783486362823,
+      "type": "stderr",
+      "testName": "PlannerLandingPage > renders landing sections, hero and steps correctly"
+    },
+    {
+      "content": "Planner autosave failed: Error: Disk full\n    at D:/OandO07072026/site/tests/unit/features/planner/hooks/usePlannerFabricAutosave.test.tsx:109:21\n    at D:\\OandO07072026\\node_modules\\\u001b[4m.pnpm\u001b[24m\\@testing-library+react@16.3_11d2d49f5a29711711a9ee76b83cb539\\node_modules\\\u001b[4m@testing-library\\react\u001b[24m\\dist\\act-compat.js:47:24\n    at process.env.NODE_ENV.exports.act (D:\\OandO07072026\\node_modules\\\u001b[4m.pnpm\u001b[24m\\react@19.2.7\\node_modules\\\u001b[4mreact\u001b[24m\\cjs\\react.development.js:814:22)\n    at Proxy.<anonymous> (D:\\OandO07072026\\node_modules\\\u001b[4m.pnpm\u001b[24m\\@testing-library+react@16.3_11d2d49f5a29711711a9ee76b83cb539\\node_modules\\\u001b[4m@testing-library\\react\u001b[24m\\dist\\act-compat.js:46:25)\n    at D:/OandO07072026/site/tests/unit/features/planner/hooks/usePlannerFabricAutosave.test.tsx:108:5\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2323:10)\n",
+      "taskId": "2004539550_0_3",
+      "time": 1783486367100,
+      "type": "stderr",
+      "testName": "usePlannerFabricAutosave > updates status to error when saver onError callback is fired"
+    },
+    {
+      "content": "In HTML, <html> cannot be a child of <div>.\nThis will cause a hydration error.\n",
+      "taskId": "-1076011847_0_1",
+      "time": 1783486367481,
+      "type": "stderr",
+      "testName": "PlannerRootLayout > renders layout correctly with children"
+    },
+    {
+      "content": "An update to LayerVisibilityPanel inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act\n",
+      "taskId": "146826350_0_0",
+      "time": 1783486368116,
+      "type": "stderr",
+      "testName": "LayerVisibilityPanel > renders layer rows and toggles visibility"
     },
     {
       "content": "An update to LayerManagerPanel inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act\n",
       "taskId": "-1105239361_0_0",
-      "time": 1783449394062,
+      "time": 1783486371384,
       "type": "stderr",
       "testName": "LayerManagerPanel > renders Fabric object rows from runtime state"
     },
     {
       "content": "An update to LayerManagerPanel inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act\n",
       "taskId": "-1105239361_0_1",
-      "time": 1783449394074,
+      "time": 1783486371397,
       "type": "stderr",
       "testName": "LayerManagerPanel > shows an empty state when no canvas objects exist"
     },
     {
-      "content": "React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.\nReact does not recognize the `whileInView` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whileinview` instead. If you accidentally passed it from a parent component, remove it from the DOM element.\n",
-      "taskId": "2006224813_0_0",
-      "time": 1783449404304,
-      "type": "stderr",
-      "testName": "PlannerLandingPage > renders landing sections, hero and steps correctly"
-    },
-    {
-      "content": "Received `true` for a non-boolean attribute `jsx`.\n\nIf you want to write it to the DOM, pass a string instead: jsx=\"true\" or jsx={value.toString()}.\n",
-      "taskId": "368234805_0_0",
-      "time": 1783449408605,
-      "type": "stderr",
-      "testName": "PlannerSkeleton > renders with shimmer elements"
-    },
-    {
-      "content": "[planner:document] validation failed {\n  context: 'parsePlannerDocumentImport',\n  issueCount: 2,\n  issues: [\n    {\n      path: 'schemaVersion',\n      code: 'invalid_value',\n      message: 'Invalid input: expected 1',\n      received: undefined,\n      sample: [Object]\n    },\n    {\n      path: 'name',\n      code: 'invalid_type',\n      message: 'Invalid input: expected string, received undefined',\n      received: undefined,\n      sample: undefined\n    }\n  ],\n  summary: {\n    id: undefined,\n    name: undefined,\n    title: undefined,\n    hasProjectName: false,\n    hasClientName: false,\n    hasPreparedBy: false,\n    roomWidthMm: undefined,\n    roomDepthMm: undefined,\n    seatTarget: undefined,\n    unitSystem: undefined,\n    itemCount: undefined,\n    status: undefined,\n    schemaVersion: 99,\n    sceneJson: { kind: 'undefined' }\n  },\n  envelopeIssueCount: 3,\n  saveRowIssueCount: 3,\n  documentIssueCount: 2,\n  errorPreview: [\n    'type: Invalid input: expected \"planner-document\"',\n    'schemaVersion: Invalid input: expected 1',\n    'document: Invalid input: expected object, received undefined',\n    'id: Invalid input: expected string, received undefined',\n    'created_at: Invalid input: expected string, received undefined',\n    'updated_at: Invalid input: expected string, received undefined'\n  ]\n}\n",
-      "taskId": "-1385116064_0_5_1",
-      "time": 1783449412799,
-      "type": "stderr",
-      "testName": "plannerDocument - additional coverage > parsePlannerDocumentImport > fails for invalid input"
-    },
-    {
-      "content": "[planner:document] validation failed {\n  context: 'normalizePlannerDocument(loose-fallback)',\n  issueCount: 1,\n  issues: [\n    {\n      path: 'status',\n      code: 'invalid_value',\n      message: 'Invalid option: expected one of \"draft\"|\"active\"|\"archived\"',\n      received: undefined,\n      sample: [Object]\n    }\n  ],\n  summary: {\n    id: undefined,\n    name: { kind: 'string', length: 4, redacted: true },\n    title: { kind: 'string', length: 4, redacted: true },\n    hasProjectName: false,\n    hasClientName: false,\n    hasPreparedBy: false,\n    roomWidthMm: undefined,\n    roomDepthMm: undefined,\n    seatTarget: undefined,\n    unitSystem: undefined,\n    itemCount: undefined,\n    status: 'unknown-status',\n    schemaVersion: undefined,\n    sceneJson: { kind: 'object', keyCount: 0, keys: [], redacted: true }\n  },\n  envelopeIssueCount: 2,\n  saveRowIssueCount: 3\n}\n",
-      "taskId": "-1385116064_0_6_5",
-      "time": 1783449412816,
-      "type": "stderr",
-      "testName": "plannerDocument - additional coverage > normalizePlannerDocument edge cases > coerces unknown status to draft"
-    },
-    {
-      "content": "Theme fetch failed, falling back to local tokens Error: Failed to fetch active theme\n    at fetchTheme (D:/OandO07072026/site/lib/theme/ThemeProvider.tsx:51:17)\n",
-      "taskId": "386945854_0_1",
-      "time": 1783449413102,
-      "type": "stderr",
-      "testName": "ThemeProvider Component > should fallback to local tokens if fetch fails"
-    },
-    {
-      "content": "[fetchCatalogProductsLive] Catalog DB unavailable: Error: relation \"catalog_products\" does not exist\n    at D:/OandO07072026/site/tests/unit/lib/catalog/catalogDrizzle.test.ts:122:17\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64\n",
-      "taskId": "612468453_0_1_3",
-      "time": 1783449433170,
-      "type": "stderr",
-      "testName": "catalogDrizzle > fetchCatalogProductsLive > returns null on missing relation error"
-    },
-    {
-      "content": "[fetchCatalogCategoriesLive] Catalog DB unavailable: Error: 42P01 undefined_table\n    at D:/OandO07072026/site/tests/unit/lib/catalog/catalogDrizzle.test.ts:173:17\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64\n",
-      "taskId": "612468453_0_4_1",
-      "time": 1783449433181,
-      "type": "stderr",
-      "testName": "catalogDrizzle > fetchCatalogCategoriesLive > returns null on 42P01 missing relation"
-    },
-    {
-      "content": "[fetchCatalogCategoryIdsLive] Catalog DB unavailable: Error: relation \"catalog_products\" does not exist\n    at D:/OandO07072026/site/tests/unit/lib/catalog/catalogDrizzle.test.ts:214:17\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64\n",
-      "taskId": "612468453_0_6_2",
-      "time": 1783449433186,
-      "type": "stderr",
-      "testName": "catalogDrizzle > fetchCatalogCategoryIdsLive > returns null on missing relation"
-    },
-    {
-      "content": "[fetchCatalogProductsSlugFieldsByCategoryLive] Catalog DB unavailable: Error: 42P01\n    at D:/OandO07072026/site/tests/unit/lib/catalog/catalogDrizzle.test.ts:245:17\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64\n",
-      "taskId": "612468453_0_7_1",
-      "time": 1783449433188,
-      "type": "stderr",
-      "testName": "catalogDrizzle > fetchCatalogProductsSlugFieldsByCategoryLive > returns null on missing relation"
-    },
-    {
-      "content": "[fetchCatalogProductSpecsRowsLive] Catalog DB unavailable: Error: does not exist\n    at D:/OandO07072026/site/tests/unit/lib/catalog/catalogDrizzle.test.ts:298:17\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64\n",
-      "taskId": "612468453_0_9_2",
-      "time": 1783449433193,
-      "type": "stderr",
-      "testName": "catalogDrizzle > fetchCatalogProductSpecsRowsLive > returns null on missing relation"
-    },
-    {
-      "content": "[fetchCatalogProductImageRowsLive] Catalog DB unavailable: Error: 42P01\n    at D:/OandO07072026/site/tests/unit/lib/catalog/catalogDrizzle.test.ts:328:17\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64\n",
-      "taskId": "612468453_0_10_2",
-      "time": 1783449433199,
-      "type": "stderr",
-      "testName": "catalogDrizzle > fetchCatalogProductImageRowsLive > returns null on missing relation"
-    },
-    {
-      "content": "[POST /api/audit] error: Error: db unavailable\n    at D:/OandO07072026/site/tests/unit/app/api/audit/route.test.ts:158:50\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64\n",
-      "taskId": "251276866_0_7",
-      "time": 1783449436581,
-      "type": "stderr",
-      "testName": "app/api/audit/route.ts > returns 500 envelope when persistence fails"
-    },
-    {
-      "content": "In HTML, <html> cannot be a child of <div>.\nThis will cause a hydration error.\n",
-      "taskId": "-1076011847_0_1",
-      "time": 1783449439567,
-      "type": "stderr",
-      "testName": "PlannerRootLayout > renders layout correctly with children"
-    },
-    {
-      "content": "Received `true` for a non-boolean attribute `jsx`.\n\nIf you want to write it to the DOM, pass a string instead: jsx=\"true\" or jsx={value.toString()}.\n",
-      "taskId": "1525544378_0_0",
-      "time": 1783449439816,
-      "type": "stderr",
-      "testName": "ProjectSetupGate > should render component ProjectSetupGate"
-    },
-    {
-      "content": "Failed to fetch feature flags from Supabase: Service Unavailable\n",
-      "taskId": "1428669149_0_4",
-      "time": 1783449440102,
-      "type": "stderr",
-      "testName": "planner lib branch coverage gaps > covers ai advisor plain-text fallbacks and failed feature flag fetch"
-    },
-    {
-      "content": "[planner:document] validation failed {\n  context: 'parsePlannerDocumentImport',\n  issueCount: 1,\n  issues: [\n    {\n      path: 'name',\n      code: 'invalid_type',\n      message: 'Invalid input: expected string, received undefined',\n      received: undefined,\n      sample: undefined\n    }\n  ],\n  summary: {\n    id: undefined,\n    name: undefined,\n    title: undefined,\n    hasProjectName: false,\n    hasClientName: false,\n    hasPreparedBy: false,\n    roomWidthMm: undefined,\n    roomDepthMm: undefined,\n    seatTarget: undefined,\n    unitSystem: undefined,\n    itemCount: undefined,\n    status: undefined,\n    schemaVersion: undefined,\n    sceneJson: { kind: 'undefined' }\n  },\n  envelopeIssueCount: 2,\n  saveRowIssueCount: 3,\n  documentIssueCount: 1,\n  errorPreview: [\n    'type: Invalid input: expected \"planner-document\"',\n    'document: Invalid input: expected object, received undefined',\n    'id: Invalid input: expected string, received undefined',\n    'created_at: Invalid input: expected string, received undefined',\n    'updated_at: Invalid input: expected string, received undefined',\n    'name: Invalid input: expected string, received undefined'\n  ]\n}\n",
-      "taskId": "2096878823_0_0_2",
-      "time": 1783449441795,
-      "type": "stderr",
-      "testName": "plannerImport > parsePlannerDocumentImportText > returns error on invalid schema"
-    },
-    {
-      "content": "[planner:document] validation failed {\n  context: 'parsePlannerDocumentImport',\n  issueCount: 1,\n  issues: [\n    {\n      path: 'name',\n      code: 'invalid_type',\n      message: 'Invalid input: expected string, received undefined',\n      received: undefined,\n      sample: undefined\n    }\n  ],\n  summary: {\n    id: undefined,\n    name: undefined,\n    title: undefined,\n    hasProjectName: false,\n    hasClientName: false,\n    hasPreparedBy: false,\n    roomWidthMm: undefined,\n    roomDepthMm: undefined,\n    seatTarget: undefined,\n    unitSystem: undefined,\n    itemCount: undefined,\n    status: undefined,\n    schemaVersion: undefined,\n    sceneJson: { kind: 'undefined' }\n  },\n  envelopeIssueCount: 2,\n  saveRowIssueCount: 3,\n  documentIssueCount: 1,\n  errorPreview: [\n    'type: Invalid input: expected \"planner-document\"',\n    'document: Invalid input: expected object, received undefined',\n    'id: Invalid input: expected string, received undefined',\n    'created_at: Invalid input: expected string, received undefined',\n    'updated_at: Invalid input: expected string, received undefined',\n    'name: Invalid input: expected string, received undefined'\n  ]\n}\n",
-      "taskId": "2096878823_0_2_1",
-      "time": 1783449441807,
-      "type": "stderr",
-      "testName": "plannerImport > parsePlannerDocumentImportValue > returns error on invalid object"
-    },
-    {
-      "content": "[planner:document] validation failed {\n  context: 'parsePlannerDocumentImport',\n  issueCount: 1,\n  issues: [\n    {\n      path: 'name',\n      code: 'invalid_type',\n      message: 'Invalid input: expected string, received undefined',\n      received: undefined,\n      sample: undefined\n    }\n  ],\n  summary: {\n    id: undefined,\n    name: undefined,\n    title: undefined,\n    hasProjectName: false,\n    hasClientName: false,\n    hasPreparedBy: false,\n    roomWidthMm: undefined,\n    roomDepthMm: undefined,\n    seatTarget: undefined,\n    unitSystem: undefined,\n    itemCount: undefined,\n    status: undefined,\n    schemaVersion: undefined,\n    sceneJson: { kind: 'undefined' }\n  },\n  envelopeIssueCount: 2,\n  saveRowIssueCount: 3,\n  documentIssueCount: 1,\n  errorPreview: [\n    'type: Invalid input: expected \"planner-document\"',\n    'document: Invalid input: expected object, received undefined',\n    'id: Invalid input: expected string, received undefined',\n    'created_at: Invalid input: expected string, received undefined',\n    'updated_at: Invalid input: expected string, received undefined',\n    'name: Invalid input: expected string, received undefined'\n  ]\n}\n",
-      "taskId": "2096878823_0_4_1",
-      "time": 1783449441813,
-      "type": "stderr",
-      "testName": "plannerImport > validatePlannerDocumentImportValue > invalidates an invalid object"
-    },
-    {
       "content": "[phase-04-benchmark] permission gate p95=0.001ms budget=1ms\n",
       "taskId": "1186612003_0_0",
-      "time": 1783449445101,
+      "time": 1783486372619,
       "type": "stdout",
       "testName": "Phase 04 persistence performance budgets > permission gate check p95 under 1ms"
     },
     {
-      "content": "[phase-04-benchmark] member load p95=0.025ms budget=500ms\n",
+      "content": "[phase-04-benchmark] member load p95=0.026ms budget=500ms\n",
       "taskId": "1186612003_0_1",
-      "time": 1783449445110,
+      "time": 1783486372631,
       "type": "stdout",
       "testName": "Phase 04 persistence performance budgets > member document load p95 under 500ms with mocked API"
     },
     {
-      "content": "[phase-04-benchmark] member save p95=0.016ms budget=2000ms\n",
+      "content": "[phase-04-benchmark] member save p95=0.023ms budget=2000ms\n",
       "taskId": "1186612003_0_2",
-      "time": 1783449445114,
+      "time": 1783486372635,
       "type": "stdout",
       "testName": "Phase 04 persistence performance budgets > member cloud save p95 under 2s with mocked API"
     },
     {
-      "content": "[phase-04-benchmark] promotion save p95=0.091ms budget=2000ms\n",
+      "content": "[phase-04-benchmark] promotion save p95=0.103ms budget=2000ms\n",
       "taskId": "1186612003_0_3",
-      "time": 1783449445146,
+      "time": 1783486372668,
       "type": "stdout",
       "testName": "Phase 04 persistence performance budgets > guest-to-member promotion save p95 under 2s with mocked repository"
     },
     {
-      "content": "[planner:document] validation failed {\n  context: 'parsePlannerDocumentImport',\n  issueCount: 1,\n  issues: [\n    {\n      path: 'name',\n      code: 'invalid_type',\n      message: 'Invalid input: expected string, received undefined',\n      received: undefined,\n      sample: undefined\n    }\n  ],\n  summary: {\n    id: undefined,\n    name: undefined,\n    title: undefined,\n    hasProjectName: false,\n    hasClientName: false,\n    hasPreparedBy: false,\n    roomWidthMm: undefined,\n    roomDepthMm: undefined,\n    seatTarget: undefined,\n    unitSystem: undefined,\n    itemCount: undefined,\n    status: undefined,\n    schemaVersion: undefined,\n    sceneJson: { kind: 'undefined' }\n  },\n  envelopeIssueCount: 2,\n  saveRowIssueCount: 3,\n  documentIssueCount: 1,\n  errorPreview: [\n    'type: Invalid input: expected \"planner-document\"',\n    'document: Invalid input: expected object, received undefined',\n    'id: Invalid input: expected string, received undefined',\n    'created_at: Invalid input: expected string, received undefined',\n    'updated_at: Invalid input: expected string, received undefined',\n    'name: Invalid input: expected string, received undefined'\n  ]\n}\n",
-      "taskId": "1924817022_0_3",
-      "time": 1783449445700,
+      "content": "Failed to fetch feature flags from Supabase: Service Unavailable\n",
+      "taskId": "1428669149_0_4",
+      "time": 1783486373685,
       "type": "stderr",
-      "testName": "planner document model > parses canonical import envelopes and validates bad JSON"
-    },
-    {
-      "content": "[planner:document] validation failed {\n  context: 'finalizePlannerDocument(input)',\n  errorType: 'Error',\n  errorMessage: 'invalid draft',\n  summary: {\n    id: '550e8400-e29b-41d4-a716-446655440000',\n    name: { kind: 'string', length: 16, redacted: true },\n    title: { kind: 'string', length: 16, redacted: true },\n    hasProjectName: false,\n    hasClientName: false,\n    hasPreparedBy: false,\n    roomWidthMm: 6000,\n    roomDepthMm: 8000,\n    seatTarget: 10,\n    unitSystem: 'metric',\n    itemCount: 0,\n    status: 'draft',\n    schemaVersion: 1,\n    sceneJson: { kind: 'object', keyCount: 1, keys: [Array], redacted: true }\n  },\n  usedFallback: true\n}\n[planner:document] validation failed {\n  context: 'finalizePlannerDocument(output)',\n  errorType: 'Error',\n  errorMessage: 'invalid draft',\n  summary: {\n    id: '550e8400-e29b-41d4-a716-446655440000',\n    name: { kind: 'string', length: 16, redacted: true },\n    title: { kind: 'string', length: 16, redacted: true },\n    hasProjectName: false,\n    hasClientName: false,\n    hasPreparedBy: false,\n    roomWidthMm: 6000,\n    roomDepthMm: 8000,\n    seatTarget: 10,\n    unitSystem: 'metric',\n    itemCount: 0,\n    status: 'draft',\n    schemaVersion: 1,\n    sceneJson: { kind: 'object', keyCount: 1, keys: [Array], redacted: true }\n  },\n  usedFallback: true\n}\n",
-      "taskId": "-1414557152_0_12",
-      "time": 1775556000000,
-      "type": "stderr",
-      "testName": "planner draft cache > reports invalid when draft document validation fails"
-    },
-    {
-      "content": "The tag <1.0.0> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter.\n",
-      "taskId": "-994582395_0_0",
-      "time": 1783449453535,
-      "type": "stderr",
-      "testName": "offlineStorage > should render component CANONICAL_SCHEMA_VERSION"
+      "testName": "planner lib branch coverage gaps > covers ai advisor plain-text fallbacks and failed feature flag fetch"
     },
     {
       "content": "An update to TestComponent inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act\n",
       "taskId": "-187929935_0_0",
-      "time": 1783449454724,
+      "time": 1783486375471,
       "type": "stderr",
       "testName": "usePlannerSessionHandlers > bootstraps session and handles user identity on mount"
     },
     {
       "content": "An update to TestComponent inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act\nAn update to TestComponent inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act\n",
       "taskId": "-187929935_0_0",
-      "time": 1783449454726,
+      "time": 1783486375473,
       "type": "stderr",
       "testName": "usePlannerSessionHandlers > bootstraps session and handles user identity on mount"
     },
     {
-      "content": "Failed to fetch feature flags from Supabase: Forbidden\n",
-      "taskId": "1424399678_0_4",
-      "time": 1783449454970,
+      "content": "Received `true` for a non-boolean attribute `jsx`.\n\nIf you want to write it to the DOM, pass a string instead: jsx=\"true\" or jsx={value.toString()}.\n",
+      "taskId": "1525544378_0_0",
+      "time": 1783486376449,
       "type": "stderr",
-      "testName": "planner feature flags > handles failed remote fetch and patch operations"
+      "testName": "ProjectSetupGate > should render component ProjectSetupGate"
     },
     {
-      "content": "Error updating feature flag in Supabase: Error: offline\n    at D:/OandO07072026/site/tests/unit/planner-lib-featureFlags.test.ts:155:53\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64\n",
-      "taskId": "1424399678_0_8",
-      "time": 1783449454984,
+      "content": "[planner:document] validation failed {\n  context: \u001b[32m'finalizePlannerDocument(input)'\u001b[39m,\n  errorType: \u001b[32m'Error'\u001b[39m,\n  errorMessage: \u001b[32m'invalid draft'\u001b[39m,\n  summary: {\n    id: \u001b[32m'550e8400-e29b-41d4-a716-446655440000'\u001b[39m,\n    name: { kind: \u001b[32m'string'\u001b[39m, length: \u001b[33m16\u001b[39m, redacted: \u001b[33mtrue\u001b[39m },\n    title: { kind: \u001b[32m'string'\u001b[39m, length: \u001b[33m16\u001b[39m, redacted: \u001b[33mtrue\u001b[39m },\n    hasProjectName: \u001b[33mfalse\u001b[39m,\n    hasClientName: \u001b[33mfalse\u001b[39m,\n    hasPreparedBy: \u001b[33mfalse\u001b[39m,\n    roomWidthMm: \u001b[33m6000\u001b[39m,\n    roomDepthMm: \u001b[33m8000\u001b[39m,\n    seatTarget: \u001b[33m10\u001b[39m,\n    unitSystem: \u001b[32m'metric'\u001b[39m,\n    itemCount: \u001b[33m0\u001b[39m,\n    status: \u001b[32m'draft'\u001b[39m,\n    schemaVersion: \u001b[33m1\u001b[39m,\n    sceneJson: { kind: \u001b[32m'object'\u001b[39m, keyCount: \u001b[33m1\u001b[39m, keys: \u001b[36m[Array]\u001b[39m, redacted: \u001b[33mtrue\u001b[39m }\n  },\n  usedFallback: \u001b[33mtrue\u001b[39m\n}\n[planner:document] validation failed {\n  context: \u001b[32m'finalizePlannerDocument(output)'\u001b[39m,\n  errorType: \u001b[32m'Error'\u001b[39m,\n  errorMessage: \u001b[32m'invalid draft'\u001b[39m,\n  summary: {\n    id: \u001b[32m'550e8400-e29b-41d4-a716-446655440000'\u001b[39m,\n    name: { kind: \u001b[32m'string'\u001b[39m, length: \u001b[33m16\u001b[39m, redacted: \u001b[33mtrue\u001b[39m },\n    title: { kind: \u001b[32m'string'\u001b[39m, length: \u001b[33m16\u001b[39m, redacted: \u001b[33mtrue\u001b[39m },\n    hasProjectName: \u001b[33mfalse\u001b[39m,\n    hasClientName: \u001b[33mfalse\u001b[39m,\n    hasPreparedBy: \u001b[33mfalse\u001b[39m,\n    roomWidthMm: \u001b[33m6000\u001b[39m,\n    roomDepthMm: \u001b[33m8000\u001b[39m,\n    seatTarget: \u001b[33m10\u001b[39m,\n    unitSystem: \u001b[32m'metric'\u001b[39m,\n    itemCount: \u001b[33m0\u001b[39m,\n    status: \u001b[32m'draft'\u001b[39m,\n    schemaVersion: \u001b[33m1\u001b[39m,\n    sceneJson: { kind: \u001b[32m'object'\u001b[39m, keyCount: \u001b[33m1\u001b[39m, keys: \u001b[36m[Array]\u001b[39m, redacted: \u001b[33mtrue\u001b[39m }\n  },\n  usedFallback: \u001b[33mtrue\u001b[39m\n}\n",
+      "taskId": "-1414557152_0_12",
+      "time": 1775556000000,
       "type": "stderr",
-      "testName": "planner feature flags > handles localStorage write failures and network errors in patch helpers"
+      "testName": "planner draft cache > reports invalid when draft document validation fails"
     },
     {
-      "content": "Error updating multiple feature flags in Supabase: Error: offline\n    at D:/OandO07072026/site/tests/unit/planner-lib-featureFlags.test.ts:155:53\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64\n",
-      "taskId": "1424399678_0_8",
-      "time": 1783449454985,
+      "content": "[planner:document] validation failed {\n  context: \u001b[32m'parsePlannerDocumentImport'\u001b[39m,\n  issueCount: \u001b[33m1\u001b[39m,\n  issues: [\n    {\n      path: \u001b[32m'name'\u001b[39m,\n      code: \u001b[32m'invalid_type'\u001b[39m,\n      message: \u001b[32m'Invalid input: expected string, received undefined'\u001b[39m,\n      received: \u001b[90mundefined\u001b[39m,\n      sample: \u001b[90mundefined\u001b[39m\n    }\n  ],\n  summary: {\n    id: \u001b[90mundefined\u001b[39m,\n    name: \u001b[90mundefined\u001b[39m,\n    title: \u001b[90mundefined\u001b[39m,\n    hasProjectName: \u001b[33mfalse\u001b[39m,\n    hasClientName: \u001b[33mfalse\u001b[39m,\n    hasPreparedBy: \u001b[33mfalse\u001b[39m,\n    roomWidthMm: \u001b[90mundefined\u001b[39m,\n    roomDepthMm: \u001b[90mundefined\u001b[39m,\n    seatTarget: \u001b[90mundefined\u001b[39m,\n    unitSystem: \u001b[90mundefined\u001b[39m,\n    itemCount: \u001b[90mundefined\u001b[39m,\n    status: \u001b[90mundefined\u001b[39m,\n    schemaVersion: \u001b[90mundefined\u001b[39m,\n    sceneJson: { kind: \u001b[32m'undefined'\u001b[39m }\n  },\n  envelopeIssueCount: \u001b[33m2\u001b[39m,\n  saveRowIssueCount: \u001b[33m3\u001b[39m,\n  documentIssueCount: \u001b[33m1\u001b[39m,\n  errorPreview: [\n    \u001b[32m'type: Invalid input: expected \"planner-document\"'\u001b[39m,\n    \u001b[32m'document: Invalid input: expected object, received undefined'\u001b[39m,\n    \u001b[32m'id: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'created_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'updated_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'name: Invalid input: expected string, received undefined'\u001b[39m\n  ]\n}\n",
+      "taskId": "2096878823_0_0_2",
+      "time": 1783486380068,
       "type": "stderr",
-      "testName": "planner feature flags > handles localStorage write failures and network errors in patch helpers"
+      "testName": "plannerImport > parsePlannerDocumentImportText > returns error on invalid schema"
     },
     {
-      "content": "[planner:document] validation failed {\n  context: 'parsePlannerDocumentImport',\n  issueCount: 1,\n  issues: [\n    {\n      path: 'name',\n      code: 'invalid_type',\n      message: 'Invalid input: expected string, received undefined',\n      received: undefined,\n      sample: undefined\n    }\n  ],\n  summary: {\n    id: undefined,\n    name: undefined,\n    title: undefined,\n    hasProjectName: false,\n    hasClientName: false,\n    hasPreparedBy: false,\n    roomWidthMm: undefined,\n    roomDepthMm: undefined,\n    seatTarget: undefined,\n    unitSystem: undefined,\n    itemCount: undefined,\n    status: undefined,\n    schemaVersion: undefined,\n    sceneJson: { kind: 'undefined' }\n  },\n  envelopeIssueCount: 2,\n  saveRowIssueCount: 3,\n  documentIssueCount: 1,\n  errorPreview: [\n    'type: Invalid input: expected \"planner-document\"',\n    'document: Invalid input: expected object, received undefined',\n    'id: Invalid input: expected string, received undefined',\n    'created_at: Invalid input: expected string, received undefined',\n    'updated_at: Invalid input: expected string, received undefined',\n    'name: Invalid input: expected string, received undefined'\n  ]\n}\n",
-      "taskId": "1991705152_0_2",
-      "time": 1783449455567,
+      "content": "[planner:document] validation failed {\n  context: \u001b[32m'parsePlannerDocumentImport'\u001b[39m,\n  issueCount: \u001b[33m1\u001b[39m,\n  issues: [\n    {\n      path: \u001b[32m'name'\u001b[39m,\n      code: \u001b[32m'invalid_type'\u001b[39m,\n      message: \u001b[32m'Invalid input: expected string, received undefined'\u001b[39m,\n      received: \u001b[90mundefined\u001b[39m,\n      sample: \u001b[90mundefined\u001b[39m\n    }\n  ],\n  summary: {\n    id: \u001b[90mundefined\u001b[39m,\n    name: \u001b[90mundefined\u001b[39m,\n    title: \u001b[90mundefined\u001b[39m,\n    hasProjectName: \u001b[33mfalse\u001b[39m,\n    hasClientName: \u001b[33mfalse\u001b[39m,\n    hasPreparedBy: \u001b[33mfalse\u001b[39m,\n    roomWidthMm: \u001b[90mundefined\u001b[39m,\n    roomDepthMm: \u001b[90mundefined\u001b[39m,\n    seatTarget: \u001b[90mundefined\u001b[39m,\n    unitSystem: \u001b[90mundefined\u001b[39m,\n    itemCount: \u001b[90mundefined\u001b[39m,\n    status: \u001b[90mundefined\u001b[39m,\n    schemaVersion: \u001b[90mundefined\u001b[39m,\n    sceneJson: { kind: \u001b[32m'undefined'\u001b[39m }\n  },\n  envelopeIssueCount: \u001b[33m2\u001b[39m,\n  saveRowIssueCount: \u001b[33m3\u001b[39m,\n  documentIssueCount: \u001b[33m1\u001b[39m,\n  errorPreview: [\n    \u001b[32m'type: Invalid input: expected \"planner-document\"'\u001b[39m,\n    \u001b[32m'document: Invalid input: expected object, received undefined'\u001b[39m,\n    \u001b[32m'id: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'created_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'updated_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'name: Invalid input: expected string, received undefined'\u001b[39m\n  ]\n}\n",
+      "taskId": "2096878823_0_2_1",
+      "time": 1783486380081,
       "type": "stderr",
-      "testName": "planner import and publish helpers > validates import text and surfaces validation failures"
+      "testName": "plannerImport > parsePlannerDocumentImportValue > returns error on invalid object"
     },
     {
-      "content": "[planner:document] validation failed {\n  context: 'parsePlannerDocumentImport',\n  issueCount: 1,\n  issues: [\n    {\n      path: 'name',\n      code: 'invalid_type',\n      message: 'Invalid input: expected string, received undefined',\n      received: undefined,\n      sample: undefined\n    }\n  ],\n  summary: {\n    id: undefined,\n    name: undefined,\n    title: undefined,\n    hasProjectName: false,\n    hasClientName: false,\n    hasPreparedBy: false,\n    roomWidthMm: undefined,\n    roomDepthMm: undefined,\n    seatTarget: undefined,\n    unitSystem: undefined,\n    itemCount: undefined,\n    status: undefined,\n    schemaVersion: undefined,\n    sceneJson: { kind: 'undefined' }\n  },\n  envelopeIssueCount: 2,\n  saveRowIssueCount: 3,\n  documentIssueCount: 1,\n  errorPreview: [\n    'type: Invalid input: expected \"planner-document\"',\n    'document: Invalid input: expected object, received undefined',\n    'id: Invalid input: expected string, received undefined',\n    'created_at: Invalid input: expected string, received undefined',\n    'updated_at: Invalid input: expected string, received undefined',\n    'name: Invalid input: expected string, received undefined'\n  ]\n}\n",
+      "content": "[planner:document] validation failed {\n  context: \u001b[32m'parsePlannerDocumentImport'\u001b[39m,\n  issueCount: \u001b[33m1\u001b[39m,\n  issues: [\n    {\n      path: \u001b[32m'name'\u001b[39m,\n      code: \u001b[32m'invalid_type'\u001b[39m,\n      message: \u001b[32m'Invalid input: expected string, received undefined'\u001b[39m,\n      received: \u001b[90mundefined\u001b[39m,\n      sample: \u001b[90mundefined\u001b[39m\n    }\n  ],\n  summary: {\n    id: \u001b[90mundefined\u001b[39m,\n    name: \u001b[90mundefined\u001b[39m,\n    title: \u001b[90mundefined\u001b[39m,\n    hasProjectName: \u001b[33mfalse\u001b[39m,\n    hasClientName: \u001b[33mfalse\u001b[39m,\n    hasPreparedBy: \u001b[33mfalse\u001b[39m,\n    roomWidthMm: \u001b[90mundefined\u001b[39m,\n    roomDepthMm: \u001b[90mundefined\u001b[39m,\n    seatTarget: \u001b[90mundefined\u001b[39m,\n    unitSystem: \u001b[90mundefined\u001b[39m,\n    itemCount: \u001b[90mundefined\u001b[39m,\n    status: \u001b[90mundefined\u001b[39m,\n    schemaVersion: \u001b[90mundefined\u001b[39m,\n    sceneJson: { kind: \u001b[32m'undefined'\u001b[39m }\n  },\n  envelopeIssueCount: \u001b[33m2\u001b[39m,\n  saveRowIssueCount: \u001b[33m3\u001b[39m,\n  documentIssueCount: \u001b[33m1\u001b[39m,\n  errorPreview: [\n    \u001b[32m'type: Invalid input: expected \"planner-document\"'\u001b[39m,\n    \u001b[32m'document: Invalid input: expected object, received undefined'\u001b[39m,\n    \u001b[32m'id: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'created_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'updated_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'name: Invalid input: expected string, received undefined'\u001b[39m\n  ]\n}\n",
+      "taskId": "2096878823_0_4_1",
+      "time": 1783486380093,
+      "type": "stderr",
+      "testName": "plannerImport > validatePlannerDocumentImportValue > invalidates an invalid object"
+    },
+    {
+      "content": "[planner:document] validation failed {\n  context: \u001b[32m'parsePlannerDocumentImport'\u001b[39m,\n  issueCount: \u001b[33m1\u001b[39m,\n  issues: [\n    {\n      path: \u001b[32m'name'\u001b[39m,\n      code: \u001b[32m'invalid_type'\u001b[39m,\n      message: \u001b[32m'Invalid input: expected string, received undefined'\u001b[39m,\n      received: \u001b[90mundefined\u001b[39m,\n      sample: \u001b[90mundefined\u001b[39m\n    }\n  ],\n  summary: {\n    id: \u001b[90mundefined\u001b[39m,\n    name: \u001b[90mundefined\u001b[39m,\n    title: \u001b[90mundefined\u001b[39m,\n    hasProjectName: \u001b[33mfalse\u001b[39m,\n    hasClientName: \u001b[33mfalse\u001b[39m,\n    hasPreparedBy: \u001b[33mfalse\u001b[39m,\n    roomWidthMm: \u001b[90mundefined\u001b[39m,\n    roomDepthMm: \u001b[90mundefined\u001b[39m,\n    seatTarget: \u001b[90mundefined\u001b[39m,\n    unitSystem: \u001b[90mundefined\u001b[39m,\n    itemCount: \u001b[90mundefined\u001b[39m,\n    status: \u001b[90mundefined\u001b[39m,\n    schemaVersion: \u001b[90mundefined\u001b[39m,\n    sceneJson: { kind: \u001b[32m'undefined'\u001b[39m }\n  },\n  envelopeIssueCount: \u001b[33m2\u001b[39m,\n  saveRowIssueCount: \u001b[33m3\u001b[39m,\n  documentIssueCount: \u001b[33m1\u001b[39m,\n  errorPreview: [\n    \u001b[32m'type: Invalid input: expected \"planner-document\"'\u001b[39m,\n    \u001b[32m'document: Invalid input: expected object, received undefined'\u001b[39m,\n    \u001b[32m'id: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'created_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'updated_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'name: Invalid input: expected string, received undefined'\u001b[39m\n  ]\n}\n",
+      "taskId": "1924817022_0_3",
+      "time": 1783486384517,
+      "type": "stderr",
+      "testName": "planner document model > parses canonical import envelopes and validates bad JSON"
+    },
+    {
+      "content": "The tag <1.0.0> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter.\n",
+      "taskId": "-994582395_0_0",
+      "time": 1783486388449,
+      "type": "stderr",
+      "testName": "offlineStorage > should render component CANONICAL_SCHEMA_VERSION"
+    },
+    {
+      "content": "[planner:document] validation failed {\n  context: \u001b[32m'parsePlannerDocumentImport'\u001b[39m,\n  issueCount: \u001b[33m1\u001b[39m,\n  issues: [\n    {\n      path: \u001b[32m'name'\u001b[39m,\n      code: \u001b[32m'invalid_type'\u001b[39m,\n      message: \u001b[32m'Invalid input: expected string, received undefined'\u001b[39m,\n      received: \u001b[90mundefined\u001b[39m,\n      sample: \u001b[90mundefined\u001b[39m\n    }\n  ],\n  summary: {\n    id: \u001b[90mundefined\u001b[39m,\n    name: \u001b[90mundefined\u001b[39m,\n    title: \u001b[90mundefined\u001b[39m,\n    hasProjectName: \u001b[33mfalse\u001b[39m,\n    hasClientName: \u001b[33mfalse\u001b[39m,\n    hasPreparedBy: \u001b[33mfalse\u001b[39m,\n    roomWidthMm: \u001b[90mundefined\u001b[39m,\n    roomDepthMm: \u001b[90mundefined\u001b[39m,\n    seatTarget: \u001b[90mundefined\u001b[39m,\n    unitSystem: \u001b[90mundefined\u001b[39m,\n    itemCount: \u001b[90mundefined\u001b[39m,\n    status: \u001b[90mundefined\u001b[39m,\n    schemaVersion: \u001b[90mundefined\u001b[39m,\n    sceneJson: { kind: \u001b[32m'undefined'\u001b[39m }\n  },\n  envelopeIssueCount: \u001b[33m2\u001b[39m,\n  saveRowIssueCount: \u001b[33m3\u001b[39m,\n  documentIssueCount: \u001b[33m1\u001b[39m,\n  errorPreview: [\n    \u001b[32m'type: Invalid input: expected \"planner-document\"'\u001b[39m,\n    \u001b[32m'document: Invalid input: expected object, received undefined'\u001b[39m,\n    \u001b[32m'id: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'created_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'updated_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'name: Invalid input: expected string, received undefined'\u001b[39m\n  ]\n}\n",
       "taskId": "-1408249676_0_2",
-      "time": 1783449459342,
+      "time": 1783486389445,
       "type": "stderr",
       "testName": "parsePlannerDocumentImportText > returns ok=false for valid JSON with wrong schema (not a planner document)"
     },
     {
-      "content": "[planner:document] validation failed {\n  context: 'parsePlannerDocumentImport',\n  issueCount: 1,\n  issues: [\n    {\n      path: 'root',\n      code: 'invalid_type',\n      message: 'Invalid input: expected object, received null',\n      received: undefined,\n      sample: [Object]\n    }\n  ],\n  summary: { valueType: 'null' },\n  envelopeIssueCount: 1,\n  saveRowIssueCount: 1,\n  documentIssueCount: 1,\n  errorPreview: [\n    'root: Invalid input: expected object, received null',\n    'root: Invalid input: expected object, received null',\n    'root: Invalid input: expected object, received null'\n  ]\n}\n",
+      "content": "[planner:document] validation failed {\n  context: \u001b[32m'parsePlannerDocumentImport'\u001b[39m,\n  issueCount: \u001b[33m1\u001b[39m,\n  issues: [\n    {\n      path: \u001b[32m'root'\u001b[39m,\n      code: \u001b[32m'invalid_type'\u001b[39m,\n      message: \u001b[32m'Invalid input: expected object, received null'\u001b[39m,\n      received: \u001b[90mundefined\u001b[39m,\n      sample: \u001b[36m[Object]\u001b[39m\n    }\n  ],\n  summary: { valueType: \u001b[32m'null'\u001b[39m },\n  envelopeIssueCount: \u001b[33m1\u001b[39m,\n  saveRowIssueCount: \u001b[33m1\u001b[39m,\n  documentIssueCount: \u001b[33m1\u001b[39m,\n  errorPreview: [\n    \u001b[32m'root: Invalid input: expected object, received null'\u001b[39m,\n    \u001b[32m'root: Invalid input: expected object, received null'\u001b[39m,\n    \u001b[32m'root: Invalid input: expected object, received null'\u001b[39m\n  ]\n}\n",
       "taskId": "-1408249676_0_4",
-      "time": 1783449459346,
+      "time": 1783486389449,
       "type": "stderr",
       "testName": "parsePlannerDocumentImportText > returns ok=false for null payload"
     },
     {
+      "content": "Failed to fetch feature flags from Supabase: Forbidden\n",
+      "taskId": "1424399678_0_4",
+      "time": 1783486393046,
+      "type": "stderr",
+      "testName": "planner feature flags > handles failed remote fetch and patch operations"
+    },
+    {
+      "content": "Error updating feature flag in Supabase: Error: offline\n    at D:/OandO07072026/site/tests/unit/planner-lib-featureFlags.test.ts:155:53\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2955:64\n",
+      "taskId": "1424399678_0_8",
+      "time": 1783486393061,
+      "type": "stderr",
+      "testName": "planner feature flags > handles localStorage write failures and network errors in patch helpers"
+    },
+    {
+      "content": "Error updating multiple feature flags in Supabase: Error: offline\n    at D:/OandO07072026/site/tests/unit/planner-lib-featureFlags.test.ts:155:53\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2955:64\n",
+      "taskId": "1424399678_0_8",
+      "time": 1783486393062,
+      "type": "stderr",
+      "testName": "planner feature flags > handles localStorage write failures and network errors in patch helpers"
+    },
+    {
       "content": "[planner] Failed to load legacy catalog for planner: Unknown error\n",
       "taskId": "-1044191644_0_3",
-      "time": 1783449460751,
+      "time": 1783486393195,
       "type": "stderr",
       "testName": "planner catalog adapter > tolerates legacy and managed source failures while merging available products"
     },
     {
       "content": "[planner] Failed to load planner-managed products: managed down\n",
       "taskId": "-1044191644_0_3",
-      "time": 1783449460753,
+      "time": 1783486393196,
       "type": "stderr",
       "testName": "planner catalog adapter > tolerates legacy and managed source failures while merging available products"
     },
     {
-      "content": "[planner/ai-advisor] provider error: Error: all providers down\n    at D:/OandO07072026/site/tests/unit/app/api/planner/ai-advisor/route.test.ts:67:43\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64\n",
-      "taskId": "889994655_0_1",
-      "time": 1783449462241,
+      "content": "[planner:document] validation failed {\n  context: \u001b[32m'parsePlannerDocumentImport'\u001b[39m,\n  issueCount: \u001b[33m1\u001b[39m,\n  issues: [\n    {\n      path: \u001b[32m'name'\u001b[39m,\n      code: \u001b[32m'invalid_type'\u001b[39m,\n      message: \u001b[32m'Invalid input: expected string, received undefined'\u001b[39m,\n      received: \u001b[90mundefined\u001b[39m,\n      sample: \u001b[90mundefined\u001b[39m\n    }\n  ],\n  summary: {\n    id: \u001b[90mundefined\u001b[39m,\n    name: \u001b[90mundefined\u001b[39m,\n    title: \u001b[90mundefined\u001b[39m,\n    hasProjectName: \u001b[33mfalse\u001b[39m,\n    hasClientName: \u001b[33mfalse\u001b[39m,\n    hasPreparedBy: \u001b[33mfalse\u001b[39m,\n    roomWidthMm: \u001b[90mundefined\u001b[39m,\n    roomDepthMm: \u001b[90mundefined\u001b[39m,\n    seatTarget: \u001b[90mundefined\u001b[39m,\n    unitSystem: \u001b[90mundefined\u001b[39m,\n    itemCount: \u001b[90mundefined\u001b[39m,\n    status: \u001b[90mundefined\u001b[39m,\n    schemaVersion: \u001b[90mundefined\u001b[39m,\n    sceneJson: { kind: \u001b[32m'undefined'\u001b[39m }\n  },\n  envelopeIssueCount: \u001b[33m2\u001b[39m,\n  saveRowIssueCount: \u001b[33m3\u001b[39m,\n  documentIssueCount: \u001b[33m1\u001b[39m,\n  errorPreview: [\n    \u001b[32m'type: Invalid input: expected \"planner-document\"'\u001b[39m,\n    \u001b[32m'document: Invalid input: expected object, received undefined'\u001b[39m,\n    \u001b[32m'id: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'created_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'updated_at: Invalid input: expected string, received undefined'\u001b[39m,\n    \u001b[32m'name: Invalid input: expected string, received undefined'\u001b[39m\n  ]\n}\n",
+      "taskId": "1991705152_0_2",
+      "time": 1783486396709,
       "type": "stderr",
-      "testName": "app/api/planner/ai-advisor/route.ts > returns heuristic fallback when all providers fail"
+      "testName": "planner import and publish helpers > validates import text and surfaces validation failures"
     },
     {
-      "content": "[api/planner/catalog] failed to create public client: Error: no client\n    at D:/OandO07072026/site/tests/unit/app/api/planner/catalog/route.test.ts:58:53\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64\n",
+      "content": "[api/planner/catalog] failed to create public client: Error: no client\n    at D:/OandO07072026/site/tests/unit/app/api/planner/catalog/route.test.ts:58:53\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2955:64\n",
       "taskId": "-1834985085_0_0",
-      "time": 1783449476321,
+      "time": 1783486396953,
       "type": "stderr",
       "testName": "app/api/planner/catalog/route.ts > returns empty payload when public client is unavailable"
     },
     {
-      "content": "[planner:document] validation failed {\n  context: 'finalizePlannerDocument(output)',\n  issueCount: 1,\n  issues: [\n    {\n      path: 'sceneJson',\n      code: 'invalid_union',\n      message: 'Invalid input',\n      received: undefined,\n      sample: [Object]\n    }\n  ],\n  summary: {\n    id: '3f3d1ca1-00eb-4d2f-b738-e5555f13fc5f',\n    name: { kind: 'string', length: 6, redacted: true },\n    title: { kind: 'string', length: 6, redacted: true },\n    hasProjectName: false,\n    hasClientName: false,\n    hasPreparedBy: false,\n    roomWidthMm: 6000,\n    roomDepthMm: 8000,\n    seatTarget: 10,\n    unitSystem: 'metric',\n    itemCount: 0,\n    status: 'draft',\n    schemaVersion: 1,\n    sceneJson: {\n      type: 'cad-suite-planner-scene',\n      version: 1,\n      itemCount: 0,\n      hasRoom: false,\n      fabricSnapshot: [Object]\n    }\n  },\n  usedFallback: true\n}\n",
+      "content": "[planner/ai-advisor] provider error: Error: all providers down\n    at D:/OandO07072026/site/tests/unit/app/api/planner/ai-advisor/route.test.ts:67:43\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:302:11\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:1903:26\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2323:10)\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2272:10)\n    at file:///D:/OandO07072026/node_modules/\u001b[4m.pnpm\u001b[24m/@vitest+runner@4.1.9/node_modules/\u001b[4m@vitest/runner\u001b[24m/dist/chunk-artifact.js:2955:64\n",
+      "taskId": "889994655_0_1",
+      "time": 1783486397943,
+      "type": "stderr",
+      "testName": "app/api/planner/ai-advisor/route.ts > returns heuristic fallback when all providers fail"
+    },
+    {
+      "content": "[planner:document] validation failed {\n  context: \u001b[32m'finalizePlannerDocument(output)'\u001b[39m,\n  issueCount: \u001b[33m1\u001b[39m,\n  issues: [\n    {\n      path: \u001b[32m'sceneJson'\u001b[39m,\n      code: \u001b[32m'invalid_union'\u001b[39m,\n      message: \u001b[32m'Invalid input'\u001b[39m,\n      received: \u001b[90mundefined\u001b[39m,\n      sample: \u001b[36m[Object]\u001b[39m\n    }\n  ],\n  summary: {\n    id: \u001b[32m'2efe0aa2-0878-49fc-add9-df84d758c389'\u001b[39m,\n    name: { kind: \u001b[32m'string'\u001b[39m, length: \u001b[33m6\u001b[39m, redacted: \u001b[33mtrue\u001b[39m },\n    title: { kind: \u001b[32m'string'\u001b[39m, length: \u001b[33m6\u001b[39m, redacted: \u001b[33mtrue\u001b[39m },\n    hasProjectName: \u001b[33mfalse\u001b[39m,\n    hasClientName: \u001b[33mfalse\u001b[39m,\n    hasPreparedBy: \u001b[33mfalse\u001b[39m,\n    roomWidthMm: \u001b[33m6000\u001b[39m,\n    roomDepthMm: \u001b[33m8000\u001b[39m,\n    seatTarget: \u001b[33m10\u001b[39m,\n    unitSystem: \u001b[32m'metric'\u001b[39m,\n    itemCount: \u001b[33m0\u001b[39m,\n    status: \u001b[32m'draft'\u001b[39m,\n    schemaVersion: \u001b[33m1\u001b[39m,\n    sceneJson: {\n      type: \u001b[32m'cad-suite-planner-scene'\u001b[39m,\n      version: \u001b[33m1\u001b[39m,\n      itemCount: \u001b[33m0\u001b[39m,\n      hasRoom: \u001b[33mfalse\u001b[39m,\n      fabricSnapshot: \u001b[36m[Object]\u001b[39m\n    }\n  },\n  usedFallback: \u001b[33mtrue\u001b[39m\n}\n",
       "taskId": "978068881_0_2",
-      "time": 1783449476953,
+      "time": 1783486415630,
       "type": "stderr",
       "testName": "planner document bridge > does not load documents back into the removed legacy editor"
     },
     {
       "content": "[planner] Failed to load legacy catalog for planner: Network Error\n",
       "taskId": "1467859992_0_1",
-      "time": 1783449486747,
+      "time": 1783486416975,
       "type": "stderr",
       "testName": "plannerCatalog > getPlannerCatalogProducts handles errors gracefully"
     },
     {
-      "content": "[getCatalog] failed: Missing catalog_categories or catalog_products\n",
-      "taskId": "1165825255_0_0",
-      "time": 1783449488174,
-      "type": "stderr",
-      "testName": "catalogTree buildCatalogLive > returns empty if both db and fallback are empty"
-    },
-    {
-      "content": "[getCatalog] failed: Missing catalog_categories or catalog_products\n",
-      "taskId": "1165825255_0_1",
-      "time": 1783449488180,
-      "type": "stderr",
-      "testName": "catalogTree buildCatalogLive > builds compat catalog from fallback if db query fails/returns empty"
-    },
-    {
       "content": "Supabase not configured. Rendering planner in anonymous mode.\n",
       "taskId": "1282392113_0_1",
-      "time": 1783449512343,
+      "time": 1783486430707,
       "type": "stderr",
       "testName": "plannerSession requirePlannerUser > returns ANONYMOUS_USER if supabase env is missing"
     }

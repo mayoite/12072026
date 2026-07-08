@@ -134,7 +134,7 @@ Legal pages (`/privacy`, `/terms`, `/imprint`, `/refund-and-return-policy`) foll
 
 ## CSS
 
-- **Canonical utilities:** `home-*` in `app/css/core/site/routes/home/` and `bundles/site-marketing.css`
+- **Canonical utilities:** `home-*` in `site/app/css/core/locked/site/` and `site-marketing.css`
 - **Retire over time:** `contact-shell` as primary layout; legal-only modifiers folded into `HomeSection`
 - **Do not** rename `home-section--*` to `surface-section-*`
 
@@ -200,7 +200,7 @@ Rules live in `site/lib/site-data/routeChromeRules.ts`; `RouteChrome.tsx` consum
 
 ## `home-*` utility inventory (Phase 5a)
 
-Defined under `site/app/css/core/site/routes/home/` and loaded via `bundles/site-marketing.css`:
+Defined under `site/app/css/core/locked/site/` and loaded via `site-marketing.css`:
 
 | Utility | Role |
 |---------|------|

@@ -63,13 +63,13 @@ Reference: `app/admin/crm/clients/page.tsx`, `app/admin/themes/page.tsx`.
 | Toolbar | `admin-toolbar`, `admin-field` | Filters / forms |
 | Table | `admin-table-wrap`, `admin-table` | Data grids |
 
-Defined in `site/app/css/core/locked/admin/base/admin-pages.css`.
+Defined in `site/app/css/core/locked/admin/admin-pages.css`.
 
 ---
 
 ## Semantic utilities (allowed)
 
-`text-strong`, `text-muted`, `text-soft`, `bg-panel`, `bg-subtle`, `border-soft`, `text-primary` — from `app/css/core/utilities/colors.css`.
+`text-strong`, `text-muted`, `text-soft`, `bg-panel`, `bg-subtle`, `border-soft`, `text-primary` — from `site/app/css/core/utilities/colors.css`.
 
 ---
 
