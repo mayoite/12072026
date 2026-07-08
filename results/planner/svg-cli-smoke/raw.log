@@ -1,0 +1,17 @@
+# SVG CLI smoke - 2026-07-08T21:03:06Z
+cwd: D:\OandO07072026\site
+
+--- chaise ---
+command: pnpm exec tsx scripts/generate-svg.mjs scripts/generate-svg/_fixtures/chaise.json
+exit: 0
+Wrote D:\OandO07072026\site\public\svg-catalog\chaise-lounge-001.svg (452 bytes)
+
+--- sectional ---
+command: pnpm exec tsx scripts/generate-svg.mjs scripts/generate-svg/_fixtures/sectional.json
+exit: 0
+Wrote D:\OandO07072026\site\public\svg-catalog\sectional-sofa-001.svg (474 bytes)
+
+--- side-table ---
+command: pnpm exec tsx scripts/generate-svg.mjs scripts/generate-svg/_fixtures/side-table.json
+exit: 0
+Wrote D:\OandO07072026\site\public\svg-catalog\side-table-001.svg (612 bytes)

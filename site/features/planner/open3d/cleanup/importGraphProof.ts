@@ -1,5 +1,6 @@
 /**
  * Phase 08 import-graph proof — documents live route → host → planner stack.
+ * Live open3d 2-D = canvas-feasibility (not Fabric); fabric-legacy rows are archive fallbacks only.
  * Used before any Fabric/iframe retirement per plannnerplan/08-cleanup-archive-and-evidence-gates.md.
  */
 

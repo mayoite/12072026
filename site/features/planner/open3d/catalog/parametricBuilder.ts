@@ -1,4 +1,8 @@
 import * as THREE from "three";
+import type {
+  Open3dFurnitureGeometryMode,
+  Open3dModularCabinetV0Options,
+} from "../model/types";
 import type { BlockDescriptorParametric } from "./svg/svgTypes";
 import {
   defaultCabinetV0Options,
@@ -8,6 +12,41 @@ import {
 } from "./modularCabinetV0";
 
 const MM = 0.001;
+const DEFAULT_FOOTPRINT_MM = 600;
+
+/** Placed furniture fields needed to pick box vs modular 2D footprint. */
+export type FurnitureFootprintSource = {
+  width?: number;
+  depth?: number;
+  geometryMode?: Open3dFurnitureGeometryMode;
+  modularOptions?: Open3dModularCabinetV0Options;
+};
+
+function boxFootprintPath(widthMm: number, depthMm: number): string {
+  const halfW = widthMm / 2;
+  const halfD = depthMm / 2;
+  return `M -${halfW} -${halfD} L ${halfW} -${halfD} L ${halfW} ${halfD} L -${halfW} ${halfD} Z`;
+}
+
+/**
+ * Plan SVG path (mm, centered) for a placed furniture item.
+ * modular-cabinet-v0 + modularOptions → generateCabinetV0Footprint;
+ * otherwise box footprint from width/depth (default 600mm).
+ */
+export function resolveFurniture2DFootprint(
+  item: FurnitureFootprintSource,
+): string {
+  if (
+    item.geometryMode === "modular-cabinet-v0" &&
+    item.modularOptions !== undefined
+  ) {
+    return generateCabinetV0Footprint(item.modularOptions);
+  }
+  return boxFootprintPath(
+    item.width ?? DEFAULT_FOOTPRINT_MM,
+    item.depth ?? DEFAULT_FOOTPRINT_MM,
+  );
+}
 
 /**
  * Client-side parametric / modular geometry.
@@ -16,9 +55,7 @@ const MM = 0.001;
 export const ParametricBuilder = {
   generate2DFootprint(descriptor: BlockDescriptorParametric): string {
     const { widthMm, depthMm } = descriptor.geometry;
-    const halfW = widthMm / 2;
-    const halfD = depthMm / 2;
-    return `M -${halfW} -${halfD} L ${halfW} -${halfD} L ${halfW} ${halfD} L -${halfW} ${halfD} Z`;
+    return boxFootprintPath(widthMm, depthMm);
   },
 
   /**

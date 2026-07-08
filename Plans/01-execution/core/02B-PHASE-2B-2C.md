@@ -62,9 +62,9 @@ This is the core acceptance test: can a user create something, leave, come back,
 
 ### 2B.5 — Route Cleanup
 
-- [ ] Update stale "Fabric-backed" comments in `guest/page.tsx` and `canvas/page.tsx`
+- [x] Update stale "Fabric-backed" comments in `guest/page.tsx` and `canvas/page.tsx` (2026-07-09: live 2-D = canvas-feasibility)
 - [ ] Verify `/planner/fabric/*` routes are unreachable from navigation (already archived)
-- [ ] Update `importGraphProof.ts` to reflect current state
+- [x] Update `importGraphProof.ts` to reflect current state (header note: live open3d ≠ Fabric)
 
 ### 2B Gates
 

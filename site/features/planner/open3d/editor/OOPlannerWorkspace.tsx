@@ -16,6 +16,11 @@ import {
   type FeasibilityCanvasHandle,
   type CanvasStatusSnapshot,
 } from "../canvas-feasibility/FeasibilityCanvas";
+import {
+  FurnitureFabricLayer,
+  isOpen3dFabricFurnitureEnabled,
+  type FurnitureDocumentPoseUpdate,
+} from "../canvas-fabric-stage";
 import { placeCatalogItemInProject } from "../catalog/placementAction";
 import { importOpen3dProjectJson } from "../persistence/projectJson";
 import { parseOpen3dSessionSnapshot } from "../persistence/open3dSession";
@@ -184,6 +189,29 @@ export function OOPlannerWorkspace({
     workspaceCanvas.project.floors.find(
       (floor) => floor.id === workspaceCanvas.project.activeFloorId,
     ) ?? workspaceCanvas.project.floors[0];
+
+  // Fabric 2B furniture stage — default OFF (NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE=1 to enable).
+  // Walls stay on FeasibilityCanvas; fabric layer is optional overlay for furniture only.
+  const fabricFurnitureEnabled = isOpen3dFabricFurnitureEnabled();
+  const feasibilityLayerVisibility = useMemo(
+    () =>
+      fabricFurnitureEnabled
+        ? { ...layerVisibility, furniture: false }
+        : layerVisibility,
+    [fabricFurnitureEnabled, layerVisibility],
+  );
+
+  const handleFabricFurnitureModified = useCallback(
+    (update: FurnitureDocumentPoseUpdate) => {
+      workspaceCanvas.updateProject((project) =>
+        updateEntityInProject(project, "furniture", update.entityId, {
+          position: update.position,
+          rotation: update.rotation,
+        }),
+      );
+    },
+    [workspaceCanvas],
+  );
 
   const selectedEntity = useMemo(
     () =>
@@ -579,22 +607,51 @@ export function OOPlannerWorkspace({
               onToolChange={setTool}
               onZoomReset={() => canvasRef.current?.resetZoom()}
             />
-            <FeasibilityCanvas
-              ref={canvasRef}
-              variant="embedded"
-              activeTool={activeTool}
-              layerVisibility={layerVisibility}
-              delegateKeyboard
-              workspaceCanvas={workspaceCanvas}
-              pendingCatalogPlacement={pendingCatalogItemId !== null}
-              placementItemLabel={
-                pendingCatalogItem?.shortName ??
-                pendingCatalogItem?.name ??
-                null
-              }
-              onPlaceAtPoint={handlePlaceAtPoint}
-              onStatusChange={setCanvasStatus}
-            />
+            {fabricFurnitureEnabled ? (
+              <div
+                className="open3d-canvas-embedded"
+                style={{ position: "relative" }}
+              >
+                <FeasibilityCanvas
+                  ref={canvasRef}
+                  variant="embedded"
+                  activeTool={activeTool}
+                  layerVisibility={feasibilityLayerVisibility}
+                  delegateKeyboard
+                  workspaceCanvas={workspaceCanvas}
+                  pendingCatalogPlacement={pendingCatalogItemId !== null}
+                  placementItemLabel={
+                    pendingCatalogItem?.shortName ??
+                    pendingCatalogItem?.name ??
+                    null
+                  }
+                  onPlaceAtPoint={handlePlaceAtPoint}
+                  onStatusChange={setCanvasStatus}
+                />
+                <FurnitureFabricLayer
+                  furniture={activeFloor?.furniture ?? []}
+                  interactive={activeTool === "select"}
+                  onFurnitureModified={handleFabricFurnitureModified}
+                />
+              </div>
+            ) : (
+              <FeasibilityCanvas
+                ref={canvasRef}
+                variant="embedded"
+                activeTool={activeTool}
+                layerVisibility={layerVisibility}
+                delegateKeyboard
+                workspaceCanvas={workspaceCanvas}
+                pendingCatalogPlacement={pendingCatalogItemId !== null}
+                placementItemLabel={
+                  pendingCatalogItem?.shortName ??
+                  pendingCatalogItem?.name ??
+                  null
+                }
+                onPlaceAtPoint={handlePlaceAtPoint}
+                onStatusChange={setCanvasStatus}
+              />
+            )}
             <aside className="open3d-tool-guidance" aria-live="polite">
               <strong>{formatToolStatus(activeTool, viewMode)}</strong>
               <span>{CANVAS_TOOL_GUIDANCE[activeTool]}</span>

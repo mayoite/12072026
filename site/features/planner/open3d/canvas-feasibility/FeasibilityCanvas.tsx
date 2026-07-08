@@ -49,8 +49,7 @@ import {
   addWindow,
 } from "../model/operations/pureActions";
 import { proofCatalogItem } from "../catalog/proofCatalog";
-import { ParametricBuilder } from "../catalog/parametricBuilder";
-import type { BlockDescriptorParametric } from "../catalog/svg/svgTypes";
+import { resolveFurniture2DFootprint } from "../catalog/parametricBuilder";
 import type { WorkspaceCanvasContext } from "../editor/useWorkspaceCanvas";
 
 const INITIAL_TRANSFORM: CanvasTransform = {
@@ -569,24 +568,18 @@ function FeasibilityCanvas(
       context.globalAlpha = 0.22;
       for (const item of activeFloor.furniture) {
         const center = projectToScreen(item.position, transform);
-        const widthMm = (item.width ?? 600);
-        const depthMm = (item.depth ?? 600);
-        
+
         context.save();
         context.translate(center.x, center.y);
         context.rotate((item.rotation * Math.PI) / 180);
-        
-        // Generate native 2D SVGs for parametric items using our math engine
-        const mockDescriptor = {
-          variant: "parametric",
-          geometry: { widthMm, depthMm, heightMm: 0 }
-        } as unknown as BlockDescriptorParametric;
-        const svgPathString = ParametricBuilder.generate2DFootprint(mockDescriptor);
+
+        // Box path by default; modular-cabinet-v0 uses generateCabinetV0Footprint
+        const svgPathString = resolveFurniture2DFootprint(item);
         const path = new Path2D(svgPathString);
-        
+
         // Scale the path down to the current viewport zoom
         context.scale(transform.scale, transform.scale);
-        
+
         context.fill(path);
         context.restore();
       }

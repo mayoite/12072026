@@ -3,7 +3,7 @@ import { getOptionalPlannerUser } from "@/lib/auth/plannerSession";
 
 export const dynamic = "force-dynamic";
 
-/** Live member/guest canvas — hybrid planner route (`open3d/` tree, Fabric-backed 2-D + Three 3-D). Legacy fallback: /planner/fabric/canvas */
+/** Live member/guest canvas — open3d hybrid: FeasibilityCanvas (canvas-feasibility) 2-D + Three 3-D. Fabric cutover = Phase 2B; archive fallback: /planner/fabric/canvas */
 export default async function PlannerCanvasRoute({
   searchParams,
 }: {

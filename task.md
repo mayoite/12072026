@@ -8,12 +8,14 @@
 
 ## 01 SVG system
 - [x] Restore `site/scripts/generate-svg.mjs` → `runPipeline` + write `public/svg-catalog`
-- [ ] Live admin publish smoke (manual / API) when ready
+- [x] CLI smoke: fixtures → `public/svg-catalog/*.svg` (`results/planner/svg-cli-smoke/`)
+- [ ] Live admin publish (Puck fail-closed + API) when ready
 
 ## 02 Generate mesh (must-do modular)
 - [x] `modularCabinetV0` options → footprint + multi-part mesh
 - [x] ParametricBuilder hooks + unit tests
 - [x] Wire catalog place → modular flag + multi-part 3D (`geometryMode` / `createSceneObjectFromNode`)
+- [x] 2D modular footprint via `resolveFurniture2DFootprint`
 - [ ] Optional GLB export from modular group (later)
 
 ## 03 Canvas / document / 3D
@@ -21,8 +23,11 @@
 - [x] `ThreeViewerInner` rebuilds walls+furniture from project (entity ids)
 - [x] Placement + entity ids: `newEntityId()` / crypto.randomUUID only (incl. JSON recovery)
 - [x] 02B.1 geometry unit net: pick/snap/pointInPolygon tests
-- [ ] Fabric cutover (2B — full stage)
+- [x] Fabric furniture stage (flag OFF default): `canvas-fabric-stage` + mapper tests
+- [ ] Fabric pan/zoom sync + browser smoke with flag ON
+- [ ] Fabric full cutover (walls/rooms/tools)
 
 ## 04 Verify
 - [x] Targeted vitest hard-path — exit 0 → `results/planner/hard-path/vitest-hard-path/`
 - [x] Agent batch: modular-place + canvas-geometry + crypto residual → `results/planner/*/`
+- [x] Wave3: modular-2d + fabric-stage + svg-cli + docs truth → evidence dirs

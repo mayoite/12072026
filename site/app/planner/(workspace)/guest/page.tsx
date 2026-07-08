@@ -2,7 +2,7 @@ import { Open3dPlannerWorkspaceRoute } from "@/features/planner/ui/Open3dPlanner
 
 export const dynamic = "force-dynamic";
 
-/** Live guest workspace — hybrid planner route (`open3d/` tree, Fabric-backed 2-D + Three 3-D). Legacy fallback: /planner/fabric/guest */
+/** Live guest workspace — open3d hybrid: FeasibilityCanvas (canvas-feasibility) 2-D + Three 3-D. Fabric cutover = Phase 2B; archive fallback: /planner/fabric/guest */
 export default async function PlannerGuestRoute({
   searchParams,
 }: {
