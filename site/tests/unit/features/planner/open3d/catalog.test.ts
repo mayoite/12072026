@@ -678,10 +678,12 @@ describe("03-CAT-08: Placement Action", () => {
       expect(s1.placementId).not.toBe(s2.placementId);
     });
 
-    it("placement IDs start with plc- prefix", () => {
+    it("placement IDs are crypto.randomUUID() (hyphenated)", () => {
       const item = makeItem();
       const snapshot = placeCatalogItem(item, null);
-      expect(snapshot.placementId).toMatch(/^plc-/);
+      expect(snapshot.placementId).toMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+      );
     });
 
     it("records placedAt as ISO 8601 timestamp", () => {

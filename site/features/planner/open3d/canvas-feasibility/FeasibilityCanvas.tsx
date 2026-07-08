@@ -36,6 +36,7 @@ import { pickWallAtPoint, pickWallWithPosition } from "../lib/geometry/canvasPic
 import { createOpen3dProject } from "../model/project";
 import type { Open3dPoint, Open3dProject } from "../model/types";
 import { addOpen3dWall } from "../model/actions/walls";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 import {
   addDoor,
   addMeasurement,
@@ -333,7 +334,7 @@ function FeasibilityCanvas(
     if (activeTool === "room" && start && preview) {
       if (Math.abs(preview.x - start.x) >= 1 && Math.abs(preview.y - start.y) >= 1) {
         commitProject((current) =>
-          addRectangularRoom(current, start, preview, { idFactory: () => crypto.randomUUID() }).project,
+          addRectangularRoom(current, start, preview, { idFactory: () => newEntityId() }).project,
         );
         setStart(null);
         setPreview(null);
@@ -347,7 +348,7 @@ function FeasibilityCanvas(
       // commit current wall segment like second click
       if (Math.hypot(preview.x - start.x, preview.y - start.y) >= 1) {
         commitProject((current) =>
-          addOpen3dWall(current, { start, end: preview }, () => crypto.randomUUID()),
+          addOpen3dWall(current, { start, end: preview }, () => newEntityId()),
         );
         setStart(preview);
         setPreview(preview);
@@ -776,7 +777,7 @@ function FeasibilityCanvas(
         return;
       }
       commitProject((current) =>
-        addRectangularRoom(current, start, snapped.point, { idFactory: () => crypto.randomUUID() }).project,
+        addRectangularRoom(current, start, snapped.point, { idFactory: () => newEntityId() }).project,
       );
       setStart(null);
       setPreview(null);
@@ -804,7 +805,7 @@ function FeasibilityCanvas(
       return;
     }
     commitProject((current) =>
-      addOpen3dWall(current, { start, end: snapped.point }, () => crypto.randomUUID()),
+      addOpen3dWall(current, { start, end: snapped.point }, () => newEntityId()),
     );
     setStart(snapped.point);
     setPreview(snapped.point);

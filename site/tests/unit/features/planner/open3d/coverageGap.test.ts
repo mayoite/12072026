@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Coverage Gap Tests â€” Phase 03A
  *
  * Targets uncovered branches and statements in:
@@ -185,7 +185,7 @@ describe("Placement Action", () => {
       colorOverride: "oak",
       locked: true,
     });
-    expect(result.placementId).toContain("plc-");
+    expect(result.placementId).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
     expect(result.position).toEqual({ x: 100, y: 200 });
     expect(result.rotation).toBe(45);
     expect(result.scale).toEqual({ x: 2, y: 2, z: 2 });
@@ -1196,41 +1196,42 @@ describe("SVG Symbols â€” coverage gaps", () => {
   });
 });
 
-// â”€â”€ Placement Action crypto branch coverage â”€â”€
-describe("Placement Action â€” crypto branches", () => {
-  it("generates ID without crypto.randomUUID (getRandomValues fallback)", () => {
+// Placement Action — crypto.randomUUID only (no plc-/randomSuffix fallbacks)
+describe("Placement Action — crypto.randomUUID only", () => {
+  it("throws when randomUUID is missing", () => {
     const origUUID = crypto.randomUUID;
     Object.defineProperty(crypto, "randomUUID", { value: undefined, configurable: true });
     try {
-      const result = placeCatalogItem(makePlacementItem(), null);
-      expect(result.placementId).toContain("plc-");
-      expect(result.placementId.length).toBeGreaterThan(10);
+      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(
+        /crypto\.randomUUID is required/,
+      );
     } finally {
       Object.defineProperty(crypto, "randomUUID", { value: origUUID, configurable: true });
     }
   });
 
-  it("generates ID when crypto exists without randomUUID or getRandomValues", () => {
+  it("throws when crypto object lacks randomUUID", () => {
     const origCrypto = globalThis.crypto;
     Object.defineProperty(globalThis, "crypto", {
       value: {},
       configurable: true,
     });
     try {
-      const result = placeCatalogItem(makePlacementItem(), null);
-      expect(result.placementId).toContain("plc-");
+      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(
+        /crypto\.randomUUID is required/,
+      );
     } finally {
       Object.defineProperty(globalThis, "crypto", { value: origCrypto, configurable: true });
     }
   });
 
-  it("generates ID without crypto at all (randomSuffix fallback)", () => {
+  it("throws when crypto is undefined", () => {
     const origCrypto = globalThis.crypto;
     Object.defineProperty(globalThis, "crypto", { value: undefined, configurable: true });
     try {
-      const result = placeCatalogItem(makePlacementItem(), null);
-      expect(result.placementId).toContain("plc-");
-      expect(result.placementId.length).toBeGreaterThan(10);
+      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(
+        /crypto\.randomUUID is required/,
+      );
     } finally {
       Object.defineProperty(globalThis, "crypto", { value: origCrypto, configurable: true });
     }
@@ -2421,7 +2422,7 @@ describe("Placement Action — crypto fallback + project map ?? (PLAN-FAIL-0408)
     const proj = {
       id: "p", name: "p", activeFloorId: "f1", displayUnit: "cm" as const,
       createdAt: "t", updatedAt: "t",
-      floors: [{ id: "f1", name: "f", level: 0, walls: [], rooms: [], doors: [], windows: [], furniture: [{ id: "plc-old", catalogId: "old" } as any], stairs: [], columns: [], guides: [], measurements: [], annotations: [], textAnnotations: [], groups: [] }],
+      floors: [{ id: "f1", name: "f", level: 0, walls: [], rooms: [], doors: [], windows: [], furniture: [{ id: "00000000-0000-4000-8000-000000000001", catalogId: "old" } as any], stairs: [], columns: [], guides: [], measurements: [], annotations: [], textAnnotations: [], groups: [] }],
     };
     const itm = makePlacementItem({ id: "cat1", color: { hex: "#fff" } as any });
     const res = placeCatalogItemInProject(proj as any, itm, null, { placedFrom: "api", materialOverride: "M", colorOverride: "C" });
@@ -2430,12 +2431,16 @@ describe("Placement Action — crypto fallback + project map ?? (PLAN-FAIL-0408)
     expect(placedF!.material).toBe("M");
   });
 
-  it("generatePlacementId crypto fallback path (no uuid/getRandomValues)", () => {
+  it("generatePlacementId requires crypto.randomUUID (no plc-/random fallback)", () => {
     const origCrypto = globalThis.crypto;
-    Object.defineProperty(globalThis, "crypto", { value: { getRandomValues: undefined, randomUUID: undefined }, configurable: true });
+    Object.defineProperty(globalThis, "crypto", {
+      value: { getRandomValues: undefined, randomUUID: undefined },
+      configurable: true,
+    });
     try {
-      const p = placeCatalogItem(makePlacementItem(), null);
-      expect(p.placementId.startsWith("plc-")).toBe(true);
+      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(
+        /crypto\.randomUUID is required/,
+      );
     } finally {
       Object.defineProperty(globalThis, "crypto", { value: origCrypto, configurable: true });
     }
@@ -2443,13 +2448,13 @@ describe("Placement Action — crypto fallback + project map ?? (PLAN-FAIL-0408)
 });
 
 describe("Placement crypto + ?? logic (TDD cycles for placementAction uncovered)", () => {
-  // TDD cycle 1 completed: wrote failing (bad expect) first -> verified RED via source+test read (would assert mismatch on plc- vs fixed), minimal fix expect to actual -> green; no prod change.
-  it("crypto===undefined fully hits randomSuffix outer else (placement logic)", () => {
+  it("crypto===undefined throws (crypto.randomUUID only policy)", () => {
     const origCrypto = globalThis.crypto;
     Object.defineProperty(globalThis, "crypto", { value: undefined, configurable: true });
     try {
-      const p = placeCatalogItem(makePlacementItem(), null);
-      expect(p.placementId.startsWith("plc-")).toBe(true);
+      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(
+        /crypto\.randomUUID is required/,
+      );
     } finally {
       Object.defineProperty(globalThis, "crypto", { value: origCrypto, configurable: true });
     }

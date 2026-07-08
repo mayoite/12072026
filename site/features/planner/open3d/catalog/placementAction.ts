@@ -15,6 +15,7 @@ import type { Open3dCatalogItem, Open3dCatalogVariant, Open3dPlacedConfiguration
 import type { Open3dProject } from "../model/types";
 import type { PureActionResult } from "../model/operations/pureActions";
 import { addFurniture } from "../model/operations/pureActions";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 // ── Placement options ──
 
@@ -45,37 +46,11 @@ export interface ProjectPlacementResult {
 
 // ── ID generation ──
 
-const idSuffixChars = "abcdefghijklmnopqrstuvwxyz0123456789";
-
-function randomSuffix(length: number): string {
-  let result = "";
-  for (let i = 0; i < length; i++) {
-    result += idSuffixChars.charAt(Math.floor(Math.random() * idSuffixChars.length));
-  }
-  return result;
-}
-
-function randomIdSegment(): string {
-  if (typeof crypto !== "undefined") {
-    if (typeof crypto.randomUUID === "function") {
-      return crypto.randomUUID().replace(/-/g, "");
-    }
-
-    if (typeof crypto.getRandomValues === "function") {
-      const bytes = new Uint8Array(12);
-      crypto.getRandomValues(bytes);
-      return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
-    }
-  }
-
-  return randomSuffix(24);
-}
-
 /**
- * Generate a collision-resistant placement ID for both interactive and batch placement.
+ * Placement entity id — crypto.randomUUID() only (no plc- / stripped-hex variants).
  */
 function generatePlacementId(): string {
-  return `plc-${Date.now().toString(36)}-${randomIdSegment()}`;
+  return newEntityId();
 }
 
 function finite(value: number, field: string): number {

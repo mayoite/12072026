@@ -43,15 +43,13 @@ function getStorageKey(projectId: string): string {
 }
 
 /**
- * Generate a unique snapshot ID using crypto.randomUUID if available,
- * falling back to a timestamp-based ID
+ * Snapshot ids use crypto.randomUUID() only (same policy as entity ids).
  */
 function generateSnapshotId(): string {
-  if (typeof crypto !== "undefined" && crypto.randomUUID) {
-    return crypto.randomUUID();
+  if (typeof globalThis.crypto?.randomUUID === "function") {
+    return globalThis.crypto.randomUUID();
   }
-  // Fallback for environments without crypto.randomUUID
-  return `snapshot-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+  throw new Error("crypto.randomUUID is required for snapshot ids.");
 }
 
 /**

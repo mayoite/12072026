@@ -6,7 +6,10 @@ let transientSessionId = "";
 if (typeof window !== "undefined") {
   transientSessionId = sessionStorage.getItem("oofpl_draft_session_id") || "";
   if (!transientSessionId) {
-    transientSessionId = crypto.randomUUID ? crypto.randomUUID() : `session-${Date.now()}`;
+    if (typeof globalThis.crypto?.randomUUID !== "function") {
+      throw new Error("crypto.randomUUID is required for session ids.");
+    }
+    transientSessionId = globalThis.crypto.randomUUID();
     sessionStorage.setItem("oofpl_draft_session_id", transientSessionId);
   }
 }
