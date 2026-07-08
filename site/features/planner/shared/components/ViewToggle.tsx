@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { PenTool, Box } from "lucide-react";
+import { PenNib as PenTool, Cube as Box } from "@phosphor-icons/react";
 
 type View = "2d" | "3d";
 

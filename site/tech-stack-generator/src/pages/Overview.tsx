@@ -1,9 +1,5 @@
 import { Link } from 'react-router-dom'
-import {
-  Layers, GitBranch, Puzzle, Database, Globe,
-  TestTube, Rocket, Shield, Zap, ArrowRight, Code
-} from 'lucide-react'
-import { overviewKeyTech, overviewStats } from '../data/overviewSummary'
+import { Stack as Layers, GitBranch, PuzzlePiece as Puzzle, Database, Globe, TestTube, Rocket, Shield, Lightning as Zap, ArrowRight, Code } from "@phosphor-icons/react";import { overviewKeyTech, overviewStats } from '../data/overviewSummary'
 import { overviewQuickCommands } from '../data/overviewData'
 import { GeneratedKeyValueTable } from '../components/GeneratedDataTables'
 import { LiveRepoSection } from '../components/LiveRepoSection'

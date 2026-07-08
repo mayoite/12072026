@@ -27,39 +27,27 @@ The `FeasibilityCanvas.tsx` (1075 lines) is the heart of the 2D editor. It is ha
 - [ ] Test deterministic flow: draw room → add wall → add door → add window → place furniture → undo → redo → save → reload
 - [ ] Fix any discovered state desynchronisation between canvas and workspace store
 
-### 2B.2 — Selection & Interaction (Evaluate Canvas Engine)
+### 2B.2 — Fabric.js full stage (chosen 2D engine)
 
-> The current pure Canvas 2D approach has no selection handles, resize grips, or rotation widgets. These are needed for production. This section evaluates whether to adopt a library or hand-code them.
+> **Decision (locked):** One 2D engine = **Fabric.js v7 full stage**. No Canvas+Konva hybrid. Pure Canvas hand-roll is **not** the tooling destination.  
+> Document model + `PlannerCommand` stay engine-agnostic; Fabric nodes carry `entityId` (UUID); never persist Fabric objects.
 
-**Spike (2 days):**
-- [ ] Prototype Konva integration for ONE interaction — furniture selection with drag + resize handles
-  - Install `konva` + `react-konva` in a branch
-  - Render furniture items as Konva nodes on a transparent layer over the existing canvas
-  - Test: click to select, drag to move, handles to resize, rotation handle
-  - Measure: code complexity vs hand-rolling equivalent in Canvas 2D
-
-**Decision gate:** Based on spike results, choose ONE:
-
-| Option | What It Means | When to Choose |
-|--------|--------------|----------------|
-| **K (Konva hybrid)** | Konva for interactive objects (furniture, selection), Canvas 2D for static grid/walls | Spike succeeds, layering works without flicker/perf issues |
-| **F (Fabric.js full)** | Replace FeasibilityCanvas entirely with Fabric.js canvas | Konva fails AND Fabric proves more capable at full-canvas replacement |
-| **H (Hand-roll)** | Continue coding all interactions in raw Canvas 2D | Both libraries add more complexity than they solve |
-
-**After decision:**
-- [ ] Implement chosen approach for: select, move, resize, rotate, delete on furniture items
-- [ ] Implement wall selection + property editing
-- [ ] Implement room selection + property editing
-- [ ] Multi-select with bounding box
+**Cutover (not “insurance”):**
+- [ ] Client-only Fabric stage mounts in open3d workspace
+- [ ] Furniture: select, move, resize, rotate, delete — all via commands
+- [ ] Wall draw + wall select + property edit via commands
+- [ ] Room select + multi-select + marquee
+- [ ] Retire interactive responsibility from `FeasibilityCanvas` (delete or static underlay only during migration)
+- [ ] Fail gate: if Fabric spike is **unworkable** (perf/UX evidence), switch to **Konva full stage** (still one engine, still no hybrid)
 
 ### 2B.3 — 2D ↔ 3D State Continuity
 
-The 2D canvas and 3D viewer must share the same project state. When a user toggles between views, everything must persist.
+Same **document** (UUIDs, mm). Two views: Fabric (2D) + Three/R3F (3D). No hybrid 2D layers.
 
-- [ ] Verify `workspaceCanvas.project` state (walls, rooms, furniture coordinates) is shared between FeasibilityCanvas and ThreeLazyViewer
-- [ ] Toggle 2D → 3D preserves: room dimensions, wall positions, furniture positions and rotations
-- [ ] Toggle 3D → 2D preserves: any changes made in 3D mode
-- [ ] Default boot: 2D `FeasibilityCanvas` (not 3D)
+- [ ] `workspace` project shared; both views rebuild from document
+- [ ] Toggle 2D → 3D / 3D → 2D preserves walls, openings, furniture pose
+- [ ] Default boot: **2D** plan view
+- [ ] `parametricBuilder.generate3DMesh()` (and generated GLBs) feed planner 3D — not designer-only asset dumps
 - [ ] Integrate `parametricBuilder.generate3DMesh()` with the 3D viewer for furniture items
 
 ### 2B.4 — Draw → Save → Reload Flow
@@ -119,46 +107,39 @@ Currently, block descriptors are persisted to `site/block-descriptors/` on disk.
 - [ ] Maintain backward compatibility: read from disk as fallback during migration
 - [ ] Remove disk-based persistence code after migration verified
 
-### 2C.3 — Product Type Pipelines
+### 2C.3 — Product Type Pipelines (system-generated first)
 
-**Custom furniture (parametric) — no file uploads:**
-- [ ] Admin sets W/D/H bounds + material selection in Puck
-- [ ] Server stores JSON only (no files)
-- [ ] Client generates 2D footprint via `ParametricBuilder.generate2DFootprint()`
-- [ ] Client generates 3D mesh via `ParametricBuilder.generate3DMesh()`
-- [ ] Extend `ParametricBuilder` beyond boxes: L-shapes, U-shapes for counters; door/drawer faces for cabinets
+**P0 must-do — modular / parametric (choose every component → good mesh/GLB):**
+- [ ] Admin chooses components (carcass, doors, top, legs, hardware style) + W/D/H + materials in Puck
+- [ ] Server stores structured JSON only for default path
+- [ ] 2D: `ParametricBuilder` (and successors) footprint from options
+- [ ] 3D: generate mesh / optional export GLB from same options — **designers do not hand-author 100 GLBs**
+- [ ] Extend beyond boxes: L/U, door/drawer faces, part library quality bar (“good GLB/mesh”)
 
-**Static/branded items (dual-asset upload):**
-- [ ] Admin uploads `.glb` (3D model) and `.svg` (2D footprint) via Puck fields
-- [ ] Server validates: file size limits, GLTF structure validation, SVG sanitisation
-- [ ] Files stored to Supabase Storage, URLs saved in descriptor JSON
-- [ ] Client renders `.glb` with Three.js, `.svg` on 2D canvas
+**P1 — Extruded (SVG → generated 3D):**
+- [ ] Admin uploads SVG outline + thickness + material
+- [ ] `GlbExtruderPreview` + publish path; server validates generated GLB
 
-**Extruded items (SVG → 3D):**
-- [ ] Admin uploads `.svg` outline + enters thickness + selects material
-- [ ] `GlbExtruderPreview.tsx` generates 3D preview in admin panel
-- [ ] On publish: browser exports `.glb` blob → uploads to server
-- [ ] Server validates `.glb` (file size, GLTF structure) before persisting
-- [ ] Stored `.glb` served to planner for 3D rendering
+**P2 exception — Static GLB (flag + size limit + review):**
+- [ ] Allowed only when generation cannot represent the form
+- [ ] Require exception flag, max file size, GLTF validation, human review
+- [ ] Upload `.glb` + `.svg` footprint; never the default catalog path
 
 ### 2C.4 — Catalog End-to-End
 
-The ultimate integration test: admin creates a product, it appears in the customer catalog, and the customer can use it.
-
-- [ ] Admin creates product → publishes → product appears in planner catalog
-- [ ] Customer selects product → places in room → sees 2D footprint
-- [ ] Customer toggles 3D → sees 3D model/mesh
-- [ ] Product variants (colour, material) work in both views
-- [ ] Catalog search (Fuse.js) works with new Supabase-sourced data
+- [ ] Admin publishes **parametric/modular** product → catalog → place in 2D + 3D
+- [ ] Variants (material/colour) work without new designer GLBs
+- [ ] Exception static GLB still works when flagged
+- [ ] Catalog search (Fuse.js) with Supabase-sourced data
 
 ### 2C Gates
 
 | Gate | Check |
 |------|-------|
-| Parametric | Admin can publish a parametric product end-to-end |
-| Static | Admin can publish a static product with uploaded `.glb` + `.svg` |
-| Extruded | Admin can publish an extruded product with SVG → 3D |
-| Integration | All three product types appear in customer catalog and render in 2D + 3D |
-| CI | `pnpm run typecheck` + `pnpm run test` — pass |
-| Security | SVG security fixtures (malicious SVG rejected) |
-| Determinism | Pipeline determinism (identical input → identical output) |
+| **Must-do modular** | Component choices produce good 2D + 3D without designer GLB |
+| Extruded | SVG → generated 3D publish path |
+| Static exception | Flag + size + review enforced; not default |
+| Integration | Catalog place in 2D + 3D |
+| CI | typecheck + tests |
+| Security | Malicious SVG rejected |
+| Determinism | Same options → same geometry output |

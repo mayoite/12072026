@@ -1,21 +1,5 @@
-import type { LucideIcon } from "lucide-react";
-import {
-  BarChart3,
-  Boxes,
-  ClipboardList,
-  FileText,
-  Flag,
-  FolderKanban,
-  LayoutDashboard,
-  Map,
-  Package,
-  Palette,
-  PenSquare,
-  Settings,
-  Shapes,
-  Users,
-  Library,
-} from "lucide-react";
+import type { Icon } from "@phosphor-icons/react";
+import { ChartBar as BarChart3, Package as Boxes, ClipboardText as ClipboardList, FileText, Flag, Kanban as FolderKanban, SquaresFour as LayoutDashboard, MapTrifold as Map, Package, Palette, NotePencil as PenSquare, Gear as Settings, Polygon as Shapes, Users, Books as Library } from "@phosphor-icons/react";
 
 import {
   CRM_CLIENTS_PATH,
@@ -27,7 +11,7 @@ export type AdminNavItem = {
   href: string;
   label: string;
   description: string;
-  icon: LucideIcon;
+  icon: Icon;
 };
 
 export type AdminNavGroup = {

@@ -9,7 +9,7 @@
  */
 
 import Link from "next/link";
-import { Plus, RefreshCw } from "lucide-react";
+import { Plus, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
 
 import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
 

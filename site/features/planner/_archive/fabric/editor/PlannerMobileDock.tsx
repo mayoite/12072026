@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { MoreHorizontal } from "lucide-react";
+import { DotsThree as MoreHorizontal } from "@phosphor-icons/react";
 import type { ToolDef, PlannerStoreTool, PlannerToolId } from "@/features/planner/editor/PlannerToolRail";
 import { TOOL_GROUPS, isToolActive } from "@/features/planner/editor/PlannerToolRail";
 import { BottomSheet } from "@/features/planner/ui/BottomSheet";

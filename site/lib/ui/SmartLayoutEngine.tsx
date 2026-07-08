@@ -11,7 +11,7 @@
  */
 
 import { useState, useCallback } from "react";
-import { Wand2, LayoutGrid, Users, Maximize2, Zap, CheckCircle2 } from "lucide-react";
+import { MagicWand as Wand2, SquaresFour as LayoutGrid, Users, ArrowsOut as Maximize2, Lightning as Zap, CheckCircle as CheckCircle2 } from "@phosphor-icons/react";
 
 export type LayoutTemplate = {
   id: string;

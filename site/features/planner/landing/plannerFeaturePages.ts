@@ -1,17 +1,11 @@
-import type { LucideIcon } from "lucide-react";
-import {
-  Box,
-  FileText,
-  Layers3,
-  Ruler,
-  Sparkles,
-} from "lucide-react";
+import type { Icon } from "@phosphor-icons/react";
+import { Cube as Box, FileText, Stack as Layers3, Ruler, Sparkle as Sparkles } from "@phosphor-icons/react";
 
 export type PlannerFeaturePage = {
   slug: string;
   title: string;
   tagline: string;
-  icon: LucideIcon;
+  icon: Icon;
   summary: string;
   bullets: string[];
   helpSectionId: string;

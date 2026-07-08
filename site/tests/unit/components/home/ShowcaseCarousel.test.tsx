@@ -33,7 +33,7 @@ vi.mock('@/components/home/PartnershipBanner', () => ({
   PartnershipPanel: () => <div data-testid="mock-partnership-panel" />
 }));
 
-vi.mock('lucide-react', () => ({
+vi.mock('@phosphor-icons/react', () => ({
   ChevronLeft: () => <span data-testid="left-icon" />,
   ChevronRight: () => <span data-testid="right-icon" />
 }));

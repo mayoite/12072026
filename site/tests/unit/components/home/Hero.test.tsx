@@ -12,7 +12,7 @@ vi.mock('framer-motion', () => ({
   useTransform: () => 0
 }));
 
-vi.mock('lucide-react', () => ({
+vi.mock('@phosphor-icons/react', () => ({
   ArrowRight: () => <span data-testid="arrow-right" />
 }));
 

@@ -5,9 +5,7 @@ import { CollapsibleSection } from '../components/CollapsibleSection'
 import { GeneratedKeyValueTable } from '../components/GeneratedDataTables'
 import { keyValueRowsFromDomain, LiveRepoSection } from '../components/LiveRepoSection'
 import { workflowRecords, siteWorkflowRecords } from '../data/workflowsData'
-import { GitCommit, GitBranch, Rocket, Wrench, Database, Package, Shield, Eye, Award, Target, ListChecks, History, ArrowRight, Image as ImageIcon, BookOpen } from 'lucide-react'
-
-const gitFlow = `flowchart TB
+import { GitCommit, GitBranch, Rocket, Wrench, Database, Package, Shield, Eye, Trophy as Award, Target, ListChecks, ClockCounterClockwise as History, ArrowRight, Image as ImageIcon, BookOpen } from "@phosphor-icons/react";const gitFlow = `flowchart TB
     Main["main<br/>production"]
     Feature["feature/<name><br/>branch"]
     Dev["Local Dev<br/>npm.cmd run dev"]

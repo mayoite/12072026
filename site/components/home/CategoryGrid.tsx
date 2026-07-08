@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Clock3, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle as CheckCircle2, Clock as Clock3, ShieldCheck } from "@phosphor-icons/react";
 import { getTranslations } from "next-intl/server";
 import { getCatalog } from "@/features/catalog/getProducts";
 import {

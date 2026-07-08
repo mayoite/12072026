@@ -1,11 +1,11 @@
-import type { LucideIcon } from "lucide-react";
-import { Compass, LayoutDashboard, UserCircle } from "lucide-react";
+import type { Icon } from "@phosphor-icons/react";
+import { Compass, SquaresFour as LayoutDashboard, UserCircle } from "@phosphor-icons/react";
 
 export type WorkspaceHubItem = {
   href: string;
   label: string;
   description: string;
-  icon: LucideIcon;
+  icon: Icon;
 };
 
 export type WorkspaceHubSection = {

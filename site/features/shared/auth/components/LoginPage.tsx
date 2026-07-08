@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Loader2 } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
+import { CircleNotch as Loader2 } from "@phosphor-icons/react";import { createClient } from '@/lib/supabase/client'
 import {
   humanizeAuthError,
   isSuspendedAuthError,
@@ -131,15 +130,15 @@ export function LoginPage() {
       <AuthLinks>
         <Link
           href="/forgot"
-          className="text-muted hover:text-heading dark:text-subtle dark:hover:text-gray-100 transition-colors"
+          className="text-muted hover:text-heading transition-colors"
         >
           Forgot password?
         </Link>
-        <span className="text-subtle dark:text-muted">
+        <span className="text-subtle">
           Need an account?{' '}
           <Link
             href="/signup"
-            className="font-medium text-[color:var(--color-blueprint-strong)] dark:text-[color:var(--color-blueprint)] hover:underline"
+            className="font-medium text-[color:var(--color-blueprint-strong)] hover:underline"
           >
             Sign up
           </Link>

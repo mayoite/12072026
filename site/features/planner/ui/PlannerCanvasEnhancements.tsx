@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { OnboardingCoach } from "@/features/planner/onboarding/OnboardingCoach";
 import { PLANNER_ONBOARDING_STEPS } from "../onboarding/steps";
 

@@ -1,18 +1,7 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
-import {
-  Armchair,
-  BrickWall,
-  DoorOpen,
-  Eraser,
-  Hand,
-  Layers2,
-  MousePointer2,
-  PanelTop,
-  RectangleHorizontal,
-  Ruler,
-} from "lucide-react";
+import type { Icon } from "@phosphor-icons/react";
+import { Armchair, Wall as BrickWall, DoorOpen, Eraser, Hand, Stack as Layers2, Cursor as MousePointer2, Browser as PanelTop, Rectangle as RectangleHorizontal, Ruler } from "@phosphor-icons/react";
 
 import type { PlannerStep } from "@/features/planner/editor/plannerStep";
 import {
@@ -53,7 +42,7 @@ export type ToolDef = {
   label: string;
   hint: string;
   shortcut?: string;
-  icon: LucideIcon;
+  icon: Icon;
 };
 
 export type ToolGroup = {

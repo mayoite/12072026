@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { ApiError, toApiError, API_ERROR_CODES } from "@/lib/api/ApiError";
+import { ApiError, toApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 
 describe("ApiError", () => {
   it("creates ApiError instances correctly", () => {

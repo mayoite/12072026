@@ -3,8 +3,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { CompareColumnActions } from '@/components/products/CompareColumnActions';
 import { trackQuoteCartAdded } from '@/lib/analytics/siteEvents';
 
-// Mock lucide-react
-vi.mock('lucide-react', () => ({
+// Mock @phosphor-icons/react
+vi.mock('@phosphor-icons/react', () => ({
   ShoppingCart: () => <div data-testid="shopping-cart-icon" />,
 }));
 

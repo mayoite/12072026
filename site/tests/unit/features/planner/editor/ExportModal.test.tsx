@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import type * as lucidereactType0 from "lucide-react";
+import type * as lucidereactType0 from "@phosphor-icons/react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import React from "react";
 import { ExportModal } from "@/features/planner/editor/ExportModal";
@@ -9,7 +9,7 @@ vi.mock("next-intl", () => ({
   useTranslations: () => vi.fn().mockImplementation((key) => key),
 }));
 
-vi.mock("lucide-react", async (importOriginal) => {
+vi.mock("@phosphor-icons/react", async (importOriginal) => {
   const actual = await importOriginal<typeof lucidereactType0>();
   const icon = (name: string) => (props: Record<string, unknown>) =>
     React.createElement("span", { "data-testid": `icon-${name}`, ...props });

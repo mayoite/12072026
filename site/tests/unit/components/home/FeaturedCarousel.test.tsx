@@ -17,7 +17,7 @@ vi.mock('embla-carousel-react', () => ({
   default: () => [vi.fn(), mockEmblaApi]
 }));
 
-vi.mock('lucide-react', () => ({
+vi.mock('@phosphor-icons/react', () => ({
   ChevronLeft: () => <span data-testid="left-icon" />,
   ChevronRight: () => <span data-testid="right-icon" />
 }));

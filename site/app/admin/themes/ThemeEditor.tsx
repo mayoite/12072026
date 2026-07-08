@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiPath, browserApiFetch } from '@/lib/api/browserApi';
 
-import { Save, UploadCloud, AlertCircle } from 'lucide-react';
+import { FloppyDisk as Save, CloudArrowUp as UploadCloud, WarningCircle as AlertCircle } from "@phosphor-icons/react";
 
 interface ThemeRow {
   id: string;

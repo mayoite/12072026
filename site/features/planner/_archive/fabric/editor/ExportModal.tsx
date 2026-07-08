@@ -9,19 +9,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import {
-  X,
-  FileText,
-  Ruler,
-  Presentation,
-  Check,
-  Loader2,
-  Link2,
-  Download,
-  Image,
-  FileCode,
-  AlertCircle,
-} from "lucide-react";
+import { X, FileText, Ruler, Presentation, Check, CircleNotch as Loader2, Link as Link2, DownloadSimple as Download, Image, FileCode, WarningCircle as AlertCircle } from "@phosphor-icons/react";
 
 import type { ExportPresetId } from "@/features/planner/lib/exportPresets";
 import {

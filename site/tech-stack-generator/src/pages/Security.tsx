@@ -3,9 +3,7 @@ import { CollapsibleSection } from '../components/CollapsibleSection'
 import { GeneratedKeyValueTable } from '../components/GeneratedDataTables'
 import { keyValueRowsFromDomain, LiveRepoSection } from '../components/LiveRepoSection'
 import { securityRecords } from '../data/securityData'
-import { Shield, Lock, Key, Eye, AlertTriangle, RefreshCw } from 'lucide-react'
-
-const securityLayers = [
+import { Shield, Lock, Key, Eye, Warning as AlertTriangle, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";const securityLayers = [
   {
     icon: Lock,
     name: 'Authentication',

@@ -2,17 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import {
-  FileUp,
-  FolderOpen,
-  HelpCircle,
-  LayoutTemplate,
-  Menu,
-  MoreHorizontal,
-  MoreVertical,
-  Save,
-  Sparkles,
-} from "lucide-react";
+import { FileArrowUp as FileUp, FolderOpen, Question as HelpCircle, Layout as LayoutTemplate, List as Menu, DotsThree as MoreHorizontal, DotsThreeVertical as MoreVertical, FloppyDisk as Save, Sparkle as Sparkles } from "@phosphor-icons/react";
 
 import { PlannerThemeToggle } from "@/features/planner/components/PlannerThemeToggle";
 import { useTheme } from "@/features/planner/components/WorkspaceThemeProvider";

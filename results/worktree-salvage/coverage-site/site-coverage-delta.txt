@@ -1,0 +1,15 @@
+﻿Site Coverage Improvement Session - 07/08/2026 22:36:51
+Initial (from results/coverage-site/coverage-summary.json read): stmts 20.86% lines 20.36%
+After edits + targeted runs (with --pool=threads override for stability):
+- navigation.ts: 100%
+- routeChromeRules.ts: 86.95%
+- filters.ts / getProducts.ts / categories: 100% when tests included
+- routeChromeRules branches partial (86%)
+- Added 2 new describes (navigation + chrome + seo) + 1 fix to existing test file: tests/unit/site-data-misc.test.ts
+- Lint: clean after 1 fix (unused import)
+- Typecheck: clean
+- Tests added:  ~7 new its, all pass
+- Artifacts: results/coverage-site-after-misc.json , results/temp-*.log , results/00-site-coverage-task.md
+- Issues: vitest site cov crashes with forks pool on win (tmp removal); many 0% files still because not all tests run in one pass or no tests for blocks2d etc (large); planner api tests failing preserved but out of site scope.
+- Remaining: PLAN-FAIL-0408 open (floor 90%); to reach 50%+ need more test additions or fix config for stable full run.
+Next: expand tests for specSchema, imageMetadata branches, lib/catalog more.

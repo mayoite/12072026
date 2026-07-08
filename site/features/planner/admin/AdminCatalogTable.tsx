@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, Loader2, Pencil, Trash2 } from "lucide-react";
+import { Archive, CircleNotch as Loader2, PencilSimple as Pencil, Trash as Trash2 } from "@phosphor-icons/react";
 
 import type {
   ConfiguratorCatalogItem,

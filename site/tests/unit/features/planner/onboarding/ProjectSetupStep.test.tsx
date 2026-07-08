@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
-import type * as lucidereactType0 from "lucide-react";
+import type * as lucidereactType0 from "@phosphor-icons/react";
 import { render } from "@testing-library/react";
 import React from "react";
 import { ProjectSetupStep } from "@/features/planner/onboarding/ProjectSetupStep";
 
-vi.mock("lucide-react", async (importOriginal) => {
+vi.mock("@phosphor-icons/react", async (importOriginal) => {
   const actual = await importOriginal<typeof lucidereactType0>();
   const icon = (name: string) => (props: any) => React.createElement("span", { "data-testid": `icon-${name}`, ...props });
   return { ...actual, ArrowRight: icon("ArrowRight"), Building2: icon("Building2"), MapPin: icon("MapPin"), Ruler: icon("Ruler"), Users: icon("Users") };

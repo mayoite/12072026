@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { PaginationQuerySchema, StandardCatalogListQuerySchema, CreatePlanSchema } from "@/lib/api/schemas";
+import { PaginationQuerySchema, StandardCatalogListQuerySchema, CreatePlanSchema } from "@/features/shared/api/schemas";
 
 describe("schemas validation", () => {
   it("validates PaginationQuerySchema correctly", () => {

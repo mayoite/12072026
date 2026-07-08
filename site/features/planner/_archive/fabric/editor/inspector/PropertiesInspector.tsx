@@ -5,7 +5,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Lock, MousePointer2, Trash2, Unlock } from "lucide-react";
+import { Lock, Cursor as MousePointer2, Trash as Trash2, LockOpen as Unlock } from "@phosphor-icons/react";
 
 import { useFloorplan } from "@/features/planner/canvas-fabric";
 import type { PlannerStep } from "@/features/planner/editor/plannerStep";

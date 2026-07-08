@@ -13,7 +13,7 @@ vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
 
-vi.mock('lucide-react', () => ({
+vi.mock('@phosphor-icons/react', () => ({
   Plus: ({ className }: { className: string }) => <span data-testid="plus-icon" className={className} />,
 }));
 

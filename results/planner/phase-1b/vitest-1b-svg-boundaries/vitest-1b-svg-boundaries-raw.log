@@ -1,0 +1,12 @@
+﻿
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/admin/svg-editor/svgPackageBoundaries.test.ts > SVG package boundaries > keeps planner browser adapter free of admin and server runtime packages 1ms
+ Γ£ô tests/unit/admin/svg-editor/svgPackageBoundaries.test.ts > SVG package boundaries > marks compiler and authoritative sanitizer server-only 1ms
+ Γ£ô tests/unit/admin/svg-editor/svgPackageBoundaries.test.ts > SVG package boundaries > marks raster and persistence modules server-only 0ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  01:20:00
+   Duration  1.33s (transform 82ms, setup 479ms, import 12ms, tests 4ms, environment 609ms)
+

@@ -1,5 +1,5 @@
 "use client";
-import { AlertTriangle, CircleAlert } from "lucide-react";
+import { Warning as AlertTriangle, WarningCircle as CircleAlert } from "@phosphor-icons/react";
 import { useMemo } from "react";
 
 

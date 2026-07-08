@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid3x3 } from "lucide-react";
+import { GridNine as Grid3x3 } from "@phosphor-icons/react";
 
 import {
   isPlannerDevToolsEnabled,

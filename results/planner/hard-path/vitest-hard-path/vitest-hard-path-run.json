@@ -1,0 +1,13 @@
+﻿{
+    "name":  "vitest-hard-path",
+    "module":  "planner",
+    "phase":  "hard-path",
+    "command":  "pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts tests/unit/features/planner/open3d/modularCabinetV0.test.ts tests/unit/admin/svg-editor/svgPipelineRunner.test.ts tests/unit/features/planner/open3d/threeViewerInner.test.tsx --reporter=verbose",
+    "cwd":  "D:\\OandO07072026",
+    "operator":  "hard-path agent",
+    "startUtc":  "2026-07-09T02:16:12.3428087+05:30",
+    "endUtc":  "2026-07-09T02:16:15.1395670+05:30",
+    "durationSec":  2.797,
+    "exitCode":  0,
+    "rawLog":  "D:\\OandO07072026\\results\\planner\\hard-path\\vitest-hard-path\\vitest-hard-path-raw.log"
+}

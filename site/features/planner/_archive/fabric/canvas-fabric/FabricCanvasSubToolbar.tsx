@@ -1,17 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  Copy,
-  DownloadSimple,
-  ArrowArcRight,
-  ArrowCounterClockwise,
-  ArrowClockwise,
-  Trash,
-  ArrowArcLeft,
-  Intersect,
-  Exclude,
-} from "@phosphor-icons/react";
+import { Copy, DownloadSimple, ArrowArcRight, ArrowCounterClockwise, ArrowClockwise, Trash, ArrowArcLeft, Intersect, Exclude } from "@phosphor-icons/react";
 import { useFloorplan } from "./context/FloorplanContext";
 import { FabricDrawToolsBar } from "./FabricDrawToolsBar";
 import { PlannerTooltip } from "@/features/planner/ui/PlannerTooltip";

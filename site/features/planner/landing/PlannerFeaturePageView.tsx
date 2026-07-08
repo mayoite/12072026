@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, BookOpen, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Check } from "@phosphor-icons/react";
 
 import {
   HomeMarketingLayout,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LayoutGrid, PanelLeftClose, Sparkles, type LucideIcon } from "lucide-react";
+import { SquaresFour as LayoutGrid, SidebarSimple as PanelLeftClose, Sparkle as Sparkles, type Icon } from "@phosphor-icons/react";
 
 import { AIAssistDrawer } from "@/features/planner/ai/AIAssistDrawer";
 import { CatalogPanel } from "@/features/planner/catalog/CatalogPanel";
@@ -14,7 +14,7 @@ import { Tooltip } from "@/features/planner/ui/Tooltip";
 import { getStepLeftEmphasis } from "@/features/planner/editor/usePlannerPanels";
 import { getStepLeftTab, type PlannerLeftTab } from "./plannerStepBindings";
 
-const TAB_META: Record<PlannerLeftTab, { label: string; Icon: LucideIcon }> = {
+const TAB_META: Record<PlannerLeftTab, { label: string; Icon: Icon }> = {
   library: { label: "Library", Icon: LayoutGrid },
   "ai-assist": { label: "AI Assist", Icon: Sparkles },
 };

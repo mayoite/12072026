@@ -8,6 +8,11 @@
 
 **Prerequisite:** None (start immediately)
 
+**Locked elsewhere (do not re-open in 2A):**
+- **2D engine:** Fabric.js v7 full stage — *cutover in 2B* (decision is done; not idle insurance).
+- **Furniture:** modular/parametric generation is **must-do**; static GLB is exception only.
+- **Visual tests:** Playwright screenshots (Percy removed).
+
 ---
 
 ## 2A.1 — React Aria Completion
@@ -17,31 +22,14 @@
 - [ ] Write integration tests for keyboard nav (Tab, Arrow, Enter, Escape) across all React Aria components
 - [ ] Verify 100dvh layout holds after every component change
 
-## 2A.2 — Lucide → Phosphor Migration (Planner Module Only)
+## 2A.2 — Lucide → Phosphor Migration
 
-**Scope:** Replace `lucide-react` imports with `@phosphor-icons/react` across all `features/planner/**` files.
+**Status (2026-07-09):** **Done site-wide** (user: Phosphor only). `lucide-react` removed from `site/package.json` and tech-stack-generator; imports rewritten to `@phosphor-icons/react`. Guard: `tests/unit/features/planner/open3d/open3dIconPolicy.test.ts`.
 
-**Why:** User prefers Phosphor. Lucide is used in ~50 files site-wide, but the planner module should have one icon system. Non-planner code (`features/shared/`, `features/site-assistant/`, `features/crm/`, `components/`) stays on Lucide for now.
-
-**Files to update:**
-- [ ] `open3d/editor/`: TopBar, PropertiesPanel, InventoryPanel, CanvasToolRail, LayersPanel
-- [ ] `ui/`: PlannerSaveIndicator, PlannerSessionDialog, PlannerEmptyCanvas
-- [ ] `shared/components/editor/`: Toolbar, ViewToggle
-- [ ] `admin/`: AdminCatalogManager, AdminWorkspaceCatalogPageView
-- [ ] `admin/svg-editor/`: AdminSvgEditorListView, AdminSvgEditorEditView
-- [ ] `onboarding/`: OnboardingCoach, ProjectSetupStep, StartingPointStep
-- [ ] `landing/`: PlannerFeaturesHubPage, PlannerToolsShowcase, PlannerFeaturePageView, plannerFeaturePages
-- [ ] `help/`: PlannerHelpPage
-- [ ] `3d/`: Planner3DViewer
+**Scope completed:** `app/`, `features/**` (incl. planner + CRM + shared + assistant), `components/`, `lib/`, tests mocks, `optimizePackageImports`.
 
 **Guard test:**
-- [ ] Add `open3dIconPolicy.test.tsx`: no `lucide-react` in `features/planner/**`
-
-**Do NOT touch:**
-- `features/shared/` (used by non-planner pages)
-- `features/site-assistant/` (separate module)
-- `features/crm/` (separate module)
-- `components/` (shared site components)
+- [x] `open3dIconPolicy.test.ts`: no `lucide-react` in production sources; package dep absent
 
 ## 2A.3 — CSS Hardening
 
@@ -52,10 +40,12 @@
 
 ## 2A.4 — Dead Dependency Cleanup
 
-- [ ] Remove `@svgdotjs/svg.js`, `@svgdotjs/svg.resize.js`, `@svgdotjs/svg.select.js` from `package.json`
-- [ ] Remove `html-to-image` from `package.json`
-- [ ] Verify `motion` / `motion-utils` are peer deps or standalone; remove if standalone with zero imports
-- [ ] Run `pnpm install` + `pnpm run typecheck` + `pnpm run test` after removal
+> **Done in 00A (2026-07-09):** `@svgdotjs/*`, `html-to-image`, `motion`, `motion-utils` removed with import census + typecheck evidence under `results/planner/00a-start/`.
+
+- [x] Remove `@svgdotjs/svg.js`, `@svgdotjs/svg.resize.js`, `@svgdotjs/svg.select.js` from `package.json`
+- [x] Remove `html-to-image` from `package.json`
+- [x] Verify `motion` / `motion-utils` are peer deps or standalone; remove if standalone with zero imports
+- [ ] Run full `pnpm run test` after 2A UI changes (00A ran typecheck + scoped planner suites only)
 
 ---
 

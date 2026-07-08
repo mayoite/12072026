@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@phosphor-icons/react";
 import { PLANNER_GUEST_COOKIE } from "@/lib/auth/constants";
 import { createClient } from "@/lib/supabase/client";
 import { GlobalNavHeader } from "@/features/shared/shell/GlobalNavHeader";

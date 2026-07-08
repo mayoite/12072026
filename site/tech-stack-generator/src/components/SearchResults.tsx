@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Search } from 'lucide-react'
-import type { SearchableItem } from '../hooks/useSearch'
+import { MagnifyingGlass as Search } from "@phosphor-icons/react";import type { SearchableItem } from '../hooks/useSearch'
 
 interface SearchResultsProps {
   results: SearchableItem[]

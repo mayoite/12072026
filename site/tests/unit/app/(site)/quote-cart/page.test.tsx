@@ -5,7 +5,7 @@ import { expectHomeMarketingShell } from '@/tests/unit/app/(site)/_template.home
 
 // Mock Router/Link/Image
 // Mock Lucide Icons
-vi.mock('lucide-react', () => ({
+vi.mock('@phosphor-icons/react', () => ({
   Minus: () => <span data-testid="icon-minus" />,
   Plus: () => <span data-testid="icon-plus" />,
   Trash2: () => <span data-testid="icon-trash" />,

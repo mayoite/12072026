@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowUpRight, ExternalLink, Menu, X } from "lucide-react";
+import { ArrowUpRight, ArrowSquareOut as ExternalLink, List as Menu, X } from "@phosphor-icons/react";
 import { OneAndOnlyLogo } from "@/components/ui/Logo";
 import { ADMIN_NAV_GROUPS } from "./adminNav";
 

@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Command, X } from 'lucide-react'
-import { useSearch } from '../hooks/useSearch'
+import { MagnifyingGlass as Search, Command, X } from "@phosphor-icons/react";import { useSearch } from '../hooks/useSearch'
 
 interface CommandPaletteProps {
   isOpen: boolean

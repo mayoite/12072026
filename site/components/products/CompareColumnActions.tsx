@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "@phosphor-icons/react";
 import { trackQuoteCartAdded } from "@/lib/analytics/siteEvents";
 import { useQuoteCart } from "@/lib/store/quoteCart";
 

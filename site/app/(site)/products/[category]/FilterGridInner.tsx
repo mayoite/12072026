@@ -3,7 +3,7 @@
 import type { CompatCategory as Category } from "@/features/catalog/getProducts";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Filter, Search as SearchIcon, SlidersHorizontal, X } from "lucide-react";
+import { Funnel as Filter, MagnifyingGlass as SearchIcon, FadersHorizontal as SlidersHorizontal, X } from "@phosphor-icons/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 

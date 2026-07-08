@@ -3,9 +3,7 @@ import { CollapsibleSection } from '../components/CollapsibleSection'
 import { GeneratedKeyValueTable } from '../components/GeneratedDataTables'
 import { keyValueRowsFromDomain, LiveRepoSection } from '../components/LiveRepoSection'
 import { codeOrganizationRecords } from '../data/codeOrganizationData'
-import { Folder, FileCode, Settings, TestTube, Database } from 'lucide-react'
-
-function getTopDirs() {
+import { Folder, FileCode, Gear as Settings, TestTube, Database } from "@phosphor-icons/react";function getTopDirs() {
   return [
     { name: 'app/', desc: 'Next.js App Router - pages, layouts, API routes, global CSS', icon: FileCode, color: 'text-brand-400' },
     { name: 'features/', desc: 'Feature modules: planner, catalog, crm, admin, ai, shared', icon: Folder, color: 'text-accent-400' },

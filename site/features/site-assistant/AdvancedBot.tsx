@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, ArrowRight, X } from "lucide-react";
+import { ChatCircle as MessageCircle, ArrowRight, X } from "@phosphor-icons/react";
 import { buildMailtoHref, buildWhatsAppHref } from "@/lib/site-data/contact";
 
 type UseCase =

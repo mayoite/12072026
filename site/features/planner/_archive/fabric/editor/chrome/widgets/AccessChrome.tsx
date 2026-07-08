@@ -1,6 +1,6 @@
 "use client";
 
-import { PanelLeftClose, PanelLeftOpen, PanelRightOpen, RotateCcw } from "lucide-react";
+import { SidebarSimple as PanelLeftClose, Sidebar as PanelLeftOpen, Sidebar as PanelRightOpen, ArrowCounterClockwise as RotateCcw } from "@phosphor-icons/react";
 import { Tooltip } from "@/features/planner/ui/Tooltip";
 
 const TOOLBAR_BUTTON_CLASS = "min-w-[2.75rem] min-h-[2.75rem] focus-visible:ring-2 focus-visible:ring-blue-500 hover:bg-gray-100 rounded-lg transition-colors";

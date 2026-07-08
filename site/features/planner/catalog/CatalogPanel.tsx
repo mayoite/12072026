@@ -9,7 +9,7 @@
  */
 
 import { useCallback, useMemo, useState } from "react";
-import { Clock, Plus, Search, X } from "lucide-react";
+import { Clock, Plus, MagnifyingGlass as Search, X } from "@phosphor-icons/react";
 import Link from "next/link";
 import Image from "next/image";
 

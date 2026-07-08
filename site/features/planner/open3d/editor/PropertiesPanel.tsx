@@ -6,6 +6,7 @@ import {
   useMemo,
   type ChangeEvent,
   type KeyboardEvent,
+  type KeyboardEventHandler,
   type MouseEvent,
   memo,
 } from "react";
@@ -1064,7 +1065,7 @@ function PropertyField({
           onChange({ target: { value: String(v) } } as unknown as ChangeEvent<HTMLInputElement>);
         }
       }}
-      onKeyDown={onKeyDown as any}
+      onKeyDown={onKeyDown as unknown as KeyboardEventHandler}
       isReadOnly={readOnly}
       minValue={min}
       maxValue={max}

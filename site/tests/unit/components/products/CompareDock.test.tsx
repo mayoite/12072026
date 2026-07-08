@@ -3,8 +3,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { CompareDock } from '@/components/products/CompareDock';
 import { trackSiteCtaClick } from '@/lib/analytics/siteEvents';
 
-// Mock lucide-react
-vi.mock('lucide-react', () => ({
+// Mock @phosphor-icons/react
+vi.mock('@phosphor-icons/react', () => ({
   GitCompareArrows: () => <div data-testid="compare-icon" />,
   Trash2: () => <div data-testid="trash-icon" />,
 }));

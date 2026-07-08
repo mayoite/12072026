@@ -3,7 +3,7 @@
 import React from "react";
 
 import { useState } from "react";
-import { ArrowRight, ArrowLeft, Phone, User, Info } from "lucide-react";
+import { ArrowRight, ArrowLeft, Phone, User, Info } from "@phosphor-icons/react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type IVRNode = {
@@ -123,11 +123,11 @@ export function VisualIVR() {
                             <ArrowLeft className="w-4 h-4" /> Back
                         </button>
                     )}
-                    {path.length > 1 && <span className="text-neutral-300">|</span>}
+                    {path.length > 1 && <span className="text-muted">|</span>}
                     <div className="flex items-center gap-2">
                         {path.map((node, idx) => (
                             <span key={node.id} className={idx === path.length - 1 ? "font-semibold text-heading" : ""}>
-                                {node.label} {(idx < path.length - 1) && <span className="text-neutral-300 mx-1">/</span>}
+                                {node.label} {(idx < path.length - 1) && <span className="text-muted mx-1">/</span>}
                             </span>
                         ))}
                     </div>

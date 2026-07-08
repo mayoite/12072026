@@ -1,16 +1,10 @@
 import { useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import {
-  Home, Layers, GitBranch, Puzzle, FolderOpen, Database,
-  Globe, TestTube, Rocket, Shield, Zap, GitCommit,
-  Monitor, Box, Wrench, ChevronDown, Menu, X, Search,
-  type LucideIcon
-} from 'lucide-react'
-import clsx from 'clsx'
+import { House as Home, Stack as Layers, GitBranch, PuzzlePiece as Puzzle, FolderOpen, Database, Globe, TestTube, Rocket, Shield, Lightning as Zap, GitCommit, Monitor, Cube as Box, Wrench, CaretDown as ChevronDown, List as Menu, X, MagnifyingGlass as Search, type Icon } from "@phosphor-icons/react";import clsx from 'clsx'
 import { navItems } from '../data/navigation'
 import type { NavItem } from '../types'
 
-const iconMap: Record<string, LucideIcon> = {
+const iconMap: Record<string, Icon> = {
   Home, Layers, GitBranch, Puzzle, FolderOpen, Database,
   Globe, TestTube, Rocket, Shield, Zap, GitCommit,
   Monitor, Box, Wrench,

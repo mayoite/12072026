@@ -1,0 +1,8 @@
+﻿CHROME-VERIFICATION CONSOLE (PROXY)
+From playwright run of site-navigation-smoke:
+- No page console logs captured because page never loaded (ERR_CONNECTION_REFUSED before DOM)
+- Test errors: page.goto net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+- Call log: navigating to "http://localhost:3000/", waiting until "load"
+- Other: Some node warnings about NO_COLOR/FORCE_COLOR (harmless)
+- No JS errors from site (site not reached)
+Full details in e2e-nav-output.txt

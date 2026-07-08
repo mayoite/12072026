@@ -5,7 +5,7 @@ import { FabricCanvasSubToolbar } from "@/features/planner/canvas-fabric/FabricC
 import { ZoomControl } from "@/features/planner/canvas-fabric/components/ZoomControl";
 import { useFloorplan } from "@/features/planner/canvas-fabric";
 import { Tooltip } from "@/features/planner/ui/Tooltip";
-import { Box } from "lucide-react";
+import { Cube as Box } from "@phosphor-icons/react";
 
 const TOOLBAR_BUTTON_CLASS = "min-w-[2.75rem] min-h-[2.75rem] focus-visible:ring-2 focus-visible:ring-blue-500 hover:bg-gray-100 rounded-lg transition-colors";
 

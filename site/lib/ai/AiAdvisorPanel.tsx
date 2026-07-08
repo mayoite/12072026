@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, X, Sparkles, Loader2, Trash2 } from "lucide-react";
+import { PaperPlaneTilt as Send, X, Sparkle as Sparkles, CircleNotch as Loader2, Trash as Trash2 } from "@phosphor-icons/react";
 import { useAiAdvisor } from "./useAiAdvisor";
 import type { AiAdvisorContext } from "./useAiAdvisor";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { PencilLine } from "lucide-react";
+import { PencilSimpleLine as PencilLine } from "@phosphor-icons/react";
 import { buildShellOnlyLayout } from "@/features/planner/ai/spaceSuggest";
 import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
 import { markProjectSetupCompleteInStorage } from "./projectSetup";

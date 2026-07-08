@@ -24,12 +24,12 @@ export default async function AboutPage() {
 
   return (
     <HomeMarketingLayout>
-    <div className="bg-[var(--surface-page)]">
+    <div className="bg-page">
       <section className="pt-16">
         <div className="grid min-h-[42rem] lg:grid-cols-[0.95fr_1.05fr]">
           <div className="flex items-center px-7 py-14 md:px-14 lg:px-16">
             <div className="max-w-xl">
-              <p className="typ-label mb-5 text-[var(--color-bronze-500)]">
+              <p className="typ-label mb-5 text-bronze-500">
                 {t("sectionKicker")}
               </p>
               <h1 className="home-heading !text-[clamp(2.4rem,5vw,4.4rem)]">

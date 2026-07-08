@@ -7,13 +7,7 @@ import type {
   CompatProduct as Product,
   ProductVariant,
 } from '@/features/catalog/getProducts';
-import {
-  ArrowLeft,
-  ChevronRight,
-  Share2,
-  ShoppingCart,
-  GitCompareArrows,
-} from "lucide-react";
+import { ArrowLeft, CaretRight as ChevronRight, ShareNetwork as Share2, ShoppingCart, GitDiff as GitCompareArrows } from "@phosphor-icons/react";
 import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";

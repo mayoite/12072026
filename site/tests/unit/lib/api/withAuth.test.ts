@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { withAuth, resolveAuthContext } from "@/lib/api/withAuth";
+import { withAuth, resolveAuthContext } from "@/features/shared/api/withAuth";
 import { NextRequest } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
-import { success } from "@/lib/api/apiResponse";
+import { success } from "@/features/shared/api/apiResponse";
 
 vi.mock("@/lib/supabase/server", () => {
   const mockSupabase = {

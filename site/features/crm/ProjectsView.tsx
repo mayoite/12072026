@@ -9,10 +9,7 @@ import { cn } from "@/lib/utils";
 import { crmProjectStatus, crmUi } from "./crmUi";
 import { crmProjectDetailPath } from "./crmRoutes";
 import { CrmDemoBanner } from "./CrmDemoBanner";
-import { 
-  FolderOpen, Plus, FileText, Trash2, ArrowRight,
-  Building2, Users, CalendarDays
-} from "lucide-react";
+import { FolderOpen, Plus, FileText, Trash as Trash2, ArrowRight, Buildings as Building2, Users, CalendarBlank as CalendarDays } from "@phosphor-icons/react";
 
 export default function ProjectsView({ embedded = false }: { embedded?: boolean }) {
   const { projects, clients, addProject, deleteProject } = useCrmStore();

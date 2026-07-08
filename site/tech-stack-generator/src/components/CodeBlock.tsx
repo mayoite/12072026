@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import hljs from 'highlight.js'
-import { Check, Copy } from 'lucide-react'
-import clsx from 'clsx'
+import { Check, Copy } from "@phosphor-icons/react";import clsx from 'clsx'
 
 interface CodeBlockProps {
   code: string

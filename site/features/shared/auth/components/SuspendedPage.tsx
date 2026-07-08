@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { ShieldAlert } from 'lucide-react'
-import { AuthShell } from './AuthShell'
+import { ShieldWarning as ShieldAlert } from "@phosphor-icons/react";import { AuthShell } from './AuthShell'
 
 /**
  * Landing page a user is routed to when their sign-in fails because

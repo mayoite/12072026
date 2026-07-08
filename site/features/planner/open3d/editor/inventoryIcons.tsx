@@ -8,24 +8,7 @@
  * carries only stable keys; this component owns presentation.
  */
 
-import {
-  Armchair,
-  Bed,
-  Briefcase,
-  Car,
-  CookingPot,
-  Couch,
-  ForkKnife,
-  House,
-  Image,
-  Lightbulb,
-  Plant,
-  Ruler,
-  Shower,
-  Tree,
-  type Icon,
-  type IconProps,
-} from "@phosphor-icons/react";
+import { Armchair, Bed, Briefcase, Car, CookingPot, Couch, ForkKnife, House, Image, Lightbulb, Plant, Ruler, Shower, Tree, type Icon, type IconProps } from "@phosphor-icons/react";
 
 import type { InventoryIconName } from "../catalog/inventory/inventoryTaxonomy";
 

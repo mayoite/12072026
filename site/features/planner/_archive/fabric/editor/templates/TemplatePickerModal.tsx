@@ -9,7 +9,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { X, LayoutGrid, Users, ArrowRight, Check } from "lucide-react";
+import { X, SquaresFour as LayoutGrid, Users, ArrowRight, Check } from "@phosphor-icons/react";
 import { LAYOUT_TEMPLATES, type LayoutTemplate } from "@/features/planner/templates/layoutTemplates";
 import { useIsMobile } from "@/features/planner/hooks/useIsMobile";
 import { BottomSheet } from "@/features/planner/ui/BottomSheet";

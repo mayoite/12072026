@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "@phosphor-icons/react";
 
 import { useTheme, type Theme } from "@/features/planner/components/WorkspaceThemeProvider";
 import { PlannerTooltip } from "@/features/planner/ui/PlannerTooltip";

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowRight, Hash, Search } from "lucide-react";
+import { ArrowRight, Hash, MagnifyingGlass as Search } from "@phosphor-icons/react";
 
 import {
   HomeMarketingLayout,

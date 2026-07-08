@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { HOMEPAGE_COLLECTIONS_CONTENT } from "@/lib/site-data/homepage";
 import { CollectionsSectionHeading } from "@/components/home/CollectionsSectionHeading";

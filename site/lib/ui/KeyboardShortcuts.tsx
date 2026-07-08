@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
-import { X, Search, Keyboard } from "lucide-react";
+import { X, MagnifyingGlass as Search, Keyboard } from "@phosphor-icons/react";
 
 interface Shortcut {
   keys: string;

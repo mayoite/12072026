@@ -33,7 +33,7 @@ vi.mock('@/lib/analytics/siteEvents', () => ({
 }));
 
 // Mock icons
-vi.mock('lucide-react', () => ({
+vi.mock('@phosphor-icons/react', () => ({
   Filter: () => <span data-testid="icon-filter" />,
   Search: () => <span data-testid="icon-search" />,
   SlidersHorizontal: () => <span data-testid="icon-sliders" />,

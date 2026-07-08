@@ -37,13 +37,6 @@
   "devDependencies": {
     "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",
     "secretlint": "^13.0.2",
-    "ts-morph": "28.0.0",
-    "turbo": "latest",
-    "zod": "4.4.3"
-  },
-  "dependencies": {
-    "@sentry/nextjs": "^10.64.0",
-    "@sentry/react": "^10.64.0",
-    "react-aria-components": "^1.19.0"
+    "turbo": "latest"
   }
 }

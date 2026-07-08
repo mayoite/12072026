@@ -1,0 +1,25 @@
+﻿
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > maps walls and furniture with stable entity ids 2ms
+ Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > converts mm to metres for Three world 0ms
+ Γ£ô tests/unit/features/planner/open3d/modularCabinetV0.test.ts > modular cabinet-v0 (must-do generate path) > emits stable centered footprint path 1ms
+ Γ£ô tests/unit/features/planner/open3d/modularCabinetV0.test.ts > modular cabinet-v0 (must-do generate path) > builds carcass-only mesh for doorStyle none 3ms
+ Γ£ô tests/unit/features/planner/open3d/modularCabinetV0.test.ts > modular cabinet-v0 (must-do generate path) > adds slab door as second part 1ms
+ Γ£ô tests/unit/features/planner/open3d/modularCabinetV0.test.ts > modular cabinet-v0 (must-do generate path) > adds pair of door leaves 1ms
+ Γ£ô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: core contracts (1B in-process unified) > DEFAULT_TIMEOUT_MS is 10_000 (Phase 04 ┬º04-SUB-02 contract) 2ms
+ Γ£ô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: core contracts (1B in-process unified) > DEFAULT_MAX_STDERR_BYTES is 1_000_000 (Phase 04 ┬º04-SUB-02 contract) 1ms
+ Γ£ô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: core contracts (1B in-process unified) > returns scriptUnavailable when generate-svg.mjs is missing 2ms
+ Γ£ô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: core contracts (1B in-process unified) > returns writeFixtureError when the per-call fixture cannot be written 7ms
+ Γ£ô tests/unit/admin/svg-editor/svgPipelineRunner.test.ts > 04-PIPELINE-RUNNER: descriptor input is shape-respecting > rejects inputs that don't carry a slug (TypeScript narrowed by caller) 2ms
+ Γ£ô tests/unit/features/planner/open3d/threeViewerInner.test.tsx > ThreeViewerInner > shows loading state then mounts the WebGL container 40ms
+ Γ£ô tests/unit/features/planner/open3d/threeViewerInner.test.tsx > ThreeViewerInner > renders an error panel when scene initialization fails 13ms
+ Γ£ô tests/unit/features/planner/open3d/threeViewerInner.test.tsx > ThreeViewerInner > disposes renderer and scene resources on unmount 19ms
+ Γ£ô tests/unit/features/planner/open3d/threeViewerInner.test.tsx > ThreeViewerInner > renders with shadow maps enabled and without an onReady callback 17ms
+ Γ£ô tests/unit/features/planner/open3d/threeViewerInner.test.tsx > ThreeViewerInner > cancels Three.js loading when unmounted early 2ms
+
+ Test Files  4 passed (4)
+      Tests  16 passed (16)
+   Start at  02:16:13
+   Duration  1.67s (transform 558ms, setup 2.09s, import 484ms, tests 122ms, environment 2.56s)
+

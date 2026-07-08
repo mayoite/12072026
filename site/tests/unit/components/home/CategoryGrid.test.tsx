@@ -24,7 +24,7 @@ vi.mock('next/cache', () => ({
   unstable_cache: (fn: () => unknown) => fn
 }));
 
-vi.mock('lucide-react', () => ({
+vi.mock('@phosphor-icons/react', () => ({
   ArrowRight: () => <span data-testid="arrow-right" />,
   CheckCircle2: () => <span data-testid="check" />,
   Clock3: () => <span data-testid="clock" />,

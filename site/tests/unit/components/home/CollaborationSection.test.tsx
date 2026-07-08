@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { CollaborationSection } from '@/components/home/CollaborationSection';
 
-vi.mock('lucide-react', () => ({
+vi.mock('@phosphor-icons/react', () => ({
   ArrowRight: () => <span data-testid="arrow-right" />
 }));
 

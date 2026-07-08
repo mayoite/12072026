@@ -1,0 +1,13 @@
+﻿{
+    "name":  "import-census",
+    "module":  "planner",
+    "phase":  "00a-start",
+    "command":  "manual import census via Grep (no production imports of removed packages)",
+    "cwd":  "D:\\OandO07072026",
+    "operator":  "00A agent",
+    "startUtc":  "2026-07-09T01:21:11.0920193+05:30",
+    "endUtc":  "2026-07-09T01:21:11.1871884+05:30",
+    "durationSec":  0.095,
+    "exitCode":  0,
+    "rawLog":  "D:\\OandO07072026\\results\\planner\\00a-start\\import-census\\import-census-raw.log"
+}

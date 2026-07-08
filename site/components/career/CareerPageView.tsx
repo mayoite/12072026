@@ -1,4 +1,4 @@
-import { Briefcase, GraduationCap, Users } from "lucide-react";
+import { Briefcase, GraduationCap, Users } from "@phosphor-icons/react";
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { JobCard } from "@/components/career/JobCard";

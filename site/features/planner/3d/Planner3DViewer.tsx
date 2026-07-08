@@ -8,7 +8,7 @@ import {
   OrbitControls,
   PerspectiveCamera,
 } from "@react-three/drei";
-import { Eye, User } from "lucide-react";
+import { Eye, User } from "@phosphor-icons/react";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
 
@@ -670,7 +670,7 @@ export function Planner3DViewer({ document, className }: Planner3DViewerProps) {
       {webglProbe.ok ? (
         <Suspense
           fallback={
-            <div className="surface-inverse min-h-[420px]">
+            <div className="surface-inverse min-h-[26.25rem]">
               <div className="planner-viewer-chip rounded-full px-4 py-2 typ-caption font-semibold uppercase tracking-[0.22em] text-body">
                 Preparing 3D scene
               </div>
@@ -706,7 +706,7 @@ export function Planner3DViewer({ document, className }: Planner3DViewerProps) {
         </Suspense>
       ) : (
         <div
-          className="surface-inverse min-h-[420px] px-6"
+          className="surface-inverse min-h-[26.25rem] px-6"
           data-testid="planner-3d-fallback"
         >
           <div className="planner-viewer-surface max-w-md rounded-[1.35rem] border border-warning px-5 py-4 text-center">
@@ -719,7 +719,7 @@ export function Planner3DViewer({ document, className }: Planner3DViewerProps) {
       )}
 
       <div className="pointer-events-none inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[color:var(--surface-inverse)] to-transparent" />
-      <div className="pointer-events-none bottom-4 right-4 h-20 w-20 rounded-xl border border-soft bg-white/80 text-[0.625rem] font-semibold shadow-sm" style={{ zIndex: Z.canvasOverlay }}>
+      <div className="pointer-events-none bottom-4 right-4 h-20 w-20 rounded-xl border border-soft bg-[color:var(--surface-page)]/80 text-[0.6875rem] font-semibold shadow-sm" style={{ zIndex: Z.canvasOverlay }}>
         <span className="left-1/2 top-2 h-12 w-0.5 -translate-x-1/2 bg-success" />
         <span className="left-1/2 top-2 -translate-x-1/2 text-success">Y</span>
         <span className="bottom-5 left-4 h-0.5 w-10 rotate-[-25deg] bg-danger" />

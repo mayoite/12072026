@@ -39,14 +39,19 @@ export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteP
 
   useEffect(() => {
     if (!open) return;
-    setQuery("");
-    setSelectedIndex(0);
-    const frame = requestAnimationFrame(() => inputRef.current?.focus());
+    const frame = requestAnimationFrame(() => {
+      setQuery("");
+      setSelectedIndex(0);
+      inputRef.current?.focus();
+    });
     return () => cancelAnimationFrame(frame);
   }, [open]);
 
   useEffect(() => {
-    setSelectedIndex(0);
+    const frame = requestAnimationFrame(() => {
+      setSelectedIndex(0);
+    });
+    return () => cancelAnimationFrame(frame);
   }, [query]);
 
   const execute = useCallback(

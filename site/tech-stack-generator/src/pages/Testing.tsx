@@ -1,9 +1,7 @@
 import { GeneratedKeyValueTable } from '../components/GeneratedDataTables'
 import { LiveRepoSection } from '../components/LiveRepoSection'
 import { testCommands as repoTestCommands, testingCommandCards, testingPolicy } from '../data/testingData'
-import { AlertTriangle } from 'lucide-react'
-
-export function Testing() {
+import { Warning as AlertTriangle } from "@phosphor-icons/react";export function Testing() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">
       <header className="mb-8">

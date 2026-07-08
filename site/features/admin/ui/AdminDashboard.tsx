@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Users, Building2, MousePointerClick } from 'lucide-react';
+import { Users, Buildings as Building2, CursorClick as MousePointerClick } from "@phosphor-icons/react";
 
 const METRICS = [
   {

@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback, type MouseEvent } from "react";
 import { CornersIn, CornersOut } from "@phosphor-icons/react";
 import { MenuTrigger, Button, Popover, Menu, MenuItem } from "react-aria-components";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";

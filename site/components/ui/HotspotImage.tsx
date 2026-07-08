@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Plus } from "lucide-react";
+import { Plus } from "@phosphor-icons/react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export interface Hotspot {

@@ -38,7 +38,7 @@ vi.mock('@/components/contact/CustomerQueryForm', () => ({
   )
 }));
 
-vi.mock('lucide-react', () => ({
+vi.mock('@phosphor-icons/react', () => ({
   MapPin: () => <span data-testid="mappin-icon" />,
   Phone: () => <span data-testid="phone-icon" />,
   Mail: () => <span data-testid="mail-icon" />

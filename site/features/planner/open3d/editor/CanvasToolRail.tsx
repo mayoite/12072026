@@ -1,16 +1,6 @@
 "use client";
 
-import {
-  ArrowsOutSimple,
-  Cursor,
-  DoorOpen,
-  Hand,
-  HouseLine,
-  Package,
-  Ruler,
-  Wall,
-  type Icon,
-} from "@phosphor-icons/react";
+import { ArrowsOutSimple, Cursor, DoorOpen, Hand, HouseLine, Package, Ruler, Wall, type Icon } from "@phosphor-icons/react";
 
 import {
   CANVAS_TOOL_LABELS,

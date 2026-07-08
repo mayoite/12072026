@@ -1,13 +1,8 @@
-import * as Sentry from "@sentry/nextjs";
-
-export async function register() {
-  if (process.env.NEXT_RUNTIME === "nodejs") {
-    await import("./sentry.server.config");
-  }
-
-  if (process.env.NEXT_RUNTIME === "edge") {
-    await import("./sentry.edge.config");
-  }
+/**
+ * Next.js instrumentation hook.
+ * Sentry was removed (wizard install + hardcoded DSN). Re-add monitoring only with
+ * env-based DSN and explicit product approval.
+ */
+export async function register(): Promise<void> {
+  // no-op — reserved for future optional observability
 }
-
-export const onRequestError = Sentry.captureRequestError;

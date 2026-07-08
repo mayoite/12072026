@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import Link from "next/link";
 
-import { ExternalLink, Loader2, RefreshCw, Search } from "lucide-react";
+import { ArrowSquareOut as ExternalLink, CircleNotch as Loader2, ArrowsClockwise as RefreshCw, MagnifyingGlass as Search } from "@phosphor-icons/react";
 
 
 

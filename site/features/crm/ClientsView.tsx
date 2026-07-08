@@ -7,10 +7,7 @@ import { GlobalNavHeader } from "@/features/shared/shell/GlobalNavHeader";
 import { cn } from "@/lib/utils";
 import { crmUi } from "./crmUi";
 import { CrmDemoBanner } from "./CrmDemoBanner";
-import { 
-  Users, Plus, Search, Trash2, Mail, Phone, MapPin, 
-  Building2, ArrowRight, X, Clock 
-} from "lucide-react";
+import { Users, Plus, MagnifyingGlass as Search, Trash as Trash2, Envelope as Mail, Phone, MapPin, Buildings as Building2, ArrowRight, X, Clock } from "@phosphor-icons/react";
 
 export default function ClientsView({ embedded = false }: { embedded?: boolean }) {
   const { clients, projects, addClient, deleteClient } = useCrmStore();
@@ -105,17 +102,17 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
         {/* Stats Grid */}
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="shell-workspace-card p-5">
-            <p className="shell-workspace-faint text-[0.625rem] font-semibold uppercase tracking-[0.2em]">Total Clients</p>
+            <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">Total Clients</p>
             <p className="mt-2 text-2xl font-bold text-strong">{clients.length}</p>
           </div>
           <div className="shell-workspace-card p-5">
-            <p className="shell-workspace-faint text-[10px] font-semibold uppercase tracking-[0.2em]">Corporate Accounts</p>
+            <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">Corporate Accounts</p>
             <p className="mt-2 text-2xl font-bold text-strong">
               {clients.filter((c) => c.company).length}
             </p>
           </div>
           <div className="shell-workspace-card p-5">
-            <p className="shell-workspace-faint text-[10px] font-semibold uppercase tracking-[0.2em]">Linked Projects</p>
+            <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">Linked Projects</p>
             <p className="mt-2 text-2xl font-bold text-strong">
               {projects.filter((p) => p.clientId !== "none").length}
             </p>
@@ -124,7 +121,7 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
 
         {/* Toolbar */}
         <div className="relative max-w-md w-full">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[color:var(--text-muted)]" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted" />
           <input
             type="text"
             placeholder="Search by name, company, or email..."
@@ -238,7 +235,7 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
 
                 {/* Contact Information */}
                 <div className="space-y-3">
-                  <p className="shell-workspace-faint text-[10px] font-semibold uppercase tracking-[0.2em]">
+                  <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">
                     Contact Details
                   </p>
                   <div className="space-y-2 text-sm">
@@ -268,7 +265,7 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
                 {/* Notes */}
                 {selectedClient.notes && (
                   <div className="space-y-3">
-                    <p className="shell-workspace-faint text-[10px] font-semibold uppercase tracking-[0.2em]">
+                    <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">
                       Correspondence Notes
                     </p>
                     <div className={cn("rounded-xl border p-4 text-xs leading-relaxed text-body whitespace-pre-wrap", crmUi.softSurface, crmUi.panelBorder)}>
@@ -279,7 +276,7 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
 
                 {/* Projects */}
                 <div className="space-y-3">
-                  <p className="shell-workspace-faint text-[10px] font-semibold uppercase tracking-[0.2em]">
+                  <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">
                     Associated Projects ({clientProjects.length})
                   </p>
                   {clientProjects.length === 0 ? (
@@ -295,7 +292,7 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
                         >
                           <div>
                             <p className="text-xs font-semibold text-strong">{p.name}</p>
-                            <p className="text-[10px] shell-workspace-muted mt-1">
+                            <p className="text-[0.6875rem] shell-workspace-muted mt-1">
                               Status: <span className="capitalize">{p.status.replace("_", " ")}</span>
                             </p>
                           </div>

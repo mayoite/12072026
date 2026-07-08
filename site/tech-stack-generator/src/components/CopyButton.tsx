@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Copy, Check } from 'lucide-react'
-import clsx from 'clsx'
+import { Copy, Check } from "@phosphor-icons/react";import clsx from 'clsx'
 
 interface CopyButtonProps {
   content: string

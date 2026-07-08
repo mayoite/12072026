@@ -13,12 +13,16 @@ export interface ModelViewerPreviewProps {
   alt?: string;
 }
 
+interface ModelViewerElement extends HTMLElement {
+  getDimensions: () => { x: number; y: number; z: number };
+}
+
 export function ModelViewerPreview({
   src,
   onModelLoaded,
   alt = "A 3D model",
 }: ModelViewerPreviewProps) {
-  const modelRef = useRef<any>(null);
+  const modelRef = useRef<ModelViewerElement>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,7 +43,7 @@ export function ModelViewerPreview({
       }
     };
 
-    const handleError = (e: any) => {
+    const handleError = (e: Event) => {
       console.error("ModelViewer error:", e);
       setError("Failed to load 3D model.");
     };
@@ -60,7 +64,7 @@ export function ModelViewerPreview({
           {error}
         </div>
       ) : (
-        /* @ts-ignore - React doesn't fully support custom web components typings yet */
+        /* @ts-expect-error - React doesn't fully support custom web components typings yet; removal when @types/model-viewer provide JSX support */
         <model-viewer
           ref={modelRef}
           src={src}

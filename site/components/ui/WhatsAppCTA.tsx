@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Mail, MessageCircle, Phone, X } from "lucide-react";
+import { ArrowUpRight, Envelope as Mail, ChatCircle as MessageCircle, Phone, X } from "@phosphor-icons/react";
 import { hasConsentChoice } from "@/lib/consent";
 import { trackSiteCtaClick } from "@/lib/analytics/siteEvents";
 import { buildMailtoHref, buildWhatsAppHref, SITE_CONTACT, toTelHref } from "@/lib/site-data/contact";

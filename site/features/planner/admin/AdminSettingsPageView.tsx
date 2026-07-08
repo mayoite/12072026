@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+import { ArrowSquareOut as ExternalLink } from "@phosphor-icons/react";
 
 import { getAllFlagsGrouped, DEFAULT_FLAGS, type FeatureFlagName } from "@/features/planner/lib/featureFlags";
 import { AdminCanvasConfigSection } from "./AdminWorkspaceCatalogPageView";

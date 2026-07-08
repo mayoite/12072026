@@ -11,7 +11,7 @@ export const metadata = SUSTAINABILITY_PAGE_METADATA;
 export default function SustainabilityPage() {
   return (
     <HomeMarketingLayout>
-    <div className="bg-[var(--surface-page)]">
+    <div className="bg-page">
       <section className="grid pt-16 lg:min-h-[42rem] lg:grid-cols-[0.85fr_1.15fr]">
         <div className="flex items-center px-7 py-14 md:px-14 lg:px-16">
           <div className="max-w-xl">
@@ -38,11 +38,11 @@ export default function SustainabilityPage() {
         </div>
       </section>
 
-      <section className="border-y border-[var(--border-soft)] py-14 md:py-18">
+      <section className="border-y border-soft py-14 md:py-18">
         <div className="home-shell-xl grid gap-8 md:grid-cols-3">
           {SUSTAINABILITY_PAGE_COPY.pillars.map((pillar, index) => (
-            <article key={pillar.title} className="border-l border-[var(--border-soft)] pl-6">
-              <span className="text-[var(--color-bronze-500)]">0{index + 1}</span>
+            <article key={pillar.title} className="border-l border-soft pl-6">
+              <span className="text-bronze-500">0{index + 1}</span>
               <h3 className="typ-h3 mt-7 text-strong">{pillar.title}</h3>
               <p className="page-copy-sm mt-3 text-body">{pillar.detail}</p>
             </article>
@@ -50,19 +50,19 @@ export default function SustainabilityPage() {
         </div>
       </section>
 
-      <section className="bg-[var(--color-dark-midnight-blue-700)] py-14 text-[var(--text-inverse)] md:py-20">
+      <section className="bg-[color:var(--color-dark-midnight-blue-700)] py-14 text-inverse md:py-20">
         <div className="home-shell-xl grid gap-10 lg:grid-cols-[0.75fr_1.25fr]">
           <h2 className="home-heading text-inverse">{SUSTAINABILITY_PAGE_COPY.ecoScoreTitle}</h2>
           <div>
-            <p className="page-copy text-[var(--text-inverse-body)]">
+            <p className="page-copy text-inverse-body">
               {SUSTAINABILITY_PAGE_COPY.ecoScoreDescription}
             </p>
             <div className="mt-8 grid gap-6 md:grid-cols-3">
               {SUSTAINABILITY_PAGE_COPY.ecoScoreItems.map((item) => (
-                <div key={item.index} className="border-t border-[var(--border-inverse)] pt-5">
-                  <span className="text-[var(--color-bronze-300)]">0{item.index}</span>
+                <div key={item.index} className="border-t border-inverse pt-5">
+                  <span className="text-bronze-300">0{item.index}</span>
                   <h3 className="mt-3 text-lg font-medium">{item.title}</h3>
-                  <p className="mt-2 text-sm text-[var(--text-inverse-body)]">{item.detail}</p>
+                  <p className="mt-2 text-sm text-inverse-body">{item.detail}</p>
                 </div>
               ))}
             </div>

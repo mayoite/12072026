@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { RefreshCw, Save } from "lucide-react";
+import { ArrowsClockwise as RefreshCw, FloppyDisk as Save } from "@phosphor-icons/react";
 import { ensureCsrfToken, invalidateCsrfToken } from "@/lib/api/browserApi";
 import { CSRF_HEADER_NAME } from "@/lib/security/csrfConstants";
 

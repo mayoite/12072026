@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowUp } from 'lucide-react'
-
-export function BackToTop() {
+import { ArrowUp } from "@phosphor-icons/react";export function BackToTop() {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {

@@ -17,7 +17,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkle as Sparkles } from "@phosphor-icons/react";
 
 import type {
   BlockDescriptor,

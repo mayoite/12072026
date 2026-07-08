@@ -1,33 +1,38 @@
 /**
- * Inner 3D Viewer Component
- * 
- * This is the actual 3D viewer implementation that gets lazy-loaded.
- * It uses Three.js for rendering but is only loaded when explicitly requested.
+ * Inner 3D Viewer — lazy-loaded Three.js scene rebuilt from Open3dProject.
+ * Document model is source of truth; meshes tagged with entity ids.
  */
 
 import { useEffect, useRef, useState } from "react";
 import type { Open3dFloor } from "../model/types";
 import styles from "./threeViewerInner.module.css";
-import type { PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import type {
+  Group,
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer,
+} from "three";
 
 import type * as THREE from "three";
 import { readThreeThemeColor } from "../shared/readThemeColor";
+import {
+  buildOpen3dSceneNodes,
+  mmToMeters,
+  type Open3dSceneNode,
+} from "./buildOpen3dSceneNodes";
 
 type ThreeModule = typeof THREE;
 
-/** Shared error msg extraction (consolidates duplicated ternary for coverage + consistency). */
 function toErrorMessage(err: unknown, fallback: string): string {
   return err instanceof Error ? err.message : fallback;
 }
 
-/**
- * Inner 3D viewer props.
- */
 interface ThreeViewerInnerProps {
   projectData?: {
     id: string;
     name: string;
     floors: Open3dFloor[];
+    activeFloorId?: string;
   };
   enableShadows?: boolean;
   enableControls?: boolean;
@@ -35,32 +40,72 @@ interface ThreeViewerInnerProps {
   onReady?: () => void;
 }
 
-/**
- * ThreeViewerInner - The actual 3D viewer implementation.
- * 
- * This component is lazy-loaded and should not be imported directly.
- * Use Lazy3DViewer instead.
- */
+function clearContentGroup(group: Group, THREE: ThreeModule): void {
+  while (group.children.length > 0) {
+    const child = group.children[0];
+    group.remove(child);
+    child.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      object.geometry.dispose();
+      const materials = Array.isArray(object.material)
+        ? object.material
+        : [object.material];
+      materials.forEach((material) => material.dispose());
+    });
+  }
+}
+
+function addNodesToGroup(
+  THREE: ThreeModule,
+  group: Group,
+  nodes: Open3dSceneNode[],
+  castShadow: boolean,
+): void {
+  for (const node of nodes) {
+    const w = mmToMeters(node.widthMm);
+    const d = mmToMeters(node.depthMm);
+    const h = mmToMeters(node.heightMm);
+    const color = node.color ?? (node.kind === "wall" ? "#9ca3af" : "#e5e7eb");
+    const geometry = new THREE.BoxGeometry(w, h, d);
+    const material = new THREE.MeshStandardMaterial({
+      color,
+      roughness: 0.8,
+      metalness: 0.05,
+    });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = node.id;
+    mesh.userData.entityId = node.id;
+    mesh.userData.kind = node.kind;
+    mesh.position.set(
+      mmToMeters(node.xMm),
+      h / 2,
+      mmToMeters(node.yMm),
+    );
+    mesh.rotation.y = -node.rotation;
+    mesh.castShadow = castShadow;
+    mesh.receiveShadow = castShadow;
+    group.add(mesh);
+  }
+}
+
 export function ThreeViewerInner({
-  projectData: _projectData,
+  projectData,
   enableShadows = true,
   enableControls: _enableControls,
   backgroundColor = readThreeThemeColor("--surface-page", "#ffffff"),
   onReady,
 }: ThreeViewerInnerProps): React.JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
+  const contentGroupRef = useRef<Group | null>(null);
   const [threeLoaded, setThreeLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [three, setThree] = useState<ThreeModule | null>(null);
 
-  // Lazy load three.js
   useEffect(() => {
     let cancelled = false;
 
     async function loadThree() {
       try {
-        // Dynamic import of three.js - only load when needed
-        // Note: This requires three to be installed as a dependency
         const threeModule = await import("three");
         if (!cancelled) {
           setThree(threeModule);
@@ -81,7 +126,7 @@ export function ThreeViewerInner({
     };
   }, [onReady]);
 
-  // Initialize Three.js scene when loaded
+  // Scene shell (once)
   useEffect(() => {
     if (!three || !containerRef.current) return;
 
@@ -92,36 +137,28 @@ export function ThreeViewerInner({
 
     try {
       const THREE = three;
-
-      // Create scene
       scene = new THREE.Scene();
       scene.background = new THREE.Color(backgroundColor);
 
-      // Create camera
       const container = containerRef.current;
-      const aspect = container.clientWidth / container.clientHeight;
-      camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
-      camera.position.set(0, 5, 10);
+      const aspect = container.clientWidth / Math.max(container.clientHeight, 1);
+      camera = new THREE.PerspectiveCamera(50, aspect, 0.1, 500);
+      camera.position.set(4, 6, 8);
       camera.lookAt(0, 0, 0);
 
-      // Create renderer
       renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(container.clientWidth, container.clientHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      
       if (enableShadows) {
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       }
-
       container.appendChild(renderer.domElement);
 
-      // Add lights
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
       scene.add(ambientLight);
-
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-      directionalLight.position.set(5, 10, 5);
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.85);
+      directionalLight.position.set(5, 12, 5);
       if (enableShadows) {
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = 1024;
@@ -129,13 +166,11 @@ export function ThreeViewerInner({
       }
       scene.add(directionalLight);
 
-      // Add grid helper
       const gridHelper = new THREE.GridHelper(20, 20, 0x888888, 0xcccccc);
       scene.add(gridHelper);
 
-      // Add placeholder floor
       const floorGeometry = new THREE.PlaneGeometry(20, 20);
-      const floorMaterial = new THREE.MeshStandardMaterial({ 
+      const floorMaterial = new THREE.MeshStandardMaterial({
         color: 0xf5f5f5,
         side: THREE.DoubleSide,
       });
@@ -144,7 +179,11 @@ export function ThreeViewerInner({
       floor.receiveShadow = enableShadows;
       scene.add(floor);
 
-      // Simple animation loop
+      const content = new THREE.Group();
+      content.name = "open3d-document-content";
+      scene.add(content);
+      contentGroupRef.current = content;
+
       function animate() {
         animationId = requestAnimationFrame(animate);
         if (renderer && scene && camera) {
@@ -153,28 +192,24 @@ export function ThreeViewerInner({
       }
       animate();
 
-      // Handle resize
       function handleResize() {
         if (!containerRef.current || !renderer || !camera) return;
         const width = containerRef.current.clientWidth;
         const height = containerRef.current.clientHeight;
-        camera.aspect = width / height;
+        camera.aspect = width / Math.max(height, 1);
         camera.updateProjectionMatrix();
         renderer.setSize(width, height);
       }
-
       window.addEventListener("resize", handleResize);
 
       return () => {
         window.removeEventListener("resize", handleResize);
         cancelAnimationFrame(animationId);
-        
+        contentGroupRef.current = null;
         if (renderer) {
           renderer.dispose();
           container?.removeChild(renderer.domElement);
         }
-        
-        // Dispose geometries and materials
         if (scene) {
           scene.traverse((object) => {
             if (!(object instanceof THREE.Mesh)) return;
@@ -187,10 +222,25 @@ export function ThreeViewerInner({
         }
       };
     } catch (err) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- set error state from sync init catch inside effect setup; reason: cannot throw in effect, must surface to render fallback; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: extract init to async fn + useEffect cleanup or error boundary when 3d viewer refactored
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync init catch must surface to UI; owner: hard-path 3d; removal: error boundary
       setError(toErrorMessage(err, "Failed to initialize Three.js"));
     }
   }, [three, backgroundColor, enableShadows]);
+
+  // Rebuild document meshes when project changes
+  useEffect(() => {
+    if (!three || !contentGroupRef.current || !projectData) return;
+    const THREE = three;
+    const group = contentGroupRef.current;
+    clearContentGroup(group, THREE);
+
+    const nodes = buildOpen3dSceneNodes({
+      floors: projectData.floors,
+      activeFloorId:
+        projectData.activeFloorId ?? projectData.floors[0]?.id ?? "",
+    });
+    addNodesToGroup(THREE, group, nodes, enableShadows);
+  }, [three, projectData, enableShadows]);
 
   if (error) {
     return (
@@ -205,9 +255,7 @@ export function ThreeViewerInner({
 
   if (!threeLoaded) {
     return (
-      <div className={styles.loadingState}>
-        Initializing 3D...
-      </div>
+      <div className={styles.loadingState}>Initializing 3D...</div>
     );
   }
 

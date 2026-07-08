@@ -1,0 +1,13 @@
+﻿{
+    "name":  "vitest-1b-svg-boundaries",
+    "module":  "planner",
+    "phase":  "phase-1b",
+    "command":  "pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/svgPackageBoundaries.test.ts --reporter=verbose",
+    "cwd":  "D:\\OandO07072026",
+    "operator":  "00A agent",
+    "startUtc":  "2026-07-09T01:19:58.9642908+05:30",
+    "endUtc":  "2026-07-09T01:20:01.7821580+05:30",
+    "durationSec":  2.818,
+    "exitCode":  0,
+    "rawLog":  "D:\\OandO07072026\\results\\planner\\phase-1b\\vitest-1b-svg-boundaries\\vitest-1b-svg-boundaries-raw.log"
+}

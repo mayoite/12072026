@@ -5,7 +5,7 @@ import { sanitizeNextPath } from "@/lib/auth/plannerRedirect";
 import { AccessForm } from "./AccessForm";
 import { SiteWorkspaceShell } from "@/components/home/layout";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "@phosphor-icons/react";
 
 export default async function AccessRoute({
   searchParams,

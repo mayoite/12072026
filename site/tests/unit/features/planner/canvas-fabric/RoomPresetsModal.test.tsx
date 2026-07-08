@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { RoomPresetsModal } from "@/features/planner/canvas-fabric/RoomPresetsModal";
 
-vi.mock("lucide-react", () => ({
+vi.mock("@phosphor-icons/react", () => ({
   LayoutGrid: () => <span />,
   X: () => <span />,
 }));

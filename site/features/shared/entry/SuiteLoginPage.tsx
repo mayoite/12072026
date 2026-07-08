@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkle as Sparkles } from "@phosphor-icons/react";
 
 import { LoginForm } from "@/app/(site)/login/LoginForm";
 import { OpenAssistantButton } from "@/features/shared/entry/OpenAssistantButton";

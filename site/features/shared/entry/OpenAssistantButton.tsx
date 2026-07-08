@@ -1,6 +1,6 @@
 "use client";
 
-import { Bot } from "lucide-react";
+import { Robot as Bot } from "@phosphor-icons/react";
 
 export function OpenAssistantButton({
   label,

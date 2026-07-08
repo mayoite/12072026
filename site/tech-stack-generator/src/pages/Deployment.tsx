@@ -13,9 +13,7 @@ import {
   releaseGateSteps,
   vercelConfigRecords,
 } from '../data/deploymentData'
-import { Cloud, GitPullRequest, Key, Rocket, Server } from 'lucide-react'
-
-function toTableRows(records: Array<{
+import { Cloud, GitPullRequest, Key, Rocket, HardDrives as Server } from "@phosphor-icons/react";function toTableRows(records: Array<{
   label: string
   value: string
   sourcePath: string

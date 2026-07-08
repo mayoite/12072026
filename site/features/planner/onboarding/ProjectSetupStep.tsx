@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowRight, Building2, MapPin, Ruler } from "lucide-react";
+import { ArrowRight, Buildings as Building2, MapPin, Ruler } from "@phosphor-icons/react";
 
 import {
   PLANNER_INDIAN_CITIES,

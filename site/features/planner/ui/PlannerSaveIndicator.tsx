@@ -1,6 +1,6 @@
 "use client";
 
-import { Cloud, CloudOff, Loader2 } from "lucide-react";
+import { Cloud, CloudSlash as CloudOff, CircleNotch as Loader2 } from "@phosphor-icons/react";
 
 import type { PlannerEnvelopeStatus, PlannerSaveStatus } from "../hooks/usePlannerFabricAutosave";
 

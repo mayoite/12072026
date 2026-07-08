@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type * as lucidereactType0 from "lucide-react";
+import type * as lucidereactType0 from "@phosphor-icons/react";
 import { render, screen } from "@testing-library/react";
 import { PlannerFeaturesHubPage } from "@/features/planner/landing/PlannerFeaturesHubPage";
 
@@ -10,7 +10,7 @@ vi.mock("framer-motion", () => ({
   useReducedMotion: vi.fn(() => false),
 }));
 
-vi.mock("lucide-react", async (importOriginal) => {
+vi.mock("@phosphor-icons/react", async (importOriginal) => {
   const actual = await importOriginal<typeof lucidereactType0>();
   const iconProxy = (name: string) => () => <span data-testid={`icon-${name}`} />;
   return {

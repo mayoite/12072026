@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { X, ChevronRight, ChevronLeft, Lightbulb, Sparkles, Armchair, Move, ZoomIn } from "lucide-react";
+import { X, CaretRight as ChevronRight, CaretLeft as ChevronLeft, Lightbulb, Sparkle as Sparkles, Armchair, ArrowsOutCardinal as Move, MagnifyingGlassPlus as ZoomIn } from "@phosphor-icons/react";
 import { BottomSheet } from "@/features/planner/ui/BottomSheet";
 import { useIsMobile } from "@/features/planner/hooks/useIsMobile";
 import { Z } from "@/lib/z-index";

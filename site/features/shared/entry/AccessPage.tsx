@@ -1,12 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowRight,
-  LockKey,
-  Sparkle,
-  UserCircle,
-} from "@phosphor-icons/react";
+import { ArrowRight, LockKey, Sparkle, UserCircle } from "@phosphor-icons/react";
 
 import { OpenAssistantButton } from "@/features/shared/entry/OpenAssistantButton";
 

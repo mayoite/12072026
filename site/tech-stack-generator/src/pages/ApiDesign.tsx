@@ -3,9 +3,7 @@ import { CollapsibleSection } from '../components/CollapsibleSection'
 import { GeneratedApiTable } from '../components/GeneratedDataTables'
 import { LiveRepoSection } from '../components/LiveRepoSection'
 import { apiRoutes as generatedApiRoutes } from '../data/apiData'
-import { Globe, Lock, Database, Zap } from 'lucide-react'
-
-const apiRoutes = [
+import { Globe, Lock, Database, Lightning as Zap } from "@phosphor-icons/react";const apiRoutes = [
   { method: 'POST', path: '/api/auth/callback', desc: 'Supabase auth callback — exchanges code for session', auth: 'Public' },
   { method: 'POST', path: '/api/auth/signout', desc: 'Sign out — clears session cookie', auth: 'Authenticated' },
   { method: 'GET', path: '/api/catalog/products', desc: 'List products with optional category filter', auth: 'Public' },

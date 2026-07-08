@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Loader2, Plus, RefreshCw, Search } from "lucide-react";
+import { CircleNotch as Loader2, Plus, ArrowsClockwise as RefreshCw, MagnifyingGlass as Search } from "@phosphor-icons/react";
 
 import { usePlannerCatalogStore } from "@/features/planner/catalog/catalogStore";
 import { AdminField, AdminSelect, AdminTextInput } from "./AdminFormFields";

@@ -4,9 +4,7 @@ import { CollapsibleSection } from '../components/CollapsibleSection'
 import { GeneratedSimpleTable } from '../components/GeneratedDataTables'
 import { LiveRepoSection } from '../components/LiveRepoSection'
 import { featureRecords } from '../data/featuresData'
-import { PenTool, ShoppingBag, Users, Settings, Bot, Box } from 'lucide-react'
-
-const features = [
+import { PenNib as PenTool, ShoppingBag, Users, Gear as Settings, Robot as Bot, Cube as Box } from "@phosphor-icons/react";const features = [
   {
     id: 'planner',
     name: 'Room Planner',

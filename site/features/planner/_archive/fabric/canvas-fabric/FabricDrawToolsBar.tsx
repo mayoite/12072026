@@ -1,17 +1,6 @@
 "use client";
 
-import {
-  Eraser,
-  Hand,
-  Minus,
-  Cursor,
-  PaintBucket,
-  Palette,
-  PencilSimple,
-  Ruler,
-  Square,
-  BezierCurve,
-} from "@phosphor-icons/react";
+import { Eraser, Hand, Minus, Cursor, PaintBucket, Palette, PencilSimple, Ruler, Square, BezierCurve } from "@phosphor-icons/react";
 import { useFloorplan } from "./context/FloorplanContext";
 import {
   FABRIC_DRAW_TOOL_COLORS,

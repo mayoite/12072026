@@ -1,6 +1,6 @@
 "use client";
 
-import { ImageUp, LayoutTemplate, MousePointerClick, Sparkles } from "lucide-react";
+import { Image as ImageUp, Layout as LayoutTemplate, CursorClick as MousePointerClick, Sparkle as Sparkles } from "@phosphor-icons/react";
 
 interface PlannerEmptyCanvasProps {
   guestMode?: boolean;

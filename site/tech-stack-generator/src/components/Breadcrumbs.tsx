@@ -1,5 +1,4 @@
-import { ChevronRight, Home } from 'lucide-react'
-import { Link, useLocation } from 'react-router-dom'
+import { CaretRight as ChevronRight, House as Home } from "@phosphor-icons/react";import { Link, useLocation } from 'react-router-dom'
 
 const routeNames: Record<string, string> = {
   '/tech-stack': 'Tech Stack',

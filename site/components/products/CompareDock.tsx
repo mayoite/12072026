@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
-import { GitCompareArrows, Trash2 } from "lucide-react";
+import { GitDiff as GitCompareArrows, Trash as Trash2 } from "@phosphor-icons/react";
 import { trackSiteCtaClick } from "@/lib/analytics/siteEvents";
 import {
   MAX_COMPARE_ITEMS,

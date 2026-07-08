@@ -2,21 +2,7 @@
 
 import { Modal, ModalOverlay, Dialog, Heading, Button as RACButton } from "react-aria-components";
 import { useMemo, useState } from "react";
-import {
-  BadgeCheck,
-  Cloud,
-  CopyPlus,
-  Download,
-  FolderOpen,
-  Import,
-  Loader2,
-  Pencil,
-  Save,
-  ShieldCheck,
-  Trash2,
-  Upload,
-  X,
-} from "lucide-react";
+import { SealCheck as BadgeCheck, Cloud, CopySimple as CopyPlus, DownloadSimple as Download, FolderOpen, DownloadSimple as Import, CircleNotch as Loader2, PencilSimple as Pencil, FloppyDisk as Save, ShieldCheck, Trash as Trash2, UploadSimple as Upload, X } from "@phosphor-icons/react";
 
 import { cn } from "@/lib/utils";
 

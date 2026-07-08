@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { AlertCircle } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { WarningCircle as AlertCircle } from "@phosphor-icons/react";import type { ReactNode } from 'react'
 import { useDocumentTitle } from '@/features/shared/auth/lib/useDocumentTitle'
 
 /**

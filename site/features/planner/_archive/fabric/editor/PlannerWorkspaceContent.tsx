@@ -15,7 +15,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { PanelRightClose } from "lucide-react";
+import { SidebarSimple as PanelRightClose } from "@phosphor-icons/react";
 import dynamic from "next/dynamic";
 import { usePlannerStore } from "@/features/planner/store/plannerStore";
 import { PlannerSkeleton } from "@/features/planner/ui/PlannerSkeleton";

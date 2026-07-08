@@ -6,7 +6,7 @@
  */
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Undo2, Redo2 } from "lucide-react";
+import { ArrowCounterClockwise as Undo2, ArrowClockwise as Redo2 } from "@phosphor-icons/react";
 
 export interface UndoToastMessage {
   id: string;

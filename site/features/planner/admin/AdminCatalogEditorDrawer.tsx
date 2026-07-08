@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronUp, Loader2, Save, X } from "lucide-react";
+import { CaretDown as ChevronDown, CaretUp as ChevronUp, CircleNotch as Loader2, FloppyDisk as Save, X } from "@phosphor-icons/react";
 
 import {
   AdminCheckbox,

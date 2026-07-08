@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkle as Sparkles } from "@phosphor-icons/react";
 
 import { PlannerHeroDemo } from "@/features/planner/landing/PlannerHeroDemo";
 import {

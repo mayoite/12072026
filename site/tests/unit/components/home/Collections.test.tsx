@@ -33,7 +33,7 @@ vi.mock('@/lib/helpers/motion', () => ({
   useMotionSafeHover: () => ({})
 }));
 
-vi.mock('lucide-react', () => ({
+vi.mock('@phosphor-icons/react', () => ({
   ArrowLeft: () => <span data-testid="arrow-left" />,
   ArrowRight: () => <span data-testid="arrow-right" />
 }));

@@ -22,16 +22,36 @@ vi.mock("three", () => {
     geometry = { dispose: geometryDispose };
     material = { dispose: materialDispose };
     rotation = { x: 0, y: 0, z: 0 };
+    position = { set: vi.fn(), x: 0, y: 0, z: 0 };
     receiveShadow = false;
+    castShadow = false;
+    name = "";
+    userData: Record<string, unknown> = {};
+  }
+
+  class MockGroup {
+    name = "";
+    children: unknown[] = [];
+    add = vi.fn((object: unknown) => {
+      this.children.push(object);
+    });
+    remove = vi.fn((object: unknown) => {
+      this.children = this.children.filter((c) => c !== object);
+    });
+    traverse = vi.fn((callback: (object: unknown) => void) => {
+      for (const child of this.children) {
+        callback(child);
+      }
+    });
   }
 
   class MockScene {
     background: unknown = null;
-    private readonly children: MockMesh[] = [];
-    add = vi.fn((object: MockMesh) => {
+    private readonly children: unknown[] = [];
+    add = vi.fn((object: unknown) => {
       this.children.push(object);
     });
-    traverse = vi.fn((callback: (object: MockMesh) => void) => {
+    traverse = vi.fn((callback: (object: unknown) => void) => {
       for (const child of this.children) {
         callback(child);
       }
@@ -69,12 +89,14 @@ vi.mock("three", () => {
   return {
     __esModule: true,
     Scene: MockScene,
+    Group: MockGroup,
     PerspectiveCamera: MockPerspectiveCamera,
     WebGLRenderer: MockWebGLRenderer,
     AmbientLight: vi.fn(),
     DirectionalLight: MockDirectionalLight,
     GridHelper: vi.fn(),
     PlaneGeometry: vi.fn(),
+    BoxGeometry: vi.fn(),
     MeshStandardMaterial: vi.fn(),
     Mesh: MockMesh,
     Color: vi.fn(),
@@ -106,7 +128,7 @@ describe("ThreeViewerInner", () => {
 
   it("shows loading state then mounts the WebGL container", async () => {
     const onReady = vi.fn();
-    const { container } = render(
+    const { container: _container } = render(
       <div style={{ width: 640, height: 480 }}>
         <ThreeViewerInner backgroundColor="#fafafa" onReady={onReady} enableShadows={false} />
       </div>,

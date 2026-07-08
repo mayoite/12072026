@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { CheckCircle2, DoorOpen, PencilRuler } from "lucide-react";
+import { CheckCircle as CheckCircle2, DoorOpen, PencilRuler } from "@phosphor-icons/react";
 
 import {
   PLANNER_STEP_DETAILS,

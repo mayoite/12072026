@@ -4,26 +4,11 @@ import { usePlannerStore } from "@/features/planner/store/plannerStore";
 import { useToastStore } from "@/features/planner/store/toastStore";
 import { OneAndOnlyLogo } from "@/components/ui/Logo";
 
-import {
-  MousePointer2,
-  Hand,
-  Square,
-  BoxSelect,
-  DoorOpen,
-  AppWindow,
-  Armchair,
-  Map,
-  Eraser,
-  Ruler,
-  LayoutTemplate,
-  Save,
-  Trash2,
-  type LucideIcon
-} from "lucide-react";
+import { Cursor as MousePointer2, Hand, Square, Selection as BoxSelect, DoorOpen, AppWindow, Armchair, MapTrifold as Map, Eraser, Ruler, Layout as LayoutTemplate, FloppyDisk as Save, Trash as Trash2, type Icon } from "@phosphor-icons/react";
 
 // ─── Tool definitions ────────────────────────────────────────────────────────
 
-type ToolDef = { id: Tool; label: string; icon: LucideIcon; shortcut: string; group: string };
+type ToolDef = { id: Tool; label: string; icon: Icon; shortcut: string; group: string };
 
 const TOOLS: ToolDef[] = [
   { id: "select",      label: "Select",     icon: MousePointer2,     shortcut: "V", group: "navigate" },

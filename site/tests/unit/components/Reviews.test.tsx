@@ -2,8 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Reviews } from '@/components/Reviews';
 
-// Mock lucide-react
-vi.mock('lucide-react', () => ({
+// Mock @phosphor-icons/react
+vi.mock('@phosphor-icons/react', () => ({
   Star: ({ className }: any) => <span className={`mock-star ${className}`} data-testid="star" />
 }));
 

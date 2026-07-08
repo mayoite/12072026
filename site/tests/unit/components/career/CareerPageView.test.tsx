@@ -25,7 +25,7 @@ vi.mock('@/components/shared/ContactTeaser', () => ({
   ContactTeaser: () => <div data-testid="mock-contact-teaser" />
 }));
 
-vi.mock('lucide-react', () => ({
+vi.mock('@phosphor-icons/react', () => ({
   Users: () => <span data-testid="users-icon" />,
   GraduationCap: () => <span data-testid="graduation-icon" />,
   Briefcase: () => <span data-testid="briefcase-icon" />

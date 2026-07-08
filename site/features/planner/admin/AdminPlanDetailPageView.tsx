@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Check, ExternalLink, Loader2 } from "lucide-react";
+import { ArrowLeft, Check, ArrowSquareOut as ExternalLink, CircleNotch as Loader2 } from "@phosphor-icons/react";
 
 import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
 import { buildPlannerCanvasHref } from "@/features/planner/admin/plannerAdminLinks";

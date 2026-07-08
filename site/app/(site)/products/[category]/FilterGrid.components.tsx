@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, ChevronUp, GitCompareArrows, ShoppingCart, X } from "lucide-react";
+import { CaretDown as ChevronDown, CaretUp as ChevronUp, GitDiff as GitCompareArrows, ShoppingCart, X } from "@phosphor-icons/react";
 import { useState, type ReactNode } from "react";
 import clsx from "clsx";
 

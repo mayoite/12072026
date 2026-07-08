@@ -39,8 +39,8 @@ export default async function SolutionsPage() {
 
   return (
     <HomeMarketingLayout>
-    <div className="min-h-screen overflow-x-hidden bg-[var(--surface-page)]">
-      <section className="border-b border-[var(--border-soft)] bg-[var(--surface-page)] pb-12 pt-[calc(4rem+3rem)] md:pb-16 md:pt-[calc(4rem+4rem)]">
+    <div className="min-h-screen overflow-x-hidden bg-page">
+      <section className="border-b border-soft bg-page pb-12 pt-[calc(4rem+3rem)] md:pb-16 md:pt-[calc(4rem+4rem)]">
         <div className="home-shell-xl">
           <h1 className="home-heading max-w-4xl !text-[clamp(2.25rem,4vw,3.25rem)]">
             Designed for the way <span className="text-accent-italic">work happens.</span>
@@ -48,7 +48,7 @@ export default async function SolutionsPage() {
         </div>
       </section>
 
-      <section className="bg-[var(--surface-page)]">
+      <section className="bg-page">
         <div className="grid items-stretch lg:grid-cols-2">
           <div className="relative h-full min-h-[20rem] self-stretch sm:min-h-[26rem] lg:min-h-[32rem]">
             <Image
@@ -105,14 +105,14 @@ export default async function SolutionsPage() {
         </div>
       </section>
 
-      <section className="bg-[var(--surface-page)] py-16 text-center md:py-28">
+      <section className="bg-page py-16 text-center md:py-28">
         <div className="home-shell-xl">
           <h2 className="home-heading">
             Let&apos;s plan your <span className="text-accent-italic">workspace.</span>
           </h2>
           <Link
             href="/contact"
-            className="mt-8 inline-flex border border-[var(--color-bronze-400)] bg-[var(--surface-page)] px-8 py-4 font-[family-name:var(--font-display)] text-base font-normal text-[var(--color-bronze-500)] transition-colors hover:bg-[var(--surface-soft)] hover:text-[var(--color-bronze-500)]"
+            className="mt-8 inline-flex border border-bronze-400 bg-page px-8 py-4 font-[family-name:var(--font-display)] text-base font-normal text-bronze-500 transition-colors hover:bg-soft hover:text-bronze-500"
           >
             Start a conversation
           </Link>

@@ -13,7 +13,7 @@ export const metadata = SHOWROOMS_PAGE_METADATA;
 export default function ShowroomsPage() {
   return (
     <HomeMarketingLayout>
-    <div className="bg-[var(--surface-page)]">
+    <div className="bg-page">
       <EditorialHero lead="See how work" accent="comes together." />
 
       <section>

@@ -4,17 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  ArrowRight,
-  Bot,
-  CheckCircle2,
-  Loader2,
-  MessageSquareText,
-  Send,
-  Sparkles,
-  Wand2,
-  X,
-} from "lucide-react";
+import { ArrowRight, Robot as Bot, CheckCircle as CheckCircle2, CircleNotch as Loader2, ChatText as MessageSquareText, PaperPlaneTilt as Send, Sparkle as Sparkles, MagicWand as Wand2, X } from "@phosphor-icons/react";
 import { hasConsentChoice } from "@/lib/consent";
 import { sanitizeDisplayText } from "@/lib/displayText";
 import { getCatalogProductHref } from '@/features/catalog/categories';

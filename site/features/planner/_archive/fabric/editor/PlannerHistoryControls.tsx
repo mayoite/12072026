@@ -1,6 +1,6 @@
 "use client";
 
-import { Eraser, Redo2, Undo2 } from "lucide-react";
+import { Eraser, ArrowClockwise as Redo2, ArrowCounterClockwise as Undo2 } from "@phosphor-icons/react";
 
 import { confirmResetPlannerCanvas } from "@/features/planner/editor/resetPlannerCanvas";
 import { PlannerIconButton } from "@/features/planner/ui/PlannerTooltip";

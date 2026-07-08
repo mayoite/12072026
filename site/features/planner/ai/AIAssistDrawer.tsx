@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useSyncExternalStore, useState } from "react";
-import { ChevronDown, Loader2, MessageSquare, Sparkles, Wand2 } from "lucide-react";
+import { CaretDown as ChevronDown, CircleNotch as Loader2, Chat as MessageSquare, Sparkle as Sparkles, MagicWand as Wand2 } from "@phosphor-icons/react";
 
 
 import { CatalogBlockPreview } from "@/features/planner/catalog/CatalogBlockPreview";

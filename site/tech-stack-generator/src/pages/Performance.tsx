@@ -3,9 +3,7 @@ import { CollapsibleSection } from '../components/CollapsibleSection'
 import { GeneratedKeyValueTable } from '../components/GeneratedDataTables'
 import { keyValueRowsFromDomain, LiveRepoSection } from '../components/LiveRepoSection'
 import { performanceRecords } from '../data/performanceData'
-import { Zap, Image, Database, Code, Server, Gauge } from 'lucide-react'
-
-const optimizations = [
+import { Lightning as Zap, Image, Database, Code, HardDrives as Server, Gauge } from "@phosphor-icons/react";const optimizations = [
   {
     icon: Server,
     name: 'Server Components',

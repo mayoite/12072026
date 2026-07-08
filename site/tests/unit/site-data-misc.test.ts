@@ -15,6 +15,16 @@ import {
 import { PRODUCT_SUITE, type ProductSuiteKey } from "@/lib/site-data/productSuite";
 import { TRUSTED_BY_CLIENTS, TRUSTED_BY_STATS } from "@/lib/site-data/proof";
 import { VISUAL_IVR_TREE } from "@/lib/site-data/support";
+import {
+  SITE_NAV_LINKS,
+  SITE_CTA_LINKS,
+  SITE_NAV_FEATURED_CARDS,
+  SITE_NAV_SEARCH_FALLBACK_LINKS,
+  normalizeFooterHref,
+  buildFooterNav,
+} from "@/lib/site-data/navigation";
+import { resolveRouteChromeMode } from "@/lib/site-data/routeChromeRules";
+import { buildPageMetadata, LOCALE_HREFLANG } from "@/lib/site-data/seo";
 
 describe("SITE_BRAND", () => {
   it("defines company identity and OG image", () => {
@@ -128,5 +138,79 @@ describe("VISUAL_IVR_TREE", () => {
     const careers = general?.options?.find((n) => n.id === "careers");
     expect(careers?.action?.type).toBe("link");
     expect(careers?.action?.value).toBe("/career");
+  });
+});
+describe("site navigation data", () => {
+  it("exports nav links and ctas", () => {
+    expect(SITE_NAV_LINKS.length).toBeGreaterThan(5);
+    expect(SITE_NAV_LINKS.some((l) => l.label === "Planner")).toBe(true);
+    expect(SITE_CTA_LINKS.length).toBe(2);
+    expect(SITE_CTA_LINKS[0].variant).toBe("primary");
+  });
+
+  it("featured cards have images and hrefs", () => {
+    expect(SITE_NAV_FEATURED_CARDS.length).toBeGreaterThan(2);
+    for (const card of SITE_NAV_FEATURED_CARDS) {
+      expect(card.href).toMatch(/^\//);
+      expect(card.image).toMatch(/\.webp$/);
+    }
+  });
+
+  it("search fallback links include planner and access", () => {
+    const hrefs = SITE_NAV_SEARCH_FALLBACK_LINKS.map((l) => l.href);
+    expect(hrefs.some((h) => h.includes("/planner"))).toBe(true);
+    expect(hrefs.some((h) => h.includes("access"))).toBe(true);
+  });
+
+  it("normalizes footer hrefs by trimming trailing slash", () => {
+    expect(normalizeFooterHref("/products/")).toBe("/products");
+    expect(normalizeFooterHref("/contact")).toBe("/contact");
+    expect(normalizeFooterHref("/")).toBe("/");
+  });
+
+  it("buildFooterNav dedupes links across sections", () => {
+    const sections = [
+      { heading: "A", links: [{ href: "/p", label: "P" }, { href: "/s", label: "S" }] },
+      { heading: "B", links: [{ href: "/p", label: "P2" }, { href: "/x", label: "X" }] },
+    ];
+    const out = buildFooterNav(sections);
+    expect(out).toHaveLength(2);
+    expect(out[0].links).toHaveLength(2);
+    expect(out[1].links).toHaveLength(1);
+    expect(out[1].links[0].label).toBe("X");
+  });
+});
+
+describe("route chrome rules", () => {
+  it("resolves full for marketing routes", () => {
+    const m = resolveRouteChromeMode("/products");
+    expect(m.header).toBe("full");
+    expect(m.footer).toBe("full");
+  });
+
+  it("hides chrome for workspace and cad routes", () => {
+    expect(resolveRouteChromeMode("/planner/canvas").header).toBe("hidden");
+    expect(resolveRouteChromeMode("/admin/svg-editor").footer).toBe("hidden");
+    expect(resolveRouteChromeMode("/planner/open3d").header).toBe("hidden");
+  });
+
+  it("uses login-tools for login paths", () => {
+    const m1 = resolveRouteChromeMode("/login");
+    expect(m1.header).toBe("hidden");
+    expect(m1.footer).toBe("login-tools");
+    const m2 = resolveRouteChromeMode("/login?next=/dashboard");
+    expect(m2.header).toBe("full");
+  });
+});
+
+describe("seo helpers", () => {
+  it("exports locale hreflang map", () => {
+    expect(LOCALE_HREFLANG.en).toBe("en-IN");
+  });
+
+  it("builds metadata with title and description", () => {
+    const md = buildPageMetadata("https://example.com", { title: "Test", description: "Desc", path: "/t" });
+    expect(md.title).toContain("Test");
+    expect(md.description).toBe("Desc");
   });
 });

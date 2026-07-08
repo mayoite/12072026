@@ -23,7 +23,7 @@ vi.mock("@/lib/api/browserApi", () => ({
   browserApiFetch: vi.fn(),
 }));
 
-vi.mock("lucide-react", () => ({
+vi.mock("@phosphor-icons/react", () => ({
   Save: (props: React.SVGProps<SVGSVGElement>) => <svg aria-hidden data-testid="icon-save" {...props} />,
   UploadCloud: (props: React.SVGProps<SVGSVGElement>) => (
     <svg aria-hidden data-testid="icon-upload" {...props} />

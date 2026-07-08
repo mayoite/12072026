@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Users, Package, Settings, LayoutDashboard } from 'lucide-react';
+import { Users, Package, Gear as Settings, SquaresFour as LayoutDashboard } from "@phosphor-icons/react";
 
 interface AdminShellProps {
   children: React.ReactNode;

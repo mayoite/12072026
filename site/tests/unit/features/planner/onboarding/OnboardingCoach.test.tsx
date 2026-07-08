@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import type * as lucidereactType0 from "lucide-react";
+import type * as lucidereactType0 from "@phosphor-icons/react";
 import { render } from "@testing-library/react";
 import { OnboardingCoach, OANDO_ONBOARDING_STEPS, BUDDY_ONBOARDING_STEPS } from "@/features/planner/onboarding/OnboardingCoach";
 
-vi.mock("lucide-react", async (importOriginal) => {
+vi.mock("@phosphor-icons/react", async (importOriginal) => {
   const actual = await importOriginal<typeof lucidereactType0>();
   return {
     ...actual,

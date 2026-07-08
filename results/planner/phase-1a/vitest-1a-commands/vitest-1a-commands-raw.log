@@ -1,0 +1,32 @@
+﻿Scope: all 3 workspace projects
+Γ£ô Lockfile passes supply-chain policies (verified 5s ago)
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +9 -10
++++++++++----------
+Progress: resolved 9, reused 9, downloaded 0, added 5, done
+
+Done in 1.6s using pnpm v11.9.0
+
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/plannerCommandWiring.test.tsx > planner command wiring ΓÇö document.update command branch > records a functional update and reports noop for an unchanged updater 2ms
+ Γ£ô tests/unit/features/planner/open3d/plannerCommandWiring.test.tsx > planner command wiring ΓÇö document.update command branch > preserves an updater-supplied updatedAt without restamping 0ms
+ Γ£ô tests/unit/features/planner/open3d/plannerCommandWiring.test.tsx > useWorkspaceCanvas routes every mutation through executePlannerCommand > blocks dispatch mutations targeting a locked item (command-layer gate) 10ms
+ Γ£ô tests/unit/features/planner/open3d/plannerCommandWiring.test.tsx > useWorkspaceCanvas routes every mutation through executePlannerCommand > blocks a locked delete through dispatch but allows adds 3ms
+ Γ£ô tests/unit/features/planner/open3d/plannerCommandWiring.test.tsx > useWorkspaceCanvas routes every mutation through executePlannerCommand > routes functional updates through the command layer and records history 1ms
+ Γ£ô tests/unit/features/planner/open3d/plannerCommandWiring.test.tsx > useWorkspaceCanvas routes every mutation through executePlannerCommand > undo and redo flow through the command layer 2ms
+ Γ£ô tests/unit/features/planner/open3d/plannerCommandWiring.test.tsx > useWorkspaceCanvas routes every mutation through executePlannerCommand > document undo/redo leaves transient non-document state (selection example; panels/search/camera/notif excluded by ownership) 1ms
+ Γ£ô tests/unit/features/planner/open3d/plannerCommandWiring.test.tsx > useWorkspaceCanvas routes every mutation through executePlannerCommand > replaceProject resets history and clears selection 2ms
+ Γ£ô tests/unit/features/planner/open3d/phase1CommandCatalog.test.ts > Phase 1 command and state contracts > records only successful document commands in history 2ms
+ Γ£ô tests/unit/features/planner/open3d/phase1CommandCatalog.test.ts > Phase 1 command and state contracts > rejects every mutation targeting a locked item 1ms
+ Γ£ô tests/unit/features/planner/open3d/phase1CommandCatalog.test.ts > Phase 1 command and state contracts > normalizes empty, duplicate, and multi-selection contracts 0ms
+ Γ£ô tests/unit/features/planner/open3d/phase1CommandCatalog.test.ts > Phase 1 catalogue contracts > ranks with Fuse and produces React Aria collection records 3ms
+ Γ£ô tests/unit/features/planner/open3d/phase1CommandCatalog.test.ts > Phase 1 catalogue contracts > uses one validated payload for click and drag placement 2ms
+ Γ£ô tests/unit/features/planner/open3d/phase1CommandCatalog.test.ts > Phase 1 deterministic persistence > serializes deterministically and reloads locked placement data 8ms
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  01:19:53
+   Duration  1.39s (transform 332ms, setup 940ms, import 264ms, tests 44ms, environment 1.06s)
+

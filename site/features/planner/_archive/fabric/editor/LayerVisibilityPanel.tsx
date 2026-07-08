@@ -2,16 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import {
-  Armchair,
-  BrickWall,
-  Eye,
-  EyeOff,
-  Layers2,
-  RectangleHorizontal,
-  Ruler,
-  type LucideIcon,
-} from "lucide-react";
+import { Armchair, Wall as BrickWall, Eye, EyeSlash as EyeOff, Stack as Layers2, Rectangle as RectangleHorizontal, Ruler, type Icon } from "@phosphor-icons/react";
 
 
 import {
@@ -33,7 +24,7 @@ const LABELS: Record<PlannerLayerCategory, string> = {
   measurements: "Measurements",
 };
 
-const ICONS: Record<PlannerLayerCategory, LucideIcon> = {
+const ICONS: Record<PlannerLayerCategory, Icon> = {
   walls: BrickWall,
   rooms: RectangleHorizontal,
   zones: Layers2,

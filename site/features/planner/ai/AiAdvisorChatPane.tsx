@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Loader2, Send, Sparkles, Wand2 } from "lucide-react";
+import { CircleNotch as Loader2, PaperPlaneTilt as Send, Sparkle as Sparkles, MagicWand as Wand2 } from "@phosphor-icons/react";
 
 
 import type { PlannerProjectMetadata } from "@/features/planner/onboarding/projectSetup";

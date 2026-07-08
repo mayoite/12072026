@@ -18,8 +18,6 @@ path,homepage_gap,homepage_fidelity,dialect,wrapper,hero,sections,container,copy
 /offline,offline error shell; out of marketing scope,0,offline,other,none,other,other,inline,offline
 /planner,delegates to feature module layout,1,feature-delegated,other,none,other,other,inline,planner
 /planner/canvas,delegates to feature module layout,1,feature-delegated,other,none,other,other,inline,planner
-/planner/fabric/canvas,delegates to feature module layout,1,feature-delegated,other,none,other,other,inline,planner
-/planner/fabric/guest,delegates to feature module layout,1,feature-delegated,other,none,other,other,inline,planner
 /planner/features,delegates to feature module layout,1,feature-delegated,other,none,other,other,inline,planner
 /planner/features/[slug],delegates to feature module layout,1,feature-delegated,overflow-x-hidden,none,mixed,other,inline,planner
 /planner/guest,delegates to feature module layout,1,feature-delegated,other,none,other,other,inline,planner

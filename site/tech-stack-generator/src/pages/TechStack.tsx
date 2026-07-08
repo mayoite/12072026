@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { ExternalLink } from 'lucide-react'
-import { techStack, techCategories } from '../data/techStack'
+import { ArrowSquareOut as ExternalLink } from "@phosphor-icons/react";import { techStack, techCategories } from '../data/techStack'
 import { CollapsibleSection } from '../components/CollapsibleSection'
 import { TableOfContents } from '../components/TableOfContents'
 

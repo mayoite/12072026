@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { LayoutGrid, X } from "lucide-react";
+import { SquaresFour as LayoutGrid, X } from "@phosphor-icons/react";
 import { FURNISHINGS } from "./models/furnishings";
 
 function formatMillimeters(inches: number) {

@@ -4,6 +4,8 @@ import React, { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 import { SVGLoader } from "three-stdlib";
 import { GLTFExporter } from "three-stdlib";
+import type { ShapePath } from "three";
+import type { SVGResult } from "three-stdlib";
 
 export interface GlbExtruderPreviewProps {
   /** The SVG path data or raw SVG string */
@@ -38,7 +40,7 @@ export function GlbExtruderPreview({
       
       // 2. Parse SVG
       const loader = new SVGLoader();
-      const svgData = loader.parse(svgString);
+      const svgData: SVGResult = loader.parse(svgString);
       
       // 3. Create Material
       const material = new THREE.MeshStandardMaterial({
@@ -52,7 +54,7 @@ export function GlbExtruderPreview({
       const group = new THREE.Group();
       
       for (const path of svgData.paths) {
-        const shapes = SVGLoader.createShapes(path as any);
+        const shapes = SVGLoader.createShapes(path as unknown as ShapePath);
         
         for (const shape of shapes) {
           const geometry = new THREE.ExtrudeGeometry(shape, {
@@ -89,16 +91,20 @@ export function GlbExtruderPreview({
         },
         (err) => {
           console.error("GLTF Export Error:", err);
-          setError("Failed to export GLB.");
-          setIsProcessing(false);
+          setTimeout(() => {
+            setError("Failed to export GLB.");
+            setIsProcessing(false);
+          }, 0);
         },
         { binary: true } // Export as .glb
       );
 
     } catch (err) {
       console.error("Extrusion Error:", err);
-      setError("Failed to parse SVG for extrusion.");
-      setIsProcessing(false);
+      setTimeout(() => {
+        setError("Failed to parse SVG for extrusion.");
+        setIsProcessing(false);
+      }, 0);
     }
 
   }, [svgString, thicknessMm, color, onGlbGenerated]);

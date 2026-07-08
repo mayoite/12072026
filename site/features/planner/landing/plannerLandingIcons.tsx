@@ -1,11 +1,4 @@
-import {
-  Cube,
-  Export,
-  Layout,
-  Ruler,
-  Sparkle,
-  type IconProps,
-} from "@phosphor-icons/react";
+import { Cube, Export, Layout, Ruler, Sparkle, type IconProps } from "@phosphor-icons/react";
 
 export type PlannerLandingIcon = React.ComponentType<IconProps>;
 

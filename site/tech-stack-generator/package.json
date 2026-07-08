@@ -21,7 +21,7 @@
     "framer-motion": "^12.41.0",
     "fuse.js": "^7.4.1",
     "highlight.js": "^11.10.0",
-    "lucide-react": "^1.21.0",
+    "@phosphor-icons/react": "^2.1.10",
     "mermaid": "^11.4.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

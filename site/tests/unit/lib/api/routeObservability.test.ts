@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { applyPlannerRouteTelemetry, jsonWithPlannerRouteTelemetry } from "@/lib/api/routeObservability";
+import { applyPlannerRouteTelemetry, jsonWithPlannerRouteTelemetry } from "@/features/shared/api/routeObservability";
 
 vi.mock("next/server", () => {
   class MockHeaders {
@@ -37,7 +37,7 @@ describe("routeObservability", () => {
       headers: mockHeaders,
     };
 
-    applyPlannerRouteTelemetry(mockResponse as any, {
+    applyPlannerRouteTelemetry(mockResponse as unknown as { headers: { set(k: string, v: string): void; get(k: string): string | null } }, {
       route: "plans/list",
       queryShape: "list",
       durationMs: 42.5,
@@ -59,7 +59,7 @@ describe("routeObservability", () => {
       durationMs: 42.5,
     });
 
-    expect((res as any).body).toEqual({ ok: true });
-    expect((res as any).headers.get("X-Planner-Route")).toBe("plans/list");
+    expect((res as unknown as { body: unknown; headers: { get(k: string): string | null } }).body).toEqual({ ok: true });
+    expect((res as unknown as { body: unknown; headers: { get(k: string): string | null } }).headers.get("X-Planner-Route")).toBe("plans/list");
   });
 });

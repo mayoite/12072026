@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { BrickWall, Hand, MousePointer2 } from "lucide-react";
+import { Wall as BrickWall, Hand, Cursor as MousePointer2 } from "@phosphor-icons/react";
 
 import { PlannerMobileDock } from "@/features/planner/editor/PlannerMobileDock";
 import type { ToolDef } from "@/features/planner/editor/PlannerToolRail";

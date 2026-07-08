@@ -7,10 +7,7 @@ import { GlobalNavHeader } from "@/features/shared/shell/GlobalNavHeader";
 import { cn } from "@/lib/utils";
 import { crmQuoteStatusColumns, crmUi } from "./crmUi";
 import { CrmDemoBanner } from "./CrmDemoBanner";
-import { 
-  FileText, Plus, Search,
-  Building2, Users, Clock, Trash2, TrendingUp
-} from "lucide-react";
+import { FileText, Plus, MagnifyingGlass as Search, Buildings as Building2, Users, Clock, Trash as Trash2, TrendUp as TrendingUp } from "@phosphor-icons/react";
 
 export default function QuotesView({ embedded = false }: { embedded?: boolean }) {
   const { quotes, clients, projects, addQuote, updateQuote, deleteQuote } = useCrmStore();

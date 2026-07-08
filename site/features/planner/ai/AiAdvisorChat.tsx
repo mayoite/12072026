@@ -5,7 +5,7 @@
 
 "use client";
 
-import { MessageSquare, X, Sparkles } from "lucide-react";
+import { Chat as MessageSquare, X, Sparkle as Sparkles } from "@phosphor-icons/react";
 
 import { AiAdvisorChatPane } from "./AiAdvisorChatPane";
 import { Z } from "@/lib/z-index";

@@ -1,14 +1,14 @@
 # Execution Roadmap Index
 
-**Last updated:** 2026-07-08
+**Last updated:** 2026-07-09
 
 ## Active Plan — Plan A (4 Documents)
 
 | Document | Covers | Status |
 |----------|--------|--------|
-| [00A-START.md](00A-START.md) | Ground truth, Phase 1 status, rules, package ownership, appendix | ✅ Master reference |
-| [01A-PHASE-2A.md](01A-PHASE-2A.md) | Phase 2A — UI Stabilisation (React Aria, Phosphor migration, CSS hardening, dead deps) | ⏳ Next |
-| [02B-PHASE-2B-2C.md](02B-PHASE-2B-2C.md) | Phase 2B — Canvas & Open3D + Phase 2C — Asset Engine & Admin Publishing | ⏳ Blocked by 2A |
+| [00A-START.md](00A-START.md) | Ground truth; Fabric = 2D engine; parametric must-do; GLB exception | ✅ Implemented 2026-07-09 |
+| [01A-PHASE-2A.md](01A-PHASE-2A.md) | Phase 2A — UI (RAC toolbars, Phosphor, CSS); Fabric decision locked, cutover is 2B | ⏳ Next |
+| [02B-PHASE-2B-2C.md](02B-PHASE-2B-2C.md) | Phase 2B — Fabric full cutover + 3D continuity; 2C — modular generate-first catalog | ⏳ Blocked by 2A |
 | [03C-HANDOVER.md](03C-HANDOVER.md) | Phase 3 — Polish & Mobile + Phase 4 — Promotion & Handover | ⏳ Blocked by 2C |
 
 **Read order:** 00A first (ground truth + rules), then follow the phase you're working on.

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { TooltipTrigger, Tooltip, Button as RACButton } from "react-aria-components";
-import { Lock } from "lucide-react";
+import { Lock } from "@phosphor-icons/react";
 
 import { Button } from "@/components/ui/Button";
 

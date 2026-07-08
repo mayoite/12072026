@@ -1,6 +1,6 @@
 "use client";
 
-import { GripHorizontal, GripVertical } from "lucide-react";
+import { DotsSix as GripHorizontal, DotsSixVertical as GripVertical } from "@phosphor-icons/react";
 import {
   useCallback,
   useEffect,
