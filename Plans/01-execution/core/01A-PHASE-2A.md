@@ -10,7 +10,7 @@
 
 **Locked elsewhere (do not re-open in 2A):**
 - **2D engine:** Fabric.js v7 full stage — *cutover in 2B* (decision is done; not idle insurance).
-- **Furniture:** modular/parametric generation is **must-do**; static GLB is exception only.
+- **Furniture:** modular/parametric + SVG extrude generation is **must-do**; **designer static GLB removed** (not an exception).
 - **Visual tests:** Playwright screenshots (Percy removed).
 
 ---

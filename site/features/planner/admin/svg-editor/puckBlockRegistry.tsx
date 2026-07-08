@@ -234,13 +234,15 @@ const A11Y_FIELDS: PuckFields = {
 const ASSET_FIELDS: PuckFields = {
   "assets.glbUrl": {
     type: "text",
-    label: "GLB URL",
-    placeholder: "https://storage.oando.com/models/sofa.glb",
+    label: "Generated GLB URL (system only)",
+    helperText:
+      "Must be catalog-assets/generated/* from SVG extrude or modular export. Designer-uploaded static GLB is not allowed.",
+    placeholder: "…/catalog-assets/generated/…glb",
   },
   "assets.svgUrl": {
     type: "text",
-    label: "SVG URL",
-    placeholder: "https://storage.oando.com/models/sofa.svg",
+    label: "SVG URL (footprint / extrude source)",
+    placeholder: "https://…/footprint.svg",
   },
 } as const;
 

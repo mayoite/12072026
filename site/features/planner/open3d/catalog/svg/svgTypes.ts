@@ -373,10 +373,26 @@ export const BlockDescriptorFixedSchema = BlockDescriptorCommonBaseSchema.extend
   fixed: z.object({
     sizingType: z.literal("fixed"),
   }),
-  assets: z.object({
-    glbUrl: z.string().optional(),
-    svgUrl: z.string().optional(),
-  }).optional(),
+  assets: z
+    .object({
+      /** System-generated only (extrude/modular). Designer static GLB rejected. */
+      glbUrl: z
+        .string()
+        .optional()
+        .refine(
+          (u) => {
+            if (u == null || u.trim() === "") return true;
+            const t = u.trim();
+            return t.startsWith("blob:") || t.includes("catalog-assets/generated/");
+          },
+          {
+            message:
+              "Designer static GLB not allowed — use generated path (catalog-assets/generated/) or modular/parametric mesh",
+          },
+        ),
+      svgUrl: z.string().optional(),
+    })
+    .optional(),
 });
 /** `fixed` variant: dimensions locked, no parametric controls. */
 export type BlockDescriptorFixed = z.infer<typeof BlockDescriptorFixedSchema>;

@@ -223,15 +223,15 @@ Designers **cannot** author 100 hand-made `.glb` files. Default path is **compon
 
 | Priority | Type | Example | 2D | 3D | Admin |
 |----------|------|---------|----|----|-------|
-| **P0 must-do** | **Parametric / modular** | Cabinet, desk, shelving | `ParametricBuilder` footprint | Generated mesh (box / L / U / parts) | Choose components + W/D/H + materials — **no GLB upload** |
-| **P1** | **Extruded** | Countertop, irregular shelf | SVG outline | Extrude → generated `.glb` | SVG + thickness + material |
-| **P2 exception** | **Static GLB** | Branded sculptural piece | Uploaded SVG footprint | Uploaded `.glb` | **Exception only:** flag + size limit + review |
+| **P0 must-do** | **Parametric / modular** | Cabinet, desk, shelving | `ParametricBuilder` footprint | Generated mesh (box / L / U / parts) | Choose components + W/D/H + materials — **no designer GLB** |
+| **P1** | **Extruded** | Countertop, irregular shelf | SVG outline | Extrude → **system-generated** `.glb` under `catalog-assets/generated/` | SVG + thickness + material |
 
-**Must-do system (quality bar):** admin (or catalog config) selects **every component** (carcass, doors, legs, top, hardware style, material) and the pipeline produces a **good** 2D footprint + 3D mesh/GLB. Parametric is not a toy box only — it is the **primary manufacturing path**.
+**Must-do system (quality bar):** admin selects **every component** (carcass, doors, legs, top, hardware, material) and the pipeline produces a **good** 2D footprint + 3D mesh/GLB.
 
-**Static GLB policy:** allowed only as exception (`staticGlb: true` or equivalent + max file size + human review). Not the default catalog path.
+**Designer static GLB: removed (not an exception).**  
+No flag/size/review path for hand-authored product GLBs. Enforcement: `glbAssetPolicy` + Zod on `assets.glbUrl` + catalog `model_3d_url` save. Only system-generated URLs (`catalog-assets/generated/*` or `blob:` preview) are accepted. Preview of **generated** assets via model-viewer is fine.
 
-**Why not thousands of designer GLBs?** Scale and cost. Generate from structured options; upload GLB only when generation cannot represent the form.
+**Why not designer GLBs?** Scale, cost, quality — generation is the product.
 
 ### Test Status (00A implementation 2026-07-09)
 

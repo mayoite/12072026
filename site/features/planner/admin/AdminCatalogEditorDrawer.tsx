@@ -356,11 +356,15 @@ function ConfiguratorCatalogForm({
             onChange={(event) => set("thumbnail_url", event.target.value)}
           />
         </AdminField>
-        <AdminField label="3D model URL">
+        <AdminField
+          label="3D model URL (system-generated only)"
+          hint="catalog-assets/generated/* from extrude/modular export — designer static GLB not allowed"
+        >
           <AdminTextInput
             value={draft.model_3d_url}
             disabled={readOnly}
             onChange={(event) => set("model_3d_url", event.target.value)}
+            placeholder="…/catalog-assets/generated/….glb"
           />
         </AdminField>
         <AdminCheckbox

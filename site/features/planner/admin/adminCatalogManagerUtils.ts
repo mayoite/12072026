@@ -2,8 +2,10 @@ import type {
   ConfiguratorCatalogItem,
   StandardCatalogItem,
 } from "./adminCatalogClient";
+import { assertNoDesignerStaticGlb } from "@/features/planner/lib/glbAssetPolicy";
 
-export const MESH_TYPES = ["box", "cylinder", "sphere", "custom", "glb", "gltf"] as const;
+/** Procedural / system mesh kinds only — no designer static glb/gltf product type. */
+export const MESH_TYPES = ["box", "cylinder", "sphere", "custom"] as const;
 
 export const STANDARD_CATEGORIES = [
   "workstation",
@@ -305,7 +307,11 @@ export function configuratorDraftToPayload(
       .map((material) => material.trim())
       .filter(Boolean),
     thumbnail_url: draft.thumbnail_url.trim() || undefined,
-    model_3d_url: draft.model_3d_url.trim() || undefined,
+    model_3d_url: (() => {
+      const url = draft.model_3d_url.trim() || undefined;
+      assertNoDesignerStaticGlb(url, "model_3d_url");
+      return url;
+    })(),
     active: draft.active,
   };
 

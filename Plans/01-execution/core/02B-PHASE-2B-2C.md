@@ -116,20 +116,18 @@ Currently, block descriptors are persisted to `site/block-descriptors/` on disk.
 - [ ] 3D: generate mesh / optional export GLB from same options — **designers do not hand-author 100 GLBs**
 - [ ] Extend beyond boxes: L/U, door/drawer faces, part library quality bar (“good GLB/mesh”)
 
-**P1 — Extruded (SVG → generated 3D):**
+**P1 — Extruded (SVG → system-generated 3D only):**
 - [ ] Admin uploads SVG outline + thickness + material
-- [ ] `GlbExtruderPreview` + publish path; server validates generated GLB
+- [ ] `GlbExtruderPreview` + upload under `catalog-assets/generated/`
+- [ ] Server validates generated GLB (`validateGlbAsset`)
+- [x] Designer static GLB upload path **removed** (policy + `glbAssetPolicy` + Zod)
 
-**P2 exception — Static GLB (flag + size limit + review):**
-- [ ] Allowed only when generation cannot represent the form
-- [ ] Require exception flag, max file size, GLTF validation, human review
-- [ ] Upload `.glb` + `.svg` footprint; never the default catalog path
+**No P2 static/designer GLB.** Do not reintroduce hand-authored product GLBs.
 
 ### 2C.4 — Catalog End-to-End
 
 - [ ] Admin publishes **parametric/modular** product → catalog → place in 2D + 3D
-- [ ] Variants (material/colour) work without new designer GLBs
-- [ ] Exception static GLB still works when flagged
+- [ ] Variants (material/colour) work without designer GLBs
 - [ ] Catalog search (Fuse.js) with Supabase-sourced data
 
 ### 2C Gates
@@ -137,8 +135,8 @@ Currently, block descriptors are persisted to `site/block-descriptors/` on disk.
 | Gate | Check |
 |------|-------|
 | **Must-do modular** | Component choices produce good 2D + 3D without designer GLB |
-| Extruded | SVG → generated 3D publish path |
-| Static exception | Flag + size + review enforced; not default |
+| Extruded | SVG → **generated** 3D only |
+| **No static GLB** | Designer GLB URLs rejected by policy/Zod/catalog save |
 | Integration | Catalog place in 2D + 3D |
 | CI | typecheck + tests |
 | Security | Malicious SVG rejected |

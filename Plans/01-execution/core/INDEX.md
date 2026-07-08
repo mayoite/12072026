@@ -6,7 +6,7 @@
 
 | Document | Covers | Status |
 |----------|--------|--------|
-| [00A-START.md](00A-START.md) | Ground truth; Fabric = 2D engine; parametric must-do; GLB exception | ✅ Implemented 2026-07-09 |
+| [00A-START.md](00A-START.md) | Ground truth; Fabric = 2D; parametric must-do; **no designer static GLB** | ✅ Implemented 2026-07-09 |
 | [01A-PHASE-2A.md](01A-PHASE-2A.md) | Phase 2A — UI (RAC toolbars, Phosphor, CSS); Fabric decision locked, cutover is 2B | ⏳ Next |
 | [02B-PHASE-2B-2C.md](02B-PHASE-2B-2C.md) | Phase 2B — Fabric full cutover + 3D continuity; 2C — modular generate-first catalog | ⏳ Blocked by 2A |
 | [03C-HANDOVER.md](03C-HANDOVER.md) | Phase 3 — Polish & Mobile + Phase 4 — Promotion & Handover | ⏳ Blocked by 2C |
