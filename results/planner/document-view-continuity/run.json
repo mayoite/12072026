@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "scenario": "document-view-continuity",
+  "status": "pass",
+  "exitCode": 0,
+  "cwd": "D:\\OandO07072026\\site",
+  "command": "npx vitest run tests/unit/features/planner/open3d/documentViewContinuity.test.ts --reporter=verbose",
+  "testFiles": [
+    "tests/unit/features/planner/open3d/documentViewContinuity.test.ts"
+  ],
+  "results": {
+    "testFiles": 1,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0
+  },
+  "summary": "1 test passed: same Open3dProject with wall+modular furniture → buildOpen3dSceneNodes ids match entities; updateFurniture pose rebuilds nodes; resolveFurniture2DFootprint still works after place",
+  "timestamp": "2026-07-09T02:45:30.000Z",
+  "artifacts": {
+    "rawLog": "results/planner/document-view-continuity/vitest-raw.log"
+  }
+}

@@ -17,14 +17,14 @@
 The `FeasibilityCanvas.tsx` (1075 lines) is the heart of the 2D editor. It is hand-rolled using the HTML5 Canvas 2D API and is fragile — any pointer math change can break drawing tools. This section adds the safety net.
 
 - [ ] Audit `FeasibilityCanvas.tsx` — identify fragile pointer math, missing edge cases
-- [ ] Add unit tests for coordinate transforms:
-  - `screenToProject` / `projectToScreen`
-  - `zoomTransformAt`
-  - `snapDrawingPoint`
-- [ ] Add unit tests for hit-testing:
+- [x] Add unit tests for coordinate transforms (**partial unit net**, 2026-07-09):
+  - `screenToProject` / `projectToScreen` — exercised via zoom anchor round-trip in `snapping.test.ts`
+  - `zoomTransformAt` — dedicated pass (`results/planner/canvas-geometry/`)
+  - `snapDrawingPoint` — covered in `domain.test.ts` + `feasibility.test.ts` (not in canvas-geometry slice)
+- [x] Add unit tests for hit-testing (`results/planner/canvas-geometry/` — 14 tests, exit 0):
   - `pointInPolygon`
   - `pickWallAtPoint` / `pickWallWithPosition`
-- [ ] Test deterministic flow: draw room → add wall → add door → add window → place furniture → undo → redo → save → reload
+- [ ] Test deterministic flow: draw room → add wall → add door → add window → place furniture → undo → redo → save → reload *(full UI/browser; unit save/reload is under 2B.4 partial)*
 - [ ] Fix any discovered state desynchronisation between canvas and workspace store
 
 ### 2B.2 — Fabric.js full stage (chosen 2D engine)
@@ -33,8 +33,8 @@ The `FeasibilityCanvas.tsx` (1075 lines) is the heart of the 2D editor. It is ha
 > Document model + `PlannerCommand` stay engine-agnostic; Fabric nodes carry `entityId` (UUID); never persist Fabric objects.
 
 **Cutover (not “insurance”):**
-- [ ] Client-only Fabric stage mounts in open3d workspace
-- [ ] Furniture: select, move, resize, rotate, delete — all via commands
+- [x] Client-only Fabric stage mounts in open3d workspace — **PARTIAL / flag-gated only** (2026-07-09): `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE=1` enables `FurnitureFabricLayer` overlay in `OOPlannerWorkspace` (furniture Rects + pan/zoom via `CanvasStatusSnapshot.transform`); default OFF → live UI unchanged (`FeasibilityCanvas` sole 2D). Evidence: `results/planner/fabric-stage-slice/` (mapper+flag unit 10 pass). **Not** full-stage cutover (walls/rooms/tools/browser smoke still open).
+- [ ] Furniture: select, move, resize, rotate, delete — all via commands *(furniture overlay has object:modified → document pose only when flag on; not full command cutover)*
 - [ ] Wall draw + wall select + property edit via commands
 - [ ] Room select + multi-select + marquee
 - [ ] Retire interactive responsibility from `FeasibilityCanvas` (delete or static underlay only during migration)
@@ -47,22 +47,22 @@ Same **document** (UUIDs, mm). Two views: Fabric (2D) + Three/R3F (3D). No hybri
 - [ ] `workspace` project shared; both views rebuild from document
 - [ ] Toggle 2D → 3D / 3D → 2D preserves walls, openings, furniture pose
 - [ ] Default boot: **2D** plan view
-- [ ] `parametricBuilder.generate3DMesh()` (and generated GLBs) feed planner 3D — not designer-only asset dumps
-- [ ] Integrate `parametricBuilder.generate3DMesh()` with the 3D viewer for furniture items
+- [x] `parametricBuilder` / modular mesh feed planner 3D — **PARTIAL (modular-cabinet-v0 only)** (2026-07-09): place stamps `geometryMode` + `modularOptions` → `buildOpen3dSceneNodes` → `createSceneObjectFromNode` → `generateCabinetV0Mesh` (not designer GLB). Box path remains `ParametricBuilder.generate3DMesh` / simple box. Evidence: `results/planner/modular-place/`, `results/planner/modular-place-smoke/`. Binary GLB export + general parametric descriptor mesh wiring still open.
+- [x] Integrate modular mesh with the 3D viewer for furniture items — **PARTIAL (modular only)** same path as above; full `generate3DMesh(descriptor)` catalog path not cut over for all furniture
 
 ### 2B.4 — Draw → Save → Reload Flow
 
 This is the core acceptance test: can a user create something, leave, come back, and find it unchanged?
 
-- [ ] Complete flow: draw room → add opening → place item → edit dimensions → undo/redo → save → reload
+- [x] Complete flow: draw room → add opening → place item → edit dimensions → undo/redo → save → reload — **UNIT only** (2026-07-09): `saveReloadContinuity.test.ts` — wall + modular furniture → envelope JSON + `exportOpen3dProjectJson` round-trip preserve ids/geometryMode/options (`results/planner/save-reload-continuity/` 2 pass). **Not** full browser acceptance (opening/edit dimensions/undo-redo UI chain still open).
 - [ ] Complete keyboard equivalent through layers, commands, and numeric controls
-- [ ] Existing documents remain compatible after reload
+- [ ] Existing documents remain compatible after reload *(unit envelope compatibility only; broader fixture matrix open)*
 - [ ] Autosave works without data loss
 - [ ] Cloud save to Supabase works for authenticated users
 
 ### 2B.5 — Route Cleanup
 
-- [x] Update stale "Fabric-backed" comments in `guest/page.tsx` and `canvas/page.tsx` (2026-07-09: live 2-D = canvas-feasibility)
+- [x] Update stale "Fabric-backed" comments in `guest/page.tsx` and `canvas/page.tsx` (2026-07-09: live 2-D = canvas-feasibility; paths: `site/app/planner/(workspace)/guest/page.tsx`, `.../canvas/page.tsx`)
 - [ ] Verify `/planner/fabric/*` routes are unreachable from navigation (already archived)
 - [x] Update `importGraphProof.ts` to reflect current state (header note: live open3d ≠ Fabric)
 
