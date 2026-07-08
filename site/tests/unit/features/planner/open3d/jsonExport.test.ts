@@ -8,6 +8,7 @@ import {
   DEFAULT_IMPORT_LIMITS,
   recoverFromErrors,
 } from "@/features/planner/open3d/shared/export/jsonImport";
+import { isEntityUuid } from "@/features/planner/lib/newEntityId";
 
 function ids(...values: string[]) {
   let index = 0;
@@ -227,7 +228,7 @@ describe("recoverFromErrors", () => {
     const envelope = createOpen3dSceneEnvelope(room());
     envelope.project.floors[0].id = "";
     const { envelope: recovered, recovered: messages } = recoverFromErrors(envelope);
-    expect(recovered.project.floors[0].id).toBe("floor-recovered-0");
+    expect(isEntityUuid(recovered.project.floors[0].id)).toBe(true);
     expect(messages.some((m) => m.includes("Assigned ID"))).toBe(true);
   });
 

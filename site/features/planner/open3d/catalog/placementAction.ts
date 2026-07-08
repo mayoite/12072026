@@ -12,10 +12,66 @@
  */
 
 import type { Open3dCatalogItem, Open3dCatalogVariant, Open3dPlacedConfiguration } from "./catalogTypes";
-import type { Open3dProject } from "../model/types";
+import type {
+  Open3dFurnitureGeometryMode,
+  Open3dModularCabinetV0Options,
+  Open3dProject,
+} from "../model/types";
 import type { PureActionResult } from "../model/operations/pureActions";
 import { addFurniture } from "../model/operations/pureActions";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
+import {
+  defaultCabinetV0Options,
+  type CabinetMaterialId,
+} from "./modularCabinetV0";
+
+/** Catalog id/slug that maps to modular cabinet-v0 multi-part mesh. */
+export const MODULAR_CABINET_V0_CATALOG_ID = "cabinet-v0";
+
+function isModularCabinetV0CatalogItem(item: Open3dCatalogItem): boolean {
+  if (item.geometryMode === "modular-cabinet-v0") return true;
+  if (item.geometryMode === "box") return false;
+  return (
+    item.id === MODULAR_CABINET_V0_CATALOG_ID ||
+    item.slug === MODULAR_CABINET_V0_CATALOG_ID
+  );
+}
+
+function resolveCabinetMaterial(
+  materialOverride: string | undefined,
+  normalizedMaterial: string,
+): CabinetMaterialId {
+  const raw = (materialOverride ?? normalizedMaterial).trim().toLowerCase();
+  if (raw === "oak") return "oak";
+  return "white";
+}
+
+/**
+ * Build serializable modular options from catalog dimensions + defaults.
+ * doorStyle defaults to slab (defaultCabinetV0Options).
+ */
+export function modularOptionsFromCatalogItem(
+  item: Open3dCatalogItem,
+  materialOverride?: string,
+): Open3dModularCabinetV0Options {
+  return defaultCabinetV0Options({
+    widthMm: item.dimensions.widthMm,
+    depthMm: item.dimensions.depthMm,
+    heightMm: item.dimensions.heightMm,
+    material: resolveCabinetMaterial(
+      materialOverride,
+      item.material.normalizedMaterial,
+    ),
+  });
+}
+
+export function resolveFurnitureGeometryMode(
+  item: Open3dCatalogItem,
+): Open3dFurnitureGeometryMode | undefined {
+  if (isModularCabinetV0CatalogItem(item)) return "modular-cabinet-v0";
+  if (item.geometryMode === "box") return "box";
+  return undefined;
+}
 
 // ── Placement options ──
 
@@ -216,6 +272,11 @@ export function placeCatalogItemInProject(
   const placed = addFurniture(project, item.id, snapshot.position, {
     idFactory: () => snapshot.placementId,
   });
+  const geometryMode = resolveFurnitureGeometryMode(item);
+  const modularOptions =
+    geometryMode === "modular-cabinet-v0"
+      ? modularOptionsFromCatalogItem(item, snapshot.materialOverride)
+      : undefined;
   const projectWithIdentity: Open3dProject = {
     ...placed.project,
     floors: placed.project.floors.map((floor) => ({
@@ -235,6 +296,8 @@ export function placeCatalogItemInProject(
               sourceCatalogId: snapshot.productIdentity.catalogId,
               sourceSlug: snapshot.productIdentity.slug,
               sourceSku: snapshot.variantIdentity?.sku ?? snapshot.productIdentity.sku,
+              ...(geometryMode !== undefined ? { geometryMode } : {}),
+              ...(modularOptions !== undefined ? { modularOptions } : {}),
             }
           : furniture
       )),

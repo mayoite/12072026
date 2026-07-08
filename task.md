@@ -13,14 +13,16 @@
 ## 02 Generate mesh (must-do modular)
 - [x] `modularCabinetV0` options → footprint + multi-part mesh
 - [x] ParametricBuilder hooks + unit tests
+- [x] Wire catalog place → modular flag + multi-part 3D (`geometryMode` / `createSceneObjectFromNode`)
 - [ ] Optional GLB export from modular group (later)
-- [ ] Wire catalog place → modular flag in furniture item
 
 ## 03 Canvas / document / 3D
 - [x] `buildOpen3dSceneNodes` pure adapter + tests
 - [x] `ThreeViewerInner` rebuilds walls+furniture from project (entity ids)
+- [x] Placement + entity ids: `newEntityId()` / crypto.randomUUID only (incl. JSON recovery)
+- [x] 02B.1 geometry unit net: pick/snap/pointInPolygon tests
 - [ ] Fabric cutover (2B — full stage)
-- [ ] Placement uses crypto.randomUUID consistently
 
 ## 04 Verify
 - [x] Targeted vitest hard-path — exit 0 → `results/planner/hard-path/vitest-hard-path/`
+- [x] Agent batch: modular-place + canvas-geometry + crypto residual → `results/planner/*/`

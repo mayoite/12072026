@@ -32,7 +32,12 @@ import {
   type CanvasTransform,
   type SnapKind,
 } from "../lib/geometry/snapping";
-import { pickWallAtPoint, pickWallWithPosition } from "../lib/geometry/canvasPicking";
+import {
+  getRoomPolygon,
+  pickWallAtPoint,
+  pickWallWithPosition,
+  pointInPolygon,
+} from "../lib/geometry/canvasPicking";
 import { createOpen3dProject } from "../model/project";
 import type { Open3dPoint, Open3dProject } from "../model/types";
 import { addOpen3dWall } from "../model/actions/walls";
@@ -88,36 +93,6 @@ function toolToCommandId(tool: PlannerTool): FeasibilityCommandId | null {
       return _exhaustive;
     }
   }
-}
-
-function getRoomPolygon(
-  roomWallIds: string[],
-  wallById: Map<string, { start: Open3dPoint; end: Open3dPoint }>,
-): Open3dPoint[] {
-  const polygon = roomWallIds
-    .map((wallId) => wallById.get(wallId)?.start)
-    .filter((point): point is Open3dPoint => point !== undefined);
-  return polygon.length >= 3 ? polygon : [];
-}
-
-function pointInPolygon(point: Open3dPoint, polygon: Open3dPoint[]): boolean {
-  let inside = false;
-  for (
-    let index = 0, previousIndex = polygon.length - 1;
-    index < polygon.length;
-    previousIndex = index++
-  ) {
-    const currentPoint = polygon[index];
-    const previousPoint = polygon[previousIndex];
-    const intersects =
-      (currentPoint.y > point.y) !== (previousPoint.y > point.y)
-      && point.x
-        < ((previousPoint.x - currentPoint.x) * (point.y - currentPoint.y))
-          / (previousPoint.y - currentPoint.y)
-          + currentPoint.x;
-    if (intersects) inside = !inside;
-  }
-  return inside;
 }
 
 export interface FeasibilityCanvasHandle {

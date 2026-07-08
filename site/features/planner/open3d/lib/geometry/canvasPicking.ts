@@ -55,3 +55,39 @@ export function pickWallWithPosition(
   }
   return best ? { wallId: best.wallId, t: best.t } : null;
 }
+
+/**
+ * Build a room polygon from ordered wall starts. Returns [] when fewer than 3
+ * vertices resolve (degenerate / incomplete rooms).
+ */
+export function getRoomPolygon(
+  roomWallIds: string[],
+  wallById: Map<string, { start: Open3dPoint; end: Open3dPoint }>,
+): Open3dPoint[] {
+  const polygon = roomWallIds
+    .map((wallId) => wallById.get(wallId)?.start)
+    .filter((point): point is Open3dPoint => point !== undefined);
+  return polygon.length >= 3 ? polygon : [];
+}
+
+/** Ray-cast point-in-polygon test (even-odd). Polygons with fewer than 3 verts are outside. */
+export function pointInPolygon(point: Open3dPoint, polygon: Open3dPoint[]): boolean {
+  if (polygon.length < 3) return false;
+  let inside = false;
+  for (
+    let index = 0, previousIndex = polygon.length - 1;
+    index < polygon.length;
+    previousIndex = index++
+  ) {
+    const currentPoint = polygon[index];
+    const previousPoint = polygon[previousIndex];
+    const intersects =
+      (currentPoint.y > point.y) !== (previousPoint.y > point.y)
+      && point.x
+        < ((previousPoint.x - currentPoint.x) * (point.y - currentPoint.y))
+          / (previousPoint.y - currentPoint.y)
+          + currentPoint.x;
+    if (intersects) inside = !inside;
+  }
+  return inside;
+}

@@ -37,6 +37,14 @@ function sampleProject(): Open3dProject {
             width: 600,
             depth: 580,
             height: 720,
+            geometryMode: "modular-cabinet-v0",
+            modularOptions: {
+              widthMm: 600,
+              depthMm: 580,
+              heightMm: 720,
+              doorStyle: "slab",
+              material: "white",
+            },
           },
         ],
         stairs: [],
@@ -72,6 +80,36 @@ describe("buildOpen3dSceneNodes", () => {
     expect(furn?.yMm).toBe(500);
     expect(furn?.widthMm).toBe(600);
     expect(furn?.catalogId).toBe("cabinet-v0");
+    expect(furn?.geometryMode).toBe("modular-cabinet-v0");
+    expect(furn?.modularOptions).toEqual({
+      widthMm: 600,
+      depthMm: 580,
+      heightMm: 720,
+      doorStyle: "slab",
+      material: "white",
+    });
+  });
+
+  it("omits geometry fields for plain box furniture", () => {
+    const project = sampleProject();
+    project.floors[0].furniture = [
+      {
+        id: "furn-box",
+        catalogId: "sample-sofa-1",
+        position: { x: 0, y: 0 },
+        rotation: 0,
+        scale: { x: 1, y: 1, z: 1 },
+        width: 2200,
+        depth: 900,
+        height: 850,
+      },
+    ];
+    const furn = buildOpen3dSceneNodes(project).find(
+      (n) => n.kind === "furniture",
+    );
+    expect(furn?.geometryMode).toBeUndefined();
+    expect(furn?.modularOptions).toBeUndefined();
+    expect(furn?.widthMm).toBe(2200);
   });
 
   it("converts mm to metres for Three world", () => {

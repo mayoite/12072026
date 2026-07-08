@@ -15,11 +15,8 @@ import type {
 
 import type * as THREE from "three";
 import { readThreeThemeColor } from "../shared/readThemeColor";
-import {
-  buildOpen3dSceneNodes,
-  mmToMeters,
-  type Open3dSceneNode,
-} from "./buildOpen3dSceneNodes";
+import { buildOpen3dSceneNodes } from "./buildOpen3dSceneNodes";
+import { addNodesToGroup } from "./createSceneObjectFromNode";
 
 type ThreeModule = typeof THREE;
 
@@ -52,39 +49,6 @@ function clearContentGroup(group: Group, THREE: ThreeModule): void {
         : [object.material];
       materials.forEach((material) => material.dispose());
     });
-  }
-}
-
-function addNodesToGroup(
-  THREE: ThreeModule,
-  group: Group,
-  nodes: Open3dSceneNode[],
-  castShadow: boolean,
-): void {
-  for (const node of nodes) {
-    const w = mmToMeters(node.widthMm);
-    const d = mmToMeters(node.depthMm);
-    const h = mmToMeters(node.heightMm);
-    const color = node.color ?? (node.kind === "wall" ? "#9ca3af" : "#e5e7eb");
-    const geometry = new THREE.BoxGeometry(w, h, d);
-    const material = new THREE.MeshStandardMaterial({
-      color,
-      roughness: 0.8,
-      metalness: 0.05,
-    });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.name = node.id;
-    mesh.userData.entityId = node.id;
-    mesh.userData.kind = node.kind;
-    mesh.position.set(
-      mmToMeters(node.xMm),
-      h / 2,
-      mmToMeters(node.yMm),
-    );
-    mesh.rotation.y = -node.rotation;
-    mesh.castShadow = castShadow;
-    mesh.receiveShadow = castShadow;
-    group.add(mesh);
   }
 }
 

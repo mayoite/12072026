@@ -15,6 +15,7 @@ import {
 } from "../lib/commands/plannerCommand";
 import { createOpen3dProject } from "../model/project";
 import type { Open3dProjectAction } from "../model/actions/projectActions";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 export interface CanvasSelection {
   type: "wall" | "door" | "window" | "furniture" | "room" | "none";
@@ -203,7 +204,7 @@ export function useCanvasDrawing(initialProject?: Open3dProject) {
       canvas.updateProject((project) => {
         const floor = project.floors[0];
         const newWall: Open3dWall = {
-          id: crypto.randomUUID(),
+          id: newEntityId(),
           start,
           end,
           thickness: 150, // default 150mm

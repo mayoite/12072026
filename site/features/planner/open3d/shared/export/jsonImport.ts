@@ -4,6 +4,7 @@ import type {
   Open3dFloor,
   Open3dDisplayUnit,
 } from "../../model/types";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 /**
  * Validation errors found during import.
@@ -332,7 +333,7 @@ export function recoverFromErrors(envelope: Open3dPlannerSceneEnvelope): {
   // Ensure each floor has required fields
   envelope.project.floors = envelope.project.floors.map((floor, index) => {
     if (!floor.id) {
-      floor.id = `floor-recovered-${index}`;
+      floor.id = newEntityId();
       recovered.push(`Assigned ID to floor ${index}`);
     }
     return floor;

@@ -1,0 +1,17 @@
+{
+  "slice": "crypto-ids residual: floor recover + canvas wall id via newEntityId()",
+  "date": "2026-07-09",
+  "command": ".\\node_modules\\.bin\\vitest.cmd run tests/unit/features/planner/open3d/jsonExport.test.ts",
+  "cwd": "site",
+  "result": "pass",
+  "testFiles": 1,
+  "tests": 25,
+  "failed": 0,
+  "skipped": 0,
+  "changes": [
+    "jsonImport.ts recoverFromErrors: floor.id = newEntityId() (was floor-recovered-${index})",
+    "jsonExport.test.ts: assert isEntityUuid on recovered floor id",
+    "useWorkspaceCanvas.ts addWall: newEntityId() instead of raw crypto.randomUUID()"
+  ],
+  "rawLog": "results/planner/crypto-ids-residual/vitest-raw.log"
+}

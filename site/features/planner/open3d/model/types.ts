@@ -47,6 +47,21 @@ export interface Open3dWindow {
   type: "standard" | "fixed" | "casement" | "sliding" | "bay";
 }
 
+/** Furniture mesh generation mode (document-serializable; no THREE objects). */
+export type Open3dFurnitureGeometryMode = "box" | "modular-cabinet-v0";
+
+/**
+ * Serializable modular cabinet-v0 options (mirrors ModularCabinetV0Options).
+ * Stored on furniture for save/load and 3D rebuild without designer GLB.
+ */
+export interface Open3dModularCabinetV0Options {
+  widthMm: number;
+  depthMm: number;
+  heightMm: number;
+  doorStyle: "none" | "slab" | "pair";
+  material: "oak" | "white";
+}
+
 export interface Open3dFurnitureItem {
   id: string;
   catalogId: string;
@@ -62,6 +77,10 @@ export interface Open3dFurnitureItem {
   sourceCatalogId?: string;
   sourceSlug?: string;
   sourceSku?: string;
+  /** When modular-cabinet-v0, viewer builds multi-part mesh from modularOptions. */
+  geometryMode?: Open3dFurnitureGeometryMode;
+  /** Required when geometryMode is modular-cabinet-v0. */
+  modularOptions?: Open3dModularCabinetV0Options;
 }
 
 export interface Open3dStair {

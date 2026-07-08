@@ -89,6 +89,16 @@ function floor(value: unknown, path: string): Open3dFloor {
       sillHeight: numberValue(window.sillHeight, `${itemPath}.sillHeight`, 0),
       type: oneOf(window.type, ["standard", "fixed", "casement", "sliding", "bay"] as const, `${itemPath}.type`) };
   };
+  const parseModularOptions = (raw: unknown, itemPath: string) => {
+    const opts = record(raw, itemPath);
+    return {
+      widthMm: numberValue(opts.widthMm, `${itemPath}.widthMm`, 0.001),
+      depthMm: numberValue(opts.depthMm, `${itemPath}.depthMm`, 0.001),
+      heightMm: numberValue(opts.heightMm, `${itemPath}.heightMm`, 0.001),
+      doorStyle: oneOf(opts.doorStyle, ["none", "slab", "pair"] as const, `${itemPath}.doorStyle`),
+      material: oneOf(opts.material, ["oak", "white"] as const, `${itemPath}.material`),
+    };
+  };
   const parseFurniture = (raw: unknown, itemPath: string) => {
     const furniture = record(raw, itemPath);
     const scale = record(furniture.scale, `${itemPath}.scale`);
@@ -99,7 +109,20 @@ function floor(value: unknown, path: string): Open3dFloor {
         furniture[key] === undefined ? [] : [[key, stringValue(furniture[key], `${itemPath}.${key}`)]])),
       ...(furniture.locked === undefined ? {} : { locked: booleanValue(furniture.locked, `${itemPath}.locked`) }),
       ...Object.fromEntries(["width", "depth", "height"].flatMap((key) =>
-        furniture[key] === undefined ? [] : [[key, numberValue(furniture[key], `${itemPath}.${key}`, 0)]])) };
+        furniture[key] === undefined ? [] : [[key, numberValue(furniture[key], `${itemPath}.${key}`, 0)]])),
+      ...(furniture.geometryMode === undefined
+        ? {}
+        : {
+            geometryMode: oneOf(
+              furniture.geometryMode,
+              ["box", "modular-cabinet-v0"] as const,
+              `${itemPath}.geometryMode`,
+            ),
+          }),
+      ...(furniture.modularOptions === undefined
+        ? {}
+        : { modularOptions: parseModularOptions(furniture.modularOptions, `${itemPath}.modularOptions`) }),
+    };
   };
   const emptyOrRecords = <T>(key: string, parser: (raw: unknown, itemPath: string) => T): T[] =>
     arrayValue(item[key] ?? [], `${path}.${key}`, parser);

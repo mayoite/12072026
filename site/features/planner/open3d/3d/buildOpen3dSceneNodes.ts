@@ -3,7 +3,12 @@
  * Document remains source of truth; nodes carry entity ids for continuity.
  */
 
-import type { Open3dFloor, Open3dProject } from "../model/types";
+import type {
+  Open3dFloor,
+  Open3dFurnitureGeometryMode,
+  Open3dModularCabinetV0Options,
+  Open3dProject,
+} from "../model/types";
 
 export type Open3dSceneNodeKind = "wall" | "furniture";
 
@@ -24,6 +29,9 @@ export interface Open3dSceneNode {
   readonly rotation: number;
   readonly color?: string;
   readonly catalogId?: string;
+  /** Pass-through for modular multi-part mesh (no THREE on document). */
+  readonly geometryMode?: Open3dFurnitureGeometryMode;
+  readonly modularOptions?: Open3dModularCabinetV0Options;
 }
 
 const DEFAULT_FURNITURE_W = 800;
@@ -94,6 +102,12 @@ export function buildOpen3dSceneNodes(
       rotation: item.rotation,
       color: item.color,
       catalogId: item.catalogId,
+      ...(item.geometryMode !== undefined
+        ? { geometryMode: item.geometryMode }
+        : {}),
+      ...(item.modularOptions !== undefined
+        ? { modularOptions: { ...item.modularOptions } }
+        : {}),
     });
   }
 

@@ -139,6 +139,32 @@ export const OPEN3D_DEMO_CATALOG_ITEMS: Open3dCatalogItem[] = [
     provenance: { source: "sample_data" },
     symbolOnly: false,
   },
+  {
+    id: "cabinet-v0",
+    slug: "cabinet-v0",
+    sku: "CAB-V0-001",
+    name: "Modular Cabinet v0",
+    shortName: "Modular Cabinet",
+    description:
+      "Parametric modular cabinet (carcass + doors) without designer GLB",
+    category: "Storage & Organisation",
+    subCategory: "Cabinets",
+    taxonomyPath: "Storage & Organisation > Cabinets",
+    dimensions: { widthMm: 600, depthMm: 580, heightMm: 720 },
+    displayUnit: "mm",
+    assets: { imageUrls: [], previewImageUrl: "/placeholder-cabinet.svg" },
+    material: { marketingMaterial: "White Laminate", normalizedMaterial: "white" },
+    roomTags: ["Kitchen", "Office"],
+    styleTags: ["Modern", "Minimalist"],
+    availability: "in-stock",
+    assemblyType: "flat-pack",
+    flatPack: true,
+    tags: ["cabinet", "modular", "storage", "cabinet-v0"],
+    variants: [],
+    provenance: { source: "sample_data" },
+    symbolOnly: false,
+    geometryMode: "modular-cabinet-v0",
+  },
 ];
 
 export function getDemoCatalogItemById(id: string): Open3dCatalogItem | undefined {

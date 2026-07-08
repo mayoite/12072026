@@ -1,0 +1,27 @@
+{
+  "slice": "02B.1 canvas geometry unit tests safety net",
+  "date": "2026-07-09",
+  "command": "npx vitest run tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts tests/unit/features/planner/open3d/geometry/snapping.test.ts",
+  "cwd": "site",
+  "result": "pass",
+  "testFiles": 2,
+  "tests": 14,
+  "failed": 0,
+  "skipped": 0,
+  "coverage": {
+    "pickWallAtPoint": ["mid-segment", "miss", "nearest of two", "empty walls", "degenerate wall"],
+    "pickWallWithPosition": ["t≈0.5 mid", "t≈0 endpoint", "t≈1 endpoint", "degenerate t=0"],
+    "pointInPolygon": ["inside", "outside", "<3 verts"],
+    "getRoomPolygon": [">=3 verts", "<3 verts"],
+    "zoomTransformAt": ["anchor invariance zoom in/out", "clamp max scale anchor", "clamp min scale anchor"]
+  },
+  "productionChanges": [
+    "site/features/planner/open3d/lib/geometry/canvasPicking.ts — extract pointInPolygon + getRoomPolygon",
+    "site/features/planner/open3d/canvas-feasibility/FeasibilityCanvas.tsx — import extracted helpers"
+  ],
+  "testFilesPaths": [
+    "site/tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts",
+    "site/tests/unit/features/planner/open3d/geometry/snapping.test.ts"
+  ],
+  "rawLog": "results/planner/canvas-geometry/vitest-raw.log"
+}
