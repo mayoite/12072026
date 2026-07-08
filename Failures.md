@@ -43,6 +43,22 @@ Skipped items must be declared. Shell works; gates are runnable.
 
 ## Active failures
 
+### Latest honesty (2026-07-09, hard-path SVG + G8)
+
+**Not open failures** — landings to keep docs/agents honest:
+
+| Topic | Current truth | Evidence / entry |
+|-------|---------------|------------------|
+| SVG **publish authority** | **`pipelineCore+normalize`** only | `compileSvgForPublish` → S1 normalize + pipelineCore S2/S3; S4 `runSvgPipeline` / `generate-svg.mjs` |
+| V1 `svgCompiler.server` | **`v1-reference-only`** (retained; not publish wire) | Not dual live authority; do not treat “unify dual compilers” as open publish blocker |
+| **G8** viewer GLB load | **partial** (unit path landed) | `ThreeViewerInner` + `loadGeneratedGlbObject` when `shouldLoadGlb(generatedGlbUrl)`; not full product |
+| G8 residuals (open work) | Upload on publish; browser smoke; no shared cache / scale / auto-upload | `task.md` §02 open items |
+| SVG residual (open work) | Full admin UI publish browser smoke | `task.md` §01 |
+
+- Do **not** re-open dual-compiler as publish-authority ambiguity.
+- Do **not** claim G8 complete (place still procedural default; stamp opt-in).
+- Related open gates unchanged: `PLAN-FAIL-0408` (coverage floor). Hard-path browser smokes remain user-owned when claiming Accepted.
+
 ### Latest slice note (2026-07-07, CSS hardening + lint)
 
 - Split `core/utilities.css` + `core/components.css` → 16 per-use files via `scripts/split-core-css.mjs` (max 406 lines; 2 in soft zone)

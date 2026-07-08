@@ -46,7 +46,14 @@ export {
 export {
   stampFurnitureGeneratedGlb,
   attachGeneratedGlbToFurniture,
+  stampFurnitureFromModularOptions,
 } from "./mesh/stampFurnitureGeneratedGlb";
+
+export {
+  placeModularWithGeneratedGlbPlan,
+  type PlaceModularWithGeneratedGlbPlanOptions,
+  type PlaceModularWithGeneratedGlbPlanResult,
+} from "./mesh/placeModularWithGeneratedGlbPlan";
 
 export {
   runModularMeshStages,

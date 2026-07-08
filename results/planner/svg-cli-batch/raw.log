@@ -1,0 +1,25 @@
+﻿
+=== block-descriptors\chaise-lounge-001.json slug=chaise-lounge-001 exit=0 ok=True bytes=309 ===
+Wrote D:\OandO07072026\site\public\svg-catalog\chaise-lounge-001.svg (308 bytes)
+
+=== block-descriptors\missing-geom-fallback-001.json slug=missing-geom-fallback-001 exit=0 ok=True bytes=310 ===
+Wrote D:\OandO07072026\site\public\svg-catalog\missing-geom-fallback-001.svg (309 bytes)
+
+=== block-descriptors\sectional-sofa-001.json slug=sectional-sofa-001 exit=0 ok=True bytes=327 ===
+Wrote D:\OandO07072026\site\public\svg-catalog\sectional-sofa-001.svg (326 bytes)
+
+=== block-descriptors\side-table-001.json slug=side-table-001 exit=0 ok=True bytes=481 ===
+Wrote D:\OandO07072026\site\public\svg-catalog\side-table-001.svg (480 bytes)
+
+=== scripts\generate-svg\_fixtures\chaise.json slug=chaise-lounge-001 exit=0 ok=True bytes=453 ===
+Wrote D:\OandO07072026\site\public\svg-catalog\chaise-lounge-001.svg (452 bytes)
+
+=== scripts\generate-svg\_fixtures\missing-geometry.json slug=missing-geom-fallback-001 exit=0 ok=True bytes=422 ===
+Wrote D:\OandO07072026\site\public\svg-catalog\missing-geom-fallback-001.svg (418 bytes)
+
+=== scripts\generate-svg\_fixtures\sectional.json slug=sectional-sofa-001 exit=0 ok=True bytes=477 ===
+Wrote D:\OandO07072026\site\public\svg-catalog\sectional-sofa-001.svg (474 bytes)
+
+=== scripts\generate-svg\_fixtures\side-table.json slug=side-table-001 exit=0 ok=True bytes=613 ===
+Wrote D:\OandO07072026\site\public\svg-catalog\side-table-001.svg (612 bytes)
+
