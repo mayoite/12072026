@@ -23,8 +23,12 @@ import type { Open3dWall } from "@/features/planner/open3d/model/types";
 vi.mock("@/features/planner/open3d/editor/CanvasToolRail", () => ({ CanvasToolRail: () => <div data-testid="tool-rail" /> }));
 vi.mock("@/features/planner/open3d/editor/CommandPalette", () => ({ CommandPalette: () => <div data-testid="cmd-palette" /> }));
 vi.mock("@/features/planner/open3d/editor/LayersPanel", () => ({ LayersPanel: () => <div data-testid="layers" /> }));
-vi.mock("@/features/planner/open3d/canvas-fabric/FeasibilityCanvas", () => ({
-  FeasibilityCanvas: ({ children }: any) => <div data-testid="feasibility-canvas">{children}</div>,
+vi.mock("@/features/planner/open3d/canvas-feasibility/FeasibilityCanvas", () => ({
+  FeasibilityCanvas: ({
+    children,
+  }: {
+    children?: React.ReactNode;
+  }) => <div data-testid="feasibility-canvas">{children}</div>,
 }));
 vi.mock("@/features/planner/open3d/3d/ThreeLazyViewer", () => ({
   Lazy3DViewer: () => <div data-testid="lazy-3d" />,
@@ -290,7 +294,7 @@ describe("TopBar", () => {
     expect(onViewModeChange).toHaveBeenCalledWith("3d");
 
     fireEvent.click(screen.getByLabelText("Display unit: cm"));
-    fireEvent.click(screen.getByRole("option", { name: "m" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "m" }));
     expect(onDisplayUnitChange).toHaveBeenCalledWith("m");
 
     fireEvent.click(screen.getByRole("button", { name: /Import/i }));

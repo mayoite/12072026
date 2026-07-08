@@ -20,7 +20,7 @@ export const DEFAULT_FURNITURE_FOOTPRINT_MM = 600;
 
 /**
  * Matches FeasibilityCanvas INITIAL_TRANSFORM so flag-on overlay starts aligned.
- * Pan/zoom sync with FeasibilityCanvas is out of this vertical slice.
+ * Live pan/zoom is pushed via CanvasStatusSnapshot.transform when the flag is on.
  */
 export const DEFAULT_FABRIC_STAGE_TRANSFORM: CanvasTransform = {
   origin: { x: -4000, y: -2500 },

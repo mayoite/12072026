@@ -2,7 +2,7 @@ import { act, cleanup, fireEvent, render, screen, within } from "@testing-librar
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { proofCatalogItem } from "@/features/planner/open3d/catalog/proofCatalog";
-import { FeasibilityCanvas } from "@/features/planner/open3d/canvas-fabric/FeasibilityCanvas";
+import { FeasibilityCanvas } from "@/features/planner/open3d/canvas-feasibility/FeasibilityCanvas";
 import { useWorkspaceCanvas } from "@/features/planner/open3d/editor/useWorkspaceCanvas";
 import { renderHook } from "@testing-library/react";
 

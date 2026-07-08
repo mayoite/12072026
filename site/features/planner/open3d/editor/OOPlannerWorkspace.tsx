@@ -630,6 +630,7 @@ export function OOPlannerWorkspace({
                 />
                 <FurnitureFabricLayer
                   furniture={activeFloor?.furniture ?? []}
+                  transform={canvasStatus?.transform}
                   interactive={activeTool === "select"}
                   onFurnitureModified={handleFabricFurnitureModified}
                 />

@@ -114,6 +114,8 @@ export interface CanvasStatusSnapshot {
   wallCount: number;
   previewLengthMm: number | null;
   zoomPercent: number;
+  /** Live viewport (origin + scale) for Fabric overlay sync when flag is on. */
+  transform: CanvasTransform;
 }
 
 export interface FeasibilityCanvasProps {
@@ -382,6 +384,7 @@ function FeasibilityCanvas(
       wallCount: activeFloor.walls.length,
       previewLengthMm,
       zoomPercent: Math.round(transform.scale * 1000),
+      transform,
     });
   }, [
     activeFloor.walls.length,
@@ -390,7 +393,7 @@ function FeasibilityCanvas(
     onStatusChange,
     previewLengthMm,
     snapKind,
-    transform.scale,
+    transform,
   ]);
 
   const runCommand = useCallback((id: FeasibilityCommandId) => {

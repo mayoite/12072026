@@ -24,7 +24,8 @@
 - [x] Placement + entity ids: `newEntityId()` / crypto.randomUUID only (incl. JSON recovery)
 - [x] 02B.1 geometry unit net: pick/snap/pointInPolygon tests
 - [x] Fabric furniture stage (flag OFF default): `canvas-fabric-stage` + mapper tests
-- [ ] Fabric pan/zoom sync + browser smoke with flag ON
+- [x] Fabric pan/zoom sync via `CanvasStatusSnapshot.transform`
+- [ ] Browser smoke with flag ON
 - [ ] Fabric full cutover (walls/rooms/tools)
 
 ## 04 Verify
