@@ -36,7 +36,7 @@ export function PlannerIconButton({
   hint,
   shortcut,
   tooltipSide,
-  className = "pw-icon-btn min-w-[2.75rem] min-h-[2.75rem] focus-visible:ring-2 focus-visible:ring-blue-500 hover:bg-soft rounded-lg transition-colors",
+  className = "pw-icon-btn min-w-[2.75rem] min-h-[2.75rem] focus-visible:ring-2 focus-visible:ring-primary hover:bg-soft rounded-lg transition-colors",
   children,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
