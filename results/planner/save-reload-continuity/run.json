@@ -1,0 +1,22 @@
+﻿{
+    "testFiles":  [
+                      "tests/unit/features/planner/open3d/saveReloadContinuity.test.ts"
+                  ],
+    "scenario":  "save-reload-continuity",
+    "cwd":  "D:\\OandO07072026\\site",
+    "summary":  "2 tests passed: draw wall + modular furniture → envelope JSON export/import + exportOpen3dProjectJson round-trip preserve ids, wall ends, geometryMode/modularOptions",
+    "command":  "npx vitest run tests/unit/features/planner/open3d/saveReloadContinuity.test.ts --reporter=verbose",
+    "results":  {
+                    "failed":  0,
+                    "tests":  2,
+                    "testFiles":  1,
+                    "passed":  2
+                },
+    "timestamp":  "2026-07-08T21:14:11.6327881Z",
+    "artifacts":  {
+                      "rawLog":  "results/planner/save-reload-continuity/vitest-raw.log"
+                  },
+    "exitCode":  0,
+    "status":  "pass",
+    "schemaVersion":  1
+}

@@ -8,7 +8,30 @@ Despite the `open3d/` folder name, the live planner is currently a **hybrid** st
 - 3-D viewing uses the Three/r3f [`3d/`](./3d)
 - route composition, chrome, catalog, persistence, and commands live under this `open3d/` tree
 
-Fabric.js is package-installed and present under `_archive/fabric/` only; live open3d is not Fabric-backed. Fabric full-stage cutover is Phase **2B** (`Plans/01-execution/core/02B-PHASE-2B-2C.md`).
+Fabric.js is package-installed; the archived full Fabric workspace lives under `_archive/fabric/`. Default live 2-D remains FeasibilityCanvas. Fabric full-stage cutover is Phase **2B** (`Plans/01-execution/core/02B-PHASE-2B-2C.md`). A **furniture-only** Fabric overlay is opt-in (below).
+
+## Fabric furniture stage (opt-in proof)
+
+Default **OFF** (unset or any value other than `1`). Production UI unchanged.
+
+```powershell
+# repo-root .env.local — then restart dev
+NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE=1
+```
+
+Only exact `1` enables (`fabricFurnitureFlag.ts`). When on:
+
+| Layer | Owner |
+|-------|--------|
+| Walls / floor / draw tools | `FeasibilityCanvas` (unchanged) |
+| Furniture | `canvas-fabric-stage/FurnitureFabricLayer` overlay |
+
+**Pointer:** Fabric gets events only when the active tool is **select**; otherwise the host uses `pointer-events: none` so walls/draw keep ownership.
+
+**Known limits (proof only, not production dual-mode):**
+
+- Select + flag: fabric host is `pointer-events: auto` over the full stage — empty space can block FeasibilityCanvas pick
+- Pan/zoom transform is not shared with FeasibilityCanvas yet (overlay can desync after pan/zoom)
 
 ## Layout
 

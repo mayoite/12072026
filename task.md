@@ -34,3 +34,5 @@
 - [x] Targeted vitest hard-path — exit 0 → `results/planner/hard-path/vitest-hard-path/`
 - [x] Agent batch: modular-place + canvas-geometry + crypto residual → `results/planner/*/`
 - [x] Wave3: modular-2d + fabric-stage + svg-cli + docs truth → evidence dirs
+- [x] Save/reload continuity unit (envelope + project JSON)
+- [x] Entity UUID asserts on place + createOpen3dProject

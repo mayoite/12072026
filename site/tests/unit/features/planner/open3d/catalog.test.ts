@@ -561,6 +561,8 @@ import {
 } from "@/features/planner/open3d/catalog/placementAction";
 import type { Open3dCatalogItem, Open3dCatalogVariant } from "@/features/planner/open3d/catalog/catalogTypes";
 import type { Open3dProject } from "@/features/planner/open3d/model/types";
+import { isEntityUuid } from "@/features/planner/lib/newEntityId";
+import { createOpen3dProject } from "@/features/planner/open3d/model/project";
 
 describe("03-CAT-08: Placement Action", () => {
   // Helper to create a minimal catalog item for testing
@@ -684,6 +686,17 @@ describe("03-CAT-08: Placement Action", () => {
       expect(snapshot.placementId).toMatch(
         /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
       );
+    });
+
+    it("placeCatalogItem generates isEntityUuid placementId", () => {
+      const snapshot = placeCatalogItem(makeItem(), null);
+      expect(isEntityUuid(snapshot.placementId)).toBe(true);
+    });
+
+    it("createOpen3dProject default id isEntityUuid", () => {
+      const project = createOpen3dProject();
+      expect(isEntityUuid(project.id)).toBe(true);
+      expect(isEntityUuid(project.floors[0].id)).toBe(true);
     });
 
     it("records placedAt as ISO 8601 timestamp", () => {
