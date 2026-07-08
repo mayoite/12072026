@@ -261,6 +261,87 @@ describe("createSceneObjectFromNode mesh paths", () => {
   });
 });
 
+/**
+ * Full pipeline smoke: demo cabinet-v0 place → scene nodes → mesh factory.
+ * Proves modular multi-part Group vs box Mesh child counts on the live path.
+ */
+describe("modular place → scene node → mesh factory (integration)", () => {
+  it("cabinet-v0 multi-part Group; box catalog single Mesh", () => {
+    const cabinetItem = getDemoCatalogItemById("cabinet-v0");
+    expect(cabinetItem).toBeDefined();
+    if (!cabinetItem) throw new Error("cabinet-v0 missing from demo catalog");
+
+    const boxItem = makeCatalogItem({
+      id: "sample-desk-1",
+      slug: "sample-desk-1",
+      dimensions: { widthMm: 1600, depthMm: 800, heightMm: 750 },
+    });
+
+    let project = emptyProject();
+    const cabinetPlace = placeCatalogItemInProject(project, cabinetItem, null, {
+      placedFrom: "click",
+      position: { x: 1200, y: 800 },
+    });
+    project = cabinetPlace.result.project;
+
+    const boxPlace = placeCatalogItemInProject(project, boxItem, null, {
+      placedFrom: "click",
+      position: { x: 0, y: 0 },
+    });
+    project = boxPlace.result.project;
+
+    const furniture = project.floors[0]?.furniture ?? [];
+    const placedCabinet = furniture.find((f) => f.catalogId === "cabinet-v0");
+    const placedBox = furniture.find((f) => f.catalogId === "sample-desk-1");
+    expect(placedCabinet).toBeDefined();
+    expect(placedBox).toBeDefined();
+    if (!placedCabinet || !placedBox) {
+      throw new Error("expected both cabinet-v0 and box furniture after place");
+    }
+
+    expect(placedCabinet.geometryMode).toBe("modular-cabinet-v0");
+    expect(placedCabinet.modularOptions).toBeDefined();
+    expect(placedBox.geometryMode).toBeUndefined();
+
+    const nodes = buildOpen3dSceneNodes(project);
+    const cabinetNode = nodes.find((n) => n.id === placedCabinet.id);
+    const boxNode = nodes.find((n) => n.id === placedBox.id);
+    expect(cabinetNode).toBeDefined();
+    expect(boxNode).toBeDefined();
+    if (!cabinetNode || !boxNode) {
+      throw new Error("scene nodes missing for placed furniture");
+    }
+
+    expect(cabinetNode.kind).toBe("furniture");
+    expect(cabinetNode.geometryMode).toBe("modular-cabinet-v0");
+    expect(cabinetNode.modularOptions).toEqual(placedCabinet.modularOptions);
+    expect(cabinetNode.xMm).toBe(1200);
+    expect(cabinetNode.yMm).toBe(800);
+    expect(boxNode.geometryMode).toBeUndefined();
+    expect(boxNode.modularOptions).toBeUndefined();
+
+    const cabinetObject = createSceneObjectFromNode(THREE, cabinetNode, false);
+    const boxObject = createSceneObjectFromNode(THREE, boxNode, false);
+
+    const modularOptions = placedCabinet.modularOptions;
+    expect(modularOptions).toBeDefined();
+    if (!modularOptions) throw new Error("modularOptions required for part count");
+
+    expect(cabinetObject.type).toBe("Group");
+    expect(cabinetObject.userData.geometryMode).toBe("modular-cabinet-v0");
+    expect(cabinetObject.userData.entityId).toBe(placedCabinet.id);
+    expect(cabinetObject.children.length).toBeGreaterThan(1);
+    expect(cabinetObject.children).toHaveLength(
+      countCabinetV0Parts(modularOptions),
+    );
+
+    expect(boxObject.type).toBe("Mesh");
+    expect(boxObject.userData.entityId).toBe(placedBox.id);
+    expect(boxObject.children).toHaveLength(0);
+    expect(boxObject.userData.geometryMode).toBeUndefined();
+  });
+});
+
 describe("projectParser furniture modular fields", () => {
   it("round-trips geometryMode + modularOptions", () => {
     const project = emptyProject();

@@ -1,0 +1,13 @@
+﻿{
+    "passed":  true,
+    "exitCode":  0,
+    "files":  [
+                  "site/features/planner/admin/svg-editor/publishDescriptorWithPipeline.ts",
+                  "site/app/admin/svg-editor/[id]/page.tsx",
+                  "site/tests/unit/admin/svg-editor/publishDescriptorWithPipeline.test.ts"
+              ],
+    "command":  "pnpm --dir site exec vitest run tests/unit/admin/svg-editor/publishDescriptorWithPipeline.test.ts --config vitest.config.ts --reporter=verbose",
+    "notes":  "Fail-closed: parse → pipeline → persist; pipeline !ok/throw skips persist; persist fail after pipeline returns error",
+    "tests":  5,
+    "task":  "puck-publish-fail-closed"
+}

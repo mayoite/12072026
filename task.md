@@ -9,7 +9,8 @@
 ## 01 SVG system
 - [x] Restore `site/scripts/generate-svg.mjs` → `runPipeline` + write `public/svg-catalog`
 - [x] CLI smoke: fixtures → `public/svg-catalog/*.svg` (`results/planner/svg-cli-smoke/`)
-- [ ] Live admin publish (Puck fail-closed + API) when ready
+- [x] Puck publish fail-closed: pipeline before persist (`publishDescriptorWithPipeline`)
+- [ ] Full admin UI publish browser smoke when ready
 
 ## 02 Generate mesh (must-do modular)
 - [x] `modularCabinetV0` options → footprint + multi-part mesh

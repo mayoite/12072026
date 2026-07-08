@@ -1,0 +1,22 @@
+﻿{
+    "testFiles":  [
+                      "tests/unit/features/planner/open3d/modularPlaceMesh.test.ts"
+                  ],
+    "scenario":  "modular-place-smoke",
+    "cwd":  "D:\\OandO07072026\\site",
+    "summary":  "10 tests passed: modular place → scene node → mesh factory integration (cabinet-v0 multi-part Group vs box Mesh)",
+    "command":  "npx vitest run tests/unit/features/planner/open3d/modularPlaceMesh.test.ts --reporter=verbose",
+    "results":  {
+                    "failed":  0,
+                    "tests":  10,
+                    "testFiles":  1,
+                    "passed":  10
+                },
+    "timestamp":  "2026-07-08T21:08:47.382Z",
+    "artifacts":  {
+                      "rawLog":  "results/planner/modular-place-smoke/vitest-raw.log"
+                  },
+    "exitCode":  0,
+    "status":  "pass",
+    "schemaVersion":  1
+}
