@@ -286,8 +286,7 @@ export function TopBar({
                   <MenuItem id="quote" className={styles.dropdownItem}>
                     Add seats to quote cart
                   </MenuItem>
-                  <MenuItem id="pdf" className={styles.dropdownItem}>Export as PDF</MenuItem>
-                  <MenuItem id="png" className={styles.dropdownItem}>Export as PNG</MenuItem>
+                  {/* PDF/PNG not shipped — do not list until real export exists */}
                 </Menu>
               </Popover>
             </MenuTrigger>

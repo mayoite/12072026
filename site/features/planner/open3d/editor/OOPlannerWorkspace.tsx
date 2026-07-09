@@ -635,8 +635,9 @@ export function OOPlannerWorkspace({
         setWorkspaceMessage(`Exported ${check.filename}`);
         return;
       }
+      // Unreachable for ready formats; preflight blocks png/pdf/dxf as unsupported.
       setWorkspaceMessage(
-        `${format.toUpperCase()} export is coming soon — use JSON, SVG, BOQ, or quote for now.`,
+        check.messages[0] ?? `Export unavailable for ${format}`,
       );
     },
     [workspaceCanvas.project, addQuoteItem],

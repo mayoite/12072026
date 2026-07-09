@@ -29,9 +29,12 @@ function project() {
 }
 
 describe("Phase 06 export preflight (live subset post-removal)", () => {
-  it("lists supported formats and correctly identifies supported/unsupported", () => {
+  it("lists ready formats only (json/svg) — not pdf/png theater", () => {
     expect(Array.isArray(SUPPORTED_EXPORT_FORMATS)).toBe(true);
     expect(isSupportedExportFormat("json")).toBe(true);
+    expect(isSupportedExportFormat("svg")).toBe(true);
+    expect(isSupportedExportFormat("pdf")).toBe(false);
+    expect(isSupportedExportFormat("png")).toBe(false);
     expect(isSupportedExportFormat("dwg")).toBe(false);
   });
 
@@ -40,7 +43,17 @@ describe("Phase 06 export preflight (live subset post-removal)", () => {
     const name = buildExportFilename(p, "json");
     expect(typeof name).toBe("string");
     const pf = preflightOpen3dExport(p, "json");
-    expect(pf).toBeTruthy();
+    expect(pf.status).toBe("ready");
+  });
+
+  it("marks pdf/png as unsupported with honest message (not ready)", () => {
+    const p = project();
+    const pdf = preflightOpen3dExport(p, "pdf");
+    const png = preflightOpen3dExport(p, "png");
+    expect(pdf.status).toBe("unsupported");
+    expect(png.status).toBe("unsupported");
+    expect(pdf.messages[0]).toMatch(/not available/i);
+    expect(png.messages[0]).toMatch(/JSON|SVG|BOQ/i);
   });
 });
 

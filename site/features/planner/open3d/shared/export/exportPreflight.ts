@@ -1,5 +1,6 @@
 import type { Open3dProject } from "../../model/types";
 
+/** Formats that exist in the type system (incl. not-yet-built). */
 export type Open3dExportFormat = "json" | "svg" | "png" | "pdf" | "dxf";
 export type Open3dExportStatus = "ready" | "unsupported" | "blocked";
 
@@ -10,18 +11,26 @@ export interface Open3dExportPreflight {
   messages: string[];
 }
 
-// Job types + fns removed (dead in prod; only tests used). Reduces uncovered source for PLAN-FAIL-0408.
+/**
+ * Formats that actually download today (not menu theater).
+ * PNG / PDF / DXF are known but not shipped — preflight returns unsupported.
+ */
+export const READY_EXPORT_FORMATS: readonly Open3dExportFormat[] = ["json", "svg"];
 
-export const SUPPORTED_EXPORT_FORMATS: readonly Open3dExportFormat[] = [
-  "json",
-  "svg",
-  "png",
-  "pdf",
-  "dxf",
-];
+/** @deprecated use READY_EXPORT_FORMATS — kept name for existing imports */
+export const SUPPORTED_EXPORT_FORMATS = READY_EXPORT_FORMATS;
+
+const NOT_READY_EXPORT_FORMATS: readonly Open3dExportFormat[] = ["png", "pdf", "dxf"];
 
 export function isSupportedExportFormat(format: string): format is Open3dExportFormat {
-  return (SUPPORTED_EXPORT_FORMATS as readonly string[]).includes(format);
+  return (READY_EXPORT_FORMATS as readonly string[]).includes(format);
+}
+
+export function isKnownExportFormat(format: string): format is Open3dExportFormat {
+  return (
+    (READY_EXPORT_FORMATS as readonly string[]).includes(format) ||
+    (NOT_READY_EXPORT_FORMATS as readonly string[]).includes(format)
+  );
 }
 
 export function buildExportFilename(
@@ -35,28 +44,43 @@ export function buildExportFilename(
 }
 
 export function preflightOpen3dExport(project: Open3dProject, format: string): Open3dExportPreflight {
-  if (!isSupportedExportFormat(format)) {
-    const message = format.toLowerCase() === "dwg"
-      ? "DWG is unsupported because it is proprietary; export DXF instead."
-      : `Unsupported export format: ${format}`;
+  const normalized = format.toLowerCase();
+
+  if (NOT_READY_EXPORT_FORMATS.includes(normalized as Open3dExportFormat)) {
+    return {
+      status: "unsupported",
+      format: normalized,
+      filename: "",
+      messages: [
+        `${normalized.toUpperCase()} export is not available yet. Use JSON, SVG, workstation BOQ, or quote cart.`,
+      ],
+    };
+  }
+
+  if (!isSupportedExportFormat(normalized)) {
+    const message =
+      normalized === "dwg"
+        ? "DWG is unsupported because it is proprietary; use DXF when available, or JSON/SVG for now."
+        : `Unsupported export format: ${format}`;
     return { status: "unsupported", format, filename: "", messages: [message] };
   }
 
-  const filename = buildExportFilename(project, format);
-  const activeFloor = project.floors.find((floor) => floor.id === project.activeFloorId) ?? project.floors[0];
+  const filename = buildExportFilename(project, normalized);
+  const activeFloor =
+    project.floors.find((floor) => floor.id === project.activeFloorId) ?? project.floors[0];
   const messages: string[] = [];
 
   if (!activeFloor) {
-    return { status: "blocked", format, filename, messages: ["Project has no floors."] };
+    return { status: "blocked", format: normalized, filename, messages: ["Project has no floors."] };
   }
 
-  if (format !== "json" && activeFloor.walls.length === 0 && activeFloor.furniture.length === 0) {
+  if (normalized !== "json" && activeFloor.walls.length === 0 && activeFloor.furniture.length === 0) {
     messages.push("Current floor has no exportable geometry.");
   }
 
   return {
     status: messages.length > 0 ? "blocked" : "ready",
-    format,
+    format: normalized,
     filename,
     messages,
   };
