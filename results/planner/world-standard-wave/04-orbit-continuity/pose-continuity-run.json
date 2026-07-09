@@ -1,0 +1,27 @@
+{
+  "slice": "P04-W4-orbit-continuity",
+  "date": "2026-07-09",
+  "status": "pass",
+  "exitCode": 0,
+  "command": "pnpm exec vitest run tests/unit/features/planner/open3d/poseContinuityW4.test.ts tests/unit/features/planner/open3d/documentViewContinuity.test.ts",
+  "cwd": "D:\\OandO07072026\\site",
+  "results": {
+    "testFiles": 2,
+    "tests": 2,
+    "passed": 2,
+    "failed": 0
+  },
+  "contract": {
+    "documentRotation": "degrees",
+    "sceneNodeRotation": "radians via degreesToRadians",
+    "rebuildDoesNotMutateDocument": true
+  },
+  "files": [
+    "site/tests/unit/features/planner/open3d/poseContinuityW4.test.ts",
+    "site/tests/unit/features/planner/open3d/documentViewContinuity.test.ts"
+  ],
+  "logs": [
+    "pose-continuity-vitest-raw.log"
+  ],
+  "notes": "documentViewContinuity expectations updated to degrees (stale radians expectation); product path already correct"
+}

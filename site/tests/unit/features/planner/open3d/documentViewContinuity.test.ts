@@ -13,6 +13,7 @@ import {
 } from "@/features/planner/open3d/model/operations/pureActions";
 import { createOpen3dProject } from "@/features/planner/open3d/model/project";
 import type { Open3dProject } from "@/features/planner/open3d/model/types";
+import { degreesToRadians } from "@/features/planner/open3d/model/units";
 
 function ids(...values: string[]) {
   let index = 0;
@@ -51,7 +52,8 @@ describe("open3d document view continuity (2D↔3D same project)", () => {
     const wallStart = { x: 0, y: 0 };
     const wallEnd = { x: 4000, y: 0 };
     const furniturePosition = { x: 1200, y: 800 };
-    const furnitureRotation = Math.PI / 4;
+    // Document convention = degrees (not radians)
+    const furnitureRotationDeg = 45;
 
     ({ project } = addWall(project, wallStart, wallEnd, {
       idFactory: ids("wall-1"),
@@ -65,7 +67,7 @@ describe("open3d document view continuity (2D↔3D same project)", () => {
       width: modularOptions.widthMm,
       depth: modularOptions.depthMm,
       height: modularOptions.heightMm,
-      rotation: furnitureRotation,
+      rotation: furnitureRotationDeg,
     }));
 
     const floor = activeFloor(project);
@@ -93,7 +95,11 @@ describe("open3d document view continuity (2D↔3D same project)", () => {
     expect(furnNode!.id).toBe(floor.furniture[0]!.id);
     expect(furnNode!.xMm).toBe(furniturePosition.x);
     expect(furnNode!.yMm).toBe(furniturePosition.y);
-    expect(furnNode!.rotation).toBe(furnitureRotation);
+    // Scene nodes convert document degrees → radians
+    expect(furnNode!.rotation).toBeCloseTo(
+      degreesToRadians(furnitureRotationDeg),
+      8,
+    );
     expect(furnNode!.widthMm).toBe(800);
     expect(furnNode!.depthMm).toBe(580);
     expect(furnNode!.heightMm).toBe(720);
@@ -101,17 +107,17 @@ describe("open3d document view continuity (2D↔3D same project)", () => {
     expect(furnNode!.geometryMode).toBe("modular-cabinet-v0");
     expect(furnNode!.modularOptions).toEqual(modularOptions);
 
-    // After updateFurniture position (+ rotation), rebuild reflects new pose
+    // After updateFurniture position (+ rotation deg), rebuild reflects new pose
     const newPosition = { x: 2500, y: 1500 };
-    const newRotation = Math.PI / 2;
+    const newRotationDeg = 90;
     ({ project } = updateFurniture(project, "furn-1", {
       position: newPosition,
-      rotation: newRotation,
+      rotation: newRotationDeg,
     }));
 
     const floorAfter = activeFloor(project);
     expect(floorAfter.furniture[0]?.position).toEqual(newPosition);
-    expect(floorAfter.furniture[0]?.rotation).toBe(newRotation);
+    expect(floorAfter.furniture[0]?.rotation).toBe(newRotationDeg);
     // Wall and furniture entity ids stable across pose edit
     expect(floorAfter.walls[0]?.id).toBe("wall-1");
     expect(floorAfter.furniture[0]?.id).toBe("furn-1");
@@ -126,7 +132,10 @@ describe("open3d document view continuity (2D↔3D same project)", () => {
     expect(furnAfter?.id).toBe("furn-1");
     expect(furnAfter?.xMm).toBe(newPosition.x);
     expect(furnAfter?.yMm).toBe(newPosition.y);
-    expect(furnAfter?.rotation).toBe(newRotation);
+    expect(furnAfter?.rotation).toBeCloseTo(
+      degreesToRadians(newRotationDeg),
+      8,
+    );
     // Modular fields survive pose-only update
     expect(furnAfter?.geometryMode).toBe("modular-cabinet-v0");
     expect(furnAfter?.modularOptions).toEqual(modularOptions);
