@@ -24,7 +24,7 @@
 
 ```
 /using-superpowers [+ skill list]
-AGENTS.md (constitution). One owner task — parallel only inside THIS task.
-Trustdata phase if needed. Evidence: results/planner/world-standard-wave/.
+AGENTS.md. One owner task — you exist so main context does not fill/lose track.
+Parallel only inside THIS task. Write to disk. Evidence: results/planner/world-standard-wave/.
 TASK: <one sub-slice of the same owner task>
 ```
