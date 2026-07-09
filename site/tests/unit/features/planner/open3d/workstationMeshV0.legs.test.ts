@@ -274,4 +274,26 @@ describe("workstationMeshV0 legs (modular posts under worktop)", () => {
       lPlan.parts.some((p) => /leg-(pedestal|panel|overhead)/.test(p.name)),
     ).toBe(false);
   });
+
+  it("countWorkstationV0Parts with desk-only includes exactly 4 legs", () => {
+    const deskOnly = createWorkstationConfigV0({
+      shape: "linear",
+      size: { lengthMm: 1500, depthMm: 600 },
+      modules: ["desk"],
+      heightMm: 750,
+    });
+    const plan = generateWorkstationV0MeshPlan(deskOnly);
+    const legs = legPartsOf(plan);
+    const modules = nonLegPartsOf(plan);
+
+    expect(modules).toHaveLength(1);
+    expect(modules[0]?.name).toBe("desk");
+    expect(legs).toHaveLength(4);
+    for (const leg of legs) {
+      expect(leg.name.startsWith("leg-desk-")).toBe(true);
+    }
+    // 1 desk worktop + 4 legs
+    expect(countWorkstationV0Parts(deskOnly)).toBe(5);
+    expect(plan.parts).toHaveLength(5);
+  });
 });
