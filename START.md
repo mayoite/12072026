@@ -122,7 +122,7 @@ pnpm run preview:tech-stack     # http://localhost:4173 after build
 pnpm run test:tech-stack
 ```
 
-Renderer: `site/tech-stack-generator/` (stays in site/) → `site/tech-stack-docs/` (served at `/tech-stack-docs/`). (Full docs incl. site-workflows. See generator vite.config and README.)
+Renderer: `site/tech-stack-generator/` → build to repo-root `tech-stack-docs/` + data in `tech-stack-generated/` (see `AGENTS.md` layout).
 
 ---
 

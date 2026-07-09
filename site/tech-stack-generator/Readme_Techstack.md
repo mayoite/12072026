@@ -6,8 +6,8 @@ This file is the quick operating guide for `site/tech-stack-generator/`.
 
 - Separate Vite app inside the Oando repo
 - Source of the interactive tech-stack docs site
-- Build output lands in `site/tech-stack-docs/` (served at `/tech-stack-docs/`, incl. enhanced site-workflows)
-- Generated data snapshots under `site/tech-stack-generated/` (via emit scripts)
+- Build output lands in repo-root `tech-stack-docs/`
+- Generated data snapshots under repo-root `tech-stack-generated/`
 
 ## First Run
 
@@ -24,7 +24,7 @@ On Windows PowerShell, use `npm.cmd` instead of `npm` if needed.
 ## Package Scripts
 
 - `npm run dev` - start the docs site
-- `npm run build` - typecheck and build to `site/tech-stack-docs/` (served at `/tech-stack-docs/`)
+- `npm run build` - typecheck and build to repo-root `tech-stack-docs/`
 - `npm run preview` - preview the built site
 - `npm run typecheck` - TypeScript check only
 - `npm run test` - Vitest suite
@@ -36,7 +36,7 @@ On Windows PowerShell, use `npm.cmd` instead of `npm` if needed.
 Current package test coverage is intentionally small and checks the package wiring:
 
 1. Read the package Vite config from disk.
-2. Confirm `outDir` points at `../tech-stack-docs` and base is `/tech-stack-docs/`.
+2. Confirm `outDir` points at repo-root `tech-stack-docs` and base is `/tech-stack-docs/`.
 3. Verify the tech stack data arrays are present and valid.
 
 Current result on 2026-06-27:

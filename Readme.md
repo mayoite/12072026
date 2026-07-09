@@ -22,7 +22,7 @@ repo-root/          ← pnpm workspace wrapper (package.json, pnpm-lock.yaml)
 └── archive/1b-5phase-agent-workflow/ (and archive/Agents_work/) ← archived 1b-5phase agent workflow reports, reviews, benchmarks (narratives only; evidence in results/)
 ```
 
-Inside `site/`: `app/` · `features/planner/` · `components/` · `lib/` · `tests/` · `scripts/` · `platform/` · `config/` · `results/`
+Inside `site/`: `app/` · `features/planner/` · `components/` · `lib/` · `tests/` · `scripts/` · `platform/` · `config/` — **no** `results/` (evidence is repo-root `results/` only; see `AGENTS.md`)
 
 **Where code goes:** [`docs/architecture/MODULE-LAYOUT.md`](docs/architecture/MODULE-LAYOUT.md) · **Architecture index:** [`docs/architecture/README.md`](docs/architecture/README.md)
 

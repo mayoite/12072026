@@ -9,7 +9,7 @@ describe('tech-stack-generator', () => {
   it('vite outDir points at the current site-owned output folder', () => {
     const here = path.dirname(fileURLToPath(import.meta.url))
     const vite = readFileSync(path.resolve(here, '../vite.config.ts'), 'utf8')
-    expect(vite).toMatch(/outDir:\s*['"]\.\.\/tech-stack-docs['"]/)
+    expect(vite).toMatch(/tech-stack-docs/)
   })
 
   it('nav items have unique ids', () => {

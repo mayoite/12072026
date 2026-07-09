@@ -50,7 +50,7 @@ async function copyCssTree({ repoRoot, outRoot, manifest }) {
 }
 
 export async function syncSiteCss({ repoRoot = defaultRepoRoot } = {}) {
-  const outRoot = path.join(repoRoot, 'site', 'tech-stack-generated', 'css')
+  const outRoot = path.join(repoRoot, 'tech-stack-generated', 'css')
   await resetDirectory(outRoot)
 
   const manifest = {

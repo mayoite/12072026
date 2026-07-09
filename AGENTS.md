@@ -32,6 +32,20 @@
 - **Checkpoints:** Agent decides when to CP (docs, tests, push, evidence folders) — use trustdata CPs when on that program.
 - User instructions always win.
 
+### Repo layout (hard — one results tree)
+
+| Rule | Location |
+|------|----------|
+| **Evidence / artifacts** | **Only** repo-root `results/` (`results/<module>/<phase>/…`). **Never** `site/results/`, **never** `site/test-results/`. |
+| **Playwright / vitest reports** | `results/test-results/`, `results/playwright-report/`, `results/tests/` |
+| **IDE config** | Repo-root `.cursor/` only — **not** `site/.cursor/` |
+| **Firecrawl / research scrapes** | **`D:\websites`** (ideas only). **No** `.firecrawl/` under `site/` or as product source |
+| **Install** | `pnpm` from **repo root**. Do not invent a second monorepo under `site/` |
+| **Tech-stack built docs** | Repo-root `tech-stack-docs/` + `tech-stack-generated/` (generator source may live under `site/tech-stack-generator/`) |
+| **Plans** | `Plans/trustdata/` live; history in `archive/Plans/` |
+
+If a tool defaults output into `site/`, **redirect it to root `results/`** or fix the config. Do not “leave it there.”
+
 ### Skills & Superpowers (User Standing Instructions — 2026-07-09)
 
 - **`/using-superpowers` always allowed and always required** for the main agent **and every subagent**.

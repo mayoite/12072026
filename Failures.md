@@ -66,7 +66,7 @@ Skipped items must be declared. Shell works; gates are runnable.
 - Fixed 7 fixed-container mobile guards + 40 `text-left`/`text-right` → `text-start`/`text-end`
 - `pnpm run lint` (site): **pass** (0 errors; was 130) — unused imports, hook deps, `import()` types, `any` cast
 - Targeted vitest: CSS (9/9), admin svg routes (8/8), feasibility canvas (7/7)
-- `tech-stack-generator` CSS sync re-run → `site/tech-stack-generated/css/` (17 imports)
+- `tech-stack-generator` CSS sync re-run → `tech-stack-generated/css/` (repo root)
 - Skipped by policy: `test:coverage`, Playwright E2E, `release:gate`
   Related open items: `PLAN-FAIL-0408`
 

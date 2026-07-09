@@ -62,7 +62,7 @@ export async function generateDocs({ repoRoot = defaultRepoRoot, documentsRoot =
   }
   const nextManifest = createManifestRecord({
     version: 'v1',
-    root: 'site/tech-stack-generated/docs',
+    root: 'tech-stack-generated/docs',
     files: [
       rootMarkerEntry,
       ...Object.entries(outputs).map(([relativePath, content]) => ({

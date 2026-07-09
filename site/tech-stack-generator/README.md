@@ -1,6 +1,6 @@
 # Oando Platform — Site Workflow / Tech Stack Documentation
 
-(Source generator stays in `site/`; build output to `site/tech-stack-docs/` (served at `/tech-stack-docs/`). Full docs site with enhanced site-workflows section.)
+(Source generator stays in `site/tech-stack-generator/`; build output to **repo-root** `tech-stack-docs/` + `tech-stack-generated/` per AGENTS.md layout.)
 
 A standalone, modifiable documentation site showcasing the entire technology stack, architecture, workflows, and development processes of the **Oando Platform** (a furniture company platform at `oando.co.in` featuring a 2D/3D room planner, product catalog, CRM, and admin dashboard).
 
@@ -23,7 +23,7 @@ Open http://localhost:5173 in your browser.
 | Script | Description |
 |--------|-------------|
 | `npm run dev` | Start Vite dev server with HMR |
-| `npm run build` | Type-check + production build to `site/tech-stack-docs/` (full tech stack docs incl. site-workflows) |
+| `npm run build` | Type-check + production build to repo-root `tech-stack-docs/` |
 | `npm run preview` | Preview the production build locally |
 | `npm run typecheck` | Run TypeScript compiler in check mode |
 | `npm run test` | Run the Vitest package suite |
@@ -169,7 +169,7 @@ Edit `tailwind.config.js` to change the `brand` and `accent` color scales. The M
 
 ## Relationship to the Main Platform
 
-This documentation site is a **separate Vite app** that lives inside the main Oando Platform repository at `site/tech-stack-generator/` and writes its built renderer to `site/tech-stack-docs/`. Generated JSON and renderer payloads are refreshed from the repo source of truth; do not hand-edit generated outputs. It has its own `package.json` and remains a separate pnpm workspace package while sitting next to the site CSS it mirrors. Keep it aligned with the authoritative repo docs in `Readme.md`, `AGENTS.md`, `docs/architecture/CSS-SOLUTION.md`, and `plans/` so it mirrors the current stack rather than drifting into stale paths.
+This documentation site is a **separate Vite app** at `site/tech-stack-generator/` writing built renderer to repo-root `tech-stack-docs/` and data to `tech-stack-generated/`. Do not hand-edit generated outputs. Align with `AGENTS.md` layout rules.
 
 ---
 

@@ -74,9 +74,9 @@ const commandsMock = vi.hoisted(() => [
   },
 ])
 
-vi.mock('../../tech-stack-generated/data/summary.json', () => ({ default: overviewSummaryMock }))
-vi.mock('../../tech-stack-generated/data/dependencies.json', () => ({ default: dependenciesMock }))
-vi.mock('../../tech-stack-generated/data/commands.json', () => ({ default: commandsMock }))
+vi.mock('../../../tech-stack-generated/data/summary.json', () => ({ default: overviewSummaryMock }))
+vi.mock('../../../tech-stack-generated/data/dependencies.json', () => ({ default: dependenciesMock }))
+vi.mock('../../../tech-stack-generated/data/commands.json', () => ({ default: commandsMock }))
 
 import { overviewKeyTech, overviewStats } from '../src/data/overviewSummary'
 import { techCategories, techStack } from '../src/data/techStack'

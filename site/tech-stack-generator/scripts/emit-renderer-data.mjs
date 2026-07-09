@@ -14,7 +14,7 @@ const defaultRepoRoot = path.resolve(scriptDir, '..', '..', '..')
 export async function emitRendererData({ repoRoot = defaultRepoRoot } = {}) {
   const model = buildGeneratorModel({ repoRoot })
   const payloads = buildRendererDataPayloads(model)
-  const outDir = path.join(repoRoot, 'site', 'tech-stack-generated', 'data')
+  const outDir = path.join(repoRoot, 'tech-stack-generated', 'data')
   await resetDirectory(outDir)
 
   for (const [filename, value] of Object.entries(payloads)) {

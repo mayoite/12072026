@@ -119,7 +119,7 @@ export function normalizeRelativePosixPath(input) {
 }
 
 export function getDocumentsRoot(repoRoot) {
-  return path.resolve(repoRoot, 'site', 'tech-stack-generated', 'docs')
+  return path.resolve(repoRoot, 'tech-stack-generated', 'docs')
 }
 
 export function getStagingDocumentsRoot(repoRoot) {

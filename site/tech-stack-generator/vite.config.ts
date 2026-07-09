@@ -15,7 +15,8 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: '../tech-stack-docs',
+    // Repo root (not site/) — see AGENTS.md layout
+    outDir: path.resolve(__dirname, '../../tech-stack-docs'),
     emptyOutDir: true,
   },
   base: '/tech-stack-docs/',

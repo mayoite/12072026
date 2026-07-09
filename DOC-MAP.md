@@ -121,6 +121,6 @@ Old paths referenced in archives/recovery data only.
 
 ## Tech-stack site
 
-- `tech-stack-generator/` (under site/) — Vite render shell for tech-stack + site-workflows documentation (builds to `site/tech-stack-docs/`, served at `/tech-stack-docs/`)
+- `site/tech-stack-generator/` — Vite source; builds to repo-root `tech-stack-docs/` + `tech-stack-generated/`
 - Commands: **`START.md`** (Tech-stack docs)
 - Audit: `docs/audit/tech-stack-generator/`

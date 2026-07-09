@@ -5,17 +5,25 @@ site/block-descriptors/_archive/
 site/block-descriptors/*.*.json
 
 node_modules/
+# pnpm may create package-local link farms under site/ — never hand-install only under site/
 site/node_modules/
-tech-stack-generator/node_modules/
 
 # Site build output
 site/.next/
 site/.swc/
 site/tsconfig.tsbuildinfo
 
-# Tech-stack generated static site output
-site/tech-stack-generated/*
-!site/tech-stack-generated/.gitkeep
+# Tech-stack generated static site output (repo root only)
+tech-stack-generated/*
+!tech-stack-generated/.gitkeep
+
+# FORBIDDEN under site/ (canonical layout — see AGENTS.md)
+site/results/
+site/test-results/
+site/.cursor/
+site/.firecrawl/
+site/tech-stack-docs/
+site/tech-stack-generated/
 
 # Local environment files
 .env.local
