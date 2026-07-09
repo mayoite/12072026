@@ -19,6 +19,8 @@ site/tech-stack-generated/*
 
 # Local environment files
 .env.local
+.env*.local
+site/.env*.local
 
 # Build and temporary output (legacy root patterns kept for safety)
 .next/

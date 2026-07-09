@@ -8,6 +8,10 @@ import { hasPublicSupabaseEnv } from "@/platform/supabase/env";
 import type { SharedSessionUser, PlannerRole } from "@/features/shared/auth/types";
 import { buildAccessRedirect } from "@/lib/auth/plannerRedirect";
 import { isAppAdmin } from "@/lib/auth/roles";
+import {
+  DEV_BYPASS_USER,
+  isDevAuthBypassEnabled,
+} from "@/lib/auth/devAuthBypass";
 
 function isNextDynamicServerUsageError(error: unknown): boolean {
   const errorRecord =
@@ -25,6 +29,15 @@ function isNextDynamicServerUsageError(error: unknown): boolean {
 }
 
 export async function getOptionalUser(): Promise<SharedSessionUser | null> {
+  if (isDevAuthBypassEnabled()) {
+    return {
+      id: DEV_BYPASS_USER.id,
+      email: DEV_BYPASS_USER.email,
+      name: "Dev Bypass Admin",
+      role: "owner",
+    };
+  }
+
   // If Supabase env vars are not configured, there is no auth surface to query.
   if (!hasPublicSupabaseEnv()) {
     return null;
@@ -66,6 +79,15 @@ export async function requireAuthUser(
   nextPath: string,
   surface: "planner" | "configurator" | "crm" | "ops" | "admin" = "planner"
 ): Promise<SharedSessionUser> {
+  if (isDevAuthBypassEnabled()) {
+    return {
+      id: DEV_BYPASS_USER.id,
+      email: DEV_BYPASS_USER.email,
+      name: "Dev Bypass Admin",
+      role: "owner",
+    };
+  }
+
   const user = await getOptionalUser();
 
   if (!user) {

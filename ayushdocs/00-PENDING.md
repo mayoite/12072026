@@ -1,75 +1,72 @@
 # Pending list (owner)
 
-**Last updated:** 2026-07-09  
-**Priority order = kill-paths that raise the real quality bar** (not more skeleton docs).
+**Last updated:** 2026-07-09 (P0.1 completed)  
+**Rule:** finish P0.n fully before starting P0.n+1. Resolve blockers; do not park them.
 
-Legend: `P0` must for “good enough product spine” · `P1` next · `P2` later · `OPS` infrastructure
-
----
-
-## P0 — Product spine (do next)
-
-| # | Item | Why pending | Done when |
-|---|------|-------------|-----------|
-| P0.1 | **Admin SVG publish browser E2E** | Unit/CLI only; no signed-off UI publish | You publish one block in admin UI → `public/svg-catalog/{slug}.svg` updates; fail shows error |
-| P0.2 | **G5 → storage → stamp → G8 browser load** | Binary exists in memory; upload + real Chrome load open | Place modular (or stamp) → file under `catalog-assets/generated/` → 3D loads mesh (not only boxes) |
-| P0.3 | **Open3d a11y: nested `main` + hydration `data-viewport`** | Live report not clean | Single main landmark; no hydration mismatch on `/planner/open3d` |
-| P0.4 | **Honest “good mesh” bar for cabinet-v0** | Still stacked boxes | Document quality bar + one visual browser smoke recorded |
+Legend: `P0` product spine · `P1` hard path · `P2` plan/platform · `OPS` infra
 
 ---
 
-## P1 — Hard path residuals
+## P0 — Product spine
 
-| # | Item | Notes |
+| # | Item | Status |
 |---|------|--------|
-| P1.1 | Fabric flag ON browser smoke | `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE=1` |
-| P1.2 | Fabric full cutover (walls/rooms/tools) | Still FeasibilityCanvas for walls |
-| P1.3 | Path-only stamp without upload | Can 404 G8 — either block G8 until file exists, or always upload |
-| P1.4 | S5 PNG thumbs on publish | Still stub / URL only |
-| P1.5 | Dual sanitizer stacks | Publish uses pipelineCore path; V1 DOMPurify path remains reference |
+| **P0.1** | Admin SVG publish browser E2E + **dev auth bypass** | **DONE** — `results/planner/p0-1-admin-svg-publish/` (2 Playwright tests, screenshots) |
+| **P0.2** | G5 → storage → stamp → G8 browser load | **NEXT** |
+| **P0.3** | Open3d a11y: nested `main` + hydration `data-viewport` only | Pending (after P0.2) |
+| **P0.4** | “Good mesh” bar for cabinet-v0 + browser visual smoke | Pending |
+
+### P0.1 done means
+- `DEV_AUTH_BYPASS=1` works for local admin (proxy + layout + API + CSRF skip)
+- `/admin/svg-editor` opens without `/access` redirect
+- `POST /api/admin/svg-editor` publishes `side-table-001` → success
+- Playwright images in `results/planner/p0-1-admin-svg-publish/`
+
+### P0.1 residual (not a P0.1 fail)
+- Full `next build` still fails on `/contact` (`createContext is not a function`) — E2E used **dev server**. Fix under **build gate** (not P0.2).
 
 ---
 
-## P2 — Plan phase / platform
+## P1 — After P0
 
-| # | Item | Notes |
-|---|------|--------|
-| P2.1 | Close remaining **2A** UI gates if still open | Master plan sequencing |
-| P2.2 | Full **2B** draw→save→reload browser acceptance | Unit continuity exists |
-| P2.3 | **2C** Supabase descriptors + assets | Still disk `block-descriptors/` |
-| P2.4 | Expand modular beyond cabinet-v0 | L/U, doors library quality |
-
----
-
-## OPS — Infrastructure
-
-| # | Item | Call already made |
-|---|------|-------------------|
-| OPS.1 | **SSR cloud** | **Later** — when shared URL needed |
-| OPS.2 | Size | **2 CPU / 32 GB** (not 4/64 yet) |
-| OPS.3 | Keys | Already in `.env.local` — copy names to server when ready |
-| OPS.4 | Figma Code Connect / library | **Blocked** — Figma MCP auth required |
+| # | Item |
+|---|------|
+| P1.1 | Fabric flag ON browser smoke |
+| P1.2 | Fabric full cutover |
+| P1.3 | G8: refuse path-only stamp without bytes (or always upload) |
+| P1.4 | S5 PNG thumbs on publish |
+| P1.5 | Dual sanitizer cleanup (optional) |
 
 ---
 
-## Explicitly NOT pending (decided)
+## P2 — Plan / platform
 
-| Item | Status |
-|------|--------|
-| Entity IDs | crypto.randomUUID / `newEntityId` only |
-| Designer static GLB | Removed; policy enforces generated path |
-| Publish compile authority | `pipelineCore` + S1 normalize via `compileSvgForPublish` |
-| V1 compiler | Reference-only (not live publish) |
-| Worktrees | Forbidden — main checkout only |
+| # | Item |
+|---|------|
+| P2.1 | Remaining 2A gates |
+| P2.2 | Full 2B browser draw→save→reload |
+| P2.3 | 2C Supabase descriptors/assets |
+| P2.4 | Modular beyond cabinet-v0 |
 
 ---
 
-## Suggested next single action
+## OPS
 
-**Pick one kill-path:**
+| # | Item | Call |
+|---|------|------|
+| OPS.1 | SSR cloud | Later · **2 CPU / 32 GB** |
+| OPS.2 | Keys | `.env.local` + `site/.env.development.local` for bypass |
+| OPS.3 | Figma library | Optional — **not needed for P0**; blocked until MCP auth |
 
-1. **P0.1** Admin publish browser E2E, or  
-2. **P0.2** GLB upload + Chrome load, or  
-3. **P0.3** A11y nested main + hydration  
+---
 
-Do not start SSR until you need a shared URL.
+## Decided (not pending)
+
+- crypto IDs · no designer GLB · publish authority = pipelineCore+S1 · no worktrees  
+- **Dev auth bypass** for development only (never public prod without explicit dual flags)
+
+---
+
+## Next action
+
+**Start P0.2 only** — modular GLB upload to storage + stamp + Chrome load in open3d.

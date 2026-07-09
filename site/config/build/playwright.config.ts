@@ -57,6 +57,17 @@ export default defineConfig({
       env: {
         ...process.env,
         NEXT_PUBLIC_PLANNER_DEV_TOOLS: "true",
+        // Pass through only if set (e.g. .env.local or test:e2e:p0-admin-svg).
+        // Do not force bypass for all e2e — admin-smoke unauth gates need real redirects.
+        ...(process.env.DEV_AUTH_BYPASS
+          ? { DEV_AUTH_BYPASS: process.env.DEV_AUTH_BYPASS }
+          : {}),
+        ...(process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION
+          ? {
+              DEV_AUTH_BYPASS_ALLOW_PRODUCTION:
+                process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION,
+            }
+          : {}),
       },
     },
 });

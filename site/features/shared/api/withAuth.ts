@@ -27,6 +27,10 @@ import { rateLimit } from "@/lib/rateLimit";
 import { ApiError, API_ERROR_CODES, toApiError } from "./ApiError";
 import { error } from "./apiResponse";
 import { isAppAdmin, readAppRole } from "@/lib/auth/roles";
+import {
+  DEV_BYPASS_USER,
+  isDevAuthBypassEnabled,
+} from "@/lib/auth/devAuthBypass";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 
 /** Roles supported by {@link withAuth}. */
@@ -77,6 +81,18 @@ function getClientIp(req: NextRequest | Request): string {
 export async function resolveAuthContext(
   requiredRole: AuthRole,
 ): Promise<AuthContext> {
+  if (isDevAuthBypassEnabled()) {
+    return {
+      user: {
+        id: DEV_BYPASS_USER.id,
+        email: DEV_BYPASS_USER.email,
+        role: DEV_BYPASS_USER.role,
+      },
+      isAdmin: true,
+      requiredRole,
+    };
+  }
+
   if (requiredRole === "guest") {
     // Guest routes may still benefit from a user if present, but never fail.
     try {
@@ -189,6 +205,7 @@ export function withAuth<TContext = unknown>(
     const method = req.method.toUpperCase();
     if (
       options.requireCsrf &&
+      !isDevAuthBypassEnabled() &&
       ["POST", "PUT", "PATCH", "DELETE"].includes(method)
     ) {
       const csrfValid = await validateCsrfRequest(req);

@@ -8,7 +8,15 @@ const ADMIN_ROUTES = [
   { path: "/admin/analytics", next: "%2Fadmin%2Fanalytics" },
 ] as const;
 
+/** When DEV_AUTH_BYPASS=1 the server is intentionally open; unauth gates do not apply. */
+const authBypassOn = process.env.DEV_AUTH_BYPASS === "1";
+
 test.describe("admin smoke — unauthenticated gate", () => {
+  test.skip(
+    authBypassOn,
+    "DEV_AUTH_BYPASS=1 — unauth redirects disabled for local/P0.1 development",
+  );
+
   for (const route of ADMIN_ROUTES) {
     test(`${route.path} redirects to access with next=`, async ({ page }) => {
       await page.goto(route.path);

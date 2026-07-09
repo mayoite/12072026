@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { PLANNER_GUEST_COOKIE } from "./lib/auth/constants";
+import { isDevAuthBypassEnabled } from "./lib/auth/devAuthBypass";
 import { isMaintenanceReadonly } from "./lib/platform/maintenanceMode";
 
 /** Canonical planner paths only — legacy /oando-planner/* and /buddy-planner/* 301 in next.config.js */
@@ -170,9 +171,11 @@ export async function proxy(request: NextRequest) {
   // Fast cookie existence check — avoids network calls for anonymous traffic.
   // Session validation still happens in layouts via getOptionalUser().
   const hasAuthCookies = hasSessionAuthCookies(request.cookies.getAll());
+  const devAuthBypass = isDevAuthBypassEnabled();
 
   // Short-circuit: If they have no auth cookies, are not a guest, and the route is protected -> Boot them immediately.
-  if (!hasAuthCookies && !allowPlannerGuest && isProtected) {
+  // Dev bypass (DEV_AUTH_BYPASS=1, non-prod) skips this gate for local admin/P0.1 work.
+  if (!devAuthBypass && !hasAuthCookies && !allowPlannerGuest && isProtected) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/access";
     redirectUrl.search = `?next=${encodeURIComponent(`${pathname}${search}`)}`;

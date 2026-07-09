@@ -1,5 +1,7 @@
 # Agent process + TDD note (for owner)
 
+> **Short version:** use [12-WORKFLOW.md](./12-WORKFLOW.md). This page is optional depth.
+
 **Purpose:** How work is run for you — agents, skills, hard rules, blockers, and how to request the next wave.  
 **Not for:** deep test dumps (those live under `results/`).
 
