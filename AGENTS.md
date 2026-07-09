@@ -38,8 +38,8 @@
 - **All skills permitted:** Main agent may load and assign **any** available skill (Firecrawl, chrome-devtools, TDD, debugging, a11y, verification, docs, etc.) as fit. Owner grants full skill authority.
 - Load **skills that fit the job** (TDD, debug, browser, etc.) — not every skill for ceremony.
 - **One owner task at a time — finish it.** Never run multiple product tasks / W-gates / plan phases as concurrent workstreams. That finishes nothing (owner 2026-07-09).
-- **Why parallel agents:** A single long thread **fills the context window and loses track**. Owner authorized parallel agents so subagents hold a **fresh context** on clean sub-slices of the **same** task — not to run many products at once.
-- **Subagents:** Parallel **only inside that one task** (default ≤8; hard max 10). Write to disk so results survive. Briefs short; point at MDs. **Not** multi-epic / multi-CP thrash.
+- **Why parallel agents (owner-explicit):** Long single threads **fill the context window and you lose track**. Parallel agents = **fresh context** on sub-slices of the **same** task. Also in `ayushdocs/19-GOALS-SLICES.md` (“Subagents with /using-superpowers keep context fresh”). This is **not** multi-product thrash.
+- **Subagents:** Parallel **only inside that one task** (default ≤8; hard max 10). Write to disk so results survive. Briefs short; point at MDs.
 - **Bar:** Global product standard only; **quality over speed**. Owner present without micromanage or prompt-engineering — agent takes the call once intent is clear.
 - **Assign with superpowers:** Every subagent brief **starts with** `/using-superpowers` (+ fit skills). That is the kill for delegated work — not a hand-written mega-prompt.
 - Skills do not override **User Wins** or Git & Workspace rules above.
