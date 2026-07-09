@@ -358,6 +358,19 @@ export function OOPlannerWorkspace({
               { placedFrom: "click", writeToPublic: true },
             );
             workspaceCanvas.updateProject(() => result.project);
+            const placedId =
+              typeof result.furnitureId === "string"
+                ? result.furnitureId
+                : null;
+            if (placedId) {
+              workspaceCanvas.setSelection({
+                type: "furniture",
+                ids: [placedId],
+              });
+              setActiveTool("select");
+              armedToolRef.current = "select";
+              canvasRef.current?.setTool("select");
+            }
             setWorkspaceMessage(
               result.stamped
                 ? `Placed ${catalogItem.shortName ?? catalogItem.name} (GLB ready)`
@@ -365,13 +378,29 @@ export function OOPlannerWorkspace({
             );
           } catch (err) {
             // Fall back to procedural place so inventory never dead-ends.
-            workspaceCanvas.updateProject(
-              (project) =>
-                placeCatalogItemInProject(project, catalogItem, null, {
-                  placedFrom: "click",
-                  position: point,
-                }).result.project,
-            );
+            let placedId: string | null = null;
+            workspaceCanvas.updateProject((project) => {
+              const placed = placeCatalogItemInProject(
+                project,
+                catalogItem,
+                null,
+                { placedFrom: "click", position: point },
+              );
+              placedId =
+                typeof placed.result.action.payload?.id === "string"
+                  ? placed.result.action.payload.id
+                  : placed.snapshot.placementId;
+              return placed.result.project;
+            });
+            if (placedId) {
+              workspaceCanvas.setSelection({
+                type: "furniture",
+                ids: [placedId],
+              });
+              setActiveTool("select");
+              armedToolRef.current = "select";
+              canvasRef.current?.setTool("select");
+            }
             setWorkspaceMessage(
               `Placed ${catalogItem.shortName ?? catalogItem.name} (procedural fallback)`,
             );
