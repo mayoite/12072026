@@ -2,7 +2,8 @@
 
 > **Owner file.** Single source of checkbox truth for the trustdata program.  
 > **Agents:** REQUIRED `/using-superpowers`. Tick a box only when evidence path exists and was re-read this session.  
-> **Do not** tick from memory, chat optimism, or ayushdocs P0-DONE notes alone.
+> **Do not** tick from memory, chat optimism, or ayushdocs P0-DONE notes alone.  
+> **Governance revision:** 2026-07-09 — see [../reviews/GOVERNANCE-suggestions.md](../reviews/GOVERNANCE-suggestions.md).
 
 **Program root:** `D:\OandO07072026\Plans\trustdata\`  
 **Evidence root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
@@ -20,6 +21,24 @@
 2. For each item: evidence path in backticks → then `- [x]`.  
 3. At P10: copy tallies into `results/planner/world-standard-wave/10-handover/MASTER-SYNC.md`.  
 4. Open blockers go to `D:\OandO07072026\Failures.md`, not silent skips.
+
+### Canonical evidence folders (do not invent)
+
+| Gate / phase | Folder under `world-standard-wave/` |
+|--------------|-------------------------------------|
+| W0 / CP-00 | `00-start/` |
+| P01 / CP-01 | `00-product-truth/` |
+| P02 / CP-02 | `01-engine-lock/` |
+| W3 / P03 / CP-03 | `03-select-delete/` (**unit + browser**) |
+| W4 / P04 / CP-04 | `04-orbit-continuity/` |
+| W2 symbols / P05 / CP-05 | `05-symbols-svg/` |
+| W5–W6 / P06 / CP-06 | `06-save-honesty/` (+ `save-reload/` for W5) |
+| W1–W2 browser / P07 / CP-07 | `02-browser-open3d-journey/` |
+| **W7 / P08 / CP-08** | **`08-mesh-quality/`** |
+| **W8 / P09 / CP-09** | **`09-shortcuts-chrome/`** |
+| Pack / P10 / CP-10 | `10-handover/` |
+
+Legacy aliases (pointer only; rehome before tick): `08-shortcuts-chrome/` → `09-shortcuts-chrome/`; `01-product-truth/` → `00-product-truth/`. See [FOLDER-LOCK](../reviews/FOLDER-LOCK-suggestions.md).
 
 ---
 
@@ -70,17 +89,17 @@
 
 ---
 
-## 3) Phase completion (P01–P10)
+## 3) Phase completion (P01–P10) — maps 1:1 to CP-01–CP-10 (+ CP-00 via §0)
 
-- [ ] **P01** Product truth inventory complete — `results/planner/world-standard-wave/01-product-truth/` (CP-01).
+- [ ] **P01** Product truth inventory complete — `results/planner/world-standard-wave/00-product-truth/` (CP-01).
 - [ ] **P02** Engine lock notes + 00-START engine checkboxes — `01-engine-lock/` or NOTES + ENGINE-DECISION ref (CP-02).
-- [ ] **P03** Select/delete/undo — W3 — `03-select-delete/` (CP-03).
+- [ ] **P03** Select/delete/undo — W3 — `03-select-delete/` with **unit + browser** proof (CP-03).
 - [ ] **P04** Orbit + 2D↔3D continuity — W4 — `04-orbit-continuity/` (CP-04).
 - [ ] **P05** Block2D symbol quality path — W2 symbols — `05-symbols-svg/` (CP-05).
 - [ ] **P06** Save reload + honest labels — W5–W6 — `06-save-honesty/` (CP-06).
 - [ ] **P07** Browser draw→place journey — W1–W2 — `02-browser-open3d-journey/` (CP-07).
-- [ ] **P08** Mesh quality bar — W7 — `08-mesh-quality/` (CP-08).
-- [ ] **P09** Shortcut/label truth + blocking chrome only — W8 — `08-shortcuts-chrome/` (CP-09).
+- [ ] **P08** Mesh quality bar — W7 — **`08-mesh-quality/`** (CP-08).
+- [ ] **P09** Shortcut/label truth + blocking chrome only — W8 — **`09-shortcuts-chrome/`** (CP-09).
 - [ ] **P10** Evidence pack + MASTER sync + E: backup + handover — `10-handover/` (CP-10).
 
 ---
@@ -105,10 +124,10 @@ Definitions from design spec; proof standards are mandatory.
 
 ### W3 — Select / delete / undo
 
-- [ ] **W3.1** Furniture selectable on default 2D canvas (hit-test works).
+- [ ] **W3.1** Furniture selectable on default 2D canvas (hit-test works). Product bar = **furniture** (openings stretch).
 - [ ] **W3.2** Delete or Backspace removes selection.
-- [ ] **W3.3** Undo restores removed entity.
-- [ ] **W3.4** Unit tests + browser proof in `03-select-delete/`.
+- [ ] **W3.3** Undo restores removed entity (same id + pose).
+- [ ] **W3.4** **Unit tests + browser proof** in `03-select-delete/` — browser is **hard**: Playwright **or** chrome-devtools select→delete→undo with `run.json` + raw log + screenshots or trace. **Unit alone = not done.** Agents may not self-waive browser (owner WAIVE in CHECKPOINTS only).
 
 ### W4 — Continuity + orbit
 
@@ -133,25 +152,25 @@ Definitions from design spec; proof standards are mandatory.
 ### W7 — Mesh quality bar
 
 - [ ] **W7.1** Bar doc written (toe / door / carcass readable for cabinet-v0).
-- [ ] **W7.2** Visual smoke screenshot shows modular mesh, not apology box only.
+- [ ] **W7.2** Visual smoke screenshot (or headless mesh PNG) shows modular mesh, not apology box only.
 - [ ] **W7.3** Remaining debt listed honestly in NOTES.md.
-- [ ] **W7.4** Proof in `08-mesh-quality/`.
+- [ ] **W7.4** Proof in **`08-mesh-quality/`** only.
 
 ### W8 — Shortcuts / labels
 
 - [ ] **W8.1** Every user-visible tool/shortcut label matches the bound handler.
-- [ ] **W8.2** Known lie fixed (example class: D labeled door while bound to dimension — must not ship).
-- [ ] **W8.3** Unit + keyboard tests in `08-shortcuts-chrome/`.
+- [ ] **W8.2** Known lie fixed (example class: D labeled/mapped door while keydown arms dimension — must not ship).
+- [ ] **W8.3** Unit + keyboard tests in **`09-shortcuts-chrome/`** only.
 - [ ] **W8.4** Non-blocking premium chrome **not** required for this checkbox (only blockers).
 
 ---
 
 ## 5) Testing & evidence discipline
 
-- [ ] **T.1** Every gate that claims browser proof has screenshots on disk (not only “ran fine” in chat).
+- [ ] **T.1** Every gate that claims browser proof has screenshots on disk (not only “ran fine” in chat). **Includes W3** under `03-select-delete/`.
 - [ ] **T.2** Every automated run has `run.json` (or playwright-run.json) plus raw log; no filtered-only success.
 - [ ] **T.3** Vitest/Playwright skipped tests counted as fail for the owning gate.
-- [ ] **T.4** Evidence folders match `RESULTS-MAP.md` names.
+- [ ] **T.4** Evidence folders match CHECKPOINTS lock table / RESULTS-MAP names (W7=`08-mesh-quality/`, W8=`09-shortcuts-chrome/`).
 - [ ] **T.5** Non-regression: prior p0/unit scripts re-run when touching spine; logs retained under wave or cited prior paths.
 - [ ] **T.6** `testing-handbook.md` zero-suppression rule followed.
 
@@ -178,7 +197,7 @@ Definitions from design spec; proof standards are mandatory.
 - [ ] **G.3** Push status recorded: not requested / requested and done / blocked.
 - [ ] **G.4** No worktrees exist for this program’s work.
 - [ ] **G.5** `10-handover/README.md` handover narrative complete (what is true, W table, blockers, next step, git, backup).
-- [ ] **G.6** `10-handover/W-GATES.md` matches this checklist’s W rows.
+- [ ] **G.6** `10-handover/W-GATES.md` matches this checklist’s W rows (W7 path `08-mesh-quality/`; W8 path `09-shortcuts-chrome/`).
 - [ ] **G.7** `10-handover/FAILURES-SNIP.md` lists only open blockers.
 - [ ] **G.8** CP-10 marked PASS in `checkpoints/CHECKPOINTS.md` only after B.* and G.* and W1–W8 (or owner WAIVE).
 
@@ -187,7 +206,7 @@ Definitions from design spec; proof standards are mandatory.
 ## 8) Explicit non-claims (keep checked when still true)
 
 - [ ] **N.1** We do **not** claim P0.1–P0.3 ayushdocs DONE equals world-standard ship quality.
-- [ ] **N.2** We do **not** claim unit-green spine equals unaided buyer success.
+- [ ] **N.2** We do **not** claim unit-green spine equals unaided buyer success (includes **unit-only W3**).
 - [ ] **N.3** We do **not** claim cloud save without wire proof.
 - [ ] **N.4** We do **not** claim Fabric full stage live until it is the interactive 2D path with proof.
 - [ ] **N.5** We do **not** claim photoreal / Homestyler parity as a W1–W8 goal.
@@ -219,6 +238,19 @@ Program complete for trustdata wave only when **Sum done = 94** or owner WAIVE r
 |-----|------|
 | Agent contract | [AGENT-RULES.md](./AGENT-RULES.md) |
 | Checkpoints | [../checkpoints/CHECKPOINTS.md](../checkpoints/CHECKPOINTS.md) |
+| Governance review | [../reviews/GOVERNANCE-suggestions.md](../reviews/GOVERNANCE-suggestions.md) |
 | P10 handover | [../phases/P10-evidence-handover.md](../phases/P10-evidence-handover.md) |
 | Research index | [../RESEARCH-MAP.md](../RESEARCH-MAP.md) |
 | Results map | [../RESULTS-MAP.md](../RESULTS-MAP.md) |
+
+---
+
+## Expert revision note — 2026-07-09
+
+Governance pass (no product code). Applied from GOVERNANCE-suggestions:
+
+1. Canonical folder table at top — CP-00–CP-10 / W1–W8.  
+2. **W3.4** browser hard gate spelled out; unit alone = not done.  
+3. **W7** → `08-mesh-quality/`; **W8** → `09-shortcuts-chrome/` (P09 row + W8.3 + G.6 + T.4).  
+4. N.2 explicitly covers unit-only W3 non-claim.  
+5. Box count remains **94**.

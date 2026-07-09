@@ -1,7 +1,8 @@
 # AGENT-RULES — Subagent contract (Trust-Data)
 
 > **Binding for main agent and every subagent** on the trustdata / world-standard planner program.  
-> Owner standing instructions (2026-07-09) in `AGENTS.md` win on conflict. Skills never override User Wins or Git rules.
+> Owner standing instructions (2026-07-09) in `AGENTS.md` win on conflict. Skills never override User Wins or Git rules.  
+> **Governance revision:** 2026-07-09 — see [../reviews/GOVERNANCE-suggestions.md](../reviews/GOVERNANCE-suggestions.md).
 
 **Checkout:** `D:\OandO07072026` only  
 **Plan root:** `D:\OandO07072026\Plans\trustdata\`  
@@ -32,6 +33,8 @@
 
 When spawning streams for W3/W4/W6/W7/W8/docs, stay ≤8 unless owner authorizes burst to 10.
 
+**W3 note:** Unit stream may run in parallel with other gates after CP-02, but **CP-03 / W3 stays red** until browser proof lands under `03-select-delete/`.
+
 ---
 
 ## 3. Git & workspace (non-negotiable)
@@ -58,6 +61,8 @@ When spawning streams for W3/W4/W6/W7/W8/docs, stay ≤8 unless owner authorizes
 
 **Order of truth:** Owner current message → live repo/tests/browser → this trustdata pack → older notes/WAVE claims.
 
+**W3 special case:** Unit-green select/delete without browser select→delete→undo under `03-select-delete/` = **not done**. Do not claim W3 / CP-03 PASS.
+
 ---
 
 ## 5. Inspiration only (competitor research)
@@ -83,25 +88,32 @@ Every implementation or verification stream must leave disk proof:
 | Gate / work | Folder under `results/planner/world-standard-wave/` |
 |-------------|-----------------------------------------------------|
 | Start / approach notes | `00-start/` |
-| Product truth | `01-product-truth/` |
+| Product truth | `00-product-truth/` |
 | Engine lock notes | `01-engine-lock/` |
 | Browser journey W1–W2 | `02-browser-open3d-journey/` |
-| Select/delete W3 | `03-select-delete/` |
+| Select/delete **W3** (unit **+ browser**) | `03-select-delete/` |
 | Orbit/continuity W4 | `04-orbit-continuity/` |
 | Symbols / Block2D (P05, W2 symbol half) | `05-symbols-svg/` |
 | Save reload W5 + honesty W6 | `06-save-honesty/` (W5 may use `save-reload/` subfolder) |
-| Mesh W7 | `08-mesh-quality/` |
-| Shortcuts W8 | `08-shortcuts-chrome/` |
+| Mesh **W7** | **`08-mesh-quality/`** |
+| Shortcuts **W8** | **`09-shortcuts-chrome/`** |
 | Handover | `10-handover/` |
+
+**Anti-drift:**
+
+- W7 mesh artifacts → **`08-mesh-quality/`** only.  
+- W8 shortcut/chrome artifacts → **`09-shortcuts-chrome/`** only (not `08-shortcuts-chrome/`; legacy name non-canonical).  
+- P01 product truth → **`00-product-truth/`** only (not `01-product-truth/`).  
+- W3 browser proof → **`03-select-delete/`** (P07 journey may re-assert; does not replace first W3 browser pack).
 
 **Minimum artifact set per automated run:**
 
 - `run.json` (or `playwright-run.json`) with command, exit code, timestamp, HEAD if known  
 - Raw log (`*-raw.log` / vitest console) — **unfiltered**  
-- Screenshots for browser claims  
+- Screenshots for browser claims (W3 requires select→delete→undo coverage or equivalent trace)  
 - `NOTES.md` when visual/quality judgment is required (W6 copy, W7 mesh bar)
 
-Map ownership: `Plans/trustdata/RESULTS-MAP.md`.
+Map ownership: `Plans/trustdata/RESULTS-MAP.md` + [FOLDER-LOCK](../reviews/FOLDER-LOCK-suggestions.md) (FINAL 2026-07-09).
 
 ---
 
@@ -111,7 +123,7 @@ Commit when **any** of these lands cleanly:
 
 1. Red→green unit tests for one behavior (select, delete, shortcut map, mesh footprint).  
 2. One honest UI copy fix (local vs cloud) with test or screenshot.  
-3. Playwright step artifacts for a W gate folder.  
+3. Playwright / chrome-devtools step artifacts for a W gate folder (including **W3 browser** under `03-select-delete/`).  
 4. Docs/plan checkboxes sync that match evidence (not ahead of evidence).  
 5. P10 backup log after E: copy succeeds.
 
@@ -129,6 +141,9 @@ Checkout: D:\OandO07072026 only — NO git worktrees.
 Trust data (repo, tests, browser evidence), not character narratives.
 Competitor research: inspiration only — no plagiarism; MIT/open packages only.
 Write evidence under results/planner/world-standard-wave/<gate-folder>/.
+  W3 → 03-select-delete/ (unit + browser hard gate)
+  W7 mesh → 08-mesh-quality/
+  W8 shortcuts → 09-shortcuts-chrome/
 Commit each landable slice locally; never git push unless owner asked in this conversation.
 Max concurrent agents with siblings: 8 default / 10 hard max.
 No any in handwritten TS. Zero suppression of test output.
@@ -142,16 +157,18 @@ Read Plans/trustdata/checklists/AGENT-RULES.md and the phase file you own.
 
 | Stream | Owns | Skills (typical) | Evidence folder |
 |--------|------|------------------|-----------------|
-| 1 | Furniture select + delete + undo (W3) | TDD, systematic-debugging | `03-select-delete/` |
-| 2 | Tool/shortcut truth (W8) | TDD | `08-shortcuts-chrome/` |
+| 1 | Furniture select + delete + undo (**W3**) — unit **and** browser | TDD, systematic-debugging, chrome-devtools / Playwright verification | `03-select-delete/` |
+| 2 | Tool/shortcut truth (**W8**) | TDD | **`09-shortcuts-chrome/`** |
 | 3 | 3D orbit + continuity (W4) | chrome-devtools, TDD | `04-orbit-continuity/` |
-| 4 | Block2D + cabinet mesh bar (W2 symbols / W7) | TDD, verification | journey PNGs + `08-mesh-quality/` |
+| 4 | Block2D + cabinet mesh bar (W2 symbols / **W7**) | TDD, verification | journey PNGs + **`08-mesh-quality/`** |
 | 5 | Autosave flush + honest save copy (W5–W6) | TDD | `06-save-honesty/` (+ `save-reload/` subfolder) |
-| 6 | Playwright open3d journey (W1–W5) | verification, chrome-devtools | `02-browser-open3d-journey/` |
-| 7 | 2A blockers only (dead prefs, inventory a11y noise) | a11y | notes under `08-shortcuts-chrome/` or dedicated NOTES |
+| 6 | Playwright open3d journey (W1–W2; may re-assert W3) | verification, chrome-devtools | `02-browser-open3d-journey/` |
+| 7 | 2A blockers only (dead prefs, inventory a11y noise) | a11y | notes under **`09-shortcuts-chrome/`** or dedicated NOTES |
 | 8 | Docs: honesty, evidence index, checklist sync | Agents-docs | `10-handover/` when closing |
 
 Main agent coordinates; does not exceed concurrency caps.
+
+**CP map (streams must not skip hard stops):** see `checkpoints/CHECKPOINTS.md` CP lock table (CP-00 → CP-10 = phases 00 / P01–P10).
 
 ---
 
@@ -162,14 +179,16 @@ Main agent coordinates; does not exceed concurrency caps.
 3. Ethics risk (about to paste competitor asset).  
 4. E: backup or secrets handling unclear.  
 5. Worktree or push pressure from a skill default — refuse; stay on main checkout.  
-6. Test output missing or tools skipped — mark FAIL, do not claim pass.
+6. Test output missing or tools skipped — mark FAIL, do not claim pass.  
+7. About to mark **W3 / CP-03** green from unit alone — **stop**; finish browser proof or report blocked.  
+8. About to write W8 evidence under `08-mesh-quality/` or legacy `08-shortcuts-chrome/` without rehome plan — **stop**; use `09-shortcuts-chrome/`.
 
 ---
 
 ## 11. Definition of done for a subagent task
 
 - [ ] Brief fully matched (no extra refactors).  
-- [ ] Evidence paths written and non-empty where claimed.  
+- [ ] Evidence paths written and non-empty where claimed (correct folder per §6).  
 - [ ] Local commit created for the slice (or explicit “docs-only uncommitted” only if owner said plan-only).  
 - [ ] Failures.md updated if blocked.  
 - [ ] Report: what ran, what failed, exact next step — no vibes.
@@ -182,6 +201,19 @@ Main agent coordinates; does not exceed concurrency caps.
 |-----|------|
 | Owner checklist | [MASTER-CHECKLIST.md](./MASTER-CHECKLIST.md) |
 | Checkpoints | [../checkpoints/CHECKPOINTS.md](../checkpoints/CHECKPOINTS.md) |
+| Governance review | [../reviews/GOVERNANCE-suggestions.md](../reviews/GOVERNANCE-suggestions.md) |
 | Start | [../00-START.md](../00-START.md) |
 | Repo rules | `D:\OandO07072026\AGENTS.md` |
 | Testing | `D:\OandO07072026\testing-handbook.md` |
+
+---
+
+## Expert revision note — 2026-07-09
+
+Governance pass (no product code). Applied from GOVERNANCE-suggestions:
+
+1. Evidence map: **W7 = `08-mesh-quality/`**, **W8 = `09-shortcuts-chrome/`**.  
+2. W3 unit+browser hard gate in §§4, 6, 8, 9, 10.  
+3. Stream 1 skills include chrome-devtools/Playwright; streams 2/7 → `09-shortcuts-chrome/`.  
+4. Subagent prompt block carries folder locks.  
+5. Explicit stop if marking W3 unit-only or parking W8 under wrong `08-*` folder.

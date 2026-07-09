@@ -2,15 +2,16 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Use **verification** + **chrome-devtools** for browser truth. After owner unlock, implement via **executing-plans** or **subagent-driven-development** task-by-task. Checkboxes (`- [ ]`) track progress.  
 > **Do not execute product code until owner unlocks** (plan-only until then).  
-> **Checkout:** `D:\OandO07072026` only · no worktrees · commit as we go · push only on ask.
+> **Checkout:** `D:\OandO07072026` only · no worktrees · commit as we go · push only on ask.  
+> **Suggestions applied:** [reviews/P07-suggestions.md](../reviews/P07-suggestions.md) · Expert revision note 2026-07-09 (end of file).
 
 **Goal:** Prove, in a real browser, that an unaided facilities buyer can open the open3d planner, **draw structure (walls + door/opening)**, and **place ≥2 catalog items including cabinet-v0** with readable 2D symbols — gates **W1** and **W2**.
 
-**Architecture:** One new Playwright pack exercises the live FeasibilityCanvas + inventory place path on `/planner/open3d` (preferred) or `/planner/guest/` (same open3d stack). Spec owns screenshots + structured proof JSON under the world-standard evidence tree. Product code changes only when the journey fails for a real product reason (missing selectors, broken place, blank canvas) — not to fake the test.
+**Architecture:** One new Playwright pack exercises the live FeasibilityCanvas + inventory place path on `/planner/open3d` (preferred) or guest (`/planner/guest/?plannerDevTools=1` via helper — same open3d stack). Spec owns screenshots + structured proof JSON under the world-standard evidence tree. Product code changes only when the journey fails for a real product reason (missing selectors, broken place, blank canvas) — not to fake the test.
 
-**Tech stack:** Playwright (`site/config/build/playwright.config.ts`), Next.js open3d route (`Open3dPlannerHost` → `OOPlannerWorkspace` → `FeasibilityCanvas` + `InventoryPanel` + Three viewer), demo/live catalog with `cabinet-v0` (`geometryMode: "modular-cabinet-v0"`), status bar metrics (`pw-status-bar` / `summarizeFloorMetrics`).
+**Tech stack:** Playwright (`site/config/build/playwright.config.ts`), Next.js open3d route (`Open3dPlannerHost` → `Open3dNativeHost` → `OOPlannerWorkspace` → `FeasibilityCanvas` + `InventoryPanel` + Three viewer), demo/live catalog with `cabinet-v0` (`geometryMode: "modular-cabinet-v0"`), status bar metrics (`pw-status-bar` / `summarizeFloorMetrics` — doors count in **objects**).
 
-**Checkpoint:** **CP-07** (see [checkpoints/CHECKPOINTS.md](../checkpoints/CHECKPOINTS.md)) — hard stop until W1 + W2 green with proof block.
+**Checkpoint:** **CP-07** (see [checkpoints/CHECKPOINTS.md](../checkpoints/CHECKPOINTS.md)) — hard stop until W1 + W2 **browser place/draw** green with proof block. Full W2 **symbol quality** remains P05/CP-05; this phase requires non-blank place symbols, not P05 mesh-symbol bar.
 
 **Authority:** Owner message > `Plans/trustdata/` > `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` > Plan A core.
 
@@ -24,10 +25,10 @@
 
 | Gate | Must prove | Proof artifacts |
 |------|------------|-----------------|
-| **W1** | Draw structure: **≥1 wall segment set that yields walls in metrics**, plus a **door or opening** on a wall, on open3d/guest route | Playwright pass + PNGs |
-| **W2** | Place **≥2** catalog furniture items, **one of which is `cabinet-v0`**; 2D canvas shows non-empty furniture symbols (Block2D path, not blank blob) | Playwright pass + PNGs |
+| **W1** | Draw structure: walls metric **increases** after draw (not “≥1 from seed alone”), plus a **door or opening** that increases **objects** (doors count in `summarizeFloorMetrics`), on open3d/guest route | Playwright pass + PNGs |
+| **W2** | Place **≥2** catalog furniture items, **one of which is `cabinet-v0`**, second preferred **`sample-desk-1`** (search `desk`); furniture metric **increases** to ≥2; 2D canvas non-empty symbols (not blank blob). Symbol *quality* bar = P05 | Playwright pass + PNGs |
 
-**Done means:** `playwright-run.json` records `result: "pass"`, failed = 0, and listed screenshots exist on disk under the evidence directory. Unit-green alone does **not** clear CP-07.
+**Done means:** `playwright-run.json` records `result: "pass"`, failed = 0, and listed screenshots exist on disk under the evidence directory. Unit-green alone does **not** clear CP-07. Seeded guest perimeter alone does **not** clear W1.
 
 ---
 
@@ -37,19 +38,24 @@
 |------|------|
 | **New Playwright spec** | `site/tests/e2e/open3d-world-standard-journey.spec.ts` |
 | **Reuse helpers** | `site/tests/e2e/guestProjectSetup.ts`, `site/tests/e2e/plannerCanvasHelpers.ts` |
+| **Helper add (test-only, allowed)** | `getFurnitureCount` in `plannerCanvasHelpers.ts` (mirror `getWallCount`) |
 | **Gold pattern (copy discipline)** | `site/tests/e2e/admin-svg-publish-p01.spec.ts` + `results/planner/p0-1-admin-svg-publish/` |
+| **Place UX gold** | `site/tests/e2e/planner-guest-workspace.spec.ts` (searchbox + `Add … to canvas`) · `planner-j4-3d-parity.spec.ts` (desk search) |
 | **Primary evidence dir** | `results/planner/world-standard-wave/02-browser-open3d-journey/` |
 | **Phase-aligned alias (same run may write or copy here)** | `results/planner/world-standard-wave/07-browser-journey/` |
 | **Proof block file** | `results/planner/world-standard-wave/02-browser-open3d-journey/playwright-run.json` |
 | **Raw log** | `results/planner/world-standard-wave/02-browser-open3d-journey/playwright-raw.log` |
 | **Design source** | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` §2 W1–W2, §6 testing |
-| **Product entry** | `site/app/planner/open3d/page.tsx` · `site/features/planner/ui/Open3dPlannerHost.tsx` · `site/features/planner/open3d/editor/OOPlannerWorkspace.tsx` |
-| **Draw tools** | `site/features/planner/open3d/editor/CanvasToolRail.tsx` · `canvasTool.ts` (Wall, Opening→door runtime) |
-| **Place path** | `InventoryPanel.tsx` (Add … to canvas) · `placementAction.ts` · `placeModularWithGeneratedGlbBrowser` for cabinet-v0 |
+| **Playwright config** | `site/config/build/playwright.config.ts` — `fullyParallel: true` → journey **must** set `mode: "serial"`; no `PLAYWRIGHT_BASE_URL` → webServer runs `pnpm run build && pnpm run start` |
+| **Product entry** | `site/app/planner/open3d/page.tsx` · `site/features/planner/ui/Open3dPlannerHost.tsx` · `site/features/planner/open3d/ui/Open3dNativeHost.tsx` · `site/features/planner/open3d/editor/OOPlannerWorkspace.tsx` |
+| **Draw tools** | `site/features/planner/open3d/editor/CanvasToolRail.tsx` · `canvasTool.ts` (labels Wall/Opening/Place; `runtimeToolFor("opening") === "door"`) |
+| **Place path** | `InventoryPanel.tsx` (searchbox **Search catalog elements**; `Add ${shortName} to canvas`) · `placementAction.ts` · `placeModularWithGeneratedGlbBrowser` for cabinet-v0 |
 | **2D canvas** | `site/features/planner/open3d/canvas-feasibility/FeasibilityCanvas.tsx` · `[data-testid="planner-2d-canvas"] canvas` |
 | **Metrics** | `workspacePlanMetrics.ts` · footer `.pw-status-bar` (`N objects`, `N walls`, `N furniture`) |
 | **cabinet-v0 seed** | `site/features/planner/open3d/editor/demoCatalogItems.ts` (`id` / `slug` = `cabinet-v0`) |
-| **npm script (add when landing)** | `site/package.json` → `test:e2e:world-standard-w1w2` |
+| **Second item seed** | same file: `sample-desk-1` (search `desk`); fallback `sample-sofa-1` |
+| **npm script (add when landing)** | `site/package.json` → `test:e2e:world-standard-w1w2` (document `PLAYWRIGHT_BASE_URL`) |
+| **Evidence wrapper** | `scripts/run-evidence-cmd.ps1` (nests under `…/name/`; still write flat proof at evidence dir root) |
 
 **Evidence dir rule:** Canonical write target is **`02-browser-open3d-journey/`** (matches design gold template). After a green run, either keep a second copy under **`07-browser-journey/`** or leave a one-line `NOTES.md` in `07-browser-journey/` pointing at `02-…` so phase number and design template both resolve. Do not invent a third folder name.
 
@@ -90,8 +96,23 @@ New-Item -ItemType Directory -Force -Path "D:\OandO07072026\results\planner\worl
 
 **Files:**
 - Create: `site/tests/e2e/open3d-world-standard-journey.spec.ts`
-- Reuse (read only first): `guestProjectSetup.ts`, `plannerCanvasHelpers.ts`, `admin-svg-publish-p01.spec.ts`
+- Reuse (read only first): `guestProjectSetup.ts`, `plannerCanvasHelpers.ts`, `admin-svg-publish-p01.spec.ts`, `planner-guest-workspace.spec.ts`
+- Modify (allowed, test-only): `plannerCanvasHelpers.ts` — add `getFurnitureCount` if not present
 - Modify (later task): `site/package.json` script entry
+
+- [ ] **Step 0: Add `getFurnitureCount` (test helper only)**
+
+```typescript
+// plannerCanvasHelpers.ts — mirror getWallCount
+export async function getFurnitureCount(page: Page): Promise<number> {
+  const text = await page
+    .locator(".pw-status-bar > span")
+    .filter({ hasText: /^\d+ furniture$/ })
+    .textContent();
+  const match = text?.match(/^(\d+)\s+furniture/i);
+  return match ? Number.parseInt(match[1], 10) : 0;
+}
+```
 
 - [ ] **Step 1: Create the spec file with locked evidence paths**
 
@@ -106,10 +127,23 @@ Header requirements (no silent skip of proof):
  * Proof block:          playwright-run.json (written after run or by this file's afterAll)
  *
  * Pattern: admin-svg-publish-p01.spec.ts (mkdir evidence, numbered PNGs, JSON proof).
+ * Serial: config is fullyParallel — this file MUST run serial so PNGs do not race.
  */
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { clearPlannerStorage, enterGuestPlannerWorkspace } from "./guestProjectSetup";
+import {
+  clickOnCanvas,
+  dragOnCanvas,
+  getFurnitureCount,
+  getObjectCount,
+  getWallCount,
+  placeOpeningOnCanvas,
+  selectPlannerTool,
+  tapOnCanvas,
+  waitForPlannerCanvas,
+} from "./plannerCanvasHelpers";
 
 const SITE_ROOT = path.resolve(__dirname, "../..");
 const REPO_ROOT = path.resolve(SITE_ROOT, "..");
@@ -128,7 +162,8 @@ const PHASE_ALIAS_DIR = path.join(
   "07-browser-journey",
 );
 
-test.describe.configure({ timeout: 120_000 });
+// S1: serial — single evidence dir writer; config fullyParallel=true otherwise races PNGs
+test.describe.configure({ mode: "serial", timeout: 120_000 });
 
 test.beforeAll(() => {
   mkdirSync(EVIDENCE_DIR, { recursive: true });
@@ -138,11 +173,12 @@ test.beforeAll(() => {
 
 - [ ] **Step 2: Route entry helper (guest or open3d)**
 
-Prefer **open3d** (design gate). Fall back to guest only if open3d lacks a ready workspace without auth.
+Prefer **open3d** (design gate). Fall back to guest only if open3d lacks a ready workspace. Always clear planner storage on the open3d attempt so residual IDB does not fake metrics.
 
 ```typescript
-/** Primary: /planner/open3d · Fallback: guest workspace with setup gate cleared. */
-async function enterWorldStandardPlanner(page: import("@playwright/test").Page): Promise<"open3d" | "guest"> {
+/** Primary: /planner/open3d · Fallback: guest (?plannerDevTools=1 owned by helper). */
+async function enterWorldStandardPlanner(page: Page): Promise<"open3d" | "guest"> {
+  await clearPlannerStorage(page);
   await page.goto("/planner/open3d", { waitUntil: "domcontentloaded", timeout: 60_000 });
   const topbar = page.locator(".pw-topbar");
   const canvas = page.locator('[data-testid="planner-2d-canvas"] canvas');
@@ -158,19 +194,19 @@ async function enterWorldStandardPlanner(page: import("@playwright/test").Page):
     return "open3d";
   }
 
-  // Same stack via guest route + existing setup helper
-  const { enterGuestPlannerWorkspace } = await import("./guestProjectSetup");
+  // Same stack via guest route + existing setup helper (clears storage again; Start from Scratch may seed walls)
   await enterGuestPlannerWorkspace(page, { projectName: "W1-W2 world-standard" });
-  const { waitForPlannerCanvas } = await import("./plannerCanvasHelpers");
   await waitForPlannerCanvas(page);
   return "guest";
 }
 ```
 
+**Seed honesty:** Guest **Start from Scratch** can leave ≥4 walls before the test draws. W1 must use **baseline deltas** (Task 2), never “walls ≥ 1” alone.
+
 - [ ] **Step 3: Commit skeleton only if unlock allows code commits**
 
 ```text
-git add site/tests/e2e/open3d-world-standard-journey.spec.ts
+git add site/tests/e2e/open3d-world-standard-journey.spec.ts site/tests/e2e/plannerCanvasHelpers.ts
 git commit -m "test(e2e): scaffold open3d world-standard W1–W2 journey spec"
 ```
 
@@ -180,17 +216,24 @@ git commit -m "test(e2e): scaffold open3d world-standard W1–W2 journey spec"
 
 **Files:**
 - Modify: `site/tests/e2e/open3d-world-standard-journey.spec.ts`
-- Reuse: `selectPlannerTool`, `dragOnCanvas`, `placeOpeningOnCanvas` / `tapOnCanvas`, `getWallCount` from `plannerCanvasHelpers.ts`
+- Reuse: `selectPlannerTool`, `dragOnCanvas`, `placeOpeningOnCanvas` / `tapOnCanvas`, `getWallCount`, `getObjectCount` from `plannerCanvasHelpers.ts`
 - Product touch **only if red for real reason:** `FeasibilityCanvas.tsx`, `CanvasToolRail.tsx`, `useDoorWindowPlacement.ts`, wall/opening pure actions under `open3d/model/`
 
-- [ ] **Step 1: Implement test `W1 draws walls and a door/opening`**
+- [ ] **Step 1: Implement serial journey step(s) for W1 (prefer one serial file journey covering W1 then W2)**
 
 Journey script (exact interactions):
 
-1. `enterWorldStandardPlanner(page)` → record route used.
+1. `enterWorldStandardPlanner(page)` → record route used in a let/const for proof JSON.
 2. Screenshot `01-route-ready.png` (full page or workspace).
-3. Select **Wall** tool: Drawing tools group button matching `/^Wall/`.
-4. Draw a closed-ish rectangle with four `dragOnCanvas` segments (relative coords stable across viewports):
+3. **Capture baselines (mandatory — S2):**
+
+```typescript
+const wallsBefore = await getWallCount(page);
+const objectsBefore = await getObjectCount(page);
+```
+
+4. Select **Wall** tool: Drawing tools group — `selectPlannerTool(page, "Wall")` matches aria `Wall (W)`.
+5. Draw a closed-ish rectangle with four `dragOnCanvas` segments (relative coords stable across viewports):
 
 ```typescript
 await selectPlannerTool(page, "Wall");
@@ -200,14 +243,20 @@ await dragOnCanvas(page, { rx: 0.75, ry: 0.75 }, { rx: 0.25, ry: 0.75 });
 await dragOnCanvas(page, { rx: 0.25, ry: 0.75 }, { rx: 0.25, ry: 0.25 });
 ```
 
-5. Assert walls via status bar:
+6. Assert walls **increased** (false-green guard — guest shell may already have ≥4 walls):
 
 ```typescript
-await expect.poll(async () => getWallCount(page), { timeout: 15_000 }).toBeGreaterThanOrEqual(1);
+await expect
+  .poll(async () => getWallCount(page), { timeout: 15_000 })
+  .toBeGreaterThan(wallsBefore);
+const wallsAfterDraw = await getWallCount(page);
+const objectsAfterWalls = await getObjectCount(page);
 ```
 
-6. Screenshot `02-walls-drawn.png`.
-7. Select **Opening** tool (label `Opening`; runtime maps to door — `runtimeToolFor("opening") === "door"`). Do **not** depend on shortcut key `D` (W8 owns shortcut honesty).
+If open3d starts at 0 walls, `toBeGreaterThan(0)` is fine as a consequence of the delta rule.
+
+7. Screenshot `02-walls-drawn.png`.
+8. Select **Opening** tool (label `Opening`; runtime maps to door — `runtimeToolFor("opening") === "door"`). Do **not** depend on shortcut key `D` (W8 owns shortcut honesty).
 
 ```typescript
 await selectPlannerTool(page, "Opening");
@@ -217,8 +266,19 @@ await placeOpeningOnCanvas(page, { rx: 0.45, ry: 0.25 }, { rx: 0.55, ry: 0.25 })
 
 If `placeOpeningOnCanvas` fails on open3d hit-testing, try `tapOnCanvas(page, 0.5, 0.25)` once; if still red, fix product hit-test (do not assert away the door).
 
-8. Assert structure side-effect: objects count increased **or** UI message / status reflects opening. Minimum bar: walls still ≥1 and at least one opening-related delta (objects ≥ walls+1, or door count visible in layers/properties). Prefer polling `getObjectCount` > post-wall baseline.
-9. Screenshot `03-door-opening.png`.
+9. **Door/opening hard assert (S6):** doors increment `objects` in `summarizeFloorMetrics`. Poll:
+
+```typescript
+await expect
+  .poll(async () => getObjectCount(page), { timeout: 15_000 })
+  .toBeGreaterThan(objectsAfterWalls);
+// walls must not regress
+await expect.poll(async () => getWallCount(page), { timeout: 5_000 }).toBeGreaterThanOrEqual(wallsAfterDraw);
+```
+
+Do **not** pass W1 on vague toast/copy alone.
+
+10. Screenshot `03-door-opening.png`.
 
 - [ ] **Step 2: Run W1-focused until green or product fix**
 
@@ -253,7 +313,8 @@ Allowed fix targets:
 | Wall tool not found | `CanvasToolRail` aria-labels vs helper `plannerToolNamePattern` |
 | Walls draw but metrics stay 0 | `summarizeFloorMetrics` wiring in `OOPlannerWorkspace` → `WorkspaceShell` |
 | Opening never commits | `FeasibilityCanvas` opening/door tool path, `useDoorWindowPlacement`, openings pure actions |
-| open3d route blank | `Open3dNativeHost` / guestMode / project bootstrap |
+| open3d route blank | `site/features/planner/open3d/ui/Open3dNativeHost.tsx` / guestMode / project bootstrap |
+| walls ≥1 without draw | Seeded guest shell — use **walls delta**, not absolute ≥1 |
 
 No new engines. No Fabric-only workaround for W1.
 
@@ -271,17 +332,23 @@ git commit -m "test(e2e): W1 open3d draw walls and door/opening journey"
 
 **Files:**
 - Modify: `site/tests/e2e/open3d-world-standard-journey.spec.ts`
-- Reuse: inventory search + `Add … to canvas` pattern from `planner-j4-3d-parity.spec.ts` / `planner-guest-workspace.spec.ts`
+- Reuse: inventory search + `Add … to canvas` pattern from `planner-guest-workspace.spec.ts` / `planner-j4-3d-parity.spec.ts`
+- Reuse: `getFurnitureCount`, `clickOnCanvas`
 - Product touch **only if red:** `InventoryPanel.tsx`, `OOPlannerWorkspace.handleInventoryPlace` / `handlePlaceAtPoint`, `placementAction.ts`, `furnitureBlock2D.ts` / canvas draw of furniture
 
-- [ ] **Step 1: Implement test `W2 places cabinet-v0 and a second catalog item`**
+- [ ] **Step 1: Continue serial journey — W2 places cabinet-v0 + second demo SKU**
 
-Can continue from W1 state in one `test` or a second test that re-enters and re-draws a minimal wall (placement often needs floor/room context). Prefer **one serial journey test** with two describe blocks only if isolation is required.
+Prefer **one serial journey** continuing W1 state (walls present). If split into a second serial test, re-enter + minimal wall + baselines again.
 
 Steps:
 
-1. Ensure canvas ready (after walls or re-enter + one wall).
-2. Inventory search for `cabinet-v0` (searchbox label variants: `Search catalog elements` on guest chrome **or** open3d inventory placeholder `Search furniture`):
+1. Ensure canvas ready (after walls). Capture furniture baseline:
+
+```typescript
+const furnitureBefore = await getFurnitureCount(page); // expect 0 on clean journey
+```
+
+2. Inventory search for `cabinet-v0`. Gold primary selector (guest-workspace / InventoryPanel label):
 
 ```typescript
 const search = page
@@ -299,23 +366,16 @@ await addCabinet.click();
 await clickOnCanvas(page, 0.4, 0.4);
 ```
 
-4. Wait for furniture metric ≥ 1 (cabinet-v0 may async GLB write; allow procedural fallback message but **require** furniture entity):
+4. Wait for furniture metric **increase** (cabinet-v0 may async GLB write; procedural fallback OK if furniture entity lands):
 
 ```typescript
 await expect
-  .poll(async () => {
-    const text = await page
-      .locator(".pw-status-bar > span")
-      .filter({ hasText: /^\d+ furniture$/ })
-      .textContent();
-    const m = text?.match(/^(\d+)\s+furniture/i);
-    return m ? Number.parseInt(m[1], 10) : 0;
-  }, { timeout: 30_000 })
-  .toBeGreaterThanOrEqual(1);
+  .poll(async () => getFurnitureCount(page), { timeout: 30_000 })
+  .toBeGreaterThan(furnitureBefore);
 ```
 
 5. Screenshot `04-cabinet-v0-placed.png`.
-6. Place **second** distinct catalog item (search `desk` or `sofa` or demo id that is not cabinet-v0):
+6. Place **second** distinct catalog item — **locked primary:** demo `sample-desk-1` via search `desk` (fallback `sofa` → `sample-sofa-1`). Record chosen id in proof JSON (`secondCatalogId`).
 
 ```typescript
 await search.fill("desk");
@@ -324,24 +384,23 @@ await expect(addSecond).toBeVisible({ timeout: 15_000 });
 await addSecond.click();
 await clickOnCanvas(page, 0.55, 0.55);
 await expect
-  .poll(/* furniture count */, { timeout: 20_000 })
-  .toBeGreaterThanOrEqual(2);
+  .poll(async () => getFurnitureCount(page), { timeout: 20_000 })
+  .toBeGreaterThanOrEqual(furnitureBefore + 2);
 ```
 
 7. Screenshot `05-two-items-placed.png`.
-8. **Block2D readable check (W2 symbol bar for this phase):** canvas screenshot must not be an empty mid-gray plate. Assert:
+8. **Block2D non-blank check (P07 share of W2 — not P05 quality bar):** canvas screenshot must not be an empty mid-gray plate. Assert:
 
 ```typescript
 const canvas = page.locator('[data-testid="planner-2d-canvas"] canvas');
 await expect(canvas).toBeVisible();
-// Pixel diversity: sample via screenshot buffer size + optional evaluate getImageData variance
 const shot = await canvas.screenshot({
   path: path.join(EVIDENCE_DIR, "06-canvas-2d-symbols.png"),
 });
 expect(shot.byteLength).toBeGreaterThan(5_000);
 ```
 
-Optional stronger check (if stable): `page.evaluate` read a few pixels from the 2D canvas context and assert more than one unique color class in the furniture region. Do not require photoreal fidelity — that is **W7**.
+Optional stronger check (if stable): `page.evaluate` sample pixels / unique color classes in furniture region. Do **not** require photoreal fidelity (W7) or P05 symbol-unit bar. If symbols exist but look empty/unreadable, file residual for P05 — still require non-blank PNG size bar for CP-07 place half.
 
 9. Screenshot `07-journey-complete.png` (full page).
 
@@ -417,10 +476,16 @@ Shape (fill real numbers from the green run; do not pre-claim pass):
   "server": "pnpm run dev (repo root) or Playwright webServer if configured",
   "spec": "site/tests/e2e/open3d-world-standard-journey.spec.ts",
   "proof": {
-    "wallsAtLeast": 1,
+    "wallsBefore": 0,
+    "wallsAfterDraw": 4,
+    "wallsIncreased": true,
     "doorOrOpeningPlaced": true,
+    "objectsIncreasedAfterOpening": true,
+    "furnitureBefore": 0,
     "furnitureAtLeast": 2,
     "includesCabinetV0": true,
+    "secondCatalogId": "sample-desk-1",
+    "symbolCheck": "non-blank-canvas-png (P07); quality bar P05",
     "screenshots": [
       "01-route-ready.png",
       "02-walls-drawn.png",
@@ -442,13 +507,24 @@ Rules:
 - If any gate red: `"result": "fail"`, list failures under `blockersResolved` is wrong — use `blockersOpen` array of concrete facts.
 - Never delete failed run artifacts; archive over delete.
 
-- [ ] **Step 3: Add npm script**
+- [ ] **Step 3: Add npm script (S3 — baseURL honesty)**
 
-In `site/package.json` scripts:
+In `site/package.json` scripts (cross-platform: document env; do not silently force build+start without recording it):
 
 ```json
 "test:e2e:world-standard-w1w2": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-standard-journey.spec.ts --reporter=list"
 ```
+
+**Required operator env when reusing dev server** (matches Task 2 manual run):
+
+```powershell
+$env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
+# repo root: pnpm run dev  already listening
+cd D:\OandO07072026\site
+pnpm run test:e2e:world-standard-w1w2
+```
+
+If `PLAYWRIGHT_BASE_URL` is **unset**, Playwright config starts `pnpm run build && pnpm run start` — slower, valid for CI-like sign-off; proof JSON `server` field **must** record which path ran. Prefer dev+baseURL for local red→green loops.
 
 - [ ] **Step 4: Phase alias**
 
@@ -477,7 +553,7 @@ pnpm run test:e2e:world-standard-w1w2
 - [ ] **Step 6: Commit landable slice**
 
 ```text
-git add site/tests/e2e/open3d-world-standard-journey.spec.ts site/package.json
+git add site/tests/e2e/open3d-world-standard-journey.spec.ts site/tests/e2e/plannerCanvasHelpers.ts site/package.json
 git commit -m "test(e2e): CP-07 W1–W2 open3d draw/place journey + npm script"
 ```
 
@@ -490,8 +566,8 @@ Do **not** commit huge binary dumps beyond the seven PNGs + json/log unless owne
 Mark complete only with paths that exist on disk:
 
 - [ ] **CP-07.1** Spec exists: `site/tests/e2e/open3d-world-standard-journey.spec.ts`
-- [ ] **CP-07.2** W1 green: walls + door/opening proven in browser
-- [ ] **CP-07.3** W2 green: ≥2 furniture including `cabinet-v0`
+- [ ] **CP-07.2** W1 green: walls **increased** + door/opening **objects increased** proven in browser
+- [ ] **CP-07.3** W2 green: furniture **increased** to ≥2 including `cabinet-v0` (+ second demo SKU id recorded)
 - [ ] **CP-07.4** Screenshots `01`–`07` under `results/planner/world-standard-wave/02-browser-open3d-journey/`
 - [ ] **CP-07.5** `playwright-run.json` proof block with `result: "pass"`, `failed: 0`, gate keys W1/W2
 - [ ] **CP-07.6** Raw log retained (`playwright-raw.log` or handbook nested `*-raw.log`)
@@ -510,8 +586,10 @@ Mark complete only with paths that exist on disk:
 | Failure | Action |
 |---------|--------|
 | Port 3000 conflict | Stop. Log `Failures.md`. Do not kill unknown processes without ask. |
-| Auth wall on `/planner/open3d` | Use guestMode path or `/planner/guest/`; do not weaken production auth. |
+| Auth wall on `/planner/open3d` | Use guestMode path or `enterGuestPlannerWorkspace` (`/planner/guest/?plannerDevTools=1`); do not weaken production auth. |
 | Flaky canvas hit-test | Prefer helper `dragOnCanvas` / `placeOpeningOnCanvas`; increase steps; fix product hit-test if systematic. |
+| False-green walls ≥1 | Guest shell seed — require walls **delta** after draw (S2). |
+| Missing PLAYWRIGHT_BASE_URL surprise build | Expected when env unset; record `build && start` in proof or set baseURL to reuse dev (S3). |
 | cabinet-v0 GLB write 500 | Procedural fallback must still place furniture; document in proof `blockersResolved` if GLB skipped. |
 | CI without display | Local browser proof is required for CP-07; do not claim pass from unit mocks. |
 | Scope creep (select/delete, save, orbit) | Stop. Those are P03/P04/P06. File residual note only. |
@@ -539,10 +617,10 @@ P0 unit spines remain history, not a substitute for this browser pack.
 | Phase | Relation to P07 |
 |-------|-----------------|
 | P01–P02 | Truth + engine lock: know Feasibility is live 2D |
-| P03 | Select/delete **after** or parallel — not required to **claim** W1–W2 |
-| P05 | Symbol quality upgrades improve `06-canvas-2d-symbols.png`; P07 still needs non-blank place proof |
+| P03 | Select/delete parallel — **not** required for W1 draw or W2 place claims in this file; CHECKPOINTS “full” product story still wants CP-03 before celebrating whole planner |
+| P05 | Symbol **quality** bar; P07 needs non-blank place PNG only. If CP-05 red, do not claim full W2 symbols in handover — claim place + non-blank canvas |
 | P06 | Save/reload not required for CP-07 |
-| P08 | Mesh beauty is W7; P07 only requires place + readable 2D footprint |
+| P08 | Mesh beauty is W7; P07 only requires place + non-blank 2D footprint |
 | P10 | Packs this evidence into final handover |
 
 Parallelism: P07 Playwright stream may run while P03/P04 code streams land, max 8 agents, as long as they do not thrash the same canvas tool contracts without coordination.
@@ -570,3 +648,41 @@ Parallelism: P07 Playwright stream may run while P03/P04 code streams land, max 
 6. Task 5 CP-07 checklist → stop or hand to next phase  
 
 **Owner unlock required before any product/test implementation.** This file is the plan; checkboxes start empty until execution.
+
+---
+
+## Expert revision note — 2026-07-09
+
+**Source:** path-verified review → [reviews/P07-suggestions.md](../reviews/P07-suggestions.md).  
+**Scope:** plan-only revise in place. No product code. No worktrees.
+
+### Top 5 applied (binding)
+
+1. **S1 Serial evidence writer** — `test.describe.configure({ mode: "serial", timeout: 120_000 })` because config `fullyParallel: true` would race flat PNG paths under `02-browser-open3d-journey/`. Prefer one serial W1→W2 journey.
+2. **S2 Baseline deltas (anti false-green)** — Guest Start from Scratch can seed ≥4 walls. W1 asserts walls **increase** after draw; W2 asserts furniture **increase**; opening asserts objects **increase** after walls baseline.
+3. **S3 / S4 Server + entry honesty** — Document `PLAYWRIGHT_BASE_URL=http://localhost:3000` when reusing `pnpm run dev`; unset env triggers config `build && start` and must be recorded in proof. Entry helper calls `clearPlannerStorage` before open3d; guest path stays `enterGuestPlannerWorkspace` (`?plannerDevTools=1`).
+4. **S5 + S6 Helpers + door proof** — Add test-only `getFurnitureCount`; W1 door/opening hard-assert via `getObjectCount` Δ (doors counted in `summarizeFloorMetrics.objects`), not toast copy.
+5. **S7–S9 Catalog lock + path + CP honesty** — Second SKU primary `sample-desk-1` (search `desk`); product path `open3d/ui/Open3dNativeHost.tsx`; CP-07 place/non-blank ≠ P05 symbol quality; proof JSON carries baselines + `secondCatalogId` + `symbolCheck`.
+
+### Also applied (lighter)
+
+- Locked paths table: Playwright webServer behavior, place-UX gold specs, `run-evidence-cmd.ps1`, InventoryPanel real labels.
+- Failure table: false-green walls, baseURL surprise build, guest `plannerDevTools` URL.
+- Product touch table still gated on real red only (no scope expansion).
+
+### Not applied / deferred
+
+- No product implementation; no commit from this plan edit unless owner asks.
+- Stronger canvas pixel sampling remains optional.
+- Full CHECKPOINTS “do not claim full W1–W2 until CP-03+CP-05 green” interpreted as **handover honesty** (place half vs full product story), not a ban on landing this Playwright pack in parallel after unlock.
+
+### Path verification (sampled)
+
+| Item | Result |
+|------|--------|
+| `site/config/build/playwright.config.ts` | exists; baseURL env; webServer build+start if unset |
+| `guestProjectSetup.ts` / `plannerCanvasHelpers.ts` | exists; helpers named in plan exported (except new `getFurnitureCount`) |
+| `demoCatalogItems.ts` cabinet-v0 + sample-desk-1 | exists |
+| `InventoryPanel` searchbox + Add to canvas | matches plan selectors |
+| `CanvasToolRail` / `CANVAS_TOOL_LABELS` Wall/Opening | matches `selectPlannerTool` |
+| Evidence canonical dir | `results/planner/world-standard-wave/02-browser-open3d-journey/` (W1–W2) |
