@@ -71,6 +71,39 @@ export function createCanvasBlockColorResolver(
   return resolve;
 }
 
+/**
+ * Stroke widths in Block2D are mm in user space. After Feasibility applies
+ * `context.scale(transform.scale, …)` (often ~0.05–0.15), a 1–2mm stroke is
+ * sub-pixel and symbols look like solid fills. Floor to min screen pixels.
+ */
+export function resolveCanvasStrokeWidthMm(
+  strokeWidthMm: number,
+  contextScale: number,
+  minScreenPx = 1.25,
+): number {
+  const s = Math.abs(contextScale) || 1;
+  const mm = Number.isFinite(strokeWidthMm) && strokeWidthMm > 0 ? strokeWidthMm : 1;
+  return Math.max(mm, minScreenPx / s);
+}
+
+function contextUniformScale(ctx: CanvasRenderingContext2D): number {
+  if (typeof ctx.getTransform !== "function") {
+    return 1;
+  }
+  const m = ctx.getTransform();
+  return Math.hypot(m.a, m.b) || 1;
+}
+
+function applyStrokeWidth(
+  ctx: CanvasRenderingContext2D,
+  strokeWidthMm: number | undefined,
+): void {
+  ctx.lineWidth = resolveCanvasStrokeWidthMm(
+    strokeWidthMm ?? 1,
+    contextUniformScale(ctx),
+  );
+}
+
 function applyPrimTransform(
   ctx: CanvasRenderingContext2D,
   prim: Prim,
@@ -158,7 +191,7 @@ function drawPrim(
     }
     if (prim.stroke && prim.strokeWidth) {
       ctx.strokeStyle = resolve(prim.stroke);
-      ctx.lineWidth = prim.strokeWidth;
+      applyStrokeWidth(ctx, prim.strokeWidth);
       ctx.stroke();
     }
   } else if (prim.kind === "circle") {
@@ -171,7 +204,7 @@ function drawPrim(
     }
     if (prim.stroke && prim.strokeWidth) {
       ctx.strokeStyle = resolve(prim.stroke);
-      ctx.lineWidth = prim.strokeWidth;
+      applyStrokeWidth(ctx, prim.strokeWidth);
       if (prim.dash?.length) ctx.setLineDash([...prim.dash]);
       ctx.stroke();
       ctx.setLineDash([]);
@@ -185,9 +218,12 @@ function drawPrim(
       else ctx.lineTo(x, y);
     }
     ctx.strokeStyle = resolve(prim.stroke);
-    ctx.lineWidth = prim.strokeWidth;
+    applyStrokeWidth(ctx, prim.strokeWidth);
     ctx.lineCap = prim.lineCap ?? "round";
-    if (prim.dash?.length) ctx.setLineDash([...prim.dash]);
+    if (prim.dash?.length) {
+      const scale = contextUniformScale(ctx);
+      ctx.setLineDash(prim.dash.map((d) => Math.max(d, 4 / scale)));
+    }
     ctx.stroke();
     ctx.setLineDash([]);
   } else if (prim.kind === "path") {
@@ -199,7 +235,7 @@ function drawPrim(
     }
     if (prim.stroke && prim.strokeWidth) {
       ctx.strokeStyle = resolve(prim.stroke);
-      ctx.lineWidth = prim.strokeWidth;
+      applyStrokeWidth(ctx, prim.strokeWidth);
       ctx.lineCap = prim.lineCap ?? "round";
       ctx.stroke(path);
     }
@@ -212,7 +248,7 @@ function drawPrim(
       ctx.fill();
     }
     ctx.strokeStyle = resolve(prim.stroke);
-    ctx.lineWidth = prim.strokeWidth;
+    applyStrokeWidth(ctx, prim.strokeWidth);
     ctx.lineCap = prim.lineCap ?? "round";
     ctx.stroke();
   }

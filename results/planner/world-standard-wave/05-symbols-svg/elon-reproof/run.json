@@ -2,8 +2,11 @@
   "checkpoint": "CP-05",
   "phase": "P05-symbols-svg",
   "slice": "elon-reproof",
-  "status": "pass",
+  "status": "hold-repass",
   "date": "2026-07-09",
+  "integrator": "P05-parallel-integrator",
+  "head": "74d8fdc",
+  "recommendation": "DO_NOT_PASS_CP05_UNTIL_LIVE_VISUAL_GREEN_OR_OWNER_WAIVE",
   "hardStop": {
     "unit": "pass",
     "nonEmpty": "pass",
@@ -12,35 +15,37 @@
     "honesty": "pass",
     "svgSmoke": "pass",
     "ethics": "pass",
-    "visual": "pass",
-    "scope": "pass"
+    "visual": "split-prim-json-pass-live-png-fail"
   },
   "unitPack": {
     "command": "pnpm exec vitest run tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts --reporter=verbose",
     "exitCode": 0,
-    "testsPassed": 17,
+    "testsPassed": 19,
     "testsFailed": 0,
     "log": "elon-reproof/vitest-reproof-raw.log"
   },
-  "priorEvidence": {
-    "cp05Json": "CP-05.json status=pass",
-    "summary": "SUMMARY.md",
-    "greenLog": "02-green/vitest-raw.log (historical 12/12; pack now 17)",
-    "cp05Log": "CP-05-vitest-raw.log 17/17 exit 0",
-    "honesty": "04-svg-honesty/NOTES.md + SVG-SMOKE.md exit 0",
-    "visual": "05-visual/cabinet-v0-prims.json + NOTES.md",
-    "codeReview": "CODE-REVIEW.md Critical: none",
-    "codeTruth": "CODE-TRUTH.md PASS",
-    "a11yOptional": "A11Y-NOTE.md (not CP-05 hard gate)"
+  "liveVisual": {
+    "status": "fail-readability",
+    "notes": "elon-reproof/visual/LIVE.md",
+    "shots": [
+      "elon-reproof/visual/01-guest-2d-plan-with-cabinet.png",
+      "elon-reproof/visual/02-canvas-plan-symbols.png",
+      "elon-reproof/visual/03-focus-2d-plan-symbols.png",
+      "elon-reproof/visual/04-zoom-plan-symbols-close.png",
+      "elon-reproof/visual/05-canvas-zoom-cabinet-symbol.png"
+    ],
+    "observation": "Solid filled box only; no carcass/door/handle cues at 100% or 422% zoom"
   },
   "claims": {
-    "cabinetV0Block2DReadable": true,
-    "notEmptyBox": true,
+    "cabinetV0Block2DReadableUnit": true,
+    "cabinetV0Block2DReadableLiveCanvas": false,
+    "notEmptyBoxUnit": true,
     "doorStyleGeometryDiffers": true,
     "canvasAuthorityIsBlock2D": true,
     "furnitureBlockUsesCenteredPathIsFalse": true,
     "svgCatalogIsPublishNotCanvas": true,
     "noCompetitorSvg": true,
     "browserPlaceJourney": "deferred-to-P07"
-  }
+  },
+  "integration": "elon-reproof/INTEGRATION.md"
 }

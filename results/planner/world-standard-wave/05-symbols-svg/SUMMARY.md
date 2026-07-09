@@ -1,18 +1,20 @@
-# CP-05 SUMMARY — W2 symbol quality + SVG honesty
+﻿# CP-05 SUMMARY — W2 symbol quality + SVG honesty (Elon re-proof)
 
 ## Done
 - cabinet-v0 Block2D ≥4 prims (slab 5 / pair 7): carcass, inner, front, back, door cues
 - pair mid stile present; slab none
-- `furnitureBlockUsesCenteredPath` always `false` (top-left authorship honesty)
-- unknown-SKU box fallback still has rect prims
-- unit: 17/17 green (`furnitureBlock2D.cabinet-v0` + `renderBlock2DToCanvas`; elon-reproof strengthened pack)
+- furnitureBlockUsesCenteredPath always false
+- unknown-SKU nonempty guards
+- unit **20/20** (cabinet-v0 + renderBlock2D + stroke floor)
+- SVG honesty NOTES + smoke exit 0
+- **Live solid-box residual closed:** plan zoom sub-pixel strokes floored in renderBlock2DToCanvas
+- ethics: O&O prims only
 
-- visual prim-JSON dump under `05-visual/`
-- SVG honesty NOTES: Block2D = canvas; compileSvgForPublish = publish only
-- `scripts:smoke:svg:batch` exit 0 (honesty, not canvas claim)
-- ethics: original O&O prims only
+## Evidence
+- elon-reproof/ (agents + CODE-TRUTH + visual + STROKE-SCALE-FIX)
+- CP-05-vitest-raw.log / CP-05.json
 
-## Not done (out of scope)
-- P07 browser place journey (W2 place half)
-- P08 mesh redesign (3D)
-- SVG as Feasibility draw path / S7 inventory consume
+## Out of scope
+- P07 journey place half
+- P08 mesh
+- SR-vector plan (canvas pixels — A11Y-NOTE)

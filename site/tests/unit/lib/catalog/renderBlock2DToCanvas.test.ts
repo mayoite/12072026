@@ -2,14 +2,24 @@ import { describe, expect, it } from "vitest";
 import {
   renderBlock2DCentered,
   renderBlock2DToCanvas,
+  resolveCanvasStrokeWidthMm,
 } from "@/lib/catalog/renderBlock2DToCanvas";
 import type { Block2D } from "@/lib/catalog/blocks2d";
 import { furnitureBlock2DFromItem } from "@/features/planner/open3d/catalog/furnitureBlock2D";
+
+describe("resolveCanvasStrokeWidthMm", () => {
+  it("floors thin mm strokes under plan zoom so detail stays visible", () => {
+    // scale 0.1 (typical Feasibility zoom) · 1.5mm → need ≥12.5mm user units for 1.25px
+    expect(resolveCanvasStrokeWidthMm(1.5, 0.1, 1.25)).toBeCloseTo(12.5, 5);
+    expect(resolveCanvasStrokeWidthMm(1.5, 1, 1.25)).toBe(1.5);
+  });
+});
 
 function mockContext(): CanvasRenderingContext2D {
   const calls: string[] = [];
   const ctx = {
     calls,
+    getTransform: () => ({ a: 0.1, b: 0, c: 0, d: 0.1, e: 0, f: 0 }),
     save: () => {
       calls.push("save");
     },
