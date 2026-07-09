@@ -8,9 +8,9 @@
 | Rule | |
 |------|--|
 | Open preferred, **not required** | MIT / Apache / BSD after check when they fit |
-| Paid OK | When product needs it — **owner buys** after agent asks |
-| Trial first | Use trial/eval if allowed |
-| Ask before purchase | Always — agent never buys alone |
+| Paid OK | When product needs it |
+| **Buy flow** | Agent **names need** → **owner buys** → agent **uses**. **Always. No exceptions.** Agent never purchases/subscribes |
+| Trial | Only if owner starts or authorizes a trial |
 | **No plagiarism** | Ever. Easy ≠ allowed |
 | Copy only if **explicitly authorized** | Only when the **product’s website/license** allows that use **for development** (or other stated terms). Research/Firecrawl ≠ copy rights |
 | No unauthorized competitor/third-party assets | Code, UI, GLB, WASM, fonts, logos, brands, site content — not into `site/` without that authorization |

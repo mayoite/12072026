@@ -45,7 +45,7 @@
 ### Packages, assets & licenses (hard — no exceptions)
 
 - **Open is preferred, not mandatory.** MIT/Apache/BSD when they fit. **Paid is fine** when the product needs it.
-- **Trial first** when a trial exists. **Ask the owner before any purchase** — owner will buy if they agree. Never buy on your own.
+- **Buy flow — always, no exceptions:** Agent **names** what is needed and why → **owner buys** → agent **uses** it. Agent never purchases, never subscribes, never adds a paid seat. Trial only if owner says to start a trial.
 - **No plagiarism. Ever.** Easy to copy; **do not.**
 - **Do not copy** code, UI, assets, fonts, GLB, WASM, logos, brands, or site content **unless** the product’s **own website (or license) explicitly authorizes that use for development** — and only within that written authorization. “I looked at it” / Firecrawl / research ≠ license to ship their work.
 - Research/ideas only under `D:\websites` (and ethics maps). Patterns and jobs-to-be-done only — **not** paste into `site/`.
