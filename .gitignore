@@ -62,6 +62,7 @@ site/nul
 *.png
 !/public/**/*.png
 !site/tests/e2e/**/*-snapshots/*.png
+!results/planner/**/*.png
 features_diff.txt
 .blackboxcli/
 
