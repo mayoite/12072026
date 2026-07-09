@@ -34,6 +34,7 @@ import {
 } from "../lib/geometry/snapping";
 import {
   getRoomPolygon,
+  pickFurnitureAtPoint,
   pickWallAtPoint,
   pickWallWithPosition,
   pointInPolygon,
@@ -194,6 +195,12 @@ function FeasibilityCanvas(
   }, [workspaceCanvas?.selection.ids, workspaceCanvas?.selection.type]);
   const selectedRoomIds = useMemo(() => {
     if (workspaceCanvas?.selection.type === "room") {
+      return new Set(workspaceCanvas.selection.ids);
+    }
+    return new Set<string>();
+  }, [workspaceCanvas?.selection.ids, workspaceCanvas?.selection.type]);
+  const selectedFurnitureIds = useMemo(() => {
+    if (workspaceCanvas?.selection.type === "furniture") {
       return new Set(workspaceCanvas.selection.ids);
     }
     return new Set<string>();
@@ -580,6 +587,7 @@ function FeasibilityCanvas(
         for (const item of activeFloor.furniture) {
           const center = projectToScreen(item.position, transform);
           const block = furnitureBlock2DFromItem(item);
+          const isSelected = selectedFurnitureIds.has(item.id);
           context.save();
           context.translate(center.x, center.y);
           context.rotate((item.rotation * Math.PI) / 180);
@@ -599,6 +607,19 @@ function FeasibilityCanvas(
             resolve: colorResolve,
             skipShadow: transform.scale < 0.05,
           });
+          if (isSelected) {
+            context.strokeStyle =
+              tokens.getPropertyValue("--color-primary").trim() || "#2563eb";
+            context.lineWidth = Math.max(2 / transform.scale, 1.5);
+            context.setLineDash([8, 4]);
+            context.strokeRect(
+              -block.footprint.L / 2 - 12,
+              -block.footprint.D / 2 - 12,
+              block.footprint.L + 24,
+              block.footprint.D + 24,
+            );
+            context.setLineDash([]);
+          }
           context.restore();
         }
       } finally {
@@ -634,6 +655,7 @@ function FeasibilityCanvas(
     layerVisibility.walls,
     layerVisibility.windows,
     preview,
+    selectedFurnitureIds,
     selectedRoomIds,
     selectedWallIds,
     snapKind,
@@ -713,6 +735,18 @@ function FeasibilityCanvas(
     if (event.button === 0 && activeTool === "select" && workspaceCanvas) {
       const raw = screenToProject(canvasPoint(event), transform);
       const pickToleranceMm = Math.max(80, 180 / transform.scale);
+      // Furniture first (top-most), then walls, then rooms — product select bar.
+      const furnitureId = pickFurnitureAtPoint(
+        raw,
+        activeFloor.furniture,
+        Math.max(20, 40 / transform.scale),
+      );
+      if (furnitureId) {
+        workspaceCanvas.setSelection({ type: "furniture", ids: [furnitureId] });
+        setDrawingOutcome("none");
+        releasePointer();
+        return;
+      }
       const wallId = pickWallAtPoint(raw, activeFloor.walls, pickToleranceMm);
       const wallById = new Map(activeFloor.walls.map((wall) => [wall.id, wall]));
       const room = activeFloor.rooms.find((candidate) =>

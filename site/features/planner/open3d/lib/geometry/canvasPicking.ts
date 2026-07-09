@@ -1,4 +1,8 @@
-import type { Open3dPoint, Open3dWall } from "../../model/types";
+import type {
+  Open3dFurnitureItem,
+  Open3dPoint,
+  Open3dWall,
+} from "../../model/types";
 
 function distancePointToSegment(point: Open3dPoint, start: Open3dPoint, end: Open3dPoint): number {
   const dx = end.x - start.x;
@@ -68,6 +72,31 @@ export function getRoomPolygon(
     .map((wallId) => wallById.get(wallId)?.start)
     .filter((point): point is Open3dPoint => point !== undefined);
   return polygon.length >= 3 ? polygon : [];
+}
+
+/**
+ * Pick furniture whose axis-aligned footprint (after inverse rotation) contains the point.
+ * Hits top-most item first (last in array = drawn last).
+ */
+export function pickFurnitureAtPoint(
+  point: Open3dPoint,
+  furniture: readonly Open3dFurnitureItem[],
+  paddingMm = 0,
+): string | null {
+  for (let index = furniture.length - 1; index >= 0; index -= 1) {
+    const item = furniture[index];
+    const halfW = Math.max(1, (item.width ?? 600) / 2) + paddingMm;
+    const halfD = Math.max(1, (item.depth ?? 600) / 2) + paddingMm;
+    const dx = point.x - item.position.x;
+    const dy = point.y - item.position.y;
+    const rad = (-(item.rotation || 0) * Math.PI) / 180;
+    const localX = dx * Math.cos(rad) - dy * Math.sin(rad);
+    const localY = dx * Math.sin(rad) + dy * Math.cos(rad);
+    if (Math.abs(localX) <= halfW && Math.abs(localY) <= halfD) {
+      return item.id;
+    }
+  }
+  return null;
 }
 
 /** Ray-cast point-in-polygon test (even-odd). Polygons with fewer than 3 verts are outside. */
