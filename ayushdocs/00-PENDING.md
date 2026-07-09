@@ -1,21 +1,34 @@
 # Pending list (owner)
 
-**Last updated:** 2026-07-09 (non-stop wave: tests + P0.2 UI wire + P0.3 a11y code)  
-**Rule:** finish P0.n fully before starting P0.n+1. Resolve blockers; do not park them.  
-**Tests do not block other work** — run in parallel agents.
+**Last updated:** 2026-07-09 (world-standard wave — superpowers + 7 agents)  
+**Rule:** finish open kill-path fully before inventing a new epic. Resolve blockers; do not park them.  
+**Honesty:** P0.1–P0.3 are **spine**, not ship quality. Owner rejected thin “journey only” bar.  
+**Active standard:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` (awaiting approach approval)  
+**Evidence:** `results/planner/world-standard-wave/WAVE.md`  
+**Tests do not block other work** — run in parallel agents (max 8).
 
-Legend: `P0` product spine · `P1` hard path · `P2` plan/platform · `OPS` infra
+Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infra
 
 ---
 
-## P0 — Product spine
+## W — World-standard planner (ACTIVE)
 
 | # | Item | Status |
 |---|------|--------|
-| **P0.1** | Admin SVG publish E2E + dev auth bypass | **DONE** |
-| **P0.2** | G5 write + stamp + G8 URL + **cabinet-v0 UI place wire** | **DONE** (unit); Chrome visual optional |
-| **P0.3** | Nested `main` + `data-viewport` hydration | **DONE** (code) |
-| **P0.4** | “Good mesh” bar + browser visual smoke | **NEXT** |
+| **W0** | Design + approach (A product-journey / B Fabric-first / C chrome-first) | **NEEDS OWNER PICK** |
+| **W1–W8** | See design spec gates (draw, place, select/delete, 2D↔3D+orbit, save/reload, honest save, mesh bar, shortcuts) | Blocked on W0 |
+| **Research** | Competitive ideas only — `D:\websites\research\2026-07-09-world-standard\` | Packed |
+
+---
+
+## P0 — Product spine (history — not “done product”)
+
+| # | Item | Status |
+|---|------|--------|
+| **P0.1** | Admin SVG publish E2E + dev auth bypass | **DONE (spine)** |
+| **P0.2** | G5 write + stamp + G8 URL + **cabinet-v0 UI place wire** | **DONE (unit)** — not browser product |
+| **P0.3** | Nested `main` + `data-viewport` hydration | **DONE (code)** |
+| **P0.4** | “Good mesh” bar + browser visual smoke | **Absorbed into W7 + W2** |
 
 ### Residuals (not open blockers)
 
