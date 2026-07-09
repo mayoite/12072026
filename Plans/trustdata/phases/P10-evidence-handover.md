@@ -355,7 +355,7 @@ CP-10 pass criteria all checked, MASTER-CHECKLIST backup + ethics + agent + git 
 ## Expert revision note — 2026-07-09
 
 **Role:** Planning expert (plan-doc only; no product code; no push).  
-**Inputs:** INDEX · CHECKPOINTS · RESULTS-MAP · MASTER-CHECKLIST · `reviews/P10-suggestions.md` · user constraints (CP-10, E: paths, commit cadence, no push without ask, mesh path `08-mesh-quality`, superpowers).
+**Inputs:** INDEX · CHECKPOINTS · RESULTS-MAP · MASTER-CHECKLIST · `reviews/P10-suggestions.md` · user constraints (CP-10, E: paths, commit cadence, push/mirror per AGENTS.md, mesh path `08-mesh-quality`, superpowers).
 
 **Top changes applied:**
 

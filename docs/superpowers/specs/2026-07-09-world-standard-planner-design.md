@@ -1,10 +1,12 @@
 # Design: World-standard open3d planner (O&O)
 
 **Date:** 2026-07-09  
-**Status:** DRAFT — awaiting owner approval before implementation plan  
-**Authority:** User standard > Plan A (`Plans/01-execution/core/`) > ayushdocs honesty  
+**Status:** **APPROVED** — Approach **A** (Product Journey First) · implementation unlock recorded 2026-07-09  
+**Record:** `Plans/trustdata/00-START.md` · evidence `results/planner/world-standard-wave/00-start/NOTES.md`  
+**Authority:** Owner message > `AGENTS.md` > `Plans/trustdata/` > this spec > ayushdocs honesty  
 **Checkout:** `D:\OandO07072026` only · commit as we go · no worktrees  
-**Research:** Ideas only (`D:\websites`, ethics). Firecrawl was for ideas, not copy.
+**Research:** Ideas only (`D:\websites`, ethics). Firecrawl was for ideas, not copy.  
+**Bar:** Global manufacturer-planner standard · quality over speed · no approach re-debate.
 
 ---
 
@@ -72,7 +74,7 @@ Finish RAC, CSS gates, mobile drawers before canvas product loop.
 |------|------|
 | Premium feel | Canvas still unusable → user still says “not working” |
 
-**Recommendation: A**, then Fabric (B) as engine migration **after** W1–W8 green. 2A items that block W (Delete, labels, a11y that hide tools) pulled into A.
+**Owner pick (locked 2026-07-09): A.** Fabric (B) remains the 2D destination **after** W1–W8 green. 2A items that block W (Delete, labels, a11y that hide tools) stay pulled into A. Do not re-open B/C unless the owner changes the goal.
 
 ---
 

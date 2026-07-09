@@ -1,64 +1,65 @@
 # Plans
 
-## User coments
-1. Added Research.md on 7th July 2026 at 20:40 PM IST
-2. Added pending-clean.md up claimed to by Grok on 7th July 2026 at 20:40 PM IST
+**Live plan only:** [`trustdata/`](./trustdata/)  
+**Constitution:** [`../AGENTS.md`](../AGENTS.md)  
+**Scoreboard:** [`../ayushdocs/19-GOALS-SLICES.md`](../ayushdocs/19-GOALS-SLICES.md) · **Why:** [`../ayushdocs/18-PRODUCT-CONTEXT.md`](../ayushdocs/18-PRODUCT-CONTEXT.md)
 
-## Orginal text
-Start here.
+Everything else under `Plans/` history is either gone from this tree or lives in **`archive/Plans/`**. Do not treat archived folders as authority.
 
-## Layout
+---
 
-| Folder | Role |
-|--------|------|
-| [`00-governance/`](00-governance/) | Binding pins, benchmarks, quality gates, review workflow |
-| [`01-execution/`](01-execution/) | Day-to-day Phase 1A/1B work and promotion sequencing |
+## How to read (2 minutes)
 
-**Recent executed plans (stubs, full archived):**
-- `site-workflows-plan-2026-07.md`
-- `current-issues-resolution-2026-07.md`
+| Order | Open | Role |
+|------:|------|------|
+| 1 | [`trustdata/README.md`](./trustdata/README.md) | Map of the trustdata folder |
+| 2 | [`trustdata/INDEX.md`](./trustdata/INDEX.md) | Approach A, kill order, phases |
+| 3 | [`trustdata/00-START.md`](./trustdata/00-START.md) | Unlock + approach record |
+| 4 | Phase file under [`trustdata/phases/`](./trustdata/phases/) | How for one CP |
+| 5 | [`trustdata/checkpoints/CHECKPOINTS.md`](./trustdata/checkpoints/CHECKPOINTS.md) | Pass / stop rules |
+| 6 | Evidence under `results/planner/world-standard-wave/` | Proof (data wins) |
 
-**Phase 1:** 1A + 1B COMPLETE (see `01-execution/core/02-PHASE-1.md` status + `phase1-checklist.md`; agent reports in `archive/1b-5phase-agent-workflow/`).
+**Agent contract (short):** [`trustdata/checklists/AGENT-RULES.md`](./trustdata/checklists/AGENT-RULES.md)  
+**Checkbox scoreboard (program):** [`trustdata/checklists/MASTER-CHECKLIST.md`](./trustdata/checklists/MASTER-CHECKLIST.md)
 
-Completed/superseded plans archived to `archive/Plans/` (no stubs left, per cleanup). See archive for full content.
+---
 
-Use `01-execution/` to do the work.
-Use `00-governance/` to resolve conflicts, gates, and standards.
+## Layout (on disk today)
+
+```
+Plans/
+├── README.md                 ← you are here
+├── plan-execution.md         ← pointer → trustdata
+└── trustdata/                ← ONLY live program
+    ├── README.md             ← folder map
+    ├── INDEX.md              ← program index
+    ├── 00-START.md           ← unlock / approach
+    ├── LATER.md              ← not kill-path
+    ├── RESEARCH-MAP.md
+    ├── RESULTS-MAP.md
+    ├── phases/               ← P01–P10
+    ├── checkpoints/          ← CP table
+    ├── checklists/           ← AGENT-RULES + MASTER
+    └── reviews/              ← expert notes (not execution authority)
+```
+
+**Archived (not live):** `archive/Plans/` — including old `00-governance/`, `01-execution/`, `02-recovery/`, `07072026/`, etc.
+
+---
 
 ## Authority order
 
-1. Current user direction
-2. **`AGENTS.md`** — sole agent conduct authority
-3. Planner / product docs below — reference when the task needs them (`PACKAGES.md`, `00-governance/`, `01-execution/`)
+1. Current owner message  
+2. **`AGENTS.md`**  
+3. **`Plans/trustdata/`** (INDEX → phase → CHECKPOINTS)  
+4. World-standard design: `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md`  
+5. `ayushdocs/` (18 why · 19 scoreboard · 12 workflow · 10 residuals)
 
-## Execution order
+---
 
-1. [`AGENTS.md`](../AGENTS.md)
-2. [`Plans.md`](../Plans.md) for planner phase work
-3. [`00-governance-checklist.md`](00-governance/01-phase1-execution/00-governance-checklist.md) for phase status
+## Mode
 
-## When to open governance
-
-Open `00-governance/` when you need:
-
-- package or tool authority
-- quality gates
-- benchmark rationale
-- route or contract governance
-- conflict resolution between plan docs
-
-## Agent setup
-
-Agents read repo-root **`AGENTS.md`** only. No separate Cursor rules or prompt packs required.
-
-## What not to do
-
-- Do not treat historical/completed plans (now archived to `archive/Plans/`) as live authority.
-- Gate command evidence stays in `results/` (`TESTING.md`).
-- Do not let execution docs override governance docs on package pins, gates, or standards.
-- Completed/superseded plans are archived without stubs in Plans/.
-
-## Mode guide
-
-- Default: Agent mode per `AGENTS.md` (targeted tests; no full suite per phase).
-- Ship / release: user triggers full gates (`Failures.md`, `START.md`).
+- **Default:** Agent per `AGENTS.md` — targeted tests; evidence in `results/`; commit as you go; push/mirror when right.  
+- **Bar:** Global manufacturer-planner standard · quality over speed.  
+- **Agents:** default 8 · hard max **10**.  
+- **Ship / release gates:** `Failures.md` + `START.md` when claiming release.

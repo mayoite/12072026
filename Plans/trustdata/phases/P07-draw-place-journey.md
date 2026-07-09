@@ -160,7 +160,7 @@ Required screenshots:
 - [ ] **CP-07.5** `playwright-run.json` pass, failed 0, gates W1/W2  
 - [ ] **CP-07.6** Raw log retained  
 - [ ] **CP-07.7** `07-browser-journey/` alias or NOTES  
-- [ ] **CP-07.8** Local commit (no push without ask)  
+- [ ] **CP-07.8** Local commit; push/mirror per `AGENTS.md` (no force-push without owner)  
 - [ ] **CP-07.9** Honesty: do not mark W3–W8 or “planner works” from this phase alone  
 
 **Exit statement when green:**  

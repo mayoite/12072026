@@ -32,7 +32,7 @@
 | Mode | Owner must say | Agents may | Agents must not |
 |------|----------------|------------|-----------------|
 | **plan-only** | “plan only” / plan review / revise plans | Read repo; write/revise `Plans/trustdata/**`; write inventory evidence under `results/planner/world-standard-wave/` when a phase is **read-only** (e.g. P01); local **docs** commits | Edit product behavior under `site/features/planner/**` (or any `site/` product path for W gates); claim W1–W8 pass |
-| **implementation unlock** | Explicit unlock for implementation / execute trustdata / run phases with product work | Phase work per phase file + evidence; product slices; commit as we go | Exceed phase scope; push without ask; worktrees; skip CP stop-if-fail |
+| **implementation unlock** | Explicit unlock for implementation / execute trustdata / run phases with product work | Phase work per phase file + evidence; product slices; commit as you go; push/mirror per `AGENTS.md` | Exceed phase scope; force-push / destroy remotes; worktrees; skip CP stop-if-fail |
 | **locked (default)** | Silence (no unlock yet) | Read plans; expert reviews; no product code | Treat “default Approach A” as unlock; implement features |
 
 **Rules:**
@@ -58,7 +58,8 @@
 | Types / tests | No `any` in handwritten TS; zero suppression of test output |
 | Ethics / licenses | `AGENTS.md` + `ayushdocs/17-LICENSES-CLEARED.md` |
 | Contract | Short: [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) · full: `AGENTS.md` |
-| Git | Commit as we go; push origin when right; mirror ~30–60m (`mayoite`) — `AGENTS.md` |
+| Git | Commit as we go; push origin when right; mirror ~30–60m (`mayoite`) — `AGENTS.md`. No force-push without owner |
+| Quality | Global manufacturer-planner standard; quality over speed; no prompt-engineering theater |
 | Later / optional | [LATER.md](./LATER.md) — SmartDraw/Foyr/Coohom etc. **not** kill-path |
 
 **Authority order:** Owner message > this folder > world-standard design spec > Plan A core > ayushdocs honesty.
@@ -200,7 +201,7 @@ Main agent coordinates; prefers write-to-disk; does not idle waiting on chat.
 - CRM / SSR expansion as substitute for W gates  
 - Full Fabric walls cutover **before** W1–W8 green (Approach A)  
 - Re-scraping Planner5D without owner order  
-- Worktrees; push without ask; competitor assets in `site/`
+- Worktrees; force-push without owner; competitor assets in `site/`
 
 ---
 

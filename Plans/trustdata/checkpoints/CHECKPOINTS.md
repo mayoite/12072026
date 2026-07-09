@@ -110,7 +110,7 @@ Agents must not self-waive. **Especially forbidden:** self-waiving CP-03 browser
 ## Global stop rules (all CPs)
 
 1. **No worktrees** — any `git worktree add` = stop; return to `D:\OandO07072026`.
-2. **No push without ask** — stop and reverse process discussion if push happened without owner text.
+2. **Push policy** — normal `git push` to origin/mirror follows `AGENTS.md` (push when right; mirror cadence). **Force-push**, remote branch delete, or history rewrite still require owner ask.
 3. **No competitor copy** — competitor JS/CSS/GLB/logos/brands in `site/` = stop; ethics FAIL.
 4. **No `any` in handwritten TS** — type exceptions need adjacent reason, owner, removal condition.
 5. **Zero suppression** of test output — missing console or skipped tests = FAIL for that CP’s test criterion.

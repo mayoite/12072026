@@ -8,7 +8,7 @@
 **Program root:** `D:\OandO07072026\Plans\trustdata\`  
 **Evidence root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
 **Design authority:** `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`  
-**Checkout:** `D:\OandO07072026` · no worktrees · commit as we go · push only on owner ask
+**Checkout:** `D:\OandO07072026` · no worktrees · commit as we go · push/mirror per `AGENTS.md` (force-push needs owner)
 
 **Last sync:** _fill date when P10 MASTER-SYNC runs_  
 **Git HEAD at last sync:** _paste short SHA_
@@ -78,7 +78,7 @@ Legacy aliases (pointer only; rehome before tick): `08-shortcuts-chrome/` → `0
 - [ ] **A.5** Competitor research in prompts tagged **inspiration only**; no plagiarism instructions.
 - [ ] **A.6** Agents write evidence to disk under `results/planner/world-standard-wave/` (prefer write-to-disk; do not idle waiting on chat).
 - [ ] **A.7** Local **commit as we go** after each landable slice; messages name phase + slice.
-- [ ] **A.8** **No `git push`** (including force / remote branch delete) without explicit owner ask in the current conversation.
+- [ ] **A.8** Push origin when right; mirror on cadence (`AGENTS.md`). **Force-push** / remote branch delete still need explicit owner ask.
 - [ ] **A.9** Subagent prompts include: superpowers; no worktrees; trust data; inspiration only; write evidence; commit slices (see AGENT-RULES.md).
 - [ ] **A.10** Scope creep beyond the ask → stop and ask owner (AGENTS.md).
 - [ ] **A.11** No `any` in handwritten TypeScript; type exceptions need reason, owner, removal condition.

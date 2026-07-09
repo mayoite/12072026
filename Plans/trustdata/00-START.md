@@ -36,7 +36,7 @@ Owner records pick below. **Default if owner silent after unlock:** **A**.
 |------|----------------------------|---------|-----------|
 | **locked** (default until stated) | _(none)_ | Read plans; expert review | Product edits; W-gate claims; treat default A as go-code |
 | **plan-only** | “plan only”, “revise plans”, “no product code” | `Plans/trustdata/**` edits; read-only inventory evidence (e.g. P01); docs commits | `site/features/planner/**` product behavior changes; claiming W1–W8 |
-| **implementation unlock** | “unlock implementation”, “execute trustdata”, “run product phases” | Phase product work per phase files + evidence + local commits | Worktrees; push without ask; skip CP stop-if-fail; scope creep without ask |
+| **implementation unlock** | “unlock implementation”, “execute trustdata”, “run product phases” | Phase product work per phase files + evidence + local commits; push/mirror per `AGENTS.md` | Worktrees; force-push / remote destroy; skip CP stop-if-fail; scope creep without ask |
 
 ### Owner pick (gate W0)
 
@@ -212,7 +212,7 @@ Spawn ≤8 by default; burst to 10 only with owner authorization. **Prefer spine
 
 ## Out of scope while any W red
 
-Photoreal race · multiplayer · AR · CRM/SSR expansion as W substitute · full Fabric cutover before W1–W8 (Approach A) · worktrees · push without ask · competitor assets in `site/`.
+Photoreal race · multiplayer · AR · CRM/SSR expansion as W substitute · full Fabric cutover before W1–W8 (Approach A) · worktrees · force-push without owner · competitor assets in `site/`.
 
 ---
 

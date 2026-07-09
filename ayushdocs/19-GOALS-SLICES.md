@@ -38,4 +38,4 @@ Agent ticks slices in evidence + commits; does **not** expand this into a novel.
 
 ## Agent one-liner
 
-*Follow trustdata kill order; this table is the scoreboard; 18 is why; don't ask for goals unless owner changes intent. Full authority: skills, browser, commands, push/mirror; agents 8�10 (12 if clean split). Subagents with /using-superpowers keep context fresh.*
+*Follow trustdata kill order; this table is the scoreboard; 18 is why; don't ask for goals unless owner changes intent. Full authority: skills, browser, commands, push/mirror; agents default 8 hard max 10. Global standard · quality over speed. Subagents with /using-superpowers keep context fresh.*
