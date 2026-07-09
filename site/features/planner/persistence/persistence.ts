@@ -341,59 +341,95 @@ export function createAutoSaver(
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   let lastSaved = 0;
   let active = true;
+  /** Latest snapshot waiting for debounce / flush. */
+  let pendingSnapshot: string | null = null;
+  let flushInFlight: Promise<void> | null = null;
 
-  function clearPendingSave() {
+  function clearPendingTimer() {
     if (timeoutId) {
       clearTimeout(timeoutId);
       timeoutId = null;
     }
   }
 
+  async function persistSnapshot(snapshot: string): Promise<void> {
+    if (!active) return;
+    const now = Date.now();
+    try {
+      const existing = await loadProject(projectId).catch(() => undefined);
+      if (!active) return;
+
+      await saveProject({
+        id: projectId,
+        name: existing?.name || projectId,
+        createdAt: existing?.createdAt || now,
+        updatedAt: now,
+        snapshot,
+      });
+      if (!active) return;
+
+      await saveHistoryEntry({
+        id: `${projectId}-${now}`,
+        projectId,
+        timestamp: now,
+        snapshot,
+        label: `Auto-save`,
+      });
+      if (!active) return;
+
+      lastSaved = now;
+      if (pendingSnapshot === snapshot) {
+        pendingSnapshot = null;
+      }
+      callbacks.onSaved?.({ projectId, updatedAt: now, snapshot });
+    } catch (error) {
+      if (!active) return;
+      callbacks.onError?.(error);
+    }
+  }
+
   return {
     scheduleSave(snapshot: string) {
       if (!active) return;
-      clearPendingSave();
-      timeoutId = setTimeout(async () => {
+      pendingSnapshot = snapshot;
+      clearPendingTimer();
+      timeoutId = setTimeout(() => {
         timeoutId = null;
-        if (!active) return;
+        if (!active || pendingSnapshot === null) return;
+        // Debounce window: skip if we just saved the same payload very recently.
         const now = Date.now();
-        if (now - lastSaved < AUTO_SAVE_DEBOUNCE_MS) return;
-
-        try {
-          // Preserve original createdAt if project already exists.
-          const existing = await loadProject(projectId).catch(() => undefined);
-          if (!active) return;
-
-          await saveProject({
-            id: projectId,
-            name: existing?.name || projectId,
-            createdAt: existing?.createdAt || now,
-            updatedAt: now,
-            snapshot,
-          });
-          if (!active) return;
-
-          await saveHistoryEntry({
-            id: `${projectId}-${now}`,
-            projectId,
-            timestamp: now,
-            snapshot,
-            label: `Auto-save`,
-          });
-          if (!active) return;
-
-          lastSaved = now;
-          callbacks.onSaved?.({ projectId, updatedAt: now, snapshot });
-        } catch (error) {
-          if (!active) return;
-          callbacks.onError?.(error);
+        if (now - lastSaved < AUTO_SAVE_DEBOUNCE_MS && flushInFlight === null) {
+          // Still honor latest pending on next schedule; do not drop it forever.
         }
+        const toSave = pendingSnapshot;
+        flushInFlight = persistSnapshot(toSave).finally(() => {
+          flushInFlight = null;
+        });
       }, AUTO_SAVE_DEBOUNCE_MS);
+    },
+
+    /**
+     * Persist pending snapshot immediately (leave / unmount / explicit save).
+     * Safe to call when idle (no-op). Does not deactivate the saver.
+     */
+    async flush(): Promise<void> {
+      if (!active) return;
+      clearPendingTimer();
+      if (flushInFlight) {
+        await flushInFlight;
+      }
+      if (pendingSnapshot === null) return;
+      const toSave = pendingSnapshot;
+      flushInFlight = persistSnapshot(toSave).finally(() => {
+        flushInFlight = null;
+      });
+      await flushInFlight;
     },
 
     cancel() {
       active = false;
-      clearPendingSave();
+      clearPendingTimer();
+      pendingSnapshot = null;
     },
   };
 }

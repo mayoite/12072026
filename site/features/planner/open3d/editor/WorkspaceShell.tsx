@@ -24,7 +24,7 @@ export interface WorkspaceShellProps {
   activeFloorId?: string;
   /** Whether project has unsaved changes */
   isModified?: boolean;
-  /** Whether project is synced to server */
+  /** Whether latest snapshot is persisted (local IDB until cloud is wired) */
   isSynced?: boolean;
   /** Left panel content */
   leftPanel?: React.ReactNode;

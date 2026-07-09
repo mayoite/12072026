@@ -33,13 +33,13 @@ describe("workspaceStatusLabels", () => {
 
 // TDD addition for full switch/branch coverage on status labels
 describe("workspaceStatusLabels full branches (TDD)", () => {
-  it("covers all autosave statuses", () => {
-    expect(formatAutosaveStatus("saving", false)).toBe("Saving…");
-    expect(formatAutosaveStatus("saved", false)).toBe("Saved");
+  it("covers all autosave statuses (honest local labels)", () => {
+    expect(formatAutosaveStatus("saving", false)).toBe("Saving locally…");
+    expect(formatAutosaveStatus("saved", false)).toBe("Saved locally");
     expect(formatAutosaveStatus("unsaved", true)).toBe("Unsaved draft");
     expect(formatAutosaveStatus("error", true)).toBe("Save failed");
-    expect(formatAutosaveStatus("idle", false)).toBe("Ready");
-    expect(formatAutosaveStatus("idle" as any, true)).toBe("Guest session");
+    expect(formatAutosaveStatus("idle", false)).toBe("Ready (local)");
+    expect(formatAutosaveStatus("idle", true)).toBe("Guest session (local)");
   });
 
   it("covers selection multi and snap variants", () => {

@@ -225,7 +225,7 @@ export function TopBar({
             </>
           ) : isSynced ? (
             <>
-              <span aria-hidden="true">✓</span> Saved
+              <span aria-hidden="true">✓</span> Saved locally
             </>
           ) : (
             <>

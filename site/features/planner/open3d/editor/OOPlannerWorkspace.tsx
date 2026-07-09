@@ -399,8 +399,8 @@ export function OOPlannerWorkspace({
   );
 
   const handleSave = useCallback(() => {
-    autosave.schedulePersist();
-    setWorkspaceMessage(guestMode ? "Saving draft…" : "Saving plan…");
+    void autosave.flushPersist();
+    setWorkspaceMessage(guestMode ? "Saving draft locally…" : "Saving plan locally…");
   }, [autosave, guestMode]);
 
   const handleExport = useCallback(

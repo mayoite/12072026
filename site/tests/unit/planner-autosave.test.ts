@@ -50,10 +50,18 @@ describe("createAutoSaver", () => {
     saver.cancel();
   });
 
-  it("returns an object with scheduleSave and cancel", () => {
+  it("returns an object with scheduleSave, flush, and cancel", () => {
     const saver = createAutoSaver("any-id");
     expect(saver).toHaveProperty("scheduleSave");
+    expect(saver).toHaveProperty("flush");
+    expect(typeof saver.flush).toBe("function");
     expect(saver).toHaveProperty("cancel");
+    saver.cancel();
+  });
+
+  it("flush() is safe when idle", async () => {
+    const saver = createAutoSaver("idle-flush");
+    await expect(saver.flush()).resolves.toBeUndefined();
     saver.cancel();
   });
 });

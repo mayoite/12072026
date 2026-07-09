@@ -32,17 +32,18 @@ export function formatAutosaveStatus(
   status: Open3dSaveStatus,
   guestMode: boolean,
 ): string {
+  // Always honest: open3d path is local IDB until cloud is wired (W6).
   switch (status) {
     case "saving":
-      return "Saving…";
+      return "Saving locally…";
     case "saved":
-      return guestMode ? "Draft saved locally" : "Saved";
+      return guestMode ? "Draft saved locally" : "Saved locally";
     case "unsaved":
       return guestMode ? "Unsaved draft" : "Unsaved changes";
     case "error":
       return "Save failed";
     case "idle":
     default:
-      return guestMode ? "Guest session" : "Ready";
+      return guestMode ? "Guest session (local)" : "Ready (local)";
   }
 }

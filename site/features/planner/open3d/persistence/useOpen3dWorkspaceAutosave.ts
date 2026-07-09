@@ -55,10 +55,23 @@ export function useOpen3dWorkspaceAutosave(
       },
     });
 
+    const flushPending = () => {
+      void saverRef.current?.flush?.();
+    };
+    window.addEventListener("pagehide", flushPending);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") flushPending();
+    });
+
     return () => {
       mountedRef.current = false;
       autosaveGenerationRef.current += 1;
-      saverRef.current?.cancel();
+      window.removeEventListener("pagehide", flushPending);
+      // Flush before cancel so leave/unmount does not drop debounced work.
+      const saver = saverRef.current;
+      void saver?.flush?.().finally(() => {
+        saver?.cancel();
+      });
       saverRef.current = null;
     };
   }, [enabled, projectId]);
@@ -88,11 +101,21 @@ export function useOpen3dWorkspaceAutosave(
 
   const exportSnapshot = useCallback(() => exportOpen3dProjectJson(project), [project]);
 
+  const flushPersist = useCallback(async () => {
+    if (!enabled || !hydrated) return;
+    const envelope = buildOpen3dSessionEnvelope(project);
+    const snapshot = JSON.stringify(envelope);
+    setStatus("saving");
+    saverRef.current?.scheduleSave(snapshot);
+    await saverRef.current?.flush?.();
+  }, [enabled, hydrated, project]);
+
   return {
     status,
     lastSavedAt,
     restoreSnapshot,
     schedulePersist,
+    flushPersist,
     exportSnapshot,
     isSynced: status === "saved",
     isModified: status === "unsaved" || status === "saving",
