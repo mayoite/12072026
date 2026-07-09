@@ -28,7 +28,7 @@
 - **Work only in the repo, no worktrees**: Always `D:\OandO07072026` main checkout. Never worktrees.
 - **Commit as we go:** Local commit after each landable slice.
 - **Push when right (agent call):** Push `main` to **origin** when a landable slice is committed and green enough to not strand the remote (tests/evidence as fits the slice). No need to ask each time.
-- **Mirror backup (agent call):** Also push the same tip to the **mirror** remote on a **~30–60 min of real work** cadence (or sooner after a big land). Default remotes: `origin` = primary, `mayoite` = mirror (`mayoite/OandO07072026`). Never force-push mirror/origin unless owner asks.
+- **Mirror backup (agent call):** Also push the same tip to the **mirror** remote about every **~45 min of real work** (or sooner after a big land). Default remotes: `origin` = primary, `mayoite` = mirror (`mayoite/OandO07072026`). Never force-push mirror/origin unless owner asks.
 - **Checkpoints:** Agent decides when to CP (docs, tests, push, evidence folders) — use trustdata CPs when on that program.
 - User instructions always win.
 
