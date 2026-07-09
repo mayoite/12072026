@@ -8,8 +8,9 @@
 import { existsSync, readdirSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { baseUrl } from "./lib/scriptEnv.mjs";
 
-const BASE = process.env.PROBE_BASE_URL ?? "http://localhost:3000";
+const BASE = baseUrl();
 
 async function probeRoute(pathname, checks = {}) {
   const res = await fetch(BASE + pathname, { redirect: "follow" });

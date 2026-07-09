@@ -4,7 +4,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright";
 
-const DEFAULT_BASE_URL = "http://localhost:3000";
+import { baseUrl as resolveBaseUrl } from "./lib/scriptEnv.mjs";
+
 const DEFAULT_OUTPUT_DIR = "screenshots/launch-smoke";
 
 const args = process.argv.slice(2);
@@ -19,14 +20,12 @@ function getArgValue(name, fallback = "") {
 }
 
 function normalizeBaseUrl(value) {
-  const raw = (value || DEFAULT_BASE_URL).trim();
+  const raw = (value || resolveBaseUrl()).trim();
   const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
   return withProtocol.replace(/\/+$/, "");
 }
 
-const baseUrl = normalizeBaseUrl(
-  getArgValue("--url", process.env.LAUNCH_SMOKE_BASE_URL || DEFAULT_BASE_URL),
-);
+const baseUrl = normalizeBaseUrl(getArgValue("--url", resolveBaseUrl()));
 const outputDir = getArgValue("--out", DEFAULT_OUTPUT_DIR);
 
 const launchRoutes = [

@@ -20,7 +20,9 @@ import { chromium } from "playwright";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
-const BASE = process.env.PROBE_BASE_URL ?? "http://localhost:3000";
+import { baseUrl } from "./lib/scriptEnv.mjs";
+
+const BASE = baseUrl();
 
 const PUBLIC_PAGES = [
   "/",

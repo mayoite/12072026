@@ -9,16 +9,21 @@
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright";
+import { baseUrl as defaultBaseUrl } from "./lib/scriptEnv.mjs";
 
 const argv = process.argv.slice(2);
 const outIdx = argv.indexOf("--out");
 const outDir = outIdx >= 0 ? argv[outIdx + 1] : "compare-shots";
-const targets = argv
+let targets = argv
   .filter((a, i) => !a.startsWith("--") && i !== outIdx + 1)
   .map((a) => {
     const eq = a.indexOf("=");
     return { label: a.slice(0, eq), base: a.slice(eq + 1) };
   });
+// Default: env BASE_URL / PLAYWRIGHT_BASE_URL — not a frozen :3000 forever
+if (targets.length === 0) {
+  targets = [{ label: "local", base: defaultBaseUrl() }];
+}
 
 // Planner guest-pass cookie + longer wait for open3d canvas; fullPage:false for viewport canvas.
 // Updated 2026-07-09: dropped dead /configurator/guest + tldraw-era notes; use open3d.

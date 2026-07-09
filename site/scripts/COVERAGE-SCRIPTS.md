@@ -1,5 +1,7 @@
 # Coverage scripts map (2026-07-09)
 
+Also see `SCRIPT-HARDCODING.md` — scripts must not assume an atomic-clock repo.
+
 Owner note: **new path is sound**; **old scripts** carried frozen bars and broad scopes.
 
 ## Use these

@@ -1,6 +1,7 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
+import { baseUrl } from "./lib/scriptEnv.mjs";
 
 const outDir = path.join(process.cwd(), "results", "screenshots");
 fs.mkdirSync(outDir, { recursive: true });
@@ -8,7 +9,7 @@ fs.mkdirSync(outDir, { recursive: true });
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
-await page.goto("http://localhost:3000/planner/guest", {
+await page.goto(`${baseUrl()}/planner/guest`, {
   waitUntil: "domcontentloaded",
   timeout: 120000,
 });
