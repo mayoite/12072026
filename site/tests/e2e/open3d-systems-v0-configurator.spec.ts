@@ -47,8 +47,12 @@ test.describe("Systems v0 configurator", () => {
       name: "Workstation systems configurator",
     });
     await expect(configurator).toBeVisible({ timeout: 15_000 });
+    // Standing evidence: 30–32 (first pack) + 33–35 (re-capture pack)
     await page.screenshot({
       path: path.join(EVIDENCE, "30-configurator-open.png"),
+    });
+    await page.screenshot({
+      path: path.join(EVIDENCE, "33-configurator-ui.png"),
     });
 
     await configurator.getByRole("button", { name: "L-shape" }).click();
@@ -67,6 +71,9 @@ test.describe("Systems v0 configurator", () => {
     await page.screenshot({
       path: path.join(EVIDENCE, "31-configurator-configured.png"),
     });
+    await page.screenshot({
+      path: path.join(EVIDENCE, "34-configurator-l-1500.png"),
+    });
 
     await configurator
       .getByRole("button", { name: "Place this workstation" })
@@ -83,6 +90,9 @@ test.describe("Systems v0 configurator", () => {
     await page.screenshot({
       path: path.join(EVIDENCE, "32-configurator-placed.png"),
     });
+    await page.screenshot({
+      path: path.join(EVIDENCE, "35-configurator-after-place.png"),
+    });
 
     fs.writeFileSync(
       path.join(EVIDENCE, "configurator-run.json"),
@@ -91,6 +101,14 @@ test.describe("Systems v0 configurator", () => {
           ok: true,
           furnitureBefore: before,
           furnitureAfter: before + 1,
+          shots: [
+            "30-configurator-open.png",
+            "31-configurator-configured.png",
+            "32-configurator-placed.png",
+            "33-configurator-ui.png",
+            "34-configurator-l-1500.png",
+            "35-configurator-after-place.png",
+          ],
           at: new Date().toISOString(),
         },
         null,

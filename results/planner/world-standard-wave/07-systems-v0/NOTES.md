@@ -72,6 +72,7 @@ Free size/shape/modules combo (not only 8 matrix SKUs):
 - Unit: `workstationConfiguratorV0.test.ts` (5/5)
 - e2e: `open3d-systems-v0-configurator.spec.ts` (1 passed ~2.9s)
 - Evidence: `30-configurator-open.png`, `31-configurator-configured.png`, `32-configurator-placed.png` + `configurator-run.json`
+- Re-capture pack (2026-07-09): `33-configurator-ui.png` (default open), `34-configurator-l-1500.png` (L-shape + 1500×600), `35-configurator-after-place.png` (after Place + canvas click). Same e2e refreshes 30–35; furniture 0→1.
 
 ## Plan Block2D symbols (2026-07-09)
 
