@@ -164,6 +164,50 @@ describe("createSceneObjectFromNode — modular vs parametric-box vs wall", () =
     expect(object.receiveShadow).toBe(true);
   });
 
+  it("wall with CSS var color does not throw and material color is parseable by THREE.Color", () => {
+    // Model walls store themeColorRef("var(--text-inverse-body)") — must not hit THREE.Color raw.
+    // Raw THREE.Color("var(...)") silently becomes white + console warn; resolve path uses wall hexFallback.
+    let object: THREE.Object3D;
+    expect(() => {
+      object = createSceneObjectFromNode(
+        THREE,
+        wallNode({ color: "var(--text-inverse-body)" }),
+        false,
+      );
+    }).not.toThrow();
+
+    expect(object!.type).toBe("Mesh");
+    const mesh = object! as THREE.Mesh;
+    const mat = mesh.material as THREE.MeshStandardMaterial;
+    expect(mat.color).toBeInstanceOf(THREE.Color);
+
+    const hex = mat.color.getHexString();
+    // Valid 6-digit hex (THREE.Color internal), not empty / NaN
+    expect(hex).toMatch(/^[0-9a-f]{6}$/i);
+    expect(Number.isFinite(mat.color.getHex())).toBe(true);
+    // Theme token absent in unit env → resolveThreeMaterialColor wall fallback #9ca3af
+    // (NOT raw THREE.Color white ffffff from unparsed var())
+    expect(hex).toBe("9ca3af");
+    // Round-trip: hex string is legal input for THREE.Color constructor
+    expect(() => new THREE.Color(`#${hex}`)).not.toThrow();
+    expect(new THREE.Color(`#${hex}`).getHexString()).toBe(hex);
+  });
+
+  it("wall with CSS var resolves document theme token when present (not silent white)", () => {
+    document.documentElement.style.setProperty("--text-inverse-body", "#224466");
+    try {
+      const object = createSceneObjectFromNode(
+        THREE,
+        wallNode({ color: "var(--text-inverse-body)" }),
+        false,
+      );
+      const mat = (object as THREE.Mesh).material as THREE.MeshStandardMaterial;
+      expect(mat.color.getHexString()).toBe("224466");
+    } finally {
+      document.documentElement.style.removeProperty("--text-inverse-body");
+    }
+  });
+
   it("furniture missing positive dimensions falls back to wall-style box", () => {
     const object = createSceneObjectFromNode(
       THREE,

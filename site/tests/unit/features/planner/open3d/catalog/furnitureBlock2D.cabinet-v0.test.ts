@@ -180,6 +180,40 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
     }
   });
 
+  it("outer fill is light surface token, not block-storage; multi-prim lines present", () => {
+    // Root-cause lock: opaque var(--block-storage)/inverse-body carcass → solid plan blob.
+    // Cabinet plan symbol must use light surface + dark detail lines so multi-prim reads.
+    const block = furnitureBlock2DFromItem(cabinetItem());
+    const { L, D } = block.footprint;
+    const outer = block.prims.find(
+      (p) =>
+        p.kind === "rect" &&
+        Math.abs(p.x) < 1 &&
+        Math.abs(p.y) < 1 &&
+        Math.abs(p.w - L) < 1 &&
+        Math.abs(p.h - D) < 1,
+    );
+    expect(outer).toBeDefined();
+    if (!outer || outer.kind !== "rect") throw new Error("outer carcass missing");
+
+    expect(outer.fill).toBe("var(--block-surface)");
+    expect(outer.fill).not.toMatch(/block-storage/);
+    expect(outer.fill).not.toMatch(/text-inverse-body/);
+    expect(outer.stroke).not.toMatch(/block-storage/);
+
+    // Multi-prim: carcass + inner + front/back lines (+ door cues)
+    expect(block.prims.length).toBeGreaterThanOrEqual(4);
+    const lines = block.prims.filter((p) => p.kind === "line");
+    expect(lines.length).toBeGreaterThanOrEqual(2);
+    for (const line of lines) {
+      if (line.kind === "line") {
+        expect(line.stroke).toBeDefined();
+        expect(line.stroke).not.toMatch(/block-storage/);
+        expect(String(line.stroke)).not.toMatch(/text-inverse-body/);
+      }
+    }
+  });
+
   it("keeps all prim geometry inside footprint (no runaway coords)", () => {
     const block = furnitureBlock2DFromItem(cabinetItem());
     const { L, D } = block.footprint;
