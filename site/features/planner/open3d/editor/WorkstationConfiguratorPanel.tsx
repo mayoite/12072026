@@ -8,7 +8,6 @@ import {
   WORKSTATION_V0_SIZE_GRID,
   type WorkstationConfigV0,
   type WorkstationModuleKindV0,
-  type WorkstationShapeV0,
 } from "../catalog/workstationSystemV0";
 import {
   WORKSTATION_V0_TOGGLE_MODULES,
@@ -88,9 +87,7 @@ export const WorkstationConfiguratorPanel = memo(
                     }
                     aria-pressed={draft.shape === value}
                     onClick={() =>
-                      setDraft((d) =>
-                        setConfiguratorShape(d, value as WorkstationShapeV0),
-                      )
+                      setDraft((d) => setConfiguratorShape(d, value))
                     }
                   >
                     {label}

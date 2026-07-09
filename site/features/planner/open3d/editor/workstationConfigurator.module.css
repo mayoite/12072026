@@ -77,6 +77,16 @@
   border-color: var(--color-primary, #2563eb);
 }
 
+.chip:focus-visible {
+  outline: 2px solid var(--color-primary, #2563eb);
+  outline-offset: 2px;
+}
+
+.header:focus-visible {
+  outline: 2px solid var(--color-primary, #2563eb);
+  outline-offset: 2px;
+}
+
 .chipActive {
   background: var(--color-primary, #2563eb);
   border-color: var(--color-primary, #2563eb);

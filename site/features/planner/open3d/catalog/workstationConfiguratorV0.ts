@@ -84,7 +84,16 @@ export function toggleConfiguratorModule(
 export function resolveWorkstationConfigFromDraft(
   draft: WorkstationConfiguratorDraftV0,
 ): WorkstationConfigV0 {
-  const modules: WorkstationModuleKindV0[] = ["desk", ...draft.toggledModules];
+  // Only allowlisted toggles (desk/return come from shape / normalize).
+  const seen = new Set<WorkstationModuleKindV0>();
+  const toggled: WorkstationModuleKindV0[] = [];
+  for (const mod of draft.toggledModules) {
+    if (!WORKSTATION_V0_TOGGLE_MODULES.includes(mod)) continue;
+    if (seen.has(mod)) continue;
+    seen.add(mod);
+    toggled.push(mod);
+  }
+  const modules: WorkstationModuleKindV0[] = ["desk", ...toggled];
   return createWorkstationConfigV0({
     shape: draft.shape,
     size: draft.size,
@@ -122,4 +131,16 @@ export function isSameSize(
   b: WorkstationSizeMm,
 ): boolean {
   return a.lengthMm === b.lengthMm && a.depthMm === b.depthMm;
+}
+
+/**
+ * Consume-once armed config for canvas place.
+ * Clears the bag so a second pointer-up in the same React tick cannot double-place.
+ */
+export function takePendingWorkstationConfig(bag: {
+  current: WorkstationConfigV0 | null;
+}): WorkstationConfigV0 | null {
+  const config = bag.current;
+  bag.current = null;
+  return config;
 }

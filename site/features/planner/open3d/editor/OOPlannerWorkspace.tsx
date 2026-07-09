@@ -30,6 +30,7 @@ import {
 } from "../catalog/placementAction";
 import type { WorkstationConfigV0 } from "../catalog/workstationSystemV0";
 import { workstationConfigKey } from "../catalog/workstationSystemV0";
+import { takePendingWorkstationConfig } from "../catalog/workstationConfiguratorV0";
 import { placeModularWithGeneratedGlbBrowser } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbBrowser";
 import { shouldPlaceModularWithGeneratedGlb } from "@/features/planner/asset-engine/mesh/shouldPlaceModularWithGeneratedGlb";
 import { importOpen3dProjectJson } from "../persistence/projectJson";
@@ -177,6 +178,8 @@ export function OOPlannerWorkspace({
   >(null);
   const [pendingWorkstationConfig, setPendingWorkstationConfig] =
     useState<WorkstationConfigV0 | null>(null);
+  /** Consume-once arm — state alone races on double pointer-up before re-render. */
+  const pendingWorkstationConfigRef = useRef<WorkstationConfigV0 | null>(null);
   const [canvasStatus, setCanvasStatus] = useState<CanvasStatusSnapshot | null>(
     null,
   );
@@ -320,6 +323,7 @@ export function OOPlannerWorkspace({
     setActiveTool(tool);
     armedToolRef.current = tool;
     setPendingCatalogItemId(null);
+    pendingWorkstationConfigRef.current = null;
     setPendingWorkstationConfig(null);
     canvasRef.current?.setTool(tool);
   }, []);
@@ -339,6 +343,7 @@ export function OOPlannerWorkspace({
   }, [workspaceCanvas]);
 
   const handleInventoryPlace = useCallback((itemId: string) => {
+    pendingWorkstationConfigRef.current = null;
     setPendingWorkstationConfig(null);
     setPendingCatalogItemId(itemId);
     setActiveTool("placement");
@@ -349,6 +354,7 @@ export function OOPlannerWorkspace({
   const handleWorkstationConfigPlace = useCallback(
     (config: WorkstationConfigV0) => {
       setPendingCatalogItemId(null);
+      pendingWorkstationConfigRef.current = config;
       setPendingWorkstationConfig(config);
       setActiveTool("placement");
       armedToolRef.current = "placement";
@@ -362,26 +368,33 @@ export function OOPlannerWorkspace({
 
   const handlePlaceAtPoint = useCallback(
     (point: Open3dPoint) => {
-      // Systems configurator path — free size/shape/modules combo
-      if (pendingWorkstationConfig) {
-        const config = pendingWorkstationConfig;
+      // Systems configurator path — free size/shape/modules combo.
+      // Consume-once via ref so double pointer-up before re-render cannot double-place.
+      const armedConfig = takePendingWorkstationConfig(
+        pendingWorkstationConfigRef,
+      );
+      if (armedConfig) {
+        setPendingWorkstationConfig(null);
         let placedId: string | null = null;
         workspaceCanvas.updateProject((project) => {
-          const placed = placeWorkstationConfigOnProject(project, config, point);
+          const placed = placeWorkstationConfigOnProject(
+            project,
+            armedConfig,
+            point,
+          );
           placedId =
             typeof placed.action.payload?.id === "string"
               ? placed.action.payload.id
               : null;
           return placed.project;
         });
-        setPendingWorkstationConfig(null);
         if (placedId) {
           workspaceCanvas.setSelection({ type: "furniture", ids: [placedId] });
           setActiveTool("select");
           armedToolRef.current = "select";
           canvasRef.current?.setTool("select");
         }
-        setWorkspaceMessage(`Placed ${workstationConfigKey(config)}`);
+        setWorkspaceMessage(`Placed ${workstationConfigKey(armedConfig)}`);
         return;
       }
 
@@ -487,12 +500,7 @@ export function OOPlannerWorkspace({
       }
       setWorkspaceMessage(`Placed ${item.shortName ?? item.name}`);
     },
-    [
-      pendingCatalogItemId,
-      pendingWorkstationConfig,
-      workspaceCanvas,
-      catalog,
-    ],
+    [pendingCatalogItemId, workspaceCanvas, catalog],
   );
 
   const handleFloorChange = useCallback(
