@@ -249,7 +249,15 @@ describe("createSceneObjectFromNode — modular vs parametric-box vs wall", () =
     expect(object.userData.meshSource).toBe("procedural");
     expect(object.children).toHaveLength(countWorkstationV0Parts(config));
     expect(object.children.map((c) => c.name).sort()).toEqual(
-      ["desk", "panel", "pedestal"].sort(),
+      [
+        "desk",
+        "leg-desk-0",
+        "leg-desk-1",
+        "leg-desk-2",
+        "leg-desk-3",
+        "panel",
+        "pedestal",
+      ].sort(),
     );
     expect(object.position.x).toBeCloseTo(2);
     expect(object.position.y).toBe(0);
