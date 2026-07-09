@@ -10,11 +10,12 @@
 - **Screenshots:** When testing planner or any site page in a browser, save **a couple of PNGs** under the evidence folder (see `testing-handbook.md` visual screenshots).
 
 ## 3. Output Paths (Technical Map)
-All run artifacts MUST go to `results/<module>/<phase>/<cmd>/`. Never output to repo root.
-- **Vitest:** `vitest-results.json`, `vitest-console.json`, `vitest-results.{csv,html}`
-- **Site Vitest:** `vitest-site-results.json`, `vitest-site-console.json`
-- **Coverage:** `coverage/` (planner), `coverage-site/` (site), `coverage-reports/`
-- **Playwright:** `test-results/` (traces), `playwright-report/` (HTML)
+All run artifacts MUST go under **repo-root** `results/<module>/<phase>/<cmd>/` only (`AGENTS.md` layout).  
+**Never** `site/results/`, **never** `site/test-results/`.
+- **Vitest:** `results/tests/vitest-results.json`, console, csv/html
+- **Site Vitest:** `results/tests/vitest-site-results.json`, …
+- **Coverage:** `results/coverage/`, `results/coverage-site/`, `results/coverage-reports/`
+- **Playwright:** `results/test-results/` (traces), `results/playwright-report/` (HTML)
 
 ## 4. Workflows & Helpers
 - **TypeScript:** Run `tsc --noEmit` before tests.
