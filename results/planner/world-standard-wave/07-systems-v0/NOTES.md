@@ -107,6 +107,13 @@ Free size/shape/modules combo (not only 8 matrix SKUs):
 - e2e: `open3d-systems-v0-batch-place.spec.ts` — furniture +4 then +2; shots `40-batch-*.png` + batch-place-run.json
 - Free height deferred (not needed for this slice)
 
+### Quiet magic mesh + batch shots (2026-07-09)
+
+- e2e: `open3d-systems-v0-mesh-batch-shots.spec.ts` — Place 4 seats → 2D → 3D
+- Shots: `41-batch-4-2d.png` (4 seats on plan), `42-workstation-mesh-3d.png` (multi-part desk/panel boxes)
+- Meta: `mesh-batch-shots-run.json` + `mesh-batch-shots-playwright.log`
+- Command: `PLAYWRIGHT_BASE_URL=http://localhost:3000 npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-systems-v0-mesh-batch-shots.spec.ts` (1 passed ~4.1s)
+
 ## Place+delete browser (2026-07-09)
 
 - e2e open3d-systems-v0-place-delete.spec.ts — place WS → auto-select → Delete → furniture restored
