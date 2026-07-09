@@ -1,11 +1,11 @@
 # Pending list (owner)
 
-**Last updated:** 2026-07-09 (open3d e2e gate scripts: `gate:open3d` / `test:e2e:open3d-world`)  
+**Last updated:** 2026-07-09 (Elon scoreboard: `results/planner/elon-standard/OWNER-BOARD.md`)  
 **Rule:** finish open kill-path fully before inventing a new epic. Resolve blockers; do not park them.  
 **Honesty:** P0.1–P0.3 are **spine**, not ship quality. Owner rejected thin “journey only” bar.  
 **Active standard:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md`  
 **W0:** **Unlocked — Approach A** (product journey first). Recorded in `Plans/trustdata/00-START.md` + `results/planner/world-standard-wave/00-start/NOTES.md`.  
-**Evidence:** `results/planner/world-standard-wave/` · truth map `TRUTH-LOCK.md`  
+**Evidence:** `results/planner/world-standard-wave/` · truth map `TRUTH-LOCK.md` · owner board `results/planner/elon-standard/OWNER-BOARD.md`  
 **Agents / one-task:** `AGENTS.md` only.
 
 Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infra
@@ -35,10 +35,12 @@ Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infr
 | Residual | Note |
 |----------|------|
 | **W4 browser orbit/continuity e2e** | **Closed** — configurator Place 4 seats path; orbit attr + count restore |
-| **Open3d e2e pack (callable)** | **Closed** — not folder-only: `pnpm gate:open3d` (typecheck + pack) and `pnpm test:e2e:open3d-world`; manifest `site/config/build/playwright-open3d-world-specs.json`; evidence `results/planner/world-standard-wave/gate-e2e/` |
-| **Mesh quality raise** | Cabinet-v0 / workstation multiparts still boxy; handles/legs/AO later — bar already PASS for readable parts |
+| **Open3d e2e pack (callable)** | **Closed** — not folder-only: `pnpm gate:open3d` (typecheck + pack) and `pnpm test:e2e:open3d-world`; manifest `site/config/build/playwright-open3d-world-specs.json`; evidence `results/planner/world-standard-wave/gate-e2e/` (`run.json` exit 0, 5/5) |
+| **A11y label-in-name (WCAG 2.5.3)** | **Partial — not closed.** Last LH (`quality-wave-agents/a11y/`, score **98**, `label-content-name-mismatch` **fail**) captured **old** names. Working tree now aligns visible text in names: `Focus — maximize canvas`, `Prefs — open preferences menu`, `Commands (Ctrl+K)` (`TopBar.tsx`, `OOPlannerWorkspace.tsx`) — **uncommitted** at 2026-07-09 board write. Still need: commit + unit name update (`workspaceShell.test.tsx` still `"Maximize canvas"`) + **re-run LH** and store under `results/planner/`. Nested `main` + `data-viewport` hydration already **DONE** (`p0-3-a11y-main/`, `p0-3-hydration/`). Other chrome residuals: H1→H3, 0×0 mobile panel toggles, status landmark. |
+| **Mesh quality raise** | Cabinet-v0 / workstation multiparts still boxy; handles/AO later — W7 bar already PASS for readable parts |
 | **Fabric full stage** | Destination still later (Approach A); flag OFF expected |
 | **Cloud / member save** | W6 is local-only honesty; cloud wire is a later gate if owner wants |
+| **Priced BOQ product** | Systems v0 list INR+GST demo unit path only — not ERP / live catalog |
 | Openings select browser | Unit landed; no dedicated e2e yet |
 | Wall delete cascade browser | Unit landed; no UI e2e yet |
 | `next build` `/contact` createContext | Pre-existing build gate — separate |

@@ -1,0 +1,15 @@
+{
+  "agent": "test-writer-1",
+  "slice": "TopBar label-in-name a11y (Focus/Prefs)",
+  "testFile": "site/tests/unit/features/planner/open3d/TopBar.a11y.test.tsx",
+  "productionFile": "site/features/planner/open3d/editor/TopBar.tsx",
+  "vitest": {
+    "testFiles": 1,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 18670
+  },
+  "status": "pass",
+  "date": "2026-07-09"
+}

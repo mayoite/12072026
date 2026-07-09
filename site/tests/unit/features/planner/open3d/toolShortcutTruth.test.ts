@@ -109,4 +109,25 @@ describe("tool shortcut truth (W8)", () => {
     press({ key: "d" });
     expect(handlers.setTool).not.toHaveBeenCalled();
   });
+
+  it("Opening tool uses O in CANVAS_TOOL_SHORTCUTS and resolves via toolFromShortcutKey", () => {
+    expect(CANVAS_TOOL_SHORTCUTS.opening).toBe("O");
+    expect(toolFromShortcutKey("O")).toBe("opening");
+    expect(toolFromShortcutKey("o")).toBe("opening");
+
+    const handlers = makeHandlers();
+    renderHook(() => useWorkspaceKeyboard(handlers));
+    press({ key: "o" });
+    expect(handlers.setTool).toHaveBeenCalledTimes(1);
+    expect(handlers.setTool).toHaveBeenCalledWith("opening");
+  });
+
+  it("Select tool label + shortcut form the accessible name contract Select (V)", () => {
+    expect(CANVAS_TOOL_LABELS.select).toBe("Select");
+    expect(CANVAS_TOOL_SHORTCUTS.select).toBe("V");
+    // CanvasToolRail aria-label / title template: `${label} (${shortcut})`
+    expect(`${CANVAS_TOOL_LABELS.select} (${CANVAS_TOOL_SHORTCUTS.select})`).toBe(
+      "Select (V)",
+    );
+  });
 });

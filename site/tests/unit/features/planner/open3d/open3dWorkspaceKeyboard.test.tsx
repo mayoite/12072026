@@ -147,4 +147,15 @@ describe("useWorkspaceKeyboard shortcuts", () => {
       unmount();
     }
   });
+
+  it("Opening tool shortcut O arms setTool(opening) from the map (case-insensitive)", () => {
+    expect(CANVAS_TOOL_SHORTCUTS.opening).toBe("O");
+
+    const handlers = makeHandlers();
+    renderHook(() => useWorkspaceKeyboard(handlers));
+
+    press({ key: "O" });
+    expect(handlers.setTool).toHaveBeenCalledTimes(1);
+    expect(handlers.setTool).toHaveBeenCalledWith("opening");
+  });
 });

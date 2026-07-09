@@ -1,0 +1,15 @@
+﻿
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/geometry/canvasPicking.quality.test.ts (1 test) 4ms
+ Γ£ô tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts (31 tests) 18ms
+ Γ£ô tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx (8 tests) 57ms
+ Γ£ô tests/unit/features/planner/open3d/toolShortcutTruth.test.ts (8 tests) 63ms
+ Γ£ô tests/unit/features/planner/open3d/canvasToolRail.a11y.test.tsx (2 tests) 43ms
+
+ Test Files  5 passed (5)
+      Tests  50 passed (50)
+   Start at  22:54:06
+   Duration  8.47s (transform 561ms, setup 4.03s, import 6.46s, tests 185ms, environment 4.82s)
+
+JSON report written to D:/OandO07072026/results/tests/vitest-results.json

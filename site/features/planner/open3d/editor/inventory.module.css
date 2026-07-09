@@ -380,6 +380,9 @@
   gap: var(--inv-space-2);
   padding: var(--inv-space-3);
   overflow-y: auto;
+  /* Keep Add actions fully inside the scrollport after scroll-into-view
+     (Playwright + real pointer hit-tests fail when card center is clipped). */
+  scroll-padding-block: 0.75rem;
   flex: 1;
   min-height: 0;
   margin: 0;
@@ -609,6 +612,9 @@
   color: var(--inv-accent);
   cursor: pointer;
   transition: background-color 0.15s ease, border-color 0.15s ease;
+  /* Nested overflow: when only the edge of a tall card is visible, the
+     layout-box center can sit under status / results chrome — leave margin. */
+  scroll-margin-block: 0.75rem;
 }
 
 .emptyAction:hover {

@@ -154,7 +154,11 @@ export function TopBar({
             type="button"
             className={styles.btn}
             aria-pressed={isCanvasMaximized}
-            aria-label={isCanvasMaximized ? "Restore workspace panels" : "Maximize canvas"}
+            aria-label={
+              isCanvasMaximized
+                ? "Restore — restore workspace panels"
+                : "Focus — maximize canvas"
+            }
             onClick={onToggleCanvasMaximized}
           >
             {isCanvasMaximized ? <CornersIn aria-hidden="true" /> : <CornersOut aria-hidden="true" />}
@@ -294,7 +298,7 @@ export function TopBar({
         )}
 
         <MenuTrigger>
-          <Button className={styles.btn} aria-label="Open preferences menu">
+          <Button className={styles.btn} aria-label="Prefs — open preferences menu">
             Prefs
             <ChevronDownIcon />
           </Button>
