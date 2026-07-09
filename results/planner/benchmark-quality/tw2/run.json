@@ -1,0 +1,8 @@
+{
+  "test": "open3d-console-clean",
+  "result": "pass",
+  "notFound404Count": 0,
+  "consoleErrorsForAssetsCount": 0,
+  "networkHitCount": 3,
+  "capturedAt": "2026-07-09T18:21:45.435Z"
+}
