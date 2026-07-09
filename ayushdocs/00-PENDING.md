@@ -11,8 +11,8 @@ Legend: `P0` product spine · `P1` hard path · `P2` plan/platform · `OPS` infr
 
 | # | Item | Status |
 |---|------|--------|
-| **P0.1** | Admin SVG publish browser E2E + **dev auth bypass** | **DONE** — `results/planner/p0-1-admin-svg-publish/` (2 Playwright tests, screenshots) |
-| **P0.2** | G5 → storage → stamp → G8 browser load | **NEXT** |
+| **P0.1** | Admin SVG publish browser E2E + **dev auth bypass** | **DONE** — `results/planner/p0-1-admin-svg-publish/` |
+| **P0.2** | G5 → public write → stamp + G8 URL resolve | **MOSTLY DONE** — unit + disk write; **Chrome visual smoke residual** |
 | **P0.3** | Open3d a11y: nested `main` + hydration `data-viewport` only | Pending (after P0.2) |
 | **P0.4** | “Good mesh” bar for cabinet-v0 + browser visual smoke | Pending |
 

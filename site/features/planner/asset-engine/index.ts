@@ -44,6 +44,20 @@ export {
 } from "./mesh/exportModularGlbBinary";
 
 export {
+  writeGeneratedGlbToPublic,
+  assertWritableGeneratedGlbRelativePath,
+  type WriteGeneratedGlbToPublicOptions,
+  type WriteGeneratedGlbToPublicResult,
+} from "./mesh/writeGeneratedGlbToPublic";
+
+export {
+  exportModularAndWrite,
+  type ExportModularAndWriteResult,
+  type ExportModularAndWriteOk,
+  type ExportModularAndWriteErr,
+} from "./mesh/exportModularAndWrite";
+
+export {
   stampFurnitureGeneratedGlb,
   attachGeneratedGlbToFurniture,
   stampFurnitureFromModularOptions,

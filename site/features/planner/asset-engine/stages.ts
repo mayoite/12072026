@@ -159,7 +159,9 @@ export const MESH_GLB_STAGES: readonly AssetStage[] = [
     status: "implemented",
     produces: "ArrayBuffer + relativePath under catalog-assets/generated/",
     entry: "asset-engine/mesh/exportModularGlbBinary.ts",
-    note: "Bytes in memory; upload to storage still separate (uploadAsset).",
+    note:
+      "Bytes in memory; optional disk write via writeGeneratedGlbToPublic / " +
+      "exportModularAndWrite under site/public (Next-served). Remote CDN upload still separate.",
   },
   {
     id: "mesh-g6-validate-glb",
@@ -187,10 +189,11 @@ export const MESH_GLB_STAGES: readonly AssetStage[] = [
     entry:
       "shouldLoadGlb + loadGeneratedGlbObject + ThreeViewerInner async replace",
     note:
-      "G8 agent landed (partial): ThreeViewerInner loads policy-allowed generatedGlbUrl via " +
-      "loadGeneratedGlbObject after procedural default. Place leaves URL unset; stampFurnitureGeneratedGlb " +
-      "is opt-in after G5. Not full product: no shared cache, no scale-to-fit, no browser smoke, " +
-      "no auto-upload on publish. Load failure keeps procedural mesh.",
+      "G8 partial: ThreeViewerInner loads policy-allowed generatedGlbUrl via " +
+      "loadGeneratedGlbObject after procedural default. placeCatalogItemInProject leaves URL unset; " +
+      "opt-in write+stamp is placeModularWithGeneratedGlbPlan (not env-flagged default place). " +
+      "Not full product: no shared cache, no scale-to-fit, no browser smoke, no remote CDN auto-upload. " +
+      "Load failure keeps procedural mesh.",
   },
 ] as const;
 

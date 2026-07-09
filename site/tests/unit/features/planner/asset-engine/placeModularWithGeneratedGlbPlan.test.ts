@@ -1,4 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { afterEach, describe, expect, it } from "vitest";
 import {
   placeModularWithGeneratedGlbPlan,
   stampFurnitureFromModularOptions,
@@ -13,6 +16,27 @@ import type {
   Open3dFurnitureItem,
   Open3dProject,
 } from "@/features/planner/open3d/model/types";
+
+const tempRoots: string[] = [];
+
+function tempPublicRoot(): string {
+  const root = mkdtempSync(path.join(tmpdir(), "p0-2-place-modular-"));
+  tempRoots.push(root);
+  return root;
+}
+
+afterEach(() => {
+  while (tempRoots.length > 0) {
+    const root = tempRoots.pop();
+    if (root) {
+      try {
+        rmSync(root, { recursive: true, force: true });
+      } catch {
+        // best-effort cleanup
+      }
+    }
+  }
+});
 
 function emptyProject(): Open3dProject {
   return {
@@ -130,6 +154,16 @@ function sampleModularFurniture(
   };
 }
 
+const defaultCabinetPath = modularCabinetV0GeneratedRelativePath(
+  defaultCabinetV0Options({
+    widthMm: 600,
+    depthMm: 580,
+    heightMm: 720,
+    doorStyle: "slab",
+    material: "white",
+  }),
+);
+
 describe("stampFurnitureFromModularOptions (path-only stamp)", () => {
   it("stamps modularCabinetV0GeneratedRelativePath without binary export", () => {
     const item = sampleModularFurniture();
@@ -180,30 +214,27 @@ describe("stampFurnitureFromModularOptions (path-only stamp)", () => {
   });
 });
 
-describe("placeModularWithGeneratedGlbPlan (binary-export stamp)", () => {
-  it("places, exports G5 in memory, stamps relativePath (not uploaded)", async () => {
+describe("placeModularWithGeneratedGlbPlan (write + stamp)", () => {
+  it("places, exports G5, writes under publicRoot, stamps relativePath", async () => {
     const position = { x: 120, y: 340 };
+    const publicRoot = tempPublicRoot();
     const result = await placeModularWithGeneratedGlbPlan(
       emptyProject(),
       modularCatalogItem(),
       position,
-      { placedFrom: "api" },
+      { placedFrom: "api", publicRoot },
     );
 
     expect(result.stamped).toBe(true);
+    expect(result.written).toBe(true);
     expect(result.furnitureId.length).toBeGreaterThan(0);
     expect(isSystemGeneratedGlbUrl(result.relativePath)).toBe(true);
-    expect(result.relativePath).toBe(
-      modularCabinetV0GeneratedRelativePath(
-        defaultCabinetV0Options({
-          widthMm: 600,
-          depthMm: 580,
-          heightMm: 720,
-          doorStyle: "slab",
-          material: "white",
-        }),
-      ),
-    );
+    expect(result.relativePath).toBe(defaultCabinetPath);
+    expect(result.publicUrlPath).toBe(`/${defaultCabinetPath}`);
+    expect(result.writtenAbsolutePath).toBeTruthy();
+    expect(existsSync(result.writtenAbsolutePath!)).toBe(true);
+    const bytes = readFileSync(result.writtenAbsolutePath!);
+    expect(bytes.byteLength).toBeGreaterThan(100);
 
     const furniture = result.project.floors[0]?.furniture.find(
       (f) => f.id === result.furnitureId,
@@ -219,10 +250,8 @@ describe("placeModularWithGeneratedGlbPlan (binary-export stamp)", () => {
       material: "white",
     });
     expect(furniture?.generatedGlbUrl).toBe(result.relativePath);
-    // Return shape has no buffer — path only, not uploaded.
-    expect(
-      Object.prototype.hasOwnProperty.call(result, "buffer"),
-    ).toBe(false);
+    // Return shape has no buffer — path only, not remote-uploaded.
+    expect(Object.prototype.hasOwnProperty.call(result, "buffer")).toBe(false);
   }, 30_000);
 
   it("honest default: plain placeCatalogItemInProject leaves generatedGlbUrl unset", () => {
@@ -237,41 +266,88 @@ describe("placeModularWithGeneratedGlbPlan (binary-export stamp)", () => {
     expect(furniture?.generatedGlbUrl).toBeUndefined();
   });
 
+  it("writeToPublic:false stamps without disk write (legacy memory stamp)", async () => {
+    const result = await placeModularWithGeneratedGlbPlan(
+      emptyProject(),
+      modularCatalogItem(),
+      { x: 0, y: 0 },
+      { writeToPublic: false, placedFrom: "api" },
+    );
+    expect(result.stamped).toBe(true);
+    expect(result.written).toBe(false);
+    expect(result.writtenAbsolutePath).toBeNull();
+    expect(result.publicUrlPath).toBeNull();
+    const furniture = result.project.floors[0]?.furniture.find(
+      (f) => f.id === result.furnitureId,
+    );
+    expect(furniture?.generatedGlbUrl).toBe(result.relativePath);
+  }, 30_000);
+
   it("throws for non-modular catalog items", async () => {
     await expect(
       placeModularWithGeneratedGlbPlan(
         emptyProject(),
         boxCatalogItem(),
         { x: 0, y: 0 },
+        { publicRoot: tempPublicRoot() },
       ),
     ).rejects.toThrow(/modular-cabinet-v0/i);
   }, 15_000);
 
-  it("respects materialOverride for modular path stamp", async () => {
+  it("respects materialOverride for modular path write+stamp", async () => {
+    const publicRoot = tempPublicRoot();
     const result = await placeModularWithGeneratedGlbPlan(
       emptyProject(),
       modularCatalogItem(),
       { x: 0, y: 0 },
-      { materialOverride: "oak", placedFrom: "api" },
+      { materialOverride: "oak", placedFrom: "api", publicRoot },
     );
     expect(result.stamped).toBe(true);
+    expect(result.written).toBe(true);
     expect(result.relativePath).toContain("-oak.glb");
+    expect(existsSync(result.writtenAbsolutePath!)).toBe(true);
     const furniture = result.project.floors[0]?.furniture.find(
       (f) => f.id === result.furnitureId,
     );
     expect(furniture?.modularOptions?.material).toBe("oak");
     expect(furniture?.generatedGlbUrl).toBe(result.relativePath);
   }, 30_000);
+
+  it("write failure leaves furniture unstamped (procedural)", async () => {
+    // publicRoot that cannot be created as a directory write target: use a file path.
+    const publicRoot = tempPublicRoot();
+    const blocked = path.join(publicRoot, "not-a-dir");
+    // Create a file so mkdir under .../not-a-dir/catalog-assets fails when parent is a file.
+    const { writeFileSync } = await import("node:fs");
+    writeFileSync(blocked, "block", "utf8");
+
+    const result = await placeModularWithGeneratedGlbPlan(
+      emptyProject(),
+      modularCatalogItem(),
+      { x: 5, y: 5 },
+      { publicRoot: blocked, placedFrom: "api" },
+    );
+
+    expect(result.written).toBe(false);
+    expect(result.stamped).toBe(false);
+    const furniture = result.project.floors[0]?.furniture.find(
+      (f) => f.id === result.furnitureId,
+    );
+    expect(furniture?.geometryMode).toBe("modular-cabinet-v0");
+    expect(furniture?.generatedGlbUrl).toBeUndefined();
+  }, 30_000);
 });
 
-describe("path-only vs binary-export stamp naming", () => {
-  it("path-only and binary-export converge on the same relativePath for same options", async () => {
+describe("path-only vs write+stamp naming", () => {
+  it("path-only and write+stamp converge on the same relativePath for same options", async () => {
     const place = await placeModularWithGeneratedGlbPlan(
       emptyProject(),
       modularCatalogItem(),
       { x: 10, y: 20 },
+      { publicRoot: tempPublicRoot() },
     );
     expect(place.stamped).toBe(true);
+    expect(place.written).toBe(true);
 
     const pathOnly = stampFurnitureFromModularOptions(
       sampleModularFurniture({

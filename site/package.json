@@ -10,6 +10,7 @@
     "gate": "npm run release:gate:fast",
     "gate:full": "npm run release:gate",
     "p0:unit": "vitest run tests/unit/features/planner/asset-engine tests/unit/features/planner/open3d/g8RoundTrip.test.ts tests/unit/features/planner/open3d/modularPlaceMesh.test.ts tests/unit/lib/auth/devAuthBypass.test.ts",
+    "p0:g8": "vitest run tests/unit/features/planner/open3d/g8RoundTrip.test.ts tests/unit/features/planner/open3d/loadGeneratedGlbObject.test.ts tests/unit/features/planner/lib/shouldLoadGlb.test.ts tests/unit/features/planner/lib/glbAssetPolicy.test.ts tests/unit/features/planner/open3d/modularCabinetV0GlbExport.test.ts tests/unit/features/planner/open3d/modularPlaceMesh.test.ts tests/unit/features/planner/asset-engine/meshStages.test.ts tests/unit/features/planner/asset-engine/placeModularWithGeneratedGlbPlan.test.ts tests/unit/features/planner/asset-engine/stampFurnitureGeneratedGlb.test.ts",
     "p0:svg": "npm run scripts:smoke:svg:batch",
     "p0:admin-svg": "npm run test:e2e:p0-admin-svg",
     "p0": "npm run p0:unit && npm run p0:svg",

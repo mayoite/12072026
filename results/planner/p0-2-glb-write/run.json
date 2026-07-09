@@ -1,0 +1,33 @@
+{
+  "id": "p0-2-glb-write",
+  "phase": "P0.2 part A",
+  "date": "2026-07-09",
+  "summary": "27 tests passed — writeGeneratedGlbToPublic + exportModularAndWrite + placeModularWithGeneratedGlbPlan disk write + stamp; policy path asserts only; temp publicRoot cleanup",
+  "command": "npx vitest run tests/unit/features/planner/asset-engine/writeGeneratedGlbToPublic.test.ts tests/unit/features/planner/asset-engine/placeModularWithGeneratedGlbPlan.test.ts tests/unit/features/planner/asset-engine/stampFurnitureGeneratedGlb.test.ts --reporter=verbose",
+  "cwd": "site",
+  "exitCode": 0,
+  "tests": {
+    "files": 3,
+    "passed": 27,
+    "failed": 0,
+    "skipped": 0
+  },
+  "implementations": {
+    "writeGeneratedGlbToPublic": "site/features/planner/asset-engine/mesh/writeGeneratedGlbToPublic.ts",
+    "exportModularAndWrite": "site/features/planner/asset-engine/mesh/exportModularAndWrite.ts",
+    "placeModularWithGeneratedGlbPlan": "site/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbPlan.ts (after G5: write + stamp)",
+    "policy": "assertWritableGeneratedGlbRelativePath — catalog-assets/generated/*.glb only; rejects designer, blob:, traversal"
+  },
+  "behavior": {
+    "defaultPublicRoot": "site/public via resolvePublicDir()",
+    "urlServedByNext": "/catalog-assets/generated/<file>.glb",
+    "documentField": "generatedGlbUrl = relativePath (no leading slash)",
+    "productDefault": "placeCatalogItemInProject still leaves generatedGlbUrl unset (procedural)",
+    "writeFail": "leave unstamped (no G8 404 on missing file)",
+    "remoteCdn": "not uploaded — disk under public only"
+  },
+  "artifacts": [
+    "results/planner/p0-2-glb-write/vitest-raw.log",
+    "results/planner/p0-2-glb-write/run.json"
+  ]
+}

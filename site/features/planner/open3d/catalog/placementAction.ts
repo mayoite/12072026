@@ -264,11 +264,9 @@ export function verifyPlacementIdentity(
  *
  * Modular cabinet-v0: stamps `geometryMode` + `modularOptions` only.
  * Leaves `generatedGlbUrl` unset so the product default stays procedural mesh.
- * After `exportModularCabinetV0GlbBinary` (and optional upload under
- * catalog-assets/generated/), stamp the path for future G8 with:
- *   stampFurnitureGeneratedGlb(furniture, result.relativePath)
- *   // alias: attachGeneratedGlbToFurniture
- * from `features/planner/asset-engine` (mesh/stampFurnitureGeneratedGlb).
+ * P0.2 wire: do **not** env-flag this path. Opt-in write+stamp lives on
+ * `placeModularWithGeneratedGlbPlan` (export → public disk → stampFurnitureGeneratedGlb).
+ * Manual stamp after G5: stampFurnitureGeneratedGlb / attachGeneratedGlbToFurniture.
  */
 export function placeCatalogItemInProject(
   project: Open3dProject,

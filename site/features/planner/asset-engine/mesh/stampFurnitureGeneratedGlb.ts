@@ -9,9 +9,10 @@
  * - **path-only** — `stampFurnitureFromModularOptions`: stamps
  *   `modularCabinetV0GeneratedRelativePath` without producing bytes. Path may
  *   not exist on disk/CDN until a later upload or G5 binary write.
- * - **binary-export stamp** — `placeModularWithGeneratedGlbPlan` (or manual
- *   `exportModularCabinetV0GlbBinary` + `stampFurnitureGeneratedGlb`): runs G5
- *   in memory, stamps `relativePath`, does **not** auto-upload.
+ * - **binary-export + write stamp** — `placeModularWithGeneratedGlbPlan` (or
+ *   `exportModularAndWrite` + `stampFurnitureGeneratedGlb`): runs G5, writes
+ *   under site/public/catalog-assets/generated/, stamps `relativePath`.
+ *   Does **not** auto-upload to remote CDN.
  */
 
 import {

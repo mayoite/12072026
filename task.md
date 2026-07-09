@@ -26,8 +26,9 @@
 - [x] **G7 extrude plan (partial)** pure `extrudeSvgPlan` under catalog-assets/generated/ (binary still admin island)
 - [x] **G5→doc stamp (partial)** `stampFurnitureGeneratedGlb` → `generatedGlbUrl` (place still procedural default)
 - [x] **G8 viewer load (partial)** `ThreeViewerInner` async `loadGeneratedGlbObject` when `shouldLoadGlb(generatedGlbUrl)` — landed unit path; not full product
-- [ ] Residual G8: upload modular GLB to storage on publish
-- [ ] Residual G8: browser smoke — stamped `generatedGlbUrl` loads in open3d viewer (cache / scale / auto-upload still out)
+- [x] **P0.2 part A** `writeGeneratedGlbToPublic` + `exportModularAndWrite` + place writes under `site/public/catalog-assets/generated/` then stamp (`results/planner/p0-2-glb-write/`)
+- [ ] Residual G8: remote CDN upload modular GLB on publish (optional; local public write landed)
+- [ ] Residual G8: browser smoke — stamped `generatedGlbUrl` loads in open3d viewer (cache / scale still out)
 
 ## 03 Canvas / document / 3D
 - [x] `buildOpen3dSceneNodes` pure adapter + tests

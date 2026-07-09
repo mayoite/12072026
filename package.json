@@ -13,6 +13,7 @@
     "gate:full": "pnpm --filter oando-site gate:full",
     "p0": "pnpm --filter oando-site p0",
     "p0:unit": "pnpm --filter oando-site p0:unit",
+    "p0:g8": "pnpm --filter oando-site p0:g8",
     "p0:svg": "pnpm --filter oando-site p0:svg",
     "p0:admin-svg": "pnpm --filter oando-site p0:admin-svg",
     "check-sharp": "node scripts/check-sharp.js",
