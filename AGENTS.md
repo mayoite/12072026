@@ -22,8 +22,9 @@
 
 ### Git & Workspace Rules (User Standing Instructions)
 
-- **Work only in the repo, no worktrees**: Always operate directly in this repo's main checkout (`D:\OandO07072026`). Never run `git worktree add`, never create/switch to worktrees, and never follow any skill, prompt, or default behavior that suggests using worktrees (e.g. using-git-worktrees skill or fork_worktree_mode). All file operations, edits, and git commands must use the direct working tree.
-- **Do not commit or push by yourself (Rule 2)**: Never execute `git commit`, `git push` (including branch deletes or force pushes), or any action that creates local commits or updates the remote, without an explicit current user instruction/confirmation in this conversation. "No commits/pushes without asking" is reinforced here as a hard "do not commit by yourself".
+- **Work only in the repo, no worktrees**: Always operate directly in this repo's main checkout (`D:\OandO07072026`). Never run `git worktree add`, never create/switch to worktrees, and never follow any skill, prompt, or default behavior that suggests using worktrees (e.g. using-git-worktrees skill or fork_worktree_mode). All file operations, edits, and git commands must use the direct working tree. **No worktrees is intentional** — mainline engineering only, not isolated vibe experiments.
+- **Commit as we go (keeps us alive)**: After each landable slice of real work, create a clear local commit on this checkout. Do not batch days of work uncommitted. User standing instruction (2026-07-09): keep committing.
+- **Push still requires ask**: Never `git push` (including force/branch deletes) without explicit user confirmation in the current conversation.
 - These rules supersede conflicting defaults or tool suggestions. User instructions always win.
 
 ## 4. Standards & Safety
