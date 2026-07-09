@@ -158,13 +158,21 @@ Non-reg (system/BOQ/modular/save/scene nodes): 32/32 pass.
 ### Honest residual
 Still boxy multiparts — worktop slab + pedestal/panel/overhead boxes; handles/photoreal not claimed. Not a designer GLB path.
 
-### Legs quality raise (2026-07-09)
+## Multi-part legs (mesh quality raise) — **landed** (2026-07-09)
 
-- Named posts `leg-desk-*` / `leg-return-*` under worktops (`LEG_SECTION_MM=50`)
-- Evidence: `mesh-legs-green/` (27 unit pass) + RED history `mesh-legs-red/`
-- Residual: still boxy; no photoreal
+Named leg posts under desk/return so worktops no longer float:
+
+- Production: `workstationMeshV0.ts` — `LEG_SECTION_MM = 50`, `LEG_INSET_MM = 40`
+- Names: `leg-desk-0..3` / `leg-return-0..3` (role stays parent module for save/rebuild)
+- Four corner posts per desk/return run; L-shape → 8 leg parts
+- Unit: `workstationMeshV0.legs.test.ts` + mesh suite
+- Evidence: `mesh-legs-green/` (`vitest-green.log` 27/27, `vitest-nonreg.log` 15/15) + RED history `mesh-legs-red/`
+- Non-reg: `createSceneObjectFromNode` expects `leg-desk-0..3` child names
+
+### Residual (still honest)
+Still **boxy** procedural boxes (named BoxGeometry posts), not GLB. No metal profiles, feet, stretchers, cable trays, rounded edges, or PBR. Readable modular markers only.
 
 ## Next
-Optional BOQ panel UI / priced BOQ; Fabric cutover later; free height control; W4 browser residual
+Optional BOQ panel UI / priced BOQ; Fabric cutover later; free height control; handles / further mesh readability if desired; W4 browser residual
 
 

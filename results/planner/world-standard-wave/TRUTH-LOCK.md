@@ -31,7 +31,7 @@ Root: `results/planner/world-standard-wave/`
 ## Residuals (honest)
 
 1. **W4 browser** — stabilize place → orbit → 2D count (only red serial W-gate).  
-2. **Mesh quality raise** — readable bar met; handles/photoreal later.  
+2. **Mesh quality raise** — readable bar met; **workstation legs landed** (`leg-desk-0..3` / `LEG_SECTION_MM`; evidence `07-systems-v0/mesh-legs-green/`); still boxy; handles/photoreal later.  
 3. **Fabric full stage** — destination later (Approach A).  
 4. **Cloud save** — later; W6 proves local honesty only.  
 5. **CP-10** — after CP-04 PASS + pack + E: backup.
