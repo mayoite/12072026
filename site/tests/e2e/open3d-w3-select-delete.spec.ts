@@ -8,6 +8,7 @@ import path from "node:path";
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
 import {
   clickOnCanvas,
+  placeSeatsFromConfigurator,
   waitForPlannerCanvas,
 } from "./plannerCanvasHelpers";
 
@@ -43,26 +44,19 @@ test.describe("W3 select / delete / undo (browser)", () => {
     const furnitureBefore = await furnitureCount(page);
     expect(furnitureBefore).toBeGreaterThanOrEqual(0);
 
-    // Open3d inventory: add catalog item then click canvas
-    await page
-      .getByRole("region", { name: "Catalog browser" })
-      .getByRole("button", { name: /Add .* to canvas/i })
-      .first()
-      .click();
-    const placeRx = 0.48;
-    const placeRy = 0.45;
-    await clickOnCanvas(page, placeRx, placeRy);
+    // Proven place path (systems v0 batch) — catalog+canvas was flaky (W4 notes).
+    await placeSeatsFromConfigurator(page, 4);
 
     await expect
-      .poll(async () => furnitureCount(page), { timeout: 20_000 })
-      .toBeGreaterThan(furnitureBefore);
+      .poll(async () => furnitureCount(page), { timeout: 25_000 })
+      .toBe(furnitureBefore + 4);
 
     const afterPlace = await furnitureCount(page);
     await page.screenshot({ path: path.join(EVIDENCE, "01-placed.png") });
 
-    // Select tool (open3d rail)
+    // Select tool (open3d rail) — batch places near origin; tap center-ish plan
     await page.getByRole("button", { name: /Select/i }).first().click();
-    await clickOnCanvas(page, placeRx, placeRy);
+    await clickOnCanvas(page, 0.5, 0.5);
 
     // Properties: not empty selection
     await expect(

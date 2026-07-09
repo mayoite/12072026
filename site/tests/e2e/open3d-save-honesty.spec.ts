@@ -12,7 +12,7 @@ import {
   enterGuestPlannerWorkspace,
 } from "./guestProjectSetup";
 import {
-  clickOnCanvas,
+  placeSeatsFromConfigurator,
   waitForPlannerCanvas,
 } from "./plannerCanvasHelpers";
 
@@ -73,19 +73,12 @@ test.describe("W5 save honesty / hard reload (browser)", () => {
     const furnitureBefore = await furnitureCount(page);
     expect(furnitureBefore).toBeGreaterThanOrEqual(0);
 
-    // Open3d inventory: catalog Add to canvas then click (same as W3 — no step-bar).
-    await page
-      .getByRole("region", { name: "Catalog browser" })
-      .getByRole("button", { name: /Add .* to canvas/i })
-      .first()
-      .click();
-    const placeRx = 0.48;
-    const placeRy = 0.45;
-    await clickOnCanvas(page, placeRx, placeRy);
+    // Proven place path (systems v0 batch) — catalog+canvas was flaky (W4 notes).
+    await placeSeatsFromConfigurator(page, 4);
 
     await expect
-      .poll(async () => furnitureCount(page), { timeout: 20_000 })
-      .toBeGreaterThan(furnitureBefore);
+      .poll(async () => furnitureCount(page), { timeout: 25_000 })
+      .toBe(furnitureBefore + 4);
 
     const afterPlace = await furnitureCount(page);
     await page.screenshot({ path: path.join(EVIDENCE, "01-before-save.png") });

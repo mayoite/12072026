@@ -206,6 +206,79 @@ export async function firstFurnitureCenter(
   return point;
 }
 
+/**
+ * Arm catalog placement ("Add … to canvas") then wait for Place tool pressed.
+ * Status bar / sticky inventory chrome intercepts Playwright hit-tests — use a
+ * DOM el.click() so React handlers fire without relying on hit-testing.
+ * Catalog arms via React state; waiting for aria-pressed avoids racing canvas click
+ * (workstation batch path uses a ref and does not need this).
+ */
+export async function clickCatalogAddToCanvas(
+  page: Page,
+  name: RegExp | string = /Add .* to canvas/i,
+): Promise<Locator> {
+  const catalog = page.getByRole("region", { name: "Catalog browser" });
+  const btn = catalog.getByRole("button", { name }).first();
+  await expect(btn).toBeVisible({ timeout: 15_000 });
+  await btn.scrollIntoViewIfNeeded();
+  await btn.evaluate((el: HTMLElement) => {
+    el.click();
+  });
+  const placeTool = page
+    .getByRole("group", { name: "Drawing tools" })
+    .getByRole("button", { name: /^Place(?: \(|$)/i });
+  // Retry once if React arm did not stick (virtual list re-render / intercept).
+  try {
+    await expect(placeTool).toHaveAttribute("aria-pressed", "true", {
+      timeout: 2_000,
+    });
+  } catch {
+    await btn.evaluate((el: HTMLElement) => {
+      el.dispatchEvent(
+        new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+        }),
+      );
+    });
+    await expect(placeTool).toHaveAttribute("aria-pressed", "true", {
+      timeout: 8_000,
+    });
+  }
+  return btn;
+}
+
+/** Catalog add (armed) + canvas click — open3d inventory place path. */
+export async function placeCatalogOnCanvas(
+  page: Page,
+  relX: number,
+  relY: number,
+  name: RegExp | string = /Add .* to canvas/i,
+): Promise<void> {
+  await clickCatalogAddToCanvas(page, name);
+  // Small settle so placement tool + pendingCatalogItemId commit.
+  await page.waitForTimeout(150);
+  await clickOnCanvas(page, relX, relY);
+}
+
+/**
+ * Proven systems-v0 place path (W4 / batch-place): immediate furniture delta,
+ * no catalog + canvas race.
+ */
+export async function placeSeatsFromConfigurator(
+  page: Page,
+  seats: 2 | 4 | 10 = 4,
+): Promise<void> {
+  const configurator = page.getByRole("region", {
+    name: "Workstation systems configurator",
+  });
+  await expect(configurator).toBeVisible({ timeout: 15_000 });
+  await configurator
+    .getByRole("button", { name: `Place ${seats} seats` })
+    .click();
+}
+
 /** Click at absolute page coordinates (down + micro-move + up). */
 export async function clickAtPoint(
   page: Page,

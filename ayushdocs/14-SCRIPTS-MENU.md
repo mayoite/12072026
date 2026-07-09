@@ -15,9 +15,13 @@ From **repo root** (`D:\OandO07072026`):
 | `pnpm p0:g8` | **P0.2 continuous verify**: G8 load/round-trip + modular GLB plan/export/stamp (existing files only) |
 | `pnpm p0:svg` | SVG fixtures → `public/svg-catalog` |
 | `pnpm p0:admin-svg` | Playwright P0.1 admin publish E2E (needs server; set `PLAYWRIGHT_BASE_URL` if reusing `pnpm dev`) |
+| `pnpm test:e2e:open3d-world` | **W-gate browser pack** (journey + W3 + W4 + save honesty + systems batch) → `results/planner/world-standard-wave/gate-e2e/` |
+| `pnpm gate:open3d` | typecheck + open3d world e2e pack (callable CI truth for open3d gates) |
 | `pnpm test` | Full vitest (site) |
 | `pnpm gate` | Fast release gate (lint + typecheck + unit + audits) |
 | `pnpm gate:full` | Full release gate (slow: build + e2e + coverage) |
+| `pnpm gate:open3d` | Open3d world pack: site typecheck + curated Playwright e2e |
+| `pnpm test:e2e:open3d-world` | Curated open3d W-gate Playwright pack only (no typecheck) |
 | `pnpm build` / `pnpm start` | Production path (note: build may still fail on `/contact`) |
 | `pnpm dev:tech-stack` | Workflow docs app (name **kept**) |
 | `pnpm build:tech-stack` | Build workflow docs (name **kept**) |
@@ -34,6 +38,8 @@ From **site/** (`cd site`):
 | `pnpm p0:admin-svg` | `test:e2e:p0-admin-svg` |
 | `pnpm gate` | `release:gate:fast` |
 | `pnpm gate:full` | `release:gate` |
+| `pnpm gate:open3d` | `typecheck` + `test:e2e:open3d-world` |
+| `pnpm test:e2e:open3d-world` | `scripts/run-open3d-world-e2e.mjs` (manifest specs) |
 
 ### P0.2 G8 + modular GLB — continuous status (unit closed)
 
@@ -73,6 +79,38 @@ $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 $env:DEV_AUTH_BYPASS = "1"
 pnpm p0:admin-svg
 ```
+
+### Open3d world-standard browser pack (W gates)
+
+```powershell
+# terminal 1 — prefer reusing dev (faster than build+start)
+cd D:\OandO07072026
+pnpm dev
+
+# terminal 2
+cd D:\OandO07072026
+$env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
+pnpm test:e2e:open3d-world
+# or: pnpm gate:open3d   (typecheck + pack)
+```
+
+Evidence: `results/planner/world-standard-wave/gate-e2e/` (`run.json`, `playwright-raw.log`).  
+Spec list: `site/config/build/playwright-open3d-world-specs.json`.
+
+### Open3d world-standard e2e gate
+
+Curated pack (not full planner e2e). Specs listed in `site/config/build/playwright-open3d-world-specs.json`. Evidence → `results/planner/world-standard-wave/gate-e2e/`.
+
+```powershell
+cd D:\OandO07072026
+# full gate (typecheck + e2e)
+pnpm gate:open3d
+
+# e2e only
+pnpm test:e2e:open3d-world
+```
+
+Needs a running app (or Playwright webServer config). Set `PLAYWRIGHT_BASE_URL` if reusing `pnpm dev`.
 
 ### Everything else
 

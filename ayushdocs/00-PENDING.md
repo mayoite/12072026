@@ -1,6 +1,6 @@
 # Pending list (owner)
 
-**Last updated:** 2026-07-09 (truth-lock — authority docs ↔ `results/planner/world-standard-wave/`)  
+**Last updated:** 2026-07-09 (open3d e2e gate scripts: `gate:open3d` / `test:e2e:open3d-world`)  
 **Rule:** finish open kill-path fully before inventing a new epic. Resolve blockers; do not park them.  
 **Honesty:** P0.1–P0.3 are **spine**, not ship quality. Owner rejected thin “journey only” bar.  
 **Active standard:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md`  
@@ -35,6 +35,7 @@ Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infr
 | Residual | Note |
 |----------|------|
 | **W4 browser orbit/continuity e2e** | **Closed** — configurator Place 4 seats path; orbit attr + count restore |
+| **Open3d e2e pack (callable)** | **Closed** — not folder-only: `pnpm gate:open3d` (typecheck + pack) and `pnpm test:e2e:open3d-world`; manifest `site/config/build/playwright-open3d-world-specs.json`; evidence `results/planner/world-standard-wave/gate-e2e/` |
 | **Mesh quality raise** | Cabinet-v0 / workstation multiparts still boxy; handles/legs/AO later — bar already PASS for readable parts |
 | **Fabric full stage** | Destination still later (Approach A); flag OFF expected |
 | **Cloud / member save** | W6 is local-only honesty; cloud wire is a later gate if owner wants |
