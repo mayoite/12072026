@@ -23,7 +23,7 @@
 ## Do not
 
 - Prompt-novel / 400-line agent briefs — point at phase MD + this file.
-- Competitor assets; keys outside `.env.local`.
+- Plagiarism / unauthorized copy (need **explicit** website/license OK for development); keys outside `.env.local`.
 - Claim W-gate green without evidence path.
 - Parallel past a hard CP stop (see `checkpoints/CHECKPOINTS.md`).
 - Force-push or delete remote branches without owner ask.

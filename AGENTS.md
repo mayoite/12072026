@@ -44,9 +44,12 @@
 
 ### Packages, assets & licenses (hard — no exceptions)
 
-- Prefer open (MIT/Apache/BSD). Paid allowed. Trial before buy. **Ask before any purchase.**
-- **No competitor assets** (code, UI, GLB, WASM, fonts, logos, brands) into product.
-- **Detail + cleared-paid table:** `ayushdocs/17-LICENSES-CLEARED.md`
+- **Open is preferred, not mandatory.** MIT/Apache/BSD when they fit. **Paid is fine** when the product needs it.
+- **Trial first** when a trial exists. **Ask the owner before any purchase** — owner will buy if they agree. Never buy on your own.
+- **No plagiarism. Ever.** Easy to copy; **do not.**
+- **Do not copy** code, UI, assets, fonts, GLB, WASM, logos, brands, or site content **unless** the product’s **own website (or license) explicitly authorizes that use for development** — and only within that written authorization. “I looked at it” / Firecrawl / research ≠ license to ship their work.
+- Research/ideas only under `D:\websites` (and ethics maps). Patterns and jobs-to-be-done only — **not** paste into `site/`.
+- **Cleared paid table:** `ayushdocs/17-LICENSES-CLEARED.md` — add a row when owner clears a paid item.
 - **Secrets / keys:** `.env.local` only (never commit).
 
 ### Point agents at the right MD (keep AGENTS short)
