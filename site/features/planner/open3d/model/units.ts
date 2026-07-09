@@ -21,6 +21,11 @@ export function normalizeDegrees(value: number): number {
   return ((value % 360) + 360) % 360;
 }
 
+/** Plan / document rotation is degrees; Three scene nodes use radians. */
+export function degreesToRadians(degrees: number): number {
+  return (normalizeDegrees(degrees) * Math.PI) / 180;
+}
+
 export function displayValueToMm(
   value: number,
   unit: Exclude<Open3dDisplayUnit, "ft-in">,

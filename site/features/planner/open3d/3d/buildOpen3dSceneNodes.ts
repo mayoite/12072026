@@ -14,6 +14,7 @@ import type {
   Open3dProject,
   Open3dWorkstationV0Options,
 } from "../model/types";
+import { degreesToRadians } from "../model/units";
 
 export type Open3dSceneNodeKind = "wall" | "furniture";
 
@@ -114,7 +115,8 @@ export function buildOpen3dSceneNodes(
       widthMm,
       depthMm,
       heightMm,
-      rotation: item.rotation,
+      // Document rotation is degrees (2D canvas, properties); scene nodes are radians.
+      rotation: degreesToRadians(item.rotation),
       color: item.color,
       catalogId: item.catalogId,
       ...(item.geometryMode !== undefined

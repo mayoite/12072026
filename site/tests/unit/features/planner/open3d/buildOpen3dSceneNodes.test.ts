@@ -131,7 +131,7 @@ describe("buildOpen3dSceneNodes", () => {
         id: "furn-mod",
         catalogId: "cabinet-v0",
         position: { x: 200, y: 300 },
-        rotation: Math.PI / 4,
+        rotation: 45, // plan degrees
         scale: { x: 1, y: 1, z: 1 },
         width: 900,
         depth: 580,
@@ -147,7 +147,7 @@ describe("buildOpen3dSceneNodes", () => {
     // Shallow copy — mutating source options must not mutate node
     modularOptions.material = "white";
     expect(furn?.modularOptions?.material).toBe("oak");
-    expect(furn?.rotation).toBeCloseTo(Math.PI / 4, 8);
+    expect(furn?.rotation).toBeCloseTo(Math.PI / 4, 8); // scene radians
     expect(furn?.xMm).toBe(200);
     expect(furn?.yMm).toBe(300);
   });
@@ -186,7 +186,7 @@ describe("buildOpen3dSceneNodes", () => {
         id: "furn-mod-glb",
         catalogId: "cabinet-v0",
         position: { x: 1200, y: 800 },
-        rotation: 0.25,
+        rotation: 90, // plan degrees
         scale: { x: 1, y: 1, z: 1 },
         width: 600,
         depth: 580,
@@ -212,7 +212,36 @@ describe("buildOpen3dSceneNodes", () => {
       depthMm: 580,
       heightMm: 720,
     });
-    expect(furn?.rotation).toBeCloseTo(0.25, 8);
+    expect(furn?.rotation).toBeCloseTo(Math.PI / 2, 8);
+  });
+
+  it("converts furniture plan degrees to scene radians (walls stay atan2 radians)", () => {
+    const project = sampleProject([
+      {
+        id: "furn-90",
+        catalogId: "box",
+        position: { x: 0, y: 0 },
+        rotation: 90,
+        scale: { x: 1, y: 1, z: 1 },
+        width: 800,
+        depth: 400,
+        height: 750,
+      },
+      {
+        id: "furn-neg",
+        catalogId: "box",
+        position: { x: 1, y: 1 },
+        rotation: -90,
+        scale: { x: 1, y: 1, z: 1 },
+        width: 800,
+        depth: 400,
+        height: 750,
+      },
+    ]);
+    const f90 = buildOpen3dSceneNodes(project).find((n) => n.id === "furn-90");
+    const fNeg = buildOpen3dSceneNodes(project).find((n) => n.id === "furn-neg");
+    expect(f90?.rotation).toBeCloseTo(Math.PI / 2, 8);
+    expect(fNeg?.rotation).toBeCloseTo((270 * Math.PI) / 180, 8); // normalizeDegrees(-90)=270
   });
 
   it("drops designer static meshUrl and blank generatedGlbUrl", () => {
