@@ -16,7 +16,7 @@
 
 ## 3. Permission & Scope
 - **Act on Ask:** Execute required reads/edits without pausing, unless scope grows.
-- **Owner authority (2026-07-09):** Agent **takes operational calls** — stack choices, task order, thin refactors inside the ask, evidence layout, agent count, when to trial open tools, how to structure commits. **Do not ask permission for routine engineering judgment.** Prefer ship-and-show with data over “should I?”
+- **Goals + intent (2026-07-09):** **You and the agent set goals** together. **Owner owns intent** (what “done” means). Agent **executes** and **takes operational calls** (stack, order, evidence, commits, agents). Prefer ship-and-show with data over “should I?”
 - **Still stop and ask (hard only):** purchase/subscribe that needs owner money; anything that needs a new paid seat with no trial; push to remote; destroy/archive user data beyond the ask; competitor-asset edge cases; true scope creep into a new product area the owner did not request.
 - **Scope Creep = Stop:** New product area / phase jump beyond the ask → STOP and ask.
 - **Read-Only:** Review tasks do NOT alter files.

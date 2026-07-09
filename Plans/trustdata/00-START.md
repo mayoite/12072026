@@ -89,8 +89,8 @@ Evidence when locked: `results/planner/world-standard-wave/01-engine-lock/NOTES.
 
 ## Trust-data rule
 
-1. Owner sets **intent**.  
-2. Agents check **repo / tests / browser**.  
+1. **You + agent set goals** together; **owner owns intent** (final call on what “done” means).  
+2. Agent **executes** and takes operational calls; proves with **repo / tests / browser**.  
 3. Status claims require paths under `results/`.  
 4. Never put the owner on trial for character.  
 5. If evidence contradicts a cheerful status report, **evidence wins** — update `D:\OandO07072026\Failures.md`.
