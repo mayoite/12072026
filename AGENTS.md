@@ -52,6 +52,7 @@
 |------|------|
 | Licenses / paid cleared | `ayushdocs/17-LICENSES-CLEARED.md` |
 | Why this product (business) | `ayushdocs/18-PRODUCT-CONTEXT.md` |
+| Goals / near slices | `ayushdocs/19-GOALS-SLICES.md` (scoreboard; plan = how) |
 | Owner pending / workflow | `ayushdocs/00-PENDING.md`, `ayushdocs/12-WORKFLOW.md` |
 | Trust-data plan | `Plans/trustdata/INDEX.md` |
 | Research home | `D:\websites\README.md` + `Plans/trustdata/RESEARCH-MAP.md` |

@@ -23,8 +23,9 @@
 | [16-RESULTS-RETENTION.md](./16-RESULTS-RETENTION.md) | Keep vs delete `results/` |
 | [17-LICENSES-CLEARED.md](./17-LICENSES-CLEARED.md) | **Licenses / paid / no competitor assets** · keys in `.env.local` |
 | [18-PRODUCT-CONTEXT.md](./18-PRODUCT-CONTEXT.md) | **Why we build** — business, money, systems catalog, engines, 6‑mo prototype |
+| [19-GOALS-SLICES.md](./19-GOALS-SLICES.md) | **Scoreboard** — 6‑mo bar + near slices (plan has the how) |
 
-**Start:** [18-PRODUCT-CONTEXT.md](./18-PRODUCT-CONTEXT.md) (if new to the business) → [00-PENDING.md](./00-PENDING.md) → [12-WORKFLOW.md](./12-WORKFLOW.md)  
+**Start:** [18](./18-PRODUCT-CONTEXT.md) → [19](./19-GOALS-SLICES.md) → plan `Plans/trustdata/INDEX.md` → [12-WORKFLOW](./12-WORKFLOW.md)  
 
 **Repo HEAD at pack time:** see `01-RECAP.md` / `09-VERIFY-SNAPSHOT.md`.  
 **Worktree rule:** only `D:\OandO07072026` — no git worktrees.
