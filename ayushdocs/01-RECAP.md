@@ -69,7 +69,7 @@ Do not re-litigate these without an explicit owner decision.
 | A11y open3d | Live report **not clean** (nested main, hydration) |
 | SSR | Not required yet |
 
-**Plan honesty:** Vertical hard-path advanced 2B/2C *pieces* before all 2A gates. Do not claim full 2B/2C done. Checklist: root `task.md`. Master plans: `Plans/01-execution/core/`.
+**Plan honesty:** Vertical hard-path advanced 2B/2C *pieces* before all 2A gates. Do not claim full 2B/2C done. Checklist: root `task.md`. Live plan: `Plans/trustdata/`.
 
 ---
 
@@ -115,7 +115,7 @@ site/features/planner/open3d/3d/loadGeneratedGlbObject.ts
 site/features/planner/lib/glbAssetPolicy.ts
 site/features/planner/lib/newEntityId.ts
 task.md                                             # working checklist
-Plans/01-execution/core/                            # Plan A authority
+Plans/trustdata/                                    # live plan authority
 results/planner/                                    # evidence (not owner prose)
 Failures.md                                         # honesty log
 ```

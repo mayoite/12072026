@@ -1,7 +1,8 @@
 # Locked files — module index
 
 **Baseline:** 2026-07-05  
-**Layout:** One folder per module; `current.md` = on disk today; `proposed.md` = target per `Plans/01-execution/core/00-REVISION.md`
+**Layout:** One folder per module; `current.md` = on disk today; `proposed.md` = target.  
+**Live plan:** [`../../Plans/trustdata/`](../../Plans/trustdata/) · historical revision notes under `archive/Plans/`
 
 ---
 
@@ -21,16 +22,17 @@
 | Module UI contract | [`ui/MODULE-UI-CONTRACT-Locked.md`](ui/MODULE-UI-CONTRACT-Locked.md) | [`../architecture/MODULE-UI-CONTRACT.md`](../architecture/MODULE-UI-CONTRACT.md) |
 | Architecture index | — | [`../architecture/README.md`](../architecture/README.md) |
 | Module placement | — | [`../architecture/MODULE-LAYOUT.md`](../architecture/MODULE-LAYOUT.md) |
-| Doc revision log | — | [`../../archive/Plans/01-execution/specialists/09-DOC-REVISION.md`](../../archive/Plans/01-execution/specialists/09-DOC-REVISION.md) (historical) |
+| Doc revision log | — | [`../../archive/Plans/01-execution/specialists/09-DOC-REVISION.md`](../../archive/Plans/01-execution/specialists/09-DOC-REVISION.md) (historical only) |
 
-## Product revision (live, not duplicated)
+## Product plan (live)
 
 | Doc | Path |
 |-----|------|
-| **Execution index** | [`../../Plans/01-execution/README.md`](../../Plans/01-execution/README.md) |
-| Plan revision | [`../../Plans/01-execution/core/00-REVISION.md`](../../Plans/01-execution/core/00-REVISION.md) |
-| UI execution | [`../../archive/Plans/01-execution/specialists/06-UI-PLAN.md`](../../archive/Plans/01-execution/specialists/06-UI-PLAN.md) (historical) |
-| Test execution | [`../../archive/Plans/01-execution/specialists/08-TEST-PLAN.md`](../../archive/Plans/01-execution/specialists/08-TEST-PLAN.md) (historical) |
+| **Live plan entry** | [`../../Plans/README.md`](../../Plans/README.md) |
+| **Trustdata index** | [`../../Plans/trustdata/INDEX.md`](../../Plans/trustdata/INDEX.md) |
+| Unlock / approach | [`../../Plans/trustdata/00-START.md`](../../Plans/trustdata/00-START.md) |
+| UI execution (historical) | [`../../archive/Plans/01-execution/specialists/06-UI-PLAN.md`](../../archive/Plans/01-execution/specialists/06-UI-PLAN.md) |
+| Test execution (historical) | [`../../archive/Plans/01-execution/specialists/08-TEST-PLAN.md`](../../archive/Plans/01-execution/specialists/08-TEST-PLAN.md) |
 
 ---
 
@@ -63,7 +65,7 @@
 |------|------|
 | New UI module | `ui/MODULE-UI-CONTRACT-Locked.md` + `architecture/MODULE-LAYOUT.md` |
 | Where code goes | `../architecture/MODULE-LAYOUT.md` |
-| Planner pilot | `planner/proposed.md` + `Plans/01-execution/core/02-PHASE-1.md` |
+| Planner / product plan | `planner/proposed.md` + `Plans/trustdata/INDEX.md` |
 | Package change | `PACKAGES.md` + `dependencies-engines/proposed.md` |
 
 Update module `current.md` / `proposed.md` only when intentionally locking a new baseline.

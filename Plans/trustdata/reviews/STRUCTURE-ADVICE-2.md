@@ -58,7 +58,7 @@ Plans/trustdata/
 
 **~25KB rule of thumb:** ~500–700 lines of dense Markdown (with tables/code) lands near 20–30KB. Several phase files sit in that band; **P05/P07/P03** are the ones that matter for agent load, not P08.
 
-**Contrast:** `Plans/02-recovery/phases/` already showed that **over-splitting** planner work (04 / 04a–04f) multiplies authority fights. Trustdata’s one-file-per-CP is a deliberate correction. Structure advice must not reverse that without cause.
+**Contrast:** `archive/Plans/07072026/02-recovery/phases/` already showed that **over-splitting** planner work (04 / 04a–04f) multiplies authority fights. Trustdata’s one-file-per-CP is a deliberate correction. Structure advice must not reverse that without cause.
 
 ---
 

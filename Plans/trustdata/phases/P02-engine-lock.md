@@ -37,7 +37,7 @@ Document (UUID entities, mm)
 | 3D admin single-asset | `@google/model-viewer` | Admin SVG editor preview only | `site/features/planner/admin/svg-editor/ModelViewerPreview.tsx` |
 | Hybrid ban | **No** Konva + Fabric simultaneous interactive 2D | Enforced by policy + this phase | Fail gate only if Fabric spike is proven unworkable → Konva **full** (still no hybrid) |
 
-**Authority chain (highest wins):** Owner message → `Plans/trustdata/` → `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` → Plan A `Plans/01-execution/core/` → research ideas under `D:\websites\research\2026-07-09-world-standard\` (inspiration only).
+**Authority chain (highest wins):** Owner message → `Plans/trustdata/` → `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` → Plan A `archive/Plans/07072026/01-execution/core/` → research ideas under `D:\websites\research\2026-07-09-world-standard\` (inspiration only).
 
 **Research sources (ideas only — no competitor code/assets/brands in product):**
 
@@ -47,7 +47,7 @@ Document (UUID entities, mm)
 | ENGINE-DECISION | `D:\websites\research\2026-07-09-world-standard\comparison\ENGINE-DECISION.md` |
 | Engine slice report | `D:\websites\research\2026-07-09-world-standard\comparison\01-engine\REPORT.md` |
 | Repo chart copy | `results/planner/world-standard-wave/COMPARISON-CHART.md` |
-| Plan A canvas/engine | `Plans/01-execution/core/00A-START.md`, `Plans/01-execution/core/02B-PHASE-2B-2C.md` |
+| Plan A canvas/engine | `archive/Plans/07072026/01-execution/core/00A-START.md`, `archive/Plans/07072026/01-execution/core/02B-PHASE-2B-2C.md` |
 | World-standard design | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` |
 
 **Evidence root for this phase (canonical — RESULTS-MAP / CP-02):**
@@ -222,7 +222,7 @@ Also cite (do not relocate): `results/planner/world-standard-wave/COMPARISON-CHA
 **Files / dirs:**
 
 - Create: `results/planner/world-standard-wave/01-engine-lock/`
-- Read (no edit required unless Task 6 owner mirror): this file, `Plans/trustdata/00-START.md`, `Plans/trustdata/INDEX.md`, `Plans/trustdata/RESULTS-MAP.md` (P02 row), `Plans/trustdata/checkpoints/CHECKPOINTS.md` (CP-02), `Plans/01-execution/core/00A-START.md` (§2D/3D engine), `Plans/01-execution/core/02B-PHASE-2B-2C.md` (§2B.2), `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` (§3–4), `D:\websites\research\2026-07-09-world-standard\comparison\MASTER-CHART.md`, `D:\websites\research\2026-07-09-world-standard\comparison\ENGINE-DECISION.md`
+- Read (no edit required unless Task 6 owner mirror): this file, `Plans/trustdata/00-START.md`, `Plans/trustdata/INDEX.md`, `Plans/trustdata/RESULTS-MAP.md` (P02 row), `Plans/trustdata/checkpoints/CHECKPOINTS.md` (CP-02), `archive/Plans/07072026/01-execution/core/00A-START.md` (§2D/3D engine), `archive/Plans/07072026/01-execution/core/02B-PHASE-2B-2C.md` (§2B.2), `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` (§3–4), `D:\websites\research\2026-07-09-world-standard\comparison\MASTER-CHART.md`, `D:\websites\research\2026-07-09-world-standard\comparison\ENGINE-DECISION.md`
 
 **Steps:**
 
@@ -287,7 +287,7 @@ Fill `startedAt`, `head`, and agent note after Step 0.1–0.2.
 **Steps:**
 
 - [ ] 1.1 Copy decisions from ENGINE-DECISION + MASTER-CHART §D into `ENGINE-LOCK-RECORD.md` using O&O product language only (no competitor brand paste as UI).
-- [ ] 1.2 Cite Plan A paths: `Plans/01-execution/core/00A-START.md`, `Plans/01-execution/core/02B-PHASE-2B-2C.md`.
+- [ ] 1.2 Cite Plan A paths: `archive/Plans/07072026/01-execution/core/00A-START.md`, `archive/Plans/07072026/01-execution/core/02B-PHASE-2B-2C.md`.
 - [ ] 1.3 State Approach A implication: W1–W8 may land on Feasibility first; Fabric remains destination.
 - [ ] 1.4 List anti-thrash rules 1–13 from this phase file (short form is fine).
 - [ ] 1.5 State supersession: this record wins over residual “under evaluation” / “hybrid stack” wording in Plan A or open3d README for agent engine choice after CP-02.
@@ -516,7 +516,7 @@ P02 is **not** done when:
 | Checkpoints | `Plans/trustdata/checkpoints/CHECKPOINTS.md` |
 | Prev | `Plans/trustdata/phases/P01-product-truth.md` |
 | Next | `Plans/trustdata/phases/P03-select-delete.md` |
-| Plan A 2B.2 | `Plans/01-execution/core/02B-PHASE-2B-2C.md` |
+| Plan A 2B.2 | `archive/Plans/07072026/01-execution/core/02B-PHASE-2B-2C.md` |
 | World-standard design | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` |
 | Fabric flag | `site/features/planner/open3d/canvas-fabric-stage/fabricFurnitureFlag.ts` |
 | Live 2D | `site/features/planner/open3d/canvas-feasibility/FeasibilityCanvas.tsx` |

@@ -1,11 +1,11 @@
-Archive for immutable planner revision documents.
+# archive/Plans — not live
 
-## 00-global-standard-revision
+Historical plan packs. **Live plan:** [`../../Plans/trustdata/`](../../Plans/trustdata/) · entry [`../../Plans/README.md`](../../Plans/README.md)
 
-Do not edit in place. Active summaries: [`plans/00-global-standard-revision/`](../00-global-standard-revision/).
+| Folder | Notes |
+|--------|--------|
+| `07072026/` | Snapshot of monorepo `01-execution` + `02-recovery` moved off live tree |
+| `00-governance/` · `01-execution/` · `02-proposed/` · … | Older programs |
+| Other date/name packs | Historical only |
 
-## Phase 1 historical specs
-
-Active governance: [`plans/01-phase1-execution/`](../01-phase1-execution/). Routing: [`00-handover-routing.md`](../01-phase1-execution/00-handover-routing.md).
-
-Historical merged phase specs: `archive/plans/2026-07-05_phase1-execution/phases/` (repo `archive/` tree — date-prefixed, not renamed).
+Agents: do not treat paths here as current kill-order or CP authority.

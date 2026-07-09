@@ -79,16 +79,14 @@ Legacy comprehensive audit (2026-06-20): not on disk — use [`docs/audit/README
 
 ## Plans (`Plans/`)
 
-Binding pins, benchmarks, gates, and execution — [`Plans/README.md`](Plans/README.md):
+**Live only:** [`Plans/README.md`](Plans/README.md) → **[`Plans/trustdata/`](Plans/trustdata/)** (INDEX · 00-START · phases · CHECKPOINTS).
 
-| # | Pack | Role |
-|---|------|------|
-| 00 | `Plans/00-governance/` | Phase 0 GS benchmark + Phase 1 pins, gates, review workflow |
-| 01 | `Plans/01-execution/` | Day-to-day Phase 1A/1B execution (`core/`, `specialists/`, `research/`) |
+| Path | Role |
+|------|------|
+| `Plans/trustdata/` | Active world-standard / product plan |
+| `archive/Plans/` | Historical packs only — not authority |
 
-**Start:** `Plans/00-governance/01-phase1-execution/00-handover-routing.md` · **Binding:** `01-implementation-decisions.md` · **Execute:** `Plans/01-execution/core/02-PHASE-1.md`
-
-Historical phase specs stay at `archive/Plans/2026-07-05_phase1-execution/` (repo archive — not renamed). Agent consolidation: `archive/Plans/02-proposed/` (preserved, not live authority).
+Do not use `Plans/00-governance/`, `Plans/01-execution/`, or `Plans/02-recovery/` — those trees are archived.
 
 ## Agent workflow artifacts (1B)
 

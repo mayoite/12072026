@@ -72,7 +72,7 @@ Plans/trustdata/
 
 **Task quality (writing-plans):** Spot-check of P01–P10 shows Task 00…N with files, checkboxes, commands, evidence paths. Grep for real TBD placeholders in phase task bodies: **none** (only “no TBD” discipline statements). Dual gates (P06 W5–W6, P07 W1–W2 place, P03 unit+browser) are intentional product packs, not unfinished stubs.
 
-**Contrast (do not copy):** `Plans/02-recovery/phases/` exploded open3d into `04` + `04a`–`04f`. That style multiplies authority fights. Trustdata’s **one file per CP** is the deliberate correction.
+**Contrast (do not copy):** `archive/Plans/07072026/02-recovery/phases/` exploded open3d into `04` + `04a`–`04f`. That style multiplies authority fights. Trustdata’s **one file per CP** is the deliberate correction.
 
 ---
 

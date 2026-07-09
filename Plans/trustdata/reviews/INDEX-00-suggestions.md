@@ -71,7 +71,7 @@ Approach **A** default · unlock gate explicit · phase order matches CP graph �
 | MASTER-CHECKLIST W0 items not mirrored in 00-START closeout | Owner checklist and start gate diverge. |
 | No “out of scope while W red” | CRM/SSR/photoreal creep during journey work. |
 | Standing rules omit `no any`, zero suppression, write-to-disk | Subagents load only 00-START and miss AGENT-RULES. |
-| Related links omit `Plans/01-execution/core/` detail and `testing-handbook.md` | Verification strategy undefined at program entry. |
+| Related links omit `archive/Plans/07072026/01-execution/core/` detail and `testing-handbook.md` | Verification strategy undefined at program entry. |
 
 ### Path / process spot-check (2026-07-09)
 

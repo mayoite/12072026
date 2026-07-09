@@ -63,4 +63,4 @@
 
 ## Final State
 
-[PLAN-A.md](file:///d:/OandO07072026/Plans/01-execution/core/PLAN-A.md) — 691 lines, fully reality-checked.
+Live plan: [Plans/trustdata/INDEX.md](Plans/trustdata/INDEX.md) (historical Plan A under `archive/Plans/`).

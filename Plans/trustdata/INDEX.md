@@ -61,7 +61,7 @@
 | Quality | Global manufacturer-planner standard; quality over speed; no prompt-engineering theater |
 | Later / optional | [LATER.md](./LATER.md) — SmartDraw/Foyr/Coohom etc. **not** kill-path |
 
-**Authority order:** Owner message > this folder > world-standard design spec > Plan A core > ayushdocs honesty.
+**Authority order:** Owner message > `AGENTS.md` > this folder > world-standard design spec > ayushdocs honesty.
 
 ---
 
@@ -213,7 +213,7 @@ Agent rules: **`AGENTS.md`**. Short spawn: [AGENT-RULES.md](./checklists/AGENT-R
 **Testing:** `testing-handbook.md` + `Agents/Agents-testing.md`
 
 **Related (outside this folder — reference only):**  
-`docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` · `Plans/01-execution/core/` · `D:\websites\research\2026-07-09-world-standard\` · `ayushdocs/` (honesty; not gate pass)
+`docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` · `D:\websites\research\2026-07-09-world-standard\` · `ayushdocs/` (honesty; not gate pass) · historical Plan A core under `archive/Plans/`
 
 ---
 
