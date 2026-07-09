@@ -17,13 +17,18 @@ import type {
   Open3dModularCabinetV0Options,
   Open3dProject,
 } from "../model/types";
-import type { PureActionResult } from "../model/operations/pureActions";
+import type { PureActionResult, ApplyPureActionOptions } from "../model/operations/pureActions";
 import { addFurniture } from "../model/operations/pureActions";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
 import {
   defaultCabinetV0Options,
   type CabinetMaterialId,
 } from "./modularCabinetV0";
+import {
+  workstationConfigKey,
+  workstationFootprintMm,
+  type WorkstationConfigV0,
+} from "./workstationSystemV0";
 
 /** Catalog id/slug that maps to modular cabinet-v0 multi-part mesh. */
 export const MODULAR_CABINET_V0_CATALOG_ID = "cabinet-v0";
@@ -328,6 +333,67 @@ export function placeCatalogItemInProject(
         description: `Placed ${snapshot.productIdentity.name}`,
         timestamp: Date.parse(snapshot.placedAt),
       },
+    },
+  };
+}
+
+/**
+ * Systems v0 — place one workstation config on the open3d document via pure actions.
+ *
+ * Footprint width/depth come from workstationFootprintMm; catalogId is the
+ * stable workstationConfigKey (`ws-v0-…`). geometryMode is box until modular
+ * workstation mesh is wired.
+ */
+export function placeWorkstationConfigOnProject(
+  project: Open3dProject,
+  config: WorkstationConfigV0,
+  position: { x: number; y: number },
+  options?: ApplyPureActionOptions,
+): PureActionResult {
+  const catalogId = workstationConfigKey(config);
+  const footprint = workstationFootprintMm(config);
+  const placed = addFurniture(project, catalogId, position, options);
+  const furnitureId = placed.action.payload?.id;
+  if (typeof furnitureId !== "string" || furnitureId.length === 0) {
+    throw new Error("placeWorkstationConfigOnProject: addFurniture did not return id");
+  }
+
+  const projectWithDims: Open3dProject = {
+    ...placed.project,
+    floors: placed.project.floors.map((floor) => ({
+      ...floor,
+      furniture: floor.furniture.map((furniture) =>
+        furniture.id === furnitureId
+          ? {
+              ...furniture,
+              width: footprint.widthMm,
+              depth: footprint.depthMm,
+              height: config.heightMm,
+              geometryMode: "box" as const,
+              sourceCatalogId: catalogId,
+            }
+          : furniture,
+      ),
+    })),
+  };
+
+  return {
+    project: projectWithDims,
+    action: {
+      type: "PLACE_WORKSTATION_V0",
+      payload: {
+        id: furnitureId,
+        catalogId,
+        position: { ...position },
+        shape: config.shape,
+        size: { ...config.size },
+        modules: [...config.modules],
+        widthMm: footprint.widthMm,
+        depthMm: footprint.depthMm,
+        heightMm: config.heightMm,
+      },
+      description: `Placed workstation ${catalogId}`,
+      timestamp: Date.now(),
     },
   };
 }
