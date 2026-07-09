@@ -389,6 +389,9 @@ export function WorkspaceShell({
             <span>{planMetrics.objects} objects</span>
             <span>{planMetrics.walls} walls</span>
             <span>{planMetrics.furniture} furniture</span>
+            {planMetrics.workstationSeats > 0 ? (
+              <span>{planMetrics.workstationSeats} seats</span>
+            ) : null}
             <span>Floor {planMetrics.floorLabel}</span>
           </>
         ) : null}
