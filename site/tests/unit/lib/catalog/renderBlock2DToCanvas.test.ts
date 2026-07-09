@@ -160,18 +160,100 @@ describe("furnitureBlock2DFromItem", () => {
     expect(block.footprint.L).toBe(800);
   });
 
-  it("box fallback still draws a rect when bridge returns nothing", () => {
+  it("unknown SKU still yields nonempty prims (never empty plan mark)", () => {
+    const width = 500;
+    const depth = 400;
+    const height = 750;
     const block = furnitureBlock2DFromItem({
       id: "unknown-1",
       catalogId: "zz-unknown-sku-no-bridge",
       position: { x: 0, y: 0 },
       rotation: 0,
       scale: { x: 1, y: 1, z: 1 },
-      width: 500,
-      depth: 500,
-      height: 500,
+      width,
+      depth,
+      height,
+    });
+
+    // Non-empty guard (P05 / W2) — unknown catalog ids must still draw
+    expect(block.prims.length).toBeGreaterThan(0);
+    expect(block.footprint.L).toBe(width);
+    expect(block.footprint.D).toBe(depth);
+    expect(block.footprint.H).toBe(height);
+
+    const rects = block.prims.filter((p) => p.kind === "rect");
+    expect(rects.length).toBeGreaterThan(0);
+    for (const p of block.prims) {
+      if (p.kind === "rect") {
+        expect(Number.isFinite(p.x)).toBe(true);
+        expect(Number.isFinite(p.y)).toBe(true);
+        expect(Number.isFinite(p.w)).toBe(true);
+        expect(Number.isFinite(p.h)).toBe(true);
+        expect(p.w).toBeGreaterThan(0);
+        expect(p.h).toBeGreaterThan(0);
+      }
+    }
+
+    // Drawable end-to-end: canvas path must fill (not silent empty geometry)
+    const ctx = mockContext();
+    renderBlock2DToCanvas(ctx, block, {
+      resolve: (t) => (t && t !== "none" ? String(t) : "transparent"),
+    });
+    const calls = (ctx as unknown as { calls: string[] }).calls;
+    expect(calls).toContain("fill");
+    expect(calls).toContain("save");
+    expect(calls).toContain("restore");
+  });
+
+  it("unknown equipment SKU box-like path still has a positive rect footprint", () => {
+    // Equipment category tends toward generic rect (box-like), not full desk symbol.
+    const block = furnitureBlock2DFromItem(
+      {
+        id: "unknown-equip-1",
+        catalogId: "zz-unknown-equip-sku",
+        position: { x: 0, y: 0 },
+        rotation: 0,
+        scale: { x: 1, y: 1, z: 1 },
+        width: 600,
+        depth: 450,
+        height: 900,
+      },
+      { name: "mystery-equip", category: "equipment" },
+    );
+
+    expect(block.prims.length).toBeGreaterThan(0);
+    expect(block.footprint.L).toBe(600);
+    expect(block.footprint.D).toBe(450);
+
+    const rect = block.prims.find((p) => p.kind === "rect");
+    expect(rect).toBeDefined();
+    if (rect?.kind === "rect") {
+      expect(rect.w).toBeGreaterThan(0);
+      expect(rect.h).toBeGreaterThan(0);
+    }
+
+    const ctx = mockContext();
+    renderBlock2DCentered(ctx, block, {
+      resolve: (t) => String(t ?? "transparent"),
+    });
+    const calls = (ctx as unknown as { calls: string[] }).calls;
+    expect(calls.filter((c) => c === "fill").length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("clamps degenerate placed dims so unknown SKU stays drawable", () => {
+    const block = furnitureBlock2DFromItem({
+      id: "unknown-degen",
+      catalogId: "zz-unknown-zero-dims",
+      position: { x: 0, y: 0 },
+      rotation: 0,
+      scale: { x: 1, y: 1, z: 1 },
+      width: 0,
+      depth: 0,
+      height: 0,
     });
     expect(block.prims.length).toBeGreaterThan(0);
+    expect(block.footprint.L).toBeGreaterThanOrEqual(1);
+    expect(block.footprint.D).toBeGreaterThanOrEqual(1);
     expect(block.prims.some((p) => p.kind === "rect")).toBe(true);
   });
 });
