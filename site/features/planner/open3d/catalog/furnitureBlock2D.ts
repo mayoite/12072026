@@ -12,7 +12,6 @@ import {
 import { resolveCatalogItemBlock2D } from "@/features/planner/catalog/catalogBlockBridge";
 import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
 import type { Open3dFurnitureItem } from "../model/types";
-import type { ModularCabinetV0Options } from "./modularCabinetV0";
 
 const DEFAULT_MM = 600;
 
@@ -35,13 +34,24 @@ function boxBlock(widthMm: number, depthMm: number, heightMm: number, label: str
   return { footprint: { L: w, D: d, H: heightMm }, prims, label };
 }
 
+/**
+ * Readable plan-view cabinet-v0 symbol (W2 / P05).
+ * Top-left mm origin (0..L, 0..D): carcass, inner, front/back, doorStyle cues.
+ * Canvas centers via renderBlock2DCentered — prims are never authored centered.
+ */
 function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
-  const opts = item.modularOptions as ModularCabinetV0Options | undefined;
+  const opts = item.modularOptions;
   const w = opts?.widthMm ?? item.width ?? DEFAULT_MM;
   const d = opts?.depthMm ?? item.depth ?? DEFAULT_MM;
   const h = opts?.heightMm ?? item.height ?? 900;
-  // Top-left plan symbol (not centered path) so renderBlock2DCentered works.
+  const doorStyle = opts?.doorStyle ?? "slab";
+  const inset = Math.min(16, Math.max(6, Math.min(w, d) * 0.04));
+  const frontY = d - inset; // plan: +Y depth; front at larger Y
+  const stroke = BLOCK_STYLE.storageStroke;
+  const strokeW = BLOCK_STYLE.surfaceStrokeWidth;
+
   const prims: Prim[] = [
+    // Outer carcass
     {
       kind: "rect",
       x: 0,
@@ -49,18 +59,98 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
       w,
       h: d,
       fill: BLOCK_STYLE.storage,
-      stroke: BLOCK_STYLE.storageStroke,
-      strokeWidth: BLOCK_STYLE.surfaceStrokeWidth,
+      stroke,
+      strokeWidth: strokeW,
       radius: 4,
     },
+    // Inner carcass / shelf zone
+    {
+      kind: "rect",
+      x: inset,
+      y: inset,
+      w: Math.max(1, w - inset * 2),
+      h: Math.max(1, d - inset * 2),
+      fill: "none",
+      stroke,
+      strokeWidth: 1,
+      radius: 2,
+    },
+    // Front edge (door face)
     {
       kind: "line",
-      points: [w * 0.5, 8, w * 0.5, d - 8],
-      stroke: BLOCK_STYLE.storageStroke,
+      points: [inset, frontY, w - inset, frontY],
+      stroke,
+      strokeWidth: 2,
+    },
+    // Back edge
+    {
+      kind: "line",
+      points: [inset, inset, w - inset, inset],
+      stroke,
       strokeWidth: 1.5,
-      dash: [6, 4],
     },
   ];
+
+  if (doorStyle === "pair") {
+    // Mid stile between pair doors
+    prims.push({
+      kind: "line",
+      points: [w * 0.5, inset, w * 0.5, frontY],
+      stroke,
+      strokeWidth: 1.5,
+      dash: [6, 4],
+    });
+    const handleW = Math.min(28, w * 0.06);
+    const handleH = Math.min(10, d * 0.06);
+    const handleY = frontY - handleH - 4;
+    prims.push({
+      kind: "rect",
+      x: w * 0.25 - handleW / 2,
+      y: handleY,
+      w: handleW,
+      h: handleH,
+      fill: stroke,
+      radius: 2,
+    });
+    prims.push({
+      kind: "rect",
+      x: w * 0.75 - handleW / 2,
+      y: handleY,
+      w: handleW,
+      h: handleH,
+      fill: stroke,
+      radius: 2,
+    });
+  } else if (doorStyle === "slab") {
+    const handleW = Math.min(36, w * 0.08);
+    const handleH = Math.min(12, d * 0.07);
+    prims.push({
+      kind: "rect",
+      x: w - inset - handleW - 8,
+      y: frontY - handleH - 4,
+      w: handleW,
+      h: handleH,
+      fill: stroke,
+      radius: 2,
+    });
+  } else {
+    // doorStyle "none" — open shelves cue
+    prims.push({
+      kind: "line",
+      points: [inset, d * 0.33, w - inset, d * 0.33],
+      stroke,
+      strokeWidth: 1,
+      dash: [8, 4],
+    });
+    prims.push({
+      kind: "line",
+      points: [inset, d * 0.66, w - inset, d * 0.66],
+      stroke,
+      strokeWidth: 1,
+      dash: [8, 4],
+    });
+  }
+
   return {
     footprint: { L: w, D: d, H: h },
     prims,
@@ -212,8 +302,10 @@ function scaleBlock2D(
 }
 
 /**
- * True when path prims are authored in centered coordinates (modular cabinet).
+ * Historical name. All furnitureBlock2D prims are authored top-left (0..L, 0..D).
+ * Canvas centers via renderBlock2DCentered — never via centered prim authorship.
+ * Always false (was a dead lie when modular returned true with top-left prims).
  */
-export function furnitureBlockUsesCenteredPath(item: Open3dFurnitureItem): boolean {
-  return item.geometryMode === "modular-cabinet-v0";
+export function furnitureBlockUsesCenteredPath(_item: Open3dFurnitureItem): boolean {
+  return false;
 }

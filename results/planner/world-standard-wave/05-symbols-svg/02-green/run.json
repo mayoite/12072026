@@ -1,0 +1,14 @@
+{
+  "phase": "P05",
+  "slice": "02-green",
+  "exitCode": 0,
+  "testsPassed": 12,
+  "testsFailed": 0,
+  "files": [
+    "furnitureBlock2D.cabinet-v0.test.ts",
+    "renderBlock2DToCanvas.test.ts"
+  ],
+  "timestamp": "2026-07-09T19:08:26Z",
+  "baseHEAD": "3b92a0c",
+  "log": "02-green/vitest-raw.log"
+}

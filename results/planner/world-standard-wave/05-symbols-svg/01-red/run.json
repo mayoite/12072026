@@ -1,0 +1,11 @@
+{
+  "phase": "P05",
+  "slice": "01-red",
+  "exitCode": 1,
+  "testsFailed": 3,
+  "testsPassed": 4,
+  "note": "Expected RED: 2 prims, slab mid-stile lie, centeredPath true",
+  "timestamp": "2026-07-09T19:08:01Z",
+  "baseHEAD": "3b92a0c",
+  "log": "01-red/vitest-raw.log"
+}

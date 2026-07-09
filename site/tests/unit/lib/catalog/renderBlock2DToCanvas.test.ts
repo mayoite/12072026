@@ -159,4 +159,19 @@ describe("furnitureBlock2DFromItem", () => {
     expect(block.prims.length).toBeGreaterThan(0);
     expect(block.footprint.L).toBe(800);
   });
+
+  it("box fallback still draws a rect when bridge returns nothing", () => {
+    const block = furnitureBlock2DFromItem({
+      id: "unknown-1",
+      catalogId: "zz-unknown-sku-no-bridge",
+      position: { x: 0, y: 0 },
+      rotation: 0,
+      scale: { x: 1, y: 1, z: 1 },
+      width: 500,
+      depth: 500,
+      height: 500,
+    });
+    expect(block.prims.length).toBeGreaterThan(0);
+    expect(block.prims.some((p) => p.kind === "rect")).toBe(true);
+  });
 });

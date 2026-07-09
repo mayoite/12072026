@@ -1,0 +1,23 @@
+{
+  "checkpoint": "CP-05",
+  "phase": "P05-symbols-svg",
+  "gate": "W2-symbol-quality",
+  "status": "pass",
+  "claims": {
+    "cabinetV0Block2DReadable": true,
+    "notEmptyBox": true,
+    "doorStyleGeometryDiffers": true,
+    "canvasAuthorityIsBlock2D": true,
+    "furnitureBlockUsesCenteredPathIsFalse": true,
+    "svgCatalogIsPublishNotCanvas": true,
+    "svgHonestySmoke": "pass",
+    "noCompetitorSvg": true,
+    "browserPlaceJourney": "deferred-to-P07"
+  },
+  "evidence": [
+    "results/planner/world-standard-wave/05-symbols-svg/02-green/vitest-raw.log",
+    "results/planner/world-standard-wave/05-symbols-svg/04-svg-honesty/NOTES.md",
+    "results/planner/world-standard-wave/05-symbols-svg/05-visual/cabinet-v0-prims.json",
+    "results/planner/world-standard-wave/05-symbols-svg/CP-05-vitest-raw.log"
+  ]
+}

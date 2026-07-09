@@ -67,3 +67,15 @@ Deterministic batch — **only** `scripts/generate-svg/_fixtures/*.json` (sorted
 
 - `site/tests/unit/features/planner/asset-engine/`
 
+## Canvas vs publish SVG (P05 honesty)
+
+| Surface | Authority today | Entry |
+|---------|-----------------|-------|
+| open3d plan furniture symbols | **Block2D prims** (top-left; canvas centers) | `furnitureBlock2DFromItem` → `renderBlock2DToCanvas` / `renderBlock2DCentered` |
+| Admin/CLI published SVG files | **pipelineCore+normalize** | `compileSvgForPublish` → `public/svg-catalog/{slug}.svg` |
+| Portal preview | Published SVG URL | `/portal/svg-catalog` |
+
+W2 acceptance is **Block2D readable**, not “SVG loaded onto FeasibilityCanvas.”
+Do not mark S7 implemented until inventory place consumes published SVG with evidence.
+`furnitureBlockUsesCenteredPath` is always `false` (prims top-left; canvas centers).
+

@@ -1,0 +1,8 @@
+{
+  "phase": "P05",
+  "slice": "00-baseline",
+  "exitCode": null,
+  "note": "baseline inventory: modularCabinetBlock 2 prims; furnitureBlockUsesCenteredPath true (lie)",
+  "timestamp": "2026-07-09T19:07:00Z",
+  "baseHEAD": "3b92a0c"
+}
