@@ -14,6 +14,7 @@ import type {
   Open3dEntityCollection,
   Open3dEntityMap,
 } from "../model/actions/projectActions";
+import { parseWorkstationConfigKey } from "../catalog/workstationSystemV0";
 import styles from "./properties.module.css";
 
 /**
@@ -581,8 +582,40 @@ export const PropertiesPanel = memo(function PropertiesPanel({
         material?: string;
       };
 
+      const workstationConfig =
+        parseWorkstationConfigKey(furniture.catalogId ?? "") ??
+        parseWorkstationConfigKey(furniture.sourceSlug ?? "");
+
       return (
         <>
+          {workstationConfig ? (
+            <div className={styles.propertyGroup}>
+              <h4 className={styles.groupTitle}>Workstation (systems v0)</h4>
+              <div className={styles.propertyGrid}>
+                <PropertyField
+                  id={`${id}-ws-shape`}
+                  label="Shape"
+                  value={
+                    workstationConfig.shape === "l-shape" ? "L-shape" : "Linear"
+                  }
+                  readOnly
+                />
+                <PropertyField
+                  id={`${id}-ws-size`}
+                  label="Size"
+                  value={`${workstationConfig.size.lengthMm}×${workstationConfig.size.depthMm}`}
+                  unit="mm"
+                  readOnly
+                />
+                <PropertyField
+                  id={`${id}-ws-modules`}
+                  label="Modules"
+                  value={workstationConfig.modules.join(", ")}
+                  readOnly
+                />
+              </div>
+            </div>
+          ) : null}
           <div className={styles.propertyGroup}>
             <h4 className={styles.groupTitle}>Position</h4>
             <div className={styles.propertyGrid}>

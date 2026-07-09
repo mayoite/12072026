@@ -90,3 +90,9 @@ Inventory click-to-place uses existing OOPlannerWorkspace → placeCatalogItemIn
 
 ## Next
 Optional BOQ panel UI; modular workstation mesh; Fabric cutover later
+
+## Place+delete browser (2026-07-09)
+
+- e2e open3d-systems-v0-place-delete.spec.ts — place WS → auto-select → Delete → furniture restored
+- Properties panel shows Workstation (systems v0) shape/size/modules when selected
+- Evidence: 20/21 png + place-delete-run.json
