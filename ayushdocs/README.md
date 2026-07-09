@@ -19,8 +19,9 @@
 | [09-VERIFY-SNAPSHOT.md](./09-VERIFY-SNAPSHOT.md) | Unit snapshot |
 | [10-REVIEW-FOLLOWUP.md](./10-REVIEW-FOLLOWUP.md) | Suggestions |
 | [11-FIGMA-BLOCKED.md](./11-FIGMA-BLOCKED.md) | Figma optional / not needed for P0 |
+| [14-SCRIPTS-MENU.md](./14-SCRIPTS-MENU.md) | **Daily scripts** (`pnpm p0`, `gate`, …) |
 
-**Start:** [00-PENDING.md](./00-PENDING.md) → [12-WORKFLOW.md](./12-WORKFLOW.md)  
+**Start:** [00-PENDING.md](./00-PENDING.md) → [12-WORKFLOW.md](./12-WORKFLOW.md) → [14-SCRIPTS-MENU.md](./14-SCRIPTS-MENU.md)  
 
 **Repo HEAD at pack time:** see `01-RECAP.md` / `09-VERIFY-SNAPSHOT.md`.  
 **Worktree rule:** only `D:\OandO07072026` — no git worktrees.

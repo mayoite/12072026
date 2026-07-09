@@ -42,14 +42,14 @@ Replaces reading long 05 / 07 / 08 / 09 docs every time. Use this loop.
 | 09 VERIFY-SNAPSHOT | Last unit snapshot (optional check) |
 
 ### Commands cheat sheet
+See **[14-SCRIPTS-MENU.md](./14-SCRIPTS-MENU.md)** for the short owner list.
+
 ```powershell
-cd D:\OandO07072026\site
-pnpm run dev                    # uses .env.development.local bypass
-pnpm run test:e2e:p0-admin-svg  # needs PLAYWRIGHT_BASE_URL if using existing dev
-# or:
-$env:PLAYWRIGHT_BASE_URL='http://localhost:3000'
-$env:DEV_AUTH_BYPASS='1'
-pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/admin-svg-publish-p01.spec.ts
+cd D:\OandO07072026
+pnpm dev          # site next dev
+pnpm p0           # unit + svg smoke
+pnpm p0:admin-svg # Playwright admin publish (with PLAYWRIGHT_BASE_URL if reusing dev)
+pnpm gate         # fast lint/typecheck/unit
 ```
 
 ### Rules
