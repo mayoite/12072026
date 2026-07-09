@@ -14,7 +14,7 @@
 | [04-HONEST-QUALITY.md](./04-HONEST-QUALITY.md) | Expectation + packages/routes/skeleton left |
 | [05-CODE-REVIEW.md](./05-CODE-REVIEW.md) | Review detail (optional) |
 | [06-A11Y-OPEN3D.md](./06-A11Y-OPEN3D.md) | A11y (P0.3 only for next fix) |
-| [07-AGENT-PROCESS.md](./07-AGENT-PROCESS.md) | Agent detail (optional; use 12) |
+| [07-AGENT-PROCESS.md](./07-AGENT-PROCESS.md) | Agent process → pointer to 12 + AGENTS |
 | [08-EVIDENCE-INDEX.md](./08-EVIDENCE-INDEX.md) | Evidence map |
 | [09-VERIFY-SNAPSHOT.md](./09-VERIFY-SNAPSHOT.md) | Unit snapshot |
 | [10-REVIEW-FOLLOWUP.md](./10-REVIEW-FOLLOWUP.md) | Suggestions |
