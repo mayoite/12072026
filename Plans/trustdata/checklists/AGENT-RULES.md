@@ -14,7 +14,7 @@
 ## Do
 
 - Superpowers + **relevant** skills (not a skill laundry list for show).
-- Concurrent agents: default **8**, hard max **10** (never 12). Write to disk; no worktrees.
+- **One owner task → finish it.** Parallel agents **only inside that task** (default ≤8, hard max **10**). Write to disk; no worktrees.
 - Commit as we go; **push origin when right**; **mirror ~30–60 min** (`mayoite`) — see `AGENTS.md`.
 - Take operational calls; prove with tests/browser/`results/`.
 - W3 needs **unit + browser** under `03-select-delete/` — no self-waive.
@@ -22,10 +22,10 @@
 
 ## Do not
 
+- **Multi-task parallel** — do not run multiple W-gates / CPs / epics as concurrent workstreams. Kill order is **serial priority**, not concurrent multi-job.
 - Prompt-novel / 400-line agent briefs — point at phase MD + this file.
 - Plagiarism / unauthorized copy (need **explicit** website/license OK for development); keys outside `.env.local`.
 - Claim W-gate green without evidence path.
-- Parallel past a hard CP stop (see `checkpoints/CHECKPOINTS.md`).
 - Force-push or delete remote branches without owner ask.
 
 ## Spawn (required)
@@ -39,8 +39,9 @@ Then short task body + MD pointers. **Do not** replace skills with a long custom
 ```
 /using-superpowers [+ skill list]
 Trustdata: AGENTS.md + Plans/trustdata/INDEX.md + phase file.
-No worktrees. Max 10 agents. Licenses: ayushdocs/17-LICENSES-CLEARED.md.
+No worktrees. One owner task only — parallel agents only inside THIS task (max 10).
+Licenses: ayushdocs/17-LICENSES-CLEARED.md (buy: owner only).
 Evidence: results/planner/world-standard-wave/. Context: ayushdocs/18 + 19.
-Global standard · quality over speed. Take calls; hard stops only (buy / force-push / goal change / competitor assets).
-TASK: <one clear ask>
+Global standard · quality over speed. Finish this task. Hard stops: buy / force-push / goal change / plagiarism.
+TASK: <one clear ask — sub-slice of the same owner task>
 ```

@@ -37,7 +37,8 @@
 - **`/using-superpowers` always allowed and always required** for the main agent **and every subagent**.
 - **All skills permitted:** Main agent may load and assign **any** available skill (Firecrawl, chrome-devtools, TDD, debugging, a11y, verification, docs, etc.) as fit. Owner grants full skill authority.
 - Load **skills that fit the job** (TDD, debug, browser, etc.) — not every skill for ceremony.
-- **Subagents:** Prefer parallel when useful. **Default 8; hard max 10** (agent call — don’t spam). Write to disk. Briefs stay short; point at MDs.
+- **One owner task at a time — finish it.** Never run multiple product tasks / W-gates / plan phases as concurrent workstreams. That finishes nothing (owner 2026-07-09).
+- **Subagents:** Parallel agents **only inside that one task** (clean sub-slices of the same goal). **Default ≤8; hard max 10.** Write to disk. Briefs short; point at MDs. **Not** parallel multi-epic / multi-CP thrash.
 - **Bar:** Global product standard only; **quality over speed**. Owner present without micromanage or prompt-engineering — agent takes the call once intent is clear.
 - **Assign with superpowers:** Every subagent brief **starts with** `/using-superpowers` (+ fit skills). That is the kill for delegated work — not a hand-written mega-prompt.
 - Skills do not override **User Wins** or Git & Workspace rules above.

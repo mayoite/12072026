@@ -61,5 +61,5 @@ Plans/
 
 - **Default:** Agent per `AGENTS.md` — targeted tests; evidence in `results/`; commit as you go; push/mirror when right.  
 - **Bar:** Global manufacturer-planner standard · quality over speed.  
-- **Agents:** default 8 · hard max **10**.  
+- **Agents:** default 8 · hard max **10** · **one owner task at a time** (parallel only inside that task).  
 - **Ship / release gates:** `Failures.md` + `START.md` when claiming release.

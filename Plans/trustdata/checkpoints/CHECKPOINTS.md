@@ -82,11 +82,12 @@ CP-00 → CP-01 → CP-02 → CP-03 (W3) → CP-04 (W4)
          All green → CP-10
 ```
 
-Parallelism allowed **after CP-02**:
+**One owner task at a time** (owner 2026-07-09 — multi-task parallel finishes nothing):
 
-- Streams for W3, W4, W8, mesh, save honesty may run concurrent (max **8** agents default, **10** hard max).
+- After CP-02, **pick one** CP/W-gate as the active task; finish it before starting another.
+- Parallel agents (default ≤**8**, hard max **10**) only as **sub-slices of that active task** — not concurrent W3+W4+mesh+save jobs.
 - CP-07 browser journey must not claim full W1–W2 until select (CP-03) and symbols (CP-05) are not red, unless owner waives with explicit partial journey scope.
-- **W3 note:** Parallel unit work on select/delete is fine; **CP-03 stays red** until browser proof lands under `03-select-delete/`.
+- **W3 note:** Parallel unit + browser sub-agents for **select/delete only** is fine; **CP-03 stays red** until browser proof lands under `03-select-delete/`.
 
 ---
 

@@ -5,7 +5,7 @@
 **Honesty:** P0.1–P0.3 are **spine**, not ship quality. Owner rejected thin “journey only” bar.  
 **Active standard:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` (awaiting approach approval)  
 **Evidence:** `results/planner/world-standard-wave/WAVE.md`  
-**Tests do not block other work** — run in parallel agents (max 8).
+**One owner task at a time** — finish it. Parallel agents (max 8–10) only **inside** that task; tests as sibling agents for the same task, never multi-epic thrash.
 
 Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infra
 

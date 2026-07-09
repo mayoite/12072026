@@ -50,9 +50,9 @@
 |-------|------|
 | Truth | Trust **data** (repo, tests, browser evidence) — not blind belief, not character trials |
 | Superpowers | Always required on main **and** every subagent; all skills permitted |
-| Concurrency | Default **8** concurrent agents; hard max **10** |
-| Parallelism | **After CP-02** only for W streams (see phase order); do not parallelize past hard stops |
-| Tests | Run in sibling agents so they do **not** idle the critical path — **never skip** or suppress output |
+| Concurrency | Default **8** agents; hard max **10** — **only inside one owner task** |
+| Parallelism | **One task at a time.** Parallel agents = sub-slices of **that** task only. Kill order is **serial priority** of phases — **not** concurrent multi-CP jobs (owner 2026-07-09: multi-task parallel finishes nothing) |
+| Tests | Sibling agents OK **for the active task** so critical path is not idle — **never skip** or suppress output |
 | Workspace | **No worktrees** — `D:\OandO07072026` only |
 | Plan vs product commits | Plan/review commits OK under plan-only; product commits only after implementation unlock |
 | Types / tests | No `any` in handwritten TS; zero suppression of test output |
@@ -68,12 +68,12 @@
 
 ## Week-1 kill order (after implementation unlock)
 
-**What this is:** Time-ordered **operator priority** for scarce agent slots (default **8**, hard max **10**).  
-**What this is not:** New phase numbers · ban on post-CP-02 parallelism · second program plan · change to CHECKPOINTS pass criteria.
+**What this is:** Time-ordered **which single task next** when choosing work (default **8** agents inside that task, hard max **10**).  
+**What this is not:** Permission to run several CPs/W-gates at once · second program plan · change to CHECKPOINTS pass criteria.
 
 **Naming rule:** Lead with **W-gate + evidence folder**, then `(P0X / CP-0X)`. Never say “do P07 before P03” without also saying **W3 browser under `03-select-delete/` is still a hard gate**.
 
-**Structure note (HYBRID):** Topology stays one file per CP. Kill order **prioritizes** streams; it does **not** split W3 unit vs browser into two CPs, and does **not** split P07 W1 vs W2 into two journey CPs. Skeletons: [P03-appendix](./phases/P03-appendix.md) · [P05-appendix](./phases/P05-appendix.md) · [P07-appendix](./phases/P07-appendix.md).
+**Structure note (HYBRID):** Topology stays one file per CP. Kill order **prioritizes the next single task**; it does **not** mean concurrent multi-stream execution. Does **not** split W3 unit vs browser into two CPs. Skeletons: [P03-appendix](./phases/P03-appendix.md) · [P05-appendix](./phases/P05-appendix.md) · [P07-appendix](./phases/P07-appendix.md).
 
 ### Serial spine (do these first)
 
@@ -93,13 +93,13 @@ CP-00 unlock → CP-01 truth → CP-02 engine
   → CP-03 W3 (unit+browser)     # 03-select-delete/
   → CP-07 journey W1–W2         # 02-browser-open3d-journey/
   → CP-06 save honesty          # 06-save-honesty/
-  → parallel fill: CP-04 orbit · CP-05 symbols · CP-08 mesh · CP-09 shortcuts
+  → next single tasks in order: CP-04 orbit · CP-05 symbols · CP-08 mesh · CP-09 shortcuts
   → CP-10 handover
 ```
 
-### Parallel fill (after CP-02; lower priority if slots scarce)
+### Later fill (after spine — **one task at a time**, not concurrent multi-CP)
 
-While the spine works **3 → 4 → 5**, side agents may run the fill list **only if** they do not thrash the same canvas/keyboard contracts without coordination.
+After spine items **3 → 4 → 5** are done (or owner picks one fill item as **the** active task), take **exactly one** row below, finish it, then the next.
 
 | Order | Kill | Gate | CP / phase | Evidence folder |
 |------:|------|------|------------|-----------------|
@@ -109,13 +109,13 @@ While the spine works **3 → 4 → 5**, side agents may run the fill list **onl
 | 9 | Shortcut/label truth | **W8** (blocking 2A only) | CP-09 · [P09](./phases/P09-shortcuts-chrome.md) | `09-shortcuts-chrome/` |
 | 10 | Pack + E: backup | Close only when data supports | CP-10 · [P10](./phases/P10-evidence-handover.md) | `10-handover/` |
 
-**Priority rule:** If agent slots are scarce, spawn **kill-order 3–5** before **7–9**. Do not burn default-8 slots on mesh/chrome while W3 browser and journey lag.
+**Priority rule:** Do spine **3–5** before fill **6–9**. **Never** spawn mesh + chrome + orbit as separate concurrent tasks.
 
-### Full claim rules (unchanged — CHECKPOINTS wins)
+### Full claim rules (CHECKPOINTS + one-task rule)
 
 - **No self-waive W3 browser** — CP-03 requires unit **+** browser under `03-select-delete/`; unit-green alone is **FAIL**.  
-- **Journey honesty** — full W1–W2 product story for CP-07 still needs **CP-03 + CP-05 not red** unless owner **WAIVE** (already in [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md)).  
-- **Parallelism allowed after CP-02** for W streams — kill order only ranks urgency; stop-if-fail still binds.  
+- **Journey honesty** — full W1–W2 product story for CP-07 still needs **CP-03 + CP-05 not red** unless owner **WAIVE**.  
+- **One owner task** — parallel agents only as sub-slices of that task; kill order ranks **which task next**, not multi-job fan-out.  
 - **Folder map** — [RESULTS-MAP.md](./RESULTS-MAP.md) remains authority; do not invent `02-engine-lock/`, `07-…` journey, or `08-shortcuts-chrome/`.
 
 Condensed copy for unlock agents: [00-START.md](./00-START.md) § Week-1 kill order.
@@ -124,15 +124,14 @@ Condensed copy for unlock agents: [00-START.md](./00-START.md) § Week-1 kill or
 
 ## Phase order & dependencies (do not reorder without owner)
 
-Kill order (above) is the **priority** sequence after unlock. Dependency graph below remains valid for hard stops:
+Kill order (above) is the **next single task** sequence after unlock. Dependency graph = hard stops + serial priority — **not** concurrent multi-CP:
 
 ```
 CP-00 (00-START unlock)
   → CP-01 product truth (baseline data)
   → CP-02 engine lock (stop thrash)
-       → serial spine priority: CP-03 W3 → CP-07 W1–W2 browser → CP-06 W5–W6
-       → parallel fill (max 8 / hard 10 agents):
-            CP-04 W4 orbit · CP-05 W2 symbols · CP-08 W7 mesh · CP-09 W8 shortcuts
+       → one task at a time: CP-03 W3 → CP-07 W1–W2 browser → CP-06 W5–W6
+       → then one task at a time: CP-04 · CP-05 · CP-08 · CP-09
        → CP-07 full claim needs CP-03 + CP-05 not red unless owner WAIVE
        → CP-10 evidence pack + E: backup (all prior PASS or WAIVE)
 ```
@@ -172,24 +171,24 @@ Definitions from `docs/superpowers/specs/2026-07-09-world-standard-planner-desig
 
 ---
 
-## Superpowers streams (Approach A; after CP-02)
+## Superpowers — one active task (Approach A)
 
-Default **8** concurrent; hard max **10**. Full contract + required prompt block: [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md).  
-**Spawn in week-1 kill-order priority when slots are scarce** (serial spine 3–5 before parallel fill 6–9). Streams may run in parallel after CP-02; they are **not** equal urgency.
+Default **8** agents **inside the active task**; hard max **10**. Contract: [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md).  
+**Pick one row as the only active product task** (kill-order priority). Parallel agents = sub-slices of that row only — **not** several rows at once.
 
-| Stream | Owns | Evidence folder | Kill priority |
-|--------|------|-----------------|---------------|
+| When active alone | Owns | Evidence folder | Priority |
+|-------------------|------|-----------------|----------|
 | 1 | Select + delete + undo (W3) | `03-select-delete/` | **Spine #3** |
 | 6 | Playwright journey (W1–W2 pack) | `02-browser-open3d-journey/` | **Spine #4** |
 | 5 | Autosave flush + honest save (W5–W6) | `06-save-honesty/` | **Spine #5** |
-| 3 | Orbit + 2D↔3D (W4) | `04-orbit-continuity/` | Fill #6 |
-| 4a | Block2D symbols (W2 symbols) | `05-symbols-svg/` | Fill #7 |
-| 4b | Mesh bar (W7) | `08-mesh-quality/` | Fill #8 |
-| 2 | Shortcut/label truth (W8) | `09-shortcuts-chrome/` | Fill #9 |
-| 7 | 2A **blockers only** | notes under `09-shortcuts-chrome/` or dedicated NOTES | Only if blocks a W gate |
+| 3 | Orbit + 2D↔3D (W4) | `04-orbit-continuity/` | Next #6 |
+| 4a | Block2D symbols (W2 symbols) | `05-symbols-svg/` | Next #7 |
+| 4b | Mesh bar (W7) | `08-mesh-quality/` | Next #8 |
+| 2 | Shortcut/label truth (W8) | `09-shortcuts-chrome/` | Next #9 |
+| 7 | 2A **blockers only** | notes under `09-shortcuts-chrome/` or dedicated NOTES | Only if blocks active W |
 | 8 | Docs / checklist / handover | `10-handover/` when closing | Close #10 |
 
-Main agent coordinates; prefers write-to-disk; does not idle waiting on chat.
+Main agent coordinates; write-to-disk; **finish the active task** before starting another.
 
 ---
 
