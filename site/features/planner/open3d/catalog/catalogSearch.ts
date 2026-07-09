@@ -35,11 +35,14 @@ export function rankCatalogItems(
   if (!normalized) return [...items];
   return new Fuse(items, {
     keys: [
-      { name: "name", weight: 0.4 },
+      { name: "name", weight: 0.35 },
       { name: "shortName", weight: 0.2 },
-      { name: "sku", weight: 0.15 },
-      { name: "tags", weight: 0.15 },
-      { name: "taxonomyPath", weight: 0.1 },
+      // Guests / docs often type catalog ids (e.g. cabinet-v0) — must rank.
+      { name: "id", weight: 0.15 },
+      { name: "slug", weight: 0.12 },
+      { name: "sku", weight: 0.08 },
+      { name: "tags", weight: 0.07 },
+      { name: "taxonomyPath", weight: 0.03 },
     ],
     threshold: 0.35,
     ignoreLocation: true,

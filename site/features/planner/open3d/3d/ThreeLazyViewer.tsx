@@ -146,7 +146,22 @@ export function Lazy3DViewer(props: Lazy3DViewerProps): React.JSX.Element {
     backgroundColor,
   } = props;
 
-  const resolvedBg = backgroundColor ?? readThreeThemeColor("--surface-page", "#ffffff");
+  // THREE.Color rejects CSS custom properties — always resolve to hex/rgb.
+  const resolvedBg = (() => {
+    if (!backgroundColor) {
+      return readThreeThemeColor("--surface-page", "#ffffff");
+    }
+    if (backgroundColor.startsWith("--")) {
+      return readThreeThemeColor(backgroundColor, "#ffffff");
+    }
+    if (backgroundColor.includes("var(")) {
+      const token = backgroundColor.match(/var\(\s*(--[^,\s)]+)/)?.[1];
+      return token
+        ? readThreeThemeColor(token, "#ffffff")
+        : readThreeThemeColor("--surface-page", "#ffffff");
+    }
+    return backgroundColor;
+  })();
   return (
     <div
       className={`${styles.viewerRoot} ${className || ""}`}
@@ -159,7 +174,7 @@ export function Lazy3DViewer(props: Lazy3DViewerProps): React.JSX.Element {
             projectData={projectData}
             enableShadows={enableShadows}
             enableControls={enableControls}
-            backgroundColor={backgroundColor}
+            backgroundColor={resolvedBg}
             onReady={onReady}
           />
         </Suspense>

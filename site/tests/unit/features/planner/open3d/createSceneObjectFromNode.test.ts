@@ -166,7 +166,7 @@ describe("createSceneObjectFromNode — modular vs parametric-box vs wall", () =
 
   it("wall with CSS var color does not throw and material color is parseable by THREE.Color", () => {
     // Model walls store themeColorRef("var(--text-inverse-body)") — must not hit THREE.Color raw.
-    // Raw THREE.Color("var(...)") silently becomes white + console warn; resolve path uses wall hexFallback.
+    // 3D remaps theme refs → wallStroke token; unit env missing token → intentional hexFallback #182A40.
     let object: THREE.Object3D;
     expect(() => {
       object = createSceneObjectFromNode(
@@ -181,20 +181,22 @@ describe("createSceneObjectFromNode — modular vs parametric-box vs wall", () =
     const mat = mesh.material as THREE.MeshStandardMaterial;
     expect(mat.color).toBeInstanceOf(THREE.Color);
 
-    const hex = mat.color.getHexString();
+    const hex = mat.color.getHexString().toLowerCase();
     // Valid 6-digit hex (THREE.Color internal), not empty / NaN
     expect(hex).toMatch(/^[0-9a-f]{6}$/i);
     expect(Number.isFinite(mat.color.getHex())).toBe(true);
-    // Theme token absent in unit env → resolveThreeMaterialColor wall fallback #9ca3af
-    // (NOT raw THREE.Color white ffffff from unparsed var())
-    expect(hex).toBe("9ca3af");
+    // Theme-ref walls → wall mass fallback (NOT mid-gray #9ca3af, NOT white ffffff, NOT inverse-body e2e8f0)
+    expect(hex).toBe("182a40");
+    expect(hex).not.toBe("9ca3af");
+    expect(hex).not.toBe("ffffff");
+    expect(hex).not.toBe("e2e8f0");
     // Round-trip: hex string is legal input for THREE.Color constructor
     expect(() => new THREE.Color(`#${hex}`)).not.toThrow();
-    expect(new THREE.Color(`#${hex}`).getHexString()).toBe(hex);
+    expect(new THREE.Color(`#${hex}`).getHexString().toLowerCase()).toBe(hex);
   });
 
-  it("wall with CSS var resolves document theme token when present (not silent white)", () => {
-    document.documentElement.style.setProperty("--text-inverse-body", "#224466");
+  it("wall theme-ref uses wallStroke when present (not washed inverse-body text color)", () => {
+    document.documentElement.style.setProperty("--color-block-wall", "#224466");
     try {
       const object = createSceneObjectFromNode(
         THREE,
@@ -202,10 +204,21 @@ describe("createSceneObjectFromNode — modular vs parametric-box vs wall", () =
         false,
       );
       const mat = (object as THREE.Mesh).material as THREE.MeshStandardMaterial;
+      // Theme refs remap to wallStroke — intentional 3D mass, not --text-inverse-body
       expect(mat.color.getHexString()).toBe("224466");
     } finally {
-      document.documentElement.style.removeProperty("--text-inverse-body");
+      document.documentElement.style.removeProperty("--color-block-wall");
     }
+  });
+
+  it("wall with explicit user hex keeps paint (theme remap does not override)", () => {
+    const object = createSceneObjectFromNode(
+      THREE,
+      wallNode({ color: "#ff00aa" }),
+      false,
+    );
+    const mat = (object as THREE.Mesh).material as THREE.MeshStandardMaterial;
+    expect(mat.color.getHexString().toLowerCase()).toBe("ff00aa");
   });
 
   it("furniture missing positive dimensions falls back to wall-style box", () => {

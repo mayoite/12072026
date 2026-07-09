@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-07-09T18:21:45.435Z",
+  "capturedAt": "2026-07-09T18:32:56.595Z",
   "route": "http://localhost:3000/planner/guest/?plannerDevTools=1",
   "knownAssetPaths": [
     "/proof-chair.svg",
@@ -25,5 +25,14 @@
   "notFound404": [],
   "consoleErrorsForAssets": [],
   "consoleErrorCount": 0,
-  "consoleErrorsSample": []
+  "consoleErrorsSample": [],
+  "consoleWarningCount": 4,
+  "consoleWarningsSample": [
+    "[.WebGL-0x6fb401d29200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x6fb401d29200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x6fb401d29200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x6fb401d29200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "threeColorUnknown": [],
+  "pageErrors": []
 }

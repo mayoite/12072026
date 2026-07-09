@@ -1,6 +1,11 @@
 import "server-only";
 
+import {
+  catalogSlugSearchTags,
+  humanizeCatalogSlug,
+} from "../catalogLabelUtils";
 import type { Open3dCatalogItem } from "../catalogTypes";
+import { buildShortName } from "../catalogTaxonomy";
 import { buildSvgCatalogPublicUrl } from "./svgPreviewAssets";
 import type { BlockDescriptor } from "./svgTypes";
 
@@ -9,16 +14,19 @@ export function mapDescriptorToCatalogItem(
   descriptor: BlockDescriptor,
 ): Open3dCatalogItem {
   const svgUrl = buildSvgCatalogPublicUrl(descriptor.slug);
+  const displayName = humanizeCatalogSlug(descriptor.slug);
+  const shortName = buildShortName(displayName);
+  const slugTags = catalogSlugSearchTags(descriptor.slug);
   return {
     id: descriptor.id,
     slug: descriptor.slug,
     sku: descriptor.sku ?? `DESC-${descriptor.slug}`,
-    name: descriptor.slug.replace(/-/g, " "),
-    shortName: descriptor.slug.slice(0, 30),
-    description: `SVG block ${descriptor.slug}`,
+    name: displayName,
+    shortName,
+    description: `SVG symbol · ${displayName}`,
     category: "Furniture",
     subCategory: "Symbols",
-    taxonomyPath: `Furniture > Symbols > ${descriptor.slug}`,
+    taxonomyPath: `Furniture > Symbols > ${displayName}`,
     dimensions: {
       widthMm: descriptor.geometry.widthMm,
       depthMm: descriptor.geometry.depthMm,
@@ -38,7 +46,9 @@ export function mapDescriptorToCatalogItem(
     availability: "in-stock",
     assemblyType: "fully-assembled",
     flatPack: false,
-    tags: [descriptor.slug, "descriptor", "symbol", "svg"],
+    tags: Array.from(
+      new Set([descriptor.slug, ...slugTags, "descriptor", "symbol", "svg"]),
+    ),
     variants: [],
     provenance: { source: "descriptor-loader" },
     symbolOnly: true,

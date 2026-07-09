@@ -1,10 +1,14 @@
-﻿import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { TopBar } from "@/features/planner/open3d/editor/TopBar";
 
+afterEach(() => {
+  cleanup();
+});
+
 describe("TopBar guest persistence gate", () => {
-  it("shows guest-safe save and JSON export without full import/export menus", () => {
+  it("shows guest-safe save + Export menu with BOQ (no Import / quote cart)", () => {
     render(
       <TopBar
         accessContext="guest"
@@ -14,9 +18,38 @@ describe("TopBar guest persistence gate", () => {
     );
 
     expect(screen.getByRole("button", { name: "Save draft" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Export JSON" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Export$/ })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /^Import/ })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /^Export$/ })).not.toBeInTheDocument();
+  });
+
+  it("guest Export menu fires boq-json (first-class BOQ download path)", () => {
+    const onExport = vi.fn();
+    render(
+      <TopBar
+        accessContext="guest"
+        projectName="Guest plan"
+        viewMode="2d"
+        onExport={onExport}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /^Export$/ }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /Export BOQ \(JSON\)/i }));
+    expect(onExport).toHaveBeenCalledWith("boq-json");
+
+    fireEvent.click(screen.getByRole("button", { name: /^Export$/ }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /Export BOQ \(CSV\)/i }));
+    expect(onExport).toHaveBeenCalledWith("boq-csv");
+
+    fireEvent.click(screen.getByRole("button", { name: /^Export$/ }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /Export as JSON/i }));
+    expect(onExport).toHaveBeenCalledWith("json");
+
+    // Guest surface stays honest: no quote cart / workstation-only ERP theater.
+    fireEvent.click(screen.getByRole("button", { name: /^Export$/ }));
+    expect(
+      screen.queryByRole("menuitem", { name: /quote cart/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("shows Import and Export controls for authenticated sessions", () => {

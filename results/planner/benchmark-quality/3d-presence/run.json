@@ -1,0 +1,29 @@
+{
+  "ok": true,
+  "at": "2026-07-09T18:33:01.469Z",
+  "url": "http://localhost:3000/planner/guest/?plannerDevTools=1",
+  "furnitureBefore": 0,
+  "furnitureAfterCabinet": 1,
+  "furnitureFinal": 5,
+  "cabinetProbe": {
+    "furnitureMatch": "1",
+    "has3d": true
+  },
+  "sceneSample": {
+    "wallHexes": [],
+    "groups": [],
+    "threeColorWarns": 0
+  },
+  "threeColorWarnCount": 0,
+  "threeColorWarnSamples": [],
+  "consoleWarnTotal": 4,
+  "shots": [
+    "01-cabinet-2d-placed.png",
+    "02-cabinet-3d-multipart.png",
+    "02b-cabinet-3d-canvas.png",
+    "03-workstation-2d-after-place.png",
+    "04-workstation-3d-multipart.png",
+    "04b-workstation-3d-canvas.png",
+    "05-cabinet-workstation-3d-together.png"
+  ]
+}

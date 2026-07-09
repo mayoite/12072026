@@ -134,7 +134,8 @@ export function ThreeViewerInner({
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         if (enableShadows) {
           renderer.shadowMap.enabled = true;
-          renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+          // PCFSoftShadowMap deprecated in current Three — use PCFShadowMap (no console spam).
+          renderer.shadowMap.type = THREE.PCFShadowMap;
         }
         container.appendChild(renderer.domElement);
 

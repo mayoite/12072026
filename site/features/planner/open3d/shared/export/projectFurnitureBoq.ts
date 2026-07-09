@@ -19,6 +19,15 @@ import { workstationV0UnitPriceInr, WORKSTATION_V0_GST_RATE } from "../../catalo
 export const OPEN3D_FURNITURE_BOQ_KIND = "open3d-furniture-boq-v1" as const;
 export const OPEN3D_FURNITURE_BOQ_GST_RATE = WORKSTATION_V0_GST_RATE;
 
+/**
+ * Honesty label for BOQ money columns.
+ * Demo list only — not live ERP / multi-tenant / cloud catalog pricing.
+ */
+export const OPEN3D_FURNITURE_BOQ_PRICING_NOTE =
+  "Workstation unit prices are demo list schedule (systems-v0), not live ERP or cloud pricing. Unpriced rows keep unitPriceInr=0 (quantity + footprint only — no fabricated prices).";
+
+export type Open3dFurnitureBoqPriceSource = "demo-list" | "none";
+
 export type Open3dFurnitureBoqLine = {
   catalogId: string;
   name: string;
@@ -36,6 +45,8 @@ export type Open3dFurnitureBoqLine = {
   lineTotalInr: number;
   geometryMode: string;
   priced: boolean;
+  /** Where unitPriceInr came from — always labeled (demo-list or none). */
+  priceSource: Open3dFurnitureBoqPriceSource;
 };
 
 export type Open3dFurnitureBoqSummary = {
@@ -45,6 +56,10 @@ export type Open3dFurnitureBoqSummary = {
   generatedAt: string;
   currencyCode: "INR";
   gstRate: number;
+  /** Always demo-list-partial until live pricing exists. */
+  pricingMode: "demo-list-partial";
+  /** Human-readable honesty note for download consumers. */
+  pricingNote: string;
   lines: Open3dFurnitureBoqLine[];
   /** Placed furniture instance count. */
   totalItems: number;
@@ -75,6 +90,7 @@ type GroupBucket = {
   geometryMode: string;
   unitPriceInr: number;
   priced: boolean;
+  priceSource: Open3dFurnitureBoqPriceSource;
   quantity: number;
 };
 
@@ -139,6 +155,7 @@ function resolveIdentity(item: Open3dFurnitureItem): {
   geometryMode: string;
   unitPriceInr: number;
   priced: boolean;
+  priceSource: Open3dFurnitureBoqPriceSource;
 } {
   const config = resolveWorkstationConfig(item);
   if (config) {
@@ -152,6 +169,7 @@ function resolveIdentity(item: Open3dFurnitureItem): {
       geometryMode: item.geometryMode ?? "workstation-v0",
       unitPriceInr: workstationV0UnitPriceInr(config),
       priced: true,
+      priceSource: "demo-list",
     };
   }
 
@@ -172,6 +190,7 @@ function resolveIdentity(item: Open3dFurnitureItem): {
     geometryMode,
     unitPriceInr: 0,
     priced: false,
+    priceSource: "none",
   };
 }
 
@@ -219,6 +238,7 @@ export function buildOpen3dFurnitureBoq(
         geometryMode: identity.geometryMode,
         unitPriceInr: identity.unitPriceInr,
         priced: identity.priced,
+        priceSource: identity.priceSource,
       };
       const key = groupKey(base);
       const existing = groups.get(key);
@@ -251,6 +271,7 @@ export function buildOpen3dFurnitureBoq(
         lineTotalInr,
         geometryMode: g.geometryMode,
         priced: g.priced,
+        priceSource: g.priceSource,
       };
     })
     .sort(
@@ -274,6 +295,8 @@ export function buildOpen3dFurnitureBoq(
     generatedAt,
     currencyCode: "INR",
     gstRate,
+    pricingMode: "demo-list-partial",
+    pricingNote: OPEN3D_FURNITURE_BOQ_PRICING_NOTE,
     lines,
     totalItems,
     totalLines: lines.length,
@@ -308,6 +331,8 @@ export function exportOpen3dFurnitureBoqToCsv(summary: Open3dFurnitureBoqSummary
   rows.push(`Generated,${escapeCsvField(summary.generatedAt)}`);
   rows.push(`Currency,${summary.currencyCode}`);
   rows.push(`GST rate,${summary.gstRate}`);
+  rows.push(`Pricing mode,${summary.pricingMode}`);
+  rows.push(`Pricing note,${escapeCsvField(summary.pricingNote)}`);
   rows.push("");
   rows.push(
     [
@@ -324,6 +349,7 @@ export function exportOpen3dFurnitureBoqToCsv(summary: Open3dFurnitureBoqSummary
       "Line GST (INR)",
       "Line total (INR)",
       "Priced",
+      "Price source",
       "Geometry",
     ].join(","),
   );
@@ -344,6 +370,7 @@ export function exportOpen3dFurnitureBoqToCsv(summary: Open3dFurnitureBoqSummary
         String(li.lineGstInr),
         String(li.lineTotalInr),
         li.priced ? "yes" : "no",
+        li.priceSource,
         escapeCsvField(li.geometryMode),
       ].join(","),
     );

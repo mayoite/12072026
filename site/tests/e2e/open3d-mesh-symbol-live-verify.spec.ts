@@ -4,6 +4,8 @@
  *
  * 1) Place cabinet-v0 → 2D zoom screenshot (multi-prim strokes readable)
  * 2) Place workstation (4 seats) → 3D multi-part mesh screenshot
+ * 3) Soft assert: zoomed cabinet outer fill is not a pure solid blob
+ *    (diversity sample — not pixel-perfect snapshot / not overfit)
  */
 import { expect, test, type Page } from "@playwright/test";
 import path from "node:path";
@@ -56,9 +58,109 @@ async function zoomCanvasInAt(
   await page.mouse.move(cx, cy);
   for (let i = 0; i < steps; i++) {
     await page.mouse.wheel(0, -120);
-    await page.waitForTimeout(50);
+    // Real settle between wheel steps — avoid stacking without paint
+    await page
+      .locator(PLANNER_PRIMARY_CANVAS)
+      .evaluate(() => undefined)
+      .catch(() => undefined);
   }
-  await page.waitForTimeout(250);
+  await expect(canvas).toBeVisible({ timeout: 5_000 });
+}
+
+/**
+ * Soft visual probe: sample a center region of the primary 2D canvas.
+ * Pure solid fill ≈ very few quantized colors + low channel stddev.
+ * Multi-prim / stroke-readable symbols show more diversity.
+ * Thresholds are intentionally loose (not pixel-golden).
+ */
+async function sampleCanvasFillDiversity(page: Page): Promise<{
+  sampleCount: number;
+  uniqueQuantized: number;
+  channelStdDev: number;
+  notPureSolid: boolean;
+}> {
+  const canvas = page.locator(PLANNER_PRIMARY_CANVAS);
+  await expect(canvas).toBeVisible({ timeout: 10_000 });
+
+  const stats = await canvas.evaluate((el) => {
+    const c = el as HTMLCanvasElement;
+    const ctx = c.getContext("2d", { willReadFrequently: true });
+    if (!ctx) {
+      return { sampleCount: 0, uniqueQuantized: 0, channelStdDev: 0 };
+    }
+    const w = c.width;
+    const h = c.height;
+    if (w < 8 || h < 8) {
+      return { sampleCount: 0, uniqueQuantized: 0, channelStdDev: 0 };
+    }
+    // Center 40% box — furniture place target lives near mid after zoom-at-point
+    const x0 = Math.floor(w * 0.3);
+    const y0 = Math.floor(h * 0.3);
+    const rw = Math.max(4, Math.floor(w * 0.4));
+    const rh = Math.max(4, Math.floor(h * 0.4));
+    const img = ctx.getImageData(x0, y0, rw, rh);
+    const data = img.data;
+    const step = 8; // every 2nd pixel in x/y (stride 8 bytes * not — use pixel stride)
+    const pixelStride = 4 * 2; // every other pixel
+    const quantized = new Set<string>();
+    let sumR = 0;
+    let sumG = 0;
+    let sumB = 0;
+    let n = 0;
+    const rs: number[] = [];
+    const gs: number[] = [];
+    const bs: number[] = [];
+
+    for (let i = 0; i + 3 < data.length; i += pixelStride * step) {
+      const a = data[i + 3] ?? 0;
+      if (a < 16) continue; // skip near-transparent
+      const r = data[i] ?? 0;
+      const g = data[i + 1] ?? 0;
+      const b = data[i + 2] ?? 0;
+      // Quantize to 16 levels per channel — ignores anti-alias micro-noise
+      const qr = r >> 4;
+      const qg = g >> 4;
+      const qb = b >> 4;
+      quantized.add(`${qr},${qg},${qb}`);
+      sumR += r;
+      sumG += g;
+      sumB += b;
+      rs.push(r);
+      gs.push(g);
+      bs.push(b);
+      n += 1;
+    }
+
+    if (n === 0) {
+      return { sampleCount: 0, uniqueQuantized: 0, channelStdDev: 0 };
+    }
+
+    const meanR = sumR / n;
+    const meanG = sumG / n;
+    const meanB = sumB / n;
+    let varSum = 0;
+    for (let i = 0; i < n; i++) {
+      const dr = (rs[i] ?? 0) - meanR;
+      const dg = (gs[i] ?? 0) - meanG;
+      const db = (bs[i] ?? 0) - meanB;
+      varSum += dr * dr + dg * dg + db * db;
+    }
+    const channelStdDev = Math.sqrt(varSum / (n * 3));
+
+    return {
+      sampleCount: n,
+      uniqueQuantized: quantized.size,
+      channelStdDev,
+    };
+  });
+
+  // Loose bar: pure solid navy blob ≈ 1–2 quantized buckets + stddev ~0–5.
+  // Multi-prim with strokes / lighter carcass typically ≥ 4 buckets or stddev ≥ 12.
+  const notPureSolid =
+    stats.sampleCount > 20 &&
+    (stats.uniqueQuantized >= 4 || stats.channelStdDev >= 12);
+
+  return { ...stats, notPureSolid };
 }
 
 test.describe("Mesh/symbol live verify (stroke floor)", () => {
@@ -81,7 +183,16 @@ test.describe("Mesh/symbol live verify (stroke floor)", () => {
     const search = page.getByLabel("Search catalog elements");
     await expect(search).toBeVisible({ timeout: 15_000 });
     await search.fill("cabinet");
-    await page.waitForTimeout(400);
+    await expect
+      .poll(
+        async () =>
+          page
+            .getByRole("region", { name: "Catalog browser" })
+            .getByRole("button", { name: /Add Modular Cabinet to canvas/i })
+            .count(),
+        { timeout: 12_000 },
+      )
+      .toBeGreaterThan(0);
 
     const catalog = page.getByRole("region", { name: "Catalog browser" });
     const cabinetAdd = catalog.getByRole("button", {
@@ -132,10 +243,43 @@ test.describe("Mesh/symbol live verify (stroke floor)", () => {
       fullPage: false,
     });
 
+    // Soft visual bar: outer fill not pure solid (loose diversity probe).
+    // Capture while zoomed on cabinet; failures here are soft (see expect.soft below).
+    let fillDiversity: Awaited<ReturnType<typeof sampleCanvasFillDiversity>> = {
+      sampleCount: 0,
+      uniqueQuantized: 0,
+      channelStdDev: 0,
+      notPureSolid: false,
+    };
+    try {
+      fillDiversity = await sampleCanvasFillDiversity(page);
+    } catch (err) {
+      // Canvas may be webgl-backed / not readable — record and continue journey.
+      fillDiversity = {
+        sampleCount: 0,
+        uniqueQuantized: 0,
+        channelStdDev: 0,
+        notPureSolid: false,
+      };
+      fs.writeFileSync(
+        path.join(EVIDENCE, "fill-diversity-error.txt"),
+        String(err),
+        "utf8",
+      );
+    }
+
     // --- 2) Place workstation (batch 4 seats — proven path) ---
     // Reset zoom/view for clearer placement
-    await page.getByRole("button", { name: /Zoom to fit/i }).click();
-    await page.waitForTimeout(300);
+    const zoomFit = page.getByRole("button", { name: /Zoom to fit/i });
+    if (await zoomFit.isVisible().catch(() => false)) {
+      await zoomFit.click();
+      await waitForPlannerCanvas(page);
+    }
+
+    // Hard journey: furniture still present after zoom-fit (real wait, not sleep).
+    await expect
+      .poll(async () => furnitureCount(page), { timeout: 15_000 })
+      .toBe(afterCabinet);
 
     const beforeWs = await furnitureCount(page);
     await placeSeatsFromConfigurator(page, 4);
@@ -149,11 +293,20 @@ test.describe("Mesh/symbol live verify (stroke floor)", () => {
     });
 
     // 3D multi-part mesh
-    await page.getByRole("radio", { name: "3D", exact: true }).click();
+    const radio3d = page.getByRole("radio", { name: "3D", exact: true });
+    await radio3d.click();
+    await expect(radio3d).toBeChecked({ timeout: 10_000 });
     await expect(page.getByTestId("planner-3d-canvas")).toBeVisible({
       timeout: 20_000,
     });
-    await page.waitForTimeout(1800);
+    const orbit = page.locator(
+      '[data-testid="three-viewer-container"][data-orbit-enabled="true"]',
+    );
+    try {
+      await expect(orbit.first()).toBeVisible({ timeout: 12_000 });
+    } catch {
+      await expect(page.getByTestId("planner-3d-canvas")).toBeVisible();
+    }
 
     await page.screenshot({
       path: path.join(EVIDENCE, "05-workstation-3d-multipart.png"),
@@ -177,6 +330,7 @@ test.describe("Mesh/symbol live verify (stroke floor)", () => {
       furnitureFinal,
       cabinetIdCue,
       zoomPercentAfterZoom: zoom,
+      fillDiversity,
       shots: [
         "01-cabinet-v0-2d-placed.png",
         "02-cabinet-v0-2d-zoom-multiprim.png",
@@ -187,7 +341,7 @@ test.describe("Mesh/symbol live verify (stroke floor)", () => {
         "06-workstation-3d-canvas.png",
       ],
       notes:
-        "Live place cabinet-v0 + zoom 2D; place workstation batch; 3D multi-part mesh. Stroke floor = resolveCanvasStrokeWidthMm in renderBlock2DToCanvas.",
+        "Live place cabinet-v0 + zoom 2D; soft fill diversity; place workstation batch; 3D multi-part mesh.",
     };
 
     fs.writeFileSync(
@@ -196,9 +350,18 @@ test.describe("Mesh/symbol live verify (stroke floor)", () => {
       "utf8",
     );
 
-    // Hard facts for gate — placement deltas only here; visual readability judged in VERIFY.md
+    // Hard facts for gate — placement deltas
     expect(afterCabinet).toBe(before + 1);
     expect(furnitureFinal).toBe(beforeWs + 4);
     expect(cabinetIdCue).toBe(true);
+
+    // Soft assert: fill not pure solid (continues after fail; fails test at end).
+    // Loose thresholds — journey + screenshots remain primary evidence.
+    expect
+      .soft(
+        fillDiversity.notPureSolid,
+        `cabinet 2D outer fill looks pure solid (uniqueQuantized=${fillDiversity.uniqueQuantized}, stdDev=${fillDiversity.channelStdDev.toFixed(1)}, samples=${fillDiversity.sampleCount}). Multi-prim readable bar wants diversity ≥4 quantized colors or channelStdDev ≥12.`,
+      )
+      .toBe(true);
   });
 });

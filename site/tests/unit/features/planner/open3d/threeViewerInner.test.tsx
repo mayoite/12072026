@@ -10,6 +10,7 @@ const {
   materialDispose,
   forceWebGLError,
   OrbitControlsCtor,
+  rendererInstances,
 } = vi.hoisted(() => {
   const OrbitControlsCtor = vi.fn(function MockOrbitControls(
     this: {
@@ -39,6 +40,10 @@ const {
     materialDispose: vi.fn(),
     forceWebGLError: { current: false },
     OrbitControlsCtor,
+    rendererInstances: [] as Array<{
+      shadowMap: { enabled: boolean; type: unknown };
+      dispose: ReturnType<typeof vi.fn>;
+    }>,
   };
 });
 
@@ -96,7 +101,7 @@ vi.mock("three", () => {
 
   class MockWebGLRenderer {
     domElement = document.createElement("canvas");
-    shadowMap = { enabled: false, type: undefined };
+    shadowMap = { enabled: false, type: undefined as unknown };
     setSize = vi.fn();
     setPixelRatio = vi.fn();
     render = renderCalls;
@@ -106,6 +111,7 @@ vi.mock("three", () => {
       if (forceWebGLError.current) {
         throw new Error("WebGL init failed");
       }
+      rendererInstances.push(this);
     }
   }
 
@@ -129,6 +135,8 @@ vi.mock("three", () => {
     MeshStandardMaterial: vi.fn(),
     Mesh: MockMesh,
     Color: vi.fn(),
+    // Non-deprecated Three shadow filter (PCFSoftShadowMap logs deprecation).
+    PCFShadowMap: "PCFShadowMap",
     PCFSoftShadowMap: "PCFSoftShadowMap",
     DoubleSide: "DoubleSide",
   };
@@ -142,6 +150,7 @@ describe("ThreeViewerInner", () => {
     geometryDispose.mockClear();
     materialDispose.mockClear();
     OrbitControlsCtor.mockClear();
+    rendererInstances.length = 0;
     vi.spyOn(window, "requestAnimationFrame").mockReturnValue(1);
     vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => undefined);
     vi.spyOn(window, "addEventListener").mockImplementation(() => undefined);
@@ -226,6 +235,43 @@ describe("ThreeViewerInner", () => {
 
     resizeHandler?.();
     expect(renderCalls).toHaveBeenCalled();
+  });
+
+  it("enableShadows uses PCFShadowMap (not deprecated PCFSoftShadowMap)", async () => {
+    render(
+      <div style={{ width: 640, height: 480 }}>
+        <ThreeViewerInner enableShadows backgroundColor="#ffffff" />
+      </div>,
+    );
+
+    await waitFor(() => {
+      expect(rendererInstances.length).toBeGreaterThan(0);
+      expect(renderCalls).toHaveBeenCalled();
+    });
+
+    const shadowMap = rendererInstances[rendererInstances.length - 1]?.shadowMap;
+    expect(shadowMap).toBeDefined();
+    expect(shadowMap?.enabled).toBe(true);
+    // Contract: PCFSoftShadowMap is deprecated in current Three and spams console.
+    expect(shadowMap?.type).toBe("PCFShadowMap");
+    expect(shadowMap?.type).not.toBe("PCFSoftShadowMap");
+  });
+
+  it("does not enable shadow maps when enableShadows is false", async () => {
+    render(
+      <div style={{ width: 640, height: 480 }}>
+        <ThreeViewerInner enableShadows={false} backgroundColor="#ffffff" />
+      </div>,
+    );
+
+    await waitFor(() => {
+      expect(rendererInstances.length).toBeGreaterThan(0);
+      expect(renderCalls).toHaveBeenCalled();
+    });
+
+    const shadowMap = rendererInstances[rendererInstances.length - 1]?.shadowMap;
+    expect(shadowMap?.enabled).toBe(false);
+    expect(shadowMap?.type).toBeUndefined();
   });
 
   it("cancels Three.js loading when unmounted early", async () => {

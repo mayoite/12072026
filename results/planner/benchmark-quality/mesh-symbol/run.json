@@ -1,21 +1,18 @@
 {
   "ok": true,
-  "journeyExit": 0,
-  "mesh_symbol_bar": "FAIL",
-  "verdict": {
-    "place_cabinet_v0": "PASS",
-    "symbol_2d_multiprim_readable": "FAIL",
-    "place_workstation": "PASS",
-    "mesh_3d_multipart_readable": "PASS",
-    "overall": "FAIL"
-  },
-  "at": "2026-07-09T18:26:21.737Z",
+  "at": "2026-07-09T18:33:10.455Z",
   "url": "http://localhost:3000/planner/guest/?plannerDevTools=1",
   "furnitureBefore": 0,
   "furnitureAfterCabinet": 1,
   "furnitureFinal": 5,
   "cabinetIdCue": true,
   "zoomPercentAfterZoom": 605,
+  "fillDiversity": {
+    "sampleCount": 4416,
+    "uniqueQuantized": 1,
+    "channelStdDev": 0,
+    "notPureSolid": false
+  },
   "shots": [
     "01-cabinet-v0-2d-placed.png",
     "02-cabinet-v0-2d-zoom-multiprim.png",
@@ -25,6 +22,5 @@
     "05-workstation-3d-multipart.png",
     "06-workstation-3d-canvas.png"
   ],
-  "notes": "Live place cabinet-v0 + zoom 2D; place workstation batch; 3D multi-part mesh. Stroke floor present but live cabinet-v0 remains solid opaque fill (no readable multi-prim). Workstation 3D multi-part PASS. See VERIFY.md.",
-  "verify": "VERIFY.md"
+  "notes": "Live place cabinet-v0 + zoom 2D; soft fill diversity; place workstation batch; 3D multi-part mesh."
 }

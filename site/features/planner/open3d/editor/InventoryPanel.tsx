@@ -402,7 +402,7 @@ export const InventoryPanel = memo(function InventoryPanel({
             ref={searchInputRef}
             type="search"
             className={styles.searchInput}
-            placeholder="Search furniture (Fuse + RAC)"
+            placeholder="Search furniture (e.g. cabinet)"
           />
           {state.searchQuery && (
             <button
@@ -630,6 +630,19 @@ export const InventoryPanel = memo(function InventoryPanel({
                     height={256}
                     loading="lazy"
                     decoding="async"
+                    onError={(event) => {
+                      // Residual 404 thumbs: hide broken image, show icon fallback.
+                      const img = event.currentTarget;
+                      img.style.display = "none";
+                      const parent = img.parentElement;
+                      if (parent && !parent.querySelector("[data-thumb-fallback]")) {
+                        const fallback = document.createElement("div");
+                        fallback.className = styles.itemPlaceholder;
+                        fallback.dataset.thumbFallback = "1";
+                        fallback.setAttribute("aria-hidden", "true");
+                        parent.appendChild(fallback);
+                      }
+                    }}
                   />
                 ) : (
                   <div className={styles.itemPlaceholder}>
@@ -646,7 +659,10 @@ export const InventoryPanel = memo(function InventoryPanel({
                 <button
                   type="button"
                   className={styles.emptyAction}
+                  // Accessible name kept stable for e2e (`Add … to canvas`); visible label
+                  // is "Place" so guests match toolbar Place (P) + systems configurator.
                   aria-label={`Add ${item.shortName} to canvas`}
+                  title={`Arm place: click the plan to drop ${item.shortName}`}
                   onClick={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -656,7 +672,7 @@ export const InventoryPanel = memo(function InventoryPanel({
                     );
                   }}
                 >
-                  Add {item.shortName} to canvas
+                  Place
                 </button>
               </div>
               <button

@@ -40,9 +40,12 @@ function boxBlock(widthMm: number, depthMm: number, heightMm: number, label: str
 }
 
 /**
- * Readable plan-view cabinet-v0 symbol (W2 / P05).
+ * Readable plan-view cabinet-v0 symbol (W2 / P05 / MASTER-CHART mesh_symbol).
  * Top-left mm origin (0..L, 0..D): carcass, inner, front/back, doorStyle cues.
  * Canvas centers via renderBlock2DCentered — prims are never authored centered.
+ *
+ * Contrast rule (benchmark): light fill + dark stroke so multi-prim detail reads
+ * at plan zoom. Opaque inverse-body carcass + same-family stroke = solid blob.
  */
 function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
   const opts = item.modularOptions;
@@ -52,18 +55,21 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
   const doorStyle = opts?.doorStyle ?? "slab";
   const inset = Math.min(16, Math.max(6, Math.min(w, d) * 0.04));
   const frontY = d - inset; // plan: +Y depth; front at larger Y
-  const stroke = BLOCK_STYLE.storageStroke;
+  // Light carcass + dark outline (not storage inverse-body fill).
+  const fill = BLOCK_STYLE.surface;
+  const stroke = BLOCK_STYLE.surfaceStroke;
+  const detailStroke = BLOCK_STYLE.glyphDark;
   const strokeW = BLOCK_STYLE.surfaceStrokeWidth;
 
   const prims: Prim[] = [
-    // Outer carcass
+    // Outer carcass — light fill so inner lines read
     {
       kind: "rect",
       x: 0,
       y: 0,
       w,
       h: d,
-      fill: BLOCK_STYLE.storage,
+      fill,
       stroke,
       strokeWidth: strokeW,
       radius: 4,
@@ -76,22 +82,22 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
       w: Math.max(1, w - inset * 2),
       h: Math.max(1, d - inset * 2),
       fill: "none",
-      stroke,
-      strokeWidth: 1,
+      stroke: detailStroke,
+      strokeWidth: 1.25,
       radius: 2,
     },
     // Front edge (door face)
     {
       kind: "line",
       points: [inset, frontY, w - inset, frontY],
-      stroke,
-      strokeWidth: 2,
+      stroke: detailStroke,
+      strokeWidth: 2.5,
     },
     // Back edge
     {
       kind: "line",
       points: [inset, inset, w - inset, inset],
-      stroke,
+      stroke: detailStroke,
       strokeWidth: 1.5,
     },
   ];
@@ -101,7 +107,7 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
     prims.push({
       kind: "line",
       points: [w * 0.5, inset, w * 0.5, frontY],
-      stroke,
+      stroke: detailStroke,
       strokeWidth: 1.5,
       dash: [6, 4],
     });
@@ -114,7 +120,7 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
       y: handleY,
       w: handleW,
       h: handleH,
-      fill: stroke,
+      fill: detailStroke,
       radius: 2,
     });
     prims.push({
@@ -123,7 +129,7 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
       y: handleY,
       w: handleW,
       h: handleH,
-      fill: stroke,
+      fill: detailStroke,
       radius: 2,
     });
   } else if (doorStyle === "slab") {
@@ -135,7 +141,7 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
       y: frontY - handleH - 4,
       w: handleW,
       h: handleH,
-      fill: stroke,
+      fill: detailStroke,
       radius: 2,
     });
   } else {
@@ -143,15 +149,15 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
     prims.push({
       kind: "line",
       points: [inset, d * 0.33, w - inset, d * 0.33],
-      stroke,
-      strokeWidth: 1,
+      stroke: detailStroke,
+      strokeWidth: 1.25,
       dash: [8, 4],
     });
     prims.push({
       kind: "line",
       points: [inset, d * 0.66, w - inset, d * 0.66],
-      stroke,
-      strokeWidth: 1,
+      stroke: detailStroke,
+      strokeWidth: 1.25,
       dash: [8, 4],
     });
   }

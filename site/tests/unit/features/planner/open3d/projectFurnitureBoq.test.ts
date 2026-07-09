@@ -12,6 +12,7 @@ import {
   exportOpen3dFurnitureBoqToCsv,
   exportOpen3dFurnitureBoqToJson,
   OPEN3D_FURNITURE_BOQ_KIND,
+  OPEN3D_FURNITURE_BOQ_PRICING_NOTE,
 } from "@/features/planner/open3d/shared/export/projectFurnitureBoq";
 
 function ids(...values: string[]) {
@@ -112,6 +113,7 @@ describe("buildOpen3dFurnitureBoq (pure first-class BOQ)", () => {
     expect(wsLine!.widthMm).toBe(1500);
     expect(wsLine!.depthMm).toBe(600);
     expect(wsLine!.priced).toBe(true);
+    expect(wsLine!.priceSource).toBe("demo-list");
     expect(wsLine!.unitPriceInr).toBeGreaterThan(0);
     expect(wsLine!.lineTotalInr).toBeGreaterThan(wsLine!.lineSubtotalInr);
 
@@ -122,18 +124,33 @@ describe("buildOpen3dFurnitureBoq (pure first-class BOQ)", () => {
     expect(tableLine!.heightMm).toBe(450);
     expect(tableLine!.sku).toBe("ST-001");
     expect(tableLine!.priced).toBe(false);
+    expect(tableLine!.priceSource).toBe("none");
     expect(tableLine!.unitPriceInr).toBe(0);
     expect(tableLine!.lineGstInr).toBe(0);
+
+    // Demo prices labeled at summary level — never presented as live ERP.
+    expect(summary.pricingMode).toBe("demo-list-partial");
+    expect(summary.pricingNote).toBe(OPEN3D_FURNITURE_BOQ_PRICING_NOTE);
+    expect(summary.pricingNote.toLowerCase()).toContain("demo");
+    expect(summary.pricingNote.toLowerCase()).toContain("not live");
 
     const json = exportOpen3dFurnitureBoqToJson(summary);
     const parsed = JSON.parse(json) as typeof summary;
     expect(parsed.kind).toBe(OPEN3D_FURNITURE_BOQ_KIND);
+    expect(parsed.pricingMode).toBe("demo-list-partial");
+    expect(parsed.pricingNote).toContain("demo list");
     expect(parsed.lines).toHaveLength(2);
     expect(parsed.totalItems).toBe(5);
+    expect(parsed.lines.find((l) => l.priced)?.priceSource).toBe("demo-list");
 
     const csv = exportOpen3dFurnitureBoqToCsv(summary);
     expect(csv).toContain("Project,Client BOQ Plan");
+    expect(csv).toContain("Pricing mode,demo-list-partial");
+    expect(csv).toContain("Pricing note,");
+    expect(csv).toContain("demo list");
     expect(csv).toContain("Category,Item,Catalog ID,SKU,Qty");
+    expect(csv).toContain("Price source");
+    expect(csv).toContain("demo-list");
     expect(csv).toContain("workstation");
     expect(csv).toContain("side-table-001");
     expect(csv).toContain("ST-001");

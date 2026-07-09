@@ -242,10 +242,30 @@ export function TopBar({
           {showGuestActions ? "Save draft" : "Save"}
         </button>
 
+        {/* Guest: honest export surface (JSON + BOQ). No Import / quote-cart / ERP. */}
         {showGuestActions && (
-          <button type="button" className={styles.btn} onClick={() => onExport?.("json")}>
-            Export JSON
-          </button>
+          <MenuTrigger>
+            <Button className={styles.btn}>
+              Export
+              <ChevronDownIcon />
+            </Button>
+            <Popover placement="bottom end">
+              <Menu
+                className={styles.dropdownMenu}
+                onAction={(key) => onExport?.(key as string)}
+              >
+                <MenuItem id="json" className={styles.dropdownItem}>
+                  Export as JSON
+                </MenuItem>
+                <MenuItem id="boq-json" className={styles.dropdownItem}>
+                  Export BOQ (JSON)
+                </MenuItem>
+                <MenuItem id="boq-csv" className={styles.dropdownItem}>
+                  Export BOQ (CSV)
+                </MenuItem>
+              </Menu>
+            </Popover>
+          </MenuTrigger>
         )}
 
         {showPersistenceActions && (

@@ -170,6 +170,45 @@ describe("furnitureBlock2DFromItem", () => {
     expect(block.footprint.L).toBe(800);
   });
 
+  it("cabinet-v0 plan symbol uses light fill + dark detail (not solid inverse-body blob)", () => {
+    // MASTER-CHART mesh_symbol bar: multi-prim must read on plan (contrast, not unit count alone).
+    const block = furnitureBlock2DFromItem({
+      id: "f2-contrast",
+      catalogId: "cabinet-v0",
+      position: { x: 0, y: 0 },
+      rotation: 0,
+      scale: { x: 1, y: 1, z: 1 },
+      width: 800,
+      depth: 400,
+      height: 900,
+      geometryMode: "modular-cabinet-v0",
+      modularOptions: {
+        widthMm: 800,
+        depthMm: 400,
+        heightMm: 900,
+        doorStyle: "slab",
+        material: "white",
+      },
+    });
+    const outer = block.prims.find(
+      (p) => p.kind === "rect" && p.x === 0 && p.y === 0 && "w" in p && p.w === 800,
+    );
+    expect(outer).toBeDefined();
+    if (!outer || outer.kind !== "rect") throw new Error("outer carcass missing");
+    // Light surface fill — NOT var(--block-storage) / inverse-body solid blob
+    expect(outer.fill).toBe("var(--block-surface)");
+    expect(outer.fill).not.toMatch(/block-storage/);
+    // Multi-prim: inner rect + front/back lines + handle for slab
+    expect(block.prims.length).toBeGreaterThanOrEqual(4);
+    const lines = block.prims.filter((p) => p.kind === "line");
+    expect(lines.length).toBeGreaterThanOrEqual(2);
+    for (const line of lines) {
+      if (line.kind === "line") {
+        expect(line.stroke).not.toMatch(/block-storage/);
+      }
+    }
+  });
+
   it("unknown SKU still yields nonempty prims (never empty plan mark)", () => {
     const width = 500;
     const depth = 400;

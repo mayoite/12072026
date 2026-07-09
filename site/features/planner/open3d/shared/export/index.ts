@@ -30,6 +30,7 @@ export {
   buildOpen3dBoqFilename,
   OPEN3D_FURNITURE_BOQ_KIND,
   OPEN3D_FURNITURE_BOQ_GST_RATE,
+  OPEN3D_FURNITURE_BOQ_PRICING_NOTE,
   type Open3dFurnitureBoqLine,
   type Open3dFurnitureBoqSummary,
   type BuildOpen3dFurnitureBoqOptions,

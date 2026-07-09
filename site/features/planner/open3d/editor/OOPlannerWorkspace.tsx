@@ -355,14 +355,21 @@ export function OOPlannerWorkspace({
     canvasRef.current?.cancel();
   }, [workspaceCanvas]);
 
-  const handleInventoryPlace = useCallback((itemId: string) => {
-    pendingWorkstationConfigRef.current = null;
-    setPendingWorkstationConfig(null);
-    setPendingCatalogItemId(itemId);
-    setActiveTool("placement");
-    armedToolRef.current = "placement";
-    canvasRef.current?.setTool("placement");
-  }, []);
+  const handleInventoryPlace = useCallback(
+    (itemId: string) => {
+      pendingWorkstationConfigRef.current = null;
+      setPendingWorkstationConfig(null);
+      setPendingCatalogItemId(itemId);
+      setActiveTool("placement");
+      armedToolRef.current = "placement";
+      canvasRef.current?.setTool("placement");
+      const item = catalog.resolveItem(itemId);
+      const label = item?.shortName ?? item?.name ?? itemId;
+      // Same honesty as workstation arm: Place is two-step (arm → canvas click).
+      setWorkspaceMessage(`Click canvas to place ${label}`);
+    },
+    [catalog],
+  );
 
   const handleWorkstationConfigPlace = useCallback(
     (config: WorkstationConfigV0) => {
@@ -602,14 +609,14 @@ export function OOPlannerWorkspace({
           const filename = buildOpen3dBoqFilename(workspaceCanvas.project, "csv");
           downloadFurnitureBoqCSV(exportOpen3dFurnitureBoqToCsv(summary), filename);
           setWorkspaceMessage(
-            `Exported BOQ CSV: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST`,
+            `Exported BOQ CSV: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST (demo list prices)`,
           );
           return;
         }
         const filename = buildOpen3dBoqFilename(workspaceCanvas.project, "json");
         downloadFurnitureBoqJSON(exportOpen3dFurnitureBoqToJson(summary), filename);
         setWorkspaceMessage(
-          `Exported BOQ JSON: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST` +
+          `Exported BOQ JSON: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST (demo list prices)` +
             (summary.unpricedItemCount > 0
               ? ` · ${summary.unpricedItemCount} unpriced`
               : ""),

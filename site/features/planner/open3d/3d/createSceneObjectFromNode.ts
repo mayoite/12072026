@@ -21,9 +21,45 @@ import {
   parseWorkstationConfigKey,
 } from "../catalog/workstationSystemV0";
 import { ParametricBuilder } from "../catalog/parametricBuilder";
+import { resolvePaintColor } from "../shared/readThemeColor";
+import { PLANNER_COLOR_TOKENS } from "../shared/themeColorTokens";
 import { mmToMeters, type Open3dSceneNode } from "./buildOpen3dSceneNodes";
 
 type ThreeModule = typeof THREE;
+
+/** True when paint is a CSS custom-property ref (not a THREE-parseable color). */
+function isCssThemeRef(color: string | undefined): boolean {
+  if (!color) return false;
+  const t = color.trim();
+  return t.startsWith("var(") || t.startsWith("--");
+}
+
+/**
+ * THREE.Color cannot parse CSS custom properties (`var(--token)`).
+ * Model walls/furniture store theme refs via themeColorRef — resolve before materials.
+ * Never returns an unresolved var()/--token string (avoids THREE.Color console spam + gray fail).
+ */
+function resolveThreeMaterialColor(
+  color: string | undefined,
+  fallbackToken: string,
+  hexFallback: string,
+): string {
+  try {
+    if (typeof document !== "undefined") {
+      const resolved = resolvePaintColor(color, fallbackToken).trim();
+      // Reject unresolved or nested-var leftovers; THREE only accepts #hex/rgb/hsl/named.
+      if (resolved && !isCssThemeRef(resolved) && !resolved.includes("var(")) {
+        return resolved;
+      }
+    }
+  } catch {
+    /* fall through to literal / hex fallback */
+  }
+  if (color && !isCssThemeRef(color) && !color.includes("var(")) {
+    return color;
+  }
+  return hexFallback;
+}
 
 function applyShadowFlags(
   object: THREE.Object3D,
@@ -160,7 +196,20 @@ export function createSceneObjectFromNode(
   const w = mmToMeters(node.widthMm);
   const d = mmToMeters(node.depthMm);
   const h = mmToMeters(node.heightMm);
-  const color = node.color ?? (node.kind === "wall" ? "#9ca3af" : "#e5e7eb");
+  const isWall = node.kind === "wall";
+  // Model walls default to wallDefault (--text-inverse-body) for 2D plan paint.
+  // In 3D that reads as washed inverse-text gray — use wallStroke (block wall) for mass.
+  // Explicit user hex/rgb still wins; theme refs remap to intentional wall token.
+  const paintInput =
+    isWall && isCssThemeRef(node.color) ? undefined : node.color;
+  const color = resolveThreeMaterialColor(
+    paintInput,
+    isWall
+      ? PLANNER_COLOR_TOKENS.wallStroke
+      : PLANNER_COLOR_TOKENS.furnitureDefault,
+    // Match theme.css --color-dark-midnight-blue-600 (wall block family)
+    isWall ? "#182A40" : "#e5e7eb",
+  );
   const geometry = new THREE.BoxGeometry(w, h, d);
   const material = new THREE.MeshStandardMaterial({
     color,
