@@ -70,6 +70,26 @@ export {
 } from "./mesh/placeModularWithGeneratedGlbPlan";
 
 export {
+  placeModularWithGeneratedGlbCore,
+  type PlaceModularGlbWriter,
+  type PlaceModularWithGeneratedGlbCoreOptions,
+  type PlaceModularWithGeneratedGlbCoreResult,
+} from "./mesh/placeModularWithGeneratedGlbCore";
+
+export {
+  placeModularWithGeneratedGlbBrowser,
+  writeGeneratedGlbViaApi,
+  GENERATED_GLB_WRITE_API_PATH,
+  type PlaceModularWithGeneratedGlbBrowserOptions,
+  type PlaceModularWithGeneratedGlbBrowserResult,
+} from "./mesh/placeModularWithGeneratedGlbBrowser";
+
+export {
+  shouldPlaceModularWithGeneratedGlb,
+  type ModularGlbPlaceCatalogRef,
+} from "./mesh/shouldPlaceModularWithGeneratedGlb";
+
+export {
   runModularMeshStages,
   type MeshStagesResult,
 } from "./mesh/runMeshStages";

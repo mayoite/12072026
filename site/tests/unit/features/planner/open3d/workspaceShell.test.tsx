@@ -12,7 +12,11 @@ import {
   useWorkspaceCanvas,
   useCanvasDrawing,
 } from "@/features/planner/open3d/editor/useWorkspaceCanvas";
-import { useDockingSystem } from "@/features/planner/open3d/editor/useDockingSystem";
+import {
+  useDockingSystem,
+  SSR_VIEWPORT_TIER,
+  PLANNER_VIEWPORT_BREAKPOINTS,
+} from "@/features/planner/open3d/editor/useDockingSystem";
 import { useDoorWindowPlacement } from "@/features/planner/open3d/editor/useDoorWindowPlacement";
 import { toolFromShortcutKey } from "@/features/planner/open3d/editor/useWorkspaceKeyboard";
 import { runtimeToolFor } from "@/features/planner/open3d/editor/canvasTool";
@@ -622,9 +626,17 @@ describe("TDD editor coverage additions", () => {
       Object.defineProperty(window, "innerWidth", { configurable: true, value: 600 }); // force small
     });
 
-    it("detects small viewport tier and handles mobile activePanel logic", () => {
+    it("uses a stable SSR default so data-viewport hydrates (desktop, not window-measured)", () => {
+      // Contract: first paint must not read window for tier; SSR_VIEWPORT_TIER is the shared default.
+      expect(SSR_VIEWPORT_TIER).toBe("desktop");
+    });
+
+    it("detects small viewport tier after mount and handles mobile activePanel logic", async () => {
       const { result } = renderHook(() => useDockingSystem());
-      expect(result.current.viewportTier).toBe("small");
+      // Post-mount effect measures real width (600 → small). Initial state was SSR desktop.
+      await waitFor(() => {
+        expect(result.current.viewportTier).toBe("small");
+      });
 
       act(() => {
         result.current.setActivePanel("left");
@@ -634,6 +646,27 @@ describe("TDD editor coverage additions", () => {
       expect(result.current.activePanel).toBe("left");
     });
 
+    it("detects tablet tier after mount without hydrating from window on first paint", async () => {
+      Object.defineProperty(window, "innerWidth", { configurable: true, value: 1024 });
+      const { result } = renderHook(() => useDockingSystem());
+      await waitFor(() => {
+        expect(result.current.viewportTier).toBe("tablet");
+      });
+    });
+
+    it("shell data-viewport matches measured tier after mount (tablet client)", async () => {
+      Object.defineProperty(window, "innerWidth", { configurable: true, value: 1024 });
+      const { container } = render(
+        <WorkspaceShell projectName="Hydration viewport">
+          <div>canvas</div>
+        </WorkspaceShell>,
+      );
+      await waitFor(() => {
+        const shell = container.querySelector("[data-viewport]");
+        expect(shell).toHaveAttribute("data-viewport", "tablet");
+      });
+    });
+
     it("reset and full cycle covers default restore branches", () => {
       const { result } = renderHook(() => useDockingSystem());
       act(() => {
@@ -641,6 +674,51 @@ describe("TDD editor coverage additions", () => {
         result.current.reset();
       });
       expect(result.current.panels.bottom.state).toBe("collapsed");
+    });
+  });
+
+  describe("P0.3 data-viewport hydration contract", () => {
+    beforeEach(() => {
+      localStorage.clear();
+    });
+
+    afterEach(() => {
+      cleanup();
+      vi.restoreAllMocks();
+    });
+
+    it("SSR_VIEWPORT_TIER is a stable desktop default (not window-measured)", () => {
+      expect(SSR_VIEWPORT_TIER).toBe("desktop");
+      expect(PLANNER_VIEWPORT_BREAKPOINTS.smallMax).toBe(768);
+      expect(PLANNER_VIEWPORT_BREAKPOINTS.tabletMax).toBe(1280);
+    });
+
+    it("useDockingSystem measures real width only after mount (tablet range)", () => {
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        value: PLANNER_VIEWPORT_BREAKPOINTS.tabletMax - 100,
+      });
+      const { result } = renderHook(() => useDockingSystem());
+      // RTL flushes mount effects → measured tier, not stuck on SSR default forever
+      expect(result.current.viewportTier).toBe("tablet");
+    });
+
+    it("WorkspaceShell sets data-viewport after mount to measured tier (no SSR/client attr split)", () => {
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        value: PLANNER_VIEWPORT_BREAKPOINTS.tabletMax - 100,
+      });
+      const { container } = render(
+        <WorkspaceShell projectName="Hydration plan">
+          <div>canvas</div>
+        </WorkspaceShell>,
+      );
+      const withViewport = container.querySelectorAll("[data-viewport]");
+      // After mount both shell + workspace carry the measured tier (tablet)
+      expect(withViewport.length).toBe(2);
+      for (const el of withViewport) {
+        expect(el.getAttribute("data-viewport")).toBe("tablet");
+      }
     });
   });
 

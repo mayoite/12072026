@@ -14,7 +14,10 @@ import {
   V1_COMPILE_AUTHORITY,
   listSvgStages,
 } from "@/features/planner/asset-engine";
-import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
+import {
+  compileSvgForPublish,
+  PUBLISH_COMPILE_AUTHORITY as PUBLISH_FROM_ENTRY,
+} from "@/features/planner/asset-engine/svg/compileSvgForPublish";
 import { compileAuthority as v1CompileAuthority } from "@/features/planner/open3d/catalog/svg/svgCompiler.server";
 
 // tests/unit/features/planner/asset-engine → site/
@@ -23,6 +26,7 @@ const siteRoot = path.resolve(__dirname, "../../../../../");
 describe("SVG compile authority (publish vs V1)", () => {
   it("documents publish authority as pipelineCore+normalize", () => {
     expect(PUBLISH_COMPILE_AUTHORITY).toBe("pipelineCore+normalize");
+    expect(PUBLISH_FROM_ENTRY).toBe(PUBLISH_COMPILE_AUTHORITY);
     expect(COMPILE_AUTHORITY.publish).toBe(PUBLISH_COMPILE_AUTHORITY);
     expect(COMPILE_AUTHORITY.publishEntries.normalize).toContain(
       "normalizeDescriptorForPipeline",
@@ -38,6 +42,8 @@ describe("SVG compile authority (publish vs V1)", () => {
     expect(COMPILE_AUTHORITY.v1).toBe("v1-reference-only");
     expect(v1CompileAuthority).toBe("v1-reference-only");
     expect(COMPILE_AUTHORITY.v1Entry).toContain("svgCompiler.server");
+    // Publish and V1 authority strings must stay distinct
+    expect(PUBLISH_COMPILE_AUTHORITY).not.toBe(V1_COMPILE_AUTHORITY);
   });
 
   it("lists publish compile stages S1–S3 in registry", () => {
@@ -73,5 +79,52 @@ describe("SVG compile authority (publish vs V1)", () => {
     );
     expect(result.svg).toContain("<svg");
     expect(result.svg.length).toBeGreaterThan(80);
+  });
+
+  it("compileSvgForPublish fails closed on missing slug (S1)", async () => {
+    const result = await compileSvgForPublish({
+      viewBox: { x: 0, y: 0, width: 10, height: 10 },
+      blocks: [{ x: 0, y: 0, width: 10, height: 10 }],
+    });
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.failedAt).toBe("svg-s1-normalize");
+    expect(result.error).toMatch(/slug/i);
+    expect(result.stages).toContain("svg-s1-normalize");
+  });
+
+  it("compileSvgForPublish fails closed on non-object descriptor", async () => {
+    const result = await compileSvgForPublish(null);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.failedAt).toBe("svg-s1-normalize");
+    expect(result.error).toMatch(/object/i);
+  });
+
+  it("compileSvgForPublish succeeds for minimal single-block admin shape", async () => {
+    const result = await compileSvgForPublish({
+      slug: "unit-box-001",
+      variant: "fixed",
+      viewBox: { x: 0, y: 0, width: 100, height: 80 },
+      blocks: [{ x: 0, y: 0, width: 100, depth: 80 }],
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.normalized.slug).toBe("unit-box-001");
+    expect(result.normalized.variant).toBe("union");
+    expect(result.normalized.blocks[0]?.height).toBe(80);
+    expect(result.stages).toEqual([...PUBLISH_SVG_COMPILE_STAGES]);
+    expect(result.svg).toMatch(/<svg[\s>]/i);
+    expect(result.svg.length).toBeGreaterThan(40);
+  });
+
+  it("publish entries never point orderedApi at V1 svgCompiler.server", () => {
+    expect(COMPILE_AUTHORITY.publishEntries.orderedApi).not.toMatch(
+      /svgCompiler\.server/,
+    );
+    expect(COMPILE_AUTHORITY.publishEntries.compile).not.toMatch(
+      /svgCompiler\.server/,
+    );
+    expect(COMPILE_AUTHORITY.v1Entry).toMatch(/svgCompiler\.server/);
   });
 });

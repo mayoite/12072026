@@ -3,6 +3,8 @@
 **Problem:** `site/package.json` has ~130 scripts (ops/db/cdn/i18n/e2e history).  
 **Fix:** use this **short menu** only. Old scripts stay for CI — do not delete them yet.
 
+**Status (2026-07-09):** P0.1 **DONE** · P0.2 **MOSTLY DONE** (unit closed — continuous verify below) · P0.3 **IN PROGRESS** (a11y). See [00-PENDING.md](./00-PENDING.md).
+
 From **repo root** (`D:\OandO07072026`):
 
 | Command | What it does |
@@ -10,13 +12,16 @@ From **repo root** (`D:\OandO07072026`):
 | `pnpm dev` | Next dev (admin bypass via `site/.env.development.local`) |
 | `pnpm p0` | P0 unit slice + SVG fixture batch smoke |
 | `pnpm p0:unit` | asset-engine + G8 round-trip + modular place + dev-auth unit tests |
-| `pnpm p0:g8` | **P0.2 unit slice**: G8 load/round-trip + modular GLB plan/export/stamp (existing files only) |
+| `pnpm p0:g8` | **P0.2 continuous verify**: G8 load/round-trip + modular GLB plan/export/stamp (existing files only) |
 | `pnpm p0:svg` | SVG fixtures → `public/svg-catalog` |
 | `pnpm p0:admin-svg` | Playwright P0.1 admin publish E2E (needs server; set `PLAYWRIGHT_BASE_URL` if reusing `pnpm dev`) |
 | `pnpm test` | Full vitest (site) |
 | `pnpm gate` | Fast release gate (lint + typecheck + unit + audits) |
 | `pnpm gate:full` | Full release gate (slow: build + e2e + coverage) |
 | `pnpm build` / `pnpm start` | Production path (note: build may still fail on `/contact`) |
+| `pnpm dev:tech-stack` | Workflow docs app (name **kept**) |
+| `pnpm build:tech-stack` | Build workflow docs (name **kept**) |
+| `pnpm preview:tech-stack` | Preview workflow docs (name **kept**) |
 
 From **site/** (`cd site`):
 
@@ -30,7 +35,9 @@ From **site/** (`cd site`):
 | `pnpm gate` | `release:gate:fast` |
 | `pnpm gate:full` | `release:gate` |
 
-### P0.2 G8 + modular GLB (unit)
+### P0.2 G8 + modular GLB — continuous status (unit closed)
+
+**P0.2 unit work is closed** ([15-P0-2-DONE.md](./15-P0-2-DONE.md)). Use `pnpm p0:g8` as **continuous regression** after hard-path edits while P0.3 (a11y) runs — do not re-open P0.2 unit scope.
 
 `pnpm p0:g8` runs **only files that already exist** (no invented paths). Today:
 
@@ -51,7 +58,7 @@ cd D:\OandO07072026
 pnpm p0:g8
 ```
 
-**Not in `p0:g8` yet (P0.2 residuals):** storage upload of G5 buffer, real Chrome load smoke. When sibling agents add those tests under `site/tests/`, extend the `p0:g8` script in `site/package.json` (and this table) — do not invent failing placeholders.
+**P0.2 residuals (not blocking P0.3):** optional Chrome open3d load smoke; remote storage upload of G5 buffer. When those tests land under `site/tests/`, extend the `p0:g8` script in `site/package.json` (and this table) — do not invent failing placeholders.
 
 ### P0.1 admin E2E (typical)
 

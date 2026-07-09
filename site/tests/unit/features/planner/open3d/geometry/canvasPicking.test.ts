@@ -25,6 +25,7 @@ function wall(
 describe("pickWallAtPoint / pickWallWithPosition", () => {
   const horizontal = wall("h", { x: 0, y: 0 }, { x: 1000, y: 0 });
   const vertical = wall("v", { x: 0, y: 0 }, { x: 0, y: 1000 });
+  const diagonal = wall("d", { x: 0, y: 0 }, { x: 1000, y: 1000 });
   const toleranceMm = 50;
 
   it("picks a mid-segment point and reports t ≈ 0.5", () => {
@@ -40,6 +41,12 @@ describe("pickWallAtPoint / pickWallWithPosition", () => {
     const far = { x: 500, y: 200 };
     expect(pickWallAtPoint(far, [horizontal], toleranceMm)).toBeNull();
     expect(pickWallWithPosition(far, [horizontal], toleranceMm)).toBeNull();
+  });
+
+  it("hits exactly at tolerance boundary and misses just beyond", () => {
+    // distance to horizontal at (500,50) is 50mm — on boundary
+    expect(pickWallAtPoint({ x: 500, y: 50 }, [horizontal], toleranceMm)).toBe("h");
+    expect(pickWallAtPoint({ x: 500, y: 50.1 }, [horizontal], toleranceMm)).toBeNull();
   });
 
   it("selects the nearest of two walls within tolerance", () => {
@@ -61,6 +68,25 @@ describe("pickWallAtPoint / pickWallWithPosition", () => {
     expect(atEnd!.t).toBeCloseTo(1, 5);
   });
 
+  it("picks a diagonal wall and reports t ≈ 0.25 at quarter span", () => {
+    const quarter = { x: 250, y: 250 };
+    const hit = pickWallWithPosition(quarter, [diagonal], toleranceMm);
+    expect(hit).not.toBeNull();
+    expect(hit!.wallId).toBe("d");
+    expect(hit!.t).toBeCloseTo(0.25, 5);
+  });
+
+  it("clamps t to [0,1] for projections beyond the segment", () => {
+    // Point past end of horizontal wall, still within lateral tolerance
+    const pastEnd = pickWallWithPosition({ x: 1100, y: 0 }, [horizontal], 150);
+    expect(pastEnd).toMatchObject({ wallId: "h" });
+    expect(pastEnd!.t).toBe(1);
+
+    const beforeStart = pickWallWithPosition({ x: -50, y: 0 }, [horizontal], 150);
+    expect(beforeStart).toMatchObject({ wallId: "h" });
+    expect(beforeStart!.t).toBe(0);
+  });
+
   it("returns null for empty walls", () => {
     expect(pickWallAtPoint({ x: 0, y: 0 }, [], toleranceMm)).toBeNull();
     expect(pickWallWithPosition({ x: 0, y: 0 }, [], toleranceMm)).toBeNull();
@@ -71,6 +97,14 @@ describe("pickWallAtPoint / pickWallWithPosition", () => {
     const hit = pickWallWithPosition({ x: 100, y: 100 }, [point], toleranceMm);
     expect(hit).toEqual({ wallId: "point", t: 0 });
     expect(pickWallAtPoint({ x: 200, y: 200 }, [point], toleranceMm)).toBeNull();
+  });
+
+  it("prefers the strictly closer wall when both are within tolerance", () => {
+    const parallelA = wall("a", { x: 0, y: 0 }, { x: 1000, y: 0 });
+    const parallelB = wall("b", { x: 0, y: 40 }, { x: 1000, y: 40 });
+    // Point at y=10 → dist 10 to a, 30 to b
+    expect(pickWallAtPoint({ x: 500, y: 10 }, [parallelA, parallelB], toleranceMm)).toBe("a");
+    expect(pickWallAtPoint({ x: 500, y: 30 }, [parallelA, parallelB], toleranceMm)).toBe("b");
   });
 });
 
@@ -96,6 +130,22 @@ describe("pointInPolygon", () => {
     expect(pointInPolygon({ x: 0, y: 0 }, [{ x: 0, y: 0 }])).toBe(false);
     expect(pointInPolygon({ x: 0, y: 0 }, [{ x: 0, y: 0 }, { x: 1, y: 0 }])).toBe(false);
   });
+
+  it("handles a non-convex L-shaped polygon", () => {
+    // L footprint: horizontal bar + vertical stem
+    const lShape: Open3dPoint[] = [
+      { x: 0, y: 0 },
+      { x: 100, y: 0 },
+      { x: 100, y: 40 },
+      { x: 40, y: 40 },
+      { x: 40, y: 100 },
+      { x: 0, y: 100 },
+    ];
+    expect(pointInPolygon({ x: 20, y: 20 }, lShape)).toBe(true); // in foot
+    expect(pointInPolygon({ x: 20, y: 70 }, lShape)).toBe(true); // in stem
+    expect(pointInPolygon({ x: 70, y: 70 }, lShape)).toBe(false); // notch outside
+    expect(pointInPolygon({ x: 150, y: 20 }, lShape)).toBe(false);
+  });
 });
 
 describe("getRoomPolygon", () => {
@@ -118,5 +168,20 @@ describe("getRoomPolygon", () => {
     ]);
     expect(getRoomPolygon(["a", "missing"], wallById)).toEqual([]);
     expect(getRoomPolygon([], wallById)).toEqual([]);
+  });
+
+  it("skips missing wall ids but keeps order of resolved starts", () => {
+    const wallById = new Map([
+      ["a", { start: { x: 0, y: 0 }, end: { x: 10, y: 0 } }],
+      ["c", { start: { x: 10, y: 10 }, end: { x: 0, y: 10 } }],
+      ["d", { start: { x: 0, y: 10 }, end: { x: 0, y: 0 } }],
+      ["e", { start: { x: 5, y: 5 }, end: { x: 6, y: 6 } }],
+    ]);
+    // a, missing, c, d → 3 points (still valid)
+    expect(getRoomPolygon(["a", "missing", "c", "d"], wallById)).toEqual([
+      { x: 0, y: 0 },
+      { x: 10, y: 10 },
+      { x: 0, y: 10 },
+    ]);
   });
 });

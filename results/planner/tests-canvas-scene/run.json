@@ -1,0 +1,74 @@
+{
+  "slice": "tests-canvas-scene — expand canvas geometry + fabric mapper + scene nodes",
+  "date": "2026-07-09",
+  "status": "DONE",
+  "command": "npx vitest run tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts tests/unit/features/planner/open3d/geometry/snapping.test.ts tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts --reporter=verbose --reporter=json --outputFile.json=../results/planner/tests-canvas-scene/vitest-results.json",
+  "cwd": "site",
+  "result": "pass",
+  "exitCode": 0,
+  "success": true,
+  "testFiles": 4,
+  "tests": 56,
+  "passed": 56,
+  "failed": 0,
+  "skipped": 0,
+  "pending": 0,
+  "durationSec": 3.081,
+  "priorBaseline": {
+    "canvas-geometry (picking+snapping only)": { "testFiles": 2, "tests": 14 },
+    "fabric-stage-slice mapper+flag": { "tests": 10 },
+    "buildOpen3dSceneNodes dedicated file": { "tests": 3 },
+    "priorSumApprox": 27
+  },
+  "countsByFile": {
+    "canvasPicking.test.ts": 17,
+    "snapping.test.ts": 14,
+    "furnitureFabricMapper.test.ts": 15,
+    "buildOpen3dSceneNodes.test.ts": 10
+  },
+  "coverageFocus": {
+    "canvasPicking": [
+      "mid/endpoint t",
+      "tolerance boundary",
+      "diagonal wall t=0.25",
+      "t clamp beyond segment",
+      "nearest of parallel walls",
+      "degenerate zero-length",
+      "pointInPolygon L-shape",
+      "getRoomPolygon missing ids"
+    ],
+    "snapping": [
+      "projectToScreen/screenToProject round-trip",
+      "zoomTransformAt min/max/custom clamps",
+      "snapDrawingPoint suppress/endpoint/grid/angle/targetId/zoom-tolerance"
+    ],
+    "furnitureFabricMapper": [
+      "entityId from furniture.id",
+      "pose drag write-back preserves entityId",
+      "default + custom transform",
+      "list order / empty list",
+      "readEntityId empty/non-string/get fallback"
+    ],
+    "buildOpen3dSceneNodes": [
+      "modular geometryMode + modularOptions copy",
+      "generatedGlbUrl policy pass-through",
+      "modular + generatedGlbUrl together",
+      "prefer generated over glb/mesh",
+      "drop designer static + blank",
+      "scale defaults + wall center/rotation"
+    ]
+  },
+  "productionChanges": [],
+  "testFilesPaths": [
+    "site/tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts",
+    "site/tests/unit/features/planner/open3d/geometry/snapping.test.ts",
+    "site/tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts",
+    "site/tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts"
+  ],
+  "constraints": {
+    "noAny": true,
+    "noSkips": true
+  },
+  "rawLog": "results/planner/tests-canvas-scene/vitest-raw.log",
+  "jsonResults": "results/planner/tests-canvas-scene/vitest-results.json"
+}

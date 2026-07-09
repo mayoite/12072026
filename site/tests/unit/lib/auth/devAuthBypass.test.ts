@@ -11,33 +11,67 @@ afterEach(() => {
   process.env = { ...originalEnv };
 });
 
+/**
+ * Env matrix for isDevAuthBypassEnabled.
+ * CSRF skip when bypass is on is covered in withAuth.test.ts (requireCsrf path).
+ */
 describe("isDevAuthBypassEnabled", () => {
-  it("is false by default", () => {
+  it.each([
+    {
+      name: "false by default (development, flag unset)",
+      env: { NODE_ENV: "development" },
+      expected: false,
+    },
+    {
+      name: "true in development when DEV_AUTH_BYPASS=1",
+      env: { NODE_ENV: "development", DEV_AUTH_BYPASS: "1" },
+      expected: true,
+    },
+    {
+      name: "false when DEV_AUTH_BYPASS is not exactly 1",
+      env: { NODE_ENV: "development", DEV_AUTH_BYPASS: "true" },
+      expected: false,
+    },
+    {
+      name: "false in production even with DEV_AUTH_BYPASS=1",
+      env: { NODE_ENV: "production", DEV_AUTH_BYPASS: "1" },
+      expected: false,
+    },
+    {
+      name: "true in production only with both flags (local Playwright)",
+      env: {
+        NODE_ENV: "production",
+        DEV_AUTH_BYPASS: "1",
+        DEV_AUTH_BYPASS_ALLOW_PRODUCTION: "1",
+      },
+      expected: true,
+    },
+    {
+      name: "false in production when only ALLOW_PRODUCTION is set",
+      env: {
+        NODE_ENV: "production",
+        DEV_AUTH_BYPASS_ALLOW_PRODUCTION: "1",
+      },
+      expected: false,
+    },
+  ] as const)("$name", ({ env, expected }) => {
+    process.env = {
+      ...originalEnv,
+      NODE_ENV: env.NODE_ENV,
+    };
     delete process.env.DEV_AUTH_BYPASS;
     delete process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION;
-    process.env.NODE_ENV = "development";
-    expect(isDevAuthBypassEnabled(process.env)).toBe(false);
-  });
-
-  it("is true in development when DEV_AUTH_BYPASS=1", () => {
-    process.env.NODE_ENV = "development";
-    process.env.DEV_AUTH_BYPASS = "1";
-    delete process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION;
-    expect(isDevAuthBypassEnabled(process.env)).toBe(true);
-  });
-
-  it("is false in production even with DEV_AUTH_BYPASS=1", () => {
-    process.env.NODE_ENV = "production";
-    process.env.DEV_AUTH_BYPASS = "1";
-    delete process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION;
-    expect(isDevAuthBypassEnabled(process.env)).toBe(false);
-  });
-
-  it("allows production only with explicit second flag (local Playwright)", () => {
-    process.env.NODE_ENV = "production";
-    process.env.DEV_AUTH_BYPASS = "1";
-    process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION = "1";
-    expect(isDevAuthBypassEnabled(process.env)).toBe(true);
+    if ("DEV_AUTH_BYPASS" in env && env.DEV_AUTH_BYPASS !== undefined) {
+      process.env.DEV_AUTH_BYPASS = env.DEV_AUTH_BYPASS;
+    }
+    if (
+      "DEV_AUTH_BYPASS_ALLOW_PRODUCTION" in env &&
+      env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION !== undefined
+    ) {
+      process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION =
+        env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION;
+    }
+    expect(isDevAuthBypassEnabled(process.env)).toBe(expected);
   });
 });
 
@@ -49,5 +83,19 @@ describe("resolveAuthContext with bypass", () => {
     expect(auth.isAdmin).toBe(true);
     expect(auth.user?.id).toBe(DEV_BYPASS_USER.id);
     expect(auth.user?.email).toBe(DEV_BYPASS_USER.email);
+  });
+
+  it("still synthesizes admin for member/guest required roles under bypass", async () => {
+    process.env.NODE_ENV = "development";
+    process.env.DEV_AUTH_BYPASS = "1";
+    const member = await resolveAuthContext("member");
+    expect(member.isAdmin).toBe(true);
+    expect(member.user?.id).toBe(DEV_BYPASS_USER.id);
+    expect(member.requiredRole).toBe("member");
+
+    const guest = await resolveAuthContext("guest");
+    expect(guest.isAdmin).toBe(true);
+    expect(guest.user?.id).toBe(DEV_BYPASS_USER.id);
+    expect(guest.requiredRole).toBe("guest");
   });
 });

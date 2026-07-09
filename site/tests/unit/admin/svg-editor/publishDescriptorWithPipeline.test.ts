@@ -265,4 +265,93 @@ describe("publishDescriptorWithPipeline (fail-closed)", () => {
     expect(runPipeline).not.toHaveBeenCalled();
     expect(persist).not.toHaveBeenCalled();
   });
+
+  it("returns success:false and skips pipeline+persist when compileSvg throws", async () => {
+    const compileSvg = vi.fn(async () => {
+      throw new Error("compile stages crashed");
+    });
+    const runPipeline = vi.fn(async () => pipelineOk());
+    const persist = vi.fn(() => persistOk());
+    const parsePayload = vi.fn(() => ({
+      ok: true as const,
+      value: validDescriptor,
+    }));
+
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload,
+      compileSvg,
+      runPipeline,
+      persist,
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toContain("compiler_exception");
+    expect(result.error).toContain("compile stages crashed");
+    expect(runPipeline).not.toHaveBeenCalled();
+    expect(persist).not.toHaveBeenCalled();
+  });
+});
+
+describe("publishDescriptorWithPipeline skipCompile path (S4 reuses S1–S3 SVG)", () => {
+  it("always passes skipCompile:true and exact precompiledSvg from compile result", async () => {
+    const compiledSvg =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><circle r="25"/></svg>';
+    const compileSvg = vi.fn(async (): Promise<SvgCompileStagesResult> => ({
+      ...compileOk(),
+      svg: compiledSvg,
+    }));
+    const runPipeline = vi.fn(async () => pipelineOk());
+    const persist = vi.fn(() => persistOk());
+    const parsePayload = vi.fn(() => ({
+      ok: true as const,
+      value: validDescriptor,
+    }));
+
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload,
+      compileSvg,
+      runPipeline,
+      persist,
+    });
+
+    expect(result.success).toBe(true);
+    expect(runPipeline).toHaveBeenCalledOnce();
+    expect(runPipeline).toHaveBeenCalledWith(validDescriptor, {
+      skipCompile: true,
+      precompiledSvg: compiledSvg,
+    });
+    // Must not re-invoke compile via pipeline options (no skipCompile:false / omitted).
+    const pipelineOpts = runPipeline.mock.calls[0]?.[1];
+    expect(pipelineOpts).toEqual({
+      skipCompile: true,
+      precompiledSvg: compiledSvg,
+    });
+    expect(pipelineOpts).not.toHaveProperty("skipCompile", false);
+  });
+
+  it("still passes skipCompile options when pipeline fails after successful compile", async () => {
+    const compiledSvg = compileOk().svg;
+    const compileSvg = vi.fn(async () => compileOk());
+    const runPipeline = vi.fn(async () => pipelineErr("S4 write failed"));
+    const persist = vi.fn(() => persistOk());
+    const parsePayload = vi.fn(() => ({
+      ok: true as const,
+      value: validDescriptor,
+    }));
+
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload,
+      compileSvg,
+      runPipeline,
+      persist,
+    });
+
+    expect(result.success).toBe(false);
+    expect(runPipeline).toHaveBeenCalledWith(validDescriptor, {
+      skipCompile: true,
+      precompiledSvg: compiledSvg,
+    });
+    expect(persist).not.toHaveBeenCalled();
+  });
 });

@@ -15,7 +15,7 @@ export type Open3dNativeHostProps = {
  */
 export function Open3dNativeHost({ guestMode = false, planId }: Open3dNativeHostProps) {
   return (
-    <div className="open3d-route-host" role="main" aria-label="Planner workspace">
+    <div className="open3d-route-host">
       <OOPlannerWorkspace guestMode={guestMode} planId={planId} />
     </div>
   );

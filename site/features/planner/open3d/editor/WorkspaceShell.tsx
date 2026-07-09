@@ -101,6 +101,9 @@ export function WorkspaceShell({
   const id = useId();
   const [internalViewMode, setInternalViewMode] = useState<"2d" | "3d">(initialViewMode);
   const [isCanvasMaximized, setIsCanvasMaximized] = useState(false);
+  // P0.3 / A3: omit data-viewport until after mount so SSR HTML matches first client paint
+  // (tier is also SSR-stable in useDockingSystem; attribute is deferred as belt-and-suspenders).
+  const [viewportAttrReady, setViewportAttrReady] = useState(false);
   const viewMode = controlledViewMode ?? internalViewMode;
 
   const {
@@ -117,6 +120,10 @@ export function WorkspaceShell({
     setActivePanel,
     setFocusedPanel,
   } = useDockingSystem();
+
+  useEffect(() => {
+    setViewportAttrReady(true);
+  }, []);
 
   // Handle view mode change
   const handleViewModeChange = useCallback(
@@ -237,10 +244,13 @@ export function WorkspaceShell({
     setIsCanvasMaximized((current) => !current);
   }, [setActivePanel]);
 
+  // Undefined until mount → attribute absent on SSR + hydrate; real tier after measure.
+  const dataViewport = viewportAttrReady ? viewportTier : undefined;
+
   return (
     <div
       className={styles.shell}
-      data-viewport={viewportTier}
+      data-viewport={dataViewport}
       data-panel-active={activePanel}
       data-canvas-maximized={isCanvasMaximized}
       data-fill-parent={fillParent ? "true" : undefined}
@@ -277,7 +287,7 @@ export function WorkspaceShell({
       />
 
       {/* Main workspace with panels */}
-      <div className={styles.workspace} data-viewport={viewportTier}>
+      <div className={styles.workspace} data-viewport={dataViewport}>
         {/* small-screen .panelBackdrop + activePanel (from useDockingSystem) + mobile actions via TopBar.
          * Resolves PLAN-FAIL-0414. GS: design §7, benchmark BP-04/BP-05 + Figma minimize + anti-copy (no donor).
          * CSS locked in workspace.module.css + planner-responsive.css. Canonical ref: open3d/editor/ + puck registry for admin UI.
@@ -316,10 +326,10 @@ export function WorkspaceShell({
           </PanelContainer>
         )}
 
-        {/* Main canvas area */}
-        <main className={styles.canvas} id={`${id.replace(/:/g, "")}-canvas`}>
+        {/* Canvas area (not a landmark — page layout owns the single main) */}
+        <div className={styles.canvas} id={`${id.replace(/:/g, "")}-canvas`}>
           {children}
-        </main>
+        </div>
 
         {/* Right panel - Properties */}
         {rightPanel && (

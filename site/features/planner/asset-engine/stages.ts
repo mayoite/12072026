@@ -191,7 +191,8 @@ export const MESH_GLB_STAGES: readonly AssetStage[] = [
     note:
       "G8 partial: ThreeViewerInner loads policy-allowed generatedGlbUrl via " +
       "loadGeneratedGlbObject after procedural default. placeCatalogItemInProject leaves URL unset; " +
-      "opt-in write+stamp is placeModularWithGeneratedGlbPlan (not env-flagged default place). " +
+      "open3d inventory cabinet-v0 uses placeModularWithGeneratedGlbBrowser (write API + stamp); " +
+      "Node helper placeModularWithGeneratedGlbPlan for tests/scripts. Other catalog stays procedural. " +
       "Not full product: no shared cache, no scale-to-fit, no browser smoke, no remote CDN auto-upload. " +
       "Load failure keeps procedural mesh.",
   },

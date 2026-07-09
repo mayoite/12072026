@@ -81,8 +81,16 @@ export const PLANNER_VIEWPORT_BREAKPOINTS = {
   tabletMax: 1280,
 } as const;
 
+/**
+ * SSR + first client paint must share one tier so `data-viewport` hydrates cleanly.
+ * Real width is measured only after mount (see useDockingSystem effect).
+ * Do not call getViewportTier() as useState initializer — on the client that reads
+ * window and diverges from SSR's "desktop" default (hydration mismatch).
+ */
+export const SSR_VIEWPORT_TIER: ViewportTier = "desktop";
+
 function getViewportTier(): ViewportTier {
-  if (typeof window === "undefined") return "desktop";
+  if (typeof window === "undefined") return SSR_VIEWPORT_TIER;
   if (window.innerWidth < PLANNER_VIEWPORT_BREAKPOINTS.smallMax) return "small";
   if (window.innerWidth < PLANNER_VIEWPORT_BREAKPOINTS.tabletMax) return "tablet";
   return "desktop";
@@ -121,22 +129,20 @@ export function useDockingSystem(): DockingSystemState & DockingSystemActions {
   const [panels, setPanels] = useState<Record<PanelId, PanelConfig>>(DEFAULT_PANEL_CONFIG);
   const [activePanel, setActivePanel] = useState<PanelId | null>(null);
   const [focusedPanel, setFocusedPanel] = useState<PanelId | null>(null);
-  const [viewportTier, setViewportTier] = useState<ViewportTier>(getViewportTier);
+  // Stable default matches SSR HTML; measure real width only after mount.
+  const [viewportTier, setViewportTier] = useState<ViewportTier>(SSR_VIEWPORT_TIER);
 
-  // Handle viewport resize
+  // Measure on mount + resize. Initial state stays SSR_VIEWPORT_TIER so React
+  // hydration of data-viewport / layout branches matches server markup.
   useEffect(() => {
-    const handleResize = () => {
+    const applyTier = () => {
       const newTier = getViewportTier();
-      setViewportTier((current) => {
-        if (current !== newTier) {
-          return newTier;
-        }
-        return current;
-      });
+      setViewportTier((current) => (current !== newTier ? newTier : current));
     };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    applyTier();
+    window.addEventListener("resize", applyTier);
+    return () => window.removeEventListener("resize", applyTier);
   }, []);
 
   // Shared restore parser (consolidates dupe logic from mount + restoreLayout; fixes seam for coverage)

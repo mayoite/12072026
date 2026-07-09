@@ -1,0 +1,42 @@
+{
+  "task": "P0.3 part B data-viewport hydration (A3)",
+  "date": "2026-07-09",
+  "status": "DONE",
+  "problem": "React hydration mismatch: SSR data-viewport=desktop vs client data-viewport=tablet on WorkspaceShell / workspace (viewport-dependent attribute during SSR vs client measure).",
+  "root_cause": {
+    "summary": "useState(getViewportTier) as lazy initializer read window.innerWidth on client first paint while SSR defaulted to desktop; data-viewport rendered that tier on first paint.",
+    "file": "site/features/planner/open3d/editor/useDockingSystem.ts",
+    "symptom_source": "results/planner/a11y-open3d/console-messages.txt"
+  },
+  "fix": {
+    "useDockingSystem": {
+      "file": "site/features/planner/open3d/editor/useDockingSystem.ts",
+      "approach": "stable SSR default then measure after mount",
+      "detail": "SSR_VIEWPORT_TIER='desktop'; useState(SSR_VIEWPORT_TIER); applyTier() in useEffect on mount + resize. Never use getViewportTier as useState initializer."
+    },
+    "WorkspaceShell": {
+      "file": "site/features/planner/open3d/editor/WorkspaceShell.tsx",
+      "approach": "client-after-mount attribute",
+      "detail": "viewportAttrReady starts false; data-viewport omitted (undefined) until mount effect; then applies measured viewportTier on shell + workspace."
+    }
+  },
+  "tests": {
+    "command": "npx vitest run tests/unit/features/planner/open3d/workspaceShell.test.tsx",
+    "cwd": "site",
+    "result": "30/30 passed",
+    "p03_cases": [
+      "SSR_VIEWPORT_TIER is a stable desktop default (not window-measured)",
+      "useDockingSystem measures real width only after mount (tablet range)",
+      "WorkspaceShell sets data-viewport after mount to measured tier (no SSR/client attr split)",
+      "detects tablet tier after mount without hydrating from window on first paint",
+      "shell data-viewport matches measured tier after mount (tablet client)"
+    ],
+    "raw_log": "results/planner/p0-3-hydration/vitest-raw.log"
+  },
+  "out_of_scope_this_slice": [
+    "Full a11y re-capture under results/planner/a11y-open3d/",
+    "P0.3 unlabeled form field (A2)"
+  ],
+  "commit": false,
+  "no_any": true
+}

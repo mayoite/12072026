@@ -184,6 +184,134 @@ describe("furnitureFabricMapper", () => {
     );
     expect(afterUpdate.rotation).toBe(15);
   });
+
+  it("uses DEFAULT_FABRIC_STAGE_TRANSFORM when transform is omitted", () => {
+    const id = "dddddddd-eeee-4fff-8000-111111111111";
+    const item = makeItem({
+      id,
+      position: { x: 0, y: 0 },
+      rotation: 0,
+      width: 600,
+      depth: 400,
+    });
+    const pose = furnitureToFabricPose(item);
+    expect(pose.entityId).toBe(id);
+    expect(pose.left).toBeCloseTo(
+      (0 - DEFAULT_FABRIC_STAGE_TRANSFORM.origin.x) *
+        DEFAULT_FABRIC_STAGE_TRANSFORM.scale,
+      8,
+    );
+    expect(pose.top).toBeCloseTo(
+      (0 - DEFAULT_FABRIC_STAGE_TRANSFORM.origin.y) *
+        DEFAULT_FABRIC_STAGE_TRANSFORM.scale,
+      8,
+    );
+    expect(pose.width).toBeCloseTo(600 * DEFAULT_FABRIC_STAGE_TRANSFORM.scale, 8);
+    expect(pose.height).toBeCloseTo(400 * DEFAULT_FABRIC_STAGE_TRANSFORM.scale, 8);
+
+    const update = fabricPoseToDocumentUpdate({
+      entityId: pose.entityId,
+      left: pose.left,
+      top: pose.top,
+      angle: pose.angle,
+    });
+    expect(update.entityId).toBe(id);
+    expect(update.position.x).toBeCloseTo(0, 8);
+    expect(update.position.y).toBeCloseTo(0, 8);
+  });
+
+  it("entityId is furniture.id only — never rewritten on pose round-trip", () => {
+    const id = "eeeeeeee-ffff-4000-8000-222222222222";
+    const item = makeItem({
+      id,
+      position: { x: 500, y: 700 },
+      rotation: 180,
+      width: 1000,
+      depth: 500,
+    });
+    const pose = furnitureToFabricPose(item, transform);
+    expect(pose.entityId).toBe(id);
+    expect(pose.entityId).toBe(item.id);
+
+    // Rotate + move write-back still carries the same entityId
+    const update = fabricPoseToDocumentUpdate(
+      {
+        entityId: pose.entityId,
+        left: pose.left + 10,
+        top: pose.top - 5,
+        angle: pose.angle + 90,
+      },
+      transform,
+    );
+    expect(update.entityId).toBe(id);
+    expect(update.rotation).toBe(270);
+  });
+
+  it("maps pose under a non-default pan/zoom transform", () => {
+    const custom: CanvasTransform = { origin: { x: 100, y: 200 }, scale: 0.5 };
+    const id = "ffffffff-0000-4111-8222-333333333333";
+    const item = makeItem({
+      id,
+      position: { x: 300, y: 400 },
+      rotation: 30,
+      width: 800,
+      depth: 600,
+    });
+    const pose = furnitureToFabricPose(item, custom);
+    expect(pose.entityId).toBe(id);
+    expect(pose.left).toBeCloseTo((300 - 100) * 0.5, 8);
+    expect(pose.top).toBeCloseTo((400 - 200) * 0.5, 8);
+    expect(pose.width).toBeCloseTo(400, 8);
+    expect(pose.height).toBeCloseTo(300, 8);
+    expect(pose.angle).toBe(30);
+
+    const update = fabricPoseToDocumentUpdate(
+      {
+        entityId: pose.entityId,
+        left: pose.left,
+        top: pose.top,
+        angle: pose.angle,
+      },
+      custom,
+    );
+    expect(update.entityId).toBe(id);
+    expect(update.position.x).toBeCloseTo(300, 8);
+    expect(update.position.y).toBeCloseTo(400, 8);
+    expect(update.rotation).toBe(30);
+  });
+
+  it("furnitureListToFabricPoses preserves empty list and entity order", () => {
+    expect(furnitureListToFabricPoses([], transform)).toEqual([]);
+    const ids = [
+      "00000000-0000-4000-8000-0000000000aa",
+      "00000000-0000-4000-8000-0000000000bb",
+      "00000000-0000-4000-8000-0000000000cc",
+    ];
+    const poses = furnitureListToFabricPoses(
+      ids.map((id, index) =>
+        makeItem({ id, position: { x: index * 100, y: 0 } }),
+      ),
+      transform,
+    );
+    expect(poses.map((p) => p.entityId)).toEqual(ids);
+  });
+
+  it("readFurnitureEntityId rejects empty string and non-string carriers", () => {
+    expect(readFurnitureEntityId({ entityId: "" })).toBeNull();
+    expect(readFurnitureEntityId({ entityId: 99 })).toBeNull();
+    expect(
+      readFurnitureEntityId({
+        get: () => "",
+        entityId: "fallback-field",
+      }),
+    ).toBe("fallback-field");
+    expect(
+      readFurnitureEntityId({
+        get: () => "from-get",
+        entityId: "ignored-when-get-works",
+      }),
+    ).toBe("from-get");
+  });
 });
 
 describe("isOpen3dFabricFurnitureEnabled", () => {

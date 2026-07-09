@@ -264,9 +264,9 @@ export function verifyPlacementIdentity(
  *
  * Modular cabinet-v0: stamps `geometryMode` + `modularOptions` only.
  * Leaves `generatedGlbUrl` unset so the product default stays procedural mesh.
- * P0.2 wire: do **not** env-flag this path. Opt-in write+stamp lives on
- * `placeModularWithGeneratedGlbPlan` (export → public disk → stampFurnitureGeneratedGlb).
- * Manual stamp after G5: stampFurnitureGeneratedGlb / attachGeneratedGlbToFurniture.
+ * Open3d inventory: cabinet-v0 only routes to placeModularWithGeneratedGlbBrowser
+ * (G5 → POST /api/planner/generated-glb → stamp). Other items use this path.
+ * Node/tests: placeModularWithGeneratedGlbPlan. Manual stamp: stampFurnitureGeneratedGlb.
  */
 export function placeCatalogItemInProject(
   project: Open3dProject,

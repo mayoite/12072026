@@ -1,0 +1,38 @@
+﻿{
+    "summary":  "35 tests passed — auth bypass CSRF skip + publish skipCompile + projectParser generatedGlbUrl",
+    "results":  {
+                    "failed":  0,
+                    "skipped":  0,
+                    "tests":  35,
+                    "testFiles":  4,
+                    "passed":  35
+                },
+    "exitCode":  0,
+    "timestamp":  "2026-07-09T08:59:03.6291798Z",
+    "revision":  {
+                     "head":  "a664aac0469e17580d786bf5857d36543180ef72",
+                     "branch":  "main"
+                 },
+    "artifacts":  {
+                      "rawLog":  "results/planner/tests-auth-publish/vitest-raw.log"
+                  },
+    "cwd":  "D:\\OandO07072026\\site",
+    "status":  "pass",
+    "command":  "npx vitest run tests/unit/lib/auth/devAuthBypass.test.ts tests/unit/lib/api/withAuth.test.ts tests/unit/admin/svg-editor/publishDescriptorWithPipeline.test.ts tests/unit/features/planner/open3d/projectParser.generatedGlbUrl.test.ts --reporter=verbose",
+    "testFiles":  [
+                      "site/tests/unit/lib/auth/devAuthBypass.test.ts",
+                      "site/tests/unit/lib/api/withAuth.test.ts",
+                      "site/tests/unit/admin/svg-editor/publishDescriptorWithPipeline.test.ts",
+                      "site/tests/unit/features/planner/open3d/projectParser.generatedGlbUrl.test.ts"
+                  ],
+    "scenario":  "tests-auth-publish",
+    "covers":  [
+                   "1. isDevAuthBypassEnabled env matrix (6 cases)",
+                   "2. withAuth CSRF skip when DEV_AUTH_BYPASS=1",
+                   "3. withAuth CSRF still enforced in production without allow flag",
+                   "4. publishDescriptorWithPipeline skipCompile + exact precompiledSvg",
+                   "5. publish compile throw skips pipeline",
+                   "6. projectParser generatedGlbUrl accept (4) + omit + reject (5)"
+               ],
+    "schemaVersion":  1
+}

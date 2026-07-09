@@ -960,7 +960,7 @@ function FeasibilityCanvas(
   }
 
   return (
-    <main className="feasibility-shell" aria-label="Open3D React feasibility editor">
+    <div className="feasibility-shell" aria-label="Open3D React feasibility editor">
       <header className="command-strip" aria-label="Drawing commands">
         <div className="proof-heading">
           <strong>React input proof</strong>
@@ -1039,7 +1039,7 @@ function FeasibilityCanvas(
         </figure>
       </aside>
       <span className="sr-only">{getFeasibilityCommand("draw-wall").label} is active.</span>
-    </main>
+    </div>
   );
 });
 

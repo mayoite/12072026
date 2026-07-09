@@ -13,7 +13,7 @@
 ## Residual (not blocking unit claim)
 
 - **Chrome open3d visual smoke** with stamped furniture (manual steps: `results/planner/p0-2-g8-load/MANUAL-open3d.md`)
-- Wire product UI button to call `placeModularWithGeneratedGlbPlan` (opt-in) — still code path only
+- ~~Wire product UI button to call modular GLB place (opt-in)~~ **done** — open3d inventory `cabinet-v0` → `placeModularWithGeneratedGlbBrowser` + `POST /api/planner/generated-glb` (evidence `results/planner/p0-2-ui-wire/`)
 - Supabase/R2 remote upload — local public write is enough for dev G8
 
 ## Next

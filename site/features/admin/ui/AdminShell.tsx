@@ -54,9 +54,9 @@ export function AdminShell({ children }: AdminShellProps) {
             })}
           </nav>
         </aside>
-        <main className="shell-admin-main">
+        <div className="shell-admin-main">
           {children}
-        </main>
+        </div>
       </div>
     </div>
   );

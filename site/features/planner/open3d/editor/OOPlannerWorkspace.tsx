@@ -22,6 +22,8 @@ import {
   type FurnitureDocumentPoseUpdate,
 } from "../canvas-fabric-stage";
 import { placeCatalogItemInProject } from "../catalog/placementAction";
+import { placeModularWithGeneratedGlbBrowser } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbBrowser";
+import { shouldPlaceModularWithGeneratedGlb } from "@/features/planner/asset-engine/mesh/shouldPlaceModularWithGeneratedGlb";
 import { importOpen3dProjectJson } from "../persistence/projectJson";
 import { parseOpen3dSessionSnapshot } from "../persistence/open3dSession";
 import { useOpen3dWorkspaceAutosave } from "../persistence/useOpen3dWorkspaceAutosave";
@@ -319,6 +321,50 @@ export function OOPlannerWorkspace({
         setPendingCatalogItemId(null);
         return;
       }
+
+      // cabinet-v0 only: write+stamp so G8 can load; other items stay procedural.
+      if (shouldPlaceModularWithGeneratedGlb(item)) {
+        const catalogItem = item;
+        const baseProject = workspaceCanvas.project;
+        setPendingCatalogItemId(null);
+        setWorkspaceMessage(
+          `Placing ${catalogItem.shortName ?? catalogItem.name} (GLB)…`,
+        );
+        void (async () => {
+          try {
+            const result = await placeModularWithGeneratedGlbBrowser(
+              baseProject,
+              catalogItem,
+              point,
+              { placedFrom: "click", writeToPublic: true },
+            );
+            workspaceCanvas.updateProject(() => result.project);
+            setWorkspaceMessage(
+              result.stamped
+                ? `Placed ${catalogItem.shortName ?? catalogItem.name} (GLB ready)`
+                : `Placed ${catalogItem.shortName ?? catalogItem.name} (procedural; GLB write skipped)`,
+            );
+          } catch (err) {
+            // Fall back to procedural place so inventory never dead-ends.
+            workspaceCanvas.updateProject(
+              (project) =>
+                placeCatalogItemInProject(project, catalogItem, null, {
+                  placedFrom: "click",
+                  position: point,
+                }).result.project,
+            );
+            setWorkspaceMessage(
+              `Placed ${catalogItem.shortName ?? catalogItem.name} (procedural fallback)`,
+            );
+            console.warn(
+              "[OOPlannerWorkspace] modular GLB place failed; procedural fallback",
+              err,
+            );
+          }
+        })();
+        return;
+      }
+
       workspaceCanvas.updateProject(
         (project) =>
           placeCatalogItemInProject(project, item, null, {
