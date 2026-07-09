@@ -3,6 +3,7 @@ export * from "./catalogQuery";
 export * from "./catalogSearch";
 export * from "./proofCatalog";
 export * from "./placementAction";
+export * from "./workstationSystemV0";
 export {
   useOpen3dWorkspaceCatalog,
   useOpen3dSvgCatalog,

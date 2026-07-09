@@ -1,36 +1,36 @@
-ï»¿# Goals & slices (thin)
+# Goals & slices (thin)
 
 **Authority for how:** `Plans/trustdata/` (INDEX kill order, phases, CPs).  
 **Why:** `18-PRODUCT-CONTEXT.md`  
-**This file:** only **what we're aiming at now** â€” not a second plan.
+**This file:** only **what we're aiming at now** — not a second plan.
 
 ---
 
 ## North star (owner)
 
-Premium custom workstation systems Â· days of recon Â· scale to thousands of seats Â· own stack (~$1â€“1.5k/mo) Â· not $40k vendor Â· 6-month **serious prototype**.
+Premium custom workstation systems · days of recon · scale to thousands of seats · own stack (~$1–1.5k/mo) · not $40k vendor · 6-month **serious prototype**.
 
 ---
 
 ## 6-month bar (prototype)
 
-Buyer-usable planner + **one** workstation family (size grid + linear/L + modules) generate/place at meaningful scale Â· Fabric destination in progress Â· browser-proven Â· path toward quote.  
+Buyer-usable planner + **one** workstation family (size grid + linear/L + modules) generate/place at meaningful scale · Fabric destination in progress · browser-proven · path toward quote.  
 Not: full multi-client factory, photoreal, enterprise parity.
 
 ---
 
-## Near slices (execute in order â€” agent updates checkboxes)
+## Near slices (execute in order — agent updates checkboxes)
 
 | # | Slice | Done when | Plan |
 |---|--------|-----------|------|
-| 0 | CP-00 unlock A | Recorded | âœ… |
+| 0 | CP-00 unlock A | Recorded | ? |
 | 1 | Product truth note | inventory as needed | P01 |
 | 2 | Engine lock evidence | PACKAGE-PIN when owned | P02 |
-| 3 | **W3 select/delete/undo** | Unit + browser under `03-select-delete/` | âœ… |
-| 4 | **W1â€“W2 journey** | Serial Playwright `02-browser-open3d-journey/` | âœ… |
-| 5 | **W5â€“W6 save honesty** | Flush + labels + hard reload | âœ… |
-| 6 | Parallel fill | Orbit âœ… Â· shortcuts âœ… Â· symbols âœ… Â· mesh âœ… | âœ… P04â€“P05â€“P08â€“P09 |
-| 7 | Systems v0 | One family sizeÃ—L/linear + modules â†’ place many | **NEXT** post-spine |
+| 3 | **W3 select/delete/undo** | Unit + browser under `03-select-delete/` | ? |
+| 4 | **W1–W2 journey** | Serial Playwright `02-browser-open3d-journey/` | ? |
+| 5 | **W5–W6 save honesty** | Flush + labels + hard reload | ? |
+| 6 | Parallel fill | Orbit ? · shortcuts ? · symbols ? · mesh ? | ? P04–P05–P08–P09 |
+| 7 | Systems v0 | Rules+matrix+5k layout ? · place-on-canvas next | **in progress** | **NEXT** post-spine |
 
 Agent ticks slices in evidence + commits; does **not** expand this into a novel.
 
@@ -38,4 +38,4 @@ Agent ticks slices in evidence + commits; does **not** expand this into a novel.
 
 ## Agent one-liner
 
-*Follow trustdata kill order; this table is the scoreboard; 18 is why; don't ask for goals unless owner changes intent. Full authority: skills, browser, commands, push/mirror; agents 8â€“10 (12 if clean split). Subagents with /using-superpowers keep context fresh.*
+*Follow trustdata kill order; this table is the scoreboard; 18 is why; don't ask for goals unless owner changes intent. Full authority: skills, browser, commands, push/mirror; agents 8–10 (12 if clean split). Subagents with /using-superpowers keep context fresh.*
