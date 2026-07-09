@@ -49,7 +49,13 @@ import {
   addWindow,
 } from "../model/operations/pureActions";
 import { proofCatalogItem } from "../catalog/proofCatalog";
-import { resolveFurniture2DFootprint } from "../catalog/parametricBuilder";
+import {
+  furnitureBlock2DFromItem,
+} from "../catalog/furnitureBlock2D";
+import {
+  createCanvasBlockColorResolver,
+  renderBlock2DCentered,
+} from "@/lib/catalog/renderBlock2DToCanvas";
 import type { WorkspaceCanvasContext } from "../editor/useWorkspaceCanvas";
 
 const INITIAL_TRANSFORM: CanvasTransform = {
@@ -567,26 +573,38 @@ function FeasibilityCanvas(
       }
     }
     if (layerVisibility.furniture) {
-      context.fillStyle = tokens.getPropertyValue("--color-primary").trim();
-      context.globalAlpha = 0.22;
-      for (const item of activeFloor.furniture) {
-        const center = projectToScreen(item.position, transform);
-
-        context.save();
-        context.translate(center.x, center.y);
-        context.rotate((item.rotation * Math.PI) / 180);
-
-        // Box path by default; modular-cabinet-v0 uses generateCabinetV0Footprint
-        const svgPathString = resolveFurniture2DFootprint(item);
-        const path = new Path2D(svgPathString);
-
-        // Scale the path down to the current viewport zoom
-        context.scale(transform.scale, transform.scale);
-
-        context.fill(path);
-        context.restore();
+      // Procedural Block2D (same prims as inventory SVG preview) → canvas.
+      // No external GLBs/SVG downloads — our blocks2d symbols only.
+      const colorResolve = createCanvasBlockColorResolver(canvas);
+      try {
+        for (const item of activeFloor.furniture) {
+          const center = projectToScreen(item.position, transform);
+          const block = furnitureBlock2DFromItem(item);
+          context.save();
+          context.translate(center.x, center.y);
+          context.rotate((item.rotation * Math.PI) / 180);
+          context.scale(transform.scale, transform.scale);
+          if (item.color) {
+            context.globalAlpha = 0.15;
+            context.fillStyle = item.color;
+            context.fillRect(
+              -block.footprint.L / 2,
+              -block.footprint.D / 2,
+              block.footprint.L,
+              block.footprint.D,
+            );
+            context.globalAlpha = 1;
+          }
+          renderBlock2DCentered(context, block, {
+            resolve: colorResolve,
+            skipShadow: transform.scale < 0.05,
+          });
+          context.restore();
+        }
+      } finally {
+        const dispose = (colorResolve as { dispose?: () => void }).dispose;
+        dispose?.();
       }
-      context.globalAlpha = 1;
     }
     if (start && preview) {
       const a = projectToScreen(start, transform);
