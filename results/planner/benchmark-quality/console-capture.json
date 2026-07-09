@@ -1,0 +1,13 @@
+{
+  "capturedAt": "2026-07-09T18:22:18.721Z",
+  "baseURL": "http://localhost:3000",
+  "errorCount": 1,
+  "warningCount": 0,
+  "failedRequestCount": 0,
+  "errors": [
+    "PAGEERROR: Internal Next.js error: Router action dispatched before initialization."
+  ],
+  "warnings": [],
+  "failedRequests": [],
+  "zeroConsoleErrors": false
+}
