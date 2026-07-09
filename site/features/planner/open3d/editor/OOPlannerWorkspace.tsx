@@ -56,6 +56,7 @@ import { useQuoteCart } from "@/lib/store/quoteCart";
 import { useOpen3dSvgCatalog } from "../catalog/useOpen3dWorkspaceCatalog";
 import { CanvasToolRail } from "./CanvasToolRail";
 import { CommandPalette } from "./CommandPalette";
+import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
 import { InventoryPanel } from "./InventoryPanel";
 import { LayersPanel } from "./LayersPanel";
 import { PropertiesPanel } from "./PropertiesPanel";
@@ -869,15 +870,7 @@ export function OOPlannerWorkspace({
           </div>
         }
         statusRight={
-          <button
-            type="button"
-            className="open3d-palette-trigger"
-            onClick={() => setPaletteOpen(true)}
-            aria-label="Open command palette (Ctrl+K)"
-          >
-            <span className="open3d-palette-trigger__long">Commands (Ctrl+K)</span>
-            <span className="open3d-palette-trigger__short">Commands</span>
-          </button>
+          <CommandsPaletteTrigger onOpen={() => setPaletteOpen(true)} />
         }
       >
         {viewMode === "2d" ? (
