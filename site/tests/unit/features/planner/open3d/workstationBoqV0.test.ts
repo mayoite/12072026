@@ -7,6 +7,8 @@ import {
 import {
   summarizeWorkstationBoqV0,
   workstationBoqToQuoteCartItems,
+  workstationV0UnitPriceInr,
+  WORKSTATION_V0_GST_RATE,
 } from "@/features/planner/open3d/catalog/workstationBoqV0";
 import {
   createWorkstationConfigV0,
@@ -64,6 +66,32 @@ describe("summarizeWorkstationBoqV0", () => {
     expect(linearLine?.footprintWidthMm).toBe(1500);
     expect(lLine?.quantity).toBe(1);
     expect(lLine?.shape).toBe("l-shape");
+
+    // Money path: unit × qty + GST 18%
+    const unitLinear = workstationV0UnitPriceInr(linear);
+    expect(linearLine?.unitPriceInr).toBe(unitLinear);
+    expect(linearLine?.lineSubtotalInr).toBe(unitLinear * 3);
+    expect(linearLine?.gstRate).toBe(WORKSTATION_V0_GST_RATE);
+    expect(linearLine?.lineGstInr).toBe(Math.round(unitLinear * 3 * WORKSTATION_V0_GST_RATE));
+    expect(linearLine?.lineTotalInr).toBe(
+      linearLine!.lineSubtotalInr + linearLine!.lineGstInr,
+    );
+    expect(summary.currencyCode).toBe("INR");
+    expect(summary.subtotalInr).toBe(
+      (linearLine?.lineSubtotalInr ?? 0) + (lLine?.lineSubtotalInr ?? 0),
+    );
+    expect(summary.totalInr).toBe(summary.subtotalInr + summary.gstInr);
+    expect(summary.totalInr).toBeGreaterThan(0);
+  });
+
+  it("prices linear 1500×600 desk+pedestal+panel from list schedule", () => {
+    const config = createWorkstationConfigV0({
+      shape: "linear",
+      size: { lengthMm: 1500, depthMm: 600 },
+      modules: ["desk", "pedestal", "panel"],
+    });
+    // base 58000 + pedestal 8000 + panel 6000
+    expect(workstationV0UnitPriceInr(config)).toBe(72_000);
   });
 
   it("ignores non-workstation furniture", () => {
@@ -97,5 +125,8 @@ describe("summarizeWorkstationBoqV0", () => {
     expect(cart[0]!.qty).toBe(2);
     expect(cart[0]!.id).toContain("ws-v0");
     expect(cart[0]!.name).toMatch(/1500/);
+    expect(cart[0]!.name).toMatch(/ex-GST/);
+    expect(cart[0]!.name).toMatch(/₹/);
   });
 });
+

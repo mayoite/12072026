@@ -582,7 +582,7 @@ export function OOPlannerWorkspace({
 
   const handleExport = useCallback(
     (format = "json") => {
-      // Systems v0 BOQ — pure qty/footprint lines (no pricing yet).
+      // Systems v0 BOQ — qty + footprint + INR list + GST.
       if (format === "boq" || format === "workstation-boq") {
         const summary = summarizeWorkstationBoqV0(workspaceCanvas.project);
         if (summary.totalInstances === 0) {
@@ -597,7 +597,7 @@ export function OOPlannerWorkspace({
         const filename = `${slug}-workstation-boq-v0.json`;
         downloadWorkstationBoqJSON(summary, filename);
         setWorkspaceMessage(
-          `Exported BOQ: ${summary.totalSeats} seats · ${summary.lines.length} lines`,
+          `Exported BOQ: ${summary.totalSeats} seats · ${summary.lines.length} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST`,
         );
         return;
       }
@@ -613,7 +613,7 @@ export function OOPlannerWorkspace({
           addQuoteItem({ id: item.id, name: item.name, qty: item.qty });
         }
         setWorkspaceMessage(
-          `Added ${summary.totalSeats} seats to quote cart (${items.length} lines)`,
+          `Added ${summary.totalSeats} seats to quote cart · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST (${items.length} lines)`,
         );
         return;
       }

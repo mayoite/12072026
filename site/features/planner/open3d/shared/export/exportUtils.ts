@@ -160,13 +160,18 @@ export function downloadJSON(project: Open3dProject, filename?: string): void {
 }
 
 /**
- * Download systems v0 workstation BOQ (identity + qty + footprint; no prices yet).
+ * Download systems v0 workstation BOQ (identity + qty + footprint + INR list + GST).
  */
 export function downloadWorkstationBoqJSON(
   summary: {
     lines: readonly unknown[];
     totalSeats: number;
     totalInstances: number;
+    currencyCode?: string;
+    gstRate?: number;
+    subtotalInr?: number;
+    gstInr?: number;
+    totalInr?: number;
   },
   filename = "workstation-boq-v0.json",
 ): void {
