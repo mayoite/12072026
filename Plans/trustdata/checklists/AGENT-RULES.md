@@ -8,7 +8,7 @@
 
 - Superpowers + **relevant** skills (not a skill laundry list for show).
 - Up to **8** agents (max **10**); write to disk; no worktrees.
-- Commit as we go; push only if owner asks.
+- Commit as we go; **push origin when right**; **mirror ~30–60 min** (`mayoite`) — see `AGENTS.md`.
 - Take operational calls; prove with tests/browser/`results/`.
 - W3 needs **unit + browser** under `03-select-delete/` — no self-waive.
 - Folder names: `RESULTS-MAP.md` only.

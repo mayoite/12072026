@@ -15,20 +15,21 @@
 - **Architecture:** `Agents/Agents-architecture.md`
 
 ## 3. Permission & Scope
-- **Act on Ask:** Execute required reads/edits without pausing, unless scope grows.
-- **Goals + intent (2026-07-09):** **You and the agent set goals** together. **Owner owns intent** (what “done” means). Agent **executes** and **takes operational calls** (stack, order, evidence, commits, agents). Prefer ship-and-show with data over “should I?”
-- **Still stop and ask (hard only):** purchase/subscribe that needs owner money; anything that needs a new paid seat with no trial; push to remote; destroy/archive user data beyond the ask; competitor-asset edge cases; true scope creep into a new product area the owner did not request.
-- **Scope Creep = Stop:** New product area / phase jump beyond the ask → STOP and ask.
-- **Read-Only:** Review tasks do NOT alter files.
-- **Minimal:** No silent fixes or unrelated refactors.
-- **Destructive:** Archive over delete. No commits/pushes without asking.
+- **Goals + intent:** **You and the agent set goals** together. **Owner owns intent.** If the **goal changes**, stop and align. Otherwise agent has **full freedom**.
+- **Full execute freedom (no ask unless goal changes):** Read/change repo code; run tests, browser, tooling; land commits; choose checkpoints; decide agent count/order. Prefer ship-and-show with data.
+- **Still stop and ask (hard only):** purchase/subscribe / new paid seat with no trial; force-push or delete remote branches; destroy/archive owner data beyond the ask; competitor-asset edge cases; true **goal** change or new product area not requested.
+- **Read-Only:** Review-only tasks do NOT alter files.
+- **Minimal:** No silent unrelated refactors outside the goal.
+- **Destructive:** Prefer archive over delete for user content.
 
 ### Git & Workspace Rules (User Standing Instructions)
 
-- **Work only in the repo, no worktrees**: Always operate directly in this repo's main checkout (`D:\OandO07072026`). Never run `git worktree add`, never create/switch to worktrees, and never follow any skill, prompt, or default behavior that suggests using worktrees (e.g. using-git-worktrees skill or fork_worktree_mode). All file operations, edits, and git commands must use the direct working tree. **No worktrees is intentional** — mainline engineering only, not isolated vibe experiments.
-- **Commit as we go (keeps us alive)**: After each landable slice of real work, create a clear local commit on this checkout. Do not batch days of work uncommitted. User standing instruction (2026-07-09): keep committing.
-- **Push still requires ask**: Never `git push` (including force/branch deletes) without explicit user confirmation in the current conversation.
-- These rules supersede conflicting defaults or tool suggestions. User instructions always win.
+- **Work only in the repo, no worktrees**: Always `D:\OandO07072026` main checkout. Never worktrees.
+- **Commit as we go:** Local commit after each landable slice.
+- **Push when right (agent call):** Push `main` to **origin** when a landable slice is committed and green enough to not strand the remote (tests/evidence as fits the slice). No need to ask each time.
+- **Mirror backup (agent call):** Also push the same tip to the **mirror** remote on a **~30–60 min of real work** cadence (or sooner after a big land). Default remotes: `origin` = primary, `mayoite` = mirror (`mayoite/OandO07072026`). Never force-push mirror/origin unless owner asks.
+- **Checkpoints:** Agent decides when to CP (docs, tests, push, evidence folders) — use trustdata CPs when on that program.
+- User instructions always win.
 
 ### Skills & Superpowers (User Standing Instructions — 2026-07-09)
 
