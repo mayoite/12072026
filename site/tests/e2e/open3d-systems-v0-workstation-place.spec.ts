@@ -1,5 +1,6 @@
 /**
- * Systems v0 — browser: guest inventory place workstation (ws-v0) → furniture +1.
+ * Systems v0 — browser: guest inventory place workstation (ws-v0) → furniture +1
+ * and place auto-selects furniture (Select tool / selection status / properties cue).
  * Evidence: results/planner/world-standard-wave/07-systems-v0/
  */
 import { expect, test, type Page } from "@playwright/test";
@@ -35,8 +36,49 @@ async function furnitureCount(page: Page): Promise<number> {
   return match ? Number.parseInt(match[1], 10) : -1;
 }
 
+/**
+ * Place path auto-selects furniture and returns to Select tool.
+ * Accept any of: Select pressed, status "… selected", properties not empty.
+ */
+async function placementAutoSelectCue(page: Page): Promise<{
+  selectActive: boolean;
+  selectionStatus: boolean;
+  propertiesHasSelection: boolean;
+  ok: boolean;
+}> {
+  const selectBtn = page
+    .getByRole("navigation", { name: "Canvas tools" })
+    .getByRole("button", { name: /^Select\b/i });
+  const selectActive =
+    (await selectBtn.getAttribute("aria-pressed").catch(() => null)) === "true";
+
+  const bodyText = await page.locator("body").innerText().catch(() => "");
+  const selectionStatus =
+    /Furniture selected|\d+\s+furniture\s+selected/i.test(bodyText) ||
+    (await page
+      .locator(".open3d-status-pill--accent, .open3d-status-pill, [class*='status']")
+      .filter({ hasText: /selected/i })
+      .count()
+      .catch(() => 0)) > 0;
+
+  const noSelectionCount = await page
+    .getByRole("heading", { name: /No Selection/i })
+    .count()
+    .catch(() => 1);
+  const propertiesHasSelection = noSelectionCount === 0;
+
+  return {
+    selectActive,
+    selectionStatus,
+    propertiesHasSelection,
+    ok: selectActive || selectionStatus || propertiesHasSelection,
+  };
+}
+
 test.describe("Systems v0 workstation place (browser)", () => {
-  test("guest → search workstation → place → furniture +1", async ({ page }) => {
+  test("guest → search workstation → place → furniture +1 + auto-select", async ({
+    page,
+  }) => {
     fs.mkdirSync(EVIDENCE, { recursive: true });
 
     await enterGuestPlannerWorkspace(page, {
@@ -91,9 +133,20 @@ test.describe("Systems v0 workstation place (browser)", () => {
 
     // Status message often includes "Placed"
     const body = await page.locator("body").innerText();
-    expect(
-      /Placed|workstation|furniture/i.test(body),
-    ).toBe(true);
+    expect(/Placed|workstation|furniture/i.test(body)).toBe(true);
+
+    // Place auto-selects furniture: Select tool OR status OR properties cue
+    await expect
+      .poll(async () => (await placementAutoSelectCue(page)).ok, {
+        timeout: 10_000,
+      })
+      .toBe(true);
+
+    const selectCue = await placementAutoSelectCue(page);
+    expect(selectCue.ok).toBe(true);
+    await page.screenshot({
+      path: path.join(EVIDENCE, "12-selected.png"),
+    });
 
     fs.writeFileSync(
       path.join(EVIDENCE, "browser-place-run.json"),
@@ -102,6 +155,11 @@ test.describe("Systems v0 workstation place (browser)", () => {
           ok: true,
           furnitureBefore: before,
           furnitureAfter: after,
+          autoSelect: {
+            selectActive: selectCue.selectActive,
+            selectionStatus: selectCue.selectionStatus,
+            propertiesHasSelection: selectCue.propertiesHasSelection,
+          },
           at: new Date().toISOString(),
         },
         null,

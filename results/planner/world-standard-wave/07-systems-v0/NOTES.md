@@ -76,6 +76,12 @@ Inventory click-to-place uses existing OOPlannerWorkspace → placeCatalogItemIn
 - Evidence: 10/11 screenshots + browser-place-run.json
 - Command: `PLAYWRIGHT_BASE_URL=http://localhost:3000 npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-systems-v0-workstation-place.spec.ts` (1 passed ~2.9s)
 
+## Browser place auto-select (2026-07-09)
+
+- After place, asserts auto-select cue: Select tool `aria-pressed` **or** status "Furniture selected" **or** properties not "No Selection"
+- Screenshot: `12-selected.png`
+- Command (green): same e2e path — 1 passed ~2.4s; `browser-place-run.json` includes `autoSelect` flags
+
 ## Batch + BOQ (2026-07-09)
 
 - `placeWorkstationInstancesOnProject` — N grid instances, `PLACE_WORKSTATION_V0_BATCH` (50-unit test)
