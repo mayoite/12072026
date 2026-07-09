@@ -12,6 +12,11 @@ import {
 import { resolveCatalogItemBlock2D } from "@/features/planner/catalog/catalogBlockBridge";
 import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
 import type { Open3dFurnitureItem } from "../model/types";
+import {
+  parseWorkstationConfigKey,
+  workstationPlanPrims,
+  type WorkstationPlanPrimV0,
+} from "./workstationSystemV0";
 
 const DEFAULT_MM = 600;
 
@@ -158,6 +163,84 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
   };
 }
 
+function roleFill(role: WorkstationPlanPrimV0["role"]): string {
+  if (role === "pedestal") return BLOCK_STYLE.storage;
+  if (role === "panel") return BLOCK_STYLE.panel;
+  return BLOCK_STYLE.surface;
+}
+
+function roleStroke(role: WorkstationPlanPrimV0["role"]): string {
+  if (role === "pedestal") return BLOCK_STYLE.storageStroke;
+  if (role === "panel") return BLOCK_STYLE.surfaceStroke;
+  return BLOCK_STYLE.surfaceStroke;
+}
+
+/**
+ * Systems v0 workstation plan symbol from workstationPlanPrims (desk/return/pedestal/panel).
+ * Top-left mm origin; canvas centers via renderBlock2DCentered.
+ */
+export function workstationBlock2DFromItem(item: Open3dFurnitureItem): Block2D | null {
+  const config =
+    parseWorkstationConfigKey(item.catalogId) ??
+    parseWorkstationConfigKey(item.sourceCatalogId ?? "") ??
+    parseWorkstationConfigKey(item.sourceSlug ?? "");
+  if (!config) return null;
+
+  const { footprint, prims: planPrims } = workstationPlanPrims(config);
+  const widthMm = Math.max(1, item.width ?? footprint.widthMm);
+  const depthMm = Math.max(1, item.depth ?? footprint.depthMm);
+  const heightMm = Math.max(1, item.height ?? config.heightMm);
+
+  // Normalize plan prims into top-left quadrant (panel can be y=-40 in rules).
+  let minX = 0;
+  let minY = 0;
+  for (const p of planPrims) {
+    minX = Math.min(minX, p.x);
+    minY = Math.min(minY, p.y);
+  }
+  const shiftX = -minX;
+  const shiftY = -minY;
+
+  let contentW = footprint.widthMm;
+  let contentD = footprint.depthMm;
+  for (const p of planPrims) {
+    contentW = Math.max(contentW, p.x + shiftX + p.w);
+    contentD = Math.max(contentD, p.y + shiftY + p.h);
+  }
+
+  const prims: Prim[] = planPrims.map((p) => ({
+    kind: "rect" as const,
+    x: p.x + shiftX,
+    y: p.y + shiftY,
+    w: Math.max(1, p.w),
+    h: Math.max(1, p.h),
+    fill: roleFill(p.role),
+    stroke: roleStroke(p.role),
+    strokeWidth: p.role === "desk" || p.role === "return" ? 2 : 1.5,
+    radius: p.role === "panel" ? 2 : BLOCK_STYLE.cornerRadius,
+  }));
+
+  // Scale content AABB into placed furniture footprint.
+  const sx = widthMm / Math.max(1, contentW);
+  const sy = depthMm / Math.max(1, contentD);
+  if (Math.abs(sx - 1) > 1e-6 || Math.abs(sy - 1) > 1e-6) {
+    for (const prim of prims) {
+      if (prim.kind === "rect") {
+        prim.x *= sx;
+        prim.y *= sy;
+        prim.w *= sx;
+        prim.h *= sy;
+      }
+    }
+  }
+
+  return {
+    footprint: { L: widthMm, D: depthMm, H: heightMm },
+    prims,
+    label: item.catalogId || "workstation-v0",
+  };
+}
+
 /**
  * Map open3d catalog dimensions onto buddy CatalogItem shape for block preview builders.
  * Only used to call our own procedural builders — not external assets.
@@ -213,6 +296,11 @@ export function furnitureBlock2DFromItem(
 
   if (item.geometryMode === "modular-cabinet-v0") {
     return modularCabinetBlock(item);
+  }
+
+  const workstationBlock = workstationBlock2DFromItem(item);
+  if (workstationBlock) {
+    return workstationBlock;
   }
 
   // Prefer full procedural symbol via catalog bridge (our SVG prims).

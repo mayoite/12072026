@@ -63,5 +63,12 @@ Inventory click-to-place uses existing OOPlannerWorkspace → placeCatalogItemIn
 - Non-box geometry for workstation modules
 - Browser e2e place workstation from inventory
 
+## Plan Block2D symbols (2026-07-09)
+
+- `workstationBlock2DFromItem` in furnitureBlock2D.ts maps plan prims (desk/return/pedestal/panel) → styled Block2D
+- Routed from `furnitureBlock2DFromItem` when catalogId is `ws-v0-…`
+- Prims normalized into top-left footprint AABB (panel y=-40 shifted in)
+- Tests: `furnitureBlock2D.workstation-v0.test.ts` (4/4)
+
 ## Next
-Browser smoke: inventory filter systems-v0 → click place; optional batch place helper; plan prims → Block2D symbol
+Browser smoke: inventory place workstation; optional batch place helper
