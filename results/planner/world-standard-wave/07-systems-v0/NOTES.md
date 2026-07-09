@@ -70,5 +70,11 @@ Inventory click-to-place uses existing OOPlannerWorkspace → placeCatalogItemIn
 - Prims normalized into top-left footprint AABB (panel y=-40 shifted in)
 - Tests: `furnitureBlock2D.workstation-v0.test.ts` (4/4)
 
+## Browser place (2026-07-09)
+
+- e2e: `open3d-systems-v0-workstation-place.spec.ts` — guest search workstation → place → furniture +1
+- Evidence: 10/11 screenshots + browser-place-run.json
+- Command: `PLAYWRIGHT_BASE_URL=http://localhost:3000 npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-systems-v0-workstation-place.spec.ts` (1 passed ~2.9s)
+
 ## Next
-Browser smoke: inventory place workstation; optional batch place helper
+Optional batch placeMany helper; modular workstation mesh later
