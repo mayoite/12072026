@@ -156,9 +156,15 @@ Log: `vitest-mesh-v0-raw.log`
 Non-reg (system/BOQ/modular/save/scene nodes): 32/32 pass.
 
 ### Honest residual
-Still boxy multiparts — worktop slab + pedestal/panel/overhead boxes; no legs, handles, or photoreal materials. Not a designer GLB path.
+Still boxy multiparts — worktop slab + pedestal/panel/overhead boxes; handles/photoreal not claimed. Not a designer GLB path.
+
+### Legs quality raise (2026-07-09)
+
+- Named posts `leg-desk-*` / `leg-return-*` under worktops (`LEG_SECTION_MM=50`)
+- Evidence: `mesh-legs-green/` (27 unit pass) + RED history `mesh-legs-red/`
+- Residual: still boxy; no photoreal
 
 ## Next
-Optional BOQ panel UI / priced BOQ; Fabric cutover later; free height control; visual smoke PNGs for workstation-v0 if desired
+Optional BOQ panel UI / priced BOQ; Fabric cutover later; free height control; W4 browser residual
 
 

@@ -1,5 +1,13 @@
 # P01 — Product Truth Inventory
 
+## Phase status (complete)
+
+| Item | Status | Evidence |
+|------|--------|----------|
+| Inventory pack | **DONE** 2026-07-09 | `results/planner/world-standard-wave/00-product-truth/` |
+| CP-01 | **PASS** | `INVENTORY.md`, `CONTRADICTIONS.md`, greps, smoke 27/27, `run.json` cp01=pass |
+| Task checkboxes below | Historical plan steps — evidence supersedes; do not re-run inventory thrash | README index in evidence folder |
+
 ## Expert revision note
 
 **Date:** 2026-07-09  
@@ -706,20 +714,20 @@ git commit -m "evidence(P01): product truth inventory ready for CP-01"
 
 ### CP-01 owner / reviewer close
 
-- [ ] Reviewer marks CP-01 in evidence footer and updates checkpoint ledger:
+- [x] Reviewer marks CP-01 in evidence footer and updates checkpoint ledger:
 
 1. Footer in `INVENTORY.md`:
 
 ```markdown
 ## CP-01
-- status: pass | fail
-- reviewer:
-- date:
-- notes:
+- status: pass
+- reviewer: agent
+- date: 2026-07-09
+- notes: full pack landed under 00-product-truth/
 ```
 
-2. Update status cell for **CP-01** in `Plans/trustdata/checkpoints/CHECKPOINTS.md` to `PASS` or `FAIL` (with date in notes if fail).  
-3. Set `run.json` `"cp01": "pass"` or `"fail"`.  
+2. Update status cell for **CP-01** in `Plans/trustdata/checkpoints/CHECKPOINTS.md` to `PASS` or `FAIL` (with date in notes if fail). — **PASS**  
+3. Set `run.json` `"cp01": "pass"` or `"fail"`. — **pass**  
 4. Commit ledger update when status changes:
 
 ```powershell

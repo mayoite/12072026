@@ -1,0 +1,21 @@
+﻿site\features\planner\open3d\3d\index.ts:3:OPEN3D_ORBIT_DEFAULT_ENABLED,
+site\features\planner\open3d\3d\orbitDefaults.ts:6:/** Product default: OrbitControls ON for open3d 3D view. */
+site\features\planner\open3d\3d\orbitDefaults.ts:7:export const OPEN3D_ORBIT_DEFAULT_ENABLED = true as const;
+site\features\planner\open3d\3d\orbitDefaults.ts:11:* Type forces enableControls: true so silent opt-out cannot type-check.
+site\features\planner\open3d\3d\orbitDefaults.ts:13:export function getOpen3dViewerControlProps(): { enableControls: true } {
+site\features\planner\open3d\3d\orbitDefaults.ts:14:return { enableControls: OPEN3D_ORBIT_DEFAULT_ENABLED };
+site\features\planner\open3d\3d\ThreeLazyViewer.tsx:13:import { OPEN3D_ORBIT_DEFAULT_ENABLED } from "./orbitDefaults";
+site\features\planner\open3d\3d\ThreeLazyViewer.tsx:16:OPEN3D_ORBIT_DEFAULT_ENABLED,
+site\features\planner\open3d\3d\ThreeLazyViewer.tsx:74:enableControls?: boolean;
+site\features\planner\open3d\3d\ThreeLazyViewer.tsx:145:enableControls = OPEN3D_ORBIT_DEFAULT_ENABLED,
+site\features\planner\open3d\3d\ThreeLazyViewer.tsx:161:enableControls={enableControls}
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:29:import { OPEN3D_ORBIT_DEFAULT_ENABLED } from "./orbitDefaults";
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:45:enableControls?: boolean;
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:68:enableControls = OPEN3D_ORBIT_DEFAULT_ENABLED,
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:77:/** Playwright truth: set after OrbitControls construct (or false when opt-out). */
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:170:if (enableControls && camera && renderer) {
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:171:const { OrbitControls } = await import(
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:172:"three/examples/jsm/controls/OrbitControls.js"
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:175:const orbit = new OrbitControls(camera, renderer.domElement);
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:233:// If unmounted while OrbitControls import was in flight, dispose now.
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:253:}, [three, backgroundColor, enableShadows, enableControls]);

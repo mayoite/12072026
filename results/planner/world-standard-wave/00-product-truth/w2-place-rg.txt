@@ -1,0 +1,45 @@
+﻿site\features\planner\open3d\3d\createSceneObjectFromNode.ts:52:* Build a wall box or furniture object (parametric / modular-cabinet-v0 /
+site\features\planner\open3d\3d\createSceneObjectFromNode.ts:63:node.geometryMode === "modular-cabinet-v0"
+site\features\planner\open3d\3d\createSceneObjectFromNode.ts:78:geometryMode: "modular-cabinet-v0",
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx:55:furnitureBlock2DFromItem,
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx:56:} from "../catalog/furnitureBlock2D";
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx:590:const block = furnitureBlock2DFromItem(item);
+site\features\planner\open3d\catalog\catalogTypes.ts:267:* When omitted, placement may still detect modular via id/slug `cabinet-v0`.
+site\features\planner\open3d\catalog\catalogTypes.ts:269:geometryMode?: "box" | "modular-cabinet-v0" | "workstation-v0";
+site\features\planner\open3d\catalog\furnitureBlock2D.ts:43:* Readable plan-view cabinet-v0 symbol (W2 / P05).
+site\features\planner\open3d\catalog\furnitureBlock2D.ts:162:label: item.catalogId || "cabinet-v0",
+site\features\planner\open3d\catalog\furnitureBlock2D.ts:288:export function furnitureBlock2DFromItem(
+site\features\planner\open3d\catalog\furnitureBlock2D.ts:297:if (item.geometryMode === "modular-cabinet-v0") {
+site\features\planner\open3d\catalog\furnitureBlock2D.ts:393:* Historical name. All furnitureBlock2D prims are authored top-left (0..L, 0..D).
+site\features\planner\open3d\catalog\index.ts:5:export * from "./placementAction";
+site\features\planner\open3d\catalog\modularCabinetV0.ts:2:* Smallest modular furniture slice: cabinet-v0 options → 2D path + 3D mesh group.
+site\features\planner\open3d\catalog\modularCabinetV0.ts:69:group.name = "modular-cabinet-v0";
+site\features\planner\open3d\catalog\modularCabinetV0.ts:71:modular: "cabinet-v0",
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:2:* Modular cabinet-v0 GLB export skeleton (generate-first, policy-safe).
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:44:kind: "modular-cabinet-v0";
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:74:"modular-cabinet-v0",
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:144:* Build a pure GLB export plan for modular cabinet-v0.
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:158:kind: "modular-cabinet-v0",
+site\features\planner\open3d\catalog\parametricBuilder.ts:33:* modular-cabinet-v0 + modularOptions → generateCabinetV0Footprint;
+site\features\planner\open3d\catalog\parametricBuilder.ts:40:item.geometryMode === "modular-cabinet-v0" &&
+site\features\planner\open3d\catalog\parametricBuilder.ts:53:* Box footprint+mesh + cabinet-v0 modular path (component choices → good mesh).
+site\features\planner\open3d\catalog\parametricBuilder.ts:88:/** Modular cabinet-v0: doors/material options without designer GLB. */
+site\features\planner\open3d\catalog\placementAction.ts:36:/** Catalog id/slug that maps to modular cabinet-v0 multi-part mesh. */
+site\features\planner\open3d\catalog\placementAction.ts:37:export const MODULAR_CABINET_V0_CATALOG_ID = "cabinet-v0";
+site\features\planner\open3d\catalog\placementAction.ts:40:if (item.geometryMode === "modular-cabinet-v0") return true;
+site\features\planner\open3d\catalog\placementAction.ts:79:if (isModularCabinetV0CatalogItem(item)) return "modular-cabinet-v0";
+site\features\planner\open3d\catalog\placementAction.ts:273:* Modular cabinet-v0: stamps `geometryMode` + `modularOptions` only.
+site\features\planner\open3d\catalog\placementAction.ts:275:* Open3d inventory: cabinet-v0 only routes to placeModularWithGeneratedGlbBrowser
+site\features\planner\open3d\catalog\placementAction.ts:306:geometryMode === "modular-cabinet-v0"
+site\features\planner\open3d\catalog\workstationSystemV0.ts:150:* Does not touch the document — placementAction will consume this later.
+site\features\planner\open3d\editor\demoCatalogItems.ts:144:id: "cabinet-v0",
+site\features\planner\open3d\editor\demoCatalogItems.ts:145:slug: "cabinet-v0",
+site\features\planner\open3d\editor\demoCatalogItems.ts:163:tags: ["cabinet", "modular", "storage", "cabinet-v0"],
+site\features\planner\open3d\editor\demoCatalogItems.ts:167:geometryMode: "modular-cabinet-v0",
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:31:} from "../catalog/placementAction";
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:471:// cabinet-v0 only: write+stamp so G8 can load; other items stay procedural.
+site\features\planner\open3d\model\types.ts:53:| "modular-cabinet-v0"
+site\features\planner\open3d\model\types.ts:57:* Serializable modular cabinet-v0 options (mirrors ModularCabinetV0Options).
+site\features\planner\open3d\model\types.ts:95:/** When modular-cabinet-v0 / workstation-v0, viewer builds multi-part mesh. */
+site\features\planner\open3d\model\types.ts:97:/** Required when geometryMode is modular-cabinet-v0. */
+site\features\planner\open3d\shared\document\projectParser.ts:138:["box", "modular-cabinet-v0", "workstation-v0"] as const,

@@ -1,10 +1,11 @@
 # Pending list (owner)
 
-**Last updated:** 2026-07-09 (world-standard wave — superpowers + 7 agents)  
+**Last updated:** 2026-07-09 (truth-lock — authority docs ↔ `results/planner/world-standard-wave/`)  
 **Rule:** finish open kill-path fully before inventing a new epic. Resolve blockers; do not park them.  
 **Honesty:** P0.1–P0.3 are **spine**, not ship quality. Owner rejected thin “journey only” bar.  
-**Active standard:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` (awaiting approach approval)  
-**Evidence:** `results/planner/world-standard-wave/WAVE.md`  
+**Active standard:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md`  
+**W0:** **Unlocked — Approach A** (product journey first). Recorded in `Plans/trustdata/00-START.md` + `results/planner/world-standard-wave/00-start/NOTES.md`.  
+**Evidence:** `results/planner/world-standard-wave/` · truth map `TRUTH-LOCK.md`  
 **Agents / one-task:** `AGENTS.md` only.
 
 Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infra
@@ -15,9 +16,32 @@ Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infr
 
 | # | Item | Status |
 |---|------|--------|
-| **W0** | Design + approach (A product-journey / B Fabric-first / C chrome-first) | **NEEDS OWNER PICK** |
-| **W1–W8** | See design spec gates (draw, place, select/delete, 2D↔3D+orbit, save/reload, honest save, mesh bar, shortcuts) | Blocked on W0 |
+| **W0** | Design + approach | **UNLOCKED — Approach A** (product-journey first; B/C not selected) |
+| **W1–W2** | Draw + place journey + symbols | **PASS** evidence — `02-browser-open3d-journey/`, `05-symbols-svg/` |
+| **W3** | Select / delete / undo (furniture) | **PASS** — `03-select-delete/` |
+| **W4** | Orbit + 2D↔3D continuity | **OPEN (partial)** — unit pose green; **browser e2e residual** (`04-orbit-continuity/playwright-raw.log` failed) |
+| **W5–W6** | Save hard-reload + local-only honesty | **PASS** — `06-save-honesty/` (local IDB only; not cloud) |
+| **W7** | Mesh quality bar (cabinet-v0) | **PASS** bar met — `08-mesh-quality/`; residual: raise readability later (not photoreal) |
+| **W8** | Shortcuts map truth | **PASS** — `09-shortcuts-chrome/` |
+| **Pack** | CP-10 handover + E: backup | **OPEN** — `10-handover/` missing; needs CP-04 closed first |
 | **Research** | Competitive ideas only — `D:\websites\research\2026-07-09-world-standard\` | Packed |
+
+**Not blocked on W0.** Gates run against evidence; only residual product kill-path above is **W4 browser** then **CP-10 pack**.
+
+---
+
+## Honest residuals (not “blocked on W0”)
+
+| Residual | Note |
+|----------|------|
+| **W4 browser orbit/continuity e2e** | Highest-value open gate — place → 3D orbit attr → 2D count restore |
+| **Mesh quality raise** | Cabinet-v0 / workstation multiparts still boxy; handles/legs/AO later — bar already PASS for readable parts |
+| **Fabric full stage** | Destination still later (Approach A); flag OFF expected |
+| **Cloud / member save** | W6 is local-only honesty; cloud wire is a later gate if owner wants |
+| Openings select browser | Unit landed; no dedicated e2e yet |
+| Wall delete cascade browser | Unit landed; no UI e2e yet |
+| `next build` `/contact` createContext | Pre-existing build gate — separate |
+| SSR / multi-tenant catalogs | Later |
 
 ---
 

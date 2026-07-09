@@ -1,5 +1,15 @@
 # P03 Appendix — skeletons & detail
 
+## Phase status (companion complete)
+
+| Item | Status | Evidence |
+|------|--------|----------|
+| P03 execute (W3) | **PASS** | `results/planner/world-standard-wave/03-select-delete/` (unit + browser + screenshots) |
+| This appendix | **Reference only** — design skeletons used for implementation; not a second CP | Does not need re-execution |
+| Browser hard gate | **Met** | `playwright-raw.log` + shots 01–04 + `run.json` |
+
+**Do not** treat open historical “Missing for W3” inventory below as current truth — that was pre-land inventory. Current code has pick/delete/preventDefault/browser proof.
+
 ## Structure rewrite 2026-07-09
 
 Companion to **[P03-select-delete.md](./P03-select-delete.md)** (execute card). Holds pure-API design, test case lists, run.json shape, inventory detail, expert archive. **Not a second CP.** CP-03 still fails without browser under `03-select-delete/`.
@@ -108,9 +118,15 @@ Fixtures: minimal `Open3dFurnitureItem` (id, catalogId, position, rotation, scal
 
 ## Honest inventory summary
 
+### Historical (pre-land — 2026-07-09 draft)
+
 **Present (verify at execute):** `pickFurnitureAtPoint`; Feasibility select order furniture→wall→room; selection ring; `CanvasSelection`; `deleteEntityFromProject`; workspace `deleteSelection` (multi-id may N history); keyboard Del/Bksp without preventDefault coverage; history undo; default tool often `wall`.
 
-**Missing for W3:** pickFurniture unit tests; Del/Bksp preventDefault tests; pure delete+undo integration; canvas select furniture unit; Esc clear selection; browser under `03-select-delete/`.
+**Missing for W3 (at draft time):** pickFurniture unit tests; Del/Bksp preventDefault tests; pure delete+undo integration; canvas select furniture unit; Esc clear selection; browser under `03-select-delete/`.
+
+### Current (post-land — 2026-07-09)
+
+**Landed:** unit pack (applySelectionDelete, preventDefault, Esc) + browser place→select→delete→undo under `03-select-delete/`. See `NOTES.md` + `run.json` there. **CP-03 PASS.**
 
 **Paths:** keyboard at `editor/useWorkspaceKeyboard.ts` (no `editor/hooks/` folder).
 

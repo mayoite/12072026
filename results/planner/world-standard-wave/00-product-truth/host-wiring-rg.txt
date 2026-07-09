@@ -1,0 +1,79 @@
+﻿site\app\planner\(workspace)\canvas\page.tsx:1:import { Open3dPlannerWorkspaceRoute } from "@/features/planner/ui/Open3dPlannerWorkspaceRoute";
+site\app\planner\(workspace)\canvas\page.tsx:6:/** Live member/guest canvas — open3d hybrid: FeasibilityCanvas (canvas-feasibility) 2-D + Three 3-D. Fabric cutover = Phase 2B; archive fallback: /planner/fabric/canvas */
+site\app\planner\(workspace)\canvas\page.tsx:19:return <Open3dPlannerWorkspaceRoute guestMode={isGuest} planId={planId} />;
+site\app\planner\(workspace)\guest\page.tsx:1:import { Open3dPlannerWorkspaceRoute } from "@/features/planner/ui/Open3dPlannerWorkspaceRoute";
+site\app\planner\(workspace)\guest\page.tsx:5:/** Live guest workspace — open3d hybrid: FeasibilityCanvas (canvas-feasibility) 2-D + Three 3-D. Fabric cutover = Phase 2B; archive fallback: /planner/fabric/guest */
+site\app\planner\(workspace)\guest\page.tsx:14:return <Open3dPlannerWorkspaceRoute guestMode planId={planId} />;
+site\app\planner\open3d\page.tsx:2:import { Open3dPlannerHost } from "@/features/planner/ui/Open3dPlannerHost";
+site\app\planner\open3d\page.tsx:7:* Native Open3D pilot route — same open3d stack as guest/canvas (FeasibilityCanvas 2-D + Three 3-D).
+site\app\planner\open3d\page.tsx:27:return <Open3dPlannerHost guestMode={isGuest} planId={planId} />;
+site\features\planner\ui\Open3dPlannerHost.tsx:1:import { Open3dNativeHost } from "@/features/planner/open3d/ui/Open3dNativeHost";
+site\features\planner\ui\Open3dPlannerHost.tsx:3:export function Open3dPlannerHost({
+site\features\planner\ui\Open3dPlannerHost.tsx:10:return <Open3dNativeHost planId={planId} guestMode={guestMode} />;
+site\features\planner\ui\Open3dPlannerWorkspaceRoute.tsx:9:const Open3dPlannerHost = dynamic(
+site\features\planner\ui\Open3dPlannerWorkspaceRoute.tsx:11:import("@/features/planner/ui/Open3dPlannerHost").then((mod) => ({
+site\features\planner\ui\Open3dPlannerWorkspaceRoute.tsx:12:default: mod.Open3dPlannerHost,
+site\features\planner\ui\Open3dPlannerWorkspaceRoute.tsx:18:export function Open3dPlannerWorkspaceRoute({
+site\features\planner\ui\Open3dPlannerWorkspaceRoute.tsx:28:<Open3dPlannerHost guestMode={guestMode} planId={planId} />
+site\features\planner\ui\PlannerCanvasEnhancements.tsx:11:// Note: Open3D native bootstrap logic is now handled entirely within OOPlannerWorkspace.tsx
+site\features\planner\open3d\3d\index.ts:1:export { Lazy3DViewer } from "./ThreeLazyViewer";
+site\features\planner\open3d\3d\ThreeLazyViewer.tsx:11:import styles from "./threeLazyViewer.module.css";
+site\features\planner\open3d\3d\ThreeLazyViewer.tsx:82:import(/* webpackChunkName: "three-viewer" */ "./ThreeViewerInner").then((mod) => ({
+site\features\planner\open3d\3d\ThreeLazyViewer.tsx:83:default: mod.ThreeViewerInner,
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:8:import styles from "./threeViewerInner.module.css";
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:37:interface ThreeViewerInnerProps {
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:65:export function ThreeViewerInner({
+site\features\planner\open3d\3d\ThreeViewerInner.tsx:71:}: ThreeViewerInnerProps): React.JSX.Element {
+site\features\planner\open3d\canvas-fabric-stage\FurnitureFabricLayer.tsx:28:/** Viewport transform; defaults to FeasibilityCanvas initial. */
+site\features\planner\open3d\canvas-fabric-stage\FurnitureFabricLayer.tsx:32:* When false, host is pointer-events:none so FeasibilityCanvas keeps ownership.
+site\features\planner\open3d\canvas-fabric-stage\furnitureFabricMapper.ts:5:* space as FeasibilityCanvas (projectToScreen / screenToProject).
+site\features\planner\open3d\canvas-fabric-stage\furnitureFabricMapper.ts:18:/** Matches FeasibilityCanvas furniture default when width/depth omitted. */
+site\features\planner\open3d\canvas-fabric-stage\furnitureFabricMapper.ts:22:* Matches FeasibilityCanvas INITIAL_TRANSFORM so flag-on overlay starts aligned.
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx:105:export interface FeasibilityCanvasHandle {
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx:116:export type FeasibilityCanvasVariant = "proof" | "embedded";
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx:129:export interface FeasibilityCanvasProps {
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx:133:variant?: FeasibilityCanvasVariant;
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx:147:export const FeasibilityCanvas = forwardRef<FeasibilityCanvasHandle, FeasibilityCanvasProps>(
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx:148:function FeasibilityCanvas(
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx:486:throw new Error("Failed to get 2D rendering context for FeasibilityCanvas. Planner canvas cannot render.");
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx:1112:FeasibilityCanvas.displayName = "FeasibilityCanvas";
+site\features\planner\open3d\cleanup\importGraphProof.ts:22:imports: ["@/features/planner/ui/Open3dPlannerWorkspaceRoute"],
+site\features\planner\open3d\cleanup\importGraphProof.ts:28:imports: ["@/features/planner/ui/Open3dPlannerWorkspaceRoute"],
+site\features\planner\open3d\cleanup\importGraphProof.ts:33:path: "site/features/planner/ui/Open3dPlannerWorkspaceRoute.tsx",
+site\features\planner\open3d\cleanup\importGraphProof.ts:34:imports: ["@/features/planner/ui/Open3dPlannerHost"],
+site\features\planner\open3d\cleanup\importGraphProof.ts:52:imports: ["@/features/planner/ui/Open3dPlannerHost"],
+site\features\planner\open3d\cleanup\importGraphProof.ts:57:path: "site/features/planner/ui/Open3dPlannerHost.tsx",
+site\features\planner\open3d\cleanup\importGraphProof.ts:58:imports: ["@/features/planner/open3d/ui/Open3dNativeHost"],
+site\features\planner\open3d\cleanup\importGraphProof.ts:63:path: "site/features/planner/open3d/ui/Open3dNativeHost.tsx",
+site\features\planner\open3d\cleanup\importGraphProof.ts:64:imports: ["@/features/planner/open3d/editor/OOPlannerWorkspace"],
+site\features\planner\open3d\editor\index.ts:1:export { OOPlannerWorkspace, type OOPlannerWorkspaceProps } from "./OOPlannerWorkspace";
+site\features\planner\open3d\editor\index.ts:3:export { FeasibilityCanvas } from "../canvas-feasibility/FeasibilityCanvas";
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:16:} from "../3d/ThreeLazyViewer";
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:18:FeasibilityCanvas,
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:19:type FeasibilityCanvasHandle,
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:21:} from "../canvas-feasibility/FeasibilityCanvas";
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:96:export type OOPlannerWorkspaceProps = {
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:101:export function OOPlannerWorkspace({
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:104:}: OOPlannerWorkspaceProps) {
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:109:const canvasRef = useRef<FeasibilityCanvasHandle>(null);
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:224:// Walls stay on FeasibilityCanvas; fabric layer is optional overlay for furniture only.
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:535:"[OOPlannerWorkspace] modular GLB place failed; procedural fallback",
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:895:<FeasibilityCanvas
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:924:<FeasibilityCanvas
+site\features\planner\open3d\editor\useWorkspaceCanvas.ts:93:// live in caller (OOPlannerWorkspace, FeasibilityCanvas, InventoryPanel, Three*).
+site\features\planner\open3d\editor\useWorkspaceCanvas.ts:187:* Live open3d wall drawing uses FeasibilityCanvas + addOpen3dWall / newEntityId —
+site\features\planner\open3d\shared\export\index.ts:1:// Production exports (used in OOPlannerWorkspace etc). Dead code (jobs, roomplan, pdf/dxf, uploads, json envelope utils) removed from source to improve coverage floor for PLAN-FAIL-0408. See exportPreflight.ts / exportUtils.ts for live.
+site\features\planner\open3d\ui\Open3dNativeHost.tsx:3:import { OOPlannerWorkspace } from "@/features/planner/open3d/editor/OOPlannerWorkspace";
+site\features\planner\open3d\ui\Open3dNativeHost.tsx:5:export type Open3dNativeHostProps = {
+site\features\planner\open3d\ui\Open3dNativeHost.tsx:13:* In-site (no iframe): FeasibilityCanvas (canvas-feasibility, Canvas 2D API) + Three/r3f 3-D.
+site\features\planner\open3d\ui\Open3dNativeHost.tsx:16:export function Open3dNativeHost({ guestMode = false, planId }: Open3dNativeHostProps) {
+site\features\planner\open3d\ui\Open3dNativeHost.tsx:19:<OOPlannerWorkspace guestMode={guestMode} planId={planId} />
+site\features\planner\open3d\README.md:7:- 2-D editing uses raw Canvas 2D via [`canvas-feasibility/FeasibilityCanvas`](./canvas-feasibility/FeasibilityCanvas.tsx) — **not** Fabric
+site\features\planner\open3d\README.md:11:Fabric.js is package-installed; the archived full Fabric workspace lives under `_archive/fabric/`. Default live 2-D remains FeasibilityCanvas. Fabric full-stage cutover is Phase **2B** (`Plans/01-execution/core/02B-PHASE-2B-2C.md`). A **furniture-only** Fabric overlay is opt-in (below).
+site\features\planner\open3d\README.md:26:| Walls / floor / draw tools | `FeasibilityCanvas` (unchanged) |
+site\features\planner\open3d\README.md:33:- Select + flag: fabric host is `pointer-events: auto` over the full stage — empty space can block FeasibilityCanvas pick
+site\features\planner\open3d\README.md:34:- Pan/zoom transform is not shared with FeasibilityCanvas yet (overlay can desync after pan/zoom)
+site\features\planner\open3d\README.md:56:| `/planner/guest` | `site/app/planner/(workspace)/guest/page.tsx` → `Open3dPlannerHost` |
+site\features\planner\open3d\README.md:57:| `/planner/canvas` | `site/app/planner/(workspace)/canvas/page.tsx` → `Open3dPlannerHost` |
+site\features\planner\open3d\README.md:59:| `/planner/open3d` | `site/app/planner/open3d/page.tsx` → `Open3dPlannerHost` (1A pilot shell) |
+site\features\planner\open3d\README.md:61:Host chain: `Open3dPlannerHost` → `ui/Open3dNativeHost` → `editor/OOPlannerWorkspace` → `canvas-feasibility/FeasibilityCanvas` (2-D) or `3d/ThreeLazyViewer` (3-D).

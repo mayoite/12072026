@@ -1,27 +1,27 @@
-# Trust-Data Plan — 00 START
+﻿# Trust-Data Plan â€” 00 START
 
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. **No product code** until owner records **implementation unlock**. Plan-only mode allows plan/review work only. Steps use checkbox syntax.  
-> **Expert revision:** 2026-07-09 — applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md).  
-> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology; week-1 kill order full in [INDEX.md](./INDEX.md) (condensed below); densest phases thinned → `phases/P0X-appendix.md`. See [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).  
+> **Expert revision:** 2026-07-09 â€” applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md).  
+> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology; week-1 kill order full in [INDEX.md](./INDEX.md) (condensed below); densest phases thinned â†’ `phases/P0X-appendix.md`. See [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).  
 > **Program index:** [INDEX.md](./INDEX.md)
 
 **Goal:** Freeze operating rules, approach pick, unlock mode, ethics, and phase order so every agent works from the same truth.
 
-**Architecture:** One checkout `D:\OandO07072026`; one plan root `Plans/trustdata/`; data decides “done.”
+**Architecture:** One checkout `D:\OandO07072026`; one plan root `Plans/trustdata/`; data decides â€œdone.â€
 
 **Tech stack:** See [INDEX.md](./INDEX.md).
 
-**North star:** A facilities buyer can, without a developer, open the planner, lay out a small office with real O&O-scale furniture, switch 2D↔3D with orbit, select/edit/delete, save and return the next day, and trust dimensions enough to quote later.
+**North star:** A facilities buyer can, without a developer, open the planner, lay out a small office with real O&O-scale furniture, switch 2Dâ†”3D with orbit, select/edit/delete, save and return the next day, and trust dimensions enough to quote later.
 
 ---
 
 ## Approach A (binding default)
 
-**Product Journey First** — ship **W1–W8** on **FeasibilityCanvas + document model** first; keep Fabric v7 full stage as 2D **destination** after gates green; pull 2A chrome **only** when it blocks a W gate.
+**Product Journey First** â€” ship **W1â€“W8** on **FeasibilityCanvas + document model** first; keep Fabric v7 full stage as 2D **destination** after gates green; pull 2A chrome **only** when it blocks a W gate.
 
 | Pick | Meaning |
 |------|---------|
-| **A** (default) | Product journey first — **recommended** |
+| **A** (default) | Product journey first â€” **recommended** |
 | **B** | Fabric full stage first |
 | **C** | Chrome / 2A first |
 
@@ -30,25 +30,25 @@ Owner records pick below. **Default if owner silent after unlock:** **A**.
 
 ---
 
-## Unlock gate (W0) — modes
+## Unlock gate (W0) â€” modes
 
 | Mode | Owner statement (examples) | Allowed | Forbidden |
 |------|----------------------------|---------|-----------|
 | **locked** (default until stated) | _(none)_ | Read plans; expert review | Product edits; W-gate claims; treat default A as go-code |
-| **plan-only** | “plan only”, “revise plans”, “no product code” | `Plans/trustdata/**` edits; read-only inventory evidence (e.g. P01); docs commits | `site/features/planner/**` product behavior changes; claiming W1–W8 |
-| **implementation unlock** | “unlock implementation”, “execute trustdata”, “run product phases” | Phase product work per phase files + evidence + local commits; push/mirror per `AGENTS.md` | Worktrees; force-push / remote destroy; skip CP stop-if-fail; scope creep without ask |
+| **plan-only** | â€œplan onlyâ€, â€œrevise plansâ€, â€œno product codeâ€ | `Plans/trustdata/**` edits; read-only inventory evidence (e.g. P01); docs commits | `site/features/planner/**` product behavior changes; claiming W1â€“W8 |
+| **implementation unlock** | â€œunlock implementationâ€, â€œexecute trustdataâ€, â€œrun product phasesâ€ | Phase product work per phase files + evidence + local commits; push/mirror per `AGENTS.md` | Worktrees; force-push / remote destroy; skip CP stop-if-fail; scope creep without ask |
 
 ### Owner pick (gate W0)
 
-- [x] Approach **A** — Product journey first (recommended) — recorded 2026-07-09
-- [ ] Approach **B** — Fabric full stage first
-- [ ] Approach **C** — Chrome / 2A first
+- [x] Approach **A** â€” Product journey first (recommended) â€” recorded 2026-07-09
+- [ ] Approach **B** â€” Fabric full stage first
+- [ ] Approach **C** â€” Chrome / 2A first
 
 ### Owner mode (gate W0)
 
-- [ ] **plan-only** — plans/reviews/inventory evidence only; no product code
-- [x] **implementation unlock** — product phases allowed per phase file — recorded 2026-07-09
-- [ ] Still **locked** — wait for owner
+- [ ] **plan-only** â€” plans/reviews/inventory evidence only; no product code
+- [x] **implementation unlock** â€” product phases allowed per phase file â€” recorded 2026-07-09
+- [ ] Still **locked** â€” wait for owner
 
 **Record unlock quote / date:**
 
@@ -65,13 +65,13 @@ Evidence: results/planner/world-standard-wave/00-start/NOTES.md
 
 ## Engine decision checkboxes (tick at CP-02 / owner engine sign-off)
 
-Do **not** invent a new engine mid-W. Research → [RESEARCH-MAP.md](./RESEARCH-MAP.md); comparison → `results/planner/world-standard-wave/COMPARISON-CHART.md`.
+Do **not** invent a new engine mid-W. Research â†’ [RESEARCH-MAP.md](./RESEARCH-MAP.md); comparison â†’ `results/planner/world-standard-wave/COMPARISON-CHART.md`.
 
-- [ ] Fabric v7 full stage = 2D **destination**; FeasibilityCanvas = **interim** (Approach A path)
-- [ ] Three + R3F + **orbit ON** = 3D
-- [ ] No Konva + Fabric hybrid interactive
-- [ ] Manufacturer SKU catalog (IKEA-class pattern, O&O products)
-- [ ] Success metric: **BOQ/quote path > photoreal**
+- [x] Fabric v7 full stage = 2D **destination**; FeasibilityCanvas = **interim** (Approach A path)
+- [x] Three + R3F + **orbit ON** = 3D
+- [x] No Konva + Fabric hybrid interactive
+- [x] Manufacturer SKU catalog (IKEA-class pattern, O&O products)
+- [x] Success metric: **BOQ/quote path > photoreal**
 
 Evidence when locked: `results/planner/world-standard-wave/01-engine-lock/NOTES.md` (CP-02).
 
@@ -80,7 +80,7 @@ Evidence when locked: `results/planner/world-standard-wave/01-engine-lock/NOTES.
 ## Ethics / licenses (hard)
 
 **Do not duplicate here.**  
-→ `AGENTS.md` · `ayushdocs/17-LICENSES-CLEARED.md` · research home `D:\websites\README.md`
+â†’ `AGENTS.md` Â· `ayushdocs/17-LICENSES-CLEARED.md` Â· research home `D:\websites\README.md`
 
 - [ ] Agent read licenses MD (CP-00)
 
@@ -88,11 +88,11 @@ Evidence when locked: `results/planner/world-standard-wave/01-engine-lock/NOTES.
 
 ## Trust-data rule
 
-1. **You + agent set goals** together; **owner owns intent** (final call on what “done” means).  
+1. **You + agent set goals** together; **owner owns intent** (final call on what â€œdoneâ€ means).  
 2. Agent **executes** and takes operational calls; proves with **repo / tests / browser**.  
 3. Status claims require paths under `results/`.  
 4. Never put the owner on trial for character.  
-5. If evidence contradicts a cheerful status report, **evidence wins** — update `D:\OandO07072026\Failures.md`.
+5. If evidence contradicts a cheerful status report, **evidence wins** â€” update `D:\OandO07072026\Failures.md`.
 
 ---
 
@@ -102,28 +102,28 @@ Evidence when locked: `results/planner/world-standard-wave/01-engine-lock/NOTES.
 |------|--------|
 | Superpowers | Always; all skills allowed; load any skill with ~1% fit |
 | Agents / one-task / git / skills | **`AGENTS.md` only** (do not restate here) |
-| Tests | Never skip or suppress — see `AGENTS.md` |
+| Tests | Never skip or suppress â€” see `AGENTS.md` |
 | Workspace | **No worktrees.** Main checkout `D:\OandO07072026` only |
-| Commit | **As we go** after each landable slice (`trustdata(P0X): …` or `fix(open3d): …`) |
+| Commit | **As we go** after each landable slice (`trustdata(P0X): â€¦` or `fix(open3d): â€¦`) |
 | Push | Only when owner asks in the **current** conversation |
 | Plan commits | Allowed under plan-only / plan revision |
 | Product commits | Only after **implementation unlock** |
 | Types | No `any` in handwritten TS (exceptions need reason, owner, removal condition) |
 | Evidence | Write under `results/planner/world-standard-wave/<folder>/`; prefer write-to-disk |
 | Failures | `D:\OandO07072026\Failures.md` |
-| Contract | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) — paste required subagent prompt block into every brief |
+| Contract | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) â€” paste required subagent prompt block into every brief |
 
 ---
 
-## W1–W8 summary
+## W1â€“W8 summary
 
 | Gate | Bar |
 |------|-----|
 | **W1** | Draw walls + door; Playwright + screenshots |
-| **W2** | Place ≥2 incl. cabinet-v0; Block2D readable |
+| **W2** | Place â‰¥2 incl. cabinet-v0; Block2D readable |
 | **W3** | Select + Delete/Backspace + undo |
-| **W4** | 2D↔3D pose preserve; orbit ON; console clean |
-| **W5** | Save → hard reload → same entity ids |
+| **W4** | 2Dâ†”3D pose preserve; orbit ON; console clean |
+| **W5** | Save â†’ hard reload â†’ same entity ids |
 | **W6** | Honest local vs cloud labels |
 | **W7** | Modular mesh bar (readable parts), not apology boxes |
 | **W8** | Labels match keyboard/handlers |
@@ -134,10 +134,10 @@ Full definitions: `docs/superpowers/specs/2026-07-09-world-standard-planner-desi
 
 ## Phase order (do not reorder without owner)
 
-Aligned with [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md). Agent concurrency → **`AGENTS.md`**. Full kill order → [INDEX.md](./INDEX.md).
+Aligned with [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md). Agent concurrency â†’ **`AGENTS.md`**. Full kill order â†’ [INDEX.md](./INDEX.md).
 
 ```
-CP-00 → CP-01 → CP-02 → CP-03 → CP-07 → CP-06 → CP-04 · CP-05 · CP-08 · CP-09 → CP-10
+CP-00 â†’ CP-01 â†’ CP-02 â†’ CP-03 â†’ CP-07 â†’ CP-06 â†’ CP-04 Â· CP-05 Â· CP-08 Â· CP-09 â†’ CP-10
 ```
 
 | # | Phase file | CP | Gates | Evidence folder |
@@ -147,29 +147,29 @@ CP-00 → CP-01 → CP-02 → CP-03 → CP-07 → CP-06 → CP-04 · CP-05 · CP
 | P03 | select/delete | CP-03 | **W3** | `03-select-delete/` |
 | P04 | orbit continuity | CP-04 | **W4** | `04-orbit-continuity/` |
 | P05 | symbols/SVG | CP-05 | **W2** symbols | `05-symbols-svg/` |
-| P06 | save honesty | CP-06 | **W5–W6** | `06-save-honesty/` |
-| P07 | draw/place journey | CP-07 | **W1–W2** browser | `02-browser-open3d-journey/` |
+| P06 | save honesty | CP-06 | **W5â€“W6** | `06-save-honesty/` |
+| P07 | draw/place journey | CP-07 | **W1â€“W2** browser | `02-browser-open3d-journey/` |
 | P08 | mesh quality | CP-08 | **W7** | `08-mesh-quality/` |
 | P09 | shortcuts/chrome | CP-09 | **W8** | **`09-shortcuts-chrome/`** |
 | P10 | evidence/handover | CP-10 | pack + E: backup | `10-handover/` |
 
-**Note:** FINAL folder lock — P01=`00-product-truth/`, P02=`01-engine-lock/`, P07=`02-browser-open3d-journey/` (not `07-…`), W7=`08-mesh-quality/` (sole `08-*`), W8=**`09-shortcuts-chrome/`** (legacy `08-shortcuts-chrome/` non-canonical). Authority: [RESULTS-MAP.md](./RESULTS-MAP.md) · [FOLDER-LOCK](./reviews/FOLDER-LOCK-suggestions.md).
+**Note:** FINAL folder lock â€” P01=`00-product-truth/`, P02=`01-engine-lock/`, P07=`02-browser-open3d-journey/` (not `07-â€¦`), W7=`08-mesh-quality/` (sole `08-*`), W8=**`09-shortcuts-chrome/`** (legacy `08-shortcuts-chrome/` non-canonical). Authority: [RESULTS-MAP.md](./RESULTS-MAP.md) Â· [FOLDER-LOCK](./reviews/FOLDER-LOCK-suggestions.md).
 
 ---
 
 ## Week-1 kill order (condensed)
 
-**Full section (tables + claim rules):** [INDEX.md](./INDEX.md) → **Week-1 kill order**.  
+**Full section (tables + claim rules):** [INDEX.md](./INDEX.md) â†’ **Week-1 kill order**.  
 **Full kill order + task list:** [INDEX.md](./INDEX.md). **Agents:** `AGENTS.md`. **Spawn block:** [AGENT-RULES.md](./checklists/AGENT-RULES.md).
 
-**Spine:** W3 (`03-select-delete/`) → journey (`02-browser-open3d-journey/`) → save (`06-save-honesty/`).  
-**Then:** orbit · symbols · mesh · shortcuts · handover — each as its own task.
+**Spine:** W3 (`03-select-delete/`) â†’ journey (`02-browser-open3d-journey/`) â†’ save (`06-save-honesty/`).  
+**Then:** orbit Â· symbols Â· mesh Â· shortcuts Â· handover â€” each as its own task.
 
 ---
 
 ## Out of scope while any W red
 
-Photoreal race · multiplayer · AR · CRM/SSR expansion as W substitute · full Fabric cutover before W1–W8 (Approach A) · worktrees · force-push without owner · competitor assets in `site/`.
+Photoreal race Â· multiplayer Â· AR Â· CRM/SSR expansion as W substitute Â· full Fabric cutover before W1â€“W8 (Approach A) Â· worktrees Â· force-push without owner Â· competitor assets in `site/`.
 
 ---
 
@@ -193,7 +193,7 @@ See [RESEARCH-MAP.md](./RESEARCH-MAP.md). Do not re-scrape Planner5D blindly. Li
 
 ## CP-00 checkpoint (authoritative closeout)
 
-See [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) → **CP-00**.
+See [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) â†’ **CP-00**.
 
 Pass only when **all** are true:
 
@@ -215,9 +215,10 @@ Pass only when **all** are true:
 |-----|------|
 | [INDEX.md](./INDEX.md) | Program index |
 | [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) | All CP hard stops |
-| [checklists/MASTER-CHECKLIST.md](./checklists/MASTER-CHECKLIST.md) | Owner checklist (W0…) |
+| [checklists/MASTER-CHECKLIST.md](./checklists/MASTER-CHECKLIST.md) | Owner checklist (W0â€¦) |
 | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) | Subagent contract |
 | [RESULTS-MAP.md](./RESULTS-MAP.md) | Evidence folders |
-| [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md) | This revision’s expert notes |
+| [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md) | This revisionâ€™s expert notes |
 | Design spec | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` |
 | Testing | `testing-handbook.md` |
+

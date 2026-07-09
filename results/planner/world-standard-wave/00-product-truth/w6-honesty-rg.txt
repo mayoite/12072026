@@ -1,0 +1,10 @@
+﻿site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:85:} from "./workspaceStatusLabels";
+site\features\planner\open3d\editor\TopBar.tsx:228:<span aria-hidden="true">✓</span> Saved locally
+site\features\planner\open3d\editor\workspaceStatusLabels.ts:40:return guestMode ? "Draft saved locally" : "Saved locally";
+site\features\planner\open3d\persistence\guestPromotion.ts:3:import type { MemberPlanRepository, SaveResult } from "./memberPlanRepository";
+site\features\planner\open3d\persistence\guestPromotion.ts:24:repository: MemberPlanRepository,
+site\features\planner\open3d\persistence\memberPlanRepository.ts:61:export interface MemberPlanRepository {
+site\features\planner\open3d\persistence\memberPlanRepository.ts:76:export function createMemberPlanRepository(
+site\features\planner\open3d\persistence\memberPlanRepository.ts:79:): MemberPlanRepository {
+site\features\planner\open3d\persistence\memberPlanRepository.ts:80:return new MemberPlanRepositoryImpl(tokenFn, fetchFn);
+site\features\planner\open3d\persistence\memberPlanRepository.ts:98:class MemberPlanRepositoryImpl implements MemberPlanRepository {

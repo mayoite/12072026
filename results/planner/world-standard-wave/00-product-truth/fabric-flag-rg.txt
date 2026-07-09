@@ -1,0 +1,10 @@
+﻿site\features\planner\open3d\canvas-fabric-stage\fabricFurnitureFlag.ts:5:* Enable: NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE=1
+site\features\planner\open3d\canvas-fabric-stage\fabricFurnitureFlag.ts:8:export const OPEN3D_FABRIC_FURNITURE_ENV = "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE" as const;
+site\features\planner\open3d\canvas-fabric-stage\fabricFurnitureFlag.ts:14:export function isOpen3dFabricFurnitureEnabled(
+site\features\planner\open3d\canvas-fabric-stage\fabricFurnitureFlag.ts:17:return env[OPEN3D_FABRIC_FURNITURE_ENV] === "1";
+site\features\planner\open3d\canvas-fabric-stage\index.ts:17:isOpen3dFabricFurnitureEnabled,
+site\features\planner\open3d\canvas-fabric-stage\index.ts:18:OPEN3D_FABRIC_FURNITURE_ENV,
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:24:isOpen3dFabricFurnitureEnabled,
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:223:// Fabric 2B furniture stage — default OFF (NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE=1 to enable).
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:225:const fabricFurnitureEnabled = isOpen3dFabricFurnitureEnabled();
+site\features\planner\open3d\README.md:19:NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE=1

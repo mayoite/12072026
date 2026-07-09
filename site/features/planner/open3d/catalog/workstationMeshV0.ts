@@ -24,8 +24,14 @@ export const PANEL_HEIGHT_MM = 1100;
 export const OVERHEAD_HEIGHT_MM = 350;
 /** Gap between worktop top and overhead bottom (mm). */
 export const OVERHEAD_GAP_MM = 200;
+/** Square leg post cross-section (mm) — readable modular, not photoreal. */
+export const LEG_SECTION_MM = 50;
+/** Inset from worktop plan edges to leg centers (mm). */
+export const LEG_INSET_MM = 40;
 
 const MM = 0.001;
+/** Metal-ish leg posts (distinct from worktop / pedestal). */
+const LEG_COLOR = "#57534e";
 
 /** Serializable options stamped on furniture for save/rebuild. */
 export type WorkstationV0MeshOptions = {
@@ -141,8 +147,48 @@ function partFromPlanPrim(
 }
 
 /**
+ * Four corner posts under a desk/return plan prim.
+ * Names: `leg-desk-0..3` / `leg-return-0..3`. Height fills floor → worktop bottom.
+ * role stays parent module so save/rebuild still knows the run; name is the identity.
+ */
+function legsForWorktopPrim(
+  prim: WorkstationPlanPrimV0,
+  footprint: WorkstationFootprintMm,
+  heightMm: number,
+  runKey: "desk" | "return",
+): WorkstationV0MeshPartPlan[] {
+  const section = LEG_SECTION_MM;
+  const legH = Math.max(1, heightMm - WORKTOP_THICKNESS_MM);
+  const inset = Math.min(
+    LEG_INSET_MM,
+    Math.max(0, prim.w / 4 - section / 2),
+    Math.max(0, prim.h / 4 - section / 2),
+  );
+  const half = section / 2;
+  const corners: ReadonlyArray<{ readonly x: number; readonly y: number }> = [
+    { x: prim.x + inset + half, y: prim.y + inset + half },
+    { x: prim.x + prim.w - inset - half, y: prim.y + inset + half },
+    { x: prim.x + inset + half, y: prim.y + prim.h - inset - half },
+    { x: prim.x + prim.w - inset - half, y: prim.y + prim.h - inset - half },
+  ];
+
+  return corners.map((c, i) => ({
+    name: `leg-${runKey}-${i}`,
+    role: runKey,
+    sizeMm: { x: section, y: legH, z: section },
+    positionMm: {
+      x: c.x - footprint.widthMm / 2,
+      y: legH / 2,
+      z: c.y - footprint.depthMm / 2,
+    },
+    color: LEG_COLOR,
+  }));
+}
+
+/**
  * Pure multi-part mesh plan from workstation config (mm).
  * Plan prims drive horizontal layout; heights/colors by module role.
+ * Desk/return runs get four named leg posts (floor → worktop bottom).
  * Overhead (not in plan prims) is placed above the main desk run when present.
  */
 export function generateWorkstationV0MeshPlan(
@@ -150,9 +196,21 @@ export function generateWorkstationV0MeshPlan(
 ): WorkstationV0MeshPlan {
   const footprint = workstationFootprintMm(config);
   const { prims } = workstationPlanPrims(config);
-  const parts: WorkstationV0MeshPartPlan[] = prims.map((prim) =>
-    partFromPlanPrim(prim, footprint, config.heightMm),
-  );
+  const parts: WorkstationV0MeshPartPlan[] = [];
+
+  for (const prim of prims) {
+    parts.push(partFromPlanPrim(prim, footprint, config.heightMm));
+    if (prim.role === "desk" || prim.role === "return") {
+      parts.push(
+        ...legsForWorktopPrim(
+          prim,
+          footprint,
+          config.heightMm,
+          prim.role,
+        ),
+      );
+    }
+  }
 
   if (config.modules.includes("overhead")) {
     const L = config.size.lengthMm;

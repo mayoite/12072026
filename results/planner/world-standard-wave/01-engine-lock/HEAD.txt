@@ -1,0 +1,39 @@
+﻿e3905cf5600a46613a2f4129bd43a9323a28bced
+## main...origin/main [ahead 1]
+ M Plans/trustdata/checkpoints/CHECKPOINTS.md
+ M ayushdocs/00-PENDING.md
+ M ayushdocs/19-GOALS-SLICES.md
+ M site/features/planner/open3d/catalog/workstationMeshV0.ts
+ M site/tests/unit/features/planner/open3d/workstationMeshV0.test.ts
+?? results/_session-trust-readback.txt
+?? results/audits/
+?? results/planner/_tsc-wave.txt
+?? results/planner/a11y-open3d/viewport.png
+?? results/planner/code-audit-2026-07-09/
+?? results/planner/world-standard-wave/00-product-truth/HEAD.txt
+?? results/planner/world-standard-wave/00-product-truth/INVENTORY.md
+?? results/planner/world-standard-wave/00-product-truth/claims-sources-concat.txt
+?? results/planner/world-standard-wave/00-product-truth/e2e-planner-spec-names.txt
+?? results/planner/world-standard-wave/00-product-truth/fabric-flag-rg.txt
+?? results/planner/world-standard-wave/00-product-truth/fabric-redirect-and-archive-rg.txt
+?? results/planner/world-standard-wave/00-product-truth/host-wiring-rg.txt
+?? results/planner/world-standard-wave/00-product-truth/key-files-exist.tsv
+?? results/planner/world-standard-wave/00-product-truth/open3d-file-list.txt
+?? results/planner/world-standard-wave/00-product-truth/open3d-folder-counts.tsv
+?? results/planner/world-standard-wave/00-product-truth/results-planner-dirs.txt
+?? results/planner/world-standard-wave/00-product-truth/unit-test-list.txt
+?? results/planner/world-standard-wave/00-product-truth/vitest-capability-smoke-raw.log
+?? results/planner/world-standard-wave/00-product-truth/w1-draw-rg.txt
+?? results/planner/world-standard-wave/00-product-truth/w2-place-rg.txt
+?? results/planner/world-standard-wave/00-product-truth/w3-select-delete-rg.txt
+?? results/planner/world-standard-wave/00-product-truth/w4-orbit-view-rg.txt
+?? results/planner/world-standard-wave/00-product-truth/w5-save-rg.txt
+?? results/planner/world-standard-wave/00-product-truth/w6-honesty-rg.txt
+?? results/planner/world-standard-wave/00-product-truth/w7-mesh-rg.txt
+?? results/planner/world-standard-wave/00-product-truth/w8-shortcuts-rg.txt
+?? results/planner/world-standard-wave/01-engine-lock/HEAD.txt
+?? results/planner/world-standard-wave/07-systems-v0/mesh-legs-red/
+?? results/planner/world-standard-wave/07-systems-v0/mesh-quality-raise/
+?? results/planner/world-standard-wave/TRUTH-LOCK.md
+?? results/tests/
+?? site/tests/unit/features/planner/open3d/workstationMeshV0.legs.test.ts

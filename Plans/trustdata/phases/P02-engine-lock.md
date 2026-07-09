@@ -1,5 +1,13 @@
 # P02 — Engine lock confirmation
 
+## Phase status (complete)
+
+| Item | Status | Evidence |
+|------|--------|----------|
+| Engine lock pack | **DONE** 2026-07-09 | `results/planner/world-standard-wave/01-engine-lock/` |
+| CP-02 | **PASS** | ENGINE-LOCK-RECORD, FLAG-INVENTORY, ENTRYPOINT-MAP, PACKAGE-PIN, OWNER-SIGNOFF, ANTI-THRASH-AUDIT, fabric vitest, CP-02-SUMMARY |
+| Task checkboxes below | Historical execute steps — evidence supersedes; do not re-open engines | README + CP-02-SUMMARY |
+
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Load verification / TDD skills when collecting evidence.  
 > **Scope:** Plan + evidence only until owner unlocks implementation. **Do not** re-pick engines, swap packages, or start Fabric full cutover in this phase. **No product code** under `site/features/planner/**` in P02 — evidence + plan/docs inventory only.  
 > **Checkout:** `D:\OandO07072026` only · **No worktrees** · Commit landable evidence slices as you go · Push only on owner ask.
@@ -472,15 +480,15 @@ Owner (human) marks these in this plan file **and** copies the checked state int
 
 **CP-02 owner checkboxes:**
 
-- [ ] CP-02.1 satisfied  
-- [ ] CP-02.2 satisfied  
-- [ ] CP-02.3 satisfied  
-- [ ] CP-02.4 satisfied  
-- [ ] CP-02.5 satisfied (pass or honest fail filed)  
-- [ ] CP-02.6 satisfied  
-- [ ] CP-02.7 satisfied  
-- [ ] CP-02.8 satisfied  
-- [ ] **Unlock P03** (select/delete / W3)
+- [x] CP-02.1 satisfied  
+- [x] CP-02.2 satisfied  
+- [x] CP-02.3 satisfied  
+- [x] CP-02.4 satisfied  
+- [x] CP-02.5 satisfied (pass or honest fail filed)  
+- [x] CP-02.6 satisfied  
+- [x] CP-02.7 satisfied  
+- [x] CP-02.8 satisfied  
+- [x] **Unlock P03** (select/delete / W3) — already unlocked via 00-START; W3 evidence under `03-select-delete/`
 
 ---
 

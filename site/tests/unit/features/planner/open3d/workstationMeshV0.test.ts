@@ -20,17 +20,24 @@ import {
 
 const MM = 0.001;
 
-function partByRole(
+/** Module slabs only (not leg-* posts). */
+function moduleParts(
   plan: ReturnType<typeof generateWorkstationV0MeshPlan>,
-  role: string,
 ) {
-  const part = plan.parts.find((p) => p.role === role);
-  expect(part, `missing role ${role}`).toBeDefined();
+  return plan.parts.filter((p) => !p.name.startsWith("leg"));
+}
+
+function moduleByName(
+  plan: ReturnType<typeof generateWorkstationV0MeshPlan>,
+  name: string,
+) {
+  const part = moduleParts(plan).find((p) => p.name === name);
+  expect(part, `missing module ${name}`).toBeDefined();
   return part!;
 }
 
 describe("generateWorkstationV0MeshPlan", () => {
-  it("linear desk+pedestal+panel yields three named parts with role colors", () => {
+  it("linear desk+pedestal+panel yields three module parts with role colors (+ legs)", () => {
     const config = createWorkstationConfigV0({
       shape: "linear",
       size: { lengthMm: 1500, depthMm: 600 },
@@ -38,27 +45,32 @@ describe("generateWorkstationV0MeshPlan", () => {
     });
     const plan = generateWorkstationV0MeshPlan(config);
     expect(plan.footprint).toEqual(workstationFootprintMm(config));
-    expect(plan.parts.map((p) => p.role).sort()).toEqual([
+    const modules = moduleParts(plan);
+    expect(modules.map((p) => p.role).sort()).toEqual([
       "desk",
       "panel",
       "pedestal",
     ]);
-    expect(countWorkstationV0Parts(config)).toBe(3);
-    expect(plan.parts).toHaveLength(3);
+    // 3 modules + 4 desk legs
+    expect(countWorkstationV0Parts(config)).toBe(7);
+    expect(plan.parts).toHaveLength(7);
+    expect(plan.parts.filter((p) => p.name.startsWith("leg-desk-"))).toHaveLength(
+      4,
+    );
 
-    const desk = partByRole(plan, "desk");
+    const desk = moduleByName(plan, "desk");
     expect(desk.name).toBe("desk");
     expect(desk.sizeMm.x).toBe(1500);
     expect(desk.sizeMm.z).toBe(600);
     expect(desk.sizeMm.y).toBe(WORKTOP_THICKNESS_MM);
     expect(desk.color).toMatch(/^#/);
 
-    const pedestal = partByRole(plan, "pedestal");
+    const pedestal = moduleByName(plan, "pedestal");
     expect(pedestal.sizeMm.x).toBeGreaterThan(0);
     expect(pedestal.sizeMm.y).toBeLessThan(config.heightMm);
     expect(pedestal.color).not.toBe(desk.color);
 
-    const panel = partByRole(plan, "panel");
+    const panel = moduleByName(plan, "panel");
     expect(panel.sizeMm.y).toBe(PANEL_HEIGHT_MM);
     expect(panel.color).not.toBe(desk.color);
   });
@@ -70,8 +82,11 @@ describe("generateWorkstationV0MeshPlan", () => {
       modules: ["desk", "return"],
     });
     const plan = generateWorkstationV0MeshPlan(config);
-    expect(plan.parts.map((p) => p.role).sort()).toEqual(["desk", "return"]);
-    const ret = partByRole(plan, "return");
+    expect(moduleParts(plan).map((p) => p.role).sort()).toEqual([
+      "desk",
+      "return",
+    ]);
+    const ret = moduleByName(plan, "return");
     expect(ret.sizeMm.y).toBe(WORKTOP_THICKNESS_MM);
     expect(ret.sizeMm.x).toBe(600);
     // Return wing depth in plan is L - D = 900
@@ -85,11 +100,14 @@ describe("generateWorkstationV0MeshPlan", () => {
       modules: ["desk", "overhead"],
     });
     const plan = generateWorkstationV0MeshPlan(config);
-    expect(plan.parts.map((p) => p.role).sort()).toEqual(["desk", "overhead"]);
-    const overhead = partByRole(plan, "overhead");
+    expect(moduleParts(plan).map((p) => p.role).sort()).toEqual([
+      "desk",
+      "overhead",
+    ]);
+    const overhead = moduleByName(plan, "overhead");
     expect(overhead.sizeMm.y).toBe(OVERHEAD_HEIGHT_MM);
     // Bottom of overhead above worktop
-    const desk = partByRole(plan, "desk");
+    const desk = moduleByName(plan, "desk");
     const deskTopY = desk.positionMm.y + desk.sizeMm.y / 2;
     const overheadBottomY = overhead.positionMm.y - overhead.sizeMm.y / 2;
     expect(overheadBottomY).toBeGreaterThan(deskTopY);
@@ -103,7 +121,7 @@ describe("generateWorkstationV0MeshPlan", () => {
       heightMm: 750,
     });
     const plan = generateWorkstationV0MeshPlan(config);
-    const desk = partByRole(plan, "desk");
+    const desk = moduleByName(plan, "desk");
     const topY = desk.positionMm.y + desk.sizeMm.y / 2;
     expect(topY).toBeCloseTo(750, 5);
   });
@@ -115,7 +133,7 @@ describe("generateWorkstationV0MeshPlan", () => {
       modules: ["desk"],
     });
     const plan = generateWorkstationV0MeshPlan(config);
-    const desk = partByRole(plan, "desk");
+    const desk = moduleByName(plan, "desk");
     // Full desk fills footprint → center at origin in XZ
     expect(desk.positionMm.x).toBeCloseTo(0, 5);
     expect(desk.positionMm.z).toBeCloseTo(0, 5);
@@ -181,6 +199,8 @@ describe("generateWorkstationV0Mesh", () => {
     const group = generateWorkstationV0Mesh(config);
     expect(group.children).toHaveLength(countWorkstationV0Parts(config));
     expect(group.children).toHaveLength(plan.parts.length);
-    expect(plan.parts.length).toBeGreaterThanOrEqual(5);
+    // 5 modules + 4 desk legs + 4 return legs = 13
+    expect(plan.parts.length).toBeGreaterThanOrEqual(13);
+    expect(moduleParts(plan)).toHaveLength(5);
   });
 });

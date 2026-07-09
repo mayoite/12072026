@@ -1,0 +1,67 @@
+﻿site\features\planner\open3d\catalog\catalogTypes.ts:269:geometryMode?: "box" | "modular-cabinet-v0" | "workstation-v0";
+site\features\planner\open3d\catalog\furnitureBlock2D.ts:47:function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
+site\features\planner\open3d\catalog\furnitureBlock2D.ts:240:label: item.catalogId || "workstation-v0",
+site\features\planner\open3d\catalog\furnitureBlock2D.ts:298:return modularCabinetBlock(item);
+site\features\planner\open3d\catalog\modularCabinetV0.ts:12:export interface ModularCabinetV0Options {
+site\features\planner\open3d\catalog\modularCabinetV0.ts:39:partial?: Partial<ModularCabinetV0Options>,
+site\features\planner\open3d\catalog\modularCabinetV0.ts:40:): ModularCabinetV0Options {
+site\features\planner\open3d\catalog\modularCabinetV0.ts:52:options: ModularCabinetV0Options,
+site\features\planner\open3d\catalog\modularCabinetV0.ts:66:options: ModularCabinetV0Options,
+site\features\planner\open3d\catalog\modularCabinetV0.ts:149:export function countCabinetV0Parts(options: ModularCabinetV0Options): number {
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:18:type ModularCabinetV0Options,
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:22:} from "./modularCabinetV0";
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:30:export type ModularCabinetV0GlbBinaryStatus = "plan-only";
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:33:export interface ModularCabinetV0PartPlan {
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:43:export interface ModularCabinetV0GlbPlan {
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:45:options: ModularCabinetV0Options;
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:48:parts: ModularCabinetV0PartPlan[];
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:51:binaryExportStatus: ModularCabinetV0GlbBinaryStatus;
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:53:* Pure plan never writes GLB. Call exportModularCabinetV0GlbBinary for ArrayBuffer.
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:58:export interface ModularCabinetV0GeneratedAssetPathResult {
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:70:export function modularCabinetV0GeneratedSlug(
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:71:options: ModularCabinetV0Options,
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:84:export function modularCabinetV0GeneratedRelativePath(
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:85:options: ModularCabinetV0Options,
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:87:return `${GENERATED_GLB_PATH_MARKER}${modularCabinetV0GeneratedSlug(options)}.glb`;
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:91:export function buildModularCabinetV0PartPlans(
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:92:options: ModularCabinetV0Options,
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:93:): ModularCabinetV0PartPlan[] {
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:103:const parts: ModularCabinetV0PartPlan[] = [
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:147:export function buildModularCabinetV0GlbPlan(
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:148:optionsInput?: Partial<ModularCabinetV0Options>,
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:149:): ModularCabinetV0GlbPlan {
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:151:const parts = buildModularCabinetV0PartPlans(options);
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:152:const relativePath = modularCabinetV0GeneratedRelativePath(options);
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:173:export function exportModularCabinetV0ToGeneratedAssetPath(
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:174:optionsInput?: Partial<ModularCabinetV0Options>,
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:175:): ModularCabinetV0GeneratedAssetPathResult {
+site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts:176:const plan = buildModularCabinetV0GlbPlan(optionsInput);
+site\features\planner\open3d\catalog\parametricBuilder.ts:4:Open3dModularCabinetV0Options,
+site\features\planner\open3d\catalog\parametricBuilder.ts:11:type ModularCabinetV0Options,
+site\features\planner\open3d\catalog\parametricBuilder.ts:12:} from "./modularCabinetV0";
+site\features\planner\open3d\catalog\parametricBuilder.ts:22:modularOptions?: Open3dModularCabinetV0Options;
+site\features\planner\open3d\catalog\parametricBuilder.ts:62:* Box mesh in metres (Y-up). Prefer modularCabinetV0 for multi-part products.
+site\features\planner\open3d\catalog\parametricBuilder.ts:89:generateModularCabinetV0(options?: Partial<ModularCabinetV0Options>): {
+site\features\planner\open3d\catalog\placementAction.ts:17:Open3dModularCabinetV0Options,
+site\features\planner\open3d\catalog\placementAction.ts:26:} from "./modularCabinetV0";
+site\features\planner\open3d\catalog\placementAction.ts:39:function isModularCabinetV0CatalogItem(item: Open3dCatalogItem): boolean {
+site\features\planner\open3d\catalog\placementAction.ts:64:): Open3dModularCabinetV0Options {
+site\features\planner\open3d\catalog\placementAction.ts:79:if (isModularCabinetV0CatalogItem(item)) return "modular-cabinet-v0";
+site\features\planner\open3d\catalog\placementAction.ts:362:* stable workstationConfigKey (`ws-v0-…`). geometryMode is workstation-v0 with
+site\features\planner\open3d\catalog\placementAction.ts:391:geometryMode: "workstation-v0" as const,
+site\features\planner\open3d\catalog\workstationCatalogV0.ts:75:geometryMode: "workstation-v0",
+site\features\planner\open3d\catalog\workstationMeshV0.ts:194:export function generateWorkstationV0MeshPlan(
+site\features\planner\open3d\catalog\workstationMeshV0.ts:243:return generateWorkstationV0MeshPlan(config).parts.length;
+site\features\planner\open3d\catalog\workstationMeshV0.ts:250:export function generateWorkstationV0Mesh(
+site\features\planner\open3d\catalog\workstationMeshV0.ts:253:const plan = generateWorkstationV0MeshPlan(config);
+site\features\planner\open3d\catalog\workstationMeshV0.ts:255:group.name = "workstation-v0";
+site\features\planner\open3d\catalog\workstationMeshV0.ts:257:modular: "workstation-v0",
+site\features\planner\open3d\3d\buildOpen3dSceneNodes.ts:13:Open3dModularCabinetV0Options,
+site\features\planner\open3d\3d\buildOpen3dSceneNodes.ts:40:readonly modularOptions?: Open3dModularCabinetV0Options;
+site\features\planner\open3d\3d\createSceneObjectFromNode.ts:3:* Modular furniture uses generateCabinetV0Mesh / generateWorkstationV0Mesh
+site\features\planner\open3d\3d\createSceneObjectFromNode.ts:14:} from "../catalog/modularCabinetV0";
+site\features\planner\open3d\3d\createSceneObjectFromNode.ts:16:generateWorkstationV0Mesh,
+site\features\planner\open3d\3d\createSceneObjectFromNode.ts:53:* workstation-v0 group). Pose matches plan mm → world metres (Y-up, plan Y → world Z).
+site\features\planner\open3d\3d\createSceneObjectFromNode.ts:94:node.geometryMode === "workstation-v0"
+site\features\planner\open3d\3d\createSceneObjectFromNode.ts:112:const meshGroup = generateWorkstationV0Mesh(resolved);
+site\features\planner\open3d\3d\createSceneObjectFromNode.ts:118:geometryMode: "workstation-v0",
