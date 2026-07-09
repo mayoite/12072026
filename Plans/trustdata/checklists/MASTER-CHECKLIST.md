@@ -44,12 +44,12 @@ Legacy aliases (pointer only; rehome before tick): `08-shortcuts-chrome/` → `0
 
 ## 0) Program control (W0)
 
-- [ ] **W0.1** Approach recorded in `Plans/trustdata/00-START.md` (A product journey / B Fabric first / C chrome first). Default A if owner silent after unlock.
-- [ ] **W0.2** Owner unlock for implementation **or** explicit “plan only” recorded in 00-START / chat.
-- [ ] **W0.3** INDEX.md + 00-START.md read by executing agent (CP-00).
-- [ ] **W0.4** Engine lock accepted: Fabric v7 full stage destination; Feasibility interim; Three+R3F+orbit; no Konva+Fabric hybrid; manufacturer SKU catalog; BOQ/quote > photoreal.
-- [ ] **W0.5** North star accepted: facilities buyer unaided → layout with O&O-scale furniture → 2D↔3D+orbit → select/edit/delete → save/return → quote path later.
-- [ ] **W0.6** Out of scope held while any W red: photoreal race, multiplayer CRDT, AR/LiDAR, CRM/SSR expansion, full Fabric walls cutover only if required after W1–W8 (Approach A path).
+- [x] **W0.1** Approach **A** recorded in `Plans/trustdata/00-START.md` (2026-07-09).
+- [x] **W0.2** **Implementation unlock recorded** in 00-START — product work allowed; **do not re-ask owner to unlock**.
+- [x] **W0.3** INDEX.md + 00-START.md read by executing agent (CP-00 **PASS**).
+- [x] **W0.4** Engine lock accepted: Fabric v7 full stage destination; Feasibility interim; Three+R3F+orbit; no Konva+Fabric hybrid; manufacturer SKU catalog; BOQ/quote > photoreal.
+- [x] **W0.5** North star accepted: facilities buyer unaided → layout with O&O-scale furniture → 2D↔3D+orbit → select/edit/delete → save/return → quote path later.
+- [x] **W0.6** Out of scope held while any W red: photoreal race, multiplayer CRDT, AR/LiDAR, CRM/SSR expansion, full Fabric walls cutover only if required after W1–W8 (Approach A path).
 
 **Evidence:** `Plans/trustdata/00-START.md` · `results/planner/world-standard-wave/00-start/` (optional NOTES) · CP-00 in `checkpoints/CHECKPOINTS.md`
 

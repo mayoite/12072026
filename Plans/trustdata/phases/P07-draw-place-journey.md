@@ -14,7 +14,7 @@
 - Authority: [EXPERT-PASS.md](../reviews/EXPERT-PASS.md) · `04-playwright-evidence` · `01-react-open3d`.
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` · verification · chrome-devtools for browser truth.  
-> **Do not execute product code until owner unlocks.**  
+> **W0 UNLOCKED** — execute product work per phase + evidence. Do not re-ask owner unlock.  
 > **Checkout:** `D:\OandO07072026` only · no worktrees · commit as we go · push only on ask.  
 > **Suggestions:** [P07-suggestions.md](../reviews/P07-suggestions.md)
 

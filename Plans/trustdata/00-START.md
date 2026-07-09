@@ -1,8 +1,10 @@
 ﻿# Trust-Data Plan â€” 00 START
 
-> **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. **No product code** until owner records **implementation unlock**. Plan-only mode allows plan/review work only. Steps use checkbox syntax.  
-> **Expert revision:** 2026-07-09 â€” applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md).  
-> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology; week-1 kill order full in [INDEX.md](./INDEX.md) (condensed below); densest phases thinned â†’ `phases/P0X-appendix.md`. See [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).  
+> **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`.  
+> **W0 STATUS (2026-07-09): UNLOCKED — Approach A + implementation unlock recorded.** Product phases are **allowed now.** Do **not** stop and ask the owner to unlock again.  
+> Plan-only mode is history only (unless owner later sets plan-only). Steps use checkbox syntax.  
+> **Expert revision:** 2026-07-09 — applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md).  
+> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology; week-1 kill order full in [INDEX.md](./INDEX.md) (condensed below); densest phases thinned → `phases/P0X-appendix.md`. See [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).  
 > **Program index:** [INDEX.md](./INDEX.md)
 
 **Goal:** Freeze operating rules, approach pick, unlock mode, ethics, and phase order so every agent works from the same truth.
@@ -25,18 +27,20 @@
 | **B** | Fabric full stage first |
 | **C** | Chrome / 2A first |
 
-Owner records pick below. **Default if owner silent after unlock:** **A**.  
-**Silent before unlock does not authorize product work.**
+Owner pick below is **recorded**. Approach **A** is binding.  
+**Current mode: implementation unlock — agents execute product phases.** Do not re-gate on owner unlock.
 
 ---
 
-## Unlock gate (W0) â€” modes
+## Unlock gate (W0) — modes (historical + current)
+
+> **Current mode is checked below: implementation unlock.** The table is reference for what modes mean; do not treat “locked (default)” as current state.
 
 | Mode | Owner statement (examples) | Allowed | Forbidden |
 |------|----------------------------|---------|-----------|
-| **locked** (default until stated) | _(none)_ | Read plans; expert review | Product edits; W-gate claims; treat default A as go-code |
-| **plan-only** | â€œplan onlyâ€, â€œrevise plansâ€, â€œno product codeâ€ | `Plans/trustdata/**` edits; read-only inventory evidence (e.g. P01); docs commits | `site/features/planner/**` product behavior changes; claiming W1â€“W8 |
-| **implementation unlock** | â€œunlock implementationâ€, â€œexecute trustdataâ€, â€œrun product phasesâ€ | Phase product work per phase files + evidence + local commits; push/mirror per `AGENTS.md` | Worktrees; force-push / remote destroy; skip CP stop-if-fail; scope creep without ask |
+| **locked** (only if owner re-locks) | _(none)_ | Read plans; expert review | Product edits; W-gate claims |
+| **plan-only** | “plan only”, “revise plans”, “no product code” | `Plans/trustdata/**` edits; read-only inventory evidence; docs commits | `site/features/planner/**` product behavior changes; claiming W1–W8 |
+| **implementation unlock** ← **ACTIVE** | recorded 2026-07-09 | Phase product work per phase files + evidence + local commits; push/mirror per `AGENTS.md` | Worktrees; force-push / remote destroy; skip CP stop-if-fail; scope creep without ask |
 
 ### Owner pick (gate W0)
 
@@ -195,17 +199,17 @@ See [RESEARCH-MAP.md](./RESEARCH-MAP.md). Do not re-scrape Planner5D blindly. Li
 
 See [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) â†’ **CP-00**.
 
-Pass only when **all** are true:
+Pass only when **all** are true — **all met (CP-00 PASS):**
 
-- [ ] INDEX + 00-START read by executing agent  
-- [ ] Approach A/B/C recorded (or default **A** documented after unlock if owner silent)  
-- [ ] Owner mode recorded: **plan-only** **or** **implementation unlock** (not left ambiguous)  
-- [ ] Licenses MD acknowledged  
-- [ ] No worktree created (`D:\OandO07072026` only)  
-- [ ] Optional/required evidence: `results/planner/world-standard-wave/00-start/NOTES.md` with approach + mode + date + agent  
-- [ ] CHECKPOINTS.md CP-00 status updated when owner/reviewer closes (PASS / FAIL / WAIVE)
+- [x] INDEX + 00-START read by executing agent  
+- [x] Approach **A** recorded  
+- [x] Owner mode: **implementation unlock** (not plan-only, not locked)  
+- [x] Licenses MD path known (`ayushdocs/17-LICENSES-CLEARED.md`)  
+- [x] No worktree created (`D:\OandO07072026` only)  
+- [x] Evidence: `results/planner/world-standard-wave/00-start/NOTES.md` with approach + mode + date + agent  
+- [x] CHECKPOINTS.md CP-00 **PASS**
 
-**Stop-if-fail:** If approach unset **and** owner has not unlocked (still locked): **do not implement product code**. If ethics violated (competitor assets in `site/`): stop all streams; purge; log `D:\OandO07072026\Failures.md`.
+**Stop-if-fail (ongoing):** If owner later reverts to **locked** or **plan-only**, honor that. If ethics violated (competitor assets in `site/`): stop all streams; purge; log `D:\OandO07072026\Failures.md`. **Do not** invent a wait for unlock when implementation unlock is already recorded.
 
 ---
 

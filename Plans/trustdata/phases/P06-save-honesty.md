@@ -1,6 +1,6 @@
 # P06 — Save honesty (W5–W6)
 
-> **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Use **test-driven-development**, **verification-before-completion**, and **systematic-debugging** when executing. Do not implement until owner unlocks after workflow briefing (see [00-START.md](../00-START.md)).  
+> **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Use **test-driven-development**, **verification-before-completion**, and **systematic-debugging** when executing. **W0 UNLOCKED** (see [00-START.md](../00-START.md)) — do not re-ask owner unlock.  
 > **Approach:** Plan A product journey (default). Trust **data** — repo, tests, browser evidence — not character claims.  
 > **Checkout:** `D:\OandO07072026` only · **no worktrees** · commit each landable slice · push only on owner ask.
 
@@ -520,4 +520,4 @@ Superpowers + TDD; no worktrees; commit slices; push only on ask.
 ### Not done (execution still required)
 
 - No implementation; W5/W6 remain **red** until CP-06 evidence exists.  
-- Owner unlock still required before product code per `00-START.md`.
+- **W0 unlocked** — product code allowed per `00-START.md` (do not re-ask unlock).

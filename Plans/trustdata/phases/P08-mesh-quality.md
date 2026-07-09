@@ -1,6 +1,6 @@
 # P08 — Mesh quality bar (W7)
 
-> **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Load **TDD**, **verification-before-completion**, and **systematic-debugging** before editing mesh code. Do not implement until owner unlocks execution (plan-only until unlock). Use checkboxes. **No worktrees.** Commit as you go after each landable slice; push only on owner ask.
+> **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Load **TDD**, **verification-before-completion**, and **systematic-debugging** before editing mesh code. **W0 UNLOCKED** — execute; do not re-ask owner unlock. Use checkboxes. **No worktrees.** Commit as you go; push/mirror per AGENTS.md.
 
 ### Expert pass P0 (2026-07-09)
 
@@ -356,7 +356,7 @@ Visual smoke command is **chosen in Task 04** (default headless) and frozen into
 | A — TDD mesh | Tasks 02–03, unit evidence + blast test updates | Browser chrome / unrelated SKUs / public GLB |
 | B — Visual + NOTES polish | Tasks 01, 04, 06 packaging | Rewrite mesh without re-running A’s units |
 
-Both: superpowers; trust data; no competitor GLB/code; no worktrees; no product code until owner unlock (this planning pass is plan-only).
+Both: superpowers; trust data; no competitor GLB/code; no worktrees; **W0 unlocked** — product work allowed (do not re-ask unlock).
 
 ---
 

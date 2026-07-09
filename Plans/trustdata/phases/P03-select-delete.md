@@ -15,7 +15,7 @@
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` (TDD, systematic-debugging, verification-before-completion).  
 > **Approach A** — FeasibilityCanvas + document model first.  
-> **Do not execute product code until owner unlocks.** Plan-only OK for this doc.  
+> **W0 UNLOCKED** — execute product work per phase + evidence. Do not re-ask owner unlock.  
 > **Ethics:** Inspiration only from Floorplanner report select/delete grammar. No competitor UI/assets.  
 > **Reviews:** [P03-suggestions.md](../reviews/P03-suggestions.md)  
 > **Governance:** [RESULTS-MAP](../RESULTS-MAP.md) · [CHECKPOINTS CP-03](../checkpoints/CHECKPOINTS.md) · [MASTER W3](../checklists/MASTER-CHECKLIST.md)

@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` + **TDD** + **verification-before-completion**.  
 > **No worktrees.** Main checkout `D:\OandO07072026` only. Commit each landable slice. Push only on owner ask.  
-> **Do not implement until owner unlocks execution** (plan-only until then).  
+> **W0 UNLOCKED** — implement per phase + evidence. Do not re-ask owner unlock.  
 > Checkboxes (`- [ ]`) track progress.
 
 ### Expert pass P0 (2026-07-09)
@@ -409,4 +409,4 @@ Do not start P10 claims from this file alone.
 
 **Folder lock addendum:** [reviews/FOLDER-LOCK-suggestions.md](../reviews/FOLDER-LOCK-suggestions.md) — evidence root **`09-shortcuts-chrome/`** only.
 
-**Not done (by design):** product code, execution, commits. Owner unlock still required before Tasks 00–06 run.
+**W0 unlocked.** Phase may execute Tasks 00–06; historical “not done” lines below are pre-land planning notes if still present.

@@ -1,15 +1,16 @@
 # Trust-Data Plan — Index
 
-> **For agentic workers:** REQUIRED: `/using-superpowers` + skills as fit. Use **subagent-driven-development** or **executing-plans** only after **implementation unlock** (see Unlock gate). Checkboxes (`- [ ]`) track progress.  
+> **For agentic workers:** REQUIRED: `/using-superpowers` + skills as fit. Use **subagent-driven-development** or **executing-plans** as fit.  
+> **W0 UNLOCKED (2026-07-09):** Approach **A** + **implementation unlock** recorded in [00-START.md](./00-START.md). **Do not ask owner to unlock again.** Execute product phases + evidence.  
 > **Folder rule:** All plan files for this program live under `Plans/trustdata/` only (phases · checkpoints · checklists · reviews).  
 > **Expert revision:** 2026-07-09 — applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md).  
-> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology (P01–P10 · CP-00–CP-10 · folder lock · Approach A · AGENT-RULES); EXPAND week-1 kill order below + [00-START.md](./00-START.md); THIN densest phases → mains + [P03-appendix](./phases/P03-appendix.md) · [P05-appendix](./phases/P05-appendix.md) · [P07-appendix](./phases/P07-appendix.md). Authority: [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md). **No product code.**
+> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology (P01–P10 · CP-00–CP-10 · folder lock · Approach A · AGENT-RULES); EXPAND week-1 kill order below + [00-START.md](./00-START.md); THIN densest phases → mains + [P03-appendix](./phases/P03-appendix.md) · [P05-appendix](./phases/P05-appendix.md) · [P07-appendix](./phases/P07-appendix.md). Authority: [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).
 
 ---
 
 ## Approach A (binding default)
 
-**Product Journey First** (recommended; default if owner silent **after** unlock):
+**Product Journey First** (recommended; **recorded** — Approach A):
 
 - Ship **W1–W8** on current **FeasibilityCanvas + document model**.  
 - Fix select/delete, orbit, save honesty, Block2D symbols, cabinet-v0 mesh bar, open3d Playwright pack.  
@@ -27,19 +28,21 @@
 
 ---
 
-## Unlock gate (W0 / CP-00)
+## Unlock gate (W0 / CP-00) — **CLOSED: UNLOCKED**
 
-| Mode | Owner must say | Agents may | Agents must not |
-|------|----------------|------------|-----------------|
-| **plan-only** | “plan only” / plan review / revise plans | Read repo; write/revise `Plans/trustdata/**`; write inventory evidence under `results/planner/world-standard-wave/` when a phase is **read-only** (e.g. P01); local **docs** commits | Edit product behavior under `site/features/planner/**` (or any `site/` product path for W gates); claim W1–W8 pass |
-| **implementation unlock** | Explicit unlock for implementation / execute trustdata / run phases with product work | Phase work per phase file + evidence; product slices; commit as you go; push/mirror per `AGENTS.md` | Exceed phase scope; force-push / destroy remotes; worktrees; skip CP stop-if-fail |
-| **locked (default)** | Silence (no unlock yet) | Read plans; expert reviews; no product code | Treat “default Approach A” as unlock; implement features |
+**Recorded:** Approach **A** + **implementation unlock** (2026-07-09) in [00-START.md](./00-START.md) · evidence `00-start/NOTES.md` · CP-00 **PASS**.
+
+| Mode | Status | Agents may | Agents must not |
+|------|--------|------------|-----------------|
+| **implementation unlock** | **ACTIVE** | Phase work per phase file + evidence; product slices; commit as you go; push/mirror per `AGENTS.md` | Exceed phase scope; force-push / destroy remotes; worktrees; skip CP stop-if-fail |
+| **plan-only** | Not current | (only if owner reverts to plan-only) | Product behavior edits if plan-only |
+| **locked** | Not current | — | Do **not** treat the program as locked |
 
 **Rules:**
 
-1. **Silent ≠ unlock.** Default Approach **A** applies only once unlock (or plan-only) is recorded and approach is chosen or defaulted.  
-2. **CP-00** authoritative criteria live in [00-START.md](./00-START.md) and [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md).  
-3. Evidence for W0: `results/planner/world-standard-wave/00-start/NOTES.md` (approach + mode + date + agent).  
+1. **Unlock is done.** Agents execute; do not re-ask the owner for unlock.  
+2. **CP-00** criteria: [00-START.md](./00-START.md) + [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) — **PASS**.  
+3. Evidence for W0: `results/planner/world-standard-wave/00-start/NOTES.md`.  
 4. Failures: `D:\OandO07072026\Failures.md`.
 
 ---
@@ -220,11 +223,11 @@ Agent rules: **`AGENTS.md`**. Short spawn: [AGENT-RULES.md](./checklists/AGENT-R
 ## First agent session (read order)
 
 1. This INDEX + [00-START.md](./00-START.md)  
-2. Unlock mode: if locked → stop product work; if plan-only → plans/evidence only; if implementation unlock → continue  
-3. **Week-1 kill order** (this file) — serial spine vs parallel fill before spawning streams  
+2. Confirm W0: **already unlocked** (Approach A + implementation) — then execute  
+3. **Week-1 kill order** (this file) — next open gate from evidence / CHECKPOINTS  
 4. [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) + [RESULTS-MAP.md](./RESULTS-MAP.md)  
 5. [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md)  
-6. Owning phase file + its `reviews/P0X-suggestions.md`  
+6. Owning phase file + evidence under `results/planner/world-standard-wave/`  
 7. Design spec W gates (link above)
 
-**Do not implement product code until owner records implementation unlock in 00-START / chat.**
+**Implementation unlock is recorded. Do not block on owner unlock. Execute the next kill-path slice.**

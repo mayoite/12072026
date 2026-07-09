@@ -9,8 +9,8 @@
 | Task checkboxes below | Historical execute steps — evidence supersedes; do not re-open engines | README + CP-02-SUMMARY |
 
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Load verification / TDD skills when collecting evidence.  
-> **Scope:** Plan + evidence only until owner unlocks implementation. **Do not** re-pick engines, swap packages, or start Fabric full cutover in this phase. **No product code** under `site/features/planner/**` in P02 — evidence + plan/docs inventory only.  
-> **Checkout:** `D:\OandO07072026` only · **No worktrees** · Commit landable evidence slices as you go · Push only on owner ask.
+> **W0 UNLOCKED.** P02 scope remains evidence/docs for engine lock (no engine thrash). **Do not** re-pick engines, swap packages, or start Fabric full cutover mid-phase.  
+> **Checkout:** `D:\OandO07072026` only · **No worktrees** · Commit landable evidence slices as you go · Push/mirror per `AGENTS.md`.
 
 ### Expert pass P0 (2026-07-09)
 

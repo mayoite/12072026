@@ -14,7 +14,7 @@
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` (TDD, verification, chrome-devtools as fit).  
 > **Checkout:** `D:\OandO07072026` only · no worktrees · commit as you go · push only on ask.  
-> **Do not execute until owner unlocks.**  
+> **W0 UNLOCKED** — execute per phase + evidence. Do not re-ask owner unlock.  
 > **Commits:** `trustdata(P05): <slice>` or `fix(open3d): <slice>`.
 
 **Prev:** [P04-orbit-continuity.md](./P04-orbit-continuity.md) · **Next:** [P06-save-honesty.md](./P06-save-honesty.md)  

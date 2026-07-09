@@ -9,7 +9,7 @@
 | Browser | green | Playwright 1 passed; `browser-run.json`; shots 01–03 |
 | Three-layer | audited | `THREE-LAYER-AUDIT.md` |
 
-> **For agentic workers:** REQUIRED: `/using-superpowers` + skills as fit (`test-driven-development`, `verification-before-completion`, `systematic-debugging`, `chrome-devtools` for live checks). Do **not** implement until owner unlocks after workflow briefing. Checkboxes track execution progress.
+> **For agentic workers:** REQUIRED: `/using-superpowers` + skills as fit (`test-driven-development`, `verification-before-completion`, `systematic-debugging`, `chrome-devtools` for live checks). **W0 UNLOCKED** — implement freely per AGENTS.md. Checkboxes track execution progress.
 >
 > **Gate W4:** 2D↔3D toggle preserves **entity pose**; **3D orbit** is **enabled by default**. Proof: unit green now · Playwright + console clean under evidence dir (this phase lays the Playwright contract; full journey may share `02-browser-open3d-journey` once P07 lands).
 >
@@ -494,4 +494,4 @@ Do not use “done” for code-complete without evidence paths. Do not claim “
 - Remount rule: unmount 3D on 2D is expected; document sole pose authority.  
 - Skills / no-worktree / commit-as-you-go / no push without owner restated.
 
-**Status after revision:** Planned (ready for owner unlock). Execution not started.
+**Status after revision:** **PASS** — W0 unlocked; unit + browser closed under `04-orbit-continuity/`.
