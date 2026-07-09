@@ -47,17 +47,17 @@ Console artifacts must contain stdout and stderr with stream, test identity or t
 
 When testing the **planner** or **any site page** in a browser (manual, Playwright, or DevTools), **take a couple of PNG screenshots** and save them under the relevant evidence folder (e.g. `results/planner/.../` or `results/<module>/.../`). Prefer viewport captures of before/after or key states (home, guest setup, open3d 2D, open3d 3D). Screenshots are part of the run record — do not rely on text-only pass claims for UI work.
 
-### Coverage reports — do not thrash on the total (2026-07-09)
+### Coverage — correct files + achievable bars (2026-07-09)
 
-Vitest **planner** coverage force-includes large trees (`all: true` + broad `include`). The report **TOTAL** is therefore an inventory of dark code, not “how good your last tests were.” **Do not chase 90% of that total** — it is virtually unreachable and wastes agent time.
+| Command | What is in the denominator | Bar |
+|---------|----------------------------|-----|
+| `test:coverage` | **Gate:** pure open3d catalog/model/lib + shared boq/export | **70/60/70/70** |
+| `test:coverage:site` | Scoped site logic | **85/75/85/85** |
+| `test:coverage:inventory` | Broad dark-product meter | **no threshold** |
 
-| Read this | For |
-|-----------|-----|
-| Per-file % for modules under change | Slice landed? |
-| Dual rollup (`node scripts/analyze-coverage-gap.mjs`) | Touched vs full include |
-| Site profile + thresholds (`test:coverage:site`) | PLAN-FAIL-0408 ship floor |
+**Out of the gate denominator:** `_archive` fabric, catalog **svg/** pipeline, scripts, public SVGs, giant UI shells (FeasibilityCanvas, OOPlannerWorkspace, …).
 
-Policy: `site/scripts/coverage-policy.mjs`. Failures: `Failures.md` § PLAN-FAIL-0408.
+Do **not** thrash to hit 90% on inventory total. Per-file still truths a slice. Policy: `site/scripts/coverage-policy.mjs` · `vitest.shared.ts` · `Failures.md` § 0408.
 
 ### Static Gates
 

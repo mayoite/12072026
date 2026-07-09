@@ -57,6 +57,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "npm run test:clean && vitest run --coverage && node scripts/generate-coverage-report.mjs planner && node scripts/generate-vitest-report.mjs ../results/tests/vitest-results.json",
+    "test:coverage:inventory": "npm run test:clean && vitest run --coverage --config vitest.coverage.inventory.config.ts",
     "test:coverage:site": "npm run test:clean && vitest run --coverage --config vitest.site.config.ts && node scripts/generate-coverage-report.mjs site && node scripts/generate-vitest-report.mjs ../results/tests/vitest-site-results.json",
     "test:results": "npm run test:coverage && npm run test:coverage:site",
     "test:planner": "vitest run planner",

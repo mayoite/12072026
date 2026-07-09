@@ -76,3 +76,57 @@ export const VITEST_COMMON_COVERAGE_REPORTERS = [
   "json-summary",
   "html",
 ] as const;
+
+/**
+ * Planner **ship-gate** coverage — **include-first (allowlist)**, not exclude-from-everything.
+ *
+ * Why include beats exclude:
+ * - Broad `features/planner/**` + exclude always leaks SVG, _archive, UI shells into the denominator.
+ * - 90% on that universe is fantasy; agents thrash on a broken scoreboard.
+ *
+ * Gate include = pure / ownable modules we actually unit-test.
+ * Not in the list = not in the gate (UI shells, 3d viewers, svg pipeline, scripts, public).
+ *
+ * Exclude list is only for carving noise *inside* allowlisted globs (e.g. catalog/svg/**).
+ * Inventory of dark product = `test:coverage:inventory` (broader include, no threshold).
+ */
+export const VITEST_PLANNER_GATE_COVERAGE_INCLUDE = [
+  // Allowlist only — anything not listed is out of the gate denominator
+  "features/planner/open3d/catalog/**/*.ts",
+  "features/planner/open3d/model/**/*.ts",
+  "features/planner/open3d/lib/**/*.{ts,tsx}",
+  "features/planner/shared/boq/**/*.ts",
+  "features/planner/shared/export/**/*.ts",
+  "features/planner/lib/**/*.ts",
+] as const;
+
+/** Carve-outs only for paths that match the allowlist globs above (keep short). */
+export const VITEST_PLANNER_GATE_COVERAGE_EXCLUDE = [
+  "**/open3d/catalog/svg/**",
+  "**/*GlbExport*",
+  "**/*.d.ts",
+  "**/*.test.{ts,tsx}",
+  "**/*.spec.{ts,tsx}",
+  "**/*.mock.{ts,tsx}",
+  "**/node_modules/**",
+] as const;
+
+/**
+ * Achievable ship floor on the gate include (not full-product inventory).
+ * Ratchet up only when dual rollup + per-file evidence shows headroom.
+ */
+export const VITEST_PLANNER_GATE_THRESHOLDS = {
+  statements: 70,
+  branches: 60,
+  functions: 70,
+  lines: 70,
+} as const;
+
+/** Broader inventory include — report only, no thresholds (dark-product meter). */
+export const VITEST_PLANNER_INVENTORY_COVERAGE_INCLUDE = [
+  "app/api/**/*.{ts,tsx}",
+  "features/planner/**/*.{ts,tsx}",
+  "features/crm/**/*.{ts,tsx}",
+  "lib/**/*.{ts,tsx}",
+  "platform/**/*.{ts,tsx}",
+] as const;

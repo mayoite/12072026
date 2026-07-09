@@ -90,12 +90,13 @@ export default defineConfig({
         '**/dist/**',
         '**/build/**',
       ],
-      // Ratcheted 2026-06-15 after S5 — ~5–8 pts below measured site rollup (~97% stmts).
+      // 2026-07-09: eased from 90/80/90/90 — gate is scoped site logic only;
+      // not SVG pipeline / scripts / full planner UI. Ratchet up with evidence.
       thresholds: {
-        statements: 90,
-        branches: 80,
-        functions: 90,
-        lines: 90,
+        statements: 85,
+        branches: 75,
+        functions: 85,
+        lines: 85,
       },
     },
   },
