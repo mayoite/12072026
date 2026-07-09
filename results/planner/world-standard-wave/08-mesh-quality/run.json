@@ -1,0 +1,35 @@
+﻿{
+    "phase":  "P08",
+    "gate":  "W7",
+    "checkpoint":  "CP-08",
+    "date":  "2026-07-09",
+    "head":  "a443a2c",
+    "headFull":  "a443a2ce0f53f7a94c2e574095563da0faca7817",
+    "w7":  "pass",
+    "partNamesDefaultSlab":  [
+                                 "toe",
+                                 "carcass",
+                                 "door-slab"
+                             ],
+    "partCountMatrix":  {
+                            "none":  2,
+                            "slab":  3,
+                            "pair":  4
+                        },
+    "vitestPassed":  true,
+    "vitestTests":  48,
+    "visualSmoke":  "pass",
+    "policyNoDesignerGlb":  true,
+    "heightIntegrity":  true,
+    "constants":  {
+                      "TOE_HEIGHT_MM":  100,
+                      "TOE_INSET_MM":  50,
+                      "DOOR_THICKNESS_MM":  18
+                  },
+    "residualHonest":  "no handles; simple materials; headless plan SVG not photoreal WebGL; not world-standard product complete",
+    "evidenceDir":  "results/planner/world-standard-wave/08-mesh-quality/",
+    "primaryFiles":  [
+                         "site/features/planner/open3d/catalog/modularCabinetV0.ts",
+                         "site/features/planner/open3d/catalog/modularCabinetV0GlbExport.ts"
+                     ]
+}

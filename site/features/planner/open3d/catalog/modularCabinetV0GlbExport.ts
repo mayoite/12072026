@@ -12,13 +12,15 @@ import {
   assertNoDesignerStaticGlb,
 } from "@/features/planner/lib/glbAssetPolicy";
 import {
+  DOOR_THICKNESS_MM,
+  TOE_HEIGHT_MM,
+  TOE_INSET_MM,
   type ModularCabinetV0Options,
   countCabinetV0Parts,
   defaultCabinetV0Options,
   generateCabinetV0Footprint,
 } from "./modularCabinetV0";
 
-const DOOR_THICKNESS_MM = 18;
 const MM = 0.001;
 
 /**
@@ -92,36 +94,45 @@ export function buildModularCabinetV0PartPlans(
   const w = options.widthMm * MM;
   const d = options.depthMm * MM;
   const h = options.heightMm * MM;
+  const toeH = TOE_HEIGHT_MM * MM;
+  const inset = TOE_INSET_MM * MM;
+  const carcassH = h - toeH;
   const doorT = DOOR_THICKNESS_MM * MM;
+  const carcassY = toeH + carcassH / 2;
 
   const parts: ModularCabinetV0PartPlan[] = [
     {
+      name: "toe",
+      sizeM: { x: w, y: toeH, z: d - inset },
+      positionM: { x: 0, y: toeH / 2, z: -inset / 2 },
+    },
+    {
       name: "carcass",
-      sizeM: { x: w, y: h, z: d },
-      positionM: { x: 0, y: h / 2, z: 0 },
+      sizeM: { x: w, y: carcassH, z: d },
+      positionM: { x: 0, y: carcassY, z: 0 },
     },
   ];
 
   if (options.doorStyle === "slab") {
     parts.push({
       name: "door-slab",
-      sizeM: { x: w * 0.96, y: h * 0.92, z: doorT },
-      positionM: { x: 0, y: h / 2, z: d / 2 + doorT / 2 },
+      sizeM: { x: w * 0.96, y: carcassH * 0.92, z: doorT },
+      positionM: { x: 0, y: carcassY, z: d / 2 + doorT / 2 },
     });
   } else if (options.doorStyle === "pair") {
     const leafW = w * 0.47;
-    const leafH = h * 0.92;
+    const leafH = carcassH * 0.92;
     const z = d / 2 + doorT / 2;
     parts.push(
       {
         name: "door-left",
         sizeM: { x: leafW, y: leafH, z: doorT },
-        positionM: { x: -leafW / 2 - 0.005, y: h / 2, z },
+        positionM: { x: -leafW / 2 - 0.005, y: carcassY, z },
       },
       {
         name: "door-right",
         sizeM: { x: leafW, y: leafH, z: doorT },
-        positionM: { x: leafW / 2 + 0.005, y: h / 2, z },
+        positionM: { x: leafW / 2 + 0.005, y: carcassY, z },
       },
     );
   }

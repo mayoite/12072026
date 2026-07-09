@@ -100,8 +100,8 @@ describe("createSceneObjectFromNode — modular vs parametric-box vs wall", () =
     );
     expect(object.type).toBe("Group");
     expect(object.userData.geometryMode).toBe("modular-cabinet-v0");
-    // default doorStyle slab → 2 parts
-    expect(object.children).toHaveLength(2);
+    // default doorStyle slab → toe + carcass + door-slab
+    expect(object.children).toHaveLength(3);
     expect(object.userData.options).toMatchObject({
       widthMm: 900,
       depthMm: 400,
@@ -110,15 +110,16 @@ describe("createSceneObjectFromNode — modular vs parametric-box vs wall", () =
     });
   });
 
-  it("modular pair door style yields three children", () => {
+  it("modular pair door style yields four children (toe+carcass+doors)", () => {
     const options = defaultCabinetV0Options({ doorStyle: "pair" });
     const object = createSceneObjectFromNode(
       THREE,
       modularNode({ modularOptions: options }),
       false,
     );
-    expect(object.children).toHaveLength(3);
+    expect(object.children).toHaveLength(4);
     expect(object.children.map((c) => c.name)).toEqual([
+      "toe",
       "carcass",
       "door-left",
       "door-right",

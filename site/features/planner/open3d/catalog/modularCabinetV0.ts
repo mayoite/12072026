@@ -1,6 +1,7 @@
 /**
  * Smallest modular furniture slice: cabinet-v0 options → 2D path + 3D mesh group.
  * Must-do path: component choices without designer GLB.
+ * W7 bar: readable toe → carcass → door(s); height integrity (toe not additive).
  */
 
 import * as THREE from "three";
@@ -21,7 +22,17 @@ const MATERIAL_COLOR: Record<CabinetMaterialId, string> = {
   white: "#f3f4f6",
 };
 
-const DOOR_THICKNESS_MM = 18;
+/** Slightly darker band so toe reads against carcass (same family). */
+const TOE_MATERIAL_COLOR: Record<CabinetMaterialId, string> = {
+  oak: "#a88858",
+  white: "#d1d5db",
+};
+
+/** Locked W7 geometry constants — import in GlbExport (no duplicate magic). */
+export const TOE_HEIGHT_MM = 100;
+export const TOE_INSET_MM = 50;
+export const DOOR_THICKNESS_MM = 18;
+
 const MM = 0.001;
 
 export function defaultCabinetV0Options(
@@ -46,8 +57,10 @@ export function generateCabinetV0Footprint(
 }
 
 /**
- * Build a Three group in metres (Y-up). Carcass + optional door panel(s).
- * Child count: 1 (none) | 2 (slab) | 3 (pair).
+ * Build a Three group in metres (Y-up). Toe + carcass + optional door panel(s).
+ * Child order: toe → carcass → door(s).
+ * Child count: 2 (none) | 3 (slab) | 4 (pair).
+ * Height integrity: total Y span ≈ heightMm (toe replaces bottom of carcass).
  */
 export function generateCabinetV0Mesh(
   options: ModularCabinetV0Options,
@@ -60,10 +73,16 @@ export function generateCabinetV0Mesh(
   };
 
   const color = MATERIAL_COLOR[options.material];
+  const toeColor = TOE_MATERIAL_COLOR[options.material];
   const carcassMat = new THREE.MeshStandardMaterial({
     color,
     roughness: 0.75,
     metalness: 0.05,
+  });
+  const toeMat = new THREE.MeshStandardMaterial({
+    color: toeColor,
+    roughness: 0.85,
+    metalness: 0.04,
   });
   const doorMat = new THREE.MeshStandardMaterial({
     color,
@@ -74,48 +93,61 @@ export function generateCabinetV0Mesh(
   const w = options.widthMm * MM;
   const d = options.depthMm * MM;
   const h = options.heightMm * MM;
+  const toeH = TOE_HEIGHT_MM * MM;
+  const inset = TOE_INSET_MM * MM;
+  const carcassH = h - toeH;
+  const doorT = DOOR_THICKNESS_MM * MM;
+  const carcassY = toeH + carcassH / 2;
+
+  const toe = new THREE.Mesh(
+    new THREE.BoxGeometry(w, toeH, d - inset),
+    toeMat,
+  );
+  toe.name = "toe";
+  toe.position.set(0, toeH / 2, -inset / 2);
+  group.add(toe);
 
   const carcass = new THREE.Mesh(
-    new THREE.BoxGeometry(w, h, d),
+    new THREE.BoxGeometry(w, carcassH, d),
     carcassMat,
   );
   carcass.name = "carcass";
-  carcass.position.y = h / 2;
+  carcass.position.set(0, carcassY, 0);
   group.add(carcass);
 
   if (options.doorStyle === "slab") {
     const door = new THREE.Mesh(
-      new THREE.BoxGeometry(w * 0.96, h * 0.92, DOOR_THICKNESS_MM * MM),
+      new THREE.BoxGeometry(w * 0.96, carcassH * 0.92, doorT),
       doorMat,
     );
     door.name = "door-slab";
-    door.position.set(0, h / 2, d / 2 + (DOOR_THICKNESS_MM * MM) / 2);
+    door.position.set(0, carcassY, d / 2 + doorT / 2);
     group.add(door);
   } else if (options.doorStyle === "pair") {
     const leafW = w * 0.47;
-    const leafH = h * 0.92;
-    const z = d / 2 + (DOOR_THICKNESS_MM * MM) / 2;
+    const leafH = carcassH * 0.92;
+    const z = d / 2 + doorT / 2;
     const left = new THREE.Mesh(
-      new THREE.BoxGeometry(leafW, leafH, DOOR_THICKNESS_MM * MM),
+      new THREE.BoxGeometry(leafW, leafH, doorT),
       doorMat,
     );
     left.name = "door-left";
-    left.position.set(-leafW / 2 - 0.005, h / 2, z);
+    left.position.set(-leafW / 2 - 0.005, carcassY, z);
     const right = new THREE.Mesh(
-      new THREE.BoxGeometry(leafW, leafH, DOOR_THICKNESS_MM * MM),
+      new THREE.BoxGeometry(leafW, leafH, doorT),
       doorMat,
     );
     right.name = "door-right";
-    right.position.set(leafW / 2 + 0.005, h / 2, z);
+    right.position.set(leafW / 2 + 0.005, carcassY, z);
     group.add(left, right);
   }
 
   return group;
 }
 
-/** Mesh/group child count for tests (excludes non-mesh). */
+/** Mesh/group child count for tests (excludes non-mesh). Always includes toe. */
 export function countCabinetV0Parts(options: ModularCabinetV0Options): number {
-  if (options.doorStyle === "none") return 1;
-  if (options.doorStyle === "slab") return 2;
-  return 3;
+  if (options.doorStyle === "none") return 2;
+  if (options.doorStyle === "slab") return 3;
+  return 4;
 }

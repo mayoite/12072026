@@ -57,8 +57,8 @@ describe("runModularMeshStages (G1–G6)", () => {
     if (!result.ok) return;
 
     expect(result.footprint.startsWith("M ")).toBe(true);
-    expect(result.runtimeMeshChildren).toBe(3);
-    expect(result.partCount).toBe(3);
+    expect(result.runtimeMeshChildren).toBe(4);
+    expect(result.partCount).toBe(4);
     expect(result.binaryByteLength).toBeGreaterThan(100);
     expect(result.stages).not.toContain("mesh-g8-viewer-load-glb");
   }, 30_000);
