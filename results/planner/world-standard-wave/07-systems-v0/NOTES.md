@@ -54,14 +54,24 @@ npx vitest run workstationSystemV0 workstationPlacementV0 workstationCatalogV0
 # Tests  16 passed (16)
 ```
 
-Inventory click-to-place uses existing OOPlannerWorkspace → placeCatalogItemInProject path (no special UI picker yet).
+Inventory click-to-place uses existing OOPlannerWorkspace → placeCatalogItemInProject path; free combo also via Configurator panel (see below).
 
 ## Not yet
-- Dedicated size/shape/module configurator UI (beyond fixed matrix SKUs)
 - Client (Philips/Ford) multi-tenant catalogs
 - Fabric cutover
-- Non-box geometry for workstation modules
-- Browser e2e place workstation from inventory
+- Non-box geometry for workstation modules / modular mesh
+- Priced BOQ (quantity BOQ export exists)
+
+## Configurator — **done** (2026-07-09, commit family `5c6df65+`)
+
+Free size/shape/modules combo (not only 8 matrix SKUs):
+
+- `workstationConfiguratorV0.ts` — pure draft + resolve
+- `WorkstationConfiguratorPanel` in inventory left rail
+- Place arms `pendingWorkstationConfig` → canvas click → `placeWorkstationConfigOnProject`
+- Unit: `workstationConfiguratorV0.test.ts` (5/5)
+- e2e: `open3d-systems-v0-configurator.spec.ts` (1 passed ~2.9s)
+- Evidence: `30-configurator-open.png`, `31-configurator-configured.png`, `32-configurator-placed.png` + `configurator-run.json`
 
 ## Plan Block2D symbols (2026-07-09)
 
@@ -89,7 +99,7 @@ Inventory click-to-place uses existing OOPlannerWorkspace → placeCatalogItemIn
 - Place-from-inventory auto-selects furniture + returns to select tool
 
 ## Next
-Optional BOQ panel UI; modular workstation mesh; Fabric cutover later
+Optional BOQ panel UI / priced BOQ; modular workstation mesh; Fabric cutover later
 
 ## Place+delete browser (2026-07-09)
 
@@ -97,14 +107,4 @@ Optional BOQ panel UI; modular workstation mesh; Fabric cutover later
 - Properties panel shows Workstation (systems v0) shape/size/modules when selected
 - Evidence: 20/21 png + place-delete-run.json
 
-## Configurator (2026-07-09)
-
-Free size/shape/modules (not only 8 matrix SKUs):
-
-- `workstationConfiguratorV0.ts` — pure draft + resolve
-- `WorkstationConfiguratorPanel` in inventory left rail
-- Place arms `pendingWorkstationConfig` → canvas click → `placeWorkstationConfigOnProject`
-- Unit: workstationConfiguratorV0.test.ts (5/5)
-- e2e: open3d-systems-v0-configurator.spec.ts (1 passed ~2.9s)
-- Evidence: 30/31/32 png + configurator-run.json
 

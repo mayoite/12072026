@@ -49,9 +49,11 @@ From existing `D:\websites\planner5d.com` + RoomSketcher/Floorplanner public pat
 | 7 | SVG ≠ plan symbols | **Partial** — Block2D procedural path + cabinet/ws symbols |
 | 8 | 2A chrome incomplete | **Still true** — not kill-path |
 
-### Systems v0 (post-spine — **core green**)
+### Systems v0 (post-spine — **core green** + configurator)
 
-Rules + matrix + place pure + catalog inventory + Block2D + browser place/select/delete + batch + BOQ export + seats status. Evidence: `07-systems-v0/`. Unit suite **26/26**. Still later: modular workstation mesh, Fabric cutover, multi-tenant catalogs, priced BOQ.
+Rules + matrix + place pure + catalog inventory + Block2D + browser place/select/delete + batch + BOQ export + seats status. Evidence: `07-systems-v0/`. Unit suite **26/26** (+ configurator unit/e2e). Still later: modular workstation mesh, Fabric cutover, multi-tenant catalogs, priced BOQ.
+
+**Configurator landed** (commit family `5c6df65+`): free size/shape/modules combo (not only 8 matrix SKUs) via pure `workstationConfiguratorV0` + left-rail `WorkstationConfiguratorPanel` + canvas place; browser e2e + PNGs under `07-systems-v0/`.
 
 ## Evidence dirs (landed)
 
