@@ -128,7 +128,8 @@ function fillStyleForPrim(
     }
     return g;
   }
-  const fill = resolve(prim.fill);
+  const rawFill = "fill" in prim ? prim.fill : undefined;
+  const fill = resolve(rawFill);
   return fill === "none" ? "transparent" : fill;
 }
 

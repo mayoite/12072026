@@ -1,17 +1,21 @@
-﻿# W3 select/delete — unit land (2026-07-09)
+﻿# W3 select/delete — CP-03 unit + browser (2026-07-09)
 
-## Code
-- applySelectionDelete: one history step for multi-id
-- deleteSelection uses applySelectionDelete
+## Unit
+- applySelectionDelete single-history multi-id
 - Delete/Backspace preventDefault
-- Esc cancel clears selection (keyboard + command palette cancel)
-
-## Unit evidence
-pnpm exec vitest run applySelectionDelete + canvasPicking pickFurniture + open3dWorkspaceKeyboard
-Result: 30/30 passed (see unit-vitest.log)
+- Esc clears selection
+- 30/30 vitest (unit-vitest.log)
 
 ## Browser
-Not yet — CP-03 still needs select->delete->undo under 03-select-delete/ (next slice)
+- tests/e2e/open3d-w3-select-delete.spec.ts
+- place → Select → Delete → Ctrl+Z
+- 1 passed (playwright-raw.log)
+- screenshots 01-04-*.png
+
+## Build notes
+- next full build still blocked by /contact createContext (pre-existing)
+- e2e ran against turbopack dev (PLAYWRIGHT_BASE_URL)
+- fixed Prim fill type on LinePrim in renderBlock2DToCanvas (build hygiene)
 
 ## Fabric
-Proof path remains flag OFF / document selection
+- Feasibility/document path; no Fabric furniture flag required

@@ -1,11 +1,8 @@
 ﻿{
   "phase": "P03-select-delete",
   "gate": "W3",
-  "layer": "unit",
-  "status": "unit-green-browser-pending",
-  "tests": 30,
-  "passed": 30,
-  "failed": 0,
-  "head": "pending-commit",
-  "log": "results/planner/world-standard-wave/03-select-delete/unit-vitest.log"
+  "status": "unit-and-browser-green",
+  "unit": { "passed": 30, "failed": 0 },
+  "browser": { "passed": 1, "failed": 0, "spec": "tests/e2e/open3d-w3-select-delete.spec.ts" },
+  "screenshots": ["01-placed.png","02-selected.png","03-deleted.png","04-undone.png"]
 }
