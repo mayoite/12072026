@@ -3,7 +3,8 @@
 ## 1. Overrides
 - **User Wins:** The user's current message supersedes all rules.
 - **Re-read:** Read this file before every task.
-- **Unclear = Stop:** Never guess scope or next steps. Ask.
+- **Unclear goal = Stop:** If the *product ask* is ambiguous, ask. Do **not** ask how to implement once the goal is clear — take the call.
+- **No prompt theater:** Short rules + real work. Do not inflate AGENTS or agent briefs into 400-line “prompt engineering.”
 
 ## 2. Routing (Mandatory Handbooks)
 - **Plan:** `Agents/Agents-Plan.md`
@@ -33,9 +34,8 @@
 
 - **`/using-superpowers` always allowed and always required** for the main agent **and every subagent**.
 - **All skills permitted:** Main agent may load and assign **any** available skill (Firecrawl, chrome-devtools, TDD, debugging, a11y, verification, docs, etc.) as fit. Owner grants full skill authority.
-- Before any non-trivial work: load and follow relevant skills (even 1% chance a skill applies → use it).
-- **Subagents:** Encourage parallel agents. **Default up to 8 concurrent; hard max 10.** Prefer write-to-disk; do not idle waiting on chat.
-- Subagent prompts must include: use superpowers/skills; no worktrees; trust data; licenses/research per pointers below.
+- Load **skills that fit the job** (TDD, debug, browser, etc.) — not every skill for ceremony.
+- **Subagents:** Prefer parallel when useful. **Default up to 8; hard max 10.** Write to disk. Briefs stay short; point at MDs.
 - Skills do not override **User Wins** or Git & Workspace rules above.
 
 ### Packages, assets & licenses (hard — no exceptions)
