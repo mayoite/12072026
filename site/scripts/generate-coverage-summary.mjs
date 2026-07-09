@@ -1,16 +1,23 @@
 /**
- * Run Vitest v8 coverage (planner + site profiles) and write
+ * Run Vitest v8 coverage (planner **gate** + site profiles) and write
  * results/coverage-summary.json. Playwright does not contribute to these numbers.
  * npm run docs:sync:coverage
+ *
+ * Targets come from coverage-policy.mjs (not frozen 75/50 or 90 monorepo).
  */
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import {
   addMetrics,
+  dualRollupFromFinal,
   emptyMetrics,
   finalizeMetrics,
 } from "./coverage-metrics.mjs";
+import {
+  COVERAGE_GATE_PLANNER,
+  COVERAGE_GATE_SITE,
+} from "./coverage-policy.mjs";
 
 const repoRoot = process.cwd();
 const workspaceRoot = path.basename(repoRoot) === "site" ? path.resolve(repoRoot, "..") : repoRoot;
@@ -145,18 +152,31 @@ if (!fs.existsSync(siteCoverageFinal)) {
 const siteCovData = JSON.parse(fs.readFileSync(siteCoverageFinal, "utf8"));
 const siteScope = aggregateSiteScope(siteCovData);
 
+const dual = dualRollupFromFinal(plannerCovData);
+
 const payload = {
   vitestExitCode: plannerRun.status ?? 0,
   vitestSiteExitCode: siteRun.status ?? 0,
   coverageRunExclude: COVERAGE_RUN_EXCLUDE,
-  targetPlannerPct: 75,
-  targetSitePct: 50,
+  // Policy bars (coverage-policy.mjs) — live gate allowlist, not monorepo 90%
+  targetPlannerPct: COVERAGE_GATE_PLANNER.statements,
+  targetSitePct: COVERAGE_GATE_SITE.statements,
+  plannerGate: { ...COVERAGE_GATE_PLANNER },
+  siteGate: { ...COVERAGE_GATE_SITE },
+  dualRollup: {
+    filesFull: dual.filesFull,
+    filesTouched: dual.filesTouched,
+    filesZero: dual.filesZero,
+    full: dual.full,
+    touched: dual.touched,
+  },
   scopes: {
     ...plannerScopes,
     site: siteScope,
   },
   reportDir: "results/coverage/",
   siteReportDir: "results/coverage-site/",
+  note: "Planner coverage.include is GATE allowlist (vitest.shared). Inventory = test:coverage:inventory.",
 };
 
 fs.mkdirSync(resultsDir, { recursive: true });
@@ -190,10 +210,10 @@ if (changed) {
   console.log(`Coverage summary unchanged — skipped write`);
 }
 console.log(
-  `features/planner statements: ${summary.scopes["features/planner"].statements.pct}% (target ${summary.targetPlannerPct}%)`,
+  `planner-gate statements: ${summary.scopes["features/planner"]?.statements?.pct ?? dual.full.statements.pct}% (gate ${summary.targetPlannerPct}%) · dual touched ${dual.touched.statements.pct}%`,
 );
 console.log(
-  `site statements: ${summary.scopes.site.statements.pct}% (target ${summary.targetSitePct}%)`,
+  `site statements: ${summary.scopes.site.statements.pct}% (gate ${summary.targetSitePct}%)`,
 );
 
 const exitCode = plannerRun.status ?? siteRun.status ?? 0;

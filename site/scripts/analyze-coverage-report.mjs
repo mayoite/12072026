@@ -4,8 +4,13 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileCounts, pct } from "./coverage-metrics.mjs";
-import { isHighMassFile, isLargeBucket } from "./coverage-policy.mjs";
+import { dualRollupFromFinal, fileCounts, pct } from "./coverage-metrics.mjs";
+import {
+  COVERAGE_GATE_PLANNER,
+  COVERAGE_GATE_SITE,
+  isHighMassFile,
+  isLargeBucket,
+} from "./coverage-policy.mjs";
 
 const repoRoot = process.cwd();
 const workspaceRoot = path.basename(repoRoot) === "site" ? path.resolve(repoRoot, "..") : repoRoot;
@@ -335,10 +340,19 @@ const site = analyze(
   siteBucket,
 );
 
-const gatePlanner = summary.targetPlannerPct;
-const gateSite = summary.targetSitePct;
-const threshPlanner = "20 / 21 / 20 / 21 (statements / functions / branches / lines)";
-const threshSite = "14 / 14 / 7 / 15";
+// Live policy only — no frozen "20/21/14/15" CI strings from old vitest floors
+const gatePlanner = COVERAGE_GATE_PLANNER.statements;
+const gateSite = COVERAGE_GATE_SITE.statements;
+const threshPlanner = `${COVERAGE_GATE_PLANNER.statements}/${COVERAGE_GATE_PLANNER.functions}/${COVERAGE_GATE_PLANNER.branches}/${COVERAGE_GATE_PLANNER.lines} (stmt/fn/br/line)`;
+const threshSite = `${COVERAGE_GATE_SITE.statements}/${COVERAGE_GATE_SITE.functions}/${COVERAGE_GATE_SITE.branches}/${COVERAGE_GATE_SITE.lines} (stmt/fn/br/line)`;
+
+const plannerFinal = JSON.parse(
+  fs.readFileSync(
+    path.join(workspaceRoot, "results/coverage/coverage-final.json"),
+    "utf8",
+  ),
+);
+const dual = dualRollupFromFinal(plannerFinal);
 
 const out = [];
 out.push("# Coverage report (Vitest v8)");
@@ -349,63 +363,78 @@ out.push(
 out.push("");
 out.push("## Executive summary");
 out.push("");
-function trackStatus(actualPct, ciFloor, productTarget) {
-  const gap = Math.round((productTarget - actualPct) * 10) / 10;
-  if (actualPct < ciFloor) return "Below Vitest floor";
-  if (actualPct >= productTarget) return "At or above product target";
-  return `Passes Vitest floor; **${gap} pts** below ${productTarget}% product target`;
+out.push(
+  "**Policy (2026-07-09):** include-first **gate allowlist** for planner (not `features/planner/**`). See `coverage-policy.mjs` + `vitest.shared.ts`. Inventory profile has no threshold.",
+);
+out.push("");
+out.push("### Dual rollup (this planner coverage-final)");
+out.push("");
+out.push(
+  `| View | Statements | Lines | Files |`,
+);
+out.push("| --- | --- | --- | --- |");
+out.push(
+  `| FULL (gate include on disk) | ${dual.full.statements.pct}% (${dual.full.statements.covered}/${dual.full.statements.total}) | ${dual.full.lines.pct}% | ${dual.filesFull} |`,
+);
+out.push(
+  `| TOUCHED only | ${dual.touched.statements.pct}% (${dual.touched.statements.covered}/${dual.touched.statements.total}) | ${dual.touched.lines.pct}% | ${dual.filesTouched} |`,
+);
+out.push("");
+function trackStatus(actualPct, gatePct) {
+  const gap = Math.round((gatePct - actualPct) * 10) / 10;
+  if (actualPct >= gatePct) return `At or above gate (${gatePct}%)`;
+  if (actualPct > 0) return `**${gap} pts** below ${gatePct}% gate`;
+  return "No coverage data";
 }
 
 out.push(
-  "| Track | Scope | Statements | Functions | Branches | Lines | Gate target | CI threshold | Status |",
+  "| Track | Scope | Statements | Functions | Branches | Lines | Gate (policy) | Status |",
 );
-out.push("| --- | --- | --- | --- | --- | --- | --- | --- | --- |");
+out.push("| --- | --- | --- | --- | --- | --- | --- | --- |");
 out.push(
   mdTableRow([
-    "Planner",
-    "`features/planner/**`",
+    "Planner gate",
+    "allowlist (`vitest.shared` GATE include)",
     formatMetric(planner.total.statements),
     formatMetric(planner.total.functions),
     formatMetric(planner.total.branches),
     formatMetric(planner.total.lines),
-    `${gatePlanner}%`,
     threshPlanner,
-    trackStatus(planner.total.statements.pct, 20, gatePlanner),
+    trackStatus(planner.total.statements.pct, gatePlanner),
   ]),
 );
 out.push(
   mdTableRow([
-    "Site",
-    "site-logic include (see `vitest.site.config.ts`)",
+    "Site gate",
+    "scoped site include (`vitest.site.config.ts`)",
     formatMetric(site.total.statements),
     formatMetric(site.total.functions),
     formatMetric(site.total.branches),
     formatMetric(site.total.lines),
-    `${gateSite}%`,
     threshSite,
-    trackStatus(site.total.statements.pct, 14, gateSite),
+    trackStatus(site.total.statements.pct, gateSite),
   ]),
 );
 out.push("");
 out.push("### Cross-cutting remarks");
 out.push("");
 out.push(
-  "1. **Statements** are the most reliable rollup column — they count whether each executable statement ran at least once.",
+  "1. **Statements** are the most reliable rollup column — each executable statement ran at least once.",
 );
 out.push(
-  "2. **Functions** track whether each declared function body was entered; re-export-only files can show 0 functions despite imports.",
+  "2. **Functions** — re-export-only files can show 0 functions despite imports.",
 );
 out.push(
-  "3. **Branches** count each outcome of conditionals (`if`, `?:`, `&&`, `||`, `switch`); this repo's UI and config code has many branches per statement, so branch % often trails statement % by 5–10 pts.",
+  "3. **Branches** often trail statements on UI/config-heavy code; gate bar is lower for branches.",
 );
 out.push(
-  `4. **Lines** match Vitest's \`lines\` threshold — derived from \`statementMap\` when \`l\` is absent in \`coverage-final.json\` (Vitest v8 default).`,
+  "4. **Lines** derived from `statementMap` when Vitest v8 omits `l`.",
 );
 out.push(
-  `5. **${planner.total.zeroStmtFiles} / ${planner.fileCount}** planner files and **${site.total.zeroStmtFiles} / ${site.fileCount}** site files have **0% statements** — target large zero-coverage modules first.`,
+  `5. Gate denominator files: **${planner.fileCount}** planner-gate · **${site.fileCount}** site (0% files: ${planner.total.zeroStmtFiles} / ${site.total.zeroStmtFiles}).`,
 );
 out.push(
-  "6. Product targets (75% planner / 50% site) are **not** CI thresholds yet; see `plans/plans/README.md` for the plan index.",
+  "6. Do **not** chase 90% full-monorepo inventory. Expand allowlist only when tests own the file.",
 );
 out.push("");
 out.push(...buildScopeSection("Planner track", planner, gatePlanner, PLANNER_BUCKETS));
