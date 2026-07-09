@@ -4,6 +4,13 @@ import { useEffect, useRef } from "react";
 import type { PlannerTool } from "./canvasTool";
 import { CANVAS_TOOL_SHORTCUTS } from "./canvasTool";
 
+/** Lowercase letter → tool, inverted once from the authority map (W8 single source). */
+const TOOL_BY_SHORTCUT_KEY: Record<string, PlannerTool> = Object.fromEntries(
+  (Object.entries(CANVAS_TOOL_SHORTCUTS) as Array<[PlannerTool, string]>).map(
+    ([tool, shortcut]) => [shortcut.toLowerCase(), tool],
+  ),
+) as Record<string, PlannerTool>;
+
 function isEditableTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
   const tag = target.tagName;
@@ -61,48 +68,6 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
         return;
       }
 
-      if (key === "v" && !mod) {
-        event.preventDefault();
-        handlers.setTool("select");
-        return;
-      }
-
-      if (key === "r" && !mod) {
-        event.preventDefault();
-        handlers.setTool("room");
-        return;
-      }
-
-      if (key === "w" && !mod) {
-        event.preventDefault();
-        handlers.setTool("wall");
-        return;
-      }
-
-      if (key === "o" && !mod) {
-        event.preventDefault();
-        handlers.setTool("opening");
-        return;
-      }
-
-      if (key === "d" && !mod) {
-        event.preventDefault();
-        handlers.setTool("dimension");
-        return;
-      }
-
-      if (key === "p" && !mod) {
-        event.preventDefault();
-        handlers.setTool("placement");
-        return;
-      }
-
-      if (key === "h" && !mod) {
-        event.preventDefault();
-        handlers.setTool("pan");
-        return;
-      }
-
       if (event.key === "Escape") {
         event.preventDefault();
         handlers.cancel();
@@ -138,6 +103,15 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
         handlers.undo();
         return;
       }
+
+      // Letter tool arming: authority map only (no second hard-coded table)
+      if (!mod && !event.altKey) {
+        const tool = TOOL_BY_SHORTCUT_KEY[key];
+        if (tool !== undefined) {
+          event.preventDefault();
+          handlers.setTool(tool);
+        }
+      }
     };
 
     const onKeyUp = (event: KeyboardEvent) => {
@@ -157,8 +131,5 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
 }
 
 export function toolFromShortcutKey(key: string): PlannerTool | null {
-  const normalized = key.toUpperCase();
-  const entries = Object.entries(CANVAS_TOOL_SHORTCUTS) as Array<[PlannerTool, string]>;
-  const match = entries.find(([, shortcut]) => shortcut.toUpperCase() === normalized);
-  return match?.[0] ?? null;
+  return TOOL_BY_SHORTCUT_KEY[key.toLowerCase()] ?? null;
 }

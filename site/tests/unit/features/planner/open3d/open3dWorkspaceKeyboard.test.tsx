@@ -2,6 +2,10 @@ import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
+  CANVAS_TOOL_SHORTCUTS,
+  type PlannerTool,
+} from "@/features/planner/open3d/editor/canvasTool";
+import {
   useWorkspaceKeyboard,
   type WorkspaceKeyboardHandlers,
 } from "@/features/planner/open3d/editor/useWorkspaceKeyboard";
@@ -112,5 +116,35 @@ describe("useWorkspaceKeyboard shortcuts", () => {
     renderHook(() => useWorkspaceKeyboard(handlers));
     press({ key: "Escape" });
     expect(handlers.cancel).toHaveBeenCalledTimes(1);
+  });
+
+  it("arms tools from CANVAS_TOOL_SHORTCUTS on live keydown (D=door, M=dimension, N=window, T=text)", () => {
+    const critical: Array<{ key: string; id: PlannerTool }> = [
+      { key: "d", id: "door" },
+      { key: "m", id: "dimension" },
+      { key: "n", id: "window" },
+      { key: "t", id: "text" },
+    ];
+
+    for (const { key, id } of critical) {
+      expect(CANVAS_TOOL_SHORTCUTS[id].toLowerCase()).toBe(key);
+      const handlers = makeHandlers();
+      const { unmount } = renderHook(() => useWorkspaceKeyboard(handlers));
+      press({ key });
+      expect(handlers.setTool).toHaveBeenCalledTimes(1);
+      expect(handlers.setTool).toHaveBeenCalledWith(id);
+      unmount();
+    }
+
+    // Full map matrix so the hook suite alone catches letter drift
+    for (const [id, shortcut] of Object.entries(CANVAS_TOOL_SHORTCUTS) as Array<
+      [PlannerTool, string]
+    >) {
+      const handlers = makeHandlers();
+      const { unmount } = renderHook(() => useWorkspaceKeyboard(handlers));
+      press({ key: shortcut.toLowerCase() });
+      expect(handlers.setTool).toHaveBeenCalledWith(id);
+      unmount();
+    }
   });
 });
