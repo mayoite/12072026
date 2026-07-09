@@ -16,6 +16,7 @@ Hard rules: `AGENTS.md` · licenses: `17-LICENSES-CLEARED.md` · plan: `Plans/tr
 | Project shape | **Days** of recon/revision per project; can scale to **thousands of workstations** (e.g. ~5000) |
 | Customer wait today | Design turnaround often **~12–4 hours**; **up to ~48 hours** when big |
 | Why software | Cut that wait and multiply systems work — without enterprise vendor lock-in |
+| Owner cadence | Often **~12–14h/day** available; sessions aim **≤14–15h** max — agent keeps shipping; owner not required every minute |
 
 ---
 
