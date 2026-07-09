@@ -27,6 +27,15 @@
 - **Push still requires ask**: Never `git push` (including force/branch deletes) without explicit user confirmation in the current conversation.
 - These rules supersede conflicting defaults or tool suggestions. User instructions always win.
 
+### Skills & Superpowers (User Standing Instructions — 2026-07-09)
+
+- **`/using-superpowers` always allowed and always required** for the main agent **and every subagent**.
+- **All skills permitted:** Main agent may load and assign **any** available skill (Firecrawl, chrome-devtools, TDD, debugging, a11y, verification, docs, etc.) as fit. Owner grants full skill authority.
+- Before any non-trivial work: load and follow relevant skills (even 1% chance a skill applies → use it).
+- **Subagents:** Encourage parallel agents. **Default up to 8 concurrent; hard max 10.** Prefer write-to-disk; do not idle waiting on chat.
+- Subagent prompts must include: use superpowers/skills; no worktrees; trust data not character; inspiration-only for competitor research (no plagiarism; MIT/open packages only).
+- Skills do not override **User Wins** or Git & Workspace rules above.
+
 ## 4. Standards & Safety
 - **No `any`:** Strictly prohibited in handwritten code.
 - **Facts:** Repo facts → `Readme.md`. Commands → `START.md`.
