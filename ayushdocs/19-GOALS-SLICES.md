@@ -30,12 +30,12 @@ Not: full multi-client factory, photoreal, enterprise parity.
 | 3 | **W3 select/delete/undo** | Unit + browser under `03-select-delete/` | **[x] PASS** |
 | 4 | **W1–W2 journey** | Serial Playwright `02-browser-open3d-journey/` | **[x] PASS** |
 | 5 | **W5–W6 save honesty** | Flush + local labels + hard reload | **[x] PASS** — `06-save-honesty/` |
-| 6 | Parallel fill | Orbit · shortcuts · symbols · mesh | **partial** — W4 orbit **OPEN** (unit green / browser residual); W2 symbols **PASS** (`05-symbols-svg/`); W7 mesh **PASS** (`08-mesh-quality/`); W8 shortcuts **PASS** (`09-shortcuts-chrome/`) |
+| 6 | Parallel fill | Orbit · shortcuts · symbols · mesh | **[x] mostly PASS** — W4 orbit **PASS** (`04-orbit-continuity/`); W2 symbols **PASS**; W7 mesh **PASS**; W8 shortcuts **PASS** |
 | 7 | Systems v0 | core + configurator (size/shape/modules free combo) | **[x] done** — mesh multiparts + workstation legs landed (green: `mesh-legs-green/`); still boxy residual; priced BOQ demo path later |
 
 Agent ticks slices in evidence + commits; does **not** expand this into a novel.
 
-**Still open before pack:** CP-04 W4 browser continuity e2e; CP-10 `10-handover/` (blocked until CP-04 PASS + pack).
+**Still open before pack:** CP-10 `10-handover/` (E: backup + evidence pack).
 
 ---
 

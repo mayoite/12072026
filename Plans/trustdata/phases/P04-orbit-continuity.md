@@ -1,5 +1,14 @@
 # P04 — Orbit Continuity (W4)
 
+## Phase status (complete)
+
+| Item | Status | Evidence |
+|------|--------|----------|
+| W4 / CP-04 | **PASS** 2026-07-09 | `results/planner/world-standard-wave/04-orbit-continuity/` |
+| Unit | pose + orbit + adapter green | `pose-continuity-*`, `orbit-default-*`, `adapter-regression-*` |
+| Browser | green | Playwright 1 passed; `browser-run.json`; shots 01–03 |
+| Three-layer | audited | `THREE-LAYER-AUDIT.md` |
+
 > **For agentic workers:** REQUIRED: `/using-superpowers` + skills as fit (`test-driven-development`, `verification-before-completion`, `systematic-debugging`, `chrome-devtools` for live checks). Do **not** implement until owner unlocks after workflow briefing. Checkboxes track execution progress.
 >
 > **Gate W4:** 2D↔3D toggle preserves **entity pose**; **3D orbit** is **enabled by default**. Proof: unit green now · Playwright + console clean under evidence dir (this phase lays the Playwright contract; full journey may share `02-browser-open3d-journey` once P07 lands).

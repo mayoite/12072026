@@ -1,31 +1,31 @@
-# P04 / W4 — Orbit + pose continuity (serial land 2026-07-09)
+# P04 / W4 — Orbit + pose continuity (2026-07-09)
 
 ## Goal
-Orbit ON by default; 2D↔3D uses **document** as pose authority.
+Orbit ON by default; 2D↔3D uses **document** as pose authority; browser proves place → 3D orbit attr → 2D same count.
 
-## Landed this session
+## Status: **PASS** (unit + browser)
 
-| Item | Status | Evidence |
-|------|--------|----------|
-| Orbit defaults (prior) | Unit green | prior vitest logs |
-| **Document ↔ scene pose continuity** | **Unit green** | `poseContinuityW4.test.ts` + `pose-continuity-vitest-raw.log` |
-| Document rotation = degrees; scene nodes = radians | Asserted in continuity unit | matches `buildOpen3dSceneNodes` |
-| **Guest /planner 500 (node:fs / NodeIO in client)** | **Fixed** | webpack client fallbacks; GLB validate server-only dynamic import |
-| Browser e2e place → 3D orbit → 2D count | **Not green yet** | `open3d-w4-orbit-continuity.spec.ts` + `playwright-raw.log` — place click/count flaky (inventory/status intercept) |
+| Layer | Status | Evidence |
+|-------|--------|----------|
+| 1. Defaults ON | PASS | `orbitDefaults.ts`, `orbit-default-vitest-raw.log` 6/6 |
+| 2. Workspace explicit | PASS | `getOpen3dViewerControlProps()` in OOPlannerWorkspace · THREE-LAYER-AUDIT |
+| 3. Proof | PASS | unit pose + Playwright browser-green |
 
-## Honest residual (next session, same phase if continuing)
+| Item | Result |
+|------|--------|
+| Pose continuity unit | poseContinuityW4 + documentViewContinuity (degrees→radians) |
+| Orbit default unit | 6/6 |
+| Adapter regression | buildOpen3dSceneNodes + createSceneObject + threeViewerInner 27/27 |
+| Browser | `open3d-w4-orbit-continuity.spec.ts` 1 passed — Place 4 seats → 3D `data-orbit-enabled=true` → 2D count 4 |
+| Screenshots | 01-2d-after-place · 02-3d-orbit-on · 03-2d-restored |
 
-- Stabilize W4 Playwright: place path + `data-orbit-enabled` + 2D restore (use proven systems-v0 place helper patterns until green).
-- Optional: left-drag orbit interaction (not required for this land).
+## Place path honesty
+Catalog click was flaky. Browser residual uses **configurator Place 4 seats** (systems-v0 proven). Still proves furniture present + orbit + count continuity.
 
-## Commands (unit)
-
+## Commands
 ```
 cd site
-pnpm exec vitest run tests/unit/features/planner/open3d/poseContinuityW4.test.ts
-# 1 passed
+pnpm exec vitest run tests/unit/features/planner/open3d/poseContinuityW4.test.ts tests/unit/features/planner/open3d/documentViewContinuity.test.ts tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx
+$env:PLAYWRIGHT_BASE_URL="http://localhost:3000"
+npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-w4-orbit-continuity.spec.ts
 ```
-
-## Stop reason
-
-Right stop: **real unit continuity + guest loadability fix** shipped. Browser residual not forced green with weak e2e thrash.
