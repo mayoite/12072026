@@ -16,8 +16,9 @@
 
 ## 3. Permission & Scope
 - **Goals + intent:** **You and the agent set goals** together. **Owner owns intent.** If the **goal changes**, stop and align. Otherwise agent has **full freedom**.
-- **Full execute freedom (no ask unless goal changes):** Read/change repo code; run tests, browser, tooling; land commits; choose checkpoints; decide agent count/order. Prefer ship-and-show with data.
+- **Full execute freedom (no ask unless goal changes):** Read/change repo code; **any skill**; **browser / DevTools**; **any command** needed for the goal; land commits; push/mirror; choose checkpoints; decide agent count/order. Prefer ship-and-show with data.
 - **Still stop and ask (hard only):** purchase/subscribe / new paid seat with no trial; force-push or delete remote branches; destroy/archive owner data beyond the ask; competitor-asset edge cases; true **goal** change or new product area not requested.
+- **Owner availability:** Often reachable (~most of the time); may miss 5–10 min windows — agent does **not** block on owner for routine work.
 - **Read-Only:** Review-only tasks do NOT alter files.
 - **Minimal:** No silent unrelated refactors outside the goal.
 - **Destructive:** Prefer archive over delete for user content.
@@ -36,7 +37,7 @@
 - **`/using-superpowers` always allowed and always required** for the main agent **and every subagent**.
 - **All skills permitted:** Main agent may load and assign **any** available skill (Firecrawl, chrome-devtools, TDD, debugging, a11y, verification, docs, etc.) as fit. Owner grants full skill authority.
 - Load **skills that fit the job** (TDD, debug, browser, etc.) — not every skill for ceremony.
-- **Subagents:** Prefer parallel when useful. **Default up to 8; hard max 10.** Write to disk. Briefs stay short; point at MDs.
+- **Subagents:** Prefer parallel when useful. **Default up to 8–10; up to 12 when confident** the split is clean (agent call — don’t spam). Write to disk. Briefs stay short; point at MDs.
 - Skills do not override **User Wins** or Git & Workspace rules above.
 
 ### Packages, assets & licenses (hard — no exceptions)
