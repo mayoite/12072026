@@ -2,7 +2,8 @@
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` + skills as fit. Use **subagent-driven-development** or **executing-plans** only after **implementation unlock** (see Unlock gate). Checkboxes (`- [ ]`) track progress.  
 > **Folder rule:** All plan files for this program live under `Plans/trustdata/` only (phases · checkpoints · checklists · reviews).  
-> **Expert revision:** 2026-07-09 — applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md). **No product code** in this revision.
+> **Expert revision:** 2026-07-09 — applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md).  
+> **Structure decision (partner):** **HYBRID** — KEEP program topology (P01–P10 · CP-00–CP-10 · folder lock · Approach A); EXPAND this INDEX + [00-START.md](./00-START.md) with week-1 kill order only; THIN phase density later (other agents). Authority: [reviews/STRUCTURE-ADVICE.md](./reviews/STRUCTURE-ADVICE.md) · [reviews/STRUCTURE-ADVICE-2.md](./reviews/STRUCTURE-ADVICE-2.md) · [reviews/STRUCTURE-REWRITE-NOTE.md](./reviews/STRUCTURE-REWRITE-NOTE.md). **No product code** in this revision.
 
 ---
 
@@ -100,6 +101,60 @@ CP-00 (00-START unlock)
 
 ---
 
+## Week-1 kill order (after implementation unlock)
+
+**What this is:** Time-ordered **operator priority** for scarce agent slots (default **8**, hard max **10**).  
+**What this is not:** New phase numbers · ban on post-CP-02 parallelism · second program plan · change to CHECKPOINTS pass criteria.
+
+**Naming rule:** Lead with **W-gate + evidence folder**, then `(P0X / CP-0X)`. Never say “do P07 before P03” without also saying **W3 browser under `03-select-delete/` is still a hard gate**.
+
+**Structure note (HYBRID):** Topology stays one file per CP. Kill order **prioritizes** streams; it does **not** split W3 unit vs browser into two CPs, and does **not** split P07 W1 vs W2 into two journey CPs.
+
+### Serial spine (do these first)
+
+| Order | Kill | Why first | CP / phase | Evidence folder |
+|------:|------|-----------|------------|-----------------|
+| 0 | Unlock + mode recorded | Silent ≠ go | CP-00 · [00-START.md](./00-START.md) | `00-start/` |
+| 1 | Product truth inventory | Stop myth-driven edits | CP-01 · P01 | `00-product-truth/` |
+| 2 | Engine lock | Stop thrash / hybrid engines | CP-02 · P02 | `01-engine-lock/` |
+| **3** | **Select + delete + undo (unit then browser)** | Buyer cannot edit without W3; **unit alone = FAIL** | CP-03 · P03 · **W3** | **`03-select-delete/`** |
+| **4** | **Draw + place browser pack** | Demo path; one serial journey pack | CP-07 · P07 · **W1–W2 browser** | **`02-browser-open3d-journey/`** |
+| **5** | **Save honesty + reload** | “Return next day” north star | CP-06 · P06 · **W5–W6** | `06-save-honesty/` (+ `save-reload/`) |
+
+**Spine one-liner:**
+
+```
+CP-00 → CP-01 → CP-02
+  → W3 unit+browser (03-select-delete/)
+  → W1–W2 journey (02-browser-open3d-journey/)
+  → W5–W6 (06-save-honesty/)
+```
+
+### Parallel fill (after CP-02; lower priority if slots scarce)
+
+While the spine works **3 → 4 → 5**, side agents may run the fill list **only if** they do not thrash the same canvas/keyboard contracts without coordination.
+
+| Order | Kill | Gate | CP / phase | Evidence folder |
+|------:|------|------|------------|-----------------|
+| 6 | Orbit + 2D↔3D | **W4** | CP-04 · P04 | `04-orbit-continuity/` |
+| 7 | Block2D symbols | **W2** quality half | CP-05 · P05 | `05-symbols-svg/` |
+| 8 | Mesh bar toe/carcass/door | **W7** | CP-08 · P08 | `08-mesh-quality/` (sole primary `08-*`) |
+| 9 | Shortcut/label truth | **W8** (blocking 2A only) | CP-09 · P09 | `09-shortcuts-chrome/` |
+| 10 | Pack + E: backup | Close only when data supports | CP-10 · P10 | `10-handover/` |
+
+**Priority rule:** If agent slots are scarce, spawn **kill-order 3–5** before **7–9**. Do not burn default-8 slots on mesh/chrome while W3 browser and journey lag.
+
+### Full claim rules (unchanged — CHECKPOINTS wins)
+
+- **No self-waive W3 browser** — CP-03 requires unit **+** browser under `03-select-delete/`; unit-green alone is **FAIL**.  
+- **Journey honesty** — full W1–W2 product story for CP-07 still needs **CP-03 + CP-05 not red** unless owner **WAIVE** (already in [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md)).  
+- **Parallelism allowed after CP-02** for W streams — kill order only ranks urgency; stop-if-fail still binds.  
+- **Folder map** — [RESULTS-MAP.md](./RESULTS-MAP.md) remains authority; do not invent `02-engine-lock/`, `07-…` journey, or `08-shortcuts-chrome/`.
+
+Condensed copy for unlock agents: [00-START.md](./00-START.md) § Week-1 kill order.
+
+---
+
 ## W1–W8 (one-screen)
 
 Definitions from `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md`. P0 spine ≠ world bar.
@@ -119,18 +174,20 @@ Definitions from `docs/superpowers/specs/2026-07-09-world-standard-planner-desig
 
 ## Superpowers streams (Approach A; after CP-02)
 
-Default **8** concurrent; hard max **10**. Full contract + required prompt block: [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md).
+Default **8** concurrent; hard max **10**. Full contract + required prompt block: [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md).  
+**Spawn in week-1 kill-order priority when slots are scarce** (serial spine 3–5 before parallel fill 6–9). Streams may run in parallel after CP-02; they are **not** equal urgency.
 
-| Stream | Owns | Evidence folder |
-|--------|------|-----------------|
-| 1 | Select + delete + undo (W3) | `03-select-delete/` |
-| 2 | Shortcut/label truth (W8) | `09-shortcuts-chrome/` |
-| 3 | Orbit + 2D↔3D (W4) | `04-orbit-continuity/` |
-| 4 | Block2D + mesh bar (W2 symbols / W7) | `05-symbols-svg/` + `08-mesh-quality/` |
-| 5 | Autosave flush + honest save (W5–W6) | `06-save-honesty/` |
-| 6 | Playwright journey (W1–W5 pack) | `02-browser-open3d-journey/` |
-| 7 | 2A **blockers only** | notes under `09-shortcuts-chrome/` or dedicated NOTES |
-| 8 | Docs / checklist / handover | `10-handover/` when closing |
+| Stream | Owns | Evidence folder | Kill priority |
+|--------|------|-----------------|---------------|
+| 1 | Select + delete + undo (W3) | `03-select-delete/` | **Spine #3** |
+| 6 | Playwright journey (W1–W2 pack) | `02-browser-open3d-journey/` | **Spine #4** |
+| 5 | Autosave flush + honest save (W5–W6) | `06-save-honesty/` | **Spine #5** |
+| 3 | Orbit + 2D↔3D (W4) | `04-orbit-continuity/` | Fill #6 |
+| 4a | Block2D symbols (W2 symbols) | `05-symbols-svg/` | Fill #7 |
+| 4b | Mesh bar (W7) | `08-mesh-quality/` | Fill #8 |
+| 2 | Shortcut/label truth (W8) | `09-shortcuts-chrome/` | Fill #9 |
+| 7 | 2A **blockers only** | notes under `09-shortcuts-chrome/` or dedicated NOTES | Only if blocks a W gate |
+| 8 | Docs / checklist / handover | `10-handover/` when closing | Close #10 |
 
 Main agent coordinates; prefers write-to-disk; does not idle waiting on chat.
 
@@ -175,9 +232,10 @@ Main agent coordinates; prefers write-to-disk; does not idle waiting on chat.
 
 1. This INDEX + [00-START.md](./00-START.md)  
 2. Unlock mode: if locked → stop product work; if plan-only → plans/evidence only; if implementation unlock → continue  
-3. [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) + [RESULTS-MAP.md](./RESULTS-MAP.md)  
-4. [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md)  
-5. Owning phase file + its `reviews/P0X-suggestions.md`  
-6. Design spec W gates (link above)
+3. **Week-1 kill order** (this file) — serial spine vs parallel fill before spawning streams  
+4. [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) + [RESULTS-MAP.md](./RESULTS-MAP.md)  
+5. [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md)  
+6. Owning phase file + its `reviews/P0X-suggestions.md`  
+7. Design spec W gates (link above)
 
 **Do not implement product code until owner records implementation unlock in 00-START / chat.**
