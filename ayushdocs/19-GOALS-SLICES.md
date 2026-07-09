@@ -26,10 +26,10 @@ Not: full multi-client factory, photoreal, enterprise parity.
 | 0 | CP-00 unlock A | Recorded | ✅ |
 | 1 | Product truth note | `00-product-truth/` inventory if gaps | P01 |
 | 2 | Engine lock evidence | `01-engine-lock/` PACKAGE-PIN + notes | P02 |
-| 3 | **W3 select/delete/undo** | Unit ✅ (30/30) · **browser still open** under `03-select-delete/` | P03 |
+| 3 | **W3 select/delete/undo** | Unit ? + browser ? | P03 | P03 |
 | 4 | **W1–W2 journey** | Serial Playwright pack `02-browser-open3d-journey/` | P07 |
 | 5 | **W5–W6 save honesty** | Flush + hard reload + honest labels | P06 |
-| 6 | Parallel fill | Orbit · symbols · mesh · shortcuts as capacity allows | P04–P05–P08–P09 |
+| 6 | Parallel fill | Orbit ? � shortcuts ? � symbols/mesh open | P04�P09 | P04–P05–P08–P09 |
 | 7 | Systems v0 | One family size×L/linear + modules → place many | post-spine |
 
 Agent ticks slices in evidence + commits; does **not** expand this into a novel.
