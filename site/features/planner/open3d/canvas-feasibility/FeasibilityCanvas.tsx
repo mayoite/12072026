@@ -35,6 +35,7 @@ import {
 import {
   getRoomPolygon,
   pickFurnitureAtPoint,
+  pickOpeningAtPoint,
   pickWallAtPoint,
   pickWallWithPosition,
   pointInPolygon,
@@ -735,7 +736,7 @@ function FeasibilityCanvas(
     if (event.button === 0 && activeTool === "select" && workspaceCanvas) {
       const raw = screenToProject(canvasPoint(event), transform);
       const pickToleranceMm = Math.max(80, 180 / transform.scale);
-      // Furniture first (top-most), then walls, then rooms — product select bar.
+      // Furniture → openings → walls → rooms (product select bar).
       const furnitureId = pickFurnitureAtPoint(
         raw,
         activeFloor.furniture,
@@ -743,6 +744,19 @@ function FeasibilityCanvas(
       );
       if (furnitureId) {
         workspaceCanvas.setSelection({ type: "furniture", ids: [furnitureId] });
+        setDrawingOutcome("none");
+        releasePointer();
+        return;
+      }
+      const opening = pickOpeningAtPoint(
+        raw,
+        activeFloor.doors,
+        activeFloor.windows,
+        activeFloor.walls,
+        Math.max(pickToleranceMm, 120 / transform.scale),
+      );
+      if (opening) {
+        workspaceCanvas.setSelection({ type: opening.type, ids: [opening.id] });
         setDrawingOutcome("none");
         releasePointer();
         return;

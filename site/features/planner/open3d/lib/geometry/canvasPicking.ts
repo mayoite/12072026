@@ -1,7 +1,9 @@
 import type {
+  Open3dDoor,
   Open3dFurnitureItem,
   Open3dPoint,
   Open3dWall,
+  Open3dWindow,
 } from "../../model/types";
 
 function distancePointToSegment(point: Open3dPoint, start: Open3dPoint, end: Open3dPoint): number {
@@ -72,6 +74,55 @@ export function getRoomPolygon(
     .map((wallId) => wallById.get(wallId)?.start)
     .filter((point): point is Open3dPoint => point !== undefined);
   return polygon.length >= 3 ? polygon : [];
+}
+
+export type OpeningPickResult = {
+  type: "door" | "window";
+  id: string;
+};
+
+/**
+ * Pick door/window by proximity to its position on the parent wall.
+ * Prefer nearest within tolerance (millimetres).
+ */
+export function pickOpeningAtPoint(
+  point: Open3dPoint,
+  doors: readonly Open3dDoor[],
+  windows: readonly Open3dWindow[],
+  walls: readonly Open3dWall[],
+  toleranceMm: number,
+): OpeningPickResult | null {
+  const wallById = new Map(walls.map((wall) => [wall.id, wall]));
+  let best: { pick: OpeningPickResult; distance: number } | null = null;
+
+  const consider = (
+    type: "door" | "window",
+    id: string,
+    wallId: string,
+    position: number,
+  ) => {
+    const wall = wallById.get(wallId);
+    if (!wall) return;
+    const at = {
+      x: wall.start.x + (wall.end.x - wall.start.x) * position,
+      y: wall.start.y + (wall.end.y - wall.start.y) * position,
+    };
+    const distance = Math.hypot(point.x - at.x, point.y - at.y);
+    if (distance > toleranceMm) return;
+    if (!best || distance < best.distance) {
+      best = { pick: { type, id }, distance };
+    }
+  };
+
+  // Windows often drawn after doors — still pick nearest by distance.
+  for (const door of doors) {
+    consider("door", door.id, door.wallId, door.position);
+  }
+  for (const win of windows) {
+    consider("window", win.id, win.wallId, win.position);
+  }
+
+  return best?.pick ?? null;
 }
 
 /**

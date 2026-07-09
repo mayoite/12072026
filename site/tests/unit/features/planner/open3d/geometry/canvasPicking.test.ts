@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   getRoomPolygon,
   pickFurnitureAtPoint,
+  pickOpeningAtPoint,
   pickWallAtPoint,
   pickWallWithPosition,
   pointInPolygon,
@@ -226,5 +227,53 @@ describe("pickFurnitureAtPoint", () => {
     const bottom = furniture("bottom", { x: 0, y: 0 });
     const top = furniture("top", { x: 0, y: 0 });
     expect(pickFurnitureAtPoint({ x: 0, y: 0 }, [bottom, top])).toBe("top");
+  });
+});
+
+describe("pickOpeningAtPoint", () => {
+  const wall: Open3dWall = {
+    id: "w1",
+    start: { x: 0, y: 0 },
+    end: { x: 4000, y: 0 },
+    thickness: 100,
+    height: 2700,
+  };
+
+  it("picks a door near its position on the wall", () => {
+    const doors = [
+      {
+        id: "d1",
+        wallId: "w1",
+        position: 0.5,
+        width: 900,
+        height: 2100,
+      },
+    ];
+    // midpoint of wall = (2000, 0)
+    expect(
+      pickOpeningAtPoint({ x: 2000, y: 20 }, doors, [], [wall], 80),
+    ).toEqual({ type: "door", id: "d1" });
+  });
+
+  it("picks nearest opening when door and window compete", () => {
+    const doors = [
+      { id: "d1", wallId: "w1", position: 0.25, width: 900, height: 2100 },
+    ];
+    const windows = [
+      { id: "win1", wallId: "w1", position: 0.75, width: 1200, height: 1200 },
+    ];
+    // near 0.75 → (3000, 0)
+    expect(
+      pickOpeningAtPoint({ x: 3000, y: 10 }, doors, windows, [wall], 100),
+    ).toEqual({ type: "window", id: "win1" });
+  });
+
+  it("returns null when far from all openings", () => {
+    const doors = [
+      { id: "d1", wallId: "w1", position: 0.5, width: 900, height: 2100 },
+    ];
+    expect(
+      pickOpeningAtPoint({ x: 0, y: 2000 }, doors, [], [wall], 50),
+    ).toBeNull();
   });
 });
