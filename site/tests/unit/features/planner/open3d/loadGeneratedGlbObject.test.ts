@@ -111,7 +111,7 @@ describe("buildOpen3dSceneNodes generatedGlbUrl pass-through", () => {
 });
 
 describe("resolveGeneratedGlbFetchUrl", () => {
-  it("pins relative catalog-assets/generated/ to origin root (not page-relative)", () => {
+  it("1. relative catalog-assets/generated → absolute with origin", () => {
     expect(
       resolveGeneratedGlbFetchUrl("catalog-assets/generated/cab.glb", {
         origin: TEST_ORIGIN,
@@ -119,7 +119,7 @@ describe("resolveGeneratedGlbFetchUrl", () => {
     ).toBe(`${TEST_ORIGIN}/catalog-assets/generated/cab.glb`);
   });
 
-  it("resolves root-relative /catalog-assets/generated/ via origin", () => {
+  it("2. leading slash path → absolute with origin", () => {
     expect(
       resolveGeneratedGlbFetchUrl("/catalog-assets/generated/mod/x.glb", {
         origin: TEST_ORIGIN,
@@ -127,7 +127,7 @@ describe("resolveGeneratedGlbFetchUrl", () => {
     ).toBe(`${TEST_ORIGIN}/catalog-assets/generated/mod/x.glb`);
   });
 
-  it("leaves absolute https URLs unchanged", () => {
+  it("3a. https absolute URL unchanged", () => {
     const abs =
       "https://cdn.example/storage/catalog-assets/generated/cab-v0.glb";
     expect(resolveGeneratedGlbFetchUrl(abs, { origin: TEST_ORIGIN })).toBe(
@@ -135,7 +135,15 @@ describe("resolveGeneratedGlbFetchUrl", () => {
     );
   });
 
-  it("leaves blob: URLs unchanged", () => {
+  it("3b. http absolute URL unchanged", () => {
+    const abs =
+      "http://cdn.example/storage/catalog-assets/generated/cab-v0.glb";
+    expect(resolveGeneratedGlbFetchUrl(abs, { origin: TEST_ORIGIN })).toBe(
+      abs,
+    );
+  });
+
+  it("3c. blob: URL unchanged", () => {
     const blob = "blob:http://localhost/uuid-here";
     expect(resolveGeneratedGlbFetchUrl(blob, { origin: TEST_ORIGIN })).toBe(
       blob,
@@ -174,7 +182,7 @@ describe("resolveGeneratedGlbFetchUrl", () => {
 });
 
 describe("loadGeneratedGlbObject (mock loader)", () => {
-  it("returns null when URL fails policy (designer static never loads)", async () => {
+  it("4. shouldLoadGlb false (designer static) → no load / null", async () => {
     const loader = vi.fn<GltfUrlLoader>();
     const result = await loadGeneratedGlbObject(
       THREE,
@@ -183,6 +191,18 @@ describe("loadGeneratedGlbObject (mock loader)", () => {
         // Policy would reject; scene builder also strips, but loader must be safe.
         generatedGlbUrl: "https://cdn.example.com/models/sofa.glb",
       }),
+      false,
+      loader,
+    );
+    expect(result).toBeNull();
+    expect(loader).not.toHaveBeenCalled();
+  });
+
+  it("4b. shouldLoadGlb false (empty URL) → no load / null", async () => {
+    const loader = vi.fn<GltfUrlLoader>();
+    const result = await loadGeneratedGlbObject(
+      THREE,
+      furnitureNode({ id: "empty-url", generatedGlbUrl: "   " }),
       false,
       loader,
     );
@@ -202,7 +222,7 @@ describe("loadGeneratedGlbObject (mock loader)", () => {
     expect(loader).not.toHaveBeenCalled();
   });
 
-  it("loads policy-allowed relative URL via absolute fetch URL for GLTFLoader", async () => {
+  it("5. mock loader: fetch URL is absolute when origin provided", async () => {
     const scene = new THREE.Group();
     scene.add(
       new THREE.Mesh(
@@ -212,10 +232,11 @@ describe("loadGeneratedGlbObject (mock loader)", () => {
     );
     const documentUrl = "catalog-assets/generated/ok.glb";
     const expectedFetch = `${TEST_ORIGIN}/catalog-assets/generated/ok.glb`;
-    const loader: GltfUrlLoader = async (url) => {
+    const loader = vi.fn<GltfUrlLoader>(async (url) => {
       expect(url).toBe(expectedFetch);
+      expect(url.startsWith("https://")).toBe(true);
       return { scene };
-    };
+    });
 
     const node = furnitureNode({
       id: "ok-entity",
@@ -229,6 +250,8 @@ describe("loadGeneratedGlbObject (mock loader)", () => {
     });
     expect(object).not.toBeNull();
     if (!object) throw new Error("expected glb object");
+    expect(loader).toHaveBeenCalledTimes(1);
+    expect(loader).toHaveBeenCalledWith(expectedFetch);
     expect(object.userData.entityId).toBe("ok-entity");
     expect(object.userData.meshSource).toBe("generated-glb");
     expect(object.userData.generatedGlbUrl).toBe(documentUrl);
@@ -237,6 +260,24 @@ describe("loadGeneratedGlbObject (mock loader)", () => {
     expect(object.position.y).toBe(0);
     expect(object.position.z).toBeCloseTo(1);
     expect(object.children.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("5b. mock loader: leading-slash document path becomes absolute fetch URL", async () => {
+    const scene = new THREE.Group();
+    const documentUrl = "/catalog-assets/generated/slash.glb";
+    const expectedFetch = `${TEST_ORIGIN}/catalog-assets/generated/slash.glb`;
+    const loader = vi.fn<GltfUrlLoader>(async () => ({ scene }));
+    const object = await loadGeneratedGlbObject(
+      THREE,
+      furnitureNode({ id: "slash", generatedGlbUrl: documentUrl }),
+      false,
+      loader,
+      { origin: TEST_ORIGIN },
+    );
+    expect(object).not.toBeNull();
+    expect(loader).toHaveBeenCalledWith(expectedFetch);
+    expect(object?.userData.generatedGlbUrl).toBe(documentUrl);
+    expect(object?.userData.generatedGlbFetchUrl).toBe(expectedFetch);
   });
 
   it("passes absolute catalog-assets CDN URL through unchanged to loader", async () => {
@@ -257,7 +298,7 @@ describe("loadGeneratedGlbObject (mock loader)", () => {
     expect(object?.userData.generatedGlbFetchUrl).toBe(abs);
   });
 
-  it("returns null on loader failure (caller keeps procedural mesh)", async () => {
+  it("6a. loader failure returns null (caller keeps procedural mesh)", async () => {
     const loader: GltfUrlLoader = async () => {
       throw new Error("network fail");
     };
@@ -291,5 +332,24 @@ describe("loadGeneratedGlbObject (mock loader)", () => {
     );
     expect(procedural.userData.meshSource).toBe("procedural");
     expect(procedural.userData.entityId).toBe("fail");
+  });
+
+  it("6b. cancel/abort returns null", async () => {
+    const loader: GltfUrlLoader = async () => {
+      const err = new Error("The operation was aborted");
+      err.name = "AbortError";
+      throw err;
+    };
+    const result = await loadGeneratedGlbObject(
+      THREE,
+      furnitureNode({
+        id: "cancel",
+        generatedGlbUrl: "catalog-assets/generated/cancel.glb",
+      }),
+      false,
+      loader,
+      { origin: TEST_ORIGIN },
+    );
+    expect(result).toBeNull();
   });
 });

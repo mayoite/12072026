@@ -214,15 +214,24 @@ describe("stampFurnitureFromModularOptions (path-only stamp)", () => {
   });
 });
 
-describe("placeModularWithGeneratedGlbPlan (write + stamp)", () => {
-  it("places, exports G5, writes under publicRoot, stamps relativePath", async () => {
+/**
+ * write+stamp matrix for placeModularWithGeneratedGlbPlan (injectable publicRoot).
+ *
+ * 1. writeToPublic true  → written, file on disk, stamped generatedGlbUrl
+ * 2. writeToPublic false → no file, path-only stamp (legacy memory contract)
+ * 3. write failure       → stamped false, no generatedGlbUrl
+ * 4. non-modular catalog → throws
+ * 5. procedural place    → placeCatalogItemInProject has no generatedGlbUrl
+ */
+describe("placeModularWithGeneratedGlbPlan (write + stamp matrix)", () => {
+  it("1 writeToPublic true: written true, file exists, stamped generatedGlbUrl", async () => {
     const position = { x: 120, y: 340 };
     const publicRoot = tempPublicRoot();
     const result = await placeModularWithGeneratedGlbPlan(
       emptyProject(),
       modularCatalogItem(),
       position,
-      { placedFrom: "api", publicRoot },
+      { placedFrom: "api", publicRoot, writeToPublic: true },
     );
 
     expect(result.stamped).toBe(true);
@@ -233,8 +242,16 @@ describe("placeModularWithGeneratedGlbPlan (write + stamp)", () => {
     expect(result.publicUrlPath).toBe(`/${defaultCabinetPath}`);
     expect(result.writtenAbsolutePath).toBeTruthy();
     expect(existsSync(result.writtenAbsolutePath!)).toBe(true);
+    // File lives under injectable publicRoot (tmpdir), not real site/public.
+    expect(result.writtenAbsolutePath!.startsWith(publicRoot)).toBe(true);
+    const expectedAbs = path.join(publicRoot, ...defaultCabinetPath.split("/"));
+    expect(path.normalize(result.writtenAbsolutePath!)).toBe(
+      path.normalize(expectedAbs),
+    );
     const bytes = readFileSync(result.writtenAbsolutePath!);
     expect(bytes.byteLength).toBeGreaterThan(100);
+    // glTF/GLB magic
+    expect(bytes.subarray(0, 4).toString("ascii")).toBe("glTF");
 
     const furniture = result.project.floors[0]?.furniture.find(
       (f) => f.id === result.furnitureId,
@@ -250,11 +267,93 @@ describe("placeModularWithGeneratedGlbPlan (write + stamp)", () => {
       material: "white",
     });
     expect(furniture?.generatedGlbUrl).toBe(result.relativePath);
+    expect(furniture?.generatedGlbUrl).toBe(defaultCabinetPath);
     // Return shape has no buffer — path only, not remote-uploaded.
     expect(Object.prototype.hasOwnProperty.call(result, "buffer")).toBe(false);
   }, 30_000);
 
-  it("honest default: plain placeCatalogItemInProject leaves generatedGlbUrl unset", () => {
+  it("2 writeToPublic false: no file under publicRoot; stamps path-only (legacy memory)", async () => {
+    const publicRoot = tempPublicRoot();
+    const result = await placeModularWithGeneratedGlbPlan(
+      emptyProject(),
+      modularCatalogItem(),
+      { x: 0, y: 0 },
+      {
+        writeToPublic: false,
+        publicRoot,
+        placedFrom: "api",
+      },
+    );
+
+    // Contract: G5 export + stamp only; skip disk write even if publicRoot given.
+    expect(result.stamped).toBe(true);
+    expect(result.written).toBe(false);
+    expect(result.writtenAbsolutePath).toBeNull();
+    expect(result.publicUrlPath).toBeNull();
+    expect(isSystemGeneratedGlbUrl(result.relativePath)).toBe(true);
+    expect(result.relativePath).toBe(defaultCabinetPath);
+
+    // No GLB file under injectable publicRoot.
+    const wouldBeAbs = path.join(publicRoot, ...defaultCabinetPath.split("/"));
+    expect(existsSync(wouldBeAbs)).toBe(false);
+    expect(existsSync(path.join(publicRoot, "catalog-assets"))).toBe(false);
+
+    const furniture = result.project.floors[0]?.furniture.find(
+      (f) => f.id === result.furnitureId,
+    );
+    expect(furniture?.geometryMode).toBe("modular-cabinet-v0");
+    // Path-only stamp: generatedGlbUrl set without a written public file.
+    expect(furniture?.generatedGlbUrl).toBe(result.relativePath);
+    expect(furniture?.generatedGlbUrl).toBe(defaultCabinetPath);
+  }, 30_000);
+
+  it("3 write failure: stamped false, no generatedGlbUrl, no write metadata", async () => {
+    // publicRoot that cannot be created as a directory write target: use a file path.
+    const publicRoot = tempPublicRoot();
+    const blocked = path.join(publicRoot, "not-a-dir");
+    // Create a file so mkdir under .../not-a-dir/catalog-assets fails when parent is a file.
+    const { writeFileSync } = await import("node:fs");
+    writeFileSync(blocked, "block", "utf8");
+
+    const result = await placeModularWithGeneratedGlbPlan(
+      emptyProject(),
+      modularCatalogItem(),
+      { x: 5, y: 5 },
+      { publicRoot: blocked, writeToPublic: true, placedFrom: "api" },
+    );
+
+    // Place succeeded; G5 may have succeeded; disk write failed → leave procedural.
+    expect(result.written).toBe(false);
+    expect(result.stamped).toBe(false);
+    expect(result.writtenAbsolutePath).toBeNull();
+    expect(result.publicUrlPath).toBeNull();
+    expect(isSystemGeneratedGlbUrl(result.relativePath)).toBe(true);
+
+    const furniture = result.project.floors[0]?.furniture.find(
+      (f) => f.id === result.furnitureId,
+    );
+    expect(furniture).toBeDefined();
+    expect(furniture?.geometryMode).toBe("modular-cabinet-v0");
+    expect(furniture?.modularOptions).toBeDefined();
+    // No stamp → G8 must not chase a missing file.
+    expect(furniture?.generatedGlbUrl).toBeUndefined();
+    expect(
+      Object.prototype.hasOwnProperty.call(furniture ?? {}, "generatedGlbUrl"),
+    ).toBe(false);
+  }, 30_000);
+
+  it("4 non-modular catalog throws", async () => {
+    await expect(
+      placeModularWithGeneratedGlbPlan(
+        emptyProject(),
+        boxCatalogItem(),
+        { x: 0, y: 0 },
+        { publicRoot: tempPublicRoot(), writeToPublic: true },
+      ),
+    ).rejects.toThrow(/modular-cabinet-v0/i);
+  }, 15_000);
+
+  it("5 procedural placeCatalogItemInProject still has no generatedGlbUrl", () => {
     const placement = placeCatalogItemInProject(
       emptyProject(),
       modularCatalogItem(),
@@ -262,37 +361,15 @@ describe("placeModularWithGeneratedGlbPlan (write + stamp)", () => {
       { placedFrom: "click", position: { x: 1, y: 2 } },
     );
     const furniture = placement.result.project.floors[0]?.furniture[0];
+    expect(furniture).toBeDefined();
     expect(furniture?.geometryMode).toBe("modular-cabinet-v0");
+    expect(furniture?.modularOptions).toBeDefined();
+    // Product UI / default place stays procedural — no write+stamp side effects.
     expect(furniture?.generatedGlbUrl).toBeUndefined();
+    expect(
+      Object.prototype.hasOwnProperty.call(furniture ?? {}, "generatedGlbUrl"),
+    ).toBe(false);
   });
-
-  it("writeToPublic:false stamps without disk write (legacy memory stamp)", async () => {
-    const result = await placeModularWithGeneratedGlbPlan(
-      emptyProject(),
-      modularCatalogItem(),
-      { x: 0, y: 0 },
-      { writeToPublic: false, placedFrom: "api" },
-    );
-    expect(result.stamped).toBe(true);
-    expect(result.written).toBe(false);
-    expect(result.writtenAbsolutePath).toBeNull();
-    expect(result.publicUrlPath).toBeNull();
-    const furniture = result.project.floors[0]?.furniture.find(
-      (f) => f.id === result.furnitureId,
-    );
-    expect(furniture?.generatedGlbUrl).toBe(result.relativePath);
-  }, 30_000);
-
-  it("throws for non-modular catalog items", async () => {
-    await expect(
-      placeModularWithGeneratedGlbPlan(
-        emptyProject(),
-        boxCatalogItem(),
-        { x: 0, y: 0 },
-        { publicRoot: tempPublicRoot() },
-      ),
-    ).rejects.toThrow(/modular-cabinet-v0/i);
-  }, 15_000);
 
   it("respects materialOverride for modular path write+stamp", async () => {
     const publicRoot = tempPublicRoot();
@@ -306,35 +383,12 @@ describe("placeModularWithGeneratedGlbPlan (write + stamp)", () => {
     expect(result.written).toBe(true);
     expect(result.relativePath).toContain("-oak.glb");
     expect(existsSync(result.writtenAbsolutePath!)).toBe(true);
+    expect(result.writtenAbsolutePath!.startsWith(publicRoot)).toBe(true);
     const furniture = result.project.floors[0]?.furniture.find(
       (f) => f.id === result.furnitureId,
     );
     expect(furniture?.modularOptions?.material).toBe("oak");
     expect(furniture?.generatedGlbUrl).toBe(result.relativePath);
-  }, 30_000);
-
-  it("write failure leaves furniture unstamped (procedural)", async () => {
-    // publicRoot that cannot be created as a directory write target: use a file path.
-    const publicRoot = tempPublicRoot();
-    const blocked = path.join(publicRoot, "not-a-dir");
-    // Create a file so mkdir under .../not-a-dir/catalog-assets fails when parent is a file.
-    const { writeFileSync } = await import("node:fs");
-    writeFileSync(blocked, "block", "utf8");
-
-    const result = await placeModularWithGeneratedGlbPlan(
-      emptyProject(),
-      modularCatalogItem(),
-      { x: 5, y: 5 },
-      { publicRoot: blocked, placedFrom: "api" },
-    );
-
-    expect(result.written).toBe(false);
-    expect(result.stamped).toBe(false);
-    const furniture = result.project.floors[0]?.furniture.find(
-      (f) => f.id === result.furnitureId,
-    );
-    expect(furniture?.geometryMode).toBe("modular-cabinet-v0");
-    expect(furniture?.generatedGlbUrl).toBeUndefined();
   }, 30_000);
 });
 
