@@ -2,11 +2,16 @@ import { describe, expect, it } from "vitest";
 
 import {
   getRoomPolygon,
+  pickFurnitureAtPoint,
   pickWallAtPoint,
   pickWallWithPosition,
   pointInPolygon,
 } from "@/features/planner/open3d/lib/geometry/canvasPicking";
-import type { Open3dPoint, Open3dWall } from "@/features/planner/open3d/model/types";
+import type {
+  Open3dFurnitureItem,
+  Open3dPoint,
+  Open3dWall,
+} from "@/features/planner/open3d/model/types";
 
 const WALL_DEFAULTS = {
   thickness: 100,
@@ -183,5 +188,43 @@ describe("getRoomPolygon", () => {
       { x: 10, y: 10 },
       { x: 0, y: 10 },
     ]);
+  });
+});
+
+describe("pickFurnitureAtPoint", () => {
+  function furniture(
+    id: string,
+    position: Open3dPoint,
+    width = 600,
+    depth = 600,
+    rotation = 0,
+  ): Open3dFurnitureItem {
+    return {
+      id,
+      catalogId: "cabinet-v0",
+      position,
+      rotation,
+      scale: { x: 1, y: 1, z: 1 },
+      width,
+      depth,
+      height: 720,
+    };
+  }
+
+  it("picks furniture when point is inside footprint", () => {
+    const item = furniture("f1", { x: 1000, y: 1000 });
+    expect(pickFurnitureAtPoint({ x: 1000, y: 1000 }, [item])).toBe("f1");
+    expect(pickFurnitureAtPoint({ x: 1290, y: 1000 }, [item])).toBe("f1");
+  });
+
+  it("misses when point is outside footprint", () => {
+    const item = furniture("f1", { x: 1000, y: 1000 });
+    expect(pickFurnitureAtPoint({ x: 2000, y: 2000 }, [item])).toBeNull();
+  });
+
+  it("prefers top-most (last array) when footprints overlap", () => {
+    const bottom = furniture("bottom", { x: 0, y: 0 });
+    const top = furniture("top", { x: 0, y: 0 });
+    expect(pickFurnitureAtPoint({ x: 0, y: 0 }, [bottom, top])).toBe("top");
   });
 });

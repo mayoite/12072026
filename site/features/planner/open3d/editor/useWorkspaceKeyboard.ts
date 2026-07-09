@@ -116,6 +116,7 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
       }
 
       if ((event.key === "Delete" || event.key === "Backspace") && !mod) {
+        event.preventDefault();
         handlers.deleteSelection?.();
         return;
       }

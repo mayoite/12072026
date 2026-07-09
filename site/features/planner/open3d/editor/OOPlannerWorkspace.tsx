@@ -50,6 +50,7 @@ import {
 import { useWorkspaceKeyboard } from "./useWorkspaceKeyboard";
 import { useWorkspaceCanvas } from "./useWorkspaceCanvas";
 import {
+  applySelectionDelete,
   deleteEntityFromProject,
   resolveSelectedEntity,
   updateEntityInProject,
@@ -285,6 +286,16 @@ export function OOPlannerWorkspace({
     [workspaceCanvas],
   );
 
+  /** Delete / Backspace — one history step for the whole selection. */
+  const deleteSelection = useCallback(() => {
+    const { selection } = workspaceCanvas;
+    if (selection.type === "none" || selection.ids.length === 0) return;
+    workspaceCanvas.updateProject((project) =>
+      applySelectionDelete(project, selection),
+    );
+    workspaceCanvas.setSelection({ type: "none", ids: [] });
+  }, [workspaceCanvas]);
+
   const setTool = useCallback((tool: PlannerTool) => {
     setActiveTool(tool);
     armedToolRef.current = tool;
@@ -463,6 +474,7 @@ export function OOPlannerWorkspace({
       cancel: () => {
         setPendingCatalogItemId(null);
         canvasRef.current?.cancel();
+        workspaceCanvas.setSelection({ type: "none", ids: [] });
       },
       commit: () => {
         // Enter commits; delegate to canvas for drawing states (task6)
@@ -472,7 +484,7 @@ export function OOPlannerWorkspace({
       // fit available for canvas-max / bounds restore (task6)
       fit: () => canvasRef.current?.fitToView?.(),
     }),
-    [runRedo, runUndo, setTool, toggleView],
+    [runRedo, runUndo, setTool, toggleView, workspaceCanvas],
   );
 
   useWorkspaceKeyboard({
@@ -481,9 +493,11 @@ export function OOPlannerWorkspace({
     openPalette: () => setPaletteOpen(true),
     undo: runUndo,
     redo: runRedo,
+    deleteSelection,
     cancel: () => {
       setPendingCatalogItemId(null);
       canvasRef.current?.cancel();
+      workspaceCanvas.setSelection({ type: "none", ids: [] });
     },
     commit: () => {
       // delegate to canvas commit for drawing (wall/room/dim); numeric handled in props (task6)

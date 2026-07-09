@@ -1,0 +1,11 @@
+﻿{
+  "phase": "P03-select-delete",
+  "gate": "W3",
+  "layer": "unit",
+  "status": "unit-green-browser-pending",
+  "tests": 30,
+  "passed": 30,
+  "failed": 0,
+  "head": "pending-commit",
+  "log": "results/planner/world-standard-wave/03-select-delete/unit-vitest.log"
+}

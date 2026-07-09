@@ -79,4 +79,38 @@ describe("useWorkspaceKeyboard shortcuts", () => {
     press({ key: "k", ctrlKey: true });
     expect(handlers.openPalette).not.toHaveBeenCalled();
   });
+
+  it("calls deleteSelection on Delete and Backspace and preventDefaults", () => {
+    const handlers = makeHandlers();
+    renderHook(() => useWorkspaceKeyboard(handlers));
+
+    const del = new KeyboardEvent("keydown", {
+      bubbles: true,
+      key: "Delete",
+      cancelable: true,
+    });
+    act(() => {
+      window.dispatchEvent(del);
+    });
+    expect(del.defaultPrevented).toBe(true);
+    expect(handlers.deleteSelection).toHaveBeenCalledTimes(1);
+
+    const bs = new KeyboardEvent("keydown", {
+      bubbles: true,
+      key: "Backspace",
+      cancelable: true,
+    });
+    act(() => {
+      window.dispatchEvent(bs);
+    });
+    expect(bs.defaultPrevented).toBe(true);
+    expect(handlers.deleteSelection).toHaveBeenCalledTimes(2);
+  });
+
+  it("calls cancel on Escape", () => {
+    const handlers = makeHandlers();
+    renderHook(() => useWorkspaceKeyboard(handlers));
+    press({ key: "Escape" });
+    expect(handlers.cancel).toHaveBeenCalledTimes(1);
+  });
 });

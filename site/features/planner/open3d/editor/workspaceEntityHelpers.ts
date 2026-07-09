@@ -97,3 +97,46 @@ export function deleteEntityFromProject(
   floors[floorIndex] = updatedFloor;
   return { ...project, floors };
 }
+
+/**
+ * Remove all selected entities in **one** project revision (single history step).
+ * Locked entities stay. Returns the same project reference when membership is unchanged.
+ */
+export function applySelectionDelete(
+  project: Open3dProject,
+  selection: CanvasSelection,
+): Open3dProject {
+  if (selection.type === "none" || selection.ids.length === 0) {
+    return project;
+  }
+  const collection = COLLECTION_BY_SELECTION[selection.type];
+  if (!collection) {
+    return project;
+  }
+
+  const floorIndex = project.floors.findIndex((floor) => floor.id === project.activeFloorId);
+  if (floorIndex === -1) {
+    return project;
+  }
+
+  const floor = project.floors[floorIndex];
+  const idSet = new Set(selection.ids);
+  const items = floor[collection] as Array<{ id: string; locked?: boolean }>;
+  const nextItems = items.filter((item) => {
+    if (!idSet.has(item.id)) return true;
+    if (item.locked) return true;
+    return false;
+  });
+
+  if (nextItems.length === items.length) {
+    return project;
+  }
+
+  const updatedFloor: Open3dFloor = {
+    ...floor,
+    [collection]: nextItems as (typeof floor)[typeof collection],
+  };
+  const floors = [...project.floors];
+  floors[floorIndex] = updatedFloor;
+  return { ...project, floors };
+}
