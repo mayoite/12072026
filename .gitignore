@@ -80,3 +80,6 @@ worktrees/
 # Generated modular GLBs (written by P0.2 place/export path)
 site/public/catalog-assets/generated/*.glb
 
+
+.firecrawl/
+

@@ -1,13 +1,24 @@
-# RESEARCH-MAP — Inspiration-only index (`D:\websites`)
+# RESEARCH-MAP — Inspiration-only index (`D:\websites` only)
 
 > **Rule:** Study patterns. **Do not** copy UI, assets, code, brands, or GLBs into O&O product.  
 > **Packages:** MIT / Apache / BSD / approved open licenses only after license check.  
 > **Agents:** REQUIRED `/using-superpowers`. Tag every competitive task **inspiration only**.  
 > **Boundary:** Research sets **intent and vocabulary**. It does **not** clear W1–W8. Pass/fail lives under `results/planner/world-standard-wave/` per [RESULTS-MAP.md](./RESULTS-MAP.md).
 
+## Single home (binding)
+
+| | |
+|--|--|
+| **Canonical research root** | **`D:\websites`** (see `D:\websites\README.md`) |
+| **Repo** | Index + pointers only — this file · `Plans/Research/README.md` |
+| **Not a second home** | `E:\websites` · `site/.firecrawl` · raw packs under monorepo · `E:\Goodsites` (salvage trees, not this Firecrawl wave) |
+| **Former `Plans/Research/*.md`** | Moved to `D:\websites\research\from-repo-Plans-Research\` |
+| **Optional E: backup** | Mirror copy only: `E:\OandO-research-backups\websites_LATEST` — never a second write-home |
+
 **Program:** Trust-data world-standard planner  
 **Primary synthesis date:** 2026-07-09  
 **Expert revision:** 2026-07-09 — `reviews/MAPS-suggestions.md`  
+**Consolidated single-home:** 2026-07-09  
 **Repo-side wave note:** `D:\OandO07072026\results\planner\world-standard-wave\WAVE.md`  
 **Design translation:** `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`
 
