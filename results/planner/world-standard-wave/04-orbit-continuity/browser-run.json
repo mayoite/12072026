@@ -7,7 +7,7 @@
   "furnitureAfterToggle": 4,
   "orbitEnabled": true,
   "placePath": "configurator Place 4 seats",
-  "consoleErrorCount": 0,
+  "consoleErrorCount": 2,
   "screenshots": [
     "01-2d-after-place.png",
     "02-3d-orbit-on.png",
