@@ -33,7 +33,12 @@ import { useOpen3dWorkspaceAutosave } from "../persistence/useOpen3dWorkspaceAut
 import { setActiveFloor } from "../model/operations/pureActions";
 import { createRectangularRoomProject } from "../model/project";
 import { preflightOpen3dExport } from "../shared/export/exportPreflight";
-import { downloadJSON, downloadSVG } from "../shared/export/exportUtils";
+import {
+  downloadJSON,
+  downloadSVG,
+  downloadWorkstationBoqJSON,
+} from "../shared/export/exportUtils";
+import { summarizeWorkstationBoqV0 } from "../catalog/workstationBoqV0";
 import { useOpen3dSvgCatalog } from "../catalog/useOpen3dWorkspaceCatalog";
 import { CanvasToolRail } from "./CanvasToolRail";
 import { CommandPalette } from "./CommandPalette";
@@ -421,6 +426,26 @@ export function OOPlannerWorkspace({
 
   const handleExport = useCallback(
     (format = "json") => {
+      // Systems v0 BOQ — pure qty/footprint lines (no pricing yet).
+      if (format === "boq" || format === "workstation-boq") {
+        const summary = summarizeWorkstationBoqV0(workspaceCanvas.project);
+        if (summary.totalInstances === 0) {
+          setWorkspaceMessage("No workstation seats to export (place systems v0 first).");
+          return;
+        }
+        const slug = (workspaceCanvas.project.name || "plan")
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "") || "plan";
+        const filename = `${slug}-workstation-boq-v0.json`;
+        downloadWorkstationBoqJSON(summary, filename);
+        setWorkspaceMessage(
+          `Exported BOQ: ${summary.totalSeats} seats · ${summary.lines.length} lines`,
+        );
+        return;
+      }
+
       const check = preflightOpen3dExport(workspaceCanvas.project, format);
       if (check.status !== "ready") {
         setWorkspaceMessage(
@@ -439,7 +464,7 @@ export function OOPlannerWorkspace({
         return;
       }
       setWorkspaceMessage(
-        `${format.toUpperCase()} export is coming soon — use JSON or SVG for now.`,
+        `${format.toUpperCase()} export is coming soon — use JSON, SVG, or BOQ for now.`,
       );
     },
     [workspaceCanvas.project],

@@ -159,6 +159,28 @@ export function downloadJSON(project: Open3dProject, filename?: string): void {
   downloadBlob(blob, filename ?? `${project.name || "floorplan"}.json`);
 }
 
+/**
+ * Download systems v0 workstation BOQ (identity + qty + footprint; no prices yet).
+ */
+export function downloadWorkstationBoqJSON(
+  summary: {
+    lines: readonly unknown[];
+    totalSeats: number;
+    totalInstances: number;
+  },
+  filename = "workstation-boq-v0.json",
+): void {
+  const payload = {
+    kind: "workstation-boq-v0",
+    exportedAt: new Date().toISOString(),
+    ...summary,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    type: "application/json",
+  });
+  downloadBlob(blob, filename);
+}
+
 // ── SVG Export ──
 
 /** Escape text for safe SVG embedding */

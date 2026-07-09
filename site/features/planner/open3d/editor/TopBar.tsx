@@ -280,6 +280,9 @@ export function TopBar({
                 >
                   <MenuItem id="json" className={styles.dropdownItem}>Export as JSON</MenuItem>
                   <MenuItem id="svg" className={styles.dropdownItem}>Export as SVG</MenuItem>
+                  <MenuItem id="boq" className={styles.dropdownItem}>
+                    Export workstation BOQ
+                  </MenuItem>
                   <MenuItem id="pdf" className={styles.dropdownItem}>Export as PDF</MenuItem>
                   <MenuItem id="png" className={styles.dropdownItem}>Export as PNG</MenuItem>
                 </Menu>
