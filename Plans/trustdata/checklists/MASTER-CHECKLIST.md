@@ -17,7 +17,7 @@
 
 ## How to use
 
-1. Work phases P01–P10 in kill-order priority — **one active task at a time**; parallel agents only inside that task (see CHECKPOINTS / AGENT-RULES).  
+1. Work phases in kill-order priority — **one active task** (`AGENTS.md`).  
 2. For each item: evidence path in backticks → then `- [x]`.  
 3. At P10: copy tallies into `results/planner/world-standard-wave/10-handover/MASTER-SYNC.md`.  
 4. Open blockers go to `D:\OandO07072026\Failures.md`, not silent skips.
@@ -72,7 +72,7 @@ Legacy aliases (pointer only; rehome before tick): `08-shortcuts-chrome/` → `0
 ## 2) Agent operating rules
 
 - [ ] **A.1** `/using-superpowers` (and fit skills) used on main agent **and** every subagent for non-trivial work.
-- [ ] **A.2** Concurrent subagents default ≤ **8**, hard max **10** — **only inside one owner task** (no multi-CP parallel).
+- [ ] **A.2** Agent concurrency matches `AGENTS.md` (one task; max 10 inside it).
 - [ ] **A.3** **No git worktrees** — only `D:\OandO07072026` main checkout.
 - [ ] **A.4** Trust **data** (repo, tests, browser artifacts) — not character trials of the owner; not blind belief in prior agent claims.
 - [ ] **A.5** Competitor research in prompts tagged **inspiration only**; no plagiarism instructions.

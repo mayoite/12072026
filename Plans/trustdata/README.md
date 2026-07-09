@@ -20,9 +20,7 @@ Root entry: [`../README.md`](../README.md) · Constitution: `AGENTS.md`
 
 `results/planner/world-standard-wave/` — see RESULTS-MAP for folder ↔ gate.
 
-## Owner bar (standing)
+## Standing rules
 
-- Global standards only  
-- Quality over time  
-- Present without micromanage / prompt-engineer  
-- Agent max **10** · no worktrees · `D:\OandO07072026` only  
+All agent / git / one-task / license rules: **`AGENTS.md`** (single authority).  
+This folder = plan + phases only.

@@ -101,9 +101,8 @@ Evidence when locked: `results/planner/world-standard-wave/01-engine-lock/NOTES.
 | Rule | Detail |
 |------|--------|
 | Superpowers | Always; all skills allowed; load any skill with ~1% fit |
-| Concurrency | Default **8** agents; hard max **10** — **only inside one owner task** |
-| Parallelism | **One task at a time.** Parallel agents = sub-slices of that task only. Kill order = serial next-task priority — **not** multi-CP concurrent jobs |
-| Tests | Sibling agents OK **for the active task** — **never skip** tests or suppress console output |
+| Agents / one-task / git / skills | **`AGENTS.md` only** (do not restate here) |
+| Tests | Never skip or suppress — see `AGENTS.md` |
 | Workspace | **No worktrees.** Main checkout `D:\OandO07072026` only |
 | Commit | **As we go** after each landable slice (`trustdata(P0X): …` or `fix(open3d): …`) |
 | Push | Only when owner asks in the **current** conversation |
@@ -135,14 +134,10 @@ Full definitions: `docs/superpowers/specs/2026-07-09-world-standard-planner-desi
 
 ## Phase order (do not reorder without owner)
 
-Aligned with [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md). **One owner task at a time** — kill order = which task next; agents may parallelize **inside** that task only. See [INDEX.md](./INDEX.md).
+Aligned with [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md). Agent concurrency → **`AGENTS.md`**. Full kill order → [INDEX.md](./INDEX.md).
 
 ```
-CP-00 → CP-01 → CP-02
-              → one task at a time: CP-03 W3 → CP-07 W1–W2 browser → CP-06 W5–W6
-              → then one task at a time: CP-04 · CP-05 · CP-08 · CP-09
-              → CP-07 full claim needs CP-03 + CP-05 not red unless owner WAIVE
-              → CP-10 pack + E: backup (all prior PASS or WAIVE)
+CP-00 → CP-01 → CP-02 → CP-03 → CP-07 → CP-06 → CP-04 · CP-05 · CP-08 · CP-09 → CP-10
 ```
 
 | # | Phase file | CP | Gates | Evidence folder |
@@ -165,47 +160,10 @@ CP-00 → CP-01 → CP-02
 ## Week-1 kill order (condensed)
 
 **Full section (tables + claim rules):** [INDEX.md](./INDEX.md) → **Week-1 kill order**.  
-**Structure decision:** **HYBRID** — one file per CP; **one active task**; up to **8–10 agents inside that task**. Not multi-CP concurrent thrash.
+**Full kill order + task list:** [INDEX.md](./INDEX.md). **Agents:** `AGENTS.md`. **Spawn block:** [AGENT-RULES.md](./checklists/AGENT-RULES.md).
 
-**Serial spine (after implementation unlock) — one row at a time:**
-
-```
-CP-00 → CP-01 → CP-02
-  → W3 unit+browser          (03-select-delete/)           # CP-03 / P03 — unit alone = FAIL
-  → W1–W2 journey pack       (02-browser-open3d-journey/)  # CP-07 / P07
-  → W5–W6 save honesty       (06-save-honesty/)            # CP-06 / P06
-```
-
-**Later fill — one task at a time (not concurrent multi-CP):**
-
-```
-W4 orbit · W2 symbols · W7 mesh · W8 labels
-→ CP-10 pack when data supports
-```
-
-**Rules:**
-
-- No self-waive W3 browser.  
-- Full journey claim needs CP-03 + CP-05 not red unless owner WAIVE.  
-- Lead with **W-gate + folder**; P-numbers second.  
-- **Parallel agents only inside the active task** — multi-task parallel finishes nothing (owner).
-
----
-
-## Superpowers — active task only (Approach A)
-
-| When active alone | Evidence | Priority |
-|-------------------|----------|----------|
-| Select + delete + undo (W3) | `03-select-delete/` | **Spine** |
-| Playwright journey | `02-browser-open3d-journey/` | **Spine** |
-| Save flush + honesty | `06-save-honesty/` | **Spine** |
-| Orbit + continuity (W4) | `04-orbit-continuity/` | Next |
-| Block2D then mesh (separate tasks) | `05-symbols-svg/` · `08-mesh-quality/` | Next |
-| Shortcuts / labels (W8) | `09-shortcuts-chrome/` | Next |
-| 2A blockers only | notes under `09-shortcuts-chrome/` | Only if blocks active W |
-| Docs / handover | `10-handover/` | Close |
-
-Spawn ≤8 (max 10) **for the one active task**. Required prompt block: [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md).
+**Spine:** W3 (`03-select-delete/`) → journey (`02-browser-open3d-journey/`) → save (`06-save-honesty/`).  
+**Then:** orbit · symbols · mesh · shortcuts · handover — each as its own task.
 
 ---
 

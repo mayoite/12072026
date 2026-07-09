@@ -30,7 +30,7 @@
 
 ## 5. Execution
 - **Owner does not micromanage or prompt-engineer.** Agent owns implementation once intent is clear.
-- **Skills / agents:** `/using-superpowers` on main + every subagent; any fit skill; default **8**, hard max **10** — **parallel only inside one owner task** (never multi-epic concurrent).
+- **Skills / agents:** `AGENTS.md` (superpowers, one-task parallel, max 10).
 - **Formal plan approval** is not a gate for routine work under implementation unlock — trustdata phases + owner intent are enough.
 - **Stop and ask** only on hard stops above or if the **product goal** changes.
 - **Blockers:** Log `Failures.md`; do not defend bad output.
