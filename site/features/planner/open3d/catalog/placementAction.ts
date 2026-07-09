@@ -25,6 +25,7 @@ import {
   type CabinetMaterialId,
 } from "./modularCabinetV0";
 import {
+  layoutWorkstationInstances,
   parseWorkstationConfigKey,
   workstationConfigKey,
   workstationFootprintMm,
@@ -409,6 +410,57 @@ export function placeWorkstationConfigOnProject(
         heightMm: config.heightMm,
       },
       description: `Placed workstation ${catalogId}`,
+      timestamp: Date.now(),
+    },
+  };
+}
+
+/**
+ * Systems v0 — place N instances of a config on a grid (layoutWorkstationInstances).
+ * Pure document transform; one furniture per layout cell. Suitable for 5k-seat layout
+ * smoke without unique assets.
+ */
+export function placeWorkstationInstancesOnProject(
+  project: Open3dProject,
+  config: WorkstationConfigV0,
+  count: number,
+  options?: ApplyPureActionOptions & {
+    pitchMm?: number;
+    columns?: number;
+    originMm?: { x: number; y: number };
+  },
+): PureActionResult {
+  const origin = options?.originMm ?? { x: 0, y: 0 };
+  const layout = layoutWorkstationInstances(config, count, {
+    pitchMm: options?.pitchMm,
+    columns: options?.columns,
+  });
+
+  let next = project;
+  const placedIds: string[] = [];
+  for (const cell of layout) {
+    const result = placeWorkstationConfigOnProject(
+      next,
+      config,
+      { x: origin.x + cell.xMm, y: origin.y + cell.yMm },
+      options,
+    );
+    next = result.project;
+    const id = result.action.payload?.id;
+    if (typeof id === "string") placedIds.push(id);
+  }
+
+  return {
+    project: next,
+    action: {
+      type: "PLACE_WORKSTATION_V0_BATCH",
+      payload: {
+        count: layout.length,
+        catalogId: workstationConfigKey(config),
+        ids: placedIds,
+        origin: { ...origin },
+      },
+      description: `Placed ${layout.length}× workstation ${workstationConfigKey(config)}`,
       timestamp: Date.now(),
     },
   };

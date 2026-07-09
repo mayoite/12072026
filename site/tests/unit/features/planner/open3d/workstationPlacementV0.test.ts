@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { placeWorkstationConfigOnProject } from "@/features/planner/open3d/catalog/placementAction";
+import {
+  placeWorkstationConfigOnProject,
+  placeWorkstationInstancesOnProject,
+} from "@/features/planner/open3d/catalog/placementAction";
 import {
   createWorkstationConfigV0,
   layoutWorkstationInstances,
@@ -107,5 +110,37 @@ describe("placeWorkstationConfigOnProject", () => {
     expect(furniture[0]!.position).toEqual({ x: 0, y: 0 });
     expect(furniture[1]!.position.x).toBeGreaterThan(0);
     expect(furniture[2]!.position.x).toBeGreaterThan(furniture[1]!.position.x);
+  });
+});
+
+describe("placeWorkstationInstancesOnProject", () => {
+  it("places 50 instances in one batch action", () => {
+    const config = createWorkstationConfigV0({
+      shape: "linear",
+      size: { lengthMm: 1200, depthMm: 600 },
+      modules: ["desk", "panel"],
+    });
+    let project = createOpen3dProject({
+      idFactory: ids("floor-1", "project-1"),
+      name: "WS Batch",
+      now: "2026-07-09T18:00:00.000Z",
+    });
+
+    const batchIds = Array.from({ length: 50 }, (_, i) => `batch-${i}`);
+    const result = placeWorkstationInstancesOnProject(project, config, 50, {
+      columns: 10,
+      originMm: { x: 500, y: 200 },
+      idFactory: ids(...batchIds),
+    });
+    project = result.project;
+
+    expect(result.action.type).toBe("PLACE_WORKSTATION_V0_BATCH");
+    expect(result.action.payload?.count).toBe(50);
+    expect(activeFloor(project).furniture).toHaveLength(50);
+    expect(activeFloor(project).furniture[0]!.position).toEqual({
+      x: 500,
+      y: 200,
+    });
+    expect(activeFloor(project).furniture[0]!.width).toBe(1200);
   });
 });
