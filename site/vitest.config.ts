@@ -49,8 +49,10 @@ export default defineConfig({
       provider: 'v8',
       reportsDirectory: VITEST_COVERAGE_DIRS.full,
       reporter: [...VITEST_COMMON_COVERAGE_REPORTERS],
-      // Force-include all source files even if no test imports them
-      // Without this, untested files are invisible (not 0%) — misleading
+      // Force every file under include into the report, even if no test imports it.
+      // Honest for gates (untested = 0%) but TOTAL % looks tiny vs "what my tests hit".
+      // Use: node scripts/analyze-coverage-gap.mjs → DUAL ROLLUP (touched vs full).
+      all: true,
       include: [
         'app/api/**/*.{ts,tsx}',
         'features/planner/**/*.{ts,tsx}',

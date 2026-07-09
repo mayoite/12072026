@@ -107,3 +107,54 @@ export function finalizeMetrics(bucket) {
   }
   return bucket;
 }
+
+/**
+ * Split coverage-final.json into:
+ * - full: every instrumented file (includes force-included 0% files)
+ * - touched: only files with ≥1 statement hit (what tests actually exercised)
+ *
+ * This is the usual “tests feel like they cover more than the report” mismatch:
+ * headline % is diluted by thousands of zero files in coverage.include.
+ */
+export function dualRollupFromFinal(covData) {
+  const full = emptyMetrics();
+  const touched = emptyMetrics();
+  let filesFull = 0;
+  let filesTouched = 0;
+  let filesZero = 0;
+
+  for (const cov of Object.values(covData)) {
+    const c = fileCounts(cov);
+    filesFull++;
+    full.statements.covered += c.stmtCovered;
+    full.statements.total += c.stmtTotal;
+    full.functions.covered += c.fnCovered;
+    full.functions.total += c.fnTotal;
+    full.branches.covered += c.brCovered;
+    full.branches.total += c.brTotal;
+    full.lines.covered += c.lineCovered;
+    full.lines.total += c.lineTotal;
+
+    if (c.stmtCovered > 0) {
+      filesTouched++;
+      touched.statements.covered += c.stmtCovered;
+      touched.statements.total += c.stmtTotal;
+      touched.functions.covered += c.fnCovered;
+      touched.functions.total += c.fnTotal;
+      touched.branches.covered += c.brCovered;
+      touched.branches.total += c.brTotal;
+      touched.lines.covered += c.lineCovered;
+      touched.lines.total += c.lineTotal;
+    } else if (c.stmtTotal > 0) {
+      filesZero++;
+    }
+  }
+
+  return {
+    filesFull,
+    filesTouched,
+    filesZero,
+    full: finalizeMetrics(full),
+    touched: finalizeMetrics(touched),
+  };
+}

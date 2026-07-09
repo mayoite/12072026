@@ -13,6 +13,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { dualRollupFromFinal } from "./coverage-metrics.mjs";
 
 const repoRoot = process.cwd();
 const workspaceRoot =
@@ -27,6 +28,28 @@ if (!fs.existsSync(covPath)) {
 }
 
 const cov = JSON.parse(fs.readFileSync(covPath, "utf8"));
+
+// --- Dual rollup: full include vs only files tests actually hit ---
+const dual = dualRollupFromFinal(cov);
+console.log("=== DUAL ROLLUP (why headline % feels wrong) ===\n");
+console.log(
+  `Instrumented files: ${dual.filesFull}  |  touched (≥1 stmt hit): ${dual.filesTouched}  |  pure 0%: ${dual.filesZero}`,
+);
+console.log(
+  `FULL include statements:  ${dual.full.statements.covered}/${dual.full.statements.total} = ${dual.full.statements.pct}%`,
+);
+console.log(
+  `TOUCHED files only:       ${dual.touched.statements.covered}/${dual.touched.statements.total} = ${dual.touched.statements.pct}%`,
+);
+console.log(
+  `TOUCHED lines:            ${dual.touched.lines.covered}/${dual.touched.lines.total} = ${dual.touched.lines.pct}%`,
+);
+console.log(
+  "\n→ Per-file % on modules you tested is usually honest; the TOTAL is diluted by force-included zeros.",
+);
+console.log(
+  "→ Vitest coverage.include pulls in features/planner/** + lib/** even when a single test runs.\n",
+);
 
 function norm(f) {
   return f.replace(/\\/g, "/").toLowerCase();
