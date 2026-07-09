@@ -41,7 +41,7 @@
 | G5 | **Binary GLB** (in-memory) | **implemented** |
 | G6 | Validate GLB | implemented (on export) |
 | G7 | SVG extrude admin | partial (island) |
-| G8 | Viewer load generated GLB URL | **planned** (viewer is procedural today) |
+| G8 | Viewer load generated GLB URL | **partial** (async policy URL; procedural default / fallback) |
 
 **Entry for modular chain:** `runModularMeshStages(options?)`.
 

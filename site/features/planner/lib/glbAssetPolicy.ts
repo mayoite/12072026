@@ -13,11 +13,25 @@
 
 export const GENERATED_GLB_PATH_MARKER = "catalog-assets/generated/";
 
+/** Pathname only (strip query/hash) so marker cannot be spoofed via `?catalog-assets/generated/`. */
+function urlPathnameOnly(url: string): string {
+  const noHash = url.split("#")[0] ?? url;
+  return noHash.split("?")[0] ?? noHash;
+}
+
+/**
+ * True for blob: previews or URLs whose **path** contains catalog-assets/generated/.
+ * Query/hash-only embeds of the marker are rejected.
+ */
 export function isSystemGeneratedGlbUrl(url: string): boolean {
   const trimmed = url.trim();
   if (!trimmed) return false;
   if (trimmed.startsWith("blob:")) return true;
-  return trimmed.includes(GENERATED_GLB_PATH_MARKER);
+  const path = urlPathnameOnly(trimmed);
+  return (
+    path.startsWith(GENERATED_GLB_PATH_MARKER) ||
+    path.includes(`/${GENERATED_GLB_PATH_MARKER}`)
+  );
 }
 
 /**

@@ -122,9 +122,19 @@ export function assertViewBoxStable(descriptor: { viewBox?: unknown }): ViewBox 
 }
 
 // ── Boolean operations (mirrors generate-svg.mjs applyBooleanOp) ─────────────
+// polygon-clipping geometry: Pair → Ring → Polygon → MultiPolygon
+//   Pair = [number, number]
+//   Ring = Pair[]
+//   Polygon = Ring[]   (outer + holes)
+//   MultiPolygon = Polygon[]
+//   Geom = Polygon | MultiPolygon
 
+/** Closed ring of plan-space points (polygon-clipping Ring). */
 type PolygonRing = [number, number][];
+/** One polygon: outer ring + optional holes (polygon-clipping Polygon). */
 type Polygon = PolygonRing[];
+/** polygon-clipping MultiPolygon — array of Polygons. */
+type MultiPolygon = Polygon[];
 
 const OP_MAP = {
   union: polygonClipping.union,
@@ -135,6 +145,10 @@ const OP_MAP = {
 
 export type BooleanVariant = keyof typeof OP_MAP;
 
+/**
+ * Apply a boolean op across input Polygons.
+ * Returns rings of the first result Polygon (sufficient for rect-block IR).
+ */
 export function applyBooleanOp(polygons: Polygon[], variant: BooleanVariant): PolygonRing[] {
   if (polygons.length === 0) {
     throw new Open3dPipelineError("invalid", "No polygons for boolean operation");
@@ -143,23 +157,24 @@ export function applyBooleanOp(polygons: Polygon[], variant: BooleanVariant): Po
   if (!op) {
     throw new Open3dPipelineError("invalid", `Unknown boolean variant "${variant}"`);
   }
+  // Pass MultiPolygon Geoms: [Polygon] — not [[Polygon]] (one nesting level).
   if (polygons.length === 1) {
     if (variant === "difference") {
       throw new Open3dPipelineError("invalid", "difference variant requires at least two polygons");
     }
-    const result = (op as typeof polygonClipping.union)([[polygons[0]!]]);
-    return Array.isArray(result) && result.length > 0 ? (result[0] as PolygonRing[]) : [];
+    const result = (op as typeof polygonClipping.union)([polygons[0]!]);
+    return Array.isArray(result) && result.length > 0 ? result[0]! : [];
   }
-  let acc: ReturnType<typeof polygonClipping.union> = [[polygons[0]!]];
+  let acc: MultiPolygon = [polygons[0]!];
   for (let i = 1; i < polygons.length; i++) {
-    const next: [[number, number][][]] = [[polygons[i]!]];
+    const next: MultiPolygon = [polygons[i]!];
     const merged = (op as typeof polygonClipping.union)(acc, next);
     if (!Array.isArray(merged) || merged.length === 0) {
       throw new Open3dPipelineError("invalid", `Boolean op "${variant}" produced empty result at index ${i}`);
     }
     acc = merged;
   }
-  return Array.isArray(acc) && acc.length > 0 ? (acc[0] as PolygonRing[]) : [];
+  return Array.isArray(acc) && acc.length > 0 ? acc[0]! : [];
 }
 
 // ── Path construction ─────────────────────────────────────────────────────────
@@ -168,17 +183,19 @@ function fmt(n: number): string {
   return parseFloat(n.toFixed(4)).toString();
 }
 
-export function polygonsToPath(rings: PolygonRing[][]): string {
+/** Convert polygon rings (outer + holes) into a single SVG path `d` string. */
+export function polygonsToPath(rings: PolygonRing[]): string {
   if (!Array.isArray(rings) || rings.length === 0) return "";
   const parts: string[] = [];
   for (const ring of rings) {
     if (!Array.isArray(ring) || ring.length === 0) continue;
-    const flatPts = (ring as [number, number][]).flat();
-    if (flatPts.length < 2) continue;
-    const moveCmd = `M ${fmt(flatPts[0]!)} ${fmt(flatPts[1]!)}`;
+    const first = ring[0];
+    if (!first || first.length < 2) continue;
+    const moveCmd = `M ${fmt(first[0])} ${fmt(first[1])}`;
     const lineCmds: string[] = [];
-    for (let i = 2; i < flatPts.length; i += 2) {
-      lineCmds.push(`L ${fmt(flatPts[i]!)} ${fmt(flatPts[i + 1]!)}`);
+    for (let i = 1; i < ring.length; i++) {
+      const pt = ring[i]!;
+      lineCmds.push(`L ${fmt(pt[0])} ${fmt(pt[1])}`);
     }
     lineCmds.push("Z");
     parts.push([moveCmd, ...lineCmds].join(" "));
@@ -247,13 +264,15 @@ export async function optimiseSvg(svg: string): Promise<string> {
 
 export interface BlockRect { x: number; y: number; width: number; height: number }
 
+/** Rect block → polygon-clipping Polygon (one outer ring, no holes). */
 export function blockToPolygon(b: BlockRect): Polygon {
-  return [
+  const ring: PolygonRing = [
     [b.x, b.y],
     [b.x + b.width, b.y],
     [b.x + b.width, b.y + b.height],
     [b.x, b.y + b.height],
   ];
+  return [ring];
 }
 
 // ── Full pipeline (SVG-only, no file I/O, no R2, no PNG) ─────────────────────
@@ -298,8 +317,8 @@ export async function runPipelineCore(descriptor: PipelineDescriptor): Promise<s
 
   const polygons: Polygon[] = rawBlocks.map(blockToPolygon);
   const variant = (descriptor.variant ?? "union") as BooleanVariant;
-  const resultPolygons = applyBooleanOp(polygons, variant);
-  const dPath = polygonsToPath(resultPolygons as unknown as PolygonRing[][]);
+  const resultRings = applyBooleanOp(polygons, variant);
+  const dPath = polygonsToPath(resultRings);
 
   const assembled = buildSvgString(
     descriptor.slug,

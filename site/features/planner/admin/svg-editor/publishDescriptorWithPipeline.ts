@@ -17,6 +17,7 @@ import {
 } from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
 import {
   runSvgPipeline,
+  type PipelineOptions,
   type PipelineResult,
 } from "@/features/planner/admin/svg-editor/svgPipelineRunner";
 import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
@@ -47,8 +48,14 @@ export type PublishDescriptorWithPipelineDeps = {
   readonly compileSvg?: (
     descriptor: BlockDescriptor,
   ) => Promise<SvgCompileStagesResult>;
-  /** S4 write public/svg-catalog via generate-svg.mjs (S1 also on that path). */
-  readonly runPipeline?: (descriptor: BlockDescriptor) => Promise<PipelineResult>;
+  /**
+   * S4 write public/svg-catalog. Publish passes `skipCompile` + `precompiledSvg`
+   * from the prior compileSvg step so S1–S3 are not re-run.
+   */
+  readonly runPipeline?: (
+    descriptor: BlockDescriptor,
+    options?: PipelineOptions,
+  ) => Promise<PipelineResult>;
   readonly persist?: (input: unknown) => PersistResult;
 };
 
@@ -60,8 +67,11 @@ const DEFAULT_DEPS: Required<PublishDescriptorWithPipelineDeps> = {
 };
 
 /**
- * Validate → compileSvgForPublish (S1–S3) → runSvgPipeline (S4) → persist (S6).
+ * Validate → compileSvgForPublish (S1–S3) → runSvgPipeline S4-only → persist (S6).
  * Compile or pipeline failure aborts before descriptor persist.
+ *
+ * S4 is invoked with `skipCompile` + `precompiledSvg` from the compile step so
+ * publish does not double-run S1–S3 (compileSvgForPublish already validated).
  *
  * If S4 succeeds and persist fails, SVG artifacts may already exist on
  * disk (or under fixtures) even though the descriptor JSON was not committed.
@@ -104,10 +114,13 @@ export async function publishDescriptorWithPipeline(
     };
   }
 
-  // S4: disk write still via runSvgPipeline / generate-svg.mjs (S1 normalize already on that path)
+  // S4: disk write only — reuse validated SVG from compileSvgForPublish (no S1–S3 recompile)
   let pipeline: PipelineResult;
   try {
-    pipeline = await runPipeline(descriptor);
+    pipeline = await runPipeline(descriptor, {
+      skipCompile: true,
+      precompiledSvg: compile.svg,
+    });
   } catch (err) {
     const details = err instanceof Error ? err.message : String(err);
     return {

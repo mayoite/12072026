@@ -36,7 +36,17 @@ describe("shouldLoadGlb (viewer policy gate)", () => {
       rejectDesignerStaticGlbUrl("https://cdn.example.com/models/sofa-hero.glb"),
     ).toMatch(/not allowed/i);
   });
+
+  it("rejects marker spoofed only in query or hash (not path)", () => {
+    expect(
+      shouldLoadGlb("https://evil.example/models/x.glb?p=catalog-assets/generated/"),
+    ).toBe(false);
+    expect(
+      shouldLoadGlb("https://evil.example/models/x.glb#catalog-assets/generated/"),
+    ).toBe(false);
+  });
 });
+
 
 describe("resolveFurnitureGlbUrl", () => {
   it("prefers generatedGlbUrl over glbUrl and meshUrl", () => {

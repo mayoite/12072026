@@ -186,6 +186,44 @@ describe("04-PIPELINE-RUNNER: descriptor input is shape-respecting", () => {
   });
 });
 
+describe("04-PIPELINE-RUNNER: skipCompile (S4-only after compileSvgForPublish)", () => {
+  it("writes precompiled SVG without requiring generate-svg.mjs", async () => {
+    const projectRoot = mkdtempSync(path.join(os.tmpdir(), "phase04-skip-compile-"));
+    const svgBody =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10"/></svg>';
+    try {
+      const result = await runSvgPipeline(fixedDescriptorFixture() as never, {
+        projectRoot,
+        skipCompile: true,
+        precompiledSvg: svgBody,
+      });
+      expect(result.ok).toBe(true);
+      if (!result.ok) return;
+      expect(result.stdout).toMatch(/\[skipCompile\]/);
+      expect(result.svgPath).toContain(`${path.sep}svg-catalog${path.sep}chaise.svg`);
+      expect(existsSync(result.svgPath)).toBe(true);
+      expect(existsSync(result.fixturePath)).toBe(true);
+      // Read via real fs (mock may wrap writeFileSync only)
+      const { readFileSync } = await import("node:fs");
+      const written = readFileSync(result.svgPath, "utf8");
+      expect(written.trim()).toBe(svgBody);
+    } finally {
+      rmSync(projectRoot, { recursive: true, force: true });
+    }
+  });
+
+  it("fails closed when skipCompile is set without precompiledSvg", async () => {
+    const result = await runSvgPipeline(fixedDescriptorFixture() as never, {
+      projectRoot: NON_EXISTENT_ROOT,
+      skipCompile: true,
+    });
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.reason).toBe("nonZeroExit");
+    expect(result.error).toMatch(/precompiledSvg/);
+  });
+});
+
 function readdirSyncSafe(target: string): string[] {
   if (!existsSync(target)) return [];
   return readdirSync(target);

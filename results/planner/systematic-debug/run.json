@@ -1,0 +1,71 @@
+{
+  "task": "Phase 1 residual — pipelineCore / asset-engine tsc errors",
+  "date": "2026-07-09",
+  "status": "fixed",
+  "product_blocker": true,
+  "blocker_reason": "pipelineCore.ts is LIVE publish authority (PUBLISH_COMPILE_AUTHORITY = pipelineCore+normalize). asset-engine imports it via runSvgCompileStages / compileSvgForPublish. Residual TS2322/TS2352 prevented clean site tsc and reflected incorrect polygon-clipping nesting types on the publish path.",
+  "evidence_before": {
+    "source": "results/planner/_tsc-wave.txt + live tsc",
+    "command": "cd site; npx tsc -p tsconfig.json --noEmit 2>&1 | Select-String -Pattern \"asset-engine|pipelineCore|error TS\" | Select-Object -First 40",
+    "errors": [
+      "scripts/generate-svg/pipelineCore.ts(150,59): TS2322 Polygon not assignable to Ring | Pair",
+      "scripts/generate-svg/pipelineCore.ts(153,57): TS2322 Polygon not assignable to Ring",
+      "scripts/generate-svg/pipelineCore.ts(155,44): TS2322 Polygon not assignable to [number, number][]",
+      "scripts/generate-svg/pipelineCore.ts(176,22): TS2352 PolygonRing[] cast to [number, number][] may be mistake",
+      "scripts/generate-svg/pipelineCore.ts(252-255): TS2322 number not assignable to [number, number] (×8) from blockToPolygon"
+    ],
+    "asset_engine_import_errors": "none standalone — errors only in pipelineCore.ts which asset-engine imports"
+  },
+  "root_cause": {
+    "summary": "Local geometry types mismatched polygon-clipping hierarchy; blockToPolygon returned a Ring typed as Polygon, and applyBooleanOp double-wrapped ([[poly]]) to compensate at runtime.",
+    "hierarchy": {
+      "polygon-clipping": "Pair=[number,number] → Ring=Pair[] → Polygon=Ring[] → MultiPolygon=Polygon[]; Geom=Polygon|MultiPolygon",
+      "local_aliases": "PolygonRing=Ring, Polygon=Polygon (correct names, wrong construction)"
+    },
+    "defects": [
+      {
+        "fn": "blockToPolygon",
+        "bug": "Returned Ring ([[x,y],...]) with return type Polygon (Ring[]). TS saw each [number,number] element as needing to be a Ring.",
+        "runtime": "Produced one nesting level short of Polygon"
+      },
+      {
+        "fn": "applyBooleanOp",
+        "bug": "Passed [[polygons[i]]] (MultiPolygon[]) into union instead of [polygons[i]] (MultiPolygon). Types failed; runtime only worked because blockToPolygon was also one level short — double-wrap compensated.",
+        "runtime": "Compensating double-wrap made MultiPolygon shape accidentally correct"
+      },
+      {
+        "fn": "polygonsToPath",
+        "bug": "Signature PolygonRing[][] but body treated each element as Pair[] (a single ring). Caller used `as unknown as PolygonRing[][]` to silence mismatch with applyBooleanOp's PolygonRing[] return."
+      }
+    ]
+  },
+  "fix": {
+    "file": "site/scripts/generate-svg/pipelineCore.ts",
+    "architecture_change": false,
+    "scope": "type + nesting alignment only; no asset-engine API change",
+    "changes": [
+      "blockToPolygon: wrap rect points as one outer ring → return [ring] (true Polygon)",
+      "applyBooleanOp: pass MultiPolygon as [polygon] not [[polygon]]; type acc/next as MultiPolygon; drop unsafe casts",
+      "polygonsToPath: accept PolygonRing[] (rings of one polygon); iterate Pair points without .flat() cast",
+      "runPipelineCore: polygonsToPath(resultRings) without unknown cast"
+    ]
+  },
+  "evidence_after": {
+    "tsc": {
+      "command": "cd site; npx tsc -p tsconfig.json --noEmit 2>&1 | Select-String -Pattern \"asset-engine|pipelineCore|error TS\" | Select-Object -First 40",
+      "exit_code": 0,
+      "pipelineCore_errors": 0,
+      "asset_engine_errors": 0
+    },
+    "vitest": {
+      "command": "cd site; npx vitest run tests/unit/features/planner/open3d/catalog/svgPipelineGolden.test.ts tests/unit/admin/svg-editor/publishDescriptorWithPipeline.test.ts",
+      "exit_code": 0,
+      "files_passed": 2,
+      "tests_passed": 35,
+      "notes": "Golden round-trips (chaise/side-table/sectional) still byte-match pinned goldens — nesting fix preserved runtime MultiPolygon shape"
+    }
+  },
+  "no_fix_needed": null,
+  "commit": false,
+  "next_step": "None for this residual; pipelineCore type residual closed. Remaining Phase 1 work is outside this root cause."
+}

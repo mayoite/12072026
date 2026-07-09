@@ -54,6 +54,17 @@ export interface PipelineOptions {
   timeoutMs?: number;
   /** Override stderr/max-buffer in bytes. */
   maxStderrBytes?: number;
+  /**
+   * When true, skip S1–S3 recompile and only perform S4 disk write.
+   * Requires a non-empty {@link precompiledSvg} already validated by
+   * `compileSvgForPublish` (or equivalent). Default false — full pipeline.
+   */
+  skipCompile?: boolean;
+  /**
+   * Validated SVG string from compileSvgForPublish. Required when
+   * `skipCompile` is true; ignored otherwise.
+   */
+  precompiledSvg?: string;
 }
 
 /**
@@ -84,11 +95,14 @@ function defaultSvgPath(slug: string, projectRoot: string): string {
 /**
  * Run the Phase 03 SVG pipeline against the just-saved descriptor (in-process dynamic import).
  *
- * Delegates to generate-svg.mjs `runPipeline`, which normalizes (S1) then
+ * Default: delegates to generate-svg.mjs `runPipeline`, which normalizes (S1) then
  * pipelineCore (S2/S3) and writes public SVG (S4). Publish compile authority
  * is pipelineCore+normalize — same path as asset-engine `compileSvgForPublish`
  * for S1–S3 (CLI also writes disk). V1 svgCompiler.server is not on this wire.
- * Fixture write kept for audit parity (min change). GS: BP-03, anti-copy.
+ *
+ * When `options.skipCompile` is true with a non-empty `precompiledSvg` (from a
+ * prior successful `compileSvgForPublish`), only S4 disk write + fixture audit
+ * run — avoids double S1–S3 on the publish path. GS: BP-03, anti-copy.
  */
 export function runSvgPipeline(
   descriptor: BlockDescriptor,
@@ -115,6 +129,58 @@ export function runSvgPipeline(
   const _maxStderrBytes = options.maxStderrBytes ?? DEFAULT_MAX_STDERR_BYTES;
   void _timeoutMs;
   void _maxStderrBytes;
+
+  const skipCompile = options.skipCompile === true;
+  const precompiledSvg =
+    typeof options.precompiledSvg === "string"
+      ? options.precompiledSvg.trim()
+      : "";
+
+  if (skipCompile) {
+    if (!precompiledSvg) {
+      return Promise.resolve({
+        ok: false,
+        reason: "nonZeroExit" as const,
+        stderr: "",
+        stdout: "",
+        exitCode: 1,
+        error:
+          "skipCompile requires a non-empty precompiledSvg (from compileSvgForPublish).",
+        fixturePath: null,
+      });
+    }
+
+    const startedAt = Date.now();
+    try {
+      mkdirSync(fixturesDir, { recursive: true });
+      writeFileSync(fixturePath, `${JSON.stringify(descriptor, null, 2)}\n`, {
+        encoding: "utf8",
+      });
+      mkdirSync(path.dirname(svgPath), { recursive: true });
+      writeFileSync(svgPath, `${precompiledSvg}\n`, { encoding: "utf8" });
+      return Promise.resolve({
+        ok: true as const,
+        exitCode: 0,
+        stdout: `[skipCompile] svg len=${precompiledSvg.length}`,
+        stderr: "",
+        fixturePath,
+        svgPath,
+        durationMs: Date.now() - startedAt,
+      });
+    } catch (writeError) {
+      const message =
+        writeError instanceof Error ? writeError.message : String(writeError);
+      return Promise.resolve({
+        ok: false,
+        reason: "writeFixtureError" as const,
+        stderr: "",
+        stdout: "",
+        exitCode: null,
+        error: `Failed to write precompiled SVG / fixture (skipCompile): ${message}`,
+        fixturePath: null,
+      });
+    }
+  }
 
   if (!existsSync(scriptPath)) {
     return Promise.resolve({

@@ -130,7 +130,11 @@ describe("publishDescriptorWithPipeline (fail-closed)", () => {
     expect(result).toEqual({ success: true, descriptor: validDescriptor });
     expect(order).toEqual(["compile", "pipeline", "persist"]);
     expect(compileSvg).toHaveBeenCalledWith(validDescriptor);
-    expect(runPipeline).toHaveBeenCalledWith(validDescriptor);
+    // S4 must reuse validated SVG — skip S1–S3 recompile on pipeline.
+    expect(runPipeline).toHaveBeenCalledWith(validDescriptor, {
+      skipCompile: true,
+      precompiledSvg: compileOk().svg,
+    });
     expect(persist).toHaveBeenCalledWith(validDescriptor);
   });
 
