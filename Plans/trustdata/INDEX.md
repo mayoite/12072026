@@ -54,11 +54,12 @@
 | Parallelism | **After CP-02** only for W streams (see phase order); do not parallelize past hard stops |
 | Tests | Run in sibling agents so they do **not** idle the critical path — **never skip** or suppress output |
 | Workspace | **No worktrees** — `D:\OandO07072026` only |
-| Git | **Commit as we go** after each landable slice; **push only on owner ask** |
 | Plan vs product commits | Plan/review commits OK under plan-only; product commits only after implementation unlock |
 | Types / tests | No `any` in handwritten TS; zero suppression of test output |
-| Ethics | Inspiration-only competitor research; MIT/open packages only |
-| Contract | Full subagent rules: [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) |
+| Ethics / licenses | `AGENTS.md` + `ayushdocs/17-LICENSES-CLEARED.md` |
+| Contract | Short: [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) · full: `AGENTS.md` |
+| Git | Commit as we go; push origin when right; mirror ~30–60m (`mayoite`) — `AGENTS.md` |
+| Later / optional | [LATER.md](./LATER.md) — SmartDraw/Foyr/Coohom etc. **not** kill-path |
 
 **Authority order:** Owner message > this folder > world-standard design spec > Plan A core > ayushdocs honesty.
 
