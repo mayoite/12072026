@@ -283,6 +283,9 @@ export function TopBar({
                   <MenuItem id="boq" className={styles.dropdownItem}>
                     Export workstation BOQ
                   </MenuItem>
+                  <MenuItem id="quote" className={styles.dropdownItem}>
+                    Add seats to quote cart
+                  </MenuItem>
                   <MenuItem id="pdf" className={styles.dropdownItem}>Export as PDF</MenuItem>
                   <MenuItem id="png" className={styles.dropdownItem}>Export as PNG</MenuItem>
                 </Menu>

@@ -55,6 +55,17 @@ function lineFromConfig(config: WorkstationConfigV0, quantity: number): Workstat
  * Aggregate workstation furniture on the active floor (or all floors if opts.allFloors).
  * Non-ws furniture is ignored.
  */
+/** Map BOQ lines into site quote-cart rows (qty only; price later). */
+export function workstationBoqToQuoteCartItems(
+  summary: WorkstationBoqSummaryV0,
+): Array<{ id: string; name: string; qty: number }> {
+  return summary.lines.map((line) => ({
+    id: `planner-ws-v0-${line.catalogId}`,
+    name: `${line.label} (${line.footprintWidthMm}×${line.footprintDepthMm} mm)`,
+    qty: line.quantity,
+  }));
+}
+
 export function summarizeWorkstationBoqV0(
   project: Open3dProject,
   opts?: { allFloors?: boolean },

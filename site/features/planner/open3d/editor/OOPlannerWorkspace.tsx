@@ -38,7 +38,11 @@ import {
   downloadSVG,
   downloadWorkstationBoqJSON,
 } from "../shared/export/exportUtils";
-import { summarizeWorkstationBoqV0 } from "../catalog/workstationBoqV0";
+import {
+  summarizeWorkstationBoqV0,
+  workstationBoqToQuoteCartItems,
+} from "../catalog/workstationBoqV0";
+import { useQuoteCart } from "@/lib/store/quoteCart";
 import { useOpen3dSvgCatalog } from "../catalog/useOpen3dWorkspaceCatalog";
 import { CanvasToolRail } from "./CanvasToolRail";
 import { CommandPalette } from "./CommandPalette";
@@ -104,6 +108,7 @@ export function OOPlannerWorkspace({
         })
       : undefined,
   });
+  const addQuoteItem = useQuoteCart((state) => state.addItem);
   // Immediate hydrated: avoids blocking render/restore waterfall; first paint uses default project, restore applies async if present.
   const [hydrated] = useState(true);
   const replaceProjectRef = useRef(workspaceCanvas.replaceProject);
@@ -475,6 +480,22 @@ export function OOPlannerWorkspace({
         return;
       }
 
+      if (format === "quote") {
+        const summary = summarizeWorkstationBoqV0(workspaceCanvas.project);
+        if (summary.totalInstances === 0) {
+          setWorkspaceMessage("No workstation seats for quote (place systems v0 first).");
+          return;
+        }
+        const items = workstationBoqToQuoteCartItems(summary);
+        for (const item of items) {
+          addQuoteItem({ id: item.id, name: item.name, qty: item.qty });
+        }
+        setWorkspaceMessage(
+          `Added ${summary.totalSeats} seats to quote cart (${items.length} lines)`,
+        );
+        return;
+      }
+
       const check = preflightOpen3dExport(workspaceCanvas.project, format);
       if (check.status !== "ready") {
         setWorkspaceMessage(
@@ -493,10 +514,10 @@ export function OOPlannerWorkspace({
         return;
       }
       setWorkspaceMessage(
-        `${format.toUpperCase()} export is coming soon — use JSON, SVG, or BOQ for now.`,
+        `${format.toUpperCase()} export is coming soon — use JSON, SVG, BOQ, or quote for now.`,
       );
     },
-    [workspaceCanvas.project],
+    [workspaceCanvas.project, addQuoteItem],
   );
 
   const handleImportClick = useCallback(() => {

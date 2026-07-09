@@ -4,7 +4,10 @@ import {
   placeWorkstationConfigOnProject,
   placeWorkstationInstancesOnProject,
 } from "@/features/planner/open3d/catalog/placementAction";
-import { summarizeWorkstationBoqV0 } from "@/features/planner/open3d/catalog/workstationBoqV0";
+import {
+  summarizeWorkstationBoqV0,
+  workstationBoqToQuoteCartItems,
+} from "@/features/planner/open3d/catalog/workstationBoqV0";
 import {
   createWorkstationConfigV0,
   workstationConfigKey,
@@ -73,5 +76,26 @@ describe("summarizeWorkstationBoqV0", () => {
     const summary = summarizeWorkstationBoqV0(project);
     expect(summary.lines).toEqual([]);
     expect(summary.totalInstances).toBe(0);
+  });
+
+  it("maps BOQ lines to quote cart items", () => {
+    const linear = createWorkstationConfigV0({
+      shape: "linear",
+      size: { lengthMm: 1500, depthMm: 600 },
+      modules: ["desk"],
+    });
+    let project = createOpen3dProject({
+      idFactory: ids("floor-1", "project-1"),
+      name: "Quote map",
+      now: "2026-07-09T19:30:00.000Z",
+    });
+    project = placeWorkstationInstancesOnProject(project, linear, 2, {
+      idFactory: ids("q0", "q1"),
+    }).project;
+    const cart = workstationBoqToQuoteCartItems(summarizeWorkstationBoqV0(project));
+    expect(cart).toHaveLength(1);
+    expect(cart[0]!.qty).toBe(2);
+    expect(cart[0]!.id).toContain("ws-v0");
+    expect(cart[0]!.name).toMatch(/1500/);
   });
 });
