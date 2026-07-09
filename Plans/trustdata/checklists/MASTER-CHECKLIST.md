@@ -1,0 +1,224 @@
+# MASTER checklist — Trust-Data world-standard planner
+
+> **Owner file.** Single source of checkbox truth for the trustdata program.  
+> **Agents:** REQUIRED `/using-superpowers`. Tick a box only when evidence path exists and was re-read this session.  
+> **Do not** tick from memory, chat optimism, or ayushdocs P0-DONE notes alone.
+
+**Program root:** `D:\OandO07072026\Plans\trustdata\`  
+**Evidence root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
+**Design authority:** `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`  
+**Checkout:** `D:\OandO07072026` · no worktrees · commit as we go · push only on owner ask
+
+**Last sync:** _fill date when P10 MASTER-SYNC runs_  
+**Git HEAD at last sync:** _paste short SHA_
+
+---
+
+## How to use
+
+1. Work phases P01–P10 in order (parallel streams only where CHECKPOINTS.md allows).  
+2. For each item: evidence path in backticks → then `- [x]`.  
+3. At P10: copy tallies into `results/planner/world-standard-wave/10-handover/MASTER-SYNC.md`.  
+4. Open blockers go to `D:\OandO07072026\Failures.md`, not silent skips.
+
+---
+
+## 0) Program control (W0)
+
+- [ ] **W0.1** Approach recorded in `Plans/trustdata/00-START.md` (A product journey / B Fabric first / C chrome first). Default A if owner silent after unlock.
+- [ ] **W0.2** Owner unlock for implementation **or** explicit “plan only” recorded in 00-START / chat.
+- [ ] **W0.3** INDEX.md + 00-START.md read by executing agent (CP-00).
+- [ ] **W0.4** Engine lock accepted: Fabric v7 full stage destination; Feasibility interim; Three+R3F+orbit; no Konva+Fabric hybrid; manufacturer SKU catalog; BOQ/quote > photoreal.
+- [ ] **W0.5** North star accepted: facilities buyer unaided → layout with O&O-scale furniture → 2D↔3D+orbit → select/edit/delete → save/return → quote path later.
+- [ ] **W0.6** Out of scope held while any W red: photoreal race, multiplayer CRDT, AR/LiDAR, CRM/SSR expansion, full Fabric walls cutover only if required after W1–W8 (Approach A path).
+
+**Evidence:** `Plans/trustdata/00-START.md` · `results/planner/world-standard-wave/00-start/` (optional NOTES) · CP-00 in `checkpoints/CHECKPOINTS.md`
+
+---
+
+## 1) Ethics (non-negotiable)
+
+- [ ] **E.1** Research used for **patterns / jobs-to-be-done only** — no competitor code, JS bundles, CSS, GLB, icons, logos, or brand assets copied into `site/` or product packages.
+- [ ] **E.2** Packages shipped are MIT / Apache / BSD / other approved open licenses after license check; no proprietary third-party assets shipped as O&O.
+- [ ] **E.3** Competitor screenshots and raw scrapes stay under `D:\websites\…` (or E: research backup); not pasted into marketing site or planner UI.
+- [ ] **E.4** Toolbar/chrome layout inspiration is re-implemented with Phosphor + O&O CSS modules/tokens — not cloned markup from Planner5D/Homestyler/etc.
+- [ ] **E.5** Firecrawl / scrape waves for RoomSketcher, Floorplanner, IKEA, Homestyler are **ideas only**; re-scrape Planner5D only if owner orders and gaps are real (pack already deep).
+- [ ] **E.6** ETHICS docs acknowledged: `D:\websites\planner5d.com\report\ETHICS_AND_INSPIRATION.md` and trustdata `RESEARCH-MAP.md`.
+- [ ] **E.7** No secrets (`.env`, tokens, cookies) in commits, evidence packs, or E: backups.
+
+**Evidence:** code review greps; absence of competitor paths under `site/`; research remains outside product tree.
+
+---
+
+## 2) Agent operating rules
+
+- [ ] **A.1** `/using-superpowers` (and fit skills) used on main agent **and** every subagent for non-trivial work.
+- [ ] **A.2** Concurrent subagents default ≤ **8**, hard max **10**.
+- [ ] **A.3** **No git worktrees** — only `D:\OandO07072026` main checkout.
+- [ ] **A.4** Trust **data** (repo, tests, browser artifacts) — not character trials of the owner; not blind belief in prior agent claims.
+- [ ] **A.5** Competitor research in prompts tagged **inspiration only**; no plagiarism instructions.
+- [ ] **A.6** Agents write evidence to disk under `results/planner/world-standard-wave/` (prefer write-to-disk; do not idle waiting on chat).
+- [ ] **A.7** Local **commit as we go** after each landable slice; messages name phase + slice.
+- [ ] **A.8** **No `git push`** (including force / remote branch delete) without explicit owner ask in the current conversation.
+- [ ] **A.9** Subagent prompts include: superpowers; no worktrees; trust data; inspiration only; write evidence; commit slices (see AGENT-RULES.md).
+- [ ] **A.10** Scope creep beyond the ask → stop and ask owner (AGENTS.md).
+- [ ] **A.11** No `any` in handwritten TypeScript; type exceptions need reason, owner, removal condition.
+- [ ] **A.12** Zero suppression of test output; missing console or skipped tests = fail for that gate.
+- [ ] **A.13** Failures logged in `Failures.md` when blocked; no defended bad output.
+
+**Evidence:** `checklists/AGENT-RULES.md` · commit log · evidence folders · Failures.md
+
+---
+
+## 3) Phase completion (P01–P10)
+
+- [ ] **P01** Product truth inventory complete — `results/planner/world-standard-wave/01-product-truth/` (CP-01).
+- [ ] **P02** Engine lock notes + 00-START engine checkboxes — `01-engine-lock/` or NOTES + ENGINE-DECISION ref (CP-02).
+- [ ] **P03** Select/delete/undo — W3 — `03-select-delete/` (CP-03).
+- [ ] **P04** Orbit + 2D↔3D continuity — W4 — `04-orbit-continuity/` (CP-04).
+- [ ] **P05** Block2D symbol quality path — W2 symbols — `05-symbols-svg/` (CP-05).
+- [ ] **P06** Save reload + honest labels — W5–W6 — `06-save-honesty/` (CP-06).
+- [ ] **P07** Browser draw→place journey — W1–W2 — `02-browser-open3d-journey/` (CP-07).
+- [ ] **P08** Mesh quality bar — W7 — `08-mesh-quality/` (CP-08).
+- [ ] **P09** Shortcut/label truth + blocking chrome only — W8 — `08-shortcuts-chrome/` (CP-09).
+- [ ] **P10** Evidence pack + MASTER sync + E: backup + handover — `10-handover/` (CP-10).
+
+---
+
+## 4) World-standard gates W1–W8
+
+Definitions from design spec; proof standards are mandatory.
+
+### W1 — Draw structure
+
+- [ ] **W1.1** Unaided path can draw walls on `/planner/open3d` or guest planner.
+- [ ] **W1.2** Door opening placed on structure.
+- [ ] **W1.3** Playwright (or equivalent browser automation) proof with screenshots.
+- [ ] **W1.4** Artifacts under `results/planner/world-standard-wave/02-browser-open3d-journey/`.
+
+### W2 — Place catalog + readable symbols
+
+- [ ] **W2.1** Place ≥2 catalog items in one session.
+- [ ] **W2.2** One of them is **cabinet-v0** (or current modular cabinet SKU bar item).
+- [ ] **W2.3** 2D symbols readable (Block2D), not empty blob.
+- [ ] **W2.4** Playwright place proof in `02-browser-open3d-journey/`; symbol unit/PNG bar in `05-symbols-svg/`.
+
+### W3 — Select / delete / undo
+
+- [ ] **W3.1** Furniture selectable on default 2D canvas (hit-test works).
+- [ ] **W3.2** Delete or Backspace removes selection.
+- [ ] **W3.3** Undo restores removed entity.
+- [ ] **W3.4** Unit tests + browser proof in `03-select-delete/`.
+
+### W4 — Continuity + orbit
+
+- [ ] **W4.1** 2D↔3D toggle preserves poses (ids + transforms).
+- [ ] **W4.2** 3D orbit controls enabled.
+- [ ] **W4.3** Console free of hard errors on toggle/orbit path.
+- [ ] **W4.4** Proof in `04-orbit-continuity/`.
+
+### W5 — Save → reload identity
+
+- [ ] **W5.1** Save (autosave flush or explicit) then hard reload.
+- [ ] **W5.2** Walls and furniture **ids** match pre-reload document.
+- [ ] **W5.3** Playwright wait strategy documented in run notes.
+- [ ] **W5.4** Proof under `06-save-honesty/` (prefer `06-save-honesty/save-reload/`).
+
+### W6 — Save honesty (local vs cloud)
+
+- [ ] **W6.1** UI status text does not claim cloud when only IndexedDB/local.
+- [ ] **W6.2** Either cloud member path wired with proof **or** explicit local-only labeling.
+- [ ] **W6.3** Code + copy review notes + test in `06-save-honesty/`.
+
+### W7 — Mesh quality bar
+
+- [ ] **W7.1** Bar doc written (toe / door / carcass readable for cabinet-v0).
+- [ ] **W7.2** Visual smoke screenshot shows modular mesh, not apology box only.
+- [ ] **W7.3** Remaining debt listed honestly in NOTES.md.
+- [ ] **W7.4** Proof in `08-mesh-quality/`.
+
+### W8 — Shortcuts / labels
+
+- [ ] **W8.1** Every user-visible tool/shortcut label matches the bound handler.
+- [ ] **W8.2** Known lie fixed (example class: D labeled door while bound to dimension — must not ship).
+- [ ] **W8.3** Unit + keyboard tests in `08-shortcuts-chrome/`.
+- [ ] **W8.4** Non-blocking premium chrome **not** required for this checkbox (only blockers).
+
+---
+
+## 5) Testing & evidence discipline
+
+- [ ] **T.1** Every gate that claims browser proof has screenshots on disk (not only “ran fine” in chat).
+- [ ] **T.2** Every automated run has `run.json` (or playwright-run.json) plus raw log; no filtered-only success.
+- [ ] **T.3** Vitest/Playwright skipped tests counted as fail for the owning gate.
+- [ ] **T.4** Evidence folders match `RESULTS-MAP.md` names.
+- [ ] **T.5** Non-regression: prior p0/unit scripts re-run when touching spine; logs retained under wave or cited prior paths.
+- [ ] **T.6** `testing-handbook.md` zero-suppression rule followed.
+
+---
+
+## 6) Backup (E: drive)
+
+- [ ] **B.1** `E:` mounted and writable.
+- [ ] **B.2** Dated folder created: `E:\OandO-backups\trustdata-YYYY-MM-DD\`.
+- [ ] **B.3** Copied minimum set: `Plans\trustdata\`, `results\planner\world-standard-wave\`, world-standard design spec, `Failures.md`.
+- [ ] **B.4** Recommended: `D:\websites\research\2026-07-09-world-standard\` copied under backup `websites-research\`.
+- [ ] **B.5** `10-handover/BACKUP-LOG.md` written with dest path, times, outcome codes, size summary.
+- [ ] **B.6** Spot-check: backup contains `Plans\trustdata\INDEX.md` and `10-handover\README.md`.
+- [ ] **B.7** No secrets included in backup.
+
+**Procedure detail:** `phases/P10-evidence-handover.md`
+
+---
+
+## 7) Git & handover
+
+- [ ] **G.1** All landable slices committed locally with clear messages.
+- [ ] **G.2** `10-handover/HEAD.txt` captures `git rev-parse HEAD` and `git status -sb`.
+- [ ] **G.3** Push status recorded: not requested / requested and done / blocked.
+- [ ] **G.4** No worktrees exist for this program’s work.
+- [ ] **G.5** `10-handover/README.md` handover narrative complete (what is true, W table, blockers, next step, git, backup).
+- [ ] **G.6** `10-handover/W-GATES.md` matches this checklist’s W rows.
+- [ ] **G.7** `10-handover/FAILURES-SNIP.md` lists only open blockers.
+- [ ] **G.8** CP-10 marked PASS in `checkpoints/CHECKPOINTS.md` only after B.* and G.* and W1–W8 (or owner WAIVE).
+
+---
+
+## 8) Explicit non-claims (keep checked when still true)
+
+- [ ] **N.1** We do **not** claim P0.1–P0.3 ayushdocs DONE equals world-standard ship quality.
+- [ ] **N.2** We do **not** claim unit-green spine equals unaided buyer success.
+- [ ] **N.3** We do **not** claim cloud save without wire proof.
+- [ ] **N.4** We do **not** claim Fabric full stage live until it is the interactive 2D path with proof.
+- [ ] **N.5** We do **not** claim photoreal / Homestyler parity as a W1–W8 goal.
+
+---
+
+## Tally (fill at P10)
+
+| Section | Total boxes | Done | Open |
+|---------|-------------|------|------|
+| 0 W0 | 6 | | |
+| 1 Ethics | 7 | | |
+| 2 Agents | 13 | | |
+| 3 Phases | 10 | | |
+| 4 W1–W8 | 32 | | |
+| 5 Testing | 6 | | |
+| 6 Backup | 7 | | |
+| 7 Git/handover | 8 | | |
+| 8 Non-claims | 5 | | |
+| **Sum** | **94** | | |
+
+Program complete for trustdata wave only when **Sum done = 94** or owner WAIVE rows are recorded in CHECKPOINTS.md and reflected here with waiver references (waived items still listed; note WAIVE id beside them).
+
+---
+
+## Related
+
+| Doc | Path |
+|-----|------|
+| Agent contract | [AGENT-RULES.md](./AGENT-RULES.md) |
+| Checkpoints | [../checkpoints/CHECKPOINTS.md](../checkpoints/CHECKPOINTS.md) |
+| P10 handover | [../phases/P10-evidence-handover.md](../phases/P10-evidence-handover.md) |
+| Research index | [../RESEARCH-MAP.md](../RESEARCH-MAP.md) |
+| Results map | [../RESULTS-MAP.md](../RESULTS-MAP.md) |
