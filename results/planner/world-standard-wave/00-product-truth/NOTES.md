@@ -119,3 +119,22 @@ Open3d is a hybrid workspace: FeasibilityCanvas for interactive 2D, Three for 3D
 - Not claiming photoreal / multiplayer / AR  
 - Not claiming all W1–W8 browser-green solely from this file  
 - README route table still slightly stale on WorkspaceRoute vs direct Host; dual entry above is code truth  
+
+---
+
+## Agent unit tests (P01 capability smoke gaps) — 2026-07-09
+
+**Scope:** tests only; no product feature code.
+
+| File | What |
+|------|------|
+| `site/tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts` | Extended `isOpen3dFabricFurnitureEnabled`: env key constant, OFF vs exact `"1"`, near-miss rejects (`true`/`yes`/`1 `/etc.), wrong keys ignored, barrel re-export |
+| `site/tests/unit/features/planner/open3d/hostWiringP01.test.ts` | **New** pure host wiring: import-graph dual entry, live source import strings (no Next render), fabric app tree absent + `next.config` redirects, workspace flag gate |
+
+**Run log:** `vitest-agent-tests-1.log` — **23 passed** (2 files).
+
+```text
+pnpm exec vitest run tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts tests/unit/features/planner/open3d/hostWiringP01.test.ts --reporter=verbose
+```
+
+**Note:** `cleanupPhase08.test.ts` still fails file-load on missing `app/planner/(workspace)/fabric/*` pages (stale vs redirect-only fabric). Out of this slice; hostWiringP01 encodes current product truth instead.

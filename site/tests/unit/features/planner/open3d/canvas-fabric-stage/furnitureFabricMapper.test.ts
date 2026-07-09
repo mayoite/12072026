@@ -11,7 +11,10 @@ import {
   readFurnitureEntityId,
   writeFurnitureEntityId,
 } from "@/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper";
-import { isOpen3dFabricFurnitureEnabled } from "@/features/planner/open3d/canvas-fabric-stage/fabricFurnitureFlag";
+import {
+  OPEN3D_FABRIC_FURNITURE_ENV,
+  isOpen3dFabricFurnitureEnabled,
+} from "@/features/planner/open3d/canvas-fabric-stage/fabricFurnitureFlag";
 import type { Open3dFurnitureItem } from "@/features/planner/open3d/model/types";
 import type { CanvasTransform } from "@/features/planner/open3d/lib/geometry/snapping";
 
@@ -315,16 +318,20 @@ describe("furnitureFabricMapper", () => {
 });
 
 describe("isOpen3dFabricFurnitureEnabled", () => {
+  it("exports OPEN3D_FABRIC_FURNITURE_ENV as the public Next env key", () => {
+    expect(OPEN3D_FABRIC_FURNITURE_ENV).toBe("NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE");
+  });
+
   it("is false by default and for non-1 values", () => {
     expect(isOpen3dFabricFurnitureEnabled({})).toBe(false);
     expect(
       isOpen3dFabricFurnitureEnabled({
-        NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE: "0",
+        [OPEN3D_FABRIC_FURNITURE_ENV]: "0",
       }),
     ).toBe(false);
     expect(
       isOpen3dFabricFurnitureEnabled({
-        NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE: "true",
+        [OPEN3D_FABRIC_FURNITURE_ENV]: "true",
       }),
     ).toBe(false);
   });
@@ -332,7 +339,70 @@ describe("isOpen3dFabricFurnitureEnabled", () => {
   it("is true only when env is exactly 1", () => {
     expect(
       isOpen3dFabricFurnitureEnabled({
-        NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE: "1",
+        [OPEN3D_FABRIC_FURNITURE_ENV]: "1",
+      }),
+    ).toBe(true);
+  });
+
+  /**
+   * P01 / W-gate product truth: Fabric furniture overlay is opt-in with exact "1" only.
+   * Near-miss truthy strings must stay OFF so default product path remains FeasibilityCanvas.
+   */
+  it("rejects near-miss enable values (strict === \"1\" only)", () => {
+    const nearMiss: Array<string | undefined> = [
+      undefined,
+      "",
+      " ",
+      "1 ",
+      " 1",
+      "01",
+      "1.0",
+      "yes",
+      "on",
+      "ON",
+      "True",
+      "TRUE",
+      "enabled",
+      "-1",
+      "2",
+      "\t1",
+      "1\n",
+    ];
+    for (const value of nearMiss) {
+      expect(
+        isOpen3dFabricFurnitureEnabled({ [OPEN3D_FABRIC_FURNITURE_ENV]: value }),
+        `expected OFF for ${JSON.stringify(value)}`,
+      ).toBe(false);
+    }
+  });
+
+  it("reads only OPEN3D_FABRIC_FURNITURE_ENV — ignores wrong keys and non-string 1", () => {
+    expect(
+      isOpen3dFabricFurnitureEnabled({
+        OPEN3D_FABRIC_FURNITURE: "1",
+        NEXT_PUBLIC_OPEN3D_FABRIC: "1",
+      }),
+    ).toBe(false);
+    // Record bags are string | undefined; numeric/boolean must not coerce through === "1"
+    const bagWithWrongTypes: Record<string, string | undefined> = {
+      [OPEN3D_FABRIC_FURNITURE_ENV]: "1",
+    };
+    expect(isOpen3dFabricFurnitureEnabled(bagWithWrongTypes)).toBe(true);
+    expect(
+      isOpen3dFabricFurnitureEnabled({
+        [OPEN3D_FABRIC_FURNITURE_ENV]: "1",
+        SOME_OTHER_FLAG: "0",
+      }),
+    ).toBe(true);
+  });
+
+  it("barrel re-exports flag helpers from canvas-fabric-stage index", async () => {
+    const barrel = await import("@/features/planner/open3d/canvas-fabric-stage");
+    expect(barrel.OPEN3D_FABRIC_FURNITURE_ENV).toBe(OPEN3D_FABRIC_FURNITURE_ENV);
+    expect(barrel.isOpen3dFabricFurnitureEnabled({})).toBe(false);
+    expect(
+      barrel.isOpen3dFabricFurnitureEnabled({
+        [OPEN3D_FABRIC_FURNITURE_ENV]: "1",
       }),
     ).toBe(true);
   });
