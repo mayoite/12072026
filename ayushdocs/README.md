@@ -22,8 +22,9 @@
 | [14-SCRIPTS-MENU.md](./14-SCRIPTS-MENU.md) | **Daily scripts** (`pnpm p0`, `gate`, …) |
 | [16-RESULTS-RETENTION.md](./16-RESULTS-RETENTION.md) | Keep vs delete `results/` |
 | [17-LICENSES-CLEARED.md](./17-LICENSES-CLEARED.md) | **Licenses / paid / no competitor assets** · keys in `.env.local` |
+| [18-PRODUCT-CONTEXT.md](./18-PRODUCT-CONTEXT.md) | **Why we build** — business, money, systems catalog, engines, 6‑mo prototype |
 
-**Start:** [00-PENDING.md](./00-PENDING.md) → [12-WORKFLOW.md](./12-WORKFLOW.md) → [14-SCRIPTS-MENU.md](./14-SCRIPTS-MENU.md)  
+**Start:** [18-PRODUCT-CONTEXT.md](./18-PRODUCT-CONTEXT.md) (if new to the business) → [00-PENDING.md](./00-PENDING.md) → [12-WORKFLOW.md](./12-WORKFLOW.md)  
 
 **Repo HEAD at pack time:** see `01-RECAP.md` / `09-VERIFY-SNAPSHOT.md`.  
 **Worktree rule:** only `D:\OandO07072026` — no git worktrees.
