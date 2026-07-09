@@ -76,3 +76,7 @@ remedyplan/
 
 # Git worktree for isolation (moved inside repo)
 worktrees/
+
+# Generated modular GLBs (written by P0.2 place/export path)
+site/public/catalog-assets/generated/*.glb
+
