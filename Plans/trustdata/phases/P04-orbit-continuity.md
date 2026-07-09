@@ -6,6 +6,14 @@
 >
 > **Reviews:** [P04-suggestions.md](../reviews/P04-suggestions.md) · Expert revision 2026-07-09 (end of file).
 
+### Expert pass P0 (2026-07-09)
+
+- **Orbit three-layer rule:** (1) Lazy+Inner defaults ON (live) · (2) workspace **must** pass `enableControls={true}` (or shared control props) — today omit at `OOPlannerWorkspace` · (3) `data-orbit-enabled` on container + unit construct-spy. Layer-1 alone ≠ W4.
+- **Rotation correction:** furniture **document + scene nodes = degrees** (live `normalizeDegrees` / pick converts). Do **not** convert furniture to radians to match older plan wording. Mesh `rotation.y = -node.rotation` is intentional plan-Y→world-Z, not pose drift.
+- **Pose continuity = document only** (double rebuild deep-equal ids / xMm / yMm / rotation). Stay **imperative Three** — no R3F rewrite mid-W4.
+- **Evidence:** `04-orbit-continuity/` only. Anti-J4: radio 2D|3D; `planner-3d-canvas` is a **div**.
+- Authority: [EXPERT-PASS.md](../reviews/EXPERT-PASS.md) · `03-r3f-3d` · `01-react-open3d`.
+
 **Parent:** [00-START.md](../00-START.md) · [INDEX.md](../INDEX.md)  
 **Design authority:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` §W4  
 **Prev:** [P03-select-delete.md](./P03-select-delete.md) · **Next:** [P05-symbols-svg.md](./P05-symbols-svg.md)  

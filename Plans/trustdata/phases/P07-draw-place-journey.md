@@ -4,6 +4,15 @@
 
 **Hybrid thin:** Execute card here. Multi-page Playwright TypeScript skeletons → **[P07-appendix.md](./P07-appendix.md)**. Evidence folder names **unchanged**: canonical `02-browser-open3d-journey/` (+ optional alias `07-browser-journey/`). One serial journey CP — do not split W1 vs W2 into two CPs.
 
+### Expert pass P0 (2026-07-09)
+
+- **Serial pack only:** `test.describe.configure({ mode: "serial", timeout: 120_000 })` — config is `fullyParallel`; multi-writer PNG race = invalid evidence.
+- **Anti seed false-green (W1):** capture `wallsBefore` / `objectsBefore`; assert **increase** after draw / opening. Never pass on guest seed walls ≥1/≥4 alone.
+- **Anti place false-green (W2):** `furnitureBefore` then ≥ `+2` incl. **cabinet-v0** + second SKU; non-blank canvas PNG ≠ P05 symbol quality. Add **`getFurnitureCount`** helper.
+- **Canonical folder:** `02-browser-open3d-journey/` only for W1–W2; do not dump under `results/tests/` or claim W3 from journey. Reuse status metrics (`pw-status-bar`); require **deltas**.
+- **No silent skip** — missing screenshot / filtered log = FAIL. Full story still needs CP-03 + CP-05 not red unless owner WAIVE.
+- Authority: [EXPERT-PASS.md](../reviews/EXPERT-PASS.md) · `04-playwright-evidence` · `01-react-open3d`.
+
 > **For agentic workers:** REQUIRED: `/using-superpowers` · verification · chrome-devtools for browser truth.  
 > **Do not execute product code until owner unlocks.**  
 > **Checkout:** `D:\OandO07072026` only · no worktrees · commit as we go · push only on ask.  

@@ -2,6 +2,14 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Load **TDD**, **verification-before-completion**, and **systematic-debugging** before editing mesh code. Do not implement until owner unlocks execution (plan-only until unlock). Use checkboxes. **No worktrees.** Commit as you go after each landable slice; push only on owner ask.
 
+### Expert pass P0 (2026-07-09)
+
+- **Default slab children exact order:** `toe` → `carcass` → `door-slab` (pair: +`door-left`/`door-right`). Live cabinet-v0 is still carcass+door (no `toe`) — gap.
+- **Height integrity:** Box3 span ≈ `heightMm`; toe **replaces** bottom of carcass (never additive overshoot). Doors track **carcassH**, not full `h`.
+- **plan === mesh:** GlbExport **imports** `TOE_*` / `DOOR_THICKNESS_MM` from `modularCabinetV0` — delete duplicate constants. Blast tests (`createSceneObjectFromNode`, meshStages pair 3→4) in same landable slice.
+- Stay **imperative Three** / procedural cabinet-v0 — no designer static GLB, no photoreal race, no R3F rewrite for pretty PNG. Evidence: `08-mesh-quality/` only.
+- Authority: [EXPERT-PASS.md](../reviews/EXPERT-PASS.md) · `03-r3f-3d.md`.
+
 **Goal:** Raise modular **cabinet-v0** so a facilities buyer can read **toe / door / carcass** in 3D (and matching 2D footprint truth) — not a single apology box. Freeze the quality bar in NOTES, prove it with unit footprint/parts + visual smoke, land evidence under CP-08.
 
 **Architecture:** Options JSON (`ModularCabinetV0Options`) → pure footprint + part plan → runtime `THREE.Group` via `generateCabinetV0Mesh` → optional G4/G5 generated GLB under `catalog-assets/generated/*` only. Viewer procedural path (`createSceneObjectFromNode`) and export path (`buildModularCabinetV0PartPlans` / `exportModularGlbBinary`) must stay **part-list identical**. No designer static GLB.

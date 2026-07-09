@@ -5,6 +5,14 @@
 > **Do not implement until owner unlocks execution** (plan-only until then).  
 > Checkboxes (`- [ ]`) track progress.
 
+### Expert pass P0 (2026-07-09)
+
+- **Handler = map (smoking gun):** `useWorkspaceKeyboard` imports `CANVAS_TOOL_SHORTCUTS` but arms tools via a **second hard-coded** letter table. Live: **D → dimension** (map = door), **M unbound** (map = dimension), **N/T unbound**. Invert map once; delete per-letter tool `if`s.
+- **Product letters locked:** D=door · M=dimension · O=opening · N=window · T=text · V/R/W/P/H as map. All map letters must `setTool(id)`.
+- **Live keydown matrix** — `toolShortcutTruth.test.ts` + keyboard RTL; `toolFromShortcutKey` alone is insufficient (map-true, handler-false today).
+- **`aria-keyshortcuts` honesty** — derive from map + only **wired** non-tool keys (Feasibility string stale). Forbidden “fix”: rebind Dimension → **D**. Evidence: **`09-shortcuts-chrome/`** only.
+- Authority: [EXPERT-PASS.md](../reviews/EXPERT-PASS.md) · `06-ui-shortcuts.md`.
+
 **Goal:** Make every tool **id → shortcut key → keyboard handler → visible label** tell the same truth (gate **W8**), and fix **only** Phase-2A chrome defects that **hide or block** canvas tools. No full chrome redesign.
 
 **Architecture:** Single authority maps in `canvasTool.ts` (`CANVAS_TOOL_SHORTCUTS`, `CANVAS_TOOL_LABELS`) drive `useWorkspaceKeyboard`, `toolFromShortcutKey`, `CanvasToolRail` aria/title/shortcut badges, palette tool rows, and canvas `aria-keyshortcuts`. Handlers must not hard-code a divergent key table. Letter tools arm by **inverting the map once** (import is already present; today it is used only by `toolFromShortcutKey`).

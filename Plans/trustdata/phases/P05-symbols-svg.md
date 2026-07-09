@@ -4,6 +4,14 @@
 
 **Hybrid thin:** Execute card here. Full TypeScript test/impl skeletons → **[P05-appendix.md](./P05-appendix.md)**. Evidence folder unchanged: `05-symbols-svg/`. One CP — do not split SVG honesty into a second gate.
 
+### Expert pass P0 (2026-07-09)
+
+- **Block2D = plan-symbol authority** on Feasibility (`furnitureBlock2DFromItem` → `renderBlock2DCentered`). Never claim `/svg-catalog/*.svg` or `compileSvgForPublish` as Feasibility draw path.
+- **`furnitureBlockUsesCenteredPath` must be always `false`** (live: `true` for modular-cabinet-v0 while prims are top-left — dead lie).
+- **Prove W2 symbol work with Fabric flag OFF**; flag-ON Rect overlay is not W2. Keep `canvas-fabric-stage/` (destination after W — do not delete).
+- Raise modular cabinet-v0 prims (stop empty-box bar); unknown-SKU non-empty fallback; no competitor SVG.
+- Authority: [EXPERT-PASS.md](../reviews/EXPERT-PASS.md) · `02-canvas-2d.md`.
+
 > **For agentic workers:** REQUIRED: `/using-superpowers` (TDD, verification, chrome-devtools as fit).  
 > **Checkout:** `D:\OandO07072026` only · no worktrees · commit as you go · push only on ask.  
 > **Do not execute until owner unlocks.**  

@@ -24,6 +24,20 @@
 
 Add a row when owner buys something new. **Not on this list** → not cleared: trial or ask.
 
+## To clear before CP-02 (expert pass 2026-07-09)
+
+Trustdata packages expert (`Plans/trustdata/reviews/expert-pass/05-packages-stack.md`). **Not cleared yet** — resolve before claiming CP-02 / package SHIP. Prefer remove unused proprietary; **ask before any purchase**.
+
+| Item | In tree | License posture | Action before CP-02 |
+|------|---------|-----------------|---------------------|
+| `@fancyapps/ui` | `site/package.json` dep; **no app import found** (2026-07-09) | Proprietary (“SEE LICENSE IN LICENSE.md”) | **Clear + license** (trial/buy with owner ask) **or remove** from deps |
+| `gsap` / `@gsap/react` | **Used** (`site/lib/hooks/useScrollAnimation.ts` + ScrollTrigger) | GSAP Standard no-charge (not MIT); Club plugins paid | Owner acceptance row below when signed off; **do not add paid Club plugins without ask** |
+
+| Item | Kind | Status | Since | Notes |
+|------|------|--------|-------|--------|
+| Fancyapps UI (`@fancyapps/ui`) | npm / proprietary | **PENDING clear or remove** | 2026-07-09 | Uncleared; likely unused — remove preferred if still unimported |
+| GSAP (`gsap`, `@gsap/react`) | npm / Standard license | **PENDING owner acceptance** | 2026-07-09 | Free-use Standard OK only after owner row; no Club plugins without ask |
+
 ## Research home
 
 Competitive scrapes: **`D:\websites` only** — `D:\websites\README.md`.  

@@ -4,6 +4,15 @@
 
 **Hybrid thin:** This is the **execute card** (goal · architecture · file map · tasks · CP). Multi-page pure-API / keyboard / canvas detail and full expert essay → **[P03-appendix.md](./P03-appendix.md)**. Evidence folder name unchanged: `03-select-delete/`. One CP (unit **+** browser) — do not split.
 
+### Expert pass P0 (2026-07-09)
+
+- **Spine #3 hard gate:** unit **then** browser under `03-select-delete/` — unit-green alone = **FAIL**. Journey folder must not substitute.
+- **Delete path:** pure `applySelectionDelete` (or equivalent) → **one** `updateProject` for multi-id (live loops N× = N history → undo cannot restore multi-select).
+- **Keyboard:** Del/Bksp `preventDefault`; Esc clears **selection** (not only draw/place).
+- **Prove with Fabric furniture flag OFF**; document selection only (`pickFurnitureAtPoint` / `workspaceCanvas.selection`) — no Fabric-stage / `firstFurnitureCenter` as W3 proof.
+- **Furniture rotation stays degrees** in document (pick converts for hit math) — do not rewrite units mid-W3.
+- Authority: [EXPERT-PASS.md](../reviews/EXPERT-PASS.md) · `01-react-open3d` · `02-canvas-2d` · `04-playwright-evidence`.
+
 > **For agentic workers:** REQUIRED: `/using-superpowers` (TDD, systematic-debugging, verification-before-completion).  
 > **Approach A** — FeasibilityCanvas + document model first.  
 > **Do not execute product code until owner unlocks.** Plan-only OK for this doc.  

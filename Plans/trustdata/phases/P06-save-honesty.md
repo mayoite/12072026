@@ -4,6 +4,14 @@
 > **Approach:** Plan A product journey (default). Trust **data** — repo, tests, browser evidence — not character claims.  
 > **Checkout:** `D:\OandO07072026` only · **no worktrees** · commit each landable slice · push only on owner ask.
 
+### Expert pass P0 (2026-07-09)
+
+- **`createAutoSaver.flush`** + retain pending snapshot / **projectRef** so leave/unmount does not drop debounce. Today: schedule+cancel only; cleanup `cancel()` loses in-flight work; Save still `schedulePersist` only.
+- **Dual-surface labels (W6):** TopBar bare **Saved** / `isSynced` and member `formatAutosaveStatus` bare **Saved** must say **local** vs cloud truth; Shell JSDoc “synced to **server**” is a lie (IDB-only path).
+- **Hydration race:** wait restore-complete before seed/flush in E2E; prefer guest `?plannerDevTools=1` + `clearPlannerStorage`.
+- **Evidence:** `06-save-honesty/` + `save-reload/` hard-reload same wall/furniture **ids**. Spine #5 after W3 + journey priority.
+- Authority: [EXPERT-PASS.md](../reviews/EXPERT-PASS.md) · `01-react-open3d.md`.
+
 **Goal:** A facilities buyer can edit a plan, leave (or hard-reload), and get **the same walls + furniture ids** back; every status string tells the truth about **local browser storage** vs **cloud account storage**.
 
 **Architecture (Approach A):** Open3d document model → `useOpen3dWorkspaceAutosave` → IndexedDB via `createAutoSaver` / `saveProject` → restore on mount via `loadProject` + `parseOpen3dSessionSnapshot`. Status UI in `TopBar` (via `OOPlannerWorkspace` / `WorkspaceShell`) must label **local** vs **cloud** honestly. Cloud wire is **optional** for this phase: if not wired, UI and help copy must say local-only — never imply account/cloud sync.
