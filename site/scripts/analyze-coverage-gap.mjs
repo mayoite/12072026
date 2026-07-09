@@ -49,7 +49,10 @@ console.log(
   "\n→ Per-file % on modules you tested is usually honest; the TOTAL is diluted by force-included zeros.",
 );
 console.log(
-  "→ Vitest coverage.include pulls in features/planner/** + lib/** even when a single test runs.\n",
+  "→ DO NOT chase 90% of FULL include — virtually impossible; that bar is inventory, not a slice ship gate.",
+);
+console.log(
+  "→ Ship floor (PLAN-FAIL-0408) = site profile thresholds, not this planner total. See coverage-policy.mjs.\n",
 );
 
 function norm(f) {

@@ -47,6 +47,18 @@ Console artifacts must contain stdout and stderr with stream, test identity or t
 
 When testing the **planner** or **any site page** in a browser (manual, Playwright, or DevTools), **take a couple of PNG screenshots** and save them under the relevant evidence folder (e.g. `results/planner/.../` or `results/<module>/.../`). Prefer viewport captures of before/after or key states (home, guest setup, open3d 2D, open3d 3D). Screenshots are part of the run record — do not rely on text-only pass claims for UI work.
 
+### Coverage reports — do not thrash on the total (2026-07-09)
+
+Vitest **planner** coverage force-includes large trees (`all: true` + broad `include`). The report **TOTAL** is therefore an inventory of dark code, not “how good your last tests were.” **Do not chase 90% of that total** — it is virtually unreachable and wastes agent time.
+
+| Read this | For |
+|-----------|-----|
+| Per-file % for modules under change | Slice landed? |
+| Dual rollup (`node scripts/analyze-coverage-gap.mjs`) | Touched vs full include |
+| Site profile + thresholds (`test:coverage:site`) | PLAN-FAIL-0408 ship floor |
+
+Policy: `site/scripts/coverage-policy.mjs`. Failures: `Failures.md` § PLAN-FAIL-0408.
+
 ### Static Gates
 
 Lint, typecheck, build, secret lint, and audit commands must retain raw stdout/stderr and exit code. A timeout without an exit code is inconclusive.
