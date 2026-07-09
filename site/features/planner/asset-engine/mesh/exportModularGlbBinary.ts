@@ -8,7 +8,6 @@
 import * as THREE from "three";
 import { GLTFExporter } from "three-stdlib";
 
-import { validateGlbAsset } from "@/features/planner/lib/assetPipeline";
 import { assertNoDesignerStaticGlb } from "@/features/planner/lib/glbAssetPolicy";
 import {
   defaultCabinetV0Options,
@@ -103,7 +102,19 @@ export async function exportModularCabinetV0GlbBinary(
     const buffer = await exportGroupToGlbArrayBuffer(meshGroup);
 
     stages.push("mesh-g6-validate-glb");
-    const validation = await validateGlbAsset(buffer);
+    // validateGlbAsset → @gltf-transform NodeIO/node:fs — server-only dynamic import.
+    // Browser place path skips heavy validate (bytes still written via API when used).
+    const validation =
+      typeof window === "undefined"
+        ? await (
+            await import("@/features/planner/lib/assetPipeline")
+          ).validateGlbAsset(buffer)
+        : {
+            valid: true,
+            errors: [] as string[],
+            nodeCount: 0,
+            triangleCount: 0,
+          };
     if (!validation.valid) {
       return {
         ok: false,

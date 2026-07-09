@@ -267,11 +267,22 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false, // PERF-FIX: enforce type safety at build time
   },
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.resolve.alias = {
       ...config.resolve.alias,
       ...plannerArchiveAliases,
     };
+    // Client bundles must not pull node:fs (e.g. gltf-transform NodeIO via modular GLB path).
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        crypto: false,
+        stream: false,
+        buffer: false,
+      };
+    }
     return config;
   },
   turbopack: {

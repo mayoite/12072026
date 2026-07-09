@@ -1,28 +1,31 @@
-# P04 / W4 — Orbit three-layer (open3d)
+# P04 / W4 — Orbit + pose continuity (serial land 2026-07-09)
 
 ## Goal
-Orbit enabled by default on open3d 3D view with **three-layer** proof (defaults alone ≠ green).
+Orbit ON by default; 2D↔3D uses **document** as pose authority.
 
-## Layers closed
+## Landed this session
 
-| Layer | Status | Proof |
-|-------|--------|-------|
-| 1. Code defaults ON | Done | `OPEN3D_ORBIT_DEFAULT_ENABLED` used by Lazy + Inner |
-| 2. Workspace explicit | Done | `OOPlannerWorkspace` spreads `getOpen3dViewerControlProps()` → `{ enableControls: true }` |
-| 3. DOM + unit construct | Done | `data-orbit-enabled` on `three-viewer-container`; `orbitControlsDefault.test.tsx` spies OrbitControls |
+| Item | Status | Evidence |
+|------|--------|----------|
+| Orbit defaults (prior) | Unit green | prior vitest logs |
+| **Document ↔ scene pose continuity** | **Unit green** | `poseContinuityW4.test.ts` + `pose-continuity-vitest-raw.log` |
+| Document rotation = degrees; scene nodes = radians | Asserted in continuity unit | matches `buildOpen3dSceneNodes` |
+| **Guest /planner 500 (node:fs / NodeIO in client)** | **Fixed** | webpack client fallbacks; GLB validate server-only dynamic import |
+| Browser e2e place → 3D orbit → 2D count | **Not green yet** | `open3d-w4-orbit-continuity.spec.ts` + `playwright-raw.log` — place click/count flaky (inventory/status intercept) |
 
-## Rotation
-Furniture **document** rotation stays **degrees** (`normalizeDegrees`). No conversion to radians in document model.
+## Honest residual (next session, same phase if continuing)
 
-## Commands
-```powershell
-cd D:\OandO07072026\site
-npx vitest run tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx tests/unit/features/planner/open3d/threeViewerInner.test.tsx tests/unit/features/planner/open3d/threeLazy.test.tsx --reporter=verbose
+- Stabilize W4 Playwright: place path + `data-orbit-enabled` + 2D restore (use proven systems-v0 place helper patterns until green).
+- Optional: left-drag orbit interaction (not required for this land).
+
+## Commands (unit)
+
+```
+cd site
+pnpm exec vitest run tests/unit/features/planner/open3d/poseContinuityW4.test.ts
+# 1 passed
 ```
 
-## Result
-**PASS** — 13/13 unit tests (orbit contract + viewer regression).
+## Stop reason
 
-## Out of scope this land
-- Full Playwright left-drag journey (later / shared journey)
-- R3F rewrite (forbidden)
+Right stop: **real unit continuity + guest loadability fix** shipped. Browser residual not forced green with weak e2e thrash.

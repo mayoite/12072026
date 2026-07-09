@@ -1,5 +1,6 @@
-import { NodeIO } from "@gltf-transform/core";
 import type { Document } from "@gltf-transform/core";
+
+// Note: do not static-import NodeIO here — it pulls node:fs into client graphs.
 
 // ---------------------------------------------------------------------------
 // FurnitureAsset type & registry
@@ -45,6 +46,9 @@ export async function validateGlbAsset(
   let triangleCount = 0;
 
   try {
+    // Node-only: NodeIO uses node:fs. Callers must not pull this into client bundles
+    // (exportModularGlbBinary dynamic-imports this module only on the server).
+    const { NodeIO } = await import("@gltf-transform/core");
     const io = new NodeIO();
     const document: Document = await io.readBinary(new Uint8Array(buffer));
     const root = document.getRoot();
