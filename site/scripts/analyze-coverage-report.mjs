@@ -91,21 +91,26 @@ function analyze(jsonPath, bucketFn) {
   return { buckets, total, files, fileCount: Object.keys(data).length };
 }
 
+/** Display order for known planner top-level dirs (unknown dirs still appear, sorted after). */
 const PLANNER_BUCKETS = [
+  "open3d",
+  "editor",
+  "asset-engine",
+  "catalog",
+  "model",
   "store",
   "hooks",
-  "tldraw",
   "ui",
-  "domain",
+  "3d",
   "canvas",
   "export",
   "import",
   "sync",
   "api",
   "admin",
-  "3d",
-  "utils",
-  "types",
+  "persistence",
+  "shared",
+  "lib",
   "components",
   "pages",
   "planner-root",

@@ -50,13 +50,21 @@ function scopeFromPath(filePath) {
   return "other";
 }
 
+/**
+ * Site coverage scope — must stay aligned with vitest.site.config.ts include.
+ * lib/configurator: .ts only (exclude .d.ts; .tsx rare and not in site profile).
+ */
 function isSiteScopeFile(filePath) {
   const n = normalizePath(filePath);
-  if (n.endsWith(SITE_SCOPE_EXACT)) return true;
-  if (!n.includes("/lib/configurator/")) {
-    return SITE_SCOPE_PREFIXES.some((prefix) => n.includes(`/${prefix}`));
+  if (n.endsWith(SITE_SCOPE_EXACT) || n.endsWith(`/${SITE_SCOPE_EXACT}`)) {
+    return true;
   }
-  return n.endsWith(".ts") && !n.endsWith(".d.ts");
+  if (n.includes("/lib/configurator/")) {
+    return n.endsWith(".ts") && !n.endsWith(".d.ts");
+  }
+  return SITE_SCOPE_PREFIXES.some(
+    (prefix) => n.includes(`/${prefix}`) || n.includes(prefix),
+  );
 }
 
 function aggregatePlannerScopes(covData) {
