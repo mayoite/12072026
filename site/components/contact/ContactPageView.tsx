@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Phone, Envelope as Mail } from "@phosphor-icons/react";
+import { MapPin, Phone, Envelope as Mail } from "@phosphor-icons/react/dist/ssr";
 import { getTranslations } from "next-intl/server";
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";

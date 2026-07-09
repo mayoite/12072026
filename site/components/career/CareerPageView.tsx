@@ -1,9 +1,10 @@
-import { Briefcase, GraduationCap, Users } from "@phosphor-icons/react";
+import { Briefcase, GraduationCap, Users } from "@phosphor-icons/react/dist/ssr";
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { JobCard } from "@/components/career/JobCard";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
-import { RouteCtaBand } from "@/components/shared/RouteCtaBand";import { CAREER_PAGE_COPY, CAREER_PAGE_JOBS } from "@/lib/site-data/routeCopy";
+import { RouteCtaBand } from "@/components/shared/RouteCtaBand";
+import { CAREER_PAGE_COPY, CAREER_PAGE_JOBS } from "@/lib/site-data/routeCopy";
 
 const CAREER_PILLAR_ICONS = {
   users: Users,
