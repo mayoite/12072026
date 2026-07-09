@@ -36,21 +36,26 @@ From existing `D:\websites\planner5d.com` + RoomSketcher/Floorplanner public pat
 4. **Gate depth** on catalog quality + quote, not empty feature spam  
 5. **O&O wedge (already on disk):** real SKUs + mm + India BOQ/GST — not photoreal arms race  
 
-## Top product blockers (user-visible)
+## Top product blockers (user-visible) — **updated 2026-07-09 tip `a6cdf70`**
 
-1. No browser draw→place→3D→save→reload on `/planner/open3d`  
-2. Cannot select furniture / openings on default 2D; Delete key unwired  
-3. Default 3D = boxes; no orbit controls  
-4. Tool/shortcut labels lie (D = dimension, not door)  
-5. Fabric full stage not live; FeasibilityCanvas sole interactive 2D  
-6. Member “Saved” is local IDB only  
-7. Admin SVG ≠ plan canvas symbol authority  
-8. 2A RAC/CSS gates incomplete (premium chrome feel)  
+| # | Was (wave open) | Now (honest) |
+|---|-----------------|--------------|
+| 1 | No browser draw→place→3D | **Improved** — journey e2e under `02-browser-open3d-journey/` |
+| 2 | Select furniture / Delete broken | **Improved** — Feasibility pick + Delete/undo e2e `03-select-delete/` + systems place-delete |
+| 3 | 3D boxes, no orbit | **Partial** — orbit ON; mesh still mostly boxes (cabinet-v0 multi-part exception) |
+| 4 | Shortcut label lies | **Improved** — `09-shortcuts-chrome/` truth work |
+| 5 | Fabric not live | **Still true** — FeasibilityCanvas interim; Fabric destination |
+| 6 | Save local only | **Honest labels** — IDB “Saved locally”; cloud still later |
+| 7 | SVG ≠ plan symbols | **Partial** — Block2D procedural path + cabinet/ws symbols |
+| 8 | 2A chrome incomplete | **Still true** — not kill-path |
 
-## Evidence dirs for next execution
+### Systems v0 (post-spine — **core green**)
 
-See `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md`  
-Folder template: `results/planner/world-standard-wave/02-browser-open3d-journey/` (empty until E2E lands)
+Rules + matrix + place pure + catalog inventory + Block2D + browser place/select/delete + batch + BOQ export + seats status. Evidence: `07-systems-v0/`. Unit suite **26/26**. Still later: modular workstation mesh, Fabric cutover, multi-tenant catalogs, priced BOQ.
+
+## Evidence dirs (landed)
+
+`00-start/` · `00-product-truth/` · `01-engine-lock/` · `02-browser-open3d-journey/` · `03-select-delete/` · `04-orbit-continuity/` · `05-symbols-svg/` · `06-save-honesty/` · `07-systems-v0/` · `08-mesh-quality/` · `09-shortcuts-chrome/`
 
 ## Firecrawl note
 
