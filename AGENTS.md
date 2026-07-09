@@ -38,6 +38,7 @@
 - **All skills permitted:** Main agent may load and assign **any** available skill (Firecrawl, chrome-devtools, TDD, debugging, a11y, verification, docs, etc.) as fit. Owner grants full skill authority.
 - Load **skills that fit the job** (TDD, debug, browser, etc.) — not every skill for ceremony.
 - **Subagents:** Prefer parallel when useful. **Default up to 8–10; up to 12 when confident** the split is clean (agent call — don’t spam). Write to disk. Briefs stay short; point at MDs.
+- **Assign with superpowers:** Every subagent brief **starts with** `/using-superpowers` (+ fit skills). That is the kill for delegated work — not a hand-written mega-prompt.
 - Skills do not override **User Wins** or Git & Workspace rules above.
 
 ### Packages, assets & licenses (hard — no exceptions)

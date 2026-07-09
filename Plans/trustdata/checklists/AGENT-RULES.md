@@ -20,8 +20,19 @@
 - Claim W-gate green without evidence path.
 - Parallel past a hard CP stop (see `checkpoints/CHECKPOINTS.md`).
 
-## Spawn one-liner
+## Spawn (required)
+
+Every subagent prompt **must** open with skill load, e.g.:
+
+`/using-superpowers` + any fit skills (TDD, systematic-debugging, verification-before-completion, chrome-devtools, …)
+
+Then short task body + MD pointers. **Do not** replace skills with a long custom “prompt novel.”
 
 ```
-Trustdata: AGENTS.md + Plans/trustdata/INDEX.md + phase file. Superpowers. No worktrees. Licenses: ayushdocs/17-LICENSES-CLEARED.md. Evidence under results/planner/world-standard-wave/. Take calls; hard stops only (buy/push/scope/competitor).
+/using-superpowers [+ skill list]
+Trustdata: AGENTS.md + Plans/trustdata/INDEX.md + phase file.
+No worktrees. Licenses: ayushdocs/17-LICENSES-CLEARED.md.
+Evidence: results/planner/world-standard-wave/. Context: ayushdocs/18 + 19.
+Take calls; hard stops only (buy / force-push / goal change / competitor assets).
+TASK: <one clear ask>
 ```
