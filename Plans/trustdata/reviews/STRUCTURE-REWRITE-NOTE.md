@@ -19,7 +19,7 @@
 | New phases / gates (P11, W9, P03b browser CP) | **REJECT** | Yes — not created |
 | INDEX week-1 kill order | **EXPAND** | **Yes** |
 | 00-START kill order | Condensed + link to INDEX | **Yes** |
-| Phase body thin (P03 / P05 / P07 density) | THIN later | **No** — other agent owns P03/P05/P07 |
+| Phase body thin (P03 / P05 / P07 density) | **THIN** mains + `P0X-appendix.md` | **Yes** — applied 2026-07-09 |
 | Merge INDEX+00-START / MASTER+CHECKPOINTS / maps | **KEEP separate** | Yes |
 
 **Label language:** STRUCTURE-ADVICE used enum **KEEP** (+ micro INDEX); STRUCTURE-ADVICE-2 used **HYBRID**. Partner selected **HYBRID** as the program label: same substance (topology keep + kill-order expand + density thin deferred).
@@ -56,11 +56,20 @@
 
 ---
 
-## What did **not** change (this agent)
+## Phase thin pass (applied 2026-07-09)
 
-- No rewrites of `phases/P01`–`P10` bodies (including P03 / P05 / P07 thin passes).
-- No CHECKPOINTS renumber; no RESULTS-MAP folder renames; no MASTER / AGENT-RULES edits.
-- No product code; no evidence fabrication; no worktrees; no push.
+| Main (execute card) | Appendix (skeletons) | Evidence folder (unchanged) |
+|---------------------|----------------------|-----------------------------|
+| `phases/P03-select-delete.md` | `phases/P03-appendix.md` | `03-select-delete/` |
+| `phases/P05-symbols-svg.md` | `phases/P05-appendix.md` | `05-symbols-svg/` |
+| `phases/P07-draw-place-journey.md` | `phases/P07-appendix.md` | `02-browser-open3d-journey/` |
+
+Each main opens with `## Structure rewrite 2026-07-09` hybrid thin note. Target main size ~150–350 lines; multi-page TS/Playwright blocks live in appendix. **One CP ownership preserved** (no P03b, no W1/W2 split).
+
+## What did **not** change
+
+- No CHECKPOINTS renumber; no RESULTS-MAP folder renames; no MASTER / AGENT-RULES topology changes.
+- No product code under `site/`; no evidence fabrication; no worktrees; no push.
 
 ---
 

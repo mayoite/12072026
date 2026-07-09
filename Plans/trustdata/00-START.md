@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. **No product code** until owner records **implementation unlock**. Plan-only mode allows plan/review work only. Steps use checkbox syntax.  
 > **Expert revision:** 2026-07-09 — applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md).  
-> **Structure decision (partner):** **HYBRID** — KEEP topology; week-1 kill order lives fully in [INDEX.md](./INDEX.md); this file keeps a **condensed** copy only. See [reviews/STRUCTURE-REWRITE-NOTE.md](./reviews/STRUCTURE-REWRITE-NOTE.md).  
+> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology; week-1 kill order full in [INDEX.md](./INDEX.md) (condensed below); densest phases thinned → `phases/P0X-appendix.md`. See [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).  
 > **Program index:** [INDEX.md](./INDEX.md)
 
 **Goal:** Freeze operating rules, approach pick, unlock mode, ethics, and phase order so every agent works from the same truth.
@@ -145,8 +145,9 @@ Aligned with [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md). Depende
 
 ```
 CP-00 → CP-01 → CP-02
-              ↘ parallel (≤8 / max 10): CP-03 W3 · CP-04 W4 · CP-05 symbols · CP-06 W5–W6 · CP-08 W7 · CP-09 W8
-              ↘ CP-07 W1–W2 browser (full claim needs CP-03 + CP-05 not red unless owner WAIVE)
+              ↘ serial spine: CP-03 W3 → CP-07 W1–W2 browser → CP-06 W5–W6
+              ↘ parallel fill (≤8 / max 10): CP-04 W4 · CP-05 symbols · CP-08 W7 · CP-09 W8
+              ↘ CP-07 full claim needs CP-03 + CP-05 not red unless owner WAIVE
               → CP-10 pack + E: backup (all prior PASS or WAIVE)
 ```
 
