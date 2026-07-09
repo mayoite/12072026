@@ -33,14 +33,24 @@
 - **All skills permitted:** Main agent may load and assign **any** available skill (Firecrawl, chrome-devtools, TDD, debugging, a11y, verification, docs, etc.) as fit. Owner grants full skill authority.
 - Before any non-trivial work: load and follow relevant skills (even 1% chance a skill applies → use it).
 - **Subagents:** Encourage parallel agents. **Default up to 8 concurrent; hard max 10.** Prefer write-to-disk; do not idle waiting on chat.
-- Subagent prompts must include: use superpowers/skills; no worktrees; trust data not character; inspiration-only for competitor research (no plagiarism; MIT/open packages only).
+- Subagent prompts must include: use superpowers/skills; no worktrees; trust data not character; inspiration-only for competitor research (no plagiarism; license rules below).
 - Skills do not override **User Wins** or Git & Workspace rules above.
+
+### Packages, assets & licenses (User Standing Instructions — 2026-07-09)
+
+- **Default:** Prefer **MIT / Apache / BSD** (or other clear open licenses) after a quick license check.
+- **Paid is allowed** when the product needs it. Do **not** refuse a tool only because it is commercial.
+- **Before buy:** If a package/asset needs a **paid license** and **does not** allow trial/eval/testing without purchase → **stop and tell the owner**; they will buy first. Do not pirate, crack, or “find a free copy.”
+- **If trial/eval is allowed without a paid seat** → use it for testing; note the license state; escalate before production ship if still unpaid.
+- **Owner-paid already (do not re-flag as unlicensed):** fonts and brand assets the owner has licensed — including **Helvetica Neue** and **Cisco** (and similar paid fonts already in repo). WASM / GLB tooling: same rule — open preferred; paid OK after ask if required; never ship competitor proprietary GLB/WASM.
+- **Competitive research:** inspiration only — never take competitor code, brands, or proprietary assets into product.
 
 ## 4. Standards & Safety
 - **No `any`:** Strictly prohibited in handwritten code.
 - **Facts:** Repo facts → `Readme.md`. Commands → `START.md`.
 - **Convention:** Match surrounding code. Read owning docs before editing.
 - **Safety:** No secrets leaked. Respect auth rules in `Readme.md`.
+- **Licenses:** Follow **Packages, assets & licenses** above (not “MIT only forever”).
 
 ## 5. Test Evidence & Type Safety (See `testing-handbook.md`)
 - **Zero Suppression:** Never delete or filter test output. Preserve all artifacts.
