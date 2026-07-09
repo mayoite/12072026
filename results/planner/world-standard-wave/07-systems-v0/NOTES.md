@@ -96,3 +96,15 @@ Optional BOQ panel UI; modular workstation mesh; Fabric cutover later
 - e2e open3d-systems-v0-place-delete.spec.ts — place WS → auto-select → Delete → furniture restored
 - Properties panel shows Workstation (systems v0) shape/size/modules when selected
 - Evidence: 20/21 png + place-delete-run.json
+
+## Configurator (2026-07-09)
+
+Free size/shape/modules (not only 8 matrix SKUs):
+
+- `workstationConfiguratorV0.ts` — pure draft + resolve
+- `WorkstationConfiguratorPanel` in inventory left rail
+- Place arms `pendingWorkstationConfig` → canvas click → `placeWorkstationConfigOnProject`
+- Unit: workstationConfiguratorV0.test.ts (5/5)
+- e2e: open3d-systems-v0-configurator.spec.ts (1 passed ~2.9s)
+- Evidence: 30/31/32 png + configurator-run.json
+

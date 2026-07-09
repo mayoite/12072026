@@ -30,7 +30,7 @@ Not: full multi-client factory, photoreal, enterprise parity.
 | 4 | **W1�W2 journey** | Serial Playwright `02-browser-open3d-journey/` | ? |
 | 5 | **W5�W6 save honesty** | Flush + labels + hard reload | ? |
 | 6 | Parallel fill | Orbit ? � shortcuts ? � symbols ? � mesh ? | ? P04�P05�P08�P09 |
-| 7 | Systems v0 | place+catalog+Block2D+e2e+BOQ+props+seats | **done core** | mesh/Fabric later |
+| 7 | Systems v0 | core + **configurator** (size/shape/modules) | **done** | mesh/priced BOQ later |
 
 Agent ticks slices in evidence + commits; does **not** expand this into a novel.
 

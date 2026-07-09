@@ -41,9 +41,11 @@ import {
   rankCatalogItems,
 } from "../catalog/catalogSearch";
 import type { Open3dCatalogItem } from "../catalog/catalogTypes";
+import type { WorkstationConfigV0 } from "../catalog/workstationSystemV0";
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
 import { isSvgAssetUrl } from "../catalog/svg/svgPreviewAssets";
 import { useOpen3dSvgCatalog } from "../catalog/useOpen3dWorkspaceCatalog";
+import { WorkstationConfiguratorPanel } from "./WorkstationConfiguratorPanel";
 import styles from "./inventory.module.css";
 
 // Wiring for PLAN-FAIL-0405/0419: inventory consumer calls svgBlockDescriptorLoader via catalogClient (catalogue-first primary descriptors, resolver blocks, search parity facets).
@@ -61,6 +63,8 @@ export interface InventoryPanelProps {
     variantId: string | null,
     position: { x: number; y: number },
   ) => void;
+  /** Systems v0 configurator — arm place with free size/shape/modules combo */
+  onWorkstationConfigPlace?: (config: WorkstationConfigV0) => void;
   /** Callback when search query changes */
   onSearch?: (query: string) => void;
   /** Live catalog items from the workspace API */
@@ -81,6 +85,7 @@ export const InventoryPanel = memo(function InventoryPanel({
   initialState,
   onItemSelect,
   onItemPlace,
+  onWorkstationConfigPlace,
   onSearch,
   catalogItems,
   isLoading = false,
@@ -405,6 +410,12 @@ export const InventoryPanel = memo(function InventoryPanel({
           )}
         </SearchField>
       </div>
+
+      {onWorkstationConfigPlace ? (
+        <WorkstationConfiguratorPanel
+          onPlaceConfig={onWorkstationConfigPlace}
+        />
+      ) : null}
 
       {/* Quick filters - Room groups */}
       <div className={styles.quickFilters}>

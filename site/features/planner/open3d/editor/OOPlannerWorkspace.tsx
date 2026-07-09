@@ -24,7 +24,12 @@ import {
   isOpen3dFabricFurnitureEnabled,
   type FurnitureDocumentPoseUpdate,
 } from "../canvas-fabric-stage";
-import { placeCatalogItemInProject } from "../catalog/placementAction";
+import {
+  placeCatalogItemInProject,
+  placeWorkstationConfigOnProject,
+} from "../catalog/placementAction";
+import type { WorkstationConfigV0 } from "../catalog/workstationSystemV0";
+import { workstationConfigKey } from "../catalog/workstationSystemV0";
 import { placeModularWithGeneratedGlbBrowser } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbBrowser";
 import { shouldPlaceModularWithGeneratedGlb } from "@/features/planner/asset-engine/mesh/shouldPlaceModularWithGeneratedGlb";
 import { importOpen3dProjectJson } from "../persistence/projectJson";
@@ -170,6 +175,8 @@ export function OOPlannerWorkspace({
   const [pendingCatalogItemId, setPendingCatalogItemId] = useState<
     string | null
   >(null);
+  const [pendingWorkstationConfig, setPendingWorkstationConfig] =
+    useState<WorkstationConfigV0 | null>(null);
   const [canvasStatus, setCanvasStatus] = useState<CanvasStatusSnapshot | null>(
     null,
   );
@@ -313,6 +320,7 @@ export function OOPlannerWorkspace({
     setActiveTool(tool);
     armedToolRef.current = tool;
     setPendingCatalogItemId(null);
+    setPendingWorkstationConfig(null);
     canvasRef.current?.setTool(tool);
   }, []);
 
@@ -331,14 +339,52 @@ export function OOPlannerWorkspace({
   }, [workspaceCanvas]);
 
   const handleInventoryPlace = useCallback((itemId: string) => {
+    setPendingWorkstationConfig(null);
     setPendingCatalogItemId(itemId);
     setActiveTool("placement");
     armedToolRef.current = "placement";
     canvasRef.current?.setTool("placement");
   }, []);
 
+  const handleWorkstationConfigPlace = useCallback(
+    (config: WorkstationConfigV0) => {
+      setPendingCatalogItemId(null);
+      setPendingWorkstationConfig(config);
+      setActiveTool("placement");
+      armedToolRef.current = "placement";
+      canvasRef.current?.setTool("placement");
+      setWorkspaceMessage(
+        `Click canvas to place ${workstationConfigKey(config)}`,
+      );
+    },
+    [],
+  );
+
   const handlePlaceAtPoint = useCallback(
     (point: Open3dPoint) => {
+      // Systems configurator path — free size/shape/modules combo
+      if (pendingWorkstationConfig) {
+        const config = pendingWorkstationConfig;
+        let placedId: string | null = null;
+        workspaceCanvas.updateProject((project) => {
+          const placed = placeWorkstationConfigOnProject(project, config, point);
+          placedId =
+            typeof placed.action.payload?.id === "string"
+              ? placed.action.payload.id
+              : null;
+          return placed.project;
+        });
+        setPendingWorkstationConfig(null);
+        if (placedId) {
+          workspaceCanvas.setSelection({ type: "furniture", ids: [placedId] });
+          setActiveTool("select");
+          armedToolRef.current = "select";
+          canvasRef.current?.setTool("select");
+        }
+        setWorkspaceMessage(`Placed ${workstationConfigKey(config)}`);
+        return;
+      }
+
       if (!pendingCatalogItemId) return;
       const item = catalog.resolveItem(pendingCatalogItemId);
       if (!item) {
@@ -441,7 +487,12 @@ export function OOPlannerWorkspace({
       }
       setWorkspaceMessage(`Placed ${item.shortName ?? item.name}`);
     },
-    [pendingCatalogItemId, workspaceCanvas, catalog],
+    [
+      pendingCatalogItemId,
+      pendingWorkstationConfig,
+      workspaceCanvas,
+      catalog,
+    ],
   );
 
   const handleFloorChange = useCallback(
@@ -675,6 +726,7 @@ export function OOPlannerWorkspace({
             onItemPlace={(itemId) => {
               handleInventoryPlace(itemId);
             }}
+            onWorkstationConfigPlace={handleWorkstationConfigPlace}
           />
         }
         rightPanel={
@@ -721,10 +773,14 @@ export function OOPlannerWorkspace({
                 {selectionLabel}
               </span>
             ) : null}
-            {pendingCatalogItem ? (
+            {pendingCatalogItem || pendingWorkstationConfig ? (
               <span className="open3d-status-pill open3d-status-pill--placement">
                 Placing{" "}
-                {pendingCatalogItem.shortName ?? pendingCatalogItem.name}
+                {pendingWorkstationConfig
+                  ? workstationConfigKey(pendingWorkstationConfig)
+                  : (pendingCatalogItem?.shortName ??
+                    pendingCatalogItem?.name ??
+                    "item")}
               </span>
             ) : null}
             <span className="open3d-status-pill open3d-status-pill--muted">
@@ -770,11 +826,16 @@ export function OOPlannerWorkspace({
                   layerVisibility={feasibilityLayerVisibility}
                   delegateKeyboard
                   workspaceCanvas={workspaceCanvas}
-                  pendingCatalogPlacement={pendingCatalogItemId !== null}
+                  pendingCatalogPlacement={
+                    pendingCatalogItemId !== null ||
+                    pendingWorkstationConfig !== null
+                  }
                   placementItemLabel={
-                    pendingCatalogItem?.shortName ??
-                    pendingCatalogItem?.name ??
-                    null
+                    pendingWorkstationConfig
+                      ? workstationConfigKey(pendingWorkstationConfig)
+                      : (pendingCatalogItem?.shortName ??
+                        pendingCatalogItem?.name ??
+                        null)
                   }
                   onPlaceAtPoint={handlePlaceAtPoint}
                   onStatusChange={setCanvasStatus}
@@ -794,11 +855,16 @@ export function OOPlannerWorkspace({
                 layerVisibility={layerVisibility}
                 delegateKeyboard
                 workspaceCanvas={workspaceCanvas}
-                pendingCatalogPlacement={pendingCatalogItemId !== null}
+                pendingCatalogPlacement={
+                  pendingCatalogItemId !== null ||
+                  pendingWorkstationConfig !== null
+                }
                 placementItemLabel={
-                  pendingCatalogItem?.shortName ??
-                  pendingCatalogItem?.name ??
-                  null
+                  pendingWorkstationConfig
+                    ? workstationConfigKey(pendingWorkstationConfig)
+                    : (pendingCatalogItem?.shortName ??
+                      pendingCatalogItem?.name ??
+                      null)
                 }
                 onPlaceAtPoint={handlePlaceAtPoint}
                 onStatusChange={setCanvasStatus}
