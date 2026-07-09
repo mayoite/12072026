@@ -20,15 +20,17 @@ const targets = argv
     return { label: a.slice(0, eq), base: a.slice(eq + 1) };
   });
 
-// `gated` routes need the planner guest-pass cookie and a longer wait for the
-// tldraw/R3F canvas to mount; `fullPage:false` because the canvas is viewport-sized.
+// Planner guest-pass cookie + longer wait for open3d canvas; fullPage:false for viewport canvas.
+// Updated 2026-07-09: dropped dead /configurator/guest + tldraw-era notes; use open3d.
 const ROUTES = [
   ["home", "/", {}],
   ["gallery", "/gallery", {}],
   ["solutions", "/solutions", {}],
+  ["products", "/products", {}],
+  ["contact", "/contact", {}],
   ["login", "/login", {}],
-  ["configurator-guest", "/configurator/guest", {}],
-  ["planner-canvas", "/planner/canvas", { gated: true, wait: 6000, fullPage: false }],
+  ["planner-guest", "/planner/guest", { gated: true, wait: 4000, fullPage: false }],
+  ["planner-open3d", "/planner/open3d", { gated: true, wait: 6000, fullPage: false }],
 ];
 
 fs.mkdirSync(outDir, { recursive: true });

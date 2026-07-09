@@ -36,8 +36,8 @@ const PUBLIC_PAGES = [
 ];
 
 const PLANNER_ROUTES = [
-  "/oando-planner/guest",
-  "/buddy-planner/editor",
+  "/planner/guest",
+  "/planner/open3d",
 ];
 
 const OUT = resolve("results", "runtime-evidence.json");
