@@ -27,7 +27,7 @@ function activeFloor(project: Open3dProject) {
 }
 
 describe("placeWorkstationConfigOnProject", () => {
-  it("places linear 1500×600 as one furniture with footprint width/depth and box geometry", () => {
+  it("places linear 1500×600 as one furniture with footprint and workstation-v0 mesh stamp", () => {
     const config = createWorkstationConfigV0({
       shape: "linear",
       size: { lengthMm: 1500, depthMm: 600 },
@@ -59,7 +59,16 @@ describe("placeWorkstationConfigOnProject", () => {
     expect(item.width).toBe(1500);
     expect(item.depth).toBe(600);
     expect(item.height).toBe(config.heightMm);
-    expect(item.geometryMode).toBe("box");
+    expect(item.geometryMode).toBe("workstation-v0");
+    expect(item.workstationOptions).toMatchObject({
+      shape: "linear",
+      lengthMm: 1500,
+      depthMm: 600,
+      heightMm: config.heightMm,
+    });
+    expect(item.workstationOptions?.modules).toEqual(
+      expect.arrayContaining(["desk", "pedestal", "panel"]),
+    );
     expect(placed.action.type).toBe("PLACE_WORKSTATION_V0");
   });
 
@@ -103,7 +112,7 @@ describe("placeWorkstationConfigOnProject", () => {
       });
       expect(item.width).toBe(1500);
       expect(item.depth).toBe(600);
-      expect(item.geometryMode).toBe("box");
+      expect(["box", "workstation-v0"]).toContain(item.geometryMode);
     }
 
     // Distinct grid coords (first col/row origin; others spaced)
@@ -142,5 +151,41 @@ describe("placeWorkstationInstancesOnProject", () => {
       y: 200,
     });
     expect(activeFloor(project).furniture[0]!.width).toBe(1200);
+  });
+
+  it("places configurator panel batch counts 2 / 4 / 10", () => {
+    const config = createWorkstationConfigV0({
+      shape: "linear",
+      size: { lengthMm: 1500, depthMm: 600 },
+      modules: ["desk", "pedestal", "panel"],
+    });
+
+    for (const count of [2, 4, 10] as const) {
+      const project = createOpen3dProject({
+        idFactory: ids(`floor-${count}`, `project-${count}`),
+        name: `WS Batch ${count}`,
+        now: "2026-07-09T18:00:00.000Z",
+      });
+      const batchIds = Array.from(
+        { length: count },
+        (_, i) => `batch-${count}-${i}`,
+      );
+      const result = placeWorkstationInstancesOnProject(project, config, count, {
+        columns: Math.min(count, 5),
+        originMm: { x: 0, y: 0 },
+        idFactory: ids(...batchIds),
+      });
+      expect(result.action.type).toBe("PLACE_WORKSTATION_V0_BATCH");
+      expect(result.action.payload?.count).toBe(count);
+      expect(activeFloor(result.project).furniture).toHaveLength(count);
+      const idsPayload = result.action.payload?.ids;
+      expect(Array.isArray(idsPayload)).toBe(true);
+      if (!Array.isArray(idsPayload)) {
+        throw new Error("expected ids array");
+      }
+      expect(idsPayload.filter((id) => typeof id === "string")).toHaveLength(
+        count,
+      );
+    }
   });
 });

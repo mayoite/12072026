@@ -136,3 +136,32 @@
   outline: 2px solid var(--color-primary, #2563eb);
   outline-offset: 2px;
 }
+
+.batchRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.batchBtn {
+  flex: 1 1 auto;
+  min-width: 4.5rem;
+  border: 1px solid var(--border-soft, #e2e8f0);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--surface-panel, #fff);
+  color: var(--text-body, #334155);
+}
+
+.batchBtn:hover {
+  border-color: var(--color-primary, #2563eb);
+  color: var(--color-primary, #2563eb);
+}
+
+.batchBtn:focus-visible {
+  outline: 2px solid var(--color-primary, #2563eb);
+  outline-offset: 2px;
+}

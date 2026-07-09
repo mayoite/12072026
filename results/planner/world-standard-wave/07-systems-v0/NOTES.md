@@ -99,13 +99,59 @@ Free size/shape/modules combo (not only 8 matrix SKUs):
 - `summarizeWorkstationBoqV0(project)` — pure quantity lines by config key (no price yet)
 - Place-from-inventory auto-selects furniture + returns to select tool
 
-## Next
-Optional BOQ panel UI / priced BOQ; modular workstation mesh; Fabric cutover later
+## Configurator Place N seats (2026-07-09)
+
+- Panel buttons: Place 2 / 4 / 10 seats → `placeWorkstationInstancesOnProject` (immediate, no canvas click)
+- Pure: `WORKSTATION_V0_BATCH_PLACE_COUNTS`, `isWorkstationV0BatchPlaceCount`, `batchPlaceButtonLabel`
+- Unit: workstationConfiguratorV0 + WorkstationConfiguratorPanel + placement 2/4/10 (vitest-batch-place*)
+- e2e: `open3d-systems-v0-batch-place.spec.ts` — furniture +4 then +2; shots `40-batch-*.png` + batch-place-run.json
+- Free height deferred (not needed for this slice)
 
 ## Place+delete browser (2026-07-09)
 
 - e2e open3d-systems-v0-place-delete.spec.ts — place WS → auto-select → Delete → furniture restored
 - Properties panel shows Workstation (systems v0) shape/size/modules when selected
 - Evidence: 20/21 png + place-delete-run.json
+
+## Multi-part 3D mesh (workstation-v0) — **done** (2026-07-09)
+
+Modular multi-part **box group** (not photoreal GLB), patterned after cabinet-v0:
+
+### Code
+- `site/features/planner/open3d/catalog/workstationMeshV0.ts`
+  - pure `generateWorkstationV0MeshPlan(config)` — mm part plans (size + position + role color)
+  - `generateWorkstationV0Mesh(config)` — THREE.Group of role boxes
+  - roles: desk / return / pedestal / panel / overhead
+  - constants: `WORKTOP_THICKNESS_MM=30`, `PANEL_HEIGHT_MM=1100`, `OVERHEAD_HEIGHT_MM=350`, `OVERHEAD_GAP_MM=200`
+  - horizontal layout from `workstationPlanPrims`; overhead elevated above worktop
+- `geometryMode: "workstation-v0"` on `Open3dFurnitureGeometryMode`
+- `workstationOptions` serializable stamp on furniture (`Open3dWorkstationV0Options`)
+- `placeWorkstationConfigOnProject` stamps geometryMode + workstationOptions (was `"box"`)
+- `createSceneObjectFromNode` builds multi-part Group for workstation-v0
+- `buildOpen3dSceneNodes` / `projectParser` pass-through + parse
+- Catalog demo items `geometryMode: "workstation-v0"`
+
+### Unit evidence
+
+```
+pnpm exec vitest run \
+  tests/unit/features/planner/open3d/workstationMeshV0.test.ts \
+  tests/unit/features/planner/open3d/workstationPlacementV0.test.ts \
+  tests/unit/features/planner/open3d/workstationCatalogV0.test.ts \
+  tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts \
+  tests/unit/features/planner/open3d/catalog/furnitureBlock2D.workstation-v0.test.ts
+# Test Files  5 passed (5)
+# Tests  34 passed (34)
+```
+
+Log: `vitest-mesh-v0-raw.log`
+
+Non-reg (system/BOQ/modular/save/scene nodes): 32/32 pass.
+
+### Honest residual
+Still boxy multiparts — worktop slab + pedestal/panel/overhead boxes; no legs, handles, or photoreal materials. Not a designer GLB path.
+
+## Next
+Optional BOQ panel UI / priced BOQ; Fabric cutover later; free height control; visual smoke PNGs for workstation-v0 if desired
 
 

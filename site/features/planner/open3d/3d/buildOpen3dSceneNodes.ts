@@ -12,6 +12,7 @@ import type {
   Open3dFurnitureGeometryMode,
   Open3dModularCabinetV0Options,
   Open3dProject,
+  Open3dWorkstationV0Options,
 } from "../model/types";
 
 export type Open3dSceneNodeKind = "wall" | "furniture";
@@ -36,6 +37,7 @@ export interface Open3dSceneNode {
   /** Pass-through for modular multi-part mesh (no THREE on document). */
   readonly geometryMode?: Open3dFurnitureGeometryMode;
   readonly modularOptions?: Open3dModularCabinetV0Options;
+  readonly workstationOptions?: Open3dWorkstationV0Options;
   /**
    * Resolved system-generated GLB candidate (generatedGlbUrl | glbUrl | meshUrl).
    * Viewer loads only when shouldLoadGlb(url) is true.
@@ -120,6 +122,14 @@ export function buildOpen3dSceneNodes(
         : {}),
       ...(item.modularOptions !== undefined
         ? { modularOptions: { ...item.modularOptions } }
+        : {}),
+      ...(item.workstationOptions !== undefined
+        ? {
+            workstationOptions: {
+              ...item.workstationOptions,
+              modules: [...item.workstationOptions.modules],
+            },
+          }
         : {}),
       ...(loadableGlb !== null ? { generatedGlbUrl: loadableGlb } : {}),
     });

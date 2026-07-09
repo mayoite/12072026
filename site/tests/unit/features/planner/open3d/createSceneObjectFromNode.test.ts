@@ -10,6 +10,15 @@ import {
   countCabinetV0Parts,
   defaultCabinetV0Options,
 } from "@/features/planner/open3d/catalog/modularCabinetV0";
+import {
+  countWorkstationV0Parts,
+  workstationOptionsFromConfig,
+} from "@/features/planner/open3d/catalog/workstationMeshV0";
+import {
+  createWorkstationConfigV0,
+  workstationConfigKey,
+  workstationFootprintMm,
+} from "@/features/planner/open3d/catalog/workstationSystemV0";
 
 function modularNode(
   overrides: Partial<Open3dSceneNode> = {},
@@ -212,6 +221,39 @@ describe("createSceneObjectFromNode — modular vs parametric-box vs wall", () =
     expect(wall.userData.kind).toBe("wall");
     expect(modular.children.length).toBeGreaterThan(1);
     expect(box.children.length).toBe(0);
+  });
+
+  it("workstation-v0 builds Group with multi-part role meshes and floor origin", () => {
+    const config = createWorkstationConfigV0({
+      shape: "linear",
+      size: { lengthMm: 1500, depthMm: 600 },
+      modules: ["desk", "pedestal", "panel"],
+    });
+    const fp = workstationFootprintMm(config);
+    const node: Open3dSceneNode = {
+      id: "ws-1",
+      kind: "furniture",
+      xMm: 2000,
+      yMm: 1000,
+      widthMm: fp.widthMm,
+      depthMm: fp.depthMm,
+      heightMm: config.heightMm,
+      rotation: 0,
+      catalogId: workstationConfigKey(config),
+      geometryMode: "workstation-v0",
+      workstationOptions: workstationOptionsFromConfig(config),
+    };
+    const object = createSceneObjectFromNode(THREE, node, false);
+    expect(object.type).toBe("Group");
+    expect(object.userData.geometryMode).toBe("workstation-v0");
+    expect(object.userData.meshSource).toBe("procedural");
+    expect(object.children).toHaveLength(countWorkstationV0Parts(config));
+    expect(object.children.map((c) => c.name).sort()).toEqual(
+      ["desk", "panel", "pedestal"].sort(),
+    );
+    expect(object.position.x).toBeCloseTo(2);
+    expect(object.position.y).toBe(0);
+    expect(object.position.z).toBeCloseTo(1);
   });
 });
 

@@ -1,6 +1,7 @@
 /**
  * Pure scene-object factory for Open3dSceneNode → THREE Object3D.
- * Modular furniture uses generateCabinetV0Mesh (no designer GLB, no THREE on document).
+ * Modular furniture uses generateCabinetV0Mesh / generateWorkstationV0Mesh
+ * (no designer GLB, no THREE on document).
  * Non-modular furniture box uses ParametricBuilder.generate3DMesh when W/D/H are available.
  * System-generated GLB is loaded asynchronously by the viewer (see loadGeneratedGlbObject);
  * this factory always builds the procedural fallback immediately.
@@ -11,6 +12,14 @@ import {
   defaultCabinetV0Options,
   generateCabinetV0Mesh,
 } from "../catalog/modularCabinetV0";
+import {
+  generateWorkstationV0Mesh,
+  workstationConfigFromOptions,
+} from "../catalog/workstationMeshV0";
+import {
+  createWorkstationConfigV0,
+  parseWorkstationConfigKey,
+} from "../catalog/workstationSystemV0";
 import { ParametricBuilder } from "../catalog/parametricBuilder";
 import { mmToMeters, type Open3dSceneNode } from "./buildOpen3dSceneNodes";
 
@@ -40,8 +49,8 @@ function hasPositiveDimensions(node: Open3dSceneNode): boolean {
 }
 
 /**
- * Build a wall box or furniture object (parametric box / modular-cabinet-v0 group).
- * Pose matches plan mm → world metres (Y-up, plan Y → world Z).
+ * Build a wall box or furniture object (parametric / modular-cabinet-v0 /
+ * workstation-v0 group). Pose matches plan mm → world metres (Y-up, plan Y → world Z).
  * Does not load GLB (sync path); use loadGeneratedGlbObject for async replace.
  */
 export function createSceneObjectFromNode(
@@ -70,6 +79,45 @@ export function createSceneObjectFromNode(
       meshSource: "procedural",
     };
     // Group origin is floor (carcass already at h/2); box path uses centered mesh at h/2.
+    meshGroup.position.set(
+      mmToMeters(node.xMm),
+      0,
+      mmToMeters(node.yMm),
+    );
+    meshGroup.rotation.y = -node.rotation;
+    applyShadowFlags(meshGroup, THREE, castShadow);
+    return meshGroup;
+  }
+
+  if (
+    node.kind === "furniture" &&
+    node.geometryMode === "workstation-v0"
+  ) {
+    const config = node.workstationOptions
+      ? workstationConfigFromOptions(node.workstationOptions)
+      : parseWorkstationConfigKey(node.catalogId ?? "") ??
+        createWorkstationConfigV0({
+          shape: "linear",
+          size: { lengthMm: node.widthMm, depthMm: node.depthMm },
+          modules: ["desk"],
+          heightMm: node.heightMm,
+        });
+    // Prefer stamped height / size when options missing height only
+    const resolved = createWorkstationConfigV0({
+      shape: config.shape,
+      size: config.size,
+      modules: config.modules,
+      heightMm: node.workstationOptions?.heightMm ?? node.heightMm ?? config.heightMm,
+    });
+    const meshGroup = generateWorkstationV0Mesh(resolved);
+    meshGroup.name = node.id;
+    meshGroup.userData = {
+      ...meshGroup.userData,
+      entityId: node.id,
+      kind: node.kind,
+      geometryMode: "workstation-v0",
+      meshSource: "procedural",
+    };
     meshGroup.position.set(
       mmToMeters(node.xMm),
       0,

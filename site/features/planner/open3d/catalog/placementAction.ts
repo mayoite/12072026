@@ -24,6 +24,7 @@ import {
   defaultCabinetV0Options,
   type CabinetMaterialId,
 } from "./modularCabinetV0";
+import { workstationOptionsFromConfig } from "./workstationMeshV0";
 import {
   layoutWorkstationInstances,
   parseWorkstationConfigKey,
@@ -358,8 +359,8 @@ export function placeCatalogItemInProject(
  * Systems v0 — place one workstation config on the open3d document via pure actions.
  *
  * Footprint width/depth come from workstationFootprintMm; catalogId is the
- * stable workstationConfigKey (`ws-v0-…`). geometryMode is box until modular
- * workstation mesh is wired.
+ * stable workstationConfigKey (`ws-v0-…`). geometryMode is workstation-v0 with
+ * serializable workstationOptions for multi-part procedural mesh.
  */
 export function placeWorkstationConfigOnProject(
   project: Open3dProject,
@@ -369,6 +370,7 @@ export function placeWorkstationConfigOnProject(
 ): PureActionResult {
   const catalogId = workstationConfigKey(config);
   const footprint = workstationFootprintMm(config);
+  const workstationOptions = workstationOptionsFromConfig(config);
   const placed = addFurniture(project, catalogId, position, options);
   const furnitureId = placed.action.payload?.id;
   if (typeof furnitureId !== "string" || furnitureId.length === 0) {
@@ -386,7 +388,8 @@ export function placeWorkstationConfigOnProject(
               width: footprint.widthMm,
               depth: footprint.depthMm,
               height: config.heightMm,
-              geometryMode: "box" as const,
+              geometryMode: "workstation-v0" as const,
+              workstationOptions,
               sourceCatalogId: catalogId,
             }
           : furniture,

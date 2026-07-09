@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "furnitureBefore": 0,
+  "furnitureAfter": 6,
+  "shots": [
+    "40-batch-ui.png",
+    "40-batch-after-4.png",
+    "40-batch-after-6.png"
+  ],
+  "at": "2026-07-09T14:31:29.787Z"
+}

@@ -266,7 +266,7 @@ export interface Open3dCatalogItem {
    * Optional geometry generation mode for placement → 3D.
    * When omitted, placement may still detect modular via id/slug `cabinet-v0`.
    */
-  geometryMode?: "box" | "modular-cabinet-v0";
+  geometryMode?: "box" | "modular-cabinet-v0" | "workstation-v0";
 
   // Sketchfab search parity facets (added for catalogue-first; BP-06 / design §9-10 / REC-02/04 / PLAN-FAIL-0419)
   // license, animated, staffPicked, favourite, downloadable per search_models contract.

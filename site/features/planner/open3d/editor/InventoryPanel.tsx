@@ -65,6 +65,11 @@ export interface InventoryPanelProps {
   ) => void;
   /** Systems v0 configurator — arm place with free size/shape/modules combo */
   onWorkstationConfigPlace?: (config: WorkstationConfigV0) => void;
+  /** Systems v0 — immediate batch place (2/4/10) via placeWorkstationInstancesOnProject */
+  onWorkstationConfigBatchPlace?: (
+    config: WorkstationConfigV0,
+    count: number,
+  ) => void;
   /** Callback when search query changes */
   onSearch?: (query: string) => void;
   /** Live catalog items from the workspace API */
@@ -86,6 +91,7 @@ export const InventoryPanel = memo(function InventoryPanel({
   onItemSelect,
   onItemPlace,
   onWorkstationConfigPlace,
+  onWorkstationConfigBatchPlace,
   onSearch,
   catalogItems,
   isLoading = false,
@@ -414,6 +420,7 @@ export const InventoryPanel = memo(function InventoryPanel({
       {onWorkstationConfigPlace ? (
         <WorkstationConfiguratorPanel
           onPlaceConfig={onWorkstationConfigPlace}
+          onPlaceBatchConfig={onWorkstationConfigBatchPlace}
         />
       ) : null}
 

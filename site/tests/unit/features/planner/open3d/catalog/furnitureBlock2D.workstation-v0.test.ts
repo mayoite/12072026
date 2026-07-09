@@ -33,7 +33,7 @@ function wsItem(
     width: fp.widthMm,
     depth: fp.depthMm,
     height: config.heightMm,
-    geometryMode: "box",
+    geometryMode: "workstation-v0",
     sourceCatalogId: key,
     ...partial,
   };
@@ -71,7 +71,7 @@ describe("workstationBlock2DFromItem", () => {
       width: fp.widthMm,
       depth: fp.depthMm,
       height: config.heightMm,
-      geometryMode: "box",
+      geometryMode: "workstation-v0",
     });
     expect(block.prims.length).toBeGreaterThanOrEqual(plan.prims.length);
     expect(block.footprint.L).toBe(fp.widthMm);

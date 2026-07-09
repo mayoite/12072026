@@ -100,6 +100,25 @@ function floor(value: unknown, path: string): Open3dFloor {
       material: oneOf(opts.material, ["oak", "white"] as const, `${itemPath}.material`),
     };
   };
+  const WORKSTATION_MODULE_KINDS = [
+    "desk",
+    "return",
+    "pedestal",
+    "panel",
+    "overhead",
+  ] as const;
+  const parseWorkstationOptions = (raw: unknown, itemPath: string) => {
+    const opts = record(raw, itemPath);
+    return {
+      shape: oneOf(opts.shape, ["linear", "l-shape"] as const, `${itemPath}.shape`),
+      lengthMm: numberValue(opts.lengthMm, `${itemPath}.lengthMm`, 0.001),
+      depthMm: numberValue(opts.depthMm, `${itemPath}.depthMm`, 0.001),
+      heightMm: numberValue(opts.heightMm, `${itemPath}.heightMm`, 0.001),
+      modules: arrayValue(opts.modules, `${itemPath}.modules`, (mod, modPath) =>
+        oneOf(mod, WORKSTATION_MODULE_KINDS, modPath),
+      ),
+    };
+  };
   const parseFurniture = (raw: unknown, itemPath: string) => {
     const furniture = record(raw, itemPath);
     const scale = record(furniture.scale, `${itemPath}.scale`);
@@ -116,13 +135,21 @@ function floor(value: unknown, path: string): Open3dFloor {
         : {
             geometryMode: oneOf(
               furniture.geometryMode,
-              ["box", "modular-cabinet-v0"] as const,
+              ["box", "modular-cabinet-v0", "workstation-v0"] as const,
               `${itemPath}.geometryMode`,
             ),
           }),
       ...(furniture.modularOptions === undefined
         ? {}
         : { modularOptions: parseModularOptions(furniture.modularOptions, `${itemPath}.modularOptions`) }),
+      ...(furniture.workstationOptions === undefined
+        ? {}
+        : {
+            workstationOptions: parseWorkstationOptions(
+              furniture.workstationOptions,
+              `${itemPath}.workstationOptions`,
+            ),
+          }),
       ...(furniture.generatedGlbUrl === undefined
         ? {}
         : (() => {

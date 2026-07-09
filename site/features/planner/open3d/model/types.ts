@@ -48,7 +48,10 @@ export interface Open3dWindow {
 }
 
 /** Furniture mesh generation mode (document-serializable; no THREE objects). */
-export type Open3dFurnitureGeometryMode = "box" | "modular-cabinet-v0";
+export type Open3dFurnitureGeometryMode =
+  | "box"
+  | "modular-cabinet-v0"
+  | "workstation-v0";
 
 /**
  * Serializable modular cabinet-v0 options (mirrors ModularCabinetV0Options).
@@ -60,6 +63,18 @@ export interface Open3dModularCabinetV0Options {
   heightMm: number;
   doorStyle: "none" | "slab" | "pair";
   material: "oak" | "white";
+}
+
+/**
+ * Serializable systems-v0 workstation options (mirrors WorkstationV0MeshOptions).
+ * Stored on furniture for multi-part mesh rebuild without designer GLB.
+ */
+export interface Open3dWorkstationV0Options {
+  shape: "linear" | "l-shape";
+  lengthMm: number;
+  depthMm: number;
+  heightMm: number;
+  modules: Array<"desk" | "return" | "pedestal" | "panel" | "overhead">;
 }
 
 export interface Open3dFurnitureItem {
@@ -77,10 +92,12 @@ export interface Open3dFurnitureItem {
   sourceCatalogId?: string;
   sourceSlug?: string;
   sourceSku?: string;
-  /** When modular-cabinet-v0, viewer builds multi-part mesh from modularOptions. */
+  /** When modular-cabinet-v0 / workstation-v0, viewer builds multi-part mesh. */
   geometryMode?: Open3dFurnitureGeometryMode;
   /** Required when geometryMode is modular-cabinet-v0. */
   modularOptions?: Open3dModularCabinetV0Options;
+  /** Required when geometryMode is workstation-v0. */
+  workstationOptions?: Open3dWorkstationV0Options;
   /**
    * System-generated GLB URL (catalog-assets/generated/* or blob:).
    * Place leaves unset (procedural default). Stamp after G5 via

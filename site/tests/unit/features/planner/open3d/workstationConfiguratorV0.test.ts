@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  WORKSTATION_V0_BATCH_PLACE_COUNTS,
+  batchPlaceButtonLabel,
   configuratorPreview,
   defaultWorkstationConfiguratorDraftV0,
+  isWorkstationV0BatchPlaceCount,
   resolveWorkstationConfigFromDraft,
   setConfiguratorShape,
   setConfiguratorSize,
@@ -119,5 +122,16 @@ describe("workstationConfiguratorV0", () => {
     expect(first).toEqual(config);
     expect(second).toBeNull();
     expect(bag.current).toBeNull();
+  });
+
+  it("batch place counts are 2, 4, 10 with labels", () => {
+    expect([...WORKSTATION_V0_BATCH_PLACE_COUNTS]).toEqual([2, 4, 10]);
+    expect(isWorkstationV0BatchPlaceCount(2)).toBe(true);
+    expect(isWorkstationV0BatchPlaceCount(4)).toBe(true);
+    expect(isWorkstationV0BatchPlaceCount(10)).toBe(true);
+    expect(isWorkstationV0BatchPlaceCount(3)).toBe(false);
+    expect(isWorkstationV0BatchPlaceCount(50)).toBe(false);
+    expect(batchPlaceButtonLabel(2)).toBe("Place 2 seats");
+    expect(batchPlaceButtonLabel(10)).toBe("Place 10 seats");
   });
 });

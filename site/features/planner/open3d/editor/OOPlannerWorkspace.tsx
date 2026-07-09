@@ -27,10 +27,14 @@ import {
 import {
   placeCatalogItemInProject,
   placeWorkstationConfigOnProject,
+  placeWorkstationInstancesOnProject,
 } from "../catalog/placementAction";
 import type { WorkstationConfigV0 } from "../catalog/workstationSystemV0";
 import { workstationConfigKey } from "../catalog/workstationSystemV0";
-import { takePendingWorkstationConfig } from "../catalog/workstationConfiguratorV0";
+import {
+  isWorkstationV0BatchPlaceCount,
+  takePendingWorkstationConfig,
+} from "../catalog/workstationConfiguratorV0";
 import { placeModularWithGeneratedGlbBrowser } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbBrowser";
 import { shouldPlaceModularWithGeneratedGlb } from "@/features/planner/asset-engine/mesh/shouldPlaceModularWithGeneratedGlb";
 import { importOpen3dProjectJson } from "../persistence/projectJson";
@@ -364,6 +368,65 @@ export function OOPlannerWorkspace({
       );
     },
     [],
+  );
+
+  /** Immediate grid batch place from configurator (2 / 4 / 10 seats). */
+  const handleWorkstationConfigBatchPlace = useCallback(
+    (config: WorkstationConfigV0, count: number) => {
+      if (!isWorkstationV0BatchPlaceCount(count)) {
+        setWorkspaceMessage("Batch place supports 2, 4, or 10 seats only.");
+        return;
+      }
+      // Clear any armed single-place so canvas click cannot double-fire.
+      pendingWorkstationConfigRef.current = null;
+      setPendingWorkstationConfig(null);
+      setPendingCatalogItemId(null);
+
+      let placedIds: string[] = [];
+      workspaceCanvas.updateProject((project) => {
+        // Offset next batch below existing furniture so re-clicks do not stack.
+        const floor =
+          project.floors.find((f) => f.id === project.activeFloorId) ??
+          project.floors[0];
+        let originY = 0;
+        if (floor && floor.furniture.length > 0) {
+          let maxBottom = 0;
+          for (const item of floor.furniture) {
+            const bottom = item.position.y + (item.depth ?? 0);
+            if (bottom > maxBottom) maxBottom = bottom;
+          }
+          originY = maxBottom + 400;
+        }
+        const result = placeWorkstationInstancesOnProject(
+          project,
+          config,
+          count,
+          {
+            originMm: { x: 0, y: originY },
+            columns: Math.min(count, 5),
+          },
+        );
+        const ids = result.action.payload?.ids;
+        if (Array.isArray(ids)) {
+          placedIds = ids.filter((id): id is string => typeof id === "string");
+        }
+        return result.project;
+      });
+
+      if (placedIds.length > 0) {
+        workspaceCanvas.setSelection({
+          type: "furniture",
+          ids: placedIds,
+        });
+        setActiveTool("select");
+        armedToolRef.current = "select";
+        canvasRef.current?.setTool("select");
+      }
+      setWorkspaceMessage(
+        `Placed ${placedIds.length || count}× ${workstationConfigKey(config)}`,
+      );
+    },
+    [workspaceCanvas],
   );
 
   const handlePlaceAtPoint = useCallback(
@@ -735,6 +798,7 @@ export function OOPlannerWorkspace({
               handleInventoryPlace(itemId);
             }}
             onWorkstationConfigPlace={handleWorkstationConfigPlace}
+            onWorkstationConfigBatchPlace={handleWorkstationConfigBatchPlace}
           />
         }
         rightPanel={

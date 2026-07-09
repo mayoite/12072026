@@ -10,7 +10,9 @@ import {
   type WorkstationModuleKindV0,
 } from "../catalog/workstationSystemV0";
 import {
+  WORKSTATION_V0_BATCH_PLACE_COUNTS,
   WORKSTATION_V0_TOGGLE_MODULES,
+  batchPlaceButtonLabel,
   configuratorPreview,
   defaultWorkstationConfiguratorDraftV0,
   isSameSize,
@@ -25,6 +27,11 @@ import styles from "./workstationConfigurator.module.css";
 export type WorkstationConfiguratorPanelProps = {
   /** Arm placement with this resolved config (canvas click places). */
   onPlaceConfig: (config: WorkstationConfigV0) => void;
+  /**
+   * Immediate grid batch place (2 / 4 / 10 seats) via placeWorkstationInstancesOnProject.
+   * When omitted, batch buttons are hidden.
+   */
+  onPlaceBatchConfig?: (config: WorkstationConfigV0, count: number) => void;
   /** Optional: start collapsed */
   defaultOpen?: boolean;
 };
@@ -40,6 +47,7 @@ const MODULE_LABELS: Record<WorkstationModuleKindV0, string> = {
 export const WorkstationConfiguratorPanel = memo(
   function WorkstationConfiguratorPanel({
     onPlaceConfig,
+    onPlaceBatchConfig,
     defaultOpen = true,
   }: WorkstationConfiguratorPanelProps) {
     const [open, setOpen] = useState(defaultOpen);
@@ -175,6 +183,25 @@ export const WorkstationConfiguratorPanel = memo(
             >
               Place this workstation
             </button>
+
+            {onPlaceBatchConfig ? (
+              <div
+                className={styles.batchRow}
+                role="group"
+                aria-label="Place multiple seats"
+              >
+                {WORKSTATION_V0_BATCH_PLACE_COUNTS.map((count) => (
+                  <button
+                    key={count}
+                    type="button"
+                    className={styles.batchBtn}
+                    onClick={() => onPlaceBatchConfig(preview.config, count)}
+                  >
+                    {batchPlaceButtonLabel(count)}
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </div>
         ) : null}
       </section>

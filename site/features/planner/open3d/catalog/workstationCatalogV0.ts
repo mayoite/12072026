@@ -72,7 +72,7 @@ export function workstationConfigToCatalogItem(
       plannerSourceSlug: key,
     },
     symbolOnly: false,
-    geometryMode: "box",
+    geometryMode: "workstation-v0",
   };
 }
 

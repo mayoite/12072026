@@ -72,7 +72,7 @@ describe("workstationConfigToCatalogItem", () => {
     expect(item.dimensions.widthMm).toBe(fp.widthMm);
     expect(item.dimensions.depthMm).toBe(fp.depthMm);
     expect(item.tags).toContain("systems-v0");
-    expect(item.geometryMode).toBe("box");
+    expect(item.geometryMode).toBe("workstation-v0");
   });
 
   it("matrix expands to 8 demo catalog items", () => {
@@ -118,7 +118,8 @@ describe("placeCatalogItemInProject systems v0 route", () => {
     expect(furniture).toHaveLength(1);
     expect(furniture[0].width).toBe(1500);
     expect(furniture[0].depth).toBe(600);
-    expect(furniture[0].geometryMode).toBe("box");
+    expect(furniture[0].geometryMode).toBe("workstation-v0");
+    expect(furniture[0].workstationOptions?.lengthMm).toBe(1500);
     expect(furniture[0].catalogId).toBe(item.id);
     expect(furniture[0].position).toEqual({ x: 2000, y: 1000 });
   });

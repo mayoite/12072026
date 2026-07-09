@@ -23,6 +23,25 @@ export const WORKSTATION_V0_TOGGLE_MODULES: readonly WorkstationModuleKindV0[] =
   "overhead",
 ] as const;
 
+/**
+ * Configurator panel batch seat counts (Place N seats via placeWorkstationInstancesOnProject).
+ * Kept small for UX; pure layout already supports larger N in tests.
+ */
+export const WORKSTATION_V0_BATCH_PLACE_COUNTS = [2, 4, 10] as const;
+
+export type WorkstationV0BatchPlaceCount =
+  (typeof WORKSTATION_V0_BATCH_PLACE_COUNTS)[number];
+
+export function isWorkstationV0BatchPlaceCount(
+  n: number,
+): n is WorkstationV0BatchPlaceCount {
+  return (WORKSTATION_V0_BATCH_PLACE_COUNTS as readonly number[]).includes(n);
+}
+
+export function batchPlaceButtonLabel(count: number): string {
+  return `Place ${count} seats`;
+}
+
 export type WorkstationConfiguratorDraftV0 = {
   shape: WorkstationShapeV0;
   size: WorkstationSizeMm;
