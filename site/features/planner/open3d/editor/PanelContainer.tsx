@@ -248,7 +248,8 @@ export function PanelContainer({
         data-floating={isFloating ? "true" : "false"}
         onMouseDown={handleTitleMouseDown}
       >
-        <h3 className={styles.panelTitle}>{title}</h3>
+        {/* h2 under TopBar brand h1 — avoids Lighthouse heading-order H1→H3 skip */}
+        <h2 className={styles.panelTitle}>{title}</h2>
         <div className={styles.panelActions}>
           {state === "floating" && onDock && (
             <button

@@ -320,6 +320,24 @@ describe("PanelContainer", () => {
     vi.restoreAllMocks();
   });
 
+  it("exposes panel title as heading level 2 (under brand h1 — no H1→H3 skip)", () => {
+    render(
+      <PanelContainer
+        id="left"
+        title="Inventory"
+        state="docked"
+        width={320}
+        height={400}
+        isOpen
+      >
+        <p>Panel body</p>
+      </PanelContainer>,
+    );
+
+    const heading = screen.getByRole("heading", { name: "Inventory", level: 2 });
+    expect(heading.tagName).toBe("H2");
+  });
+
   it("handles dock, undock, minimize, close, resize, and focus", () => {
     const onDock = vi.fn();
     const onUndock = vi.fn();
@@ -515,9 +533,9 @@ describe("WorkspaceShell", () => {
     expect(screen.getByText(/Modified/i)).toBeInTheDocument();
     expect(onSave).not.toHaveBeenCalled();
 
-    const maximize = screen.getByRole("button", { name: "Maximize canvas" });
+    const maximize = screen.getByRole("button", { name: /Focus — maximize canvas|Focus - maximize canvas/i });
     fireEvent.click(maximize);
-    expect(screen.getByRole("button", { name: "Restore workspace panels" })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: /Restore — restore workspace panels|Restore - restore workspace panels/i })).toHaveAttribute(
       "aria-pressed",
       "true",
     );
