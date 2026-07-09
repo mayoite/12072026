@@ -43,6 +43,10 @@ Console artifacts must contain stdout and stderr with stream, test identity or t
 - Navigation timeouts, intercepted clicks, browser errors, failed requests, and server errors are gate evidence.
 - Forced clicks, disabled checks, hidden overlays, and unexplained timeout increases are not remedies.
 
+### Visual screenshots (owner standing — 2026-07-09)
+
+When testing the **planner** or **any site page** in a browser (manual, Playwright, or DevTools), **take a couple of PNG screenshots** and save them under the relevant evidence folder (e.g. `results/planner/.../` or `results/<module>/.../`). Prefer viewport captures of before/after or key states (home, guest setup, open3d 2D, open3d 3D). Screenshots are part of the run record — do not rely on text-only pass claims for UI work.
+
 ### Static Gates
 
 Lint, typecheck, build, secret lint, and audit commands must retain raw stdout/stderr and exit code. A timeout without an exit code is inconclusive.

@@ -7,6 +7,7 @@
 - **Targeted:** Run smallest relevant check. Do not run unrelated suites.
 - **No Hallucinations:** Do not claim a pass without live proof. Skipped = Skipped.
 - **Zero Deletion:** Never delete, suppress, or modify test logs before review.
+- **Screenshots:** When testing planner or any site page in a browser, save **a couple of PNGs** under the evidence folder (see `testing-handbook.md` visual screenshots).
 
 ## 3. Output Paths (Technical Map)
 All run artifacts MUST go to `results/<module>/<phase>/<cmd>/`. Never output to repo root.
