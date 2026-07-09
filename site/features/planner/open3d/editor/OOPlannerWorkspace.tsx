@@ -47,7 +47,15 @@ import {
   downloadJSON,
   downloadSVG,
   downloadWorkstationBoqJSON,
+  downloadFurnitureBoqJSON,
+  downloadFurnitureBoqCSV,
 } from "../shared/export/exportUtils";
+import {
+  buildOpen3dFurnitureBoq,
+  buildOpen3dBoqFilename,
+  exportOpen3dFurnitureBoqToCsv,
+  exportOpen3dFurnitureBoqToJson,
+} from "../shared/export/projectFurnitureBoq";
 import {
   summarizeWorkstationBoqV0,
   workstationBoqToQuoteCartItems,
@@ -583,8 +591,34 @@ export function OOPlannerWorkspace({
 
   const handleExport = useCallback(
     (format = "json") => {
-      // Systems v0 BOQ — qty + footprint + INR list + GST.
-      if (format === "boq" || format === "workstation-boq") {
+      // First-class project furniture BOQ (JSON / CSV) — all placed furniture.
+      if (format === "boq" || format === "boq-json" || format === "boq-csv") {
+        const summary = buildOpen3dFurnitureBoq(workspaceCanvas.project);
+        if (summary.totalItems === 0) {
+          setWorkspaceMessage("No furniture to export for BOQ (place items first).");
+          return;
+        }
+        if (format === "boq-csv") {
+          const filename = buildOpen3dBoqFilename(workspaceCanvas.project, "csv");
+          downloadFurnitureBoqCSV(exportOpen3dFurnitureBoqToCsv(summary), filename);
+          setWorkspaceMessage(
+            `Exported BOQ CSV: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST`,
+          );
+          return;
+        }
+        const filename = buildOpen3dBoqFilename(workspaceCanvas.project, "json");
+        downloadFurnitureBoqJSON(exportOpen3dFurnitureBoqToJson(summary), filename);
+        setWorkspaceMessage(
+          `Exported BOQ JSON: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST` +
+            (summary.unpricedItemCount > 0
+              ? ` · ${summary.unpricedItemCount} unpriced`
+              : ""),
+        );
+        return;
+      }
+
+      // Systems v0 workstation BOQ — qty + footprint + INR list + GST.
+      if (format === "workstation-boq") {
         const summary = summarizeWorkstationBoqV0(workspaceCanvas.project);
         if (summary.totalInstances === 0) {
           setWorkspaceMessage("No workstation seats to export (place systems v0 first).");
@@ -598,7 +632,7 @@ export function OOPlannerWorkspace({
         const filename = `${slug}-workstation-boq-v0.json`;
         downloadWorkstationBoqJSON(summary, filename);
         setWorkspaceMessage(
-          `Exported BOQ: ${summary.totalSeats} seats · ${summary.lines.length} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST`,
+          `Exported workstation BOQ: ${summary.totalSeats} seats · ${summary.lines.length} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST`,
         );
         return;
       }

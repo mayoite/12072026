@@ -186,6 +186,22 @@ export function downloadWorkstationBoqJSON(
   downloadBlob(blob, filename);
 }
 
+/**
+ * Download first-class project furniture BOQ as JSON (all placed furniture).
+ */
+export function downloadFurnitureBoqJSON(json: string, filename: string): void {
+  const blob = new Blob([json], { type: "application/json" });
+  downloadBlob(blob, filename);
+}
+
+/**
+ * Download first-class project furniture BOQ as CSV.
+ */
+export function downloadFurnitureBoqCSV(csv: string, filename: string): void {
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  downloadBlob(blob, filename);
+}
+
 // ── SVG Export ──
 
 /** Escape text for safe SVG embedding */

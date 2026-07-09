@@ -52,7 +52,7 @@ export function preflightOpen3dExport(project: Open3dProject, format: string): O
       format: normalized,
       filename: "",
       messages: [
-        `${normalized.toUpperCase()} export is not available yet. Use JSON, SVG, workstation BOQ, or quote cart.`,
+        `${normalized.toUpperCase()} export is not available yet. Use JSON, SVG, BOQ (JSON/CSV), workstation BOQ, or quote cart.`,
       ],
     };
   }

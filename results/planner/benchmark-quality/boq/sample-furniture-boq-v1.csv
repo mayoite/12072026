@@ -1,0 +1,17 @@
+Project,Benchmark BOQ Plan
+Project ID,project-1
+Generated,2026-07-09T23:00:00.000Z
+Currency,INR
+GST rate,0.18
+
+Category,Item,Catalog ID,SKU,Qty,Width (mm),Depth (mm),Height (mm),Unit price (INR ex-GST),Line subtotal (INR),Line GST (INR),Line total (INR),Priced,Geometry
+cabinet,cabinet v0,cabinet-v0,CAB-V0,1,800,500,720,0,0,0,0,no,modular-cabinet-v0
+workstation,Workstation Linear 1500×600,ws-v0-linear-1500x600-desk+panel,ws-v0-linear-1500x600-desk+panel,4,1500,600,750,64000,256000,46080,302080,yes,workstation-v0
+
+Total items,5
+Total lines,2
+Subtotal INR,256000
+GST INR,46080
+Grand total INR,302080
+Priced items,4
+Unpriced items,1

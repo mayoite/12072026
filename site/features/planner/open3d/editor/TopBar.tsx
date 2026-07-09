@@ -284,7 +284,13 @@ export function TopBar({
                 >
                   <MenuItem id="json" className={styles.dropdownItem}>Export as JSON</MenuItem>
                   <MenuItem id="svg" className={styles.dropdownItem}>Export as SVG</MenuItem>
-                  <MenuItem id="boq" className={styles.dropdownItem}>
+                  <MenuItem id="boq-json" className={styles.dropdownItem}>
+                    Export BOQ (JSON)
+                  </MenuItem>
+                  <MenuItem id="boq-csv" className={styles.dropdownItem}>
+                    Export BOQ (CSV)
+                  </MenuItem>
+                  <MenuItem id="workstation-boq" className={styles.dropdownItem}>
                     Export workstation BOQ
                   </MenuItem>
                   <MenuItem id="quote" className={styles.dropdownItem}>
