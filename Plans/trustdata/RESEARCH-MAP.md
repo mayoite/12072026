@@ -1,45 +1,13 @@
-# RESEARCH-MAP — Inspiration-only index (`D:\websites` only)
+# RESEARCH-MAP — index (`D:\websites` only)
 
-> **Rule:** Study patterns. **Do not** copy UI, assets, code, brands, or GLBs into O&O product.  
-> **Packages:** MIT / Apache / BSD / approved open licenses only after license check.  
-> **Agents:** REQUIRED `/using-superpowers`. Tag every competitive task **inspiration only**.  
-> **Boundary:** Research sets **intent and vocabulary**. It does **not** clear W1–W8. Pass/fail lives under `results/planner/world-standard-wave/` per [RESULTS-MAP.md](./RESULTS-MAP.md).
+**Licenses / no competitor assets (hard):** `AGENTS.md` + `ayushdocs/17-LICENSES-CLEARED.md`  
+**Research home:** `D:\websites` (`D:\websites\README.md`) — not in monorepo, not E: mirror  
+**Research ≠ W-gate pass:** evidence → [RESULTS-MAP.md](./RESULTS-MAP.md)  
+**Secrets:** `.env.local` only  
 
-## Single home (binding)
-
-| | |
-|--|--|
-| **Canonical research root** | **`D:\websites`** (see `D:\websites\README.md`) |
-| **Repo** | Index + pointers only — this file · `Plans/Research/README.md` |
-| **Not a second home** | No E: mirror of scrapes · no `site/.firecrawl` · no raw packs in monorepo · no duplicate chart tables in `results/` |
-| **Former `Plans/Research/*.md`** | Only under `D:\websites\research\from-repo-Plans-Research\` |
-| **Repo `results/.../COMPARISON-CHART.md`** | Pointer only — full chart is under `D:\websites\...` |
-| **`E:\Goodsites`** | Salvage code trees — **not** Firecrawl research (do not mix) |
-
-**Program:** Trust-data world-standard planner  
-**Primary synthesis date:** 2026-07-09  
-**Expert revision:** 2026-07-09 — `reviews/MAPS-suggestions.md`  
-**Consolidated single-home:** 2026-07-09  
-**Repo-side wave note:** `D:\OandO07072026\results\planner\world-standard-wave\WAVE.md`  
-**Design translation:** `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`
-
----
-
-## Ideas-only boundary (binding)
-
-| Allowed (ideas) | Forbidden (product) |
-|-----------------|---------------------|
-| Jobs-to-be-done, loop order, chrome **regions**, measurement rigor as a product job | Competitor JS/CSS/HTML, editor markup, SVG path blobs, GLB/models, logos, brand names in customer UI |
-| Scorecards and ENGINE-DECISION as **decision aids** | Treating research scores or WAVE narrative as a W-gate **pass** |
-| Open-source **package names** as candidates after license check | Shipping proprietary or scraped assets as O&O |
-| Screenshots/JSON under `D:\websites\**` for study | Moving those files into `site/public`, `site/features`, or product commits |
-| O&O original re-implementation (Phosphor, CSS modules, O&O SKUs) | “Planner5D-like” wording, class-name clones, toolbar-mock shipped as product |
-
-**Subagent sentence (when any competitor is named):**  
-*Inspiration only — no plagiarism; MIT/open packages only.*
-
-Deep ethics pack: `D:\websites\planner5d.com\report\ETHICS_AND_INSPIRATION.md`  
-Standing ethics table: [00-START.md](./00-START.md).
+**Program:** trust-data planner · pack date 2026-07-09  
+**Wave honesty:** `results/planner/world-standard-wave/WAVE.md`  
+**Design:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md`
 
 ---
 

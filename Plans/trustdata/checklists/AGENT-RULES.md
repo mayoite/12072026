@@ -65,19 +65,12 @@ When spawning streams for W3/W4/W6/W7/W8/docs, stay ≤8 unless owner authorizes
 
 ---
 
-## 5. Inspiration only (competitor research)
+## 5. Licenses & research (hard — pointer only)
 
-| Allowed | Forbidden |
-|---------|-----------|
-| Patterns, jobs-to-be-done, IA, workflow loops | Competitor source code, minified JS, CSS, GLB, textures |
-| Public marketing/feature lists for scoring | Shipping competitor logos, brand names as product UI, copied screenshots in app |
-| MIT/Apache/BSD packages after license check | Proprietary assets “borrowed” into `site/public` |
-| Notes under `D:\websites\…` | Pasting competitor UI into `site/` components |
-
-Research index: `Plans/trustdata/RESEARCH-MAP.md`.  
-Ethics deep pack: `D:\websites\planner5d.com\report\ETHICS_AND_INSPIRATION.md`.
-
-If a subagent prompt mentions Planner5D, RoomSketcher, Floorplanner, Homestyler, IKEA, or 3dplanner: include the sentence **“Inspiration only — no plagiarism; MIT/open packages only.”**
+- Rules + cleared paid: `ayushdocs/17-LICENSES-CLEARED.md` · hard bullets in `AGENTS.md`
+- Research index: `Plans/trustdata/RESEARCH-MAP.md` · home: `D:\websites`
+- Keys: `.env.local` only
+- Subagent line when naming a competitor: *Inspiration only — no competitor assets; licenses per 17-LICENSES-CLEARED.*
 
 ---
 

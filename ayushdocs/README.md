@@ -21,6 +21,7 @@
 | [11-FIGMA-BLOCKED.md](./11-FIGMA-BLOCKED.md) | Figma optional / not needed for P0 |
 | [14-SCRIPTS-MENU.md](./14-SCRIPTS-MENU.md) | **Daily scripts** (`pnpm p0`, `gate`, …) |
 | [16-RESULTS-RETENTION.md](./16-RESULTS-RETENTION.md) | Keep vs delete `results/` |
+| [17-LICENSES-CLEARED.md](./17-LICENSES-CLEARED.md) | **Licenses / paid / no competitor assets** · keys in `.env.local` |
 
 **Start:** [00-PENDING.md](./00-PENDING.md) → [12-WORKFLOW.md](./12-WORKFLOW.md) → [14-SCRIPTS-MENU.md](./14-SCRIPTS-MENU.md)  
 

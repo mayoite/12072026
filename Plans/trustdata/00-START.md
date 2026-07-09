@@ -78,17 +78,12 @@ Evidence when locked: `results/planner/world-standard-wave/01-engine-lock/NOTES.
 
 ---
 
-## Ethics (non-negotiable)
+## Ethics / licenses (hard)
 
-| Allowed | Forbidden |
-|---------|-----------|
-| Patterns / jobs-to-be-done from research | Competitor code, JS, CSS, GLB, logos, brands |
-| MIT / Apache / BSD packages after license check | Shipping proprietary third-party assets as ours |
-| Notes under `D:\websites\…` | Pasting competitor UI into `site/` |
+**Do not duplicate here.**  
+→ `AGENTS.md` · `ayushdocs/17-LICENSES-CLEARED.md` · research home `D:\websites\README.md`
 
-Deep ethics: `D:\websites\planner5d.com\report\ETHICS_AND_INSPIRATION.md` · [RESEARCH-MAP.md](./RESEARCH-MAP.md).
-
-- [ ] Ethics table acknowledged by executing agent (CP-00)
+- [ ] Agent read licenses MD (CP-00)
 
 ---
 
@@ -236,7 +231,7 @@ Photoreal race · multiplayer · AR · CRM/SSR expansion as W substitute · full
 
 ## Research (ideas only)
 
-See [RESEARCH-MAP.md](./RESEARCH-MAP.md). Do not re-scrape Planner5D blindly. Inspiration only — no plagiarism; MIT/open packages only.
+See [RESEARCH-MAP.md](./RESEARCH-MAP.md). Do not re-scrape Planner5D blindly. Licenses: `ayushdocs/17-LICENSES-CLEARED.md`.
 
 ---
 
@@ -249,7 +244,7 @@ Pass only when **all** are true:
 - [ ] INDEX + 00-START read by executing agent  
 - [ ] Approach A/B/C recorded (or default **A** documented after unlock if owner silent)  
 - [ ] Owner mode recorded: **plan-only** **or** **implementation unlock** (not left ambiguous)  
-- [ ] Ethics table acknowledged  
+- [ ] Licenses MD acknowledged  
 - [ ] No worktree created (`D:\OandO07072026` only)  
 - [ ] Optional/required evidence: `results/planner/world-standard-wave/00-start/NOTES.md` with approach + mode + date + agent  
 - [ ] CHECKPOINTS.md CP-00 status updated when owner/reviewer closes (PASS / FAIL / WAIVE)
