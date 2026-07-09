@@ -1,25 +1,14 @@
-# Comparison chart (repo copy)
+# Comparison chart — pointer only
 
-Full pack lives at:
+**Not a second copy of research.**
 
-`D:\websites\research\2026-07-09-world-standard\comparison\MASTER-CHART.md`
+Full crawled / comparison pack (single home):
 
-| Slice | Who wins | O&O score |
-|-------|----------|-----------|
-| Engine 2D | RoomSketcher | 2 |
-| Engine 3D | Homestyler/Foyr/P5D | 2 |
-| Toolbar | Planner5D | 2 |
-| Inventory UX | P5D/Floorplanner | 2 |
-| Inventory SKU | **IKEA** | 3 pot / 2 UX |
-| Ease | Planner5D | 2 |
-| Realtime/save | P5D/Floorplanner | 2 |
-| BOQ/quote | **IKEA** | 2 |
-| Mesh | Homestyler/Foyr | 1 |
+```
+D:\websites\research\2026-07-09-world-standard\comparison\MASTER-CHART.md
+D:\websites\research\2026-07-09-world-standard\comparison\ENGINE-DECISION.md
+```
 
-## Engine lock (proposed)
-- **2D:** Fabric v7 full stage (target); Feasibility interim  
-- **3D:** Three + R3F + orbit  
-- **Catalog:** manufacturer SKU (IKEA pattern)  
-- **Success:** BOQ/quote > photoreal  
+Site packs: `D:\websites\` (see `D:\websites\README.md`).
 
-See ENGINE-DECISION.md in the comparison folder.
+Wave honesty note for product spine (not competitor scrape): `./WAVE.md`

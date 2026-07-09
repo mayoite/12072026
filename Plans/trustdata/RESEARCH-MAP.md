@@ -11,9 +11,10 @@
 |--|--|
 | **Canonical research root** | **`D:\websites`** (see `D:\websites\README.md`) |
 | **Repo** | Index + pointers only — this file · `Plans/Research/README.md` |
-| **Not a second home** | `E:\websites` · `site/.firecrawl` · raw packs under monorepo · `E:\Goodsites` (salvage trees, not this Firecrawl wave) |
-| **Former `Plans/Research/*.md`** | Moved to `D:\websites\research\from-repo-Plans-Research\` |
-| **Optional E: backup** | Mirror copy only: `E:\OandO-research-backups\websites_LATEST` — never a second write-home |
+| **Not a second home** | No E: mirror of scrapes · no `site/.firecrawl` · no raw packs in monorepo · no duplicate chart tables in `results/` |
+| **Former `Plans/Research/*.md`** | Only under `D:\websites\research\from-repo-Plans-Research\` |
+| **Repo `results/.../COMPARISON-CHART.md`** | Pointer only — full chart is under `D:\websites\...` |
+| **`E:\Goodsites`** | Salvage code trees — **not** Firecrawl research (do not mix) |
 
 **Program:** Trust-data world-standard planner  
 **Primary synthesis date:** 2026-07-09  
