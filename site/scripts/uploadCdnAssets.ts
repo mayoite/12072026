@@ -15,7 +15,7 @@ const ROOT = process.cwd();
 const ASSET_CDN_DIR = path.join(ROOT, "asset-cdn");
 const PUBLIC_DIR = path.join(ROOT, "public");
 
-// Catalog bytes only — SDKs live in public/cdn + public/tldraw-assets (deployed with Next).
+// Catalog bytes only — SDKs live in public/cdn (deployed with Next; tldraw-assets removed).
 const UPLOAD_ROOTS = ["images", "models"] as const;
 
 type UploadRoot = (typeof UPLOAD_ROOTS)[number];

@@ -189,16 +189,17 @@ const siteFolders = {
   },
   "features/planner": {
     title: "Canonical planner",
-    why: "Single source for /planner workspace: tldraw editor, catalog placement, 3D viewer, persistence, AI assist.",
+    why: "Single source for /planner workspace: open3d editor, catalog placement, 3D viewer, persistence, AI assist.",
     contains: [
-      "editor/ — canvas, layers, tools, inspector",
+      "open3d/ — destination fabric stage + mesh + catalog + editor shell",
+      "ui/ — Open3dPlannerHost / workspace routes",
       "catalog/ — ingest + generated items",
       "store/ — Zustand state",
-      "3d/, viewer/ — Three.js scene",
+      "3d/ — Three.js scene helpers",
       "landing/, onboarding/ — guest funnel",
       "persistence/, document/, model/",
       "shared/ — BOQ, export, engine types",
-      "tldraw/ — custom shapes & tools",
+      "_archive/fabric/ — retired fabric prototype (do not import)",
     ],
     ownership: [
       {
@@ -234,10 +235,10 @@ const siteFolders = {
     ],
     see: ["docs/TESTING.md", "docs/Handover.md"],
   },
-  "features/planner/editor": {
-    title: "Planner editor",
-    why: "tldraw-based 2D canvas: walls, furniture, layers, measurements, blueprint import.",
-    contains: ["inspector/, templates/, layer visibility, tool rail, selection UI"],
+  "features/planner/open3d": {
+    title: "Open3d planner workspace",
+    why: "Destination 2D/3D planner: fabric stage, modular mesh, catalog placement, persistence.",
+    contains: ["editor/, canvas-fabric-stage/, catalog/, model/, store/, ui/"],
   },
   "features/planner/catalog": {
     title: "Planner catalog",
@@ -269,11 +270,6 @@ const siteFolders = {
     title: "Planner shared kernel",
     why: "Code shared across editor, export, and 3D without circular imports.",
     contains: ["boq/ — quote cart bridge", "catalog/ — adapters", "export/ — PDF/BOQ", "document/, engine/, types/"],
-  },
-  "features/planner/tldraw": {
-    title: "tldraw extensions",
-    why: "Custom shapes (walls, furniture blocks), tools, and shape utils for the canvas.",
-    contains: ["shapes/, tools/ — ClearanceChecker, catalog blocks"],
   },
   "features/planner/ui": {
     title: "Planner shell UI",
@@ -500,8 +496,8 @@ const siteFolders = {
   },
   public: {
     title: "Static public assets",
-    why: "Files served at / without bundling: images, fonts, 3D models, tldraw CDN fallback.",
-    contains: ["images/, fonts/, models/, cdn/, tldraw-assets/", "favicon and static downloads"],
+    why: "Files served at / without bundling: images, fonts, 3D models, vendor CDN mirrors.",
+    contains: ["images/, fonts/, models/, cdn/", "favicon and static downloads"],
     rules: ["Large assets prefer CDN/Supabase storage; public/ for essentials only"],
   },
   "public/images": {
@@ -513,11 +509,6 @@ const siteFolders = {
     title: "3D models",
     why: "GLB/OBJ assets for planner 3D viewer and product previews.",
     contains: ["Furniture and scene models"],
-  },
-  "public/tldraw-assets": {
-    title: "tldraw static assets",
-    why: "Self-hosted tldraw icons/fonts when not loaded from package CDN.",
-    contains: ["tldraw package asset mirror"],
   },
   results: {
     title: "Generated evidence",

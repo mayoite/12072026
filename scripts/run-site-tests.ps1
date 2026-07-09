@@ -20,7 +20,7 @@ $wrapper  = Join-Path $PSScriptRoot "run-evidence-cmd.ps1"
 $commands = @(
     @{ name = "site-typecheck";      module = "site";   cmd = "pnpm --filter oando-site run typecheck";                  cwd = $repoRoot }
     @{ name = "site-lint";           module = "site";   cmd = "pnpm --filter oando-site run lint";                       cwd = $repoRoot }
-    @{ name = "site-lint-secrets";   module = "site";   cmd = "pnpm --filter oando-site run lint:secrets";               cwd = $repoRoot }
+    @{ name = "site-scan-secrets";   module = "site";   cmd = "pnpm --filter oando-site run scan:secrets";               cwd = $repoRoot }
     @{ name = "site-test:clean";     module = "site";   cmd = "pnpm --filter oando-site run test:clean";                 cwd = $repoRoot }
     @{ name = "site-planner-units";  module = "site";   cmd = "pnpm exec vitest run planner";                            cwd = $siteRoot }
     @{ name = "site-test";           module = "site";   cmd = "pnpm --filter oando-site run test";                       cwd = $repoRoot }

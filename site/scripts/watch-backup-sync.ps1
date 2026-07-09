@@ -2,8 +2,8 @@
 # Run in a dedicated terminal, or install via install-backup-sync.ps1 (scheduled task).
 
 param(
-  [Parameter(Mandatory=$true)][string]$Source,
-  [Parameter(Mandatory=$true)][string]$Destination,
+  [string]$Source = "E:\16062026",
+  [string]$Destination = "E:\Goodsites\15062026",
   [int]$DebounceSeconds = 45
 )
 

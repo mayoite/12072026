@@ -2,8 +2,9 @@
 # Safe to run repeatedly. Logs append to BACKUP-SYNC.log on the backup root.
 
 param(
-  [Parameter(Mandatory=$true)][string]$Source,
-  [Parameter(Mandatory=$true)][string]$Destination,
+  # Defaults match owner backup layout (comment header); override when needed.
+  [string]$Source = "E:\16062026",
+  [string]$Destination = "E:\Goodsites\15062026",
   [switch]$Quiet
 )
 

@@ -1,19 +1,24 @@
 {
-  "generatedAt": "2026-07-09T14:36:06.744Z",
+  "generatedAt": "2026-07-09T14:55:55.917Z",
   "packages": {
     "tldraw": false,
     "konva": false,
     "nova-act": false,
     "fabric": true,
     "three": true,
-    "@playwright/test": true
+    "@playwright/test": true,
+    "ts-morph": true
   },
   "featureDirs": {
     "features/planner/tldraw": false,
+    "features/planner/open3d": true,
     "features/buddy-planner": false,
+    "features/oando-planner": false,
+    "features/ops-portal": false,
     "lib/configurator": true,
     "public/tldraw-assets": false,
-    "block-descriptors": true
+    "block-descriptors": true,
+    "lib/db.ts": false
   },
   "samplePlannerRoutes": [
     "/admin/planner-catalog",
@@ -27,117 +32,20 @@
   ],
   "hardRoutesMissing": [
     "/configurator/guest",
-    "/configurator",
     "/buddy-planner",
     "/buddy-planner/editor",
-    "/buddy-planner/guest",
-    "/oando-planner/canvas"
+    "/buddy-planner/guest"
   ],
-  "findings": [
-    {
-      "file": "scripts/analyze-coverage-gap.mjs",
-      "issues": [
-        "references tldraw but features/planner/tldraw missing"
-      ]
-    },
-    {
-      "file": "scripts/analyze-coverage-report.mjs",
-      "issues": [
-        "references tldraw but features/planner/tldraw missing",
-        "hardcodes route /configurator which has no app page"
-      ]
-    },
-    {
-      "file": "scripts/generate-contents-md.mjs",
-      "issues": [
-        "references tldraw but features/planner/tldraw missing"
-      ]
-    },
-    {
-      "file": "scripts/generate-coverage-summary.mjs",
-      "issues": [
-        "hardcodes route /configurator which has no app page"
-      ]
-    },
-    {
-      "file": "scripts/generate-route-classification.mjs",
-      "issues": [
-        "references buddy-planner path/feature missing",
-        "hardcodes route /buddy-planner which has no app page",
-        "hardcodes route /buddy-planner/editor which has no app page",
-        "hardcodes route /buddy-planner/guest which has no app page",
-        "hardcodes route /oando-planner/canvas which has no app page"
-      ]
-    },
-    {
-      "file": "scripts/generate-test-inventory.mjs",
-      "issues": [
-        "references tldraw but features/planner/tldraw missing"
-      ]
-    },
-    {
-      "file": "scripts/generate-tree.js",
-      "issues": [
-        "references buddy-planner path/feature missing",
-        "hardcodes route /buddy-planner which has no app page"
-      ]
-    },
-    {
-      "file": "scripts/refresh-coverage-summary-from-json.mjs",
-      "issues": [
-        "hardcodes route /configurator which has no app page"
-      ]
-    },
-    {
-      "file": "scripts/runtime-evidence-probe.mjs",
-      "issues": [
-        "references buddy-planner path/feature missing",
-        "hardcodes route /buddy-planner which has no app page",
-        "hardcodes route /buddy-planner/editor which has no app page"
-      ]
-    },
-    {
-      "file": "scripts/seed_configurator_catalog.ts",
-      "issues": [
-        "hardcodes route /configurator which has no app page"
-      ]
-    },
-    {
-      "file": "scripts/shoot-routes.mjs",
-      "issues": [
-        "references tldraw but features/planner/tldraw missing",
-        "hardcodes route /configurator/guest which has no app page",
-        "hardcodes route /configurator which has no app page"
-      ]
-    },
-    {
-      "file": "scripts/syncVendorCdnAssets.mjs",
-      "issues": [
-        "references tldraw but features/planner/tldraw missing"
-      ]
-    },
-    {
-      "file": "scripts/tldraw-coverage-report.mjs",
-      "issues": [
-        "references tldraw but features/planner/tldraw missing",
-        "script exists solely for removed tldraw coverage"
-      ]
-    },
-    {
-      "file": "scripts/uploadCdnAssets.ts",
-      "issues": [
-        "references tldraw but features/planner/tldraw missing"
-      ]
-    }
-  ],
-  "archiveCandidatesByName": [
-    "tldraw-coverage-report.mjs",
-    "screenshot_all_pages.py",
-    "scrapeAfcChairs.ts",
-    "tmp-run-features.mjs"
-  ],
+  "findings": [],
+  "brokenNpmScripts": [],
   "summary": {
-    "scriptsScanned": 178,
-    "scriptsWithIssues": 14
+    "siteScriptsScanned": 168,
+    "rootScriptsScanned": 4,
+    "scriptsWithIssues": 0,
+    "byClass": {
+      "ARCHIVE": 0,
+      "FIX": 0,
+      "KEEP": 0
+    }
   }
 }

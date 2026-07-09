@@ -38,7 +38,7 @@ const MIGRATION_MAP = [
   ["features/planner/store/plannerFurnitureStore.test.ts", "tests/planner-store-plannerFurnitureStore.test.ts"],
   ["features/planner/store/plannerGeometryStore.test.ts", "tests/planner-store-plannerGeometryStore.test.ts"],
   ["features/planner/store/plannerProjectData.test.ts", "tests/planner-store-plannerProjectData.test.ts"],
-  ["features/planner/tldraw/tools/__tests__/ClearanceChecker.test.ts", "tests/planner-tldraw-tools-ClearanceChecker.test.ts"],
+  // tldraw ClearanceChecker map removed 2026-07-09 (features/planner/tldraw gone)
   ["features/planner/ui/InspectorPanel.test.tsx", "tests/planner-ui-InspectorPanel.test.tsx"],
   ["features/ops/__tests__/CustomerQueriesOpsPageView.test.tsx", "tests/ops-CustomerQueriesOpsPageView.test.tsx"],
   ["features/shared/__tests__/providerChain.test.ts", "tests/shared-providerChain.test.ts"],

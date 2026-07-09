@@ -31,7 +31,7 @@ async function seed() {
     console.log('📋 Re-applying fixed catalog functions...');
     // Re-apply the fixed migration to update functions with ELSE NULL
     const migrationSql = fs.readFileSync(
-      path.resolve(__dirname, '../supabase/migrations/20260309113000_add_canonical_catalog_fields.sql'),
+      path.resolve(__dirname, '../platform/supabase/migrations/20260309113000_add_canonical_catalog_fields.sql'),
       'utf8'
     );
     // Run the whole migration again (idempotent due to CREATE OR REPLACE)

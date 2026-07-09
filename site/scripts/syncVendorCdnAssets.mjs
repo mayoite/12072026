@@ -38,8 +38,7 @@ const REQUIRED_LOCAL_PATHS = [
   "cdn/vendor/model-viewer@4.3.1/model-viewer.min.js",
   "cdn/vendor/draco/1.5.6/draco_wasm_wrapper.js",
   "cdn/vendor/basis-universal/2021-04-15-ba1c3e4/basis_transcoder.wasm",
-  "tldraw-assets/fonts/IBMPlexSans-Medium.woff2",
-  "tldraw-assets/translations/en.json",
+  // tldraw-assets removed 2026-07-09 — package + public/tldraw-assets gone (open3d destination)
   "cdn/lebombo_1k.hdr",
   "cdn/potsdamer_platz_1k.hdr",
 ];

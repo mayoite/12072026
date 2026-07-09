@@ -1,13 +1,17 @@
 /**
- * One-shot: find scripts that reference missing packages, feature dirs, or dead routes.
- * Usage: node scripts/_audit-stale-scripts.mjs
+ * Find scripts that reference missing packages, feature dirs, dead routes,
+ * or other archive-class patterns. Also scans repo-root scripts/.
+ *
+ * Usage (from site/): node scripts/_audit-stale-scripts.mjs
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const repoRoot = path.resolve(siteRoot, "..");
 const scriptsDir = path.join(siteRoot, "scripts");
+const rootScriptsDir = path.join(repoRoot, "scripts");
 const pkg = JSON.parse(fs.readFileSync(path.join(siteRoot, "package.json"), "utf8"));
 const deps = { ...pkg.dependencies, ...pkg.devDependencies };
 
@@ -16,9 +20,7 @@ function walk(dir, pred, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const abs = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (entry.name === "node_modules" || entry.name === "generate-svg") {
-        // still scan generate-svg briefly
-      }
+      if (["node_modules", "__goldens__", "_fixtures"].includes(entry.name)) continue;
       walk(abs, pred, out);
     } else if (pred(entry.name)) out.push(abs);
   }
@@ -27,38 +29,39 @@ function walk(dir, pred, out = []) {
 
 function walkPages(appDir) {
   const routes = new Set();
-  function walk(dir) {
+  function walkInner(dir) {
     if (!fs.existsSync(dir)) return;
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
       const abs = path.join(dir, entry.name);
-      if (entry.isDirectory()) walk(abs);
+      if (entry.isDirectory()) walkInner(abs);
       else if (entry.name === "page.tsx") {
         const rel = path.relative(appDir, abs).replace(/\\/g, "/");
         const segs = rel
           .split("/")
           .filter((s) => s !== "page.tsx" && !(s.startsWith("(") && s.endsWith(")")));
-        const route = `/${segs.join("/")}`.replace(/\/+/g, "/") || "/";
-        routes.add(route === "/" ? "/" : route.replace(/\/$/, "") || "/");
+        let route = `/${segs.join("/")}`.replace(/\/+/g, "/") || "/";
+        if (route.length > 1 && route.endsWith("/")) route = route.slice(0, -1);
+        routes.add(route || "/");
       }
     }
   }
-  walk(appDir);
+  walkInner(appDir);
   return routes;
 }
 
 const routes = walkPages(path.join(siteRoot, "app"));
-const routeExists = (r) => {
-  if (routes.has(r)) return true;
-  // dynamic: /portal/[id] matches /portal/foo loosely for static probes only exact
-  return [...routes].some((x) => x === r);
-};
+const routeExists = (r) => routes.has(r);
 
 const featureChecks = {
   "features/planner/tldraw": fs.existsSync(path.join(siteRoot, "features/planner/tldraw")),
+  "features/planner/open3d": fs.existsSync(path.join(siteRoot, "features/planner/open3d")),
   "features/buddy-planner": fs.existsSync(path.join(siteRoot, "features/buddy-planner")),
+  "features/oando-planner": fs.existsSync(path.join(siteRoot, "features/oando-planner")),
+  "features/ops-portal": fs.existsSync(path.join(siteRoot, "features/ops-portal")),
   "lib/configurator": fs.existsSync(path.join(siteRoot, "lib/configurator")),
   "public/tldraw-assets": fs.existsSync(path.join(siteRoot, "public/tldraw-assets")),
   "block-descriptors": fs.existsSync(path.join(siteRoot, "block-descriptors")),
+  "lib/db.ts": fs.existsSync(path.join(siteRoot, "lib/db.ts")),
 };
 
 const packageChecks = {
@@ -68,85 +71,186 @@ const packageChecks = {
   fabric: Boolean(deps.fabric),
   three: Boolean(deps.three),
   "@playwright/test": Boolean(deps["@playwright/test"]),
+  "ts-morph": Boolean(deps["ts-morph"]),
 };
 
-const scriptFiles = walk(
-  scriptsDir,
-  (name) => /\.(mjs|js|ts|cjs|py|ps1)$/.test(name) && !name.startsWith("_audit"),
-);
+const scriptPred = (name) =>
+  /\.(mjs|js|ts|cjs|py|ps1)$/.test(name) &&
+  !name.startsWith("_audit") &&
+  !name.startsWith("_tmp");
 
-/** @type {Array<{file:string, issues:string[]}>} */
-const findings = [];
+const siteScriptFiles = walk(scriptsDir, scriptPred);
+const rootScriptFiles = walk(rootScriptsDir, scriptPred);
 
-const hardRoutes = [
+/** Routes that must not be treated as live product pages (redirects only). */
+const hardDeadRoutes = [
   "/configurator/guest",
-  "/configurator",
   "/buddy-planner",
   "/buddy-planner/editor",
   "/buddy-planner/guest",
-  "/oando-planner/canvas",
 ];
 
-for (const abs of scriptFiles) {
-  const rel = path.relative(siteRoot, abs).replace(/\\/g, "/");
+/** Doc/redirect tables may still mention these intentionally. */
+const intentionalLegacyRouteScripts = new Set([
+  "scripts/generate-route-classification.mjs",
+]);
+
+/** @type {Array<{file:string, class:string, issues:string[]}>} */
+const findings = [];
+
+/**
+ * @param {string} abs
+ * @param {"site"|"root"} scope
+ */
+function auditFile(abs, scope) {
+  const relFromSite =
+    scope === "site"
+      ? path.relative(siteRoot, abs).replace(/\\/g, "/")
+      : `../scripts/${path.basename(abs)}`;
+  const relKey = scope === "site" ? relFromSite : `repo-scripts/${path.basename(abs)}`;
   const text = fs.readFileSync(abs, "utf8");
   const issues = [];
+  let cls = "KEEP";
 
-  if (/tldraw/i.test(text) && !featureChecks["features/planner/tldraw"]) {
-    issues.push("references tldraw but features/planner/tldraw missing");
+  // Package imports (real imports only — not prose)
+  if (
+    /from\s+['"]tldraw['"]|from\s+['"]@tldraw\/|require\(['"]tldraw|require\(['"]@tldraw/.test(
+      text,
+    ) &&
+    !packageChecks.tldraw
+  ) {
+    issues.push("imports tldraw package (not in package.json)");
+    cls = "ARCHIVE";
   }
-  if (/buddy-planner|buddyPlanner|features\/buddy/i.test(text) && !featureChecks["features/buddy-planner"]) {
-    issues.push("references buddy-planner path/feature missing");
+  if (
+    /from\s+['"]nova_act['"]|require\(['"]nova-act['"]\)|from\s+['"]nova-act['"]/.test(text) &&
+    !packageChecks["nova-act"]
+  ) {
+    issues.push("imports nova-act (not in package.json)");
+    cls = "ARCHIVE";
   }
-  if (/from\s+['"]nova_act['"]|require\(['"]nova.act['"]\)|nova-act/i.test(text) && !packageChecks["nova-act"]) {
-    issues.push("imports nova-act but package not in package.json");
+  if (
+    /from\s+['"]konva['"]|from\s+['"]react-konva['"]|require\(['"]konva['"]\)/.test(text) &&
+    !packageChecks.konva
+  ) {
+    issues.push("imports konva (not in package.json)");
+    cls = "ARCHIVE";
   }
-  if (/lib\/configurator/i.test(text) && !featureChecks["lib/configurator"]) {
-    // allow @/lib/catalog/configuratorCatalog
-    if (!/lib\/catalog\/configurator/i.test(text) || /lib\/configurator\//i.test(text)) {
-      if (/[\"']@\/lib\/configurator|lib\/configurator\//.test(text)) {
-        issues.push("references lib/configurator/ tree missing");
+
+  // Feature paths that no longer exist (code paths, not historical migration maps alone)
+  if (
+    /features\/planner\/tldraw\//.test(text) &&
+    !featureChecks["features/planner/tldraw"]
+  ) {
+    issues.push("references features/planner/tldraw/ (missing)");
+    if (cls !== "ARCHIVE") cls = "FIX";
+  }
+  if (
+    /features\/buddy-planner\//.test(text) &&
+    !featureChecks["features/buddy-planner"]
+  ) {
+    issues.push("references features/buddy-planner/ (missing)");
+    if (cls !== "ARCHIVE") cls = "FIX";
+  }
+  if (
+    /features\/oando-planner\//.test(text) &&
+    !featureChecks["features/oando-planner"]
+  ) {
+    issues.push("references features/oando-planner/ (missing)");
+    if (cls !== "ARCHIVE") cls = "FIX";
+  }
+  if (/features\/ops-portal\//.test(text) && !featureChecks["features/ops-portal"]) {
+    issues.push("references features/ops-portal/ (missing)");
+    if (cls !== "ARCHIVE") cls = "FIX";
+  }
+
+  // lib/configurator tree vs catalog path (avoid false positive on lib/catalog/configurator*)
+  if (
+    /@\/lib\/configurator\/|["']lib\/configurator\//.test(text) &&
+    !featureChecks["lib/configurator"]
+  ) {
+    issues.push("references lib/configurator/ tree (missing)");
+    if (cls !== "ARCHIVE") cls = "FIX";
+  }
+
+  // Required public tldraw-assets (not mere comments)
+  if (
+    /["']tldraw-assets\//.test(text) &&
+    !featureChecks["public/tldraw-assets"]
+  ) {
+    issues.push("requires public/tldraw-assets path (missing)");
+    if (cls !== "ARCHIVE") cls = "FIX";
+  }
+
+  // Dead product routes (skip intentional redirect docs)
+  if (!intentionalLegacyRouteScripts.has(relFromSite)) {
+    for (const r of hardDeadRoutes) {
+      // only flag string literals that look like navigation targets
+      const re = new RegExp(`["'\`]${r.replace(/\//g, "\\/")}["'\`]`);
+      if (re.test(text) && !routeExists(r)) {
+        issues.push(`hardcodes dead route ${r}`);
+        if (cls !== "ARCHIVE") cls = "FIX";
       }
     }
   }
-  for (const r of hardRoutes) {
-    if (text.includes(r) && !routeExists(r)) {
-      issues.push(`hardcodes route ${r} which has no app page`);
-    }
+
+  // Dangerous / dead one-shots
+  if (/expect\(page\)\.toBeDefined\(\)/.test(text) && /tests\/e2e/.test(text)) {
+    issues.push("injects hollow expect(page).toBeDefined into e2e");
+    cls = "ARCHIVE";
   }
-  // dead package-like script names
-  if (/tldraw-coverage/i.test(path.basename(abs)) && !featureChecks["features/planner/tldraw"]) {
-    issues.push("script exists solely for removed tldraw coverage");
+  if (/lib\/db\.ts/.test(text) && !featureChecks["lib/db.ts"]) {
+    issues.push("references lib/db.ts (missing; use platform/drizzle)");
+    cls = "ARCHIVE";
+  }
+  if (/scrapeAfc|afcindia/i.test(text)) {
+    issues.push("competitor scrape risk");
+    cls = "ARCHIVE";
+  }
+  if (/e-Goodsites-oando-consolidated|D:\\\\worktrees|D:\\worktrees|D:\\\\OOFPLWeb|D:\\OOFPLWeb/.test(text)) {
+    issues.push("hardcoded obsolete machine/project path");
+    cls = "ARCHIVE";
   }
 
-  if (issues.length) findings.push({ file: rel, issues: [...new Set(issues)] });
+  if (issues.length) findings.push({ file: relKey, class: cls, issues: [...new Set(issues)] });
 }
 
-// Known whole-script archive candidates (by basename purpose)
-const archiveByName = [
-  "tldraw-coverage-report.mjs",
-  "screenshot_all_pages.py", // nova_act + API key hardcoded
-  "scrapeAfcChairs.ts", // competitor scrape risk
-  "tmp-run-features.mjs",
-];
+for (const abs of siteScriptFiles) auditFile(abs, "site");
+for (const abs of rootScriptFiles) auditFile(abs, "root");
+
+// package.json scripts pointing at missing files
+const brokenNpm = [];
+for (const [name, cmd] of Object.entries(pkg.scripts || {})) {
+  if (name.startsWith("//")) continue;
+  for (const m of String(cmd).matchAll(/(?:node|tsx|npx tsx|python|pwsh[^\s]* -File)\s+(scripts\/[^\s"']+)/gi)) {
+    const rel = m[1].replace(/\\/g, "/");
+    if (!fs.existsSync(path.join(siteRoot, rel))) {
+      brokenNpm.push({ name, rel });
+    }
+  }
+}
 
 const report = {
   generatedAt: new Date().toISOString(),
   packages: packageChecks,
   featureDirs: featureChecks,
   samplePlannerRoutes: [...routes].filter((r) => r.includes("planner")).sort(),
-  hardRoutesMissing: hardRoutes.filter((r) => !routeExists(r)),
+  hardRoutesMissing: hardDeadRoutes.filter((r) => !routeExists(r)),
   findings,
-  archiveCandidatesByName: archiveByName.filter((n) =>
-    fs.existsSync(path.join(scriptsDir, n)),
-  ),
+  brokenNpmScripts: brokenNpm,
   summary: {
-    scriptsScanned: scriptFiles.length,
+    siteScriptsScanned: siteScriptFiles.length,
+    rootScriptsScanned: rootScriptFiles.length,
     scriptsWithIssues: findings.length,
+    byClass: {
+      ARCHIVE: findings.filter((f) => f.class === "ARCHIVE").length,
+      FIX: findings.filter((f) => f.class === "FIX").length,
+      KEEP: findings.filter((f) => f.class === "KEEP").length,
+    },
   },
 };
 
-const outDir = path.join(siteRoot, "..", "results", "site", "scripts-audit");
+const outDir = path.join(repoRoot, "results", "site", "scripts-audit");
 fs.mkdirSync(outDir, { recursive: true });
 const outJson = path.join(outDir, "stale-scripts-audit.json");
 const outMd = path.join(outDir, "STALE-SCRIPTS.md");
@@ -169,22 +273,25 @@ const md = [
   "",
   ...report.hardRoutesMissing.map((r) => `- \`${r}\``),
   "",
-  `## Scripts with issues (${findings.length}/${scriptFiles.length})`,
+  `## Scripts with issues (${findings.length} / site ${siteScriptFiles.length} + root ${rootScriptFiles.length})`,
   "",
   ...findings.flatMap((f) => [
-    `### \`${f.file}\``,
+    `### \`${f.file}\` — **${f.class}**`,
     ...f.issues.map((i) => `- ${i}`),
     "",
   ]),
-  "## Archive candidates (name-based)",
+  "## Broken package.json script targets",
   "",
-  ...report.archiveCandidatesByName.map((n) => `- \`site/scripts/${n}\``),
+  ...(brokenNpm.length
+    ? brokenNpm.map((b) => `- \`${b.name}\` → missing \`${b.rel}\``)
+    : ["- (none)"]),
   "",
   "## Notes",
   "",
-  "- Fabric canvas-audit scripts may still be valid (fabric package present; destination engine).",
+  "- Fabric canvas-audit / debug-* scripts stay valid when **fabric** package is present.",
+  "- `generate-route-classification.mjs` may list legacy redirects on purpose (not flagged).",
   "- Prefer **archive** over delete per AGENTS.md.",
-  "- Do not run `screenshot_all_pages.py` (hardcoded API key + nova_act missing).",
+  "- Sweep report: `results/site/scripts-audit/SCRIPTS-SWEEP-2026-07-09.md`",
   "",
 ].join("\n");
 
