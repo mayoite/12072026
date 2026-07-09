@@ -368,4 +368,67 @@ describe("pickOpeningAtPoint", () => {
       pickOpeningAtPoint({ x: 0, y: 2000 }, doors, [], [wall], 50),
     ).toBeNull();
   });
+
+  it("picks openings at wall endpoints (position 0 and position 1)", () => {
+    // position 0 → wall.start (0, 0); position 1 → wall.end (4000, 0)
+    const doors = [
+      { id: "d-start", wallId: "w1", position: 0, width: 900, height: 2100 },
+      { id: "d-end", wallId: "w1", position: 1, width: 900, height: 2100 },
+    ];
+    expect(
+      pickOpeningAtPoint({ x: 0, y: 15 }, doors, [], [wall], 80),
+    ).toEqual({ type: "door", id: "d-start" });
+    expect(
+      pickOpeningAtPoint({ x: 4000, y: 15 }, doors, [], [wall], 80),
+    ).toEqual({ type: "door", id: "d-end" });
+
+    // Window at end endpoint still maps via position × wall segment
+    const windows = [
+      { id: "win-end", wallId: "w1", position: 1, width: 1200, height: 1200 },
+    ];
+    expect(
+      pickOpeningAtPoint({ x: 4000, y: 0 }, [], windows, [wall], 50),
+    ).toEqual({ type: "window", id: "win-end" });
+  });
+
+  it("picks an opening on a diagonal wall via interpolated segment position", () => {
+    // Local fixture is named `wall` above — build diagonal inline to avoid shadowing the helper.
+    const diagonal: Open3dWall = {
+      id: "diag",
+      start: { x: 0, y: 0 },
+      end: { x: 4000, y: 4000 },
+      thickness: 100,
+      height: 2700,
+    };
+    // position 0.25 → (1000, 1000) on the diagonal
+    const doors = [
+      { id: "d-diag", wallId: "diag", position: 0.25, width: 900, height: 2100 },
+    ];
+    expect(
+      pickOpeningAtPoint({ x: 1000, y: 1000 }, doors, [], [diagonal], 80),
+    ).toEqual({ type: "door", id: "d-diag" });
+    // Offset perpendicular to the diagonal still within tolerance
+    // diagonal direction (1,1); perpendicular offset ≈ (10√2/2, -10√2/2) ≈ (7, -7)
+    expect(
+      pickOpeningAtPoint({ x: 1007, y: 993 }, doors, [], [diagonal], 80),
+    ).toEqual({ type: "door", id: "d-diag" });
+    // Far along the diagonal (near end) must miss this mid-span opening
+    expect(
+      pickOpeningAtPoint({ x: 3900, y: 3900 }, doors, [], [diagonal], 80),
+    ).toBeNull();
+  });
+
+  it("includes hits exactly at tolerance and misses just beyond", () => {
+    const doors = [
+      { id: "d1", wallId: "w1", position: 0.5, width: 900, height: 2100 },
+    ];
+    // Opening at (2000, 0); point at y=50 with tolerance 50 → distance === 50 → hit
+    expect(
+      pickOpeningAtPoint({ x: 2000, y: 50 }, doors, [], [wall], 50),
+    ).toEqual({ type: "door", id: "d1" });
+    // Just beyond inclusive boundary → miss
+    expect(
+      pickOpeningAtPoint({ x: 2000, y: 50.1 }, doors, [], [wall], 50),
+    ).toBeNull();
+  });
 });
