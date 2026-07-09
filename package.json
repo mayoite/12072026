@@ -9,8 +9,9 @@
   "scripts": {
     "dev": "pnpm --filter oando-site dev",
     "dev:turbo": "pnpm --filter oando-site dev:turbo",
-    "gate": "pnpm --filter oando-site gate",
-    "gate:full": "pnpm --filter oando-site gate:full",
+    "check:layout": "node scripts/check-repo-layout.mjs",
+    "gate": "pnpm run check:layout && pnpm --filter oando-site gate",
+    "gate:full": "pnpm run check:layout && pnpm --filter oando-site gate:full",
     "p0": "pnpm --filter oando-site p0",
     "p0:unit": "pnpm --filter oando-site p0:unit",
     "p0:g8": "pnpm --filter oando-site p0:g8",

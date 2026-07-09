@@ -44,7 +44,8 @@
 | **Tech-stack built docs** | Repo-root `tech-stack-docs/` + `tech-stack-generated/` (generator source may live under `site/tech-stack-generator/`) |
 | **Plans** | `Plans/trustdata/` live; history in `archive/Plans/` |
 
-If a tool defaults output into `site/`, **redirect it to root `results/`** or fix the config. Do not “leave it there.”
+If a tool defaults output into `site/`, **redirect it to root `results/`** or fix the config. Do not “leave it there.”  
+**Enforcement:** `pnpm run check:layout` (also first step of `gate` / `release:gate*`). Exit 1 if forbidden paths exist or are tracked — docs alone are not enough.
 
 ### Skills & Superpowers (User Standing Instructions — 2026-07-09)
 
