@@ -1,0 +1,46 @@
+{
+  "checkpoint": "CP-05",
+  "phase": "P05-symbols-svg",
+  "slice": "elon-reproof",
+  "status": "pass",
+  "date": "2026-07-09",
+  "hardStop": {
+    "unit": "pass",
+    "nonEmpty": "pass",
+    "doorStyle": "pass",
+    "centeredPath": "pass",
+    "honesty": "pass",
+    "svgSmoke": "pass",
+    "ethics": "pass",
+    "visual": "pass",
+    "scope": "pass"
+  },
+  "unitPack": {
+    "command": "pnpm exec vitest run tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts --reporter=verbose",
+    "exitCode": 0,
+    "testsPassed": 17,
+    "testsFailed": 0,
+    "log": "elon-reproof/vitest-reproof-raw.log"
+  },
+  "priorEvidence": {
+    "cp05Json": "CP-05.json status=pass",
+    "summary": "SUMMARY.md",
+    "greenLog": "02-green/vitest-raw.log (historical 12/12; pack now 17)",
+    "cp05Log": "CP-05-vitest-raw.log 17/17 exit 0",
+    "honesty": "04-svg-honesty/NOTES.md + SVG-SMOKE.md exit 0",
+    "visual": "05-visual/cabinet-v0-prims.json + NOTES.md",
+    "codeReview": "CODE-REVIEW.md Critical: none",
+    "codeTruth": "CODE-TRUTH.md PASS",
+    "a11yOptional": "A11Y-NOTE.md (not CP-05 hard gate)"
+  },
+  "claims": {
+    "cabinetV0Block2DReadable": true,
+    "notEmptyBox": true,
+    "doorStyleGeometryDiffers": true,
+    "canvasAuthorityIsBlock2D": true,
+    "furnitureBlockUsesCenteredPathIsFalse": true,
+    "svgCatalogIsPublishNotCanvas": true,
+    "noCompetitorSvg": true,
+    "browserPlaceJourney": "deferred-to-P07"
+  }
+}

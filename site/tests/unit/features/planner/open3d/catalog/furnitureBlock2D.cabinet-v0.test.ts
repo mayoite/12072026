@@ -106,6 +106,27 @@ function midVerticalStileCount(prims: Prim[], midX: number): number {
   }).length;
 }
 
+/** Small filled rects (handles) — exclude outer/inner carcass. */
+function handleRectCount(prims: Prim[]): number {
+  return prims.filter((p) => {
+    if (p.kind !== "rect") return false;
+    if (p.fill === "none" || p.fill === undefined) return false;
+    // Carcass outer is large (≥ half footprint either axis when typical).
+    return p.w < 80 && p.h < 40;
+  }).length;
+}
+
+function horizontalLineYs(prims: Prim[]): number[] {
+  const ys: number[] = [];
+  for (const p of prims) {
+    if (p.kind !== "line" || p.points.length < 4) continue;
+    const y0 = p.points[1]!;
+    const y1 = p.points[3]!;
+    if (Math.abs(y0 - y1) < 2) ys.push(y0);
+  }
+  return ys;
+}
+
 describe("cabinet-v0 Block2D plan symbol (W2)", () => {
   it("uses placed modular dimensions for footprint", () => {
     const block = furnitureBlock2DFromItem(cabinetItem());
@@ -114,11 +135,49 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
     expect(block.footprint.H).toBe(900);
   });
 
+  it("prefers modularOptions dims over item width/depth/height when set", () => {
+    const block = furnitureBlock2DFromItem(
+      cabinetItem({
+        width: 1200,
+        depth: 600,
+        height: 700,
+        modularOptions: {
+          widthMm: 900,
+          depthMm: 350,
+          heightMm: 880,
+          doorStyle: "slab",
+          material: "white",
+        },
+      }),
+    );
+    expect(block.footprint.L).toBe(900);
+    expect(block.footprint.D).toBe(350);
+    expect(block.footprint.H).toBe(880);
+  });
+
   it("is not an empty-box symbol: ≥4 prims with carcass + front + door cue", () => {
     const block = furnitureBlock2DFromItem(cabinetItem());
     expect(block.prims.length).toBeGreaterThanOrEqual(4);
     expect(countByKind(block.prims, "rect")).toBeGreaterThanOrEqual(1);
     expect(countByKind(block.prims, "line")).toBeGreaterThanOrEqual(2);
+  });
+
+  it("draws outer carcass covering full footprint origin (0,0)", () => {
+    const block = furnitureBlock2DFromItem(cabinetItem());
+    const { L, D } = block.footprint;
+    const outer = block.prims.find(
+      (p) =>
+        p.kind === "rect" &&
+        Math.abs(p.x) < 1 &&
+        Math.abs(p.y) < 1 &&
+        Math.abs(p.w - L) < 1 &&
+        Math.abs(p.h - D) < 1,
+    );
+    expect(outer).toBeDefined();
+    expect(outer?.kind).toBe("rect");
+    if (outer?.kind === "rect") {
+      expect(outer.fill).not.toBe("none");
+    }
   });
 
   it("keeps all prim geometry inside footprint (no runaway coords)", () => {
@@ -140,6 +199,17 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
         }
       }
     }
+  });
+
+  it("front edge is deeper (+Y) than back edge (readable door face)", () => {
+    const block = furnitureBlock2DFromItem(cabinetItem());
+    const hs = horizontalLineYs(block.prims);
+    expect(hs.length).toBeGreaterThanOrEqual(2);
+    const backY = Math.min(...hs);
+    const frontY = Math.max(...hs);
+    expect(frontY).toBeGreaterThan(backY);
+    // Front sits near depth face, not mid-carcass only
+    expect(frontY).toBeGreaterThan(block.footprint.D * 0.7);
   });
 
   it("pair doors get a center stile; slab does not", () => {
@@ -171,8 +241,94 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
     expect(midVerticalStileCount(slab.prims, midX)).toBe(0);
   });
 
+  it("pair has dual handle cues; slab has single offset handle (no mid stile)", () => {
+    const midX = 400;
+    const pair = furnitureBlock2DFromItem(
+      cabinetItem({
+        modularOptions: {
+          widthMm: 800,
+          depthMm: 400,
+          heightMm: 900,
+          doorStyle: "pair",
+          material: "oak",
+        },
+      }),
+    );
+    const slab = furnitureBlock2DFromItem(
+      cabinetItem({
+        modularOptions: {
+          widthMm: 800,
+          depthMm: 400,
+          heightMm: 900,
+          doorStyle: "slab",
+          material: "white",
+        },
+      }),
+    );
+
+    expect(pair.prims.length).toBeGreaterThanOrEqual(4);
+    expect(slab.prims.length).toBeGreaterThanOrEqual(4);
+    // doorStyle geometry must actually differ (S2)
+    expect(JSON.stringify(pair.prims)).not.toEqual(JSON.stringify(slab.prims));
+
+    expect(handleRectCount(pair.prims)).toBe(2);
+    expect(handleRectCount(slab.prims)).toBe(1);
+    expect(midVerticalStileCount(slab.prims, midX)).toBe(0);
+
+    // Slab handle offset to one side — not centered on mid-X
+    const slabHandle = slab.prims.find(
+      (p) => p.kind === "rect" && p.w < 80 && p.h < 40 && p.fill !== "none",
+    );
+    expect(slabHandle?.kind).toBe("rect");
+    if (slabHandle?.kind === "rect") {
+      const handleCx = slabHandle.x + slabHandle.w / 2;
+      expect(Math.abs(handleCx - midX)).toBeGreaterThan(40);
+    }
+  });
+
+  it("doorStyle none has open-shelf cues and zero mid stile", () => {
+    const midX = 400;
+    const open = furnitureBlock2DFromItem(
+      cabinetItem({
+        modularOptions: {
+          widthMm: 800,
+          depthMm: 400,
+          heightMm: 900,
+          doorStyle: "none",
+          material: "white",
+        },
+      }),
+    );
+    expect(open.prims.length).toBeGreaterThanOrEqual(4);
+    expect(midVerticalStileCount(open.prims, midX)).toBe(0);
+    expect(handleRectCount(open.prims)).toBe(0);
+
+    const dashedHoriz = open.prims.filter((p) => {
+      if (p.kind !== "line" || p.points.length < 4) return false;
+      const y0 = p.points[1]!;
+      const y1 = p.points[3]!;
+      const isHoriz = Math.abs(y0 - y1) < 2;
+      return isHoriz && Array.isArray(p.dash) && p.dash.length > 0;
+    });
+    // Open shelves: at least two dashed horizontal shelf lines
+    expect(dashedHoriz.length).toBeGreaterThanOrEqual(2);
+  });
+
   it("reports top-left prim authorship (centeredPath helper is false)", () => {
     expect(furnitureBlockUsesCenteredPath(cabinetItem())).toBe(false);
+    expect(
+      furnitureBlockUsesCenteredPath(
+        cabinetItem({
+          modularOptions: {
+            widthMm: 800,
+            depthMm: 400,
+            heightMm: 900,
+            doorStyle: "pair",
+            material: "oak",
+          },
+        }),
+      ),
+    ).toBe(false);
   });
 
   it("renders to canvas without throwing and issues fill+stroke", () => {

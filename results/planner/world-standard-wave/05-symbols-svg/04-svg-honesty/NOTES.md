@@ -17,3 +17,5 @@
 ## Smoke result this run
 - scripts:smoke:svg:batch exit: **0** (fixtures=4 ok=4 fail=0)
 - log: `04-svg-honesty/svg-batch-raw.log`
+- elon re-proof: `04-svg-honesty/svg-batch-raw-elon.log` + `elon-reproof/SVG-SMOKE.md` (exit **0**, 2026-07-09)
+- **Block2D ≠ publish:** smoke proves publish fixtures only; open3d plan canvas remains Block2D (not svg-catalog authority)

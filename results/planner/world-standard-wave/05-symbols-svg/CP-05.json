@@ -3,6 +3,23 @@
   "phase": "P05-symbols-svg",
   "gate": "W2-symbol-quality",
   "status": "pass",
+  "exitCode": 0,
+  "counts": {
+    "testFiles": 2,
+    "testFilesPassed": 2,
+    "testFilesFailed": 0,
+    "tests": 17,
+    "testsPassed": 17,
+    "testsFailed": 0
+  },
+  "startedAt": "2026-07-09T17:37:07Z",
+  "endedAt": "2026-07-09T17:37:09Z",
+  "command": "pnpm exec vitest run tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts --reporter=verbose",
+  "cwd": "D:\\OandO07072026\\site",
+  "files": [
+    "tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts",
+    "tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts"
+  ],
   "claims": {
     "cabinetV0Block2DReadable": true,
     "notEmptyBox": true,
@@ -15,9 +32,18 @@
     "browserPlaceJourney": "deferred-to-P07"
   },
   "evidence": [
+    "results/planner/world-standard-wave/05-symbols-svg/CP-05-vitest-raw.log",
+    "results/planner/world-standard-wave/05-symbols-svg/CP-05.json",
+    "results/planner/world-standard-wave/05-symbols-svg/SUMMARY.md",
     "results/planner/world-standard-wave/05-symbols-svg/02-green/vitest-raw.log",
     "results/planner/world-standard-wave/05-symbols-svg/04-svg-honesty/NOTES.md",
     "results/planner/world-standard-wave/05-symbols-svg/05-visual/cabinet-v0-prims.json",
-    "results/planner/world-standard-wave/05-symbols-svg/CP-05-vitest-raw.log"
-  ]
+    "results/planner/world-standard-wave/05-symbols-svg/elon-reproof/run.json",
+    "results/planner/world-standard-wave/05-symbols-svg/elon-reproof/SUMMARY.md",
+    "results/planner/world-standard-wave/05-symbols-svg/elon-reproof/vitest-reproof-raw.log",
+    "results/planner/world-standard-wave/05-symbols-svg/elon-reproof/CODE-REVIEW.md",
+    "results/planner/world-standard-wave/05-symbols-svg/elon-reproof/CODE-TRUTH.md",
+    "results/planner/world-standard-wave/05-symbols-svg/elon-reproof/SVG-SMOKE.md"
+  ],
+  "log": "CP-05-vitest-raw.log"
 }

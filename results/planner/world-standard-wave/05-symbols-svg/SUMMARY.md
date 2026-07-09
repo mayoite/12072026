@@ -5,7 +5,8 @@
 - pair mid stile present; slab none
 - `furnitureBlockUsesCenteredPath` always `false` (top-left authorship honesty)
 - unknown-SKU box fallback still has rect prims
-- unit: 12/12 green (`furnitureBlock2D.cabinet-v0` + `renderBlock2DToCanvas`)
+- unit: 17/17 green (`furnitureBlock2D.cabinet-v0` + `renderBlock2DToCanvas`; elon-reproof strengthened pack)
+
 - visual prim-JSON dump under `05-visual/`
 - SVG honesty NOTES: Block2D = canvas; compileSvgForPublish = publish only
 - `scripts:smoke:svg:batch` exit 0 (honesty, not canvas claim)

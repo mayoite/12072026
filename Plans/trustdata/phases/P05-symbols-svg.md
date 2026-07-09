@@ -1,5 +1,18 @@
 # P05 — W2 Symbol Quality + SVG Path Honesty
 
+## Phase status (complete)
+
+| Item | Status | Evidence |
+|------|--------|----------|
+| W2 symbols / CP-05 | **PASS** 2026-07-09 | `results/planner/world-standard-wave/05-symbols-svg/` |
+| Unit | 17/17 green | `CP-05-vitest-raw.log`; `elon-reproof/vitest-reproof-raw.log` |
+| Hard stop | all required rows green | `elon-reproof/SUMMARY.md` + `elon-reproof/run.json` |
+| Honesty | Block2D canvas · SVG publish | `04-svg-honesty/NOTES.md` |
+| Visual | prim-JSON (not empty box) | `05-visual/cabinet-v0-prims.json` |
+| Pack | `CP-05.json` status=pass | `SUMMARY.md` |
+
+Task checkboxes below are historical execute steps — evidence supersedes; do not re-open symbol thrash.
+
 ## Structure rewrite 2026-07-09
 
 **Hybrid thin:** Execute card here. Full TypeScript test/impl skeletons → **[P05-appendix.md](./P05-appendix.md)**. Evidence folder unchanged: `05-symbols-svg/`. One CP — do not split SVG honesty into a second gate.
