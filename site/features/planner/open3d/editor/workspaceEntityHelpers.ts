@@ -89,9 +89,16 @@ export function deleteEntityFromProject(
   const floor = project.floors[floorIndex];
   const target = (floor[collection] as Array<{ id: string; locked?: boolean }>).find((i) => i.id === id);
   if (target && target.locked) return project; // locked reject
-  const updatedFloor = mapEntityCollection(floor, collection, (items) =>
+  let updatedFloor = mapEntityCollection(floor, collection, (items) =>
     items.filter((item) => item.id !== id),
   );
+  if (collection === "walls") {
+    updatedFloor = {
+      ...updatedFloor,
+      doors: updatedFloor.doors.filter((d) => d.wallId !== id),
+      windows: updatedFloor.windows.filter((w) => w.wallId !== id),
+    };
+  }
 
   const floors = [...project.floors];
   floors[floorIndex] = updatedFloor;
@@ -132,9 +139,24 @@ export function applySelectionDelete(
     return project;
   }
 
+  // Walls removed: also drop doors/windows on those walls (same as pureActions.removeWall).
+  const removedWallIds =
+    collection === "walls"
+      ? items
+          .filter((item) => idSet.has(item.id) && !item.locked)
+          .map((item) => item.id)
+      : [];
+  const removedWallSet = new Set(removedWallIds);
+
   const updatedFloor: Open3dFloor = {
     ...floor,
     [collection]: nextItems as (typeof floor)[typeof collection],
+    ...(removedWallSet.size > 0
+      ? {
+          doors: floor.doors.filter((d) => !removedWallSet.has(d.wallId)),
+          windows: floor.windows.filter((w) => !removedWallSet.has(w.wallId)),
+        }
+      : {}),
   };
   const floors = [...project.floors];
   floors[floorIndex] = updatedFloor;

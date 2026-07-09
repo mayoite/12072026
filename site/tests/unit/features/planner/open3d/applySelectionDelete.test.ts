@@ -103,4 +103,61 @@ describe("applySelectionDelete (W3 pure)", () => {
     });
     expect(next).toBe(project);
   });
+
+  it("deleting a wall cascades doors and windows on that wall (no orphans)", () => {
+    let project = createOpen3dProject({
+      idFactory: ids("floor-1", "project-1"),
+    });
+    ({ project } = addWall(project, { x: 0, y: 0 }, { x: 3000, y: 0 }, {
+      idFactory: ids("wall-keep"),
+    }));
+    ({ project } = addWall(project, { x: 0, y: 0 }, { x: 0, y: 3000 }, {
+      idFactory: ids("wall-gone"),
+    }));
+
+    // Stamp openings on both walls (document fields only — pure path).
+    const floor = project.floors[0]!;
+    project = {
+      ...project,
+      floors: [
+        {
+          ...floor,
+          doors: [
+            {
+              id: "door-gone",
+              wallId: "wall-gone",
+              position: 0.5,
+              width: 900,
+              height: 2100,
+            },
+            {
+              id: "door-keep",
+              wallId: "wall-keep",
+              position: 0.4,
+              width: 900,
+              height: 2100,
+            },
+          ],
+          windows: [
+            {
+              id: "win-gone",
+              wallId: "wall-gone",
+              position: 0.7,
+              width: 1200,
+              height: 1200,
+            },
+          ],
+        },
+      ],
+    };
+
+    const next = applySelectionDelete(project, {
+      type: "wall",
+      ids: ["wall-gone"],
+    });
+    const nextFloor = next.floors[0]!;
+    expect(nextFloor.walls.map((w) => w.id)).toEqual(["wall-keep"]);
+    expect(nextFloor.doors.map((d) => d.id)).toEqual(["door-keep"]);
+    expect(nextFloor.windows).toEqual([]);
+  });
 });
