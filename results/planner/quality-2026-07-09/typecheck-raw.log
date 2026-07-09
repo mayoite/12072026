@@ -1,0 +1,5 @@
+pnpm exec tsc --noEmit -p tsconfig.json
+cwd: D:\OandO07072026\site
+exit: 0
+errors: 0
+output: (empty — clean typecheck)

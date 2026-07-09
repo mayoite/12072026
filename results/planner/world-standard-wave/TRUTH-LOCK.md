@@ -1,8 +1,9 @@
 # TRUTH-LOCK — world-standard-wave
 
-**Date:** 2026-07-09 (updated after CP-04 browser close)  
+**Date:** 2026-07-09 (CP-04 PASS; CP-10 unblocked)  
 **Scope:** Docs/evidence status only when syncing; product proof lives under gate folders.  
 **Authority synced:** `Plans/trustdata/checkpoints/CHECKPOINTS.md`, `ayushdocs/19-GOALS-SLICES.md`, `ayushdocs/00-PENDING.md`  
+**Owner plain status:** `results/planner/quality-2026-07-09/OWNER-STATUS.md`  
 **Rule:** PASS only when NOTES/run/screenshots support it. No invented PASS.
 
 Root: `results/planner/world-standard-wave/`
@@ -19,20 +20,23 @@ Root: `results/planner/world-standard-wave/`
 | **CP-07** | **W1–W2** browser | **PASS** | `02-browser-open3d-journey/` | Journey green |
 | **CP-08** | **W7** | **PASS** | `08-mesh-quality/` | Cabinet multiparts bar |
 | **CP-09** | **W8** | **PASS** | `09-shortcuts-chrome/` | Map-driven shortcuts |
-| **CP-10** | Pack + E: | **OPEN** | `10-handover/` **missing** | Only remaining pack gate |
+| **CP-10** | Pack + E: | **OPEN** | `10-handover/` **missing** | Only remaining pack gate — **not blocked on CP-04** (CP-04 PASS) |
 
 ## Related (not CP rows)
 
 | Surface | Status | Path |
 |---------|--------|------|
 | Systems v0 | Done (configurator + batch + multiparts + legs) | `07-systems-v0/` |
+| Quality slice (typecheck + pick tests) | Active / separate | `results/planner/quality-2026-07-09/` |
 
 ## Residuals (honest)
 
-1. **CP-10** — handover pack + E: backup.  
+1. **CP-10** — handover pack + E: backup only. **Not waiting on CP-04** (or any other CP-00…09).  
 2. **Mesh** — workstation legs landed; still boxy; handles/photoreal later.  
 3. **Fabric full stage** — destination later (Approach A).  
-4. **Cloud save** — later; W6 proves local honesty only.
+4. **Cloud save** — later; W6 proves local honesty only.  
+5. **Priced BOQ** — later; not claimed by W gates.  
+6. **Quality slice** — typecheck + pick-test quality (see OWNER-STATUS); does not close CP-10 by itself.
 
 ## Count
 

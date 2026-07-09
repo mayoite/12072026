@@ -228,6 +228,27 @@ describe("pickFurnitureAtPoint", () => {
     const top = furniture("top", { x: 0, y: 0 });
     expect(pickFurnitureAtPoint({ x: 0, y: 0 }, [bottom, top])).toBe("top");
   });
+
+  it("hits furniture rotated 90° via inverse-rotation local footprint", () => {
+    // 800×400 unrotated: halfW=400 (local X), halfD=200 (local Y).
+    // Production inverse-rotates the point by -rotation before AABB test.
+    // For rotation=90°: rad=-π/2 → localX=dy, localY=-dx.
+    const item = furniture("rot90", { x: 0, y: 0 }, 800, 400, 90);
+
+    // World +X 150 → local (0, -150): |localY| <= halfD → hit
+    expect(pickFurnitureAtPoint({ x: 150, y: 0 }, [item])).toBe("rot90");
+    // World +Y 350 → local (350, 0): |localX| <= halfW → hit (width after 90°)
+    expect(pickFurnitureAtPoint({ x: 0, y: 350 }, [item])).toBe("rot90");
+    // World +X 250 → local (0, -250): |localY| > halfD → miss (depth axis after 90°)
+    expect(pickFurnitureAtPoint({ x: 250, y: 0 }, [item])).toBeNull();
+  });
+
+  it("respects paddingMm by expanding the hit footprint", () => {
+    const item = furniture("pad", { x: 0, y: 0 }, 200, 200, 0);
+    // halfW/halfD = 100; point at 120 is outside without padding, inside with 30mm pad
+    expect(pickFurnitureAtPoint({ x: 120, y: 0 }, [item])).toBeNull();
+    expect(pickFurnitureAtPoint({ x: 120, y: 0 }, [item], 30)).toBe("pad");
+  });
 });
 
 describe("pickOpeningAtPoint", () => {
@@ -266,6 +287,77 @@ describe("pickOpeningAtPoint", () => {
     expect(
       pickOpeningAtPoint({ x: 3000, y: 10 }, doors, windows, [wall], 100),
     ).toEqual({ type: "window", id: "win1" });
+  });
+
+  it("picks door when it is closer than a competing window", () => {
+    const doors = [
+      { id: "d1", wallId: "w1", position: 0.25, width: 900, height: 2100 },
+    ];
+    const windows = [
+      { id: "win1", wallId: "w1", position: 0.75, width: 1200, height: 1200 },
+    ];
+    // near door at 0.25 → (1000, 0); window is at (3000, 0)
+    expect(
+      pickOpeningAtPoint({ x: 1000, y: 10 }, doors, windows, [wall], 100),
+    ).toEqual({ type: "door", id: "d1" });
+  });
+
+  it("skips openings whose wallId is missing without throwing", () => {
+    const doors = [
+      { id: "orphan", wallId: "gone", position: 0.5, width: 900, height: 2100 },
+      { id: "d1", wallId: "w1", position: 0.5, width: 900, height: 2100 },
+    ];
+    const windows = [
+      { id: "win-orphan", wallId: "also-gone", position: 0.5, width: 1200, height: 1200 },
+    ];
+
+    expect(() =>
+      pickOpeningAtPoint({ x: 2000, y: 10 }, doors, windows, [wall], 80),
+    ).not.toThrow();
+    expect(
+      pickOpeningAtPoint({ x: 2000, y: 10 }, doors, windows, [wall], 80),
+    ).toEqual({ type: "door", id: "d1" });
+
+    // Only orphaned openings → null, still no throw
+    expect(() =>
+      pickOpeningAtPoint({ x: 2000, y: 10 }, [doors[0]], windows, [wall], 80),
+    ).not.toThrow();
+    expect(
+      pickOpeningAtPoint({ x: 2000, y: 10 }, [doors[0]], windows, [wall], 80),
+    ).toBeNull();
+  });
+
+  it("when distances are equal, prefers first registered candidate deterministically", () => {
+    // Same wall + same position → identical distance for door and window.
+    // Implementation updates only when distance < bestDistance, so the first
+    // registered candidate wins (doors are registered before windows).
+    const doors = [
+      { id: "d-first", wallId: "w1", position: 0.5, width: 900, height: 2100 },
+    ];
+    const windows = [
+      { id: "win-same", wallId: "w1", position: 0.5, width: 1200, height: 1200 },
+    ];
+    expect(
+      pickOpeningAtPoint({ x: 2000, y: 0 }, doors, windows, [wall], 100),
+    ).toEqual({ type: "door", id: "d-first" });
+
+    // Two doors at the same position: earlier array entry stays best.
+    const twoDoors = [
+      { id: "d-a", wallId: "w1", position: 0.5, width: 900, height: 2100 },
+      { id: "d-b", wallId: "w1", position: 0.5, width: 900, height: 2100 },
+    ];
+    expect(
+      pickOpeningAtPoint({ x: 2000, y: 0 }, twoDoors, [], [wall], 100),
+    ).toEqual({ type: "door", id: "d-a" });
+
+    // Windows-only equal distance: first window registered wins.
+    const twoWindows = [
+      { id: "win-a", wallId: "w1", position: 0.5, width: 1200, height: 1200 },
+      { id: "win-b", wallId: "w1", position: 0.5, width: 1200, height: 1200 },
+    ];
+    expect(
+      pickOpeningAtPoint({ x: 2000, y: 0 }, [], twoWindows, [wall], 100),
+    ).toEqual({ type: "window", id: "win-a" });
   });
 
   it("returns null when far from all openings", () => {

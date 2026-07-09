@@ -23,10 +23,10 @@ Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infr
 | **W5–W6** | Save hard-reload + local-only honesty | **PASS** — `06-save-honesty/` (local IDB only; not cloud) |
 | **W7** | Mesh quality bar (cabinet-v0) | **PASS** bar met — `08-mesh-quality/`; residual: raise readability later (not photoreal) |
 | **W8** | Shortcuts map truth | **PASS** — `09-shortcuts-chrome/` |
-| **Pack** | CP-10 handover + E: backup | **OPEN** — `10-handover/` missing; needs CP-04 closed first |
+| **Pack** | CP-10 handover + E: backup | **OPEN** — `10-handover/` missing; **not blocked on CP-04** (CP-04 **PASS**) |
 | **Research** | Competitive ideas only — `D:\websites\research\2026-07-09-world-standard\` | Packed |
 
-**Not blocked on W0.** Gates run against evidence; open pack residual is **CP-10 handover** (optional next).
+**Not blocked on W0.** CP-00…CP-09 **PASS**. Open pack residual is **CP-10 handover** only (optional next — pack + E: backup).
 
 ---
 

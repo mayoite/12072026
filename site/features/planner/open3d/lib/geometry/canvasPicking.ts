@@ -93,36 +93,49 @@ export function pickOpeningAtPoint(
   toleranceMm: number,
 ): OpeningPickResult | null {
   const wallById = new Map(walls.map((wall) => [wall.id, wall]));
-  let best: { pick: OpeningPickResult; distance: number } | null = null;
+  // Flat loop (no nested mutator) — keeps TS narrowable and avoids `never` on best.pick.
+  let bestPick: OpeningPickResult | null = null;
+  let bestDistance = Number.POSITIVE_INFINITY;
 
-  const consider = (
-    type: "door" | "window",
-    id: string,
-    wallId: string,
-    position: number,
-  ) => {
-    const wall = wallById.get(wallId);
-    if (!wall) return;
-    const at = {
-      x: wall.start.x + (wall.end.x - wall.start.x) * position,
-      y: wall.start.y + (wall.end.y - wall.start.y) * position,
-    };
-    const distance = Math.hypot(point.x - at.x, point.y - at.y);
-    if (distance > toleranceMm) return;
-    if (!best || distance < best.distance) {
-      best = { pick: { type, id }, distance };
-    }
+  type Candidate = {
+    readonly type: "door" | "window";
+    readonly id: string;
+    readonly wallId: string;
+    readonly position: number;
   };
 
-  // Windows often drawn after doors — still pick nearest by distance.
-  for (const door of doors) {
-    consider("door", door.id, door.wallId, door.position);
-  }
-  for (const win of windows) {
-    consider("window", win.id, win.wallId, win.position);
+  const candidates: Candidate[] = [
+    ...doors.map((door) => ({
+      type: "door" as const,
+      id: door.id,
+      wallId: door.wallId,
+      position: door.position,
+    })),
+    ...windows.map((win) => ({
+      type: "window" as const,
+      id: win.id,
+      wallId: win.wallId,
+      position: win.position,
+    })),
+  ];
+
+  // Nearest within tolerance wins (windows and doors compete equally).
+  for (const candidate of candidates) {
+    const wall = wallById.get(candidate.wallId);
+    if (!wall) continue;
+    const at = {
+      x: wall.start.x + (wall.end.x - wall.start.x) * candidate.position,
+      y: wall.start.y + (wall.end.y - wall.start.y) * candidate.position,
+    };
+    const distance = Math.hypot(point.x - at.x, point.y - at.y);
+    if (distance > toleranceMm) continue;
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestPick = { type: candidate.type, id: candidate.id };
+    }
   }
 
-  return best?.pick ?? null;
+  return bestPick;
 }
 
 /**
