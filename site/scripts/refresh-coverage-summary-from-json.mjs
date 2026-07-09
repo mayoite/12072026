@@ -38,11 +38,15 @@ const SITE_SCOPE_EXACT = "features/ai/aiadvisor.ts";
 
 function isSiteScopeFile(filePath) {
   const n = normalizePath(filePath);
-  if (n.endsWith(SITE_SCOPE_EXACT)) return true;
-  if (!n.includes("/lib/configurator/")) {
-    return SITE_SCOPE_PREFIXES.some((prefix) => n.includes(`/${prefix}`));
+  if (n.endsWith(SITE_SCOPE_EXACT) || n.endsWith(`/${SITE_SCOPE_EXACT}`)) {
+    return true;
   }
-  return n.endsWith(".ts") && !n.endsWith(".d.ts");
+  if (n.includes("/lib/configurator/")) {
+    return n.endsWith(".ts") && !n.endsWith(".d.ts");
+  }
+  return SITE_SCOPE_PREFIXES.some(
+    (prefix) => n.includes(`/${prefix}`) || n.includes(prefix),
+  );
 }
 
 const summaryPath = path.join(workspaceRoot, "results/coverage-summary.json");

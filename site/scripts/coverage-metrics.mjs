@@ -1,6 +1,10 @@
 /**
  * Shared Istanbul/V8 coverage counters for coverage-final.json.
  * Vitest v8 often omits the `l` map — lines are derived from statementMap + `s`.
+ *
+ * RULE: never hardcode absolute statement totals, file counts, or historical
+ * denominators in callers. Always pass live data from coverage-final.json.
+ * Policy gate % lives in coverage-policy.mjs only.
  */
 
 export function pct(n, d) {

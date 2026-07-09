@@ -7,9 +7,10 @@
  *   node scripts/analyze-coverage-gap.mjs
  *
  * Fixed 2026-07-09:
- * - no frozen statement totals from old runs
+ * - no frozen statement totals from old runs (NEVER hardcode mass)
  * - recursive tests/** discovery (not only tests/*.test.ts)
  * - open3d wording (tldraw era removed)
+ * - dual rollup: full include vs touched-only (live from this JSON)
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -268,5 +269,5 @@ console.log(
   "4. Playwright e2e is excluded from V8 coverage — browser journeys do not raise %.",
 );
 console.log(
-  "5. PLAN-FAIL-0408: hard floor 90% still open — this script diagnoses, it does not gate.",
+  "5. PLAN-FAIL-0408: gate % is policy (coverage-policy.mjs), not a frozen mass total — this script diagnoses only.",
 );

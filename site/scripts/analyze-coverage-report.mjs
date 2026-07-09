@@ -5,6 +5,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileCounts, pct } from "./coverage-metrics.mjs";
+import { isHighMassFile, isLargeBucket } from "./coverage-policy.mjs";
 
 const repoRoot = process.cwd();
 const workspaceRoot = path.basename(repoRoot) === "site" ? path.resolve(repoRoot, "..") : repoRoot;
@@ -174,7 +175,7 @@ function remarkForColumn(col, scope, m, target) {
   return base;
 }
 
-function bucketRemark(name, b, target) {
+function bucketRemark(name, b, target, universeStmts = 0) {
   const parts = [];
   if (b.zeroStmtFiles === b.files) {
     parts.push("Entire bucket untested — high ROI if in critical path.");
@@ -182,12 +183,17 @@ function bucketRemark(name, b, target) {
     parts.push(`Majority of files (${b.zeroStmtFiles}/${b.files}) at 0% — slice tests here for fast gains.`);
   } else if (b.statements.pct >= target * 0.85) {
     parts.push("Near target — protect with threshold ratchet.");
-  } else if (b.statements.total > 1500) {
-    parts.push("Large surface area — prioritize store/domain/hooks over presentational TSX.");
-  } else if (b.statements.pct > 40) {
+  } else if (isLargeBucket(b.statements.total, universeStmts)) {
+    const share = universeStmts
+      ? ((100 * b.statements.total) / universeStmts).toFixed(1)
+      : "?";
+    parts.push(
+      `Large share of this run (${share}% of stmts) — prioritize domain/hooks over presentational TSX.`,
+    );
+  } else if (b.statements.pct > target * 0.45) {
     parts.push("Already partially covered — extend existing test files.");
   } else {
-    parts.push("Early slice candidate per PLANNER-COVERAGE-75 / SITE-COVERAGE plans.");
+    parts.push("Early slice candidate — grow tests against live gaps, not frozen plans.");
   }
   return parts.join(" ");
 }
@@ -202,10 +208,13 @@ function formatMetric(m) {
 
 function buildScopeSection(title, analysis, target, bucketOrder) {
   const t = analysis.total;
+  const universeStmts = t.statements.total;
   const lines = [];
   lines.push(`## ${title}`);
   lines.push("");
-  lines.push(`**Files in scope:** ${analysis.fileCount} · **Zero-statement files:** ${t.zeroStmtFiles}`);
+  lines.push(
+    `**Files in scope:** ${analysis.fileCount} · **Zero-statement files:** ${t.zeroStmtFiles} · **Stmts (this run):** ${universeStmts}`,
+  );
   lines.push("");
   lines.push("### Rollup by metric");
   lines.push("");
@@ -278,7 +287,7 @@ function buildScopeSection(title, analysis, target, bucketOrder) {
         formatMetric(b.lines),
         String(b.files),
         String(b.zeroStmtFiles),
-        bucketRemark(name, b, target),
+        bucketRemark(name, b, target, universeStmts),
       ]),
     );
   }
@@ -292,14 +301,20 @@ function buildScopeSection(title, analysis, target, bucketOrder) {
   if (zeros.length === 0) {
     lines.push("_None — all files with statements have some coverage._");
   } else {
-    lines.push(mdTableRow(["File", "Statements", "Remarks"]));
-    lines.push(mdTableRow(["---", "---", "---"]));
+    lines.push(mdTableRow(["File", "Statements", "Share of run", "Remarks"]));
+    lines.push(mdTableRow(["---", "---", "---", "---"]));
     for (const f of zeros) {
+      const share = universeStmts
+        ? `${((100 * f.stmtTotal) / universeStmts).toFixed(2)}%`
+        : "—";
       lines.push(
         mdTableRow([
           `\`${f.rel}\``,
           String(f.stmtTotal),
-          f.stmtTotal > 200 ? "High mass — single file test can move rollup %" : "Quick win — small isolated module",
+          share,
+          isHighMassFile(f.stmtTotal, universeStmts)
+            ? "High mass *in this run* — single file test can move rollup %"
+            : "Quick win — small isolated module *relative to this run*",
         ]),
       );
     }

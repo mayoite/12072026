@@ -11,6 +11,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { fileStatusVsGate } from "./coverage-policy.mjs";
 
 const PROFILES = {
   planner: {
@@ -94,9 +95,8 @@ function formatMetricCells(metric) {
 }
 
 function lineStatus(pct) {
-  if (pct >= 80) return "PASS (>= 80%)";
-  if (pct > 0) return "PARTIAL (< 80%)";
-  return "FAIL (0%)";
+  // Bands relative to gate policy — never a frozen absolute mass total
+  return fileStatusVsGate(pct, "lines");
 }
 
 function buildCsvHeader(metricKeys = METRIC_KEYS) {
