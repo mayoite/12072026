@@ -25,6 +25,7 @@ import {
   type CabinetMaterialId,
 } from "./modularCabinetV0";
 import {
+  parseWorkstationConfigKey,
   workstationConfigKey,
   workstationFootprintMm,
   type WorkstationConfigV0,
@@ -280,6 +281,21 @@ export function placeCatalogItemInProject(
   options: PlacementOptions = { placedFrom: "click" },
 ): ProjectPlacementResult {
   const snapshot = placeCatalogItem(item, variant, options);
+
+  // Systems v0 workstation — route through placeWorkstationConfigOnProject so
+  // footprint/modules/action type stay consistent with pure rules.
+  const workstationConfig =
+    parseWorkstationConfigKey(item.id) ?? parseWorkstationConfigKey(item.slug);
+  if (workstationConfig) {
+    const pure = placeWorkstationConfigOnProject(
+      project,
+      workstationConfig,
+      snapshot.position,
+      { idFactory: () => snapshot.placementId },
+    );
+    return { snapshot, result: pure };
+  }
+
   const placed = addFurniture(project, item.id, snapshot.position, {
     idFactory: () => snapshot.placementId,
   });

@@ -230,3 +230,42 @@ export type WorkstationPlanPrimsResult = {
   footprint: WorkstationFootprintMm;
   prims: WorkstationPlanPrimV0[];
 };
+
+const WORKSTATION_MODULE_KIND_SET: ReadonlySet<WorkstationModuleKindV0> = new Set([
+  "desk",
+  "return",
+  "pedestal",
+  "panel",
+  "overhead",
+]);
+
+/**
+ * Reverse of workstationConfigKey. Returns null if not a systems-v0 key.
+ * Example key: `ws-v0-linear-1500x600-desk+pedestal+panel`
+ */
+export function parseWorkstationConfigKey(key: string): WorkstationConfigV0 | null {
+  const match = /^ws-v0-(linear|l-shape)-(\d+)x(\d+)-(.+)$/.exec(key.trim());
+  if (!match) return null;
+  const shape = match[1] as WorkstationShapeV0;
+  const lengthMm = Number(match[2]);
+  const depthMm = Number(match[3]);
+  if (!Number.isFinite(lengthMm) || !Number.isFinite(depthMm)) return null;
+  const modules = match[4]
+    .split("+")
+    .map((part) => part.trim())
+    .filter((part): part is WorkstationModuleKindV0 =>
+      WORKSTATION_MODULE_KIND_SET.has(part as WorkstationModuleKindV0),
+    );
+  if (modules.length === 0) return null;
+  return createWorkstationConfigV0({
+    shape,
+    size: { lengthMm, depthMm },
+    modules,
+  });
+}
+
+/** True when catalog id/slug is a systems-v0 workstation config key. */
+export function isWorkstationV0CatalogId(id: string | undefined | null): boolean {
+  if (!id) return false;
+  return parseWorkstationConfigKey(id) !== null;
+}

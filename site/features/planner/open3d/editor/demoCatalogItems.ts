@@ -1,4 +1,5 @@
 import type { Open3dCatalogItem, Open3dCatalogCategory } from "../catalog/catalogTypes";
+import { WORKSTATION_V0_DEMO_CATALOG_ITEMS } from "../catalog/workstationCatalogV0";
 import { proofCatalogItem } from "../catalog/proofCatalog";
 
 function createCatalogItemFromProof(proof: typeof proofCatalogItem): Open3dCatalogItem {
@@ -165,6 +166,8 @@ export const OPEN3D_DEMO_CATALOG_ITEMS: Open3dCatalogItem[] = [
     symbolOnly: false,
     geometryMode: "modular-cabinet-v0",
   },
+  // Systems v0 workstation family (size grid × linear/L) — inventory place path
+  ...WORKSTATION_V0_DEMO_CATALOG_ITEMS,
 ];
 
 export function getDemoCatalogItemById(id: string): Open3dCatalogItem | undefined {
