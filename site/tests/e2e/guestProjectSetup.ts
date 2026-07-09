@@ -15,21 +15,52 @@ import { expect, type Page } from "@playwright/test";
  *
  * Call inside page.addInitScript so it runs before any app code.
  */
-export async function clearPlannerStorage(page: Page): Promise<void> {
-  await page.addInitScript(() => {
-    const plannerPrefixes = [
-      "cad-suite:planner:",
-      "oando-project-setup-complete-",
-      "planner-",
-    ];
+const PLANNER_LS_PREFIXES = [
+  "cad-suite:planner:",
+  "oando-project-setup-complete-",
+  "planner-",
+] as const;
+
+/**
+ * Clears planner storage on the current origin (evaluate).
+ * Safe for hard-reload tests: does **not** install an init script that would
+ * wipe IndexedDB again on `page.reload()`.
+ * Page must already be on the app origin.
+ */
+export async function clearPlannerStorageInPage(page: Page): Promise<void> {
+  await page.evaluate(async (prefixes) => {
     for (const key of Object.keys(localStorage)) {
-      if (plannerPrefixes.some((prefix) => key.startsWith(prefix))) {
+      if (prefixes.some((prefix) => key.startsWith(prefix))) {
+        localStorage.removeItem(key);
+      }
+    }
+    const deleteDb = (name: string) =>
+      new Promise<void>((resolve) => {
+        const req = indexedDB.deleteDatabase(name);
+        req.onsuccess = () => resolve();
+        req.onerror = () => resolve();
+        req.onblocked = () => resolve();
+      });
+    await deleteDb("planner-workspace-db");
+    await deleteDb("buddy-planner-db");
+  }, [...PLANNER_LS_PREFIXES]);
+}
+
+/**
+ * Clears planner storage before any app code runs (init script).
+ * Re-runs on every navigation for this page — **do not** use when the test
+ * needs IndexedDB to survive `page.reload()` (use `clearPlannerStorageInPage` once instead).
+ */
+export async function clearPlannerStorage(page: Page): Promise<void> {
+  await page.addInitScript((prefixes: string[]) => {
+    for (const key of Object.keys(localStorage)) {
+      if (prefixes.some((prefix) => key.startsWith(prefix))) {
         localStorage.removeItem(key);
       }
     }
     void indexedDB.deleteDatabase("planner-workspace-db");
     void indexedDB.deleteDatabase("buddy-planner-db");
-  });
+  }, [...PLANNER_LS_PREFIXES]);
 }
 
 /** Complete the guest project setup gate when it appears (fresh session). */

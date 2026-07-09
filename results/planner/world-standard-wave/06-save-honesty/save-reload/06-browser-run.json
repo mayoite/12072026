@@ -1,0 +1,27 @@
+{
+  "phase": "P06-save-honesty",
+  "gate": "W5",
+  "status": "browser-green",
+  "exitCode": 0,
+  "route": "/planner/guest/?plannerDevTools=1",
+  "browser": "chromium",
+  "cloudEnabled": false,
+  "idChannel": "status-bar furniture count (N furniture); guest title may stay Untitled plan",
+  "assert": "after hard reload, furniture count equals pre-save placed count",
+  "spec": "tests/e2e/open3d-save-honesty.spec.ts",
+  "baseURL": "http://localhost:3000",
+  "passed": 1,
+  "failed": 0,
+  "durationSec": 3.6,
+  "screenshots": [
+    "01-before-save.png",
+    "02-saved-local.png",
+    "03-after-hard-reload.png"
+  ],
+  "helpers": {
+    "clear": "clearPlannerStorageInPage (one-shot evaluate; not init-script)",
+    "enter": "enterGuestPlannerWorkspace({ preservePlannerState: true })",
+    "save": "Save draft → flushPersist → wait Saved locally / Draft saved locally",
+    "reload": "page.reload({ waitUntil: 'domcontentloaded' })"
+  }
+}

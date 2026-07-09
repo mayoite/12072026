@@ -1,4 +1,4 @@
-﻿# W6 save honesty — unit land (2026-07-09)
+# W6 save honesty — unit land + W5 hard-reload (2026-07-09)
 
 ## Code
 - createAutoSaver.flush + pending snapshot
@@ -9,8 +9,12 @@
 ## Unit
 planner-autosave + workspaceStatusLabels: 12/12 pass
 
-## Browser hard-reload
-Still open (W5 full CP-06)
+## Browser hard-reload (W5)
+**PASS** — see `save-reload/`
+- Spec: `site/tests/e2e/open3d-save-honesty.spec.ts`
+- 1 passed @ PLAYWRIGHT_BASE_URL=http://localhost:3000
+- Screenshots 01–03 + `06-playwright-raw.log` + `06-browser-run.json`
+- Assert: furniture count restored after hard reload (status bar `N furniture`)
 
 ## HEAD
 see git after commit
