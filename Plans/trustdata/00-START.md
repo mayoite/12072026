@@ -40,27 +40,26 @@ Owner records pick below. **Default if owner silent after unlock:** **A**.
 
 ### Owner pick (gate W0)
 
-- [ ] Approach **A** — Product journey first (recommended)
+- [x] Approach **A** — Product journey first (recommended) — recorded 2026-07-09
 - [ ] Approach **B** — Fabric full stage first
 - [ ] Approach **C** — Chrome / 2A first
 
 ### Owner mode (gate W0)
 
 - [ ] **plan-only** — plans/reviews/inventory evidence only; no product code
-- [ ] **implementation unlock** — product phases allowed per phase file
+- [x] **implementation unlock** — product phases allowed per phase file — recorded 2026-07-09
 - [ ] Still **locked** — wait for owner
 
-**Record unlock quote / date (when known):**
+**Record unlock quote / date:**
 
 ```text
-Date:
-Mode: locked | plan-only | implementation unlock
-Approach: A | B | C | (default A after unlock if silent)
-Owner quote:
-Agent:
+Date: 2026-07-09
+Mode: implementation unlock
+Approach: A
+Owner quote: full execute freedom; goals together; owner owns intent; agent does the thing; available but no prompt engineering; 6-month prototype bar
+Agent: grok
+Evidence: results/planner/world-standard-wave/00-start/NOTES.md
 ```
-
-Mirror into `results/planner/world-standard-wave/00-start/NOTES.md` when CP-00 is executed.
 
 ---
 
