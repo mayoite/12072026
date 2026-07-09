@@ -1,14 +1,27 @@
-﻿import { cleanup, render, screen, waitFor } from "@testing-library/react";
+/**
+ * W4 orbit three-layer contract:
+ * 1) enableControls defaults ON (Lazy + Inner)
+ * 2) product helper forces enableControls: true for workspace
+ * 3) OrbitControls constructed when enabled; data-orbit-enabled attribute
+ *
+ * Furniture document rotation remains degrees (normalizeDegrees) — not part of
+ * this file's scope beyond noting the contract stays intact.
+ */
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import {
+  OPEN3D_ORBIT_DEFAULT_ENABLED,
+  getOpen3dViewerControlProps,
+} from "@/features/planner/open3d/3d/orbitDefaults";
 import { ThreeViewerInner } from "@/features/planner/open3d/3d/ThreeViewerInner";
+import { normalizeDegrees } from "@/features/planner/open3d/model/units";
 
 const {
   renderCalls,
   disposeCalls,
   geometryDispose,
   materialDispose,
-  forceWebGLError,
   OrbitControlsCtor,
 } = vi.hoisted(() => {
   const OrbitControlsCtor = vi.fn(function MockOrbitControls(
@@ -37,14 +50,9 @@ const {
     disposeCalls: vi.fn(),
     geometryDispose: vi.fn(),
     materialDispose: vi.fn(),
-    forceWebGLError: { current: false },
     OrbitControlsCtor,
   };
 });
-
-vi.mock("three/examples/jsm/controls/OrbitControls.js", () => ({
-  OrbitControls: OrbitControlsCtor,
-}));
 
 vi.mock("three", () => {
   class MockMesh {
@@ -101,12 +109,6 @@ vi.mock("three", () => {
     setPixelRatio = vi.fn();
     render = renderCalls;
     dispose = disposeCalls;
-
-    constructor() {
-      if (forceWebGLError.current) {
-        throw new Error("WebGL init failed");
-      }
-    }
   }
 
   class MockDirectionalLight {
@@ -134,21 +136,53 @@ vi.mock("three", () => {
   };
 });
 
-describe("ThreeViewerInner", () => {
+vi.mock("three/examples/jsm/controls/OrbitControls.js", () => ({
+  OrbitControls: OrbitControlsCtor,
+}));
+
+describe("orbitControlsDefault — product helper / prop contract", () => {
+  it("OPEN3D_ORBIT_DEFAULT_ENABLED is true", () => {
+    expect(OPEN3D_ORBIT_DEFAULT_ENABLED).toBe(true);
+  });
+
+  it("getOpen3dViewerControlProps forces enableControls: true", () => {
+    const props = getOpen3dViewerControlProps();
+    expect(props).toEqual({ enableControls: true });
+    expect(props.enableControls).toBe(OPEN3D_ORBIT_DEFAULT_ENABLED);
+  });
+
+  it("furniture document rotation stays degrees via normalizeDegrees", () => {
+    // Document model contract (W4 expert pass): degrees, not radians.
+    expect(normalizeDegrees(0)).toBe(0);
+    expect(normalizeDegrees(90)).toBe(90);
+    expect(normalizeDegrees(360)).toBe(0);
+    expect(normalizeDegrees(-90)).toBe(270);
+  });
+});
+
+describe("orbitControlsDefault — ThreeViewerInner construct + data-orbit-enabled", () => {
   beforeEach(() => {
-    forceWebGLError.current = false;
+    OrbitControlsCtor.mockClear();
     renderCalls.mockClear();
     disposeCalls.mockClear();
     geometryDispose.mockClear();
     materialDispose.mockClear();
-    OrbitControlsCtor.mockClear();
     vi.spyOn(window, "requestAnimationFrame").mockReturnValue(1);
     vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => undefined);
     vi.spyOn(window, "addEventListener").mockImplementation(() => undefined);
     vi.spyOn(window, "removeEventListener").mockImplementation(() => undefined);
-    Object.defineProperty(window, "devicePixelRatio", { value: 1, configurable: true });
-    Object.defineProperty(HTMLElement.prototype, "clientWidth", { configurable: true, value: 800 });
-    Object.defineProperty(HTMLElement.prototype, "clientHeight", { configurable: true, value: 600 });
+    Object.defineProperty(window, "devicePixelRatio", {
+      value: 1,
+      configurable: true,
+    });
+    Object.defineProperty(HTMLElement.prototype, "clientWidth", {
+      configurable: true,
+      value: 800,
+    });
+    Object.defineProperty(HTMLElement.prototype, "clientHeight", {
+      configurable: true,
+      value: 600,
+    });
   });
 
   afterEach(() => {
@@ -156,67 +190,28 @@ describe("ThreeViewerInner", () => {
     vi.restoreAllMocks();
   });
 
-  it("shows loading state then mounts the WebGL container", async () => {
-    const onReady = vi.fn();
-    const { container: _container } = render(
-      <div style={{ width: 640, height: 480 }}>
-        <ThreeViewerInner backgroundColor="#fafafa" onReady={onReady} enableShadows={false} />
-      </div>,
-    );
-
-    expect(screen.getByText("Initializing 3D...")).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(onReady).toHaveBeenCalled();
-      expect(renderCalls).toHaveBeenCalled();
-    });
-
-    expect(screen.getByTestId("three-viewer-container")).toBeInTheDocument();
-  });
-
-  it("renders an error panel when scene initialization fails", async () => {
-    forceWebGLError.current = true;
-
+  it("omitted enableControls (default ON) constructs OrbitControls and sets data-orbit-enabled=true", async () => {
     render(
       <div style={{ width: 640, height: 480 }}>
-        <ThreeViewerInner />
-      </div>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText("3D Viewer Error")).toBeInTheDocument();
-      expect(screen.getByText("WebGL init failed")).toBeInTheDocument();
-    });
-  });
-
-  it("disposes renderer and scene resources on unmount", async () => {
-    const { unmount } = render(
-      <div style={{ width: 640, height: 480 }}>
-        <ThreeViewerInner enableShadows backgroundColor="#fff" />
+        <ThreeViewerInner enableShadows={false} />
       </div>,
     );
 
     await waitFor(() => {
       expect(renderCalls).toHaveBeenCalled();
+      expect(OrbitControlsCtor).toHaveBeenCalledTimes(1);
     });
 
-    unmount();
-    expect(disposeCalls).toHaveBeenCalled();
-    expect(geometryDispose).toHaveBeenCalled();
-    expect(materialDispose).toHaveBeenCalled();
+    const container = screen.getByTestId("three-viewer-container");
+    await waitFor(() => {
+      expect(container.getAttribute("data-orbit-enabled")).toBe("true");
+    });
   });
 
-  it("renders with shadow maps enabled and without an onReady callback", async () => {
-    let resizeHandler: (() => void) | undefined;
-    vi.spyOn(window, "addEventListener").mockImplementation((event, handler) => {
-      if (event === "resize") {
-        resizeHandler = handler as () => void;
-      }
-    });
-
+  it("enableControls={false} does not construct OrbitControls and sets data-orbit-enabled=false", async () => {
     render(
       <div style={{ width: 640, height: 480 }}>
-        <ThreeViewerInner enableShadows backgroundColor="#000000" />
+        <ThreeViewerInner enableShadows={false} enableControls={false} />
       </div>,
     );
 
@@ -224,17 +219,28 @@ describe("ThreeViewerInner", () => {
       expect(renderCalls).toHaveBeenCalled();
     });
 
-    resizeHandler?.();
-    expect(renderCalls).toHaveBeenCalled();
+    // Allow async setup to settle without constructing orbit.
+    await waitFor(() => {
+      const container = screen.getByTestId("three-viewer-container");
+      expect(container.getAttribute("data-orbit-enabled")).toBe("false");
+    });
+    expect(OrbitControlsCtor).not.toHaveBeenCalled();
   });
 
-  it("cancels Three.js loading when unmounted early", async () => {
-    const { unmount } = render(
+  it("enableControls={true} explicit construct + data-orbit-enabled=true", async () => {
+    render(
       <div style={{ width: 640, height: 480 }}>
-        <ThreeViewerInner />
+        <ThreeViewerInner enableShadows={false} enableControls={true} />
       </div>,
     );
-    unmount();
-    expect(screen.queryByText("Initializing 3D...")).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(OrbitControlsCtor).toHaveBeenCalledTimes(1);
+    });
+
+    const container = screen.getByTestId("three-viewer-container");
+    await waitFor(() => {
+      expect(container.getAttribute("data-orbit-enabled")).toBe("true");
+    });
   });
 });

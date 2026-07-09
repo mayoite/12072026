@@ -10,6 +10,12 @@ import type { ReactNode } from "react";
 import type { Open3dProject } from "../model/types";
 import styles from "./threeLazyViewer.module.css";
 import { readThreeThemeColor } from "../shared/readThemeColor";
+import { OPEN3D_ORBIT_DEFAULT_ENABLED } from "./orbitDefaults";
+
+export {
+  OPEN3D_ORBIT_DEFAULT_ENABLED,
+  getOpen3dViewerControlProps,
+} from "./orbitDefaults";
 
 /**
  * Loading fallback component for lazy-loaded 3D viewer.
@@ -136,7 +142,7 @@ export function Lazy3DViewer(props: Lazy3DViewerProps): React.JSX.Element {
     onError,
     loadingMessage = "Loading 3D viewer...",
     enableShadows = true,
-    enableControls = true,
+    enableControls = OPEN3D_ORBIT_DEFAULT_ENABLED,
     backgroundColor,
   } = props;
 

@@ -1,0 +1,32 @@
+{
+  "slice": "P04-W4-orbit-three-layer",
+  "date": "2026-07-09",
+  "status": "pass",
+  "command": "npx vitest run tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx tests/unit/features/planner/open3d/threeViewerInner.test.tsx tests/unit/features/planner/open3d/threeLazy.test.tsx --reporter=verbose",
+  "cwd": "D:\\OandO07072026\\site",
+  "results": {
+    "testFiles": 3,
+    "tests": 13,
+    "passed": 13,
+    "failed": 0
+  },
+  "contract": {
+    "OPEN3D_ORBIT_DEFAULT_ENABLED": true,
+    "getOpen3dViewerControlProps": { "enableControls": true },
+    "workspace": "OOPlannerWorkspace spreads getOpen3dViewerControlProps() on Lazy3DViewer",
+    "dataOrbitEnabled": "three-viewer-container data-orbit-enabled true|false after OrbitControls path",
+    "furnitureRotation": "document degrees via normalizeDegrees (asserted in orbitControlsDefault)"
+  },
+  "files": [
+    "site/features/planner/open3d/3d/orbitDefaults.ts",
+    "site/features/planner/open3d/3d/ThreeViewerInner.tsx",
+    "site/features/planner/open3d/3d/ThreeLazyViewer.tsx",
+    "site/features/planner/open3d/3d/index.ts",
+    "site/features/planner/open3d/editor/OOPlannerWorkspace.tsx",
+    "site/tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx",
+    "site/tests/unit/features/planner/open3d/threeViewerInner.test.tsx"
+  ],
+  "logs": [
+    "orbit-default-vitest-raw.log"
+  ]
+}

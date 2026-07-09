@@ -10,7 +10,10 @@ import {
   type ChangeEvent,
 } from "react";
 import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
-import { Lazy3DViewer } from "../3d/ThreeLazyViewer";
+import {
+  Lazy3DViewer,
+  getOpen3dViewerControlProps,
+} from "../3d/ThreeLazyViewer";
 import {
   FeasibilityCanvas,
   type FeasibilityCanvasHandle,
@@ -743,7 +746,10 @@ export function OOPlannerWorkspace({
             )}
           </div>
         ) : (
-          <Lazy3DViewer projectData={workspaceCanvas.project} />
+          <Lazy3DViewer
+            projectData={workspaceCanvas.project}
+            {...getOpen3dViewerControlProps()}
+          />
         )}
       </WorkspaceShell>
       <CommandPalette
