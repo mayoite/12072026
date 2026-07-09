@@ -53,6 +53,7 @@ If a tool defaults output into `site/`, **redirect it to root `results/`** or fi
 - **All skills permitted:** Main agent may load and assign **any** available skill (Firecrawl, chrome-devtools, TDD, debugging, a11y, verification, docs, etc.) as fit. Owner grants full skill authority.
 - Load **skills that fit the job** (TDD, debug, browser, etc.) — not every skill for ceremony.
 - **One owner task at a time — finish it.** Never run multiple product tasks / W-gates / plan phases as concurrent workstreams. That finishes nothing (owner 2026-07-09).
+- **Tests are part of the phase.** When you take a slice/phase, **writing and running tests for that work is included** — not a follow-up, not “unit later.” No “feature done, tests someday.” Evidence under `results/` for the same slice.
 - **Why parallel agents (owner-explicit):** Long single threads **fill the context window and you lose track**. Parallel agents = **fresh context** on sub-slices of the **same** task. Also in `ayushdocs/19-GOALS-SLICES.md` (“Subagents with /using-superpowers keep context fresh”). This is **not** multi-product thrash.
 - **Subagents:** Parallel **only inside that one task** (default ≤8; hard max 10). Write to disk so results survive. Briefs short; point at MDs.
 - **Bar:** Global product standard only; **quality over speed**. Owner present without micromanage or prompt-engineering — agent takes the call once intent is clear.
