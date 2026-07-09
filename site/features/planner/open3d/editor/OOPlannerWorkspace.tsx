@@ -379,14 +379,27 @@ export function OOPlannerWorkspace({
         return;
       }
 
-      workspaceCanvas.updateProject(
-        (project) =>
-          placeCatalogItemInProject(project, item, null, {
-            placedFrom: "click",
-            position: point,
-          }).result.project,
-      );
+      let placedId: string | null = null;
+      workspaceCanvas.updateProject((project) => {
+        const placed = placeCatalogItemInProject(project, item, null, {
+          placedFrom: "click",
+          position: point,
+        });
+        placedId =
+          typeof placed.result.action.payload?.id === "string"
+            ? placed.result.action.payload.id
+            : typeof placed.snapshot.placementId === "string"
+              ? placed.snapshot.placementId
+              : null;
+        return placed.result.project;
+      });
       setPendingCatalogItemId(null);
+      if (placedId) {
+        workspaceCanvas.setSelection({ type: "furniture", ids: [placedId] });
+        setActiveTool("select");
+        armedToolRef.current = "select";
+        canvasRef.current?.setTool("select");
+      }
       setWorkspaceMessage(`Placed ${item.shortName ?? item.name}`);
     },
     [pendingCatalogItemId, workspaceCanvas, catalog],
