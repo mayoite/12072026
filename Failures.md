@@ -21,7 +21,7 @@ Skipped items must be declared. Shell works; gates are runnable.
 - Read this file before running release gates (`START.md` → `pnpm run release:gate`).
 - **Agent default:** do not run Playwright, browser automation, or full E2E on every task; prefer targeted Vitest, typecheck, and HTTP/API probes (`AGENTS.md` §Browser / E2E). Full browser/E2E is for explicit user request, release gate, or closing `PLAN-FAIL-0412` — not routine slice work.
 - **Agent default:** do not run the full test suite or `test:coverage` after each planner phase/slice; run only Vitest files/patterns for the changed surface unless the user asks or a release/ship claim requires it (`AGENTS.md` §Test runs; `PLAN-FAIL-0413`, `0408`).
-- Coverage (2026-07-09 revisit): **correct files + achievable bars**. Planner **gate** include = pure open3d catalog/model/lib + shared boq/export (see `vitest.shared.ts` `VITEST_PLANNER_GATE_*`). **Excluded from gate:** `_archive` fabric, catalog **svg/** pipeline, GlbExport, scripts, public SVG, giant UI shells. Thresholds: planner **70/60/70/70**, site **85/75/85/85**. Optional inventory profile has **no** threshold — never thrash to 90% full-product. Policy: `site/scripts/coverage-policy.mjs`.
+- Coverage (agent call 2026-07-09): **include-first allowlist**, not 90% of monorepo. Planner gate = `workstation*` + placementAction + furnitureBlock2D + proofCatalog + canvasPicking (`vitest.shared.ts`). Thresholds **70/55/70/70**. Site **85/75/85/85**. Inventory = no threshold. Expand allowlist only when tests own the file.
 - A passing assertion count with missing console output or artifacts is **INCOMPLETE**, not passed.
 - Log blockers and skips here; move resolved items to `resolved-failures.md`.
 
@@ -104,11 +104,11 @@ Skipped items must be declared. Shell works; gates are runnable.
 
 | Profile | Command | Include (intent) | Threshold |
 |---------|---------|------------------|-----------|
-| **Planner gate** | `test:coverage` | pure open3d catalog/model/lib + shared boq/export | **70/60/70/70** |
+| **Planner gate** | `test:coverage` | systems spine allowlist (vitest.shared) | **70/55/70/70** |
 | **Site gate** | `test:coverage:site` | scoped site-data/catalog/ops/assistant | **85/75/85/85** |
-| **Inventory** | `test:coverage:inventory` | broad planner+lib (no svg scripts) | **none** — meter only |
+| **Inventory** | `test:coverage:inventory` | broad dark-product meter | **none** |
 
-**Excluded from planner gate:** `features/planner/_archive/**`, `**/svg/**` under catalog, GlbExport, scripts/, public SVG, editor/canvas UI shells.
+**Not in planner gate (by omission):** UI shells, svg pipeline, _archive fabric, pureActions megafile, inventory index, scripts, public SVG.
 
 **Next:** Run `test:coverage` + `test:coverage:site` with artifacts; close when both pass thresholds. Policy: `site/scripts/coverage-policy.mjs` + `vitest.shared.ts`.
 

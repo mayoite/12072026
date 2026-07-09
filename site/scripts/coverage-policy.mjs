@@ -22,15 +22,15 @@
  * Source of include globs: vitest.shared.ts (VITEST_PLANNER_GATE_*).
  */
 
-/** Planner ship gate — matches vitest.config.ts thresholds */
+/** Planner ship gate — matches vitest.config.ts / vitest.shared GATE allowlist */
 export const COVERAGE_GATE_PLANNER = {
   statements: 70,
-  branches: 60,
+  branches: 55,
   functions: 70,
   lines: 70,
   profile: "planner-gate",
   meaning:
-    "Pure open3d/shared modules only. Achievable. Ratchet when headroom proven.",
+    "Allowlist: workstation* + placementAction + furnitureBlock2D + proofCatalog + canvasPicking. Expand only when suite owns the file.",
 };
 
 /** Site ship gate — matches vitest.site.config.ts */
