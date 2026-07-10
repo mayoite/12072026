@@ -78,5 +78,11 @@ describe("plannerPersistence", () => {
         false,
       );
     });
+    it("walks originalError/cause for nested Postgres missing-table signals", () => {
+      const nested = Object.assign(new Error("Database list failed: Failed query: select …"), {
+        originalError: new Error('relation "oando_plans" does not exist'),
+      });
+      expect(isMissingOandoPlansTableError(nested)).toBe(true);
+    });
   });
 });

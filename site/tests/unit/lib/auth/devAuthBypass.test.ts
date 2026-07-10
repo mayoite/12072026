@@ -11,6 +11,17 @@ afterEach(() => {
   process.env = { ...originalEnv };
 });
 
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+describe("DEV_BYPASS_USER", () => {
+  it("uses a Postgres-valid UUID (oando_plans.user_id is uuid)", () => {
+    expect(DEV_BYPASS_USER.id).toMatch(UUID_RE);
+    // Guard against the historical non-hex suffix `…000dev`.
+    expect(DEV_BYPASS_USER.id.toLowerCase()).not.toContain("dev");
+  });
+});
+
 /**
  * Env matrix for isDevAuthBypassEnabled.
  * CSRF skip when bypass is on is covered in withAuth.test.ts (requireCsrf path).

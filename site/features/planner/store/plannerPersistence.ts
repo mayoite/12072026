@@ -368,14 +368,31 @@ export function isPlannerDatabaseConfigured(): boolean {
  * (or equivalent). Used so portal UX shows “not configured” instead of a
  * false “storage is configured but query failed” panel.
  */
+function collectErrorMessages(error: unknown, depth = 0): string[] {
+  if (depth > 4 || error == null) return [];
+  const out: string[] = [];
+  if (typeof error === "string") {
+    out.push(error);
+    return out;
+  }
+  if (error instanceof Error) {
+    out.push(error.message);
+    const withOriginal = error as Error & { originalError?: unknown; cause?: unknown };
+    out.push(...collectErrorMessages(withOriginal.originalError, depth + 1));
+    out.push(...collectErrorMessages(withOriginal.cause, depth + 1));
+    return out;
+  }
+  if (typeof error === "object") {
+    const rec = error as { message?: unknown; code?: unknown; cause?: unknown };
+    if (typeof rec.message === "string") out.push(rec.message);
+    if (typeof rec.code === "string") out.push(rec.code);
+    out.push(...collectErrorMessages(rec.cause, depth + 1));
+  }
+  return out;
+}
+
 export function isMissingOandoPlansTableError(error: unknown): boolean {
-  const message =
-    error instanceof Error
-      ? error.message
-      : typeof error === "string"
-        ? error
-        : String(error ?? "");
-  const normalized = message.toLowerCase();
+  const normalized = collectErrorMessages(error).join("\n").toLowerCase();
   if (!normalized) return false;
 
   // Postgres undefined_table

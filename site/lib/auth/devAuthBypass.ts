@@ -17,9 +17,13 @@ export type DevBypassUser = {
   role: "admin";
 };
 
-/** Stable synthetic admin for bypass sessions. */
+/**
+ * Stable synthetic admin for bypass sessions.
+ * Must be a real UUID (hex only) — oando_plans.user_id and profiles.id are uuid.
+ * The old suffix `…000dev` is not valid hex and broke every portal/list query.
+ */
 export const DEV_BYPASS_USER: DevBypassUser = {
-  id: "00000000-0000-4000-8000-0000000000dev",
+  id: "00000000-0000-4000-8000-0000000000d1",
   email: "dev-bypass@localhost",
   role: "admin",
 };

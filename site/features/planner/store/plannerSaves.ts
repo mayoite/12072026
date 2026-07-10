@@ -68,7 +68,9 @@ export async function listPlannerDocumentsFromStore(
   if (!userId) return [];
   const res = await plannerPersistence.listPlannerDocuments(userId);
   if (!res.success) {
-    throw new Error(res.error.message);
+    // Preserve PlannerPersistenceError (+ originalError) so portal can demote
+    // missing-table / invalid-param failures honestly instead of a bare string.
+    throw res.error;
   }
   return res.documents.map(({ id, document }) => ({
     id,
