@@ -17,7 +17,7 @@ Pending: `ayushdocs/00-PENDING.md`
 
 | Bar | Status | Proof |
 |-----|--------|-------|
-| **Spine W0–W9** | **PASS W0–W8** · **W9 N/A** (not a defined gate) · pack residual **CP-10 OPEN** | Design defines **W0 + W1–W8** only (`docs/superpowers/specs/2026-07-09-world-standard-planner-design.md`). Evidence under `results/planner/world-standard-wave/`: |
+| **Spine W0–W9** | **GATE PASS W0–W8** · **W9 N/A** · CP-10 **PASS (pack)** · **product not ship** | Design defines **W0 + W1–W8** only. **PASS = gate artifacts, not finished product.** See `00-rebaseline/HONEST-STATUS.md`. |
 | | W0 unlock Approach A | `00-start/NOTES.md` + `Plans/trustdata/00-START.md` |
 | | W1–W2 journey + symbols | `02-browser-open3d-journey/` · `05-symbols-svg/` |
 | | W3 select/delete/undo | `03-select-delete/` (unit + browser) |
@@ -63,6 +63,6 @@ Pending: `ayushdocs/00-PENDING.md`
 
 ## Next honest residual (not inventing epics)
 
-1. **CP-10** `10-handover/` + E: backup when owner wants program close  
-2. **label-in-name** — commit working-tree strings + refresh unit names + re-run LH under `results/planner/`  
-3. Product polish (mesh raise / Fabric / cloud / priced BOQ) only when owner changes kill path
+1. **Product residuals** (pick one phase): a11y LH · mesh raise · fresh W browser re-proof · Fabric / cloud / BOQ when owner wants  
+2. **Do not** read GATE PASS as product finished  
+3. CP-10 pack already at `10-handover/` + `E:\OandO-backups\trustdata-2026-07-10\`
