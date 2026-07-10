@@ -1,0 +1,5 @@
+﻿## Console messages
+Showing 1-2 of 2 (Page 1 of 1).
+msgid=2 [info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold (2 args)
+msgid=3 [error] WebSocket connection to 'ws://127.0.0.1:3001/_next/webpack-hmr?id=CtPF0FJ65IRRnucW6hMF_' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE (0 args) [4 times]
+

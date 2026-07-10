@@ -107,7 +107,7 @@ describe("P01 host wiring (import graph + source)", () => {
     );
   });
 
-  it("workspace gates Fabric furniture overlay with isOpen3dFabricFurnitureEnabled (default OFF)", () => {
+  it("workspace mounts Open3dFabricStage as sole live 2-D canvas (no FeasibilityCanvas fallback)", () => {
     const workspaceSrc = readSite(
       "features",
       "planner",
@@ -115,10 +115,11 @@ describe("P01 host wiring (import graph + source)", () => {
       "editor",
       "OOPlannerWorkspace.tsx",
     );
-    expect(workspaceSrc).toMatch(/isOpen3dFabricFurnitureEnabled/);
-    expect(workspaceSrc).toMatch(/fabricFurnitureEnabled/);
+    expect(workspaceSrc).toMatch(/Open3dFabricStage/);
+    expect(workspaceSrc).not.toMatch(/FeasibilityCanvas/);
+    expect(workspaceSrc).not.toMatch(/isOpen3dFabricFurnitureEnabled/);
 
-    // Product default: missing env → OFF (FeasibilityCanvas sole interactive 2D furniture)
+    // Legacy env flag module remains for mapper tests; not wired in workspace.
     expect(isOpen3dFabricFurnitureEnabled({})).toBe(false);
     expect(
       isOpen3dFabricFurnitureEnabled({

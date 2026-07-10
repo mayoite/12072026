@@ -336,6 +336,23 @@ export const BlockDescriptorThemeTokensSchema = z
     }
   });
 
+/** Parametric Maker.js recipe (optional). When set, publish uses maker path + pipelineCore S3. */
+export const BlockDescriptorMakerSchema = z.discriminatedUnion("recipe", [
+  z.object({
+    recipe: z.literal("linear-desk"),
+    widthMm: z.number().finite().positive(),
+    depthMm: z.number().finite().positive(),
+    topThicknessMm: z.number().finite().positive().optional(),
+  }),
+  z.object({
+    recipe: z.literal("l-desk"),
+    widthMm: z.number().finite().positive(),
+    depthMm: z.number().finite().positive(),
+    returnWidthMm: z.number().finite().positive(),
+  }),
+]);
+export type BlockDescriptorMaker = z.infer<typeof BlockDescriptorMakerSchema>;
+
 /** Common base fields shared across the three variant tags. */
 const BlockDescriptorCommonBaseSchema = z.object({
   schemaVersion: z.literal(BLOCK_DESCRIPTOR_SCHEMA_VERSION),
@@ -351,6 +368,7 @@ const BlockDescriptorCommonBaseSchema = z.object({
   mountingPoints: z.array(MountingPointSchema).optional(),
   /** Optional explicit blocks for resolver contract (PLAN-FAIL-0413 / 0406). See BlockDescriptorBlockSchema. Cites BP-02 schema parity + Phase 06 loader. */
   blocks: z.array(BlockDescriptorBlockSchema).optional(),
+  maker: BlockDescriptorMakerSchema.optional(),
   themeTokens: BlockDescriptorThemeTokensSchema,
   rovingFocus: z.array(BlockDescriptorRovingFocusEntrySchema),
   liveAnnouncementCategories: z

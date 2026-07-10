@@ -4,7 +4,7 @@
 
 **Live file:** `docs/architecture/MODULE-UI-CONTRACT.md`. Update this copy only when intentionally locking a new baseline.
 
-**Authority stack:** live plan `Plans/trustdata/` → `archive/Plans/01-execution/specialists/06-UI-PLAN.md` (historical) → **this file** → `docs/architecture/CSS-SOLUTION.md`
+**Authority stack:** live plan `Plans/P-track/` → `archive/Plans/01-execution/specialists/06-UI-PLAN.md` (historical) → **this file** → `docs/architecture/CSS-SOLUTION.md`
 
 **Problem:** New modules copy the nearest TSX and reintroduce `slate-*`, hex, or a third dialect.
 

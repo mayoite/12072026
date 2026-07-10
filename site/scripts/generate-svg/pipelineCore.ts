@@ -378,9 +378,27 @@ export async function runPipelineCore(descriptor: PipelineDescriptor): Promise<s
   const resultRings = applyBooleanOp(polygons, variant);
   const dPath = polygonsToPath(resultRings);
 
+  return runPipelineCoreFromPath(descriptor, viewBox, dPath);
+}
+
+/**
+ * S2 maker path: assemble + SVGO + sanitize from a pre-built `d` path (mm plan space).
+ */
+export async function runPipelineCoreFromPath(
+  descriptor: PipelineDescriptor,
+  viewBox: ViewBox,
+  dPath: string,
+): Promise<string> {
+  validateSlug(descriptor.slug);
+  const stableViewBox = assertViewBoxStable({ ...descriptor, viewBox });
+
+  if (!dPath.trim()) {
+    throw new Open3dPipelineError("invalid", "Empty SVG path data");
+  }
+
   const assembled = buildSvgString(
     descriptor.slug,
-    viewBox,
+    stableViewBox,
     dPath,
     descriptor.themeTokens,
     descriptor.name,

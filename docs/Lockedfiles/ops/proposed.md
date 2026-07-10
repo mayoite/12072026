@@ -1,7 +1,7 @@
 # Ops — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`plann/00-REVISION.md`](../../../plann/00-REVISION.md) — ops unchanged through 1A/1B
+**Authority:** [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) — ops unchanged through 1A/1B
 
 ## Cross-links
 

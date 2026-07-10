@@ -14,14 +14,10 @@ import {
   Lazy3DViewer,
   getOpen3dViewerControlProps,
 } from "../3d/ThreeLazyViewer";
+import { Open3dFabricStage } from "../canvas-fabric-stage/Open3dFabricStage";
 import {
-  FeasibilityCanvas,
-  type FeasibilityCanvasHandle,
   type CanvasStatusSnapshot,
-} from "../canvas-feasibility/FeasibilityCanvas";
-import {
-  FurnitureFabricLayer,
-  isOpen3dFabricFurnitureEnabled,
+  type Open3dCanvasStageHandle,
   type FurnitureDocumentPoseUpdate,
 } from "../canvas-fabric-stage";
 import {
@@ -117,7 +113,7 @@ export function OOPlannerWorkspace({
     ? "guest"
     : "authenticated";
   const projectName = planId ? `Plan ${planId}` : "Untitled plan";
-  const canvasRef = useRef<FeasibilityCanvasHandle>(null);
+  const canvasRef = useRef<Open3dCanvasStageHandle>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
   const workspaceCanvas = useWorkspaceCanvas({
     projectName,
@@ -230,17 +226,6 @@ export function OOPlannerWorkspace({
     workspaceCanvas.project.floors.find(
       (floor) => floor.id === workspaceCanvas.project.activeFloorId,
     ) ?? workspaceCanvas.project.floors[0];
-
-  // Fabric 2B furniture stage — default OFF (NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE=1 to enable).
-  // Walls stay on FeasibilityCanvas; fabric layer is optional overlay for furniture only.
-  const fabricFurnitureEnabled = isOpen3dFabricFurnitureEnabled();
-  const feasibilityLayerVisibility = useMemo(
-    () =>
-      fabricFurnitureEnabled
-        ? { ...layerVisibility, furniture: false }
-        : layerVisibility,
-    [fabricFurnitureEnabled, layerVisibility],
-  );
 
   const handleFabricFurnitureModified = useCallback(
     (update: FurnitureDocumentPoseUpdate) => {
@@ -968,47 +953,13 @@ export function OOPlannerWorkspace({
               onToolChange={setTool}
               onZoomReset={() => canvasRef.current?.resetZoom()}
             />
-            {fabricFurnitureEnabled ? (
-              <div
-                className="open3d-canvas-embedded"
-                style={{ position: "relative" }}
-              >
-                <FeasibilityCanvas
-                  ref={canvasRef}
-                  variant="embedded"
-                  activeTool={activeTool}
-                  layerVisibility={feasibilityLayerVisibility}
-                  delegateKeyboard
-                  workspaceCanvas={workspaceCanvas}
-                  pendingCatalogPlacement={
-                    pendingCatalogItemId !== null ||
-                    pendingWorkstationConfig !== null
-                  }
-                  placementItemLabel={
-                    pendingWorkstationConfig
-                      ? workstationConfigKey(pendingWorkstationConfig)
-                      : (pendingCatalogItem?.shortName ??
-                        pendingCatalogItem?.name ??
-                        null)
-                  }
-                  onPlaceAtPoint={handlePlaceAtPoint}
-                  onStatusChange={setCanvasStatus}
-                />
-                <FurnitureFabricLayer
-                  furniture={activeFloor?.furniture ?? []}
-                  transform={canvasStatus?.transform}
-                  interactive={activeTool === "select"}
-                  onFurnitureModified={handleFabricFurnitureModified}
-                />
-              </div>
-            ) : (
-              <FeasibilityCanvas
+            <div className="open3d-canvas-embedded">
+              <Open3dFabricStage
                 ref={canvasRef}
-                variant="embedded"
                 activeTool={activeTool}
                 layerVisibility={layerVisibility}
-                delegateKeyboard
                 workspaceCanvas={workspaceCanvas}
+                activeFloor={activeFloor}
                 pendingCatalogPlacement={
                   pendingCatalogItemId !== null ||
                   pendingWorkstationConfig !== null
@@ -1022,8 +973,9 @@ export function OOPlannerWorkspace({
                 }
                 onPlaceAtPoint={handlePlaceAtPoint}
                 onStatusChange={setCanvasStatus}
+                onFurnitureModified={handleFabricFurnitureModified}
               />
-            )}
+            </div>
             {/* P-UI-3: tool guidance lives in status bar only (avoid duplicate chrome) */}
             {isCanvasEmpty && (
               <section

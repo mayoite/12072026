@@ -1,3 +1,3 @@
 export { OOPlannerWorkspace, type OOPlannerWorkspaceProps } from "./OOPlannerWorkspace";
 export { WorkspaceShell } from "./WorkspaceShell";
-export { FeasibilityCanvas } from "../canvas-feasibility/FeasibilityCanvas";
+export { Open3dFabricStage } from "../canvas-fabric-stage/Open3dFabricStage";

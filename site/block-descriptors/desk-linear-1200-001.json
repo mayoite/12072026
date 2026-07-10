@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "2026-07-04.v2",
+  "id": "f81e3a1b-16f4-4000-8000-000000000005",
+  "slug": "desk-linear-1200-001",
+  "sku": "OFL-DSK-LIN-1200",
+  "sourceProvenance": "native",
+  "createdBy": "seed-block-descriptors",
+  "geometry": {
+    "widthMm": 1200,
+    "depthMm": 600,
+    "heightMm": 750
+  },
+  "viewBox": {
+    "x": 0,
+    "y": 0,
+    "width": 1200,
+    "height": 600
+  },
+  "mounting": [
+    "floor"
+  ],
+  "maker": {
+    "recipe": "linear-desk",
+    "widthMm": 1200,
+    "depthMm": 600,
+    "topThicknessMm": 80
+  },
+  "themeTokens": {
+    "currentColor": "currentColor",
+    "--fill-primary": "var(--color-surface-raised)"
+  },
+  "rovingFocus": [
+    {
+      "key": "focus-desk-top",
+      "focusSelector": "#desk-top",
+      "label": "Worksurface"
+    }
+  ],
+  "liveAnnouncementCategories": [
+    "status"
+  ],
+  "generatedAt": 1751631004,
+  "checksum": "e325cff5baa3a30d1b38ce82375c0d164a3637fcdc1959014f2fe8275ab8b30d",
+  "variant": "fixed",
+  "fixed": {
+    "sizingType": "fixed"
+  }
+}

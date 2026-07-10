@@ -1,7 +1,7 @@
 # CSS Solution — Oando Platform
 
 **Status:** Locked folder policy (execution via UI-0 → UI-3)  
-**Authority:** `plann/00-REVISION.md` → `plann/06-UI-PLAN.md` → [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) → **this file**  
+**Authority:** `Plans/00-REVISION.md` → `Plans/06-UI-PLAN.md` → [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) → **this file**  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — styles live in `app/css/`, never mirrored under `features/`  
 **Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
@@ -123,7 +123,7 @@ New feature modules are the main drift vector. Enforcement lives in:
 
 - **[`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md)** — surface rules, checklist, layers
 - **[`MODULE-LAYOUT.md`](MODULE-LAYOUT.md)** — no CSS mirrors under `features/`
-- **`plann/06-UI-PLAN.md`** — phased execution (UI-0 → UI-3)
+- **`Plans/06-UI-PLAN.md`** — phased execution (UI-0 → UI-3)
 - **`site/scripts/lint-ui-contract.mjs`** — `lint:ui` / `lint:ui:strict`
 
 Do not adopt a full design-system program (Storybook-first) before 1A+1B; extract primitives to `core/components/*.css` after the third repeated pattern.

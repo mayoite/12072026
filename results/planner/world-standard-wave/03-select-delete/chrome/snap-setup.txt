@@ -1,1 +1,8 @@
-uid=1_0 RootWebArea url="about:blank"
+﻿## Latest page snapshot
+uid=1_0 RootWebArea "Planner Workspace | One&Only | One&Only" url="http://127.0.0.1:3001/planner/guest/?plannerDevTools=1"
+  uid=1_1 link "Skip to main content" url="http://127.0.0.1:3001/planner/guest/?plannerDevTools=1#main-content"
+    uid=1_2 StaticText "Skip to main content"
+  uid=1_3 main
+    uid=1_4 status "Loading planner..." atomic live="polite" relevant="additions text"
+
+

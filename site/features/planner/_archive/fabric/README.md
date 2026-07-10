@@ -6,7 +6,7 @@
 Important distinction:
 
 - this archive is the **old top-level Fabric planner route** (and its Fabric.js canvas)
-- live open3d 2-D is **`open3d/canvas-feasibility/FeasibilityCanvas`** (Canvas 2D API), not Fabric — Fabric full-stage cutover is Phase 2B
+- archived Canvas 2D: **`_archive/canvas-feasibility/FeasibilityCanvas`** (tests only — not live)
 
 ## Contents
 

@@ -1,0 +1,19 @@
+cmd : Error: Not enough non-option arguments: got 0, need at least 1
+At line:8 char:1
++ cmd /c "`"$cli`" select_page $pageId --bringToFront true" 2>&1 | Out- ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Error: Not enou...need at least 1:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+=========================================
+=ƒÆí TIP FOR AI AGENT / DEVELOPER:
+In the `chrome-devtools` CLI:
+1. Required parameters MUST be passed as positional arguments (without flags).
+   - INCORRECT: chrome-devtools evaluate_script --expression "() => document.title"
+   - CORRECT:   chrome-devtools evaluate_script "() => document.title"
+2. Optional parameters are passed as double-dash options/flags (e.g. --pageId 1).
+3. Make sure to escape quotes properly for your shell environment.
+Run `chrome-devtools <command> --help` to see exact positional and optional parameters.
+=========================================
+

@@ -1,0 +1,5 @@
+Script ran on page and returned:
+```json
+{"orbit":null,"hasPlanner3d":false,"els":[],"canv":[{"t":null,"cw":377,"ch":759,"w":377,"h":759}],"furniture":8,"modeHint":"Wall -+ 2D"}
+```
+

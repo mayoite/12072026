@@ -24,9 +24,9 @@ export function mapDescriptorToCatalogItem(
     name: displayName,
     shortName,
     description: `SVG symbol · ${displayName}`,
-    category: "Furniture",
-    subCategory: "Symbols",
-    taxonomyPath: `Furniture > Symbols > ${displayName}`,
+    category: "Symbols",
+    subCategory: "SVG Catalog",
+    taxonomyPath: `Symbols > SVG Catalog > ${displayName}`,
     dimensions: {
       widthMm: descriptor.geometry.widthMm,
       depthMm: descriptor.geometry.depthMm,

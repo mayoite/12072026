@@ -1,7 +1,7 @@
 # Admin UI contract (proposed)
 
 **Status:** Proposed — enforce in **UI-2** (1B)  
-**Authority:** `plann/00-REVISION.md` → `plann/06-UI-PLAN.md` → [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) → **this file** → `admin-pages.css`  
+**Authority:** `Plans/00-REVISION.md` → `Plans/06-UI-PLAN.md` → [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) → **this file** → `admin-pages.css`  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — routes in `app/admin/`, views in `features/planner/admin/`  
 **Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
@@ -135,4 +135,4 @@ Admin layout must set `data-admin-layout` and load `admin-pages.css` via site ad
 
 - [`CSS-SOLUTION.md`](CSS-SOLUTION.md) — admin bundle ownership
 - [`DATA_FLOW.md`](DATA_FLOW.md) §6 — SVG publish sequence
-- `plann/08-TEST-PLAN.md` — TEST-2 admin gates
+- `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` — TEST-2 admin gates

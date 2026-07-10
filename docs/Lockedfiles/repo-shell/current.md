@@ -1,7 +1,7 @@
 # Repo shell — current (locked)
 
 **Baseline:** 2026-07-05  
-**Revision alignment:** Per [`plann/00-REVISION.md`](../../../plann/00-REVISION.md), Phase **1A** and **1B** are **not accepted** — this file describes on-disk repo layout only.
+**Revision alignment:** Per [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md), Phase **1A** and **1B** are **not accepted** — this file describes on-disk repo layout only.
 
 ## Cross-links
 
@@ -20,7 +20,7 @@
 | Deploy | Vercel project `oando-platform`; Root Directory = `site` | `site/vercel.json` (`buildCommand`: `cd .. && pnpm run build`) |
 | Env | Repo-root `.env.local` loaded by scripts | `.env.example`, `site/scripts/loadEnvLocal.cjs` |
 | Evidence | Test/lint output under `results/<module>/…` | `results/`, `testing-handbook.md` |
-| Governance | Conduct + gates at root; product plan in `plann/` | `AGENTS.md`, `Failures.md`, `plann/01-START.md` |
+| Governance | Conduct + gates at root; product plan in `Plans/` | `AGENTS.md`, `Failures.md`, `Plans/P-track/START.md` |
 
 ## Packages (on disk)
 
@@ -44,4 +44,4 @@ Clean separation: no application logic at repo root. Standardized test evidence 
 
 ## Weaknesses
 
-Two handovers (root governance vs `plann/` product) can disagree on status. CI and Vercel greenness must be verified live, not from docs. Overlapping `plans/` and archived plan trees on disk create path confusion for agents. Tech-stack CI has been a known weak signal on main.
+Two handovers (root governance vs `Plans/` product) can disagree on status. CI and Vercel greenness must be verified live, not from docs. Overlapping `plans/` and archived plan trees on disk create path confusion for agents. Tech-stack CI has been a known weak signal on main.

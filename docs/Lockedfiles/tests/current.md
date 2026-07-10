@@ -12,8 +12,8 @@
 | Tech-stack | Package tests in `tech-stack-generator/` | `site/tech-stack-generator/` | `START.md` |
 | Evidence | Output under `results/<module>/<phase>/<cmd>/` as `<cmd>-run.json` + `<cmd>-raw.log` | `results/` | `testing-handbook.md`, `AGENTS.md` |
 | UI lint | `lint:ui` (warn); `lint:ui:strict` exists; **not** in `release:gate:fast` yet | `site/scripts/lint-ui-contract.mjs` | `MODULE-UI-CONTRACT.md` |
-| Command catalog | `phase1CommandCatalog.test.ts` — unit-tests `executePlannerCommand`; **does not** prove UI wiring | `site/tests/unit/features/planner/open3d/` | `plann/04-HANDOVER.md` |
-| Icon policy | `open3dIconPolicy.test.ts` — **not on disk** (planned TEST-1) | — | `plann/08-TEST-PLAN.md` |
+| Command catalog | `phase1CommandCatalog.test.ts` — unit-tests `executePlannerCommand`; **does not** prove UI wiring | `site/tests/unit/features/planner/open3d/` | `ayushdocs/SESSION-RECAP.md` |
+| Icon policy | `open3dIconPolicy.test.ts` — **not on disk** (planned TEST-1) | — | `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` |
 | Coverage | PLAN-FAIL-0408 **open** — no fresh full % proof | `coverageGap.test.ts` | `Failures.md` |
 | Fabric aliases | Vitest maps `editor` / `canvas-fabric` → `_archive/fabric/` | `vitest.config.ts` | — |
 | SVG tests | boundaries, phase1 completion, persist, puck registry, API routes | `tests/unit/admin/svg-editor/` | — |

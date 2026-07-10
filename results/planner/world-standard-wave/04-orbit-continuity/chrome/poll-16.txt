@@ -1,0 +1,5 @@
+Script ran on page and returned:
+```json
+{"len":20,"hasInv":false,"hasSetup":false,"hasLoading":false,"href":"http://127.0.0.1:3000/planner/guest/?plannerDevTools=1"}
+```
+

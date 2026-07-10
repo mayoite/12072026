@@ -1,0 +1,19 @@
+cmd : chrome-devtools-mcp exposes content of the browser instance to the MCP clients allowing them to inspect,
+At line:11 char:8
++   $r = cmd /c "`"$cli`" evaluate_script `"() => ({ len: document.body ...
++        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (chrome-devtools...hem to inspect,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+debug, and modify any data in the browser or DevTools.
+Avoid sharing sensitive or personal information that you do not want to share with MCP clients.
+Performance tools may send trace URLs to the Google CrUX API to fetch real-user experience data. To disable, run with 
+--no-performance-crux.
+
+Google collects usage statistics to improve Chrome DevTools MCP. To opt-out, run with --no-usage-statistics.
+For more details, visit: https://github.com/ChromeDevTools/chrome-devtools-mcp#usage-statistics
+Script ran on page and returned:
+```json
+{"len":0,"hasInv":false,"hasSetup":false,"hasLoading":false,"href":"about:blank"}
+```
+

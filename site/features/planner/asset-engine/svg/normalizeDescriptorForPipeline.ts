@@ -4,6 +4,7 @@
  * Live publish uses pipelineCore which expects:
  * - blocks[].height (plan Y extent)
  * - variant ∈ union | intersection | difference | xor
+ * - optional `maker` recipe → Maker.js path (S2) before S3 sanitize/optimize
  *
  * Admin BlockDescriptor uses:
  * - blocks[].depth (often)
@@ -11,6 +12,8 @@
  *
  * Without this stage, admin descriptors silently mismatch fixture geometry.
  */
+
+import type { MakerRecipe } from "./makerJsRecipes";
 
 export type PipelineBooleanVariant =
   | "union"
@@ -34,6 +37,8 @@ export interface PipelineCompileDescriptor {
   viewBox: { x: number; y: number; width: number; height: number };
   blocks: PipelineBlockRect[];
   themeTokens?: Record<string, string | undefined>;
+  /** When set, S2 uses Maker.js path compile instead of polygon-clipping blocks. */
+  makerRecipe?: MakerRecipe;
 }
 
 const BOOLEAN_VARIANTS = new Set<PipelineBooleanVariant>([
@@ -90,6 +95,32 @@ function synthesizeBlocksFromGeometry(
     finiteNumber(geometry.heightMm) ??
     viewBox.height;
   return [{ x: 0, y: 0, width: Math.max(1, w), height: Math.max(1, d) }];
+}
+
+function parseMakerRecipe(raw: unknown): MakerRecipe | undefined {
+  const o = asRecord(raw);
+  if (!o) return undefined;
+  const recipe = typeof o.recipe === "string" ? o.recipe.trim() : "";
+  if (recipe === "linear-desk") {
+    const widthMm = finiteNumber(o.widthMm);
+    const depthMm = finiteNumber(o.depthMm);
+    if (widthMm === null || depthMm === null) return undefined;
+    const topThicknessMm = finiteNumber(o.topThicknessMm) ?? undefined;
+    return {
+      recipe: "linear-desk",
+      widthMm,
+      depthMm,
+      ...(topThicknessMm !== undefined ? { topThicknessMm } : {}),
+    };
+  }
+  if (recipe === "l-desk") {
+    const widthMm = finiteNumber(o.widthMm);
+    const depthMm = finiteNumber(o.depthMm);
+    const returnWidthMm = finiteNumber(o.returnWidthMm);
+    if (widthMm === null || depthMm === null || returnWidthMm === null) return undefined;
+    return { recipe: "l-desk", widthMm, depthMm, returnWidthMm };
+  }
+  return undefined;
 }
 
 /**
@@ -163,6 +194,8 @@ export function normalizeDescriptorForPipeline(
     | Record<string, string | undefined>
     | undefined;
 
+  const makerRecipe = parseMakerRecipe(root.maker);
+
   return {
     slug,
     name: typeof root.name === "string" ? root.name : undefined,
@@ -172,5 +205,6 @@ export function normalizeDescriptorForPipeline(
     viewBox,
     blocks: finalBlocks,
     themeTokens,
+    makerRecipe,
   };
 }

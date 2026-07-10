@@ -1,7 +1,7 @@
 # Admin — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`plann/00-REVISION.md`](../../../plann/00-REVISION.md) · **Phase 1B** for SVG admin product — **acceptance pending**
+**Authority:** [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) · **Phase 1B** for SVG admin product — **acceptance pending**
 
 ## Cross-links
 
@@ -21,7 +21,7 @@
 | Nav | `adminNav.ts` is source of truth (includes svg-editor) | `adminNav.ts` | `ADMIN_workflow.md` (to update) |
 | Catalog admin | Three data sets; APIs at `/api/admin/catalogs/{type}` | catalog views + handlers | `ADMIN_workflow.md` |
 | SVG editor | Puck registry canonical; full `<Puck>` for field edit; `onPublish` → validate → compile → persist | `features/planner/admin/svg-editor/` | `plans/01-phase1-execution/01-implementation-decisions.md` |
-| Publish flow | Save draft ≠ publish; compile failures block publish (not silent success) | API + `svgRevisionRepository` | `plann/01-START.md` §9 |
+| Publish flow | Save draft ≠ publish; compile failures block publish (not silent success) | API + `svgRevisionRepository` | `Plans/P-track/START.md` §9 |
 | Portal SVG | ≤1 Puck `Render` per route; public preview of published blocks | `portal/svg-catalog/` | `benchmark-delivery.md` |
 | Views vs routes | Routes own URLs only; views in `features/planner/admin/`, `crm/`, `ops/` | `site/app/admin/` | `MODULE-LAYOUT.md` |
 | Icons | Phosphor = planner chrome; **Lucide allowed in admin CMS** (revision Decision 3) | admin views | `PACKAGES.md` |

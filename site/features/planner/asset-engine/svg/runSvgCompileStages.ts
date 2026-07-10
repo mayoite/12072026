@@ -8,12 +8,14 @@
 
 import {
   runPipelineCore,
+  runPipelineCoreFromPath,
   type PipelineDescriptor,
 } from "../../../../scripts/generate-svg/pipelineCore";
 import {
   normalizeDescriptorForPipeline,
   type PipelineCompileDescriptor,
 } from "./normalizeDescriptorForPipeline";
+import { compileMakerRecipeToPath } from "./makerJsToPath";
 
 export interface SvgCompileStageResult {
   readonly ok: true;
@@ -63,9 +65,21 @@ export async function runSvgCompileStages(
     stages.push("svg-s1-normalize");
     const normalized = normalizeDescriptorForPipeline(rawDescriptor);
 
-    stages.push("svg-s2-compile");
-    stages.push("svg-s3-sanitize-optimize");
-    const svg = await runPipelineCore(toPipelineDescriptor(normalized));
+    let svg: string;
+    if (normalized.makerRecipe) {
+      stages.push("svg-s2-maker-compile");
+      stages.push("svg-s3-sanitize-optimize");
+      const { dPath, viewBox } = compileMakerRecipeToPath(normalized.makerRecipe);
+      svg = await runPipelineCoreFromPath(
+        toPipelineDescriptor({ ...normalized, viewBox }),
+        viewBox,
+        dPath,
+      );
+    } else {
+      stages.push("svg-s2-compile");
+      stages.push("svg-s3-sanitize-optimize");
+      svg = await runPipelineCore(toPipelineDescriptor(normalized));
+    }
 
     if (typeof svg !== "string" || svg.length === 0) {
       return {

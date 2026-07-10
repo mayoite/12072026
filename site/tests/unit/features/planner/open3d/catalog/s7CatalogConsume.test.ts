@@ -51,9 +51,9 @@ function svgCatalogItem(slug = "chaise-lounge-001"): Open3dCatalogItem {
     name: "Chaise Lounge",
     shortName: "Chaise Lounge",
     description: `SVG symbol · Chaise Lounge`,
-    category: "Furniture",
-    subCategory: "Symbols",
-    taxonomyPath: `Furniture > Symbols > Chaise Lounge`,
+    category: "Symbols",
+    subCategory: "SVG Catalog",
+    taxonomyPath: `Symbols > SVG Catalog > Chaise Lounge`,
     dimensions: { widthMm: 800, depthMm: 1600, heightMm: 420 },
     displayUnit: "mm",
     assets: {

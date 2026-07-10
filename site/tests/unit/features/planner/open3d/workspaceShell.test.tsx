@@ -27,8 +27,8 @@ import type { Open3dWall } from "@/features/planner/open3d/model/types";
 vi.mock("@/features/planner/open3d/editor/CanvasToolRail", () => ({ CanvasToolRail: () => <div data-testid="tool-rail" /> }));
 vi.mock("@/features/planner/open3d/editor/CommandPalette", () => ({ CommandPalette: () => <div data-testid="cmd-palette" /> }));
 vi.mock("@/features/planner/open3d/editor/LayersPanel", () => ({ LayersPanel: () => <div data-testid="layers" /> }));
-vi.mock("@/features/planner/open3d/canvas-feasibility/FeasibilityCanvas", () => ({
-  FeasibilityCanvas: ({
+vi.mock("@/features/planner/open3d/canvas-fabric-stage/Open3dFabricStage", () => ({
+  Open3dFabricStage: ({
     children,
   }: {
     children?: React.ReactNode;
@@ -829,10 +829,9 @@ describe("OOPlannerWorkspace (TDD)", () => {
     }, { timeout: 100 });
   });
 
-  it("professional workspace: topbar has project/save/floor/units/2d3d/undo/redo/save + structured menus for import/export/prefs; panels separate catalogue/layers; canvas-max (GS: Figma REC-01 minimize, catalogue-first REC-04, 2026-07-04 benchmark)", () => {
-    // Note: full render assertions limited by existing mocks in this test file (TopBar/Shell indirect); verified via docking hook + manual structure. TDD intent covered by other passes + code.
+  it("professional workspace chrome deferred to browser e2e (TopBar mocked in this file)", () => {
     render(<OOPlannerWorkspace guestMode />);
-    expect(true).toBe(true); // passes gate; full e2e/browser validate chrome
+    expect(document.querySelector(".open3d-workspace-root")).toBeTruthy();
   });
 
   it("docking persists valid panel ratios to workspace prefs schema (task5)", () => {

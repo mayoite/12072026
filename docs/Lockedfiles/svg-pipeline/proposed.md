@@ -1,7 +1,7 @@
 # SVG pipeline — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`plann/00-REVISION.md`](../../../plann/00-REVISION.md) · **Phase 1B** — **acceptance pending evidence**
+**Authority:** [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) · **Phase 1B** — **acceptance pending evidence**
 
 ## Cross-links
 
@@ -21,10 +21,10 @@
 | Icons | Phosphor in planner; admin CMS may use Lucide if documented | `PACKAGES.md` | Decision 3 |
 | Descriptor schema | `BlockDescriptor` for catalog consumer; `SvgBlockDefinitionV1` for reference blocks; bridge adapter in 1B | `svgBlockSchemas.ts`, `svgTypes.ts` | `implementation-decisions.md` |
 | Compile | **One** compiler module; `generate-svg.mjs` is thin CLI over same logic | `open3d/catalog/svg/svgCompiler.server.ts` | `PACKAGES.md` Option A |
-| Sanitize | DOMPurify before SVGO; SVGO is optimization not sanitization | `svgServerSanitizer.ts` | `plann/01-START.md` §10 |
-| Raster | resvg canonical PNG + Sharp thumbnails; server-only | `svgArtifactCompiler.server.ts` | `plann/01-START.md` §8 |
+| Sanitize | DOMPurify before SVGO; SVGO is optimization not sanitization | `svgServerSanitizer.ts` | `Plans/P-track/START.md` §10 |
+| Raster | resvg canonical PNG + Sharp thumbnails; server-only | `svgArtifactCompiler.server.ts` | `Plans/P-track/START.md` §8 |
 | Boundaries | No server-only packages in planner or browser adapter chunks | boundary tests | `svgPackageBoundaries.test.ts` |
-| Publish | Draft → validate → preview → publish; compile failure blocks publish | revision repo + API | `plann/01-START.md` §9 |
+| Publish | Draft → validate → preview → publish; compile failure blocks publish | revision repo + API | `Plans/P-track/START.md` §9 |
 
 ## Packages (proposed per plan)
 

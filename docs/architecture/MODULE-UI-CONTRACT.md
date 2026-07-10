@@ -1,7 +1,7 @@
 # Module UI Contract — Anti-drift lock
 
 **Status:** Locked  
-**Authority:** `plann/00-REVISION.md` → `plann/06-UI-PLAN.md` → **this file** → [`CSS-SOLUTION.md`](CSS-SOLUTION.md)  
+**Authority:** `Plans/00-REVISION.md` → `Plans/06-UI-PLAN.md` → **this file** → [`CSS-SOLUTION.md`](CSS-SOLUTION.md)  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — path roots below must match  
 **Locked copy:** [`docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md`](../Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md)  
@@ -100,7 +100,7 @@ Every new UI module under the path roots above **must** satisfy:
 | Command boundary | `plannerCommandBoundary.test.ts` | TEST-1 |
 | Command wiring | `plannerCommandWiring.test.ts` | TEST-1 — **fails until `useWorkspaceCanvas` uses `executePlannerCommand`** |
 
-See `plann/08-TEST-PLAN.md` for full gate matrix.
+See `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` for full gate matrix.
 
 ---
 
@@ -121,6 +121,6 @@ See `plann/08-TEST-PLAN.md` for full gate matrix.
 - [`CSS-SOLUTION.md`](CSS-SOLUTION.md) — folder ownership
 - [`ADMIN-UI-CONTRACT.md`](ADMIN-UI-CONTRACT.md) — admin surface detail (UI-2)
 - [`SITE-MARKETING-UI-CONTRACT.md`](SITE-MARKETING-UI-CONTRACT.md) — marketing reference (UI-3)
-- `plann/06-UI-PLAN.md` — phased execution
-- `plann/08-TEST-PLAN.md` — test gates
+- `Plans/06-UI-PLAN.md` — phased execution
+- `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` — test gates
 - `site/scripts/lint-ui-contract.mjs` — automated checks

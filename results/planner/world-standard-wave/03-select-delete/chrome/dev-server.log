@@ -1,0 +1,54 @@
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.103:3000
+- Environments: .env.development.local
+✓ Ready in 558ms
+- Experiments (use with caution):
+  · optimizePackageImports
+
+ GET / 200 in 106ms (next.js: 6ms, proxy.ts: 3ms, application-code: 98ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 166ms (next.js: 23ms, proxy.ts: 4ms, application-code: 140ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 104ms (next.js: 8ms, proxy.ts: 7ms, application-code: 89ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 93ms (next.js: 8ms, proxy.ts: 7ms, application-code: 77ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 81ms (next.js: 9ms, proxy.ts: 6ms, application-code: 67ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 153ms (next.js: 11ms, proxy.ts: 6ms, application-code: 136ms)
+ GET / 200 in 172ms (next.js: 5ms, proxy.ts: 5ms, application-code: 163ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 146ms (next.js: 9ms, proxy.ts: 7ms, application-code: 130ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 173ms (next.js: 14ms, proxy.ts: 18ms, application-code: 141ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 104ms (next.js: 11ms, proxy.ts: 5ms, application-code: 88ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 79ms (next.js: 7ms, proxy.ts: 4ms, application-code: 67ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 90ms (next.js: 8ms, proxy.ts: 8ms, application-code: 75ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 158ms (next.js: 9ms, proxy.ts: 4ms, application-code: 144ms)
+ GET / 200 in 178ms (next.js: 7ms, proxy.ts: 5ms, application-code: 166ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 136ms (next.js: 8ms, proxy.ts: 6ms, application-code: 122ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 83ms (next.js: 7ms, proxy.ts: 4ms, application-code: 72ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 76ms (next.js: 7ms, proxy.ts: 4ms, application-code: 65ms)
+ GET / 200 in 155ms (next.js: 6ms, proxy.ts: 4ms, application-code: 145ms)
+ GET / 200 in 155ms (next.js: 6ms, proxy.ts: 4ms, application-code: 145ms)
+ GET / 200 in 171ms (next.js: 5ms, proxy.ts: 3ms, application-code: 162ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 93ms (next.js: 7ms, proxy.ts: 5ms, application-code: 81ms)
+ GET /api/csrf/ 200 in 262ms (next.js: 235ms, proxy.ts: 8ms, application-code: 20ms)
+ GET /api/theme/active/ 200 in 1057ms (next.js: 97ms, proxy.ts: 10ms, application-code: 949ms)
+ GET /api/planner/catalog/svg-blocks/ 200 in 582ms (next.js: 90ms, proxy.ts: 7ms, application-code: 485ms)
+ GET /api/planner/catalog/svg-blocks/ 200 in 213ms (next.js: 5ms, proxy.ts: 4ms, application-code: 205ms)
+ GET / 200 in 219ms (next.js: 8ms, proxy.ts: 8ms, application-code: 203ms)
+ GET /admin/svg-editor/ 200 in 3.0s (next.js: 2.6s, proxy.ts: 7ms, application-code: 355ms)
+○ Compiling /admin/svg-editor ...
+ GET /api/csrf/ 200 in 25ms (next.js: 6ms, proxy.ts: 6ms, application-code: 13ms)
+ GET /admin/svg-editor/side-table-001/ 500 in 6.6s (next.js: 5.9s, proxy.ts: 5ms, application-code: 696ms)
+ POST /api/admin/svg-editor/ 422 in 1482ms (next.js: 462ms, proxy.ts: 9ms, application-code: 1011ms)
+✓ Compiled in 618ms
+ GET /portal/ 200 in 2.0s (next.js: 1426ms, proxy.ts: 94ms, application-code: 513ms)
+ GET /portal/ 200 in 148ms (next.js: 15ms, proxy.ts: 54ms, application-code: 79ms)
+ GET /api/csrf/ 200 in 73ms (next.js: 47ms, proxy.ts: 7ms, application-code: 20ms)
+ GET /portal/ 200 in 1714ms (next.js: 647ms, proxy.ts: 7ms, application-code: 1060ms)
+ GET /portal/ 200 in 1067ms (next.js: 368ms, proxy.ts: 107ms, application-code: 592ms)
+ GET /admin/svg-editor/ 200 in 1464ms (next.js: 54ms, proxy.ts: 15ms, application-code: 1395ms)
+ GET /admin/svg-editor/side-table-001/ 500 in 1468ms (next.js: 511ms, proxy.ts: 9ms, application-code: 948ms)
+ GET /api/csrf/ 200 in 102ms (next.js: 67ms, proxy.ts: 7ms, application-code: 28ms)
+ POST /api/admin/svg-editor/ 422 in 821ms (next.js: 262ms, proxy.ts: 6ms, application-code: 553ms)
+✓ Compiled in 327ms
+ GET /portal/ 200 in 1185ms (next.js: 271ms, proxy.ts: 75ms, application-code: 839ms)
+ GET /portal/ 200 in 743ms (next.js: 155ms, proxy.ts: 118ms, application-code: 470ms)
+ GET /portal/ 200 in 460ms (next.js: 5ms, proxy.ts: 19ms, application-code: 437ms)
+[?25h

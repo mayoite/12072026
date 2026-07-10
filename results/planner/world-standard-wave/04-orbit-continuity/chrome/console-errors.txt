@@ -1,0 +1,4 @@
+## Console messages
+Showing 1-1 of 1 (Page 1 of 1).
+msgid=14 [error] WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=_K0OZjHZK_pmVyU01ExNq' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE (0 args) [6 times]
+

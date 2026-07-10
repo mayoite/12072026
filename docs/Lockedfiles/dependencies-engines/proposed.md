@@ -1,7 +1,7 @@
 # Dependencies & engines — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** `PACKAGES.md`, [`plann/00-REVISION.md`](../../../plann/00-REVISION.md), `implementation-decisions.md`, `plann/01-START.md` §5  
+**Authority:** `PACKAGES.md`, [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md), `implementation-decisions.md`, `Plans/P-track/START.md` §5  
 **Per-domain breakdown:** each `*-proposed.md` has **Packages (proposed per plan)** with Phase 1A / 1B tags.
 
 ## Cross-links

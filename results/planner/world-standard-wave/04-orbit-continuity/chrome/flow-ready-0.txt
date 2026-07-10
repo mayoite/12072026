@@ -1,0 +1,5 @@
+Script ran on page and returned:
+```json
+{"inv":true,"setup":false,"furn":"4"}
+```
+

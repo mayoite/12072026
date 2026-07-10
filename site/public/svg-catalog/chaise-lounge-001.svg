@@ -1,17 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" viewBox="0 0 800 1600" width="800" height="1600" data-block-variant="plan-symbol" data-oando-origin="true">
-  <title>Chaise Lounge</title>
-  <desc>O&amp;O original multi-path plan symbol: seat, backrest, arm, cushion seams — not a solid boolean blob. Safe for Canvas drawImage.</desc>
-  <!-- Outer footprint (light fill so strokes read when rasterized as image) -->
-  <rect x="24" y="24" width="752" height="1552" rx="32" fill="#f3efe6" stroke="#3f3a32" stroke-width="22"/>
-  <!-- Backrest (head end) -->
-  <rect x="24" y="24" width="752" height="300" rx="28" fill="#d9d2c3" stroke="#3f3a32" stroke-width="18"/>
-  <!-- Left arm -->
-  <rect x="24" y="300" width="148" height="1000" rx="20" fill="#e6dfd1" stroke="#3f3a32" stroke-width="16"/>
-  <!-- Seat body fill region (open side) -->
-  <rect x="172" y="340" width="580" height="920" rx="16" fill="#f7f3ea" stroke="#5c564c" stroke-width="10"/>
-  <!-- Cushion seam lines -->
-  <line x1="188" y1="640" x2="736" y2="640" stroke="#5c564c" stroke-width="12"/>
-  <line x1="188" y1="960" x2="736" y2="960" stroke="#5c564c" stroke-width="12"/>
-  <!-- Foot-end bolster -->
-  <rect x="200" y="1320" width="520" height="180" rx="20" fill="#e0d8c8" stroke="#3f3a32" stroke-width="14"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" viewBox="0 0 800 1600" width="800" height="1600" data-block-variant="difference"><title>chaise-lounge-001</title><g><path d="M 0 420 L 800 420 L 800 1600 L 0 1600 L 0 420 Z" fill="currentColor" class="chaise-lounge-001"/></g></svg>

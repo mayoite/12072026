@@ -2,4 +2,4 @@
 
 Screenshots, logs, playwright dumps. **Not** durable status or handbooks.
 
-Durable D-track docs: **`Plans/D-track/`**
+Durable S-track docs: **`Plans/S-track/`**

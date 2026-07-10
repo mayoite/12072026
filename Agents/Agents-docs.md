@@ -1,19 +1,9 @@
 # Agents/Agents-docs.md
 
-## 1. Authority
-- **Head bar:** `Agents-ELON-STANDARD.md` (phase grain, honesty, backup).
-- **Docs:** Read `../docs/Lockedfiles/ReadmeLocked.md` (locked repo facts).
+**Bar:** `Agents-ELON-STANDARD.md` · **Hub:** `docs/INDEX.md`
 
-## 2. Synchronization
-- **Live Facts Only:** Write docs based on verified live state, never intent.
-- **No Implementation Speculation:** Keep architectural docs focused on structures. No massive code blocks.
-- **Respect Locks:** Do not edit "Locked" files without explicit `Agents-Plan.md` workflow.
-
-## 3. Generators
-- **No Hand-Edits:** If auto-generated (e.g. `tech-stack-generator/`), edit the source generator, not the output.
-
-## 4. Archiving
-- **Archive Over Delete:** Move obsolete documentation to `../archive/`. Do not mix active and archive references.
-
-## 5. Escalation
-- **Massive Mismatch = Stop:** If live code entirely contradicts docs, STOP and report. Do not silently rewrite the stack.
+- Docs from verified live state, not intent.
+- No stack essays in plan/law folders; museum for history.
+- Locked conduct: `archive/museum/lockedfiles-conduct/`
+- Generated docs: edit source generator, not output.
+- Big mismatch code vs docs → stop and report.

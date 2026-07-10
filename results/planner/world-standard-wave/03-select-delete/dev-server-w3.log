@@ -1,0 +1,17 @@
+$ pnpm --filter oando-site dev
+$ next dev --turbo
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.103:3000
+- Environments: .env.development.local
+✓ Ready in 596ms
+- Experiments (use with caution):
+  · optimizePackageImports
+
+ GET /planner/guest/ 200 in 1534ms (next.js: 1046ms, proxy.ts: 215ms, application-code: 273ms)
+ GET /planner/guest/?plannerDevTools=1 200 in 84ms (next.js: 6ms, proxy.ts: 5ms, application-code: 72ms)
+ GET /api/csrf/ 200 in 79ms (next.js: 52ms, proxy.ts: 7ms, application-code: 20ms)
+ GET /api/theme/active/ 200 in 871ms (next.js: 97ms, proxy.ts: 7ms, application-code: 767ms)
+ GET /api/planner/catalog/svg-blocks/ 200 in 537ms (next.js: 71ms, proxy.ts: 8ms, application-code: 458ms)
+ GET /api/planner/catalog/svg-blocks/ 200 in 265ms (next.js: 4ms, proxy.ts: 4ms, application-code: 257ms)
+ GET /planner/guest/ 200 in 71ms (next.js: 5ms, proxy.ts: 3ms, application-code: 63ms)

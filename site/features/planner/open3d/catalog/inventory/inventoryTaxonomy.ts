@@ -144,6 +144,12 @@ export const INVENTORY_CATEGORIES: InventoryCategory[] = [
     defaultExpanded: false,
     icon: "ruler",
     subCategories: [
+      {
+        id: "svg-catalog",
+        label: "SVG catalog",
+        filterTags: ["symbol", "descriptor", "svg"],
+        sortOrder: 0,
+      },
       { id: "electrical", label: "Electrical", filterTags: ["electrical"], sortOrder: 1 },
       { id: "plumbing", label: "Plumbing", filterTags: ["plumbing"], sortOrder: 2 },
     ],

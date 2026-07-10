@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-07-05
 
-**Owns:** index of reference docs. Which doc to open → `docs/Lockedfiles/conduct/ReadmeLocked.md`.
+**Owns:** index of reference docs. Start: [`docs/INDEX.md`](docs/INDEX.md) · routing: [`docs/Lockedfiles/conduct/ReadmeLocked.md`](docs/Lockedfiles/conduct/ReadmeLocked.md).
 
 ## Lockedfiles
 
@@ -79,14 +79,27 @@ Legacy comprehensive audit (2026-06-20): not on disk — use [`docs/audit/README
 
 ## Plans (`Plans/`)
 
-**Live only:** [`Plans/README.md`](Plans/README.md) → **[`Plans/trustdata/`](Plans/trustdata/)** (INDEX · 00-START · phases · CHECKPOINTS).
+**Live:** [`Plans/INDEX.md`](Plans/INDEX.md) · [`Plans/README.md`](Plans/README.md)
 
-| Path | Role |
-|------|------|
-| `Plans/trustdata/` | Active world-standard / product plan |
-| `archive/Plans/` | Historical packs only — not authority |
+| Track | Board |
+|-------|-------|
+| P (planner) | [`Plans/P-track/`](Plans/P-track/) |
+| S (site) | [`Plans/S-track/`](Plans/S-track/) |
+| A (admin) | [`Plans/A-track/`](Plans/A-track/) |
+| SEO | [`Plans/SEO-track/`](Plans/SEO-track/) |
+| SEC | [`Plans/SEC-track/`](Plans/SEC-track/) |
 
-Do not use `Plans/00-governance/`, `Plans/01-execution/`, or `Plans/02-recovery/` — those trees are archived.
+`archive/Plans/` — historical packs only. Museum: [`archive/museum/`](archive/museum/).
+
+## Owner + agents hubs
+
+- [`ayushdocs/INDEX.md`](ayushdocs/INDEX.md) — owner intent (thin)
+- [`Agents/INDEX.md`](Agents/INDEX.md) — process handbooks
+- [`docs/INDEX.md`](docs/INDEX.md) — architecture + locked baselines
+
+## Planner execution (historical `plann/`)
+
+**Dead path** — consolidated into `Plans/`. See [`Plans/INDEX.md`](Plans/INDEX.md) · museum: [`archive/museum/plans1-residual/`](archive/museum/plans1-residual/).
 
 ## Agent workflow artifacts (1B)
 
@@ -105,12 +118,6 @@ See `Plans/README.md`, `archive/Agents_work/README.md`, and `AGENTS.md` (narrati
 - `archive/Plans/done/planner-unified-3-file-plan/` — canonical planner packet
 - `archive/Plans/done/sketch-to-plan-3-file-plan/` — sketch-to-plan packet
 - `archive/Plans/wip/` — superseded multi-file packets
-
-## Planner execution (historical `plann/`)
-
-**Historical** — renamed/consolidated into `Plans/`. See [`Plans/README.md`](Plans/README.md) for current.
-
-Old paths referenced in archives/recovery data only.
 
 ## Feature documentation
 

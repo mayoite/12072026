@@ -1,7 +1,7 @@
 # Module layout — where code should live
 
 **Status:** Proposed (execution authority for **new** code)  
-**Authority:** `plann/00-REVISION.md` → **this file** → `AGENTS.md` → [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md)  
+**Authority:** `Plans/00-REVISION.md` → **this file** → `AGENTS.md` → [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md)  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **UI contract:** [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) · [`CSS-SOLUTION.md`](CSS-SOLUTION.md)  
 **Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)

@@ -5,7 +5,7 @@
 Optional archaeology (confusing; research only):
 
 → [`../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md`](../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md)  
-→ [`../PlansA/diff/`](../PlansA/diff/)
+→ [`../museum/PlansA-merge/diff/`](../museum/PlansA-merge/diff/)
 
 | Folder | Job |
 |--------|-----|

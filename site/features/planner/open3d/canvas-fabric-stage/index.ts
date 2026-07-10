@@ -1,4 +1,15 @@
 export {
+  type CanvasDrawingState,
+  type CanvasStatusSnapshot,
+  type Open3dCanvasStageHandle,
+} from "./canvasStageTypes";
+
+export {
+  Open3dFabricStage,
+  type Open3dFabricStageProps,
+} from "./Open3dFabricStage";
+
+export {
   DEFAULT_FABRIC_STAGE_TRANSFORM,
   DEFAULT_FURNITURE_FOOTPRINT_MM,
   FURNITURE_ENTITY_ID_PROP,

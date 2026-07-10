@@ -1,7 +1,7 @@
 # Component Architecture
 
 **Status:** Live map (refresh after 1A/1B acceptance)  
-**Authority:** `plann/00-REVISION.md` → [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) → **this file**  
+**Authority:** `Plans/00-REVISION.md` → [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) → **this file**  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
 
@@ -132,7 +132,7 @@ UI contract deferred to UI-3 — [`SITE-MARKETING-UI-CONTRACT.md`](SITE-MARKETIN
 
 ## Proposed (Phase 1 target)
 
-Per `plann/00-REVISION.md`:
+Per `Plans/00-REVISION.md`:
 
 | Change | Target |
 |--------|--------|

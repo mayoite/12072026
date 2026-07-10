@@ -5,7 +5,7 @@
 
 | Topic | On disk today | Paths / evidence |
 |--------|---------------|------------------|
-| UI phase | **UI-0 done** (tokens, ThemeEditor outlier, `lint:ui` warn) — **UI-1 planner shell next** | `plann/06-UI-PLAN.md`, `plann/04-HANDOVER.md` |
+| UI phase | **UI-0 done** (tokens, ThemeEditor outlier, `lint:ui` warn) — **UI-1 planner shell next** | `archive/Plans/01-execution/specialists/06-UI-PLAN.md`, `ayushdocs/SESSION-RECAP.md` |
 | CSS ownership | `app/css/` canonical; Tailwind v4 engine in `index.css` | `docs/architecture/CSS-SOLUTION.md` |
 | Planner styling | CSS modules + `planner-*.css`; split token names historically (`--planner-primary` vs `--planner-accent`) | `site/app/css/core/locked/planner/` |
 | Open3d layout | Real pilot route loads `open3d-workspace.css` bundle | `app/planner/open3d/layout.tsx`, `app/planner/open3d/page.tsx` |

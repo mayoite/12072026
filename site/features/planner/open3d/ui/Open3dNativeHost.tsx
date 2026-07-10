@@ -10,8 +10,7 @@ export type Open3dNativeHostProps = {
 /**
  * Live planner host for the `features/planner/open3d/` tree.
  *
- * In-site (no iframe): FeasibilityCanvas (canvas-feasibility, Canvas 2D API) + Three/r3f 3-D.
- * Fabric is archive/package only until Phase 2B full-stage cutover.
+ * In-site: Open3dFabricStage (Fabric 2-D) + Three/r3f 3-D.
  */
 export function Open3dNativeHost({ guestMode = false, planId }: Open3dNativeHostProps) {
   return (

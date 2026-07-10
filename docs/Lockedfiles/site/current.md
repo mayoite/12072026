@@ -1,7 +1,7 @@
 # Site — current (locked)
 
 **Baseline:** 2026-07-05  
-**Revision alignment:** Per [`plann/00-REVISION.md`](../../../plann/00-REVISION.md), Phase **1A** (Open3D pilot) and **1B** (SVG publish) are **not accepted** — portal svg-catalog is read-only preview ahead of full admin compose.
+**Revision alignment:** Per [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md), Phase **1A** (Open3D pilot) and **1B** (SVG publish) are **not accepted** — portal svg-catalog is read-only preview ahead of full admin compose.
 
 ## Cross-links
 

@@ -2,7 +2,7 @@
 
 **Baseline:** 2026-07-05  
 **Layout:** One folder per module; `current.md` = on disk today; `proposed.md` = target.  
-**Live plan:** [`../../Plans/trustdata/`](../../Plans/trustdata/) · historical revision notes under `archive/Plans/`
+**Live plan:** [`../../Plans/P-track/`](../../Plans/P-track/) · historical revision notes under `archive/Plans/`
 
 ---
 
@@ -10,10 +10,10 @@
 
 | Doc | Path |
 |-----|------|
-| Which doc to open | [`conduct/ReadmeLocked.md`](conduct/ReadmeLocked.md) |
-| Agent conduct snapshot | [`conduct/AgentsLocked.md`](conduct/AgentsLocked.md) |
-| Testing snapshot | [`conduct/TestingLocked.md`](conduct/TestingLocked.md) |
-| Test evidence handbook snapshot | [`conduct/TestingHandbookLocked.md`](conduct/TestingHandbookLocked.md) |
+| Which doc to open | [`archive/museum/lockedfiles-conduct/ReadmeLocked.md`](../../archive/museum/lockedfiles-conduct/ReadmeLocked.md) |
+| Agent conduct snapshot | [`archive/museum/lockedfiles-conduct/AgentsLocked.md`](../../archive/museum/lockedfiles-conduct/AgentsLocked.md) |
+| Testing snapshot | [`archive/museum/lockedfiles-conduct/TestingLocked.md`](../../archive/museum/lockedfiles-conduct/TestingLocked.md) |
+| Test evidence handbook snapshot | [`archive/museum/lockedfiles-conduct/TestingHandbookLocked.md`](../../archive/museum/lockedfiles-conduct/TestingHandbookLocked.md) |
 
 ## UI & architecture (live docs in `docs/architecture/`)
 
@@ -29,8 +29,8 @@
 | Doc | Path |
 |-----|------|
 | **Live plan entry** | [`../../Plans/README.md`](../../Plans/README.md) |
-| **Trustdata index** | [`../../Plans/trustdata/INDEX.md`](../../Plans/trustdata/INDEX.md) |
-| Unlock / approach | [`../../Plans/trustdata/00-START.md`](../../Plans/trustdata/00-START.md) |
+| **P-track board** | [`../../Plans/P-track/BOARD.md`](../../Plans/P-track/BOARD.md) |
+| Unlock / approach | [`../../Plans/P-track/START.md`](../../Plans/P-track/START.md) |
 | UI execution (historical) | [`../../archive/Plans/01-execution/specialists/06-UI-PLAN.md`](../../archive/Plans/01-execution/specialists/06-UI-PLAN.md) |
 | Test execution (historical) | [`../../archive/Plans/01-execution/specialists/08-TEST-PLAN.md`](../../archive/Plans/01-execution/specialists/08-TEST-PLAN.md) |
 
@@ -42,7 +42,7 @@
 |--------|---------|----------|
 | Repo shell | [repo-shell/current.md](repo-shell/current.md) | [repo-shell/proposed.md](repo-shell/proposed.md) |
 | Site | [site/current.md](site/current.md) | [site/proposed.md](site/proposed.md) |
-| Planner | [planner/current.md](planner/current.md) | [planner/proposed.md](planner/proposed.md) |
+| Planner | [planner/current.md](planner/current.md) (thin stub; [full snapshot](../../archive/museum/lockedfiles-snapshots/planner-current-2026-07-05.md)) | [planner/proposed.md](planner/proposed.md) |
 | Admin | [admin/current.md](admin/current.md) | [admin/proposed.md](admin/proposed.md) |
 | CRM | [crm/current.md](crm/current.md) | [crm/proposed.md](crm/proposed.md) |
 | Ops | [ops/current.md](ops/current.md) | [ops/proposed.md](ops/proposed.md) |
@@ -65,7 +65,7 @@
 |------|------|
 | New UI module | `ui/MODULE-UI-CONTRACT-Locked.md` + `architecture/MODULE-LAYOUT.md` |
 | Where code goes | `../architecture/MODULE-LAYOUT.md` |
-| Planner / product plan | `planner/proposed.md` + `Plans/trustdata/INDEX.md` |
+| Planner / product plan | `planner/proposed.md` + `Plans/P-track/BOARD.md` |
 | Package change | `PACKAGES.md` + `dependencies-engines/proposed.md` |
 
 Update module `current.md` / `proposed.md` only when intentionally locking a new baseline.

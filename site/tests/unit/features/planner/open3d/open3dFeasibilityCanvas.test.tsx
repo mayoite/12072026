@@ -9,7 +9,7 @@ vi.mock("@/lib/catalog/renderBlock2DToCanvas", () => ({
 }));
 
 import { proofCatalogItem } from "@/features/planner/open3d/catalog/proofCatalog";
-import { FeasibilityCanvas } from "@/features/planner/open3d/canvas-feasibility/FeasibilityCanvas";
+import { FeasibilityCanvas } from "@/features/planner/_archive/canvas-feasibility/FeasibilityCanvas";
 import { useWorkspaceCanvas } from "@/features/planner/open3d/editor/useWorkspaceCanvas";
 import { projectToScreen } from "@/features/planner/open3d/lib/geometry/snapping";
 import { createOpen3dProject } from "@/features/planner/open3d/model/project";

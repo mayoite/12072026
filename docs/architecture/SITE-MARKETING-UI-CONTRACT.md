@@ -3,7 +3,7 @@
 > **⏸ DEFERRED — UI-3 only.** Do not prioritize marketing dialect migration ahead of **1A** (`/planner/open3d`) or **1B** (SVG publish). This doc is **reference** for future marketing work.
 
 **Status:** Reference (execution priority **UI-3** — post-1A)  
-**Authority:** `plann/00-REVISION.md` → `plann/06-UI-PLAN.md` → [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) → **this file**  
+**Authority:** `Plans/00-REVISION.md` → `Plans/06-UI-PLAN.md` → [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) → **this file**  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — marketing UI in `components/`, not `features/planner/open3d/`  
 **Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
@@ -243,4 +243,4 @@ import {
 
 - [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — `components/` vs `features/`
 - [`CSS-SOLUTION.md`](CSS-SOLUTION.md) — site bundle ownership
-- `plann/06-UI-PLAN.md` — UI-3 sequencing
+- `Plans/06-UI-PLAN.md` — UI-3 sequencing

@@ -26,6 +26,13 @@ type SeedInput = {
     width: number;
     depth: number;
   }>;
+  readonly maker?: {
+    recipe: "linear-desk" | "l-desk";
+    widthMm: number;
+    depthMm: number;
+    topThicknessMm?: number;
+    returnWidthMm?: number;
+  };
   readonly rovingFocus?: ReadonlyArray<{
     key: string;
     focusSelector: string;
@@ -86,6 +93,23 @@ const SEEDS: SeedInput[] = [
     generatedAt: 1_751_631_002,
   },
   {
+    id: "f81e3a1b-16f4-4000-8000-000000000005",
+    slug: "desk-linear-1200-001",
+    sku: "OFL-DSK-LIN-1200",
+    geometry: { widthMm: 1200, depthMm: 600, heightMm: 750 },
+    viewBox: { x: 0, y: 0, width: 1200, height: 600 },
+    maker: {
+      recipe: "linear-desk",
+      widthMm: 1200,
+      depthMm: 600,
+      topThicknessMm: 80,
+    },
+    rovingFocus: [
+      { key: "focus-desk-top", focusSelector: "#desk-top", label: "Worksurface" },
+    ],
+    generatedAt: 1_751_631_004,
+  },
+  {
     id: "f81e3a1b-16f4-4000-8000-000000000004",
     slug: "missing-geom-fallback-001",
     sku: "OFL-FBK-001",
@@ -118,6 +142,7 @@ function buildDescriptor(seed: SeedInput) {
     checksum: "0".repeat(64),
     generatedAt: seed.generatedAt,
     ...(seed.blocks && seed.blocks.length > 0 ? { blocks: seed.blocks } : {}),
+    ...(seed.maker ? { maker: seed.maker } : {}),
   };
 
   const frozen = freezeFreshDescriptor(base, () => seed.generatedAt);
