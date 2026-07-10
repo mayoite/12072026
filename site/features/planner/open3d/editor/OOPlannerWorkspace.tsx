@@ -89,7 +89,7 @@ import {
   updateEntityInProject,
 } from "./workspaceEntityHelpers";
 import {
-  formatAutosaveStatus,
+  open3dSaveStatusLabel,
   formatSelectionStatus,
   formatSnapStatus,
   formatToolStatus,
@@ -602,8 +602,20 @@ export function OOPlannerWorkspace({
   );
 
   const handleSave = useCallback(() => {
-    void autosave.flushPersist();
-    setWorkspaceMessage(guestMode ? "Saving draft locally…" : "Saving plan locally…");
+    void (async () => {
+      setWorkspaceMessage(
+        guestMode ? "Saving draft locally…" : "Saving plan locally…",
+      );
+      try {
+        await autosave.flushPersist();
+        // Honest local-only success copy (cloudEnabled stays false — no account strings).
+        setWorkspaceMessage(
+          guestMode ? "Draft saved locally" : "Plan saved locally",
+        );
+      } catch {
+        setWorkspaceMessage("Local save failed");
+      }
+    })();
   }, [autosave, guestMode]);
 
   const handleExport = useCallback(
@@ -789,6 +801,20 @@ export function OOPlannerWorkspace({
   const selectionLabel = formatSelectionStatus(workspaceCanvas.selection);
   const planMetrics = summarizeFloorMetrics(activeFloor);
 
+  // Prefer autosave honesty exports (storage / cloudEnabled / isLocalSaved).
+  // cloudEnabled stays false today — label table must never imply account save.
+  const saveStorage = autosave.storage ?? "local";
+  const saveCloudEnabled = autosave.cloudEnabled ?? false;
+  const isLocalSaved = autosave.isLocalSaved ?? autosave.isSynced;
+  /** One helper for status bar + TopBar (via shell saveStatusLabel pass-through). */
+  const saveStatusLabel = open3dSaveStatusLabel({
+    status: autosave.status,
+    storage: saveStorage,
+    lastSavedAt: autosave.lastSavedAt,
+    cloudEnabled: saveCloudEnabled,
+    guestMode,
+  });
+
   if (!hydrated) {
     return (
       <div
@@ -825,7 +851,12 @@ export function OOPlannerWorkspace({
         displayUnit={displayUnit}
         onDisplayUnitChange={setDisplayUnit}
         isModified={autosave.isModified}
-        isSynced={autosave.isSynced}
+        isLocalSaved={isLocalSaved}
+        isSynced={isLocalSaved}
+        saveStatus={autosave.status}
+        saveStatusLabel={saveStatusLabel}
+        storage={saveStorage}
+        cloudEnabled={saveCloudEnabled}
         canUndo={workspaceCanvas.canUndo}
         canRedo={workspaceCanvas.canRedo}
         onUndo={runUndo}
@@ -916,8 +947,13 @@ export function OOPlannerWorkspace({
                   ? "Offline catalog"
                   : "Loading catalog…"}
             </span>
-            <span className="open3d-status-pill open3d-status-pill--muted">
-              {formatAutosaveStatus(autosave.status, guestMode)}
+            <span
+              className="open3d-status-pill open3d-status-pill--muted"
+              data-testid="open3d-save-status-bar"
+              data-status={autosave.status}
+              data-storage={saveCloudEnabled ? saveStorage : "local"}
+            >
+              {saveStatusLabel}
             </span>
           </div>
         }
