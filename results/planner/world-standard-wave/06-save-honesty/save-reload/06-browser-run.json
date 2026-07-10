@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "gate": "W5",
+  "result": "pass",
+  "exitCode": 0,
+  "route": "/planner/guest/?plannerDevTools=1",
+  "cloudEnabled": false,
+  "projectId": "planner-guest-local",
+  "idChannel": "indexeddb-projects-snapshot",
+  "placePath": "configurator-batch",
+  "wallIdsBefore": [
+    "1f0fd155-3694-4dc3-8ab6-3c8d9dab1c76",
+    "2c7e157f-07ba-487e-a33a-4382a987d847",
+    "59541fcb-30d1-4824-8950-20b171ecd60d",
+    "f7047a5e-16db-4796-9e4f-2399625859e6"
+  ],
+  "wallIdsAfter": [
+    "1f0fd155-3694-4dc3-8ab6-3c8d9dab1c76",
+    "2c7e157f-07ba-487e-a33a-4382a987d847",
+    "59541fcb-30d1-4824-8950-20b171ecd60d",
+    "f7047a5e-16db-4796-9e4f-2399625859e6"
+  ],
+  "furnitureIdsBefore": [
+    "124a69dc-7578-4bd8-b8ea-6c7e4a6d872c",
+    "6865a3db-ffe8-4bdf-bdaa-98c3f84d4e21",
+    "7ec821d1-171f-4c6a-87a4-aa72ad6fe5d8",
+    "d8defd88-7502-4f10-84a8-a7dcfb6e5e0f"
+  ],
+  "furnitureIdsAfter": [
+    "124a69dc-7578-4bd8-b8ea-6c7e4a6d872c",
+    "6865a3db-ffe8-4bdf-bdaa-98c3f84d4e21",
+    "7ec821d1-171f-4c6a-87a4-aa72ad6fe5d8",
+    "d8defd88-7502-4f10-84a8-a7dcfb6e5e0f"
+  ],
+  "wallCountBefore": 4,
+  "wallCountAfter": 4,
+  "furnitureCountBefore": 4,
+  "furnitureCountAfter": 4,
+  "furnitureCountUiBeforePlace": 0,
+  "furnitureCountUiAfterPlace": 4,
+  "furnitureCountUiAfterReload": 4,
+  "wallsMatch": true,
+  "furnitureMatch": true,
+  "browser": "playwright",
+  "evidenceDir": "results/planner/world-standard-wave/06-save-honesty/save-reload",
+  "screenshots": [
+    "01-before-save.png",
+    "02-saved-local.png",
+    "03-after-hard-reload.png"
+  ],
+  "timestamp": "2026-07-10T11:37:45.938Z"
+}
