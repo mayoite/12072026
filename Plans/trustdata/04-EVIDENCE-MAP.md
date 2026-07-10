@@ -3,8 +3,8 @@
 > **For agentic workers:** REQUIRED `/using-superpowers`. Claim a gate **pass** only when the folder below has the minimum artifacts.  
 > **Root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
 > **Do not** invent alternate folder names mid-wave; if a phase file uses an alias, leave a `NOTES.md` pointer to the canonical path.  
-> **Research is not evidence:** competitive packs under `D:\websites` are ideas only — see [RESEARCH-MAP.md](./RESEARCH-MAP.md).  
-> **FINAL folder lock:** 2026-07-09 — [FOLDER-LOCK-suggestions.md](./FOLDER-LOCK-suggestions.md). This map wins over older phase reviews that banned `09-shortcuts-chrome/` or used `01-product-truth/`.
+> **Research is not evidence:** competitive packs under `D:\websites` are ideas only — see [05-RESEARCH-MAP.md](./05-RESEARCH-MAP.md).
+> **FINAL folder lock:** 2026-07-09 — [evidence path lock](./history/10-EVIDENCE-PATH-LOCK.md). This map wins over older phase reviews that banned `09-shortcuts-chrome/` or used `01-product-truth/`.
 
 **Related:** `checkpoints/CHECKPOINTS.md` · `checklists/MASTER-CHECKLIST.md` · `checklists/AGENT-RULES.md` · `phases/P10-evidence-handover/P10-evidence-handover.md` · `FOLDER-LOCK-suggestions.md` · `MAPS-suggestions.md`  
 **Expert revisions:** MAPS structure 2026-07-09 · **FOLDER-LOCK path names 2026-07-09** (supersedes MAPS dual-`08` / dual-`01` path choices)
@@ -298,15 +298,15 @@ $root = "D:\OandO07072026\results\planner\world-standard-wave"
 
 | Doc | Role |
 |-----|------|
-| [INDEX.md](./INDEX.md) | Program index |
-| [00-START.md](./00-START.md) | Unlock + ethics + approach |
-| [RESEARCH-MAP.md](./RESEARCH-MAP.md) | Inspiration-only research index |
+| [02-PROGRAM-INDEX.md](./02-PROGRAM-INDEX.md) | Program index |
+| [01-START-HERE.md](./01-START-HERE.md) | Unlock + ethics + approach |
+| [05-RESEARCH-MAP.md](./05-RESEARCH-MAP.md) | Inspiration-only research index |
 | [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) | CP-00–CP-10 stop gates |
 | [checklists/MASTER-CHECKLIST.md](./checklists/MASTER-CHECKLIST.md) | Owner single checklist (T.4 folder names) |
 | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) | Subagent evidence table §6 |
 | [phases/P10-evidence-handover/P10-evidence-handover.md](./phases/P10-evidence-handover/P10-evidence-handover.md) | Final pack + E: backup |
-| [FOLDER-LOCK-suggestions.md](./FOLDER-LOCK-suggestions.md) | FINAL evidence folder lock |
-| [MAPS-suggestions.md](./MAPS-suggestions.md) | Earlier MAPS structure notes (path names superseded by FOLDER-LOCK) |
+| [evidence path lock](./history/10-EVIDENCE-PATH-LOCK.md) | FINAL evidence folder lock |
+| [map review](./history/40-MAP-REVIEW.md) | Earlier map structure notes (path names superseded by the lock) |
 | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` | W1–W8 definitions |
 
 ---

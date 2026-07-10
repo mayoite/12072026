@@ -26,7 +26,7 @@
 
 **Checkpoint:** **CP-07** — hard stop until W1 + W2 **browser place/draw** green. Symbol **quality** = P05; mesh = P08.
 
-**Kill-order role:** Serial spine #4 after W3 ([INDEX](../../INDEX.md#week-1-kill-order-after-implementation-unlock)). Full product story still needs CP-03 + CP-05 not red unless owner **WAIVE**.
+**Kill-order role:** Serial spine #4 after W3 ([program index](../../02-PROGRAM-INDEX.md#week-1-kill-order-after-implementation-unlock)). Full product story still needs CP-03 + CP-05 not red unless owner **WAIVE**.
 
 **Authority:** Owner > `Plans/trustdata/` > design spec > Plan A core.  
 **Ethics:** Ideas only from research; no competitor code/CSS/GLB in product or tests.

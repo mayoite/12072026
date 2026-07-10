@@ -10,7 +10,7 @@
 
 **Tech stack:** PowerShell on Windows; git on `D:\OandO07072026` main checkout only; Playwright/Vitest artifacts already produced by P03–P09; robocopy / Copy-Item for E: backup.
 
-**Parent:** [INDEX.md](../../INDEX.md) · [00-START.md](../../00-START.md) · [RESULTS-MAP.md](../../RESULTS-MAP.md) · [checkpoints/CHECKPOINTS.md](../../checkpoints/CHECKPOINTS.md) · [checklists/MASTER-CHECKLIST.md](../../checklists/MASTER-CHECKLIST.md)
+**Parent:** [02-PROGRAM-INDEX.md](../../02-PROGRAM-INDEX.md) · [01-START-HERE.md](../../01-START-HERE.md) · [04-EVIDENCE-MAP.md](../../04-EVIDENCE-MAP.md) · [checkpoints/CHECKPOINTS.md](../../checkpoints/CHECKPOINTS.md) · [checklists/MASTER-CHECKLIST.md](../../checklists/MASTER-CHECKLIST.md)
 
 ---
 
@@ -50,7 +50,7 @@
 
 ## Canonical evidence folders (RESULTS-MAP lock)
 
-**Do not invent alternate folder names.** FINAL lock 2026-07-09 — see [FOLDER-LOCK-suggestions.md](../../FOLDER-LOCK-suggestions.md). **Sole primary `08-*`:** mesh. W8 is `09-*`.
+**Do not invent alternate folder names.** FINAL lock 2026-07-09 — see [evidence path lock](../../history/10-EVIDENCE-PATH-LOCK.md). **Sole primary `08-*`:** mesh. W8 is `09-*`.
 
 | Gate | Canonical primary folder | Owning phase / CP |
 |------|--------------------------|-------------------|
@@ -342,10 +342,10 @@ CP-10 pass criteria all checked, MASTER-CHECKLIST backup + ethics + agent + git 
 
 | Doc | Role |
 |-----|------|
-| [../../INDEX.md](../../INDEX.md) | Program index |
-| [../../00-START.md](../../00-START.md) | Approach, ethics, phase order |
+| [../../02-PROGRAM-INDEX.md](../../02-PROGRAM-INDEX.md) | Program index |
+| [../../01-START-HERE.md](../../01-START-HERE.md) | Approach, ethics, phase order |
 | [../../checkpoints/CHECKPOINTS.md](../../checkpoints/CHECKPOINTS.md) | CP-00–CP-10 hard stops |
-| [../../RESULTS-MAP.md](../../RESULTS-MAP.md) | Canonical evidence folders |
+| [../../04-EVIDENCE-MAP.md](../../04-EVIDENCE-MAP.md) | Canonical evidence folders |
 | [../../checklists/MASTER-CHECKLIST.md](../../checklists/MASTER-CHECKLIST.md) | Owner single checklist (94) |
 | [../../checklists/AGENT-RULES.md](../../checklists/AGENT-RULES.md) | Subagent contract |
 | [../../phases/P10-evidence-handover/P10-suggestions.md](../../phases/P10-evidence-handover/P10-suggestions.md) | Consistency suggestions applied this revision |

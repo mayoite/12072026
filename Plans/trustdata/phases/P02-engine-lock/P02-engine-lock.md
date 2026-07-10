@@ -230,7 +230,7 @@ Also cite (do not relocate): `results/planner/world-standard-wave/COMPARISON-CHA
 **Files / dirs:**
 
 - Create: `results/planner/world-standard-wave/01-engine-lock/`
-- Read (no edit required unless Task 6 owner mirror): this file, `Plans/trustdata/00-START.md`, `Plans/trustdata/INDEX.md`, `Plans/trustdata/RESULTS-MAP.md` (P02 row), `Plans/trustdata/checkpoints/CHECKPOINTS.md` (CP-02), `archive/Plans/07072026/01-execution/core/00A-START.md` (§2D/3D engine), `archive/Plans/07072026/01-execution/core/02B-PHASE-2B-2C.md` (§2B.2), `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` (§3–4), `D:\websites\research\2026-07-09-world-standard\comparison\MASTER-CHART.md`, `D:\websites\research\2026-07-09-world-standard\comparison\ENGINE-DECISION.md`
+- Read (no edit required unless Task 6 owner mirror): this file, `Plans/trustdata/01-START-HERE.md`, `Plans/trustdata/02-PROGRAM-INDEX.md`, `Plans/trustdata/04-EVIDENCE-MAP.md` (P02 row), `Plans/trustdata/checkpoints/CHECKPOINTS.md` (CP-02), `archive/Plans/07072026/01-execution/core/00A-START.md` (§2D/3D engine), `archive/Plans/07072026/01-execution/core/02B-PHASE-2B-2C.md` (§2B.2), `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` (§3–4), `D:\websites\research\2026-07-09-world-standard\comparison\MASTER-CHART.md`, `D:\websites\research\2026-07-09-world-standard\comparison\ENGINE-DECISION.md`
 
 **Steps:**
 
@@ -270,7 +270,7 @@ git status -sb
 Fill `startedAt`, `head`, and agent note after Step 0.1–0.2.
 
 - [ ] 0.4 Write `results/planner/world-standard-wave/01-engine-lock/README.md` stating: phase goal = **confirm lock**, not implement Fabric cutover; Approach A; evidence root is `01-engine-lock` per RESULTS-MAP.
-- [ ] 0.5 Confirm Approach **A** is still the active default in `Plans/trustdata/00-START.md` (or record owner override A/B/C in the evidence README with quote).
+- [ ] 0.5 Confirm Approach **A** is still the active default in `Plans/trustdata/01-START-HERE.md` (or record owner override A/B/C in the evidence README with quote).
 
 **Done when:** Evidence folder exists; HEAD + run.json have real values; authority docs were read; approach recorded.
 
@@ -423,7 +423,7 @@ Owner (human) marks these in this plan file **and** copies the checked state int
 - [ ] 6.1 Present the checkbox list in chat / handover with paths to ENGINE-LOCK-RECORD + FLAG-INVENTORY.
 - [ ] 6.2 Do not start P03 implementation until owner checkboxes (or explicit “plan only continue”) are recorded.
 - [ ] 6.3 If owner silent and prior 00-START default applies: Approach A may continue **planning**; engine lock still requires owner sign-off before claiming CP-02 green for execution waves.
-- [ ] 6.4 After owner marks engine boxes: mirror the same marks into `Plans/trustdata/00-START.md` engine decision section (CHECKPOINTS CP-02 criterion 6). If owner defers, write explicit deferral text in `OWNER-SIGNOFF.md` instead of claiming green.
+- [ ] 6.4 After owner marks engine boxes: mirror the same marks into `Plans/trustdata/01-START-HERE.md` engine decision section (CHECKPOINTS CP-02 criterion 6). If owner defers, write explicit deferral text in `OWNER-SIGNOFF.md` instead of claiming green.
 
 **Done when:** `OWNER-SIGNOFF.md` exists with owner marks or an explicit written deferral.
 
@@ -454,7 +454,7 @@ Owner (human) marks these in this plan file **and** copies the checked state int
 
 - [ ] 8.1 List all artifacts produced under `01-engine-lock/` (use artifact checklist above).
 - [ ] 8.2 One-paragraph honest status: engines locked; Fabric not fully cut over; Feasibility live; orbit default on; flag OFF; Approach A.
-- [ ] 8.3 Next phase pointer: `Plans/trustdata/phases/P03-select-delete/P03-select-delete.md` (**W3**). Cross-link `Plans/trustdata/RESULTS-MAP.md` + `Plans/trustdata/checkpoints/CHECKPOINTS.md` CP-02.
+- [ ] 8.3 Next phase pointer: `Plans/trustdata/phases/P03-select-delete/P03-select-delete.md` (**W3**). Cross-link `Plans/trustdata/04-EVIDENCE-MAP.md` + `Plans/trustdata/checkpoints/CHECKPOINTS.md` CP-02.
 - [ ] 8.4 Commit evidence + this plan on main checkout when landable (“commit as we go”); do not push unless owner asks.
 
 **Done when:** CP-02 summary exists and [Checkpoint CP-02](#checkpoint-cp-02) boxes can be checked from evidence paths.
@@ -518,9 +518,9 @@ P02 is **not** done when:
 |---------|------|
 | This phase | `Plans/trustdata/phases/P02-engine-lock/P02-engine-lock.md` |
 | Suggestions / review | `./P02-suggestions.md` |
-| Start / phase order | `Plans/trustdata/00-START.md` |
-| Index | `Plans/trustdata/INDEX.md` |
-| Results map (canonical folders) | `Plans/trustdata/RESULTS-MAP.md` |
+| Start / phase order | `Plans/trustdata/01-START-HERE.md` |
+| Index | `Plans/trustdata/02-PROGRAM-INDEX.md` |
+| Results map (canonical folders) | `Plans/trustdata/04-EVIDENCE-MAP.md` |
 | Checkpoints | `Plans/trustdata/checkpoints/CHECKPOINTS.md` |
 | Prev | `Plans/trustdata/phases/P01-product-truth/P01-product-truth.md` |
 | Next | `Plans/trustdata/phases/P03-select-delete/P03-select-delete.md` |

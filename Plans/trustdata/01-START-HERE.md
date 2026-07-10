@@ -3,21 +3,21 @@
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`.  
 > **W0 STATUS (2026-07-09): UNLOCKED — Approach A + implementation unlock recorded.** Product phases are **allowed now.** Do **not** stop and ask the owner to unlock again.  
 > Plan-only mode is history only (unless owner later sets plan-only). Steps use checkbox syntax.  
-> **Expert revision:** 2026-07-09 — applied from [INDEX-00-suggestions.md](./INDEX-00-suggestions.md).  
-> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology; week-1 kill order full in [INDEX.md](./INDEX.md) (condensed below); densest phases thinned → per-folder appendices.  
-> **Folder-wise 2026-07-10:** `phases/P0X-<slug>/` holds execute card + suggestions (+ appendix). See [phases/README.md](./phases/README.md) · [STRUCTURE-REWRITE-NOTE](./STRUCTURE-REWRITE-NOTE.md).  
-> **Program index:** [INDEX.md](./INDEX.md)
+> **Expert revision:** 2026-07-09 — applied from [start and index review](./history/20-START-AND-INDEX-REVIEW.md).
+> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology; week-1 kill order full in [program index](./02-PROGRAM-INDEX.md) (condensed below); densest phases thinned → per-folder appendices.
+> **Folder-wise 2026-07-10:** `phases/P0X-<slug>/` holds execute card + suggestions (+ appendix). See [phases/README.md](./phases/README.md) · [structure decision](./history/60-STRUCTURE-DECISION.md).
+> **Program index:** [02-PROGRAM-INDEX.md](./02-PROGRAM-INDEX.md)
 
 **Goal:** Freeze operating rules, approach pick, unlock mode, ethics, and phase order so every agent works from the same truth.
 
 **Global-standard revision (2026-07-10):** Old CP-00 PASS = **process unlock only**. Raised bar is **module-wise** — not more CP folders.  
 **Module:** `results/planner/global-standard-revision/modules/foundation/` (BRAINSTORM · UI-EXPERT · SYNTHESIS).  
-**Program:** `Plans/trustdata/GLOBAL-STANDARD-REVISION.md`.  
+**Program:** `Plans/trustdata/03-QUALITY-BAR.md`.
 **Status:** `PASS (unlock process)` · `OPEN (foundation product)` until foundation SYNTHESIS F-criteria have paths.
 
 **Architecture:** One checkout `D:\OandO07072026`; one plan root `Plans/trustdata/`; data decides â€œdone.â€
 
-**Tech stack:** See [INDEX.md](./INDEX.md).
+**Tech stack:** See [02-PROGRAM-INDEX.md](./02-PROGRAM-INDEX.md).
 
 **North star:** A facilities buyer can, without a developer, open the planner, lay out a small office with real O&O-scale furniture, switch 2Dâ†”3D with orbit, select/edit/delete, save and return the next day, and trust dimensions enough to quote later.
 
@@ -75,7 +75,7 @@ Evidence: results/planner/world-standard-wave/00-start/NOTES.md
 
 ## Engine decision checkboxes (tick at CP-02 / owner engine sign-off)
 
-Do **not** invent a new engine mid-W. Research â†’ [RESEARCH-MAP.md](./RESEARCH-MAP.md); comparison â†’ `results/planner/world-standard-wave/COMPARISON-CHART.md`.
+Do **not** invent a new engine mid-W. Research â†’ [05-RESEARCH-MAP.md](./05-RESEARCH-MAP.md); comparison â†’ `results/planner/world-standard-wave/COMPARISON-CHART.md`.
 
 - [x] Fabric v7 full stage = 2D **destination**; FeasibilityCanvas = **interim** (Approach A path)
 - [x] Three + R3F + **orbit ON** = 3D
@@ -144,7 +144,7 @@ Full definitions: `docs/superpowers/specs/2026-07-09-world-standard-planner-desi
 
 ## Phase order (do not reorder without owner)
 
-Aligned with [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md). Agent concurrency â†’ **`AGENTS.md`**. Full kill order â†’ [INDEX.md](./INDEX.md).
+Aligned with [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md). Agent concurrency â†’ **`AGENTS.md`**. Full kill order â†’ [02-PROGRAM-INDEX.md](./02-PROGRAM-INDEX.md).
 
 ```
 CP-00 â†’ CP-01 â†’ CP-02 â†’ CP-03 â†’ CP-07 â†’ CP-06 â†’ CP-04 Â· CP-05 Â· CP-08 Â· CP-09 â†’ CP-10
@@ -163,14 +163,14 @@ CP-00 â†’ CP-01 â†’ CP-02 â†’ CP-03 â†’ CP-07 â†’ CP-06
 | P09 | shortcuts/chrome | CP-09 | **W8** | **`09-shortcuts-chrome/`** |
 | P10 | evidence/handover | CP-10 | pack + E: backup | `10-handover/` |
 
-**Note:** FINAL folder lock â€” P01=`00-product-truth/`, P02=`01-engine-lock/`, P07=`02-browser-open3d-journey/` (not `07-â€¦`), W7=`08-mesh-quality/` (sole `08-*`), W8=**`09-shortcuts-chrome/`** (legacy `08-shortcuts-chrome/` non-canonical). Authority: [RESULTS-MAP.md](./RESULTS-MAP.md) Â· [FOLDER-LOCK](./FOLDER-LOCK-suggestions.md).
+**Note:** FINAL folder lock â€” P01=`00-product-truth/`, P02=`01-engine-lock/`, P07=`02-browser-open3d-journey/` (not `07-â€¦`), W7=`08-mesh-quality/` (sole `08-*`), W8=**`09-shortcuts-chrome/`** (legacy `08-shortcuts-chrome/` non-canonical). Authority: [04-EVIDENCE-MAP.md](./04-EVIDENCE-MAP.md) Â· [evidence path lock](./history/10-EVIDENCE-PATH-LOCK.md).
 
 ---
 
 ## Week-1 kill order (condensed)
 
-**Full section (tables + claim rules):** [INDEX.md](./INDEX.md) â†’ **Week-1 kill order**.  
-**Full kill order + task list:** [INDEX.md](./INDEX.md). **Agents:** `AGENTS.md`. **Spawn block:** [AGENT-RULES.md](./checklists/AGENT-RULES.md).
+**Full section (tables + claim rules):** [02-PROGRAM-INDEX.md](./02-PROGRAM-INDEX.md) â†’ **Week-1 kill order**.
+**Full kill order + task list:** [02-PROGRAM-INDEX.md](./02-PROGRAM-INDEX.md). **Agents:** `AGENTS.md`. **Spawn block:** [AGENT-RULES.md](./checklists/AGENT-RULES.md).
 
 **Spine:** W3 (`03-select-delete/`) â†’ journey (`02-browser-open3d-journey/`) â†’ save (`06-save-honesty/`).  
 **Then:** orbit Â· symbols Â· mesh Â· shortcuts Â· handover â€” each as its own task.
@@ -191,13 +191,13 @@ Photoreal race Â· multiplayer Â· AR Â· CRM/SSR expansion as W substitute �
 |------|--------|
 | This file / CP-00 | `00-start/` (`NOTES.md` minimum) |
 | Browser journey template | `02-browser-open3d-journey/` (create when executing P07) |
-| Full map | [RESULTS-MAP.md](./RESULTS-MAP.md) |
+| Full map | [04-EVIDENCE-MAP.md](./04-EVIDENCE-MAP.md) |
 
 ---
 
 ## Research (ideas only)
 
-See [RESEARCH-MAP.md](./RESEARCH-MAP.md). Do not re-scrape Planner5D blindly. Licenses: `ayushdocs/17-LICENSES-CLEARED.md`.
+See [05-RESEARCH-MAP.md](./05-RESEARCH-MAP.md). Do not re-scrape Planner5D blindly. Licenses: `ayushdocs/17-LICENSES-CLEARED.md`.
 
 ---
 
@@ -223,12 +223,11 @@ Pass only when **all** are true — **all met (CP-00 PASS):**
 
 | Doc | Role |
 |-----|------|
-| [INDEX.md](./INDEX.md) | Program index |
+| [02-PROGRAM-INDEX.md](./02-PROGRAM-INDEX.md) | Program index |
 | [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) | All CP hard stops |
 | [checklists/MASTER-CHECKLIST.md](./checklists/MASTER-CHECKLIST.md) | Owner checklist (W0â€¦) |
 | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) | Subagent contract |
-| [RESULTS-MAP.md](./RESULTS-MAP.md) | Evidence folders |
-| [INDEX-00-suggestions.md](./INDEX-00-suggestions.md) | This revisionâ€™s expert notes |
+| [04-EVIDENCE-MAP.md](./04-EVIDENCE-MAP.md) | Evidence folders |
+| [history/20-START-AND-INDEX-REVIEW.md](./history/20-START-AND-INDEX-REVIEW.md) | This revisionâ€™s expert notes |
 | Design spec | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` |
 | Testing | `testing-handbook.md` |
-

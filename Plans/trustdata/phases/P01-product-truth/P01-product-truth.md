@@ -18,7 +18,7 @@
 - Corrected host/route chain: dual entry (`Open3dPlannerWorkspaceRoute` for guest/canvas; direct `Open3dPlannerHost` for `/planner/open3d`); absolute paths for UI hosts.
 - Vitest smoke is **required attempt** with explicit `run.json` outcome (`ok` | `failed` | `skipped` + reason) — no silent skip; conflicts with “optional if time” removed.
 - Expanded key-file existence checks, W6 greps, tightened W4 greps, full claims-source concat, Failures.md path, CHECKPOINTS close step, Approach A in `run.json`.
-- **FOLDER-LOCK 2026-07-09:** evidence root **`00-product-truth/`** (was `01-product-truth/` in earlier drafts). Phase **file** remains `P01-product-truth.md`. See `FOLDER-LOCK-suggestions.md`.
+- **Evidence path lock 2026-07-09:** evidence root **`00-product-truth/`** (was `01-product-truth/` in earlier drafts). Phase **file** remains `P01-product-truth.md`. See `history/10-EVIDENCE-PATH-LOCK.md`.
 
 ---
 
@@ -33,7 +33,7 @@
 
 **Authority order:** Owner message > `Plans/trustdata/` > `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` > Plan A core > `ayushdocs/` honesty.
 
-**Canonical evidence map:** `Plans/trustdata/RESULTS-MAP.md` row for `00-product-truth/` — minimum green artifacts include **`INVENTORY.md`** and **`CONTRADICTIONS.md`**.
+**Canonical evidence map:** `Plans/trustdata/04-EVIDENCE-MAP.md` row for `00-product-truth/` — minimum green artifacts include **`INVENTORY.md`** and **`CONTRADICTIONS.md`**.
 
 **Out of scope for P01:** Select/delete fixes, orbit product work, Fabric cutover, mesh quality, new Playwright journey product code, package upgrades, CRM/auth/SSR, any edit under `site/features/planner/open3d/**` except if a later owner unlock explicitly expands scope. Read-only inventory + evidence write under `results/planner/world-standard-wave/00-product-truth/`.
 
@@ -43,8 +43,8 @@
 
 ## Preconditions
 
-- [ ] Read `Plans/trustdata/00-START.md` and `Plans/trustdata/INDEX.md`
-- [ ] Read `Plans/trustdata/RESULTS-MAP.md` row for `00-product-truth/` and CP-01 row in `Plans/trustdata/checkpoints/CHECKPOINTS.md`
+- [ ] Read `Plans/trustdata/01-START-HERE.md` and `Plans/trustdata/02-PROGRAM-INDEX.md`
+- [ ] Read `Plans/trustdata/04-EVIDENCE-MAP.md` row for `00-product-truth/` and CP-01 row in `Plans/trustdata/checkpoints/CHECKPOINTS.md`
 - [ ] Confirm working tree is main checkout only:
 
 ```powershell
@@ -636,8 +636,8 @@ Also write companion synthesis (same content allowed to overlap):
 ```markdown
 # PRODUCT-TRUTH
 
-Canonical inventory: [INVENTORY.md](./INVENTORY.md)  
-Contradictions: [CONTRADICTIONS.md](./CONTRADICTIONS.md)
+Canonical inventory: `results/planner/world-standard-wave/00-product-truth/INVENTORY.md`
+Contradictions: `results/planner/world-standard-wave/00-product-truth/CONTRADICTIONS.md`
 ```
 
 or a full copy of the narrative sections; **INVENTORY.md remains the CP-01 path of record**.
@@ -789,7 +789,7 @@ Do **not** write P01 proof into `archive/results/`, worktrees, or chat-only summ
 5. **Trust data** — repo greps, file reads, test logs — not character or vibes.  
 6. **Parallelism:** up to 8 concurrent agents for read-only greps/notes; hard max 10.  
    - **File ownership:** each parallel agent writes **distinct** filenames under `00-product-truth/`; one designated merger owns `INVENTORY.md`, `CONTRADICTIONS.md`, `run.json`, `CAPABILITY-MATRIX.md`.  
-7. **Ethics:** competitor research inspiration-only; no plagiarism; MIT/open packages only if any package note appears. Do not re-scrape Planner5D blindly (see `Plans/trustdata/RESEARCH-MAP.md`).  
+7. **Ethics:** competitor research inspiration-only; no plagiarism; MIT/open packages only if any package note appears. Do not re-scrape Planner5D blindly (see `Plans/trustdata/05-RESEARCH-MAP.md`).
 8. **Scope creep = stop** — if inventory requires product code changes, stop and ask; log `Failures.md`.  
 9. **Encoding:** prefer UTF-8 logs; if BOM breaks a downstream parser, re-write without BOM — do not discard evidence.  
 

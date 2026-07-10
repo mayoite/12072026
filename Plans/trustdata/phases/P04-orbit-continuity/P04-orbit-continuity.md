@@ -23,7 +23,7 @@
 - **Evidence:** `04-orbit-continuity/` only. Anti-J4: radio 2D|3D; `planner-3d-canvas` is a **div**.
 - Authority: [EXPERT-PASS.md](../EXPERT-PASS.md) · [03-r3f-3d.md](./03-r3f-3d.md) · [01-react-open3d.md](./01-react-open3d.md).
 
-**Parent:** [00-START.md](../../00-START.md) · [INDEX.md](../../INDEX.md)  
+**Parent:** [01-START-HERE.md](../../01-START-HERE.md) · [02-PROGRAM-INDEX.md](../../02-PROGRAM-INDEX.md)
 **Design authority:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` §W4  
 **Prev:** [P03-select-delete.md](../P03-select-delete/P03-select-delete.md) · **Next:** [P05-symbols-svg.md](../P05-symbols-svg/P05-symbols-svg.md)  
 **Checkpoint:** **CP-04** (see end of this file + `checkpoints/CHECKPOINTS.md`)  

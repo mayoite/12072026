@@ -38,20 +38,20 @@
 | **W8 / P09 / CP-09** | **`09-shortcuts-chrome/`** |
 | Pack / P10 / CP-10 | `10-handover/` |
 
-Legacy aliases (pointer only; rehome before tick): `08-shortcuts-chrome/` → `09-shortcuts-chrome/`; `01-product-truth/` → `00-product-truth/`. See [FOLDER-LOCK](../FOLDER-LOCK-suggestions.md).
+Legacy aliases (pointer only; rehome before tick): `08-shortcuts-chrome/` → `09-shortcuts-chrome/`; `01-product-truth/` → `00-product-truth/`. See [evidence path lock](../history/10-EVIDENCE-PATH-LOCK.md).
 
 ---
 
 ## 0) Program control (W0)
 
-- [x] **W0.1** Approach **A** recorded in `Plans/trustdata/00-START.md` (2026-07-09).
+- [x] **W0.1** Approach **A** recorded in `Plans/trustdata/01-START-HERE.md` (2026-07-09).
 - [x] **W0.2** **Implementation unlock recorded** in 00-START — product work allowed; **do not re-ask owner to unlock**.
 - [x] **W0.3** INDEX.md + 00-START.md read by executing agent (CP-00 **PASS**).
 - [x] **W0.4** Engine lock accepted: Fabric v7 full stage destination; Feasibility interim; Three+R3F+orbit; no Konva+Fabric hybrid; manufacturer SKU catalog; BOQ/quote > photoreal.
 - [x] **W0.5** North star accepted: facilities buyer unaided → layout with O&O-scale furniture → 2D↔3D+orbit → select/edit/delete → save/return → quote path later.
 - [x] **W0.6** Out of scope held while any W red: photoreal race, multiplayer CRDT, AR/LiDAR, CRM/SSR expansion, full Fabric walls cutover only if required after W1–W8 (Approach A path).
 
-**Evidence:** `Plans/trustdata/00-START.md` · `results/planner/world-standard-wave/00-start/` (optional NOTES) · CP-00 in `checkpoints/CHECKPOINTS.md`
+**Evidence:** `Plans/trustdata/01-START-HERE.md` · `results/planner/world-standard-wave/00-start/` (optional NOTES) · CP-00 in `checkpoints/CHECKPOINTS.md`
 
 ---
 
@@ -183,7 +183,7 @@ Definitions from design spec; proof standards are mandatory.
 - [ ] **B.3** Copied minimum set: `Plans\trustdata\`, `results\planner\world-standard-wave\`, world-standard design spec, `Failures.md`.
 - [ ] **B.4** Recommended: `D:\websites\research\2026-07-09-world-standard\` copied under backup `websites-research\`.
 - [ ] **B.5** `10-handover/BACKUP-LOG.md` written with dest path, times, outcome codes, size summary.
-- [ ] **B.6** Spot-check: backup contains `Plans\trustdata\INDEX.md` and `10-handover\README.md`.
+- [ ] **B.6** Spot-check: backup contains `Plans\trustdata\02-PROGRAM-INDEX.md` and `10-handover\README.md`.
 - [ ] **B.7** No secrets included in backup.
 
 **Procedure detail:** `phases/P10-evidence-handover/P10-evidence-handover.md`
@@ -240,8 +240,8 @@ Program complete for trustdata wave only when **Sum done = 94** or owner WAIVE r
 | Checkpoints | [../checkpoints/CHECKPOINTS.md](../checkpoints/CHECKPOINTS.md) |
 | Governance review | [../checkpoints/GOVERNANCE-suggestions.md](../checkpoints/GOVERNANCE-suggestions.md) |
 | P10 handover | [../phases/P10-evidence-handover/P10-evidence-handover.md](../phases/P10-evidence-handover/P10-evidence-handover.md) |
-| Research index | [../RESEARCH-MAP.md](../RESEARCH-MAP.md) |
-| Results map | [../RESULTS-MAP.md](../RESULTS-MAP.md) |
+| Research index | [../05-RESEARCH-MAP.md](../05-RESEARCH-MAP.md) |
+| Results map | [../04-EVIDENCE-MAP.md](../04-EVIDENCE-MAP.md) |
 
 ---
 

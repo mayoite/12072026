@@ -31,7 +31,7 @@ Task checkboxes below are historical execute steps — evidence supersedes; do n
 > **Commits:** `trustdata(P05): <slice>` or `fix(open3d): <slice>`.
 
 **Prev:** [P04-orbit-continuity.md](../P04-orbit-continuity/P04-orbit-continuity.md) · **Next:** [P06-save-honesty.md](../P06-save-honesty/P06-save-honesty.md)  
-**Kill-order role:** Parallel **fill #7** after CP-02 ([INDEX](../../INDEX.md#week-1-kill-order-after-implementation-unlock)).
+**Kill-order role:** Parallel **fill #7** after CP-02 ([program index](../../02-PROGRAM-INDEX.md#week-1-kill-order-after-implementation-unlock)).
 
 **Goal:** Make open3d plan-view furniture symbols **readable** for **cabinet-v0** (stop empty-box marks) and write an honest SVG story: **Block2D = canvas authority now; admin/CLI SVG = publish authority later** — not competitor assets.
 

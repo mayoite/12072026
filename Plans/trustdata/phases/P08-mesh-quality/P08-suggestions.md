@@ -2,7 +2,7 @@
 
 **Reviewer:** planning expert (trust-data)  
 **Date:** 2026-07-09  
-**Plan:** [phases/P08-mesh-quality/P08-mesh-quality.md](../phases/P08-mesh-quality/P08-mesh-quality.md)  
+**Plan:** [P08-mesh-quality.md](./P08-mesh-quality.md)
 **Mode:** plan-only · **no product code** · no worktrees · superpowers required at execution
 
 ---

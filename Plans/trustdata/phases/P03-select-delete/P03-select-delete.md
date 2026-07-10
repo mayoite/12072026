@@ -18,7 +18,7 @@
 > **W0 UNLOCKED** — execute product work per phase + evidence. Do not re-ask owner unlock.  
 > **Ethics:** Inspiration only from Floorplanner report select/delete grammar. No competitor UI/assets.  
 > **Reviews:** [P03-suggestions.md](./P03-suggestions.md)  
-> **Governance:** [RESULTS-MAP](../../RESULTS-MAP.md) · [CHECKPOINTS CP-03](../../checkpoints/CHECKPOINTS.md) · [MASTER W3](../../checklists/MASTER-CHECKLIST.md)
+> **Governance:** [evidence map](../../04-EVIDENCE-MAP.md) · [CHECKPOINTS CP-03](../../checkpoints/CHECKPOINTS.md) · [MASTER W3](../../checklists/MASTER-CHECKLIST.md)
 
 **Goal:** Buyer on `/planner/open3d` (or guest) can **select furniture on 2D**, press **Delete/Backspace** to remove it, **Ctrl/Cmd+Z** to restore same entity id + pose.
 
@@ -27,7 +27,7 @@
 **Evidence root (canonical):** `results/planner/world-standard-wave/03-select-delete/`  
 Required: `run.json`, vitest raw logs, unit proof, browser screenshots or Playwright/chrome-devtools trace.
 
-**Kill-order role:** Serial spine #3 after CP-00→01→02 ([INDEX week-1](../../INDEX.md#week-1-kill-order-after-implementation-unlock)).
+**Kill-order role:** Serial spine #3 after CP-00→01→02 ([program index week-1](../../02-PROGRAM-INDEX.md#week-1-kill-order-after-implementation-unlock)).
 
 ---
 

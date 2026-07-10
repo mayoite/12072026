@@ -5,8 +5,8 @@
 **Partner decision:** **HYBRID**
 
 **Inputs:**
-- [STRUCTURE-ADVICE.md](./STRUCTURE-ADVICE.md) — primary (KEEP topology + light INDEX EXPAND)
-- [STRUCTURE-ADVICE-2.md](./STRUCTURE-ADVICE-2.md) — peer (HYBRID density language + EXPAND INDEX kill order)
+- [50-STRUCTURE-REVIEW.md](./50-STRUCTURE-REVIEW.md) — primary (KEEP topology + light INDEX EXPAND)
+- [51-STRUCTURE-REVIEW-FOLLOW-UP.md](./51-STRUCTURE-REVIEW-FOLLOW-UP.md) — peer (HYBRID density language + EXPAND INDEX kill order)
 
 ---
 
@@ -106,7 +106,7 @@ Each main opens with `## Structure rewrite 2026-07-09` hybrid thin note. Target 
 | `reviews/P0X-suggestions.md` (retired) | `phases/P0X-<slug>/P0X-suggestions.md` |
 | appendices next to flat mains | appendix co-located in phase folder |
 
-**Map:** [phases/README.md](./phases/README.md). Evidence folder names under `results/` **unchanged** (FOLDER-LOCK still binds).
+**Map:** [phase-folder map](../phases/README.md). Evidence folder names under `results/` **unchanged** (FOLDER-LOCK still binds).
 
 ### Reviews folder removed (2026-07-10)
 

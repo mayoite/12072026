@@ -2,7 +2,7 @@
 
 **Licenses / no competitor assets (hard):** `AGENTS.md` + `ayushdocs/17-LICENSES-CLEARED.md`  
 **Research home:** `D:\websites` (`D:\websites\README.md`) — not in monorepo, not E: mirror  
-**Research ≠ W-gate pass:** evidence → [RESULTS-MAP.md](./RESULTS-MAP.md)  
+**Research ≠ W-gate pass:** evidence → [04-EVIDENCE-MAP.md](./04-EVIDENCE-MAP.md)
 **Secrets:** `.env.local` only  
 
 **Program:** trust-data planner · pack date 2026-07-09  
@@ -18,7 +18,7 @@
 3. Translate to **O&O original** implementation (Phosphor, CSS modules, O&O SKUs).  
 4. Never import files from these trees into `site/`.  
 5. Do **not** re-scrape Planner5D or 3dplanner by default — packs already deep.  
-6. Before claiming a gate: open [RESULTS-MAP.md](./RESULTS-MAP.md) and the owning phase under `phases/`. Research folders are **not** evidence folders.
+6. Before claiming a gate: open [04-EVIDENCE-MAP.md](./04-EVIDENCE-MAP.md) and the owning phase under `phases/`. Research folders are **not** evidence folders.
 
 ---
 
@@ -41,7 +41,7 @@
 
 ## Phase → research pack routing (ideas only)
 
-Open the pack **report** before inventing UX for that stream. Implement only in `site/` with tests + [RESULTS-MAP](./RESULTS-MAP.md) evidence.
+Open the pack **report** before inventing UX for that stream. Implement only in `site/` with tests + [evidence map](./04-EVIDENCE-MAP.md) evidence.
 
 | Phase / gate | Open first (ideas) | Then translate to O&O | Evidence lands in (not research) |
 |--------------|--------------------|----------------------|----------------------------------|
@@ -177,13 +177,13 @@ Gaps file: `D:\websites\research\2026-07-09-world-standard\FIRECRAWL-GAPS.md`
 
 | Doc | Role |
 |-----|------|
-| [INDEX.md](./INDEX.md) | Program index |
-| [00-START.md](./00-START.md) | Ethics + approach + unlock |
-| [RESULTS-MAP.md](./RESULTS-MAP.md) | Evidence folders (pass/fail) |
+| [02-PROGRAM-INDEX.md](./02-PROGRAM-INDEX.md) | Program index |
+| [01-START-HERE.md](./01-START-HERE.md) | Ethics + approach + unlock |
+| [04-EVIDENCE-MAP.md](./04-EVIDENCE-MAP.md) | Evidence folders (pass/fail) |
 | [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) | CP-00–CP-10 |
 | [checklists/MASTER-CHECKLIST.md](./checklists/MASTER-CHECKLIST.md) | Owner checklist |
 | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) | Subagent contract |
-| [MAPS-suggestions.md](./MAPS-suggestions.md) | This revision’s expert notes |
+| [map review](./history/40-MAP-REVIEW.md) | This revision’s expert notes |
 | `D:\websites\planner5d.com\report\ETHICS_AND_INSPIRATION.md` | Deep ethics |
 | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` | W1–W8 definitions |
 

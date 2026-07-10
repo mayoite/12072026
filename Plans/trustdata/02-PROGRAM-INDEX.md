@@ -1,11 +1,11 @@
 ﻿# Trust-Data Plan — Index
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` + skills as fit. Use **subagent-driven-development** or **executing-plans** as fit.  
-> **W0 UNLOCKED (2026-07-09):** Approach **A** + **implementation unlock** recorded in [00-START.md](./00-START.md). **Do not ask owner to unlock again.** Execute product phases + evidence.  
+> **W0 UNLOCKED (2026-07-09):** Approach **A** + **implementation unlock** recorded in [01-START-HERE.md](./01-START-HERE.md). **Do not ask owner to unlock again.** Execute product phases + evidence.
 > **Folder rule:** All plan files for this program live under `Plans/trustdata/` only (phases · checkpoints · checklists · reviews).  
-> **Expert revision:** 2026-07-09 — applied from [INDEX-00-suggestions.md](./INDEX-00-suggestions.md).  
-> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology (P01–P10 · CP-00–CP-10 · folder lock · Approach A · AGENT-RULES); EXPAND week-1 kill order below + [00-START.md](./00-START.md); THIN densest phases → mains + [P03-appendix](./phases/P03-select-delete/P03-appendix.md) · [P05-appendix](./phases/P05-symbols-svg/P05-appendix.md) · [P07-appendix](./phases/P07-draw-place-journey/P07-appendix.md).  
-> **Folder-wise phases 2026-07-10:** one directory per CP under [phases/](./phases/) — execute card + appendix + suggestions co-located. Map: [phases/README.md](./phases/README.md). Authority: [STRUCTURE-REWRITE-NOTE](./STRUCTURE-REWRITE-NOTE.md).
+> **Expert revision:** 2026-07-09 — applied from [start and index review](./history/20-START-AND-INDEX-REVIEW.md).
+> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology (P01–P10 · CP-00–CP-10 · folder lock · Approach A · AGENT-RULES); EXPAND week-1 kill order below + [01-START-HERE.md](./01-START-HERE.md); THIN densest phases → mains + [P03-appendix](./phases/P03-select-delete/P03-appendix.md) · [P05-appendix](./phases/P05-symbols-svg/P05-appendix.md) · [P07-appendix](./phases/P07-draw-place-journey/P07-appendix.md).
+> **Folder-wise phases 2026-07-10:** one directory per CP under [phases/](./phases/) — execute card + appendix + suggestions co-located. Map: [phases/README.md](./phases/README.md). Authority: [structure decision](./history/60-STRUCTURE-DECISION.md).
 
 ---
 
@@ -17,7 +17,7 @@
 - Fix select/delete, orbit, save honesty, Block2D symbols, cabinet-v0 mesh bar, open3d Playwright pack.  
 - **Fabric v7 full stage** remains the 2D **destination** — migrate **after** W1–W8 green (not mid-journey thrash).  
 - Pull **2A chrome only when it blocks** a W gate (dead prefs, hidden tools, label lies).  
-- Owner may override to **B** (Fabric first) or **C** (chrome first) only via recorded pick in [00-START.md](./00-START.md).
+- Owner may override to **B** (Fabric first) or **C** (chrome first) only via recorded pick in [01-START-HERE.md](./01-START-HERE.md).
 
 **North star:** A facilities buyer can, without a developer, open the planner, lay out a small office with real O&O-scale furniture, switch 2D↔3D with orbit, select/edit/delete, save and return the next day, and trust dimensions enough to quote later.
 
@@ -31,7 +31,7 @@
 
 ## Unlock gate (W0 / CP-00) — **CLOSED: UNLOCKED**
 
-**Recorded:** Approach **A** + **implementation unlock** (2026-07-09) in [00-START.md](./00-START.md) · evidence `00-start/NOTES.md` · CP-00 **PASS**.
+**Recorded:** Approach **A** + **implementation unlock** (2026-07-09) in [01-START-HERE.md](./01-START-HERE.md) · evidence `00-start/NOTES.md` · CP-00 **PASS**.
 
 | Mode | Status | Agents may | Agents must not |
 |------|--------|------------|-----------------|
@@ -42,7 +42,7 @@
 **Rules:**
 
 1. **Unlock is done.** Agents execute; do not re-ask the owner for unlock.  
-2. **CP-00** criteria: [00-START.md](./00-START.md) + [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) — **PASS**.  
+2. **CP-00** criteria: [01-START-HERE.md](./01-START-HERE.md) + [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) — **PASS**.
 3. Evidence for W0: `results/planner/world-standard-wave/00-start/NOTES.md`.  
 4. Failures: `D:\OandO07072026\Failures.md`.
 
@@ -63,7 +63,7 @@
 | Contract | Short: [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) · full: `AGENTS.md` |
 | Git | Commit as we go; push origin when right; mirror ~30–60m (`mayoite`) — `AGENTS.md`. No force-push without owner |
 | Quality | Global manufacturer-planner standard; quality over speed; no prompt-engineering theater |
-| Later / optional | [LATER.md](./LATER.md) — SmartDraw/Foyr/Coohom etc. **not** kill-path |
+| Later / optional | [deferred ideas](./history/30-DEFERRED-IDEAS.md) — SmartDraw/Foyr/Coohom etc. **not** kill-path |
 
 **Authority order:** Owner message > `AGENTS.md` > this folder > world-standard design spec > ayushdocs honesty.
 
@@ -81,7 +81,7 @@
 
 | Order | Kill | Why first | CP / phase | Evidence folder |
 |------:|------|-----------|------------|-----------------|
-| 0 | Unlock + mode recorded | Silent ≠ go | CP-00 · [00-START.md](./00-START.md) | `00-start/` |
+| 0 | Unlock + mode recorded | Silent ≠ go | CP-00 · [01-START-HERE.md](./01-START-HERE.md) | `00-start/` |
 | 1 | Product truth inventory | Stop myth-driven edits | CP-01 · [P01](./phases/P01-product-truth/P01-product-truth.md) | `00-product-truth/` |
 | 2 | Engine lock | Stop thrash / hybrid engines | CP-02 · [P02](./phases/P02-engine-lock/P02-engine-lock.md) | `01-engine-lock/` |
 | **3** | **Select + delete + undo (unit then browser)** | Buyer cannot edit without W3; **unit alone = FAIL** | CP-03 · [P03](./phases/P03-select-delete/P03-select-delete.md) · **W3** | **`03-select-delete/`** |
@@ -117,9 +117,9 @@ After spine **3 → 4 → 5**, take **one** row, finish it, then the next.
 
 - **No self-waive W3 browser** — unit **+** browser under `03-select-delete/`.  
 - **Journey honesty** — CP-07 full claim needs CP-03 + CP-05 not red unless owner **WAIVE**.  
-- **Folder map** — [RESULTS-MAP.md](./RESULTS-MAP.md).
+- **Folder map** — [04-EVIDENCE-MAP.md](./04-EVIDENCE-MAP.md).
 
-Condensed copy for unlock agents: [00-START.md](./00-START.md) § Week-1 kill order.
+Condensed copy for unlock agents: [01-START-HERE.md](./01-START-HERE.md) § Week-1 kill order.
 
 ---
 
@@ -136,7 +136,7 @@ CP-00 → CP-01 → CP-02
 
 | # | Phase file | CP | Gates | Canonical evidence folder |
 |---|------------|----|-------|---------------------------|
-| — | [00-START.md](./00-START.md) | **CP-00** | W0 | `00-start/` |
+| — | [01-START-HERE.md](./01-START-HERE.md) | **CP-00** | W0 | `00-start/` |
 | P01 | [phases/P01-product-truth/P01-product-truth.md](./phases/P01-product-truth/P01-product-truth.md) | CP-01 | Baseline | `00-product-truth/` |
 | P02 | [phases/P02-engine-lock/P02-engine-lock.md](./phases/P02-engine-lock/P02-engine-lock.md) | CP-02 | Engine lock | `01-engine-lock/` |
 | P03 | [phases/P03-select-delete/P03-select-delete.md](./phases/P03-select-delete/P03-select-delete.md) (+ [appendix](./phases/P03-select-delete/P03-appendix.md)) | CP-03 | **W3** | `03-select-delete/` |
@@ -148,7 +148,7 @@ CP-00 → CP-01 → CP-02
 | P09 | [phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md](./phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md) | CP-09 | **W8** | **`09-shortcuts-chrome/`** (not mesh `08-mesh-quality/`; legacy `08-shortcuts-chrome/` non-canonical) |
 | P10 | [phases/P10-evidence-handover/P10-evidence-handover.md](./phases/P10-evidence-handover/P10-evidence-handover.md) | CP-10 | Pack + backup | `10-handover/` |
 
-**Folder map authority:** [RESULTS-MAP.md](./RESULTS-MAP.md) · FINAL lock [FOLDER-LOCK-suggestions.md](./FOLDER-LOCK-suggestions.md). Do not invent alternate gate folder names. Retired: `01-product-truth/` → `00-product-truth/`; `08-shortcuts-chrome/` → `09-shortcuts-chrome/`.
+**Folder map authority:** [04-EVIDENCE-MAP.md](./04-EVIDENCE-MAP.md) · FINAL lock [evidence path lock](./history/10-EVIDENCE-PATH-LOCK.md). Do not invent alternate gate folder names. Retired: `01-product-truth/` → `00-product-truth/`; `08-shortcuts-chrome/` → `09-shortcuts-chrome/`.
 
 ---
 
@@ -202,15 +202,15 @@ Agent rules: **`AGENTS.md`**. Short spawn: [AGENT-RULES.md](./checklists/AGENT-R
 
 | Doc | Role |
 |-----|------|
-| [00-START.md](./00-START.md) | Ground truth, unlock, ethics, approach pick, engine checkboxes, CP-00 |
+| [01-START-HERE.md](./01-START-HERE.md) | Ground truth, unlock, ethics, approach pick, engine checkboxes, CP-00 |
 | [phases/P01-product-truth/P01-product-truth.md](./phases/P01-product-truth/P01-product-truth.md) … [P10-evidence-handover.md](./phases/P10-evidence-handover/P10-evidence-handover.md) | Executable phases |
 | [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) | Hard stop gates CP-00–CP-10 |
 | [checklists/MASTER-CHECKLIST.md](./checklists/MASTER-CHECKLIST.md) | Single owner checklist |
 | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) | Subagent contract + prompt block |
-| [RESEARCH-MAP.md](./RESEARCH-MAP.md) | Inspiration-only research index |
-| [RESULTS-MAP.md](./RESULTS-MAP.md) | Evidence folder → phase map (**FINAL folder lock**) |
-| [FOLDER-LOCK-suggestions.md](./FOLDER-LOCK-suggestions.md) | Evidence path reconciliation (P01=`00-product-truth/`, P09=`09-shortcuts-chrome/`) |
-| [INDEX-00-suggestions.md](./INDEX-00-suggestions.md) · [MAPS-suggestions.md](./MAPS-suggestions.md) · [STRUCTURE-REWRITE-NOTE.md](./STRUCTURE-REWRITE-NOTE.md) | Program review notes (co-located) |
+| [05-RESEARCH-MAP.md](./05-RESEARCH-MAP.md) | Inspiration-only research index |
+| [04-EVIDENCE-MAP.md](./04-EVIDENCE-MAP.md) | Evidence folder → phase map (**FINAL folder lock**) |
+| [evidence path lock](./history/10-EVIDENCE-PATH-LOCK.md) | Evidence path reconciliation (P01=`00-product-truth/`, P09=`09-shortcuts-chrome/`) |
+| [start and index review](./history/20-START-AND-INDEX-REVIEW.md) · [map review](./history/40-MAP-REVIEW.md) · [structure decision](./history/60-STRUCTURE-DECISION.md) | Historical program review notes |
 | [phases/EXPERT-PASS.md](./phases/EXPERT-PASS.md) | Consolidated expert pass |
 | [checkpoints/GOVERNANCE-suggestions.md](./checkpoints/GOVERNANCE-suggestions.md) | CP + MASTER governance review |
 
@@ -225,10 +225,10 @@ Agent rules: **`AGENTS.md`**. Short spawn: [AGENT-RULES.md](./checklists/AGENT-R
 
 ## First agent session (read order)
 
-1. This INDEX + [00-START.md](./00-START.md)  
+1. This index + [01-START-HERE.md](./01-START-HERE.md)
 2. Confirm W0: **already unlocked** (Approach A + implementation) — then execute  
 3. **Week-1 kill order** (this file) — next open gate from evidence / CHECKPOINTS  
-4. [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) + [RESULTS-MAP.md](./RESULTS-MAP.md)  
+4. [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) + [04-EVIDENCE-MAP.md](./04-EVIDENCE-MAP.md)
 5. [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md)  
 6. Owning phase file + evidence under `results/planner/world-standard-wave/`  
 7. Design spec W gates (link above)

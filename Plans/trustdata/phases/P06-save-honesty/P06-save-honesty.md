@@ -1,6 +1,6 @@
 ﻿# P06 — Save honesty (W5–W6)
 
-> **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Use **test-driven-development**, **verification-before-completion**, and **systematic-debugging** when executing. **W0 UNLOCKED** (see [00-START.md](../../00-START.md)) — do not re-ask owner unlock.  
+> **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Use **test-driven-development**, **verification-before-completion**, and **systematic-debugging** when executing. **W0 UNLOCKED** (see [01-START-HERE.md](../../01-START-HERE.md)) — do not re-ask owner unlock.
 > **Approach:** Plan A product journey (default). Trust **data** — repo, tests, browser evidence — not character claims.  
 > **Checkout:** `D:\OandO07072026` only · **no worktrees** · commit each landable slice · push only on owner ask.
 
@@ -26,7 +26,7 @@
 **W5 subfolder (required):** `results/planner/world-standard-wave/06-save-honesty/save-reload/`  
 **Suggestions applied:** [phases/P06-save-honesty/P06-suggestions.md](./P06-suggestions.md) · see [Expert revision note 2026-07-09](#expert-revision-note-2026-07-09)
 
-**Spec authority:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` (W5, W6). Parent index: [INDEX.md](../../INDEX.md).
+**Spec authority:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` (W5, W6). Parent index: [02-PROGRAM-INDEX.md](../../02-PROGRAM-INDEX.md).
 
 ---
 

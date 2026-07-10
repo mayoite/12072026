@@ -4,7 +4,7 @@
 **Date:** 2026-07-09  
 **Scope:** `D:\OandO07072026\Plans\trustdata\` only — spot-check of sizes/structure; **no rewrites** of phase bodies in this pass  
 **Mode:** plan-only · no product code  
-**Peer note:** Independent second opinion also landed as [STRUCTURE-ADVICE-2.md](./STRUCTURE-ADVICE-2.md) (aligned on KEEP topology + thin density; this file is the primary structured answer to the six owner questions)
+**Peer note:** Independent second opinion also landed as [51-STRUCTURE-REVIEW-FOLLOW-UP.md](./51-STRUCTURE-REVIEW-FOLLOW-UP.md) (aligned on KEEP topology + thin density; this file is the primary structured answer to the six owner questions)
 
 **Constraints held:**
 

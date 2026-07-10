@@ -3,7 +3,7 @@
 **Date:** 2026-07-09  
 **Research status:** DONE (maps only — no re-scrape)  
 **Mode:** plan-only · no product code  
-**Sources:** phase folders (expert essays co-located) · kill order [INDEX.md](../INDEX.md)
+**Sources:** phase folders (expert essays co-located) · kill order [02-PROGRAM-INDEX.md](../02-PROGRAM-INDEX.md)
 
 ---
 

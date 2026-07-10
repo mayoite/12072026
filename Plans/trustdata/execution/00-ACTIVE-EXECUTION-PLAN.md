@@ -4,6 +4,16 @@
 **Purpose:** Execute the restored Trust-Data planner program against the current repository.  
 **Scope:** The O&O planner. Not a new product roadmap. Not a generic architecture presentation.
 
+## 0. How to use this plan
+
+This is the current authority for work order and current truth. It does not replace the detailed phase cards.
+
+1. Read this plan first.
+2. Read [start here](../01-START-HERE.md), then the named phase card under `../phases/`.
+3. Use [the evidence map](../04-EVIDENCE-MAP.md) to choose the only valid proof folder.
+4. Run the phase. Record evidence. Write a verdict that reflects the current worktree.
+5. Move forward only when the phase outcome is proved. Historical PASS labels are not a shortcut.
+
 ## 1. Product outcome
 
 O&O sells configurable office and workstation systems. The buyer outcome is narrow and concrete:

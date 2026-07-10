@@ -19,11 +19,11 @@
 
 **Tech stack:** Next.js site · Vitest · React Testing Library · Phosphor · existing open3d workspace (FeasibilityCanvas + OOPlannerWorkspace). No new packages.
 
-**Parent:** [INDEX.md](../../INDEX.md) · [00-START.md](../../00-START.md) · design `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` (§2 **W8**, Approach A pulls 2A blockers that hide tools).  
+**Parent:** [02-PROGRAM-INDEX.md](../../02-PROGRAM-INDEX.md) · [01-START-HERE.md](../../01-START-HERE.md) · design `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` (§2 **W8**, Approach A pulls 2A blockers that hide tools).
 **Suggestions applied:** [phases/P09-shortcuts-chrome/P09-suggestions.md](./P09-suggestions.md).
 
 **Evidence root (canonical):** `results/planner/world-standard-wave/09-shortcuts-chrome/`  
-(See [RESULTS-MAP.md](../../RESULTS-MAP.md), [CHECKPOINTS.md](../../checkpoints/CHECKPOINTS.md), [FOLDER-LOCK](../../FOLDER-LOCK-suggestions.md). Do **not** use `08-shortcuts-chrome/` — that retired name collides with mesh `08-mesh-quality/`.)
+(See [04-EVIDENCE-MAP.md](../../04-EVIDENCE-MAP.md), [CHECKPOINTS.md](../../checkpoints/CHECKPOINTS.md), [evidence path lock](../../history/10-EVIDENCE-PATH-LOCK.md). Do **not** use `08-shortcuts-chrome/` — that retired name collides with mesh `08-mesh-quality/`.)
 
 **Checkpoint:** **CP-09** (this file bottom + `checkpoints/CHECKPOINTS.md`).
 
@@ -407,6 +407,6 @@ Do not start P10 claims from this file alone.
 
 **Also folded:** S6 test ownership (`toolShortcutTruth` + `open3dWorkspaceKeyboard` letter matrix); S7 dual-keyboard scope fence; S8 hide-tools proof-first / no CSS without NOTES; S9 palette subset stay; S10 out-of-scope freeze reinforced.
 
-**Folder lock addendum:** [FOLDER-LOCK-suggestions.md](../../FOLDER-LOCK-suggestions.md) — evidence root **`09-shortcuts-chrome/`** only.
+**Folder lock addendum:** [evidence path lock](../../history/10-EVIDENCE-PATH-LOCK.md) — evidence root **`09-shortcuts-chrome/`** only.
 
 **W0 unlocked.** Phase may execute Tasks 00–06; historical “not done” lines below are pre-land planning notes if still present.

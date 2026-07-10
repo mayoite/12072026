@@ -17,6 +17,6 @@ Each phase owns **one folder**. Execute card, appendix, suggestions, and **relat
 
 **Note:** Cross-cutting expert essays (e.g. react, canvas, playwright) are **copied into every related phase folder** so each folder is self-contained.
 
-**Program:** [../INDEX.md](../INDEX.md) · **Unlock:** [../00-START.md](../00-START.md)  
+**Program:** [../02-PROGRAM-INDEX.md](../02-PROGRAM-INDEX.md) · **Unlock:** [../01-START-HERE.md](../01-START-HERE.md)
 **Consolidated expert summary:** [EXPERT-PASS.md](./EXPERT-PASS.md)  
-**Program notes:** [../FOLDER-LOCK-suggestions.md](../FOLDER-LOCK-suggestions.md) · [../STRUCTURE-REWRITE-NOTE.md](../STRUCTURE-REWRITE-NOTE.md) · [../checkpoints/GOVERNANCE-suggestions.md](../checkpoints/GOVERNANCE-suggestions.md)
+**Program notes:** [evidence path lock](../history/10-EVIDENCE-PATH-LOCK.md) · [structure decision](../history/60-STRUCTURE-DECISION.md) · [../checkpoints/GOVERNANCE-suggestions.md](../checkpoints/GOVERNANCE-suggestions.md)
