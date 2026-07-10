@@ -134,7 +134,7 @@
       "items": [
         {
           "name": "Seating",
-          "image": "/images/catalog/oando-seating--fluid-x/image-01.webp",
+          "image": "/images/catalog/oando-seating--fluid-x/image-1.webp",
           "href": "/products/seating"
         },
         {
@@ -144,7 +144,7 @@
         },
         {
           "name": "Tables",
-          "image": "/images/products/meeting-table-10pax.webp",
+          "image": "/images/catalog/oando-tables--curvivo-meet/image-1.jpg",
           "href": "/products/tables"
         },
         {
@@ -154,12 +154,12 @@
         },
         {
           "name": "Soft Seating",
-          "image": "/images/products/softseating-solace-1.webp",
+          "image": "/images/catalog/oando-soft-seating--accent/image-1.jpg",
           "href": "/products/soft-seating"
         },
         {
           "name": "Education",
-          "image": "/images/products/chair-cafeteria.webp",
+          "image": "/images/catalog/oando-educational--academia/image-1.jpg",
           "href": "/products/education"
         }
       ]

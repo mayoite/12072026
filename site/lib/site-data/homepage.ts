@@ -78,7 +78,8 @@ export const HOMEPAGE_COLLECTIONS_CONTENT = {
   items: [
     {
       name: "Seating",
-      image: "/images/catalog/oando-seating--fluid-x/image-01.webp",
+      // public has image-1.webp (not zero-padded image-01.webp)
+      image: "/images/catalog/oando-seating--fluid-x/image-1.webp",
       href: "/products/seating",
     },
     {
@@ -88,7 +89,7 @@ export const HOMEPAGE_COLLECTIONS_CONTENT = {
     },
     {
       name: "Tables",
-      image: "/images/products/meeting-table-10pax.webp",
+      image: "/images/catalog/oando-tables--curvivo-meet/image-1.jpg",
       href: "/products/tables",
     },
     {
@@ -98,12 +99,12 @@ export const HOMEPAGE_COLLECTIONS_CONTENT = {
     },
     {
       name: "Soft Seating",
-      image: "/images/products/softseating-solace-1.webp",
+      image: "/images/catalog/oando-soft-seating--accent/image-1.jpg",
       href: "/products/soft-seating",
     },
     {
       name: "Education",
-      image: "/images/products/chair-cafeteria.webp",
+      image: "/images/catalog/oando-educational--academia/image-1.jpg",
       href: "/products/education",
     },
   ],
@@ -297,7 +298,7 @@ export const HOMEPAGE_SOLUTIONS_CONTENT = {
       outcome:
         "Task and executive seating tuned for posture support, long-hour comfort, and dependable after-sales coverage.",
       href: "/products/seating",
-      image: "/images/catalog/oando-seating--fluid-x/image-01.webp",
+      image: "/images/catalog/oando-seating--fluid-x/image-1.webp",
     },
     {
       title: "Scalable Workstations",
@@ -311,7 +312,7 @@ export const HOMEPAGE_SOLUTIONS_CONTENT = {
       outcome:
         "Table systems for collaboration, review, and client-facing discussion zones.",
       href: "/products/tables",
-      image: "/images/products/meeting-table-10pax.webp",
+      image: "/images/catalog/oando-tables--curvivo-meet/image-1.jpg",
     },
     {
       title: "Storage Systems",

@@ -11,7 +11,7 @@ const HERO_PRODUCTS = [
     id: "fluid-x",
     name: "Fluid X",
     category: "Ergonomic Seating",
-    image: "/images/catalog/oando-seating--fluid-x/image-1.jpg",
+    image: "/images/catalog/oando-seating--fluid-x/image-1.webp",
     link: "/products/seating/oando-seating--fluid-x",
   },
   {
