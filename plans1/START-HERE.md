@@ -6,6 +6,7 @@
 |--|--|
 | **Execute** | **`plans1/`** (this folder) |
 | **How + folder names** | `Plans/Research/RESULTS-MAP.md` |
+| **Admin SVG backend (copies)** | [`admin-svg-backend/`](./admin-svg-backend/) — global-standard `admin-svg-pipeline` + locked admin/svg-pipeline (source of truth still under `docs/`) |
 | **Archived packages** | `archive/plans2/`, `archive/PlansA/` — only if stuck |
 | **Optional hardness** | `archive/plans2/…/CODE-REVIEW-REPORT.md` — if FAIL vs plans1 APPROVE → **gate FAIL** |
 
