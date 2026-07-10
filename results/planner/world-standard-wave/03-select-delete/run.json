@@ -1,50 +1,43 @@
 {
-    "phase":  "P03",
-    "gate":  "W3",
-    "checkpoint":  "CP-03",
-    "approach":  "B",
-    "checkout":  "D:\\\\OandO07072026",
-    "worktrees":  false,
-    "evidenceRoot":  "results/planner/world-standard-wave/03-select-delete",
-    "HEAD": "7ef5754da121b8052ccdd0455bf2700f81b7073c",
-    "date":  "2026-07-10",
-    "agent":  "P03-Agent-4",
-    "action":  "browser W3 hard gate re-prove (Playwright + eyes)",
-    "endedAt":  "2026-07-10T13:34:50.066Z",
-    "browser":  {
-                    "exitCode":  0,
-                    "tool":  "playwright",
-                    "log":  "browser-w3-raw.log",
-                    "spec":  "tests/e2e/open3d-w3-select-delete.spec.ts",
-                    "command":  ".\\node_modules\\.bin\\playwright.cmd test -c config/build/playwright.config.ts tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list",
-                    "baseURL":  "http://localhost:3000",
-                    "PLAYWRIGHT_BASE_URL":  "http://localhost:3000",
-                    "fabricFurnitureEnv":  "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)",
-                    "durationSec":  2.5,
-                    "tests":  "1/1 passed",
-                    "pngs":  [
-                                 "01-placed.png",
-                                 "02-selected.png",
-                                 "03-deleted.png",
-                                 "04-undone.png"
-                             ],
-                    "pngOnDisk":  {
-                                      "01-placed.png":  115797,
-                                      "02-selected.png":  114109,
-                                      "03-deleted.png":  97350,
-                                      "04-undone.png":  96830
-                                  },
-                    "pngProof":  "eyes: 4 furniture -\u003e 3 after Delete -\u003e 4 after Ctrl+Z",
-                    "modeBFix":  "plannerToolButton scopes to navigation Canvas tools so Select (Navigation tools group) resolves",
-                    "reProvedOnTip":  true,
-                    "onDisk":  true,
-                    "note":  "Browser hard gate PASS on tip after helper land. Unit alone != W3.",
-                    "provedAtHead": "7ef5754da121b8052ccdd0455bf2700f81b7073c"
-                },
-    "unitPack":  {
-                     "note":  "Browser seat only; unit alone != W3."
-                 },
-    "status":  "pass",
-    "statusNote":  "Browser W3 exit 0 on tip dada98ee. Fabric OFF. PNGs 01-04. Mode B e2e helper only."
+  "phase": "P03",
+  "gate": "W3",
+  "checkpoint": "CP-03",
+  "approach": "B",
+  "checkout": "D:\\OandO07072026",
+  "worktrees": false,
+  "evidenceRoot": "results/planner/world-standard-wave/03-select-delete",
+  "HEAD": "fb5ff5f4cf269e824e6b20da1142c6c033b03861",
+  "date": "2026-07-10",
+  "agent": "P03-Agent-4",
+  "action": "browser W3 hard gate re-prove (Playwright + eyes)",
+  "browser": {
+    "exitCode": 0,
+    "tool": "playwright",
+    "log": "browser-w3-raw.log",
+    "spec": "tests/e2e/open3d-w3-select-delete.spec.ts",
+    "command": ".\\node_modules\\.bin\\playwright.cmd test -c config/build/playwright.config.ts tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list",
+    "baseURL": "http://localhost:3000",
+    "PLAYWRIGHT_BASE_URL": "http://localhost:3000",
+    "fabricFurnitureEnv": "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)",
+    "durationSec": 2.5,
+    "tests": "1/1 passed",
+    "provedAtHead": "fb5ff5f4cf269e824e6b20da1142c6c033b03861",
+    "pngs": ["01-placed.png", "02-selected.png", "03-deleted.png", "04-undone.png"],
+    "pngOnDisk": {
+      "01-placed.png": 115797,
+      "02-selected.png": 114109,
+      "03-deleted.png": 97350,
+      "04-undone.png": 96830
+    },
+    "pngProof": "eyes: 4 furniture -> 3 after Delete -> 4 after Ctrl+Z",
+    "modeBFix": "plannerToolButton scopes Select via navigation Canvas tools (Navigation tools group)",
+    "reProvedOnTip": true,
+    "onDisk": true,
+    "note": "Browser hard gate PASS. Unit alone != W3."
+  },
+  "unitPack": {
+    "note": "Browser seat only; unit alone != W3."
+  },
+  "status": "pass",
+  "statusNote": "Browser W3 exit 0. Fabric OFF. PNGs 01-04. Mode B e2e helper only. Tip fb5ff5f4."
 }
-
