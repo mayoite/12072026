@@ -11,8 +11,8 @@
 
 **Inputs consumed:**
 - Repo read: 2026-07-10 · HEAD `cb62c4e` (re-check) · dirty: Plans/Others deleted; archive/Idiots*, idiotplanners2 untracked · **`results/` MISSING**
-- Code reviews: `idiotplanners/P01…P10-*/CODE-REVIEW-REPORT.md` (**primary residual authority**)
-- Implementation plans: `idiotplanners/P0X-*/IMPLEMENTATION-PLAN.md` (task detail when residual needs steps)
+- Code reviews: `plans1/P01…P10-*/CODE-REVIEW-REPORT.md` (**primary residual authority**)
+- Implementation plans: `plans1/P0X-*/IMPLEMENTATION-PLAN.md` (task detail when residual needs steps)
 - Brainstormer: `archive/Idiots2/P0X-*/REPORT.md` (root Idiots2 absent)
 - Phase map: `Plans/INDEX.md`, `Plans/Research/RESULTS-MAP.md`, `Plans/phases/*`
 - Conduct: `AGENTS.md`, `testing-handbook.md`, `START.md`
@@ -84,7 +84,7 @@ Entire tree. Recreate on execute. Optional E: backup is **not** HEAD proof witho
 
 | Phase | Verdict | Score (review) | Product rewrite? | Residual focus | Report |
 |-------|---------|----------------|------------------|----------------|--------|
-| **P01** | APPROVE-WITH-FIXES | 8/10 | No (inventory) | `00-product-truth/` pack; rg fallback; full self-check | `idiotplanners/P01-product-truth/CODE-REVIEW-REPORT.md` |
+| **P01** | APPROVE-WITH-FIXES | 8/10 | No (inventory) | `00-product-truth/` pack; rg fallback; full self-check | `plans1/P01-product-truth/CODE-REVIEW-REPORT.md` |
 | **P02** | APPROVE-WITH-FIXES | 8.5/10 | No (lock) | `01-engine-lock/` freeze pack + units; OWNER A/B | `…/P02-engine-lock/…` |
 | **P03** | APPROVE-WITH-FIXES | 8/10 | No (Mode A) | Unit gaps + browser W3 + `03-select-delete/` | `…/P03-select-delete/…` |
 | **P04** | APPROVE-WITH-FIXES | 7.5/10 | Harden only | Wiring unit + console e2e + `04-orbit-continuity/` | `…/P04-orbit-continuity/…` |
@@ -184,16 +184,16 @@ W proofs require Fabric flag **OFF**. Document rotation furniture = **degrees**;
 | # | Work | Evidence | Source review / plan |
 |---|------|----------|----------------------|
 | 0 | Session zero | `00-start/` | `plans1/00-START.md` |
-| 1 | P01 product truth | `00-product-truth/` | `idiotplanners/P01-…/CODE-REVIEW-REPORT.md` |
-| 2 | P02 engine lock | `01-engine-lock/` | `idiotplanners/P02-…/CODE-REVIEW-REPORT.md` |
-| 3 | P03 W3 residual | `03-select-delete/` | `idiotplanners/P03-…/CODE-REVIEW-REPORT.md` |
-| 4 | P07 W1–W2 journey | `02-browser-open3d-journey/` | `idiotplanners/P07-…/CODE-REVIEW-REPORT.md` |
-| 5 | P06 W5–W6 residual | `06-save-honesty/` | `idiotplanners/P06-…/CODE-REVIEW-REPORT.md` |
-| 6 | P04 W4 residual | `04-orbit-continuity/` | `idiotplanners/P04-…/CODE-REVIEW-REPORT.md` |
-| 7 | P05 symbols re-prove | `05-symbols-svg/` | `idiotplanners/P05-…/CODE-REVIEW-REPORT.md` |
-| 8 | P08 mesh residual | `08-mesh-quality/` | `idiotplanners/P08-…/CODE-REVIEW-REPORT.md` |
-| 9 | P09 shortcuts residual | `09-shortcuts-chrome/` | `idiotplanners/P09-…/CODE-REVIEW-REPORT.md` |
-| 10 | P10 handover Mode A/B | `10-handover/` | `idiotplanners/P10-…/CODE-REVIEW-REPORT.md` |
+| 1 | P01 product truth | `00-product-truth/` | `plans1/P01-…/CODE-REVIEW-REPORT.md` |
+| 2 | P02 engine lock | `01-engine-lock/` | `plans1/P02-…/CODE-REVIEW-REPORT.md` |
+| 3 | P03 W3 residual | `03-select-delete/` | `plans1/P03-…/CODE-REVIEW-REPORT.md` |
+| 4 | P07 W1–W2 journey | `02-browser-open3d-journey/` | `plans1/P07-…/CODE-REVIEW-REPORT.md` |
+| 5 | P06 W5–W6 residual | `06-save-honesty/` | `plans1/P06-…/CODE-REVIEW-REPORT.md` |
+| 6 | P04 W4 residual | `04-orbit-continuity/` | `plans1/P04-…/CODE-REVIEW-REPORT.md` |
+| 7 | P05 symbols re-prove | `05-symbols-svg/` | `plans1/P05-…/CODE-REVIEW-REPORT.md` |
+| 8 | P08 mesh residual | `08-mesh-quality/` | `plans1/P08-…/CODE-REVIEW-REPORT.md` |
+| 9 | P09 shortcuts residual | `09-shortcuts-chrome/` | `plans1/P09-…/CODE-REVIEW-REPORT.md` |
+| 10 | P10 handover Mode A/B | `10-handover/` | `plans1/P10-…/CODE-REVIEW-REPORT.md` |
 | 11 | P11 integration | `11-integration-closeout/` | `plans1/P11-CHECKLIST.md` |
 
 Detail templates for long dumps remain in each IMPLEMENTATION-PLAN — **use only for residual steps**, not full rewrite.
@@ -260,7 +260,7 @@ git commit -m "docs(plans1): session zero evidence scaffold"
 ### Task group P01: Product truth re-prove (inventory only)
 
 **Evidence:** `results/planner/world-standard-wave/00-product-truth/`  
-**Review:** `idiotplanners/P01-product-truth/CODE-REVIEW-REPORT.md`  
+**Review:** `plans1/P01-product-truth/CODE-REVIEW-REPORT.md`  
 **Mode:** Inventory only — **no** open3d feature edits.
 
 #### Task 01.00 — Scaffold pack
@@ -353,7 +353,7 @@ pnpm exec vitest run `
 ### Task group P02: Engine lock re-prove
 
 **Evidence:** `01-engine-lock/`  
-**Review:** `idiotplanners/P02-engine-lock/CODE-REVIEW-REPORT.md`  
+**Review:** `plans1/P02-engine-lock/CODE-REVIEW-REPORT.md`  
 **Default product code:** none.
 
 #### Task 02.00 — Scaffold
@@ -409,7 +409,7 @@ pnpm exec vitest run tests/unit/features/planner/open3d/orbitControlsDefault.tes
 ### Task group P03: W3 select/delete residual (Mode A)
 
 **Evidence:** `03-select-delete/`  
-**Review:** `idiotplanners/P03-select-delete/CODE-REVIEW-REPORT.md`  
+**Review:** `plans1/P03-select-delete/CODE-REVIEW-REPORT.md`  
 **Do not:** rewrite `applySelectionDelete` signature; dual-store migrate; Fabric ON proof.
 
 #### Task 03.00 — Scaffold + baseline unit log
@@ -467,7 +467,7 @@ Remove-Item Env:NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE -ErrorAction SilentlyContinu
 ### Task group P07: W1–W2 journey rewrite
 
 **Evidence:** `02-browser-open3d-journey/`  
-**Review:** `idiotplanners/P07-draw-place-journey/CODE-REVIEW-REPORT.md`  
+**Review:** `plans1/P07-draw-place-journey/CODE-REVIEW-REPORT.md`  
 **Mode:** Rewrite-in-place e2e + helpers — **not** Fabric cutover.
 
 #### Task 07.00 — Scaffold evidence dir
@@ -520,7 +520,7 @@ pnpm --filter oando-site run test:e2e:world-standard-w1w2
 ### Task group P06: W5–W6 residual honesty
 
 **Evidence:** `06-save-honesty/` + `save-reload/`  
-**Review:** `idiotplanners/P06-save-honesty/CODE-REVIEW-REPORT.md`  
+**Review:** `plans1/P06-save-honesty/CODE-REVIEW-REPORT.md`  
 **Do not:** re-land flush/pagehide already present; mount fabric save indicator; cloud wire (cancel Task 07).
 
 #### Task 06.00 — Scaffold + baseline
@@ -586,7 +586,7 @@ pnpm --filter oando-site run test:e2e:world-standard-w1w2
 ### Task group P04: W4 orbit residual
 
 **Evidence:** `04-orbit-continuity/`  
-**Review:** `idiotplanners/P04-orbit-continuity/CODE-REVIEW-REPORT.md`
+**Review:** `plans1/P04-orbit-continuity/CODE-REVIEW-REPORT.md`
 
 #### Task 04.00 — Scaffold + THREE-LAYER-AUDIT.md
 
@@ -629,7 +629,7 @@ pnpm --filter oando-site run test:e2e:world-standard-w1w2
 ### Task group P05: Symbols re-prove only
 
 **Evidence:** `05-symbols-svg/`  
-**Review:** `idiotplanners/P05-symbols-svg/CODE-REVIEW-REPORT.md`  
+**Review:** `plans1/P05-symbols-svg/CODE-REVIEW-REPORT.md`  
 **Hard:** Do **not** rewrite `modularCabinetBlock` unless units RED. Do not re-apply storage fill.
 
 #### Task 05.00 — Scaffold
@@ -672,7 +672,7 @@ Expected: **22/22 PASS** (13+9) unless regression.
 ### Task group P08: Mesh quality residual
 
 **Evidence:** `08-mesh-quality/`  
-**Review:** `idiotplanners/P08-mesh-quality/CODE-REVIEW-REPORT.md`  
+**Review:** `plans1/P08-mesh-quality/CODE-REVIEW-REPORT.md`  
 **Hard:** Skip geometry Task 03 if formulas/toe present. No designer GLB. No photoreal thrash.
 
 #### Task 08.00 — Scaffold + toe re-proof grep
@@ -715,7 +715,7 @@ Expected: **22/22 PASS** (13+9) unless regression.
 ### Task group P09: Shortcuts residual
 
 **Evidence:** `09-shortcuts-chrome/`  
-**Review:** `idiotplanners/P09-shortcuts-chrome/CODE-REVIEW-REPORT.md`  
+**Review:** `plans1/P09-shortcuts-chrome/CODE-REVIEW-REPORT.md`  
 **Hard:** Skip invert rewrite if baseline GREEN. Never Dimension→D. Never folder `08-shortcuts-chrome/`.
 
 #### Task 09.00 — Scaffold + baseline vitest
@@ -784,7 +784,7 @@ export function canvasKeyShortcutsAttribute(options?: {
 ### Task group P10: Evidence handover
 
 **Evidence:** `10-handover/`  
-**Review:** `idiotplanners/P10-evidence-handover/CODE-REVIEW-REPORT.md`
+**Review:** `plans1/P10-evidence-handover/CODE-REVIEW-REPORT.md`
 
 #### Task 10.00 — Mode selection
 

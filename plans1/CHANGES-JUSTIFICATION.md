@@ -1,6 +1,6 @@
 # CHANGES-JUSTIFICATION — plans1 vs raw idiotplanners
 
-**Purpose:** Justify every material change this master package makes relative to executing each `idiotplanners/P0X-*/IMPLEMENTATION-PLAN.md` in isolation.  
+**Purpose:** Justify every material change this master package makes relative to executing each `plans1/P0X-*/IMPLEMENTATION-PLAN.md` in isolation.  
 **Rule:** CODE-REVIEW-REPORT + live repo win over plan rewrite pastes.  
 **Date:** 2026-07-10
 
@@ -8,9 +8,9 @@
 
 ## Why one spine (EXECUTE-NOW) — not both trees
 
-**From:** Two full trees (`idiotplanners` + `idiotplanners2`) + two packages (`plans1` + `plans2`) looked like two programs to run.  
-**To:** Single board [`EXECUTE-NOW.md`](./EXECUTE-NOW.md) copied to `plans1`, `plans2`, `idiotplanners`, `idiotplanners2`.  
-**Primary:** `plans1` + `idiotplanners` (Idiots2). **Secondary:** `plans2` + `idiotplanners2` (Idiots) = reference only.  
+**From:** Two full trees (`plans1` + `plans2`) + two packages (`plans1` + `plans2`) looked like two programs to run.  
+**To:** Single board [`EXECUTE-NOW.md`](./EXECUTE-NOW.md) copied to `plans1`, `plans2`, `plans1`, `plans2`.  
+**Primary:** `plans1` + `plans1` (Idiots2). **Secondary:** `plans2` + `plans2` (Idiots) = reference only.  
 
 **Justification:** Same phases, same product; dual waves were parallel drafts. Running both thrash evidence and double residual work. Both review waves agree on residual vs rewrite and `results/` unproven.
 
@@ -31,7 +31,7 @@
 | P09 | APPROVE residual | Map invert **22/22 green** | aria/rail/evidence only |
 | P10 | Mode A only | No results tree | FAIL-honest pack; Mode B blocked |
 
-**Citation pattern:** each row from `idiotplanners/P0X-*/CODE-REVIEW-REPORT.md` “Already exists / Residual / Bottom line.”
+**Citation pattern:** each row from `plans1/P0X-*/CODE-REVIEW-REPORT.md` “Already exists / Residual / Bottom line.”
 
 **Why:** Full-plan Task pastes include recovery dumps that tempt executors to re-land green code. Reviews repeatedly say **rewrite would thrash**. This package drops virgin rewrites from the kill path.
 

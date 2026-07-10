@@ -16,9 +16,9 @@
 
 **Inputs consumed:**
 - **Repo read:** 2026-07-10 — workspace `D:\OandO07072026` — HEAD `cb62c4eb5fff3a0c3e1ea099809b4e7d77d74ecc` (dirty tree possible; **re-read at execute**)
-- **Plan source (sole):** `D:\OandO07072026\idiotplanners2\` — all P01–P10 `IMPLEMENTATION-PLAN.md` + README
+- **Plan source (sole):** `D:\OandO07072026\plans2/` — all P01–P10 `IMPLEMENTATION-PLAN.md` + README
 - **CODE-REVIEW-REPORT.md under idiotplanners2:** **NONE** — plan from plans + live repo only
-- **Not used as authority:** missing `idiotplanners1/`; sibling `idiotplanners/` (Idiots2 / plans1 lane)
+- **Not used as authority:** missing `idiotplanners1/`; sibling `plans1/` (Idiots2 / plans1 lane)
 - **Program maps:** `Plans/INDEX.md`, `Plans/README.md`, `Plans/Research/RESULTS-MAP.md`, `Plans/phases/*`
 - **Design:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md`
 - **Brainstormers (optional intent):** `archive/Idiots/P0X-*/REPORT.md` (root `Idiots/` may be absent)
@@ -34,7 +34,7 @@
 **Evidence folder (wave root):** `results/planner/world-standard-wave/`  
 **Create on execute; re-prove if missing** — at package write **entire `results/` was MISSING**.
 
-**Deep plans:** Do not paste 15k lines of per-phase TDD here. When a task needs full code, open the cited `idiotplanners2/P0X-…/IMPLEMENTATION-PLAN.md` and execute those steps. This master plan is the **operator spine + residual synthesis + cross-cutting law**.
+**Deep plans:** Do not paste 15k lines of per-phase TDD here. When a task needs full code, open the cited `plans2/P0X-…/IMPLEMENTATION-PLAN.md` and execute those steps. This master plan is the **operator spine + residual synthesis + cross-cutting law**.
 
 ---
 
@@ -45,9 +45,9 @@
 | Path | Status | Impact |
 |------|--------|--------|
 | `results/` | **MISSING** | All historical CP PASS unproven |
-| `idiotplanners1/` | **MISSING** | Source → `idiotplanners2/` |
-| `idiotplanners2/` | Present — plans only (no code reviews) | Sole residual plan source |
-| `idiotplanners/` | Present — plans + CODE-REVIEW-REPORT | **Not** plans2 authority |
+| `idiotplanners1/` | **MISSING** | Source → `plans2/` |
+| `plans2/` | Present — plans only (no code reviews) | Sole residual plan source |
+| `plans1/` | Present — plans + CODE-REVIEW-REPORT | **Not** plans2 authority |
 | `Plans/trustdata/` | Removed | Use `Plans/phases` + `Plans/Research` |
 | `ayushdocs/` | Often missing | Use `Plans/Research/Others/*` |
 | open3d product tree | **Present** and large | Residual-first |
@@ -113,16 +113,16 @@ site/features/planner/open3d/
 
 | Phase | Gate | Evidence folder | Code posture (idiotplanners2) | Residual class | Code review in idiotplanners2? | Deep plan |
 |-------|------|-----------------|-------------------------------|----------------|--------------------------------|-----------|
-| P01 | Baseline | `00-product-truth/` | Inventory only; no feature edits | Full pack recreate | **No** | [IMPLEMENTATION-PLAN](../idiotplanners2/P01-product-truth/IMPLEMENTATION-PLAN.md) |
-| P02 | Engine | `01-engine-lock/` | Zero product impl default | Full pack recreate + unit re-run | **No** | [IMPLEMENTATION-PLAN](../idiotplanners2/P02-engine-lock/IMPLEMENTATION-PLAN.md) |
-| P03 | **W3** | `03-select-delete/` | Code mostly landed; Mode A | Unit gaps + **browser mandatory** + evidence | **No** | [IMPLEMENTATION-PLAN](../idiotplanners2/P03-select-delete/IMPLEMENTATION-PLAN.md) |
-| P04 | **W4** | `04-orbit-continuity/` | Three-layer + degrees landed | Verify + evidence + optional harden | **No** | [IMPLEMENTATION-PLAN](../idiotplanners2/P04-orbit-continuity/IMPLEMENTATION-PLAN.md) |
-| P05 | **W2** symbols | `05-symbols-svg/` | Multi-prim shipped | Re-prove + honesty NOTES + visual | **No** | [IMPLEMENTATION-PLAN](../idiotplanners2/P05-symbols-svg/IMPLEMENTATION-PLAN.md) |
-| P06 | **W5–W6** | `06-save-honesty/` | Flush skeleton landed | **Real product residual** (help, testids, projectRef, id W5) | **No** | [IMPLEMENTATION-PLAN](../idiotplanners2/P06-save-honesty/IMPLEMENTATION-PLAN.md) |
-| P07 | **W1–W2** place | `02-browser-open3d-journey/` | Spec partial | **Rewrite journey bar** + helper | **No** | [IMPLEMENTATION-PLAN](../idiotplanners2/P07-draw-place-journey/IMPLEMENTATION-PLAN.md) |
-| P08 | **W7** | `08-mesh-quality/` | Toe mesh landed | Evidence-first NOTES + smoke + logs | **No** | [IMPLEMENTATION-PLAN](../idiotplanners2/P08-mesh-quality/IMPLEMENTATION-PLAN.md) |
-| P09 | **W8** | `09-shortcuts-chrome/` | Map invert landed | aria residual + evidence + rail asserts | **No** | [IMPLEMENTATION-PLAN](../idiotplanners2/P09-shortcuts-chrome/IMPLEMENTATION-PLAN.md) |
-| P10 | Pack | `10-handover/` | Pack-only; no site features | Mode A default if results missing | **No** | [IMPLEMENTATION-PLAN](../idiotplanners2/P10-evidence-handover/IMPLEMENTATION-PLAN.md) |
+| P01 | Baseline | `00-product-truth/` | Inventory only; no feature edits | Full pack recreate | **No** | [IMPLEMENTATION-PLAN](../plans2/P01-product-truth/IMPLEMENTATION-PLAN.md) |
+| P02 | Engine | `01-engine-lock/` | Zero product impl default | Full pack recreate + unit re-run | **No** | [IMPLEMENTATION-PLAN](../plans2/P02-engine-lock/IMPLEMENTATION-PLAN.md) |
+| P03 | **W3** | `03-select-delete/` | Code mostly landed; Mode A | Unit gaps + **browser mandatory** + evidence | **No** | [IMPLEMENTATION-PLAN](../plans2/P03-select-delete/IMPLEMENTATION-PLAN.md) |
+| P04 | **W4** | `04-orbit-continuity/` | Three-layer + degrees landed | Verify + evidence + optional harden | **No** | [IMPLEMENTATION-PLAN](../plans2/P04-orbit-continuity/IMPLEMENTATION-PLAN.md) |
+| P05 | **W2** symbols | `05-symbols-svg/` | Multi-prim shipped | Re-prove + honesty NOTES + visual | **No** | [IMPLEMENTATION-PLAN](../plans2/P05-symbols-svg/IMPLEMENTATION-PLAN.md) |
+| P06 | **W5–W6** | `06-save-honesty/` | Flush skeleton landed | **Real product residual** (help, testids, projectRef, id W5) | **No** | [IMPLEMENTATION-PLAN](../plans2/P06-save-honesty/IMPLEMENTATION-PLAN.md) |
+| P07 | **W1–W2** place | `02-browser-open3d-journey/` | Spec partial | **Rewrite journey bar** + helper | **No** | [IMPLEMENTATION-PLAN](../plans2/P07-draw-place-journey/IMPLEMENTATION-PLAN.md) |
+| P08 | **W7** | `08-mesh-quality/` | Toe mesh landed | Evidence-first NOTES + smoke + logs | **No** | [IMPLEMENTATION-PLAN](../plans2/P08-mesh-quality/IMPLEMENTATION-PLAN.md) |
+| P09 | **W8** | `09-shortcuts-chrome/` | Map invert landed | aria residual + evidence + rail asserts | **No** | [IMPLEMENTATION-PLAN](../plans2/P09-shortcuts-chrome/IMPLEMENTATION-PLAN.md) |
+| P10 | Pack | `10-handover/` | Pack-only; no site features | Mode A default if results missing | **No** | [IMPLEMENTATION-PLAN](../plans2/P10-evidence-handover/IMPLEMENTATION-PLAN.md) |
 | **P11** | Close-out | `11-world-standard-closeout/` | **plans2 only** | Integration crosswalk | N/A | [P11-CHECKLIST](./P11-CHECKLIST.md) |
 
 ---
@@ -131,16 +131,16 @@ site/features/planner/open3d/
 
 ```
 P00  plans2/00-START.md
-P01  idiotplanners2/P01-product-truth/IMPLEMENTATION-PLAN.md
-P02  idiotplanners2/P02-engine-lock/IMPLEMENTATION-PLAN.md
-P03  idiotplanners2/P03-select-delete/IMPLEMENTATION-PLAN.md
-P07  idiotplanners2/P07-draw-place-journey/IMPLEMENTATION-PLAN.md
-P06  idiotplanners2/P06-save-honesty/IMPLEMENTATION-PLAN.md
-P04  idiotplanners2/P04-orbit-continuity/IMPLEMENTATION-PLAN.md
-P05  idiotplanners2/P05-symbols-svg/IMPLEMENTATION-PLAN.md
-P08  idiotplanners2/P08-mesh-quality/IMPLEMENTATION-PLAN.md
-P09  idiotplanners2/P09-shortcuts-chrome/IMPLEMENTATION-PLAN.md
-P10  idiotplanners2/P10-evidence-handover/IMPLEMENTATION-PLAN.md
+P01  plans2/P01-product-truth/IMPLEMENTATION-PLAN.md
+P02  plans2/P02-engine-lock/IMPLEMENTATION-PLAN.md
+P03  plans2/P03-select-delete/IMPLEMENTATION-PLAN.md
+P07  plans2/P07-draw-place-journey/IMPLEMENTATION-PLAN.md
+P06  plans2/P06-save-honesty/IMPLEMENTATION-PLAN.md
+P04  plans2/P04-orbit-continuity/IMPLEMENTATION-PLAN.md
+P05  plans2/P05-symbols-svg/IMPLEMENTATION-PLAN.md
+P08  plans2/P08-mesh-quality/IMPLEMENTATION-PLAN.md
+P09  plans2/P09-shortcuts-chrome/IMPLEMENTATION-PLAN.md
+P10  plans2/P10-evidence-handover/IMPLEMENTATION-PLAN.md
 P11  plans2/P11-CHECKLIST.md
 ```
 
@@ -148,7 +148,7 @@ P11  plans2/P11-CHECKLIST.md
 
 **One phase at a time.** Inside a phase, follow that plan’s Task 00…N.
 
-**Code reviews:** none under idiotplanners2 — if executor opens `idiotplanners/P0X/CODE-REVIEW-REPORT.md`, treat as **optional cross-check only**, never override repo or idiotplanners2.
+**Code reviews:** none under idiotplanners2 — if executor opens `plans1/P0X/CODE-REVIEW-REPORT.md`, treat as **optional cross-check only**, never override repo or idiotplanners2.
 
 ---
 
@@ -231,11 +231,11 @@ Expected: SHA printed; dirty OK; paste into `00-start/NOTES.md`.
 
 ```powershell
 Test-Path .\idiotplanners1
-Test-Path .\idiotplanners2\README.md
+Test-Path .\plans2/README.md
 Test-Path .\results
 ```
 
-Expected: `idiotplanners1` False; `idiotplanners2` True; `results` likely False → re-prove posture.
+Expected: `idiotplanners1` False; `plans2` True; `results` likely False → re-prove posture.
 
 - [ ] **Step 4: Layout guard**
 
@@ -259,7 +259,7 @@ Expected: exit 0 or honest fail (log later under P01).
 
 - [ ] **Step 7: Open kill-order next**
 
-Next = **P01**. Open deep plan: `idiotplanners2/P01-product-truth/IMPLEMENTATION-PLAN.md`.
+Next = **P01**. Open deep plan: `plans2/P01-product-truth/IMPLEMENTATION-PLAN.md`.
 
 **Done when:** Session-zero checklist in `00-START.md` ticked; NOTES exists or intentional skip logged.
 
@@ -267,7 +267,7 @@ Next = **P01**. Open deep plan: `idiotplanners2/P01-product-truth/IMPLEMENTATION
 
 ### Task group P01: Product truth inventory (re-prove)
 
-**Deep plan:** `idiotplanners2/P01-product-truth/IMPLEMENTATION-PLAN.md`  
+**Deep plan:** `plans2/P01-product-truth/IMPLEMENTATION-PLAN.md`  
 **Evidence:** `results/planner/world-standard-wave/00-product-truth/`  
 **Product code:** **None** under open3d features (inventory only).
 
@@ -319,7 +319,7 @@ git commit -m "docs(p01): re-prove product truth inventory pack (results wipe)"
 
 ### Task group P02: Engine lock freeze (re-prove)
 
-**Deep plan:** `idiotplanners2/P02-engine-lock/IMPLEMENTATION-PLAN.md`  
+**Deep plan:** `plans2/P02-engine-lock/IMPLEMENTATION-PLAN.md`  
 **Evidence:** `results/planner/world-standard-wave/01-engine-lock/`  
 **Product code:** Default **none**.
 
@@ -371,7 +371,7 @@ git commit -m "docs(p02): re-prove engine lock pack under 01-engine-lock"
 
 ### Task group P03: W3 select / delete / undo (residual + re-prove)
 
-**Deep plan:** `idiotplanners2/P03-select-delete/IMPLEMENTATION-PLAN.md`  
+**Deep plan:** `plans2/P03-select-delete/IMPLEMENTATION-PLAN.md`  
 **Evidence:** `results/planner/world-standard-wave/03-select-delete/`  
 **Mode:** **A** residual (default). **B** on red product. **C** greenfield only if helpers missing (unlikely).
 
@@ -425,7 +425,7 @@ Expected: Select → Delete → count drop → Ctrl+Z restore; PNGs + browser-ru
 
 ### Task group P07: W1–W2 browser journey (rewrite bar + re-prove)
 
-**Deep plan:** `idiotplanners2/P07-draw-place-journey/IMPLEMENTATION-PLAN.md`  
+**Deep plan:** `plans2/P07-draw-place-journey/IMPLEMENTATION-PLAN.md`  
 **Evidence:** `results/planner/world-standard-wave/02-browser-open3d-journey/`
 
 **Why early in kill order:** Proves authoring path after W3 machinery exists.
@@ -470,7 +470,7 @@ Expected: pass; artifacts under `02-browser-open3d-journey/`.
 
 ### Task group P06: W5–W6 save honesty (residual product + re-prove)
 
-**Deep plan:** `idiotplanners2/P06-save-honesty/IMPLEMENTATION-PLAN.md`  
+**Deep plan:** `plans2/P06-save-honesty/IMPLEMENTATION-PLAN.md`  
 **Evidence:** `06-save-honesty/` + `save-reload/`  
 **Approach:** Residual close (not re-implement flush from zero).
 
@@ -519,7 +519,7 @@ Raise to assert **same wall + furniture UUIDs** (not count-only). Use `clearPlan
 
 ### Task group P04: W4 orbit continuity (verify + re-prove)
 
-**Deep plan:** `idiotplanners2/P04-orbit-continuity/IMPLEMENTATION-PLAN.md`  
+**Deep plan:** `plans2/P04-orbit-continuity/IMPLEMENTATION-PLAN.md`  
 **Evidence:** `04-orbit-continuity/`
 
 - [ ] **P04.1 — Scaffold + THREE-LAYER-AUDIT template**
@@ -554,7 +554,7 @@ Expected: 3D orbit attr true; left-drag; 2D↔3D; PNGs + browser-run.json **or**
 
 ### Task group P05: W2 symbols / SVG honesty (re-prove)
 
-**Deep plan:** `idiotplanners2/P05-symbols-svg/IMPLEMENTATION-PLAN.md`  
+**Deep plan:** `plans2/P05-symbols-svg/IMPLEMENTATION-PLAN.md`  
 **Evidence:** `05-symbols-svg/`
 
 - [ ] **P05.1 — Scaffold**
@@ -584,7 +584,7 @@ pnpm --filter oando-site exec vitest run `
 
 ### Task group P08: W7 mesh quality (evidence-first)
 
-**Deep plan:** `idiotplanners2/P08-mesh-quality/IMPLEMENTATION-PLAN.md`  
+**Deep plan:** `plans2/P08-mesh-quality/IMPLEMENTATION-PLAN.md`  
 **Evidence:** `08-mesh-quality/`  
 **Approach A** unless formula drift → Approach B TDD.
 
@@ -619,7 +619,7 @@ node scripts/p08-cabinet-v0-visual-smoke.mjs
 
 ### Task group P09: W8 shortcuts / chrome (residual + re-prove)
 
-**Deep plan:** `idiotplanners2/P09-shortcuts-chrome/IMPLEMENTATION-PLAN.md`  
+**Deep plan:** `plans2/P09-shortcuts-chrome/IMPLEMENTATION-PLAN.md`  
 **Evidence:** `09-shortcuts-chrome/`
 
 - [ ] **P09.1 — Scaffold**
@@ -650,7 +650,7 @@ pnpm --filter oando-site exec vitest run `
 
 ### Task group P10: Evidence handover pack
 
-**Deep plan:** `idiotplanners2/P10-evidence-handover/IMPLEMENTATION-PLAN.md`  
+**Deep plan:** `plans2/P10-evidence-handover/IMPLEMENTATION-PLAN.md`  
 **Evidence:** `10-handover/`  
 **Scope:** Pack / honesty / backup **only** — **no** `site/` product features.
 
@@ -854,7 +854,7 @@ Owner decision defaults: see `00-START.md`.
 | Ethics | Yes §4 |
 | P11 + 00-START | Delivered as sibling docs |
 
-**Length honesty:** Master is extensive spine + residual synthesis. Per-phase full TDD source remains in `idiotplanners2` (1.2k–2k lines each) — intentionally not duplicated to avoid drift.
+**Length honesty:** Master is extensive spine + residual synthesis. Per-phase full TDD source remains in `plans2` (1.2k–2k lines each) — intentionally not duplicated to avoid drift.
 
 ---
 
@@ -907,7 +907,7 @@ npx playwright test -c config/build/playwright.config.ts <spec> --reporter=list
 + verification-before-completion (+ TDD / chrome-devtools as needed)
 
 Execute plans2 kill order phase P0X only.
-Deep plan: idiotplanners2/P0X-*/IMPLEMENTATION-PLAN.md
+Deep plan: plans2/P0X-*/IMPLEMENTATION-PLAN.md
 Master: plans2/EXECUTABLE-PLAN.md
 Repo wins; results missing = re-prove; residual not rewrite.
 Evidence only under results/planner/world-standard-wave/<canonical>/.

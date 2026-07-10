@@ -163,7 +163,7 @@ Detailed tasks: [EXECUTABLE-PLAN.md](./EXECUTABLE-PLAN.md) · Flat board: [CHECK
 - [ ] Optional: note E: backup path if present (`E:\OandO-backups\trustdata-2026-07-10\`) — **not** auto-PASS
 - [ ] Write `00-start/NOTES.md` with: approach A binding, date, agent id, “results re-prove wave”
 - [ ] Do **not** edit product code in session zero
-- [ ] Do **not** edit `idiotplanners/`
+- [ ] Do **not** edit `plans1/`
 - [ ] Ready for P01 Task group only when checkboxes above done
 
 ---

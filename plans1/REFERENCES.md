@@ -23,21 +23,21 @@
 
 | Phase | Plan | Code review |
 |-------|------|-------------|
-| README | `idiotplanners/README.md` | — |
-| P01 | `idiotplanners/P01-product-truth/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
-| P02 | `idiotplanners/P02-engine-lock/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
-| P03 | `idiotplanners/P03-select-delete/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
-| P04 | `idiotplanners/P04-orbit-continuity/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
-| P05 | `idiotplanners/P05-symbols-svg/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
-| P06 | `idiotplanners/P06-save-honesty/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
-| P07 | `idiotplanners/P07-draw-place-journey/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
-| P08 | `idiotplanners/P08-mesh-quality/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
-| P09 | `idiotplanners/P09-shortcuts-chrome/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
-| P10 | `idiotplanners/P10-evidence-handover/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
+| README | `plans1/README.md` | — |
+| P01 | `plans1/P01-product-truth/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
+| P02 | `plans1/P02-engine-lock/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
+| P03 | `plans1/P03-select-delete/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
+| P04 | `plans1/P04-orbit-continuity/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
+| P05 | `plans1/P05-symbols-svg/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
+| P06 | `plans1/P06-save-honesty/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
+| P07 | `plans1/P07-draw-place-journey/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
+| P08 | `plans1/P08-mesh-quality/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
+| P09 | `plans1/P09-shortcuts-chrome/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
+| P10 | `plans1/P10-evidence-handover/IMPLEMENTATION-PLAN.md` | `…/CODE-REVIEW-REPORT.md` |
 
 **Do not edit** these from plans1 execution unless owner asks.
 
-Secondary (not authority for this package): `idiotplanners2/P0X-*/IMPLEMENTATION-PLAN.md`
+Secondary (not authority for this package): `plans2/P0X-*/IMPLEMENTATION-PLAN.md`
 
 ---
 

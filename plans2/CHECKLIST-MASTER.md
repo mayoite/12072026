@@ -1,7 +1,7 @@
 # CHECKLIST-MASTER — P00–P11 flat board
 
 Tick **only** when evidence paths exist on this machine (or explicit WAIVE with owner).  
-Source plans: **`idiotplanners2/`**. Package: **`plans2/`**.
+Source plans: **`plans2/`**. Package: **`plans2/`**.
 
 Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P08 → P09 → P10 → P11**
 
@@ -12,7 +12,7 @@ Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P0
 - [ ] Main checkout `D:\OandO07072026` (no worktrees)
 - [ ] HEAD + status recorded
 - [ ] `results/` presence known (missing → re-prove posture)
-- [ ] `idiotplanners1` missing acknowledged; source = `idiotplanners2`
+- [ ] `idiotplanners1` missing acknowledged; source = `plans2`
 - [ ] `pnpm run check:layout` OK
 - [ ] Active phase = P01 (unless owner override)
 
@@ -22,7 +22,7 @@ Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P0
 
 ## P01 — Product truth (baseline)
 
-**Plan:** `idiotplanners2/P01-product-truth/IMPLEMENTATION-PLAN.md`  
+**Plan:** `plans2/P01-product-truth/IMPLEMENTATION-PLAN.md`  
 **Folder:** `00-product-truth/`
 
 - [ ] Evidence dir created
@@ -38,7 +38,7 @@ Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P0
 
 ## P02 — Engine lock
 
-**Plan:** `idiotplanners2/P02-engine-lock/IMPLEMENTATION-PLAN.md`  
+**Plan:** `plans2/P02-engine-lock/IMPLEMENTATION-PLAN.md`  
 **Folder:** `01-engine-lock/`
 
 - [ ] `NOTES.md` map minimum
@@ -56,7 +56,7 @@ Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P0
 
 ## P03 — W3 select / delete / undo
 
-**Plan:** `idiotplanners2/P03-select-delete/IMPLEMENTATION-PLAN.md`  
+**Plan:** `plans2/P03-select-delete/IMPLEMENTATION-PLAN.md`  
 **Folder:** `03-select-delete/`
 
 - [ ] Unit pack exit 0 (pick, delete, keyboard, undo id/pose)
@@ -70,7 +70,7 @@ Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P0
 
 ## P07 — W1–W2 browser journey
 
-**Plan:** `idiotplanners2/P07-draw-place-journey/IMPLEMENTATION-PLAN.md`  
+**Plan:** `plans2/P07-draw-place-journey/IMPLEMENTATION-PLAN.md`  
 **Folder:** `02-browser-open3d-journey/`
 
 - [ ] `getFurnitureCount` helper landed / used
@@ -87,7 +87,7 @@ Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P0
 
 ## P06 — W5–W6 save honesty
 
-**Plan:** `idiotplanners2/P06-save-honesty/IMPLEMENTATION-PLAN.md`  
+**Plan:** `plans2/P06-save-honesty/IMPLEMENTATION-PLAN.md`  
 **Folder:** `06-save-honesty/` (+ `save-reload/`)
 
 - [ ] Help/copy no account over-claim (local-only default)
@@ -102,7 +102,7 @@ Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P0
 
 ## P04 — W4 orbit continuity
 
-**Plan:** `idiotplanners2/P04-orbit-continuity/IMPLEMENTATION-PLAN.md`  
+**Plan:** `plans2/P04-orbit-continuity/IMPLEMENTATION-PLAN.md`  
 **Folder:** `04-orbit-continuity/`
 
 - [ ] Three-layer audit regeneratable
@@ -116,7 +116,7 @@ Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P0
 
 ## P05 — W2 symbols / SVG honesty
 
-**Plan:** `idiotplanners2/P05-symbols-svg/IMPLEMENTATION-PLAN.md`  
+**Plan:** `plans2/P05-symbols-svg/IMPLEMENTATION-PLAN.md`  
 **Folder:** `05-symbols-svg/`
 
 - [ ] cabinet-v0 Block2D vitest green + log
@@ -131,7 +131,7 @@ Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P0
 
 ## P08 — W7 mesh quality
 
-**Plan:** `idiotplanners2/P08-mesh-quality/IMPLEMENTATION-PLAN.md`  
+**Plan:** `plans2/P08-mesh-quality/IMPLEMENTATION-PLAN.md`  
 **Folder:** `08-mesh-quality/`
 
 - [ ] NOTES bar doc with numbers
@@ -146,7 +146,7 @@ Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P0
 
 ## P09 — W8 shortcuts / chrome
 
-**Plan:** `idiotplanners2/P09-shortcuts-chrome/IMPLEMENTATION-PLAN.md`  
+**Plan:** `plans2/P09-shortcuts-chrome/IMPLEMENTATION-PLAN.md`  
 **Folder:** `09-shortcuts-chrome/`
 
 - [ ] toolShortcutTruth / keyboard matrix green + log
@@ -160,7 +160,7 @@ Kill order: **P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P0
 
 ## P10 — Evidence handover
 
-**Plan:** `idiotplanners2/P10-evidence-handover/IMPLEMENTATION-PLAN.md`  
+**Plan:** `plans2/P10-evidence-handover/IMPLEMENTATION-PLAN.md`  
 **Folder:** `10-handover/`
 
 - [ ] Mode locked (A / B / H4) with owner context

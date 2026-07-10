@@ -2,8 +2,8 @@
 
 Absolute-path oriented map for executors. **Repo wins** on file presence; re-check before claiming.
 
-**Source resolution:** plans2 authority = **`D:\OandO07072026\idiotplanners2\`**.  
-`idiotplanners1` = **missing**. `idiotplanners/` = Idiots2 wave (not this package).
+**Source resolution:** plans2 authority = **`D:\OandO07072026\plans2/`**.  
+`idiotplanners1` = **missing**. `plans1/` = Idiots2 wave (not this package).
 
 ---
 
@@ -25,17 +25,17 @@ Absolute-path oriented map for executors. **Repo wins** on file presence; re-che
 
 | Phase | Implementation plan |
 |-------|---------------------|
-| README | `D:\OandO07072026\idiotplanners2\README.md` |
-| P01 | `D:\OandO07072026\idiotplanners2\P01-product-truth\IMPLEMENTATION-PLAN.md` |
-| P02 | `D:\OandO07072026\idiotplanners2\P02-engine-lock\IMPLEMENTATION-PLAN.md` |
-| P03 | `D:\OandO07072026\idiotplanners2\P03-select-delete\IMPLEMENTATION-PLAN.md` |
-| P04 | `D:\OandO07072026\idiotplanners2\P04-orbit-continuity\IMPLEMENTATION-PLAN.md` |
-| P05 | `D:\OandO07072026\idiotplanners2\P05-symbols-svg\IMPLEMENTATION-PLAN.md` |
-| P06 | `D:\OandO07072026\idiotplanners2\P06-save-honesty\IMPLEMENTATION-PLAN.md` |
-| P07 | `D:\OandO07072026\idiotplanners2\P07-draw-place-journey\IMPLEMENTATION-PLAN.md` |
-| P08 | `D:\OandO07072026\idiotplanners2\P08-mesh-quality\IMPLEMENTATION-PLAN.md` |
-| P09 | `D:\OandO07072026\idiotplanners2\P09-shortcuts-chrome\IMPLEMENTATION-PLAN.md` |
-| P10 | `D:\OandO07072026\idiotplanners2\P10-evidence-handover\IMPLEMENTATION-PLAN.md` |
+| README | `D:\OandO07072026\plans2/README.md` |
+| P01 | `D:\OandO07072026\plans2/P01-product-truth\IMPLEMENTATION-PLAN.md` |
+| P02 | `D:\OandO07072026\plans2/P02-engine-lock\IMPLEMENTATION-PLAN.md` |
+| P03 | `D:\OandO07072026\plans2/P03-select-delete\IMPLEMENTATION-PLAN.md` |
+| P04 | `D:\OandO07072026\plans2/P04-orbit-continuity\IMPLEMENTATION-PLAN.md` |
+| P05 | `D:\OandO07072026\plans2/P05-symbols-svg\IMPLEMENTATION-PLAN.md` |
+| P06 | `D:\OandO07072026\plans2/P06-save-honesty\IMPLEMENTATION-PLAN.md` |
+| P07 | `D:\OandO07072026\plans2/P07-draw-place-journey\IMPLEMENTATION-PLAN.md` |
+| P08 | `D:\OandO07072026\plans2/P08-mesh-quality\IMPLEMENTATION-PLAN.md` |
+| P09 | `D:\OandO07072026\plans2/P09-shortcuts-chrome\IMPLEMENTATION-PLAN.md` |
+| P10 | `D:\OandO07072026\plans2/P10-evidence-handover\IMPLEMENTATION-PLAN.md` |
 
 **CODE-REVIEW-REPORT.md under idiotplanners2:** **none**.
 
@@ -166,7 +166,7 @@ Historical survivor (optional restore source):
 | Path | Why not authority |
 |------|-------------------|
 | `idiotplanners1/` | Missing |
-| `idiotplanners/` (Idiots2) | Other package / plans1 lane |
+| `plans1/` (Idiots2) | Other package / plans1 lane |
 | `plans1/` | Other agent owns |
 | Phase “PASS” prose without `results/` files | Paper green |
 | `D:\websites\**` research packs | Ideas only |

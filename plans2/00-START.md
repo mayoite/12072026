@@ -1,7 +1,7 @@
 # 00-START — Session zero (executable start card)
 
 > **For agentic workers:** `/using-superpowers` first. Work only in `D:\OandO07072026` (no worktrees).  
-> **Package:** `plans2/` synthesized from **`idiotplanners2/`** (idiotplanners1 missing).  
+> **Package:** `plans2/` synthesized from **`plans2/`** (idiotplanners1 missing).  
 > **Do not** mark any W gate PASS from this card alone.
 
 ---
@@ -28,7 +28,7 @@ Bootstrap an execute session so residual P01–P11 work starts with:
 | Env | Repo-root `.env.local` from `.env.example` when browser/dev needed |
 | Evidence root | **Only** `D:\OandO07072026\results\` — never `site/results/` |
 | Skills | `/using-superpowers` + TDD / verification / chrome-devtools as phase needs |
-| Source plans | `idiotplanners2/` sole residual authority (not `idiotplanners/`, not missing `idiotplanners1/`) |
+| Source plans | `plans2/` sole residual authority (not `plans1/`, not missing `idiotplanners1/`) |
 
 ---
 
@@ -81,7 +81,7 @@ Test-Path .\results
 Test-Path .\results\planner\world-standard-wave
 
 # 3) Source tree present
-Test-Path .\idiotplanners2\README.md
+Test-Path .\plans2/README.md
 Test-Path .\idiotplanners1   # expect False
 
 # 4) Layout guard (evidence never under site/)
@@ -169,7 +169,7 @@ Contents: Approach **A**, date, agent, HEAD, “results wiped → full re-prove�
 | P10 | Pack | `10-handover/` |
 | P11 | Integration close-out | `11-world-standard-closeout/` **or** extend `10-handover/` with P11 section (see P11-CHECKLIST) |
 
-Deep how: `plans2/EXECUTABLE-PLAN.md` + `idiotplanners2/P0X-…/IMPLEMENTATION-PLAN.md`.
+Deep how: `plans2/EXECUTABLE-PLAN.md` + `plans2/P0X-…/IMPLEMENTATION-PLAN.md`.
 
 ---
 
@@ -207,14 +207,14 @@ Deep how: `plans2/EXECUTABLE-PLAN.md` + `idiotplanners2/P0X-…/IMPLEMENTATION-P
 
 - [ ] Workspace is `D:\OandO07072026` (not a worktree)
 - [ ] `git rev-parse HEAD` + `git status -sb` recorded (session NOTES or first phase HEAD.txt)
-- [ ] Confirmed `idiotplanners1` absent; working from **`idiotplanners2`** + `plans2`
+- [ ] Confirmed `idiotplanners1` absent; working from **`plans2`** + `plans2`
 - [ ] Confirmed `results/` present or **MISSING** (if missing → re-prove posture)
 - [ ] Read `plans2/README.md` kill order
 - [ ] Read `Plans/Research/RESULTS-MAP.md` folder lock (skim)
 - [ ] `pnpm run check:layout` exit 0
 - [ ] Optional: `hostWiringP01` vitest smoke attempted (log retained later under P01)
 - [ ] Active phase chosen = **P01** unless owner overrides
-- [ ] Open `idiotplanners2/P01-product-truth/IMPLEMENTATION-PLAN.md` + `EXECUTABLE-PLAN.md` Task group P01
+- [ ] Open `plans2/P01-product-truth/IMPLEMENTATION-PLAN.md` + `EXECUTABLE-PLAN.md` Task group P01
 - [ ] No product commits planned under wrong phase label
 - [ ] Ethics: no `D:\websites` paste into product
 

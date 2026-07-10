@@ -279,5 +279,5 @@ results/planner/world-standard-wave/<W-folders>/
 | Path map | [REFERENCES.md](./REFERENCES.md) |
 | Folder lock | `Plans/Research/RESULTS-MAP.md` |
 | Kill order | `Plans/INDEX.md` · this package README |
-| Reviews | `idiotplanners/P0X-*/CODE-REVIEW-REPORT.md` |
+| Reviews | `plans1/P0X-*/CODE-REVIEW-REPORT.md` |
 | Design W1–W8 | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` |

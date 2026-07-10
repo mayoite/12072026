@@ -189,7 +189,7 @@ npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-
 | Master plan | `plans2/EXECUTABLE-PLAN.md` Task P11 |
 | Start card | `plans2/00-START.md` |
 | Justification | `plans2/CHANGES-JUSTIFICATION.md` |
-| P10 deep | `idiotplanners2/P10-evidence-handover/IMPLEMENTATION-PLAN.md` |
+| P10 deep | `plans2/P10-evidence-handover/IMPLEMENTATION-PLAN.md` |
 | Folder lock | `Plans/Research/RESULTS-MAP.md` |
 | Design W1–W8 | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` |
 | Program kill order | `Plans/INDEX.md` |

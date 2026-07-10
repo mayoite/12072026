@@ -1,10 +1,10 @@
 # CHANGES-JUSTIFICATION — plans2 vs raw idiotplanners2
 
-**Purpose:** Justify every material synthesis change between the ten per-phase `idiotplanners2/**/IMPLEMENTATION-PLAN.md` files and this **master executable package** under `plans2/`.
+**Purpose:** Justify every material synthesis change between the ten per-phase `plans2/**/IMPLEMENTATION-PLAN.md` files and this **master executable package** under `plans2/`.
 
-**Source resolution (stated in README):** Owner said **idiotplanners1** — that folder **does not exist**. Sole plan source is **`idiotplanners2/`** (Idiots wave 1). Sibling `idiotplanners/` (Idiots2) is **not** authority for plans2.
+**Source resolution (stated in README):** Owner said **idiotplanners1** — that folder **does not exist**. Sole plan source is **`plans2/`** (Idiots wave 1). Sibling `plans1/` (Idiots2) is **not** authority for plans2.
 
-**CODE-REVIEW-REPORT.md:** **Missing** under `idiotplanners2/`. This package plans from **implementation plans + live repo only** (and optional `archive/Idiots` reports when a plan cites Idiots REPORT paths).
+**CODE-REVIEW-REPORT.md:** **Missing** under `plans2/`. This package plans from **implementation plans + live repo only** (and optional `archive/Idiots` reports when a plan cites Idiots REPORT paths).
 
 **Repo snapshot used:** 2026-07-10 · HEAD `cb62c4e…` (re-read at execute) · **`results/` MISSING**.
 
@@ -48,8 +48,8 @@ P10 idiotplanners2 already defines Mode A FAIL-honest vs Mode B PASS vs H4 hybri
 
 | Change | From (plan claim / raw shape) | To (this package) | Justification | Source |
 |--------|-------------------------------|-------------------|---------------|--------|
-| **Source tree** | Owner message “idiotplanners1” | Use **`idiotplanners2/`** only | Folder missing on disk; sibling trees mapped | Owner mission + disk list_dir |
-| **Exclude idiotplanners/** | Could confuse with Idiots2 plans | Explicit non-authority for plans2 | Other agent / plans1 lane; different brainstormer wave | idiotplanners2/README; mission |
+| **Source tree** | Owner message “idiotplanners1” | Use **`plans2/`** only | Folder missing on disk; sibling trees mapped | Owner mission + disk list_dir |
+| **Exclude plans1/** | Could confuse with Idiots2 plans | Explicit non-authority for plans2 | Other agent / plans1 lane; different brainstormer wave | plans2/README; mission |
 | **No code reviews** | Might expect CODE-REVIEW-REPORT per phase | State **absent**; plan from plans + repo | No review files under idiotplanners2 | Disk list_dir |
 | **Brainstormer path** | Plans cite `Idiots/…` | Prefer **`archive/Idiots/…`** if root missing | Root Idiots moved to archive | archive/Idiots present |
 | **Re-prove all gates** | Phase headers DONE/PASS 2026-07-09 | Treat as **stale** until artifacts land | Entire `results/` missing | idiotplanners2 all phases §Repo reality; this session |
@@ -128,7 +128,7 @@ P10 idiotplanners2 already defines Mode A FAIL-honest vs Mode B PASS vs H4 hybri
 
 ## Honesty about what plans2 is not
 
-- Not a replacement for `idiotplanners2` deep TDD steps (those remain the long form).
+- Not a replacement for `plans2` deep TDD steps (those remain the long form).
 - Not a claim that product is buyer-shippable after pack files exist.
 - Not a second monorepo plan authority that overrides owner messages or `AGENTS.md`.
 - Not a license to skip reading the active phase’s IMPLEMENTATION-PLAN when coding.
