@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+﻿import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Furniture draw path needs full Canvas2D; selection tests only care about setSelection.
@@ -22,6 +22,20 @@ const SELECT_TRANSFORM = {
   scale: 0.1,
 } as const;
 
+const FURNITURE_ID = "furn-select-1";
+const WALL_ID = "wall-select-1";
+const DOOR_ID = "door-select-1";
+const WINDOW_ID = "win-select-1";
+const ROOM_ID = "room-select-1";
+const DEFAULT_FOOTPRINT_MM = 600;
+const WALL_LENGTH_MM = 3000;
+const ROOM_SIZE_MM = 5000;
+
+function idFactory(prefix: string) {
+  let i = 0;
+  return () => `${prefix}-${i++}`;
+}
+
 function projectWithFurniture(id: string, position: { x: number; y: number }): Open3dProject {
   const project = createOpen3dProject({
     name: "Select residual",
@@ -44,10 +58,157 @@ function projectWithFurniture(id: string, position: { x: number; y: number }): O
             position,
             rotation: 0,
             scale: { x: 1, y: 1, z: 1 },
-            width: 600,
-            depth: 600,
+            width: DEFAULT_FOOTPRINT_MM,
+            depth: DEFAULT_FOOTPRINT_MM,
           },
         ],
+      },
+    ],
+  };
+}
+
+function projectWithWallOnly(): Open3dProject {
+  const project = createOpen3dProject({
+    name: "Select wall residual",
+    idFactory: idFactory("sw"),
+  });
+  const floor = project.floors[0]!;
+  return {
+    ...project,
+    floors: [
+      {
+        ...floor,
+        walls: [
+          {
+            id: WALL_ID,
+            start: { x: 0, y: 0 },
+            end: { x: WALL_LENGTH_MM, y: 0 },
+            thickness: 100,
+            height: 2700,
+            color: "#ccc",
+          },
+        ],
+        doors: [],
+        windows: [],
+        furniture: [],
+        rooms: [],
+      },
+    ],
+  };
+}
+
+function projectWithWallAndOpenings(): Open3dProject {
+  const project = createOpen3dProject({
+    name: "Select wall residual",
+    idFactory: idFactory("sw"),
+  });
+  const floor = project.floors[0]!;
+  return {
+    ...project,
+    floors: [
+      {
+        ...floor,
+        walls: [
+          {
+            id: WALL_ID,
+            start: { x: 0, y: 0 },
+            end: { x: WALL_LENGTH_MM, y: 0 },
+            thickness: 100,
+            height: 2700,
+            color: "#ccc",
+          },
+        ],
+        doors: [
+          {
+            id: DOOR_ID,
+            wallId: WALL_ID,
+            position: 0.5,
+            width: 900,
+            height: 2100,
+            type: "single",
+            swingDirection: "left",
+            flipSide: false,
+          },
+        ],
+        windows: [
+          {
+            id: WINDOW_ID,
+            wallId: WALL_ID,
+            position: 0.2,
+            width: 1200,
+            height: 1200,
+            sillHeight: 900,
+            type: "standard",
+          },
+        ],
+        furniture: [],
+        rooms: [],
+      },
+    ],
+  };
+}
+
+function projectWithRoomPolygon(): Open3dProject {
+  const project = createOpen3dProject({
+    name: "Select room residual",
+    idFactory: idFactory("sr"),
+  });
+  const floor = project.floors[0]!;
+  const wallA = "wall-a";
+  const wallB = "wall-b";
+  const wallC = "wall-c";
+  const wallD = "wall-d";
+  return {
+    ...project,
+    floors: [
+      {
+        ...floor,
+        walls: [
+          {
+            id: wallA,
+            start: { x: 0, y: 0 },
+            end: { x: ROOM_SIZE_MM, y: 0 },
+            thickness: 100,
+            height: 2700,
+            color: "#ccc",
+          },
+          {
+            id: wallB,
+            start: { x: ROOM_SIZE_MM, y: 0 },
+            end: { x: ROOM_SIZE_MM, y: ROOM_SIZE_MM },
+            thickness: 100,
+            height: 2700,
+            color: "#ccc",
+          },
+          {
+            id: wallC,
+            start: { x: ROOM_SIZE_MM, y: ROOM_SIZE_MM },
+            end: { x: 0, y: ROOM_SIZE_MM },
+            thickness: 100,
+            height: 2700,
+            color: "#ccc",
+          },
+          {
+            id: wallD,
+            start: { x: 0, y: ROOM_SIZE_MM },
+            end: { x: 0, y: 0 },
+            thickness: 100,
+            height: 2700,
+            color: "#ccc",
+          },
+        ],
+        rooms: [
+          {
+            id: ROOM_ID,
+            name: "Select room",
+            walls: [wallA, wallB, wallC, wallD],
+            floorTexture: "none",
+            area: (ROOM_SIZE_MM * ROOM_SIZE_MM) / 1_000_000,
+          },
+        ],
+        furniture: [],
+        doors: [],
+        windows: [],
       },
     ],
   };
@@ -121,9 +282,9 @@ function seedCanvasContext(target: Record<string, unknown>) {
 
 const contextBase: Record<string, unknown> = {};
 seedCanvasContext(contextBase);
-    contextBase.fillRect = vi.fn();
+contextBase.fillRect = vi.fn();
 
-/** Stub any remaining canvas 2d method used by furniture/block draw paths. */
+/** Stub canvas 2d methods used by furniture/block draw paths. */
 const context = new Proxy(contextBase, {
   get(target, prop, receiver) {
     if (typeof prop === "string" && !(prop in target)) {
@@ -142,9 +303,27 @@ const context = new Proxy(contextBase, {
   },
 }) as unknown as CanvasRenderingContext2D;
 
-
 function toolbarButton(name: RegExp) {
   return within(screen.getByRole("toolbar", { name: "Canvas tools" })).getByRole("button", { name });
+}
+
+function pointerTap(
+  canvas: HTMLElement,
+  screenPt: { x: number; y: number },
+  pointerId: number,
+) {
+  fireEvent.pointerDown(canvas, {
+    pointerId,
+    button: 0,
+    clientX: screenPt.x,
+    clientY: screenPt.y,
+  });
+  fireEvent.pointerUp(canvas, {
+    pointerId,
+    button: 0,
+    clientX: screenPt.x,
+    clientY: screenPt.y,
+  });
 }
 
 describe("open3d FeasibilityCanvas", () => {
@@ -314,9 +493,8 @@ describe("open3d FeasibilityCanvas", () => {
   });
 
   it("select tool pointer on furniture sets furniture selection", () => {
-    const furnitureId = "furn-select-1";
     const position = { x: 0, y: 0 };
-    const initialProject = projectWithFurniture(furnitureId, position);
+    const initialProject = projectWithFurniture(FURNITURE_ID, position);
     const { result } = renderHook(() => useWorkspaceCanvas({ initialProject }));
     render(
       <FeasibilityCanvas
@@ -330,22 +508,11 @@ describe("open3d FeasibilityCanvas", () => {
     const screenPt = projectToScreen(position, SELECT_TRANSFORM);
     expect(result.current.selection).toEqual({ type: "none", ids: [] });
 
-    fireEvent.pointerDown(canvas, {
-      pointerId: 50,
-      button: 0,
-      clientX: screenPt.x,
-      clientY: screenPt.y,
-    });
-    fireEvent.pointerUp(canvas, {
-      pointerId: 50,
-      button: 0,
-      clientX: screenPt.x,
-      clientY: screenPt.y,
-    });
+    pointerTap(canvas, screenPt, 50);
 
     expect(result.current.selection).toEqual({
       type: "furniture",
-      ids: [furnitureId],
+      ids: [FURNITURE_ID],
     });
   });
 
@@ -364,7 +531,6 @@ describe("open3d FeasibilityCanvas", () => {
     );
     const canvas = screen.getByLabelText("Floor plan drawing surface");
 
-    // Pre-select furniture
     act(() => {
       result.current.setSelection({ type: "furniture", ids: [furnitureId] });
     });
@@ -373,22 +539,85 @@ describe("open3d FeasibilityCanvas", () => {
       ids: [furnitureId],
     });
 
-    // Empty canvas far from furniture (project ~ (5000, 5000) with default transform)
     const emptyScreen = projectToScreen({ x: 5000, y: 5000 }, SELECT_TRANSFORM);
-    fireEvent.pointerDown(canvas, {
-      pointerId: 51,
-      button: 0,
-      clientX: emptyScreen.x,
-      clientY: emptyScreen.y,
-    });
-    fireEvent.pointerUp(canvas, {
-      pointerId: 51,
-      button: 0,
-      clientX: emptyScreen.x,
-      clientY: emptyScreen.y,
-    });
+    pointerTap(canvas, emptyScreen, 51);
 
     expect(result.current.selection).toEqual({ type: "none", ids: [] });
   });
 
+  it("select tool pointer on wall midpoint sets wall selection by id", () => {
+    const initialProject = projectWithWallOnly();
+    const { result } = renderHook(() => useWorkspaceCanvas({ initialProject }));
+    render(
+      <FeasibilityCanvas
+        variant="embedded"
+        activeTool="select"
+        delegateKeyboard
+        workspaceCanvas={result.current}
+      />,
+    );
+    const canvas = screen.getByLabelText("Floor plan drawing surface");
+    // Midpoint of wall-only fixture (no openings to steal the hit).
+    const wallPick = { x: WALL_LENGTH_MM / 2, y: 0 };
+    const screenPt = projectToScreen(wallPick, SELECT_TRANSFORM);
+    pointerTap(canvas, screenPt, 60);
+    expect(result.current.selection).toEqual({ type: "wall", ids: [WALL_ID] });
+  });
+
+  it("select tool pointer near door position prefers door over wall", () => {
+    const initialProject = projectWithWallAndOpenings();
+    const { result } = renderHook(() => useWorkspaceCanvas({ initialProject }));
+    render(
+      <FeasibilityCanvas
+        variant="embedded"
+        activeTool="select"
+        delegateKeyboard
+        workspaceCanvas={result.current}
+      />,
+    );
+    const canvas = screen.getByLabelText("Floor plan drawing surface");
+    // Door at wall position 0.5 → (1500, 0)
+    const doorWorld = { x: WALL_LENGTH_MM * 0.5, y: 0 };
+    const screenPt = projectToScreen(doorWorld, SELECT_TRANSFORM);
+    pointerTap(canvas, screenPt, 61);
+    expect(result.current.selection).toEqual({ type: "door", ids: [DOOR_ID] });
+  });
+
+  it("select tool pointer near window position prefers window over wall", () => {
+    const initialProject = projectWithWallAndOpenings();
+    const { result } = renderHook(() => useWorkspaceCanvas({ initialProject }));
+    render(
+      <FeasibilityCanvas
+        variant="embedded"
+        activeTool="select"
+        delegateKeyboard
+        workspaceCanvas={result.current}
+      />,
+    );
+    const canvas = screen.getByLabelText("Floor plan drawing surface");
+    // Window at wall position 0.2 → (600, 0)
+    const windowWorld = { x: WALL_LENGTH_MM * 0.2, y: 0 };
+    const screenPt = projectToScreen(windowWorld, SELECT_TRANSFORM);
+    pointerTap(canvas, screenPt, 62);
+    expect(result.current.selection).toEqual({ type: "window", ids: [WINDOW_ID] });
+  });
+
+  it("select tool pointer inside room polygon sets room selection by id", () => {
+    const initialProject = projectWithRoomPolygon();
+    const { result } = renderHook(() => useWorkspaceCanvas({ initialProject }));
+    render(
+      <FeasibilityCanvas
+        variant="embedded"
+        activeTool="select"
+        delegateKeyboard
+        workspaceCanvas={result.current}
+      />,
+    );
+    const canvas = screen.getByLabelText("Floor plan drawing surface");
+    // Interior of 0..2000 square, away from walls so wall pick loses to room path.
+    const interior = { x: ROOM_SIZE_MM / 2, y: ROOM_SIZE_MM / 2 };
+    const screenPt = projectToScreen(interior, SELECT_TRANSFORM);
+    pointerTap(canvas, screenPt, 63);
+    expect(result.current.selection).toEqual({ type: "room", ids: [ROOM_ID] });
+  });
 });
