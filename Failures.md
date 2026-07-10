@@ -57,6 +57,15 @@ Skipped items must be declared. Shell works; gates are runnable.
 
 ## Active failures
 
+### GIT-MIRROR-MAYOITE-404 — mirror backup unavailable
+
+**Status:** Open · observed 2026-07-10
+
+- `git push origin main` succeeded for `ba7cca0f`.
+- `git push mayoite main` failed: `Repository not found` for `https://github.com/mayoite/OandO07072026.git/`.
+- No mirror backup is claimed for this commit.
+- Resolution: authenticate an account with access to `mayoite/OandO07072026`, then push the current `main` tip without force-push.
+
 ### Latest honesty (2026-07-09, hard-path SVG + G8)
 
 **Not open failures** — landings to keep docs/agents honest:
