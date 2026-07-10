@@ -1,24 +1,31 @@
 # Session recap
 
 **Updated:** 2026-07-10  
-**HEAD:** `git rev-parse --short HEAD`  
-**Active phase:** a11y label-in-name (`results/planner/a11y-label-in-name/TASK-LIST.md`)  
-**Recap cadence:** ~**30 min** + land/block
+**Active phase:** **00-rebaseline** (start from CP-00)  
+**Evidence:** `results/planner/world-standard-wave/00-rebaseline/`  
+**Recap cadence:** ~30 min + land/block
 
 ## Done this window
 
-- Owner approvals landed: peer pointers, stop table, temp task list, browser/Failures align, **30 min recap**
-- mayoite recheck: still **404 from agent shell** (owner: repo exists, push ~12h ago → access/cred issue)
-- Phase **opened**: a11y temp task list written
+- Started from **00** per owner
+- Unlock still ACTIVE (Approach A) — no re-ask
+- Folder matrix CP-00…10; **10-handover missing**
+- Fixed layout: deleted `site/test-results`; `check:layout` **OK**
+- Dual remotes functional (switch gh account per remote)
+- a11y phase paused as secondary until 00 next-step choice
 
 ## Red / blocked
 
-- none for git mirror — **mayoite green** after gh login as mayoite (`ea400ae` on origin + mayoite)
+- none hard  
+- CHECKPOINTS.md still says “push only on owner ask” — **stale vs AGENTS** (noted in NOTES)
 
-## Next
+## Next (owner pick)
 
-- A11y phase T2 Lighthouse re-proof (T0–T1 already green)
+1. CP-10 handover pack  
+2. Continue a11y T2 LH  
+3. Full sequential re-proof CP-01+ (days)
 
 ## Do not claim
 
-- A11y PASS without fresh LH path
+- Fresh W1–W8 green on current HEAD without re-run  
+- CP-10 done
