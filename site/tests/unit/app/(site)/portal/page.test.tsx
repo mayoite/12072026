@@ -22,16 +22,19 @@ vi.mock('@/features/planner/portal/PortalPageView', () => ({
     databaseConfigured,
     plans,
     userName,
+    listError,
   }: {
     databaseConfigured: boolean;
     plans: unknown[];
     userName: string | null;
+    listError?: string | null;
   }) => (
     <div
       data-testid="portal-page-view"
       data-db={String(databaseConfigured)}
       data-plan-count={String(plans.length)}
       data-user={userName ?? ''}
+      data-list-error={listError ?? ''}
     />
   ),
 }));
@@ -50,5 +53,20 @@ describe('app/(site)/portal/page.tsx', () => {
 
     expect(screen.getByTestId('portal-page-view')).toHaveAttribute('data-user', 'Test User');
     expect(screen.getByTestId('portal-page-view')).toHaveAttribute('data-db', 'false');
+  });
+
+  it('does not throw when plan list fails; surfaces listError', async () => {
+    vi.mocked(isPlannerDatabaseConfigured).mockReturnValue(true);
+    vi.mocked(listPlannerDocumentsFromStore).mockRejectedValue(
+      new Error('Database list failed: oando_plans'),
+    );
+
+    const page = await PortalPage();
+    render(page);
+
+    const view = screen.getByTestId('portal-page-view');
+    expect(view).toHaveAttribute('data-db', 'true');
+    expect(view).toHaveAttribute('data-plan-count', '0');
+    expect(view).toHaveAttribute('data-list-error', 'Database list failed: oando_plans');
   });
 });

@@ -14,6 +14,20 @@ test('renders empty state when no plans exist', () => {
   expect(screen.getByText('No saved plans yet')).toBeInTheDocument();
 });
 
+test('renders list error without crashing when storage query fails', () => {
+  render(
+    <PortalPageView
+      databaseConfigured={true}
+      plans={[]}
+      userName="Alice"
+      listError="Database list failed: oando_plans"
+    />,
+  );
+  expect(screen.getByTestId('portal-list-error')).toBeInTheDocument();
+  expect(screen.getByText(/Plans could not be loaded/i)).toBeInTheDocument();
+  expect(screen.queryByText('No saved plans yet')).not.toBeInTheDocument();
+});
+
 test('renders list of plans', () => {
   const plans: PlannerSaveSummary[] = [
     {

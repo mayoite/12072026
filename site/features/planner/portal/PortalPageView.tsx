@@ -6,6 +6,8 @@ interface PortalPageViewProps {
   databaseConfigured: boolean;
   plans: PlannerSaveSummary[];
   userName?: string | null;
+  /** Set when storage is configured but list query failed (table missing, network, etc.). */
+  listError?: string | null;
 }
 
 function formatTimestamp(value: string) {
@@ -18,6 +20,7 @@ export default function PortalPageView({
   databaseConfigured,
   plans,
   userName,
+  listError = null,
 }: PortalPageViewProps) {
   return (
     <div className="shell-portal-page mx-auto max-w-6xl px-6 py-10 md:px-8 md:py-12">
@@ -39,11 +42,31 @@ export default function PortalPageView({
         </div>
       </header>
 
+      {listError ? (
+        <section
+          className="shell-portal-panel-soft mt-6 p-6 text-sm text-muted"
+          role="status"
+          data-testid="portal-list-error"
+        >
+          <h2 className="shell-portal-table-header text-base">Plans could not be loaded</h2>
+          <p className="shell-portal-table-meta mt-2">
+            Storage is configured, but the plan list query failed. You can still open the planner; saving
+            may fail until the database is repaired.
+          </p>
+          <p className="shell-portal-table-meta mt-2 font-mono text-xs break-all opacity-80">{listError}</p>
+          <div className="mt-5">
+            <Link href="/planner/canvas/" className="shell-portal-button-primary">
+              Open planner
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
       {!databaseConfigured ? (
         <section className="shell-portal-panel-soft mt-6 p-6 text-sm text-muted">
           Planner storage is not configured yet, so no published portal plans are available in this environment.
         </section>
-      ) : plans.length === 0 ? (
+      ) : !listError && plans.length === 0 ? (
         <section className="shell-portal-panel mt-6 p-6">
           <h2 className="shell-portal-table-header">No saved plans yet</h2>
           <p className="shell-portal-table-meta mt-2">
