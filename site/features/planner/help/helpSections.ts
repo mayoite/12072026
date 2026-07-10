@@ -94,13 +94,15 @@ export const PLANNER_HELP_SECTIONS: HelpSection[] = [
   {
     id: "saving-and-autosave",
     title: "Saving and autosave",
-    summary: "Sessions autosave to your browser; members keep named save slots in their account.",
-    keywords: ["autosave", "save", "restore", "slot", "reload"],
+    summary:
+      "Plans autosave in this browser (local storage). Clearing site data removes them. Account cloud save is not enabled for the open3d planner yet.",
+    keywords: ["autosave", "save", "restore", "reload", "local"],
   },
   {
     id: "guest-vs-member",
     title: "Guest vs member",
-    summary: "Guest explores the canvas; members save, export, and publish.",
+    summary:
+      "Guest explores the canvas with local drafts; members unlock more export/workspace tools. Open3d plan durability is still local browser storage until cloud save ships.",
     keywords: ["guest", "login", "save", "member"],
   },
   {
@@ -134,11 +136,13 @@ export const PLANNER_HELP_FAQ_ITEMS: HelpFaqItem[] = [
   },
   {
     question: "How are plans saved?",
-    answer: "Sessions autosave to your browser; members keep named save slots in their account.",
+    answer:
+      "Sessions autosave to this browser’s local storage. Use Save draft / Save for an immediate local flush. Account cloud save is not enabled for open3d yet — export JSON if you need a portable backup.",
   },
   {
     question: "What is guest mode for?",
-    answer: "Guest explores the canvas; members save, export, and publish.",
+    answer:
+      "Guest explores the canvas with local drafts; members unlock more export/workspace tools. Open3d plan durability is still local browser storage until cloud save ships.",
   },
   {
     question: "Can I export a plan as a PDF?",

@@ -1,0 +1,107 @@
+﻿=== P06 W6 help save honesty — copy grep (05-copy-grep.txt) ===
+Date: 2026-07-10T17:06:07.3105973+05:30
+Checkout: D:\OandO07072026
+
+--- Forbidden phrase: named save slots (helpSections.ts) ---
+(no matches — PASS: phrase absent from helpSections.ts)
+
+--- Forbidden phrase: named save slots in their account (site/features/planner/help) ---
+(no matches — PASS)
+
+--- Broader audit: Saved|cloud|sync|account|autosave|named save slots in help + open3d editor/persistence ---
+.\features\planner\help\helpSections.ts:95:id: "saving-and-autosave",
+.\features\planner\help\helpSections.ts:96:title: "Saving and autosave",
+.\features\planner\help\helpSections.ts:98:"Plans autosave in this browser (local storage). Clearing site data removes them. Account cloud save is not enabled for the open3d planner yet.",
+.\features\planner\help\helpSections.ts:99:keywords: ["autosave", "save", "restore", "reload", "local"],
+.\features\planner\help\helpSections.ts:105:"Guest explores the canvas with local drafts; members unlock more export/workspace tools. Open3d plan durability is still local browser storage until cloud save ships.",
+.\features\planner\help\helpSections.ts:138:question: "How are plans saved?",
+.\features\planner\help\helpSections.ts:140:"Sessions autosave to this browser’s local storage. Use Save draft / Save for an immediate local flush. Account cloud save is not enabled for open3d yet — export JSON if you need a portable backup.",
+.\features\planner\help\helpSections.ts:145:"Guest explores the canvas with local drafts; members unlock more export/workspace tools. Open3d plan durability is still local browser storage until cloud save ships.",
+.\features\planner\open3d\editor\InventoryPanel.tsx:665:decoding="async"
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:44:import { useOpen3dWorkspaceAutosave } from "../persistence/useOpen3dWorkspaceAutosave";
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:92:formatAutosaveStatus,
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:133:// Immediate hydrated: avoids blocking render/restore waterfall; first paint uses default project, restore applies async if present.
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:140:const autosave = useOpen3dWorkspaceAutosave(
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:147:const restoreSnapshotRef = useRef(autosave.restoreSnapshot);
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:149:restoreSnapshotRef.current = autosave.restoreSnapshot;
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:155:void (async () => {
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:505:void (async () => {
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:605:void autosave.flushPersist();
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:607:}, [autosave, guestMode]);
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:827:isModified={autosave.isModified}
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:828:isSynced={autosave.isSynced}
+.\features\planner\open3d\editor\OOPlannerWorkspace.tsx:920:{formatAutosaveStatus(autosave.status, guestMode)}
+.\features\planner\open3d\editor\TopBar.tsx:14:isSynced?: boolean;
+.\features\planner\open3d\editor\TopBar.tsx:42:isSynced = false,
+.\features\planner\open3d\editor\TopBar.tsx:75:{isModified && <span className={styles.brandSub}>Unsaved changes</span>}
+.\features\planner\open3d\editor\TopBar.tsx:224:data-synced={isSynced && !isModified}
+.\features\planner\open3d\editor\TopBar.tsx:230:) : isSynced ? (
+.\features\planner\open3d\editor\TopBar.tsx:232:<span aria-hidden="true">✓</span> Saved locally
+.\features\planner\open3d\editor\useDockingSystem.ts:178:// eslint-disable-next-line react-hooks/set-state-in-effect -- conditional set from localStorage restore on mount; reason: one-time hydration of persisted layout; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: use useSyncExternalStore or init state from storage when docking system revised
+.\features\planner\open3d\editor\useDockingSystem.ts:244:const maxY = window.innerHeight - 120; // Account for topbar
+.\features\planner\open3d\editor\useWorkspaceCanvas.ts:50:/** Replace document and reset history (restore/autosave load) */
+.\features\planner\open3d\editor\WorkspaceShell.tsx:25:/** Whether project has unsaved changes */
+.\features\planner\open3d\editor\WorkspaceShell.tsx:27:/** Whether latest snapshot is persisted (local IDB until cloud is wired) */
+.\features\planner\open3d\editor\WorkspaceShell.tsx:28:isSynced?: boolean;
+.\features\planner\open3d\editor\WorkspaceShell.tsx:78:isSynced = false,
+.\features\planner\open3d\editor\WorkspaceShell.tsx:265:isSynced={isSynced}
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:5:import type { Open3dSaveStatus } from "../persistence/useOpen3dWorkspaceAutosave";
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:31:export type Open3dPersistStorage = "local" | "cloud";
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:36:lastSavedAt: string | null;
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:37:cloudEnabled: boolean;
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:43:* When cloudEnabled is false, storage is forced to local for labeling.
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:48:input.cloudEnabled && input.storage === "cloud" ? "cloud" : "local";
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:50:if (storage === "cloud") {
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:53:return "Saving to account…";
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:54:case "saved":
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:55:return "Saved to account";
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:57:return "Account save failed";
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:58:case "unsaved":
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:59:return guestMode ? "Unsaved draft" : "Unsaved changes";
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:69:case "saved":
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:70:return guestMode ? "Draft saved locally" : "Saved locally";
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:71:case "unsaved":
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:72:return guestMode ? "Unsaved draft" : "Unsaved changes";
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:82:export function formatAutosaveStatus(
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:89:lastSavedAt: null,
+.\features\planner\open3d\editor\workspaceStatusLabels.ts:90:cloudEnabled: false,
+.\features\planner\open3d\persistence\guestPromotion.ts:16:* Promotes the current in-memory guest project to a member cloud save.
+.\features\planner\open3d\persistence\guestPromotion.ts:22:export async function promoteGuestSession(
+.\features\planner\open3d\persistence\memberPlanRepository.ts:2:* Member Plan Repository — fetch-based cloud persistence for authenticated plan operations.
+.\features\planner\open3d\persistence\memberPlanRepository.ts:5:* Auth token is supplied via an async accessor so the caller controls token lifecycle.
+.\features\planner\open3d\persistence\memberPlanRepository.ts:8:* Error codes align with the 7 categories from plannerCloudApi.ts.
+.\features\planner\open3d\persistence\memberPlanRepository.ts:18:/** Async token accessor — returns current auth token or null */
+.\features\planner\open3d\persistence\memberPlanRepository.ts:73:* @param tokenFn - async function returning the current auth token or null
+.\features\planner\open3d\persistence\memberPlanRepository.ts:89:async function buildHeaders(tokenFn: TokenFn): Promise<Record<string, string>> {
+.\features\planner\open3d\persistence\memberPlanRepository.ts:104:async load(saveId: string): Promise<LoadResult> {
+.\features\planner\open3d\persistence\memberPlanRepository.ts:126:async save(document: StagingPlannerDocument, _saveId?: string): Promise<SaveResult> {
+.\features\planner\open3d\persistence\memberPlanRepository.ts:141:const saved = body.document;
+.\features\planner\open3d\persistence\memberPlanRepository.ts:142:if (!isStagingPlannerDocument(saved)) {
+.\features\planner\open3d\persistence\memberPlanRepository.ts:145:return { status: "ok", document: saved };
+.\features\planner\open3d\persistence\memberPlanRepository.ts:151:async list(): Promise<ListResult> {
+.\features\planner\open3d\persistence\memberPlanRepository.ts:176:async delete(saveId: string): Promise<DeleteResult> {
+.\features\planner\open3d\persistence\persistenceErrors.ts:3:* Maps from plannerCloudApi.ts error codes:
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:6:createAutoSaver,
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:15:export type Open3dSaveStatus = "idle" | "unsaved" | "saving" | "saved" | "error";
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:17:export function useOpen3dWorkspaceAutosave(
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:27:const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:28:const saverRef = useRef<ReturnType<typeof createAutoSaver> | null>(null);
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:30:const autosaveGenerationRef = useRef(0);
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:45:const generation = ++autosaveGenerationRef.current;
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:46:saverRef.current = createAutoSaver(projectId, {
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:47:onSaved: () => {
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:48:if (!mountedRef.current || autosaveGenerationRef.current !== generation) return;
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:49:setStatus("saved");
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:50:setLastSavedAt(new Date().toISOString());
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:53:if (!mountedRef.current || autosaveGenerationRef.current !== generation) return;
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:68:autosaveGenerationRef.current += 1;
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:85:setStatus("unsaved");
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:89:const restoreSnapshot = useCallback(async (): Promise<Open3dProject | null> => {
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:104:const flushPersist = useCallback(async () => {
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:115:lastSavedAt,
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:120:isSynced: status === "saved",
+.\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts:121:isModified: status === "unsaved" || status === "saving",
+
+--- Verdict ---
+PASS: helpSections.ts has zero 'named save slots' claims.
+Allowed: 'Saved locally', cloudEnabled identifiers, comments until cloud is wired.
