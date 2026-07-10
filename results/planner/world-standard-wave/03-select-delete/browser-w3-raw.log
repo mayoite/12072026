@@ -1,0 +1,29 @@
+# P03 / W3 browser — open3d-w3-select-delete.spec.ts
+# Date (UTC): 2026-07-10T09:11:00Z
+# HEAD: 94e4da798d6a252a9e575e71ac4df9340b522337
+# Fabric: NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)
+# Server: existing pnpm run dev on http://localhost:3000 (reuseExistingServer)
+# Command:
+#   cd D:\OandO07072026\site
+#   pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list
+
+Running 1 test using 1 worker
+
+  ok 1 [chromium] tests/e2e/open3d-w3-select-delete.spec.ts:40:7 › W3 select / delete / undo (browser) › place furniture, select, Delete removes, Ctrl+Z restores (14.0s)
+
+  1 passed (23.6s)
+
+EXIT_CODE=0
+
+# Screenshots deposited (same run):
+#   01-placed.png
+#   02-selected.png
+#   03-deleted.png
+#   04-undone.png
+
+# Pre-flight note:
+# First attempt used webServer: pnpm run build && pnpm run start.
+# That failed: Turbopack "Can't resolve 'react-aria-components'" because the
+# package install was broken (missing dist/exports/index.cjs). Fixed with
+# pnpm --filter oando-site install react-aria-components@1.19.0 --force.
+# W3 re-run against dev server after resolve OK — exit 0.
