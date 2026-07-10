@@ -15,7 +15,7 @@
 | **Peer handbooks** | `Agents/Agents-*.md` | Plan · testing · browser · failure · docs · architecture |
 | **Ops backup (infra)** | `OPERATIONS_RUNBOOK.md` + `START.md` | DB/R2/Vercel — not a substitute for git mirror |
 | **Scoreboards** | `ayushdocs/19-*`, `00-PENDING`, `results/planner/elon-standard/OWNER-BOARD.md` | Intent + claims — **re-check** |
-| **Live plan** | `Plans/trustdata/` | Kill order — **provisional** |
+| **Live plan** | `Plans/INDEX.md` · `Plans/phases/` | Kill order — **provisional** |
 
 **Conflict:**
 

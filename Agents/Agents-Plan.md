@@ -3,7 +3,7 @@
 ## 1. Authority
 - **Constitution:** `../AGENTS.md` wins on every conflict.
 - **Highest bar (head):** `Agents-ELON-STANDARD.md` — phase grain, seats, honesty, git backup; raise to it, never lower.
-- **Also read:** `../Readme.md`, live plan via `../Plans/README.md` → **`Plans/trustdata/`**.
+- **Also read:** `../Readme.md`, live plan via `../Plans/README.md` → **`Plans/INDEX.md`** · `Plans/phases/`.
 - **Scoreboard / why:** `../ayushdocs/19-GOALS-SLICES.md`, `../ayushdocs/18-PRODUCT-CONTEXT.md`.
 
 ## 2. Discovery
@@ -15,7 +15,7 @@
 - **Scope:** Smallest change that meets a **global quality bar**. Prefer quality over speed.
 - **Format:** Exact canonical casing. Relative links only.
 - **Content:** Exact files to modify. No implementation code in plans unless architectural.
-- **Live plan only:** `Plans/trustdata/` (INDEX → phase → CHECKPOINTS → evidence). Archived plans under `archive/Plans/` are history, not authority.
+- **Live plan only:** `Plans/` (`INDEX.md` → `phases/P0X-*` → `Research/RESULTS-MAP` → evidence). Archived plans under `archive/Plans/` are history, not authority.
 - **Git & workspace:** Follow **User Standing Instructions** in `../AGENTS.md`:
   - Checkout **`D:\OandO07072026` only** — never worktrees.
   - **Commit as you go** after each landable slice.

@@ -1,43 +1,45 @@
 # Plans
 
-**Live program (only):** [`trustdata/`](./trustdata/)  
-**Constitution:** [`../AGENTS.md`](../AGENTS.md)  
-**Scoreboard:** [`../ayushdocs/19-GOALS-SLICES.md`](../ayushdocs/19-GOALS-SLICES.md) · **Why:** [`../ayushdocs/18-PRODUCT-CONTEXT.md`](../ayushdocs/18-PRODUCT-CONTEXT.md)
+**Detailed catalog:** [`INDEX.md`](./INDEX.md) — every file on disk, role, kill order, W gates.  
+**Constitution:** [`../AGENTS.md`](../AGENTS.md)
 
-History lives under **`archive/Plans/`** — not authority.
-
----
-
-## Tree (on disk)
+Live tree only (owner cleanup 2026-07-10):
 
 ```
 Plans/
-├── README.md                 ← you are here (entry only)
-└── trustdata/                ← ONLY live plan
-    ├── README.md · INDEX.md · 00-START.md
-    ├── INDEX-00-suggestions.md · STRUCTURE-*.md
-    ├── RESULTS-MAP · RESEARCH-MAP · FOLDER-LOCK · MAPS-suggestions
-    ├── phases/               ← one folder per CP + EXPERT-PASS.md
-    │   ├── P01-product-truth/ … P10-evidence-handover/
-    │   └── (execute · suggestions · appendix · expert essays)
-    ├── checkpoints/          ← CHECKPOINTS + GOVERNANCE-suggestions
-    └── checklists/           ← AGENT-RULES · MASTER-CHECKLIST
+├── INDEX.md      ← detailed index (open this for full map)
+├── README.md     ← you are here
+├── phases/       ← P01–P10 product how
+└── Research/     ← RESULTS-MAP · RESEARCH-MAP · structure notes
 ```
 
 ---
 
-## Read order (2 minutes)
+## Read order
 
 | # | Open | Role |
 |---|------|------|
-| 1 | [`trustdata/README.md`](./trustdata/README.md) | Map |
-| 2 | [`trustdata/INDEX.md`](./trustdata/INDEX.md) | Kill order + phases |
-| 3 | [`trustdata/00-START.md`](./trustdata/00-START.md) | Unlock / Approach A |
-| 4 | `trustdata/phases/P0X-<slug>/` | How for one CP (folder) |
-| 5 | [`trustdata/checkpoints/CHECKPOINTS.md`](./trustdata/checkpoints/CHECKPOINTS.md) | Pass / stop |
-| 6 | `results/planner/world-standard-wave/` | Proof (data wins) |
+| 1 | [INDEX.md](./INDEX.md) | Full file catalog |
+| 2 | [phases/README.md](./phases/README.md) | Phase folders |
+| 3 | [phases/EXPERT-PASS.md](./phases/EXPERT-PASS.md) | Expert must-fix |
+| 4 | Active `phases/P0X-*/` execute card | How for one CP |
+| 5 | [Research/RESULTS-MAP.md](./Research/RESULTS-MAP.md) | Evidence folder names |
+| 6 | `results/planner/world-standard-wave/` | Proof |
 
-Agent rules: **`AGENTS.md`** (not restated here). Short spawn: [`trustdata/checklists/AGENT-RULES.md`](./trustdata/checklists/AGENT-RULES.md).
+---
+
+## Kill order (Approach A)
+
+```
+P01 truth → P02 engine
+  → P03 W3 (unit+browser)
+  → P07 W1–W2 journey
+  → P06 W5–W6 save
+  → P04 orbit · P05 symbols · P08 mesh · P09 shortcuts
+  → P10 handover
+```
+
+One owner task at a time. Parallel only inside that task (`AGENTS.md`).
 
 ---
 
@@ -45,18 +47,9 @@ Agent rules: **`AGENTS.md`** (not restated here). Short spawn: [`trustdata/check
 
 1. Owner message  
 2. `AGENTS.md`  
-3. `Plans/trustdata/` (INDEX → phase → CHECKPOINTS)  
-4. `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md`  
-5. `ayushdocs/` (18 · 19 · …)
+3. This folder (`INDEX` → phase execute card → RESULTS-MAP)  
+4. World-standard design spec  
+5. `ayushdocs/` honesty  
 
----
-
-## Archive map
-
-| Path | What |
-|------|------|
-| `archive/Plans/07072026/` | Old `01-execution` / `02-recovery` from this monorepo |
-| `archive/Plans/00-governance/` · `01-execution/` · … | Older plan packs |
-| `archive/Plans/README.md` | Archive index |
-
-Do **not** open archive packs as live execution authority.
+**Archive** under `archive/Plans/` is history, not authority.  
+**Evidence** never lives under `Plans/` — only under `results/`.
