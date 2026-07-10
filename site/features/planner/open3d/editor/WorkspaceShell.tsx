@@ -6,6 +6,8 @@ import { PanelContainer } from "./PanelContainer";
 import { TopBar } from "./TopBar";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";
 import type { Open3dDisplayUnit } from "../model/types";
+import type { Open3dSaveStatus } from "../persistence/useOpen3dWorkspaceAutosave";
+import type { Open3dPersistStorage } from "./workspaceStatusLabels";
 import type { WorkspacePlanMetrics } from "./workspacePlanMetrics";
 import styles from "./workspace.module.css";
 
@@ -24,8 +26,24 @@ export interface WorkspaceShellProps {
   activeFloorId?: string;
   /** Whether project has unsaved changes */
   isModified?: boolean;
-  /** Whether latest snapshot is persisted (local IDB until cloud is wired) */
+  /** Whether latest snapshot is persisted to local IDB (not cloud unless cloudEnabled). */
+  isLocalSaved?: boolean;
+  /**
+   * @deprecated use isLocalSaved — whether latest snapshot is persisted
+   * (local IDB until cloud is wired)
+   */
   isSynced?: boolean;
+  /**
+   * Autosave state machine — pass-through to TopBar only.
+   * Label copy is owned by the caller via saveStatusLabel (no dual table here).
+   */
+  saveStatus?: Open3dSaveStatus;
+  /** Pre-formatted honest status label (from open3dSaveStatusLabel / caller). */
+  saveStatusLabel?: string;
+  /** Where the last successful persist landed — pass-through for TopBar data attrs. */
+  storage?: Open3dPersistStorage;
+  /** When false, UI must not imply account/cloud save. Pass-through only. */
+  cloudEnabled?: boolean;
   /** Left panel content */
   leftPanel?: React.ReactNode;
   /** Right panel content */
@@ -75,7 +93,12 @@ export function WorkspaceShell({
   floors = [],
   activeFloorId,
   isModified = false,
+  isLocalSaved,
   isSynced = false,
+  saveStatus,
+  saveStatusLabel,
+  storage,
+  cloudEnabled,
   leftPanel,
   rightPanel,
   bottomPanel,
@@ -247,6 +270,19 @@ export function WorkspaceShell({
   // Undefined until mount → attribute absent on SSR + hydrate; real tier after measure.
   const dataViewport = viewportAttrReady ? viewportTier : undefined;
 
+  // Prefer isLocalSaved; fall back to legacy isSynced. No label table — labels come from caller.
+  const resolvedLocalSaved = isLocalSaved ?? isSynced;
+
+  // Save-status pass-through for TopBar (A3+). Spread keeps shell compiling if TopBar lags.
+  const topBarSaveStatusProps = {
+    isLocalSaved: resolvedLocalSaved,
+    isSynced: resolvedLocalSaved,
+    ...(saveStatus !== undefined ? { saveStatus } : {}),
+    ...(saveStatusLabel !== undefined ? { saveStatusLabel } : {}),
+    ...(storage !== undefined ? { storage } : {}),
+    ...(cloudEnabled !== undefined ? { cloudEnabled } : {}),
+  };
+
   return (
     <div
       className={styles.shell}
@@ -262,7 +298,6 @@ export function WorkspaceShell({
         accessContext={accessContext}
         projectName={projectName}
         isModified={isModified}
-        isSynced={isSynced}
         viewMode={viewMode}
         floors={floors}
         activeFloorId={activeFloorId}
@@ -284,6 +319,7 @@ export function WorkspaceShell({
         onToggleCanvasMaximized={handleCanvasMaximizedToggle}
         density={density}
         onToggleDensity={onToggleDensity}
+        {...topBarSaveStatusProps}
       />
 
       {/* Main workspace with panels */}
