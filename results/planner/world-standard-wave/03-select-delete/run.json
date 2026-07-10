@@ -6,32 +6,39 @@
   "checkout": "D:\\OandO07072026",
   "worktrees": false,
   "evidenceRoot": "results/planner/world-standard-wave/03-select-delete",
-  "HEAD": "94e4da798d6a252a9e575e71ac4df9340b522337",
+  "HEAD": "PENDING_COMMIT",
   "date": "2026-07-10",
-  "startedAt": "2026-07-10T09:09:00.000Z",
-  "endedAt": "2026-07-10T09:11:30.000Z",
+  "startedAt": "2026-07-10T12:45:00.000Z",
+  "endedAt": "2026-07-10T12:46:00.000Z",
   "unit": {
-    "exitCode": 0,
+    "exitCode": null,
     "log": "unit-w3-pack.log",
-    "note": "Prior residual pack: 4 files / 62 tests (Mode A). Not re-run this seat."
+    "note": "Seat A owns unit re-prove. Seat B browser only — units not re-run."
   },
   "browser": {
     "exitCode": 0,
     "tool": "playwright",
     "log": "browser-w3-raw.log",
     "spec": "tests/e2e/open3d-w3-select-delete.spec.ts",
-    "command": "pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list",
+    "command": ".\\node_modules\\.bin\\playwright.cmd test -c config/build/playwright.config.ts tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list",
     "baseURL": "http://localhost:3000",
-    "server": "reuseExistingServer: pnpm run dev (webpack)",
+    "server": "reuseExistingServer: existing :3000 (pnpm run dev / turbo)",
     "fabricFurnitureEnv": "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)",
-    "durationSec": 23.6,
+    "durationSec": 3.0,
+    "testBodySec": 2.0,
     "tests": "1/1 passed",
+    "firstAttempt": {
+      "exitCode": 1,
+      "error": "Timeout waiting for Place 4 seats — systems configurator collapsed (defaultOpen=false)",
+      "fix": "placeSeatsFromConfigurator expands Systems configurator when Place N not visible"
+    },
     "pngs": [
       "01-placed.png",
       "02-selected.png",
       "03-deleted.png",
       "04-undone.png"
-    ]
+    ],
+    "pngProof": "4 furniture → 3 after Delete → 4 after Ctrl+Z"
   },
   "status": "PASS"
 }

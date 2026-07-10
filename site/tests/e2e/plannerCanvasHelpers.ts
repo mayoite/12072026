@@ -291,6 +291,7 @@ export async function placeCatalogOnCanvas(
 /**
  * Proven systems-v0 place path (W4 / batch-place): immediate furniture delta,
  * no catalog + canvas race.
+ * Inventory collapses configurator by default (catalog-first) — expand if needed.
  */
 export async function placeSeatsFromConfigurator(
   page: Page,
@@ -300,9 +301,18 @@ export async function placeSeatsFromConfigurator(
     name: "Workstation systems configurator",
   });
   await expect(configurator).toBeVisible({ timeout: 15_000 });
-  await configurator
-    .getByRole("button", { name: `Place ${seats} seats` })
-    .click();
+
+  const placeBtn = configurator.getByRole("button", {
+    name: `Place ${seats} seats`,
+  });
+  // defaultOpen={false} on InventoryPanel — Place N seats only after expand.
+  if (!(await placeBtn.isVisible().catch(() => false))) {
+    await configurator
+      .getByRole("button", { name: /Systems configurator/i })
+      .click();
+    await expect(placeBtn).toBeVisible({ timeout: 10_000 });
+  }
+  await placeBtn.click();
 }
 
 /** Click at absolute page coordinates (down + micro-move + up). */

@@ -2,9 +2,9 @@
 
 **Date:** 2026-07-10  
 **Checkout:** `D:\OandO07072026` (main only; no worktrees)  
-**HEAD:** `94e4da798d6a252a9e575e71ac4df9340b522337`  
+**HEAD:** *(set to tip SHA after land commit)*  
 **Evidence:** `results/planner/world-standard-wave/03-select-delete/`  
-**Seat:** Browser W3 hard gate only  
+**Seat:** Browser W3 hard gate only (seat B re-prove)  
 
 ---
 
@@ -14,13 +14,13 @@
 |-------|--------|
 | Fabric furniture flag OFF (`NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE` ≠ `"1"`) | **PASS** — unset in shell for run |
 | Playwright W3 spec green | **PASS** — exit code **0** |
-| Flow: place → select → Delete → Ctrl+Z | **PASS** (14.0s test body; 23.6s total) |
-| PNGs 01–04 present | **PASS** — all four files on disk |
-| `browser-w3-raw.log` | **PASS** — deposited |
+| Flow: place → select → Delete → Ctrl+Z | **PASS** (2.0s test body; 3.0s total; warm dev server) |
+| PNGs 01–04 present + counts | **PASS** — 4 furniture → 3 after Delete → 4 after Ctrl+Z |
+| `browser-w3-raw.log` | **PASS** — deposited (this re-prove) |
 | `run.json` status | **PASS** |
-| Product architecture rewrite | **None** this seat — e2e already green; no select/delete product thrash |
+| Product select/delete thrash | **None** — e2e helper expand only |
 
-**Unit alone ≠ W3.** Units were already green (62 residual pack). This seat closes the **browser** hard gate only.
+**Unit alone ≠ W3.** This seat closes the **browser** hard gate only.
 
 ---
 
@@ -28,37 +28,44 @@
 
 ```text
 cd D:\OandO07072026\site
-pnpm exec playwright test -c config/build/playwright.config.ts \
+# pnpm exec playwright failed (ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL) — use local bin:
+.\node_modules\.bin\playwright.cmd test -c config/build/playwright.config.ts \
   tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list
 ```
 
 - **Spec:** `site/tests/e2e/open3d-w3-select-delete.spec.ts`
 - **Path under test:** guest planner → `placeSeatsFromConfigurator(4)` → Select tool + canvas click → `Delete` → furniture count down → `Control+z` → count up
-- **Server:** `pnpm run dev` (webpack) on `http://localhost:3000`, reused by Playwright (`reuseExistingServer`)
+- **Server:** existing `http://localhost:3000` (reuseExistingServer)
 - **Exit code:** `0`
-- **Reporter summary:** `1 passed (23.6s)`
+- **Reporter summary:** `1 passed (3.0s)`
 
 ### Screenshots
 
-| File | Role |
-|------|------|
-| `01-placed.png` | After systems configurator place (4 seats) |
-| `02-selected.png` | After Select tool + canvas pick (no "No Selection") |
-| `03-deleted.png` | After Delete (furniture count reduced) |
-| `04-undone.png` | After Ctrl+Z (furniture count restored) |
+| File | Role | Status bar proof |
+|------|------|------------------|
+| `01-placed.png` | After systems configurator place (4 seats) | 4 furniture |
+| `02-selected.png` | After Select tool + canvas pick | selection active |
+| `03-deleted.png` | After Delete | 3 furniture |
+| `04-undone.png` | After Ctrl+Z | 4 furniture restored |
+
+---
+
+## Root cause on first re-prove (RED → green)
+
+1. **First run FAIL** (not select/delete product):
+   - Timeout waiting for `Place 4 seats` inside region `Workstation systems configurator`.
+   - Snapshot: configurator collapsed — only `Systems configurator ▸` header (`aria-expanded` path).
+   - Product: `InventoryPanel` passes `defaultOpen={false}` (catalog-first, commit `b0720f94`).
+2. **Minimal fix (e2e helper only):** `placeSeatsFromConfigurator` in `site/tests/e2e/plannerCanvasHelpers.ts` expands the header when Place N is not visible, then clicks.
+3. **Re-run → green.** No select/delete product code change.
 
 ---
 
 ## Environment / pre-flight
 
-1. **Fabric OFF** — `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE` removed from env before run (required for Feasibility furniture pick, not Fabric rect layer).
-2. **First production-build attempt RED (infra, not product):** Playwright `webServer` ran `pnpm run build && pnpm run start`. Build failed with Turbopack `Module not found: Can't resolve 'react-aria-components'` because the installed package was broken (missing `dist/exports/index.cjs`; stale hardlinks). Fixed with:
-   ```text
-   pnpm --filter oando-site install react-aria-components@1.19.0 --force
-   ```
-   Node `require.resolve('react-aria-components')` then OK. **Not a select/delete product bug.**
-3. Re-ran W3 against **dev server** after resolve fix → **green**.
-4. **No e2e harden required** — existing spec passed without edits. Optional future hardening (`selectPlannerTool` instead of raw Select button) not applied (green; no flaky failure observed).
+1. **Fabric OFF** — `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE` unset.
+2. **localhost:3000** already up (HTTP 200); did not start a second dev server.
+3. Chrome-devtools manual: **not needed** — Playwright + PNGs sufficient.
 
 ---
 
@@ -66,9 +73,9 @@ pnpm exec playwright test -c config/build/playwright.config.ts \
 
 | Item | Severity | Note |
 |------|----------|------|
-| Proof server = **dev**, not standalone prod build | Low for W3 behavior | Select/delete is client workspace path; Fabric flag OFF proven. Full `next build` was blocked only by broken dep install, then fixed — not re-proved end-to-end under `pnpm start` this seat. |
-| Lockfile / node_modules reinstall | Ops | Force reinstall of `react-aria-components` may touch local install state; package was already declared at `1.19.0` in `package.json`. |
-| Chrome-devtools manual | N/A | Not used — Playwright green; no blocker snapshot needed. |
+| Proof server = **dev**, not `pnpm start` prod | Low for W3 | Client workspace path; fabric OFF proven. |
+| Other e2e specs that click Place N without expand | Medium | `open3d-systems-v0-batch-place`, W4 orbit, etc. may still RED until they use the helper or expand. Out of seat B scope unless head asks. |
+| Fast 2.0s body | N/A | Warm turbo/dev; PNG counts still prove place/delete/undo. |
 
 ---
 
@@ -82,11 +89,12 @@ pnpm exec playwright test -c config/build/playwright.config.ts \
 | Delete without selection | Delete only after selection assertion |
 | Undo without prior delete | Count after delete, then expect greater after undo |
 | Journey folder substituted | Evidence only under `03-select-delete/` |
+| Collapsed configurator false-green | First run failed honestly; expand fix required |
 
 ---
 
 ## Status for head
 
-- **DONE** for browser W3 hard gate evidence.
-- Commit message target: `test(planner): P03 W3 browser evidence for select-delete`
-- Product select/delete Mode A: already landed; **no product code change this seat**.
+- **DONE** for browser W3 hard gate re-prove (seat B).
+- Helper fix lands with evidence.
+- Product select/delete Mode A: **no product code change** this seat.
