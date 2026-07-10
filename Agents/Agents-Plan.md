@@ -2,6 +2,7 @@
 
 ## 1. Authority
 - **Constitution:** `../AGENTS.md` wins on every conflict.
+- **Highest bar:** `Agents-elon-standard.md` — skill order, seats, honesty; raise to it, never lower.
 - **Also read:** `../Readme.md`, live plan via `../Plans/README.md` → **`Plans/trustdata/`**.
 - **Scoreboard / why:** `../ayushdocs/19-GOALS-SLICES.md`, `../ayushdocs/18-PRODUCT-CONTEXT.md`.
 

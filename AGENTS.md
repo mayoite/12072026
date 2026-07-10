@@ -7,12 +7,18 @@
 - **No prompt theater:** Short rules + real work. Do not inflate AGENTS or agent briefs into 400-line “prompt engineering.”
 
 ## 2. Routing (Mandatory Handbooks)
+
+**All agent process handbooks live under `Agents/`.** Read the bar handbook before routine work.
+
+- **Elon standard (highest bar):** `Agents/Agents-elon-standard.md` — skill order, seats, honesty bar, recap. **Max quality benchmark; raise to this, never lower it.**
 - **Plan:** `Agents/Agents-Plan.md`
 - **Failures:** `Agents/Agents-failure.md`
 - **Testing:** `Agents/Agents-testing.md` & `testing-handbook.md`
 - **Browser:** `Agents/Agents-browser.md`
 - **Docs:** `Agents/Agents-docs.md`
 - **Architecture:** `Agents/Agents-architecture.md`
+
+**Owner thin pointer (not authority):** `ayushdocs/20-ELON-STANDARD.md` → `Agents/Agents-elon-standard.md`
 
 ## 3. Permission & Scope
 - **Goals + intent:** **You and the agent set goals** together. **Owner owns intent.** If the **goal changes**, stop and align. Otherwise agent has **full freedom**.
@@ -57,8 +63,9 @@ If a tool defaults output into `site/`, **redirect it to root `results/`** or fi
 - **Real tests, not fake coverage.** Prefer **one real test** that asserts the behavior you changed — even if coverage moves only ~**1%** — over a pile of hollow tests for a number. **Purpose over percentage.** Zero tests is not allowed; **fake tests are not allowed.**
 - **Why parallel agents (owner-explicit):** Long single threads **fill the context window and you lose track**. Parallel agents = **fresh context** on sub-slices of the **same** task. Also in `ayushdocs/19-GOALS-SLICES.md` (“Subagents with /using-superpowers keep context fresh”). This is **not** multi-product thrash.
 - **Subagents:** Parallel **only inside that one task** (default ≤8; hard max 10). Write to disk so results survive. Briefs short; point at MDs.
-- **Bar:** Global product standard only; **quality over speed**. Owner present without micromanage or prompt-engineering — agent takes the call once intent is clear.
-- **Assign with superpowers:** Every subagent brief **starts with** `/using-superpowers` (+ fit skills). That is the kill for delegated work — not a hand-written mega-prompt.
+- **Bar:** **Elon standard** — `Agents/Agents-elon-standard.md` is the **highest** process/quality benchmark. Global product standard; **quality over speed**. Owner present without micromanage or prompt-engineering — agent takes the call once intent is clear.
+- **Pipeline / seats:** Follow ordered pipeline in `Agents/Agents-elon-standard.md` (superpowers → goal → scout → plan → SDD 2–4 + TDD → review → verify → check-work → finish → recap).
+- **Assign with superpowers:** Every subagent brief **starts with** `/using-superpowers` (+ fit skills from Elon roster). That is the kill for delegated work — not a hand-written mega-prompt.
 - Skills do not override **User Wins** or Git & Workspace rules above.
 
 ### Packages, assets & licenses (hard — no exceptions)
@@ -78,8 +85,10 @@ If a tool defaults output into `site/`, **redirect it to root `results/`** or fi
 | Licenses / paid cleared | `ayushdocs/17-LICENSES-CLEARED.md` |
 | Why this product (business) | `ayushdocs/18-PRODUCT-CONTEXT.md` |
 | Goals / near slices | `ayushdocs/19-GOALS-SLICES.md` (scoreboard; plan = how) |
-| Elon skill order / seats | `ayushdocs/20-ELON-STANDARD.md` · rolling `ayushdocs/SESSION-RECAP.md` |
+| **Elon standard (highest bar)** | **`Agents/Agents-elon-standard.md`** (owner pointer: `ayushdocs/20-ELON-STANDARD.md`) |
+| Session recap (~15m) | `ayushdocs/SESSION-RECAP.md` |
 | Owner pending / workflow | `ayushdocs/00-PENDING.md`, `ayushdocs/12-WORKFLOW.md` |
+| All agent handbooks | `Agents/` (`Agents-elon-standard` · Plan · testing · browser · failure · docs · architecture) |
 | Trust-data plan | `Plans/trustdata/INDEX.md` |
 | Research home | `D:\websites\README.md` + `Plans/trustdata/RESEARCH-MAP.md` |
 | Testing | `testing-handbook.md` + `Agents/Agents-testing.md` |

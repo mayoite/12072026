@@ -6,9 +6,9 @@
 
 ## Done this window
 
-- Armed skill stack + wrote Elon standard workflow: `ayushdocs/20-ELON-STANDARD.md`
-- Rolling recap file created (this file)
-- Goal lock still open: CP-10 · a11y residual · or owner custom
+- **Highest bar** moved to `Agents/Agents-elon-standard.md`; `AGENTS.md` routes to `Agents/` first
+- Owner pointer only: `ayushdocs/20-ELON-STANDARD.md`
+- Rolling recap (this file); goal lock still open: CP-10 · a11y · or custom
 
 ## Red / blocked
 

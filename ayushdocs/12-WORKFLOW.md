@@ -1,7 +1,7 @@
 # Owner workflow (simple)
 
 Replaces reading long 05 / 07 / 08 / 09 docs every time. Use this loop.  
-**Agent skill order / seats:** [20-ELON-STANDARD.md](./20-ELON-STANDARD.md) · **rolling recap:** [SESSION-RECAP.md](./SESSION-RECAP.md)
+**Agent skill order / seats (highest bar):** [`Agents/Agents-elon-standard.md`](../Agents/Agents-elon-standard.md) · pointer [20-ELON-STANDARD.md](./20-ELON-STANDARD.md) · **rolling recap:** [SESSION-RECAP.md](./SESSION-RECAP.md)
 
 ```
 ┌─────────────┐
@@ -10,7 +10,7 @@ Replaces reading long 05 / 07 / 08 / 09 docs every time. Use this loop.
 └──────┬──────┘
        ▼
 ┌─────────────┐
-│ 2. Implement│  →  20-ELON-STANDARD pipeline: superpowers → plan → SDD 2–4
+│ 2. Implement│  →  Agents-elon-standard pipeline: superpowers → plan → SDD 2–4
 │             │     TDD on every implementer; no worktrees; ≤8 (max 10)
 └──────┬──────┘
        ▼
