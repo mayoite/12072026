@@ -273,14 +273,13 @@ export function WorkspaceShell({
   // Prefer isLocalSaved; fall back to legacy isSynced. No label table — labels come from caller.
   const resolvedLocalSaved = isLocalSaved ?? isSynced;
 
-  // Save-status pass-through for TopBar (A3+). Spread keeps shell compiling if TopBar lags.
+  // Map shell names → TopBar contract (saveStorage / saveCloudEnabled).
   const topBarSaveStatusProps = {
-    isLocalSaved: resolvedLocalSaved,
     isSynced: resolvedLocalSaved,
     ...(saveStatus !== undefined ? { saveStatus } : {}),
     ...(saveStatusLabel !== undefined ? { saveStatusLabel } : {}),
-    ...(storage !== undefined ? { storage } : {}),
-    ...(cloudEnabled !== undefined ? { cloudEnabled } : {}),
+    ...(storage !== undefined ? { saveStorage: storage } : {}),
+    ...(cloudEnabled !== undefined ? { saveCloudEnabled: cloudEnabled } : {}),
   };
 
   return (

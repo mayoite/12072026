@@ -354,7 +354,6 @@ export function createAutoSaver(
   const debounceMs = deps?.debounceMs ?? AUTO_SAVE_DEBOUNCE_MS;
 
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
-  let lastSaved = 0;
   let active = true;
   /** Latest snapshot waiting for debounce / flush. */
   let pendingSnapshot: string | null = null;
@@ -392,7 +391,6 @@ export function createAutoSaver(
       });
       if (!active) return;
 
-      lastSaved = now;
       if (pendingSnapshot === snapshot) {
         pendingSnapshot = null;
       }
@@ -411,11 +409,6 @@ export function createAutoSaver(
       timeoutId = setTimeout(() => {
         timeoutId = null;
         if (!active || pendingSnapshot === null) return;
-        // Debounce window: skip if we just saved the same payload very recently.
-        const now = Date.now();
-        if (now - lastSaved < debounceMs && flushInFlight === null) {
-          // Still honor latest pending on next schedule; do not drop it forever.
-        }
         const toSave = pendingSnapshot;
         flushInFlight = persistSnapshot(toSave).finally(() => {
           flushInFlight = null;

@@ -9,28 +9,28 @@
   "idChannel": "indexeddb-projects-snapshot",
   "placePath": "configurator-batch",
   "wallIdsBefore": [
-    "1f0fd155-3694-4dc3-8ab6-3c8d9dab1c76",
-    "2c7e157f-07ba-487e-a33a-4382a987d847",
-    "59541fcb-30d1-4824-8950-20b171ecd60d",
-    "f7047a5e-16db-4796-9e4f-2399625859e6"
+    "3d3ad97d-f41e-43bb-a1f6-4cfa8c13c1ed",
+    "a98fe3b9-b84d-4767-9993-74fa17a3c959",
+    "d97dc1c8-9e38-4f80-a6e4-cd1ab7e8e284",
+    "e6100a08-e1be-4083-8185-a15292bbf5a6"
   ],
   "wallIdsAfter": [
-    "1f0fd155-3694-4dc3-8ab6-3c8d9dab1c76",
-    "2c7e157f-07ba-487e-a33a-4382a987d847",
-    "59541fcb-30d1-4824-8950-20b171ecd60d",
-    "f7047a5e-16db-4796-9e4f-2399625859e6"
+    "3d3ad97d-f41e-43bb-a1f6-4cfa8c13c1ed",
+    "a98fe3b9-b84d-4767-9993-74fa17a3c959",
+    "d97dc1c8-9e38-4f80-a6e4-cd1ab7e8e284",
+    "e6100a08-e1be-4083-8185-a15292bbf5a6"
   ],
   "furnitureIdsBefore": [
-    "124a69dc-7578-4bd8-b8ea-6c7e4a6d872c",
-    "6865a3db-ffe8-4bdf-bdaa-98c3f84d4e21",
-    "7ec821d1-171f-4c6a-87a4-aa72ad6fe5d8",
-    "d8defd88-7502-4f10-84a8-a7dcfb6e5e0f"
+    "2a993211-5520-4a15-a1c7-ba3aabe1d104",
+    "360852d2-91da-45e5-a95b-823b037e09b1",
+    "5af37de0-702c-422e-8158-c4358307482e",
+    "65843170-f281-48b2-ac14-77c05aea38c8"
   ],
   "furnitureIdsAfter": [
-    "124a69dc-7578-4bd8-b8ea-6c7e4a6d872c",
-    "6865a3db-ffe8-4bdf-bdaa-98c3f84d4e21",
-    "7ec821d1-171f-4c6a-87a4-aa72ad6fe5d8",
-    "d8defd88-7502-4f10-84a8-a7dcfb6e5e0f"
+    "2a993211-5520-4a15-a1c7-ba3aabe1d104",
+    "360852d2-91da-45e5-a95b-823b037e09b1",
+    "5af37de0-702c-422e-8158-c4358307482e",
+    "65843170-f281-48b2-ac14-77c05aea38c8"
   ],
   "wallCountBefore": 4,
   "wallCountAfter": 4,
@@ -48,5 +48,5 @@
     "02-saved-local.png",
     "03-after-hard-reload.png"
   ],
-  "timestamp": "2026-07-10T11:37:45.938Z"
+  "timestamp": "2026-07-10T11:38:34.592Z"
 }
