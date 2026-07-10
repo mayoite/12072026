@@ -1,0 +1,81 @@
+{
+  "seat": "chrome-eyes-admin-svg",
+  "phase": "admin-svg-working",
+  "date": "2026-07-10",
+  "headStart": "d34d2e85",
+  "headFinal": "6268e1ec92954a24e34d156d0b0699539db4ac5a",
+  "headFinalSubject": "fix(admin-svg): EXEC-1 edit page mount (themeTokens + dedupe dynamics)",
+  "baseUrl": "http://localhost:3000",
+  "env": {
+    "DEV_AUTH_BYPASS": "1",
+    "fabric": "irrelevant"
+  },
+  "tool": "chrome-devtools-mcp + Invoke-WebRequest POST",
+  "productCodeEditedByThisSeat": false,
+  "steps": [
+    {
+      "id": 1,
+      "name": "admin-svg-editor-list",
+      "url": "/admin/svg-editor/",
+      "status": "pass",
+      "checks": {
+        "notAccessRedirect": true,
+        "heading": "SVG block editor",
+        "sideTableListed": true
+      },
+      "evidence": [
+        "results/planner/admin-svg-working/chrome/01-list.png",
+        "results/planner/admin-svg-working/chrome/01-list.a11y.txt"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "admin-svg-editor-side-table-edit",
+      "url": "/admin/svg-editor/side-table-001/",
+      "status": "pass",
+      "checks": {
+        "h1": "side-table-001",
+        "globalError": false,
+        "puckEditorVisible": true,
+        "publishControlVisible": true
+      },
+      "midSessionFailuresObserved": [
+        "Build Error: GlbExtruderPreview defined multiple times",
+        "Runtime TypeError + [global-error]: undefined['--fill-primary'] at Puck mount"
+      ],
+      "recoveryNote": "Green after EXEC-1 commit 6268e1ec; re-proved in chrome after HEAD advanced",
+      "evidence": [
+        "results/planner/admin-svg-working/chrome/02-edit-side-table.png",
+        "results/planner/admin-svg-working/chrome/02-edit.a11y.txt"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "publish-path",
+      "method": "POST /api/admin/svg-editor/",
+      "status": "pass",
+      "checks": {
+        "httpStatus": 200,
+        "success": true,
+        "slug": "side-table-001",
+        "svgExists": true,
+        "svgBytes": 481
+      },
+      "evidence": [
+        "results/planner/admin-svg-working/chrome/03-api-publish.json"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "notes-and-run-json",
+      "status": "pass",
+      "evidence": [
+        "results/planner/admin-svg-working/chrome/NOTES.md",
+        "results/planner/admin-svg-working/chrome/run.json"
+      ]
+    }
+  ],
+  "status": "pass",
+  "open": [],
+  "notesPath": "results/planner/admin-svg-working/chrome/NOTES.md"
+}
