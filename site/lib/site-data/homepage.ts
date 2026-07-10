@@ -379,10 +379,11 @@ export const HOMEPAGE_FAQ_CONTENT = {
   ],
 } as const;
 
+/** Legacy partnership ribbon data — banner removed from homepage; no AFC branding. */
 export const HOMEPAGE_PARTNERSHIP_CONTENT = {
   image: {
-    src: "/catalog-logo-sharp.webp",
-    alt: "AFC logo - Official Strategic Partner",
+    src: "/logo.webp",
+    alt: "One&Only",
   },
-  title: ["Official Strategic", "Partner"],
+  title: ["One&Only", "Office Furniture"],
 } as const;

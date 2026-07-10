@@ -113,8 +113,13 @@ export function buildSiteMetadata(siteUrl: string): Metadata {
     },
     robots: { index: true, follow: true },
     icons: {
-      icon: "/catalog-logo-sharp.webp",
-      shortcut: "/catalog-logo-sharp.webp",
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/icon.png", type: "image/png", sizes: "192x192" },
+        { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+      ],
+      shortcut: "/favicon.ico",
+      apple: "/icon.png",
     },
     alternates: {
       canonical: "/",

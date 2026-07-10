@@ -63,13 +63,15 @@ describe("homepage data", () => {
     });
   });
 
-  it("partnership banner uses AFC strategic partner copy", () => {
+  it("partnership content has no AFC branding (One&Only only)", () => {
     expect(HOMEPAGE_PARTNERSHIP_CONTENT.title).toEqual([
-      "Official Strategic",
-      "Partner",
+      "One&Only",
+      "Office Furniture",
     ]);
-    expect(HOMEPAGE_PARTNERSHIP_CONTENT.image.src).toBe("/catalog-logo-sharp.webp");
-    expect(HOMEPAGE_PARTNERSHIP_CONTENT.image.alt).toMatch(/AFC/i);
+    expect(HOMEPAGE_PARTNERSHIP_CONTENT.image.src).toBe("/logo.webp");
+    expect(HOMEPAGE_PARTNERSHIP_CONTENT.image.alt).toMatch(/One&Only/i);
+    expect(HOMEPAGE_PARTNERSHIP_CONTENT.image.alt).not.toMatch(/AFC/i);
+    expect(JSON.stringify(HOMEPAGE_PARTNERSHIP_CONTENT)).not.toMatch(/AFC/i);
   });
 
   it("contact teaser leads with requirement headline and direct actions", () => {
