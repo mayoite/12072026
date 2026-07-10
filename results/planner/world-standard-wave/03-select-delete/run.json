@@ -6,11 +6,19 @@
   "checkout": "D:\\OandO07072026",
   "worktrees": false,
   "evidenceRoot": "results/planner/world-standard-wave/03-select-delete",
-  "HEAD": "3e7f3b8d086a197b40c92674e4100cba849d3595",
-  "unitPackCodeTip": "74e89a4b431f5e5cecab79f1523a84543981a7f0",
+  "HEAD": "bf212a9a7d0fa8e7867b5f6a803b06ee5a5c43df",
+  "hygienePin": {
+    "agent": "P03-Execute-4/5",
+    "action": "evidence tree hygiene + HEAD pin",
+    "pinnedAt": "2026-07-10T13:25:00.000Z",
+    "pngsTouched": false,
+    "note": "HEAD.txt + run.json re-pinned to tip. PNGs 01-04 left intact (non-empty). No invented PASS."
+  },
   "date": "2026-07-10",
   "startedAt": "2026-07-10T18:52:59.000Z",
   "endedAt": "2026-07-10T18:53:01.000Z",
+  "unitPackCodeTip": "74e89a4b431f5e5cecab79f1523a84543981a7f0",
+  "unitPackDepositTip": "bf212a9a7d0fa8e7867b5f6a803b06ee5a5c43df",
   "unitPack": {
     "exitCode": 0,
     "log": "unit-w3-pack.log",
@@ -28,6 +36,7 @@
     "tests": "62/62 passed",
     "durationSec": 1.99,
     "agent": "P03-Agent-3",
+    "onDisk": true,
     "note": "Unit pack re-prove only. unit alone != W3. Do not treat unitPack green as phase PASS without browser green on same tip."
   },
   "unit": {
@@ -54,10 +63,19 @@
       "03-deleted.png",
       "04-undone.png"
     ],
+    "pngOnDisk": {
+      "01-placed.png": 115791,
+      "02-selected.png": 114109,
+      "03-deleted.png": 97350,
+      "04-undone.png": 96830
+    },
     "pngProof": "4 furniture -> 3 after Delete -> 4 after Ctrl+Z",
+    "provedAtHead": "aea4e76c44ed82130b3d8b38d8980877fc976540",
     "staleRelativeToHead": true,
-    "note": "Prior browser evidence recorded at HEAD aea4e76 - not re-proved on tip d6118a39 by Agent 3. Browser re-prove required for W3 on this tip."
+    "onDisk": true,
+    "reProvedOnPinnedHead": false,
+    "note": "Prior browser evidence on disk (log + PNGs 01-04 non-empty, exit 0) recorded at HEAD aea4e76. Not re-proved on pinned tip bf212a9a. Hygiene seat does not invent browser PASS on current tip."
   },
   "status": "unitPack-only",
-  "statusNote": "Agent 3 set unitPack only. unit alone != W3. Do not set status pass without browser green on same HEAD."
+  "statusNote": "Honest hygiene pin. unitPack green on deposit tip bf212a9a. browser artifacts present but staleRelativeToHead (proved at aea4e76). unit alone != W3. Do not set status pass without browser green on same HEAD."
 }
