@@ -1,92 +1,109 @@
-# UI Agent W1 — Products suite grid polish (not homepage)
+# Phase 3 — Products suite align to home design base
 
 **Date:** 2026-07-10  
 **Surface:** `/products/*` catalog suite only  
+**Design base:** `results/site/design-base-home/` (Phase 2)  
 **Constraint:** zero edits under `site/app/css/core/locked/**`  
-**Out of scope:** homepage `/`, `components/home/**`, open3d planner, locked CSS
+**Out of scope:** homepage `/`, `components/home/**`, locked CSS, catalog image path data (Phase 5)
 
-## Live routes checked (Chrome, isolated context `ui-agent-w1-products`)
+## Goal
 
-| Route | Grid / media result |
-|-------|---------------------|
-| `/products/seating/` | 13 cards · maxImgs **1** · badges overlaid |
-| `/products/tables/` | 20 cards · maxImgs **1** · badges overlaid |
-| `/products/workstations/` | empty catalog (0 products — data, not layering) |
-| `/products/` hub | category tiles present (no ProductCard grid) |
-| `/quote-cart/` | image box `position:relative` + single `absolute` img — OK |
+FilterGrid / product cards match home **card media layer language**:
 
-## Before (suite gaps after Agent B media fix)
+1. One image paint layer  
+2. `isolation: isolate` on media box  
+3. Badges on top of media (not document flow)  
+4. Shared type/shell utilities (`typ-*`, `home-heading`, `home-shell-xl`, `page-copy*`)  
+5. Tokens first — no new palette  
 
-Card media layering was already green on seating (prior land `23a697b`):
+## Routes checked (Chrome)
 
-- `.catalog-card__media` → `relative` / `isolate` / `hidden`
-- `.catalog-card__media-layer` → `absolute` z-0
-- badge-row absolute z-1 · BIFMA / Eco separate left offsets
-- `maxImgs` per card = 1
+| Route | Result |
+|-------|--------|
+| `/products/seating/` | **13** cards · maxImgs **1** · badges overlaid as separate pills |
+| `/products/tables/` | **20** cards · same shared card chrome (second category — workstations empty) |
+| `/products/workstations/` | **0** products — honest empty state (data gap, not layering) |
+| `/products/` hub | category tiles (no ProductCard grid) |
 
-**Still broken on live pass (same locked `@utility` chunk bug):**
+## Root causes addressed
 
-| Selector | Expected | Actual before W1 |
-|----------|----------|------------------|
-| `.filter-ui-heading` | weight 500, strong color | weight 400, no intent |
-| `.filter-ui-count` | primary pill chip | unstyled text / transparent |
-| badge / compare radius | pill | `0px` — theme `--radius-pill` → missing `--radius-full` |
+### A. Locked `@utility` chunk (Agent B + Phase 3)
 
-Evidence: `before-seating-viewport.png`, `before-tables-viewport.png`, `before-workstations-viewport.png` (empty data).
+`products/layout.tsx` imports locked `catalog.css` as a **separate CSS chunk**. Tailwind v4 `@utility` rules in that entry **do not emit**. Media isolation / badge-row / filter-ui chrome were missing or incomplete.
 
-## Fix (non-locked only)
+**Fix (non-locked):** plain CSS in main pipeline:
 
-1. **`site/app/css/core/components/catalog-suite-filters.css`** (new)  
-   Plain CSS for filter-ui-label / heading / count, sticky toolbar, filter shell, empty/summary bands. Imported via main pipeline.
+| File | Role |
+|------|------|
+| `site/app/css/core/components/catalog-card-media.css` | media isolation, single layer, badge overlay, density |
+| `site/app/css/core/components/catalog-suite-filters.css` | filter-ui-* / toolbar chrome |
+| `site/app/css/index.css` | imports both |
 
-2. **`site/app/css/core/components/catalog-card-media.css`** (extend)  
-   - Badge / signal `white-space` + ellipsis density  
-   - `border-radius: var(--radius-pill, 9999px)` fallback (theme chain broken)  
-   - Compare pill fallback  
-   - Footer / quote-btn density
+### B. Missing pill token
 
-3. **`site/app/css/index.css`**  
-   `@import "./core/components/catalog-suite-filters.css";`
+`--radius-pill: var(--radius-full)` but **`--radius-full` was undefined** → computed badge radius `0px`.
 
-No TSX structure change required (media-layer wrapper already present from Agent B).
+**Fix:** define in `site/app/css/core/theme.css`:
 
-## After (green — computed Chrome)
+```css
+--radius-full: 9999px;
+--radius-pill: var(--radius-full);
+```
+
+Suite sheets also use `var(--radius-pill, 9999px)` fallback.
+
+## After (green — live computed)
 
 **Seating / Tables cards**
 
-- media: `position: relative`, `isolation: isolate`, `overflow: hidden`, aspect `1 / 1` compact  
-- layer: `position: absolute`, `z-index: 0`  
-- badge-row: absolute, z-1, flex, gap 8px  
-- badges: separate pills, `border-radius: 9999px`, nowrap  
-- compare: absolute z-10, pill radius  
-- maxImgs: **1**
+| Check | Value |
+|-------|--------|
+| media | `position: relative`, `isolation: isolate`, `overflow: hidden` |
+| media-layer | `position: absolute`, `z-index: 0` |
+| badge-row | `absolute`, `z-index: 1`, flex, gap |
+| badges | separate texts (`BIFMA`, `Eco 5/10`), `border-radius: 9999px` |
+| compare | absolute, pill, above media |
+| imgs per card | **1** |
+| tokens | `--radius-full: 9999px`, `--radius-pill: 9999px` |
 
 **Filter chrome**
 
-- `.filter-ui-count`: primary bg, inverse text, `border-radius: 9999px`, padding 2×6  
-- `.filter-ui-heading`: font-weight 500  
+- `.filter-ui-count`: primary bg, inverse text, pill radius (Subcategory **5** chip visible)
+- `.filter-ui-heading`: weight 500 intent restored
 
-Evidence:
+## Evidence files
 
-- `after-seating-viewport.png` — Subcategory count pill; BIFMA/Eco over image; Compare top-right  
-- `after-tables-viewport.png` — same shared grid chrome  
-- `after-products-hub-viewport.png` — hub category tiles  
-- `after-quote-cart-viewport.png` — single image box OK (no CSS change)
+| File | What |
+|------|------|
+| `before-seating-viewport.png` | pre Phase 3 suite pass baseline |
+| `before-tables-viewport.png` | tables baseline |
+| `before-workstations-viewport.png` | empty catalog baseline |
+| `after-seating-viewport.png` | pills + badge overlay + count chip |
+| `after-seating-card.png` | single card close-up (media + badges + compare) |
+| `after-tables-viewport.png` | second category parity |
+| `after-workstations-empty.png` | honest empty (0 products) |
+| `after-products-hub-viewport.png` | hub tiles |
+| `after-quote-cart-viewport.png` | quote cart image box OK |
 
 ## Out of scope (honest)
 
-- Product image assets still often resolve to placeholder (data/path — not this UI layer).  
-- Workstations category has zero products in local catalog.  
-- Theme missing `--radius-full` is a global token debt; W1 only falls back on suite sheets, did not edit `theme.css` (fence prefers tokens; fallback is local).  
-- Homepage / home components untouched.
+- Product thumbs still often resolve to `/images/fallback/product-placeholder.webp` — **Phase 5** image paths.  
+- Workstations has **zero** catalog rows locally — second grid proof used **tables**.  
+- Homepage / `components/home/**` untouched.  
+- Locked CSS unmodified.
 
-## Files touched
+## Files touched (this phase)
 
 | Path | Role |
 |------|------|
-| `site/app/css/core/components/catalog-suite-filters.css` | non-locked filter/toolbar utilities |
-| `site/app/css/core/components/catalog-card-media.css` | pill fallback + density |
+| `site/app/css/core/theme.css` | define `--radius-full` (token fix) |
+| `site/app/css/core/components/catalog-card-media.css` | home media language for catalog cards |
+| `site/app/css/core/components/catalog-suite-filters.css` | filter/toolbar plain CSS |
 | `site/app/css/index.css` | import suite-filters |
 | `results/site/ui-websuite-products/*` | proof |
 
-**Locked paths modified:** **none** (asserted).
+**Locked paths modified:** **none**.
+
+## Status
+
+**Phase 3 DONE** — products suite card/filter chrome aligned to home design base.

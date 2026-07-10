@@ -39,7 +39,7 @@
 | 0 | **DONE** — this file |
 | 1 | **DONE** — portal no longer red-boundary (`dfd596a`); `/` seating portal 200 |
 | 2 | **DONE** — `results/site/design-base-home/` |
-| 3 | **IN PROGRESS** — products suite align to home |
+| 3 | **DONE** — `results/site/ui-websuite-products/` |
 | 4–6 | queued |
 
 ---

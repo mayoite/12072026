@@ -296,6 +296,8 @@
   --radius-giant: 1.6rem;
   --radius-huge: 1.75rem;
   --radius-blob: 2rem;
+  /* Full pill — used by badges, chips, buttons (home + suite). Must be concrete. */
+  --radius-full: 9999px;
   --radius-pill: var(--radius-full);
   --radius-default: 0.875rem;
 
