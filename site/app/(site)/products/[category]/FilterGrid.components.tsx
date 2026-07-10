@@ -252,21 +252,24 @@ export function ProductCard({
 
       <Link href={productHref} className="block">
         <div className="catalog-card__media">
-          <Image
-            key={imgSrc}
-            src={imgSrc}
-            alt={imageAlt}
-            loading="lazy"
-            width={1200}
-            height={900}
-            sizes="(max-width: 768px) 100vw, (max-width: 75rem) 50vw, 33vw"
-            className="h-full w-full scale-[1.08] object-contain p-2 transition-transform duration-500 group-hover:scale-[1.13] sm:p-3"
-            onError={() =>
-              setImgIndex((current) =>
-                current + 1 < imageCandidates.length ? current + 1 : current,
-              )
-            }
-          />
+          {/* One image layer: key remounts on candidate change; no stacked imgs */}
+          <div className="catalog-card__media-layer">
+            <Image
+              key={imgSrc}
+              src={imgSrc}
+              alt={imageAlt}
+              loading="lazy"
+              width={1200}
+              height={900}
+              sizes="(max-width: 768px) 100vw, (max-width: 75rem) 50vw, 33vw"
+              className="h-full w-full scale-[1.08] object-contain p-2 transition-transform duration-500 group-hover:scale-[1.13] sm:p-3"
+              onError={() =>
+                setImgIndex((current) =>
+                  current + 1 < imageCandidates.length ? current + 1 : current,
+                )
+              }
+            />
+          </div>
           <div className="catalog-card__badge-row">
             {product.metadata?.bifmaCertified ? (
               <span className="catalog-card__badge">BIFMA</span>
