@@ -111,10 +111,9 @@ function emptyProof(): JourneyProof {
     secondCatalogId: "",
     secondPlaceCta: "",
     symbolCheck: "non-blank-canvas-png (P07); quality bar P05",
+    // Forced to localhost by playwright.config (never 127.0.0.1)
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000",
-    server: process.env.PLAYWRIGHT_BASE_URL
-      ? "PLAYWRIGHT_BASE_URL reuse (dev or external)"
-      : "Playwright webServer: pnpm run build && pnpm run start",
+    server: "localhost only (127.0.0.1 rewritten in playwrightBaseURL.cjs)",
   };
 }
 
