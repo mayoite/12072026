@@ -32,7 +32,9 @@ import {
 import type { WorkstationConfigV0 } from "../catalog/workstationSystemV0";
 import { workstationConfigKey } from "../catalog/workstationSystemV0";
 import {
+  defaultWorkstationConfiguratorDraftV0,
   isWorkstationV0BatchPlaceCount,
+  resolveWorkstationConfigFromDraft,
   takePendingWorkstationConfig,
 } from "../catalog/workstationConfiguratorV0";
 import { placeModularWithGeneratedGlbBrowser } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbBrowser";
@@ -296,7 +298,7 @@ export function OOPlannerWorkspace({
         depthMm: 4000,
       }),
     );
-    setWorkspaceMessage("Created a 5 m × 4 m starter room.");
+    setWorkspaceMessage("Created a 500 × 400 cm starter room.");
   }, [workspaceCanvas]);
 
   const handleUpdateEntity = useCallback(
@@ -385,6 +387,14 @@ export function OOPlannerWorkspace({
     },
     [],
   );
+
+  /** P-UI-4: arm default linear workstation place from empty-state CTA. */
+  const handleStartPlaceWorkstation = useCallback(() => {
+    const config = resolveWorkstationConfigFromDraft(
+      defaultWorkstationConfiguratorDraftV0(),
+    );
+    handleWorkstationConfigPlace(config);
+  }, [handleWorkstationConfigPlace]);
 
   /** Immediate grid batch place from configurator (2 / 4 / 10 seats). */
   const handleWorkstationConfigBatchPlace = useCallback(
@@ -982,20 +992,23 @@ export function OOPlannerWorkspace({
             {isCanvasEmpty && (
               <section
                 className="open3d-first-use"
-                aria-label="Start your plan"
+                aria-label="Start the office plan"
               >
-                <p className="open3d-first-use__eyebrow">Start your plan</p>
-                <h2>Set up the first room</h2>
+                <p className="open3d-first-use__eyebrow">Office layout</p>
+                <h2>Start the floor plan</h2>
                 <p>
-                  Draw freely, begin with a measured room, or import an existing
-                  plan.
+                  Draw walls, drop a starter room, or arm a workstation and
+                  click the plan to place it.
                 </p>
                 <div className="open3d-first-use__actions">
                   <button type="button" onClick={() => setTool("wall")}>
                     Draw walls
                   </button>
                   <button type="button" onClick={handleStartTemplate}>
-                    Use 5 m × 4 m room
+                    Starter room 500 × 400 cm
+                  </button>
+                  <button type="button" onClick={handleStartPlaceWorkstation}>
+                    Place workstation
                   </button>
                   <button type="button" onClick={handleImportClick}>
                     Import plan
