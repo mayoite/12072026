@@ -114,6 +114,32 @@ export async function getWallCount(page: Page): Promise<number> {
   return match ? Number.parseInt(match[1], 10) : 0;
 }
 
+/** Status-bar furniture metric only — no body-text fallback (CP-07 / false-green bar). */
+export async function getFurnitureCount(page: Page): Promise<number> {
+  const text = await page
+    .locator(".pw-status-bar > span")
+    .filter({ hasText: /^\d+ furniture$/ })
+    .textContent();
+  const match = text?.match(/^(\d+)\s+furniture/i);
+  return match ? Number.parseInt(match[1], 10) : 0;
+}
+
+/**
+ * Open3d wall tool: two taps (start then end). Wall guidance is click-click;
+ * micro-drag helpers can miss commit on some pointer paths.
+ */
+export async function drawWallByTwoClicks(
+  page: Page,
+  from: { rx: number; ry: number },
+  to: { rx: number; ry: number },
+): Promise<void> {
+  await selectPlannerTool(page, "Wall");
+  await tapOnCanvas(page, from.rx, from.ry);
+  await page.waitForTimeout(200);
+  await tapOnCanvas(page, to.rx, to.ry);
+  await page.waitForTimeout(200);
+}
+
 export async function expectObjectCountAtLeast(page: Page, min: number): Promise<void> {
   await expect
     .poll(async () => getObjectCount(page), { timeout: 15_000 })

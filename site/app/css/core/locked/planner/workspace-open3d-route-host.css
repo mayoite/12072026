@@ -159,6 +159,8 @@ body.planner-workspace {
   text-align: center;
   transform: translate(-50%, -50%);
   backdrop-filter: blur(0.75rem);
+  /* Card chrome must not steal wall/place pointer hits — CTAs stay clickable. */
+  pointer-events: none;
 }
 
 .open3d-first-use h2,
@@ -187,6 +189,7 @@ body.planner-workspace {
   justify-content: center;
   gap: var(--space-2);
   margin-top: var(--space-5);
+  pointer-events: auto;
 }
 
 .open3d-first-use__actions button {
