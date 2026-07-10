@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-10  
 **Checkout:** `D:\OandO07072026` (main only; no worktrees)  
-**HEAD:** *(set to tip SHA after land commit)*  
+**HEAD:** `aea4e76c44ed82130b3d8b38d8980877fc976540`  
 **Evidence:** `results/planner/world-standard-wave/03-select-delete/`  
 **Seat:** Browser W3 hard gate only (seat B re-prove)  
 

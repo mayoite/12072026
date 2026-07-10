@@ -6,7 +6,7 @@
   "checkout": "D:\\OandO07072026",
   "worktrees": false,
   "evidenceRoot": "results/planner/world-standard-wave/03-select-delete",
-  "HEAD": "PENDING_COMMIT",
+  "HEAD": "aea4e76c44ed82130b3d8b38d8980877fc976540",
   "date": "2026-07-10",
   "startedAt": "2026-07-10T12:45:00.000Z",
   "endedAt": "2026-07-10T12:46:00.000Z",
