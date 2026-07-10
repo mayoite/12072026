@@ -68,18 +68,52 @@ export interface PipelineOptions {
 }
 
 /**
- * Locate the project root (one level above `site/`) for in-process dynamic import paths.
+ * True when generate-svg.mjs AND pipelineCore exist under root/site/scripts
+ * (incomplete standalone copies often ship the .mjs without pipelineCore.ts).
+ */
+function isCompleteSvgScriptTree(root: string): boolean {
+  const scripts = path.join(root, "site", "scripts");
+  return (
+    existsSync(path.join(scripts, "generate-svg.mjs")) &&
+    existsSync(path.join(scripts, "generate-svg", "pipelineCore.ts"))
+  );
+}
+
+/**
+ * Locate the monorepo / standalone root that contains `site/scripts/generate-svg*`.
+ * Prefer a **complete** source tree over a partial `.next/standalone` copy
+ * (dev servers under `site/` were resolving standalone first and failing
+ * with missing pipelineCore.ts → 422 compiler_failed on admin publish).
  */
 function findProjectRoot(override?: string): string {
   if (override) return path.resolve(override);
   const cwd = process.cwd();
-  // Support standalone: prepare-standalone.cjs copies under .next/standalone/site/scripts when full source tree absent.
+
+  // cwd = site/ → monorepo root is parent
+  const monorepoFromSite = path.resolve(cwd, "..");
+  if (isCompleteSvgScriptTree(monorepoFromSite)) {
+    return monorepoFromSite;
+  }
+
+  // cwd = monorepo root
+  if (isCompleteSvgScriptTree(cwd)) {
+    return cwd;
+  }
+
+  // Standalone only when complete (mjs + pipelineCore)
   const stand = path.resolve(cwd, ".next", "standalone");
-  if (existsSync(path.join(stand, "site", "scripts", "generate-svg.mjs"))) {
+  if (isCompleteSvgScriptTree(stand)) {
     return stand;
   }
-  // jsconfig-style resolution: assume cwd is `site/`. Tests can override.
-  return path.resolve(cwd, "..");
+
+  // site/.next/standalone when cwd is site/
+  const standFromSite = path.resolve(cwd, ".next", "standalone");
+  if (isCompleteSvgScriptTree(standFromSite)) {
+    return standFromSite;
+  }
+
+  // Legacy fallback (same as historical site-cwd assumption)
+  return monorepoFromSite;
 }
 
 function defaultSvgPath(slug: string, projectRoot: string): string {

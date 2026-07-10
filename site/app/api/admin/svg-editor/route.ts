@@ -1,13 +1,13 @@
 /**
  * POST /api/admin/svg-editor
  *
- * 04-ADMIN-06: Accept JSON BlockDescriptor, Zod (via parseAdminPayload), atomic persist,
- * shell to Phase 03 generate-svg.mjs (via svgPipelineRunner which also triggers R2 PNG thumb upload),
+ * Fail-closed publish: `publishDescriptorWithPipeline`
+ * (parse → compileSvgForPublish S1–S3 → S4 disk write → persist descriptor).
  * return { success, descriptor, thumb }.
  *
  * Error taxonomy:
- *   422 for invalid (Open3dDescriptorError.invalid + parse failures)
- *   500 for IO/pipeline hard failures (still return descriptor if persisted)
+ *   422 for invalid parse / compiler / pipeline failures
+ *   500 for unexpected publish failures
  *
  * Auth: withAuth(['admin']) + CSRF for POST.
  * Server-only (no client bundle).
@@ -19,13 +19,8 @@ import { NextResponse } from "next/server";
 import { withAuth } from "@/features/shared/api/withAuth";
 import { success } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
-import {
-  persistBlockDescriptor,
-  parseAdminPayload,
-  type PersistError,
-} from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
-import { runSvgPipeline } from "@/features/planner/admin/svg-editor/svgPipelineRunner";
-import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+import { parseAdminPayload } from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
+import { publishDescriptorWithPipeline } from "@/features/planner/admin/svg-editor/publishDescriptorWithPipeline";
 import { buildBlockThumbPngUrl } from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
 import {
   toOpen3dDescriptorErrorHttp,
@@ -48,33 +43,6 @@ function descriptorErrorResponse(descriptorError: Open3dDescriptorError): NextRe
   );
 }
 
-function persistErrorResponse(persistError: PersistError): NextResponse {
-  const status =
-    persistError.reason === "hashMismatch" || persistError.reason === "lockBusy"
-      ? 409
-      : persistError.reason === "ioError" || persistError.reason === "dualReadMismatch"
-        ? 500
-        : 422;
-  return NextResponse.json(
-    {
-      success: false,
-      error: {
-        error:
-          persistError.reason === "lockBusy"
-            ? "lock_busy"
-            : persistError.reason === "hashMismatch"
-              ? "hash_mismatch"
-              : persistError.reason,
-        code: persistError.code,
-        fieldPath: persistError.fieldPath,
-        message: persistError.message,
-        ...(persistError.issues ? { issues: persistError.issues } : {}),
-      },
-    },
-    { status },
-  );
-}
-
 async function handleSvgEditorPost(req: NextRequest) {
   let payload: unknown;
   try {
@@ -83,54 +51,46 @@ async function handleSvgEditorPost(req: NextRequest) {
     throw new ApiError(400, API_ERROR_CODES.INVALID_INPUT, "Invalid JSON body");
   }
 
-  // Phase 02/04 Zod boundary (re-uses parseAdminPayload which calls freeze + schema)
-  const parsed = parseAdminPayload(payload);
-  if (!parsed.ok) {
-    return descriptorErrorResponse(parsed.error);
-  }
+  // Fail-closed 1B path: parse → compileSvgForPublish (S1–S3) → S4 write → persist.
+  // Avoids broken full recompile via incomplete .next/standalone generate-svg tree.
+  const published = await publishDescriptorWithPipeline(payload);
+  if (!published.success) {
+    const err = published.error;
+    const isParse =
+      err.startsWith("invalid:") ||
+      err.startsWith("missing_field:") ||
+      err.includes("Zod") ||
+      err.toLowerCase().includes("parse");
+    const isCompiler =
+      err.startsWith("compiler_failed:") ||
+      err.startsWith("compiler_exception:") ||
+      err.startsWith("pipeline_failed:") ||
+      err.includes("Pipeline error");
 
-  const descriptor: BlockDescriptor = parsed.value;
-
-  // Shell Phase 03 Compilation Gate (Run BEFORE persist to prevent silent corruption)
-  let thumb: string | undefined;
-  try {
-    const pipeline = await runSvgPipeline(descriptor);
-    if (!pipeline.ok) {
-      // If compiler fails (e.g. invalid SVG geometry), we reject immediately.
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: "compiler_failed",
-            message: "Backend SVG compilation failed. Check geometries.",
-            details: pipeline.error,
-          }
-        },
-        { status: 422 }
-      );
+    if (isParse) {
+      const reparsed = parseAdminPayload(payload);
+      if (!reparsed.ok) {
+        return descriptorErrorResponse(reparsed.error);
+      }
     }
-    thumb = buildBlockThumbPngUrl(descriptor.slug);
-  } catch (err) {
+
     return NextResponse.json(
       {
         success: false,
         error: {
-          code: "compiler_exception",
-          message: "A fatal error occurred during SVG compilation.",
-          details: String(err),
-        }
+          code: isCompiler ? "compiler_failed" : "publish_failed",
+          message: isCompiler
+            ? "Backend SVG compilation failed. Check geometries."
+            : "Publish failed.",
+          details: err,
+        },
       },
-      { status: 500 }
+      { status: isCompiler || isParse ? 422 : 500 },
     );
   }
 
-  // Atomic write (04-ADMIN-06) - Only runs if compilation succeeds
-  const persistResult = persistBlockDescriptor(descriptor);
-  if (!persistResult.ok) {
-    return persistErrorResponse(persistResult.error);
-  }
-
-  return success({ descriptor: persistResult.descriptor, thumb });
+  const thumb = buildBlockThumbPngUrl(published.descriptor.slug);
+  return success({ descriptor: published.descriptor, thumb });
 }
 
 export const POST = withAuth(

@@ -16,14 +16,72 @@ import { dirname } from "node:path";
 const _require = createRequire(import.meta.url);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// ── External deps (required via CJS bridge — same pattern as generate-svg.mjs) ──
+// ── External deps (CJS bridge — robust under Next/turbopack server bundles) ──
 
-const polygonClipping = _require("polygon-clipping") as {
+type PolygonClippingApi = {
   union: typeof import("polygon-clipping").union;
   intersection: typeof import("polygon-clipping").intersection;
   difference: typeof import("polygon-clipping").difference;
   xor: typeof import("polygon-clipping").xor;
 };
+
+/**
+ * Next/webpack sometimes surface CJS as `{ default: { union, difference, … } }`
+ * or resolve createRequire from a chunk URL so ops go missing →
+ * "Unknown boolean variant difference". Prefer a bag that actually has difference.
+ */
+function loadPolygonClipping(): PolygonClippingApi {
+  const candidates: unknown[] = [];
+  try {
+    candidates.push(_require("polygon-clipping"));
+  } catch {
+    /* try absolute below */
+  }
+  try {
+    // site/scripts/generate-svg → site/node_modules
+    const abs = pathResolveSafe(
+      __dirname,
+      "..",
+      "..",
+      "node_modules",
+      "polygon-clipping",
+    );
+    candidates.push(_require(abs));
+  } catch {
+    /* ignore */
+  }
+
+  for (const raw of candidates) {
+    if (!raw || typeof raw !== "object") continue;
+    const rec = raw as Record<string, unknown>;
+    const bags = [rec, rec.default].filter(Boolean);
+    for (const bag of bags) {
+      if (!bag || typeof bag !== "object") continue;
+      const b = bag as Record<string, unknown>;
+      if (
+        typeof b.union === "function" &&
+        typeof b.intersection === "function" &&
+        typeof b.difference === "function" &&
+        typeof b.xor === "function"
+      ) {
+        return b as unknown as PolygonClippingApi;
+      }
+    }
+  }
+
+  throw new Error(
+    "polygon-clipping boolean ops unavailable (union/intersection/difference/xor). " +
+      "Check site/node_modules/polygon-clipping and Next serverExternalPackages.",
+  );
+}
+
+function pathResolveSafe(...parts: string[]): string {
+  // local require of path to avoid top-level path import churn in ESM
+  const nodePath = _require("node:path") as typeof import("node:path");
+  return nodePath.resolve(...parts);
+}
+
+const polygonClipping = loadPolygonClipping();
 
 const svgo = _require("svgo") as typeof import("svgo");
 
