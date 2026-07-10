@@ -210,8 +210,12 @@ const MOUNTING_FIELDS: PuckFields = {
 } as const;
 
 const THEME_FIELDS: PuckFields = {
+  // Must NOT use type:"object" without objectFields — Puck walkField does
+  // fields[propKey] on undefined objectFields and throws on keys like
+  // `--fill-primary` / `currentColor` when mounting the editor.
+  // custom matches mounting / liveAnnouncementCategories free-form maps.
   themeTokens: {
-    type: "object",
+    type: "custom",
     label: "Theme tokens",
     helperText:
       "keys must be 'currentColor' or --kebab; values must be semantic CSS vars (no #hex)",
@@ -763,9 +767,9 @@ export function getPuckEditorData(descriptor: BlockDescriptor): PuckData {
     geometry: { ...descriptor.geometry },
     viewBox: { ...descriptor.viewBox },
     mounting: [...descriptor.mounting],
-    themeTokens: { ...descriptor.themeTokens },
-    rovingFocus: [...descriptor.rovingFocus],
-    liveAnnouncementCategories: [...descriptor.liveAnnouncementCategories],
+    themeTokens: { ...(descriptor.themeTokens ?? {}) },
+    rovingFocus: [...(descriptor.rovingFocus ?? [])],
+    liveAnnouncementCategories: [...(descriptor.liveAnnouncementCategories ?? [])],
   };
   if (descriptor.variant === "fixed" && "assets" in descriptor && descriptor.assets) {
     baseProps.assets = { ...descriptor.assets };
@@ -807,10 +811,20 @@ export function puckEditorDataToDescriptorInput(
     geometry: (blockProps.geometry as BlockDescriptor["geometry"]) ?? original.geometry,
     viewBox: (blockProps.viewBox as BlockDescriptor["viewBox"]) ?? original.viewBox,
     mounting: (blockProps.mounting as BlockDescriptor["mounting"]) ?? original.mounting,
-    themeTokens: (blockProps.themeTokens as BlockDescriptor["themeTokens"]) ?? original.themeTokens,
-    rovingFocus: (blockProps.rovingFocus as BlockDescriptor["rovingFocus"]) ?? original.rovingFocus,
+    themeTokens:
+      (blockProps.themeTokens as BlockDescriptor["themeTokens"] | undefined) ??
+      original.themeTokens ??
+      ({ currentColor: "currentColor" } as BlockDescriptor["themeTokens"]),
+    rovingFocus:
+      (blockProps.rovingFocus as BlockDescriptor["rovingFocus"] | undefined) ??
+      original.rovingFocus ??
+      [],
     liveAnnouncementCategories:
-      (blockProps.liveAnnouncementCategories as BlockDescriptor["liveAnnouncementCategories"]) ?? original.liveAnnouncementCategories,
+      (blockProps.liveAnnouncementCategories as
+        | BlockDescriptor["liveAnnouncementCategories"]
+        | undefined) ??
+      original.liveAnnouncementCategories ??
+      (["status"] as BlockDescriptor["liveAnnouncementCategories"]),
   };
   if (blockProps.mountingPoints) {
     (updated as Record<string, unknown>).mountingPoints = blockProps.mountingPoints;
