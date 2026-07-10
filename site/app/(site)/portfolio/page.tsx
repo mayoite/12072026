@@ -5,7 +5,7 @@ import {
   EditorialCta,
   EditorialHero,
 } from "@/components/site/EditorialRoute";
-import { HomeMarketingLayout } from "@/components/home/layout";
+import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { PORTFOLIO_CLIENTS } from "@/lib/site-data/routeCopy";
 import { PORTFOLIO_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
 
@@ -42,20 +42,19 @@ export default async function PortfolioPage() {
 
   return (
     <HomeMarketingLayout>
-    <div className="bg-[var(--surface-page)]">
       <EditorialHero lead="Spaces we’ve" accent="delivered." />
 
-      <section className="py-12 md:py-18">
-        <div className="home-shell-xl space-y-16 md:space-y-24">
+      <HomeSection variant="white" spacing="md" className="border-t-0">
+        <HomeSectionInner className="space-y-16 md:space-y-24">
           {portfolio.map((client, index) => (
             <article key={client.id} className="portfolio-case">
               <div className="mb-6 grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] md:items-end md:gap-10">
                 <div className="min-w-0">
-                  <span className="text-[var(--color-bronze-500)]">
+                  <span className="typ-label text-brand">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <h2 className="home-heading mt-3">{client.name}</h2>
-                  <p className="mt-2 text-sm text-muted">{client.location}</p>
+                  <p className="typ-body-sm mt-2 text-muted">{client.location}</p>
                 </div>
                 <p className="page-copy max-w-2xl text-body md:justify-self-end">
                   {client.summary}
@@ -63,8 +62,8 @@ export default async function PortfolioPage() {
               </div>
 
               {/*
-                Mobile: tall primary + side-by-side secondary (no fixed 24rem that
-                halved the hero). md+: classic 7/5 mosaic with fixed height.
+                Mobile: tall primary + side-by-side secondary (no fixed height crush).
+                md+: classic 7/5 mosaic. Media cells: isolation + single paint layer.
               */}
               <div className="portfolio-case__mosaic grid grid-cols-2 gap-3 md:h-[34rem] md:grid-cols-12 md:grid-rows-2">
                 <div className="portfolio-case__media relative col-span-2 aspect-[16/10] min-h-[12.5rem] overflow-hidden rounded-2xl bg-[var(--surface-muted)] md:col-span-7 md:row-span-2 md:aspect-auto md:min-h-0 md:h-full">
@@ -73,7 +72,7 @@ export default async function PortfolioPage() {
                     alt={`${client.name} workplace project view 1`}
                     fill
                     sizes="(max-width: 768px) 100vw, 58vw"
-                    className="object-cover"
+                    className="portfolio-case__img object-cover"
                     priority={index === 0}
                   />
                 </div>
@@ -87,15 +86,15 @@ export default async function PortfolioPage() {
                       alt={`${client.name} workplace project view ${photoIndex + 2}`}
                       fill
                       sizes="(max-width: 768px) 50vw, 42vw"
-                      className="object-cover"
+                      className="portfolio-case__img object-cover"
                     />
                   </div>
                 ))}
               </div>
             </article>
           ))}
-        </div>
-      </section>
+        </HomeSectionInner>
+      </HomeSection>
 
       <EditorialCta
         lead="Bring us your"
@@ -103,7 +102,6 @@ export default async function PortfolioPage() {
         href="/contact"
         label="Start a conversation"
       />
-    </div>
     </HomeMarketingLayout>
   );
 }

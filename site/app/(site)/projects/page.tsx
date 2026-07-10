@@ -1,11 +1,11 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { ClientBadge } from "@/components/ClientBadge";
 import { KpiIntegrityMonitor } from "@/components/analytics/KpiIntegrityMonitor";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
 import { PROJECTS_PAGE_CLIENTS, PROJECTS_PAGE_COPY } from "@/lib/site-data/routeCopy";
-import { getBusinessStats } from '@/features/crm/businessStats';
+import { getBusinessStats } from "@/features/crm/businessStats";
 import { formatKpiAsOf, formatKpiValuePlus } from "@/lib/kpiFormat";
 import { PROJECTS_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
 
@@ -35,31 +35,38 @@ export default async function ProjectsPage() {
 
       <HomeSection variant="white" spacing="md">
         <HomeSectionInner>
-          <div className="stats-block scheme-border mb-16 grid grid-cols-1 gap-6 border-b pb-16 sm:grid-cols-3">
+          {/* Home trust-strip language: typ-stat + typ-label, readable 3-up grid */}
+          <div className="mb-12 grid grid-cols-1 gap-4 border-b border-theme-soft pb-12 sm:grid-cols-3 sm:gap-6 md:mb-16 md:pb-16">
             {[
               { id: "client-organisations", value: clientsValue, label: "Client Organisations" },
               { id: "projects-delivered", value: projectsValue, label: "Projects Delivered" },
               { id: "sectors-served", value: sectorsValue, label: "Sectors Served" },
             ].map((stat) => (
-              <div key={stat.label} className="scheme-panel-soft scheme-border rounded-2xl border px-6 py-7 text-center">
-                <p data-testid={`kpi-${stat.id}-projects`} className="typ-stat text-strong mb-1">
+              <div
+                key={stat.label}
+                className="home-trust-kpi home-trust-kpi--light text-center"
+              >
+                <p
+                  data-testid={`kpi-${stat.id}-projects`}
+                  className="typ-stat text-primary"
+                >
                   {stat.value}
                 </p>
-                <p className="stats-block__label">{stat.label}</p>
+                <p className="typ-label mt-2 text-muted">{stat.label}</p>
               </div>
             ))}
           </div>
 
           <p
             data-testid="kpi-as-of-projects"
-            className="text-muted -mt-10 mb-16 text-center text-xs font-medium tracking-wide"
+            className="typ-caption text-muted -mt-6 mb-12 text-center md:-mt-10 md:mb-16"
           >
             {asOfLabel}
           </p>
 
           <div className="scheme-panel scheme-border mb-12 rounded-2xl border p-5 sm:p-8 md:p-10">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-              <div>
+              <div className="min-w-0">
                 <p className="typ-label mb-3 text-body">{PROJECTS_PAGE_COPY.featuredLabel}</p>
                 <h2 className="home-heading">{PROJECTS_PAGE_COPY.featuredTitle}</h2>
               </div>
@@ -72,7 +79,7 @@ export default async function ProjectsPage() {
                 </Link>
               </div>
             </div>
-            {/* Max 4 cols — 6-col crushes sector + logo + name (~178px). */}
+            {/* Max 4 cols — never 6-col crush. Shared client-badge-group. */}
             <div className="client-badge-group">
               {PROJECTS_PAGE_CLIENTS.slice(0, 12).map((client) => (
                 <ClientBadge key={client.name} {...client} featured />
@@ -80,7 +87,7 @@ export default async function ProjectsPage() {
             </div>
           </div>
 
-          <div className="scheme-border border-t pt-12">
+          <div className="scheme-border border-t border-theme-soft pt-12">
             <p className="typ-label mb-6 text-body">{PROJECTS_PAGE_COPY.allLabel}</p>
             <div className="client-badge-group client-badge-group--dense">
               {PROJECTS_PAGE_CLIENTS.slice(12).map((client) => (

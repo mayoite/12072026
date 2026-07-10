@@ -66,11 +66,14 @@
 }
 
 .client-badge__mark {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   min-height: 3rem;
   min-width: 0;
+  isolation: isolate;
+  overflow: hidden;
 }
 
 .client-badge__logo {

@@ -1,69 +1,110 @@
-# UI Agent W2 — Marketing suite pages polish (non-home)
+# Phase 4 — Marketing suite align to home design base
 
 **Date:** 2026-07-10  
-**Scope:** `/projects/`, `/portfolio/`, `/trusted-by/` (+ contact audit only)  
-**Out of scope:** Homepage, products catalog (W1), open3d/planner workspace, locked CSS
+**Scope:** `/projects/`, `/trusted-by/`, `/portfolio/`  
+**Design base:** `results/site/design-base-home/` (Phase 2)  
+**Constraint:** zero edits under `site/app/css/core/locked/**`  
+**Out of scope:** homepage polish, products grid (Phase 3), open3d, locked CSS
 
-## CSS fence
+## Goal
 
-- **Zero** edits under `site/app/css/core/locked/**`
-- Custom CSS only in `site/app/css/core/components/client-badge.css` (shared, non-locked)
-- Tokens first (`--surface-*`, `--border-*`, `--radius-*`, type tokens)
+Align marketing suite pages to homepage visual system:
 
-## Before (audit)
+1. `typ-*` / `home-heading` / `page-copy*` type utilities  
+2. Shell spacing (`home-shell-xl`, `HomeSection`, section borders)  
+3. Card / media isolation (portfolio mosaic + client-badge mark)  
+4. Readable grids (`client-badge-group`, never 6-col crush)  
+5. Buttons `btn-*` where CTAs appear  
 
-Playwright headless @ 1440 / 768 / 390. Artifacts: `before/*`, `before/audit.json`.
+Not a redesign — class/language alignment only.
 
-| Page | Findings |
-|------|----------|
-| `/projects/` | Featured grid `lg:grid-cols-6` → **badge min width ~178px** (desktop). Mobile 2-col inside padded panel → **~138px**. Logos OK (29/61), monograms for rest. Hero `scale-105` + `scale-100` conflict. |
-| `/portfolio/` | Desktop mosaic OK (media non-zero). Mobile fixed `h-[24rem]` split 50/50 → **primary only ~186px**, no radius, sharp boxes. |
-| `/trusted-by/` | Roster readable; logos 13/28; no overlaps. Grid already 1/2/4 — switched to shared `client-badge-group`. |
-| `/contact/` | No layout breakage found (desktop only in after/contact). |
+## Before (prior polish + residual gaps)
 
-No broken client-logo requests; ClientBadge logo land already worked.
+Earlier W2 polish (`4c89431`) fixed badge grid crush + portfolio mobile mosaic height. Residual vs home design base:
 
-## Fixes
+| Surface | Gap |
+|---------|-----|
+| `/projects/` | KPI cards used ad-hoc `scheme-panel-soft` + `stats-block` chrome, not home `home-trust-kpi` + `typ-label` |
+| `/trusted-by/` | Stats labels via `stats-block__label` (body-size tracking) vs home `typ-label` |
+| `/portfolio/` | Media cells lacked `isolation: isolate` / single-layer pin; index used raw bronze color; CTA custom border button not `btn-primary`; not on `HomeSection` |
+| Shared | `EditorialCta` / `EditorialArrowLink` off home button/type language |
 
-1. **`projects/page.tsx`**
-   - Featured + extended roster → `client-badge-group` / `client-badge-group--dense` (max 4 featured, dense 5@xl — never 6).
-   - Featured panel padding `p-5 sm:p-8 md:p-10` so mobile badges aren’t crushed by inset.
-   - Hero `imageClassName="!scale-100 object-[center_44%]"` (kills double-scale).
-   - Featured badges mark `featured`.
+## Fixes (this phase)
 
-2. **`portfolio/page.tsx`**
-   - Mosaic: mobile aspect-ratio stack (primary `16/10` min-h 12.5rem; secondary `4/3`); md+ 7/5 fixed height.
-   - `rounded-2xl` + muted surface fallback on media cells.
-   - Case header grid uses `minmax(0,1fr)` so titles don’t pin to tiny `auto` columns.
-   - Index `padStart(2,"0")`.
+### 1. `projects/page.tsx`
+- KPI row → `home-trust-kpi home-trust-kpi--light` + `typ-stat text-primary` + `typ-label`
+- As-of → `typ-caption text-muted`
+- Drop legacy `stats-block` wrapper
+- Keep `client-badge-group` / dense + `btn-outline` / `btn-primary`
 
-3. **`trusted-by/page.tsx`**
-   - Roster uses `client-badge-group` + `data-testid="trusted-by-roster"`.
+### 2. `trusted-by/page.tsx`
+- Stats tiles → `home-trust-kpi` + `typ-stat` / `typ-label`
+- Hero media: `!scale-100` + overlay/content spacing (parity with projects)
+- Roster stays `client-badge-group` + `data-testid="trusted-by-roster"`
 
-4. **`client-badge.css`**
-   - Dense group breakpoints; `min-width:0` / equal height; logo `max-width:min(100%,…)`; sector/name `overflow-wrap`; tighter dense padding @xl.
+### 3. `portfolio/page.tsx`
+- Cases inside `HomeSection` + `HomeSectionInner` (home shell spacing)
+- Index → `typ-label text-brand`; location → `typ-body-sm text-muted`
+- Media class `portfolio-case__img` for layer pin
 
-## After (metrics)
+### 4. `EditorialRoute.tsx` (shared marketing editorial)
+- Borders → `border-theme-soft`
+- Arrow link → `typ-label` + `text-brand`
+- CTA → `btn-primary` (home button language)
 
-| Metric | Before | After |
-|--------|--------|-------|
-| Projects desktop badge min W | 178 | **237** |
-| Projects mobile badge min W | 138 | **316** |
-| Portfolio mobile primary H | ~186 | **~224** (+ radius) |
-| Broken logos / zero media / overlaps | 0 / 0 / 0 | 0 / 0 / 0 |
+### 5. Non-locked CSS
+| File | Role |
+|------|------|
+| `site/app/css/core/components/portfolio-media.css` | isolation + single image layer for mosaic cells |
+| `site/app/css/core/components/client-badge.css` | mark `isolation: isolate` |
+| `site/app/css/index.css` | import `portfolio-media.css` |
 
-Artifacts: `after/*`, `after/audit.json`.
+## After (live computed — Playwright headless)
+
+Source: `phase4-audit.json` · viewports 1440×900 + 390×844
+
+| Route | Check | Result |
+|-------|--------|--------|
+| `/projects/` | trust KPIs | **3** · `typ-stat` **3** · `typ-label` **5** |
+| `/projects/` | badge min W | desktop **237** · mobile **316** · 4-col / 5-col dense |
+| `/projects/` | logos | 29 logos · 32 monograms · **0 broken** |
+| `/projects/` | legacy `stats-block` | **0** |
+| `/projects/` | mark isolation | **isolate** |
+| `/trusted-by/` | trust KPIs | **4** · roster badges **28** · min W **299** · **0 broken** |
+| `/portfolio/` | cases | **5** |
+| `/portfolio/` | media isolation | **all cells `isolation: isolate`**, overflow hidden, **1 img each** |
+| `/portfolio/` | mobile primary H | **224** (readable) |
+| `/portfolio/` | CTA | `btn-primary` present |
+
+## Evidence files
+
+| Path | What |
+|------|------|
+| `phase4-before-projects-viewport.png` | pre Phase 4 projects viewport |
+| `phase4-after-projects-viewport.png` | after projects (home-trust-kpi + badges) |
+| `phase4-after-trusted-by-viewport.png` | after trusted-by |
+| `phase4-after-portfolio-viewport.png` | after portfolio mosaic |
+| `after/{projects,trusted-by,portfolio}-{desktop,mid,mobile}.png` | full/mid/mobile |
+| `phase4-audit.json` | computed metrics |
+| `phase4-verify.mjs` | repro script |
 
 ## Files touched
 
 - `site/app/(site)/projects/page.tsx`
-- `site/app/(site)/portfolio/page.tsx`
 - `site/app/(site)/trusted-by/page.tsx`
+- `site/app/(site)/portfolio/page.tsx`
+- `site/components/site/EditorialRoute.tsx`
+- `site/app/css/core/components/portfolio-media.css` *(new, non-locked)*
 - `site/app/css/core/components/client-badge.css`
-- `results/site/ui-websuite-marketing/**` (evidence)
+- `site/app/css/index.css`
+- `results/site/ui-websuite-marketing/**`
 
-**Locked paths:** none.
+**Locked paths modified:** **none**.
 
-## Commit
+## Unit
 
-`fix(ui): marketing suite pages polish (non-locked, not home)`
+`pnpm exec vitest run tests/unit/app/(site)/projects/page.test.tsx` → **pass**
+
+## Status
+
+**Phase 4 DONE** — marketing suite pages aligned to home design base (type, shell, media isolation, readable grids).

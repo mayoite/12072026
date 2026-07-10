@@ -1,0 +1,40 @@
+/* ==========================================================================
+   Portfolio case media — NON-LOCKED (home media-layer language)
+
+   Align /portfolio/ mosaic cells to homepage card media rules:
+   - isolation: isolate on media box
+   - single image paint layer under chrome
+   - next/image fill span pinned absolute
+   Do NOT put under core/locked/.
+   ========================================================================== */
+
+.portfolio-case__media {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--surface-muted);
+}
+
+/* next/image `fill` wraps in a span — pin to media layer (z-0) */
+.portfolio-case__media > span:has(> img),
+.portfolio-case__media > span:has(img) {
+  position: absolute !important;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  overflow: hidden;
+}
+
+.portfolio-case__img,
+.portfolio-case__media img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.portfolio-case__mosaic {
+  min-width: 0;
+}

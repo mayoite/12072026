@@ -39,7 +39,7 @@ Prefix letter is **not** sacred — pick one and stick to it. What matters is **
 | **D1** | Site loads (`/`, seating, portal usable) | **DONE** | `dfd596a` |
 | **D2** | Home = design base (inventory) | **DONE** | `results/site/design-base-home/` |
 | **D3** | Products suite align to home | **DONE** | `1f8c26c`, `141569c`, `ui-websuite-products/` |
-| **D4** | Marketing suite align to home | **DONE** | `4c89431` + `ui-websuite-marketing/VERIFY.md` (Chrome verify) |
+| **D4** | Marketing suite align to home | **DONE** | `4c89431`, `ui-websuite-marketing/D4-CLOSED.md`, `d4-close/*`, NOTES + after/* |
 | **D5** | Catalog image residual | queued | placeholders residual |
 | **D6** | Portal real DB list | queued | honest error UI only so far |
 
