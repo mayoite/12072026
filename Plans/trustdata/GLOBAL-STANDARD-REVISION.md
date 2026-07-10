@@ -1,63 +1,88 @@
-# Global-standard phase revision program
+# Global-standard revision — **module-wise**
 
-**Opened:** 2026-07-10  
-**Owner ask:** Plan/bar too low for “complete”; revise to **global standards**. Each phase through **brainstormer** + **UI expert**.  
-**Bar:** Raise, never lower · `Agents/Agents-ELON-STANDARD.md`  
-**Does not delete** kill order topology — **raises acceptance** and rewrites phase pass criteria via addenda.
+**Date:** 2026-07-10 (restructured — kill CP-folder theater)  
+**Owner:** plan not useless; **bar too low**; stop organizing raised work as CP-00…10 duplicates.  
+**Evidence root:** `results/planner/global-standard-revision/modules/`  
+**Index:** `results/planner/global-standard-revision/README.md`
 
-## Why
+## What was stupid
 
-| Failure | Fix |
-|---------|-----|
-| GATE PASS sold as product done | Dual expert raise of **definition of done** |
-| Block2D-only W2 while owner expects **SVG files** | Expert re-scope W2 / asset pipeline |
-| Thin spine vs manufacturer planners (Foyr/Coohom class **patterns only**) | Global UI + product bar per phase |
+| Old | Why stupid |
+|-----|------------|
+| Parallel `CP-00`…`CP-10` under revision tree | Second copy of trustdata numbering; confuses gate history with product modules |
+| “Revise every CP” as the product | Agents re-sticker process while **SVG/mesh/shell** stay unfinished |
+| One PASS word | GATE spine ≠ module complete |
 
-## Process (every phase — mandatory)
+## What we do instead
 
-```
-1 Goal lock: which CP/P0X
-2 Repo-truth scout (optional if fresh)
-3 BRAINSTORMER subagent → PHASE-BRAINSTORM.md (product/global bar, gaps, non-goals)
-4 UI EXPERT subagent → PHASE-UI-EXPERT.md (interaction, visual, a11y, information architecture)
-5 Head synthesizes → phases/P0X addendum OR reviews/*-global-revision.md
-   - Raised PASS criteria (must be path-provable)
-   - Explicit NOT product-complete list
-6 Only then: implementation phases use the raised bar
-```
+### 1. Trustdata CP folders stay history
 
-**Seats never skip.** Serial: finish one phase’s dual expert pass before the next phase’s.
+`results/planner/world-standard-wave/03-select-delete/` etc. = **old spine evidence**.  
+Do **not** create `global-standard-revision/CP-03/`.
 
-## Phase queue (serial)
+### 2. Raised bar lives in **modules**
 
-| # | Phase file | Gate | Revision status |
-|---|------------|------|-----------------|
-| 0 | `00-START.md` | W0 | **Dual expert DONE** · foundation product criteria still **OPEN** (`CP-00/SYNTHESIS.md`) |
-| 1 | `phases/P01-product-truth.md` | baseline | pending |
-| 2 | `phases/P02-engine-lock.md` | engine | pending |
-| 3 | `phases/P03-select-delete.md` | W3 | pending |
-| 4 | `phases/P04-orbit-continuity.md` | W4 | pending |
-| 5 | `phases/P05-symbols-svg.md` | W2 + **SVG files** | pending |
-| 6 | `phases/P06-save-honesty.md` | W5–W6 | pending |
-| 7 | `phases/P07-draw-place-journey.md` | W1–W2 journey | pending |
-| 8 | `phases/P08-mesh-quality.md` | W7 | pending |
-| 9 | `phases/P09-shortcuts-chrome.md` | W8 | pending |
-| 10 | `phases/P10-evidence-handover.md` | pack | pending |
-
-## Evidence root
-
-`results/planner/global-standard-revision/`
+Only:
 
 ```
-results/planner/global-standard-revision/
-  INDEX.md
-  CP-00/
-    BRAINSTORM.md
-    UI-EXPERT.md
-    SYNTHESIS.md
-  CP-01/ …
+results/planner/global-standard-revision/modules/
+  foundation/
+  shell-chrome/
+  canvas-2d/
+  symbols-svg/          ← SVG files on disk live here
+  catalog-place/
+  select-edit/
+  view-3d-orbit/
+  mesh-3d/
+  save-persist/
+  export-boq/
+  admin-svg-pipeline/
+  evidence-handover/
 ```
+
+### 3. Per module workflow (serial)
+
+```
+1 Pick ONE module
+2 Brainstormer → modules/<m>/BRAINSTORM.md
+3 UI expert     → modules/<m>/UI-EXPERT.md
+4 Head          → modules/<m>/SYNTHESIS.md  (raised complete bar + OPEN list)
+5 Implement + prove under modules/<m>/evidence/ or world-standard-wave only when reusing
+6 Close module README status — then next module
+```
+
+### 4. Suggested implement order (product pain first)
+
+| Order | Module | Why |
+|------:|--------|-----|
+| 1 | **foundation** | Claim language + authority map (experts already run) |
+| 2 | **symbols-svg** | Owner pain: SVGs not created |
+| 3 | **admin-svg-pipeline** | How files get to `public/svg-catalog/` |
+| 4 | **mesh-3d** | Still boxy residual |
+| 5 | **shell-chrome** | Honesty + a11y chrome |
+| 6 | **select-edit** / **canvas-2d** / **catalog-place** / **view-3d-orbit** / **save-persist** | Journey modules |
+| 7 | **export-boq** | Quote path |
+| 8 | **evidence-handover** | Pack only after modules honest |
+
+Change order only if owner pain says so — still **one module at a time**.
+
+## Map old CP → module (reference only)
+
+| Old CP | Module |
+|--------|--------|
+| CP-00 | foundation |
+| CP-01 | foundation (+ product truth) |
+| CP-02 | foundation (engine locks) |
+| CP-03 | select-edit |
+| CP-04 | view-3d-orbit |
+| CP-05 | symbols-svg (+ Block2D) |
+| CP-06 | save-persist |
+| CP-07 | canvas-2d + catalog-place |
+| CP-08 | mesh-3d |
+| CP-09 | shell-chrome |
+| CP-10 | evidence-handover |
+| Asset S4 publish | admin-svg-pipeline |
 
 ## Ethics
 
-Research = ideas/JTBD only (`D:\websites`). **No** competitor assets, CSS, code, or brands in product.  
+Ideas only from research. No competitor assets.  

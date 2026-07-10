@@ -1,23 +1,24 @@
 # Session recap
 
 **Updated:** 2026-07-10  
-**Program:** Global-standard revision — brainstormer + UI expert **per phase**
+**Change:** Global-standard revision restructured **module-wise** (killed CP theater under revision tree)
 
-## Done
+## Structure now
 
-- Program: `Plans/trustdata/GLOBAL-STANDARD-REVISION.md`
-- ELON + MEMORY: dual seats mandatory before product-complete claims
-- **CP-00:** brainstormer + UI expert + SYNTHESIS
-- Verdict: old CP-00 bar = process unlock only; foundation product **OPEN** (F1–F7)
-- SVG honesty: census required; ~4 files ≠ catalog complete
+`results/planner/global-standard-revision/modules/{foundation,symbols-svg,mesh-3d,...}`  
+Law: `Plans/trustdata/GLOBAL-STANDARD-REVISION.md`
 
-## Next (serial)
+## CP-00 expert work
 
-1. Land W0.F2–F4 docs under `00-start/` (buyer contract, authority map, asset census)  
-2. **CP-01** brainstormer + UI expert  
-3. Continue CP-02…  
+Moved → `modules/foundation/` (BRAINSTORM, UI-EXPERT, SYNTHESIS)
+
+## Next module (pain order)
+
+1. Finish foundation landables (contract + authority + SVG census)  
+2. **symbols-svg** dual experts (SVGs not being created)  
+3. admin-svg-pipeline · mesh-3d · …  
 
 ## Do not claim
 
-- Global-standard product complete  
-- All phases revised  
+- Product complete  
+- SVG catalog complete  

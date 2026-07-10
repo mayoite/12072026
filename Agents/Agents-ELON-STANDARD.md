@@ -47,19 +47,24 @@ You are the **main agent**: set goals with owner, **decide what to implement**, 
 **Standing memory** (partner rules): `D:\.grok\memory\MEMORY.md` when Grok memory is on.  
 **Raise the bar, never lower it.** This handbook is a **floor**. Improve process when it raises quality (tighter proof, better root-cause, cleaner seats). Never drop ROOT-CAUSE / TDD / verify / one-phase-complete to “save time.” Owner OK with serial phases + live gate before product raise + subagents — execute that path at Elon bar or higher.
 
-### Global-standard revision (owner 2026-07-10)
+### Global-standard revision (owner 2026-07-10; restructured module-wise)
 
-Prior spine gates were **too low** for “complete.” Program: `Plans/trustdata/GLOBAL-STANDARD-REVISION.md`.
+Prior spine gates were **too low** for “complete.”  
+Program: `Plans/trustdata/GLOBAL-STANDARD-REVISION.md`  
+Evidence: `results/planner/global-standard-revision/modules/<module>/`  
 
-**Before treating a trustdata phase as product-ready, run both seats:**
+**Organize by product module** (foundation, symbols-svg, mesh-3d, shell-chrome, …) — **not** a second CP-00…10 tree.
+
+**Per module before product-complete claims:**
 
 | Seat | Output |
 |------|--------|
-| **Brainstormer** | Global product bar, gaps, SVG/mesh/save expectations, non-goals |
-| **UI expert** | Manufacturer-planner UI/UX/a11y/IA; what “looks unfinished” fails |
+| **Brainstormer** | `modules/<m>/BRAINSTORM.md` |
+| **UI expert** | `modules/<m>/UI-EXPERT.md` |
+| **Head** | `modules/<m>/SYNTHESIS.md` + implement proof |
 
-Evidence under `results/planner/global-standard-revision/CP-XX/`. Head **synthesizes** raised PASS criteria into a phase **addendum** (not a second master plan).  
-**Gate PASS from old spine ≠ global-standard complete.**
+**One module at a time.** Old `world-standard-wave/CP` folders = history only.  
+**Gate PASS from old spine ≠ global-standard module complete.**
 
 ### Stop vs take the call
 

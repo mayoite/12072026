@@ -9,9 +9,10 @@
 
 **Goal:** Freeze operating rules, approach pick, unlock mode, ethics, and phase order so every agent works from the same truth.
 
-**Global-standard revision (2026-07-10):** Old CP-00 PASS = **process unlock only** (bar too low for “product foundation complete”). Dual expert pass: brainstormer + UI expert.  
-**Authority for raised bar:** `results/planner/global-standard-revision/CP-00/SYNTHESIS.md` · program `Plans/trustdata/GLOBAL-STANDARD-REVISION.md`.  
-**Status split:** `PASS (unlock process)` vs `OPEN (foundation product)` until W0.F1–F7 in SYNTHESIS have paths.
+**Global-standard revision (2026-07-10):** Old CP-00 PASS = **process unlock only**. Raised bar is **module-wise** — not more CP folders.  
+**Module:** `results/planner/global-standard-revision/modules/foundation/` (BRAINSTORM · UI-EXPERT · SYNTHESIS).  
+**Program:** `Plans/trustdata/GLOBAL-STANDARD-REVISION.md`.  
+**Status:** `PASS (unlock process)` · `OPEN (foundation product)` until foundation SYNTHESIS F-criteria have paths.
 
 **Architecture:** One checkout `D:\OandO07072026`; one plan root `Plans/trustdata/`; data decides â€œdone.â€
 
