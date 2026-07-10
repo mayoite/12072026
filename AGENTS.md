@@ -10,7 +10,7 @@
 
 **All agent process handbooks live under `Agents/`.** Read the bar handbook before routine work.
 
-- **Elon standard (highest bar):** `Agents/Agents-elon-standard.md` — skill order, seats, honesty bar, recap. **Max quality benchmark; raise to this, never lower it.**
+- **Elon standard (highest bar):** `Agents/Agents-elon-standard.md` — skill order, seats, honesty bar, recap, **epistemic law** (repo is truth; assume gaps; addenda not plan bloat; no paper PASS). **Max quality benchmark; raise to this, never lower it.**
 - **Plan:** `Agents/Agents-Plan.md`
 - **Failures:** `Agents/Agents-failure.md`
 - **Testing:** `Agents/Agents-testing.md` & `testing-handbook.md`
@@ -64,7 +64,8 @@ If a tool defaults output into `site/`, **redirect it to root `results/`** or fi
 - **Why parallel agents (owner-explicit):** Long single threads **fill the context window and you lose track**. Parallel agents = **fresh context** on sub-slices of the **same** task. Also in `ayushdocs/19-GOALS-SLICES.md` (“Subagents with /using-superpowers keep context fresh”). This is **not** multi-product thrash.
 - **Subagents:** Parallel **only inside that one task** (default ≤8; hard max 10). Write to disk so results survive. Briefs short; point at MDs.
 - **Bar:** **Elon standard** — `Agents/Agents-elon-standard.md` is the **highest** process/quality benchmark. Global product standard; **quality over speed**. Owner present without micromanage or prompt-engineering — agent takes the call once intent is clear.
-- **Pipeline / seats:** Follow ordered pipeline in `Agents/Agents-elon-standard.md` (superpowers → goal → scout → plan → SDD 2–4 + TDD → review → verify → check-work → finish → recap).
+- **Pipeline / seats:** Follow `Agents/Agents-elon-standard.md` (superpowers → goal → **repo-truth scout** → gap/brainstorm → **slice addendum/checklist** → SDD 2–4 + TDD → review → verify → check-work → finish → recap). Plans/checklists are hypotheses; **live repo** decides done.
+- **Facts vs intent:** Owner owns **intent**. Agent must **not** trust owner, plans, or checklist ticks for **repo facts** — re-read code, re-run proof.
 - **Assign with superpowers:** Every subagent brief **starts with** `/using-superpowers` (+ fit skills from Elon roster). That is the kill for delegated work — not a hand-written mega-prompt.
 - Skills do not override **User Wins** or Git & Workspace rules above.
 

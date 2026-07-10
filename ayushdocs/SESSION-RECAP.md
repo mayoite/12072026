@@ -6,9 +6,9 @@
 
 ## Done this window
 
-- **Highest bar** moved to `Agents/Agents-elon-standard.md`; `AGENTS.md` routes to `Agents/` first
-- Owner pointer only: `ayushdocs/20-ELON-STANDARD.md`
-- Rolling recap (this file); goal lock still open: CP-10 · a11y · or custom
+- Elon standard epistemic law landed: `Agents/Agents-elon-standard.md` §2 (repo truth, assume gaps, addenda, no paper PASS)
+- `AGENTS.md` updated for facts-vs-intent
+- Goal lock still open: CP-10 · a11y · or custom
 
 ## Red / blocked
 
@@ -16,7 +16,7 @@
 
 ## Next 15m
 
-- Owner picks kill **1** CP-10 / **2** a11y / **3** other → run pipeline in `20-ELON-STANDARD.md`
+- Owner picks kill **1** CP-10 / **2** a11y / **3** other → run `Agents/Agents-elon-standard.md`
 
 ## Do not claim
 
