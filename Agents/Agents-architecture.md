@@ -7,6 +7,7 @@
 ## 2. Constraints
 - **No Rogue Patterns:** Obey Drizzle for DB and Vanilla CSS/Tokens (`theme.css`). No Tailwind or new state managers without explicit command.
 - **Respect Boundaries:** Adhere to `../docs/architecture/MODULE-LAYOUT.md`.
+- **CSS fence (hard):** `Agents-css.md` — **do not modify** `site/app/css/core/locked/**`. Theme/tiling already defined. Post-locked custom CSS only if required.
 
 ## 3. Proposal Phase
 - **Plan First:** For true architecture forks, write an explicit proposal via `Agents-Plan.md` / phase addendum.
