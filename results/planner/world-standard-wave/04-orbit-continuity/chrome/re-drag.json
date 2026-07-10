@@ -1,0 +1,5 @@
+Script ran on page and returned:
+```json
+{"ok":true,"rect":{"w":429,"h":759},"orbit":"true","still3d":true}
+```
+

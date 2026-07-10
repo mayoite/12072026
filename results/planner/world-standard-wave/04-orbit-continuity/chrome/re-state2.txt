@@ -1,0 +1,5 @@
+Script ran on page and returned:
+```json
+{"has3d":true,"orbit":"true","furniture":8,"canv":[{"t":null,"cw":427,"ch":757,"w":429,"h":759}]}
+```
+

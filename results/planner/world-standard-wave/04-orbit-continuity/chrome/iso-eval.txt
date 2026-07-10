@@ -1,0 +1,5 @@
+Script ran on page and returned:
+```json
+{"href":"http://localhost:3000/planner/guest/?plannerDevTools=1","len":1348,"sample":"Skip to main content\nUntitled plan\n2D\n3D\nGround Floor\ncm\nFocus\nUndo\nRedo\nG£ô\nDRAFT SAVED LOCALLY\nSave draft\nExport\nPrefs\nINVENTORY\nSearch catalog elements\nSYSTEMS CONFIGURATOR\nGû+\nAll\nOffice\nCATEGORIES\nFurniture\nDesks & Workstations\nChairs\nStorage\nTables","hasInv":true}
+```
+
