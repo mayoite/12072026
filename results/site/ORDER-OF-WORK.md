@@ -39,8 +39,9 @@
 | 0 | **DONE** — this file |
 | 1 | **DONE** — portal no longer red-boundary (`dfd596a`); `/` seating portal 200 |
 | 2 | **DONE** — `results/site/design-base-home/` |
-| 3 | **DONE** — `results/site/ui-websuite-products/` |
-| 4–6 | queued |
+| 3 | **DONE** — products suite + image paths (`1f8c26c`, `141569c`) · `results/site/ui-websuite-products/` |
+| 4 | **IN PROGRESS** — marketing suite (2 agents) |
+| 5–6 | queued |
 
 ---
 
