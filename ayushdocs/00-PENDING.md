@@ -36,7 +36,7 @@ Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infr
 |----------|------|
 | **W4 browser orbit/continuity e2e** | **Closed** — configurator Place 4 seats path; orbit attr + count restore |
 | **Open3d e2e pack (callable)** | **Closed** — not folder-only: `pnpm gate:open3d` (typecheck + pack) and `pnpm test:e2e:open3d-world`; manifest `site/config/build/playwright-open3d-world-specs.json`; evidence `results/planner/world-standard-wave/gate-e2e/` (`run.json` exit 0, 5/5) |
-| **A11y label-in-name (WCAG 2.5.3)** | **HALF.** Code + unit 31/31 (`a11y-label-in-name/`). **Fresh LH still OPEN.** Nested main + hydration done earlier. |
+| **A11y label-in-name (WCAG 2.5.3)** | **PASS (this residual).** Code + unit 31/31 + fresh LH **100** / label-in-name **pass** — `results/planner/a11y-label-in-name/` (`lh-open3d-guest.report.json`). **Not** site-wide a11y clean. Other chrome residuals (heading order, 0×0 toggles, landmarks) still open if present. |
 | **Mesh quality raise** | Cabinet-v0 / workstation multiparts still boxy; handles/AO later — W7 bar already PASS for readable parts |
 | **Fabric full stage** | Destination still later (Approach A); flag OFF expected |
 | **Cloud / member save** | W6 is local-only honesty; cloud wire is a later gate if owner wants |
