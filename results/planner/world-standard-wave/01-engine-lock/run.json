@@ -3,8 +3,13 @@
   "approach": "A-freeze-reprove",
   "evidenceDir": "results/planner/world-standard-wave/01-engine-lock",
   "date": "2026-07-10",
-  "head": "2970518672ad17c9a636b748c7c46ad8f3092187",
+  "head": "6bd28d3816b11e3fc2eb09ee9834eadb11c78ea3",
   "productEdits": false,
+  "cp02Status": "OPEN",
+  "cp02PassBlockedBy": [
+    "OWNER-SIGNOFF.md missing",
+    "remaining pack docs may still be incomplete (other seats)"
+  ],
   "suites": [
     {
       "id": "orbitControlsDefault",
@@ -36,6 +41,7 @@
     "testFilesPassed": 3,
     "allExitZero": true
   },
+  "combinedLog": "unit-freeze-pack-raw.log",
   "packagePinsObserved": {
     "fabric": "7.4.0",
     "three": "^0.185.1",
@@ -43,5 +49,12 @@
     "@react-three/drei": "^10.7.7"
   },
   "konvaPresent": false,
-  "chromeDevtoolsSmoke": "separate-optional"
+  "hygieneFlagsPresent": {
+    "@fancyapps/ui": "^6.1.14",
+    "gsap": "^3.15.0",
+    "@gsap/react": "^2.1.2"
+  },
+  "packagePinDoc": "PACKAGE-PIN.md",
+  "chromeDevtoolsSmoke": "separate-optional",
+  "rePinNote": "Seat A 2026-07-10: PACKAGE-PIN written; freeze pack re-run at tip 6bd28d38; CP-02 not PASS (OWNER-SIGNOFF missing)"
 }
