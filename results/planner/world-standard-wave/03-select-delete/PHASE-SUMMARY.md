@@ -3,7 +3,7 @@
 **Date:** 2026-07-10  
 **Seat:** Code-review units + browser W3 hard gate (updated after green Playwright)  
 **Checkout:** `D:\OandO07072026` (main only)  
-**Status:** **UNITS DONE · BROWSER W3 PASS · CP-03 browser gate CLOSED**
+**Status:** **UNITS DONE · BROWSER W3 PASS · CP-03 SCORECARD PASS** (Agent 5)
 
 ---
 
@@ -176,6 +176,23 @@ Logs refreshed: `unit-w3-pack.log`, per-suite `unit-*.log`, `unit-residual.log`,
 
 ---
 
+
+---
+
+## Agent 5 scorecard (2026-07-10)
+
+| Field | Value |
+|-------|--------|
+| File | `results/planner/world-standard-wave/03-select-delete/CP-03-SCORECARD.md` |
+| Live: one `updateProject(applySelectionDelete)` | **OK** (`OOPlannerWorkspace` ~L327–335) |
+| Live: keyboard Del/Bksp `preventDefault` + `!mod` | **OK** (`useWorkspaceKeyboard` ~L83–86) |
+| Live: Fabric flag `=== "1"` only | **OK** (`fabricFurnitureFlag.ts`) |
+| Unit pack green? | **Y** — `unit-w3-pack.log` (4 files / 62 passed) |
+| Browser green? | **Y** — `browser-w3-raw.log` + PNGs 01–04; exit 0 |
+| Unit alone = W3? | **NO — FAIL if claimed** |
+| **Overall CP-03** | **PASS** (both unit + browser evidence on disk) |
+| Honesty residual | Browser count-only; U4 carries id/pose; evidence pack HEAD `aea4e76c` (tip advanced after) |
+
 ## Checklist (P03 close criteria)
 
 - [x] Baseline + residual unit gaps (locked, pose+history, canvas select, keyboard edges)
@@ -186,6 +203,7 @@ Logs refreshed: `unit-w3-pack.log`, per-suite `unit-*.log`, `unit-residual.log`,
 - [x] PNGs + browser raw log
 - [x] `run.json` / `HEAD.txt` / acceptance meta
 - [x] `W3-ACCEPTANCE.md` from data (unit + browser)
+- [x] `CP-03-SCORECARD.md` Agent 5 gate (unit Y + browser Y → overall PASS; unit alone = FAIL reminder)
 
 ---
 
@@ -196,4 +214,4 @@ Logs refreshed: `unit-w3-pack.log`, per-suite `unit-*.log`, `unit-residual.log`,
 | Product code changed this phase residual | **None** (tests + evidence only) |
 | Units residual | 62 green |
 | Browser seat | **PASS** — commit `8660997` |
-| W3 / CP-03 | **CLOSED** for residual wave (count-only e2e; U4 carries id/pose unit bar) |
+| W3 / CP-03 | **PASS** — Agent 5 `CP-03-SCORECARD.md` (count-only e2e; U4 id/pose unit bar) |

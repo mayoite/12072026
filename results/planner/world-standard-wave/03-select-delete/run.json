@@ -6,14 +6,34 @@
   "checkout": "D:\\OandO07072026",
   "worktrees": false,
   "evidenceRoot": "results/planner/world-standard-wave/03-select-delete",
-  "HEAD": "aea4e76c44ed82130b3d8b38d8980877fc976540",
+  "HEAD": "74e89a4b431f5e5cecab79f1523a84543981a7f0",
   "date": "2026-07-10",
-  "startedAt": "2026-07-10T12:45:00.000Z",
-  "endedAt": "2026-07-10T12:46:00.000Z",
-  "unit": {
-    "exitCode": null,
+  "startedAt": "2026-07-10T18:52:59.000Z",
+  "endedAt": "2026-07-10T18:53:01.000Z",
+  "unitPack": {
+    "exitCode": 0,
     "log": "unit-w3-pack.log",
-    "note": "Seat A owns unit re-prove. Seat B browser only — units not re-run."
+    "rawLog": "unit-w3-pack-raw.log",
+    "command": "pnpm exec vitest run tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts tests/unit/features/planner/open3d/applySelectionDelete.test.ts tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx --reporter=verbose",
+    "cwd": "site/",
+    "files": [
+      "tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts",
+      "tests/unit/features/planner/open3d/applySelectionDelete.test.ts",
+      "tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx",
+      "tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx"
+    ],
+    "pathNote": "applySelectionDelete lives under open3d/ (not open3d/editor/)",
+    "testFiles": "4/4 passed",
+    "tests": "62/62 passed",
+    "durationSec": 1.99,
+    "agent": "P03-Agent-3",
+    "note": "Unit pack re-prove only. unit alone ≠ W3. Do not treat unitPack green as phase PASS without browser green on same tip."
+  },
+  "unit": {
+    "exitCode": 0,
+    "log": "unit-w3-pack.log",
+    "tests": "62/62 passed",
+    "note": "Superseded metadata pointer — see unitPack for Agent 3 re-prove."
   },
   "browser": {
     "exitCode": 0,
@@ -27,18 +47,16 @@
     "durationSec": 3.0,
     "testBodySec": 2.0,
     "tests": "1/1 passed",
-    "firstAttempt": {
-      "exitCode": 1,
-      "error": "Timeout waiting for Place 4 seats — systems configurator collapsed (defaultOpen=false)",
-      "fix": "placeSeatsFromConfigurator expands Systems configurator when Place N not visible"
-    },
     "pngs": [
       "01-placed.png",
       "02-selected.png",
       "03-deleted.png",
       "04-undone.png"
     ],
-    "pngProof": "4 furniture → 3 after Delete → 4 after Ctrl+Z"
+    "pngProof": "4 furniture → 3 after Delete → 4 after Ctrl+Z",
+    "staleRelativeToHead": true,
+    "note": "Prior browser evidence recorded at HEAD aea4e76… — not re-proved on tip 74e89a4 by Agent 3. Browser re-prove required for W3 on this tip."
   },
-  "status": "PASS"
+  "status": "unitPack-only",
+  "statusNote": "Agent 3 set unitPack only. unit alone ≠ W3. Do not set status pass without browser green on same HEAD."
 }
