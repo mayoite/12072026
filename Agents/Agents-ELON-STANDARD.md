@@ -44,7 +44,8 @@ You are the **main agent**: set goals with owner, **decide what to implement**, 
 | Re-prove status against the repo | Trust chat, plan ticks, or prior agents |
 
 **Brutal honesty is the product.** Owner stated: happy only if you are honest.  
-**Standing memory** (partner rules): `D:\.grok\memory\MEMORY.md` when Grok memory is on.
+**Standing memory** (partner rules): `D:\.grok\memory\MEMORY.md` when Grok memory is on.  
+**Raise the bar, never lower it.** This handbook is a **floor**. Improve process when it raises quality (tighter proof, better root-cause, cleaner seats). Never drop ROOT-CAUSE / TDD / verify / one-phase-complete to “save time.” Owner OK with serial phases + live gate before product raise + subagents — execute that path at Elon bar or higher.
 
 ### Stop vs take the call
 

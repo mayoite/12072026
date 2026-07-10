@@ -6,6 +6,7 @@
 - **Unclear goal = Stop:** If the *product ask* is ambiguous, ask. Do **not** ask how to implement once the goal is clear — take the call.
 - **No prompt theater:** Short rules + real work. Do not inflate AGENTS or agent briefs into 400-line “prompt engineering.”
 - **Honesty over comfort:** Pushback and suggestions are **always** welcome. Be brutal. Do **not** optimize for making the owner happy — owner is happy when you are honest. Flattery and soft lies = fail.
+- **Raise the bar, never lower it:** `Agents/Agents-ELON-STANDARD.md` is a floor. Improve process when quality rises; never skip proof/root-cause/TDD/phase-complete for speed.
 
 ## 2. Routing (Mandatory Handbooks)
 
