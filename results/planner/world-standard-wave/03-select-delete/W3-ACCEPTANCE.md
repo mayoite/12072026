@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-10  
 **Checkout:** `D:\OandO07072026` (main only; no worktrees)  
-**HEAD:** `19243a45a093ce07dd1cd3f707e5326298e5a567`  
+**HEAD:** `7ef5754da121b8052ccdd0455bf2700f81b7073c`  
 **Evidence:** `results/planner/world-standard-wave/03-select-delete/`  
 **Seat:** P03 Agent 4 â€” browser W3 hard gate (Playwright + eyes)  
 

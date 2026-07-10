@@ -1,4 +1,4 @@
-﻿{
+{
     "phase":  "P03",
     "gate":  "W3",
     "checkpoint":  "CP-03",
@@ -6,7 +6,7 @@
     "checkout":  "D:\\\\OandO07072026",
     "worktrees":  false,
     "evidenceRoot":  "results/planner/world-standard-wave/03-select-delete",
-    "HEAD": "19243a45a093ce07dd1cd3f707e5326298e5a567",
+    "HEAD": "7ef5754da121b8052ccdd0455bf2700f81b7073c",
     "date":  "2026-07-10",
     "agent":  "P03-Agent-4",
     "action":  "browser W3 hard gate re-prove (Playwright + eyes)",
@@ -39,7 +39,7 @@
                     "reProvedOnTip":  true,
                     "onDisk":  true,
                     "note":  "Browser hard gate PASS on tip after helper land. Unit alone != W3.",
-                    "provedAtHead": "19243a45a093ce07dd1cd3f707e5326298e5a567"
+                    "provedAtHead": "7ef5754da121b8052ccdd0455bf2700f81b7073c"
                 },
     "unitPack":  {
                      "note":  "Browser seat only; unit alone != W3."
