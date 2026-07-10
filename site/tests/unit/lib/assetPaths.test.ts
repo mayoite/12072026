@@ -30,6 +30,14 @@ describe('assetPaths', () => {
     // Force server-side by default
     vi.stubGlobal('window', undefined);
     vi.resetModules();
+    // Reset FS mock (other tests override implementation).
+    mockFs.existsSync.mockImplementation((p: string) => {
+      if (p.includes('exists.webp')) return true;
+      if (p.includes('exists-jpg.jpg')) return true;
+      if (p.includes('exists-jpeg.jpeg')) return true;
+      if (p.includes('exists-png.png')) return true;
+      return false;
+    });
     // Set environment variables for testing
     process.env.NEXT_PUBLIC_ASSET_BASE_URL = 'https://cdn.example.com/';
     assetPaths = await import('../../../lib/assetPaths');
@@ -56,15 +64,24 @@ describe('assetPaths', () => {
     // If it does not exist, it falls back to category.svg.
     const legacySeg = String.fromCharCode(97, 102, 99);
     const legacy = `/images/${legacySeg}/chair.webp`;
-    expect(assetPaths.normalizeAssetPath(legacy)).toBe('https://cdn.example.com/images/fallback/category.svg');
+    expect(assetPaths.normalizeAssetPath(legacy)).toBe(
+      'https://cdn.example.com/images/fallback/product-placeholder.webp',
+    );
   });
 
   it('should resolve legacy products paths', () => {
-    expect(assetPaths.normalizeAssetPath('/products/table.webp')).toBe('https://cdn.example.com/images/fallback/category.svg');
+    expect(assetPaths.normalizeAssetPath('/products/table.webp')).toBe(
+      'https://cdn.example.com/images/fallback/product-placeholder.webp',
+    );
   });
 
-  it('should resolve category.webp to category.svg', () => {
-    expect(assetPaths.normalizeAssetPath('/images/fallback/category.webp')).toBe('https://cdn.example.com/images/fallback/category.svg');
+  it('should resolve category placeholders to raster product fallback', () => {
+    expect(assetPaths.normalizeAssetPath('/images/fallback/category.webp')).toBe(
+      'https://cdn.example.com/images/fallback/product-placeholder.webp',
+    );
+    expect(assetPaths.normalizeAssetPath('/images/fallback/category.svg')).toBe(
+      'https://cdn.example.com/images/fallback/product-placeholder.webp',
+    );
   });
 
   it('should resolve phoenix seating webp to jpg', () => {
@@ -72,7 +89,7 @@ describe('assetPaths', () => {
       'https://cdn.example.com/images/catalog/oando-seating--phoenix/image-1.jpg'
     );
     expect(assetPaths.normalizeAssetPath('/images/catalog/oando-seating--phoenix/image-4.webp')).toBe(
-      '/images/fallback/category.svg'
+      'https://cdn.example.com/images/fallback/product-placeholder.webp'
     );
   });
 
@@ -89,21 +106,46 @@ describe('assetPaths', () => {
     // exists-png.webp does not exist, but exists-png.png does
     expect(assetPaths.normalizeAssetPath('/images/exists-png.webp')).toBe('https://cdn.example.com/images/exists-png.png');
 
-    // non-existing resolves to fallback
-    expect(assetPaths.normalizeAssetPath('/images/not-here.webp')).toBe('https://cdn.example.com/images/fallback/category.svg');
+    // non-existing resolves to raster fallback (next/image rejects SVG)
+    expect(assetPaths.normalizeAssetPath('/images/not-here.webp')).toBe(
+      'https://cdn.example.com/images/fallback/product-placeholder.webp',
+    );
+  });
+
+  it('should strip zero-padded catalog image numbers when unpadded file exists', () => {
+    mockFs.existsSync.mockImplementation((p: string) => {
+      if (String(p).includes('/images/catalog/oando-seating--fluid-x/image-1.webp')) return true;
+      if (String(p).includes('/images/catalog/oando-seating--canaret/image-1.jpg')) return true;
+      return false;
+    });
+    expect(
+      assetPaths.normalizeAssetPath('/images/catalog/oando-seating--fluid-x/image-01.webp'),
+    ).toBe('https://cdn.example.com/images/catalog/oando-seating--fluid-x/image-1.webp');
+    expect(
+      assetPaths.normalizeAssetPath('/images/catalog/oando-seating--canaret/image-01.webp'),
+    ).toBe('https://cdn.example.com/images/catalog/oando-seating--canaret/image-1.jpg');
   });
 
   it('should behave differently on client side (window is defined)', async () => {
     vi.stubGlobal('window', {});
     vi.resetModules();
     const clientAssetPaths = await import('../../../lib/assetPaths');
-    // On client side, resolves directly without local variant check:
-    expect(clientAssetPaths.normalizeAssetPath('/images/anything.webp')).toBe('https://cdn.example.com/images/anything.webp');
+    // On client side, still strip zero-padding so public files resolve without FS:
+    expect(clientAssetPaths.normalizeAssetPath('/images/anything.webp')).toBe(
+      'https://cdn.example.com/images/anything.webp',
+    );
+    expect(
+      clientAssetPaths.normalizeAssetPath('/images/catalog/oando-seating--fluid-x/image-01.webp'),
+    ).toBe('https://cdn.example.com/images/catalog/oando-seating--fluid-x/image-1.webp');
   });
 
   it('should normalize asset list', () => {
-    expect(assetPaths.normalizeAssetList(null)).toEqual(['/images/fallback/category.svg']);
-    expect(assetPaths.normalizeAssetList([])).toEqual(['/images/fallback/category.svg']);
+    expect(assetPaths.normalizeAssetList(null)).toEqual([
+      '/images/fallback/product-placeholder.webp',
+    ]);
+    expect(assetPaths.normalizeAssetList([])).toEqual([
+      '/images/fallback/product-placeholder.webp',
+    ]);
     expect(assetPaths.normalizeAssetList(['/images/exists.webp', null, ''])).toEqual(['https://cdn.example.com/images/exists.webp']);
   });
 });

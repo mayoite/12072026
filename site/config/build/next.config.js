@@ -260,6 +260,9 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     unoptimized: useUnoptimizedImages,
     remotePatterns: imageRemotePatterns,
+    // Allow SVG only if something still points at category.svg; product paths prefer raster fallback.
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   experimental: {
     optimizePackageImports: ["@phosphor-icons/react", "framer-motion", "three", "@react-three/fiber", "@react-three/drei"], // PERF-FIX: tree-shake heavy deps

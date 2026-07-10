@@ -254,7 +254,7 @@ export default async function ComparePage({
                     const image =
                       normalizeAssetPath(item.product.images?.[0]) ||
                       normalizeAssetPath(item.product.flagship_image) ||
-                      "/images/fallback/category.svg";
+                      "/images/fallback/product-placeholder.webp";
                     const productHref = `/products/${item.categoryId}/${item.product.slug}`;
                     return (
                       <th

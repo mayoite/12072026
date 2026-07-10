@@ -144,7 +144,7 @@ export async function generateMetadata({
   const image =
     normalizeAssetPath(images.length > 0 ? images[0] : null) ||
     normalizeAssetPath(product.flagship_image) ||
-    "/images/fallback/category.svg";
+    "/images/fallback/product-placeholder.webp";
   const canonicalProductUrlKey =
     preferredCanonicalSlug || productResolution.canonicalSlug || productUrlKey;
 

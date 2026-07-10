@@ -198,7 +198,7 @@ export function ProductCard({
   const imgSrc =
     imageCandidates[imgIndex] ||
     imageCandidates[0] ||
-    "/images/fallback/category.svg";
+    "/images/fallback/product-placeholder.webp";
   const displayName = sanitizeDisplayText(product.name);
   const ecoScore = product.metadata?.sustainabilityScore || 0;
   const routeKey = getProductRouteKey(product);

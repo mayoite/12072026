@@ -106,7 +106,7 @@ export default function QuoteCartPage() {
                 >
                   <div className="relative h-20 w-20 overflow-hidden rounded-xl bg-muted sm:h-24 sm:w-24">
                     <Image
-                      src={normalizeAssetPath(item.image) || "/images/fallback/category.svg"}
+                      src={normalizeAssetPath(item.image) || "/images/fallback/product-placeholder.webp"}
                       alt={item.name}
                       fill
                       className="object-contain p-2"
