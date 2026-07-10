@@ -1,107 +1,72 @@
-# HONEST-STATUS — CP-05 re-prove (Seat C)
+# HONEST-STATUS — CP-05 from-scratch re-baseline (Seat C)
 
 **Date:** 2026-07-10  
-**Role:** Seat C — honest re-prove after A+B land claim  
+**Role:** Seat C — kill paper PASS + baseline honesty  
 **Checkout:** `D:\OandO07072026` main only (no worktrees)  
-
-**Timeline:**
-- Seat C first pull tip: `c29dadf3` (cabinet literal colors only)
-- Concurrent land during/after: `8ea2d558` S7 plan canvas SVG draw · `a485b597` docs pin · `a31f5d35` NO PAPER MOON
-- This trustdata tip: `4dc318f1` (+ follow-up if amended)
+**Tip:** `cca98824` (git pull: already up to date with origin/main)
 
 ## Verdict (owner law)
 
 # **FAIL — not CP-05 PASS**
 
-Owner law: solid empty box for cabinet = FAIL. Do not rewrite SUMMARY to pass.
+Cabinet on the live plan is a **solid empty cream box**. That alone keeps CP-05 open/fail.  
+S7 chaise multipath draw is real. Dual gate still fails.
 
 | Gate | Required | Actual | Result |
 |------|----------|--------|--------|
 | Cabinet readable multiprim (not empty box) | Human-readable doors/stile/handles on plan | Cream/beige **solid empty rectangle** + thin dark outline | **FAIL** |
-| S7 plan canvas draws published SVG | Multipath SVG paint after place | Chaise multipath symbol clearly painted on canvas | **TRUE** (`8ea2d558` + e2e) |
+| S7 plan canvas draws published SVG | Multipath SVG paint after place | Chaise multipath symbol clearly painted on canvas | **TRUE** (`8ea2d558` + PNGs) |
 | Dual gate | Both true | Cabinet fails | **FAIL overall** |
 
-**No "PASS"** on this checkpoint.
-
-Prior `SUMMARY.md` / `CP-05.json` status `"pass"` is **over-claimed** relative to browser pixels. This file supersedes them for honesty.
-
----
-
-## What was run (fresh)
-
-```text
-git pull origin main  → Already up to date (first pull at c29dadf3)
-# later origin advanced with 8ea2d558 S7 hard path
-
-cd site
-pnpm exec vitest run \
-  tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts \
-  tests/unit/features/planner/open3d/catalog/s7CatalogConsume.test.ts \
-  tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts
-# → 25 passed / 3 files · exit 0  (log: seat-c-vitest-raw.log)
-
-pnpm exec playwright test -c config/build/playwright.config.ts \
-  tests/e2e/open3d-cp05-symbols-s7.spec.ts --reporter=list
-# fabric default OFF (no NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE=1)
-# → 1 passed · ~6.5s · exit 0
-```
-
-Tests green ≠ product gate green.
+**No "PASS"** on this checkpoint.  
+`CP-05.json` status is **`fail`**. Prior SUMMARY/JSON `"pass"` is **struck**.
 
 ---
 
-## Worktree / land timeline honesty
+## From-scratch baseline — what works
 
-At **Seat C first pull**, tip was `c29dadf3` (colors only). Local worktree already had uncommitted S7 hard-path files (cache + Feasibility drawImage + e2e). E2E ran against that dirty tree.
+1. **Unit Block2D multiprim data exists**  
+   - `modularCabinetBlock` builds outer rect + inner stroke + front/back + doorStyle handles/stile.  
+   - `05-visual/cabinet-v0-prims.json`: pair=7, slab=5, none=6.  
+   - Pair ≠ slab geometry asserted in unit history.
 
-**Post-hoc:** Seat B land `8ea2d558` put the same S7 hard path on main. Parent chain of this trustdata commit includes `8ea2d558`. S7 draw is **on origin** — that half of the dual gate is real.
+2. **Not a black blob anymore**  
+   - Literal cream fill / dark stroke path; browser shows cream carcass, not unresolved CSS-var black.
 
-**Still does not flip CP-05:** cabinet empty-box pixel gate remains FAIL.
+3. **S7 hard path is on main** (`8ea2d558`)  
+   - Inventory place stamps published `/svg-catalog/*.svg`.  
+   - Plan canvas `drawImage` of published SVG for non–modular-cabinet-v0 items.  
+   - Pixel proof: `browser/05-svg-plan-canvas-draw.png` — chaise multipath (seat/back/cushions) is unmistakable.
 
-See `seat-c-worktree-status.txt` (dirty snapshot at re-prove start).
+4. **Modular cabinet stays on Block2D**  
+   - `geometryMode === "modular-cabinet-v0"` skips published SVG and uses Block2D — intentional; quality still fails visually.
 
----
-
-## What is TRUE in code
-
-1. **cabinet-v0 Block2D is multi-prim in data**  
-   - `modularCabinetBlock` builds outer rect + inner stroke + front/back lines + doorStyle handles/stile.  
-   - Dump `05-visual/cabinet-v0-prims.json`: pair=7, slab=5, none=6 prims.  
-   - Unit pack asserts prim counts and pair≠slab geometry.
-
-2. **Literal paint colors (c29dadf3)**  
-   - Fill `#f3efe6`, stroke `#3f3a32`, detail `#5c564c` — no unresolved `var(--block-*)` black blob path for cabinet prims.  
-   - Browser confirms: cabinet is **cream**, not solid black.
-
-3. **Canvas authority still Block2D for modular cabinet**  
-   - Feasibility path: `geometryMode === "modular-cabinet-v0"` **skips** published SVG and calls `renderBlock2DCentered`.
-
-4. **S7 hard path on main (`8ea2d558`)**  
-   - `svgPlanSymbolCache`: load `/svg-catalog/*.svg`, `drawSvgPlanSymbol` → `drawImage`.  
-   - Feasibility: if `previewImageUrl` is published SVG and not modular-cabinet-v0 → draw SVG; else Block2D.  
-   - Inventory still stamps published SVG URLs (S7 API + thumb).
-
-5. **Unit packs green** — 25/25 (cabinet-v0 13 + s7 3 + renderBlock2DToCanvas 9).
-
-6. **E2E green** — place cabinet + chaise; `canvasDiversity.notPureSolid=true` (driven mostly by chaise multipath, not cabinet detail).
+5. **Unit / e2e harness historically green**  
+   - Vitest packs and `open3d-cp05-symbols-s7.spec.ts` exit 0 in prior logs.  
+   - **Does not equal CP-05 product PASS.**
 
 ---
 
-## What is FALSE / still broken
+## From-scratch baseline — what does not work
 
-1. **Cabinet is still an empty box on the plan (human pixel gate).**  
-   - `01-cabinet-v0-placed.png` / `02-cabinet-v0-canvas.png`: single cream filled square, dark border, **no legible stile, shelves, dual doors, or handles**.  
-   - Not black anymore — color fix landed — but **owner empty-box fail still applies**.  
-   - Center-region sample of `02-cabinet-v0-canvas.png` (~716×619): cream-dominant filled rect; detail strokes do not read as multiprim furniture at 100% zoom.
+1. **Cabinet empty-box pixel gate (owner law) — FAIL**  
+   - `01-cabinet-v0-placed.png`, `02-cabinet-v0-canvas.png`, `live-see-cabinet.png`: one cream filled square, optional blue selection ring, **no legible stile, shelves, dual doors, or handles**.  
+   - Inventory Modular Cabinet thumb is also a simple box.
 
-2. **Unit multiprim ≠ browser-readable multiprim.**  
-   - Prims exist at mm scale; at default plan zoom they collapse visually to a filled tile.  
+2. **Unit multiprim ≠ browser-readable multiprim**  
+   - Prims exist at mm scale; at default plan zoom they collapse to a filled tile.  
    - Soft e2e diversity probe samples **whole center canvas after SVG place** — chaise multipath inflates diversity and **does not prove cabinet multiprim**.
 
-3. **Prior SUMMARY/CP-05.json `"pass"`**  
-   - False-green relative to owner pixel law. Do not treat as authority. `a31f5d35` (NO PAPER MOON) is the process ban that matches this finding.
+3. **Paper PASS residue (struck this seat)**  
+   - Old `CP-05.json` `"status":"pass"` with `cabinetV0Block2DReadable: true`, `notEmptyBox: true`, `browserVisualCp05: true` — **false-green relative to pixels**.  
+   - Old `SUMMARY.md` **PASS** banner — **struck**; rewritten FAIL.  
+   - E2e `browser/run.json` `"status":"pass"` remains harness self-label only.  
+   - `elon-reproof/run.json` unit `"pass"` = unit pack only, not CP-05 dual gate.
 
-4. **E2e `run.json` `"status":"pass"`** is the **test harness self-label**, not Seat C dual-gate verdict.
+4. **Uncommitted product delta (not this seat)**  
+   - Working tree had dirty `furnitureBlock2D.ts` + browser PNG churn after A/B attempts.  
+   - Seat C does **not** thrash product code. Honesty land only.  
+   - Even if A/B later lands better strokes: **no PASS until multiprim browser YES is re-proved.**
 
 ---
 
@@ -109,12 +74,13 @@ See `seat-c-worktree-status.txt` (dirty snapshot at re-prove start).
 
 | File | What you actually see |
 |------|------------------------|
-| `browser/01-cabinet-v0-placed.png` | UI ok; plan shows **cream empty box** near wall corner; properties `cabinet-v0` 600×580 cm; inventory Modular Cabinet thumb also simple box |
-| `browser/02-cabinet-v0-canvas.png` | Grid + L-wall + **one cream square with blue selection ring** — no multiprim interior |
-| `browser/03-inventory-svg-preview.png` | Chaise inventory thumb is real SVG furniture; cabinet on plan still empty box |
-| `browser/04-svg-catalog-item-placed.png` | **Chaise multipath plan symbol** (seat/back/cushions/extension) + cream cabinet box beside it; 2 furniture |
-| `browser/05-svg-plan-canvas-draw.png` | Same: **SVG chaise clearly drawn**; cabinet remains empty box |
-| `browser/run.json` | `furnitureAfter: 2`, `canvasDiversity.uniqueQuantized: 45`, `status: "pass"` — e2e self-label only |
+| `browser/01-cabinet-v0-placed.png` | UI ok; plan **cream empty box** near wall; props `cabinet-v0` 600×580 cm; inventory thumb simple box |
+| `browser/02-cabinet-v0-canvas.png` | Grid + L-wall + **one cream square** — no multiprim interior |
+| `browser/live-see-cabinet.png` | Same empty cream box inside room rect; Zoom 100% |
+| `browser/03-inventory-svg-preview.png` | Chaise inventory thumb is real SVG furniture |
+| `browser/04-svg-catalog-item-placed.png` | **Chaise multipath** + cream cabinet box; 2 furniture |
+| `browser/05-svg-plan-canvas-draw.png` | **SVG chaise clearly drawn**; cabinet remains empty box |
+| `browser/run.json` | `furnitureAfter: 2`, diversity not pure solid, `status: "pass"` — **e2e self-label only** |
 
 ### Pixel call (Seat C)
 
@@ -124,12 +90,15 @@ See `seat-c-worktree-status.txt` (dirty snapshot at re-prove start).
 
 ---
 
-## Evidence this seat wrote/refreshed
+## Authority order (this folder)
 
-- `HONEST-STATUS.md` (this file)  
-- `seat-c-vitest-raw.log`  
-- `seat-c-worktree-status.txt`  
-- Browser PNGs + `browser/run.json` from e2e run `2026-07-10T12:53:38.574Z`
+1. Pixels in `browser/*.png`  
+2. This `HONEST-STATUS.md`  
+3. `CP-05.json` (`status: fail`)  
+4. `SUMMARY.md` (FAIL baseline)  
+5. Unit logs / e2e harness JSON (supporting only)
+
+Anything that says CP-05 **PASS** while cabinet is empty box is **wrong**.
 
 ---
 
@@ -137,6 +106,6 @@ See `seat-c-worktree-status.txt` (dirty snapshot at re-prove start).
 
 1. Browser cabinet at default/reasonable zoom shows **distinct multiprim** (inner lines, stile/handles readable — not a filled tile).  
 2. S7 SVG plan draw remains green on clean main (already landed as `8ea2d558`).  
-3. Evidence PNGs re-shot; this file upgraded only after re-prove — never flip SUMMARY first.
+3. Evidence PNGs re-shot; status upgraded only after re-prove — never flip SUMMARY/JSON first.
 
-Until then: **CP-05 = FAIL.**
+Until then: **CP-05 = FAIL / residual OPEN.**
