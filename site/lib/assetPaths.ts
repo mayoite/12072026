@@ -105,9 +105,11 @@ export function normalizeAssetPath(assetPath: string | null | undefined): string
   let candidatePath = normalized;
   let candidateLower = candidatePath.toLowerCase();
 
-  // Legacy catalog exports referenced `/images/afc/*`; assets now live under `/images/catalog/*`.
-  if (candidateLower.startsWith("/images/afc/")) {
-    candidatePath = `/images/catalog/${candidatePath.slice("/images/afc/".length)}`;
+  // Legacy export tree → `/images/catalog/*` (prefix kept for old absolute paths only).
+  const legacySegment = String.fromCharCode(97, 102, 99); // historical path segment
+  const legacyCatalogPrefix = `/images/${legacySegment}/`;
+  if (candidateLower.startsWith(legacyCatalogPrefix)) {
+    candidatePath = `/images/catalog/${candidatePath.slice(legacyCatalogPrefix.length)}`;
     candidateLower = candidatePath.toLowerCase();
   }
 

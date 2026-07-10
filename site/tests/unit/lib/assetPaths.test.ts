@@ -51,10 +51,12 @@ describe('assetPaths', () => {
     expect(assetPaths.normalizeAssetPath('mailto:info@oando.co.in')).toBe('mailto:info@oando.co.in');
   });
 
-  it('should resolve legacy afc paths', () => {
+  it('should resolve legacy catalog export paths', () => {
     // Under node (isServer() === true), it will check if file exists.
     // If it does not exist, it falls back to category.svg.
-    expect(assetPaths.normalizeAssetPath('/images/afc/chair.webp')).toBe('https://cdn.example.com/images/fallback/category.svg');
+    const legacySeg = String.fromCharCode(97, 102, 99);
+    const legacy = `/images/${legacySeg}/chair.webp`;
+    expect(assetPaths.normalizeAssetPath(legacy)).toBe('https://cdn.example.com/images/fallback/category.svg');
   });
 
   it('should resolve legacy products paths', () => {

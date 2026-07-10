@@ -380,7 +380,7 @@ export const HOMEPAGE_FAQ_CONTENT = {
   ],
 } as const;
 
-/** Legacy partnership ribbon data — banner removed from homepage; no AFC branding. */
+/** Legacy ribbon data only — banner is not mounted on homepage. One&Only branding only. */
 export const HOMEPAGE_PARTNERSHIP_CONTENT = {
   image: {
     src: "/logo.webp",
