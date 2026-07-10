@@ -79,7 +79,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         href: "/admin/svg-editor",
         label: "SVG block editor",
         description:
-          "Puck-managed block descriptors (fixed, configurable, parametric) — Phase 04",
+          "Puck-managed SVG block descriptors (fixed, configurable, parametric)",
         icon: PenSquare,
       },
     ],
