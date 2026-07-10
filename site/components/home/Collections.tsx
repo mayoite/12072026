@@ -86,15 +86,16 @@ export function Collections() {
                 <SwiperSlide key={item.name}>
                   <div className="h-full">
                     <Link href={item.href} className="group home-collection-card block h-full">
+                    {/* Single layer: image under overlay/footer — avoid fill stacking without isolation */}
                     <Image
                       src={item.image}
                       alt={item.name}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
-                      className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                      className="home-collection-card__media object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                     />
-                    <div className="home-collection-card__overlay" />
-                    <div className="home-collection-card__footer absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 p-6 md:p-7">
+                    <div className="home-collection-card__overlay" aria-hidden="true" />
+                    <div className="home-collection-card__footer absolute inset-x-0 bottom-0 z-[2] flex items-center justify-between gap-4 p-6 md:p-7">
                       <h3 className="typ-overlay-title text-inverse">{item.name}</h3>
                       <span className="home-collection-card__arrow shrink-0" aria-hidden="true">
                         <ArrowRight className="h-[1.125rem] w-[1.125rem]" />

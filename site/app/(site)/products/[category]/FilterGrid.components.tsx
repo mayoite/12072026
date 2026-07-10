@@ -253,6 +253,7 @@ export function ProductCard({
       <Link href={productHref} className="block">
         <div className="catalog-card__media">
           <Image
+            key={imgSrc}
             src={imgSrc}
             alt={imageAlt}
             loading="lazy"

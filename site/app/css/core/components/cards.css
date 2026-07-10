@@ -183,6 +183,7 @@
   display: block;
   aspect-ratio: 3/4;
   overflow: hidden;
+  isolation: isolate;
   border-radius: var(--radius-huge);
   border: 1px solid var(--border-soft);
   background: var(--surface-soft);
@@ -190,6 +191,16 @@
   transition:
     box-shadow var(--motion-base) var(--ease-standard),
     border-color var(--motion-base) var(--ease-standard);
+}
+
+/* next/image fill — one paint layer under chrome */
+.home-collection-card__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .home-collection-card:hover {
@@ -200,6 +211,8 @@
 .home-collection-card__overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
+  pointer-events: none;
   transition: opacity 500ms;
   background: linear-gradient(
     180deg,

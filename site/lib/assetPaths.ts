@@ -30,30 +30,19 @@ function isServer(): boolean {
 let _fs: typeof fsType | null = null;
 let _path: typeof pathType | null = null;
 
-/** Webpack exposes this; plain Node/tsx does not — fall back to createRequire. */
-function nodeRequire(id: "node:fs" | "node:path"): unknown {
-  try {
-    if (typeof __non_webpack_require__ === "function") {
-      return __non_webpack_require__(id);
-    }
-  } catch {
-    /* fall through */
-  }
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { createRequire } = require("node:module") as typeof import("node:module");
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const req = createRequire(typeof __filename !== "undefined" ? __filename : process.cwd() + "/package.json");
-    return req(id);
-  } catch {
-    return null;
-  }
-}
-
+/**
+ * Server-only FS access via webpack's `__non_webpack_require__`.
+ * Do **not** import `node:module` / `createRequire` here — this file is also
+ * imported by client components (FilterGrid) and that breaks the browser bundle.
+ */
 function getFs(): typeof fsType | null {
   if (!isServer()) return null;
   if (!_fs) {
-    _fs = nodeRequire("node:fs") as typeof fsType | null;
+    try {
+      _fs = __non_webpack_require__("node:fs");
+    } catch {
+      return null;
+    }
   }
   return _fs;
 }
@@ -61,13 +50,17 @@ function getFs(): typeof fsType | null {
 function getPath(): typeof pathType | null {
   if (!isServer()) return null;
   if (!_path) {
-    _path = nodeRequire("node:path") as typeof pathType | null;
+    try {
+      _path = __non_webpack_require__("node:path");
+    } catch {
+      return null;
+    }
   }
   return _path;
 }
 
-// Declare __non_webpack_require__ for TypeScript
-declare const __non_webpack_require__: NodeRequire | undefined;
+// Declare __non_webpack_require__ for TypeScript (injected by Next/webpack on server)
+declare const __non_webpack_require__: NodeRequire;
 
 function toPublicFsPath(assetPath: string): string | null {
   const pathMod = getPath();
