@@ -7,12 +7,13 @@
   "checkout": "D:\\OandO07072026",
   "worktrees": false,
   "evidenceRoot": "results/planner/world-standard-wave/04-orbit-continuity",
-  "HEAD": "d4c80c35bcc0a6b3ec1dcba3a96c7986be3ecb5a",
+  "HEAD": "fa1ac921e294d960ae229a26dab4c2f14b381a2e",
   "date": "2026-07-10",
-  "agent": "P04-three-layer-audit",
-  "action": "three-layer audit + coherent status pack",
+  "agent": "P04-Agent-10-consolidator",
+  "action": "proof index + coherent NOTES + single status (scratch pack)",
   "paperPass": false,
   "unitAloneEqualsW4": false,
+  "browserAloneEqualsW4": false,
   "w4ProductClaim": "NO",
   "planRating": {
     "verdict": "APPROVE-WITH-FIXES",
@@ -23,7 +24,7 @@
   "productVsPlan": {
     "plan": "APPROVE-WITH-FIXES 7.5/10",
     "productW4": "open — not pass",
-    "phaseCardHistorical": "PASS 2026-07-09 is paper until this pack dual-green same tip"
+    "phaseCardHistorical": "PASS 2026-07-09 is paper until dual-green same tip"
   },
   "layers": {
     "layer1_defaults": {
@@ -42,7 +43,7 @@
         "OOPlannerWorkspace.tsx:13-16 import Lazy3DViewer + getOpen3dViewerControlProps",
         "OOPlannerWorkspace.tsx:1057-1060 {...getOpen3dViewerControlProps()}"
       ],
-      "unit": "workspaceOrbitWiring.test.ts green in unit-orbit-pack / unit-p04-pack"
+      "unit": "workspaceOrbitWiring.test.ts green in unit packs"
     },
     "layer3_unit_browser": {
       "unitGreenDeposit": true,
@@ -52,13 +53,18 @@
     }
   },
   "unitPack": {
-    "status": "green_deposit",
+    "status": "green",
     "exitCode": 0,
     "tests": "34/34",
     "files": 5,
-    "log": "unit-p04-pack-raw.log",
+    "logs": [
+      "unit-p04-pack-raw.log",
+      "unit-p04-scratch-pack-raw.log",
+      "unit-p04-pack-consolidator-tip.log"
+    ],
     "depositJson": "unit-pack-deposit.json",
     "depositHEAD": "b8109733c0c7a1e0657a2989576f27060f4a6bd5",
+    "consolidatorReproveLog": "unit-p04-pack-consolidator-tip.log",
     "orbitPack": {
       "log": "unit-orbit-pack.log",
       "tests": "9/9",
@@ -69,13 +75,15 @@
       "tests": "26/26",
       "exitCode": 0
     },
-    "note": "Unit alone != W4. Deposit HEAD != audit content commit; not dual-green same tip with browser."
+    "note": "Unit alone != W4. Consolidator re-ran 34/34 on tip era; still not dual-locked with browser on one SHA."
   },
   "browser": {
     "status": "green_deposit",
     "exitCode": 0,
     "tool": "playwright",
     "spec": "tests/e2e/open3d-w4-orbit-continuity.spec.ts",
+    "proveTip": "bb0531685e7e714acb6026d0afcb214ba6e68f7a",
+    "trustdataCommit": "6c236ac66883dd62cc0355c277e86ec22ebafcf1",
     "logs": [
       "browser-w4-raw.log",
       "browser-w4-playwright-live.log",
@@ -104,14 +112,23 @@
     "consoleErrorCount": 0,
     "consoleHardAssertInSpec": false,
     "consoleMessagesTxt": false,
-    "note": "Browser deposit green without HEAD pin in browser-run.json — cannot claim same-tip with unit deposit."
+    "note": "Browser proves count + orbit attr only (H3). No HEAD pin in browser-run.json — cannot claim same tip as unit/pack HEAD."
+  },
+  "chrome": {
+    "status": "not_proof",
+    "dir": "chrome/",
+    "cdmPresent": false,
+    "note": "Optional snaps / port noise only. Do not recreate chrome/_cdm node_modules under results."
   },
   "artifacts": {
-    "THREE_LAYER_AUDIT": "THREE-LAYER-AUDIT.md",
+    "PROOF_INDEX": "PROOF-INDEX.md",
     "NOTES": "NOTES.md",
+    "THREE_LAYER_AUDIT": "THREE-LAYER-AUDIT.md",
     "CP_04_STATUS": "CP-04-STATUS.md",
-    "HEAD_txt": "HEAD.txt"
+    "HEAD_txt": "HEAD.txt",
+    "NOTES_BROWSER": "NOTES-BROWSER.md",
+    "NOTES_UNIT_PACK": "NOTES-unit-pack.md"
   },
   "status": "open",
-  "statusNote": "pass only if unit+browser both green on same tip. Unit deposit green at b8109733; browser-run.json browser-green without HEAD pin; audit content commit d4c80c35. Dual-green same tip not locked → open. W4 product claim NO."
+  "statusNote": "pass only if unit pack + playwright both green on same HEAD tip. Unit green deposits + consolidator re-run; browser green at prove tip bb053168 without HEAD pin; pack tip 74399324. Dual-green same tip not locked → open. W4 product claim NO. Phase-card historical PASS void."
 }

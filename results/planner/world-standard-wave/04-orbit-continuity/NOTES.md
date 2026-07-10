@@ -1,10 +1,10 @@
-# P04 / W4 — NOTES (three-layer audit + coherent pack)
+# P04 / W4 proof pack — NOTES (Agent 10 consolidator)
 
 **Date:** 2026-07-10  
 **Checkout:** `D:\OandO07072026` only (no worktrees)  
-**Tip at pack write:** `bb0531685e7e714acb6026d0afcb214ba6e68f7a` (see `HEAD.txt`)  
-**Agent:** P04 three-layer audit + coherent status  
-**Evidence:** `results/planner/world-standard-wave/04-orbit-continuity/` only — never `site/results/`
+**HEAD pin:** `fa1ac921e294d960ae229a26dab4c2f14b381a2e` (see `HEAD.txt`)  
+**Agent:** P04 Agent 10/10 — proof pack consolidator  
+**Evidence root:** `results/planner/world-standard-wave/04-orbit-continuity/` only — never `site/results/`
 
 ---
 
@@ -12,80 +12,131 @@
 
 | Law | Applied |
 |-----|---------|
-| **No paper moon** | Overall `run.json` **`status: open`** — not invented pass |
-| **Unit alone ≠ W4** | Unit 34/34 deposit does **not** close CP-04 / W4 |
+| **No paper moon** | Overall `run.json` **`status: open`** — not invented `pass` |
+| **Unit alone ≠ W4** | Unit 34/34 does **not** close CP-04 / W4 |
 | **Browser alone ≠ W4** | Playwright green deposit without same-tip unit lock does **not** close |
-| **Pass rule** | `pass` **only** if unit **and** browser green on **same tip** |
-| **Phase-card PASS is paper** | `Plans/phases/P04-orbit-continuity/P04-orbit-continuity.md` header **PASS 2026-07-09** is **paper** until this pack is dual-green same tip |
+| **Pass rule** | `pass` **only** if unit pack **and** Playwright both green on the **same HEAD tip** |
+| **Browser ≠ ids/mm** | Browser proves furniture **count** + `data-orbit-enabled` — **not** entity ids / mm / document rotation (units only) |
+| **Phase-card PASS is paper** | Historical W4/CP-04 PASS (2026-07-09 phase card) is **void** until dual-green same tip |
 
 ---
 
-## Phase-card PASS is paper until this pack
+## Phase PASS void
 
-Historical phase card claims:
+| Claim source | Claim | Reality |
+|--------------|-------|---------|
+| `Plans/phases/P04-orbit-continuity/…` historical | W4 / CP-04 **PASS** 2026-07-09 | **PAPER** vs missing/incomplete evidence before scratch |
+| Plan rating | APPROVE-WITH-FIXES **7.5/10** | Plan quality only — **not** product ship |
+| This pack | Coherent index + notes + single `status` | **`open`** — same-tip dual-green not locked |
 
-- W4 / CP-04 **PASS** 2026-07-09  
-- unit + browser green under `04-orbit-continuity/`  
-- `THREE-LAYER-AUDIT.md` present  
-
-**2026-07-10 reality before re-prove:** evidence folder missing or incomplete; audit file absent.  
-**This seat:** wrote `THREE-LAYER-AUDIT.md`, coherent `run.json`, `CP-04-STATUS.md`, this `NOTES.md`.  
-**Still not product PASS:** same-tip dual-green **not locked**.
-
-Do **not** inherit phase-header PASS. Do **not** sell W4 from plan rating alone.
+Do **not** inherit phase-header PASS. Do **not** sell W4 from plan score alone.
 
 ---
 
-## Degrees vs radians (document honesty)
+## Three-layer status
 
-| Surface | Unit | Authority |
-|---------|------|-----------|
-| **Furniture document** (`Open3dFurnitureItem.rotation`) | **degrees** | `model/units.ts` `normalizeDegrees`; 2D canvas / properties |
-| **Scene nodes** (`buildOpen3dSceneNodes`) | **radians** | L118–119: `degreesToRadians(item.rotation)` |
-| **Mesh** | node rad with sign flip | `rotation.y = -node.rotation` intentional plan-Y→world-Z |
+See `THREE-LAYER-AUDIT.md` + `CP-04-STATUS.md` for long form. Consolidator summary:
 
-**Do not thrash** document furniture into radians to match stale phase/expert prose.  
-Stale claim “document + scene nodes = radians” is **false** for the furniture document field.
+| Layer | Meaning | Product source | Proof |
+|-------|---------|----------------|-------|
+| **1 Defaults** | Orbit ON via `OPEN3D_ORBIT_DEFAULT_ENABLED` | **CLOSED** — `orbitDefaults.ts` L7; Inner L68; Lazy L145; construct + `data-orbit-enabled` L340 | Unit construct spy green |
+| **2 Workspace** | Explicit `{...getOpen3dViewerControlProps()}` | **CLOSED** — `OOPlannerWorkspace.tsx` L1057–1060 | `workspaceOrbitWiring` unit green |
+| **3 Unit + browser same tip** | Hard gate | Code/path ready | Unit **green deposits**; browser **green deposit**; **same tip not locked** → layer 3 **OPEN** |
 
----
-
-## Layer summary (see `THREE-LAYER-AUDIT.md`)
-
-| Layer | Product | Proof |
-|-------|---------|-------|
-| **1** Defaults ON | **CLOSED** — ThreeViewerInner L68 · ThreeLazyViewer L145 · orbitDefaults L7 | unit construct spy |
-| **2** Workspace `getOpen3dViewerControlProps` | **CLOSED** — OOPlannerWorkspace **L1057–1060** | workspaceOrbitWiring unit |
-| **3** Unit + browser same tip | deposits exist | unit green @ `b8109733…`; browser-green deposit **no HEAD pin** → **not closed** |
+**Degrees honesty:** furniture **document = degrees** → scene nodes **radians** → mesh `rotation.y = -node.rotation` intentional. Do not thrash document into radians.
 
 ---
 
-## Unit deposits (not this seat’s re-run)
+## Unit outcomes
 
-| Pack | Log | Tests | Exit | Deposit HEAD |
-|------|-----|-------|------|--------------|
-| Full W4 unit | `unit-p04-pack-raw.log` | **34/34** | 0 | `b8109733…` (`unit-pack-deposit.json`) |
-| Orbit core | `unit-orbit-pack.log` | **9/9** | 0 | earlier tip thrash |
-| Pose + adapter | `unit-pose-pack.log` | **26/26** | 0 | earlier tip thrash |
+| Pack | Log | Tests | Exit | Notes |
+|------|-----|-------|------|-------|
+| Full W4 unit | `unit-p04-pack-raw.log` | **34/34** | 0 | deposit HEAD `b8109733…` (`unit-pack-deposit.json`) |
+| Scratch re-tee | `unit-p04-scratch-pack-raw.log` | **34/34** | 0 | seat re-prove logs |
+| Consolidator tip re-run | `unit-p04-pack-consolidator-tip.log` | **34/34** | 0 | Agent 10 re-ran pack on tip era after other seats |
+| Orbit core | `unit-orbit-pack.log` | **9/9** | 0 | defaults + pose + wiring |
+| Pose + adapter | `unit-pose-pack.log` | **26/26** | 0 | adapter + mesh |
+
+**Files in full pack:**
+
+1. `orbitControlsDefault.test.tsx` (6)  
+2. `poseContinuityW4.test.ts` (1)  
+3. `workspaceOrbitWiring.test.ts` (2)  
+4. `buildOpen3dSceneNodes.test.ts` (11)  
+5. `createSceneObjectFromNode.test.ts` (14)
+
+**Unit alone ≠ W4.**
 
 ---
 
-## Browser deposits (not this seat’s re-run)
+## Browser outcomes
 
 | Artifact | Status |
 |----------|--------|
-| `browser-run.json` | `"status": "browser-green"` · **no HEAD field** |
-| Latest Playwright logs | **1 passed** (~8–10s) |
-| PNGs | `01-2d-after-place.png` · `02-3d-orbit-on.png` · `03-2d-restored.png` |
-| Proves | furniture **count** + `data-orbit-enabled=true` + count stable 2D↔3D |
-| Does **not** prove | entity **ids / mm / rotation** (units only — H3 honesty) |
+| Prove tip (NOTES-BROWSER) | `bb0531685e7e714acb6026d0afcb214ba6e68f7a` |
+| Trustdata land | `6c236ac6` browser W4 re-prove |
+| Playwright logs | **1 passed** (`browser-w4-raw.log`, `browser-w4-playwright-live.log`, `playwright-raw.log`) |
+| `browser-run.json` | `"status": "browser-green"` — **no HEAD field** |
+| PNGs | `01-2d-after-place.png`, `02-3d-orbit-on.png`, `03-2d-restored.png` |
+| Fabric | unset (`NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE` ≠ `"1"`) |
+| Console | `consoleErrorCount: 0` recorded; **no** hard `expect(hardAppErrors).toEqual([])`; **no** `console-messages.txt` |
+
+### What browser proves vs does not
+
+| Proves | Does **not** prove |
+|--------|---------------------|
+| Furniture **count** via status text | Entity **ids** |
+| `data-orbit-enabled="true"` | **mm** position |
+| 2D↔3D count stable + optional left-drag no-crash | Document **rotation** degrees / pose identity |
+
+Pose ids/mm/rotation remain **unit-only** (CODE-REVIEW-REPORT **H3**).
+
+Earlier `CODE-REVIEW-LIVE.md` recorded browser **RED** (place timeout). **Later** Playwright re-prove greened and overwrote logs/PNGs — use latest green deposit; do not launder older RED as current, and do not invent same-tip lock.
+
+---
+
+## Chrome outcomes
+
+| Item | Status |
+|------|--------|
+| `chrome/` snaps | Present (setup/config dumps + optional PNG) — **not** W4 hard gate |
+| `dev-server-w4-chrome.log` | Port conflict / noise — **not** orbit proof |
+| `chrome/_cdm/node_modules` | **Absent** under this pack (good) |
+| Policy | Do **not** recreate `_cdm` under `results/**/chrome/`; gitignore hardened at repo root |
+
+Chrome DevTools is **optional** and never substitutes Playwright for W4.
 
 ---
 
 ## Why overall remains `open`
 
-1. Unit green deposit HEAD (`b8109733…`) ≠ audit tip (`bb053168…`).  
-2. Browser green deposit has **no** HEAD pin in `browser-run.json`.  
-3. Same-tip dual-green is the only path to `pass`.  
-4. Plan **APPROVE-WITH-FIXES 7.5** ≠ product PASS (see `CP-04-STATUS.md`).
+1. Browser green deposit prove tip (`bb053168…`) ≠ consolidator pack tip (`74399324…`).  
+2. `browser-run.json` has **no** HEAD pin.  
+3. Unit deposit JSON still cites older `b8109733…` (consolidator re-ran green later — still not dual-locked with browser on one SHA).  
+4. Soft console residual (H1) remains — recorded count, not fail-closed empty console.  
+5. Pass requires **unit + Playwright green on the same HEAD tip**.
 
-**Next for Done (not this seat unless re-dispatched):** re-run unit pack + Playwright on one pinned tip; stamp both HEADs; only then flip `run.json` → `pass`.
+```text
+status = open
+```
+
+---
+
+## Seat deposits retained (not deleted)
+
+| File | Role |
+|------|------|
+| `NOTES-unit-pack.md` | Exec4 unit seat |
+| `NOTES-BROWSER.md` | Playwright seat |
+| `SCRATCH-BASELINE.md` / `CODE-REVIEW-*` / exec audits | Prior seats |
+| `THREE-LAYER-AUDIT.md` / `CP-04-STATUS.md` | Audit seats |
+
+**This `NOTES.md` is the consolidator single honesty surface.** Seat NOTES remain historical.
+
+---
+
+## Out of consolidator scope
+
+- Re-run Playwright on pack tip to flip dual-green → `pass`  
+- Harden e2e console to hard `expect([]).toEqual` + `console-messages.txt`  
+- Product thrash (orbit defaults, adapter degrees, R3F port) — not RED for consolidator  

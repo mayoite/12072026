@@ -1,0 +1,16 @@
+﻿chrome-devtools.cmd : chrome-devtools-mcp exposes content of the browser instance to the MCP clients allowing them to 
+inspect,
+At line:2 char:1
++ & $cli click "1_26" --includeSnapshot true 2>&1 | Out-File "D:\OandO0 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (chrome-devtools...hem to inspect,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+debug, and modify any data in the browser or DevTools.
+Avoid sharing sensitive or personal information that you do not want to share with MCP clients.
+Performance tools may send trace URLs to the Google CrUX API to fetch real-user experience data. To disable, run with 
+--no-performance-crux.
+
+Google collects usage statistics to improve Chrome DevTools MCP. To opt-out, run with --no-usage-statistics.
+For more details, visit: https://github.com/ChromeDevTools/chrome-devtools-mcp#usage-statistics
+[{"type":"text","text":"Error: No snapshot found for page 1. Use take_snapshot to capture one."}]

@@ -102,3 +102,7 @@ site/public/catalog-assets/generated/*.glb
 # Durable docs belong in Plans/ Agents/ ayushdocs/ — not results/.
 # Never gitignore results/ entirely.
 
+
+# Chrome DevTools MCP local bootstrap under evidence chrome/ dumps (never commit junk)
+# node_modules/ already ignores nested node_modules; ignore whole _cdm tree if recreated
+results/**/chrome/_cdm/
