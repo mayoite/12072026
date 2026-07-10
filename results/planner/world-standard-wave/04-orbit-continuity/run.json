@@ -5,12 +5,13 @@
   "checkout": "D:\\OandO07072026",
   "worktrees": false,
   "evidenceRoot": "results/planner/world-standard-wave/04-orbit-continuity",
-  "HEAD": "41df56e5fa10424688402c1a396e4eeca4dbf4a2",
+  "HEAD": "bb0531685e7e714acb6026d0afcb214ba6e68f7a",
   "date": "2026-07-10",
-  "agent": "P04-code-review-seat",
-  "action": "code-review scratch verdict — coherent status",
+  "agent": "P04-exec5-playwright-W4",
+  "action": "exec5 browser Playwright W4 deposit",
   "paperPass": false,
   "unitAloneEqualsW4": false,
+  "browserAloneEqualsW4": false,
   "w4ProductClaim": "NO",
   "planRating": {
     "verdict": "APPROVE-WITH-FIXES",
@@ -26,58 +27,72 @@
     "layer2_workspace": {
       "product": "closed",
       "cite": "OOPlannerWorkspace.tsx:1057-1060 {...getOpen3dViewerControlProps()}",
-      "unit": "workspaceOrbitWiring.test.ts present (f692ca96); re-run 2/2 green this seat"
+      "unit": "workspaceOrbitWiring.test.ts"
     },
     "layer3_dom_and_browser": {
       "dataOrbitEnabledInCode": true,
       "cite": "ThreeViewerInner.tsx:340",
-      "unitConstruct": "orbitControlsDefault.test.tsx in unit-orbit-pack.log (9/9 pack at older tip)",
-      "browserPackProven": false,
-      "chromeOptional": "not proven — dev-server-w4-chrome.log is port-noise only"
+      "unitConstruct": "orbitControlsDefault.test.tsx in unit-orbit-pack.log",
+      "browserPackProven": true,
+      "browserProveHEAD": "231b2f032d893e524fab24efcf8c1ee9f14494f5",
+      "chromeOptional": "not required for W4 browser gate"
     }
   },
   "unit": {
-    "status": "green_stale_tip",
+    "status": "green_other_seats",
     "orbitPack": {
       "log": "unit-orbit-pack.log",
       "tests": "9/9",
-      "exitCode": 0,
-      "files": [
-        "orbitControlsDefault.test.tsx",
-        "poseContinuityW4.test.ts",
-        "workspaceOrbitWiring.test.ts"
-      ],
-      "depositedAtNote": "NOTES.md HEAD 382ab73f; wiring unit landed f692ca96; not re-teed on 41df56e5"
+      "exitCode": 0
     },
     "poseAdapterPack": {
       "log": "unit-pose-pack.log",
       "tests": "26/26",
       "exitCode": 0
     },
-    "thisSeatWiringRerun": {
-      "file": "workspaceOrbitWiring.test.ts",
-      "tests": "2/2",
-      "exitCode": 0,
-      "HEAD": "41df56e5fa10424688402c1a396e4eeca4dbf4a2"
-    }
+    "note": "Unit not re-run by exec5; see NOTES-unit-pack.md / unit-p04-pack logs"
   },
   "browser": {
-    "status": "missing",
+    "status": "pass",
+    "exitCode": 0,
+    "tests": "1/1",
     "playwrightSpec": "site/tests/e2e/open3d-w4-orbit-continuity.spec.ts",
-    "pnGs": false,
-    "browserRunJson": false,
-    "rawLog": false,
-    "consoleMessagesTxt": false,
-    "consoleHardAssertInSpec": false
+    "command": "pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/open3d-w4-orbit-continuity.spec.ts --reporter=list",
+    "PLAYWRIGHT_BASE_URL": "http://localhost:3000",
+    "proveHEAD": "231b2f032d893e524fab24efcf8c1ee9f14494f5",
+    "pnGs": true,
+    "screenshots": [
+      "01-2d-after-place.png",
+      "02-3d-orbit-on.png",
+      "03-2d-restored.png"
+    ],
+    "browserRunJson": true,
+    "rawLog": "browser-w4-raw.log",
+    "liveLog": "browser-w4-playwright-live.log",
+    "notesBrowser": "NOTES-BROWSER.md",
+    "asserts": [
+      "furniture-count-status-text",
+      "data-orbit-enabled=true",
+      "2d-3d-toggle-count-stable",
+      "optional-left-drag-no-crash"
+    ],
+    "doesNotAssert": [
+      "entity-ids",
+      "mm-position",
+      "document-rotation-degrees"
+    ],
+    "consoleHardAssertInSpec": true,
+    "consoleErrorCount": 0,
+    "furnitureBefore": 0,
+    "furnitureAfterPlace": 4
   },
   "chrome": {
     "status": "not_proof",
-    "note": "optional; no orbit journey deposit"
+    "note": "optional; Playwright is hard browser gate"
   },
   "artifacts": {
-    "CODE_REVIEW_SCRATCH": "CODE-REVIEW-SCRATCH.md",
-    "SCRATCH_BASELINE": "SCRATCH-BASELINE.md",
-    "THREE_LAYER_AUDIT": false,
+    "NOTES_BROWSER": "NOTES-BROWSER.md",
+    "BROWSER_RUN": "browser-run.json",
     "execAudits": [
       "exec1-layer1-defaults.md",
       "exec2-layer2-workspace.md",
@@ -85,5 +100,5 @@
     ]
   },
   "status": "open",
-  "statusNote": "pass only if unit+playwright both green on same HEAD. Unit deposited green on older tip; browser pack absent. W4 product claim NO."
+  "statusNote": "Browser half PASS (exit 0). Combined W4 product claim still NO until consolidator confirms unit+browser on aligned tip. Browser proves count + orbit attr only — not ids/mm/rotation."
 }
