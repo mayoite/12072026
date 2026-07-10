@@ -32,7 +32,7 @@ export default function PortalPageView({
         <p className="shell-portal-table-meta mt-3 max-w-3xl">
           Review saved workspace layouts, reopen them in the planner, and share the current room setup with your team.
         </p>
-        <div className="mt-5 flex-wrap gap-3">
+        <div className="mt-5 flex flex-wrap gap-3">
           <Link href="/planner/canvas/" className="shell-portal-button-primary">
             Open planner
           </Link>
@@ -42,6 +42,7 @@ export default function PortalPageView({
         </div>
       </header>
 
+      {/* Mutually exclusive body: listError must not also paint empty/grid (was double content). */}
       {listError ? (
         <section
           className="shell-portal-panel-soft mt-6 p-6 text-sm text-muted"
@@ -60,13 +61,11 @@ export default function PortalPageView({
             </Link>
           </div>
         </section>
-      ) : null}
-
-      {!databaseConfigured ? (
+      ) : !databaseConfigured ? (
         <section className="shell-portal-panel-soft mt-6 p-6 text-sm text-muted">
           Planner storage is not configured yet, so no published portal plans are available in this environment.
         </section>
-      ) : !listError && plans.length === 0 ? (
+      ) : plans.length === 0 ? (
         <section className="shell-portal-panel mt-6 p-6">
           <h2 className="shell-portal-table-header">No saved plans yet</h2>
           <p className="shell-portal-table-meta mt-2">
@@ -92,15 +91,15 @@ export default function PortalPageView({
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {plans.map((plan) => (
               <article key={plan.id} className="shell-portal-grid-card p-5">
-                <div className="items-start gap-4">
-                  <div className="">
+                <div className="flex items-start gap-4">
+                  <div className="min-w-0 flex-1">
                     <p className="shell-portal-table-label">Workspace plan</p>
                     <h3 className="shell-portal-table-header mt-2 truncate">{plan.name}</h3>
                     <p className="shell-portal-table-meta mt-1 truncate">
                       {plan.project_name ?? plan.client_name ?? "No project metadata"}
                     </p>
                   </div>
-                  <span className="rounded-full border border-soft px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-soft">
+                  <span className="shrink-0 rounded-full border border-soft px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-soft">
                     {plan.item_count} items
                   </span>
                 </div>
@@ -118,7 +117,7 @@ export default function PortalPageView({
                   </div>
                 </dl>
 
-                <div className="mt-5 flex-wrap gap-2">
+                <div className="mt-5 flex flex-wrap gap-2">
                   <Link href={`/portal/${plan.id}`} className="shell-portal-button-primary">
                     View details
                   </Link>

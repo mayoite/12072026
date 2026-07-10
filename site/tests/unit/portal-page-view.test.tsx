@@ -25,7 +25,10 @@ test('renders list error without crashing when storage query fails', () => {
   );
   expect(screen.getByTestId('portal-list-error')).toBeInTheDocument();
   expect(screen.getByText(/Plans could not be loaded/i)).toBeInTheDocument();
+  // Must not also paint empty or grid body (double-content bug).
   expect(screen.queryByText('No saved plans yet')).not.toBeInTheDocument();
+  expect(screen.queryByText('Saved layouts')).not.toBeInTheDocument();
+  expect(screen.queryByText(/0 plans available/i)).not.toBeInTheDocument();
 });
 
 test('renders list of plans', () => {
