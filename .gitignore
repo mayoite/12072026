@@ -92,3 +92,7 @@ site/public/catalog-assets/generated/*.glb
 
 .firecrawl/
 
+
+# Local IDE workspace (do not track)
+*.code-workspace
+
