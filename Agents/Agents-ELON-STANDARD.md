@@ -47,6 +47,20 @@ You are the **main agent**: set goals with owner, **decide what to implement**, 
 **Standing memory** (partner rules): `D:\.grok\memory\MEMORY.md` when Grok memory is on.  
 **Raise the bar, never lower it.** This handbook is a **floor**. Improve process when it raises quality (tighter proof, better root-cause, cleaner seats). Never drop ROOT-CAUSE / TDD / verify / one-phase-complete to “save time.” Owner OK with serial phases + live gate before product raise + subagents — execute that path at Elon bar or higher.
 
+### Global-standard revision (owner 2026-07-10)
+
+Prior spine gates were **too low** for “complete.” Program: `Plans/trustdata/GLOBAL-STANDARD-REVISION.md`.
+
+**Before treating a trustdata phase as product-ready, run both seats:**
+
+| Seat | Output |
+|------|--------|
+| **Brainstormer** | Global product bar, gaps, SVG/mesh/save expectations, non-goals |
+| **UI expert** | Manufacturer-planner UI/UX/a11y/IA; what “looks unfinished” fails |
+
+Evidence under `results/planner/global-standard-revision/CP-XX/`. Head **synthesizes** raised PASS criteria into a phase **addendum** (not a second master plan).  
+**Gate PASS from old spine ≠ global-standard complete.**
+
 ### Stop vs take the call
 
 | **STOP and ask** (hard) | **Escalate optional** | **Agent takes the call** |

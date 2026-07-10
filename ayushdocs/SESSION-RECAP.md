@@ -1,22 +1,23 @@
 # Session recap
 
 **Updated:** 2026-07-10  
-**Phase:** full Elon workflow demo — workstation visual smoke  
+**Program:** Global-standard revision — brainstormer + UI expert **per phase**
 
-## Pipeline (ran once, completely)
+## Done
 
-0 superpowers → 1 GOAL → 2 scout ROOT-TRUTH → 3 GAP → 4 TASK-LIST  
-→ 5 implementer (smoke script + PNG) → 8 code review APPROVE  
-→ 9 head re-verify vitest+smoke → 10 verifier VERDICT PASS  
-→ 11 dual push → 12 this recap  
+- Program: `Plans/trustdata/GLOBAL-STANDARD-REVISION.md`
+- ELON + MEMORY: dual seats mandatory before product-complete claims
+- **CP-00:** brainstormer + UI expert + SYNTHESIS
+- Verdict: old CP-00 bar = process unlock only; foundation product **OPEN** (F1–F7)
+- SVG honesty: census required; ~4 files ≠ catalog complete
 
-## Evidence root
+## Next (serial)
 
-`results/planner/full-workflow-demo-2026-07-10/`
+1. Land W0.F2–F4 docs under `00-start/` (buyer contract, authority map, asset census)  
+2. **CP-01** brainstormer + UI expert  
+3. Continue CP-02…  
 
-## Honest
+## Do not claim
 
-- Workflow discipline **proven once**  
-- Visual smoke shows legs + stretchers  
-- Product **not** finished  
-- Residual: smoke formula parity with mesh module (raise later)  
+- Global-standard product complete  
+- All phases revised  
