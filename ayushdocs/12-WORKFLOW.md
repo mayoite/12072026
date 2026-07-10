@@ -1,23 +1,26 @@
 # Owner workflow (simple)
 
-Replaces reading long 05 / 07 / 08 / 09 docs every time. Use this loop.
+Replaces reading long 05 / 07 / 08 / 09 docs every time. Use this loop.  
+**Agent skill order / seats:** [20-ELON-STANDARD.md](./20-ELON-STANDARD.md) · **rolling recap:** [SESSION-RECAP.md](./SESSION-RECAP.md)
 
 ```
 ┌─────────────┐
-│ 1. Pick ONE │  →  ayushdocs/00-PENDING.md  (next open P0 only)
+│ 1. Pick ONE │  →  ayushdocs/00-PENDING.md + 19-GOALS-SLICES.md
 │    kill-path│
 └──────┬──────┘
        ▼
 ┌─────────────┐
-│ 2. Implement│  →  TDD if new logic; superpowers ≤8 agents; no worktrees
+│ 2. Implement│  →  20-ELON-STANDARD pipeline: superpowers → plan → SDD 2–4
+│             │     TDD on every implementer; no worktrees; ≤8 (max 10)
 └──────┬──────┘
        ▼
 ┌─────────────┐
-│ 3. Verify   │  →  unit + Playwright (screenshots under results/planner/<slice>/)
+│ 3. Verify   │  →  verification-before-completion + check-work
+│             │     unit + Playwright under results/planner/<slice>/
 └──────┬──────┘
        ▼
 ┌─────────────┐
-│ 4. Review   │  →  ayushdocs/05 + 10 (or agent code-review)
+│ 4. Review   │  →  requesting-code-review + code-review (ayushdocs/05 detail)
 └──────┬──────┘
        ▼
 ┌─────────────┐
@@ -25,11 +28,11 @@ Replaces reading long 05 / 07 / 08 / 09 docs every time. Use this loop.
 └──────┬──────┘
        ▼
 ┌─────────────┐
-│ 6. Commit   │  →  main + push baseline
+│ 6. Commit   │  →  finishing-a-development-branch · main + push when green
 └──────┬──────┘
        ▼
 ┌─────────────┐
-│ 7. Update   │  →  00-PENDING (mark done) + short note in 01-RECAP if big
+│ 7. Update   │  →  00-PENDING + SESSION-RECAP (~15m) + 01-RECAP if big
 └─────────────┘
 ```
 
