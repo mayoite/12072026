@@ -40,7 +40,8 @@ import {
 } from "./puckBlockRegistry";
 import { safeThemeTokens } from "./themeTokens";
 import { Puck } from "@puckeditor/core";
-import "@puckeditor/core/puck.css";
+// no-external.css: same Puck UI without @import https://rsms.me/inter (CSP style-src blocks it)
+import "@puckeditor/core/no-external.css";
 import type { PuckDataShape } from "./puckBlockRegistry";
 import { uploadAssetToSupabase } from "./uploadAsset";
 
