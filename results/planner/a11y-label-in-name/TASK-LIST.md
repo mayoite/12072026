@@ -19,11 +19,11 @@
 
 ## Tasks
 
-- [ ] **T0** Confirm all related unit queries (Prefs/Commands/Focus) match live aria
-- [ ] **T1** Run targeted vitest for workspace shell / topbar a11y; log under this folder
-- [ ] **T2** Re-run Lighthouse a11y on open3d planner (or document blocker); store report.json + notes
-- [ ] **T3** Update OWNER-BOARD / 00-PENDING only if repo proof changes claims
-- [ ] **T4** Commit + push origin; try mayoite (log if 404)
+- [x] **T0** Confirm all related unit queries (Prefs/Commands/Focus) match live aria — Focus unit updated; Prefs/Commands aria in TopBar + CommandsPaletteTrigger; no stale Maximize-only query in workspaceShell
+- [x] **T1** Run targeted vitest workspaceShell — **31/31 PASS** — `vitest-workspaceShell.log`
+- [ ] **T2** Re-run Lighthouse a11y on open3d planner; store report.json + notes
+- [ ] **T3** Update OWNER-BOARD / 00-PENDING only if repo proof changes claims (after T2)
+- [x] **T4** Docs/process commit + origin `ff662b9`; mayoite still 404 from agent
 - [ ] **T5** SESSION-RECAP + phase close or HALF residual named
 
 ## Do not claim
