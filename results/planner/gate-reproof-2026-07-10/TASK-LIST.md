@@ -23,7 +23,7 @@
 - [x] **04** TDD/minimal fix — no thrash; one clear change  
 - [x] **05** `next build` green (log)  
 - [x] **06** `pnpm gate:open3d` green — copy/update evidence  
-- [ ] **07** NOTES honest close · commit · origin + mayoite · SESSION-RECAP  
+- [x] **07** NOTES honest close · commit `6a1ec58` · origin + mayoite · SESSION-RECAP  
 
 ## Stop-if-fail
 
