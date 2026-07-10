@@ -69,7 +69,7 @@ If a tool defaults output into `site/`, **redirect it to root `results/`** or fi
 - **`/using-superpowers` always required** for main agent **and every subagent**.
 - **Fit skills only** — TDD, debug, chrome-devtools, verification, SDD, etc. as the **phase** needs.
 - **Firecrawl: dead.** One-time research history only. Do not load for normal phases unless owner **explicitly** restarts research.
-- **One phase at a time — finish it.** Phase = multi-hour **task list** (days/months product). Not multi-epic thrash. Not vibe coding.
+- **One phase at a time — finish it completely, then the next.** Phase = multi-hour **task list**. Head **decides** what to implement when intent is clear. **Use subagents** for real work (fresh context; saves the head window). Not multi-epic thrash. Not vibe coding.
 - **Tests are part of the phase.** Real tests; purpose over %; zero fake coverage.
 - **Parallel agents:** Only **inside** the active phase; **never two writers on the same package**. Default ≤8; hard max 10. Fresh context — not multi-product thrash.
 - **Bar + pipeline + backup:** **`Agents/Agents-ELON-STANDARD.md`** (head’s primary).
