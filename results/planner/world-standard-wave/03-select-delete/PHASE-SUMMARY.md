@@ -127,6 +127,21 @@ No structural product regression from residual work. Tests are direct (pure help
 
 ---
 
+
+---
+
+## Unit re-prove (P03 seat A — 2026-07-10)
+
+| Item | Value |
+|------|--------|
+| Seat | **A — unit pack only** |
+| Tip re-proved | `40c341964428b3fef2551ff8653c309b8167e003` |
+| Pack | 4 files / **62 passed** / exit **0** (~3.52s) |
+| Product code edits | **None** (green on tip; no fix required) |
+| Residual open for units | **None** — U1–U11 still present; pack green on current tip |
+| Unit alone = W3? | **NO** — units re-prove only; browser remains separate evidence |
+
+Logs refreshed: `unit-w3-pack.log`, per-suite `unit-*.log`, `unit-residual.log`, `HEAD.txt`.
 ## False-green defenses (do not weaken)
 
 1. **Unit pack green ≠ W3 PASS** — browser Task required.  
