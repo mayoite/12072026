@@ -229,7 +229,8 @@
 }
 
 .home-collection-card__footer {
-  z-index: 1;
+  /* media 0 · overlay 1 · footer 2 — keep chrome above scrim */
+  z-index: 2;
 }
 
 .home-collection-card__tagline {

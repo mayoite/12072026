@@ -167,15 +167,15 @@ export function ShowcaseCarousel({
                 className="group relative min-w-0 shrink-0 grow-0 basis-[min(88vw,22rem)] sm:basis-[min(72vw,24rem)] lg:basis-[min(42vw,28rem)]"
               >
                 <Link href={item.link} className="block overflow-hidden rounded-[var(--radius-giant)]">
-                  <div className="relative aspect-[4/5] overflow-hidden">
+                  <div className="home-showcase-card__media-box relative aspect-[4/5] overflow-hidden">
                     <Image
                       src={item.image}
                       alt={item.name}
                       fill
                       sizes="(max-width: 768px) 88vw, (max-width: 1280px) 42vw, 28rem"
-                      className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                      className="home-showcase-card__media object-cover transition-transform duration-1000 group-hover:scale-105"
                     />
-                    <div className="home-showcase-overlay" />
+                    <div className="home-showcase-overlay" aria-hidden="true" />
                     <div className="home-showcase-card__caption">
                       <h3 className="typ-overlay-title text-inverse">{item.name}</h3>
                     </div>

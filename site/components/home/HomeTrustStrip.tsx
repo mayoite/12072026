@@ -22,22 +22,23 @@ export function HomeTrustStrip() {
             {HOMEPAGE_TRUST_CONTENT.projectsCta}
           </Link>
         </div>
-        <div className="home-trust-strip__track relative overflow-hidden">
-          <div
-            className="footer-logo-marquee__track flex w-max animate-marquee motion-reduce:animate-none"
-            style={{ ["--marquee-duration" as string]: "95s" }}
-          >
+        <div
+          className="home-trust-strip__track relative overflow-hidden"
+          style={{ ["--marquee-duration" as string]: "95s" }}
+        >
+          {/* marquee-left + duration token — not animate-marquee (30s conflict) */}
+          <div className="footer-logo-marquee__track flex w-max motion-reduce:animate-none">
             {trackLogos.map((logo, index) => (
               <div
                 key={`${logo.name}-${index}`}
-                className="footer-logo-marquee__item relative flex h-12 w-34 shrink-0 items-center justify-center overflow-hidden md:h-14 md:w-40"
+                className="footer-logo-marquee__item relative h-12 w-34 shrink-0 md:h-14 md:w-40"
               >
                 <Image
                   src={logo.src}
                   alt={logo.name}
-                  width={160}
-                  height={56}
-                  className="max-h-9 w-auto max-w-full object-contain opacity-90 md:max-h-10"
+                  fill
+                  sizes="160px"
+                  className="footer-logo-marquee__logo opacity-90"
                 />
               </div>
             ))}
