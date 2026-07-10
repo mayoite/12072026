@@ -1,0 +1,42 @@
+{
+  "phase": "P04",
+  "gate": "W4",
+  "checkpoint": null,
+  "checkout": "D:\\OandO07072026",
+  "worktrees": false,
+  "evidenceRoot": "results/planner/world-standard-wave/04-orbit-continuity",
+  "HEAD": "382ab73f336cabdf9e76cad683d1a3b7fa1a47f8",
+  "date": "2026-07-10",
+  "agent": "P04-unit-pack-seat",
+  "action": "unit orbit/pose re-prove + adapter tests",
+  "unitPack": {
+    "orbit": {
+      "exitCode": 0,
+      "log": "unit-orbit-pack.log",
+      "command": "pnpm exec vitest run tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx tests/unit/features/planner/open3d/poseContinuityW4.test.ts tests/unit/features/planner/open3d/workspaceOrbitWiring.test.ts --reporter=verbose",
+      "files": 3,
+      "tests": "9/9 passed",
+      "breakdown": {
+        "orbitControlsDefault.test.tsx": 6,
+        "poseContinuityW4.test.ts": 1,
+        "workspaceOrbitWiring.test.ts": 2
+      }
+    },
+    "poseAdapter": {
+      "exitCode": 0,
+      "log": "unit-pose-pack.log",
+      "command": "pnpm exec vitest run tests/unit/features/planner/open3d/poseContinuityW4.test.ts tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts --reporter=verbose",
+      "files": 3,
+      "tests": "26/26 passed",
+      "breakdown": {
+        "poseContinuityW4.test.ts": 1,
+        "buildOpen3dSceneNodes.test.ts": 11,
+        "createSceneObjectFromNode.test.ts": 14
+      }
+    },
+    "note": "Unit alone != W4. Browser hard gate not run by this seat."
+  },
+  "browser": null,
+  "status": "open",
+  "statusNote": "Unit orbit pack 9/9 and pose/adapter pack 26/26 green at HEAD. Do not claim W4 PASS without browser orbit/pose verification."
+}
