@@ -4,12 +4,12 @@
   "phase": "orbit-continuity",
   "agent": "P04-Scratch-Agent-0",
   "status": "open",
-  "reason": "scratch start — phase card W4 PASS invalid until new unit+browser pack on this tip",
+  "reason": "scratch start - phase card W4 PASS invalid until new unit+browser pack on this tip",
   "paperPass": false,
   "unitAloneEqualsW4": false,
   "fabricRequired": "OFF",
   "evidenceDir": "results/planner/world-standard-wave/04-orbit-continuity/",
-  "head": "f692ca963a68224e2daefee70b65d780a9ef766d",
+  "head": "41df56e5fa10424688402c1a396e4eeca4dbf4a2",
   "productLayers": {
     "layer1_defaults": {
       "present": true,
