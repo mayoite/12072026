@@ -196,7 +196,10 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
     expect(outer).toBeDefined();
     if (!outer || outer.kind !== "rect") throw new Error("outer carcass missing");
 
-    expect(outer.fill).toBe("var(--block-surface)");
+    // Literal light fill required on canvas (CSS vars often fail → black blob).
+    expect(outer.fill).toMatch(/^#|^rgb/i);
+    expect(outer.fill?.toLowerCase()).not.toBe("#000");
+    expect(outer.fill?.toLowerCase()).not.toBe("#000000");
     expect(outer.fill).not.toMatch(/block-storage/);
     expect(outer.fill).not.toMatch(/text-inverse-body/);
     expect(outer.stroke).not.toMatch(/block-storage/);

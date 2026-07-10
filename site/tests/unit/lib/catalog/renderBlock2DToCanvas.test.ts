@@ -196,7 +196,9 @@ describe("furnitureBlock2DFromItem", () => {
     expect(outer).toBeDefined();
     if (!outer || outer.kind !== "rect") throw new Error("outer carcass missing");
     // Light surface fill — NOT var(--block-storage) / inverse-body solid blob
-    expect(outer.fill).toBe("var(--block-surface)");
+    expect(outer.fill).toMatch(/^#|^rgb/i);
+    expect(outer.fill?.toLowerCase()).not.toBe('#000');
+    expect(outer.fill?.toLowerCase()).not.toBe('#000000');
     expect(outer.fill).not.toMatch(/block-storage/);
     // Multi-prim: inner rect + front/back lines + handle for slab
     expect(block.prims.length).toBeGreaterThanOrEqual(4);

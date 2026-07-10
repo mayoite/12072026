@@ -55,11 +55,13 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
   const doorStyle = opts?.doorStyle ?? "slab";
   const inset = Math.min(16, Math.max(6, Math.min(w, d) * 0.04));
   const frontY = d - inset; // plan: +Y depth; front at larger Y
-  // Light carcass + dark outline (not storage inverse-body fill).
-  const fill = BLOCK_STYLE.surface;
-  const stroke = BLOCK_STYLE.surfaceStroke;
-  const detailStroke = BLOCK_STYLE.glyphDark;
-  const strokeW = BLOCK_STYLE.surfaceStrokeWidth;
+  // Plan canvas: use *literal* light/dark colors. CSS var(--block-*) often fails
+  // to resolve on Canvas2D → fill paints opaque black → solid empty-box blob.
+  // Tokens kept only as documentation of intent; paint must stay readable at zoom.
+  const fill = "#f3efe6";
+  const stroke = "#3f3a32";
+  const detailStroke = "#5c564c";
+  const strokeW = Math.max(BLOCK_STYLE.surfaceStrokeWidth, 2.5);
 
   const prims: Prim[] = [
     // Outer carcass — light fill so inner lines read
