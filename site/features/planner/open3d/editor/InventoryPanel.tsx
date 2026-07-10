@@ -443,6 +443,7 @@ export const InventoryPanel = memo(function InventoryPanel({
         <WorkstationConfiguratorPanel
           onPlaceConfig={onWorkstationConfigPlace}
           onPlaceBatchConfig={onWorkstationConfigBatchPlace}
+          defaultOpen={false}
         />
       ) : null}
 
