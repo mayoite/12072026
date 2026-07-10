@@ -1,12 +1,11 @@
 # Pending list (owner)
 
-**Last updated:** 2026-07-09 (Elon scoreboard: `results/planner/elon-standard/OWNER-BOARD.md`)  
-**Rule:** finish open kill-path fully before inventing a new epic. Resolve blockers; do not park them.  
-**Honesty:** P0.1–P0.3 are **spine**, not ship quality. Owner rejected thin “journey only” bar.  
+**Last updated:** 2026-07-10  
+**Rule:** finish open kill-path fully before inventing a new epic.  
+**Honesty (critical):** **GATE PASS ≠ product finished.** Owner was right to be confused. Read `results/planner/world-standard-wave/00-rebaseline/HONEST-STATUS.md` + `10-handover/W-GATES.md`.  
 **Active standard:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md`  
-**W0:** **Unlocked — Approach A** (product journey first). Recorded in `Plans/trustdata/00-START.md` + `results/planner/world-standard-wave/00-start/NOTES.md`.  
-**Evidence:** `results/planner/world-standard-wave/` · truth map `TRUTH-LOCK.md` · owner board `results/planner/elon-standard/OWNER-BOARD.md`  
-**Agents / one-task:** `AGENTS.md` only.
+**W0:** Unlocked Approach A.  
+**Evidence:** `results/planner/world-standard-wave/` · `TRUTH-LOCK.md` · head bar `Agents/Agents-ELON-STANDARD.md`
 
 Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infra
 
@@ -17,16 +16,17 @@ Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infr
 | # | Item | Status |
 |---|------|--------|
 | **W0** | Design + approach | **UNLOCKED — Approach A** (product-journey first; B/C not selected) |
-| **W1–W2** | Draw + place journey + symbols | **PASS** evidence — `02-browser-open3d-journey/`, `05-symbols-svg/` |
-| **W3** | Select / delete / undo (furniture) | **PASS** — `03-select-delete/` |
-| **W4** | Orbit + 2D↔3D continuity | **PASS** — unit + browser (`04-orbit-continuity/` browser-run.json + shots) |
-| **W5–W6** | Save hard-reload + local-only honesty | **PASS** — `06-save-honesty/` (local IDB only; not cloud) |
-| **W7** | Mesh quality bar (cabinet-v0) | **PASS** bar met — `08-mesh-quality/`; residual: raise readability later (not photoreal) |
-| **W8** | Shortcuts map truth | **PASS** — `09-shortcuts-chrome/` |
-| **Pack** | CP-10 handover + E: backup | **OPEN** — `10-handover/` missing; **not blocked on CP-04** (CP-04 **PASS**) |
-| **Research** | Competitive ideas only — `D:\websites\research\2026-07-09-world-standard\` | Packed |
+| **W1–W2** | Draw + place + symbols | **GATE PASS** (artifacts) — **product not finished** |
+| **W3** | Select / delete / undo | **GATE PASS** (artifacts) |
+| **W4** | Orbit + 2D↔3D | **GATE PASS** (artifacts) |
+| **W5–W6** | Save reload + local honesty | **GATE PASS** — local only; **no cloud** |
+| **W7** | Mesh bar | **GATE PASS** bar — **still boxy** |
+| **W8** | Shortcuts | **GATE PASS** (artifacts) |
+| **Pack** | CP-10 handover + E: | **GATE PASS (pack)** — `10-handover/` + `E:\OandO-backups\trustdata-2026-07-10\` |
+| **Product ship** | Buyer-ready planner | **OPEN — not done** |
+| **Research** | Ideas only `D:\websites\...` | Historical |
 
-**Not blocked on W0.** CP-00…CP-09 **PASS**. Open pack residual is **CP-10 handover** only (optional next — pack + E: backup).
+**Spine gates have folders. Product is half. Do not read “PASS” as finished product.**
 
 ---
 
@@ -36,7 +36,7 @@ Legend: `W` world-standard · `P0` spine history · `P1` hard path · `OPS` infr
 |----------|------|
 | **W4 browser orbit/continuity e2e** | **Closed** — configurator Place 4 seats path; orbit attr + count restore |
 | **Open3d e2e pack (callable)** | **Closed** — not folder-only: `pnpm gate:open3d` (typecheck + pack) and `pnpm test:e2e:open3d-world`; manifest `site/config/build/playwright-open3d-world-specs.json`; evidence `results/planner/world-standard-wave/gate-e2e/` (`run.json` exit 0, 5/5) |
-| **A11y label-in-name (WCAG 2.5.3)** | **Partial — not closed.** Last LH (`quality-wave-agents/a11y/`, score **98**, `label-content-name-mismatch` **fail**) captured **old** names. Working tree now aligns visible text in names: `Focus — maximize canvas`, `Prefs — open preferences menu`, `Commands (Ctrl+K)` (`TopBar.tsx`, `OOPlannerWorkspace.tsx`) — **uncommitted** at 2026-07-09 board write. Still need: commit + unit name update (`workspaceShell.test.tsx` still `"Maximize canvas"`) + **re-run LH** and store under `results/planner/`. Nested `main` + `data-viewport` hydration already **DONE** (`p0-3-a11y-main/`, `p0-3-hydration/`). Other chrome residuals: H1→H3, 0×0 mobile panel toggles, status landmark. |
+| **A11y label-in-name (WCAG 2.5.3)** | **HALF.** Code + unit 31/31 (`a11y-label-in-name/`). **Fresh LH still OPEN.** Nested main + hydration done earlier. |
 | **Mesh quality raise** | Cabinet-v0 / workstation multiparts still boxy; handles/AO later — W7 bar already PASS for readable parts |
 | **Fabric full stage** | Destination still later (Approach A); flag OFF expected |
 | **Cloud / member save** | W6 is local-only honesty; cloud wire is a later gate if owner wants |

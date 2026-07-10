@@ -1,31 +1,28 @@
 # Session recap
 
 **Updated:** 2026-07-10  
-**Active phase:** **00-rebaseline** (start from CP-00)  
-**Evidence:** `results/planner/world-standard-wave/00-rebaseline/`  
-**Recap cadence:** ~30 min + land/block
+**Active:** honesty fix + CP-10 pack land  
+**HEAD:** after next commit (was `500ac6e` mid-session)
 
 ## Done this window
 
-- Started from **00** per owner
-- Unlock still ACTIVE (Approach A) — no re-ask
-- Folder matrix CP-00…10; **10-handover missing**
-- Fixed layout: deleted `site/test-results`; `check:layout` **OK**
-- Dual remotes functional (switch gh account per remote)
-- a11y phase paused as secondary until 00 next-step choice
+- Named the bug: **everything “PASS” = gates, not finished product**
+- `00-rebaseline/HONEST-STATUS.md` + `10-handover/*` (README, W-GATES, MASTER-SYNC, FAILURES-SNIP, BACKUP-LOG, HEAD)
+- E: backup **OK** → `E:\OandO-backups\trustdata-2026-07-10\` (270 files)
+- Updated TRUTH-LOCK, 00-PENDING, CHECKPOINTS CP-10, OWNER-BOARD, 19-GOALS
+- Live: tsc exit 0; layout OK
 
 ## Red / blocked
 
 - none hard  
-- CHECKPOINTS.md still says “push only on owner ask” — **stale vs AGENTS** (noted in NOTES)
+- Product ship still OPEN (expected)
 
-## Next (owner pick)
+## Next
 
-1. CP-10 handover pack  
-2. Continue a11y T2 LH  
-3. Full sequential re-proof CP-01+ (days)
+- Owner picks product residual (a11y LH, mesh raise, fresh W re-proof) — **not** more fake “all done”
+- Or stop and absorb honest scoreboard
 
 ## Do not claim
 
-- Fresh W1–W8 green on current HEAD without re-run  
-- CP-10 done
+- Product finished  
+- Fresh Playwright W suite on tip  

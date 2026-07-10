@@ -35,7 +35,7 @@ Not: full multi-client factory, photoreal, enterprise parity.
 
 Agent ticks slices in evidence + commits; does **not** expand this into a novel.
 
-**Still open before pack:** CP-10 `10-handover/` (E: backup + evidence pack).
+**Gate pack:** CP-10 `10-handover/` landed 2026-07-10 (E: backup too). **Product still not finished** — see `00-rebaseline/HONEST-STATUS.md`.
 
 ---
 

@@ -26,7 +26,7 @@ Pending: `ayushdocs/00-PENDING.md`
 | | W7 mesh bar (cabinet-v0 parts) | `08-mesh-quality/` — bar met, not photoreal |
 | | W8 shortcuts map truth | `09-shortcuts-chrome/` |
 | | CP-00…CP-09 | **PASS** — `TRUTH-LOCK.md` |
-| | CP-10 pack + E: backup | **OPEN** — `10-handover/` **missing** |
+| | CP-10 pack + E: backup | **PASS (pack)** — `10-handover/` + `E:\OandO-backups\trustdata-2026-07-10\` — **not product ship** |
 | **Callable e2e gate** | **PASS** (pack green; gate wire real) | `pnpm gate:open3d` = typecheck + open3d pack. Pack run: `gate-e2e/run.json` **exitCode 0**, **status PASS**, 5/5 specs (`playwright-raw.log` 5 passed / 27.8s). Specs: journey · W3 · W4 · save honesty · systems batch. Manifest: `site/config/build/playwright-open3d-world-specs.json`. **Honesty:** this board cites the **pack** artifact + separate typecheck clean; not a single combined `gate:open3d` wall-clock log in this folder. Wire exists and is contract-tested (`gate-e2e/vitest-contract.log`). |
 | **Typecheck** | **PASS** | `results/planner/quality-2026-07-09/typecheck-raw.log` — `tsc --noEmit` **exit 0**, **0 errors**. Also `results/planner/00a-start/typecheck/typecheck-run.json` exit 0. |
 | **A11y chrome** | **Score 98** (Lighthouse snapshot) · **not clean** | Last LH: `quality-wave-agents/a11y/report.json` — **categories.accessibility = 0.98**; `label-content-name-mismatch` **score 0** on **pre-fix** strings (`Maximize canvas` / `Open preferences menu` / `Open command palette`). Report: `quality-wave-agents/a11y/A11Y-REPORT.md`. Earlier open3d tree: `a11y-open3d/REPORT.md` (nested main, hydration, unlabeled field). **Code progress:** nested `main` → `p0-3-a11y-main/REPORT.md` **DONE**; `data-viewport` hydration → `p0-3-hydration/REPORT.md` **DONE**. **label-in-name:** working tree **has** aligned strings (`Focus — maximize canvas`, `Prefs — open preferences menu`, `Commands (Ctrl+K)`) in `TopBar.tsx` / `OOPlannerWorkspace.tsx` — **uncommitted** at board write; **no post-fix LH re-capture**; unit still queries old name (`workspaceShell.test.tsx` → `"Maximize canvas"`). Residual still open until re-proof + commit. Other open: heading H1→H3, 0×0 mobile panel toggles, status bar landmark, nested inventory region name. |
@@ -45,7 +45,7 @@ Pending: `ayushdocs/00-PENDING.md`
 
 ## One line
 
-**W0–W8 spine has evidence and is PASS. Callable open3d pack is green. tsc is clean. A11y chrome is 98 with known residuals (label-in-name code-on-disk only, unproven). Product half is still half: boxy mesh, no cloud, no Fabric stage, demo BOQ only. CP-10 handover pack not done.**
+**GATE spine CP-00…10 pack has paths. PRODUCT is not finished. Owner confusion was correct: PASS meant gate artifacts, not ship. Mesh boxy, no cloud, no Fabric stage, demo BOQ, a11y LH open. Read `00-rebaseline/HONEST-STATUS.md`.**
 
 ---
 

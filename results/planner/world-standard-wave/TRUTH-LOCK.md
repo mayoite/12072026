@@ -1,26 +1,26 @@
 # TRUTH-LOCK — world-standard-wave
 
-**Date:** 2026-07-09 (CP-04 PASS; CP-10 unblocked)  
-**Scope:** Docs/evidence status only when syncing; product proof lives under gate folders.  
-**Authority synced:** `Plans/trustdata/checkpoints/CHECKPOINTS.md`, `ayushdocs/19-GOALS-SLICES.md`, `ayushdocs/00-PENDING.md`  
-**Owner plain status:** `results/planner/quality-2026-07-09/OWNER-STATUS.md`  
-**Rule:** PASS only when NOTES/run/screenshots support it. No invented PASS.
+**Date:** 2026-07-10 (rebaseline + CP-10 pack land)  
+**Owner confusion fixed here:** **GATE PASS ≠ product finished.** Read `00-rebaseline/HONEST-STATUS.md` + `10-handover/W-GATES.md`.  
+**Scope:** Gate = evidence folders / CP criteria. Product = buyer ship — **still not done**.  
+**Authority:** CHECKPOINTS · 19-GOALS · 00-PENDING · ELON  
+**Rule:** No invented product PASS. Gate PASS may be historical artifacts.
 
 Root: `results/planner/world-standard-wave/`
 
-| CP | Gate | Status | Evidence path | Notes |
-|----|------|--------|---------------|-------|
-| **CP-00** | W0 | **PASS** | `00-start/NOTES.md` + `Plans/trustdata/00-START.md` | Approach **A**; implementation unlock recorded |
-| **CP-01** | Baseline | **PASS** | `00-product-truth/` full pack | INVENTORY + CONTRADICTIONS + smoke |
-| **CP-02** | Engine | **PASS** | `01-engine-lock/` | Feasibility interim; Fabric dest; Three + orbit ON |
-| **CP-03** | **W3** | **PASS** | `03-select-delete/` | Unit + Playwright place→select→delete→undo |
-| **CP-04** | **W4** | **PASS** | `04-orbit-continuity/` | Unit + browser-green; Place 4 seats → orbit attr → 2D count |
-| **CP-05** | **W2** symbols | **PASS** | `05-symbols-svg/` | Block2D + SVG honesty |
-| **CP-06** | **W5–W6** | **PASS** | `06-save-honesty/` + `save-reload/` | Local-only honesty |
-| **CP-07** | **W1–W2** browser | **PASS** | `02-browser-open3d-journey/` | Journey green |
-| **CP-08** | **W7** | **PASS** | `08-mesh-quality/` | Cabinet multiparts bar |
-| **CP-09** | **W8** | **PASS** | `09-shortcuts-chrome/` | Map-driven shortcuts |
-| **CP-10** | Pack + E: | **OPEN** | `10-handover/` **missing** | Only remaining pack gate — **not blocked on CP-04** (CP-04 PASS) |
+| CP | Gate | GATE status | Evidence path | Product note |
+|----|------|-------------|---------------|--------------|
+| **CP-00** | W0 | **PASS** | `00-start/` + `00-rebaseline/` | Process only |
+| **CP-01** | Baseline | **PASS** (artifact) | `00-product-truth/` | Not re-proven on tip today |
+| **CP-02** | Engine | **PASS** (artifact) | `01-engine-lock/` | Fabric stage later |
+| **CP-03** | **W3** | **PASS** (artifact) | `03-select-delete/` | Not re-run today |
+| **CP-04** | **W4** | **PASS** (artifact) | `04-orbit-continuity/` | Not re-run today |
+| **CP-05** | **W2** symbols | **PASS** (artifact) | `05-symbols-svg/` | Quality raise later |
+| **CP-06** | **W5–W6** | **PASS** (artifact) | `06-save-honesty/` | Local only — no cloud |
+| **CP-07** | **W1–W2** browser | **PASS** (artifact) | `02-browser-open3d-journey/` | Not re-run today |
+| **CP-08** | **W7** | **PASS** (bar) | `08-mesh-quality/` | **Still boxy** |
+| **CP-09** | **W8** | **PASS** (artifact) | `09-shortcuts-chrome/` | Chrome residuals |
+| **CP-10** | Pack + E: | **PASS (pack)** | `10-handover/` + `E:\OandO-backups\trustdata-2026-07-10\` | Pack honesty only — **not ship** |
 
 ## Related (not CP rows)
 
@@ -29,17 +29,19 @@ Root: `results/planner/world-standard-wave/`
 | Systems v0 | Done (configurator + batch + multiparts + legs) | `07-systems-v0/` |
 | Quality slice (typecheck + pick tests) | Active / separate | `results/planner/quality-2026-07-09/` |
 
-## Residuals (honest)
+## Residuals (honest) — product still open
 
-1. **CP-10** — handover pack + E: backup only. **Not waiting on CP-04** (or any other CP-00…09).  
-2. **Mesh** — workstation legs landed; still boxy; handles/photoreal later.  
+1. **Product ship** — **NOT DONE** (never was a W-gate claim).  
+2. **Mesh** — still boxy; handles/photoreal later.  
 3. **Fabric full stage** — destination later (Approach A).  
-4. **Cloud save** — later; W6 proves local honesty only.  
-5. **Priced BOQ** — later; not claimed by W gates.  
-6. **Quality slice** — typecheck + pick-test quality (see OWNER-STATUS); does not close CP-10 by itself.
+4. **Cloud save** — later; W6 = local only.  
+5. **Priced BOQ** — demo only.  
+6. **A11y** — unit labels aligned; fresh LH not closed.  
+7. **Fresh browser re-proof** of W packs on current HEAD — optional multi-hour phase.  
+8. **MASTER 94-box line re-tick** — deferred; `10-handover/MASTER-SYNC.md` honest.
 
 ## Count
 
-- **PASS:** CP-00 … CP-09 (10)  
-- **OPEN:** CP-10 only  
+- **GATE PASS:** CP-00 … CP-10 (pack)  
+- **PRODUCT FINISHED:** **0**  
 - **FAIL / WAIVE:** none
