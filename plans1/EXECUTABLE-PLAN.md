@@ -271,7 +271,7 @@ git commit -m "docs(plans1): session zero evidence scaffold"
 |-----------|-----------|
 | `Idiots2/…` | `archive/Idiots2/…` |
 | `Plans/trustdata/…` | `Plans/phases/` + `Plans/Research/` |
-| `ayushdocs/…` | `Plans/Research/Others/` (if present) |
+| `ayushdocs/…` | `Plans/Others/` (if present) |
 
 #### Task 01.01 — Tree inventory
 

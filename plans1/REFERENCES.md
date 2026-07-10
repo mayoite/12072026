@@ -62,7 +62,7 @@ Older wave (do not use as primary unless owner): `archive/Idiots/P0X-*/REPORT.md
 | Expert merge | `Plans/phases/EXPERT-PASS.md` |
 | Evidence folder lock | `Plans/Research/RESULTS-MAP.md` |
 | Research map | `Plans/Research/RESEARCH-MAP.md` |
-| Owner-style notes (moved) | `Plans/Research/Others/*` (not W proof) |
+| Owner-style notes (moved) | `Plans/Others/*` (not W proof) |
 
 **Dead paths (do not write evidence here):** `Plans/trustdata/`, root `ayushdocs/`, `checkpoints/CHECKPOINTS.md` at old locations.
 

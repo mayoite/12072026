@@ -2,8 +2,8 @@
 
 Absolute-path oriented map for executors. **Repo wins** on file presence; re-check before claiming.
 
-**Source resolution:** plans2 authority = **`D:\OandO07072026\plans2/`**.  
-`idiotplanners1` = **missing**. `plans1/` = Idiots2 wave (not this package).
+**Source resolution:** **Frozen reference.** Live execute = **`D:\OandO07072026\plans1\START-HERE.md`**.  
+`plans2/` = Idiots-wave reviews/plans for cross-check only.
 
 ---
 
@@ -37,9 +37,9 @@ Absolute-path oriented map for executors. **Repo wins** on file presence; re-che
 | P09 | `D:\OandO07072026\plans2/P09-shortcuts-chrome\IMPLEMENTATION-PLAN.md` |
 | P10 | `D:\OandO07072026\plans2/P10-evidence-handover\IMPLEMENTATION-PLAN.md` |
 
-**CODE-REVIEW-REPORT.md under idiotplanners2:** **none**.
+**CODE-REVIEW-REPORT.md under plans2:** **present** — `plans2/P0X-*/CODE-REVIEW-REPORT.md` (all 10).
 
-Sibling (not plans2 authority): `D:\OandO07072026\idiotplanners\P0X-*\CODE-REVIEW-REPORT.md` (Idiots2).
+Sibling execute package: `D:\OandO07072026\plans1\` (use that for residual run).
 
 ---
 

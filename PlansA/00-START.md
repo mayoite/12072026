@@ -1,12 +1,12 @@
-# 00-START — Session zero (PlansA)
+# 00-START — PlansA (FROZEN — not execute)
 
-**For:** next engineer or agent on `D:\OandO07072026`  
-**Maps to:** EXECUTABLE-PLAN Task 00  
+> **Do not start residual from here.** Open [`../plans1/START-HERE.md`](../plans1/START-HERE.md) + [`../plans1/00-START.md`](../plans1/00-START.md).
+
+**For:** archaeology only  
 **Date of package:** 2026-07-10  
 **Repo HEAD at source synthesis:** `cb62c4e` — **re-check on execute**
 
-> **For agentic workers:** `/using-superpowers` first. Work only in `D:\OandO07072026` (no worktrees).  
-> **Do not** mark any W gate PASS from this card alone.
+> **For agentic workers:** `/using-superpowers` first. Work only in `D:\OandO07072026` (no worktrees).
 
 ---
 
@@ -23,7 +23,7 @@
 | Skills | `/using-superpowers` + fit skills (verification, TDD for residual code) |
 | Firecrawl | **Dead** — do not re-run research scrapes |
 | Ethics | Research under `D:\websites` = ideas only — **no** competitor paste into product |
-| Execute authority | **`PlansA/`** only — not dual plans1/plans2 |
+| Execute authority | **`plans1/START-HERE.md` only** — PlansA is frozen research |
 
 ### Immediate first commands
 

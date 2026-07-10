@@ -1,8 +1,9 @@
-# 00-START — Session zero (executable start card)
+# 00-START — plans2 (FROZEN — not execute)
 
-> **For agentic workers:** `/using-superpowers` first. Work only in `D:\OandO07072026` (no worktrees).  
-> **Package:** `plans2/` synthesized from **`plans2/`** (idiotplanners1 missing).  
-> **Do not** mark any W gate PASS from this card alone.
+> **Do not start residual from here.** Open [`../plans1/START-HERE.md`](../plans1/START-HERE.md) + [`../plans1/00-START.md`](../plans1/00-START.md).  
+> This file is historical Idiots-wave session zero.
+
+> **For agentic workers:** `/using-superpowers` first. Work only in `D:\OandO07072026` (no worktrees).
 
 ---
 
@@ -28,7 +29,7 @@ Bootstrap an execute session so residual P01–P11 work starts with:
 | Env | Repo-root `.env.local` from `.env.example` when browser/dev needed |
 | Evidence root | **Only** `D:\OandO07072026\results\` — never `site/results/` |
 | Skills | `/using-superpowers` + TDD / verification / chrome-devtools as phase needs |
-| Source plans | `plans2/` sole residual authority (not `plans1/`, not missing `idiotplanners1/`) |
+| Source plans | **Frozen.** Live execute = `plans1/START-HERE.md`. This tree = reference reviews only. |
 
 ---
 

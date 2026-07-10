@@ -99,7 +99,7 @@ From CODE-REVIEW reports (2026-07-10) vs live `site/features/planner/open3d/`:
 ### Paper-green sources (ignore for PASS)
 
 - Phase cards under `Plans/phases/P0X-*/` claiming DONE/PASS without disk folders
-- `Plans/Research/Others/00-PENDING.md` / goals slices W PASS language
+- `Plans/Others/00-PENDING.md` / goals slices W PASS language
 - Historical `10-handover/W-GATES.md` GATE PASS from git/E: backup without re-prove on HEAD
 - `08-EVIDENCE-INDEX.md` dead path catalog
 - Root `Idiots2/` (does not exist — use `archive/Idiots2/`)

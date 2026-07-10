@@ -44,7 +44,7 @@
 
 **Justification:** Root `Idiots2/` **does not exist** on disk (every CODE-REVIEW B/M finding: P01 B2, P02 B1, P03 M1, P04 M2, P05 M1, P06 M5, P07 H2, P08 M3, P09 M1, P10 M2). Content under archive is valid; path is wrong.
 
-**Also:** `Plans/trustdata/`, root `ayushdocs/`, old CHECKPOINTS/MASTER live paths → use `Plans/phases`, `Plans/Research`, `Plans/Research/Others` for historical notes only.
+**Also:** `Plans/trustdata/`, root `ayushdocs/`, old CHECKPOINTS/MASTER live paths → use `Plans/phases`, `Plans/Research`, `Plans/Others` for historical notes only.
 
 ---
 

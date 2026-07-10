@@ -2,7 +2,7 @@
 
 **Phase:** P11 (new — not in original P01–P10 set)  
 **Type:** Checkbox-only execute board  
-**Authority after residual:** `PlansA/EXECUTABLE-PLAN.md` residual DONE + live `results/` + `AGENTS.md`  
+**Authority after residual:** `plans1/START-HERE.md` residual DONE + live `results/` + `AGENTS.md` (PlansA P11 = research copy only)  
 **Date:** 2026-07-10  
 **Merge:** plans1 buyer-journey + SHIP-HONESTY **plus** plans2 CROSSWALK + DUAL-LANGUAGE
 
@@ -35,11 +35,11 @@ Do **not** start P11 until all of the following are true **on disk** (or explici
 
 ### Process
 
-- [ ] Session zero complete (`PlansA/00-START.md`)
+- [ ] Session zero complete (`plans1/00-START.md`)
 - [ ] Brainstormer path discipline used: `archive/Idiots2/` + `archive/Idiots/` as needed
 - [ ] No product thrash outside residual lists
 - [ ] Fabric flag OFF for all W browser proofs
-- [ ] Execute path was **PlansA only** (not dual plans1/plans2)
+- [ ] Execute path was **plans1 only** (not PlansA, not dual plans2)
 
 ### Per-phase residual DONE (short form)
 

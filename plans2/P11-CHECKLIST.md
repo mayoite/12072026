@@ -65,9 +65,9 @@ If owner prefers zero new folder: store the same six names under `10-handover/p1
 
 ### A. Process & honesty
 
-- [ ] Session used `plans2/00-START.md` posture (no worktrees; results root legal)
-- [ ] Source plans confirmed as **idiotplanners2** (idiotplanners1 missing)
-- [ ] No CODE-REVIEW under idiotplanners2 acknowledged (repo + plans only)
+- [ ] Session used `plans1/00-START.md` posture (no worktrees; results root legal)
+- [ ] Live execute confirmed as **plans1/** (this plans2 P11 is reference only)
+- [ ] CODE-REVIEW under `plans2/P0X-*/` present when cross-checking hardness
 - [ ] `pnpm run check:layout` exit 0 at close-out
 - [ ] Failures.md updated for any open residual (or explicit “none new”)
 - [ ] Dual language written: CP/W pack ≠ product ship

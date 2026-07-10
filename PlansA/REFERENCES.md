@@ -1,8 +1,8 @@
 # REFERENCES — Source path map (PlansA)
 
 Absolute-path oriented map. **Repo wins** on file presence; re-check before claiming.  
-**Execute authority:** `D:\OandO07072026\PlansA\`  
-**Reference packages (do not dual-run):** `plans1/`, `plans2/`
+**Execute authority:** `D:\OandO07072026\plans1\` (`START-HERE.md`) — **not** this folder  
+**This package:** research dump only. Do not dual-run.
 
 ---
 

@@ -2,9 +2,9 @@
 
 **Purpose:** Justify every material synthesis change between the ten per-phase `plans2/**/IMPLEMENTATION-PLAN.md` files and this **master executable package** under `plans2/`.
 
-**Source resolution (stated in README):** Owner said **idiotplanners1** — that folder **does not exist**. Sole plan source is **`plans2/`** (Idiots wave 1). Sibling `plans1/` (Idiots2) is **not** authority for plans2.
+**Source resolution:** Historical. Live execute = **`plans1/START-HERE.md`**. This package = Idiots wave reference only.
 
-**CODE-REVIEW-REPORT.md:** **Missing** under `plans2/`. This package plans from **implementation plans + live repo only** (and optional `archive/Idiots` reports when a plan cites Idiots REPORT paths).
+**CODE-REVIEW-REPORT.md:** **Present** under `plans2/P0X-*/` (all 10 phases). Older “missing” claim was **stale** — do not re-assert it.
 
 **Repo snapshot used:** 2026-07-10 · HEAD `cb62c4e…` (re-read at execute) · **`results/` MISSING**.
 

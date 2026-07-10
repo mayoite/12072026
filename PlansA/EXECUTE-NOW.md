@@ -1,19 +1,23 @@
-# EXECUTE-NOW — Single spine (PlansA)
+# EXECUTE-NOW — PlansA (FROZEN — not execute)
+
+> **Do not run residual work from this file.**  
+> **Execute:** [`../plans1/START-HERE.md`](../plans1/START-HERE.md) only.  
+> This tree = merge research / dual copies. Body below is **historical**.
 
 **Date:** 2026-07-10  
-**Canonical path:** `PlansA/EXECUTE-NOW.md`  
-**Checkout:** `D:\OandO07072026` main only · **no worktrees**  
-**Supersedes:** dual execution of `plans1/` then `plans2/`
+**Canonical path (historical):** `PlansA/EXECUTE-NOW.md`  
+**Checkout:** `D:\OandO07072026` main only · **no worktrees**
 
 ---
 
-## 1. Folders
+## 1. Folders (historical)
 
 | Role | Path | Notes |
 |------|------|--------|
-| **PRIMARY execute** | `PlansA/` | Package docs **+** `P01`…`P10` phase folders |
-| Per phase (both trees) | `PlansA/P0X-*/` | Primary plan/review + `*.plans2.md` secondary |
-| Originals (optional) | `plans1/`, `plans2/` | Unchanged mirrors; do not dual-run |
+| **Execute (live)** | **`plans1/`** | Use START-HERE there |
+| **This package** | `PlansA/` | Research dump only |
+| Per phase (both trees) | `PlansA/P0X-*/` | Primary + `*.plans2.md` — archaeology |
+| Originals | `plans1/`, `plans2/` | Do not dual-run |
 
 Each phase folder contains:
 
@@ -28,7 +32,7 @@ Each phase folder contains:
 
 | # | Change |
 |---|--------|
-| C1 | One spine: **PlansA only** |
+| C1 | One spine: **plans1 only** (PlansA frozen) |
 | C2 | `results/` missing ⇒ historical CP/GATE PASS **unproven** |
 | C3 | Re-prove / residual only — no engine/mesh/symbol/keymap rewrite when unit-green |
 | C4 | Brainstorm: `archive/Idiots2/` (primary lineage), `archive/Idiots/` (secondary) |
@@ -129,6 +133,6 @@ Master tasks: `PlansA/EXECUTABLE-PLAN.md`.
 
 ## 8. Bottom line
 
-**One product. One execute path: `PlansA/`.**  
-`plans1/` + `plans2/` = reference archives (kept).  
+**One product. One execute path: `plans1/START-HERE.md`.**  
+PlansA = frozen research. plans2 = frozen reference.  
 Work = re-prove + real residuals (**P06 / P07 / P09** + honesty + P03/P04 harden).
