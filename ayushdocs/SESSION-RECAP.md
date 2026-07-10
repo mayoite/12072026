@@ -13,7 +13,7 @@
 
 ## Red / blocked
 
-- none (no product phase execute yet)
+- **mayoite mirror push FAIL** (2026-07-10): `git push mayoite main` → `Repository not found` for `https://github.com/mayoite/OandO07072026.git`. origin OK (`094b7f7`). Mirror backup **not** proven until remote exists / access fixed.
 
 ## Next
 

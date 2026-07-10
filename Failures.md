@@ -16,6 +16,19 @@ Skipped items must be declared. Shell works; gates are runnable.
 
 ---
 
+## Open: mirror backup remote
+
+| Field | Detail |
+|-------|--------|
+| **ID** | `GIT-MIRROR-MAYOITE-404` |
+| **Date** | 2026-07-10 |
+| **Symptom** | `git push mayoite main` → `remote: Repository not found` for `https://github.com/mayoite/OandO07072026.git` |
+| **Impact** | AGENTS / Elon §5 requires ~45m mirror backup; **mirror not proven**. origin push works. |
+| **Owner action** | Create/restore `mayoite/OandO07072026` or fix remote URL + credentials; agent re-test `git push mayoite main` |
+| **Agent action** | Keep pushing origin; log each mayoite fail; do not claim mirror backup green |
+
+---
+
 ## Gate policy
 
 - Read this file before running release gates (`START.md` → `pnpm run release:gate`).
