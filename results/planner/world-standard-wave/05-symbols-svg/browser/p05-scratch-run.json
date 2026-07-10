@@ -1,0 +1,25 @@
+{
+  "phase": "P05",
+  "gate": "scratch-cabinet-multiprim-s7-chaise",
+  "entry": "/planner/guest/",
+  "date": "2026-07-10T13:21:17.683Z",
+  "furnitureBefore": 0,
+  "furnitureAfter": 2,
+  "cabinetDiversity": {
+    "sampleCount": 6914,
+    "uniqueQuantized": 15,
+    "channelStdDev": 67.25861523970147,
+    "notPureSolid": true
+  },
+  "chaiseDiversity": {
+    "sampleCount": 6914,
+    "uniqueQuantized": 51,
+    "channelStdDev": 56.309191274646544,
+    "notPureSolid": true
+  },
+  "evidence": [
+    "p05-scratch-cabinet-canvas.png",
+    "p05-scratch-s7-chaise.png"
+  ],
+  "note": "Eyes on PNG are hard bar; diversity is soft only. See P05-SCRATCH-STATUS.md"
+}
