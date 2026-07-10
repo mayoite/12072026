@@ -1,0 +1,68 @@
+﻿=== P02 unit freeze pack (combined) ===
+HEAD: 2970518672ad17c9a636b748c7c46ad8f3092187
+Date: 2026-07-10
+All suite exits: 0
+
+======== orbitControlsDefault.log ========
+
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö product helper / prop contract > OPEN3D_ORBIT_DEFAULT_ENABLED is true 1ms
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö product helper / prop contract > getOpen3dViewerControlProps forces enableControls: true 1ms
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö product helper / prop contract > furniture document rotation stays degrees via normalizeDegrees 0ms
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö ThreeViewerInner construct + data-orbit-enabled > omitted enableControls (default ON) constructs OrbitControls and sets data-orbit-enabled=true 38ms
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö ThreeViewerInner construct + data-orbit-enabled > enableControls={false} does not construct OrbitControls and sets data-orbit-enabled=false 17ms
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö ThreeViewerInner construct + data-orbit-enabled > enableControls={true} explicit construct + data-orbit-enabled=true 45ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  14:43:50
+   Duration  1.60s (transform 256ms, setup 492ms, import 219ms, tests 104ms, environment 581ms)
+
+
+======== hostWiringP01.log ========
+
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/hostWiringP01.test.ts > P01 host wiring (import graph + source) > documents dual entry: guest/canvas hybrid + open3d pilot native 3ms
+ Γ£ô tests/unit/features/planner/open3d/hostWiringP01.test.ts > P01 host wiring (import graph + source) > live route/host sources import the open3d chain (file text, no render) 1ms
+ Γ£ô tests/unit/features/planner/open3d/hostWiringP01.test.ts > P01 host wiring (import graph + source) > has no live app/planner fabric page tree; next.config redirects fabric ΓåÆ open3d 1ms
+ Γ£ô tests/unit/features/planner/open3d/hostWiringP01.test.ts > P01 host wiring (import graph + source) > workspace gates Fabric furniture overlay with isOpen3dFabricFurnitureEnabled (default OFF) 1ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  14:43:56
+   Duration  1.45s (transform 118ms, setup 501ms, import 42ms, tests 9ms, environment 646ms)
+
+
+======== fabricMapper.log ========
+
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > maps entityId from furniture.id and uses default footprint when width/depth omitted 2ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > uses explicit width/depth mm and scale for fabric size 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > round-trips position and rotation through fabric pose (project mm) 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > normalizes negative and >360 rotation degrees 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > marks locked furniture and maps list order 1ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > furnitureFootprintMm defaults and overrides 1ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > read/write entityId on fabric-like carriers 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > preserves entityId after a synthetic drag (left/top change only) 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > uses DEFAULT_FABRIC_STAGE_TRANSFORM when transform is omitted 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > entityId is furniture.id only ΓÇö never rewritten on pose round-trip 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > maps pose under a non-default pan/zoom transform 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > furnitureListToFabricPoses preserves empty list and entity order 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > furnitureFabricMapper > readFurnitureEntityId rejects empty string and non-string carriers 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > isOpen3dFabricFurnitureEnabled > exports OPEN3D_FABRIC_FURNITURE_ENV as the public Next env key 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > isOpen3dFabricFurnitureEnabled > is false by default and for non-1 values 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > isOpen3dFabricFurnitureEnabled > is true only when env is exactly 1 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > isOpen3dFabricFurnitureEnabled > rejects near-miss enable values (strict === "1" only) 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > isOpen3dFabricFurnitureEnabled > reads only OPEN3D_FABRIC_FURNITURE_ENV ΓÇö ignores wrong keys and non-string 1 0ms
+ Γ£ô tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts > isOpen3dFabricFurnitureEnabled > barrel re-exports flag helpers from canvas-fabric-stage index 107ms
+
+ Test Files  1 passed (1)
+      Tests  19 passed (19)
+   Start at  14:43:56
+   Duration  1.58s (transform 213ms, setup 501ms, import 65ms, tests 116ms, environment 644ms)
+
+
+=== END unit freeze pack; exits all 0 ===

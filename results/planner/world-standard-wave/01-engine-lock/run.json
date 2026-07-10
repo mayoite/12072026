@@ -1,0 +1,47 @@
+{
+  "phase": "P02-engine-lock",
+  "approach": "A-freeze-reprove",
+  "evidenceDir": "results/planner/world-standard-wave/01-engine-lock",
+  "date": "2026-07-10",
+  "head": "2970518672ad17c9a636b748c7c46ad8f3092187",
+  "productEdits": false,
+  "suites": [
+    {
+      "id": "orbitControlsDefault",
+      "test": "tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx",
+      "log": "orbitControlsDefault.log",
+      "exitCode": 0,
+      "testsPassed": 6,
+      "testFilesPassed": 1
+    },
+    {
+      "id": "hostWiringP01",
+      "test": "tests/unit/features/planner/open3d/hostWiringP01.test.ts",
+      "log": "hostWiringP01.log",
+      "exitCode": 0,
+      "testsPassed": 4,
+      "testFilesPassed": 1
+    },
+    {
+      "id": "fabricMapper",
+      "test": "tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts",
+      "log": "fabricMapper.log",
+      "exitCode": 0,
+      "testsPassed": 19,
+      "testFilesPassed": 1
+    }
+  ],
+  "totals": {
+    "testsPassed": 29,
+    "testFilesPassed": 3,
+    "allExitZero": true
+  },
+  "packagePinsObserved": {
+    "fabric": "7.4.0",
+    "three": "^0.185.1",
+    "@react-three/fiber": "^9.6.1",
+    "@react-three/drei": "^10.7.7"
+  },
+  "konvaPresent": false,
+  "chromeDevtoolsSmoke": "separate-optional"
+}
