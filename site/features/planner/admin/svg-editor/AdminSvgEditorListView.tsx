@@ -6,10 +6,13 @@
  * §04-ADMIN-01: list view of registered descriptors + "new block" CTA.
  * The list is server-loaded via {@link listBlockDescriptors}, then passed
  * into this client component for interactive navigation to per-slug routes.
+ *
+ * Chrome: ADMIN-UI-CONTRACT primitives only (admin-page / admin-btn / admin-panel /
+ * admin-table / admin-badge / admin-empty). No raw palette classes.
  */
 
 import Link from "next/link";
-import { Plus, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
+import { PencilSimple as Pencil, Plus } from "@phosphor-icons/react";
 
 import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
 
@@ -33,6 +36,17 @@ function describeVariant(variant: BlockDescriptor["variant"]): string {
       return "Discrete option set or bounded parametric adjustment.";
     case "parametric":
       return "Full parametric schema with explicit mounting points.";
+  }
+}
+
+function variantBadgeClass(variant: BlockDescriptor["variant"]): string {
+  switch (variant) {
+    case "parametric":
+      return "admin-badge admin-badge--active";
+    case "configurable":
+      return "admin-badge admin-badge--active";
+    case "fixed":
+      return "admin-badge admin-badge--hidden";
   }
 }
 
@@ -82,8 +96,8 @@ export function AdminSvgEditorListView({
           <h1 className="admin-page__title">SVG block editor</h1>
           <p className="admin-page__copy">
             Author Puck-managed SVG block descriptors. Permissions gate through{" "}
-            <code>withAuth(['admin'])</code>; saves flow through Zod →
-            atomic-rename JSON write → Phase 03 SVG pipeline → R2 PNG thumb.
+            <code>{"withAuth(['admin'])"}</code>; saves flow through Zod → atomic-rename JSON
+            write → Phase 03 SVG pipeline → R2 PNG thumb.
           </p>
           <p className="admin-page__meta">
             Last loader pass: <code>{refreshedAtLabel}</code> · schemaVersion pinned at{" "}
@@ -91,91 +105,99 @@ export function AdminSvgEditorListView({
           </p>
         </div>
         <div className="admin-page__actions">
-          <Link
-            href="/admin/svg-editor/new"
-            className="btn-primary inline-flex gap-2 px-3 py-2 text-sm"
-          >
-            <Plus size={14} />
+          <Link href="/admin/svg-editor/new" className="admin-btn admin-btn--primary">
+            <Plus size={14} aria-hidden />
             New block
           </Link>
         </div>
       </header>
 
-      <section
-        aria-label="Variant tag balances"
-        className="admin-page__summary"
-      >
+      <section aria-label="Variant balances" className="admin-grid-cards mb-6">
         {VARIANT_ORDER.map((variant) => (
-          <article
-            key={variant}
-            className={`admin-page__summary-card admin-page__summary-card--${variant}`}
-            data-variant={variant}
-          >
-            <h2 className="admin-page__summary-card-title">
-              {VARIANT_LABEL[variant]}
-            </h2>
-            <p className="admin-page__summary-card-value">{counts[variant]}</p>
-            <p className="admin-page__summary-card-copy">{describeVariant(variant)}</p>
+          <article key={variant} className="admin-panel" data-variant={variant}>
+            <div className="admin-panel__header">{VARIANT_LABEL[variant]}</div>
+            <div className="px-4 py-3">
+              <p className="admin-table__primary">{counts[variant]}</p>
+              <p className="admin-table__secondary">{describeVariant(variant)}</p>
+            </div>
           </article>
         ))}
       </section>
 
       {ordered.length === 0 ? (
-        <div className="admin-empty">
-          No block descriptors persisted yet. Use “New block” to author the{" "}
-          first variant. Slug input is a kebab regex pinned at the schema layer.
+        <div className="admin-empty" role="status">
+          <p className="admin-table__primary">No block descriptors yet</p>
+          <p className="admin-table__secondary">
+            Author the first variant with New block. Slug input is a kebab regex pinned at
+            the schema layer.
+          </p>
+          <div className="mt-4">
+            <Link href="/admin/svg-editor/new" className="admin-btn admin-btn--primary">
+              <Plus size={14} aria-hidden />
+              New block
+            </Link>
+          </div>
         </div>
       ) : (
-        <div className="admin-table">
-          <table className="admin-table__element">
-            <caption className="sr-only">
-              Persisted BlockDescriptor entries grouped by variant.
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Slug</th>
-                <th scope="col">Variant</th>
-                <th scope="col">Source</th>
-                <th scope="col">Created</th>
-                <th scope="col" aria-label="Actions" />
-              </tr>
-            </thead>
-            <tbody>
-              {ordered.map((d) => (
-                <tr key={`${d.variant}:${d.slug}`}>
-                  <td>
-                    <Link href={`/admin/svg-editor/${d.slug}`} className="admin-table__slug">
-                      {d.slug}
-                    </Link>
-                    {d.sku ? (
-                      <p className="admin-table__sku">
-                        <span aria-hidden>SKU: </span>
-                        <code>{d.sku}</code>
-                      </p>
-                    ) : null}
-                  </td>
-                  <td>
-                    <span className={`admin-pill admin-pill--${d.variant}`}>
-                      {VARIANT_LABEL[d.variant]}
-                    </span>
-                  </td>
-                  <td>{d.sourceProvenance}</td>
-                  <td>
-                    <code>{timestampLabel(d.generatedAt)}</code>
-                  </td>
-                  <td>
-                    <Link
-                      href={`/admin/svg-editor/${d.slug}`}
-                      className="btn-outline inline-flex gap-2 px-3 py-1.5 text-xs"
-                    >
-                      <RefreshCw size={12} aria-hidden />
-                      Edit
-                    </Link>
-                  </td>
+        <div className="admin-panel">
+          <div className="admin-panel__header">
+            {ordered.length} descriptor{ordered.length === 1 ? "" : "s"}
+          </div>
+          <div className="admin-table-wrap">
+            <table className="admin-table">
+              <caption className="sr-only">
+                Persisted BlockDescriptor entries grouped by variant.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Slug</th>
+                  <th scope="col">Variant</th>
+                  <th scope="col">Source</th>
+                  <th scope="col">Created</th>
+                  <th scope="col" className="text-end">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {ordered.map((d) => (
+                  <tr key={`${d.variant}:${d.slug}`}>
+                    <td>
+                      <p className="admin-table__primary">
+                        <Link href={`/admin/svg-editor/${d.slug}`}>{d.slug}</Link>
+                      </p>
+                      {d.sku ? (
+                        <p className="admin-table__secondary">
+                          <span aria-hidden>SKU: </span>
+                          <code>{d.sku}</code>
+                        </p>
+                      ) : null}
+                    </td>
+                    <td>
+                      <span className={variantBadgeClass(d.variant)}>
+                        {VARIANT_LABEL[d.variant]}
+                      </span>
+                    </td>
+                    <td className="text-muted">{d.sourceProvenance}</td>
+                    <td>
+                      <code className="text-muted">{timestampLabel(d.generatedAt)}</code>
+                    </td>
+                    <td>
+                      <div className="flex justify-end">
+                        <Link
+                          href={`/admin/svg-editor/${d.slug}`}
+                          className="admin-btn admin-btn--outline"
+                        >
+                          <Pencil size={14} aria-hidden />
+                          Edit
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
