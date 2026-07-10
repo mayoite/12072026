@@ -1,4 +1,4 @@
-{
+﻿{
   "phase": "P03",
   "gate": "W3",
   "checkpoint": "CP-03",
@@ -6,19 +6,13 @@
   "checkout": "D:\\OandO07072026",
   "worktrees": false,
   "evidenceRoot": "results/planner/world-standard-wave/03-select-delete",
-  "HEAD": "bf212a9a7d0fa8e7867b5f6a803b06ee5a5c43df",
-  "hygienePin": {
-    "agent": "P03-Execute-4/5",
-    "action": "evidence tree hygiene + HEAD pin",
-    "pinnedAt": "2026-07-10T13:25:00.000Z",
-    "pngsTouched": false,
-    "note": "HEAD.txt + run.json re-pinned to tip. PNGs 01-04 left intact (non-empty). No invented PASS."
-  },
+  "HEAD": "dcb469941e9b88f4da01a0e272252d83edcb8ea2",
   "date": "2026-07-10",
-  "startedAt": "2026-07-10T18:52:59.000Z",
-  "endedAt": "2026-07-10T18:53:01.000Z",
-  "unitPackCodeTip": "74e89a4b431f5e5cecab79f1523a84543981a7f0",
-  "unitPackDepositTip": "bf212a9a7d0fa8e7867b5f6a803b06ee5a5c43df",
+  "agent": "P03-Agent-9",
+  "action": "save complete W3 proof pack under results (no invented PASS)",
+  "depositTip": "dcb469941e9b88f4da01a0e272252d83edcb8ea2",
+  "startedAt": "2026-07-10T18:55:22.000Z",
+  "endedAt": "2026-07-10T18:58:53.000Z",
   "unitPack": {
     "exitCode": 0,
     "log": "unit-w3-pack.log",
@@ -31,32 +25,30 @@
       "tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx",
       "tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx"
     ],
-    "pathNote": "applySelectionDelete lives under open3d/ (not open3d/editor/)",
     "testFiles": "4/4 passed",
     "tests": "62/62 passed",
-    "durationSec": 1.99,
-    "agent": "P03-Agent-3",
+    "durationSec": 2.47,
+    "provedAtHead": "ded7da283829bb8b54d33019888dc84b8763eb9f",
     "onDisk": true,
-    "note": "Unit pack re-prove only. unit alone != W3. Do not treat unitPack green as phase PASS without browser green on same tip."
-  },
-  "unit": {
-    "exitCode": 0,
-    "log": "unit-w3-pack.log",
-    "tests": "62/62 passed",
-    "note": "See unitPack for Agent 3 re-prove."
+    "note": "Unit pack re-prove Agent 9. unit alone != W3."
   },
   "browser": {
-    "exitCode": 0,
+    "exitCode": 1,
     "tool": "playwright",
     "log": "browser-w3-raw.log",
     "spec": "tests/e2e/open3d-w3-select-delete.spec.ts",
     "command": ".\\node_modules\\.bin\\playwright.cmd test -c config/build/playwright.config.ts tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list",
     "baseURL": "http://localhost:3000",
-    "server": "reuseExistingServer: existing :3000 (pnpm run dev / turbo)",
     "fabricFurnitureEnv": "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)",
-    "durationSec": 3.0,
-    "testBodySec": 2.0,
-    "tests": "1/1 passed",
+    "durationSec": 16.5,
+    "tests": "0/1 passed (1 failed)",
+    "failure": {
+      "stage": "selectPlannerTool('Select') after place",
+      "symptom": "Drawing tools group Select button not visible (15s)",
+      "specLine": "open3d-w3-select-delete.spec.ts:59 -> plannerCanvasHelpers.selectPlannerTool",
+      "note": "Place path reached (01-placed.png refreshed). Delete/undo not reached. Intermittent earlier 404 on /planner/guest/ also observed this session.",
+      "errorContext": "results/test-results/e2e-open3d-w3-select-delet-4e252-ete-removes-Ctrl-Z-restores-chromium/error-context.md"
+    },
     "pngs": [
       "01-placed.png",
       "02-selected.png",
@@ -69,13 +61,18 @@
       "03-deleted.png": 97350,
       "04-undone.png": 96830
     },
-    "pngProof": "4 furniture -> 3 after Delete -> 4 after Ctrl+Z",
-    "provedAtHead": "aea4e76c44ed82130b3d8b38d8980877fc976540",
-    "staleRelativeToHead": true,
-    "onDisk": true,
+    "pngNote": "01-placed refreshed on failed re-prove after place; 02-04 residual from prior green run (not full flow on tip)",
+    "priorGreen": {
+      "provedAtHead": "aea4e76c44ed82130b3d8b38d8980877fc976540",
+      "exitCode": 0,
+      "tests": "1/1 passed",
+      "pngProof": "4 furniture -> 3 after Delete -> 4 after Ctrl+Z",
+      "staleRelativeToCurrentHead": true
+    },
     "reProvedOnPinnedHead": false,
-    "note": "Prior browser evidence on disk (log + PNGs 01-04 non-empty, exit 0) recorded at HEAD aea4e76. Not re-proved on pinned tip bf212a9a. Hygiene seat does not invent browser PASS on current tip."
+    "onDisk": true,
+    "note": "Live re-prove RED (exit 1). Not browser PASS on tip."
   },
-  "status": "unitPack-only",
-  "statusNote": "Honest hygiene pin. unitPack green on deposit tip bf212a9a. browser artifacts present but staleRelativeToHead (proved at aea4e76). unit alone != W3. Do not set status pass without browser green on same HEAD."
+  "status": "open",
+  "statusNote": "Unit pack green on tip (62/62 exit 0). Browser live re-prove exit 1. unit alone != W3. status=open â€” do not claim pass."
 }
