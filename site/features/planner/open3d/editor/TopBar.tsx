@@ -4,14 +4,45 @@ import { CornersIn, CornersOut } from "@phosphor-icons/react";
 import { MenuTrigger, Button, Popover, Menu, MenuItem } from "react-aria-components";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";
 import type { Open3dDisplayUnit } from "../model/types";
+import type { Open3dSaveStatus } from "../persistence/useOpen3dWorkspaceAutosave";
 import type { PanelId } from "./useDockingSystem";
+import {
+  open3dSaveStatusLabel,
+  type Open3dPersistStorage,
+} from "./workspaceStatusLabels";
 import styles from "./workspace.module.css";
 
+/**
+ * Prop contract for WorkspaceShell / OOPlanner wiring (next agent):
+ *
+ * Prefer honest save pill via one of:
+ * 1. `saveStatusLabel` — parent already resolved open3dSaveStatusLabel text
+ * 2. `saveStatus` (+ optional `saveStorage`, `saveCloudEnabled`) — TopBar calls
+ *    open3dSaveStatusLabel; guestMode from accessContext === "guest"
+ *
+ * `isModified` / `isSynced` remain optional fallback only:
+ * - brand subline "Unsaved changes" when isModified
+ * - pill maps modified→unsaved, synced→saved, else→idle through the helper
+ *   (never bare "Ready" / "Modified" / /^Saved$/)
+ */
 export interface TopBarProps {
   accessContext?: PlannerAccessContext;
   projectName: string;
+  /** Brand subline only when true; also fallback for pill status when saveStatus omitted. */
   isModified?: boolean;
+  /** Fallback for pill status when saveStatus omitted (synced → "saved"). */
   isSynced?: boolean;
+  /**
+   * Pre-resolved pill label from open3dSaveStatusLabel (or equivalent).
+   * Wins over saveStatus / isModified / isSynced for displayed text.
+   */
+  saveStatusLabel?: string;
+  /** Autosave machine status — drives pill text via open3dSaveStatusLabel when label omitted. */
+  saveStatus?: Open3dSaveStatus;
+  /** Persist target for data-storage + label table. Default "local". */
+  saveStorage?: Open3dPersistStorage;
+  /** When false (default), cloud storage is forced to local labeling. */
+  saveCloudEnabled?: boolean;
   viewMode: "2d" | "3d";
   floors?: Array<{ id: string; name: string }>;
   activeFloorId?: string;
@@ -35,11 +66,38 @@ export interface TopBarProps {
   onToggleDensity?: () => void;
 }
 
+function resolveSaveStatusFromLegacy(
+  isModified: boolean,
+  isSynced: boolean,
+): Open3dSaveStatus {
+  if (isModified) return "unsaved";
+  if (isSynced) return "saved";
+  return "idle";
+}
+
+function saveStatusGlyph(status: Open3dSaveStatus): string {
+  switch (status) {
+    case "unsaved":
+    case "error":
+      return "●";
+    case "saved":
+      return "✓";
+    case "saving":
+    case "idle":
+    default:
+      return "○";
+  }
+}
+
 export function TopBar({
   accessContext = "authenticated",
   projectName,
   isModified = false,
   isSynced = false,
+  saveStatusLabel,
+  saveStatus,
+  saveStorage = "local",
+  saveCloudEnabled = false,
   viewMode,
   floors = [],
   activeFloorId,
@@ -64,6 +122,21 @@ export function TopBar({
 }: TopBarProps) {
   const showPersistenceActions = accessContext !== "guest";
   const showGuestActions = accessContext === "guest";
+  const guestMode = accessContext === "guest";
+
+  const resolvedSaveStatus: Open3dSaveStatus =
+    saveStatus ?? resolveSaveStatusFromLegacy(isModified, isSynced);
+  const effectiveStorage: Open3dPersistStorage =
+    saveCloudEnabled && saveStorage === "cloud" ? "cloud" : "local";
+  const resolvedSaveLabel =
+    saveStatusLabel ??
+    open3dSaveStatusLabel({
+      status: resolvedSaveStatus,
+      storage: saveStorage,
+      lastSavedAt: null,
+      cloudEnabled: saveCloudEnabled,
+      guestMode,
+    });
 
   const unitOptions: Open3dDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
   const activeFloorName = floors.find((f) => f.id === activeFloorId)?.name ?? "Floor";
@@ -220,22 +293,16 @@ export function TopBar({
 
         <div
           className={styles.saveStatus}
-          data-modified={isModified}
-          data-synced={isSynced && !isModified}
+          data-testid="open3d-save-status"
+          data-status={resolvedSaveStatus}
+          data-storage={effectiveStorage}
+          data-modified={isModified || resolvedSaveStatus === "unsaved"}
+          data-synced={
+            (isSynced && !isModified) || resolvedSaveStatus === "saved"
+          }
         >
-          {isModified ? (
-            <>
-              <span aria-hidden="true">●</span> Modified
-            </>
-          ) : isSynced ? (
-            <>
-              <span aria-hidden="true">✓</span> Saved locally
-            </>
-          ) : (
-            <>
-              <span aria-hidden="true">○</span> Ready
-            </>
-          )}
+          <span aria-hidden="true">{saveStatusGlyph(resolvedSaveStatus)}</span>{" "}
+          {resolvedSaveLabel}
         </div>
 
         <button type="button" className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => onSave?.()}>
