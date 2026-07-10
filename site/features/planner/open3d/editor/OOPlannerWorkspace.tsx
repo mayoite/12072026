@@ -978,10 +978,7 @@ export function OOPlannerWorkspace({
                 onStatusChange={setCanvasStatus}
               />
             )}
-            <aside className="open3d-tool-guidance" aria-live="polite">
-              <strong>{formatToolStatus(activeTool, viewMode)}</strong>
-              <span>{CANVAS_TOOL_GUIDANCE[activeTool]}</span>
-            </aside>
+            {/* P-UI-3: tool guidance lives in status bar only (avoid duplicate chrome) */}
             {isCanvasEmpty && (
               <section
                 className="open3d-first-use"
