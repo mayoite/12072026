@@ -5,6 +5,7 @@ import {
   formatCatalogFootprintCm,
   isInternalCatalogItem,
 } from "@/features/planner/open3d/catalog/catalogBuyerVisibility";
+import { inventoryRoomGroupsForProduct } from "@/features/planner/open3d/catalog/inventory/inventoryTaxonomy";
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "@/features/planner/open3d/editor/demoCatalogItems";
 
 function minimalItem(
@@ -110,5 +111,22 @@ describe("formatCatalogFootprintCm", () => {
 
   it("formats 2200mm × 900mm as 220 × 90 cm", () => {
     expect(formatCatalogFootprintCm(2200, 900)).toBe("220 × 90 cm");
+  });
+});
+
+describe("inventoryRoomGroupsForProduct (P-UI-2)", () => {
+  it("office-systems mode keeps All + Office only", () => {
+    const groups = inventoryRoomGroupsForProduct("office-systems");
+    expect(groups.map((g) => g.id)).toEqual(["all-rooms", "office"]);
+    expect(groups[0]?.label).toBe("All");
+    expect(groups.some((g) => g.id === "living" || g.id === "bedroom")).toBe(
+      false,
+    );
+  });
+
+  it("full mode keeps residential room chips", () => {
+    const groups = inventoryRoomGroupsForProduct("full");
+    expect(groups.some((g) => g.id === "living")).toBe(true);
+    expect(groups.length).toBeGreaterThan(2);
   });
 });

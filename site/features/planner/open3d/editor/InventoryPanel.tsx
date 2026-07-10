@@ -32,7 +32,7 @@ import {
 } from "../catalog/inventory/inventoryState";
 import {
   INVENTORY_CATEGORIES,
-  INVENTORY_ROOM_GROUPS,
+  inventoryRoomGroupsForProduct,
 } from "../catalog/inventory/inventoryTaxonomy";
 import { InventoryIcon } from "./inventoryIcons";
 import {
@@ -88,6 +88,11 @@ export interface InventoryPanelProps {
     | "stale"
     | "offline"
     | "error";
+  /**
+   * Guest / systems planner defaults to office room chips only.
+   * Member full catalog may pass false for residential room filters.
+   */
+  officeSystemsInventory?: boolean;
 }
 
 export const InventoryPanel = memo(function InventoryPanel({
@@ -100,10 +105,18 @@ export const InventoryPanel = memo(function InventoryPanel({
   catalogItems,
   isLoading = false,
   catalogStatus = "ready",
+  officeSystemsInventory = true,
 }: InventoryPanelProps) {
   const id = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const hasExternalCatalog = catalogItems !== undefined;
+  const roomGroups = useMemo(
+    () =>
+      inventoryRoomGroupsForProduct(
+        officeSystemsInventory ? "office-systems" : "full",
+      ),
+    [officeSystemsInventory],
+  );
   const svgCatalog = useOpen3dSvgCatalog();
   const [state, setState] = useState<InventoryPanelState>(
     initialState ?? defaultInventoryPanelState(),
@@ -279,7 +292,7 @@ export const InventoryPanel = memo(function InventoryPanel({
         base = base.filter((it) => it.category === category.catalogCategory);
       }
     }
-    const roomGroup = INVENTORY_ROOM_GROUPS.find(
+    const roomGroup = roomGroups.find(
       (r) => r.id === state.selectedRoomGroupId,
     );
     if (roomGroup && roomGroup.roomTags.length > 0) {
@@ -290,6 +303,7 @@ export const InventoryPanel = memo(function InventoryPanel({
     return capCatalogResults(ranked, OPEN3D_CATALOG_RESULT_CAP);
   }, [
     indexedItems,
+    roomGroups,
     state.searchQuery,
     state.selectedCategoryId,
     state.selectedRoomGroupId,
@@ -432,9 +446,9 @@ export const InventoryPanel = memo(function InventoryPanel({
         />
       ) : null}
 
-      {/* Quick filters - Room groups */}
+      {/* Quick filters - Room groups (office-systems: All + Office only) */}
       <div className={styles.quickFilters}>
-        {INVENTORY_ROOM_GROUPS.slice(0, 5).map((room) => (
+        {roomGroups.map((room) => (
           <button
             key={room.id}
             type="button"

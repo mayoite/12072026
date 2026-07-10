@@ -171,6 +171,26 @@ export const INVENTORY_ROOM_GROUPS: InventoryRoomGroup[] = [
   { id: "garage", label: "Garage", roomTags: ["Garage"], icon: "car" },
 ];
 
+/** Guest / O&O systems planner: no residential home-room chips. */
+const OFFICE_SYSTEMS_ROOM_GROUP_IDS = new Set(["all-rooms", "office"]);
+
+/**
+ * Room chips for inventory. `office-systems` keeps All + Office only
+ * (premium workstation product — not home DIY room filters).
+ */
+export function inventoryRoomGroupsForProduct(
+  product: "full" | "office-systems",
+): InventoryRoomGroup[] {
+  if (product === "full") {
+    return INVENTORY_ROOM_GROUPS;
+  }
+  return INVENTORY_ROOM_GROUPS.filter((group) =>
+    OFFICE_SYSTEMS_ROOM_GROUP_IDS.has(group.id),
+  ).map((group) =>
+    group.id === "all-rooms" ? { ...group, label: "All" } : group,
+  );
+}
+
 // ── Style filter groups ──
 
 export interface InventoryStyleGroup {

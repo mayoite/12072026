@@ -837,6 +837,7 @@ export function OOPlannerWorkspace({
             catalogItems={catalog.items}
             isLoading={catalog.isLoading && catalog.items.length === 0}
             catalogStatus={catalog.status}
+            /* P-UI-2: default officeSystemsInventory=true — All + Office chips only */
             onItemPlace={(itemId) => {
               handleInventoryPlace(itemId);
             }}
