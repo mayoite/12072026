@@ -1,44 +1,89 @@
 {
-  "track": "P04",
-  "wave": "W4",
-  "phase": "orbit-continuity",
-  "agent": "P04-Scratch-Agent-0",
-  "status": "open",
-  "reason": "scratch start - phase card W4 PASS invalid until new unit+browser pack on this tip",
+  "phase": "P04",
+  "gate": "W4",
+  "track": "orbit-continuity",
+  "checkout": "D:\\OandO07072026",
+  "worktrees": false,
+  "evidenceRoot": "results/planner/world-standard-wave/04-orbit-continuity",
+  "HEAD": "41df56e5fa10424688402c1a396e4eeca4dbf4a2",
+  "date": "2026-07-10",
+  "agent": "P04-code-review-seat",
+  "action": "code-review scratch verdict — coherent status",
   "paperPass": false,
   "unitAloneEqualsW4": false,
-  "fabricRequired": "OFF",
-  "evidenceDir": "results/planner/world-standard-wave/04-orbit-continuity/",
-  "head": "41df56e5fa10424688402c1a396e4eeca4dbf4a2",
+  "w4ProductClaim": "NO",
+  "planRating": {
+    "verdict": "APPROVE-WITH-FIXES",
+    "score": 7.5,
+    "source": "plans1/P04-orbit-continuity/CODE-REVIEW-REPORT.md",
+    "note": "Plan rating is separate from product claim"
+  },
   "productLayers": {
     "layer1_defaults": {
-      "present": true,
-      "cite": "site/features/planner/open3d/3d/orbitDefaults.ts:7 OPEN3D_ORBIT_DEFAULT_ENABLED=true; ThreeViewerInner.tsx:68; ThreeLazyViewer.tsx:145"
+      "product": "closed",
+      "cite": "orbitDefaults.ts:7; ThreeLazyViewer.tsx:145; ThreeViewerInner.tsx:68"
     },
     "layer2_workspace": {
-      "present": true,
-      "cite": "site/features/planner/open3d/editor/OOPlannerWorkspace.tsx:1057-1060 spreads getOpen3dViewerControlProps()"
+      "product": "closed",
+      "cite": "OOPlannerWorkspace.tsx:1057-1060 {...getOpen3dViewerControlProps()}",
+      "unit": "workspaceOrbitWiring.test.ts present (f692ca96); re-run 2/2 green this seat"
     },
-    "layer3_dom_and_proof": {
+    "layer3_dom_and_browser": {
       "dataOrbitEnabledInCode": true,
-      "cite": "site/features/planner/open3d/3d/ThreeViewerInner.tsx:340",
-      "unitFilesExist": true,
+      "cite": "ThreeViewerInner.tsx:340",
+      "unitConstruct": "orbitControlsDefault.test.tsx in unit-orbit-pack.log (9/9 pack at older tip)",
       "browserPackProven": false,
-      "proof": "open"
+      "chromeOptional": "not proven — dev-server-w4-chrome.log is port-noise only"
     }
   },
-  "testsPresent": [
-    "site/tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx",
-    "site/tests/unit/features/planner/open3d/workspaceOrbitWiring.test.ts",
-    "site/tests/unit/features/planner/open3d/poseContinuityW4.test.ts",
-    "site/tests/unit/features/planner/open3d/documentViewContinuity.test.ts",
-    "site/tests/e2e/open3d-w4-orbit-continuity.spec.ts"
-  ],
-  "staleOrConcurrentAtScratch": [
-    "unit-orbit-pack.log",
-    "unit-pose-pack.log",
-    "dev-server-w4.log"
-  ],
-  "createdAt": "2026-07-10T19:17:00Z",
-  "notes": "SCRATCH-BASELINE.md is authority for live line cites. Do not treat unit tee logs as W4 Done."
+  "unit": {
+    "status": "green_stale_tip",
+    "orbitPack": {
+      "log": "unit-orbit-pack.log",
+      "tests": "9/9",
+      "exitCode": 0,
+      "files": [
+        "orbitControlsDefault.test.tsx",
+        "poseContinuityW4.test.ts",
+        "workspaceOrbitWiring.test.ts"
+      ],
+      "depositedAtNote": "NOTES.md HEAD 382ab73f; wiring unit landed f692ca96; not re-teed on 41df56e5"
+    },
+    "poseAdapterPack": {
+      "log": "unit-pose-pack.log",
+      "tests": "26/26",
+      "exitCode": 0
+    },
+    "thisSeatWiringRerun": {
+      "file": "workspaceOrbitWiring.test.ts",
+      "tests": "2/2",
+      "exitCode": 0,
+      "HEAD": "41df56e5fa10424688402c1a396e4eeca4dbf4a2"
+    }
+  },
+  "browser": {
+    "status": "missing",
+    "playwrightSpec": "site/tests/e2e/open3d-w4-orbit-continuity.spec.ts",
+    "pnGs": false,
+    "browserRunJson": false,
+    "rawLog": false,
+    "consoleMessagesTxt": false,
+    "consoleHardAssertInSpec": false
+  },
+  "chrome": {
+    "status": "not_proof",
+    "note": "optional; no orbit journey deposit"
+  },
+  "artifacts": {
+    "CODE_REVIEW_SCRATCH": "CODE-REVIEW-SCRATCH.md",
+    "SCRATCH_BASELINE": "SCRATCH-BASELINE.md",
+    "THREE_LAYER_AUDIT": false,
+    "execAudits": [
+      "exec1-layer1-defaults.md",
+      "exec2-layer2-workspace.md",
+      "exec3-pose-document.md"
+    ]
+  },
+  "status": "open",
+  "statusNote": "pass only if unit+playwright both green on same HEAD. Unit deposited green on older tip; browser pack absent. W4 product claim NO."
 }
