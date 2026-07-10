@@ -2,7 +2,8 @@
 
 **Checkout:** `D:\OandO07072026` main only · **no worktrees**  
 **Date:** 2026-07-10  
-**Role:** **Single execute path** for the world-standard residual wave. Supersedes dual-running `plans1/` then `plans2/`.
+**Role:** **Single execute path** for the world-standard residual wave. Supersedes dual-running `plans1/` then `plans2/`.  
+**Difference matrix:** [`MATRIX-Plans-vs-plans2-vs-PlansA.md`](./MATRIX-Plans-vs-plans2-vs-PlansA.md) — Plans · plans2 · PlansA (folders stay separate)
 
 ---
 

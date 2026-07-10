@@ -10,10 +10,11 @@
 
 | Role | Path |
 |------|------|
-| **PRIMARY execute** | [`../plans1/`](../plans1/) + [`EXECUTE-NOW.md`](./EXECUTE-NOW.md) |
-| **This package** | Secondary synthesis only — **not** a second full program |
+| **PRIMARY execute** | [`../PlansA/`](../PlansA/) — residual execute package (not this tree) |
+| **This package** | **REFERENCE only** — Idiots lineage synthesis; **not** a second full program |
+| **Difference matrix** | [`../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md`](../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md) |
 
-Same `EXECUTE-NOW.md` spine as plans1. Prefer **plans1** for execution.
+**Keep this folder.** Do **not** dual-run with PlansA (or plans1). Cross-check only; execute from PlansA.
 
 ---
 
@@ -21,9 +22,9 @@ Same `EXECUTE-NOW.md` spine as plans1. Prefer **plans1** for execution.
 
 | Doc | Role |
 |-----|------|
-| [**EXECUTE-NOW.md**](./EXECUTE-NOW.md) | Single spine (copy of plans1) |
-| [**00-START.md**](./00-START.md) | Session zero (prefer plans1) |
-| [**EXECUTABLE-PLAN.md**](./EXECUTABLE-PLAN.md) | Alternate residual wording |
+| [**EXECUTE-NOW.md**](./EXECUTE-NOW.md) | Historical spine copy — prefer PlansA |
+| [**00-START.md**](./00-START.md) | Session zero (prefer PlansA) |
+| [**EXECUTABLE-PLAN.md**](./EXECUTABLE-PLAN.md) | Alternate residual wording (reference) |
 | [**P11-CHECKLIST.md**](./P11-CHECKLIST.md) | Close-out |
 | [**CHANGES-JUSTIFICATION.md**](./CHANGES-JUSTIFICATION.md) | Why this package differs from raw phase plans |
 | [**REFERENCES.md**](./REFERENCES.md) | Path map |

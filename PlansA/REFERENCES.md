@@ -11,6 +11,7 @@ Absolute-path oriented map. **Repo wins** on file presence; re-check before clai
 | Path | Role |
 |------|------|
 | `D:\OandO07072026\PlansA\README.md` | Index + coverage honesty |
+| `D:\OandO07072026\PlansA\MATRIX-Plans-vs-plans2-vs-PlansA.md` | Difference matrix: Plans · plans2 · PlansA |
 | `D:\OandO07072026\PlansA\EXECUTE-NOW.md` | Single spine |
 | `D:\OandO07072026\PlansA\00-START.md` | Session zero |
 | `D:\OandO07072026\PlansA\EXECUTABLE-PLAN.md` | Master residual tasks |
