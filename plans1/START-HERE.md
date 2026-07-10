@@ -1,14 +1,13 @@
 # START HERE — residual wave execute
 
-**One package. One path. No dual trees.**  
-**Four-seat review:** [`FOUR-SEAT-REVIEW.md`](./FOUR-SEAT-REVIEW.md) (executor 6/10 · planner · critic SHIP-WITH-FIXES · benchmark 84/100)
+**One package. One path.** Root has execute files only; process dump lives in [`noise/`](./noise/).
 
 | | |
 |--|--|
 | **Execute** | **`plans1/`** (this folder) |
 | **How + folder names** | `Plans/Research/RESULTS-MAP.md` |
-| **Archived (not execute)** | `archive/plans2/`, `archive/PlansA/` — open only if stuck on hardness |
-| **Optional cross-check** | `archive/plans2/P0X/CODE-REVIEW-REPORT.md` — if FAIL vs plans1 APPROVE, **gate is FAIL** |
+| **Archived packages** | `archive/plans2/`, `archive/PlansA/` — only if stuck |
+| **Optional hardness** | `archive/plans2/…/CODE-REVIEW-REPORT.md` — if FAIL vs plans1 APPROVE → **gate FAIL** |
 
 **Session-zero path re-prove (mandatory):**
 
