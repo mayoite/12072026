@@ -1,117 +1,117 @@
-{
-  "phase": "P04",
-  "gate": "W4",
-  "checkpoint": "CP-04",
-  "track": "orbit-continuity",
-  "approach": "A",
-  "checkout": "D:\\OandO07072026",
-  "worktrees": false,
-  "evidenceRoot": "results/planner/world-standard-wave/04-orbit-continuity",
-  "HEAD": "bb0531685e7e714acb6026d0afcb214ba6e68f7a",
-  "date": "2026-07-10",
-  "agent": "P04-three-layer-audit",
-  "action": "three-layer audit + coherent status pack",
-  "paperPass": false,
-  "unitAloneEqualsW4": false,
-  "w4ProductClaim": "NO",
-  "planRating": {
-    "verdict": "APPROVE-WITH-FIXES",
-    "score": 7.5,
-    "source": "plans1/P04-orbit-continuity/CODE-REVIEW-REPORT.md",
-    "note": "Plan rating is separate from product claim / CP-04 ship gate"
-  },
-  "productVsPlan": {
-    "plan": "APPROVE-WITH-FIXES 7.5/10",
-    "productW4": "open — not pass",
-    "phaseCardHistorical": "PASS 2026-07-09 is paper until this pack dual-green same tip"
-  },
-  "layers": {
-    "layer1_defaults": {
-      "product": "closed",
-      "cites": [
-        "orbitDefaults.ts:7 OPEN3D_ORBIT_DEFAULT_ENABLED=true",
-        "ThreeViewerInner.tsx:68 enableControls default ON",
-        "ThreeLazyViewer.tsx:145 enableControls default ON",
-        "ThreeViewerInner.tsx:171-186 OrbitControls construct",
-        "ThreeViewerInner.tsx:340 data-orbit-enabled"
-      ]
-    },
-    "layer2_workspace": {
-      "product": "closed",
-      "cites": [
-        "OOPlannerWorkspace.tsx:13-16 import Lazy3DViewer + getOpen3dViewerControlProps",
-        "OOPlannerWorkspace.tsx:1057-1060 {...getOpen3dViewerControlProps()}"
-      ],
-      "unit": "workspaceOrbitWiring.test.ts green in unit-orbit-pack / unit-p04-pack"
-    },
-    "layer3_unit_browser": {
-      "unitGreenDeposit": true,
-      "browserGreenDeposit": true,
-      "sameTipDualGreen": false,
-      "closed": false
-    }
-  },
-  "unitPack": {
-    "status": "green_deposit",
-    "exitCode": 0,
-    "tests": "34/34",
-    "files": 5,
-    "log": "unit-p04-pack-raw.log",
-    "depositJson": "unit-pack-deposit.json",
-    "depositHEAD": "b8109733c0c7a1e0657a2989576f27060f4a6bd5",
-    "orbitPack": {
-      "log": "unit-orbit-pack.log",
-      "tests": "9/9",
-      "exitCode": 0
-    },
-    "poseAdapterPack": {
-      "log": "unit-pose-pack.log",
-      "tests": "26/26",
-      "exitCode": 0
-    },
-    "note": "Unit alone != W4. Deposit HEAD != audit tip; not re-teed as dual-green with browser on same SHA."
-  },
-  "browser": {
-    "status": "green_deposit",
-    "exitCode": 0,
-    "tool": "playwright",
-    "spec": "tests/e2e/open3d-w4-orbit-continuity.spec.ts",
-    "logs": [
-      "browser-w4-raw.log",
-      "browser-w4-playwright-live.log",
-      "playwright-raw.log"
-    ],
-    "browserRunJson": "browser-run.json",
-    "browserRunStatus": "browser-green",
-    "browserRunHEAD": null,
-    "tests": "1/1 passed (latest logs)",
-    "pngs": [
-      "01-2d-after-place.png",
-      "02-3d-orbit-on.png",
-      "03-2d-restored.png"
-    ],
-    "proves": [
-      "furniture-count-status-text",
-      "data-orbit-enabled=true",
-      "2d-3d-2d-count-stable",
-      "optional-left-drag-no-crash"
-    ],
-    "doesNotProve": [
-      "entity-ids",
-      "mm-position",
-      "document-rotation-degrees"
-    ],
-    "consoleErrorCount": 0,
-    "consoleHardAssertInSpec": false,
-    "consoleMessagesTxt": false,
-    "note": "Browser deposit green without HEAD pin in browser-run.json — cannot claim same-tip with unit deposit."
-  },
-  "artifacts": {
-    "THREE_LAYER_AUDIT": "THREE-LAYER-AUDIT.md",
-    "NOTES": "NOTES.md",
-    "CP_04_STATUS": "CP-04-STATUS.md",
-    "HEAD_txt": "HEAD.txt"
-  },
-  "status": "open",
-  "statusNote": "pass only if unit+browser both green on same tip. Unit deposit green at b8109733; browser-run.json browser-green without HEAD pin; tip at audit bb053168. Dual-green same tip not locked → open. W4 product claim NO."
+﻿{
+    "phase":  "P04",
+    "gate":  "W4",
+    "checkpoint":  "CP-04",
+    "track":  "orbit-continuity",
+    "approach":  "A",
+    "checkout":  "D:\\OandO07072026",
+    "worktrees":  false,
+    "evidenceRoot":  "results/planner/world-standard-wave/04-orbit-continuity",
+    "HEAD":  "d4c80c35bcc0a6b3ec1dcba3a96c7986be3ecb5a",
+    "date":  "2026-07-10",
+    "agent":  "P04-three-layer-audit",
+    "action":  "three-layer audit + coherent status pack",
+    "paperPass":  false,
+    "unitAloneEqualsW4":  false,
+    "w4ProductClaim":  "NO",
+    "planRating":  {
+                       "verdict":  "APPROVE-WITH-FIXES",
+                       "score":  7.5,
+                       "source":  "plans1/P04-orbit-continuity/CODE-REVIEW-REPORT.md",
+                       "note":  "Plan rating is separate from product claim / CP-04 ship gate"
+                   },
+    "productVsPlan":  {
+                          "plan":  "APPROVE-WITH-FIXES 7.5/10",
+                          "productW4":  "open — not pass",
+                          "phaseCardHistorical":  "PASS 2026-07-09 is paper until this pack dual-green same tip"
+                      },
+    "layers":  {
+                   "layer1_defaults":  {
+                                           "product":  "closed",
+                                           "cites":  [
+                                                         "orbitDefaults.ts:7 OPEN3D_ORBIT_DEFAULT_ENABLED=true",
+                                                         "ThreeViewerInner.tsx:68 enableControls default ON",
+                                                         "ThreeLazyViewer.tsx:145 enableControls default ON",
+                                                         "ThreeViewerInner.tsx:171-186 OrbitControls construct",
+                                                         "ThreeViewerInner.tsx:340 data-orbit-enabled"
+                                                     ]
+                                       },
+                   "layer2_workspace":  {
+                                            "product":  "closed",
+                                            "cites":  [
+                                                          "OOPlannerWorkspace.tsx:13-16 import Lazy3DViewer + getOpen3dViewerControlProps",
+                                                          "OOPlannerWorkspace.tsx:1057-1060 {...getOpen3dViewerControlProps()}"
+                                                      ],
+                                            "unit":  "workspaceOrbitWiring.test.ts green in unit-orbit-pack / unit-p04-pack"
+                                        },
+                   "layer3_unit_browser":  {
+                                               "unitGreenDeposit":  true,
+                                               "browserGreenDeposit":  true,
+                                               "sameTipDualGreen":  false,
+                                               "closed":  false
+                                           }
+               },
+    "unitPack":  {
+                     "status":  "green_deposit",
+                     "exitCode":  0,
+                     "tests":  "34/34",
+                     "files":  5,
+                     "log":  "unit-p04-pack-raw.log",
+                     "depositJson":  "unit-pack-deposit.json",
+                     "depositHEAD":  "b8109733c0c7a1e0657a2989576f27060f4a6bd5",
+                     "orbitPack":  {
+                                       "log":  "unit-orbit-pack.log",
+                                       "tests":  "9/9",
+                                       "exitCode":  0
+                                   },
+                     "poseAdapterPack":  {
+                                             "log":  "unit-pose-pack.log",
+                                             "tests":  "26/26",
+                                             "exitCode":  0
+                                         },
+                     "note":  "Unit alone != W4. Deposit HEAD != audit tip; not re-teed as dual-green with browser on same SHA."
+                 },
+    "browser":  {
+                    "status":  "green_deposit",
+                    "exitCode":  0,
+                    "tool":  "playwright",
+                    "spec":  "tests/e2e/open3d-w4-orbit-continuity.spec.ts",
+                    "logs":  [
+                                 "browser-w4-raw.log",
+                                 "browser-w4-playwright-live.log",
+                                 "playwright-raw.log"
+                             ],
+                    "browserRunJson":  "browser-run.json",
+                    "browserRunStatus":  "browser-green",
+                    "browserRunHEAD":  null,
+                    "tests":  "1/1 passed (latest logs)",
+                    "pngs":  [
+                                 "01-2d-after-place.png",
+                                 "02-3d-orbit-on.png",
+                                 "03-2d-restored.png"
+                             ],
+                    "proves":  [
+                                   "furniture-count-status-text",
+                                   "data-orbit-enabled=true",
+                                   "2d-3d-2d-count-stable",
+                                   "optional-left-drag-no-crash"
+                               ],
+                    "doesNotProve":  [
+                                         "entity-ids",
+                                         "mm-position",
+                                         "document-rotation-degrees"
+                                     ],
+                    "consoleErrorCount":  0,
+                    "consoleHardAssertInSpec":  false,
+                    "consoleMessagesTxt":  false,
+                    "note":  "Browser deposit green without HEAD pin in browser-run.json — cannot claim same-tip with unit deposit."
+                },
+    "artifacts":  {
+                      "THREE_LAYER_AUDIT":  "THREE-LAYER-AUDIT.md",
+                      "NOTES":  "NOTES.md",
+                      "CP_04_STATUS":  "CP-04-STATUS.md",
+                      "HEAD_txt":  "HEAD.txt"
+                  },
+    "status":  "open",
+    "statusNote":  "pass only if unit+browser both green on same tip. Unit deposit green at b8109733; browser-run.json browser-green without HEAD pin; tip at audit bb053168. Dual-green same tip not locked → open. W4 product claim NO."
 }
