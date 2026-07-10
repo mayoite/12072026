@@ -13,15 +13,15 @@
 |------|------|--------|
 | **PRIMARY execute** | **`plans1/`** | 2 files per phase — use this |
 | Folder names / how | `Plans/Research/RESULTS-MAP.md` | Not residual tasks |
-| Optional second review | `plans2/` | Never dual-run full program |
-| Merge research dump | `PlansA/` | **Do not execute from here** |
+| Optional second review | `archive/plans2/` | Never dual-run full program |
+| Merge research dump | `archive/PlansA/` | **Do not execute from here** |
 
 Everything for a phase lives under:
 
 - `plans1/P0X-*/CODE-REVIEW-REPORT.md` (**read first**)
 - `plans1/P0X-*/IMPLEMENTATION-PLAN.md` (detail if needed)
 
-**Do not** run plans1 + plans2 + PlansA as three programs.
+**Do not** dual-run archived packages.
 
 ---
 
@@ -100,7 +100,7 @@ Map also: `Plans/Research/RESULTS-MAP.md`.
 ## 6. How to run one phase
 
 1. Read `plans1/P0X-*/CODE-REVIEW-REPORT.md`
-2. Optional: `plans2/P0X-*/CODE-REVIEW-REPORT.md` cross-check
+2. Optional: `archive/plans2/P0X-*/CODE-REVIEW-REPORT.md` cross-check
 3. Residual tasks from `plans1/P0X-*/IMPLEMENTATION-PLAN.md` (skip “do not rebuild”)
 4. Land evidence under correct results folder
 5. Commit; no CP PASS without folder + HEAD + commands
@@ -125,5 +125,5 @@ Master tasks: `plans1/EXECUTABLE-PLAN.md`.
 ## 8. Bottom line
 
 **One product. One execute path: `plans1/`.**  
-`plans2/` = second draft for reference.  
+`archive/plans2/` = second draft for reference only.  
 Work = re-prove + real residuals (P06 / P07 / P09 + honesty).

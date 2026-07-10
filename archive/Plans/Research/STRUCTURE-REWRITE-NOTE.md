@@ -1,0 +1,123 @@
+﻿# STRUCTURE-REWRITE-NOTE — Partner HYBRID decision applied
+
+**Date:** 2026-07-09  
+**Mode:** plan-only · **no product code**  
+**Partner decision:** **HYBRID**
+
+**Inputs:**
+- [STRUCTURE-ADVICE.md](./STRUCTURE-ADVICE.md) — primary (KEEP topology + light INDEX EXPAND)
+- [STRUCTURE-ADVICE-2.md](./STRUCTURE-ADVICE-2.md) — peer (HYBRID density language + EXPAND INDEX kill order)
+
+---
+
+## Decision summary
+
+| Layer | Decision | Applied this pass? |
+|-------|----------|--------------------|
+| Program topology (P01–P10 · CP-00–CP-10 · folder lock · Approach A) | **KEEP** | Yes — unchanged |
+| Multi-file phase split (`P0X` + tasks + evidence) | **REJECT** | Yes — not created |
+| New phases / gates (P11, W9, P03b browser CP) | **REJECT** | Yes — not created |
+| INDEX week-1 kill order | **EXPAND** | **Yes** |
+| 00-START kill order | Condensed + link to INDEX | **Yes** |
+| Phase body thin (P03 / P05 / P07 density) | **THIN** mains + `P0X-appendix.md` | **Yes** — applied 2026-07-09 |
+| Merge INDEX+00-START / MASTER+CHECKPOINTS / maps | **KEEP separate** | Yes |
+
+**Label language:** STRUCTURE-ADVICE used enum **KEEP** (+ micro INDEX); STRUCTURE-ADVICE-2 used **HYBRID**. Partner selected **HYBRID** as the program label: same substance (topology keep + kill-order expand + density thin deferred).
+
+---
+
+## What changed
+
+### 1. `Plans/trustdata/INDEX.md`
+
+- Banner: structure decision **HYBRID** + links to STRUCTURE-ADVICE / STRUCTURE-ADVICE-2 / this note.
+- New section **Week-1 kill order (after implementation unlock)**:
+  - Serial spine table (orders 0–5): unlock → truth → engine → **W3 unit+browser** → **W1–W2 journey** → **W5–W6**.
+  - Parallel fill table (orders 6–10): W4 · W2 symbols · W7 mesh · W8 · CP-10.
+  - Priority rule: scarce slots → spawn 3–5 before 7–9.
+  - Full claim rules: no self-waive W3 browser; journey honesty needs CP-03+CP-05 unless owner WAIVE; CHECKPOINTS unchanged; folder-first naming.
+- Superpowers streams table: kill-priority column; streams re-ordered by urgency (spine first).
+- First agent session: step for kill order before CHECKPOINTS/RESULTS-MAP.
+
+**Preserved:** Approach A, unlock modes, phase/folder table, agent 8–10, W1–W8 one-screen, out-of-scope, program docs, RESULTS-MAP authority.
+
+### 2. `Plans/trustdata/00-START.md`
+
+- Banner: HYBRID + link INDEX full kill order + this note.
+- New condensed **Week-1 kill order** section (spine one-liner + fill list + claim rules) with **full tables only in INDEX**.
+- Phase order note: dependency graph ≠ kill-order priority.
+- Superpowers streams: kill-priority column; spine preference when slots scarce.
+
+**Preserved:** W0 unlock modes + checkboxes, Approach A/B/C picks, engine decision checkboxes, ethics, standing agent rules, CP-00 closeout.
+
+### 3. This note
+
+- Records partner decision and file-level delta for audit trail.
+
+---
+
+## Phase thin pass (applied 2026-07-09)
+
+| Main (execute card) | Appendix (skeletons) | Evidence folder (unchanged) |
+|---------------------|----------------------|-----------------------------|
+| `phases/P03-select-delete/P03-select-delete.md` | `phases/P03-select-delete/P03-appendix.md` | `03-select-delete/` |
+| `phases/P05-symbols-svg/P05-symbols-svg.md` | `phases/P05-symbols-svg/P05-appendix.md` | `05-symbols-svg/` |
+| `phases/P07-draw-place-journey/P07-draw-place-journey.md` | `phases/P07-draw-place-journey/P07-appendix.md` | `02-browser-open3d-journey/` |
+
+Each main opens with `## Structure rewrite 2026-07-09` hybrid thin note. Target main size ~150–350 lines; multi-page TS/Playwright blocks live in appendix. **One CP ownership preserved** (no P03b, no W1/W2 split).
+
+## What did **not** change
+
+- No CHECKPOINTS renumber; no RESULTS-MAP folder renames; no MASTER / AGENT-RULES topology changes.
+- No product code under `site/`; no evidence fabrication; no worktrees; no push.
+
+---
+
+## Authority reminder
+
+1. **Owner message** wins.  
+2. **RESULTS-MAP / FOLDER-LOCK** for evidence paths.  
+3. **CHECKPOINTS** for pass/fail.  
+4. **INDEX kill order** for spawn priority under scarce slots.  
+5. **Phase file** for how to execute a CP.  
+6. Review notes historical; applied body wins after edit (notes co-located with targets).
+
+---
+
+## Next steps (other agents / owner)
+
+| Owner | Work |
+|-------|------|
+| Other agent | P03 / P05 / P07 content thin (embedded code out; keep one CP ownership) — if authorized |
+| Optional later | AGENT-RULES one-liner: spawn in kill-order priority |
+| Owner | Accept/reject; unlock when ready for product |
+
+---
+
+---
+
+## Folder-wise phases (2026-07-10)
+
+**Owner ask:** proper plans folder-wise — each phase a directory with all related files.
+
+| Before | After |
+|--------|--------|
+| `phases/P0X-….md` flat | `phases/P0X-<slug>/P0X-….md` |
+| `reviews/P0X-suggestions.md` (retired) | `phases/P0X-<slug>/P0X-suggestions.md` |
+| appendices next to flat mains | appendix co-located in phase folder |
+
+**Map:** [phases/README.md](./phases/README.md). Evidence folder names under `results/` **unchanged** (FOLDER-LOCK still binds).
+
+### Reviews folder removed (2026-07-10)
+
+`Plans/trustdata/reviews/` is **gone**. Notes co-located:
+
+| Note | Home |
+|------|------|
+| INDEX-00-suggestions | `Plans/trustdata/` |
+| MAPS · FOLDER-LOCK · STRUCTURE-* | `Plans/trustdata/` |
+| GOVERNANCE-suggestions | `checkpoints/` |
+| EXPERT-PASS | `phases/` |
+| Phase P0X-suggestions + expert essays | `phases/P0X-<slug>/` |
+
+*End of STRUCTURE-REWRITE-NOTE.*

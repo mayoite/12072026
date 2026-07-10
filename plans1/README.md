@@ -40,13 +40,13 @@
 
 ---
 
-## Other folders (do not dual-run)
+## Other folders
 
 | Folder | Role |
 |--------|------|
 | [`../Plans/`](../Plans/) | Program how + RESULTS-MAP |
-| [`../plans2/`](../plans2/) | Optional second review (Idiots) |
-| [`../PlansA/`](../PlansA/) | **Research only** — merge notes / matrix / dual copies |
+| [`../archive/plans2/`](../archive/plans2/) | **Archived** — Idiots reviews (not execute) |
+| [`../archive/PlansA/`](../archive/PlansA/) | **Archived** — merge museum (not execute) |
 | `archive/Plans/` | Backup of Plans |
 
 ---

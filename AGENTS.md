@@ -61,7 +61,8 @@
 | **Install** | `pnpm` from **repo root**. Do not invent a second monorepo under `site/` |
 | **Tech-stack built docs** | Repo-root `tech-stack-docs/` + `tech-stack-generated/` |
 | **Plans** | `Plans/` live (`INDEX.md` · `phases/` · `Research/`); history in `archive/Plans/` |
-| **Residual execute (world-standard wave)** | **`plans1/START-HERE.md`** only — not `PlansA/` (research dump) |
+| **Residual execute (world-standard wave)** | **`plans1/START-HERE.md`** only |
+| **Archived plan packages** | `archive/plans2/`, `archive/PlansA/` — not execute |
 
 If a tool defaults output into `site/`, **redirect it to root `results/`** or fix the config.  
 **Enforcement:** `pnpm run check:layout` (also first step of `gate` / `release:gate*`).
@@ -129,5 +130,5 @@ If a tool defaults output into `site/`, **redirect it to root `results/`** or fi
 6. **Report:** What ran, what failed, next phase step — honest.
 
 ## 8. Master Plan Alignment
-- **Read live plan first:** residual execute → `plans1/START-HERE.md`; program how / maps → `Plans/INDEX.md` · `Plans/phases/P0X-*` · `Plans/Research/RESULTS-MAP.md`. Do not skip foundational phases. Do **not** execute from `PlansA/`.
+- **Read live plan first:** residual execute → `plans1/START-HERE.md`; program how / maps → `Plans/INDEX.md` · `Plans/phases/P0X-*` · `Plans/Research/RESULTS-MAP.md`. Do not skip foundational phases. Do **not** execute from `archive/plans2/` or `archive/PlansA/`.
 - **Phase task lists:** Map work to phase checklists; prove in repo; addenda for gaps — do not invent a second program plan.

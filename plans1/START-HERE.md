@@ -6,10 +6,9 @@
 | | |
 |--|--|
 | **Execute** | **`plans1/`** (this folder) |
-| **How + folder names** | `Plans/Research/RESULTS-MAP.md` (must exist at root — if missing use `archive/Plans/Research/RESULTS-MAP.md`) |
-| **Do not open to execute** | `PlansA/` or `archive/PlansA/` — merge research dump only |
-| **Optional cross-check** | `plans2/` CODE-REVIEW if stuck — if plans2 says **FAIL** and plans1 says APPROVE, **gate is FAIL** |
-| **History backup** | `archive/Plans/` — not authority when live `Plans/` exists |
+| **How + folder names** | `Plans/Research/RESULTS-MAP.md` |
+| **Archived (not execute)** | `archive/plans2/`, `archive/PlansA/` — open only if stuck on hardness |
+| **Optional cross-check** | `archive/plans2/P0X/CODE-REVIEW-REPORT.md` — if FAIL vs plans1 APPROVE, **gate is FAIL** |
 
 **Session-zero path re-prove (mandatory):**
 
@@ -64,7 +63,7 @@ Wave root: `results/planner/world-standard-wave/` only.
 
 ## Stricter rules (merged from plans2 — already binding here)
 
-You do **not** need PlansA for these:
+You do **not** need archived packages for these (already binding here):
 
 1. **W3:** unit alone = **FAIL** — browser pack mandatory  
 2. **W5:** UUID identity, not furniture **count**  
@@ -81,10 +80,10 @@ You do **not** need PlansA for these:
 
 | Folder | Use it? | Why |
 |--------|---------|-----|
-| **plans1/** | **Yes — execute** | One review + one plan per phase. Residual spine. |
-| **Plans/** | Maps only | RESULTS-MAP + phase *how* cards — not residual task list |
-| **plans2/** | Rare | Second opinion review language only |
-| **PlansA/** | **No for execute** | Dual copies + matrix + merge notes = research, not runbook |
+| **plans1/** | **Yes — execute** | Only live residual package |
+| **Plans/** | Maps only | RESULTS-MAP + phase how |
+| **archive/plans2/** | Rare | Frozen Idiots reviews |
+| **archive/PlansA/** | Rare | Frozen merge museum |
 | **archive/Plans/** | No | Backup of Plans |
 
 ---

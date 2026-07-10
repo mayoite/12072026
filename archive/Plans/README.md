@@ -51,9 +51,11 @@ One owner task at a time. Parallel only inside that task (`AGENTS.md`).
 4. World-standard design spec  
 5. `ayushdocs/` honesty  
 
-**Residual execute:** [`../plans1/START-HERE.md`](../plans1/START-HERE.md) only.  
+**Residual execute:** [`../plans1/START-HERE.md`](../plans1/START-HERE.md) — **not** PlansA.  
 **This tree:** program how + RESULTS-MAP only.  
-**Archived (not execute):** [`../archive/plans2/`](../archive/plans2/) · [`../archive/PlansA/`](../archive/PlansA/)
+**Research dump (optional):** [`../PlansA/`](../PlansA/) — merge notes / matrix; confusing; do not execute there.  
+**Second review (optional):** [`../plans2/`](../plans2/).  
+**Diff archaeology:** [`../PlansA/diff/`](../PlansA/diff/) · matrix pointer: [`DIFFERENCE-MATRIX.md`](./DIFFERENCE-MATRIX.md)
 
 **Archive** under `archive/Plans/` is history, not authority.  
 **Evidence** never lives under `Plans/` — only under `results/`.
