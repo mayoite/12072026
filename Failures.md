@@ -16,17 +16,16 @@ Skipped items must be declared. Shell works; gates are runnable.
 
 ---
 
-## Open: mirror backup remote
+## Resolved (keep short): mirror backup remote
 
 | Field | Detail |
 |-------|--------|
 | **ID** | `GIT-MIRROR-MAYOITE-404` |
-| **Date** | 2026-07-10 (recheck same day) |
-| **Symptom** | Agent shell: `git push mayoite main` / `ls-remote` → `Repository not found` for `https://github.com/mayoite/OandO07072026.git` |
-| **Owner note** | Repo exists at that URL; last push ~12h ago from owner side — likely **agent credential/access**, not missing repo |
-| **Impact** | Mirror from **this agent environment** not proven. origin push works. |
-| **Owner action** | Grant agent/git credential access to `mayoite/OandO07072026`, or push mirror from a machine that can |
-| **Agent action** | Keep pushing origin; retry mayoite; log fails; never claim mirror green without exit 0 |
+| **Opened** | 2026-07-10 |
+| **Closed** | 2026-07-10 |
+| **Was** | Agent `git push mayoite` → Repository not found (wrong/inactive gh account) |
+| **Fix** | `gh auth login` as **mayoite** (active account); `git push mayoite main` **OK** `95b2fc6..ea400ae` |
+| **Proof** | `gh auth status` → mayoite active; origin + mayoite both at `ea400ae` |
 
 ---
 

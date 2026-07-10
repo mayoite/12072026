@@ -13,13 +13,12 @@
 
 ## Red / blocked
 
-- mayoite from agent: still not green (`GIT-MIRROR-MAYOITE-404`)
+- none for git mirror — **mayoite green** after gh login as mayoite (`ea400ae` on origin + mayoite)
 
 ## Next
 
-- Execute a11y TASK-LIST T0–T5 (units + LH re-proof)
+- A11y phase T2 Lighthouse re-proof (T0–T1 already green)
 
 ## Do not claim
 
-- A11y PASS without fresh LH path  
-- Mirror green from this agent
+- A11y PASS without fresh LH path
