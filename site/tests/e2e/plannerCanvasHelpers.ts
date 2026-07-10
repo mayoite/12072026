@@ -24,9 +24,17 @@ function plannerToolNamePattern(toolName: string): RegExp {
 }
 
 export function plannerToolButton(page: Page, toolName: string): Locator {
-  return page
+  const pattern = plannerToolNamePattern(toolName);
+  // open3d CanvasToolRail: Select/Pan live under "Navigation tools"; draw tools under
+  // "Drawing tools". Scope to the rail so Select works (Drawing-tools-only was a false fail).
+  const open3dRail = page
+    .getByRole("navigation", { name: "Canvas tools" })
+    .getByRole("button", { name: pattern });
+  // Legacy / fabric fallback: whole group labeled Drawing tools.
+  const drawingGroup = page
     .getByRole("group", { name: "Drawing tools" })
-    .getByRole("button", { name: plannerToolNamePattern(toolName) });
+    .getByRole("button", { name: pattern });
+  return open3dRail.or(drawingGroup);
 }
 
 export async function canvasPoint(

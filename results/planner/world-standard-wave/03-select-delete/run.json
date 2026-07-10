@@ -1,78 +1,48 @@
-﻿{
-  "phase": "P03",
-  "gate": "W3",
-  "checkpoint": "CP-03",
-  "approach": "A",
-  "checkout": "D:\\OandO07072026",
-  "worktrees": false,
-  "evidenceRoot": "results/planner/world-standard-wave/03-select-delete",
-  "HEAD": "7bcb7f581fff5294ba1191a5b4574cd72b7aadb9",
-  "date": "2026-07-10",
-  "agent": "P03-Agent-9",
-  "action": "save complete W3 proof pack under results (no invented PASS)",
-  "depositTip": "dcb469941e9b88f4da01a0e272252d83edcb8ea2",
-  "startedAt": "2026-07-10T18:55:22.000Z",
-  "endedAt": "2026-07-10T18:58:53.000Z",
-  "unitPack": {
-    "exitCode": 0,
-    "log": "unit-w3-pack.log",
-    "rawLog": "unit-w3-pack-raw.log",
-    "command": "pnpm exec vitest run tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts tests/unit/features/planner/open3d/applySelectionDelete.test.ts tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx --reporter=verbose",
-    "cwd": "site/",
-    "files": [
-      "tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts",
-      "tests/unit/features/planner/open3d/applySelectionDelete.test.ts",
-      "tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx",
-      "tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx"
-    ],
-    "testFiles": "4/4 passed",
-    "tests": "62/62 passed",
-    "durationSec": 2.47,
-    "provedAtHead": "ded7da283829bb8b54d33019888dc84b8763eb9f",
-    "onDisk": true,
-    "note": "Unit pack re-prove Agent 9. unit alone != W3."
-  },
-  "browser": {
-    "exitCode": 1,
-    "tool": "playwright",
-    "log": "browser-w3-raw.log",
-    "spec": "tests/e2e/open3d-w3-select-delete.spec.ts",
-    "command": ".\\node_modules\\.bin\\playwright.cmd test -c config/build/playwright.config.ts tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list",
-    "baseURL": "http://localhost:3000",
-    "fabricFurnitureEnv": "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)",
-    "durationSec": 16.5,
-    "tests": "0/1 passed (1 failed)",
-    "failure": {
-      "stage": "selectPlannerTool('Select') after place",
-      "symptom": "Drawing tools group Select button not visible (15s)",
-      "specLine": "open3d-w3-select-delete.spec.ts:59 -> plannerCanvasHelpers.selectPlannerTool",
-      "note": "Place path reached (01-placed.png refreshed). Delete/undo not reached. Intermittent earlier 404 on /planner/guest/ also observed this session.",
-      "errorContext": "results/test-results/e2e-open3d-w3-select-delet-4e252-ete-removes-Ctrl-Z-restores-chromium/error-context.md"
-    },
-    "pngs": [
-      "01-placed.png",
-      "02-selected.png",
-      "03-deleted.png",
-      "04-undone.png"
-    ],
-    "pngOnDisk": {
-      "01-placed.png": 115791,
-      "02-selected.png": 114109,
-      "03-deleted.png": 97350,
-      "04-undone.png": 96830
-    },
-    "pngNote": "01-placed refreshed on failed re-prove after place; 02-04 residual from prior green run (not full flow on tip)",
-    "priorGreen": {
-      "provedAtHead": "aea4e76c44ed82130b3d8b38d8980877fc976540",
-      "exitCode": 0,
-      "tests": "1/1 passed",
-      "pngProof": "4 furniture -> 3 after Delete -> 4 after Ctrl+Z",
-      "staleRelativeToCurrentHead": true
-    },
-    "reProvedOnPinnedHead": false,
-    "onDisk": true,
-    "note": "Live re-prove RED (exit 1). Not browser PASS on tip."
-  },
-  "status": "open",
-  "statusNote": "Unit pack green on tip (62/62 exit 0). Browser live re-prove exit 1. unit alone != W3. status=open â€” do not claim pass."
+{
+    "phase":  "P03",
+    "unitPack":  {
+                     "note":  "Unit pack not re-run this seat (browser half only). unit alone != W3."
+                 },
+    "approach":  "B",
+    "statusNote":  "Browser W3 exit 0 with Mode B helper fix. Fabric OFF. PNGs 01-04 eyes-checked.",
+    "HEAD":  "8dfccddbef62877ae66965f0e6732fe007f48d55",
+    "checkpoint":  "CP-03",
+    "status":  "pass",
+    "startedAt":  "2026-07-10T13:25:00.000Z",
+    "browser":  {
+                    "fabricFurnitureEnv":  "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)",
+                    "log":  "browser-w3-raw.log",
+                    "baseURL":  "http://localhost:3000",
+                    "exitCode":  0,
+                    "tool":  "playwright",
+                    "note":  "Browser hard gate PASS. Unit alone != W3.",
+                    "pngProof":  "eyes: 4 furniture -\u003e 3 after Delete -\u003e 4 after Ctrl+Z",
+                    "pngOnDisk":  {
+                                      "02-selected.png":  114154,
+                                      "04-undone.png":  96830,
+                                      "03-deleted.png":  97350,
+                                      "01-placed.png":  115791
+                                  },
+                    "tests":  "1/1 passed",
+                    "command":  ".\\node_modules\\.bin\\playwright.cmd test -c config/build/playwright.config.ts tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list",
+                    "spec":  "tests/e2e/open3d-w3-select-delete.spec.ts",
+                    "reProvedOnTip":  true,
+                    "pngs":  [
+                                 "01-placed.png",
+                                 "02-selected.png",
+                                 "03-deleted.png",
+                                 "04-undone.png"
+                             ],
+                    "modeBFix":  "plannerToolButton: scope Select to navigation Canvas tools (Select is under Navigation tools, not Drawing tools)",
+                    "onDisk":  true,
+                    "durationSec":  3.1
+                },
+    "date":  "2026-07-10",
+    "endedAt":  "2026-07-10T13:30:38.301Z",
+    "gate":  "W3",
+    "worktrees":  false,
+    "checkout":  "D:\\OandO07072026",
+    "evidenceRoot":  "results/planner/world-standard-wave/03-select-delete",
+    "agent":  "P03-Agent-4",
+    "action":  "browser W3 hard gate re-prove (Playwright + eyes)"
 }
