@@ -6,7 +6,8 @@
   "checkout": "D:\\OandO07072026",
   "worktrees": false,
   "evidenceRoot": "results/planner/world-standard-wave/03-select-delete",
-  "HEAD": "cd0f25de4f5576cc934f14dc693a3dce795000d6",
+  "HEAD": "d6118a39b264a3f43cac08b44b398b2083bbcc97",
+  "unitPackCodeTip": "74e89a4b431f5e5cecab79f1523a84543981a7f0",
   "date": "2026-07-10",
   "startedAt": "2026-07-10T18:52:59.000Z",
   "endedAt": "2026-07-10T18:53:01.000Z",
@@ -27,13 +28,13 @@
     "tests": "62/62 passed",
     "durationSec": 1.99,
     "agent": "P03-Agent-3",
-    "note": "Unit pack re-prove only. unit alone â‰  W3. Do not treat unitPack green as phase PASS without browser green on same tip."
+    "note": "Unit pack re-prove only. unit alone != W3. Do not treat unitPack green as phase PASS without browser green on same tip."
   },
   "unit": {
     "exitCode": 0,
     "log": "unit-w3-pack.log",
     "tests": "62/62 passed",
-    "note": "Superseded metadata pointer â€” see unitPack for Agent 3 re-prove."
+    "note": "See unitPack for Agent 3 re-prove."
   },
   "browser": {
     "exitCode": 0,
@@ -53,10 +54,10 @@
       "03-deleted.png",
       "04-undone.png"
     ],
-    "pngProof": "4 furniture â†’ 3 after Delete â†’ 4 after Ctrl+Z",
+    "pngProof": "4 furniture -> 3 after Delete -> 4 after Ctrl+Z",
     "staleRelativeToHead": true,
-    "note": "Prior browser evidence recorded at HEAD aea4e76â€¦ â€” not re-proved on tip cd0f25d by Agent 3. Browser re-prove required for W3 on this tip."
+    "note": "Prior browser evidence recorded at HEAD aea4e76 - not re-proved on tip d6118a39 by Agent 3. Browser re-prove required for W3 on this tip."
   },
   "status": "unitPack-only",
-  "statusNote": "Agent 3 set unitPack only. unit alone â‰  W3. Do not set status pass without browser green on same HEAD."
+  "statusNote": "Agent 3 set unitPack only. unit alone != W3. Do not set status pass without browser green on same HEAD."
 }
