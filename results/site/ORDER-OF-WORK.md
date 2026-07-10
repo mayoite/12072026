@@ -36,9 +36,11 @@
 
 | Phase | Status |
 |-------|--------|
-| 0 | IN PROGRESS → complete this land |
-| 1 | NEXT |
-| 2–6 | queued |
+| 0 | **DONE** — this file |
+| 1 | **DONE** — portal no longer red-boundary (`dfd596a`); `/` seating portal 200 |
+| 2 | **DONE** — `results/site/design-base-home/` |
+| 3 | **IN PROGRESS** — products suite align to home |
+| 4–6 | queued |
 
 ---
 
