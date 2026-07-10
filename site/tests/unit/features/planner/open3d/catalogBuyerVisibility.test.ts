@@ -4,6 +4,7 @@ import {
   filterBuyerFacingCatalogItems,
   formatCatalogFootprintCm,
   isInternalCatalogItem,
+  prioritizeOfficeSystemsBrowse,
 } from "@/features/planner/open3d/catalog/catalogBuyerVisibility";
 import {
   inventoryCategoriesForProduct,
@@ -151,5 +152,32 @@ describe("inventoryCategoriesForProduct (P-UI-2b)", () => {
       "sofas",
     ]);
     expect(furniture?.subCategories[0]?.label).toMatch(/Desk/i);
+  });
+});
+
+describe("prioritizeOfficeSystemsBrowse", () => {
+  it("surfaces workstations and desks before sofas", () => {
+    const sofa = minimalItem({
+      id: "sample-sofa-1",
+      name: "Modern 3-Seater Sofa",
+      tags: ["sofa"],
+    });
+    const desk = minimalItem({
+      id: "sample-desk-1",
+      name: "Executive Standing Desk",
+      tags: ["desk"],
+      subCategory: "Desks & Workstations",
+    });
+    const station = minimalItem({
+      id: "ws-linear-900",
+      name: "Workstation Linear 900×600",
+      tags: ["workstation", "desk"],
+    });
+    const ordered = prioritizeOfficeSystemsBrowse([sofa, desk, station]);
+    expect(ordered.map((i) => i.id)).toEqual([
+      "ws-linear-900",
+      "sample-desk-1",
+      "sample-sofa-1",
+    ]);
   });
 });

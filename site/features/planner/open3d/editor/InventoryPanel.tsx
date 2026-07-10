@@ -44,6 +44,7 @@ import type { Open3dCatalogItem } from "../catalog/catalogTypes";
 import {
   filterBuyerFacingCatalogItems,
   formatCatalogFootprintCm,
+  prioritizeOfficeSystemsBrowse,
 } from "../catalog/catalogBuyerVisibility";
 import type { WorkstationConfigV0 } from "../catalog/workstationSystemV0";
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
@@ -302,11 +303,16 @@ export const InventoryPanel = memo(function InventoryPanel({
       base = base.filter((it) => it.roomTags?.some((t) => tags.includes(t)));
     }
     const ranked = rankCatalogItems(base, state.searchQuery || "");
-    return capCatalogResults(ranked, OPEN3D_CATALOG_RESULT_CAP);
+    const ordered =
+      officeSystemsInventory && !(state.searchQuery || "").trim()
+        ? prioritizeOfficeSystemsBrowse(ranked)
+        : ranked;
+    return capCatalogResults(ordered, OPEN3D_CATALOG_RESULT_CAP);
   }, [
     indexedItems,
     categories,
     roomGroups,
+    officeSystemsInventory,
     state.searchQuery,
     state.selectedCategoryId,
     state.selectedRoomGroupId,
