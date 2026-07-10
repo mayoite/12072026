@@ -1,5 +1,5 @@
 
-/* Client roster badges â€” trusted-by, projects, about */
+/* Client roster badges — trusted-by, projects, about */
 
 .client-badge-group {
   display: grid;
@@ -19,10 +19,35 @@
   }
 }
 
+/* Extended / dense rosters: 3 cols md, 5 cols xl — still wider than old 6-col crush. */
+.client-badge-group--dense {
+  gap: 0.75rem;
+}
+
+@media (width >= theme(--breakpoint-md)) {
+  .client-badge-group--dense {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (width >= theme(--breakpoint-lg)) {
+  .client-badge-group--dense {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (width >= theme(--breakpoint-xl)) {
+  .client-badge-group--dense {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
 .client-badge {
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
+  min-width: 0;
+  height: 100%;
   padding: 1.25rem;
   border: 0.0625rem solid var(--border-soft);
   border-radius: var(--radius-lg);
@@ -37,6 +62,7 @@
   flex-direction: column;
   gap: 0.5rem;
   margin-top: auto;
+  min-width: 0;
 }
 
 .client-badge__mark {
@@ -44,11 +70,13 @@
   align-items: center;
   justify-content: flex-start;
   min-height: 3rem;
+  min-width: 0;
 }
 
 .client-badge__logo {
+  display: block;
   width: auto;
-  max-width: 8.75rem;
+  max-width: min(100%, 8.75rem);
   height: 2.5rem;
   object-fit: contain;
   object-position: left center;
@@ -87,6 +115,7 @@
 .client-badge__sector {
   display: inline-flex;
   align-self: flex-start;
+  max-width: 100%;
   padding: 0.25rem 0.5rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-accent);
@@ -97,6 +126,7 @@
   letter-spacing: 0.11em;
   line-height: 1.3;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .client-badge__name {
@@ -104,6 +134,7 @@
   font-weight: var(--font-weight-copy-semibold);
   line-height: 1.3;
   color: var(--text-strong);
+  overflow-wrap: anywhere;
   transition: color var(--motion-fast) var(--ease-standard);
 }
 
@@ -116,4 +147,12 @@
   font-size: var(--type-label-size);
   font-weight: var(--font-weight-copy-medium);
   color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+/* Slightly tighter padding when grid is dense (5-up). */
+@media (width >= theme(--breakpoint-xl)) {
+  .client-badge-group--dense .client-badge {
+    padding: 1rem 1.1rem;
+  }
 }

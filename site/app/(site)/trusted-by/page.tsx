@@ -85,7 +85,7 @@ export default function TrustedByPage() {
             <p className="typ-label text-body mb-4">{TRUSTED_BY_PAGE_COPY.rosterKicker}</p>
             <h2 className="home-heading">{TRUSTED_BY_PAGE_COPY.rosterTitle}</h2>
           </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="client-badge-group" data-testid="trusted-by-roster">
             {TRUSTED_BY_CLIENTS.map((client) => (
               <ClientBadge key={client.name} {...client} />
             ))}

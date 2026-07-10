@@ -28,7 +28,7 @@ export default async function ProjectsPage() {
         showButton={false}
         backgroundImage={PROJECTS_PAGE_COPY.heroBackgroundImage}
         className="h-[34vh] min-h-[16.5rem] md:h-[37vh] md:min-h-[18.5rem]"
-        imageClassName="scale-100 object-[center_44%]"
+        imageClassName="!scale-100 object-[center_44%]"
         contentClassName="py-10 md:py-12"
         overlayClassName="bg-black/40"
       />
@@ -57,7 +57,7 @@ export default async function ProjectsPage() {
             {asOfLabel}
           </p>
 
-          <div className="scheme-panel scheme-border mb-12 rounded-2xl border p-8 md:p-10">
+          <div className="scheme-panel scheme-border mb-12 rounded-2xl border p-5 sm:p-8 md:p-10">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="typ-label mb-3 text-body">{PROJECTS_PAGE_COPY.featuredLabel}</p>
@@ -72,16 +72,17 @@ export default async function ProjectsPage() {
                 </Link>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {/* Max 4 cols — 6-col crushes sector + logo + name (~178px). */}
+            <div className="client-badge-group">
               {PROJECTS_PAGE_CLIENTS.slice(0, 12).map((client) => (
-                <ClientBadge key={client.name} {...client} />
+                <ClientBadge key={client.name} {...client} featured />
               ))}
             </div>
           </div>
 
           <div className="scheme-border border-t pt-12">
             <p className="typ-label mb-6 text-body">{PROJECTS_PAGE_COPY.allLabel}</p>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <div className="client-badge-group client-badge-group--dense">
               {PROJECTS_PAGE_CLIENTS.slice(12).map((client) => (
                 <ClientBadge key={client.name} {...client} />
               ))}
