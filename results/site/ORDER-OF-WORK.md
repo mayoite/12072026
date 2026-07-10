@@ -39,7 +39,7 @@ Prefix letter is **not** sacred — pick one and stick to it. What matters is **
 | **D1** | Site loads (`/`, seating, portal usable) | **DONE** | `dfd596a` |
 | **D2** | Home = design base (inventory) | **DONE** | `results/site/design-base-home/` |
 | **D3** | Products suite align to home | **DONE** | `1f8c26c`, `141569c`, `ui-websuite-products/` |
-| **D4** | Marketing suite align to home | **CHECK / finish** | `ui-websuite-marketing/`, commits like `4c89431` |
+| **D4** | Marketing suite align to home | **DONE** | `4c89431` + `ui-websuite-marketing/VERIFY.md` (Chrome verify) |
 | **D5** | Catalog image residual | queued | placeholders residual |
 | **D6** | Portal real DB list | queued | honest error UI only so far |
 
@@ -63,6 +63,6 @@ Prefix letter is **not** sacred — pick one and stick to it. What matters is **
 ```
 Tracks may run in parallel: D* · A* · AI* · P*
 Within a track: one ID only.
-Use agents for D4 finish / A1 / AI1 only when owner activates that track.
+D4 closed. Use agents for D5 / A1 / AI1 only when owner activates that track.
 Evidence: results/<track-or-site>/…
 ```
