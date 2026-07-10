@@ -29,15 +29,18 @@ export function useOpen3dWorkspaceAutosave(
   const mountedRef = useRef(false);
   const autosaveGenerationRef = useRef(0);
   const didScheduleAfterHydrationRef = useRef(false);
+  /** Always holds the latest project so schedule/flush never close over a stale snapshot. */
+  const projectRef = useRef(project);
+  projectRef.current = project;
 
   const schedulePersist = useCallback(() => {
     if (!enabled || !hydrated) return;
     if (!mountedRef.current) return;
-    const envelope = buildOpen3dSessionEnvelope(project);
+    const envelope = buildOpen3dSessionEnvelope(projectRef.current);
     const snapshot = JSON.stringify(envelope);
     setStatus("saving");
     saverRef.current?.scheduleSave(snapshot);
-  }, [enabled, hydrated, project]);
+  }, [enabled, hydrated]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -58,15 +61,17 @@ export function useOpen3dWorkspaceAutosave(
     const flushPending = () => {
       void saverRef.current?.flush?.();
     };
-    window.addEventListener("pagehide", flushPending);
-    document.addEventListener("visibilitychange", () => {
+    const onVisibilityChange = () => {
       if (document.visibilityState === "hidden") flushPending();
-    });
+    };
+    window.addEventListener("pagehide", flushPending);
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     return () => {
       mountedRef.current = false;
       autosaveGenerationRef.current += 1;
       window.removeEventListener("pagehide", flushPending);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       // Flush before cancel so leave/unmount does not drop debounced work.
       const saver = saverRef.current;
       void saver?.flush?.().finally(() => {
@@ -99,16 +104,21 @@ export function useOpen3dWorkspaceAutosave(
     }
   }, [guestMode, projectId]);
 
-  const exportSnapshot = useCallback(() => exportOpen3dProjectJson(project), [project]);
+  const exportSnapshot = useCallback(
+    () => exportOpen3dProjectJson(projectRef.current),
+    [],
+  );
 
   const flushPersist = useCallback(async () => {
     if (!enabled || !hydrated) return;
-    const envelope = buildOpen3dSessionEnvelope(project);
+    const envelope = buildOpen3dSessionEnvelope(projectRef.current);
     const snapshot = JSON.stringify(envelope);
     setStatus("saving");
     saverRef.current?.scheduleSave(snapshot);
     await saverRef.current?.flush?.();
-  }, [enabled, hydrated, project]);
+  }, [enabled, hydrated]);
+
+  const isLocalSaved = status === "saved";
 
   return {
     status,
@@ -117,7 +127,11 @@ export function useOpen3dWorkspaceAutosave(
     schedulePersist,
     flushPersist,
     exportSnapshot,
-    isSynced: status === "saved",
+    storage: "local" as const,
+    cloudEnabled: false as const,
+    isLocalSaved,
+    /** @deprecated Prefer isLocalSaved — temporary alias while consumers migrate. */
+    isSynced: isLocalSaved,
     isModified: status === "unsaved" || status === "saving",
   };
 }
