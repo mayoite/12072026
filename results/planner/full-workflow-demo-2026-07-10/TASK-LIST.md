@@ -13,14 +13,14 @@
 | 2 | Repo-truth scout | subagent scout | [x] `ROOT-TRUTH.md` |
 | 3 | Gap scan (brainstorm light) | head | [x] `GAP.md` |
 | 4 | writing-plans / this TASK-LIST | head | [x] |
-| 5 | Implement (TDD if code) | subagent implementer | [ ] |
+| 5 | Implement (TDD if code) | subagent implementer | [x] `e82dfa8` + smoke |
 | 6 | Parallel only if multi-package | n/a serial | [x] serial one package |
-| 7 | Debug if red | as needed | [ ] |
-| 8 | Code quality review | subagent reviewer | [ ] |
-| 9 | verification-before-completion | head | [ ] |
-| 10 | check-work style verifier | subagent verifier | [ ] |
-| 11 | Commit + origin + mayoite | head | [ ] |
-| 12 | SESSION-RECAP | head | [ ] |
+| 7 | Debug if red | as needed | [x] no red |
+| 8 | Code quality review | subagent reviewer | [x] APPROVE |
+| 9 | verification-before-completion | head | [x] VERIFY-HEAD.md |
+| 10 | check-work style verifier | subagent verifier | [x] VERIFY.md PASS |
+| 11 | Commit + origin + mayoite | head | [x] |
+| 12 | SESSION-RECAP | head | [x] |
 
 ## Deliverables
 

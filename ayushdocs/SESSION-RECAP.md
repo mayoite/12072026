@@ -1,21 +1,22 @@
 # Session recap
 
 **Updated:** 2026-07-10  
-**Pick:** **B** product raise (not A re-proof marathon)  
-**Phase:** workstation mesh stretchers  
+**Phase:** full Elon workflow demo — workstation visual smoke  
 
-## Done
+## Pipeline (ran once, completely)
 
-- Under-desk front/back stretchers for desk/return runs  
-- TDD stretchers suite + legs/mesh/scene non-reg **35/35**  
-- Evidence: `results/planner/world-standard-wave/07-systems-v0/mesh-stretchers/`  
+0 superpowers → 1 GOAL → 2 scout ROOT-TRUTH → 3 GAP → 4 TASK-LIST  
+→ 5 implementer (smoke script + PNG) → 8 code review APPROVE  
+→ 9 head re-verify vitest+smoke → 10 verifier VERDICT PASS  
+→ 11 dual push → 12 this recap  
 
-## Prior this session
+## Evidence root
 
-- Gate re-proof green (phosphor SSR)  
-- A11y label-in-name LH 100  
-- Elon: raise bar never lower  
+`results/planner/full-workflow-demo-2026-07-10/`
 
-## Do not claim
+## Honest
 
-- Product finished / photoreal mesh  
+- Workflow discipline **proven once**  
+- Visual smoke shows legs + stretchers  
+- Product **not** finished  
+- Residual: smoke formula parity with mesh module (raise later)  
