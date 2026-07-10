@@ -11,7 +11,7 @@
 - **Keyboard:** Del/Bksp `preventDefault`; Esc clears **selection** (not only draw/place).
 - **Prove with Fabric furniture flag OFF**; document selection only (`pickFurnitureAtPoint` / `workspaceCanvas.selection`) — no Fabric-stage / `firstFurnitureCenter` as W3 proof.
 - **Furniture rotation stays degrees** in document (pick converts for hit math) — do not rewrite units mid-W3.
-- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · `01-react-open3d` · `02-canvas-2d` · `04-playwright-evidence`.
+- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · [01-react-open3d.md](./01-react-open3d.md) · [02-canvas-2d.md](./02-canvas-2d.md) · [04-playwright-evidence.md](./04-playwright-evidence.md).
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` (TDD, systematic-debugging, verification-before-completion).  
 > **Approach A** — FeasibilityCanvas + document model first.  

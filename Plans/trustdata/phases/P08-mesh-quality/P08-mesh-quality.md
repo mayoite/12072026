@@ -8,7 +8,7 @@
 - **Height integrity:** Box3 span ≈ `heightMm`; toe **replaces** bottom of carcass (never additive overshoot). Doors track **carcassH**, not full `h`.
 - **plan === mesh:** GlbExport **imports** `TOE_*` / `DOOR_THICKNESS_MM` from `modularCabinetV0` — delete duplicate constants. Blast tests (`createSceneObjectFromNode`, meshStages pair 3→4) in same landable slice.
 - Stay **imperative Three** / procedural cabinet-v0 — no designer static GLB, no photoreal race, no R3F rewrite for pretty PNG. Evidence: `08-mesh-quality/` only.
-- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · `03-r3f-3d.md`.
+- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · [03-r3f-3d.md](./03-r3f-3d.md).
 
 **Goal:** Raise modular **cabinet-v0** so a facilities buyer can read **toe / door / carcass** in 3D (and matching 2D footprint truth) — not a single apology box. Freeze the quality bar in NOTES, prove it with unit footprint/parts + visual smoke, land evidence under CP-08.
 

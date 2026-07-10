@@ -1,9 +1,13 @@
 # reviews/ — cross-cutting history only
 
-Expert passes and structure notes used to shape trustdata.
+Structure / governance notes used to shape trustdata.
 
-**Phase-specific suggestions** (`P0X-suggestions.md`) live inside each phase folder under `../phases/P0X-<slug>/` — not here.
+| Lives here | Lives in phase folders |
+|------------|------------------------|
+| [EXPERT-PASS.md](./EXPERT-PASS.md) consolidated index | Full expert essays `01`–`06` |
+| FOLDER-LOCK · GOVERNANCE · STRUCTURE-* · MAPS · INDEX-00 | `P0X-suggestions.md` |
+| — | Execute cards · appendices |
 
-**Not** day-to-day execution authority.  
+**Not** day-to-day execution authority (except EXPERT-PASS as summary pointer).  
 **Live:** `../INDEX.md` · `../00-START.md` · `../phases/` · `../checkpoints/CHECKPOINTS.md`  
 **Agents:** repo-root `AGENTS.md`

@@ -1,9 +1,9 @@
-# Trust-Data Expert Pass — Consolidated
+﻿# Trust-Data Expert Pass — Consolidated
 
 **Date:** 2026-07-09  
 **Research status:** DONE (maps only — no re-scrape)  
 **Mode:** plan-only · no product code  
-**Sources:** `reviews/expert-pass/01`–`06` · kill order [INDEX.md](../INDEX.md)
+**Sources:** phase folders (expert essays co-located) · kill order [INDEX.md](../INDEX.md)
 
 ---
 
@@ -18,16 +18,17 @@ Plans + kill order match live architecture. **Not SHIP** until must-fixes land a
 
 ## Expert table
 
-| Expert | File | Verdict | Top P0 |
-|--------|------|---------|--------|
-| React / open3d workspace | `01-react-open3d.md` | **FIX** | W3 pure delete + single history; orbit explicit; save flush; **furniture degrees** |
-| Canvas 2D / Fabric | `02-canvas-2d.md` | **SHIP** | Prove W3/W2 with Fabric flag **OFF**; Block2D authority; centered-path lie |
-| 3D / R3F | `03-r3f-3d.md` | **FIX** | Orbit three-layer; document pose; mesh toe→carcass→door; **stay imperative Three** |
-| Playwright / evidence | `04-playwright-evidence.md` | **FIX** | W3 browser in `03-*`; serial journey; seed **deltas**; no silent skip |
-| Packages / stack | `05-packages-stack.md` | **FIX** | Owner sign-off + `PACKAGE-PIN`; Fancyapps clear/remove; GSAP row |
-| UI / shortcuts | `06-ui-shortcuts.md` | **FIX** | Handler = map (D/M/N/T); forbid Dimension→D rebind |
+| Expert | Home (primary) | Also in | Verdict | Top P0 |
+|--------|----------------|---------|---------|--------|
+| React / open3d workspace | [P03/01-react-open3d.md](../phases/P03-select-delete/01-react-open3d.md) | P04 · P06 · P07 | **FIX** | W3 pure delete + single history; orbit explicit; save flush; **furniture degrees** |
+| Canvas 2D / Fabric | [P02/02-canvas-2d.md](../phases/P02-engine-lock/02-canvas-2d.md) | P03 · P05 | **SHIP** | Prove W3/W2 with Fabric flag **OFF**; Block2D authority; centered-path lie |
+| 3D / R3F | [P04/03-r3f-3d.md](../phases/P04-orbit-continuity/03-r3f-3d.md) | P08 | **FIX** | Orbit three-layer; document pose; mesh toe→carcass→door; **stay imperative Three** |
+| Playwright / evidence | [P03/04-playwright-evidence.md](../phases/P03-select-delete/04-playwright-evidence.md) | P07 | **FIX** | W3 browser in `03-*`; serial journey; seed **deltas**; no silent skip |
+| Packages / stack | [P02/05-packages-stack.md](../phases/P02-engine-lock/05-packages-stack.md) | — | **FIX** | Owner sign-off + `PACKAGE-PIN`; Fancyapps clear/remove; GSAP row |
+| UI / shortcuts | [P09/06-ui-shortcuts.md](../phases/P09-shortcuts-chrome/06-ui-shortcuts.md) | — | **FIX** | Handler = map (D/M/N/T); forbid Dimension→D rebind |
 
 ---
+
 
 ## Merged Must-fix (P0) — de-duped
 
@@ -81,6 +82,6 @@ Plans + kill order match live architecture. **Not SHIP** until must-fixes land a
 
 ## Phase callouts
 
-Expert pass P0 callouts applied into **P02–P09** (short, top of each phase). Full essays remain in `reviews/expert-pass/`.
+Expert pass P0 callouts applied into **P02–P09** (short, top of each phase). Full essays live under related `phases/P0X-<slug>/` (see Expert table).
 
 **Handover:** After unlock, execute spine with P0 discipline; do not re-scrape research; do not thrash locked stack.

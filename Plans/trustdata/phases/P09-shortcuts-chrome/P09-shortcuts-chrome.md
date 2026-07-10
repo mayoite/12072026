@@ -11,7 +11,7 @@
 - **Product letters locked:** D=door · M=dimension · O=opening · N=window · T=text · V/R/W/P/H as map. All map letters must `setTool(id)`.
 - **Live keydown matrix** — `toolShortcutTruth.test.ts` + keyboard RTL; `toolFromShortcutKey` alone is insufficient (map-true, handler-false today).
 - **`aria-keyshortcuts` honesty** — derive from map + only **wired** non-tool keys (Feasibility string stale). Forbidden “fix”: rebind Dimension → **D**. Evidence: **`09-shortcuts-chrome/`** only.
-- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · `06-ui-shortcuts.md`.
+- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · [06-ui-shortcuts.md](./06-ui-shortcuts.md).
 
 **Goal:** Make every tool **id → shortcut key → keyboard handler → visible label** tell the same truth (gate **W8**), and fix **only** Phase-2A chrome defects that **hide or block** canvas tools. No full chrome redesign.
 

@@ -11,7 +11,7 @@
 - **Anti place false-green (W2):** `furnitureBefore` then ≥ `+2` incl. **cabinet-v0** + second SKU; non-blank canvas PNG ≠ P05 symbol quality. Add **`getFurnitureCount`** helper.
 - **Canonical folder:** `02-browser-open3d-journey/` only for W1–W2; do not dump under `results/tests/` or claim W3 from journey. Reuse status metrics (`pw-status-bar`); require **deltas**.
 - **No silent skip** — missing screenshot / filtered log = FAIL. Full story still needs CP-03 + CP-05 not red unless owner WAIVE.
-- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · `04-playwright-evidence` · `01-react-open3d`.
+- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · [04-playwright-evidence.md](./04-playwright-evidence.md) · [01-react-open3d.md](./01-react-open3d.md).
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` · verification · chrome-devtools for browser truth.  
 > **W0 UNLOCKED** — execute product work per phase + evidence. Do not re-ask owner unlock.  
