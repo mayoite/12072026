@@ -208,14 +208,14 @@ Deep how: `plans2/EXECUTABLE-PLAN.md` + `plans2/P0X-…/IMPLEMENTATION-PLAN.md`.
 
 - [ ] Workspace is `D:\OandO07072026` (not a worktree)
 - [ ] `git rev-parse HEAD` + `git status -sb` recorded (session NOTES or first phase HEAD.txt)
-- [ ] Confirmed `idiotplanners1` absent; working from **`plans2`** + `plans2`
+- [ ] Confirmed live execute is **`plans1/START-HERE.md`** (this plans2 card is frozen)
 - [ ] Confirmed `results/` present or **MISSING** (if missing → re-prove posture)
 - [ ] Read `plans2/README.md` kill order
 - [ ] Read `Plans/Research/RESULTS-MAP.md` folder lock (skim)
 - [ ] `pnpm run check:layout` exit 0
 - [ ] Optional: `hostWiringP01` vitest smoke attempted (log retained later under P01)
 - [ ] Active phase chosen = **P01** unless owner overrides
-- [ ] Open `plans2/P01-product-truth/IMPLEMENTATION-PLAN.md` + `EXECUTABLE-PLAN.md` Task group P01
+- [ ] Open `plans1/P01-product-truth/` review + residual (not this frozen plans2 path for execute)
 - [ ] No product commits planned under wrong phase label
 - [ ] Ethics: no `D:\websites` paste into product
 
