@@ -1,4 +1,4 @@
-# FOLDER-LOCK — evidence path reconciliation (2026-07-09)
+﻿# FOLDER-LOCK — evidence path reconciliation (2026-07-09)
 
 > **Status:** **APPLIED** 2026-07-09 into RESULTS-MAP, CHECKPOINTS, MASTER-CHECKLIST, AGENT-RULES, 00-START, INDEX, RESEARCH-MAP phase routing, and phases P01/P02/P08/P09/P10.  
 > **Scope:** Trustdata plan docs only — no product code, no evidence tree moves (gate folders still create-on-execute).  
@@ -70,9 +70,9 @@ Root: `results/planner/world-standard-wave/`
 
 ## Supersedes (do not re-apply)
 
-- `reviews/P09-suggestions.md` S1 (“use `08-shortcuts-chrome/` not `09-`”) — **reversed by this lock**
-- `reviews/P10-suggestions.md` S2 anti-drift “do not invent `09-…`” — **reversed for W8 only**
-- `reviews/P01-suggestions.md` paths using `01-product-truth/` — evidence root only; phase file name unchanged
+- `phases/P09-shortcuts-chrome/P09-suggestions.md` S1 (“use `08-shortcuts-chrome/` not `09-`”) — **reversed by this lock**
+- `phases/P10-evidence-handover/P10-suggestions.md` S2 anti-drift “do not invent `09-…`” — **reversed for W8 only**
+- `phases/P01-product-truth/P01-suggestions.md` paths using `01-product-truth/` — evidence root only; phase file name unchanged
 - P08 note that P09 lives under `08-shortcuts-chrome/` — update to `09-shortcuts-chrome/`
 
 Phase **file** names stay `P01-product-truth.md` … `P10-evidence-handover.md` (plan IDs ≠ evidence folder numbers).

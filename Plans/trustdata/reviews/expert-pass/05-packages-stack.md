@@ -1,9 +1,9 @@
-# Expert pass — Packages / stack / licenses
+﻿# Expert pass — Packages / stack / licenses
 
 **Date:** 2026-07-09  
 **Role:** packages / stack / license expert  
 **Scope:** Plan + pin truth only. **No product code.** No competitor pack expansion (SmartDraw / Foyr / Coohom stay `Plans/trustdata/LATER.md`).  
-**Inputs:** `Plans/trustdata/phases/P02-engine-lock.md`, `site/package.json`, root `package.json`, `ayushdocs/17-LICENSES-CLEARED.md`, `AGENTS.md` license bullets, `D:\websites\research\2026-07-09-world-standard\comparison\ENGINE-DECISION.md`.
+**Inputs:** `Plans/trustdata/phases/P02-engine-lock/P02-engine-lock.md`, `site/package.json`, root `package.json`, `ayushdocs/17-LICENSES-CLEARED.md`, `AGENTS.md` license bullets, `D:\websites\research\2026-07-09-world-standard\comparison\ENGINE-DECISION.md`.
 
 ---
 

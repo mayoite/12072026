@@ -1,4 +1,4 @@
-# RESULTS-MAP — `results/planner/world-standard-wave/` → phases
+﻿# RESULTS-MAP — `results/planner/world-standard-wave/` → phases
 
 > **For agentic workers:** REQUIRED `/using-superpowers`. Claim a gate **pass** only when the folder below has the minimum artifacts.  
 > **Root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
@@ -6,7 +6,7 @@
 > **Research is not evidence:** competitive packs under `D:\websites` are ideas only — see [RESEARCH-MAP.md](./RESEARCH-MAP.md).  
 > **FINAL folder lock:** 2026-07-09 — [reviews/FOLDER-LOCK-suggestions.md](./reviews/FOLDER-LOCK-suggestions.md). This map wins over older phase reviews that banned `09-shortcuts-chrome/` or used `01-product-truth/`.
 
-**Related:** `checkpoints/CHECKPOINTS.md` · `checklists/MASTER-CHECKLIST.md` · `checklists/AGENT-RULES.md` · `phases/P10-evidence-handover.md` · `reviews/FOLDER-LOCK-suggestions.md` · `reviews/MAPS-suggestions.md`  
+**Related:** `checkpoints/CHECKPOINTS.md` · `checklists/MASTER-CHECKLIST.md` · `checklists/AGENT-RULES.md` · `phases/P10-evidence-handover/P10-evidence-handover.md` · `reviews/FOLDER-LOCK-suggestions.md` · `reviews/MAPS-suggestions.md`  
 **Expert revisions:** MAPS structure 2026-07-09 · **FOLDER-LOCK path names 2026-07-09** (supersedes MAPS dual-`08` / dual-`01` path choices)
 
 ---
@@ -40,16 +40,16 @@ If a phase draft still says a retired name, **this map wins**; write artifacts u
 | Phase file | CP | Gates | Canonical folder(s) under `world-standard-wave/` | Map minimum when green (CP floor) |
 |------------|----|-------|--------------------------------------------------|-----------------------------------|
 | `00-START.md` | **CP-00** | W0 | `00-start/` | `NOTES.md` with approach A/B/C + date + agent (optional but preferred) |
-| `phases/P01-product-truth.md` | **CP-01** | Baseline | **`00-product-truth/`** | `INVENTORY.md`, `CONTRADICTIONS.md` (repo paths required) |
-| `phases/P02-engine-lock.md` | **CP-02** | Engine | **`01-engine-lock/`** | `NOTES.md` + link to ENGINE-DECISION; **phase may add** richer pack (`run.json`, `HEAD.txt`, lock records) — extras do not replace NOTES |
-| `phases/P03-select-delete.md` | **CP-03** | **W3** | `03-select-delete/` | Canonical `run.json`; vitest raw log; unit proof; browser proof when claimed |
-| `phases/P04-orbit-continuity.md` | **CP-04** | **W4** | `04-orbit-continuity/` | `run.json`; screenshots; console log excerpt |
-| `phases/P05-symbols-svg.md` | **CP-05** | **W2** symbols | `05-symbols-svg/` | `run.json` / vitest logs; PNG or prim-JSON; `NOTES.md` canvas vs publish honesty |
-| `phases/P06-save-honesty.md` | **CP-06** | **W5–W6** | `06-save-honesty/` (+ `save-reload/` for W5) | `run.json`; vitest/Playwright logs; label NOTES; W5 hard-reload pack preferred under `save-reload/` |
-| `phases/P07-draw-place-journey.md` | **CP-07** | **W1–W2** browser | `02-browser-open3d-journey/` | `run.json` or `playwright-run.json`; raw log; screenshots `01`–`N`; no skipped steps |
-| `phases/P08-mesh-quality.md` | **CP-08** | **W7** | **`08-mesh-quality/`** | `NOTES.md` bar doc; screenshots; optional vitest logs |
-| `phases/P09-shortcuts-chrome.md` | **CP-09** | **W8** | **`09-shortcuts-chrome/`** | `run.json`; vitest/keyboard logs; optional Playwright |
-| `phases/P10-evidence-handover.md` | **CP-10** | Pack | `10-handover/` | `README.md`, `W-GATES.md`, `MASTER-SYNC.md`, `HEAD.txt`, `FAILURES-SNIP.md`, `BACKUP-LOG.md` |
+| `phases/P01-product-truth/P01-product-truth.md` | **CP-01** | Baseline | **`00-product-truth/`** | `INVENTORY.md`, `CONTRADICTIONS.md` (repo paths required) |
+| `phases/P02-engine-lock/P02-engine-lock.md` | **CP-02** | Engine | **`01-engine-lock/`** | `NOTES.md` + link to ENGINE-DECISION; **phase may add** richer pack (`run.json`, `HEAD.txt`, lock records) — extras do not replace NOTES |
+| `phases/P03-select-delete/P03-select-delete.md` | **CP-03** | **W3** | `03-select-delete/` | Canonical `run.json`; vitest raw log; unit proof; browser proof when claimed |
+| `phases/P04-orbit-continuity/P04-orbit-continuity.md` | **CP-04** | **W4** | `04-orbit-continuity/` | `run.json`; screenshots; console log excerpt |
+| `phases/P05-symbols-svg/P05-symbols-svg.md` | **CP-05** | **W2** symbols | `05-symbols-svg/` | `run.json` / vitest logs; PNG or prim-JSON; `NOTES.md` canvas vs publish honesty |
+| `phases/P06-save-honesty/P06-save-honesty.md` | **CP-06** | **W5–W6** | `06-save-honesty/` (+ `save-reload/` for W5) | `run.json`; vitest/Playwright logs; label NOTES; W5 hard-reload pack preferred under `save-reload/` |
+| `phases/P07-draw-place-journey/P07-draw-place-journey.md` | **CP-07** | **W1–W2** browser | `02-browser-open3d-journey/` | `run.json` or `playwright-run.json`; raw log; screenshots `01`–`N`; no skipped steps |
+| `phases/P08-mesh-quality/P08-mesh-quality.md` | **CP-08** | **W7** | **`08-mesh-quality/`** | `NOTES.md` bar doc; screenshots; optional vitest logs |
+| `phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md` | **CP-09** | **W8** | **`09-shortcuts-chrome/`** | `run.json`; vitest/keyboard logs; optional Playwright |
+| `phases/P10-evidence-handover/P10-evidence-handover.md` | **CP-10** | Pack | `10-handover/` | `README.md`, `W-GATES.md`, `MASTER-SYNC.md`, `HEAD.txt`, `FAILURES-SNIP.md`, `BACKUP-LOG.md` |
 
 **Minimum vs phase extras:** The “map minimum” is the **CP green floor**. Phase files may require additional named artifacts (summaries, matrices, task `*-run.json`). Agents must satisfy **both** map minimum **and** phase task list. Map minimum alone is not permission to skip phase extras; phase extras alone do not rename the folder.
 
@@ -69,17 +69,17 @@ If a phase draft still says a retired name, **this map wins**; write artifacts u
 | `WAVE.md` (file at root) | Research pre-plan | — | Context | Honest pre-execution verdict + blockers | Exists (already); do not treat as W pass |
 | `COMPARISON-CHART.md` (file at root) | Research pre-plan | — | Context | In-repo score summary → websites pack | Exists (already) |
 | `00-start/` | `00-START.md` | **CP-00** | W0 | Approach pick, unlock note, engine checkbox snapshot | `NOTES.md` with approach A/B/C + date + agent; optional copy of unlock quote |
-| `00-product-truth/` | `phases/P01-product-truth.md` | **CP-01** | Baseline | What code actually does vs claims | `INVENTORY.md`, `CONTRADICTIONS.md` with repo paths |
-| `01-engine-lock/` | `phases/P02-engine-lock.md` | **CP-02** | Engine | Confirm Fabric dest / Feasibility interim / R3F+orbit / SKU / BOQ>photoreal | `NOTES.md`; link to `D:\websites\research\2026-07-09-world-standard\comparison\ENGINE-DECISION.md` |
-| `02-browser-open3d-journey/` | `phases/P07-draw-place-journey.md` | **CP-07** | **W1–W2** browser | Playwright draw walls+door; place ≥2 items incl. cabinet-v0 | `run.json` or `playwright-run.json`; raw log; screenshots `01`–`N` PNGs; no skipped steps |
-| `03-select-delete/` | `phases/P03-select-delete.md` | **CP-03** | **W3** | Select furniture; Delete/Backspace; undo | `run.json`; vitest raw log; unit proof; browser proof when claimed |
-| `04-orbit-continuity/` | `phases/P04-orbit-continuity.md` | **CP-04** | **W4** | 2D↔3D pose preserve; orbit ON; console clean | `run.json`; screenshots; console log excerpt |
-| `05-symbols-svg/` | `phases/P05-symbols-svg.md` | **CP-05** | **W2** symbols | Block2D cabinet-v0 quality; SVG authority honesty | `run.json` / vitest logs; PNG or prim-JSON; `NOTES.md` canvas vs publish; CP-05 summary if phase requires |
-| `06-save-honesty/` | `phases/P06-save-honesty.md` | **CP-06** | **W5–W6** | Flush/reload identity + non-lying save labels | `run.json`; vitest/Playwright logs; label NOTES; prefer subfolder `save-reload/` for W5 hard-reload pack |
+| `00-product-truth/` | `phases/P01-product-truth/P01-product-truth.md` | **CP-01** | Baseline | What code actually does vs claims | `INVENTORY.md`, `CONTRADICTIONS.md` with repo paths |
+| `01-engine-lock/` | `phases/P02-engine-lock/P02-engine-lock.md` | **CP-02** | Engine | Confirm Fabric dest / Feasibility interim / R3F+orbit / SKU / BOQ>photoreal | `NOTES.md`; link to `D:\websites\research\2026-07-09-world-standard\comparison\ENGINE-DECISION.md` |
+| `02-browser-open3d-journey/` | `phases/P07-draw-place-journey/P07-draw-place-journey.md` | **CP-07** | **W1–W2** browser | Playwright draw walls+door; place ≥2 items incl. cabinet-v0 | `run.json` or `playwright-run.json`; raw log; screenshots `01`–`N` PNGs; no skipped steps |
+| `03-select-delete/` | `phases/P03-select-delete/P03-select-delete.md` | **CP-03** | **W3** | Select furniture; Delete/Backspace; undo | `run.json`; vitest raw log; unit proof; browser proof when claimed |
+| `04-orbit-continuity/` | `phases/P04-orbit-continuity/P04-orbit-continuity.md` | **CP-04** | **W4** | 2D↔3D pose preserve; orbit ON; console clean | `run.json`; screenshots; console log excerpt |
+| `05-symbols-svg/` | `phases/P05-symbols-svg/P05-symbols-svg.md` | **CP-05** | **W2** symbols | Block2D cabinet-v0 quality; SVG authority honesty | `run.json` / vitest logs; PNG or prim-JSON; `NOTES.md` canvas vs publish; CP-05 summary if phase requires |
+| `06-save-honesty/` | `phases/P06-save-honesty/P06-save-honesty.md` | **CP-06** | **W5–W6** | Flush/reload identity + non-lying save labels | `run.json`; vitest/Playwright logs; label NOTES; prefer subfolder `save-reload/` for W5 hard-reload pack |
 | `06-save-honesty/save-reload/` | (same P06) | **CP-06** / W5 | **W5** | Hard reload same wall + furniture ids | Playwright artifacts; id assertion notes |
-| `08-mesh-quality/` | `phases/P08-mesh-quality.md` | **CP-08** | **W7** | Modular cabinet-v0 mesh bar (readable parts) | `NOTES.md` bar doc; screenshots; optional vitest logs |
-| `09-shortcuts-chrome/` | `phases/P09-shortcuts-chrome.md` | **CP-09** | **W8** | Labels match handlers; blocking chrome only | `run.json`; vitest/keyboard logs; optional Playwright |
-| `10-handover/` | `phases/P10-evidence-handover.md` | **CP-10** | Pack | Final evidence index, MASTER sync, backup log | `README.md`, `W-GATES.md`, `MASTER-SYNC.md`, `HEAD.txt`, `FAILURES-SNIP.md`, `BACKUP-LOG.md` |
+| `08-mesh-quality/` | `phases/P08-mesh-quality/P08-mesh-quality.md` | **CP-08** | **W7** | Modular cabinet-v0 mesh bar (readable parts) | `NOTES.md` bar doc; screenshots; optional vitest logs |
+| `09-shortcuts-chrome/` | `phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md` | **CP-09** | **W8** | Labels match handlers; blocking chrome only | `run.json`; vitest/keyboard logs; optional Playwright |
+| `10-handover/` | `phases/P10-evidence-handover/P10-evidence-handover.md` | **CP-10** | Pack | Final evidence index, MASTER sync, backup log | `README.md`, `W-GATES.md`, `MASTER-SYNC.md`, `HEAD.txt`, `FAILURES-SNIP.md`, `BACKUP-LOG.md` |
 
 ### FINAL folder lock (callout)
 
@@ -230,7 +230,7 @@ After CP-10, the same tree must exist under:
 E:\OandO-backups\trustdata-YYYY-MM-DD\results\planner\world-standard-wave\
 ```
 
-Procedure: `phases/P10-evidence-handover.md`. Log: `10-handover/BACKUP-LOG.md` (per-source exit codes; multiple copy steps).
+Procedure: `phases/P10-evidence-handover/P10-evidence-handover.md`. Log: `10-handover/BACKUP-LOG.md` (per-source exit codes; multiple copy steps).
 
 ---
 
@@ -304,7 +304,7 @@ $root = "D:\OandO07072026\results\planner\world-standard-wave"
 | [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) | CP-00–CP-10 stop gates |
 | [checklists/MASTER-CHECKLIST.md](./checklists/MASTER-CHECKLIST.md) | Owner single checklist (T.4 folder names) |
 | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) | Subagent evidence table §6 |
-| [phases/P10-evidence-handover.md](./phases/P10-evidence-handover.md) | Final pack + E: backup |
+| [phases/P10-evidence-handover/P10-evidence-handover.md](./phases/P10-evidence-handover/P10-evidence-handover.md) | Final pack + E: backup |
 | [reviews/FOLDER-LOCK-suggestions.md](./reviews/FOLDER-LOCK-suggestions.md) | FINAL evidence folder lock |
 | [reviews/MAPS-suggestions.md](./reviews/MAPS-suggestions.md) | Earlier MAPS structure notes (path names superseded by FOLDER-LOCK) |
 | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` | W1–W8 definitions |

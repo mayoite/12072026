@@ -1,4 +1,4 @@
-# STRUCTURE-REWRITE-NOTE — Partner HYBRID decision applied
+﻿# STRUCTURE-REWRITE-NOTE — Partner HYBRID decision applied
 
 **Date:** 2026-07-09  
 **Mode:** plan-only · **no product code**  
@@ -60,9 +60,9 @@
 
 | Main (execute card) | Appendix (skeletons) | Evidence folder (unchanged) |
 |---------------------|----------------------|-----------------------------|
-| `phases/P03-select-delete.md` | `phases/P03-appendix.md` | `03-select-delete/` |
-| `phases/P05-symbols-svg.md` | `phases/P05-appendix.md` | `05-symbols-svg/` |
-| `phases/P07-draw-place-journey.md` | `phases/P07-appendix.md` | `02-browser-open3d-journey/` |
+| `phases/P03-select-delete/P03-select-delete.md` | `phases/P03-select-delete/P03-appendix.md` | `03-select-delete/` |
+| `phases/P05-symbols-svg/P05-symbols-svg.md` | `phases/P05-symbols-svg/P05-appendix.md` | `05-symbols-svg/` |
+| `phases/P07-draw-place-journey/P07-draw-place-journey.md` | `phases/P07-draw-place-journey/P07-appendix.md` | `02-browser-open3d-journey/` |
 
 Each main opens with `## Structure rewrite 2026-07-09` hybrid thin note. Target main size ~150–350 lines; multi-page TS/Playwright blocks live in appendix. **One CP ownership preserved** (no P03b, no W1/W2 split).
 
@@ -93,5 +93,19 @@ Each main opens with `## Structure rewrite 2026-07-09` hybrid thin note. Target 
 | Owner | Accept/reject; unlock when ready for product |
 
 ---
+
+---
+
+## Folder-wise phases (2026-07-10)
+
+**Owner ask:** proper plans folder-wise — each phase a directory with all related files.
+
+| Before | After |
+|--------|--------|
+| `phases/P0X-….md` flat | `phases/P0X-<slug>/P0X-….md` |
+| `reviews/P0X-suggestions.md` | `phases/P0X-<slug>/P0X-suggestions.md` |
+| appendices next to flat mains | appendix co-located in phase folder |
+
+**Map:** [phases/README.md](../phases/README.md). Cross-cutting reviews stay under `reviews/`. Evidence folder names under `results/` **unchanged** (FOLDER-LOCK still binds).
 
 *End of STRUCTURE-REWRITE-NOTE — plan-only; INDEX + 00-START + this note only.*

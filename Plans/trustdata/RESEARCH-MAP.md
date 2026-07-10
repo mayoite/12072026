@@ -169,7 +169,7 @@ Gaps file: `D:\websites\research\2026-07-09-world-standard\FIRECRAWL-GAPS.md`
 5. `D:\websites\research\2026-07-09-world-standard\SYNTHESIS.md`  
 6. `comparison\ENGINE-DECISION.md`  
 7. Pack report for the stream you own (see phase→pack routing)  
-8. Owning `phases/P0X-*.md` — implement in `site/` with tests + evidence — never by copying raw packs
+8. Owning `phases/P0X-<slug>/` execute card — implement in `site/` with tests + evidence — never by copying raw packs
 
 ---
 

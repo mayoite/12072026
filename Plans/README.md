@@ -20,10 +20,16 @@ Plans/
     ├── LATER.md              ← not kill-path
     ├── RESEARCH-MAP.md       ← ideas research pointers
     ├── RESULTS-MAP.md        ← evidence folder names
-    ├── phases/               ← P01–P10 (+ appendices)
+    ├── phases/               ← one folder per CP (P01…P10)
+    │   ├── README.md
+    │   ├── P01-product-truth/     (execute + suggestions)
+    │   ├── P02-engine-lock/
+    │   ├── P03-select-delete/     (+ appendix)
+    │   ├── … P04–P09 …
+    │   └── P10-evidence-handover/
     ├── checkpoints/          ← CHECKPOINTS.md
     ├── checklists/           ← AGENT-RULES · MASTER-CHECKLIST
-    └── reviews/              ← expert history (not day-to-day authority)
+    └── reviews/              ← cross-cutting expert history only
 ```
 
 ---
@@ -35,7 +41,7 @@ Plans/
 | 1 | [`trustdata/README.md`](./trustdata/README.md) | Map |
 | 2 | [`trustdata/INDEX.md`](./trustdata/INDEX.md) | Kill order + phases |
 | 3 | [`trustdata/00-START.md`](./trustdata/00-START.md) | Unlock / Approach A |
-| 4 | `trustdata/phases/P0X-*.md` | How for one CP |
+| 4 | `trustdata/phases/P0X-<slug>/` | How for one CP (folder) |
 | 5 | [`trustdata/checkpoints/CHECKPOINTS.md`](./trustdata/checkpoints/CHECKPOINTS.md) | Pass / stop |
 | 6 | `results/planner/world-standard-wave/` | Proof (data wins) |
 

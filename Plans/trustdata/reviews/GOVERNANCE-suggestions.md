@@ -1,4 +1,4 @@
-# GOVERNANCE suggestions — Checkpoints + Master checklist + Agent rules
+﻿# GOVERNANCE suggestions — Checkpoints + Master checklist + Agent rules
 
 **Reviewer:** planning expert (trust-data governance)  
 **Date:** 2026-07-09  
@@ -22,16 +22,16 @@
 | CP | Phase file | Gate(s) | Structural match |
 |----|------------|---------|------------------|
 | CP-00 | `00-START.md` | W0 | OK |
-| CP-01 | `phases/P01-product-truth.md` | Baseline | OK |
-| CP-02 | `phases/P02-engine-lock.md` | Engine | OK |
-| CP-03 | `phases/P03-select-delete.md` | **W3** | OK (tighten browser wording) |
-| CP-04 | `phases/P04-orbit-continuity.md` | **W4** | OK |
-| CP-05 | `phases/P05-symbols-svg.md` | **W2** symbols | OK |
-| CP-06 | `phases/P06-save-honesty.md` | **W5–W6** | OK |
-| CP-07 | `phases/P07-draw-place-journey.md` | **W1–W2** browser | OK |
-| CP-08 | `phases/P08-mesh-quality.md` | **W7** | OK · folder `08-mesh-quality/` |
-| CP-09 | `phases/P09-shortcuts-chrome.md` | **W8** | **Folder wrong in governance** (see S1) |
-| CP-10 | `phases/P10-evidence-handover.md` | Pack + E: | OK |
+| CP-01 | `phases/P01-product-truth/P01-product-truth.md` | Baseline | OK |
+| CP-02 | `phases/P02-engine-lock/P02-engine-lock.md` | Engine | OK |
+| CP-03 | `phases/P03-select-delete/P03-select-delete.md` | **W3** | OK (tighten browser wording) |
+| CP-04 | `phases/P04-orbit-continuity/P04-orbit-continuity.md` | **W4** | OK |
+| CP-05 | `phases/P05-symbols-svg/P05-symbols-svg.md` | **W2** symbols | OK |
+| CP-06 | `phases/P06-save-honesty/P06-save-honesty.md` | **W5–W6** | OK |
+| CP-07 | `phases/P07-draw-place-journey/P07-draw-place-journey.md` | **W1–W2** browser | OK |
+| CP-08 | `phases/P08-mesh-quality/P08-mesh-quality.md` | **W7** | OK · folder `08-mesh-quality/` |
+| CP-09 | `phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md` | **W8** | **Folder wrong in governance** (see S1) |
+| CP-10 | `phases/P10-evidence-handover/P10-evidence-handover.md` | Pack + E: | OK |
 
 Phase order in `00-START.md` / `INDEX.md` matches CP-00–CP-10. Dependency graph (parallel after CP-02; CP-07 waits CP-03+CP-05) matches Approach A.
 
@@ -124,10 +124,10 @@ In CHECKPOINTS global notes or Related: if any pre-revision notes pointed at `08
 | File | Needed change |
 |------|----------------|
 | `RESULTS-MAP.md` | W8 / P09 rows + create script + forbidden matrix → `09-shortcuts-chrome/` |
-| `phases/P09-shortcuts-chrome.md` | Canonical evidence root → `09-…`; reverse “do not use 09” lines |
-| `phases/P10-evidence-handover.md` | W-gate table + anti-drift (delete ban on 09; require 09) |
-| `phases/P08-mesh-quality.md` | Next-phase pointer: P09 evidence is `09-shortcuts-chrome/` |
-| `reviews/P09-suggestions.md` | Historical; leave as archive or add supersession banner later |
+| `phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md` | Canonical evidence root → `09-…`; reverse “do not use 09” lines |
+| `phases/P10-evidence-handover/P10-evidence-handover.md` | W-gate table + anti-drift (delete ban on 09; require 09) |
+| `phases/P08-mesh-quality/P08-mesh-quality.md` | Next-phase pointer: P09 evidence is `09-shortcuts-chrome/` |
+| `phases/P09-shortcuts-chrome/P09-suggestions.md` | Historical; leave as archive or add supersession banner later |
 
 **User Wins:** owner asked only the three governance files + this suggestions doc this pass.
 

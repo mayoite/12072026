@@ -1,4 +1,4 @@
-# MASTER checklist — Trust-Data world-standard planner
+﻿# MASTER checklist — Trust-Data world-standard planner
 
 > **Owner file.** Single source of checkbox truth for the trustdata program.  
 > **Agents:** REQUIRED `/using-superpowers`. Tick a box only when evidence path exists and was re-read this session.  
@@ -186,7 +186,7 @@ Definitions from design spec; proof standards are mandatory.
 - [ ] **B.6** Spot-check: backup contains `Plans\trustdata\INDEX.md` and `10-handover\README.md`.
 - [ ] **B.7** No secrets included in backup.
 
-**Procedure detail:** `phases/P10-evidence-handover.md`
+**Procedure detail:** `phases/P10-evidence-handover/P10-evidence-handover.md`
 
 ---
 
@@ -239,7 +239,7 @@ Program complete for trustdata wave only when **Sum done = 94** or owner WAIVE r
 | Agent contract | [AGENT-RULES.md](./AGENT-RULES.md) |
 | Checkpoints | [../checkpoints/CHECKPOINTS.md](../checkpoints/CHECKPOINTS.md) |
 | Governance review | [../reviews/GOVERNANCE-suggestions.md](../reviews/GOVERNANCE-suggestions.md) |
-| P10 handover | [../phases/P10-evidence-handover.md](../phases/P10-evidence-handover.md) |
+| P10 handover | [../phases/P10-evidence-handover/P10-evidence-handover.md](../phases/P10-evidence-handover/P10-evidence-handover.md) |
 | Research index | [../RESEARCH-MAP.md](../RESEARCH-MAP.md) |
 | Results map | [../RESULTS-MAP.md](../RESULTS-MAP.md) |
 

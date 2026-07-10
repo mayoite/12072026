@@ -6,12 +6,13 @@
 |------|------|
 | [INDEX.md](./INDEX.md) | Approach A · kill order · phase table |
 | [00-START.md](./00-START.md) | Unlock + approach (W0 / CP-00) |
-| [phases/](./phases/) | P01–P10 how (appendices = detail) |
+| [phases/](./phases/) | **One folder per CP** — execute card + appendix + suggestions |
+| [phases/README.md](./phases/README.md) | Phase folder map |
 | [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) | Pass / stop / status |
 | [checklists/](./checklists/) | AGENT-RULES (pointer) · MASTER-CHECKLIST |
 | [RESULTS-MAP.md](./RESULTS-MAP.md) | Evidence folder names |
 | [RESEARCH-MAP.md](./RESEARCH-MAP.md) | Research pointers (ideas only) |
 | [LATER.md](./LATER.md) | Optional later — not kill-path |
-| [reviews/](./reviews/) | Expert history — not day-to-day authority |
+| [reviews/](./reviews/) | Cross-cutting expert history only (not phase suggestions) |
 
 **Evidence:** `results/planner/world-standard-wave/`

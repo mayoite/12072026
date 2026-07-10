@@ -1,9 +1,9 @@
-# Expert pass — UI chrome / shortcuts (W8 only)
+﻿# Expert pass — UI chrome / shortcuts (W8 only)
 
 **Date:** 2026-07-09  
 **Role:** UI chrome / shortcuts (light)  
 **Scope:** W8 truth (id → key → handler → label). No product code.  
-**Phase:** [P09-shortcuts-chrome.md](../../phases/P09-shortcuts-chrome.md) · **CP-09**  
+**Phase:** [P09-shortcuts-chrome.md](../../phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md) · **CP-09**  
 **Evidence (canonical):** `results/planner/world-standard-wave/09-shortcuts-chrome/`  
 **Live read:** `canvasTool.ts`, `useWorkspaceKeyboard.ts`, `CanvasToolRail.tsx`
 

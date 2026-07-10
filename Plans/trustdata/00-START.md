@@ -4,7 +4,8 @@
 > **W0 STATUS (2026-07-09): UNLOCKED — Approach A + implementation unlock recorded.** Product phases are **allowed now.** Do **not** stop and ask the owner to unlock again.  
 > Plan-only mode is history only (unless owner later sets plan-only). Steps use checkbox syntax.  
 > **Expert revision:** 2026-07-09 — applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md).  
-> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology; week-1 kill order full in [INDEX.md](./INDEX.md) (condensed below); densest phases thinned → `phases/P0X-appendix.md`. See [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).  
+> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology; week-1 kill order full in [INDEX.md](./INDEX.md) (condensed below); densest phases thinned → per-folder appendices.  
+> **Folder-wise 2026-07-10:** `phases/P0X-<slug>/` holds execute card + suggestions (+ appendix). See [phases/README.md](./phases/README.md) · [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).  
 > **Program index:** [INDEX.md](./INDEX.md)
 
 **Goal:** Freeze operating rules, approach pick, unlock mode, ethics, and phase order so every agent works from the same truth.

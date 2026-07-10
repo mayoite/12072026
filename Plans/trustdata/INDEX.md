@@ -1,10 +1,11 @@
-# Trust-Data Plan — Index
+﻿# Trust-Data Plan — Index
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` + skills as fit. Use **subagent-driven-development** or **executing-plans** as fit.  
 > **W0 UNLOCKED (2026-07-09):** Approach **A** + **implementation unlock** recorded in [00-START.md](./00-START.md). **Do not ask owner to unlock again.** Execute product phases + evidence.  
 > **Folder rule:** All plan files for this program live under `Plans/trustdata/` only (phases · checkpoints · checklists · reviews).  
 > **Expert revision:** 2026-07-09 — applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md).  
-> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology (P01–P10 · CP-00–CP-10 · folder lock · Approach A · AGENT-RULES); EXPAND week-1 kill order below + [00-START.md](./00-START.md); THIN densest phases → mains + [P03-appendix](./phases/P03-appendix.md) · [P05-appendix](./phases/P05-appendix.md) · [P07-appendix](./phases/P07-appendix.md). Authority: [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).
+> **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology (P01–P10 · CP-00–CP-10 · folder lock · Approach A · AGENT-RULES); EXPAND week-1 kill order below + [00-START.md](./00-START.md); THIN densest phases → mains + [P03-appendix](./phases/P03-select-delete/P03-appendix.md) · [P05-appendix](./phases/P05-symbols-svg/P05-appendix.md) · [P07-appendix](./phases/P07-draw-place-journey/P07-appendix.md).  
+> **Folder-wise phases 2026-07-10:** one directory per CP under [phases/](./phases/) — execute card + appendix + suggestions co-located. Map: [phases/README.md](./phases/README.md). Authority: [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).
 
 ---
 
@@ -74,18 +75,18 @@
 **What this is not:** Multi-CP concurrent work · second program plan.
 
 **Naming rule:** Lead with **W-gate + evidence folder**, then `(P0X / CP-0X)`.  
-**Structure:** One file per CP. Skeletons: [P03-appendix](./phases/P03-appendix.md) · [P05-appendix](./phases/P05-appendix.md) · [P07-appendix](./phases/P07-appendix.md).
+**Structure:** One **folder** per CP under `phases/`. Skeletons: [P03-appendix](./phases/P03-select-delete/P03-appendix.md) · [P05-appendix](./phases/P05-symbols-svg/P05-appendix.md) · [P07-appendix](./phases/P07-draw-place-journey/P07-appendix.md).
 
 ### Serial spine (do these first)
 
 | Order | Kill | Why first | CP / phase | Evidence folder |
 |------:|------|-----------|------------|-----------------|
 | 0 | Unlock + mode recorded | Silent ≠ go | CP-00 · [00-START.md](./00-START.md) | `00-start/` |
-| 1 | Product truth inventory | Stop myth-driven edits | CP-01 · [P01](./phases/P01-product-truth.md) | `00-product-truth/` |
-| 2 | Engine lock | Stop thrash / hybrid engines | CP-02 · [P02](./phases/P02-engine-lock.md) | `01-engine-lock/` |
-| **3** | **Select + delete + undo (unit then browser)** | Buyer cannot edit without W3; **unit alone = FAIL** | CP-03 · [P03](./phases/P03-select-delete.md) · **W3** | **`03-select-delete/`** |
-| **4** | **Draw + place browser pack** | Demo path; one serial journey pack | CP-07 · [P07](./phases/P07-draw-place-journey.md) · **W1–W2 browser** | **`02-browser-open3d-journey/`** |
-| **5** | **Save honesty + reload** | “Return next day” north star | CP-06 · [P06](./phases/P06-save-honesty.md) · **W5–W6** | `06-save-honesty/` (+ `save-reload/`) |
+| 1 | Product truth inventory | Stop myth-driven edits | CP-01 · [P01](./phases/P01-product-truth/P01-product-truth.md) | `00-product-truth/` |
+| 2 | Engine lock | Stop thrash / hybrid engines | CP-02 · [P02](./phases/P02-engine-lock/P02-engine-lock.md) | `01-engine-lock/` |
+| **3** | **Select + delete + undo (unit then browser)** | Buyer cannot edit without W3; **unit alone = FAIL** | CP-03 · [P03](./phases/P03-select-delete/P03-select-delete.md) · **W3** | **`03-select-delete/`** |
+| **4** | **Draw + place browser pack** | Demo path; one serial journey pack | CP-07 · [P07](./phases/P07-draw-place-journey/P07-draw-place-journey.md) · **W1–W2 browser** | **`02-browser-open3d-journey/`** |
+| **5** | **Save honesty + reload** | “Return next day” north star | CP-06 · [P06](./phases/P06-save-honesty/P06-save-honesty.md) · **W5–W6** | `06-save-honesty/` (+ `save-reload/`) |
 
 **Spine one-liner:**
 
@@ -104,11 +105,11 @@ After spine **3 → 4 → 5**, take **one** row, finish it, then the next.
 
 | Order | Kill | Gate | CP / phase | Evidence folder |
 |------:|------|------|------------|-----------------|
-| 6 | Orbit + 2D↔3D | **W4** | CP-04 · [P04](./phases/P04-orbit-continuity.md) | `04-orbit-continuity/` |
-| 7 | Block2D symbols | **W2** quality half | CP-05 · [P05](./phases/P05-symbols-svg.md) | `05-symbols-svg/` |
-| 8 | Mesh bar toe/carcass/door | **W7** | CP-08 · [P08](./phases/P08-mesh-quality.md) | `08-mesh-quality/` (sole primary `08-*`) |
-| 9 | Shortcut/label truth | **W8** (blocking 2A only) | CP-09 · [P09](./phases/P09-shortcuts-chrome.md) | `09-shortcuts-chrome/` |
-| 10 | Pack + E: backup | Close only when data supports | CP-10 · [P10](./phases/P10-evidence-handover.md) | `10-handover/` |
+| 6 | Orbit + 2D↔3D | **W4** | CP-04 · [P04](./phases/P04-orbit-continuity/P04-orbit-continuity.md) | `04-orbit-continuity/` |
+| 7 | Block2D symbols | **W2** quality half | CP-05 · [P05](./phases/P05-symbols-svg/P05-symbols-svg.md) | `05-symbols-svg/` |
+| 8 | Mesh bar toe/carcass/door | **W7** | CP-08 · [P08](./phases/P08-mesh-quality/P08-mesh-quality.md) | `08-mesh-quality/` (sole primary `08-*`) |
+| 9 | Shortcut/label truth | **W8** (blocking 2A only) | CP-09 · [P09](./phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md) | `09-shortcuts-chrome/` |
+| 10 | Pack + E: backup | Close only when data supports | CP-10 · [P10](./phases/P10-evidence-handover/P10-evidence-handover.md) | `10-handover/` |
 
 **Priority:** spine **3–5** before fill **6–9**. Agent concurrency → `AGENTS.md`.
 
@@ -136,16 +137,16 @@ CP-00 → CP-01 → CP-02
 | # | Phase file | CP | Gates | Canonical evidence folder |
 |---|------------|----|-------|---------------------------|
 | — | [00-START.md](./00-START.md) | **CP-00** | W0 | `00-start/` |
-| P01 | [phases/P01-product-truth.md](./phases/P01-product-truth.md) | CP-01 | Baseline | `00-product-truth/` |
-| P02 | [phases/P02-engine-lock.md](./phases/P02-engine-lock.md) | CP-02 | Engine lock | `01-engine-lock/` |
-| P03 | [phases/P03-select-delete.md](./phases/P03-select-delete.md) (+ [appendix](./phases/P03-appendix.md)) | CP-03 | **W3** | `03-select-delete/` |
-| P04 | [phases/P04-orbit-continuity.md](./phases/P04-orbit-continuity.md) | CP-04 | **W4** | `04-orbit-continuity/` |
-| P05 | [phases/P05-symbols-svg.md](./phases/P05-symbols-svg.md) (+ [appendix](./phases/P05-appendix.md)) | CP-05 | **W2** symbols | `05-symbols-svg/` |
-| P06 | [phases/P06-save-honesty.md](./phases/P06-save-honesty.md) | CP-06 | **W5–W6** | `06-save-honesty/` |
-| P07 | [phases/P07-draw-place-journey.md](./phases/P07-draw-place-journey.md) (+ [appendix](./phases/P07-appendix.md)) | CP-07 | **W1–W2** browser | `02-browser-open3d-journey/` (**not** `07-…`) |
-| P08 | [phases/P08-mesh-quality.md](./phases/P08-mesh-quality.md) | CP-08 | **W7** | `08-mesh-quality/` |
-| P09 | [phases/P09-shortcuts-chrome.md](./phases/P09-shortcuts-chrome.md) | CP-09 | **W8** | **`09-shortcuts-chrome/`** (not mesh `08-mesh-quality/`; legacy `08-shortcuts-chrome/` non-canonical) |
-| P10 | [phases/P10-evidence-handover.md](./phases/P10-evidence-handover.md) | CP-10 | Pack + backup | `10-handover/` |
+| P01 | [phases/P01-product-truth/P01-product-truth.md](./phases/P01-product-truth/P01-product-truth.md) | CP-01 | Baseline | `00-product-truth/` |
+| P02 | [phases/P02-engine-lock/P02-engine-lock.md](./phases/P02-engine-lock/P02-engine-lock.md) | CP-02 | Engine lock | `01-engine-lock/` |
+| P03 | [phases/P03-select-delete/P03-select-delete.md](./phases/P03-select-delete/P03-select-delete.md) (+ [appendix](./phases/P03-select-delete/P03-appendix.md)) | CP-03 | **W3** | `03-select-delete/` |
+| P04 | [phases/P04-orbit-continuity/P04-orbit-continuity.md](./phases/P04-orbit-continuity/P04-orbit-continuity.md) | CP-04 | **W4** | `04-orbit-continuity/` |
+| P05 | [phases/P05-symbols-svg/P05-symbols-svg.md](./phases/P05-symbols-svg/P05-symbols-svg.md) (+ [appendix](./phases/P05-symbols-svg/P05-appendix.md)) | CP-05 | **W2** symbols | `05-symbols-svg/` |
+| P06 | [phases/P06-save-honesty/P06-save-honesty.md](./phases/P06-save-honesty/P06-save-honesty.md) | CP-06 | **W5–W6** | `06-save-honesty/` |
+| P07 | [phases/P07-draw-place-journey/P07-draw-place-journey.md](./phases/P07-draw-place-journey/P07-draw-place-journey.md) (+ [appendix](./phases/P07-draw-place-journey/P07-appendix.md)) | CP-07 | **W1–W2** browser | `02-browser-open3d-journey/` (**not** `07-…`) |
+| P08 | [phases/P08-mesh-quality/P08-mesh-quality.md](./phases/P08-mesh-quality/P08-mesh-quality.md) | CP-08 | **W7** | `08-mesh-quality/` |
+| P09 | [phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md](./phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md) | CP-09 | **W8** | **`09-shortcuts-chrome/`** (not mesh `08-mesh-quality/`; legacy `08-shortcuts-chrome/` non-canonical) |
+| P10 | [phases/P10-evidence-handover/P10-evidence-handover.md](./phases/P10-evidence-handover/P10-evidence-handover.md) | CP-10 | Pack + backup | `10-handover/` |
 
 **Folder map authority:** [RESULTS-MAP.md](./RESULTS-MAP.md) · FINAL lock [reviews/FOLDER-LOCK-suggestions.md](./reviews/FOLDER-LOCK-suggestions.md). Do not invent alternate gate folder names. Retired: `01-product-truth/` → `00-product-truth/`; `08-shortcuts-chrome/` → `09-shortcuts-chrome/`.
 
@@ -202,7 +203,7 @@ Agent rules: **`AGENTS.md`**. Short spawn: [AGENT-RULES.md](./checklists/AGENT-R
 | Doc | Role |
 |-----|------|
 | [00-START.md](./00-START.md) | Ground truth, unlock, ethics, approach pick, engine checkboxes, CP-00 |
-| [phases/P01-product-truth.md](./phases/P01-product-truth.md) … [P10-evidence-handover.md](./phases/P10-evidence-handover.md) | Executable phases |
+| [phases/P01-product-truth/P01-product-truth.md](./phases/P01-product-truth/P01-product-truth.md) … [P10-evidence-handover.md](./phases/P10-evidence-handover/P10-evidence-handover.md) | Executable phases |
 | [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) | Hard stop gates CP-00–CP-10 |
 | [checklists/MASTER-CHECKLIST.md](./checklists/MASTER-CHECKLIST.md) | Single owner checklist |
 | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) | Subagent contract + prompt block |
