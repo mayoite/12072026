@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Catalog card media layering (NON-LOCKED)
+   Catalog card media layering (NON-LOCKED) — Phase 3 suite ↔ home design base
 
    Root cause: locked `catalog-cards.css` defines many card chrome styles via
    `@utility`, but that file is loaded as a separate products CSS chunk.
@@ -7,9 +7,12 @@
    Result: `.catalog-card__media` stays position:static / isolation:auto,
    badges sit in document flow ("BIFMAEco"), and images can stack on retry.
 
-   This sheet re-applies the needed rules as plain CSS in the main pipeline
-   (imported from app/css/index.css). Do NOT put this under core/locked/.
+   Home language (design-base-home): one media paint layer → chrome above,
+   isolation, badges on top. This sheet re-applies that intent for product cards
+   via the main pipeline (app/css/index.css). Do NOT put under core/locked/.
    ========================================================================== */
+
+/* ── Media box (home: isolation + single layer under chrome) ─────────────── */
 
 .catalog-card__media {
   position: relative;
@@ -35,13 +38,18 @@
   pointer-events: none;
 }
 
-.catalog-card__media-layer > span,
-.catalog-card__media-layer > img,
-.catalog-card__media > span,
-.catalog-card__media > img {
+/* next/image fill span (if used) — pin like home-media-layers */
+.catalog-card__media-layer > span:has(> img),
+.catalog-card__media > span:has(> img) {
+  position: absolute !important;
+  inset: 0;
   z-index: 0;
+  display: block;
+  overflow: hidden;
 }
 
+/* Sized product thumbs (width/height Image): one layer, fill the box */
+.catalog-card__media-layer > img,
 .catalog-card__media-layer img,
 .catalog-card__media > img {
   position: relative;
@@ -49,8 +57,10 @@
   height: 100%;
   width: 100%;
   display: block;
+  object-fit: contain;
 }
 
+/* Badges above media (z1) — home card chrome language */
 .catalog-card__badge-row {
   position: absolute;
   left: 0.75rem;
@@ -59,22 +69,33 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  max-width: calc(100% - 6.5rem); /* leave room for compare control */
   pointer-events: none;
 }
 
 .catalog-card__badge {
   display: inline-flex;
   align-items: center;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-pill, 9999px);
   border: 1px solid var(--border-soft);
   background: var(--overlay-panel-92);
   padding: 0.25rem 0.625rem;
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
+  line-height: 1.2;
   color: var(--text-body);
+  white-space: nowrap;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
+
+/* Compare sits above media + badges (locked plain rules already absolute; reinforce) */
+.catalog-card__compare {
+  z-index: 10;
+  border-radius: var(--radius-pill, 9999px);
+}
+
+/* ── Body / signals / footer density ─────────────────────────────────────── */
 
 .catalog-card__body {
   display: flex;
@@ -93,13 +114,27 @@
 .catalog-card__signal {
   display: inline-flex;
   align-items: center;
-  border-radius: var(--radius-pill);
+  max-width: 100%;
+  border-radius: var(--radius-pill, 9999px);
   border: 1px solid var(--border-soft);
   background: var(--surface-hover);
   padding: 0.25rem 0.625rem;
   font-size: 0.6875rem;
   font-weight: 500;
   color: var(--text-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Quote CTA footer — keep actions inside card density. */
+.catalog-card__footer {
+  margin-top: auto;
+}
+
+.catalog-card__quote-btn {
+  justify-content: center;
+  gap: 0.375rem;
 }
 
 .catalog-card--compact .catalog-card__media {
