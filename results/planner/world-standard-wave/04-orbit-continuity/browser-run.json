@@ -1,0 +1,28 @@
+{
+  "phase": "P04",
+  "gate": "W4",
+  "status": "browser-green",
+  "furnitureBefore": 0,
+  "furnitureAfterPlace": 4,
+  "furnitureAfterToggle": 4,
+  "orbitEnabled": true,
+  "placePath": "placeSeatsFromConfigurator Place 4 seats",
+  "browserProves": [
+    "furniture-count-status-text",
+    "data-orbit-enabled=true",
+    "2d-3d-2d-count-stable",
+    "optional-left-drag-no-crash"
+  ],
+  "browserDoesNotProve": [
+    "entity-ids",
+    "mm-position",
+    "document-rotation-degrees"
+  ],
+  "honestyNote": "CODE-REVIEW-REPORT H3: browser = count + orbit attr; pose ids/mm/rotation = units only",
+  "consoleErrorCount": 0,
+  "screenshots": [
+    "01-2d-after-place.png",
+    "02-3d-orbit-on.png",
+    "03-2d-restored.png"
+  ]
+}
