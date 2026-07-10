@@ -1,14 +1,25 @@
 # START HERE — residual wave execute
 
-**One package. One path. No dual trees.**
+**One package. One path. No dual trees.**  
+**Four-seat review:** [`FOUR-SEAT-REVIEW.md`](./FOUR-SEAT-REVIEW.md) (executor 6/10 · planner · critic SHIP-WITH-FIXES · benchmark 84/100)
 
 | | |
 |--|--|
 | **Execute** | **`plans1/`** (this folder) |
-| **How + folder names** | `Plans/Research/RESULTS-MAP.md` only when you need evidence path |
-| **Do not open to execute** | `PlansA/` (merge research dump — confusing on purpose, not the runbook) |
-| **Optional cross-check** | `plans2/` CODE-REVIEW only if stuck — never run as second program |
-| **History backup** | `archive/Plans/` — not authority |
+| **How + folder names** | `Plans/Research/RESULTS-MAP.md` (must exist at root — if missing use `archive/Plans/Research/RESULTS-MAP.md`) |
+| **Do not open to execute** | `PlansA/` or `archive/PlansA/` — merge research dump only |
+| **Optional cross-check** | `plans2/` CODE-REVIEW if stuck — if plans2 says **FAIL** and plans1 says APPROVE, **gate is FAIL** |
+| **History backup** | `archive/Plans/` — not authority when live `Plans/` exists |
+
+**Session-zero path re-prove (mandatory):**
+
+```powershell
+cd D:\OandO07072026
+@Test-Path Plans\Research\RESULTS-MAP.md
+@Test-Path plans1\START-HERE.md
+@Test-Path results   # expect False until you create it
+# If Plans map False → use archive\Plans\Research\RESULTS-MAP.md and fix docs before claiming PASS
+```
 
 ---
 

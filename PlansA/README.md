@@ -1,7 +1,10 @@
 # PlansA — merge **research** dump (NOT the execute path)
 
 **Checkout:** `D:\OandO07072026` only · no worktrees  
-**Date:** 2026-07-10 · **clarity fix:** same day
+**Date:** 2026-07-10 · **HISTORICAL — execute authority revoked**
+
+> **Four-seat review:** residual *content* OK; this folder is still the most confusing tree.  
+> **Execute only:** [`../plans1/START-HERE.md`](../plans1/START-HERE.md)
 
 ---
 
@@ -11,7 +14,7 @@
 |--|--|
 | **Execute residual wave** | **[`../plans1/START-HERE.md`](../plans1/START-HERE.md)** |
 | **This folder** | Archaeology: dual plan copies, MERGE-NOTES, matrix, 10 diffs |
-| **Why it confuses** | 5 files/phase + “primary = PlansA” while deep links still go to plans1 |
+| **Why it confuses** | 5 files/phase; older files inside still say PRIMARY=PlansA — **ignore them** |
 
 PlansA was built to *merge* plans1 + plans2. That produced a useful **decision record**, not a usable runbook. Forcing agents to “execute PlansA” was a bad call.
 

@@ -1,7 +1,11 @@
 # MERGE-NOTES — plans1 vs plans2 → PlansA
 
+> **HISTORICAL (revoked for execute).** 2026-07-10 four-seat review:  
+> **Execute = `plans1/START-HERE.md` only.** This file is a merge decision record.  
+> Ignore any “PlansA sole execute path” language below — that authority is **revoked**.
+
 **Date:** 2026-07-10  
-**Mission:** Synthesize one residual execute package under `PlansA/`.  
+**Mission (historical):** Synthesize merge decisions under `PlansA/`.  
 **Sources preserved:** `plans1/` and `plans2/` not deleted.
 
 ---

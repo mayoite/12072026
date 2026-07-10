@@ -22,9 +22,9 @@
 
 | Doc | Role |
 |-----|------|
-| [**EXECUTE-NOW.md**](./EXECUTE-NOW.md) | Historical spine copy — prefer PlansA |
-| [**00-START.md**](./00-START.md) | Session zero (prefer PlansA) |
-| [**EXECUTABLE-PLAN.md**](./EXECUTABLE-PLAN.md) | Alternate residual wording (reference) |
+| [**EXECUTE-NOW.md**](./EXECUTE-NOW.md) | Historical spine — prefer **plans1** |
+| [**00-START.md**](./00-START.md) | Session zero — prefer **plans1** |
+| [**EXECUTABLE-PLAN.md**](./EXECUTABLE-PLAN.md) | Alternate residual wording (reference only) |
 | [**P11-CHECKLIST.md**](./P11-CHECKLIST.md) | Close-out |
 | [**CHANGES-JUSTIFICATION.md**](./CHANGES-JUSTIFICATION.md) | Why this package differs from raw phase plans |
 | [**REFERENCES.md**](./REFERENCES.md) | Path map |

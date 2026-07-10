@@ -61,6 +61,7 @@
 | **Install** | `pnpm` from **repo root**. Do not invent a second monorepo under `site/` |
 | **Tech-stack built docs** | Repo-root `tech-stack-docs/` + `tech-stack-generated/` |
 | **Plans** | `Plans/` live (`INDEX.md` · `phases/` · `Research/`); history in `archive/Plans/` |
+| **Residual execute (world-standard wave)** | **`plans1/START-HERE.md`** only — not `PlansA/` (research dump) |
 
 If a tool defaults output into `site/`, **redirect it to root `results/`** or fix the config.  
 **Enforcement:** `pnpm run check:layout` (also first step of `gate` / `release:gate*`).
@@ -98,7 +99,8 @@ If a tool defaults output into `site/`, **redirect it to root `results/`** or fi
 | Owner pending / workflow | `ayushdocs/00-PENDING.md`, `ayushdocs/12-WORKFLOW.md` |
 | All agent handbooks | `Agents/` |
 | Git + ops backup | `Agents/Agents-ELON-STANDARD.md` §5 · `OPERATIONS_RUNBOOK.md` · `START.md` |
-| Trust-data plan | `Plans/INDEX.md` · `Plans/phases/` |
+| Trust-data / program how | `Plans/INDEX.md` · `Plans/phases/` · `Plans/Research/RESULTS-MAP.md` |
+| Residual wave execute | `plans1/START-HERE.md` · four-seat review: `plans1/FOUR-SEAT-REVIEW.md` |
 | Research (historical ideas) | `D:\websites\README.md` · `Plans/Research/RESEARCH-MAP.md` |
 | Testing | `testing-handbook.md` + `Agents/Agents-testing.md` |
 
@@ -127,5 +129,5 @@ If a tool defaults output into `site/`, **redirect it to root `results/`** or fi
 6. **Report:** What ran, what failed, next phase step — honest.
 
 ## 8. Master Plan Alignment
-- **Read live plan first:** `Plans/INDEX.md` · sequential `Plans/phases/P0X-*`. Do not skip foundational phases.
+- **Read live plan first:** residual execute → `plans1/START-HERE.md`; program how / maps → `Plans/INDEX.md` · `Plans/phases/P0X-*` · `Plans/Research/RESULTS-MAP.md`. Do not skip foundational phases. Do **not** execute from `PlansA/`.
 - **Phase task lists:** Map work to phase checklists; prove in repo; addenda for gaps — do not invent a second program plan.
