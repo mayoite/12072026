@@ -9,6 +9,7 @@ const mockFs = {
     if (p.includes('exists-png.png')) return true;
     return false;
   }),
+  readdirSync: vi.fn((): string[] => []),
 };
 
 const mockPath = {
@@ -38,6 +39,7 @@ describe('assetPaths', () => {
       if (p.includes('exists-png.png')) return true;
       return false;
     });
+    mockFs.readdirSync.mockImplementation((): string[] => []);
     // Set environment variables for testing
     process.env.NEXT_PUBLIC_ASSET_BASE_URL = 'https://cdn.example.com/';
     assetPaths = await import('../../../lib/assetPaths');
@@ -126,17 +128,44 @@ describe('assetPaths', () => {
     ).toBe('https://cdn.example.com/images/catalog/oando-seating--canaret/image-1.jpg');
   });
 
-  it('should behave differently on client side (window is defined)', async () => {
+  it('should keep zero-padded path when padded file exists on disk', () => {
+    mockFs.existsSync.mockImplementation((p: string) => {
+      if (String(p).includes('/images/catalog/oando-seating--arvo/image-01.webp')) return true;
+      return false;
+    });
+    expect(
+      assetPaths.normalizeAssetPath('/images/catalog/oando-seating--arvo/image-01.webp'),
+    ).toBe('https://cdn.example.com/images/catalog/oando-seating--arvo/image-01.webp');
+  });
+
+  it('should resolve nearest sibling image when exact index is missing', () => {
+    mockFs.existsSync.mockImplementation((p: string) => {
+      const s = String(p).replace(/\\/g, '/');
+      // directory exists for readdir; only image-2.jpg present
+      if (s.endsWith('/images/catalog/oando-seating--casca')) return true;
+      if (s.includes('/images/catalog/oando-seating--casca/image-2.jpg')) return true;
+      return false;
+    });
+    mockFs.readdirSync = vi.fn(() => ['image-2.jpg', 'image-3.jpg']);
+    expect(
+      assetPaths.normalizeAssetPath('/images/catalog/oando-seating--casca/image-1.jpg'),
+    ).toBe('https://cdn.example.com/images/catalog/oando-seating--casca/image-2.jpg');
+  });
+
+  it('should preserve original path on client (no destructive unpad)', async () => {
     vi.stubGlobal('window', {});
     vi.resetModules();
     const clientAssetPaths = await import('../../../lib/assetPaths');
-    // On client side, still strip zero-padding so public files resolve without FS:
     expect(clientAssetPaths.normalizeAssetPath('/images/anything.webp')).toBe(
       'https://cdn.example.com/images/anything.webp',
     );
+    // Client must not rewrite image-01 → image-1 (destroys SSR-resolved padded paths).
+    expect(
+      clientAssetPaths.normalizeAssetPath('/images/catalog/oando-seating--arvo/image-01.webp'),
+    ).toBe('https://cdn.example.com/images/catalog/oando-seating--arvo/image-01.webp');
     expect(
       clientAssetPaths.normalizeAssetPath('/images/catalog/oando-seating--fluid-x/image-01.webp'),
-    ).toBe('https://cdn.example.com/images/catalog/oando-seating--fluid-x/image-1.webp');
+    ).toBe('https://cdn.example.com/images/catalog/oando-seating--fluid-x/image-01.webp');
   });
 
   it('should normalize asset list', () => {

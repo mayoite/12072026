@@ -86,13 +86,19 @@ function localAssetExists(assetPath: string): boolean {
 
 /**
  * Catalog exports often use zero-padded names (`image-01.webp`) while files on disk
- * are unpadded (`image-1.webp` / `image-1.jpg`). Expand both forms for resolution.
+ * are unpadded (`image-1.webp` / `image-1.jpg`) — or the reverse. Expand both forms.
  */
 function expandImagePathCandidates(assetPath: string): string[] {
   const candidates = [assetPath];
-  const match = assetPath.match(/^(.*\/image-)0+(\d+)(\.[a-z0-9]+)$/i);
-  if (match) {
-    candidates.push(`${match[1]}${Number.parseInt(match[2], 10)}${match[3]}`);
+  const padded = assetPath.match(/^(.*\/image-)0+(\d+)(\.[a-z0-9]+)$/i);
+  if (padded) {
+    candidates.push(`${padded[1]}${Number.parseInt(padded[2], 10)}${padded[3]}`);
+    return candidates;
+  }
+  // Reverse: catalog unpadded, disk zero-padded (image-1 → image-01).
+  const unpadded = assetPath.match(/^(.*\/image-)(\d)(\.[a-z0-9]+)$/i);
+  if (unpadded) {
+    candidates.push(`${unpadded[1]}0${unpadded[2]}${unpadded[3]}`);
   }
   return candidates;
 }
@@ -114,12 +120,66 @@ function withAlternateExtensions(assetPath: string): string[] {
   return out;
 }
 
+/**
+ * When image-N is missing but the product folder has other image-* files, pick the
+ * nearest lower index (else first). Server-only — needs directory listing.
+ */
+function resolveNearestSiblingImage(assetPath: string): string | null {
+  const fsMod = getFs();
+  const pathMod = getPath();
+  if (!fsMod || !pathMod) return null;
+
+  const match = assetPath.match(/^(.*\/)(image-)0*(\d+)(\.[a-z0-9]+)$/i);
+  if (!match) return null;
+
+  const dirWeb = match[1].replace(/\/+$/, "");
+  const requested = Number.parseInt(match[3], 10);
+  if (!Number.isFinite(requested)) return null;
+
+  const dirFs = toPublicFsPath(dirWeb);
+  if (!dirFs || !fsMod.existsSync(dirFs)) return null;
+
+  let entries: string[];
+  try {
+    entries = fsMod.readdirSync(dirFs);
+  } catch {
+    return null;
+  }
+
+  const numbered = entries
+    .map((file) => {
+      const m = file.match(/^image-0*(\d+)\.[a-z0-9]+$/i);
+      if (!m) return null;
+      return {
+        number: Number.parseInt(m[1], 10),
+        webPath: `${dirWeb}/${file}`,
+      };
+    })
+    .filter((row): row is { number: number; webPath: string } => row !== null)
+    .sort((a, b) => a.number - b.number);
+
+  if (numbered.length === 0) return null;
+
+  const exact = numbered.find((row) => row.number === requested);
+  if (exact && localAssetExists(exact.webPath)) return exact.webPath;
+
+  const lowerOrEqual = [...numbered].reverse().find((row) => row.number <= requested);
+  if (lowerOrEqual && localAssetExists(lowerOrEqual.webPath)) return lowerOrEqual.webPath;
+
+  const first = numbered[0];
+  return first && localAssetExists(first.webPath) ? first.webPath : null;
+}
+
 function resolveLocalImageVariant(assetPath: string): string {
   const numbered = expandImagePathCandidates(assetPath);
 
-  // Client: no FS — still strip zero-padding so the browser hits real public files.
+  // Client: no FS. Keep the original path — do **not** force-unpad.
+  // Aggressive image-01 → image-1 rewrite breaks folders that only ship
+  // zero-padded webps (or image-01.webp + image-1.jpg without image-1.webp).
+  // Catalog adapters normalize server-side with FS; client re-entry must not
+  // destroy those resolved paths (FilterGrid calls normalize again).
   if (!isServer()) {
-    return numbered[numbered.length - 1] ?? assetPath;
+    return assetPath;
   }
 
   for (const base of numbered) {
@@ -127,6 +187,10 @@ function resolveLocalImageVariant(assetPath: string): string {
       if (localAssetExists(candidate)) return candidate;
     }
   }
+
+  // Same folder, different index (e.g. catalog image-1, disk only image-2.jpg).
+  const sibling = resolveNearestSiblingImage(assetPath);
+  if (sibling) return sibling;
 
   // Raster fallback only — next/image returns 400 for SVG by default (black cards).
   return PRODUCT_IMAGE_FALLBACK;
