@@ -6,7 +6,7 @@
     "checkout":  "D:\\\\OandO07072026",
     "worktrees":  false,
     "evidenceRoot":  "results/planner/world-standard-wave/03-select-delete",
-    "HEAD":  "dada98eea5ffcfd96a59c9c792f6e960098ce9d6",
+    "HEAD": "19243a45a093ce07dd1cd3f707e5326298e5a567",
     "date":  "2026-07-10",
     "agent":  "P03-Agent-4",
     "action":  "browser W3 hard gate re-prove (Playwright + eyes)",
@@ -22,7 +22,6 @@
                     "fabricFurnitureEnv":  "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)",
                     "durationSec":  2.5,
                     "tests":  "1/1 passed",
-                    "provedAtHead":  "dada98eea5ffcfd96a59c9c792f6e960098ce9d6",
                     "pngs":  [
                                  "01-placed.png",
                                  "02-selected.png",
@@ -39,7 +38,8 @@
                     "modeBFix":  "plannerToolButton scopes to navigation Canvas tools so Select (Navigation tools group) resolves",
                     "reProvedOnTip":  true,
                     "onDisk":  true,
-                    "note":  "Browser hard gate PASS on tip after helper land. Unit alone != W3."
+                    "note":  "Browser hard gate PASS on tip after helper land. Unit alone != W3.",
+                    "provedAtHead": "19243a45a093ce07dd1cd3f707e5326298e5a567"
                 },
     "unitPack":  {
                      "note":  "Browser seat only; unit alone != W3."
@@ -47,3 +47,4 @@
     "status":  "pass",
     "statusNote":  "Browser W3 exit 0 on tip dada98ee. Fabric OFF. PNGs 01-04. Mode B e2e helper only."
 }
+
