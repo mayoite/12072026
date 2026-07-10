@@ -44,8 +44,7 @@ test.describe("site navigation smoke", () => {
     await expect(page.getByRole("heading", { name: /Delivered for/i })).toContainText(
       /leading organizations/i,
     );
-    await expect(page.getByTestId("home-partnership")).toContainText(/Official Strategic/i);
-    await expect(page.getByTestId("home-partnership")).toContainText(/Partner/i);
+    await expect(page.getByTestId("home-partnership")).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /Design your workspace/i })).toBeVisible();
     await expect(page.locator("a.home-tool-card", { hasText: /Oando Planner/i })).toBeVisible();
     await expect(page.getByLabel(/example 10 by 8 metre office floor plan/i)).toBeVisible();

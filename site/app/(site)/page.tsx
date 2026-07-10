@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "@/app/css/core/locked/site/homepage-sections.css";
 import { HomepageHero } from "@/components/home/HomepageHero";
 import { HomeMarketingLayout } from "@/components/home/layout";
-import { PartnershipBanner } from "@/components/home/PartnershipBanner";
 import { Collections } from "@/components/home/Collections";
 import { TrustStrip } from "@/components/home/TrustStrip";
 import { ShowcaseCarousel } from "@/components/home/ShowcaseCarousel";
@@ -46,7 +45,6 @@ export default async function Home() {
       />
 
       <HomepageHero />
-      <PartnershipBanner />
       <Collections />
       <TrustStrip stats={stats} />
       <InteractiveTools />
