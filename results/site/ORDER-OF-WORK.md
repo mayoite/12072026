@@ -1,54 +1,68 @@
-# Website / suite — ordered work (stop thrash)
+# Multi-track work order (save context · use agents)
 
 **Date:** 2026-07-10  
-**Rule:** One phase complete with proof, then next. No parallel epics.  
-**Design base:** Homepage is the visual system root. Suite pages align to it.  
-**CSS:** `Agents/Agents-css.md` — never edit `site/app/css/core/locked/**`.
+**Law:** One **phase ID per track** at a time. **Parallel across tracks OK.** Never two phases of the **same** track.
+
+Prefix letter is **not** sacred — pick one and stick to it. What matters is **ID uniqueness + serial within track**.
 
 ---
 
-## Kill order (site UI + function)
+## Tracks (examples)
 
-| # | Phase | Done when | Evidence |
-|---|--------|-----------|----------|
-| **0** | **Baseline / stop thrash** | This file + tip stable; no concurrent writers on same package | `ORDER-OF-WORK.md` |
-| **1** | **Site loads** | `/`, `/products/seating/`, `/portal/` return usable pages (no 500 / red error boundary) | curl + Chrome NOTES |
-| **2** | **Home = design base (verify only unless broken)** | Document home tokens/classes used as base; fix only if base itself is broken | `results/site/design-base-home/` |
-| **3** | **Products suite align to home** | Seating (then one more category) grid/media/spacing matches home card language | `results/site/ui-websuite-products/` |
-| **4** | **Marketing suite align to home** | Projects + trusted-by (then portfolio) match shell/type/card language | `results/site/ui-websuite-marketing/` |
-| **5** | **Catalog image paths** | Real thumbs where files exist; honest placeholder only when missing | path resolve + sample PNGs |
-| **6** | **Portal functional** | List plans or honest empty; no uncaught DB crash | portal NOTES + pass/fail |
+| Track | Prefix (example) | Meaning | Serial rule |
+|-------|------------------|---------|-------------|
+| **Site / design suite** | `D0`…`D6` (or `S0`…) | Website UI + load + portal shell | Never `D3`+`D4` together |
+| **Plans (planner product)** | `P01`…`P10` | `Plans/phases/` world-standard | Never `P01`+`P02` together |
+| **Admin** | `A1` `A2`… | Admin surface | Never `A1`+`A2` together |
+| **AI / assistant** | `AI1` `AI2`… | Site assistant / AI product | Never `AI1`+`AI2` together |
 
-**Planner open3d residual (P04/P08/…)** stays **after** site order unless owner reorders.
+### Parallel examples (OK)
 
----
+- `D3` + `A1` + `P07` at once (different tracks, different packages)  
+- `AI1` + `D5` if packages do not collide  
 
-## Explicitly not now
+### Forbidden
 
-- Homepage “vanity” redesign  
-- Parallel agents on home + products + planner  
-- Locked CSS rewrites  
-- New product features  
+- `P01` and `P02` in parallel  
+- `D3` and `D4` in parallel  
+- Two writers on the same package  
 
----
-
-## Status
-
-| Phase | Status |
-|-------|--------|
-| 0 | **DONE** — this file |
-| 1 | **DONE** — portal no longer red-boundary (`dfd596a`); `/` seating portal 200 |
-| 2 | **DONE** — `results/site/design-base-home/` |
-| 3 | **DONE** — products suite + image paths (`1f8c26c`, `141569c`) · `results/site/ui-websuite-products/` |
-| 4 | **IN PROGRESS** — marketing suite (2 agents) |
-| 5–6 | queued |
+**Agents:** Prefer subagents for heavy work so head window stays small. Brief: `/using-superpowers` + track ID + `Agents/Agents-css.md` if UI.
 
 ---
 
-## Active rule for agents
+## Site track (`D*`) — status
+
+| ID | Name | Status | Evidence |
+|----|------|--------|----------|
+| **D0** | Stop thrash / this file | **DONE** | this file |
+| **D1** | Site loads (`/`, seating, portal usable) | **DONE** | `dfd596a` |
+| **D2** | Home = design base (inventory) | **DONE** | `results/site/design-base-home/` |
+| **D3** | Products suite align to home | **DONE** | `1f8c26c`, `141569c`, `ui-websuite-products/` |
+| **D4** | Marketing suite align to home | **CHECK / finish** | `ui-websuite-marketing/`, commits like `4c89431` |
+| **D5** | Catalog image residual | queued | placeholders residual |
+| **D6** | Portal real DB list | queued | honest error UI only so far |
+
+**Design base:** Homepage. Suite aligns to home.  
+**CSS:** never edit `site/app/css/core/locked/**` (`Agents/Agents-css.md`).
+
+---
+
+## Other tracks (placeholders — owner fills order)
+
+| ID | Status |
+|----|--------|
+| **A1**… | not started this arc |
+| **AI1**… | not started this arc |
+| **P07** etc. | planner residual after site D* or owner reorders |
+
+---
+
+## Active
 
 ```
-One phase only. CSS: Agents/Agents-css.md.
-Home = design base (phase 2). Suite = align (3–4).
-Evidence under results/site/.
+Tracks may run in parallel: D* · A* · AI* · P*
+Within a track: one ID only.
+Use agents for D4 finish / A1 / AI1 only when owner activates that track.
+Evidence: results/<track-or-site>/…
 ```

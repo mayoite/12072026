@@ -12,7 +12,7 @@
 |-------|------|------|
 | **Constitution** | `AGENTS.md` | Law: overrides, git, layout, licenses, hard stops |
 | **Head bar (this file)** | `Agents/Agents-ELON-STANDARD.md` | How the partner works: grain, seats, truth, backup cadence, pushback |
-| **Peer handbooks** | `Agents/Agents-*.md` | Plan · testing · browser · failure · docs · architecture · **css (locked fence)** |
+| **Peer handbooks** | `Agents/Agents-*.md` | Plan · testing · browser · failure · docs · architecture · **css** · **tracks (D/A/AI/P)** |
 | **Ops backup (infra)** | `OPERATIONS_RUNBOOK.md` + `START.md` | DB/R2/Vercel — not a substitute for git mirror |
 | **Scoreboards** | `ayushdocs/19-*`, `00-PENDING`, `results/planner/elon-standard/OWNER-BOARD.md` | Intent + claims — **re-check** |
 | **Live plan** | `Plans/INDEX.md` · `Plans/phases/` | Kill order — **provisional** |
@@ -242,8 +242,10 @@ Default concurrent ≤8; hard max 10. Empty seats OK. No idle “always on” se
 /using-superpowers
 Bar: Agents/Agents-ELON-STANDARD.md
 CSS: Agents/Agents-css.md — NEVER edit site/app/css/core/locked/**
+Tracks: Agents/Agents-tracks.md — one ID per track; parallel tracks OK (D4+A1 not D3+D4)
 Head expects: honest pushback · repo truth · phase-scale work
 Seat: <…>
+Track phase ID: <e.g. D4 | A1 | AI1 | P07> — only this ID on this track
 Phase / task: <…>
 Package: <one> — no concurrent writer on same package
 No Firecrawl. No worktrees. D:\OandO07072026 only.

@@ -27,6 +27,7 @@
 - **Docs:** `Agents/Agents-docs.md`
 - **Architecture:** `Agents/Agents-architecture.md`
 - **CSS / locked fence:** `Agents/Agents-css.md` — **never edit** `site/app/css/core/locked/**`; custom CSS only outside locked
+- **Tracks (D / A / AI / P):** `Agents/Agents-tracks.md` — parallel **across** tracks; never two phases of the **same** track (e.g. not P1+P2)
 - **Ops backup (DB/R2/deploy):** `OPERATIONS_RUNBOOK.md` + `START.md`
 
 **Owner thin pointer (not authority):** `ayushdocs/20-ELON-STANDARD.md` → `Agents/Agents-ELON-STANDARD.md`
