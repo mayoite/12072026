@@ -9,6 +9,7 @@ import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
 import {
   clickOnCanvas,
   placeSeatsFromConfigurator,
+  selectPlannerTool,
   waitForPlannerCanvas,
 } from "./plannerCanvasHelpers";
 
@@ -54,8 +55,8 @@ test.describe("W3 select / delete / undo (browser)", () => {
     const afterPlace = await furnitureCount(page);
     await page.screenshot({ path: path.join(EVIDENCE, "01-placed.png") });
 
-    // Select tool (open3d rail) — batch places near origin; tap center-ish plan
-    await page.getByRole("button", { name: /Select/i }).first().click();
+    // Select tool via Drawing-tools rail helper (aria-pressed + scoped role).
+    await selectPlannerTool(page, "Select");
     await clickOnCanvas(page, 0.5, 0.5);
 
     // Properties: not empty selection

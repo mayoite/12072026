@@ -88,10 +88,32 @@ export async function dragOnCanvas(
   await page.mouse.up();
 }
 
+/**
+ * Arm a Drawing-tools rail button and wait until aria-pressed sticks.
+ * Scoped to the tools group (avoids matching unrelated "Select" chrome).
+ * Retries once if the first click is intercepted / React state drops.
+ */
 export async function selectPlannerTool(page: Page, toolName: string): Promise<void> {
   const button = plannerToolButton(page, toolName);
-  await button.click();
-  await expect(button).toHaveAttribute("aria-pressed", "true", { timeout: 5_000 });
+  await expect(button).toBeVisible({ timeout: 15_000 });
+  await button.scrollIntoViewIfNeeded();
+  // Already armed (e.g. Place auto-returns to Select) — skip re-click thrash.
+  if ((await button.getAttribute("aria-pressed")) !== "true") {
+    await button.click();
+    try {
+      await expect(button).toHaveAttribute("aria-pressed", "true", {
+        timeout: 2_000,
+      });
+    } catch {
+      // Retry via DOM click so status-bar / sticky chrome intercepts cannot block.
+      await button.evaluate((el: HTMLElement) => {
+        el.click();
+      });
+      await expect(button).toHaveAttribute("aria-pressed", "true", {
+        timeout: 5_000,
+      });
+    }
+  }
   await waitForPlannerCanvas(page);
   await page.waitForTimeout(150);
 }
