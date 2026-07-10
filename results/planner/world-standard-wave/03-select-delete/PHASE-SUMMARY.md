@@ -167,10 +167,10 @@ No structural product regression from residual work. Tests are direct (pure help
 - [x] Full unit pack raw log PASS (62)
 - [x] Unit alone **not** claimed as W3 (stated in this file)
 - [x] No `applySelectionDelete` signature thrash
-- [ ] Browser W3 Fabric OFF + Select + place delta
-- [ ] PNGs + browser raw log
-- [ ] `run.json` / `HEAD.txt` / `NOTES.md`
-- [ ] `W3-ACCEPTANCE.md` from data (unit + browser)
+- [x] Browser W3 Fabric OFF + Select + place delta
+- [x] PNGs + browser raw log
+- [x] `run.json` / `HEAD.txt` / acceptance meta
+- [x] `W3-ACCEPTANCE.md` from data (unit + browser)
 
 ---
 
@@ -178,7 +178,7 @@ No structural product regression from residual work. Tests are direct (pure help
 
 | Field | Value |
 |-------|--------|
-| Product code changed this review | **None** (read-only seat; write only this file) |
-| Units residual implement | Prior seat — tests + vitest evidence only |
-| Browser seat | May still be running; head updates Open section |
-| W3 / CP-03 | **OPEN** until browser hard gate lands |
+| Product code changed this phase residual | **None** (tests + evidence only) |
+| Units residual | 62 green |
+| Browser seat | **PASS** — commit `8660997` |
+| W3 / CP-03 | **CLOSED** for residual wave (count-only e2e; U4 carries id/pose unit bar) |
