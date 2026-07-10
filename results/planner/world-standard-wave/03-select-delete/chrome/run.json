@@ -1,0 +1,19 @@
+{
+  "verdict": "PASS",
+  "fabric": "OFF",
+  "url": "http://127.0.0.1:3000/planner/guest/?plannerDevTools=1",
+  "tool": "Playwright Chromium live (chrome-devtools MCP hung on Loading planner); PNGs eyes-checked",
+  "furnitureAfterPlace": 4,
+  "furnitureAfterDelete": 3,
+  "furnitureAfterUndo": 4,
+  "screenshots": [
+    "01-placed.png",
+    "02-selected.png",
+    "03-deleted.png",
+    "04-undone.png"
+  ],
+  "playwrightSpec": "tests/e2e/open3d-w3-select-delete.spec.ts",
+  "playwrightExitCode": 0,
+  "chromeDevtoolsMcp": "FAIL hydrate — stuck PlannerSkeleton",
+  "timestamp": "2026-07-10T14:50:00.000Z"
+}
