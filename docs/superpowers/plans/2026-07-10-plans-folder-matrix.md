@@ -5,9 +5,9 @@
 > **Plan skill:** writing-plans (docs reconcile — no product TDD).  
 > **Execution mode chosen:** subagent-driven inventory + head synthesis (owner: option 2 / subagents).
 
-**Goal:** Keep `Plans/`, `plans2/`, and `PlansA/` as three separate folders and publish one canonical difference matrix so agents stop dual-running or collapsing trees.
+**Goal:** Keep `Plans/`, `plans1/`, `plans2/`, and `PlansA/` as **four** separate folders and publish one canonical **4-way** difference matrix (plans1 + plans1↔plans2 residual tables required — matrix incomplete with only three columns).
 
-**Architecture:** Program tree (`Plans/`) owns HOW + RESULTS-MAP. Residual execute package (`PlansA/`) owns day-to-day residual spine after merging plans1+plans2. Reference package (`plans2/`) keeps Idiots wave-1 plans+reviews. Matrix lives under PlansA; thin pointer under Plans.
+**Architecture:** Program tree (`Plans/`) owns HOW + RESULTS-MAP. Residual execute package (`PlansA/`) owns day-to-day residual spine after merging plans1+plans2. Reference packages: `plans1/` (Idiots2) + `plans2/` (Idiots). Matrix lives under PlansA; thin pointer under Plans.
 
 **Tech Stack:** Markdown plan trees only · git · PowerShell path checks · no `site/` product changes.
 

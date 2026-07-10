@@ -1,4 +1,4 @@
-# plans1 — PRIMARY (consolidated)
+# plans1 — REFERENCE source (Idiots2 consolidated)
 
 **Checkout:** `D:\OandO07072026` main only · **no worktrees**  
 **Source wave:** Idiots2 (websites-first) + code reviews  
@@ -6,20 +6,32 @@
 
 ---
 
-## Start here
+## Authority
+
+| Role | Path |
+|------|------|
+| **PRIMARY execute** | [`../PlansA/`](../PlansA/) — residual execute package |
+| **This package** | **REFERENCE source** — Idiots2 lineage; PlansA primary IMPL/reviews are copies of these files |
+| **Difference matrix (4-way)** | [`../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md`](../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md) |
+
+**Keep this folder.** Do **not** dual-run with PlansA or plans2. Deep recovery / RED dumps only.
+
+---
+
+## Package docs (historical spine — prefer PlansA)
 
 | Doc | Role |
 |-----|------|
-| [**EXECUTE-NOW.md**](./EXECUTE-NOW.md) | Binding single spine + kill order |
-| [**00-START.md**](./00-START.md) | Session zero |
-| [**EXECUTABLE-PLAN.md**](./EXECUTABLE-PLAN.md) | Master residual tasks |
-| [**CHECKLIST-MASTER.md**](./CHECKLIST-MASTER.md) | Flat P00–P11 board |
-| [**P11-CHECKLIST.md**](./P11-CHECKLIST.md) | Final close-out |
+| [**EXECUTE-NOW.md**](./EXECUTE-NOW.md) | Historical spine — prefer PlansA |
+| [**00-START.md**](./00-START.md) | Session zero (prefer PlansA) |
+| [**EXECUTABLE-PLAN.md**](./EXECUTABLE-PLAN.md) | Residual tasks (prefer PlansA) |
+| [**CHECKLIST-MASTER.md**](./CHECKLIST-MASTER.md) | Flat board (prefer PlansA) |
+| [**P11-CHECKLIST.md**](./P11-CHECKLIST.md) | Close-out (prefer PlansA) |
 | [**CHANGES-JUSTIFICATION.md**](./CHANGES-JUSTIFICATION.md) | Why residual / one spine |
 | [**REFERENCES.md**](./REFERENCES.md) | Path map |
 
-**Secondary (reference only):** [`../plans2/`](../plans2/) — former `idiotplanners2`.  
-**Do not** run both packages end-to-end.
+**Twin reference:** [`../plans2/`](../plans2/) — Idiots wave.  
+**Do not** run plans1 and plans2 end-to-end.
 
 ---
 

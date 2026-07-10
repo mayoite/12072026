@@ -1,125 +1,115 @@
-# Difference matrix — Plans · plans2 · PlansA
+# Difference matrix — Plans · plans1 · plans2 · PlansA
 
 **Date:** 2026-07-10  
 **Checkout:** `D:\OandO07072026` only · **no worktrees**  
-**Method:** Parallel inventory subagents (`/using-superpowers`) on each tree; head synthesis.  
-**Rule:** **All three folders stay separate.** This file is the comparison only — not a merge of content into one tree.
+**Method:** Parallel inventory subagents (`/using-superpowers`) — wave 1: Plans + plans2 + PlansA; wave 2: **plans1** + **plans1↔plans2 deep residual diff**. Head synthesis.  
+**Rule:** **All four folders stay separate.** This file is comparison only — not a merge of trees.
 
-| Folder | Path | Keep? |
-|--------|------|-------|
-| **Plans** | `Plans/` | **Yes** — program how + RESULTS-MAP (AGENTS live plan) |
-| **plans2** | `plans2/` | **Yes** — Idiots wave-1 residual package (reference) |
-| **PlansA** | `PlansA/` | **Yes** — merged residual **execute** package (this folder) |
+| Folder | Path | Keep? | Job |
+|--------|------|-------|-----|
+| **Plans** | `Plans/` | **Yes** | Program how + RESULTS-MAP (AGENTS live plan) |
+| **plans1** | `plans1/` | **Yes** | Idiots2 residual package (source of PlansA primary files) |
+| **plans2** | `plans2/` | **Yes** | Idiots residual package (source of PlansA `*.plans2.md`) |
+| **PlansA** | `PlansA/` | **Yes** | Merged residual **execute** package (open this to run) |
 
-**Also on disk (out of this 3-way matrix but related):** `plans1/` (Idiots2 twin of plans2), `archive/Plans/` (backup of Plans), `archive/Idiots/`, `archive/Idiots2/`.
-
----
-
-## 1. One-screen role matrix
-
-| Dimension | **Plans/** | **plans2/** | **PlansA/** |
-|-----------|------------|-------------|-------------|
-| **What it is** | World-standard **program tree**: phase execute cards, expert notes, Research maps | Residual **execute package** from Idiots (wave 1) + code reviews | **Merged** residual execute package (plans1 + plans2 synthesis) |
-| **Former name** | Always `Plans/` | `idiotplanners2/` | New 2026-07-10 merge |
-| **Self-claimed authority** | AGENTS live plan: INDEX → phase card → RESULTS-MAP | **Conflict:** README/EXECUTE-NOW = **SECONDARY** (prefer plans1); older docs = **sole** residual | **PRIMARY execute** — supersedes dual-running plans1 then plans2 |
-| **Who should open it to do work** | Product **how** + evidence **folder lock** | Deep recovery / Idiots-lineage cross-check | **Day-to-day residual execute** (start here) |
-| **Brainstormer lineage** | None cited inside tree | **Idiots** (`archive/Idiots/`) | Both; **Idiots2 primary narrative** + Idiots secondary |
-| **Sibling twin** | — | `plans1/` (Idiots2) | Consumes both plans1 + plans2 |
-| **File count (.md)** | **77** | **28** | **59** |
-| **Root package kit** | No EXECUTE-NOW / 00-START / EXECUTABLE-PLAN / P11 | Yes (8 roots) | Yes (9 roots, includes **MERGE-NOTES**) |
-| **Per-phase shape** | Multi-file cards: `P0X-*.md`, suggestions, expert appendices | `IMPLEMENTATION-PLAN.md` + `CODE-REVIEW-REPORT.md` | Primary plan+review (from plans1) + `*.plans2.md` + phase `README.md` |
-| **P11** | **No** (structure notes reject P11 as program phase) | Yes — `11-world-standard-closeout/` | Yes — `11-integration-closeout/` (+ alias for plans2 name) |
-| **MERGE-NOTES** | No | No | **Yes** — plans1 vs plans2 decisions |
-| **RESULTS-MAP** | **Yes** — `Plans/Research/RESULTS-MAP.md` (folder lock) | Points at Plans/Research (depends on Plans live) | Points at Plans/Research; evidence table mirrored in package |
-| **Evidence wave root** | Documents `results/planner/world-standard-wave/` | Same | Same |
-| **`results/` on disk** | Required for PASS; currently often **missing** = unproven | Same honesty | Same honesty |
-| **Product code** | How only (no site/) | Plan only | Plan only |
-| **Keep separate?** | **Yes** | **Yes** | **Yes** |
+**Also on disk (not matrix columns):** `archive/Plans/`, `archive/Idiots/`, `archive/Idiots2/`.
 
 ---
 
-## 2. Authority / when to use which
+## 1. One-screen role matrix (4-way)
+
+| Dimension | **Plans/** | **plans1/** | **plans2/** | **PlansA/** |
+|-----------|------------|-------------|-------------|-------------|
+| **What it is** | World-standard **program tree**: phase execute cards, expert notes, Research maps | Residual **execute package** Idiots2 + code reviews | Residual **execute package** Idiots + code reviews | **Merged** residual execute (plans1 + plans2) |
+| **Former name** | Always `Plans/` | `idiotplanners/` | `idiotplanners2/` | New 2026-07-10 merge |
+| **Self-claimed authority** | AGENTS live: INDEX → phase card → RESULTS-MAP | Still titles **PRIMARY** (stale vs PlansA) | **REFERENCE**; PRIMARY → **PlansA** | **PRIMARY execute** — supersedes dual-run |
+| **Who opens for work** | HOW + folder lock | RED recovery / Idiots2 dumps | RED recovery / Idiots dumps | **Day-to-day residual execute** |
+| **Brainstormer** | None cited | **Idiots2** → `archive/Idiots2/` | **Idiots** → `archive/Idiots/` | Both; Idiots2 primary narrative |
+| **File count (.md)** | **78** | **28** | **28** | **60** |
+| **Root kit** | README + INDEX + Research (no EXECUTE-NOW) | 8 roots (no MERGE-NOTES) | 8 roots (no MERGE-NOTES) | **9+** roots incl. MERGE-NOTES + **this matrix** |
+| **Per-phase shape** | Multi-file cards + expert appendices | IMPL + CODE-REVIEW | IMPL + CODE-REVIEW | Primary (plans1) + `*.plans2.md` + README |
+| **P11** | **No** | Yes · `11-integration-closeout/` | Yes · `11-world-standard-closeout/` | Yes · **`11-integration-closeout/`** (+ alias) |
+| **MERGE-NOTES / MATRIX** | Pointer only | — | — | **Yes** |
+| **RESULTS-MAP** | **Owns** `Plans/Research/RESULTS-MAP.md` | Cites Plans | Cites Plans | Cites Plans |
+| **Product code** | How only | Plan only | Plan only | Plan only |
+| **Keep separate?** | **Yes** | **Yes** | **Yes** | **Yes** |
+
+---
+
+## 2. Authority map (binding)
 
 ```
 Owner message
   → AGENTS.md
-    → Plans/              = program map, kill order history, RESULTS-MAP folder lock, phase HOW cards
-    → PlansA/             = residual EXECUTE spine (what to do now after code reviews)
-    → plans2/             = reference only (Idiots residual + secondary reviews)
-    → plans1/             = reference only (Idiots2 residual + primary reviews; also copied into PlansA)
+    → Plans/     = program map + RESULTS-MAP folder lock + phase HOW cards
+    → PlansA/    = residual EXECUTE spine (what to do now)
+    → plans1/    = Idiots2 source archive (PlansA primary IMPL/reviews copied from here)
+    → plans2/    = Idiots source archive (PlansA *.plans2.md copied from here)
 ```
 
 | Need | Open |
 |------|------|
-| Evidence folder names / forbidden aliases | `Plans/Research/RESULTS-MAP.md` |
-| Phase product-how card (CP narrative) | `Plans/phases/P0X-*/` |
-| **Execute residual today** | `PlansA/EXECUTE-NOW.md` → `00-START.md` → `EXECUTABLE-PLAN.md` |
-| Why merge chose X over Y | `PlansA/MERGE-NOTES.md` + **this matrix** |
-| Idiots-only deep plan dump | `plans2/P0X-*/IMPLEMENTATION-PLAN.md` |
-| Idiots2 deep plan dump | `plans1/…` or `PlansA/P0X-*/IMPLEMENTATION-PLAN.md` |
-| Code-review residual list | `PlansA/P0X-*/CODE-REVIEW-REPORT.md` first; optional `CODE-REVIEW-REPORT.plans2.md` |
+| Evidence folder names | `Plans/Research/RESULTS-MAP.md` |
+| Phase product-how card | `Plans/phases/P0X-*/` |
+| **Execute residual today** | `PlansA/EXECUTE-NOW.md` |
+| Why merge chose X | `PlansA/MERGE-NOTES.md` + **this matrix** |
+| Idiots2 deep plan | `plans1/P0X-*/IMPLEMENTATION-PLAN.md` |
+| Idiots deep plan | `plans2/P0X-*/IMPLEMENTATION-PLAN.md` |
+| Primary code-review residual | `PlansA/P0X-*/CODE-REVIEW-REPORT.md` (= plans1 copy) |
+| Secondary review cross-check | `PlansA/P0X-*/CODE-REVIEW-REPORT.plans2.md` |
 
-**Do not** run plans2 and PlansA as two full programs.  
-**Do not** treat Plans phase “PASS” prose as live green without `results/` paths.
-
----
-
-## 3. Structure matrix
-
-| Structure item | Plans | plans2 | PlansA |
-|----------------|:----:|:------:|:------:|
-| `README.md` | ✓ | ✓ | ✓ |
-| `INDEX.md` | ✓ | — | — |
-| `phases/` tree | ✓ | — (flat `P0X-*/` at package root) | — (flat `P0X-*/`) |
-| `Research/RESULTS-MAP.md` | ✓ | cite only | cite only |
-| `Research/Others/` | ✓ (22 honesty docs) | — | — |
-| `EXECUTE-NOW.md` | — | ✓ (copy; claims plans1 primary) | ✓ (PlansA primary) |
-| `00-START.md` | — (referenced historically; missing as root) | ✓ | ✓ merged |
-| `EXECUTABLE-PLAN.md` | — | ✓ | ✓ residual contracts |
-| `CHECKLIST-MASTER.md` | — | ✓ | ✓ |
-| `P11-CHECKLIST.md` | — | ✓ | ✓ merged |
-| `CHANGES-JUSTIFICATION.md` | — | ✓ | ✓ |
-| `REFERENCES.md` | — | ✓ | ✓ |
-| `MERGE-NOTES.md` | — | — | ✓ |
-| `P0X/IMPLEMENTATION-PLAN.md` | — | ✓ | ✓ (from plans1) |
-| `P0X/CODE-REVIEW-REPORT.md` | — | ✓ | ✓ (from plans1) |
-| `P0X/*.plans2.md` | — | — | ✓ (from plans2) |
-| `P0X/README.md` provenance | phase README different | — | ✓ |
-| Expert appendices (`01-react…`, etc.) | ✓ | — | — |
-| `EXPERT-PASS.md` | ✓ | — | — |
+**Do not** dual-run plans1 then plans2 then PlansA.  
+**Do not** treat Plans phase PASS prose as live green without `results/` paths.  
+**plans1 title “PRIMARY” is stale** — execute authority is **PlansA**.
 
 ---
 
-## 4. Kill order matrix
+## 3. Structure matrix (4-way)
 
-| Step | Plans (INDEX) | plans2 | PlansA |
-|------|---------------|--------|--------|
-| Session zero | CP-00 optional (doc gaps) | **P00** `00-START` | **P00** `00-START` |
-| 1 | P01 product truth | P01 | P01 |
-| 2 | P02 engine lock | P02 | P02 |
-| 3 | P03 W3 select/delete | P03 | P03 |
-| 4 | P07 W1–W2 journey | P07 | P07 |
-| 5 | P06 W5–W6 save | P06 | P06 |
-| 6–9 fill | P04 · P05 · P08 · P09 | same | same |
-| 10 | P10 handover | P10 | P10 |
-| 11 | **(none / reject P11)** | **P11** close-out | **P11** close-out |
+| Structure item | Plans | plans1 | plans2 | PlansA |
+|----------------|:----:|:------:|:------:|:------:|
+| `README.md` | ✓ | ✓ | ✓ | ✓ |
+| `INDEX.md` | ✓ | — | — | — |
+| `phases/` tree + EXPERT-PASS | ✓ | — | — | — |
+| `Research/RESULTS-MAP.md` | ✓ | cite | cite | cite |
+| `Research/Others/` | ✓ | — | — | — |
+| `EXECUTE-NOW.md` | — | ✓ (claims self primary) | ✓ (points PlansA) | ✓ (binding) |
+| `00-START.md` | — | ✓ | ✓ | ✓ merged |
+| `EXECUTABLE-PLAN.md` | — | ✓ denser | ✓ thinner | ✓ residual contracts |
+| `CHECKLIST-MASTER.md` | — | ✓ | ✓ | ✓ |
+| `P11-CHECKLIST.md` | — | ✓ | ✓ | ✓ merge |
+| `CHANGES-JUSTIFICATION.md` | — | ✓ | ✓ | ✓ |
+| `REFERENCES.md` | — | ✓ | ✓ | ✓ |
+| `MERGE-NOTES.md` | — | — | — | ✓ |
+| `MATRIX-…md` | pointer | — | — | ✓ canonical |
+| `P0X/IMPLEMENTATION-PLAN.md` | — | ✓ | ✓ | ✓ from plans1 |
+| `P0X/CODE-REVIEW-REPORT.md` | — | ✓ | ✓ | ✓ from plans1 |
+| `P0X/*.plans2.md` | — | — | — | ✓ from plans2 |
+| `P0X/README.md` provenance | different | — | — | ✓ |
+| Expert appendices | ✓ | — | — | — |
 
-**Spine string (plans2 / PlansA):**
+---
+
+## 4. Kill order (shared spine)
+
+| Step | Plans (INDEX) | plans1 / plans2 / PlansA |
+|------|---------------|--------------------------|
+| Session zero | CP-00 optional | **P00** `00-START` |
+| 1–10 | P01→P02→P03→P07→P06→P04→P05→P08→P09→P10 | Same |
+| 11 | **(none)** | **P11** close-out |
 
 ```
 P00 → P01 → P02 → P03 → P07 → P06 → P04 → P05 → P08 → P09 → P10 → P11
 ```
 
-**Spine string (Plans INDEX):** same middle without formal P00/P11 package bookends.
+Evidence wave root (all packages that execute): `results/planner/world-standard-wave/`.
 
 ---
 
-## 5. Evidence folder matrix (shared RESULTS-MAP)
+## 5. Evidence folder matrix
 
-All three **agree** on wave root: `results/planner/world-standard-wave/`.
-
-| Canonical folder | Plans phase | plans2 / PlansA phase |
-|------------------|-------------|------------------------|
+| Canonical folder | Plans phase | plans1 / plans2 / PlansA |
+|------------------|-------------|---------------------------|
 | `00-start/` | CP-00 | P00 |
 | `00-product-truth/` | P01 | P01 |
 | `01-engine-lock/` | P02 | P02 |
@@ -131,84 +121,112 @@ All three **agree** on wave root: `results/planner/world-standard-wave/`.
 | `08-mesh-quality/` | P08 | P08 |
 | `09-shortcuts-chrome/` | P09 | P09 |
 | `10-handover/` | P10 | P10 |
-| `11-world-standard-closeout/` | — | plans2 P11 |
-| `11-integration-closeout/` | — | **PlansA P11** (preferred) |
+| `11-integration-closeout/` | — | plans1 + **PlansA** |
+| `11-world-standard-closeout/` | — | plans2 only (alias → integration) |
 
-**Forbidden primary names (all packages that cite RESULTS-MAP):**  
-`01-product-truth/`, `02-engine-lock/`, `08-shortcuts-chrome/`, `07-mesh-quality/`, `site/results/`.
+**Forbidden primary names:** `01-product-truth/`, `02-engine-lock/`, `08-shortcuts-chrome/`, `07-mesh-quality/`, `site/results/`.
 
 ---
 
-## 6. Per-phase posture matrix (execute residual)
+## 6. CODE-REVIEW verdict matrix (plans1 vs plans2 → PlansA)
 
-| Phase | Plans (how card focus) | plans2 review posture | PlansA execute posture |
-|-------|------------------------|----------------------|------------------------|
-| **P01** | Inventory-only truth map | APPROVE-WITH-FIXES; re-prove pack | Re-prove inventory → `00-product-truth/` |
-| **P02** | Engine lock; stop thrash | APPROVE-WITH-FIXES; freeze | Re-prove freeze; **no** engine rebuild |
-| **P03** | W3 unit + browser | **FAIL UNPROVEN**; browser mandatory | Residual units + **browser mandatory** (unit alone = FAIL) |
-| **P04** | W4 orbit three-layer | FAIL NOT PROVEN; verify-first | Re-prove + wiring/console harden; no R3F port |
-| **P05** | W2 symbols / Block2D | APPROVE residual-only | Re-prove only; **no** geometry thrash if green |
-| **P06** | W5–W6 save honesty | **FAIL NOT GREEN**; code residual | **Code residual** (help, UUID, testids, projectRef, leave flush); cloud Task 07 **cancel** |
-| **P07** | W1–W2 browser journey | **FAIL CP-07**; journey rewrite | **Code residual** journey rewrite; place-CTA identity; no configurator-only green |
-| **P08** | W7 mesh quality | FAIL evidence; plan evidence-first | Evidence + smoke; skip toe rewrite if green |
-| **P09** | W8 shortcuts chrome | FAIL W8 until residual | **Code residual** aria-keyshortcuts + rail a11y + evidence |
-| **P10** | Handover pack | Mode A FAIL-honest; Mode B blocked | Mode A default; Mode B blocked until map-min green on HEAD |
-| **P11** | N/A in Plans tree | Dual-language + CROSSWALK | Buyer journey + SHIP-HONESTY + dual-language merge |
+| Phase | **plans1** | **plans2** | **PlansA execute posture** |
+|-------|------------|------------|----------------------------|
+| **P01** | APPROVE-WITH-FIXES | APPROVE-WITH-FIXES | Re-prove inventory pack; Select-String; no open3d thrash |
+| **P02** | APPROVE-WITH-FIXES | APPROVE-WITH-FIXES | Freeze only → `01-engine-lock/`; no rebuild |
+| **P03** | APPROVE-WITH-FIXES Mode A | **FAIL UNPROVEN** | **Stricter:** unit + browser mandatory; unit-alone FAIL |
+| **P04** | APPROVE-WITH-FIXES | **FAIL NOT PROVEN** | Re-prove + `workspaceOrbitWiring` + console harden |
+| **P05** | APPROVE re-prove only | APPROVE residual-only | Re-prove; skip geometry unless RED |
+| **P06** | **FAIL NOT GREEN** | **FAIL NOT GREEN** | **Code residual** (union); cancel cloud Task 07 |
+| **P07** | **CONDITIONAL APPROVE** | **FAIL CP-07** | **Code residual** journey rewrite; place-CTA identity |
+| **P08** | CONDITIONAL (mesh OK / evidence FAIL) | FAIL evidence; plan OK | Evidence + smoke; skip toe rewrite if green |
+| **P09** | APPROVE residual | **FAIL W8** until residual | **Code residual** aria + rail M/W + evidence |
+| **P10** | Mode A OK · Mode B blocked | Mode A OK · Mode B blocked | Mode A FAIL-honest default; Mode B blocked |
 
-**PlansA residual code set (binding):** P06 + P07 + P09 (+ P03 unit gaps, P04 wiring/console).  
+**PlansA residual code set:** P06 + P07 + P09 (+ P03 unit gaps, P04 wiring/console).  
 **Re-prove only:** P01, P02, P05, P08.
 
 ---
 
-## 7. Content / honesty conflicts (plans2 internal + cross-tree)
+## 7. Residual deep-diff (plans1 ↔ plans2) — material only
 
-| Issue | Plans | plans2 | PlansA |
-|-------|-------|--------|--------|
-| Live path vs archive | Was deleted mid-session; **restored to `Plans/`** for AGENTS | Still has dual “sole vs secondary” voice | Claims sole execute; plans1/2 reference |
-| “No CODE-REVIEW” claim | N/A | **Stale** — 10 reviews exist under plans2 | Reviews present as primary + `.plans2.md` |
-| Idiots vs Idiots2 | Not used | Phase lock Idiots-only; EXECUTE-NOW C4 flips Idiots2 primary | Idiots2 primary lineage for residual narrative |
-| Paper PASS | Cards may say DONE | Banned without `results/` | Banned without `results/` |
-| Broken internal links | Historical trustdata / checkpoints refs | Cites Plans/ (OK if Plans live) | Cites Plans/ (OK if Plans live) |
-| Dual-run risk | N/A | Secondary but long residual spine | **Forbids** dual-run |
+### 7.1 P06 save honesty
+
+| Class | Items |
+|-------|--------|
+| **Shared** | Help over-claims account slots · missing save testids · no `projectRef` · W5 count≠UUID · weak write mocks · evidence gone · **Task 07 cancel cloud** |
+| **plans1-only** | `formatAutosaveStatus` two-arg residual · optional restore-settled Task 09 · denser task numbering |
+| **plans2-only (stricter)** | Leave bare `saver.flush()` called out · dual label tables · “Local save failed” string · denser leave/projectRef rigor |
+| **PlansA keeps** | **Union**; plans2 leave-flush rigor; cancel cloud 07 |
+
+### 7.2 P07 draw/place journey
+
+| Class | Items |
+|-------|--------|
+| **Shared** | Rewrite partial journey · wall Δ + Opening · cabinet-v0 + second SKU · PNG >5k · storyboard · no configurator sole green · Feasibility Approach A |
+| **plans1-only** | Idiots2 brainstorm lock · forced `includesCabinetV0=true` / body-text false-greens flagged in review |
+| **plans2-only** | Idiots brainstorm lock · FAIL-harder language · explicit configurator ban Done-when |
+| **PlansA keeps** | Journey rewrite + **identity from place CTA**; drop force-true / body-text / configurator-only greens |
+
+### 7.3 P09 shortcuts chrome
+
+| Class | Items |
+|-------|--------|
+| **Shared** | Skip invert if green · aria-keyshortcuts · rail regression · evidence `09-shortcuts-chrome/` · ban Dimension→D · ban `08-shortcuts` folder |
+| **plans1-only** | Softer “APPROVE residual” framing |
+| **plans2-only** | FAIL W8 until residual+evidence · explicit Dimension(M)/Wall(W) |
+| **PlansA keeps** | **aria + rail M/W + evidence** (stricter) |
+
+### 7.4 P11 merge
+
+| Topic | plans1 | plans2 | PlansA |
+|-------|--------|--------|--------|
+| Evidence folder | `11-integration-closeout/` | `11-world-standard-closeout/` | **`11-integration-closeout/`** |
+| Buyer journey | Deep (P11.5 style) | Light | **plans1 depth** |
+| SHIP-HONESTY | Explicit | Implicit | **Kept** |
+| CROSSWALK | Folder audit only | Explicit CROSSWALK.md | **plans2 kept** |
+| DUAL-LANGUAGE | Implicit | Explicit GATE≠PRODUCT | **plans2 kept** |
 
 ---
 
-## 8. File-count & lineage summary
+## 8. What is the same (all four / execute three)
 
-| | Plans | plans2 | PlansA |
-|--|------:|-------:|-------:|
-| Total `.md` | 77 | 28 | 59 |
-| Root docs | 2 (+ Research) | 8 | 9 |
-| Phase folders | 10 under `phases/` | 10 flat | 10 flat |
-| Files/phase (typical) | 3–7 | 2 | 5 |
-| Brainstorm archive | — | `archive/Idiots/` | `archive/Idiots2/` + `archive/Idiots/` |
-| Source of primary IMPL | Phase cards (different genre) | Own wave | **plans1** copy |
-| Source of secondary IMPL | — | — | **plans2** as `*.plans2.md` |
-
----
-
-## 9. What is the same in all three
-
-1. **Checkout:** `D:\OandO07072026` only, no worktrees.  
-2. **Approach A kill middle:** P01→P02→P03→P07→P06 then P04/P05/P08/P09→P10.  
-3. **Evidence root:** repo-root `results/planner/world-standard-wave/` only.  
-4. **Folder lock numbers ≠ phase numbers** (P07→`02-browser-…`, P02→`01-engine-lock/`).  
-5. **Repo wins** over plan PASS prose.  
-6. **No competitor paste** from research scrapes into product.  
-7. World-standard **W1–W8** vocabulary for gates.
+1. Checkout `D:\OandO07072026` only, no worktrees.  
+2. Kill middle: P01→P02→P03→P07→P06 then fill → P10.  
+3. Evidence root: repo-root `results/planner/world-standard-wave/`.  
+4. Folder numbers ≠ phase numbers.  
+5. Repo wins over plan PASS; paper PASS banned.  
+6. No competitor paste into product.  
+7. W1–W8 vocabulary.  
+8. plans1 + plans2 both have full P01–P10 CODE-REVIEW-REPORT (old “no reviews” claim is **false**).
 
 ---
 
-## 10. What differs (decision-useful)
+## 9. What differs (decision-useful)
 
 | Topic | Winner for executors | Why |
 |-------|----------------------|-----|
-| Day-to-day residual tasks | **PlansA** | Single spine; MERGE-NOTES; dual reviews co-located |
-| Evidence folder names | **Plans/Research/RESULTS-MAP.md** | AGENTS + historical folder lock authority |
-| Product-how / expert depth | **Plans/phases/** | Appendices + EXPERT-PASS not in execute packages |
-| Idiots-only plan wording | **plans2** | Wave-1 dumps without Idiots2 bleed |
-| P11 close-out board | **PlansA** | Merged plans1 + plans2 styles |
-| “Are we dual-running?” | **PlansA says no** | plans2 alone still confuses sole vs secondary |
+| Day-to-day residual | **PlansA** | Single spine + MERGE-NOTES + dual reviews co-located |
+| Evidence folder lock | **Plans/Research/RESULTS-MAP.md** | AGENTS + canonical names |
+| Product-how / experts | **Plans/phases/** | Appendices + EXPERT-PASS |
+| Idiots2 dumps | **plans1** | Source of PlansA primary files |
+| Idiots dumps | **plans2** | Source of `*.plans2.md` |
+| Stricter FAIL language | **plans2** (P03/P04/P07/P09) | PlansA absorbed into gate honesty |
+| Denser residual contracts | **plans1** | PlansA EXECUTABLE prefers denser spine |
+| P11 board | **PlansA** | Merge of both P11 styles |
+| Stale “I am PRIMARY” | **plans1 README** | Ignore for execute; use PlansA |
+
+---
+
+## 10. File-count & lineage
+
+| | Plans | plans1 | plans2 | PlansA |
+|--|------:|-------:|-------:|-------:|
+| Total `.md` | 78 | 28 | 28 | 60 |
+| Lineage | Program | Idiots2 | Idiots | Both (merged) |
+| Former folder | — | idiotplanners | idiotplanners2 | — |
+| Primary IMPL source for PlansA | — | **Yes** | via sidecars | Self |
+| Self execute claim | Program | PRIMARY (stale) | Reference → PlansA | **Sole PRIMARY** |
 
 ---
 
@@ -216,22 +234,24 @@ All three **agree** on wave root: `results/planner/world-standard-wave/`.
 
 | Action | Allowed? |
 |--------|----------|
-| Keep `Plans/`, `plans2/`, `PlansA/` as three folders | **Required** |
-| Delete plans2 after reading this matrix | **No** (owner: keep separate) |
-| Copy plans2 content into Plans/phases | **No** (different genre; pollutes program tree) |
-| Dual-run full plans2 then PlansA | **No** |
-| Use PlansA as execute + Plans for maps + plans2 for RED recovery | **Yes** |
-| Archive copy under `archive/Plans/` | OK as backup; **live authority is `Plans/`** when present |
+| Keep Plans, plans1, plans2, PlansA as four folders | **Required** |
+| Delete plans1 or plans2 after matrix | **No** |
+| Dual-run full programs | **No** |
+| Execute from PlansA; maps from Plans; RED dumps from plans1/plans2 | **Yes** |
+| Collapse plans1 into Plans/phases | **No** (different genre) |
 
 ---
 
 ## 12. Inventory sources (subagents)
 
-| Tree | Subagent role | Outcome |
-|------|---------------|---------|
-| Plans | explore inventory | Live missing → used archive; **then head restored `Plans/`** (77 files) |
-| plans2 | explore inventory | 28 files; dual authority voice; 10 reviews present |
-| PlansA | explore inventory | 59 files; sole execute claim; MERGE-NOTES; broken Plans pointers **fixed by restore** |
+| Wave | Tree / task | Role |
+|------|-------------|------|
+| 1 | Plans | explore inventory (restore live tree) |
+| 1 | plans2 | explore inventory |
+| 1 | PlansA | explore inventory |
+| 1 | pointer wire | general-purpose README links |
+| **2** | **plans1** | explore inventory (**needed for matrix**) |
+| **2** | **plans1↔plans2 residual deep diff** | explore decision tables (**needed for matrix**) |
 
 ---
 
@@ -239,15 +259,15 @@ All three **agree** on wave root: `results/planner/world-standard-wave/`.
 
 | Doc | Path |
 |-----|------|
-| This matrix | `PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md` |
+| This matrix (canonical) | `PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md` |
+| Thin pointer | `Plans/DIFFERENCE-MATRIX.md` |
 | PlansA execute | `PlansA/EXECUTE-NOW.md` |
-| PlansA merge decisions | `PlansA/MERGE-NOTES.md` |
+| Merge decisions | `PlansA/MERGE-NOTES.md` |
 | Plans entry | `Plans/README.md` |
-| Plans index | `Plans/INDEX.md` |
 | RESULTS-MAP | `Plans/Research/RESULTS-MAP.md` |
-| plans2 entry | `plans2/README.md` |
 | plans1 entry | `plans1/README.md` |
+| plans2 entry | `plans2/README.md` |
 
 ---
 
-**Bottom line:** Three folders, three jobs — **Plans** = program + folder lock; **PlansA** = execute residual now; **plans2** = Idiots reference. Do not collapse them; do not dual-run them.
+**Bottom line:** Four folders, four jobs — **Plans** = program + folder lock; **PlansA** = execute now; **plans1** = Idiots2 source; **plans2** = Idiots source. Matrix is incomplete without plans1 + plans1↔plans2 residual tables (wave 2). Do not collapse; do not dual-run.

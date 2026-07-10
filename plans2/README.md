@@ -12,7 +12,7 @@
 |------|------|
 | **PRIMARY execute** | [`../PlansA/`](../PlansA/) — residual execute package (not this tree) |
 | **This package** | **REFERENCE only** — Idiots lineage synthesis; **not** a second full program |
-| **Difference matrix** | [`../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md`](../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md) |
+| **Difference matrix (4-way)** | [`../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md`](../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md) — Plans · plans1 · plans2 · PlansA |
 
 **Keep this folder.** Do **not** dual-run with PlansA (or plans1). Cross-check only; execute from PlansA.
 
