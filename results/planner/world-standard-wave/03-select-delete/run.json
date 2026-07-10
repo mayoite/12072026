@@ -1,48 +1,49 @@
-{
+﻿{
     "phase":  "P03",
-    "unitPack":  {
-                     "note":  "Unit pack not re-run this seat (browser half only). unit alone != W3."
-                 },
-    "approach":  "B",
-    "statusNote":  "Browser W3 exit 0 with Mode B helper fix. Fabric OFF. PNGs 01-04 eyes-checked.",
-    "HEAD":  "8dfccddbef62877ae66965f0e6732fe007f48d55",
+    "gate":  "W3",
     "checkpoint":  "CP-03",
-    "status":  "pass",
-    "startedAt":  "2026-07-10T13:25:00.000Z",
+    "approach":  "B",
+    "checkout":  "D:\\\\OandO07072026",
+    "worktrees":  false,
+    "evidenceRoot":  "results/planner/world-standard-wave/03-select-delete",
+    "HEAD":  "dada98eea5ffcfd96a59c9c792f6e960098ce9d6",
+    "date":  "2026-07-10",
+    "agent":  "P03-Agent-4",
+    "action":  "browser W3 hard gate re-prove (Playwright + eyes)",
+    "endedAt":  "2026-07-10T13:34:50.066Z",
     "browser":  {
-                    "fabricFurnitureEnv":  "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)",
-                    "log":  "browser-w3-raw.log",
-                    "baseURL":  "http://localhost:3000",
                     "exitCode":  0,
                     "tool":  "playwright",
-                    "note":  "Browser hard gate PASS. Unit alone != W3.",
-                    "pngProof":  "eyes: 4 furniture -\u003e 3 after Delete -\u003e 4 after Ctrl+Z",
-                    "pngOnDisk":  {
-                                      "02-selected.png":  114154,
-                                      "04-undone.png":  96830,
-                                      "03-deleted.png":  97350,
-                                      "01-placed.png":  115791
-                                  },
-                    "tests":  "1/1 passed",
-                    "command":  ".\\node_modules\\.bin\\playwright.cmd test -c config/build/playwright.config.ts tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list",
+                    "log":  "browser-w3-raw.log",
                     "spec":  "tests/e2e/open3d-w3-select-delete.spec.ts",
-                    "reProvedOnTip":  true,
+                    "command":  ".\\node_modules\\.bin\\playwright.cmd test -c config/build/playwright.config.ts tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list",
+                    "baseURL":  "http://localhost:3000",
+                    "PLAYWRIGHT_BASE_URL":  "http://localhost:3000",
+                    "fabricFurnitureEnv":  "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)",
+                    "durationSec":  2.5,
+                    "tests":  "1/1 passed",
+                    "provedAtHead":  "dada98eea5ffcfd96a59c9c792f6e960098ce9d6",
                     "pngs":  [
                                  "01-placed.png",
                                  "02-selected.png",
                                  "03-deleted.png",
                                  "04-undone.png"
                              ],
-                    "modeBFix":  "plannerToolButton: scope Select to navigation Canvas tools (Select is under Navigation tools, not Drawing tools)",
+                    "pngOnDisk":  {
+                                      "01-placed.png":  115797,
+                                      "02-selected.png":  114109,
+                                      "03-deleted.png":  97350,
+                                      "04-undone.png":  96830
+                                  },
+                    "pngProof":  "eyes: 4 furniture -\u003e 3 after Delete -\u003e 4 after Ctrl+Z",
+                    "modeBFix":  "plannerToolButton scopes to navigation Canvas tools so Select (Navigation tools group) resolves",
+                    "reProvedOnTip":  true,
                     "onDisk":  true,
-                    "durationSec":  3.1
+                    "note":  "Browser hard gate PASS on tip after helper land. Unit alone != W3."
                 },
-    "date":  "2026-07-10",
-    "endedAt":  "2026-07-10T13:30:38.301Z",
-    "gate":  "W3",
-    "worktrees":  false,
-    "checkout":  "D:\\OandO07072026",
-    "evidenceRoot":  "results/planner/world-standard-wave/03-select-delete",
-    "agent":  "P03-Agent-4",
-    "action":  "browser W3 hard gate re-prove (Playwright + eyes)"
+    "unitPack":  {
+                     "note":  "Browser seat only; unit alone != W3."
+                 },
+    "status":  "pass",
+    "statusNote":  "Browser W3 exit 0 on tip dada98ee. Fabric OFF. PNGs 01-04. Mode B e2e helper only."
 }
