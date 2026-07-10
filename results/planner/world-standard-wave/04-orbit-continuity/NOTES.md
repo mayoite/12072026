@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-10  
 **Checkout:** `D:\OandO07072026` only (no worktrees)  
-**HEAD pin:** `fa1ac921e294d960ae229a26dab4c2f14b381a2e` (see `HEAD.txt`)  
+**HEAD pin:** `5f682651e4533e56b403f37d17e771ecfc90bb33` (see `HEAD.txt`)  
 **Agent:** P04 Agent 10/10 — proof pack consolidator  
 **Evidence root:** `results/planner/world-standard-wave/04-orbit-continuity/` only — never `site/results/`
 

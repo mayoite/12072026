@@ -1,7 +1,7 @@
 # P04 / W4 PROOF-INDEX — `results/planner/world-standard-wave/04-orbit-continuity/`
 
 **Agent 10/10 consolidator.** Paths relative to this folder.  
-**HEAD pin:** `HEAD.txt` → `fa1ac921e294d960ae229a26dab4c2f14b381a2e`  
+**HEAD pin:** `HEAD.txt` → `5f682651e4533e56b403f37d17e771ecfc90bb33`  
 **Overall status:** `run.json` → **`open`** (unit alone ≠ W4; same-tip dual-green not locked).
 
 | File | Purpose | Present |
