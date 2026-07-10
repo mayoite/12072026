@@ -23,10 +23,12 @@
 
 - Name the **active ID per track** in recap and agent briefs.  
 - Use **subagents** so head context stays thin.  
-- CSS fence always: `Agents-css.md`.
+- CSS fence always: `Agents-css.md`.  
+- **Durable track status → `Plans/` or `Agents/`.** `results/` = screenshots/logs only (disposable).
 
 ## Subagent one-liner
 
 ```
-Track phase: D4 only (not D5). CSS locked fence. Evidence under results/site/.
+Track phase: D4 only (not D5). CSS locked fence.
+Durable status → Plans/ (not results/). results/ = screenshots/logs only.
 ```
