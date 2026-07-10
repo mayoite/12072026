@@ -1,10 +1,57 @@
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+// Furniture draw path needs full Canvas2D; selection tests only care about setSelection.
+vi.mock("@/lib/catalog/renderBlock2DToCanvas", () => ({
+  createCanvasBlockColorResolver: vi.fn(() => vi.fn(() => "#000000")),
+  renderBlock2DCentered: vi.fn(),
+  renderBlock2DToCanvas: vi.fn(),
+}));
+
 import { proofCatalogItem } from "@/features/planner/open3d/catalog/proofCatalog";
 import { FeasibilityCanvas } from "@/features/planner/open3d/canvas-feasibility/FeasibilityCanvas";
 import { useWorkspaceCanvas } from "@/features/planner/open3d/editor/useWorkspaceCanvas";
+import { projectToScreen } from "@/features/planner/open3d/lib/geometry/snapping";
+import { createOpen3dProject } from "@/features/planner/open3d/model/project";
+import type { Open3dProject } from "@/features/planner/open3d/model/types";
 import { renderHook } from "@testing-library/react";
+
+/** Default FeasibilityCanvas INITIAL_TRANSFORM — do not call fitToView in these tests. */
+const SELECT_TRANSFORM = {
+  origin: { x: -4000, y: -2500 },
+  scale: 0.1,
+} as const;
+
+function projectWithFurniture(id: string, position: { x: number; y: number }): Open3dProject {
+  const project = createOpen3dProject({
+    name: "Select residual",
+    idFactory: (() => {
+      let i = 0;
+      const ids = ["floor-sel", "project-sel"];
+      return () => ids[i++] ?? `gen-${i}`;
+    })(),
+  });
+  const floor = project.floors[0]!;
+  return {
+    ...project,
+    floors: [
+      {
+        ...floor,
+        furniture: [
+          {
+            id,
+            catalogId: "cabinet-v0",
+            position,
+            rotation: 0,
+            scale: { x: 1, y: 1, z: 1 },
+            width: 600,
+            depth: 600,
+          },
+        ],
+      },
+    ],
+  };
+}
 
 interface ResizeObserverEntryLike {
   contentRect: { width: number; height: number };
@@ -25,22 +72,76 @@ class ResizeObserverMock {
   disconnect = disconnect;
 }
 
-const context = {
-  setTransform: vi.fn(),
-  fillRect: vi.fn(),
-  beginPath: vi.fn(),
-  moveTo: vi.fn(),
-  lineTo: vi.fn(),
-  stroke: vi.fn(),
-  closePath: vi.fn(),
-  setLineDash: vi.fn(),
-  arc: vi.fn(),
-  fill: vi.fn(),
-  fillStyle: "",
-  strokeStyle: "",
-  lineWidth: 0,
-  lineCap: "butt" as CanvasLineCap,
-};
+/** Restore-safe: plain fns, not vi.fn() (afterEach restoreAllMocks would wipe returns). */
+function seedCanvasContext(target: Record<string, unknown>) {
+  target.fillStyle = "";
+  target.strokeStyle = "";
+  target.lineWidth = 0;
+  target.lineCap = "butt";
+  target.font = "";
+  target.textAlign = "start";
+  target.textBaseline = "alphabetic";
+  target.globalAlpha = 1;
+  target.shadowColor = "transparent";
+  target.shadowBlur = 0;
+  target.shadowOffsetX = 0;
+  target.shadowOffsetY = 0;
+  target.measureText = () => ({ width: 0 });
+  target.createLinearGradient = () => ({ addColorStop: () => undefined });
+  target.createRadialGradient = () => ({ addColorStop: () => undefined });
+  target.createPattern = () => null;
+  target.getTransform = () => ({ a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 });
+  // Common paint ops — plain no-ops survive restoreAllMocks.
+  // Spy used by catalog-proof assertion (toHaveBeenCalled).
+  target.fillRect = vi.fn();
+  for (const method of [
+    "setTransform",
+    "strokeRect",
+    "beginPath",
+    "moveTo",
+    "lineTo",
+    "stroke",
+    "fill",
+    "closePath",
+    "setLineDash",
+    "arc",
+    "rect",
+    "roundRect",
+    "save",
+    "restore",
+    "translate",
+    "rotate",
+    "scale",
+    "fillText",
+    "clearRect",
+  ]) {
+    target[method] = () => undefined;
+  }
+}
+
+const contextBase: Record<string, unknown> = {};
+seedCanvasContext(contextBase);
+    contextBase.fillRect = vi.fn();
+
+/** Stub any remaining canvas 2d method used by furniture/block draw paths. */
+const context = new Proxy(contextBase, {
+  get(target, prop, receiver) {
+    if (typeof prop === "string" && !(prop in target)) {
+      const stub = () => undefined;
+      target[prop] = stub;
+      return stub;
+    }
+    return Reflect.get(target, prop, receiver);
+  },
+  set(target, prop, value) {
+    if (typeof prop === "string") {
+      target[prop] = value;
+      return true;
+    }
+    return false;
+  },
+}) as unknown as CanvasRenderingContext2D;
+
 
 function toolbarButton(name: RegExp) {
   return within(screen.getByRole("toolbar", { name: "Canvas tools" })).getByRole("button", { name });
@@ -211,4 +312,83 @@ describe("open3d FeasibilityCanvas", () => {
     // current impl places on down; after drag wiring will call on final up too or equiv. Assert fn received for validated path.
     expect(onPlace).toHaveBeenCalled();
   });
+
+  it("select tool pointer on furniture sets furniture selection", () => {
+    const furnitureId = "furn-select-1";
+    const position = { x: 0, y: 0 };
+    const initialProject = projectWithFurniture(furnitureId, position);
+    const { result } = renderHook(() => useWorkspaceCanvas({ initialProject }));
+    render(
+      <FeasibilityCanvas
+        variant="embedded"
+        activeTool="select"
+        delegateKeyboard
+        workspaceCanvas={result.current}
+      />,
+    );
+    const canvas = screen.getByLabelText("Floor plan drawing surface");
+    const screenPt = projectToScreen(position, SELECT_TRANSFORM);
+    expect(result.current.selection).toEqual({ type: "none", ids: [] });
+
+    fireEvent.pointerDown(canvas, {
+      pointerId: 50,
+      button: 0,
+      clientX: screenPt.x,
+      clientY: screenPt.y,
+    });
+    fireEvent.pointerUp(canvas, {
+      pointerId: 50,
+      button: 0,
+      clientX: screenPt.x,
+      clientY: screenPt.y,
+    });
+
+    expect(result.current.selection).toEqual({
+      type: "furniture",
+      ids: [furnitureId],
+    });
+  });
+
+  it("select tool empty click clears selection to none", () => {
+    const furnitureId = "furn-select-2";
+    const position = { x: 0, y: 0 };
+    const initialProject = projectWithFurniture(furnitureId, position);
+    const { result } = renderHook(() => useWorkspaceCanvas({ initialProject }));
+    render(
+      <FeasibilityCanvas
+        variant="embedded"
+        activeTool="select"
+        delegateKeyboard
+        workspaceCanvas={result.current}
+      />,
+    );
+    const canvas = screen.getByLabelText("Floor plan drawing surface");
+
+    // Pre-select furniture
+    act(() => {
+      result.current.setSelection({ type: "furniture", ids: [furnitureId] });
+    });
+    expect(result.current.selection).toEqual({
+      type: "furniture",
+      ids: [furnitureId],
+    });
+
+    // Empty canvas far from furniture (project ~ (5000, 5000) with default transform)
+    const emptyScreen = projectToScreen({ x: 5000, y: 5000 }, SELECT_TRANSFORM);
+    fireEvent.pointerDown(canvas, {
+      pointerId: 51,
+      button: 0,
+      clientX: emptyScreen.x,
+      clientY: emptyScreen.y,
+    });
+    fireEvent.pointerUp(canvas, {
+      pointerId: 51,
+      button: 0,
+      clientX: emptyScreen.x,
+      clientY: emptyScreen.y,
+    });
+
+    expect(result.current.selection).toEqual({ type: "none", ids: [] });
+  });
+
 });

@@ -249,6 +249,26 @@ describe("pickFurnitureAtPoint", () => {
     expect(pickFurnitureAtPoint({ x: 120, y: 0 }, [item])).toBeNull();
     expect(pickFurnitureAtPoint({ x: 120, y: 0 }, [item], 30)).toBe("pad");
   });
+
+  it("returns null for empty furniture array", () => {
+    expect(pickFurnitureAtPoint({ x: 0, y: 0 }, [])).toBeNull();
+  });
+
+  it("defaults missing width/depth to 600mm footprint", () => {
+    // Half of 600mm = 300; hit at 290 along axes, miss at 310.
+    const item: Open3dFurnitureItem = {
+      id: "def600",
+      catalogId: "cabinet-v0",
+      position: { x: 0, y: 0 },
+      rotation: 0,
+      scale: { x: 1, y: 1, z: 1 },
+      // width/depth intentionally omitted
+    };
+    expect(pickFurnitureAtPoint({ x: 0, y: 290 }, [item])).toBe("def600");
+    expect(pickFurnitureAtPoint({ x: 290, y: 0 }, [item])).toBe("def600");
+    expect(pickFurnitureAtPoint({ x: 0, y: 310 }, [item])).toBeNull();
+    expect(pickFurnitureAtPoint({ x: 310, y: 0 }, [item])).toBeNull();
+  });
 });
 
 describe("pickOpeningAtPoint", () => {

@@ -111,6 +111,67 @@ describe("useWorkspaceKeyboard shortcuts", () => {
     expect(handlers.deleteSelection).toHaveBeenCalledTimes(2);
   });
 
+  it("does not call deleteSelection on Ctrl+Backspace or Cmd+Backspace", () => {
+    const handlers = makeHandlers();
+    renderHook(() => useWorkspaceKeyboard(handlers));
+
+    const ctrlBs = new KeyboardEvent("keydown", {
+      bubbles: true,
+      key: "Backspace",
+      ctrlKey: true,
+      cancelable: true,
+    });
+    act(() => {
+      window.dispatchEvent(ctrlBs);
+    });
+    expect(handlers.deleteSelection).not.toHaveBeenCalled();
+    expect(ctrlBs.defaultPrevented).toBe(false);
+
+    const metaBs = new KeyboardEvent("keydown", {
+      bubbles: true,
+      key: "Backspace",
+      metaKey: true,
+      cancelable: true,
+    });
+    act(() => {
+      window.dispatchEvent(metaBs);
+    });
+    expect(handlers.deleteSelection).not.toHaveBeenCalled();
+    expect(metaBs.defaultPrevented).toBe(false);
+  });
+
+  it("does not call deleteSelection when Delete is pressed in an input", () => {
+    const handlers = makeHandlers();
+    renderHook(() => useWorkspaceKeyboard(handlers));
+
+    const input = document.createElement("input");
+    document.body.appendChild(input);
+    act(() => {
+      input.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "Delete",
+          cancelable: true,
+        }),
+      );
+    });
+    expect(handlers.deleteSelection).not.toHaveBeenCalled();
+    input.remove();
+  });
+
+  it("does not throw when deleteSelection handler is omitted", () => {
+    const handlers = makeHandlers();
+    // Explicit omit (not a stub) — optional chaining path.
+    const { deleteSelection: _omit, ...withoutDelete } = handlers;
+    void _omit;
+    renderHook(() => useWorkspaceKeyboard(withoutDelete));
+
+    expect(() => {
+      press({ key: "Delete", cancelable: true });
+      press({ key: "Backspace", cancelable: true });
+    }).not.toThrow();
+  });
+
   it("calls cancel on Escape", () => {
     const handlers = makeHandlers();
     renderHook(() => useWorkspaceKeyboard(handlers));
