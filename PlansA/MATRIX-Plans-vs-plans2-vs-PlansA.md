@@ -260,6 +260,7 @@ Evidence wave root (all packages that execute): `results/planner/world-standard-
 | Doc | Path |
 |-----|------|
 | This matrix (canonical) | `PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md` |
+| **10 phase difference docs** | `PlansA/diff/01-…` … `10-…` (includes **archive/Plans**) |
 | Thin pointer | `Plans/DIFFERENCE-MATRIX.md` |
 | PlansA execute | `PlansA/EXECUTE-NOW.md` |
 | Merge decisions | `PlansA/MERGE-NOTES.md` |

@@ -12,3 +12,6 @@ All four folders stay separate.
 | `PlansA/` | Residual **execute** |
 | `plans1/` | Idiots2 source (reference) |
 | `plans2/` | Idiots source (reference) |
+| `archive/Plans/` | Backup of program tree (not authority when live Plans exists) |
+
+**10 phase difference docs:** [`../PlansA/diff/`](../PlansA/diff/) (`01`…`10`)
