@@ -1,5 +1,7 @@
 import type { Icon } from "@phosphor-icons/react";
-import { Cube as Box, FileText, Stack as Layers3, Ruler, Sparkle as Sparkles } from "@phosphor-icons/react";
+// SSR entry: CSR icons call createContext at module eval — breaks next build page-data
+// collection when this module is imported from Server Components (features/[slug]/page).
+import { Cube as Box, FileText, Stack as Layers3, Ruler, Sparkle as Sparkles } from "@phosphor-icons/react/dist/ssr";
 
 export type PlannerFeaturePage = {
   slug: string;

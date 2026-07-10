@@ -1,7 +1,7 @@
 {
   "phase": "open3d-world-e2e-gate",
-  "startedAt": "2026-07-09T18:22:16.530Z",
-  "endedAt": "2026-07-09T18:23:19.064Z",
+  "startedAt": "2026-07-10T05:25:41.952Z",
+  "endedAt": "2026-07-10T05:26:50.303Z",
   "exitCode": 0,
   "workers": 1,
   "specs": [

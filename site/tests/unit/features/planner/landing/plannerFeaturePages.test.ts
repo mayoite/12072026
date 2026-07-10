@@ -1,9 +1,34 @@
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
   PLANNER_FEATURE_PAGES,
   PLANNER_FEATURE_BY_SLUG,
   isPlannerFeatureSlug,
 } from "@/features/planner/landing/plannerFeaturePages";
+
+/**
+ * Server route app/planner/(marketing)/features/[slug]/page.tsx imports this
+ * module for generateStaticParams / generateMetadata. CSR phosphor calls
+ * createContext at module eval → next build: "createContext is not a function".
+ */
+describe("plannerFeaturePages RSC-safe phosphor imports", () => {
+  it("imports runtime icons from @phosphor-icons/react/dist/ssr only", () => {
+    const sourcePath = join(
+      dirname(fileURLToPath(import.meta.url)),
+      "../../../../../features/planner/landing/plannerFeaturePages.ts",
+    );
+    const source = readFileSync(sourcePath, "utf8");
+    const runtimeImport = source.match(
+      /^import\s+\{[^}]+\}\s+from\s+["']([^"']+)["']/m,
+    );
+    expect(runtimeImport?.[1]).toBe("@phosphor-icons/react/dist/ssr");
+    expect(source).not.toMatch(
+      /import\s+\{[^}]+\}\s+from\s+["']@phosphor-icons\/react["']/,
+    );
+  });
+});
 
 describe("plannerFeaturePages configuration", () => {
   it("should define feature pages with correct keys", () => {
