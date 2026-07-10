@@ -100,12 +100,11 @@ export const SVG_STAGES: readonly AssetStage[] = [
     order: 7,
     name: "Catalog + inventory consume SVG URL",
     status: "implemented",
-    produces: "previewImageUrl /svg-catalog/{slug}.svg stamped on place",
+    produces: "previewImageUrl stamp + FeasibilityCanvas drawImage of /svg-catalog/{slug}.svg",
     entry:
-      "descriptorCatalogBridge + catalogClient + placeCatalogItemInProject (furniture.previewImageUrl)",
+      "descriptorCatalogBridge + placeCatalogItemInProject + svgPlanSymbolCache + FeasibilityCanvas SVG draw",
     note:
-      "Inventory shows published SVG; place stamps previewImageUrl onto furniture. " +
-      "Feasibility plan draw remains Block2D (not SVG path rasterization).",
+      "place stamps previewImageUrl; FeasibilityCanvas draws /svg-catalog/*.svg via drawImage when geometryMode !== modular-cabinet-v0; Block2D fallback on load fail / cabinet-v0.",
   },
 ] as const;
 

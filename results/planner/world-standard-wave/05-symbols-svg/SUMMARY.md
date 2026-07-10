@@ -1,8 +1,8 @@
-# SUMMARY — P05 / CP-05 (W2 symbol quality + SVG honesty)
+# SUMMARY — P05 / CP-05 (W2 + S7 plan canvas draws published SVG)
 
 **Date:** 2026-07-10  
 **Checkout:** `D:\OandO07072026` (main only)  
-**Status:** **PASS** (re-prove after empty evidence dir)
+**Status:** **PASS** (S7 hard path: canvas `drawImage` of `/svg-catalog/*.svg`)
 
 ---
 
@@ -10,41 +10,39 @@
 
 | Claim | Proof |
 |-------|--------|
-| cabinet-v0 not empty box (≥4 prims) | Unit pack 22/22; prim JSON pair=7 slab=5 none=6 |
-| pair vs slab geometry differs | Mid stile + dual handles vs single handle; unit + prim JSON |
-| `furnitureBlockUsesCenteredPath` always false | Unit + JSDoc + prim dump criteria |
-| Canvas authority = Block2D | Code path + asset-engine README + honesty NOTES |
-| SVG catalog = publish path | `scripts:smoke:svg:batch` exit 0 · 4 fixtures · NOTES |
-| **S7 inventory place consumes published SVG** | API + unit stamp + browser inventory thumb + place (2 furniture) |
-| Browser visual CP-05 | `browser/01–04*.png` · e2e exit 0 |
-| No competitor SVG | O&O prims only; canvas does not rasterize catalog SVG as draw path |
+| cabinet-v0 not empty black blob | Unit multi-prim; browser `02-cabinet-v0-canvas.png` light carcass |
+| pair vs slab geometry differs | Unit + prim JSON |
+| `furnitureBlockUsesCenteredPath` always false | Unit |
+| **S7 place stamps published SVG** | Unit `s7CatalogConsume` + API |
+| **S7 plan canvas draws published SVG** | `FeasibilityCanvas` + `svgPlanSymbolCache`; browser `05-svg-plan-canvas-draw.png` multi-path chaise |
+| SVG load fail → Block2D | Unit cache null remember |
+| modular-cabinet-v0 keeps Block2D | Code branch `geometryMode !== modular-cabinet-v0` |
+| No competitor SVG | O&O multi-path chaise fixture |
 
 ## Not done (correct deferrals)
 
 | Item | Owner phase |
 |------|-------------|
-| Place journey with live cabinet-v0 PNG | **P07** |
+| Place journey with live cabinet-v0 PNG pack | **P07** |
 | Mesh / toe / carcass beauty | **P08** |
-| Fabric full stage cutover | destination — not W2 |
+| Boolean publish pipeline multi-path for all fixtures | optional follow-up — chaise hand-tuned; smoke batch can overwrite |
 
-## Commands re-run
+## Commands re-run (this land)
 
 ```text
 cd site
 pnpm exec vitest run `
-  tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts `
-  tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts
-# → 22 passed
+  tests/unit/features/planner/open3d/catalog/svgPlanSymbolCache.test.ts `
+  tests/unit/features/planner/open3d/catalog/s7CatalogConsume.test.ts
+# → 9 passed
 
-pnpm run scripts:smoke:svg:batch
-# → fixtures=4 ok=4 fail=0
-
-pnpm exec tsx scripts/p05-dump-cabinet-prims.mts
-# → 05-visual/cabinet-v0-prims.json
+pnpm exec playwright test -c config/build/playwright.config.ts `
+  tests/e2e/open3d-cp05-symbols-s7.spec.ts --reporter=list
+# → 1 passed · evidence browser/05-svg-plan-canvas-draw.png
 ```
 
 ## False-green defenses
 
-- Unit green alone does **not** prove browser place (P07).
-- SVG smoke green proves **publish** pipeline, not Feasibility draw path.
-- Evidence must live under `05-symbols-svg/` only (this re-prove refilled an emptied dir).
+- Inventory `<img>` alone ≠ S7 product complete.
+- Stamp-only without canvas draw = cheat (killed).
+- `svgCatalogIsPublishNotCanvasDraw` claim retired (false).

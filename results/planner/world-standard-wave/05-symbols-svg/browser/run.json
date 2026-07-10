@@ -1,10 +1,17 @@
 {
   "phase": "P05",
-  "gate": "CP-05-browser",
-  "date": "2026-07-10T12:48:25.746Z",
+  "gate": "CP-05-browser-S7-canvas-draw",
+  "date": "2026-07-10T12:53:38.574Z",
   "s7ApiSvgItems": 4,
   "inventoryThumbSrc": "/svg-catalog/chaise-lounge-001.svg",
   "furnitureBefore": 0,
   "furnitureAfter": 2,
+  "canvasDiversity": {
+    "sampleCount": 6914,
+    "uniqueQuantized": 45,
+    "channelStdDev": 34.08890243619971,
+    "notPureSolid": true
+  },
+  "s7CanvasDraw": true,
   "status": "pass"
 }

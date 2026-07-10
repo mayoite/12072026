@@ -58,6 +58,11 @@ import {
   createCanvasBlockColorResolver,
   renderBlock2DCentered,
 } from "@/lib/catalog/renderBlock2DToCanvas";
+import {
+  drawSvgPlanSymbol,
+  getSvgPlanImage,
+  isPublishedSvgPlanUrl,
+} from "../catalog/svg/svgPlanSymbolCache";
 import type { WorkspaceCanvasContext } from "../editor/useWorkspaceCanvas";
 
 const INITIAL_TRANSFORM: CanvasTransform = {
@@ -179,6 +184,8 @@ function FeasibilityCanvas(
   const [latencyP95, setLatencyP95] = useState<number | null>(null);
   const [transform, setTransform] = useState<CanvasTransform>(INITIAL_TRANSFORM);
   const [canvasSize, setCanvasSize] = useState({ width: 1, height: 1 });
+  /** Bumps when a published plan SVG finishes loading so paint re-runs (S7). */
+  const [svgPaintGen, setSvgPaintGen] = useState(0);
   const [activeCommandId, setActiveCommandId] = useState<FeasibilityCommandId>(
     toolToCommandId(activeToolProp) ?? "draw-wall",
   );
@@ -581,19 +588,32 @@ function FeasibilityCanvas(
       }
     }
     if (layerVisibility.furniture) {
-      // Procedural Block2D (same prims as inventory SVG preview) → canvas.
-      // No external GLBs/SVG downloads — our blocks2d symbols only.
+      // S7: published `/svg-catalog/*.svg` on furniture.previewImageUrl → draw SVG on plan.
+      // Else procedural Block2D (cabinet-v0 multi-prim, etc.).
       const colorResolve = createCanvasBlockColorResolver(canvas);
+      const requestRedraw = () => {
+        setSvgPaintGen((n) => n + 1);
+      };
       try {
         for (const item of activeFloor.furniture) {
           const center = projectToScreen(item.position, transform);
           const block = furnitureBlock2DFromItem(item);
           const isSelected = selectedFurnitureIds.has(item.id);
+          const svgUrl = item.previewImageUrl;
+          const useSvg =
+            isPublishedSvgPlanUrl(svgUrl) &&
+            // Modular cabinet keeps parametric Block2D (doorStyle/dims) over published SVG.
+            item.geometryMode !== "modular-cabinet-v0";
+          const svgImg =
+            useSvg && svgUrl
+              ? getSvgPlanImage(svgUrl, requestRedraw)
+              : null;
+
           context.save();
           context.translate(center.x, center.y);
           context.rotate((item.rotation * Math.PI) / 180);
           context.scale(transform.scale, transform.scale);
-          if (item.color) {
+          if (item.color && !svgImg) {
             context.globalAlpha = 0.15;
             context.fillStyle = item.color;
             context.fillRect(
@@ -604,10 +624,19 @@ function FeasibilityCanvas(
             );
             context.globalAlpha = 1;
           }
-          renderBlock2DCentered(context, block, {
-            resolve: colorResolve,
-            skipShadow: transform.scale < 0.05,
-          });
+          if (svgImg) {
+            drawSvgPlanSymbol(
+              context,
+              svgImg,
+              block.footprint.L,
+              block.footprint.D,
+            );
+          } else {
+            renderBlock2DCentered(context, block, {
+              resolve: colorResolve,
+              skipShadow: transform.scale < 0.05,
+            });
+          }
           if (isSelected) {
             context.strokeStyle =
               tokens.getPropertyValue("--color-primary").trim() || "#2563eb";
@@ -661,6 +690,7 @@ function FeasibilityCanvas(
     selectedWallIds,
     snapKind,
     start,
+    svgPaintGen,
     transform,
   ]);
 

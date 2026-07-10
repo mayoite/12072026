@@ -1,7 +1,7 @@
 /**
- * P05 / asset-engine S7 — catalog + inventory consume published SVG URL.
+ * P05 / asset-engine S7 - catalog place stamps published SVG URL.
  * Proves place stamps previewImageUrl onto furniture (inventory place consume).
- * Does NOT claim Feasibility draws published SVG paths (Block2D remains canvas authority).
+ * Canvas draw path: svgPlanSymbolCache.test.ts + FeasibilityCanvas (not Block2D-only).
  */
 import { describe, expect, it } from "vitest";
 import { placeCatalogItemInProject } from "@/features/planner/open3d/catalog/placementAction";

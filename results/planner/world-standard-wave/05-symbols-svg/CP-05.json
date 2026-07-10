@@ -1,17 +1,18 @@
 {
   "checkpoint": "CP-05",
   "phase": "P05-symbols-svg",
-  "gate": "W2-symbol-quality-plus-S7",
+  "gate": "W2-symbol-quality-plus-S7-canvas-draw",
   "status": "pass",
   "date": "2026-07-10",
   "claims": {
     "cabinetV0Block2DReadable": true,
     "notEmptyBox": true,
     "doorStyleGeometryDiffers": true,
-    "canvasAuthorityIsBlock2D": true,
+    "canvasAuthorityIsBlock2D": "partial — Block2D for cabinet-v0 / load-fail; SVG drawImage when previewImageUrl is .svg",
     "furnitureBlockUsesCenteredPathIsFalse": true,
-    "svgCatalogIsPublishNotCanvasDraw": true,
-    "svgHonestySmoke": "pass",
+    "svgCatalogIsPublishNotCanvasDraw": false,
+    "s7PlanCanvasDrawsPublishedSvg": true,
+    "svgHonestySmoke": "pass-historical",
     "s7InventoryPlaceConsumesPublishedSvg": true,
     "s7StageStatus": "implemented",
     "browserVisualCp05": true,
@@ -20,8 +21,8 @@
     "meshBeauty": "deferred-to-P08"
   },
   "unitPack": {
-    "cabinetAndRender": 22,
     "s7CatalogConsume": 3,
+    "svgPlanSymbolCache": 6,
     "exitCode": 0
   },
   "browser": {
@@ -29,6 +30,14 @@
     "exitCode": 0,
     "furnitureAfter": 2,
     "inventoryThumbSrc": "/svg-catalog/chaise-lounge-001.svg",
+    "canvasShot": "05-svg-plan-canvas-draw.png",
+    "s7CanvasDraw": true,
+    "canvasDiversity": {
+      "sampleCount": 6914,
+      "uniqueQuantized": 45,
+      "channelStdDev": 34.09,
+      "notPureSolid": true
+    },
     "evidenceDir": "browser/"
   },
   "evidence": [
@@ -40,6 +49,7 @@
     "browser/02-cabinet-v0-canvas.png",
     "browser/03-inventory-svg-preview.png",
     "browser/04-svg-catalog-item-placed.png",
+    "browser/05-svg-plan-canvas-draw.png",
     "browser/run.json",
     "SUMMARY.md"
   ]
