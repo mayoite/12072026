@@ -64,8 +64,8 @@ If a tool defaults output into `site/`, **redirect it to root `results/`** or fi
 - **Why parallel agents (owner-explicit):** Long single threads **fill the context window and you lose track**. Parallel agents = **fresh context** on sub-slices of the **same** task. Also in `ayushdocs/19-GOALS-SLICES.md` (“Subagents with /using-superpowers keep context fresh”). This is **not** multi-product thrash.
 - **Subagents:** Parallel **only inside that one task** (default ≤8; hard max 10). Write to disk so results survive. Briefs short; point at MDs.
 - **Bar:** **Elon standard** — `Agents/Agents-elon-standard.md` is the **highest** process/quality benchmark. Global product standard; **quality over speed**. Owner present without micromanage or prompt-engineering — agent takes the call once intent is clear.
-- **Pipeline / seats:** Follow `Agents/Agents-elon-standard.md` (superpowers → goal → **repo-truth scout** → gap/brainstorm → **slice addendum/checklist** → SDD 2–4 + TDD → review → verify → check-work → finish → recap). Plans/checklists are hypotheses; **live repo** decides done.
-- **Facts vs intent:** Owner owns **intent**. Agent must **not** trust owner, plans, or checklist ticks for **repo facts** — re-read code, re-run proof.
+- **Pipeline / seats:** `Agents/Agents-elon-standard.md`. **Phase = multi-hour task list** (days/months product, not vibe coding). Parallel implementers only on **different packages** inside one phase; never two writers on the same package. 2–4 implementers normal when domains split; ≤8 seats OK for real multi-hour parallel work. Plans = hypotheses; **repo** decides done.
+- **Facts vs intent:** Owner owns **intent**. Agent must **not** trust owner/plan/checklist for **repo facts** — re-prove.
 - **Assign with superpowers:** Every subagent brief **starts with** `/using-superpowers` (+ fit skills from Elon roster). That is the kill for delegated work — not a hand-written mega-prompt.
 - Skills do not override **User Wins** or Git & Workspace rules above.
 

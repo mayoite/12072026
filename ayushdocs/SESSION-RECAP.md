@@ -6,18 +6,18 @@
 
 ## Done this window
 
-- Elon standard epistemic law landed: `Agents/Agents-elon-standard.md` §2 (repo truth, assume gaps, addenda, no paper PASS)
-- `AGENTS.md` updated for facts-vs-intent
-- Goal lock still open: CP-10 · a11y · or custom
+- Elon grain corrected: **phase = multi-hour task list**; no same-package parallel writers; 2–4 impl / ≤8 seats OK for real multi-hour work (`Agents/Agents-elon-standard.md`)
+- Agent pushback on “20‑min residual” framing retracted as wrong grain
+- Goal lock still open: pick a **phase** (not a vibe fix)
 
 ## Red / blocked
 
-- none (no product execute yet)
+- none (no product phase execute yet)
 
-## Next 15m
+## Next
 
-- Owner picks kill **1** CP-10 / **2** a11y / **3** other → run `Agents/Agents-elon-standard.md`
+- Owner names active **phase** → open task list from repo truth → multi-hour execute
 
 ## Do not claim
 
-- No product PASS this session beyond docs/process
+- No product phase PASS this session beyond process docs

@@ -4,7 +4,7 @@
 
 Do not treat this file as the source of truth. Agents read **`Agents/Agents-elon-standard.md`**.
 
-**Also encoded there:** repo is truth · assume gaps · no paper PASS · addenda not plan expansion · goal fixed · don’t trust owner/plan for facts without re-proof.
+**Also encoded there:** phase = multi-hour task list (not 20‑min vibe) · parallel only across packages · repo is truth · assume gaps · addenda not plan expansion · goal fixed.
 
 | Need | Path |
 |------|------|
