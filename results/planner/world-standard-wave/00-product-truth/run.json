@@ -1,0 +1,21 @@
+﻿{
+  "phase": "P01",
+  "cp": "CP-01",
+  "evidenceRoot": "results/planner/world-standard-wave/00-product-truth",
+  "head": "ab930b89c5dcd089f9dcc46490ab2d4dd50cdb96",
+  "date": "2026-07-10",
+  "approach": "A",
+  "inventoryOnly": true,
+  "vitest": {
+    "command": "pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/hostWiringP01.test.ts --reporter=verbose",
+    "log": "vitest-hostWiringP01.log",
+    "exitCode": 0,
+    "tests": "4/4 passed",
+    "outcome": "ok"
+  },
+  "mapMin": {
+    "INVENTORY.md": true,
+    "CONTRADICTIONS.md": true,
+    "HEAD.txt": true
+  }
+}
