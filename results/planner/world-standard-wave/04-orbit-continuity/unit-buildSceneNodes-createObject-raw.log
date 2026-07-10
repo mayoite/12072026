@@ -1,34 +1,35 @@
+# P04 scratch unit — unit-buildSceneNodes-createObject-raw.log proven_at=2026-07-10T19:20:40.1073482+05:30 exit=0
 
  RUN  v4.1.9 D:/OandO07072026/site
 
- Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > maps walls and furniture with stable entity ids 6ms
- Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > omits geometry fields for plain box furniture 1ms
- Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > propagates modular geometryMode + modularOptions copy 1ms
+ Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > maps walls and furniture with stable entity ids 2ms
+ Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > omits geometry fields for plain box furniture 0ms
+ Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > propagates modular geometryMode + modularOptions copy 0ms
  Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > propagates policy-allowed generatedGlbUrl onto furniture node 0ms
  Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > propagates modular fields together with generatedGlbUrl 1ms
  Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > converts furniture plan degrees to scene radians (walls stay atan2 radians) 0ms
  Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > drops designer static meshUrl and blank generatedGlbUrl 0ms
  Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > prefers generatedGlbUrl over glbUrl and meshUrl 0ms
- Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > applies scale multipliers to furniture dimensions and defaults 0ms
+ Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > applies scale multipliers to furniture dimensions and defaults 1ms
  Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > returns [] for empty floors and maps wall center/rotation 1ms
  Γ£ô tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts > buildOpen3dSceneNodes > converts mm to metres for Three world 0ms
- Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > modular-cabinet-v0 builds Group with multi-part mesh and floor origin 6ms
- Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > modular without modularOptions derives defaults from node W/D/H 3ms
- Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > modular pair door style yields four children (toe+carcass+doors) 2ms
+ Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > modular-cabinet-v0 builds Group with multi-part mesh and floor origin 3ms
+ Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > modular without modularOptions derives defaults from node W/D/H 1ms
+ Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > modular pair door style yields four children (toe+carcass+doors) 1ms
  Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > non-modular furniture with dimensions uses parametric-box Mesh 1ms
- Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > wall builds BoxGeometry mesh at half height (not parametric-box) 1ms
- Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > wall with CSS var color does not throw and material color is parseable by THREE.Color 7ms
- Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > wall theme-ref uses wallStroke when present (not washed inverse-body text color) 3ms
+ Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > wall builds BoxGeometry mesh at half height (not parametric-box) 0ms
+ Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > wall with CSS var color does not throw and material color is parseable by THREE.Color 4ms
+ Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > wall theme-ref uses wallStroke when present (not washed inverse-body text color) 2ms
  Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > wall with explicit user hex keeps paint (theme remap does not override) 0ms
  Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > furniture missing positive dimensions falls back to wall-style box 1ms
  Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > applies plan rotation about world Y (negated) 1ms
  Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > distinguishes the three roots: Group vs parametric Mesh vs wall Mesh 1ms
  Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode ΓÇö modular vs parametric-box vs wall > workstation-v0 builds Group with multi-part role meshes and floor origin 2ms
- Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > addNodesToGroup / disposeAndRemoveObject > adds one object per node into the group 1ms
- Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > addNodesToGroup / disposeAndRemoveObject > disposeAndRemoveObject removes from parent 1ms
+ Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > addNodesToGroup / disposeAndRemoveObject > adds one object per node into the group 0ms
+ Γ£ô tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > addNodesToGroup / disposeAndRemoveObject > disposeAndRemoveObject removes from parent 0ms
 
  Test Files  2 passed (2)
       Tests  25 passed (25)
-   Start at  19:19:14
-   Duration  2.88s (transform 423ms, setup 1.42s, import 303ms, tests 49ms, environment 3.07s)
+   Start at  19:20:52
+   Duration  1.52s (transform 257ms, setup 1.34s, import 201ms, tests 28ms, environment 997ms)
 

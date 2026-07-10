@@ -1,10 +1,11 @@
+# P04 scratch unit — unit-poseContinuityW4-raw.log proven_at=2026-07-10T19:20:40.1073482+05:30 exit=0
 
  RUN  v4.1.9 D:/OandO07072026/site
 
- Γ£ô tests/unit/features/planner/open3d/poseContinuityW4.test.ts > W4 pose continuity (document Γåö scene nodes) > rebuilds furniture pose without mutating document ids/position/rotation 5ms
+ Γ£ô tests/unit/features/planner/open3d/poseContinuityW4.test.ts > W4 pose continuity (document Γåö scene nodes) > rebuilds furniture pose without mutating document ids/position/rotation 3ms
 
  Test Files  1 passed (1)
       Tests  1 passed (1)
-   Start at  19:18:59
-   Duration  2.64s (transform 378ms, setup 839ms, import 290ms, tests 10ms, environment 1.17s)
+   Start at  19:20:46
+   Duration  1.34s (transform 178ms, setup 469ms, import 131ms, tests 5ms, environment 509ms)
 
