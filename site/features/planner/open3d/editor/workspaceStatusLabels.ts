@@ -28,12 +28,42 @@ export function formatSelectionStatus(selection: CanvasSelection): string | null
   return count === 1 ? `${label} selected` : `${count} ${label.toLowerCase()}s selected`;
 }
 
-export function formatAutosaveStatus(
-  status: Open3dSaveStatus,
-  guestMode: boolean,
-): string {
-  // Always honest: open3d path is local IDB until cloud is wired (W6).
-  switch (status) {
+export type Open3dPersistStorage = "local" | "cloud";
+
+export type Open3dSaveStatusLabelInput = {
+  status: Open3dSaveStatus;
+  storage: Open3dPersistStorage;
+  lastSavedAt: string | null;
+  cloudEnabled: boolean;
+  guestMode?: boolean;
+};
+
+/**
+ * Single source of truth for TopBar + status-bar save copy (W6).
+ * When cloudEnabled is false, storage is forced to local for labeling.
+ */
+export function open3dSaveStatusLabel(input: Open3dSaveStatusLabelInput): string {
+  const guestMode = input.guestMode ?? false;
+  const storage: Open3dPersistStorage =
+    input.cloudEnabled && input.storage === "cloud" ? "cloud" : "local";
+
+  if (storage === "cloud") {
+    switch (input.status) {
+      case "saving":
+        return "Saving to account…";
+      case "saved":
+        return "Saved to account";
+      case "error":
+        return "Account save failed";
+      case "unsaved":
+        return guestMode ? "Unsaved draft" : "Unsaved changes";
+      case "idle":
+      default:
+        return guestMode ? "Guest session (local)" : "Ready (local)";
+    }
+  }
+
+  switch (input.status) {
     case "saving":
       return "Saving locally…";
     case "saved":
@@ -41,9 +71,23 @@ export function formatAutosaveStatus(
     case "unsaved":
       return guestMode ? "Unsaved draft" : "Unsaved changes";
     case "error":
-      return "Save failed";
+      return "Local save failed";
     case "idle":
     default:
       return guestMode ? "Guest session (local)" : "Ready (local)";
   }
+}
+
+/** Back-compat wrapper — always local-only path used by open3d today. */
+export function formatAutosaveStatus(
+  status: Open3dSaveStatus,
+  guestMode: boolean,
+): string {
+  return open3dSaveStatusLabel({
+    status,
+    storage: "local",
+    lastSavedAt: null,
+    cloudEnabled: false,
+    guestMode,
+  });
 }

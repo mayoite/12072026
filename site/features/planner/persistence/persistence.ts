@@ -330,14 +330,29 @@ type AutoSaverCallbacks = {
   onError?: (error: unknown) => void;
 };
 
+/** Injectable persistence for unit write-proof (default = module IDB helpers). */
+export type AutoSaverDeps = {
+  loadProject: (id: string) => Promise<PlannerProject | undefined>;
+  saveProject: (project: PlannerProject) => Promise<void>;
+  saveHistoryEntry: (entry: HistoryEntry) => Promise<void>;
+  debounceMs?: number;
+};
+
 /**
  * Creates a debounced auto-save function.
  * Call with project data on every store change.
+ * Optional deps injects load/save for unit tests (production omits → IDB).
  */
 export function createAutoSaver(
   projectId: string,
   callbacks: AutoSaverCallbacks = {},
+  deps?: AutoSaverDeps,
 ) {
+  const load = deps?.loadProject ?? loadProject;
+  const save = deps?.saveProject ?? saveProject;
+  const saveHistory = deps?.saveHistoryEntry ?? saveHistoryEntry;
+  const debounceMs = deps?.debounceMs ?? AUTO_SAVE_DEBOUNCE_MS;
+
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   let lastSaved = 0;
   let active = true;
@@ -356,10 +371,10 @@ export function createAutoSaver(
     if (!active) return;
     const now = Date.now();
     try {
-      const existing = await loadProject(projectId).catch(() => undefined);
+      const existing = await load(projectId).catch(() => undefined);
       if (!active) return;
 
-      await saveProject({
+      await save({
         id: projectId,
         name: existing?.name || projectId,
         createdAt: existing?.createdAt || now,
@@ -368,7 +383,7 @@ export function createAutoSaver(
       });
       if (!active) return;
 
-      await saveHistoryEntry({
+      await saveHistory({
         id: `${projectId}-${now}`,
         projectId,
         timestamp: now,
@@ -398,14 +413,14 @@ export function createAutoSaver(
         if (!active || pendingSnapshot === null) return;
         // Debounce window: skip if we just saved the same payload very recently.
         const now = Date.now();
-        if (now - lastSaved < AUTO_SAVE_DEBOUNCE_MS && flushInFlight === null) {
+        if (now - lastSaved < debounceMs && flushInFlight === null) {
           // Still honor latest pending on next schedule; do not drop it forever.
         }
         const toSave = pendingSnapshot;
         flushInFlight = persistSnapshot(toSave).finally(() => {
           flushInFlight = null;
         });
-      }, AUTO_SAVE_DEBOUNCE_MS);
+      }, debounceMs);
     },
 
     /**

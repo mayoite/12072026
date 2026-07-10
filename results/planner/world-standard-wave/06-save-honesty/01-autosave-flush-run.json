@@ -1,0 +1,15 @@
+﻿{
+    "gate":  "residual-units-agent2",
+    "head":  "1c318d50a2ea24e0e38edd9951f8bff90ca707ec",
+    "notes":  "Labels: open3dSaveStatusLabel + forbidden cloud lies; Autosave: flush write-proof via AutoSaverDeps; Session UUID identity through envelope",
+    "commitMessage":  "test(planner): P06 residual unit honesty for save labels/flush",
+    "phase":  "P06-save-honesty",
+    "timestamp":  "2026-07-10T09:03:40.7477438Z",
+    "exitCode":  0,
+    "suites":  [
+                   "planner-autosave",
+                   "workspaceStatusLabels",
+                   "open3dSession"
+               ],
+    "schemaVersion":  1
+}
