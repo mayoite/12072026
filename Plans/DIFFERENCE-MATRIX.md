@@ -1,17 +1,16 @@
 # Difference matrix (pointer)
 
-Canonical comparison of **Plans · plans1 · plans2 · PlansA** (4-way):
+**Execute:** [`../plans1/START-HERE.md`](../plans1/START-HERE.md) — not PlansA.
 
-→ [`../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md`](../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md)
+Optional archaeology (confusing; research only):
 
-All four folders stay separate.
+→ [`../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md`](../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md)  
+→ [`../PlansA/diff/`](../PlansA/diff/)
 
 | Folder | Job |
 |--------|-----|
 | `Plans/` (this tree) | Program how + RESULTS-MAP |
-| `PlansA/` | Residual **execute** |
-| `plans1/` | Idiots2 source (reference) |
-| `plans2/` | Idiots source (reference) |
-| `archive/Plans/` | Backup of program tree (not authority when live Plans exists) |
-
-**10 phase difference docs:** [`../PlansA/diff/`](../PlansA/diff/) (`01`…`10`)
+| **`plans1/`** | **Execute residual** |
+| `plans2/` | Optional second review |
+| `PlansA/` | Merge research dump — **do not execute** |
+| `archive/Plans/` | Backup of Plans |

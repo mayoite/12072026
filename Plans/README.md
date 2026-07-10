@@ -51,10 +51,11 @@ One owner task at a time. Parallel only inside that task (`AGENTS.md`).
 4. World-standard design spec  
 5. `ayushdocs/` honesty  
 
-**Residual execute package:** [`../PlansA/`](../PlansA/) — one spine for residual wave work.  
-**This tree:** program how + RESULTS-MAP (catalog, phase cards, evidence map).  
-**Reference sources:** [`../plans1/`](../plans1/) (Idiots2) · [`../plans2/`](../plans2/) (Idiots) — keep separate; do not dual-run with PlansA.  
-**Difference matrix (4-way):** [`../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md`](../PlansA/MATRIX-Plans-vs-plans2-vs-PlansA.md) · thin pointer: [`DIFFERENCE-MATRIX.md`](./DIFFERENCE-MATRIX.md)
+**Residual execute:** [`../plans1/START-HERE.md`](../plans1/START-HERE.md) — **not** PlansA.  
+**This tree:** program how + RESULTS-MAP only.  
+**Research dump (optional):** [`../PlansA/`](../PlansA/) — merge notes / matrix; confusing; do not execute there.  
+**Second review (optional):** [`../plans2/`](../plans2/).  
+**Diff archaeology:** [`../PlansA/diff/`](../PlansA/diff/) · matrix pointer: [`DIFFERENCE-MATRIX.md`](./DIFFERENCE-MATRIX.md)
 
 **Archive** under `archive/Plans/` is history, not authority.  
 **Evidence** never lives under `Plans/` — only under `results/`.

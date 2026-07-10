@@ -1,26 +1,27 @@
-# EXECUTE-NOW — Single spine (consolidated)
+# EXECUTE-NOW — Single spine (**plans1**)
 
-**Date:** 2026-07-10  
+**Date:** 2026-07-10 · clarity fix: PlansA is **not** execute  
 **Canonical path:** `plans1/EXECUTE-NOW.md`  
-**Copy:** also `plans2/EXECUTE-NOW.md` (keep identical)  
+**Entry:** [`START-HERE.md`](./START-HERE.md) first  
 **Checkout:** `D:\OandO07072026` main only · **no worktrees**
 
 ---
 
-## 1. Folders (after consolidate)
+## 1. Folders (honest)
 
-| Role | Path | Former name |
-|------|------|-------------|
-| **PRIMARY (use this)** | `plans1/` | master package + `idiotplanners/` phases |
-| **SECONDARY (reference)** | `plans2/` | master package + `idiotplanners2/` phases |
-| Redirect stubs only | `idiotplanners/`, `idiotplanners2/` | README → plans1 / plans2 |
+| Role | Path | Notes |
+|------|------|--------|
+| **PRIMARY execute** | **`plans1/`** | 2 files per phase — use this |
+| Folder names / how | `Plans/Research/RESULTS-MAP.md` | Not residual tasks |
+| Optional second review | `plans2/` | Never dual-run full program |
+| Merge research dump | `PlansA/` | **Do not execute from here** |
 
-Everything for a phase (plan + code review) lives under:
+Everything for a phase lives under:
 
-- `plans1/P0X-*/IMPLEMENTATION-PLAN.md` + `CODE-REVIEW-REPORT.md`
-- `plans2/P0X-*/…` (secondary)
+- `plans1/P0X-*/CODE-REVIEW-REPORT.md` (**read first**)
+- `plans1/P0X-*/IMPLEMENTATION-PLAN.md` (detail if needed)
 
-**Do not** run plans1 and plans2 as two full programs.
+**Do not** run plans1 + plans2 + PlansA as three programs.
 
 ---
 
@@ -28,7 +29,7 @@ Everything for a phase (plan + code review) lives under:
 
 | # | Change |
 |---|--------|
-| C1 | One spine: **plans1 primary**, plans2 reference |
+| C1 | One spine: **plans1 only** to execute; PlansA = research dump not runbook |
 | C2 | `results/` missing ⇒ historical CP/GATE PASS unproven |
 | C3 | Re-prove / residual only — no engine/mesh/symbol/keymap rewrite when unit-green |
 | C4 | Brainstorm paths: `archive/Idiots2/` (primary), `archive/Idiots/` (secondary) |

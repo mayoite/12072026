@@ -10,7 +10,7 @@
 | **Plans** | `Plans/` | **Yes** | Program how + RESULTS-MAP (AGENTS live plan) |
 | **plans1** | `plans1/` | **Yes** | Idiots2 residual package (source of PlansA primary files) |
 | **plans2** | `plans2/` | **Yes** | Idiots residual package (source of PlansA `*.plans2.md`) |
-| **PlansA** | `PlansA/` | **Yes** | Merged residual **execute** package (open this to run) |
+| **PlansA** | `PlansA/` | **Yes (research)** | Merge dump — **do not execute here**; use `plans1/START-HERE.md` |
 
 **Also on disk (not matrix columns):** `archive/Plans/`, `archive/Idiots/`, `archive/Idiots2/`.
 
@@ -22,8 +22,8 @@
 |-----------|------------|-------------|-------------|-------------|
 | **What it is** | World-standard **program tree**: phase execute cards, expert notes, Research maps | Residual **execute package** Idiots2 + code reviews | Residual **execute package** Idiots + code reviews | **Merged** residual execute (plans1 + plans2) |
 | **Former name** | Always `Plans/` | `idiotplanners/` | `idiotplanners2/` | New 2026-07-10 merge |
-| **Self-claimed authority** | AGENTS live: INDEX → phase card → RESULTS-MAP | Still titles **PRIMARY** (stale vs PlansA) | **REFERENCE**; PRIMARY → **PlansA** | **PRIMARY execute** — supersedes dual-run |
-| **Who opens for work** | HOW + folder lock | RED recovery / Idiots2 dumps | RED recovery / Idiots dumps | **Day-to-day residual execute** |
+| **Self-claimed authority** | Maps / how | **PRIMARY execute** (clarity fix) | REFERENCE | Research only (was wrongly marketed as execute) |
+| **Who opens for work** | HOW + folder lock | **Day-to-day residual execute** | Optional second review | Merge archaeology only (avoid) |
 | **Brainstormer** | None cited | **Idiots2** → `archive/Idiots2/` | **Idiots** → `archive/Idiots/` | Both; Idiots2 primary narrative |
 | **File count (.md)** | **78** | **28** | **28** | **60** |
 | **Root kit** | README + INDEX + Research (no EXECUTE-NOW) | 8 roots (no MERGE-NOTES) | 8 roots (no MERGE-NOTES) | **9+** roots incl. MERGE-NOTES + **this matrix** |
@@ -41,26 +41,22 @@
 ```
 Owner message
   → AGENTS.md
-    → Plans/     = program map + RESULTS-MAP folder lock + phase HOW cards
-    → PlansA/    = residual EXECUTE spine (what to do now)
-    → plans1/    = Idiots2 source archive (PlansA primary IMPL/reviews copied from here)
-    → plans2/    = Idiots source archive (PlansA *.plans2.md copied from here)
+    → plans1/START-HERE.md  = residual EXECUTE (what to do now)
+    → Plans/                = RESULTS-MAP + phase HOW only
+    → plans2/               = optional second review
+    → PlansA/               = merge research only (skip for execute)
 ```
 
 | Need | Open |
 |------|------|
+| **Execute residual today** | `plans1/START-HERE.md` |
 | Evidence folder names | `Plans/Research/RESULTS-MAP.md` |
 | Phase product-how card | `Plans/phases/P0X-*/` |
-| **Execute residual today** | `PlansA/EXECUTE-NOW.md` |
-| Why merge chose X | `PlansA/MERGE-NOTES.md` + **this matrix** |
-| Idiots2 deep plan | `plans1/P0X-*/IMPLEMENTATION-PLAN.md` |
-| Idiots deep plan | `plans2/P0X-*/IMPLEMENTATION-PLAN.md` |
-| Primary code-review residual | `PlansA/P0X-*/CODE-REVIEW-REPORT.md` (= plans1 copy) |
-| Secondary review cross-check | `PlansA/P0X-*/CODE-REVIEW-REPORT.plans2.md` |
+| Why merge chose X | `PlansA/MERGE-NOTES.md` (optional) |
+| Idiots deep plan | `plans2/P0X-*/` (optional) |
 
-**Do not** dual-run plans1 then plans2 then PlansA.  
-**Do not** treat Plans phase PASS prose as live green without `results/` paths.  
-**plans1 title “PRIMARY” is stale** — execute authority is **PlansA**.
+**Do not** dual-run. **Do not** start in PlansA.  
+**Paper PASS** without `results/` = FAIL.
 
 ---
 

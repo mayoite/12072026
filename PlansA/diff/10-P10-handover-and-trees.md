@@ -18,15 +18,15 @@
 
 ---
 
-## B. Five trees — jobs (binding)
+## B. Five trees — jobs (binding) · **clarity fix**
 
 | Tree | Path | Job | Authority |
 |------|------|-----|-----------|
-| **Plans** | `Plans/` | Program how + **RESULTS-MAP** | AGENTS live plan |
-| **archive/Plans** | `archive/Plans/` | **Backup / history** of program tree | Not authority when live Plans exists |
-| **PlansA** | `PlansA/` | Residual **execute** (merged) | **PRIMARY execute** |
-| **plans1** | `plans1/` | Idiots2 **source** (primary copies in PlansA) | Reference only |
-| **plans2** | `plans2/` | Idiots **source** (`*.plans2.md` in PlansA) | Reference only |
+| **Plans** | `Plans/` | Program how + **RESULTS-MAP** | Maps / how only |
+| **archive/Plans** | `archive/Plans/` | **Backup** of program tree | Not authority when live Plans exists |
+| **plans1** | `plans1/` | Residual **execute** (2 files/phase) | **PRIMARY execute** → `START-HERE.md` |
+| **plans2** | `plans2/` | Optional second review | Reference only |
+| **PlansA** | `PlansA/` | Merge **research** dump (dual files, matrix) | **Not execute** — too confusing |
 
 ---
 
@@ -60,7 +60,7 @@
 | Question | Answer tree |
 |----------|-------------|
 | What is the evidence folder name? | **Plans** → RESULTS-MAP |
-| What do I implement residual today? | **PlansA** |
+| What do I implement residual today? | **plans1** (`START-HERE.md`) — **not** PlansA |
 | Where is Idiots2 deep dump? | **plans1** |
 | Where is Idiots deep dump? | **plans2** |
 | Where is historical program copy? | **archive/Plans** |
