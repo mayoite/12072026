@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-10  
 **Seat:** Code-review units + browser W3 hard gate (updated after green Playwright)  
-**Checkout:** `D:\OandO07072026` (main only)  
+**Checkout:** `.` (main only)  
 **Status:** **UNITS DONE · BROWSER W3 PASS · CP-03 SCORECARD PASS** (Agent 5)
 
 ---
@@ -100,7 +100,7 @@ No structural product regression from residual work. Tests are direct (pure help
 ## Evidence paths
 
 **Canonical folder only:**  
-`D:\OandO07072026\results\planner\world-standard-wave\03-select-delete\`  
+`results\planner\world-standard-wave\03-select-delete\`  
 (Never `site/results/`; never journey folder substitute.)
 
 ### Units (deposited)

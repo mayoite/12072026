@@ -96,7 +96,7 @@ These are **not** planner 2D/3D engine enable flags.
 
 ## 4. Cite map (absolute)
 
-- `D:\OandO07072026\site\features\planner\open3d\canvas-fabric-stage\fabricFurnitureFlag.ts`
-- `D:\OandO07072026\site\features\planner\open3d\canvas-fabric-stage\index.ts`
-- `D:\OandO07072026\site\features\planner\open3d\editor\OOPlannerWorkspace.tsx`
-- `D:\OandO07072026\site\features\planner\open3d\3d\orbitDefaults.ts`
+- `site\features\planner\open3d\canvas-fabric-stage\fabricFurnitureFlag.ts`
+- `site\features\planner\open3d\canvas-fabric-stage\index.ts`
+- `site\features\planner\open3d\editor\OOPlannerWorkspace.tsx`
+- `site\features\planner\open3d\3d\orbitDefaults.ts`

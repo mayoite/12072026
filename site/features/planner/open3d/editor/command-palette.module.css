@@ -88,7 +88,9 @@
   cursor: pointer;
 }
 
-.commandPaletteItem[data-active="true"] {
+.commandPaletteItem[data-active="true"],
+.commandPaletteItem[data-selected],
+.commandPaletteItem[data-focused] {
   background: var(--cp-accent-soft);
 }
 

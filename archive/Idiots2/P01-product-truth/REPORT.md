@@ -2,9 +2,9 @@
 
 **Brainstormer:** 01/10 RE-RUN  
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` (main only; no worktrees)  
+**Checkout:** `.` (main only; no worktrees)  
 **Mode:** Ideas / inventory / honesty only. **No product code. No `site/` edits. No package installs. No competitor assets.**  
-**Deliverable (only):** `D:\OandO07072026\Idiots2\P01-product-truth\REPORT.md`  
+**Deliverable (only):** `Idiots2\P01-product-truth\REPORT.md`  
 **Research order (followed):**  
 1. **`D:\websites` FIRST** — full pack inventory + deep-read of all report / INSPIRATION / ETHICS / SYNTHESIS / ENGINE-DECISION / MASTER-CHART / slice REPORTs  
 2. **`Plans\Research` entire**  
@@ -42,7 +42,7 @@
 
 | Check | Result (2026-07-10 this agent) |
 |-------|--------------------------------|
-| `D:\OandO07072026\results\` | **DOES NOT EXIST** |
+| `results\` | **DOES NOT EXIST** |
 | `results/planner/world-standard-wave/` | **MISSING** |
 | `00-product-truth/` pack (`INVENTORY.md`, `CONTRADICTIONS.md`, greps, smoke logs) | **UNREADABLE on disk** |
 | `WAVE.md` / `COMPARISON-CHART.md` in-repo | **MISSING** |
@@ -624,7 +624,7 @@ P01 is **inventory-only**:
 | Required vitest smoke attempt | Re-scrape Planner5D |
 
 **Output root (contract):**  
-`D:\OandO07072026\results\planner\world-standard-wave\00-product-truth\`
+`results\planner\world-standard-wave\00-product-truth\`
 
 ### 6.3 Live workspace surface map (this re-run)
 
@@ -1192,7 +1192,7 @@ If later scoreboards mark W-gates PASS, product truth still requires: **residual
 | Kind | Path | Is W-gate proof? |
 |------|------|------------------|
 | Competitive research | `D:\websites\**` | **No** |
-| Product evidence | `D:\OandO07072026\results\planner\world-standard-wave\**` | **Yes** when artifacts match RESULTS-MAP |
+| Product evidence | `results\planner\world-standard-wave\**` | **Yes** when artifacts match RESULTS-MAP |
 | Plans / execute cards | `Plans/phases/**` | Procedure only |
 | ayushdocs / Others | honesty, context | Claim sources |
 | Idiots / Idiots2 REPORTS | brainstorm | **No** as gate proof |
@@ -1278,22 +1278,22 @@ If later scoreboards mark W-gates PASS, product truth still requires: **residual
 
 ### 22.3 Plans / phase / product
 
-- `D:\OandO07072026\Plans\Research\RESEARCH-MAP.md`  
-- `D:\OandO07072026\Plans\Research\RESULTS-MAP.md`  
-- `D:\OandO07072026\Plans\Research\Others\18-PRODUCT-CONTEXT.md`  
-- `D:\OandO07072026\Plans\Research\Others\19-GOALS-SLICES.md`  
-- `D:\OandO07072026\Plans\Research\Others\00-PENDING.md`  
-- `D:\OandO07072026\Plans\Research\Others\04-HONEST-QUALITY.md`  
-- `D:\OandO07072026\Plans\phases\P01-product-truth\P01-product-truth.md`  
-- `D:\OandO07072026\Plans\phases\P01-product-truth\P01-suggestions.md`  
-- `D:\OandO07072026\Plans\phases\P01-product-truth\README.md`  
-- `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`  
-- `D:\OandO07072026\AGENTS.md`  
+- `Plans\Research\RESEARCH-MAP.md`  
+- `Plans\Research\RESULTS-MAP.md`  
+- `Plans\Research\Others\18-PRODUCT-CONTEXT.md`  
+- `Plans\Research\Others\19-GOALS-SLICES.md`  
+- `Plans\Research\Others\00-PENDING.md`  
+- `Plans\Research\Others\04-HONEST-QUALITY.md`  
+- `Plans\phases\P01-product-truth\P01-product-truth.md`  
+- `Plans\phases\P01-product-truth\P01-suggestions.md`  
+- `Plans\phases\P01-product-truth\README.md`  
+- `docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`  
+- `AGENTS.md`  
 
 ### 22.4 Prior brainstorm
 
-- `D:\OandO07072026\Idiots\P01-product-truth\REPORT.md` (wave 1)  
-- This file: `D:\OandO07072026\Idiots2\P01-product-truth\REPORT.md` (wave 2 re-run)
+- `Idiots\P01-product-truth\REPORT.md` (wave 1)  
+- This file: `Idiots2\P01-product-truth\REPORT.md` (wave 2 re-run)
 
 ---
 

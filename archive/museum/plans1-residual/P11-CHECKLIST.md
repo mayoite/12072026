@@ -113,7 +113,7 @@ Forbidden present as “canonical”?
 Run and tee raw logs under `11-integration-closeout/unit/`:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 
 # Representative spine (adjust if paths move — prefer existing suites)
 pnpm exec vitest run `
@@ -154,7 +154,7 @@ Minimum story (can be one Playwright project or ordered specs):
 Commands (prefer existing scripts):
 
 ```powershell
-cd D:\OandO07072026
+cd .
 # Ensure env Fabric OFF
 Remove-Item Env:NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE -ErrorAction SilentlyContinue
 
@@ -180,7 +180,7 @@ pnpm --filter oando-site run test:e2e:open3d-world
 ### P11.7 — Static gates (ship honesty, not theater)
 
 ```powershell
-cd D:\OandO07072026
+cd .
 pnpm run typecheck 2>&1 | Tee-Object results\planner\world-standard-wave\11-integration-closeout\typecheck-raw.log
 pnpm run lint 2>&1 | Tee-Object results\planner\world-standard-wave\11-integration-closeout\lint-raw.log
 # Optional full gate if owner wants release-level:

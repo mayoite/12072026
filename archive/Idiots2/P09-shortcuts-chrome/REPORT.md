@@ -7,7 +7,7 @@
 **Gate:** **W8** — Tool/shortcut labels match handlers  
 **Checkpoint:** **CP-09**  
 **Evidence home (execution, not this report):** `results/planner/world-standard-wave/09-shortcuts-chrome/`  
-**Checkout:** `D:\OandO07072026` main only · no worktrees  
+**Checkout:** `.` main only · no worktrees  
 
 **Skills invoked:** `/using-superpowers` · brainstorming (design/spec synthesis; no implementation)  
 
@@ -865,7 +865,7 @@ This mapping is **runtime drawing mode**, not keyboard letter identity. W8 does 
 **PowerShell pattern (from phase):**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx tests/unit/features/planner/open3d/donorParity.test.ts tests/unit/features/planner/open3d/workspaceShell.test.tsx --reporter=verbose 2>&1 | Tee-Object -FilePath ..\results\planner\world-standard-wave\09-shortcuts-chrome\00-baseline-vitest.log
 ```
 
@@ -2056,14 +2056,14 @@ And letter arming still works when focus is not editable
 
 | Path | Use |
 |------|-----|
-| `D:\OandO07072026\Plans\Research\RESEARCH-MAP.md` | P09 pack routing |
-| `D:\OandO07072026\Plans\Research\RESULTS-MAP.md` | **09-shortcuts-chrome/** lock |
-| `D:\OandO07072026\Plans\Research\STRUCTURE-ADVICE.md` | Phase sizing; thrash risks |
-| `D:\OandO07072026\Plans\Research\STRUCTURE-ADVICE-2.md` | Parallel fill order |
-| `D:\OandO07072026\Plans\phases\P09-shortcuts-chrome\P09-shortcuts-chrome.md` | Execute card |
-| `D:\OandO07072026\Plans\phases\P09-shortcuts-chrome\P09-suggestions.md` | S1–S10 |
-| `D:\OandO07072026\Plans\phases\P09-shortcuts-chrome\06-ui-shortcuts.md` | Expert FIX verdict |
-| `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md` | W8 one-line gate |
+| `Plans\Research\RESEARCH-MAP.md` | P09 pack routing |
+| `Plans\Research\RESULTS-MAP.md` | **09-shortcuts-chrome/** lock |
+| `Plans\Research\STRUCTURE-ADVICE.md` | Phase sizing; thrash risks |
+| `Plans\Research\STRUCTURE-ADVICE-2.md` | Parallel fill order |
+| `Plans\phases\P09-shortcuts-chrome\P09-shortcuts-chrome.md` | Execute card |
+| `Plans\phases\P09-shortcuts-chrome\P09-suggestions.md` | S1–S10 |
+| `Plans\phases\P09-shortcuts-chrome\06-ui-shortcuts.md` | Expert FIX verdict |
+| `docs\superpowers\specs\2026-07-09-world-standard-planner-design.md` | W8 one-line gate |
 
 ### Live code (re-prove)
 
@@ -2245,7 +2245,7 @@ W8 alone does not make O&O win MASTER-CHART toolbar column. It makes O&O **not a
 
 ## 36. Final seal
 
-**Deliverable path:** `D:\OandO07072026\Idiots2\P09-shortcuts-chrome\REPORT.md`  
+**Deliverable path:** `Idiots2\P09-shortcuts-chrome\REPORT.md`  
 **Mode:** Brainstorm / research synthesis only  
 **Gate focus:** **W8**  
 **Research order:** D:\websites → Plans/Research → Plans/phases/P09-shortcuts-chrome  

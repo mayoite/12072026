@@ -1,7 +1,7 @@
 # chrome-devtools W3 — select → delete → undo (live eyes)
 
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` (main only; no worktrees)  
+**Checkout:** `.` (main only; no worktrees)  
 **Seat:** Chrome DevTools seat (1) — live eyes  
 **URL:** `http://127.0.0.1:3000/planner/guest/?plannerDevTools=1`  
 **Fabric:** OFF (`NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE` unset in shell)

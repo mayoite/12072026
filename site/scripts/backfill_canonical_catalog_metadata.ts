@@ -8,8 +8,9 @@ import {
   normalizeRequestedCategoryId,
   resolveCanonicalSubcategory,
 } from "@/features/catalog/categories";
+import { REPO_ROOT, SITE_PACKAGE_ROOT } from "./lib/repoRoot";
 
-config({ path: resolve(process.cwd(), ".env.local") });
+config({ path: resolve(SITE_PACKAGE_ROOT, ".env.local") });
 
 type ProductRow = {
   id: string;
@@ -169,7 +170,7 @@ async function main() {
     .filter((item) => item.legacySlugs.length > 1)
     .sort((left, right) => left.aliasSlug.localeCompare(right.aliasSlug));
 
-  const reportDir = resolve(process.cwd(), "results", "audits");
+  const reportDir = resolve(REPO_ROOT, "results", "audits");
   mkdirSync(reportDir, { recursive: true });
   writeFileSync(
     resolve(reportDir, "canonical-metadata-backfill-report.json"),

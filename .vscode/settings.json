@@ -28,7 +28,7 @@
         "editor.defaultFormatter": "ms-vscode.js-debug",
     },
     "github.copilot.completions.chat.enabled": true,
-    "typescript.tsdk": "site/node_modules/typescript/lib",
+    "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "css.lint.unknownAtRules": "ignore",
     "less.lint.unknownAtRules": "ignore",

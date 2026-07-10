@@ -2,7 +2,7 @@
 
 **Seat:** Independent test + coverage code-review (1 agent)  
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` only — no worktrees  
+**Checkout:** `.` only — no worktrees  
 **Bar:** NO PAPER MOON. No bias toward prior PASS seats. Read every `it(`/`test(` body. Re-measured coverage.
 
 **Verdict key**

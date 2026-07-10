@@ -2,7 +2,7 @@
 
 **Reviewer:** Planning expert (structure pass)  
 **Date:** 2026-07-09  
-**Scope:** `D:\OandO07072026\Plans\trustdata\` only — spot-check of sizes/structure; **no rewrites** of phase bodies in this pass  
+**Scope:** `Plans\trustdata\` only — spot-check of sizes/structure; **no rewrites** of phase bodies in this pass  
 **Mode:** plan-only · no product code  
 **Peer note:** Independent second opinion also landed as [STRUCTURE-ADVICE-2.md](./STRUCTURE-ADVICE-2.md) (aligned on KEEP topology + thin density; this file is the primary structured answer to the six owner questions)
 
@@ -315,7 +315,7 @@ Lead with W-gate + folder name; P-numbers second.
 1. **Match:** Six owner questions answered; decision KEEP; no phase rewrites.  
 2. **Verify:** Live read of INDEX, 00-START, RESULTS-MAP, RESEARCH-MAP, CHECKPOINTS, MASTER, AGENT-RULES, all P01–P10 headers/task maps; line ends spot-checked; TBD grep clean in task bodies.  
 3. **Log:** No product blockers; structure-only.  
-4. **Report path:** `D:\OandO07072026\Plans\trustdata\reviews\STRUCTURE-ADVICE.md`  
+4. **Report path:** `Plans\trustdata\reviews\STRUCTURE-ADVICE.md`  
 5. **Next step (owner):** Accept KEEP; optionally authorize INDEX kill-order paste only; **do not** authorize multi-file phase splits unless a future execute proves skim failures that CHECKPOINTS cannot fix.
 
 ---

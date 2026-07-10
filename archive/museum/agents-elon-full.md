@@ -155,7 +155,7 @@ Not vibe coding. Product horizon: **days and months**.
 
 | Step | When | Command / action |
 |------|------|------------------|
-| **Commit** | Each landable task | Local commit on `main` (`D:\OandO07072026` only ΓÇö **no worktrees**) |
+| **Commit** | Each landable task | Local commit on `main` (`.` only ΓÇö **no worktrees**) |
 | **origin** | Slice green enough not to strand remote | `git push origin main` ΓÇö **agent call, no ask** |
 | **mirror** | ~**45 min** real work **or** sooner after a big land | `git push mayoite main` ΓÇö remote **`mayoite`** ΓåÆ `https://github.com/mayoite/OandO07072026` |
 | **Never** | Unless owner asks | Force-push origin or mayoite; delete remote branches |
@@ -269,7 +269,7 @@ Seat: <ΓÇª>
 Track phase ID: <e.g. D4 | A1 | AI1 | P07> ΓÇö only this ID on this track
 Phase / task: <ΓÇª>
 Package: <one> ΓÇö no concurrent writer on same package
-No Firecrawl. No worktrees. D:\OandO07072026 only.
+No Firecrawl. No worktrees. . only.
 TDD if product code. Evidence under results/.
 Return: DONE|DONE_WITH_CONCERNS|NEEDS_CONTEXT|BLOCKED + paths.
 ```

@@ -28,8 +28,9 @@ import type { PlannerProjectMetadata } from "@/features/planner/onboarding/proje
 import type { AIProviderClassification } from "./aiStatus";
 
 import type { CatalogMatchResult, SuggestedLayoutJson } from "./types";
+import type { WorkspaceAiBridge } from "./workspaceAiBridge";
 
-function useCanvasPlacementCount(): number {
+function useFabricPlacementCount(): number {
   return useSyncExternalStore(
     subscribePlannerFabricRuntimeState,
     () => extractCanvasPlacements(null).length,
@@ -44,18 +45,27 @@ export type AIAssistDrawerProps = {
   /** When false, only the header row is shown until expanded. */
   defaultExpanded?: boolean;
   embedded?: boolean;
+  defaultTab?: AiAssistTab;
+  /** Live workspace document bridge (bypasses Fabric runtime). */
+  workspaceBridge?: WorkspaceAiBridge;
+  /** Fills a workspace shell panel — no extra drawer chrome. */
+  panelFill?: boolean;
 };
 
 export function AIAssistDrawer({
   editor,
   defaultExpanded = true,
   embedded = true,
+  defaultTab = "suggest-layout",
+  workspaceBridge,
+  panelFill = false,
 }: AIAssistDrawerProps) {
   const projectMetadata = usePlannerWorkspaceStore((s) => s.projectMetadata);
 
   const [expanded, setExpanded] = useState(defaultExpanded);
-  const [tab, setTab] = useState<AiAssistTab>("suggest-layout");
-  const placementCount = useCanvasPlacementCount();
+  const [tab, setTab] = useState<AiAssistTab>(defaultTab);
+  const fabricPlacementCount = useFabricPlacementCount();
+  const placementCount = workspaceBridge?.placementCount ?? fabricPlacementCount;
 
   const [matchBusy, setMatchBusy] = useState(false);
   const [matchResults, setMatchResults] = useState<CatalogMatchResult[]>([]);
@@ -63,19 +73,25 @@ export function AIAssistDrawer({
 
   const handleScanCanvas = useCallback(() => {
     setMatchBusy(true);
-    const placements = extractCanvasPlacements(null);
+    const placements = workspaceBridge
+      ? workspaceBridge.getPlacements()
+      : extractCanvasPlacements(null);
     setMatchResults(matchCatalogForPlacements(placements));
     setMatchScanned(true);
     setMatchBusy(false);
-  }, []);
+  }, [workspaceBridge]);
 
   const handleApplyCatalogMatch = useCallback(
-    (_shapeId: string, catalogItemId: string) => {
+    (shapeId: string, catalogItemId: string) => {
+      if (workspaceBridge) {
+        workspaceBridge.replaceCatalogMatch(shapeId, catalogItemId);
+        return;
+      }
       const item = PLANNER_CATALOG_ITEMS.find((entry) => entry.id === catalogItemId);
       if (!item) return;
       getPlannerFabricRuntime()?.placeCatalogItem(item);
     },
-    [],
+    [workspaceBridge],
   );
 
   const emptyCanvasHint = placementCount === 0;
@@ -84,7 +100,7 @@ export function AIAssistDrawer({
 
   return (
     <section
-      className={`pw-ai-drawer${embedded ? " pw-ai-drawer--embedded" : ""}`}
+      className={`pw-ai-drawer${embedded ? " pw-ai-drawer--embedded" : ""}${panelFill ? " pw-ai-drawer--panel-fill" : ""}`}
       data-expanded={showBody}
       aria-label="AI Assist"
     >
@@ -154,6 +170,8 @@ export function AIAssistDrawer({
               ].join(":")}
               _editor={editor}
               projectMetadata={projectMetadata}
+              onApplyLayout={workspaceBridge?.applyLayout}
+              onFitCanvas={workspaceBridge?.fitCanvas}
             />
           ) : tab === "match-catalog" ? (
             <div className="pw-ai-drawer-pane" role="tabpanel">
@@ -238,6 +256,7 @@ export function AIAssistDrawer({
               key={projectMetadata?.completedAt ?? "pending-setup"}
               editor={editor}
               projectMetadata={projectMetadata}
+              currentShapeCount={placementCount}
             />
           )}
         </div>
@@ -249,9 +268,13 @@ export function AIAssistDrawer({
 function SuggestLayoutPane({
   _editor,
   projectMetadata,
+  onApplyLayout,
+  onFitCanvas,
 }: {
   _editor?: null;
   projectMetadata: PlannerProjectMetadata | null;
+  onApplyLayout?: (layout: SuggestedLayoutJson) => void;
+  onFitCanvas?: () => void;
 }) {
   const defaults = resolveSpaceSuggestDefaults(projectMetadata);
   const [seatCount, setSeatCount] = useState(defaults.seatCount);
@@ -336,10 +359,15 @@ function SuggestLayoutPane({
 
   const handleApplyLayout = useCallback(() => {
     if (!previewLayout) return;
-    applySuggestedLayout(null, previewLayout);
+    if (onApplyLayout) {
+      onApplyLayout(previewLayout);
+      onFitCanvas?.();
+    } else {
+      applySuggestedLayout(null, previewLayout);
+      getPlannerFabricRuntime()?.fitToContent();
+    }
     setLayoutError(null);
-    getPlannerFabricRuntime()?.fitToContent();
-  }, [previewLayout]);
+  }, [onApplyLayout, onFitCanvas, previewLayout]);
 
   return (
     <div className="pw-ai-drawer-pane" role="tabpanel">

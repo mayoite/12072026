@@ -334,7 +334,7 @@ process.exit(1);
 - [ ] **Step 3: Run checker**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 node scripts/check-w-gates.mjs
 ```
 
@@ -478,7 +478,7 @@ git commit -m "docs: single residual execute authority plans1 START-HERE"
 - [ ] **Step 1: Path prove**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 @(
   'plans1\START-HERE.md',
   'plans1\gates.yaml',

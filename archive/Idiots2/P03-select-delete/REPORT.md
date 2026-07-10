@@ -2,8 +2,8 @@
 
 **Agent:** BRAINSTORMER 03 of 10 (Idiots2)  
 **Seat:** Phase brainstorm only — **no product code**  
-**Checkout:** `D:\OandO07072026` only — no worktrees  
-**Write path (only):** `D:\OandO07072026\Idiots2\P03-select-delete\REPORT.md`  
+**Checkout:** `.` only — no worktrees  
+**Write path (only):** `Idiots2\P03-select-delete\REPORT.md`  
 **Date:** 2026-07-10  
 **Skills posture:** `/using-superpowers` + brainstorming discipline  
 **Read order (mandatory for this seat):**  
@@ -1176,11 +1176,11 @@ Do **not** tick MASTER after 07.
 
 | Path | Role |
 |------|------|
-| `D:\OandO07072026\Plans\Research\RESEARCH-MAP.md` | Pack routing P03 |
-| `D:\OandO07072026\Plans\Research\RESULTS-MAP.md` | Evidence folders |
-| `D:\OandO07072026\Plans\Research\STRUCTURE-ADVICE.md` | One CP; reject split |
-| `D:\OandO07072026\Plans\Research\STRUCTURE-ADVICE-2.md` | W3 density advice |
-| `D:\OandO07072026\Plans\Research\STRUCTURE-REWRITE-NOTE.md` | HYBRID rewrite note |
+| `Plans\Research\RESEARCH-MAP.md` | Pack routing P03 |
+| `Plans\Research\RESULTS-MAP.md` | Evidence folders |
+| `Plans\Research\STRUCTURE-ADVICE.md` | One CP; reject split |
+| `Plans\Research\STRUCTURE-ADVICE-2.md` | W3 density advice |
+| `Plans\Research\STRUCTURE-REWRITE-NOTE.md` | HYBRID rewrite note |
 
 #### Phase P03
 
@@ -1199,7 +1199,7 @@ Do **not** tick MASTER after 07.
 
 | Path | Role |
 |------|------|
-| `D:\OandO07072026\results\planner\world-standard-wave\03-select-delete\` | **Only** gate file-of-record |
+| `results\planner\world-standard-wave\03-select-delete\` | **Only** gate file-of-record |
 
 ### 22.2 Non-claims
 

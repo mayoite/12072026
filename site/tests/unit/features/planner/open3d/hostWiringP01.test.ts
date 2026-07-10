@@ -107,7 +107,7 @@ describe("P01 host wiring (import graph + source)", () => {
     );
   });
 
-  it("workspace mounts Open3dFabricStage as sole live 2-D canvas (no FeasibilityCanvas fallback)", () => {
+  it("workspace mounts PlannerCanvasStage as sole live 2-D canvas (native Block2D)", () => {
     const workspaceSrc = readSite(
       "features",
       "planner",
@@ -115,8 +115,8 @@ describe("P01 host wiring (import graph + source)", () => {
       "editor",
       "OOPlannerWorkspace.tsx",
     );
-    expect(workspaceSrc).toMatch(/Open3dFabricStage/);
-    expect(workspaceSrc).not.toMatch(/FeasibilityCanvas/);
+    expect(workspaceSrc).toMatch(/PlannerCanvasStage/);
+    expect(workspaceSrc).not.toMatch(/Open3dFabricStage/);
     expect(workspaceSrc).not.toMatch(/isOpen3dFabricFurnitureEnabled/);
 
     // Legacy env flag module remains for mapper tests; not wired in workspace.

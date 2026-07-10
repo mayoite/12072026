@@ -8,8 +8,9 @@
 const fs = require("fs");
 const path = require("path");
 
-const ROOT = path.resolve(__dirname, "..");
-const OUT = path.join(ROOT, "results", "reviews");
+const SITE_ROOT = path.resolve(__dirname, "..");
+const REPO_ROOT = path.resolve(SITE_ROOT, "..");
+const OUT = path.join(REPO_ROOT, "results", "reviews");
 
 const CODE_EXTS = new Set([".ts", ".tsx", ".css", ".js", ".mjs", ".json"]);
 
@@ -33,7 +34,7 @@ function walkDir(dir, filter) {
 }
 
 function copyToReview(srcPath, destFolder) {
-  const rel = path.relative(ROOT, srcPath);
+  const rel = path.relative(SITE_ROOT, srcPath);
   const dest = path.join(destFolder, rel);
   ensureDir(path.dirname(dest));
   fs.copyFileSync(srcPath, dest);
@@ -158,7 +159,7 @@ ${fileList.map((f) => `- \`${f}\``).join("\n")}
 }
 
 function main() {
-  console.log(`Preparing review folders from ${ROOT}\n`);
+  console.log(`Preparing review folders from ${SITE_ROOT}\n`);
 
   if (fs.existsSync(OUT)) fs.rmSync(OUT, { recursive: true });
   ensureDir(OUT);
@@ -173,7 +174,7 @@ function main() {
     const fileList = [];
 
     for (const source of config.sources) {
-      const srcPath = path.join(ROOT, source.dir);
+      const srcPath = path.join(SITE_ROOT, source.dir);
 
       if (source.single) {
         if (fs.existsSync(srcPath) && fs.statSync(srcPath).isFile()) {
@@ -201,7 +202,7 @@ function main() {
   const summary = `# Review Folders Summary
 
 Generated: ${new Date().toISOString()}
-Source root: \`${ROOT}\`
+Source root: \`${SITE_ROOT}\`
 
 | Folder | Files | Purpose |
 |--------|-------|---------|

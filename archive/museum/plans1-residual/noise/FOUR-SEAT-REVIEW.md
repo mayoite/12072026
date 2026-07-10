@@ -1,7 +1,7 @@
 # Four-seat review — residual plan package
 
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026`  
+**Checkout:** `.`  
 **Method:** Parallel subagents · `/using-superpowers`  
 **Seats:** Executing agent · Planning expert · Critic · Benchmarker  
 **Subject:** Execute spine after “plans1 not PlansA” clarity fix  

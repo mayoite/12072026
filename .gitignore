@@ -5,8 +5,9 @@ site/block-descriptors/_archive/
 site/block-descriptors/*.*.json
 
 node_modules/
-# pnpm may create package-local link farms under site/ ‚Äî never hand-install only under site/
+# Hoisted at repo root (.npmrc node-linker=hoisted) ù never install-only under site/
 site/node_modules/
+site/tech-stack-generator/node_modules/
 
 # Site build output
 site/.next/
@@ -17,7 +18,7 @@ site/tsconfig.tsbuildinfo
 tech-stack-generated/*
 !tech-stack-generated/.gitkeep
 
-# FORBIDDEN under site/ (canonical layout ‚Äî see AGENTS.md)
+# FORBIDDEN under site/ (canonical layout ó see AGENTS.md)
 site/results/
 site/test-results/
 site/.cursor/
@@ -99,7 +100,7 @@ site/public/catalog-assets/generated/*.glb
 
 
 # Root results/ stays tracked for evidence artifacts (screenshots/logs).
-# Durable docs belong in Plans/ Agents/ ayushdocs/ ó not results/.
+# Durable docs belong in Plans/ Agents/ ayushdocs/ ù not results/.
 # Never gitignore results/ entirely.
 
 

@@ -4,7 +4,7 @@
 **Status:** **APPROVED** — Approach **A** (Product Journey First) · implementation unlock recorded 2026-07-09  
 **Record:** `Plans/trustdata/00-START.md` · evidence `results/planner/world-standard-wave/00-start/NOTES.md`  
 **Authority:** Owner message > `AGENTS.md` > `Plans/trustdata/` > this spec > ayushdocs honesty  
-**Checkout:** `D:\OandO07072026` only · commit as we go · no worktrees  
+**Checkout:** `.` only · commit as we go · no worktrees  
 **Research:** Ideas only (`D:\websites`, ethics). Firecrawl was for ideas, not copy.  
 **Bar:** Global manufacturer-planner standard · quality over speed · no approach re-debate.
 

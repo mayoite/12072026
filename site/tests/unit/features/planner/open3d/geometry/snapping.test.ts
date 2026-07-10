@@ -4,6 +4,7 @@ import {
   projectToScreen,
   screenToProject,
   snapDrawingPoint,
+  wheelZoomFactor,
   zoomTransformAt,
   type CanvasTransform,
 } from "@/features/planner/open3d/lib/geometry/snapping";
@@ -24,6 +25,19 @@ describe("projectToScreen / screenToProject", () => {
     const transform: CanvasTransform = { origin: { x: 100, y: 200 }, scale: 2 };
     expect(projectToScreen({ x: 100, y: 200 }, transform)).toEqual({ x: 0, y: 0 });
     expect(screenToProject({ x: 0, y: 0 }, transform)).toEqual({ x: 100, y: 200 });
+  });
+});
+
+describe("wheelZoomFactor", () => {
+  it("zooms in for negative pixel deltas and out for positive", () => {
+    expect(wheelZoomFactor(-100, 0)).toBeGreaterThan(1);
+    expect(wheelZoomFactor(100, 0)).toBeLessThan(1);
+  });
+
+  it("scales line-mode deltas like Fabric planner wheel", () => {
+    const pixel = wheelZoomFactor(-120, 0);
+    const line = wheelZoomFactor(-7.5, 1);
+    expect(line).toBeCloseTo(pixel, 6);
   });
 });
 

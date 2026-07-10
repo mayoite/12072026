@@ -7,6 +7,7 @@
     "node": ">=24.0.0"
   },
   "scripts": {
+    "preinstall": "node scripts/guard-workspace-install.mjs",
     "dev": "pnpm --filter oando-site dev",
     "dev:turbo": "pnpm --filter oando-site dev:turbo",
     "check:layout": "node scripts/check-repo-layout.mjs",
@@ -48,7 +49,8 @@
     "build:tech-stack": "pnpm --filter oando-site-workflow-docs build",
     "preview:tech-stack": "pnpm --filter oando-site-workflow-docs preview",
     "typecheck:tech-stack": "pnpm --filter oando-site-workflow-docs typecheck",
-    "test:tech-stack": "pnpm --filter oando-site-workflow-docs test"
+    "test:tech-stack": "pnpm --filter oando-site-workflow-docs test",
+    "postinstall": "node scripts/cleanup-nested-installs.mjs"
   },
   "devDependencies": {
     "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",

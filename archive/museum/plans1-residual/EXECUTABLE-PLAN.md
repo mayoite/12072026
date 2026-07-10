@@ -35,7 +35,7 @@
 
 | Check | Fact |
 |-------|------|
-| Checkout | `D:\OandO07072026` main · no worktrees required |
+| Checkout | `.` main · no worktrees required |
 | `results/` | **MISSING** → all prior GATE/CP PASS unproven |
 | Layout | `pnpm run check:layout` fails until `results/` exists |
 | Root `Idiots2/` | **Absent** → use `archive/Idiots2/` |
@@ -210,7 +210,7 @@ Detail templates for long dumps remain in each IMPLEMENTATION-PLAN — **use onl
 - [ ] **Step 1:** Confirm single worktree
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git worktree list
 ```
 
@@ -308,7 +308,7 @@ Get-ChildItem site\features\planner\open3d -Recurse -Include *.ts,*.tsx |
 #### Task 01.05 — Required vitest capability smoke
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/hostWiringP01.test.ts `
   tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx `
@@ -381,7 +381,7 @@ Freeze with **live** truth:
 #### Task 02.03 — Unit re-runs (raw logs)
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts --reporter=verbose 2>&1 |
   Tee-Object ..\results\planner\world-standard-wave\01-engine-lock\vitest-fabric-flag-raw.log
 

@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-10  
 **HEAD:** `ab930b89c5dcd089f9dcc46490ab2d4dd50cdb96`  
-**Checkout:** `D:\OandO07072026` (main only; single worktree)  
+**Checkout:** `.` (main only; single worktree)  
 **Scope:** Inventory only — no edits under `site/features/planner/open3d/**`  
 **Evidence folder (FOLDER-LOCK):** `results/planner/world-standard-wave/00-product-truth/`
 

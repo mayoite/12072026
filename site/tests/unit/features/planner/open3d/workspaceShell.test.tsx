@@ -27,8 +27,8 @@ import type { Open3dWall } from "@/features/planner/open3d/model/types";
 vi.mock("@/features/planner/open3d/editor/CanvasToolRail", () => ({ CanvasToolRail: () => <div data-testid="tool-rail" /> }));
 vi.mock("@/features/planner/open3d/editor/CommandPalette", () => ({ CommandPalette: () => <div data-testid="cmd-palette" /> }));
 vi.mock("@/features/planner/open3d/editor/LayersPanel", () => ({ LayersPanel: () => <div data-testid="layers" /> }));
-vi.mock("@/features/planner/open3d/canvas-fabric-stage/Open3dFabricStage", () => ({
-  Open3dFabricStage: ({
+vi.mock("@/features/planner/open3d/canvas-stage", () => ({
+  PlannerCanvasStage: ({
     children,
   }: {
     children?: React.ReactNode;

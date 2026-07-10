@@ -422,14 +422,14 @@ Not theater: select, paint (furniture/wall/room), delete, history, undo are real
 
 | File |
 |------|
-| `D:\OandO07072026\site\features\planner\open3d\editor\workspaceEntityHelpers.ts` |
-| `D:\OandO07072026\site\features\planner\open3d\editor\OOPlannerWorkspace.tsx` |
-| `D:\OandO07072026\site\features\planner\open3d\editor\useWorkspaceKeyboard.ts` |
-| `D:\OandO07072026\site\features\planner\open3d\lib\geometry\canvasPicking.ts` |
-| `D:\OandO07072026\site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx` |
-| `D:\OandO07072026\site\features\planner\open3d\store\history.ts` |
-| `D:\OandO07072026\site\features\planner\open3d\canvas-fabric-stage\fabricFurnitureFlag.ts` |
+| `site\features\planner\open3d\editor\workspaceEntityHelpers.ts` |
+| `site\features\planner\open3d\editor\OOPlannerWorkspace.tsx` |
+| `site\features\planner\open3d\editor\useWorkspaceKeyboard.ts` |
+| `site\features\planner\open3d\lib\geometry\canvasPicking.ts` |
+| `site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx` |
+| `site\features\planner\open3d\store\history.ts` |
+| `site\features\planner\open3d\canvas-fabric-stage\fabricFurnitureFlag.ts` |
 
-**Report:** `D:\OandO07072026\results\planner\world-standard-wave\03-select-delete\CODE-AUDIT-LINES.md`
+**Report:** `results\planner\world-standard-wave\03-select-delete\CODE-AUDIT-LINES.md`
 
 **Product edits:** none (no one-line critical bug requiring fix; report only).

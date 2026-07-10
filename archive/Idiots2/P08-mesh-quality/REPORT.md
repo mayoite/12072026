@@ -7,7 +7,7 @@
 **Gate:** **W7** — Mesh quality **bar doc** + visual: modular not “apology boxes” for cabinet-v0 (**toe / door / carcass readable**)  
 **Checkpoint:** **CP-08**  
 **Evidence home (execution, not this report):** `results/planner/world-standard-wave/08-mesh-quality/`  
-**Checkout:** `D:\OandO07072026` main only · no worktrees  
+**Checkout:** `.` main only · no worktrees  
 
 **Skills invoked:** `/using-superpowers` · brainstorming (design/spec synthesis; no implementation)  
 
@@ -709,15 +709,15 @@ PNG names preferred:
 ### 9.5 Commands (copy-paste from phase — keep as executor truth)
 
 ```powershell
-New-Item -ItemType Directory -Force -Path D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality | Out-Null
+New-Item -ItemType Directory -Force -Path results\planner\world-standard-wave\08-mesh-quality | Out-Null
 
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/modularCabinetV0.test.ts `
   tests/unit/features/planner/open3d/modularCabinetV0GlbExport.test.ts `
   tests/unit/features/planner/open3d/resolveFurniture2DFootprint.test.ts `
   --reporter=verbose 2>&1 |
-  Tee-Object -FilePath D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\vitest-raw.log
+  Tee-Object -FilePath results\planner\world-standard-wave\08-mesh-quality\vitest-raw.log
 ```
 
 Non-reg expands blast files (see phase Task 05).
@@ -1016,27 +1016,27 @@ P08 is done when **all** hold:
 
 ### Plans
 
-- `D:\OandO07072026\Plans\Research\RESEARCH-MAP.md`  
-- `D:\OandO07072026\Plans\phases\P08-mesh-quality\P08-mesh-quality.md`  
-- `D:\OandO07072026\Plans\phases\P08-mesh-quality\P08-suggestions.md`  
-- `D:\OandO07072026\Plans\phases\P08-mesh-quality\03-r3f-3d.md`  
-- `D:\OandO07072026\Plans\phases\EXPERT-PASS.md`  
-- `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`  
+- `Plans\Research\RESEARCH-MAP.md`  
+- `Plans\phases\P08-mesh-quality\P08-mesh-quality.md`  
+- `Plans\phases\P08-mesh-quality\P08-suggestions.md`  
+- `Plans\phases\P08-mesh-quality\03-r3f-3d.md`  
+- `Plans\phases\EXPERT-PASS.md`  
+- `docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`  
 
 ### Product (verify only)
 
-- `D:\OandO07072026\site\features\planner\open3d\catalog\modularCabinetV0.ts`  
-- `D:\OandO07072026\site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts`  
-- `D:\OandO07072026\site\tests\unit\features\planner\open3d\modularCabinetV0.test.ts`  
-- `D:\OandO07072026\site\tests\unit\features\planner\open3d\modularCabinetV0GlbExport.test.ts`  
+- `site\features\planner\open3d\catalog\modularCabinetV0.ts`  
+- `site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts`  
+- `site\tests\unit\features\planner\open3d\modularCabinetV0.test.ts`  
+- `site\tests\unit\features\planner\open3d\modularCabinetV0GlbExport.test.ts`  
 
 ### Evidence (create at execute)
 
-- `D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\`  
+- `results\planner\world-standard-wave\08-mesh-quality\`  
 
 ### This report
 
-- `D:\OandO07072026\Idiots2\P08-mesh-quality\REPORT.md`  
+- `Idiots2\P08-mesh-quality\REPORT.md`  
 
 ---
 

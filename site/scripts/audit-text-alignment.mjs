@@ -15,10 +15,11 @@
 import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { REPO_ROOT, SITE_PACKAGE_ROOT } from "./lib/repoRoot.mjs";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
-const SITE_ROOT = join(__dirname, "..");
-const OUT = join(SITE_ROOT, "results", "text-alignment-audit.csv");
+const SITE_ROOT = SITE_PACKAGE_ROOT;
+const OUT = join(REPO_ROOT, "results", "text-alignment-audit.csv");
 
 const SKIP_DIRS = new Set([
   "node_modules", ".next", "dist", "results", "outputs", ".git",

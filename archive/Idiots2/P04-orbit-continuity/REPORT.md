@@ -1095,7 +1095,7 @@ Not a clone of any pack — product feel targets:
 
 ## 18. Evidence directory contract (when execute runs)
 
-**Root only:** `D:\OandO07072026\results\planner\world-standard-wave/04-orbit-continuity/`
+**Root only:** `results\planner\world-standard-wave/04-orbit-continuity/`
 
 | Artifact | Source |
 |----------|--------|
@@ -1114,7 +1114,7 @@ Not a clone of any pack — product feel targets:
 
 | Rule | Value |
 |------|--------|
-| Checkout | `D:\OandO07072026` only |
+| Checkout | `.` only |
 | Worktrees | **Forbidden** |
 | Commit | Landable slices as you go |
 | Push | Per AGENTS (origin when right; mayoite mirror policy) |
@@ -1215,30 +1215,30 @@ Phase file may claim PASS; this brainstorm pass did **not** find `results/planne
 
 ### 22.3 Plans Research + design
 
-- `D:\OandO07072026\Plans\Research\RESEARCH-MAP.md`  
-- `D:\OandO07072026\Plans\Research\Others\18-PRODUCT-CONTEXT.md`  
-- `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`  
+- `Plans\Research\RESEARCH-MAP.md`  
+- `Plans\Research\Others\18-PRODUCT-CONTEXT.md`  
+- `docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`  
 
 ### 22.4 Phase P04
 
-- `D:\OandO07072026\Plans\phases\P04-orbit-continuity\README.md`  
-- `D:\OandO07072026\Plans\phases\P04-orbit-continuity\P04-orbit-continuity.md`  
-- `D:\OandO07072026\Plans\phases\P04-orbit-continuity\P04-suggestions.md`  
-- `D:\OandO07072026\Plans\phases\P04-orbit-continuity\01-react-open3d.md`  
-- `D:\OandO07072026\Plans\phases\P04-orbit-continuity\03-r3f-3d.md`  
+- `Plans\phases\P04-orbit-continuity\README.md`  
+- `Plans\phases\P04-orbit-continuity\P04-orbit-continuity.md`  
+- `Plans\phases\P04-orbit-continuity\P04-suggestions.md`  
+- `Plans\phases\P04-orbit-continuity\01-react-open3d.md`  
+- `Plans\phases\P04-orbit-continuity\03-r3f-3d.md`  
 
 ### 22.5 Live product anchors (read-only references for brainstorm honesty)
 
-- `D:\OandO07072026\site\features\planner\open3d\3d\ThreeViewerInner.tsx`  
-- `D:\OandO07072026\site\features\planner\open3d\3d\ThreeLazyViewer.tsx`  
-- `D:\OandO07072026\site\features\planner\open3d\3d\orbitDefaults.ts`  
-- `D:\OandO07072026\site\features\planner\open3d\3d\buildOpen3dSceneNodes.ts`  
-- `D:\OandO07072026\site\features\planner\open3d\3d\createSceneObjectFromNode.ts`  
-- `D:\OandO07072026\site\features\planner\open3d\editor\OOPlannerWorkspace.tsx`  
+- `site\features\planner\open3d\3d\ThreeViewerInner.tsx`  
+- `site\features\planner\open3d\3d\ThreeLazyViewer.tsx`  
+- `site\features\planner\open3d\3d\orbitDefaults.ts`  
+- `site\features\planner\open3d\3d\buildOpen3dSceneNodes.ts`  
+- `site\features\planner\open3d\3d\createSceneObjectFromNode.ts`  
+- `site\features\planner\open3d\editor\OOPlannerWorkspace.tsx`  
 
 ### 22.6 Evidence (expected product proof)
 
-- `D:\OandO07072026\results\planner\world-standard-wave\04-orbit-continuity\` (**expected; not found in 2026-07-10 scan**)  
+- `results\planner\world-standard-wave\04-orbit-continuity\` (**expected; not found in 2026-07-10 scan**)  
 
 ---
 

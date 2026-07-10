@@ -8,7 +8,7 @@
 | **Mode** | Read-only · no implement · no plan edits |
 | **Plan** | `plans1/P09-shortcuts-chrome/IMPLEMENTATION-PLAN.md` |
 | **Brainstormer** | `archive/Idiots2/P09-shortcuts-chrome/REPORT.md` (live path; plan cites `Idiots2/…`) |
-| **Checkout** | `D:\OandO07072026` main only |
+| **Checkout** | `.` main only |
 
 ## Verdict
 
@@ -237,7 +237,7 @@ No blocking product-handler lie remains (historical smoking gun cleared).
 
 | Item | Path / note |
 |------|-------------|
-| Report | `D:\OandO07072026\plans1/P09-shortcuts-chrome\CODE-REVIEW-REPORT.md` |
+| Report | `plans1/P09-shortcuts-chrome\CODE-REVIEW-REPORT.md` |
 | Plan reviewed | `…\IMPLEMENTATION-PLAN.md` |
-| Brainstormer | `D:\OandO07072026\archive\Idiots2\P09-shortcuts-chrome\REPORT.md` |
+| Brainstormer | `archive\Idiots2\P09-shortcuts-chrome\REPORT.md` |
 | Vitest re-proof | 22/22 PASS (2026-07-10, review agent) |

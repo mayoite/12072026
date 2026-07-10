@@ -71,7 +71,7 @@ Ctrl/Cmd+Z → history.undo → furniture restored
 
 ## Tech stack
 
-Next.js `site/` · FeasibilityCanvas · Vitest · Playwright **or** chrome-devtools (minimal W3 browser) · `newEntityId` · no `any` · no worktrees · `D:\OandO07072026` only.
+Next.js `site/` · FeasibilityCanvas · Vitest · Playwright **or** chrome-devtools (minimal W3 browser) · `newEntityId` · no `any` · no worktrees · `.` only.
 
 ---
 
@@ -116,7 +116,7 @@ Every impl task: failing test first (except packaging after green unit). Skeleto
 - [ ] **00.4** Baseline vitest (record exitCode):
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts `
   tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx `
@@ -163,7 +163,7 @@ pnpm exec vitest run `
 ### Task 07 — Unit evidence pack
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts `
   tests/unit/features/planner/open3d/deleteSelection.test.ts `

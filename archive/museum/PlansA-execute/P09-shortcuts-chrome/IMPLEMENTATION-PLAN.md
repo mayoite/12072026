@@ -357,7 +357,7 @@ Both D and O valid; must stay distinct.
 - [ ] **Step 1: Create evidence directory**
 
 ```powershell
-$root = "D:\OandO07072026\results\planner\world-standard-wave"
+$root = "results\planner\world-standard-wave"
 New-Item -ItemType Directory -Force -Path (Join-Path $root "09-shortcuts-chrome") | Out-Null
 ```
 
@@ -366,7 +366,7 @@ Expected: directory exists; **not** named `08-shortcuts-chrome`.
 - [ ] **Step 2: Record HEAD honesty into NOTES stub**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse HEAD
 git status -sb
 ```
@@ -432,7 +432,7 @@ Open `FeasibilityCanvas.tsx` and paste exact `aria-keyshortcuts="…"` value int
 - [ ] **Step 4: Run baseline Vitest (unfiltered)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/toolShortcutTruth.test.ts `
   tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx `
@@ -673,7 +673,7 @@ describe("tool shortcut truth (W8)", () => {
 - [ ] **Step 3: Run truth suite**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/toolShortcutTruth.test.ts tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\09-shortcuts-chrome\01-tool-shortcut-truth.log
 ```
@@ -871,7 +871,7 @@ export function toolFromShortcutKey(key: string): PlannerTool | null {
 - [ ] **Step 3: Run truth suite GREEN**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/toolShortcutTruth.test.ts tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\09-shortcuts-chrome\02-tool-shortcut-truth-green.log
 ```
@@ -881,7 +881,7 @@ Expected: PASS all cases; D→door, M→dimension, N→window, T→text.
 - [ ] **Step 4: Regression non-tool handlers**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\09-shortcuts-chrome\02-regression-keyboard.log
 ```
@@ -1024,7 +1024,7 @@ Must not hard-code dimension letter. Fix only if lies.
 - [ ] **Step 4: Run rail tests**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/canvasToolRail.a11y.test.tsx tests/unit/features/planner/open3d/toolShortcutTruth.test.ts --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\09-shortcuts-chrome\03-rail-labels.log
 ```
@@ -1114,7 +1114,7 @@ describe("canvasKeyShortcutsAttribute (W8 aria honesty)", () => {
 - [ ] **Step 2: Run helper tests — expect FAIL (export missing)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/toolShortcutTruth.test.ts --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\09-shortcuts-chrome\04-aria-helper-red.log
 ```
@@ -1300,7 +1300,7 @@ If `paletteCommands.ts` already map-sources shortcuts, product file stays untouc
 - [ ] **Step 6: Run aria + palette GREEN**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/toolShortcutTruth.test.ts `
   tests/unit/features/planner/open3d/donorParity.test.ts `
@@ -1313,7 +1313,7 @@ Expected: PASS; helper includes M/D/O/R/P/N; palette tool-* match map.
 - [ ] **Step 7: Grep residual hard-coded donor aria**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 rg -n "aria-keyshortcuts=\"V W D T H" features/planner/open3d
 ```
 
@@ -1425,7 +1425,7 @@ git commit -m "fix(planner): unblock canvas tool chrome (W8/2A hide-tools only)"
 - [ ] **Step 1: Final Vitest pack**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/toolShortcutTruth.test.ts `
   tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx `
@@ -1510,7 +1510,7 @@ Not a substitute for unit matrix.
 - [ ] **Step 5: Final greps (honesty)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 # Second letter table pattern (should be empty of tool arming ifs)
 rg -n 'setTool\(\"dimension\"\)' features/planner/open3d/editor/useWorkspaceKeyboard.ts
 # Stale donor aria

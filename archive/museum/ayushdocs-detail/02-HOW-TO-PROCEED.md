@@ -1,6 +1,6 @@
 # How to proceed (local)
 
-**Repo:** `D:\OandO07072026` only — no git worktrees.  
+**Repo:** `.` only — no git worktrees.  
 **Commands:** run from repo root unless noted.
 
 ---
@@ -8,7 +8,7 @@
 ## 1. First-time install
 
 ```powershell
-cd D:\OandO07072026
+cd .
 pnpm install
 copy .env.example .env.local   # if you don't already have keys
 ```
@@ -51,7 +51,7 @@ pnpm run start
 From `site/` (or `pnpm --filter oando-site run …`):
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm run scripts:smoke:svg          # one fixture (chaise)
 pnpm run scripts:smoke:svg:batch    # all generate-svg fixtures
 ```
@@ -68,7 +68,7 @@ Evidence pattern: `results/planner/svg-cli-smoke/`, `results/planner/verify-wave
 Unit path for place→mesh (optional):
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/modularPlaceMesh.test.ts
 ```
 

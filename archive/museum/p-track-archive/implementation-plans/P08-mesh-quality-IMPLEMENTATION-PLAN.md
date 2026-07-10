@@ -274,19 +274,19 @@ Evidence: results/planner/world-standard-wave/08-mesh-quality/*
 Run:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse --show-toplevel
 git rev-parse --short HEAD
 git status -sb
 ```
 
-Expected: toplevel is `D:/OandO07072026` (or Windows equivalent). **No worktree.** Record short SHA.
+Expected: toplevel is `.` (or Windows equivalent). **No worktree.** Record short SHA.
 
 - [ ] **Step 2: Create evidence directory**
 
 ```powershell
-New-Item -ItemType Directory -Force -Path D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality | Out-Null
-git rev-parse --short HEAD | Set-Content -Encoding utf8 D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\HEAD.txt
+New-Item -ItemType Directory -Force -Path results\planner\world-standard-wave\08-mesh-quality | Out-Null
+git rev-parse --short HEAD | Set-Content -Encoding utf8 results\planner\world-standard-wave\08-mesh-quality\HEAD.txt
 ```
 
 Expected: directory exists; `HEAD.txt` has short sha.
@@ -296,8 +296,8 @@ Expected: directory exists; `HEAD.txt` has short sha.
 Run:
 
 ```powershell
-Select-String -Path D:\OandO07072026\site\features\planner\open3d\catalog\modularCabinetV0.ts -Pattern 'TOE_HEIGHT_MM|name = "toe"|countCabinetV0Parts'
-Select-String -Path D:\OandO07072026\site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts -Pattern 'TOE_HEIGHT_MM|name: "toe"'
+Select-String -Path site\features\planner\open3d\catalog\modularCabinetV0.ts -Pattern 'TOE_HEIGHT_MM|name = "toe"|countCabinetV0Parts'
+Select-String -Path site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts -Pattern 'TOE_HEIGHT_MM|name: "toe"'
 ```
 
 Expected: matches proving exported constants + toe child + GlbExport import/use of toe. If **no toe**, skip to Task 02/03 full TDD implement path (Approach B fallback). If toe present, continue Approach A.
@@ -305,13 +305,13 @@ Expected: matches proving exported constants + toe child + GlbExport import/use 
 - [ ] **Step 4: Baseline unit pack (expect green if live bar holds)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/modularCabinetV0.test.ts `
   tests/unit/features/planner/open3d/modularCabinetV0GlbExport.test.ts `
   tests/unit/features/planner/open3d/resolveFurniture2DFootprint.test.ts `
   --reporter=verbose 2>&1 |
-  Tee-Object -FilePath D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\vitest-baseline-raw.log
+  Tee-Object -FilePath results\planner\world-standard-wave\08-mesh-quality\vitest-baseline-raw.log
 ```
 
 Expected (Approach A): **PASS** all tests in those files.  
@@ -393,20 +393,20 @@ Create the file with **exactly this content** (fill HEAD/date at execute if diff
 ### Unit primary
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/modularCabinetV0.test.ts `
   tests/unit/features/planner/open3d/modularCabinetV0GlbExport.test.ts `
   tests/unit/features/planner/open3d/resolveFurniture2DFootprint.test.ts `
   tests/unit/features/planner/open3d/cabinetV0MeshSmokeRender.test.ts `
   --reporter=verbose 2>&1 |
-  Tee-Object -FilePath D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\vitest-raw.log
+  Tee-Object -FilePath results\planner\world-standard-wave\08-mesh-quality\vitest-raw.log
 ```
 
 ### Non-reg blast
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/modularCabinetV0.test.ts `
   tests/unit/features/planner/open3d/modularCabinetV0GlbExport.test.ts `
@@ -416,13 +416,13 @@ pnpm exec vitest run `
   tests/unit/features/planner/asset-engine/meshStages.test.ts `
   tests/unit/features/planner/open3d/cabinetV0MeshSmokeRender.test.ts `
   --reporter=verbose 2>&1 |
-  Tee-Object -FilePath D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\vitest-nonreg-raw.log
+  Tee-Object -FilePath results\planner\world-standard-wave\08-mesh-quality\vitest-nonreg-raw.log
 ```
 
 ### Headless visual smoke (default)
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec tsx scripts/render-cabinet-v0-mesh-smoke.mts
 ```
 
@@ -469,7 +469,7 @@ Open the file; verify `100` / `50` / `18` / matrix 2/3/4 / exact `toe` appear. N
 - [ ] **Step 3: Commit**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/08-mesh-quality/NOTES.md results/planner/world-standard-wave/08-mesh-quality/HEAD.txt
 git commit -m "docs(planner): W7 mesh quality bar NOTES for cabinet-v0 (P08)"
 ```
@@ -532,13 +532,13 @@ If you must add a new assertion against broken code: run → expect FAIL → fix
 - [ ] **Step 3: Run primary pack → evidence log**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/modularCabinetV0.test.ts `
   tests/unit/features/planner/open3d/modularCabinetV0GlbExport.test.ts `
   tests/unit/features/planner/open3d/resolveFurniture2DFootprint.test.ts `
   --reporter=verbose 2>&1 |
-  Tee-Object -FilePath D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\vitest-raw.log
+  Tee-Object -FilePath results\planner\world-standard-wave\08-mesh-quality\vitest-raw.log
 ```
 
 Expected (Approach A): **PASS**.  
@@ -547,13 +547,13 @@ Expected (Approach B virgin): FAIL missing `toe` / wrong counts — then Task 03
 - [ ] **Step 4: Run blast pack early (detect hard-coded 1/2/3)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts `
   tests/unit/features/planner/open3d/modularPlaceMesh.test.ts `
   tests/unit/features/planner/asset-engine/meshStages.test.ts `
   --reporter=verbose 2>&1 |
-  Tee-Object -FilePath D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\vitest-blast-preview.log
+  Tee-Object -FilePath results\planner\world-standard-wave\08-mesh-quality\vitest-blast-preview.log
 ```
 
 Expected live: **PASS** with pair children **4** and names including `toe`. If red, fix blast expectations or mesh in Task 03 same landable slice.
@@ -868,7 +868,7 @@ describe("cabinetV0MeshSmokeRender — readable multi-part silhouette", () => {
 - [ ] **Step 2: Run test — expect FAIL (module missing)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/cabinetV0MeshSmokeRender.test.ts --reporter=verbose
 ```
 
@@ -1229,7 +1229,7 @@ export function encodePngRgba(
 - [ ] **Step 4: Run unit tests — expect PASS**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/cabinetV0MeshSmokeRender.test.ts --reporter=verbose
 ```
 
@@ -1293,15 +1293,15 @@ for (const v of views) {
 - [ ] **Step 6: Run CLI — produce PNGs**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec tsx scripts/render-cabinet-v0-mesh-smoke.mts
 ```
 
 Expected stdout like:
 
 ```text
-wrote D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\01-cabinet-v0-three-quarter.png <n> bytes
-wrote D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\02-cabinet-v0-side.png <n> bytes
+wrote results\planner\world-standard-wave\08-mesh-quality\01-cabinet-v0-three-quarter.png <n> bytes
+wrote results\planner\world-standard-wave\08-mesh-quality\02-cabinet-v0-side.png <n> bytes
 ```
 
 Both files exist and size > 1KB.
@@ -1342,7 +1342,7 @@ Fill yes/no after opening both PNGs (use image viewer). **Fail closed** if singl
 - [ ] **Step 8: Commit smoke stack**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add `
   site/features/planner/open3d/catalog/cabinetV0MeshSmokeRender.ts `
   site/tests/unit/features/planner/open3d/cabinetV0MeshSmokeRender.test.ts `
@@ -1364,7 +1364,7 @@ git commit -m "test(planner): W7 headless cabinet-v0 mesh visual smoke (P08)"
 - [ ] **Step 1: Run full non-reg pack**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/modularCabinetV0.test.ts `
   tests/unit/features/planner/open3d/modularCabinetV0GlbExport.test.ts `
@@ -1374,7 +1374,7 @@ pnpm exec vitest run `
   tests/unit/features/planner/asset-engine/meshStages.test.ts `
   tests/unit/features/planner/open3d/cabinetV0MeshSmokeRender.test.ts `
   --reporter=verbose 2>&1 |
-  Tee-Object -FilePath D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\vitest-nonreg-raw.log
+  Tee-Object -FilePath results\planner\world-standard-wave\08-mesh-quality\vitest-nonreg-raw.log
 ```
 
 Expected: **all PASS**. meshStages pair partCount 4; createSceneObject pair names include toe.
@@ -1382,7 +1382,7 @@ Expected: **all PASS**. meshStages pair partCount 4; createSceneObject pair name
 - [ ] **Step 2: Optional house pack**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm run p0:g8
 ```
 
@@ -1445,7 +1445,7 @@ If visual failed: `"w7": "fail"`, `"visualSmoke": "fail"` — **do not** claim p
 - [ ] **Step 5: Commit evidence + optional stages**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/08-mesh-quality/
 git add site/features/planner/asset-engine/stages.ts
 git commit -m "test(planner): W7 mesh quality nonreg + run.json (P08/CP-08)"
@@ -1611,35 +1611,35 @@ Mirror mayoite if ~45m work / big land.
 
 **Product**
 
-- `D:\OandO07072026\site\features\planner\open3d\catalog\modularCabinetV0.ts`
-- `D:\OandO07072026\site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts`
-- `D:\OandO07072026\site\features\planner\open3d\catalog\cabinetV0MeshSmokeRender.ts` (create)
-- `D:\OandO07072026\site\features\planner\open3d\3d\createSceneObjectFromNode.ts`
-- `D:\OandO07072026\site\features\planner\asset-engine\mesh\exportModularGlbBinary.ts`
-- `D:\OandO07072026\site\features\planner\lib\glbAssetPolicy.ts`
-- `D:\OandO07072026\site\scripts\render-cabinet-v0-mesh-smoke.mts` (create)
+- `site\features\planner\open3d\catalog\modularCabinetV0.ts`
+- `site\features\planner\open3d\catalog\modularCabinetV0GlbExport.ts`
+- `site\features\planner\open3d\catalog\cabinetV0MeshSmokeRender.ts` (create)
+- `site\features\planner\open3d\3d\createSceneObjectFromNode.ts`
+- `site\features\planner\asset-engine\mesh\exportModularGlbBinary.ts`
+- `site\features\planner\lib\glbAssetPolicy.ts`
+- `site\scripts\render-cabinet-v0-mesh-smoke.mts` (create)
 
 **Tests**
 
-- `D:\OandO07072026\site\tests\unit\features\planner\open3d\modularCabinetV0.test.ts`
-- `D:\OandO07072026\site\tests\unit\features\planner\open3d\modularCabinetV0GlbExport.test.ts`
-- `D:\OandO07072026\site\tests\unit\features\planner\open3d\resolveFurniture2DFootprint.test.ts`
-- `D:\OandO07072026\site\tests\unit\features\planner\open3d\createSceneObjectFromNode.test.ts`
-- `D:\OandO07072026\site\tests\unit\features\planner\open3d\modularPlaceMesh.test.ts`
-- `D:\OandO07072026\site\tests\unit\features\planner\asset-engine\meshStages.test.ts`
-- `D:\OandO07072026\site\tests\unit\features\planner\open3d\cabinetV0MeshSmokeRender.test.ts` (create)
+- `site\tests\unit\features\planner\open3d\modularCabinetV0.test.ts`
+- `site\tests\unit\features\planner\open3d\modularCabinetV0GlbExport.test.ts`
+- `site\tests\unit\features\planner\open3d\resolveFurniture2DFootprint.test.ts`
+- `site\tests\unit\features\planner\open3d\createSceneObjectFromNode.test.ts`
+- `site\tests\unit\features\planner\open3d\modularPlaceMesh.test.ts`
+- `site\tests\unit\features\planner\asset-engine\meshStages.test.ts`
+- `site\tests\unit\features\planner\open3d\cabinetV0MeshSmokeRender.test.ts` (create)
 
 **Phase / design**
 
-- `D:\OandO07072026\Plans\phases\P08-mesh-quality\P08-mesh-quality.md`
-- `D:\OandO07072026\Plans\phases\P08-mesh-quality\P08-suggestions.md`
-- `D:\OandO07072026\Plans\phases\P08-mesh-quality\03-r3f-3d.md`
-- `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`
-- `D:\OandO07072026\Idiots2\P08-mesh-quality\REPORT.md`
+- `Plans\phases\P08-mesh-quality\P08-mesh-quality.md`
+- `Plans\phases\P08-mesh-quality\P08-suggestions.md`
+- `Plans\phases\P08-mesh-quality\03-r3f-3d.md`
+- `docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`
+- `Idiots2\P08-mesh-quality\REPORT.md`
 
 **Evidence**
 
-- `D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\`
+- `results\planner\world-standard-wave\08-mesh-quality\`
 
 ### B. Research translation (ideas only)
 

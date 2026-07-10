@@ -8,26 +8,27 @@ Built with **Vite + React + TypeScript + Tailwind CSS**, this site documents the
 
 ## Quick Start
 
+Install once from the **repo root** (never `npm install` inside this folder):
+
 ```bash
-cd site/tech-stack-generator
-npm install
-npm run dev
+# from repo root
+pnpm install
+pnpm dev:tech-stack
 ```
 
 Open http://localhost:5173 in your browser.
 
-> **Windows / PowerShell:** use `npm.cmd` instead of `npm` (e.g. `npm.cmd run dev`) — this matches the conventions of the main Oando Platform repository.
+> **Windows / PowerShell:** use `pnpm` from the repo root. Do not run `npm install` in `site/` or `site/tech-stack-generator/` — the monorepo lockfile is `pnpm-lock.yaml` at the root.
 
 ## Scripts
 
 | Script | Description |
 |--------|-------------|
-| `npm run dev` | Start Vite dev server with HMR |
-| `npm run build` | Type-check + production build to repo-root `tech-stack-docs/` |
-| `npm run preview` | Preview the production build locally |
-| `npm run typecheck` | Run TypeScript compiler in check mode |
-| `npm run test` | Run the Vitest package suite |
-| `npm run test:coverage` | Run the Vitest suite with V8 coverage |
+| `pnpm dev:tech-stack` (root) | Start Vite dev server with HMR |
+| `pnpm build:tech-stack` (root) | Type-check + production build to repo-root `tech-stack-docs/` |
+| `pnpm preview:tech-stack` (root) | Preview the production build locally |
+| `pnpm typecheck:tech-stack` (root) | Run TypeScript compiler in check mode |
+| `pnpm test:tech-stack` (root) | Run the Vitest package suite |
 
 ## Walkthrough
 

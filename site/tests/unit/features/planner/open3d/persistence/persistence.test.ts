@@ -7,6 +7,8 @@ import {
 import { createOpen3dProject } from "@/features/planner/open3d/model/project";
 import { createOpen3dGuestProjectRepository } from "@/features/planner/open3d/persistence/guestProjectRepository";
 import { exportOpen3dProjectJson, importOpen3dProjectJson } from "@/features/planner/open3d/persistence/projectJson";
+import { exportAsJSON } from "@/features/planner/open3d/shared/export/exportUtils";
+import { importOpen3dPlannerText } from "@/features/planner/open3d/shared/export/importUtils";
 
 const mockCommandContext: FeasibilityCommandContext = {
   activateDrawWall: () => undefined,
@@ -17,6 +19,14 @@ const mockCommandContext: FeasibilityCommandContext = {
 };
 
 describe("project persistence", () => {
+  it("imports exported JSON envelopes from the workspace export menu", () => {
+    const project = createOpen3dProject({ idFactory: (() => { let id = 0; return () => `${++id}`; })() });
+    const exported = exportAsJSON(project, true);
+    const result = importOpen3dPlannerText(exported);
+    expect(result.success).toBe(true);
+    expect(result.project).toEqual(project);
+  });
+
   it("exports, imports, saves, backs up, restores, and removes in memory only", () => {
     const project = createOpen3dProject({ idFactory: (() => { let id = 0; return () => `${++id}`; })() });
     expect(importOpen3dProjectJson(exportOpen3dProjectJson(project))).toEqual(project);

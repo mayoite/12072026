@@ -18,7 +18,7 @@ describe("TopBar guest persistence gate", () => {
     );
 
     expect(screen.getByRole("button", { name: "Save draft" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /^Export$/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Export/i })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /^Import/ })).not.toBeInTheDocument();
   });
 
@@ -33,20 +33,20 @@ describe("TopBar guest persistence gate", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /^Export$/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Export/i }));
     fireEvent.click(screen.getByRole("menuitem", { name: /Export BOQ \(JSON\)/i }));
     expect(onExport).toHaveBeenCalledWith("boq-json");
 
-    fireEvent.click(screen.getByRole("button", { name: /^Export$/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Export/i }));
     fireEvent.click(screen.getByRole("menuitem", { name: /Export BOQ \(CSV\)/i }));
     expect(onExport).toHaveBeenCalledWith("boq-csv");
 
-    fireEvent.click(screen.getByRole("button", { name: /^Export$/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Export/i }));
     fireEvent.click(screen.getByRole("menuitem", { name: /Export as JSON/i }));
     expect(onExport).toHaveBeenCalledWith("json");
 
     // Guest surface stays honest: no quote cart / workstation-only ERP theater.
-    fireEvent.click(screen.getByRole("button", { name: /^Export$/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Export/i }));
     expect(
       screen.queryByRole("menuitem", { name: /quote cart/i }),
     ).not.toBeInTheDocument();

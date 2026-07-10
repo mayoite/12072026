@@ -2,11 +2,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { collectPageSources as collectSourcesFromLib } from "./lib/siteUiRouteSources.mjs";
+import { REPO_ROOT, SITE_PACKAGE_ROOT } from "./lib/repoRoot.mjs";
 
 const scriptsDir = path.dirname(fileURLToPath(import.meta.url));
-const siteRoot = path.resolve(scriptsDir, "..");
+const siteRoot = SITE_PACKAGE_ROOT;
 const appDir = path.join(siteRoot, "app");
-const outFile = path.join(siteRoot, "results", "site-ui", "route-matrix.csv");
+const outFile = path.join(REPO_ROOT, "results", "site-ui", "route-matrix.csv");
 
 const GOLDEN_PATHS = new Set(["/", "/solutions"]);
 

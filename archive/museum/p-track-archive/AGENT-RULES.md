@@ -12,7 +12,7 @@
 | Scoreboard | `ayushdocs/19-GOALS-SLICES.md` |
 | Why | `ayushdocs/18-PRODUCT-CONTEXT.md` |
 | Evidence root | `results/planner/world-standard-wave/` |
-| Checkout | `D:\OandO07072026` only |
+| Checkout | `.` only |
 
 ## Trustdata-only notes
 

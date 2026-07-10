@@ -5,10 +5,10 @@
 > **Do not** tick from memory, chat optimism, or ayushdocs P0-DONE notes alone.  
 > **Governance revision:** 2026-07-09 — see [../checkpoints/GOVERNANCE-suggestions.md](../checkpoints/GOVERNANCE-suggestions.md).
 
-**Program root:** `D:\OandO07072026\Plans\P-track\`  
-**Evidence root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
-**Design authority:** `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`  
-**Checkout:** `D:\OandO07072026` · no worktrees · commit as we go · push/mirror per `AGENTS.md` (force-push needs owner)
+**Program root:** `Plans\P-track\`  
+**Evidence root:** `results\planner\world-standard-wave\`  
+**Design authority:** `docs\superpowers\specs\2026-07-09-world-standard-planner-design.md`  
+**Checkout:** `.` · no worktrees · commit as we go · push/mirror per `AGENTS.md` (force-push needs owner)
 
 **Last sync:** _fill date when P10 MASTER-SYNC runs_  
 **Git HEAD at last sync:** _paste short SHA_
@@ -20,7 +20,7 @@
 1. Work phases in kill-order priority — **one active task** (`AGENTS.md`).  
 2. For each item: evidence path in backticks → then `- [x]`.  
 3. At P10: copy tallies into `results/planner/world-standard-wave/10-handover/MASTER-SYNC.md`.  
-4. Open blockers go to `D:\OandO07072026\Failures.md`, not silent skips.
+4. Open blockers go to `Failures.md`, not silent skips.
 
 ### Canonical evidence folders (do not invent)
 
@@ -73,7 +73,7 @@ Legacy aliases (pointer only; rehome before tick): `08-shortcuts-chrome/` → `0
 
 - [ ] **A.1** `/using-superpowers` (and fit skills) used on main agent **and** every subagent for non-trivial work.
 - [ ] **A.2** Agent concurrency matches `AGENTS.md` (one task; max 10 inside it).
-- [ ] **A.3** **No git worktrees** — only `D:\OandO07072026` main checkout.
+- [ ] **A.3** **No git worktrees** — only `.` main checkout.
 - [ ] **A.4** Trust **data** (repo, tests, browser artifacts) — not character trials of the owner; not blind belief in prior agent claims.
 - [ ] **A.5** Competitor research in prompts tagged **inspiration only**; no plagiarism instructions.
 - [ ] **A.6** Agents write evidence to disk under `results/planner/world-standard-wave/` (prefer write-to-disk; do not idle waiting on chat).

@@ -3,7 +3,7 @@
 **Reviewer role:** planning expert (tech lead + PM)  
 **Date:** 2026-07-09  
 **Plan reviewed:** `Plans/trustdata/phases/P01-product-truth/P01-product-truth.md`  
-**Method:** full plan read + live path spot-check under `D:\OandO07072026\site` and trustdata authority files. **No product code changes.**
+**Method:** full plan read + live path spot-check under `site` and trustdata authority files. **No product code changes.**
 
 ---
 
@@ -44,7 +44,7 @@ Risk: agents produce a rich pack that still **fails CP-01** on folder contract.
 - W6 grep limited to `*Status*.{ts,tsx}` — will miss honesty copy in TopBar, repositories, UI strings outside Status-named files.
 - W4 grep includes bare `2d|3d` — extremely noisy; matrix quality degrades.
 - Claims table lists `ayushdocs/09-VERIFY-SNAPSHOT.md` and design spec; concat script **omits** both (and SESSION-RECAP).
-- “Log under Failures” has no absolute path (`D:\OandO07072026\Failures.md`).
+- “Log under Failures” has no absolute path (`Failures.md`).
 - CP-01 owner mark: plan says update CHECKPOINTS “when maintained”; **CHECKPOINTS.md already exists** and is the CP ledger — should be an explicit final step when owner/reviewer passes.
 
 ### Path spot-check summary (production-relevant)

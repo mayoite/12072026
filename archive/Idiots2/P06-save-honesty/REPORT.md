@@ -3,7 +3,7 @@
 **Role:** BRAINSTORMER 06/10  
 **Date:** 2026-07-10  
 **Mode:** Research + design synthesis only · **NO product code in this deliverable**  
-**Output path:** `D:\OandO07072026\Idiots2\P06-save-honesty\REPORT.md`  
+**Output path:** `Idiots2\P06-save-honesty\REPORT.md`  
 **Gates covered:** **W5** (save → hard reload → same walls + furniture ids) · **W6** (status / help / toasts never lie about local vs cloud)  
 **Approach:** Plan A product journey (locked) · Open3d document model · IndexedDB first · cloud optional / default off  
 **Ethics:** Patterns and JTBD only from `D:\websites`. No competitor UI, assets, code, brands, or trade dress in product.
@@ -738,15 +738,15 @@ P06: **none of these**. Status must never show fake presence. Share link view-on
 
 | Role | Absolute path |
 |------|----------------|
-| Autosave hook | `D:\OandO07072026\site\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts` |
-| IDB + AutoSaver | `D:\OandO07072026\site\features\planner\persistence\persistence.ts` |
+| Autosave hook | `site\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts` |
+| IDB + AutoSaver | `site\features\planner\persistence\persistence.ts` |
 | Session envelope | `…\open3d\persistence\open3dSession.ts` |
 | Project JSON | `…\open3d\persistence\projectJson.ts` |
 | Workspace | `…\open3d\editor\OOPlannerWorkspace.tsx` |
 | TopBar | `…\open3d\editor\TopBar.tsx` |
 | Status labels | `…\open3d\editor\workspaceStatusLabels.ts` |
 | Shell | `…\open3d\editor\WorkspaceShell.tsx` |
-| Help | `D:\OandO07072026\site\features\planner\help\helpSections.ts` |
+| Help | `site\features\planner\help\helpSections.ts` |
 | Optional cloud | `memberPlanRepository.ts`, `guestPromotion.ts`, `plannerCloudApi.ts` |
 | Unit autosave | `site/tests/unit/planner-autosave.test.ts` |
 | Unit labels | `site/tests/unit/features/planner/open3d/workspaceStatusLabels.test.ts` |
@@ -779,7 +779,7 @@ P06: **none of these**. Status must never show fake presence. Share link view-on
 Commands (from plan — preserve full logs under evidence):
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/planner-autosave.test.ts --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\01-autosave-flush-vitest.log
 
@@ -808,7 +808,7 @@ npx playwright test tests/e2e/open3d-save-honesty.spec.ts --reporter=line 2>&1 |
 - verification-before-completion before CP-06 claim  
 - systematic-debugging if restore flaky  
 - chrome-devtools only if Playwright blocked  
-- **No worktrees** · checkout `D:\OandO07072026` only  
+- **No worktrees** · checkout `.` only  
 - Commit landable slices · push per owner/git rules  
 
 ---
@@ -1016,20 +1016,20 @@ Superpowers + TDD; no worktrees; commit slices.
 
 | Path | Use |
 |------|-----|
-| `D:\OandO07072026\Plans\Research\RESEARCH-MAP.md` | P06 routing |
-| `D:\OandO07072026\Plans\Research\RESULTS-MAP.md` | Evidence contract |
-| `D:\OandO07072026\Plans\Research\STRUCTURE-ADVICE.md` | Keep dual gate one phase |
-| `D:\OandO07072026\Plans\Research\Others\00-PENDING.md` | Residuals; gate PASS ≠ finished |
-| `D:\OandO07072026\Plans\Research\Others\03-SSR-CLOUD.md` | Cloud host deferral |
+| `Plans\Research\RESEARCH-MAP.md` | P06 routing |
+| `Plans\Research\RESULTS-MAP.md` | Evidence contract |
+| `Plans\Research\STRUCTURE-ADVICE.md` | Keep dual gate one phase |
+| `Plans\Research\Others\00-PENDING.md` | Residuals; gate PASS ≠ finished |
+| `Plans\Research\Others\03-SSR-CLOUD.md` | Cloud host deferral |
 
 ### A.3 Phase + spec
 
 | Path | Use |
 |------|-----|
-| `D:\OandO07072026\Plans\phases\P06-save-honesty\P06-save-honesty.md` | Normative execute |
-| `D:\OandO07072026\Plans\phases\P06-save-honesty\P06-suggestions.md` | Measured debt S1–S10 |
-| `D:\OandO07072026\Plans\phases\P06-save-honesty\01-react-open3d.md` | P0 false-reverse |
-| `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md` | W5 W6 gates |
+| `Plans\phases\P06-save-honesty\P06-save-honesty.md` | Normative execute |
+| `Plans\phases\P06-save-honesty\P06-suggestions.md` | Measured debt S1–S10 |
+| `Plans\phases\P06-save-honesty\01-react-open3d.md` | P0 false-reverse |
+| `docs\superpowers\specs\2026-07-09-world-standard-planner-design.md` | W5 W6 gates |
 
 ### A.4 Live code anchors (re-read at execute)
 

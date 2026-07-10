@@ -7,10 +7,10 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { REPO_ROOT } from "./lib/repoRoot.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const siteRoot = path.resolve(__dirname, "..");
-const resultsDir = path.join(siteRoot, "results");
+const resultsDir = path.join(REPO_ROOT, "results");
 
 const RULE_BUCKETS = {
   P: ["@typescript-eslint/no-explicit-any", "no-explicit-any"],

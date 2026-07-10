@@ -6,7 +6,7 @@
 >
 > **Process:** `/using-superpowers` + test-driven-development + verification-before-completion + systematic-debugging when restore/flush flakes.
 >
-> **Checkout:** `D:\OandO07072026` only · **no worktrees** · commit each landable slice · push origin when green enough; mayoite ~45m / big land per AGENTS.md.
+> **Checkout:** `.` only · **no worktrees** · commit each landable slice · push origin when green enough; mayoite ~45m / big land per AGENTS.md.
 
 **Goal:** A facilities buyer can edit a plan, leave or hard-reload, get **the same walls + furniture entity ids** back, and every visible status/help/toast string tells the truth about **browser local storage** vs **account/cloud storage**.
 
@@ -297,7 +297,7 @@ Mount workspace
 - [ ] **Step 1: Create evidence directories**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 New-Item -ItemType Directory -Force -Path results\planner\world-standard-wave\06-save-honesty\save-reload | Out-Null
 ```
 
@@ -306,7 +306,7 @@ Expected: directories exist.
 - [ ] **Step 2: Record HEAD honesty in NOTES.md**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse HEAD
 git status -sb
 ```
@@ -327,7 +327,7 @@ Write `results/planner/world-standard-wave/06-save-honesty/NOTES.md`:
 - [ ] **Step 3: Run baseline vitest suite (continuity + autosave + labels)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run `
   tests/unit/features/planner/open3d/saveReloadContinuity.test.ts `
   tests/unit/features/planner/open3d/open3dSession.test.ts `
@@ -546,7 +546,7 @@ export function createAutoSaver(
 - [ ] **Step 2: Run tests — expect FAIL until write mocks hook correctly**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/planner-autosave.test.ts --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\01-autosave-flush-vitest.log
 ```
@@ -608,7 +608,7 @@ Remove any path that does `if (now - lastSaved < DEBOUNCE) return` **without** s
 - [ ] **Step 4: Re-run — expect PASS**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/planner-autosave.test.ts --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\01-autosave-flush-vitest.log
 ```
@@ -773,7 +773,7 @@ describe("formatAutosaveStatus delegates to same table (no dual drift)", () => {
 - [ ] **Step 2: Run — expect FAIL if `open3dSaveStatusLabel` missing or error still “Save failed”**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/workspaceStatusLabels.test.ts --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\02-labels-vitest.log
 ```
@@ -978,7 +978,7 @@ Adjust `minimalProject` fields to match live `Open3dProject` type if compile fai
 - [ ] **Step 2: Run — expect FAIL on missing exports**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/useOpen3dWorkspaceAutosave.test.tsx --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\03-hook-vitest.log
 ```
@@ -1202,7 +1202,7 @@ describe("TopBar save status (W6)", () => {
 - [ ] **Step 2: Run — FAIL until props/testids exist**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/TopBar.saveStatus.test.tsx --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\04-topbar-status-vitest.log
 ```
@@ -1439,7 +1439,7 @@ Also audit guest-vs-member summary if it over-promises member cloud:
 - [ ] **Step 4: Grep audit → evidence**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 rg -n "Saved|cloud|sync|account|autosave|named save slots" `
   features/planner/open3d/editor `
   features/planner/open3d/persistence `
@@ -1473,7 +1473,7 @@ git commit -m "fix(p06): honest local-only save help and FAQ copy"
 - [ ] **Step 1: Re-run continuity units**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/saveReloadContinuity.test.ts tests/unit/features/planner/open3d/open3dSession.test.ts --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\06-unit-continuity.log
 ```
@@ -1733,7 +1733,7 @@ test.describe("W5 save honesty / hard reload (browser)", () => {
 - [ ] **Step 4: Run Playwright**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 New-Item -ItemType Directory -Force -Path ..\results\planner\world-standard-wave\06-save-honesty\save-reload | Out-Null
 npx playwright test tests/e2e/open3d-save-honesty.spec.ts --reporter=line 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\save-reload\06-playwright-raw.log
@@ -1811,7 +1811,7 @@ See §9. Do not mark green without paths.
 - [ ] **Step 3: Typecheck touched packages**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec tsc --noEmit -p tsconfig.json 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\08-tsc.log
 ```
@@ -1882,7 +1882,7 @@ Do not implement unless flake proven.
 Non-regression optional:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm p0:unit
 ```
 
@@ -2102,7 +2102,7 @@ See §5.4 and brainstormer Appendix C — implemented in Task 02 table.
 
 ```powershell
 # Baseline
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/planner-autosave.test.ts tests/unit/features/planner/open3d/workspaceStatusLabels.test.ts --reporter=verbose
 
 # Hook + TopBar
@@ -2115,7 +2115,7 @@ npx vitest run tests/unit/features/planner/help/helpSections.saveHonesty.test.ts
 npx playwright test tests/e2e/open3d-save-honesty.spec.ts --reporter=line
 
 # Layout gate (repo rule)
-cd D:\OandO07072026
+cd .
 pnpm run check:layout
 ```
 
@@ -2138,18 +2138,18 @@ CP-06 hard stop before W5–W6 green claim.
 
 | Role | Path |
 |------|------|
-| This plan | `D:\OandO07072026\plans1/P06-save-honesty\IMPLEMENTATION-PLAN.md` |
-| Brainstormer | `D:\OandO07072026\Idiots2\P06-save-honesty\REPORT.md` |
-| Execute card | `D:\OandO07072026\Plans\phases\P06-save-honesty\P06-save-honesty.md` |
-| AutoSaver | `D:\OandO07072026\site\features\planner\persistence\persistence.ts` |
-| Hook | `D:\OandO07072026\site\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts` |
-| Labels | `D:\OandO07072026\site\features\planner\open3d\editor\workspaceStatusLabels.ts` |
-| TopBar | `D:\OandO07072026\site\features\planner\open3d\editor\TopBar.tsx` |
-| Shell | `D:\OandO07072026\site\features\planner\open3d\editor\WorkspaceShell.tsx` |
-| Workspace | `D:\OandO07072026\site\features\planner\open3d\editor\OOPlannerWorkspace.tsx` |
-| Help | `D:\OandO07072026\site\features\planner\help\helpSections.ts` |
-| E2E | `D:\OandO07072026\site\tests\e2e\open3d-save-honesty.spec.ts` |
-| Evidence | `D:\OandO07072026\results\planner\world-standard-wave\06-save-honesty\` |
+| This plan | `plans1/P06-save-honesty\IMPLEMENTATION-PLAN.md` |
+| Brainstormer | `Idiots2\P06-save-honesty\REPORT.md` |
+| Execute card | `Plans\phases\P06-save-honesty\P06-save-honesty.md` |
+| AutoSaver | `site\features\planner\persistence\persistence.ts` |
+| Hook | `site\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts` |
+| Labels | `site\features\planner\open3d\editor\workspaceStatusLabels.ts` |
+| TopBar | `site\features\planner\open3d\editor\TopBar.tsx` |
+| Shell | `site\features\planner\open3d\editor\WorkspaceShell.tsx` |
+| Workspace | `site\features\planner\open3d\editor\OOPlannerWorkspace.tsx` |
+| Help | `site\features\planner\help\helpSections.ts` |
+| E2E | `site\tests\e2e\open3d-save-honesty.spec.ts` |
+| Evidence | `results\planner\world-standard-wave\06-save-honesty\` |
 
 ---
 

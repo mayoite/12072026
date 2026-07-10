@@ -5,7 +5,7 @@
 **Output location (only):** `Idiots2/P10-evidence-handover/REPORT.md`  
 **Mode:** **NO product code.** Documentation / honesty / map only.  
 **Date of this inventory pass:** 2026-07-10  
-**Checkout scanned:** `D:\OandO07072026` (main; no worktrees)  
+**Checkout scanned:** `.` (main; no worktrees)  
 **Research home scanned:** `D:\websites` (canonical competitive research; not in monorepo)
 
 ---
@@ -27,9 +27,9 @@
 
 | Check | Result (2026-07-10 this agent) |
 |-------|--------------------------------|
-| `D:\OandO07072026\results\` | **DOES NOT EXIST** |
-| `D:\OandO07072026\results\planner\` | **DOES NOT EXIST** |
-| `D:\OandO07072026\results\planner\world-standard-wave\` | **DOES NOT EXIST** |
+| `results\` | **DOES NOT EXIST** |
+| `results\planner\` | **DOES NOT EXIST** |
+| `results\planner\world-standard-wave\` | **DOES NOT EXIST** |
 | Any `10-handover/` six-file pack on disk | **MISSING** (target never created, or tree wiped) |
 | `Plans/trustdata/` (historical plan root) | **REMOVED** (owner cleanup 2026-07-10; live plans under `Plans/`) |
 | `Plans/**/CHECKPOINTS.md` | **NOT FOUND** in live tree |
@@ -346,7 +346,7 @@ From RESEARCH-MAP + ETHICS_AND_INSPIRATION:
 1. Existing Planner5D Firecrawl-era pack  
 2. `E:\Goodsites\…\CAPABILITY-MATRIX.md`, `STRATEGIC-GAPS.md` (if still present on E:)  
 3. Public web comparisons (marketing-level) RoomSketcher / Floorplanner / IKEA  
-4. Live repo Plan A + explore agents on `D:\OandO07072026`  
+4. Live repo Plan A + explore agents on `.`  
 
 **Pattern library → O&O translation (ideas only):**
 
@@ -548,8 +548,8 @@ All other phases route to SYNTHESIS / ENGINE-DECISION / specific packs — alrea
 
 ## 6. RESULTS-MAP — full authority extract (file-of-record)
 
-**Path:** `D:\OandO07072026\Plans\Research\RESULTS-MAP.md`  
-**Root of proof:** `D:\OandO07072026\results\planner\world-standard-wave\`  
+**Path:** `Plans\Research\RESULTS-MAP.md`  
+**Root of proof:** `results\planner\world-standard-wave\`  
 **FINAL folder lock date:** 2026-07-09  
 
 ### 6.1 Forbidden folder names (never invent as canonical)
@@ -727,7 +727,7 @@ Produce a single final evidence pack that proves **W0–W8 from data**, sync MAS
 - Approach A/B/C recorded (default **A** if owner silent after unlock)  
 - CP-00–CP-09 PASS or owner WAIVE in CHECKPOINTS  
 - **W0–W8** each have concrete path under wave root **or** WAIVE  
-- Main checkout `D:\OandO07072026` only  
+- Main checkout `.` only  
 - Superpowers / verification-before-completion used  
 - `E:` mounted before claiming backup  
 
@@ -1022,24 +1022,24 @@ That is **allowed as honesty documentation**. It is **not** CP-10 PASS.
 
 | Doc | Absolute path |
 |-----|---------------|
-| Plans index | `D:\OandO07072026\Plans\INDEX.md` |
-| Plans README | `D:\OandO07072026\Plans\README.md` |
-| RESULTS-MAP | `D:\OandO07072026\Plans\Research\RESULTS-MAP.md` |
-| RESEARCH-MAP | `D:\OandO07072026\Plans\Research\RESEARCH-MAP.md` |
-| STRUCTURE-REWRITE-NOTE | `D:\OandO07072026\Plans\Research\STRUCTURE-REWRITE-NOTE.md` |
-| EXPERT-PASS | `D:\OandO07072026\Plans\phases\EXPERT-PASS.md` |
-| P10 execute | `D:\OandO07072026\Plans\phases\P10-evidence-handover\P10-evidence-handover.md` |
-| P10 suggestions | `D:\OandO07072026\Plans\phases\P10-evidence-handover\P10-suggestions.md` |
-| Design W1–W8 | `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md` |
-| Failures | `D:\OandO07072026\Failures.md` |
-| This REPORT | `D:\OandO07072026\Idiots2\P10-evidence-handover\REPORT.md` |
+| Plans index | `Plans\INDEX.md` |
+| Plans README | `Plans\README.md` |
+| RESULTS-MAP | `Plans\Research\RESULTS-MAP.md` |
+| RESEARCH-MAP | `Plans\Research\RESEARCH-MAP.md` |
+| STRUCTURE-REWRITE-NOTE | `Plans\Research\STRUCTURE-REWRITE-NOTE.md` |
+| EXPERT-PASS | `Plans\phases\EXPERT-PASS.md` |
+| P10 execute | `Plans\phases\P10-evidence-handover\P10-evidence-handover.md` |
+| P10 suggestions | `Plans\phases\P10-evidence-handover\P10-suggestions.md` |
+| Design W1–W8 | `docs\superpowers\specs\2026-07-09-world-standard-planner-design.md` |
+| Failures | `Failures.md` |
+| This REPORT | `Idiots2\P10-evidence-handover\REPORT.md` |
 
 ### Evidence (target — currently missing)
 
 | Doc | Absolute path |
 |-----|---------------|
-| Wave root | `D:\OandO07072026\results\planner\world-standard-wave\` |
-| Handover pack | `D:\OandO07072026\results\planner\world-standard-wave\10-handover\` |
+| Wave root | `results\planner\world-standard-wave\` |
+| Handover pack | `results\planner\world-standard-wave\10-handover\` |
 | E: backup pattern | `E:\OandO-backups\trustdata-YYYY-MM-DD\` |
 
 ---

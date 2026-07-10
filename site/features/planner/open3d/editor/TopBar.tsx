@@ -1,7 +1,15 @@
 "use client";
 
 import { CornersIn, CornersOut } from "@phosphor-icons/react";
-import { MenuTrigger, Button, Popover, Menu, MenuItem } from "react-aria-components";
+import {
+  MenuTrigger,
+  Button,
+  Popover,
+  Menu,
+  MenuItem,
+  RadioGroup,
+  Radio,
+} from "react-aria-components";
 import type { PlannerAccessContext } from "../lib/commands/plannerAccessContext";
 import type { Open3dDisplayUnit } from "../model/types";
 import type { Open3dSaveStatus } from "../persistence/useOpen3dWorkspaceAutosave";
@@ -149,28 +157,19 @@ export function TopBar({
       </div>
 
       <div className={styles.center}>
-        <div className={styles.viewToggle} role="radiogroup" aria-label="View mode">
-          <button
-            type="button"
-            className={styles.viewToggleBtn}
-            data-active={viewMode === "2d"}
-            onClick={() => onViewModeChange?.("2d")}
-            aria-checked={viewMode === "2d"}
-            role="radio"
-          >
+        <RadioGroup
+          className={styles.viewToggle}
+          value={viewMode}
+          onChange={(value) => onViewModeChange?.(value as "2d" | "3d")}
+          aria-label="View mode"
+        >
+          <Radio className={styles.viewToggleBtn} value="2d">
             2D
-          </button>
-          <button
-            type="button"
-            className={styles.viewToggleBtn}
-            data-active={viewMode === "3d"}
-            onClick={() => onViewModeChange?.("3d")}
-            aria-checked={viewMode === "3d"}
-            role="radio"
-          >
+          </Radio>
+          <Radio className={styles.viewToggleBtn} value="3d">
             3D
-          </button>
-        </div>
+          </Radio>
+        </RadioGroup>
 
         {floors.length > 0 && (
           <MenuTrigger>
@@ -181,6 +180,8 @@ export function TopBar({
             <Popover placement="bottom start">
               <Menu
                 className={styles.dropdownMenu}
+                selectionMode="single"
+                selectedKeys={activeFloorId ? [activeFloorId] : undefined}
                 onAction={(key) => onFloorChange?.(key as string)}
               >
                 {floors.map((floor) => (
@@ -205,6 +206,8 @@ export function TopBar({
           <Popover placement="bottom start">
             <Menu
               className={styles.dropdownMenu}
+              selectionMode="single"
+              selectedKeys={[displayUnit]}
               onAction={(key) => onDisplayUnitChange?.(key as Open3dDisplayUnit)}
             >
               {unitOptions.map((unit) => (
@@ -293,6 +296,9 @@ export function TopBar({
 
         <div
           className={styles.saveStatus}
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
           data-testid="open3d-save-status"
           data-status={resolvedSaveStatus}
           data-storage={effectiveStorage}
@@ -312,7 +318,7 @@ export function TopBar({
         {/* Guest: honest export surface (JSON + BOQ). No Import / quote-cart / ERP. */}
         {showGuestActions && (
           <MenuTrigger>
-            <Button className={styles.btn}>
+            <Button className={styles.btn} aria-label="Export — open export menu">
               Export
               <ChevronDownIcon />
             </Button>
@@ -338,7 +344,7 @@ export function TopBar({
         {showPersistenceActions && (
           <>
             <MenuTrigger>
-              <Button className={styles.btn}>
+              <Button className={styles.btn} aria-label="Import — open import menu">
                 Import
                 <ChevronDownIcon />
               </Button>
@@ -360,7 +366,7 @@ export function TopBar({
             </MenuTrigger>
 
             <MenuTrigger>
-              <Button className={styles.btn}>
+              <Button className={styles.btn} aria-label="Export — open export menu">
                 Export
                 <ChevronDownIcon />
               </Button>
@@ -371,6 +377,9 @@ export function TopBar({
                 >
                   <MenuItem id="json" className={styles.dropdownItem}>Export as JSON</MenuItem>
                   <MenuItem id="svg" className={styles.dropdownItem}>Export as SVG</MenuItem>
+                  <MenuItem id="png" className={styles.dropdownItem}>Export as PNG</MenuItem>
+                  <MenuItem id="pdf" className={styles.dropdownItem}>Export as PDF</MenuItem>
+                  <MenuItem id="dxf" className={styles.dropdownItem}>Export as DXF</MenuItem>
                   <MenuItem id="boq-json" className={styles.dropdownItem}>
                     Export BOQ (JSON)
                   </MenuItem>
@@ -383,7 +392,6 @@ export function TopBar({
                   <MenuItem id="quote" className={styles.dropdownItem}>
                     Add seats to quote cart
                   </MenuItem>
-                  {/* PDF/PNG not shipped — do not list until real export exists */}
                 </Menu>
               </Popover>
             </MenuTrigger>
@@ -426,6 +434,7 @@ function ChevronDownIcon() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      aria-hidden="true"
     >
       <path d="M6 9l6 6 6-6" />
     </svg>

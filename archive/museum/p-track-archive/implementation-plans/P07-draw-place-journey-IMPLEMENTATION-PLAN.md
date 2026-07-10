@@ -6,7 +6,7 @@
 >
 > **Every subagent brief starts with:** `/using-superpowers` + fit skills (verification-before-completion, chrome-devtools, systematic-debugging as needed).
 >
-> **Checkout:** `D:\OandO07072026` only — **no worktrees**.
+> **Checkout:** `.` only — **no worktrees**.
 
 **Goal:** Land one serial Playwright browser pack that proves W1 (walls + opening with **metric deltas**) and W2 (place ≥2 catalog SKUs including **cabinet-v0**, non-blank 2D canvas PNG) on open3d-preferred / guest-fallback, with honest evidence under `results/planner/world-standard-wave/02-browser-open3d-journey/`.
 
@@ -301,7 +301,7 @@ canvas screenshot 06 byteLength > 5000
 Run:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 Test-Path site\tests\e2e\open3d-world-standard-journey.spec.ts
 Test-Path site\tests\e2e\plannerCanvasHelpers.ts
 Test-Path site\tests\e2e\guestProjectSetup.ts
@@ -328,8 +328,8 @@ Expected: all three present.
 - [ ] **Step 3: Create evidence directories**
 
 ```powershell
-New-Item -ItemType Directory -Force -Path "D:\OandO07072026\results\planner\world-standard-wave\02-browser-open3d-journey" | Out-Null
-New-Item -ItemType Directory -Force -Path "D:\OandO07072026\results\planner\world-standard-wave\07-browser-journey" | Out-Null
+New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\02-browser-open3d-journey" | Out-Null
+New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\07-browser-journey" | Out-Null
 ```
 
 Expected: both dirs exist.
@@ -338,7 +338,7 @@ Expected: both dirs exist.
 
 ```powershell
 # From repo root — if not already running on :3000
-cd D:\OandO07072026
+cd .
 pnpm run dev
 ```
 
@@ -355,7 +355,7 @@ Expected: planner chrome or guest setup; if open3d auth-walls, guest fallback is
 - [ ] **Step 5: Playwright browser binary if needed**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm run test:browsers:install
 ```
 
@@ -386,7 +386,7 @@ In a temporary scratch or by reading helpers: assert export does not exist.
 Run:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec tsc --noEmit -p tests/tsconfig.json 2>&1 | Select-String "getFurnitureCount" 
 # Or: node -e "require('fs').readFileSync('tests/e2e/plannerCanvasHelpers.ts','utf8').includes('getFurnitureCount') || process.exit(1)"
 node -e "const fs=require('fs'); const s=fs.readFileSync('tests/e2e/plannerCanvasHelpers.ts','utf8'); if(s.includes('export async function getFurnitureCount')) process.exit(0); process.exit(1)"
@@ -416,7 +416,7 @@ Notes:
 - [ ] **Step 3: Verify export present**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 node -e "const fs=require('fs'); const s=fs.readFileSync('tests/e2e/plannerCanvasHelpers.ts','utf8'); if(!s.includes('export async function getFurnitureCount')) process.exit(1); console.log('getFurnitureCount: ok')"
 ```
 
@@ -646,7 +646,7 @@ During intermediate scaffold, **do not leave a permanent `expect(false)`** in fi
 - [ ] **Step 5: Run skeleton (expect incomplete / fail until W1–W2 filled)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-standard-journey.spec.ts --reporter=list
 ```
@@ -710,7 +710,7 @@ Append inside the same test after baselines:
 - [ ] **Step 2: Run focused — expect fail later on opening/W2 or pass if only walls coded**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-standard-journey.spec.ts --reporter=list
 ```
@@ -912,7 +912,7 @@ git commit -m "test(e2e): W1 walls+opening metric deltas for world-standard jour
 - [ ] **Step 6: Run full journey**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-standard-journey.spec.ts --reporter=list 2>&1 | Tee-Object -FilePath "..\results\planner\world-standard-wave\02-browser-open3d-journey\playwright-raw.log"
 ```
@@ -1020,7 +1020,7 @@ Never delete red PNGs. Prefer archive over delete.
 - [ ] **Step 3: Re-run and verify JSON**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-standard-journey.spec.ts --reporter=list 2>&1 | Tee-Object -FilePath "..\results\planner\world-standard-wave\02-browser-open3d-journey\playwright-raw.log"
 Get-Content ..\results\planner\world-standard-wave\02-browser-open3d-journey\playwright-run.json
@@ -1056,7 +1056,7 @@ In `site/package.json` scripts section (near other e2e scripts):
 **Preferred (dev reuse):**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 pnpm run test:e2e:world-standard-w1w2 2>&1 | Tee-Object -FilePath "..\results\planner\world-standard-wave\02-browser-open3d-journey\playwright-raw.log"
 ```
@@ -1071,7 +1071,7 @@ Create `results/planner/world-standard-wave/07-browser-journey/NOTES.md`:
 # P07 evidence alias
 
 **Canonical proof (only gold root):**  
-`D:\OandO07072026\results\planner\world-standard-wave\02-browser-open3d-journey\`
+`results\planner\world-standard-wave\02-browser-open3d-journey\`
 
 **Checkpoint:** CP-07  
 **Gates:** W1 (draw walls + opening deltas), W2 (place ≥2 incl. cabinet-v0, non-blank 2D PNG)
@@ -1084,7 +1084,7 @@ Do **not** split real screenshots into this folder. Optional copy of `playwright
 - [ ] **Step 4: Run via npm script once**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 pnpm run test:e2e:world-standard-w1w2
 ```
@@ -1446,7 +1446,7 @@ Ensure removal of:
 - [ ] **Step 2: Final green run + commit**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 pnpm run test:e2e:world-standard-w1w2 2>&1 | Tee-Object -FilePath "..\results\planner\world-standard-wave\02-browser-open3d-journey\playwright-raw.log"
 ```
@@ -1484,8 +1484,8 @@ git commit -m "test(e2e): land CP-07 W1-W2 serial open3d draw/place journey"
 
 ```powershell
 # already have playwright-raw.log; copy timestamped fail pack if needed
-Copy-Item -Recurse "D:\OandO07072026\results\planner\world-standard-wave\02-browser-open3d-journey" `
-  "D:\OandO07072026\results\planner\world-standard-wave\02-browser-open3d-journey-FAIL-$(Get-Date -Format yyyyMMdd-HHmmss)"
+Copy-Item -Recurse "results\planner\world-standard-wave\02-browser-open3d-journey" `
+  "results\planner\world-standard-wave\02-browser-open3d-journey-FAIL-$(Get-Date -Format yyyyMMdd-HHmmss)"
 ```
 
 - [ ] **Step 2: chrome-devtools triage**
@@ -1687,25 +1687,25 @@ Plan is long because CP-07 is a full serial browser pack with false-green discip
 ### Appendix A — Absolute path index
 
 ```
-D:\OandO07072026\plans1/P07-draw-place-journey\IMPLEMENTATION-PLAN.md  ← this plan
-D:\OandO07072026\Idiots2\P07-draw-place-journey\REPORT.md
-D:\OandO07072026\Plans\phases\P07-draw-place-journey\P07-draw-place-journey.md
-D:\OandO07072026\Plans\phases\P07-draw-place-journey\P07-appendix.md
-D:\OandO07072026\Plans\phases\P07-draw-place-journey\P07-suggestions.md
-D:\OandO07072026\Plans\phases\P07-draw-place-journey\01-react-open3d.md
-D:\OandO07072026\Plans\phases\P07-draw-place-journey\04-playwright-evidence.md
-D:\OandO07072026\Plans\Research\RESULTS-MAP.md
-D:\OandO07072026\site\tests\e2e\open3d-world-standard-journey.spec.ts
-D:\OandO07072026\site\tests\e2e\plannerCanvasHelpers.ts
-D:\OandO07072026\site\tests\e2e\guestProjectSetup.ts
-D:\OandO07072026\site\config\build\playwright.config.ts
-D:\OandO07072026\site\package.json
-D:\OandO07072026\site\features\planner\open3d\editor\demoCatalogItems.ts
-D:\OandO07072026\site\features\planner\open3d\editor\WorkspaceShell.tsx
-D:\OandO07072026\site\features\planner\open3d\editor\workspacePlanMetrics.ts
-D:\OandO07072026\site\features\planner\open3d\editor\canvasTool.ts
-D:\OandO07072026\results\planner\world-standard-wave\02-browser-open3d-journey\
-D:\OandO07072026\results\planner\world-standard-wave\07-browser-journey\
+plans1/P07-draw-place-journey\IMPLEMENTATION-PLAN.md  ← this plan
+Idiots2\P07-draw-place-journey\REPORT.md
+Plans\phases\P07-draw-place-journey\P07-draw-place-journey.md
+Plans\phases\P07-draw-place-journey\P07-appendix.md
+Plans\phases\P07-draw-place-journey\P07-suggestions.md
+Plans\phases\P07-draw-place-journey\01-react-open3d.md
+Plans\phases\P07-draw-place-journey\04-playwright-evidence.md
+Plans\Research\RESULTS-MAP.md
+site\tests\e2e\open3d-world-standard-journey.spec.ts
+site\tests\e2e\plannerCanvasHelpers.ts
+site\tests\e2e\guestProjectSetup.ts
+site\config\build\playwright.config.ts
+site\package.json
+site\features\planner\open3d\editor\demoCatalogItems.ts
+site\features\planner\open3d\editor\WorkspaceShell.tsx
+site\features\planner\open3d\editor\workspacePlanMetrics.ts
+site\features\planner\open3d\editor\canvasTool.ts
+results\planner\world-standard-wave\02-browser-open3d-journey\
+results\planner\world-standard-wave\07-browser-journey\
 ```
 
 ### Appendix B — Selector table (quick card)
@@ -1754,11 +1754,11 @@ D:\OandO07072026\results\planner\world-standard-wave\07-browser-journey\
 
 ```powershell
 # Dev
-cd D:\OandO07072026
+cd .
 pnpm run dev
 
 # Journey (preferred)
-cd D:\OandO07072026\site
+cd site
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 pnpm run test:e2e:world-standard-w1w2 2>&1 | Tee-Object -FilePath "..\results\planner\world-standard-wave\02-browser-open3d-journey\playwright-raw.log"
 
@@ -1796,4 +1796,4 @@ Two execution options:
 
 **Which approach?**
 
-Execute agents must start with `/using-superpowers`, work only in `D:\OandO07072026`, rewrite the **existing** partial journey to the binding bar, land commits as they go, and refuse to claim full planner success from CP-07 alone.
+Execute agents must start with `/using-superpowers`, work only in `.`, rewrite the **existing** partial journey to the binding bar, land commits as they go, and refuse to claim full planner success from CP-07 alone.

@@ -11,7 +11,7 @@
 **Tech Stack:** TypeScript · Next.js (`site/`) · Vitest · Fabric.js `7.4.0` (exact) · three `^0.185.1` · `@react-three/fiber` `^9.6.1` · `@react-three/drei` `^10.7.7` · Canvas 2D (Feasibility) · OrbitControls from `three/examples/jsm/controls/OrbitControls.js` · pnpm monorepo · evidence only under repo-root `results/`.
 
 **Inputs consumed:**
-- Repo read: 2026-07-10 · workspace `D:\OandO07072026` · tree dirty honesty assumed until Task 0 records `HEAD.txt` · key paths in § Repo reality
+- Repo read: 2026-07-10 · workspace `.` · tree dirty honesty assumed until Task 0 records `HEAD.txt` · key paths in § Repo reality
 - Brainstormer: `Idiots2/P02-engine-lock/REPORT.md` **only** (never `Idiots/`)
 - Phase plan: `Plans/phases/P02-engine-lock/` (all five files)
 - Maps: `Plans/INDEX.md`, `Plans/Research/RESULTS-MAP.md`
@@ -397,20 +397,20 @@ Routes:
 Run:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse --show-toplevel
 git worktree list
 ```
 
-Expected: single worktree at `D:\OandO07072026` (or path-equivalent). **Stop** if extra worktrees invented for this phase.
+Expected: single worktree at `.` (or path-equivalent). **Stop** if extra worktrees invented for this phase.
 
 - [ ] **Step 2: Confirm results tree policy**
 
 Run:
 
 ```powershell
-Test-Path "D:\OandO07072026\results"
-Test-Path "D:\OandO07072026\site\results"
+Test-Path "results"
+Test-Path "site\results"
 ```
 
 Expected: `results` may be false (missing — OK); `site\results` should be false (layout ban). If `site\results` exists, do not dump P02 there.
@@ -444,7 +444,7 @@ Do **not** in this phase:
 - [ ] **Step 1: Create evidence root**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\01-engine-lock" | Out-Null
 # Explicit ban: do NOT create 02-engine-lock
 if (Test-Path "results\planner\world-standard-wave\02-engine-lock") {
@@ -457,11 +457,11 @@ Expected: directory created; no `02-engine-lock`.
 - [ ] **Step 2: Capture HEAD.txt with real output**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 $head = git rev-parse HEAD
 $status = git status -sb
 @"
-repo: D:\OandO07072026
+repo: .
 HEAD: $head
 status:
 $status
@@ -565,7 +565,7 @@ This folder is the re-prove pack. Product gates still later phases.
 - [ ] **Step 6: Commit meta slice**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/01-engine-lock/HEAD.txt `
   results/planner/world-standard-wave/01-engine-lock/run.json `
   results/planner/world-standard-wave/01-engine-lock/README.md `
@@ -673,7 +673,7 @@ P03 select/delete · P04 orbit Playwright · Fabric walls cutover · package upg
 - [ ] **Step 2: Grep-verify no soft language**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 Select-String -Path "results\planner\world-standard-wave\01-engine-lock\ENGINE-LOCK-RECORD.md" -Pattern "maybe Konva now|under evaluation as product|insurance only|TBD|TODO"
 ```
 
@@ -697,7 +697,7 @@ git commit -m "docs(p02): ENGINE-LOCK-RECORD Fabric dest Feasibility interim Thr
 - [ ] **Step 1: Trace consumers with rg**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 rg -n "isOpen3dFabricFurnitureEnabled|NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE|OPEN3D_FABRIC_FURNITURE_ENV" site/features/planner site/tests --glob "!**/node_modules/**"
 ```
 
@@ -783,7 +783,7 @@ git commit -m "docs(p02): FLAG-INVENTORY exact env=1 Fabric furniture spike"
 - [ ] **Step 1: Verify route imports live**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 rg -n "Open3dPlannerWorkspaceRoute|Open3dPlannerHost" site/app/planner site/features/planner/ui --glob "*.tsx"
 ```
 
@@ -875,7 +875,7 @@ git commit -m "docs(p02): ENTRYPOINT-MAP host chains WorkspaceRoute orbit helper
 - [ ] **Step 1: Extract live pins with node (no hand-wavy copy)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 node -e "const p=require('./package.json'); const d=p.dependencies; const keys=['fabric','three','@react-three/fiber','@react-three/drei','@google/model-viewer','gsap','@gsap/react','@fancyapps/ui']; for (const k of keys) console.log(k+'='+(d[k]??'ABSENT')); console.log('konva='+(d.konva??'ABSENT')); console.log('react-konva='+(d['react-konva']??'ABSENT'));"
 ```
 
@@ -943,7 +943,7 @@ AI SDKs are metered — keys only in `.env.local`; no new paid seats without own
 - [ ] **Step 3: Assert Fabric major is 7**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 node -e "const v=require('./package.json').dependencies.fabric; if(!String(v).startsWith('7')) { console.error('FAIL fabric major', v); process.exit(1);} console.log('OK fabric', v);"
 ```
 
@@ -986,7 +986,7 @@ This note does **not** reopen engines. Cleanup is hygiene, not Konva/Fabric deba
 - [ ] **Step 2: Optional rg for fancyapps imports (read-only)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 rg -n "@fancyapps/ui|fancybox|Fancybox" --glob "!**/node_modules/**" app components features lib | Select-Object -First 40
 ```
 
@@ -1010,10 +1010,10 @@ git commit -m "docs(p02): license hygiene note Fancyapps GSAP (not engine thrash
 - [ ] **Step 1: Run vitest with package-relative path and absolute Tee**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\01-engine-lock" | Out-Null
 Set-Location site
-pnpm exec vitest run tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts --reporter=verbose 2>&1 | Tee-Object -FilePath "D:\OandO07072026\results\planner\world-standard-wave\01-engine-lock\vitest-fabric-flag-raw.log"
+pnpm exec vitest run tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts --reporter=verbose 2>&1 | Tee-Object -FilePath "results\planner\world-standard-wave\01-engine-lock\vitest-fabric-flag-raw.log"
 echo "EXIT=$LASTEXITCODE"
 ```
 
@@ -1036,8 +1036,8 @@ If FAIL:
 - [ ] **Step 2: Confirm raw log non-empty and not suppressed**
 
 ```powershell
-Get-Item "D:\OandO07072026\results\planner\world-standard-wave\01-engine-lock\vitest-fabric-flag-raw.log" | Format-List Length, FullName
-Select-String -Path "D:\OandO07072026\results\planner\world-standard-wave\01-engine-lock\vitest-fabric-flag-raw.log" -Pattern "FAIL|PASS|Tests " | Select-Object -First 30
+Get-Item "results\planner\world-standard-wave\01-engine-lock\vitest-fabric-flag-raw.log" | Format-List Length, FullName
+Select-String -Path "results\planner\world-standard-wave\01-engine-lock\vitest-fabric-flag-raw.log" -Pattern "FAIL|PASS|Tests " | Select-Object -First 30
 ```
 
 Expected: Length > 0; shows test results; no silent empty file.
@@ -1070,7 +1070,7 @@ Parse counts from the log/terminal. Template (replace numbers):
 - [ ] **Step 4: Spot-check flag cases exist in source (sanity)**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 rg -n "is true only when env is exactly 1|rejects near-miss|is false by default" site/tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts
 ```
 
@@ -1097,9 +1097,9 @@ git commit -m "test(p02): re-run fabric flag+mapper vitest into 01-engine-lock"
 - [ ] **Step 1: Run orbit unit suite**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 Set-Location site
-pnpm exec vitest run tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx --reporter=verbose 2>&1 | Tee-Object -FilePath "D:\OandO07072026\results\planner\world-standard-wave\01-engine-lock\vitest-orbit-default-raw.log"
+pnpm exec vitest run tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx --reporter=verbose 2>&1 | Tee-Object -FilePath "results\planner\world-standard-wave\01-engine-lock\vitest-orbit-default-raw.log"
 echo "EXIT=$LASTEXITCODE"
 ```
 
@@ -1135,7 +1135,7 @@ Expected: exit 0; includes:
 - [ ] **Step 3: Optional static assert workspace still spreads helper**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 rg -n "getOpen3dViewerControlProps" site/features/planner/open3d/editor/OOPlannerWorkspace.tsx
 ```
 
@@ -1320,7 +1320,7 @@ git commit -m "docs(p02): OWNER-SIGNOFF (marks or explicit CP-02 deferral)"
 - [ ] **Step 1: Grep interactive 2D thrash libs under planner**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 rg -n "\bkonva\b|react-konva|from ['\"]pixi|paper\.js|createjs" site/features/planner site/package.json --glob "!**/node_modules/**" | Select-Object -First 80
 ```
 
@@ -1412,7 +1412,7 @@ git commit -m "docs(p02): ANTI-THRASH-AUDIT greps orbit helper no konva"
 - [ ] **Step 1: List artifacts with Test-Path**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 $root = "results\planner\world-standard-wave\01-engine-lock"
 @(
   "HEAD.txt","run.json","README.md","NOTES.md",
@@ -1659,34 +1659,34 @@ No `TBD`/`TODO` left as agent excuses. `REPLACE_*` markers appear only where liv
 ### Appendix A — Full absolute path index
 
 ```
-D:\OandO07072026\plans1/P02-engine-lock\IMPLEMENTATION-PLAN.md
-D:\OandO07072026\Idiots2\P02-engine-lock\REPORT.md
-D:\OandO07072026\Plans\phases\P02-engine-lock\P02-engine-lock.md
-D:\OandO07072026\Plans\phases\P02-engine-lock\P02-suggestions.md
-D:\OandO07072026\Plans\phases\P02-engine-lock\02-canvas-2d.md
-D:\OandO07072026\Plans\phases\P02-engine-lock\05-packages-stack.md
-D:\OandO07072026\Plans\INDEX.md
-D:\OandO07072026\Plans\Research\RESULTS-MAP.md
-D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md
-D:\OandO07072026\site\package.json
-D:\OandO07072026\site\features\planner\open3d\canvas-fabric-stage\fabricFurnitureFlag.ts
-D:\OandO07072026\site\features\planner\open3d\canvas-fabric-stage\FurnitureFabricLayer.tsx
-D:\OandO07072026\site\features\planner\open3d\canvas-fabric-stage\furnitureFabricMapper.ts
-D:\OandO07072026\site\features\planner\open3d\canvas-fabric-stage\index.ts
-D:\OandO07072026\site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx
-D:\OandO07072026\site\features\planner\open3d\editor\OOPlannerWorkspace.tsx
-D:\OandO07072026\site\features\planner\open3d\3d\orbitDefaults.ts
-D:\OandO07072026\site\features\planner\open3d\3d\ThreeLazyViewer.tsx
-D:\OandO07072026\site\features\planner\open3d\3d\ThreeViewerInner.tsx
-D:\OandO07072026\site\features\planner\ui\Open3dPlannerWorkspaceRoute.tsx
-D:\OandO07072026\site\features\planner\ui\Open3dPlannerHost.tsx
-D:\OandO07072026\site\features\planner\open3d\ui\Open3dNativeHost.tsx
-D:\OandO07072026\site\app\planner\open3d\page.tsx
-D:\OandO07072026\site\app\planner\(workspace)\guest\page.tsx
-D:\OandO07072026\site\app\planner\(workspace)\canvas\page.tsx
-D:\OandO07072026\site\tests\unit\features\planner\open3d\canvas-fabric-stage\furnitureFabricMapper.test.ts
-D:\OandO07072026\site\tests\unit\features\planner\open3d\orbitControlsDefault.test.tsx
-D:\OandO07072026\results\planner\world-standard-wave\01-engine-lock\   (create on execute)
+plans1/P02-engine-lock\IMPLEMENTATION-PLAN.md
+Idiots2\P02-engine-lock\REPORT.md
+Plans\phases\P02-engine-lock\P02-engine-lock.md
+Plans\phases\P02-engine-lock\P02-suggestions.md
+Plans\phases\P02-engine-lock\02-canvas-2d.md
+Plans\phases\P02-engine-lock\05-packages-stack.md
+Plans\INDEX.md
+Plans\Research\RESULTS-MAP.md
+docs\superpowers\specs\2026-07-09-world-standard-planner-design.md
+site\package.json
+site\features\planner\open3d\canvas-fabric-stage\fabricFurnitureFlag.ts
+site\features\planner\open3d\canvas-fabric-stage\FurnitureFabricLayer.tsx
+site\features\planner\open3d\canvas-fabric-stage\furnitureFabricMapper.ts
+site\features\planner\open3d\canvas-fabric-stage\index.ts
+site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx
+site\features\planner\open3d\editor\OOPlannerWorkspace.tsx
+site\features\planner\open3d\3d\orbitDefaults.ts
+site\features\planner\open3d\3d\ThreeLazyViewer.tsx
+site\features\planner\open3d\3d\ThreeViewerInner.tsx
+site\features\planner\ui\Open3dPlannerWorkspaceRoute.tsx
+site\features\planner\ui\Open3dPlannerHost.tsx
+site\features\planner\open3d\ui\Open3dNativeHost.tsx
+site\app\planner\open3d\page.tsx
+site\app\planner\(workspace)\guest\page.tsx
+site\app\planner\(workspace)\canvas\page.tsx
+site\tests\unit\features\planner\open3d\canvas-fabric-stage\furnitureFabricMapper.test.ts
+site\tests\unit\features\planner\open3d\orbitControlsDefault.test.tsx
+results\planner\world-standard-wave\01-engine-lock\   (create on execute)
 ```
 
 ### Appendix B — Flag API catalog
@@ -1782,16 +1782,16 @@ Forbidden: hybrid Konva+Fabric · Unity thrash · competitor assets ·
 
 ```powershell
 # From repo root always create evidence dir first
-New-Item -ItemType Directory -Force -Path "D:\OandO07072026\results\planner\world-standard-wave\01-engine-lock" | Out-Null
+New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\01-engine-lock" | Out-Null
 
 # Fabric
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm exec vitest run tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts --reporter=verbose 2>&1 |
-  Tee-Object -FilePath "D:\OandO07072026\results\planner\world-standard-wave\01-engine-lock\vitest-fabric-flag-raw.log"
+  Tee-Object -FilePath "results\planner\world-standard-wave\01-engine-lock\vitest-fabric-flag-raw.log"
 
 # Orbit
 pnpm exec vitest run tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx --reporter=verbose 2>&1 |
-  Tee-Object -FilePath "D:\OandO07072026\results\planner\world-standard-wave\01-engine-lock\vitest-orbit-default-raw.log"
+  Tee-Object -FilePath "results\planner\world-standard-wave\01-engine-lock\vitest-orbit-default-raw.log"
 ```
 
 ### Appendix I — Relationship to later phases (lock stays locked)

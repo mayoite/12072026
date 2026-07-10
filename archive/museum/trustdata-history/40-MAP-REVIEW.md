@@ -72,7 +72,7 @@
 | `D:\websites\research\2026-07-09-world-standard\comparison\01-engine` … `07-oando-self` | OK |
 | `D:\websites\oando-render-options\report\CANVAS_INVENTORY_UI_SVG.md` | OK |
 | `D:\websites\oando-render-options\CANVAS_RENDER_OPTIONS.md` (root) | OK — map path fix needed |
-| `D:\OandO07072026\Plans\Research\RESEARCH-2026-07-05-*.md` | OK (5 files) |
+| `Plans\Research\RESEARCH-2026-07-05-*.md` | OK (5 files) |
 | `results/planner/world-standard-wave/WAVE.md`, `COMPARISON-CHART.md` | OK |
 
 ### Evidence root (pre-execution)
@@ -107,7 +107,7 @@
 
 ## Already correct (do not thrash)
 
-- Evidence root: `D:\OandO07072026\results\planner\world-standard-wave\`.  
+- Evidence root: `results\planner\world-standard-wave\`.  
 - E: mirror: `E:\OandO-backups\trustdata-YYYY-MM-DD\results\planner\world-standard-wave\`.  
 - W1/W2 place → `02-browser-open3d-journey/`; W2 symbols → `05-symbols-svg/`.  
 - W5/W6 → `06-save-honesty/` (+ `save-reload/` for hard reload).  

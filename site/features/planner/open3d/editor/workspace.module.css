@@ -288,6 +288,116 @@
 .canvas > * {
   flex: 1;
   min-height: 0;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas :global(.open3d-canvas-with-rail),
+.canvas :global(.open3d-canvas-embedded) {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Maximize canvas: hide side panels and give the grid column to the plan. */
+.shell[data-canvas-maximized="true"] .workspace {
+  grid-template-columns: 1fr;
+}
+
+.shell[data-canvas-maximized="true"] .panelLeft,
+.shell[data-canvas-maximized="true"] .panelRight {
+  display: none;
+}
+
+.canvas :global(.planner-canvas-region) {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas :global(.planner-canvas-region) canvas {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: block;
+  touch-action: none;
+}
+
+.leftPanelStack {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.leftPanelTabs {
+  flex-shrink: 0;
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--ws-panel-border);
+  background: color-mix(in srgb, var(--surface-soft) 92%, var(--ws-panel-bg));
+}
+
+.leftPanelTab {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: var(--ws-control-h);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ws-text-muted);
+  cursor: pointer;
+}
+
+.leftPanelTab[data-active="true"],
+.leftPanelTab[data-selected] {
+  border-color: var(--ws-panel-border);
+  background: var(--ws-panel-bg);
+  color: var(--ws-text-primary);
+}
+
+.leftPanelBody {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.leftPanelBody :global(.pw-ai-drawer--panel-fill) {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.leftPanelBody :global(.pw-ai-drawer--panel-fill .pw-ai-drawer-body) {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* Side panels */
@@ -370,6 +480,14 @@
   min-height: 0;
   overflow: auto;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.panelContent > * {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
 }
 
 .panelTitle {
@@ -525,7 +643,8 @@
   color: var(--ws-text-primary);
 }
 
-.viewToggleBtn[data-active="true"] {
+.viewToggleBtn[data-active="true"],
+.viewToggleBtn[data-selected] {
   background: var(--ws-accent);
   color: var(--text-inverse);
 }

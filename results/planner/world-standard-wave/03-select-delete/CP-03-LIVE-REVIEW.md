@@ -3,7 +3,7 @@
 **Date:** 2026-07-10  
 **Seat:** Code-review seat (1) — live gate only  
 **Authority:** `plans1/P03-select-delete/CODE-REVIEW-REPORT.md`  
-**Checkout:** `D:\OandO07072026` (main only; no worktrees)  
+**Checkout:** `.` (main only; no worktrees)  
 **Tip at review:** `bf212a9a7d0fa8e7867b5f6a803b06ee5a5c43df`  
 **Canonical evidence:** `results/planner/world-standard-wave/03-select-delete/`  
 **Product code changed this seat:** **None**

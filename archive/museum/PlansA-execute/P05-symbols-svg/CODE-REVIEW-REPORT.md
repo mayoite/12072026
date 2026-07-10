@@ -2,9 +2,9 @@
 
 **Date:** 2026-07-10  
 **Reviewer:** review agent (repo-first, no implement, no plan edits)  
-**Plan under review:** `D:\OandO07072026\plans1/P05-symbols-svg\IMPLEMENTATION-PLAN.md`  
-**Brainstormer (optional):** `D:\OandO07072026\archive\Idiots2\P05-symbols-svg\REPORT.md`  
-**Checkout:** `D:\OandO07072026` (main only; no worktrees)
+**Plan under review:** `plans1/P05-symbols-svg\IMPLEMENTATION-PLAN.md`  
+**Brainstormer (optional):** `archive\Idiots2\P05-symbols-svg\REPORT.md`  
+**Checkout:** `.` (main only; no worktrees)
 
 ---
 
@@ -58,7 +58,7 @@ The plan’s architecture graph (A inventory DOM / B canvas Block2D / C publish 
 ### Blocking (B)
 
 **B1 — No live CP-05 evidence tree (`results/` absent)**  
-- **Fact:** `D:\OandO07072026\results` does not exist. Phase card and any historical NOTES claiming CP-05 PASS cannot be re-proved from this checkout.  
+- **Fact:** `results` does not exist. Phase card and any historical NOTES claiming CP-05 PASS cannot be re-proved from this checkout.  
 - **Impact:** Shipping or quoting “W2 symbol half green” without recreating `results/planner/world-standard-wave/05-symbols-svg/` is false-green (AGENTS layout + plan §1.4 / §8).  
 - **Plan:** Correctly mandates Task 00 tree create + unit re-prove logs + CP pack.  
 - **Action for execute:** Run plan Tasks 00, 01, 04, 05, 07 before any `status: pass`. Do **not** invent PASS from unit memory alone.
@@ -212,4 +212,4 @@ The **implementation plan is sound and repo-aligned**: it treats live multi-prim
 2. **Product path is already unit-green (22/22)** — cabinet-v0 multi-prim, doorStyle matrix, surface fill, centeredPath false, Feasibility Path B, honesty README; **prefer no geometry thrash**.  
 3. **Stale phase/expert prose** (2 prims, centeredPath true, 17 tests, PASS) remains a thrash hazard — plan’s “repo wins / RED only” policy is mandatory, not optional.
 
-**Report path:** `D:\OandO07072026\plans1/P05-symbols-svg\CODE-REVIEW-REPORT.md`
+**Report path:** `plans1/P05-symbols-svg\CODE-REVIEW-REPORT.md`

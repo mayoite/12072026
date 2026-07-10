@@ -95,18 +95,18 @@ This is **not** an implementation plan rewrite of `Plans\phases\P05-symbols-svg\
 
 | File | Role |
 |------|------|
-| `D:\OandO07072026\Plans\Research\RESEARCH-MAP.md` | Phase → research pack routing: **P05 / W2 → oando-render-options + P5D catalog quality as bar idea → Block2D + O&O pipeline honesty**; evidence lands in `05-symbols-svg/` |
-| `D:\OandO07072026\Plans\Research\RESULTS-MAP.md` | Evidence ≠ research (if present; research is not a pass) |
+| `Plans\Research\RESEARCH-MAP.md` | Phase → research pack routing: **P05 / W2 → oando-render-options + P5D catalog quality as bar idea → Block2D + O&O pipeline honesty**; evidence lands in `05-symbols-svg/` |
+| `Plans\Research\RESULTS-MAP.md` | Evidence ≠ research (if present; research is not a pass) |
 
 ### 2.3 Tier 3 — phase folder (ALL)
 
 | File | Role |
 |------|------|
-| `D:\OandO07072026\Plans\phases\P05-symbols-svg\README.md` | Index of phase files |
-| `D:\OandO07072026\Plans\phases\P05-symbols-svg\P05-symbols-svg.md` | Execute card: W2 + SVG honesty; CP-05; tasks 00–6; hard stop |
-| `D:\OandO07072026\Plans\phases\P05-symbols-svg\P05-appendix.md` | Test/impl skeletons; honesty NOTES templates; CP-05.json shape |
-| `D:\OandO07072026\Plans\phases\P05-symbols-svg\P05-suggestions.md` | Expert review: centeredPath lie; doorStyle must differ; smoke ≠ W2 fail |
-| `D:\OandO07072026\Plans\phases\P05-symbols-svg\02-canvas-2d.md` | Expert pass: SHIP Approach A; Block2D authority; Fabric flag OFF for proof |
+| `Plans\phases\P05-symbols-svg\README.md` | Index of phase files |
+| `Plans\phases\P05-symbols-svg\P05-symbols-svg.md` | Execute card: W2 + SVG honesty; CP-05; tasks 00–6; hard stop |
+| `Plans\phases\P05-symbols-svg\P05-appendix.md` | Test/impl skeletons; honesty NOTES templates; CP-05.json shape |
+| `Plans\phases\P05-symbols-svg\P05-suggestions.md` | Expert review: centeredPath lie; doorStyle must differ; smoke ≠ W2 fail |
+| `Plans\phases\P05-symbols-svg\02-canvas-2d.md` | Expert pass: SHIP Approach A; Block2D authority; Fabric flag OFF for proof |
 
 ### 2.4 Out of research scope (explicit)
 
@@ -1145,17 +1145,17 @@ Make **cabinet-v0** look like a cabinet on the **Canvas plan** using **original 
 
 ### Repo research index + phase
 
-- `D:\OandO07072026\Plans\Research\RESEARCH-MAP.md`
-- `D:\OandO07072026\Plans\phases\P05-symbols-svg\README.md`
-- `D:\OandO07072026\Plans\phases\P05-symbols-svg\P05-symbols-svg.md`
-- `D:\OandO07072026\Plans\phases\P05-symbols-svg\P05-appendix.md`
-- `D:\OandO07072026\Plans\phases\P05-symbols-svg\P05-suggestions.md`
-- `D:\OandO07072026\Plans\phases\P05-symbols-svg\02-canvas-2d.md`
+- `Plans\Research\RESEARCH-MAP.md`
+- `Plans\phases\P05-symbols-svg\README.md`
+- `Plans\phases\P05-symbols-svg\P05-symbols-svg.md`
+- `Plans\phases\P05-symbols-svg\P05-appendix.md`
+- `Plans\phases\P05-symbols-svg\P05-suggestions.md`
+- `Plans\phases\P05-symbols-svg\02-canvas-2d.md`
 
 ### This deliverable
 
-- `D:\OandO07072026\Idiots2\P05-symbols-svg\REPORT.md` (this file)
-- `D:\OandO07072026\Idiots2\README.md` (wave 2 index rule)
+- `Idiots2\P05-symbols-svg\REPORT.md` (this file)
+- `Idiots2\README.md` (wave 2 index rule)
 
 ---
 

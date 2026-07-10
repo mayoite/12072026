@@ -49,14 +49,14 @@
 - [x] **Step 1: Confirm missing**
 
 ```powershell
-Test-Path D:\OandO07072026\Plans
+Test-Path Plans
 # was False
 ```
 
 - [x] **Step 2: Restore**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git checkout HEAD -- Plans/
 # Expect: Plans\INDEX.md, Plans\Research\RESULTS-MAP.md exist; ~77 files
 ```

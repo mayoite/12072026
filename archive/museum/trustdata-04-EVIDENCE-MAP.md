@@ -1,7 +1,7 @@
 ﻿# RESULTS-MAP — `results/planner/world-standard-wave/` → phases
 
 > **For agentic workers:** REQUIRED `/using-superpowers`. Claim a gate **pass** only when the folder below has the minimum artifacts.  
-> **Root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
+> **Root:** `results\planner\world-standard-wave\`  
 > **Do not** invent alternate folder names mid-wave; if a phase file uses an alias, leave a `NOTES.md` pointer to the canonical path.  
 > **Research is not evidence:** competitive packs under `D:\websites` are ideas only — see [05-RESEARCH-MAP.md](./05-RESEARCH-MAP.md).
 > **FINAL folder lock:** 2026-07-09 — [evidence path lock](./history/10-EVIDENCE-PATH-LOCK.md). This map wins over older phase reviews that banned `09-shortcuts-chrome/` or used `01-product-truth/`.
@@ -152,7 +152,7 @@ Do not mark MASTER / CP ahead of GREEN or WAIVE.
 
 ## Historical / sibling evidence (cite, do not rename)
 
-These live under `D:\OandO07072026\results\planner\` (parent of world-standard-wave). Use as **baseline or non-regression cites** in **P01 inventory** (CP-01 criterion: spine-only vs world-standard); they do **not** clear W1–W8 alone.
+These live under `results\planner\` (parent of world-standard-wave). Use as **baseline or non-regression cites** in **P01 inventory** (CP-01 criterion: spine-only vs world-standard); they do **not** clear W1–W8 alone.
 
 | Existing folder | Typical content | May support |
 |-----------------|-----------------|-------------|
@@ -239,7 +239,7 @@ Procedure: `phases/P10-evidence-handover/P10-evidence-handover.md`. Log: `10-han
 Folders are **created when the phase runs**, not empty placeholders for show. Before first write in a phase, create **that** folder (or run the full set if preparing a multi-stream session):
 
 ```powershell
-$root = "D:\OandO07072026\results\planner\world-standard-wave"
+$root = "results\planner\world-standard-wave"
 @(
   "00-start",
   "00-product-truth",
@@ -283,14 +283,14 @@ $root = "D:\OandO07072026\results\planner\world-standard-wave"
 
 | Path | Role |
 |------|------|
-| `D:\OandO07072026\results\tests\` | Generic vitest dumps — copy or re-run into wave folders for gate claims |
-| `D:\OandO07072026\results\test-results\` | Tool default outputs — rehome or reference explicitly |
-| `D:\OandO07072026\site\results\` | Site-local CSV/etc. — not W-gate root |
-| `D:\OandO07072026\archive\results\` | Archived — historical only |
+| `results\tests\` | Generic vitest dumps — copy or re-run into wave folders for gate claims |
+| `results\test-results\` | Tool default outputs — rehome or reference explicitly |
+| `site\results\` | Site-local CSV/etc. — not W-gate root |
+| `archive\results\` | Archived — historical only |
 | `D:\websites\**` | Research ideas only — never W-gate file-of-record |
 
 **W-gate file-of-record root remains:**  
-`D:\OandO07072026\results\planner\world-standard-wave\`
+`results\planner\world-standard-wave\`
 
 ---
 

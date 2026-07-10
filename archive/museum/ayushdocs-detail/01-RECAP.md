@@ -1,6 +1,6 @@
 # Hard-path recap (owner)
 
-**Repo:** `D:\OandO07072026` · **Branch:** `main` · **No worktrees**  
+**Repo:** `.` · **Branch:** `main` · **No worktrees**  
 **Document date:** 2026-07-09  
 **HEAD at pack time:** `258c8ee` (docs session recap) · hard-path code baseline `e9edc31`  
 **Agent detail dump (not this doc):** `results/planner/SESSION-RECAP.md`

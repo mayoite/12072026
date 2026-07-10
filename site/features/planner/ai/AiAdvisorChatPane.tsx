@@ -35,6 +35,8 @@ export type AiAdvisorChatPaneProps = {
   editor?: null;
   projectMetadata: PlannerProjectMetadata | null;
   onApplySuggestion?: (suggestion: LayoutSuggestion) => void;
+  /** When set, overrides Fabric placement count (live workspace document). */
+  currentShapeCount?: number;
 };
 
 function createMessageId(prefix: string): string {
@@ -54,6 +56,7 @@ export function AiAdvisorChatPane({
   editor,
   projectMetadata,
   onApplySuggestion,
+  currentShapeCount,
 }: AiAdvisorChatPaneProps) {
   const suggestionChips = buildChatSuggestionChips(projectMetadata);
 
@@ -105,7 +108,9 @@ export function AiAdvisorChatPane({
       abortRef.current = controller;
 
       try {
-        const placementCount = editor ? extractCanvasPlacements(editor).length : 0;
+        const placementCount =
+          currentShapeCount ??
+          (editor ? extractCanvasPlacements(editor).length : 0);
         const response = await browserApiFetch("/api/planner/ai-advisor", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

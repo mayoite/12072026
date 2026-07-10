@@ -56,7 +56,8 @@
   outline-offset: 2px;
 }
 
-.toolBtn[data-active="true"] {
+.toolBtn[data-active="true"],
+.toolBtn[data-selected] {
   background: color-mix(in srgb, var(--color-primary) 14%, var(--surface-panel));
   border-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
   color: var(--color-primary);
@@ -82,7 +83,8 @@
     border-color: ButtonBorder;
   }
 
-  .toolBtn[data-active="true"] {
+  .toolBtn[data-active="true"],
+.toolBtn[data-selected] {
     color: HighlightText;
     background: Highlight;
     forced-color-adjust: none;

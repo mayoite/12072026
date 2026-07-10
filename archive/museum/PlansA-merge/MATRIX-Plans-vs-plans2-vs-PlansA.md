@@ -1,7 +1,7 @@
 # Difference matrix — Plans · plans1 · plans2 · PlansA
 
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` only · **no worktrees**  
+**Checkout:** `.` only · **no worktrees**  
 **Method:** Parallel inventory subagents (`/using-superpowers`) — wave 1: Plans + plans2 + PlansA; wave 2: **plans1** + **plans1↔plans2 deep residual diff**. Head synthesis.  
 **Rule:** **All four folders stay separate.** This file is comparison only — not a merge of trees.
 
@@ -187,7 +187,7 @@ Evidence wave root (all packages that execute): `results/planner/world-standard-
 
 ## 8. What is the same (all four / execute three)
 
-1. Checkout `D:\OandO07072026` only, no worktrees.  
+1. Checkout `.` only, no worktrees.  
 2. Kill middle: P01→P02→P03→P07→P06 then fill → P10.  
 3. Evidence root: repo-root `results/planner/world-standard-wave/`.  
 4. Folder numbers ≠ phase numbers.  

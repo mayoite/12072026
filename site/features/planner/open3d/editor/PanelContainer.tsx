@@ -48,6 +48,8 @@ export interface PanelContainerProps {
   onFocus?: () => void;
   /** Called when panel loses focus */
   onBlur?: () => void;
+  /** When true, skip shell title bar (content provides its own tabs). */
+  contentOnly?: boolean;
 }
 
 interface ResizeState {
@@ -78,6 +80,7 @@ export function PanelContainer({
   onResize,
   onFocus,
   onBlur,
+  contentOnly = false,
 }: PanelContainerProps) {
   const panelRef = useRef<HTMLElement>(null);
   const titleBarRef = useRef<HTMLDivElement>(null);
@@ -235,13 +238,14 @@ export function PanelContainer({
       onKeyDown={handleKeyDown}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      className={`${styles.panel} ${id === "left" ? styles.panelLeft : ""} ${ id === "right" ? styles.panelRight : "" } ${id === "bottom" ? styles.panelBottom : ""} ${ id === "left" ? "pw-left-panel" : "" }`}
+      className={`${styles.panel} ${id === "left" ? styles.panelLeft : ""} ${ id === "right" ? styles.panelRight : "" } ${id === "bottom" ? styles.panelBottom : ""}`}
       data-state={state}
       data-panel-id={id}
       data-open={isOpen ? "true" : "false"}
       style={panelStyle}
     >
       {/* Title bar */}
+      {!contentOnly ? (
       <div
         ref={titleBarRef}
         className={styles.panelTitleBar}
@@ -297,6 +301,7 @@ export function PanelContainer({
           )}
         </div>
       </div>
+      ) : null}
 
       {/* Resize handles (floating only) */}
       {isFloating && (

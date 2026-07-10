@@ -8,9 +8,9 @@
 
 **Goal:** Produce an honest final evidence pack under `results/planner/world-standard-wave/10-handover/` that binds W0–W8 to **disk-re-read** paths (or FAIL/WAIVE), syncs owner checklist truth without paper PASS, logs E: backup, commits landable doc/evidence slices, and never claims product ship from gate ceremony.
 
-**Architecture:** P10 is a **verification + documentation + backup** phase. Proof file-of-record is only `D:\OandO07072026\results\planner\world-standard-wave\`. Research under `D:\websites` is ideas only. Process maps live under `Plans/` + `Plans/Research/RESULTS-MAP.md`. Missing or red W evidence reopens owning phases (P01–P09) — **never** patches `site/` under the P10 label. GATE PASS ≠ product complete.
+**Architecture:** P10 is a **verification + documentation + backup** phase. Proof file-of-record is only `results\planner\world-standard-wave\`. Research under `D:\websites` is ideas only. Process maps live under `Plans/` + `Plans/Research/RESULTS-MAP.md`. Missing or red W evidence reopens owning phases (P01–P09) — **never** patches `site/` under the P10 label. GATE PASS ≠ product complete.
 
-**Tech Stack:** PowerShell on Windows; git on main checkout `D:\OandO07072026` only (no worktrees); Markdown pack files; robocopy / Copy-Item for E:; Vitest/Playwright artifacts **consumed** if present (not authored as product code here).
+**Tech Stack:** PowerShell on Windows; git on main checkout `.` only (no worktrees); Markdown pack files; robocopy / Copy-Item for E:; Vitest/Playwright artifacts **consumed** if present (not authored as product code here).
 
 **Inputs consumed:**
 - Repo read: 2026-07-10 — live tree: `results/` **ABSENT**; `Plans/trustdata/` **REMOVED**; `CHECKPOINTS.md` / `MASTER-CHECKLIST.md` / `00-START.md` **NOT FOUND** under live `Plans/`; phase execute card still references historical `Plans/trustdata/*` paths — **repo wins** for path truth
@@ -51,7 +51,7 @@
 
 | Check | Result |
 |-------|--------|
-| `D:\OandO07072026\results\` | **DOES NOT EXIST** |
+| `results\` | **DOES NOT EXIST** |
 | `…\results\planner\world-standard-wave\` | **DOES NOT EXIST** |
 | Any `10-handover/` six-file pack | **MISSING** |
 | `Plans/trustdata/` | **REMOVED** (cleanup 2026-07-10) |
@@ -132,12 +132,12 @@
 Executor must capture live:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse HEAD
 git status -sb
 git rev-parse --show-toplevel
-# Expect toplevel: D:/OandO07072026 or D:\OandO07072026 — not a worktree
-Test-Path "D:\OandO07072026\results"
+# Expect toplevel: . or . — not a worktree
+Test-Path "results"
 # Expect: False (as of 2026-07-10 planner pass) until rebuilt
 ```
 
@@ -379,10 +379,10 @@ Ethics checklist before any PR that touched UI (P10 should touch **none** of pro
 Announce in agent log: using superpowers + verification-before-completion + Agents-docs + Agents-failure.
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse --show-toplevel
 git worktree list
-# Expect single main checkout at D:\OandO07072026 — no extra worktrees for this work
+# Expect single main checkout at . — no extra worktrees for this work
 ```
 
 Expected: toplevel is repo root; no second worktree created by this agent.
@@ -402,7 +402,7 @@ Open and skim enough to act (already planned; re-open if executor is fresh):
 - [ ] **Step 3: Probe evidence + process files**
 
 ```powershell
-$root = "D:\OandO07072026"
+$root = "."
 @(
   "results",
   "results\planner",
@@ -437,7 +437,7 @@ Default if probes match §0.2: **Mode A (FAIL-honest pack)**.
 - [ ] **Step 5: Layout gate awareness (optional probe)**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 pnpm run check:layout
 ```
 
@@ -459,7 +459,7 @@ No commit required for Task 00 alone.
 - [ ] **Step 1: Create handover directory only**
 
 ```powershell
-$h = "D:\OandO07072026\results\planner\world-standard-wave\10-handover"
+$h = "results\planner\world-standard-wave\10-handover"
 New-Item -ItemType Directory -Force -Path $h | Out-Null
 Test-Path $h
 ```
@@ -471,7 +471,7 @@ Expected: `True`. Do **not** mass-create empty `00-start`…`09-*` for show.
 Create temporary probe expectations (executor mental or local checklist): after write, each file must exist and contain required headings. Until written:
 
 ```powershell
-$h = "D:\OandO07072026\results\planner\world-standard-wave\10-handover"
+$h = "results\planner\world-standard-wave\10-handover"
 @("README.md","W-GATES.md","MASTER-SYNC.md","HEAD.txt","FAILURES-SNIP.md","BACKUP-LOG.md") | ForEach-Object {
   Test-Path (Join-Path $h $_)
 }
@@ -482,12 +482,12 @@ Expected **before** write: all `False` (or partial if re-run).
 - [ ] **Step 3: Capture HEAD.txt**
 
 ```powershell
-$h = "D:\OandO07072026\results\planner\world-standard-wave\10-handover"
-cd D:\OandO07072026
+$h = "results\planner\world-standard-wave\10-handover"
+cd .
 @"
 # HEAD.txt — P10 handover
 Captured: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss zzz')
-Checkout: D:\OandO07072026
+Checkout: .
 
 ## git rev-parse HEAD
 $(git rev-parse HEAD)
@@ -506,7 +506,7 @@ Expected: SHA line + status; no secrets; no `.env` contents.
 - [ ] **Step 4: Probe every RESULTS-MAP primary folder (binding input)**
 
 ```powershell
-$wave = "D:\OandO07072026\results\planner\world-standard-wave"
+$wave = "results\planner\world-standard-wave"
 $folders = @(
   "00-start",
   "00-product-truth",
@@ -575,7 +575,7 @@ If Mode B and folders GREEN, change Status to PASS and fill map minimum check wi
 - [ ] **Step 6: Write FAILURES-SNIP.md from live Failures.md**
 
 ```powershell
-# Manual: read D:\OandO07072026\Failures.md Active failures / honesty
+# Manual: read Failures.md Active failures / honesty
 # Write snip — do not invent resolved product claims
 ```
 
@@ -584,7 +584,7 @@ Full starter content:
 ```markdown
 # FAILURES-SNIP — open blockers only (P10)
 
-**Source:** `D:\OandO07072026\Failures.md`  
+**Source:** `Failures.md`  
 **Snipped:** YYYY-MM-DD  
 **Rule:** Open blockers only. Historical “pass” evidence paths cited in Failures.md that are not on disk are **not** re-certified here.
 
@@ -699,7 +699,7 @@ Prefer completing Task 02 same session.
 - [ ] **Step 10: Run pack existence verification (expect PASS for files present)**
 
 ```powershell
-$h = "D:\OandO07072026\results\planner\world-standard-wave\10-handover"
+$h = "results\planner\world-standard-wave\10-handover"
 $need = @("README.md","W-GATES.md","MASTER-SYNC.md","HEAD.txt","FAILURES-SNIP.md","BACKUP-LOG.md")
 $need | ForEach-Object {
   $ok = Test-Path (Join-Path $h $_)
@@ -714,7 +714,7 @@ Expected: all OK; W-GATES contains status tokens.
 - [ ] **Step 11: Commit pack core**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/10-handover/README.md `
   results/planner/world-standard-wave/10-handover/W-GATES.md `
   results/planner/world-standard-wave/10-handover/HEAD.txt `
@@ -739,9 +739,9 @@ Expected: commit succeeds; no secrets staged (`git diff --cached` review).
 
 ```powershell
 $candidates = @(
-  "D:\OandO07072026\Plans\checklists\MASTER-CHECKLIST.md",
-  "D:\OandO07072026\Plans\trustdata\checklists\MASTER-CHECKLIST.md",
-  "D:\OandO07072026\Plans\MASTER-CHECKLIST.md"
+  "Plans\checklists\MASTER-CHECKLIST.md",
+  "Plans\trustdata\checklists\MASTER-CHECKLIST.md",
+  "Plans\MASTER-CHECKLIST.md"
 )
 $candidates | ForEach-Object { "$_ -> $(Test-Path $_)" }
 # Optional recover:
@@ -814,7 +814,7 @@ Procedure:
 - [ ] **Step 3: Verification**
 
 ```powershell
-$ms = "D:\OandO07072026\results\planner\world-standard-wave\10-handover\MASTER-SYNC.md"
+$ms = "results\planner\world-standard-wave\10-handover\MASTER-SYNC.md"
 Test-Path $ms
 Select-String -Path $ms -Pattern "NOT FOUND|Sum|94|PASS|FAIL"
 ```
@@ -824,7 +824,7 @@ Expected Mode A: contains NOT FOUND / blocked language. Mode B: numeric tallies 
 - [ ] **Step 4: Commit**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/10-handover/MASTER-SYNC.md
 # if MASTER restored and edited:
 # git add Plans/**/MASTER-CHECKLIST.md
@@ -849,7 +849,7 @@ Standing four-slice model (execute card):
 - [ ] **Step 1: Verify no secrets staged**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git status -sb
 git diff --cached --stat
 # Reject if .env, cookies, keys appear
@@ -878,7 +878,7 @@ git worktree list
 - [ ] **Step 2: If owner asks push**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git branch --show-current
 git remote -v
 # Confirm origin; never force without second explicit ask
@@ -949,26 +949,26 @@ $dest = "E:\OandO-backups\trustdata-$date"
 $start = Get-Date
 
 # 1 Plans (live tree)
-robocopy "D:\OandO07072026\Plans" "$dest\Plans" /E /NFL /NDL /NJH /NJS /nc /ns /np
+robocopy "Plans" "$dest\Plans" /E /NFL /NDL /NJH /NJS /nc /ns /np
 $rcPlans = $LASTEXITCODE
 
 # 2 Evidence wave (may be only 10-handover)
-robocopy "D:\OandO07072026\results\planner\world-standard-wave" "$dest\results\planner\world-standard-wave" /E /NFL /NDL /NJH /NJS /nc /ns /np
+robocopy "results\planner\world-standard-wave" "$dest\results\planner\world-standard-wave" /E /NFL /NDL /NJH /NJS /nc /ns /np
 $rcWave = $LASTEXITCODE
 
 # 3 Design spec
 New-Item -ItemType Directory -Force -Path "$dest\docs\superpowers\specs" | Out-Null
-Copy-Item "D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md" "$dest\docs\superpowers\specs\" -Force
+Copy-Item "docs\superpowers\specs\2026-07-09-world-standard-planner-design.md" "$dest\docs\superpowers\specs\" -Force
 $copySpec = $?
 
 # 4 Failures
-Copy-Item "D:\OandO07072026\Failures.md" "$dest\Failures.md" -Force
+Copy-Item "Failures.md" "$dest\Failures.md" -Force
 $copyFail = $?
 
 # 5 Evidence index if present
 $copyIdx = $false
-$idx1 = "D:\OandO07072026\ayushdocs\08-EVIDENCE-INDEX.md"
-$idx2 = "D:\OandO07072026\Plans\Research\Others\08-EVIDENCE-INDEX.md"
+$idx1 = "ayushdocs\08-EVIDENCE-INDEX.md"
+$idx2 = "Plans\Research\Others\08-EVIDENCE-INDEX.md"
 if (Test-Path $idx1) {
   New-Item -ItemType Directory -Force -Path "$dest\ayushdocs" | Out-Null
   Copy-Item $idx1 "$dest\ayushdocs\" -Force
@@ -1028,7 +1028,7 @@ Expected Mode A: INDEX true; handover README true; other gate folders may be abs
 - [ ] **Step 6: Commit backup log**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/10-handover/BACKUP-LOG.md
 git commit -m "trustdata(P10): backup log + CP-10 notes"
 ```
@@ -1095,7 +1095,7 @@ If CHECKPOINTS still missing: **cannot** mark; document in README and Failures.m
 
 ```powershell
 # after final commit commands
-cd D:\OandO07072026
+cd .
 # re-run Task 01 HEAD.txt capture
 ```
 
@@ -1120,7 +1120,7 @@ git commit -m "trustdata(P10): handover complete CP-10"
 Re-run:
 
 ```powershell
-$h = "D:\OandO07072026\results\planner\world-standard-wave\10-handover"
+$h = "results\planner\world-standard-wave\10-handover"
 Get-ChildItem $h | Format-Table Name, Length
 Select-String -Path "$h\W-GATES.md" -Pattern "PASS" 
 # Mode A: should not claim all PASS
@@ -1136,7 +1136,7 @@ Select-String -Path "$h\README.md" -Pattern "CP-10 PASS|not CP-10|FAIL-honest"
 - [ ] **Step 1: Search git history**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git log --all --diff-filter=A --summary -- "**/MASTER-CHECKLIST.md" "**/CHECKPOINTS.md" "**/00-START.md" | Select-Object -First 40
 git log --all --full-history -- "**/MASTER-CHECKLIST.md" -n 5 --oneline
 ```
@@ -1169,14 +1169,14 @@ git commit -m "docs(Plans): restore MASTER/CHECKPOINTS for P10 Mode B"
 
 ```powershell
 # Git
-cd D:\OandO07072026
+cd .
 git log --all --oneline -- results/planner/world-standard-wave 2>$null | Select-Object -First 20
 
 # E: backups
 Get-ChildItem "E:\OandO-backups" -ErrorAction SilentlyContinue | Sort-Object Name -Descending
 
 # Archive
-Test-Path "D:\OandO07072026\archive\results"
+Test-Path "archive\results"
 ```
 
 - [ ] **Step 2: Copy recover to live wave root**
@@ -1184,7 +1184,7 @@ Test-Path "D:\OandO07072026\archive\results"
 ```powershell
 # Example if E: has prior wave:
 # robocopy "E:\OandO-backups\trustdata-PREV\results\planner\world-standard-wave" `
-#   "D:\OandO07072026\results\planner\world-standard-wave" /E
+#   "results\planner\world-standard-wave" /E
 ```
 
 - [ ] **Step 3: Re-verify each folder against RESULTS-MAP minimum**
@@ -1214,7 +1214,7 @@ If recovery incomplete → stay Mode A or escalate Pack-C rebuild via P01–P09.
 | **Status** | OPEN |
 | **Was** | Entire `results/` absent; cannot green W0–W8 or CP-10 |
 | **Action** | Kill-order rebuild P01–P09 or recover from E:/git; then re-run P10 Mode B |
-| **Proof of problem** | `Test-Path D:\OandO07072026\results` → False; `10-handover` FAIL-honest pack |
+| **Proof of problem** | `Test-Path results` → False; `10-handover` FAIL-honest pack |
 ```
 
 - [ ] **Step 2: Commit**
@@ -1248,7 +1248,7 @@ For each row, confirm pack does **not** assert PASS without folder:
 - [ ] **Step 2: Grep pack for research false greens**
 
 ```powershell
-$h = "D:\OandO07072026\results\planner\world-standard-wave\10-handover"
+$h = "results\planner\world-standard-wave\10-handover"
 Select-String -Path "$h\*.md" -Pattern "D:\\\\websites|SYNTHESIS|MASTER-CHART|Planner5D" 
 # Allowed as context; illegal if adjacent to Status PASS for a W gate
 ```
@@ -1459,7 +1459,7 @@ P10 does **not** invent run.json for missing gates.
 Only when **executing owning phases** that will immediately write artifacts:
 
 ```powershell
-$root = "D:\OandO07072026\results\planner\world-standard-wave"
+$root = "results\planner\world-standard-wave"
 @(
   "00-start",
   "00-product-truth",
@@ -1557,14 +1557,14 @@ Under parent `results/planner/` when present: `p0-1-admin-svg-publish/`, `p0-2-*
 
 | Role | Path |
 |------|------|
-| This plan | `D:\OandO07072026\plans1/P10-evidence-handover\IMPLEMENTATION-PLAN.md` |
-| Brainstormer | `D:\OandO07072026\Idiots2\P10-evidence-handover\REPORT.md` |
-| Execute card | `D:\OandO07072026\Plans\phases\P10-evidence-handover\P10-evidence-handover.md` |
-| RESULTS-MAP | `D:\OandO07072026\Plans\Research\RESULTS-MAP.md` |
-| RESEARCH-MAP | `D:\OandO07072026\Plans\Research\RESEARCH-MAP.md` |
-| Design | `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md` |
-| Wave root | `D:\OandO07072026\results\planner\world-standard-wave\` |
-| Pack | `D:\OandO07072026\results\planner\world-standard-wave\10-handover\` |
+| This plan | `plans1/P10-evidence-handover\IMPLEMENTATION-PLAN.md` |
+| Brainstormer | `Idiots2\P10-evidence-handover\REPORT.md` |
+| Execute card | `Plans\phases\P10-evidence-handover\P10-evidence-handover.md` |
+| RESULTS-MAP | `Plans\Research\RESULTS-MAP.md` |
+| RESEARCH-MAP | `Plans\Research\RESEARCH-MAP.md` |
+| Design | `docs\superpowers\specs\2026-07-09-world-standard-planner-design.md` |
+| Wave root | `results\planner\world-standard-wave\` |
+| Pack | `results\planner\world-standard-wave\10-handover\` |
 | E: pattern | `E:\OandO-backups\trustdata-YYYY-MM-DD\` |
 | Research home | `D:\websites\` |
 | SYNTHESIS | `D:\websites\research\2026-07-09-world-standard\SYNTHESIS.md` |

@@ -11,11 +11,12 @@ import {
   findSitePagePath,
   walkSitePageFiles,
 } from "./lib/siteUiRouteSources.mjs";
+import { REPO_ROOT, SITE_PACKAGE_ROOT } from "./lib/repoRoot.mjs";
 
 const scriptsDir = path.dirname(fileURLToPath(import.meta.url));
-const siteRoot = path.resolve(scriptsDir, "..");
+const siteRoot = SITE_PACKAGE_ROOT;
 const appDir = path.join(siteRoot, "app");
-const matrixFile = path.join(siteRoot, "results", "site-ui", "route-matrix.csv");
+const matrixFile = path.join(REPO_ROOT, "results", "site-ui", "route-matrix.csv");
 
 const EXEMPT_DIALECTS = new Set([
   "redirect",

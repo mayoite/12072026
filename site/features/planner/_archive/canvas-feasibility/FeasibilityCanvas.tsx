@@ -10,7 +10,6 @@ import {
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
-  type WheelEvent as ReactWheelEvent,
 } from "react";
 
 import type { PlannerTool } from "../../open3d/editor/canvasTool";
@@ -25,9 +24,15 @@ import {
   type FeasibilityCommandId,
 } from "../../open3d/lib/commands/registry";
 import {
+  fitCanvasTransformToFloor,
+  nativeCanvasScaleLimits,
+} from "../../open3d/lib/geometry/fitCanvasView";
+import {
   projectToScreen,
   screenToProject,
   snapDrawingPoint,
+  viewportPointFromHost,
+  wheelZoomFactor,
   zoomTransformAt,
   type CanvasTransform,
   type SnapKind,
@@ -58,11 +63,6 @@ import {
   createCanvasBlockColorResolver,
   renderBlock2DCentered,
 } from "@/lib/catalog/renderBlock2DToCanvas";
-import {
-  drawSvgPlanSymbol,
-  getSvgPlanImage,
-  isPublishedSvgPlanUrl,
-} from "../../open3d/catalog/svg/svgPlanSymbolCache";
 import type { WorkspaceCanvasContext } from "../../open3d/editor/useWorkspaceCanvas";
 
 const INITIAL_TRANSFORM: CanvasTransform = {
@@ -147,6 +147,10 @@ export interface FeasibilityCanvasProps {
   onStatusChange?: (status: CanvasStatusSnapshot) => void;
   onProjectChange?: (project: Open3dProject) => void;
   onHistoryChange?: (state: { canUndo: boolean; canRedo: boolean }) => void;
+  /** Fit content when the host region first receives a real layout size (embedded workspace). */
+  autoFitOnLayout?: boolean;
+  /** Right-click on the canvas host opens the workspace import file picker. */
+  onImportRequest?: () => void;
 }
 
 export const FeasibilityCanvas = forwardRef<FeasibilityCanvasHandle, FeasibilityCanvasProps>(
@@ -163,10 +167,15 @@ function FeasibilityCanvas(
     onStatusChange,
     onProjectChange,
     onHistoryChange,
+    autoFitOnLayout = false,
+    onImportRequest,
   },
   ref,
 ) {
+  const hostRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const didAutoFitRef = useRef(false);
+  const scaleLimits = useMemo(() => nativeCanvasScaleLimits(), []);
   const pointerIdRef = useRef<number | null>(null);
   const panRef = useRef<PanSession | null>(null);
   const spacePressedRef = useRef(false);
@@ -184,8 +193,6 @@ function FeasibilityCanvas(
   const [latencyP95, setLatencyP95] = useState<number | null>(null);
   const [transform, setTransform] = useState<CanvasTransform>(INITIAL_TRANSFORM);
   const [canvasSize, setCanvasSize] = useState({ width: 1, height: 1 });
-  /** Bumps when a published plan SVG finishes loading so paint re-runs (S7). */
-  const [svgPaintGen, setSvgPaintGen] = useState(0);
   const [activeCommandId, setActiveCommandId] = useState<FeasibilityCommandId>(
     toolToCommandId(activeToolProp) ?? "draw-wall",
   );
@@ -306,15 +313,22 @@ function FeasibilityCanvas(
     }
   }, [cancel]);
 
-  const resetZoom = useCallback(() => {
-    setTransform(INITIAL_TRANSFORM);
-  }, []);
-
   const fitToView = useCallback(() => {
-    // fit drawing bounds + origin/scale (grid, snap state maintained); simple center on content or default
-    // GS: REC-03 AutoCAD style bottom surface for feedback; task6
-    setTransform({ origin: { x: -5000, y: -3000 }, scale: 0.08 });
-  }, []);
+    setTransform(
+      fitCanvasTransformToFloor(activeFloor, canvasSize.width, canvasSize.height),
+    );
+  }, [activeFloor, canvasSize.height, canvasSize.width]);
+
+  const resetZoom = useCallback(() => {
+    fitToView();
+  }, [fitToView]);
+
+  useEffect(() => {
+    if (!autoFitOnLayout || didAutoFitRef.current) return;
+    if (canvasSize.width < 64 || canvasSize.height < 64) return;
+    didAutoFitRef.current = true;
+    fitToView();
+  }, [autoFitOnLayout, canvasSize.height, canvasSize.width, fitToView]);
 
   const commit = useCallback(() => {
     // Enter commits valid drawing (wall segment, dimension via text runtime) or numeric (in props). Do not discard work.
@@ -428,7 +442,15 @@ function FeasibilityCanvas(
       undo,
       zoomBy: (factor) => {
         const center = { x: canvasSize.width / 2, y: canvasSize.height / 2 };
-        setTransform((current) => zoomTransformAt(current, center, factor));
+        setTransform((current) =>
+          zoomTransformAt(
+            current,
+            center,
+            factor,
+            scaleLimits.min,
+            scaleLimits.max,
+          ),
+        );
       },
       resetZoom,
     });
@@ -436,7 +458,7 @@ function FeasibilityCanvas(
       setDrawingOutcome("none");
     }
     canvasRef.current?.focus();
-  }, [cancel, canvasSize, resetZoom, undo]);
+  }, [cancel, canvasSize, resetZoom, scaleLimits.max, scaleLimits.min, undo]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -473,17 +495,41 @@ function FeasibilityCanvas(
   }, [cancel, delegateKeyboard, runCommand]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const host = hostRef.current;
+    if (!host) return;
     const observer = new ResizeObserver(([entry]) => {
       setCanvasSize({
         width: Math.max(1, entry.contentRect.width),
         height: Math.max(1, entry.contentRect.height),
       });
     });
-    observer.observe(canvas);
+    observer.observe(host);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+
+    const onWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const screenPoint = viewportPointFromHost(host, event.clientX, event.clientY);
+      const factor = wheelZoomFactor(event.deltaY, event.deltaMode);
+      setTransform((current) =>
+        zoomTransformAt(
+          current,
+          screenPoint,
+          factor,
+          scaleLimits.min,
+          scaleLimits.max,
+        ),
+      );
+    };
+
+    host.addEventListener("wheel", onWheel, { passive: false, capture: true });
+    return () => host.removeEventListener("wheel", onWheel, { capture: true });
+  }, [scaleLimits.max, scaleLimits.min]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -588,32 +634,18 @@ function FeasibilityCanvas(
       }
     }
     if (layerVisibility.furniture) {
-      // S7: published `/svg-catalog/*.svg` on furniture.previewImageUrl → draw SVG on plan.
-      // Else procedural Block2D (cabinet-v0 multi-prim, etc.).
       const colorResolve = createCanvasBlockColorResolver(canvas);
-      const requestRedraw = () => {
-        setSvgPaintGen((n) => n + 1);
-      };
       try {
         for (const item of activeFloor.furniture) {
           const center = projectToScreen(item.position, transform);
           const block = furnitureBlock2DFromItem(item);
           const isSelected = selectedFurnitureIds.has(item.id);
-          const svgUrl = item.previewImageUrl;
-          const useSvg =
-            isPublishedSvgPlanUrl(svgUrl) &&
-            // Modular cabinet keeps parametric Block2D (doorStyle/dims) over published SVG.
-            item.geometryMode !== "modular-cabinet-v0";
-          const svgImg =
-            useSvg && svgUrl
-              ? getSvgPlanImage(svgUrl, requestRedraw)
-              : null;
 
           context.save();
           context.translate(center.x, center.y);
           context.rotate((item.rotation * Math.PI) / 180);
           context.scale(transform.scale, transform.scale);
-          if (item.color && !svgImg) {
+          if (item.color) {
             context.globalAlpha = 0.15;
             context.fillStyle = item.color;
             context.fillRect(
@@ -624,19 +656,10 @@ function FeasibilityCanvas(
             );
             context.globalAlpha = 1;
           }
-          if (svgImg) {
-            drawSvgPlanSymbol(
-              context,
-              svgImg,
-              block.footprint.L,
-              block.footprint.D,
-            );
-          } else {
-            renderBlock2DCentered(context, block, {
-              resolve: colorResolve,
-              skipShadow: transform.scale < 0.05,
-            });
-          }
+          renderBlock2DCentered(context, block, {
+            resolve: colorResolve,
+            skipShadow: transform.scale < 0.05,
+          });
           if (isSelected) {
             context.strokeStyle =
               tokens.getPropertyValue("--color-primary").trim() || "#2563eb";
@@ -690,7 +713,6 @@ function FeasibilityCanvas(
     selectedWallIds,
     snapKind,
     start,
-    svgPaintGen,
     transform,
   ]);
 
@@ -924,18 +946,24 @@ function FeasibilityCanvas(
     releasePointer();
   };
 
-  const onWheel = (event: ReactWheelEvent<HTMLCanvasElement>) => {
-    event.preventDefault();
-    const screenPoint = canvasPoint(event);
-    const factor = Math.exp(-event.deltaY * 0.0015);
-    setTransform((current) => zoomTransformAt(current, screenPoint, factor));
-  };
-
   const canvasRegion = (
     <section
-      className="canvas-region pw-canvas-surface"
+      ref={hostRef}
+      className={
+        variant === "embedded"
+          ? "planner-canvas-region"
+          : "canvas-region pw-canvas-surface"
+      }
       aria-label="Drawing canvas"
       data-testid="planner-2d-canvas"
+      onContextMenu={(event) => {
+        event.preventDefault();
+        if (onImportRequest) {
+          onImportRequest();
+          return;
+        }
+        cancel();
+      }}
     >
       <canvas
         ref={canvasRef}
@@ -952,11 +980,6 @@ function FeasibilityCanvas(
         }}
         onLostPointerCapture={(event) => {
           if (pointerIdRef.current === event.pointerId) cancel();
-        }}
-        onWheel={onWheel}
-        onContextMenu={(event) => {
-          event.preventDefault();
-          cancel();
         }}
       >
         Floor plan for {project.name}, with {activeFloor.walls.length} walls.
@@ -1029,30 +1052,7 @@ function FeasibilityCanvas(
   );
 
   if (variant === "embedded") {
-    return (
-      <div
-        className="open3d-canvas-embedded"
-        data-tool={activeTool}
-        data-pending-placement={pendingCatalogPlacement ? "true" : undefined}
-      >
-        {canvasRegion}
-        {activeFloor.walls.length === 0 && !start ? (
-          <div className="open3d-canvas-empty" aria-hidden>
-            <p>
-              <strong>Start your floor plan</strong>
-            </p>
-            <p>Press <kbd>W</kbd> or choose the wall tool, then click to draw. Hold Space to pan.</p>
-          </div>
-        ) : null}
-        {pendingCatalogPlacement ? (
-          <div className="open3d-canvas-placement-hint" aria-live="polite">
-            {placementItemLabel
-              ? `Click to place ${placementItemLabel}. Press Esc to cancel.`
-              : "Click on the canvas to place the selected item. Press Esc to cancel."}
-          </div>
-        ) : null}
-      </div>
-    );
+    return canvasRegion;
   }
 
   return (

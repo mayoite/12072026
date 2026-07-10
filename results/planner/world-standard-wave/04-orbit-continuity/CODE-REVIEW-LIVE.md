@@ -4,7 +4,7 @@
 |-------|--------|
 | **Seat** | P04 code-review (live re-prove after other seats) |
 | **Date** | 2026-07-10 |
-| **Checkout** | `D:\OandO07072026` only (no worktrees) |
+| **Checkout** | `.` only (no worktrees) |
 | **Tip at final write** | `1dd9ae6346db54e58303c7c5adb89bf1cb48361f` (moving trustdata tip; product W4 files stable) |
 | **Browser pack tip (HEAD.txt during green)** | `231b2f03…` era → green Playwright deposit on disk |
 | **Bar** | NO PAPER MOON. Plan rating ≠ product claim. Re-prove before claim. |

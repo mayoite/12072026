@@ -3,7 +3,7 @@
 **Date:** 2026-07-10  
 **Seat:** Agent 5 — code-review gate + scorecard (read product; write evidence only)  
 **Authority:** `plans1/P03-select-delete/CODE-REVIEW-REPORT.md`  
-**Checkout:** `D:\OandO07072026` (main only; no worktrees)  
+**Checkout:** `.` (main only; no worktrees)  
 **Scorecard written at tip:** `74e89a4b431f5e5cecab79f1523a84543981a7f0`  
 **Evidence pack HEAD (browser pin):** `aea4e76c44ed82130b3d8b38d8980877fc976540`  
 **Canonical evidence:** `results/planner/world-standard-wave/03-select-delete/`

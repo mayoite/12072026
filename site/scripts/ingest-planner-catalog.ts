@@ -32,11 +32,13 @@ import { FURNITURE_ASSET_REGISTRY } from "@/features/planner/lib/assetPipeline";
 import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
 
 const ROOT = process.cwd();
-const CATALOG_DIR = path.join(ROOT, "features/planner/catalog");
+const SITE_ROOT = path.basename(ROOT) === "site" ? ROOT : path.join(ROOT, "site");
+const REPO_ROOT = path.basename(ROOT) === "site" ? path.resolve(ROOT, "..") : ROOT;
+const CATALOG_DIR = path.join(SITE_ROOT, "features/planner/catalog");
 const PART1_OUT = path.join(CATALOG_DIR, "generatedCatalogItemsPart1.ts");
 const PART2_OUT = path.join(CATALOG_DIR, "generatedCatalogItemsPart2.ts");
 const WRAPPER_OUT = path.join(CATALOG_DIR, "generatedCatalogItems.ts");
-const AUDITS_DIR = path.join(ROOT, "results", "audits");
+const AUDITS_DIR = path.join(REPO_ROOT, "results", "audits");
 const GOLDEN_OUT = path.join(AUDITS_DIR, "planner-catalog-golden.json");
 const REPORT_JSON_OUT = path.join(AUDITS_DIR, "planner-catalog-ingest-report.json");
 const REPORT_MD_OUT = path.join(AUDITS_DIR, "planner-catalog-ingest-report.md");

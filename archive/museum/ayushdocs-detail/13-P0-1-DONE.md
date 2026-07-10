@@ -35,7 +35,7 @@ pnpm exec playwright test tests/e2e/admin-svg-publish-p01.spec.ts
 ## Commands for you
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 # .env.development.local already has DEV_AUTH_BYPASS=1
 pnpm run dev
 # other terminal:

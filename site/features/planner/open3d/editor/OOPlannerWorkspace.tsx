@@ -14,12 +14,11 @@ import {
   Lazy3DViewer,
   getOpen3dViewerControlProps,
 } from "../3d/ThreeLazyViewer";
-import { Open3dFabricStage } from "../canvas-fabric-stage/Open3dFabricStage";
 import {
+  PlannerCanvasStage,
+  type PlannerCanvasStageHandle,
   type CanvasStatusSnapshot,
-  type Open3dCanvasStageHandle,
-  type FurnitureDocumentPoseUpdate,
-} from "../canvas-fabric-stage";
+} from "../canvas-stage";
 import {
   placeCatalogItemInProject,
   placeWorkstationConfigOnProject,
@@ -35,8 +34,7 @@ import {
 } from "../catalog/workstationConfiguratorV0";
 import { placeModularWithGeneratedGlbBrowser } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbBrowser";
 import { shouldPlaceModularWithGeneratedGlb } from "@/features/planner/asset-engine/mesh/shouldPlaceModularWithGeneratedGlb";
-import { importOpen3dProjectJson } from "../persistence/projectJson";
-import { parseOpen3dSessionSnapshot } from "../persistence/open3dSession";
+import { importOpen3dPlannerText } from "../shared/export/importUtils";
 import { useOpen3dWorkspaceAutosave } from "../persistence/useOpen3dWorkspaceAutosave";
 import { setActiveFloor } from "../model/operations/pureActions";
 import { createRectangularRoomProject } from "../model/project";
@@ -44,6 +42,9 @@ import { preflightOpen3dExport } from "../shared/export/exportPreflight";
 import {
   downloadJSON,
   downloadSVG,
+  downloadPNG,
+  downloadPDF,
+  downloadDXF,
   downloadWorkstationBoqJSON,
   downloadFurnitureBoqJSON,
   downloadFurnitureBoqCSV,
@@ -63,9 +64,9 @@ import { useOpen3dSvgCatalog } from "../catalog/useOpen3dWorkspaceCatalog";
 import { CanvasToolRail } from "./CanvasToolRail";
 import { CommandPalette } from "./CommandPalette";
 import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
-import { InventoryPanel } from "./InventoryPanel";
 import { LayersPanel } from "./LayersPanel";
 import { PropertiesPanel } from "./PropertiesPanel";
+import { WorkspaceLeftPanel } from "./WorkspaceLeftPanel";
 import { WorkspaceShell } from "./WorkspaceShell";
 import {
   CANVAS_TOOL_GUIDANCE,
@@ -99,6 +100,9 @@ import {
   parsePlannerWorkspacePreferences,
   DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
 } from "../store/workspacePreferences";
+import { applyLayoutToWorkspace } from "@/features/planner/ai/applyLayoutToWorkspace";
+import { extractProjectPlacements } from "@/features/planner/ai/extractProjectPlacements";
+import type { WorkspaceAiBridge } from "@/features/planner/ai/workspaceAiBridge";
 
 export type OOPlannerWorkspaceProps = {
   guestMode: boolean;
@@ -113,7 +117,7 @@ export function OOPlannerWorkspace({
     ? "guest"
     : "authenticated";
   const projectName = planId ? `Plan ${planId}` : "Untitled plan";
-  const canvasRef = useRef<Open3dCanvasStageHandle>(null);
+  const canvasRef = useRef<PlannerCanvasStageHandle>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
   const workspaceCanvas = useWorkspaceCanvas({
     projectName,
@@ -178,6 +182,14 @@ export function OOPlannerWorkspace({
   }, [guestMode, planId, projectName]);
 
   const [viewMode, setViewMode] = useState<"2d" | "3d">("2d");
+
+  useEffect(() => {
+    if (viewMode !== "2d") return;
+    const frame = requestAnimationFrame(() => {
+      canvasRef.current?.fitToView?.();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [viewMode]);
   const [activeTool, setActiveTool] = useState<PlannerTool>("wall");
   const [displayUnit, setDisplayUnit] = useState<Open3dDisplayUnit>("cm");
   const [layerVisibility, setLayerVisibility] = useState<Open3dLayerVisibility>(
@@ -227,18 +239,6 @@ export function OOPlannerWorkspace({
       (floor) => floor.id === workspaceCanvas.project.activeFloorId,
     ) ?? workspaceCanvas.project.floors[0];
 
-  const handleFabricFurnitureModified = useCallback(
-    (update: FurnitureDocumentPoseUpdate) => {
-      workspaceCanvas.updateProject((project) =>
-        updateEntityInProject(project, "furniture", update.entityId, {
-          position: update.position,
-          rotation: update.rotation,
-        }),
-      );
-    },
-    [workspaceCanvas],
-  );
-
   const selectedEntity = useMemo(
     () =>
       resolveSelectedEntity(
@@ -254,6 +254,41 @@ export function OOPlannerWorkspace({
       activeFloor.windows.length === 0 &&
       activeFloor.furniture.length === 0
     : true;
+
+  const workspaceAiBridge = useMemo<WorkspaceAiBridge>(
+    () => ({
+      placementCount: extractProjectPlacements(activeFloor).length,
+      getPlacements: () => extractProjectPlacements(activeFloor),
+      applyLayout: (layout) => {
+        workspaceCanvas.updateProject((project) =>
+          applyLayoutToWorkspace(project, layout, catalog.resolveItem),
+        );
+        setWorkspaceMessage("Applied AI layout.");
+        canvasRef.current?.fitToView?.();
+      },
+      replaceCatalogMatch: (furnitureId, catalogItemId) => {
+        const item = catalog.resolveItem(catalogItemId);
+        if (!item) return;
+        workspaceCanvas.updateProject((project) => {
+          const floor =
+            project.floors.find((f) => f.id === project.activeFloorId) ??
+            project.floors[0];
+          const existing = floor?.furniture.find((f) => f.id === furnitureId);
+          if (!existing) return project;
+          const without = deleteEntityFromProject(project, "furniture", furnitureId);
+          const placed = placeCatalogItemInProject(without, item, null, {
+            placedFrom: "api",
+            position: existing.position,
+            rotation: existing.rotation,
+          });
+          return placed.result.project;
+        });
+        setWorkspaceMessage(`Updated catalog match to ${item.shortName ?? item.name}.`);
+      },
+      fitCanvas: () => canvasRef.current?.fitToView?.(),
+    }),
+    [activeFloor, catalog.resolveItem, workspaceCanvas],
+  );
 
   const toggleDensity = useCallback(() => {
     setDensity((current) => {
@@ -684,6 +719,30 @@ export function OOPlannerWorkspace({
         setWorkspaceMessage(`Exported ${check.filename}`);
         return;
       }
+      if (format === "png") {
+        void downloadPNG(
+          document.createElement("canvas"),
+          workspaceCanvas.project,
+          check.filename,
+        ).then(() => {
+          setWorkspaceMessage(`Exported ${check.filename}`);
+        });
+        return;
+      }
+      if (format === "pdf") {
+        void downloadPDF(workspaceCanvas.project, undefined, check.filename).then(
+          () => {
+            setWorkspaceMessage(`Exported ${check.filename}`);
+          },
+        );
+        return;
+      }
+      if (format === "dxf") {
+        void downloadDXF(workspaceCanvas.project, check.filename).then(() => {
+          setWorkspaceMessage(`Exported ${check.filename}`);
+        });
+        return;
+      }
       // Unreachable for ready formats; preflight blocks png/pdf/dxf as unsupported.
       setWorkspaceMessage(
         check.messages[0] ?? `Export unavailable for ${format}`,
@@ -706,10 +765,20 @@ export function OOPlannerWorkspace({
       reader.onload = () => {
         try {
           const raw = String(reader.result ?? "");
-          const restored =
-            parseOpen3dSessionSnapshot(raw) ?? importOpen3dProjectJson(raw);
-          workspaceCanvas.replaceProject(restored);
+          const result = importOpen3dPlannerText(raw);
+          if (!result.success || !result.project) {
+            const firstError = result.errors.find((error) => error.severity === "error");
+            setWorkspaceMessage(
+              firstError?.message ??
+                "Could not import that file. Use an Open3D plan JSON export.",
+            );
+            return;
+          }
+          workspaceCanvas.replaceProject(result.project);
           setWorkspaceMessage(`Imported ${file.name}`);
+          requestAnimationFrame(() => {
+            canvasRef.current?.fitToView?.();
+          });
         } catch {
           setWorkspaceMessage(
             "Could not import that file. Use an Open3D plan JSON export.",
@@ -859,16 +928,14 @@ export function OOPlannerWorkspace({
         density={density}
         onToggleDensity={toggleDensity}
         leftPanel={
-          <InventoryPanel
+          <WorkspaceLeftPanel
             catalogItems={catalog.items}
             isLoading={catalog.isLoading && catalog.items.length === 0}
             catalogStatus={catalog.status}
-            /* P-UI-2: default officeSystemsInventory=true — All + Office chips only */
-            onItemPlace={(itemId) => {
-              handleInventoryPlace(itemId);
-            }}
+            onItemPlace={handleInventoryPlace}
             onWorkstationConfigPlace={handleWorkstationConfigPlace}
             onWorkstationConfigBatchPlace={handleWorkstationConfigBatchPlace}
+            workspaceBridge={workspaceAiBridge}
           />
         }
         rightPanel={
@@ -947,35 +1014,43 @@ export function OOPlannerWorkspace({
         }
       >
         {viewMode === "2d" ? (
-          <div className="open3d-canvas-with-rail">
+          <div
+            className="open3d-canvas-with-rail"
+            data-tool={activeTool}
+            data-pending-placement={
+              pendingCatalogItemId !== null || pendingWorkstationConfig !== null
+                ? "true"
+                : undefined
+            }
+          >
             <CanvasToolRail
               activeTool={activeTool}
               onToolChange={setTool}
-              onZoomReset={() => canvasRef.current?.resetZoom()}
+              onZoomReset={() => canvasRef.current?.fitToView()}
             />
-            <div className="open3d-canvas-embedded">
-              <Open3dFabricStage
-                ref={canvasRef}
-                activeTool={activeTool}
-                layerVisibility={layerVisibility}
-                workspaceCanvas={workspaceCanvas}
-                activeFloor={activeFloor}
-                pendingCatalogPlacement={
-                  pendingCatalogItemId !== null ||
-                  pendingWorkstationConfig !== null
-                }
-                placementItemLabel={
-                  pendingWorkstationConfig
-                    ? workstationConfigKey(pendingWorkstationConfig)
-                    : (pendingCatalogItem?.shortName ??
-                      pendingCatalogItem?.name ??
-                      null)
-                }
-                onPlaceAtPoint={handlePlaceAtPoint}
-                onStatusChange={setCanvasStatus}
-                onFurnitureModified={handleFabricFurnitureModified}
-              />
-            </div>
+            <PlannerCanvasStage
+              ref={canvasRef}
+              variant="embedded"
+              autoFitOnLayout
+              onImportRequest={handleImportClick}
+              delegateKeyboard
+              activeTool={activeTool}
+              layerVisibility={layerVisibility}
+              workspaceCanvas={workspaceCanvas}
+              pendingCatalogPlacement={
+                pendingCatalogItemId !== null ||
+                pendingWorkstationConfig !== null
+              }
+              placementItemLabel={
+                pendingWorkstationConfig
+                  ? workstationConfigKey(pendingWorkstationConfig)
+                  : (pendingCatalogItem?.shortName ??
+                    pendingCatalogItem?.name ??
+                    null)
+              }
+              onPlaceAtPoint={handlePlaceAtPoint}
+              onStatusChange={setCanvasStatus}
+            />
             {/* P-UI-3: tool guidance lives in status bar only (avoid duplicate chrome) */}
             {isCanvasEmpty && (
               <section

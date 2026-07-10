@@ -2,7 +2,7 @@
 
 **Brainstormer:** 02/10  
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026`  
+**Checkout:** `.`  
 **Scope:** Ideas only. **No product code.** No implementation. No package installs. No competitor assets.  
 **Deliverable path:** `Idiots2\P02-engine-lock\REPORT.md`  
 **Research order (followed):** (1) `D:\websites` deep → (2) `Plans\Research` → (3) `Plans\phases\P02-engine-lock\` all files  
@@ -960,17 +960,17 @@ Document (UUID, mm)
 
 ### Plans
 
-- `D:\OandO07072026\Plans\Research\RESEARCH-MAP.md`  
-- `D:\OandO07072026\Plans\Research\Others\18-PRODUCT-CONTEXT.md`  
-- `D:\OandO07072026\Plans\phases\P02-engine-lock\P02-engine-lock.md`  
-- `D:\OandO07072026\Plans\phases\P02-engine-lock\P02-suggestions.md`  
-- `D:\OandO07072026\Plans\phases\P02-engine-lock\02-canvas-2d.md`  
-- `D:\OandO07072026\Plans\phases\P02-engine-lock\05-packages-stack.md`  
-- `D:\OandO07072026\Plans\INDEX.md`  
+- `Plans\Research\RESEARCH-MAP.md`  
+- `Plans\Research\Others\18-PRODUCT-CONTEXT.md`  
+- `Plans\phases\P02-engine-lock\P02-engine-lock.md`  
+- `Plans\phases\P02-engine-lock\P02-suggestions.md`  
+- `Plans\phases\P02-engine-lock\02-canvas-2d.md`  
+- `Plans\phases\P02-engine-lock\05-packages-stack.md`  
+- `Plans\INDEX.md`  
 
 ### Evidence (execution, not this brainstorm)
 
-- `D:\OandO07072026\results\planner\world-standard-wave\01-engine-lock\`  
+- `results\planner\world-standard-wave\01-engine-lock\`  
 
 ---
 

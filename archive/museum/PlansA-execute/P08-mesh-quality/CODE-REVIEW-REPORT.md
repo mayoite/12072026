@@ -4,7 +4,7 @@
 |-------|--------|
 | **Phase** | P08 Mesh Quality (W7 / CP-08) |
 | **Date** | 2026-07-10 |
-| **Checkout** | `D:\OandO07072026` main · SHA `7cad93d` · no worktree |
+| **Checkout** | `.` main · SHA `7cad93d` · no worktree |
 | **Reviewer mode** | Repo-first vs plan · **no implement · no plan edits** |
 | **Plan reviewed** | `plans1/P08-mesh-quality/IMPLEMENTATION-PLAN.md` |
 | **Brainstormer** | `archive/Idiots2/P08-mesh-quality/REPORT.md` (live path; plan still cites `Idiots2/…`) |
@@ -220,7 +220,7 @@ Blast meshStages: 1 FAIL (nodeCount>0) | runModularMeshStages pair=4 PASS
 
 | Artifact | Absolute path |
 |----------|----------------|
-| **This report** | `D:\OandO07072026\plans1/P08-mesh-quality\CODE-REVIEW-REPORT.md` |
-| Plan | `D:\OandO07072026\plans1/P08-mesh-quality\IMPLEMENTATION-PLAN.md` |
-| Brainstormer | `D:\OandO07072026\archive\Idiots2\P08-mesh-quality\REPORT.md` |
-| Mesh source | `D:\OandO07072026\site\features\planner\open3d\catalog\modularCabinetV0.ts` |
+| **This report** | `plans1/P08-mesh-quality\CODE-REVIEW-REPORT.md` |
+| Plan | `plans1/P08-mesh-quality\IMPLEMENTATION-PLAN.md` |
+| Brainstormer | `archive\Idiots2\P08-mesh-quality\REPORT.md` |
+| Mesh source | `site\features\planner\open3d\catalog\modularCabinetV0.ts` |

@@ -5,7 +5,7 @@
 | **Phase** | P06 Save Honesty (W5–W6) |
 | **Date** | 2026-07-10 |
 | **Reviewer** | code-review agent #1 (live re-proof; no product edits) |
-| **Checkout** | `D:\OandO07072026` |
+| **Checkout** | `.` |
 | **Inputs** | `plans1/P06-save-honesty/CODE-REVIEW-REPORT.md` · `IMPLEMENTATION-PLAN.md` · live open3d paths below |
 | **Scope** | Read product code only; write this evidence file only |
 

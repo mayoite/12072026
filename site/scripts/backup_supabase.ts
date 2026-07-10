@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { REPO_ROOT } from "./lib/repoRoot";
 
 const require = createRequire(import.meta.url);
 require("./loadEnvLocal.cjs").loadEnvLocal();
@@ -188,7 +189,7 @@ async function main() {
   const retentionDays = parseRetentionDays();
   const maxRetries = parseMaxRetries();
   const runId = timestampFolder();
-  const backupRoot = path.join(process.cwd(), "results", "backups", "supabase");
+  const backupRoot = path.join(REPO_ROOT, "results", "backups", "supabase");
   const runDir = path.join(backupRoot, runId);
   ensureDir(runDir);
 

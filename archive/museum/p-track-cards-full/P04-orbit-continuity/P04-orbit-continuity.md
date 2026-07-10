@@ -116,19 +116,19 @@ Three-layer truth (do not collapse into one “orbit works” claim):
 
 | Role | Absolute path |
 |------|----------------|
-| Orbit host | `D:\OandO07072026\site\features\planner\open3d\3d\ThreeViewerInner.tsx` |
-| Lazy wrapper + defaults | `D:\OandO07072026\site\features\planner\open3d\3d\ThreeLazyViewer.tsx` |
-| Optional orbit constant/helper | `D:\OandO07072026\site\features\planner\open3d\3d\orbitDefaults.ts` (create only if workspace wiring needs a pure export; else export from Lazy file) |
-| View mode + project into 3D | `D:\OandO07072026\site\features\planner\open3d\editor\OOPlannerWorkspace.tsx` |
-| Toggle chrome | `D:\OandO07072026\site\features\planner\open3d\editor\TopBar.tsx` (read; edit only if extra testid needed — radios already labeled **2D**/**3D**) |
-| Entity pose types | `D:\OandO07072026\site\features\planner\open3d\model\types.ts` (read; edit only if pose fields wrong — expected **no change**) |
-| Pure pose adapter | `D:\OandO07072026\site\features\planner\open3d\3d\buildOpen3dSceneNodes.ts` (read/extend tests; code change only if pose bug found) |
-| Mesh factory (read) | `D:\OandO07072026\site\features\planner\open3d\3d\createSceneObjectFromNode.ts` (regression only) |
-| Existing continuity unit | `D:\OandO07072026\site\tests\unit\features\planner\open3d\documentViewContinuity.test.ts` |
-| **Primary** orbit contract unit | `D:\OandO07072026\site\tests\unit\features\planner\open3d\orbitControlsDefault.test.ts` |
+| Orbit host | `site\features\planner\open3d\3d\ThreeViewerInner.tsx` |
+| Lazy wrapper + defaults | `site\features\planner\open3d\3d\ThreeLazyViewer.tsx` |
+| Optional orbit constant/helper | `site\features\planner\open3d\3d\orbitDefaults.ts` (create only if workspace wiring needs a pure export; else export from Lazy file) |
+| View mode + project into 3D | `site\features\planner\open3d\editor\OOPlannerWorkspace.tsx` |
+| Toggle chrome | `site\features\planner\open3d\editor\TopBar.tsx` (read; edit only if extra testid needed — radios already labeled **2D**/**3D**) |
+| Entity pose types | `site\features\planner\open3d\model\types.ts` (read; edit only if pose fields wrong — expected **no change**) |
+| Pure pose adapter | `site\features\planner\open3d\3d\buildOpen3dSceneNodes.ts` (read/extend tests; code change only if pose bug found) |
+| Mesh factory (read) | `site\features\planner\open3d\3d\createSceneObjectFromNode.ts` (regression only) |
+| Existing continuity unit | `site\tests\unit\features\planner\open3d\documentViewContinuity.test.ts` |
+| **Primary** orbit contract unit | `site\tests\unit\features\planner\open3d\orbitControlsDefault.test.ts` |
 | Optional secondary | extend `threeViewerInner.test.tsx` and/or `threeLazy.test.tsx` if construct-spy fits existing mocks — **do not** invent a third parallel `threeLazyViewerOrbit.test.tsx` unless primary cannot cover prop default |
-| Playwright (phase end / shared) | `D:\OandO07072026\site\tests\e2e\open3d-w4-orbit-continuity.spec.ts` **or** W4 block in `open3d-world-standard-journey.spec.ts` |
-| Evidence | `D:\OandO07072026\results\planner\world-standard-wave\04-orbit-continuity\` |
+| Playwright (phase end / shared) | `site\tests\e2e\open3d-w4-orbit-continuity.spec.ts` **or** W4 block in `open3d-world-standard-journey.spec.ts` |
+| Evidence | `results\planner\world-standard-wave\04-orbit-continuity\` |
 
 Do **not** thrash `Planner3DViewer.tsx` or rewrite `planner-j4-3d-parity.spec.ts` as the W4 proof (legacy chrome).
 
@@ -165,7 +165,7 @@ Do **not** thrash `Planner3DViewer.tsx` or rewrite `planner-j4-3d-parity.spec.ts
 **Commands:**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/documentViewContinuity.test.ts --reporter=verbose
 ```
 
@@ -217,7 +217,7 @@ Place helper in `ThreeLazyViewer.tsx` or `open3d/3d/orbitDefaults.ts` — pick *
 **Commands:**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/orbitControlsDefault.test.ts --reporter=verbose
 ```
 
@@ -321,7 +321,7 @@ Rules:
 **Commands:**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts tests/unit/features/planner/open3d/documentViewContinuity.test.ts tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts --reporter=verbose
 ```
 
@@ -363,7 +363,7 @@ npx vitest run tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts 
 **Commands:**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx playwright test tests/e2e/open3d-w4-orbit-continuity.spec.ts --reporter=line
 ```
 
@@ -394,8 +394,8 @@ npx playwright test tests/e2e/open3d-w4-orbit-continuity.spec.ts --reporter=line
 | Playwright W4 | `npx playwright test tests/e2e/open3d-w4-orbit-continuity.spec.ts` |
 | Non-regression (optional) | site vitest folder `tests/unit/features/planner/open3d/` |
 
-All product commands run from `D:\OandO07072026\site` unless noted. Evidence lands under  
-`D:\OandO07072026\results\planner\world-standard-wave\04-orbit-continuity\`.
+All product commands run from `site` unless noted. Evidence lands under  
+`results\planner\world-standard-wave\04-orbit-continuity\`.
 
 ---
 

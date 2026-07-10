@@ -2,7 +2,7 @@
 
 **Reviewer:** Planning expert #2 (independent structure pass)  
 **Date:** 2026-07-09  
-**Scope:** Structure of `D:\OandO07072026\Plans\trustdata\` only  
+**Scope:** Structure of `Plans\trustdata\` only  
 **Mode:** plan-only · **no product code** · **no phase rewrites** in this pass  
 **Output:** Recommendations only — KEEP / SPLIT / EXPAND / hybrid  
 

@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "preinstall": "node ../../scripts/guard-workspace-install.mjs",
     "dev": "node scripts/emit-renderer-data.mjs && vite",
     "build": "node scripts/emit-renderer-data.mjs && vite build",
     "preview": "vite preview",

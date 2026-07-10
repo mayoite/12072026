@@ -38,9 +38,10 @@ function loadPolygonClipping(): PolygonClippingApi {
     /* try absolute below */
   }
   try {
-    // site/scripts/generate-svg → site/node_modules
+    // site/scripts/generate-svg → repo-root node_modules (hoisted)
     const abs = pathResolveSafe(
       __dirname,
+      "..",
       "..",
       "..",
       "node_modules",
@@ -71,7 +72,7 @@ function loadPolygonClipping(): PolygonClippingApi {
 
   throw new Error(
     "polygon-clipping boolean ops unavailable (union/intersection/difference/xor). " +
-      "Check site/node_modules/polygon-clipping and Next serverExternalPackages.",
+      "Check repo-root node_modules/polygon-clipping and Next serverExternalPackages.",
   );
 }
 

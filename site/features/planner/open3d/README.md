@@ -1,26 +1,19 @@
-# Open3D planner route (production hybrid)
+# Open3D planner feature tree
 
-Production source of truth for `/planner/guest`, `/planner/canvas`, `/planner/open3d/`.
+## Live 2-D canvas
 
-## Live 2-D
+**`canvas-stage/PlannerCanvasStage`** — native HTML canvas + procedural Block2D (`furnitureBlock2D`, walls). No Fabric. No borrowed SVG/GLB on the plan.
 
-**`canvas-fabric-stage/Open3dFabricStage.tsx`** (Fabric.js) — sole plan canvas. No env flag, no FeasibilityCanvas fallback.
+Implementation source: `features/planner/_archive/canvas-feasibility/FeasibilityCanvas.tsx` (re-exported as `PlannerCanvasStage`).
 
-3-D: Three/r3f [`3d/`](./3d).
+## Export
 
-## Archived (not live)
+JSON, SVG, PNG, PDF, DXF from the same procedural scene (`shared/export/exportUtils.ts`). Furniture draws as rects / Block2D — not catalog symbol files.
+
+## Archived / reference only
 
 | Path | Role |
 |------|------|
-| `features/planner/_archive/canvas-feasibility/` | Old Canvas 2D `FeasibilityCanvas` — tests/reference only |
-| `features/planner/_archive/fabric/` | Full legacy Fabric floorplan workspace |
-
-Import archived FeasibilityCanvas only as:
-
-`@/features/planner/_archive/canvas-feasibility/FeasibilityCanvas`
-
-**Do not** import under `open3d/canvas-feasibility/` — that alias was removed.
-
-## Host chain
-
-`Open3dPlannerHost` → `Open3dNativeHost` → `OOPlannerWorkspace` → `Open3dFabricStage` + `ThreeLazyViewer`
+| `canvas-fabric-stage/` | Former Fabric 2-D stage — not mounted in production workspace |
+| `_archive/canvas-feasibility/` | Source for `PlannerCanvasStage` + unit tests |
+| `_archive/fabric/` | Legacy Fabric workspace |

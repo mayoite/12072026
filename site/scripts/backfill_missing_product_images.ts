@@ -3,6 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import { resolveProductImages } from "@/features/catalog/imageMetadata";
+import { REPO_ROOT } from "./lib/repoRoot";
 
 config({ path: resolve(process.cwd(), ".env.local") });
 
@@ -91,7 +92,7 @@ async function main() {
     });
   }
 
-  const reportDir = resolve(process.cwd(), "results", "audits");
+  const reportDir = resolve(REPO_ROOT, "results", "audits");
   mkdirSync(reportDir, { recursive: true });
   writeFileSync(
     resolve(reportDir, "missing-product-images-backfill-report.json"),

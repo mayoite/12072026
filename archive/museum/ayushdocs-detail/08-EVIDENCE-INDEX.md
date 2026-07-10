@@ -3,7 +3,7 @@
 **Purpose:** Map each planner evidence directory to what it means (slice, wave, or assessment).  
 **Deep dumps stay in** `results/planner/` — this file is the owner-facing index only.  
 **Handoff narrative:** [`results/planner/SESSION-RECAP.md`](../results/planner/SESSION-RECAP.md)  
-**Repo rule:** work only in `D:\OandO07072026` (no git worktrees).
+**Repo rule:** work only in `.` (no git worktrees).
 
 Typical contents per slice: `run.json` (machine summary) + `vitest-raw.log` / related logs. Some dirs are assessments only (`REVIEW.md`, `STATUS.md`, `REPORT.md`).
 

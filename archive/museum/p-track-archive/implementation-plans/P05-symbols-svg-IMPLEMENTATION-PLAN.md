@@ -11,7 +11,7 @@
 **Tech Stack:** TypeScript · Vitest · Canvas 2D · Block2D (`blocks2d` prim vocabulary) · modular-cabinet-v0 · asset-engine SVG pipeline (`svgo` / pipelineCore) · optional Playwright · evidence under repo-root `results/planner/world-standard-wave/05-symbols-svg/`.
 
 **Inputs consumed:**
-- Repo read: 2026-07-10 — workspace `D:\OandO07072026` (tree dirty possible; `results/` **absent** at root → historical CP-05 PASS is **unproven in this checkout**)
+- Repo read: 2026-07-10 — workspace `.` (tree dirty possible; `results/` **absent** at root → historical CP-05 PASS is **unproven in this checkout**)
 - Brainstormer: `Idiots2/P05-symbols-svg/REPORT.md` only (never `Idiots/`)
 - Phase plan: `Plans/phases/P05-symbols-svg/` (execute card + appendix + suggestions + 02-canvas-2d)
 - Research index: `Plans/Research/RESULTS-MAP.md` · `Plans/Research/RESEARCH-MAP.md` · `Plans/INDEX.md`
@@ -73,7 +73,7 @@ Live `site/features/planner/open3d/catalog/furnitureBlock2D.ts` is **already pas
 ### 1.4 Missing evidence (hard)
 
 ```
-D:\OandO07072026\results   → does not exist
+results   → does not exist
 ```
 
 Per `AGENTS.md` + `RESULTS-MAP.md` + Idiots2 §10.1 / §16:  
@@ -371,9 +371,9 @@ Smoke: `pnpm run scripts:smoke:svg:batch` from `site/` — **honesty evidence**,
 - [ ] **Step 1: Confirm checkout**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 pwd
-# Expect: D:\OandO07072026
+# Expect: .
 # Never use worktrees
 ```
 
@@ -382,7 +382,7 @@ Expected: path is main checkout only.
 - [ ] **Step 2: Create evidence tree**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 $base = "results\planner\world-standard-wave\05-symbols-svg"
 @(
   "00-baseline","01-unit-reprove","02-green","03-nonempty",
@@ -395,7 +395,7 @@ Expected: directories exist under repo-root `results/` (not `site/results/`).
 - [ ] **Step 3: Authority greps → raw log**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 rg -n "furnitureBlock2DFromItem|modularCabinetBlock|furnitureBlockUsesCenteredPath|compileSvgForPublish|renderBlock2DCentered|svg-catalog" `
   features/planner/open3d lib/catalog features/planner/asset-engine `
   2>&1 | Tee-Object -FilePath ..\results\planner\world-standard-wave\05-symbols-svg\00-baseline\rg-raw.log
@@ -416,7 +416,7 @@ Write exactly this content (fill ISO date + HEAD if available):
 # P05 baseline (re-prove checkout)
 
 - Date: (ISO)
-- Checkout: D:\OandO07072026
+- Checkout: .
 - results/ prior existence: MISSING at plan write; tree recreated
 - Canvas draw path: FeasibilityCanvas → furnitureBlock2DFromItem → renderBlock2DCentered
 - Live modularCabinetBlock: multi-prim (≥4) with doorStyle branches + light surface fill
@@ -463,7 +463,7 @@ git commit -m "trustdata(P05): baseline NOTES for W2 symbols re-prove (results t
 - [ ] **Step 1: Run both suites unfiltered**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts `
   tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts `
@@ -555,7 +555,7 @@ git commit -m "trustdata(P05): unit re-prove RED notes (no paper green)"
 - [ ] **Step 1: Confirm failing tests still RED**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts --reporter=verbose
 ```
 
@@ -712,7 +712,7 @@ export function furnitureBlockUsesCenteredPath(_item: Open3dFurnitureItem): bool
 - [ ] **Step 3: Re-run cabinet-v0 suite — expect PASS**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\05-symbols-svg\02-green\vitest-cabinet-raw.log
 ```
@@ -775,7 +775,7 @@ export function renderBlock2DCentered(
 - [ ] **Step 4: Re-run render suite**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts --reporter=verbose 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\05-symbols-svg\03-nonempty\vitest-raw.log
 ```
@@ -828,7 +828,7 @@ If **present**, do not rewrite for style thrash.
 - [ ] **Step 2: Run SVG smoke batch (honesty optional for symbol half)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm run scripts:smoke:svg:batch 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\05-symbols-svg\04-svg-honesty\svg-batch-raw.log
 echo "EXIT=$LASTEXITCODE"
@@ -907,7 +907,7 @@ Create temporary runner (or use `pnpm exec tsx` with inline file under evidence 
 `results/planner/world-standard-wave/05-symbols-svg/05-visual/dump-prims.mjs` is awkward for TS imports. Prefer:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts --reporter=verbose
 ```
 
@@ -916,7 +916,7 @@ Then produce JSON via a **small Node script** that imports through the package p
 Add **only if** no dump exists — optional test file is heavier; preferred approach:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec tsx -e "
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { furnitureBlock2DFromItem } from './features/planner/open3d/catalog/furnitureBlock2D.ts';
@@ -979,7 +979,7 @@ Browser place journey remains P07 for full W2 place half.
 - [ ] **Step 3 (optional strong visual): Playwright place PNG with flag OFF**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 # Ensure NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE is NOT 1
 $env:NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE = $null
 pnpm exec playwright test tests/e2e/open3d-mesh-symbol-live-verify.spec.ts --reporter=line 2>&1 |
@@ -1078,7 +1078,7 @@ describe("P05 authority honesty locks", () => {
 - [ ] **Step 2: RED then GREEN**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/catalog/furnitureBlock2D.authority-honesty.test.ts --reporter=verbose
 ```
 
@@ -1106,7 +1106,7 @@ git commit -m "test(open3d): P05 authority honesty locks (Block2D ≠ svg-catalo
 - [ ] **Step 1: Final vitest both core files**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts `
   tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts `
@@ -1491,7 +1491,7 @@ export function compileSvgForPublish(raw: unknown): Promise<CompileResult>;
 ### Appendix D — Commands cheat sheet
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 
 # Unit symbol pack
 pnpm exec vitest run `
@@ -1508,7 +1508,7 @@ pnpm dev
 # → /planner/open3d → place cabinet-v0 → 2D zoom inspect multi-prim
 
 # Layout gate
-cd D:\OandO07072026
+cd .
 pnpm run check:layout
 ```
 

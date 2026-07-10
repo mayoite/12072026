@@ -50,7 +50,7 @@ Replaces reading long 05 / 07 / 08 / 09 docs every time. Use this loop.
 See **[14-SCRIPTS-MENU.md](./14-SCRIPTS-MENU.md)** for the short owner list.
 
 ```powershell
-cd D:\OandO07072026
+cd .
 pnpm dev          # site next dev
 pnpm p0           # unit + svg smoke
 pnpm p0:admin-svg # Playwright admin publish (with PLAYWRIGHT_BASE_URL if reusing dev)

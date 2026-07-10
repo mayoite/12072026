@@ -15,7 +15,7 @@
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` · verification · chrome-devtools for browser truth.  
 > **W0 UNLOCKED** — execute product work per phase + evidence. Do not re-ask owner unlock.  
-> **Checkout:** `D:\OandO07072026` only · no worktrees · commit as we go · push only on ask.  
+> **Checkout:** `.` only · no worktrees · commit as we go · push only on ask.  
 > **Suggestions:** [P07-suggestions.md](../../../archive/Plans/phases/P07-draw-place-journey/P07-suggestions.md)
 
 **Goal:** Prove in a real browser: unaided buyer opens open3d planner, **draws walls + door/opening**, **places ≥2 catalog items including cabinet-v0** with non-blank 2D symbols — gates **W1** and **W2** (place half).
@@ -87,8 +87,8 @@
 - [ ] **00.6** Create evidence dirs:
 
 ```powershell
-New-Item -ItemType Directory -Force -Path "D:\OandO07072026\results\planner\world-standard-wave\02-browser-open3d-journey" | Out-Null
-New-Item -ItemType Directory -Force -Path "D:\OandO07072026\results\planner\world-standard-wave\07-browser-journey" | Out-Null
+New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\02-browser-open3d-journey" | Out-Null
+New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\07-browser-journey" | Out-Null
 ```
 
 ---
@@ -113,7 +113,7 @@ New-Item -ItemType Directory -Force -Path "D:\OandO07072026\results\planner\worl
 - [ ] **2.4** Run with baseURL:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-standard-journey.spec.ts --reporter=list
 ```

@@ -5,12 +5,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { REPO_ROOT, SITE_PACKAGE_ROOT } from "../lib/repoRoot.mjs";
 
 const scriptsDir = path.dirname(fileURLToPath(import.meta.url));
-const siteRoot = path.resolve(scriptsDir, "..");
+const siteRoot = SITE_PACKAGE_ROOT;
 const siteApp = path.join(siteRoot, "app", "(site)");
 const write = process.argv.includes("--write");
-const logFile = path.join(siteRoot, "results", "site-ui", "codemod-dry-run.log");
+const logFile = path.join(REPO_ROOT, "results", "site-ui", "codemod-dry-run.log");
 
 const SKIP_FILES = new Set(["app/(site)/page.tsx".replaceAll("\\", "/")]);
 

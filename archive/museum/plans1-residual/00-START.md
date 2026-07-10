@@ -1,6 +1,6 @@
 # 00-START — Session zero (executable start card)
 
-**For:** next engineer or agent on `D:\OandO07072026`  
+**For:** next engineer or agent on `.`  
 **Maps to:** EXECUTABLE-PLAN Task 00  
 **Date of package:** 2026-07-10  
 **Repo HEAD at synthesis:** `cb62c4e` (`docs(idiotplanners): code-review reports for P01-P10 vs live repo`) — **re-check on execute**
@@ -11,7 +11,7 @@
 
 | Requirement | Detail |
 |-------------|--------|
-| Checkout | **Only** `D:\OandO07072026` main · **no worktrees** |
+| Checkout | **Only** `.` main · **no worktrees** |
 | Package manager | **pnpm** from repo root (`pnpm-workspace.yaml`) |
 | Env | **Repo-root `.env.local` only** (never commit; never invent `site/.env.local`). Keys for Supabase/E2E/auth/CDN live there. Playwright loads it via `site/scripts/loadEnvLocal.cjs` (repo-root first). |
 | Playwright | `pnpm --filter oando-site exec playwright install chromium` once. Tests: `pnpm exec playwright test -c config/build/playwright.config.ts <spec>` from `site/`. Prefer existing dev server: set `PLAYWRIGHT_BASE_URL=http://localhost:3000` or leave default + `reuseExistingServer`. Fabric W proofs: leave `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE` **unset**. |
@@ -25,7 +25,7 @@
 ### Immediate first commands
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git worktree list
 # Expect: single main checkout only
 
@@ -150,7 +150,7 @@ Detailed tasks: [EXECUTABLE-PLAN.md](./EXECUTABLE-PLAN.md) · Flat board: [CHECK
 
 ## Session-zero checklist
 
-- [ ] Single worktree at `D:\OandO07072026` (`git worktree list`)
+- [ ] Single worktree at `.` (`git worktree list`)
 - [ ] Record HEAD: `git log -1 --format="%H %s"` → write to `results/planner/world-standard-wave/00-start/HEAD.txt` after mkdir
 - [ ] Record dirty honesty: `git status -sb` → `00-start/DIRTY.txt` if dirty
 - [ ] Confirm `results/` missing or inventory existing (do not claim historical PASS)

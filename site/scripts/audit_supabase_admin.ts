@@ -6,6 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { config } from "dotenv";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { REPO_ROOT } from "./lib/repoRoot";
 
 type AdminTable =
   | "customer_queries"
@@ -168,7 +169,7 @@ async function main() {
     runtimeQueries,
   };
 
-  const auditsDir = path.join(process.cwd(), "results", "audits");
+  const auditsDir = path.join(REPO_ROOT, "results", "audits");
   fs.mkdirSync(auditsDir, { recursive: true });
 
   const jsonPath = path.join(auditsDir, "supabase-admin-schema-audit.json");

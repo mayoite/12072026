@@ -86,7 +86,7 @@
 Record at execute start:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse HEAD
 git status -sb
 ```
@@ -290,7 +290,7 @@ See §8 False-green catalog. Highest severity:
 - [ ] **Step 1: Create evidence directory**
 
 ```powershell
-New-Item -ItemType Directory -Force -Path "D:\OandO07072026\results\planner\world-standard-wave\04-orbit-continuity"
+New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\04-orbit-continuity"
 ```
 
 Expected: directory exists; `pnpm run check:layout` later must not flag evidence under `site/`.
@@ -298,7 +298,7 @@ Expected: directory exists; `pnpm run check:layout` later must not flag evidence
 - [ ] **Step 2: Capture HEAD**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse HEAD | Out-File -Encoding utf8 results\planner\world-standard-wave\04-orbit-continuity\HEAD.txt
 git status -sb | Out-File -Encoding utf8 results\planner\world-standard-wave\04-orbit-continuity\STATUS.txt
 ```
@@ -519,7 +519,7 @@ describe("W4 pose continuity (document ↔ scene nodes)", () => {
 - [ ] **Step 2: Run pose tests — expect PASS (or fix product only if FAIL)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/poseContinuityW4.test.ts tests/unit/features/planner/open3d/documentViewContinuity.test.ts --reporter=verbose
 ```
 
@@ -539,21 +539,21 @@ If FAIL on degrees/radians mismatch: **fix adapter or test expectation**, not do
 Preferred (wrapper creates nested name folders — also copy summary into `04-orbit-continuity/`):
 
 ```powershell
-cd D:\OandO07072026
+cd .
 pwsh -File scripts/run-evidence-cmd.ps1 `
   -Name "pose-continuity" `
   -Module "planner" `
   -Phase "world-standard-wave/04-orbit-continuity" `
-  -Cwd "D:\OandO07072026\site" `
+  -Cwd "site" `
   -Command "npx vitest run tests/unit/features/planner/open3d/poseContinuityW4.test.ts tests/unit/features/planner/open3d/documentViewContinuity.test.ts --reporter=verbose"
 ```
 
 Alternative direct capture:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/poseContinuityW4.test.ts tests/unit/features/planner/open3d/documentViewContinuity.test.ts --reporter=verbose 2>&1 |
-  Tee-Object -FilePath "D:\OandO07072026\results\planner\world-standard-wave\04-orbit-continuity\pose-continuity-vitest-raw.log"
+  Tee-Object -FilePath "results\planner\world-standard-wave\04-orbit-continuity\pose-continuity-vitest-raw.log"
 ```
 
 Also write `pose-continuity-run.json`:
@@ -603,7 +603,7 @@ git commit -m "test(open3d): harden W4 pose double-rebuild continuity units"
 
 Do **not** create a parallel `orbitControlsDefault.test.ts` if `.tsx` exists. Open:
 
-`D:\OandO07072026\site\tests\unit\features\planner\open3d\orbitControlsDefault.test.tsx`
+`site\tests\unit\features\planner\open3d\orbitControlsDefault.test.tsx`
 
 If any O1–O5 case missing, add it. Full locked source (current live shape, keep mocks):
 
@@ -906,7 +906,7 @@ if (enableControls && camera && renderer) {
 - [ ] **Step 3: Run orbit unit**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx --reporter=verbose
 ```
 
@@ -924,9 +924,9 @@ Test Files  1 passed
 - [ ] **Step 4: Capture evidence**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx --reporter=verbose 2>&1 |
-  Tee-Object -FilePath "D:\OandO07072026\results\planner\world-standard-wave\04-orbit-continuity\orbit-default-vitest-raw.log"
+  Tee-Object -FilePath "results\planner\world-standard-wave\04-orbit-continuity\orbit-default-vitest-raw.log"
 ```
 
 Write `orbit-default-run.json` with `status: "unit-green"`.
@@ -1055,7 +1055,7 @@ const workspacePath = path.join(
 - [ ] **Step 3: Run**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/workspaceOrbitWiring.test.ts --reporter=verbose
 ```
 
@@ -1065,7 +1065,7 @@ Expected: PASS 2 tests.
 
 ```powershell
 npx vitest run tests/unit/features/planner/open3d/workspaceOrbitWiring.test.ts --reporter=verbose 2>&1 |
-  Tee-Object -FilePath "D:\OandO07072026\results\planner\world-standard-wave\04-orbit-continuity\workspace-wiring-vitest-raw.log"
+  Tee-Object -FilePath "results\planner\world-standard-wave\04-orbit-continuity\workspace-wiring-vitest-raw.log"
 ```
 
 ```bash
@@ -1086,7 +1086,7 @@ git commit -m "test(open3d): lock W4 workspace explicit orbit wiring"
 - [ ] **Step 1: Run regression suite**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts --reporter=verbose
 ```
 
@@ -1096,7 +1096,7 @@ Expected: all PASS.
 
 ```powershell
 npx vitest run tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts --reporter=verbose 2>&1 |
-  Tee-Object -FilePath "D:\OandO07072026\results\planner\world-standard-wave\04-orbit-continuity\adapter-regression-vitest-raw.log"
+  Tee-Object -FilePath "results\planner\world-standard-wave\04-orbit-continuity\adapter-regression-vitest-raw.log"
 ```
 
 - [ ] **Step 3: Mesh sign honesty check (do not “fix”)**
@@ -1132,7 +1132,7 @@ git commit -m "test(open3d): document intentional mesh rotation sign for W4"
 - [ ] **Step 1: Run combined**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run `
   tests/unit/features/planner/open3d/poseContinuityW4.test.ts `
   tests/unit/features/planner/open3d/documentViewContinuity.test.ts `
@@ -1347,14 +1347,14 @@ Note: if live spec does not assert `consoleErrors` empty or write `console-messa
 From site (match project’s usual e2e pattern). Typical:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx playwright test tests/e2e/open3d-w4-orbit-continuity.spec.ts --reporter=line
 ```
 
 Or package gate:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm run test:e2e:open3d-world -- tests/e2e/open3d-w4-orbit-continuity.spec.ts
 ```
 
@@ -1380,9 +1380,9 @@ Artifacts present:
 - [ ] **Step 3: Capture playwright log**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx playwright test tests/e2e/open3d-w4-orbit-continuity.spec.ts --reporter=line 2>&1 |
-  Tee-Object -FilePath "D:\OandO07072026\results\planner\world-standard-wave\04-orbit-continuity\playwright-raw.log"
+  Tee-Object -FilePath "results\planner\world-standard-wave\04-orbit-continuity\playwright-raw.log"
 ```
 
 - [ ] **Step 4: On failure — systematic debug (do not declare browser-green)**
@@ -1424,7 +1424,7 @@ git commit -m "test(e2e): W4 orbit continuity console assert + evidence"
 - [ ] **Step 1: Run pack contract unit**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/config/playwrightOpen3dWorldSpecs.test.ts --reporter=verbose
 ```
 
@@ -1496,7 +1496,7 @@ Update status vocabulary:
 - [ ] **Step 4: Layout check**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 pnpm run check:layout
 ```
 
@@ -1525,7 +1525,7 @@ git commit -m "docs(w4): CP-04 orbit continuity evidence pack"
 | Browser | `npx playwright test tests/e2e/open3d-w4-orbit-continuity.spec.ts --reporter=line` | 1 passed |
 | Layout | `pnpm run check:layout` (repo root) | PASS |
 
-All product commands from `D:\OandO07072026\site` unless noted. Evidence → `D:\OandO07072026\results\planner\world-standard-wave\04-orbit-continuity\`.
+All product commands from `site` unless noted. Evidence → `results\planner\world-standard-wave\04-orbit-continuity\`.
 
 ---
 

@@ -18,6 +18,11 @@ import type {
   Open3dPoint,
   Open3dDisplayUnit,
 } from "../../model/types";
+import { importOpen3dProjectJson } from "../../persistence/projectJson";
+import {
+  OPEN3D_SESSION_VERSION,
+  parseOpen3dSessionSnapshot,
+} from "../../persistence/open3dSession";
 import { themeColorRef } from "../readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "../themeColorTokens";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
@@ -43,7 +48,7 @@ export interface RoomPlanImportOptions {
 
 /** Import format detection result */
 export interface FormatDetectionResult {
-  format: "json" | "roomplan" | "unknown";
+  format: "json" | "session" | "raw-project" | "roomplan" | "unknown";
   confidence: number;
 }
 
@@ -515,7 +520,15 @@ export function importRoomPlanFromJson(
  */
 export function detectFormat(jsonString: string): FormatDetectionResult {
   try {
-    const data = JSON.parse(jsonString);
+    const data = JSON.parse(jsonString) as Record<string, unknown>;
+
+    if (
+      data.version === OPEN3D_SESSION_VERSION &&
+      data.engine === "open3d" &&
+      data.project
+    ) {
+      return { format: "session", confidence: 0.98 };
+    }
 
     // Check for RoomPlan format
     if (data.walls && data.doors && data.sections && !data.project && !data.floors) {
@@ -528,9 +541,9 @@ export function detectFormat(jsonString: string): FormatDetectionResult {
       return { format: "json", confidence: 0.95 };
     }
 
-    // Check for older format
+    // Raw Open3D project document (persistence round-trip / legacy)
     if (data.floors && data.id && data.name) {
-      return { format: "json", confidence: 0.7 };
+      return { format: "raw-project", confidence: 0.85 };
     }
 
     return { format: "unknown", confidence: 0 };
@@ -552,6 +565,39 @@ export function autoImport(
   const format = detectFormat(jsonString);
 
   switch (format.format) {
+    case "session": {
+      const project = parseOpen3dSessionSnapshot(jsonString);
+      if (!project) {
+        return {
+          success: false,
+          project: null,
+          errors: [
+            { path: "session", message: "Invalid Open3D session snapshot", severity: "error" },
+          ],
+        };
+      }
+      return { success: true, project, errors: [] };
+    }
+
+    case "raw-project": {
+      try {
+        const project = importOpen3dProjectJson(jsonString);
+        return { success: true, project, errors: [] };
+      } catch (error) {
+        return {
+          success: false,
+          project: null,
+          errors: [
+            {
+              path: "project",
+              message: error instanceof Error ? error.message : "Invalid project JSON",
+              severity: "error",
+            },
+          ],
+        };
+      }
+    }
+
     case "json":
       return importFromJSON(jsonString, options?.importLimits);
 
@@ -591,6 +637,13 @@ export function autoImport(
         ],
       };
   }
+}
+
+/**
+ * Workspace file-import entry: session snapshot, export envelope, raw project, or RoomPlan.
+ */
+export function importOpen3dPlannerText(raw: string): ImportResult {
+  return autoImport(raw);
 }
 
 // Re-export from jsonImport for convenience

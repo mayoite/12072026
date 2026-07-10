@@ -4,9 +4,9 @@
 > **Stop-if-fail is mandatory:** do not start the next phase while the prior CP is red unless the owner writes a waiver with reason + date.  
 > **Governance revision:** 2026-07-09 — see [museum copy](../../archive/museum/p-track-archive/GOVERNANCE-suggestions.md).
 
-**Checkout:** `D:\OandO07072026` only · no worktrees · commit as you go · push only on owner ask.  
-**Evidence root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
-**Plan root:** `D:\OandO07072026\Plans\P-track\`
+**Checkout:** `.` only · no worktrees · commit as you go · push only on owner ask.  
+**Evidence root:** `results\planner\world-standard-wave\`  
+**Plan root:** `Plans\P-track\`
 
 ### Status legend
 
@@ -108,7 +108,7 @@ Agents must not self-waive. **Especially forbidden:** self-waiving CP-03 browser
 
 ## Global stop rules (all CPs)
 
-1. **No worktrees** — any `git worktree add` = stop; return to `D:\OandO07072026`.
+1. **No worktrees** — any `git worktree add` = stop; return to `.`.
 2. **Push policy** — normal `git push` to origin/mirror follows `AGENTS.md` (push when right; mirror cadence). **Force-push**, remote branch delete, or history rewrite still require owner ask.
 3. **No competitor copy** — competitor JS/CSS/GLB/logos/brands in `site/` = stop; ethics FAIL.
 4. **No `any` in handwritten TS** — type exceptions need adjacent reason, owner, removal condition.
@@ -120,7 +120,7 @@ Agents must not self-waive. **Especially forbidden:** self-waiving CP-03 browser
 
 ## Quick re-verify commands (evidence only; adjust filters per phase)
 
-Run from `D:\OandO07072026\site` when executing CPs that need tests. Capture under the CP evidence folder via project evidence scripts when available (`scripts/run-evidence-cmd.ps1` / site scripts). Do not delete logs.
+Run from `site` when executing CPs that need tests. Capture under the CP evidence folder via project evidence scripts when available (`scripts/run-evidence-cmd.ps1` / site scripts). Do not delete logs.
 
 | Intent | Example |
 |--------|---------|

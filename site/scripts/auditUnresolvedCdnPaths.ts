@@ -5,13 +5,14 @@ import path from "path";
 
 import { resolveProductImages } from "@/features/catalog/imageMetadata";
 import { buildBasenameIndex, localAssetExists } from "./lib/cdnAssetResolver";
+import { REPO_ROOT, SITE_PACKAGE_ROOT } from "./lib/repoRoot";
 
-dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
+dotenv.config({ path: path.resolve(SITE_PACKAGE_ROOT, ".env.local") });
 
-const PUBLIC_DIR = path.resolve(process.cwd(), "public");
-const FAILURES_PATH = path.resolve(process.cwd(), "results/cdn-asset-failures.json");
-const REPORT_JSON = path.resolve(process.cwd(), "results/cdn-unresolved-replacements.json");
-const REPORT_MD = path.resolve(process.cwd(), "results/cdn-unresolved-replacements.md");
+const PUBLIC_DIR = path.resolve(SITE_PACKAGE_ROOT, "public");
+const FAILURES_PATH = path.resolve(REPO_ROOT, "results/cdn-asset-failures.json");
+const REPORT_JSON = path.resolve(REPO_ROOT, "results/cdn-unresolved-replacements.json");
+const REPORT_MD = path.resolve(REPO_ROOT, "results/cdn-unresolved-replacements.md");
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;

@@ -110,7 +110,7 @@ Approach **A** default · unlock gate explicit · phase order matches CP graph �
 
 1. North star quote (from design spec) on INDEX + 00-START.  
 2. Out-of-scope list while any W red.  
-3. Absolute Failures.md path: `D:\OandO07072026\Failures.md`.  
+3. Absolute Failures.md path: `Failures.md`.  
 4. Standing rules expanded: no `any`, zero suppression, write-to-disk, commit message shape.  
 5. INDEX doc table: add MASTER, AGENT-RULES, RESULTS-MAP (already partly), reviews/, Failures.  
 6. Clarify engine checkboxes: tick at CP-02 / owner engine sign-off; mirror into `00-start/` or engine-lock NOTES.  

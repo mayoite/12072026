@@ -2,13 +2,13 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Also load `verification-before-completion` and `Agents/Agents-docs.md` before claiming done.  
 > **Gate:** **CP-10**. Do not mark the trustdata program complete until every checkbox in this file is green with paths.  
-> **Checkout:** `D:\OandO07072026` only · **no worktrees** · commit each landable slice · **push only on owner ask** in the current conversation.
+> **Checkout:** `.` only · **no worktrees** · commit each landable slice · **push only on owner ask** in the current conversation.
 
 **Goal:** Produce a single final evidence pack that proves **W0–W8** from data, sync **MASTER-CHECKLIST** (all 9 sections / 94 boxes), back up plan + evidence to `E:`, commit landable docs/evidence slices locally, and hand over without a push unless the owner asks.
 
 **Architecture:** Proof lives under `results/planner/world-standard-wave/`; checklists under `Plans/trustdata/checklists/`; this phase is **documentation + verification + backup only**.
 
-**Tech stack:** PowerShell on Windows; git on `D:\OandO07072026` main checkout only; Playwright/Vitest artifacts already produced by P03–P09; robocopy / Copy-Item for E: backup.
+**Tech stack:** PowerShell on Windows; git on `.` main checkout only; Playwright/Vitest artifacts already produced by P03–P09; robocopy / Copy-Item for E: backup.
 
 **Parent:** [INDEX.md](../../INDEX.md) · [00-START.md](../../00-START.md) · [RESULTS-MAP.md](../../RESULTS-MAP.md) · [checkpoints/CHECKPOINTS.md](../../checkpoints/CHECKPOINTS.md) · [checklists/MASTER-CHECKLIST.md](../../checklists/MASTER-CHECKLIST.md)
 
@@ -42,7 +42,7 @@
 - [ ] Approach A/B/C recorded in `Plans/trustdata/00-START.md` (default **A** if owner silent after unlock).
 - [ ] CP-00 through CP-09 recorded **PASS** or owner **WAIVE** (date + reason) in `Plans/trustdata/checkpoints/CHECKPOINTS.md`.
 - [ ] **W0–W8** each have a concrete evidence path under `results/planner/world-standard-wave/` (see RESULTS-MAP.md) **or** an explicit owner WAIVE in CHECKPOINTS.md.
-- [ ] Working tree is the main checkout: `D:\OandO07072026` — **no worktrees**.
+- [ ] Working tree is the main checkout: `.` — **no worktrees**.
 - [ ] Superpowers / skills used for every non-trivial verification step this phase (`/using-superpowers`, `verification-before-completion`).
 - [ ] `E:` is mounted and writable **before** claiming backup (if not, log Failures.md; pack on D: may still land; **CP-10 backup criterion stays FAIL**).
 
@@ -77,7 +77,7 @@ Optional journey alias: `07-browser-journey/` → must point at `02-browser-open
 ## Task 00 — Setup / skills / tree check
 
 - [ ] Load `/using-superpowers`, `verification-before-completion`, `Agents/Agents-docs.md`.
-- [ ] Confirm `pwd` / git root is `D:\OandO07072026` (not a worktree).
+- [ ] Confirm `pwd` / git root is `.` (not a worktree).
 - [ ] Read INDEX, this file, CHECKPOINTS, RESULTS-MAP, MASTER-CHECKLIST.
 - [ ] Ensure folder exists: `results/planner/world-standard-wave/10-handover/`.
 - [ ] Spot-list primary gate folders (create nothing empty for show; missing gate folder = reopen owning phase).
@@ -89,7 +89,7 @@ Optional journey alias: `07-browser-journey/` → must point at `02-browser-open
 Target root:
 
 ```
-D:\OandO07072026\results\planner\world-standard-wave\10-handover\
+results\planner\world-standard-wave\10-handover\
 ```
 
 Required files (all concrete; write them during this phase):
@@ -161,7 +161,7 @@ Standing rule from `AGENTS.md` / `00-START.md` / MASTER A.7:
 
 Commit rules:
 
-- [ ] Commit on main checkout only (`D:\OandO07072026`).
+- [ ] Commit on main checkout only (`.`).
 - [ ] Message states phase + what landed (no empty “WIP” mega-commits for days of work).
 - [ ] Do **not** `git push` / force-push / delete remote branches.
 - [ ] Do **not** create git worktrees.
@@ -200,18 +200,18 @@ E:\OandO-backups\trustdata-2026-07-09\
 
 | Source | Destination under dated folder | Notes |
 |--------|--------------------------------|-------|
-| `D:\OandO07072026\Plans\trustdata\` | `Plans\trustdata\` | Full plan pack |
-| `D:\OandO07072026\results\planner\world-standard-wave\` | `results\planner\world-standard-wave\` | All W evidence + `10-handover/` |
-| `D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md` | `docs\superpowers\specs\` | Design authority |
-| `D:\OandO07072026\Failures.md` | `Failures.md` | Open blockers |
-| `D:\OandO07072026\ayushdocs\08-EVIDENCE-INDEX.md` | `ayushdocs\` | Cross-index if present |
+| `Plans\trustdata\` | `Plans\trustdata\` | Full plan pack |
+| `results\planner\world-standard-wave\` | `results\planner\world-standard-wave\` | All W evidence + `10-handover/` |
+| `docs\superpowers\specs\2026-07-09-world-standard-planner-design.md` | `docs\superpowers\specs\` | Design authority |
+| `Failures.md` | `Failures.md` | Open blockers |
+| `ayushdocs\08-EVIDENCE-INDEX.md` | `ayushdocs\` | Cross-index if present |
 | `D:\websites\research\2026-07-09-world-standard\` | `websites-research\2026-07-09-world-standard\` | Ideas-only research (MASTER B.4 recommended) |
 
 ### Optional larger snapshot (owner may request)
 
 | Source | Destination | Notes |
 |--------|-------------|-------|
-| Entire `D:\OandO07072026` excluding `node_modules`, `.next`, large `public` GLB caches if owner says skip | `repo-snapshot\` | Use robocopy `/XD node_modules .next` |
+| Entire `.` excluding `node_modules`, `.next`, large `public` GLB caches if owner says skip | `repo-snapshot\` | Use robocopy `/XD node_modules .next` |
 | `D:\websites\` competitor packs | `websites-full\` | Inspiration only; do not merge into product |
 
 ### PowerShell procedure (run from user with E: mounted)
@@ -222,14 +222,14 @@ $dest = "E:\OandO-backups\trustdata-$date"
 New-Item -ItemType Directory -Force -Path $dest | Out-Null
 
 # Minimum set — record each $LASTEXITCODE / robocopy code in BACKUP-LOG.md
-robocopy "D:\OandO07072026\Plans\trustdata" "$dest\Plans\trustdata" /E /NFL /NDL /NJH /NJS /nc /ns /np
-robocopy "D:\OandO07072026\results\planner\world-standard-wave" "$dest\results\planner\world-standard-wave" /E /NFL /NDL /NJH /NJS /nc /ns /np
+robocopy "Plans\trustdata" "$dest\Plans\trustdata" /E /NFL /NDL /NJH /NJS /nc /ns /np
+robocopy "results\planner\world-standard-wave" "$dest\results\planner\world-standard-wave" /E /NFL /NDL /NJH /NJS /nc /ns /np
 New-Item -ItemType Directory -Force -Path "$dest\docs\superpowers\specs" | Out-Null
-Copy-Item "D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md" "$dest\docs\superpowers\specs\" -Force
-Copy-Item "D:\OandO07072026\Failures.md" "$dest\Failures.md" -Force
-if (Test-Path "D:\OandO07072026\ayushdocs\08-EVIDENCE-INDEX.md") {
+Copy-Item "docs\superpowers\specs\2026-07-09-world-standard-planner-design.md" "$dest\docs\superpowers\specs\" -Force
+Copy-Item "Failures.md" "$dest\Failures.md" -Force
+if (Test-Path "ayushdocs\08-EVIDENCE-INDEX.md") {
   New-Item -ItemType Directory -Force -Path "$dest\ayushdocs" | Out-Null
-  Copy-Item "D:\OandO07072026\ayushdocs\08-EVIDENCE-INDEX.md" "$dest\ayushdocs\" -Force
+  Copy-Item "ayushdocs\08-EVIDENCE-INDEX.md" "$dest\ayushdocs\" -Force
 }
 if (Test-Path "D:\websites\research\2026-07-09-world-standard") {
   robocopy "D:\websites\research\2026-07-09-world-standard" "$dest\websites-research\2026-07-09-world-standard" /E /NFL /NDL /NJH /NJS /nc /ns /np

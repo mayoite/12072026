@@ -3,7 +3,7 @@
 **Date:** 2026-07-09  
 **Plan:** `Plans/trustdata/phases/P07-draw-place-journey/P07-draw-place-journey.md`  
 **Reviewer role:** planning expert (path verify → suggest → revise in place)  
-**Checkout:** `D:\OandO07072026` · no product code in this review  
+**Checkout:** `.` · no product code in this review  
 
 ## Verification summary (repo truth)
 

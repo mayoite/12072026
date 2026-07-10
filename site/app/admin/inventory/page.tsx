@@ -3,7 +3,10 @@ import path from "node:path";
 
 import AdminInventoryPageView from "@/features/planner/admin/AdminInventoryPageView";
 
-const INVENTORY_PATH = path.join(process.cwd(), "results", "app-pages-inventory.csv");
+const SITE_ROOT = process.cwd();
+const REPO_ROOT =
+  path.basename(SITE_ROOT) === "site" ? path.resolve(SITE_ROOT, "..") : SITE_ROOT;
+const INVENTORY_PATH = path.join(REPO_ROOT, "results", "app-pages-inventory.csv");
 
 export default function AdminInventoryPage() {
   let csv = "";

@@ -11,25 +11,35 @@ This file is the quick operating guide for `site/tech-stack-generator/`.
 
 ## First Run
 
+From the **repo root**:
+
 ```bash
-cd site/tech-stack-generator
-npm install
-npm run dev
+pnpm install
+pnpm dev:tech-stack
 ```
 
 Open `http://localhost:5173`.
 
-On Windows PowerShell, use `npm.cmd` instead of `npm` if needed.
+Do not run `npm install` inside `site/tech-stack-generator/` — use the root `pnpm-lock.yaml`.
 
 ## Package Scripts
 
-- `npm run dev` - start the docs site
-- `npm run build` - typecheck and build to repo-root `tech-stack-docs/`
-- `npm run preview` - preview the built site
-- `npm run typecheck` - TypeScript check only
-- `npm run test` - Vitest suite
-- `npm run test:coverage` - Vitest with V8 coverage
-- `npm run coverage` - alias for coverage
+Root aliases (preferred):
+
+- `pnpm dev:tech-stack` - start the docs site
+- `pnpm build:tech-stack` - typecheck and build to repo-root `tech-stack-docs/`
+- `pnpm preview:tech-stack` - preview the built site
+- `pnpm typecheck:tech-stack` - TypeScript check only
+- `pnpm test:tech-stack` - Vitest suite
+
+Package-local (`pnpm --filter oando-site-workflow-docs <script>`):
+
+- `dev` - start the docs site
+- `build` - typecheck and build
+- `preview` - preview the built site
+- `typecheck` - TypeScript check only
+- `test` - Vitest suite
+- `test:coverage` / `coverage` - Vitest with V8 coverage
 
 ## Test Walkthrough
 

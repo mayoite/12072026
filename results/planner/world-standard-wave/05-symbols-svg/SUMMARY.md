@@ -1,7 +1,7 @@
 # SUMMARY — P05 / CP-05 (scratch baseline — NO PAPER MOON)
 
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` (main only)  
+**Checkout:** `.` (main only)  
 **Tip at baseline:** `cca98824` (origin/main)  
 **Status:** **FAIL** — not CP-05 PASS
 

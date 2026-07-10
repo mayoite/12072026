@@ -1,11 +1,11 @@
 # Archived — FeasibilityCanvas (Canvas 2D)
 
-**Not live.** Production 2-D is `open3d/canvas-fabric-stage/Open3dFabricStage.tsx`.
+**Live product:** `open3d/canvas-stage/PlannerCanvasStage` (this file, re-exported).
 
-Kept for unit tests (`open3dFeasibilityCanvas.test.tsx`) and reference during Fabric cutover.
+Procedural Block2D on the plan — no borrowed SVG symbols.
 
-**Import (tests only):**
+Kept here for unit tests (`open3dFeasibilityCanvas.test.tsx`).
+
+**Import (tests):**
 
 `@/features/planner/_archive/canvas-feasibility/FeasibilityCanvas`
-
-Sibling archive: `_archive/fabric/`.

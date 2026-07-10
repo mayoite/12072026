@@ -167,16 +167,16 @@ So documented “fallback” URLs **`/planner/fabric/guest`** and **`/planner/fa
 
 ## 8. Absolute cite roots
 
-- `D:\OandO07072026\site\app\planner\(workspace)\guest\page.tsx`
-- `D:\OandO07072026\site\app\planner\(workspace)\canvas\page.tsx`
-- `D:\OandO07072026\site\app\planner\open3d\page.tsx`
-- `D:\OandO07072026\site\features\planner\ui\Open3dPlannerWorkspaceRoute.tsx`
-- `D:\OandO07072026\site\features\planner\ui\Open3dPlannerHost.tsx`
-- `D:\OandO07072026\site\features\planner\open3d\ui\Open3dNativeHost.tsx`
-- `D:\OandO07072026\site\features\planner\open3d\editor\OOPlannerWorkspace.tsx`
-- `D:\OandO07072026\site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx`
-- `D:\OandO07072026\site\features\planner\open3d\3d\ThreeLazyViewer.tsx`
-- `D:\OandO07072026\site\features\planner\open3d\3d\orbitDefaults.ts`
-- `D:\OandO07072026\site\features\planner\open3d\canvas-fabric-stage\`
-- `D:\OandO07072026\site\config\build\next.config.js`
-- `D:\OandO07072026\site\features\planner\_archive\fabric\`
+- `site\app\planner\(workspace)\guest\page.tsx`
+- `site\app\planner\(workspace)\canvas\page.tsx`
+- `site\app\planner\open3d\page.tsx`
+- `site\features\planner\ui\Open3dPlannerWorkspaceRoute.tsx`
+- `site\features\planner\ui\Open3dPlannerHost.tsx`
+- `site\features\planner\open3d\ui\Open3dNativeHost.tsx`
+- `site\features\planner\open3d\editor\OOPlannerWorkspace.tsx`
+- `site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx`
+- `site\features\planner\open3d\3d\ThreeLazyViewer.tsx`
+- `site\features\planner\open3d\3d\orbitDefaults.ts`
+- `site\features\planner\open3d\canvas-fabric-stage\`
+- `site\config\build\next.config.js`
+- `site\features\planner\_archive\fabric\`

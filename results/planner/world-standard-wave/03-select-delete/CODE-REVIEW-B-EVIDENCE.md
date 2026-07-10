@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-10  
 **Seat:** Code-review B (evidence + claims only; no product rewrite)  
-**Checkout:** `D:\OandO07072026` only (no worktrees)  
+**Checkout:** `.` only (no worktrees)  
 **Skills:** `/using-superpowers` + receiving-code-review rigor (verify claims; no performative agree)  
 **Canonical pack:** `results/planner/world-standard-wave/03-select-delete/`  
 **Plan review:** `plans1/P03-select-delete/CODE-REVIEW-REPORT.md`  

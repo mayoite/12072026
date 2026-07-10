@@ -1,7 +1,7 @@
 # W3 ACCEPTANCE — P03 Select / Delete / Undo (browser hard gate)
 
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` (main only; no worktrees)  
+**Checkout:** `.` (main only; no worktrees)  
 **HEAD:** `fc48ff8cb58c999fdbfe75014d4d358c4e67bd08`  
 **Evidence:** `results/planner/world-standard-wave/03-select-delete/`  
 **Seat:** P03 Agent 4 — browser W3 hard gate (Playwright + eyes)  
@@ -27,7 +27,7 @@
 ## What ran
 
 ``text
-cd D:\OandO07072026\site
+cd site
 # Fabric OFF; reuse running server:
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 Remove-Item Env:NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE -ErrorAction SilentlyContinue

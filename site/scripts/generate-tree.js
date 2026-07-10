@@ -134,7 +134,7 @@ tree.forEach(item => {
     csv += `"${l[0]}","${l[1]}","${l[2]}","${l[3]}","${l[4]}","${l[5]}","${l[6]}","${l[7]}","${narration}",""\n`;
 });
 
-const outPath = path.join('results', 'project-tree.csv');
+const outPath = path.join(path.resolve(__dirname, '..', '..'), 'results', 'project-tree.csv');
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, csv, 'utf8');
 console.log('Generated ultra-deep code-intelligent CSV tree with ' + tree.length + ' nodes.');

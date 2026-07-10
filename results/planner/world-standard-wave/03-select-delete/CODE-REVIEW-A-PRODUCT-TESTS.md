@@ -2,7 +2,7 @@
 
 **Seat:** Code-review A (product path vs tests)  
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` only (no worktrees)  
+**Checkout:** `.` only (no worktrees)  
 **Reviewer HEAD (read time):** `cd3b7cdcbb244f140ba5c2564fe9af7b5d8c9b3d`  
 **Evidence root:** `results/planner/world-standard-wave/03-select-delete/`  
 **Law:** NO PAPER MOON · unit alone ≠ W3 · write only under `results/` for this seat

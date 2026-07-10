@@ -5,9 +5,10 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { REPO_ROOT, SITE_PACKAGE_ROOT } from "./lib/repoRoot.mjs";
 
-const ROOT = path.resolve(import.meta.dirname, "..");
-const OUT = path.join(ROOT, "results", "tsx-hardcoded-audit.csv");
+const ROOT = SITE_PACKAGE_ROOT;
+const OUT = path.join(REPO_ROOT, "results", "tsx-hardcoded-audit.csv");
 
 const SKIP_DIRS = new Set([
   "node_modules",

@@ -3,7 +3,7 @@
 **Date:** 2026-07-10  
 **Plan:** `plans1/P02-engine-lock/IMPLEMENTATION-PLAN.md`  
 **Reviewer role:** Plan-vs-repo technical review (read-only on product code)  
-**Checkout verified:** `D:\OandO07072026` (main checkout; no worktree work)  
+**Checkout verified:** `.` (main checkout; no worktree work)  
 **Verdict:** **APPROVE-WITH-FIXES**
 
 ---
@@ -76,8 +76,8 @@ The plan correctly rejects phase-card **DONE/PASS** theater without disk artifac
 
 #### B1 — Brainstormer / Appendix path does not exist on disk
 
-- **Claim:** Inputs + Appendix A list `D:\OandO07072026\Idiots2\P02-engine-lock\REPORT.md`.
-- **Verified:** `Test-Path Idiots2` = **False**. Live report: `D:\OandO07072026\archive\Idiots2\P02-engine-lock\REPORT.md` (content reviewed; Approach A + D1–D14 align with plan synthesis).
+- **Claim:** Inputs + Appendix A list `Idiots2\P02-engine-lock\REPORT.md`.
+- **Verified:** `Test-Path Idiots2` = **False**. Live report: `archive\Idiots2\P02-engine-lock\REPORT.md` (content reviewed; Approach A + D1–D14 align with plan synthesis).
 - **Judgment:** Agents that `Read` the plan’s path will fail or invent a second brainstorm. Intent of “Idiots2 only, never Idiots” is right; **filesystem path is wrong**.
 - **Action:** Before execute, treat authority as **`archive/Idiots2/P02-engine-lock/REPORT.md`**. Do **not** recreate root `Idiots2/` tree. (Plan file itself is out of scope for this review to edit.)
 
@@ -335,7 +335,7 @@ From `Plans/INDEX.md` + plan §9:
 7. Fail-forward Konva **full** only after failed Fabric spike with `results/` proof — never hybrid.  
 8. Mesh complaints → **P08**, not “switch Three/Babylon.”  
 9. Evidence folder: **`01-engine-lock/` only**. Never create `02-engine-lock/` as P02 canonical.  
-10. Work only in `D:\OandO07072026` main checkout; commit evidence slices; push/mirror per AGENTS when landable.
+10. Work only in `.` main checkout; commit evidence slices; push/mirror per AGENTS when landable.
 
 ---
 
@@ -420,4 +420,4 @@ export function getOpen3dViewerControlProps(): { enableControls: true } {
 
 ---
 
-**Report path:** `D:\OandO07072026\plans1/P02-engine-lock\CODE-REVIEW-REPORT.md`
+**Report path:** `plans1/P02-engine-lock\CODE-REVIEW-REPORT.md`

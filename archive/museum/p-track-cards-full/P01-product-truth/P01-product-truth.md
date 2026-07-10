@@ -23,7 +23,7 @@
 ---
 
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Load skills as fit (verification, systematic-debugging, executing-plans, writing-plans). **This phase is inventory only** — no product-feature implementation. Steps use checkbox syntax.  
-> **Checkout:** `D:\OandO07072026` only · **No worktrees** · **Commit as we go** after each landable evidence slice · **Push only on owner ask**.
+> **Checkout:** `.` only · **No worktrees** · **Commit as we go** after each landable evidence slice · **Push only on owner ask**.
 
 **Goal:** Produce a data-backed map of what the live open3d planner **actually does** versus what docs/README/UI copy **claim**, so later phases (P02–P10) fix real gaps against world-standard gates W1–W8 — not stories.
 
@@ -37,7 +37,7 @@
 
 **Out of scope for P01:** Select/delete fixes, orbit product work, Fabric cutover, mesh quality, new Playwright journey product code, package upgrades, CRM/auth/SSR, any edit under `site/features/planner/open3d/**` except if a later owner unlock explicitly expands scope. Read-only inventory + evidence write under `results/planner/world-standard-wave/00-product-truth/`.
 
-**Stop / failure log path:** `D:\OandO07072026\Failures.md` (append blocker rows with phase `P01`, path, and command that failed). Do not invent alternate failure logs.
+**Stop / failure log path:** `Failures.md` (append blocker rows with phase `P01`, path, and command that failed). Do not invent alternate failure logs.
 
 ---
 
@@ -48,16 +48,16 @@
 - [ ] Confirm working tree is main checkout only:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse --show-toplevel
 git worktree list
-# Expect single worktree at D:\OandO07072026 (or path-equivalent). Do not add worktrees.
+# Expect single worktree at . (or path-equivalent). Do not add worktrees.
 ```
 
 - [ ] Record HEAD before inventory:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse HEAD
 git status -sb
 ```
@@ -72,20 +72,20 @@ Write both lines into `results/planner/world-standard-wave/00-product-truth/HEAD
 
 **Files / dirs:**
 
-- Create: `D:\OandO07072026\results\planner\world-standard-wave\00-product-truth\`
+- Create: `results\planner\world-standard-wave\00-product-truth\`
 - Already present (do not overwrite meaning): `results/planner/world-standard-wave/WAVE.md`, `results/planner/world-standard-wave/COMPARISON-CHART.md`
 
 - [ ] **Step 1: Create evidence root**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\00-product-truth" | Out-Null
 ```
 
 - [ ] **Step 2: Write HEAD.txt + run meta**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse HEAD | Set-Content -Encoding utf8 "results\planner\world-standard-wave\00-product-truth\HEAD.txt"
 git status -sb | Add-Content -Encoding utf8 "results\planner\world-standard-wave\00-product-truth\HEAD.txt"
 ```
@@ -114,7 +114,7 @@ Required keys at end of phase: `startedAt`, `finishedAt`, `head`, `headEnd`, `ap
 - [ ] **Step 3: Commit evidence scaffold**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add Plans/P-track/phases/P01-product-truth/P01-product-truth.md ../../../archive/Plans/phases/P01-product-truth/P01-suggestions.md results/planner/world-standard-wave/00-product-truth
 git status -sb
 git commit -m "plans(trustdata): P01 product-truth inventory plan + evidence scaffold"
@@ -126,7 +126,7 @@ git commit -m "plans(trustdata): P01 product-truth inventory plan + evidence sca
 
 ## Task 01 — Tree inventory of production open3d
 
-**Primary path:** `D:\OandO07072026\site\features\planner\open3d\`
+**Primary path:** `site\features\planner\open3d\`
 
 **Must include these files in the inventory tables (repo-relative):**
 
@@ -150,7 +150,7 @@ git commit -m "plans(trustdata): P01 product-truth inventory plan + evidence sca
 - [ ] **Step 1: Directory listing (depth-aware)**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 Get-ChildItem -Path "site\features\planner\open3d" -Recurse -File |
   Where-Object { $_.FullName -notmatch 'node_modules' } |
   ForEach-Object { $_.FullName.Substring((Get-Location).Path.Length + 1) } |
@@ -161,7 +161,7 @@ Get-ChildItem -Path "site\features\planner\open3d" -Recurse -File |
 - [ ] **Step 2: Counts by top-level folder**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 Get-ChildItem "site\features\planner\open3d" -Directory |
   ForEach-Object {
     $n = (Get-ChildItem $_.FullName -Recurse -File | Measure-Object).Count
@@ -173,7 +173,7 @@ Get-ChildItem "site\features\planner\open3d" -Directory |
 - [ ] **Step 3: Confirm key files exist**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 @(
   "site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx",
   "site\features\planner\open3d\editor\OOPlannerWorkspace.tsx",
@@ -194,12 +194,12 @@ cd D:\OandO07072026
 } | Set-Content -Encoding utf8 "results\planner\world-standard-wave\00-product-truth\key-files-exist.tsv"
 ```
 
-Every path must be `True`. If any `False`, **stop**, append to `D:\OandO07072026\Failures.md`, set `run.json` `cp01: "blocked"` — do not invent alternate paths.
+Every path must be `True`. If any `False`, **stop**, append to `Failures.md`, set `run.json` `cp01: "blocked"` — do not invent alternate paths.
 
 - [ ] **Step 4: Commit file list evidence**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/00-product-truth
 git commit -m "evidence(P01): open3d tree inventory file lists"
 ```
@@ -244,7 +244,7 @@ git commit -m "evidence(P01): open3d tree inventory file lists"
 - [ ] **Step 1: Grep host imports + fabric redirects**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 $out = "results\planner\world-standard-wave\00-product-truth"
 rg -n "Open3dNativeHost|OOPlannerWorkspace|FeasibilityCanvas|ThreeLazyViewer|ThreeViewerInner|Open3dPlannerHost|Open3dPlannerWorkspaceRoute" site/app/planner site/features/planner --glob "*.{ts,tsx}" |
   Set-Content -Encoding utf8 "$out\host-wiring-rg.txt"
@@ -288,7 +288,7 @@ Explicit rows required:
 - [ ] **Step 4: Commit**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/00-product-truth
 git commit -m "evidence(P01): route and host wiring claims vs code"
 ```
@@ -313,7 +313,7 @@ Map each world-standard gate to **symbols/handlers found in code**, not browser 
 - [ ] **Step 1: Symbol greps (one file per gate)**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 $out = "results\planner\world-standard-wave\00-product-truth"
 
 rg -n "addOpen3dWall|drawWall|wallTool|useDoorWindowPlacement" site/features/planner/open3d --glob "*.{ts,tsx}" | Set-Content -Encoding utf8 "$out\w1-draw-rg.txt"
@@ -359,7 +359,7 @@ Rules:
 - [ ] **Step 4: Commit**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/00-product-truth
 git commit -m "evidence(P01): W1-W8 capability matrix from live code greps"
 ```
@@ -385,7 +385,7 @@ git commit -m "evidence(P01): W1-W8 capability matrix from live code greps"
 - [ ] **Step 1: Extract claim sentences**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 @(
   "ayushdocs\04-HONEST-QUALITY.md",
   "ayushdocs\08-EVIDENCE-INDEX.md",
@@ -427,7 +427,7 @@ Minimum claims to register (do not skip if source still says them):
 - [ ] **Step 3: Cross-check fabric flag + redirects (dedicated)**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 rg -n "OPEN3D_FABRIC_FURNITURE|fabricFurnitureFlag" site/features/planner/open3d --glob "*.{ts,tsx}" |
   Set-Content -Encoding utf8 "results\planner\world-standard-wave\00-product-truth\fabric-flag-rg.txt"
 ```
@@ -437,7 +437,7 @@ rg -n "OPEN3D_FABRIC_FURNITURE|fabricFurnitureFlag" site/features/planner/open3d
 - [ ] **Step 4: Commit**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/00-product-truth
 git commit -m "evidence(P01): claims register vs live code"
 ```
@@ -453,7 +453,7 @@ git commit -m "evidence(P01): claims register vs live code"
 - [ ] **Step 1: List open3d unit tests**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 Get-ChildItem "site\tests\unit\features\planner\open3d" -Recurse -File -Filter "*.ts*" |
   ForEach-Object { $_.FullName.Substring((Get-Location).Path.Length + 1) } |
   Sort-Object |
@@ -463,7 +463,7 @@ Get-ChildItem "site\tests\unit\features\planner\open3d" -Recurse -File -Filter "
 - [ ] **Step 2: List Playwright planner-related specs**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 # Name filter + known related specs that omit "planner" in the filename
 $names = @(
   Get-ChildItem "site\tests\e2e" -File -Filter "*planner*" | ForEach-Object { $_.Name }
@@ -476,7 +476,7 @@ $names | Set-Content -Encoding utf8 "results\planner\world-standard-wave\00-prod
 - [ ] **Step 3: Map results/planner directories**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 Get-ChildItem "results\planner" -Directory |
   Select-Object -ExpandProperty Name |
   Sort-Object |
@@ -503,7 +503,7 @@ Explicitly note:
 From **repo root**, package-filtered vitest (cwd for package is `site/` when using filter exec — paths are relative to `site/`):
 
 ```powershell
-cd D:\OandO07072026
+cd .
 New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\00-product-truth" | Out-Null
 pnpm --filter oando-site exec vitest run `
   tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx `
@@ -528,14 +528,14 @@ Then set `run.json`:
 Also accept broader capture if agent has capacity:
 
 ```powershell
-cd D:\OandO07072026\site
-pnpm run test:planner 2>&1 | Tee-Object -FilePath "D:\OandO07072026\results\planner\world-standard-wave\00-product-truth\vitest-test-planner-raw.log"
+cd site
+pnpm run test:planner 2>&1 | Tee-Object -FilePath "results\planner\world-standard-wave\00-product-truth\vitest-test-planner-raw.log"
 ```
 
 - [ ] **Step 6: Commit**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/00-product-truth
 git commit -m "evidence(P01): unit/e2e/results coverage map and smoke logs"
 ```
@@ -589,7 +589,7 @@ Required headings:
 - [ ] **Step 4: Commit**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/00-product-truth
 git commit -m "evidence(P01): deep-read notes for canvas workspace viewer"
 ```
@@ -674,7 +674,7 @@ Update `results/planner/world-standard-wave/00-product-truth/run.json` with:
 - [ ] **Step 5: Final evidence commit**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add results/planner/world-standard-wave/00-product-truth Plans/P-track/phases/P01-product-truth/P01-product-truth.md
 git status -sb
 git commit -m "evidence(P01): product truth inventory ready for CP-01"
@@ -731,7 +731,7 @@ git commit -m "evidence(P01): product truth inventory ready for CP-01"
 4. Commit ledger update when status changes:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git add Plans/P-track/checkpoints/CHECKPOINTS.md results/planner/world-standard-wave/00-product-truth
 git commit -m "checkpoint(CP-01): product truth pass|fail"
 ```
@@ -745,7 +745,7 @@ Until owner/reviewer marks pass, executing agents leave `cp01: "ready-for-review
 All new proof for P01 **must** land under:
 
 ```text
-D:\OandO07072026\results\planner\world-standard-wave\00-product-truth\
+results\planner\world-standard-wave\00-product-truth\
 ```
 
 | Artifact | Required |
@@ -783,7 +783,7 @@ Do **not** write P01 proof into `archive/results/`, worktrees, or chat-only summ
 ## Agent operating rules (standing)
 
 1. **Superpowers** always (`/using-superpowers`); load verification / docs skills as needed.  
-2. **No worktrees** — main tree `D:\OandO07072026` only.  
+2. **No worktrees** — main tree `.` only.  
 3. **Commit as we go** after each task’s evidence slice.  
 4. **Push** only when the owner explicitly asks in the current conversation.  
 5. **Trust data** — repo greps, file reads, test logs — not character or vibes.  

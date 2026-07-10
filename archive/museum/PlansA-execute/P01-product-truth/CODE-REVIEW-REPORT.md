@@ -12,7 +12,7 @@
 ## Executive summary
 
 - **Solid:** Inventory-only re-proof is the correct phase shape for a checkout where `results/` is gone while plan/PENDING tables still say GATE PASS / CP-01 PASS. FOLDER-LOCK (`00-product-truth/`), Approach A, dual-host truth, fabric permanent redirects, status vocabulary, false-green catalog, and required vitest smoke with non-silent skip are all aligned with live authority (`Plans/INDEX.md`, `Plans/Research/RESULTS-MAP.md`, `AGENTS.md`).
-- **Solid:** Almost every production path, unit/e2e filename, symbol, and line anchor the plan pre-reads was **re-verified True** on `D:\OandO07072026` (open3d tree ~143 files; unit open3d ~91 files; dual host chains correct; OrbitControls + default ON; Delete/Backspace → `deleteSelection`; local save labels; fabric env exact `"1"`; `newEntityId` = `crypto.randomUUID`).
+- **Solid:** Almost every production path, unit/e2e filename, symbol, and line anchor the plan pre-reads was **re-verified True** on `.` (open3d tree ~143 files; unit open3d ~91 files; dual host chains correct; OrbitControls + default ON; Delete/Backspace → `deleteSelection`; local save labels; fabric env exact `"1"`; `newEntityId` = `crypto.randomUUID`).
 - **Wrong / fix before execute:** Brainstormer input path is **`archive/Idiots2/...`**, not repo-root `Idiots2/`. Plan (and `plans1/README.md`) still point at a non-existent root folder.
 - **Wrong / fix before execute:** Plan Task 02–04 greps depend on **`rg` (ripgrep). On this machine `rg` is not on PATH** — as written, host/W-gate greps hard-fail. Need Select-String / findstr fallback or an install step.
 - **Wrong / fix for self-check honesty:** Task 07 artifact self-check omits artifacts Task 00/02 create (`authority-path-map.md`, `import-graph-stale-paths.tsv`) while §4.1 / Appendix A list them — fail-closed script can green while pack is incomplete relative to the plan’s own contract.
@@ -28,7 +28,7 @@
 
 | Check | Live fact | Plan claim | Status |
 |-------|-----------|------------|--------|
-| Checkout | `D:/OandO07072026` single worktree on `main` | main only, no worktrees | **MATCH** |
+| Checkout | `.` single worktree on `main` | main only, no worktrees | **MATCH** |
 | `results/` | **Does not exist** | Missing; re-prove | **MATCH** |
 | `results/planner/world-standard-wave/` | Missing | Missing | **MATCH** |
 | `WAVE.md` / `COMPARISON-CHART.md` | Missing | Missing | **MATCH** |
@@ -120,7 +120,7 @@
 #### B2 — Brainstormer / Idiots2 path is wrong on disk
 
 - **Claim:** Inputs / §2 / self-review: `Idiots2/P01-product-truth/REPORT.md` only (wave-1 not opened).
-- **Verified:** Repo-root `Idiots2` **does not exist**. Live file: `D:\OandO07072026\archive\Idiots2\P01-product-truth\REPORT.md`. Wave-1 is `archive/Idiots/…`. `plans1/README.md` also points at `Idiots2/` root.
+- **Verified:** Repo-root `Idiots2` **does not exist**. Live file: `archive\Idiots2\P01-product-truth\REPORT.md`. Wave-1 is `archive/Idiots/…`. `plans1/README.md` also points at `Idiots2/` root.
 - **Judgment:** **Fix plan path references for execution.** Content of the archived report matches the plan’s synthesis (results missing, Approach A, five surfaces) — the defect is path, not substance.
 - **Action for implementer:** Open **`archive/Idiots2/P01-product-truth/REPORT.md`**. Do not fail Task 00 because root `Idiots2` is missing. Do not reopen `archive/Idiots/` unless owner changes the rule.
 

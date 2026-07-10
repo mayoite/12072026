@@ -1,7 +1,7 @@
 # How to take the best of each tree and make **one plan**
 
 **When:** **Before** residual product execute (P01… thrash).  
-**Checkout:** `D:\OandO07072026` only · no worktrees  
+**Checkout:** `.` only · no worktrees  
 **Inputs:** five-seat synthesis [`TREE-OWNER-SYNTHESIS.md`](./TREE-OWNER-SYNTHESIS.md) · PlansA merge [`MERGE-NOTES.md`](../../archive/museum/PlansA-merge/MERGE-NOTES.md) · four trees on disk  
 
 ---

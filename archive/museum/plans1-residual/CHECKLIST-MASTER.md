@@ -8,7 +8,7 @@
 
 ## P00 — Session zero
 
-- [ ] Single worktree `D:\OandO07072026`
+- [ ] Single worktree `.`
 - [ ] HEAD + dirty recorded under `00-start/`
 - [ ] `results/` created
 - [ ] `pnpm install`

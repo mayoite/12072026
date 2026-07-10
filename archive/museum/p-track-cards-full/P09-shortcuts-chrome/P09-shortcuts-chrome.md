@@ -1,7 +1,7 @@
 # P09 — Shortcuts & Blocking Chrome (**W8**)
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` + **TDD** + **verification-before-completion**.  
-> **No worktrees.** Main checkout `D:\OandO07072026` only. Commit each landable slice. Push only on owner ask.  
+> **No worktrees.** Main checkout `.` only. Commit each landable slice. Push only on owner ask.  
 > **W0 UNLOCKED** — implement per phase + evidence. Do not re-ask owner unlock.  
 > Checkboxes (`- [ ]`) track progress.
 
@@ -159,7 +159,7 @@ Rail product tool is **opening** (O), not separate Door button. Legacy `door` / 
 - [ ] **00.2** From `site/`, run existing keyboard-related unit files and capture raw output (no filter, no silent pass):
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 # Prefer repo evidence wrapper if present; else:
 pnpm exec vitest run tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx tests/unit/features/planner/open3d/donorParity.test.ts tests/unit/features/planner/open3d/workspaceShell.test.tsx --reporter=verbose 2>&1 | Tee-Object -FilePath ..\results\planner\world-standard-wave\09-shortcuts-chrome\00-baseline-vitest.log
 ```
@@ -320,7 +320,7 @@ const TOOL_SHORTCUT_TRUTH: Array<{ id: PlannerTool; key: string; label: string }
 - [ ] **06.1** Final Vitest run (full truth + keyboard + donor + rail):
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/toolShortcutTruth.test.ts tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx tests/unit/features/planner/open3d/donorParity.test.ts --reporter=verbose 2>&1 | Tee-Object -FilePath ..\results\planner\world-standard-wave\09-shortcuts-chrome\06-final-vitest.log
 ```
 

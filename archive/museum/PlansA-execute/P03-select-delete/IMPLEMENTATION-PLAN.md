@@ -8,7 +8,7 @@
 
 **Architecture:** Approach **A** — FeasibilityCanvas is the interactive 2D surface; document model is active-floor `furniture[]` with UUIDs; selection is **transient** `CanvasSelection` on `useWorkspaceCanvas` (never in history). Select tool pointer → `pickFurnitureAtPoint` → `setSelection({ type: "furniture", ids })`. Delete/Backspace → `useWorkspaceKeyboard` → workspace `deleteSelection` → pure `applySelectionDelete` → **one** `updateProject` when membership changes → clear selection. Undo → `history.undo` / `executePlannerCommand({ type: "history.undo" })` restores full prior project graph. Fabric furniture flag **OFF** for all W3 proof.
 
-**Tech Stack:** Next.js `site/` · FeasibilityCanvas (Canvas 2D) · Vitest · Playwright (`open3d-w3-select-delete.spec.ts`) · open3d history (`createOpen3dHistory` / `updateOpen3dProject` / `undoOpen3dAction` via command layer) · no `any` · main checkout only `D:\OandO07072026` · no worktrees.
+**Tech Stack:** Next.js `site/` · FeasibilityCanvas (Canvas 2D) · Vitest · Playwright (`open3d-w3-select-delete.spec.ts`) · open3d history (`createOpen3dHistory` / `updateOpen3dProject` / `undoOpen3dAction` via command layer) · no `any` · main checkout only `.` · no worktrees.
 
 **Inputs consumed:**
 - Repo read: **2026-07-10** — `results/planner/` **absent** on disk (evidence not depositable); product code + unit/e2e tests largely present under `site/features/planner/open3d/` and `site/tests/`. Re-read HEAD at execute with `git rev-parse HEAD`.
@@ -71,7 +71,7 @@ Create on execute; **re-prove if missing** (current checkout: missing).
 4. Furniture rotation stays **degrees** in document.
 5. Multi-id delete = **one** history step.
 6. Undo restores **same id + pose**, not new UUID.
-7. No worktrees; work only in `D:\OandO07072026`.
+7. No worktrees; work only in `.`.
 8. No `any` in handwritten code.
 9. Evidence only under repo-root `results/` — never `site/results/`.
 10. Research/`D:\websites` = **ideas only** — no competitor UI/assets/copy.
@@ -464,7 +464,7 @@ Read in order:
 - [ ] **Step 0.2: Capture HEAD**
 
 ```powershell
-Set-Location D:\OandO07072026
+Set-Location .
 git rev-parse HEAD | Out-File -Encoding utf8 results\planner\world-standard-wave\03-select-delete\HEAD.txt
 git status --short | Out-File -Encoding utf8 results\planner\world-standard-wave\03-select-delete\00-git-status.txt
 ```
@@ -479,7 +479,7 @@ Write `results/planner/world-standard-wave/03-select-delete/NOTES.md`:
 # P03 / W3 evidence NOTES
 
 - Date: <ISO date>
-- Checkout: D:\OandO07072026
+- Checkout: .
 - Worktrees: false
 - Approach: A
 - Fabric furniture flag: OFF (NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset or not "1")
@@ -492,7 +492,7 @@ Write `results/planner/world-standard-wave/03-select-delete/NOTES.md`:
 - [ ] **Step 0.4: Baseline vitest (record exit code — do not suppress)**
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts `
   tests/unit/features/planner/open3d/applySelectionDelete.test.ts `
@@ -572,7 +572,7 @@ Ensure imports include `Open3dFurnitureItem` if not already.
 - [ ] **Step 1.2: Run pick suite — expect PASS if production already correct (or FAIL if bug)**
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm exec vitest run tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts --reporter=verbose
 ```
 
@@ -753,7 +753,7 @@ import {
 - [ ] **Step 2.5: Run suite**
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm exec vitest run tests/unit/features/planner/open3d/applySelectionDelete.test.ts --reporter=verbose
 ```
 
@@ -975,7 +975,7 @@ describe("workspace deleteSelection wire (W3)", () => {
 - [ ] **Step 3.2: Run wire suite**
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm exec vitest run tests/unit/features/planner/open3d/workspaceDeleteSelection.wire.test.ts --reporter=verbose
 ```
 
@@ -1084,7 +1084,7 @@ Existing coverage (keep):
 - [ ] **Step 4.4: Run keyboard suite**
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm exec vitest run tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx --reporter=verbose
 ```
 
@@ -1312,7 +1312,7 @@ const FEASIBILITY_INITIAL_TRANSFORM = {
 - [ ] **Step 5.2: Run — expect FAIL if select path broken, PASS if live path works**
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm exec vitest run tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx --reporter=verbose
 ```
 
@@ -1421,7 +1421,7 @@ This is weak alone — combine with code audit Step 6.2. Browser Esc is optional
 - [ ] **Step 7.1: Full W3 unit pack (unfiltered)**
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts `
   tests/unit/features/planner/open3d/applySelectionDelete.test.ts `
@@ -1437,7 +1437,7 @@ Expected: exitCode **0**. Any fail → stop; CP-03 open.
 - [ ] **Step 7.2: p0:unit non-regression**
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm run p0:unit 2>&1 |
   Tee-Object -FilePath ..\results\planner\world-standard-wave\03-select-delete\p0-unit-raw.log
 ```
@@ -1613,7 +1613,7 @@ test.describe("W3 select / delete / undo (browser)", () => {
 - [ ] **Step 8.3: Ensure evidence directory exists before Playwright**
 
 ```powershell
-New-Item -ItemType Directory -Force -Path D:\OandO07072026\results\planner\world-standard-wave\03-select-delete | Out-Null
+New-Item -ItemType Directory -Force -Path results\planner\world-standard-wave\03-select-delete | Out-Null
 ```
 
 - [ ] **Step 8.4: Run Playwright W3 only**
@@ -1621,7 +1621,7 @@ New-Item -ItemType Directory -Force -Path D:\OandO07072026\results\planner\world
 Preferred package entry if available:
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 # Ensure FABRIC flag not set
 Remove-Item Env:NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE -ErrorAction SilentlyContinue
 
@@ -1771,7 +1771,7 @@ git commit -m "docs(planner): CP-03 W3 select/delete evidence sign-off"
 ### 7.1 Exact unit pack command (copy-paste)
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts `
   tests/unit/features/planner/open3d/applySelectionDelete.test.ts `
@@ -1784,7 +1784,7 @@ pnpm exec vitest run `
 ### 7.2 Exact browser command (copy-paste)
 
 ```powershell
-Set-Location D:\OandO07072026\site
+Set-Location site
 Remove-Item Env:NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE -ErrorAction SilentlyContinue
 pnpm exec playwright test -c config/build/playwright.config.ts `
   tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list

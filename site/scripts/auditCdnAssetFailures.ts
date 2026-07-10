@@ -9,12 +9,13 @@ import {
   localAssetExists,
   resolveMissingAssetPath,
 } from "./lib/cdnAssetResolver";
+import { REPO_ROOT, SITE_PACKAGE_ROOT } from "./lib/repoRoot";
 
-dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
+dotenv.config({ path: path.resolve(SITE_PACKAGE_ROOT, ".env.local") });
 
-const REPORT_PATH = path.resolve(process.cwd(), "results/cdn-asset-failures.json");
-const REPORT_MD_PATH = path.resolve(process.cwd(), "results/cdn-asset-failures.md");
-const CATALOG_SEATING_PATH = path.resolve(process.cwd(), "scripts/catalog-seating.json");
+const REPORT_PATH = path.resolve(REPO_ROOT, "results/cdn-asset-failures.json");
+const REPORT_MD_PATH = path.resolve(REPO_ROOT, "results/cdn-asset-failures.md");
+const CATALOG_SEATING_PATH = path.resolve(SITE_PACKAGE_ROOT, "scripts/catalog-seating.json");
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey =

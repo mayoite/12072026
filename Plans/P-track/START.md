@@ -27,7 +27,7 @@ A facilities buyer opens the planner, lays out a small office, places real-scale
 | Topic | Rule |
 |-------|------|
 | Truth | Repo + tests + browser — not stale PASS banners |
-| Workspace | `D:\OandO07072026` only · no worktrees |
+| Workspace | `.` only · no worktrees |
 | Ethics | `AGENTS.md` · `ayushdocs/17-LICENSES-CLEARED.md` |
 | Agents | `AGENTS.md` · [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) |
 | Raised bar | [global-standard-revision](../global-standard-revision/) — GATE PASS ≠ module complete |

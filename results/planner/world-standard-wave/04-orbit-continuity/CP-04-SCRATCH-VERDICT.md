@@ -4,7 +4,7 @@
 |-------|--------|
 | **Seat** | P04 Scratch Agent 3 — independent score after agents 0–2 |
 | **Date** | 2026-07-10 |
-| **Checkout** | `D:\OandO07072026` only (no worktrees) |
+| **Checkout** | `.` only (no worktrees) |
 | **Tip at score** | `d4c80c35bcc0a6b3ec1dcba3a96c7986be3ecb5a` (re-read after pull; tip moves with trustdata stamps) |
 | **Bar** | NO PAPER MOON. Plan score ≠ product. Unit alone ≠ W4. Pass only if unit + browser green on **same HEAD**. |
 | **Evidence root** | `results/planner/world-standard-wave/04-orbit-continuity/` |

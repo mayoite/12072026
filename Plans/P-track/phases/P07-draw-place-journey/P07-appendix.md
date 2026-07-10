@@ -222,7 +222,7 @@ Rules: pass only when exit 0 and every screenshot exists; on fail use `blockersO
 
 ```powershell
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
-cd D:\OandO07072026\site
+cd site
 pnpm run test:e2e:world-standard-w1w2
 ```
 

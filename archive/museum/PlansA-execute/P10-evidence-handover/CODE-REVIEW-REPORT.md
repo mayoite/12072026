@@ -5,7 +5,7 @@
 | **Phase** | P10 Evidence Handover |
 | **Date** | 2026-07-10 |
 | **Reviewer** | Review agent (repo-first, no implement) |
-| **Checkout** | `D:\OandO07072026` main (no worktrees) |
+| **Checkout** | `.` main (no worktrees) |
 | **HEAD at review** | `7cad93d5e9334d99d4c982096db12dbfbca26c9a` |
 | **Plan under review** | `plans1/P10-evidence-handover/IMPLEMENTATION-PLAN.md` |
 | **Brainstormer input** | `archive/Idiots2/P10-evidence-handover/REPORT.md` (live `Idiots2/` **absent**) |
@@ -28,7 +28,7 @@ It is **not** approved as a path to mark CP-10 PASS, ship product, or re-certify
 
 ## Executive summary
 
-1. **Owner delete is real.** Live `D:\OandO07072026\results\` **does not exist**. Git history shows `a98e29f chore: delete results/ folder`. World-standard wave, sibling planner slices, and any `10-handover` pack are **absent from D:**. Every W0–W8 file-of-record is **MISSING** until recover or rebuild.
+1. **Owner delete is real.** Live `results\` **does not exist**. Git history shows `a98e29f chore: delete results/ folder`. World-standard wave, sibling planner slices, and any `10-handover` pack are **absent from D:**. Every W0–W8 file-of-record is **MISSING** until recover or rebuild.
 
 2. **Layout gate is red for the right reason.** `pnpm run check:layout` → **FAILED**: `REQUIRED missing: results/`. No forbidden `site/results` or `site/test-results` present. Layout rule matches AGENTS.md; empty-or-populated root `results/` is required once evidence work resumes.
 

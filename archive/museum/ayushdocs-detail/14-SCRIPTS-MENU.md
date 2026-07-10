@@ -5,7 +5,7 @@
 
 **Status (2026-07-09):** P0.1 **DONE** · P0.2 **MOSTLY DONE** (unit closed — continuous verify below) · P0.3 **IN PROGRESS** (a11y). See [00-PENDING.md](./00-PENDING.md).
 
-From **repo root** (`D:\OandO07072026`):
+From **repo root** (`.`):
 
 | Command | What it does |
 |---------|----------------|
@@ -60,7 +60,7 @@ From **site/** (`cd site`):
 | `tests/unit/features/planner/asset-engine/stampFurnitureGeneratedGlb.test.ts` | Path stamp on furniture |
 
 ```powershell
-cd D:\OandO07072026
+cd .
 pnpm p0:g8
 ```
 
@@ -70,11 +70,11 @@ pnpm p0:g8
 
 ```powershell
 # terminal 1
-cd D:\OandO07072026\site
+cd site
 pnpm dev
 
 # terminal 2
-cd D:\OandO07072026
+cd .
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 $env:DEV_AUTH_BYPASS = "1"
 pnpm p0:admin-svg
@@ -84,11 +84,11 @@ pnpm p0:admin-svg
 
 ```powershell
 # terminal 1 — prefer reusing dev (faster than build+start)
-cd D:\OandO07072026
+cd .
 pnpm dev
 
 # terminal 2
-cd D:\OandO07072026
+cd .
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 pnpm test:e2e:open3d-world
 # or: pnpm gate:open3d   (typecheck + pack)
@@ -102,7 +102,7 @@ Spec list: `site/config/build/playwright-open3d-world-specs.json`.
 Curated pack (not full planner e2e). Specs listed in `site/config/build/playwright-open3d-world-specs.json`. Evidence → `results/planner/world-standard-wave/gate-e2e/`.
 
 ```powershell
-cd D:\OandO07072026
+cd .
 # full gate (typecheck + e2e)
 pnpm gate:open3d
 

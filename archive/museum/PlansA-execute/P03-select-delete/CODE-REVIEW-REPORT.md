@@ -3,7 +3,7 @@
 **Date:** 2026-07-10  
 **Verdict:** **APPROVE-WITH-FIXES**  
 **Reviewer seat:** Read-only product code · plan vs live repo truth · no product edits · no `IMPLEMENTATION-PLAN.md` edits  
-**Checkout:** `D:\OandO07072026` (main only; no worktrees)
+**Checkout:** `.` (main only; no worktrees)
 
 ---
 
@@ -211,10 +211,10 @@ Not 9–10: path error + snippet bug + browser id residual + weak Esc “unit”
 
 | Field | Value |
 |-------|--------|
-| Plan reviewed | `D:\OandO07072026\plans1/P03-select-delete\IMPLEMENTATION-PLAN.md` |
-| Optional brainstormer | `D:\OandO07072026\archive\Idiots2\P03-select-delete\REPORT.md` |
+| Plan reviewed | `plans1/P03-select-delete\IMPLEMENTATION-PLAN.md` |
+| Optional brainstormer | `archive\Idiots2\P03-select-delete\REPORT.md` |
 | Phase card / appendix | `Plans/phases/P03-select-delete/` (stale PASS in appendix) |
 | Product scope | `site/features/planner/open3d/**` (read-only) |
-| This report | `D:\OandO07072026\plans1/P03-select-delete\CODE-REVIEW-REPORT.md` |
+| This report | `plans1/P03-select-delete\CODE-REVIEW-REPORT.md` |
 | Product code changed | **None** |
 | Plan file edited | **None** |

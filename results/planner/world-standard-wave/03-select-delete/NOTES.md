@@ -1,7 +1,7 @@
 # P03 / W3 proof pack — NOTES (coherent same-tip)
 
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` only (no worktrees)  
+**Checkout:** `.` only (no worktrees)  
 **HEAD pin:** `d4b0c492d3ecd596bb65498fe2cfa404f2aa0a99` (see `HEAD.txt`)  
 **Agent:** P03 coherent proof pack seat  
 **Single status:** `run.json` → **`pass`** (also this file + `PROOF-INDEX.md` — no dual-status)

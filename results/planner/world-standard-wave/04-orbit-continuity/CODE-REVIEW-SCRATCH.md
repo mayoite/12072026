@@ -4,7 +4,7 @@
 |-------|--------|
 | **Seat** | Code-review (1 of 8) — product claim vs plan vs deposited evidence |
 | **Date** | 2026-07-10 |
-| **Checkout** | `D:\OandO07072026` only (no worktrees) |
+| **Checkout** | `.` only (no worktrees) |
 | **Tip at write** | `41df56e5fa10424688402c1a396e4eeca4dbf4a2` |
 | **Bar** | NO PAPER MOON. Plan rating ≠ product claim. Unit alone ≠ W4. |
 | **Inputs** | `plans1/P04-orbit-continuity/CODE-REVIEW-REPORT.md`, live product lines, `04-orbit-continuity/*` deposits, this-seat re-run of `workspaceOrbitWiring` only |

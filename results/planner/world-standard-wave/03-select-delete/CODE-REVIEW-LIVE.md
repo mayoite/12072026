@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-10  
 **Seat:** Read-only product code · live re-verify of `plans1/P03-select-delete/CODE-REVIEW-REPORT.md`  
-**Checkout:** `D:\OandO07072026` (main only)  
+**Checkout:** `.` (main only)  
 **Source plan report:** `plans1/P03-select-delete/CODE-REVIEW-REPORT.md`  
 **This file:** `results/planner/world-standard-wave/03-select-delete/CODE-REVIEW-LIVE.md`
 
@@ -130,26 +130,26 @@ CP-03 / W3 is still **OPEN**: evidence dir now exists but is **empty** (no vites
 TDD: write/extend **failing or missing assertion first**; run suite; **production edit only if red**. Mode A expects GREEN without product edits for U1–U11.
 
 ### Task 1 — Pick completeness
-**Extend:** `D:\OandO07072026\site\tests\unit\features\planner\open3d\geometry\canvasPicking.test.ts`  
+**Extend:** `site\tests\unit\features\planner\open3d\geometry\canvasPicking.test.ts`  
 **Cases:** U1 empty array; U2 default 600mm.  
 **Prod only if red:** `site/features/planner/open3d/lib/geometry/canvasPicking.ts`  
 **Evidence:** `results/planner/world-standard-wave/03-select-delete/01-pick-furniture-vitest-raw.log`
 
 ### Task 2 — Pure delete + real history identity (highest conviction residual)
-**Extend:** `D:\OandO07072026\site\tests\unit\features\planner\open3d\applySelectionDelete.test.ts`  
+**Extend:** `site\tests\unit\features\planner\open3d\applySelectionDelete.test.ts`  
 **Cases:** U3 locked same-ref; U4 pose+id via `updateOpen3dProject`+undo; U5 multi-id one past; U6 empty furniture ids.  
 **Import:** `updateOpen3dProject` from `@/features/planner/open3d/store/history` (currently **unused in entire test tree**).  
 **Prod only if red:** `site/features/planner/open3d/editor/workspaceEntityHelpers.ts`  
 **Evidence:** `…/02-delete-undo-vitest-raw.log`
 
 ### Task 3 — Keyboard edges
-**Extend:** `D:\OandO07072026\site\tests\unit\features\planner\open3d\open3dWorkspaceKeyboard.test.tsx`  
+**Extend:** `site\tests\unit\features\planner\open3d\open3dWorkspaceKeyboard.test.tsx`  
 **Cases:** U7 Ctrl/Cmd+Bksp; U8 Del in input; U9 omitted handler.  
 **Prod only if red:** `site/features/planner/open3d/editor/useWorkspaceKeyboard.ts`  
 **Evidence:** `…/04-keyboard-delete-vitest-raw.log`
 
 ### Task 4 — Canvas select → setSelection (highest interaction residual)
-**Extend:** `D:\OandO07072026\site\tests\unit\features\planner\open3d\open3dFeasibilityCanvas.test.tsx`  
+**Extend:** `site\tests\unit\features\planner\open3d\open3dFeasibilityCanvas.test.tsx`  
 **Cases:** U10 furniture hit → furniture selection; U11 empty click → none.  
 **Coord:** seed mm; `projectToScreen` with `{ origin: {-4000,-2500}, scale: 0.1 }`; mock rect 800×600; **no** `fitToView`; `useWorkspaceCanvas({ initialProject })` + `activeTool="select"`.  
 **Fix plan snippet:** `rotation: 0` not second `depth`.  
@@ -157,7 +157,7 @@ TDD: write/extend **failing or missing assertion first**; run suite; **productio
 **Evidence:** `…/05-canvas-select-vitest-raw.log`
 
 ### Task 5 — Optional wire (skip if Task 2 U4/U5 sufficient)
-**Create only if needed:** `D:\OandO07072026\site\tests\unit\features\planner\open3d\workspaceDeleteSelection.wire.test.ts`  
+**Create only if needed:** `site\tests\unit\features\planner\open3d\workspaceDeleteSelection.wire.test.ts`  
 **Assert:** multi-id path cannot become N history steps at command/`updateOpen3dProject` seam.  
 **Evidence:** `…/03-workspace-delete-vitest-raw.log`
 
@@ -166,7 +166,7 @@ Run full W3 unit set; deposit `vitest-w3-raw.log` / `p0-unit-raw.log` + `p0-unit
 **Unit green ≠ W3.**
 
 ### Task 7 — Browser hard gate
-**Harden then run:** `D:\OandO07072026\site\tests\e2e\open3d-w3-select-delete.spec.ts`  
+**Harden then run:** `site\tests\e2e\open3d-w3-select-delete.spec.ts`  
 **Prefer:** `selectPlannerTool(page, "Select")`; keep place delta; Fabric env unset; PNGs `01-placed`…`04-undone` (or NOTES-named scheme).  
 **On flake:** try `tapOnCanvas` for select hit.  
 **Evidence:** `browser-w3-raw.log` + PNGs.  

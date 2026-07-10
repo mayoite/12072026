@@ -2,7 +2,7 @@
 
 ## Structure rewrite 2026-07-09
 
-Companion to **[P05-symbols-svg.md](../P05-symbols-svg/P05-symbols-svg.md)**. Full test + impl source moved out of the execute card. **Not a second CP.** Evidence remains `results/planner/world-standard-wave/05-symbols-svg/`.
+Companion to **[P05-symbols-svg.md](./P05-symbols-svg.md)**. Full test + impl source moved out of the execute card. **Not a second CP.** Evidence remains `results/planner/world-standard-wave/05-symbols-svg/`.
 
 ---
 

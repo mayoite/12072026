@@ -88,7 +88,7 @@ export function getOpen3dViewerControlProps(): { enableControls: true } {
 
 ## 3. Unit / e2e files that exist (paths)
 
-Checked on disk under `D:\OandO07072026` (paths relative to repo root):
+Checked on disk under `.` (paths relative to repo root):
 
 | Role | Path | Exists |
 |------|------|--------|

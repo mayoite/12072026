@@ -14,7 +14,7 @@
 npx vitest run tests/unit/features/planner/asset-engine tests/unit/features/planner/open3d/g8RoundTrip.test.ts --reporter=dot
 ```
 
-(Run from `D:\OandO07072026\site`.)
+(Run from `site`.)
 
 ## Counts
 
@@ -29,7 +29,7 @@ npx vitest run tests/unit/features/planner/asset-engine tests/unit/features/plan
 ## Console summary
 
 ```
- RUN  v4.1.9 D:/OandO07072026/site
+ RUN  v4.1.9 site
 
 ··············································
 

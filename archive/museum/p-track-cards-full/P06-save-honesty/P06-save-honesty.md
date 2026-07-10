@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Use **test-driven-development**, **verification-before-completion**, and **systematic-debugging** when executing. **W0 UNLOCKED** (see [START.md](../../START.md)) — do not re-ask owner unlock.
 > **Approach:** Plan A product journey (default). Trust **data** — repo, tests, browser evidence — not character claims.  
-> **Checkout:** `D:\OandO07072026` only · **no worktrees** · commit each landable slice · push only on owner ask.
+> **Checkout:** `.` only · **no worktrees** · commit each landable slice · push only on owner ask.
 
 ### Expert pass P0 (2026-07-09)
 
@@ -94,24 +94,24 @@ These are **measured** from the tree (re-verified 2026-07-09 planning expert pas
 
 | Role | Absolute path |
 |------|----------------|
-| Autosave hook | `D:\OandO07072026\site\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts` |
-| IDB + AutoSaver | `D:\OandO07072026\site\features\planner\persistence\persistence.ts` |
-| Session envelope | `D:\OandO07072026\site\features\planner\open3d\persistence\open3dSession.ts` |
-| Project JSON | `D:\OandO07072026\site\features\planner\open3d\persistence\projectJson.ts` |
-| Workspace wiring | `D:\OandO07072026\site\features\planner\open3d\editor\OOPlannerWorkspace.tsx` |
-| Status UI (TopBar) | `D:\OandO07072026\site\features\planner\open3d\editor\TopBar.tsx` |
-| Status UI (status-bar labels) | `D:\OandO07072026\site\features\planner\open3d\editor\workspaceStatusLabels.ts` — **extend or wrap**; do not leave bare member `"Saved"` |
-| Shell passthrough | `D:\OandO07072026\site\features\planner\open3d\editor\WorkspaceShell.tsx` — forwards TopBar props; rewrite “synced to server” JSDoc/prop names |
+| Autosave hook | `site\features\planner\open3d\persistence\useOpen3dWorkspaceAutosave.ts` |
+| IDB + AutoSaver | `site\features\planner\persistence\persistence.ts` |
+| Session envelope | `site\features\planner\open3d\persistence\open3dSession.ts` |
+| Project JSON | `site\features\planner\open3d\persistence\projectJson.ts` |
+| Workspace wiring | `site\features\planner\open3d\editor\OOPlannerWorkspace.tsx` |
+| Status UI (TopBar) | `site\features\planner\open3d\editor\TopBar.tsx` |
+| Status UI (status-bar labels) | `site\features\planner\open3d\editor\workspaceStatusLabels.ts` — **extend or wrap**; do not leave bare member `"Saved"` |
+| Shell passthrough | `site\features\planner\open3d\editor\WorkspaceShell.tsx` — forwards TopBar props; rewrite “synced to server” JSDoc/prop names |
 | Label pure helper | Prefer extend `formatAutosaveStatus` **or** one new pure module both TopBar + status bar call — **one copy table only** |
-| Help / FAQ honesty | `D:\OandO07072026\site\features\planner\help\helpSections.ts` |
+| Help / FAQ honesty | `site\features\planner\help\helpSections.ts` |
 | Optional cloud (only if owner picks cloud wire) | `memberPlanRepository.ts`, `guestPromotion.ts`, `plannerCloudApi.ts` |
 | Unit — autosave | `site/tests/unit/planner-autosave.test.ts` (mock `saveProject`; flush + double-gate) |
 | Unit — labels | `site/tests/unit/features/planner/open3d/workspaceStatusLabels.test.ts` (+ TopBar/render if needed) |
 | Unit — continuity non-regression | `site/tests/unit/features/planner/open3d/saveReloadContinuity.test.ts` |
 | E2E helpers (reuse) | `site/tests/e2e/guestProjectSetup.ts`, `plannerCanvasHelpers.ts` |
 | E2E — hard reload | `site/tests/e2e/open3d-save-honesty.spec.ts` (create) |
-| Evidence (W6 + shared) | `D:\OandO07072026\results\planner\world-standard-wave\06-save-honesty\` |
-| Evidence (W5 hard reload) | `D:\OandO07072026\results\planner\world-standard-wave\06-save-honesty\save-reload\` |
+| Evidence (W6 + shared) | `results\planner\world-standard-wave\06-save-honesty\` |
+| Evidence (W5 hard reload) | `results\planner\world-standard-wave\06-save-honesty\save-reload\` |
 
 **Do not** treat `PlannerSaveIndicator.tsx` as the live open3d control; reuse its **label honesty pattern** only.
 
@@ -222,7 +222,7 @@ Playwright must wait for status pill `data-storage="local"` + saved state **or**
 - [ ] **00.3** Run existing continuity units and capture logs:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/features/planner/open3d/saveReloadContinuity.test.ts tests/unit/features/planner/open3d/open3dSession.test.ts tests/unit/planner-autosave.test.ts --reporter=verbose 2>&1 | Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\00-baseline-vitest.log
 ```
 
@@ -245,7 +245,7 @@ npx vitest run tests/unit/features/planner/open3d/saveReloadContinuity.test.ts t
 - [ ] **01.3** Capture:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 npx vitest run tests/unit/planner-autosave.test.ts --reporter=verbose 2>&1 | Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\01-autosave-flush-vitest.log
 ```
 
@@ -310,7 +310,7 @@ npx vitest run tests/unit/planner-autosave.test.ts --reporter=verbose 2>&1 | Tee
 - [ ] **05.2** Grep open3d workspace strings for “cloud”, “sync”, “account” save claims:
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 rg -n "Saved|cloud|sync|account|autosave" features/planner/open3d/editor features/planner/open3d/persistence features/planner/help/helpSections.ts
 ```
 
@@ -350,7 +350,7 @@ Create `site/tests/e2e/open3d-save-honesty.spec.ts`.
 **Commands:**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 New-Item -ItemType Directory -Force -Path ..\results\planner\world-standard-wave\06-save-honesty\save-reload | Out-Null
 npx playwright test tests/e2e/open3d-save-honesty.spec.ts --reporter=line 2>&1 | Tee-Object -FilePath ..\results\planner\world-standard-wave\06-save-honesty\save-reload\06-playwright-raw.log
 ```
@@ -414,7 +414,7 @@ If owner chooses cloud:
 Non-regression (run after landable slices when time allows):
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm p0:unit
 ```
 
@@ -433,7 +433,7 @@ Do not delete or filter failing output; park full logs under the evidence dir.
 7. **Phosphor only** if icons change; prefer existing TopBar glyphs (● / ✓ / ○) if sufficient with new text.
 8. **Inspiration only:** Competitor “autosave + cloud badge” patterns from research notes — no copied CSS/JS/assets. Fabric `PlannerSaveIndicator` = pattern only.
 9. **Skills:** `/using-superpowers`; TDD for Tasks 01–04; chrome-devtools or Playwright for Task 06; verification-before-completion before CP-06 claim.
-10. **Checkout:** `D:\OandO07072026` only · **no worktrees** · commit landable slices · push only on owner ask.
+10. **Checkout:** `.` only · **no worktrees** · commit landable slices · push only on owner ask.
 
 ---
 

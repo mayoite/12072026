@@ -1,7 +1,7 @@
 # Execute 3/5 — Keyboard delete wire
 
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` (main only; no worktrees)  
+**Checkout:** `.` (main only; no worktrees)  
 **HEAD:** `bf212a9a7d0fa8e7867b5f6a803b06ee5a5c43df`  
 **Seat:** Execute 3/5 — keyboard delete wire  
 **Mode:** verify-first; product wire only if RED  
@@ -69,7 +69,7 @@ Single wire site for workspace keyboard. No second delete listener found for thi
 ## Unit evidence (this seat)
 
 ```text
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run \
   tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx \
   tests/unit/features/planner/open3d/toolShortcutTruth.test.ts \

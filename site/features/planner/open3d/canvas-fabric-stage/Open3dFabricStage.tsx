@@ -248,15 +248,21 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
 
       const resize = () => {
         const rect = host.getBoundingClientRect();
-        canvas.setDimensions({
-          width: Math.max(1, Math.floor(rect.width)),
-          height: Math.max(1, Math.floor(rect.height)),
-        });
+        const w = Math.max(1, Math.floor(rect.width));
+        const h = Math.max(1, Math.floor(rect.height));
+        if (canvas.width === w && canvas.height === h) return;
+        canvas.setDimensions({ width: w, height: h });
         canvas.requestRenderAll();
       };
       resize();
-      const observer = new ResizeObserver(resize);
+      const observer = new ResizeObserver(() => {
+        resize();
+      });
       observer.observe(host);
+      const canvasRegion = host.closest(".canvas");
+      if (canvasRegion instanceof HTMLElement) {
+        observer.observe(canvasRegion);
+      }
 
       return () => {
         canvas.off("object:modified", handleModified);

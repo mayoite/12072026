@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import { REPO_ROOT } from "./lib/repoRoot.mjs";
 
-const ROOT = path.resolve(import.meta.dirname, "..");
-const INPUT = path.join(ROOT, "Failures.md");
-const INDEX_OUTPUT = path.join(ROOT, "results", "failures-index.csv");
-const PENDING_OUTPUT = path.join(ROOT, "results", "pending-failures.csv");
+const INPUT = path.join(REPO_ROOT, "Failures.md");
+const INDEX_OUTPUT = path.join(REPO_ROOT, "results", "failures-index.csv");
+const PENDING_OUTPUT = path.join(REPO_ROOT, "results", "pending-failures.csv");
 
 function csvEscape(value) {
   const text = String(value ?? "");

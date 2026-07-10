@@ -3,7 +3,7 @@
 **Date:** 2026-07-10 · clarity fix: PlansA is **not** execute  
 **Canonical path:** `plans1/EXECUTE-NOW.md`  
 **Entry:** [`START-HERE.md`](./START-HERE.md) first  
-**Checkout:** `D:\OandO07072026` main only · **no worktrees**
+**Checkout:** `.` main only · **no worktrees**
 
 ---
 
@@ -86,7 +86,7 @@ Map also: `archive/Plans/Research/RESULTS-MAP.md`.
 
 ## 5. Session zero
 
-- [ ] On `D:\OandO07072026` main
+- [ ] On `.` main
 - [ ] Read this file + `plans1/00-START.md`
 - [ ] `git rev-parse HEAD` into evidence NOTES
 - [ ] Treat missing `results/` as unproven

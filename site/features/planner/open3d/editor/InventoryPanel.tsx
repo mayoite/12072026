@@ -426,7 +426,6 @@ export const InventoryPanel = memo(function InventoryPanel({
           value={state.searchQuery}
           onChange={handleSearchValueChange}
           className={styles.searchWrapper}
-          aria-label="Search catalog elements"
         >
           <Label className="sr-only">Search catalog elements</Label>
           <SearchIcon className={styles.searchIcon} />

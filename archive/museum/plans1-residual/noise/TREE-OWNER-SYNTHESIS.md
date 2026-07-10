@@ -1,7 +1,7 @@
 # Five-seat synthesis — full ownership of all four plan trees
 
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` HEAD `eeb86bf` (re-check)  
+**Checkout:** `.` HEAD `eeb86bf` (re-check)  
 **Method:** Four parallel **tree-owner** agents (each owns one tree only) → **fifth seat: head synthesis**  
 **Unlike prior four-seat review:** each owner was required to fully inventory **their** tree (not skim plans1-only).
 

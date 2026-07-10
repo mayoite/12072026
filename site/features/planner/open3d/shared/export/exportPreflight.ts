@@ -13,14 +13,19 @@ export interface Open3dExportPreflight {
 
 /**
  * Formats that actually download today (not menu theater).
- * PNG / PDF / DXF are known but not shipped — preflight returns unsupported.
  */
-export const READY_EXPORT_FORMATS: readonly Open3dExportFormat[] = ["json", "svg"];
+export const READY_EXPORT_FORMATS: readonly Open3dExportFormat[] = [
+  "json",
+  "svg",
+  "png",
+  "pdf",
+  "dxf",
+];
 
 /** @deprecated use READY_EXPORT_FORMATS — kept name for existing imports */
 export const SUPPORTED_EXPORT_FORMATS = READY_EXPORT_FORMATS;
 
-const NOT_READY_EXPORT_FORMATS: readonly Open3dExportFormat[] = ["png", "pdf", "dxf"];
+const NOT_READY_EXPORT_FORMATS: readonly Open3dExportFormat[] = [];
 
 export function isSupportedExportFormat(format: string): format is Open3dExportFormat {
   return (READY_EXPORT_FORMATS as readonly string[]).includes(format);

@@ -31,7 +31,7 @@
 ## Re-prove commands
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/planner-autosave.test.ts tests/unit/features/planner/open3d/workspaceStatusLabels.test.ts tests/unit/features/planner/open3d/useOpen3dWorkspaceAutosave.test.tsx tests/unit/features/planner/open3d/TopBar.saveStatus.test.tsx tests/unit/features/planner/help/helpSections.test.ts
 # 55 passed
 

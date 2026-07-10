@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-10  
 **Seat:** Execute 2/5 (Mode A — re-prove only)  
-**Checkout:** `D:\OandO07072026` (main only; no worktrees)  
+**Checkout:** `.` (main only; no worktrees)  
 **HEAD:** `bf212a9a7d0fa8e7867b5f6a803b06ee5a5c43df`  
 **Mode:** A — verify product path; **no thrash if green**
 

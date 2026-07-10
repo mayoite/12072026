@@ -30,4 +30,4 @@
 **Start:** [18](./18-PRODUCT-CONTEXT.md) → [19](./19-GOALS-SLICES.md) → **`Agents/Agents-ELON-STANDARD.md`** → plan `Plans/trustdata/INDEX.md` → [12-WORKFLOW](./12-WORKFLOW.md)  
 
 **Repo HEAD at pack time:** see `01-RECAP.md` / `09-VERIFY-SNAPSHOT.md`.  
-**Worktree rule:** only `D:\OandO07072026` — no git worktrees.
+**Worktree rule:** only `.` — no git worktrees.

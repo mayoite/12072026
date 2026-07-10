@@ -5,7 +5,7 @@
 | **Phase** | P06 Save Honesty (W5–W6) |
 | **Date** | 2026-07-10 |
 | **Reviewer** | Review agent (repo-first; no implement) |
-| **Checkout** | `D:\OandO07072026` main only |
+| **Checkout** | `.` main only |
 | **HEAD** | `7cad93d5e9334d99d4c982096db12dbfbca26c9a` (`main...origin/main`; dirty unrelated Plans/archive paths) |
 | **Plan** | `plans1/P06-save-honesty/IMPLEMENTATION-PLAN.md` |
 | **Brainstormer** | Live `Idiots2/P06-save-honesty/REPORT.md` **absent**; content exists only at `archive/Idiots2/P06-save-honesty/REPORT.md` |

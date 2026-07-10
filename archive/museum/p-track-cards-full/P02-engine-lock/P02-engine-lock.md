@@ -10,7 +10,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`. Load verification / TDD skills when collecting evidence.  
 > **W0 UNLOCKED.** P02 scope remains evidence/docs for engine lock (no engine thrash). **Do not** re-pick engines, swap packages, or start Fabric full cutover mid-phase.  
-> **Checkout:** `D:\OandO07072026` only · **No worktrees** · Commit landable evidence slices as you go · Push/mirror per `AGENTS.md`.
+> **Checkout:** `.` only · **No worktrees** · Commit landable evidence slices as you go · Push/mirror per `AGENTS.md`.
 
 ### Expert pass P0 (2026-07-09)
 
@@ -197,7 +197,7 @@ Inside `OOPlannerWorkspace` (all three routes):
 9. **Research is inspiration only.** MASTER-CHART winners (RoomSketcher measure, P5D ease, IKEA SKU) inform product gates — never paste competitor UI, CSS, JS, GLB, logos, or brands into `site/`.
 10. **Success metric:** Prefer BOQ/quote and plan truth over photoreal thrash that forces engine swaps.
 11. **Evidence or it did not happen.** Status claims for engine lock require files under `results/planner/world-standard-wave/01-engine-lock/`.
-12. **No worktrees.** All edits and evidence on main checkout `D:\OandO07072026`.
+12. **No worktrees.** All edits and evidence on main checkout `.`.
 13. **Supersession:** After CP-02 green, `ENGINE-LOCK-RECORD.md` supersedes residual Plan A / README wording such as “Konva/Fabric under evaluation” or production “hybrid” titles for **agent engine choice**. Residual language is listed for a later docs pass — not re-litigation.
 
 ---
@@ -237,17 +237,17 @@ Also cite (do not relocate): `results/planner/world-standard-wave/COMPARISON-CHA
 - [ ] 0.1 Create evidence root on main checkout:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\01-engine-lock" | Out-Null
 git rev-parse --show-toplevel
 git worktree list
-# Expect single worktree at D:\OandO07072026 (or path-equivalent). Do not add worktrees.
+# Expect single worktree at . (or path-equivalent). Do not add worktrees.
 ```
 
 - [ ] 0.2 Write `results/planner/world-standard-wave/01-engine-lock/HEAD.txt` with real command output:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse HEAD
 git status -sb
 ```
@@ -371,10 +371,10 @@ NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE=1
 **Commands (from repo root, PowerShell):**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 New-Item -ItemType Directory -Force -Path "results\planner\world-standard-wave\01-engine-lock" | Out-Null
 Set-Location site
-pnpm exec vitest run tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts --reporter=verbose 2>&1 | Tee-Object -FilePath "D:\OandO07072026\results\planner\world-standard-wave\01-engine-lock\vitest-fabric-flag-raw.log"
+pnpm exec vitest run tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts --reporter=verbose 2>&1 | Tee-Object -FilePath "results\planner\world-standard-wave\01-engine-lock\vitest-fabric-flag-raw.log"
 ```
 
 > Paths are **package-relative** (`tests/unit/...` under `site/`). Do **not** prefix with `site/` when CWD is `site/`. Mirror pattern used by P08/P09 and prior `results/planner/*` vitest packs.
@@ -542,7 +542,7 @@ P02 is **not** done when:
 
 **Date:** 2026-07-09  
 **Role:** Planning expert (trust-data open3d engine lock)  
-**Process:** Read plan → live-verify flags/files/packages/routes against `D:\OandO07072026` → write `../../../archive/Plans/phases/P02-engine-lock/P02-suggestions.md` → revise this plan in place.  
+**Process:** Read plan → live-verify flags/files/packages/routes against `.` → write `../../../archive/Plans/phases/P02-engine-lock/P02-suggestions.md` → revise this plan in place.  
 **Constraints held:** Approach **A**; Fabric destination / Feasibility interim / R3F+orbit; no hybrid thrash; superpowers; **no product code**; no TBD placeholders.
 
 ### Live verification highlights

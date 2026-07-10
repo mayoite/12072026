@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-10  
 **Role:** Seat C — kill paper PASS + baseline honesty  
-**Checkout:** `D:\OandO07072026` main only (no worktrees)  
+**Checkout:** `.` main only (no worktrees)  
 **Tip:** `cca98824` (git pull: already up to date with origin/main)
 
 ## Verdict (owner law)

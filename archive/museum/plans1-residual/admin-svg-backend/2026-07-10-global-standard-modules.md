@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.  
 > **Every subagent brief starts with:** `/using-superpowers` + fit skills (TDD, verification, chrome-devtools as the task needs).  
-> **Checkout:** `D:\OandO07072026` only — **no worktrees**.  
+> **Checkout:** `.` only — **no worktrees**.  
 > **Bar:** `Agents/Agents-ELON-STANDARD.md` — raise never lower.
 
 **Goal:** Execute the module-wise global-standard revision so each product module has raised experts → synthesis → path-provable implement proof, starting with foundation landables (F2–F4) and owner-pain SVG production — without CP-folder theater.
@@ -134,7 +134,7 @@ Use this exact sequence. Do not skip seats to “save time.”
 /using-superpowers
 Skills: brainstorming | (UI expert: verification + chrome-devtools if live UI)
 Seat: brainstormer | ui-expert | synthesis-head
-Checkout: D:\OandO07072026 only
+Checkout: . only
 Bar: Agents/Agents-ELON-STANDARD.md
 Law: Plans/trustdata/GLOBAL-STANDARD-REVISION.md
 Module: <name>
@@ -156,13 +156,13 @@ Ethics: no competitor copy. GATE PASS ≠ product complete.
 - [ ] **Step 0.1: Confirm checkout and layout**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 git rev-parse --show-toplevel
 git branch --show-current
 pnpm run check:layout
 ```
 
-Expected: toplevel = `D:/OandO07072026` (or equivalent), branch `main`, layout exit 0. No worktree path.
+Expected: toplevel = `.` (or equivalent), branch `main`, layout exit 0. No worktree path.
 
 - [ ] **Step 0.2: Confirm dual-language seed exists (W0.F1)**
 
@@ -277,7 +277,7 @@ git commit -m "docs(foundation): W0.F3 authority map Block2D vs SVG vs mesh"
 - [ ] **Step 3.1: Run SVG census (exact commands)**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 $svgDir = "site\public\svg-catalog"
 $svgs = Get-ChildItem -Path $svgDir -Filter "*.svg" -File
 $svgs.Count | Set-Content -Encoding utf8 "results\planner\global-standard-revision\modules\foundation\evidence\svg-count.txt"
@@ -379,7 +379,7 @@ git commit -m "docs(foundation): close F2-F4 product-foundation landables + resi
 - [ ] **Step 5.1: Baseline census into this module**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 $out = "results\planner\global-standard-revision\modules\symbols-svg\evidence"
 New-Item -ItemType Directory -Force -Path $out | Out-Null
 $svgs = Get-ChildItem site\public\svg-catalog -Filter *.svg -File
@@ -459,7 +459,7 @@ git commit -m "docs(symbols-svg): dual experts + synthesis + task list"
 - [ ] **Step 6.1: RED — if Block2D or compile API changes**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts --reporter=verbose 2>&1 |
   Tee-Object -FilePath "..\results\planner\global-standard-revision\modules\symbols-svg\evidence\vitest-red.log"
 ```
@@ -471,7 +471,7 @@ Expected for intentional RED: fail on new assertion. If only adding SVG files vi
 Implement via **pipeline only** (CLI or admin later module) — do not hand-paste foreign SVG:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 pnpm p0:svg 2>&1 | Tee-Object -FilePath "results\planner\global-standard-revision\modules\symbols-svg\evidence\p0-svg-raw.log"
 ```
 
@@ -494,7 +494,7 @@ Module complete requires: **count and list match SYNTHESIS targets**, not “pip
 - [ ] **Step 6.4: GREEN vitest pack (if TS touched)**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts --reporter=verbose 2>&1 |
   Tee-Object -FilePath "..\results\planner\global-standard-revision\modules\symbols-svg\evidence\vitest-green.log"
 ```
@@ -541,7 +541,7 @@ Raised complete means:
 Unit first if pipeline code changes; then:
 
 ```powershell
-cd D:\OandO07072026
+cd .
 # server must be up for admin E2E if required by spec
 pnpm p0:admin-svg 2>&1 | Tee-Object -FilePath "results\planner\global-standard-revision\modules\admin-svg-pipeline\evidence\p0-admin-svg-raw.log"
 ```
@@ -577,7 +577,7 @@ Raised bar: readable multipart (toe / carcass / door or workstation legs/stretch
 - [ ] **Step 8.2: TDD**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 # adjust test paths from SYNTHESIS TASK-LIST — example pack:
 pnpm exec vitest run tests/unit/features/planner --reporter=verbose 2>&1 |
   Select-String -Pattern "cabinet|workstation|mesh|modular" 
@@ -588,7 +588,7 @@ Prefer exact files named in TASK-LIST. Capture RED then GREEN under `modules/mes
 - [ ] **Step 8.3: Visual proof (browser)**
 
 ```powershell
-cd D:\OandO07072026
+cd .
 pnpm run dev
 # Playwright or chrome-devtools: place cabinet-v0 + workstation, 3D three-quarter + side
 # Save PNGs ONLY under:
@@ -613,7 +613,7 @@ Raised bar: mode/tool/selection status never lie; a11y landmarks/labels; keyboar
 - [ ] **Step 9.2: TDD unit for shortcut/tool truth; browser PNG optional but preferred.**
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit --reporter=verbose 2>&1 |
   Tee-Object -FilePath "..\results\planner\global-standard-revision\modules\shell-chrome\evidence\vitest-raw.log"
 ```
@@ -680,7 +680,7 @@ git commit -m "feat(<m>): raised global-standard proof for module"
 - Product: export/BOQ/quote path code as discovered in SYNTHESIS (search before inventing)
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 rg -n "BOQ|billOfQuantit|exportQuote|quote" --glob "*.{ts,tsx}" features/planner app
 ```
 

@@ -50,6 +50,34 @@ export function zoomTransformAt(
   };
 }
 
+/** Screen coordinates relative to a viewport host element (CSS pixels). */
+export function viewportPointFromHost(
+  host: HTMLElement,
+  clientX: number,
+  clientY: number,
+): Open3dPoint {
+  const rect = host.getBoundingClientRect();
+  return { x: clientX - rect.left, y: clientY - rect.top };
+}
+
+/** Normalize wheel delta across pixel / line / page modes. */
+export function normalizeWheelDelta(deltaY: number, deltaMode: number): number {
+  switch (deltaMode) {
+    case 1:
+      return deltaY * 16;
+    case 2:
+      return deltaY * (typeof window !== "undefined" ? window.innerHeight : 800);
+    case 0:
+    default:
+      return deltaY;
+  }
+}
+
+/** Smooth wheel zoom factor (matches Fabric planner canvas feel). */
+export function wheelZoomFactor(deltaY: number, deltaMode = 0): number {
+  return Math.pow(0.999, normalizeWheelDelta(deltaY, deltaMode));
+}
+
 function distance(a: Open3dPoint, b: Open3dPoint): number {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }

@@ -1,7 +1,7 @@
 # P03 select-delete coverage — ≥90% floor
 
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` only  
+**Checkout:** `.` only  
 **Tool:** vitest + `@vitest/coverage-v8` (stmts / branch / funcs / lines)  
 **Residual pack:** **110 tests / 6 files / exit 0**  
 **Command (from `site/`):**

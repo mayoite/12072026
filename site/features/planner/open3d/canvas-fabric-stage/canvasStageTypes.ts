@@ -4,7 +4,7 @@ import type { Open3dProject } from "../model/types";
 
 export type CanvasDrawingState = "ready" | "drawing" | "panning";
 
-/** Live viewport snapshot from Open3dFabricStage (2-D plan canvas). */
+/** Live viewport snapshot from PlannerCanvasStage (2-D plan canvas). */
 export interface CanvasStatusSnapshot {
   snapKind: SnapKind;
   activeTool: PlannerTool;

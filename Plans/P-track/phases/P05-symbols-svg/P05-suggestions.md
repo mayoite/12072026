@@ -2,7 +2,7 @@
 
 **Plan:** `Plans/trustdata/phases/P05-symbols-svg/P05-symbols-svg.md`  
 **Scope:** Plan-only (no product code). W2 symbols + Block2D canvas authority honesty; no competitor SVG.  
-**Checkout verified:** `D:\OandO07072026` (mainline).
+**Checkout verified:** `.` (mainline).
 
 ---
 

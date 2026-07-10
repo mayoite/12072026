@@ -29,7 +29,7 @@
 - Six handover files match CP-10 and RESULTS-MAP `10-handover/` minimum artifacts.
 - Commit cadence four-slice model + **no push without ask** matches AGENTS.md / A.7–A.8 / G.3.
 - W7 primary `08-mesh-quality/` already correct in draft W-gate table.
-- No worktrees / main checkout `D:\OandO07072026` already stated.
+- No worktrees / main checkout `.` already stated.
 
 ---
 

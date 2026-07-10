@@ -28,7 +28,8 @@ Subagents → same bar · `/using-superpowers` · fit skills.
 - Detail: Elon §5 · `OPERATIONS_RUNBOOK.md`.
 
 ## 5. Layout (hard)
-- **Evidence** → repo-root `results/` only (disposable). Never durable plans/handbooks in `results/`.
+- **Evidence** → repo-root `results/` only. Never `site/results/` or `site/test-results/`.
+- **`site/` tracked tree** → product code only. `site/node_modules/` = gitignored pnpm workspace shim (expected after root install; not committed). **Never** `npm install` under `site/` or `site/tech-stack-generator/` — no nested `package-lock.json` or `site/tech-stack-generator/node_modules/`.
 - **Durable** → `Plans/` · `Agents/` · `ayushdocs/` (5 files) · `archive/museum/`.
 - **Install** → `pnpm` from repo root. **Firecrawl dead.** Research ideas → external `websites` folder only.
 - Redirect stray tool output to `results/`. `pnpm run check:layout`.

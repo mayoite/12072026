@@ -4,10 +4,10 @@
 |-------|--------|
 | **Date** | 2026-07-10 |
 | **Reviewer** | Review agent (repo-first, no implement) |
-| **Plan under review** | `D:\OandO07072026\plans1/P07-draw-place-journey\IMPLEMENTATION-PLAN.md` |
+| **Plan under review** | `plans1/P07-draw-place-journey\IMPLEMENTATION-PLAN.md` |
 | **Brainstormer input** | `Idiots2/P07-draw-place-journey/REPORT.md` — **MISSING** (path does not exist; only `plans2/P07-draw-place-journey/IMPLEMENTATION-PLAN.md` exists) |
 | **Phase authority** | `Plans/phases/P07-draw-place-journey/` |
-| **Checkout** | `D:\OandO07072026` main only |
+| **Checkout** | `.` main only |
 | **Verdict** | **CONDITIONAL APPROVE** — plan is largely accurate against live repo and correctly refuses partial-journey “green”; fix identity false-greens + opening-target coupling before execute |
 
 ---

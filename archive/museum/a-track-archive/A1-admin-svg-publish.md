@@ -19,7 +19,7 @@
 ## Run again
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm run dev
 # other terminal:
 $env:PLAYWRIGHT_BASE_URL='http://localhost:3000'

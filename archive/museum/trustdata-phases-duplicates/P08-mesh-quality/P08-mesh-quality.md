@@ -137,13 +137,13 @@ Do **not** add a designer static GLB under `site/public/` product trees. Do **no
 - Create: `results/planner/world-standard-wave/08-mesh-quality/` (empty until artifacts land)
 - Read: this phase file; `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` §W7; current `modularCabinetV0.ts` + `modularCabinetV0GlbExport.ts`
 
-- [ ] **Step 1:** Confirm checkout is `D:\OandO07072026` main tree (no worktree).  
+- [ ] **Step 1:** Confirm checkout is `.` main tree (no worktree).  
 - [ ] **Step 2:** Create evidence directory if missing.  
 - [ ] **Step 3:** Record pre-change unit baseline (expect green today; red after Task 02):
 
 ```powershell
-cd D:\OandO07072026\site
-pnpm exec vitest run tests/unit/features/planner/open3d/modularCabinetV0.test.ts tests/unit/features/planner/open3d/modularCabinetV0GlbExport.test.ts tests/unit/features/planner/open3d/resolveFurniture2DFootprint.test.ts --reporter=verbose 2>&1 | Tee-Object -FilePath D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\vitest-baseline-raw.log
+cd site
+pnpm exec vitest run tests/unit/features/planner/open3d/modularCabinetV0.test.ts tests/unit/features/planner/open3d/modularCabinetV0GlbExport.test.ts tests/unit/features/planner/open3d/resolveFurniture2DFootprint.test.ts --reporter=verbose 2>&1 | Tee-Object -FilePath results\planner\world-standard-wave\08-mesh-quality\vitest-baseline-raw.log
 ```
 
 - [ ] **Step 4:** Commit is **not** required for empty dir alone; first commit after Task 01 NOTES or Task 03 green mesh — whichever lands first as a complete slice.
@@ -252,7 +252,7 @@ pnpm exec vitest run tests/unit/features/planner/open3d/modularCabinetV0.test.ts
 - Run (do not expand product scope):
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/modularCabinetV0.test.ts `
   tests/unit/features/planner/open3d/modularCabinetV0GlbExport.test.ts `
@@ -261,7 +261,7 @@ pnpm exec vitest run `
   tests/unit/features/planner/open3d/modularPlaceMesh.test.ts `
   tests/unit/features/planner/asset-engine/meshStages.test.ts `
   --reporter=verbose 2>&1 |
-  Tee-Object -FilePath D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\vitest-nonreg-raw.log
+  Tee-Object -FilePath results\planner\world-standard-wave\08-mesh-quality\vitest-nonreg-raw.log
 ```
 
 - Optional house pack: `pnpm p0:unit` if that script exists and is affordable; still keep scoped log above as CP-08 primary.
@@ -333,16 +333,16 @@ pnpm exec vitest run `
 
 ```powershell
 # Evidence dir
-New-Item -ItemType Directory -Force -Path D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality | Out-Null
+New-Item -ItemType Directory -Force -Path results\planner\world-standard-wave\08-mesh-quality | Out-Null
 
 # Core unit pack (P08 primary)
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/modularCabinetV0.test.ts `
   tests/unit/features/planner/open3d/modularCabinetV0GlbExport.test.ts `
   tests/unit/features/planner/open3d/resolveFurniture2DFootprint.test.ts `
   --reporter=verbose 2>&1 |
-  Tee-Object -FilePath D:\OandO07072026\results\planner\world-standard-wave\08-mesh-quality\vitest-raw.log
+  Tee-Object -FilePath results\planner\world-standard-wave\08-mesh-quality\vitest-raw.log
 ```
 
 Visual smoke command is **chosen in Task 04** (default headless) and frozen into `NOTES.md` + `visual-smoke.md`. Browser open3d place is optional if already proven by P07.

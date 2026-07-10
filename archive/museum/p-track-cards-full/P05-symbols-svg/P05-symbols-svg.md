@@ -26,7 +26,7 @@ Task checkboxes below are historical execute steps — evidence supersedes; do n
 - Authority: [EXPERT-PASS.md](../EXPERT-PASS.md) · [02-canvas-2d.md](../../../archive/Plans/phases/P05-symbols-svg/02-canvas-2d.md).
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` (TDD, verification, chrome-devtools as fit).  
-> **Checkout:** `D:\OandO07072026` only · no worktrees · commit as you go · push only on ask.  
+> **Checkout:** `.` only · no worktrees · commit as you go · push only on ask.  
 > **W0 UNLOCKED** — execute per phase + evidence. Do not re-ask owner unlock.  
 > **Commits:** `trustdata(P05): <slice>` or `fix(open3d): <slice>`.
 
@@ -86,11 +86,11 @@ generateCabinetV0Footprint = mesh helper path string — NOT canvas Block2D.
 
 ### Task 00 — Baseline
 
-- [ ] **00.1** Main checkout only (`D:\OandO07072026`).
+- [ ] **00.1** Main checkout only (`.`).
 - [ ] **00.2** Inventory greps (expect modularCabinet ~2 prims today; centeredPath wrong true):
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 rg -n "furnitureBlock2DFromItem|modularCabinetBlock|furnitureBlockUsesCenteredPath|compileSvgForPublish" features/planner/open3d lib/catalog features/planner/asset-engine
 ```
 
@@ -135,7 +135,7 @@ rg -n "furnitureBlock2DFromItem|modularCabinetBlock|furnitureBlockUsesCenteredPa
 ### Task 6 — CP-05 pack
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run `
   tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts `
   tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts `
@@ -170,7 +170,7 @@ If required row fails: stop; log `Failures.md`; do not mark W2 symbol half green
 ## Commands cheat sheet
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 pnpm exec vitest run tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts --reporter=verbose
 pnpm run scripts:smoke:svg:batch
 pnpm dev   # /planner/open3d → place cabinet-v0 → inspect 2D

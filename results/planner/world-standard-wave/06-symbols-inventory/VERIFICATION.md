@@ -63,7 +63,7 @@ See `run.json` — `status: "pass"`, `furnitureAfter: "2 furniture"`.
 ## Reproduce
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 $env:PLAYWRIGHT_BASE_URL="http://localhost:3000"
 npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-p06-symbols-inventory.spec.ts --reporter=list
 ```

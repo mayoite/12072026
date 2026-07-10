@@ -8,10 +8,11 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { REPO_ROOT, SITE_PACKAGE_ROOT } from "./lib/repoRoot.mjs";
 
-const ROOT = path.resolve(import.meta.dirname, "..");
-const DETAIL_OUT = path.join(ROOT, "results", "hardcoded-audit-detail.csv");
-const SUMMARY_OUT = path.join(ROOT, "results", "hardcoded-audit-summary.csv");
+const ROOT = SITE_PACKAGE_ROOT;
+const DETAIL_OUT = path.join(REPO_ROOT, "results", "hardcoded-audit-detail.csv");
+const SUMMARY_OUT = path.join(REPO_ROOT, "results", "hardcoded-audit-summary.csv");
 
 const SKIP_DIRS = new Set([
   "node_modules",

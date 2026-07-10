@@ -1,7 +1,7 @@
 # Plans — detailed index
 
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026`  
+**Checkout:** `.`  
 **Live tree only:** what is on disk under `Plans/` after cleanup (no `trustdata/`, no empty process thrash).
 
 **Constitution:** repo-root `AGENTS.md`  
@@ -138,8 +138,8 @@ CP-00 / unlock history (if any) → CP-01 product truth → CP-02 engine lock
 
 | File | Role |
 |------|------|
-| [P01-product-truth.md](./phases/P01-product-truth/P01-product-truth.md) | Execute card — inventory tasks, CAPABILITY matrix, CP-01 |
-| [P01-suggestions.md](./phases/P01-product-truth/P01-suggestions.md) | Expert suggestions for P01 |
+| [P01-product-truth.md](../../Plans/P-track/phases/P01-product-truth/P01-product-truth.md) | Execute card — inventory tasks, CAPABILITY matrix, CP-01 |
+| [P01-suggestions.md](../../Plans/P-track/phases/P01-product-truth/P01-suggestions.md) | Expert suggestions for P01 |
 | [README.md](./phases/P01-product-truth/README.md) | Local index |
 
 ---
@@ -186,10 +186,10 @@ CP-00 / unlock history (if any) → CP-01 product truth → CP-02 engine lock
 
 | File | Role |
 |------|------|
-| [P04-orbit-continuity.md](./phases/P04-orbit-continuity/P04-orbit-continuity.md) | Execute card — pose units, orbit default, Playwright |
-| [P04-suggestions.md](./phases/P04-orbit-continuity/P04-suggestions.md) | Expert suggestions for P04 |
-| [01-react-open3d.md](./phases/P04-orbit-continuity/01-react-open3d.md) | Expert: React / open3d (copy) |
-| [03-r3f-3d.md](./phases/P04-orbit-continuity/03-r3f-3d.md) | Expert: 3D / orbit / mesh path |
+| [P04-orbit-continuity.md](../../Plans/P-track/phases/P04-orbit-continuity/P04-orbit-continuity.md) | Execute card — pose units, orbit default, Playwright |
+| [P04-suggestions.md](../../Plans/P-track/phases/P04-orbit-continuity/P04-suggestions.md) | Expert suggestions for P04 |
+| [01-react-open3d.md](../../Plans/P-track/phases/P04-orbit-continuity/01-react-open3d.md) | Expert: React / open3d (copy) |
+| [03-r3f-3d.md](../../Plans/P-track/phases/P04-orbit-continuity/03-r3f-3d.md) | Expert: 3D / orbit / mesh path |
 | [README.md](./phases/P04-orbit-continuity/README.md) | Local index |
 
 ---
@@ -202,10 +202,10 @@ CP-00 / unlock history (if any) → CP-01 product truth → CP-02 engine lock
 
 | File | Role |
 |------|------|
-| [P05-symbols-svg.md](./phases/P05-symbols-svg/P05-symbols-svg.md) | Execute card — Block2D quality + SVG honesty |
-| [P05-appendix.md](./phases/P05-symbols-svg/P05-appendix.md) | Test / modularCabinetBlock skeletons |
-| [P05-suggestions.md](./phases/P05-symbols-svg/P05-suggestions.md) | Expert suggestions for P05 |
-| [02-canvas-2d.md](./phases/P05-symbols-svg/02-canvas-2d.md) | Expert: Canvas 2D / symbols (copy) |
+| [P05-symbols-svg.md](../../Plans/P-track/phases/P05-symbols-svg/P05-symbols-svg.md) | Execute card — Block2D quality + SVG honesty |
+| [P05-appendix.md](../../Plans/P-track/phases/P05-symbols-svg/P05-appendix.md) | Test / modularCabinetBlock skeletons |
+| [P05-suggestions.md](../../Plans/P-track/phases/P05-symbols-svg/P05-suggestions.md) | Expert suggestions for P05 |
+| [02-canvas-2d.md](../../Plans/P-track/phases/P02-engine-lock/02-canvas-2d.md) | Expert: Canvas 2D / symbols (copy) |
 | [README.md](./phases/P05-symbols-svg/README.md) | Local index |
 
 ---
@@ -294,7 +294,7 @@ Cross-cutting essays live **inside phase folders** (copied where multiple phases
 |-------|----------------|---------|
 | [01-react-open3d.md](./phases/P03-select-delete/01-react-open3d.md) | P03 | P04 · P06 · P07 |
 | [02-canvas-2d.md](./phases/P02-engine-lock/02-canvas-2d.md) | P02 | P03 · P05 |
-| [03-r3f-3d.md](./phases/P04-orbit-continuity/03-r3f-3d.md) | P04 | P08 |
+| [03-r3f-3d.md](../../Plans/P-track/phases/P04-orbit-continuity/03-r3f-3d.md) | P04 | P08 |
 | [04-playwright-evidence.md](./phases/P03-select-delete/04-playwright-evidence.md) | P03 | P07 |
 | [05-packages-stack.md](./phases/P02-engine-lock/05-packages-stack.md) | P02 | — |
 | [06-ui-shortcuts.md](./phases/P09-shortcuts-chrome/06-ui-shortcuts.md) | P09 | — |

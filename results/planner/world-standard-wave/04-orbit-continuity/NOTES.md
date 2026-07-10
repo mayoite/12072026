@@ -1,7 +1,7 @@
 # P04 / W4 proof pack — NOTES (Agent 10 consolidator)
 
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` only (no worktrees)  
+**Checkout:** `.` only (no worktrees)  
 **HEAD pin:** `5f682651e4533e56b403f37d17e771ecfc90bb33` (see `HEAD.txt`)  
 **Agent:** P04 Agent 10/10 — proof pack consolidator  
 **Evidence root:** `results/planner/world-standard-wave/04-orbit-continuity/` only — never `site/results/`

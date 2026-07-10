@@ -19,7 +19,10 @@ const FORBIDDEN = [
   "site/.firecrawl",
   "site/tech-stack-docs",
   "site/tech-stack-generated",
+  "site/tech-stack-generator/node_modules",
 ];
+
+const FORBIDDEN_FILES = ["site/tech-stack-generator/package-lock.json"];
 
 const REQUIRED_DIRS = ["results"];
 
@@ -32,6 +35,13 @@ for (const rel of FORBIDDEN) {
   }
 }
 
+for (const rel of FORBIDDEN_FILES) {
+  const abs = path.join(root, rel);
+  if (fs.existsSync(abs)) {
+    violations.push(`FORBIDDEN present: ${rel} (use root pnpm-lock.yaml only)`);
+  }
+}
+
 for (const rel of REQUIRED_DIRS) {
   const abs = path.join(root, rel);
   if (!fs.existsSync(abs) || !fs.statSync(abs).isDirectory()) {
@@ -39,14 +49,15 @@ for (const rel of REQUIRED_DIRS) {
   }
 }
 
-// Tracked files under site/results (git index) — catch re-adds even if empty dir gone
-// Optional: only when git is available
 try {
   const { execSync } = await import("node:child_process");
-  const tracked = execSync("git ls-files site/results site/test-results site/.cursor site/.firecrawl site/tech-stack-docs site/tech-stack-generated", {
-    cwd: root,
-    encoding: "utf8",
-  })
+  const tracked = execSync(
+    "git ls-files site/results site/test-results site/.cursor site/.firecrawl site/tech-stack-docs site/tech-stack-generated site/tech-stack-generator/package-lock.json site/tech-stack-generator/node_modules",
+    {
+      cwd: root,
+      encoding: "utf8",
+    },
+  )
     .trim()
     .split(/\r?\n/)
     .filter(Boolean);

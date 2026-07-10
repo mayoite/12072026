@@ -19,6 +19,7 @@ import { resolve } from "node:path";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { createR2CatalogClient, resolveCatalogBucketName } from "./lib/r2Catalog";
 import { resolvePgDumpExecutable } from "./lib/resolvePgDump";
+import { REPO_ROOT } from "./lib/repoRoot";
 
 const require = createRequire(import.meta.url);
 require("./loadEnvLocal.cjs").loadEnvLocal();
@@ -100,7 +101,7 @@ async function backupTarget(target: Target, keepLocal: boolean, pgDump: string):
 
 /** Optional JSON table export fallback → R2 (products Supabase REST snapshot). */
 async function uploadLatestJsonBackup(): Promise<void> {
-  const backupRoot = resolve(process.cwd(), "results", "backups", "supabase");
+  const backupRoot = resolve(REPO_ROOT, "results", "backups", "supabase");
   if (!existsSync(backupRoot)) {
     console.log("Skip JSON backup upload: no results/backups/supabase (run supabase:backup first).");
     return;

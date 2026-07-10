@@ -4,7 +4,7 @@
 |-------|--------|
 | **Seat** | P04 three-layer audit + coherent pack |
 | **Date** | 2026-07-10 |
-| **Checkout** | `D:\OandO07072026` only (no worktrees) |
+| **Checkout** | `.` only (no worktrees) |
 | **Tip at audit write** | `bb0531685e7e714acb6026d0afcb214ba6e68f7a` |
 | **Bar** | NO PAPER MOON · unit alone ≠ W4 · pass only if unit+browser green **same tip** |
 | **Evidence root** | `results/planner/world-standard-wave/04-orbit-continuity/` |

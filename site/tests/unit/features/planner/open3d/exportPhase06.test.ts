@@ -28,13 +28,14 @@ function project() {
   return { ...result, displayUnit: "m" as const };
 }
 
-describe("Phase 06 export preflight (live subset post-removal)", () => {
-  it("lists ready formats only (json/svg) — not pdf/png theater", () => {
+describe("Phase 06 export preflight (live subset)", () => {
+  it("lists ready formats (json/svg/png/pdf/dxf)", () => {
     expect(Array.isArray(SUPPORTED_EXPORT_FORMATS)).toBe(true);
     expect(isSupportedExportFormat("json")).toBe(true);
     expect(isSupportedExportFormat("svg")).toBe(true);
-    expect(isSupportedExportFormat("pdf")).toBe(false);
-    expect(isSupportedExportFormat("png")).toBe(false);
+    expect(isSupportedExportFormat("pdf")).toBe(true);
+    expect(isSupportedExportFormat("png")).toBe(true);
+    expect(isSupportedExportFormat("dxf")).toBe(true);
     expect(isSupportedExportFormat("dwg")).toBe(false);
   });
 
@@ -46,14 +47,14 @@ describe("Phase 06 export preflight (live subset post-removal)", () => {
     expect(pf.status).toBe("ready");
   });
 
-  it("marks pdf/png as unsupported with honest message (not ready)", () => {
+  it("preflights png/pdf/dxf as ready when floor has geometry", () => {
     const p = project();
     const pdf = preflightOpen3dExport(p, "pdf");
     const png = preflightOpen3dExport(p, "png");
-    expect(pdf.status).toBe("unsupported");
-    expect(png.status).toBe("unsupported");
-    expect(pdf.messages[0]).toMatch(/not available/i);
-    expect(png.messages[0]).toMatch(/JSON|SVG|BOQ/i);
+    const dxf = preflightOpen3dExport(p, "dxf");
+    expect(pdf.status).toBe("ready");
+    expect(png.status).toBe("ready");
+    expect(dxf.status).toBe("ready");
   });
 });
 

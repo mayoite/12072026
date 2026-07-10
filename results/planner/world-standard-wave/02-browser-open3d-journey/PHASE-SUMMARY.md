@@ -36,7 +36,7 @@ File: `site/app/css/core/locked/planner/workspace-open3d-route-host.css`
 ## Commands run
 
 ```powershell
-cd D:\OandO07072026\site
+cd site
 $env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
 $env:NEXT_PUBLIC_PLANNER_DEV_TOOLS = "true"
 pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-standard-journey.spec.ts --reporter=list

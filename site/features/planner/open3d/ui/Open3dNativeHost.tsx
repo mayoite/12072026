@@ -10,7 +10,7 @@ export type Open3dNativeHostProps = {
 /**
  * Live planner host for the `features/planner/open3d/` tree.
  *
- * In-site: Open3dFabricStage (Fabric 2-D) + Three/r3f 3-D.
+ * In-site: PlannerCanvasStage (native 2-D) + Three/r3f 3-D.
  */
 export function Open3dNativeHost({ guestMode = false, planId }: Open3dNativeHostProps) {
   return (

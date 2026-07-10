@@ -231,7 +231,7 @@ export function WorkspaceShell({
   }, [activePanel, panels, setActivePanel]);
 
   const panelTitles: Record<PanelId, string> = {
-    left: "Inventory",
+    left: "Library",
     right: "Properties",
     bottom: "Output",
   };
@@ -341,6 +341,7 @@ export function WorkspaceShell({
           <PanelContainer
             id="left"
             title={panelTitles.left}
+            contentOnly
             state={panels.left.state}
             width={panels.left.width}
             height={0}

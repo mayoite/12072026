@@ -8,6 +8,7 @@ import {
   getCanonicalCategoryId,
   resolveCanonicalSubcategory,
 } from "@/features/catalog/categories";
+import { REPO_ROOT } from "./lib/repoRoot";
 
 type ProductRow = {
   id: string;
@@ -185,7 +186,7 @@ async function main() {
     canonicalConflicts,
   };
 
-  const auditsDir = path.join(process.cwd(), "results", "audits");
+  const auditsDir = path.join(REPO_ROOT, "results", "audits");
   fs.mkdirSync(auditsDir, { recursive: true });
 
   fs.writeFileSync(

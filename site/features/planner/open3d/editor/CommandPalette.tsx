@@ -9,7 +9,16 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
-import { ModalOverlay, Modal, Dialog } from "react-aria-components";
+import {
+  Dialog,
+  Input,
+  Label,
+  ListBox,
+  ListBoxItem,
+  Modal,
+  ModalOverlay,
+  SearchField,
+} from "react-aria-components";
 import {
   buildPaletteCommands,
   filterPaletteCommands,
@@ -27,9 +36,10 @@ export interface CommandPaletteProps {
 
 export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteProps) {
   const id = useId();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const listBoxRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
   const commands = useMemo(() => buildPaletteCommands(), []);
   const results = useMemo(
@@ -41,18 +51,15 @@ export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteP
     if (!open) return;
     const frame = requestAnimationFrame(() => {
       setQuery("");
-      setSelectedIndex(0);
-      inputRef.current?.focus();
+      setSelectedKey(null);
+      searchInputRef.current?.focus();
     });
     return () => cancelAnimationFrame(frame);
   }, [open]);
 
   useEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      setSelectedIndex(0);
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [query]);
+    setSelectedKey(results[0]?.id ?? null);
+  }, [query, results]);
 
   const execute = useCallback(
     (command: PaletteCommand) => {
@@ -62,21 +69,18 @@ export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteP
     [handlers, onOpenChange],
   );
 
-  const onKeyDown = useCallback(
+  const onSearchKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key === "ArrowDown") {
         event.preventDefault();
-        setSelectedIndex((current) => Math.min(current + 1, Math.max(0, results.length - 1)));
-        return;
-      }
-      if (event.key === "ArrowUp") {
-        event.preventDefault();
-        setSelectedIndex((current) => Math.max(current - 1, 0));
+        if (results.length > 0) {
+          listBoxRef.current?.focus();
+        }
         return;
       }
       if (event.key === "Enter") {
         event.preventDefault();
-        const item = results[selectedIndex];
+        const item = results.find((command) => command.id === selectedKey) ?? results[0];
         if (item) execute(item);
         return;
       }
@@ -85,7 +89,7 @@ export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteP
         onOpenChange(false);
       }
     },
-    [execute, onOpenChange, results, selectedIndex],
+    [execute, onOpenChange, results, selectedKey],
   );
 
   return (
@@ -97,37 +101,50 @@ export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteP
     >
       <Modal className={styles.commandPalettePanel}>
         <Dialog aria-label="Command palette" className="outline-none">
-          <div className={styles.commandPaletteSearch}>
-            <label className="sr-only" htmlFor={`${id}-palette-search`}>
+          <SearchField
+            className={styles.commandPaletteSearch}
+            value={query}
+            onChange={setQuery}
+            aria-label="Search commands"
+          >
+            <Label className="sr-only" htmlFor={`${id}-palette-search`}>
               Search commands
-            </label>
-            <input
-              ref={inputRef}
+            </Label>
+            <Input
+              ref={searchInputRef}
               id={`${id}-palette-search`}
               type="search"
-              value={query}
               placeholder="Search tools and actions…"
               autoComplete="off"
               spellCheck={false}
-              onChange={(event) => setQuery(event.currentTarget.value)}
-              onKeyDown={onKeyDown}
+              onKeyDown={onSearchKeyDown}
             />
             <span className={styles.commandPaletteHint}>Esc to close</span>
-          </div>
-          <div className={styles.commandPaletteResults} role="listbox" aria-label="Command results">
-            {results.length === 0 ? (
-              <p className={styles.commandPaletteEmpty}>No matching commands</p>
-            ) : (
-              results.map((command, index) => (
-                <button
-                  key={command.id}
-                  type="button"
+          </SearchField>
+          {results.length === 0 ? (
+            <p className={styles.commandPaletteEmpty}>No matching commands</p>
+          ) : (
+            <ListBox
+              ref={listBoxRef}
+              className={styles.commandPaletteResults}
+              aria-label="Command results"
+              items={results}
+              selectionMode="single"
+              selectedKeys={selectedKey ? [selectedKey] : []}
+              onSelectionChange={(keys) => {
+                const key = [...keys][0];
+                setSelectedKey(typeof key === "string" ? key : null);
+              }}
+              onAction={(key) => {
+                const command = results.find((item) => item.id === key);
+                if (command) execute(command);
+              }}
+            >
+              {(command) => (
+                <ListBoxItem
+                  id={command.id}
+                  textValue={command.label}
                   className={styles.commandPaletteItem}
-                  data-active={index === selectedIndex}
-                  role="option"
-                  aria-selected={index === selectedIndex}
-                  onMouseEnter={() => setSelectedIndex(index)}
-                  onClick={() => execute(command)}
                 >
                   <span className={styles.commandPaletteItemMeta}>
                     <span className={styles.commandPaletteItemLabel}>{command.label}</span>
@@ -136,10 +153,10 @@ export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteP
                   {command.shortcut ? (
                     <kbd className={styles.commandPaletteShortcut}>{command.shortcut}</kbd>
                   ) : null}
-                </button>
-              ))
-            )}
-          </div>
+                </ListBoxItem>
+              )}
+            </ListBox>
+          )}
         </Dialog>
       </Modal>
     </ModalOverlay>

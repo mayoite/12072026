@@ -1,6 +1,6 @@
 # REFERENCES — source path map for plans1
 
-**Package:** `D:\OandO07072026\plans1\`  
+**Package:** `plans1\`  
 **Rule:** Live repo wins over plan PASS prose. Brainstormer reports live under **`archive/Idiots2/`** (root `Idiots2/` absent).
 
 ---

@@ -10,7 +10,7 @@
 
 **Source of truth:** homepage (`/`) for visual language; `app/(site)/solutions/page.tsx` for inner-page structure.
 
-**Matrix:** `site/results/site-ui/route-matrix.csv` (regenerate: `pnpm --filter oando-site run site-ui:matrix`; local under gitignored results/; archive copy kept if present).
+**Matrix:** `results/site-ui/route-matrix.csv` (regenerate: `pnpm --filter oando-site run site-ui:matrix`).
 
 **Primitives (Phase 2b):** `@/components/home/layout` — `HomeMarketingLayout`, `HomeSection`, `HomeSectionInner`.
 

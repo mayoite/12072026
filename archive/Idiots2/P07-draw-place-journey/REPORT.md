@@ -2,7 +2,7 @@
 
 **Role:** Brainstormer 07/10 · **Mode:** Ideas + phase truth only · **NO code**  
 **Date:** 2026-07-10  
-**Checkout:** `D:\OandO07072026` only · no worktrees  
+**Checkout:** `.` only · no worktrees  
 **Output folder (this file only):** `Idiots2\P07-draw-place-journey\`  
 **Phase ownership:** `Plans\phases\P07-draw-place-journey\` · **CP-07** · gates **W1 + W2 (browser place half)**  
 **Canonical evidence (when execute lands):** `results\planner\world-standard-wave\02-browser-open3d-journey\`  
@@ -893,12 +893,12 @@ From MASTER-CHART (research, not live proof):
 ## 20. Appendix A — Phase file absolute index
 
 ```
-D:\OandO07072026\Plans\phases\P07-draw-place-journey\README.md
-D:\OandO07072026\Plans\phases\P07-draw-place-journey\P07-draw-place-journey.md
-D:\OandO07072026\Plans\phases\P07-draw-place-journey\P07-appendix.md
-D:\OandO07072026\Plans\phases\P07-draw-place-journey\P07-suggestions.md
-D:\OandO07072026\Plans\phases\P07-draw-place-journey\01-react-open3d.md
-D:\OandO07072026\Plans\phases\P07-draw-place-journey\04-playwright-evidence.md
+Plans\phases\P07-draw-place-journey\README.md
+Plans\phases\P07-draw-place-journey\P07-draw-place-journey.md
+Plans\phases\P07-draw-place-journey\P07-appendix.md
+Plans\phases\P07-draw-place-journey\P07-suggestions.md
+Plans\phases\P07-draw-place-journey\01-react-open3d.md
+Plans\phases\P07-draw-place-journey\04-playwright-evidence.md
 ```
 
 ## 21. Appendix B — Websites absolute index (P07-critical)
@@ -917,15 +917,15 @@ D:\websites\homestyler.com\report\INSPIRATION.md
 D:\websites\roomsketcher.com\report\INSPIRATION.md
 D:\websites\floorplanner.com\report\INSPIRATION.md
 D:\websites\ikea.com\planner-public\report\INSPIRATION.md
-D:\OandO07072026\Plans\Research\RESEARCH-MAP.md
-D:\OandO07072026\Plans\Research\RESULTS-MAP.md
-D:\OandO07072026\docs\superpowers\specs\2026-07-09-world-standard-planner-design.md
+Plans\Research\RESEARCH-MAP.md
+Plans\Research\RESULTS-MAP.md
+docs\superpowers\specs\2026-07-09-world-standard-planner-design.md
 ```
 
 ## 22. Appendix C — Evidence path absolute (target)
 
 ```
-D:\OandO07072026\results\planner\world-standard-wave\02-browser-open3d-journey\
+results\planner\world-standard-wave\02-browser-open3d-journey\
   01-route-ready.png
   02-walls-drawn.png
   03-door-opening.png
@@ -936,17 +936,17 @@ D:\OandO07072026\results\planner\world-standard-wave\02-browser-open3d-journey\
   playwright-run.json
   playwright-raw.log
 
-D:\OandO07072026\results\planner\world-standard-wave\07-browser-journey\
+results\planner\world-standard-wave\07-browser-journey\
   NOTES.md   # points to ../02-browser-open3d-journey/
 ```
 
 ## 23. Appendix D — Spec / helper absolute (target create)
 
 ```
-D:\OandO07072026\site\tests\e2e\open3d-world-standard-journey.spec.ts   # CREATE
-D:\OandO07072026\site\tests\e2e\plannerCanvasHelpers.ts                 # ADD getFurnitureCount
-D:\OandO07072026\site\tests\e2e\guestProjectSetup.ts                    # REUSE
-D:\OandO07072026\site\config\build\playwright.config.ts                 # REUSE (serial in spec)
+site\tests\e2e\open3d-world-standard-journey.spec.ts   # CREATE
+site\tests\e2e\plannerCanvasHelpers.ts                 # ADD getFurnitureCount
+site\tests\e2e\guestProjectSetup.ts                    # REUSE
+site\config\build\playwright.config.ts                 # REUSE (serial in spec)
 ```
 
 ## 24. Appendix E — Expert suggestions disposition (S1–S12)
