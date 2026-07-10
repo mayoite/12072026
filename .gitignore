@@ -69,6 +69,7 @@ site/nul
 # Patch/reject artifacts
 *.png
 !/public/**/*.png
+!site/public/images/client-logos/*.png
 !site/tests/e2e/**/*-snapshots/*.png
 !results/planner/**/*.png
 features_diff.txt
