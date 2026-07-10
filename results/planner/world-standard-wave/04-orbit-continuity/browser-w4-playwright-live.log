@@ -1,14 +1,8 @@
-﻿
+
 Running 1 test using 1 worker
 
-node.exe : (node:20116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
-At C:\Program Files\nodejs\pnpm.ps1:16 char:5
-+     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
-+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: ((node:20116) Wa... env being set.:String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 
+(node:42984) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
-  Γ£ô  1 [chromium] ΓÇ║ tests\e2e\open3d-w4-orbit-continuity.spec.ts:40:7 ΓÇ║ W4 orbit + 2DΓåö3D continuity (browser) ΓÇ║ place furniture ΓåÆ 3D orbit attr ΓåÆ 2D same count (8.0s)
+  Γ£ô  1 [chromium] ΓÇ║ tests\e2e\open3d-w4-orbit-continuity.spec.ts:40:7 ΓÇ║ W4 orbit + 2DΓåö3D continuity (browser) ΓÇ║ place furniture ΓåÆ 3D orbit attr ΓåÆ 2D same count (5.4s)
 
-  1 passed (9.6s)
+  1 passed (6.0s)
