@@ -47,6 +47,24 @@ You are the **main agent**: set goals with owner, **decide what to implement**, 
 **Standing memory** (partner rules): `D:\.grok\memory\MEMORY.md` when Grok memory is on.  
 **Raise the bar, never lower it.** This handbook is a **floor**. Improve process when it raises quality (tighter proof, better root-cause, cleaner seats). Never drop ROOT-CAUSE / TDD / verify / one-phase-complete to “save time.” Owner OK with serial phases + live gate before product raise + subagents — execute that path at Elon bar or higher.
 
+### Owner paid-seat law — **NO PAPER MOON** (mandatory for head + every subagent)
+
+Owner pays for **product truth**, not status theater. Lying (including soft lies) = fail the seat.
+
+| Forbidden (“I went to the moon — see this paper”) | Required (actual moon) |
+|--------------------------------------------------|-------------------------|
+| `status: pass` / DONE / 9/10 in JSON or SUMMARY without live proof | Pixels + code + command exit match the claim |
+| Unit green alone as browser / W / S-stage complete | Unit + browser (when gate needs browser); unit alone = **FAIL** for that gate |
+| Stamping a field / writing NOTES as “feature implemented” | Buyer-visible path works end-to-end (or status = OPEN/FAIL) |
+| Solid black blob screenshot claimed “multi-prim readable” | Visual evidence that a skeptic can read without the agent’s story |
+| Marking stages `implemented` while paint/consume missing | `partial` / `planned` until wire is real |
+| Soften FAIL for comfort | Say OPEN / HALF / FAIL with paths |
+
+**Done** = proved · tested · (when required) deployed · retested · meets the **named bar**.  
+**Not done** = any of those missing. Do not invent a 9/10 audit that was never run.
+
+Every subagent brief **must** include the block in §10. Head rejects subagent returns that claim PASS with only paper.
+
 ### Global-standard revision (owner 2026-07-10; restructured module-wise)
 
 Prior spine gates were **too low** for “complete.”  
@@ -241,9 +259,12 @@ Default concurrent ≤8; hard max 10. Empty seats OK. No idle “always on” se
 ```text
 /using-superpowers
 Bar: Agents/Agents-ELON-STANDARD.md
+NO PAPER MOON: Owner pays for truth. No status:pass / DONE / “implemented”
+  without live product proof. Unit alone ≠ browser gate. Black-box PNG ≠ multiprim.
+  Stamp field ≠ feature. Prefer FAIL/OPEN over fake PASS. Lying = seat fail.
 CSS: Agents/Agents-css.md — NEVER edit site/app/css/core/locked/**
 Tracks: Agents/Agents-tracks.md — one ID per track; parallel tracks OK (D4+A1 not D3+D4)
-Head expects: honest pushback · repo truth · phase-scale work
+Head expects: honest pushback · repo truth · phase-scale work · no comfort lies
 Seat: <…>
 Track phase ID: <e.g. D4 | A1 | AI1 | P07> — only this ID on this track
 Phase / task: <…>

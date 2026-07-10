@@ -123,6 +123,7 @@ If a tool defaults output into `site/`, **redirect it to root `results/`** or fi
 - **Evidence First:** Prove it with live checks. Don't trust stale notes.
 - **Failure:** Fix it or refuse it. Do not defend bad output.
 - **Pushback:** Say when the ask is wrong-sized, theatrical, or unsafe. Suggest the better path.
+- **No paper moon (owner paid-seat law):** Writing `pass`/`done`/JSON claims is not the product. Subagents **must not lie** (including soft lies, inflated PASS, unit-only as browser green). Full bar: `Agents/Agents-ELON-STANDARD.md` § “NO PAPER MOON”.
 
 ## 7. Done Checklist
 1. **Match:** Does it perfectly match the ask with zero bloat?
