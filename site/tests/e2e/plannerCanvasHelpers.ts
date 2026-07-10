@@ -2,6 +2,39 @@ import { expect, type Locator, type Page } from "@playwright/test";
 
 export const PLANNER_PRIMARY_CANVAS = '[data-testid="planner-2d-canvas"] canvas';
 
+/** TopBar view-mode radiogroup - product labels are literal "2D" / "3D" (role=radio). */
+export const VIEW_MODE_RADIOGROUP_NAME = "View mode";
+export const VIEW_MODE_2D_NAME = "2D";
+export const VIEW_MODE_3D_NAME = "3D";
+
+export type PlannerViewMode = "2d" | "3d";
+
+/**
+ * Locator for the TopBar 2D|3D radio, scoped to the View mode radiogroup.
+ * Prefer this over bare getByRole("radio") or getByRole("button") (buttons are wrong - product uses role="radio").
+ */
+export function plannerViewModeRadio(
+  page: Page,
+  mode: PlannerViewMode,
+): Locator {
+  const name = mode === "2d" ? VIEW_MODE_2D_NAME : VIEW_MODE_3D_NAME;
+  return page
+    .getByRole("radiogroup", { name: VIEW_MODE_RADIOGROUP_NAME })
+    .getByRole("radio", { name, exact: true });
+}
+
+/** Click 2D or 3D radio and wait until aria-checked sticks. */
+export async function switchPlannerViewMode(
+  page: Page,
+  mode: PlannerViewMode,
+): Promise<void> {
+  const radio = plannerViewModeRadio(page, mode);
+  await expect(radio).toBeVisible({ timeout: 15_000 });
+  await radio.click();
+  await expect(radio).toBeChecked({ timeout: 10_000 });
+}
+
+
 async function primaryCanvas(page: Page): Promise<Locator> {
   return page.locator(PLANNER_PRIMARY_CANVAS);
 }

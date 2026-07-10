@@ -1,14 +1,23 @@
 /**
  * W4 browser — place seats (configurator) → 3D orbit attr → 2D same furniture count.
- * Place path uses proven systems-v0 "Place N seats" (catalog click was flaky).
+ * Place path uses proven systems-v0 "Place N seats" via placeSeatsFromConfigurator
+ * (InventoryPanel defaultOpen=false — must expand; catalog click was flaky).
  * Evidence: results/planner/world-standard-wave/04-orbit-continuity/
+ *
+ * Honesty (CODE-REVIEW-REPORT H3): browser proves furniture **count** +
+ * data-orbit-enabled attr + toggle remount — NOT entity ids/mm/rotation
+ * (pose continuity is unit-only).
  */
 import { expect, test, type Page } from "@playwright/test";
 import path from "node:path";
 import fs from "node:fs";
 
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
-import { waitForPlannerCanvas } from "./plannerCanvasHelpers";
+import {
+  placeSeatsFromConfigurator,
+  switchPlannerViewMode,
+  waitForPlannerCanvas,
+} from "./plannerCanvasHelpers";
 
 test.describe.configure({ mode: "serial", timeout: 120_000 });
 
@@ -45,12 +54,8 @@ test.describe("W4 orbit + 2D↔3D continuity (browser)", () => {
     const before = await furnitureCount(page);
     expect(before).toBeGreaterThanOrEqual(0);
 
-    // Proven place path (systems v0 batch) — avoids flaky catalog + canvas click.
-    const configurator = page.getByRole("region", {
-      name: "Workstation systems configurator",
-    });
-    await expect(configurator).toBeVisible({ timeout: 15_000 });
-    await configurator.getByRole("button", { name: "Place 4 seats" }).click();
+    // Proven place path (systems v0 batch) — expands collapsed configurator.
+    await placeSeatsFromConfigurator(page, 4);
 
     await expect
       .poll(async () => furnitureCount(page), { timeout: 25_000 })
@@ -59,7 +64,7 @@ test.describe("W4 orbit + 2D↔3D continuity (browser)", () => {
 
     await page.screenshot({ path: path.join(EVIDENCE, "01-2d-after-place.png") });
 
-    await page.getByRole("radio", { name: "3D", exact: true }).click();
+    await switchPlannerViewMode(page, "3d");
     await expect(page.getByTestId("planner-3d-canvas")).toBeVisible({
       timeout: 20_000,
     });
@@ -83,14 +88,14 @@ test.describe("W4 orbit + 2D↔3D continuity (browser)", () => {
 
     await page.screenshot({ path: path.join(EVIDENCE, "02-3d-orbit-on.png") });
 
-    await page.getByRole("radio", { name: "2D", exact: true }).click();
+    await switchPlannerViewMode(page, "2d");
     await waitForPlannerCanvas(page);
 
     await expect
       .poll(async () => furnitureCount(page), { timeout: 15_000 })
       .toBe(afterPlace);
 
-    await page.getByRole("radio", { name: "3D", exact: true }).click();
+    await switchPlannerViewMode(page, "3d");
     await expect(page.getByTestId("planner-3d-canvas")).toBeVisible({
       timeout: 20_000,
     });
@@ -100,7 +105,7 @@ test.describe("W4 orbit + 2D↔3D continuity (browser)", () => {
       ),
     ).toBeVisible({ timeout: 15_000 });
 
-    await page.getByRole("radio", { name: "2D", exact: true }).click();
+    await switchPlannerViewMode(page, "2d");
     await waitForPlannerCanvas(page);
     await expect
       .poll(async () => furnitureCount(page), { timeout: 15_000 })
@@ -126,7 +131,20 @@ test.describe("W4 orbit + 2D↔3D continuity (browser)", () => {
           furnitureAfterPlace: afterPlace,
           furnitureAfterToggle: afterPlace,
           orbitEnabled: true,
-          placePath: "configurator Place 4 seats",
+          placePath: "placeSeatsFromConfigurator Place 4 seats",
+          browserProves: [
+            "furniture-count-status-text",
+            "data-orbit-enabled=true",
+            "2d-3d-2d-count-stable",
+            "optional-left-drag-no-crash",
+          ],
+          browserDoesNotProve: [
+            "entity-ids",
+            "mm-position",
+            "document-rotation-degrees",
+          ],
+          honestyNote:
+            "CODE-REVIEW-REPORT H3: browser = count + orbit attr; pose ids/mm/rotation = units only",
           consoleErrorCount: hardAppErrors.length,
           screenshots: [
             "01-2d-after-place.png",
