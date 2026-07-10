@@ -20,11 +20,13 @@ import {
 
 const MM = 0.001;
 
-/** Module slabs only (not leg-* posts). */
+/** Module slabs only (not leg-* posts or stretcher-* rails). */
 function moduleParts(
   plan: ReturnType<typeof generateWorkstationV0MeshPlan>,
 ) {
-  return plan.parts.filter((p) => !p.name.startsWith("leg"));
+  return plan.parts.filter(
+    (p) => !p.name.startsWith("leg") && !p.name.startsWith("stretcher-"),
+  );
 }
 
 function moduleByName(
@@ -51,12 +53,15 @@ describe("generateWorkstationV0MeshPlan", () => {
       "panel",
       "pedestal",
     ]);
-    // 3 modules + 4 desk legs
-    expect(countWorkstationV0Parts(config)).toBe(7);
-    expect(plan.parts).toHaveLength(7);
+    // 3 modules + 4 desk legs + 2 desk stretchers
+    expect(countWorkstationV0Parts(config)).toBe(9);
+    expect(plan.parts).toHaveLength(9);
     expect(plan.parts.filter((p) => p.name.startsWith("leg-desk-"))).toHaveLength(
       4,
     );
+    expect(
+      plan.parts.filter((p) => p.name.startsWith("stretcher-desk-")),
+    ).toHaveLength(2);
 
     const desk = moduleByName(plan, "desk");
     expect(desk.name).toBe("desk");
@@ -199,8 +204,8 @@ describe("generateWorkstationV0Mesh", () => {
     const group = generateWorkstationV0Mesh(config);
     expect(group.children).toHaveLength(countWorkstationV0Parts(config));
     expect(group.children).toHaveLength(plan.parts.length);
-    // 5 modules + 4 desk legs + 4 return legs = 13
-    expect(plan.parts.length).toBeGreaterThanOrEqual(13);
+    // 5 modules + 8 legs + 4 stretchers ≥ 17
+    expect(plan.parts.length).toBeGreaterThanOrEqual(17);
     expect(moduleParts(plan)).toHaveLength(5);
   });
 });

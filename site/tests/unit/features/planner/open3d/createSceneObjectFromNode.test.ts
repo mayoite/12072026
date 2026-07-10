@@ -314,6 +314,8 @@ describe("createSceneObjectFromNode — modular vs parametric-box vs wall", () =
         "leg-desk-3",
         "panel",
         "pedestal",
+        "stretcher-desk-back",
+        "stretcher-desk-front",
       ].sort(),
     );
     expect(object.position.x).toBeCloseTo(2);

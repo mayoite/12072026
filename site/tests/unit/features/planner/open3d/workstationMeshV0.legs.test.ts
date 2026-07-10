@@ -24,12 +24,19 @@ function isLegPart(part: WorkstationV0MeshPartPlan): boolean {
   return part.name.startsWith("leg");
 }
 
+function isStructurePart(part: WorkstationV0MeshPartPlan): boolean {
+  return (
+    part.name.startsWith("leg") || part.name.startsWith("stretcher-")
+  );
+}
+
 function legPartsOf(plan: WorkstationV0MeshPlan): WorkstationV0MeshPartPlan[] {
   return plan.parts.filter(isLegPart);
 }
 
 function nonLegPartsOf(plan: WorkstationV0MeshPlan): WorkstationV0MeshPartPlan[] {
-  return plan.parts.filter((p) => !isLegPart(p));
+  // Module slabs only — exclude legs and stretchers
+  return plan.parts.filter((p) => !isStructurePart(p));
 }
 
 function partTopY(part: WorkstationV0MeshPartPlan): number {
@@ -236,11 +243,11 @@ describe("workstationMeshV0 legs (modular posts under worktop)", () => {
     const legs = legPartsOf(plan);
     const modules = nonLegPartsOf(plan);
 
-    // 4 modules (desk/pedestal/panel/overhead) + 4 desk legs only
+    // 4 modules + 4 desk legs + 2 desk stretchers
     expect(modules).toHaveLength(4);
     expect(legs).toHaveLength(4);
-    expect(countWorkstationV0Parts(linear)).toBe(8);
-    expect(plan.parts).toHaveLength(8);
+    expect(countWorkstationV0Parts(linear)).toBe(10);
+    expect(plan.parts).toHaveLength(10);
 
     // Only worktop runs get legs — never pedestal / panel / overhead
     for (const leg of legs) {
@@ -268,8 +275,8 @@ describe("workstationMeshV0 legs (modular posts under worktop)", () => {
     expect(lLegs.filter((p) => p.name.startsWith("leg-return-"))).toHaveLength(
       4,
     );
-    // 4 modules + 8 legs
-    expect(countWorkstationV0Parts(lShape)).toBe(12);
+    // 4 modules + 8 legs + 4 stretchers (2 per worktop run)
+    expect(countWorkstationV0Parts(lShape)).toBe(16);
     expect(
       lPlan.parts.some((p) => /leg-(pedestal|panel|overhead)/.test(p.name)),
     ).toBe(false);
@@ -292,8 +299,8 @@ describe("workstationMeshV0 legs (modular posts under worktop)", () => {
     for (const leg of legs) {
       expect(leg.name.startsWith("leg-desk-")).toBe(true);
     }
-    // 1 desk worktop + 4 legs
-    expect(countWorkstationV0Parts(deskOnly)).toBe(5);
-    expect(plan.parts).toHaveLength(5);
+    // 1 desk worktop + 4 legs + 2 stretchers
+    expect(countWorkstationV0Parts(deskOnly)).toBe(7);
+    expect(plan.parts).toHaveLength(7);
   });
 });

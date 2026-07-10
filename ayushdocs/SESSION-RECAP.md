@@ -1,28 +1,21 @@
 # Session recap
 
 **Updated:** 2026-07-10  
-**Phase closed:** `gate:open3d` green on HEAD (`results/planner/gate-reproof-2026-07-10/`)
+**Pick:** **B** product raise (not A re-proof marathon)  
+**Phase:** workstation mesh stretchers  
 
-## Decision (A vs B)
+## Done
 
-- **Not full A** (03→04→05 re-sticker marathon)  
-- **Not pure B** (mesh/Fabric/cloud) while gate was red  
-- **This phase:** live gate proof → fix real blocker → green  
+- Under-desk front/back stretchers for desk/return runs  
+- TDD stretchers suite + legs/mesh/scene non-reg **35/35**  
+- Evidence: `results/planner/world-standard-wave/07-systems-v0/mesh-stretchers/`  
 
-## Done (workflow)
+## Prior this session
 
-1. Locked TASK-LIST + NOTES (after owner called out thrash quality)  
-2. Subagent implementer: systematic debug → TDD → fix → verify  
-3. Root cause: `plannerFeaturePages.ts` CSR phosphor on server page-data path  
-4. Fix: `@phosphor-icons/react/dist/ssr` + unit regression  
-5. **`gate:open3d` PASS** · `gate-e2e/run.json` status PASS · 5 specs  
-6. Commit `6a1ec58` · dual push  
+- Gate re-proof green (phosphor SSR)  
+- A11y label-in-name LH 100  
+- Elon: raise bar never lower  
 
 ## Do not claim
 
-- Product finished  
-- Site-wide a11y / mesh raise done in this phase  
-
-## Next phase (after this close)
-
-Product residual — **workstation mesh readability** (beyond legs already landed) **or** first new red — head picks when starting next session.  
+- Product finished / photoreal mesh  

@@ -28,10 +28,16 @@ export const OVERHEAD_GAP_MM = 200;
 export const LEG_SECTION_MM = 50;
 /** Inset from worktop plan edges to leg centers (mm). */
 export const LEG_INSET_MM = 40;
+/** Stretcher rail section (mm) — under-desk front/back structure. */
+export const STRETCHER_SECTION_MM = 40;
+/** Stretcher center height as fraction of leg clear height (floor → worktop bottom). */
+export const STRETCHER_HEIGHT_FRAC = 0.28;
 
 const MM = 0.001;
 /** Metal-ish leg posts (distinct from worktop / pedestal). */
 const LEG_COLOR = "#57534e";
+/** Slightly lighter than legs for rail readability. */
+const STRETCHER_COLOR = "#78716c";
 
 /** Serializable options stamped on furniture for save/rebuild. */
 export type WorkstationV0MeshOptions = {
@@ -186,9 +192,48 @@ function legsForWorktopPrim(
 }
 
 /**
+ * Front + back rails under a desk/return prim (along plan X length).
+ * Names: `stretcher-{desk|return}-front|back`. Sits between floor and worktop bottom.
+ */
+function stretchersForWorktopPrim(
+  prim: WorkstationPlanPrimV0,
+  footprint: WorkstationFootprintMm,
+  heightMm: number,
+  runKey: "desk" | "return",
+): WorkstationV0MeshPartPlan[] {
+  const section = STRETCHER_SECTION_MM;
+  const legH = Math.max(1, heightMm - WORKTOP_THICKNESS_MM);
+  const inset = Math.min(
+    LEG_INSET_MM,
+    Math.max(0, prim.w / 4 - LEG_SECTION_MM / 2),
+    Math.max(0, prim.h / 4 - LEG_SECTION_MM / 2),
+  );
+  const railLen = Math.max(1, prim.w - 2 * inset - LEG_SECTION_MM);
+  const railY = Math.max(section / 2, legH * STRETCHER_HEIGHT_FRAC);
+  const halfSec = section / 2;
+  const rails: ReadonlyArray<{ readonly suffix: string; readonly y: number }> = [
+    { suffix: "front", y: prim.y + inset + halfSec },
+    { suffix: "back", y: prim.y + prim.h - inset - halfSec },
+  ];
+
+  return rails.map((r) => ({
+    name: `stretcher-${runKey}-${r.suffix}`,
+    role: runKey,
+    sizeMm: { x: railLen, y: section, z: section },
+    positionMm: {
+      x: prim.x + prim.w / 2 - footprint.widthMm / 2,
+      y: railY,
+      z: r.y - footprint.depthMm / 2,
+    },
+    color: STRETCHER_COLOR,
+  }));
+}
+
+/**
  * Pure multi-part mesh plan from workstation config (mm).
  * Plan prims drive horizontal layout; heights/colors by module role.
- * Desk/return runs get four named leg posts (floor → worktop bottom).
+ * Desk/return runs get four named leg posts (floor → worktop bottom)
+ * and front/back stretchers under the worktop.
  * Overhead (not in plan prims) is placed above the main desk run when present.
  */
 export function generateWorkstationV0MeshPlan(
@@ -203,6 +248,14 @@ export function generateWorkstationV0MeshPlan(
     if (prim.role === "desk" || prim.role === "return") {
       parts.push(
         ...legsForWorktopPrim(
+          prim,
+          footprint,
+          config.heightMm,
+          prim.role,
+        ),
+      );
+      parts.push(
+        ...stretchersForWorktopPrim(
           prim,
           footprint,
           config.heightMm,
