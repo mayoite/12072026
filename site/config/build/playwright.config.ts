@@ -4,7 +4,25 @@ const { loadEnvLocal } = require("../../scripts/loadEnvLocal.cjs");
 
 loadEnvLocal();
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3000";
+/**
+ * Always hit the dev server as `localhost`, not `127.0.0.1`.
+ * Next.js treats those as different origins for HMR/websocket; 127.0.0.1 often
+ * stalls "Loading planner…" / disables cross-origin bits without matching certs.
+ */
+function resolvePlaywrightBaseURL(): string {
+  const raw = (process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3000").trim();
+  try {
+    const u = new URL(raw);
+    if (u.hostname === "127.0.0.1" || u.hostname === "[::1]") {
+      u.hostname = "localhost";
+    }
+    return u.toString().replace(/\/$/, "");
+  } catch {
+    return "http://localhost:3000";
+  }
+}
+
+const baseURL = resolvePlaywrightBaseURL();
 const isCI = !!process.env.CI;
 
 export default defineConfig({
