@@ -29,7 +29,7 @@ export function LanguageSwitcher() {
 
   return (
     <div className="flex flex-col gap-1.5 mt-2">
-      <label htmlFor="locale-switcher" className="typ-label text-body">
+      <label htmlFor="locale-switcher" className="typ-label text-inverse-muted">
         Select Language
       </label>
       <select
