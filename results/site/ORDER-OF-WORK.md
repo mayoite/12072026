@@ -40,7 +40,7 @@ Prefix letter is **not** sacred — pick one and stick to it. What matters is **
 | **D2** | Home = design base (inventory) | **DONE** | `results/site/design-base-home/` |
 | **D3** | Products suite align to home | **DONE** | `1f8c26c`, `141569c`, `ui-websuite-products/` |
 | **D4** | Marketing suite align to home | **DONE** | `4c89431`, `ui-websuite-marketing/D4-CLOSED.md`, `d4-close/*`, NOTES + after/* |
-| **D5** | Catalog image residual | queued | placeholders residual |
+| **D5** | Catalog image residual | **DONE** (path code) | `ui-websuite-products/D5-IMAGE-RESIDUAL.md` — 268/279 flagships; **11** need asset/JSON migration |
 | **D6** | Portal real DB list | queued | honest error UI only so far |
 
 **Design base:** Homepage. Suite aligns to home.  
@@ -63,6 +63,7 @@ Prefix letter is **not** sacred — pick one and stick to it. What matters is **
 ```
 Tracks may run in parallel: D* · A* · AI* · P*
 Within a track: one ID only.
-D4 closed. Use agents for D5 / A1 / AI1 only when owner activates that track.
+D5 path residual DONE (47 slug-folder wins). 11 SKUs still need assets/data migration — not more path heuristics.
+Next site track: D6 when activated.
 Evidence: results/<track-or-site>/…
 ```

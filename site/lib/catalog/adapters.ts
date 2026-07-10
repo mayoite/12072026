@@ -1,4 +1,7 @@
-import { normalizeAssetList, normalizeAssetPath } from "@/lib/assetPaths";
+import {
+  normalizeAssetPath,
+  resolveProductCatalogAssets,
+} from "@/lib/assetPaths";
 import { normalizeCatalogProductId } from "@/lib/uuid/normalizeUuid";
 import type { CompatProduct, Product } from "./types";
 
@@ -27,14 +30,21 @@ export function isMissingTableError(message: string, tableName?: string): boolea
 }
 
 export function normalizeProducts(rows: Product[]): Product[] {
-  return (rows ?? []).map((product) => ({
-    ...product,
-    id: normalizeCatalogProductId(product.id, product.slug),
-    images: normalizeAssetList(product.images),
-    flagship_image: normalizeAssetPath(product.flagship_image),
-    "3d_model": normalizeAssetPath(product["3d_model"]),
-    category_id: product.category_id,
-  }));
+  return (rows ?? []).map((product) => {
+    const assets = resolveProductCatalogAssets(
+      product.slug,
+      product.flagship_image,
+      product.images,
+    );
+    return {
+      ...product,
+      id: normalizeCatalogProductId(product.id, product.slug),
+      images: assets.images,
+      flagship_image: assets.flagship_image,
+      "3d_model": normalizeAssetPath(product["3d_model"]),
+      category_id: product.category_id,
+    };
+  });
 }
 
 export function toCompatProduct(product: Product): CompatProduct {
@@ -56,15 +66,19 @@ export function toCompatProduct(product: Product): CompatProduct {
     product.metadata?.ai_alt_text ||
     product.metadata?.aiAltText ||
     `${product.name} product image`;
-  const normalizedImages = normalizeAssetList(product.images);
-  const normalizedFlagshipImage = normalizeAssetPath(product.flagship_image);
+  // Prefer already-normalized product fields (normalizeProducts); re-resolve with slug if raw.
+  const assets = resolveProductCatalogAssets(
+    product.slug,
+    product.flagship_image,
+    product.images,
+  );
 
   return {
     id: product.id,
     slug: product.slug,
     name: product.name,
     description: product.description || "",
-    flagshipImage: normalizedFlagshipImage,
+    flagshipImage: assets.flagship_image,
     sceneImages: [],
     variants: [],
     detailedInfo: {
@@ -79,7 +93,7 @@ export function toCompatProduct(product: Product): CompatProduct {
     },
     "3d_model": modelPath,
     threeDModelUrl: modelPath,
-    images: normalizedImages,
+    images: assets.images,
     altText: explicitAlt.replace(/\s+/g, " ").trim().slice(0, 140),
     specs: specsObject,
   };

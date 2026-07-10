@@ -263,3 +263,130 @@ export function normalizeAssetList(
     .filter(Boolean) as string[];
   return resolved.length > 0 ? resolved : [PRODUCT_IMAGE_FALLBACK];
 }
+
+/** True when path is (or ends as) the raster product placeholder. */
+export function isProductImageFallback(assetPath: string | null | undefined): boolean {
+  if (!assetPath) return true;
+  const lower = String(assetPath).toLowerCase();
+  return (
+    lower.endsWith("/images/fallback/product-placeholder.webp") ||
+    lower === PRODUCT_IMAGE_FALLBACK ||
+    lower.endsWith("product-placeholder.webp")
+  );
+}
+
+/**
+ * Resolve on-disk catalog folder for a product slug (server FS).
+ * Prefer exact `/images/catalog/{slug}`; else unique folder ending `--{slug}`.
+ */
+function resolveCatalogFolderWebPath(slug: string): string | null {
+  const trimmed = String(slug || "").trim();
+  if (!trimmed) return null;
+
+  const exactDir = `/images/catalog/${trimmed}`;
+  const exactFs = toPublicFsPath(exactDir);
+  const fsMod = getFs();
+  if (!fsMod) return null;
+
+  if (exactFs && fsMod.existsSync(exactFs)) return exactDir;
+
+  // Short slugs (fluid-x, sway, prelam-locker) live under oando-{cat}--{slug}.
+  const catalogRoot = toPublicFsPath("/images/catalog");
+  if (!catalogRoot || !fsMod.existsSync(catalogRoot)) return null;
+
+  let entries: string[];
+  try {
+    entries = fsMod.readdirSync(catalogRoot);
+  } catch {
+    return null;
+  }
+
+  const suffix = `--${trimmed}`;
+  const matches = entries.filter((name) => name === trimmed || name.endsWith(suffix));
+  if (matches.length !== 1) return null;
+  return `/images/catalog/${matches[0]}`;
+}
+
+/**
+ * List numbered image-* files in a product catalog folder (server).
+ * Empty on client or when folder missing — callers keep path-normalize fallbacks.
+ */
+export function listCatalogSlugImages(slug: string | null | undefined): string[] {
+  if (!isServer()) return [];
+  const folder = resolveCatalogFolderWebPath(String(slug || "").trim());
+  if (!folder) return [];
+
+  const fsMod = getFs();
+  const dirFs = toPublicFsPath(folder);
+  if (!fsMod || !dirFs || !fsMod.existsSync(dirFs)) return [];
+
+  let entries: string[];
+  try {
+    entries = fsMod.readdirSync(dirFs);
+  } catch {
+    return [];
+  }
+
+  return entries
+    .map((file) => {
+      const m = file.match(/^image-0*(\d+)\.([a-z0-9]+)$/i);
+      if (!m) return null;
+      return {
+        number: Number.parseInt(m[1], 10),
+        webPath: `${folder}/${file}`,
+      };
+    })
+    .filter((row): row is { number: number; webPath: string } => row !== null)
+    .sort((a, b) => a.number - b.number)
+    .map((row) => row.webPath)
+    .filter((webPath) => localAssetExists(webPath));
+}
+
+/**
+ * When catalog JSON still carries CMS-hash basenames or missing imported paths,
+ * resolve flagship/gallery via on-disk `/images/catalog/{slug}/image-*` if present.
+ * Server-only FS; client returns preferred normalize result (adapters run on server).
+ */
+export function resolveProductCatalogAssets(
+  slug: string | null | undefined,
+  preferredFlagship?: string | null,
+  preferredImages?: Array<string | null | undefined> | null,
+): { flagship_image: string; images: string[] } {
+  const usableImages = (Array.isArray(preferredImages) ? preferredImages : [])
+    .map((value) => normalizeAssetPath(value))
+    .filter((value): value is string => Boolean(value) && !isProductImageFallback(value));
+
+  let flagship = preferredFlagship ? normalizeAssetPath(preferredFlagship) : "";
+  if (flagship && isProductImageFallback(flagship)) flagship = "";
+  if (!flagship && usableImages.length > 0) flagship = usableImages[0];
+
+  if (flagship && usableImages.length > 0) {
+    return { flagship_image: flagship, images: usableImages };
+  }
+
+  // Disk catalog folder for this slug (or unique --slug match).
+  const listed = listCatalogSlugImages(slug).map((webPath) => applyAssetBase(webPath));
+  if (listed.length > 0) {
+    return {
+      flagship_image: flagship || listed[0],
+      images: usableImages.length > 0 ? usableImages : listed,
+    };
+  }
+
+  // Last resort: probe image-1 via full normalize (pad/ext/sibling inside folder).
+  const probe = normalizeAssetPath(
+    `/images/catalog/${String(slug || "").trim()}/image-1.webp`,
+  );
+  if (probe && !isProductImageFallback(probe)) {
+    return {
+      flagship_image: flagship || probe,
+      images: usableImages.length > 0 ? usableImages : [probe],
+    };
+  }
+
+  const fallback = applyAssetBase(PRODUCT_IMAGE_FALLBACK);
+  return {
+    flagship_image: flagship || fallback,
+    images: usableImages.length > 0 ? usableImages : [flagship || fallback],
+  };
+}

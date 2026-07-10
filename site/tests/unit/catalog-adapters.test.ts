@@ -54,6 +54,7 @@ describe("catalog adapters", () => {
       }),
     ]);
 
+    // jsdom = client path: keep original (FS resolve is server-only).
     expect(normalized[0].images[0]).toBe("/images/chair.jpg");
     expect(normalized[0].flagship_image).toBe("/images/flagship.jpg");
     expect(normalized[0]["3d_model"]).toBe("/models/model.glb");

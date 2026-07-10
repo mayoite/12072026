@@ -177,4 +177,71 @@ describe('assetPaths', () => {
     ]);
     expect(assetPaths.normalizeAssetList(['/images/exists.webp', null, ''])).toEqual(['https://cdn.example.com/images/exists.webp']);
   });
+
+  it('detects product image fallback paths', () => {
+    expect(assetPaths.isProductImageFallback('')).toBe(true);
+    expect(assetPaths.isProductImageFallback('/images/fallback/product-placeholder.webp')).toBe(true);
+    expect(
+      assetPaths.isProductImageFallback('https://cdn.example.com/images/fallback/product-placeholder.webp'),
+    ).toBe(true);
+    expect(assetPaths.isProductImageFallback('/images/catalog/oando-tables--crest/image-1.jpg')).toBe(false);
+  });
+
+  it('lists catalog slug images and resolves CMS-hash miss via slug folder', () => {
+    mockFs.existsSync.mockImplementation((p: string) => {
+      const s = String(p).replace(/\\/g, '/');
+      if (s.endsWith('/images/catalog')) return true;
+      if (s.endsWith('/images/catalog/oando-tables--crest')) return true;
+      if (s.includes('/images/catalog/oando-tables--crest/image-1.jpg')) return true;
+      if (s.includes('/images/catalog/oando-tables--crest/image-2.jpg')) return true;
+      return false;
+    });
+    mockFs.readdirSync.mockImplementation((p: string) => {
+      const s = String(p).replace(/\\/g, '/');
+      if (s.endsWith('/images/catalog')) return ['oando-tables--crest', 'oando-seating--arvo'];
+      if (s.endsWith('/images/catalog/oando-tables--crest')) return ['image-1.jpg', 'image-2.jpg', 'readme.txt'];
+      return [];
+    });
+
+    expect(assetPaths.listCatalogSlugImages('oando-tables--crest')).toEqual([
+      '/images/catalog/oando-tables--crest/image-1.jpg',
+      '/images/catalog/oando-tables--crest/image-2.jpg',
+    ]);
+
+    // Short slug unique --suffix match (fluid-x → oando-seating--fluid-x style).
+    mockFs.existsSync.mockImplementation((p: string) => {
+      const s = String(p).replace(/\\/g, '/');
+      if (s.endsWith('/images/catalog')) return true;
+      if (s.endsWith('/images/catalog/oando-seating--fluid-x')) return true;
+      if (s.includes('/images/catalog/oando-seating--fluid-x/image-1.webp')) return true;
+      return false;
+    });
+    mockFs.readdirSync.mockImplementation((p: string) => {
+      const s = String(p).replace(/\\/g, '/');
+      if (s.endsWith('/images/catalog')) return ['oando-seating--fluid-x'];
+      if (s.endsWith('/images/catalog/oando-seating--fluid-x')) return ['image-1.webp'];
+      return [];
+    });
+    const short = assetPaths.resolveProductCatalogAssets(
+      'fluid-x',
+      '/images/products/fluid-x-chair-1.webp',
+      ['/images/products/fluid-x-chair-1.webp'],
+    );
+    expect(short.flagship_image).toBe(
+      'https://cdn.example.com/images/catalog/oando-seating--fluid-x/image-1.webp',
+    );
+    expect(short.images[0]).toBe(
+      'https://cdn.example.com/images/catalog/oando-seating--fluid-x/image-1.webp',
+    );
+
+    // Prefer real preferred path when it exists.
+    mockFs.existsSync.mockImplementation((p: string) => String(p).includes('exists.webp'));
+    const keep = assetPaths.resolveProductCatalogAssets(
+      'anything',
+      '/images/exists.webp',
+      ['/images/exists.webp'],
+    );
+    expect(keep.flagship_image).toBe('https://cdn.example.com/images/exists.webp');
+    expect(keep.images).toEqual(['https://cdn.example.com/images/exists.webp']);
+  });
 });
