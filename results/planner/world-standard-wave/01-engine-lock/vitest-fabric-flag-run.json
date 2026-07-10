@@ -1,8 +1,0 @@
-{
-  "command": "pnpm exec vitest run tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts",
-  "exitCode": 0,
-  "testFile": "tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts",
-  "passed": 19,
-  "failed": 0,
-  "timestamp": "2026-07-09T22:26:26.000Z"
-}

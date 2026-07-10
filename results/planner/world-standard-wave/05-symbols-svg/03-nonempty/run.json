@@ -1,8 +1,0 @@
-{
-  "phase": "P05",
-  "slice": "03-nonempty",
-  "exitCode": 0,
-  "note": "unknown SKU box fallback + modular ≥4 prims green",
-  "timestamp": "2026-07-09T19:08:35Z",
-  "log": "03-nonempty/vitest-raw.log"
-}

@@ -1,5 +1,0 @@
-﻿msgid=1 [issue] No label associated with a form field (count: 1)
-msgid=2 [info] React DevTools download prompt
-msgid=3 [log] [HMR] connected
-msgid=4 [error] React hydration mismatch: data-viewport server=desktop client=tablet on workspace_shell / workspace
-msgid=5-9 [log] Fast Refresh rebuild noise (dev)

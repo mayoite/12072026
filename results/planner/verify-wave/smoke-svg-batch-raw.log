@@ -1,8 +1,0 @@
-$ tsx scripts/smoke-svg-fixtures.mjs
-OK  scripts\generate-svg\_fixtures\chaise.json slug=chaise-lounge-001 bytes=453
-OK  scripts\generate-svg\_fixtures\missing-geometry.json slug=missing-geom-fallback-001 bytes=422
-OK  scripts\generate-svg\_fixtures\sectional.json slug=sectional-sofa-001 bytes=477
-OK  scripts\generate-svg\_fixtures\side-table.json slug=side-table-001 bytes=613
-
-smoke:svg:batch fixtures=4 ok=4 fail=0
-EXIT_CODE=0

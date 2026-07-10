@@ -1,8 +1,0 @@
-﻿site\features\planner\open3d\editor\canvasTool.ts:28:export const CANVAS_TOOL_SHORTCUTS: Record<PlannerTool, string> = {
-site\features\planner\open3d\editor\CanvasToolRail.tsx:7:CANVAS_TOOL_SHORTCUTS,
-site\features\planner\open3d\editor\CanvasToolRail.tsx:43:const shortcut = CANVAS_TOOL_SHORTCUTS[tool];
-site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:65:CANVAS_TOOL_SHORTCUTS,
-site\features\planner\open3d\editor\OOPlannerWorkspace.tsx:833:{CANVAS_TOOL_SHORTCUTS[activeTool]} ·{" "}
-site\features\planner\open3d\editor\useWorkspaceKeyboard.ts:5:import { CANVAS_TOOL_SHORTCUTS } from "./canvasTool";
-site\features\planner\open3d\editor\useWorkspaceKeyboard.ts:9:(Object.entries(CANVAS_TOOL_SHORTCUTS) as Array<[PlannerTool, string]>).map(
-site\features\planner\open3d\editor\useWorkspaceKeyboard.ts:133:export function toolFromShortcutKey(key: string): PlannerTool | null {

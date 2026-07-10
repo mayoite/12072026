@@ -1,9 +1,0 @@
-﻿00A import census 2026-07-09T01:21:11.0935343+05:30
-HEAD: 831d0f5
-branch: main
-dirty: yes (salvage + 00A work)
-
-REMOVED (0 production imports proven):
-  @svgdotjs/svg.js, @svgdotjs/svg.resize.js, @svgdotjs/svg.select.js, html-to-image, motion, motion-utils
-KEPT: fabric (insurance until 2B), framer-motion (active imports), html2canvas (pdfExport)
-framer-motion remains direct dep; motion/motion-utils had zero source imports (were redundant direct deps).
