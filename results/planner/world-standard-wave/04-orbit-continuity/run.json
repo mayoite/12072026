@@ -1,42 +1,44 @@
 {
-  "phase": "P04",
-  "gate": "W4",
-  "checkpoint": null,
-  "checkout": "D:\\OandO07072026",
-  "worktrees": false,
-  "evidenceRoot": "results/planner/world-standard-wave/04-orbit-continuity",
-  "HEAD": "382ab73f336cabdf9e76cad683d1a3b7fa1a47f8",
-  "date": "2026-07-10",
-  "agent": "P04-unit-pack-seat",
-  "action": "unit orbit/pose re-prove + adapter tests",
-  "unitPack": {
-    "orbit": {
-      "exitCode": 0,
-      "log": "unit-orbit-pack.log",
-      "command": "pnpm exec vitest run tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx tests/unit/features/planner/open3d/poseContinuityW4.test.ts tests/unit/features/planner/open3d/workspaceOrbitWiring.test.ts --reporter=verbose",
-      "files": 3,
-      "tests": "9/9 passed",
-      "breakdown": {
-        "orbitControlsDefault.test.tsx": 6,
-        "poseContinuityW4.test.ts": 1,
-        "workspaceOrbitWiring.test.ts": 2
-      }
-    },
-    "poseAdapter": {
-      "exitCode": 0,
-      "log": "unit-pose-pack.log",
-      "command": "pnpm exec vitest run tests/unit/features/planner/open3d/poseContinuityW4.test.ts tests/unit/features/planner/open3d/buildOpen3dSceneNodes.test.ts tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts --reporter=verbose",
-      "files": 3,
-      "tests": "26/26 passed",
-      "breakdown": {
-        "poseContinuityW4.test.ts": 1,
-        "buildOpen3dSceneNodes.test.ts": 11,
-        "createSceneObjectFromNode.test.ts": 14
-      }
-    },
-    "note": "Unit alone != W4. Browser hard gate not run by this seat."
-  },
-  "browser": null,
+  "track": "P04",
+  "wave": "W4",
+  "phase": "orbit-continuity",
+  "agent": "P04-Scratch-Agent-0",
   "status": "open",
-  "statusNote": "Unit orbit pack 9/9 and pose/adapter pack 26/26 green at HEAD. Do not claim W4 PASS without browser orbit/pose verification."
+  "reason": "scratch start — phase card W4 PASS invalid until new unit+browser pack on this tip",
+  "paperPass": false,
+  "unitAloneEqualsW4": false,
+  "fabricRequired": "OFF",
+  "evidenceDir": "results/planner/world-standard-wave/04-orbit-continuity/",
+  "head": "f692ca963a68224e2daefee70b65d780a9ef766d",
+  "productLayers": {
+    "layer1_defaults": {
+      "present": true,
+      "cite": "site/features/planner/open3d/3d/orbitDefaults.ts:7 OPEN3D_ORBIT_DEFAULT_ENABLED=true; ThreeViewerInner.tsx:68; ThreeLazyViewer.tsx:145"
+    },
+    "layer2_workspace": {
+      "present": true,
+      "cite": "site/features/planner/open3d/editor/OOPlannerWorkspace.tsx:1057-1060 spreads getOpen3dViewerControlProps()"
+    },
+    "layer3_dom_and_proof": {
+      "dataOrbitEnabledInCode": true,
+      "cite": "site/features/planner/open3d/3d/ThreeViewerInner.tsx:340",
+      "unitFilesExist": true,
+      "browserPackProven": false,
+      "proof": "open"
+    }
+  },
+  "testsPresent": [
+    "site/tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx",
+    "site/tests/unit/features/planner/open3d/workspaceOrbitWiring.test.ts",
+    "site/tests/unit/features/planner/open3d/poseContinuityW4.test.ts",
+    "site/tests/unit/features/planner/open3d/documentViewContinuity.test.ts",
+    "site/tests/e2e/open3d-w4-orbit-continuity.spec.ts"
+  ],
+  "staleOrConcurrentAtScratch": [
+    "unit-orbit-pack.log",
+    "unit-pose-pack.log",
+    "dev-server-w4.log"
+  ],
+  "createdAt": "2026-07-10T19:17:00Z",
+  "notes": "SCRATCH-BASELINE.md is authority for live line cites. Do not treat unit tee logs as W4 Done."
 }
