@@ -24,8 +24,9 @@ Skipped items must be declared. Shell works; gates are runnable.
 | **Opened** | 2026-07-10 |
 | **Closed** | 2026-07-10 |
 | **Was** | Agent `git push mayoite` → Repository not found (wrong/inactive gh account) |
-| **Fix** | `gh auth login` as **mayoite** (active account); `git push mayoite main` **OK** `95b2fc6..ea400ae` |
-| **Proof** | `gh auth status` → mayoite active; origin + mayoite both at `ea400ae` |
+| **Fix** | Multi-account: `gh auth switch --user pglcarpets` → `git push origin main`; `gh auth switch --user mayoite` → `git push mayoite main` |
+| **Proof** | Both remotes at `6916c43` after dual push (2026-07-10) |
+| **Standing note** | Active `gh` account must match remote owner or git HTTPS returns “Repository not found” |
 
 ---
 
