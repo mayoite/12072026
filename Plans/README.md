@@ -14,22 +14,14 @@ History lives under **`archive/Plans/`** — not authority.
 Plans/
 ├── README.md                 ← you are here (entry only)
 └── trustdata/                ← ONLY live plan
-    ├── README.md             ← folder map
-    ├── INDEX.md              ← Approach A · kill order · phase table
-    ├── 00-START.md           ← unlock + approach record
-    ├── LATER.md              ← not kill-path
-    ├── RESEARCH-MAP.md       ← ideas research pointers
-    ├── RESULTS-MAP.md        ← evidence folder names
-    ├── phases/               ← one folder per CP (P01…P10)
-    │   ├── README.md
-    │   ├── P01-product-truth/     (execute + suggestions)
-    │   ├── P02-engine-lock/
-    │   ├── P03-select-delete/     (+ appendix)
-    │   ├── … P04–P09 …
-    │   └── P10-evidence-handover/
-    ├── checkpoints/          ← CHECKPOINTS.md
-    ├── checklists/           ← AGENT-RULES · MASTER-CHECKLIST
-    └── reviews/              ← cross-cutting expert history only
+    ├── README.md · INDEX.md · 00-START.md
+    ├── INDEX-00-suggestions.md · STRUCTURE-*.md
+    ├── RESULTS-MAP · RESEARCH-MAP · FOLDER-LOCK · MAPS-suggestions
+    ├── phases/               ← one folder per CP + EXPERT-PASS.md
+    │   ├── P01-product-truth/ … P10-evidence-handover/
+    │   └── (execute · suggestions · appendix · expert essays)
+    ├── checkpoints/          ← CHECKPOINTS + GOVERNANCE-suggestions
+    └── checklists/           ← AGENT-RULES · MASTER-CHECKLIST
 ```
 
 ---

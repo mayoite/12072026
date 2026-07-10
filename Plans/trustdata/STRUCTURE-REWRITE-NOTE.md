@@ -80,7 +80,7 @@ Each main opens with `## Structure rewrite 2026-07-09` hybrid thin note. Target 
 3. **CHECKPOINTS** for pass/fail.  
 4. **INDEX kill order** for spawn priority under scarce slots.  
 5. **Phase file** for how to execute a CP.  
-6. `reviews/*` historical; applied body wins after edit.
+6. Review notes historical; applied body wins after edit (notes co-located with targets).
 
 ---
 
@@ -103,9 +103,21 @@ Each main opens with `## Structure rewrite 2026-07-09` hybrid thin note. Target 
 | Before | After |
 |--------|--------|
 | `phases/P0X-….md` flat | `phases/P0X-<slug>/P0X-….md` |
-| `reviews/P0X-suggestions.md` | `phases/P0X-<slug>/P0X-suggestions.md` |
+| `reviews/P0X-suggestions.md` (retired) | `phases/P0X-<slug>/P0X-suggestions.md` |
 | appendices next to flat mains | appendix co-located in phase folder |
 
-**Map:** [phases/README.md](../phases/README.md). Cross-cutting reviews stay under `reviews/`. Evidence folder names under `results/` **unchanged** (FOLDER-LOCK still binds).
+**Map:** [phases/README.md](./phases/README.md). Evidence folder names under `results/` **unchanged** (FOLDER-LOCK still binds).
 
-*End of STRUCTURE-REWRITE-NOTE — plan-only; INDEX + 00-START + this note only.*
+### Reviews folder removed (2026-07-10)
+
+`Plans/trustdata/reviews/` is **gone**. Notes co-located:
+
+| Note | Home |
+|------|------|
+| INDEX-00-suggestions | `Plans/trustdata/` |
+| MAPS · FOLDER-LOCK · STRUCTURE-* | `Plans/trustdata/` |
+| GOVERNANCE-suggestions | `checkpoints/` |
+| EXPERT-PASS | `phases/` |
+| Phase P0X-suggestions + expert essays | `phases/P0X-<slug>/` |
+
+*End of STRUCTURE-REWRITE-NOTE.*

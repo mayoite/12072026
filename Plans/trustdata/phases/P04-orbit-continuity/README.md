@@ -2,7 +2,7 @@
 
 **Execute card:** [P04-orbit-continuity.md](./P04-orbit-continuity.md)  
 **Program index:** [../../INDEX.md](../../INDEX.md) · [../../00-START.md](../../00-START.md)  
-**Consolidated expert pass:** [../../reviews/EXPERT-PASS.md](../../reviews/EXPERT-PASS.md)
+**Consolidated expert pass:** [../EXPERT-PASS.md](../EXPERT-PASS.md)
 
 ## Files in this folder
 

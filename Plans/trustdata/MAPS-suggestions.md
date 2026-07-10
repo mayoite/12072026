@@ -1,4 +1,4 @@
-# MAPS suggestions — RESEARCH-MAP + RESULTS-MAP (planning expert)
+﻿# MAPS suggestions — RESEARCH-MAP + RESULTS-MAP (planning expert)
 
 **Date:** 2026-07-09  
 **Plans reviewed:**  
@@ -99,7 +99,7 @@
 2. **M3 + M6 + M7 + M10 + M11 + M14** — RESEARCH-MAP: ideas-only boundary, thin packs, score snapshot honesty, path fixes, phase routing, open order.  
 3. **M4 + M5 + M9 + M12 + M13** — RESULTS-MAP: minimum vs phase extras, run.json schema, save-reload, status, P01 historical duty.  
 4. **M8** — Related footers + **Expert revision note 2026-07-09** on both maps.  
-5. Point both maps at this file: `Plans/trustdata/reviews/MAPS-suggestions.md`.
+5. Point both maps at this file: `Plans/trustdata/MAPS-suggestions.md`.
 
 **Do not:** rename canonical folders mid-wave; invent product code; re-scrape competitors; claim WAVE.md narrative as gate pass.
 

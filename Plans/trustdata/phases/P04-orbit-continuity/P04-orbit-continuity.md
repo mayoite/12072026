@@ -21,7 +21,7 @@
 - **Rotation correction:** furniture **document + scene nodes = degrees** (live `normalizeDegrees` / pick converts). Do **not** convert furniture to radians to match older plan wording. Mesh `rotation.y = -node.rotation` is intentional plan-Y→world-Z, not pose drift.
 - **Pose continuity = document only** (double rebuild deep-equal ids / xMm / yMm / rotation). Stay **imperative Three** — no R3F rewrite mid-W4.
 - **Evidence:** `04-orbit-continuity/` only. Anti-J4: radio 2D|3D; `planner-3d-canvas` is a **div**.
-- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · [03-r3f-3d.md](./03-r3f-3d.md) · [01-react-open3d.md](./01-react-open3d.md).
+- Authority: [EXPERT-PASS.md](../EXPERT-PASS.md) · [03-r3f-3d.md](./03-r3f-3d.md) · [01-react-open3d.md](./01-react-open3d.md).
 
 **Parent:** [00-START.md](../../00-START.md) · [INDEX.md](../../INDEX.md)  
 **Design authority:** `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` §W4  

@@ -1,4 +1,4 @@
-# Licenses & paid (cleared list)
+﻿# Licenses & paid (cleared list)
 
 **Hard rules (no exceptions):** `AGENTS.md` → Packages, assets & licenses.  
 **Secrets / API keys / license keys:** only in **`.env.local`** (repo root and/or `site/.env.local`). Never in this file, never in git, never in `D:\websites`.
@@ -28,7 +28,7 @@ Add a row when owner buys something new. **Not on this list** → not cleared: t
 
 ## To clear before CP-02 (expert pass 2026-07-09)
 
-Trustdata packages expert (`Plans/trustdata/reviews/expert-pass/05-packages-stack.md`). **Not cleared yet** — resolve before claiming CP-02 / package SHIP. Prefer remove unused proprietary; **ask before any purchase**.
+Trustdata packages expert (`Plans/trustdata/phases/P02-engine-lock/05-packages-stack.md`). **Not cleared yet** — resolve before claiming CP-02 / package SHIP. Prefer remove unused proprietary; **ask before any purchase**.
 
 | Item | In tree | License posture | Action before CP-02 |
 |------|---------|-----------------|---------------------|

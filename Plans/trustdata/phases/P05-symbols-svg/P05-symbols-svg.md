@@ -23,7 +23,7 @@ Task checkboxes below are historical execute steps — evidence supersedes; do n
 - **`furnitureBlockUsesCenteredPath` must be always `false`** (live: `true` for modular-cabinet-v0 while prims are top-left — dead lie).
 - **Prove W2 symbol work with Fabric flag OFF**; flag-ON Rect overlay is not W2. Keep `canvas-fabric-stage/` (destination after W — do not delete).
 - Raise modular cabinet-v0 prims (stop empty-box bar); unknown-SKU non-empty fallback; no competitor SVG.
-- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · [02-canvas-2d.md](./02-canvas-2d.md).
+- Authority: [EXPERT-PASS.md](../EXPERT-PASS.md) · [02-canvas-2d.md](./02-canvas-2d.md).
 
 > **For agentic workers:** REQUIRED: `/using-superpowers` (TDD, verification, chrome-devtools as fit).  
 > **Checkout:** `D:\OandO07072026` only · no worktrees · commit as you go · push only on ask.  

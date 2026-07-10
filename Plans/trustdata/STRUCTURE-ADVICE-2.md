@@ -1,4 +1,4 @@
-# STRUCTURE-ADVICE-2 — Independent plan structure review
+﻿# STRUCTURE-ADVICE-2 — Independent plan structure review
 
 **Reviewer:** Planning expert #2 (independent structure pass)  
 **Date:** 2026-07-09  
@@ -288,7 +288,7 @@ Plus the table above condensed to ~8 rows.
 
 ## Status
 
-- **This file:** advice only under `Plans/trustdata/reviews/STRUCTURE-ADVICE-2.md`.  
+- **This file:** advice only under `Plans/trustdata/STRUCTURE-ADVICE-2.md`.  
 - **Phases:** not rewritten.  
 - **INDEX kill order:** recommended, not applied.  
 - **Next step for owner:** accept/reject matrix → if accept P0, authorize INDEX-only patch; if accept P1, authorize P07/P05 thin pass without CP changes.

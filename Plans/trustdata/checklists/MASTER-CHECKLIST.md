@@ -3,7 +3,7 @@
 > **Owner file.** Single source of checkbox truth for the trustdata program.  
 > **Agents:** REQUIRED `/using-superpowers`. Tick a box only when evidence path exists and was re-read this session.  
 > **Do not** tick from memory, chat optimism, or ayushdocs P0-DONE notes alone.  
-> **Governance revision:** 2026-07-09 — see [../reviews/GOVERNANCE-suggestions.md](../reviews/GOVERNANCE-suggestions.md).
+> **Governance revision:** 2026-07-09 — see [../checkpoints/GOVERNANCE-suggestions.md](../checkpoints/GOVERNANCE-suggestions.md).
 
 **Program root:** `D:\OandO07072026\Plans\trustdata\`  
 **Evidence root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
@@ -38,7 +38,7 @@
 | **W8 / P09 / CP-09** | **`09-shortcuts-chrome/`** |
 | Pack / P10 / CP-10 | `10-handover/` |
 
-Legacy aliases (pointer only; rehome before tick): `08-shortcuts-chrome/` → `09-shortcuts-chrome/`; `01-product-truth/` → `00-product-truth/`. See [FOLDER-LOCK](../reviews/FOLDER-LOCK-suggestions.md).
+Legacy aliases (pointer only; rehome before tick): `08-shortcuts-chrome/` → `09-shortcuts-chrome/`; `01-product-truth/` → `00-product-truth/`. See [FOLDER-LOCK](../FOLDER-LOCK-suggestions.md).
 
 ---
 
@@ -238,7 +238,7 @@ Program complete for trustdata wave only when **Sum done = 94** or owner WAIVE r
 |-----|------|
 | Agent contract | [AGENT-RULES.md](./AGENT-RULES.md) |
 | Checkpoints | [../checkpoints/CHECKPOINTS.md](../checkpoints/CHECKPOINTS.md) |
-| Governance review | [../reviews/GOVERNANCE-suggestions.md](../reviews/GOVERNANCE-suggestions.md) |
+| Governance review | [../checkpoints/GOVERNANCE-suggestions.md](../checkpoints/GOVERNANCE-suggestions.md) |
 | P10 handover | [../phases/P10-evidence-handover/P10-evidence-handover.md](../phases/P10-evidence-handover/P10-evidence-handover.md) |
 | Research index | [../RESEARCH-MAP.md](../RESEARCH-MAP.md) |
 | Results map | [../RESULTS-MAP.md](../RESULTS-MAP.md) |

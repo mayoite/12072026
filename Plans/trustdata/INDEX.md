@@ -3,9 +3,9 @@
 > **For agentic workers:** REQUIRED: `/using-superpowers` + skills as fit. Use **subagent-driven-development** or **executing-plans** as fit.  
 > **W0 UNLOCKED (2026-07-09):** Approach **A** + **implementation unlock** recorded in [00-START.md](./00-START.md). **Do not ask owner to unlock again.** Execute product phases + evidence.  
 > **Folder rule:** All plan files for this program live under `Plans/trustdata/` only (phases · checkpoints · checklists · reviews).  
-> **Expert revision:** 2026-07-09 — applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md).  
+> **Expert revision:** 2026-07-09 — applied from [INDEX-00-suggestions.md](./INDEX-00-suggestions.md).  
 > **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology (P01–P10 · CP-00–CP-10 · folder lock · Approach A · AGENT-RULES); EXPAND week-1 kill order below + [00-START.md](./00-START.md); THIN densest phases → mains + [P03-appendix](./phases/P03-select-delete/P03-appendix.md) · [P05-appendix](./phases/P05-symbols-svg/P05-appendix.md) · [P07-appendix](./phases/P07-draw-place-journey/P07-appendix.md).  
-> **Folder-wise phases 2026-07-10:** one directory per CP under [phases/](./phases/) — execute card + appendix + suggestions co-located. Map: [phases/README.md](./phases/README.md). Authority: [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).
+> **Folder-wise phases 2026-07-10:** one directory per CP under [phases/](./phases/) — execute card + appendix + suggestions co-located. Map: [phases/README.md](./phases/README.md). Authority: [STRUCTURE-REWRITE-NOTE](./STRUCTURE-REWRITE-NOTE.md).
 
 ---
 
@@ -148,7 +148,7 @@ CP-00 → CP-01 → CP-02
 | P09 | [phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md](./phases/P09-shortcuts-chrome/P09-shortcuts-chrome.md) | CP-09 | **W8** | **`09-shortcuts-chrome/`** (not mesh `08-mesh-quality/`; legacy `08-shortcuts-chrome/` non-canonical) |
 | P10 | [phases/P10-evidence-handover/P10-evidence-handover.md](./phases/P10-evidence-handover/P10-evidence-handover.md) | CP-10 | Pack + backup | `10-handover/` |
 
-**Folder map authority:** [RESULTS-MAP.md](./RESULTS-MAP.md) · FINAL lock [reviews/FOLDER-LOCK-suggestions.md](./reviews/FOLDER-LOCK-suggestions.md). Do not invent alternate gate folder names. Retired: `01-product-truth/` → `00-product-truth/`; `08-shortcuts-chrome/` → `09-shortcuts-chrome/`.
+**Folder map authority:** [RESULTS-MAP.md](./RESULTS-MAP.md) · FINAL lock [FOLDER-LOCK-suggestions.md](./FOLDER-LOCK-suggestions.md). Do not invent alternate gate folder names. Retired: `01-product-truth/` → `00-product-truth/`; `08-shortcuts-chrome/` → `09-shortcuts-chrome/`.
 
 ---
 
@@ -209,8 +209,10 @@ Agent rules: **`AGENTS.md`**. Short spawn: [AGENT-RULES.md](./checklists/AGENT-R
 | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) | Subagent contract + prompt block |
 | [RESEARCH-MAP.md](./RESEARCH-MAP.md) | Inspiration-only research index |
 | [RESULTS-MAP.md](./RESULTS-MAP.md) | Evidence folder → phase map (**FINAL folder lock**) |
-| [reviews/FOLDER-LOCK-suggestions.md](./reviews/FOLDER-LOCK-suggestions.md) | Evidence path reconciliation (P01=`00-product-truth/`, P09=`09-shortcuts-chrome/`) |
-| [reviews/](./reviews/) | Expert plan reviews (INDEX-00, P01–P10; path names superseded by FOLDER-LOCK where they conflict) |
+| [FOLDER-LOCK-suggestions.md](./FOLDER-LOCK-suggestions.md) | Evidence path reconciliation (P01=`00-product-truth/`, P09=`09-shortcuts-chrome/`) |
+| [INDEX-00-suggestions.md](./INDEX-00-suggestions.md) · [MAPS-suggestions.md](./MAPS-suggestions.md) · [STRUCTURE-REWRITE-NOTE.md](./STRUCTURE-REWRITE-NOTE.md) | Program review notes (co-located) |
+| [phases/EXPERT-PASS.md](./phases/EXPERT-PASS.md) | Consolidated expert pass |
+| [checkpoints/GOVERNANCE-suggestions.md](./checkpoints/GOVERNANCE-suggestions.md) | CP + MASTER governance review |
 
 **Evidence root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
 **Failures:** `D:\OandO07072026\Failures.md`  

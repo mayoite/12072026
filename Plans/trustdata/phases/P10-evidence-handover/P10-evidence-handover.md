@@ -50,7 +50,7 @@
 
 ## Canonical evidence folders (RESULTS-MAP lock)
 
-**Do not invent alternate folder names.** FINAL lock 2026-07-09 — see [FOLDER-LOCK-suggestions.md](../../reviews/FOLDER-LOCK-suggestions.md). **Sole primary `08-*`:** mesh. W8 is `09-*`.
+**Do not invent alternate folder names.** FINAL lock 2026-07-09 — see [FOLDER-LOCK-suggestions.md](../../FOLDER-LOCK-suggestions.md). **Sole primary `08-*`:** mesh. W8 is `09-*`.
 
 | Gate | Canonical primary folder | Owning phase / CP |
 |------|--------------------------|-------------------|

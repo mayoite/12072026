@@ -4,9 +4,9 @@
 > **Root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
 > **Do not** invent alternate folder names mid-wave; if a phase file uses an alias, leave a `NOTES.md` pointer to the canonical path.  
 > **Research is not evidence:** competitive packs under `D:\websites` are ideas only — see [RESEARCH-MAP.md](./RESEARCH-MAP.md).  
-> **FINAL folder lock:** 2026-07-09 — [reviews/FOLDER-LOCK-suggestions.md](./reviews/FOLDER-LOCK-suggestions.md). This map wins over older phase reviews that banned `09-shortcuts-chrome/` or used `01-product-truth/`.
+> **FINAL folder lock:** 2026-07-09 — [FOLDER-LOCK-suggestions.md](./FOLDER-LOCK-suggestions.md). This map wins over older phase reviews that banned `09-shortcuts-chrome/` or used `01-product-truth/`.
 
-**Related:** `checkpoints/CHECKPOINTS.md` · `checklists/MASTER-CHECKLIST.md` · `checklists/AGENT-RULES.md` · `phases/P10-evidence-handover/P10-evidence-handover.md` · `reviews/FOLDER-LOCK-suggestions.md` · `reviews/MAPS-suggestions.md`  
+**Related:** `checkpoints/CHECKPOINTS.md` · `checklists/MASTER-CHECKLIST.md` · `checklists/AGENT-RULES.md` · `phases/P10-evidence-handover/P10-evidence-handover.md` · `FOLDER-LOCK-suggestions.md` · `MAPS-suggestions.md`  
 **Expert revisions:** MAPS structure 2026-07-09 · **FOLDER-LOCK path names 2026-07-09** (supersedes MAPS dual-`08` / dual-`01` path choices)
 
 ---
@@ -305,16 +305,16 @@ $root = "D:\OandO07072026\results\planner\world-standard-wave"
 | [checklists/MASTER-CHECKLIST.md](./checklists/MASTER-CHECKLIST.md) | Owner single checklist (T.4 folder names) |
 | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) | Subagent evidence table §6 |
 | [phases/P10-evidence-handover/P10-evidence-handover.md](./phases/P10-evidence-handover/P10-evidence-handover.md) | Final pack + E: backup |
-| [reviews/FOLDER-LOCK-suggestions.md](./reviews/FOLDER-LOCK-suggestions.md) | FINAL evidence folder lock |
-| [reviews/MAPS-suggestions.md](./reviews/MAPS-suggestions.md) | Earlier MAPS structure notes (path names superseded by FOLDER-LOCK) |
+| [FOLDER-LOCK-suggestions.md](./FOLDER-LOCK-suggestions.md) | FINAL evidence folder lock |
+| [MAPS-suggestions.md](./MAPS-suggestions.md) | Earlier MAPS structure notes (path names superseded by FOLDER-LOCK) |
 | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` | W1–W8 definitions |
 
 ---
 
 ## Expert revision note — 2026-07-09
 
-1. **MAPS** (`reviews/MAPS-suggestions.md`): master P01–P10 crosswalk; forbidden-alias table; minimum-vs-phase-extras; `run.json` + `evidenceRoot`; `save-reload` in create script; folder status legend; Related footer.  
-2. **FOLDER-LOCK** (`reviews/FOLDER-LOCK-suggestions.md`) — **path names authority:**  
+1. **MAPS** (`MAPS-suggestions.md`): master P01–P10 crosswalk; forbidden-alias table; minimum-vs-phase-extras; `run.json` + `evidenceRoot`; `save-reload` in create script; folder status legend; Related footer.  
+2. **FOLDER-LOCK** (`FOLDER-LOCK-suggestions.md`) — **path names authority:**  
    - P01 → **`00-product-truth/`** (retired `01-product-truth/`)  
    - P09 / W8 → **`09-shortcuts-chrome/`** (retired `08-shortcuts-chrome/`)  
    - P08 / W7 sole `08-*` → **`08-mesh-quality/`**  

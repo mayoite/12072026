@@ -1,4 +1,4 @@
-# Phases — one folder per CP
+﻿# Phases — one folder per CP
 
 Each phase owns **one folder**. Execute card, appendix, suggestions, and **related expert-pass essays** live together.
 
@@ -18,5 +18,5 @@ Each phase owns **one folder**. Execute card, appendix, suggestions, and **relat
 **Note:** Cross-cutting expert essays (e.g. react, canvas, playwright) are **copied into every related phase folder** so each folder is self-contained.
 
 **Program:** [../INDEX.md](../INDEX.md) · **Unlock:** [../00-START.md](../00-START.md)  
-**Consolidated expert summary:** [../reviews/EXPERT-PASS.md](../reviews/EXPERT-PASS.md)  
-**Other reviews (structure / folder lock only):** [../reviews/](../reviews/)
+**Consolidated expert summary:** [EXPERT-PASS.md](./EXPERT-PASS.md)  
+**Program notes:** [../FOLDER-LOCK-suggestions.md](../FOLDER-LOCK-suggestions.md) · [../STRUCTURE-REWRITE-NOTE.md](../STRUCTURE-REWRITE-NOTE.md) · [../checkpoints/GOVERNANCE-suggestions.md](../checkpoints/GOVERNANCE-suggestions.md)

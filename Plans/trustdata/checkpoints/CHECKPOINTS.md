@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED: `/using-superpowers`. A checkpoint is **pass** only when every pass criterion is proven by a path under `results/` or an explicit owner waiver in this file.  
 > **Stop-if-fail is mandatory:** do not start the next phase while the prior CP is red unless the owner writes a waiver with reason + date.  
-> **Governance revision:** 2026-07-09 — see [../reviews/GOVERNANCE-suggestions.md](../reviews/GOVERNANCE-suggestions.md).
+> **Governance revision:** 2026-07-09 — see [./GOVERNANCE-suggestions.md](./GOVERNANCE-suggestions.md).
 
 **Checkout:** `D:\OandO07072026` only · no worktrees · commit as you go · push only on owner ask.  
 **Evidence root:** `D:\OandO07072026\results\planner\world-standard-wave\`  
@@ -145,14 +145,14 @@ Exact script names: follow `START.md` and `site/package.json` at execution time;
 | [../checklists/AGENT-RULES.md](../checklists/AGENT-RULES.md) | Subagent contract |
 | [../RESULTS-MAP.md](../RESULTS-MAP.md) | Folder → phase map (**follow-up:** sync W8 to `09-shortcuts-chrome/` if still on legacy `08-`) |
 | [../phases/P10-evidence-handover/P10-evidence-handover.md](../phases/P10-evidence-handover/P10-evidence-handover.md) | Final pack + E: backup |
-| [../reviews/GOVERNANCE-suggestions.md](../reviews/GOVERNANCE-suggestions.md) | 2026-07-09 governance review |
+| [./GOVERNANCE-suggestions.md](./GOVERNANCE-suggestions.md) | 2026-07-09 governance review |
 | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` | W1–W8 definitions |
 
 ---
 
 ## Expert revision note — 2026-07-09
 
-Governance pass (no product code). Applied from [GOVERNANCE-suggestions.md](../reviews/GOVERNANCE-suggestions.md):
+Governance pass (no product code). Applied from [GOVERNANCE-suggestions.md](./GOVERNANCE-suggestions.md):
 
 1. **CP lock table** — CP-00–CP-10 ↔ phase ↔ gate ↔ folder explicit.  
 2. **W3 browser hard gate** — unit alone = FAIL; minimum browser artifacts listed; no agent self-waive.  

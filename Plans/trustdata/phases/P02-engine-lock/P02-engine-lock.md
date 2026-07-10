@@ -18,7 +18,7 @@
 - **`PACKAGE-PIN.md`** under `results/planner/world-standard-wave/01-engine-lock/` — exact pins from `site/package.json` (no upgrades in P02). Folder is `01-engine-lock/` only (never `02-engine-lock/`).
 - **Commercial hygiene:** `@fancyapps/ui` proprietary, likely unused → clear+license **or remove** (ask before purchase). `gsap` / `@gsap/react` Standard license, **used** → owner acceptance row in `ayushdocs/17-LICENSES-CLEARED.md`.
 - **Do not re-open engines** in P03+; keep Fabric dest + Feasibility interim + Three path; no competitor assets into `site/`.
-- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · [05-packages-stack.md](./05-packages-stack.md) · [02-canvas-2d.md](./02-canvas-2d.md).
+- Authority: [EXPERT-PASS.md](../EXPERT-PASS.md) · [05-packages-stack.md](./05-packages-stack.md) · [02-canvas-2d.md](./02-canvas-2d.md).
 
 **Goal:** Confirm once, in writing and in repo evidence, the locked 2D/3D stack from Plan A + research (`MASTER-CHART` / `ENGINE-DECISION`) so later phases stop thrashing engines and only ship product gates (W1–W8) on the locked path.
 

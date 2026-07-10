@@ -1,4 +1,4 @@
-# INDEX + 00-START — expert review suggestions
+﻿# INDEX + 00-START — expert review suggestions
 
 **Reviewer role:** planning expert (tech lead + PM)  
 **Date:** 2026-07-09  
@@ -135,7 +135,7 @@ Approach **A** default · unlock gate explicit · phase order matches CP graph �
 4. P0 W1–W8 summary → INDEX (short) + 00-START (table)  
 5. P0 concurrency / superpowers 8–10 → both + AGENT-RULES link  
 6. P1 standing rules, Failures.md, out-of-scope, doc index  
-7. Revision stamp + “applied from reviews/INDEX-00-suggestions.md”
+7. Revision stamp + “applied from INDEX-00-suggestions.md”
 
 ---
 

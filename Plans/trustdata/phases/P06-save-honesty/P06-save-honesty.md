@@ -10,7 +10,7 @@
 - **Dual-surface labels (W6):** TopBar bare **Saved** / `isSynced` and member `formatAutosaveStatus` bare **Saved** must say **local** vs cloud truth; Shell JSDoc “synced to **server**” is a lie (IDB-only path).
 - **Hydration race:** wait restore-complete before seed/flush in E2E; prefer guest `?plannerDevTools=1` + `clearPlannerStorage`.
 - **Evidence:** `06-save-honesty/` + `save-reload/` hard-reload same wall/furniture **ids**. Spine #5 after W3 + journey priority.
-- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · [01-react-open3d.md](./01-react-open3d.md).
+- Authority: [EXPERT-PASS.md](../EXPERT-PASS.md) · [01-react-open3d.md](./01-react-open3d.md).
 
 **Goal:** A facilities buyer can edit a plan, leave (or hard-reload), and get **the same walls + furniture ids** back; every status string tells the truth about **local browser storage** vs **cloud account storage**.
 

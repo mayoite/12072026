@@ -20,12 +20,12 @@ Plans + kill order match live architecture. **Not SHIP** until must-fixes land a
 
 | Expert | Home (primary) | Also in | Verdict | Top P0 |
 |--------|----------------|---------|---------|--------|
-| React / open3d workspace | [P03/01-react-open3d.md](../phases/P03-select-delete/01-react-open3d.md) | P04 · P06 · P07 | **FIX** | W3 pure delete + single history; orbit explicit; save flush; **furniture degrees** |
-| Canvas 2D / Fabric | [P02/02-canvas-2d.md](../phases/P02-engine-lock/02-canvas-2d.md) | P03 · P05 | **SHIP** | Prove W3/W2 with Fabric flag **OFF**; Block2D authority; centered-path lie |
-| 3D / R3F | [P04/03-r3f-3d.md](../phases/P04-orbit-continuity/03-r3f-3d.md) | P08 | **FIX** | Orbit three-layer; document pose; mesh toe→carcass→door; **stay imperative Three** |
-| Playwright / evidence | [P03/04-playwright-evidence.md](../phases/P03-select-delete/04-playwright-evidence.md) | P07 | **FIX** | W3 browser in `03-*`; serial journey; seed **deltas**; no silent skip |
-| Packages / stack | [P02/05-packages-stack.md](../phases/P02-engine-lock/05-packages-stack.md) | — | **FIX** | Owner sign-off + `PACKAGE-PIN`; Fancyapps clear/remove; GSAP row |
-| UI / shortcuts | [P09/06-ui-shortcuts.md](../phases/P09-shortcuts-chrome/06-ui-shortcuts.md) | — | **FIX** | Handler = map (D/M/N/T); forbid Dimension→D rebind |
+| React / open3d workspace | [P03/01-react-open3d.md](./P03-select-delete/01-react-open3d.md) | P04 · P06 · P07 | **FIX** | W3 pure delete + single history; orbit explicit; save flush; **furniture degrees** |
+| Canvas 2D / Fabric | [P02/02-canvas-2d.md](./P02-engine-lock/02-canvas-2d.md) | P03 · P05 | **SHIP** | Prove W3/W2 with Fabric flag **OFF**; Block2D authority; centered-path lie |
+| 3D / R3F | [P04/03-r3f-3d.md](./P04-orbit-continuity/03-r3f-3d.md) | P08 | **FIX** | Orbit three-layer; document pose; mesh toe→carcass→door; **stay imperative Three** |
+| Playwright / evidence | [P03/04-playwright-evidence.md](./P03-select-delete/04-playwright-evidence.md) | P07 | **FIX** | W3 browser in `03-*`; serial journey; seed **deltas**; no silent skip |
+| Packages / stack | [P02/05-packages-stack.md](./P02-engine-lock/05-packages-stack.md) | — | **FIX** | Owner sign-off + `PACKAGE-PIN`; Fancyapps clear/remove; GSAP row |
+| UI / shortcuts | [P09/06-ui-shortcuts.md](./P09-shortcuts-chrome/06-ui-shortcuts.md) | — | **FIX** | Handler = map (D/M/N/T); forbid Dimension→D rebind |
 
 ---
 

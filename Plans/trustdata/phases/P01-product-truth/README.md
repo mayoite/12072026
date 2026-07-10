@@ -2,7 +2,7 @@
 
 **Execute card:** [P01-product-truth.md](./P01-product-truth.md)  
 **Program index:** [../../INDEX.md](../../INDEX.md) · [../../00-START.md](../../00-START.md)  
-**Consolidated expert pass:** [../../reviews/EXPERT-PASS.md](../../reviews/EXPERT-PASS.md)
+**Consolidated expert pass:** [../EXPERT-PASS.md](../EXPERT-PASS.md)
 
 ## Files in this folder
 

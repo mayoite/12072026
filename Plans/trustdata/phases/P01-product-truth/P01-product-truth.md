@@ -18,7 +18,7 @@
 - Corrected host/route chain: dual entry (`Open3dPlannerWorkspaceRoute` for guest/canvas; direct `Open3dPlannerHost` for `/planner/open3d`); absolute paths for UI hosts.
 - Vitest smoke is **required attempt** with explicit `run.json` outcome (`ok` | `failed` | `skipped` + reason) — no silent skip; conflicts with “optional if time” removed.
 - Expanded key-file existence checks, W6 greps, tightened W4 greps, full claims-source concat, Failures.md path, CHECKPOINTS close step, Approach A in `run.json`.
-- **FOLDER-LOCK 2026-07-09:** evidence root **`00-product-truth/`** (was `01-product-truth/` in earlier drafts). Phase **file** remains `P01-product-truth.md`. See `reviews/FOLDER-LOCK-suggestions.md`.
+- **FOLDER-LOCK 2026-07-09:** evidence root **`00-product-truth/`** (was `01-product-truth/` in earlier drafts). Phase **file** remains `P01-product-truth.md`. See `FOLDER-LOCK-suggestions.md`.
 
 ---
 

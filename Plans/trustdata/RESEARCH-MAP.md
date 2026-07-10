@@ -1,4 +1,4 @@
-# RESEARCH-MAP — index (`D:\websites` only)
+﻿# RESEARCH-MAP — index (`D:\websites` only)
 
 **Licenses / no competitor assets (hard):** `AGENTS.md` + `ayushdocs/17-LICENSES-CLEARED.md`  
 **Research home:** `D:\websites` (`D:\websites\README.md`) — not in monorepo, not E: mirror  
@@ -183,7 +183,7 @@ Gaps file: `D:\websites\research\2026-07-09-world-standard\FIRECRAWL-GAPS.md`
 | [checkpoints/CHECKPOINTS.md](./checkpoints/CHECKPOINTS.md) | CP-00–CP-10 |
 | [checklists/MASTER-CHECKLIST.md](./checklists/MASTER-CHECKLIST.md) | Owner checklist |
 | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) | Subagent contract |
-| [reviews/MAPS-suggestions.md](./reviews/MAPS-suggestions.md) | This revision’s expert notes |
+| [MAPS-suggestions.md](./MAPS-suggestions.md) | This revision’s expert notes |
 | `D:\websites\planner5d.com\report\ETHICS_AND_INSPIRATION.md` | Deep ethics |
 | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` | W1–W8 definitions |
 
@@ -191,4 +191,4 @@ Gaps file: `D:\websites\research\2026-07-09-world-standard\FIRECRAWL-GAPS.md`
 
 ## Expert revision note — 2026-07-09
 
-Applied `reviews/MAPS-suggestions.md` (M3, M6, M7, M8, M10, M11, M14): ideas-only ↔ evidence boundary; thin firecrawl-wave2 honesty; research scores labeled snapshot not live truth; oando-render-options root path fix; phase→pack routing; open order includes RESULTS-MAP + CHECKPOINTS; Related footer. **No product code.** Ethics remain inspiration-only.
+Applied `MAPS-suggestions.md` (M3, M6, M7, M8, M10, M11, M14): ideas-only ↔ evidence boundary; thin firecrawl-wave2 honesty; research scores labeled snapshot not live truth; oando-render-options root path fix; phase→pack routing; open order includes RESULTS-MAP + CHECKPOINTS; Related footer. **No product code.** Ethics remain inspiration-only.

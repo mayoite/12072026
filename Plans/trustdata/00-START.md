@@ -3,9 +3,9 @@
 > **For agentic workers:** REQUIRED SUB-SKILL: `/using-superpowers`.  
 > **W0 STATUS (2026-07-09): UNLOCKED — Approach A + implementation unlock recorded.** Product phases are **allowed now.** Do **not** stop and ask the owner to unlock again.  
 > Plan-only mode is history only (unless owner later sets plan-only). Steps use checkbox syntax.  
-> **Expert revision:** 2026-07-09 — applied from [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md).  
+> **Expert revision:** 2026-07-09 — applied from [INDEX-00-suggestions.md](./INDEX-00-suggestions.md).  
 > **Structure rewrite 2026-07-09 (hybrid thin):** KEEP topology; week-1 kill order full in [INDEX.md](./INDEX.md) (condensed below); densest phases thinned → per-folder appendices.  
-> **Folder-wise 2026-07-10:** `phases/P0X-<slug>/` holds execute card + suggestions (+ appendix). See [phases/README.md](./phases/README.md) · [STRUCTURE-REWRITE-NOTE](./reviews/STRUCTURE-REWRITE-NOTE.md).  
+> **Folder-wise 2026-07-10:** `phases/P0X-<slug>/` holds execute card + suggestions (+ appendix). See [phases/README.md](./phases/README.md) · [STRUCTURE-REWRITE-NOTE](./STRUCTURE-REWRITE-NOTE.md).  
 > **Program index:** [INDEX.md](./INDEX.md)
 
 **Goal:** Freeze operating rules, approach pick, unlock mode, ethics, and phase order so every agent works from the same truth.
@@ -163,7 +163,7 @@ CP-00 â†’ CP-01 â†’ CP-02 â†’ CP-03 â†’ CP-07 â†’ CP-06
 | P09 | shortcuts/chrome | CP-09 | **W8** | **`09-shortcuts-chrome/`** |
 | P10 | evidence/handover | CP-10 | pack + E: backup | `10-handover/` |
 
-**Note:** FINAL folder lock â€” P01=`00-product-truth/`, P02=`01-engine-lock/`, P07=`02-browser-open3d-journey/` (not `07-â€¦`), W7=`08-mesh-quality/` (sole `08-*`), W8=**`09-shortcuts-chrome/`** (legacy `08-shortcuts-chrome/` non-canonical). Authority: [RESULTS-MAP.md](./RESULTS-MAP.md) Â· [FOLDER-LOCK](./reviews/FOLDER-LOCK-suggestions.md).
+**Note:** FINAL folder lock â€” P01=`00-product-truth/`, P02=`01-engine-lock/`, P07=`02-browser-open3d-journey/` (not `07-â€¦`), W7=`08-mesh-quality/` (sole `08-*`), W8=**`09-shortcuts-chrome/`** (legacy `08-shortcuts-chrome/` non-canonical). Authority: [RESULTS-MAP.md](./RESULTS-MAP.md) Â· [FOLDER-LOCK](./FOLDER-LOCK-suggestions.md).
 
 ---
 
@@ -228,7 +228,7 @@ Pass only when **all** are true — **all met (CP-00 PASS):**
 | [checklists/MASTER-CHECKLIST.md](./checklists/MASTER-CHECKLIST.md) | Owner checklist (W0â€¦) |
 | [checklists/AGENT-RULES.md](./checklists/AGENT-RULES.md) | Subagent contract |
 | [RESULTS-MAP.md](./RESULTS-MAP.md) | Evidence folders |
-| [reviews/INDEX-00-suggestions.md](./reviews/INDEX-00-suggestions.md) | This revisionâ€™s expert notes |
+| [INDEX-00-suggestions.md](./INDEX-00-suggestions.md) | This revisionâ€™s expert notes |
 | Design spec | `docs/superpowers/specs/2026-07-09-world-standard-planner-design.md` |
 | Testing | `testing-handbook.md` |
 

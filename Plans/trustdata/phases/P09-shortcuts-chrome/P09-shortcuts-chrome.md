@@ -11,7 +11,7 @@
 - **Product letters locked:** D=door · M=dimension · O=opening · N=window · T=text · V/R/W/P/H as map. All map letters must `setTool(id)`.
 - **Live keydown matrix** — `toolShortcutTruth.test.ts` + keyboard RTL; `toolFromShortcutKey` alone is insufficient (map-true, handler-false today).
 - **`aria-keyshortcuts` honesty** — derive from map + only **wired** non-tool keys (Feasibility string stale). Forbidden “fix”: rebind Dimension → **D**. Evidence: **`09-shortcuts-chrome/`** only.
-- Authority: [EXPERT-PASS.md](../../reviews/EXPERT-PASS.md) · [06-ui-shortcuts.md](./06-ui-shortcuts.md).
+- Authority: [EXPERT-PASS.md](../EXPERT-PASS.md) · [06-ui-shortcuts.md](./06-ui-shortcuts.md).
 
 **Goal:** Make every tool **id → shortcut key → keyboard handler → visible label** tell the same truth (gate **W8**), and fix **only** Phase-2A chrome defects that **hide or block** canvas tools. No full chrome redesign.
 
@@ -23,7 +23,7 @@
 **Suggestions applied:** [phases/P09-shortcuts-chrome/P09-suggestions.md](./P09-suggestions.md).
 
 **Evidence root (canonical):** `results/planner/world-standard-wave/09-shortcuts-chrome/`  
-(See [RESULTS-MAP.md](../../RESULTS-MAP.md), [CHECKPOINTS.md](../../checkpoints/CHECKPOINTS.md), [FOLDER-LOCK](../../reviews/FOLDER-LOCK-suggestions.md). Do **not** use `08-shortcuts-chrome/` — that retired name collides with mesh `08-mesh-quality/`.)
+(See [RESULTS-MAP.md](../../RESULTS-MAP.md), [CHECKPOINTS.md](../../checkpoints/CHECKPOINTS.md), [FOLDER-LOCK](../../FOLDER-LOCK-suggestions.md). Do **not** use `08-shortcuts-chrome/` — that retired name collides with mesh `08-mesh-quality/`.)
 
 **Checkpoint:** **CP-09** (this file bottom + `checkpoints/CHECKPOINTS.md`).
 
@@ -407,6 +407,6 @@ Do not start P10 claims from this file alone.
 
 **Also folded:** S6 test ownership (`toolShortcutTruth` + `open3dWorkspaceKeyboard` letter matrix); S7 dual-keyboard scope fence; S8 hide-tools proof-first / no CSS without NOTES; S9 palette subset stay; S10 out-of-scope freeze reinforced.
 
-**Folder lock addendum:** [reviews/FOLDER-LOCK-suggestions.md](../../reviews/FOLDER-LOCK-suggestions.md) — evidence root **`09-shortcuts-chrome/`** only.
+**Folder lock addendum:** [FOLDER-LOCK-suggestions.md](../../FOLDER-LOCK-suggestions.md) — evidence root **`09-shortcuts-chrome/`** only.
 
 **W0 unlocked.** Phase may execute Tasks 00–06; historical “not done” lines below are pre-land planning notes if still present.
