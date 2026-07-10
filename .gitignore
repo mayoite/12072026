@@ -97,3 +97,8 @@ site/public/catalog-assets/generated/*.glb
 # Local IDE workspace (do not track)
 *.code-workspace
 
+
+# Root results/ stays tracked for evidence artifacts (screenshots/logs).
+# Durable docs belong in Plans/ Agents/ ayushdocs/ — not results/.
+# Never gitignore results/ entirely.
+

@@ -56,8 +56,8 @@
 
 | Rule | Location |
 |------|----------|
-| **Evidence / artifacts (disposable)** | Repo-root `results/` only — **screenshots, logs, run dumps, raw reports**. **Never** durable plans, track boards, handbooks, or “source of truth” docs here. **Never** `site/results/`, **never** `site/test-results/`. |
-| **Durable docs / track boards** | `Plans/`, `Agents/`, `ayushdocs/` (SESSION-RECAP, D-TRACK-*, etc.) |
+| **Evidence / artifacts (disposable)** | Repo-root `results/` only — **screenshots, logs, run dumps, raw reports**. **Never** durable plans, track boards, handbooks, or “source of truth” docs here. **Do not gitignore root `results/`.** Still never `site/results/` or `site/test-results/`. |
+| **Durable docs / track boards** | `Plans/` (e.g. `Plans/D-track/`), `Agents/`, `ayushdocs/` |
 | **Playwright / vitest reports** | `results/test-results/`, `results/playwright-report/`, `results/tests/` |
 | **IDE config** | Repo-root `.cursor/` only — **not** `site/.cursor/` |
 | **Research scrapes (historical)** | **`D:\websites`** ideas only. **Firecrawl is dead** for active work — do not re-run as routine. **No** `.firecrawl/` under `site/` or as product source |

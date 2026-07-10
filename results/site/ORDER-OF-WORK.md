@@ -1,9 +1,5 @@
-# Disposable pointer
+﻿# Moved / disposable
 
-**Durable D-track docs live in `Plans/` — not here.**
+Durable notes for the **D track** live under `Plans/D-track/`.
 
-- Board: `Plans/D-TRACK-BOARD.md`
-- Summary: `Plans/D-TRACK-SUMMARY.md`
-- Tracks rule: `Agents/Agents-tracks.md`
-
-This folder (`results/site/`) is for **screenshots, logs, run dumps** only. Do not treat NOTES here as source of truth.
+This path under `results/` is for screenshots and logs only.
