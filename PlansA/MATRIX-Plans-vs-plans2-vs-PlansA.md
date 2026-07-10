@@ -69,7 +69,7 @@ Owner message
 | `phases/` tree + EXPERT-PASS | ✓ | — | — | — |
 | `Research/RESULTS-MAP.md` | ✓ | cite | cite | cite |
 | `Research/Others/` | ✓ | — | — | — |
-| `EXECUTE-NOW.md` | — | ✓ (claims self primary) | ✓ (points PlansA) | ✓ (binding) |
+| `EXECUTE-NOW.md` | — | ✓ (**execute binding**) | ✓ (reference) | research only |
 | `00-START.md` | — | ✓ | ✓ | ✓ merged |
 | `EXECUTABLE-PLAN.md` | — | ✓ denser | ✓ thinner | ✓ residual contracts |
 | `CHECKLIST-MASTER.md` | — | ✓ | ✓ | ✓ |
@@ -202,15 +202,15 @@ Evidence wave root (all packages that execute): `results/planner/world-standard-
 
 | Topic | Winner for executors | Why |
 |-------|----------------------|-----|
-| Day-to-day residual | **PlansA** | Single spine + MERGE-NOTES + dual reviews co-located |
+| Day-to-day residual | **plans1** | 2 files/phase; START-HERE; PlansA too noisy |
 | Evidence folder lock | **Plans/Research/RESULTS-MAP.md** | AGENTS + canonical names |
 | Product-how / experts | **Plans/phases/** | Appendices + EXPERT-PASS |
 | Idiots2 dumps | **plans1** | Source of PlansA primary files |
 | Idiots dumps | **plans2** | Source of `*.plans2.md` |
 | Stricter FAIL language | **plans2** (P03/P04/P07/P09) | PlansA absorbed into gate honesty |
 | Denser residual contracts | **plans1** | PlansA EXECUTABLE prefers denser spine |
-| P11 board | **PlansA** | Merge of both P11 styles |
-| Stale “I am PRIMARY” | **plans1 README** | Ignore for execute; use PlansA |
+| P11 board | **plans1** (optional PlansA P11 if dual-language wanted) | Prefer one checklist |
+| Stale “execute PlansA” | **old matrix / README** | Fixed: execute **plans1** |
 
 ---
 
