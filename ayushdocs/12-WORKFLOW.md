@@ -1,7 +1,7 @@
 # Owner workflow (simple)
 
 Replaces reading long 05 / 07 / 08 / 09 docs every time. Use this loop.  
-**Agent skill order / seats (highest bar):** [`Agents/Agents-elon-standard.md`](../Agents/Agents-elon-standard.md) · pointer [20-ELON-STANDARD.md](./20-ELON-STANDARD.md) · **rolling recap:** [SESSION-RECAP.md](./SESSION-RECAP.md)
+**Head bar:** [`Agents/Agents-ELON-STANDARD.md`](../Agents/Agents-ELON-STANDARD.md) · pointer [20-ELON-STANDARD.md](./20-ELON-STANDARD.md) · **recap:** [SESSION-RECAP.md](./SESSION-RECAP.md)
 
 ```
 ┌─────────────┐
@@ -10,8 +10,8 @@ Replaces reading long 05 / 07 / 08 / 09 docs every time. Use this loop.
 └──────┬──────┘
        ▼
 ┌─────────────┐
-│ 2. Implement│  →  Agents-elon-standard pipeline: superpowers → plan → SDD 2–4
-│             │     TDD on every implementer; no worktrees; ≤8 (max 10)
+│ 2. Implement│  →  Agents-ELON-STANDARD: phase task list · multi-hour
+│             │     package-isolated parallel; TDD; no worktrees; ≤8 (max 10)
 └──────┬──────┘
        ▼
 ┌─────────────┐
@@ -28,13 +28,15 @@ Replaces reading long 05 / 07 / 08 / 09 docs every time. Use this loop.
 └──────┬──────┘
        ▼
 ┌─────────────┐
-│ 6. Commit   │  →  finishing-a-development-branch · main + push when green
+│ 6. Commit   │  →  main · push origin when green · mayoite ~45m / big land
 └──────┬──────┘
        ▼
 ┌─────────────┐
-│ 7. Update   │  →  00-PENDING + SESSION-RECAP (~15m) + 01-RECAP if big
+│ 7. Update   │  →  00-PENDING + SESSION-RECAP + 01-RECAP if big
 └─────────────┘
 ```
+
+**Backup:** git = Elon §5; DB/R2 = `OPERATIONS_RUNBOOK.md`. **Firecrawl:** dead.
 
 ### Map to older docs
 | Old | Role now |

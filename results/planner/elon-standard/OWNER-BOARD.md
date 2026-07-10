@@ -5,9 +5,9 @@
 **Audience:** owner  
 **Rule:** PASS only with paths. No hype. Spine ≠ ship-ready product.
 
-**Agent skill workflow (highest bar):** `Agents/Agents-elon-standard.md`  
+**Head bar:** `Agents/Agents-ELON-STANDARD.md`  
 **Owner pointer:** `ayushdocs/20-ELON-STANDARD.md`  
-**Rolling session recap:** `ayushdocs/SESSION-RECAP.md`  
+**Session recap:** `ayushdocs/SESSION-RECAP.md`  
 Map: `results/planner/world-standard-wave/TRUTH-LOCK.md`  
 Pending: `ayushdocs/00-PENDING.md`
 

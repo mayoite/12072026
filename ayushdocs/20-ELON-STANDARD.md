@@ -1,15 +1,14 @@
 # Elon standard — owner pointer
 
-**Authority (highest process bar):** [`Agents/Agents-elon-standard.md`](../Agents/Agents-elon-standard.md)
+**Head / partner authority:** [`Agents/Agents-ELON-STANDARD.md`](../Agents/Agents-ELON-STANDARD.md)
 
-Do not treat this file as the source of truth. Agents read **`Agents/Agents-elon-standard.md`**.
+Not the source of truth. Main agent and subagents read **`Agents/Agents-ELON-STANDARD.md`**.
 
-**Also encoded there:** phase = multi-hour task list (not 20‑min vibe) · parallel only across packages · repo is truth · assume gaps · addenda not plan expansion · goal fixed.
-
-| Need | Path |
-|------|------|
-| Skill order · seats · epistemic bar | `Agents/Agents-elon-standard.md` |
+| Topic | Path |
+|-------|------|
+| Bar · phase grain · seats · pushback | `Agents/Agents-ELON-STANDARD.md` |
+| Git commit / origin / mayoite mirror | same file §5 |
+| DB / R2 / deploy backup | `OPERATIONS_RUNBOOK.md` · `START.md` |
 | Constitution | `AGENTS.md` |
-| Product PASS board (re-verify) | `results/planner/elon-standard/OWNER-BOARD.md` |
-| Rolling session recap | `ayushdocs/SESSION-RECAP.md` |
-| Goals / pending (intent; re-check status) | `19-GOALS-SLICES.md` · `00-PENDING.md` |
+| Firecrawl | **Dead** — one-time research only |
+| Session recap | `ayushdocs/SESSION-RECAP.md` |

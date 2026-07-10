@@ -6,9 +6,10 @@
 
 ## Done this window
 
-- Elon grain corrected: **phase = multi-hour task list**; no same-package parallel writers; 2–4 impl / ≤8 seats OK for real multi-hour work (`Agents/Agents-elon-standard.md`)
-- Agent pushback on “20‑min residual” framing retracted as wrong grain
-- Goal lock still open: pick a **phase** (not a vibe fix)
+- Canonical head bar: **`Agents/Agents-ELON-STANDARD.md`** (AGENTS.md points head/partner there)
+- Backup procedure documented: git origin + mayoite ~45m; ops → OPERATIONS_RUNBOOK
+- Firecrawl marked **dead** for active work
+- Honesty rule: pushback always; no flattery
 
 ## Red / blocked
 
@@ -16,8 +17,8 @@
 
 ## Next
 
-- Owner names active **phase** → open task list from repo truth → multi-hour execute
+- Owner names active **phase** → execute under Agents-ELON-STANDARD
 
 ## Do not claim
 
-- No product phase PASS this session beyond process docs
+- No product phase PASS beyond process docs this session

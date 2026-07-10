@@ -24,10 +24,10 @@
 | [17-LICENSES-CLEARED.md](./17-LICENSES-CLEARED.md) | **Licenses / paid / no competitor assets** · keys in `.env.local` |
 | [18-PRODUCT-CONTEXT.md](./18-PRODUCT-CONTEXT.md) | **Why we build** — business, money, systems catalog, engines, 6‑mo prototype |
 | [19-GOALS-SLICES.md](./19-GOALS-SLICES.md) | **Scoreboard** — 6‑mo bar + near slices (plan has the how) |
-| [20-ELON-STANDARD.md](./20-ELON-STANDARD.md) | Pointer → **`Agents/Agents-elon-standard.md`** (highest bar) |
-| [SESSION-RECAP.md](./SESSION-RECAP.md) | Rolling ~15m session recap |
+| [20-ELON-STANDARD.md](./20-ELON-STANDARD.md) | Pointer → **`Agents/Agents-ELON-STANDARD.md`** (head bar) |
+| [SESSION-RECAP.md](./SESSION-RECAP.md) | Rolling session recap |
 
-**Start:** [18](./18-PRODUCT-CONTEXT.md) → [19](./19-GOALS-SLICES.md) → **`Agents/Agents-elon-standard.md`** → plan `Plans/trustdata/INDEX.md` → [12-WORKFLOW](./12-WORKFLOW.md)  
+**Start:** [18](./18-PRODUCT-CONTEXT.md) → [19](./19-GOALS-SLICES.md) → **`Agents/Agents-ELON-STANDARD.md`** → plan `Plans/trustdata/INDEX.md` → [12-WORKFLOW](./12-WORKFLOW.md)  
 
 **Repo HEAD at pack time:** see `01-RECAP.md` / `09-VERIFY-SNAPSHOT.md`.  
 **Worktree rule:** only `D:\OandO07072026` — no git worktrees.
