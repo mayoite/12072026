@@ -1,0 +1,17 @@
+{
+  "vw": 768,
+  "display": "grid",
+  "cols": "680px",
+  "gap": "40px",
+  "children": [
+    {
+      "w": 680,
+      "top": 559
+    },
+    {
+      "w": 680,
+      "top": 1421
+    }
+  ],
+  "stacked": true
+}

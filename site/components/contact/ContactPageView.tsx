@@ -116,7 +116,7 @@ export async function ContactPageView({ intent, source }: ContactPageViewProps) 
 
             <div className="contact-form-panel">
               <RouteCtaBand
-                className="mb-6 p-6"
+                className="p-6"
                 kicker={t("quickDeskKicker")}
                 title={t("quickDeskTitle")}
                 description={t("quickDeskDescription")}

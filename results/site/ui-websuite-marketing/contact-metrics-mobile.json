@@ -1,0 +1,9 @@
+{
+  "vw": 390,
+  "display": "grid",
+  "cols": "358px",
+  "gap": "40px",
+  "inputMinH": "44px",
+  "inputBorder": "1px solid rgb(210, 220, 231)",
+  "formW": 358
+}

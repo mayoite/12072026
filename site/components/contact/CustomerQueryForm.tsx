@@ -138,7 +138,11 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
   }
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit}>
+    <form
+      className="contact-page-form"
+      data-testid="contact-page-form"
+      onSubmit={handleSubmit}
+    >
       {contextCopy ? (
         <div className="contact-form-context">
           <p className="typ-label text-brand">{contextCopy.eyebrow}</p>
@@ -150,7 +154,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
         Fields marked <span className="font-semibold text-primary">*</span> are required. Share
         either email or phone and we will respond within 1 business day.
       </p>
-      <div>
+      <div className="contact-page-form__field">
         <label htmlFor="name" className="contact-form-label">
           Name <span className="text-primary">*</span>
         </label>
@@ -164,7 +168,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
           required
         />
       </div>
-      <div>
+      <div className="contact-page-form__field">
         <label htmlFor="company" className="contact-form-label">
           Company
         </label>
@@ -177,8 +181,8 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
           className="contact-form-input"
         />
       </div>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div>
+      <div className="contact-page-form__row">
+        <div className="contact-page-form__field">
           <label htmlFor="email" className="contact-form-label">
             Email
           </label>
@@ -191,7 +195,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
             className="contact-form-input"
           />
         </div>
-        <div>
+        <div className="contact-page-form__field">
           <label htmlFor="phone" className="contact-form-label">
             Phone / WhatsApp
           </label>
@@ -205,7 +209,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
           />
         </div>
       </div>
-      <div>
+      <div className="contact-page-form__field">
         <label htmlFor="preferredContact" className="contact-form-label">
           Preferred Contact
         </label>
@@ -226,7 +230,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
           <option value="phone">Phone</option>
         </select>
       </div>
-      <div>
+      <div className="contact-page-form__field">
         <label htmlFor="message" className="contact-form-label">
           Message <span className="text-primary">*</span>
         </label>
@@ -272,7 +276,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
         </div>
       ) : null}
 
-      <div className="space-y-3">
+      <div className="contact-page-form__field">
         <button
           type="submit"
           disabled={!canSubmit || isSubmitting}
