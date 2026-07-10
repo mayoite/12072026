@@ -31,7 +31,7 @@ import {
   isInventoryFavorite,
 } from "../catalog/inventory/inventoryState";
 import {
-  INVENTORY_CATEGORIES,
+  inventoryCategoriesForProduct,
   inventoryRoomGroupsForProduct,
 } from "../catalog/inventory/inventoryTaxonomy";
 import { InventoryIcon } from "./inventoryIcons";
@@ -110,12 +110,14 @@ export const InventoryPanel = memo(function InventoryPanel({
   const id = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const hasExternalCatalog = catalogItems !== undefined;
+  const productMode = officeSystemsInventory ? "office-systems" : "full";
   const roomGroups = useMemo(
-    () =>
-      inventoryRoomGroupsForProduct(
-        officeSystemsInventory ? "office-systems" : "full",
-      ),
-    [officeSystemsInventory],
+    () => inventoryRoomGroupsForProduct(productMode),
+    [productMode],
+  );
+  const categories = useMemo(
+    () => inventoryCategoriesForProduct(productMode),
+    [productMode],
   );
   const svgCatalog = useOpen3dSvgCatalog();
   const [state, setState] = useState<InventoryPanelState>(
@@ -285,7 +287,7 @@ export const InventoryPanel = memo(function InventoryPanel({
   const searchResultsItems = useMemo(() => {
     let base = indexedItems;
     if (state.selectedCategoryId) {
-      const category = INVENTORY_CATEGORIES.find(
+      const category = categories.find(
         (c) => c.id === state.selectedCategoryId,
       );
       if (category?.catalogCategory) {
@@ -303,6 +305,7 @@ export const InventoryPanel = memo(function InventoryPanel({
     return capCatalogResults(ranked, OPEN3D_CATALOG_RESULT_CAP);
   }, [
     indexedItems,
+    categories,
     roomGroups,
     state.searchQuery,
     state.selectedCategoryId,
@@ -312,7 +315,7 @@ export const InventoryPanel = memo(function InventoryPanel({
   const displayedItems = useMemo(() => {
     let items = searchResultsItems;
     if (state.selectedSubCategoryId) {
-      const category = INVENTORY_CATEGORIES.find(
+      const category = categories.find(
         (c) => c.id === state.selectedCategoryId,
       );
       const subCategory = category?.subCategories.find(
@@ -328,6 +331,7 @@ export const InventoryPanel = memo(function InventoryPanel({
     }
     return capCatalogResults(items, OPEN3D_CATALOG_RESULT_CAP);
   }, [
+    categories,
     searchResultsItems,
     state.selectedCategoryId,
     state.selectedSubCategoryId,
@@ -483,7 +487,7 @@ export const InventoryPanel = memo(function InventoryPanel({
         </div>
 
         <nav className={styles.categoryList} aria-label="Inventory categories">
-          {INVENTORY_CATEGORIES.map((category) => (
+          {categories.map((category) => (
             <div key={category.id} className={styles.categoryItem}>
               <button
                 type="button"

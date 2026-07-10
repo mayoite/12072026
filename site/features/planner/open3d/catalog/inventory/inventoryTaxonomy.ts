@@ -191,6 +191,48 @@ export function inventoryRoomGroupsForProduct(
   );
 }
 
+/** Categories kept for O&O workstation product (no outdoor / kitchen home path). */
+const OFFICE_SYSTEMS_CATEGORY_IDS = new Set([
+  "furniture",
+  "lighting",
+  "symbols",
+]);
+
+/**
+ * Category nav for inventory. `office-systems` reorders furniture toward desks
+ * and drops residential-only top-level categories (Outdoor, Kitchen & Dining, Decor).
+ */
+export function inventoryCategoriesForProduct(
+  product: "full" | "office-systems",
+): InventoryCategory[] {
+  if (product === "full") {
+    return INVENTORY_CATEGORIES;
+  }
+
+  return INVENTORY_CATEGORIES.filter((category) =>
+    OFFICE_SYSTEMS_CATEGORY_IDS.has(category.id),
+  ).map((category) => {
+    if (category.id !== "furniture") {
+      return category;
+    }
+    // Desks first; beds out of office systems nav.
+    const byId = new Map(
+      category.subCategories.map((sub) => [sub.id, sub] as const),
+    );
+    const officeSubs: InventorySubCategory[] = [
+      { ...byId.get("desks")!, sortOrder: 1 },
+      { ...byId.get("chairs")!, sortOrder: 2 },
+      { ...byId.get("storage")!, sortOrder: 3 },
+      { ...byId.get("tables")!, sortOrder: 4 },
+      { ...byId.get("sofas")!, sortOrder: 5 },
+    ].filter(Boolean);
+    return {
+      ...category,
+      subCategories: officeSubs,
+    };
+  });
+}
+
 // ── Style filter groups ──
 
 export interface InventoryStyleGroup {

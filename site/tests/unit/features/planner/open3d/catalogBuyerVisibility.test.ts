@@ -5,7 +5,10 @@ import {
   formatCatalogFootprintCm,
   isInternalCatalogItem,
 } from "@/features/planner/open3d/catalog/catalogBuyerVisibility";
-import { inventoryRoomGroupsForProduct } from "@/features/planner/open3d/catalog/inventory/inventoryTaxonomy";
+import {
+  inventoryCategoriesForProduct,
+  inventoryRoomGroupsForProduct,
+} from "@/features/planner/open3d/catalog/inventory/inventoryTaxonomy";
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "@/features/planner/open3d/editor/demoCatalogItems";
 
 function minimalItem(
@@ -128,5 +131,25 @@ describe("inventoryRoomGroupsForProduct (P-UI-2)", () => {
     const groups = inventoryRoomGroupsForProduct("full");
     expect(groups.some((g) => g.id === "living")).toBe(true);
     expect(groups.length).toBeGreaterThan(2);
+  });
+});
+
+describe("inventoryCategoriesForProduct (P-UI-2b)", () => {
+  it("office-systems drops outdoor kitchen decor and beds sub", () => {
+    const cats = inventoryCategoriesForProduct("office-systems");
+    expect(cats.map((c) => c.id)).toEqual([
+      "furniture",
+      "lighting",
+      "symbols",
+    ]);
+    const furniture = cats.find((c) => c.id === "furniture");
+    expect(furniture?.subCategories.map((s) => s.id)).toEqual([
+      "desks",
+      "chairs",
+      "storage",
+      "tables",
+      "sofas",
+    ]);
+    expect(furniture?.subCategories[0]?.label).toMatch(/Desk/i);
   });
 });
