@@ -1,5 +1,6 @@
 /**
  * P05 / W2 — cabinet-v0 Block2D plan symbol quality (not empty-box bar).
+ * Geometry is fraction-of-footprint so multiprim stays legible at plan zoom.
  */
 import { describe, expect, it } from "vitest";
 import {
@@ -106,13 +107,20 @@ function midVerticalStileCount(prims: Prim[], midX: number): number {
   }).length;
 }
 
-/** Small filled rects (handles) — exclude outer/inner carcass. */
-function handleRectCount(prims: Prim[]): number {
+/**
+ * Filled rects that are not the outer carcass (handles).
+ * Fractional handles can exceed old absolute 80×40 mm filters.
+ */
+function handleRectCount(prims: Prim[], L: number, D: number): number {
   return prims.filter((p) => {
     if (p.kind !== "rect") return false;
     if (p.fill === "none" || p.fill === undefined) return false;
-    // Carcass outer is large (≥ half footprint either axis when typical).
-    return p.w < 80 && p.h < 40;
+    const isOuter =
+      Math.abs(p.x) < 1 &&
+      Math.abs(p.y) < 1 &&
+      Math.abs(p.w - L) < 1 &&
+      Math.abs(p.h - D) < 1;
+    return !isOuter;
   }).length;
 }
 
@@ -125,6 +133,14 @@ function horizontalLineYs(prims: Prim[]): number[] {
     if (Math.abs(y0 - y1) < 2) ys.push(y0);
   }
   return ys;
+}
+
+/** Inner carcass rect (fill none, inset from outer). */
+function innerCarcassRect(prims: Prim[]): Extract<Prim, { kind: "rect" }> | undefined {
+  return prims.find(
+    (p): p is Extract<Prim, { kind: "rect" }> =>
+      p.kind === "rect" && p.fill === "none",
+  );
 }
 
 describe("cabinet-v0 Block2D plan symbol (W2)", () => {
@@ -249,36 +265,9 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
     expect(frontY).toBeGreaterThan(block.footprint.D * 0.7);
   });
 
-  it("pair doors get a center stile; slab does not", () => {
-    const midX = 400;
-    const pair = furnitureBlock2DFromItem(
-      cabinetItem({
-        modularOptions: {
-          widthMm: 800,
-          depthMm: 400,
-          heightMm: 900,
-          doorStyle: "pair",
-          material: "oak",
-        },
-      }),
-    );
-    expect(midVerticalStileCount(pair.prims, midX)).toBeGreaterThanOrEqual(1);
-
-    const slab = furnitureBlock2DFromItem(
-      cabinetItem({
-        modularOptions: {
-          widthMm: 800,
-          depthMm: 400,
-          heightMm: 900,
-          doorStyle: "slab",
-          material: "white",
-        },
-      }),
-    );
-    expect(midVerticalStileCount(slab.prims, midX)).toBe(0);
-  });
-
-  it("pair has dual handle cues; slab has single offset handle (no mid stile)", () => {
+  it("pair and slab differ; pair has dual handles, slab single offset (slab may have mid line)", () => {
+    // Fractional multiprim: slab may include a mid vertical cue so it is not an empty tile.
+    // Pair/slab must still differ; pair dual handles vs slab single offset handle.
     const midX = 400;
     const pair = furnitureBlock2DFromItem(
       cabinetItem({
@@ -305,17 +294,24 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
 
     expect(pair.prims.length).toBeGreaterThanOrEqual(4);
     expect(slab.prims.length).toBeGreaterThanOrEqual(4);
-    // doorStyle geometry must actually differ (S2)
     expect(JSON.stringify(pair.prims)).not.toEqual(JSON.stringify(slab.prims));
 
-    expect(handleRectCount(pair.prims)).toBe(2);
-    expect(handleRectCount(slab.prims)).toBe(1);
-    expect(midVerticalStileCount(slab.prims, midX)).toBe(0);
+    // Pair always has a center stile; slab may also have a mid cue (allowed).
+    expect(midVerticalStileCount(pair.prims, midX)).toBeGreaterThanOrEqual(1);
+
+    expect(handleRectCount(pair.prims, 800, 400)).toBe(2);
+    expect(handleRectCount(slab.prims, 800, 400)).toBe(1);
 
     // Slab handle offset to one side — not centered on mid-X
-    const slabHandle = slab.prims.find(
-      (p) => p.kind === "rect" && p.w < 80 && p.h < 40 && p.fill !== "none",
-    );
+    const slabHandle = slab.prims.find((p) => {
+      if (p.kind !== "rect" || p.fill === "none" || p.fill === undefined) return false;
+      const isOuter =
+        Math.abs(p.x) < 1 &&
+        Math.abs(p.y) < 1 &&
+        Math.abs(p.w - 800) < 1 &&
+        Math.abs(p.h - 400) < 1;
+      return !isOuter;
+    });
     expect(slabHandle?.kind).toBe("rect");
     if (slabHandle?.kind === "rect") {
       const handleCx = slabHandle.x + slabHandle.w / 2;
@@ -323,7 +319,7 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
     }
   });
 
-  it("doorStyle none has open-shelf cues and zero mid stile", () => {
+  it("doorStyle none has open-shelf cues and zero handles", () => {
     const midX = 400;
     const open = furnitureBlock2DFromItem(
       cabinetItem({
@@ -338,7 +334,7 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
     );
     expect(open.prims.length).toBeGreaterThanOrEqual(4);
     expect(midVerticalStileCount(open.prims, midX)).toBe(0);
-    expect(handleRectCount(open.prims)).toBe(0);
+    expect(handleRectCount(open.prims, 800, 400)).toBe(0);
 
     const dashedHoriz = open.prims.filter((p) => {
       if (p.kind !== "line" || p.points.length < 4) return false;
@@ -349,6 +345,69 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
     });
     // Open shelves: at least two dashed horizontal shelf lines
     expect(dashedHoriz.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("600×580 footprint uses fractional inset/handle/strokes (plan-zoom lock)", () => {
+    // Absolute 6–16mm insets collapse at ~0.1 plan scale. Fractions keep multiprim legible.
+    const w = 600;
+    const d = 580;
+    const block = furnitureBlock2DFromItem(
+      cabinetItem({
+        width: w,
+        depth: d,
+        modularOptions: {
+          widthMm: w,
+          depthMm: d,
+          heightMm: 900,
+          doorStyle: "slab",
+          material: "white",
+        },
+      }),
+    );
+
+    expect(block.footprint.L).toBe(w);
+    expect(block.footprint.D).toBe(d);
+
+    const minSide = Math.min(w, d);
+    const inner = innerCarcassRect(block.prims);
+    expect(inner).toBeDefined();
+    if (!inner) throw new Error("inner carcass missing");
+
+    // inset ≥ 10% of min side (fraction-of-footprint, not 6–16mm absolute)
+    expect(inner.x).toBeGreaterThanOrEqual(minSide * 0.1);
+    expect(inner.y).toBeGreaterThanOrEqual(minSide * 0.1);
+    expect(w - (inner.x + inner.w)).toBeGreaterThanOrEqual(minSide * 0.1 - 0.01);
+    expect(d - (inner.y + inner.h)).toBeGreaterThanOrEqual(minSide * 0.1 - 0.01);
+
+    // Handle: area ≥ 0.5% footprint OR width ≥ 8% of w
+    const handles = block.prims.filter((p) => {
+      if (p.kind !== "rect" || p.fill === "none" || p.fill === undefined) return false;
+      const isOuter =
+        Math.abs(p.x) < 1 &&
+        Math.abs(p.y) < 1 &&
+        Math.abs(p.w - w) < 1 &&
+        Math.abs(p.h - d) < 1;
+      return !isOuter;
+    });
+    expect(handles.length).toBeGreaterThanOrEqual(1);
+    const footprintArea = w * d;
+    for (const h of handles) {
+      if (h.kind !== "rect") continue;
+      const area = h.w * h.h;
+      const areaOk = area >= footprintArea * 0.005;
+      const widthOk = h.w >= w * 0.08;
+      expect(areaOk || widthOk).toBe(true);
+    }
+
+    // Detail stroke widths ≥ 6mm (outer excluded — detail lines + inner rect)
+    for (const p of block.prims) {
+      if (p.kind === "line" && p.strokeWidth != null) {
+        expect(p.strokeWidth).toBeGreaterThanOrEqual(6);
+      }
+      if (p.kind === "rect" && p.fill === "none" && p.strokeWidth != null) {
+        expect(p.strokeWidth).toBeGreaterThanOrEqual(6);
+      }
+    }
   });
 
   it("reports top-left prim authorship (centeredPath helper is false)", () => {

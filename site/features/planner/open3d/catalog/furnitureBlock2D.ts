@@ -40,31 +40,36 @@ function boxBlock(widthMm: number, depthMm: number, heightMm: number, label: str
 }
 
 /**
- * Readable plan-view cabinet-v0 symbol (W2 / P05 / MASTER-CHART mesh_symbol).
- * Top-left mm origin (0..L, 0..D): carcass, inner, front/back, doorStyle cues.
- * Canvas centers via renderBlock2DCentered — prims are never authored centered.
+ * Readable plan-view cabinet-v0 symbol (W2 / P05).
+ * Top-left mm origin (0..L, 0..D). Canvas centers via renderBlock2DCentered.
  *
- * Contrast rule (benchmark): light fill + dark stroke so multi-prim detail reads
- * at plan zoom. Opaque inverse-body carcass + same-family stroke = solid blob.
+ * HARD RULE: detail is **fraction of footprint**, not absolute mm insets of 6–16.
+ * At plan zoom (~0.1 scale) a 600×580 cabinet is ~60px — fixed 16mm inset (~1.6px)
+ * and 12mm handles collapse to an empty cream tile. Fractions keep multiprim legible.
+ *
+ * Colors are literal hex (CSS vars often fail on Canvas2D → black blob).
  */
 function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
   const opts = item.modularOptions;
-  const w = opts?.widthMm ?? item.width ?? DEFAULT_MM;
-  const d = opts?.depthMm ?? item.depth ?? DEFAULT_MM;
+  const w = Math.max(1, opts?.widthMm ?? item.width ?? DEFAULT_MM);
+  const d = Math.max(1, opts?.depthMm ?? item.depth ?? DEFAULT_MM);
   const h = opts?.heightMm ?? item.height ?? 900;
   const doorStyle = opts?.doorStyle ?? "slab";
-  const inset = Math.min(16, Math.max(6, Math.min(w, d) * 0.04));
-  const frontY = d - inset; // plan: +Y depth; front at larger Y
-  // Plan canvas: use *literal* light/dark colors. CSS var(--block-*) often fails
-  // to resolve on Canvas2D → fill paints opaque black → solid empty-box blob.
-  // Tokens kept only as documentation of intent; paint must stay readable at zoom.
-  const fill = "#f3efe6";
-  const stroke = "#3f3a32";
-  const detailStroke = "#5c564c";
-  const strokeW = Math.max(BLOCK_STYLE.surfaceStrokeWidth, 2.5);
+
+  // Fractions of the smaller side so symbols read when footprint is ~40–80 screen px.
+  const m = Math.min(w, d);
+  const inset = Math.max(m * 0.1, m * 0.12); // ~10–12% carcass wall
+  const frontBand = Math.max(m * 0.14, d * 0.12);
+  const frontY = d - frontBand;
+  const fill = "#f7f2e8";
+  const stroke = "#1a1814";
+  const detailStroke = "#2a2620";
+  // Thick relative strokes; resolveCanvasStrokeWidthMm still floors to screen px.
+  const outerSw = Math.max(m * 0.035, 8);
+  const detailSw = Math.max(m * 0.028, 6);
+  const frontSw = Math.max(m * 0.04, 10);
 
   const prims: Prim[] = [
-    // Outer carcass — light fill so inner lines read
     {
       kind: "rect",
       x: 0,
@@ -73,10 +78,9 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
       h: d,
       fill,
       stroke,
-      strokeWidth: strokeW,
-      radius: 4,
+      strokeWidth: outerSw,
+      radius: Math.min(m * 0.04, 12),
     },
-    // Inner carcass / shelf zone
     {
       kind: "rect",
       x: inset,
@@ -85,37 +89,36 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
       h: Math.max(1, d - inset * 2),
       fill: "none",
       stroke: detailStroke,
-      strokeWidth: 1.25,
-      radius: 2,
+      strokeWidth: detailSw,
+      radius: Math.min(m * 0.02, 6),
     },
-    // Front edge (door face)
+    // Front door face (thick)
     {
       kind: "line",
       points: [inset, frontY, w - inset, frontY],
       stroke: detailStroke,
-      strokeWidth: 2.5,
+      strokeWidth: frontSw,
     },
     // Back edge
     {
       kind: "line",
       points: [inset, inset, w - inset, inset],
       stroke: detailStroke,
-      strokeWidth: 1.5,
+      strokeWidth: detailSw,
     },
   ];
 
   if (doorStyle === "pair") {
-    // Mid stile between pair doors
     prims.push({
       kind: "line",
       points: [w * 0.5, inset, w * 0.5, frontY],
       stroke: detailStroke,
-      strokeWidth: 1.5,
-      dash: [6, 4],
+      strokeWidth: detailSw,
+      dash: [m * 0.06, m * 0.04],
     });
-    const handleW = Math.min(28, w * 0.06);
-    const handleH = Math.min(10, d * 0.06);
-    const handleY = frontY - handleH - 4;
+    const handleW = Math.max(w * 0.1, m * 0.08);
+    const handleH = Math.max(d * 0.08, m * 0.06);
+    const handleY = frontY - handleH - m * 0.03;
     prims.push({
       kind: "rect",
       x: w * 0.25 - handleW / 2,
@@ -135,32 +138,46 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
       radius: 2,
     });
   } else if (doorStyle === "slab") {
-    const handleW = Math.min(36, w * 0.08);
-    const handleH = Math.min(12, d * 0.07);
+    // Single door: handle + mid vertical cue so it is not an empty tile
+    const handleW = Math.max(w * 0.12, m * 0.1);
+    const handleH = Math.max(d * 0.1, m * 0.08);
     prims.push({
       kind: "rect",
-      x: w - inset - handleW - 8,
-      y: frontY - handleH - 4,
+      x: w - inset - handleW - m * 0.04,
+      y: frontY - handleH - m * 0.03,
       w: handleW,
       h: handleH,
       fill: detailStroke,
       radius: 2,
     });
-  } else {
-    // doorStyle "none" — open shelves cue
     prims.push({
       kind: "line",
-      points: [inset, d * 0.33, w - inset, d * 0.33],
+      points: [w * 0.5, inset + m * 0.05, w * 0.5, frontY - m * 0.05],
       stroke: detailStroke,
-      strokeWidth: 1.25,
-      dash: [8, 4],
+      strokeWidth: detailSw * 0.75,
+      dash: [m * 0.05, m * 0.04],
+    });
+  } else {
+    prims.push({
+      kind: "line",
+      points: [inset, d * 0.35, w - inset, d * 0.35],
+      stroke: detailStroke,
+      strokeWidth: detailSw,
+      dash: [m * 0.08, m * 0.04],
     });
     prims.push({
       kind: "line",
-      points: [inset, d * 0.66, w - inset, d * 0.66],
+      points: [inset, d * 0.55, w - inset, d * 0.55],
       stroke: detailStroke,
-      strokeWidth: 1.25,
-      dash: [8, 4],
+      strokeWidth: detailSw,
+      dash: [m * 0.08, m * 0.04],
+    });
+    prims.push({
+      kind: "line",
+      points: [inset, d * 0.75, w - inset, d * 0.75],
+      stroke: detailStroke,
+      strokeWidth: detailSw,
+      dash: [m * 0.08, m * 0.04],
     });
   }
 

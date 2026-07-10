@@ -168,6 +168,8 @@ describe("furnitureBlock2DFromItem", () => {
     });
     expect(block.prims.length).toBeGreaterThan(0);
     expect(block.footprint.L).toBe(800);
+    // Slab multiprim: carcass + inner + front/back + handle + optional mid line
+    expect(block.prims.length).toBeGreaterThanOrEqual(5);
   });
 
   it("cabinet-v0 plan symbol uses light fill + dark detail (not solid inverse-body blob)", () => {
@@ -197,18 +199,67 @@ describe("furnitureBlock2DFromItem", () => {
     if (!outer || outer.kind !== "rect") throw new Error("outer carcass missing");
     // Light surface fill — NOT var(--block-storage) / inverse-body solid blob
     expect(outer.fill).toMatch(/^#|^rgb/i);
-    expect(outer.fill?.toLowerCase()).not.toBe('#000');
-    expect(outer.fill?.toLowerCase()).not.toBe('#000000');
+    expect(outer.fill?.toLowerCase()).not.toBe("#000");
+    expect(outer.fill?.toLowerCase()).not.toBe("#000000");
     expect(outer.fill).not.toMatch(/block-storage/);
-    // Multi-prim: inner rect + front/back lines + handle for slab
-    expect(block.prims.length).toBeGreaterThanOrEqual(4);
+    // Multi-prim: inner rect + front/back lines + handle; slab may include mid vertical cue
+    expect(block.prims.length).toBeGreaterThanOrEqual(5);
     const lines = block.prims.filter((p) => p.kind === "line");
     expect(lines.length).toBeGreaterThanOrEqual(2);
     for (const line of lines) {
       if (line.kind === "line") {
         expect(line.stroke).not.toMatch(/block-storage/);
+        // Fractional thick strokes (floor ≥6mm) — not hairline 1–1.5mm
+        if (line.strokeWidth != null) {
+          expect(line.strokeWidth).toBeGreaterThanOrEqual(6);
+        }
       }
     }
+    // Inner carcass inset is fraction of min side (≥10%), not absolute 6–16mm
+    const inner = block.prims.find((p) => p.kind === "rect" && p.fill === "none");
+    expect(inner).toBeDefined();
+    if (inner && inner.kind === "rect") {
+      const minSide = Math.min(800, 400);
+      expect(inner.x).toBeGreaterThanOrEqual(minSide * 0.1);
+    }
+  });
+
+  it("cabinet-v0 pair and slab door styles produce different multiprim sets", () => {
+    const base = {
+      id: "f2-door",
+      catalogId: "cabinet-v0",
+      position: { x: 0, y: 0 },
+      rotation: 0,
+      scale: { x: 1, y: 1, z: 1 },
+      width: 800,
+      depth: 400,
+      height: 900,
+      geometryMode: "modular-cabinet-v0" as const,
+    };
+    const pair = furnitureBlock2DFromItem({
+      ...base,
+      modularOptions: {
+        widthMm: 800,
+        depthMm: 400,
+        heightMm: 900,
+        doorStyle: "pair",
+        material: "oak",
+      },
+    });
+    const slab = furnitureBlock2DFromItem({
+      ...base,
+      modularOptions: {
+        widthMm: 800,
+        depthMm: 400,
+        heightMm: 900,
+        doorStyle: "slab",
+        material: "white",
+      },
+    });
+    expect(JSON.stringify(pair.prims)).not.toEqual(JSON.stringify(slab.prims));
+    // Both multiprim (not empty cream tile)
+    expect(pair.prims.length).toBeGreaterThanOrEqual(5);
+    expect(slab.prims.length).toBeGreaterThanOrEqual(5);
   });
 
   it("unknown SKU still yields nonempty prims (never empty plan mark)", () => {
