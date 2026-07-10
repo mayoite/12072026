@@ -1,0 +1,11 @@
+
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/workspaceOrbitWiring.test.ts > W4 workspace orbit wiring (layer 2) > helper forces enableControls true 3ms
+ Γ£ô tests/unit/features/planner/open3d/workspaceOrbitWiring.test.ts > W4 workspace orbit wiring (layer 2) > OOPlannerWorkspace spreads getOpen3dViewerControlProps into Lazy3DViewer 1ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  19:18:26
+   Duration  1.90s (transform 128ms, setup 694ms, import 32ms, tests 9ms, environment 805ms)
+

@@ -1,0 +1,15 @@
+
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö product helper / prop contract > OPEN3D_ORBIT_DEFAULT_ENABLED is true 1ms
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö product helper / prop contract > getOpen3dViewerControlProps forces enableControls: true 1ms
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö product helper / prop contract > furniture document rotation stays degrees via normalizeDegrees 0ms
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö ThreeViewerInner construct + data-orbit-enabled > omitted enableControls (default ON) constructs OrbitControls and sets data-orbit-enabled=true 57ms
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö ThreeViewerInner construct + data-orbit-enabled > enableControls={false} does not construct OrbitControls and sets data-orbit-enabled=false 15ms
+ Γ£ô tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx > orbitControlsDefault ΓÇö ThreeViewerInner construct + data-orbit-enabled > enableControls={true} explicit construct + data-orbit-enabled=true 24ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  19:18:51
+   Duration  1.79s (transform 304ms, setup 703ms, import 274ms, tests 100ms, environment 497ms)
+

@@ -1,0 +1,23 @@
+
+ RUN  v4.1.9 D:/OandO07072026/site
+
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > modular-cabinet-v0 builds Group with multi-part mesh and floor origin 7ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > modular without modularOptions derives defaults from node W/D/H 3ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > modular pair door style yields four children (toe+carcass+doors) 1ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > non-modular furniture with dimensions uses parametric-box Mesh 1ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > wall builds BoxGeometry mesh at half height (not parametric-box) 1ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > wall with CSS var color does not throw and material color is parseable by THREE.Color 9ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > wall theme-ref uses wallStroke when present (not washed inverse-body text color) 4ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > wall with explicit user hex keeps paint (theme remap does not override) 1ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > furniture missing positive dimensions falls back to wall-style box 1ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > applies plan rotation about world Y (negated) 1ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > distinguishes the three roots: Group vs parametric Mesh vs wall Mesh 1ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > createSceneObjectFromNode — modular vs parametric-box vs wall > workstation-v0 builds Group with multi-part role meshes and floor origin 3ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > addNodesToGroup / disposeAndRemoveObject > adds one object per node into the group 1ms
+ ✓ tests/unit/features/planner/open3d/createSceneObjectFromNode.test.ts > addNodesToGroup / disposeAndRemoveObject > disposeAndRemoveObject removes from parent 1ms
+
+ Test Files  1 passed (1)
+      Tests  14 passed (14)
+   Start at  19:18:12
+   Duration  3.35s (transform 280ms, setup 860ms, import 261ms, tests 39ms, environment 1.26s)
+
