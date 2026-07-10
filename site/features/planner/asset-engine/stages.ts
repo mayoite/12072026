@@ -99,9 +99,13 @@ export const SVG_STAGES: readonly AssetStage[] = [
     id: "svg-s7-catalog-consume",
     order: 7,
     name: "Catalog + inventory consume SVG URL",
-    status: "partial",
-    produces: "previewImageUrl /svg-catalog/{slug}.svg",
-    entry: "descriptorCatalogBridge + catalogClient",
+    status: "implemented",
+    produces: "previewImageUrl /svg-catalog/{slug}.svg stamped on place",
+    entry:
+      "descriptorCatalogBridge + catalogClient + placeCatalogItemInProject (furniture.previewImageUrl)",
+    note:
+      "Inventory shows published SVG; place stamps previewImageUrl onto furniture. " +
+      "Feasibility plan draw remains Block2D (not SVG path rasterization).",
   },
 ] as const;
 

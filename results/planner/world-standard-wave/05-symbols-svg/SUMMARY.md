@@ -14,8 +14,10 @@
 | pair vs slab geometry differs | Mid stile + dual handles vs single handle; unit + prim JSON |
 | `furnitureBlockUsesCenteredPath` always false | Unit + JSDoc + prim dump criteria |
 | Canvas authority = Block2D | Code path + asset-engine README + honesty NOTES |
-| SVG catalog = publish only | `scripts:smoke:svg:batch` exit 0 · 4 fixtures · NOTES |
-| No competitor SVG | O&O prims only; no `/svg-catalog` load on Feasibility |
+| SVG catalog = publish path | `scripts:smoke:svg:batch` exit 0 · 4 fixtures · NOTES |
+| **S7 inventory place consumes published SVG** | API + unit stamp + browser inventory thumb + place (2 furniture) |
+| Browser visual CP-05 | `browser/01–04*.png` · e2e exit 0 |
+| No competitor SVG | O&O prims only; canvas does not rasterize catalog SVG as draw path |
 
 ## Not done (correct deferrals)
 

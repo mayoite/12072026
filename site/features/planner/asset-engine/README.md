@@ -13,7 +13,7 @@
 | S4 | Write `public/svg-catalog/{slug}.svg` | implemented |
 | S5 | PNG thumbs | stub (URL only on publish) |
 | S6 | Persist descriptor (fail-closed after compile) | implemented (disk) |
-| S7 | Catalog consume | partial |
+| S7 | Catalog + inventory consume SVG URL | **implemented** (place stamps `previewImageUrl`; canvas draw still Block2D) |
 
 ### Publish authority (single)
 
@@ -75,7 +75,9 @@ Deterministic batch — **only** `scripts/generate-svg/_fixtures/*.json` (sorted
 | Admin/CLI published SVG files | **pipelineCore+normalize** | `compileSvgForPublish` → `public/svg-catalog/{slug}.svg` |
 | Portal preview | Published SVG URL | `/portal/svg-catalog` |
 
-W2 acceptance is **Block2D readable**, not “SVG loaded onto FeasibilityCanvas.”
-Do not mark S7 implemented until inventory place consumes published SVG with evidence.
+W2 acceptance is **Block2D readable**, not “SVG path drawn as Feasibility prims.”
+**S7 (implemented):** catalog/API + inventory show `previewImageUrl` under `/svg-catalog/{slug}.svg`;
+`placeCatalogItemInProject` stamps that URL onto the placed furniture entity.
+Evidence: unit `s7CatalogConsume.test.ts` + CP-05 browser pack under `05-symbols-svg/`.
 `furnitureBlockUsesCenteredPath` is always `false` (prims top-left; canvas centers).
 

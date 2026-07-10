@@ -1,0 +1,10 @@
+{
+  "phase": "P05",
+  "gate": "CP-05-browser",
+  "date": "2026-07-10T12:48:25.746Z",
+  "s7ApiSvgItems": 4,
+  "inventoryThumbSrc": "/svg-catalog/chaise-lounge-001.svg",
+  "furnitureBefore": 0,
+  "furnitureAfter": 2,
+  "status": "pass"
+}

@@ -327,6 +327,10 @@ export function placeCatalogItemInProject(
               sourceSku: snapshot.variantIdentity?.sku ?? snapshot.productIdentity.sku,
               ...(geometryMode !== undefined ? { geometryMode } : {}),
               ...(modularOptions !== undefined ? { modularOptions } : {}),
+              // S7: inventory/catalog published preview (often /svg-catalog/{slug}.svg)
+              ...(item.assets.previewImageUrl
+                ? { previewImageUrl: item.assets.previewImageUrl }
+                : {}),
               // generatedGlbUrl intentionally omitted — procedural default;
               // stamp after G5 export via stampFurnitureGeneratedGlb.
             }

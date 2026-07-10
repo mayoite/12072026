@@ -1,49 +1,45 @@
-# P05 — SVG honesty (publish path seat)
+# P05 — SVG honesty + S7 (publish path + inventory place consume)
 
 - **Date:** 2026-07-10
-- **Seat scope:** Publish-path smoke + honesty notes only. **Not** canvas W2 product work. **Not** full CP-05 alone.
-- **HEAD at smoke:** `a4f5d9f8f389f83ec6de3192e0454c106848562c`
+- **HEAD:** see `../HEAD.txt` / git tip after CP-05 S7 land
+- **Owner call:** S7 **is in scope** for P05 (inventory place consumes published SVG URL).
 
-## Authority split (do not conflate)
+## Authority split (honest)
 
 | Surface | Authority | Entry |
 |---------|-----------|-------|
-| **Canvas (Feasibility plan symbols)** | Block2D prims | `furnitureBlock2DFromItem` → `renderBlock2DCentered` (via `FeasibilityCanvas`) |
-| **Publish (catalog SVG files)** | pipelineCore + normalize | `compileSvgForPublish` → `public/svg-catalog/{slug}.svg` |
+| **Canvas plan symbols (W2)** | Block2D prims | `furnitureBlock2DFromItem` → `renderBlock2DCentered` |
+| **Publish (disk SVG)** | pipelineCore + normalize | `compileSvgForPublish` → `public/svg-catalog/{slug}.svg` |
+| **S7 inventory / place** | Catalog `previewImageUrl` | `descriptorCatalogBridge` → inventory `<img>` → `placeCatalogItemInProject` stamps `furniture.previewImageUrl` |
 
-- **Canvas authority** = `furnitureBlock2DFromItem` → `renderBlock2DCentered`. Feasibility draws furniture from Block2D, not from loaded published SVG.
-- **Publish authority** = `compileSvgForPublish` → writes under `public/svg-catalog`.
-- **Feasibility does NOT load `/svg-catalog` as the draw path.** W2 acceptance is Block2D-readable plan symbols, not “SVG loaded onto FeasibilityCanvas.”
-
-Doc mirror: `site/features/planner/asset-engine/README.md` § **Canvas vs publish SVG (P05 honesty)** — present at seat time; no README edit required.
+- Feasibility **does not** rasterize `/svg-catalog/*.svg` as the plan-draw path. Canvas W2 = Block2D (cabinet-v0 multi-prim).
+- S7 **does** mean: published URL is on catalog items, shown in inventory, and **stamped on place**.
 
 ## Smoke (publish path)
 
 | Item | Value |
 |------|-------|
-| Script | `site/package.json` → `scripts:smoke:svg:batch` (`tsx scripts/smoke-svg-fixtures.mjs`) |
-| Also present | `scripts:smoke:svg` (single fixture chaise) |
-| CWD | `site/` |
-| Raw log | `results/planner/world-standard-wave/05-symbols-svg/04-svg-honesty/svg-batch-raw.log` |
-| **Exit code** | **0** |
-| Result | **PASS** — fixtures=4 ok=4 fail=0 |
+| `pnpm run scripts:smoke:svg:batch` | exit **0** · fixtures=4 ok=4 |
+| Log | `svg-batch-raw.log` |
 
-Fixture lines (from log):
+## S7 proof
 
-- OK chaise.json → chaise-lounge-001
-- OK missing-geometry.json → missing-geom-fallback-001
-- OK sectional.json → sectional-sofa-001
-- OK side-table.json → side-table-001
+| Layer | Evidence |
+|-------|----------|
+| API | `/api/planner/catalog/svg-blocks/` → `previewImageUrl: /svg-catalog/{slug}.svg` (4 items) |
+| Unit | `tests/unit/.../s7CatalogConsume.test.ts` — place stamps URL |
+| Browser | `browser/03-inventory-svg-preview.png` · `04-svg-catalog-item-placed.png` · `run.json` |
+| Stage registry | `asset-engine/stages.ts` `svg-s7-catalog-consume` = **implemented** |
 
-## Honesty rules applied
+## W2 canvas proof
 
-- Smoke exit code reported honestly: **0 → pass**.
-- Do **not** claim smoke green if exit ≠ 0 (N/A this run).
-- This seat does **not** claim full CP-05. No `furnitureBlock2D` product code touched.
-- Publish smoke green ≠ canvas W2 complete; those are separate authorities.
+| Layer | Evidence |
+|-------|----------|
+| Unit | cabinet-v0 Block2D ≥4 prims, centeredPath false (22 tests with render pack) |
+| Browser | `browser/01-cabinet-v0-placed.png` · `02-cabinet-v0-canvas.png` |
 
-## Out of scope this seat
+## Explicit non-claims
 
-- Canvas W2 cabinet-v0 / Block2D product changes
-- Visual CP-05 browser proof
-- Claiming S7 (inventory place consuming published SVG) implemented
+- Canvas does **not** load SVG path strings as Feasibility prims.
+- Full admin SVG editor UX polish is not this seat.
+- P07 place journey / P08 mesh remain separate.

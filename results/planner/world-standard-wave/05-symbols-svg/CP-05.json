@@ -1,46 +1,46 @@
 {
   "checkpoint": "CP-05",
   "phase": "P05-symbols-svg",
-  "gate": "W2-symbol-quality",
+  "gate": "W2-symbol-quality-plus-S7",
   "status": "pass",
   "date": "2026-07-10",
-  "head": "a0cb04ae9b84d7a69f9cbc32ba468c5bf85cebfc",
-  "reproveNote": "Evidence folder was empty on tip; re-proved units + prim dump + SVG honesty on 2026-07-10. Honesty commit a0cb04ae landed separately.",
   "claims": {
     "cabinetV0Block2DReadable": true,
     "notEmptyBox": true,
     "doorStyleGeometryDiffers": true,
     "canvasAuthorityIsBlock2D": true,
     "furnitureBlockUsesCenteredPathIsFalse": true,
-    "svgCatalogIsPublishNotCanvas": true,
+    "svgCatalogIsPublishNotCanvasDraw": true,
     "svgHonestySmoke": "pass",
+    "s7InventoryPlaceConsumesPublishedSvg": true,
+    "s7StageStatus": "implemented",
+    "browserVisualCp05": true,
     "noCompetitorSvg": true,
-    "browserPlaceJourney": "deferred-to-P07",
+    "browserPlaceJourneyFull": "deferred-to-P07",
     "meshBeauty": "deferred-to-P08"
   },
   "unitPack": {
-    "files": [
-      "tests/unit/features/planner/open3d/catalog/furnitureBlock2D.cabinet-v0.test.ts",
-      "tests/unit/lib/catalog/renderBlock2DToCanvas.test.ts"
-    ],
-    "tests": 22,
-    "passed": 22,
-    "exitCode": 0,
-    "log": "CP-05-vitest-raw.log"
+    "cabinetAndRender": 22,
+    "s7CatalogConsume": 3,
+    "exitCode": 0
   },
-  "visual": {
-    "type": "prim-json",
-    "path": "05-visual/cabinet-v0-prims.json",
-    "pairPrims": 7,
-    "slabPrims": 5,
-    "nonePrims": 6
+  "browser": {
+    "spec": "tests/e2e/open3d-cp05-symbols-s7.spec.ts",
+    "exitCode": 0,
+    "furnitureAfter": 2,
+    "inventoryThumbSrc": "/svg-catalog/chaise-lounge-001.svg",
+    "evidenceDir": "browser/"
   },
   "evidence": [
-    "results/planner/world-standard-wave/05-symbols-svg/CP-05-vitest-raw.log",
-    "results/planner/world-standard-wave/05-symbols-svg/elon-reproof/vitest-reproof-raw.log",
-    "results/planner/world-standard-wave/05-symbols-svg/04-svg-honesty/NOTES.md",
-    "results/planner/world-standard-wave/05-symbols-svg/04-svg-honesty/svg-batch-raw.log",
-    "results/planner/world-standard-wave/05-symbols-svg/05-visual/cabinet-v0-prims.json",
-    "results/planner/world-standard-wave/05-symbols-svg/SUMMARY.md"
+    "CP-05-vitest-raw.log",
+    "05-visual/cabinet-v0-prims.json",
+    "04-svg-honesty/NOTES.md",
+    "04-svg-honesty/svg-batch-raw.log",
+    "browser/01-cabinet-v0-placed.png",
+    "browser/02-cabinet-v0-canvas.png",
+    "browser/03-inventory-svg-preview.png",
+    "browser/04-svg-catalog-item-placed.png",
+    "browser/run.json",
+    "SUMMARY.md"
   ]
 }

@@ -109,6 +109,12 @@ export interface Open3dFurnitureItem {
   meshUrl?: string;
   /** Optional GLB URL alias — only loaded if policy allows. */
   glbUrl?: string;
+  /**
+   * S7 — published catalog preview consumed at place time (e.g. `/svg-catalog/{slug}.svg`).
+   * Inventory shows this URL; place stamps it onto the furniture entity.
+   * Plan-canvas draw authority remains Block2D (`furnitureBlock2DFromItem`), not rasterizing this SVG.
+   */
+  previewImageUrl?: string;
 }
 
 export interface Open3dStair {
