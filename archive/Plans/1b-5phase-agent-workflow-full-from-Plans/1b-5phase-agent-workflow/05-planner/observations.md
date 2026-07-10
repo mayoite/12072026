@@ -1,4 +1,0 @@
-- Last 10 commits complete 1A, partial 1B.
-- Agent workflow setup complete with reports.
-- 1B needs full gates and polish.
-- Plan folder restructured, .grok and worktree in repo, gitignore updated.

@@ -1,7 +1,0 @@
-TDD CYCLE 1 - RED phase
-Command: pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/coverageGap.test.ts -t "loadDescriptorsFromLoader returns [] immediately when window defined (client guard branch)" --config vitest.site.config.ts
-Purpose: verify the just-written minimal test fails (RED) for the expected reason (intentional assert fail to simulate 'failing first', not syntax error). Then will correct for GREEN.
-Evidence integrity: full output captured.
-Expected: test fails with mismatch on expect result toEqual wrong array.
-Timestamp: 2026-07-04
-Per AGENTS: run only when required, capture in results/.

@@ -1,4 +1,0 @@
-- 1B still partial per original plan (some publishes, gates).
-- Full agent run not executed (setup only).
-- Some evidence in phase-1b but not all 12B.
-- Move had minor issues.

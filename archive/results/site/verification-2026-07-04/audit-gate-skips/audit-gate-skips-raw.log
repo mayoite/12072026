@@ -1,8 +1,0 @@
-﻿node.exe : $ node scripts/audit-gate-skips.mjs
-At C:\Program Files\nodejs\pnpm.ps1:16 char:5
-+     & "$basedir/node$exe"  "$basedir/node_modules/corepack/dist/pnpm. ...
-+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: ($ node scripts/audit-gate-skips.mjs:String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 
-audit-gate-skips: ok

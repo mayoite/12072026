@@ -1,5 +1,0 @@
-- Verified last 10 commits against GS from rules_plan/00-global-standard-revision.
-- 1A shell complete with evidence in results/planner/phase-1a/.
-- 1B partial: some publishes done but gates like a11y, prod build not fully evidenced.
-- Worktree and .grok setup in repo, gitignore updated.
-- Subfolders structured sequentially.

@@ -1,8 +1,0 @@
-﻿{
-    "note":  "inventory pre-existing surfaced but scope is edited; classify per handbook",
-    "exitCode":  1,
-    "command":  "pnpm --filter oando-site exec eslint -c ... (post-fix our changes)",
-    "start":  "2026-07-05T23:38:30.6749300+05:30",
-    "revision":  "dfb91c3b6f5ebd8e3872ba84fd29dd61bc880e5a",
-    "end":  "2026-07-05T23:38:34.6679137+05:30"
-}

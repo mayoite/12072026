@@ -1,5 +1,0 @@
-- Last 10 commits show completion of 1A Open3D shell and partial 1B SVG work.
-- Some references in docs were outdated (fixed in one commit).
-- Potential issues in 1B code from partial implementation (e.g. Puck mount, compiler).
-- Worktree and .grok moved into repo as per setup.
-- Gitignore updated for isolation.

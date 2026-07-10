@@ -1,5 +1,0 @@
-- Used chrome-devtools MCP and a11y-debugging to inspect UI in planner and admin/svg-editor.
-- Found some a11y issues in 1B surfaces (e.g., focus, contrast in Puck editor).
-- Last commits improved 1A UI, but 1B needs similar treatment.
-- Playwright a11y tests not fully run for 1B.
-- Workflow setup good, but reports need to be agent-generated.
