@@ -1,15 +1,20 @@
 /**
  * Verify `oando_plans` exists on admin Supabase. Create via migrations, not ad-hoc DDL.
+ * Env: repo-root `.env.local` via loadEnvLocal (same as db:test / db:apply).
  */
-import * as dotenv from "dotenv";
+import { createRequire } from "node:module";
 import postgres from "postgres";
+import { resolvePlannerDatabaseUrl } from "../platform/drizzle/databaseUrls";
 
-dotenv.config({ path: ".env.local" });
+const require = createRequire(import.meta.url);
+require("./loadEnvLocal.cjs").loadEnvLocal();
 
 async function main() {
-  const url = process.env.SUPABASE_AUTH_DATABASE_URL?.trim();
+  const url = resolvePlannerDatabaseUrl();
   if (!url) {
-    console.error("❌ SUPABASE_AUTH_DATABASE_URL missing from .env.local");
+    console.error(
+      "❌ Planner DB URL missing (set SUPABASE_AUTH_DATABASE_URL in repo-root .env.local)",
+    );
     process.exit(1);
   }
 

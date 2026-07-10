@@ -2,16 +2,23 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import PortalPage from '@/app/(site)/portal/page';
 import { requireAuthUser } from '@/lib/auth/session';
-import { isPlannerDatabaseConfigured } from '@/features/planner/store/plannerPersistence';
+import {
+  isMissingOandoPlansTableError,
+  isPlannerDatabaseConfigured,
+} from '@/features/planner/store/plannerPersistence';
 import { listPlannerDocumentsFromStore } from '@/features/planner/store/plannerSaves';
 
 vi.mock('@/lib/auth/session', () => ({
   requireAuthUser: vi.fn(),
 }));
 
-vi.mock('@/features/planner/store/plannerPersistence', () => ({
-  isPlannerDatabaseConfigured: vi.fn(),
-}));
+vi.mock('@/features/planner/store/plannerPersistence', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/features/planner/store/plannerPersistence')>();
+  return {
+    ...actual,
+    isPlannerDatabaseConfigured: vi.fn(),
+  };
+});
 
 vi.mock('@/features/planner/store/plannerSaves', () => ({
   listPlannerDocumentsFromStore: vi.fn(),
@@ -55,10 +62,10 @@ describe('app/(site)/portal/page.tsx', () => {
     expect(screen.getByTestId('portal-page-view')).toHaveAttribute('data-db', 'false');
   });
 
-  it('does not throw when plan list fails; surfaces listError', async () => {
+  it('does not throw when plan list fails; surfaces listError for non-schema errors', async () => {
     vi.mocked(isPlannerDatabaseConfigured).mockReturnValue(true);
     vi.mocked(listPlannerDocumentsFromStore).mockRejectedValue(
-      new Error('Database list failed: oando_plans'),
+      new Error('Database list failed: connection refused'),
     );
 
     const page = await PortalPage();
@@ -67,6 +74,36 @@ describe('app/(site)/portal/page.tsx', () => {
     const view = screen.getByTestId('portal-page-view');
     expect(view).toHaveAttribute('data-db', 'true');
     expect(view).toHaveAttribute('data-plan-count', '0');
-    expect(view).toHaveAttribute('data-list-error', 'Database list failed: oando_plans');
+    expect(view).toHaveAttribute('data-list-error', 'Database list failed: connection refused');
+  });
+
+  it('demotes missing oando_plans to databaseConfigured=false (no listError)', async () => {
+    vi.mocked(isPlannerDatabaseConfigured).mockReturnValue(true);
+    const missing = new Error(
+      'Database list failed: relation "oando_plans" does not exist',
+    );
+    expect(isMissingOandoPlansTableError(missing)).toBe(true);
+    vi.mocked(listPlannerDocumentsFromStore).mockRejectedValue(missing);
+
+    const page = await PortalPage();
+    render(page);
+
+    const view = screen.getByTestId('portal-page-view');
+    expect(view).toHaveAttribute('data-db', 'false');
+    expect(view).toHaveAttribute('data-plan-count', '0');
+    expect(view).toHaveAttribute('data-list-error', '');
+  });
+
+  it('renders empty success list when store returns []', async () => {
+    vi.mocked(isPlannerDatabaseConfigured).mockReturnValue(true);
+    vi.mocked(listPlannerDocumentsFromStore).mockResolvedValue([]);
+
+    const page = await PortalPage();
+    render(page);
+
+    const view = screen.getByTestId('portal-page-view');
+    expect(view).toHaveAttribute('data-db', 'true');
+    expect(view).toHaveAttribute('data-plan-count', '0');
+    expect(view).toHaveAttribute('data-list-error', '');
   });
 });

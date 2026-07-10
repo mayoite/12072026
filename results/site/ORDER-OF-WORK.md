@@ -41,7 +41,7 @@ Prefix letter is **not** sacred — pick one and stick to it. What matters is **
 | **D3** | Products suite align to home | **DONE** | `1f8c26c`, `141569c`, `ui-websuite-products/` |
 | **D4** | Marketing suite align to home | **DONE** | `4c89431`, `ui-websuite-marketing/D4-CLOSED.md`, `d4-close/*`, NOTES + after/* |
 | **D5** | Catalog image residual | **DONE** (path code) | `ui-websuite-products/D5-IMAGE-RESIDUAL.md` — 268/279 flagships; **11** need asset/JSON migration |
-| **D6** | Portal real DB list | queued | honest error UI only so far |
+| **D6** | Portal real DB list | **DONE** | `results/site/portal-d6/NOTES.md` — list OK (0 rows); missing-table demotes configured=false |
 
 **Design base:** Homepage. Suite aligns to home.  
 **CSS:** never edit `site/app/css/core/locked/**` (`Agents/Agents-css.md`).
@@ -64,6 +64,7 @@ Prefix letter is **not** sacred — pick one and stick to it. What matters is **
 Tracks may run in parallel: D* · A* · AI* · P*
 Within a track: one ID only.
 D5 path residual DONE (47 slug-folder wins). 11 SKUs still need assets/data migration — not more path heuristics.
-Next site track: D6 when activated.
+D6 portal plan list DONE — real empty list + honest not-configured when oando_plans missing.
+Next site track: owner picks (suite polish / A* / AI* / P*).
 Evidence: results/<track-or-site>/…
 ```

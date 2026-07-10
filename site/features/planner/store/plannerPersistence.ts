@@ -354,8 +354,48 @@ export async function deletePlannerDocument(
   }
 }
 
+/**
+ * Sync env gate only (URL present). Does **not** prove `oando_plans` exists.
+ * Callers that list/save should treat missing-table errors as “not ready”
+ * (see {@link isMissingOandoPlansTableError}) rather than “configured but broken”.
+ */
 export function isPlannerDatabaseConfigured(): boolean {
   return isPlannerDatabaseUrlConfigured();
+}
+
+/**
+ * Postgres / Drizzle failures that mean the planner plans relation is absent
+ * (or equivalent). Used so portal UX shows “not configured” instead of a
+ * false “storage is configured but query failed” panel.
+ */
+export function isMissingOandoPlansTableError(error: unknown): boolean {
+  const message =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : String(error ?? "");
+  const normalized = message.toLowerCase();
+  if (!normalized) return false;
+
+  // Postgres undefined_table
+  if (normalized.includes("42p01") || normalized.includes("undefined_table")) {
+    return true;
+  }
+
+  const missingRelation =
+    normalized.includes("does not exist") ||
+    normalized.includes("could not find the table") ||
+    normalized.includes("schema cache");
+
+  if (!missingRelation) return false;
+
+  // Portal list only hits oando_plans; accept explicit name or generic relation/table miss.
+  return (
+    normalized.includes("oando_plans") ||
+    normalized.includes("relation") ||
+    normalized.includes("table")
+  );
 }
 
 /** Admin list row — mirrors legacy `planner_saves` columns for API compatibility. */
