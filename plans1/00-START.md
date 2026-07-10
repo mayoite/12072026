@@ -13,7 +13,8 @@
 |-------------|--------|
 | Checkout | **Only** `D:\OandO07072026` main · **no worktrees** |
 | Package manager | **pnpm** from repo root (`pnpm-workspace.yaml`) |
-| Env | Repo-root `.env.local` (never commit). Copy from `.env.example` if missing |
+| Env | **Repo-root `.env.local` only** (never commit; never invent `site/.env.local`). Keys for Supabase/E2E/auth/CDN live there. Playwright loads it via `site/scripts/loadEnvLocal.cjs` (repo-root first). |
+| Playwright | `pnpm --filter oando-site exec playwright install chromium` once. Tests: `pnpm exec playwright test -c config/build/playwright.config.ts <spec>` from `site/`. Prefer existing dev server: set `PLAYWRIGHT_BASE_URL=http://localhost:3000` or leave default + `reuseExistingServer`. Fabric W proofs: leave `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE` **unset**. |
 | Node | Match repo engines (see root / site `package.json`) |
 | Evidence path | **Only** repo-root `results/` — never `site/results/`, never `site/test-results/` |
 | Shell | PowerShell OK; **`rg` may be missing** → use Select-String or install ripgrep |
