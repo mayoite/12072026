@@ -56,13 +56,14 @@
 
 | Rule | Location |
 |------|----------|
-| **Evidence / artifacts** | **Only** repo-root `results/` (`results/<module>/<phase>/…`). **Never** `site/results/`, **never** `site/test-results/`. |
+| **Evidence / artifacts (disposable)** | Repo-root `results/` only — **screenshots, logs, run dumps, raw reports**. **Never** durable plans, track boards, handbooks, or “source of truth” docs here. **Never** `site/results/`, **never** `site/test-results/`. |
+| **Durable docs / track boards** | `Plans/`, `Agents/`, `ayushdocs/` (SESSION-RECAP, D-TRACK-*, etc.) |
 | **Playwright / vitest reports** | `results/test-results/`, `results/playwright-report/`, `results/tests/` |
 | **IDE config** | Repo-root `.cursor/` only — **not** `site/.cursor/` |
 | **Research scrapes (historical)** | **`D:\websites`** ideas only. **Firecrawl is dead** for active work — do not re-run as routine. **No** `.firecrawl/` under `site/` or as product source |
 | **Install** | `pnpm` from **repo root**. Do not invent a second monorepo under `site/` |
 | **Tech-stack built docs** | Repo-root `tech-stack-docs/` + `tech-stack-generated/` |
-| **Plans** | `Plans/` live (`INDEX.md` · `phases/` · `Research/`); history in `archive/Plans/` |
+| **Plans** | `Plans/` live (`INDEX.md` · `phases/` · `Research/` · track summaries); history in `archive/Plans/` |
 | **Residual execute (world-standard wave)** | **`plans1/START-HERE.md`** only |
 | **Archived plan packages** | `archive/plans2/`, `archive/PlansA/` — not execute |
 

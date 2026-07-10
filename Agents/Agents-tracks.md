@@ -14,7 +14,7 @@
 
 | Track | Prefix | Handbook / plan |
 |-------|--------|-----------------|
-| Site suite | `D0`–`D6` | `results/site/ORDER-OF-WORK.md` |
+| Site suite | `D0`–`D6` | `Plans/D-TRACK-BOARD.md` · `Plans/D-TRACK-SUMMARY.md` (not `results/`) |
 | Planner product | `P01`–`P10` | `Plans/INDEX.md` |
 | Admin | `A1`… | admin surfaces |
 | AI | `AI1`… | assistant / AI |

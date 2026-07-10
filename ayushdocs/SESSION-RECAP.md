@@ -14,7 +14,8 @@ Stopped thrash with ordered site phases; home is design base; locked CSS fenced;
 
 ## Language: multi-track IDs (not “phase” alone)
 
-**Handbook:** `Agents/Agents-tracks.md` · **Board:** `results/site/ORDER-OF-WORK.md`
+**Handbook:** `Agents/Agents-tracks.md` · **Board:** `Plans/D-TRACK-BOARD.md` · **Bullets:** `Plans/D-TRACK-SUMMARY.md`  
+**`results/` is disposable** (screenshots/logs) — not for durable boards or important docs.
 
 | Track | IDs | Meaning |
 |-------|-----|---------|
@@ -79,7 +80,7 @@ Letter prefix optional; **serial within track** is the real rule.
 
 ## Next session — start here
 
-1. `git pull` · `git log -5` · read `results/site/ORDER-OF-WORK.md`  
+1. `git pull` · `git log -5` · read `Plans/D-TRACK-BOARD.md` + `ayushdocs/SESSION-RECAP.md`  
 2. Finish **D4** if open; then **D5** or **D6** (one only)  
 3. May start **A1** or **AI1** in parallel with a **D\*** only if packages do not clash  
 4. **P\*** planner: one P at a time; can parallel a D/A/AI  
@@ -90,17 +91,14 @@ Letter prefix optional; **serial within track** is the real rule.
 
 ---
 
-## Evidence map
+## Where things live
 
 ```
-results/site/
-  ORDER-OF-WORK.md
-  design-base-home/
-  ui-websuite-products/
-  ui-websuite-marketing/
-  ui-agent-a-home/          # earlier home polish (design base related)
-  ui-agent-b-seating/
-  a11y-homepage/            # optional a11y residual
+Plans/D-TRACK-BOARD.md      # durable D status
+Plans/D-TRACK-SUMMARY.md    # short bullets
+Agents/Agents-tracks.md     # multi-track rule
+Agents/Agents-css.md        # locked CSS fence
+results/site/               # disposable: screenshots, logs, run dumps only
 ```
 
 ---
@@ -110,4 +108,4 @@ results/site/
 - Full website “done”  
 - Portal cloud plans working  
 - Locked CSS rewritten  
-- Planner CP-04+ closed this session  
+- Planner CP-04+ close
