@@ -2,6 +2,7 @@ export * from "./catalogTypes";
 export * from "./catalogQuery";
 export * from "./catalogSearch";
 export * from "./proofCatalog";
+export * from "./catalogBuyerVisibility";
 export * from "./placementAction";
 export * from "./workstationSystemV0";
 export * from "./workstationMeshV0";

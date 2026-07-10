@@ -41,6 +41,10 @@ import {
   rankCatalogItems,
 } from "../catalog/catalogSearch";
 import type { Open3dCatalogItem } from "../catalog/catalogTypes";
+import {
+  filterBuyerFacingCatalogItems,
+  formatCatalogFootprintCm,
+} from "../catalog/catalogBuyerVisibility";
 import type { WorkstationConfigV0 } from "../catalog/workstationSystemV0";
 import { OPEN3D_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
 import { isSvgAssetUrl } from "../catalog/svg/svgPreviewAssets";
@@ -114,13 +118,17 @@ export const InventoryPanel = memo(function InventoryPanel({
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
 
   const indexedItems = useMemo(() => {
-    if (hasExternalCatalog) {
-      const external = catalogItems ?? [];
-      return external.length > 0 ? external : OPEN3D_DEMO_CATALOG_ITEMS;
-    }
-    return svgCatalog.items.length > 0
-      ? svgCatalog.items
-      : OPEN3D_DEMO_CATALOG_ITEMS;
+    const raw: Open3dCatalogItem[] = (() => {
+      if (hasExternalCatalog) {
+        const external = catalogItems ?? [];
+        return external.length > 0 ? external : OPEN3D_DEMO_CATALOG_ITEMS;
+      }
+      return svgCatalog.items.length > 0
+        ? svgCatalog.items
+        : OPEN3D_DEMO_CATALOG_ITEMS;
+    })();
+    // P-UI-1: never show proof / missing-geom fallback SKUs in buyer inventory.
+    return filterBuyerFacingCatalogItems(raw);
   }, [hasExternalCatalog, catalogItems, svgCatalog.items]);
 
   const effectiveStatus = hasExternalCatalog ? catalogStatus : svgCatalog.status;
@@ -653,8 +661,10 @@ export const InventoryPanel = memo(function InventoryPanel({
               <div className={styles.itemInfo}>
                 <span className={styles.itemName}>{item.shortName}</span>
                 <span className={styles.itemDimensions}>
-                  {(item.dimensions.widthMm / 1000).toFixed(1)}m ×{" "}
-                  {(item.dimensions.depthMm / 1000).toFixed(1)}m
+                  {formatCatalogFootprintCm(
+                    item.dimensions.widthMm,
+                    item.dimensions.depthMm,
+                  )}
                 </span>
                 <button
                   type="button"
