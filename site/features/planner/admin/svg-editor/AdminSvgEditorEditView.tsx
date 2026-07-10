@@ -38,6 +38,7 @@ import {
   puckEditorDataToDescriptorInput,
   puckConfig,
 } from "./puckBlockRegistry";
+import { safeThemeTokens } from "./themeTokens";
 import { Puck } from "@puckeditor/core";
 import "@puckeditor/core/puck.css";
 import type { PuckDataShape } from "./puckBlockRegistry";
@@ -143,8 +144,8 @@ function buildFieldRows(
         .join(" │ "),
     });
   }
-  // Null-safe: partial / new stubs may omit optional a11y + token maps (EXEC-1 crash fix).
-  const themeTokens = descriptor.themeTokens ?? {};
+  // Null-safe: partial / new stubs may omit optional a11y + token maps (TDD-1).
+  const themeTokens = safeThemeTokens(descriptor.themeTokens);
   rows.push({
     key: "themeTokens",
     value: `${Object.keys(themeTokens).length} semantic references`,

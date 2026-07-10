@@ -50,6 +50,10 @@ import {
   type BlockDescriptorParametric,
   type BlockDescriptorVariant,
 } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import { safeThemeTokens } from "./themeTokens";
+
+// Re-export theme token helpers so registry consumers share one defensive path.
+export { DEFAULT_THEME_TOKENS, safeThemeTokens } from "./themeTokens";
 
 // ── Puck field descriptor (typed mirror of @puckeditor/core Field) ──────────
 //
@@ -767,7 +771,9 @@ export function getPuckEditorData(descriptor: BlockDescriptor): PuckData {
     geometry: { ...descriptor.geometry },
     viewBox: { ...descriptor.viewBox },
     mounting: [...descriptor.mounting],
-    themeTokens: { ...(descriptor.themeTokens ?? {}) },
+    // Defensive defaults: never hand Puck undefined themeTokens (edit-page crash
+    // on .currentColor / ['--fill-primary'] when partial descriptors load).
+    themeTokens: safeThemeTokens(descriptor.themeTokens),
     rovingFocus: [...(descriptor.rovingFocus ?? [])],
     liveAnnouncementCategories: [...(descriptor.liveAnnouncementCategories ?? [])],
   };
@@ -811,10 +817,10 @@ export function puckEditorDataToDescriptorInput(
     geometry: (blockProps.geometry as BlockDescriptor["geometry"]) ?? original.geometry,
     viewBox: (blockProps.viewBox as BlockDescriptor["viewBox"]) ?? original.viewBox,
     mounting: (blockProps.mounting as BlockDescriptor["mounting"]) ?? original.mounting,
-    themeTokens:
+    themeTokens: safeThemeTokens(
       (blockProps.themeTokens as BlockDescriptor["themeTokens"] | undefined) ??
-      original.themeTokens ??
-      ({ currentColor: "currentColor" } as BlockDescriptor["themeTokens"]),
+        original.themeTokens,
+    ),
     rovingFocus:
       (blockProps.rovingFocus as BlockDescriptor["rovingFocus"] | undefined) ??
       original.rovingFocus ??
