@@ -43,6 +43,17 @@ You are the **main agent**: set goals with owner, run the phase, dispatch subage
 
 **Brutal honesty is the product.** Owner stated: happy only if you are honest.
 
+### Stop vs take the call
+
+| **STOP and ask** (hard) | **Escalate optional** | **Agent takes the call** |
+|-------------------------|------------------------|---------------------------|
+| Purchase / paid seat | Unscriptable visual judgment | Multi-file work in-phase |
+| Force-push / delete remote branches | True multi-module architecture fork | Package-local structure |
+| Destroy owner data / competitor assets | — | Browser/E2E when **task** is UI proof |
+| **Goal** change or new product area | — | Targeted tests (not full monorepo suite by default) |
+
+Peer handbooks that say “stop” mean **hard list** or optional escalate — not freeze on normal phase work. Gate policy for suite size: `Failures.md`.
+
 ---
 
 ## 3. Grain
@@ -54,6 +65,7 @@ You are the **main agent**: set goals with owner, run the phase, dispatch subage
 | **Task** | One item on the phase list |
 | **Residual** | Gap inside the active phase (still phase-scale when the list is multi-hour) |
 | **Prompt** | Owner message naming/continuing a phase — not a substitute for the task list |
+| **Temp task list** | While a phase is executing: a **short live checklist** (often under `results/<module>/<phase>/TASK-LIST.md`) is good. Not a second master plan. Discard or fold into phase NOTES/addendum when the phase closes. |
 
 Not vibe coding. Product horizon: **days and months**.
 
@@ -104,15 +116,15 @@ Not vibe coding. Product horizon: **days and months**.
 |------|------|------------------|
 | **Commit** | Each landable task | Local commit on `main` (`D:\OandO07072026` only — **no worktrees**) |
 | **origin** | Slice green enough not to strand remote | `git push origin main` — **agent call, no ask** |
-| **mirror** | ~**45 min** real work **or** sooner after a big land | `git push mayoite main` — remote **`mayoite`** → `mayoite/OandO07072026` |
+| **mirror** | ~**45 min** real work **or** sooner after a big land | `git push mayoite main` — remote **`mayoite`** → `https://github.com/mayoite/OandO07072026` |
 | **Never** | Unless owner asks | Force-push origin or mayoite; delete remote branches |
 
-**Remotes (verified pattern):**
+**Remotes:**
 
 - `origin` = primary (e.g. `pglcarpets/Codex07072026`)  
-- `mayoite` = **mirror backup** (`https://github.com/mayoite/OandO07072026.git`)
+- `mayoite` = **mirror backup** (`https://github.com/mayoite/OandO07072026.git`) — repo **exists**; agent environment may 404 if credentials lack access. Re-try; on fail log `Failures.md` — **do not claim mirror green**. Owner machine may still push successfully.
 
-If `mayoite` missing or push fails → log in `Failures.md` / recap; do not pretend backup happened.
+If push fails → origin still required; mirror failure is OPEN not silent skip.
 
 ### 5.2 Infra / data backup (ops — not automatic every chat)
 
@@ -130,7 +142,7 @@ Full policy: **`OPERATIONS_RUNBOOK.md`**. Commands: **`START.md`**.
 
 ### 5.3 Session truth log
 
-`ayushdocs/SESSION-RECAP.md` — during multi-hour phases: on land / block / ~15–45m. Paths or it didn’t happen.
+`ayushdocs/SESSION-RECAP.md` — during multi-hour phases: on land / block / about every **30 minutes** of active work. Paths or it didn’t happen.
 
 ---
 
@@ -153,23 +165,25 @@ Full policy: **`OPERATIONS_RUNBOOK.md`**. Commands: **`START.md`**.
 2  Repo-truth open (0–2 scouts) — disprove paper PASS
 3  Gap / brainstorm as needed → phase task list (can be ~10–15 tasks)
 4  writing-plans / checklist from repo truth
-5  Execute hours:
+5  Execute hours (temp TASK-LIST.md under results/ OK):
      - multi-package → 2–4 implementers (different packages only)
      - one package → serial
      - TDD on product tasks
-     - chrome-devtools when browser proof is the task
+     - Browser/E2E only when the **task** needs UI proof (chrome-devtools and/or Playwright) — not every task; see Failures.md gate policy for suite defaults
 6  parallel agents only across independent packages
 7  systematic-debugging on red
 8  review at landable checkpoints
 9  verification-before-completion
 10 check-work at phase / high-risk gates
 11 finish: commit → push origin → mirror mayoite per §5.1
-12 SESSION-RECAP
+12 SESSION-RECAP (~**30 min** during active phase work + land/block)
 ```
 
 **Skills in play:** superpowers, goal, explore, brainstorming, writing-plans, SDD / executing-plans, parallel (package-safe), TDD, chrome-devtools, systematic-debugging, code-review / requesting-code-review, verification-before-completion, check-work, finishing-a-development-branch, recap.
 
 **Out:** Firecrawl. **Out:** git worktrees.
+
+**Test/browser default:** Prefer targeted Vitest/typecheck. Full Playwright / monorepo suite only for explicit UI-proof tasks, phase gates, release, or owner ask (`Failures.md`).
 
 ---
 

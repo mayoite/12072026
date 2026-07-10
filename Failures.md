@@ -21,18 +21,19 @@ Skipped items must be declared. Shell works; gates are runnable.
 | Field | Detail |
 |-------|--------|
 | **ID** | `GIT-MIRROR-MAYOITE-404` |
-| **Date** | 2026-07-10 |
-| **Symptom** | `git push mayoite main` → `remote: Repository not found` for `https://github.com/mayoite/OandO07072026.git` |
-| **Impact** | AGENTS / Elon §5 requires ~45m mirror backup; **mirror not proven**. origin push works. |
-| **Owner action** | Create/restore `mayoite/OandO07072026` or fix remote URL + credentials; agent re-test `git push mayoite main` |
-| **Agent action** | Keep pushing origin; log each mayoite fail; do not claim mirror backup green |
+| **Date** | 2026-07-10 (recheck same day) |
+| **Symptom** | Agent shell: `git push mayoite main` / `ls-remote` → `Repository not found` for `https://github.com/mayoite/OandO07072026.git` |
+| **Owner note** | Repo exists at that URL; last push ~12h ago from owner side — likely **agent credential/access**, not missing repo |
+| **Impact** | Mirror from **this agent environment** not proven. origin push works. |
+| **Owner action** | Grant agent/git credential access to `mayoite/OandO07072026`, or push mirror from a machine that can |
+| **Agent action** | Keep pushing origin; retry mayoite; log fails; never claim mirror green without exit 0 |
 
 ---
 
 ## Gate policy
 
 - Read this file before running release gates (`START.md` → `pnpm run release:gate`).
-- **Agent default:** do not run Playwright, browser automation, or full E2E on every task; prefer targeted Vitest, typecheck, and HTTP/API probes (`AGENTS.md` §Browser / E2E). Full browser/E2E is for explicit user request, release gate, or closing `PLAN-FAIL-0412` — not routine slice work.
+- **Agent default:** do not run Playwright, browser automation, or full E2E on every task; prefer targeted Vitest, typecheck, and HTTP/API probes. Full browser/E2E (Playwright and/or chrome-devtools) is for **phase tasks that need UI proof**, release gate, owner ask, or closing `PLAN-FAIL-0412` — not every task. Aligns with `Agents/Agents-ELON-STANDARD.md` + `Agents-browser.md`.
 - **Agent default:** do not run the full test suite or `test:coverage` after each planner phase/slice; run only Vitest files/patterns for the changed surface unless the user asks or a release/ship claim requires it (`AGENTS.md` §Test runs; `PLAN-FAIL-0413`, `0408`).
 - Coverage (agent call 2026-07-09): **include-first allowlist**, not 90% of monorepo. Planner gate = `workstation*` + placementAction + furnitureBlock2D + proofCatalog + canvasPicking (`vitest.shared.ts`). Thresholds **70/55/70/70**. Site **85/75/85/85**. Inventory = no threshold. Expand allowlist only when tests own the file.
 - A passing assertion count with missing console output or artifacts is **INCOMPLETE**, not passed.

@@ -1,7 +1,9 @@
 # Agents/Agents-testing.md
 
 ## 1. Authority
+- **Head bar:** `Agents-ELON-STANDARD.md` (phase grain, honesty, backup).
 - **Docs:** Read `../testing-handbook.md` (universal policy) and `../Readme.md` (commands).
+- **Planner evidence:** often `../results/planner/<phase>/` in addition to generic vitest paths below.
 
 ## 2. Verification Protocol (Behavior)
 - **Targeted:** Run smallest relevant check. Do not run unrelated suites.

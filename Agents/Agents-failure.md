@@ -1,7 +1,9 @@
 # Agents/Agents-failure.md
 
 ## 1. Authority
+- **Head bar:** `Agents-ELON-STANDARD.md` (phase grain, honesty, backup).
 - **Docs:** Read `../Failures.md` (active blockers) and `../resolved-failures.md` (history).
+- **Example open:** `GIT-MIRROR-MAYOITE-404` — log mirror fail; do not claim backup PASS.
 
 ## 2. Logging
 - **Immediate Action:** STOP and log failing tests/build errors in `../Failures.md`.

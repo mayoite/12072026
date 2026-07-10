@@ -120,9 +120,10 @@ If a tool defaults output into `site/`, **redirect it to root `results/`** or fi
 ## 7. Done Checklist
 1. **Match:** Does it perfectly match the ask with zero bloat?
 2. **Verify:** Is there concrete evidence in `results/`?
-3. **Backup:** origin pushed when right; mayoite if ~45m / big land?
-4. **Log:** Blockers in `Failures.md`?
-5. **Report:** What ran, what failed, next phase step — honest.
+3. **Backup:** origin pushed when right; mayoite if ~45m / big land (log fail if agent cannot access)?
+4. **Recap:** SESSION-RECAP on land/block / ~**30 min** active phase work?
+5. **Log:** Blockers in `Failures.md`?
+6. **Report:** What ran, what failed, next phase step — honest.
 
 ## 8. Master Plan Alignment
 - **Read live plan first:** `Plans/trustdata/` sequential phases. Do not skip foundational phases.

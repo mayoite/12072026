@@ -1,6 +1,7 @@
 # Agents/Agents-docs.md
 
 ## 1. Authority
+- **Head bar:** `Agents-ELON-STANDARD.md` (phase grain, honesty, backup).
 - **Docs:** Read `../docs/Lockedfiles/ReadmeLocked.md` (locked repo facts).
 
 ## 2. Synchronization
