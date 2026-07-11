@@ -10,19 +10,19 @@ const dir = path.join(root, "Agents");
 
 const ALLOWED = new Set([
   "INDEX.md",
-  "Agents-ELON-STANDARD.md",
-  "Agents-tracks.md",
-  "Agents-Plan.md",
-  "Agents-testing.md",
-  "Agents-browser.md",
-  "Agents-failure.md",
-  "Agents-docs.md",
-  "Agents-architecture.md",
-  "Agents-css.md",
+  "Agents-01-ELON-STANDARD.md",
+  "Agents-02-tracks.md",
+  "Agents-03-Plan.md",
+  "Agents-04-testing.md",
+  "Agents-05-browser.md",
+  "Agents-06-failure.md",
+  "Agents-07-docs.md",
+  "Agents-08-architecture.md",
+  "Agents-09-css.md",
 ]);
 
 const MAX_LINES = {
-  "Agents-ELON-STANDARD.md": 100,
+  "Agents-01-ELON-STANDARD.md": 100,
   "INDEX.md": 25,
   default: 40,
 };

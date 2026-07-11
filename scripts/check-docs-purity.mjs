@@ -18,8 +18,8 @@ const SCAN = [
 ].map((p) => path.join(root, p));
 
 const ALLOWLIST = [
-  path.normalize("docs/Lockedfiles/planner/proposed.md"),
-  path.normalize("docs/Lockedfiles/tech-stack/"),
+  path.normalize("docs/Lockedfiles/01-planner-current.md"),
+  path.normalize("docs/Lockedfiles/03-dependencies-engines-current.md"),
 ];
 
 function allowed(rel) {

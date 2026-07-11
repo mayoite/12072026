@@ -1,6 +1,6 @@
 # Start — dev, test, and release commands
 
-**Open when running commands** · conduct `AGENTS.md` · repo facts `Readme.md` · doc routing `docs/Lockedfiles/ReadmeLocked.md` · test layout `TESTING.md` · gate policy `Failures.md`
+**Open when running commands** · conduct `AGENTS.md` · repo facts `Readme.md` · doc routing `docs/Lockedfiles/INDEX.md` · test layout `TESTING.md` · gate policy `Failures.md`
 
 Repo root (`pnpm-workspace.yaml`). Package manager: **pnpm**.
 
@@ -129,7 +129,7 @@ Renderer: `site/tech-stack-generator/` → build to repo-root `tech-stack-docs/`
 ## Docs (root link check)
 
 ```powershell
-pnpm run docs:check:root-links   # DOC-MAP.md, Readme.md, ReadmeLocked.md
+pnpm run docs:check:root-links   # DOC-MAP.md, Readme.md, Lockedfiles/INDEX.md
 ```
 
 ---

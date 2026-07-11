@@ -1,59 +1,55 @@
 # P02 — Engine lock
 
-**Status:** OPEN / REPROVE — not complete. Old `01-engine-lock/` packs are clues only.
+**Status:** OPEN / REPROVE — not complete. Disk pack `01-engine-lock/` is **stale** if it still freezes Feasibility interim. **OWNER-SIGNOFF OPEN**.
 
-**Gate:** CP-02 — lock 2D/3D stack in writing so later phases do not thrash engines.  
+**Gate:** CP-02 — lock the **upgraded** stack in writing. Later phases ship on it; no engine rollback.  
 **Evidence:** `results/planner/world-standard-wave/01-engine-lock/` only (never `02-engine-lock/`).  
-**CP:** [CHECKPOINTS](./CHECKPOINTS.md) · binding: [CONSTRAINTS](./CONSTRAINTS.md) · [BOARD](./BOARD.md)
+**CP:** [CHECKPOINTS](./CHECKPOINTS.md) · [CONSTRAINTS](./CONSTRAINTS.md) · [BOARD](./BOARD.md)
 
-**Goal:** Confirm locked stack once; ship W1–W8 on that path. No mid-wave engine vote.
-
-**Approach A:** FeasibilityCanvas + document model first. Fabric.js v7 = **destination** 2D (not abandoned). Three + orbit ON = planner 3D. **No** Konva+Fabric hybrid.
+**Goal:** Freeze Fabric-sole + Three/orbit. Reject any plan that reopens Feasibility as live 2D.
 
 ---
 
-## Locked stack (do not re-debate in P03+)
+## Locked stack (upgrade — code 2026-07-11)
 
-| Layer | Choice | Live today |
-|-------|--------|------------|
-| 2D destination | Fabric.js v7 full stage | Furniture overlay flag OFF — `canvas-fabric-stage/` |
-| 2D interim | FeasibilityCanvas | Sole interactive 2D on open3d |
-| 3D planner | Three + R3F path + OrbitControls default ON | `Lazy3DViewer` / `ThreeViewerInner` |
-| 3D admin preview | `@google/model-viewer` | Admin SVG only — not planner workspace |
-| Hybrid ban | One interactive 2D engine | Fail → Konva **full** only if Fabric proven unworkable |
+| Layer | Locked choice | Live path |
+|-------|---------------|-----------|
+| **2D host** | Fabric.js **v7** sole interactive plan canvas | `PlannerCanvasStage` → `canvas-fabric-stage/Open3dFabricStage` |
+| Walls + furniture | Drawn **in** Fabric stage (layer visibility) | Not Feasibility; not flag-gated overlay |
+| Flag leftover | `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE` | Module + tests only — **not** product host switch |
+| `FurnitureFabricLayer` | Spike leftover | Not mounted by workspace |
+| FeasibilityCanvas | **Archived** | `_archive/canvas-feasibility/` — restore = owner unlock only |
+| 3D planner | Three + orbit ON | `Lazy3DViewer` + `getOpen3dViewerControlProps()` |
+| Admin 3D preview | `@google/model-viewer` | Admin SVG only |
+| Hybrid ban | One interactive 2D host | No Konva; no second Fabric product shell |
 
 ```
 Document (UUID, mm)
-  → 2D dest: Fabric · 2D interim: Feasibility · 3D: Three+orbit
-  → Persist: IDB first (P06) · Catalog/mesh later phases
+  → 2D: Fabric stage (sole) · 3D: Three + orbit
+  → Persist: IDB first (P06)
 ```
 
-**Pins:** from `site/package.json` only — no upgrades in P02. Record in `PACKAGE-PIN.md`.
-
-**Licenses:** `@fancyapps/ui` unused? clear or remove (ask before buy). `gsap` used → `ayushdocs/17-LICENSES-CLEARED.md` row.
-
----
-
-## Anti-thrash
-
-- Do **not** re-open engines in P03+.
-- Do **not** invent second interactive 2D mid-wave.
-- Success metric: quote/BOQ path > photoreal thrash.
-- Research under `D:\websites\…` = inspiration only — no competitor assets in `site/`.
+**Pins:** `site/package.json` — `fabric@7.4.0`. Refresh `PACKAGE-PIN.md`.  
+**Do not** re-apply old ENGINE-LOCK text that says “Feasibility interim / Fabric overlay when flag ON” — that freezes a **downgrade**.
 
 ---
 
-## Evidence checklist (unchecked)
+## Anti-thrash (upgrade protection)
 
-- [ ] `ENGINE-LOCK-RECORD.md` — stack + Approach A + folder lock
-- [ ] `FLAG-INVENTORY.md` — `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE` etc. (code truth)
-- [ ] `ENTRYPOINT-MAP.md` — Feasibility / Fabric stage / Lazy3D / hosts
-- [ ] `PACKAGE-PIN.md` — exact versions from package.json
-- [ ] `OWNER-SIGNOFF.md` or written deferral (no silent green)
-- [ ] `ANTI-THRASH-AUDIT.md` — no second 2D; CONSTRAINTS match tree or drift noted
-- [ ] Fabric/flag unit re-run logged (no product engine swap)
-- [ ] CONSTRAINTS.md matches live tree or drift recorded
+- Do not re-open engines in P03+ without owner.
+- Do not prove W3/W5/W8 on Feasibility “because flag OFF.”
+- Raise missing behavior **on Fabric** (select, Block2D symbols, draw tools) — that is the upgrade path.
+- Research = inspiration only — no competitor assets in `site/`.
 
-**Out of scope:** W3 select/delete · W4 browser pack · Fabric walls cutover · package upgrades · photoreal · multiplayer.
+---
 
-**Next:** [P03](./P03-select-delete.md) only after CP-02 fresh proof or owner WAIVE.
+## Kill order (unchecked)
+
+- [ ] Rewrite ENGINE-LOCK-RECORD / ENTRYPOINT-MAP to **Fabric-sole** (explicitly retire Feasibility-interim freeze)
+- [ ] FLAG-INVENTORY: leftover only; not host authority
+- [ ] PACKAGE-PIN matches this `package.json`
+- [ ] CONSTRAINTS matches this card
+- [ ] OWNER-SIGNOFF.md **or** written deferral
+- [ ] No product engine swap / no Feasibility un-archive this phase
+
+**Next:** [P03](./P03-select-delete.md) after CP-02 fresh proof or owner WAIVE.

@@ -6,9 +6,9 @@ pnpm monorepo for `oando.co.in`. Next.js in `site/`.
 
 ## Which doc to open
 
-→ **`docs/Lockedfiles/conduct/ReadmeLocked.md`** (locked). Repo facts and app paths continue below.
+→ **`docs/Lockedfiles/INDEX.md`** (routing). Repo facts and app paths continue below.
 
-→ **Active lane / session status & handover** — see [`Plans/README.md`](Plans/README.md) to discover the current active lane (live status, blockers, next actions, and promotion state).
+→ **Active lane / session status & handover** — see [`Plans/INDEX.md`](Plans/INDEX.md) to discover the current active lane (live status, blockers, next actions, and promotion state).
 
 ## Layout
 
@@ -18,13 +18,13 @@ repo-root/          ← pnpm workspace wrapper (package.json, pnpm-lock.yaml)
 ├── tech-stack-generator/  ← Vite source (oando-tech-stack-docs); build output — see `tech-stack-generator/README.md`
 ├── docs/           ← reference docs (architecture, api, audit)
 ├── archive/        ← historical outputs + `archive/migrationdocs/`
-├── Plans/          ← governance + execution plans (see Plans/README.md to discover active session status and lanes)
+├── Plans/          ← governance + execution plans (see Plans/INDEX.md to discover active session status and lanes)
 └── archive/1b-5phase-agent-workflow/ (and archive/Agents_work/) ← archived 1b-5phase agent workflow reports, reviews, benchmarks (narratives only; evidence in results/)
 ```
 
 Inside `site/`: `app/` · `features/planner/` · `components/` · `lib/` · `tests/` · `scripts/` · `platform/` · `config/` — **no** `results/` (evidence is repo-root `results/` only; see `AGENTS.md`)
 
-**Where code goes:** [`docs/architecture/MODULE-LAYOUT.md`](docs/architecture/MODULE-LAYOUT.md) · **Architecture index:** [`docs/architecture/README.md`](docs/architecture/README.md)
+**Where code goes:** [`docs/architecture/01-MODULE-LAYOUT.md`](docs/architecture/01-MODULE-LAYOUT.md) · **Architecture index:** [`docs/architecture/README.md`](docs/architecture/README.md)
 
 ## Environment
 
@@ -65,7 +65,7 @@ Copy `.env.example` → repo-root `.env.local`. Minimum keys: `NEXT_PUBLIC_SUPAB
 - **Admin:** `site/app/css/core/locked/admin/` — flat `*.css` + `index.css`.
 - **Planner:** `site/app/css/core/locked/planner/` — flat `*.css`; `marketing.css` / `open3d-workspace.css` entry bundles.
 
-CSS operating model: [`docs/architecture/CSS-SOLUTION.md`](docs/architecture/CSS-SOLUTION.md). Module folders and ownership: [`docs/architecture/MODULE-LAYOUT.md`](docs/architecture/MODULE-LAYOUT.md) · [`docs/architecture/README.md`](docs/architecture/README.md).
+CSS operating model: [`docs/architecture/04-CSS-SOLUTION.md`](docs/architecture/04-CSS-SOLUTION.md). Module folders and ownership: [`docs/architecture/01-MODULE-LAYOUT.md`](docs/architecture/01-MODULE-LAYOUT.md) · [`docs/architecture/README.md`](docs/architecture/README.md).
 
 ## Assets & CDN
 
@@ -88,12 +88,12 @@ Install, dev server, and all other commands: **`START.md`**.
 
 ## Testing & Evidence
 
-- **Technical Guide & Paths:** [`Agents/Agents-testing.md`](Agents/Agents-testing.md)
+- **Technical Guide & Paths:** [`Agents/Agents-04-testing.md`](Agents/Agents-04-testing.md)
 - **Universal Policy:** [`testing-handbook.md`](testing-handbook.md) (Mandatory output-integrity policy for both humans and agents).
 
 http://localhost:3000 · guest planner `/planner/guest/`
 
-TypeScript **6.x**. Dev: `next dev --webpack`. Vercel Root Directory = `site`. Test output: repo-root `results/` (detail **`TESTING.md`**; locked copy **`docs/Lockedfiles/TestingLocked.md`**).
+TypeScript **6.x**. Dev: `next dev --webpack`. Vercel Root Directory = `site`. Test output: repo-root `results/` (detail **`testing-handbook.md`**).
 
-Other reference: `docs/architecture/`, `docs/api/ROUTE-INDEX.md`, `docs/audit/`, `Plans/README.md` (active lane & session status).
+Other reference: `docs/architecture/`, `docs/api/ROUTE-INDEX.md`, `Plans/INDEX.md`.
 

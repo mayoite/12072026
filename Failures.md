@@ -33,7 +33,7 @@ Skipped items must be declared. Shell works; gates are runnable.
 ## Gate policy
 
 - Read this file before running release gates (`START.md` → `pnpm run release:gate`).
-- **Agent default:** do not run Playwright, browser automation, or full E2E on every task; prefer targeted Vitest, typecheck, and HTTP/API probes. Full browser/E2E (Playwright and/or chrome-devtools) is for **phase tasks that need UI proof**, release gate, owner ask, or closing `PLAN-FAIL-0412` — not every task. Aligns with `Agents/Agents-ELON-STANDARD.md` + `Agents-browser.md`.
+- **Agent default:** do not run Playwright, browser automation, or full E2E on every task; prefer targeted Vitest, typecheck, and HTTP/API probes. Full browser/E2E (Playwright and/or chrome-devtools) is for **phase tasks that need UI proof**, release gate, owner ask, or closing `PLAN-FAIL-0412` — not every task. Aligns with `Agents/Agents-01-ELON-STANDARD.md` + `Agents-05-browser.md`.
 - **Agent default:** do not run the full test suite or `test:coverage` after each planner phase/slice; run only Vitest files/patterns for the changed surface unless the user asks or a release/ship claim requires it (`AGENTS.md` §Test runs; `PLAN-FAIL-0413`, `0408`).
 - Coverage (agent call 2026-07-09): **include-first allowlist**, not 90% of monorepo. Planner gate = `workstation*` + placementAction + furnitureBlock2D + proofCatalog + canvasPicking (`vitest.shared.ts`). Thresholds **70/55/70/70**. Site **85/75/85/85**. Inventory = no threshold. Expand allowlist only when tests own the file.
 - A passing assertion count with missing console output or artifacts is **INCOMPLETE**, not passed.
@@ -75,8 +75,8 @@ Skipped items must be declared. Shell works; gates are runnable.
 | SVG **publish authority** | **`pipelineCore+normalize`** only | `compileSvgForPublish` → S1 normalize + pipelineCore S2/S3; S4 `runSvgPipeline` / `generate-svg.mjs` |
 | V1 `svgCompiler.server` | **`v1-reference-only`** (retained; not publish wire) | Not dual live authority; do not treat “unify dual compilers” as open publish blocker |
 | **G8** viewer GLB load | **partial** (unit path landed) | `ThreeViewerInner` + `loadGeneratedGlbObject` when `shouldLoadGlb(generatedGlbUrl)`; not full product |
-| G8 residuals (open work) | Upload on publish; browser smoke; no shared cache / scale / auto-upload | `task.md` §02 open items |
-| SVG residual (open work) | Full admin UI publish browser smoke | `task.md` §01 |
+| G8 residuals (open work) | Upload on publish; browser smoke; no shared cache / scale / auto-upload | Admin A1/A2 + mesh P08 |
+| SVG residual (open work) | Full admin UI publish browser smoke | Admin A1 |
 
 - Do **not** re-open dual-compiler as publish-authority ambiguity.
 - Do **not** claim G8 complete (place still procedural default; stamp opt-in).

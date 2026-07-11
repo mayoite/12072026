@@ -9,11 +9,11 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dir = path.join(root, "ayushdocs");
 
 const ALLOWED = new Set([
-  "00-PENDING.md",
-  "12-WORKFLOW.md",
-  "18-PRODUCT-CONTEXT.md",
-  "19-GOALS-SLICES.md",
-  "SESSION-RECAP.md",
+  "01-PENDING.md",
+  "02-WORKFLOW.md",
+  "03-PRODUCT-CONTEXT.md",
+  "04-GOALS-SLICES.md",
+  "05-SESSION-RECAP.md",
 ]);
 
 const ABS_RE = /[A-Za-z]:\\|\/Users\/|D:\\\\websites/i;
@@ -56,7 +56,7 @@ for (const f of files) {
 if (violations.length) {
   console.error("check:ayushdocs FAIL:\n");
   violations.forEach((v) => console.error(`  ${v}`));
-  console.error("\nMove detail to Plans/Planner-track/library/from-museum/ayushdocs-detail/.");
+  console.error("\nKeep ayushdocs at 5 owner files only. Detail → Plans or docs/architecture.");
   process.exit(1);
 }
 

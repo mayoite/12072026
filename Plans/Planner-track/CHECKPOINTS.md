@@ -4,7 +4,8 @@
 
 **Checkout:** `.` only · no worktrees  
 **Evidence root:** `results/planner/world-standard-wave/`  
-**Owner law:** [BOARD](./BOARD.md) · [CONSTRAINTS](./CONSTRAINTS.md) · [Agents-Plan](../../Agents/Agents-Plan.md)
+**Upgrade lock:** Fabric sole 2D — see [BOARD](./BOARD.md) · [CONSTRAINTS](./CONSTRAINTS.md)  
+**Owner law:** [BOARD](./BOARD.md) · [CONSTRAINTS](./CONSTRAINTS.md) · [Agents-Plan](../../Agents/Agents-03-Plan.md)
 
 ### Status meanings
 
@@ -43,12 +44,12 @@ There is **no** separate MASTER-CHECKLIST. Tick theater was deleted.
 |----|-------------|--------|
 | CP-00 | Approach A + unlock recorded — do not re-ask unlock | **PASS** (process only) |
 | CP-01 | Inventory vs claims, paths in evidence | **REPROVE** |
-| CP-02 | CONSTRAINTS match live stack; no second interactive 2D | **REPROVE** |
-| CP-03 | Select · delete · undo — **unit + browser** (unit alone = fail) | **REPROVE** |
-| CP-04 | Orbit ON + 2D↔3D pose continuity, browser proof | **REPROVE** |
-| CP-05 | Block2D symbols readable; no false SVG-publish claim | **REPROVE** |
+| CP-02 | CONSTRAINTS = **Fabric-sole**; no Feasibility restore | **REPROVE** |
+| CP-03 | Select · delete · undo **on Fabric** — unit + browser | **REPROVE** |
+| CP-04 | Orbit ON + 2D↔3D pose (Fabric↔Three), browser proof | **REPROVE** |
+| CP-05 | Symbols readable **on live Fabric**; SVG = publish only | **REPROVE** |
 | CP-06 | Save→reload same ids; honest local/cloud labels | **REPROVE** |
-| CP-07 | Draw walls/door + place ≥2 items, screenshots | **REPROVE** |
+| CP-07 | Draw/place on Fabric (`open3d-fabric-stage`), screenshots | **REPROVE** |
 | CP-08 | Modular mesh readable (toe/carcass/door) | **REPROVE** |
 | CP-09 | Shortcut labels = handlers | **REPROVE** |
 | CP-10 | Handover pack on disk — **not product ship** | **OPEN** (`10-handover/` missing) |

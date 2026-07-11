@@ -28,9 +28,8 @@ const SCAN_DIRS = [
   "Planner-track/BOARD.md",
   "Planner-track/START.md",
   "Planner-track/EXECUTE.md",
-  "Planner-track/CODE-REVIEWS.md",
   "Planner-track/CONSTRAINTS.md",
-  // CHECKPOINTS + CHECKPOINTS are program-law hubs at Planner-track root (length-exempt).
+  // CHECKPOINTS are program-law hubs at Planner-track root (length-exempt).
   "Planner-track",
   "Admin-track",
   "Site-track",

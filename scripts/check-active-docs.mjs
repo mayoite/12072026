@@ -18,7 +18,7 @@ const ACTIVE_ROOTS = [
   "Plans",
   "docs/INDEX.md",
   "docs/Lockedfiles/INDEX.md",
-  "docs/Lockedfiles/planner/current.md",
+  "docs/Lockedfiles/01-planner-current.md",
 ];
 
 function collectMd(abs) {
@@ -65,7 +65,7 @@ const relPaths = [...files]
 if (relPaths.length > MAX_ACTIVE) {
   console.error(`check:active-docs FAIL: ${relPaths.length} active MDs (max ${MAX_ACTIVE}):\n`);
   relPaths.forEach((p) => console.error(`  ${p}`));
-  console.error("\nMove detail to Plans/*/library|supporting (from-museum*) or merge into track BOARD.md.");
+  console.error("\nMove detail out of active budget or merge into track BOARD.md / Lockedfiles *-current.md.");
   process.exit(1);
 }
 

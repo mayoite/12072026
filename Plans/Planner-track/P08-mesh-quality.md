@@ -8,7 +8,7 @@
 
 **Goal:** Freeze bar in NOTES; prove with units + headless visual smoke; plan === mesh part list.
 
-**Out of scope:** Photoreal · full kitchens/hardware · Fabric · cloud catalog · designer static GLB · non–cabinet-v0 · writes under `site/public/**`. Stay imperative Three — no R3F rewrite for pretty PNGs.
+**Out of scope:** Photoreal · full kitchens/hardware · 2D host thrash · Feasibility restore · cloud catalog · designer static GLB · non–cabinet-v0 · writes under `site/public/**`. Stay imperative Three — no R3F rewrite for pretty PNGs.
 
 **Depends:** P01 path truth. P07 browser place optional — headless mesh PNG is default smoke.
 

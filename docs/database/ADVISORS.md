@@ -106,7 +106,7 @@ When a `rls_enabled_no_policy` finding is intentional (e.g. a service-role-only 
 
 ## Known intentional WARNs (2026-06-30)
 
-Re-run: `pnpm --filter oando-site run db:advisors` · `:admin` · full detail in [`docs/audit/database/advisors-report.md`](../audit/database/advisors-report.md).
+Re-run: `pnpm --filter oando-site run db:advisors` · `:admin`. Keep SECURITY ERROR count at zero before gate.
 
 **Products DB**
 

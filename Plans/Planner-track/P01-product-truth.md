@@ -1,57 +1,60 @@
 # P01 — Product truth inventory
 
-**Status:** OPEN / REPROVE — not complete. Old `00-product-truth/` packs are clues only.
+**Status:** OPEN / REPROVE — not complete. Old `00-product-truth/` pack = clue only (pre–Fabric-sole).
 
-**Gate:** CP-01 baseline — map what open3d **does** vs what docs/UI **claim** (paths required).  
+**Gate:** CP-01 — map what open3d **does** vs what docs/UI **claim** (paths required).  
 **Evidence:** `results/planner/world-standard-wave/00-product-truth/`  
 **CP:** [CHECKPOINTS](./CHECKPOINTS.md) · [BOARD](./BOARD.md) · Approach **A**
 
-**Goal:** Data-backed inventory + contradictions so later phases fix real gaps (W1–W8), not stories.
+**Goal:** Inventory so later phases **raise** the live Fabric host — never restore Feasibility as product 2D.
 
-**Scope:** Inventory only — **no** product-feature code under `site/features/planner/open3d/**`. Read tree; write evidence under `00-product-truth/` only.
-
-**Out of scope:** Select/delete (P03) · orbit (P04) · Fabric cutover · mesh · new journey product code · package upgrades · CRM/auth/SSR.
+**Scope:** Inventory only — no product-feature implementation. Evidence under `00-product-truth/` only.
 
 ---
 
-## Truth anchors (re-verify)
+## Upgrade lock (code 2026-07-11 — do not reverse)
 
-| Topic | Live path / note |
-|-------|------------------|
-| Planner source | `site/features/planner/open3d/` |
-| App hosts | `site/app/planner/` · UI adapters `site/features/planner/ui/` |
-| Interim 2D | FeasibilityCanvas — sole interactive 2D on open3d routes |
-| Fabric | Destination; archive `_archive/fabric/`; overlay flag default OFF; `/planner/fabric*` → open3d |
-| 3D | Three + orbit path (`Lazy3DViewer` / `ThreeViewerInner`) |
-| Persist | IDB first; cloud honesty = P06 |
-| Units | `site/tests/unit/features/planner/open3d/` |
+| Layer | Live (upgrade) | Forbidden downgrade |
+|-------|----------------|---------------------|
+| 2D host | `PlannerCanvasStage` → `features/planner/canvas-fabric-stage` (`Open3dFabricStage`) | Mount `FeasibilityCanvas` / `canvas-feasibility` again |
+| Workspace | `OOPlannerWorkspace` mounts **only** `PlannerCanvasStage` | Dual host / flag-gated Feasibility+overlay |
+| Furniture env | Flag module exists; **not wired** in workspace (`hostWiringP01` asserts) | Treat flag-OFF Feasibility as “production proof path” |
+| Walls + furniture draw | In-stage Fabric (`Line` / `Rect`) always when layers on | “Walls on Feasibility, furniture on Fabric overlay” |
+| 3D | Three + `getOpen3dViewerControlProps()` | R3F rewrite as W4 substitute |
+| Archive | `_archive/canvas-feasibility/` · `_archive/fabric/` | Copy archive into live mounts |
+
+Unit already encodes the upgrade: `hostWiringP01.test.ts` (PlannerCanvasStage sole; no Feasibility; no flag in workspace).
 
 ---
 
-## Required artifacts (all unchecked)
+## Honesty gaps (raise on Fabric — do not roll back)
+
+| Gap | Live fact | Upgrade direction |
+|-----|-----------|-------------------|
+| W2 symbols | `furnitureBlock2D` / `renderBlock2DCentered` run only under **archive** Feasibility | Port Block2D (or Fabric-equivalent) onto live stage — [P05](./P05-symbols-svg.md) |
+| W3 select | Fabric stage has no `pickFurnitureAtPoint` → `setSelection` path yet | Wire select/delete on Fabric — [P03](./P03-select-delete.md) |
+| Stale packs | Old INVENTORY / ENGINE-LOCK still name Feasibility interim | Re-diff artifacts to Fabric-sole |
+
+---
+
+## Required artifacts (fresh)
 
 | File | Role |
 |------|------|
-| `INVENTORY.md` | What code actually does (hosts, tools, gates W1–W8 surface) |
-| `CONTRADICTIONS.md` | Claim vs code with **file paths** |
-| `HEAD.txt` · `run.json` | Checkout, approach A, vitestSmoke, cp01 |
-| `NOTES.md` | Non-claims; spine vs world-standard results pointers |
-| Vitest smoke log | Required attempt — `ok` \| `failed` \| `skipped` + reason (no silent skip) |
-
-Minimum greps / checks: key open3d files exist; W4/W6 claim strings vs code; Failures.md row if blocked.
+| `INVENTORY.md` | Fabric-sole hosts, tools surface, W1–W8 code surface |
+| `CONTRADICTIONS.md` | Claim vs code — include Block2D/select gaps **without** calling Feasibility live |
+| `HEAD.txt` · `run.json` · `NOTES.md` | Checkout, Approach A, vitestSmoke |
+| Vitest | Prefer `hostWiringP01` + smoke — ok \| failed \| skipped + reason |
 
 ---
 
 ## Kill order (unchecked)
 
-- [ ] Evidence dir + HEAD + `run.json` (approach A, no worktrees)
-- [ ] Tree inventory of production open3d + route/host wiring (claim vs code)
-- [ ] Capability matrix for W1–W8 (code surface only — not “works”)
-- [ ] Claims corpus: `ayushdocs/` + WAVE/README vs code
-- [ ] Existing tests/results map (what is already proven vs theater)
-- [ ] Deep read: FeasibilityCanvas · OOPlannerWorkspace · ThreeViewerInner
-- [ ] Land `INVENTORY.md` + `CONTRADICTIONS.md`; vitest smoke recorded
-- [ ] CP-01 only after artifacts exist — then hand off to [P02](./P02-engine-lock.md)
+- [ ] Inventory matches Fabric-sole (cite `canvas-stage` + `Open3dFabricStage`)
+- [ ] CONTRADICTIONS lists symbol/select gaps as **port-forward**, not Feasibility restore
+- [ ] Route/host graph matches `importGraphProof` / `hostWiringP01`
+- [ ] Claims corpus (`ayushdocs/` + WAVE) vs code
+- [ ] Vitest recorded on this HEAD
+- [ ] CP-01 → [P02](./P02-engine-lock.md)
 
-**Do not** claim “works” without browser proof. Opinion-only inventory = fail.  
 **Stop log:** `Failures.md` (phase `P01`).

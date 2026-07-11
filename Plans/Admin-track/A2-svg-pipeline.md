@@ -1,10 +1,12 @@
 # A2 — SVG pipeline (raised bar)
 
-**Status:** OPEN — not complete. Live Admin kill.
+**Status:** OPEN — not complete.
 
-**Goal:** Honest path admin author → server compile → `site/public/svg-catalog/{slug}.svg` on disk, with census and publish ritual — not “a few SVGs and hope.”
+**Goal:** Honest path admin author → server compile → `site/public/svg-catalog/{slug}.svg` on disk, with census — not “a few SVGs and hope.”
 
-**Bar:** [03-QUALITY-BAR](../03-QUALITY-BAR.md) · Locked: `docs/Lockedfiles/svg-pipeline/current.md`
+**Honesty:** Publish path ≠ plan-draw path. Live planner 2D is Fabric ([CONSTRAINTS](../Planner-track/CONSTRAINTS.md)).
+
+**Bar:** [00-QUALITY-BAR](../00-QUALITY-BAR.md)
 
 ## Key code
 
@@ -16,11 +18,11 @@
 | Admin API | `site/app/api/admin/svg-editor/route.ts` |
 | Editor UI | `site/features/planner/admin/svg-editor/` |
 
-## Done when (all unchecked until proven)
+## Done when (unchecked)
 
 - [ ] Census of `svg-catalog/*.svg` with publish path per slug
-- [ ] Publish E2E re-green after pipeline change (A1 path)
-- [ ] Written residuals (OPEN debt) under evidence — no silent ship
-- [ ] Evidence only under `results/planner/global-standard-revision/modules/admin-svg-pipeline/`
+- [ ] Publish E2E re-green after pipeline change (A1)
+- [ ] Written residuals under evidence — no silent ship
+- [ ] Evidence under `results/planner/admin-svg-pipeline/` (flat; no Plans `modules/` maze)
 
-**A1 E2E green ≠ A2 module complete.**
+**A1 E2E green ≠ A2 complete.**

@@ -43,7 +43,7 @@
 
 **Pre-apply:** backup before `db:apply` when SQL has `DROP`, column type change, or data backfill. Skip for idempotent index / `CREATE IF NOT EXISTS`.
 
-**Apply:** `db:apply` · `db:apply:admin` · **Restore:** Supabase dashboard or `docs/database/RESTORE-RUNBOOK.md` · **Schema:** `db:sync-drizzle`, `db:types` · **Advisors:** `db:advisors:security`, `db:advisors:performance`, `db:advisors:admin` (report: `docs/audit/database/advisors-report.md` — target zero SECURITY ERRORs before gate).
+**Apply:** `db:apply` · `db:apply:admin` · **Restore:** Supabase dashboard or `docs/database/RESTORE-RUNBOOK.md` · **Schema:** `db:sync-drizzle`, `db:types` · **Advisors:** `db:advisors:security`, `db:advisors:performance`, `db:advisors:admin` — target zero SECURITY ERRORs before gate (`docs/database/ADVISORS.md`).
 
 Env: repo-root `.env.local` via `loadEnvLocal.cjs`. Actions secrets: `pnpm --filter oando-site run backup:github-secrets:sync`.
 

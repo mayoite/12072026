@@ -40,7 +40,8 @@
 | Units | `planner-autosave.test.ts` · `workspaceStatusLabels.test.ts` · `saveReloadContinuity.test.ts` |
 | E2E | `site/tests/e2e/open3d-save-honesty.spec.ts` (+ guest helpers) |
 
-**Out of scope:** Fabric cutover · full cloud multi-tenant · W7 mesh · W8 chrome · P07 full draw journey.
+**Host:** Fabric stage already live — flush/labels on that path.  
+**Out of scope:** Feasibility restore · full cloud multi-tenant · W7 mesh · W8 chrome · P07 full draw journey.
 
 ---
 

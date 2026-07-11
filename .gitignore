@@ -107,3 +107,4 @@ site/public/catalog-assets/generated/*.glb
 # Chrome DevTools MCP local bootstrap under evidence chrome/ dumps (never commit junk)
 # node_modules/ already ignores nested node_modules; ignore whole _cdm tree if recreated
 results/**/chrome/_cdm/
+.aider*

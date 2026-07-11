@@ -1,100 +1,15 @@
 # Architecture docs — index
 
-**Status:** Live index (update with each architecture revision)  
-**Authority:** [`Plans/INDEX.md`](../../../Plans/INDEX.md) → [`Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md) → this folder  
-**Placement:** [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — start here for new code  
-**Locked baseline:** [`docs/Lockedfiles/architecture/current.md`](../Lockedfiles/architecture/current.md) · [`proposed.md`](../Lockedfiles/architecture/proposed.md)
-
----
-
-## Open this when…
+**Authority:** Plans (execute) → this folder (HOW)  
+**Placement:** [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) · **Domains:** [`02-DOMAINS.md`](02-DOMAINS.md)  
+**Upgrade lock:** [`CONSTRAINTS`](../../Plans/Planner-track/CONSTRAINTS.md)
 
 | Task | Doc |
 |------|-----|
-| **Where new code goes** | [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) |
-| **New UI module (any surface)** | [`MODULE-UI-CONTRACT.md`](MODULE-UI-CONTRACT.md) → [`ui/MODULE-UI-CONTRACT-Locked.md`](../Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md) |
-| **CSS folder / tokens / Tailwind role** | [`CSS-SOLUTION.md`](CSS-SOLUTION.md) |
-| **Design-system intake, Penpot first** | [`DESIGN-SYSTEM-INTAKE.md`](DESIGN-SYSTEM-INTAKE.md) |
-| **Admin page or svg-editor** | [`ADMIN-UI-CONTRACT.md`](ADMIN-UI-CONTRACT.md) (UI-2) + MODULE-UI-CONTRACT |
-| **Marketing / homepage** | [`SITE-MARKETING-UI-CONTRACT.md`](SITE-MARKETING-UI-CONTRACT.md) — **UI-3 deferred** |
-| **Where code lives (C4, modules)** | [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md) |
-| **Request / save / publish flows** | [`DATA_FLOW.md`](DATA_FLOW.md) |
-| **Deploy / infra** | [`DEPLOYMENT.md`](DEPLOYMENT.md) |
-| **Phased UI execution** | `archive/Plans/01-execution/specialists/06-UI-PLAN.md` |
-| **Phased test gates** | `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` |
-
-Redirects (do not extend): [`STRUCTURE_GUIDELINES.md`](STRUCTURE_GUIDELINES.md), [`SYSTEM_OVERVIEW.md`](SYSTEM_OVERVIEW.md).
-
----
-
-## Authority stack
-
-```text
-Plans/03-QUALITY-BAR.md   (module bar — not W-spine execute)
-  → archive/Plans/01-execution/specialists/06-UI-PLAN.md
-  → archive/Plans/01-execution/specialists/08-TEST-PLAN.md
-  → docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md
-  → docs/architecture/MODULE-LAYOUT.md      (where code goes)
-  → docs/architecture/MODULE-UI-CONTRACT.md (surface + lint contract)
-  → docs/architecture/DESIGN-SYSTEM-INTAKE.md (Penpot-first design intake)
-  → surface contracts (ADMIN-*, SITE-MARKETING-*)
-  → CSS-SOLUTION.md (folder ownership)
-```
-
-**W-spine execute:** [`Plans/Planner-track/`](../../../Plans/Planner-track/) — buyer law only.
-
-When `Plans/` and `PACKAGES.md` conflict on SVG tooling, **PACKAGES.md wins**.
-
----
-
-## Phase 1 honesty (on disk today)
-
-| Claim | Truth (2026-07-05) |
-|-------|-------------------|
-| `/planner/open3d` | **Real route** — sole Phase 1 promotion target |
-| `PlannerCommand` | Exists in `lib/commands/`; **`useWorkspaceCanvas` still calls `dispatchOpen3dAction` directly** — 1A P0 is to wire the seam |
-| Admin Puck | **`[id]` uses `<Render>` preview + JSON editor** — full `<Puck onPublish=…>` mount is **1B** |
-| SVG compile | **Dual path open:** API → `svgPipelineRunner` (exec `generate-svg.mjs`) **and** in-process `svgCompiler.server.ts` — unify in 1B |
-| SVG.js | **Not in Phase 1** production path (Option A) |
-
----
-
-## Current vs proposed in this folder
-
-| Doc | Current truth | Proposed target |
-|-----|---------------|-----------------|
-| Module placement | Dual planner trees on disk | [`MODULE-LAYOUT.md`](MODULE-LAYOUT.md) — `open3d/` only for new pilot code |
-| Component map | [`COMPONENT_ARCHITECTURE.md`](COMPONENT_ARCHITECTURE.md) § Current | Same file § Proposed |
-| Data flows | [`DATA_FLOW.md`](DATA_FLOW.md) §1–4 legacy/guest | §5 open3d save; §6 SVG publish |
-| Admin UI | JSON editor + `<Render>` preview | [`ADMIN-UI-CONTRACT.md`](ADMIN-UI-CONTRACT.md) — full Puck in 1B |
-| Marketing UI | Reference dialect on `/` | Deferred until UI-3 — banner in SITE-MARKETING contract |
-| Enforcement | `lint:ui` warn | `lint:ui:strict` in `release:gate:fast` after UI-1 shell |
-
-Full snapshot: locked pair above.
-
----
-
-## Expert review — when to use a subagent
-
-| Doc / area | Expert needed? | Why |
-|------------|----------------|-----|
-| **MODULE-LAYOUT** | No | Coordinator + disk audit; optional for large folder moves |
-| **MODULE-UI-CONTRACT** | No (locked) | Coordinator + `lint:ui` already defined |
-| **CSS-SOLUTION** | No | Folder policy is stable |
-| **DESIGN-SYSTEM-INTAKE** | Optional | Use when Penpot, Figma, or Code Connect readiness changes |
-| **COMPONENT_ARCHITECTURE** | **Optional** | C4 polish or security boundary review after 1A code refresh |
-| **DATA_FLOW — §5 open3d save** | No | Verify from `persistence/` + `plannerCommandWiring.test.ts` |
-| **DATA_FLOW — §6 SVG publish** | **Yes (1B)** | Security sequence (sanitize → compile → persist) before publish sign-off |
-| **ADMIN-UI-CONTRACT** | **Optional (UI-2)** | When mounting full `<Puck>` — field chrome + publish UX |
-| **SITE-MARKETING-UI-CONTRACT** | **Optional (UI-3)** | Dialect migration — not 1A/1B |
-| **DEPLOYMENT** | **Yes (ops)** | Only when changing Vercel/Supabase/DO topology |
-
-**Default:** parent agent updates architecture from disk; launch expert only for SVG security flow (TEST-2) and optional marketing migration (UI-3).
-
----
-
-## Maintenance
-
-- After **1A** acceptance: mark COMPONENT § Proposed items done; wire `lint:ui:strict`; confirm `PlannerCommand` wired in `useWorkspaceCanvas`.
-- After **1B** acceptance: expand DATA_FLOW §6; unify SVG compile; expert-review SVG sequence.
-- Update locked `architecture/current.md` / `proposed.md` when freezing a new baseline.
+| Where code goes | [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) |
+| Admin / site / crm / ops / auth / offline / ai / catalog | [`02-DOMAINS.md`](02-DOMAINS.md) |
+| UI contract | [`03-MODULE-UI-CONTRACT.md`](03-MODULE-UI-CONTRACT.md) |
+| CSS | [`04-CSS-SOLUTION.md`](04-CSS-SOLUTION.md) |
+| Flows (§0 live Fabric) | [`05-DATA_FLOW.md`](05-DATA_FLOW.md) |
+| Engines + licenses | [`../Lockedfiles/03-dependencies-engines-current.md`](../Lockedfiles/03-dependencies-engines-current.md) |
+| Deploy / incidents | root `OPERATIONS_RUNBOOK.md` |

@@ -31,7 +31,7 @@ const repoFolders = {
     title: "Reference documentation",
     why: "Read-only specs and architecture — not live app code. Implementation is in site/.",
     contains: [
-      "architecture/ — CSS solution, component architecture, data flow, deployment",
+      "architecture/ — 01-MODULE-LAYOUT, 02-DOMAINS, 03-UI, 04-CSS, 05-DATA_FLOW",
       "api/ — README.md (contract source), ROUTE-INDEX.md",
       "database/ — schema, seeding, advisors",
       "audit/ — lane audits (pending only; see audit/README.md)",
@@ -89,7 +89,7 @@ const siteFolders = {
       "admin/, crm/, ops/ — portal routes",
     ],
     rules: ["No heavy business logic in page files", "CSS tokens live in app/css/, not inline in routes"],
-    see: ["docs/architecture/CSS-SOLUTION.md", "docs/architecture/COMPONENT_ARCHITECTURE.md"],
+    see: ["docs/architecture/04-CSS-SOLUTION.md", "docs/architecture/02-DOMAINS.md"],
   },
   "app/(site)": {
     title: "Marketing site routes",
@@ -107,7 +107,7 @@ const siteFolders = {
     title: "Shared CSS (FOCSS)",
     why: "Single design system for site + planner. Tokens and bundles avoid hardcoded colors in TSX.",
     contains: ["core/theme.css, utilities.css, components.css", "core/locked/site|admin|planner — surface modules"],
-    see: ["docs/architecture/CSS-SOLUTION.md", "docs/architecture/COMPONENT_ARCHITECTURE.md"],
+    see: ["docs/architecture/04-CSS-SOLUTION.md", "docs/architecture/02-DOMAINS.md"],
   },
   "app/css/base": {
     title: "Global CSS primitives",

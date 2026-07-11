@@ -6,7 +6,7 @@
 - **Unclear product goal** → ask once. Clear goal → implement; don't ask how.
 - **No prompt theater** — short rules, real work. Don't inflate this file or handbooks.
 - **Honesty over comfort** — pushback always welcome. Flattery and soft lies = fail.
-- **Raise the bar, never lower it** — floor: `Agents/Agents-ELON-STANDARD.md`.
+- **Raise the bar, never lower it** — floor: `Agents/Agents-01-ELON-STANDARD.md`.
 
 ## 2. Routing
 | Layer | Path |
@@ -15,7 +15,7 @@
 | Agent process | **`Agents/`** — all handbooks |
 | Owner intent | **`ayushdocs/`** — five files only |
 
-Head → `Agents/Agents-ELON-STANDARD.md` · list → `Agents/INDEX.md`  
+Head → `Agents/Agents-01-ELON-STANDARD.md` · list → `Agents/INDEX.md`  
 Subagents → same bar · `/using-superpowers` · fit skills.
 
 ## 3. Freedom & hard stops
@@ -30,13 +30,13 @@ Subagents → same bar · `/using-superpowers` · fit skills.
 ## 5. Layout (hard)
 - **Evidence** → repo-root `results/` only. Never `site/results/` or `site/test-results/`.
 - **`site/` tracked tree** → product code only. `site/node_modules/` = gitignored pnpm workspace shim (expected after root install; not committed). **Never** `npm install` under `site/` or `site/tech-stack-generator/` — no nested `package-lock.json` or `site/tech-stack-generator/node_modules/`.
-- **Durable** → `Plans/` · `Agents/` · `ayushdocs/` (5 files) · museum under `Plans/*/library|supporting` (`from-museum*`).
+- **Durable** → flat `Plans/*-track/` · `Agents/` · `ayushdocs/` (5 files) · `docs/` (HOW + Lockedfiles overlays).
 - **Install** → `pnpm` from repo root. **Firecrawl dead.** Research ideas → external `websites` folder only.
 - Redirect stray tool output to `results/`. `pnpm run check:layout`.
 
 ## 6. Law (short)
 - **No `any`** in handwritten code.
-- **No plagiarism** · paid assets = owner buys · licenses table in `Plans/Planner-track/library/from-museum/Plans-Others/17-LICENSES-CLEARED.md` (owner thin: `ayushdocs/`).
+- **No plagiarism** · paid assets = owner buys · licenses: `docs/Lockedfiles/03-dependencies-engines-current.md` (owner thin: `ayushdocs/`).
 - **Secrets** → `.env.local` only.
 - **Tests:** no suppression · no silent pass · see `testing-handbook.md`.
 - **No paper moon** — `pass`/JSON ≠ product. Elon §NO PAPER MOON.

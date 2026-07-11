@@ -1,27 +1,21 @@
 # Docs index
 
-**Repo map:** [`DOC-MAP.md`](../DOC-MAP.md) · **Active doc budget:** `pnpm run check:active-docs` (max 50)
+**Map:** [`DOC-MAP.md`](../DOC-MAP.md) · **Budget:** `pnpm run check:active-docs`
 
-## Layers (do not mix)
+| Layer | Path |
+|-------|------|
+| Execute | [`Plans/`](../Plans/) |
+| Owner | [`ayushdocs/`](../ayushdocs/) (5) |
+| Process | [`Agents/`](../Agents/) |
+| HOW | [`architecture/`](./architecture/) — 01-MODULE-LAYOUT · 02-DOMAINS · 03-UI · 04-CSS · 05-DATA_FLOW |
+| Overlays | [`Lockedfiles/`](./Lockedfiles/) — 01-planner · 02-svg · 03-engines(+licenses) · 04-UI lock |
+| Reference | [`api/`](./api/) · [`database/`](./database/) |
 
-| Layer | Folder | Role |
-|-------|--------|------|
-| **Plans** | [`Plans/`](../Plans/) | Buyer law · kill order · tracks |
-| **Owner** | [`ayushdocs/`](../ayushdocs/) | Intent · scoreboard |
-| **Agents** | [`Agents/`](../Agents/) | Process bar |
-| **Architecture** | [`architecture/`](./architecture/) | HOW · contracts · data flow |
-| **Locked baselines** | [`Lockedfiles/`](./Lockedfiles/) | Frozen module snapshots |
-| **Reference** | [`api/`](./api/) · [`database/`](./database/) | Routes · schema |
-| **Debate / history** | [`superpowers/`](./superpowers/) | Specs — not execute law |
-| **Evidence** | `results/` | Proof only |
-
-## Open when
+**Upgrade lock:** Fabric sole 2D — [`CONSTRAINTS`](../Plans/Planner-track/CONSTRAINTS.md).
 
 | Task | Start |
 |------|-------|
-| Where code goes | [`architecture/MODULE-LAYOUT.md`](./architecture/MODULE-LAYOUT.md) |
-| Module UI contract | [`Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md`](./Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md) |
-| Planner stack | [`Plans/Planner-track/CONSTRAINTS.md`](../Plans/Planner-track/CONSTRAINTS.md) |
-| Doc routing | [`Plans/.../lockedfiles-conduct/ReadmeLocked.md`](../Plans/Planner-track/library/from-museum/lockedfiles-conduct/ReadmeLocked.md) |
-
-**Purity:** `pnpm run check:docs-purity` · **Active doc budget:** `pnpm run check:active-docs`
+| Code placement | [`architecture/01-MODULE-LAYOUT.md`](./architecture/01-MODULE-LAYOUT.md) |
+| Domains | [`architecture/02-DOMAINS.md`](./architecture/02-DOMAINS.md) |
+| Routing | [`Lockedfiles/INDEX.md`](./Lockedfiles/INDEX.md) |
+| W gates | [`Plans/Planner-track/BOARD.md`](../Plans/Planner-track/BOARD.md) |

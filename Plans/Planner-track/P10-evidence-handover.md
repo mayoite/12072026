@@ -21,4 +21,4 @@ Honest pack: W-gate summary, HEAD, failures snip, backup log if claimed — **do
 - Paper PASS without `results/` paths
 - Claiming product ship from pack alone
 
-[CODE-REVIEWS](./CODE-REVIEWS.md) is untrusted history only.
+Pack ≠ product ship. Re-prove gates from [CHECKPOINTS](./CHECKPOINTS.md) — do not cite deleted review stubs.

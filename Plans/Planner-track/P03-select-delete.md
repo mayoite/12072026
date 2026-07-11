@@ -1,31 +1,34 @@
 # P03 — Select / delete / undo (W3)
 
-**Status:** OPEN / REPROVE — not complete. Old `03-select-delete/` packs are clues only.
+**Status:** OPEN / REPROVE — not complete. Old packs that prove on Feasibility are **invalid** on this tree.
 
-**Gate:** **W3** / CP-03 — select furniture on 2D · Delete/Backspace remove · Ctrl/Cmd+Z restore **same id + pose**.  
-**Hard rule:** unit **+** browser under `03-select-delete/`. Unit alone = **FAIL**. Journey folder must not substitute.  
+**Gate:** **W3** / CP-03 — select furniture on **live Fabric 2D** · Delete/Backspace remove · Ctrl/Cmd+Z restore **same id + pose**.  
+**Hard rule:** unit **+** browser under `03-select-delete/`. Unit alone = **FAIL**.  
 **Evidence:** `results/planner/world-standard-wave/03-select-delete/`  
 **CP:** [CHECKPOINTS](./CHECKPOINTS.md) · [BOARD](./BOARD.md) · Approach **A**
 
-**Goal:** Buyer on `/planner/open3d` (or guest) selects furniture, deletes it, undoes to same entity.
+**Goal:** Buyer selects furniture on Fabric stage, deletes, undoes to same entity.
 
-**Bar:** Furniture only — no multi-select, 3D pick, Fabric cutover, openings as first-class targets.
+**Bar:** Furniture only — no multi-select, 3D pick, openings as first-class targets.  
+**Upgrade rule:** Wire select **on Fabric**. Do **not** un-archive Feasibility to “prove W3.”
 
-**Out of scope:** Orbit (P04) · save (P06) · full journey (P07) · chrome/W8 · Fabric walls.
+**Out of scope:** Orbit (P04) · save (P06) · full journey (P07) · chrome/W8 · Feasibility restore.
 
 ---
 
-## Architecture
+## Architecture (target = Fabric host)
 
 ```
-Select (V) → FeasibilityCanvas → pickFurnitureAtPoint → setSelection({ type: "furniture", ids })
+Select (V) → PlannerCanvasStage (Fabric)
+  → pick / Fabric object hit → setSelection({ type: "furniture", ids })
 Delete|Backspace → useWorkspaceKeyboard → applySelectionDelete (pure)
-  → one updateProject (multi-id must not N× history) → selection none
+  → one updateProject → selection none
 Ctrl/Cmd+Z → history.undo → same id + pose
-Esc → clears draw/place **and** selection
+Esc → clears draw/place and selection
 ```
 
-Prove with Fabric furniture flag **OFF**. Document selection only — no Fabric-stage / `firstFurnitureCenter` as W3 proof. Furniture rotation stays **degrees** in document (pick converts for hit math).
+Document selection only. Rotation stays **degrees** in document.  
+`pickFurnitureAtPoint` may remain the pure hit helper — call it from Fabric stage / workspace, not from archive.
 
 ---
 
@@ -33,29 +36,26 @@ Prove with Fabric furniture flag **OFF**. Document selection only — no Fabric-
 
 | File | Role |
 |------|------|
-| `…/lib/geometry/canvasPicking.ts` | `pickFurnitureAtPoint` |
-| `…/canvas-feasibility/FeasibilityCanvas.tsx` | Select pointer path |
+| `canvas-fabric-stage/Open3dFabricStage.tsx` | Select pointer → selection (raise here) |
+| `…/lib/geometry/canvasPicking.ts` | `pickFurnitureAtPoint` (pure) |
 | `…/editor/OOPlannerWorkspace.tsx` | `deleteSelection`, Esc |
 | `…/editor/useWorkspaceKeyboard.ts` | Del/Bksp + `preventDefault` |
 | `…/editor/workspaceEntityHelpers.ts` | Pure `applySelectionDelete` |
-| Units | pick · delete+undo · keyboard · feasibility select |
-| Browser | Playwright or chrome-devtools select→delete→undo |
-
-Prefix: `site/features/planner/open3d/`.
+| Units | pick · delete+undo · keyboard · **Fabric** select |
+| Browser | select → delete → undo on live canvas |
 
 ---
 
 ## Kill order (unchecked)
 
-- [ ] Evidence dir + HEAD + NOTES (Approach A)
-- [ ] Unit: `pickFurnitureAtPoint` (hit / miss / top-most / rotation)
-- [ ] Pure delete + undo same id/pose; **one** history step for multi-id
-- [ ] Wire `deleteSelection`; Del/Bksp `preventDefault`
-- [ ] Canvas select furniture (Select tool); empty clears
-- [ ] Esc clears selection
-- [ ] Unit pack logs under `03-select-delete/` (exit 0)
-- [ ] **Browser:** select → delete → undo; `run.json` + raw log + PNGs/trace
-- [ ] No `any`; commits on `.` only
+- [ ] Evidence dir + HEAD + NOTES (Approach A; Fabric host named)
+- [ ] Unit: pick hit/miss/top-most/rotation
+- [ ] Pure delete + undo same id/pose; one history step for multi-id
+- [ ] Wire Fabric select → `setSelection`; empty clears
+- [ ] Del/Bksp + Esc on live host
+- [ ] Unit logs under `03-select-delete/`
+- [ ] **Browser:** select → delete → undo; `run.json` + PNGs/trace
+- [ ] No Feasibility mount · no “flag OFF” proof theater
 
-**W3 red until** browser artifacts exist under `03-select-delete/`. Count-only browser ≠ id/pose proof.  
-**Next:** [P07](./P07-draw-place-journey.md) (journey) / fill [P04](./P04-orbit-continuity.md) per BOARD kill order.
+**W3 red until** browser artifacts under `03-select-delete/`.  
+**Next:** [P07](./P07-draw-place-journey.md) / [P04](./P04-orbit-continuity.md) per BOARD.

@@ -3,9 +3,17 @@
 > [Plans/INDEX.md](../INDEX.md) · [START](./START.md) · [CONSTRAINTS](./CONSTRAINTS.md) · [EXECUTE](./EXECUTE.md) · [CHECKPOINTS](./CHECKPOINTS.md)
 
 **W0:** UNLOCKED · Approach **A** · CP-00 process PASS — do not re-ask unlock.  
-**CP-01…CP-09:** **REPROVE** — do not trust old PASS / checklist ticks. **CP-10:** OPEN.
+**CP-01…CP-09:** **REPROVE** — do not trust old PASS. **CP-10:** OPEN.
 
-Flat cards: `P01`…`P10` here. No `modules/` · `library/` · `research/`.
+## Upgrade lock (reject downgrade)
+
+| Live | Forbidden |
+|------|-----------|
+| Fabric `PlannerCanvasStage` / `data-testid="open3d-fabric-stage"` | Restore Feasibility · dual 2D host |
+| Raise select / Block2D / draw **on Fabric** | Prove W3/W5/W8 on archive or `planner-2d-canvas` (archive-only) |
+| Admin SVG = publish only | Claim `svg-catalog` is plan-draw |
+
+Flat cards only: `P01`…`P10` here. No `modules/` · `library/` · `phases/`.
 
 ## Kill order — spine
 
@@ -31,9 +39,9 @@ CP-00 → CP-01 → CP-02 → CP-03 → CP-07 → CP-06 → CP-04 → CP-05 → 
 
 | Gate | Bar |
 |------|-----|
-| W1 | Draw walls + door |
-| W2 | Place ≥2 items; symbols readable |
-| W3 | Select · delete · undo (unit **+** browser) |
+| W1 | Draw walls + door **on Fabric** |
+| W2 | Place ≥2 items; symbols readable **on Fabric** |
+| W3 | Select · delete · undo on Fabric (unit **+** browser) |
 | W4 | 2D↔3D + orbit |
 | W5 | Save → reload → same ids |
 | W6 | Honest local/cloud labels |
@@ -41,4 +49,4 @@ CP-00 → CP-01 → CP-02 → CP-03 → CP-07 → CP-06 → CP-04 → CP-05 → 
 | W8 | Labels match shortcuts |
 
 **Evidence root:** `results/planner/world-standard-wave/` · each gate: `HEAD.txt` · `RUN-META.json` · `RAW-LOGS/` · `VERDICT.md`  
-**Bar:** [03-QUALITY-BAR](../03-QUALITY-BAR.md) · **Agents:** [Agents-Plan](../../Agents/Agents-Plan.md)
+**Bar:** [00-QUALITY-BAR](../00-QUALITY-BAR.md) · **Agents:** [Agents-Plan](../../Agents/Agents-03-Plan.md)

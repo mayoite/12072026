@@ -1,6 +1,6 @@
 /**
  * Verify markdown file links in root doc-chain files resolve on disk.
- * Policy: docs/audit/README.md (open lanes only)
+ * Policy: root doc-chain links must resolve on disk.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -11,7 +11,7 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../
 const FILES = [
   "DOC-MAP.md",
   "Readme.md",
-  "docs/Lockedfiles/ReadmeLocked.md",
+  "docs/Lockedfiles/INDEX.md",
 ];
 
 const LINK_RE = /\[([^\]]*)\]\(([^)]+)\)/g;

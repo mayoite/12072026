@@ -1,42 +1,35 @@
 # P09 — Shortcuts & blocking chrome (W8)
 
-**Status:** OPEN / REPROVE — not complete. Old `09-shortcuts-chrome/` packs are clues only.
+**Status:** OPEN / REPROVE — map-align may be landed; **fresh evidence pack still required**.
 
 **Gate:** **W8** / CP-09 — tool **id → key → handler → visible label** same truth; fix only chrome that **hides/blocks** tools.  
 **Evidence:** `results/planner/world-standard-wave/09-shortcuts-chrome/` only (never `08-shortcuts-chrome/`).  
 **CP:** [CHECKPOINTS](./CHECKPOINTS.md) · [BOARD](./BOARD.md)
 
-**Goal:** One authority map drives keyboard + rail + palette + `aria-keyshortcuts`. No full chrome redesign.
+**Goal:** One authority map drives keyboard + rail + palette on the **Fabric** workspace. No full chrome redesign.
 
 ---
 
-## Smoking gun (re-verify)
+## Live truth (re-verify 2026-07-11)
 
-`canvasTool.ts` maps vs `useWorkspaceKeyboard` hard-coded letters:
+| Piece | Status |
+|-------|--------|
+| `CANVAS_TOOL_SHORTCUTS` | D=door · M=dimension · N=window · T=text · V/R/W/O/P/H as map |
+| `useWorkspaceKeyboard` | Arms via inverted map (`TOOL_BY_SHORTCUT_KEY`) |
+| Units | `toolShortcutTruth.test.ts` — **re-run** under evidence |
+| Live canvas testid | `open3d-fabric-stage` (not archive `planner-2d-canvas`) |
+| Archive aria strings | Ignore `_archive/` Feasibility — do not chase |
+| Evidence `09-shortcuts-chrome/` | Untrusted until fresh logs |
 
-| Key | Map | Handler today | Verdict |
-|-----|-----|---------------|---------|
-| D | door | dimension | **LIE** |
-| M | dimension | unbound | **LIE** |
-| N | window | unbound | **GAP** |
-| T | text | unbound | **GAP** |
-| V/R/W/O/P/H | as map | OK (re-check) | — |
-
-**Fix:** invert `CANVAS_TOOL_SHORTCUTS` once for tool arming; delete second letter table.  
-**Forbidden “fix”:** rebind Dimension → D to match the bad handler.
-
-Rail is already map-sourced — keep it; don’t invent hard-codes.  
-`FeasibilityCanvas` `aria-keyshortcuts` often stale — derive from map + **wired** non-tool keys only.
-
-**Product letters locked:** D=door · M=dimension · O=opening · N=window · T=text · V/R/W/P/H as map.
+**Historical smoking gun (fixed — re-prove, don’t re-bind Dimension→D):** old hard-coded handler vs map. Gone in code.
 
 ---
 
 ## Scope
 
-**In:** W8 truth table · fix D/M/N/T · handler = map · rail regression · aria/palette parity · 2A hide-tools only (proof-first in NOTES).
+**In:** Truth table + keyboard RTL · rail/palette regression · hide-tools only · evidence under `09-`.
 
-**Out:** Full 2A polish / mobile redesign · full a11y sweep unless hides tools · Fabric · mesh · P03/P04/P06 behavior · redesign which tools exist · competitor shortcut philosophy · dual Feasibility local-keydown redesign (log only unless W8 broken).
+**Out:** Full chrome redesign · a11y sweep unless hides tools · mesh/P03/P04/P06 thrash · Feasibility restore · archive aria chase.
 
 ---
 
@@ -44,24 +37,23 @@ Rail is already map-sourced — keep it; don’t invent hard-codes.
 
 | File | Role |
 |------|------|
-| `editor/canvasTool.ts` | Authority maps + optional aria helper |
-| `editor/useWorkspaceKeyboard.ts` | Arm from map only |
-| `editor/CanvasToolRail.tsx` | Map-sourced labels (regression) |
-| `canvas-feasibility/FeasibilityCanvas.tsx` | `aria-keyshortcuts` only |
-| `lib/commands/paletteCommands.ts` | Palette shortcuts = map |
-| Units | `toolShortcutTruth.test.ts` + keyboard RTL (live keydown, not map-only) |
+| `editor/canvasTool.ts` | Authority maps |
+| `editor/useWorkspaceKeyboard.ts` | Map-only arming |
+| `editor/CanvasToolRail.tsx` | Map-sourced labels |
+| `lib/commands/paletteCommands.ts` | Palette = map |
+| Units | `toolShortcutTruth.test.ts` + keyboard RTL |
+
+Prefix: `site/features/planner/open3d/`.
 
 ---
 
 ## Kill order (unchecked)
 
-- [ ] Evidence dir + baseline vitest log + NOTES (D/M lie + N/T gaps with line refs)
-- [ ] RED unit: tool id → key → `setTool(id)` for all map tools (incl. D/M/N/T); unique letters
-- [ ] GREEN: handlers from map only; no second letter table
-- [ ] Rail regression: Label (Key) from maps
-- [ ] `aria-keyshortcuts` + palette match maps
-- [ ] Hide-tools chrome: minimal fix or documented none-found
-- [ ] Final vitest under `09-shortcuts-chrome/`; commits on `.` only
+- [ ] Evidence dir + re-run shortcut/keyboard vitest → `09-shortcuts-chrome/`
+- [ ] NOTES: D→door, M→dimension, N/T from map (line refs)
+- [ ] Rail + palette match maps
+- [ ] Hide-tools chrome: minimal fix or none-found
+- [ ] No archive Feasibility / no Dimension→D rebind
 
-**CP-09 green only if** truth table + no divergent handler table + rail/aria/palette honest + evidence paths real.  
-**Next:** [P10](./P10-evidence-handover.md) — pack ≠ product ship.
+**CP-09 green only with fresh evidence.** Code looking right ≠ PASS.  
+**Next:** [P10](./P10-evidence-handover.md).
