@@ -1,6 +1,6 @@
 # P05 — W2 symbol quality + SVG path honesty
 
-**Status:** OPEN / REPROVE — Block2D library raised; **live Fabric stage still draws plain Rects** (symbol port incomplete).
+**Status:** PASS dual-gate on tip (2026-07-11 Option 2) — live Fabric paints Block2D via `createFabricFurnitureBlock`; unit + multiprim browser green.
 
 **Gate:** **W2 symbol half** / CP-05 — readable **cabinet-v0** on the **live** plan canvas; honest Block2D vs SVG-publish.  
 **Evidence:** `results/planner/world-standard-wave/05-symbols-svg/`  

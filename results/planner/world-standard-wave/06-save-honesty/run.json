@@ -1,0 +1,19 @@
+{
+  "phase": "P06",
+  "gates": ["W5", "W6"],
+  "date": "2026-07-11",
+  "head": "b24ad691",
+  "status": "pass",
+  "unitPack": {
+    "exitCode": 0,
+    "tests": "39/39",
+    "files": 4,
+    "log": "unit-w5w6-pack.log"
+  },
+  "browser": {
+    "exitCode": 0,
+    "spec": "tests/e2e/open3d-save-honesty.spec.ts",
+    "tests": "1/1 passed",
+    "note": "place, save, hard reload preserves wall + furniture UUIDs"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "phase": "P05",
+  "gate": "W2-symbol-half",
+  "date": "2026-07-11",
+  "headProduct": "b24ad691+",
+  "status": "pass",
+  "livePaint": "Open3dFabricStage → createFabricFurnitureBlock (Block2D multiprim), not plain Rect",
+  "unitPack": {
+    "exitCode": 0,
+    "log": "unit-p05-pack.log",
+    "suites": ["furnitureBlock2D.cabinet-v0", "canvas-fabric-stage"]
+  },
+  "browser": {
+    "exitCode": 0,
+    "spec": "tests/e2e/open3d-p05-cabinet-multiprim.spec.ts",
+    "evidence": "browser/p05-scratch-cabinet-canvas.png (+ chaise S7 shots if deposited)",
+    "note": "Pixel probe uses PLANNER_PAINT_CANVAS (lower-canvas)"
+  }
+}

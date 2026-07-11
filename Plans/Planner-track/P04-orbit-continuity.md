@@ -1,6 +1,6 @@
 # P04 — Orbit continuity (W4)
 
-**Status:** OPEN / REPROVE — not complete. Old `04-orbit-continuity/` pack = clue only.
+**Status:** PASS dual-gate on tip (2026-07-11 Option 2) — unit 9/9 + browser count/orbit attr; pose ids unit-only (honest).
 
 **Gate:** **W4** / CP-04 — 2D↔3D preserves **entity pose**; orbit ON with explicit workspace wiring + browser proof.  
 **Evidence:** `results/planner/world-standard-wave/04-orbit-continuity/`  

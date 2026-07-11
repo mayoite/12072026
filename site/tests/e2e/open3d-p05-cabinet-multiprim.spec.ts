@@ -12,8 +12,10 @@ import path from "node:path";
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
 import {
   placeCatalogOnCanvas,
-  waitForPlannerCanvas,
+  PLANNER_PAINT_CANVAS,
   PLANNER_PRIMARY_CANVAS,
+  switchPlannerViewMode,
+  waitForPlannerCanvas,
 } from "./plannerCanvasHelpers";
 
 test.describe.configure({ mode: "serial", timeout: 180_000 });
@@ -67,7 +69,8 @@ async function sampleCanvasFillDiversity(page: Page): Promise<{
   channelStdDev: number;
   notPureSolid: boolean;
 }> {
-  const canvas = page.locator(PLANNER_PRIMARY_CANVAS);
+  // Paint lives on lower-canvas; upper is the event layer (often empty getImageData).
+  const canvas = page.locator(PLANNER_PAINT_CANVAS);
   await expect(canvas).toBeVisible({ timeout: 10_000 });
 
   const stats = await canvas.evaluate((el) => {
@@ -153,7 +156,7 @@ test.describe("P05 scratch: cabinet multiprim + S7 chaise eyes", () => {
       projectName: "P05 scratch multiprim",
     });
     await waitForPlannerCanvas(page);
-    await page.getByRole("radio", { name: "2D", exact: true }).click();
+    await switchPlannerViewMode(page, "2d");
     await waitForPlannerCanvas(page);
 
     const before = await furnitureCount(page);
@@ -185,7 +188,8 @@ test.describe("P05 scratch: cabinet multiprim + S7 chaise eyes", () => {
     await zoomCanvasInAt(page, placeRx, placeRy, 4);
     await page.waitForTimeout(400);
 
-    const canvas = page.locator(PLANNER_PRIMARY_CANVAS);
+    const canvas = page.locator(PLANNER_PAINT_CANVAS);
+    await expect(canvas).toBeVisible({ timeout: 10_000 });
     await canvas.screenshot({
       path: path.join(EVIDENCE, "p05-scratch-cabinet-canvas.png"),
     });

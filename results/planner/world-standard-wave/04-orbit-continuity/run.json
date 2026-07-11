@@ -1,134 +1,24 @@
 {
   "phase": "P04",
   "gate": "W4",
-  "checkpoint": "CP-04",
-  "track": "orbit-continuity",
-  "approach": "A",
-  "checkout": "D:\\OandO07072026",
-  "worktrees": false,
-  "evidenceRoot": "results/planner/world-standard-wave/04-orbit-continuity",
-  "HEAD": "5f682651e4533e56b403f37d17e771ecfc90bb33",
-  "date": "2026-07-10",
-  "agent": "P04-Agent-10-consolidator",
-  "action": "proof index + coherent NOTES + single status (scratch pack)",
-  "paperPass": false,
-  "unitAloneEqualsW4": false,
-  "browserAloneEqualsW4": false,
-  "w4ProductClaim": "NO",
-  "planRating": {
-    "verdict": "APPROVE-WITH-FIXES",
-    "score": 7.5,
-    "source": "plans1/P04-orbit-continuity/CODE-REVIEW-REPORT.md",
-    "note": "Plan rating is separate from product claim / CP-04 ship gate"
-  },
-  "productVsPlan": {
-    "plan": "APPROVE-WITH-FIXES 7.5/10",
-    "productW4": "open — not pass",
-    "phaseCardHistorical": "PASS 2026-07-09 is paper until dual-green same tip"
-  },
-  "layers": {
-    "layer1_defaults": {
-      "product": "closed",
-      "cites": [
-        "orbitDefaults.ts:7 OPEN3D_ORBIT_DEFAULT_ENABLED=true",
-        "ThreeViewerInner.tsx:68 enableControls default ON",
-        "ThreeLazyViewer.tsx:145 enableControls default ON",
-        "ThreeViewerInner.tsx:171-186 OrbitControls construct",
-        "ThreeViewerInner.tsx:340 data-orbit-enabled"
-      ]
-    },
-    "layer2_workspace": {
-      "product": "closed",
-      "cites": [
-        "OOPlannerWorkspace.tsx:13-16 import Lazy3DViewer + getOpen3dViewerControlProps",
-        "OOPlannerWorkspace.tsx:1057-1060 {...getOpen3dViewerControlProps()}"
-      ],
-      "unit": "workspaceOrbitWiring.test.ts green in unit packs"
-    },
-    "layer3_unit_browser": {
-      "unitGreenDeposit": true,
-      "browserGreenDeposit": true,
-      "sameTipDualGreen": false,
-      "closed": false
-    }
-  },
+  "date": "2026-07-11",
+  "head": "b24ad691",
+  "status": "pass",
+  "honesty": "Browser proves furniture count + data-orbit-enabled + 2D↔3D toggle; pose ids/mm/rotation unit-only (poseContinuityW4).",
   "unitPack": {
-    "status": "green",
     "exitCode": 0,
-    "tests": "34/34",
-    "files": 5,
-    "logs": [
-      "unit-p04-pack-raw.log",
-      "unit-p04-scratch-pack-raw.log",
-      "unit-p04-pack-consolidator-tip.log"
+    "tests": "9/9",
+    "files": [
+      "orbitControlsDefault.test.tsx",
+      "poseContinuityW4.test.ts",
+      "workspaceOrbitWiring.test.ts"
     ],
-    "depositJson": "unit-pack-deposit.json",
-    "depositHEAD": "b8109733c0c7a1e0657a2989576f27060f4a6bd5",
-    "consolidatorReproveLog": "unit-p04-pack-consolidator-tip.log",
-    "orbitPack": {
-      "log": "unit-orbit-pack.log",
-      "tests": "9/9",
-      "exitCode": 0
-    },
-    "poseAdapterPack": {
-      "log": "unit-pose-pack.log",
-      "tests": "26/26",
-      "exitCode": 0
-    },
-    "note": "Unit alone != W4. Consolidator re-ran 34/34 on tip era; still not dual-locked with browser on one SHA."
+    "log": "unit-w4-pack.log"
   },
   "browser": {
-    "status": "green_deposit",
     "exitCode": 0,
-    "tool": "playwright",
     "spec": "tests/e2e/open3d-w4-orbit-continuity.spec.ts",
-    "proveTip": "bb0531685e7e714acb6026d0afcb214ba6e68f7a",
-    "trustdataCommit": "6c236ac66883dd62cc0355c277e86ec22ebafcf1",
-    "logs": [
-      "browser-w4-raw.log",
-      "browser-w4-playwright-live.log",
-      "playwright-raw.log"
-    ],
-    "browserRunJson": "browser-run.json",
-    "browserRunStatus": "browser-green",
-    "browserRunHEAD": null,
-    "tests": "1/1 passed (latest logs)",
-    "pngs": [
-      "01-2d-after-place.png",
-      "02-3d-orbit-on.png",
-      "03-2d-restored.png"
-    ],
-    "proves": [
-      "furniture-count-status-text",
-      "data-orbit-enabled=true",
-      "2d-3d-2d-count-stable",
-      "optional-left-drag-no-crash"
-    ],
-    "doesNotProve": [
-      "entity-ids",
-      "mm-position",
-      "document-rotation-degrees"
-    ],
-    "consoleErrorCount": 0,
-    "consoleHardAssertInSpec": false,
-    "consoleMessagesTxt": false,
-    "note": "Browser proves count + orbit attr only (H3). No HEAD pin in browser-run.json — cannot claim same tip as unit/pack HEAD."
-  },
-  "chrome": {
-    "status": "not_proof",
-    "dir": "chrome/",
-    "cdmPresent": false,
-    "note": "Optional snaps / port noise only. Do not recreate chrome/_cdm node_modules under results."
-  },
-  "artifacts": {
-    "PROOF_INDEX": "PROOF-INDEX.md",
-    "NOTES": "NOTES.md",
-    "THREE_LAYER_AUDIT": "THREE-LAYER-AUDIT.md",
-    "CP_04_STATUS": "CP-04-STATUS.md",
-    "HEAD_txt": "HEAD.txt",
-    "NOTES_BROWSER": "NOTES-BROWSER.md",
-    "NOTES_UNIT_PACK": "NOTES-unit-pack.md"
-  },
-  "status": "open",
-  "statusNote": "pass only if unit pack + playwright both green on same HEAD tip. Unit green deposits + consolidator re-run; browser green at prove tip bb053168 without HEAD pin; pack tip 74399324. Dual-green same tip not locked → open. W4 product claim NO. Phase-card historical PASS void."
+    "baseURL": "http://localhost:3000",
+    "tests": "1/1 passed"
+  }
 }

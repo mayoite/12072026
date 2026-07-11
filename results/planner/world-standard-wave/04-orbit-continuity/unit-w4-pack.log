@@ -1,0 +1,18 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.9 [39m[90md:/OandO07072026/site[39m
+
+ [32m✓[39m tests/unit/features/planner/open3d/workspaceOrbitWiring.test.ts[2m > [22mW4 workspace orbit wiring (layer 2)[2m > [22mhelper forces enableControls true[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/workspaceOrbitWiring.test.ts[2m > [22mW4 workspace orbit wiring (layer 2)[2m > [22mOOPlannerWorkspace spreads getOpen3dViewerControlProps into Lazy3DViewer[32m 1[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/poseContinuityW4.test.ts[2m > [22mW4 pose continuity (document ↔ scene nodes)[2m > [22mrebuilds furniture pose without mutating document ids/position/rotation[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx[2m > [22morbitControlsDefault — product helper / prop contract[2m > [22mOPEN3D_ORBIT_DEFAULT_ENABLED is true[32m 1[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx[2m > [22morbitControlsDefault — product helper / prop contract[2m > [22mgetOpen3dViewerControlProps forces enableControls: true[32m 1[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx[2m > [22morbitControlsDefault — product helper / prop contract[2m > [22mfurniture document rotation stays degrees via normalizeDegrees[32m 0[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx[2m > [22morbitControlsDefault — ThreeViewerInner construct + data-orbit-enabled[2m > [22momitted enableControls (default ON) constructs OrbitControls and sets data-orbit-enabled=true[32m 40[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx[2m > [22morbitControlsDefault — ThreeViewerInner construct + data-orbit-enabled[2m > [22menableControls={false} does not construct OrbitControls and sets data-orbit-enabled=false[32m 11[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx[2m > [22morbitControlsDefault — ThreeViewerInner construct + data-orbit-enabled[2m > [22menableControls={true} explicit construct + data-orbit-enabled=true[32m 20[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 23:37:20
+[2m   Duration [22m 1.11s[2m (transform 472ms, setup 1.08s, import 375ms, tests 86ms, environment 945ms)[22m
+

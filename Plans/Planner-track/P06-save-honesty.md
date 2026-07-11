@@ -1,6 +1,6 @@
 ﻿# P06 — Save honesty (W5–W6)
 
-**Status:** OPEN / REPROVE — not complete. Old `06-save-honesty/` packs are clues only.
+**Status:** PASS dual-gate on tip (2026-07-11 Option 2) — unit 39/39 + browser UUID reload; evidence `06-save-honesty/`.
 
 **Gates:** **W5** save → hard reload → same wall + furniture **ids** · **W6** status copy never implies cloud when only IDB.
 

@@ -2,19 +2,19 @@
   "phase": "P05",
   "gate": "scratch-cabinet-multiprim-s7-chaise",
   "entry": "/planner/guest/",
-  "date": "2026-07-10T13:21:17.683Z",
+  "date": "2026-07-11T18:08:50.812Z",
   "furnitureBefore": 0,
   "furnitureAfter": 2,
   "cabinetDiversity": {
     "sampleCount": 6914,
-    "uniqueQuantized": 15,
-    "channelStdDev": 67.25861523970147,
+    "uniqueQuantized": 20,
+    "channelStdDev": 48.56529744314257,
     "notPureSolid": true
   },
   "chaiseDiversity": {
     "sampleCount": 6914,
-    "uniqueQuantized": 51,
-    "channelStdDev": 56.309191274646544,
+    "uniqueQuantized": 28,
+    "channelStdDev": 32.9009120944864,
     "notPureSolid": true
   },
   "evidence": [
