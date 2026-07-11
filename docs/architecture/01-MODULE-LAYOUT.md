@@ -4,7 +4,7 @@
 **Authority:** [`Plans/Planner-track/CONSTRAINTS.md`](../../Plans/Planner-track/CONSTRAINTS.md) → **this file** → `AGENTS.md` → [`02-DOMAINS.md`](02-DOMAINS.md)  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **UI contract:** [`03-MODULE-UI-CONTRACT.md`](03-MODULE-UI-CONTRACT.md) · [`04-CSS-SOLUTION.md`](04-CSS-SOLUTION.md)  
-**Locked overlay:** [docs/Lockedfiles/01-planner-current.md](../Lockedfiles/01-planner-current.md) · engines [03-dependencies-engines-current.md](../Lockedfiles/03-dependencies-engines-current.md)
+**Locked overlay:** [docs/Lockedfiles/01-planner-current.md](../Lockedfiles/01-planner-current.md) · engines [docs/Lockedfiles/03-dependencies-engines-current.md](../Lockedfiles/03-dependencies-engines-current.md)
 
 ---
 
@@ -33,7 +33,7 @@ site/
 ├── components/       → Site marketing / shared presentational UI
 ├── lib/              → Pure TS, site-data, auth helpers (no feature screens)
 ├── platform/         → DB + Supabase clients
-├── app/css/          → All styles (see CSS-SOLUTION.md)
+├── app/css/          → All styles (see 04-CSS-SOLUTION.md)
 ├── tests/            → Mirrors features/ (never co-located under features/)
 ├── config/           → Route contracts, build config
 ├── i18n/             → Messages

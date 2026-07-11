@@ -1,24 +1,22 @@
 /**
- * W3 browser proof — select furniture → Delete → undo (open3d native chrome).
+ * W3 browser proof — select furniture → Delete → undo on live Fabric sole host.
  * Evidence: results/planner/world-standard-wave/03-select-delete/
  *
- * Fabric OFF hard gate: do not set NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE for this run.
- * Unset before Playwright (PowerShell):
- *   Remove-Item Env:NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE -EA SilentlyContinue
- * W3 proves open3d native select/delete/undo — fabric furniture path must stay off.
+ * Host: Open3dFabricStage (`data-testid="open3d-fabric-stage"`).
+ * No Fabric-OFF / Feasibility downgrade theater.
  */
 import { expect, test, type Page } from "@playwright/test";
 import path from "node:path";
 
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
 import {
-  clickOnCanvas,
+  firstFurnitureCenter,
   placeSeatsFromConfigurator,
+  PLANNER_FABRIC_STAGE,
   selectPlannerTool,
+  tapAtPoint,
   waitForPlannerCanvas,
 } from "./plannerCanvasHelpers";
-
-test.describe.configure({ mode: "serial", timeout: 120_000 });
 
 /** Batch place size used throughout this proof (Place N seats). */
 const SEATS_PLACED = 4;
@@ -54,7 +52,10 @@ async function furnitureCount(page: Page): Promise<number> {
  */
 async function isFurnitureSelection(page: Page): Promise<boolean> {
   const body = await page.locator("body").innerText();
-  if (/Wall selected|\d+\s+walls?\s+selected/i.test(body) && !/Furniture selected|\d+\s+furniture\s+selected/i.test(body)) {
+  if (
+    /Wall selected|\d+\s+walls?\s+selected/i.test(body) &&
+    !/Furniture selected|\d+\s+furniture\s+selected/i.test(body)
+  ) {
     return false;
   }
   if (/Furniture selected|\d+\s+furniture\s+selected/i.test(body)) {
@@ -62,30 +63,37 @@ async function isFurnitureSelection(page: Page): Promise<boolean> {
   }
   if (/Workstation \(systems v0\)|ws-v0|L-shape|Linear/i.test(body)) {
     // Properties/status still showing systems furniture context after select.
-    const noSelection = await page.getByRole("heading", { name: /No Selection/i }).count();
+    const noSelection = await page
+      .getByRole("heading", { name: /No Selection/i })
+      .count();
     return noSelection === 0;
   }
   // Properties header entity type "Furniture" (entityType span next to name).
-  const furnitureType = page.locator(".pw-properties, [class*='properties'], aside, [class*='panel']").getByText(
-    /^Furniture$/,
-    { exact: true },
-  );
+  const furnitureType = page
+    .locator(".pw-properties, [class*='properties'], aside, [class*='panel']")
+    .getByText(/^Furniture$/, { exact: true });
   if ((await furnitureType.count()) > 0) {
     return true;
   }
   return false;
 }
 
-test.describe("W3 select / delete / undo (browser)", () => {
-  test("place furniture, select, Delete removes, Ctrl+Z restores", async ({ page }) => {
-    // Runner-side fabric OFF (process env). Server must also start without the flag.
-    expect(
-      process.env.NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE,
-      "Fabric furniture env must be unset for W3 hard gate",
-    ).toBeFalsy();
+test.describe("W3 select / delete / undo (browser, Fabric sole)", () => {
+  test.describe.configure({ mode: "serial", timeout: 120_000 });
 
+  test("place furniture, select, Delete removes, Ctrl+Z restores", async ({
+    page,
+  }) => {
     await enterGuestPlannerWorkspace(page, { projectName: "W3 select-delete" });
     await waitForPlannerCanvas(page);
+
+    // Live host must be Fabric stage — archive Feasibility testid must not mount.
+    await expect(page.locator(PLANNER_FABRIC_STAGE)).toBeVisible({
+      timeout: 15_000,
+    });
+    await expect(
+      page.locator('[data-testid="planner-2d-canvas"]'),
+    ).toHaveCount(0);
 
     const furnitureBefore = await furnitureCount(page);
     expect(furnitureBefore).toBeGreaterThanOrEqual(0);
@@ -101,9 +109,16 @@ test.describe("W3 select / delete / undo (browser)", () => {
     expect(afterPlace).toBe(furnitureBefore + SEATS_PLACED);
     await page.screenshot({ path: path.join(EVIDENCE, "01-placed.png") });
 
-    // Select tool is under Navigation tools (open3d Canvas tools rail) — helper scopes both.
+    // Select tool is under Navigation tools (open3d Canvas tools rail).
     await selectPlannerTool(page, "Select");
-    await clickOnCanvas(page, 0.5, 0.5);
+
+    // Hit real furniture via Fabric scene hook (center of plan may miss seats).
+    const furniturePoint = await firstFurnitureCenter(page);
+    expect(
+      furniturePoint,
+      "expected __plannerFabricView furniture center after batch place",
+    ).not.toBeNull();
+    await tapAtPoint(page, furniturePoint!);
 
     // Not merely "No Selection" gone — must be furniture selection, count unchanged until Delete.
     await expect(

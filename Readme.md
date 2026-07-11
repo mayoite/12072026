@@ -15,7 +15,7 @@ pnpm monorepo for `oando.co.in`. Next.js in `site/`.
 ```
 repo-root/          ← pnpm workspace wrapper (package.json, pnpm-lock.yaml)
 ├── site/           ← Next.js app (oando-site)
-├── tech-stack-generator/  ← Vite source (oando-tech-stack-docs); build output — see `tech-stack-generator/README.md`
+├── site/tech-stack-generator/  ← Vite source (oando-tech-stack-docs); build output — see `site/tech-stack-generator/README.md`
 ├── docs/           ← reference docs (architecture, api, audit)
 ├── archive/        ← historical outputs + `archive/migrationdocs/`
 ├── Plans/          ← governance + execution plans (see Plans/INDEX.md to discover active session status and lanes)
@@ -96,4 +96,3 @@ http://localhost:3000 · guest planner `/planner/guest/`
 TypeScript **6.x**. Dev: `next dev --webpack`. Vercel Root Directory = `site`. Test output: repo-root `results/` (detail **`testing-handbook.md`**).
 
 Other reference: `docs/architecture/`, `docs/api/ROUTE-INDEX.md`, `Plans/INDEX.md`.
-

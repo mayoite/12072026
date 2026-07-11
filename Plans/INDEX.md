@@ -14,12 +14,12 @@
 
 ```
 Plans/
-  INDEX.md · 00-QUALITY-BAR.md
+  INDEX.md Â· 00-QUALITY-BAR.md
   Planner-track/   hubs + P01-P10.md   (0 subfolders)
-  Admin-track/     BOARD + A1 A2 A3.md
-  Site-track/      BOARD + S1 S2.md
+  Admin-track/     BOARD + A1-admin-svg-publish.md + A2-svg-pipeline.md + A3-production-auth.md
+  Site-track/      BOARD + S1-deps-cleanup.md + S2-site-chrome.md
   SEO-track/BOARD.md
   Security-track/  BOARD + SEC-hardening.md
 ```
 
-Hubs: [Planner BOARD](./Planner-track/BOARD.md) · [CHECKPOINTS](./Planner-track/CHECKPOINTS.md) · [Agents-03-Plan](../Agents/Agents-03-Plan.md)
+Hubs: [Planner BOARD](./Planner-track/BOARD.md) Â· [CHECKPOINTS](./Planner-track/CHECKPOINTS.md) Â· [Agents-03-Plan](../Agents/Agents-03-Plan.md)

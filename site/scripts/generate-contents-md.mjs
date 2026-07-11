@@ -16,13 +16,14 @@ const repoFolders = {
     contains: [
       "site/ — Next.js app (oando-site)",
       "site/tech-stack-generator/ — Vite source for tech-stack docs",
-      "Documents/ — generated tech-stack facts + static site (`tech-stack-generated/`)",
+      "tech-stack-docs/ — generated static site build",
+      "tech-stack-generated/ — emitted renderer data",
       "docs/ — reference documentation (architecture, api, database, audit)",
       "archive/ — historical outputs and archive/migrationdocs/",
-      "plans/ — planning notes and WIP packets",
+      "Plans/ — governance + execution tracks",
       "pnpm-workspace.yaml, pnpm-lock.yaml, package.json",
       "AGENTS.md, Readme.md, CONTENTS.md (this file)",
-      "DOC-MAP.md, START.md, TESTING.md, OPERATIONS_RUNBOOK.md, Failures.md",
+      "DOC-MAP.md, START.md, testing-handbook.md, OPERATIONS_RUNBOOK.md, Failures.md",
     ],
     see: ["Readme.md", "AGENTS.md", "DOC-MAP.md"],
     rules: ["Application code lives in site/, not at repo root"],
@@ -49,12 +50,12 @@ const repoFolders = {
     rules: ["Prefer archive over delete", "Do not import from archive/ in site/"],
   },
   plans: {
-    title: "Planning notes",
-    why: "Phased roadmaps and in-flight execution packets.",
+    title: "Planning tracks",
+    why: "Flat execution tracks and the shared quality bar.",
     contains: [
-      "README.md — active plan index",
-      "planner-unified-3-file-plan/, sketch-to-plan-3-file-plan/, database-consolidation-3-file-plan/, tech-stack-docs-3-file-plan/",
-      "archive/plans/wip/ — superseded multi-file packets",
+      "INDEX.md — active plan index",
+      "00-QUALITY-BAR.md — shared product bar",
+      "Planner-track/, Admin-track/, Site-track/, SEO-track/, Security-track/",
     ],
     see: ["DOC-MAP.md", "Failures.md"],
   },
@@ -62,7 +63,7 @@ const repoFolders = {
     title: "Tech stack docs (source)",
     why: "Vite + React mini-site in `site/tech-stack-generator/`; build output is written to `site/tech-stack-docs/`.",
     contains: ["src/ — pages and data", "vite.config.ts — outDir `Documents/tech-stack-generated`"],
-    see: ["Readme.md", "Readme_Techstack.md", "COVERAGE-REPORT.md"],
+    see: ["README.md", "Readme_Techstack.md", "COVERAGE-REPORT.md"],
   },
 };
 
@@ -74,9 +75,8 @@ const siteFolders = {
     contains: [
       "app/, features/, components/, lib/, tests/, scripts/, platform/, config/",
       "package.json, next.config.js, tsconfig.json",
-      "results/ — active test and audit output",
     ],
-    see: ["../../Readme.md", "../../AGENTS.md", "../../DOC-MAP.md"],
+    see: ["../Readme.md", "../AGENTS.md", "../DOC-MAP.md"],
   },
   app: {
     title: "Next.js App Router",
@@ -233,7 +233,7 @@ const siteFolders = {
         doNotDuplicate: "Duplicate ingest in planner/catalog/ except placement adapters",
       },
     ],
-    see: ["docs/TESTING.md", "docs/Handover.md"],
+    see: ["../../testing-handbook.md", "../../Plans/Planner-track/BOARD.md"],
   },
   "features/planner/open3d": {
     title: "Open3d planner workspace",
@@ -471,7 +471,7 @@ const siteFolders = {
       "setup.ts, guestProjectSetup.ts — helpers",
       "INVENTORY.md — auto file list (pnpm run docs:sync)",
     ],
-    see: ["../../TESTING.md", "tests/INVENTORY.md"],
+    see: ["../../testing-handbook.md", "INVENTORY.md"],
     rules: ["No subfolders — flat layout with prefixed names", "No co-located tests in features/"],
   },
   scripts: {

@@ -1,6 +1,8 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-export const PLANNER_PRIMARY_CANVAS = '[data-testid="planner-2d-canvas"] canvas';
+/** Live sole 2D host = Open3dFabricStage (not archive Feasibility `planner-2d-canvas`). */
+export const PLANNER_PRIMARY_CANVAS = '[data-testid="open3d-fabric-stage"] canvas';
+export const PLANNER_FABRIC_STAGE = '[data-testid="open3d-fabric-stage"]';
 
 /** TopBar view-mode radiogroup - product labels are literal "2D" / "3D" (role=radio). */
 export const VIEW_MODE_RADIOGROUP_NAME = "View mode";
@@ -237,6 +239,8 @@ type FabricObjectHandle = {
   left?: number;
   top?: number;
   name?: string;
+  get?: (key: string) => unknown;
+  plannerEntityType?: unknown;
 };
 type FabricViewHandle = {
   getActiveObject?: () => FabricObjectHandle | undefined;
@@ -245,53 +249,45 @@ type FabricViewHandle = {
   lowerCanvasEl?: HTMLElement;
 };
 
-const STRUCTURE_PREFIXES = [
-  "WALL",
-  "CORNER",
-  "ROOM",
-  "ROOM-LABEL",
-  "DOOR",
-  "WINDOW",
-  "FLOORPLAN",
-  "DRAW",
-];
-
 /**
  * Read the screen (page) coordinates of the first furniture object on the
- * canvas. Robust to zoom/pan because it reads the live viewportTransform.
- * Requires the `window.__plannerFabricView` test hook. Falls back to the
- * active object when no scan match is found.
+ * live Fabric stage. Uses `plannerEntityType === "furniture"` (not archive name
+ * prefixes). Requires `window.__plannerFabricView` from Open3dFabricStage.
  */
 export async function firstFurnitureCenter(
   page: Page,
 ): Promise<{ x: number; y: number } | null> {
-  const point = await page.evaluate(
-    (prefixes: string[]) => {
-      const w = (window as unknown as { __plannerFabricView?: FabricViewHandle })
-        .__plannerFabricView;
-      if (!w) return null;
-      const objs = w.getObjects?.() ?? [];
-      const isFurniture = (o: FabricObjectHandle) => {
-        const name = String(o.name ?? "");
-        if (!name) return true;
-        return !prefixes.some((p) => name.startsWith(p));
-      };
-      const target = objs.find(isFurniture) ?? w.getActiveObject?.();
-      if (!target) return null;
-      const center =
-        typeof target.getCenterPoint === "function"
-          ? target.getCenterPoint()
-          : { x: target.left ?? 0, y: target.top ?? 0 };
-      const vt = w.viewportTransform ?? [1, 0, 0, 1, 0, 0];
-      const px = center.x * vt[0] + center.y * vt[2] + vt[4];
-      const py = center.x * vt[1] + center.y * vt[3] + vt[5];
-      const el = w.lowerCanvasEl;
-      if (!el) return null;
-      const rect = el.getBoundingClientRect();
-      return { x: rect.left + px, y: rect.top + py };
-    },
-    [...STRUCTURE_PREFIXES],
-  );
+  const point = await page.evaluate(() => {
+    const w = (window as unknown as { __plannerFabricView?: FabricViewHandle })
+      .__plannerFabricView;
+    if (!w) return null;
+    const objs = w.getObjects?.() ?? [];
+    const entityType = (o: FabricObjectHandle): string | null => {
+      if (typeof o.get === "function") {
+        const viaGet = o.get("plannerEntityType");
+        if (typeof viaGet === "string") return viaGet;
+      }
+      return typeof o.plannerEntityType === "string" ? o.plannerEntityType : null;
+    };
+    const target =
+      objs.find((o) => entityType(o) === "furniture") ??
+      (() => {
+        const active = w.getActiveObject?.();
+        return active && entityType(active) === "furniture" ? active : undefined;
+      })();
+    if (!target) return null;
+    const center =
+      typeof target.getCenterPoint === "function"
+        ? target.getCenterPoint()
+        : { x: target.left ?? 0, y: target.top ?? 0 };
+    const vt = w.viewportTransform ?? [1, 0, 0, 1, 0, 0];
+    const px = center.x * vt[0] + center.y * vt[2] + vt[4];
+    const py = center.x * vt[1] + center.y * vt[3] + vt[5];
+    const el = w.lowerCanvasEl;
+    if (!el) return null;
+    const rect = el.getBoundingClientRect();
+    return { x: rect.left + px, y: rect.top + py };
+  });
   return point;
 }
 

@@ -1,11 +1,11 @@
 # Module UI Contract — Anti-drift lock
 
 **Status:** Locked  
-**Authority:** `Plans/00-REVISION.md` → `Plans/06-UI-PLAN.md` → **this file** → [`04-CSS-SOLUTION.md`](04-CSS-SOLUTION.md)  
+**Authority:** `Plans/00-QUALITY-BAR.md` → `Plans/Admin-track/BOARD.md` / `Plans/Site-track/BOARD.md` → **this file** → [`04-CSS-SOLUTION.md`](04-CSS-SOLUTION.md)  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) — path roots below must match  
 **Locked copy:** [`docs/Lockedfiles/04-MODULE-UI-CONTRACT-Locked.md`](../Lockedfiles/04-MODULE-UI-CONTRACT-Locked.md)  
-**Locked overlay:** [docs/Lockedfiles/01-planner-current.md](../Lockedfiles/01-planner-current.md) · engines [03-dependencies-engines-current.md](../Lockedfiles/03-dependencies-engines-current.md)
+**Locked overlay:** [docs/Lockedfiles/01-planner-current.md](../Lockedfiles/01-planner-current.md) · engines [docs/Lockedfiles/03-dependencies-engines-current.md](../Lockedfiles/03-dependencies-engines-current.md)
 
 **Problem:** New modules copy the nearest TSX and reintroduce `slate-*`, hex, or a third dialect.
 
@@ -83,7 +83,7 @@ Every new UI module under the path roots above **must** satisfy:
 - [ ] No raw Tailwind palette classes in TSX
 - [ ] No `#hex` or `rgb()` / `hsl()` in open3d `*.module.css` (tokens only)
 - [ ] No new `--planner-primary*` usage (use `--planner-accent*`; primary is compat shim only)
-- [ ] Icons: Phosphor in `open3d/`; Lucide in admin (per `00-REVISION.md` Decision 3)
+- [ ] Icons: Phosphor in `open3d/`; Lucide in admin (per `docs/Lockedfiles/03-dependencies-engines-current.md`)
 - [ ] Repeated pattern (3×) → extract to `app/css/core/components/*.css` before a fourth copy
 - [ ] `pnpm run lint:ui` passes (strict after UI-1 shell lands)
 
@@ -107,7 +107,7 @@ See `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` for full gate matri
 ## Rejected
 
 - **Option F** — full design-system / Storybook program before 1A+1B stable
-- **Option E** — Mantine (deferred per `PACKAGES.md`)
+- **Option E** — Mantine (deferred per `docs/Lockedfiles/03-dependencies-engines-current.md`)
 - **Cross-surface UI sprint** — site + admin + planner in one pass
 - **Component-by-component repo sweep** without layer order
 - **UI-3 before 1B** — marketing dialect migration deferred
@@ -121,6 +121,6 @@ See `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` for full gate matri
 - [`04-CSS-SOLUTION.md`](04-CSS-SOLUTION.md) — folder ownership
 - [Admin-track](../../Plans/Admin-track/BOARD.md) — admin surface detail (UI-2)
 - [Site-track](../../Plans/Site-track/BOARD.md) — marketing reference (UI-3)
-- `Plans/06-UI-PLAN.md` — phased execution
+- `Plans/Admin-track/BOARD.md` / `Plans/Site-track/BOARD.md` — phased execution
 - `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` — test gates
 - `site/scripts/lint-ui-contract.mjs` — automated checks

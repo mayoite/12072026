@@ -1,7 +1,7 @@
 # Dependencies & engines — current (locked)
 
 **Baseline:** 2026-07-05  
-**Source of truth for pins:** `PACKAGES.md` + `site/package.json` (disk may drift — verify lockfile)  
+**Source of truth for pins:** `site/package.json` + `pnpm-lock.yaml` (disk may drift — verify lockfile)  
 **Revision alignment:** Option A locked in revision — **1B not accepted**; `@svgdotjs/*` still on disk unused.
 
 ## Cross-links
@@ -24,7 +24,7 @@
 | **2D canvas** | `fabric` | `7.4.0` (exact) | Live open3d/guest/canvas via `canvas-fabric-stage` (`PlannerCanvasStage`); not Feasibility |
 | **3D** | `three` | `^0.185.1` | Open3D lazy 3D, product viewers |
 | **3D React** | `@react-three/fiber` | `^9.6.1` | R3F bindings (not a third engine) |
-| **3D helpers** | `@react-three/drei` | `^10.7.7` | Installed; `PACKAGES.md` lists Tier-2 reserved — **policy drift** |
+| **3D helpers** | `@react-three/drei` | `^10.7.7` | Installed; this locked file treats it as Tier-2 reserved — **policy drift** |
 
 No second general canvas engine (Konva, Paper, Pixi, etc.). Do not restore Feasibility as interactive host.
 
@@ -92,7 +92,7 @@ Fabric pinned exactly at `7.4.0`. Option A SVG stack is present with boundary te
 
 ## Weaknesses
 
-**Policy vs disk drift:** `@svgdotjs/*` unused; `@react-three/drei` installed vs Tier-2 in PACKAGES; Lucide coexists with Phosphor; XYFlow/GSAP/Swiper not in exclusion list. **polygon-clipping** is stale on npm. **Dual panel libraries** — `react-resizable-panels` vs custom `useDockingSystem` in open3d. **PACKAGES.md** incomplete for planner runtime. **1A bundle audit not accepted.**
+**Policy vs disk drift:** `@svgdotjs/*` unused; `@react-three/drei` installed vs Tier-2 in this file; Lucide coexists with Phosphor; XYFlow/GSAP/Swiper not in exclusion list. **polygon-clipping** is stale on npm. **Dual panel libraries** — `react-resizable-panels` vs custom `useDockingSystem` in open3d. This locked inventory is still incomplete for planner runtime. **1A bundle audit not accepted.**
 
 ---
 

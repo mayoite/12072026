@@ -13,6 +13,6 @@
 **Verifiable:**
 - `pnpm run test:tech-stack` + site vitest i18n slice.
 - Fresh artifacts under results/ on change.
-- Cross-ref to `docs/Lockedfiles/documentation/proposed.md` for doc i18n if added.
+- Cross-ref to `docs/INDEX.md` for doc i18n if added.
 
-Refer to `site/i18n/CONTENTS.md` + TESTING.md.
+Refer to `site/i18n/CONTENTS.md` + `testing-handbook.md`.

@@ -3,10 +3,10 @@
 **Scope:** Admin content flows to site/portal (SVG catalog, plans publish, portal render). Involves admin/svg-editor, planner/publish, portal views, Puck Render.
 
 **References:** 
-- `docs/Lockedfiles/site/proposed.md` (portal svg-catalog)
+- `docs/architecture/02-DOMAINS.md` (portal svg-catalog context)
 - `site/features/planner/admin/svg-editor/`
 - `site/features/planner/portal/`
-- `plann/00-REVISION.md` (1B)
+- `Plans/00-QUALITY-BAR.md` (1B bar)
 - `START.md` (no direct publish cmd listed; use admin flows)
 - GS §8 SVG + §5
 

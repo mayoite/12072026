@@ -1,6 +1,6 @@
 # Content Publishing — Current Situation
 
-**Evidence:** Reads of Lockedfiles/site/proposed, planner admin CONTENTS implied, portal, superpowers design.
+**Evidence:** Reads of `docs/Lockedfiles/02-svg-pipeline-current.md`, planner admin CONTENTS, portal, and superpowers design.
 
 ## Honest State
 
@@ -23,5 +23,5 @@
 
 - SVG generation strict Option A + contracts (superpowers §8).
 - Global standard visual + anti-copy on published assets.
-- Refer/revise `plann/00-REVISION.md`, `docs/Lockedfiles/planner/proposed.md`, svg-pipeline locked.
+- Refer/revise `Plans/00-QUALITY-BAR.md`, `docs/Lockedfiles/01-planner-current.md`, `docs/Lockedfiles/02-svg-pipeline-current.md`.
 - Evidence: golden tests + run records required.

@@ -41,8 +41,8 @@ Unit already encodes the upgrade: `hostWiringP01.test.ts` (PlannerCanvasStage so
 
 | File | Role |
 |------|------|
-| `INVENTORY.md` | Fabric-sole hosts, tools surface, W1–W8 code surface |
-| `CONTRADICTIONS.md` | Claim vs code — include Block2D/select gaps **without** calling Feasibility live |
+| `../../results/planner/world-standard-wave/00-product-truth/INVENTORY.md` | Fabric-sole hosts, tools surface, W1–W8 code surface |
+| `../../results/planner/world-standard-wave/00-product-truth/CONTRADICTIONS.md` | Claim vs code — include Block2D/select gaps **without** calling Feasibility live |
 | `HEAD.txt` · `run.json` · `NOTES.md` | Checkout, Approach A, vitestSmoke |
 | Vitest | Prefer `hostWiringP01` + smoke — ok \| failed \| skipped + reason |
 

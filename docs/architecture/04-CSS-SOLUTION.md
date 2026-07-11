@@ -1,10 +1,10 @@
 # CSS Solution — Oando Platform
 
 **Status:** Locked folder policy (execution via UI-0 → UI-3)  
-**Authority:** `Plans/00-REVISION.md` → `Plans/06-UI-PLAN.md` → [`03-MODULE-UI-CONTRACT.md`](03-MODULE-UI-CONTRACT.md) → **this file**  
+**Authority:** `Plans/00-QUALITY-BAR.md` → `Plans/Admin-track/BOARD.md` / `Plans/Site-track/BOARD.md` → [`03-MODULE-UI-CONTRACT.md`](03-MODULE-UI-CONTRACT.md) → **this file**  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) — styles live in `app/css/`, never mirrored under `features/`  
-**Locked overlay:** [docs/Lockedfiles/01-planner-current.md](../Lockedfiles/01-planner-current.md) · engines [03-dependencies-engines-current.md](../Lockedfiles/03-dependencies-engines-current.md)
+**Locked overlay:** [docs/Lockedfiles/01-planner-current.md](../Lockedfiles/01-planner-current.md) · engines [docs/Lockedfiles/03-dependencies-engines-current.md](../Lockedfiles/03-dependencies-engines-current.md)
 
 ---
 

@@ -2,11 +2,11 @@
 
 ## Why this folder exists
 
-Files served at / without bundling: images, fonts, 3D models, tldraw CDN fallback.
+Files served at / without bundling: images, fonts, 3D models, vendor CDN mirrors.
 
 ## What is here
 
-- images/, fonts/, models/, cdn/, tldraw-assets/
+- images/, fonts/, models/, cdn/
 - favicon and static downloads
 
 ## Rules

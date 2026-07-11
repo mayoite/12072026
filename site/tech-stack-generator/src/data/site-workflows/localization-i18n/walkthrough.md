@@ -4,9 +4,9 @@
 
 **References:** 
 - `site/i18n/CONTENTS.md`
-- `docs/Lockedfiles/site/current.md`
+- `Readme.md`
 - `site/i18n/routing.ts`, `config.ts`, `request.ts`
-- `TESTING.md` (nextIntlServerEnMock)
+- `testing-handbook.md` (nextIntlServerEnMock)
 - `Readme.md`
 - GS: evidence + refer docs
 

@@ -30,6 +30,15 @@ export {
 } from "./fabricFurnitureFlag";
 
 export {
+  CANVAS_ENTITY_TYPE_PROP,
+  readCanvasEntityType,
+  selectionFromFabricTarget,
+  writeCanvasEntityType,
+  type FabricCanvasEntityType,
+  type FabricEntitySelection,
+} from "./fabricSelection";
+
+export {
   FurnitureFabricLayer,
   type FurnitureFabricLayerProps,
 } from "./FurnitureFabricLayer";

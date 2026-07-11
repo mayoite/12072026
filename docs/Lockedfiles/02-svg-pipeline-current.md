@@ -51,7 +51,7 @@ SVG is the strongest “backend contracts, weakest admin product” area. Option
 
 ## Strengths
 
-Package boundary tests enforce server-only compiler in planner chunks. Deterministic compiler module with checksum story. Phase 1 completion tests prove reference variants compile. Atomic persist and pipeline runner with defined failure taxonomy. Portal `Render` path works for preview. Aligns with locked `PACKAGES.md` Option A when code path is unified.
+Package boundary tests enforce server-only compiler in planner chunks. Deterministic compiler module with checksum story. Phase 1 completion tests prove reference variants compile. Atomic persist and pipeline runner with defined failure taxonomy. Portal `Render` path works for preview. Aligns with locked `03-dependencies-engines-current.md` Option A when code path is unified.
 
 ## Weaknesses
 

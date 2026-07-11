@@ -16,4 +16,4 @@
 - `pnpm run test:tech-stack` + `docs:gate:tech-stack` green with artifacts.
 - list_dir shows complete structure for all 7 modules.
 - Cross refs in generator CONTENTS/Readme updated only when owning docs change.
-- Refer `site/tech-stack-generator/README.md` + root `Readme.md` + `docs/Lockedfiles/tech-stack/`.
+- Refer `site/tech-stack-generator/README.md` + root `Readme.md` + `docs/INDEX.md`.

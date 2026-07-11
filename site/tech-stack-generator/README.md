@@ -36,7 +36,7 @@ See [`Readme_Techstack.md`](./Readme_Techstack.md) for the package runbook, test
 
 ## Coverage Report
 
-See [`COVERAGE-REPORT.md`](./COVERAGE-REPORT.md) for the current file-wise coverage breakdown.
+See [`COVERAGE-REPORT.md`](./COVERAGE-REPORT.md) for the generator package coverage breakdown.
 
 ## Documentation Sections
 

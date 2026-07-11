@@ -42,25 +42,15 @@ import {
   writeFurnitureEntityId,
   type FurnitureDocumentPoseUpdate,
 } from "./furnitureFabricMapper";
+import {
+  selectionFromFabricTarget,
+  writeCanvasEntityType,
+  type FabricCanvasEntityType,
+} from "./fabricSelection";
 import { createFabricFurnitureBlock } from "./fabricBlock2D";
 import styles from "./open3dFabricStage.module.css";
 
-type CanvasEntityType = "wall" | "furniture";
-type CanvasEntityCarrier = {
-  get?: (key: string) => unknown;
-  set?: (key: string, value: string) => unknown;
-};
-
-const CANVAS_ENTITY_TYPE_PROP = "plannerEntityType";
-
-function writeCanvasEntityType(target: CanvasEntityCarrier, type: CanvasEntityType): void {
-  target.set?.(CANVAS_ENTITY_TYPE_PROP, type);
-}
-
-function readCanvasEntityType(target: CanvasEntityCarrier | null | undefined): CanvasEntityType | null {
-  const value = target?.get?.(CANVAS_ENTITY_TYPE_PROP);
-  return value === "wall" || value === "furniture" ? value : null;
-}
+type CanvasEntityType = FabricCanvasEntityType;
 
 function nearestWall(
   point: Open3dPoint,
@@ -270,6 +260,10 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
         ),
       });
       fabricRef.current = canvas;
+      // Scene-aware E2E helpers (firstFurnitureCenter) read this hook.
+      (
+        window as unknown as { __plannerFabricView?: Canvas }
+      ).__plannerFabricView = canvas;
 
       const handleModified = (event: ModifiedEvent) => {
         if (rebuildingRef.current) return;
@@ -400,9 +394,8 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
 
       const handleSelection = () => {
         const target = canvas.getActiveObject();
-        const type = readCanvasEntityType(target as CanvasEntityCarrier | undefined);
-        const id = readFurnitureEntityId(target);
-        if (type && id) onSelectionRef.current?.({ type, id });
+        const next = selectionFromFabricTarget(target);
+        if (next) onSelectionRef.current?.(next);
       };
 
       const handleSelectionCleared = () => onSelectionRef.current?.(null);
@@ -444,6 +437,10 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
         observer.disconnect();
         canvas.dispose();
         fabricRef.current = null;
+        const w = window as unknown as { __plannerFabricView?: Canvas };
+        if (w.__plannerFabricView === canvas) {
+          delete w.__plannerFabricView;
+        }
       };
     }, [activeFloor?.walls.length, emitStatus, onStatusChange]);
 

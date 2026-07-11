@@ -107,7 +107,7 @@ export function fabricPoseToDocumentUpdate(
   };
 }
 
-type EntityIdCarrier = {
+export type EntityIdCarrier = {
   get?: (key: string) => unknown;
   entityId?: unknown;
 };

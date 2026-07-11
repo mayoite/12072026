@@ -271,7 +271,7 @@ sequenceDiagram
 
 ## §6. SVG block publish — admin → planner catalog (1B target)
 
-**Authority:** Option A — no SVG.js in production path (`Plans/00-REVISION.md`)
+**Authority:** Option A — no SVG.js in production path (`docs/Lockedfiles/03-dependencies-engines-current.md`)
 
 ### On disk today vs 1B target
 

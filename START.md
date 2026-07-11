@@ -1,6 +1,6 @@
 # Start — dev, test, and release commands
 
-**Open when running commands** · conduct `AGENTS.md` · repo facts `Readme.md` · doc routing `docs/Lockedfiles/INDEX.md` · test layout `TESTING.md` · gate policy `Failures.md`
+**Open when running commands** · conduct `AGENTS.md` · repo facts `Readme.md` · doc routing `docs/Lockedfiles/INDEX.md` · test layout `testing-handbook.md` · gate policy `Failures.md`
 
 Repo root (`pnpm-workspace.yaml`). Package manager: **pnpm**.
 
@@ -74,7 +74,7 @@ cd site
 pnpm exec vitest run tests/unit/offlineStorage.test.ts --config vitest.site.config.ts
 ```
 
-Artifact paths: repo-root `results/` (see **`TESTING.md`**); archive/results/ kept for history (archive over delete).
+Artifact paths: repo-root `results/` (see **`testing-handbook.md`**); archive/results/ kept for history (archive over delete).
 
 ---
 
@@ -162,4 +162,4 @@ Invoke-RestMethod -Uri "http://localhost:3000/api/planner/catalog/"
 
 ## See also
 
-`Readme.md` · `TESTING.md` · `Failures.md` · `OPERATIONS_RUNBOOK.md` · `.env.example`
+`Readme.md` · `testing-handbook.md` · `Failures.md` · `OPERATIONS_RUNBOOK.md` · `.env.example`

@@ -2,7 +2,7 @@
 
 **Updated:** 2026-07-11 · Finish one kill-path before a new epic.
 
-**GATE PASS ≠ product done.** Honest read: `results/planner/world-standard-wave/00-rebaseline/HONEST-STATUS.md`  
+**GATE PASS ≠ product done.** Honest read: `../results/planner/world-standard-wave/00-rebaseline/HONEST-STATUS.md`  
 **Execute:** `Plans/Planner-track/BOARD.md` · **Law:** `AGENTS.md` (not duplicated here)
 
 ## Open now

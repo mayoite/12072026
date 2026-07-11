@@ -14,4 +14,4 @@
 - Golden roundtrips + resolver tests pass.
 - `test:planner-catalog` + portal e2e.
 - Update Lockedfiles after 1B acceptance.
-- Refer `docs/Lockedfiles/svg-pipeline/proposed.md`.
+- Refer `docs/Lockedfiles/02-svg-pipeline-current.md`.

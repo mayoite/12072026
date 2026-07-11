@@ -24,7 +24,7 @@ If any required record is missing, status is **INCOMPLETE**, not passed.
 
 All test, lint, typecheck, build, Playwright, accessibility, coverage, and audit runs land under repo-root `results/<module>/<phase>/<cmd>/` in the standardized `<cmd>-run.json` + `<cmd>-raw.log` format (never to the repo root, `E:`, or any other drive path).
 
-Agent reports and review markdown belong under `Plans/trustdata/` (live) or `archive/Plans/` (history) — see `Plans/README.md` — not under `results/`.
+Agent reports and review markdown belong under `Plans/*-track/` (live) or `archive/Plans/` (history) — see `Plans/INDEX.md` — not under `results/`.
 
 ### Vitest
 
@@ -33,7 +33,7 @@ Agent reports and review markdown belong under `Plans/trustdata/` (live) or `arc
 - Console output: `results/tests/vitest-console.json`
 - Site console output: `results/tests/vitest-site-console.json`
 - Human reports: `results/tests/vitest-results.{csv,html}` and site equivalents
-- Coverage: paths documented in `TESTING.md`
+- Coverage: paths documented in `START.md`
 
 Console artifacts must contain stdout and stderr with stream, test identity or task ID, timestamp, and content. CSV/HTML reports must expose console, stderr, and stdout counts.
 
@@ -141,12 +141,12 @@ Sign-off requires:
 
 ## Locking This Handbook
 
-The live policy is `testing-handbook.md`. The frozen reference is `docs/Lockedfiles/TestingHandbookLocked.md`.
+The live policy is `testing-handbook.md`. No frozen copy exists on this tree today.
 
 Locking procedure:
 
 1. Update the live file first.
-2. Update the locked copy in the same change.
+2. Add or update the locked copy under `docs/Lockedfiles/` in the same change.
 3. Update routing references in live and locked repository docs.
 4. Run documentation and test-configuration checks.
 5. Commit both copies together.

@@ -6,7 +6,7 @@
 **Evidence:** `results/planner/world-standard-wave/08-mesh-quality/` only.  
 **CP:** [CHECKPOINTS](./CHECKPOINTS.md) · [BOARD](./BOARD.md)
 
-**Goal:** Freeze bar in NOTES; prove with units + headless visual smoke; plan === mesh part list.
+**Goal:** Freeze bar in `../../results/planner/world-standard-wave/08-mesh-quality/NOTES.md`; prove with units + headless visual smoke; plan === mesh part list.
 
 **Out of scope:** Photoreal · full kitchens/hardware · 2D host thrash · Feasibility restore · cloud catalog · designer static GLB · non–cabinet-v0 · writes under `site/public/**`. Stay imperative Three — no R3F rewrite for pretty PNGs.
 
@@ -62,10 +62,10 @@ Prefix open3d: `site/features/planner/open3d/`.
 ## Kill order (unchecked)
 
 - [ ] Evidence dir + baseline vitest log
-- [ ] `NOTES.md` = this bar (exact `toe`, formulas, fail modes)
+- [ ] `../../results/planner/world-standard-wave/08-mesh-quality/NOTES.md` = this bar (exact `toe`, formulas, fail modes)
 - [ ] RED units: slab names `toe,carcass,door-slab`; counts 2/3/4; height span; toe geometry
 - [ ] GREEN mesh + GlbExport mirror; blast tests updated
-- [ ] Headless three-quarter (+ side) PNG; `visual-smoke.md` yes/no per criterion
+- [ ] Headless three-quarter (+ side) PNG; `../../results/planner/world-standard-wave/08-mesh-quality/visual-smoke.md` yes/no per criterion
 - [ ] Non-regression scoped vitest; `run.json` (gate W7)
 - [ ] Residual honesty (handles/materials still simple) — no world-standard ship claim
 

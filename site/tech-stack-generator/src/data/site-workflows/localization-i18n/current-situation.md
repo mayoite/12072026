@@ -1,6 +1,6 @@
 # Localization / i18n — Current Situation
 
-**Evidence:** Direct read of `site/i18n/CONTENTS.md`, routing.ts, Lockedfiles/site, proxy.ts, TESTING.md.
+**Evidence:** Direct read of `site/i18n/CONTENTS.md`, routing.ts, Readme.md, proxy.ts, testing-handbook.md.
 
 ## Honest State
 
@@ -22,6 +22,6 @@
 ## GS Application
 
 - Evidence first: any i18n change requires test run artifacts + console output.
-- Refer: update `docs/Lockedfiles/site/current.md` + TESTING.md on policy shift.
+- Refer: update `Readme.md` + `testing-handbook.md` on policy shift.
 - Anti-copy: translation quality not copied from competitors without attribution/benchmark.
 - Superpowers lens: cite GS gate if i18n affects UI/UX surfaces.

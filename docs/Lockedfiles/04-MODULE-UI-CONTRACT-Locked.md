@@ -82,7 +82,7 @@ Every new UI module under the path roots above **must** satisfy:
 - [ ] No raw Tailwind palette classes in TSX
 - [ ] No `#hex` or `rgb()` / `hsl()` in open3d `*.module.css` (tokens only)
 - [ ] No new `--planner-primary*` usage (use `--planner-accent*`; primary is compat shim only)
-- [ ] Icons: Phosphor in `open3d/`; Lucide in admin (per `00-REVISION.md` Decision 3)
+- [ ] Icons: Phosphor in `open3d/`; Lucide in admin (per `docs/Lockedfiles/03-dependencies-engines-current.md`)
 - [ ] Repeated pattern (3×) → extract to `site/app/css/core/components/` before a fourth copy
 - [ ] `pnpm run lint:ui` passes (strict after UI-1 shell lands)
 
@@ -105,7 +105,7 @@ See `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` for full gate matri
 ## Rejected
 
 - **Option F** — full design-system / Storybook program before 1A+1B stable
-- **Option E** — Mantine (deferred per `PACKAGES.md`)
+- **Option E** — Mantine (deferred per `docs/Lockedfiles/03-dependencies-engines-current.md`)
 - **Cross-surface UI sprint** — site + admin + planner in one pass
 - **Component-by-component repo sweep** without layer order
 - **UI-3 before 1B** — marketing dialect migration deferred
