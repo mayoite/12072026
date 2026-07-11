@@ -1,6 +1,6 @@
 # Agents/Agents-07-docs.md
 
-**Bar:** `Agents-01-ELON-STANDARD.md` · **Hub:** `docs/INDEX.md`
+**Bar:** `Agents-01-STANDARD.md` · **Hub:** `docs/INDEX.md`
 
 - Docs from verified live state, not intent.
 - No stack essays in plan/law folders.

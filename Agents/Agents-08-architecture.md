@@ -1,6 +1,6 @@
 # Agents/Agents-08-architecture.md
 
-**Bar:** `Agents-01-ELON-STANDARD.md` · **HOW:** `docs/architecture/`
+**Bar:** `Agents-01-STANDARD.md` · **HOW:** `docs/architecture/`
 
 - Read `docs/architecture/01-MODULE-LAYOUT.md` before placing code.
 - Match surrounding patterns; no second architecture in chat.

@@ -4,7 +4,7 @@
 **Tip under test:** `98d654524e202581f4fd4d2a7c37102694991409`  
 **Rule:** Overall **MUST NOT** claim PASS without owner marks in `OWNER-SIGNOFF.md` **or** explicit **owner-worded** DEFERRED. Neither exists → **OPEN**.
 
-**Bar:** Elon standard · NO PAPER MOON  
+**Bar:** Agents-01-STANDARD · NO PAPER MOON 
 **Scope:** Track P02 only · `results/planner/world-standard-wave/01-engine-lock/`
 
 ---

@@ -1,6 +1,6 @@
 # Agents/Agents-06-failure.md
 
-**Bar:** `Agents-01-ELON-STANDARD.md` · **Log:** `Failures.md` (repo root)
+**Bar:** `Agents-01-STANDARD.md` · **Log:** `Failures.md` (repo root)
 
 - Stop and log failures; never hide stderr or missing artifacts.
 - Smallest safe fix; archive over delete when history exists.

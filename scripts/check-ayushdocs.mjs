@@ -17,7 +17,7 @@ const ALLOWED = new Set([
 ]);
 
 const ABS_RE = /[A-Za-z]:\\|\/Users\/|D:\\\\websites/i;
-const AGENT_LAW_RE = /Agents\/Agents-|Agents-ELON/i;
+const AGENT_LAW_RE = /Agents\/Agents-|Agents-01-STANDARD|Agents-ELON/i;
 
 if (!fs.existsSync(dir)) {
   console.error("check:ayushdocs FAIL: ayushdocs/ missing");

@@ -6,7 +6,7 @@
 - **Unclear product goal** → ask once. Clear goal → implement; don't ask how.
 - **No prompt theater** — short rules, real work. Don't inflate this file or handbooks.
 - **Honesty over comfort** — pushback always welcome. Flattery and soft lies = fail.
-- **Raise the bar, never lower it** — floor: `Agents/Agents-01-ELON-STANDARD.md`.
+- **Raise the bar, never lower it** — floor: `Agents/Agents-01-STANDARD.md`.
 
 ## 2. Routing
 | Layer | Path |
@@ -15,7 +15,7 @@
 | Agent process | **`Agents/`** — all handbooks |
 | Owner intent | **`ayushdocs/`** — five files only |
 
-Head → `Agents/Agents-01-ELON-STANDARD.md` · list → `Agents/INDEX.md`  
+Head → `Agents/Agents-01-STANDARD.md` · list → `Agents/INDEX.md`  
 Subagents → same bar · `/using-superpowers` · fit skills.
 
 ## 3. Freedom & hard stops
@@ -25,7 +25,7 @@ Subagents → same bar · `/using-superpowers` · fit skills.
 ## 4. Git (standing)
 - Repo root checkout only — **no worktrees**.
 - Commit each landable slice · push `origin` when green enough · mirror `mayoite` ~45m / big land.
-- Detail: Elon §5 · `OPERATIONS_RUNBOOK.md`.
+- Detail: Standard §6 · `OPERATIONS_RUNBOOK.md`.
 
 ## 5. Layout (hard)
 - **Evidence** → repo-root `results/` only. Never `site/results/` or `site/test-results/`.
@@ -39,7 +39,7 @@ Subagents → same bar · `/using-superpowers` · fit skills.
 - **No plagiarism** · paid assets = owner buys · licenses: `docs/Lockedfiles/03-dependencies-engines-current.md` (owner thin: `ayushdocs/`).
 - **Secrets** → `.env.local` only.
 - **Tests:** no suppression · no silent pass · see `testing-handbook.md`.
-- **No paper moon** — `pass`/JSON ≠ product. Elon §NO PAPER MOON.
+- **No paper moon** — `pass`/JSON ≠ product. Standard §3 NO PAPER MOON.
 
 ## 7. Where detail lives (not here)
 | Need | File |

@@ -1,6 +1,6 @@
 # Agents/Agents-04-testing.md
 
-**Bar:** `Agents-01-ELON-STANDARD.md` · **Handbook:** `testing-handbook.md`
+**Bar:** `Agents-01-STANDARD.md` · **Handbook:** `testing-handbook.md`
 
 - Real tests for real behavior; purpose over %.
 - No suppression, no silent skip, no `expect(true)` theater.

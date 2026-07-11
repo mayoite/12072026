@@ -1,6 +1,6 @@
 # Agents/Agents-03-Plan.md
 
-**Constitution:** `AGENTS.md` · **Bar:** `Agents-01-ELON-STANDARD.md` — do not restate them here.
+**Constitution:** `AGENTS.md` · **Bar:** `Agents-01-STANDARD.md` — do not restate them here.
 
 - Paths on disk; mismatch → stop. Smallest change that meets the bar. Relative links only.
 - Live plan: `Plans/Planner-track/` + track boards (flat cards only). Archive = history.

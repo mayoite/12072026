@@ -1,6 +1,6 @@
 # Agents/Agents-05-browser.md
 
-**Bar:** `Agents-01-ELON-STANDARD.md` · **Policy:** `Failures.md`
+**Bar:** `Agents-01-STANDARD.md` · **Policy:** `Failures.md`
 
 - No UI claim without Playwright trace/screenshot or live browser proof in `results/`.
 - Run browser/E2E only when task, gate, release, or owner requires it — not every task.

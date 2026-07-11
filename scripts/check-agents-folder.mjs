@@ -1,5 +1,5 @@
 /**
- * Agents/ = tight handbooks. ELON max 100 lines. Peers max 40. INDEX max 25.
+ * Agents/ = tight handbooks. STANDARD max 100 lines. Peers max 40. INDEX max 25.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -10,7 +10,7 @@ const dir = path.join(root, "Agents");
 
 const ALLOWED = new Set([
   "INDEX.md",
-  "Agents-01-ELON-STANDARD.md",
+  "Agents-01-STANDARD.md",
   "Agents-02-tracks.md",
   "Agents-03-Plan.md",
   "Agents-04-testing.md",
@@ -22,7 +22,7 @@ const ALLOWED = new Set([
 ]);
 
 const MAX_LINES = {
-  "Agents-01-ELON-STANDARD.md": 100,
+  "Agents-01-STANDARD.md": 100,
   "INDEX.md": 25,
   default: 40,
 };
@@ -59,5 +59,5 @@ if (violations.length) {
   console.error("\nMove essays to Plans/Planner-track/library/from-museum/. Keep handbooks tight.");
   process.exit(1);
 }
-console.log(`check:agents-folder OK (${files.length} handbooks, ELON≤100)`);
+console.log(`check:agents-folder OK (${files.length} handbooks, STANDARD≤100)`);
 process.exit(0);

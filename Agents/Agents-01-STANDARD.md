@@ -1,6 +1,6 @@
-# Agents/Agents-01-ELON-STANDARD.md
+# Agents/Agents-01-STANDARD.md
 
-**Head + subagent bar.** Constitution: `AGENTS.md`. Honesty > flattery. Pushback always.
+**Head + subagent bar** (internal agent law only — not product brand). Constitution: `AGENTS.md`. Honesty > flattery. Pushback always.
 
 ## 1. Rank
 | Wins | Who |

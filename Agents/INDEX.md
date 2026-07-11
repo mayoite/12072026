@@ -1,6 +1,6 @@
 # Agents index
 
-**Constitution:** `AGENTS.md` (~60 lines). **Bar:** [`Agents-01-ELON-STANDARD.md`](./Agents-01-ELON-STANDARD.md) (≤100 lines).
+**Constitution:** `AGENTS.md` (~60 lines). **Bar:** [`Agents-01-STANDARD.md`](./Agents-01-STANDARD.md) (≤100 lines).
 
 | Handbook | File |
 |----------|------|
