@@ -9,6 +9,8 @@
  *
  * Chrome: ADMIN-UI-CONTRACT primitives only (admin-page / admin-btn / admin-panel /
  * admin-table / admin-badge / admin-empty). No raw palette classes.
+ *
+ * A1 UI slice: artifact state + colored SVG thumbnail before edit.
  */
 
 import Link from "next/link";
@@ -16,6 +18,7 @@ import { PencilSimple as Pencil, Plus } from "@phosphor-icons/react";
 
 import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
 import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
+import { PublishedSvgPreview } from "./PublishedSvgPreview";
 
 const VARIANT_LABEL: Readonly<Record<BlockDescriptor["variant"], string>> = {
   fixed: "Fixed",
@@ -76,6 +79,17 @@ function timestampLabel(value: number | undefined): string {
   }
 }
 
+function missingStatus(): SvgArtifactStatus {
+  return {
+    state: "missing",
+    bytes: 0,
+    updatedAt: null,
+    hash: null,
+    publicUrl: null,
+    markup: null,
+  };
+}
+
 export interface AdminSvgEditorListViewProps {
   readonly descriptors: ReadonlyArray<BlockDescriptor>;
   readonly refreshedAtLabel: string;
@@ -94,9 +108,14 @@ function artifactLabel(state: SvgArtifactStatus["state"]): string {
 }
 
 function artifactBadgeClass(state: SvgArtifactStatus["state"]): string {
-  return state === "published"
-    ? "admin-badge admin-badge--active"
-    : "admin-badge admin-badge--hidden";
+  switch (state) {
+    case "published":
+      return "admin-badge admin-badge--active";
+    case "invalid":
+      return "admin-badge admin-badge--warn";
+    case "missing":
+      return "admin-badge admin-badge--hidden";
+  }
 }
 
 function formatBytes(bytes: number): string {
@@ -113,6 +132,13 @@ export function AdminSvgEditorListView({
   const publishedCount = descriptors.filter(
     (descriptor) => artifactStatuses[descriptor.slug]?.state === "published",
   ).length;
+  const missingCount = descriptors.filter(
+    (descriptor) =>
+      (artifactStatuses[descriptor.slug]?.state ?? "missing") === "missing",
+  ).length;
+  const invalidCount = descriptors.filter(
+    (descriptor) => artifactStatuses[descriptor.slug]?.state === "invalid",
+  ).length;
   const ordered = [...descriptors].sort((a, b) => {
     const av = a.variant.localeCompare(b.variant);
     return av !== 0 ? av : a.slug.localeCompare(b.slug);
@@ -127,15 +153,18 @@ export function AdminSvgEditorListView({
           <p className="admin-page__copy">
             Author Puck-managed SVG block descriptors. Permissions gate through{" "}
             <code>{"withAuth(['admin'])"}</code>; saves flow through Zod →
-            atomic-rename JSON write → Phase 03 SVG pipeline → R2 PNG thumb.
+            atomic-rename JSON write → Phase 03 SVG pipeline → public catalog
+            SVG.
           </p>
           <p className="admin-page__meta">
             Last loader pass: <code>{refreshedAtLabel}</code> · schemaVersion
             pinned at <code>2026-07-04.v2</code>
           </p>
-          <p className="admin-page__meta" role="status">
-            Artifact health: <strong>{publishedCount}</strong> of{" "}
-            <strong>{descriptors.length}</strong> published.
+          <p className="admin-page__meta" role="status" data-testid="artifact-health">
+            Artifact health: <strong>{publishedCount}</strong> published ·{" "}
+            <strong>{missingCount}</strong> missing ·{" "}
+            <strong>{invalidCount}</strong> invalid · of{" "}
+            <strong>{descriptors.length}</strong> descriptors.
           </p>
         </div>
         <div className="admin-page__actions">
@@ -188,10 +217,12 @@ export function AdminSvgEditorListView({
           <div className="admin-table-wrap">
             <table className="admin-table">
               <caption className="sr-only">
-                Persisted BlockDescriptor entries grouped by variant.
+                Persisted BlockDescriptor entries grouped by variant, with
+                published SVG preview and artifact state.
               </caption>
               <thead>
                 <tr>
+                  <th scope="col">Preview</th>
                   <th scope="col">Slug</th>
                   <th scope="col">Variant</th>
                   <th scope="col">Source</th>
@@ -203,67 +234,76 @@ export function AdminSvgEditorListView({
                 </tr>
               </thead>
               <tbody>
-                {ordered.map((d) => (
-                  <tr key={`${d.variant}:${d.slug}`}>
-                    <td>
-                      <p className="admin-table__primary">
-                        <Link href={`/admin/svg-editor/${d.slug}`}>
-                          {d.slug}
-                        </Link>
-                      </p>
-                      {d.sku ? (
-                        <p className="admin-table__secondary">
-                          <span aria-hidden>SKU: </span>
-                          <code>{d.sku}</code>
+                {ordered.map((d) => {
+                  const status =
+                    artifactStatuses[d.slug] ?? missingStatus();
+                  return (
+                    <tr
+                      key={`${d.variant}:${d.slug}`}
+                      data-slug={d.slug}
+                      data-artifact-state={status.state}
+                    >
+                      <td>
+                        <PublishedSvgPreview
+                          slug={d.slug}
+                          status={status}
+                          size="thumb"
+                        />
+                      </td>
+                      <td>
+                        <p className="admin-table__primary">
+                          <Link href={`/admin/svg-editor/${d.slug}`}>
+                            {d.slug}
+                          </Link>
                         </p>
-                      ) : null}
-                    </td>
-                    <td>
-                      <span className={variantBadgeClass(d.variant)}>
-                        {VARIANT_LABEL[d.variant]}
-                      </span>
-                    </td>
-                    <td className="text-muted">{d.sourceProvenance}</td>
-                    <td>
-                      {(() => {
-                        const status = artifactStatuses[d.slug] ?? {
-                          state: "missing" as const,
-                          bytes: 0,
-                          updatedAt: null,
-                          hash: null,
-                        };
-                        return (
-                          <>
-                            <span className={artifactBadgeClass(status.state)}>
-                              {artifactLabel(status.state)}
-                            </span>
-                            <p className="admin-table__secondary">
-                              {status.bytes > 0
-                                ? formatBytes(status.bytes)
-                                : "No bytes on disk"}
-                            </p>
-                          </>
-                        );
-                      })()}
-                    </td>
-                    <td>
-                      <code className="text-muted">
-                        {timestampLabel(d.generatedAt)}
-                      </code>
-                    </td>
-                    <td>
-                      <div className="flex justify-end">
-                        <Link
-                          href={`/admin/svg-editor/${d.slug}`}
-                          className="admin-btn admin-btn--outline"
-                        >
-                          <Pencil size={14} aria-hidden />
-                          Edit
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        {d.sku ? (
+                          <p className="admin-table__secondary">
+                            <span aria-hidden>SKU: </span>
+                            <code>{d.sku}</code>
+                          </p>
+                        ) : null}
+                      </td>
+                      <td>
+                        <span className={variantBadgeClass(d.variant)}>
+                          {VARIANT_LABEL[d.variant]}
+                        </span>
+                      </td>
+                      <td className="text-muted">{d.sourceProvenance}</td>
+                      <td>
+                        <span className={artifactBadgeClass(status.state)}>
+                          {artifactLabel(status.state)}
+                        </span>
+                        <p className="admin-table__secondary">
+                          {status.bytes > 0
+                            ? formatBytes(status.bytes)
+                            : "No bytes on disk"}
+                          {status.publicUrl ? (
+                            <>
+                              {" · "}
+                              <code>{status.publicUrl}</code>
+                            </>
+                          ) : null}
+                        </p>
+                      </td>
+                      <td>
+                        <code className="text-muted">
+                          {timestampLabel(d.generatedAt)}
+                        </code>
+                      </td>
+                      <td>
+                        <div className="flex justify-end">
+                          <Link
+                            href={`/admin/svg-editor/${d.slug}`}
+                            className="admin-btn admin-btn--outline"
+                          >
+                            <Pencil size={14} aria-hidden />
+                            Edit
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

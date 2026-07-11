@@ -45,6 +45,8 @@ import "@puckeditor/core/no-external.css";
 import type { PuckDataShape } from "./puckBlockRegistry";
 import { uploadAssetToSupabase } from "./uploadAsset";
 import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
+import type { PublishDescriptorResult } from "./publishDescriptorWithPipeline";
+import { PublishedSvgPreview } from "./PublishedSvgPreview";
 
 // Note: direct persist/runner now via server action passed from RSC page (onPublish calls them).
 // Legacy POST kept for compat in alerts only; 1B prefers the action path.
@@ -202,7 +204,7 @@ export interface AdminSvgEditorEditViewProps {
   /** Server action (or async fn) wired by page RSC so onPublish can call persistBlockDescriptor + runSvgPipeline directly. */
   readonly onPublishAction?: (
     data: PuckDataShape,
-  ) => Promise<void | { success?: boolean; error?: string }>;
+  ) => Promise<void | PublishDescriptorResult>;
 }
 
 export function AdminSvgEditorEditView({
@@ -296,20 +298,22 @@ export function AdminSvgEditorEditView({
         if (onPublishAction) {
           // Preferred 1B path: server action calls persistBlockDescriptor + runSvgPipeline directly.
           const result = await onPublishAction(data);
-          if (result && (result as unknown as { error?: string }).error) {
+          if (result && result.success === false) {
             setFormState((previous) => ({
               ...previous,
               submitting: false,
-              errorMessage: String(
-                (result as unknown as { error?: string }).error,
-              ),
+              errorMessage: `Publish failed for “${slug}”: ${result.error}`,
             }));
             return;
           }
+          const publishedSlug =
+            result && result.success === true
+              ? result.descriptor.slug
+              : slug;
           setFormState((previous) => ({
             ...previous,
             submitting: false,
-            successMessage: `Published “${slug}” via Puck · ${nowStampLabel()}. Pipeline + persist completed.`,
+            successMessage: `Published “${publishedSlug}” → /svg-catalog/${publishedSlug}.svg · ${nowStampLabel()}. Pipeline + persist completed. Refreshing artifact preview…`,
           }));
           router.refresh();
           return;
@@ -335,14 +339,15 @@ export function AdminSvgEditorEditView({
           setFormState((previous) => ({
             ...previous,
             submitting: false,
-            errorMessage: buildErrorFromResponse(response.status, body),
+            errorMessage: `Publish failed for “${slug}”: ${buildErrorFromResponse(response.status, body)}`,
           }));
           return;
         }
+        const savedSlug = body?.descriptor?.slug ?? slug;
         setFormState((previous) => ({
           ...previous,
           submitting: false,
-          successMessage: `Saved descriptor “${body?.descriptor?.slug ?? slug}” · ${nowStampLabel()}.`,
+          successMessage: `Published “${savedSlug}” → /svg-catalog/${savedSlug}.svg · ${nowStampLabel()}.`,
         }));
         router.refresh();
       } catch (networkError) {
@@ -353,7 +358,7 @@ export function AdminSvgEditorEditView({
         setFormState((previous) => ({
           ...previous,
           submitting: false,
-          errorMessage: `Network error: ${message}`,
+          errorMessage: `Publish failed for “${slug}”: Network error: ${message}`,
         }));
       }
     },
@@ -457,6 +462,7 @@ export function AdminSvgEditorEditView({
         <article
           className="admin-page__summary-card admin-panel"
           data-artifact-state={artifactStatus.state}
+          data-testid="admin-svg-artifact-panel"
         >
           <div className="admin-panel__header">Published SVG artifact</div>
           <div
@@ -468,7 +474,9 @@ export function AdminSvgEditorEditView({
                 className={
                   artifactStatus.state === "published"
                     ? "admin-badge admin-badge--active"
-                    : "admin-badge admin-badge--hidden"
+                    : artifactStatus.state === "invalid"
+                      ? "admin-badge admin-badge--warn"
+                      : "admin-badge admin-badge--hidden"
                 }
               >
                 {artifactStatus.state === "published"
@@ -484,11 +492,22 @@ export function AdminSvgEditorEditView({
                 : "No bytes on disk"}
               {" · updated "}
               <code>{artifactUpdatedAt}</code>
+              {artifactStatus.publicUrl ? (
+                <>
+                  {" · "}
+                  <code>{artifactStatus.publicUrl}</code>
+                </>
+              ) : null}
             </p>
             <p className="admin-page__meta">
               SHA-256{" "}
               <code className="admin-page__checksum">{artifactHashShort}</code>
             </p>
+            <PublishedSvgPreview
+              slug={slug}
+              status={artifactStatus}
+              size="panel"
+            />
           </div>
         </article>
       </section>

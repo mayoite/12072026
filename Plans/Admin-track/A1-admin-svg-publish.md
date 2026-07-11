@@ -27,11 +27,11 @@ pnpm run test:e2e:p0-admin-svg
 
 ## UI execution slice
 
-- [ ] List shows artifact state before editing.
-- [ ] Editor shows published, missing, or invalid SVG state.
-- [ ] Publish feedback names the slug and outcome.
-- [ ] Refresh shows the new artifact state.
+- [x] List shows artifact state before editing.
+- [x] Editor shows published, missing, or invalid SVG state.
+- [x] Publish feedback names the slug and outcome.
+- [x] Refresh shows the new artifact state.
 
 **Reason:** Admin authors need visible proof of publish state.
 
-**Implementation:** UI slice landed. Browser proof remains OPEN.
+**Implementation:** UI slice landed + browser-proven 2026-07-11 (`results/admin/svg-visibility/`). Colored catalog preview (not empty box); list thumbs + health; publish banner names slug + `/svg-catalog/{slug}.svg`.

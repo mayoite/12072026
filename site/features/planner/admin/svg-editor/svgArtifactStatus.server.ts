@@ -11,34 +11,90 @@ export type SvgArtifactStatus = {
   readonly bytes: number;
   readonly updatedAt: number | null;
   readonly hash: string | null;
+  /** Public URL path when a file exists (even if invalid). */
+  readonly publicUrl: string | null;
+  /**
+   * Sanitized SVG markup for admin inline preview when `state === "published"`.
+   * Null for missing/invalid. Catalog-only (we wrote the file).
+   */
+  readonly markup: string | null;
 };
 
 function svgPathForSlug(slug: string): string {
   return path.join(resolvePublicDir(), "svg-catalog", `${slug}.svg`);
 }
 
+function publicUrlForSlug(slug: string): string {
+  return `/svg-catalog/${slug}.svg`;
+}
+
 function hashSvg(contents: string): string {
   return createHash("sha256").update(contents, "utf8").digest("hex");
 }
 
+/**
+ * Fail-closed markup gate for admin preview.
+ * Catalog artifacts are server-authored; still strip script/handlers.
+ */
+export function sanitizeCatalogSvgMarkup(raw: string): string | null {
+  const contents = raw.trim();
+  if (!contents.startsWith("<svg") || !/<\/svg>\s*$/i.test(contents)) {
+    return null;
+  }
+  if (/<script[\s>]/i.test(contents) || /\bon[a-z]+\s*=/i.test(contents)) {
+    return null;
+  }
+  if (/javascript:/i.test(contents)) {
+    return null;
+  }
+  return contents;
+}
+
 export function readSvgArtifactStatus(slug: string): SvgArtifactStatus {
   const artifactPath = svgPathForSlug(slug);
+  const publicUrl = publicUrlForSlug(slug);
   if (!existsSync(artifactPath)) {
-    return { state: "missing", bytes: 0, updatedAt: null, hash: null };
+    return {
+      state: "missing",
+      bytes: 0,
+      updatedAt: null,
+      hash: null,
+      publicUrl: null,
+      markup: null,
+    };
   }
 
   try {
     const stat = statSync(artifactPath);
-    const contents = readFileSync(artifactPath, "utf8").trim();
-    const valid = contents.startsWith("<svg") && contents.endsWith("</svg>");
+    const contents = readFileSync(artifactPath, "utf8");
+    const markup = sanitizeCatalogSvgMarkup(contents);
+    if (!markup) {
+      return {
+        state: "invalid",
+        bytes: stat.size,
+        updatedAt: stat.mtimeMs,
+        hash: hashSvg(contents.trim()),
+        publicUrl,
+        markup: null,
+      };
+    }
     return {
-      state: valid ? "published" : "invalid",
+      state: "published",
       bytes: stat.size,
       updatedAt: stat.mtimeMs,
-      hash: hashSvg(contents),
+      hash: hashSvg(markup),
+      publicUrl,
+      markup,
     };
   } catch {
-    return { state: "invalid", bytes: 0, updatedAt: null, hash: null };
+    return {
+      state: "invalid",
+      bytes: 0,
+      updatedAt: null,
+      hash: null,
+      publicUrl,
+      markup: null,
+    };
   }
 }
 

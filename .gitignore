@@ -74,6 +74,7 @@ site/nul
 !site/tests/e2e/**/*-snapshots/*.png
 !results/planner/**/*.png
 !results/site/**/*.png
+!results/admin/**/*.png
 features_diff.txt
 .blackboxcli/
 
