@@ -3,8 +3,8 @@
 **Phase:** P02 engine lock (evidence only — no package upgrades)  
 **Evidence folder:** `results/planner/world-standard-wave/01-engine-lock/`  
 **Source:** `site/package.json` (dependencies + devDependencies scanned)  
-**Recorded at tip:** see `HEAD.txt` / `run.json`  
-**Date:** 2026-07-10  
+**Recorded at tip:** see `HEAD.txt` / `run.json` / `RUN-META.json`  
+**Date:** 2026-07-11  
 
 ---
 
@@ -12,8 +12,8 @@
 
 | Package | Spec in package.json | Notes |
 |---------|----------------------|--------|
-| `fabric` | **`7.4.0`** | Exact pin (no caret) |
-| `three` | `^0.185.1` | R3F stack |
+| `fabric` | **`7.4.0`** | Exact pin (no caret) — sole 2D host lib |
+| `three` | `^0.185.1` | Planner 3D |
 | `@react-three/fiber` | `^9.6.1` | R3F |
 | `@react-three/drei` | `^10.7.7` | R3F helpers |
 
@@ -26,7 +26,7 @@
 | `konva` | **ABSENT** (not in dependencies or devDependencies) |
 | `react-konva` | **ABSENT** (not in dependencies or devDependencies) |
 
-No Konva path for planner 2D/3D hybrid.
+No Konva path for planner 2D. One interactive 2D host only (Fabric).
 
 ---
 
@@ -40,7 +40,7 @@ No Konva path for planner 2D/3D hybrid.
 
 ## Hygiene flags (present — do **not** remove without owner)
 
-These are **not** part of the open3d engine freeze. Flagged for hygiene only; removal is out of scope for P02 Seat A.
+These are **not** part of the open3d engine freeze. Flagged for hygiene only; removal is out of scope for P02.
 
 | Package | Spec | Flag |
 |---------|------|------|

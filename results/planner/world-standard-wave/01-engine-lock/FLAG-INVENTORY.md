@@ -1,13 +1,13 @@
-# FLAG-INVENTORY — P02 engine lock (live code)
+# FLAG-INVENTORY — P02 engine lock (Fabric-sole leftover truth)
 
-**Seat:** P02 B (docs only — no product edits)  
-**Date:** 2026-07-10  
-**Scope:** `site/features/planner/open3d/` + related env readers  
-**Authority:** source files below — not plan cards, not invent
+**Phase:** P02 / CP-02  
+**Date:** 2026-07-11  
+**Scope:** planner open3d + canvas-fabric-stage env readers  
+**Authority:** live source — flag is **not** product host authority.
 
 ---
 
-## 1. Live env flag (planner 2D Fabric furniture stage)
+## 1. Leftover env flag (not host switch)
 
 ### `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE`
 
@@ -16,12 +16,11 @@
 | Env key constant | `OPEN3D_FABRIC_FURNITURE_ENV = "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE"` |
 | Reader | `isOpen3dFabricFurnitureEnabled()` |
 | Enable rule | **exact** `env[key] === "1"` only |
-| Default | **OFF** — missing, `"true"`, `"yes"`, `"0"`, `1` (number), wrong key → false |
-| Enable string | `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE=1` |
-| Source file | `site/features/planner/open3d/canvas-fabric-stage/fabricFurnitureFlag.ts` |
-| Barrel re-export | `site/features/planner/open3d/canvas-fabric-stage/index.ts` (lines 16–19) |
+| Default | **OFF** — missing, `"true"`, `"yes"`, `"0"`, other → false |
+| Source file | `site/features/planner/canvas-fabric-stage/fabricFurnitureFlag.ts` |
+| Barrel re-export | `site/features/planner/canvas-fabric-stage/index.ts` |
 
-**Live predicate** (`fabricFurnitureFlag.ts` L8–17):
+**Live predicate:**
 
 ```ts
 export const OPEN3D_FABRIC_FURNITURE_ENV = "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE" as const;
@@ -33,51 +32,39 @@ export function isOpen3dFabricFurnitureEnabled(
 }
 ```
 
-**Workspace wire** (`OOPlannerWorkspace.tsx`):
+### Workspace wire — **NONE**
 
-| Lines | Behavior |
-|-------|----------|
-| 22–26 | Imports `FurnitureFabricLayer`, `isOpen3dFabricFurnitureEnabled` from `../canvas-fabric-stage` |
-| 234–236 | Comment + `fabricFurnitureEnabled = isOpen3dFabricFurnitureEnabled()` |
-| 237–243 | When ON → `feasibilityLayerVisibility` forces `furniture: false` (walls stay on Feasibility) |
-| 971–1002 | Flag ON: FeasibilityCanvas + `FurnitureFabricLayer` overlay |
-| 1004–1025 | Flag OFF: sole `FeasibilityCanvas` for furniture + walls |
+| Check | Result |
+|-------|--------|
+| `OOPlannerWorkspace` imports flag | **No** |
+| `OOPlannerWorkspace` calls `isOpen3dFabricFurnitureEnabled` | **No** |
+| Flag selects Feasibility vs Fabric | **N/A — Fabric is sole host** |
+| Product host when flag OFF | **Still Fabric** `PlannerCanvasStage` |
 
-**Unit coverage (existing — do not invent):**
+**Unit coverage:**
 
-- `site/tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts` — exact `"1"`, near-miss strings, wrong keys, barrel
-- `site/tests/unit/features/planner/open3d/hostWiringP01.test.ts` — workspace source contains flag wire; default OFF
+- `site/tests/unit/features/planner/canvas-fabric-stage/furnitureFabricMapper.test.ts` — exact `"1"`, near-miss strings, wrong keys, barrel
+- `site/tests/unit/features/planner/open3d/hostWiringP01.test.ts` — workspace source **must not** contain flag wire; default path = Fabric stage
 
-**Not this flag:** `site/features/planner/lib/featureFlags.ts` is a separate product-flag registry (`planner2D`, `planner3D`, etc.). It does **not** read `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE`.
+**Not this flag:** `site/features/planner/lib/featureFlags.ts` is a separate product-flag registry. It does **not** read `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE`.
 
 ---
 
-## 2. Other `OPEN3D_*` symbols under `site/features/planner/open3d`
+## 2. Other `OPEN3D_*` symbols under open3d (not env host flags)
 
-**rg result:** There is **exactly one** env-backed `OPEN3D_*` / `NEXT_PUBLIC_OPEN3D_*` flag in this tree: Fabric furniture above.
-
-All other `OPEN3D_*` hits are **in-code constants** (not `process.env`), listed for anti-thrash so agents do not invent second env readers:
+**Exactly one** env-backed `NEXT_PUBLIC_OPEN3D_*` leftover exists (above). Other `OPEN3D_*` hits are **in-code constants**:
 
 | Symbol | Kind | File | Role |
 |--------|------|------|------|
-| `OPEN3D_ORBIT_DEFAULT_ENABLED` | const `true` | `3d/orbitDefaults.ts` L7 | Product orbit default ON |
-| `getOpen3dViewerControlProps()` | helper → `{ enableControls: true }` | `3d/orbitDefaults.ts` L13–14 | Forces orbit props on product Lazy3DViewer mount |
-| `OPEN3D_CATALOG_RESULT_CAP` | number `24` | `catalog/catalogSearch.ts` L11 | Catalog search result cap |
-| `OPEN3D_CATALOG_QUERY_KEY` | query key tuple | `catalog/catalogQuery.ts` L7 | React Query key |
-| `OPEN3D_DEMO_CATALOG_ITEMS` | demo data array | `editor/demoCatalogItems.ts` L45 | Fallback catalog |
-| `OPEN3D_SESSION_VERSION` | `"open3d-1"` | `persistence/open3dSession.ts` L4 | Session blob version |
-| `OPEN3D_FURNITURE_BOQ_KIND` | `"open3d-furniture-boq-v1"` | `shared/export/projectFurnitureBoq.ts` L19 | BOQ envelope kind |
-| `OPEN3D_FURNITURE_BOQ_GST_RATE` | GST rate const | same L20 | BOQ GST |
-| `OPEN3D_FURNITURE_BOQ_PRICING_NOTE` | string | same L26 | BOQ pricing note |
+| `OPEN3D_ORBIT_DEFAULT_ENABLED` | const `true` | `3d/orbitDefaults.ts` | Product orbit default ON |
+| `getOpen3dViewerControlProps()` | helper → `{ enableControls: true }` | same | Forces orbit on product Lazy3DViewer |
+| `OPEN3D_CATALOG_RESULT_CAP` | number | `catalog/catalogSearch.ts` | Catalog search cap |
+| `OPEN3D_CATALOG_QUERY_KEY` | query key | `catalog/catalogQuery.ts` | React Query key |
+| `OPEN3D_DEMO_CATALOG_ITEMS` | demo data | `editor/demoCatalogItems.ts` | Fallback catalog |
+| `OPEN3D_SESSION_VERSION` | session version | `persistence/open3dSession.ts` | Session blob version |
+| BOQ `OPEN3D_FURNITURE_BOQ_*` | export consts | `shared/export/projectFurnitureBoq.ts` | BOQ envelope |
 
-**Adjacent env (not `OPEN3D_*` prefix, still in open3d tree):**
-
-| Env | File | Role |
-|-----|------|------|
-| `NEXT_PUBLIC_SITE_URL` / `SITE_URL` | `catalog/catalogClient.ts` ~789–790 | Site base URL for catalog client |
-| `CLOUDFLARE_ACCOUNT_ID` | `catalog/svg/svgPreviewAssets.ts` ~42 | SVG preview asset path (server-side) |
-
-These are **not** planner 2D/3D engine enable flags.
+**Adjacent env (not engine host flags):** `NEXT_PUBLIC_SITE_URL` / `SITE_URL`, `CLOUDFLARE_ACCOUNT_ID` in catalog helpers.
 
 ---
 
@@ -85,18 +72,18 @@ These are **not** planner 2D/3D engine enable flags.
 
 | Question | Answer |
 |----------|--------|
-| How many `NEXT_PUBLIC_OPEN3D_*` engine flags? | **1** — Fabric furniture |
-| Enable semantics | String **`"1"` only** |
-| Product default path | Fabric furniture **OFF** → FeasibilityCanvas sole interactive 2D furniture |
+| How many `NEXT_PUBLIC_OPEN3D_*` engine flags? | **1 leftover** — Fabric furniture env (historical spike) |
+| Does it switch product 2D host? | **No** |
+| Product 2D host | Fabric `PlannerCanvasStage` always |
 | Orbit “flag”? | **No env** — code constant + typed helper only |
-| Second Fabric env reader? | **None** found under open3d |
-| Re-open engines based on this inventory? | **No** — freeze / document only |
+| Re-open engines based on this inventory? | **No** |
 
 ---
 
-## 4. Cite map (absolute)
+## 4. Cite map
 
-- `site\features\planner\open3d\canvas-fabric-stage\fabricFurnitureFlag.ts`
-- `site\features\planner\open3d\canvas-fabric-stage\index.ts`
+- `site\features\planner\canvas-fabric-stage\fabricFurnitureFlag.ts`
+- `site\features\planner\canvas-fabric-stage\index.ts`
 - `site\features\planner\open3d\editor\OOPlannerWorkspace.tsx`
 - `site\features\planner\open3d\3d\orbitDefaults.ts`
+- `site\tests\unit\features\planner\open3d\hostWiringP01.test.ts`

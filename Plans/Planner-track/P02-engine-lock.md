@@ -1,6 +1,6 @@
 # P02 — Engine lock
 
-**Status:** OPEN / REPROVE — not complete. Disk pack `01-engine-lock/` is **stale** if it still freezes Feasibility interim. **OWNER-SIGNOFF OPEN**.
+**Status:** OPEN — pack rewritten to **Fabric-sole** (2026-07-11) + unit freeze green; **OWNER-SIGNOFF still OPEN** (CP-02 not PASS).
 
 **Gate:** CP-02 — lock the **upgraded** stack in writing. Later phases ship on it; no engine rollback.  
 **Evidence:** `results/planner/world-standard-wave/01-engine-lock/` only (never `02-engine-lock/`).  
@@ -43,13 +43,15 @@ Document (UUID, mm)
 
 ---
 
-## Kill order (unchecked)
+## Kill order
 
-- [ ] Rewrite ENGINE-LOCK-RECORD / ENTRYPOINT-MAP to **Fabric-sole** (explicitly retire Feasibility-interim freeze)
-- [ ] FLAG-INVENTORY: leftover only; not host authority
-- [ ] PACKAGE-PIN matches this `package.json`
-- [ ] CONSTRAINTS matches this card
-- [ ] OWNER-SIGNOFF.md **or** written deferral
-- [ ] No product engine swap / no Feasibility un-archive this phase
+- [x] Rewrite ENGINE-LOCK-RECORD / ENTRYPOINT-MAP to **Fabric-sole** (explicitly retire Feasibility-interim freeze)
+- [x] FLAG-INVENTORY: leftover only; not host authority
+- [x] PACKAGE-PIN matches this `package.json`
+- [x] CONSTRAINTS matches this card
+- [x] `../../results/planner/world-standard-wave/01-engine-lock/OWNER-SIGNOFF-STATUS.md` **OPEN** (honest; no forged owner green) — written owner deferral still absent
+- [x] No product engine swap / no Feasibility un-archive this phase
+
+**Still open:** owner marks or owner-worded deferral in `OWNER-SIGNOFF.md` before CP-02 PASS.
 
 **Next:** [P03](./P03-select-delete.md) after CP-02 fresh proof or owner WAIVE.

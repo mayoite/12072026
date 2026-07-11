@@ -1,20 +1,28 @@
 {
   "phase": "P02-engine-lock",
-  "approach": "A-freeze-reprove",
+  "approach": "A-fabric-sole-freeze-reprove",
   "evidenceDir": "results/planner/world-standard-wave/01-engine-lock",
-  "date": "2026-07-10",
-  "head": "6bd28d3816b11e3fc2eb09ee9834eadb11c78ea3",
+  "date": "2026-07-11",
+  "head": "98d654524e202581f4fd4d2a7c37102694991409",
+  "headNote": "Unit freeze + live host proof at this product tip; this commit is docs-only on top",
   "productEdits": false,
+  "lockedStack": {
+    "2dHost": "Fabric.js v7 sole via PlannerCanvasStage → Open3dFabricStage",
+    "wallsFurniture": "drawn in Fabric stage",
+    "flagLeftover": "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE module/tests only — not product host switch",
+    "feasibility": "not mounted; not live product 2D; restore = owner only",
+    "3d": "Three + orbit ON via getOpen3dViewerControlProps()"
+  },
   "cp02Status": "OPEN",
   "cp02PassBlockedBy": [
-    "OWNER-SIGNOFF.md missing",
-    "remaining pack docs may still be incomplete (other seats)"
+    "OWNER-SIGNOFF.md missing (owner marks or owner-worded deferral required)",
+    "prior pack froze Feasibility interim — rewritten this run to Fabric-sole; owner still must sign upgrade lock"
   ],
   "suites": [
     {
       "id": "orbitControlsDefault",
       "test": "tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx",
-      "log": "orbitControlsDefault.log",
+      "log": "unit-freeze-pack.log",
       "exitCode": 0,
       "testsPassed": 6,
       "testFilesPassed": 1
@@ -22,15 +30,15 @@
     {
       "id": "hostWiringP01",
       "test": "tests/unit/features/planner/open3d/hostWiringP01.test.ts",
-      "log": "hostWiringP01.log",
+      "log": "unit-freeze-pack.log",
       "exitCode": 0,
       "testsPassed": 4,
       "testFilesPassed": 1
     },
     {
       "id": "fabricMapper",
-      "test": "tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts",
-      "log": "fabricMapper.log",
+      "test": "tests/unit/features/planner/canvas-fabric-stage/furnitureFabricMapper.test.ts",
+      "log": "unit-freeze-pack.log",
       "exitCode": 0,
       "testsPassed": 19,
       "testFilesPassed": 1
@@ -41,7 +49,7 @@
     "testFilesPassed": 3,
     "allExitZero": true
   },
-  "combinedLog": "unit-freeze-pack-raw.log",
+  "combinedLog": "unit-freeze-pack.log",
   "packagePinsObserved": {
     "fabric": "7.4.0",
     "three": "^0.185.1",
@@ -55,6 +63,11 @@
     "@gsap/react": "^2.1.2"
   },
   "packagePinDoc": "PACKAGE-PIN.md",
-  "chromeDevtoolsSmoke": "separate-optional",
-  "rePinNote": "Seat A 2026-07-10: PACKAGE-PIN written; freeze pack re-run at tip 6bd28d38; CP-02 not PASS (OWNER-SIGNOFF missing)"
+  "liveHostProof": {
+    "workspaceMountsFeasibility": false,
+    "workspaceMountsPlannerCanvasStage": true,
+    "flagWiredInWorkspace": false,
+    "furnitureFabricLayerMounted": false
+  },
+  "rePinNote": "2026-07-11 Fabric-sole rewrite: retired Feasibility-interim freeze; units re-run at product tip 98d65452; evidence commit docs-only; CP-02 still OPEN (owner sign-off)"
 }

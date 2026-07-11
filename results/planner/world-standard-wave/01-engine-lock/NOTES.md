@@ -1,27 +1,33 @@
-# NOTES — P02 engine-lock freeze re-prove
+# NOTES — P02 engine-lock Fabric-sole freeze re-prove
 
 **Approach:** **A** — document + unit-re-prove the live freeze; **do not rebuild engines**.  
 **Canonical evidence:** `results/planner/world-standard-wave/01-engine-lock/` (never `02-engine-lock/`).  
-**Plan review:** `plans1/P02-engine-lock/CODE-REVIEW-REPORT.md` → APPROVE-WITH-FIXES (path honesty only; product code default = none).
+**Date:** 2026-07-11  
+**HEAD (product tip under test):** `98d654524e202581f4fd4d2a7c37102694991409`
 
-## What this phase did
+## Problem fixed this seat
 
-1. Captured `HEAD.txt` via `git rev-parse HEAD`.
-2. Wrote `ENGINE-LOCK-RECORD.md` from live sources (Feasibility default 2D, Fabric `=== "1"`, orbit helper spread, package pins, konva absent, no product edits).
-3. Re-ran freeze unit suites (verbose) and teed full logs:
-   - `orbitControlsDefault.log`
-   - `hostWiringP01.log`
-   - `fabricMapper.log` (`furnitureFabricMapper.test.ts` — flag + mapper)
-4. Wrote `run.json` with exits + HEAD.
-5. Committed results pack only.
+Prior pack text freezed **FeasibilityCanvas as interim 2D** with Fabric as optional flag overlay. Live code (and plan cards) are **Fabric-sole**. That old freeze was a **downgrade freeze** and is superseded.
+
+## What this seat did
+
+1. Verified live host: `OOPlannerWorkspace` mounts only `PlannerCanvasStage` (Fabric barrel); no Feasibility; no flag wire; no `FurnitureFabricLayer` mount.
+2. Rewrote `ENGINE-LOCK-RECORD`, `ENTRYPOINT-MAP`, `FLAG-INVENTORY`, `ANTI-THRASH-AUDIT`, refreshed `PACKAGE-PIN`.
+3. Confirmed `Plans/Planner-track/CONSTRAINTS.md` already matches Fabric-sole (no edit required).
+4. Re-ran unit freeze pack from repo root via pnpm; log `unit-freeze-pack.log` — **29/29 pass**.
+5. Refreshed `HEAD.txt`, `run.json`, `RUN-META.json`, `VERDICT.md`, `OWNER-SIGNOFF-STATUS.md` (OPEN, honest).
+6. No product engine source edits. No Feasibility un-archive.
 
 ## What this phase did **not** do
 
 - No product / open3d engine source edits.
-- No package upgrades, Fabric cutover, or Konva introduction.
-- No chrome-devtools browser smoke (may be separate under journey / other wave folders).
-- No inventing `02-engine-lock/` evidence path.
+- No package upgrades, Konva introduction, or Feasibility restore.
+- No W3/W5/W8 proofs.
+- No invented owner sign-off.
 
 ## Honest status
 
-Unit freeze pack: **PASS** (all three suites exit 0). Browser visual smoke is **optional / separate** from Approach A freeze re-prove.
+| Layer | Status |
+|-------|--------|
+| Fabric-sole docs + units | **Aligned / green** |
+| CP-02 owner gate | **OPEN** |

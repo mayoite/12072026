@@ -1,0 +1,19 @@
+{
+  "phase": "P02-engine-lock",
+  "cp": "CP-02",
+  "date": "2026-07-11",
+  "head": "98d654524e202581f4fd4d2a7c37102694991409",
+  "headShort": "98d65452",
+  "headNote": "Unit freeze + live host proof at this product tip; evidence pack commit is docs-only on top",
+  "evidenceDir": "results/planner/world-standard-wave/01-engine-lock",
+  "command": "pnpm --filter oando-site exec vitest run tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx tests/unit/features/planner/open3d/hostWiringP01.test.ts tests/unit/features/planner/canvas-fabric-stage/furnitureFabricMapper.test.ts --reporter=verbose",
+  "cwd": "repo root (pnpm workspace); vitest runs with site as package root",
+  "unitExit": 0,
+  "testsPassed": 29,
+  "testFilesPassed": 3,
+  "log": "unit-freeze-pack.log",
+  "productEdits": false,
+  "docsRewrittenTo": "Fabric-sole (reject Feasibility-interim freeze)",
+  "cp02Status": "OPEN",
+  "ownerSignoff": "OPEN — see OWNER-SIGNOFF-STATUS.md"
+}

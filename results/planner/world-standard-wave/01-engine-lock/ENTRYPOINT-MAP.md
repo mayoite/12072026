@@ -1,9 +1,9 @@
-# ENTRYPOINT-MAP — P02 engine lock (live routes / hosts)
+# ENTRYPOINT-MAP — P02 engine lock (Fabric-sole, live routes / hosts)
 
-**Seat:** P02 B (docs only — no product edits)  
-**Date:** 2026-07-10  
-**Authority:** live `page.tsx` + host components + `next.config.js` redirects  
-**Note:** Wins over stale `open3d/README.md` host table (README omits WorkspaceRoute).
+**Phase:** P02 / CP-02  
+**Date:** 2026-07-11  
+**Authority:** live `page.tsx` + host components + workspace mounts  
+**Supersedes:** any prior map that names FeasibilityCanvas as interim product 2D.
 
 ---
 
@@ -11,147 +11,100 @@
 
 | URL | App page | Host chain |
 |-----|----------|------------|
-| `/planner/guest` | `site/app/planner/(workspace)/guest/page.tsx` | `Open3dPlannerWorkspaceRoute` → dynamic `Open3dPlannerHost` → `Open3dNativeHost` → **`OOPlannerWorkspace`** |
+| `/planner/guest` | `site/app/planner/(workspace)/guest/page.tsx` | `Open3dPlannerWorkspaceRoute` → dynamic `Open3dPlannerHost` → **`OOPlannerWorkspace`** |
 | `/planner/canvas` | `site/app/planner/(workspace)/canvas/page.tsx` | Same WorkspaceRoute chain; `guestMode` from `!user` |
-| `/planner/open3d` | `site/app/planner/open3d/page.tsx` | **Direct** `Open3dPlannerHost` → `Open3dNativeHost` → **`OOPlannerWorkspace`** (no WorkspaceRoute / no ProjectSetupGate) |
+| `/planner/open3d` | `site/app/planner/open3d/page.tsx` | **Direct** `Open3dPlannerHost` → **`OOPlannerWorkspace`** (no WorkspaceRoute / no ProjectSetupGate) |
 
-### Guest — lines
+### Route comments (live)
 
-`site/app/planner/(workspace)/guest/page.tsx`:
-
-- L1: imports `Open3dPlannerWorkspaceRoute`
-- L5: comment documents open3d hybrid + archive fallback `/planner/fabric/guest`
-- L14: `<Open3dPlannerWorkspaceRoute guestMode planId={planId} />`
-
-### Canvas — lines
-
-`site/app/planner/(workspace)/canvas/page.tsx`:
-
-- L1–2: WorkspaceRoute + `getOptionalPlannerUser`
-- L6: comment documents open3d hybrid + archive fallback `/planner/fabric/canvas`
-- L19: `<Open3dPlannerWorkspaceRoute guestMode={isGuest} planId={planId} />`
-
-### Open3d pilot — lines
-
-`site/app/planner/open3d/page.tsx`:
-
-- L2: imports `Open3dPlannerHost` (not WorkspaceRoute)
-- L7–8: comment — same stack as guest/canvas (Feasibility 2D + Three 3D)
-- L27: `<Open3dPlannerHost guestMode={isGuest} planId={planId} />`
+- Guest L5: `Open3dFabricStage (Fabric 2-D) + Three 3-D`
+- Canvas L6: `Fabric 2-D (PlannerCanvasStage) + Three 3-D`
+- Open3d L7: `Open3dFabricStage 2-D + Three 3-D`
 
 ---
 
-## 2. Host component chain (absolute paths + roles)
+## 2. Host component chain
 
 ```
 /planner/guest | /planner/canvas
   → Open3dPlannerWorkspaceRoute
       site/features/planner/ui/Open3dPlannerWorkspaceRoute.tsx
-      L9–15  dynamic(Open3dPlannerHost, ssr:false)
-      L17    comment: live guest + canvas under open3d tree
-      L25–30 Providers → ProjectSetupGate → Open3dPlannerHost
+      dynamic(Open3dPlannerHost, ssr:false)
+      Providers → ProjectSetupGate → Open3dPlannerHost
 
 /planner/open3d (skips WorkspaceRoute)
   → Open3dPlannerHost
       site/features/planner/ui/Open3dPlannerHost.tsx
-      L10    → Open3dNativeHost
-
-  → Open3dNativeHost
-      site/features/planner/open3d/ui/Open3dNativeHost.tsx
-      L13–14  FeasibilityCanvas (canvas-feasibility) + Three/r3f
-      L16–20  mounts OOPlannerWorkspace
+      → OOPlannerWorkspace (direct)
 
   → OOPlannerWorkspace
       site/features/planner/open3d/editor/OOPlannerWorkspace.tsx
+      2D: PlannerCanvasStage (Fabric sole)
+      3D: Lazy3DViewer + getOpen3dViewerControlProps()
 ```
 
-**Import graph proof (secondary):** `site/features/planner/open3d/cleanup/importGraphProof.ts` — stacks `open3d-hybrid` for guest/canvas/WorkspaceRoute; open3d route native host chain.
+**Note:** Prior packs cited `Open3dNativeHost` / `open3d/ui/` — that path is **gone**. Host is `Open3dPlannerHost` only (`hostWiringP01` asserts `open3d/ui` does not exist).
+
+**Import graph proof (secondary):** `site/features/planner/open3d/cleanup/importGraphProof.ts` — stacks still labeled `open3d-hybrid` for guest/canvas (naming residue; **not** dual 2D host).
 
 ---
 
-## 3. FeasibilityCanvas path + OOPlannerWorkspace mounts
+## 3. Sole 2D mount — Fabric stage
 
-| Item | Live path / lines |
-|------|-------------------|
-| Component file | `site/features/planner/open3d/canvas-feasibility/FeasibilityCanvas.tsx` |
-| Export (forwardRef) | ~L152–153 `export const FeasibilityCanvas = forwardRef...` |
-| Editor barrel re-export | `site/features/planner/open3d/editor/index.ts` L3 |
-| Workspace import | `OOPlannerWorkspace.tsx` L17–21 from `../canvas-feasibility/FeasibilityCanvas` |
-| Mount A (Fabric furniture ON) | `OOPlannerWorkspace.tsx` L976–996 — Feasibility + furniture layer hidden via visibility |
-| Mount B (default OFF) | `OOPlannerWorkspace.tsx` L1005–1025 — sole FeasibilityCanvas |
-| Implementation | Canvas 2D API (`getContext("2d")`) — not Fabric, not Konva |
-
-**Interim role:** sole interactive 2D furniture + walls when Fabric flag OFF; walls always stay on Feasibility when Fabric furniture overlay ON.
+| Item | Live path / fact |
+|------|------------------|
+| Workspace import | `OOPlannerWorkspace.tsx` L17–21: `PlannerCanvasStage` from `../canvas-stage` |
+| Barrel | `open3d/canvas-stage/index.ts` → `Open3dFabricStage as PlannerCanvasStage` |
+| Implementation | `site/features/planner/canvas-fabric-stage/Open3dFabricStage.tsx` |
+| Mount | `OOPlannerWorkspace.tsx` ~L1093–1116 inside `viewMode === "2d"` |
+| Walls + furniture | Drawn in Fabric stage via layer visibility (`onWallDrawn`, furniture objects) |
+| `data-testid` | `open3d-fabric-stage` |
+| Feasibility mount | **None** |
+| Flag-gated overlay | **None** |
 
 ---
 
 ## 4. Lazy3DViewer + `getOpen3dViewerControlProps`
 
-| Item | Live path / lines |
-|------|-------------------|
-| Lazy viewer | `site/features/planner/open3d/3d/ThreeLazyViewer.tsx` — `export function Lazy3DViewer` ~L137; default `enableControls = OPEN3D_ORBIT_DEFAULT_ENABLED` L145 |
+| Item | Live path |
+|------|-----------|
+| Lazy viewer | `site/features/planner/open3d/3d/ThreeLazyViewer.tsx` |
 | Orbit defaults + helper | `site/features/planner/open3d/3d/orbitDefaults.ts` |
-| `OPEN3D_ORBIT_DEFAULT_ENABLED` | L7 `true as const` |
-| `getOpen3dViewerControlProps()` | L13–14 returns `{ enableControls: true }` (literal type forces ON) |
-| 3d barrel | `site/features/planner/open3d/3d/index.ts` re-exports Lazy3DViewer + helper |
-| Workspace import | `OOPlannerWorkspace.tsx` L13–16 from `../3d/ThreeLazyViewer` |
-| Product mount | `OOPlannerWorkspace.tsx` L1057–1060: |
+| `OPEN3D_ORBIT_DEFAULT_ENABLED` | `true as const` |
+| `getOpen3dViewerControlProps()` | returns `{ enableControls: true }` |
+| Product mount | `OOPlannerWorkspace.tsx` spreads helper into `Lazy3DViewer` (~L1149) |
 
-```tsx
-<Lazy3DViewer
-  projectData={workspaceCanvas.project}
-  {...getOpen3dViewerControlProps()}
-/>
-```
-
-**Lock note:** Product path **spreads** the helper (typed force `enableControls: true`). Do not “fix” lock by reverting to omit-prop-only; that would weaken the contract.
+**Lock note:** Product path **spreads** the helper (typed force `enableControls: true`).
 
 ---
 
-## 5. `canvas-fabric-stage` location (destination spike)
+## 5. `canvas-fabric-stage` layout (live + leftovers)
 
 | File | Role |
 |------|------|
-| `site/features/planner/open3d/canvas-fabric-stage/fabricFurnitureFlag.ts` | Env gate exact `"1"` |
-| `…/FurnitureFabricLayer.tsx` | Fabric.js furniture overlay |
-| `…/furnitureFabricMapper.ts` | Document ↔ Fabric pose (mm; entityId) |
-| `…/furnitureFabricLayer.module.css` | Overlay styles |
-| `…/index.ts` | Barrel |
+| `Open3dFabricStage.tsx` | **Product** sole 2D canvas |
+| `canvasStageTypes.ts` | Handle / status types |
+| `furnitureFabricMapper.ts` | Document ↔ Fabric pose (mm; entityId) |
+| `fabricBlock2D.ts` | Block2D helpers on Fabric path |
+| `fabricFurnitureFlag.ts` | **Leftover** env gate (`=== "1"`) — tests/module only |
+| `FurnitureFabricLayer.tsx` | **Spike leftover** — not mounted by workspace |
+| `index.ts` | Barrel (stage + mapper + leftover flag/layer) |
 
-**Not** the live default 2D path. Mounted only when `isOpen3dFabricFurnitureEnabled()` is true (`OOPlannerWorkspace.tsx` L997–1002).
+Location: `site/features/planner/canvas-fabric-stage/` (outside `open3d/`; open3d barrel re-exports stage only).
 
 ---
 
-## 6. Archive Fabric routes — redirected (not live app pages)
+## 6. Feasibility / archive — not product hosts
 
-### No live `app/planner/fabric/**` pages
+| Surface | Status |
+|---------|--------|
+| `open3d/canvas-feasibility/` | **Absent** (not live) |
+| `_archive/canvas-feasibility/` | **Absent on this tip** (plan cards still name it) |
+| Residual CSS | `site/app/css/core/locked/planner/workspace-FeasibilityCanvas.css` |
+| `_archive/fabric/` | Legacy Fabric workspace shell — not live routes |
+| `/planner/fabric`, `/planner/fabric/:path*` | Permanent redirect → `/planner/open3d/` (`next.config.js`) |
 
-`site/app/planner/` tree has only: marketing, `(workspace)/guest`, `(workspace)/canvas`, `open3d` — **no** fabric route segment.
-
-### Permanent redirects (live)
-
-`site/config/build/next.config.js` L206–207:
-
-```js
-{ source: "/planner/fabric", destination: "/planner/open3d/", permanent: true },
-{ source: "/planner/fabric/:path*", destination: "/planner/open3d/", permanent: true },
-```
-
-So documented “fallback” URLs **`/planner/fabric/guest`** and **`/planner/fabric/canvas`** (comments on guest/canvas pages L5–6; archive README) **do not serve archived Fabric UI** — they **308/301-style permanent-redirect to `/planner/open3d/`**.
-
-### Archive source (not mounted by live routes)
-
-`site/features/planner/_archive/fabric/`
-
-- `editor/` — legacy PlannerWorkspace shell  
-- `canvas-fabric/` — legacy Fabric floorplan canvas  
-- `README.md` — deprecated 2026-07-03; replaced by open3d  
-
-**Vitest path aliases** still map `@/features/planner/canvas-fabric` → archive for tests (`vitest.config.ts` / `vitest.site.config.ts`) — **not** a live route host.
-
-### next.config archive aliases (build)
-
-`site/config/build/next.config.js` ~L66–67 resolves planner editor/canvas-fabric package paths to `_archive/fabric/*` for residual imports — product guest/canvas/open3d pages do **not** mount that workspace.
+**Restore Feasibility or dual host = owner unlock only.** Do not prove gates on archive selectors.
 
 ---
 
@@ -172,11 +125,10 @@ So documented “fallback” URLs **`/planner/fabric/guest`** and **`/planner/fa
 - `site\app\planner\open3d\page.tsx`
 - `site\features\planner\ui\Open3dPlannerWorkspaceRoute.tsx`
 - `site\features\planner\ui\Open3dPlannerHost.tsx`
-- `site\features\planner\open3d\ui\Open3dNativeHost.tsx`
 - `site\features\planner\open3d\editor\OOPlannerWorkspace.tsx`
-- `site\features\planner\open3d\canvas-feasibility\FeasibilityCanvas.tsx`
+- `site\features\planner\open3d\canvas-stage\index.ts`
+- `site\features\planner\canvas-fabric-stage\Open3dFabricStage.tsx`
 - `site\features\planner\open3d\3d\ThreeLazyViewer.tsx`
 - `site\features\planner\open3d\3d\orbitDefaults.ts`
-- `site\features\planner\open3d\canvas-fabric-stage\`
 - `site\config\build\next.config.js`
 - `site\features\planner\_archive\fabric\`

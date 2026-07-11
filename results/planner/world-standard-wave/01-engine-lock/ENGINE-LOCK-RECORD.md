@@ -1,52 +1,74 @@
-# ENGINE-LOCK-RECORD — P02 Approach A freeze re-prove
+# ENGINE-LOCK-RECORD — P02 Fabric-sole freeze (upgrade)
 
-**Phase:** P02 engine lock (evidence only — **no product edits**)  
+**Phase:** P02 engine lock (CP-02) — evidence + unit re-prove  
 **Evidence folder (canonical):** `results/planner/world-standard-wave/01-engine-lock/`  
-**Never use:** `02-engine-lock/` (reserved for other wave work)  
-**Record date:** 2026-07-10  
-**HEAD:** see `HEAD.txt` / `run.json`  
-**Verdict context:** `plans1/P02-engine-lock/CODE-REVIEW-REPORT.md` → **APPROVE-WITH-FIXES** (re-prove only; do not rebuild engines)
+**Never use:** `02-engine-lock/`  
+**Record date:** 2026-07-11  
+**HEAD:** see `HEAD.txt` / `run.json` / `RUN-META.json`  
+**Authority:** live source under `site/` — **not** prior pack text that freezes Feasibility interim (that was a **downgrade freeze**).
 
 ---
 
-## Freeze statement (live repo truth)
+## Freeze statement (live repo truth — upgrade lock)
 
-This phase **documents and unit-re-proves** the already-shipped stack. No Fabric cutover, no package upgrades, no Konva, no P03/P04 product work.
+This phase **documents and unit-re-proves** the already-shipped **Fabric-sole** stack. No product engine swap. No Feasibility un-archive. No Konva. Do not re-open engines in P03+ without owner.
 
-### 1. 2D interim — FeasibilityCanvas (Canvas 2D API)
+### 1. 2D host — Fabric.js v7 sole (product)
 
 | Claim | Live truth |
 |-------|------------|
-| Sole furniture/walls path when Fabric flag **OFF** | `FeasibilityCanvas` from `site/features/planner/open3d/canvas-feasibility/FeasibilityCanvas.tsx` mounted in `OOPlannerWorkspace.tsx` |
-| Implementation | Native Canvas 2D context (`getContext("2d")`) — not Fabric, not Konva |
-| When Fabric ON | Workspace sets `feasibilityLayerVisibility` with `furniture: false` and mounts Fabric furniture overlay; **walls stay on FeasibilityCanvas** |
+| Sole interactive plan canvas | `PlannerCanvasStage` barrel → `Open3dFabricStage` |
+| Barrel | `site/features/planner/open3d/canvas-stage/index.ts` re-exports `Open3dFabricStage as PlannerCanvasStage` from `@/features/planner/canvas-fabric-stage/Open3dFabricStage` |
+| Implementation | Fabric.js **v7** stage — walls + furniture drawn **in** stage (layer visibility) |
+| DOM proof id | `data-testid="open3d-fabric-stage"` |
+| Workspace mount | `OOPlannerWorkspace.tsx` mounts **only** `<PlannerCanvasStage … />` in 2D mode — no flag branch, no second host |
 
-**Source:** `OOPlannerWorkspace.tsx` ~232–241, ~924–958; `FeasibilityCanvas.tsx`.
+**Source:** `OOPlannerWorkspace.tsx` imports from `../canvas-stage`; mount ~L1093–1116.  
+**Unit proof:** `hostWiringP01.test.ts` — workspace has `PlannerCanvasStage`; **no** `FeasibilityCanvas` / `canvas-feasibility` / `isOpen3dFabricFurnitureEnabled` wire.
 
-### 2. Fabric — exact env `"1"` only
+### 2. FeasibilityCanvas — retired from product (not interim)
+
+| Claim | Live truth |
+|-------|------------|
+| Product 2D host | **Not** Feasibility |
+| Live open3d tree | **No** `canvas-feasibility/` under `site/features/planner/open3d/` |
+| Workspace | **No** `FeasibilityCanvas` import or mount |
+| Plan card archive path | Cards name `_archive/canvas-feasibility/` — **that directory is not present** on this tip; residual only: `site/app/css/core/locked/planner/workspace-FeasibilityCanvas.css` + unrelated geometry suite `feasibility.test.ts` |
+| Restore | **Owner unlock only** — do not re-mount as product 2D to “prove” W3/W5/W8 |
+
+**Hard ban:** Any plan that freezes “Feasibility interim / Fabric overlay when flag ON” is a **downgrade** and must be rejected.
+
+### 3. Flag leftover — module + tests only (not product host switch)
 
 | Claim | Live truth |
 |-------|------------|
 | Env key | `NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE` (`OPEN3D_FABRIC_FURNITURE_ENV`) |
 | Enable predicate | `env[key] === "1"` only |
-| Default | **OFF** (missing / `"true"` / `"yes"` / `"0"` / other → false) |
-| Stage code | `site/features/planner/open3d/canvas-fabric-stage/` (spike / optional overlay) |
-| Reader | `fabricFurnitureFlag.ts` → `isOpen3dFabricFurnitureEnabled()` |
+| Reader | `site/features/planner/canvas-fabric-stage/fabricFurnitureFlag.ts` → `isOpen3dFabricFurnitureEnabled()` |
+| Workspace wire | **None** — `OOPlannerWorkspace` does not call the flag |
+| Product host switch | **No** — Fabric stage is always the 2D host |
 
-**Unit proof:** `furnitureFabricMapper.test.ts` (flag + mapper suite) — log `fabricMapper.log`.
+**Unit proof:** `furnitureFabricMapper.test.ts` (flag + mapper) + `hostWiringP01` asserts flag not in workspace source.
 
-### 3. Orbit — product authority
+### 4. FurnitureFabricLayer — spike leftover
+
+| Claim | Live truth |
+|-------|------------|
+| File | `canvas-fabric-stage/FurnitureFabricLayer.tsx` |
+| Barrel export | yes (mapper/flag suite) |
+| Mounted by workspace | **No** |
+
+### 5. Orbit — product authority (Three + orbit ON)
 
 | Claim | Live truth |
 |-------|------------|
 | Default constant | `OPEN3D_ORBIT_DEFAULT_ENABLED = true` in `orbitDefaults.ts` |
 | Product helper | `getOpen3dViewerControlProps(): { enableControls: true }` |
-| Workspace mount | `<Lazy3DViewer {...getOpen3dViewerControlProps()} />` (~1010–1012) |
-| Viewer default | `ThreeViewerInner` / `ThreeLazyViewer` default `enableControls = OPEN3D_ORBIT_DEFAULT_ENABLED` |
+| Workspace mount | `<Lazy3DViewer … {...getOpen3dViewerControlProps()} />` |
 
-**Unit proof:** `orbitControlsDefault.test.tsx` — log `orbitControlsDefault.log`.
+**Unit proof:** `orbitControlsDefault.test.tsx`.
 
-### 4. Package pins (`site/package.json`)
+### 6. Package pins (`site/package.json`)
 
 | Package | Pinned / range (live) |
 |---------|------------------------|
@@ -56,29 +78,27 @@ This phase **documents and unit-re-proves** the already-shipped stack. No Fabric
 | `@react-three/drei` | `^10.7.7` |
 | `@google/model-viewer` | `^4.3.1` (admin / preview path) |
 
-### 5. Hybrid ban — Konva absent
+### 7. Hybrid ban — Konva absent · one interactive 2D host
 
 | Claim | Live truth |
 |-------|------------|
-| `konva` | **Absent** from `site/package.json` |
-| `react-konva` | **Absent** from `site/package.json` |
+| `konva` / `react-konva` | **Absent** from `site/package.json` |
+| Second interactive 2D product host | **Banned** |
+| Archive Fabric shell | `site/features/planner/_archive/fabric/` — routes `/planner/fabric*` redirect to `/planner/open3d/` |
 
-### 6. Host wiring (P01 chain still true)
+### 8. Host wiring (P01 chain)
 
-| Claim | Live truth |
-|-------|------------|
-| guest / canvas | Open3d hybrid host → workspace (Feasibility + Three) |
-| `/planner/open3d` | Native open3d pilot host |
-| Fabric furniture | Gated by `isOpen3dFabricFurnitureEnabled` (default OFF) |
+| URL | Chain |
+|-----|--------|
+| `/planner/guest`, `/planner/canvas` | WorkspaceRoute → `Open3dPlannerHost` → `OOPlannerWorkspace` → **Fabric** `PlannerCanvasStage` + Three |
+| `/planner/open3d` | Direct `Open3dPlannerHost` → same workspace |
 
-**Unit proof:** `hostWiringP01.test.ts` — log `hostWiringP01.log`.
-
-### 7. Product edits this phase
+### 9. Product edits this re-prove
 
 | Claim | Status |
 |-------|--------|
-| Product / engine source changes | **None** — evidence pack only under `results/planner/world-standard-wave/01-engine-lock/` |
-| Engine rebuild / Fabric cutover / package bump | **Out of scope** |
+| Product / engine source changes | **None this seat** — pack rewrite + unit re-prove only |
+| Engine rebuild / Feasibility restore / package bump | **Out of scope** |
 
 ---
 
@@ -86,15 +106,16 @@ This phase **documents and unit-re-proves** the already-shipped stack. No Fabric
 
 | Suite | Path | Log | Exit |
 |-------|------|-----|------|
-| Orbit | `tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx` | `orbitControlsDefault.log` | 0 |
-| Host wiring | `tests/unit/features/planner/open3d/hostWiringP01.test.ts` | `hostWiringP01.log` | 0 |
-| Fabric mapper + flag | `tests/unit/features/planner/open3d/canvas-fabric-stage/furnitureFabricMapper.test.ts` | `fabricMapper.log` | 0 |
+| Orbit | `tests/unit/features/planner/open3d/orbitControlsDefault.test.tsx` | `unit-freeze-pack.log` | 0 |
+| Host wiring | `tests/unit/features/planner/open3d/hostWiringP01.test.ts` | same | 0 |
+| Fabric mapper + flag | `tests/unit/features/planner/canvas-fabric-stage/furnitureFabricMapper.test.ts` | same | 0 |
 
-Optional combined: `unit-freeze-pack.log` if present.
+**Totals:** 3 files · **29 tests passed** · all exit 0.
 
 ---
 
 ## Out of band (not this phase)
 
-- Chrome-devtools / browser smoke for open3d journey may land under other wave folders (e.g. `02-browser-open3d-journey/`) — **not required** for this freeze re-prove pack.
-- No rebuild of flag, fabric stage, Feasibility, orbitDefaults, or host chains.
+- Do **not** prove W3/W5/W8 in this pack.
+- Chrome smoke prior artifacts may remain under this folder — optional; not required to re-claim Fabric-sole freeze.
+- Owner sign-off remains **OPEN** until human marks or written deferral (`OWNER-SIGNOFF-STATUS.md`).
