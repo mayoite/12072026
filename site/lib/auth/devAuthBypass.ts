@@ -41,12 +41,10 @@ export function isDevAuthBypassEnabled(
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
   const bypass = readFlag(env, DEV_AUTH_BYPASS_ENV);
-  const allowProd = readFlag(env, "DEV_AUTH_BYPASS_ALLOW_PRODUCTION");
   const nodeEnv = readFlag(env, "NODE_ENV");
 
   if (nodeEnv === "production") {
-    // Local Playwright against `next start` only when BOTH flags are set.
-    return bypass === "1" && allowProd === "1";
+    return false;
   }
   return bypass === "1";
 }

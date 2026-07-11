@@ -2,11 +2,22 @@
 - Local:         http://localhost:3000
 - Network:       http://192.168.1.103:3000
 - Environments: .env.development.local
-✓ Ready in 1848ms
+✓ Ready in 959ms
 Creating turbopack project { dir: 'D:\\OandO07072026\\site', testMode: true }
 - Experiments (use with caution):
   · optimizePackageImports
 
+ GET /planner/guest/ 200 in 996ms (next.js: 187ms, proxy.ts: 219ms, application-code: 590ms)
+ GET /planner/guest/ 200 in 153ms (next.js: 9ms, proxy.ts: 5ms, application-code: 138ms)
+ GET /api/csrf/ 200 in 141ms (next.js: 99ms, proxy.ts: 12ms, application-code: 29ms)
+ GET /api/theme/active/ 200 in 1856ms (next.js: 180ms, proxy.ts: 11ms, application-code: 1665ms)
+ GET /api/planner/catalog/svg-blocks/ 200 in 1276ms (next.js: 538ms, proxy.ts: 24ms, application-code: 713ms)
+ GET /api/planner/catalog/svg-blocks/ 200 in 262ms (next.js: 5ms, proxy.ts: 6ms, application-code: 251ms)
+ GET / 200 in 735ms (next.js: 161ms, proxy.ts: 9ms, application-code: 566ms)
+ GET /api/csrf/ 200 in 756ms (next.js: 184ms, proxy.ts: 12ms, application-code: 560ms)
+ GET /api/nav-categories/ 200 in 3.0s (next.js: 698ms, proxy.ts: 13ms, application-code: 2.3s)
+✓ Compiled in 1506ms
+ GET /planner/guest/ 200 in 866ms (next.js: 221ms, proxy.ts: 10ms, application-code: 635ms)
 D:\OandO07072026\site:
 [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] oando-site@0.1.0 dev: `next dev --turbo`
-Exit status 1
+Exit status 4294967295

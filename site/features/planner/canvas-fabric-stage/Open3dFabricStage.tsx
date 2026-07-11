@@ -27,7 +27,7 @@ import {
   type SnapKind,
 } from "@/features/planner/open3d/lib/geometry/snapping";
 import { createOpen3dProject } from "@/features/planner/open3d/model/project";
-import type { Open3dFloor, Open3dPoint } from "@/features/planner/open3d/model/types";
+import type { Open3dFloor, Open3dPoint, Open3dWall } from "@/features/planner/open3d/model/types";
 import { resolvePaintColor } from "@/features/planner/open3d/shared/readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "@/features/planner/open3d/shared/themeColorTokens";
 import type {
@@ -62,6 +62,25 @@ function readCanvasEntityType(target: CanvasEntityCarrier | null | undefined): C
   return value === "wall" || value === "furniture" ? value : null;
 }
 
+function nearestWall(
+  point: Open3dPoint,
+  walls: ReadonlyArray<Open3dWall>,
+): { wallId: string; position: number; distance: number } | null {
+  let best: { wallId: string; position: number; distance: number } | null = null;
+  for (const wall of walls) {
+    const dx = wall.end.x - wall.start.x;
+    const dy = wall.end.y - wall.start.y;
+    const lengthSquared = dx * dx + dy * dy;
+    if (lengthSquared <= 0) continue;
+    const raw = ((point.x - wall.start.x) * dx + (point.y - wall.start.y) * dy) / lengthSquared;
+    const position = Math.min(1, Math.max(0, raw));
+    const nearest = { x: wall.start.x + dx * position, y: wall.start.y + dy * position };
+    const distance = Math.hypot(point.x - nearest.x, point.y - nearest.y);
+    if (!best || distance < best.distance) best = { wallId: wall.id, position, distance };
+  }
+  return best;
+}
+
 export type Open3dFabricStageProps = {
   activeTool?: PlannerTool;
   layerVisibility?: Open3dLayerVisibility;
@@ -71,6 +90,7 @@ export type Open3dFabricStageProps = {
   placementItemLabel?: string | null;
   onPlaceAtPoint?: (point: Open3dPoint) => void;
   onWallDrawn?: (start: Open3dPoint, end: Open3dPoint) => void;
+  onOpeningPlaced?: (wallId: string, position: number) => void;
   onSelectionChange?: (selection: { type: CanvasEntityType; id: string } | null) => void;
   onStatusChange?: (status: CanvasStatusSnapshot) => void;
   onFurnitureModified?: (update: FurnitureDocumentPoseUpdate) => void;
@@ -106,6 +126,7 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
       placementItemLabel = null,
       onPlaceAtPoint,
       onWallDrawn,
+      onOpeningPlaced,
       onSelectionChange,
       onStatusChange,
       onFurnitureModified,
@@ -123,8 +144,10 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
     const onModifiedRef = useRef(onFurnitureModified);
     const onPlaceRef = useRef(onPlaceAtPoint);
     const onWallDrawnRef = useRef(onWallDrawn);
+    const onOpeningPlacedRef = useRef(onOpeningPlaced);
     const onSelectionRef = useRef(onSelectionChange);
     const pendingPlaceRef = useRef(pendingCatalogPlacement);
+    const activeFloorRef = useRef(activeFloor);
     const wallDrawRef = useRef<{ start: Open3dPoint; pointerId: number } | null>(null);
     const previewLineRef = useRef<Line | null>(null);
 
@@ -147,6 +170,14 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
     useEffect(() => {
       onWallDrawnRef.current = onWallDrawn;
     }, [onWallDrawn]);
+
+    useEffect(() => {
+      onOpeningPlacedRef.current = onOpeningPlaced;
+    }, [onOpeningPlaced]);
+
+    useEffect(() => {
+      activeFloorRef.current = activeFloor;
+    }, [activeFloor]);
 
     useEffect(() => {
       onSelectionRef.current = onSelectionChange;
@@ -284,6 +315,17 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
           previewLineRef.current = preview;
           wallDrawRef.current = { start, pointerId: nativeEvent.pointerId ?? 1 };
           emitStatus(transformRef.current, tool);
+          return;
+        }
+
+        if (tool === "opening" || tool === "door") {
+          const floor = activeFloorRef.current;
+          if (!floor || !onOpeningPlacedRef.current) return;
+          const screen = hostPoint(hostEl, nativeEvent.clientX, nativeEvent.clientY);
+          const hit = nearestWall(screenToProject(screen, transformRef.current), floor.walls);
+          if (hit && hit.distance <= 240) {
+            onOpeningPlacedRef.current(hit.wallId, hit.position);
+          }
           return;
         }
 
@@ -452,6 +494,42 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
           writeFurnitureEntityId(symbol, pose.entityId);
           canvas.add(symbol);
         }
+      }
+
+      for (const door of activeFloor.doors) {
+        const wall = activeFloor.walls.find((item) => item.id === door.wallId);
+        if (!wall) continue;
+        const point = {
+          x: wall.start.x + (wall.end.x - wall.start.x) * door.position,
+          y: wall.start.y + (wall.end.y - wall.start.y) * door.position,
+        };
+        const screen = projectToScreen(point, transform);
+        const marker = new Line([screen.x - 8, screen.y - 8, screen.x + 8, screen.y + 8], {
+          stroke: "#b45309",
+          strokeWidth: 3,
+          selectable: false,
+          evented: false,
+          objectCaching: false,
+        });
+        canvas.add(marker);
+      }
+
+      for (const window of activeFloor.windows) {
+        const wall = activeFloor.walls.find((item) => item.id === window.wallId);
+        if (!wall) continue;
+        const point = {
+          x: wall.start.x + (wall.end.x - wall.start.x) * window.position,
+          y: wall.start.y + (wall.end.y - wall.start.y) * window.position,
+        };
+        const screen = projectToScreen(point, transform);
+        const marker = new Line([screen.x - 8, screen.y + 8, screen.x + 8, screen.y - 8], {
+          stroke: "#0369a1",
+          strokeWidth: 3,
+          selectable: false,
+          evented: false,
+          objectCaching: false,
+        });
+        canvas.add(marker);
       }
 
       canvas.selection = false;

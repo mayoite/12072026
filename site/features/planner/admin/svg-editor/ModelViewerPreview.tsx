@@ -72,8 +72,6 @@ export function ModelViewerPreview({
     if (typeof window === "undefined") return;
     // No GLB yet — skip library load (empty admin state is enough).
     if (!trimmedSrc) {
-      setReady(false);
-      setError(null);
       return;
     }
 

@@ -39,6 +39,7 @@ import { useOpen3dWorkspaceAutosave } from "../persistence/useOpen3dWorkspaceAut
 import { setActiveFloor } from "../model/operations/pureActions";
 import { createRectangularRoomProject } from "../model/project";
 import { addOpen3dWall } from "../model/actions/walls";
+import { addOpen3dDoor } from "../model/actions/openings";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
 import { preflightOpen3dExport } from "../shared/export/exportPreflight";
 import {
@@ -344,6 +345,30 @@ export function OOPlannerWorkspace({
       setActiveTool("select");
       armedToolRef.current = "select";
       setWorkspaceMessage("Wall added.");
+    },
+    [workspaceCanvas],
+  );
+
+  const handleOpeningPlaced = useCallback(
+    (wallId: string, position: number) => {
+      workspaceCanvas.updateProject((project) =>
+        addOpen3dDoor(
+          project,
+          {
+            wallId,
+            position,
+            width: 900,
+            height: 2100,
+            type: "single",
+            swingDirection: "left",
+            flipSide: false,
+          },
+          newEntityId,
+        ),
+      );
+      setActiveTool("select");
+      armedToolRef.current = "select";
+      setWorkspaceMessage("Opening added.");
     },
     [workspaceCanvas],
   );
@@ -1084,6 +1109,7 @@ export function OOPlannerWorkspace({
               }
               onPlaceAtPoint={handlePlaceAtPoint}
               onWallDrawn={handleWallDrawn}
+              onOpeningPlaced={handleOpeningPlaced}
               onSelectionChange={handleCanvasSelection}
               onFurnitureModified={handleFurnitureModified}
               onStatusChange={setCanvasStatus}

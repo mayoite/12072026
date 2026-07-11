@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
+import type { ShapePath } from "three";
 
 /**
  * Browser binary SVG→GLB extrude (admin island).
@@ -53,8 +54,6 @@ export function GlbExtruderPreview({
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!trimmedSvg) {
-      setStatus("idle");
-      setError(null);
       return;
     }
 
@@ -102,9 +101,7 @@ export function GlbExtruderPreview({
 
         for (const path of svgData.paths) {
           // SVGLoader path shapes — ShapePath cast matches three-stdlib typings.
-          const shapes = SVGLoader.createShapes(
-            path as unknown as import("three").ShapePath,
-          );
+          const shapes = SVGLoader.createShapes(path as unknown as ShapePath);
 
           for (const shape of shapes) {
             const geometry = new THREE.ExtrudeGeometry(shape, {

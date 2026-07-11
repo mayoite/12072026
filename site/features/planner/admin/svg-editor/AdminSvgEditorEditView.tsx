@@ -39,7 +39,7 @@ import {
   puckConfig,
 } from "./puckBlockRegistry";
 import { safeThemeTokens } from "./themeTokens";
-import { Puck } from "@puckeditor/core";
+import { Puck, type Plugin } from "@puckeditor/core";
 // no-external.css: same Puck UI without @import https://rsms.me/inter (CSP style-src blocks it)
 import "@puckeditor/core/no-external.css";
 import type { PuckDataShape } from "./puckBlockRegistry";
@@ -75,6 +75,12 @@ const ModelViewerPreview = dynamic(
     ),
   },
 );
+
+const NOOP_OUTLINE_PLUGIN: Plugin = {
+  name: "outline",
+  label: "Outline",
+  render: () => <></>,
+};
 
 interface FormState {
   readonly payloadText: string;
@@ -655,6 +661,7 @@ export function AdminSvgEditorEditView({
             <Puck
               config={puckConfig}
               data={editorData}
+              plugins={[NOOP_OUTLINE_PLUGIN]}
               onPublish={handlePublish}
             />
           </div>

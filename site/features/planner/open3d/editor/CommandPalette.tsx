@@ -58,7 +58,10 @@ export function CommandPalette({ open, onOpenChange, handlers }: CommandPaletteP
   }, [open]);
 
   useEffect(() => {
-    setSelectedKey(results[0]?.id ?? null);
+    const frame = requestAnimationFrame(() => {
+      setSelectedKey(results[0]?.id ?? null);
+    });
+    return () => cancelAnimationFrame(frame);
   }, [query, results]);
 
   const execute = useCallback(

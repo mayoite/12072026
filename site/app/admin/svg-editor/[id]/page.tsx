@@ -21,6 +21,21 @@ import { readSvgArtifactStatus } from "@/features/planner/admin/svg-editor/svgAr
 /** Disk descriptors can change under admin publish — never static-cache this route. */
 export const dynamic = "force-dynamic";
 
+function formatDescriptorStamp(value: number | undefined): string {
+  if (typeof value !== "number" || !Number.isFinite(value) || value <= 0) {
+    return "—";
+  }
+  const normalized = value < 1e12 ? value * 1000 : value;
+  try {
+    return new Date(normalized)
+      .toISOString()
+      .replace("T", " ")
+      .replace(/\.\d{3}Z$/, " UTC");
+  } catch {
+    return String(value);
+  }
+}
+
 export default async function AdminSvgEditorDetailPage({
   params,
 }: {
@@ -40,10 +55,7 @@ export default async function AdminSvgEditorDetailPage({
     descriptor = result.value;
   }
 
-  const updatedAtLabel = new Date(descriptor.generatedAt ?? 0)
-    .toISOString()
-    .replace("T", " ")
-    .replace(/\..*$/, "");
+  const updatedAtLabel = formatDescriptorStamp(descriptor.generatedAt);
 
   // Bind slug so Client Component receives a Server Action ref (not a page wrapper fn).
   const onPublishAction = publishSvgEditorAction.bind(null, slug);

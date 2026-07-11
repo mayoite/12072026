@@ -23,6 +23,7 @@ import {
   type PublishDescriptorResult,
 } from "@/features/planner/admin/svg-editor/publishDescriptorWithPipeline";
 import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/newBlockDescriptorStub";
+import { resolveAuthContext } from "@/features/shared/api/withAuth";
 
 /**
  * Fail-closed Puck publish for one slug.
@@ -34,6 +35,12 @@ export async function publishSvgEditorAction(
   slug: string,
   puckDataFromEditor: PuckDataShape,
 ): Promise<PublishDescriptorResult> {
+  try {
+    await resolveAuthContext("admin");
+  } catch {
+    return { success: false, error: "Admin access required" };
+  }
+
   let descriptor: BlockDescriptor;
   if (slug === "new") {
     descriptor = makeNewBlockDescriptorStub();

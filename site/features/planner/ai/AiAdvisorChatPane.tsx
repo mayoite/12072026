@@ -224,7 +224,7 @@ export function AiAdvisorChatPane({
         }
       }
     },
-    [editor, isLoading, projectMetadata, setInput, setIsLoading, setMessages],
+    [currentShapeCount, editor, isLoading, projectMetadata, setInput, setIsLoading, setMessages],
   );
 
   const showChips = messages.length <= 1 && !isLoading;

@@ -48,39 +48,14 @@ describe("isDevAuthBypassEnabled", () => {
       env: { NODE_ENV: "production", DEV_AUTH_BYPASS: "1" },
       expected: false,
     },
-    {
-      name: "true in production only with both flags (local Playwright)",
-      env: {
-        NODE_ENV: "production",
-        DEV_AUTH_BYPASS: "1",
-        DEV_AUTH_BYPASS_ALLOW_PRODUCTION: "1",
-      },
-      expected: true,
-    },
-    {
-      name: "false in production when only ALLOW_PRODUCTION is set",
-      env: {
-        NODE_ENV: "production",
-        DEV_AUTH_BYPASS_ALLOW_PRODUCTION: "1",
-      },
-      expected: false,
-    },
   ] as const)("$name", ({ env, expected }) => {
     process.env = {
       ...originalEnv,
       NODE_ENV: env.NODE_ENV,
     };
     delete process.env.DEV_AUTH_BYPASS;
-    delete process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION;
     if ("DEV_AUTH_BYPASS" in env && env.DEV_AUTH_BYPASS !== undefined) {
       process.env.DEV_AUTH_BYPASS = env.DEV_AUTH_BYPASS;
-    }
-    if (
-      "DEV_AUTH_BYPASS_ALLOW_PRODUCTION" in env &&
-      env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION !== undefined
-    ) {
-      process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION =
-        env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION;
     }
     expect(isDevAuthBypassEnabled(process.env)).toBe(expected);
   });

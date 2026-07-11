@@ -101,7 +101,6 @@ describe("withAuth middleware", () => {
     // Bypass off so CSRF gate is active.
     process.env.NODE_ENV = "development";
     delete process.env.DEV_AUTH_BYPASS;
-    delete process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION;
 
     const supabase = await createServerClient();
     vi.mocked(supabase.auth.getUser).mockResolvedValueOnce({
@@ -138,7 +137,6 @@ describe("withAuth middleware", () => {
   it("skips CSRF validation when DEV_AUTH_BYPASS is enabled (mutating + requireCsrf)", async () => {
     process.env.NODE_ENV = "development";
     process.env.DEV_AUTH_BYPASS = "1";
-    delete process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION;
     // Would fail if CSRF were evaluated.
     vi.mocked(validateCsrfRequest).mockResolvedValue(false);
 
@@ -168,7 +166,6 @@ describe("withAuth middleware", () => {
   it("still enforces CSRF when bypass env is set but NODE_ENV=production without allow flag", async () => {
     process.env.NODE_ENV = "production";
     process.env.DEV_AUTH_BYPASS = "1";
-    delete process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION;
 
     const supabase = await createServerClient();
     vi.mocked(supabase.auth.getUser).mockResolvedValueOnce({

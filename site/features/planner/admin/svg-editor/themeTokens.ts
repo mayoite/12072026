@@ -30,7 +30,12 @@ export const DEFAULT_THEME_TOKENS: ThemeTokensMap = Object.freeze({
 export function safeThemeTokens(
   tokens: ThemeTokensMap | Record<string, string | undefined> | null | undefined,
 ): ThemeTokensMap {
-  if (tokens == null || typeof tokens !== "object" || Array.isArray(tokens)) {
+  if (
+    tokens === null ||
+    tokens === undefined ||
+    typeof tokens !== "object" ||
+    Array.isArray(tokens)
+  ) {
     return { ...DEFAULT_THEME_TOKENS };
   }
   const out: Record<string, string> = { ...DEFAULT_THEME_TOKENS };

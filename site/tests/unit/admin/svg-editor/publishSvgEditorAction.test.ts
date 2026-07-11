@@ -19,6 +19,18 @@ vi.mock("@/features/planner/admin/svg-editor/publishDescriptorWithPipeline", () 
   publishDescriptorWithPipeline,
 }));
 
+vi.mock("@/features/shared/api/withAuth", () => ({
+  resolveAuthContext: vi.fn().mockResolvedValue({
+    user: {
+      id: "00000000-0000-4000-8000-0000000000d1",
+      email: "dev-bypass@localhost",
+      role: "admin",
+    },
+    isAdmin: true,
+    requiredRole: "admin",
+  }),
+}));
+
 import { publishSvgEditorAction } from "@/features/planner/admin/svg-editor/publishSvgEditorAction";
 import type { PuckDataShape } from "@/features/planner/admin/svg-editor/puckBlockRegistry";
 

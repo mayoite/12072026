@@ -69,7 +69,8 @@ function timestampLabel(value: number | undefined): string {
   if (typeof value !== "number" || !Number.isFinite(value) || value <= 0)
     return "—";
   try {
-    return new Date(value).toISOString().replace("T", " ").replace(/\..*$/, "");
+    const normalized = value < 1e12 ? value * 1000 : value;
+    return new Date(normalized).toISOString().replace("T", " ").replace(/\..*$/, "");
   } catch {
     return String(value);
   }

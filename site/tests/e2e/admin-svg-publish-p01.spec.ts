@@ -3,7 +3,7 @@
  *
  * Requires server env:
  *   DEV_AUTH_BYPASS=1
- *   DEV_AUTH_BYPASS_ALLOW_PRODUCTION=1  (when Playwright uses build+start)
+ *   Playwright dev server
  *
  * Proves: open admin svg-editor → POST publish → success + SVG on disk.
  * Screenshots under results/planner/p0-1-admin-svg-publish/

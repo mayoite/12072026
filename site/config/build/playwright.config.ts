@@ -55,7 +55,10 @@ export default defineConfig({
   webServer: userProvidedBaseURL
     ? undefined
     : {
-        command: "pnpm run build && pnpm run start",
+        command:
+          process.env.DEV_AUTH_BYPASS === "1"
+            ? "pnpm run dev"
+            : "pnpm run build && pnpm run start",
         url: baseURL,
         timeout: 120_000,
         reuseExistingServer: !isCI,
@@ -65,12 +68,6 @@ export default defineConfig({
           NEXT_PUBLIC_PLANNER_DEV_TOOLS: "true",
           ...(process.env.DEV_AUTH_BYPASS
             ? { DEV_AUTH_BYPASS: process.env.DEV_AUTH_BYPASS }
-            : {}),
-          ...(process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION
-            ? {
-                DEV_AUTH_BYPASS_ALLOW_PRODUCTION:
-                  process.env.DEV_AUTH_BYPASS_ALLOW_PRODUCTION,
-              }
             : {}),
         },
       },
