@@ -10,7 +10,7 @@
 | Item | Status |
 |------|--------|
 | **Product ship** | OPEN — planner not buyer-ready |
-| **Module bar** | OPEN — SVG pipeline, mesh raise, BOQ (see `Plans/global-standard-revision/03-QUALITY-BAR.md`) |
+| **Module bar** | OPEN — SVG pipeline, mesh raise, BOQ (see `Plans/03-QUALITY-BAR.md`) |
 | **CP-10 pack** | OPEN — `10-handover/` not on disk; do not claim landed |
 | **`next build` `/contact`** | OPEN — blocks prod gate |
 | **Fabric destination 2D** | Later — interim canvas only today |

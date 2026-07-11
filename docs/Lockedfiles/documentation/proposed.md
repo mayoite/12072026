@@ -1,7 +1,7 @@
 # Documentation — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) — refresh locked snapshots after each acceptance gate
+**Authority:** [`Plans/03-QUALITY-BAR.md`](../../../Plans/03-QUALITY-BAR.md) — refresh locked snapshots after each acceptance gate
 
 ## Cross-links
 
@@ -33,7 +33,7 @@
 | Doc | Update when |
 |-----|-------------|
 | `PACKAGES.md` | Any Tier move — benchmark + Package Review gate |
-| `Plans/P-track/START.md` §5 | Planner runtime table sync |
+| `Plans/Planner-track/START.md` §5 | Planner runtime table sync |
 | `dependencies-engines/proposed.md` | After `package.json` cleanup PR |
 | Domain `<module>/current.md` | Each lock baseline — packages section mirrors disk |
 | `ADMIN_workflow.md` | Route or admin package surface changes |

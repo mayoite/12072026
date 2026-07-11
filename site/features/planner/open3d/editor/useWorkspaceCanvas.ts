@@ -90,7 +90,7 @@ export function useWorkspaceCanvas(
   });
 
   // Task 4 foundation: panels, search, loading, camera (3d transform), notifications
-  // live in caller (OOPlannerWorkspace, FeasibilityCanvas, InventoryPanel, Three*).
+  // live in caller (OOPlannerWorkspace, PlannerCanvasStage, InventoryPanel, Three*).
   // Document undo/redo/replace ONLY mutate history.present (Open3dProject).
   // Transients are never passed to runCommand / executePlannerCommand.
   // GS: clean canonical doc vs transient ownership (no drift); follows benchmark anti-drift + clean state per Phase 1A.
@@ -184,7 +184,7 @@ export function useWorkspaceCanvas(
 
 /**
  * Dead production path (kept for unit coverage / possible reuse).
- * Live open3d wall drawing uses FeasibilityCanvas + addOpen3dWall / newEntityId —
+ * Live open3d wall drawing uses PlannerCanvasStage + addOpen3dWall / newEntityId —
  * not this hook. Only caller: workspaceShell.test.tsx.
  */
 export function useCanvasDrawing(initialProject?: Open3dProject) {

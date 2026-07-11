@@ -6,7 +6,7 @@
 Important distinction:
 
 - this archive is the **old top-level Fabric planner route** (and its Fabric.js canvas)
-- archived Canvas 2D: **`_archive/canvas-feasibility/FeasibilityCanvas`** (tests only — not live)
+- Canvas2D FeasibilityCanvas: **deleted** — live 2-D is `open3d/canvas-stage` → Fabric
 
 ## Contents
 

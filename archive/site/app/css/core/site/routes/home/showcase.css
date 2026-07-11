@@ -1,3 +1,0 @@
-/* Re-export split showcase modules — prefer marketing-primitives + homepage-sections bundles */
-@import "./showcase-shared.css";
-@import "./showcase-carousel.css";

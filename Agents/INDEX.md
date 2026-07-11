@@ -5,7 +5,7 @@
 | Handbook | File |
 |----------|------|
 | Tracks | `Agents-tracks.md` |
-| Plan | `Agents-Plan.md` |
+| Plan (+ planner map / W3 / spawn) | `Agents-Plan.md` |
 | Testing | `Agents-testing.md` + `testing-handbook.md` |
 | Browser | `Agents-browser.md` |
 | Failures | `Agents-failure.md` |

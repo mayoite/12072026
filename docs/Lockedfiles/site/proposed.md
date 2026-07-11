@@ -1,7 +1,7 @@
 # Site — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) — site stays separate from planner engine graph; **1B** owns portal svg-catalog publish seam
+**Authority:** [`Plans/03-QUALITY-BAR.md`](../../../Plans/03-QUALITY-BAR.md) — site stays separate from planner engine graph; **1B** owns portal svg-catalog publish seam
 
 ## Cross-links
 

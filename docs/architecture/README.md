@@ -30,7 +30,7 @@ Redirects (do not extend): [`STRUCTURE_GUIDELINES.md`](STRUCTURE_GUIDELINES.md),
 ## Authority stack
 
 ```text
-Plans/global-standard-revision/README.md   (module bar — not W-spine execute)
+Plans/03-QUALITY-BAR.md   (module bar — not W-spine execute)
   → archive/Plans/01-execution/specialists/06-UI-PLAN.md
   → archive/Plans/01-execution/specialists/08-TEST-PLAN.md
   → docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md
@@ -41,7 +41,7 @@ Plans/global-standard-revision/README.md   (module bar — not W-spine execute)
   → CSS-SOLUTION.md (folder ownership)
 ```
 
-**W-spine execute:** [`Plans/P-track/`](../../../Plans/P-track/) — buyer law only.
+**W-spine execute:** [`Plans/Planner-track/`](../../../Plans/Planner-track/) — buyer law only.
 
 When `Plans/` and `PACKAGES.md` conflict on SVG tooling, **PACKAGES.md wins**.
 

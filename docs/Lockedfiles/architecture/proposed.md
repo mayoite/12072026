@@ -1,7 +1,7 @@
 # Architecture docs — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) — update live docs after **1A** / **1B** evidence only
+**Authority:** [`Plans/03-QUALITY-BAR.md`](../../../Plans/03-QUALITY-BAR.md) — update live docs after **1A** / **1B** evidence only
 
 ## Cross-links
 
@@ -51,7 +51,7 @@ docs/architecture/README.md          ← open first
 
 ## Authority
 
-1. `Plans/global-standard-revision/README.md`
+1. `Plans/03-QUALITY-BAR.md`
 2. `docs/Lockedfiles/architecture/proposed.md` (this file)
 3. `docs/architecture/README.md`
 4. Individual architecture docs

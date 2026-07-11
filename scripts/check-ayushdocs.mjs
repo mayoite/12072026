@@ -56,7 +56,7 @@ for (const f of files) {
 if (violations.length) {
   console.error("check:ayushdocs FAIL:\n");
   violations.forEach((v) => console.error(`  ${v}`));
-  console.error("\nMove detail to archive/museum/ayushdocs-detail/.");
+  console.error("\nMove detail to Plans/Planner-track/library/from-museum/ayushdocs-detail/.");
   process.exit(1);
 }
 

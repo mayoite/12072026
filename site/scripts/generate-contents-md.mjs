@@ -238,7 +238,7 @@ const siteFolders = {
   "features/planner/open3d": {
     title: "Open3d planner workspace",
     why: "Destination 2D/3D planner: fabric stage, modular mesh, catalog placement, persistence.",
-    contains: ["editor/, canvas-fabric-stage/, catalog/, model/, store/, ui/"],
+    contains: ["editor/, catalog/, model/, store/, ui/ (Fabric 2-D: ../canvas-fabric-stage/)"],
   },
   "features/planner/catalog": {
     title: "Planner catalog",

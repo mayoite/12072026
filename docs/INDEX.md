@@ -21,7 +21,7 @@
 |------|-------|
 | Where code goes | [`architecture/MODULE-LAYOUT.md`](./architecture/MODULE-LAYOUT.md) |
 | Module UI contract | [`Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md`](./Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md) |
-| Planner stack | [`Plans/P-track/CONSTRAINTS.md`](../Plans/P-track/CONSTRAINTS.md) |
-| Doc routing | [`archive/museum/lockedfiles-conduct/ReadmeLocked.md`](../../archive/museum/lockedfiles-conduct/ReadmeLocked.md) |
+| Planner stack | [`Plans/Planner-track/CONSTRAINTS.md`](../Plans/Planner-track/CONSTRAINTS.md) |
+| Doc routing | [`Plans/.../lockedfiles-conduct/ReadmeLocked.md`](../Plans/Planner-track/library/from-museum/lockedfiles-conduct/ReadmeLocked.md) |
 
 **Purity:** `pnpm run check:docs-purity` · **Active doc budget:** `pnpm run check:active-docs`

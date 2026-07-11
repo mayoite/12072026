@@ -1,7 +1,7 @@
 # Database — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) — disk JSON through **1B**; immutable Supabase revisions in **Phase 08**
+**Authority:** [`Plans/03-QUALITY-BAR.md`](../../../Plans/03-QUALITY-BAR.md) — disk JSON through **1B**; immutable Supabase revisions in **Phase 08**
 
 ## Cross-links
 
@@ -21,7 +21,7 @@
 | No new `.from()` | **Do not add** Supabase `.from()` for catalog/planner data | — | `Readme.md` |
 | Migrations | Migrations live under `platform/` only | `site/platform/supabase/` | `RESTORE-RUNBOOK.md` |
 | Block descriptors | Atomic persist via `persistBlockDescriptor`; history slots on write | `admin/svg-editor/` | Phase 04 |
-| SVG revisions | Immutable revisions + artifact metadata in Supabase (**Phase 08**) | `svgRevisionRepository.server.ts` | `Plans/P-track/START.md` §8 |
+| SVG revisions | Immutable revisions + artifact metadata in Supabase (**Phase 08**) | `svgRevisionRepository.server.ts` | `Plans/Planner-track/START.md` §8 |
 | Catalog tables | ERD + RLS matrix in SCHEMA; advisors at zero SECURITY ERRORs before gate | Drizzle + migrations | `ADVISORS.md` |
 
 ## Packages (proposed per plan)

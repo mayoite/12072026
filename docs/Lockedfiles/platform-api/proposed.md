@@ -1,7 +1,7 @@
 # Platform & API — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) — AI Tier-3 deferred to Phase 09; **1B** owns svg-editor API unify
+**Authority:** [`Plans/03-QUALITY-BAR.md`](../../../Plans/03-QUALITY-BAR.md) — AI Tier-3 deferred to Phase 09; **1B** owns svg-editor API unify
 
 ## Cross-links
 

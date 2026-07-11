@@ -1,11 +1,13 @@
 /**
- * Live 2-D plan canvas (native HTML canvas + Block2D).
- * Promoted from `_archive/canvas-feasibility` — procedural geometry only.
+ * Live 2-D plan canvas entry — Fabric stage only.
+ * Implementation lives outside open3d: `features/planner/canvas-fabric-stage`.
  */
 export {
-  FeasibilityCanvas as PlannerCanvasStage,
-  type FeasibilityCanvasHandle as PlannerCanvasStageHandle,
-  type FeasibilityCanvasProps as PlannerCanvasStageProps,
-} from "@/features/planner/_archive/canvas-feasibility/FeasibilityCanvas";
+  Open3dFabricStage as PlannerCanvasStage,
+  type Open3dFabricStageProps as PlannerCanvasStageProps,
+} from "@/features/planner/canvas-fabric-stage/Open3dFabricStage";
 
-export type { CanvasStatusSnapshot } from "@/features/planner/open3d/canvas-fabric-stage/canvasStageTypes";
+export type {
+  Open3dCanvasStageHandle as PlannerCanvasStageHandle,
+  CanvasStatusSnapshot,
+} from "@/features/planner/canvas-fabric-stage/canvasStageTypes";

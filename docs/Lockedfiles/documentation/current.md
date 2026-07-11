@@ -1,7 +1,7 @@
 # Documentation — current (locked)
 
 **Baseline:** 2026-07-05  
-**Revision alignment:** [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) is locked coordinator truth — **1A and 1B not accepted**; do not treat `proposed.md` snapshots as law until evidence lands.
+**Revision alignment:** [`Plans/03-QUALITY-BAR.md`](../../../Plans/03-QUALITY-BAR.md) is locked coordinator truth — **1A and 1B not accepted**; do not treat `proposed.md` snapshots as law until evidence lands.
 
 ## Cross-links
 
@@ -24,7 +24,7 @@
 | Doc routing | `ReadmeLocked.md`, `DOC-MAP.md` | Lockedfiles + root |
 | Admin workflow | `ADMIN_workflow.md` — **stale** on svg-editor (2026-06-26) | root |
 | Planner governance | `plans/01-phase1-execution/` | `plans/` |
-| Product plan | `Plans/global-standard-revision/README.md`, `01-START.md`, `02-PHASE-1.md`, `03-PHASE-2.md` | `Plans/` |
+| Product plan | `Plans/03-QUALITY-BAR.md`, `01-START.md`, `02-PHASE-1.md`, `03-PHASE-2.md` | `Plans/` |
 | Architecture live | `docs/architecture/README.md`, `MODULE-LAYOUT.md` | `docs/architecture/` |
 
 ## Packages (on disk)
@@ -34,8 +34,8 @@ Documentation does not install runtime packages. **Governance docs reference:**
 | Doc | Pins / engines described |
 |-----|--------------------------|
 | `PACKAGES.md` | Tier-1/2/3 locked set (partial vs `package.json`) |
-| `Plans/P-track/START.md` §5 | Planner + SVG package ownership |
-| `Plans/global-standard-revision/README.md` | Option A, 1A/1B sequencing |
+| `Plans/Planner-track/START.md` §5 | Planner + SVG package ownership |
+| `Plans/03-QUALITY-BAR.md` | Option A, 1A/1B sequencing |
 | `dependencies-engines/` | Full disk vs proposed graph |
 
 ---
@@ -46,7 +46,7 @@ Documentation is dense and layered — conduct, gates, plans, locked snapshots, 
 
 ## Strengths
 
-`AGENTS.md` and testing handbook are strict on evidence integrity. `implementation-decisions.md` gives governance anchors. `Plans/global-standard-revision/README.md` resolves SVG and 1A/1B ordering. Lockedfiles pattern freezes baselines without blocking live docs. `docs/architecture/README.md` now indexes placement and UI contracts.
+`AGENTS.md` and testing handbook are strict on evidence integrity. `implementation-decisions.md` gives governance anchors. `Plans/03-QUALITY-BAR.md` resolves SVG and 1A/1B ordering. Lockedfiles pattern freezes baselines without blocking live docs. `docs/architecture/README.md` now indexes placement and UI contracts.
 
 ## Weaknesses
 

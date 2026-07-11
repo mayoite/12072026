@@ -1,7 +1,7 @@
 # SVG pipeline — current (locked)
 
 **Baseline:** 2026-07-05  
-**Revision alignment:** **Option A locked** in [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) — **1B not accepted**; dual compile paths and dual descriptor models remain on disk.
+**Revision alignment:** **Option A locked** in [`Plans/03-QUALITY-BAR.md`](../../../Plans/03-QUALITY-BAR.md) — **1B not accepted**; dual compile paths and dual descriptor models remain on disk.
 
 ## Cross-links
 

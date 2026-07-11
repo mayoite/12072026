@@ -9,7 +9,7 @@
 | Quality bar | **This file** (raise, never lower) |
 | Facts, PASS, done | **Live repo** only |
 
-Peers: `Agents/INDEX.md` · Plan: `Plans/P-track/BOARD.md` · Owner: `ayushdocs/` (5 files) · Ops: `OPERATIONS_RUNBOOK.md`
+Peers: `Agents/INDEX.md` · Plan: `Plans/Planner-track/BOARD.md` · Owner: `ayushdocs/` (5 files) · Ops: `OPERATIONS_RUNBOOK.md`
 
 ## 2. Head duty
 - One **phase** to completion before the next. Subagents for heavy work.
@@ -32,7 +32,7 @@ Commit each land · push `origin` when green · `mayoite` ~45m/big land · no fo
 ## 7. Pipeline
 `/using-superpowers` → goal → repo scout → task list → TDD execute → browser only if task needs UI → verify → commit/push → `SESSION-RECAP` ~30m
 
-Firecrawl **dead**. No worktrees. Module bar: `Plans/global-standard-revision/03-QUALITY-BAR.md`
+Firecrawl **dead**. No worktrees. Module bar: `Plans/03-QUALITY-BAR.md`
 
 ## 8. Judgment
 | PASS | HALF | OPEN | FAIL |

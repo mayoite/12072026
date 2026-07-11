@@ -14,7 +14,7 @@ import {
 import {
   OPEN3D_FABRIC_FURNITURE_ENV,
   isOpen3dFabricFurnitureEnabled,
-} from "@/features/planner/open3d/canvas-fabric-stage/fabricFurnitureFlag";
+} from "@/features/planner/canvas-fabric-stage/fabricFurnitureFlag";
 
 const siteRoot = process.cwd();
 
@@ -39,15 +39,14 @@ describe("P01 host wiring (import graph + source)", () => {
       expect.arrayContaining([
         "route-open3d-pilot",
         "host-open3d",
-        "native-host",
       ]),
     );
+    expect(open3dNativeRoutes()).not.toContain("native-host");
 
     const guest = PRODUCTION_IMPORT_GRAPH.find((n) => n.id === "route-guest");
     const canvas = PRODUCTION_IMPORT_GRAPH.find((n) => n.id === "route-canvas");
     const pilot = PRODUCTION_IMPORT_GRAPH.find((n) => n.id === "route-open3d-pilot");
     const host = PRODUCTION_IMPORT_GRAPH.find((n) => n.id === "host-open3d");
-    const native = PRODUCTION_IMPORT_GRAPH.find((n) => n.id === "native-host");
 
     expect(guest?.imports).toContain(
       "@/features/planner/ui/Open3dPlannerWorkspaceRoute",
@@ -57,9 +56,6 @@ describe("P01 host wiring (import graph + source)", () => {
     );
     expect(pilot?.imports).toContain("@/features/planner/ui/Open3dPlannerHost");
     expect(host?.imports).toContain(
-      "@/features/planner/open3d/ui/Open3dNativeHost",
-    );
-    expect(native?.imports).toContain(
       "@/features/planner/open3d/editor/OOPlannerWorkspace",
     );
   });
@@ -75,21 +71,17 @@ describe("P01 host wiring (import graph + source)", () => {
       "Open3dPlannerWorkspaceRoute.tsx",
     );
     const hostSrc = readSite("features", "planner", "ui", "Open3dPlannerHost.tsx");
-    const nativeSrc = readSite(
-      "features",
-      "planner",
-      "open3d",
-      "ui",
-      "Open3dNativeHost.tsx",
-    );
 
     expect(guestSrc).toMatch(/Open3dPlannerWorkspaceRoute/);
     expect(canvasSrc).toMatch(/Open3dPlannerWorkspaceRoute/);
     expect(open3dSrc).toMatch(/Open3dPlannerHost/);
     expect(open3dSrc).not.toMatch(/Open3dPlannerWorkspaceRoute/);
     expect(workspaceRouteSrc).toMatch(/Open3dPlannerHost/);
-    expect(hostSrc).toMatch(/Open3dNativeHost/);
-    expect(nativeSrc).toMatch(/OOPlannerWorkspace/);
+    expect(hostSrc).toMatch(/OOPlannerWorkspace/);
+    expect(hostSrc).not.toMatch(/Open3dNativeHost|open3d\/ui/);
+    expect(
+      existsSync(siteFile("features", "planner", "open3d", "ui")),
+    ).toBe(false);
   });
 
   it("has no live app/planner fabric page tree; next.config redirects fabric → open3d", () => {
@@ -107,7 +99,7 @@ describe("P01 host wiring (import graph + source)", () => {
     );
   });
 
-  it("workspace mounts PlannerCanvasStage as sole live 2-D canvas (native Block2D)", () => {
+  it("workspace mounts PlannerCanvasStage as sole live 2-D canvas (Fabric barrel)", () => {
     const workspaceSrc = readSite(
       "features",
       "planner",
@@ -118,6 +110,19 @@ describe("P01 host wiring (import graph + source)", () => {
     expect(workspaceSrc).toMatch(/PlannerCanvasStage/);
     expect(workspaceSrc).not.toMatch(/Open3dFabricStage/);
     expect(workspaceSrc).not.toMatch(/isOpen3dFabricFurnitureEnabled/);
+    expect(workspaceSrc).not.toMatch(/FeasibilityCanvas|canvas-feasibility/);
+
+    const stageBarrel = readSite(
+      "features",
+      "planner",
+      "open3d",
+      "canvas-stage",
+      "index.ts",
+    );
+    expect(stageBarrel).toMatch(/Open3dFabricStage as PlannerCanvasStage/);
+    expect(stageBarrel).toMatch(/@\/features\/planner\/canvas-fabric-stage\//);
+    expect(stageBarrel).not.toMatch(/canvas-feasibility|FeasibilityCanvas/);
+    expect(stageBarrel).not.toMatch(/open3d\/canvas-fabric-stage/);
 
     // Legacy env flag module remains for mapper tests; not wired in workspace.
     expect(isOpen3dFabricFurnitureEnabled({})).toBe(false);

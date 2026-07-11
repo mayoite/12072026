@@ -1,4 +1,7 @@
-# SEO track board
+# SEO-track board
+
+**Scope:** Sitemap, metadata, canonicals, robots/noindex, JSON-LD.  
+**Shape:** BOARD-only until thin `phases/<SEO-id>/plan/` cards land. Rows below are the execute queue.
 
 | ID | Name | Status | Notes |
 |----|------|--------|-------|
@@ -8,7 +11,7 @@
 | **SEO4** | robots / noindex policy | **OPEN** | tech-stack-docs noindex; planner guest? |
 | **SEO5** | Structured data (JSON-LD) | **OPEN** | Not landed |
 
-**Rules:** one SEO-ID at a time · parallel **S** / **P** / **A** OK  
+**Rules:** one SEO-ID at a time · parallel Site / Planner / Admin OK  
 **Not in scope:** paid ads, content marketing copy thrash
 
-**Depends on:** S-track pages existing (S4 marketing largely DONE)
+**Depends on:** Site-track pages existing (S4 marketing largely DONE)

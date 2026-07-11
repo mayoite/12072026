@@ -20,7 +20,7 @@
 
 ## Packages (proposed per plan)
 
-**Authority:** `Plans/global-standard-revision/README.md` + `quality-gates.md`
+**Authority:** `Plans/03-QUALITY-BAR.md` + `quality-gates.md`
 
 | Package | Phase | Policy |
 |---------|-------|--------|

@@ -1,7 +1,7 @@
 # Repo shell — current (locked)
 
 **Baseline:** 2026-07-05  
-**Revision alignment:** Per [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md), Phase **1A** and **1B** are **not accepted** — this file describes on-disk repo layout only.
+**Revision alignment:** Per [`Plans/03-QUALITY-BAR.md`](../../../Plans/03-QUALITY-BAR.md), Phase **1A** and **1B** are **not accepted** — this file describes on-disk repo layout only.
 
 ## Cross-links
 
@@ -20,7 +20,7 @@
 | Deploy | Vercel project `oando-platform`; Root Directory = `site` | `site/vercel.json` (`buildCommand`: `cd .. && pnpm run build`) |
 | Env | Repo-root `.env.local` loaded by scripts | `.env.example`, `site/scripts/loadEnvLocal.cjs` |
 | Evidence | Test/lint output under `results/<module>/…` | `results/`, `testing-handbook.md` |
-| Governance | Conduct + gates at root; product plan in `Plans/` | `AGENTS.md`, `Failures.md`, `Plans/P-track/START.md` |
+| Governance | Conduct + gates at root; product plan in `Plans/` | `AGENTS.md`, `Failures.md`, `Plans/Planner-track/START.md` |
 
 ## Packages (on disk)
 

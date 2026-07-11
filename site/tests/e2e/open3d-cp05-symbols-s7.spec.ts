@@ -3,7 +3,7 @@
  * Evidence: results/planner/world-standard-wave/05-symbols-svg/browser/
  *
  * S7 hard path: inventory thumb alone is NOT enough — canvas must drawImage the
- * published `/svg-catalog/*.svg` after place (see svgPlanSymbolCache + FeasibilityCanvas).
+ * published `/svg-catalog/*.svg` after place (see svgPlanSymbolCache + PlannerCanvasStage).
  */
 import { expect, test, type Page } from "@playwright/test";
 import fs from "node:fs";
@@ -242,7 +242,7 @@ test.describe("CP-05 W2 cabinet-v0 + S7 SVG plan canvas draw", () => {
       svgPaintResponse.catch(() => null),
       page.waitForTimeout(1500),
     ]);
-    // Two rAFs so FeasibilityCanvas svgPaintGen redraw lands
+    // Two rAFs so plan-canvas svgPaintGen redraw lands
     await page.evaluate(
       () =>
         new Promise<void>((resolve) => {

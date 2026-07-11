@@ -83,13 +83,13 @@ Legacy comprehensive audit (2026-06-20): not on disk — use [`docs/audit/README
 
 | Track | Board |
 |-------|-------|
-| P (planner) | [`Plans/P-track/`](Plans/P-track/) |
-| S (site) | [`Plans/S-track/`](Plans/S-track/) |
-| A (admin) | [`Plans/A-track/`](Plans/A-track/) |
+| P (planner) | [`Plans/Planner-track/`](Plans/Planner-track/) |
+| S (site) | [`Plans/Site-track/`](Plans/Site-track/) |
+| A (admin) | [`Plans/Admin-track/`](Plans/Admin-track/) |
 | SEO | [`Plans/SEO-track/`](Plans/SEO-track/) |
-| SEC | [`Plans/SEC-track/`](Plans/SEC-track/) |
+| SEC | [`Plans/Security-track/`](Plans/Security-track/) |
 
-`archive/Plans/` — historical packs only. Museum: [`archive/museum/`](archive/museum/).
+Historical packs (minimal): `Planner-track/ · site history: [`Site-track/). Phase boards at each track’s `BOARD.md`; work cards under `phases/<ID>/plan/`.
 
 ## Owner + agents hubs
 
@@ -99,7 +99,7 @@ Legacy comprehensive audit (2026-06-20): not on disk — use [`docs/audit/README
 
 ## Planner execution (historical `plann/`)
 
-**Dead path** — consolidated into `Plans/`. See [`Plans/INDEX.md`](Plans/INDEX.md) · museum: [`archive/museum/plans1-residual/`](archive/museum/plans1-residual/).
+**Dead path** — consolidated into `Plans/`. See [`Plans/INDEX.md`](Plans/INDEX.md) · museum (minimal): `Plans/Planner-track/
 
 ## Agent workflow artifacts (1B)
 
@@ -110,14 +110,6 @@ Agent narrative outputs (observations, work-done, failures, executive-summary + 
 - First-pass reports preserved in `archive/1b-5phase-first-pass/` and `archive/recovery-reconcile-*`
 
 See `Plans/README.md`, `archive/Agents_work/README.md`, and `AGENTS.md` (narratives ≠ gate evidence; evidence stays in `results/`).
-
-## Other plan packets
-
-- `archive/Plans/done/database-consolidation-3-file-plan/` — 2 Supabase + R2 packet
-- `archive/Plans/done/tech-stack-docs-3-file-plan/` — tech-stack docs packet
-- `archive/Plans/done/planner-unified-3-file-plan/` — canonical planner packet
-- `archive/Plans/done/sketch-to-plan-3-file-plan/` — sketch-to-plan packet
-- `archive/Plans/wip/` — superseded multi-file packets
 
 ## Feature documentation
 

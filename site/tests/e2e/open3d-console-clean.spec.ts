@@ -164,7 +164,7 @@ test.describe("open3d console clean — known preview SVG 404s + THREE.Color", (
 
     const monitors = await attachKnownAssetMonitors(page);
 
-    // Open3d stack via guest host (same FeasibilityCanvas + demo catalog previews).
+    // Open3d stack via guest host (Fabric PlannerCanvasStage + demo catalog previews).
     // Also warm /planner/open3d so both entrypoints are exercised in network log.
     await page.goto("/planner/open3d/?plannerDevTools=1", {
       waitUntil: "domcontentloaded",

@@ -1,15 +1,15 @@
 # Planner module — current baseline
 
-**Frozen snapshot:** 2026-07-05 · **Full snapshot:** [`archive/museum/lockedfiles-snapshots/planner-current-2026-07-05.md`](../../../archive/museum/lockedfiles-snapshots/planner-current-2026-07-05.md)
+**Frozen snapshot:** 2026-07-05 · **Full snapshot:** [`Plans/.../lockedfiles-snapshots/planner-current-2026-07-05.md`](../../../Plans/Planner-track/library/from-museum/lockedfiles-snapshots/planner-current-2026-07-05.md)
 
 ## Live truth (re-check on every task)
 
 | Topic | Where |
 |-------|--------|
 | Routes + hosts | `site/app/planner/` · `site/features/planner/open3d/` |
-| Stack constraints | [`Plans/P-track/CONSTRAINTS.md`](../../../Plans/P-track/CONSTRAINTS.md) |
+| Stack constraints | [`Plans/Planner-track/CONSTRAINTS.md`](../../../Plans/Planner-track/CONSTRAINTS.md) |
 | Package pins | `site/package.json` at execute time |
-| Execute / W gates | [`Plans/P-track/`](../../../Plans/P-track/) |
+| Execute / W gates | [`Plans/Planner-track/`](../../../Plans/Planner-track/) |
 | Open3D README | `site/features/planner/open3d/README.md` |
 
 ## Summary

@@ -32,7 +32,7 @@ No new UI libraries. Storybook/Ladle deferred indefinitely (**Option F rejected*
 
 ## Authority
 
-1. `Plans/global-standard-revision/README.md`
+1. `Plans/03-QUALITY-BAR.md`
 2. [`docs/Lockedfiles/ui/MODULE-UI-CONTRACT-Locked.md`](../ui/MODULE-UI-CONTRACT-Locked.md)
 3. `archive/Plans/01-execution/specialists/06-UI-PLAN.md`
 4. `archive/Plans/01-execution/specialists/08-TEST-PLAN.md`

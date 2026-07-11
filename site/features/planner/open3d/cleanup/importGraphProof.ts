@@ -1,6 +1,6 @@
 /**
  * Phase 08 import-graph proof — documents live route → host → planner stack.
- * Live open3d 2-D = canvas-feasibility (not Fabric); fabric-legacy rows are archive fallbacks only.
+ * Live open3d 2-D = Fabric `PlannerCanvasStage`; fabric-legacy rows are old route fallbacks only.
  * Used before any Fabric/iframe retirement per plannnerplan/08-cleanup-archive-and-evidence-gates.md.
  */
 
@@ -55,12 +55,6 @@ export const PRODUCTION_IMPORT_GRAPH: readonly ImportGraphNode[] = [
   {
     id: "host-open3d",
     path: "site/features/planner/ui/Open3dPlannerHost.tsx",
-    imports: ["@/features/planner/open3d/ui/Open3dNativeHost"],
-    stack: "open3d-native",
-  },
-  {
-    id: "native-host",
-    path: "site/features/planner/open3d/ui/Open3dNativeHost.tsx",
     imports: ["@/features/planner/open3d/editor/OOPlannerWorkspace"],
     stack: "open3d-native",
   },

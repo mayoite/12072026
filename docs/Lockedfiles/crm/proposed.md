@@ -1,7 +1,7 @@
 # CRM — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) — CRM persistence is **post-1B**; not blocking 1A or 1B
+**Authority:** [`Plans/03-QUALITY-BAR.md`](../../../Plans/03-QUALITY-BAR.md) — CRM persistence is **post-1B**; not blocking 1A or 1B
 
 ## Cross-links
 

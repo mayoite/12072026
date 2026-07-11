@@ -29,6 +29,23 @@ function collectMd(abs) {
   const out = [];
   for (const ent of fs.readdirSync(abs, { withFileTypes: true })) {
     if (ent.name === "node_modules") continue;
+    // Plans reference packs — consolidated history, not law-layer budget.
+    const underPlans = /[/\\]Plans([/\\]|$)/.test(abs);
+    if (
+      underPlans &&
+      (ent.name === "research" ||
+        ent.name === "suggestions" ||
+        ent.name === "benchmark" ||
+        ent.name === "supporting" ||
+        ent.name === "library" ||
+        ent.name === "archive-packs" ||
+        ent.name === "notes" ||
+        ent.name === "impl" ||
+        ent.name === "reviews" ||
+        ent.name.startsWith("from-"))
+    ) {
+      continue;
+    }
     out.push(...collectMd(path.join(abs, ent.name)));
   }
   return out;
@@ -48,7 +65,7 @@ const relPaths = [...files]
 if (relPaths.length > MAX_ACTIVE) {
   console.error(`check:active-docs FAIL: ${relPaths.length} active MDs (max ${MAX_ACTIVE}):\n`);
   relPaths.forEach((p) => console.error(`  ${p}`));
-  console.error("\nMove detail to archive/museum/ or merge into track BOARD.md.");
+  console.error("\nMove detail to Plans/*/library|supporting (from-museum*) or merge into track BOARD.md.");
   process.exit(1);
 }
 

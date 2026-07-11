@@ -2,18 +2,14 @@
 
 ## Live 2-D canvas
 
-**`canvas-stage/PlannerCanvasStage`** — native HTML canvas + procedural Block2D (`furnitureBlock2D`, walls). No Fabric. No borrowed SVG/GLB on the plan.
-
-Implementation source: `features/planner/_archive/canvas-feasibility/FeasibilityCanvas.tsx` (re-exported as `PlannerCanvasStage`).
+**`canvas-stage/PlannerCanvasStage`** re-exports Fabric from **`features/planner/canvas-fabric-stage/`** (outside this folder).
 
 ## Export
 
-JSON, SVG, PNG, PDF, DXF from the same procedural scene (`shared/export/exportUtils.ts`). Furniture draws as rects / Block2D — not catalog symbol files.
+JSON, SVG, PNG, PDF, DXF from the document model (`shared/export/exportUtils.ts`).
 
 ## Archived / reference only
 
 | Path | Role |
 |------|------|
-| `canvas-fabric-stage/` | Former Fabric 2-D stage — not mounted in production workspace |
-| `_archive/canvas-feasibility/` | Source for `PlannerCanvasStage` + unit tests |
-| `_archive/fabric/` | Legacy Fabric workspace |
+| `_archive/fabric/` | Legacy top-level Fabric planner route (old product shell) |

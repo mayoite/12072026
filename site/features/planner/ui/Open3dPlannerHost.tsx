@@ -1,11 +1,17 @@
-import { Open3dNativeHost } from "@/features/planner/open3d/ui/Open3dNativeHost";
+"use client";
+
+import { OOPlannerWorkspace } from "@/features/planner/open3d/editor/OOPlannerWorkspace";
 
 export function Open3dPlannerHost({
   planId,
-  guestMode,
+  guestMode = false,
 }: {
   planId?: string;
   guestMode?: boolean;
 }) {
-  return <Open3dNativeHost planId={planId} guestMode={guestMode} />;
+  return (
+    <div className="open3d-route-host">
+      <OOPlannerWorkspace guestMode={guestMode} planId={planId} />
+    </div>
+  );
 }

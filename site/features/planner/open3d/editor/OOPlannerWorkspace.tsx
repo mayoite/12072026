@@ -1030,13 +1030,10 @@ export function OOPlannerWorkspace({
             />
             <PlannerCanvasStage
               ref={canvasRef}
-              variant="embedded"
-              autoFitOnLayout
-              onImportRequest={handleImportClick}
-              delegateKeyboard
               activeTool={activeTool}
               layerVisibility={layerVisibility}
               workspaceCanvas={workspaceCanvas}
+              activeFloor={activeFloor}
               pendingCatalogPlacement={
                 pendingCatalogItemId !== null ||
                 pendingWorkstationConfig !== null

@@ -1,7 +1,7 @@
 # Tech-stack — proposed (locked)
 
 **Baseline:** 2026-07-05  
-**Authority:** [`Plans/global-standard-revision/README.md`](../../../Plans/global-standard-revision/README.md) — regen when `PACKAGES.md` or major site deps change
+**Authority:** [`Plans/03-QUALITY-BAR.md`](../../../Plans/03-QUALITY-BAR.md) — regen when `PACKAGES.md` or major site deps change
 
 ## Cross-links
 

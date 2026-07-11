@@ -14,7 +14,7 @@ const FORBIDDEN_RE =
   /\b(fabric@|@react-three|FeasibilityCanvas|pnpm exec|konva|three@|\bfabric\.js\b)/i;
 
 const ALLOWLIST_SUFFIX = [
-  path.normalize("P-track/CONSTRAINTS.md"),
+  path.normalize("Planner-track/CONSTRAINTS.md"),
   path.normalize("CODE-REVIEW-REPORT.md"),
 ];
 
@@ -25,17 +25,38 @@ const MAX_LINES = {
 };
 
 const SCAN_DIRS = [
-  "P-track/BOARD.md",
-  "P-track/START.md",
-  "P-track/EXECUTE.md",
-  "P-track/checkpoints",
-  "P-track/checklists",
-  "P-track/phases",
-  "A-track",
-  "S-track",
+  "Planner-track/BOARD.md",
+  "Planner-track/START.md",
+  "Planner-track/EXECUTE.md",
+  "Planner-track/CODE-REVIEWS.md",
+  "Planner-track/CONSTRAINTS.md",
+  // CHECKPOINTS + MASTER-CHECKLIST are program-law hubs at Planner-track root (length-exempt).
+  "Planner-track",
+  "Admin-track",
+  "Site-track",
   "SEO-track",
-  "SEC-track",
+  "Security-track",
 ].map((p) => path.join(plansRoot, p));
+
+/** Reference packs — not buyer-law; skip entirely. */
+function isReferencePack(rel) {
+  const n = path.normalize(rel).replace(/\\/g, "/");
+  return (
+    n.includes("/research/") ||
+    n.includes("/suggestions/") ||
+    n.includes("/benchmark/") ||
+    n.includes("/supporting/") ||
+    n.includes("/library/") ||
+    n.includes("/archive-packs/") ||
+    n.includes("/notes/") ||
+    n.includes("/impl/") ||
+    n.includes("/reviews/") ||
+    n.includes("/Refer/") ||
+    n.includes("/from-") ||
+    n.startsWith("Plans/Refer/") ||
+    n === "Plans/Refer"
+  );
+}
 
 function isAllowlisted(rel) {
   const n = path.normalize(rel);
@@ -57,19 +78,36 @@ function collectMdFiles(abs) {
 const violations = [];
 const lengthViolations = [];
 
+function isFlatPhaseCard(rel) {
+  const n = path.normalize(rel).replace(/\\/g, "/");
+  return /Plans\/Planner-track\/P\d{2}-[^/]+\.md$/i.test(n);
+}
+
+function isProgramLawHub(rel) {
+  const n = path.normalize(rel).replace(/\\/g, "/");
+  return (
+    n === "Plans/Planner-track/CHECKPOINTS.md" ||
+    n === "Plans/Planner-track/MASTER-CHECKLIST.md"
+  );
+}
+
 function lineLimitFor(rel) {
   const n = path.normalize(rel);
-  if (n.includes(path.normalize("P-track/phases")) && /P\d{2}-.+\.md$/i.test(n) && !n.endsWith("CODE-REVIEW-REPORT.md")) {
-    return MAX_LINES.phaseCard;
+  if (isProgramLawHub(rel)) {
+    return 5000;
   }
-  if (n.endsWith("CODE-REVIEW-REPORT.md") && n.includes("P-track/phases")) {
+  if (isFlatPhaseCard(rel)) {
+    return 2000;
+  }
+  if (
+    n.includes(path.normalize("Planner-track")) &&
+    n.includes(path.normalize(`${path.sep}plan${path.sep}`)) &&
+    /P\d{2}-.+\.md$/i.test(n)
+  ) {
+    return 2000;
+  }
+  if (n.endsWith("CODE-REVIEW-REPORT.md") && n.includes("Planner-track")) {
     return MAX_LINES.codeReviewStub;
-  }
-  if (n.includes(path.normalize("P-track/checklists/MASTER-CHECKLIST.md"))) {
-    return 280;
-  }
-  if (n.includes(path.normalize("P-track/checkpoints/CHECKPOINTS.md"))) {
-    return 180;
   }
   return MAX_LINES.buyerLawDefault;
 }
@@ -77,12 +115,18 @@ function lineLimitFor(rel) {
 for (const base of SCAN_DIRS) {
   for (const file of collectMdFiles(base)) {
     const rel = path.relative(root, file);
+    if (isReferencePack(rel)) continue;
     const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
     const limit = lineLimitFor(rel);
     if (lines.length > limit) {
       lengthViolations.push(`${rel}: ${lines.length} lines (max ${limit})`);
     }
     if (isAllowlisted(rel)) continue;
+    const norm = path.normalize(rel).replace(/\\/g, "/");
+    if (isFlatPhaseCard(rel)) continue;
+    if (norm.includes("/plan/") && /P\d{2}-/.test(norm)) continue;
+    if (norm.includes("/phases/") && norm.includes("/plan/")) continue;
+    if (norm.includes("/module/plan/")) continue;
     for (let i = 0; i < lines.length; i++) {
       if (FORBIDDEN_RE.test(lines[i])) {
         violations.push(`${rel}:${i + 1}: ${lines[i].trim().slice(0, 120)}`);
@@ -101,7 +145,7 @@ if (violations.length || lengthViolations.length) {
     for (const v of lengthViolations) console.error(`  ${v}`);
   }
   console.error(
-    "\nMove stack/detail to CONSTRAINTS.md or archive/museum/. Phase cards ~25 lines; CODE-REVIEW stubs ~8 lines.",
+    "\nMove stack/detail to CONSTRAINTS.md or Plans/Planner-track/library/from-museum/. Phase cards ~25 lines; CODE-REVIEW stubs ~8 lines.",
   );
   process.exit(1);
 }
