@@ -748,7 +748,7 @@ export function getPuckData(descriptor: BlockDescriptor): PuckData {
   const rp = blockDescriptorToRenderProps(descriptor);
   return {
     root: { props: { title: descriptor.slug } },
-    content: [{ type: rp.name, props: rp.props }],
+    content: [{ type: rp.name, props: { id: descriptor.id, ...rp.props } }],
   } as PuckData;
 }
 
@@ -764,6 +764,7 @@ export function getPuckData(descriptor: BlockDescriptor): PuckData {
 export function getPuckEditorData(descriptor: BlockDescriptor): PuckData {
   const rp = blockDescriptorToRenderProps(descriptor);
   const baseProps: Record<string, unknown> = {
+    id: descriptor.id,
     slug: descriptor.slug,
     sku: descriptor.sku ?? "",
     sourceProvenance: descriptor.sourceProvenance,

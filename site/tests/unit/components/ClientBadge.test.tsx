@@ -4,7 +4,6 @@ import { ClientBadge } from '@/components/ClientBadge';
 
 vi.mock('next/image', () => ({
   default: (props: { src: string; className?: string; alt?: string }) => (
-    // eslint-disable-next-line @next/next/no-img-element
     <img src={props.src} className={props.className} alt={props.alt ?? ''} />
   ),
 }));
