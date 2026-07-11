@@ -1,0 +1,159 @@
+{
+  "home": {
+    "title": "One&Only | Premium Office Solutions | One&Only",
+    "url": "/",
+    "nav": [
+      "Products",
+      "Solutions",
+      "Projects",
+      "Planner",
+      "Portfolio",
+      "About",
+      "Contact",
+      "More"
+    ],
+    "cta": {
+      "right": 1400,
+      "left": 1244,
+      "w": 156,
+      "clipped": false
+    },
+    "vw": 1440,
+    "overflowX": false,
+    "hasFooter": true
+  },
+  "solutions": {
+    "title": "Workspace Planning Approach | One&Only",
+    "url": "/solutions/",
+    "nav": [
+      "Products",
+      "Solutions",
+      "Projects",
+      "Planner",
+      "Portfolio",
+      "About",
+      "Contact",
+      "More"
+    ],
+    "cta": {
+      "right": 1400,
+      "left": 1244,
+      "w": 156,
+      "clipped": false
+    },
+    "vw": 1440,
+    "overflowX": false,
+    "hasFooter": true
+  },
+  "contact": {
+    "title": "Contact us | One&Only",
+    "url": "/contact/",
+    "nav": [
+      "Products",
+      "Solutions",
+      "Projects",
+      "Planner",
+      "Portfolio",
+      "About",
+      "Contact",
+      "More"
+    ],
+    "cta": {
+      "right": 1400,
+      "left": 1244,
+      "w": 156,
+      "clipped": false
+    },
+    "vw": 1440,
+    "overflowX": false,
+    "hasFooter": true
+  },
+  "moreMenu": {
+    "open": true,
+    "items": [
+      {
+        "t": "Trusted",
+        "h": "/trusted-by/"
+      },
+      {
+        "t": "Sustainability",
+        "h": "/sustainability/"
+      },
+      {
+        "t": "Portal",
+        "h": "/portal/"
+      },
+      {
+        "t": "Login",
+        "h": "/login/"
+      }
+    ]
+  },
+  "home1280": {
+    "title": "One&Only | Premium Office Solutions | One&Only",
+    "url": "/",
+    "nav": [
+      "Products",
+      "Solutions",
+      "Projects",
+      "Planner",
+      "Portfolio",
+      "About",
+      "Contact",
+      "More"
+    ],
+    "cta": {
+      "right": 1240,
+      "left": 1084,
+      "w": 156,
+      "clipped": false
+    },
+    "vw": 1280,
+    "overflowX": false,
+    "hasFooter": true
+  },
+  "mobile": {
+    "drawerLinks": [
+      "Skip to main content",
+      "Solutions",
+      "Projects",
+      "Planner",
+      "Portfolio",
+      "About",
+      "Contact",
+      "Explore Products",
+      "Request a quote",
+      "Trusted byExecuted over 400+ workplace projects since 2011 — Fortune 500 and growing teams.Serving India's biggest companies and government.View clients",
+      "Browse full catalog",
+      "Seating",
+      "Workstations",
+      "Tables",
+      "Storage",
+      "Soft Seating",
+      "Education",
+      "Oando PlannerFlagshipOpen the planner and start from a blank shell or your own plan.Launch planner",
+      "Office layout · 10 × 8 m2D3DSplitDoorWindowOPEN PLAN · 4 WORKSTATIONSBOARDROOMWorkstation WS-301Workstation WS-302Workstation WS-303Workstation WS-304Boardroom BR-12Storage ST-0510 000 mm8 000 mm● Saved6 furniture items2 zonesFloor 80 m²True to scaleExample layout · 10 × 8 m · true-scale floor plan",
+      "View portfolio",
+      "DMRC",
+      "Titan",
+      "TVS",
+      "WhatsApp now",
+      "Call team",
+      "9031022875",
+      "sales@oando.co.in",
+      "All Products",
+      "Solutions",
+      "Planner",
+      "Member dashboard",
+      "About Us",
+      "Trusted By",
+      "Portfolio",
+      "Sustainability",
+      "Contact",
+      "After Sales",
+      "Showrooms",
+      "Refund Policy",
+      "Privacy Policy"
+    ]
+  }
+}

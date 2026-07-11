@@ -1,19 +1,36 @@
 import { SITE_CONTACT } from "@/lib/site-data/contact";
 import { PRODUCT_SUITE } from "@/lib/site-data/productSuite";
 
+/**
+ * Marketing header + mobile drawer destinations.
+ * `headerSlot: "more"` keeps the link in the mobile drawer and footer paths,
+ * but collapses it under desktop header "More" so the bar does not clip CTAs.
+ */
 export const SITE_NAV_LINKS = [
   { label: "Products", href: "/products", hasMega: true },
   { label: "Solutions", href: "/solutions" },
   { label: "Projects", href: "/projects" },
   { label: "Planner", href: "/planner" },
   { label: "Portfolio", href: "/portfolio" },
-  { label: "Trusted", href: "/trusted-by" },
+  { label: "Trusted", href: "/trusted-by", headerSlot: "more" as const },
   { label: "About", href: "/about" },
-  { label: "Sustainability", href: "/sustainability" },
+  { label: "Sustainability", href: "/sustainability", headerSlot: "more" as const },
   { label: "Contact", href: "/contact" },
-  { label: "Portal", href: "/portal" },
-  { label: "Login", href: "/login" },
+  { label: "Portal", href: "/portal", headerSlot: "more" as const },
+  { label: "Login", href: "/login", headerSlot: "more" as const },
 ] as const;
+
+export type SiteNavLink = (typeof SITE_NAV_LINKS)[number];
+
+/** Center desktop nav — primary buyer destinations only. */
+export const SITE_HEADER_PRIMARY_LINKS = SITE_NAV_LINKS.filter(
+  (link) => !("headerSlot" in link && link.headerSlot === "more"),
+);
+
+/** Desktop "More" flyout — secondary destinations still reachable without crowding. */
+export const SITE_HEADER_MORE_LINKS = SITE_NAV_LINKS.filter(
+  (link) => "headerSlot" in link && link.headerSlot === "more",
+);
 
 export const SITE_CTA_LINKS = [
   { label: "Get Quote", href: "/contact", variant: "primary" as const },

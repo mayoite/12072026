@@ -225,9 +225,9 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
             event.preventDefault();
             focusHamburger();
           }}
-          className="fixed inset-y-0 right-0 z-[70] flex w-[92vw] max-w-md flex-col overflow-y-auto bg-panel text-strong focus:outline-none"
+          className="fixed inset-y-0 right-0 z-[70] flex w-[92vw] max-w-md flex-col overflow-hidden bg-panel text-strong focus:outline-none"
         >
-          <div className="flex items-center justify-between border-b border-soft px-5 py-4">
+          <div className="flex shrink-0 items-center justify-between border-b border-soft px-5 py-4">
             <OneAndOnlyLogo className="h-8" variant="orange" />
             <button
               ref={closeBtnRef}
@@ -240,7 +240,7 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
             </button>
           </div>
 
-        <nav className="flex-1 overflow-y-auto px-5 py-4" aria-label="Mobile primary navigation">
+        <nav className="min-h-0 flex-1 overflow-y-auto px-5 py-4" aria-label="Mobile primary navigation">
           <div className="mb-4">
             <form
               className={drawerSearchClass}
@@ -251,7 +251,7 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
             >
               <MagnifyingGlass size={16} weight="bold" className="text-muted" />
               <label htmlFor="mobile-nav-search" className="sr-only">
-                Mobile AI product search
+                Mobile product search
               </label>
               <input
                 id="mobile-nav-search"
@@ -260,10 +260,10 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 onFocus={() => setShowSearchPanel(true)}
-                placeholder="AI search products..."
+                placeholder="Search products..."
                 className="w-full bg-transparent text-sm text-strong outline-none placeholder:text-subtle"
                 autoComplete="off"
-                aria-label="Mobile AI product search"
+                aria-label="Mobile product search"
               />
               <Sparkle size={16} weight="duotone" className="text-accent1" />
               <button type="submit" className="sr-only">
@@ -401,7 +401,7 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
           </ul>
         </nav>
 
-        <div className="sticky bottom-0 border-t border-soft bg-panel px-5 py-4">
+        <div className="shrink-0 border-t border-soft bg-panel px-5 py-4">
           <a
             href="tel:+919835630940"
             onClick={handleClose}

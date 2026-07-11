@@ -12,10 +12,11 @@ import {
   groupCategories,
   type GroupedCategory,
 } from "@/lib/navigation";
-import { SITE_NAV_LINKS } from "@/lib/siteNav";
+import { SITE_HEADER_MORE_LINKS, SITE_HEADER_PRIMARY_LINKS } from "@/lib/siteNav";
 
 /** Frozen at module load so SSR and client hydration always see the same nav order. */
-const HEADER_NAV_LINKS = [...SITE_NAV_LINKS];
+const HEADER_PRIMARY_LINKS = [...SITE_HEADER_PRIMARY_LINKS];
+const HEADER_MORE_LINKS = [...SITE_HEADER_MORE_LINKS];
 import { MobileNavDrawer } from "@/components/site/MobileNavDrawer";
 import {
   trackPlannerLaunchClicked,
@@ -99,6 +100,7 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMega, setActiveMega] = useState<string | null>(null);
+  const [moreOpen, setMoreOpen] = useState(false);
   const [groupedCategories, setGroupedCategories] = useState<GroupedCategory[]>(
     FALLBACK_CATEGORY_GROUPS,
   );
@@ -122,17 +124,26 @@ export function SiteHeader() {
   const closeMegaMenu = () => {
     clearMegaCloseTimer();
     setActiveMega(null);
+    setMoreOpen(false);
   };
 
   const openMegaMenu = (label: string) => {
     clearMegaCloseTimer();
+    setMoreOpen(false);
     setActiveMega(label);
+  };
+
+  const openMoreMenu = () => {
+    clearMegaCloseTimer();
+    setActiveMega(null);
+    setMoreOpen(true);
   };
 
   const scheduleMegaClose = () => {
     clearMegaCloseTimer();
     megaCloseTimerRef.current = setTimeout(() => {
       setActiveMega(null);
+      setMoreOpen(false);
       megaCloseTimerRef.current = null;
     }, 320);
   };
@@ -141,7 +152,8 @@ export function SiteHeader() {
     if (!(target instanceof Element)) return false;
     return (
       target.closest("[data-mega-zone]") !== null ||
-      target.closest("#products-mega-menu") !== null
+      target.closest("#products-mega-menu") !== null ||
+      target.closest("#header-more-menu") !== null
     );
   };
 
@@ -174,20 +186,21 @@ export function SiteHeader() {
 
   useEffect(() => () => clearMegaCloseTimer(), []);
 
-  // Close mobile menu on resize to desktop
+  // Close mobile drawer once desktop primary nav is visible (xl = 80rem / 1280px)
   useEffect(() => {
     const onResize = () => {
-      if (window.innerWidth >= 1024) setMobileOpen(false);
+      if (window.innerWidth >= 1280) setMobileOpen(false);
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Esc closes mega menu
+  // Esc closes mega / more / search panels
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setActiveMega(null);
+        setMoreOpen(false);
         setShowSearchPanel(false);
       }
     };
@@ -210,6 +223,7 @@ export function SiteHeader() {
     Promise.resolve().then(() => {
       setShowSearchPanel(false);
       setActiveMega(null);
+      setMoreOpen(false);
     });
   }, [pathname]);
 
@@ -373,7 +387,7 @@ export function SiteHeader() {
               aria-label="Primary navigation"
               suppressHydrationWarning
             >
-              {HEADER_NAV_LINKS.map((link) => {
+              {HEADER_PRIMARY_LINKS.map((link) => {
                 const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
                 const hasMega = "hasMega" in link && link.hasMega;
 
@@ -396,7 +410,7 @@ export function SiteHeader() {
                         aria-controls="products-mega-menu"
                         onFocus={() => openMegaMenu(link.label)}
                         className={cn(
-                          "typ-nav shell-nav-link shell-nav-link--desktop relative inline-flex items-center gap-1 whitespace-nowrap px-2 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary xl:px-2.5",
+                          "typ-nav shell-nav-link shell-nav-link--desktop relative inline-flex items-center gap-1 whitespace-nowrap px-1.5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary 2xl:px-2.5",
                           isActive
                             ? "shell-nav-link-current"
                             : activeMega === link.label
@@ -424,7 +438,7 @@ export function SiteHeader() {
                     href={link.href}
                     onMouseEnter={closeMegaMenu}
                     className={cn(
-                      "typ-nav shell-nav-link shell-nav-link--desktop relative whitespace-nowrap px-2 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary xl:px-2.5",
+                      "typ-nav shell-nav-link shell-nav-link--desktop relative whitespace-nowrap px-1.5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary 2xl:px-2.5",
                       isActive
                         ? "shell-nav-link-current"
                         : "",
@@ -434,6 +448,79 @@ export function SiteHeader() {
                   </Link>
                 );
               })}
+
+              {HEADER_MORE_LINKS.length > 0 ? (
+                <div
+                  data-mega-zone
+                  className="relative flex h-full items-stretch"
+                  onMouseEnter={openMoreMenu}
+                  onMouseLeave={(event) => {
+                    if (isMegaPointerTarget(event.relatedTarget)) return;
+                    scheduleMegaClose();
+                  }}
+                >
+                  <button
+                    type="button"
+                    data-mega-trigger
+                    aria-expanded={moreOpen}
+                    aria-controls="header-more-menu"
+                    onFocus={openMoreMenu}
+                    className={cn(
+                      "typ-nav shell-nav-link shell-nav-link--desktop relative inline-flex items-center gap-1 whitespace-nowrap px-1.5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary 2xl:px-2.5",
+                      moreOpen ||
+                        HEADER_MORE_LINKS.some(
+                          (link) =>
+                            pathname === link.href || pathname.startsWith(`${link.href}/`),
+                        )
+                        ? "shell-nav-link-current"
+                        : "",
+                    )}
+                  >
+                    More
+                    <CaretDown
+                      size={14}
+                      weight="bold"
+                      className={cn(
+                        "transition-transform duration-300 ease-out",
+                        moreOpen && "rotate-180",
+                      )}
+                    />
+                  </button>
+
+                  {moreOpen ? (
+                    <div
+                      id="header-more-menu"
+                      role="menu"
+                      aria-label="More site pages"
+                      className="absolute left-0 top-full z-50 mt-0 min-w-[12rem] rounded-b-xl border border-soft bg-panel py-2 shadow-theme-soft animate-in fade-in slide-in-from-top-1 duration-200"
+                      onMouseEnter={openMoreMenu}
+                      onMouseLeave={(event) => {
+                        if (isMegaPointerTarget(event.relatedTarget)) return;
+                        scheduleMegaClose();
+                      }}
+                    >
+                      {HEADER_MORE_LINKS.map((link) => {
+                        const isActive =
+                          pathname === link.href || pathname.startsWith(`${link.href}/`);
+                        return (
+                          <Link
+                            key={link.label}
+                            href={link.href}
+                            role="menuitem"
+                            onClick={() => setMoreOpen(false)}
+                            className={cn(
+                              "shell-list-link block whitespace-nowrap px-4 py-2.5 typ-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                              isActive ? "shell-nav-link-current text-primary" : "text-strong",
+                            )}
+                          >
+                            {link.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
             </nav>
 
             {/* Right CTAs */}
@@ -462,8 +549,8 @@ export function SiteHeader() {
                     value={searchQuery}
                     onChange={(event) => setSearchQuery(event.target.value)}
                     onFocus={() => setShowSearchPanel(true)}
-                    placeholder="AI search products..."
-                    className="w-44 bg-transparent typ-body text-strong outline-none placeholder:text-subtle"
+                    placeholder="Search products..."
+                    className="w-28 bg-transparent typ-body text-strong outline-none placeholder:text-subtle xl:w-36 2xl:w-44"
                     autoComplete="off"
                     aria-label="Search products with AI"
                   />
@@ -548,7 +635,12 @@ export function SiteHeader() {
                 </svg>
               </Link>
 
-              <button type="button" onClick={openGuidedPlanner} className="btn-primary">
+              <button
+                type="button"
+                onClick={openGuidedPlanner}
+                className="btn-primary whitespace-nowrap px-3 text-sm xl:px-4"
+                aria-label="Guided Planner"
+              >
                 Guided Planner
               </button>
 

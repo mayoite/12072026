@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   SITE_NAV_LINKS,
+  SITE_HEADER_MORE_LINKS,
+  SITE_HEADER_PRIMARY_LINKS,
   SITE_CTA_LINKS,
   SITE_FOOTER_NAV,
   SITE_NAV_FEATURED_CARDS,
@@ -87,6 +89,27 @@ describe("SITE_NAV_LINKS", () => {
   it("no duplicate labels", () => {
     const labels = SITE_NAV_LINKS.map((l) => l.label);
     expect(new Set(labels).size).toBe(labels.length);
+  });
+
+  it("splits primary desktop links from More-slot secondary links", () => {
+    expect(SITE_HEADER_PRIMARY_LINKS.map((l) => l.label)).toEqual([
+      "Products",
+      "Solutions",
+      "Projects",
+      "Planner",
+      "Portfolio",
+      "About",
+      "Contact",
+    ]);
+    expect(SITE_HEADER_MORE_LINKS.map((l) => l.label)).toEqual([
+      "Trusted",
+      "Sustainability",
+      "Portal",
+      "Login",
+    ]);
+    expect(
+      SITE_HEADER_PRIMARY_LINKS.length + SITE_HEADER_MORE_LINKS.length,
+    ).toBe(SITE_NAV_LINKS.length);
   });
 });
 

@@ -175,7 +175,7 @@ describe('MobileNavDrawer Component', () => {
       />
     );
 
-    const searchInput = screen.getByPlaceholderText('AI search products...');
+    const searchInput = screen.getByPlaceholderText('Search products...');
     fireEvent.change(searchInput, { target: { value: 'Task' } });
 
     await waitFor(() => {

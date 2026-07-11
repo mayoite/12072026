@@ -35,9 +35,19 @@ vi.mock('@/lib/navigation', () => ({
 }));
 
 vi.mock('@/lib/siteNav', () => ({
+  SITE_HEADER_PRIMARY_LINKS: [
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products', hasMega: true },
+  ],
+  SITE_HEADER_MORE_LINKS: [
+    { label: 'Portal', href: '/portal', headerSlot: 'more' as const },
+    { label: 'Login', href: '/login', headerSlot: 'more' as const },
+  ],
   SITE_NAV_LINKS: [
     { label: 'Home', href: '/' },
     { label: 'Products', href: '/products', hasMega: true },
+    { label: 'Portal', href: '/portal', headerSlot: 'more' as const },
+    { label: 'Login', href: '/login', headerSlot: 'more' as const },
   ],
 }));
 
@@ -154,7 +164,7 @@ describe('SiteHeader Component', () => {
 
     vi.useFakeTimers({ shouldAdvanceTime: true });
 
-    const searchInput = screen.getByPlaceholderText('AI search products...');
+    const searchInput = screen.getByPlaceholderText('Search products...');
     fireEvent.focus(searchInput);
     
     // Default quick links list
@@ -192,11 +202,11 @@ describe('SiteHeader Component', () => {
   it('submits search form and redirects using resolved destination', async () => {
     await renderSettledHeader();
 
-    const searchInput = screen.getByPlaceholderText('AI search products...');
+    const searchInput = screen.getByPlaceholderText('Search products...');
     fireEvent.change(searchInput, { target: { value: 'Premium' } });
 
     // Submit form
-    const searchForm = screen.getByPlaceholderText('AI search products...').closest('form')!;
+    const searchForm = screen.getByPlaceholderText('Search products...').closest('form')!;
     fireEvent.submit(searchForm);
 
     await waitFor(() => {
@@ -224,6 +234,19 @@ describe('SiteHeader Component', () => {
     expect(dispatchSpy).toHaveBeenCalledWith(
       expect.objectContaining({ type: 'oando-assistant:open' })
     );
+  });
+
+  it('collapses secondary destinations under More flyout', async () => {
+    await renderSettledHeader();
+
+    expect(screen.queryByRole('menuitem', { name: 'Portal' })).toBeNull();
+    expect(screen.queryByRole('menuitem', { name: 'Login' })).toBeNull();
+
+    const moreBtn = screen.getByRole('button', { name: /More/i });
+    fireEvent.mouseEnter(moreBtn);
+
+    expect(screen.getByRole('menuitem', { name: 'Portal' })).toHaveAttribute('href', '/portal');
+    expect(screen.getByRole('menuitem', { name: 'Login' })).toHaveAttribute('href', '/login');
   });
 
   it('triggers mobile nav drawer on hamburger click', async () => {
