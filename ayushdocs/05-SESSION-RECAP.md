@@ -4,13 +4,13 @@
 
 ## Last arc
 
-Plans flattened (no `P-track` maze). Docs Lockedfiles thinned + domain HOW added. Fabric sole 2D locked in Plans/CONSTRAINTS. `ayushdocs/` = five owner files only.
+Active law renumbered (repo-relative): `Plans/00-QUALITY-BAR` · Site `S1`/`S2` · `ayushdocs/01–05` · `Agents-01…09` · `docs/architecture/01–05` · `docs/Lockedfiles/01–04`. Docs maze cut (Lockedfiles proposed/audit/superpowers). Fabric sole 2D stays locked. Pushed `48c1bc1b` (+ this recap).
 
 ## Next
 
 1. `git log -5` · read `01-PENDING.md` · `Plans/Planner-track/BOARD.md`
-2. One Planner phase **or** one parallel track (Admin/Site/SEO/Security) — see track BOARDs under `Plans/`
-3. Re-prove before claiming PASS — raise gaps **on Fabric**, never restore Feasibility
+2. One Planner phase **or** one parallel track (Admin/Site/SEO/Security)
+3. Re-prove before PASS — raise gaps **on Fabric**, never restore Feasibility
 
 ## Do not claim
 

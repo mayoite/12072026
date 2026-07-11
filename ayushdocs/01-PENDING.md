@@ -26,7 +26,7 @@ Known gap: W3 browser often count-only vs id/pose.
 | Track | Board |
 |-------|--------|
 | Admin | `Plans/Admin-track/BOARD.md` (A1–A3) |
-| Site | `Plans/Site-track/BOARD.md` (S7–S8) — do not assume marketing DONE |
+| Site | `Plans/Site-track/BOARD.md` (S1–S2) — do not assume marketing DONE |
 | SEO | `Plans/SEO-track/BOARD.md` |
 | Security | `Plans/Security-track/BOARD.md` |
 
