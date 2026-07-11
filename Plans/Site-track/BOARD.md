@@ -1,12 +1,18 @@
 # Site-track
 
-> [Plans/INDEX.md](../INDEX.md)
+> [Plans/INDEX.md](../INDEX.md) · **Bar:** [03-QUALITY-BAR](../03-QUALITY-BAR.md)
 
-| Card | Path |
-|------|------|
-| S7 deps cleanup | [S7-deps-cleanup.md](./S7-deps-cleanup.md) |
-| S8 site chrome | [S8-site-chrome.md](./S8-site-chrome.md) |
+**Nothing here is complete.** Old notes / marketing “mostly DONE” claims are untrusted.
 
-S5/S6 residual dumps removed from law layer (obsolete vs live cards).
+| Card | Status | Owns |
+|------|--------|------|
+| [S7](./S7-deps-cleanup.md) | **OPEN** | Dependency cleanup (plan → owner OK → cut) |
+| [S8](./S8-site-chrome.md) | **OPEN** | Site chrome (toolbars / dropdowns / motion / CSS) |
 
-**Bar:** [03-QUALITY-BAR](../03-QUALITY-BAR.md)
+S5 catalog image · S6 portal list — residual work not closed; no DONE tick.
+
+```
+S7 deps (owner gate) → S8 chrome raise
+```
+
+Do not tick complete from memory or old Site BOARD copy.

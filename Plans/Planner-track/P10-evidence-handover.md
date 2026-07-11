@@ -1,25 +1,24 @@
-# P10 G�� Evidence handover
+# P10 — Evidence handover
 
-**CP:** CP-10 -+ **Evidence:** `10-handover/`
+**Status:** OPEN — not complete. Pack ≠ product ship.
+
+**CP:** CP-10 · **Evidence:** `results/planner/world-standard-wave/10-handover/`  
+**CP status:** [CHECKPOINTS](./CHECKPOINTS.md) · [BOARD](./BOARD.md)
 
 ## Goal
 
-Honest pack: W gate summary, HEAD, failures snip, backup log G�� **does not mean product shipped**.
+Honest pack: W-gate summary, HEAD, failures snip, backup log if claimed — **does not mean product shipped**.
 
-## Done when
+## Done when (unchecked)
 
 - [ ] `10-handover/` README + W-GATES + HEAD.txt + FAILURES-SNIP
-- [ ] MASTER checklist sync honest (waives recorded)
-- [ ] E: backup verified if claiming backup criterion
-- [ ] CP-00G��CP-09 PASS or WAIVE documented
+- [ ] CHECKPOINTS status honest (REPROVE/OPEN/WAIVE recorded — no master tick list)
+- [ ] E: backup verified only if claiming backup criterion
+- [ ] CP-00…CP-09 PASS or WAIVE documented with fresh proof paths
 
 ## Forbidden
 
 - Paper PASS without `results/` paths
 - Claiming product ship from pack alone
 
-## HOW
-
-Track map: [RESULTS-MAP](./.) -+ checklist: MASTER-CHECKLIST
-
-**Review:** [CODE-REVIEWS.md](../CODE-REVIEWS.md)
+[CODE-REVIEWS](./CODE-REVIEWS.md) is untrusted history only.

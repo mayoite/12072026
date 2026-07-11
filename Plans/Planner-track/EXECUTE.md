@@ -1,12 +1,13 @@
 # Planner-track · execute (reproof)
 
 1. [CONSTRAINTS](./CONSTRAINTS.md) · [BOARD](./BOARD.md)
-2. `modules/P0X/plan/P0X-*.md` ? [CODE-REVIEWS](./CODE-REVIEWS.md)
-3. RESULTS-MAP
+2. Active flat card `P0X-*.md` · status in [CHECKPOINTS](./CHECKPOINTS.md)
+3. [CODE-REVIEWS](./CODE-REVIEWS.md) is untrusted history — re-prove, do not cite as PASS
 
 ```text
-P01 ? P02 ? P03 ? P05 ? P07 ? P06 ? P04 ? P08 ? P09 ? P10
+P01 → P02 → P03 → P07 → P06 → P04 → P05 → P08 → P09 → P10
 ```
 
-Evidence: `HEAD.txt` · `WORKTREE.txt` · `RUN-META.json` · `RAW-LOGS/` · `VERDICT.md`  
-Museum minimal · do not execute dumps.
+Evidence under `results/planner/world-standard-wave/`:  
+`HEAD.txt` · `WORKTREE.txt` · `RUN-META.json` · `RAW-LOGS/` · `VERDICT.md`  
+Old packs = clues only. Do not execute museum dumps.

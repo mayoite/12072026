@@ -30,7 +30,7 @@ const SCAN_DIRS = [
   "Planner-track/EXECUTE.md",
   "Planner-track/CODE-REVIEWS.md",
   "Planner-track/CONSTRAINTS.md",
-  // CHECKPOINTS + MASTER-CHECKLIST are program-law hubs at Planner-track root (length-exempt).
+  // CHECKPOINTS + CHECKPOINTS are program-law hubs at Planner-track root (length-exempt).
   "Planner-track",
   "Admin-track",
   "Site-track",
@@ -85,10 +85,7 @@ function isFlatPhaseCard(rel) {
 
 function isProgramLawHub(rel) {
   const n = path.normalize(rel).replace(/\\/g, "/");
-  return (
-    n === "Plans/Planner-track/CHECKPOINTS.md" ||
-    n === "Plans/Planner-track/MASTER-CHECKLIST.md"
-  );
+  return n === "Plans/Planner-track/CHECKPOINTS.md";
 }
 
 function lineLimitFor(rel) {

@@ -1,25 +1,10 @@
 # A2 — SVG pipeline (raised bar)
 
-> **Track:** A2 only · **Module:** `admin-svg-pipeline` (global-standard #3) · **Status:** OPEN
+**Status:** OPEN — not complete. Live Admin kill.
 
-## Goal
+**Goal:** Honest path admin author → server compile → `site/public/svg-catalog/{slug}.svg` on disk, with census and publish ritual — not “a few SVGs and hope.”
 
-Honest path from admin author → server compile → **`site/public/svg-catalog/{slug}.svg`** on disk, with census and publish ritual — not “~4 SVGs and hope.”
-
-## Read first
-
-1. [`docs/superpowers/plans/2026-07-10-global-standard-modules.md`](../../../../../docs/superpowers/plans/2026-07-10-global-standard-modules.md) — Task ritual + `admin-svg-pipeline` section
-2. [`Plans/03-QUALITY-BAR.md`](../../../../03-QUALITY-BAR.md)
-3. Locked contracts: [`docs/Lockedfiles/svg-pipeline/current.md`](../../../../../docs/Lockedfiles/svg-pipeline/current.md)
-4. Research notes: [`../research/`](../research/) (SVG-ORA · svgedit). Canvas inventory lives under Planner [P05 research](../../../../Planner-track/phases/P05-symbols-svg/research/) when present.
-5. History snapshots (do not edit): [`../supporting/from-plans1-admin-svg/`](../supporting/from-plans1-admin-svg/)
-
-## Module workspace (create when executing)
-
-```text
-results/planner/global-standard-revision/modules/admin-svg-pipeline/
-  README.md · BRAINSTORM.md · UI-EXPERT.md · SYNTHESIS.md · TASK-LIST.md · evidence/
-```
+**Bar:** [03-QUALITY-BAR](../03-QUALITY-BAR.md) · Locked: `docs/Lockedfiles/svg-pipeline/current.md`
 
 ## Key code
 
@@ -31,11 +16,11 @@ results/planner/global-standard-revision/modules/admin-svg-pipeline/
 | Admin API | `site/app/api/admin/svg-editor/route.ts` |
 | Editor UI | `site/features/planner/admin/svg-editor/` |
 
-## Done when (module complete — not gate theater)
+## Done when (all unchecked until proven)
 
-- SYNTHESIS lists raised PASS + OPEN residuals.
-- Census of `svg-catalog/*.svg` with publish path per slug.
-- Re-prove publish E2E after any pipeline change.
-- Evidence only under `modules/admin-svg-pipeline/evidence/`.
+- [ ] Census of `svg-catalog/*.svg` with publish path per slug
+- [ ] Publish E2E re-green after pipeline change (A1 path)
+- [ ] Written residuals (OPEN debt) under evidence — no silent ship
+- [ ] Evidence only under `results/planner/global-standard-revision/modules/admin-svg-pipeline/`
 
-**GATE PASS (A1) ≠ module complete (A2).**
+**A1 E2E green ≠ A2 module complete.**

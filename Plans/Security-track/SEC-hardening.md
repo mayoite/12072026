@@ -1,9 +1,10 @@
 # SEC-hardening — combined security phase
 
-**Status:** OPEN (work items on [BOARD.md](../../../BOARD.md))  
+**Status:** OPEN — not complete. Work items on [BOARD.md](./BOARD.md).
+
 **Owns:** CSP · CSRF · auth boundaries · RLS · upload surface · dep/secret scan
 
-Thin execute card for the single Security phase folder. Kill order and status live on the board (rows **SEC1**–**SEC6**). Land detail here when a row starts.
+Thin execute card. Kill order and status live on the board (rows **SEC1**–**SEC6**). Land detail here when a row starts.
 
 | Board ID | Work |
 |----------|------|
@@ -15,4 +16,4 @@ Thin execute card for the single Security phase folder. Kill order and status li
 | SEC6 | Dependency / secret scan in CI |
 
 **Rules:** one SEC-ID at a time · no secrets in git · no weakening CSP for theater PASS  
-**Related:** [Admin A3](../../../../Admin-track/phases/A3-production-auth/plan/A3-production-auth.md) overlaps SEC3
+**Related:** [Admin A3](../Admin-track/A3-production-auth.md) overlaps SEC3

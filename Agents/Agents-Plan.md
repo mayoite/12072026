@@ -14,7 +14,7 @@
 | Need | Where |
 |------|--------|
 | Kill order / unlock | [BOARD](../Plans/Planner-track/BOARD.md) · [START](../Plans/Planner-track/START.md) |
-| CP / owner ticks | [CHECKPOINTS](../Plans/Planner-track/CHECKPOINTS.md) · [MASTER-CHECKLIST](../Plans/Planner-track/MASTER-CHECKLIST.md) |
+| CP status (REPROVE until fresh proof) | [CHECKPOINTS](../Plans/Planner-track/CHECKPOINTS.md) — no master tick list |
 | Why / score / licenses | `ayushdocs/18` · `19` · `17-LICENSES-CLEARED` |
 | Evidence | `results/planner/world-standard-wave/` · checkout `.` only |
 

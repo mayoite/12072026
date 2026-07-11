@@ -8,10 +8,12 @@
 2. [CONSTRAINTS.md](./CONSTRAINTS.md)
 3. [BOARD.md](./BOARD.md)
 4. [EXECUTE.md](./EXECUTE.md)
-5. [CODE-REVIEWS.md](./CODE-REVIEWS.md) ? `modules/P0X/plan/P0X-*.md`
+5. Active card: `P0X-*.md` at this folder root · [CHECKPOINTS](./CHECKPOINTS.md)
 
+| | |
+|------|--------|
 | Approach | **A** |
 | Evidence W0 | `results/planner/world-standard-wave/00-start/NOTES.md` |
+| CP-00 | Process PASS only — do not re-ask unlock |
 
-**Bar:** [03-QUALITY-BAR](../03-QUALITY-BAR.md) · **Agents:** [Agents-Plan.md](../../Agents/Agents-Plan.md)
-**Evidence map:** RESULTS-MAP · **CP-00:** [CHECKPOINTS.md](./CHECKPOINTS.md) PASS
+**Bar:** [03-QUALITY-BAR](../03-QUALITY-BAR.md) · **Agents:** [Agents-Plan](../../Agents/Agents-Plan.md)
