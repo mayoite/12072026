@@ -668,6 +668,13 @@ export function AdminSvgEditorEditView({
               config={puckConfig}
               data={editorData}
               plugins={[NOOP_BLOCKS_PLUGIN, NOOP_OUTLINE_PLUGIN, fieldsPlugin()]}
+              permissions={{
+                drag: false,
+                duplicate: false,
+                delete: false,
+                edit: true,
+                insert: false,
+              }}
               onPublish={handlePublish}
             />
           </div>

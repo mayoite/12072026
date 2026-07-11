@@ -401,10 +401,15 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
 
     // Detail stroke widths ≥ 6mm (outer excluded — detail lines + inner rect)
     for (const p of block.prims) {
-      if (p.kind === "line" && p.strokeWidth != null) {
+      if (p.kind === "line" && p.strokeWidth !== null && p.strokeWidth !== undefined) {
         expect(p.strokeWidth).toBeGreaterThanOrEqual(6);
       }
-      if (p.kind === "rect" && p.fill === "none" && p.strokeWidth != null) {
+      if (
+        p.kind === "rect" &&
+        p.fill === "none" &&
+        p.strokeWidth !== null &&
+        p.strokeWidth !== undefined
+      ) {
         expect(p.strokeWidth).toBeGreaterThanOrEqual(6);
       }
     }

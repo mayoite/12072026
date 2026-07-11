@@ -13,7 +13,7 @@ vi.mock('@/lib/auth/session', () => ({
 }));
 
 vi.mock('@/features/planner/store/plannerPersistence', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@/features/planner/store/plannerPersistence')>();
+  const actual = await importOriginal();
   return {
     ...actual,
     isPlannerDatabaseConfigured: vi.fn(),

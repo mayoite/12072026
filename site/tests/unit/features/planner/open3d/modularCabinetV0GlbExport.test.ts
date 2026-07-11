@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import type { BoxGeometry, Mesh } from "three";
 import {
   GENERATED_GLB_PATH_MARKER,
   isSystemGeneratedGlbUrl,
@@ -107,8 +108,8 @@ describe("modularCabinetV0GlbExport — plan-only, policy-safe", () => {
 
     for (let i = 0; i < planParts.length; i++) {
       const plan = planParts[i]!;
-      const mesh = group.children[i] as import("three").Mesh;
-      const geom = mesh.geometry as import("three").BoxGeometry;
+      const mesh = group.children[i] as Mesh;
+      const geom = mesh.geometry as BoxGeometry;
       expect(plan.name).toBe(mesh.name);
       expect(plan.sizeM.x).toBeCloseTo(geom.parameters.width);
       expect(plan.sizeM.y).toBeCloseTo(geom.parameters.height);

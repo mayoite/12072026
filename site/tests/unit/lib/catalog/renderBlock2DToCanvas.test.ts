@@ -210,7 +210,7 @@ describe("furnitureBlock2DFromItem", () => {
       if (line.kind === "line") {
         expect(line.stroke).not.toMatch(/block-storage/);
         // Fractional thick strokes (floor ≥6mm) — not hairline 1–1.5mm
-        if (line.strokeWidth != null) {
+        if (line.strokeWidth !== null && line.strokeWidth !== undefined) {
           expect(line.strokeWidth).toBeGreaterThanOrEqual(6);
         }
       }

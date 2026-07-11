@@ -95,7 +95,7 @@ describe("summarizeWorkstationBoqV0", () => {
   });
 
   it("ignores non-workstation furniture", () => {
-    let project = createOpen3dProject({
+    const project = createOpen3dProject({
       idFactory: ids("floor-1", "project-1"),
       name: "BOQ empty",
       now: "2026-07-09T19:00:00.000Z",
@@ -129,4 +129,3 @@ describe("summarizeWorkstationBoqV0", () => {
     expect(cart[0]!.name).toMatch(/₹/);
   });
 });
-
