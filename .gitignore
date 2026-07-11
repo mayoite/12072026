@@ -95,6 +95,8 @@ site/public/catalog-assets/generated/*.glb
 
 .firecrawl/
 
+# Competitive research packs (~1.8GB Firecrawl/raw) — live at repo-root websites/; not product
+websites/
 
 # Local IDE workspace (do not track)
 *.code-workspace

@@ -31,7 +31,7 @@ Subagents → same bar · `/using-superpowers` · fit skills.
 - **Evidence** → repo-root `results/` only. Never `site/results/` or `site/test-results/`.
 - **`site/` tracked tree** → product code only. `site/node_modules/` = gitignored pnpm workspace shim (expected after root install; not committed). **Never** `npm install` under `site/` or `site/tech-stack-generator/` — no nested `package-lock.json` or `site/tech-stack-generator/node_modules/`.
 - **Durable** → flat `Plans/*-track/` · `Agents/` · `ayushdocs/` (5 files) · `docs/` (HOW + Lockedfiles overlays).
-- **Install** → `pnpm` from repo root. **Firecrawl dead.** Research ideas → external `websites` folder only.
+- **Install** → `pnpm` from repo root. **Firecrawl dead.** Research → repo-root **`websites/`** (gitignored; junction `D:\websites` → same). Never claim benchmarks missing without reading it.
 - Redirect stray tool output to `results/`. `pnpm run check:layout`.
 
 ## 6. Law (short)
