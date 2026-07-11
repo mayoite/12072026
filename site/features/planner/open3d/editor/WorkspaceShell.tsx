@@ -145,7 +145,10 @@ export function WorkspaceShell({
   } = useDockingSystem();
 
   useEffect(() => {
-    setViewportAttrReady(true);
+    const frame = requestAnimationFrame(() => {
+      setViewportAttrReady(true);
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   // Handle view mode change
@@ -457,4 +460,3 @@ export function WorkspaceShell({
     </div>
   );
 }
-

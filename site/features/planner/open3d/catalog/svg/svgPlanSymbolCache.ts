@@ -19,7 +19,8 @@ function isLoadedImage(entry: CacheEntry | undefined): entry is HTMLImageElement
   // Prefer duck-type over instanceof — unit FakeImage and some environments
   // do not satisfy `instanceof HTMLImageElement` even when drawImage-ready.
   return (
-    entry != null &&
+    entry !== null &&
+    entry !== undefined &&
     entry !== "loading" &&
     typeof (entry as HTMLImageElement).src === "string"
   );

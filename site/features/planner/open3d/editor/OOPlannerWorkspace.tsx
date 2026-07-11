@@ -290,7 +290,7 @@ export function OOPlannerWorkspace({
       },
       fitCanvas: () => canvasRef.current?.fitToView?.(),
     }),
-    [activeFloor, catalog.resolveItem, workspaceCanvas],
+    [activeFloor, catalog, workspaceCanvas],
   );
 
   const toggleDensity = useCallback(() => {

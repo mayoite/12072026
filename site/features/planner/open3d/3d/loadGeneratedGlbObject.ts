@@ -150,7 +150,7 @@ export async function loadGeneratedGlbObject(
   if (node.kind !== "furniture") return null;
   const url = node.generatedGlbUrl;
   if (!shouldLoadGlb(url)) return null;
-  if (url == null) return null;
+  if (url === null || url === undefined) return null;
 
   try {
     const fetchUrl = resolveGeneratedGlbFetchUrl(url, options);

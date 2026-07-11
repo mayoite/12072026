@@ -51,9 +51,13 @@ export type WorkstationConfiguratorDraftV0 = {
 };
 
 export function defaultWorkstationConfiguratorDraftV0(): WorkstationConfiguratorDraftV0 {
+  const firstSize = WORKSTATION_V0_SIZE_GRID[0];
+  if (!firstSize) {
+    throw new Error("Workstation size grid is empty.");
+  }
   return {
     shape: "linear",
-    size: { ...WORKSTATION_V0_SIZE_GRID[0]! },
+    size: { ...firstSize },
     toggledModules: ["pedestal", "panel"],
     heightMm: WORKSTATION_V0_DEFAULT_HEIGHT_MM,
   };

@@ -399,7 +399,7 @@ export const BlockDescriptorFixedSchema = BlockDescriptorCommonBaseSchema.extend
         .optional()
         .refine(
           (u) => {
-            if (u == null || u.trim() === "") return true;
+            if (u === null || u === undefined || u.trim() === "") return true;
             const t = u.trim();
             return t.startsWith("blob:") || t.includes("catalog-assets/generated/");
           },

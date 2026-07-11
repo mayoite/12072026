@@ -369,7 +369,7 @@ export function isPlannerDatabaseConfigured(): boolean {
  * false “storage is configured but query failed” panel.
  */
 function collectErrorMessages(error: unknown, depth = 0): string[] {
-  if (depth > 4 || error == null) return [];
+  if (depth > 4 || error === null || error === undefined) return [];
   const out: string[] = [];
   if (typeof error === "string") {
     out.push(error);

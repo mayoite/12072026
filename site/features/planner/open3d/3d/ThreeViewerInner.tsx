@@ -299,7 +299,7 @@ export function ThreeViewerInner({
           enableShadows,
           loadGltf,
         );
-        if (cancelled || glbObject == null) continue;
+        if (cancelled || glbObject === null || glbObject === undefined) continue;
 
         const existing = group.children.find(
           (child) => child.userData.entityId === node.id,

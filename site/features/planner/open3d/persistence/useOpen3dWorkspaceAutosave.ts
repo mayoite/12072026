@@ -31,7 +31,10 @@ export function useOpen3dWorkspaceAutosave(
   const didScheduleAfterHydrationRef = useRef(false);
   /** Always holds the latest project so schedule/flush never close over a stale snapshot. */
   const projectRef = useRef(project);
-  projectRef.current = project;
+
+  useEffect(() => {
+    projectRef.current = project;
+  }, [project]);
 
   const schedulePersist = useCallback(() => {
     if (!enabled || !hydrated) return;

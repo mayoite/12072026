@@ -40,7 +40,7 @@ export function isSystemGeneratedGlbUrl(url: string): boolean {
 export function rejectDesignerStaticGlbUrl(
   url: string | null | undefined,
 ): string | null {
-  if (url == null) return null;
+  if (url === null || url === undefined) return null;
   const trimmed = url.trim();
   if (!trimmed) return null;
   if (isSystemGeneratedGlbUrl(trimmed)) return null;
@@ -92,7 +92,7 @@ export function resolveFurnitureGlbUrl(
  * (catalog-assets/generated/* or blob:). Rejects designer static URLs.
  */
 export function shouldLoadGlb(url: string | null | undefined): boolean {
-  if (url == null) return false;
+  if (url === null || url === undefined) return false;
   const trimmed = url.trim();
   if (!trimmed) return false;
   return isSystemGeneratedGlbUrl(trimmed);

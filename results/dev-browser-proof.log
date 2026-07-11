@@ -111,3 +111,15 @@ Creating turbopack project { dir: 'D:\\OandO07072026\\site', testMode: true }
  GET /planner/guest/ 200 in 218ms (next.js: 84ms, proxy.ts: 61ms, application-code: 72ms)
  GET /admin/svg-editor/chaise-lounge-001/ 200 in 563ms (next.js: 167ms, proxy.ts: 3ms, application-code: 394ms)
  GET /api/csrf/ 200 in 137ms (next.js: 101ms, proxy.ts: 9ms, application-code: 27ms)
+ GET /planner/guest/ 200 in 39ms (next.js: 5ms, proxy.ts: 3ms, application-code: 31ms)
+✓ Compiled in 374ms
+ GET /planner/guest/ 200 in 1209ms (next.js: 130ms, proxy.ts: 277ms, application-code: 802ms)
+ GET /planner/guest/ 200 in 673ms (next.js: 147ms, proxy.ts: 206ms, application-code: 320ms)
+✓ Compiled in 528ms
+✓ Compiled in 769ms
+✓ Compiled in 482ms
+✓ Compiled in 547ms
+✓ Compiled in 477ms
+✓ Compiled in 580ms
+ GET /planner/guest/ 200 in 540ms (next.js: 198ms, proxy.ts: 123ms, application-code: 220ms)
+✓ Compiled in 488ms

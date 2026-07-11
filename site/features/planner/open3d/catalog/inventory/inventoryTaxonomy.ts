@@ -225,13 +225,13 @@ export function inventoryCategoriesForProduct(
     const byId = new Map(
       category.subCategories.map((sub) => [sub.id, sub] as const),
     );
-    const officeSubs: InventorySubCategory[] = [
-      { ...byId.get("desks")!, sortOrder: 1 },
-      { ...byId.get("chairs")!, sortOrder: 2 },
-      { ...byId.get("storage")!, sortOrder: 3 },
-      { ...byId.get("tables")!, sortOrder: 4 },
-      { ...byId.get("sofas")!, sortOrder: 5 },
-    ].filter(Boolean);
+    const orderedIds = ["desks", "chairs", "storage", "tables", "sofas"] as const;
+    const officeSubs: InventorySubCategory[] = orderedIds
+      .map((id, index) => {
+        const sub = byId.get(id);
+        return sub ? { ...sub, sortOrder: index + 1 } : null;
+      })
+      .filter((sub): sub is InventorySubCategory => sub !== null);
     return {
       ...category,
       subCategories: officeSubs,
