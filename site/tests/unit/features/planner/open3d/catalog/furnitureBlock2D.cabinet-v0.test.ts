@@ -108,8 +108,8 @@ function midVerticalStileCount(prims: Prim[], midX: number): number {
 }
 
 /**
- * Filled rects that are not the outer carcass (handles).
- * Fractional handles can exceed old absolute 80×40 mm filters.
+ * Small filled hardware rects (handles) — not outer carcass, door band, or shelf strips.
+ * Door band spans most of width; handles stay under ~25% of each side.
  */
 function handleRectCount(prims: Prim[], L: number, D: number): number {
   return prims.filter((p) => {
@@ -120,7 +120,10 @@ function handleRectCount(prims: Prim[], L: number, D: number): number {
       Math.abs(p.y) < 1 &&
       Math.abs(p.w - L) < 1 &&
       Math.abs(p.h - D) < 1;
-    return !isOuter;
+    if (isOuter) return false;
+    // Exclude full-width door face / shelf strips
+    if (p.w >= L * 0.5) return false;
+    return p.w < L * 0.25 && p.h < D * 0.25;
   }).length;
 }
 
@@ -292,8 +295,8 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
       }),
     );
 
-    expect(pair.prims.length).toBeGreaterThanOrEqual(4);
-    expect(slab.prims.length).toBeGreaterThanOrEqual(4);
+    expect(pair.prims.length).toBeGreaterThanOrEqual(5);
+    expect(slab.prims.length).toBeGreaterThanOrEqual(5);
     expect(JSON.stringify(pair.prims)).not.toEqual(JSON.stringify(slab.prims));
 
     // Pair always has a center stile; slab may also have a mid cue (allowed).
@@ -302,7 +305,7 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
     expect(handleRectCount(pair.prims, 800, 400)).toBe(2);
     expect(handleRectCount(slab.prims, 800, 400)).toBe(1);
 
-    // Slab handle offset to one side — not centered on mid-X
+    // Slab handle offset to one side — not centered on mid-X (exclude door band by size)
     const slabHandle = slab.prims.find((p) => {
       if (p.kind !== "rect" || p.fill === "none" || p.fill === undefined) return false;
       const isOuter =
@@ -310,7 +313,8 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
         Math.abs(p.y) < 1 &&
         Math.abs(p.w - 800) < 1 &&
         Math.abs(p.h - 400) < 1;
-      return !isOuter;
+      if (isOuter) return false;
+      return p.w < 800 * 0.25 && p.h < 400 * 0.25;
     });
     expect(slabHandle?.kind).toBe("rect");
     if (slabHandle?.kind === "rect") {
@@ -336,15 +340,50 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
     expect(midVerticalStileCount(open.prims, midX)).toBe(0);
     expect(handleRectCount(open.prims, 800, 400)).toBe(0);
 
-    const dashedHoriz = open.prims.filter((p) => {
-      if (p.kind !== "line" || p.points.length < 4) return false;
-      const y0 = p.points[1]!;
-      const y1 = p.points[3]!;
-      const isHoriz = Math.abs(y0 - y1) < 2;
-      return isHoriz && Array.isArray(p.dash) && p.dash.length > 0;
+    // Open shelves: filled horizontal shelf strips (readable at plan zoom, not hairlines only)
+    const shelfStrips = open.prims.filter((p) => {
+      if (p.kind !== "rect" || p.fill === "none" || p.fill === undefined) return false;
+      const isOuter =
+        Math.abs(p.x) < 1 &&
+        Math.abs(p.y) < 1 &&
+        Math.abs(p.w - 800) < 1 &&
+        Math.abs(p.h - 400) < 1;
+      if (isOuter) return false;
+      return p.w >= 800 * 0.5 && p.h < 400 * 0.15;
     });
-    // Open shelves: at least two dashed horizontal shelf lines
-    expect(dashedHoriz.length).toBeGreaterThanOrEqual(2);
+    expect(shelfStrips.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("has distinct body + door fills (not single cream tile)", () => {
+    const block = furnitureBlock2DFromItem(cabinetItem());
+    const fills = new Set(
+      block.prims
+        .filter((p): p is Extract<Prim, { kind: "rect" }> => p.kind === "rect")
+        .map((p) => p.fill)
+        .filter((f): f is string => typeof f === "string" && f !== "none"),
+    );
+    // body, door band, handle — at least 2 distinct non-none fills
+    expect(fills.size).toBeGreaterThanOrEqual(2);
+    const outer = block.prims.find(
+      (p) =>
+        p.kind === "rect" &&
+        Math.abs(p.x) < 1 &&
+        Math.abs(p.y) < 1 &&
+        Math.abs(p.w - 800) < 1,
+    );
+    expect(outer?.kind).toBe("rect");
+    if (outer?.kind === "rect") {
+      expect(String(outer.fill).toLowerCase()).not.toBe("#f7f2e8");
+    }
+    // Filled door band near front (not stroke-only multiprim)
+    const doorBand = block.prims.find((p) => {
+      if (p.kind !== "rect" || p.fill === "none" || !p.fill) return false;
+      return p.y > 400 * 0.55 && p.w > 800 * 0.5;
+    });
+    expect(doorBand).toBeDefined();
+    if (doorBand?.kind === "rect" && outer?.kind === "rect") {
+      expect(doorBand.fill).not.toBe(outer.fill);
+    }
   });
 
   it("600×580 footprint uses fractional inset/handle/strokes (plan-zoom lock)", () => {
@@ -379,7 +418,7 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
     expect(w - (inner.x + inner.w)).toBeGreaterThanOrEqual(minSide * 0.1 - 0.01);
     expect(d - (inner.y + inner.h)).toBeGreaterThanOrEqual(minSide * 0.1 - 0.01);
 
-    // Handle: area ≥ 0.5% footprint OR width ≥ 8% of w
+    // Hardware handle: small filled rect (door band excluded by width)
     const handles = block.prims.filter((p) => {
       if (p.kind !== "rect" || p.fill === "none" || p.fill === undefined) return false;
       const isOuter =
@@ -387,7 +426,8 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
         Math.abs(p.y) < 1 &&
         Math.abs(p.w - w) < 1 &&
         Math.abs(p.h - d) < 1;
-      return !isOuter;
+      if (isOuter) return false;
+      return p.w < w * 0.25 && p.h < d * 0.25;
     });
     expect(handles.length).toBeGreaterThanOrEqual(1);
     const footprintArea = w * d;
@@ -398,6 +438,16 @@ describe("cabinet-v0 Block2D plan symbol (W2)", () => {
       const widthOk = h.w >= w * 0.08;
       expect(areaOk || widthOk).toBe(true);
     }
+    // Door face band must exist as filled multiprim (not cream-only tile)
+    const doorBand = block.prims.find(
+      (p) =>
+        p.kind === "rect" &&
+        p.fill !== "none" &&
+        p.fill !== undefined &&
+        p.w >= w * 0.5 &&
+        p.y > d * 0.55,
+    );
+    expect(doorBand).toBeDefined();
 
     // Detail stroke widths ≥ 6mm (outer excluded — detail lines + inner rect)
     for (const p of block.prims) {

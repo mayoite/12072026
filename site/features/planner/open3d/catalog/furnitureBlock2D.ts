@@ -47,7 +47,8 @@ function boxBlock(widthMm: number, depthMm: number, heightMm: number, label: str
  * At plan zoom (~0.1 scale) a 600×580 cabinet is ~60px — fixed 16mm inset (~1.6px)
  * and 12mm handles collapse to an empty cream tile. Fractions keep multiprim legible.
  *
- * Colors are literal hex (CSS vars often fail on Canvas2D → black blob).
+ * Colors are literal hex (CSS vars often fail on Canvas2D / Fabric theme resolver → blob).
+ * Body + door face use **distinct fills** so eyes see structure, not one cream rectangle.
  */
 function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
   const opts = item.modularOptions;
@@ -55,19 +56,27 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
   const d = Math.max(1, opts?.depthMm ?? item.depth ?? DEFAULT_MM);
   const h = opts?.heightMm ?? item.height ?? 900;
   const doorStyle = opts?.doorStyle ?? "slab";
+  const material = (opts?.material ?? "white").toLowerCase();
 
   // Fractions of the smaller side so symbols read when footprint is ~40–80 screen px.
   const m = Math.min(w, d);
   const inset = Math.max(m * 0.1, m * 0.12); // ~10–12% carcass wall
-  const frontBand = Math.max(m * 0.14, d * 0.12);
+  // Door band is a filled strip (not a hairline) so structure survives plan zoom.
+  const frontBand = Math.max(m * 0.22, d * 0.2);
   const frontY = d - frontBand;
-  const fill = "#f7f2e8";
+  // Warm body / cooler door / dark hardware — three readable colors at ~60px.
+  const bodyFill = material === "oak" ? "#d9b88a" : "#e8d9c0";
+  const doorFill = material === "oak" ? "#c4a06e" : "#c9b89a";
   const stroke = "#1a1814";
-  const detailStroke = "#2a2620";
-  // Thick relative strokes; resolveCanvasStrokeWidthMm still floors to screen px.
-  const outerSw = Math.max(m * 0.035, 8);
-  const detailSw = Math.max(m * 0.028, 6);
-  const frontSw = Math.max(m * 0.04, 10);
+  const detailStroke = "#3a3228";
+  const handleFill = "#4a4034";
+  // Thick relative strokes; Fabric + canvas floor still to ≥1.5 screen px.
+  const outerSw = Math.max(m * 0.045, 10);
+  const detailSw = Math.max(m * 0.035, 8);
+  const frontSw = Math.max(m * 0.05, 12);
+
+  const innerW = Math.max(1, w - inset * 2);
+  const innerH = Math.max(1, d - inset * 2);
 
   const prims: Prim[] = [
     {
@@ -76,23 +85,36 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
       y: 0,
       w,
       h: d,
-      fill,
+      fill: bodyFill,
       stroke,
       strokeWidth: outerSw,
       radius: Math.min(m * 0.04, 12),
     },
+    // Inner carcass void (stroke only) — readable wall thickness.
     {
       kind: "rect",
       x: inset,
       y: inset,
-      w: Math.max(1, w - inset * 2),
-      h: Math.max(1, d - inset * 2),
+      w: innerW,
+      h: innerH,
       fill: "none",
       stroke: detailStroke,
       strokeWidth: detailSw,
       radius: Math.min(m * 0.02, 6),
     },
-    // Front door face (thick)
+    // Filled door face band at front — primary multiprim cue (not a single cream tile).
+    {
+      kind: "rect",
+      x: inset,
+      y: frontY,
+      w: innerW,
+      h: Math.max(1, frontBand - inset * 0.25),
+      fill: doorFill,
+      stroke: detailStroke,
+      strokeWidth: frontSw * 0.65,
+      radius: Math.min(m * 0.015, 4),
+    },
+    // Front hinge edge (thick)
     {
       kind: "line",
       points: [inset, frontY, w - inset, frontY],
@@ -111,21 +133,22 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
   if (doorStyle === "pair") {
     prims.push({
       kind: "line",
-      points: [w * 0.5, inset, w * 0.5, frontY],
+      points: [w * 0.5, frontY, w * 0.5, d - inset * 0.4],
       stroke: detailStroke,
       strokeWidth: detailSw,
-      dash: [m * 0.06, m * 0.04],
     });
-    const handleW = Math.max(w * 0.1, m * 0.08);
-    const handleH = Math.max(d * 0.08, m * 0.06);
-    const handleY = frontY - handleH - m * 0.03;
+    const handleW = Math.max(w * 0.08, m * 0.07);
+    const handleH = Math.max(d * 0.1, m * 0.08);
+    const handleY = frontY + frontBand * 0.35 - handleH / 2;
     prims.push({
       kind: "rect",
       x: w * 0.25 - handleW / 2,
       y: handleY,
       w: handleW,
       h: handleH,
-      fill: detailStroke,
+      fill: handleFill,
+      stroke,
+      strokeWidth: Math.max(m * 0.01, 2),
       radius: 2,
     });
     prims.push({
@@ -134,51 +157,48 @@ function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
       y: handleY,
       w: handleW,
       h: handleH,
-      fill: detailStroke,
+      fill: handleFill,
+      stroke,
+      strokeWidth: Math.max(m * 0.01, 2),
       radius: 2,
     });
   } else if (doorStyle === "slab") {
-    // Single door: handle + mid vertical cue so it is not an empty tile
-    const handleW = Math.max(w * 0.12, m * 0.1);
-    const handleH = Math.max(d * 0.1, m * 0.08);
+    // Single door: oversized handle + mid stile so it is not an empty tile
+    const handleW = Math.max(w * 0.1, m * 0.09);
+    const handleH = Math.max(d * 0.12, m * 0.1);
     prims.push({
       kind: "rect",
-      x: w - inset - handleW - m * 0.04,
-      y: frontY - handleH - m * 0.03,
+      x: w - inset - handleW - m * 0.05,
+      y: frontY + frontBand * 0.28 - handleH / 2,
       w: handleW,
       h: handleH,
-      fill: detailStroke,
+      fill: handleFill,
+      stroke,
+      strokeWidth: Math.max(m * 0.01, 2),
       radius: 2,
     });
     prims.push({
       kind: "line",
-      points: [w * 0.5, inset + m * 0.05, w * 0.5, frontY - m * 0.05],
+      points: [w * 0.5, inset + m * 0.04, w * 0.5, frontY - m * 0.02],
       stroke: detailStroke,
-      strokeWidth: detailSw * 0.75,
-      dash: [m * 0.05, m * 0.04],
+      strokeWidth: detailSw * 0.85,
+      dash: [m * 0.06, m * 0.04],
     });
   } else {
-    prims.push({
-      kind: "line",
-      points: [inset, d * 0.35, w - inset, d * 0.35],
-      stroke: detailStroke,
-      strokeWidth: detailSw,
-      dash: [m * 0.08, m * 0.04],
-    });
-    prims.push({
-      kind: "line",
-      points: [inset, d * 0.55, w - inset, d * 0.55],
-      stroke: detailStroke,
-      strokeWidth: detailSw,
-      dash: [m * 0.08, m * 0.04],
-    });
-    prims.push({
-      kind: "line",
-      points: [inset, d * 0.75, w - inset, d * 0.75],
-      stroke: detailStroke,
-      strokeWidth: detailSw,
-      dash: [m * 0.08, m * 0.04],
-    });
+    // Open shelves — three filled shelf strips (not hairlines only)
+    for (const yFrac of [0.35, 0.55, 0.75] as const) {
+      const sy = d * yFrac;
+      prims.push({
+        kind: "rect",
+        x: inset,
+        y: sy - m * 0.02,
+        w: innerW,
+        h: Math.max(m * 0.035, 4),
+        fill: doorFill,
+        stroke: detailStroke,
+        strokeWidth: detailSw * 0.6,
+      });
+    }
   }
 
   return {

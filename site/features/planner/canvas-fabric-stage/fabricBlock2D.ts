@@ -11,17 +11,40 @@ export type FabricBlockOptions = {
   readonly resolveColor: (token: string, fallback: string) => string;
 };
 
+/**
+ * Resolve prim paint for Fabric.
+ * Literal hex/rgb must pass through — resolveStageColor historically treated
+ * every token as a CSS variable and fell back, killing multiprim contrast.
+ */
 function paint(
   token: string | undefined,
   fallback: string,
   resolveColor: FabricBlockOptions["resolveColor"],
 ): string {
   if (!token || token === "none") return "transparent";
+  if (token === "transparent") return "transparent";
+  // Keep authored literal colors (cabinet multiprim uses hex on purpose).
+  if (/^#([0-9a-f]{3,8})$/i.test(token) || /^(rgb|hsl)a?\(/i.test(token)) {
+    return token;
+  }
   return resolveColor(token, fallback);
 }
 
+/**
+ * Stroke in screen px. Prim strokeWidth is authored in mm; multiply by plan scale.
+ * Floor at 1.5px so door lines/handles survive default zoom (~0.1 → ~60px cabinet).
+ */
 function strokeWidth(value: number | undefined, scale: number): number {
-  return Math.max(1, (value ?? 1) * scale);
+  return Math.max(1.5, (value ?? 1) * scale);
+}
+
+/** Exported for unit tests — literal hex bypass of theme resolver. */
+export function resolveFabricPrimPaint(
+  token: string | undefined,
+  fallback: string,
+  resolveColor: FabricBlockOptions["resolveColor"] = (_t, fb) => fb,
+): string {
+  return paint(token, fallback, resolveColor);
 }
 
 function pathFromArc(prim: Extract<Prim, { kind: "arc" }>): string {
@@ -61,6 +84,7 @@ function fabricPrim(
         fill: paint(prim.fill, "#e2e8f0", resolveColor),
         stroke: paint(prim.stroke, "#334155", resolveColor),
         strokeWidth: strokeWidth(prim.strokeWidth, scale),
+        strokeUniform: true,
       });
     case "circle":
       return new Circle({
@@ -71,7 +95,10 @@ function fabricPrim(
         fill: paint(prim.fill, "#e2e8f0", resolveColor),
         stroke: paint(prim.stroke, "#334155", resolveColor),
         strokeWidth: strokeWidth(prim.strokeWidth, scale),
-        strokeDashArray: prim.dash ? [...prim.dash].map((dash) => dash * scale) : undefined,
+        strokeUniform: true,
+        strokeDashArray: prim.dash
+          ? [...prim.dash].map((dash) => Math.max(1.5, dash * scale))
+          : undefined,
       });
     case "line":
       {
@@ -79,9 +106,10 @@ function fabricPrim(
           ...common,
           stroke: paint(prim.stroke, "#334155", resolveColor),
           strokeWidth: strokeWidth(prim.strokeWidth, scale),
+          strokeUniform: true,
           strokeLineCap: prim.lineCap ?? "round",
           strokeDashArray: prim.dash
-            ? [...prim.dash].map((dash) => dash * scale)
+            ? [...prim.dash].map((dash) => Math.max(1.5, dash * scale))
             : undefined,
         };
         if (prim.points.length === 4) {
@@ -107,6 +135,7 @@ function fabricPrim(
         fill: paint(prim.fill, "transparent", resolveColor),
         stroke: paint(prim.stroke, "#334155", resolveColor),
         strokeWidth: strokeWidth(prim.strokeWidth, 1),
+        strokeUniform: true,
         strokeLineCap: prim.lineCap ?? "round",
       });
     case "path":
@@ -119,6 +148,7 @@ function fabricPrim(
         fill: paint(prim.fill, "transparent", resolveColor),
         stroke: paint(prim.stroke, "#334155", resolveColor),
         strokeWidth: strokeWidth(prim.strokeWidth, 1),
+        strokeUniform: true,
         strokeLineCap: prim.lineCap ?? "round",
       });
   }

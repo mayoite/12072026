@@ -97,8 +97,21 @@ function hostPoint(host: HTMLElement, clientX: number, clientY: number): Open3dP
   return { x: clientX - rect.left, y: clientY - rect.top };
 }
 
+/**
+ * Theme token → paint string for walls/background.
+ * Literal hex/rgb pass through so furniture multiprim contrast is not destroyed.
+ */
 function resolveStageColor(token: string, fallback: string): string {
+  if (!token) return fallback;
+  if (/^#([0-9a-f]{3,8})$/i.test(token) || /^(rgb|hsl)a?\(/i.test(token)) {
+    return token;
+  }
   try {
+    // resolvePaintColor(color, fallbackToken): pass var/token as color when present.
+    if (token.startsWith("--") || token.startsWith("var(")) {
+      return resolvePaintColor(token, fallback);
+    }
+    // Bare PLANNER_COLOR_TOKENS keys historically went through fallbackToken path.
     return resolvePaintColor(undefined, token);
   } catch {
     return fallback;

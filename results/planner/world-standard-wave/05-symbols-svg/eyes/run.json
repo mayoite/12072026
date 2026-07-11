@@ -1,0 +1,230 @@
+{
+  "date": "2026-07-11T18:20:11.898Z",
+  "furniture": -1,
+  "diversity": {
+    "sampleCount": 29160,
+    "uniqueQuantized": 78
+  },
+  "fabric": {
+    "hasFabric": true,
+    "count": 6,
+    "objs": [
+      {
+        "type": "line",
+        "childCount": 0,
+        "children": null
+      },
+      {
+        "type": "line",
+        "childCount": 0,
+        "children": null
+      },
+      {
+        "type": "line",
+        "childCount": 0,
+        "children": null
+      },
+      {
+        "type": "line",
+        "childCount": 0,
+        "children": null
+      },
+      {
+        "type": "group",
+        "childCount": 7,
+        "children": [
+          {
+            "type": "rect",
+            "fill": "#e8d9c0",
+            "stroke": "#1a1814",
+            "strokeWidth": 5.594766794100002,
+            "w": 128.61532860000005,
+            "h": 124.32815098000005
+          },
+          {
+            "type": "rect",
+            "fill": "transparent",
+            "stroke": "#3a3228",
+            "strokeWidth": 4.351485284300002,
+            "w": 98.77657236480005,
+            "h": 94.48939474480004
+          },
+          {
+            "type": "rect",
+            "fill": "#c9b89a",
+            "stroke": "#3a3228",
+            "strokeWidth": 4.040664906850002,
+            "w": 98.77657236480005,
+            "h": 23.622348686200006
+          },
+          {
+            "type": "line",
+            "fill": "rgb(0,0,0)",
+            "stroke": "#3a3228",
+            "strokeWidth": 6.216407549000002,
+            "w": 98.77657236480003,
+            "h": 0
+          },
+          {
+            "type": "line",
+            "fill": "rgb(0,0,0)",
+            "stroke": "#3a3228",
+            "strokeWidth": 4.351485284300002,
+            "w": 98.77657236480003,
+            "h": 0
+          },
+          {
+            "type": "rect",
+            "fill": "#4a4034",
+            "stroke": "#1a1814",
+            "strokeWidth": 1.5,
+            "w": 12.861532860000006,
+            "h": 14.919378117600004
+          },
+          {
+            "type": "line",
+            "fill": "rgb(0,0,0)",
+            "stroke": "#3a3228",
+            "strokeWidth": 3.698762491655001,
+            "w": 0,
+            "h": 74.59689058800001
+          }
+        ]
+      },
+      {
+        "type": "group",
+        "childCount": 16,
+        "children": [
+          {
+            "type": "rect",
+            "fill": "#070d121f",
+            "stroke": "transparent",
+            "strokeWidth": 1.5,
+            "w": 167.8430038230001,
+            "h": 339.18434458392016
+          },
+          {
+            "type": "rect",
+            "fill": "#b7a079",
+            "stroke": "transparent",
+            "strokeWidth": 1.5,
+            "w": 167.8430038230001,
+            "h": 7.288201954000003
+          },
+          {
+            "type": "rect",
+            "fill": "#cbb78f",
+            "stroke": "transparent",
+            "strokeWidth": 1.5,
+            "w": 5.976325602280003,
+            "h": 338.3097603494402
+          },
+          {
+            "type": "rect",
+            "fill": "transparent",
+            "stroke": "#334155",
+            "strokeWidth": 1.5,
+            "w": 167.8430038230001,
+            "h": 339.18434458392016
+          },
+          {
+            "type": "line",
+            "fill": "rgb(0,0,0)",
+            "stroke": "#fff6",
+            "strokeWidth": 1.5,
+            "w": 163.98454396500009,
+            "h": 0
+          },
+          {
+            "type": "line",
+            "fill": "rgb(0,0,0)",
+            "stroke": "#fff3",
+            "strokeWidth": 1.5,
+            "w": 0,
+            "h": 334.89716696392014
+          },
+          {
+            "type": "rect",
+            "fill": "#e2e8f0",
+            "stroke": "#334155",
+            "strokeWidth": 1.5,
+            "w": 94.31790764000004,
+            "h": 8.574355240000004
+          },
+          {
+            "type": "rect",
+            "fill": "#e2e8f0",
+            "stroke": "transparent",
+            "strokeWidth": 1.5,
+            "w": 12.004097336000006,
+            "h": 3.858459858000002
+          },
+          {
+            "type": "rect",
+            "fill": "#fff",
+            "stroke": "#e2e8f0",
+            "strokeWidth": 1.5,
+            "w": 64.30766430000003,
+            "h": 17.14871048000001
+          },
+          {
+            "type": "rect",
+            "fill": "#070d120f",
+            "stroke": "transparent",
+            "strokeWidth": 1.5,
+            "w": 75.45432611200005,
+            "h": 6.859484192000004
+          },
+          {
+            "type": "circle",
+            "fill": "#e2e8f0",
+            "stroke": "#334155",
+            "strokeWidth": 1.5,
+            "w": 8.574355240000004,
+            "h": 8.574355240000004
+          },
+          {
+            "type": "circle",
+            "fill": "#e2e8f0",
+            "stroke": "#334155",
+            "strokeWidth": 1.5,
+            "w": 8.574355240000004,
+            "h": 8.574355240000004
+          },
+          {
+            "type": "rect",
+            "fill": "#e2e8f0",
+            "stroke": "#334155",
+            "strokeWidth": 1.5,
+            "w": 94.31790764000004,
+            "h": 85.74355240000004
+          },
+          {
+            "type": "rect",
+            "fill": "transparent",
+            "stroke": "#334155",
+            "strokeWidth": 1.5,
+            "w": 60.363460889600034,
+            "h": 70.30971296800004
+          },
+          {
+            "type": "rect",
+            "fill": "#e2e8f0",
+            "stroke": "#334155",
+            "strokeWidth": 1.5,
+            "w": 64.13617719520005,
+            "h": 10.289226288000005
+          },
+          {
+            "type": "rect",
+            "fill": "#e2e8f0",
+            "stroke": "transparent",
+            "strokeWidth": 1.5,
+            "w": 56.59074458400003,
+            "h": 1.714871048000001
+          }
+        ]
+      }
+    ]
+  }
+}
