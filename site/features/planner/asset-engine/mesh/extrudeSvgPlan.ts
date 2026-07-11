@@ -113,7 +113,7 @@ function sanitizeColorSlug(color: string): string {
 }
 
 function normalizeThicknessMm(raw: number | undefined): number {
-  if (raw == null || !Number.isFinite(raw) || raw <= 0) {
+  if (raw === null || raw === undefined || !Number.isFinite(raw) || raw <= 0) {
     return DEFAULT_EXTRUDE_THICKNESS_MM;
   }
   return raw;

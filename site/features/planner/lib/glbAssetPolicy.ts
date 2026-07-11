@@ -80,7 +80,7 @@ export function resolveFurnitureGlbUrl(
     sources.meshUrl,
   ];
   for (const candidate of candidates) {
-    if (candidate == null) continue;
+    if (candidate === null || candidate === undefined) continue;
     const trimmed = candidate.trim();
     if (trimmed) return trimmed;
   }

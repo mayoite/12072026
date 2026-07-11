@@ -445,7 +445,7 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
         canvas.dispose();
         fabricRef.current = null;
       };
-    }, []);
+    }, [activeFloor?.walls.length, emitStatus, onStatusChange]);
 
     useEffect(() => {
       const canvas = fabricRef.current;
