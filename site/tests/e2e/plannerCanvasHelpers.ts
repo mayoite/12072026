@@ -1,8 +1,10 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 /** Live sole 2D host = Open3dFabricStage (not archive Feasibility `planner-2d-canvas`). */
-export const PLANNER_PRIMARY_CANVAS = '[data-testid="open3d-fabric-stage"] canvas';
 export const PLANNER_FABRIC_STAGE = '[data-testid="open3d-fabric-stage"]';
+/** Fabric mounts lower + upper canvas; interact with upper (events). Strict-mode single. */
+export const PLANNER_PRIMARY_CANVAS =
+  '[data-testid="open3d-fabric-stage"] canvas.upper-canvas';
 
 /** TopBar view-mode radiogroup - product labels are literal "2D" / "3D" (role=radio). */
 export const VIEW_MODE_RADIOGROUP_NAME = "View mode";
@@ -32,7 +34,17 @@ export async function switchPlannerViewMode(
 ): Promise<void> {
   const radio = plannerViewModeRadio(page, mode);
   await expect(radio).toBeVisible({ timeout: 15_000 });
-  await radio.click();
+  // React Aria: visible label intercepts pointer events over the input.
+  // Prefer label click; fall back to force on the radio.
+  const label = page
+    .getByRole("radiogroup", { name: VIEW_MODE_RADIOGROUP_NAME })
+    .locator("label")
+    .filter({ has: radio });
+  if ((await label.count()) > 0) {
+    await label.first().click();
+  } else {
+    await radio.click({ force: true });
+  }
   await expect(radio).toBeChecked({ timeout: 10_000 });
 }
 
@@ -60,16 +72,15 @@ function plannerToolNamePattern(toolName: string): RegExp {
 
 export function plannerToolButton(page: Page, toolName: string): Locator {
   const pattern = plannerToolNamePattern(toolName);
-  // open3d CanvasToolRail: Select/Pan live under "Navigation tools"; draw tools under
-  // "Drawing tools". Scope to the rail so Select works (Drawing-tools-only was a false fail).
-  const open3dRail = page
-    .getByRole("navigation", { name: "Canvas tools" })
-    .getByRole("button", { name: pattern });
-  // Legacy / fabric fallback: whole group labeled Drawing tools.
+  // Live CanvasToolRail uses role=radio under Navigation / Drawing radiogroups.
+  const canvasTools = page.getByRole("navigation", { name: "Canvas tools" });
+  const radio = canvasTools.getByRole("radio", { name: pattern });
+  // Legacy fallbacks: button in nav or Drawing tools group.
+  const open3dButton = canvasTools.getByRole("button", { name: pattern });
   const drawingGroup = page
     .getByRole("group", { name: "Drawing tools" })
     .getByRole("button", { name: pattern });
-  return open3dRail.or(drawingGroup);
+  return radio.or(open3dButton).or(drawingGroup);
 }
 
 export async function canvasPoint(
@@ -140,21 +151,35 @@ export async function selectPlannerTool(page: Page, toolName: string): Promise<v
   const button = plannerToolButton(page, toolName);
   await expect(button).toBeVisible({ timeout: 15_000 });
   await button.scrollIntoViewIfNeeded();
-  // Already armed (e.g. Place auto-returns to Select) — skip re-click thrash.
-  if ((await button.getAttribute("aria-pressed")) !== "true") {
+  // Radios use aria-checked; legacy buttons use aria-pressed.
+  const role = await button.getAttribute("role");
+  const isRadio = role === "radio";
+  const armed = isRadio
+    ? (await button.getAttribute("aria-checked")) === "true" ||
+      (await button.isChecked().catch(() => false))
+    : (await button.getAttribute("aria-pressed")) === "true";
+  if (!armed) {
     await button.click();
     try {
-      await expect(button).toHaveAttribute("aria-pressed", "true", {
-        timeout: 2_000,
-      });
+      if (isRadio) {
+        await expect(button).toBeChecked({ timeout: 2_000 });
+      } else {
+        await expect(button).toHaveAttribute("aria-pressed", "true", {
+          timeout: 2_000,
+        });
+      }
     } catch {
       // Retry via DOM click so status-bar / sticky chrome intercepts cannot block.
       await button.evaluate((el: HTMLElement) => {
         el.click();
       });
-      await expect(button).toHaveAttribute("aria-pressed", "true", {
-        timeout: 5_000,
-      });
+      if (isRadio) {
+        await expect(button).toBeChecked({ timeout: 5_000 });
+      } else {
+        await expect(button).toHaveAttribute("aria-pressed", "true", {
+          timeout: 5_000,
+        });
+      }
     }
   }
   await waitForPlannerCanvas(page);
@@ -190,8 +215,8 @@ export async function getFurnitureCount(page: Page): Promise<number> {
 }
 
 /**
- * Open3d wall tool: two taps (start then end). Wall guidance is click-click;
- * micro-drag helpers can miss commit on some pointer paths.
+ * Open3d Fabric wall tool: press at start → drag → release at end.
+ * Live host commits on pointerup when length ≥ 10mm (not two independent taps).
  */
 export async function drawWallByTwoClicks(
   page: Page,
@@ -199,9 +224,7 @@ export async function drawWallByTwoClicks(
   to: { rx: number; ry: number },
 ): Promise<void> {
   await selectPlannerTool(page, "Wall");
-  await tapOnCanvas(page, from.rx, from.ry);
-  await page.waitForTimeout(200);
-  await tapOnCanvas(page, to.rx, to.ry);
+  await dragOnCanvas(page, from, to);
   await page.waitForTimeout(200);
 }
 
@@ -309,27 +332,33 @@ export async function clickCatalogAddToCanvas(
   await btn.evaluate((el: HTMLElement) => {
     el.click();
   });
-  const placeTool = page
-    .getByRole("group", { name: "Drawing tools" })
-    .getByRole("button", { name: /^Place(?: \(|$)/i });
+  const placeTool = plannerToolButton(page, "Place");
   // Retry once if React arm did not stick (virtual list re-render / intercept).
   try {
-    await expect(placeTool).toHaveAttribute("aria-pressed", "true", {
-      timeout: 2_000,
-    });
+    await expect(placeTool).toBeChecked({ timeout: 2_000 });
   } catch {
-    await btn.evaluate((el: HTMLElement) => {
-      el.dispatchEvent(
-        new MouseEvent("click", {
-          bubbles: true,
-          cancelable: true,
-          view: window,
-        }),
-      );
-    });
-    await expect(placeTool).toHaveAttribute("aria-pressed", "true", {
-      timeout: 8_000,
-    });
+    try {
+      await expect(placeTool).toHaveAttribute("aria-pressed", "true", {
+        timeout: 500,
+      });
+    } catch {
+      await btn.evaluate((el: HTMLElement) => {
+        el.dispatchEvent(
+          new MouseEvent("click", {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          }),
+        );
+      });
+      try {
+        await expect(placeTool).toBeChecked({ timeout: 8_000 });
+      } catch {
+        await expect(placeTool).toHaveAttribute("aria-pressed", "true", {
+          timeout: 8_000,
+        });
+      }
+    }
   }
   return btn;
 }
@@ -356,6 +385,17 @@ export async function placeSeatsFromConfigurator(
   page: Page,
   seats: 2 | 4 | 10 = 4,
 ): Promise<void> {
+  // Left panel may open on AI Assist; configurator lives under Library.
+  const libraryTab = page
+    .getByRole("tablist", { name: "Left panel" })
+    .getByRole("tab", { name: /^Library$/i });
+  if (await libraryTab.isVisible().catch(() => false)) {
+    const selected = await libraryTab.getAttribute("aria-selected");
+    if (selected !== "true") {
+      await libraryTab.click();
+    }
+  }
+
   const configurator = page.getByRole("region", {
     name: "Workstation systems configurator",
   });

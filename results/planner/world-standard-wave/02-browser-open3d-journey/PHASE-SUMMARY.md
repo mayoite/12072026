@@ -1,60 +1,26 @@
-# P07 / CP-07 — Draw/Place Journey — PHASE SUMMARY
+# P07 / CP-07 — W1–W2 browser journey (2026-07-11)
 
-| Field | Value |
-|-------|--------|
-| **Date** | 2026-07-10 |
-| **Verdict** | **PASS** (live Playwright green + evidence on disk) |
-| **Prior review** | `CODE-REVIEW-LIVE.md` FAIL → rewrite landed |
-| **Spec** | `site/tests/e2e/open3d-world-standard-journey.spec.ts` |
-| **Helpers** | `getFurnitureCount`, `drawWallByTwoClicks` in `plannerCanvasHelpers.ts` |
-| **npm** | `pnpm run test:e2e:world-standard-w1w2` (from `site/`) |
-| **Evidence** | `results/planner/world-standard-wave/02-browser-open3d-journey/` |
+## Status: **PASS** (Fabric sole host)
 
-## Gates
+| Gate | Result |
+|------|--------|
+| W1 walls Δ + opening objects Δ | **PASS** |
+| W2 place ≥2 catalog incl. Modular Cabinet | **PASS** |
+| Host | `open3d-fabric-stage` (archive `planner-2d-canvas` = 0) |
+| Spec | `site/tests/e2e/open3d-world-standard-journey.spec.ts` |
 
-| Gate | Result | Proof |
-|------|--------|--------|
-| **W1 walls Δ** | pass | wallsBefore 0 → wallsAfterDraw 1 |
-| **W1 Opening objects Δ** | pass | objectsAfterWalls 1 → objectsAfterOpening 2; `doorOrOpeningPlaced` |
-| **W2 cabinet-v0** | pass | exact CTA `Add Modular Cabinet to canvas`; `includesCabinetV0: true` |
-| **W2 second SKU** | pass | exact CTA `Add Executive Standing Desk to canvas`; `secondCatalogId: sample-desk-1` |
-| **placePath catalog only** | pass | no `placeSeatsFromConfigurator` in journey |
-| **Entry** | pass | `routeUsed: "open3d"` (primary path) |
-| **Non-blank canvas** | pass | `06-canvas-2d-symbols.png` byteLength 8880 (> 5000) |
-| **Storyboard 01–07** | pass | all PNGs on disk |
-| **playwright-run.json** | pass | `result: pass`, `failed: 0`, gates W1/W2 |
+## Product/helper fixes this run
 
-## Product fix required for green
+- Library default tab (place path usable)
+- E2E: upper-canvas, radio tools, wall **drag** commit, view-mode label click
+- Journey selectors → Fabric sole
 
-Empty-state card `.open3d-first-use` was intercepting canvas pointer events (wall taps no-op while Wall tool pressed). Fixed:
+## Evidence
 
-- `pointer-events: none` on `.open3d-first-use`
-- `pointer-events: auto` on `.open3d-first-use__actions`
+- PNGs `01`–`07` under this folder
+- `playwright-run.log` + `playwright-run.json` (from spec on green)
+- HEAD: see `HEAD.txt` / commit after land
 
-File: `site/app/css/core/locked/planner/workspace-open3d-route-host.css`
+## Next
 
-## Commands run
-
-```powershell
-cd site
-$env:PLAYWRIGHT_BASE_URL = "http://localhost:3000"
-$env:NEXT_PUBLIC_PLANNER_DEV_TOOLS = "true"
-pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-standard-journey.spec.ts --reporter=list
-# → 1 passed (~6–7s)
-```
-
-Raw log: `playwright-raw.log`  
-Proof JSON: `playwright-run.json`  
-Phase alias: `results/planner/world-standard-wave/07-browser-journey/playwright-run.json`
-
-## Explicit non-claims
-
-- Not W3 (select/delete), W4 (orbit), W5 (save honesty), Fabric cutover, or systems configurator batch as place path.
-- P06 residual still open after this phase.
-
-## Files touched
-
-- `site/tests/e2e/plannerCanvasHelpers.ts` — helpers
-- `site/tests/e2e/open3d-world-standard-journey.spec.ts` — CP-07 rewrite
-- `site/package.json` — `test:e2e:world-standard-w1w2`
-- `site/app/css/core/locked/planner/workspace-open3d-route-host.css` — empty-state hit-test fix
+Option 2: P04 orbit → P06 save honesty → P05 symbols

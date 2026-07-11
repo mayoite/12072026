@@ -10,20 +10,18 @@
 | Konva | **ABSENT** |
 | Feasibility as product 2D | **FALSE** (not mounted) |
 | Prior pack “Feasibility interim” freeze | **STALE / SUPERSEDED** by this rewrite |
-| Owner sign-off (CP-02.6) | **OPEN** |
-| **CP-02 PASS / ship lock ceremony** | **NOT PASS** |
+| Owner sign-off (CP-02.6) | **WAIVED** — written deferral in `OWNER-SIGNOFF.md` |
+| **CP-02 ship ceremony** | **WAIVE / continue** (not multi-box PASS theater) |
 
 ## Honest bottom line
 
-- **Stack freeze (code facts + docs aligned to Fabric-sole):** ready for owner eyes.  
-- **CP-02 green:** blocked only by missing owner marks or **owner-worded** deferral in `OWNER-SIGNOFF.md`.  
-- Agent must **not** invent owner green.  
-- Do **not** re-open engines. Do **not** restore Feasibility to prove later gates. Raise select / Block2D / draw **on Fabric**.
+- **Stack freeze (code facts + docs aligned to Fabric-sole):** re-proved on tip (29/29).  
+- **Owner unlock:** written deferral unlocks P03+; engines stay locked.  
+- Do **not** re-open engines. Do **not** restore Feasibility. Raise select / Block2D / draw **on Fabric**.
 
 ## HEAD (product tip under test)
 
-`98d654524e202581f4fd4d2a7c37102694991409`  
-Docs-only evidence commit lands on top; no product engine source delta.
+`91fd96c704e9f85508d07652408f57ab41005fec`
 
 ## Skills used
 

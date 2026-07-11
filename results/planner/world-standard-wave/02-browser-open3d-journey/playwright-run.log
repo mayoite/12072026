@@ -1,0 +1,6 @@
+
+[2mRunning [22m1[2m test using [22m1[2m worker[22m
+
+  [32mok[39m [2m1 [22m[chromium] › tests\e2e\open3d-world-standard-journey.spec.ts:166:7 › W1–W2 open3d world-standard journey (browser) › draw walls + opening → place cabinet-v0 + second SKU → non-blank 2D[2m (4.2s)[22m
+
+[32m  1 passed[39m[2m (4.8s)[22m

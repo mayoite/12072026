@@ -41,7 +41,7 @@ export function WorkspaceLeftPanel({
   return (
     <Tabs
       className={styles.leftPanelStack}
-      defaultSelectedKey="ai-assist"
+      defaultSelectedKey="library"
     >
       <TabList className={styles.leftPanelTabs} aria-label="Left panel">
         {(Object.keys(TAB_META) as WorkspaceLeftTab[]).map((tabId) => {

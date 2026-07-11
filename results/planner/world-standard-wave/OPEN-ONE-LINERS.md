@@ -2,5 +2,7 @@
 
 | Phase | Open (one sentence) |
 |-------|---------------------|
-| **P03 W3** | Helpers + exact-count e2e can be green, but pack HEAD drift / soft selection (not id+pose in browser) means do not treat as owner 9.5 usable product. |
-| **P04 W4** | Orbit wiring + unit/browser smoke are real, but **status stays open** until unit+Playwright are co-pinned on **one tip** and browser still does not prove ids/mm/rotation. |
+| **Option 1 (P02/P03/P07)** | **CLOSED 2026-07-11** — P02 WAIVE continue + unit 29/29; P03 W3 dual-gate pass; P07 W1–W2 dual-gate pass on Fabric sole. |
+| **P04 W4** | Orbit wiring + unit/browser smoke may exist, but **status stays open** until unit+Playwright co-pinned on **one tip** with real continuity proof. |
+| **P06 W5–W6** | Save honesty dual-gate not re-proved on tip this session. |
+| **P05** | Symbol/SVG quality bar not closed (P07 only non-blank PNG). |

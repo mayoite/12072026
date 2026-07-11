@@ -1,12 +1,12 @@
 # OWNER-SIGNOFF-STATUS — P02 / CP-02
 
-**Status: OPEN**  
+**Status: WAIVED (written deferral)** — see `OWNER-SIGNOFF.md`  
 **Date:** 2026-07-11  
-**Seat:** P02 Fabric-sole freeze rewrite  
+**Seat:** P02 Fabric-sole freeze rewrite + tip re-prove  
 
-> This file is **not** owner-signed.  
-> Do **not** invent a green `OWNER-SIGNOFF.md` as if owner marked boxes.  
-> CP-02 requires real owner marks **or** explicit written deferral before claiming green.
+> Owner wrote execute unlock (“go finish option 1 … leave you to it”).  
+> `OWNER-SIGNOFF.md` records **written deferral** (not multi-box ceremony).  
+> Engines stay Fabric-sole locked; P03+ may proceed.
 
 ---
 

@@ -1,0 +1,6 @@
+
+[2mRunning [22m1[2m test using [22m1[2m worker[22m
+
+  [32mok[39m [2m1 [22m[chromium] › tests\e2e\open3d-w3-select-delete.spec.ts:84:7 › W3 select / delete / undo (browser, Fabric sole) › place furniture, select, Delete removes, Ctrl+Z restores[2m (2.1s)[22m
+
+[32m  1 passed[39m[2m (2.7s)[22m

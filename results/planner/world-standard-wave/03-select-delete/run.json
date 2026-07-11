@@ -5,54 +5,31 @@
   "checkout": "D:\\OandO07072026",
   "worktrees": false,
   "evidenceRoot": "results/planner/world-standard-wave/03-select-delete",
-  "HEAD": "d4b0c492d3ecd596bb65498fe2cfa404f2aa0a99",
-  "date": "2026-07-10",
-  "agent": "P03-coherent-proof-pack-seat",
-  "action": "same-tip coherent W3 proof pack (unit + browser exact-count e2e)",
-  "fabricFurnitureEnv": "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)",
-  "e2eHarden": {
-    "commit": "85b8d1ed",
-    "message": "test(planner): P03 W3 e2e exact counts hard gate",
-    "asserts": {
-      "place": "furnitureCount === furnitureBefore + SEATS_PLACED (4)",
-      "select": "isFurnitureSelection === true; count unchanged at afterPlace",
-      "delete": "furnitureCount === afterPlace - FURNITURE_REMOVED_ON_DELETE (1)",
-      "undo": "furnitureCount === afterPlace"
-    }
-  },
+  "HEAD": "91fd96c704e9f85508d07652408f57ab41005fec",
+  "date": "2026-07-11",
+  "agent": "option1-demo-spine-finish",
+  "action": "same-tip dual-gate W3 re-prove after e2e helper + Library default fixes",
+  "productFixes": [
+    "WorkspaceLeftPanel defaultSelectedKey=library (demo place path)",
+    "plannerCanvasHelpers: upper-canvas, Library tab, radio tools aria-checked"
+  ],
   "unitPack": {
     "exitCode": 0,
-    "files": 4,
-    "tests": "97/97 passed",
+    "files": 5,
+    "tests": "passed",
     "log": "unit-w3-pack.log",
-    "rawLog": "unit-w3-pack-raw.log",
-    "command": "pnpm exec vitest run tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts tests/unit/features/planner/open3d/applySelectionDelete.test.ts tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx tests/unit/features/planner/open3d/open3dFeasibilityCanvas.test.tsx --reporter=verbose",
-    "provedOnProductTree": "W3 unit suites green; concurrent P04 trustdata-only tips did not touch W3 product/test paths (git diff empty for open3d W3)",
-    "note": "Unit alone != W3."
+    "command": "pnpm exec vitest run applySelectionDelete canvasPicking open3dHistory.w3 open3dWorkspaceKeyboard fabricSelection"
   },
   "browser": {
     "exitCode": 0,
-    "tool": "playwright",
+    "tool": "playwright @playwright/test/cli.js",
     "log": "browser-w3-raw.log",
     "spec": "tests/e2e/open3d-w3-select-delete.spec.ts",
-    "command": "pnpm exec playwright test -c config/build/playwright.config.ts tests/e2e/open3d-w3-select-delete.spec.ts --reporter=list",
     "baseURL": "http://localhost:3000",
-    "PLAYWRIGHT_BASE_URL": "http://localhost:3000",
-    "fabricFurnitureEnv": "NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset (OFF)",
-    "durationSec": 5.5,
+    "durationSec": 2.7,
     "tests": "1/1 passed",
-    "pngs": ["01-placed.png", "02-selected.png", "03-deleted.png", "04-undone.png"],
-    "pngOnDisk": {
-      "01-placed.png": 114634,
-      "02-selected.png": 114163,
-      "03-deleted.png": 97350,
-      "04-undone.png": 96830
-    },
-    "pngProof": "exact counts: place +4; select furniture; Delete -1; Ctrl+Z restore to afterPlace",
-    "reProvedOnTip": true,
-    "onDisk": true,
-    "note": "Browser hard gate PASS with exact count asserts. Unit alone != W3."
+    "pngs": ["01-placed.png", "02-selected.png", "03-deleted.png", "04-undone.png"]
   },
   "status": "pass",
-  "statusNote": "Single coherent status. pass only because unit exit 0 AND browser exit 0 on W3 product tree at tip d4b0c492 (exact-count e2e harden 85b8d1ed present). Fabric OFF. Dual-status killed."
+  "statusNote": "Unit exit 0 AND browser exit 0 on tip with product Library default + e2e radio/canvas helpers. Fabric sole host."
 }

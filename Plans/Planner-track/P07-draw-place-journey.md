@@ -1,6 +1,6 @@
 ﻿# P07 — Draw / place browser journey (W1–W2)
 
-**Status:** OPEN / REPROVE — not complete. Old journey packs + `planner-2d-canvas` selectors are **stale** (archive-only).
+**Status:** PASS dual-gate on tip (2026-07-11 Option 1) — W1 walls Δ + opening + W2 catalog place on Fabric; evidence `02-browser-open3d-journey/`.
 
 **Gate:** **W1–W2** / CP-07 — real browser on **Fabric** stage: draw walls + door/opening · place ≥2 catalog items incl. **cabinet-v0**.  
 **Evidence:** `results/planner/world-standard-wave/02-browser-open3d-journey/` only  

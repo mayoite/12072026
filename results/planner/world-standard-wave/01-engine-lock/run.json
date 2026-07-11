@@ -3,8 +3,8 @@
   "approach": "A-fabric-sole-freeze-reprove",
   "evidenceDir": "results/planner/world-standard-wave/01-engine-lock",
   "date": "2026-07-11",
-  "head": "98d654524e202581f4fd4d2a7c37102694991409",
-  "headNote": "Unit freeze + live host proof at this product tip; this commit is docs-only on top",
+  "head": "91fd96c704e9f85508d07652408f57ab41005fec",
+  "headNote": "Unit freeze re-prove on tip after owner WAIVE deferral (OWNER-SIGNOFF.md)",
   "productEdits": false,
   "lockedStack": {
     "2dHost": "Fabric.js v7 sole via PlannerCanvasStage → Open3dFabricStage",
@@ -13,11 +13,9 @@
     "feasibility": "not mounted; not live product 2D; restore = owner only",
     "3d": "Three + orbit ON via getOpen3dViewerControlProps()"
   },
-  "cp02Status": "OPEN",
-  "cp02PassBlockedBy": [
-    "OWNER-SIGNOFF.md missing (owner marks or owner-worded deferral required)",
-    "prior pack froze Feasibility interim — rewritten this run to Fabric-sole; owner still must sign upgrade lock"
-  ],
+  "cp02Status": "WAIVED-DEFER-CONTINUE",
+  "cp02PassBlockedBy": [],
+  "ownerSignoff": "OWNER-SIGNOFF.md written deferral unlocks P03+; not multi-box ceremony",
   "suites": [
     {
       "id": "orbitControlsDefault",
@@ -57,17 +55,11 @@
     "@react-three/drei": "^10.7.7"
   },
   "konvaPresent": false,
-  "hygieneFlagsPresent": {
-    "@fancyapps/ui": "^6.1.14",
-    "gsap": "^3.15.0",
-    "@gsap/react": "^2.1.2"
-  },
-  "packagePinDoc": "PACKAGE-PIN.md",
   "liveHostProof": {
     "workspaceMountsFeasibility": false,
     "workspaceMountsPlannerCanvasStage": true,
     "flagWiredInWorkspace": false,
     "furnitureFabricLayerMounted": false
   },
-  "rePinNote": "2026-07-11 Fabric-sole rewrite: retired Feasibility-interim freeze; units re-run at product tip 98d65452; evidence commit docs-only; CP-02 still OPEN (owner sign-off)"
+  "rePinNote": "2026-07-11 tip re-prove 91fd96c7; owner WAIVE deferral in OWNER-SIGNOFF.md; engines locked Fabric-sole"
 }

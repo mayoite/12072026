@@ -28,7 +28,10 @@ import {
   getWallCount,
   placeCatalogOnCanvas,
   placeOpeningOnCanvas,
+  PLANNER_FABRIC_STAGE,
+  PLANNER_PRIMARY_CANVAS,
   selectPlannerTool,
+  switchPlannerViewMode,
   tapOnCanvas,
   waitForPlannerCanvas,
 } from "./plannerCanvasHelpers";
@@ -127,10 +130,12 @@ async function enterWorldStandardPlanner(
     timeout: 60_000,
   });
   const topbar = page.locator(".pw-topbar");
-  const canvas = page.locator('[data-testid="planner-2d-canvas"] canvas');
+  // Live sole 2D host = Fabric stage (archive planner-2d-canvas is not product).
+  const fabricStage = page.locator(PLANNER_FABRIC_STAGE);
+  const canvas = page.locator(PLANNER_PRIMARY_CANVAS);
   const ready = await Promise.race([
     topbar.waitFor({ state: "visible", timeout: 25_000 }).then(() => true),
-    canvas.waitFor({ state: "visible", timeout: 25_000 }).then(() => true),
+    fabricStage.waitFor({ state: "visible", timeout: 25_000 }).then(() => true),
   ]).catch(() => false);
 
   if (ready) {
@@ -144,7 +149,9 @@ async function enterWorldStandardPlanner(
     if (await startFromScratch.isVisible({ timeout: 5_000 }).catch(() => false)) {
       await startFromScratch.click();
     }
+    await expect(fabricStage).toBeVisible({ timeout: 25_000 });
     await expect(canvas).toBeVisible({ timeout: 25_000 });
+    await expect(page.locator('[data-testid="planner-2d-canvas"]')).toHaveCount(0);
     return "open3d";
   }
 
@@ -165,7 +172,12 @@ test.describe("W1–W2 open3d world-standard journey (browser)", () => {
     await waitForPlannerCanvas(page);
     await expect(page.locator(".pw-topbar")).toBeVisible();
     await expect(page.getByRole("radio", { name: "2D", exact: true })).toBeVisible();
-    await expect(page.getByRole("group", { name: "Drawing tools" })).toBeVisible();
+    // Drawing tools: live rail is radiogroup; keep group as legacy or.
+    const drawingTools = page
+      .getByRole("radiogroup", { name: "Drawing tools" })
+      .or(page.getByRole("group", { name: "Drawing tools" }));
+    await expect(drawingTools).toBeVisible();
+    await expect(page.locator(PLANNER_FABRIC_STAGE)).toBeVisible();
     await expect(page.locator(".pw-step-bar")).toHaveCount(0);
 
     proof.wallsBefore = await getWallCount(page);
@@ -307,17 +319,18 @@ test.describe("W1–W2 open3d world-standard journey (browser)", () => {
       path: path.join(EVIDENCE_DIR, "05-two-items-placed.png"),
     });
 
-    // --- Non-blank 2D canvas PNG (byteLength > 5000) ---
-    const canvasEl = page.locator('[data-testid="planner-2d-canvas"] canvas');
+    // --- Non-blank 2D canvas PNG (byteLength > 5000) on Fabric sole host ---
+    const canvasEl = page.locator(PLANNER_PRIMARY_CANVAS);
+    await expect(canvasEl).toBeVisible({ timeout: 15_000 });
     const shot06 = await canvasEl.screenshot({
       path: path.join(EVIDENCE_DIR, "06-canvas-2d-symbols.png"),
     });
     expect(shot06.byteLength).toBeGreaterThan(5_000);
 
-    // Soft 2D↔3D (does not claim W4)
-    await page.getByRole("radio", { name: "3D", exact: true }).click();
+    // Soft 2D↔3D (does not claim W4) — use helper (label intercepts bare radio.click)
+    await switchPlannerViewMode(page, "3d");
     await expect(page.getByTestId("planner-3d-canvas")).toBeVisible({ timeout: 20_000 });
-    await page.getByRole("radio", { name: "2D", exact: true }).click();
+    await switchPlannerViewMode(page, "2d");
     await waitForPlannerCanvas(page);
     await expect
       .poll(async () => getFurnitureCount(page), { timeout: 10_000 })

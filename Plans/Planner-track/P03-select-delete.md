@@ -1,6 +1,6 @@
 # P03 — Select / delete / undo (W3)
 
-**Status:** OPEN / REPROVE — not complete. Old packs that prove on Feasibility are **invalid** on this tree.
+**Status:** PASS dual-gate on tip (2026-07-11 Option 1) — unit + browser W3 on Fabric sole; evidence `03-select-delete/`.
 
 **Gate:** **W3** / CP-03 — select furniture on **live Fabric 2D** · Delete/Backspace remove · Ctrl/Cmd+Z restore **same id + pose**.  
 **Hard rule:** unit **+** browser under `03-select-delete/`. Unit alone = **FAIL**.  

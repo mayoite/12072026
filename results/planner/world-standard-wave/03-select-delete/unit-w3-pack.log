@@ -1,5 +1,5 @@
 
-[1m[30m[46m RUN [49m[39m[22m [36mv4.1.9 [39m[90mD:/OandO07072026/site[39m
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.9 [39m[90md:/OandO07072026/site[39m
 
  [32m✓[39m tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts[2m > [22mpickWallAtPoint / pickWallWithPosition[2m > [22mpicks a mid-segment point and reports t ≈ 0.5[32m 1[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts[2m > [22mpickWallAtPoint / pickWallWithPosition[2m > [22mmisses when the point is outside tolerance[32m 0[2mms[22m[39m
@@ -34,10 +34,6 @@
  [32m✓[39m tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts[2m > [22mpickOpeningAtPoint[2m > [22mpicks openings at wall endpoints (position 0 and position 1)[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts[2m > [22mpickOpeningAtPoint[2m > [22mpicks an opening on a diagonal wall via interpolated segment position[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/geometry/canvasPicking.test.ts[2m > [22mpickOpeningAtPoint[2m > [22mincludes hits exactly at tolerance and misses just beyond[32m 0[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/hostWiringP01.test.ts[2m > [22mP01 host wiring (import graph + source)[2m > [22mdocuments dual entry: guest/canvas hybrid + open3d pilot native[32m 3[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/hostWiringP01.test.ts[2m > [22mP01 host wiring (import graph + source)[2m > [22mlive route/host sources import the open3d chain (file text, no render)[32m 2[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/hostWiringP01.test.ts[2m > [22mP01 host wiring (import graph + source)[2m > [22mhas no live app/planner fabric page tree; next.config redirects fabric → open3d[32m 1[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/hostWiringP01.test.ts[2m > [22mP01 host wiring (import graph + source)[2m > [22mworkspace mounts PlannerCanvasStage as sole live 2-D canvas (Fabric barrel)[32m 1[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/canvas-fabric-stage/fabricSelection.test.ts[2m > [22mselectionFromFabricTarget (Fabric → setSelection)[2m > [22mreturns furniture selection when type + entityId are present[32m 2[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/canvas-fabric-stage/fabricSelection.test.ts[2m > [22mselectionFromFabricTarget (Fabric → setSelection)[2m > [22mreturns wall selection when type + entityId are present[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/canvas-fabric-stage/fabricSelection.test.ts[2m > [22mselectionFromFabricTarget (Fabric → setSelection)[2m > [22mreads entityId written via writeFurnitureEntityId[32m 0[2mms[22m[39m
@@ -45,13 +41,13 @@
  [32m✓[39m tests/unit/features/planner/canvas-fabric-stage/fabricSelection.test.ts[2m > [22mselectionFromFabricTarget (Fabric → setSelection)[2m > [22mreturns null when type is missing or unknown[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/canvas-fabric-stage/fabricSelection.test.ts[2m > [22mselectionFromFabricTarget (Fabric → setSelection)[2m > [22mreturns null when entityId is missing or empty[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mopens the command palette on Ctrl+K and Cmd+K[32m 13[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mundoes on Ctrl/Cmd+Z and redoes on Shift+Ctrl/Cmd+Z and Ctrl/Cmd+Y[32m 2[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mignores shortcuts when typing in an editable field[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mundoes on Ctrl/Cmd+Z and redoes on Shift+Ctrl/Cmd+Z and Ctrl/Cmd+Y[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mignores shortcuts when typing in an editable field[32m 3[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mdoes not bind when disabled[32m 1[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mcalls deleteSelection on Delete and Backspace and preventDefaults[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mcalls deleteSelection on Delete and Backspace and preventDefaults[32m 1[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mdoes not call deleteSelection on Ctrl+Backspace or Cmd+Backspace[32m 1[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mdoes not call deleteSelection when Delete is pressed in an input[32m 1[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mdoes not throw when deleteSelection handler is omitted[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mdoes not throw when deleteSelection handler is omitted[32m 1[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mcalls cancel on Escape and preventDefaults[32m 1[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22marms tools from CANVAS_TOOL_SHORTCUTS on live keydown (D=door, M=dimension, N=window, T=text)[32m 8[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mOpening tool shortcut O arms setTool(opening) from the map (case-insensitive)[32m 1[2mms[22m[39m
@@ -66,16 +62,16 @@
  [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mdoes not arm tools for unmapped letter keys[32m 1[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mdoes not arm tools when Alt or Ctrl is held with a map letter[32m 1[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dWorkspaceKeyboard.test.tsx[2m > [22museWorkspaceKeyboard shortcuts[2m > [22mallows non-HTMLElement targets (window) to reach deleteSelection[32m 1[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mcreateOpen3dHistory starts with empty past/future and null dragStart[32m 3[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mupdateOpen3dProject + undo restores deleted furniture id and position[32m 2[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mredo re-applies the deleted state after undo[32m 1[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mcreateOpen3dHistory starts with empty past/future and null dragStart[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mupdateOpen3dProject + undo restores deleted furniture id and position[32m 1[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mredo re-applies the deleted state after undo[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mundo on empty past and redo on empty future return same history reference[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mupdateOpen3dProject no-ops when updater returns the same project reference[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mupdateOpen3dProject clears future and stamps updatedAt when clock is unchanged[32m 0[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mdispatchOpen3dTransaction no-ops on empty actions or no document change[32m 1[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mdispatchOpen3dAction records a delete action and undo restores furniture[32m 1[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mdispatchOpen3dTransaction no-ops on empty actions or no document change[32m 0[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mdispatchOpen3dAction records a delete action and undo restores furniture[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mdispatchOpen3dAction no-ops when action does not change the document[32m 0[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mdispatchOpen3dTransaction applies multiple actions as one past entry[32m 1[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mdispatchOpen3dTransaction applies multiple actions as one past entry[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mbeginOpen3dDrag snapshots present; commit records one past when project changed[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/open3dHistory.w3.test.ts[2m > [22mopen3d history (W3 residual)[2m > [22mcommitOpen3dDrag without dragStart or with unchanged project clears drag without past push[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mreturns same project reference when selection is none[32m 2[2mms[22m[39m
@@ -85,15 +81,15 @@
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mdeletes unlocked furniture while keeping locked peers in the same multi-id selection[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mreturns same project when active floor id is missing[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mreturns same project for unknown selection type (defensive branch)[32m 0[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mremoves multi-id furniture in one project revision (single history step)[32m 1[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mupdateOpen3dProject + delete + undo restores same furniture id and pose[32m 1[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mmulti-id delete via updateOpen3dProject pushes exactly one past entry[32m 1[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mremoves multi-id furniture in one project revision (single history step)[32m 0[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mupdateOpen3dProject + delete + undo restores same furniture id and pose[32m 0[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mmulti-id delete via updateOpen3dProject pushes exactly one past entry[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mupdateOpen3dProject is a no-op when delete does not change membership[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mupdateOpen3dProject stamps updatedAt when updater leaves it unchanged[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mupdateOpen3dProject keeps updater-provided updatedAt when already changed[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mreturns same reference when ids do not match any furniture[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mdeleting a wall cascades doors and windows on that wall (no orphans)[32m 0[2mms[22m[39m
- [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mdeletes door and window selection types without touching furniture[32m 1[2mms[22m[39m
+ [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mdeletes door and window selection types without touching furniture[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mapplySelectionDelete (W3 pure)[2m > [22mdeletes a room selection without cascading walls[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mresolveSelectedEntity[2m > [22mreturns null for none / empty / unknown selection types[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mresolveSelectedEntity[2m > [22mreturns null when the entity id is not on the floor[32m 0[2mms[22m[39m
@@ -108,8 +104,8 @@
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mdeleteEntityFromProject[2m > [22mcascades doors and windows when deleting a wall[32m 0[2mms[22m[39m
  [32m✓[39m tests/unit/features/planner/open3d/applySelectionDelete.test.ts[2m > [22mdeleteEntityFromProject[2m > [22mno-ops membership when entity id is absent[32m 0[2mms[22m[39m
 
-[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
-[2m      Tests [22m [1m[32m106 passed[39m[22m[90m (106)[39m
-[2m   Start at [22m 23:19:06
-[2m   Duration [22m 1.40s[2m (transform 896ms, setup 3.07s, import 696ms, tests 103ms, environment 2.70s)[22m
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m102 passed[39m[22m[90m (102)[39m
+[2m   Start at [22m 23:23:46
+[2m   Duration [22m 1.20s[2m (transform 658ms, setup 2.20s, import 559ms, tests 86ms, environment 1.98s)[22m
 

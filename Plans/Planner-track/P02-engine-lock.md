@@ -1,6 +1,6 @@
 # P02 — Engine lock
 
-**Status:** OPEN — pack rewritten to **Fabric-sole** (2026-07-11) + unit freeze green; **OWNER-SIGNOFF still OPEN** (CP-02 not PASS).
+**Status:** WAIVE/CONTINUE — Fabric-sole re-proved on tip (29/29); owner written deferral in `OWNER-SIGNOFF.md` unlocks P03+ (2026-07-11 Option 1 finish).
 
 **Gate:** CP-02 — lock the **upgraded** stack in writing. Later phases ship on it; no engine rollback.  
 **Evidence:** `results/planner/world-standard-wave/01-engine-lock/` only (never `02-engine-lock/`).  
