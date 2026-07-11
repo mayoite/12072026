@@ -16,6 +16,7 @@ import {
 } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
 import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/newBlockDescriptorStub";
 import { publishSvgEditorAction } from "@/features/planner/admin/svg-editor/publishSvgEditorAction";
+import { readSvgArtifactStatus } from "@/features/planner/admin/svg-editor/svgArtifactStatus.server";
 
 /** Disk descriptors can change under admin publish — never static-cache this route. */
 export const dynamic = "force-dynamic";
@@ -46,12 +47,14 @@ export default async function AdminSvgEditorDetailPage({
 
   // Bind slug so Client Component receives a Server Action ref (not a page wrapper fn).
   const onPublishAction = publishSvgEditorAction.bind(null, slug);
+  const artifactStatus = readSvgArtifactStatus(slug);
 
   return (
     <AdminSvgEditorEditView
       slug={slug}
       descriptor={descriptor}
       updatedAtLabel={updatedAtLabel}
+      artifactStatus={artifactStatus}
       onPublishAction={onPublishAction}
     />
   );

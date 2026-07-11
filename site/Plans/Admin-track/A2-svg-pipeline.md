@@ -26,3 +26,14 @@
 - [ ] Evidence under `results/planner/admin-svg-pipeline/` (flat; no Plans `modules/` maze)
 
 **A1 E2E green ≠ A2 complete.**
+
+## UI execution slice
+
+- [ ] List shows live descriptor count.
+- [ ] List shows published artifact count.
+- [ ] Each row shows artifact state and byte size.
+- [ ] Revision files stay excluded from live counts.
+
+**Reason:** File counts alone confuse revisions with live assets.
+
+**Implementation:** UI slice landed. Census proof remains OPEN.

@@ -7,6 +7,7 @@
 
 import type { Metadata } from "next";
 import AdminSvgEditorListView from "@/features/planner/admin/svg-editor/AdminSvgEditorListView";
+import { readSvgArtifactStatuses } from "@/features/planner/admin/svg-editor/svgArtifactStatus.server";
 import { loadAll } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
 
 export const metadata: Metadata = {
@@ -21,10 +22,14 @@ export const dynamic = "force-dynamic";
 export default async function AdminSvgEditorListPage() {
   const descriptors = loadAll();
   const refreshedAtLabel = new Date().toISOString();
+  const artifactStatuses = readSvgArtifactStatuses(
+    descriptors.map((descriptor) => descriptor.slug),
+  );
   return (
     <AdminSvgEditorListView
       descriptors={descriptors}
       refreshedAtLabel={refreshedAtLabel}
+      artifactStatuses={artifactStatuses}
     />
   );
 }

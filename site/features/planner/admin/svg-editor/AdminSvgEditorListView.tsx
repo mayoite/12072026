@@ -15,6 +15,7 @@ import Link from "next/link";
 import { PencilSimple as Pencil, Plus } from "@phosphor-icons/react";
 
 import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 
 const VARIANT_LABEL: Readonly<Record<BlockDescriptor["variant"], string>> = {
   fixed: "Fixed",
@@ -65,7 +66,8 @@ function variantSlugCount(
 }
 
 function timestampLabel(value: number | undefined): string {
-  if (typeof value !== "number" || !Number.isFinite(value) || value <= 0) return "—";
+  if (typeof value !== "number" || !Number.isFinite(value) || value <= 0)
+    return "—";
   try {
     return new Date(value).toISOString().replace("T", " ").replace(/\..*$/, "");
   } catch {
@@ -76,13 +78,40 @@ function timestampLabel(value: number | undefined): string {
 export interface AdminSvgEditorListViewProps {
   readonly descriptors: ReadonlyArray<BlockDescriptor>;
   readonly refreshedAtLabel: string;
+  readonly artifactStatuses: Readonly<Record<string, SvgArtifactStatus>>;
+}
+
+function artifactLabel(state: SvgArtifactStatus["state"]): string {
+  switch (state) {
+    case "published":
+      return "Published";
+    case "invalid":
+      return "Invalid SVG";
+    case "missing":
+      return "Missing";
+  }
+}
+
+function artifactBadgeClass(state: SvgArtifactStatus["state"]): string {
+  return state === "published"
+    ? "admin-badge admin-badge--active"
+    : "admin-badge admin-badge--hidden";
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  return `${(bytes / 1024).toFixed(1)} KB`;
 }
 
 export function AdminSvgEditorListView({
   descriptors,
   refreshedAtLabel,
+  artifactStatuses,
 }: AdminSvgEditorListViewProps) {
   const counts = variantSlugCount(descriptors);
+  const publishedCount = descriptors.filter(
+    (descriptor) => artifactStatuses[descriptor.slug]?.state === "published",
+  ).length;
   const ordered = [...descriptors].sort((a, b) => {
     const av = a.variant.localeCompare(b.variant);
     return av !== 0 ? av : a.slug.localeCompare(b.slug);
@@ -96,16 +125,23 @@ export function AdminSvgEditorListView({
           <h1 className="admin-page__title">SVG block editor</h1>
           <p className="admin-page__copy">
             Author Puck-managed SVG block descriptors. Permissions gate through{" "}
-            <code>{"withAuth(['admin'])"}</code>; saves flow through Zod → atomic-rename JSON
-            write → Phase 03 SVG pipeline → R2 PNG thumb.
+            <code>{"withAuth(['admin'])"}</code>; saves flow through Zod →
+            atomic-rename JSON write → Phase 03 SVG pipeline → R2 PNG thumb.
           </p>
           <p className="admin-page__meta">
-            Last loader pass: <code>{refreshedAtLabel}</code> · schemaVersion pinned at{" "}
-            <code>2026-07-04.v2</code>
+            Last loader pass: <code>{refreshedAtLabel}</code> · schemaVersion
+            pinned at <code>2026-07-04.v2</code>
+          </p>
+          <p className="admin-page__meta" role="status">
+            Artifact health: <strong>{publishedCount}</strong> of{" "}
+            <strong>{descriptors.length}</strong> published.
           </p>
         </div>
         <div className="admin-page__actions">
-          <Link href="/admin/svg-editor/new" className="admin-btn admin-btn--primary">
+          <Link
+            href="/admin/svg-editor/new"
+            className="admin-btn admin-btn--primary"
+          >
             <Plus size={14} aria-hidden />
             New block
           </Link>
@@ -118,7 +154,9 @@ export function AdminSvgEditorListView({
             <div className="admin-panel__header">{VARIANT_LABEL[variant]}</div>
             <div className="px-4 py-3">
               <p className="admin-table__primary">{counts[variant]}</p>
-              <p className="admin-table__secondary">{describeVariant(variant)}</p>
+              <p className="admin-table__secondary">
+                {describeVariant(variant)}
+              </p>
             </div>
           </article>
         ))}
@@ -128,11 +166,14 @@ export function AdminSvgEditorListView({
         <div className="admin-empty" role="status">
           <p className="admin-table__primary">No block descriptors yet</p>
           <p className="admin-table__secondary">
-            Author the first variant with New block. Slug input is a kebab regex pinned at
-            the schema layer.
+            Author the first variant with New block. Slug input is a kebab regex
+            pinned at the schema layer.
           </p>
           <div className="mt-4">
-            <Link href="/admin/svg-editor/new" className="admin-btn admin-btn--primary">
+            <Link
+              href="/admin/svg-editor/new"
+              className="admin-btn admin-btn--primary"
+            >
               <Plus size={14} aria-hidden />
               New block
             </Link>
@@ -153,6 +194,7 @@ export function AdminSvgEditorListView({
                   <th scope="col">Slug</th>
                   <th scope="col">Variant</th>
                   <th scope="col">Source</th>
+                  <th scope="col">Artifact</th>
                   <th scope="col">Created</th>
                   <th scope="col" className="text-end">
                     Actions
@@ -164,7 +206,9 @@ export function AdminSvgEditorListView({
                   <tr key={`${d.variant}:${d.slug}`}>
                     <td>
                       <p className="admin-table__primary">
-                        <Link href={`/admin/svg-editor/${d.slug}`}>{d.slug}</Link>
+                        <Link href={`/admin/svg-editor/${d.slug}`}>
+                          {d.slug}
+                        </Link>
                       </p>
                       {d.sku ? (
                         <p className="admin-table__secondary">
@@ -180,7 +224,31 @@ export function AdminSvgEditorListView({
                     </td>
                     <td className="text-muted">{d.sourceProvenance}</td>
                     <td>
-                      <code className="text-muted">{timestampLabel(d.generatedAt)}</code>
+                      {(() => {
+                        const status = artifactStatuses[d.slug] ?? {
+                          state: "missing" as const,
+                          bytes: 0,
+                          updatedAt: null,
+                          hash: null,
+                        };
+                        return (
+                          <>
+                            <span className={artifactBadgeClass(status.state)}>
+                              {artifactLabel(status.state)}
+                            </span>
+                            <p className="admin-table__secondary">
+                              {status.bytes > 0
+                                ? formatBytes(status.bytes)
+                                : "No bytes on disk"}
+                            </p>
+                          </>
+                        );
+                      })()}
+                    </td>
+                    <td>
+                      <code className="text-muted">
+                        {timestampLabel(d.generatedAt)}
+                      </code>
                     </td>
                     <td>
                       <div className="flex justify-end">

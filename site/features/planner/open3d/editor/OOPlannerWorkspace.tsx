@@ -38,6 +38,8 @@ import { importOpen3dPlannerText } from "../shared/export/importUtils";
 import { useOpen3dWorkspaceAutosave } from "../persistence/useOpen3dWorkspaceAutosave";
 import { setActiveFloor } from "../model/operations/pureActions";
 import { createRectangularRoomProject } from "../model/project";
+import { addOpen3dWall } from "../model/actions/walls";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 import { preflightOpen3dExport } from "../shared/export/exportPreflight";
 import {
   downloadJSON,
@@ -329,6 +331,41 @@ export function OOPlannerWorkspace({
     ) => {
       workspaceCanvas.updateProject((project) =>
         updateEntityInProject(project, collection, id, updates),
+      );
+    },
+    [workspaceCanvas],
+  );
+
+  const handleWallDrawn = useCallback(
+    (start: Open3dPoint, end: Open3dPoint) => {
+      workspaceCanvas.updateProject((project) =>
+        addOpen3dWall(project, { start, end }, newEntityId),
+      );
+      setActiveTool("select");
+      armedToolRef.current = "select";
+      setWorkspaceMessage("Wall added.");
+    },
+    [workspaceCanvas],
+  );
+
+  const handleFurnitureModified = useCallback(
+    (update: { entityId: string; position: Open3dPoint; rotation: number }) => {
+      workspaceCanvas.updateProject((project) =>
+        updateEntityInProject(project, "furniture", update.entityId, {
+          position: update.position,
+          rotation: update.rotation,
+        }),
+      );
+    },
+    [workspaceCanvas],
+  );
+
+  const handleCanvasSelection = useCallback(
+    (selection: { type: "wall" | "furniture"; id: string } | null) => {
+      workspaceCanvas.setSelection(
+        selection
+          ? { type: selection.type, ids: [selection.id] }
+          : { type: "none", ids: [] },
       );
     },
     [workspaceCanvas],
@@ -1046,6 +1083,9 @@ export function OOPlannerWorkspace({
                     null)
               }
               onPlaceAtPoint={handlePlaceAtPoint}
+              onWallDrawn={handleWallDrawn}
+              onSelectionChange={handleCanvasSelection}
+              onFurnitureModified={handleFurnitureModified}
               onStatusChange={setCanvasStatus}
             />
             {/* P-UI-3: tool guidance lives in status bar only (avoid duplicate chrome) */}

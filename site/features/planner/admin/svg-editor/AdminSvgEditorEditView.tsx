@@ -44,6 +44,7 @@ import { Puck } from "@puckeditor/core";
 import "@puckeditor/core/no-external.css";
 import type { PuckDataShape } from "./puckBlockRegistry";
 import { uploadAssetToSupabase } from "./uploadAsset";
+import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 
 // Note: direct persist/runner now via server action passed from RSC page (onPublish calls them).
 // Legacy POST kept for compat in alerts only; 1B prefers the action path.
@@ -51,25 +52,25 @@ const POST_URL = "/api/admin/svg-editor";
 
 /** Browser-only 3D islands — static import of model-viewer/three breaks RSC SSR. */
 const GlbExtruderPreview = dynamic(
-  () =>
-    import("./GlbExtruderPreview").then((m) => m.GlbExtruderPreview),
+  () => import("./GlbExtruderPreview").then((m) => m.GlbExtruderPreview),
   {
     ssr: false,
     loading: () => (
       <p className="admin-page__meta" role="status">
-        <Loader2 size={14} className="animate-spin" aria-hidden /> Loading extruder…
+        <Loader2 size={14} className="animate-spin" aria-hidden /> Loading
+        extruder…
       </p>
     ),
   },
 );
 const ModelViewerPreview = dynamic(
-  () =>
-    import("./ModelViewerPreview").then((m) => m.ModelViewerPreview),
+  () => import("./ModelViewerPreview").then((m) => m.ModelViewerPreview),
   {
     ssr: false,
     loading: () => (
       <p className="admin-page__meta" role="status">
-        <Loader2 size={14} className="animate-spin" aria-hidden /> Loading 3D preview…
+        <Loader2 size={14} className="animate-spin" aria-hidden /> Loading 3D
+        preview…
       </p>
     ),
   },
@@ -123,7 +124,8 @@ function buildFieldRows(
   if (descriptor.sku) rows.push({ key: "sku", value: descriptor.sku });
   rows.push({ key: "schemaVersion", value: descriptor.schemaVersion });
   rows.push({ key: "sourceProvenance", value: descriptor.sourceProvenance });
-  if (descriptor.createdBy) rows.push({ key: "createdBy", value: descriptor.createdBy });
+  if (descriptor.createdBy)
+    rows.push({ key: "createdBy", value: descriptor.createdBy });
   rows.push({
     key: "geometry",
     value:
@@ -157,14 +159,21 @@ function buildFieldRows(
   });
   rows.push({
     key: "liveAnnouncementCategories",
-    value: (descriptor.liveAnnouncementCategories ?? []).join(" │ ") || "(none)",
+    value:
+      (descriptor.liveAnnouncementCategories ?? []).join(" │ ") || "(none)",
   });
   return rows;
 }
 
 function buildErrorFromResponse(
   status: number,
-  body: { error?: { code?: string; message?: string; details?: Record<string, unknown> } } | null,
+  body: {
+    error?: {
+      code?: string;
+      message?: string;
+      details?: Record<string, unknown>;
+    };
+  } | null,
 ): string {
   if (body?.error?.message) {
     if (body.error.code) return `${body.error.code}: ${body.error.message}`;
@@ -177,18 +186,25 @@ export interface AdminSvgEditorEditViewProps {
   readonly slug: string;
   readonly descriptor: BlockDescriptor;
   readonly updatedAtLabel: string;
+  readonly artifactStatus: SvgArtifactStatus;
   /** Server action (or async fn) wired by page RSC so onPublish can call persistBlockDescriptor + runSvgPipeline directly. */
-  readonly onPublishAction?: (data: PuckDataShape) => Promise<void | { success?: boolean; error?: string }>;
+  readonly onPublishAction?: (
+    data: PuckDataShape,
+  ) => Promise<void | { success?: boolean; error?: string }>;
 }
 
 export function AdminSvgEditorEditView({
   slug,
   descriptor,
   updatedAtLabel,
+  artifactStatus,
   onPublishAction,
 }: AdminSvgEditorEditViewProps) {
   const router = useRouter();
-  const renderProps = useMemo(() => blockDescriptorToRenderProps(descriptor), [descriptor]);
+  const renderProps = useMemo(
+    () => blockDescriptorToRenderProps(descriptor),
+    [descriptor],
+  );
   const editorData = useMemo(() => getPuckEditorData(descriptor), [descriptor]);
 
   const [uploadedSvgText, setUploadedSvgText] = useState<string>("");
@@ -196,37 +212,49 @@ export function AdminSvgEditorEditView({
   const [glbUploading, setGlbUploading] = useState(false);
   const [glbUploadError, setGlbUploadError] = useState<string | null>(null);
 
-  const handleSvgUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => setUploadedSvgText(event.target?.result as string);
-      reader.readAsText(file);
-    }
-  }, []);
-
-  const handleGlbGenerated = useCallback(async (blob: Blob) => {
-    // 1. Show temporary URL instantly (blob: allowed by glbAssetPolicy)
-    const localUrl = URL.createObjectURL(blob);
-    setMockGlbUrl(localUrl);
-    setGlbUploadError(null);
-    setGlbUploading(true);
-
-    try {
-      // 2. Upload to generated/ path only — designer static GLB path removed
-      const permanentUrl = await uploadAssetToSupabase(blob, `${slug || "generated"}.glb`);
-      if (permanentUrl) {
-        setMockGlbUrl(permanentUrl);
-      } else {
-        setGlbUploadError("Upload returned no URL — blob preview still available locally.");
+  const handleSvgUpload = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) =>
+          setUploadedSvgText(event.target?.result as string);
+        reader.readAsText(file);
       }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      setGlbUploadError(`GLB upload failed: ${message}`);
-    } finally {
-      setGlbUploading(false);
-    }
-  }, [slug]);
+    },
+    [],
+  );
+
+  const handleGlbGenerated = useCallback(
+    async (blob: Blob) => {
+      // 1. Show temporary URL instantly (blob: allowed by glbAssetPolicy)
+      const localUrl = URL.createObjectURL(blob);
+      setMockGlbUrl(localUrl);
+      setGlbUploadError(null);
+      setGlbUploading(true);
+
+      try {
+        // 2. Upload to generated/ path only — designer static GLB path removed
+        const permanentUrl = await uploadAssetToSupabase(
+          blob,
+          `${slug || "generated"}.glb`,
+        );
+        if (permanentUrl) {
+          setMockGlbUrl(permanentUrl);
+        } else {
+          setGlbUploadError(
+            "Upload returned no URL — blob preview still available locally.",
+          );
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        setGlbUploadError(`GLB upload failed: ${message}`);
+      } finally {
+        setGlbUploading(false);
+      }
+    },
+    [slug],
+  );
 
   // Simplified state: Puck manages draft/compose state + live preview.
   // Only track submit + validation err/success for admin UX (failure + recovery).
@@ -260,7 +288,9 @@ export function AdminSvgEditorEditView({
             setFormState((previous) => ({
               ...previous,
               submitting: false,
-              errorMessage: String((result as unknown as { error?: string }).error),
+              errorMessage: String(
+                (result as unknown as { error?: string }).error,
+              ),
             }));
             return;
           }
@@ -280,9 +310,15 @@ export function AdminSvgEditorEditView({
           headers: { "content-type": "application/json" },
           body: JSON.stringify(payload),
         });
-        const body = (await response.json().catch(() => null)) as
-          | { success?: boolean; descriptor?: BlockDescriptor; error?: { code?: string; message?: string; details?: Record<string, unknown> } }
-          | null;
+        const body = (await response.json().catch(() => null)) as {
+          success?: boolean;
+          descriptor?: BlockDescriptor;
+          error?: {
+            code?: string;
+            message?: string;
+            details?: Record<string, unknown>;
+          };
+        } | null;
         if (!response.ok) {
           setFormState((previous) => ({
             ...previous,
@@ -298,7 +334,10 @@ export function AdminSvgEditorEditView({
         }));
         router.refresh();
       } catch (networkError) {
-        const message = networkError instanceof Error ? networkError.message : String(networkError);
+        const message =
+          networkError instanceof Error
+            ? networkError.message
+            : String(networkError);
         setFormState((previous) => ({
           ...previous,
           submitting: false,
@@ -314,30 +353,42 @@ export function AdminSvgEditorEditView({
     typeof descriptor.checksum === "string" && descriptor.checksum.length > 16
       ? `${descriptor.checksum.slice(0, 16)}…`
       : (descriptor.checksum ?? "—");
+  const artifactHashShort = artifactStatus.hash
+    ? `${artifactStatus.hash.slice(0, 16)}…`
+    : "—";
+  const artifactUpdatedAt = artifactStatus.updatedAt
+    ? new Date(artifactStatus.updatedAt)
+        .toISOString()
+        .replace("T", " ")
+        .replace(/\.\d{3}Z$/, " UTC")
+    : "—";
 
   return (
     <div className="admin-page">
       <header className="admin-page__header">
         <div>
-          <p className="admin-page__eyebrow">Catalog assets · SVG block editor</p>
+          <p className="admin-page__eyebrow">
+            Catalog assets · SVG block editor
+          </p>
           <h1 className="admin-page__title">
             <code>{slug}</code>
           </h1>
-          <p className="admin-page__copy">{describeVariant(descriptor.variant)}</p>
+          <p className="admin-page__copy">
+            {describeVariant(descriptor.variant)}
+          </p>
           <p className="admin-page__meta">
-            <span className="admin-badge">{variantTitle(descriptor.variant)}</span>
+            <span className="admin-badge">
+              {variantTitle(descriptor.variant)}
+            </span>
             {descriptor.sku ? (
               <>
                 {" "}
                 · SKU <code>{descriptor.sku}</code>
               </>
-            ) : null}
-            {" "}
-            · schema <code>{descriptor.schemaVersion}</code>
-            {" "}
-            · checksum <code className="admin-page__checksum">{checksumShort}</code>
-            {" "}
-            · loaded <code>{updatedAtLabel}</code>
+            ) : null}{" "}
+            · schema <code>{descriptor.schemaVersion}</code> · checksum{" "}
+            <code className="admin-page__checksum">{checksumShort}</code> ·
+            loaded <code>{updatedAtLabel}</code>
             {descriptor.sourceProvenance ? (
               <>
                 {" "}
@@ -348,7 +399,10 @@ export function AdminSvgEditorEditView({
         </div>
         {/* No header Save: Puck editor owns publish (REC-01 minimize + contextual). Header is identity + nav only. */}
         <div className="admin-page__actions">
-          <Link href="/admin/svg-editor" className="admin-btn admin-btn--outline">
+          <Link
+            href="/admin/svg-editor"
+            className="admin-btn admin-btn--outline"
+          >
             <ArrowLeft size={14} aria-hidden />
             Back to list
           </Link>
@@ -361,11 +415,16 @@ export function AdminSvgEditorEditView({
           data-variant={descriptor.variant}
         >
           <div className="admin-panel__header">
-            <Sparkles size={14} aria-hidden /> {variantTitle(descriptor.variant)}
+            <Sparkles size={14} aria-hidden />{" "}
+            {variantTitle(descriptor.variant)}
           </div>
-          <div className="admin-page__section" style={{ padding: "0.75rem 1rem" }}>
+          <div
+            className="admin-page__section"
+            style={{ padding: "0.75rem 1rem" }}
+          >
             <p className="admin-page__summary-card-value">
-              Puck component: <code>{puckComponentName(descriptor.variant)}</code>
+              Puck component:{" "}
+              <code>{puckComponentName(descriptor.variant)}</code>
             </p>
             {renderProps.props && Object.keys(renderProps.props).length > 0 ? (
               <p className="admin-page__summary-card-copy admin-page__meta">
@@ -377,8 +436,47 @@ export function AdminSvgEditorEditView({
                 </code>
               </p>
             ) : (
-              <p className="admin-page__meta">No extra render props on this descriptor.</p>
+              <p className="admin-page__meta">
+                No extra render props on this descriptor.
+              </p>
             )}
+          </div>
+        </article>
+        <article
+          className="admin-page__summary-card admin-panel"
+          data-artifact-state={artifactStatus.state}
+        >
+          <div className="admin-panel__header">Published SVG artifact</div>
+          <div
+            className="admin-page__section"
+            style={{ padding: "0.75rem 1rem" }}
+          >
+            <p className="admin-page__summary-card-value">
+              <span
+                className={
+                  artifactStatus.state === "published"
+                    ? "admin-badge admin-badge--active"
+                    : "admin-badge admin-badge--hidden"
+                }
+              >
+                {artifactStatus.state === "published"
+                  ? "Published"
+                  : artifactStatus.state === "invalid"
+                    ? "Invalid SVG"
+                    : "Missing"}
+              </span>
+            </p>
+            <p className="admin-page__meta">
+              {artifactStatus.bytes > 0
+                ? `${artifactStatus.bytes.toLocaleString()} bytes`
+                : "No bytes on disk"}
+              {" · updated "}
+              <code>{artifactUpdatedAt}</code>
+            </p>
+            <p className="admin-page__meta">
+              SHA-256{" "}
+              <code className="admin-page__checksum">{artifactHashShort}</code>
+            </p>
           </div>
         </article>
       </section>
@@ -392,7 +490,8 @@ export function AdminSvgEditorEditView({
           >
             <Loader2 size={16} className="animate-spin shrink-0" aria-hidden />
             <span>
-              Publishing <code>{slug}</code>… Persist + SVG pipeline in progress. Do not close this tab.
+              Publishing <code>{slug}</code>… Persist + SVG pipeline in
+              progress. Do not close this tab.
             </span>
           </div>
         ) : null}
@@ -434,12 +533,18 @@ export function AdminSvgEditorEditView({
         ) : null}
       </div>
 
-      <section aria-label="Field cartography" className="admin-page__section admin-panel">
+      <section
+        aria-label="Field cartography"
+        className="admin-page__section admin-panel"
+      >
         <details>
           <summary className="admin-page__section-title admin-panel__header">
             Field cartography (minimize)
           </summary>
-          <dl className="admin-page__field-list" style={{ padding: "0.75rem 1rem" }}>
+          <dl
+            className="admin-page__field-list"
+            style={{ padding: "0.75rem 1rem" }}
+          >
             {rows.map((row) => (
               <div key={row.key} className="admin-page__field-row">
                 <dt>
@@ -463,8 +568,9 @@ export function AdminSvgEditorEditView({
           <div className="admin-panel__header">SVG → generated GLB</div>
           <div style={{ padding: "0.75rem 1rem" }}>
             <p className="admin-page__copy">
-              Designer static GLB is not a product path. Extrude SVG to generate a GLB under{" "}
-              <code>catalog-assets/generated/</code>, or use modular/parametric meshes.
+              Designer static GLB is not a product path. Extrude SVG to generate
+              a GLB under <code>catalog-assets/generated/</code>, or use
+              modular/parametric meshes.
             </p>
             <div className="admin-field" style={{ marginTop: "0.75rem" }}>
               <label className="admin-field__label" htmlFor="admin-svg-upload">
@@ -484,7 +590,9 @@ export function AdminSvgEditorEditView({
                 onGlbGenerated={handleGlbGenerated}
               />
             ) : (
-              <p className="admin-page__meta">Upload an SVG to open the extruder preview.</p>
+              <p className="admin-page__meta">
+                Upload an SVG to open the extruder preview.
+              </p>
             )}
             {glbUploading ? (
               <div
@@ -492,7 +600,11 @@ export function AdminSvgEditorEditView({
                 className="admin-alert admin-alert--info flex flex-wrap items-center gap-3"
                 aria-busy="true"
               >
-                <Loader2 size={14} className="animate-spin shrink-0" aria-hidden />
+                <Loader2
+                  size={14}
+                  className="animate-spin shrink-0"
+                  aria-hidden
+                />
                 Uploading generated GLB…
               </div>
             ) : null}
@@ -508,7 +620,8 @@ export function AdminSvgEditorEditView({
             {mockGlbUrl ? (
               <div className="admin-page__section">
                 <p className="admin-page__meta">
-                  <strong>Generated GLB URL</strong> (system only — paste into Generated GLB field if needed)
+                  <strong>Generated GLB URL</strong> (system only — paste into
+                  Generated GLB field if needed)
                 </p>
                 <code
                   className="admin-page__checksum"
@@ -517,7 +630,9 @@ export function AdminSvgEditorEditView({
                   {mockGlbUrl}
                 </code>
                 {mockGlbUrl.startsWith("blob:") ? (
-                  <p className="admin-page__meta">Local blob URL — permanent path appears after upload.</p>
+                  <p className="admin-page__meta">
+                    Local blob URL — permanent path appears after upload.
+                  </p>
                 ) : (
                   <div style={{ marginTop: "0.5rem" }}>
                     <ModelViewerPreview src={mockGlbUrl} />
@@ -533,7 +648,8 @@ export function AdminSvgEditorEditView({
       <section aria-label="Puck block editor" className="admin-page__section">
         <div className="admin-panel">
           <div className="admin-panel__header">
-            Block editor (Puck) · use the editor’s Publish control (header has no separate Save)
+            Block editor (Puck) · use the editor’s Publish control (header has
+            no separate Save)
           </div>
           <div className="admin-puck-editor">
             <Puck

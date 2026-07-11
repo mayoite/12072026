@@ -16,4 +16,11 @@
 A1 publish E2E → A2 pipeline bar → A3 prod auth
 ```
 
+## Execution changes
+
+- A1 UI must show the full publish journey and visible publish feedback.
+- A2 UI must show artifact state for every live descriptor.
+- A3 UI must never imply that dev bypass is production-safe.
+- Every card needs fresh evidence before status changes.
+
 Do not tick DONE from memory or old P0 notes.

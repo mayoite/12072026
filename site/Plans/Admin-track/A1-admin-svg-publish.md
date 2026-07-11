@@ -24,3 +24,14 @@ pnpm run test:e2e:p0-admin-svg
 **Not A1:** full catalog census (A2) · production SSO (A3) · planner place journey · Feasibility restore.
 
 **Next:** [A2-svg-pipeline.md](./A2-svg-pipeline.md)
+
+## UI execution slice
+
+- [ ] List shows artifact state before editing.
+- [ ] Editor shows published, missing, or invalid SVG state.
+- [ ] Publish feedback names the slug and outcome.
+- [ ] Refresh shows the new artifact state.
+
+**Reason:** Admin authors need visible proof of publish state.
+
+**Implementation:** UI slice landed. Browser proof remains OPEN.

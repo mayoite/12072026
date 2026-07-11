@@ -14,7 +14,7 @@ import {
   useState,
   type WheelEvent as ReactWheelEvent,
 } from "react";
-import { Canvas, Line, Rect, type FabricObject, type ModifiedEvent, type TPointerEventInfo } from "fabric";
+import { Canvas, Line, type FabricObject, type ModifiedEvent, type TPointerEventInfo } from "fabric";
 
 import type { PlannerTool } from "@/features/planner/open3d/editor/canvasTool";
 import type { Open3dLayerVisibility } from "@/features/planner/open3d/editor/layerVisibility";
@@ -42,7 +42,25 @@ import {
   writeFurnitureEntityId,
   type FurnitureDocumentPoseUpdate,
 } from "./furnitureFabricMapper";
+import { createFabricFurnitureBlock } from "./fabricBlock2D";
 import styles from "./open3dFabricStage.module.css";
+
+type CanvasEntityType = "wall" | "furniture";
+type CanvasEntityCarrier = {
+  get?: (key: string) => unknown;
+  set?: (key: string, value: string) => unknown;
+};
+
+const CANVAS_ENTITY_TYPE_PROP = "plannerEntityType";
+
+function writeCanvasEntityType(target: CanvasEntityCarrier, type: CanvasEntityType): void {
+  target.set?.(CANVAS_ENTITY_TYPE_PROP, type);
+}
+
+function readCanvasEntityType(target: CanvasEntityCarrier | null | undefined): CanvasEntityType | null {
+  const value = target?.get?.(CANVAS_ENTITY_TYPE_PROP);
+  return value === "wall" || value === "furniture" ? value : null;
+}
 
 export type Open3dFabricStageProps = {
   activeTool?: PlannerTool;
@@ -52,6 +70,8 @@ export type Open3dFabricStageProps = {
   pendingCatalogPlacement?: boolean;
   placementItemLabel?: string | null;
   onPlaceAtPoint?: (point: Open3dPoint) => void;
+  onWallDrawn?: (start: Open3dPoint, end: Open3dPoint) => void;
+  onSelectionChange?: (selection: { type: CanvasEntityType; id: string } | null) => void;
   onStatusChange?: (status: CanvasStatusSnapshot) => void;
   onFurnitureModified?: (update: FurnitureDocumentPoseUpdate) => void;
 };
@@ -85,6 +105,8 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
       pendingCatalogPlacement = false,
       placementItemLabel = null,
       onPlaceAtPoint,
+      onWallDrawn,
+      onSelectionChange,
       onStatusChange,
       onFurnitureModified,
     },
@@ -100,7 +122,11 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
     const panSessionRef = useRef<PanSession | null>(null);
     const onModifiedRef = useRef(onFurnitureModified);
     const onPlaceRef = useRef(onPlaceAtPoint);
+    const onWallDrawnRef = useRef(onWallDrawn);
+    const onSelectionRef = useRef(onSelectionChange);
     const pendingPlaceRef = useRef(pendingCatalogPlacement);
+    const wallDrawRef = useRef<{ start: Open3dPoint; pointerId: number } | null>(null);
+    const previewLineRef = useRef<Line | null>(null);
 
     useEffect(() => {
       transformRef.current = transform;
@@ -117,6 +143,14 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
     useEffect(() => {
       onPlaceRef.current = onPlaceAtPoint;
     }, [onPlaceAtPoint]);
+
+    useEffect(() => {
+      onWallDrawnRef.current = onWallDrawn;
+    }, [onWallDrawn]);
+
+    useEffect(() => {
+      onSelectionRef.current = onSelectionChange;
+    }, [onSelectionChange]);
 
     useEffect(() => {
       pendingPlaceRef.current = pendingCatalogPlacement;
@@ -154,8 +188,32 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
           workspaceCanvas.redo();
           return true;
         },
-        cancel: () => {},
-        commit: () => {},
+        cancel: () => {
+          wallDrawRef.current = null;
+          const preview = previewLineRef.current;
+          if (preview) {
+            fabricRef.current?.remove(preview);
+            previewLineRef.current = null;
+            fabricRef.current?.requestRenderAll();
+          }
+        },
+        commit: () => {
+          const session = wallDrawRef.current;
+          const canvas = fabricRef.current;
+          const preview = previewLineRef.current;
+          if (!session || !canvas || !preview) return;
+          const end = screenToProject(
+            { x: preview.x2 ?? 0, y: preview.y2 ?? 0 },
+            transformRef.current,
+          );
+          if (Math.hypot(end.x - session.start.x, end.y - session.start.y) >= 10) {
+            onWallDrawnRef.current?.(session.start, end);
+          }
+          wallDrawRef.current = null;
+          canvas.remove(preview);
+          previewLineRef.current = null;
+          canvas.requestRenderAll();
+        },
         resetZoom: () => setTransform(DEFAULT_FABRIC_STAGE_TRANSFORM),
         fitToView: () => setTransform(DEFAULT_FABRIC_STAGE_TRANSFORM),
         setTool: () => {},
@@ -212,6 +270,23 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
           return;
         }
 
+        if (tool === "wall") {
+          const screen = hostPoint(hostEl, nativeEvent.clientX, nativeEvent.clientY);
+          const start = screenToProject(screen, transformRef.current);
+          const preview = new Line([screen.x, screen.y, screen.x, screen.y], {
+            stroke: resolveStageColor(PLANNER_COLOR_TOKENS.wallStroke, "#64748b"),
+            strokeWidth: 5,
+            selectable: false,
+            evented: false,
+            objectCaching: false,
+          });
+          canvas.add(preview);
+          previewLineRef.current = preview;
+          wallDrawRef.current = { start, pointerId: nativeEvent.pointerId ?? 1 };
+          emitStatus(transformRef.current, tool);
+          return;
+        }
+
         if (tool === "pan") {
           panSessionRef.current = {
             pointerId: nativeEvent.pointerId ?? 1,
@@ -222,11 +297,31 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
       };
 
       const handlePointerMove = (opt: TPointerEventInfo) => {
-        const session = panSessionRef.current;
         const hostEl = hostRef.current;
         const nativeEvent = opt.e as PointerEvent | undefined;
-        if (!session || !hostEl || !nativeEvent) return;
+        if (!hostEl || !nativeEvent) return;
         const screen = hostPoint(hostEl, nativeEvent.clientX, nativeEvent.clientY);
+
+        const wallSession = wallDrawRef.current;
+        const preview = previewLineRef.current;
+        if (wallSession && preview && wallSession.pointerId === (nativeEvent.pointerId ?? 1)) {
+          preview.set({ x2: screen.x, y2: screen.y });
+          const end = screenToProject(screen, transformRef.current);
+          onStatusChange?.({
+            snapKind: "none",
+            activeTool: "wall",
+            drawingState: "drawing",
+            wallCount: activeFloor?.walls.length ?? 0,
+            previewLengthMm: Math.round(Math.hypot(end.x - wallSession.start.x, end.y - wallSession.start.y)),
+            zoomPercent: Math.round(transformRef.current.scale * 1000),
+            transform: transformRef.current,
+          });
+          canvas.requestRenderAll();
+          return;
+        }
+
+        const session = panSessionRef.current;
+        if (!session) return;
         const dx = screen.x - session.screen.x;
         const dy = screen.y - session.screen.y;
         setTransform((current) => ({
@@ -238,14 +333,45 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
         }));
       };
 
-      const handlePointerUp = () => {
+      const handlePointerUp = (opt: TPointerEventInfo) => {
+        const nativeEvent = opt.e as PointerEvent | undefined;
+        const wallSession = wallDrawRef.current;
+        const preview = previewLineRef.current;
+        if (wallSession && preview && nativeEvent) {
+          const hostEl = hostRef.current;
+          if (hostEl && wallSession.pointerId === (nativeEvent.pointerId ?? 1)) {
+            const screen = hostPoint(hostEl, nativeEvent.clientX, nativeEvent.clientY);
+            const end = screenToProject(screen, transformRef.current);
+            if (Math.hypot(end.x - wallSession.start.x, end.y - wallSession.start.y) >= 10) {
+              onWallDrawnRef.current?.(wallSession.start, end);
+            }
+            wallDrawRef.current = null;
+            canvas.remove(preview);
+            previewLineRef.current = null;
+            canvas.requestRenderAll();
+            emitStatus(transformRef.current, "wall");
+            return;
+          }
+        }
         panSessionRef.current = null;
       };
+
+      const handleSelection = () => {
+        const target = canvas.getActiveObject();
+        const type = readCanvasEntityType(target as CanvasEntityCarrier | undefined);
+        const id = readFurnitureEntityId(target);
+        if (type && id) onSelectionRef.current?.({ type, id });
+      };
+
+      const handleSelectionCleared = () => onSelectionRef.current?.(null);
 
       canvas.on("object:modified", handleModified);
       canvas.on("mouse:down", handlePointerDown);
       canvas.on("mouse:move", handlePointerMove);
       canvas.on("mouse:up", handlePointerUp);
+      canvas.on("selection:created", handleSelection);
+      canvas.on("selection:updated", handleSelection);
+      canvas.on("selection:cleared", handleSelectionCleared);
 
       const resize = () => {
         const rect = host.getBoundingClientRect();
@@ -270,6 +396,9 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
         canvas.off("mouse:down", handlePointerDown);
         canvas.off("mouse:move", handlePointerMove);
         canvas.off("mouse:up", handlePointerUp);
+        canvas.off("selection:created", handleSelection);
+        canvas.off("selection:updated", handleSelection);
+        canvas.off("selection:cleared", handleSelectionCleared);
         observer.disconnect();
         canvas.dispose();
         fabricRef.current = null;
@@ -302,10 +431,12 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
           const line = new Line([a.x, a.y, b.x, b.y], {
             stroke: wallStroke,
             strokeWidth: 5,
-            selectable: false,
-            evented: false,
+            evented: activeTool === "select",
+            selectable: activeTool === "select",
             objectCaching: false,
           });
+          writeCanvasEntityType(line, "wall");
+          writeFurnitureEntityId(line, wall.id);
           canvas.add(line);
         }
       }
@@ -313,36 +444,13 @@ export const Open3dFabricStage = forwardRef<Open3dCanvasStageHandle, Open3dFabri
       if (showFurniture) {
         for (const item of activeFloor.furniture) {
           const pose = furnitureToFabricPose(item, transform);
-          const rect = new Rect({
-            left: pose.left,
-            top: pose.top,
-            width: pose.width,
-            height: pose.height,
-            angle: pose.angle,
-            originX: "center",
-            originY: "center",
-            fill: resolveStageColor(
-              PLANNER_COLOR_TOKENS.furnitureDefault,
-              "#334155",
-            ),
-            opacity: 0.85,
-            stroke: resolveStageColor(
-              PLANNER_COLOR_TOKENS.furnitureStroke,
-              "#94a3b8",
-            ),
-            strokeWidth: 1,
-            selectable: interactive && !pose.locked,
-            evented: interactive && !pose.locked,
-            hasControls: interactive && !pose.locked,
-            hasBorders: interactive && !pose.locked,
-            lockScalingX: true,
-            lockScalingY: true,
-            lockSkewingX: true,
-            lockSkewingY: true,
-            objectCaching: false,
+          const symbol = createFabricFurnitureBlock(item, pose, {
+            interactive,
+            resolveColor: resolveStageColor,
           });
-          writeFurnitureEntityId(rect, pose.entityId);
-          canvas.add(rect);
+          writeCanvasEntityType(symbol, "furniture");
+          writeFurnitureEntityId(symbol, pose.entityId);
+          canvas.add(symbol);
         }
       }
 

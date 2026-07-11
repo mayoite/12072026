@@ -561,7 +561,7 @@ export function autoImport(
     importLimits?: ImportLimits;
     roomPlanOptions?: RoomPlanImportOptions;
   },
-): ImportResult | { floor: Open3dFloor; error?: string } {
+): ImportResult {
   const format = detectFormat(jsonString);
 
   switch (format.format) {
