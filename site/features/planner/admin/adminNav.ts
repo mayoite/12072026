@@ -82,6 +82,12 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
           "No-code SVG block descriptors (fixed, configurable, parametric)",
         icon: PenSquare,
       },
+      {
+        href: "/admin/price-books",
+        label: "Price books",
+        description: "Versioned BOQ price books — draft, approve, activate",
+        icon: FileText,
+      },
     ],
   },
   {

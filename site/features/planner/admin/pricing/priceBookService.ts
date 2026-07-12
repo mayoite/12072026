@@ -86,6 +86,34 @@ export async function activatePriceBookVersion(
   return { ok: true, contract };
 }
 
+export async function approvePriceBookVersion(
+  store: PriceBookStore,
+  bookId: string,
+  versionId: string,
+  role: PriceBookRole,
+): Promise<ActivateResult> {
+  if (role === "viewer") {
+    return { ok: false, error: "Viewer cannot approve price-book versions" };
+  }
+
+  const snapshot = await store.getBook(bookId);
+  if (!snapshot) return { ok: false, error: `Price book "${bookId}" not found` };
+
+  const target = snapshot.versions.find((v) => v.versionId === versionId);
+  if (!target) return { ok: false, error: `Version "${versionId}" not found` };
+  if (target.status !== "draft") {
+    return { ok: false, error: `Only draft versions can be approved (got ${target.status})` };
+  }
+
+  const nextVersions = snapshot.versions.map((version) =>
+    version.versionId === versionId ? { ...version, status: "approved" as const } : version,
+  );
+  await store.saveBook(snapshot.book, nextVersions);
+  const contract = emitPriceBookContract(snapshot.book, nextVersions);
+  if (!contract) return { ok: false, error: "Approve failed contract emission" };
+  return { ok: true, contract };
+}
+
 export async function rollbackPriceBookVersion(
   store: PriceBookStore,
   bookId: string,

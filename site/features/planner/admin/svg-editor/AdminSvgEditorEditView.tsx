@@ -39,6 +39,9 @@ import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 import type { PublishDescriptorResult } from "./publishDescriptorWithPipeline";
 import { PublishedSvgPreview } from "./PublishedSvgPreview";
 import { DescriptorRevisionPanel } from "./DescriptorRevisionPanel";
+import { proveDescriptorFootprintMm } from "./footprintMmProof";
+import type { CatalogLifecycleState } from "./catalogLifecycle";
+import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
 import { sceneFromDescriptor } from "./sceneFromDescriptor";
 import { serializeSceneToDefinition } from "./scene/svgSceneSerializer";
 import type { SvgSceneDocument } from "./scene/svgSceneDocument";
@@ -126,6 +129,7 @@ export interface AdminSvgEditorEditViewProps {
   readonly descriptor: BlockDescriptor;
   readonly updatedAtLabel: string;
   readonly artifactStatus: SvgArtifactStatus;
+  readonly catalogLifecycle: CatalogLifecycleState;
   /** Server action wired by the RSC page: persists + runs the SVG pipeline. */
   readonly onPublishAction?: (
     data: SvgEditorFormState,
@@ -137,8 +141,11 @@ export function AdminSvgEditorEditView({
   descriptor,
   updatedAtLabel,
   artifactStatus,
+  catalogLifecycle,
   onPublishAction,
 }: AdminSvgEditorEditViewProps) {
+  const [lifecycle, setLifecycle] = useState(catalogLifecycle);
+  const [approving, setApproving] = useState(false);
   const router = useRouter();
 
   // Controlled form state, seeded from the persisted descriptor.
@@ -245,6 +252,23 @@ export function AdminSvgEditorEditView({
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, [sceneDirty]);
 
+  const handleApproveForBuyers = useCallback(async () => {
+    if (artifactStatus.state !== "published") return;
+    setApproving(true);
+    try {
+      const response = await browserApiFetch(apiPath(`/api/admin/svg-editor/${slug}/lifecycle`), {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ state: "live" }),
+      });
+      if (!response.ok) return;
+      setLifecycle("live");
+      router.refresh();
+    } finally {
+      setApproving(false);
+    }
+  }, [artifactStatus.state, router, slug]);
+
   const handleResetToPublished = useCallback(() => {
     if (sceneDirty && !window.confirm("Discard unpublished studio edits and restore the last published scene?")) {
       return;
@@ -308,6 +332,8 @@ export function AdminSvgEditorEditView({
     }
   }, [onPublishAction, publishPayloadFromStudio, router, slug]);
 
+  const footprintProof = useMemo(() => proveDescriptorFootprintMm(descriptor), [descriptor]);
+
   const checksumShort =
     typeof descriptor.checksum === "string" && descriptor.checksum.length > 16
       ? `${descriptor.checksum.slice(0, 16)}…`
@@ -337,6 +363,35 @@ export function AdminSvgEditorEditView({
                 · <span className="admin-badge admin-badge--warn">Unsaved studio edits</span>
               </>
             ) : null}
+            {" "}
+            ·{" "}
+            <span
+              className={
+                lifecycle === "live"
+                  ? "admin-badge admin-badge--active"
+                  : lifecycle === "retired"
+                    ? "admin-badge admin-badge--hidden"
+                    : "admin-badge admin-badge--warn"
+              }
+            >
+              {lifecycle}
+            </span>
+            {" "}
+            ·{" "}
+            <span
+              data-testid="admin-footprint-mm-proof"
+              data-aligned={footprintProof.aligned ? "true" : "false"}
+              data-width-mm={footprintProof.widthMm}
+              data-depth-mm={footprintProof.depthMm}
+              className={
+                footprintProof.aligned
+                  ? "admin-badge admin-badge--active"
+                  : "admin-badge admin-badge--warn"
+              }
+            >
+              {footprintProof.widthMm}×{footprintProof.depthMm} mm
+              {footprintProof.aligned ? "" : " · viewBox mismatch"}
+            </span>
           </p>
         </div>
         <div className="admin-page__actions">
@@ -354,6 +409,19 @@ export function AdminSvgEditorEditView({
             disabled={feedback.submitting || !sceneDirty}
           >
             Reset to published
+          </button>
+          <button
+            type="button"
+            className="admin-btn admin-btn--outline"
+            onClick={() => void handleApproveForBuyers()}
+            disabled={
+              approving ||
+              feedback.submitting ||
+              lifecycle === "live" ||
+              artifactStatus.state !== "published"
+            }
+          >
+            Approve for buyers
           </button>
           <button
             type="button"

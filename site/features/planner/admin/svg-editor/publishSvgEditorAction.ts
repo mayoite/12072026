@@ -21,6 +21,7 @@ import {
   type PublishDescriptorResult,
 } from "@/features/planner/admin/svg-editor/publishDescriptorWithPipeline";
 import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/newBlockDescriptorStub";
+import { setCatalogLifecycle } from "@/features/planner/admin/svg-editor/catalogLifecycle";
 import { appendDescriptorAudit } from "@/features/planner/admin/svg-editor/descriptorAuditLog";
 import { resolveAuthContext } from "@/features/shared/api/withAuth";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
@@ -56,11 +57,12 @@ export async function publishSvgEditorAction(
   const input = formStateToDescriptorInput(descriptor, formFromEditor);
   const published = await publishDescriptorWithPipeline(input);
   if (published.success) {
+    setCatalogLifecycle(published.descriptor.slug, "draft");
     appendDescriptorAudit({
       actorId,
       slug: published.descriptor.slug,
       action: "publish",
-      detail: { checksum: published.descriptor.checksum },
+      detail: { checksum: published.descriptor.checksum, lifecycle: "draft" },
     });
   }
   return published;

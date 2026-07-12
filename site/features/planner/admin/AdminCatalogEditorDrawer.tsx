@@ -20,6 +20,7 @@ import {
   type EditorMode,
   type StandardDraft,
 } from "./adminCatalogManagerUtils";
+import { WorkstationFamilyAuthorFields } from "./workstation/WorkstationFamilyAuthorFields";
 
 function JsonFieldMessage({ error }: { error?: string }) {
   if (!error) {
@@ -281,12 +282,20 @@ function ConfiguratorCatalogForm({
           </p>
         </div>
 
+        {draft.sizing_type === "parametric" ? (
+          <WorkstationFamilyAuthorFields
+            workstationJson={draft.workstationJson}
+            readOnly={readOnly}
+            onWorkstationJsonChange={(next) => set("workstationJson", next)}
+          />
+        ) : null}
+
         {showAdvancedJson ? (
           <div className="space-y-3">
             {draft.sizing_type === "parametric" ? (
               <AdminField
-                label="Workstation JSON *"
-                hint="shape, system, seaterOptions, lengthOptions, depthOptions"
+                label="Workstation JSON (raw)"
+                hint="Advanced override — structured fields above are preferred"
               >
                 <AdminTextarea
                   value={draft.workstationJson}

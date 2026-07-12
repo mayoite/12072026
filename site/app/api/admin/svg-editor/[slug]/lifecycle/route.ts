@@ -48,7 +48,7 @@ async function handleLifecyclePatch(
   appendDescriptorAudit({
     actorId,
     slug,
-    action: "lifecycle_change",
+    action: state === "live" ? "approve" : "lifecycle_change",
     detail: { state },
   });
 

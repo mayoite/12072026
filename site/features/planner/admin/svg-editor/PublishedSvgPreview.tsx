@@ -73,6 +73,14 @@ export function PublishedSvgPreview({
       data-testid="admin-svg-preview"
       data-slug={slug}
     >
+      {size === "thumb" && status.publicUrl ? (
+        <img
+          src={status.publicUrl}
+          alt=""
+          className="admin-svg-preview__img"
+          data-testid="admin-svg-preview-img"
+        />
+      ) : null}
       <div
         className="admin-svg-preview__stage"
         role="img"

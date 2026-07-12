@@ -4,7 +4,7 @@ Live run gates each tick (browser and/or on-disk bytes).
 
 ## PHASE-01 — Authoring quality
 - [x] Baseline reproof: HEAD `216e8dc94c4ac0062855439c84dfccc9804047a4`
-- [ ] Inventory preview: catalog UI shows `img[src*="/svg-catalog/"]` for published symbol (preview ≠ plan paint)
+- [x] Inventory preview: catalog UI shows `img[src*="/svg-catalog/"]` for published symbol (thumb `admin-svg-preview-img`)
 - [x] `publishMultipath.test.ts` green (chaise + desk multipath)
 - [x] Publish pipeline emits per-block paths (maker + blocks union path)
 - [x] `chaise-lounge-001.svg` + catalog set regenerated via `compileSvgForPublish`
@@ -28,7 +28,7 @@ Live run gates each tick (browser and/or on-disk bytes).
 - [x] Reset-to-published restores bytes (studio remount + form reseed)
 
 ## PHASE-04 — Workstation family
-- [ ] Family authored via real form (seats/topology/options)
+- [x] Family authored via real form (seats/topology/options) (`WorkstationFamilyAuthorFields`)
 - [ ] Version release works; one version drives 2D/3D/BOQ
 - [x] Emits documented workstation-family JSON contract (`workstationFamilyContract` + fixture)
 - [ ] Version replacement requires explicit migration choice
@@ -46,7 +46,7 @@ Live run gates each tick (browser and/or on-disk bytes).
 
 ## PHASE-06 — Release / audit / rollback
 - [x] Revision history visible per symbol (`DescriptorRevisionPanel` + revisions API)
-- [ ] Approve step before buyer-visible publish
+- [x] Approve step before buyer-visible publish (publish → draft; Approve for buyers → live)
 - [x] Rollback restores prior bytes; newer revision still on disk (`rollbackDescriptorToVersion`)
 - [x] Audit log records who/when/what (`_descriptor-audit.jsonl` + publish hook)
 

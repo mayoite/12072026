@@ -16,6 +16,10 @@ import {
 } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/newBlockDescriptorStub";
 import { publishSvgEditorAction } from "@/features/planner/admin/svg-editor/publishSvgEditorAction";
+import {
+  readLifecycleManifest,
+  resolveCatalogLifecycle,
+} from "@/features/planner/admin/svg-editor/catalogLifecycle";
 import { readSvgArtifactStatus } from "@/features/planner/admin/svg-editor/svgArtifactStatus.server";
 
 /** Disk descriptors can change under admin publish — never static-cache this route. */
@@ -60,6 +64,11 @@ export default async function AdminSvgEditorDetailPage({
   // Bind slug so Client Component receives a Server Action ref (not a page wrapper fn).
   const onPublishAction = publishSvgEditorAction.bind(null, slug);
   const artifactStatus = readSvgArtifactStatus(slug);
+  const lifecycle = resolveCatalogLifecycle(
+    slug,
+    artifactStatus.state,
+    readLifecycleManifest(),
+  );
 
   return (
     <AdminSvgEditorEditView
@@ -67,6 +76,7 @@ export default async function AdminSvgEditorDetailPage({
       descriptor={descriptor}
       updatedAtLabel={updatedAtLabel}
       artifactStatus={artifactStatus}
+      catalogLifecycle={lifecycle}
       onPublishAction={onPublishAction}
     />
   );

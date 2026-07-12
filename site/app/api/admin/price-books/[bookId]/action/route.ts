@@ -1,0 +1,61 @@
+/**
+ * POST /api/admin/price-books/[bookId]/action — approve | activate | rollback
+ */
+
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+
+import { withAuth } from "@/features/shared/api/withAuth";
+import { success } from "@/features/shared/api/apiResponse";
+import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
+import { runPriceBookAction } from "@/features/planner/admin/pricing/priceBookAdmin.server";
+import type { PriceBookRole } from "@/features/planner/admin/pricing/priceBookService";
+
+type RouteContext = { params: Promise<{ bookId: string }> };
+
+function parseRole(value: unknown): PriceBookRole {
+  if (value === "author" || value === "approver" || value === "viewer") return value;
+  return "approver";
+}
+
+async function handleAction(req: NextRequest, bookId: string) {
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    throw new ApiError(400, API_ERROR_CODES.INVALID_INPUT, "Invalid JSON body");
+  }
+  const record = body && typeof body === "object" ? (body as Record<string, unknown>) : {};
+  const action = record.action;
+  const versionId = record.versionId;
+  if (action !== "approve" && action !== "activate" && action !== "rollback") {
+    throw new ApiError(400, API_ERROR_CODES.INVALID_INPUT, "action must be approve, activate, or rollback");
+  }
+  if (typeof versionId !== "string" || versionId.trim() === "") {
+    throw new ApiError(400, API_ERROR_CODES.INVALID_INPUT, "versionId is required");
+  }
+
+  const result = await runPriceBookAction(
+    bookId,
+    action,
+    versionId.trim(),
+    parseRole(record.role),
+  );
+  if (!result.ok) {
+    return NextResponse.json({ success: false, error: result.error }, { status: 422 });
+  }
+  return success({ contract: result.contract });
+}
+
+export const POST = withAuth<RouteContext>(
+  async (req, _auth, context) => {
+    const { bookId } = await context.params;
+    return handleAction(req, bookId);
+  },
+  {
+    role: "admin",
+    rateLimitScope: "price-books:action",
+    rateLimit: 20,
+    requireCsrf: true,
+  },
+);

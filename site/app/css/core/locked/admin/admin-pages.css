@@ -573,6 +573,13 @@
   margin: 0;
 }
 
+[data-admin-layout] .admin-svg-preview__img {
+  display: block;
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: contain;
+}
+
 [data-admin-layout] .admin-svg-preview--thumb .admin-svg-preview__stage {
   width: 3.5rem;
   height: 3.5rem;
