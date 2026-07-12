@@ -5,7 +5,7 @@
  * pinned golden SVG file.
  *
  * Three golden fixture blocks (union/difference/intersection) per quality-gates:
- *   chaise     → union         (two overlapping rects → unified outline)
+ *   chaise     → union         (two blocks → per-block paths for inventory preview)
  *   side-table → difference    (tabletop minus four leg cutouts)
  *   sectional  → intersection  (two overlapping sections → overlap only)
  *

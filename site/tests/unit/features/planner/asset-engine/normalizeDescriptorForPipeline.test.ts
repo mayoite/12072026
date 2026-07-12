@@ -26,10 +26,35 @@ describe("normalizeDescriptorForPipeline (SVG S1)", () => {
   });
 
   it("keeps explicit boolean variant", () => {
-    expect(resolveBooleanVariant("union", 5)).toBe("union");
-    expect(resolveBooleanVariant("difference", 1)).toBe("difference");
-    expect(resolveBooleanVariant("intersection", 3)).toBe("intersection");
-    expect(resolveBooleanVariant("xor", 2)).toBe("xor");
+    const five = Array.from({ length: 5 }, (_, i) => ({
+      x: i,
+      y: 0,
+      width: 10,
+      height: 10,
+    }));
+    const pair = [
+      { x: 0, y: 0, width: 10, height: 10 },
+      { x: 1, y: 1, width: 2, height: 2 },
+    ];
+    expect(resolveBooleanVariant("union", five)).toBe("union");
+    expect(resolveBooleanVariant("difference", [{ x: 0, y: 0, width: 1, height: 1 }])).toBe(
+      "difference",
+    );
+    expect(resolveBooleanVariant("intersection", pair)).toBe("intersection");
+    expect(resolveBooleanVariant("xor", pair)).toBe("xor");
+  });
+
+  it("fixed multi-block chaise-like parts → union (not cutout difference)", () => {
+    const normalized = normalizeDescriptorForPipeline({
+      slug: "chaise-lounge-001",
+      variant: "fixed",
+      viewBox: { x: 0, y: 0, width: 800, height: 1600 },
+      blocks: [
+        { id: "seat-block", x: 0, y: 400, width: 800, depth: 1200 },
+        { id: "backrest-block", x: 0, y: 0, width: 800, depth: 420 },
+      ],
+    });
+    expect(normalized.variant).toBe("union");
   });
 
   it("single block fixed → union", () => {

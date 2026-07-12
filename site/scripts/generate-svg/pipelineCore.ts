@@ -278,6 +278,56 @@ export interface ThemeTokens {
   [key: string]: string | undefined;
 }
 
+function blockRectToPath(b: BlockRect): string {
+  return [
+    `M ${fmt(b.x)} ${fmt(b.y)}`,
+    `L ${fmt(b.x + b.width)} ${fmt(b.y)}`,
+    `L ${fmt(b.x + b.width)} ${fmt(b.y + b.height)}`,
+    `L ${fmt(b.x)} ${fmt(b.y + b.height)}`,
+    "Z",
+  ].join(" ");
+}
+
+/** Inventory publish: one path per block (seat + backrest visible), not one merged silhouette. */
+export function buildPerBlockSvgString(
+  slug: string,
+  viewBox: ViewBox,
+  blocks: readonly BlockRect[],
+  themeTokens: ThemeTokens | undefined,
+  title: string | undefined,
+  desc: string | undefined,
+  variant: string | undefined,
+): string {
+  const titleAttr = `<title>${escXml(title ?? slug)}</title>`;
+  const descAttr = desc ? `<desc>${escXml(desc)}</desc>` : "";
+  const tokens = themeTokens ?? {};
+  const fillAttr = tokens["fill-primary"]
+    ? ` fill="${escXml(tokens["fill-primary"])}"`
+    : ` fill="currentColor"`;
+  const strokeAttr = tokens["stroke-accent"]
+    ? ` stroke="${escXml(tokens["stroke-accent"])}"`
+    : "";
+  const variantAttr = variant ? ` data-block-variant="${escXml(variant)}"` : "";
+  const vb = `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
+  const inner = blocks
+    .map((b, index) => {
+      const d = blockRectToPath(b);
+      const idAttr = b.id ? ` id="${escXml(b.id)}"` : ` id="block-${index}"`;
+      const classAttr = slug ? ` class="${slug}"` : "";
+      return `<path d="${d}"${fillAttr}${strokeAttr}${idAttr}${classAttr}/>`;
+    })
+    .join("\n");
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}"${variantAttr}>`,
+    titleAttr,
+    descAttr,
+    `<g>`,
+    inner,
+    `</g>`,
+    `</svg>`,
+  ].join("\n");
+}
+
 export function buildSvgString(
   slug: string,
   viewBox: ViewBox,
@@ -321,7 +371,13 @@ export async function optimiseSvg(svg: string): Promise<string> {
 
 // ── Block → polygon conversion ────────────────────────────────────────────────
 
-export interface BlockRect { x: number; y: number; width: number; height: number }
+export interface BlockRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  id?: string;
+}
 
 /** Rect block → polygon-clipping Polygon (one outer ring, no holes). */
 export function blockToPolygon(b: BlockRect): Polygon {
@@ -374,8 +430,22 @@ export async function runPipelineCore(descriptor: PipelineDescriptor): Promise<s
     return sanitiseSvg(fallback);
   }
 
-  const polygons: Polygon[] = rawBlocks.map(blockToPolygon);
   const variant = (descriptor.variant ?? "union") as BooleanVariant;
+  if (variant === "union" && rawBlocks.length >= 2) {
+    const assembled = buildPerBlockSvgString(
+      descriptor.slug,
+      viewBox,
+      rawBlocks,
+      descriptor.themeTokens,
+      descriptor.name,
+      descriptor.description,
+      descriptor.variant,
+    );
+    const optimised = await optimiseSvg(assembled);
+    return sanitiseSvg(optimised);
+  }
+
+  const polygons: Polygon[] = rawBlocks.map(blockToPolygon);
   const resultRings = applyBooleanOp(polygons, variant);
   const dPath = polygonsToPath(resultRings);
 

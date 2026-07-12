@@ -100,11 +100,11 @@ export const SVG_STAGES: readonly AssetStage[] = [
     order: 7,
     name: "Catalog + inventory consume SVG URL",
     status: "implemented",
-    produces: "previewImageUrl stamp + plan-canvas draw of /svg-catalog/{slug}.svg",
+    produces: "previewImageUrl stamp for inventory thumbnails (publish path only)",
     entry:
-      "descriptorCatalogBridge + placeCatalogItemInProject + svgPlanSymbolCache + plan-canvas SVG draw",
+      "descriptorCatalogBridge + placeCatalogItemInProject + catalog previewImageUrl",
     note:
-      "place stamps previewImageUrl; plan canvas draws /svg-catalog/*.svg via drawImage when geometryMode !== modular-cabinet-v0; Block2D fallback on load fail / cabinet-v0.",
+      "Inventory preview uses /svg-catalog/*.svg from compileSvgForPublish. Live plan paint is Fabric Block2D multiprim on PlannerFabricStage — not catalog drawImage.",
   },
 ] as const;
 

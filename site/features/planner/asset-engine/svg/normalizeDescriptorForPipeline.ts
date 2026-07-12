@@ -148,17 +148,34 @@ function parseMakerRecipe(raw: unknown): MakerRecipe | undefined {
   return undefined;
 }
 
+function blocksLookLikeCutouts(blocks: readonly PipelineBlockRect[]): boolean {
+  if (blocks.length < 2) return false;
+  const areas = blocks.map((b) => b.width * b.height);
+  const maxArea = Math.max(...areas);
+  if (maxArea <= 0) return false;
+  const minArea = Math.min(...areas);
+  // Side-table legs / interior cutouts are tiny vs tabletop; chaise parts are similar scale.
+  return minArea / maxArea < 0.15;
+}
+
 /**
  * Map product variant labels onto boolean ops for the boolean compiler.
- * Multi-block furniture seeds (tabletop + cutouts) → difference.
- * Single block / unknown → union.
+ * Multi-block with cutout-scale children → difference; adjacent parts → union.
  */
 export function resolveBooleanVariant(
   rawVariant: unknown,
-  blockCount: number,
+  blocks: readonly PipelineBlockRect[],
 ): PipelineBooleanVariant {
+  const blockCount = blocks.length;
   if (typeof rawVariant === "string" && BOOLEAN_VARIANTS.has(rawVariant as PipelineBooleanVariant)) {
     return rawVariant as PipelineBooleanVariant;
+  }
+  if (
+    typeof rawVariant === "string" &&
+    (rawVariant === "fixed" || rawVariant === "configurable" || rawVariant === "parametric")
+  ) {
+    if (blockCount >= 2 && blocksLookLikeCutouts(blocks)) return "difference";
+    return "union";
   }
   if (blockCount >= 2) return "difference";
   return "union";
@@ -219,7 +236,7 @@ export function normalizeDescriptorForPipeline(
       ? blocks
       : synthesizeBlocksFromGeometry(geometry ?? dimensions, viewBox);
 
-  const variant = resolveBooleanVariant(root.variant, finalBlocks.length);
+  const variant = resolveBooleanVariant(root.variant, finalBlocks);
 
   const themeTokens = asRecord(root.themeTokens) as
     | Record<string, string | undefined>

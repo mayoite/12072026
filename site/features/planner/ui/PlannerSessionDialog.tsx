@@ -289,7 +289,7 @@ export function PlannerSessionDialog({
                     ) : (
                       <>
                         {isAuthenticated ? <Cloud className={SESSION_TINY_ICON_CLASS} /> : <ShieldCheck className={SESSION_TINY_ICON_CLASS} />}
-                        {isAuthenticated ? "Cloud Ready" : "Draft Mode"}
+                        {isAuthenticated ? "Cloud Ready" : "Guest · local draft"}
                       </>
                     )}
                   </span>

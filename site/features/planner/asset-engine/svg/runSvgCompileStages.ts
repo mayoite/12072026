@@ -47,6 +47,7 @@ function toPipelineDescriptor(
       y: b.y,
       width: b.width,
       height: b.height,
+      id: b.id,
     })),
     themeTokens: normalized.themeTokens,
   };

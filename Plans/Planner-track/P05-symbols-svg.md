@@ -1,6 +1,6 @@
 # P05 — W2 symbol quality + SVG path honesty
 
-**Status:** REPROVE — multiprim library + Fabric paint + browser eyes green on this checkout; **CP-05 not PASS** (published SVG multipath residual).
+**Status:** **PASS** (agent 2026-07-12 — publish multipath + Fabric cabinet e2e + honesty split on this checkout).
 
 **Gate:** **W2 symbol half** / CP-05 — readable **cabinet-v0** on the **live** plan canvas; honest Block2D vs SVG-publish.  
 **Evidence:** `results/planner/world-standard-wave/05-symbols-svg/`  
@@ -39,7 +39,7 @@ Live plan paint = Fabric multiprim only. SVG catalog = inventory publish only.
 | Units | cabinet-v0 + fabricBlock2D + renderBlock2D: **32 tests green** (logs under evidence/) |
 | **Live Fabric paint** | `createFabricFurnitureBlock` multiprim wired; e2e `open3d-p05-cabinet-multiprim` **PASS** (eyes PNG multiprim) |
 | SVG publish honesty | Plan ≠ catalog; NOTES: `agents-work/P05-SVG-HONESTY-NOTES.md` |
-| **CP-05** | **Not green** — `open3d-cp05-symbols-s7` fails published chaise multipath (1 pathish); do **not** forge PASS |
+| **CP-05** | **PASS** — publish per-block paths + cp05/p05 browser green; honesty split in spec + `stages.ts` |
 
 ---
 

@@ -45,7 +45,7 @@ export function ProjectSetupGate({
     return <PlannerSkeleton />;
   }
 
-  if (guestMode || isFullyComplete) {
+  if (isFullyComplete) {
     return <>{children}</>;
   }
 

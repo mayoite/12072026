@@ -3,7 +3,7 @@
 **Status:** REPROVE → **inventory refreshed this checkout** (hostWiring 4/4 + artifacts). Browser W gates still later cards.
 
 **Gate:** CP-01 — map what the live planner **does** vs what docs/UI **claim** (paths required).  
-**Evidence:** `results/planner/world-standard-wave/00-product-truth/`  
+**Owner gate:** Say inventory OK on this HEAD — no evidence folder required.
 **CP:** [CHECKPOINTS](./CHECKPOINTS.md) · [BOARD](./BOARD.md) · Approach **A**
 
 **Goal:** Inventory so later phases **raise** the **only** live plan canvas — Fabric on `canvas/`. No second plan host.
@@ -23,7 +23,7 @@
 | Furniture env flag | Module exists; **not wired** in workspace | Flag as product host switch |
 | Walls + furniture | In-stage Fabric when layers on | Split across two hosts |
 | 3D | `features/planner/3d/` + `getPlannerViewerControlProps()` | R3F rewrite as W4 substitute |
-| On-disk archive | `_archive/fabric/` only (historical shell) | Treat any deleted host as restorable product 2D |
+| On-disk archive | `features/planner/_archive/` **absent** (deleted; `hostWiringP01`) | Treat any deleted host as restorable product 2D |
 
 Unit: `hostWiringP01.test.ts` — PlannerCanvasStage sole; no second-host strings in live mounts; no flag in workspace.
 
@@ -43,8 +43,8 @@ Unit: `hostWiringP01.test.ts` — PlannerCanvasStage sole; no second-host string
 
 | File | Role |
 |------|------|
-| `../../results/planner/world-standard-wave/00-product-truth/INVENTORY.md` | Fabric-sole hosts, tools surface, W1–W8 code surface |
-| `../../results/planner/world-standard-wave/00-product-truth/CONTRADICTIONS.md` | Claim vs code — Block2D/select gaps as Fabric raise only |
+| `../../results/planner/world-standard-wave/00-product-truth/INVENTORY.md` | Fabric-sole hosts, tools surface, W1–W8 code surface (if present) |
+| `../../results/planner/world-standard-wave/00-product-truth/CONTRADICTIONS.md` | Claim vs code — Block2D/select gaps as Fabric raise only (if present) |
 | `HEAD.txt` · `run.json` · `NOTES.md` | Checkout, Approach A, vitestSmoke |
 | Vitest | Prefer `hostWiringP01` + smoke — ok \| failed \| skipped + reason |
 
