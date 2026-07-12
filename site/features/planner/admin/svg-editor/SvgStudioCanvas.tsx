@@ -109,6 +109,8 @@ export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudio
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const document = history.present.document;
+  const documentRef = useRef(document);
+  documentRef.current = document;
 
   // Mount the SVG.js engine once, lazily (client-only import).
   useEffect(() => {
@@ -116,6 +118,7 @@ export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudio
     if (!mount) return;
     let disposed = false;
     let offPointer: (() => void) | undefined;
+    let offChange: (() => void) | undefined;
 
     void import("./scene/svgJsEngineAdapter").then(({ createSvgJsEngineAdapter }) => {
       if (disposed || !mountRef.current) return;
@@ -124,11 +127,20 @@ export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudio
       offPointer = adapter.on("node:pointerdown", (event) => {
         setSelectedId(event.nodeId);
       });
+      offChange = adapter.on("node:change", (event) => {
+        const latestDoc = documentRef.current;
+        const updated = replaceNode(latestDoc, event.nodeId, (node) => ({
+          ...node,
+          ...event.patch,
+        } as SvgSceneNode));
+        apply(`Transform ${findNode(latestDoc, event.nodeId)?.name || "shape"}`, updated);
+      });
     });
 
     return () => {
       disposed = true;
       offPointer?.();
+      offChange?.();
       adapterRef.current?.destroy();
       adapterRef.current = null;
     };
@@ -138,8 +150,8 @@ export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudio
 
   // Push every committed document to the engine.
   useEffect(() => {
-    adapterRef.current?.render(document);
-  }, [document]);
+    adapterRef.current?.render(document, selectedId);
+  }, [document, selectedId]);
 
   const apply = useCallback(
     (label: string, next: SvgSceneDocument) => {

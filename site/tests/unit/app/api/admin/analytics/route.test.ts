@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 
-vi.mock("@/lib/api/withAuth", () => ({
+vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: unknown) => handler,
 }));
 

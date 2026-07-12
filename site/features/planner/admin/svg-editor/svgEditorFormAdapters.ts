@@ -117,7 +117,7 @@ export function descriptorToFormState(descriptor: BlockDescriptor): SvgEditorFor
     assetsGlbUrl: assets?.glbUrl ?? "",
     assetsSvgUrl: assets?.svgUrl ?? "",
     sceneViewBox: descriptor.viewBox,
-    sceneParts: descriptor.parts,
+    sceneParts: "parts" in descriptor ? (descriptor as unknown as { parts: unknown[] }).parts as never : undefined,
   };
 }
 

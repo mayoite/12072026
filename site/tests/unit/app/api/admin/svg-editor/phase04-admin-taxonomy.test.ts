@@ -9,7 +9,7 @@ import { NextRequest } from "next/server";
 import { POST } from "@/app/api/admin/svg-editor/route";
 import type * as PersistBlockDescriptor from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
 
-vi.mock("@/lib/api/withAuth", () => ({
+vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: (req: NextRequest) => Promise<Response>) => handler,
 }));
 

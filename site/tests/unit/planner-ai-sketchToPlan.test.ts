@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { SketchToPlanRequestSchema, SketchToPlanResponseSchema } from "@/lib/api/schemas";
+import { SketchToPlanRequestSchema, SketchToPlanResponseSchema } from "@/features/shared/api/schemas";
 import { buildSketchPlanFabricDraft } from "@/features/planner/ai/sketchToPlan";
 
 describe("sketch-to-plan schemas", () => {

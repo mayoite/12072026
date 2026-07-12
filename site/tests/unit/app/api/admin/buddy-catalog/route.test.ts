@@ -4,13 +4,13 @@ import { GET, POST } from "@/app/api/admin/buddy-catalog/route";
 import {
   listConfiguratorCatalog,
   createConfiguratorCatalog,
-} from "@/lib/api/catalogAdminHandlers";
+} from "@/features/planner/admin/api/catalogAdminHandlers";
 
-vi.mock("@/lib/api/withAuth", () => ({
+vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: unknown) => handler,
 }));
 
-vi.mock("@/lib/api/catalogAdminHandlers", () => ({
+vi.mock("@/features/planner/admin/api/catalogAdminHandlers", () => ({
   listConfiguratorCatalog: vi.fn(),
   createConfiguratorCatalog: vi.fn(),
 }));

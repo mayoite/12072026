@@ -232,9 +232,9 @@ export function createSvgJsEngineAdapter(
           element.on("dragend", () => {
             let patch: Partial<SvgSceneNode> = {};
             if (nodeModel.kind === "rect" || nodeModel.kind === "text") {
-              patch = { x: element.x(), y: element.y() };
+              patch = { x: Number(element.x()), y: Number(element.y()) };
             } else if (nodeModel.kind === "circle") {
-              patch = { cx: element.cx(), cy: element.cy() };
+              patch = { cx: Number(element.cx()), cy: Number(element.cy()) };
             } else if (nodeModel.kind === "line") {
               patch = {
                 x1: Number(element.attr("x1")),
@@ -252,16 +252,16 @@ export function createSvgJsEngineAdapter(
             let patch: Partial<SvgSceneNode> = {};
             if (nodeModel.kind === "rect") {
               patch = {
-                x: element.x(),
-                y: element.y(),
-                width: element.width(),
-                height: element.height(),
+                x: Number(element.x()),
+                y: Number(element.y()),
+                width: Number(element.width()),
+                height: Number(element.height()),
               };
             } else if (nodeModel.kind === "circle") {
               patch = {
-                cx: element.cx(),
-                cy: element.cy(),
-                r: element.width() / 2,
+                cx: Number(element.cx()),
+                cy: Number(element.cy()),
+                r: Number(element.width()) / 2,
               };
             } else if (nodeModel.kind === "line") {
               patch = {

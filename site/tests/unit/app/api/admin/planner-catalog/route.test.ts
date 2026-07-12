@@ -1,13 +1,13 @@
 import { describe, it, expect, vi } from 'vitest';
 import { GET, POST } from '@/app/api/admin/planner-catalog/route';
-import { listConfiguratorCatalog, createConfiguratorCatalog } from '@/lib/api/catalogAdminHandlers';
+import { listConfiguratorCatalog, createConfiguratorCatalog } from '@/features/planner/admin/api/catalogAdminHandlers';
 import { NextRequest } from 'next/server';
 
-vi.mock('@/lib/api/withAuth', () => ({
+vi.mock('@/features/shared/api/withAuth', () => ({
   withAuth: (handler: any) => handler,
 }));
 
-vi.mock('@/lib/api/catalogAdminHandlers', () => ({
+vi.mock('@/features/planner/admin/api/catalogAdminHandlers', () => ({
   listConfiguratorCatalog: vi.fn(),
   createConfiguratorCatalog: vi.fn(),
 }));

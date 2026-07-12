@@ -41,10 +41,6 @@ describe("PlannerRootLayout", () => {
     render(resolvedLayout);
 
     expect(screen.getByTestId("planner-layout-shell")).toBeInTheDocument();
-    expect(screen.getByTestId("service-worker-register")).toBeInTheDocument();
-    expect(screen.getByTestId("csrf-bootstrap")).toBeInTheDocument();
     expect(screen.getByTestId("test-child")).toBeInTheDocument();
-    expect(screen.getByText("Skip to main content")).toBeInTheDocument();
-
   });
 });

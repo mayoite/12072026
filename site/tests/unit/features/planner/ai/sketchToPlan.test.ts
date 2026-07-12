@@ -10,7 +10,7 @@ import {
 
 const mockCreate = vi.hoisted(() => vi.fn());
 
-vi.mock("@/lib/api/schemas", () => ({
+vi.mock("@/features/shared/api/schemas", () => ({
   SketchToPlanResponseSchema: {
     parse: (val: unknown) => val,
   },

@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config';
 import path from 'path';
+import { loadEnv } from 'vite';
 
 import {
   VITEST_COMMON_COVERAGE_REPORTERS,
@@ -30,6 +31,11 @@ export default defineConfig({
     },
   },
   test: {
+    // Load repo-root .env.local so auth/CSRF/env-gated code sees real vars in test
+    env: {
+      ...loadEnv('test', path.resolve(VITEST_REPO_ROOT, '..'), ''),
+      DEV_AUTH_BYPASS: 'true',
+    },
     // forks is safer than threads on Windows for V8 coverage file merging
     pool: 'forks',
     globals: true,

@@ -15,7 +15,7 @@
 
 import { serializeSceneToDefinition } from "./svgSceneSerializer";
 import type { SvgBlockDefinitionV1 } from "@/features/planner/admin/svg-editor/svgBlockSchemas";
-import type { SvgSceneDocument, SvgSceneViewBox } from "./svgSceneDocument";
+import type { SvgSceneDocument, SvgSceneViewBox, SvgSceneNode } from "./svgSceneDocument";
 
 export interface SvgEngineViewport {
   /** Pan offset in scene units. */
@@ -104,7 +104,7 @@ export function createHeadlessEngineAdapter(
   }
 
   return {
-    render(document) {
+    render(document, selectedId) {
       assertLive();
       current = document;
     },

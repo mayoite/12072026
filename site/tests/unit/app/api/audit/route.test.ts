@@ -6,7 +6,7 @@ import { rateLimit } from "@/lib/rateLimit";
 import { createServerClient } from "@/lib/supabase/server";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 import { userBelongsToTeam } from "@/lib/audit/teamAccess";
-import { API_ERROR_CODES } from "@/lib/api/ApiError";
+import { API_ERROR_CODES } from "@/features/shared/api/ApiError";
 
 vi.mock("@/lib/audit/teamAccess", () => ({
   isAuditTeamId: (value: string) =>

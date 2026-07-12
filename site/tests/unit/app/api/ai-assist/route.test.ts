@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 const resolveProviderChain = vi.hoisted(() => vi.fn());
 const requestProviderText = vi.hoisted(() => vi.fn());
 
-vi.mock("@/lib/api/withAuth", () => ({
+vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: (req: NextRequest) => Promise<Response>) => handler,
 }));
 

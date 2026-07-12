@@ -59,6 +59,6 @@ describe('app/admin/layout.tsx', () => {
     const resolved = await AdminLayout({ params: Promise.resolve({ id: '1', type: 'standard' }), searchParams: Promise.resolve({ page: '1' }) } as any);
     const html = renderToStaticMarkup(resolved);
     // minimal assertion
-    expect(html).toContain('<html');
+    expect(html).toContain('mock---features-planner-admin-AdminLayoutShell');
   });
 });

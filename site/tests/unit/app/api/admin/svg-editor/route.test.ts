@@ -17,7 +17,7 @@ import { NextRequest } from "next/server";
 import { POST } from "@/app/api/admin/svg-editor/route";
 import type * as SvgBlockDescriptorLoader from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
 
-vi.mock("@/lib/api/withAuth", () => ({
+vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (
     handler: (req: NextRequest, ctx: unknown) => Promise<Response>,
     _opts: unknown,

@@ -12,7 +12,7 @@ import routeContract from "@/config/route-contract.json";
 import {
   API_ERROR_CODES,
   DEFAULT_STATUS_FOR_CODE,
-} from "@/lib/api/ApiError";
+} from "@/features/shared/api/ApiError";
 import {
   PLANNER_ACTION_PERMISSION_MATRIX,
   PLANNER_GUEST_BLOCKED_ACTIONS,

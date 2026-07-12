@@ -5,7 +5,7 @@ const getFeatureFlags = vi.hoisted(() => vi.fn(() => ({ plannerV2: true })));
 const setFeatureFlags = vi.hoisted(() => vi.fn());
 const getAllFlagNames = vi.hoisted(() => vi.fn(() => ["plannerV2"]));
 
-vi.mock("@/lib/api/withAuth", () => ({
+vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: unknown) => handler,
 }));
 

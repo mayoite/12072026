@@ -5,7 +5,7 @@ import { createSupabaseAuthAdminClient } from "@/platform/supabase/auth-admin";
 import { createServerClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
-import { API_ERROR_CODES } from "@/lib/api/ApiError";
+import { API_ERROR_CODES } from "@/features/shared/api/ApiError";
 
 vi.mock("@/platform/supabase/auth-admin", () => ({
   createSupabaseAuthAdminClient: vi.fn(),

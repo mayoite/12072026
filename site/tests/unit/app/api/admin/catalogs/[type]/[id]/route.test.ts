@@ -7,13 +7,13 @@ import {
   patchStandardCatalog,
   deleteStandardCatalog,
   resolveCatalogType,
-} from "@/lib/api/catalogAdminHandlers";
+} from "@/features/planner/admin/api/catalogAdminHandlers";
 
-vi.mock("@/lib/api/withAuth", () => ({
+vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: unknown) => handler,
 }));
 
-vi.mock("@/lib/api/catalogAdminHandlers", () => ({
+vi.mock("@/features/planner/admin/api/catalogAdminHandlers", () => ({
   patchConfiguratorCatalog: vi.fn(),
   deleteConfiguratorCatalog: vi.fn(),
   patchStandardCatalog: vi.fn(),

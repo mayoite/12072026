@@ -159,7 +159,7 @@ function createSketchClient() {
   return new OpenAI({
     apiKey: provider.apiKey,
     baseURL: provider.baseURL,
-    defaultHeaders: provider.defaultHeaders,
+    defaultHeaders: "defaultHeaders" in provider ? provider.defaultHeaders : undefined,
   });
 }
 

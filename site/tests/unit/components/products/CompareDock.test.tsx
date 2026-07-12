@@ -5,8 +5,8 @@ import { trackSiteCtaClick } from '@/lib/analytics/siteEvents';
 
 // Mock @phosphor-icons/react
 vi.mock('@phosphor-icons/react', () => ({
-  GitCompareArrows: () => <div data-testid="compare-icon" />,
-  Trash2: () => <div data-testid="trash-icon" />,
+  GitDiff: () => <div data-testid="compare-icon" />,
+  Trash: () => <div data-testid="trash-icon" />,
 }));
 
 // Mock navigation path

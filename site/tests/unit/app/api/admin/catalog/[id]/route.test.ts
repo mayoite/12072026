@@ -4,13 +4,13 @@ import { PATCH, DELETE } from "@/app/api/admin/catalog/[id]/route";
 import {
   patchStandardCatalog,
   deleteStandardCatalog,
-} from "@/lib/api/catalogAdminHandlers";
+} from "@/features/planner/admin/api/catalogAdminHandlers";
 
-vi.mock("@/lib/api/withAuth", () => ({
+vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: unknown) => handler,
 }));
 
-vi.mock("@/lib/api/catalogAdminHandlers", () => ({
+vi.mock("@/features/planner/admin/api/catalogAdminHandlers", () => ({
   patchStandardCatalog: vi.fn(),
   deleteStandardCatalog: vi.fn(),
 }));

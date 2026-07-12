@@ -7,7 +7,7 @@ vi.mock("@/platform/supabase/adminServer", () => ({
   isMissingTableError: vi.fn((message: string) => message.includes("does not exist")),
 }));
 
-vi.mock("@/lib/api/withAuth", () => ({
+vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: () => Promise<Response>) => handler,
 }));
 

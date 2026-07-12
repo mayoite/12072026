@@ -5,7 +5,7 @@ const requestSketchToPlan = vi.hoisted(() => vi.fn());
 const classifySketchConversionError = vi.hoisted(() => vi.fn());
 const getSketchRecoveryMessage = vi.hoisted(() => vi.fn());
 
-vi.mock("@/lib/api/withAuth", () => ({
+vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: (req: NextRequest) => Promise<Response>) => handler,
 }));
 
