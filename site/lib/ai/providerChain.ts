@@ -8,7 +8,7 @@ export type ServerChatMessage = {
   content: string;
 };
 
-export type ProviderId = "openrouter";
+export type ProviderId = "openrouter" | "gemini";
 
 type OpenRouterProvider = {
   provider: "openrouter";
@@ -18,7 +18,14 @@ type OpenRouterProvider = {
   defaultHeaders?: Record<string, string>;
 };
 
-export type ResolvedProvider = OpenRouterProvider;
+type GeminiProvider = {
+  provider: "gemini";
+  model: string;
+  apiKey: string;
+  baseURL: string;
+};
+
+export type ResolvedProvider = OpenRouterProvider | GeminiProvider;
 
 type RequestProviderTextOptions = {
   jsonMode?: boolean;
@@ -45,8 +52,25 @@ function createOpenRouterClient(apiKey: string) {
   });
 }
 
+function createGeminiClient(apiKey: string) {
+  return new OpenAI({
+    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
+    apiKey,
+  });
+}
+
 export function resolveProviderChain(): ResolvedProvider[] {
   const providers: ResolvedProvider[] = [];
+
+  const geminiKey = env.GEMINI_API_KEY?.trim() || process.env.GEMINI_API_KEY?.trim();
+  if (geminiKey) {
+    providers.push({
+      provider: "gemini",
+      apiKey: geminiKey,
+      baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
+      model: env.GEMINI_MODEL || "gemini-2.5-flash",
+    });
+  }
 
   const primaryKey = env.OPENROUTER_API_KEY_PRIMARY?.trim();
   if (primaryKey) {
@@ -104,11 +128,13 @@ function extractStreamChunkText(chunk: unknown): string {
 }
 
 async function requestOpenAiCompatibleText(
-  provider: OpenRouterProvider,
+  provider: ResolvedProvider,
   messages: ServerChatMessage[],
   options: RequestProviderTextOptions,
 ): Promise<string> {
-  const client = createOpenRouterClient(provider.apiKey);
+  const client = provider.provider === "gemini"
+    ? createGeminiClient(provider.apiKey)
+    : createOpenRouterClient(provider.apiKey);
   const requestBody = {
     model: provider.model,
     messages,

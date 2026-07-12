@@ -15,6 +15,8 @@ const envSchema = z.object({
   OPENROUTER_API_KEY_PRIMARY: optionalEnvString,
   OPENROUTER_API_KEY_BACKUP: optionalEnvString,
   OPENROUTER_MODEL: optionalEnvString,
+  GEMINI_API_KEY: optionalEnvString,
+  GEMINI_MODEL: optionalEnvString,
   PRODUCTS_DATABASE_URL: optionalEnvUrl,
   SUPABASE_AUTH_DATABASE_URL: optionalEnvUrl,
   

@@ -17,6 +17,8 @@ describe('env.server', () => {
     process.env.OPENROUTER_API_KEY_PRIMARY = 'test-openrouter-key';
     process.env.OPENROUTER_API_KEY_BACKUP = '';
     process.env.OPENROUTER_MODEL = 'test-model';
+    process.env.GEMINI_API_KEY = 'test-gemini-key';
+    process.env.GEMINI_MODEL = 'test-gemini-model';
 
     const { env } = await import('../../../lib/env.server');
 
@@ -24,6 +26,8 @@ describe('env.server', () => {
     expect(env.OPENROUTER_API_KEY_PRIMARY).toBe('test-openrouter-key');
     expect(env.OPENROUTER_API_KEY_BACKUP).toBeUndefined();
     expect(env.OPENROUTER_MODEL).toBe('test-model');
+    expect(env.GEMINI_API_KEY).toBe('test-gemini-key');
+    expect(env.GEMINI_MODEL).toBe('test-gemini-model');
   });
 
   it('should throw an error and console.error when environment validation fails', async () => {

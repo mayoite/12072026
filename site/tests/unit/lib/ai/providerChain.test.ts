@@ -22,6 +22,8 @@ vi.mock('@/lib/env.server', () => ({
     OPENROUTER_API_KEY_PRIMARY: 'primary-key',
     OPENROUTER_API_KEY_BACKUP: 'backup-key',
     OPENROUTER_MODEL: 'test-model',
+    GEMINI_API_KEY: 'gemini-key',
+    GEMINI_MODEL: 'gemini-model',
   },
 }));
 
@@ -47,8 +49,14 @@ describe('providerChain', () => {
 
   it('should resolve provider chain from environment keys', () => {
     const chain = providerChain.resolveProviderChain();
-    expect(chain).toHaveLength(2);
+    expect(chain).toHaveLength(3);
     expect(chain[0]).toEqual({
+      provider: 'gemini',
+      apiKey: 'gemini-key',
+      baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+      model: 'gemini-model',
+    });
+    expect(chain[1]).toEqual({
       provider: 'openrouter',
       apiKey: 'primary-key',
       baseURL: 'https://openrouter.ai/api/v1',
@@ -58,7 +66,7 @@ describe('providerChain', () => {
       },
       model: 'test-model',
     });
-    expect(chain[1].apiKey).toBe('backup-key');
+    expect(chain[2].apiKey).toBe('backup-key');
   });
 
   it('should request OpenAI compatible text successfully (non-streaming)', async () => {
@@ -72,7 +80,7 @@ describe('providerChain', () => {
       ],
     });
 
-    const provider = providerChain.resolveProviderChain()[0];
+    const provider = providerChain.resolveProviderChain()[1];
     const res = await providerChain.requestProviderText(
       provider,
       [{ role: 'user', content: 'hi' }],
@@ -83,6 +91,37 @@ describe('providerChain', () => {
     expect(mockCreate).toHaveBeenCalledWith(
       {
         model: 'test-model',
+        messages: [{ role: 'user', content: 'hi' }],
+        temperature: 0.7,
+      },
+      {
+        signal: undefined,
+      }
+    );
+  });
+
+  it('should request Gemini text successfully (non-streaming)', async () => {
+    mockCreate.mockResolvedValue({
+      choices: [
+        {
+          message: {
+            content: 'Hello, I am Gemini!',
+          },
+        },
+      ],
+    });
+
+    const provider = providerChain.resolveProviderChain()[0];
+    const res = await providerChain.requestProviderText(
+      provider,
+      [{ role: 'user', content: 'hi' }],
+      { temperature: 0.7 }
+    );
+
+    expect(res).toBe('Hello, I am Gemini!');
+    expect(mockCreate).toHaveBeenCalledWith(
+      {
+        model: 'gemini-model',
         messages: [{ role: 'user', content: 'hi' }],
         temperature: 0.7,
       },
@@ -108,7 +147,7 @@ describe('providerChain', () => {
       ],
     });
 
-    const provider = providerChain.resolveProviderChain()[0];
+    const provider = providerChain.resolveProviderChain()[1];
     const res = await providerChain.requestProviderText(provider, []);
     expect(res).toBe('Part 1 Part 2');
   });
@@ -123,7 +162,7 @@ describe('providerChain', () => {
     };
     mockCreate.mockResolvedValue(mockAsyncIterable);
 
-    const provider = providerChain.resolveProviderChain()[0];
+    const provider = providerChain.resolveProviderChain()[1];
     const deltaCallback = vi.fn();
 
     const res = await providerChain.requestProviderText(
