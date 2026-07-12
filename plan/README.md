@@ -10,8 +10,9 @@ file executable in parallel by its own agent.
   real dependency — so unrelated phases run in parallel, even within one track.
 - **One root `FAILURES.md`** ([FAILURES.md](./FAILURES.md)) for the whole effort — real execution
   red only, not backlog.
+- **Quality bar** ([QUALITY-BAR.md](./QUALITY-BAR.md)) — honesty rules, locked stack, proof model.
 - **UI bar** ([UI-BAR.md](./UI-BAR.md)) — required on every buyer-facing phase close (UI, Planner, Buyer).
-- **Hygiene gates** ([HYGIENE.md](./HYGIENE.md)) — CP-01, P01a, P01b frozen (§G), Wave 0 CP-09 reproof (§F), optional S0/S5/G8.
+- **Hygiene gates** ([HYGIENE.md](./HYGIENE.md)) — owner product-truth, dead-path cleanup, toolbar reproof, frozen orphan slice.
 - **Proof = a live run** (browser / bytes / headers). Two outputs from a run:
   **human report → `agents-work/reports/<track>-phase-<nn>.md`** (committed, this is what agents
   write up), and **raw auto-generated artifacts → `results/…`** (gitignored dump, never the
@@ -71,8 +72,8 @@ fixture and integrates at the seam:
 | Contract | Produced by | Consumed by |
 |----------|-------------|-------------|
 | Symbol SVG (`public/svg-catalog/{slug}.svg` + descriptor) | Admin PHASE-01 | Planner PHASE-01 |
-| Workstation family JSON | Admin PHASE-04 | Planner P12 configurator |
-| Price-book JSON | Admin PHASE-05 | Planner BOQ / P15 |
+| Workstation family JSON | Admin P04 | Buyer P01 configurator |
+| Price-book JSON | Admin P05 | Buyer P04 priced BOQ |
 
 ## Owner locks (apply across tracks)
 

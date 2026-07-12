@@ -29,4 +29,4 @@ Each phase ends in a **buyer-visible** delta, proven live — not read-only audi
 ## Relationship to Planner track
 UI PHASE-01 (M/T tools) **owns** dimension (M) and text (T) promotion — Planner PHASE-04 inherits
 and only verifies snap + measure together. UI PHASE-02 (onboarding) feeds Planner PHASE-06.
-Integration map: [../README.md](../README.md) · [../HYGIENE.md](../HYGIENE.md).
+Execution order and contracts: [../README.md](../README.md).

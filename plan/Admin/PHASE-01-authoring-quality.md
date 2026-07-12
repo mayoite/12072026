@@ -27,7 +27,7 @@ This phase makes the studio produce **real, layered** symbols so that when the p
 - `stages.ts` S7 may still say Block2D-only plan paint — stale vs owner lock (planner renders catalog).
 
 ## Steps
-0. **P05 Task 0 baseline (no code):** record `git rev-parse HEAD`; curl chaise SVG pathish count (expect RED
+0. **Baseline reproof (no code):** record `git rev-parse HEAD`; curl chaise SVG pathish count (expect RED
    if 1-path); note in report. Verify inventory preview shows `img[src*="/svg-catalog/"]` before/after publish.
 1. **Failing unit:** `publishMultipath.test.ts` — chaise ≥2 pathish, `seat-block` + `backrest-block` ids.
 2. **Pipeline fix:** multi-block descriptor → per-block pathish output (not one merged difference path).

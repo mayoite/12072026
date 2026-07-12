@@ -20,7 +20,7 @@ into standing proof.
 - `editor/CommandPalette.tsx` — keyboard spine.
 - Prior manual checks reported chrome GREEN and 0 console errors — not yet a repeatable test.
 - Missing notes to restore under `agents-work/`: `CANVAS-NOTES.md`, `TOOLBAR-NOTES.md`,
-  `LAYOUT-OVERFLOW.md`, `P05-SVG-HONESTY-NOTES.md`.
+  `LAYOUT-OVERFLOW.md`, `SVG-CATALOG-HONESTY-NOTES.md`.
 
 ## The buyer story (benchmark: Planner 5D step count)
 land → empty state → draw room → place SVG furniture → edit in inspector → switch 3D → save →

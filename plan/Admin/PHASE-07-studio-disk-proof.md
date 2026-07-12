@@ -48,8 +48,8 @@ polish as product work · a11y matrix theater · extra form fields beyond metada
 4. **Browser — publish:** click **Publish** → status shows published → POST succeeds.
 5. **Disk:** `public/svg-catalog/side-table-001.svg` contains rect signature coords
    (`225 225 L 225 375 L 375 375 L 375 225` per fixture) and byte size increases.
-6. **Evidence pack:** screenshots + run log + published snippet under
-   `results/admin/no-code-svg-studio/a4-0-1-scene-publish-proof/` on **this** checkout.
+6. **Evidence pack:** screenshots + run log + published snippet under `results/admin/phase-07/`
+   on **this** checkout (e2e spec may also write its own dump path).
 
 ## Done when
 Boxes in `plan/Admin/CHECKLIST.md` → PHASE-07.
@@ -60,7 +60,7 @@ pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/scenePublis
 pnpm --filter oando-site exec playwright test tests/e2e/admin-svg-scene-publish-a401.spec.ts -c config/build/playwright.config.ts
 ```
 
-Live run is the proof. Raw artifacts → `results/admin/no-code-svg-studio/` (dump).
+Live run is the proof. Raw artifacts → `results/admin/phase-07/` (dump).
 Report → `agents-work/reports/admin-phase-07.md`.
 
 ## Guardrails

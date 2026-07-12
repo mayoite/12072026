@@ -10,7 +10,23 @@ A buyer finds and fixes layout issues before export or quote.
 
 ## Build
 
-Overlap, wall, opening, boundary, aisle, chair, accessibility rules. One saved validation authority for UI, export, and quote.
+Overlap, wall, opening, boundary, aisle, chair, and accessibility rules. One saved validation
+authority serves UI, export, and quote.
+
+## UI gates
+
+- Summary shows severity, location, objects, and remedy.
+- One action focuses the issue on canvas.
+- Advisory waivers need a saved reason. Hard errors stay blocking.
+- Empty and all-clear states are explicit.
+
+## PASS gates
+
+- Known invalid layouts create stable issue IDs.
+- Detect → focus → fix → clear passes without reload.
+- Waivers survive reload and remain auditable.
+- Export and quote use the same result.
+- Browser screenshots and accessibility checks pass.
 
 ## Steps
 

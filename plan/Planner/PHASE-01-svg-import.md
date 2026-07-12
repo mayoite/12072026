@@ -9,8 +9,8 @@ When a buyer drops furniture on the plan, the planner draws a rough Block2D box.
 publishes proper `.svg` files. **This phase wires the loader** so the real symbol paints on Fabric;
 Block2D is fallback only when the file is missing.
 
-**Owner lock:** catalog SVG is **primary** plan paint (see `plan/README.md` and
-[HYGIENE.md §D](../HYGIENE.md)). Block2D is fallback only when the published file is missing.
+**Owner lock:** catalog SVG is **primary** plan paint. Admin authors in SVG.js; planner renders
+published bytes via `svgPlanSymbolCache`. Block2D is fallback only when the published file is missing.
 
 ## File map
 
@@ -28,7 +28,7 @@ Block2D is fallback only when the file is missing.
 - Five fixture files under `public/svg-catalog/` + `block-descriptors/`.
 
 ## Steps
-0. **P05 Task 0 baseline (no code):** run and log on HEAD:
+0. **Baseline reproof (no code):** run and log on HEAD:
    ```bash
    pnpm --filter oando-site exec vitest run \
      tests/unit/features/planner/modularCabinetV0.test.ts \

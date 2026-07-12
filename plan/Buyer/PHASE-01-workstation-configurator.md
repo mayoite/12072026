@@ -10,14 +10,29 @@ A buyer configures, places, and edits linear and L-shaped workstation runs.
 
 ## Build
 
-Seats, topology, desk size, finish, screen, storage, cable options. One released family version drives 2D, 3D, and BOQ.
+Seats, topology, desk size, finish, screen, storage, and cable options. One released family version
+drives 2D, 3D, and BOQ.
+
+## UI gates
+
+- Fast defaults first. Advanced options stay optional.
+- Invalid choices are disabled with a reason.
+- Live dimensions, preview, price state, and validation update together.
+- Re-edit uses the same panel and preserves ID and pose.
+
+## PASS gates
+
+- Two-seat linear and four-seat L journeys pass in browser.
+- Invalid combinations cannot be placed.
+- Re-edit preserves run identity and placement.
+- 2D, 3D, and BOQ use the same saved option set.
+- Version replacement requires an explicit migration choice.
 
 ## Steps
 
-1. Wire configurator panel to Admin workstation-family JSON contract.
-2. Fast defaults first; invalid choices disabled with reason.
-3. Live dimensions, preview, price state, validation update together.
-4. Re-edit uses same panel; preserves ID and pose.
+1. Wire configurator panel to Admin P04 workstation-family JSON contract.
+2. Implement UI gates above on `/planner/guest`.
+3. Prove linear and L journeys with screenshots + trace.
 
 ## Done when
 

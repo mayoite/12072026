@@ -4,7 +4,7 @@ One checklist for the track. A box ticks only after a live run (browser and/or o
 `results/` is a dump, not the authority. Failures go to `../FAILURES.md`.
 
 ## PHASE-01 — Authoring quality
-- [ ] P05 Task 0 baseline: `git rev-parse HEAD` + chaise HTTP pathish count recorded (RED baseline ok before fix)
+- [ ] Baseline reproof: `git rev-parse HEAD` + chaise HTTP pathish count recorded (RED baseline ok before fix)
 - [ ] Inventory preview: catalog UI shows `img[src*="/svg-catalog/"]` for published symbol (preview ≠ plan paint)
 - [ ] `publishMultipath.test.ts` green (≥2 pathish per block count; chaise `seat-block` + `backrest-block`)
 - [ ] Publish pipeline emits per-block paths (`runSvgCompileStages` / `normalizeDescriptorForPipeline`) — not one merged difference path
@@ -35,10 +35,15 @@ One checklist for the track. A box ticks only after a live run (browser and/or o
 - [ ] Version replacement requires explicit migration choice
 
 ## PHASE-05 — Pricing / BOQ
-- [ ] Price-book model + migration
-- [ ] Versioned, reproducible released book
+- [ ] Price-book model + migration (versions, currency, effective dates)
+- [ ] Versioned, reproducible released book; past quotes pin original version
 - [ ] Emits documented price-book JSON contract
-- [ ] Planner BOQ computes correct total against a fixture
+- [ ] BOQ lines show quantity × unit price × adjustment — not total only
+- [ ] "Price unavailable" when no rule — never silent zero
+- [ ] Author/approver/viewer permissions enforced server-side
+- [ ] Failed activation leaves prior active book untouched; rollback audited
+- [ ] Buyer P04 computes correct total against a fixture
+- [ ] Browser: draft, approve, activate, rollback journey
 
 ## PHASE-06 — Release / audit / rollback
 - [ ] Revision history visible per symbol
@@ -53,5 +58,5 @@ One checklist for the track. A box ticks only after a live run (browser and/or o
 - [ ] Publish → status "Published"; POST succeeds
 - [ ] `public/svg-catalog/side-table-001.svg` contains rect signature coords; byte size increases
 - [ ] `admin-svg-scene-publish-a401.spec.ts` green on this checkout
-- [ ] Evidence pack under `results/admin/no-code-svg-studio/a4-0-1-scene-publish-proof/` (dump)
+- [ ] Evidence pack under `results/admin/phase-07/` (dump)
 - [ ] Kill list respected until green: no minimap/pen/multi-select scored as done

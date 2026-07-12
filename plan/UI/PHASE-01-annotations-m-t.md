@@ -48,7 +48,7 @@ PHASE-02). Measurements and labels are also genuinely needed to produce a readab
 5. **Task 5:** Promote `dimension`/`text` to `live` in `canvasTool.ts`; wire M/T via stage handlers →
    `pureActions`; update `useRoomElements.ts` shortcut wiring if needed.
 6. **E2E:** `open3d-annotations-m-t.spec.ts` — M measures, T labels, both visible.
-7. **Reload-ID:** Hard reload; annotation IDs unchanged (P06 parity).
+7. **Reload-ID:** Hard reload; annotation IDs unchanged (Planner P06 save/reload parity).
 
 ## Done when
 Boxes in `plan/UI/CHECKLIST.md` → PHASE-01.
@@ -70,5 +70,5 @@ Live run is the proof. Raw artifacts → `results/ui/phase-01/`. Report → `age
 - **Stop-if-fail:** `Failures.md` on build break, second plan host, or live M/T without Fabric paint.
 
 ## Out of scope
-- Tier B `@excalidraw/element` export bridge (deferred to P16 share/export).
+- Tier B `@excalidraw/element` export bridge (deferred to Buyer P05 share/export).
 - Tier C full `@excalidraw/excalidraw` UI on plan route — owner-gated never.

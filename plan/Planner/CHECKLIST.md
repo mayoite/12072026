@@ -3,7 +3,7 @@
 Tick [UI-BAR.md](../UI-BAR.md) **and** the phase section below. Live browser proof required. Units/typecheck alone never tick a box.
 
 ## PHASE-01 — SVG import
-- [ ] P05 Task 0 baseline: `modularCabinetV0.test.ts` + `fabricBlock2D.test.ts` green on HEAD (log before edits)
+- [ ] Baseline reproof: `modularCabinetV0.test.ts` + `fabricBlock2D.test.ts` green on HEAD (log before edits)
 - [ ] `svgPlanSymbolCache` wired in placement path (`getSvgPlanImage`); Block2D paints while loading
 - [ ] Placed item paints published SVG (not flat box)
 - [ ] Missing `.svg` → Block2D fallback, no console error (`open3d-p05-cabinet-multiprim.spec.ts` regression guard)
@@ -46,7 +46,7 @@ Tick [UI-BAR.md](../UI-BAR.md) **and** the phase section below. Live browser pro
 - [ ] Journey uses live theme from PHASE-11 (not mouse-only theme bypass)
 - [ ] Zero console errors on guest workspace load
 - [ ] Height/chrome audit turned into a repeatable check (not a one-off screenshot)
-- [ ] Chrome notes restored: `CANVAS-NOTES.md`, `TOOLBAR-NOTES.md`, `LAYOUT-OVERFLOW.md`, `P05-SVG-HONESTY-NOTES.md` under `agents-work/`
+- [ ] Chrome notes restored: `CANVAS-NOTES.md`, `TOOLBAR-NOTES.md`, `LAYOUT-OVERFLOW.md`, `SVG-CATALOG-HONESTY-NOTES.md` under `agents-work/`
 - [ ] axe/lighthouse clean
 - [ ] Trace + screenshots attached
 
@@ -85,6 +85,6 @@ Tick [UI-BAR.md](../UI-BAR.md) **and** the phase section below. Live browser pro
 - [ ] `hostWiringP01` 4/4 on HEAD
 - [ ] `open3d-world-standard-journey.spec.ts` green
 - [ ] `open3d-systems-v0-batch-place.spec.ts` green
-- [ ] P01–P11 residuals closed or owner-waived in report
-- [ ] CP-01 accepted or named open
+- [ ] Foundation residuals closed or owner-waived (Planner P01 + Admin P01 symbols, P10 mesh, P11 theme + toolbar reproof, other P01–P11)
+- [ ] Owner product-truth accept recorded or named open
 - [ ] HEAD.txt + handover report committed path named

@@ -1,7 +1,7 @@
 # FAILURES — all tracks (root log)
 
-One log for the **whole** `agents-work/` effort. Every track writes here — scan this one
-file to see what is red anywhere.
+One log for the **whole** `plan/` effort. Every track writes here — scan this one file to see
+what is red anywhere.
 
 ## What belongs here
 Only things that went **red during real execution or proof**: a test that broke, a browser

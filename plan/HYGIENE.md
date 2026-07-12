@@ -1,33 +1,33 @@
 # Hygiene — cross-cutting gates (not full phases)
 
 **Law:** `AGENTS.md` · `plan/` phases  
-**Purpose:** Cross-cutting items that are **not** buyer-facing phases but must not be lost. Run in
-parallel with foundation phases when fenced; never block UI/Planner/Admin work.
+Cross-cutting work that is **not** a buyer-facing phase. Run in parallel when fenced; never block
+UI / Planner / Admin foundation closes.
 
 ---
 
-## A. CP-01 — Owner product-truth accept (paperwork only)
+## A. Owner product-truth accept (paperwork only)
 
 Agent cannot auto-PASS. Owner-only gate.
 
-**Product-truth outcome:** the plan names the real routes, host, code, tests, and known gaps.
+**Outcome:** the plan names the real routes, host, code, tests, and known gaps.
 
-**Owner reads and accepts when all are true:**
+**Owner accepts when all are true:**
 - [ ] `/planner/guest` and `/planner/canvas` mount the live Fabric host
 - [ ] No dead route or removed host (`planner-2d-canvas`) is used as product proof
-- [ ] Inventory separates live, legacy redirect, orphan, and missing work
+- [ ] Inventory separates live, redirect, orphan, and missing work
 - [ ] Public entry and core UI are browser-checked
 - [ ] `hostWiringP01.test.ts` green on current HEAD:
   ```bash
   pnpm --filter oando-site exec vitest run tests/unit/features/planner/hostWiringP01.test.ts
   ```
-- [ ] Owner says **accept** → record date in `agents-work/reports/cp-01-owner-accept.md`
+- [ ] Owner says **accept** → record date in `agents-work/reports/owner-product-truth-accept.md`
 
 No agent-authored inventory dumps.
 
 ---
 
-## B. P01a — Dead-path / stale import cleanup
+## B. Dead-path / stale import cleanup
 
 **Fence:** Do **not** land in the same PR/session as `PlannerFabricStage` wall/place fixes.
 
@@ -36,7 +36,7 @@ No agent-authored inventory dumps.
 **PASS gates:**
 - [ ] No test targets `planner-2d-canvas`
 - [ ] No product import reaches `_archive`, `open3d`, or removed Fabric trees
-- [ ] Legacy URLs only redirect to `/planner/canvas/`
+- [ ] Removed URLs only redirect to `/planner/canvas/`
 - [ ] No second host, compatibility shell, or fake adapter is added
 - [ ] Layout, import-boundary, and targeted route tests pass
 
@@ -45,37 +45,37 @@ pnpm --filter oando-site exec vitest run tests/unit/features/planner/hostWiringP
 pnpm --filter oando-site exec playwright test tests/e2e/open3d-world-standard-journey.spec.ts -c config/build/playwright.config.ts
 ```
 
-Do not delete owner data when removing dead paths.
+Do not delete owner data when removing dead paths. New orphans → this section (§B), not §G.
 
 ---
 
-## C. Asset-engine optional waves (admin/CLI fenced)
+## C. Optional asset-engine work (admin/CLI fenced)
 
 **Rule:** Admin/CLI paths only — never touch `PlannerFabricStage` rebuild or plan-paint semantics.
 
-| Wave | Target | Fence |
+| Item | Target | Fence |
 |------|--------|-------|
-| **S0** | Validate unify in asset-engine | Admin/CLI only |
-| **S5** | PNG on admin publish (`svgArtifactCompiler.server.ts`) | Admin publish path only |
-| **G8** | Generated GLB browser smoke (P08 residual) | New e2e spec only |
+| Validate unify | asset-engine | Admin/CLI only |
+| PNG on publish | `svgArtifactCompiler.server.ts` | Admin publish path only |
+| GLB browser smoke | mesh follow-up | New e2e spec only |
 
-Tick when done; failures → `FAILURES.md`. Not required to close UI/Planner/Admin foundation phases.
+Tick when done; failures → `FAILURES.md`. Not required to close foundation phases.
 
 ---
 
-## D. Catalog SVG in the planner (owner lock + task routing)
+## D. Catalog SVG seam (owner lock)
 
 **Owner lock:** Planner **renders** published SVG (`svgPlanSymbolCache`); Block2D is fallback only.
 Admin **authors** catalog SVG in SVG.js only. Fabric never authors inventory symbols.
 
-| Work item | Home in `plan/` |
-|-----------|-----------------|
-| Publish multipath + `publishMultipath.test.ts` | Admin PHASE-01 |
-| Wire planner to catalog SVG | Planner PHASE-01 |
-| `open3d-cp05-symbols-s7.spec.ts` — planner paints published SVG + HTTP multipath | Planner PHASE-01 |
-| `open3d-p05-cabinet-multiprim.spec.ts` — Block2D fallback when SVG missing | Planner PHASE-01 |
-| `stages.ts` S7 text — catalog publish + planner consume | Admin PHASE-01 |
-| Canvas route / `DEV_AUTH_BYPASS` buyer vs dev path | UI PHASE-02 |
+| Work | Phase |
+|------|-------|
+| Publish multipath + `publishMultipath.test.ts` | Admin P01 |
+| Wire planner to catalog SVG | Planner P01 |
+| Planner paints published SVG + HTTP multipath (`open3d-cp05-symbols-s7.spec.ts`) | Planner P01 |
+| Block2D fallback when SVG missing (`open3d-p05-cabinet-multiprim.spec.ts`) | Planner P01 |
+| `stages.ts` S7 publish + consume text | Admin P01 |
+| `DEV_AUTH_BYPASS` buyer vs dev path | UI P02 |
 | Chrome honesty notes | Planner P07 |
 
 ---
@@ -90,12 +90,12 @@ pnpm --filter oando-site exec vitest run tests/unit/features/planner/onboarding/
 pnpm --filter oando-site exec playwright test tests/e2e/open3d-world-standard-journey.spec.ts -c config/build/playwright.config.ts
 ```
 
-UI P02 bar: public-entry playwright green + onboarding vitest green + journey spec green +
-`hostWiringP01` 4/4. Full brief scope → [UI PHASE-02](./UI/PHASE-02-onboarding-entry.md).
+UI P02 close bar: public-entry playwright + onboarding vitest + journey spec + `hostWiringP01` 4/4.
+Full brief field list lives in `UI/CHECKLIST.md` PHASE-02 and `UI/PHASE-02-onboarding-entry.md`.
 
 ---
 
-## F. CP-09 shortcuts/chrome reproof
+## F. Toolbar shortcuts reproof
 
 **Rule:** Fix docs drift and toolbar honesty tests — **never** change tool behavior just to green vitest.
 
@@ -107,24 +107,23 @@ UI P02 bar: public-entry playwright green + onboarding vitest green + journey sp
     tests/unit/features/planner/canvasToolPaletteAuthority.test.ts \
     --reporter=verbose
   ```
-- [ ] Record honest status in `agents-work/reports/cp-09-shortcuts-reproof.md` if checklist drift found
-- [ ] Log unit output path in report; raw log may go to `results/planner/cp-09-vitest.log` (dump only)
+- [ ] Record status in `agents-work/reports/toolbar-shortcuts-reproof.md` if drift found
+- [ ] Raw log may go to `results/planner/toolbar-shortcuts-vitest.log` (dump only)
 
-Failures → `FAILURES.md`. This wave does not block UI/Planner/Admin foundation phases.
+Failures → `FAILURES.md`. Does not block foundation phase closes.
 
 ---
 
-## G. P01b — Orphan cleanup (PASS slice — do not reopen)
+## G. Orphan cleanup — frozen (do not reopen)
 
-**Status:** Bounded cleanup slice already PASS. **Do not reopen** this card.
+**Status:** Bounded slice already PASS. **Do not reopen.**
 
-**Outcome (already met):** unused Planner modules were classified before removal.
+**Outcome (met):** unused Planner modules were classified before removal from the tree.
 
-**PASS gates (frozen):**
+**Frozen gates (reference only):**
 - Import reachability checked from live routes
-- Generated, test-only, legacy, and product modules separated
+- Generated, test-only, removed, and product modules separated
 - Removal did not change live UI or data behavior
 - Targeted tests and typecheck passed at slice close
 
-**Rule for new work:** any **new** orphan or stale import → **P01a** (§B), not P01b.
-P01b is not product-truth completion and is not a standing hygiene gate.
+Not product-truth completion. Not a standing hygiene gate.

@@ -25,7 +25,8 @@ Phases are **independent files**, executable in parallel by their own agent. `bl
 
 ## Cross-phase notes
 Publish multipath tasks (`publishMultipath.test.ts`, pipeline multipath, `stages.ts` S7) live in
-PHASE-01. Catalog SVG owner lock → [HYGIENE.md §D](../HYGIENE.md).
+PHASE-01. Catalog SVG owner lock: admin authors in SVG.js; planner renders published bytes;
+Block2D fallback only.
 
 **PHASE-07** closes scene → publish disk proof. Code landed; product green requires draw → live
 compile → Publish → bytes in `public/svg-catalog/{slug}.svg`. Kill list until P07 green: minimap,
@@ -39,5 +40,5 @@ pen/path, multi-select, templates, command palette.
 | Contract | File / shape | Planner consumer |
 |----------|--------------|------------------|
 | Symbol SVG | `public/svg-catalog/{slug}.svg` + `BlockDescriptor` | Planner PHASE-01 |
-| Price book | price-book JSON | Planner BOQ / P15 |
-| Workstation family | family JSON | Planner P12 configurator |
+| Price book | price-book JSON | Buyer P04 priced BOQ |
+| Workstation family | family JSON | Buyer P01 configurator |
