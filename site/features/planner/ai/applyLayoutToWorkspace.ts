@@ -1,20 +1,20 @@
 import { canvasUnitsToMillimeters } from "@/features/planner/lib/canvasBounds";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 import { placeCatalogItemInProject } from "@/features/planner/project/catalog/placementAction";
 import {
   addRectangularRoom,
   addWall,
 } from "@/features/planner/project/model/operations/pureActions";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
 import { validateLayoutSchema } from "./aiStatus";
 import type { SuggestedLayoutJson } from "./types";
 
 export function applyLayoutToWorkspace(
-  project: Open3dProject,
+  project: PlannerProject,
   layout: SuggestedLayoutJson,
-  resolveCatalogItem: (id: string) => Open3dCatalogItem | undefined,
-): Open3dProject {
+  resolveCatalogItem: (id: string) => PlannerCatalogItem | undefined,
+): PlannerProject {
   if (!validateLayoutSchema(layout)) {
     console.error("[applyLayoutToWorkspace] Schema validation failed for layout:", layout);
     return project;

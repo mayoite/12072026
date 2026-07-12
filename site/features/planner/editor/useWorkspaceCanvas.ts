@@ -2,19 +2,19 @@
 
 import { useCallback, useMemo, useState } from "react";
 import type {
-  Open3dProject,
-  Open3dPoint,
-  Open3dWall,
-  Open3dFloor,
+  PlannerProject,
+  PlannerPoint,
+  PlannerWall,
+  PlannerFloor,
 } from "@/features/planner/project/model/types";
 import { readThemeColor } from "@/features/planner/project/shared/readThemeColor";
-import { createOpen3dHistory, type Open3dHistoryState } from "@/features/planner/project/store/history";
+import { createPlannerHistory, type PlannerHistoryState } from "@/features/planner/project/store/history";
 import {
   executePlannerCommand,
   type PlannerCommand,
 } from "@/features/planner/project/lib/commands/plannerCommand";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
-import type { Open3dProjectAction } from "@/features/planner/project/model/actions/projectActions";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+import type { PlannerProjectAction } from "@/features/planner/project/model/actions/projectActions";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 export interface CanvasSelection {
@@ -26,11 +26,11 @@ export type PlannerSelection = CanvasSelection;
 
 export interface WorkspaceCanvasContext {
   /** Current project state */
-  project: Open3dProject;
+  project: PlannerProject;
   /** Active floor from project */
-  activeFloor: Open3dFloor;
+  activeFloor: PlannerFloor;
   /** History state for undo/redo */
-  history: Open3dHistoryState;
+  history: PlannerHistoryState;
   /** Current selection */
   selection: CanvasSelection;
   /** Whether undo is available */
@@ -38,7 +38,7 @@ export interface WorkspaceCanvasContext {
   /** Whether redo is available */
   canRedo: boolean;
   /** Dispatch an action to modify the project */
-  dispatch: (action: Open3dProjectAction) => void;
+  dispatch: (action: PlannerProjectAction) => void;
   /** Undo the last action */
   undo: () => void;
   /** Redo the last undone action */
@@ -46,16 +46,16 @@ export interface WorkspaceCanvasContext {
   /** Set selection */
   setSelection: (selection: CanvasSelection) => void;
   /** Update project directly (for canvas interactions) */
-  updateProject: (updater: (project: Open3dProject) => Open3dProject) => void;
+  updateProject: (updater: (project: PlannerProject) => PlannerProject) => void;
   /** Replace document and reset history (restore/autosave load) */
-  replaceProject: (project: Open3dProject) => void;
+  replaceProject: (project: PlannerProject) => void;
 }
 
 export interface UseWorkspaceCanvasOptions {
   /** Initial project name */
   projectName?: string;
   /** Initial project (if provided, takes precedence over projectName) */
-  initialProject?: Open3dProject;
+  initialProject?: PlannerProject;
   /** Maximum history entries */
   maxHistory?: number;
 }
@@ -72,15 +72,15 @@ export function useWorkspaceCanvas(
     if (initialProject) {
       return initialProject;
     }
-    return createOpen3dProject({ name: projectName });
+    return createPlannerProject({ name: projectName });
   }, [initialProject, projectName]);
 
   // History is the single source of truth for the document. The command layer
   // (`executePlannerCommand`) is the sole write authority: every document
   // mutation, undo, and redo flows through it so history semantics and the
   // locked-item permission gate live in one place.
-  const [history, setHistory] = useState<Open3dHistoryState>(() =>
-    createOpen3dHistory(initialProjectState),
+  const [history, setHistory] = useState<PlannerHistoryState>(() =>
+    createPlannerHistory(initialProjectState),
   );
 
   // Selection state (transient — never recorded in document history/undo).
@@ -91,7 +91,7 @@ export function useWorkspaceCanvas(
 
   // Task 4 foundation: panels, search, loading, camera (3d transform), notifications
   // live in caller (OOPlannerWorkspace, PlannerCanvasStage, InventoryPanel, Three*).
-  // Document undo/redo/replace ONLY mutate history.present (Open3dProject).
+  // Document undo/redo/replace ONLY mutate history.present (PlannerProject).
   // Transients are never passed to runCommand / executePlannerCommand.
   // GS: clean canonical doc vs transient ownership (no drift); follows benchmark anti-drift + clean state per Phase 1A.
 
@@ -119,7 +119,7 @@ export function useWorkspaceCanvas(
 
   // Dispatch a document action (locked-item gated by the command layer).
   const dispatch = useCallback(
-    (action: Open3dProjectAction) => {
+    (action: PlannerProjectAction) => {
       runCommand({ type: "document.apply", action });
     },
     [runCommand],
@@ -137,14 +137,14 @@ export function useWorkspaceCanvas(
 
   // Functional document update (canvas interactions like drawing walls).
   const updateProject = useCallback(
-    (updater: (project: Open3dProject) => Open3dProject) => {
+    (updater: (project: PlannerProject) => PlannerProject) => {
       runCommand({ type: "document.update", updater });
     },
     [runCommand],
   );
 
-  const replaceProject = useCallback((next: Open3dProject) => {
-    setHistory(createOpen3dHistory(next));
+  const replaceProject = useCallback((next: PlannerProject) => {
+    setHistory(createPlannerHistory(next));
     setSelection({ type: "none", ids: [] });
   }, []);
 
@@ -184,10 +184,10 @@ export function useWorkspaceCanvas(
 
 /**
  * Dead production path (kept for unit coverage / possible reuse).
- * Live open3d wall drawing uses PlannerCanvasStage + addOpen3dWall / newEntityId —
+ * Live open3d wall drawing uses PlannerCanvasStage + addPlannerWall / newEntityId —
  * not this hook. Only caller: workspaceShell.test.tsx.
  */
-export function useCanvasDrawing(initialProject?: Open3dProject) {
+export function useCanvasDrawing(initialProject?: PlannerProject) {
   const canvas = useWorkspaceCanvas({
     initialProject,
     projectName: initialProject?.name ?? "Feasibility project",
@@ -195,16 +195,16 @@ export function useCanvasDrawing(initialProject?: Open3dProject) {
 
   // Drawing-specific state
   const [drawingPoint, setDrawingPoint] = useState<{
-    start: Open3dPoint;
-    current: Open3dPoint;
+    start: PlannerPoint;
+    current: PlannerPoint;
   } | null>(null);
 
   // Add a wall to the project
   const addWall = useCallback(
-    (start: Open3dPoint, end: Open3dPoint) => {
+    (start: PlannerPoint, end: PlannerPoint) => {
       canvas.updateProject((project) => {
         const floor = project.floors[0];
-        const newWall: Open3dWall = {
+        const newWall: PlannerWall = {
           id: newEntityId(),
           start,
           end,
@@ -224,12 +224,12 @@ export function useCanvasDrawing(initialProject?: Open3dProject) {
   );
 
   // Start drawing a wall
-  const startDrawing = useCallback((point: Open3dPoint) => {
+  const startDrawing = useCallback((point: PlannerPoint) => {
     setDrawingPoint({ start: point, current: point });
   }, []);
 
   // Update drawing preview
-  const updateDrawing = useCallback((point: Open3dPoint) => {
+  const updateDrawing = useCallback((point: PlannerPoint) => {
     setDrawingPoint((prev) => (prev ? { ...prev, current: point } : null));
   }, []);
 

@@ -12,11 +12,11 @@ import {
   workstationFootprintMm,
   workstationPlanPrims,
 } from "@/features/planner/project/catalog/workstationSystemV0";
-import type { Open3dFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
 
 function wsItem(
-  partial?: Partial<Open3dFurnitureItem>,
-): Open3dFurnitureItem {
+  partial?: Partial<PlannerFurnitureItem>,
+): PlannerFurnitureItem {
   const config = createWorkstationConfigV0({
     shape: "linear",
     size: { lengthMm: 1500, depthMm: 600 },

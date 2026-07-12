@@ -1,4 +1,4 @@
-import type { Open3dFloor } from "@/features/planner/project/model/types";
+import type { PlannerFloor } from "@/features/planner/project/model/types";
 import { parseWorkstationConfigKey } from "@/features/planner/project/catalog/workstationSystemV0";
 
 export type WorkspacePlanMetrics = {
@@ -10,7 +10,7 @@ export type WorkspacePlanMetrics = {
   floorLabel: string;
 };
 
-function countWorkstationSeats(floor: Open3dFloor): number {
+function countWorkstationSeats(floor: PlannerFloor): number {
   let seats = 0;
   for (const item of floor.furniture) {
     if (
@@ -24,7 +24,7 @@ function countWorkstationSeats(floor: Open3dFloor): number {
 }
 
 export function summarizeFloorMetrics(
-  floor: Open3dFloor | undefined,
+  floor: PlannerFloor | undefined,
 ): WorkspacePlanMetrics {
   if (!floor) {
     return {

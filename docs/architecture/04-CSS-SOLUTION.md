@@ -41,7 +41,7 @@ theme.css → surface bundles → @utility/component CSS → CSS modules (open3d
 |---------|------------------|
 | Site marketing | `typ-*`, scheme utilities; layout Tailwind OK |
 | Admin | No raw palette; `admin-pages.css` + semantic utilities |
-| Planner open3d (`/planner/open3d`) | **No Tailwind in TSX**; CSS modules + `var(--planner-*)` only |
+| Planner workspace (`/planner/guest` · `/planner/canvas`) | **No Tailwind in TSX**; CSS modules + `var(--planner-*)` only |
 
 ---
 
@@ -65,7 +65,7 @@ theme.css → surface bundles → @utility/component CSS → CSS modules (open3d
 
 | Area | Current | Proposed |
 |------|---------|----------|
-| Open3d pilot | Single `open3d-workspace.css` in `core/locked/planner/` | via `app/planner/open3d/layout.tsx` |
+| Planner workspace | Single `open3d-workspace.css` in `core/locked/planner/` (filename fence) | via `app/planner/(workspace)/layout.tsx` |
 | Admin | Some raw Tailwind palette on older routes | `admin-pages.css` primitives + `lint:ui` |
 | Marketing | `home-*` + legacy `scheme-*` dialects | Site Plans track (S2) |
 | Enforcement | `lint:ui` warn | `lint:ui:strict` after UI-1 shell |

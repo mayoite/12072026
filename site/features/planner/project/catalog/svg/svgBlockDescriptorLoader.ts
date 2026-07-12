@@ -4,7 +4,7 @@
  * The single loader entry point for `BlockDescriptor` JSON files on disk.
  * Reads from `site/block-descriptors/{slug}.json` synchronously, validates
  * structure + checksum via the canonical Zod schema (see ./svgTypes), and
- * returns either a typed descriptor or an `Open3dDescriptorError` variant.
+ * returns either a typed descriptor or an `PlannerDescriptorError` variant.
  *
  * Re-exports the canonical schema surface (Phase 02 §02-CAT-01: single
  * source-of-truth file). Do NOT re-export the schema from any other path
@@ -33,9 +33,9 @@ import {
 import {
   BLOCK_DESCRIPTOR_SLUG_REGEX,
   parseBlockDescriptor,
-  toOpen3dDescriptorErrorHttp,
-  type Open3dDescriptorError,
-  type Open3dResult,
+  toPlannerDescriptorErrorHttp,
+  type PlannerDescriptorError,
+  type PlannerResult,
 } from "./svgTypes";
 import type { BlockDescriptor } from "./svgTypes";
 
@@ -43,12 +43,12 @@ import type { BlockDescriptor } from "./svgTypes";
 export {
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
   BLOCK_DESCRIPTOR_SLUG_REGEX,
-  Open3dDescriptorErrorKindSchema,
+  PlannerDescriptorErrorKindSchema,
   parseBlockDescriptor,
-  toOpen3dDescriptorErrorHttp,
+  toPlannerDescriptorErrorHttp,
   type BlockDescriptor,
-  type Open3dDescriptorError,
-  type Open3dResult,
+  type PlannerDescriptorError,
+  type PlannerResult,
   /** Phase 06 schema surface — keep imports centralized here. */
 } from "./svgTypes";
 
@@ -71,8 +71,8 @@ export {
   computeBlockDescriptorChecksum,
   freezeFreshDescriptor,
   freezeRewriteDescriptor,
-  open3dErr,
-  open3dOk,
+  plannerErr,
+  plannerOk,
   type BlockDescriptorConfigurable,
   type BlockDescriptorFixed,
   type BlockDescriptorGeometry,
@@ -102,7 +102,7 @@ function isPromiseLikeRejectReason(value: unknown): value is { message: string }
  * Reject paths that escape the loader directory or violate the slug format.
  * Centralized so traversal attempts cannot reach the disk layer.
  */
-function validateSlug(slug: unknown): Open3dResult<string, Open3dDescriptorError> {
+function validateSlug(slug: unknown): PlannerResult<string, PlannerDescriptorError> {
   if (typeof slug !== "string") {
     return {
       ok: false,
@@ -134,7 +134,7 @@ function validateSlug(slug: unknown): Open3dResult<string, Open3dDescriptorError
 function readDescriptorFile(
   slug: string,
   dir: string,
-): Open3dResult<string, Open3dDescriptorError> {
+): PlannerResult<string, PlannerDescriptorError> {
   let resolved: string | null;
   try {
     resolved = resolveDescriptorReadPath(slug, dir);
@@ -242,12 +242,12 @@ function readDescriptorFile(
  * Boundary function. Accepts a slug plus optional `{ dir }`, reads the
  * descriptor from disk, parses JSON, and validates via the canonical Zod
  * `BlockDescriptorSchema` parser. Returns a discriminated `Result` whose
- * `error` is one of the four `Open3dDescriptorError` variants.
+ * `error` is one of the four `PlannerDescriptorError` variants.
  */
 export function tryLoad(
   slug: string,
   options?: { dir?: string },
-): Open3dResult<BlockDescriptor, Open3dDescriptorError> {
+): PlannerResult<BlockDescriptor, PlannerDescriptorError> {
   const slugCheck = validateSlug(slug);
   if (!slugCheck.ok) return slugCheck;
 
@@ -285,7 +285,7 @@ export function tryLoad(
 /**
  * Throwing variant — admin/portal/phaser test fixtures that want a hard failure.
  * Phase 06 inventory consumer should prefer `tryLoad` and handle errors via
- * the `Open3dDescriptorError` discriminated union.
+ * the `PlannerDescriptorError` discriminated union.
  */
 export function loadBySlug(
   slug: string,
@@ -293,7 +293,7 @@ export function loadBySlug(
 ): BlockDescriptor {
   const result = tryLoad(slug, options);
   if (!result.ok) {
-    const http = toOpen3dDescriptorErrorHttp(result.error);
+    const http = toPlannerDescriptorErrorHttp(result.error);
     throw new Error(
       `[svgBlockDescriptorLoader] loadBySlug ${slug} failed: ${http.status} ${http.body.code} ${http.body.fieldPath} ${http.body.message}`,
     );

@@ -14,6 +14,7 @@ import {
   GENERATED_GLB_PATH_MARKER,
   isSystemGeneratedGlbUrl,
 } from "@/features/planner/lib/glbAssetPolicy";
+import * as assetPipeline from "@/features/planner/lib/assetPipeline";
 
 const tempRoots: string[] = [];
 
@@ -154,7 +155,9 @@ describe("exportModularAndWrite", () => {
     ).toBe(false);
   });
 
-  it("failure: write-public when buffer is empty", async () => {
+  it("failure: mesh-g6-validate-glb-node when buffer is empty (before write-public)", async () => {
+    // Node export path re-validates GLB after binary export; empty bytes fail G6,
+    // so write-public is never reached (empty-buffer write policy covered in writeGeneratedGlbToPublic).
     const publicRoot = tempPublicRoot();
     const empty = new ArrayBuffer(0);
     vi.spyOn(exportBinary, "exportModularCabinetV0GlbBinary").mockResolvedValue(
@@ -168,11 +171,12 @@ describe("exportModularAndWrite", () => {
 
     expect(result.ok).toBe(false);
     if (result.ok) {
-      throw new Error("expected write-public failure");
+      throw new Error("expected mesh-g6-validate-glb-node failure");
     }
-    expect(result.failedAt).toBe("write-public");
-    expect(result.error).toMatch(/non-empty ArrayBuffer/i);
-    expect(result.stages).toContain("write-public");
+    expect(result.failedAt).toBe("mesh-g6-validate-glb-node");
+    expect(result.error).toMatch(/parse GLB|validation failed|no nodes/i);
+    expect(result.stages).toContain("mesh-g6-validate-glb-node");
+    expect(result.stages).not.toContain("write-public");
     expect(
       existsSync(path.join(publicRoot, "catalog-assets", "generated")),
     ).toBe(false);
@@ -180,6 +184,13 @@ describe("exportModularAndWrite", () => {
 
   it("failure: write-public when relativePath is designer static", async () => {
     const publicRoot = tempPublicRoot();
+    // Bypass G6 parse so path policy on write-public is the unit under test.
+    vi.spyOn(assetPipeline, "validateGlbAsset").mockResolvedValue({
+      valid: true,
+      errors: [],
+      nodeCount: 1,
+      triangleCount: 1,
+    });
     vi.spyOn(exportBinary, "exportModularCabinetV0GlbBinary").mockResolvedValue(
       syntheticBinaryOk({
         relativePath: "models/designer-sofa.glb",
@@ -201,6 +212,12 @@ describe("exportModularAndWrite", () => {
 
   it("failure: write-public when relativePath has path traversal", async () => {
     const publicRoot = tempPublicRoot();
+    vi.spyOn(assetPipeline, "validateGlbAsset").mockResolvedValue({
+      valid: true,
+      errors: [],
+      nodeCount: 1,
+      triangleCount: 1,
+    });
     vi.spyOn(exportBinary, "exportModularCabinetV0GlbBinary").mockResolvedValue(
       syntheticBinaryOk({
         relativePath: `${GENERATED_GLB_PATH_MARKER}../escape.glb`,
@@ -221,6 +238,12 @@ describe("exportModularAndWrite", () => {
 
   it("failure: write-public when relativePath is blob:", async () => {
     const publicRoot = tempPublicRoot();
+    vi.spyOn(assetPipeline, "validateGlbAsset").mockResolvedValue({
+      valid: true,
+      errors: [],
+      nodeCount: 1,
+      triangleCount: 1,
+    });
     vi.spyOn(exportBinary, "exportModularCabinetV0GlbBinary").mockResolvedValue(
       syntheticBinaryOk({
         relativePath: "blob:http://local/preview",

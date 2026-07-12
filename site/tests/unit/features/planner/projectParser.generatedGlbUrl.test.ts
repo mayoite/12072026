@@ -5,10 +5,10 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { parseOpen3dProject } from "@/features/planner/project/shared/document/projectParser";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import { parsePlannerProject } from "@/features/planner/project/shared/document/projectParser";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
-function baseProject(): Open3dProject {
+function baseProject(): PlannerProject {
   return {
     id: "project-glb-url",
     name: "generatedGlbUrl parser",
@@ -73,12 +73,12 @@ describe("projectParser furniture.generatedGlbUrl accept", () => {
       url: "blob:http://localhost/abc-123",
     },
   ] as const)("accepts $name", ({ url }) => {
-    const parsed = parseOpen3dProject(rawWithGeneratedGlbUrl(url));
+    const parsed = parsePlannerProject(rawWithGeneratedGlbUrl(url));
     expect(parsed.floors[0]?.furniture[0]?.generatedGlbUrl).toBe(url);
   });
 
   it("omits generatedGlbUrl when field is absent", () => {
-    const parsed = parseOpen3dProject(baseProject());
+    const parsed = parsePlannerProject(baseProject());
     expect(parsed.floors[0]?.furniture[0]?.generatedGlbUrl).toBeUndefined();
     expect(
       Object.prototype.hasOwnProperty.call(
@@ -112,7 +112,7 @@ describe("projectParser furniture.generatedGlbUrl reject", () => {
       url: "catalog-assets/static/not-generated.glb",
     },
   ] as const)("rejects $name", ({ url }) => {
-    expect(() => parseOpen3dProject(rawWithGeneratedGlbUrl(url))).toThrow(
+    expect(() => parsePlannerProject(rawWithGeneratedGlbUrl(url))).toThrow(
       /not allowed|Static designer/i,
     );
   });

@@ -4,7 +4,7 @@ import { createRectangularRoomProject } from "@/features/planner/project/model/p
 import {
   buildExportFilename,
   isSupportedExportFormat,
-  preflightOpen3dExport,
+  preflightPlannerExport,
   SUPPORTED_EXPORT_FORMATS,
 } from "@/features/planner/project/shared/export/exportPreflight";
 import {
@@ -43,15 +43,15 @@ describe("Phase 06 export preflight (live subset)", () => {
     const p = project();
     const name = buildExportFilename(p, "json");
     expect(typeof name).toBe("string");
-    const pf = preflightOpen3dExport(p, "json");
+    const pf = preflightPlannerExport(p, "json");
     expect(pf.status).toBe("ready");
   });
 
   it("preflights png/pdf/dxf as ready when floor has geometry", () => {
     const p = project();
-    const pdf = preflightOpen3dExport(p, "pdf");
-    const png = preflightOpen3dExport(p, "png");
-    const dxf = preflightOpen3dExport(p, "dxf");
+    const pdf = preflightPlannerExport(p, "pdf");
+    const png = preflightPlannerExport(p, "png");
+    const dxf = preflightPlannerExport(p, "dxf");
     expect(pdf.status).toBe("ready");
     expect(png.status).toBe("ready");
     expect(dxf.status).toBe("ready");

@@ -6,14 +6,14 @@ import {
   resolveFurnitureGeometryMode,
 } from "@/features/planner/project/catalog/placementAction";
 import { countCabinetV0Parts } from "@/features/planner/project/catalog/modularCabinetV0";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
-import type { Open3dProject } from "@/features/planner/project/model/types";
-import { buildOpen3dSceneNodes } from "@/features/planner/3d/buildOpen3dSceneNodes";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerProject } from "@/features/planner/project/model/types";
+import { buildPlannerSceneNodes } from "@/features/planner/3d/buildPlannerSceneNodes";
 import { createSceneObjectFromNode } from "@/features/planner/3d/createSceneObjectFromNode";
 import { getDemoCatalogItemById } from "@/features/planner/editor/demoCatalogItems";
-import { parseOpen3dProject } from "@/features/planner/project/shared/document/projectParser";
+import { parsePlannerProject } from "@/features/planner/project/shared/document/projectParser";
 
-function emptyProject(): Open3dProject {
+function emptyProject(): PlannerProject {
   return {
     id: "project-modular",
     name: "Modular place",
@@ -44,8 +44,8 @@ function emptyProject(): Open3dProject {
 }
 
 function makeCatalogItem(
-  overrides: Partial<Open3dCatalogItem> = {},
-): Open3dCatalogItem {
+  overrides: Partial<PlannerCatalogItem> = {},
+): PlannerCatalogItem {
   return {
     id: "sample-desk-1",
     slug: "sample-desk-1",
@@ -149,7 +149,7 @@ describe("modular place → furniture geometry fields", () => {
   });
 });
 
-describe("buildOpen3dSceneNodes propagates modular fields", () => {
+describe("buildPlannerSceneNodes propagates modular fields", () => {
   it("passes geometryMode + modularOptions on furniture nodes", () => {
     const project = emptyProject();
     project.floors[0].furniture = [
@@ -183,7 +183,7 @@ describe("buildOpen3dSceneNodes propagates modular fields", () => {
       },
     ];
 
-    const nodes = buildOpen3dSceneNodes(project);
+    const nodes = buildPlannerSceneNodes(project);
     const mod = nodes.find((n) => n.id === "furn-mod");
     const box = nodes.find((n) => n.id === "furn-box");
 
@@ -305,7 +305,7 @@ describe("modular place → scene node → mesh factory (integration)", () => {
     expect(placedCabinet.modularOptions).toBeDefined();
     expect(placedBox.geometryMode).toBeUndefined();
 
-    const nodes = buildOpen3dSceneNodes(project);
+    const nodes = buildPlannerSceneNodes(project);
     const cabinetNode = nodes.find((n) => n.id === placedCabinet.id);
     const boxNode = nodes.find((n) => n.id === placedBox.id);
     expect(cabinetNode).toBeDefined();
@@ -369,7 +369,7 @@ describe("projectParser furniture modular fields", () => {
       },
     ];
 
-    const parsed = parseOpen3dProject(JSON.parse(JSON.stringify(project)));
+    const parsed = parsePlannerProject(JSON.parse(JSON.stringify(project)));
     expect(parsed.floors[0].furniture[0]?.geometryMode).toBe(
       "modular-cabinet-v0",
     );
@@ -403,6 +403,6 @@ describe("projectParser furniture modular fields", () => {
         },
       },
     ];
-    expect(() => parseOpen3dProject(raw)).toThrow("unsupported value");
+    expect(() => parsePlannerProject(raw)).toThrow("unsupported value");
   });
 });

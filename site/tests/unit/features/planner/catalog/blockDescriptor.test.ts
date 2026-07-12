@@ -7,7 +7,7 @@
  *                tokens, mismatched checksum, version mismatch.
  *   §02-TEST-04  Variant exhaustiveness: adding a new variant forces a compile error
  *                on the test-side exhaustive switch.
- *   §02-ERR-01..06  Code → HTTP-shape mapping for the four `Open3dDescriptorError`
+ *   §02-ERR-01..06  Code → HTTP-shape mapping for the four `PlannerDescriptorError`
  *                variants.
  */
 
@@ -19,14 +19,14 @@ import {
   BLOCK_DESCRIPTOR_VARIANTS,
   BlockDescriptorSchema,
   MountPlaneSchema,
-  Open3dDescriptorErrorKindSchema,
+  PlannerDescriptorErrorKindSchema,
   computeBlockDescriptorChecksum,
   freezeFreshDescriptor,
   freezeRewriteDescriptor,
   parseBlockDescriptor,
-  toOpen3dDescriptorErrorHttp,
+  toPlannerDescriptorErrorHttp,
   type BlockDescriptor,
-  type Open3dDescriptorError,
+  type PlannerDescriptorError,
 } from "@/features/planner/project/catalog/svg/svgTypes";
 
 // ── Fixture builder ────────────────────────────────────────────────────────
@@ -119,8 +119,8 @@ describe("02-BLOCK-DESCRIPTOR: schema surface", () => {
     expect(BLOCK_DESCRIPTOR_SLUG_REGEX.test("chair_01")).toBe(false);
   });
 
-  it("Open3dDescriptorErrorKindSchema enumerates the four canonical kinds", () => {
-    expect(Open3dDescriptorErrorKindSchema.options).toEqual([
+  it("PlannerDescriptorErrorKindSchema enumerates the four canonical kinds", () => {
+    expect(PlannerDescriptorErrorKindSchema.options).toEqual([
       "invalid",
       "notFound",
       "versionMismatch",
@@ -430,18 +430,18 @@ describe("02-BLOCK-DESCRIPTOR: variant exhaustiveness", () => {
   });
 });
 
-// ── Open3dDescriptorError → HTTP-shape mapping (§02-ERR-02..06) ────────────
+// ── PlannerDescriptorError → HTTP-shape mapping (§02-ERR-02..06) ────────────
 
 describe("02-BLOCK-DESCRIPTOR: HTTP-shape mapper", () => {
   it("invalid → 422.invalid", () => {
-    const err: Open3dDescriptorError = {
+    const err: PlannerDescriptorError = {
       kind: "invalid",
       code: "422.invalid",
       fieldPath: "slug",
       message: "bad slug",
       issues: [{ path: "slug", message: "bad slug" }],
     };
-    expect(toOpen3dDescriptorErrorHttp(err)).toEqual({
+    expect(toPlannerDescriptorErrorHttp(err)).toEqual({
       status: 422,
       body: {
         error: "invalid",
@@ -453,7 +453,7 @@ describe("02-BLOCK-DESCRIPTOR: HTTP-shape mapper", () => {
   });
 
   it("versionMismatch → 422.version_mismatch", () => {
-    const err: Open3dDescriptorError = {
+    const err: PlannerDescriptorError = {
       kind: "versionMismatch",
       code: "422.version_mismatch",
       fieldPath: "schemaVersion",
@@ -461,7 +461,7 @@ describe("02-BLOCK-DESCRIPTOR: HTTP-shape mapper", () => {
       expected: BLOCK_DESCRIPTOR_SCHEMA_VERSION,
       actual: "2030-01-01.v99",
     };
-    const http = toOpen3dDescriptorErrorHttp(err);
+    const http = toPlannerDescriptorErrorHttp(err);
     expect(http.status).toBe(422);
     expect(http.body.code).toBe("422.version_mismatch");
     expect(http.body.error).toBe("version_mismatch");
@@ -469,7 +469,7 @@ describe("02-BLOCK-DESCRIPTOR: HTTP-shape mapper", () => {
   });
 
   it("hashMismatch → 409.hash_mismatch", () => {
-    const err: Open3dDescriptorError = {
+    const err: PlannerDescriptorError = {
       kind: "hashMismatch",
       code: "409.hash_mismatch",
       fieldPath: "checksum",
@@ -477,7 +477,7 @@ describe("02-BLOCK-DESCRIPTOR: HTTP-shape mapper", () => {
       expected: "a".repeat(64),
       actual: "b".repeat(64),
     };
-    const http = toOpen3dDescriptorErrorHttp(err);
+    const http = toPlannerDescriptorErrorHttp(err);
     expect(http.status).toBe(409);
     expect(http.body.code).toBe("409.hash_mismatch");
     expect(http.body.error).toBe("hash_mismatch");
@@ -485,14 +485,14 @@ describe("02-BLOCK-DESCRIPTOR: HTTP-shape mapper", () => {
   });
 
   it("notFound → 404.not_found", () => {
-    const err: Open3dDescriptorError = {
+    const err: PlannerDescriptorError = {
       kind: "notFound",
       code: "404.not_found",
       fieldPath: "slug:chaise",
       message: "no chaise.json",
       slug: "chaise",
     };
-    const http = toOpen3dDescriptorErrorHttp(err);
+    const http = toPlannerDescriptorErrorHttp(err);
     expect(http.status).toBe(404);
     expect(http.body.code).toBe("404.not_found");
     expect(http.body.error).toBe("not_found");

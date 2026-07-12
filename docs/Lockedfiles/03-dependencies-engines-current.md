@@ -21,7 +21,7 @@
 
 | Engine | Package | Pin (site) | Routes / role |
 |--------|---------|------------|---------------|
-| **2D canvas** | `fabric` | `7.4.0` (exact) | Live open3d/guest/canvas via `canvas` (`PlannerCanvasStage`); not Feasibility |
+| **2D canvas** | `fabric` | `7.4.0` (exact) | Live guest/canvas via `features/planner/canvas` (`PlannerCanvasStage`); not Feasibility |
 | **3D** | `three` | `^0.185.1` | Open3D lazy 3D, product viewers |
 | **3D React** | `@react-three/fiber` | `^9.6.1` | R3F bindings (not a third engine) |
 | **3D helpers** | `@react-three/drei` | `^10.7.7` | Installed; this locked file treats it as Tier-2 reserved — **policy drift** |
@@ -47,14 +47,14 @@ No second general canvas engine (Konva, Paper, Pixi, etc.). Feasibility / `canva
 | `@tanstack/react-query` | `^5.101.0` | Server catalogue lifecycle |
 | `fuse.js` | `^7.4.1` | Client-side catalog ranking |
 | `sonner` | `^2.0.7` | Toasts |
-| `@phosphor-icons/react` | `^2.1.10` | Planner icons (partial adoption in UI) |
-| `lucide-react` | `^1.21.0` | Admin + some planner-adjacent — **policy drift** |
+| `@phosphor-icons/react` | `^2.1.10` | Icons (planner + site) — **lucide-react is not installed** |
 | `framer-motion` / `motion` | `^12.x` | Shell motion |
 | `react-resizable-panels` | `^4.11.2` | Panel layout (open3d uses custom docking too) |
 | `vaul` | `^1.1.2` | Drawers (Phase 2 mobile) |
 | `@ark-ui/react` | `5.37.2` | Admin headless primitives |
-| `react-aria-components` | `1.19.0` | Combobox / a11y collections |
+| `react-aria-components` | `1.19.0` | **Planner canvas toolbar** (`CanvasToolRail` ToggleButtonGroup) + combobox / dialog / tabs — plan lock: [P09](../../Plans/Planner-track/P09-shortcuts-chrome.md) |
 | `zod` | `^4.4.3` | Descriptors, commands, validation |
+| `uuid` | `^14.0.0` (resolved 14.x) | Planner entity ids **v7** via `lib/newEntityId`; v5 for catalog slug→id |
 
 ## SVG pipeline (installed)
 

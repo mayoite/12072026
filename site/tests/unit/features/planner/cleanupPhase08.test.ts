@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { createElement } from "react";
+import { existsSync } from "node:fs";
+import path from "node:path";
 
 import {
   DEMO_MODEL_ASSETS,
@@ -9,27 +11,22 @@ import {
   listCdnEligibleRuntimeAssets,
 } from "@/features/planner/project/cleanup/assetClassification";
 import {
+  FORBIDDEN_GRAPH_IDS,
   PRODUCTION_IMPORT_GRAPH,
   fabricRetirementBlocked,
-  open3dHybridRoutes,
+  plannerHybridRoutes,
   routesStillOnFabricStack,
 } from "@/features/planner/project/cleanup/importGraphProof";
 
-vi.mock("@/features/planner/ui/PlannerWorkspaceRoute", () => ({
-  PlannerWorkspaceRoute: ({ guestMode, planId }: { guestMode?: boolean; planId?: string }) =>
-    createElement(
-      "div",
-      { "data-testid": "open3d-workspace-route" },
-      guestMode ? "guest" : "member",
-      planId ? ` ${planId}` : "",
-    ),
+vi.mock("@/lib/auth/plannerSession", () => ({
+  getOptionalPlannerUser: vi.fn(async () => null),
 }));
 
 vi.mock("@/features/planner/ui/PlannerWorkspaceRoute", () => ({
   PlannerWorkspaceRoute: ({ guestMode, planId }: { guestMode?: boolean; planId?: string }) =>
     createElement(
       "div",
-      { "data-testid": "fabric-workspace-route" },
+      { "data-testid": "planner-workspace-route" },
       guestMode ? "guest" : "member",
       planId ? ` ${planId}` : "",
     ),
@@ -39,62 +36,43 @@ vi.mock("@/features/planner/ui/PlannerHost", () => ({
   PlannerHost: ({ guestMode, planId }: { guestMode?: boolean; planId?: string }) =>
     createElement(
       "div",
-      { "data-testid": "open3d-pilot-route" },
+      { "data-testid": "planner-host" },
       guestMode ? "guest" : "member",
       planId ? ` ${planId}` : "",
     ),
 }));
 
-
-
 describe("Phase 08 asset classification", () => {
-
   it("keeps product catalog assets off git public paths", () => {
-
     expect(assertProductAssetsStayOffGit(PRODUCT_CATALOG_POLICY)).toBe(true);
 
     for (const demo of DEMO_MODEL_ASSETS) {
-
       expect(demo.productionAllowed).toBe(false);
-
     }
-
   });
-
-
 
   it("lists runtime textures eligible for CDN copy only", () => {
-
     const eligible = listCdnEligibleRuntimeAssets();
-
     expect(eligible.length).toBeGreaterThan(0);
-
     for (const asset of eligible) {
-
-      expect(asset.cdnDestination).toMatch(/^\/cdn\/planner\/open3d\//);
-
+      // Classified CDN slot is /cdn/planner/canvas/ (public/open3d remains legacy empty slot)
+      expect(asset.cdnDestination).toMatch(/^\/cdn\/planner\/canvas\//);
       expect(asset.ownership).toBe("runtime-editor-cdn");
-
     }
-
   });
-
 });
 
-
-
 describe("Phase 08 import graph proof", () => {
-
   afterEach(() => {
     cleanup();
   });
 
-  it("wires the live guest and canvas routes to the hybrid open3d workspace", async () => {
+  it("wires the live guest and canvas routes to PlannerWorkspaceRoute", async () => {
     const { default: PlannerGuestPage } = await import("@/app/planner/(workspace)/guest/page");
     const { default: PlannerCanvasPage } = await import("@/app/planner/(workspace)/canvas/page");
 
     render(await PlannerGuestPage({ searchParams: Promise.resolve({}) }));
-    expect(screen.getByTestId("open3d-workspace-route")).toHaveTextContent("guest");
+    expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent("guest");
 
     cleanup();
 
@@ -103,37 +81,31 @@ describe("Phase 08 import graph proof", () => {
         searchParams: Promise.resolve({ id: "live-plan" }),
       }),
     );
-    expect(screen.getByTestId("open3d-workspace-route")).toHaveTextContent("live-plan");
+    expect(screen.getByTestId("planner-workspace-route")).toHaveTextContent("live-plan");
   });
 
-  it("keeps /planner/open3d on the pilot host route", async () => {
-    const { default: Open3dPage } = await import("@/app/planner/open3d/page");
-
-    render(
-      await Open3dPage({
-        searchParams: Promise.resolve({ id: "pilot-plan" }),
-      }),
-    );
-    expect(screen.getByTestId("open3d-pilot-route")).toHaveTextContent("pilot-plan");
+  it("has no pilot /planner/open3d page module (redirect-only in next.config)", () => {
+    const open3dPage = path.resolve(process.cwd(), "app/planner/open3d/page.tsx");
+    expect(existsSync(open3dPage)).toBe(false);
   });
-
-
 
   it("preserves iframe embed node until explicit retirement", () => {
-
     const embed = PRODUCTION_IMPORT_GRAPH.find((n) => n.stack === "iframe-embed");
-
     expect(embed?.path).toContain("vendor/open3d-floorplan/embed");
-
   });
 
   it("records live hybrid routes; fabric-legacy stack empty (archive deleted)", () => {
-    expect(open3dHybridRoutes()).toEqual(
-      expect.arrayContaining(["route-guest", "route-canvas", "workspace-route-open3d"]),
+    expect(plannerHybridRoutes()).toEqual(
+      expect.arrayContaining(["route-guest", "route-canvas", "workspace-route"]),
     );
     expect(routesStillOnFabricStack()).toEqual([]);
     expect(fabricRetirementBlocked()).toBe(false);
+    const ids = PRODUCTION_IMPORT_GRAPH.map((n) => n.id);
+    for (const forbidden of FORBIDDEN_GRAPH_IDS) {
+      expect(ids).not.toContain(forbidden);
+    }
+    expect(ids.some((id) => id.includes("fabric-legacy") || id.startsWith("route-fabric"))).toBe(
+      false,
+    );
   });
-
 });
-

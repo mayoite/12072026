@@ -1,12 +1,9 @@
 /**
- * W4 browser — place seats (configurator) → 3D orbit attr → 2D same furniture count.
- * Place path uses proven systems-v0 "Place N seats" via placeSeatsFromConfigurator
- * (InventoryPanel defaultOpen=false — must expand; catalog click was flaky).
+ * W4 browser — place seats → 3D orbit ON → 2D same **furniture ids** (not count-only).
  * Evidence: results/planner/world-standard-wave/04-orbit-continuity/
  *
- * Honesty (CODE-REVIEW-REPORT H3): browser proves furniture **count** +
- * data-orbit-enabled attr + toggle remount — NOT entity ids/mm/rotation
- * (pose continuity is unit-only).
+ * Pose mm/rotation document authority remains unit-proven (`poseContinuityW4`).
+ * Browser: id set stable across 2D↔3D remount + data-orbit-enabled + no crash on drag.
  */
 import { expect, test, type Page } from "@playwright/test";
 import path from "node:path";
@@ -14,7 +11,9 @@ import fs from "node:fs";
 
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
 import {
+  getFurnitureCount,
   placeSeatsFromConfigurator,
+  PLANNER_FABRIC_STAGE,
   switchPlannerViewMode,
   waitForPlannerCanvas,
 } from "./plannerCanvasHelpers";
@@ -30,14 +29,40 @@ const EVIDENCE = path.join(
   "04-orbit-continuity",
 );
 
-async function furnitureCount(page: Page): Promise<number> {
-  const body = await page.locator("body").innerText();
-  const match = body.match(/(\d+)\s+furniture/i);
-  return match ? Number.parseInt(match[1], 10) : -1;
+async function fabricFurnitureIds(page: Page): Promise<string[]> {
+  return page.evaluate(() => {
+    const w = (
+      window as unknown as {
+        __plannerFabricView?: {
+          getObjects?: () => Array<{
+            get?: (key: string) => unknown;
+            plannerEntityType?: unknown;
+            entityId?: unknown;
+          }>;
+        };
+      }
+    ).__plannerFabricView;
+    if (!w?.getObjects) return [];
+    const ids: string[] = [];
+    for (const o of w.getObjects()) {
+      const type =
+        (typeof o.get === "function" ? o.get("plannerEntityType") : null) ??
+        o.plannerEntityType;
+      if (type !== "furniture") continue;
+      const id =
+        (typeof o.get === "function" ? o.get("entityId") : null) ?? o.entityId;
+      if (typeof id === "string" && id.length > 0) ids.push(id);
+    }
+    return ids;
+  });
+}
+
+function sorted(ids: string[]): string[] {
+  return [...ids].sort();
 }
 
 test.describe("W4 orbit + 2D↔3D continuity (browser)", () => {
-  test("place furniture → 3D orbit attr → 2D same count", async ({ page }) => {
+  test("place furniture → 3D orbit → 2D same furniture ids", async ({ page }) => {
     fs.mkdirSync(EVIDENCE, { recursive: true });
 
     const consoleErrors: string[] = [];
@@ -49,18 +74,25 @@ test.describe("W4 orbit + 2D↔3D continuity (browser)", () => {
 
     await enterGuestPlannerWorkspace(page, { projectName: "W4 continuity" });
     await waitForPlannerCanvas(page);
+    await expect(page.locator(PLANNER_FABRIC_STAGE)).toBeVisible({
+      timeout: 15_000,
+    });
     await expect(page.locator(".pw-topbar")).toBeVisible();
 
-    const before = await furnitureCount(page);
+    const before = await getFurnitureCount(page);
     expect(before).toBeGreaterThanOrEqual(0);
 
-    // Proven place path (systems v0 batch) — expands collapsed configurator.
     await placeSeatsFromConfigurator(page, 4);
 
     await expect
-      .poll(async () => furnitureCount(page), { timeout: 25_000 })
+      .poll(async () => getFurnitureCount(page), { timeout: 25_000 })
       .toBe(before + 4);
-    const afterPlace = await furnitureCount(page);
+    const afterPlace = await getFurnitureCount(page);
+    expect(afterPlace).toBe(before + 4);
+
+    const idsAfterPlace = await fabricFurnitureIds(page);
+    expect(idsAfterPlace.length).toBe(afterPlace);
+    expect(new Set(idsAfterPlace).size).toBe(idsAfterPlace.length);
 
     await page.screenshot({ path: path.join(EVIDENCE, "01-2d-after-place.png") });
 
@@ -74,7 +106,6 @@ test.describe("W4 orbit + 2D↔3D continuity (browser)", () => {
     );
     await expect(orbit.first()).toBeVisible({ timeout: 15_000 });
 
-    // Optional light left-drag — orbit should not crash the page.
     const box = await orbit.first().boundingBox();
     if (box) {
       const cx = box.x + box.width / 2;
@@ -90,10 +121,23 @@ test.describe("W4 orbit + 2D↔3D continuity (browser)", () => {
 
     await switchPlannerViewMode(page, "2d");
     await waitForPlannerCanvas(page);
+    await expect(page.locator(PLANNER_FABRIC_STAGE)).toBeVisible({
+      timeout: 15_000,
+    });
 
     await expect
-      .poll(async () => furnitureCount(page), { timeout: 15_000 })
+      .poll(async () => getFurnitureCount(page), { timeout: 15_000 })
       .toBe(afterPlace);
+
+    await expect
+      .poll(async () => {
+        const ids = await fabricFurnitureIds(page);
+        return (
+          ids.length === idsAfterPlace.length &&
+          sorted(ids).join("|") === sorted(idsAfterPlace).join("|")
+        );
+      }, { timeout: 15_000 })
+      .toBe(true);
 
     await switchPlannerViewMode(page, "3d");
     await expect(page.getByTestId("planner-3d-canvas")).toBeVisible({
@@ -108,8 +152,10 @@ test.describe("W4 orbit + 2D↔3D continuity (browser)", () => {
     await switchPlannerViewMode(page, "2d");
     await waitForPlannerCanvas(page);
     await expect
-      .poll(async () => furnitureCount(page), { timeout: 15_000 })
+      .poll(async () => getFurnitureCount(page), { timeout: 15_000 })
       .toBe(afterPlace);
+    const idsFinal = await fabricFurnitureIds(page);
+    expect(sorted(idsFinal)).toEqual(sorted(idsAfterPlace));
 
     await page.screenshot({ path: path.join(EVIDENCE, "03-2d-restored.png") });
 
@@ -129,22 +175,27 @@ test.describe("W4 orbit + 2D↔3D continuity (browser)", () => {
           status: "browser-green",
           furnitureBefore: before,
           furnitureAfterPlace: afterPlace,
-          furnitureAfterToggle: afterPlace,
+          idsAfterPlace: sorted(idsAfterPlace),
+          idsAfterToggle: sorted(idsFinal),
+          idSetStable: true,
           orbitEnabled: true,
           placePath: "placeSeatsFromConfigurator Place 4 seats",
           browserProves: [
-            "furniture-count-status-text",
+            "furniture-id-set-stable-2d-3d-2d",
+            "furniture-count-status-bar",
             "data-orbit-enabled=true",
-            "2d-3d-2d-count-stable",
             "optional-left-drag-no-crash",
           ],
           browserDoesNotProve: [
-            "entity-ids",
-            "mm-position",
-            "document-rotation-degrees",
+            "three-mesh-userData.entityId-in-browser",
+            "mm-position-live-assert",
+            "document-rotation-degrees-live-assert",
           ],
-          honestyNote:
-            "CODE-REVIEW-REPORT H3: browser = count + orbit attr; pose ids/mm/rotation = units only",
+          unitProves: [
+            "poseContinuityW4 document↔scene nodes mm+rotation",
+            "orbitControlsDefault enableControls",
+            "workspaceOrbitWiring getPlannerViewerControlProps",
+          ],
           consoleErrorCount: hardAppErrors.length,
           screenshots: [
             "01-2d-after-place.png",

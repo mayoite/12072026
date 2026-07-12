@@ -2,7 +2,7 @@
 
 /**
  * Live 2-D planner stage (Fabric.js). Sole production plan canvas.
- * Mounted as `PlannerCanvasStage` from `open3d/canvas-stage`. Build tools/walls here from scratch.
+ * Mounted as `PlannerCanvasStage` from `project/canvas-stage` (re-export). Build tools/walls here.
  */
 
 import {
@@ -16,8 +16,8 @@ import {
 } from "react";
 import { Canvas, Line, type FabricObject, type ModifiedEvent, type TPointerEventInfo } from "fabric";
 
-import type { PlannerTool } from "@/features/planner/editor/canvasTool";
-import type { Open3dLayerVisibility } from "@/features/planner/editor/layerVisibility";
+import { runtimeToolFor, type PlannerTool } from "@/features/planner/editor/canvasTool";
+import type { PlannerLayerVisibility } from "@/features/planner/editor/layerVisibility";
 import type { WorkspaceCanvasContext } from "@/features/planner/editor/useWorkspaceCanvas";
 import {
   projectToScreen,
@@ -26,13 +26,13 @@ import {
   type CanvasTransform,
   type SnapKind,
 } from "@/features/planner/project/lib/geometry/snapping";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
-import type { Open3dFloor, Open3dPoint, Open3dWall } from "@/features/planner/project/model/types";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+import type { PlannerFloor, PlannerPoint, PlannerWall } from "@/features/planner/project/model/types";
 import { resolvePaintColor } from "@/features/planner/project/shared/readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "@/features/planner/project/shared/themeColorTokens";
 import type {
   CanvasStatusSnapshot,
-  Open3dCanvasStageHandle,
+  PlannerCanvasStageHandle,
 } from "./canvasStageTypes";
 import {
   DEFAULT_FABRIC_STAGE_TRANSFORM,
@@ -48,13 +48,17 @@ import {
   type FabricCanvasEntityType,
 } from "./fabricSelection";
 import { createFabricFurnitureBlock } from "./fabricBlock2D";
+import {
+  shouldCommitWallSegment,
+  wallSegmentLengthMm,
+} from "./wallDrawGeometry";
 import styles from "./plannerFabricStage.module.css";
 
 type CanvasEntityType = FabricCanvasEntityType;
 
 function nearestWall(
-  point: Open3dPoint,
-  walls: ReadonlyArray<Open3dWall>,
+  point: PlannerPoint,
+  walls: ReadonlyArray<PlannerWall>,
 ): { wallId: string; position: number; distance: number } | null {
   let best: { wallId: string; position: number; distance: number } | null = null;
   for (const wall of walls) {
@@ -73,14 +77,15 @@ function nearestWall(
 
 export type PlannerFabricStageProps = {
   activeTool?: PlannerTool;
-  layerVisibility?: Open3dLayerVisibility;
+  layerVisibility?: PlannerLayerVisibility;
   workspaceCanvas?: WorkspaceCanvasContext;
-  activeFloor?: Open3dFloor;
+  activeFloor?: PlannerFloor;
   pendingCatalogPlacement?: boolean;
   placementItemLabel?: string | null;
-  onPlaceAtPoint?: (point: Open3dPoint) => void;
-  onWallDrawn?: (start: Open3dPoint, end: Open3dPoint) => void;
-  onOpeningPlaced?: (wallId: string, position: number) => void;
+  onPlaceAtPoint?: (point: PlannerPoint) => void;
+  onWallDrawn?: (start: PlannerPoint, end: PlannerPoint) => void;
+  /** kind restored: door vs window (opening tool defaults to door). */
+  onOpeningPlaced?: (wallId: string, position: number, kind: "door" | "window") => void;
   onSelectionChange?: (selection: { type: CanvasEntityType; id: string } | null) => void;
   onStatusChange?: (status: CanvasStatusSnapshot) => void;
   onFurnitureModified?: (update: FurnitureDocumentPoseUpdate) => void;
@@ -88,11 +93,11 @@ export type PlannerFabricStageProps = {
 
 type PanSession = {
   pointerId: number;
-  screen: Open3dPoint;
-  origin: Open3dPoint;
+  screen: PlannerPoint;
+  origin: PlannerPoint;
 };
 
-function hostPoint(host: HTMLElement, clientX: number, clientY: number): Open3dPoint {
+function hostPoint(host: HTMLElement, clientX: number, clientY: number): PlannerPoint {
   const rect = host.getBoundingClientRect();
   return { x: clientX - rect.left, y: clientY - rect.top };
 }
@@ -118,7 +123,7 @@ function resolveStageColor(token: string, fallback: string): string {
   }
 }
 
-export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFabricStageProps>(
+export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFabricStageProps>(
   function PlannerFabricStage(
     {
       activeTool = "select",
@@ -149,9 +154,10 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
     const onWallDrawnRef = useRef(onWallDrawn);
     const onOpeningPlacedRef = useRef(onOpeningPlaced);
     const onSelectionRef = useRef(onSelectionChange);
+    const onStatusChangeRef = useRef(onStatusChange);
     const pendingPlaceRef = useRef(pendingCatalogPlacement);
     const activeFloorRef = useRef(activeFloor);
-    const wallDrawRef = useRef<{ start: Open3dPoint; pointerId: number } | null>(null);
+    const wallDrawRef = useRef<{ start: PlannerPoint; pointerId: number } | null>(null);
     const previewLineRef = useRef<Line | null>(null);
 
     useEffect(() => {
@@ -187,27 +193,31 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
     }, [onSelectionChange]);
 
     useEffect(() => {
+      onStatusChangeRef.current = onStatusChange;
+    }, [onStatusChange]);
+
+    useEffect(() => {
       pendingPlaceRef.current = pendingCatalogPlacement;
     }, [pendingCatalogPlacement]);
 
     const emitStatus = useCallback(
       (nextTransform: CanvasTransform, tool: PlannerTool) => {
-        onStatusChange?.({
+        onStatusChangeRef.current?.({
           snapKind: "none" as SnapKind,
           activeTool: tool,
           drawingState: "ready",
-          wallCount: activeFloor?.walls.length ?? 0,
+          wallCount: activeFloorRef.current?.walls.length ?? 0,
           previewLengthMm: null,
           zoomPercent: Math.round(nextTransform.scale * 1000),
           transform: nextTransform,
         });
       },
-      [activeFloor?.walls.length, onStatusChange],
+      [],
     );
 
     useEffect(() => {
       emitStatus(transform, activeTool);
-    }, [activeTool, emitStatus, transform]);
+    }, [activeTool, emitStatus, transform, activeFloor?.walls.length]);
 
     useImperativeHandle(
       ref,
@@ -240,7 +250,7 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
             { x: preview.x2 ?? 0, y: preview.y2 ?? 0 },
             transformRef.current,
           );
-          if (Math.hypot(end.x - session.start.x, end.y - session.start.y) >= 10) {
+          if (shouldCommitWallSegment(session.start, end)) {
             onWallDrawnRef.current?.(session.start, end);
           }
           wallDrawRef.current = null;
@@ -251,7 +261,7 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
         resetZoom: () => setTransform(DEFAULT_FABRIC_STAGE_TRANSFORM),
         fitToView: () => setTransform(DEFAULT_FABRIC_STAGE_TRANSFORM),
         setTool: () => {},
-        getProject: () => workspaceCanvas?.project ?? createOpen3dProject(),
+        getProject: () => workspaceCanvas?.project ?? createPlannerProject(),
       }),
       [workspaceCanvas],
     );
@@ -267,6 +277,9 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
         renderOnAddRemove: true,
         skipTargetFind: false,
         enableRetinaScaling: true,
+        // Prefer pointer events so Playwright/Chromium drag gestures do not
+        // enter HTML5 drag mode mid wall stroke.
+        enablePointerEvents: true,
         backgroundColor: resolveStageColor(
           PLANNER_COLOR_TOKENS.exportBackground,
           "#f8fafc",
@@ -277,6 +290,86 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
       (
         window as unknown as { __plannerFabricView?: Canvas }
       ).__plannerFabricView = canvas;
+
+      // Fabric marks upper canvas draggable=true; long wall drags then fire
+      // native dragstart and drop mouseup — wall never commits. Kill that path.
+      const upperEl = canvas.upperCanvasEl;
+      if (upperEl) {
+        upperEl.draggable = false;
+        upperEl.setAttribute("draggable", "false");
+      }
+      const blockDragStart = (event: Event) => {
+        event.preventDefault();
+      };
+      upperEl?.addEventListener("dragstart", blockDragStart);
+
+      const clearWallPreview = () => {
+        const preview = previewLineRef.current;
+        if (preview) {
+          canvas.remove(preview);
+          previewLineRef.current = null;
+        }
+        wallDrawRef.current = null;
+        canvas.requestRenderAll();
+      };
+
+      const commitWallAt = (clientX: number, clientY: number) => {
+        const wallSession = wallDrawRef.current;
+        const preview = previewLineRef.current;
+        if (!wallSession) return;
+        const screen = hostPoint(host, clientX, clientY);
+        const end = screenToProject(screen, transformRef.current);
+        if (shouldCommitWallSegment(wallSession.start, end)) {
+          onWallDrawnRef.current?.(wallSession.start, end);
+        }
+        if (preview) {
+          canvas.remove(preview);
+          previewLineRef.current = null;
+        }
+        wallDrawRef.current = null;
+        canvas.requestRenderAll();
+        emitStatus(transformRef.current, "wall");
+      };
+
+      const startWallAt = (clientX: number, clientY: number, pointerId: number) => {
+        const screen = hostPoint(host, clientX, clientY);
+        const start = screenToProject(screen, transformRef.current);
+        // Drop any prior preview (stale session / double-down).
+        if (previewLineRef.current) {
+          canvas.remove(previewLineRef.current);
+          previewLineRef.current = null;
+        }
+        const preview = new Line([screen.x, screen.y, screen.x, screen.y], {
+          stroke: resolveStageColor(PLANNER_COLOR_TOKENS.wallStroke, "#64748b"),
+          strokeWidth: 5,
+          selectable: false,
+          evented: false,
+          objectCaching: false,
+        });
+        canvas.add(preview);
+        previewLineRef.current = preview;
+        wallDrawRef.current = { start, pointerId };
+        emitStatus(transformRef.current, "wall");
+      };
+
+      const updateWallAt = (clientX: number, clientY: number) => {
+        const wallSession = wallDrawRef.current;
+        const preview = previewLineRef.current;
+        if (!wallSession || !preview) return;
+        const screen = hostPoint(host, clientX, clientY);
+        preview.set({ x2: screen.x, y2: screen.y });
+        const end = screenToProject(screen, transformRef.current);
+        onStatusChangeRef.current?.({
+          snapKind: "none",
+          activeTool: "wall",
+          drawingState: "drawing",
+          wallCount: activeFloorRef.current?.walls.length ?? 0,
+          previewLengthMm: Math.round(wallSegmentLengthMm(wallSession.start, end)),
+          zoomPercent: Math.round(transformRef.current.scale * 1000),
+          transform: transformRef.current,
+        });
+        canvas.requestRenderAll();
+      };
 
       const handleModified = (event: ModifiedEvent) => {
         if (rebuildingRef.current) return;
@@ -296,81 +389,89 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
         onModifiedRef.current?.(update);
       };
 
-      const handlePointerDown = (opt: TPointerEventInfo) => {
-        const hostEl = hostRef.current;
-        const nativeEvent = opt.e as PointerEvent | undefined;
-        if (!hostEl || !nativeEvent) return;
-        const tool = activeToolRef.current;
+      /**
+       * Geometry tools (wall/place/opening/pan) run on the host in capture phase
+       * so Fabric's upper-canvas draggable / findTarget cannot swallow the stroke.
+       * Select still uses Fabric mouse:down for object hit-testing.
+       * Accept PointerEvent | MouseEvent — Playwright mouse API is reliable in both.
+       */
+      const pointerIdOf = (event: PointerEvent | MouseEvent): number => {
+        if ("pointerId" in event && typeof event.pointerId === "number") {
+          return event.pointerId;
+        }
+        return 1;
+      };
+
+      const handleHostPointerDown = (event: PointerEvent | MouseEvent) => {
+        if (event.button !== 0) return;
+        const uiTool = activeToolRef.current;
+        const tool = runtimeToolFor(uiTool);
+        const pointerId = pointerIdOf(event);
 
         if (pendingPlaceRef.current && onPlaceRef.current) {
-          const pt = hostPoint(hostEl, nativeEvent.clientX, nativeEvent.clientY);
+          event.preventDefault();
+          const pt = hostPoint(host, event.clientX, event.clientY);
           onPlaceRef.current(screenToProject(pt, transformRef.current));
           return;
         }
 
         if (tool === "wall") {
-          const screen = hostPoint(hostEl, nativeEvent.clientX, nativeEvent.clientY);
-          const start = screenToProject(screen, transformRef.current);
-          const preview = new Line([screen.x, screen.y, screen.x, screen.y], {
-            stroke: resolveStageColor(PLANNER_COLOR_TOKENS.wallStroke, "#64748b"),
-            strokeWidth: 5,
-            selectable: false,
-            evented: false,
-            objectCaching: false,
-          });
-          canvas.add(preview);
-          previewLineRef.current = preview;
-          wallDrawRef.current = { start, pointerId: nativeEvent.pointerId ?? 1 };
-          emitStatus(transformRef.current, tool);
+          event.preventDefault();
+          event.stopPropagation();
+          startWallAt(event.clientX, event.clientY, pointerId);
+          if ("pointerId" in event) {
+            try {
+              host.setPointerCapture(event.pointerId);
+            } catch {
+              // Capture is best-effort; window-level up still commits.
+            }
+          }
           return;
         }
 
-        if (tool === "opening" || tool === "door") {
+        if (tool === "door" || tool === "window" || tool === "opening") {
           const floor = activeFloorRef.current;
           if (!floor || !onOpeningPlacedRef.current) return;
-          const screen = hostPoint(hostEl, nativeEvent.clientX, nativeEvent.clientY);
-          const hit = nearestWall(screenToProject(screen, transformRef.current), floor.walls);
+          event.preventDefault();
+          event.stopPropagation();
+          const screen = hostPoint(host, event.clientX, event.clientY);
+          const hit = nearestWall(
+            screenToProject(screen, transformRef.current),
+            floor.walls,
+          );
           if (hit && hit.distance <= 240) {
-            onOpeningPlacedRef.current(hit.wallId, hit.position);
+            const kind = tool === "window" ? "window" : "door";
+            onOpeningPlacedRef.current(hit.wallId, hit.position, kind);
           }
           return;
         }
 
         if (tool === "pan") {
+          event.preventDefault();
+          event.stopPropagation();
           panSessionRef.current = {
-            pointerId: nativeEvent.pointerId ?? 1,
-            screen: hostPoint(hostEl, nativeEvent.clientX, nativeEvent.clientY),
+            pointerId,
+            screen: hostPoint(host, event.clientX, event.clientY),
             origin: { ...transformRef.current.origin },
           };
+          if ("pointerId" in event) {
+            try {
+              host.setPointerCapture(event.pointerId);
+            } catch {
+              // ignore
+            }
+          }
         }
       };
 
-      const handlePointerMove = (opt: TPointerEventInfo) => {
-        const hostEl = hostRef.current;
-        const nativeEvent = opt.e as PointerEvent | undefined;
-        if (!hostEl || !nativeEvent) return;
-        const screen = hostPoint(hostEl, nativeEvent.clientX, nativeEvent.clientY);
-
-        const wallSession = wallDrawRef.current;
-        const preview = previewLineRef.current;
-        if (wallSession && preview && wallSession.pointerId === (nativeEvent.pointerId ?? 1)) {
-          preview.set({ x2: screen.x, y2: screen.y });
-          const end = screenToProject(screen, transformRef.current);
-          onStatusChange?.({
-            snapKind: "none",
-            activeTool: "wall",
-            drawingState: "drawing",
-            wallCount: activeFloor?.walls.length ?? 0,
-            previewLengthMm: Math.round(Math.hypot(end.x - wallSession.start.x, end.y - wallSession.start.y)),
-            zoomPercent: Math.round(transformRef.current.scale * 1000),
-            transform: transformRef.current,
-          });
-          canvas.requestRenderAll();
+      const handleHostPointerMove = (event: PointerEvent | MouseEvent) => {
+        if (wallDrawRef.current) {
+          updateWallAt(event.clientX, event.clientY);
           return;
         }
-
         const session = panSessionRef.current;
-        if (!session) return;
+        if (!session || session.pointerId !== pointerIdOf(event)) return;
+        const screen = hostPoint(host, event.clientX, event.clientY);
         const dx = screen.x - session.screen.x;
         const dy = screen.y - session.screen.y;
         setTransform((current) => ({
@@ -382,27 +483,55 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
         }));
       };
 
-      const handlePointerUp = (opt: TPointerEventInfo) => {
-        const nativeEvent = opt.e as PointerEvent | undefined;
-        const wallSession = wallDrawRef.current;
-        const preview = previewLineRef.current;
-        if (wallSession && preview && nativeEvent) {
-          const hostEl = hostRef.current;
-          if (hostEl && wallSession.pointerId === (nativeEvent.pointerId ?? 1)) {
-            const screen = hostPoint(hostEl, nativeEvent.clientX, nativeEvent.clientY);
-            const end = screenToProject(screen, transformRef.current);
-            if (Math.hypot(end.x - wallSession.start.x, end.y - wallSession.start.y) >= 10) {
-              onWallDrawnRef.current?.(wallSession.start, end);
+      const handleHostPointerUp = (event: PointerEvent | MouseEvent) => {
+        if (wallDrawRef.current) {
+          commitWallAt(event.clientX, event.clientY);
+          if ("pointerId" in event) {
+            try {
+              if (host.hasPointerCapture(event.pointerId)) {
+                host.releasePointerCapture(event.pointerId);
+              }
+            } catch {
+              // ignore
             }
-            wallDrawRef.current = null;
-            canvas.remove(preview);
-            previewLineRef.current = null;
-            canvas.requestRenderAll();
-            emitStatus(transformRef.current, "wall");
-            return;
+          }
+          return;
+        }
+        if (panSessionRef.current?.pointerId === pointerIdOf(event)) {
+          panSessionRef.current = null;
+          if ("pointerId" in event) {
+            try {
+              if (host.hasPointerCapture(event.pointerId)) {
+                host.releasePointerCapture(event.pointerId);
+              }
+            } catch {
+              // ignore
+            }
           }
         }
-        panSessionRef.current = null;
+      };
+
+      // Window backup: if pointerup is lost on the host (HTML5 drag residual),
+      // still commit any open wall session from the last known client point.
+      const handleWindowPointerUp = (event: PointerEvent | MouseEvent) => {
+        if (!wallDrawRef.current) return;
+        commitWallAt(event.clientX, event.clientY);
+      };
+
+      const handleFabricSelectDown = (opt: TPointerEventInfo) => {
+        const uiTool = activeToolRef.current;
+        const tool = runtimeToolFor(uiTool);
+        if (tool !== "select") return;
+        if (pendingPlaceRef.current) return;
+        const nativeEvent = opt.e as PointerEvent | MouseEvent | undefined;
+        if (!nativeEvent) return;
+        const hit =
+          (opt.target as FabricObject | undefined) ??
+          canvas.findTarget(nativeEvent);
+        const next = selectionFromFabricTarget(
+          hit as Parameters<typeof selectionFromFabricTarget>[0],
+        );
+        onSelectionRef.current?.(next);
       };
 
       const handleSelection = () => {
@@ -414,17 +543,38 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
       const handleSelectionCleared = () => onSelectionRef.current?.(null);
 
       canvas.on("object:modified", handleModified);
-      canvas.on("mouse:down", handlePointerDown);
-      canvas.on("mouse:move", handlePointerMove);
-      canvas.on("mouse:up", handlePointerUp);
+      canvas.on("mouse:down", handleFabricSelectDown);
       canvas.on("selection:created", handleSelection);
       canvas.on("selection:updated", handleSelection);
       canvas.on("selection:cleared", handleSelectionCleared);
 
+      // Capture phase: wall/pan/place before Fabric upper-canvas handlers.
+      const captureOpts: AddEventListenerOptions = { capture: true };
+      host.addEventListener("pointerdown", handleHostPointerDown, captureOpts);
+      host.addEventListener("pointermove", handleHostPointerMove, captureOpts);
+      host.addEventListener("pointerup", handleHostPointerUp, captureOpts);
+      host.addEventListener("pointercancel", handleHostPointerUp, captureOpts);
+      // Mouse fallback for engines that only synthesize mouse events (Playwright CDP).
+      host.addEventListener("mousedown", handleHostPointerDown, captureOpts);
+      host.addEventListener("mousemove", handleHostPointerMove, captureOpts);
+      host.addEventListener("mouseup", handleHostPointerUp, captureOpts);
+      window.addEventListener("pointerup", handleWindowPointerUp);
+      window.addEventListener("mouseup", handleWindowPointerUp);
+
       const resize = () => {
-        const rect = host.getBoundingClientRect();
-        const w = Math.max(1, Math.floor(rect.width));
-        const h = Math.max(1, Math.floor(rect.height));
+        // Prefer layout box (client*) over getBoundingClientRect so a blown
+        // scroll height cannot pin Fabric to multi-viewport canvas sizes.
+        const region = host.closest(".canvas");
+        const regionH =
+          region instanceof HTMLElement ? region.clientHeight : 0;
+        const w = Math.max(1, Math.floor(host.clientWidth || host.getBoundingClientRect().width));
+        let h = Math.max(1, Math.floor(host.clientHeight || host.getBoundingClientRect().height));
+        if (regionH > 0) {
+          h = Math.min(h, regionH);
+        }
+        // Hard cap: never paint a stage taller than the window (select hit-tests).
+        const maxH = Math.max(240, Math.floor(window.innerHeight));
+        h = Math.min(h, maxH);
         if (canvas.width === w && canvas.height === h) return;
         canvas.setDimensions({ width: w, height: h });
         canvas.requestRenderAll();
@@ -441,12 +591,21 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
 
       return () => {
         canvas.off("object:modified", handleModified);
-        canvas.off("mouse:down", handlePointerDown);
-        canvas.off("mouse:move", handlePointerMove);
-        canvas.off("mouse:up", handlePointerUp);
+        canvas.off("mouse:down", handleFabricSelectDown);
         canvas.off("selection:created", handleSelection);
         canvas.off("selection:updated", handleSelection);
         canvas.off("selection:cleared", handleSelectionCleared);
+        host.removeEventListener("pointerdown", handleHostPointerDown, captureOpts);
+        host.removeEventListener("pointermove", handleHostPointerMove, captureOpts);
+        host.removeEventListener("pointerup", handleHostPointerUp, captureOpts);
+        host.removeEventListener("pointercancel", handleHostPointerUp, captureOpts);
+        host.removeEventListener("mousedown", handleHostPointerDown, captureOpts);
+        host.removeEventListener("mousemove", handleHostPointerMove, captureOpts);
+        host.removeEventListener("mouseup", handleHostPointerUp, captureOpts);
+        window.removeEventListener("pointerup", handleWindowPointerUp);
+        window.removeEventListener("mouseup", handleWindowPointerUp);
+        upperEl?.removeEventListener("dragstart", blockDragStart);
+        clearWallPreview();
         observer.disconnect();
         canvas.dispose();
         fabricRef.current = null;
@@ -455,13 +614,19 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
           delete w.__plannerFabricView;
         }
       };
-    }, [activeFloor?.walls.length, emitStatus, onStatusChange]);
+      // Mount once — scene rebuild + refs handle document/tool updates.
+      // Do not recreate Fabric when wall count changes (that aborted draws).
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional single mount
+    }, []);
 
     useEffect(() => {
       const canvas = fabricRef.current;
       if (!canvas || !activeFloor) return;
 
       rebuildingRef.current = true;
+      // Preserve in-progress wall preview across document rebuilds so a live
+      // stroke is not wiped mid-drag (HTML5 drag residual / status re-render).
+      const livePreview = previewLineRef.current;
       canvas.clear();
       canvas.backgroundColor = resolveStageColor(
         PLANNER_COLOR_TOKENS.exportBackground,
@@ -542,6 +707,13 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
         canvas.add(marker);
       }
 
+      if (livePreview && wallDrawRef.current) {
+        canvas.add(livePreview);
+        previewLineRef.current = livePreview;
+      } else {
+        previewLineRef.current = null;
+      }
+
       canvas.selection = false;
       canvas.skipTargetFind = !interactive;
       canvas.requestRenderAll();
@@ -570,6 +742,7 @@ export const PlannerFabricStage = forwardRef<Open3dCanvasStageHandle, PlannerFab
         ref={hostRef}
         className={`${styles.root} ${cursorClass}`}
         data-testid="planner-fabric-stage"
+        role="application"
         onWheel={handleWheel}
         aria-label={
           pendingCatalogPlacement && placementItemLabel

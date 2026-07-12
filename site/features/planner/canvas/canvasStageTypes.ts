@@ -1,6 +1,6 @@
 import type { PlannerTool } from "@/features/planner/editor/canvasTool";
 import type { CanvasTransform, SnapKind } from "@/features/planner/project/lib/geometry/snapping";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
 export type CanvasDrawingState = "ready" | "drawing" | "panning";
 
@@ -16,7 +16,7 @@ export interface CanvasStatusSnapshot {
 }
 
 /** Imperative handle for workspace chrome (zoom, undo, tool arm). */
-export interface Open3dCanvasStageHandle {
+export interface PlannerCanvasStageHandle {
   undo: () => boolean;
   redo: () => boolean;
   cancel: () => void;
@@ -24,5 +24,5 @@ export interface Open3dCanvasStageHandle {
   resetZoom: () => void;
   fitToView: () => void;
   setTool: (tool: PlannerTool) => void;
-  getProject: () => Open3dProject;
+  getProject: () => PlannerProject;
 }

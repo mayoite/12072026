@@ -3,7 +3,7 @@
  */
 
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createOpen3dProject, createRectangularRoomProject } from "@/features/planner/project/model/project";
+import { createPlannerProject, createRectangularRoomProject } from "@/features/planner/project/model/project";
 import {
   createAiPrivacyNotice,
   DEFAULT_CATALOG_IDS,
@@ -47,7 +47,7 @@ describe("jsonExport module", () => {
 
 describe("aiAdvisor summaries", () => {
   it("summarizes project state and validates proposals", () => {
-    const project = createOpen3dProject({ name: "Advisor Target" });
+    const project = createPlannerProject({ name: "Advisor Target" });
     const summary = summarizeProjectState(project, "wall-1", "wall");
     expect(summary.projectName).toBe("Advisor Target");
     expect(summary.totalWalls).toBe(0);

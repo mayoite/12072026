@@ -14,7 +14,7 @@ import {
   createWorkstationConfigV0,
   workstationConfigKey,
 } from "@/features/planner/project/catalog/workstationSystemV0";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 
 function ids(...values: string[]) {
   let index = 0;
@@ -34,7 +34,7 @@ describe("summarizeWorkstationBoqV0", () => {
       modules: ["desk", "return", "panel"],
     });
 
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "BOQ",
       now: "2026-07-09T19:00:00.000Z",
@@ -95,7 +95,7 @@ describe("summarizeWorkstationBoqV0", () => {
   });
 
   it("ignores non-workstation furniture", () => {
-    const project = createOpen3dProject({
+    const project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "BOQ empty",
       now: "2026-07-09T19:00:00.000Z",
@@ -112,7 +112,7 @@ describe("summarizeWorkstationBoqV0", () => {
       size: { lengthMm: 1500, depthMm: 600 },
       modules: ["desk"],
     });
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "Quote map",
       now: "2026-07-09T19:30:00.000Z",

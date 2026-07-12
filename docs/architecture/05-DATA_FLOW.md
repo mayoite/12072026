@@ -10,9 +10,9 @@
 
 | Sections | Scope |
 |----------|-------|
-| **§0** | Live open3d 2D + 3D (Fabric stage) — **use this** |
-| **§1–4** | Legacy `_archive/fabric` shell diagrams — historical only |
-| **§5** | Open3d save/reload |
+| **§0** | Live planner 2D + 3D (Fabric stage) — **use this** |
+| **§1–4** | Legacy archive Fabric shell diagrams — historical only |
+| **§5** | Live save/reload |
 | **§6** | SVG block publish (Admin — not plan-draw) |
 | **Appendix** | Platform flows (auth, catalog, audit, offline) |
 
@@ -20,32 +20,32 @@
 
 ## §0. Live plan edit (Fabric stage)
 
-Guest / canvas / open3d hosts mount the same open3d workspace. 2D is **not** Feasibility and **not** the archive Fabric shell.
+Guest / canvas hosts mount the same live workspace. 2D is **not** Feasibility and **not** an archive Fabric shell. `/planner/open3d` is **301 only**.
 
 ```mermaid
 sequenceDiagram
     participant User
     participant Workspace as OOPlannerWorkspace
     participant Stage as PlannerCanvasStage
-    participant Doc as Open3dProject
+    participant Doc as PlannerProject
     participant Viewer as Lazy3DViewer
 
-    User->>Workspace: Opens /planner/guest or /open3d
+    User->>Workspace: Opens /planner/guest or /planner/canvas
     Workspace->>Stage: viewMode 2d mounts Fabric stage
     Stage->>Doc: walls/furniture from activeFloor
     User->>Stage: pan / place / (tools as wired)
     Stage->>Doc: pose updates via workspace callbacks
     User->>Workspace: toggle 3d
     Workspace->>Viewer: projectData + enableControls
-    Viewer->>Doc: meshes from buildOpen3dSceneNodes
+    Viewer->>Doc: meshes from buildPlannerSceneNodes
 ```
 
 | Piece | Path |
 |-------|------|
 | Workspace | `features/planner/editor/OOPlannerWorkspace.tsx` |
 | 2D entry | `project/canvas-stage` → `features/planner/canvas` |
-| Document | `open3d/model/` |
-| 3D | `open3d/3d/` + `getOpen3dViewerControlProps()` |
+| Document | `project/model/` |
+| 3D | `features/planner/3d/` + `getPlannerViewerControlProps()` |
 | Persist | P06 — IDB first; honest local/cloud labels |
 
 Raise select / Block2D / wall-draw **on Fabric** — see Planner P03/P05/P07. Do not invent or restore Feasibility / `canvas-feasibility` to “make diagrams match.”
@@ -214,17 +214,17 @@ sequenceDiagram
 
 ---
 
-## §5. Open3D pilot — save / reload (1A target)
+## §5. Live workspace — save / reload (1A target)
 
-**Route:** `/planner/open3d` (`app/planner/open3d/page.tsx`) — **real pilot route**  
-**Code:** `features/planner/project/persistence/`
+**Routes:** `/planner/guest` · `/planner/canvas` (`app/planner/(workspace)/…`)  
+**Code:** `features/planner/project/persistence/` · shell `features/planner/editor/`
 
 ### On disk today vs 1A target
 
 | Piece | Today | 1A target |
 |-------|-------|-----------|
 | Document mutations | `useWorkspaceCanvas` → **`dispatchOpen3dAction` directly** | `executePlannerCommand` for all mutations |
-| Autosave | `useOpen3dWorkspaceAutosave` → `guestProjectRepository` | Same — already wired |
+| Autosave | `usePlannerWorkspaceAutosave` → `guestProjectRepository` | Same — already wired |
 | Tests | `plannerCommandWiring.test.ts` **red** until seam wired | Green with boundary tests |
 
 ```mermaid
@@ -234,7 +234,7 @@ sequenceDiagram
     participant Canvas as useWorkspaceCanvas
     participant Commands as PlannerCommand
     participant History as store/history
-    participant Autosave as useOpen3dWorkspaceAutosave
+    participant Autosave as usePlannerWorkspaceAutosave
     participant Repo as guestProjectRepository
     participant JSON as projectJson
 
@@ -243,25 +243,25 @@ sequenceDiagram
     Workspace->>Canvas: dispatch(action)
     Canvas->>Commands: executePlannerCommand (1A target)
     Commands->>History: document.apply / undo / redo
-    History-->>Workspace: Open3dProject snapshot
+    History-->>Workspace: PlannerProject snapshot
     Workspace->>Autosave: scheduleSave(snapshot)
-    Autosave->>JSON: exportOpen3dProjectJson
+    Autosave->>JSON: exportPlannerProjectJson
     Autosave->>Repo: save(project) — in-memory + backup map
     User->>Workspace: Reload route
     Workspace->>Repo: loadSafely(id)
-    Repo->>JSON: importOpen3dProjectJson
-    JSON-->>Workspace: Open3dProject restored
+    Repo->>JSON: importPlannerProjectJson
+    JSON-->>Workspace: PlannerProject restored
 ```
 
 | Piece | Path |
 |-------|------|
 | Command seam | `lib/commands/plannerCommand.ts` |
 | Canvas hook (bypass today) | `editor/useWorkspaceCanvas.ts` |
-| Autosave hook | `persistence/useOpen3dWorkspaceAutosave.ts` |
+| Autosave hook | `persistence/usePlannerWorkspaceAutosave.ts` |
 | Guest repo | `persistence/guestProjectRepository.ts` |
 | Serialize | `persistence/projectJson.ts` |
 
-**1A acceptance:** room → opening → place → edit → undo/redo → save → reload on `/planner/open3d`.
+**1A acceptance:** room → opening → place → edit → undo/redo → save → reload on `/planner/guest` or `/planner/canvas`.
 
 **Tests:** `plannerCommandWiring.test.ts`, `plannerCommandBoundary.test.ts`, `tests/e2e/open3d-workspace.spec.ts`.
 

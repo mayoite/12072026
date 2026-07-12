@@ -10,15 +10,15 @@ import {
   dragToPlace,
   validatePlannerPlacementPayload,
 } from "@/features/planner/project/catalog/placementAction";
-import { OPEN3D_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
-import { createOpen3dHistory } from "@/features/planner/project/store/history";
+import { PLANNER_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
+import { createPlannerHistory } from "@/features/planner/project/store/history";
 import { createPlannerSelection } from "@/features/planner/project/store/selection";
-import { exportOpen3dProjectJson, importOpen3dProjectJson } from "@/features/planner/project/persistence/projectJson";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import { exportPlannerProjectJson, importPlannerProjectJson } from "@/features/planner/project/persistence/projectJson";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
-function projectWithFurniture(locked: boolean): Open3dProject {
-  const project = createOpen3dProject({
+function projectWithFurniture(locked: boolean): PlannerProject {
+  const project = createPlannerProject({
     idFactory: (() => {
       const ids = ["floor", "project"];
       return () => ids.shift() ?? "generated";
@@ -38,7 +38,7 @@ function projectWithFurniture(locked: boolean): Open3dProject {
 
 describe("Phase 1 command and state contracts", () => {
   it("records only successful document commands in history", () => {
-    const initial = createOpen3dHistory(projectWithFurniture(false));
+    const initial = createPlannerHistory(projectWithFurniture(false));
     const command: PlannerCommand = {
       type: "document.apply",
       action: {
@@ -64,7 +64,7 @@ describe("Phase 1 command and state contracts", () => {
   });
 
   it("rejects every mutation targeting a locked item", () => {
-    const initial = createOpen3dHistory(projectWithFurniture(true));
+    const initial = createPlannerHistory(projectWithFurniture(true));
     for (const action of [
       { type: "update", collection: "furniture", id: "chair", updates: { rotation: 45 } },
       { type: "delete", collection: "furniture", id: "chair" },
@@ -87,7 +87,7 @@ describe("Phase 1 command and state contracts", () => {
 
 describe("Phase 1 catalogue contracts", () => {
   it("ranks with Fuse and produces React Aria collection records", () => {
-    const items = OPEN3D_DEMO_CATALOG_ITEMS;
+    const items = PLANNER_DEMO_CATALOG_ITEMS;
     const ranked = rankCatalogItems(items, items[0].sku);
     expect(ranked[0].id).toBe(items[0].id);
     expect(toPlannerCatalogCollection(ranked)[0]).toMatchObject({
@@ -98,7 +98,7 @@ describe("Phase 1 catalogue contracts", () => {
   });
 
   it("uses one validated payload for click and drag placement", () => {
-    const item = OPEN3D_DEMO_CATALOG_ITEMS[0];
+    const item = PLANNER_DEMO_CATALOG_ITEMS[0];
     expect(clickToPlace(item, null, { x: 10, y: 20 }).position)
       .toEqual(dragToPlace(item, null, { x: 10, y: 20 }).position);
     expect(() => validatePlannerPlacementPayload({
@@ -123,9 +123,9 @@ describe("Phase 1 deterministic persistence", () => {
       floors: project.floors,
       name: project.name,
       id: project.id,
-    } as Open3dProject;
-    const json = exportOpen3dProjectJson(project);
-    expect(exportOpen3dProjectJson(reordered)).toBe(json);
-    expect(importOpen3dProjectJson(json)).toEqual(project);
+    } as PlannerProject;
+    const json = exportPlannerProjectJson(project);
+    expect(exportPlannerProjectJson(reordered)).toBe(json);
+    expect(importPlannerProjectJson(json)).toEqual(project);
   });
 });

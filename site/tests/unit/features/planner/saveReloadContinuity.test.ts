@@ -6,16 +6,16 @@ import {
   addWall,
   updateFurniture,
 } from "@/features/planner/project/model/operations/pureActions";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 import {
   envelopeToJsonString,
   exportToJson,
 } from "@/features/planner/project/shared/export/jsonExport";
 import { importFromJson } from "@/features/planner/project/shared/export/jsonImport";
 import {
-  exportOpen3dProjectJson,
-  importOpen3dProjectJson,
+  exportPlannerProjectJson,
+  importPlannerProjectJson,
 } from "@/features/planner/project/persistence/projectJson";
 
 function ids(...values: string[]) {
@@ -23,7 +23,7 @@ function ids(...values: string[]) {
   return () => values[index++] ?? `generated-${index}`;
 }
 
-function activeFloor(project: Open3dProject) {
+function activeFloor(project: PlannerProject) {
   const floor = project.floors.find((f) => f.id === project.activeFloorId);
   if (!floor) {
     throw new Error(`Active floor not found: ${project.activeFloorId}`);
@@ -33,7 +33,7 @@ function activeFloor(project: Open3dProject) {
 
 /**
  * 2B.4 slice: draw wall + modular furniture → save envelope JSON → reload.
- * Pure unit path (no browser): createOpen3dProject, pureActions, export/import.
+ * Pure unit path (no browser): createPlannerProject, pureActions, export/import.
  */
 describe("open3d draw → save envelope → reload continuity (2B.4)", () => {
   it("preserves wall ends, furniture ids, and modular geometryMode/options through envelope JSON", () => {
@@ -45,7 +45,7 @@ describe("open3d draw → save envelope → reload continuity (2B.4)", () => {
       material: "oak",
     });
 
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "Save Reload Continuity",
       now: "2026-07-09T12:00:00.000Z",
@@ -119,7 +119,7 @@ describe("open3d draw → save envelope → reload continuity (2B.4)", () => {
     expect(furniture!.height).toBe(720);
   });
 
-  it("also preserves modular furniture through exportOpen3dProjectJson round-trip", () => {
+  it("also preserves modular furniture through exportPlannerProjectJson round-trip", () => {
     const modularOptions = defaultCabinetV0Options({
       widthMm: 600,
       depthMm: 580,
@@ -128,7 +128,7 @@ describe("open3d draw → save envelope → reload continuity (2B.4)", () => {
       material: "white",
     });
 
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-a", "project-a"),
       name: "Project JSON Continuity",
       now: "2026-07-09T12:30:00.000Z",
@@ -154,8 +154,8 @@ describe("open3d draw → save envelope → reload continuity (2B.4)", () => {
       height: modularOptions.heightMm,
     }));
 
-    const json = exportOpen3dProjectJson(project);
-    const reloaded = importOpen3dProjectJson(json);
+    const json = exportPlannerProjectJson(project);
+    const reloaded = importPlannerProjectJson(json);
 
     expect(reloaded.id).toBe("project-a");
     expect(reloaded.activeFloorId).toBe("floor-a");

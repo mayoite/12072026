@@ -5,7 +5,7 @@ import {
   createSceneObjectFromNode,
   disposeAndRemoveObject,
 } from "@/features/planner/3d/createSceneObjectFromNode";
-import type { Open3dSceneNode } from "@/features/planner/3d/buildOpen3dSceneNodes";
+import type { PlannerSceneNode } from "@/features/planner/3d/buildPlannerSceneNodes";
 import {
   countCabinetV0Parts,
   defaultCabinetV0Options,
@@ -21,8 +21,8 @@ import {
 } from "@/features/planner/project/catalog/workstationSystemV0";
 
 function modularNode(
-  overrides: Partial<Open3dSceneNode> = {},
-): Open3dSceneNode {
+  overrides: Partial<PlannerSceneNode> = {},
+): PlannerSceneNode {
   const options = defaultCabinetV0Options({
     widthMm: 600,
     depthMm: 580,
@@ -45,7 +45,7 @@ function modularNode(
   };
 }
 
-function boxNode(overrides: Partial<Open3dSceneNode> = {}): Open3dSceneNode {
+function boxNode(overrides: Partial<PlannerSceneNode> = {}): PlannerSceneNode {
   return {
     id: "box-1",
     kind: "furniture",
@@ -60,7 +60,7 @@ function boxNode(overrides: Partial<Open3dSceneNode> = {}): Open3dSceneNode {
   };
 }
 
-function wallNode(overrides: Partial<Open3dSceneNode> = {}): Open3dSceneNode {
+function wallNode(overrides: Partial<PlannerSceneNode> = {}): PlannerSceneNode {
   return {
     id: "wall-1",
     kind: "wall",
@@ -287,7 +287,7 @@ describe("createSceneObjectFromNode — modular vs parametric-box vs wall", () =
       modules: ["desk", "pedestal", "panel"],
     });
     const fp = workstationFootprintMm(config);
-    const node: Open3dSceneNode = {
+    const node: PlannerSceneNode = {
       id: "ws-1",
       kind: "furniture",
       xMm: 2000,

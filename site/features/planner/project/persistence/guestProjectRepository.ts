@@ -1,17 +1,17 @@
-import type { Open3dProject } from "../model/types";
-import { exportOpen3dProjectJson, importOpen3dProjectJson } from "./projectJson";
+import type { PlannerProject } from "../model/types";
+import { exportPlannerProjectJson, importPlannerProjectJson } from "./projectJson";
 
-export interface Open3dGuestLoadResult {
-  project: Open3dProject | null;
+export interface PlannerGuestLoadResult {
+  project: PlannerProject | null;
   recoveredFromBackup: boolean;
   error?: string;
 }
 
-export interface Open3dGuestProjectRepository {
-  load(id: string): Open3dProject | null;
-  loadSafely(id: string): Open3dGuestLoadResult;
-  save(project: Open3dProject): void;
-  restoreBackup(id: string): Open3dProject | null;
+export interface PlannerGuestProjectRepository {
+  load(id: string): PlannerProject | null;
+  loadSafely(id: string): PlannerGuestLoadResult;
+  save(project: PlannerProject): void;
+  restoreBackup(id: string): PlannerProject | null;
   remove(id: string): void;
 }
 
@@ -19,12 +19,12 @@ function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : "Project data is invalid.";
 }
 
-export function createOpen3dGuestProjectRepository(): Open3dGuestProjectRepository {
+export function createPlannerGuestProjectRepository(): PlannerGuestProjectRepository {
   const projects = new Map<string, string>();
   const backups = new Map<string, string>();
 
-  const parse = (value: string | undefined): Open3dProject | null =>
-    value === undefined ? null : importOpen3dProjectJson(value);
+  const parse = (value: string | undefined): PlannerProject | null =>
+    value === undefined ? null : importPlannerProjectJson(value);
 
   return {
     load: (id) => parse(projects.get(id)),
@@ -60,7 +60,7 @@ export function createOpen3dGuestProjectRepository(): Open3dGuestProjectReposito
     save: (project) => {
       const previous = projects.get(project.id);
       if (previous !== undefined) backups.set(project.id, previous);
-      projects.set(project.id, exportOpen3dProjectJson(project));
+      projects.set(project.id, exportPlannerProjectJson(project));
     },
     restoreBackup: (id) => parse(backups.get(id)),
     remove: (id) => {

@@ -11,12 +11,12 @@ import {
   Radio,
 } from "react-aria-components";
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
-import type { Open3dDisplayUnit } from "@/features/planner/project/model/types";
-import type { Open3dSaveStatus } from "@/features/planner/project/persistence/useOpen3dWorkspaceAutosave";
+import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
+import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
 import type { PanelId } from "./useDockingSystem";
 import {
-  open3dSaveStatusLabel,
-  type Open3dPersistStorage,
+  plannerSaveStatusLabel,
+  type PlannerPersistStorage,
 } from "./workspaceStatusLabels";
 import styles from "./workspace.module.css";
 
@@ -24,9 +24,9 @@ import styles from "./workspace.module.css";
  * Prop contract for WorkspaceShell / OOPlanner wiring (next agent):
  *
  * Prefer honest save pill via one of:
- * 1. `saveStatusLabel` — parent already resolved open3dSaveStatusLabel text
+ * 1. `saveStatusLabel` — parent already resolved plannerSaveStatusLabel text
  * 2. `saveStatus` (+ optional `saveStorage`, `saveCloudEnabled`) — TopBar calls
- *    open3dSaveStatusLabel; guestMode from accessContext === "guest"
+ *    plannerSaveStatusLabel; guestMode from accessContext === "guest"
  *
  * `isModified` / `isSynced` remain optional fallback only:
  * - brand subline "Unsaved changes" when isModified
@@ -41,23 +41,23 @@ export interface TopBarProps {
   /** Fallback for pill status when saveStatus omitted (synced → "saved"). */
   isSynced?: boolean;
   /**
-   * Pre-resolved pill label from open3dSaveStatusLabel (or equivalent).
+   * Pre-resolved pill label from plannerSaveStatusLabel (or equivalent).
    * Wins over saveStatus / isModified / isSynced for displayed text.
    */
   saveStatusLabel?: string;
-  /** Autosave machine status — drives pill text via open3dSaveStatusLabel when label omitted. */
-  saveStatus?: Open3dSaveStatus;
+  /** Autosave machine status — drives pill text via plannerSaveStatusLabel when label omitted. */
+  saveStatus?: PlannerSaveStatus;
   /** Persist target for data-storage + label table. Default "local". */
-  saveStorage?: Open3dPersistStorage;
+  saveStorage?: PlannerPersistStorage;
   /** When false (default), cloud storage is forced to local labeling. */
   saveCloudEnabled?: boolean;
   viewMode: "2d" | "3d";
   floors?: Array<{ id: string; name: string }>;
   activeFloorId?: string;
-  displayUnit?: Open3dDisplayUnit;
+  displayUnit?: PlannerDisplayUnit;
   onViewModeChange?: (mode: "2d" | "3d") => void;
   onFloorChange?: (floorId: string) => void;
-  onDisplayUnitChange?: (unit: Open3dDisplayUnit) => void;
+  onDisplayUnitChange?: (unit: PlannerDisplayUnit) => void;
   onSave?: () => void;
   onExport?: (format?: string) => void;
   onImport?: () => void;
@@ -77,13 +77,13 @@ export interface TopBarProps {
 function resolveSaveStatusFromLegacy(
   isModified: boolean,
   isSynced: boolean,
-): Open3dSaveStatus {
+): PlannerSaveStatus {
   if (isModified) return "unsaved";
   if (isSynced) return "saved";
   return "idle";
 }
 
-function saveStatusGlyph(status: Open3dSaveStatus): string {
+function saveStatusGlyph(status: PlannerSaveStatus): string {
   switch (status) {
     case "unsaved":
     case "error":
@@ -132,13 +132,13 @@ export function TopBar({
   const showGuestActions = accessContext === "guest";
   const guestMode = accessContext === "guest";
 
-  const resolvedSaveStatus: Open3dSaveStatus =
+  const resolvedSaveStatus: PlannerSaveStatus =
     saveStatus ?? resolveSaveStatusFromLegacy(isModified, isSynced);
-  const effectiveStorage: Open3dPersistStorage =
+  const effectiveStorage: PlannerPersistStorage =
     saveCloudEnabled && saveStorage === "cloud" ? "cloud" : "local";
   const resolvedSaveLabel =
     saveStatusLabel ??
-    open3dSaveStatusLabel({
+    plannerSaveStatusLabel({
       status: resolvedSaveStatus,
       storage: saveStorage,
       lastSavedAt: null,
@@ -146,7 +146,7 @@ export function TopBar({
       guestMode,
     });
 
-  const unitOptions: Open3dDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
+  const unitOptions: PlannerDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
   const activeFloorName = floors.find((f) => f.id === activeFloorId)?.name ?? "Floor";
 
   return (
@@ -208,7 +208,7 @@ export function TopBar({
               className={styles.dropdownMenu}
               selectionMode="single"
               selectedKeys={[displayUnit]}
-              onAction={(key) => onDisplayUnitChange?.(key as Open3dDisplayUnit)}
+              onAction={(key) => onDisplayUnitChange?.(key as PlannerDisplayUnit)}
             >
               {unitOptions.map((unit) => (
                 <MenuItem

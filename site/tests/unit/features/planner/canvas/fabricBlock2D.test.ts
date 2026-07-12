@@ -7,9 +7,9 @@ import {
   createFabricFurnitureBlock,
   resolveFabricPrimPaint,
 } from "@/features/planner/canvas/fabricBlock2D";
-import type { Open3dFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
 
-function cabinetItem(): Open3dFurnitureItem {
+function cabinetItem(): PlannerFurnitureItem {
   return {
     id: "cab-fabric-1",
     catalogId: "cabinet-v0",

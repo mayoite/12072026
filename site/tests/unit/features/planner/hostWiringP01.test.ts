@@ -7,12 +7,12 @@ import { describe, expect, it } from "vitest";
 
 import {
   PRODUCTION_IMPORT_GRAPH,
-  open3dHybridRoutes,
-  open3dNativeRoutes,
+  plannerHybridRoutes,
+  plannerNativeRoutes,
 } from "@/features/planner/project/cleanup/importGraphProof";
 import {
-  OPEN3D_FABRIC_FURNITURE_ENV,
-  isOpen3dFabricFurnitureEnabled,
+  PLANNER_FABRIC_FURNITURE_ENV,
+  isPlannerFabricFurnitureEnabled,
 } from "@/features/planner/canvas/fabricFurnitureFlag";
 
 const siteRoot = process.cwd();
@@ -27,10 +27,10 @@ function readSite(...segments: string[]): string {
 
 describe("P01 host wiring (import graph + source)", () => {
   it("documents guest/canvas hybrid + planner host", () => {
-    expect(open3dHybridRoutes()).toEqual(
+    expect(plannerHybridRoutes()).toEqual(
       expect.arrayContaining(["route-guest", "route-canvas", "workspace-route"]),
     );
-    expect(open3dNativeRoutes()).toEqual(expect.arrayContaining(["host-planner"]));
+    expect(plannerNativeRoutes()).toEqual(expect.arrayContaining(["host-planner"]));
     expect(PRODUCTION_IMPORT_GRAPH.find((n) => n.id === "host-planner")?.imports).toContain(
       "@/features/planner/editor/OOPlannerWorkspace",
     );
@@ -45,10 +45,15 @@ describe("P01 host wiring (import graph + source)", () => {
     expect(guestSrc).toMatch(/PlannerWorkspaceRoute/);
     expect(canvasSrc).toMatch(/PlannerWorkspaceRoute/);
     expect(routeSrc).toMatch(/PlannerHost/);
+    expect(routeSrc).not.toMatch(/_archive/);
+    expect(routeSrc).not.toMatch(/fabric\/editor|Open3dPlanner/);
     expect(hostSrc).toMatch(/OOPlannerWorkspace/);
     expect(existsSync(siteFile("features", "planner", "workspace"))).toBe(false);
     expect(existsSync(siteFile("features", "planner", "open3d"))).toBe(false);
+    expect(existsSync(siteFile("features", "planner", "_archive"))).toBe(false);
     expect(existsSync(siteFile("app", "planner", "open3d"))).toBe(false);
+    expect(existsSync(siteFile("app", "planner", "fabric"))).toBe(false);
+    expect(existsSync(siteFile("app", "planner", "(workspace)", "fabric"))).toBe(false);
     expect(existsSync(siteFile("features", "planner", "editor", "OOPlannerWorkspace.tsx"))).toBe(
       true,
     );
@@ -84,9 +89,9 @@ describe("P01 host wiring (import graph + source)", () => {
     );
     expect(stageBarrel).toMatch(/PlannerFabricStage as PlannerCanvasStage/);
     expect(stageBarrel).toMatch(/@\/features\/planner\/canvas\/PlannerFabricStage/);
-    expect(isOpen3dFabricFurnitureEnabled({})).toBe(false);
+    expect(isPlannerFabricFurnitureEnabled({})).toBe(false);
     expect(
-      isOpen3dFabricFurnitureEnabled({ [OPEN3D_FABRIC_FURNITURE_ENV]: "1" }),
+      isPlannerFabricFurnitureEnabled({ [PLANNER_FABRIC_FURNITURE_ENV]: "1" }),
     ).toBe(true);
   });
 });

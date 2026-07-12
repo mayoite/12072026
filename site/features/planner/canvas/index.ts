@@ -1,7 +1,7 @@
-﻿export {
+export {
   type CanvasDrawingState,
   type CanvasStatusSnapshot,
-  type Open3dCanvasStageHandle,
+  type PlannerCanvasStageHandle,
 } from "./canvasStageTypes";
 
 export {
@@ -25,8 +25,8 @@ export {
 } from "./furnitureFabricMapper";
 
 export {
-  isOpen3dFabricFurnitureEnabled,
-  OPEN3D_FABRIC_FURNITURE_ENV,
+  isPlannerFabricFurnitureEnabled,
+  PLANNER_FABRIC_FURNITURE_ENV,
 } from "./fabricFurnitureFlag";
 
 export {
@@ -42,3 +42,9 @@ export {
   FurnitureFabricLayer,
   type FurnitureFabricLayerProps,
 } from "./FurnitureFabricLayer";
+
+export {
+  MIN_WALL_SEGMENT_MM,
+  shouldCommitWallSegment,
+  wallSegmentLengthMm,
+} from "./wallDrawGeometry";

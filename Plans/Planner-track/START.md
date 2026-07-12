@@ -18,8 +18,11 @@
 |------|--------|
 | Approach | **A** |
 | Live 2D | Fabric `planner-fabric-stage` |
-| Owner sequence | P01 → P12 (no skip) |
-| Standing seats | TDD + Chrome DevTools · `/using-superpowers` |
+| Owner sequence | **P01 → P16** (no skip; one open card) |
+| Standing seats | TDD + Chrome DevTools · `/using-superpowers` · **through P16** |
 | CP-00 | Process PASS only — do not re-ask unlock |
+| Pace | **5k before marathon** — see [BOARD calibration](./BOARD.md#owner-calibration-2026-07-12--5k-before-marathon) |
 
 **Bar:** [00-QUALITY-BAR](../00-QUALITY-BAR.md) · **Agents plan map:** [Agents-03-Plan](../../Agents/Agents-03-Plan.md)
+
+**Calibrated (owner 2026-07-12):** get **2D** right (SmartDraw tools/library/canvas); **3D stays open as-is**; full interior 3D later. **P03/W3** owner PASS · **P04/W4** agent PASS. Open card now = [P05](./P05-symbols-svg.md).

@@ -9,9 +9,9 @@ import {
   pointInPolygon,
 } from "@/features/planner/project/lib/geometry/canvasPicking";
 import type {
-  Open3dFurnitureItem,
-  Open3dPoint,
-  Open3dWall,
+  PlannerFurnitureItem,
+  PlannerPoint,
+  PlannerWall,
 } from "@/features/planner/project/model/types";
 
 const WALL_DEFAULTS = {
@@ -22,9 +22,9 @@ const WALL_DEFAULTS = {
 
 function wall(
   id: string,
-  start: Open3dPoint,
-  end: Open3dPoint,
-): Open3dWall {
+  start: PlannerPoint,
+  end: PlannerPoint,
+): PlannerWall {
   return { id, start, end, ...WALL_DEFAULTS };
 }
 
@@ -115,7 +115,7 @@ describe("pickWallAtPoint / pickWallWithPosition", () => {
 });
 
 describe("pointInPolygon", () => {
-  const square: Open3dPoint[] = [
+  const square: PlannerPoint[] = [
     { x: 0, y: 0 },
     { x: 100, y: 0 },
     { x: 100, y: 100 },
@@ -139,7 +139,7 @@ describe("pointInPolygon", () => {
 
   it("handles a non-convex L-shaped polygon", () => {
     // L footprint: horizontal bar + vertical stem
-    const lShape: Open3dPoint[] = [
+    const lShape: PlannerPoint[] = [
       { x: 0, y: 0 },
       { x: 100, y: 0 },
       { x: 100, y: 40 },
@@ -195,11 +195,11 @@ describe("getRoomPolygon", () => {
 describe("pickFurnitureAtPoint", () => {
   function furniture(
     id: string,
-    position: Open3dPoint,
+    position: PlannerPoint,
     width = 600,
     depth = 600,
     rotation = 0,
-  ): Open3dFurnitureItem {
+  ): PlannerFurnitureItem {
     return {
       id,
       catalogId: "cabinet-v0",
@@ -256,7 +256,7 @@ describe("pickFurnitureAtPoint", () => {
 
   it("defaults missing width/depth to 600mm footprint", () => {
     // Half of 600mm = 300; hit at 290 along axes, miss at 310.
-    const item: Open3dFurnitureItem = {
+    const item: PlannerFurnitureItem = {
       id: "def600",
       catalogId: "cabinet-v0",
       position: { x: 0, y: 0 },
@@ -272,7 +272,7 @@ describe("pickFurnitureAtPoint", () => {
 });
 
 describe("pickOpeningAtPoint", () => {
-  const wall: Open3dWall = {
+  const wall: PlannerWall = {
     id: "w1",
     start: { x: 0, y: 0 },
     end: { x: 4000, y: 0 },
@@ -413,7 +413,7 @@ describe("pickOpeningAtPoint", () => {
 
   it("picks an opening on a diagonal wall via interpolated segment position", () => {
     // Local fixture is named `wall` above — build diagonal inline to avoid shadowing the helper.
-    const diagonal: Open3dWall = {
+    const diagonal: PlannerWall = {
       id: "diag",
       start: { x: 0, y: 0 },
       end: { x: 4000, y: 4000 },

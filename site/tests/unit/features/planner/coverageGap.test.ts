@@ -26,7 +26,7 @@ import {
   _freezeRewriteDescriptor,
   computeBlockDescriptorChecksum,
   canonicalizeBlockDescriptorInput,
-  toOpen3dDescriptorErrorHttp,
+  toPlannerDescriptorErrorHttp,
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
 } from "@/features/planner/project/catalog/svg/svgTypes";
 
@@ -34,7 +34,7 @@ import {
 
 // TDD imports for export/* shared (preflight, format/progress utils, import/export roundtrips, upload, errors) — added strictly per TDD cycle (first for coverage drive)
 import {
-  preflightOpen3dExport,
+  preflightPlannerExport,
   buildExportFilename,
 } from "@/features/planner/project/shared/export/exportPreflight";
 import {
@@ -66,7 +66,7 @@ import {
   isSketchToPlanAvailable,
 } from "@/features/planner/project/ai/sketchToPlanClient";
 import type { SpaceSuggestLayout, AdvisorMessage, _AdvisorContext } from "@/features/planner/project/ai/advisorTypes";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 
 // â”€â”€ SVG Fixture Gallery â”€â”€
 import { buildSvgFixtureGallery } from "@/features/planner/project/catalog/svg/svgFixtureGallery";
@@ -133,9 +133,9 @@ import {
   verifyPlacementIdentity,
   placeCatalogItemInProject,
 } from "@/features/planner/project/catalog/placementAction";
-import type { Open3dCatalogItem, _Open3dCatalogVariant } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem, _PlannerCatalogVariant } from "@/features/planner/project/catalog/catalogTypes";
 
-function makePlacementItem(overrides: Partial<Open3dCatalogItem> = {}): Open3dCatalogItem {
+function makePlacementItem(overrides: Partial<PlannerCatalogItem> = {}): PlannerCatalogItem {
   return {
     id: "item-1",
     slug: "test-chair",
@@ -169,7 +169,7 @@ function makePlacementItem(overrides: Partial<Open3dCatalogItem> = {}): Open3dCa
     assets: { thumbnail: "https://example.com/thumb.jpg" },
     pricing: { price: 299, currency: "USD" },
     ...overrides,
-  } as Open3dCatalogItem;
+  } as PlannerCatalogItem;
 }
 
 describe("Placement Action", () => {
@@ -315,13 +315,13 @@ describe("Placement Action", () => {
 });
 
 // â”€â”€ Catalog Client additional coverage â”€â”€
-import { Open3dCatalogClient } from "@/features/planner/project/catalog/catalogClient";
+import { PlannerCatalogClient } from "@/features/planner/project/catalog/catalogClient";
 
 describe("Catalog Client â€” coverage gaps", () => {
-  function makeItems(count: number): Open3dCatalogItem[] {
-    const cats: Open3dCatalogItem["category"][] = ["Furniture", "Lighting", "Decor", "Outdoor"];
-    const rooms: Open3dCatalogItem["roomTags"][0][] = ["Office", "Living Room", "Bedroom"];
-    const styles: Open3dCatalogItem["styleTags"][0][] = ["Modern", "Traditional", "Industrial"];
+  function makeItems(count: number): PlannerCatalogItem[] {
+    const cats: PlannerCatalogItem["category"][] = ["Furniture", "Lighting", "Decor", "Outdoor"];
+    const rooms: PlannerCatalogItem["roomTags"][0][] = ["Office", "Living Room", "Bedroom"];
+    const styles: PlannerCatalogItem["styleTags"][0][] = ["Modern", "Traditional", "Industrial"];
     return Array.from({ length: count }, (_, i) => makePlacementItem({
       id: `item-${i}`,
       slug: `item-slug-${i}`,
@@ -340,10 +340,10 @@ describe("Catalog Client â€” coverage gaps", () => {
     }));
   }
 
-  let client: Open3dCatalogClient;
+  let client: PlannerCatalogClient;
 
   beforeEach(() => {
-    client = new Open3dCatalogClient({ cacheTtlMs: 100 });
+    client = new PlannerCatalogClient({ cacheTtlMs: 100 });
     client.load(makeItems(50), "standard");
   });
 
@@ -492,7 +492,7 @@ describe("Catalog Client â€” coverage gaps", () => {
   });
 
   it("search on empty catalog returns empty", () => {
-    const empty = new Open3dCatalogClient();
+    const empty = new PlannerCatalogClient();
     const result = empty.search({ text: "anything" });
     expect(result.items.length).toBe(0);
     expect(result.totalCount).toBe(0);
@@ -500,13 +500,13 @@ describe("Catalog Client â€” coverage gaps", () => {
 
   it("isLoaded returns correct state", () => {
     expect(client.isLoaded()).toBe(true);
-    const empty = new Open3dCatalogClient();
+    const empty = new PlannerCatalogClient();
     expect(empty.isLoaded()).toBe(false);
   });
 
   it("getSource returns loaded source", () => {
     expect(client.getSource()).toBe("standard");
-    const empty = new Open3dCatalogClient();
+    const empty = new PlannerCatalogClient();
     expect(empty.getSource()).toBeNull();
   });
 
@@ -518,7 +518,7 @@ describe("Catalog Client â€” coverage gaps", () => {
   });
 
   it("getById/getBySlug/getBySku return null on unloaded client", () => {
-    const empty = new Open3dCatalogClient();
+    const empty = new PlannerCatalogClient();
     expect(empty.getById("x")).toBeNull();
     expect(empty.getBySlug("x")).toBeNull();
     expect(empty.getBySku("x")).toBeNull();
@@ -537,19 +537,19 @@ describe("Catalog Client â€” coverage gaps", () => {
     const originalFetch = globalThis.fetch;
     Object.defineProperty(globalThis, "fetch", { value: undefined, configurable: true });
     try {
-      const noFetch = new Open3dCatalogClient();
+      const noFetch = new PlannerCatalogClient();
       await expect(noFetch.loadFromApi("standard")).rejects.toThrow("requires fetch");
     } finally {
       Object.defineProperty(globalThis, "fetch", { value: originalFetch, configurable: true });
     }
 
     const fetchMock = vi.fn(async () => ({ ok: false, status: 503 } as Response));
-    const failing = new Open3dCatalogClient({ fetchImpl: fetchMock as unknown as typeof fetch });
+    const failing = new PlannerCatalogClient({ fetchImpl: fetchMock as unknown as typeof fetch });
     await expect(failing.loadFromApi("standard")).rejects.toThrow("Catalog API request failed: 503");
   });
 
   it("search falls back to per-item tokenization when index is empty", () => {
-    const sparseClient = new Open3dCatalogClient();
+    const sparseClient = new PlannerCatalogClient();
     sparseClient.load([makePlacementItem({
       id: "sku-only",
       slug: "sku-only",
@@ -566,7 +566,7 @@ describe("Catalog Client â€” coverage gaps", () => {
   // Proper tests for 0405/0419 loader wiring fixes (TDD updated): client [], resolver actually uses blocks, search parity, primary path
   it("loadDescriptorsFromLoader returns [] on client (addresses always []) without throwing", async () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: false });
-    const c = new Open3dCatalogClient({ fetchImpl: fetchMock });
+    const c = new PlannerCatalogClient({ fetchImpl: fetchMock });
     const res = await c.loadDescriptorsFromLoader();
     expect(Array.isArray(res)).toBe(true);
     expect(res).toEqual([]);
@@ -574,7 +574,7 @@ describe("Catalog Client â€” coverage gaps", () => {
 
   it("search integrates resolver blocks when descriptors path taken (uses .blocks result)", () => {
     // simulate descriptors primary by loading mapped items (as loadDescriptors would); exercises search if branch + resolve call
-    const c = new Open3dCatalogClient();
+    const c = new PlannerCatalogClient();
     c.load([makePlacementItem({ id: "d1", slug: "d1", sku: "D-1", name: "Desc", description: "", tags: ["d"], roomTags: [], styleTags: [], material: { marketingMaterial: "SVG", normalizedMaterial: "svg" } })], "standard");
     const r = c.search({ text: "Desc" });
     expect(r.items.length).toBeGreaterThanOrEqual(0);
@@ -1196,30 +1196,30 @@ describe("SVG Symbols â€” coverage gaps", () => {
   });
 });
 
-// Placement Action — crypto.randomUUID only (no plc-/randomSuffix fallbacks)
-describe("Placement Action — crypto.randomUUID only", () => {
-  it("throws when randomUUID is missing", () => {
+// Placement Action — UUID v7 via newEntityId (no plc-/randomSuffix fallbacks)
+describe("Placement Action — newEntityId UUID v7 (no plc- fallback)", () => {
+  it("still mints when crypto.randomUUID is missing (v7 uses getRandomValues)", () => {
     const origUUID = crypto.randomUUID;
     Object.defineProperty(crypto, "randomUUID", { value: undefined, configurable: true });
     try {
-      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(
-        /crypto\.randomUUID is required/,
+      const result = placeCatalogItem(makePlacementItem(), null);
+      expect(result.placementId).toMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
       );
+      expect(result.placementId.startsWith("plc-")).toBe(false);
     } finally {
       Object.defineProperty(crypto, "randomUUID", { value: origUUID, configurable: true });
     }
   });
 
-  it("throws when crypto object lacks randomUUID", () => {
+  it("throws when crypto lacks getRandomValues (uuid v7 entropy)", () => {
     const origCrypto = globalThis.crypto;
     Object.defineProperty(globalThis, "crypto", {
       value: {},
       configurable: true,
     });
     try {
-      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(
-        /crypto\.randomUUID is required/,
-      );
+      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(/getRandomValues/i);
     } finally {
       Object.defineProperty(globalThis, "crypto", { value: origCrypto, configurable: true });
     }
@@ -1229,9 +1229,7 @@ describe("Placement Action — crypto.randomUUID only", () => {
     const origCrypto = globalThis.crypto;
     Object.defineProperty(globalThis, "crypto", { value: undefined, configurable: true });
     try {
-      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(
-        /crypto\.randomUUID is required/,
-      );
+      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow();
     } finally {
       Object.defineProperty(globalThis, "crypto", { value: origCrypto, configurable: true });
     }
@@ -1242,7 +1240,7 @@ describe("Placement Action — crypto.randomUUID only", () => {
 import { InventorySearchIndex } from "@/features/planner/project/catalog/inventory/inventoryIndex";
 
 describe("Inventory Index â€” coverage gaps", () => {
-  function makeSearchItems(count: number): Open3dCatalogItem[] {
+  function makeSearchItems(count: number): PlannerCatalogItem[] {
     return Array.from({ length: count }, (_, i) => makePlacementItem({
       id: `search-${i}`,
       slug: `search-slug-${i}`,
@@ -1692,7 +1690,7 @@ describe("AI Advisor Actions (TDD: apply errors, preview, revert, layout branche
 
   it("applySuggestion and applyLayoutToProject hit no-floor, no-project, unsupported, layout validation fail", async () => {
     // RED first conceptual: test added to cover !floorId and !project
-    const emptyProj = createOpen3dProject({ name: "empty" });
+    const emptyProj = createPlannerProject({ name: "empty" });
     // force no floor by empty (activeFloorId null + no floors? create gives one)
     const noFloorRes = await applySuggestion({ type: "placement", description: "p", actionLabel: "a" }, { ...emptyProj, floors: [] } as any);
     expect(noFloorRes.success).toBe(false);
@@ -1719,14 +1717,14 @@ describe("AI Advisor Actions (TDD: apply errors, preview, revert, layout branche
     const noLay = previewSuggestionActions({ type: "placement", description: "p", actionLabel: "a" } as any);
     expect(noLay).toEqual([]);
 
-    const proj = createOpen3dProject({ name: "r" });
+    const proj = createPlannerProject({ name: "r" });
     // revert just returns project + warns (covers console)
     const reverted = revertLastSuggestion(proj, []);
     expect(reverted).toBe(proj);
   });
 
   it("applyLayoutToProject skips when no floorId", () => {
-    const proj = createOpen3dProject({ name: "nof" });
+    const proj = createPlannerProject({ name: "nof" });
     const res = applyLayoutToProject({ ...proj, activeFloorId: null as any, floors: [] } as any, VALID_LAYOUT);
     expect(res.actions).toEqual([]);
     // also cover the throw path via advisor wrapper for error msg branch
@@ -1905,7 +1903,7 @@ describe("Unit Conversion â€” remaining lines", () => {
 // â”€â”€ Catalog Client remaining functions â”€â”€
 describe("Catalog Client â€” remaining function coverage", () => {
   it("LRU cache evicts when at capacity", () => {
-    const client = new Open3dCatalogClient({ maxCacheItems: 3, cacheTtlMs: 100 });
+    const client = new PlannerCatalogClient({ maxCacheItems: 3, cacheTtlMs: 100 });
     const items = Array.from({ length: 5 }, (_, i) => makePlacementItem({
       id: `evict-${i}`, slug: `evict-slug-${i}`, sku: `EVICT-${i}`, name: `Evict ${i}`,
     }));
@@ -1922,7 +1920,7 @@ describe("Catalog Client â€” remaining function coverage", () => {
 
   it("gs: catalogue-first loader primary + Sketchfab facets + cursor cap + resolver wire (BP-06 / design §9-10 / 0419)", () => {
     // static coverage of updated paths (no live loadDescriptors on client = [] but exercises search facets + cap code)
-    const client = new Open3dCatalogClient();
+    const client = new PlannerCatalogClient();
     const r1 = client.search({ licenseFilter: ["cc"], animatedFilter: false, staffPicked: false, pageSize: 99 });
     expect(r1).toBeDefined();
     const r2 = client.search({ favourite: true, downloadable: true, cursor: "0" });
@@ -1931,7 +1929,7 @@ describe("Catalog Client â€” remaining function coverage", () => {
   });
 
   it("stale cache triggers revalidation", async () => {
-    const client = new Open3dCatalogClient({ cacheTtlMs: 10 });
+    const client = new PlannerCatalogClient({ cacheTtlMs: 10 });
     const items = Array.from({ length: 5 }, (_, i) => makePlacementItem({
       id: `stale-${i}`, slug: `stale-slug-${i}`, sku: `STALE-${i}`, name: `Stale ${i}`,
     }));
@@ -2203,7 +2201,7 @@ describe("Pure Actions â€” remaining branches", () => {
 // â”€â”€ Catalog Client functions coverage â”€â”€
 describe("Catalog Client â€” uncovered functions", () => {
   it("LRU cache has() returns false for expired entries", async () => {
-    const client = new Open3dCatalogClient({ cacheTtlMs: 5 });
+    const client = new PlannerCatalogClient({ cacheTtlMs: 5 });
     const items = [makePlacementItem({ id: "exp-1", slug: "exp-1", sku: "EXP-1", name: "Exp 1" })];
     client.load(items, "standard");
     client.search({ text: "Exp" });
@@ -2305,8 +2303,8 @@ describe("SVG Symbols â€” cache eviction edge case", () => {
 // ——— PLAN-FAIL-0408 focused gap tests (TDD static: branches identified via source read/grep on if/??/filter/sort/startsWith/protocol/crypto/resolve etc; min additions to coverageGap.test.ts only) ———
 // Per AGENTS: no any broad in prod (here tests only, exempt per handbook); no new files; evidence via post grep.
 
-import { Open3dCatalogClient } from "@/features/planner/project/catalog/catalogClient";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import { PlannerCatalogClient } from "@/features/planner/project/catalog/catalogClient";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 import {
   addInventoryRecent,
   defaultCollectionsState,
@@ -2331,24 +2329,24 @@ import { sanitizeSvg } from "@/features/planner/project/catalog/svg/svgSanitizer
 import {
   placeCatalogItem,
 } from "@/features/planner/project/catalog/placementAction";
-import { addOpen3dFurniture, _rotateOpen3dFurniture } from "@/features/planner/project/model/actions/furniture";
-import { addOpen3dDoor, addOpen3dWindow } from "@/features/planner/project/model/actions/openings";
+import { addPlannerFurniture, _rotatePlannerFurniture } from "@/features/planner/project/model/actions/furniture";
+import { addPlannerDoor, addPlannerWindow } from "@/features/planner/project/model/actions/openings";
 import {
-  applyOpen3dProjectAction,
-  applyOpen3dProjectTransaction,
-  moveOpen3dEntity,
+  applyPlannerProjectAction,
+  applyPlannerProjectTransaction,
+  movePlannerEntity,
 } from "@/features/planner/project/model/actions/projectActions";
-import { addOpen3dWall } from "@/features/planner/project/model/actions/walls";
-import { inspectOpen3dProject, assertOpen3dProject } from "@/features/planner/project/model/invariants";
+import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
+import { inspectPlannerProject, assertPlannerProject } from "@/features/planner/project/model/invariants";
 
 describe("Catalog Client — search/filter additional (PLAN-FAIL-0408)", () => {
   it("search exercises configurability/mounting/assetReadiness filter branches + sketchfab parity", () => {
-    const client = new Open3dCatalogClient();
+    const client = new PlannerCatalogClient();
     const base = makePlacementItem({
       configurability: "configurable",
       mounting: ["wall", "floor"],
       assetReadiness: ["ready"],
-    } as Partial<Open3dCatalogItem> as any);
+    } as Partial<PlannerCatalogItem> as any);
     (base as any).license = "cc";
     (base as any).animated = true;
     (base as any).staffPicked = true;
@@ -2378,14 +2376,14 @@ describe("Catalog Client — search/filter additional (PLAN-FAIL-0408)", () => {
         }],
       }),
     } as Partial<Response> as any);
-    const c = new Open3dCatalogClient({ fetchImpl: mockFetch as any });
+    const c = new PlannerCatalogClient({ fetchImpl: mockFetch as any });
     const loaded = await c.loadFromApi("standard");
     expect(loaded.length).toBe(1);
     expect(c.getById("api-ok")).not.toBeNull();
   });
 
   it("text search hits computeRelevance tag/name/desc/fuzzy + compareNewest", () => {
-    const client = new Open3dCatalogClient();
+    const client = new PlannerCatalogClient();
     const items = [
       makePlacementItem({ id: "r1", name: "Wood Desk", description: "office", tags: ["wood"], sku: "R1", provenance: { source: "s", importedAt: "2020-01-01" } as any }),
       makePlacementItem({ id: "r2", name: "Desk Chair", description: "wood frame", tags: [], sku: "R2", provenance: { source: "s", importedAt: "2021-01-01" } as any }),
@@ -2431,16 +2429,14 @@ describe("Placement Action — crypto fallback + project map ?? (PLAN-FAIL-0408)
     expect(placedF!.material).toBe("M");
   });
 
-  it("generatePlacementId requires crypto.randomUUID (no plc-/random fallback)", () => {
+  it("generatePlacementId requires crypto entropy (no plc-/random fallback)", () => {
     const origCrypto = globalThis.crypto;
     Object.defineProperty(globalThis, "crypto", {
       value: { getRandomValues: undefined, randomUUID: undefined },
       configurable: true,
     });
     try {
-      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(
-        /crypto\.randomUUID is required/,
-      );
+      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(/getRandomValues/i);
     } finally {
       Object.defineProperty(globalThis, "crypto", { value: origCrypto, configurable: true });
     }
@@ -2448,13 +2444,11 @@ describe("Placement Action — crypto fallback + project map ?? (PLAN-FAIL-0408)
 });
 
 describe("Placement crypto + ?? logic (TDD cycles for placementAction uncovered)", () => {
-  it("crypto===undefined throws (crypto.randomUUID only policy)", () => {
+  it("crypto===undefined throws (uuid v7 mint needs WebCrypto entropy)", () => {
     const origCrypto = globalThis.crypto;
     Object.defineProperty(globalThis, "crypto", { value: undefined, configurable: true });
     try {
-      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow(
-        /crypto\.randomUUID is required/,
-      );
+      expect(() => placeCatalogItem(makePlacementItem(), null)).toThrow();
     } finally {
       Object.defineProperty(globalThis, "crypto", { value: origCrypto, configurable: true });
     }
@@ -2489,67 +2483,67 @@ describe("Model Actions + Invariants error paths + map (TDD for model/actions/* 
   }
 
   // TDD cycle 3a: write failing (wrong msg) first for furniture errors
-  it("addOpen3dFurniture throws catalog/scale errors", () => {
+  it("addPlannerFurniture throws catalog/scale errors", () => {
     const proj = makeBaseProject();
-    expect(() => addOpen3dFurniture(proj, { catalogId: " ", position: {x:0,y:0}, rotation:0, scale:{x:1,y:1,z:1} } as any, idf)).toThrow("Furniture catalog id is required.");
-    expect(() => addOpen3dFurniture(proj, { catalogId: "c", position: {x:0,y:0}, rotation:0, scale:{x:0,y:1,z:1} } as any, idf)).toThrow("Furniture scale must be positive.");
+    expect(() => addPlannerFurniture(proj, { catalogId: " ", position: {x:0,y:0}, rotation:0, scale:{x:1,y:1,z:1} } as any, idf)).toThrow("Furniture catalog id is required.");
+    expect(() => addPlannerFurniture(proj, { catalogId: "c", position: {x:0,y:0}, rotation:0, scale:{x:0,y:1,z:1} } as any, idf)).toThrow("Furniture scale must be positive.");
   });
 
   // TDD cycle 3b: openings assert paths (multiple if throws)
-  it("addOpen3d* opening errors (wall, pos, width, length)", () => {
+  it("addPlanner* opening errors (wall, pos, width, length)", () => {
     const proj = makeBaseProject();
     const badDoor = { wallId: "missing", position: 0.5, width: 100, height: 2100, type: "single" as const, swingDirection: "left" as const, flipSide: false };
-    expect(() => addOpen3dDoor(proj, badDoor, idf)).toThrow('Opening wall "missing" does not exist.');
-    expect(() => addOpen3dDoor(proj, { ...badDoor, wallId: "w1", position: -0.1 }, idf)).toThrow("Opening position must be between 0 and 1.");
-    expect(() => addOpen3dWindow(proj, { ...badDoor, wallId: "w1", width: 0 }, idf)).toThrow("Opening width must be positive.");
+    expect(() => addPlannerDoor(proj, badDoor, idf)).toThrow('Opening wall "missing" does not exist.');
+    expect(() => addPlannerDoor(proj, { ...badDoor, wallId: "w1", position: -0.1 }, idf)).toThrow("Opening position must be between 0 and 1.");
+    expect(() => addPlannerWindow(proj, { ...badDoor, wallId: "w1", width: 0 }, idf)).toThrow("Opening width must be positive.");
     const tooWide = { ...badDoor, wallId: "w1", width: 2000 };
-    expect(() => addOpen3dDoor(proj, tooWide, idf)).toThrow("Opening width must be shorter than its wall.");
+    expect(() => addPlannerDoor(proj, tooWide, idf)).toThrow("Opening width must be shorter than its wall.");
   });
 
   // TDD cycle 3c: projectActions error + early return + delete map/filter + transaction
   it("projectActions duplicate add, !source dup return orig, wall delete cascade", () => {
     const proj = makeBaseProject();
-    const added = applyOpen3dProjectAction(proj, { type: "add", collection: "furniture", entity: { id: "f1", catalogId: "c", position: {x:0,y:0}, rotation:0, scale:{x:1,y:1,z:1} } as any });
-    expect(() => applyOpen3dProjectAction(added, { type: "add", collection: "furniture", entity: { id: "f1", catalogId: "c2" } as any })).toThrow('Entity id "f1" already exists in furniture.');
-    const dupRes = applyOpen3dProjectAction(proj, { type: "duplicate", collection: "furniture", id: "absent", newId: "n1" });
+    const added = applyPlannerProjectAction(proj, { type: "add", collection: "furniture", entity: { id: "f1", catalogId: "c", position: {x:0,y:0}, rotation:0, scale:{x:1,y:1,z:1} } as any });
+    expect(() => applyPlannerProjectAction(added, { type: "add", collection: "furniture", entity: { id: "f1", catalogId: "c2" } as any })).toThrow('Entity id "f1" already exists in furniture.');
+    const dupRes = applyPlannerProjectAction(proj, { type: "duplicate", collection: "furniture", id: "absent", newId: "n1" });
     expect(dupRes).toBe(proj); // green: !source return original project; map/filter hit in other paths
-    const withDoor = applyOpen3dProjectAction(proj, { type: "add", collection: "doors", entity: { id: "d1", wallId: "w1", position: 0.5, width: 100, height: 2100, type: "single", swingDirection: "left", flipSide: false } as any });
-    const deleted = applyOpen3dProjectAction(withDoor, { type: "delete", collection: "walls", id: "w1" });
+    const withDoor = applyPlannerProjectAction(proj, { type: "add", collection: "doors", entity: { id: "d1", wallId: "w1", position: 0.5, width: 100, height: 2100, type: "single", swingDirection: "left", flipSide: false } as any });
+    const deleted = applyPlannerProjectAction(withDoor, { type: "delete", collection: "walls", id: "w1" });
     expect(deleted.floors[0].doors.length).toBe(0); // green: wall-delete special case filters doors/windows via map
   });
 
   // TDD cycle 3d: walls no floor, transaction reduce/map, move
-  it("addOpen3dWall no active floor + transaction reduce + move update", () => {
+  it("addPlannerWall no active floor + transaction reduce + move update", () => {
     const badProj = { ...makeBaseProject(), activeFloorId: "no" };
-    expect(() => addOpen3dWall(badProj, { start: { x: 0, y: 0 }, end: { x: 10, y: 0 } }, idf)).toThrow("Active floor not found");
+    expect(() => addPlannerWall(badProj, { start: { x: 0, y: 0 }, end: { x: 10, y: 0 } }, idf)).toThrow("Active floor not found");
     const proj = makeBaseProject();
-    const tx = applyOpen3dProjectTransaction(proj, [
+    const tx = applyPlannerProjectTransaction(proj, [
       { type: "add", collection: "furniture", entity: { id: "f1", catalogId: "c", position: {x:0,y:0}, rotation:0, scale:{x:1,y:1,z:1} } as any },
     ]);
     expect(tx.floors[0].furniture.length).toBe(1); // green: reduce calls apply which does map
-    const moved = moveOpen3dEntity(proj, "furniture", "no", { x: 5, y: 5 });
+    const moved = movePlannerEntity(proj, "furniture", "no", { x: 5, y: 5 });
     expect(moved).not.toBe(proj); // always new project wrapper even for absent update (no-op content)
     expect(moved.floors[0].furniture).toEqual(proj.floors[0].furniture); // content unchanged for absent id
   });
 
   // TDD cycle 4: invariants inspect (for/flatMap/some/if branches) + assert throw; duplicate/invalid/missing
-  it("inspectOpen3dProject + assert cover duplicate/invalid/missing-active/missing-wall", () => {
+  it("inspectPlannerProject + assert cover duplicate/invalid/missing-active/missing-wall", () => {
     const dupProj = {
       id: "p", name: "p", activeFloorId: "f1", displayUnit: "mm" as const, createdAt: "t", updatedAt: "t",
       floors: [{ id: "f1", name: "f", level: 0, walls: [{ id: "d1", start:{x:0,y:0}, end:{x:1,y:1}, height:10, thickness:10, color:"#0" }, { id: "d1", start:{x:2,y:2}, end:{x:3,y:3}, height:10, thickness:10, color:"#0" }], rooms: [], doors: [], windows: [], furniture: [], stairs: [], columns: [], guides: [], measurements: [], annotations: [], textAnnotations: [], groups: [] }],
     } as any;
-    const issues = inspectOpen3dProject(dupProj);
+    const issues = inspectPlannerProject(dupProj);
     expect(issues[0].code).toBe("duplicate-id"); // green: for loop + if ids.has
-    expect(() => assertOpen3dProject(dupProj)).toThrow(/floors\[0\]: Entity id "d1" is duplicated/); // green: assert[0] throw
+    expect(() => assertPlannerProject(dupProj)).toThrow(/floors\[0\]: Entity id "d1" is duplicated/); // green: assert[0] throw
     const badDim = { ...dupProj, floors: [{ ...dupProj.floors[0], walls: [{ id: "w", start:{x:0,y:0}, end:{x:0,y:0}, height:0, thickness:10, color:"#0" }] }] };
-    expect(inspectOpen3dProject(badDim)[0].code).toBe("invalid-dimension"); // green: hasPositive + forEach if
+    expect(inspectPlannerProject(badDim)[0].code).toBe("invalid-dimension"); // green: hasPositive + forEach if
     const cleanForNoActive = { ...dupProj, floors: [{ ...dupProj.floors[0], walls: [{ id: "w1", start:{x:0,y:0}, end:{x:1,y:1}, height:10, thickness:10, color:"#0" }] }] };
     const noActive = { ...cleanForNoActive, activeFloorId: "xx" };
-    expect(inspectOpen3dProject(noActive)[0].code).toBe("missing-active-floor"); // green: flatMap + if !some + unshift
+    expect(inspectPlannerProject(noActive)[0].code).toBe("missing-active-floor"); // green: flatMap + if !some + unshift
     // use clean walls (no dups) for miss-wall case to ensure first issue is missing-wall
     const cleanWallsProj = { ...dupProj, floors: [{ ...dupProj.floors[0], walls: [{ id: "w1", start:{x:0,y:0}, end:{x:1,y:1}, height:10, thickness:10, color:"#0" }] }] };
     const missWall = { ...cleanWallsProj, floors: [{ ...cleanWallsProj.floors[0], doors: [{ id: "d", wallId: "no", position:0.5, width:10, height:10, type:"single", swingDirection:"left", flipSide:false }] }] };
-    expect(inspectOpen3dProject(missWall)[0].code).toBe("missing-wall"); // green: some + if not found
+    expect(inspectPlannerProject(missWall)[0].code).toBe("missing-wall"); // green: some + if not found
   });
 });
 
@@ -2663,7 +2657,7 @@ describe("Inventory Taxonomy — categories/rooms/styles/sorts/density (TDD)", (
 // Test name clear, real behavior, ONE thing only.
 describe("Catalog Client — TDD loadDescriptorsFromLoader (window/client guard)", () => {
   it("loadDescriptorsFromLoader returns [] immediately when window defined (client guard branch)", async () => {
-    const client = new Open3dCatalogClient({
+    const client = new PlannerCatalogClient({
       fetchImpl: vi.fn().mockResolvedValue({ ok: false }),
     });
     const origWindow = (globalThis as { window?: unknown }).window;
@@ -2793,9 +2787,9 @@ describe("SVG Types Validation TDD — parse/freeze/checksum/error paths (RED te
     expect(cs).toMatch(/^[0-9a-f]{64}$/);
   });
 
-  it("toOpen3dDescriptorErrorHttp covers kinds; freezeFresh stamps generatedAt", () => {
+  it("toPlannerDescriptorErrorHttp covers kinds; freezeFresh stamps generatedAt", () => {
     const invErr = { kind: "invalid" as const, code: "422.invalid", fieldPath: "x", message: "bad", issues: [] };
-    const http = toOpen3dDescriptorErrorHttp(invErr as any);
+    const http = toPlannerDescriptorErrorHttp(invErr as any);
     expect(http.status).toBe(422);
     expect(http.body.code).toBe("422.invalid");
 
@@ -2842,7 +2836,7 @@ describe("Export shared — TDD preflight + format utils (formatMeasurement, for
     const fn = buildExportFilename(proj, "svg");
     expect(fn).toBe("my-floor-ground.svg");
 
-    const ready = preflightOpen3dExport(proj, "json");
+    const ready = preflightPlannerExport(proj, "json");
     expect(ready.status).toBe("ready"); // GREEN after minimal correction (exercises slug + preflight ifs/??/find)
   });
 });

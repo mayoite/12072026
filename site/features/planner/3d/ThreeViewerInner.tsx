@@ -1,10 +1,10 @@
 /**
- * Inner 3D Viewer — lazy-loaded Three.js scene rebuilt from Open3dProject.
+ * Inner 3D Viewer — lazy-loaded Three.js scene rebuilt from PlannerProject.
  * Document model is source of truth; meshes tagged with entity ids.
  */
 
 import { useEffect, useRef, useState } from "react";
-import type { Open3dFloor } from "@/features/planner/project/model/types";
+import type { PlannerFloor } from "@/features/planner/project/model/types";
 import styles from "./threeViewerInner.module.css";
 import type {
   Group,
@@ -15,8 +15,8 @@ import type {
 
 import type * as THREE from "three";
 import { shouldLoadGlb } from "@/features/planner/lib/glbAssetPolicy";
-import { readThreeThemeColor } from "../shared/readThemeColor";
-import { buildOpen3dSceneNodes } from "./buildOpen3dSceneNodes";
+import { readThreeThemeColor } from "@/features/planner/project/shared/readThemeColor";
+import { buildPlannerSceneNodes } from "./buildPlannerSceneNodes";
 import {
   addNodesToGroup,
   disposeAndRemoveObject,
@@ -26,7 +26,7 @@ import {
   loadGeneratedGlbObject,
   type GltfUrlLoader,
 } from "./loadGeneratedGlbObject";
-import { OPEN3D_ORBIT_DEFAULT_ENABLED } from "./orbitDefaults";
+import { PLANNER_ORBIT_DEFAULT_ENABLED } from "./orbitDefaults";
 
 type ThreeModule = typeof THREE;
 
@@ -38,7 +38,7 @@ interface ThreeViewerInnerProps {
   projectData?: {
     id: string;
     name: string;
-    floors: Open3dFloor[];
+    floors: PlannerFloor[];
     activeFloorId?: string;
   };
   enableShadows?: boolean;
@@ -65,7 +65,7 @@ function clearContentGroup(group: Group, THREE: ThreeModule): void {
 export function ThreeViewerInner({
   projectData,
   enableShadows = true,
-  enableControls = OPEN3D_ORBIT_DEFAULT_ENABLED,
+  enableControls = PLANNER_ORBIT_DEFAULT_ENABLED,
   backgroundColor = readThreeThemeColor("--surface-page", "#ffffff"),
   onReady,
 }: ThreeViewerInnerProps): React.JSX.Element {
@@ -164,7 +164,7 @@ export function ThreeViewerInner({
         scene.add(floor);
 
         const content = new THREE.Group();
-        content.name = "open3d-document-content";
+        content.name = "planner-document-content";
         scene.add(content);
         contentGroupRef.current = content;
 
@@ -262,7 +262,7 @@ export function ThreeViewerInner({
     const group = contentGroupRef.current;
     clearContentGroup(group, THREE);
 
-    const nodes = buildOpen3dSceneNodes({
+    const nodes = buildPlannerSceneNodes({
       floors: projectData.floors,
       activeFloorId:
         projectData.activeFloorId ?? projectData.floors[0]?.id ?? "",

@@ -4,9 +4,9 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { buildOpen3dSceneNodes } from "@/features/planner/3d/buildOpen3dSceneNodes";
+import { buildPlannerSceneNodes } from "@/features/planner/3d/buildPlannerSceneNodes";
 import { addFurniture } from "@/features/planner/project/model/operations/pureActions";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 import { degreesToRadians } from "@/features/planner/project/model/units";
 
 function ids(...values: string[]) {
@@ -16,7 +16,7 @@ function ids(...values: string[]) {
 
 describe("W4 pose continuity (document ↔ scene nodes)", () => {
   it("rebuilds furniture pose without mutating document ids/position/rotation", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "W4 continuity",
       now: "2026-07-09T22:00:00.000Z",
@@ -43,8 +43,8 @@ describe("W4 pose continuity (document ↔ scene nodes)", () => {
     };
 
     const before = structuredClone(project.floors[0]!.furniture.find((f) => f.id === "furn-w4")!);
-    const nodesA = buildOpen3dSceneNodes(project);
-    const nodesB = buildOpen3dSceneNodes(project);
+    const nodesA = buildPlannerSceneNodes(project);
+    const nodesB = buildPlannerSceneNodes(project);
     const furnA = nodesA.find((n) => n.id === "furn-w4");
     const furnB = nodesB.find((n) => n.id === "furn-w4");
 

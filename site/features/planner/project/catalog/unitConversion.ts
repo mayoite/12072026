@@ -9,7 +9,7 @@
  * Display values are derived via centralized converters based on user-selected unit.
  */
 
-import type { Open3dCatalogDimensions } from "./catalogTypes";
+import type { PlannerCatalogDimensions } from "./catalogTypes";
 
 // ── Conversion constants ──
 
@@ -59,7 +59,7 @@ export function configuratorHeightCmFromMixedUnit(
 }
 
 /**
- * Build Open3dCatalogDimensions from legacy cm values.
+ * Build PlannerCatalogDimensions from legacy cm values.
  */
 export function canonicalDimensionsFromCatalogCm(params: {
   widthCm: number;
@@ -67,7 +67,7 @@ export function canonicalDimensionsFromCatalogCm(params: {
   heightCm?: number;
   seatHeightCm?: number;
   weightKg?: number;
-}): Open3dCatalogDimensions {
+}): PlannerCatalogDimensions {
   const seatHeightCm = params.seatHeightCm ?? null;
   return {
     widthMm: canonicalMmFromCatalogCm(params.widthCm),
@@ -113,7 +113,7 @@ export function displayFtInFromCanonicalMm(mm: number): string {
  * Format dimensions for display in the user's preferred unit.
  */
 export function displayDimensions(
-  dimensions: Open3dCatalogDimensions,
+  dimensions: PlannerCatalogDimensions,
   unit: "mm" | "cm" | "m" | "in" | "ft-in",
 ): string {
   const converters: Record<string, (v: number) => string> = {
@@ -136,7 +136,7 @@ export function displayDimensions(
  * Build an accessible name for a catalog item including dimensions.
  * Example: "Office Chair, 45 cm by 45 cm by 90 cm"
  */
-export function buildAccessibleName(name: string, dimensions: Open3dCatalogDimensions): string {
+export function buildAccessibleName(name: string, dimensions: PlannerCatalogDimensions): string {
   const w = displayCmFromCanonicalMm(dimensions.widthMm);
   const d = displayCmFromCanonicalMm(dimensions.depthMm);
   const h = displayCmFromCanonicalMm(dimensions.heightMm);
@@ -148,7 +148,7 @@ export function buildAccessibleName(name: string, dimensions: Open3dCatalogDimen
 /**
  * Validate that dimensions are positive and within reasonable bounds.
  */
-export function validateDimensions(dimensions: Open3dCatalogDimensions): {
+export function validateDimensions(dimensions: PlannerCatalogDimensions): {
   valid: boolean;
   errors: string[];
 } {

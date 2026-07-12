@@ -2,15 +2,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { MemberPlanRepository, MemberSaveResult } from "@/features/planner/project/persistence/memberPlanRepository";
 import type { StagingPlannerDocument } from "@/features/planner/project/persistence/plannerDocumentTypes";
 import { promoteGuestSession } from "@/features/planner/project/persistence/guestPromotion";
-import { importOpen3dProjectJson } from "@/features/planner/project/persistence/projectJson";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { importPlannerProjectJson } from "@/features/planner/project/persistence/projectJson";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function makeProject(overrides: Partial<Parameters<typeof createOpen3dProject>[0]> = {}) {
-  return createOpen3dProject({ idFactory: (() => { let n = 0; return () => `id-${++n}`; })(), ...overrides });
+function makeProject(overrides: Partial<Parameters<typeof createPlannerProject>[0]> = {}) {
+  return createPlannerProject({ idFactory: (() => { let n = 0; return () => `id-${++n}`; })(), ...overrides });
 }
 
 function makeSavedDoc(project: ReturnType<typeof makeProject>): StagingPlannerDocument {
@@ -220,7 +220,7 @@ describe("promoteGuestSession", () => {
       await promoteGuestSession(project, repo);
 
       expect(capturedDoc).toBeDefined();
-      const roundTripped = importOpen3dProjectJson(capturedDoc!.sceneJson);
+      const roundTripped = importPlannerProjectJson(capturedDoc!.sceneJson);
       expect(roundTripped).toEqual(project);
     });
   });

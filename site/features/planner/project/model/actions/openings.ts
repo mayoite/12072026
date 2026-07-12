@@ -1,8 +1,8 @@
-import type { Open3dDoor, Open3dProject, Open3dWindow } from "../types";
-import type { Open3dIdFactory } from "../project";
-import { applyOpen3dProjectAction, activeFloorOrThrow } from "./projectActions";
+import type { PlannerDoor, PlannerProject, PlannerWindow } from "../types";
+import type { PlannerIdFactory } from "../project";
+import { applyPlannerProjectAction, activeFloorOrThrow } from "./projectActions";
 
-function assertOpening(project: Open3dProject, wallId: string, position: number, width: number): void {
+function assertOpening(project: PlannerProject, wallId: string, position: number, width: number): void {
   const floor = activeFloorOrThrow(project);
   const wall = floor.walls.find((item) => item.id === wallId);
   if (!wall) throw new Error(`Opening wall "${wallId}" does not exist.`);
@@ -12,28 +12,28 @@ function assertOpening(project: Open3dProject, wallId: string, position: number,
   if (width >= wallLength) throw new Error("Opening width must be shorter than its wall.");
 }
 
-export function addOpen3dDoor(
-  project: Open3dProject,
-  door: Omit<Open3dDoor, "id">,
-  idFactory: Open3dIdFactory,
+export function addPlannerDoor(
+  project: PlannerProject,
+  door: Omit<PlannerDoor, "id">,
+  idFactory: PlannerIdFactory,
   now?: string,
-): Open3dProject {
+): PlannerProject {
   assertOpening(project, door.wallId, door.position, door.width);
-  return applyOpen3dProjectAction(
+  return applyPlannerProjectAction(
     project,
     { type: "add", collection: "doors", entity: { ...door, id: idFactory() } },
     now,
   );
 }
 
-export function addOpen3dWindow(
-  project: Open3dProject,
-  window: Omit<Open3dWindow, "id">,
-  idFactory: Open3dIdFactory,
+export function addPlannerWindow(
+  project: PlannerProject,
+  window: Omit<PlannerWindow, "id">,
+  idFactory: PlannerIdFactory,
   now?: string,
-): Open3dProject {
+): PlannerProject {
   assertOpening(project, window.wallId, window.position, window.width);
-  return applyOpen3dProjectAction(
+  return applyPlannerProjectAction(
     project,
     { type: "add", collection: "windows", entity: { ...window, id: idFactory() } },
     now,

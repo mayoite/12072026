@@ -16,7 +16,7 @@ import {
   type PlannerAccessContext,
   type PlannerCommandKey,
 } from "@/features/planner/project/lib/commands/plannerAccessContext";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 import { promoteGuestSession } from "@/features/planner/project/persistence/guestPromotion";
 import {
   createMemberPlanRepository,
@@ -35,7 +35,7 @@ function percentile95(durations: number[]): number {
 }
 
 function makeDoc(overrides: Partial<StagingPlannerDocument> = {}): StagingPlannerDocument {
-  const project = createOpen3dProject({
+  const project = createPlannerProject({
     idFactory: (() => {
       let n = 0;
       return () => `bench-${++n}`;
@@ -136,7 +136,7 @@ describePhase04Benchmarks("Phase 04 persistence performance budgets", () => {
   });
 
   it("guest-to-member promotion save p95 under 2s with mocked repository", async () => {
-    const project = createOpen3dProject({
+    const project = createPlannerProject({
       idFactory: (() => {
         let n = 0;
         return () => `promo-${++n}`;

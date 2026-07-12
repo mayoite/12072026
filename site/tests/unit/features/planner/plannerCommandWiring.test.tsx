@@ -6,12 +6,12 @@ import {
   type PlannerCommand,
 } from "@/features/planner/project/lib/commands/plannerCommand";
 import { useWorkspaceCanvas } from "@/features/planner/editor/useWorkspaceCanvas";
-import { createOpen3dHistory } from "@/features/planner/project/store/history";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import { createPlannerHistory } from "@/features/planner/project/store/history";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
-function projectWithFurniture(locked: boolean): Open3dProject {
-  const project = createOpen3dProject({
+function projectWithFurniture(locked: boolean): PlannerProject {
+  const project = createPlannerProject({
     idFactory: (() => {
       const ids = ["floor", "project"];
       return () => ids.shift() ?? "generated";
@@ -38,7 +38,7 @@ function projectWithFurniture(locked: boolean): Open3dProject {
  */
 describe("planner command wiring — document.update command branch", () => {
   it("records a functional update and reports noop for an unchanged updater", () => {
-    const history = createOpen3dHistory(projectWithFurniture(false));
+    const history = createPlannerHistory(projectWithFurniture(false));
 
     const noop = executePlannerCommand(history, {
       type: "document.update",
@@ -60,7 +60,7 @@ describe("planner command wiring — document.update command branch", () => {
   });
 
   it("preserves an updater-supplied updatedAt without restamping", () => {
-    const history = createOpen3dHistory(projectWithFurniture(false));
+    const history = createPlannerHistory(projectWithFurniture(false));
     const command: PlannerCommand = {
       type: "document.update",
       updater: (project) => ({ ...project, updatedAt: "2030-01-01T00:00:00.000Z" }),
@@ -212,7 +212,7 @@ describe("useWorkspaceCanvas routes every mutation through executePlannerCommand
     expect(result.current.canUndo).toBe(true);
 
     act(() => {
-      result.current.replaceProject(createOpen3dProject({ name: "Fresh" }));
+      result.current.replaceProject(createPlannerProject({ name: "Fresh" }));
     });
     expect(result.current.project.name).toBe("Fresh");
     expect(result.current.canUndo).toBe(false);

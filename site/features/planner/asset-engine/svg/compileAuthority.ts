@@ -46,5 +46,5 @@ export const COMPILE_AUTHORITY = {
     cliWrite: "scripts/generate-svg.mjs runPipeline (S1–S4 + disk)",
     adminWire: "svgPipelineRunner → generate-svg.mjs runPipeline",
   },
-  v1Entry: "open3d/catalog/svg/svgCompiler.server.ts",
+  v1Entry: "project/catalog/svg/svgCompiler.server.ts",
 } as const;

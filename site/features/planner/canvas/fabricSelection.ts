@@ -22,6 +22,13 @@ type EntityTypeCarrier = {
   set?: (key: string, value: string) => unknown;
 };
 
+/** Fabric Group / active child may nest under `.group` or `.parent`. */
+type ParentableCarrier = EntityIdCarrier &
+  EntityTypeCarrier & {
+    group?: ParentableCarrier | null;
+    parent?: ParentableCarrier | null;
+  };
+
 export function writeCanvasEntityType(
   target: EntityTypeCarrier,
   type: FabricCanvasEntityType,
@@ -38,13 +45,20 @@ export function readCanvasEntityType(
 
 /**
  * Map a Fabric active object to a document selection payload.
+ * Walks parent Group when a sub-prim is hit (Block2D groups store id on the root).
  * Returns null for empty canvas, missing metadata, or non-furniture/wall types.
  */
 export function selectionFromFabricTarget(
-  target: (EntityIdCarrier & EntityTypeCarrier) | null | undefined,
+  target: ParentableCarrier | null | undefined,
 ): FabricEntitySelection | null {
-  const type = readCanvasEntityType(target);
-  const id = readFurnitureEntityId(target);
-  if (!type || !id) return null;
-  return { type, id };
+  let current: ParentableCarrier | null | undefined = target;
+  let depth = 0;
+  while (current && depth < 8) {
+    const type = readCanvasEntityType(current);
+    const id = readFurnitureEntityId(current);
+    if (type && id) return { type, id };
+    current = current.group ?? current.parent ?? null;
+    depth += 1;
+  }
+  return null;
 }

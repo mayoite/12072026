@@ -1,5 +1,5 @@
 /**
- * Pure scene-object factory for Open3dSceneNode → THREE Object3D.
+ * Pure scene-object factory for PlannerSceneNode → THREE Object3D.
  * Modular furniture uses generateCabinetV0Mesh / generateWorkstationV0Mesh
  * (no designer GLB, no THREE on document).
  * Non-modular furniture box uses ParametricBuilder.generate3DMesh when W/D/H are available.
@@ -21,9 +21,9 @@ import {
   parseWorkstationConfigKey,
 } from "@/features/planner/project/catalog/workstationSystemV0";
 import { ParametricBuilder } from "@/features/planner/project/catalog/parametricBuilder";
-import { resolvePaintColor } from "../shared/readThemeColor";
-import { PLANNER_COLOR_TOKENS } from "../shared/themeColorTokens";
-import { mmToMeters, type Open3dSceneNode } from "./buildOpen3dSceneNodes";
+import { resolvePaintColor } from "@/features/planner/project/shared/readThemeColor";
+import { PLANNER_COLOR_TOKENS } from "@/features/planner/project/shared/themeColorTokens";
+import { mmToMeters, type PlannerSceneNode } from "./buildPlannerSceneNodes";
 
 type ThreeModule = typeof THREE;
 
@@ -73,7 +73,7 @@ function applyShadowFlags(
   });
 }
 
-function hasPositiveDimensions(node: Open3dSceneNode): boolean {
+function hasPositiveDimensions(node: PlannerSceneNode): boolean {
   return (
     Number.isFinite(node.widthMm) &&
     Number.isFinite(node.depthMm) &&
@@ -91,7 +91,7 @@ function hasPositiveDimensions(node: Open3dSceneNode): boolean {
  */
 export function createSceneObjectFromNode(
   THREE: ThreeModule,
-  node: Open3dSceneNode,
+  node: PlannerSceneNode,
   castShadow: boolean,
 ): THREE.Object3D {
   if (
@@ -232,7 +232,7 @@ export function createSceneObjectFromNode(
 export function addNodesToGroup(
   THREE: ThreeModule,
   group: THREE.Group,
-  nodes: Open3dSceneNode[],
+  nodes: PlannerSceneNode[],
   castShadow: boolean,
 ): void {
   for (const node of nodes) {

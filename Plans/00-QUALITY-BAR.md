@@ -40,11 +40,13 @@ A plan can be honest while product is red. That is truth, not failure.
 
 | Layer | Live | Forbidden downgrade |
 |-------|------|---------------------|
-| 2D host | Fabric `PlannerCanvasStage` → `planner-fabric-stage` | Dual host · any second interactive plan canvas |
+| Document stack | **UUID v7** + mm → Fabric 2D sole · Three+orbit 3D · local-first persist | Mint non-v7 entity ids · dual unit record · dual plan host · cloud labels while local-only |
+| 2D host | Fabric `PlannerCanvasStage` → `planner-fabric-stage` | Dual interactive plan canvas · prove W gates on archive `planner-2d-canvas` · re-add `_archive/fabric` as product host |
 | Plan symbols | Block2D / multiprim **on Fabric** | Non-Fabric host “proof” |
 | Select/delete | Fabric host | Archive `planner-2d-canvas` selectors |
+| **Canvas toolbar** | **React Aria** on `CanvasToolRail` + Phosphor · live vs deferred tool tiers | Lucide · claim deferred tools as W1 geometry · drop RAC without owner explain · second rail |
 | Admin SVG | Publish → `public/svg-catalog/` | Claim catalog SVG is plan-draw |
-| 3D | Three + orbit | R3F rewrite as substitute |
+| 3D | Three + orbit (`Lazy3DViewer`) | R3F rewrite as substitute for workspace Lazy3D path |
 
 ## Evidence roots (dump only — not PASS law; `AGENTS.md` §5)
 

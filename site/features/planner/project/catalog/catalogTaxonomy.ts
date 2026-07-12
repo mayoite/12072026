@@ -8,14 +8,14 @@
  */
 
 import type {
-  Open3dAssemblyType,
-  Open3dCatalogCategory,
-  Open3dCatalogColor,
-  Open3dCatalogMaterial,
-  Open3dCatalogSubCategory,
-  Open3dCatalogTaxonomyPath,
-  Open3dRoomTag,
-  Open3dStyleTag,
+  PlannerAssemblyType,
+  PlannerCatalogCategory,
+  PlannerCatalogColor,
+  PlannerCatalogMaterial,
+  PlannerCatalogSubCategory,
+  PlannerCatalogTaxonomyPath,
+  PlannerRoomTag,
+  PlannerStyleTag,
 } from "./catalogTypes";
 
 // ── Canonical taxonomy hierarchy ──
@@ -31,7 +31,7 @@ export interface TaxonomyNode {
  * Primary axis is product type (Furniture, Lighting, Decor...),
  * NOT room. Room is a multi-value filterable attribute.
  */
-export const CANONICAL_TAXONOMY: Record<Open3dCatalogCategory, TaxonomyNode> = {
+export const CANONICAL_TAXONOMY: Record<PlannerCatalogCategory, TaxonomyNode> = {
   Furniture: {
     name: "Furniture",
     subCategories: {
@@ -193,7 +193,7 @@ export const CANONICAL_TAXONOMY: Record<Open3dCatalogCategory, TaxonomyNode> = {
 
 // ── Normalized room tags ──
 
-export const ROOM_TAGS: readonly Open3dRoomTag[] = [
+export const ROOM_TAGS: readonly PlannerRoomTag[] = [
   "Living Room",
   "Bedroom",
   "Kitchen",
@@ -209,7 +209,7 @@ export const ROOM_TAGS: readonly Open3dRoomTag[] = [
 
 // ── Normalized style tags ──
 
-export const STYLE_TAGS: readonly Open3dStyleTag[] = [
+export const STYLE_TAGS: readonly PlannerStyleTag[] = [
   "Modern",
   "Scandinavian",
   "Industrial",
@@ -332,10 +332,10 @@ const COLOR_NAME_TO_FAMILY: Record<string, string> = {
  * Build a taxonomy path string: "Furniture > Tables > Dining Tables"
  */
 export function buildTaxonomyPath(
-  category: Open3dCatalogCategory,
-  subCategory?: Open3dCatalogSubCategory,
+  category: PlannerCatalogCategory,
+  subCategory?: PlannerCatalogSubCategory,
   leafCategory?: string,
-): Open3dCatalogTaxonomyPath {
+): PlannerCatalogTaxonomyPath {
   const parts: string[] = [category];
   if (subCategory && subCategory.length > 0) {
     parts.push(subCategory);
@@ -350,7 +350,7 @@ export function buildTaxonomyPath(
  * Normalize a material: given a marketing name, return the two-field material object.
  * Falls back to "Other" as normalized value if no mapping exists.
  */
-export function normalizeMaterial(marketingMaterial: string): Open3dCatalogMaterial {
+export function normalizeMaterial(marketingMaterial: string): PlannerCatalogMaterial {
   const normalized = marketingMaterial.trim();
   const key = normalized.toLowerCase();
   const normalizedValue = MARKETING_TO_NORMALIZED_MATERIAL[key] ?? normalized;
@@ -363,7 +363,7 @@ export function normalizeMaterial(marketingMaterial: string): Open3dCatalogMater
 /**
  * Resolve a color from name and hex to structured color with normalized family.
  */
-export function normalizeColor(name: string, hex: string): Open3dCatalogColor {
+export function normalizeColor(name: string, hex: string): PlannerCatalogColor {
   const colorName = name.trim();
   const normalizedHex = hex.startsWith("#") ? hex : `#${hex}`;
   const familyKey = colorName.toLowerCase();
@@ -378,21 +378,21 @@ export function normalizeColor(name: string, hex: string): Open3dCatalogColor {
 /**
  * Validate that a room tag is a recognized canonical value.
  */
-export function isValidRoomTag(value: string): value is Open3dRoomTag {
+export function isValidRoomTag(value: string): value is PlannerRoomTag {
   return (ROOM_TAGS as readonly string[]).includes(value);
 }
 
 /**
  * Validate that a style tag is a recognized canonical value.
  */
-export function isValidStyleTag(value: string): value is Open3dStyleTag {
+export function isValidStyleTag(value: string): value is PlannerStyleTag {
   return (STYLE_TAGS as readonly string[]).includes(value);
 }
 
 /**
  * Normalize an assembly type string to the canonical enum.
  */
-export function normalizeAssemblyType(raw: string): Open3dAssemblyType {
+export function normalizeAssemblyType(raw: string): PlannerAssemblyType {
   const normalized = raw.trim().toLowerCase();
   if (normalized.includes("flat") || normalized.includes("pack")) return "flat-pack";
   if (normalized.includes("partial") || normalized.includes("some") || normalized.includes("semi")) return "partial";

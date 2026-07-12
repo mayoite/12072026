@@ -26,17 +26,16 @@ function walkTsFiles(dir: string, out: string[] = []): string[] {
 
 describe("icon policy — Phosphor only", () => {
   it("has zero lucide-react imports in app/features/components/lib (excl. archive optional)", () => {
-    const roots = ["app", "features", "components", "lib"].map((r) =>
-      path.resolve(__dirname, "../../../../../", r),
-    );
+    // This file: site/tests/unit/features/planner → site root is 4 levels up
+    const siteRoot = path.resolve(__dirname, "../../../../");
+    const roots = ["app", "features", "components", "lib"].map((r) => path.join(siteRoot, r));
     const offenders: string[] = [];
     for (const root of roots) {
       for (const file of walkTsFiles(root)) {
-        // Archive fabric is legacy; still migrated but allow if any residual
         if (file.includes(`${path.sep}_archive${path.sep}`)) continue;
         const src = fs.readFileSync(file, "utf8");
         if (src.includes("lucide-react")) {
-          offenders.push(path.relative(path.resolve(__dirname, "../../../../../"), file));
+          offenders.push(path.relative(siteRoot, file));
         }
       }
     }
@@ -44,9 +43,11 @@ describe("icon policy — Phosphor only", () => {
   });
 
   it("does not list lucide-react in site package.json dependencies", () => {
-    const pkg = JSON.parse(
-      fs.readFileSync(path.resolve(__dirname, "../../../../../package.json"), "utf8"),
-    ) as { dependencies?: Record<string, string>; devDependencies?: Record<string, string> };
+    const siteRoot = path.resolve(__dirname, "../../../../");
+    const pkg = JSON.parse(fs.readFileSync(path.join(siteRoot, "package.json"), "utf8")) as {
+      dependencies?: Record<string, string>;
+      devDependencies?: Record<string, string>;
+    };
     expect(pkg.dependencies?.["lucide-react"]).toBeUndefined();
     expect(pkg.devDependencies?.["lucide-react"]).toBeUndefined();
     expect(pkg.dependencies?.["@phosphor-icons/react"]).toBeDefined();

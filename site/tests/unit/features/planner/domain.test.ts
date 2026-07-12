@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { convertLegacyRectScene } from "@/features/planner/project/shared/document/legacyProject";
-import { parseOpen3dProject, parseOpen3dSceneEnvelope } from "@/features/planner/project/shared/document/projectParser";
+import { parsePlannerProject, parsePlannerSceneEnvelope } from "@/features/planner/project/shared/document/projectParser";
 import { feasibilityCommands, getFeasibilityCommand } from "@/features/planner/project/lib/commands/registry";
 import {
   projectToScreen,
@@ -9,40 +9,40 @@ import {
   snapDrawingPoint,
   zoomTransformAt,
 } from "@/features/planner/project/lib/geometry/snapping";
-import { assertOpen3dProject, inspectOpen3dProject } from "@/features/planner/project/model/invariants";
+import { assertPlannerProject, inspectPlannerProject } from "@/features/planner/project/model/invariants";
 import {
-  createOpen3dProject,
-  createOpen3dSceneEnvelope,
+  createPlannerProject,
+  createPlannerSceneEnvelope,
   createRectangularRoomProject,
 } from "@/features/planner/project/model/project";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 import {
-  boundsMmToOpen3dCm,
-  boundsOpen3dCmToMm,
+  boundsMmToPlannerCm,
+  boundsplannerCmToMm,
   displayValueToMm,
   formatFeetAndInches,
   mmToDisplayValue,
-  mmToOpen3dCm,
+  mmToPlannerCm,
   normalizeDegrees,
-  open3dCmToMm,
+  plannerCmToMm,
   parseFeetAndInches,
 } from "@/features/planner/project/model/units";
-import { addOpen3dFurniture, rotateOpen3dFurniture } from "@/features/planner/project/model/actions/furniture";
-import { addOpen3dDoor, addOpen3dWindow } from "@/features/planner/project/model/actions/openings";
+import { addPlannerFurniture, rotatePlannerFurniture } from "@/features/planner/project/model/actions/furniture";
+import { addPlannerDoor, addPlannerWindow } from "@/features/planner/project/model/actions/openings";
 import {
-  applyOpen3dProjectAction,
-  applyOpen3dProjectTransaction,
-  moveOpen3dEntity,
+  applyPlannerProjectAction,
+  applyPlannerProjectTransaction,
+  movePlannerEntity,
 } from "@/features/planner/project/model/actions/projectActions";
-import { addOpen3dWall } from "@/features/planner/project/model/actions/walls";
+import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
 import {
-  beginOpen3dDrag,
-  commitOpen3dDrag,
-  createOpen3dHistory,
-  dispatchOpen3dAction,
-  dispatchOpen3dTransaction,
-  redoOpen3dAction,
-  undoOpen3dAction,
+  beginPlannerDrag,
+  commitPlannerDrag,
+  createPlannerHistory,
+  dispatchPlannerAction,
+  dispatchPlannerTransaction,
+  redoPlannerAction,
+  undoPlannerAction,
 } from "@/features/planner/project/store/history";
 
 function ids(...values: string[]) {
@@ -50,7 +50,7 @@ function ids(...values: string[]) {
   return () => values[index++] ?? `generated-${index}`;
 }
 
-function room(): Open3dProject {
+function room(): PlannerProject {
   return createRectangularRoomProject({
     idFactory: ids("floor", "project", "wall-1", "wall-2", "wall-3", "wall-4"),
     widthMm: 6000,
@@ -61,7 +61,7 @@ function room(): Open3dProject {
 
 describe("project model and units", () => {
   it("creates projects, rooms, and envelopes with defaults and overrides", () => {
-    const project = createOpen3dProject();
+    const project = createPlannerProject();
     expect(project.floors).toHaveLength(1);
     expect(project.id).toBeTruthy();
     const rectangular = createRectangularRoomProject({
@@ -74,19 +74,20 @@ describe("project model and units", () => {
     });
     expect(rectangular.floors[0].walls).toHaveLength(4);
     expect(rectangular.floors[0].walls[0]).toMatchObject({ height: 5, thickness: 2 });
-    expect(createOpen3dSceneEnvelope(rectangular).project).toBe(rectangular);
+    expect(createPlannerSceneEnvelope(rectangular).project).toBe(rectangular);
+    // Entity ids mint via newEntityId() → uuid v7 (getRandomValues), not crypto.randomUUID.
     const originalCrypto = globalThis.crypto;
     vi.stubGlobal("crypto", {});
-    expect(() => createOpen3dProject()).toThrow(/crypto\.randomUUID is required/);
+    expect(() => createPlannerProject()).toThrow(/getRandomValues/i);
     expect(() => createRectangularRoomProject({ widthMm: 1, depthMm: 1 })).toThrow(
-      /crypto\.randomUUID is required/,
+      /getRandomValues/i,
     );
     vi.stubGlobal("crypto", originalCrypto);
   });
 
   it("converts every supported measurement representation", () => {
-    expect(mmToOpen3dCm(20)).toBe(2);
-    expect(open3dCmToMm(2)).toBe(20);
+    expect(mmToPlannerCm(20)).toBe(2);
+    expect(plannerCmToMm(2)).toBe(20);
     expect(normalizeDegrees(-10)).toBe(350);
     expect([displayValueToMm(2, "mm"), displayValueToMm(2, "cm"), displayValueToMm(2, "m"), displayValueToMm(2, "in")])
       .toEqual([2, 20, 2000, 50.8]);
@@ -99,7 +100,7 @@ describe("project model and units", () => {
     expect(formatFeetAndInches(-304.8)).toBe("-1' 0\"");
     expect(formatFeetAndInches(304.79, 0)).toBe("1' 0\"");
     const bounds = { minX: 10, minY: 20, maxX: 30, maxY: 40 };
-    expect(boundsOpen3dCmToMm(boundsMmToOpen3dCm(bounds))).toEqual(bounds);
+    expect(boundsplannerCmToMm(boundsMmToPlannerCm(bounds))).toEqual(bounds);
   });
 });
 
@@ -185,81 +186,81 @@ describe("geometry and commands", () => {
 
 describe("operations, invariants, and history", () => {
   it("adds walls and rejects projects without an active floor", () => {
-    const project = createOpen3dProject({ idFactory: ids("floor", "project") });
-    expect(addOpen3dWall(project, { start: { x: 0, y: 0 }, end: { x: 1, y: 1 } }, ids("wall"), "now").updatedAt).toBe("now");
-    expect(() => addOpen3dWall({ ...project, activeFloorId: "missing" }, { start: { x: 0, y: 0 }, end: { x: 1, y: 1 } }, ids("wall"))).toThrow();
+    const project = createPlannerProject({ idFactory: ids("floor", "project") });
+    expect(addPlannerWall(project, { start: { x: 0, y: 0 }, end: { x: 1, y: 1 } }, ids("wall"), "now").updatedAt).toBe("now");
+    expect(() => addPlannerWall({ ...project, activeFloorId: "missing" }, { start: { x: 0, y: 0 }, end: { x: 1, y: 1 } }, ids("wall"))).toThrow();
   });
 
   it("adds and validates openings", () => {
     const project = room();
     const door = { wallId: "wall-1", position: 0.5, width: 900, height: 2100, type: "single" as const, swingDirection: "left" as const, flipSide: false };
-    const withDoor = addOpen3dDoor(project, door, ids("door"));
+    const withDoor = addPlannerDoor(project, door, ids("door"));
     const window = { wallId: "wall-1", position: 0.4, width: 1000, height: 1200, sillHeight: 900, type: "fixed" as const };
-    expect(addOpen3dWindow(withDoor, window, ids("window")).floors[0].windows).toHaveLength(1);
+    expect(addPlannerWindow(withDoor, window, ids("window")).floors[0].windows).toHaveLength(1);
     for (const invalid of [
       { ...door, wallId: "missing" },
       { ...door, position: -1 },
       { ...door, width: 0 },
       { ...door, width: 6000 },
-    ]) expect(() => addOpen3dDoor(project, invalid, ids("x"))).toThrow();
+    ]) expect(() => addPlannerDoor(project, invalid, ids("x"))).toThrow();
   });
 
   it("adds, rotates, moves, duplicates, updates, and deletes entities", () => {
     const project = room();
     const furniture = { catalogId: "chair", position: { x: 1, y: 2 }, rotation: -10, scale: { x: 1, y: 1, z: 1 } };
-    expect(() => addOpen3dFurniture(project, { ...furniture, catalogId: " " }, ids("f"))).toThrow();
-    expect(() => addOpen3dFurniture(project, { ...furniture, scale: { x: 0, y: 1, z: 1 } }, ids("f"))).toThrow();
-    const added = addOpen3dFurniture(project, furniture, ids("f"), "one");
+    expect(() => addPlannerFurniture(project, { ...furniture, catalogId: " " }, ids("f"))).toThrow();
+    expect(() => addPlannerFurniture(project, { ...furniture, scale: { x: 0, y: 1, z: 1 } }, ids("f"))).toThrow();
+    const added = addPlannerFurniture(project, furniture, ids("f"), "one");
     expect(added.floors[0].furniture[0].rotation).toBe(350);
-    const rotated = rotateOpen3dFurniture(added, "f", 370, "two");
-    const moved = moveOpen3dEntity(rotated, "furniture", "f", { x: 4, y: 5 }, "three");
-    const duplicated = applyOpen3dProjectAction(moved, { type: "duplicate", collection: "furniture", id: "f", newId: "f2" });
+    const rotated = rotatePlannerFurniture(added, "f", 370, "two");
+    const moved = movePlannerEntity(rotated, "furniture", "f", { x: 4, y: 5 }, "three");
+    const duplicated = applyPlannerProjectAction(moved, { type: "duplicate", collection: "furniture", id: "f", newId: "f2" });
     expect(duplicated.floors[0].furniture).toHaveLength(2);
-    expect(() => applyOpen3dProjectAction(duplicated, { type: "duplicate", collection: "furniture", id: "f", newId: "f2" })).toThrow();
-    expect(applyOpen3dProjectAction(project, { type: "duplicate", collection: "furniture", id: "absent", newId: "new" })).toBe(project);
-    expect(() => applyOpen3dProjectAction(added, { type: "add", collection: "furniture", entity: added.floors[0].furniture[0] })).toThrow();
-    const removedWall = applyOpen3dProjectAction(addOpen3dDoor(project, { wallId: "wall-1", position: 0.5, width: 900, height: 2100, type: "single", swingDirection: "left", flipSide: false }, ids("door")), { type: "delete", collection: "walls", id: "wall-1" });
+    expect(() => applyPlannerProjectAction(duplicated, { type: "duplicate", collection: "furniture", id: "f", newId: "f2" })).toThrow();
+    expect(applyPlannerProjectAction(project, { type: "duplicate", collection: "furniture", id: "absent", newId: "new" })).toBe(project);
+    expect(() => applyPlannerProjectAction(added, { type: "add", collection: "furniture", entity: added.floors[0].furniture[0] })).toThrow();
+    const removedWall = applyPlannerProjectAction(addPlannerDoor(project, { wallId: "wall-1", position: 0.5, width: 900, height: 2100, type: "single", swingDirection: "left", flipSide: false }, ids("door")), { type: "delete", collection: "walls", id: "wall-1" });
     expect(removedWall.floors[0].doors).toEqual([]);
-    expect(() => applyOpen3dProjectAction({ ...project, activeFloorId: "none" }, { type: "delete", collection: "walls", id: "wall-1" })).toThrow();
+    expect(() => applyPlannerProjectAction({ ...project, activeFloorId: "none" }, { type: "delete", collection: "walls", id: "wall-1" })).toThrow();
     const secondFloor = { ...project.floors[0], id: "floor-2", name: "Second" };
     const twoFloors = { ...project, floors: [project.floors[0], secondFloor] };
-    expect(applyOpen3dProjectAction(twoFloors, { type: "update", collection: "walls", id: "wall-1", updates: { color: "blue" } }).floors[1]).toBe(secondFloor);
-    expect(applyOpen3dProjectAction(project, { type: "delete", collection: "furniture", id: "absent" }).floors[0].walls).toHaveLength(4);
-    const withBoth = addOpen3dWindow(
-      addOpen3dDoor(project, { wallId: "wall-1", position: .2, width: 500, height: 2000, type: "single", swingDirection: "left", flipSide: false }, ids("door-2")),
+    expect(applyPlannerProjectAction(twoFloors, { type: "update", collection: "walls", id: "wall-1", updates: { color: "blue" } }).floors[1]).toBe(secondFloor);
+    expect(applyPlannerProjectAction(project, { type: "delete", collection: "furniture", id: "absent" }).floors[0].walls).toHaveLength(4);
+    const withBoth = addPlannerWindow(
+      addPlannerDoor(project, { wallId: "wall-1", position: .2, width: 500, height: 2000, type: "single", swingDirection: "left", flipSide: false }, ids("door-2")),
       { wallId: "wall-1", position: .7, width: 500, height: 500, sillHeight: 500, type: "fixed" },
       ids("window-2"),
     );
-    expect(applyOpen3dProjectAction(withBoth, { type: "delete", collection: "walls", id: "wall-1" }).floors[0].windows).toEqual([]);
-    const empty = createOpen3dProject({ idFactory: ids("empty-floor", "empty-project") });
+    expect(applyPlannerProjectAction(withBoth, { type: "delete", collection: "walls", id: "wall-1" }).floors[0].windows).toEqual([]);
+    const empty = createPlannerProject({ idFactory: ids("empty-floor", "empty-project") });
     const extraFloor = { ...empty.floors[0], id: "other" };
-    expect(addOpen3dWall({ ...empty, floors: [empty.floors[0], extraFloor] }, { start: { x: 0, y: 0 }, end: { x: 2, y: 2 }, height: 3, thickness: 4, color: "red" }, ids("custom-wall")).floors[1].walls).toEqual([]);
+    expect(addPlannerWall({ ...empty, floors: [empty.floors[0], extraFloor] }, { start: { x: 0, y: 0 }, end: { x: 2, y: 2 }, height: 3, thickness: 4, color: "red" }, ids("custom-wall")).floors[1].walls).toEqual([]);
   });
 
   it("applies transactions and all history transitions", () => {
     const project = room();
     const action = { type: "delete", collection: "walls", id: "wall-1" } as const;
-    expect(applyOpen3dProjectTransaction(project, [action], "now").updatedAt).toBe("now");
-    const initial = createOpen3dHistory(project);
-    expect(dispatchOpen3dTransaction(initial, [])).toBe(initial);
-    expect(dispatchOpen3dTransaction(initial, [{ type: "duplicate", collection: "furniture", id: "absent", newId: "new" }])).toBe(initial);
-    expect(dispatchOpen3dTransaction(initial, [action], "transaction").present.updatedAt).toBe("transaction");
-    expect(dispatchOpen3dAction(initial, { type: "duplicate", collection: "furniture", id: "absent", newId: "new" })).toBe(initial);
-    const changed = dispatchOpen3dAction(initial, action, "now");
-    expect(undoOpen3dAction(changed).present).toBe(project);
-    expect(undoOpen3dAction(initial)).toBe(initial);
-    expect(redoOpen3dAction(undoOpen3dAction(changed)).present.floors[0].walls).toHaveLength(3);
-    expect(redoOpen3dAction(initial)).toBe(initial);
-    const drag = beginOpen3dDrag(initial);
-    expect(commitOpen3dDrag(initial, changed.present).past).toEqual([]);
-    expect(commitOpen3dDrag(drag, project).past).toEqual([]);
-    expect(commitOpen3dDrag(drag, changed.present).past).toEqual([project]);
+    expect(applyPlannerProjectTransaction(project, [action], "now").updatedAt).toBe("now");
+    const initial = createPlannerHistory(project);
+    expect(dispatchPlannerTransaction(initial, [])).toBe(initial);
+    expect(dispatchPlannerTransaction(initial, [{ type: "duplicate", collection: "furniture", id: "absent", newId: "new" }])).toBe(initial);
+    expect(dispatchPlannerTransaction(initial, [action], "transaction").present.updatedAt).toBe("transaction");
+    expect(dispatchPlannerAction(initial, { type: "duplicate", collection: "furniture", id: "absent", newId: "new" })).toBe(initial);
+    const changed = dispatchPlannerAction(initial, action, "now");
+    expect(undoPlannerAction(changed).present).toBe(project);
+    expect(undoPlannerAction(initial)).toBe(initial);
+    expect(redoPlannerAction(undoPlannerAction(changed)).present.floors[0].walls).toHaveLength(3);
+    expect(redoPlannerAction(initial)).toBe(initial);
+    const drag = beginPlannerDrag(initial);
+    expect(commitPlannerDrag(initial, changed.present).past).toEqual([]);
+    expect(commitPlannerDrag(drag, project).past).toEqual([]);
+    expect(commitPlannerDrag(drag, changed.present).past).toEqual([project]);
   });
 
   it("reports every invariant class", () => {
     const project = room();
     const wall = project.floors[0].walls[0];
-    const invalid: Open3dProject = {
+    const invalid: PlannerProject = {
       ...project,
       activeFloorId: "missing",
       floors: [{
@@ -268,11 +269,11 @@ describe("operations, invariants, and history", () => {
         doors: [{ id: wall.id, wallId: "missing", position: 0.5, width: 1, height: 1, type: "single", swingDirection: "left", flipSide: false }],
       }],
     };
-    expect(inspectOpen3dProject(invalid).map((issue) => issue.code)).toEqual([
+    expect(inspectPlannerProject(invalid).map((issue) => issue.code)).toEqual([
       "missing-active-floor", "duplicate-id", "invalid-dimension", "missing-wall",
     ]);
-    expect(() => assertOpen3dProject(invalid)).toThrow("Active floor");
-    expect(() => assertOpen3dProject(project)).not.toThrow();
+    expect(() => assertPlannerProject(invalid)).toThrow("Active floor");
+    expect(() => assertPlannerProject(project)).not.toThrow();
   });
 });
 
@@ -285,7 +286,7 @@ describe("legacy conversion and parser", () => {
   it("parses a complete project and envelope", () => {
     const project = room();
     const floor = project.floors[0];
-    const complete: Open3dProject = {
+    const complete: PlannerProject = {
       ...project,
       description: "Complete",
       displayUnit: "cm",
@@ -304,9 +305,9 @@ describe("legacy conversion and parser", () => {
         groups: [{ id: "group", elementIds: ["f"] }],
       }],
     };
-    expect(parseOpen3dProject(JSON.parse(JSON.stringify(complete)))).toEqual(complete);
-    expect(parseOpen3dSceneEnvelope(createOpen3dSceneEnvelope(complete)).project).toEqual(complete);
-    expect(() => parseOpen3dSceneEnvelope({})).toThrow("Unsupported");
+    expect(parsePlannerProject(JSON.parse(JSON.stringify(complete)))).toEqual(complete);
+    expect(parsePlannerSceneEnvelope(createPlannerSceneEnvelope(complete)).project).toEqual(complete);
+    expect(() => parsePlannerSceneEnvelope({})).toThrow("Unsupported");
   });
 
   it("rejects malformed values through every primitive parser", () => {
@@ -320,7 +321,7 @@ describe("legacy conversion and parser", () => {
       { ...valid, floors: [{ ...valid.floors[0], level: Number.NaN }] },
       { ...valid, floors: [{ ...valid.floors[0], walls: [{ ...valid.floors[0].walls[0], color: false }] }] },
     ];
-    for (const value of cases) expect(() => parseOpen3dProject(value)).toThrow();
+    for (const value of cases) expect(() => parsePlannerProject(value)).toThrow();
   });
 
   it("covers parser defaults and invalid optional primitive branches", () => {
@@ -332,9 +333,9 @@ describe("legacy conversion and parser", () => {
     for (const key of ["walls", "rooms", "doors", "windows", "furniture", "stairs", "columns", "guides", "measurements", "annotations", "textAnnotations", "groups"]) {
       delete sparseFloor[0][key];
     }
-    expect(parseOpen3dProject(sparse).displayUnit).toBe("mm");
+    expect(parsePlannerProject(sparse).displayUnit).toBe("mm");
 
-    const optional: Open3dProject = {
+    const optional: PlannerProject = {
       ...project,
       floors: [{
         ...baseFloor,
@@ -343,9 +344,9 @@ describe("legacy conversion and parser", () => {
         annotations: [{ id: "a-min", x1: 0, y1: 0, x2: 1, y2: 1, offset: 0 }],
       }],
     };
-    expect(parseOpen3dProject(optional)).toEqual(optional);
+    expect(parsePlannerProject(optional)).toEqual(optional);
 
-    const malformed: Open3dProject = {
+    const malformed: PlannerProject = {
       ...project,
       floors: [{
         ...baseFloor,
@@ -354,10 +355,10 @@ describe("legacy conversion and parser", () => {
     };
     const badBoolean = JSON.parse(JSON.stringify(malformed)) as { floors: Array<{ doors: Array<Record<string, unknown>> }> };
     badBoolean.floors[0].doors[0].flipSide = "false";
-    expect(() => parseOpen3dProject(badBoolean)).toThrow("must be a boolean");
+    expect(() => parsePlannerProject(badBoolean)).toThrow("must be a boolean");
     const badMinimum = JSON.parse(JSON.stringify(project)) as { floors: Array<{ walls: Array<Record<string, unknown>> }> };
     badMinimum.floors[0].walls[0].thickness = 0;
-    expect(() => parseOpen3dProject(badMinimum)).toThrow(">= 0.001");
-    expect(() => parseOpen3dProject({ ...project, floors: [{ ...baseFloor, level: "zero" }] })).toThrow("finite number");
+    expect(() => parsePlannerProject(badMinimum)).toThrow(">= 0.001");
+    expect(() => parsePlannerProject({ ...project, floors: [{ ...baseFloor, level: "zero" }] })).toThrow("finite number");
   });
 });

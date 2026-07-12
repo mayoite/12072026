@@ -10,7 +10,7 @@
 
 // ── Display units (mirrors model/types.ts for catalog isolation) ──
 
-export type Open3dCatalogDisplayUnit = "mm" | "cm" | "m" | "in" | "ft-in";
+export type PlannerCatalogDisplayUnit = "mm" | "cm" | "m" | "in" | "ft-in";
 
 // ── Canonical taxonomy types ──
 
@@ -18,7 +18,7 @@ export type Open3dCatalogDisplayUnit = "mm" | "cm" | "m" | "in" | "ft-in";
  * Primary type-based category (e.g. "Sofas", "Tables", "Chairs").
  * This is the canonical organization axis, not room-based.
  */
-export type Open3dCatalogCategory =
+export type PlannerCatalogCategory =
   | "Furniture"
   | "Lighting"
   | "Decor"
@@ -28,19 +28,19 @@ export type Open3dCatalogCategory =
   | "Kitchen & Dining"
   | "Symbols";
 
-export type Open3dCatalogSubCategory = string;
+export type PlannerCatalogSubCategory = string;
 
 /**
  * Full taxonomy path: Category > SubCategory > LeafCategory
  * Example: "Furniture > Sofas & Sectionals > 3-Seater Sofas"
  */
-export type Open3dCatalogTaxonomyPath = string;
+export type PlannerCatalogTaxonomyPath = string;
 
 /**
  * Room as multi-value filterable attribute (not top-level category).
  * Matches Wayfair/IKEA best practice: type-based primary hierarchy.
  */
-export type Open3dRoomTag =
+export type PlannerRoomTag =
   | "Living Room"
   | "Bedroom"
   | "Kitchen"
@@ -57,7 +57,7 @@ export type Open3dRoomTag =
  * Style as multi-select filterable attribute.
  * A product can carry multiple style tags (e.g., Coastal + Boho).
  */
-export type Open3dStyleTag =
+export type PlannerStyleTag =
   | "Modern"
   | "Scandinavian"
   | "Industrial"
@@ -73,7 +73,7 @@ export type Open3dStyleTag =
  * Two-field material: marketing name for display, normalized value for filtering.
  * Example: marketingMaterial="Smoked Oak", normalizedMaterial="Oak"
  */
-export interface Open3dCatalogMaterial {
+export interface PlannerCatalogMaterial {
   /** Customer-facing marketing name (e.g. "Smoked Oak", "Warm Walnut Veneer") */
   marketingMaterial: string;
   /** Normalized value for filtering and feed submission (e.g. "Oak", "Walnut") */
@@ -83,19 +83,19 @@ export interface Open3dCatalogMaterial {
 /**
  * Structured color with hex, name, and normalized family.
  */
-export interface Open3dCatalogColor {
+export interface PlannerCatalogColor {
   hex: string;
   name: string;
   /** Normalized color family for filtering (e.g. "Blue", "Neutral", "Red") */
   normalizedFamily: string;
 }
 
-export type Open3dAssemblyType = "flat-pack" | "partial" | "fully-assembled";
+export type PlannerAssemblyType = "flat-pack" | "partial" | "fully-assembled";
 
-export type Open3dAvailabilityStatus = "in-stock" | "out-of-stock" | "discontinued" | "preorder" | "backorder";
-export type Open3dConfigurability = "fixed" | "configurable";
-export type Open3dMountingContract = "floor" | "wall" | "ceiling" | "floating";
-export type Open3dAssetReadiness = "ready" | "missing-image" | "missing-mesh" | "missing-svg" | "degraded";
+export type PlannerAvailabilityStatus = "in-stock" | "out-of-stock" | "discontinued" | "preorder" | "backorder";
+export type PlannerConfigurability = "fixed" | "configurable";
+export type PlannerMountingContract = "floor" | "wall" | "ceiling" | "floating";
+export type PlannerAssetReadiness = "ready" | "missing-image" | "missing-mesh" | "missing-svg" | "degraded";
 
 // ── Catalog item dimension metadata ──
 
@@ -104,7 +104,7 @@ export type Open3dAssetReadiness = "ready" | "missing-image" | "missing-mesh" | 
  * The legacy OOFPLWeb catalog stores dimensions as cm in fields named `widthMm`/`heightMm`
  * (naming debt documented here). Converters in unitConversion.ts handle the mapping.
  */
-export interface Open3dCatalogDimensions {
+export interface PlannerCatalogDimensions {
   /** Width in canonical millimetres */
   widthMm: number;
   /** Depth in canonical millimetres */
@@ -123,7 +123,7 @@ export interface Open3dCatalogDimensions {
  * A specific variant of a catalog product (e.g., different color, size, material).
  * Master variant + variant array pattern from ThreeKit/commercetools/Fabric.
  */
-export interface Open3dCatalogVariant {
+export interface PlannerCatalogVariant {
   /** Unique variant identifier */
   variantId: string;
   /** Stock-keeping unit for this variant */
@@ -134,26 +134,26 @@ export interface Open3dCatalogVariant {
   label: string;
   /** Variant attributes that differentiate this from the master */
   variantAttributes: {
-    color?: Open3dCatalogColor;
+    color?: PlannerCatalogColor;
     size?: string;
-    material?: Open3dCatalogMaterial;
+    material?: PlannerCatalogMaterial;
     finish?: string;
   };
   /** Variant-specific dimensions if different from master */
-  dimensions: Open3dCatalogDimensions;
+  dimensions: PlannerCatalogDimensions;
   /** Variant-specific pricing */
-  pricing?: Open3dCatalogPricing;
+  pricing?: PlannerCatalogPricing;
   /** Variant-specific preview image */
   imageUrl?: string;
   /** Variant-specific 3D mesh URL */
   meshUrl?: string;
   /** Availability for this specific variant */
-  availability: Open3dAvailabilityStatus;
+  availability: PlannerAvailabilityStatus;
 }
 
 // ── Pricing metadata ──
 
-export interface Open3dCatalogPricing {
+export interface PlannerCatalogPricing {
   /** Price in smallest currency unit (e.g., cents, paise) */
   price: number;
   currencyCode: string;
@@ -164,7 +164,7 @@ export interface Open3dCatalogPricing {
 
 // ── Asset URLs ──
 
-export interface Open3dCatalogAssets {
+export interface PlannerCatalogAssets {
   /** Preview/thumbnail image URL (validated against origin allowlist) */
   previewImageUrl?: string;
   /** Full-resolution or lifestyle image URLs */
@@ -177,7 +177,7 @@ export interface Open3dCatalogAssets {
 
 // ── Provenance metadata ──
 
-export interface Open3dCatalogProvenance {
+export interface PlannerCatalogProvenance {
   /** Source catalog system (e.g. "planner_managed_products", "configurator_products") */
   source: string;
   /** OOFPLWeb legacy product ID if mapped from existing catalog */
@@ -203,7 +203,7 @@ export interface Open3dCatalogProvenance {
  * This is the concept layer (IKEA three-layer model): product identity, taxonomy, metadata.
  * Individual variants carry variant-specific data.
  */
-export interface Open3dCatalogItem {
+export interface PlannerCatalogItem {
   /** Unique catalog identifier (source system ID preserved) */
   id: string;
   /** Human-readable slug for URLs */
@@ -217,37 +217,37 @@ export interface Open3dCatalogItem {
   /** Description / marketing copy */
   description: string;
   /** Primary type-based category (canonical hierarchy axis) */
-  category: Open3dCatalogCategory;
+  category: PlannerCatalogCategory;
   /** Taxonomy subcategory */
-  subCategory: Open3dCatalogSubCategory;
+  subCategory: PlannerCatalogSubCategory;
   /** Full taxonomy path string */
-  taxonomyPath: Open3dCatalogTaxonomyPath;
+  taxonomyPath: PlannerCatalogTaxonomyPath;
   /** Canonical dimensions in millimetres */
-  dimensions: Open3dCatalogDimensions;
+  dimensions: PlannerCatalogDimensions;
   /** Display unit preference */
-  displayUnit: Open3dCatalogDisplayUnit;
+  displayUnit: PlannerCatalogDisplayUnit;
   /** Asset URLs */
-  assets: Open3dCatalogAssets;
+  assets: PlannerCatalogAssets;
   /** Material (two-field: marketing + normalized) */
-  material: Open3dCatalogMaterial;
+  material: PlannerCatalogMaterial;
   /** Room tags (multi-value filterable attribute) */
-  roomTags: Open3dRoomTag[];
+  roomTags: PlannerRoomTag[];
   /** Style tags (multi-select filterable attribute) */
-  styleTags: Open3dStyleTag[];
+  styleTags: PlannerStyleTag[];
   /** Structured color info */
-  color?: Open3dCatalogColor;
+  color?: PlannerCatalogColor;
   /** Pricing metadata */
-  pricing?: Open3dCatalogPricing;
+  pricing?: PlannerCatalogPricing;
   /** Availability status */
-  availability: Open3dAvailabilityStatus;
+  availability: PlannerAvailabilityStatus;
   /** Assembly type */
-  assemblyType: Open3dAssemblyType;
+  assemblyType: PlannerAssemblyType;
   /** Whether dimensions are manufacturer-fixed or user-configurable within bounds */
-  configurability?: Open3dConfigurability;
+  configurability?: PlannerConfigurability;
   /** Placement anchoring contracts supported by this item */
-  mounting?: Open3dMountingContract[];
+  mounting?: PlannerMountingContract[];
   /** Asset readiness for degraded-state search and UI indicators */
-  assetReadiness?: Open3dAssetReadiness[];
+  assetReadiness?: PlannerAssetReadiness[];
   /** Whether product is flat-pack (redundant with assemblyType but explicit for filtering) */
   flatPack: boolean;
   /** Search/discovery tags */
@@ -257,9 +257,9 @@ export interface Open3dCatalogItem {
   /** Maximum weight capacity in kg */
   weightCapacityKg?: number;
   /** Available variants (master variant at index 0 per convention) */
-  variants: Open3dCatalogVariant[];
+  variants: PlannerCatalogVariant[];
   /** Source provenance for identity traceability */
-  provenance: Open3dCatalogProvenance;
+  provenance: PlannerCatalogProvenance;
   /** Whether this is a 2D-only architectural symbol (like electrical/plumbing symbols) */
   symbolOnly: boolean;
   /**
@@ -285,7 +285,7 @@ export interface Open3dCatalogItem {
  * at placement time. Used for undo/AI/export/BOQ traceability.
  * Must not be mutated after creation; edits produce a new snapshot.
  */
-export interface Open3dPlacedConfiguration {
+export interface PlannerPlacedConfiguration {
   /** Unique placement identifier (deterministic, timestamp + random suffix) */
   placementId: string;
   /** ISO 8601 timestamp of placement */
@@ -304,7 +304,7 @@ export interface Open3dPlacedConfiguration {
     label: string;
   } | null;
   /** Overridden dimensions at placement time (if user resized) */
-  overriddenDimensions?: Partial<Open3dCatalogDimensions>;
+  overriddenDimensions?: Partial<PlannerCatalogDimensions>;
   /** Position in floor-plan coordinates */
   position: { x: number; y: number };
   /** Rotation in degrees */
@@ -333,36 +333,36 @@ export interface Open3dPlacedConfiguration {
  * Client-side search index for O(1) lookups and full-text search.
  * Built from normalized catalog data on load.
  */
-export interface Open3dCatalogIndex {
+export interface PlannerCatalogIndex {
   /** O(1) lookup by canonical ID */
-  byId: Map<string, Open3dCatalogItem>;
+  byId: Map<string, PlannerCatalogItem>;
   /** O(1) lookup by slug */
-  bySlug: Map<string, Open3dCatalogItem>;
+  bySlug: Map<string, PlannerCatalogItem>;
   /** O(1) lookup by SKU */
-  bySku: Map<string, Open3dCatalogItem>;
+  bySku: Map<string, PlannerCatalogItem>;
   /** Indexed by category for filtered views */
-  byCategory: Map<Open3dCatalogCategory, Open3dCatalogItem[]>;
+  byCategory: Map<PlannerCatalogCategory, PlannerCatalogItem[]>;
   /** Indexed by tag for filtered views */
-  byTag: Map<string, Open3dCatalogItem[]>;
+  byTag: Map<string, PlannerCatalogItem[]>;
   /** Indexed by room tag for filtered views */
-  byRoom: Map<Open3dRoomTag, Open3dCatalogItem[]>;
+  byRoom: Map<PlannerRoomTag, PlannerCatalogItem[]>;
   /** Indexed by style tag for filtered views */
-  byStyle: Map<Open3dStyleTag, Open3dCatalogItem[]>;
+  byStyle: Map<PlannerStyleTag, PlannerCatalogItem[]>;
   /** Full-text search index: token → item IDs */
   textIndex: Map<string, Set<string>>;
   /** All items in insertion order */
-  all: Open3dCatalogItem[];
+  all: PlannerCatalogItem[];
   /** Index build timestamp */
   builtAt: number;
 }
 
 // ── Search types ──
 
-export type Open3dCatalogSortOrder = "relevance" | "name-asc" | "name-desc" | "price-asc" | "price-desc" | "newest";
-export type Open3dCatalogSortField = "relevance" | "name" | "price" | "newest";
-export type Open3dCatalogSortDirection = "asc" | "desc";
+export type PlannerCatalogSortOrder = "relevance" | "name-asc" | "name-desc" | "price-asc" | "price-desc" | "newest";
+export type PlannerCatalogSortField = "relevance" | "name" | "price" | "newest";
+export type PlannerCatalogSortDirection = "asc" | "desc";
 
-export interface Open3dCatalogDimensionFilter {
+export interface PlannerCatalogDimensionFilter {
   minWidthMm?: number;
   maxWidthMm?: number;
   minDepthMm?: number;
@@ -371,35 +371,35 @@ export interface Open3dCatalogDimensionFilter {
   maxHeightMm?: number;
 }
 
-export interface Open3dCatalogSearchQuery {
+export interface PlannerCatalogSearchQuery {
   /** Free-text search query */
   text?: string;
   /** Category filter */
-  categoryFilter?: Open3dCatalogCategory;
+  categoryFilter?: PlannerCatalogCategory;
   /** Room tag filter (items matching any of the given rooms) */
-  roomFilter?: Open3dRoomTag[];
+  roomFilter?: PlannerRoomTag[];
   /** Style tag filter (items matching any of the given styles) */
-  styleFilter?: Open3dStyleTag[];
+  styleFilter?: PlannerStyleTag[];
   /** Normalized material filter */
   materialFilter?: string[];
   /** Normalized color family filter */
   colorFilter?: string[];
   /** Dimension range filter */
-  dimensionFilter?: Open3dCatalogDimensionFilter;
+  dimensionFilter?: PlannerCatalogDimensionFilter;
   /** Availability filter */
-  availabilityFilter?: Open3dAvailabilityStatus[];
+  availabilityFilter?: PlannerAvailabilityStatus[];
   /** Configurability filter from Phase 03A benchmark */
-  configurabilityFilter?: Open3dConfigurability[];
+  configurabilityFilter?: PlannerConfigurability[];
   /** Mounting/anchoring filter from Phase 03A benchmark */
-  mountingFilter?: Open3dMountingContract[];
+  mountingFilter?: PlannerMountingContract[];
   /** Asset readiness filter for degraded-state recovery */
-  assetReadinessFilter?: Open3dAssetReadiness[];
+  assetReadinessFilter?: PlannerAssetReadiness[];
   /** Sort order */
-  sortOrder?: Open3dCatalogSortOrder;
+  sortOrder?: PlannerCatalogSortOrder;
   /** Deterministic sort field; preferred over legacy sortOrder when set */
-  sortField?: Open3dCatalogSortField;
+  sortField?: PlannerCatalogSortField;
   /** Deterministic sort direction; used with sortField */
-  sortDirection?: Open3dCatalogSortDirection;
+  sortDirection?: PlannerCatalogSortDirection;
   /** Cursor for pagination (opaque string from previous result) */
   cursor?: string;
   /** Page size (default 20 for search, 50 for browse) */
@@ -414,9 +414,9 @@ export interface Open3dCatalogSearchQuery {
   downloadable?: boolean;
 }
 
-export interface Open3dCatalogSearchResult {
+export interface PlannerCatalogSearchResult {
   /** Matching items for the current page */
-  items: Open3dCatalogItem[];
+  items: PlannerCatalogItem[];
   /** Total matching items (across all pages) */
   totalCount: number;
   /** Opaque cursor for next page (null if no more results) */
@@ -429,15 +429,15 @@ export interface Open3dCatalogSearchResult {
 
 // ── Fallback geometry ──
 
-export type Open3dFallbackGeometryType = "box" | "cylinder" | "plane";
+export type PlannerFallbackGeometryType = "box" | "cylinder" | "plane";
 
 /**
  * Visible fallback geometry used when an asset URL is missing, expired, or invalid.
  * Always a colored procedural shape with accessible name and visible border.
  */
-export interface Open3dFallbackGeometry {
+export interface PlannerFallbackGeometry {
   /** Geometry type for fallback rendering */
-  type: Open3dFallbackGeometryType;
+  type: PlannerFallbackGeometryType;
   /** Fill color (hex) */
   color: string;
   /** Border color (hex) for visibility */
@@ -447,14 +447,14 @@ export interface Open3dFallbackGeometry {
   /** Accessible name (e.g. "Missing asset: Office Chair (placeholder)") */
   accessibleName: string;
   /** Approximate dimensions matched to catalog item */
-  dimensions: Open3dCatalogDimensions;
+  dimensions: PlannerCatalogDimensions;
   /** Reason for fallback (for debugging/error reporting) */
   reason: string;
 }
 
 // ── Recent items and favorites ──
 
-export interface Open3dRecentItemEntry {
+export interface PlannerRecentItemEntry {
   /** SKU of the catalog item */
   sku: string;
   /** Catalog item ID for lookup */
@@ -465,7 +465,7 @@ export interface Open3dRecentItemEntry {
   lastUsedAt: string;
 }
 
-export interface Open3dFavoriteEntry {
+export interface PlannerFavoriteEntry {
   /** Catalog item ID */
   catalogId: string;
   /** SKU */
@@ -473,21 +473,21 @@ export interface Open3dFavoriteEntry {
   /** Human-readable name for display */
   name: string;
   /** Category for filtered views */
-  category: Open3dCatalogCategory;
+  category: PlannerCatalogCategory;
   /** ISO 8601 timestamp when favorited */
   favoritedAt: string;
 }
 
-export interface Open3dRecentItemsData {
+export interface PlannerRecentItemsData {
   /** Schema version for migration support */
   schemaVersion: number;
   /** Recent items in reverse-chronological order */
-  items: Open3dRecentItemEntry[];
+  items: PlannerRecentItemEntry[];
 }
 
-export interface Open3dFavoritesData {
+export interface PlannerFavoritesData {
   /** Schema version for migration support */
   schemaVersion: number;
   /** Favorite items */
-  items: Open3dFavoriteEntry[];
+  items: PlannerFavoriteEntry[];
 }

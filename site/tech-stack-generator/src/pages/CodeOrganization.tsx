@@ -21,13 +21,13 @@ import { Folder, FileCode, Gear as Settings, TestTube, Database } from "@phospho
 function getPlannerStructure() {
   return `features/planner/
 ├── 3d/                      # React Three Fiber 3D viewer
-│   ├── Planner3DViewer.tsx  # Main 3D canvas
+│   ├── ThreeLazyViewer.tsx  # Main 3D canvas
 │   ├── viewerMaterials.ts   # Material definitions
 │   ├── models/              # GLTF model components
 │   └── types.ts
-├── canvas-fabric/           # Fabric.js 2D canvas (replacement for tldraw)
+├── canvas/           # Fabric.js 2D canvas (replacement for tldraw)
 │   ├── FloorplanCanvas.tsx  # Core canvas component
-│   ├── FabricCanvasWorkspace.tsx
+│   ├── PlannerHost.tsx
 │   ├── FabricDrawToolsBar.tsx
 │   ├── FabricLibraryPanel.tsx
 │   ├── FabricCanvasContextMenu.tsx
@@ -208,8 +208,8 @@ export function CodeOrganization() {
         <CodeBlock
           title="app/planner/page.tsx (pattern)"
           language="tsx"
-          code={`import { FabricCanvasWorkspace } from '@/features/planner/canvas-fabric/FabricCanvasWorkspace'
-import { Planner3DViewer } from '@/features/planner/3d/Planner3DViewer'
+          code={`import { PlannerHost } from '@/features/planner/canvas/PlannerHost'
+import { ThreeLazyViewer } from '@/features/planner/3d/ThreeLazyViewer'
 import { plannerProducts } from './plannerProducts'
 import { createClient } from '@/lib/supabase/server'
 
@@ -226,8 +226,8 @@ export default async function PlannerPage() {
 
   return (
     <div className="planner-layout">
-      <FabricCanvasWorkspace products={products} userId={user.id} />
-      <Planner3DViewer />
+      <PlannerHost products={products} userId={user.id} />
+      <ThreeLazyViewer />
     </div>
   )
 }`}

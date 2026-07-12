@@ -1,29 +1,29 @@
-import type { Open3dPoint, Open3dProject, Open3dWall } from "../types";
-import type { Open3dIdFactory } from "../project";
+import type { PlannerPoint, PlannerProject, PlannerWall } from "../types";
+import type { PlannerIdFactory } from "../project";
 import { themeColorRef } from "../../shared/readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "../../shared/themeColorTokens";
 import { activeFloorOrThrow } from "./projectActions";
 
-export interface AddOpen3dWallInput {
-  start: Open3dPoint;
-  end: Open3dPoint;
+export interface AddPlannerWallInput {
+  start: PlannerPoint;
+  end: PlannerPoint;
   height?: number;
   thickness?: number;
   color?: string;
 }
 
-export function addOpen3dWall(
-  project: Open3dProject,
-  input: AddOpen3dWallInput,
-  idFactory: Open3dIdFactory,
+export function addPlannerWall(
+  project: PlannerProject,
+  input: AddPlannerWallInput,
+  idFactory: PlannerIdFactory,
   now = new Date().toISOString(),
-): Open3dProject {
+): PlannerProject {
   const activeFloor = activeFloorOrThrow(project);
   const floorIndex = project.floors.findIndex(
     (floor) => floor.id === activeFloor.id,
   );
 
-  const wall: Open3dWall = {
+  const wall: PlannerWall = {
     id: idFactory(),
     start: { ...input.start },
     end: { ...input.end },

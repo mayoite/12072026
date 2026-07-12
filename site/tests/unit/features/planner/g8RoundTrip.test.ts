@@ -3,7 +3,7 @@
  *
  * Covers:
  * 1. furniture generatedGlbUrl under catalog-assets/generated/ survives projectParser
- * 2. buildOpen3dSceneNodes propagates URL after reload
+ * 2. buildPlannerSceneNodes propagates URL after reload
  * 3. shouldLoadGlb rejects designer static
  * 4. disposeAndRemoveObject + cancel-safe commit gate (ThreeViewerInner pattern)
  */
@@ -16,7 +16,7 @@ import {
   shouldLoadGlb,
   rejectDesignerStaticGlbUrl,
 } from "@/features/planner/lib/glbAssetPolicy";
-import { buildOpen3dSceneNodes } from "@/features/planner/3d/buildOpen3dSceneNodes";
+import { buildPlannerSceneNodes } from "@/features/planner/3d/buildPlannerSceneNodes";
 import {
   createSceneObjectFromNode,
   disposeAndRemoveObject,
@@ -31,24 +31,24 @@ import {
   addFurniture,
   updateFurniture,
 } from "@/features/planner/project/model/operations/pureActions";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 import type {
-  Open3dFurnitureItem,
-  Open3dProject,
+  PlannerFurnitureItem,
+  PlannerProject,
 } from "@/features/planner/project/model/types";
 import {
-  exportOpen3dProjectJson,
-  importOpen3dProjectJson,
+  exportPlannerProjectJson,
+  importPlannerProjectJson,
 } from "@/features/planner/project/persistence/projectJson";
-import { parseOpen3dProject } from "@/features/planner/project/shared/document/projectParser";
-import type { Open3dSceneNode } from "@/features/planner/3d/buildOpen3dSceneNodes";
+import { parsePlannerProject } from "@/features/planner/project/shared/document/projectParser";
+import type { PlannerSceneNode } from "@/features/planner/3d/buildPlannerSceneNodes";
 
 function ids(...values: string[]) {
   let index = 0;
   return () => values[index++] ?? `generated-${index}`;
 }
 
-function activeFloor(project: Open3dProject) {
+function activeFloor(project: PlannerProject) {
   const floor = project.floors.find((f) => f.id === project.activeFloorId);
   if (!floor) {
     throw new Error(`Active floor not found: ${project.activeFloorId}`);
@@ -68,8 +68,8 @@ function shouldCommitGlbReplace(
 }
 
 function furnitureNode(
-  overrides: Partial<Open3dSceneNode> & Pick<Open3dSceneNode, "id">,
-): Open3dSceneNode {
+  overrides: Partial<PlannerSceneNode> & Pick<PlannerSceneNode, "id">,
+): PlannerSceneNode {
   return {
     kind: "furniture",
     xMm: 1000,
@@ -94,7 +94,7 @@ describe("G8 round-trip: generatedGlbUrl save/reload continuity", () => {
     const relativePath = modularCabinetV0GeneratedRelativePath(modularOptions);
     expect(relativePath).toContain("catalog-assets/generated/");
 
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "G8 Round Trip",
       now: "2026-07-09T18:00:00.000Z",
@@ -120,26 +120,26 @@ describe("G8 round-trip: generatedGlbUrl save/reload continuity", () => {
 
     expect(activeFloor(project).furniture[0]?.generatedGlbUrl).toBe(relativePath);
 
-    // JSON clone + parseOpen3dProject (projectParser path)
-    const reparsed = parseOpen3dProject(JSON.parse(JSON.stringify(project)));
+    // JSON clone + parsePlannerProject (projectParser path)
+    const reparsed = parsePlannerProject(JSON.parse(JSON.stringify(project)));
     expect(reparsed.floors[0]?.furniture[0]?.generatedGlbUrl).toBe(relativePath);
     expect(reparsed.floors[0]?.furniture[0]?.id).toBe("furn-1");
     expect(reparsed.floors[0]?.furniture[0]?.geometryMode).toBe(
       "modular-cabinet-v0",
     );
 
-    // exportOpen3dProjectJson → importOpen3dProjectJson also routes through parser
-    const json = exportOpen3dProjectJson(project);
+    // exportPlannerProjectJson → importPlannerProjectJson also routes through parser
+    const json = exportPlannerProjectJson(project);
     expect(json).toContain("generatedGlbUrl");
     expect(json).toContain("catalog-assets/generated/");
-    const reloaded = importOpen3dProjectJson(json);
+    const reloaded = importPlannerProjectJson(json);
     const reloadedFurniture = activeFloor(reloaded).furniture[0];
     expect(reloadedFurniture?.id).toBe("furn-1");
     expect(reloadedFurniture?.generatedGlbUrl).toBe(relativePath);
   });
 
   it("projectParser rejects designer static generatedGlbUrl", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-r", "project-r"),
       name: "Reject static",
       now: "2026-07-09T18:01:00.000Z",
@@ -154,14 +154,14 @@ describe("G8 round-trip: generatedGlbUrl save/reload continuity", () => {
     raw.floors[0]!.furniture[0]!.generatedGlbUrl =
       "https://cdn.example.com/models/sofa-hero.glb";
 
-    expect(() => parseOpen3dProject(raw)).toThrow(/not allowed|Static designer/i);
+    expect(() => parsePlannerProject(raw)).toThrow(/not allowed|Static designer/i);
   });
 });
 
-describe("G8 round-trip: buildOpen3dSceneNodes propagates URL", () => {
+describe("G8 round-trip: buildPlannerSceneNodes propagates URL", () => {
   it("propagates catalog-assets/generated generatedGlbUrl onto furniture node after reload", () => {
     const url = "catalog-assets/generated/modular/cab-v0.glb";
-    const furniture: Open3dFurnitureItem = {
+    const furniture: PlannerFurnitureItem = {
       id: "furn-node",
       catalogId: "cabinet-v0",
       position: { x: 500, y: 600 },
@@ -173,7 +173,7 @@ describe("G8 round-trip: buildOpen3dSceneNodes propagates URL", () => {
       generatedGlbUrl: url,
     };
 
-    const project: Open3dProject = {
+    const project: PlannerProject = {
       id: "proj-nodes",
       name: "Nodes",
       activeFloorId: "floor-1",
@@ -201,8 +201,8 @@ describe("G8 round-trip: buildOpen3dSceneNodes propagates URL", () => {
       ],
     };
 
-    const reloaded = parseOpen3dProject(JSON.parse(JSON.stringify(project)));
-    const nodes = buildOpen3dSceneNodes(reloaded);
+    const reloaded = parsePlannerProject(JSON.parse(JSON.stringify(project)));
+    const nodes = buildPlannerSceneNodes(reloaded);
     const node = nodes.find((n) => n.id === "furn-node");
     expect(node?.kind).toBe("furniture");
     expect(node?.generatedGlbUrl).toBe(url);
@@ -210,7 +210,7 @@ describe("G8 round-trip: buildOpen3dSceneNodes propagates URL", () => {
   });
 
   it("does not attach designer static meshUrl as generatedGlbUrl on node", () => {
-    const project: Open3dProject = {
+    const project: PlannerProject = {
       id: "proj-static",
       name: "Static reject",
       activeFloorId: "floor-1",
@@ -247,7 +247,7 @@ describe("G8 round-trip: buildOpen3dSceneNodes propagates URL", () => {
       ],
     };
 
-    const node = buildOpen3dSceneNodes(project).find((n) => n.id === "furn-static");
+    const node = buildPlannerSceneNodes(project).find((n) => n.id === "furn-static");
     expect(node?.generatedGlbUrl).toBeUndefined();
   });
 });

@@ -1,19 +1,19 @@
-import type { Open3dProject } from "../types";
+import type { PlannerProject } from "../types";
 
 export interface HistoryEntry {
-  state: Open3dProject;
+  state: PlannerProject;
   description: string;
   timestamp: number;
 }
 
 export interface HistoryState {
   past: HistoryEntry[];
-  present: Open3dProject;
+  present: PlannerProject;
   future: HistoryEntry[];
   maxHistory: number;
 }
 
-export function createHistoryState(project: Open3dProject, maxHistory = 50): HistoryState {
+export function createHistoryState(project: PlannerProject, maxHistory = 50): HistoryState {
   return {
     past: [],
     present: JSON.parse(JSON.stringify(project)),
@@ -35,7 +35,7 @@ export function pushHistory(state: HistoryState, description: string, now: numbe
   };
 }
 
-export function updatePresent(state: HistoryState, project: Open3dProject): HistoryState {
+export function updatePresent(state: HistoryState, project: PlannerProject): HistoryState {
   return {
     ...state,
     present: JSON.parse(JSON.stringify(project)),

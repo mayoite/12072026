@@ -12,15 +12,15 @@ import {
   writeFurnitureEntityId,
 } from "@/features/planner/canvas/furnitureFabricMapper";
 import {
-  OPEN3D_FABRIC_FURNITURE_ENV,
-  isOpen3dFabricFurnitureEnabled,
+  PLANNER_FABRIC_FURNITURE_ENV,
+  isPlannerFabricFurnitureEnabled,
 } from "@/features/planner/canvas/fabricFurnitureFlag";
-import type { Open3dFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
 import type { CanvasTransform } from "@/features/planner/project/lib/geometry/snapping";
 
 function makeItem(
-  overrides: Partial<Open3dFurnitureItem> & Pick<Open3dFurnitureItem, "id">,
-): Open3dFurnitureItem {
+  overrides: Partial<PlannerFurnitureItem> & Pick<PlannerFurnitureItem, "id">,
+): PlannerFurnitureItem {
   return {
     catalogId: "catalog-desk",
     position: { x: 0, y: 0 },
@@ -317,29 +317,29 @@ describe("furnitureFabricMapper", () => {
   });
 });
 
-describe("isOpen3dFabricFurnitureEnabled", () => {
-  it("exports OPEN3D_FABRIC_FURNITURE_ENV as the public Next env key", () => {
-    expect(OPEN3D_FABRIC_FURNITURE_ENV).toBe("NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE");
+describe("isPlannerFabricFurnitureEnabled", () => {
+  it("exports PLANNER_FABRIC_FURNITURE_ENV as the public Next env key", () => {
+    expect(PLANNER_FABRIC_FURNITURE_ENV).toBe("NEXT_PUBLIC_PLANNER_FABRIC_FURNITURE");
   });
 
   it("is false by default and for non-1 values", () => {
-    expect(isOpen3dFabricFurnitureEnabled({})).toBe(false);
+    expect(isPlannerFabricFurnitureEnabled({})).toBe(false);
     expect(
-      isOpen3dFabricFurnitureEnabled({
-        [OPEN3D_FABRIC_FURNITURE_ENV]: "0",
+      isPlannerFabricFurnitureEnabled({
+        [PLANNER_FABRIC_FURNITURE_ENV]: "0",
       }),
     ).toBe(false);
     expect(
-      isOpen3dFabricFurnitureEnabled({
-        [OPEN3D_FABRIC_FURNITURE_ENV]: "true",
+      isPlannerFabricFurnitureEnabled({
+        [PLANNER_FABRIC_FURNITURE_ENV]: "true",
       }),
     ).toBe(false);
   });
 
   it("is true only when env is exactly 1", () => {
     expect(
-      isOpen3dFabricFurnitureEnabled({
-        [OPEN3D_FABRIC_FURNITURE_ENV]: "1",
+      isPlannerFabricFurnitureEnabled({
+        [PLANNER_FABRIC_FURNITURE_ENV]: "1",
       }),
     ).toBe(true);
   });
@@ -370,27 +370,27 @@ describe("isOpen3dFabricFurnitureEnabled", () => {
     ];
     for (const value of nearMiss) {
       expect(
-        isOpen3dFabricFurnitureEnabled({ [OPEN3D_FABRIC_FURNITURE_ENV]: value }),
+        isPlannerFabricFurnitureEnabled({ [PLANNER_FABRIC_FURNITURE_ENV]: value }),
         `expected OFF for ${JSON.stringify(value)}`,
       ).toBe(false);
     }
   });
 
-  it("reads only OPEN3D_FABRIC_FURNITURE_ENV — ignores wrong keys and non-string 1", () => {
+  it("reads only PLANNER_FABRIC_FURNITURE_ENV — ignores wrong keys and non-string 1", () => {
     expect(
-      isOpen3dFabricFurnitureEnabled({
-        OPEN3D_FABRIC_FURNITURE: "1",
+      isPlannerFabricFurnitureEnabled({
+        PLANNER_FABRIC_FURNITURE: "1",
         NEXT_PUBLIC_OPEN3D_FABRIC: "1",
       }),
     ).toBe(false);
     // Record bags are string | undefined; numeric/boolean must not coerce through === "1"
     const bagWithWrongTypes: Record<string, string | undefined> = {
-      [OPEN3D_FABRIC_FURNITURE_ENV]: "1",
+      [PLANNER_FABRIC_FURNITURE_ENV]: "1",
     };
-    expect(isOpen3dFabricFurnitureEnabled(bagWithWrongTypes)).toBe(true);
+    expect(isPlannerFabricFurnitureEnabled(bagWithWrongTypes)).toBe(true);
     expect(
-      isOpen3dFabricFurnitureEnabled({
-        [OPEN3D_FABRIC_FURNITURE_ENV]: "1",
+      isPlannerFabricFurnitureEnabled({
+        [PLANNER_FABRIC_FURNITURE_ENV]: "1",
         SOME_OTHER_FLAG: "0",
       }),
     ).toBe(true);
@@ -398,11 +398,11 @@ describe("isOpen3dFabricFurnitureEnabled", () => {
 
   it("barrel re-exports flag helpers from canvas index", async () => {
     const barrel = await import("@/features/planner/canvas");
-    expect(barrel.OPEN3D_FABRIC_FURNITURE_ENV).toBe(OPEN3D_FABRIC_FURNITURE_ENV);
-    expect(barrel.isOpen3dFabricFurnitureEnabled({})).toBe(false);
+    expect(barrel.PLANNER_FABRIC_FURNITURE_ENV).toBe(PLANNER_FABRIC_FURNITURE_ENV);
+    expect(barrel.isPlannerFabricFurnitureEnabled({})).toBe(false);
     expect(
-      barrel.isOpen3dFabricFurnitureEnabled({
-        [OPEN3D_FABRIC_FURNITURE_ENV]: "1",
+      barrel.isPlannerFabricFurnitureEnabled({
+        [PLANNER_FABRIC_FURNITURE_ENV]: "1",
       }),
     ).toBe(true);
   });

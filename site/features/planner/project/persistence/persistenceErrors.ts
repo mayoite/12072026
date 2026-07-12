@@ -10,7 +10,7 @@
  *   HTTP 409               → conflict
  */
 
-export type Open3dPersistenceErrorKind =
+export type PlannerPersistenceErrorKind =
   | "unauthenticated"
   | "forbidden"
   | "not-found"
@@ -19,14 +19,14 @@ export type Open3dPersistenceErrorKind =
   | "network"
   | "conflict";
 
-export class Open3dPersistenceError extends Error {
+export class PlannerPersistenceError extends Error {
   constructor(
-    public readonly kind: Open3dPersistenceErrorKind,
+    public readonly kind: PlannerPersistenceErrorKind,
     message: string,
     public readonly cause?: unknown,
   ) {
     super(message);
-    this.name = "Open3dPersistenceError";
+    this.name = "PlannerPersistenceError";
   }
 }
 

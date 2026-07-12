@@ -5,7 +5,7 @@ import { summarizeWorkstationBoqV0 } from "@/features/planner/project/catalog/wo
 import {
   createWorkstationConfigV0,
 } from "@/features/planner/project/catalog/workstationSystemV0";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 
 function ids(...values: string[]) {
   let index = 0;
@@ -19,7 +19,7 @@ describe("workstation BOQ export payload", () => {
       size: { lengthMm: 1500, depthMm: 600 },
       modules: ["desk", "panel"],
     });
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "Export BOQ",
       now: "2026-07-09T20:00:00.000Z",

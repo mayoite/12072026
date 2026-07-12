@@ -5,7 +5,8 @@ import { describe, expect, it } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 
-const publicRoot = path.resolve(__dirname, "../../../../../public");
+// vitest file is site/tests/unit/features/planner → site root is 4 levels up
+const publicRoot = path.resolve(__dirname, "../../../../public");
 
 const REQUIRED_PREVIEWS = [
   "proof-chair.svg",

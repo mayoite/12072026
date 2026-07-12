@@ -1,5 +1,5 @@
 /**
- * Client-safe place + G5 + public write + stamp for open3d inventory.
+ * Client-safe place + G5 + public write + stamp for planner inventory.
  *
  * Node `writeGeneratedGlbToPublic` cannot run in the browser; this path POSTs
  * bytes to `/api/planner/generated-glb` (server writes under site/public), then
@@ -14,15 +14,15 @@ import {
 } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbCore";
 import type { PlacementOptions } from "@/features/planner/project/catalog/placementAction";
 import type {
-  Open3dCatalogItem,
-  Open3dCatalogVariant,
+  PlannerCatalogItem,
+  PlannerCatalogVariant,
 } from "@/features/planner/project/catalog/catalogTypes";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
 export const GENERATED_GLB_WRITE_API_PATH = "/api/planner/generated-glb";
 
 export type PlaceModularWithGeneratedGlbBrowserOptions = {
-  variant?: Open3dCatalogVariant | null;
+  variant?: PlannerCatalogVariant | null;
   placedFrom?: PlacementOptions["placedFrom"];
   rotation?: number;
   scale?: PlacementOptions["scale"];
@@ -104,8 +104,8 @@ export async function writeGeneratedGlbViaApi(
  * (writeToPublic true → API write then stamp).
  */
 export async function placeModularWithGeneratedGlbBrowser(
-  project: Open3dProject,
-  item: Open3dCatalogItem,
+  project: PlannerProject,
+  item: PlannerCatalogItem,
   position: { x: number; y: number },
   options?: PlaceModularWithGeneratedGlbBrowserOptions,
 ): Promise<PlaceModularWithGeneratedGlbBrowserResult> {

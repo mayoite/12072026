@@ -1,7 +1,7 @@
 /**
  * Phase 03 Placement Action Layer
  *
- * Produces an immutable Open3dPlacedConfiguration snapshot from a catalog item
+ * Produces an immutable PlannerPlacedConfiguration snapshot from a catalog item
  * or variant. Integrates with the existing Phase 02 pureActions/history path
  * for undo/redo/autosave observation.
  *
@@ -11,11 +11,11 @@
  * Performance target: <5ms from action dispatch to state update.
  */
 
-import type { Open3dCatalogItem, Open3dCatalogVariant, Open3dPlacedConfiguration } from "./catalogTypes";
+import type { PlannerCatalogItem, PlannerCatalogVariant, PlannerPlacedConfiguration } from "./catalogTypes";
 import type {
-  Open3dFurnitureGeometryMode,
-  Open3dModularCabinetV0Options,
-  Open3dProject,
+  PlannerFurnitureGeometryMode,
+  PlannerModularCabinetV0Options,
+  PlannerProject,
 } from "../model/types";
 import type { PureActionResult, ApplyPureActionOptions } from "../model/operations/pureActions";
 import { addFurniture } from "../model/operations/pureActions";
@@ -36,7 +36,7 @@ import {
 /** Catalog id/slug that maps to modular cabinet-v0 multi-part mesh. */
 export const MODULAR_CABINET_V0_CATALOG_ID = "cabinet-v0";
 
-function isModularCabinetV0CatalogItem(item: Open3dCatalogItem): boolean {
+function isModularCabinetV0CatalogItem(item: PlannerCatalogItem): boolean {
   if (item.geometryMode === "modular-cabinet-v0") return true;
   if (item.geometryMode === "box") return false;
   return (
@@ -59,9 +59,9 @@ function resolveCabinetMaterial(
  * doorStyle defaults to slab (defaultCabinetV0Options).
  */
 export function modularOptionsFromCatalogItem(
-  item: Open3dCatalogItem,
+  item: PlannerCatalogItem,
   materialOverride?: string,
-): Open3dModularCabinetV0Options {
+): PlannerModularCabinetV0Options {
   return defaultCabinetV0Options({
     widthMm: item.dimensions.widthMm,
     depthMm: item.dimensions.depthMm,
@@ -74,8 +74,8 @@ export function modularOptionsFromCatalogItem(
 }
 
 export function resolveFurnitureGeometryMode(
-  item: Open3dCatalogItem,
-): Open3dFurnitureGeometryMode | undefined {
+  item: PlannerCatalogItem,
+): PlannerFurnitureGeometryMode | undefined {
   if (isModularCabinetV0CatalogItem(item)) return "modular-cabinet-v0";
   if (item.geometryMode === "box") return "box";
   return undefined;
@@ -104,14 +104,14 @@ export type PlacementOptions = PlannerPlacementPayload;
 export type PlacementOverrides = Omit<PlannerPlacementPayload, "placedFrom">;
 
 export interface ProjectPlacementResult {
-  snapshot: Open3dPlacedConfiguration;
+  snapshot: PlannerPlacedConfiguration;
   result: PureActionResult;
 }
 
 // ── ID generation ──
 
 /**
- * Placement entity id — crypto.randomUUID() only (no plc- / stripped-hex variants).
+ * Placement entity id — UUID v7 via newEntityId() (no plc- / stripped-hex variants).
  */
 function generatePlacementId(): string {
   return newEntityId();
@@ -158,10 +158,10 @@ export function validatePlannerPlacementPayload(
  * The snapshot is immutable by design. Edits to a placed item produce a NEW snapshot.
  */
 export function placeCatalogItem(
-  item: Open3dCatalogItem,
-  variant: Open3dCatalogVariant | null,
+  item: PlannerCatalogItem,
+  variant: PlannerCatalogVariant | null,
   options: PlacementOptions = { placedFrom: "click" },
-): Open3dPlacedConfiguration {
+): PlannerPlacedConfiguration {
   options = validatePlannerPlacementPayload(options);
   const placementId = generatePlacementId();
   const placedAt = new Date().toISOString();
@@ -205,10 +205,10 @@ export function placeCatalogItem(
  * Create a placement snapshot for click-to-place interaction.
  */
 export function clickToPlace(
-  item: Open3dCatalogItem,
-  variant: Open3dCatalogVariant | null,
+  item: PlannerCatalogItem,
+  variant: PlannerCatalogVariant | null,
   position: { x: number; y: number },
-): Open3dPlacedConfiguration {
+): PlannerPlacedConfiguration {
   return placeCatalogItem(item, variant, {
     placedFrom: "click",
     position,
@@ -219,10 +219,10 @@ export function clickToPlace(
  * Create a placement snapshot for drag-to-place interaction.
  */
 export function dragToPlace(
-  item: Open3dCatalogItem,
-  variant: Open3dCatalogVariant | null,
+  item: PlannerCatalogItem,
+  variant: PlannerCatalogVariant | null,
   position: { x: number; y: number },
-): Open3dPlacedConfiguration {
+): PlannerPlacedConfiguration {
   return placeCatalogItem(item, variant, {
     placedFrom: "drag",
     position,
@@ -233,10 +233,10 @@ export function dragToPlace(
  * Create a placement snapshot for API/programmatic placement.
  */
 export function apiPlace(
-  item: Open3dCatalogItem,
-  variant: Open3dCatalogVariant | null,
+  item: PlannerCatalogItem,
+  variant: PlannerCatalogVariant | null,
   options: PlacementOverrides = {},
-): Open3dPlacedConfiguration {
+): PlannerPlacedConfiguration {
   return placeCatalogItem(item, variant, {
     ...options,
     placedFrom: "api",
@@ -248,8 +248,8 @@ export function apiPlace(
  * Returns true if the snapshot preserves all required identity fields.
  */
 export function verifyPlacementIdentity(
-  snapshot: Open3dPlacedConfiguration,
-  item: Open3dCatalogItem,
+  snapshot: PlannerPlacedConfiguration,
+  item: PlannerCatalogItem,
 ): boolean {
   return (
     snapshot.productIdentity.catalogId === item.id &&
@@ -272,14 +272,14 @@ export function verifyPlacementIdentity(
  *
  * Modular cabinet-v0: stamps `geometryMode` + `modularOptions` only.
  * Leaves `generatedGlbUrl` unset so the product default stays procedural mesh.
- * Open3d inventory: cabinet-v0 only routes to placeModularWithGeneratedGlbBrowser
+ * Planner inventory: cabinet-v0 only routes to placeModularWithGeneratedGlbBrowser
  * (G5 → POST /api/planner/generated-glb → stamp). Other items use this path.
  * Node/tests: placeModularWithGeneratedGlbPlan. Manual stamp: stampFurnitureGeneratedGlb.
  */
 export function placeCatalogItemInProject(
-  project: Open3dProject,
-  item: Open3dCatalogItem,
-  variant: Open3dCatalogVariant | null,
+  project: PlannerProject,
+  item: PlannerCatalogItem,
+  variant: PlannerCatalogVariant | null,
   options: PlacementOptions = { placedFrom: "click" },
 ): ProjectPlacementResult {
   const snapshot = placeCatalogItem(item, variant, options);
@@ -306,7 +306,7 @@ export function placeCatalogItemInProject(
     geometryMode === "modular-cabinet-v0"
       ? modularOptionsFromCatalogItem(item, snapshot.materialOverride)
       : undefined;
-  const projectWithIdentity: Open3dProject = {
+  const projectWithIdentity: PlannerProject = {
     ...placed.project,
     floors: placed.project.floors.map((floor) => ({
       ...floor,
@@ -367,7 +367,7 @@ export function placeCatalogItemInProject(
  * serializable workstationOptions for multi-part procedural mesh.
  */
 export function placeWorkstationConfigOnProject(
-  project: Open3dProject,
+  project: PlannerProject,
   config: WorkstationConfigV0,
   position: { x: number; y: number },
   options?: ApplyPureActionOptions,
@@ -381,7 +381,7 @@ export function placeWorkstationConfigOnProject(
     throw new Error("placeWorkstationConfigOnProject: addFurniture did not return id");
   }
 
-  const projectWithDims: Open3dProject = {
+  const projectWithDims: PlannerProject = {
     ...placed.project,
     floors: placed.project.floors.map((floor) => ({
       ...floor,
@@ -428,7 +428,7 @@ export function placeWorkstationConfigOnProject(
  * smoke without unique assets.
  */
 export function placeWorkstationInstancesOnProject(
-  project: Open3dProject,
+  project: PlannerProject,
   config: WorkstationConfigV0,
   count: number,
   options?: ApplyPureActionOptions & {

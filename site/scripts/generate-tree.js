@@ -16,7 +16,7 @@ const domainNarrations = {
   'features/': 'Feature-Sliced Domain Logic',
   'features/ai/': 'AI Advisor features',
   'features/planner/': 'Canonical planner (open3d canvas, catalog, 3D, AI)',
-  'features/planner/project/': 'Open3d destination workspace (fabric stage + mesh)',
+  'features/planner/project/': 'Live planner project tree (fabric stage + mesh + catalog)',
   'features/catalog/': 'Product catalog logic (filters, schemas, resolvers)',
   'features/crm/': 'CRM contact surfaces and business stats',
   'features/ops/': 'Internal ops portal views',

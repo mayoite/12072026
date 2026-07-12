@@ -1,13 +1,13 @@
 /**
- * Pure document ↔ Fabric pose mapping for open3d furniture stage (Fabric 2B slice).
+ * Pure document ↔ Fabric pose mapping for planner furniture stage (Fabric 2B slice).
  *
  * Coordinates: project space is millimetres; Fabric left/top use the same screen
  * space as the plan canvas (projectToScreen / screenToProject).
- * entityId on Fabric objects MUST equal Open3dFurnitureItem.id — never invent ids.
+ * entityId on Fabric objects MUST equal PlannerFurnitureItem.id — never invent ids.
  * Fabric JSON is never persisted; document furniture is the source of truth.
  */
 
-import type { Open3dFurnitureItem, Open3dPoint } from "@/features/planner/project/model/types";
+import type { PlannerFurnitureItem, PlannerPoint } from "@/features/planner/project/model/types";
 import { normalizeDegrees } from "@/features/planner/project/model/units";
 import {
   projectToScreen,
@@ -40,7 +40,7 @@ export type FurnitureFabricPose = {
   width: number;
   /** Footprint depth in screen units (depthMm * scale). */
   height: number;
-  /** Degrees, same convention as Open3dFurnitureItem.rotation. */
+  /** Degrees, same convention as PlannerFurnitureItem.rotation. */
   angle: number;
   widthMm: number;
   depthMm: number;
@@ -49,7 +49,7 @@ export type FurnitureFabricPose = {
 
 export type FurnitureDocumentPoseUpdate = {
   entityId: string;
-  position: Open3dPoint;
+  position: PlannerPoint;
   rotation: number;
 };
 
@@ -60,7 +60,7 @@ export type FurnitureFabricPoseInput = {
   angle: number;
 };
 
-export function furnitureFootprintMm(item: Pick<Open3dFurnitureItem, "width" | "depth">): {
+export function furnitureFootprintMm(item: Pick<PlannerFurnitureItem, "width" | "depth">): {
   widthMm: number;
   depthMm: number;
 } {
@@ -75,7 +75,7 @@ export function furnitureFootprintMm(item: Pick<Open3dFurnitureItem, "width" | "
  * entityId is furniture.id — required for write-back without Fabric JSON.
  */
 export function furnitureToFabricPose(
-  item: Open3dFurnitureItem,
+  item: PlannerFurnitureItem,
   transform: CanvasTransform = DEFAULT_FABRIC_STAGE_TRANSFORM,
 ): FurnitureFabricPose {
   const { widthMm, depthMm } = furnitureFootprintMm(item);
@@ -137,7 +137,7 @@ export function writeFurnitureEntityId(
  * Rebuild helper: map a full furniture list to poses (stable order preserved).
  */
 export function furnitureListToFabricPoses(
-  furniture: readonly Open3dFurnitureItem[],
+  furniture: readonly PlannerFurnitureItem[],
   transform: CanvasTransform = DEFAULT_FABRIC_STAGE_TRANSFORM,
 ): FurnitureFabricPose[] {
   return furniture.map((item) => furnitureToFabricPose(item, transform));

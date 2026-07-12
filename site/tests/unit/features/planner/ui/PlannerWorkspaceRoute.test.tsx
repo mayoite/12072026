@@ -14,24 +14,23 @@ vi.mock("next/dynamic", () => {
 });
 
 vi.mock("@/features/planner/components/Providers", () => ({
-  Providers: ({ children }: any) => <div data-testid="providers">{children}</div>,
+  Providers: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="providers">{children}</div>
+  ),
 }));
 
 vi.mock("@/features/planner/onboarding/ProjectSetupGate", () => ({
-  ProjectSetupGate: ({ children }: any) => <div data-testid="setup-gate">{children}</div>,
-}));
-
-vi.mock("@/features/planner/ui/PlannerCanvasEnhancements", () => ({
-  PlannerCanvasEnhancements: () => <div data-testid="enhancements" />,
+  ProjectSetupGate: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="setup-gate">{children}</div>
+  ),
 }));
 
 describe("PlannerWorkspaceRoute", () => {
-  it("renders correctly", () => {
+  it("mounts Providers → ProjectSetupGate → PlannerHost shell", () => {
     render(<PlannerWorkspaceRoute guestMode={true} planId="123" />);
 
     expect(screen.getByTestId("providers")).toBeDefined();
     expect(screen.getByTestId("setup-gate")).toBeDefined();
     expect(screen.getByTestId("workspace")).toBeDefined();
-    expect(screen.getByTestId("enhancements")).toBeDefined();
   });
 });

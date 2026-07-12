@@ -1,36 +1,36 @@
 import Fuse from "fuse.js";
 
-import type { Open3dCatalogItem } from "./catalogTypes";
+import type { PlannerCatalogItem } from "./catalogTypes";
 
 /**
- * Maximum catalogue results surfaced to the planner at once (REC-02,
- * `00-REVISION.md` Decision 2 / `02-PHASE-1.md` §1A). Keeps the catalogue grid
- * scannable and bounds render cost; deeper browsing happens through filters and
- * categories rather than an unbounded result list.
+ * Default maximum catalogue results shown in the planner inventory at once.
+ * Owner: multi-line multi-SKU — floor of **50** (was 24). Deeper browse via
+ * filters/categories/search; raise later if needed.
  */
-export const OPEN3D_CATALOG_RESULT_CAP = 24;
+export const PLANNER_CATALOG_RESULT_CAP = 50;
 
 /**
- * Clamp a result list to the catalogue cap. Non-mutating; returns the input
- * unchanged when already within the cap.
+ * Clamp a result list to the catalogue cap. Non-mutating; returns a copy.
  */
 export function capCatalogResults<T>(
   items: readonly T[],
-  cap: number = OPEN3D_CATALOG_RESULT_CAP,
+  cap: number = PLANNER_CATALOG_RESULT_CAP,
 ): T[] {
-  return items.length > cap ? items.slice(0, cap) : [...items];
+  if (!Number.isFinite(cap) || cap <= 0) return [];
+  const limit = Math.floor(cap);
+  return items.length > limit ? items.slice(0, limit) : [...items];
 }
 
 export interface PlannerCatalogCollectionItem {
   key: string;
   textValue: string;
-  item: Open3dCatalogItem;
+  item: PlannerCatalogItem;
 }
 
 export function rankCatalogItems(
-  items: readonly Open3dCatalogItem[],
+  items: readonly PlannerCatalogItem[],
   query: string,
-): Open3dCatalogItem[] {
+): PlannerCatalogItem[] {
   const normalized = query.trim();
   if (!normalized) return [...items];
   return new Fuse(items, {
@@ -51,7 +51,7 @@ export function rankCatalogItems(
 }
 
 export function toPlannerCatalogCollection(
-  items: readonly Open3dCatalogItem[],
+  items: readonly PlannerCatalogItem[],
 ): PlannerCatalogCollectionItem[] {
   return items.map((item) => ({
     key: item.id,

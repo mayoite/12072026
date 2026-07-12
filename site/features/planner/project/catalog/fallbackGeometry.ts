@@ -8,7 +8,7 @@
  * accessible name. Fallback is noticeable but safe.
  */
 
-import type { Open3dCatalogDimensions, Open3dFallbackGeometry } from "./catalogTypes";
+import type { PlannerCatalogDimensions, PlannerFallbackGeometry } from "./catalogTypes";
 import { buildAccessibleName } from "./unitConversion";
 
 // ── Fallback color palette ──
@@ -43,10 +43,10 @@ const FALLBACK_COLORS: Record<string, { fill: string; border: string }> = {
 export function buildFallbackGeometry(params: {
   name: string;
   category: string;
-  dimensions: Open3dCatalogDimensions;
+  dimensions: PlannerCatalogDimensions;
   reason: string;
   type?: "image" | "mesh" | "texture";
-}): Open3dFallbackGeometry {
+}): PlannerFallbackGeometry {
   const colors = FALLBACK_COLORS[params.category] ?? {
     fill: "#FFEB3B",
     border: "#F44336",
@@ -78,9 +78,9 @@ export function buildFallbackGeometry(params: {
 export function buildImageFallback(
   name: string,
   category: string,
-  dimensions: Open3dCatalogDimensions,
+  dimensions: PlannerCatalogDimensions,
   reason: string,
-): Open3dFallbackGeometry {
+): PlannerFallbackGeometry {
   return buildFallbackGeometry({ name, category, dimensions, reason, type: "image" });
 }
 
@@ -90,9 +90,9 @@ export function buildImageFallback(
 export function buildMeshFallback(
   name: string,
   category: string,
-  dimensions: Open3dCatalogDimensions,
+  dimensions: PlannerCatalogDimensions,
   reason: string,
-): Open3dFallbackGeometry {
+): PlannerFallbackGeometry {
   return buildFallbackGeometry({ name, category, dimensions, reason, type: "mesh" });
 }
 
@@ -102,8 +102,8 @@ export function buildMeshFallback(
 export function buildTextureFallback(
   name: string,
   category: string,
-  dimensions: Open3dCatalogDimensions,
+  dimensions: PlannerCatalogDimensions,
   reason: string,
-): Open3dFallbackGeometry {
+): PlannerFallbackGeometry {
   return buildFallbackGeometry({ name, category, dimensions, reason, type: "texture" });
 }

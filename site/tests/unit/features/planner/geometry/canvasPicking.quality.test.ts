@@ -5,10 +5,10 @@
 import { describe, expect, it } from "vitest";
 
 import { pickOpeningAtPoint } from "@/features/planner/project/lib/geometry/canvasPicking";
-import type { Open3dWall } from "@/features/planner/project/model/types";
+import type { PlannerWall } from "@/features/planner/project/model/types";
 
 describe("pickOpeningAtPoint (quality non-reg)", () => {
-  const wall: Open3dWall = {
+  const wall: PlannerWall = {
     id: "w1",
     start: { x: 0, y: 0 },
     end: { x: 4000, y: 0 },

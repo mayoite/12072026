@@ -102,27 +102,16 @@ export async function exportModularCabinetV0GlbBinary(
     const buffer = await exportGroupToGlbArrayBuffer(meshGroup);
 
     stages.push("mesh-g6-validate-glb");
-    // validateGlbAsset → @gltf-transform NodeIO/node:fs — server-only dynamic import.
-    // Browser place path skips heavy validate (bytes still written via API when used).
-    const validation =
-      typeof window === "undefined"
-        ? await (
-            await import("@/features/planner/lib/assetPipeline")
-          ).validateGlbAsset(buffer)
-        : {
-            valid: true,
-            errors: [] as string[],
-            nodeCount: 0,
-            triangleCount: 0,
-          };
-    if (!validation.valid) {
-      return {
-        ok: false,
-        stages,
-        failedAt: "mesh-g6-validate-glb",
-        error: validation.errors.join("; ") || "GLB validation failed",
-      };
-    }
+    // Do NOT import assetPipeline / @gltf-transform here — this module is shared with the
+    // browser place path (OOPlannerWorkspace). Webpack would pull node:fs into the client.
+    // Full Node validation: callers under server/tests use validateGlbAsset separately
+    // (runMeshStages / exportModularAndWrite). Browser trusts G5 bytes + API write.
+    const validation = {
+      valid: true,
+      errors: [] as string[],
+      nodeCount: 0,
+      triangleCount: 0,
+    };
 
     return {
       ok: true,

@@ -26,7 +26,7 @@ import {
   estimateConversionTimeout,
   getSketchRecoveryMessage,
 } from "@/features/planner/project/ai/sketchToPlanClient";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 import type { SpaceSuggestLayout } from "@/features/planner/project/ai/advisorTypes";
 
 const VALID_LAYOUT: SpaceSuggestLayout = {
@@ -74,7 +74,7 @@ describe("advisor types and client validation", () => {
 
 describe("advisor actions", () => {
   it("previews and applies layout suggestions to a project", () => {
-    const project = createOpen3dProject({ name: "Advisor Target" });
+    const project = createPlannerProject({ name: "Advisor Target" });
     const preview = previewSuggestionActions({
       type: "suggestion",
       description: "Add layout",
@@ -89,7 +89,7 @@ describe("advisor actions", () => {
   });
 
   it("applies suggestions through the action layer", async () => {
-    const project = createOpen3dProject({ name: "Suggestion Project" });
+    const project = createPlannerProject({ name: "Suggestion Project" });
 
     const layoutResult = await applySuggestion(
       {

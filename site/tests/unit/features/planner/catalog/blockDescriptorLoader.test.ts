@@ -3,7 +3,7 @@
  *
  * Covers:
  *   §02-LOAD-01  tryLoad / loadBySlug / loadAll entry points return either a
- *                typed `BlockDescriptor` or a discriminated `Open3dDescriptorError`.
+ *                typed `BlockDescriptor` or a discriminated `PlannerDescriptorError`.
  *   §02-LOAD-02  directory pinned to `site/block-descriptors/`; traversal
  *                rejected; whitelist `.json` only.
  *   §02-LOAD-03  loader fully typed; no `any`, no `@ts-ignore`, no unchecked
@@ -27,7 +27,7 @@ import {
   loadBySlug,
   tryLoad,
   clearLoaderCache,
-  type Open3dDescriptorError,
+  type PlannerDescriptorError,
 } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
 const VALID_UUID_V4 = "f81e3a1b-16f4-4c2a-9e6b-8e1f3b7e1a44";
@@ -318,9 +318,9 @@ describe("02-LOADER: storage boundary", () => {
     expect(all.map((d) => d.slug).sort()).toEqual(["chaise", "side-table"]);
   });
 
-  it("Open3dDescriptorError union covers all four canonical kinds", () => {
-    // Compile-time check: Open3dDescriptorError is a closed union.
-    const cases: Open3dDescriptorError[] = [
+  it("PlannerDescriptorError union covers all four canonical kinds", () => {
+    // Compile-time check: PlannerDescriptorError is a closed union.
+    const cases: PlannerDescriptorError[] = [
       {
         kind: "invalid",
         code: "422.invalid",

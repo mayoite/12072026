@@ -7,9 +7,10 @@ import { AIAssistDrawer } from "@/features/planner/ai/AIAssistDrawer";
 import type { WorkspaceAiBridge } from "@/features/planner/ai/workspaceAiBridge";
 
 import { InventoryPanel } from "./InventoryPanel";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 import type { WorkstationConfigV0 } from "@/features/planner/project/catalog/workstationSystemV0";
-import type { Open3dWorkspaceCatalogStatus } from "@/features/planner/project/catalog/useOpen3dWorkspaceCatalog";
+import type { PlannerWorkspaceCatalogStatus } from "@/features/planner/project/catalog/usePlannerWorkspaceCatalog";
+import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
 import styles from "./workspace.module.css";
 
 type WorkspaceLeftTab = "library" | "ai-assist";
@@ -20,13 +21,14 @@ const TAB_META: Record<WorkspaceLeftTab, { label: string; Icon: Icon }> = {
 };
 
 export type WorkspaceLeftPanelProps = {
-  catalogItems: Open3dCatalogItem[];
+  catalogItems: PlannerCatalogItem[];
   isLoading: boolean;
-  catalogStatus: Open3dWorkspaceCatalogStatus;
+  catalogStatus: PlannerWorkspaceCatalogStatus;
   onItemPlace: (itemId: string) => void;
   onWorkstationConfigPlace: (config: WorkstationConfigV0) => void;
   onWorkstationConfigBatchPlace: (config: WorkstationConfigV0, count: number) => void;
   workspaceBridge: WorkspaceAiBridge;
+  displayUnit?: PlannerDisplayUnit;
 };
 
 export function WorkspaceLeftPanel({
@@ -37,6 +39,7 @@ export function WorkspaceLeftPanel({
   onWorkstationConfigPlace,
   onWorkstationConfigBatchPlace,
   workspaceBridge,
+  displayUnit = "cm",
 }: WorkspaceLeftPanelProps) {
   return (
     <Tabs
@@ -63,6 +66,7 @@ export function WorkspaceLeftPanel({
           onItemPlace={onItemPlace}
           onWorkstationConfigPlace={onWorkstationConfigPlace}
           onWorkstationConfigBatchPlace={onWorkstationConfigBatchPlace}
+          displayUnit={displayUnit}
         />
       </TabPanel>
 

@@ -6,7 +6,7 @@ import {
   nativeCanvasScaleLimits,
 } from "@/features/planner/project/lib/geometry/fitCanvasView";
 import { projectToScreen } from "@/features/planner/project/lib/geometry/snapping";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 
 describe("fitCanvasView", () => {
   it("exposes scale limits aligned with planner viewport config", () => {
@@ -17,7 +17,7 @@ describe("fitCanvasView", () => {
   });
 
   it("frames empty floors to the configured default world square", () => {
-    const project = createOpen3dProject({ name: "Empty" });
+    const project = createPlannerProject({ name: "Empty" });
     const transform = fitCanvasTransformToFloor(project.floors[0]!, 800, 600);
     expect(transform.scale).toBeGreaterThan(0);
     expect(transform.scale).toBeLessThanOrEqual(0.15);
@@ -30,7 +30,7 @@ describe("fitCanvasView", () => {
   });
 
   it("centers wall geometry inside the viewport", () => {
-    const project = createOpen3dProject({ name: "Wall" });
+    const project = createPlannerProject({ name: "Wall" });
     const floor = {
       ...project.floors[0]!,
       walls: [

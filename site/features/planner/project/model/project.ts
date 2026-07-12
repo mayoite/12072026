@@ -1,31 +1,31 @@
 import type {
-  Open3dFloor,
-  Open3dPlannerSceneEnvelope,
-  Open3dProject,
-  Open3dWall,
+  PlannerFloor,
+  PlannerSceneEnvelope,
+  PlannerProject,
+  PlannerWall,
 } from "./types";
 import { themeColorRef } from "../shared/readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "../shared/themeColorTokens";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
 
-export type Open3dIdFactory = () => string;
+export type PlannerIdFactory = () => string;
 
 function defaultIdFactory(): string {
   return newEntityId();
 }
 
-export interface CreateOpen3dProjectOptions {
-  idFactory?: Open3dIdFactory;
+export interface CreatePlannerProjectOptions {
+  idFactory?: PlannerIdFactory;
   name?: string;
   now?: string;
 }
 
-export function createOpen3dProject(
-  options: CreateOpen3dProjectOptions = {},
-): Open3dProject {
+export function createPlannerProject(
+  options: CreatePlannerProjectOptions = {},
+): PlannerProject {
   const idFactory = options.idFactory ?? defaultIdFactory;
   const now = options.now ?? new Date().toISOString();
-  const floor: Open3dFloor = {
+  const floor: PlannerFloor = {
     id: idFactory(),
     name: "Ground Floor",
     level: 0,
@@ -54,7 +54,7 @@ export function createOpen3dProject(
   };
 }
 
-export interface CreateRectangularRoomOptions extends CreateOpen3dProjectOptions {
+export interface CreateRectangularRoomOptions extends CreatePlannerProjectOptions {
   widthMm: number;
   depthMm: number;
   wallHeightMm?: number;
@@ -63,9 +63,9 @@ export interface CreateRectangularRoomOptions extends CreateOpen3dProjectOptions
 
 export function createRectangularRoomProject(
   options: CreateRectangularRoomOptions,
-): Open3dProject {
+): PlannerProject {
   const idFactory = options.idFactory ?? defaultIdFactory;
-  const project = createOpen3dProject({ ...options, idFactory });
+  const project = createPlannerProject({ ...options, idFactory });
   const width = options.widthMm;
   const depth = options.depthMm;
   const height = options.wallHeightMm ?? 2700;
@@ -76,7 +76,7 @@ export function createRectangularRoomProject(
     { x: width, y: depth },
     { x: 0, y: depth },
   ];
-  const walls: Open3dWall[] = points.map((start, index) => ({
+  const walls: PlannerWall[] = points.map((start, index) => ({
     id: idFactory(),
     start,
     end: points[(index + 1) % points.length],
@@ -91,9 +91,9 @@ export function createRectangularRoomProject(
   };
 }
 
-export function createOpen3dSceneEnvelope(
-  project: Open3dProject,
-): Open3dPlannerSceneEnvelope {
+export function createPlannerSceneEnvelope(
+  project: PlannerProject,
+): PlannerSceneEnvelope {
   return {
     type: "open3d-floorplan-project",
     version: 1,

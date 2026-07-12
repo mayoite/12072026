@@ -42,11 +42,11 @@ Label work: **`[surface] / [layer] / [module]`** (e.g. `planner / L3 / inventory
 | Phase | Surface | Product tie-in |
 |-------|---------|----------------|
 | UI-0 | Shared tokens + ThemeEditor outlier | L0 |
-| UI-1 | **Planner open3d** only | 1A — L1 then L3 |
+| UI-1 | **Planner workspace** (`editor`/`canvas`/`project`) | 1A — L1 then L3 |
 | UI-2 | **Admin** (no-code svg-editor; Puck portal renderer) | A4 |
 | UI-3 | **Site marketing** (optional) | Post-1A |
 
-Guest/canvas shells: **Phase 2** promotion only.
+Live shells: `/planner/guest` · `/planner/canvas`.
 
 ---
 
@@ -54,11 +54,11 @@ Guest/canvas shells: **Phase 2** promotion only.
 
 | Surface | Path roots | TSX | CSS |
 |---------|------------|-----|-----|
-| **Planner open3d** | `features/planner/project/**` | Structure + behavior only; **no Tailwind utilities** | `*.module.css` with `var(--planner-*)` / `var(--surface-*)` only |
+| **Planner workspace** | `features/planner/{editor,canvas,3d,project,ui}/**` | Structure + behavior only; **no Tailwind utilities** | `*.module.css` with `var(--planner-*)` / `var(--surface-*)` only |
 | **Admin** | `app/admin/**`, `features/planner/admin/**` | Semantic utilities (`text-strong`, `bg-panel`, `border-soft`) + `admin-*` classes | No `slate-*` / `blue-*` / `zinc-*` / `gray-*` / `emerald-*` palette |
 | **Site marketing** | `app/(site)/**`, `components/**` | `typ-*`, scheme utilities; layout Tailwind OK | Route bundles in `app/css/core/site/` |
 
-**Cross-surface copy-paste is forbidden.** Admin does not import open3d modules; planner does not copy admin Tailwind patterns.
+**Cross-surface copy-paste is forbidden.** Admin does not import planner workspace modules; planner does not copy admin Tailwind patterns.
 
 ---
 
@@ -66,11 +66,11 @@ Guest/canvas shells: **Phase 2** promotion only.
 
 | Surface | Layout / entry must import |
 |---------|---------------------------|
-| Open3d pilot (`/planner/open3d`) | `app/css/core/locked/planner/open3d-workspace.css` via `app/planner/open3d/layout.tsx` |
+| Planner workspace (`/planner/guest` · `/planner/canvas`) | `app/css/core/locked/planner/open3d-workspace.css` via `app/planner/(workspace)/layout.tsx` (filename **fence** — do not rename) |
 | Admin | `data-admin-layout` shell + `admin-pages.css` (via admin layout) |
 | Site | `app/css/index.css` (site layout) |
 
-New open3d editor modules **do not** add their own `@import` of `index.css` or palette files.
+New planner editor modules **do not** add their own `@import` of `index.css` or palette files.
 
 ---
 
@@ -81,9 +81,9 @@ Every new UI module under the path roots above **must** satisfy:
 - [ ] Correct surface bundle already loaded by route layout (not re-imported ad hoc)
 - [ ] Path matches [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) decision tree
 - [ ] No raw Tailwind palette classes in TSX
-- [ ] No `#hex` or `rgb()` / `hsl()` in open3d `*.module.css` (tokens only)
+- [ ] No `#hex` or `rgb()` / `hsl()` in planner workspace `*.module.css` (tokens only)
 - [ ] No new `--planner-primary*` usage (use `--planner-accent*`; primary is compat shim only)
-- [ ] Icons: Phosphor in `open3d/`; Lucide in admin (per `docs/Lockedfiles/03-dependencies-engines-current.md`)
+- [ ] Icons: Phosphor in planner workspace; Lucide in admin (per `docs/Lockedfiles/03-dependencies-engines-current.md`)
 - [ ] Repeated pattern (3×) → extract to `app/css/core/components/*.css` before a fourth copy
 - [ ] `pnpm run lint:ui` passes (strict after UI-1 shell lands)
 

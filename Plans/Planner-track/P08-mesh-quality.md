@@ -10,7 +10,7 @@
 
 **Out of scope:** Photoreal · full kitchens/hardware · 2D host thrash · adding a second plan host · cloud catalog · designer static GLB · non–cabinet-v0 · writes under `site/public/**`. Stay imperative Three — no R3F rewrite for pretty PNGs.
 
-**Depends:** P01 path truth. P07 browser place optional — headless mesh PNG is default smoke.
+**Depends:** P01 path truth only. **Not blocked by P05 or P07** — headless/unit mesh is the default smoke; browser place is optional convenience, not a gate.
 
 ---
 
@@ -55,7 +55,7 @@ Default slab children **exact order:** `toe` → `carcass` → `door-slab` (pair
 | `modularCabinetV0*.test.ts` · `modularPlaceMesh.test.ts` | TDD |
 | Evidence | NOTES · vitest logs · headless PNGs · `run.json` |
 
-Prefix open3d: `site/features/planner/project/`.
+Prefix: `site/features/planner/project/` (and live 3D under `features/planner/3d/`).
 
 ---
 

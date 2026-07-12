@@ -21,7 +21,7 @@ const violations = [];
 const RAW_PALETTE =
   /\b(?:bg|text|border|ring|from|to|via|fill|stroke)-(?:slate|blue|zinc|gray|emerald|neutral|stone)-(?:\d{2,3}|black|white)\b/;
 
-const OPEN3D_TAILWIND_UTIL =
+const PLANNER_TAILWIND_UTIL =
   /className=["'`][^"'`]*\b(?:bg|text|border|p-|m-|flex|grid|gap-|px-|py-|pt-|pb-|pl-|pr-|mt-|mb-|ml-|mr-|w-|h-|min-h-|max-h-|rounded|shadow)-/;
 
 function walk(dir, filter) {
@@ -58,19 +58,19 @@ function checkAdminPalette() {
 }
 
 function checkOpen3dTailwindInTsx() {
-  const open3dDir = join(SITE_ROOT, "features/planner/workspace");
-  const files = walk(open3dDir, (p) => /\.tsx$/.test(p));
+  const plannerDir = join(SITE_ROOT, "features/planner/workspace");
+  const files = walk(plannerDir, (p) => /\.tsx$/.test(p));
   for (const file of files) {
     const text = readFileSync(file, "utf8");
-    if (OPEN3D_TAILWIND_UTIL.test(text)) {
+    if (PLANNER_TAILWIND_UTIL.test(text)) {
       violations.push(`${relative(SITE_ROOT, file)}: Tailwind utility in open3d TSX`);
     }
   }
 }
 
 function checkOpen3dModuleHex() {
-  const open3dDir = join(SITE_ROOT, "features/planner/workspace");
-  const files = walk(open3dDir, (p) => /\.module\.css$/.test(p));
+  const plannerDir = join(SITE_ROOT, "features/planner/workspace");
+  const files = walk(plannerDir, (p) => /\.module\.css$/.test(p));
   const hexPattern = /#[0-9a-fA-F]{3,8}\b/;
   for (const file of files) {
     const text = readFileSync(file, "utf8");

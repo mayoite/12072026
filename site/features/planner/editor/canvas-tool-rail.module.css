@@ -35,37 +35,125 @@
   width: var(--planner-control-target, 2.5rem);
   height: var(--planner-control-target, 2.5rem);
   padding: 0;
-  border: 1px solid transparent;
+  border: none;
   border-radius: var(--radius-md, 0.5rem);
   background: transparent;
   color: var(--text-body);
   cursor: pointer;
+}
+
+.toolBtn:disabled,
+.toolBtn[data-disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.toolFace {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md, 0.5rem);
   transition:
     background 120ms ease,
     border-color 120ms ease,
-    color 120ms ease;
+    color 120ms ease,
+    box-shadow 120ms ease;
 }
 
-.toolBtn:hover {
+.toolBtn:hover .toolFace,
+.toolBtn[data-hovered] .toolFace {
   background: color-mix(in srgb, var(--surface-soft) 85%, var(--surface-panel));
   border-color: var(--border-soft);
 }
 
-.toolBtn:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-.toolBtn[data-active="true"],
-.toolBtn[data-selected] {
+.toolBtn[data-selected] .toolFace,
+.toolFace[data-selected="true"] {
   background: color-mix(in srgb, var(--color-primary) 14%, var(--surface-panel));
   border-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
   color: var(--color-primary);
 }
 
-.toolBtn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+.toolFace[data-focus-visible="true"],
+.toolBtn[data-focus-visible] .toolFace {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.toolFace[data-pressed="true"] {
+  transform: scale(0.96);
+}
+
+.toolBtn[data-deferred="true"] .toolFace {
+  opacity: 0.88;
+}
+
+.deferredDot {
+  position: absolute;
+  top: 0.2rem;
+  left: 0.2rem;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 999px;
+  background: var(--text-muted);
+}
+
+.shortcut {
+  position: absolute;
+  right: 0.2rem;
+  bottom: 0.15rem;
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.tooltip {
+  max-width: 14rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md, 0.5rem);
+  background: var(--surface-panel);
+  color: var(--text-body);
+  box-shadow: var(--shadow-md, 0 8px 24px color-mix(in srgb, #000 12%, transparent));
+  font-size: var(--type-label-size, 0.75rem);
+  line-height: 1.35;
+  z-index: calc(var(--ws-z-rail, 60) + 20);
+}
+
+.tooltipTitle {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.tooltipBody {
+  display: block;
+  color: var(--text-muted);
+}
+
+.tooltipMeta {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 :global([data-planner-density="compact"]) .toolBtn {
@@ -79,12 +167,12 @@
 }
 
 @media (forced-colors: active) {
-  .toolBtn {
+  .toolFace {
     border-color: ButtonBorder;
   }
 
-  .toolBtn[data-active="true"],
-.toolBtn[data-selected] {
+  .toolBtn[data-selected] .toolFace,
+  .toolFace[data-selected="true"] {
     color: HighlightText;
     background: Highlight;
     forced-color-adjust: none;
@@ -133,38 +221,15 @@
   .shortcut {
     display: none;
   }
+
+  .tooltip {
+    /* Prefer below on mobile rail */
+    max-width: 12rem;
+  }
 }
 
 @media print {
   .rail {
     display: none;
   }
-}
-
-.shortcut {
-  position: absolute;
-  right: 0.2rem;
-  bottom: 0.15rem;
-  font-size: 0.5625rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--text-muted);
-  pointer-events: none;
-}
-
-.toolWrap {
-  position: relative;
-  display: flex;
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }

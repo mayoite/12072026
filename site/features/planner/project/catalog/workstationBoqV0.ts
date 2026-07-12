@@ -1,9 +1,9 @@
 /**
- * Systems v0 — pure BOQ lines from open3d project furniture (ws-v0 keys).
+ * Systems v0 — pure BOQ lines from planner project furniture (ws-v0 keys).
  * List prices (INR) + GST for quote path. Not live ERP / multi-tenant catalogs.
  */
 
-import type { Open3dProject } from "../model/types";
+import type { PlannerProject } from "../model/types";
 import {
   parseWorkstationConfigKey,
   workstationConfigKey,
@@ -139,7 +139,7 @@ export function workstationBoqToQuoteCartItems(
 }
 
 export function summarizeWorkstationBoqV0(
-  project: Open3dProject,
+  project: PlannerProject,
   opts?: { allFloors?: boolean; gstRate?: number },
 ): WorkstationBoqSummaryV0 {
   const gstRate = opts?.gstRate ?? WORKSTATION_V0_GST_RATE;

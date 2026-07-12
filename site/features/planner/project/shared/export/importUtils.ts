@@ -9,20 +9,20 @@
  */
 
 import type {
-  Open3dFloor,
-  Open3dWall,
-  Open3dDoor,
-  Open3dWindow,
-  Open3dFurnitureItem,
-  Open3dRoom,
-  Open3dPoint,
-  Open3dDisplayUnit,
+  PlannerFloor,
+  PlannerWall,
+  PlannerDoor,
+  PlannerWindow,
+  PlannerFurnitureItem,
+  PlannerRoom,
+  PlannerPoint,
+  PlannerDisplayUnit,
 } from "../../model/types";
-import { importOpen3dProjectJson } from "../../persistence/projectJson";
+import { importPlannerProjectJson } from "../../persistence/projectJson";
 import {
-  OPEN3D_SESSION_VERSION,
-  parseOpen3dSessionSnapshot,
-} from "../../persistence/open3dSession";
+  PLANNER_SESSION_VERSION,
+  parsePlannerSessionSnapshot,
+} from "../../persistence/plannerSession";
 import { themeColorRef } from "../readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "../themeColorTokens";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
@@ -98,7 +98,7 @@ export function importFromJSONWithRecovery(
 const ROOMPLAN_TO_MM = 1000;
 
 /**
- * Generate a unique ID for imported elements (crypto.randomUUID only).
+ * Generate a unique ID for imported elements (UUID v7 via newEntityId).
  */
 function generateId(): string {
   return newEntityId();
@@ -107,7 +107,7 @@ function generateId(): string {
 /**
  * Convert RoomPlan point (meters in XZ) to our point (mm in XY).
  */
-function toOurPoint(rpX: number, rpZ: number): Open3dPoint {
+function toOurPoint(rpX: number, rpZ: number): PlannerPoint {
   return { x: rpX * ROOMPLAN_TO_MM, y: rpZ * ROOMPLAN_TO_MM };
 }
 
@@ -128,7 +128,7 @@ function getYRotation(t: number[]): number {
 /**
  * Project a point onto a wall segment.
  */
-function projectOntoWall(wall: Open3dWall, pt: Open3dPoint): number {
+function projectOntoWall(wall: PlannerWall, pt: PlannerPoint): number {
   const dx = wall.end.x - wall.start.x;
   const dy = wall.end.y - wall.start.y;
   const lenSq = dx * dx + dy * dy;
@@ -140,7 +140,7 @@ function projectOntoWall(wall: Open3dWall, pt: Open3dPoint): number {
 /**
  * Map RoomPlan door category to our door type.
  */
-function mapDoorType(category: unknown): Open3dDoor["type"] {
+function mapDoorType(category: unknown): PlannerDoor["type"] {
   if (typeof category === "string") {
     if (category === "doubleDoor" || category === "french") return "double";
     if (category === "slidingDoor") return "sliding";
@@ -153,7 +153,7 @@ function mapDoorType(category: unknown): Open3dDoor["type"] {
 /**
  * Map RoomPlan window category to our window type.
  */
-function mapWindowType(category: unknown): Open3dWindow["type"] {
+function mapWindowType(category: unknown): PlannerWindow["type"] {
   if (typeof category === "string") {
     if (category === "slidingWindow") return "sliding";
     if (category === "bayWindow") return "bay";
@@ -188,7 +188,7 @@ function mapSectionLabel(label: string): string {
  * Simplify RoomPlan walls by snapping to orthogonal and merging endpoints.
  */
 function straightenWalls(
-  walls: Open3dWall[],
+  walls: PlannerWall[],
   angleTolerance = 5,
   mergeDistance = 15,
 ): void {
@@ -232,9 +232,9 @@ function straightenWalls(
 /**
  * Merge nearby wall endpoints.
  */
-function mergeWallEndpoints(walls: Open3dWall[], mergeDistance: number): void {
+function mergeWallEndpoints(walls: PlannerWall[], mergeDistance: number): void {
   interface Endpoint {
-    wall: Open3dWall;
+    wall: PlannerWall;
     which: "start" | "end";
   }
 
@@ -244,7 +244,7 @@ function mergeWallEndpoints(walls: Open3dWall[], mergeDistance: number): void {
     endpoints.push({ wall, which: "end" });
   }
 
-  const getPoint = (ep: Endpoint): Open3dPoint =>
+  const getPoint = (ep: Endpoint): PlannerPoint =>
     ep.which === "start" ? ep.wall.start : ep.wall.end;
 
   // Union-Find for clustering
@@ -315,7 +315,7 @@ function mergeWallEndpoints(walls: Open3dWall[], mergeDistance: number): void {
 export function importRoomPlan(
   jsonData: Record<string, unknown>,
   options: RoomPlanImportOptions = {},
-): Open3dFloor {
+): PlannerFloor {
   const rpWalls = (jsonData.walls ?? []) as Array<Record<string, unknown>>;
   const rpDoors = (jsonData.doors ?? []) as Array<Record<string, unknown>>;
   const rpWindows = (jsonData.windows ?? []) as Array<Record<string, unknown>>;
@@ -323,11 +323,11 @@ export function importRoomPlan(
   const rpSections = (jsonData.sections ?? []) as Array<Record<string, unknown>>;
 
   const floorId = generateId();
-  const walls: Open3dWall[] = [];
-  const doors: Open3dDoor[] = [];
-  const windows: Open3dWindow[] = [];
-  const furniture: Open3dFurnitureItem[] = [];
-  const rooms: Open3dRoom[] = [];
+  const walls: PlannerWall[] = [];
+  const doors: PlannerDoor[] = [];
+  const windows: PlannerWindow[] = [];
+  const furniture: PlannerFurnitureItem[] = [];
+  const rooms: PlannerRoom[] = [];
 
   // Map RoomPlan wall IDs to our wall IDs
   const wallIdMap = new Map<string, string>();
@@ -349,11 +349,11 @@ export function importRoomPlan(
     const wallDirZ = transform[2] ?? 0;
 
     const center = toOurPoint(pos.x, pos.z);
-    const start: Open3dPoint = {
+    const start: PlannerPoint = {
       x: center.x - wallDirX * halfWidth,
       y: center.y - wallDirZ * halfWidth,
     };
-    const end: Open3dPoint = {
+    const end: PlannerPoint = {
       x: center.x + wallDirX * halfWidth,
       y: center.y + wallDirZ * halfWidth,
     };
@@ -503,7 +503,7 @@ export function importRoomPlan(
 export function importRoomPlanFromJson(
   jsonString: string,
   options: RoomPlanImportOptions = {},
-): { floor: Open3dFloor | null; error: string | null } {
+): { floor: PlannerFloor | null; error: string | null } {
   try {
     const jsonData = JSON.parse(jsonString);
     const floor = importRoomPlan(jsonData, options);
@@ -523,7 +523,7 @@ export function detectFormat(jsonString: string): FormatDetectionResult {
     const data = JSON.parse(jsonString) as Record<string, unknown>;
 
     if (
-      data.version === OPEN3D_SESSION_VERSION &&
+      data.version === PLANNER_SESSION_VERSION &&
       data.engine === "open3d" &&
       data.project
     ) {
@@ -566,7 +566,7 @@ export function autoImport(
 
   switch (format.format) {
     case "session": {
-      const project = parseOpen3dSessionSnapshot(jsonString);
+      const project = parsePlannerSessionSnapshot(jsonString);
       if (!project) {
         return {
           success: false,
@@ -581,7 +581,7 @@ export function autoImport(
 
     case "raw-project": {
       try {
-        const project = importOpen3dProjectJson(jsonString);
+        const project = importPlannerProjectJson(jsonString);
         return { success: true, project, errors: [] };
       } catch (error) {
         return {
@@ -614,7 +614,7 @@ export function autoImport(
             name: "Imported Project",
             floors: [result.floor],
             activeFloorId: result.floor.id,
-            displayUnit: "mm" as Open3dDisplayUnit,
+            displayUnit: "mm" as PlannerDisplayUnit,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           },
@@ -642,7 +642,7 @@ export function autoImport(
 /**
  * Workspace file-import entry: session snapshot, export envelope, raw project, or RoomPlan.
  */
-export function importOpen3dPlannerText(raw: string): ImportResult {
+export function importPlannerPlannerText(raw: string): ImportResult {
   return autoImport(raw);
 }
 

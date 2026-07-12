@@ -1,5 +1,9 @@
-import type { CanvasTool } from "../../editor/canvasTool";
-import { CANVAS_TOOL_LABELS, CANVAS_TOOL_SHORTCUTS } from "../../editor/canvasTool";
+import type { PlannerTool } from "../../../editor/canvasTool";
+import {
+  CANVAS_TOOL_LABELS,
+  CANVAS_TOOL_SHORTCUTS,
+  PALETTE_TOOLS,
+} from "../../../editor/canvasTool";
 import { feasibilityCommands } from "./registry";
 
 export type PaletteCommandCategory = "tool" | "action" | "navigation";
@@ -14,7 +18,8 @@ export interface PaletteCommand {
 }
 
 export interface PaletteCommandHandlers {
-  setTool: (tool: CanvasTool) => void;
+  /** Same PlannerTool surface as rail + keyboard. */
+  setTool: (tool: PlannerTool) => void;
   toggleView: () => void;
   openPalette: () => void;
   undo: () => void;
@@ -23,10 +28,12 @@ export interface PaletteCommandHandlers {
   zoomReset: () => void;
 }
 
-const TOOL_IDS: CanvasTool[] = ["select", "wall", "door", "window", "text", "pan"];
-
+/**
+ * Tool list = rail (CANVAS_TOOLS) + door/window/text extras.
+ * Restored single authority — no separate TOOL_IDS subset.
+ */
 export function buildPaletteCommands(): PaletteCommand[] {
-  const toolCommands: PaletteCommand[] = TOOL_IDS.map((tool) => ({
+  const toolCommands: PaletteCommand[] = PALETTE_TOOLS.map((tool) => ({
     id: `tool-${tool}`,
     label: `${CANVAS_TOOL_LABELS[tool]} tool`,
     shortcut: CANVAS_TOOL_SHORTCUTS[tool],
@@ -101,7 +108,7 @@ export function runPaletteCommand(
   handlers: PaletteCommandHandlers,
 ): boolean {
   if (id.startsWith("tool-")) {
-    const tool = id.slice("tool-".length) as CanvasTool;
+    const tool = id.slice("tool-".length) as PlannerTool;
     handlers.setTool(tool);
     return true;
   }

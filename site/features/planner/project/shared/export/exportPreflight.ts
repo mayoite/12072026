@@ -1,11 +1,11 @@
-import type { Open3dProject } from "../../model/types";
+import type { PlannerProject } from "../../model/types";
 
 /** Formats that exist in the type system (incl. not-yet-built). */
-export type Open3dExportFormat = "json" | "svg" | "png" | "pdf" | "dxf";
-export type Open3dExportStatus = "ready" | "unsupported" | "blocked";
+export type PlannerExportFormat = "json" | "svg" | "png" | "pdf" | "dxf";
+export type PlannerExportStatus = "ready" | "unsupported" | "blocked";
 
-export interface Open3dExportPreflight {
-  status: Open3dExportStatus;
+export interface PlannerExportPreflight {
+  status: PlannerExportStatus;
   format: string;
   filename: string;
   messages: string[];
@@ -14,7 +14,7 @@ export interface Open3dExportPreflight {
 /**
  * Formats that actually download today (not menu theater).
  */
-export const READY_EXPORT_FORMATS: readonly Open3dExportFormat[] = [
+export const READY_EXPORT_FORMATS: readonly PlannerExportFormat[] = [
   "json",
   "svg",
   "png",
@@ -25,13 +25,13 @@ export const READY_EXPORT_FORMATS: readonly Open3dExportFormat[] = [
 /** @deprecated use READY_EXPORT_FORMATS — kept name for existing imports */
 export const SUPPORTED_EXPORT_FORMATS = READY_EXPORT_FORMATS;
 
-const NOT_READY_EXPORT_FORMATS: readonly Open3dExportFormat[] = [];
+const NOT_READY_EXPORT_FORMATS: readonly PlannerExportFormat[] = [];
 
-export function isSupportedExportFormat(format: string): format is Open3dExportFormat {
+export function isSupportedExportFormat(format: string): format is PlannerExportFormat {
   return (READY_EXPORT_FORMATS as readonly string[]).includes(format);
 }
 
-export function isKnownExportFormat(format: string): format is Open3dExportFormat {
+export function isKnownExportFormat(format: string): format is PlannerExportFormat {
   return (
     (READY_EXPORT_FORMATS as readonly string[]).includes(format) ||
     (NOT_READY_EXPORT_FORMATS as readonly string[]).includes(format)
@@ -39,8 +39,8 @@ export function isKnownExportFormat(format: string): format is Open3dExportForma
 }
 
 export function buildExportFilename(
-  project: Pick<Open3dProject, "name" | "activeFloorId" | "floors">,
-  format: Open3dExportFormat,
+  project: Pick<PlannerProject, "name" | "activeFloorId" | "floors">,
+  format: PlannerExportFormat,
 ): string {
   const floor = project.floors.find((entry) => entry.id === project.activeFloorId) ?? project.floors[0];
   const projectName = slug(project.name || "floorplan");
@@ -48,10 +48,10 @@ export function buildExportFilename(
   return `${projectName}-${floorName}.${format}`;
 }
 
-export function preflightOpen3dExport(project: Open3dProject, format: string): Open3dExportPreflight {
+export function preflightPlannerExport(project: PlannerProject, format: string): PlannerExportPreflight {
   const normalized = format.toLowerCase();
 
-  if (NOT_READY_EXPORT_FORMATS.includes(normalized as Open3dExportFormat)) {
+  if (NOT_READY_EXPORT_FORMATS.includes(normalized as PlannerExportFormat)) {
     return {
       status: "unsupported",
       format: normalized,

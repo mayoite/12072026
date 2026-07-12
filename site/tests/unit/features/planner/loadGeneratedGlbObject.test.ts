@@ -1,20 +1,20 @@
 import { describe, expect, it, vi } from "vitest";
 import * as THREE from "three";
-import { buildOpen3dSceneNodes } from "@/features/planner/3d/buildOpen3dSceneNodes";
+import { buildPlannerSceneNodes } from "@/features/planner/3d/buildPlannerSceneNodes";
 import { createSceneObjectFromNode } from "@/features/planner/3d/createSceneObjectFromNode";
 import {
   loadGeneratedGlbObject,
   resolveGeneratedGlbFetchUrl,
   type GltfUrlLoader,
 } from "@/features/planner/3d/loadGeneratedGlbObject";
-import type { Open3dProject } from "@/features/planner/project/model/types";
-import type { Open3dSceneNode } from "@/features/planner/3d/buildOpen3dSceneNodes";
+import type { PlannerProject } from "@/features/planner/project/model/types";
+import type { PlannerSceneNode } from "@/features/planner/3d/buildPlannerSceneNodes";
 
 const TEST_ORIGIN = "https://viewer.test.example";
 
 function furnitureNode(
-  overrides: Partial<Open3dSceneNode> & Pick<Open3dSceneNode, "id">,
-): Open3dSceneNode {
+  overrides: Partial<PlannerSceneNode> & Pick<PlannerSceneNode, "id">,
+): PlannerSceneNode {
   return {
     kind: "furniture",
     xMm: 1000,
@@ -28,8 +28,8 @@ function furnitureNode(
 }
 
 function projectWithFurniture(
-  furniture: Open3dProject["floors"][number]["furniture"],
-): Open3dProject {
+  furniture: PlannerProject["floors"][number]["furniture"],
+): PlannerProject {
   return {
     id: "proj-g8",
     name: "G8",
@@ -59,7 +59,7 @@ function projectWithFurniture(
   };
 }
 
-describe("buildOpen3dSceneNodes generatedGlbUrl pass-through", () => {
+describe("buildPlannerSceneNodes generatedGlbUrl pass-through", () => {
   it("passes policy-allowed generatedGlbUrl onto furniture node", () => {
     const project = projectWithFurniture([
       {
@@ -74,7 +74,7 @@ describe("buildOpen3dSceneNodes generatedGlbUrl pass-through", () => {
         generatedGlbUrl: "catalog-assets/generated/cab.glb",
       },
     ]);
-    const node = buildOpen3dSceneNodes(project).find((n) => n.id === "f1");
+    const node = buildPlannerSceneNodes(project).find((n) => n.id === "f1");
     expect(node?.generatedGlbUrl).toBe("catalog-assets/generated/cab.glb");
   });
 
@@ -89,7 +89,7 @@ describe("buildOpen3dSceneNodes generatedGlbUrl pass-through", () => {
         meshUrl: "https://cdn.example.com/models/sofa-hero.glb",
       },
     ]);
-    const node = buildOpen3dSceneNodes(project).find((n) => n.id === "f2");
+    const node = buildPlannerSceneNodes(project).find((n) => n.id === "f2");
     expect(node?.generatedGlbUrl).toBeUndefined();
   });
 
@@ -105,7 +105,7 @@ describe("buildOpen3dSceneNodes generatedGlbUrl pass-through", () => {
         meshUrl: "catalog-assets/generated/b.glb",
       },
     ]);
-    const node = buildOpen3dSceneNodes(project).find((n) => n.id === "f3");
+    const node = buildPlannerSceneNodes(project).find((n) => n.id === "f3");
     expect(node?.generatedGlbUrl).toBe("catalog-assets/generated/a.glb");
   });
 });

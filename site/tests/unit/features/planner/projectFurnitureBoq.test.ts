@@ -4,15 +4,15 @@ import { placeWorkstationInstancesOnProject } from "@/features/planner/project/c
 import {
   createWorkstationConfigV0,
 } from "@/features/planner/project/catalog/workstationSystemV0";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
-import type { Open3dFurnitureItem, Open3dProject } from "@/features/planner/project/model/types";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+import type { PlannerFurnitureItem, PlannerProject } from "@/features/planner/project/model/types";
 import {
-  buildOpen3dBoqFilename,
-  buildOpen3dFurnitureBoq,
-  exportOpen3dFurnitureBoqToCsv,
-  exportOpen3dFurnitureBoqToJson,
-  OPEN3D_FURNITURE_BOQ_KIND,
-  OPEN3D_FURNITURE_BOQ_PRICING_NOTE,
+  buildPlannerBoqFilename,
+  buildPlannerFurnitureBoq,
+  exportPlannerFurnitureBoqToCsv,
+  exportPlannerFurnitureBoqToJson,
+  PLANNER_FURNITURE_BOQ_KIND,
+  PLANNER_FURNITURE_BOQ_PRICING_NOTE,
 } from "@/features/planner/project/shared/export/projectFurnitureBoq";
 
 function ids(...values: string[]) {
@@ -20,7 +20,7 @@ function ids(...values: string[]) {
   return () => values[index++] ?? `generated-${index}`;
 }
 
-function withFurniture(project: Open3dProject, items: Open3dFurnitureItem[]): Open3dProject {
+function withFurniture(project: PlannerProject, items: PlannerFurnitureItem[]): PlannerProject {
   return {
     ...project,
     floors: project.floors.map((floor, i) =>
@@ -29,19 +29,19 @@ function withFurniture(project: Open3dProject, items: Open3dFurnitureItem[]): Op
   };
 }
 
-describe("buildOpen3dFurnitureBoq (pure first-class BOQ)", () => {
+describe("buildPlannerFurnitureBoq (pure first-class BOQ)", () => {
   it("returns empty summary for a project with no furniture", () => {
-    const project = createOpen3dProject({
+    const project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "Empty Plan",
       now: "2026-07-09T12:00:00.000Z",
     });
 
-    const summary = buildOpen3dFurnitureBoq(project, {
+    const summary = buildPlannerFurnitureBoq(project, {
       now: "2026-07-09T12:00:00.000Z",
     });
 
-    expect(summary.kind).toBe(OPEN3D_FURNITURE_BOQ_KIND);
+    expect(summary.kind).toBe(PLANNER_FURNITURE_BOQ_KIND);
     expect(summary.totalItems).toBe(0);
     expect(summary.totalLines).toBe(0);
     expect(summary.lines).toEqual([]);
@@ -56,7 +56,7 @@ describe("buildOpen3dFurnitureBoq (pure first-class BOQ)", () => {
       modules: ["desk", "panel"],
     });
 
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "Client BOQ Plan",
       now: "2026-07-09T12:00:00.000Z",
@@ -67,7 +67,7 @@ describe("buildOpen3dFurnitureBoq (pure first-class BOQ)", () => {
       idFactory: ids("w0", "w1", "w2"),
     }).project;
 
-    const tableTemplate: Omit<Open3dFurnitureItem, "id" | "position"> = {
+    const tableTemplate: Omit<PlannerFurnitureItem, "id" | "position"> = {
       catalogId: "side-table-001",
       rotation: 0,
       scale: { x: 1, y: 1, z: 1 },
@@ -93,11 +93,11 @@ describe("buildOpen3dFurnitureBoq (pure first-class BOQ)", () => {
       },
     ]);
 
-    const summary = buildOpen3dFurnitureBoq(project, {
+    const summary = buildPlannerFurnitureBoq(project, {
       now: "2026-07-09T15:00:00.000Z",
     });
 
-    expect(summary.kind).toBe(OPEN3D_FURNITURE_BOQ_KIND);
+    expect(summary.kind).toBe(PLANNER_FURNITURE_BOQ_KIND);
     expect(summary.projectName).toBe("Client BOQ Plan");
     expect(summary.generatedAt).toBe("2026-07-09T15:00:00.000Z");
     expect(summary.totalItems).toBe(5);
@@ -130,20 +130,20 @@ describe("buildOpen3dFurnitureBoq (pure first-class BOQ)", () => {
 
     // Demo prices labeled at summary level — never presented as live ERP.
     expect(summary.pricingMode).toBe("demo-list-partial");
-    expect(summary.pricingNote).toBe(OPEN3D_FURNITURE_BOQ_PRICING_NOTE);
+    expect(summary.pricingNote).toBe(PLANNER_FURNITURE_BOQ_PRICING_NOTE);
     expect(summary.pricingNote.toLowerCase()).toContain("demo");
     expect(summary.pricingNote.toLowerCase()).toContain("not live");
 
-    const json = exportOpen3dFurnitureBoqToJson(summary);
+    const json = exportPlannerFurnitureBoqToJson(summary);
     const parsed = JSON.parse(json) as typeof summary;
-    expect(parsed.kind).toBe(OPEN3D_FURNITURE_BOQ_KIND);
+    expect(parsed.kind).toBe(PLANNER_FURNITURE_BOQ_KIND);
     expect(parsed.pricingMode).toBe("demo-list-partial");
     expect(parsed.pricingNote).toContain("demo list");
     expect(parsed.lines).toHaveLength(2);
     expect(parsed.totalItems).toBe(5);
     expect(parsed.lines.find((l) => l.priced)?.priceSource).toBe("demo-list");
 
-    const csv = exportOpen3dFurnitureBoqToCsv(summary);
+    const csv = exportPlannerFurnitureBoqToCsv(summary);
     expect(csv).toContain("Project,Client BOQ Plan");
     expect(csv).toContain("Pricing mode,demo-list-partial");
     expect(csv).toContain("Pricing note,");
@@ -157,10 +157,10 @@ describe("buildOpen3dFurnitureBoq (pure first-class BOQ)", () => {
     expect(csv).toContain("Total items,5");
     expect(csv).toContain("Unpriced items,2");
 
-    expect(buildOpen3dBoqFilename(project, "json")).toBe(
+    expect(buildPlannerBoqFilename(project, "json")).toBe(
       "client-boq-plan-furniture-boq-v1.json",
     );
-    expect(buildOpen3dBoqFilename(project, "csv")).toBe(
+    expect(buildPlannerBoqFilename(project, "csv")).toBe(
       "client-boq-plan-furniture-boq-v1.csv",
     );
   });

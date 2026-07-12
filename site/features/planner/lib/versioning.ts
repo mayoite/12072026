@@ -10,6 +10,7 @@
  */
 
 import type { PlannerDocument } from "@/features/planner/model/plannerDocument";
+import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 /**
  * A single version snapshot of a plan document
@@ -43,13 +44,10 @@ function getStorageKey(projectId: string): string {
 }
 
 /**
- * Snapshot ids use crypto.randomUUID() only (same policy as entity ids).
+ * Snapshot ids use UUID v7 (same policy as entity ids via newEntityId).
  */
 function generateSnapshotId(): string {
-  if (typeof globalThis.crypto?.randomUUID === "function") {
-    return globalThis.crypto.randomUUID();
-  }
-  throw new Error("crypto.randomUUID is required for snapshot ids.");
+  return newEntityId();
 }
 
 /**

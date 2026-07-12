@@ -1,6 +1,6 @@
-import type { Open3dDisplayUnit } from "./types";
+import type { PlannerDisplayUnit } from "./types";
 
-export interface Open3dBounds {
+export interface PlannerBounds {
   minX: number;
   minY: number;
   maxX: number;
@@ -8,13 +8,17 @@ export interface Open3dBounds {
 }
 
 const MILLIMETRES_PER_INCH = 25.4;
+const MM_PER_CM = 10;
+const MM_PER_M = 1000;
+/** 1 ft² = 144 in² = 144 × 25.4² mm² */
+const MM2_PER_SQ_FT = 92903.04;
 
-export function mmToOpen3dCm(valueMm: number): number {
-  return valueMm / 10;
+export function mmToPlannerCm(valueMm: number): number {
+  return valueMm / MM_PER_CM;
 }
 
-export function open3dCmToMm(valueCm: number): number {
-  return valueCm * 10;
+export function plannerCmToMm(valueCm: number): number {
+  return valueCm * MM_PER_CM;
 }
 
 export function normalizeDegrees(value: number): number {
@@ -28,21 +32,21 @@ export function degreesToRadians(degrees: number): number {
 
 export function displayValueToMm(
   value: number,
-  unit: Exclude<Open3dDisplayUnit, "ft-in">,
+  unit: Exclude<PlannerDisplayUnit, "ft-in">,
 ): number {
   if (unit === "mm") return value;
-  if (unit === "cm") return value * 10;
-  if (unit === "m") return value * 1000;
+  if (unit === "cm") return value * MM_PER_CM;
+  if (unit === "m") return value * MM_PER_M;
   return value * MILLIMETRES_PER_INCH;
 }
 
 export function mmToDisplayValue(
   valueMm: number,
-  unit: Exclude<Open3dDisplayUnit, "ft-in">,
+  unit: Exclude<PlannerDisplayUnit, "ft-in">,
 ): number {
   if (unit === "mm") return valueMm;
-  if (unit === "cm") return valueMm / 10;
-  if (unit === "m") return valueMm / 1000;
+  if (unit === "cm") return valueMm / MM_PER_CM;
+  if (unit === "m") return valueMm / MM_PER_M;
   return valueMm / MILLIMETRES_PER_INCH;
 }
 
@@ -71,20 +75,120 @@ export function formatFeetAndInches(valueMm: number, precision = 2): string {
   return `${sign}${feet}' ${inches}"`;
 }
 
-export function boundsMmToOpen3dCm(bounds: Open3dBounds): Open3dBounds {
+/**
+ * Format a canonical mm length for UI labels (status, inventory, readouts).
+ * Always includes a unit token so mixed tools stay legible.
+ */
+export function formatLengthDisplay(
+  valueMm: number,
+  unit: PlannerDisplayUnit,
+): string {
+  if (!Number.isFinite(valueMm)) return "—";
+  switch (unit) {
+    case "mm":
+      return `${Math.round(valueMm)} mm`;
+    case "cm":
+      return `${trimTrailingZeros(mmToDisplayValue(valueMm, "cm"), 1)} cm`;
+    case "m":
+      return `${trimTrailingZeros(mmToDisplayValue(valueMm, "m"), 3)} m`;
+    case "in":
+      return `${trimTrailingZeros(mmToDisplayValue(valueMm, "in"), 2)} in`;
+    case "ft-in":
+      return formatFeetAndInches(valueMm, 1);
+  }
+}
+
+/**
+ * Format a length for property inputs.
+ * Numeric units → plain number string; ft-in → feet/inches text.
+ */
+export function formatLengthInput(
+  valueMm: number,
+  unit: PlannerDisplayUnit,
+): string {
+  if (!Number.isFinite(valueMm)) return "";
+  if (unit === "ft-in") {
+    return formatFeetAndInches(valueMm, 1);
+  }
+  const n = mmToDisplayValue(valueMm, unit);
+  if (unit === "mm") return String(Math.round(n));
+  if (unit === "cm") return trimTrailingZeros(n, 1);
+  if (unit === "m") return trimTrailingZeros(n, 3);
+  return trimTrailingZeros(n, 2);
+}
+
+/**
+ * Parse a user-entered length in the active display unit → canonical mm.
+ * Accepts optional unit suffixes (mm/cm/m/in/"/'). Returns null if invalid.
+ */
+export function parseLengthInput(
+  raw: string,
+  unit: PlannerDisplayUnit,
+): number | null {
+  const text = raw.trim().replace(/,/g, "");
+  if (text.length === 0) return null;
+
+  if (unit === "ft-in") {
+    try {
+      const mm = parseFeetAndInches(text);
+      return Number.isFinite(mm) ? Math.round(mm) : null;
+    } catch {
+      // Bare number while in ft-in: treat as total inches (CAD habit).
+      const bare = Number.parseFloat(text);
+      if (!Number.isFinite(bare)) return null;
+      return Math.round(bare * MILLIMETRES_PER_INCH);
+    }
+  }
+
+  const stripped = text
+    .replace(/\s*(mm|cm|m|in|inch|inches|"|'|ft|feet)\s*$/i, "")
+    .trim();
+  const n = Number.parseFloat(stripped);
+  if (!Number.isFinite(n)) return null;
+  return Math.round(displayValueToMm(n, unit));
+}
+
+/** Footprint pair for inventory / BOQ glance lines. */
+export function formatFootprintDisplay(
+  widthMm: number,
+  depthMm: number,
+  unit: PlannerDisplayUnit,
+): string {
+  return `${formatLengthDisplay(widthMm, unit)} × ${formatLengthDisplay(depthMm, unit)}`;
+}
+
+/** Room / floor area: metric → m², imperial-ish units → sq ft. */
+export function formatAreaDisplay(
+  areaMm2: number,
+  unit: PlannerDisplayUnit,
+): string {
+  if (!Number.isFinite(areaMm2) || areaMm2 < 0) return "—";
+  if (unit === "in" || unit === "ft-in") {
+    return `${trimTrailingZeros(areaMm2 / MM2_PER_SQ_FT, 1)} sq ft`;
+  }
+  return `${trimTrailingZeros(areaMm2 / 1_000_000, 2)} m²`;
+}
+
+export function boundsMmToPlannerCm(bounds: PlannerBounds): PlannerBounds {
   return {
-    minX: mmToOpen3dCm(bounds.minX),
-    minY: mmToOpen3dCm(bounds.minY),
-    maxX: mmToOpen3dCm(bounds.maxX),
-    maxY: mmToOpen3dCm(bounds.maxY),
+    minX: mmToPlannerCm(bounds.minX),
+    minY: mmToPlannerCm(bounds.minY),
+    maxX: mmToPlannerCm(bounds.maxX),
+    maxY: mmToPlannerCm(bounds.maxY),
   };
 }
 
-export function boundsOpen3dCmToMm(bounds: Open3dBounds): Open3dBounds {
+export function boundsplannerCmToMm(bounds: PlannerBounds): PlannerBounds {
   return {
-    minX: open3dCmToMm(bounds.minX),
-    minY: open3dCmToMm(bounds.minY),
-    maxX: open3dCmToMm(bounds.maxX),
-    maxY: open3dCmToMm(bounds.maxY),
+    minX: plannerCmToMm(bounds.minX),
+    minY: plannerCmToMm(bounds.minY),
+    maxX: plannerCmToMm(bounds.maxX),
+    maxY: plannerCmToMm(bounds.maxY),
   };
+}
+
+function trimTrailingZeros(value: number, maxFractionDigits: number): string {
+  const fixed = value.toFixed(maxFractionDigits);
+  if (!fixed.includes(".")) return fixed;
+  return fixed.replace(/\.?0+$/, "");
 }

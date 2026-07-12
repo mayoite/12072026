@@ -12,14 +12,14 @@
  */
 
 import type {
-  Open3dAvailabilityStatus,
-  Open3dAssetReadiness,
-  Open3dCatalogCategory,
-  Open3dConfigurability,
-  Open3dCatalogItem,
-  Open3dMountingContract,
-  Open3dRoomTag,
-  Open3dStyleTag,
+  PlannerAvailabilityStatus,
+  PlannerAssetReadiness,
+  PlannerCatalogCategory,
+  PlannerConfigurability,
+  PlannerCatalogItem,
+  PlannerMountingContract,
+  PlannerRoomTag,
+  PlannerStyleTag,
 } from "../catalogTypes";
 import { tokenize } from "../catalogClient";
 
@@ -58,11 +58,11 @@ function expandSynonyms(token: string): string[] {
 // ── Relevance scoring ──
 
 interface ScoredItem {
-  item: Open3dCatalogItem;
+  item: PlannerCatalogItem;
   score: number;
 }
 
-function compareCatalogItems(a: Open3dCatalogItem, b: Open3dCatalogItem): number {
+function compareCatalogItems(a: PlannerCatalogItem, b: PlannerCatalogItem): number {
   return a.name.localeCompare(b.name)
     || a.sku.localeCompare(b.sku)
     || a.id.localeCompare(b.id);
@@ -89,7 +89,7 @@ function compareScoredItems(a: ScoredItem, b: ScoredItem): number {
  * 8. Synonym match: 25 per synonym token
  */
 function scoreItem(
-  item: Open3dCatalogItem,
+  item: PlannerCatalogItem,
   preTokenized: string[],
   queryTokens: string[],
   queryLower: string,
@@ -159,21 +159,21 @@ export interface InventorySearchOptions {
   /** Whether to use typo tolerance */
   typoTolerance?: boolean;
   /** Optional category filter applied before ranking */
-  category?: Open3dCatalogCategory;
+  category?: PlannerCatalogCategory;
   /** Optional room filter. Matches items containing at least one selected room. */
-  roomTags?: Open3dRoomTag[];
+  roomTags?: PlannerRoomTag[];
   /** Optional style filter. Matches items containing at least one selected style. */
-  styleTags?: Open3dStyleTag[];
+  styleTags?: PlannerStyleTag[];
   /** Optional material filter using normalized material values. */
   material?: string[];
   /** Optional availability filter. */
-  availability?: Open3dAvailabilityStatus[];
+  availability?: PlannerAvailabilityStatus[];
   /** Optional configurability filter. */
-  configurability?: Open3dConfigurability[];
+  configurability?: PlannerConfigurability[];
   /** Optional mounting/anchoring filter. */
-  mounting?: Open3dMountingContract[];
+  mounting?: PlannerMountingContract[];
   /** Optional asset-readiness filter for degraded-state recovery. */
-  assetReadiness?: Open3dAssetReadiness[];
+  assetReadiness?: PlannerAssetReadiness[];
   /** Optional dimension range filter in millimetres. */
   dimensionFilter?: {
     /** Minimum width in mm */
@@ -192,7 +192,7 @@ export interface InventorySearchOptions {
 }
 
 export interface InventorySearchResult {
-  items: Open3dCatalogItem[];
+  items: PlannerCatalogItem[];
   totalCount: number;
   /** Original query (for zero-result recovery) */
   query: string;
@@ -206,7 +206,7 @@ export interface InventorySearchResult {
  * Inventory search engine with synonyms, typo tolerance, and zero-result recovery.
  */
 export class InventorySearchIndex {
-  private items: Open3dCatalogItem[] = [];
+  private items: PlannerCatalogItem[] = [];
   /**
    * Pre-tokenized item corpus, keyed by item ID.
    * Built once in load() so scoreItem() never calls tokenize() at query time.
@@ -214,7 +214,7 @@ export class InventorySearchIndex {
    */
   private itemTokenCache = new Map<string, string[]>();
 
-  load(items: Open3dCatalogItem[]): void {
+  load(items: PlannerCatalogItem[]): void {
     this.items = [...items].sort(compareCatalogItems);
     // Pre-tokenize all items once so search scoring is allocation-free per query.
     this.itemTokenCache.clear();
@@ -226,7 +226,7 @@ export class InventorySearchIndex {
     }
   }
 
-  private filterItems(options: InventorySearchOptions): Open3dCatalogItem[] {
+  private filterItems(options: InventorySearchOptions): PlannerCatalogItem[] {
     const materialFilter = new Set((options.material ?? []).map((value) => value.toLowerCase()));
     const roomFilter = new Set(options.roomTags ?? []);
     const styleFilter = new Set(options.styleTags ?? []);
@@ -236,7 +236,7 @@ export class InventorySearchIndex {
     const assetReadinessFilter = new Set(options.assetReadiness ?? []);
     const dim = options.dimensionFilter;
 
-    const configurability = (item: Open3dCatalogItem) => item.configurability ?? null;
+    const configurability = (item: PlannerCatalogItem) => item.configurability ?? null;
     return this.items.filter((item) => {
       if (options.category && item.category !== options.category) return false;
       if (roomFilter.size > 0 && !item.roomTags.some((tag) => roomFilter.has(tag))) return false;

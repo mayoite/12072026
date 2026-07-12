@@ -5,14 +5,14 @@
  */
 import { describe, expect, it } from "vitest";
 import { placeCatalogItemInProject } from "@/features/planner/project/catalog/placementAction";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 import {
   buildSvgCatalogPublicUrl,
   isSvgAssetUrl,
 } from "@/features/planner/project/catalog/svg/svgPreviewAssets";
 
-function emptyProject(id = "s7-proj"): Open3dProject {
+function emptyProject(id = "s7-proj"): PlannerProject {
   return {
     id,
     name: "S7",
@@ -42,7 +42,7 @@ function emptyProject(id = "s7-proj"): Open3dProject {
   };
 }
 
-function svgCatalogItem(slug = "chaise-lounge-001"): Open3dCatalogItem {
+function svgCatalogItem(slug = "chaise-lounge-001"): PlannerCatalogItem {
   const previewImageUrl = buildSvgCatalogPublicUrl(slug);
   return {
     id: "f81e3a1b-16f4-4000-8000-000000000001",

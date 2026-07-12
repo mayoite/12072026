@@ -6,8 +6,9 @@
 
 **Outcome:** No live product import resolves to missing short paths or “accidental” archive hosts. Vitest does not pretend archive is product. E2E targets `planner-fabric-stage` only.
 
-**Law:** Live workspace = `open3d/` + `canvas-fabric-stage` · testid `planner-fabric-stage`.  
-Second plan host / `canvas-feasibility` = does not / will not exist.  
+**Law:** Live layout = `editor` · `canvas` · `3d` · `project` · `ui` under `features/planner/`.  
+2D host = `canvas/PlannerFabricStage` · testid **`planner-fabric-stage` only**.  
+**No** product `open3d/` folder · **no** `canvas-fabric-stage` path · second host / `canvas-feasibility` does not / will not exist.  
 SVG catalog = inventory publish only.
 
 ---
@@ -19,7 +20,7 @@ SVG catalog = inventory publish only.
 | Dead short path | `@/features/planner/canvas-fabric` — folder **missing** |
 | Half-dead short path | `@/features/planner/editor/*` — only `PlannerErrorBoundary.tsx` live |
 | Live importers | ~12 files under `features/planner/{ai,document,hooks,lib,store,components}` still import those shorts |
-| Graph lie | `importGraphProof` fabric-legacy routes — app folders **absent** |
+| Graph lie | `importGraphProof` fabric-legacy routes — **cleared** (live graph only; app fabric tree absent) |
 | E2E lie | Several specs still use `planner-2d-canvas` |
 | Vitest aliases | Map shorts → `_archive/fabric/*` — test-only crutch; not product law |
 
@@ -41,16 +42,16 @@ Product aliases already removed from `tsconfig` + `next.config` (session work). 
 | ID | Task | Done when |
 |----|------|-----------|
 | B1 | List every live (non-test, non-`_archive`) import of `@/features/planner/canvas-fabric` and `@/features/planner/editor/*` | Checklist in NOTES or this card |
-| B2 | For each import: **rewrite** to open3d / `canvas-fabric-stage` / shared live module, **or** delete dead call site if unused by open3d routes | `tsc` / targeted vitest green; no missing-module resolve |
+| B2 | For each import: **rewrite** to `editor` / `canvas` / `project` / `ui` / shared live module, **or** delete dead call site if unused by guest/canvas routes | `tsc` / targeted vitest green; no missing-module resolve |
 | B3 | `workspaceStore` + AI/document bridges: either wire to live Fabric stage APIs or mark/quarantine unused by `OOPlannerWorkspace` | No import of missing path |
-| B4 | `PlannerLayoutShell` / `PlannerErrorBoundary`: keep live-only error boundary; do not pull archive shell | Live file under `editor/` or move under `open3d`/`ui` |
-| B5 | `PlannerWorkspaceRoute`: keep explicit `_archive` import **or** delete if unused by app routes; never re-add short aliases in next/tsconfig | Guest/canvas stay on Open3d* |
+| B4 | `PlannerLayoutShell` / `PlannerErrorBoundary`: keep live-only error boundary; do not pull archive shell | Live file under `editor/` or `ui/` |
+| B5 | `PlannerWorkspaceRoute`: keep explicit `_archive` import **or** delete if unused by app routes; never re-add short aliases in next/tsconfig | Guest/canvas stay on live host |
 
 ### Phase C — Graph + config honesty
 
 | ID | Task | Done when |
 |----|------|-----------|
-| C1 | Update `importGraphProof.ts`: remove or mark historical fabric-legacy route nodes whose `app/.../fabric` paths do not exist | hostWiring + graph unit green; no false live paths |
+| C1 | Update `importGraphProof.ts`: remove or mark historical fabric-legacy route nodes whose `app/.../fabric` paths do not exist | **Done** — live graph only + FORBIDDEN_GRAPH_IDS guard |
 | C2 | Confirm product `tsconfig` / next: **no** archive short aliases; `_archive` excluded from app typecheck | Grep clean on product configs |
 | C3 | Vitest: either (preferred) rewrite tests to explicit `_archive/...` imports and **delete** short aliases, **or** keep aliases with header comment “TEST ONLY / not product” until Phase D | Document choice in NOTES |
 
@@ -60,7 +61,7 @@ Product aliases already removed from `tsconfig` + `next.config` (session work). 
 |----|------|-----------|
 | D1 | E2E: retarget or retire specs using `planner-2d-canvas` → `planner-fabric-stage` (helpers already export live selectors) | Specs either updated or deleted with reason |
 | D2 | `scripts/p06-symbols-inventory-verify.mjs` same | Script uses live testid |
-| D3 | Integration tests under `tests/integration/planner-editor-*` / `planner-canvas-fabric-*`: migrate to live surface **or** move to archive-only suite that cannot claim W-gates | W3/W5 claims only on Fabric open3d |
+| D3 | Integration tests under `tests/integration/planner-editor-*` / `planner-canvas-fabric-*`: migrate to live surface **or** move to archive-only suite that cannot claim W-gates | W3/W5 claims only on Fabric `planner-fabric-stage` |
 | D4 | Remove Vitest short→archive aliases once no test needs them | vitest configs clean |
 
 ### Phase E — Dev / ops (standing)
@@ -103,4 +104,4 @@ If owner prefers P02 first: finish B1–B2 minimum so product resolve is not bro
 
 ## Next action (only)
 
-**B1:** Enumerate live importers of dead short paths and open first rewrite batch (store + lib bridges or delete if open3d-unused).
+**B1:** Enumerate live importers of dead short paths and open first rewrite batch (store + lib bridges or delete if unused by guest/canvas).

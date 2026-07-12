@@ -11,9 +11,17 @@ import {
   memo,
 } from "react";
 import type {
-  Open3dEntityCollection,
-  Open3dEntityMap,
+  PlannerEntityCollection,
+  PlannerEntityMap,
 } from "@/features/planner/project/model/actions/projectActions";
+import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
+import {
+  formatAreaDisplay,
+  formatFootprintDisplay,
+  formatLengthDisplay,
+  formatLengthInput,
+  parseLengthInput,
+} from "@/features/planner/project/model/units";
 import { parseWorkstationConfigKey } from "@/features/planner/project/catalog/workstationSystemV0";
 import styles from "./properties.module.css";
 
@@ -23,11 +31,11 @@ import styles from "./properties.module.css";
  */
 export interface SelectedEntity {
   /** The collection type (e.g., 'walls', 'furniture', 'rooms') */
-  collection: Open3dEntityCollection;
+  collection: PlannerEntityCollection;
   /** The entity ID within the collection */
   id: string;
   /** The raw entity data */
-  entity: Open3dEntityMap[Open3dEntityCollection];
+  entity: PlannerEntityMap[PlannerEntityCollection];
 }
 
 /**
@@ -46,14 +54,14 @@ export interface PropertiesPanelState {
 export interface PropertiesPanelCallbacks {
   /** Called when an entity property is updated */
   onUpdateEntity?: (
-    collection: Open3dEntityCollection,
+    collection: PlannerEntityCollection,
     id: string,
     updates: Record<string, unknown>,
   ) => void;
   /** Called when delete is requested */
-  onDeleteEntity?: (collection: Open3dEntityCollection, id: string) => void;
+  onDeleteEntity?: (collection: PlannerEntityCollection, id: string) => void;
   /** Called when lock toggle is requested */
-  onToggleLock?: (collection: Open3dEntityCollection, id: string) => void;
+  onToggleLock?: (collection: PlannerEntityCollection, id: string) => void;
   /** Called when user clicks outside to deselect */
   onDeselect?: () => void;
 }
@@ -72,37 +80,15 @@ export interface PropertiesPanelProps {
   selectedEntity: SelectedEntity | null;
   /** Action callbacks */
   callbacks?: PropertiesPanelCallbacks;
-  /** Display unit for dimensions */
-  displayUnit?: "mm" | "cm" | "m" | "in" | "ft-in";
-}
-
-/**
- * Convert a value to display string with unit
- */
-function formatDimension(value: number, unit: string): string {
-  switch (unit) {
-    case "m":
-      return (value / 1000).toFixed(2);
-    case "cm":
-      return (value / 10).toFixed(1);
-    case "in":
-      return (value / 25.4).toFixed(1);
-    case "ft-in": {
-      const totalInches = value / 25.4;
-      const feet = Math.floor(totalInches / 12);
-      const inches = Math.round(totalInches % 12);
-      return feet > 0 ? `${feet}' ${inches}"` : `${inches}"`;
-    }
-    default:
-      return value.toFixed(0);
-  }
+  /** Display unit for dimensions (document store stays mm). */
+  displayUnit?: PlannerDisplayUnit;
 }
 
 /**
  * Get entity type label for display
  */
-function getEntityTypeLabel(collection: Open3dEntityCollection): string {
-  const labels: Record<Open3dEntityCollection, string> = {
+function getEntityTypeLabel(collection: PlannerEntityCollection): string {
+  const labels: Record<PlannerEntityCollection, string> = {
     walls: "Wall",
     rooms: "Room",
     doors: "Door",
@@ -164,7 +150,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
   // GS REC-01 contextual props; locked reject everywhere (command + ui) per task7. No explicit any.
 
   /**
-   * Handle number input change
+   * Handle number input change (non-length fields: rotation, counts, plain numbers).
    */
   const handleNumberChange = useCallback(
     (field: string, subField?: string) =>
@@ -206,6 +192,41 @@ export const PropertiesPanel = memo(function PropertiesPanel({
         );
       },
     [selectedEntity, callbacks, isLocked],
+  );
+
+  /**
+   * Length fields: UI shows displayUnit; document stores canonical mm.
+   */
+  const handleLengthChange = useCallback(
+    (field: string, subField?: string) =>
+      (event: ChangeEvent<HTMLInputElement>) => {
+        if (!selectedEntity || isLocked) return;
+
+        const mm = parseLengthInput(event.target.value, displayUnit);
+        if (mm === null) return;
+
+        let updates: Record<string, unknown>;
+        if (subField) {
+          const existingNested = selectedEntity.entity[
+            field as keyof SelectedEntity["entity"]
+          ] as unknown as Record<string, unknown> | undefined;
+          updates = {
+            [field]: {
+              ...(existingNested || {}),
+              [subField]: mm,
+            },
+          };
+        } else {
+          updates = { [field]: mm };
+        }
+
+        callbacks?.onUpdateEntity?.(
+          selectedEntity.collection,
+          selectedEntity.id,
+          updates,
+        );
+      },
+    [selectedEntity, callbacks, isLocked, displayUnit],
   );
 
   /**
@@ -302,24 +323,24 @@ export const PropertiesPanel = memo(function PropertiesPanel({
               <PropertyField
                 id={`${id}-length`}
                 label="Length"
-                value={formatDimension(length, displayUnit)}
+                value={formatLengthDisplay(length, displayUnit)}
                 unit={displayUnit}
                 readOnly
               />
               <PropertyField
                 id={`${id}-thickness`}
                 label="Thickness"
-                value={wall.thickness}
+                value={formatLengthInput(wall.thickness, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("thickness")}
+                onChange={handleLengthChange("thickness")}
                 onKeyDown={handleKeyDown}
               />
               <PropertyField
                 id={`${id}-height`}
                 label="Height"
-                value={wall.height}
+                value={formatLengthInput(wall.height, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("height")}
+                onChange={handleLengthChange("height")}
                 onKeyDown={handleKeyDown}
               />
             </div>
@@ -330,17 +351,17 @@ export const PropertiesPanel = memo(function PropertiesPanel({
               <PropertyField
                 id={`${id}-startX`}
                 label="X"
-                value={wall.start.x}
+                value={formatLengthInput(wall.start.x, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("start", "x")}
+                onChange={handleLengthChange("start", "x")}
                 onKeyDown={handleKeyDown}
               />
               <PropertyField
                 id={`${id}-startY`}
                 label="Y"
-                value={wall.start.y}
+                value={formatLengthInput(wall.start.y, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("start", "y")}
+                onChange={handleLengthChange("start", "y")}
                 onKeyDown={handleKeyDown}
               />
             </div>
@@ -351,17 +372,17 @@ export const PropertiesPanel = memo(function PropertiesPanel({
               <PropertyField
                 id={`${id}-endX`}
                 label="X"
-                value={wall.end.x}
+                value={formatLengthInput(wall.end.x, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("end", "x")}
+                onChange={handleLengthChange("end", "x")}
                 onKeyDown={handleKeyDown}
               />
               <PropertyField
                 id={`${id}-endY`}
                 label="Y"
-                value={wall.end.y}
+                value={formatLengthInput(wall.end.y, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("end", "y")}
+                onChange={handleLengthChange("end", "y")}
                 onKeyDown={handleKeyDown}
               />
             </div>
@@ -369,7 +390,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
         </>
       );
     },
-    [id, displayUnit, handleNumberChange, handleKeyDown],
+    [id, displayUnit, handleLengthChange, handleKeyDown],
   );
 
   /**
@@ -394,17 +415,17 @@ export const PropertiesPanel = memo(function PropertiesPanel({
               <PropertyField
                 id={`${id}-width`}
                 label="Width"
-                value={door.width}
+                value={formatLengthInput(door.width, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("width")}
+                onChange={handleLengthChange("width")}
                 onKeyDown={handleKeyDown}
               />
               <PropertyField
                 id={`${id}-height`}
                 label="Height"
-                value={door.height}
+                value={formatLengthInput(door.height, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("height")}
+                onChange={handleLengthChange("height")}
                 onKeyDown={handleKeyDown}
               />
             </div>
@@ -415,9 +436,9 @@ export const PropertiesPanel = memo(function PropertiesPanel({
               <PropertyField
                 id={`${id}-position`}
                 label="Position"
-                value={door.position}
+                value={formatLengthInput(door.position, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("position")}
+                onChange={handleLengthChange("position")}
                 onKeyDown={handleKeyDown}
               />
             </div>
@@ -473,7 +494,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
     [
       id,
       displayUnit,
-      handleNumberChange,
+      handleLengthChange,
       handleSelectChange,
       handleKeyDown,
       selectedEntity,
@@ -502,25 +523,25 @@ export const PropertiesPanel = memo(function PropertiesPanel({
               <PropertyField
                 id={`${id}-width`}
                 label="Width"
-                value={window.width}
+                value={formatLengthInput(window.width, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("width")}
+                onChange={handleLengthChange("width")}
                 onKeyDown={handleKeyDown}
               />
               <PropertyField
                 id={`${id}-height`}
                 label="Height"
-                value={window.height}
+                value={formatLengthInput(window.height, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("height")}
+                onChange={handleLengthChange("height")}
                 onKeyDown={handleKeyDown}
               />
               <PropertyField
                 id={`${id}-sill`}
                 label="Sill Height"
-                value={window.sillHeight}
+                value={formatLengthInput(window.sillHeight, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("sillHeight")}
+                onChange={handleLengthChange("sillHeight")}
                 onKeyDown={handleKeyDown}
               />
             </div>
@@ -531,9 +552,9 @@ export const PropertiesPanel = memo(function PropertiesPanel({
               <PropertyField
                 id={`${id}-position`}
                 label="Position"
-                value={window.position}
+                value={formatLengthInput(window.position, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("position")}
+                onChange={handleLengthChange("position")}
                 onKeyDown={handleKeyDown}
               />
             </div>
@@ -559,7 +580,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
         </>
       );
     },
-    [id, displayUnit, handleNumberChange, handleSelectChange, handleKeyDown],
+    [id, displayUnit, handleLengthChange, handleSelectChange, handleKeyDown],
   );
 
   /**
@@ -603,8 +624,12 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 <PropertyField
                   id={`${id}-ws-size`}
                   label="Size"
-                  value={`${workstationConfig.size.lengthMm}×${workstationConfig.size.depthMm}`}
-                  unit="mm"
+                  value={formatFootprintDisplay(
+                    workstationConfig.size.lengthMm,
+                    workstationConfig.size.depthMm,
+                    displayUnit,
+                  )}
+                  unit={displayUnit}
                   readOnly
                 />
                 <PropertyField
@@ -622,17 +647,17 @@ export const PropertiesPanel = memo(function PropertiesPanel({
               <PropertyField
                 id={`${id}-posX`}
                 label="X"
-                value={furniture.position.x}
+                value={formatLengthInput(furniture.position.x, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("position", "x")}
+                onChange={handleLengthChange("position", "x")}
                 onKeyDown={handleKeyDown}
               />
               <PropertyField
                 id={`${id}-posY`}
                 label="Y"
-                value={furniture.position.y}
+                value={formatLengthInput(furniture.position.y, displayUnit)}
                 unit={displayUnit}
-                onChange={handleNumberChange("position", "y")}
+                onChange={handleLengthChange("position", "y")}
                 onKeyDown={handleKeyDown}
               />
             </div>
@@ -660,9 +685,9 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                   <PropertyField
                     id={`${id}-furnWidth`}
                     label="Width"
-                    value={furniture.width}
+                    value={formatLengthInput(furniture.width, displayUnit)}
                     unit={displayUnit}
-                    onChange={handleNumberChange("width")}
+                    onChange={handleLengthChange("width")}
                     onKeyDown={handleKeyDown}
                   />
                 )}
@@ -670,9 +695,9 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                   <PropertyField
                     id={`${id}-furnDepth`}
                     label="Depth"
-                    value={furniture.depth}
+                    value={formatLengthInput(furniture.depth, displayUnit)}
                     unit={displayUnit}
-                    onChange={handleNumberChange("depth")}
+                    onChange={handleLengthChange("depth")}
                     onKeyDown={handleKeyDown}
                   />
                 )}
@@ -680,9 +705,9 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                   <PropertyField
                     id={`${id}-furnHeight`}
                     label="Height"
-                    value={furniture.height}
+                    value={formatLengthInput(furniture.height, displayUnit)}
                     unit={displayUnit}
-                    onChange={handleNumberChange("height")}
+                    onChange={handleLengthChange("height")}
                     onKeyDown={handleKeyDown}
                   />
                 )}
@@ -750,7 +775,14 @@ export const PropertiesPanel = memo(function PropertiesPanel({
         </>
       );
     },
-    [id, displayUnit, handleNumberChange, handleTextChange, handleKeyDown],
+    [
+      id,
+      displayUnit,
+      handleLengthChange,
+      handleNumberChange,
+      handleTextChange,
+      handleKeyDown,
+    ],
   );
 
   /**
@@ -800,8 +832,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
               <PropertyField
                 id={`${id}-area`}
                 label="Area"
-                value={formatDimension(room.area, displayUnit) + "²"}
-                unit={displayUnit}
+                value={formatAreaDisplay(room.area, displayUnit)}
                 readOnly
               />
               {room.floorTexture && (
@@ -1066,9 +1097,14 @@ function PropertyField({
 }: PropertyFieldProps) {
   // Use React Aria NumberField for numeric strictness and accessibility
   const numValue = typeof value === "string" ? parseFloat(value) : value;
+  // ft-in and mixed label strings must stay text (NumberField cannot own 6' 8").
+  const forceText =
+    unit === "ft-in" ||
+    (typeof value === "string" &&
+      (isNaN(numValue) || /['"a-zA-Z°²]/.test(value)));
 
-  if (typeof value === "string" && isNaN(numValue)) {
-    // Fallback to text input for non-numeric fields (like name, color)
+  if (forceText) {
+    // Text path: names, colors, ft-in, area labels
     return (
       <div className={styles.field}>
         <label htmlFor={id} className={styles.fieldLabel}>
@@ -1079,11 +1115,12 @@ function PropertyField({
             id={id}
             type="text"
             className={styles.fieldInput}
-            value={value}
+            value={String(value)}
             onChange={onChange}
             onKeyDown={onKeyDown}
             readOnly={readOnly}
           />
+          {unit ? <span className={styles.fieldUnit}>{unit}</span> : null}
         </div>
       </div>
     );

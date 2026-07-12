@@ -1,5 +1,5 @@
 import { createRectangularRoomProject } from "../../model/project";
-import type { Open3dProject } from "../../model/types";
+import type { PlannerProject } from "../../model/types";
 
 export interface LegacyRectScene {
   type: "cad-suite-planner-scene";
@@ -20,7 +20,7 @@ export interface ConversionReport {
 export function convertLegacyRectScene(
   scene: LegacyRectScene,
   idFactory: () => string,
-): { project: Open3dProject; report: ConversionReport } {
+): { project: PlannerProject; report: ConversionReport } {
   if (scene.room.widthMm <= 0 || scene.room.depthMm <= 0) {
     throw new Error("Legacy room dimensions must be positive.");
   }

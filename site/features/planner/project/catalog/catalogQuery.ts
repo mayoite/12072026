@@ -1,20 +1,20 @@
 import type { QueryFunctionContext } from "@tanstack/react-query";
 
-import { OPEN3D_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
-import type { Open3dCatalogClient } from "./catalogClient";
-import type { Open3dCatalogItem } from "./catalogTypes";
+import { PLANNER_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
+import type { PlannerCatalogClient } from "./catalogClient";
+import type { PlannerCatalogItem } from "./catalogTypes";
 
-export const OPEN3D_CATALOG_QUERY_KEY = ["open3d", "catalog"] as const;
+export const PLANNER_CATALOG_QUERY_KEY = ["open3d", "catalog"] as const;
 
-export interface Open3dCatalogQueryData {
-  items: Open3dCatalogItem[];
+export interface PlannerCatalogQueryData {
+  items: PlannerCatalogItem[];
   source: "remote" | "fallback";
 }
 
-export async function loadOpen3dCatalog(
-  client: Open3dCatalogClient,
+export async function loadPlannerCatalog(
+  client: PlannerCatalogClient,
   context?: Pick<QueryFunctionContext, "signal">,
-): Promise<Open3dCatalogQueryData> {
+): Promise<PlannerCatalogQueryData> {
   if (context?.signal.aborted) throw new DOMException("Aborted", "AbortError");
   await client.loadDescriptorsFromLoader();
   const allItems = client.getAll();
@@ -25,6 +25,6 @@ export async function loadOpen3dCatalog(
 
   const loaded = await client.loadFromApi("configurator", 200);
   if (loaded.length > 0) return { items: loaded, source: "remote" };
-  client.load(OPEN3D_DEMO_CATALOG_ITEMS, "configurator");
-  return { items: OPEN3D_DEMO_CATALOG_ITEMS, source: "fallback" };
+  client.load(PLANNER_DEMO_CATALOG_ITEMS, "configurator");
+  return { items: PLANNER_DEMO_CATALOG_ITEMS, source: "fallback" };
 }

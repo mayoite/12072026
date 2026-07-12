@@ -11,8 +11,8 @@ import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
-  OPEN3D_ORBIT_DEFAULT_ENABLED,
-  getOpen3dViewerControlProps,
+  PLANNER_ORBIT_DEFAULT_ENABLED,
+  getPlannerViewerControlProps,
 } from "@/features/planner/3d/orbitDefaults";
 import { ThreeViewerInner } from "@/features/planner/3d/ThreeViewerInner";
 import { normalizeDegrees } from "@/features/planner/project/model/units";
@@ -141,14 +141,14 @@ vi.mock("three/examples/jsm/controls/OrbitControls.js", () => ({
 }));
 
 describe("orbitControlsDefault — product helper / prop contract", () => {
-  it("OPEN3D_ORBIT_DEFAULT_ENABLED is true", () => {
-    expect(OPEN3D_ORBIT_DEFAULT_ENABLED).toBe(true);
+  it("PLANNER_ORBIT_DEFAULT_ENABLED is true", () => {
+    expect(PLANNER_ORBIT_DEFAULT_ENABLED).toBe(true);
   });
 
-  it("getOpen3dViewerControlProps forces enableControls: true", () => {
-    const props = getOpen3dViewerControlProps();
+  it("getPlannerViewerControlProps forces enableControls: true", () => {
+    const props = getPlannerViewerControlProps();
     expect(props).toEqual({ enableControls: true });
-    expect(props.enableControls).toBe(OPEN3D_ORBIT_DEFAULT_ENABLED);
+    expect(props.enableControls).toBe(PLANNER_ORBIT_DEFAULT_ENABLED);
   });
 
   it("furniture document rotation stays degrees via normalizeDegrees", () => {

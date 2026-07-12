@@ -56,16 +56,61 @@ async function primaryCanvas(page: Page): Promise<Locator> {
   return page.locator(PLANNER_PRIMARY_CANVAS);
 }
 
+/**
+ * Keep Fabric upper-canvas in the viewport before measuring hit targets.
+ * A tall shell + scrollIntoView on the tool rail used to shove the stage to
+ * negative Y so wall drags hit nothing and walls stayed at seed (4).
+ */
+export async function ensurePlannerCanvasOnScreen(page: Page): Promise<void> {
+  const stage = page.locator(PLANNER_FABRIC_STAGE);
+  await expect(stage).toBeVisible({ timeout: 25_000 });
+  await stage.evaluate((el) => {
+    el.scrollIntoView({ block: "nearest", inline: "nearest" });
+    // Prefer restoring a scrollable ancestor over window when body is locked.
+    let node: HTMLElement | null = el.parentElement;
+    while (node && node !== document.body) {
+      const style = window.getComputedStyle(node);
+      const oy = style.overflowY;
+      if (
+        (oy === "auto" || oy === "scroll" || oy === "overlay") &&
+        node.scrollHeight > node.clientHeight + 1
+      ) {
+        // Keep stage top inside this scroller when possible.
+        const nodeRect = node.getBoundingClientRect();
+        const elRect = el.getBoundingClientRect();
+        if (elRect.top < nodeRect.top) {
+          node.scrollTop += elRect.top - nodeRect.top;
+        }
+      }
+      node = node.parentElement;
+    }
+    if (window.scrollY !== 0) {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+    }
+  });
+}
+
 async function canvasBox(page: Page) {
+  await ensurePlannerCanvasOnScreen(page);
   const canvas = await primaryCanvas(page);
   await expect(canvas).toBeVisible({ timeout: 25_000 });
-  const box = await canvas.boundingBox();
+  let box = await canvas.boundingBox();
   if (!box) throw new Error("Planner canvas bounding box not found");
+  // If still mostly off-screen, pin stage and remeasure once.
+  const viewportH = page.viewportSize()?.height ?? 900;
+  if (box.y + box.height * 0.2 < 0 || box.y > viewportH - 40) {
+    await page.locator(PLANNER_FABRIC_STAGE).evaluate((el) => {
+      el.scrollIntoView({ block: "center", inline: "nearest" });
+    });
+    box = await canvas.boundingBox();
+    if (!box) throw new Error("Planner canvas bounding box not found after scroll");
+  }
   return { canvas, box };
 }
 
 export async function waitForPlannerCanvas(page: Page): Promise<void> {
   await expect(page.locator(PLANNER_PRIMARY_CANVAS)).toBeVisible({ timeout: 25_000 });
+  await ensurePlannerCanvasOnScreen(page);
 }
 
 function plannerToolNamePattern(toolName: string): RegExp {
@@ -79,11 +124,11 @@ export function plannerToolButton(page: Page, toolName: string): Locator {
   const canvasTools = page.getByRole("navigation", { name: "Canvas tools" });
   const radio = canvasTools.getByRole("radio", { name: pattern });
   // Legacy fallbacks: button in nav or Drawing tools group.
-  const open3dButton = canvasTools.getByRole("button", { name: pattern });
+  const plannerButton = canvasTools.getByRole("button", { name: pattern });
   const drawingGroup = page
     .getByRole("group", { name: "Drawing tools" })
     .getByRole("button", { name: pattern });
-  return radio.or(open3dButton).or(drawingGroup);
+  return radio.or(plannerButton).or(drawingGroup);
 }
 
 export async function canvasPoint(
@@ -153,7 +198,9 @@ export async function dragOnCanvas(
 export async function selectPlannerTool(page: Page, toolName: string): Promise<void> {
   const button = plannerToolButton(page, toolName);
   await expect(button).toBeVisible({ timeout: 15_000 });
-  await button.scrollIntoViewIfNeeded();
+  // Do NOT scrollIntoViewIfNeeded on the rail — a blown stage height centers
+  // tools below the fold; scrolling them into view shoves the Fabric stage
+  // above the viewport and wall drags miss (walls stay at seed).
   // Radios use aria-checked; legacy buttons use aria-pressed.
   const role = await button.getAttribute("role");
   const isRadio = role === "radio";
@@ -162,7 +209,8 @@ export async function selectPlannerTool(page: Page, toolName: string): Promise<v
       (await button.isChecked().catch(() => false))
     : (await button.getAttribute("aria-pressed")) === "true";
   if (!armed) {
-    await button.click();
+    // force: skip actionability scroll that would kick the stage off-screen.
+    await button.click({ force: true });
     try {
       if (isRadio) {
         await expect(button).toBeChecked({ timeout: 2_000 });
@@ -220,6 +268,7 @@ export async function getFurnitureCount(page: Page): Promise<number> {
 /**
  * Open3d Fabric wall tool: press at start → drag → release at end.
  * Live host commits on pointerup when length ≥ 10mm (not two independent taps).
+ * Re-measures canvas after arming so coords are never from an off-screen box.
  */
 export async function drawWallByTwoClicks(
   page: Page,
@@ -227,6 +276,7 @@ export async function drawWallByTwoClicks(
   to: { rx: number; ry: number },
 ): Promise<void> {
   await selectPlannerTool(page, "Wall");
+  await ensurePlannerCanvasOnScreen(page);
   await dragOnCanvas(page, from, to);
   await page.waitForTimeout(200);
 }
@@ -283,6 +333,10 @@ type FabricViewHandle = {
 export async function firstFurnitureCenter(
   page: Page,
 ): Promise<{ x: number; y: number } | null> {
+  // Prefer visible upper canvas rect — lower can report a blown layout box.
+  await page.locator(PLANNER_FABRIC_STAGE).evaluate((el) => {
+    el.scrollIntoView({ block: "nearest", inline: "nearest" });
+  });
   const point = await page.evaluate(() => {
     const w = (window as unknown as { __plannerFabricView?: FabricViewHandle })
       .__plannerFabricView;
@@ -309,10 +363,32 @@ export async function firstFurnitureCenter(
     const vt = w.viewportTransform ?? [1, 0, 0, 1, 0, 0];
     const px = center.x * vt[0] + center.y * vt[2] + vt[4];
     const py = center.x * vt[1] + center.y * vt[3] + vt[5];
-    const el = w.lowerCanvasEl;
+    const host = document.querySelector(
+      '[data-testid="planner-fabric-stage"]',
+    ) as HTMLElement | null;
+    const upper = document.querySelector(
+      '[data-testid="planner-fabric-stage"] canvas.upper-canvas',
+    ) as HTMLElement | null;
+    const el = upper ?? w.lowerCanvasEl ?? host;
     if (!el) return null;
     const rect = el.getBoundingClientRect();
-    return { x: rect.left + px, y: rect.top + py };
+    // Map fabric coords into the *visible* box (clamp if layout still tall).
+    const x = rect.left + Math.min(Math.max(px, 4), Math.max(4, rect.width - 4));
+    const y = rect.top + Math.min(Math.max(py, 4), Math.max(4, rect.height - 4));
+    // If rect is mostly off-screen, use viewport-safe Y on the visible strip.
+    const safeY =
+      y < 0
+        ? Math.min(window.innerHeight - 8, Math.max(8, rect.bottom - 40))
+        : y > window.innerHeight
+          ? Math.max(8, rect.top + 40)
+          : y;
+    const safeX =
+      x < 0
+        ? Math.min(window.innerWidth - 8, Math.max(8, rect.left + 40))
+        : x > window.innerWidth
+          ? Math.max(8, rect.right - 40)
+          : x;
+    return { x: safeX, y: safeY };
   });
   return point;
 }

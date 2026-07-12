@@ -54,7 +54,7 @@ const commitConventions = [
 ]
 
 const commonTasks = [
-  { icon: Wrench, title: 'Add a new planner tool', steps: ['Create component in features/planner/canvas-fabric/', 'Add tool type to fabricDrawToolTypes.ts', 'Wire to Zustand store action', 'Add test under tests/planner/'] },
+  { icon: Wrench, title: 'Add a new planner tool', steps: ['Create component in features/planner/canvas/', 'Add tool type to fabricDrawToolTypes.ts', 'Wire to Zustand store action', 'Add test under tests/planner/'] },
   { icon: Database, title: 'Add a database table', steps: ['Write SQL migration in config/database/migrations/', 'Add Drizzle schema definition', 'Enable RLS + write policies', 'Run db:apply + db:types to regenerate types'] },
   { icon: Package, title: 'Add a catalog product', steps: ['Run npm.cmd run catalog:ingest', 'Upload images: npm.cmd run assets:cdn:upload', 'Run npm.cmd run audit:supabase:catalog', 'Verify in planner library panel'] },
   { icon: Rocket, title: 'Deploy to production', steps: ['Ensure all tests pass locally', 'Create PR + get approval', 'Run npm.cmd run release:gate', 'Run npm.cmd run vercel:prod'] },
@@ -333,7 +333,7 @@ export function Workflows() {
               language="bash"
               code={`git commit -m "feat(planner): add wall snap tool with grid alignment
 
-- New FabricWallSnap utility in canvas-fabric/lib/
+- New FabricWallSnap utility in canvas/lib/
 - Integrates with plannerStore for tool state
 - Tests in tests/planner/wall-snap.test.ts
 - Closes var(--color-bronze-900)

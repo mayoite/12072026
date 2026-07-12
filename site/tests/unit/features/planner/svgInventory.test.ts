@@ -73,12 +73,12 @@ import {
   resolveSymbolGenerator,
   registerSymbolGenerator,
 } from "@/features/planner/project/catalog/svg/svgSymbols";
-import type { Open3dCatalogDimensions } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogDimensions } from "@/features/planner/project/catalog/catalogTypes";
 import { sanitizeSvg, isSvgSafe } from "@/features/planner/project/catalog/svg/svgSanitizer";
 import { generateFallbackSvg } from "@/features/planner/project/catalog/svg/svgFallback";
 
 describe("03A-SVG: Symbol Generation", () => {
-  const dims: Open3dCatalogDimensions = { widthMm: 1200, depthMm: 600, heightMm: 750 };
+  const dims: PlannerCatalogDimensions = { widthMm: 1200, depthMm: 600, heightMm: 750 };
 
   describe("generateSymbol", () => {
     it("generates desk symbol", () => {
@@ -544,7 +544,7 @@ describe("03A-INV: Taxonomy", () => {
 // ────────────────────────────────────────────────────────────────
 
 import { InventorySearchIndex } from "@/features/planner/project/catalog/inventory/inventoryIndex";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 
 describe("03A-INV: Search Index", () => {
   function makeItem(
@@ -552,8 +552,8 @@ describe("03A-INV: Search Index", () => {
     sku: string,
     name: string,
     tags: string[] = [],
-    overrides: Partial<Open3dCatalogItem> = {},
-  ): Open3dCatalogItem {
+    overrides: Partial<PlannerCatalogItem> = {},
+  ): PlannerCatalogItem {
     return {
       id, slug: id, sku,
       name,
@@ -807,8 +807,8 @@ it("finds by exact name", () => {
       }
     }
 
-    function makeLargeInventory(size: number): Open3dCatalogItem[] {
-      const items: Open3dCatalogItem[] = [];
+    function makeLargeInventory(size: number): PlannerCatalogItem[] {
+      const items: PlannerCatalogItem[] = [];
       for (let i = 0; i < size; i += 1) {
         items.push(makeItem(
           `item-${i}`,

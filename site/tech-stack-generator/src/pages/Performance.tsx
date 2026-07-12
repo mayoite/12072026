@@ -135,27 +135,17 @@ export function Performance() {
             code={`import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 
-// Heavy canvas + 3D — only load on /planner
-const FabricCanvasWorkspace = dynamic(
-  () => import('@/features/planner/canvas-fabric/FabricCanvasWorkspace')
-    .then(m => m.FabricCanvasWorkspace),
+// Live planner — guest/canvas routes load workspace via PlannerHost
+const PlannerHost = dynamic(
+  () => import('@/features/planner/ui/PlannerHost').then(m => m.PlannerHost),
   { ssr: false, loading: () => <PlannerSkeleton /> }
-)
-
-const Planner3DViewer = dynamic(
-  () => import('@/features/planner/3d/Planner3DViewer')
-    .then(m => m.Planner3DViewer),
-  { ssr: false, loading: () => <ViewerSkeleton /> }
 )
 
 export default function PlannerPage() {
   return (
     <div className="planner-layout">
       <Suspense fallback={<PlannerSkeleton />}>
-        <FabricCanvasWorkspace />
-      </Suspense>
-      <Suspense fallback={<ViewerSkeleton />}>
-        <Planner3DViewer />
+        <PlannerHost />
       </Suspense>
     </div>
   )

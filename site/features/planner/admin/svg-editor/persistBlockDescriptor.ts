@@ -31,10 +31,10 @@ import {
   BLOCK_DESCRIPTOR_SLUG_REGEX,
   freezeFreshDescriptor,
   parseBlockDescriptor,
-  toOpen3dDescriptorErrorHttp,
+  toPlannerDescriptorErrorHttp,
   type BlockDescriptor,
-  type Open3dDescriptorError,
-  type Open3dResult,
+  type PlannerDescriptorError,
+  type PlannerResult,
 } from "@/features/planner/project/catalog/svg/svgTypes";
 import {
   BLOCK_DESCRIPTORS_DIR_DEFAULT,
@@ -114,7 +114,7 @@ export interface PersistOptions {
   lock?: AcquireDescriptorLockOptions;
 }
 
-function sanitizeSlug(slug: string): Open3dResult<string, PersistError> {
+function sanitizeSlug(slug: string): PlannerResult<string, PersistError> {
   if (typeof slug !== "string") {
     return {
       ok: false,
@@ -140,8 +140,8 @@ function sanitizeSlug(slug: string): Open3dResult<string, PersistError> {
   return { ok: true, value: slug };
 }
 
-function coerceOpen3dError(error: Open3dDescriptorError): PersistError {
-  const http = toOpen3dDescriptorErrorHttp(error);
+function coercePlannerError(error: PlannerDescriptorError): PersistError {
+  const http = toPlannerDescriptorErrorHttp(error);
   return {
     reason:
       error.kind === "notFound"
@@ -159,7 +159,7 @@ function buildTempPath(slug: string, dir: string, nextVersion: number): string {
   return path.resolve(dir, `.${slug}.${nextVersion}.tmp-${suffix}`);
 }
 
-function ensureDir(dir?: string): Open3dResult<string, PersistError> {
+function ensureDir(dir?: string): PlannerResult<string, PersistError> {
   if (typeof dir === "string" && dir.length > 0) {
     return { ok: true, value: path.resolve(dir) };
   }
@@ -308,14 +308,14 @@ export function persistBlockDescriptor(
   const frozen = freezeFreshDescriptor(shapeForFreeze, clock);
   if (!frozen.ok) {
     releaseLock();
-    return { ok: false, error: coerceOpen3dError(frozen.error) };
+    return { ok: false, error: coercePlannerError(frozen.error) };
   }
   const descriptor = frozen.value;
 
   const reparse = parseBlockDescriptor(descriptor);
   if (!reparse.ok) {
     releaseLock();
-    return { ok: false, error: coerceOpen3dError(reparse.error) };
+    return { ok: false, error: coercePlannerError(reparse.error) };
   }
 
   const nextVersion = currentVersion + 1;
@@ -403,9 +403,9 @@ export function persistBlockDescriptor(
   };
 }
 
-export function parseAdminPayload(input: unknown): Open3dResult<
+export function parseAdminPayload(input: unknown): PlannerResult<
   BlockDescriptor,
-  Open3dDescriptorError
+  PlannerDescriptorError
 > {
   if (!input || typeof input !== "object") {
     return {

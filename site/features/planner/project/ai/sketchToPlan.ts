@@ -5,8 +5,8 @@
  * sketches/images to floor plans through the AI service.
  */
 
-import type { Open3dProject, Open3dFloor, Open3dDisplayUnit } from "../model/types";
-import { createRectangularRoomProject } from "../model/project"; // (removed unused createOpen3dProject)
+import type { PlannerProject, PlannerFloor, PlannerDisplayUnit } from "../model/types";
+import { createRectangularRoomProject } from "../model/project"; // (removed unused createPlannerProject)
 
 /**
  * Sketch-to-plan request options.
@@ -17,7 +17,7 @@ export interface SketchToPlanRequest {
   /** Optional name for the resulting project */
   projectName?: string;
   /** Target display unit for the plan */
-  displayUnit?: Open3dDisplayUnit;
+  displayUnit?: PlannerDisplayUnit;
   /** Optional hints about the sketch (room count, dimensions, etc.) */
   hints?: SketchHints;
 }
@@ -45,8 +45,8 @@ export type SketchToPlanStatus = "pending" | "processing" | "completed" | "faile
 export interface SketchToPlanResult {
   success: boolean;
   status: SketchToPlanStatus;
-  project?: Open3dProject;
-  floor?: Open3dFloor;
+  project?: PlannerProject;
+  floor?: PlannerFloor;
   error?: string;
   message?: string;
   /** Time taken to process in milliseconds */
@@ -98,7 +98,7 @@ export function validateSketchToPlanRequest(
   }
 
   if (request.displayUnit) {
-    const validUnits: Open3dDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
+    const validUnits: PlannerDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
     if (!validUnits.includes(request.displayUnit)) {
       errors.push(`Invalid display unit: ${request.displayUnit}`);
     }

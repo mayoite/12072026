@@ -44,10 +44,9 @@ import { sanitizeSvg } from "@/features/planner/project/catalog/svg/svgSanitizer
 // ── Path helpers ──────────────────────────────────────────────────────────────
 
 const _dirname = dirname(fileURLToPath(import.meta.url));
-// Test file is at site/tests/unit/features/planner/project/catalog/
-// Go up 6 levels to reach site/, then down to scripts/generate-svg/
-const FIXTURES_DIR = join(_dirname, "../../../../../../scripts/generate-svg/_fixtures");
-const GOLDENS_DIR = join(_dirname, "../../../../../../scripts/generate-svg/__goldens__");
+// Test file: site/tests/unit/features/planner/catalog/ → 5 levels up to site/
+const FIXTURES_DIR = join(_dirname, "../../../../../scripts/generate-svg/_fixtures");
+const GOLDENS_DIR = join(_dirname, "../../../../../scripts/generate-svg/__goldens__");
 
 function readFixture(name: string): PipelineDescriptor {
   const raw = readFileSync(join(FIXTURES_DIR, `${name}.json`), "utf-8");

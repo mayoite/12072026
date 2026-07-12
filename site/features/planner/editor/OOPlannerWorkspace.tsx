@@ -12,7 +12,7 @@ import {
 import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
 import {
   Lazy3DViewer,
-  getOpen3dViewerControlProps,
+  getPlannerViewerControlProps,
 } from "@/features/planner/3d/ThreeLazyViewer";
 import {
   PlannerCanvasStage,
@@ -34,14 +34,17 @@ import {
 } from "@/features/planner/project/catalog/workstationConfiguratorV0";
 import { placeModularWithGeneratedGlbBrowser } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbBrowser";
 import { shouldPlaceModularWithGeneratedGlb } from "@/features/planner/asset-engine/mesh/shouldPlaceModularWithGeneratedGlb";
-import { importOpen3dPlannerText } from "@/features/planner/project/shared/export/importUtils";
-import { useOpen3dWorkspaceAutosave } from "@/features/planner/project/persistence/useOpen3dWorkspaceAutosave";
+import { importPlannerPlannerText } from "@/features/planner/project/shared/export/importUtils";
+import { usePlannerWorkspaceAutosave } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
 import { setActiveFloor } from "@/features/planner/project/model/operations/pureActions";
 import { createRectangularRoomProject } from "@/features/planner/project/model/project";
-import { addOpen3dWall } from "@/features/planner/project/model/actions/walls";
-import { addOpen3dDoor } from "@/features/planner/project/model/actions/openings";
+import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
+import {
+  addPlannerDoor,
+  addPlannerWindow,
+} from "@/features/planner/project/model/actions/openings";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
-import { preflightOpen3dExport } from "@/features/planner/project/shared/export/exportPreflight";
+import { preflightPlannerExport } from "@/features/planner/project/shared/export/exportPreflight";
 import {
   downloadJSON,
   downloadSVG,
@@ -53,17 +56,17 @@ import {
   downloadFurnitureBoqCSV,
 } from "@/features/planner/project/shared/export/exportUtils";
 import {
-  buildOpen3dFurnitureBoq,
-  buildOpen3dBoqFilename,
-  exportOpen3dFurnitureBoqToCsv,
-  exportOpen3dFurnitureBoqToJson,
+  buildPlannerFurnitureBoq,
+  buildPlannerBoqFilename,
+  exportPlannerFurnitureBoqToCsv,
+  exportPlannerFurnitureBoqToJson,
 } from "@/features/planner/project/shared/export/projectFurnitureBoq";
 import {
   summarizeWorkstationBoqV0,
   workstationBoqToQuoteCartItems,
 } from "@/features/planner/project/catalog/workstationBoqV0";
 import { useQuoteCart } from "@/lib/store/quoteCart";
-import { useOpen3dSvgCatalog } from "@/features/planner/project/catalog/useOpen3dWorkspaceCatalog";
+import { usePlannerSvgCatalog } from "@/features/planner/project/catalog/usePlannerWorkspaceCatalog";
 import { CanvasToolRail } from "./CanvasToolRail";
 import { CommandPalette } from "./CommandPalette";
 import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
@@ -78,7 +81,7 @@ import {
 } from "./canvasTool";
 import {
   DEFAULT_LAYER_VISIBILITY,
-  type Open3dLayerVisibility,
+  type PlannerLayerVisibility,
 } from "./layerVisibility";
 import { useWorkspaceKeyboard } from "./useWorkspaceKeyboard";
 import { useWorkspaceCanvas } from "./useWorkspaceCanvas";
@@ -86,18 +89,20 @@ import {
   applySelectionDelete,
   deleteEntityFromProject,
   resolveSelectedEntity,
+  selectionAfterBatchPlace,
   updateEntityInProject,
 } from "./workspaceEntityHelpers";
 import {
-  open3dSaveStatusLabel,
+  plannerSaveStatusLabel,
   formatSelectionStatus,
   formatSnapStatus,
   formatToolStatus,
 } from "./workspaceStatusLabels";
 import { summarizeFloorMetrics } from "./workspacePlanMetrics";
-import type { Open3dDisplayUnit, Open3dPoint } from "@/features/planner/project/model/types";
+import type { PlannerDisplayUnit, PlannerPoint } from "@/features/planner/project/model/types";
+import { formatLengthDisplay } from "@/features/planner/project/model/units";
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
-import type { Open3dEntityCollection } from "@/features/planner/project/model/actions/projectActions";
+import type { PlannerEntityCollection } from "@/features/planner/project/model/actions/projectActions";
 import type { PaletteCommandHandlers } from "@/features/planner/project/lib/commands/paletteCommands";
 import {
   parsePlannerWorkspacePreferences,
@@ -140,13 +145,13 @@ export function OOPlannerWorkspace({
     replaceProjectRef.current = workspaceCanvas.replaceProject;
   });
 
-  const autosave = useOpen3dWorkspaceAutosave(
+  const autosave = usePlannerWorkspaceAutosave(
     workspaceCanvas.project,
     guestMode,
     planId,
     { hydrated },
   );
-  const catalog = useOpen3dSvgCatalog();
+  const catalog = usePlannerSvgCatalog();
   const restoreSnapshotRef = useRef(autosave.restoreSnapshot);
   useLayoutEffect(() => {
     restoreSnapshotRef.current = autosave.restoreSnapshot;
@@ -194,8 +199,8 @@ export function OOPlannerWorkspace({
     return () => cancelAnimationFrame(frame);
   }, [viewMode]);
   const [activeTool, setActiveTool] = useState<PlannerTool>("wall");
-  const [displayUnit, setDisplayUnit] = useState<Open3dDisplayUnit>("cm");
-  const [layerVisibility, setLayerVisibility] = useState<Open3dLayerVisibility>(
+  const [displayUnit, setDisplayUnit] = useState<PlannerDisplayUnit>("cm");
+  const [layerVisibility, setLayerVisibility] = useState<PlannerLayerVisibility>(
     DEFAULT_LAYER_VISIBILITY,
   );
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -219,7 +224,7 @@ export function OOPlannerWorkspace({
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
-      const raw = localStorage.getItem("open3d-workspace-preferences");
+      const raw = localStorage.getItem("planner-workspace-preferences");
       const prefs = parsePlannerWorkspacePreferences(
         raw ? JSON.parse(raw) : null,
       );
@@ -297,13 +302,13 @@ export function OOPlannerWorkspace({
     setDensity((current) => {
       const next = current === "compact" ? "touch" : "compact";
       try {
-        const raw = localStorage.getItem("open3d-workspace-preferences");
+        const raw = localStorage.getItem("planner-workspace-preferences");
         const base = parsePlannerWorkspacePreferences(
           raw ? JSON.parse(raw) : null,
         );
         const updated = { ...base, density: next };
         localStorage.setItem(
-          "open3d-workspace-preferences",
+          "planner-workspace-preferences",
           JSON.stringify(updated),
         );
       } catch {
@@ -326,7 +331,7 @@ export function OOPlannerWorkspace({
 
   const handleUpdateEntity = useCallback(
     (
-      collection: Open3dEntityCollection,
+      collection: PlannerEntityCollection,
       id: string,
       updates: Record<string, unknown>,
     ) => {
@@ -338,9 +343,9 @@ export function OOPlannerWorkspace({
   );
 
   const handleWallDrawn = useCallback(
-    (start: Open3dPoint, end: Open3dPoint) => {
+    (start: PlannerPoint, end: PlannerPoint) => {
       workspaceCanvas.updateProject((project) =>
-        addOpen3dWall(project, { start, end }, newEntityId),
+        addPlannerWall(project, { start, end }, newEntityId),
       );
       setActiveTool("select");
       armedToolRef.current = "select";
@@ -350,31 +355,49 @@ export function OOPlannerWorkspace({
   );
 
   const handleOpeningPlaced = useCallback(
-    (wallId: string, position: number) => {
-      workspaceCanvas.updateProject((project) =>
-        addOpen3dDoor(
-          project,
-          {
-            wallId,
-            position,
-            width: 900,
-            height: 2100,
-            type: "single",
-            swingDirection: "left",
-            flipSide: false,
-          },
-          newEntityId,
-        ),
-      );
+    (wallId: string, position: number, kind: "door" | "window" = "door") => {
+      if (kind === "window") {
+        workspaceCanvas.updateProject((project) =>
+          addPlannerWindow(
+            project,
+            {
+              wallId,
+              position,
+              width: 1200,
+              height: 1200,
+              sillHeight: 900,
+              type: "standard",
+            },
+            newEntityId,
+          ),
+        );
+        setWorkspaceMessage("Window added.");
+      } else {
+        workspaceCanvas.updateProject((project) =>
+          addPlannerDoor(
+            project,
+            {
+              wallId,
+              position,
+              width: 900,
+              height: 2100,
+              type: "single",
+              swingDirection: "left",
+              flipSide: false,
+            },
+            newEntityId,
+          ),
+        );
+        setWorkspaceMessage(kind === "door" ? "Door added." : "Opening added.");
+      }
       setActiveTool("select");
       armedToolRef.current = "select";
-      setWorkspaceMessage("Opening added.");
     },
     [workspaceCanvas],
   );
 
   const handleFurnitureModified = useCallback(
-    (update: { entityId: string; position: Open3dPoint; rotation: number }) => {
+    (update: { entityId: string; position: PlannerPoint; rotation: number }) => {
       workspaceCanvas.updateProject((project) =>
         updateEntityInProject(project, "furniture", update.entityId, {
           position: update.position,
@@ -397,7 +420,7 @@ export function OOPlannerWorkspace({
   );
 
   const handleDeleteEntity = useCallback(
-    (collection: Open3dEntityCollection, id: string) => {
+    (collection: PlannerEntityCollection, id: string) => {
       workspaceCanvas.updateProject((project) =>
         deleteEntityFromProject(project, collection, id),
       );
@@ -522,10 +545,8 @@ export function OOPlannerWorkspace({
       });
 
       if (placedIds.length > 0) {
-        workspaceCanvas.setSelection({
-          type: "furniture",
-          ids: placedIds,
-        });
+        // W3: single-id selection only — multi-id + Delete wipes entire batch.
+        workspaceCanvas.setSelection(selectionAfterBatchPlace(placedIds));
         setActiveTool("select");
         armedToolRef.current = "select";
         canvasRef.current?.setTool("select");
@@ -538,7 +559,7 @@ export function OOPlannerWorkspace({
   );
 
   const handlePlaceAtPoint = useCallback(
-    (point: Open3dPoint) => {
+    (point: PlannerPoint) => {
       // Systems configurator path — free size/shape/modules combo.
       // Consume-once via ref so double pointer-up before re-render cannot double-place.
       const armedConfig = takePendingWorkstationConfig(
@@ -704,21 +725,21 @@ export function OOPlannerWorkspace({
     (format = "json") => {
       // First-class project furniture BOQ (JSON / CSV) — all placed furniture.
       if (format === "boq" || format === "boq-json" || format === "boq-csv") {
-        const summary = buildOpen3dFurnitureBoq(workspaceCanvas.project);
+        const summary = buildPlannerFurnitureBoq(workspaceCanvas.project);
         if (summary.totalItems === 0) {
           setWorkspaceMessage("No furniture to export for BOQ (place items first).");
           return;
         }
         if (format === "boq-csv") {
-          const filename = buildOpen3dBoqFilename(workspaceCanvas.project, "csv");
-          downloadFurnitureBoqCSV(exportOpen3dFurnitureBoqToCsv(summary), filename);
+          const filename = buildPlannerBoqFilename(workspaceCanvas.project, "csv");
+          downloadFurnitureBoqCSV(exportPlannerFurnitureBoqToCsv(summary), filename);
           setWorkspaceMessage(
             `Exported BOQ CSV: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST (demo list prices)`,
           );
           return;
         }
-        const filename = buildOpen3dBoqFilename(workspaceCanvas.project, "json");
-        downloadFurnitureBoqJSON(exportOpen3dFurnitureBoqToJson(summary), filename);
+        const filename = buildPlannerBoqFilename(workspaceCanvas.project, "json");
+        downloadFurnitureBoqJSON(exportPlannerFurnitureBoqToJson(summary), filename);
         setWorkspaceMessage(
           `Exported BOQ JSON: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST (demo list prices)` +
             (summary.unpricedItemCount > 0
@@ -764,7 +785,7 @@ export function OOPlannerWorkspace({
         return;
       }
 
-      const check = preflightOpen3dExport(workspaceCanvas.project, format);
+      const check = preflightPlannerExport(workspaceCanvas.project, format);
       if (check.status !== "ready") {
         setWorkspaceMessage(
           check.messages[0] ?? `Export unavailable for ${format}`,
@@ -827,7 +848,7 @@ export function OOPlannerWorkspace({
       reader.onload = () => {
         try {
           const raw = String(reader.result ?? "");
-          const result = importOpen3dPlannerText(raw);
+          const result = importPlannerPlannerText(raw);
           if (!result.success || !result.project) {
             const firstError = result.errors.find((error) => error.severity === "error");
             setWorkspaceMessage(
@@ -911,7 +932,7 @@ export function OOPlannerWorkspace({
   const measurementLabel =
     canvasStatus?.previewLengthMm !== null &&
     canvasStatus?.previewLengthMm !== undefined
-      ? `${canvasStatus.previewLengthMm} mm`
+      ? formatLengthDisplay(canvasStatus.previewLengthMm, displayUnit)
       : formatSnapStatus(canvasStatus?.snapKind ?? "none");
 
   const selectionLabel = formatSelectionStatus(workspaceCanvas.selection);
@@ -923,7 +944,7 @@ export function OOPlannerWorkspace({
   const saveCloudEnabled = autosave.cloudEnabled ?? false;
   const isLocalSaved = autosave.isLocalSaved ?? autosave.isSynced;
   /** One helper for status bar + TopBar (via shell saveStatusLabel pass-through). */
-  const saveStatusLabel = open3dSaveStatusLabel({
+  const saveStatusLabel = plannerSaveStatusLabel({
     status: autosave.status,
     storage: saveStorage,
     lastSavedAt: autosave.lastSavedAt,
@@ -934,7 +955,7 @@ export function OOPlannerWorkspace({
   if (!hydrated) {
     return (
       <div
-        className="open3d-route-host open3d-route-host--loading"
+        className="planner-route-host open3d-route-host planner-route-host--loading"
         aria-busy="true"
         aria-label="Loading planner"
       >
@@ -948,7 +969,7 @@ export function OOPlannerWorkspace({
   }
 
   return (
-    <div className="open3d-workspace-root">
+    <div className="planner-workspace-root open3d-workspace-root">
       <input
         ref={importInputRef}
         type="file"
@@ -998,6 +1019,7 @@ export function OOPlannerWorkspace({
             onWorkstationConfigPlace={handleWorkstationConfigPlace}
             onWorkstationConfigBatchPlace={handleWorkstationConfigBatchPlace}
             workspaceBridge={workspaceAiBridge}
+            displayUnit={displayUnit}
           />
         }
         rightPanel={
@@ -1146,7 +1168,7 @@ export function OOPlannerWorkspace({
         ) : (
           <Lazy3DViewer
             projectData={workspaceCanvas.project}
-            {...getOpen3dViewerControlProps()}
+            {...getPlannerViewerControlProps()}
           />
         )}
       </WorkspaceShell>

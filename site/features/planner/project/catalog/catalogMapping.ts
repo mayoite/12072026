@@ -2,7 +2,7 @@
  * Phase 03 Catalog Mapping
  *
  * Maps OOFPLWeb planner catalog API responses into the canonical
- * Open3dCatalogItem domain model. Preserves all source identity fields
+ * PlannerCatalogItem domain model. Preserves all source identity fields
  * (plannerSourceSlug, legacyProductId, categoryId, seriesId) for
  * BOQ/quote/export/AI traceability.
  *
@@ -12,15 +12,15 @@
  */
 
 import type {
-  Open3dCatalogItem,
-  Open3dCatalogCategory,
-  Open3dCatalogProvenance,
-  Open3dCatalogVariant,
-  Open3dAvailabilityStatus,
-  Open3dRoomTag,
-  Open3dStyleTag,
-  Open3dAssetReadiness,
-  Open3dMountingContract,
+  PlannerCatalogItem,
+  PlannerCatalogCategory,
+  PlannerCatalogProvenance,
+  PlannerCatalogVariant,
+  PlannerAvailabilityStatus,
+  PlannerRoomTag,
+  PlannerStyleTag,
+  PlannerAssetReadiness,
+  PlannerMountingContract,
 } from "./catalogTypes";
 import {
   buildTaxonomyPath,
@@ -97,13 +97,13 @@ export interface ConfiguratorProductInput {
 // ── Category mapping ──
 
 /**
- * Map OOFPLWeb admin/workspace category strings to canonical Open3dCatalogCategory.
+ * Map OOFPLWeb admin/workspace category strings to canonical PlannerCatalogCategory.
  * Based on the existing mapAdminCategoryToWorkspace logic but extended to canonical types.
  */
 export function mapAdminCategoryToCanonical(
   category: string,
   subcategory?: string | null,
-): Open3dCatalogCategory {
+): PlannerCatalogCategory {
   const blob = `${category} ${subcategory ?? ""}`.toLowerCase();
   if (blob.includes("desk") || blob.includes("workstation") || blob.includes("bench")) return "Furniture";
   if (blob.includes("room") || blob.includes("booth") || blob.includes("pod") || blob.includes("meeting")) return "Furniture";
@@ -124,9 +124,9 @@ export function mapAdminCategoryToCanonical(
 /**
  * Infer room tags from category and subcategory strings.
  */
-export function inferRoomTags(category: string, subcategory?: string | null): Open3dRoomTag[] {
+export function inferRoomTags(category: string, subcategory?: string | null): PlannerRoomTag[] {
   const blob = `${category} ${subcategory ?? ""}`.toLowerCase();
-  const tags: Open3dRoomTag[] = [];
+  const tags: PlannerRoomTag[] = [];
   if (blob.includes("living")) tags.push("Living Room");
   if (blob.includes("bedroom")) tags.push("Bedroom");
   if (blob.includes("kitchen")) tags.push("Kitchen");
@@ -144,9 +144,9 @@ export function inferRoomTags(category: string, subcategory?: string | null): Op
  * Infer style tags from product name and description.
  * Simplified heuristic — production would use ML-based tagging (Wayfair approach).
  */
-export function inferStyleTags(name: string, description?: string): Open3dStyleTag[] {
+export function inferStyleTags(name: string, description?: string): PlannerStyleTag[] {
   const blob = `${name} ${description ?? ""}`.toLowerCase();
-  const tags: Open3dStyleTag[] = [];
+  const tags: PlannerStyleTag[] = [];
   if (blob.includes("modern") || blob.includes("contemporary")) tags.push("Modern");
   if (blob.includes("scandinavian") || blob.includes("scandi") || blob.includes("nordic")) tags.push("Scandinavian");
   if (blob.includes("industrial")) tags.push("Industrial");
@@ -187,14 +187,14 @@ export function resolveAvailabilityStatus(input: {
   active?: boolean;
   visible?: boolean;
   plannerVisible?: boolean;
-}): Open3dAvailabilityStatus {
+}): PlannerAvailabilityStatus {
   if (input.active === false || input.visible === false || input.plannerVisible === false) {
     return "discontinued";
   }
   return "in-stock";
 }
 
-function resolveMountingContract(category: Open3dCatalogCategory, subCategory: string): Open3dMountingContract[] {
+function resolveMountingContract(category: PlannerCatalogCategory, subCategory: string): PlannerMountingContract[] {
   const blob = `${category} ${subCategory}`.toLowerCase();
   if (blob.includes("ceiling")) return ["ceiling"];
   if (blob.includes("wall") || blob.includes("mirror") || blob.includes("art") || blob.includes("sconce")) return ["wall"];
@@ -203,8 +203,8 @@ function resolveMountingContract(category: Open3dCatalogCategory, subCategory: s
   return ["floor"];
 }
 
-function resolveAssetReadiness(params: { imageUrl?: string; meshUrl?: string; symbolOnly?: boolean }): Open3dAssetReadiness[] {
-  const readiness: Open3dAssetReadiness[] = [];
+function resolveAssetReadiness(params: { imageUrl?: string; meshUrl?: string; symbolOnly?: boolean }): PlannerAssetReadiness[] {
+  const readiness: PlannerAssetReadiness[] = [];
   if (!params.imageUrl) readiness.push("missing-image");
   if (!params.symbolOnly && !params.meshUrl) readiness.push("missing-mesh");
   return readiness.length > 0 ? readiness : ["ready"];
@@ -213,11 +213,11 @@ function resolveAssetReadiness(params: { imageUrl?: string; meshUrl?: string; sy
 // ── Mapping functions ──
 
 /**
- * Map a planner managed product row to a canonical Open3dCatalogItem.
+ * Map a planner managed product row to a canonical PlannerCatalogItem.
  */
 export function mapPlannerManagedProductToCatalogItem(
   input: PlannerManagedProductInput,
-): Open3dCatalogItem | null {
+): PlannerCatalogItem | null {
   if (!input.id || !input.name) return null;
 
   const specs = input.specs ?? {};
@@ -244,7 +244,7 @@ export function mapPlannerManagedProductToCatalogItem(
   const name = input.name.trim();
   const description = input.description ?? `${input.category_name ?? ""} · ${input.series_name ?? ""}`;
 
-  const provenance: Open3dCatalogProvenance = {
+  const provenance: PlannerCatalogProvenance = {
     source: "planner_managed_products",
     legacyProductId: input.legacy_product_id ?? undefined,
     plannerSourceSlug: input.planner_source_slug ?? undefined,
@@ -253,7 +253,7 @@ export function mapPlannerManagedProductToCatalogItem(
     importedAt: new Date().toISOString(),
   };
 
-  const item: Open3dCatalogItem = {
+  const item: PlannerCatalogItem = {
     id: input.id,
     slug: input.slug || input.id,
     sku: input.slug || input.id,
@@ -294,12 +294,12 @@ export function mapPlannerManagedProductToCatalogItem(
 }
 
 /**
- * Map a configurator product to a canonical Open3dCatalogItem.
+ * Map a configurator product to a canonical PlannerCatalogItem.
  * Only call this if configurator products are currently used in the planner.
  */
 export function mapConfiguratorProductToCatalogItem(
   input: ConfiguratorProductInput,
-): Open3dCatalogItem | null {
+): PlannerCatalogItem | null {
   if (!input.slug?.trim() || !input.name?.trim()) return null;
 
   // Resolve dimensions
@@ -353,14 +353,14 @@ export function mapConfiguratorProductToCatalogItem(
   const materialName = input.specs?.materials?.[0] ?? "Configurator";
   const material = normalizeMaterial(materialName);
 
-  const provenance: Open3dCatalogProvenance = {
+  const provenance: PlannerCatalogProvenance = {
     source: "configurator_products",
     sourceCategoryId: input.category_id,
     importedAt: new Date().toISOString(),
   };
 
   // Build a master variant
-  const masterVariant: Open3dCatalogVariant = {
+  const masterVariant: PlannerCatalogVariant = {
     variantId: `${input.slug}-master`,
     sku: input.slug,
     parentProductId: input.slug,
@@ -381,7 +381,7 @@ export function mapConfiguratorProductToCatalogItem(
       })()
       : undefined;
 
-  const item: Open3dCatalogItem = {
+  const item: PlannerCatalogItem = {
     id: input.slug,
     slug: input.slug,
     sku: input.slug,

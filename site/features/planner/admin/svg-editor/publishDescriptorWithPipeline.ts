@@ -9,7 +9,7 @@
  */
 
 import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
-import type { Open3dDescriptorError, Open3dResult } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { PlannerDescriptorError, PlannerResult } from "@/features/planner/project/catalog/svg/svgTypes";
 import {
   parseAdminPayload,
   persistBlockDescriptor,
@@ -40,7 +40,7 @@ export type PublishDescriptorResult =
 export type PublishDescriptorWithPipelineDeps = {
   readonly parsePayload?: (
     input: unknown,
-  ) => Open3dResult<BlockDescriptor, Open3dDescriptorError>;
+  ) => PlannerResult<BlockDescriptor, PlannerDescriptorError>;
   /**
    * Asset-engine authority (S1 normalize → S2 compile → S3 sanitize).
    * Fail-closed before S4 disk write.

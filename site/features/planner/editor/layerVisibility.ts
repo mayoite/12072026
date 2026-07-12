@@ -1,7 +1,7 @@
-import type { Open3dFloor } from "@/features/planner/project/model/types";
+import type { PlannerFloor } from "@/features/planner/project/model/types";
 
 /** Layer categories aligned with donor LayersPanel.svelte */
-export type Open3dLayerCategory =
+export type PlannerLayerCategory =
   | "walls"
   | "doors"
   | "windows"
@@ -13,9 +13,9 @@ export type Open3dLayerCategory =
   | "annotations"
   | "rooms";
 
-export type Open3dLayerVisibility = Record<Open3dLayerCategory, boolean>;
+export type PlannerLayerVisibility = Record<PlannerLayerCategory, boolean>;
 
-export const DEFAULT_LAYER_VISIBILITY: Open3dLayerVisibility = {
+export const DEFAULT_LAYER_VISIBILITY: PlannerLayerVisibility = {
   walls: true,
   doors: true,
   windows: true,
@@ -29,19 +29,19 @@ export const DEFAULT_LAYER_VISIBILITY: Open3dLayerVisibility = {
 };
 
 export function toggleLayerVisibility(
-  current: Open3dLayerVisibility,
-  category: Open3dLayerCategory,
-): Open3dLayerVisibility {
+  current: PlannerLayerVisibility,
+  category: PlannerLayerCategory,
+): PlannerLayerVisibility {
   return { ...current, [category]: !current[category] };
 }
 
 export interface LayerCategorySummary {
-  key: Open3dLayerCategory;
+  key: PlannerLayerCategory;
   label: string;
   count: number;
 }
 
-const LAYER_LABELS: Record<Open3dLayerCategory, string> = {
+const LAYER_LABELS: Record<PlannerLayerCategory, string> = {
   walls: "Walls",
   doors: "Doors",
   windows: "Windows",
@@ -54,8 +54,8 @@ const LAYER_LABELS: Record<Open3dLayerCategory, string> = {
   rooms: "Rooms",
 };
 
-export function summarizeFloorLayers(floor: Open3dFloor): LayerCategorySummary[] {
-  const counts: Record<Open3dLayerCategory, number> = {
+export function summarizeFloorLayers(floor: PlannerFloor): LayerCategorySummary[] {
+  const counts: Record<PlannerLayerCategory, number> = {
     walls: floor.walls.length,
     doors: floor.doors.length,
     windows: floor.windows.length,
@@ -68,7 +68,7 @@ export function summarizeFloorLayers(floor: Open3dFloor): LayerCategorySummary[]
     rooms: floor.rooms.length,
   };
 
-  return (Object.keys(LAYER_LABELS) as Open3dLayerCategory[]).map((key) => ({
+  return (Object.keys(LAYER_LABELS) as PlannerLayerCategory[]).map((key) => ({
     key,
     label: LAYER_LABELS[key],
     count: counts[key],

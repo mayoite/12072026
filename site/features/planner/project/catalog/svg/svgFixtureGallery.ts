@@ -1,14 +1,14 @@
-import type { Open3dCatalogCategory, Open3dCatalogDimensions } from "../catalogTypes";
+import type { PlannerCatalogCategory, PlannerCatalogDimensions } from "../catalogTypes";
 import type { SvgThemeName } from "./svgTypes";
 import { generateFallbackSvg } from "./svgFallback";
 import { generateSymbol, getSvgSymbolDimensionAgreement, renderSvgSymbol } from "./svgSymbols";
 
 export interface SvgFixtureGalleryEntry {
   id: string;
-  category: Open3dCatalogCategory;
+  category: PlannerCatalogCategory;
   subCategory?: string;
   name: string;
-  dimensions: Open3dCatalogDimensions;
+  dimensions: PlannerCatalogDimensions;
   theme: SvgThemeName;
   rotation: number;
   viewBox: string;
@@ -17,7 +17,7 @@ export interface SvgFixtureGalleryEntry {
   svg: string;
 }
 
-const FIXTURE_DIMENSIONS: Record<string, Open3dCatalogDimensions> = {
+const FIXTURE_DIMENSIONS: Record<string, PlannerCatalogDimensions> = {
   chair: { widthMm: 520, depthMm: 540, heightMm: 880 },
   desk: { widthMm: 1400, depthMm: 700, heightMm: 740 },
   sofa: { widthMm: 2100, depthMm: 900, heightMm: 820 },
@@ -28,10 +28,10 @@ const FIXTURE_DIMENSIONS: Record<string, Open3dCatalogDimensions> = {
 export function buildSvgFixtureGallery(): SvgFixtureGalleryEntry[] {
   const fixtures: Array<{
     id: string;
-    category: Open3dCatalogCategory;
+    category: PlannerCatalogCategory;
     subCategory?: string;
     name: string;
-    dimensions: Open3dCatalogDimensions;
+    dimensions: PlannerCatalogDimensions;
     theme: SvgThemeName;
     rotation: number;
   }> = [

@@ -3,10 +3,10 @@ import {
   placeModularWithGeneratedGlbBrowser,
   writeGeneratedGlbViaApi,
 } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbBrowser";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
-function emptyProject(): Open3dProject {
+function emptyProject(): PlannerProject {
   return {
     id: "project-browser-place",
     name: "Browser place",
@@ -36,7 +36,7 @@ function emptyProject(): Open3dProject {
   };
 }
 
-function modularCatalogItem(): Open3dCatalogItem {
+function modularCatalogItem(): PlannerCatalogItem {
   return {
     id: "cabinet-v0",
     slug: "cabinet-v0",

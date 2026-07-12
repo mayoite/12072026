@@ -2,17 +2,17 @@ import type {
   PlannerDocument,
   PlannerJsonValue,
 } from "@/features/planner/model/plannerDocument";
-import type { Open3dProject, Open3dPlannerSceneEnvelope } from "../../model/types";
+import type { PlannerProject, PlannerSceneEnvelope } from "../../model/types";
 import { createRectangularRoomProject } from "../../model/project";
 import { createEnvelopeV1, validateEnvelope } from "../../model/operations/migration";
 
-export interface PlannerDocumentToOpen3dResult {
-  project: Open3dProject;
-  envelope: Open3dPlannerSceneEnvelope;
+export interface PlannerDocumentToPlannerResult {
+  project: PlannerProject;
+  envelope: PlannerSceneEnvelope;
   warnings: string[];
 }
 
-export interface Open3dToPlannerDocumentResult {
+export interface PlannerToPlannerDocumentResult {
   document: PlannerDocument;
   warnings: string[];
 }
@@ -21,26 +21,26 @@ function isPlannerJsonObject(value: PlannerJsonValue | undefined | null): value 
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function toPlannerJsonValue(value: Open3dPlannerSceneEnvelope): PlannerJsonValue {
+function toPlannerJsonValue(value: PlannerSceneEnvelope): PlannerJsonValue {
   return JSON.parse(JSON.stringify(value)) as PlannerJsonValue;
 }
 
 /**
- * Convert an OOFPLWeb PlannerDocument to an Open3dProject + envelope.
+ * Convert an OOFPLWeb PlannerDocument to an PlannerProject + envelope.
  * Preserves metadata in the envelope source field and description.
  */
-export function plannerDocumentToOpen3dProject(
+export function plannerDocumentToPlannerProject(
   document: PlannerDocument,
-): PlannerDocumentToOpen3dResult {
+): PlannerDocumentToPlannerResult {
   const warnings: string[] = [];
 
   // Build base project from room dimensions if no scene data
-  let project: Open3dProject;
+  let project: PlannerProject;
   const sceneJson = document.sceneJson;
 
   if (isPlannerJsonObject(sceneJson) && sceneJson.type === "open3d-floorplan-project") {
     // Already an Open3D envelope stored in sceneJson
-    const envelope = sceneJson as unknown as Open3dPlannerSceneEnvelope;
+    const envelope = sceneJson as unknown as PlannerSceneEnvelope;
     const validation = validateEnvelope(envelope);
     if (validation.valid) {
       project = envelope.project;
@@ -92,13 +92,13 @@ export function plannerDocumentToOpen3dProject(
 }
 
 /**
- * Convert an Open3dProject back to an OOFPLWeb PlannerDocument.
+ * Convert an PlannerProject back to an OOFPLWeb PlannerDocument.
  * Reconstructs metadata from description and envelope fields.
  */
-export function open3dProjectToPlannerDocument(
-  project: Open3dProject,
-  envelope?: Open3dPlannerSceneEnvelope,
-): Open3dToPlannerDocumentResult {
+export function plannerProjectToPlannerDocument(
+  project: PlannerProject,
+  envelope?: PlannerSceneEnvelope,
+): PlannerToPlannerDocumentResult {
   const warnings: string[] = [];
 
   // Parse description back into metadata fields

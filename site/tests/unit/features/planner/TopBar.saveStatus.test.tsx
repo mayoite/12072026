@@ -2,7 +2,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { TopBar } from "@/features/planner/editor/TopBar";
-import { open3dSaveStatusLabel } from "@/features/planner/editor/workspaceStatusLabels";
+import { plannerSaveStatusLabel } from "@/features/planner/editor/workspaceStatusLabels";
 
 afterEach(() => {
   cleanup();
@@ -13,7 +13,7 @@ const baseProps = {
   viewMode: "2d" as const,
 };
 
-describe("TopBar save status pill — open3dSaveStatusLabel table", () => {
+describe("TopBar save status pill — plannerSaveStatusLabel table", () => {
   it("idle (default / no legacy flags) shows Ready (local), not bare Ready", () => {
     render(<TopBar {...baseProps} />);
 
@@ -35,7 +35,7 @@ describe("TopBar save status pill — open3dSaveStatusLabel table", () => {
     );
 
     const pill = screen.getByTestId("open3d-save-status");
-    const expected = open3dSaveStatusLabel({
+    const expected = plannerSaveStatusLabel({
       status: "idle",
       storage: "local",
       lastSavedAt: null,

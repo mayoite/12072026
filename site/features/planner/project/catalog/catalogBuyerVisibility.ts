@@ -3,8 +3,9 @@
  * Pure helpers; no React. Repo evidence: UI-DIAGNOSIS P-UI-1.
  */
 
-import type { Open3dCatalogItem } from "./catalogTypes";
-import { displayCmFromCanonicalMm } from "./unitConversion";
+import type { PlannerCatalogItem } from "./catalogTypes";
+import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
+import { formatFootprintDisplay } from "@/features/planner/project/model/units";
 
 const INTERNAL_TAG = /^(proof|test|internal|dev|fixture|fallback)$/i;
 const INTERNAL_NAME =
@@ -15,7 +16,7 @@ const INTERNAL_ID =
 /**
  * True when item must not appear in buyer/guest catalog UI.
  */
-export function isInternalCatalogItem(item: Open3dCatalogItem): boolean {
+export function isInternalCatalogItem(item: PlannerCatalogItem): boolean {
   if (item.provenance?.source === "proof_catalog") {
     return true;
   }
@@ -37,26 +38,34 @@ export function isInternalCatalogItem(item: Open3dCatalogItem): boolean {
 
 /** Buyer-facing list (drops proof / test / missing-geom fallback). */
 export function filterBuyerFacingCatalogItems(
-  items: readonly Open3dCatalogItem[],
-): Open3dCatalogItem[] {
+  items: readonly PlannerCatalogItem[],
+): PlannerCatalogItem[] {
   return items.filter((item) => !isInternalCatalogItem(item));
 }
 
 /**
- * Footprint for inventory tiles. Default **cm** to match workspace display unit chrome.
- * Canonical store remains mm.
+ * Footprint for inventory tiles.
+ * Canonical store remains mm; display follows workspace display unit.
+ * @deprecated prefer formatCatalogFootprint(width, depth, unit)
  */
 export function formatCatalogFootprintCm(
   widthMm: number,
   depthMm: number,
 ): string {
-  const w = displayCmFromCanonicalMm(widthMm);
-  const d = displayCmFromCanonicalMm(depthMm);
-  return `${w} × ${d} cm`;
+  return formatCatalogFootprint(widthMm, depthMm, "cm");
+}
+
+/** Footprint pair in the active planner display unit (mm / m / ft-in / …). */
+export function formatCatalogFootprint(
+  widthMm: number,
+  depthMm: number,
+  unit: PlannerDisplayUnit = "cm",
+): string {
+  return formatFootprintDisplay(widthMm, depthMm, unit);
 }
 
 /** Higher = earlier in default (empty search) office-systems browse order. */
-export function officeSystemsBrowseScore(item: Open3dCatalogItem): number {
+export function officeSystemsBrowseScore(item: PlannerCatalogItem): number {
   const blob = [
     item.id,
     item.slug ?? "",
@@ -99,8 +108,8 @@ export function officeSystemsBrowseScore(item: Open3dCatalogItem): number {
  * Search query ranking (Fuse) is applied separately and left alone.
  */
 export function prioritizeOfficeSystemsBrowse(
-  items: readonly Open3dCatalogItem[],
-): Open3dCatalogItem[] {
+  items: readonly PlannerCatalogItem[],
+): PlannerCatalogItem[] {
   return [...items].sort((a, b) => {
     const delta = officeSystemsBrowseScore(b) - officeSystemsBrowseScore(a);
     if (delta !== 0) return delta;

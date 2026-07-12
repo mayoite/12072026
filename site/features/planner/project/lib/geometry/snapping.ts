@@ -1,31 +1,31 @@
-import type { Open3dPoint } from "../../model/types";
+import type { PlannerPoint } from "../../model/types";
 
 export type SnapKind = "none" | "endpoint" | "grid" | "angle";
 
 export interface SnapResult {
-  point: Open3dPoint;
+  point: PlannerPoint;
   kind: SnapKind;
   targetId?: string;
 }
 
 export interface SnapEndpoint {
   id: string;
-  point: Open3dPoint;
+  point: PlannerPoint;
 }
 
 export interface CanvasTransform {
-  origin: Open3dPoint;
+  origin: PlannerPoint;
   scale: number;
 }
 
-export function projectToScreen(point: Open3dPoint, transform: CanvasTransform): Open3dPoint {
+export function projectToScreen(point: PlannerPoint, transform: CanvasTransform): PlannerPoint {
   return {
     x: (point.x - transform.origin.x) * transform.scale,
     y: (point.y - transform.origin.y) * transform.scale,
   };
 }
 
-export function screenToProject(point: Open3dPoint, transform: CanvasTransform): Open3dPoint {
+export function screenToProject(point: PlannerPoint, transform: CanvasTransform): PlannerPoint {
   return {
     x: transform.origin.x + point.x / transform.scale,
     y: transform.origin.y + point.y / transform.scale,
@@ -34,7 +34,7 @@ export function screenToProject(point: Open3dPoint, transform: CanvasTransform):
 
 export function zoomTransformAt(
   transform: CanvasTransform,
-  screenPoint: Open3dPoint,
+  screenPoint: PlannerPoint,
   factor: number,
   minimumScale = 0.02,
   maximumScale = 2,
@@ -55,7 +55,7 @@ export function viewportPointFromHost(
   host: HTMLElement,
   clientX: number,
   clientY: number,
-): Open3dPoint {
+): PlannerPoint {
   const rect = host.getBoundingClientRect();
   return { x: clientX - rect.left, y: clientY - rect.top };
 }
@@ -78,14 +78,14 @@ export function wheelZoomFactor(deltaY: number, deltaMode = 0): number {
   return Math.pow(0.999, normalizeWheelDelta(deltaY, deltaMode));
 }
 
-function distance(a: Open3dPoint, b: Open3dPoint): number {
+function distance(a: PlannerPoint, b: PlannerPoint): number {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
 export function snapDrawingPoint(input: {
-  raw: Open3dPoint;
-  start: Open3dPoint | null;
-  endpoints: readonly Open3dPoint[];
+  raw: PlannerPoint;
+  start: PlannerPoint | null;
+  endpoints: readonly PlannerPoint[];
   endpointTargets?: readonly SnapEndpoint[];
   zoom: number;
   suppress: boolean;

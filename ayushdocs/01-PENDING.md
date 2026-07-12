@@ -29,7 +29,7 @@ W3 browser must not be count-only.
 
 | Track | One next action |
 |-------|-----------------|
-| Planner | P01 inventory pack this HEAD — owner accept → **P02** (sequence P01→P12) |
+| Planner | **P02** engine lock re-prove (P01b orphan slice landed) · sequence P01→P12 |
 | Admin | A4.0.1 publish bytes |
 | Site | S1 owner decision |
 | SEO | SEO1 sitemap diff close |

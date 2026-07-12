@@ -7,13 +7,13 @@ import {
   furnitureBlock2DFromItem,
   furnitureBlockUsesCenteredPath,
 } from "@/features/planner/project/catalog/furnitureBlock2D";
-import type { Open3dFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
 import { renderBlock2DToCanvas } from "@/lib/catalog/renderBlock2DToCanvas";
 import type { Prim } from "@/lib/catalog/blocks2d";
 
 function cabinetItem(
-  partial?: Partial<Open3dFurnitureItem>,
-): Open3dFurnitureItem {
+  partial?: Partial<PlannerFurnitureItem>,
+): PlannerFurnitureItem {
   return {
     id: "cab-1",
     catalogId: "cabinet-v0",

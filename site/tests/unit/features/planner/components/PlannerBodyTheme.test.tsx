@@ -13,7 +13,7 @@ describe("PlannerBodyTheme", () => {
   });
 
   it("applies workspace shell class on workspace route", () => {
-    vi.mocked(usePathname).mockReturnValue("/planner/open3d");
+    vi.mocked(usePathname).mockReturnValue("/planner/canvas");
 
     render(<PlannerBodyTheme />);
 

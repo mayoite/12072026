@@ -1,8 +1,8 @@
 import type {
-  Open3dPlannerSceneEnvelope,
-  Open3dProject,
-  Open3dFloor,
-  Open3dDisplayUnit,
+  PlannerSceneEnvelope,
+  PlannerProject,
+  PlannerFloor,
+  PlannerDisplayUnit,
 } from "../../model/types";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
 
@@ -20,7 +20,7 @@ export interface ImportValidationError {
  */
 export interface ImportResult {
   success: boolean;
-  project: Open3dProject | null;
+  project: PlannerProject | null;
   errors: ImportValidationError[];
 }
 
@@ -60,7 +60,7 @@ export const DEFAULT_IMPORT_LIMITS: ImportLimits = {
  * @returns The parsed envelope or null if invalid
  */
 export function parseJsonToEnvelope(jsonString: string): {
-  envelope: Open3dPlannerSceneEnvelope | null;
+  envelope: PlannerSceneEnvelope | null;
   parseError: string | null;
 } {
   if (!jsonString || typeof jsonString !== "string") {
@@ -78,7 +78,7 @@ export function parseJsonToEnvelope(jsonString: string): {
 
   try {
     const parsed = JSON.parse(jsonString);
-    return { envelope: parsed as Open3dPlannerSceneEnvelope, parseError: null };
+    return { envelope: parsed as PlannerSceneEnvelope, parseError: null };
   } catch (error) {
     return {
       envelope: null,
@@ -94,7 +94,7 @@ export function parseJsonToEnvelope(jsonString: string): {
  * @returns Validation errors found
  */
 export function validateEnvelopeStructure(
-  envelope: Open3dPlannerSceneEnvelope,
+  envelope: PlannerSceneEnvelope,
   limits: ImportLimits = DEFAULT_IMPORT_LIMITS,
 ): ImportValidationError[] {
   const errors: ImportValidationError[] = [];
@@ -128,7 +128,7 @@ export function validateEnvelopeStructure(
   }
 
   // Validate display unit
-  const validDisplayUnits: Open3dDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
+  const validDisplayUnits: PlannerDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
   if (!envelope.displayUnit || !validDisplayUnits.includes(envelope.displayUnit)) {
     errors.push({
       path: "displayUnit",
@@ -183,7 +183,7 @@ export function validateEnvelopeStructure(
  * Validates a single floor.
  */
 function validateFloor(
-  floor: Open3dFloor,
+  floor: PlannerFloor,
   limits: ImportLimits,
   index: number,
 ): ImportValidationError[] {
@@ -314,8 +314,8 @@ export function importFromJson(
  * @param envelope - The envelope to recover
  * @returns The recovered envelope
  */
-export function recoverFromErrors(envelope: Open3dPlannerSceneEnvelope): {
-  envelope: Open3dPlannerSceneEnvelope;
+export function recoverFromErrors(envelope: PlannerSceneEnvelope): {
+  envelope: PlannerSceneEnvelope;
   recovered: string[];
 } {
   const recovered: string[] = [];

@@ -3,8 +3,8 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createElement, type PropsWithChildren } from "react";
 
-import { useOpen3dWorkspaceCatalog, useOpen3dSvgCatalog } from "@/features/planner/project/catalog/useOpen3dWorkspaceCatalog";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import { usePlannerWorkspaceCatalog, usePlannerSvgCatalog } from "@/features/planner/project/catalog/usePlannerWorkspaceCatalog";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 
 function renderCatalogHook() {
   const client = new QueryClient({
@@ -13,16 +13,16 @@ function renderCatalogHook() {
   const wrapper = ({ children }: PropsWithChildren) => (
     createElement(QueryClientProvider, { client }, children)
   );
-  return renderHook(() => useOpen3dWorkspaceCatalog(), { wrapper });
+  return renderHook(() => usePlannerWorkspaceCatalog(), { wrapper });
 }
 
-describe("useOpen3dWorkspaceCatalog", () => {
+describe("usePlannerWorkspaceCatalog", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
 
-  it("exports useOpen3dSvgCatalog as the Phase 06 plan alias", () => {
-    expect(useOpen3dSvgCatalog).toBe(useOpen3dWorkspaceCatalog);
+  it("exports usePlannerSvgCatalog as the Phase 06 plan alias", () => {
+    expect(usePlannerSvgCatalog).toBe(usePlannerWorkspaceCatalog);
   });
 
   it("loads live catalog items from the configurator API", async () => {
@@ -129,7 +129,7 @@ describe("useOpen3dWorkspaceCatalog", () => {
 
   // TDD for 0405/0419 loader primary wiring fix: call loadDescriptorsFromLoader (primary), check getAll path after (addresses [] return); falls to api
   it("calls loadDescriptorsFromLoader for catalogue-first primary before api fallback", async () => {
-    const liveItem: Open3dCatalogItem = {
+    const liveItem: PlannerCatalogItem = {
       id: "ldr-1",
       slug: "ldr-1",
       sku: "LDR-1",

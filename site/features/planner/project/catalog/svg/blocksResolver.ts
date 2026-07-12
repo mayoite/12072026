@@ -15,7 +15,7 @@
  *
  * Type Safety rule (AGENTS.md):
  *  - No `any`, no `as any`, no `@ts-ignore`, no eslint-disable.
- *  - Errors surfaced via the same `Open3dDescriptorError` discriminated
+ *  - Errors surfaced via the same `PlannerDescriptorError` discriminated
  *    union the rest of the catalog uses.
  */
 

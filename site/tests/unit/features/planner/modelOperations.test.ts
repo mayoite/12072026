@@ -1,7 +1,7 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import type { Open3dProject, Open3dPlannerSceneEnvelope } from "@/features/planner/project/model/types";
+import type { PlannerProject, PlannerSceneEnvelope } from "@/features/planner/project/model/types";
 import {
-  createOpen3dProject,
+  createPlannerProject,
   createRectangularRoomProject,
 } from "@/features/planner/project/model/project";
 import {
@@ -84,8 +84,8 @@ import {
   resetMigrations,
 } from "@/features/planner/project/model/operations/migration";
 
-function envelopeWithVersion(project: Open3dProject, version: number): Open3dPlannerSceneEnvelope {
-  return { ...createEnvelopeV1(project), version } as unknown as Open3dPlannerSceneEnvelope;
+function envelopeWithVersion(project: PlannerProject, version: number): PlannerSceneEnvelope {
+  return { ...createEnvelopeV1(project), version } as unknown as PlannerSceneEnvelope;
 }
 
 function ids(...values: string[]) {
@@ -93,7 +93,7 @@ function ids(...values: string[]) {
   return () => values[index++] ?? `generated-${index}`;
 }
 
-function room(): Open3dProject {
+function room(): PlannerProject {
   return createRectangularRoomProject({
     idFactory: ids("floor", "project", "wall-1", "wall-2", "wall-3", "wall-4"),
     widthMm: 6000,
@@ -104,7 +104,7 @@ function room(): Open3dProject {
 
 describe("pureActions â€” wall operations", () => {
   it("adds a wall", () => {
-    const p = createOpen3dProject({ idFactory: ids("floor", "project") });
+    const p = createPlannerProject({ idFactory: ids("floor", "project") });
     const r = addWall(p, { x: 0, y: 0 }, { x: 1000, y: 0 }, { idFactory: ids("w1") });
     expect(r.action.type).toBe("ADD_WALL");
     expect(r.project.floors[0].walls).toHaveLength(1);
@@ -565,7 +565,7 @@ describe("pureActions â€” room operations", () => {
 describe("pureActions â€” import floor", () => {
   it("imports floor data into active floor", () => {
     const p = room();
-    const importedFloor = createOpen3dProject({ idFactory: ids("imp-floor", "imp-proj") }).floors[0];
+    const importedFloor = createPlannerProject({ idFactory: ids("imp-floor", "imp-proj") }).floors[0];
     importedFloor.walls = [{ id: "imp-wall", start: { x: 0, y: 0 }, end: { x: 1000, y: 0 }, thickness: 150, height: 2800, color: "red" }];
     importedFloor.doors = [{ id: "imp-door", wallId: "imp-wall", position: 0.5, width: 900, height: 2100, type: "single", swingDirection: "left", flipSide: false }];
     const r = importFloorIntoCurrentProject(p, importedFloor);
@@ -576,7 +576,7 @@ describe("pureActions â€” import floor", () => {
 
   it("imports floor with stairs and columns into active floor", () => {
     const p = room();
-    const importedFloor = createOpen3dProject({ idFactory: ids("imp-floor", "imp-proj") }).floors[0];
+    const importedFloor = createPlannerProject({ idFactory: ids("imp-floor", "imp-proj") }).floors[0];
     importedFloor.stairs = [{ id: "imp-stair", position: { x: 100, y: 100 }, rotation: 0, width: 1000, depth: 3000, riserCount: 14, direction: "up", stairType: "straight" }];
     importedFloor.columns = [{ id: "imp-col", position: { x: 200, y: 200 }, rotation: 0, shape: "round", diameter: 300, height: 2800, color: "red" }];
     const r = importFloorIntoCurrentProject(p, importedFloor);
@@ -587,7 +587,7 @@ describe("pureActions â€” import floor", () => {
   it("throws when active floor is missing", () => {
     const p = room();
     const badProject = { ...p, activeFloorId: "missing" };
-    const importedFloor = createOpen3dProject({ idFactory: ids("imp-floor", "imp-proj") }).floors[0];
+    const importedFloor = createPlannerProject({ idFactory: ids("imp-floor", "imp-proj") }).floors[0];
     expect(() => importFloorIntoCurrentProject(badProject, importedFloor)).toThrow("Active floor not found");
   });
 });
@@ -716,7 +716,7 @@ describe("history", () => {
 describe("migration", () => {
   it("validates envelopes", () => {
     expect(validateEnvelope({})).toEqual({ valid: false, errors: expect.arrayContaining([expect.stringContaining("type")]) });
-    const valid: Open3dPlannerSceneEnvelope = {
+    const valid: PlannerSceneEnvelope = {
       type: "open3d-floorplan-project",
       version: 1,
       units: "mm",

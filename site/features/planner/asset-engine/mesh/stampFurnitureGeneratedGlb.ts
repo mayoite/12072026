@@ -21,16 +21,16 @@ import {
 } from "@/features/planner/lib/glbAssetPolicy";
 import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
 import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
-import type { Open3dFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
 
 /**
  * Stamp a system-generated GLB path onto furniture for catalog/document + G8.
  * Rejects empty and designer/static URLs (glbAssetPolicy).
  */
 export function stampFurnitureGeneratedGlb(
-  item: Open3dFurnitureItem,
+  item: PlannerFurnitureItem,
   relativePath: string,
-): Open3dFurnitureItem {
+): PlannerFurnitureItem {
   const trimmed = relativePath.trim();
   if (!trimmed) {
     throw new Error(
@@ -67,8 +67,8 @@ export const attachGeneratedGlbToFurniture = stampFurnitureGeneratedGlb;
  * Requires `geometryMode === "modular-cabinet-v0"` and `modularOptions`.
  */
 export function stampFurnitureFromModularOptions(
-  item: Open3dFurnitureItem,
-): Open3dFurnitureItem {
+  item: PlannerFurnitureItem,
+): PlannerFurnitureItem {
   if (item.geometryMode !== "modular-cabinet-v0") {
     throw new Error(
       "stampFurnitureFromModularOptions requires geometryMode modular-cabinet-v0 " +

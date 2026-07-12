@@ -88,12 +88,12 @@ const svgo = _require("svgo") as typeof import("svgo");
 
 // ── Public error class (mirrors generate-svg.mjs) ─────────────────────────────
 
-export class Open3dPipelineError extends Error {
+export class PlannerPipelineError extends Error {
   public readonly code: string;
   constructor(code: string, message: string) {
     super(message);
     this.code = code;
-    this.name = "Open3dPipelineError";
+    this.name = "PlannerPipelineError";
   }
 }
 
@@ -102,7 +102,7 @@ export class Open3dPipelineError extends Error {
 const MAX_ATTR_SIZE = 4096;
 
 /**
- * Sanitize an SVG string; throws Open3dPipelineError for unsafe content.
+ * Sanitize an SVG string; throws PlannerPipelineError for unsafe content.
  * Mirrors generate-svg.mjs sanitiseSvg exactly.
  */
 export function sanitiseSvg(svg: string): string {
@@ -115,7 +115,7 @@ export function sanitiseSvg(svg: string): string {
   result = result.replace(/<foreignObject[\s\S]*?\/>/gi, "");
 
   if (/href\s*=\s*["']?\s*javascript:/i.test(result)) {
-    throw new Open3dPipelineError("malformedSvg", "Sanitisation failed: javascript: href found in SVG");
+    throw new PlannerPipelineError("malformedSvg", "Sanitisation failed: javascript: href found in SVG");
   }
 
   const externalUseMatch = result.match(
@@ -128,7 +128,7 @@ export function sanitiseSvg(svg: string): string {
       const scheme = url.includes(":") ? url.slice(0, url.indexOf(":") + 1) : "";
       const ALLOWED: string[] = ["https:", "http:", "data:image/png;base64", "data:image/svg+xml;"];
       if (!ALLOWED.includes(scheme)) {
-        throw new Open3dPipelineError(
+        throw new PlannerPipelineError(
           "malformedSvg",
           `Sanitisation failed: disallowed external reference in ${match.slice(0, 80)}`,
         );
@@ -141,7 +141,7 @@ export function sanitiseSvg(svg: string): string {
     for (const attr of attrMatch) {
       const val = attr.match(/=\s*(["'])([\s\S]*?)\1/)?.[2] ?? "";
       if (val.length > MAX_ATTR_SIZE) {
-        throw new Open3dPipelineError(
+        throw new PlannerPipelineError(
           "malformedSvg",
           `Sanitisation failed: attribute value exceeds ${MAX_ATTR_SIZE} bytes`,
         );
@@ -158,7 +158,7 @@ const SLUG_RE = /^[a-z][a-z0-9-]{1,63}$/;
 
 export function validateSlug(slug: string): void {
   if (!SLUG_RE.test(slug)) {
-    throw new Open3dPipelineError(
+    throw new PlannerPipelineError(
       "invalid",
       `Slug "${slug}" does not match required pattern ^[a-z][a-z0-9-]{1,63}$`,
     );
@@ -169,13 +169,13 @@ export interface ViewBox { x: number; y: number; width: number; height: number }
 
 export function assertViewBoxStable(descriptor: { viewBox?: unknown }): ViewBox {
   const vb = descriptor.viewBox as Record<string, unknown> | undefined;
-  if (!vb) throw new Open3dPipelineError("invalid", "Descriptor missing viewBox");
+  if (!vb) throw new PlannerPipelineError("invalid", "Descriptor missing viewBox");
   const { x, y, width, height } = vb as { x: unknown; y: unknown; width: unknown; height: unknown };
   if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(width) || !Number.isFinite(height)) {
-    throw new Open3dPipelineError("invalid", "viewBox contains non-finite values");
+    throw new PlannerPipelineError("invalid", "viewBox contains non-finite values");
   }
   if ((width as number) <= 0 || (height as number) <= 0) {
-    throw new Open3dPipelineError("invalid", "viewBox width/height must be positive");
+    throw new PlannerPipelineError("invalid", "viewBox width/height must be positive");
   }
   return { x: x as number, y: y as number, width: width as number, height: height as number };
 }
@@ -210,16 +210,16 @@ export type BooleanVariant = keyof typeof OP_MAP;
  */
 export function applyBooleanOp(polygons: Polygon[], variant: BooleanVariant): PolygonRing[] {
   if (polygons.length === 0) {
-    throw new Open3dPipelineError("invalid", "No polygons for boolean operation");
+    throw new PlannerPipelineError("invalid", "No polygons for boolean operation");
   }
   const op = OP_MAP[variant];
   if (!op) {
-    throw new Open3dPipelineError("invalid", `Unknown boolean variant "${variant}"`);
+    throw new PlannerPipelineError("invalid", `Unknown boolean variant "${variant}"`);
   }
   // Pass MultiPolygon Geoms: [Polygon] — not [[Polygon]] (one nesting level).
   if (polygons.length === 1) {
     if (variant === "difference") {
-      throw new Open3dPipelineError("invalid", "difference variant requires at least two polygons");
+      throw new PlannerPipelineError("invalid", "difference variant requires at least two polygons");
     }
     const result = (op as typeof polygonClipping.union)([polygons[0]!]);
     return Array.isArray(result) && result.length > 0 ? result[0]! : [];
@@ -229,7 +229,7 @@ export function applyBooleanOp(polygons: Polygon[], variant: BooleanVariant): Po
     const next: MultiPolygon = [polygons[i]!];
     const merged = (op as typeof polygonClipping.union)(acc, next);
     if (!Array.isArray(merged) || merged.length === 0) {
-      throw new Open3dPipelineError("invalid", `Boolean op "${variant}" produced empty result at index ${i}`);
+      throw new PlannerPipelineError("invalid", `Boolean op "${variant}" produced empty result at index ${i}`);
     }
     acc = merged;
   }
@@ -394,7 +394,7 @@ export async function runPipelineCoreFromPath(
   const stableViewBox = assertViewBoxStable({ ...descriptor, viewBox });
 
   if (!dPath.trim()) {
-    throw new Open3dPipelineError("invalid", "Empty SVG path data");
+    throw new PlannerPipelineError("invalid", "Empty SVG path data");
   }
 
   const assembled = buildSvgString(

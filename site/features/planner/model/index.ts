@@ -1,3 +1,10 @@
+/**
+ * Top-level planner document model (domain / portal / API saves).
+ * Live guest/canvas project model lives under `features/planner/project/model/`.
+ * Do not treat this tree as the plan canvas host.
+ * @see features/planner/CONTENTS.md — Dual trees
+ */
+
 export {
   PLANNER_DOCUMENT_SCHEMA_VERSION,
   assertPlannerDocument,

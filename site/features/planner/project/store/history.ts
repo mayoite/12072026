@@ -1,24 +1,24 @@
-import type { Open3dProject } from "../model/types";
+import type { PlannerProject } from "../model/types";
 import {
-  applyOpen3dProjectAction,
-  type Open3dProjectAction,
-  applyOpen3dProjectTransaction,
+  applyPlannerProjectAction,
+  type PlannerProjectAction,
+  applyPlannerProjectTransaction,
 } from "../model/actions/projectActions";
 
-export interface Open3dHistoryState {
-  past: Open3dProject[];
-  present: Open3dProject;
-  future: Open3dProject[];
-  dragStart: Open3dProject | null;
+export interface PlannerHistoryState {
+  past: PlannerProject[];
+  present: PlannerProject;
+  future: PlannerProject[];
+  dragStart: PlannerProject | null;
 }
 
-export function dispatchOpen3dTransaction(
-  history: Open3dHistoryState,
-  actions: readonly Open3dProjectAction[],
+export function dispatchPlannerTransaction(
+  history: PlannerHistoryState,
+  actions: readonly PlannerProjectAction[],
   now?: string,
-): Open3dHistoryState {
+): PlannerHistoryState {
   if (actions.length === 0) return history;
-  const next = applyOpen3dProjectTransaction(history.present, actions, now);
+  const next = applyPlannerProjectTransaction(history.present, actions, now);
   if (next === history.present) return history;
   return {
     past: [...history.past, history.present],
@@ -28,16 +28,16 @@ export function dispatchOpen3dTransaction(
   };
 }
 
-export function createOpen3dHistory(project: Open3dProject): Open3dHistoryState {
+export function createPlannerHistory(project: PlannerProject): PlannerHistoryState {
   return { past: [], present: project, future: [], dragStart: null };
 }
 
-export function dispatchOpen3dAction(
-  history: Open3dHistoryState,
-  action: Open3dProjectAction,
+export function dispatchPlannerAction(
+  history: PlannerHistoryState,
+  action: PlannerProjectAction,
   now?: string,
-): Open3dHistoryState {
-  const next = applyOpen3dProjectAction(history.present, action, now);
+): PlannerHistoryState {
+  const next = applyPlannerProjectAction(history.present, action, now);
   if (next === history.present) return history;
   return {
     past: [...history.past, history.present],
@@ -47,7 +47,7 @@ export function dispatchOpen3dAction(
   };
 }
 
-export function undoOpen3dAction(history: Open3dHistoryState): Open3dHistoryState {
+export function undoPlannerAction(history: PlannerHistoryState): PlannerHistoryState {
   const previous = history.past.at(-1);
   if (!previous) return history;
   return {
@@ -58,7 +58,7 @@ export function undoOpen3dAction(history: Open3dHistoryState): Open3dHistoryStat
   };
 }
 
-export function redoOpen3dAction(history: Open3dHistoryState): Open3dHistoryState {
+export function redoPlannerAction(history: PlannerHistoryState): PlannerHistoryState {
   const next = history.future[0];
   if (!next) return history;
   return {
@@ -73,17 +73,17 @@ export function redoOpen3dAction(history: Open3dHistoryState): Open3dHistoryStat
  * Apply a functional updater to the current document and record it in history.
  *
  * Used for canvas interactions (wall/opening geometry, placement, entity edits)
- * that are not expressible as a single {@link Open3dProjectAction}. Timestamp
+ * that are not expressible as a single {@link PlannerProjectAction}. Timestamp
  * stamping mirrors the action reducer: if the updater did not change
  * `updatedAt`, it is stamped so every recorded mutation advances the clock.
  * Returns the same history reference when the updater is a no-op so callers can
  * skip re-renders.
  */
-export function updateOpen3dProject(
-  history: Open3dHistoryState,
-  updater: (project: Open3dProject) => Open3dProject,
+export function updatePlannerProject(
+  history: PlannerHistoryState,
+  updater: (project: PlannerProject) => PlannerProject,
   now?: string,
-): Open3dHistoryState {
+): PlannerHistoryState {
   const updated = updater(history.present);
   if (updated === history.present) return history;
   const stamped =
@@ -98,14 +98,14 @@ export function updateOpen3dProject(
   };
 }
 
-export function beginOpen3dDrag(history: Open3dHistoryState): Open3dHistoryState {
+export function beginPlannerDrag(history: PlannerHistoryState): PlannerHistoryState {
   return { ...history, dragStart: history.present };
 }
 
-export function commitOpen3dDrag(
-  history: Open3dHistoryState,
-  project: Open3dProject,
-): Open3dHistoryState {
+export function commitPlannerDrag(
+  history: PlannerHistoryState,
+  project: PlannerProject,
+): PlannerHistoryState {
   if (!history.dragStart || history.dragStart === project) {
     return { ...history, present: project, dragStart: null };
   }

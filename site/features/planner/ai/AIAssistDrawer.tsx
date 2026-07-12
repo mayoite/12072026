@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useSyncExternalStore, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { CaretDown as ChevronDown, CircleNotch as Loader2, Chat as MessageSquare, Sparkle as Sparkles, MagicWand as Wand2 } from "@phosphor-icons/react";
 
 
@@ -20,7 +20,6 @@ import {
   resolveSpaceSuggestDefaults,
 } from "./aiAdvisorConfig";
 import { matchCatalogForPlacements } from "./catalogMatch";
-import { extractCanvasPlacements } from "./extractCanvasPlacements";
 import { LayoutPreviewSvg } from "./LayoutPreviewSvg";
 import { suggestLayout, suggestLayoutGridPack } from "./spaceSuggest";
 import type { PlannerProjectMetadata } from "@/features/planner/onboarding/projectSetup";
@@ -28,11 +27,6 @@ import type { AIProviderClassification } from "./aiStatus";
 
 import type { CatalogMatchResult, SuggestedLayoutJson } from "./types";
 import type { WorkspaceAiBridge } from "./workspaceAiBridge";
-
-/** Archive fabric runtime removed — only workspaceBridge supplies counts. */
-function useFabricPlacementCount(): number {
-  return 0;
-}
 
 type AiAssistTab = "suggest-layout" | "match-catalog" | "chat";
 
@@ -42,7 +36,7 @@ export type AIAssistDrawerProps = {
   defaultExpanded?: boolean;
   embedded?: boolean;
   defaultTab?: AiAssistTab;
-  /** Live workspace document bridge (bypasses Fabric runtime). */
+  /** Live document bridge — required for place/scan against editor project. */
   workspaceBridge?: WorkspaceAiBridge;
   /** Fills a workspace shell panel — no extra drawer chrome. */
   panelFill?: boolean;
@@ -60,8 +54,7 @@ export function AIAssistDrawer({
 
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [tab, setTab] = useState<AiAssistTab>(defaultTab);
-  const fabricPlacementCount = useFabricPlacementCount();
-  const placementCount = workspaceBridge?.placementCount ?? fabricPlacementCount;
+  const placementCount = workspaceBridge?.placementCount ?? 0;
 
   const [matchBusy, setMatchBusy] = useState(false);
   const [matchResults, setMatchResults] = useState<CatalogMatchResult[]>([]);
@@ -69,9 +62,7 @@ export function AIAssistDrawer({
 
   const handleScanCanvas = useCallback(() => {
     setMatchBusy(true);
-    const placements = workspaceBridge
-      ? workspaceBridge.getPlacements()
-      : extractCanvasPlacements(null);
+    const placements = workspaceBridge?.getPlacements() ?? [];
     setMatchResults(matchCatalogForPlacements(placements));
     setMatchScanned(true);
     setMatchBusy(false);
@@ -79,13 +70,7 @@ export function AIAssistDrawer({
 
   const handleApplyCatalogMatch = useCallback(
     (shapeId: string, catalogItemId: string) => {
-      if (workspaceBridge) {
-        workspaceBridge.replaceCatalogMatch(shapeId, catalogItemId);
-        return;
-      }
-      // No archive fabric runtime — require workspaceBridge for catalog place.
-      void shapeId;
-      void catalogItemId;
+      workspaceBridge?.replaceCatalogMatch(shapeId, catalogItemId);
     },
     [workspaceBridge],
   );

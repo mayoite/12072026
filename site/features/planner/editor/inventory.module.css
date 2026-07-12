@@ -156,11 +156,12 @@
   line-height: 1.2;
 }
 
-/* Categories Section */
+/* Categories — chrome only, no second vertical scrollport.
+   Results list (.itemGrid) is the sole vertical scroll (SmartDraw palette bar). */
 .categoriesSection {
   flex-shrink: 0;
-  max-height: 280px;
-  overflow-y: auto;
+  max-height: none;
+  overflow: visible;
   border-bottom: 1px solid var(--inv-panel-border);
 }
 
@@ -379,11 +380,13 @@
   grid-template-columns: repeat(3, 1fr);
   gap: var(--inv-space-2);
   padding: var(--inv-space-3);
+  /* Sole vertical scroll in the library panel */
+  overflow-x: hidden;
   overflow-y: auto;
-  /* Keep Add actions fully inside the scrollport after scroll-into-view
-     (Playwright + real pointer hit-tests fail when card center is clipped). */
+  overscroll-behavior: contain;
+  /* Keep Place actions hittable after scroll-into-view */
   scroll-padding-block: 0.75rem;
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
   margin: 0;
   list-style: none;

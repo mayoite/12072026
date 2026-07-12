@@ -1,7 +1,7 @@
-# Open3D runtime/editor CDN slot
+# Legacy CDN slot (do not write new assets)
 
-Phase 08 destination for **classified runtime/editor assets only** (`plannnerplan/08-cleanup-archive-and-evidence-gates.md:45`).
+**Superseded** by `public/cdn/planner/canvas/` for classified destinations in `assetClassification.ts`.
 
-- Product/catalog images and 3D models remain R2/DB-backed — do not commit here.
-- Donor textures from `open3d-floorplan/static/textures/` may be copied after Phase 08 sign-off.
-- See `site/features/planner/project/catalog/ASSET-PROVENANCE.md` and `cleanup/assetClassification.ts`.
+Kept empty so old bookmarks/docs that mention `/cdn/planner/open3d/` do not 404 the folder. New runtime texture copies go under `canvas/`.
+
+Vendor pack (separate): `public/vendor/open3d-floorplan/`.

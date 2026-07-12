@@ -4,7 +4,7 @@
 **Revision alignment:** [`Plans/00-QUALITY-BAR.md`](../../Plans/00-QUALITY-BAR.md) · Admin A1/A2.  
 **Honesty (owner lock):**
 - `public/svg-catalog/` = **inventory publish only** — not live plan-draw.
-- Live plan-draw = Fabric + Block2D on `open3d/` (P05).
+- Live plan-draw = Fabric + Block2D on `features/planner/canvas/` (P05).
 - Admin A4 studio draws **inventory symbols** with a full toolset destination; publish path stays catalog bytes only.
 
 ## Cross-links
@@ -23,8 +23,8 @@
 | Package policy | `@svgdotjs/*` used by Admin A4 studio (`svgJsEngineAdapter`) | `admin/svg-editor/scene/` |
 | Descriptor schema | `BlockDescriptor` (publish SoT) + `SvgBlockDefinitionV1` (studio/parts) | `svgTypes.ts`, `svgBlockSchemas.ts` |
 | Compile (publish) | **`compileSvgForPublish` / `runSvgCompileStages`** (S1–S3); S4 disk via pipeline with `skipCompile` | `asset-engine/svg/`, `svgPipelineRunner.ts` |
-| V1 compiler | `svgCompiler.server.ts` = **reference/tests**, not live publish authority | `open3d/catalog/svg/` |
-| Sanitize | DOMPurify + SVGO | `open3d/catalog/svg/svgServerSanitizer.ts` |
+| V1 compiler | `svgCompiler.server.ts` = **reference/tests**, not live publish authority | `project/catalog/svg/` |
+| Sanitize | DOMPurify + SVGO | `project/catalog/svg/svgServerSanitizer.ts` |
 | Raster | `svgArtifactCompiler.server.ts` — resvg + sharp | `admin/svg-editor/` |
 | Planner browser | `plannerSvgAdapter.ts` — minimal projection | `admin/svg-editor/` |
 | Admin UI | Canvas-first studio + form rail + live compile; no admin Puck mount | `AdminSvgEditorEditView.tsx`, `SvgStudioCanvas.tsx` |

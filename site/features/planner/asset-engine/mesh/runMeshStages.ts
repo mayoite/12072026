@@ -74,6 +74,23 @@ export async function runModularMeshStages(
     }
     stages.push(...binary.stages.filter((s) => !stages.includes(s)));
 
+    // Node-only GLB parse (not in exportModularGlbBinary — keeps client bundle free of node:fs)
+    let validationNodeCount = binary.validation.nodeCount;
+    if (typeof process !== "undefined" && process.versions?.node) {
+      const { validateGlbAsset } = await import("@/features/planner/lib/assetPipeline");
+      const validation = await validateGlbAsset(binary.buffer);
+      if (!validation.valid) {
+        return {
+          ok: false,
+          stages: [...stages, "mesh-g6-validate-glb-node"],
+          failedAt: "mesh-g6-validate-glb-node",
+          error: validation.errors.join("; ") || "GLB validation failed",
+        };
+      }
+      validationNodeCount = validation.nodeCount;
+      stages.push("mesh-g6-validate-glb-node");
+    }
+
     return {
       ok: true,
       stages,
@@ -82,7 +99,7 @@ export async function runModularMeshStages(
       partCount: plan.partCount,
       relativePath: binary.relativePath,
       binaryByteLength: binary.byteLength,
-      validationNodeCount: binary.validation.nodeCount,
+      validationNodeCount,
       runtimeMeshChildren,
     };
   } catch (err: unknown) {

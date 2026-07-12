@@ -5,10 +5,10 @@ import {
   formatSelectionStatus,
   formatSnapStatus,
   formatToolStatus,
-  open3dSaveStatusLabel,
-  type Open3dPersistStorage,
+  plannerSaveStatusLabel,
+  type PlannerPersistStorage,
 } from "@/features/planner/editor/workspaceStatusLabels";
-import type { Open3dSaveStatus } from "@/features/planner/project/persistence/useOpen3dWorkspaceAutosave";
+import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
 
 /** Buyer-facing lies when open3d is local-IDB only (cloudEnabled=false). */
 const FORBIDDEN_LOCAL_HONESTY = [
@@ -72,11 +72,11 @@ describe("workspaceStatusLabels full branches (TDD)", () => {
   });
 });
 
-describe("open3dSaveStatusLabel — local-only default (W6)", () => {
-  const local: Open3dPersistStorage = "local";
+describe("plannerSaveStatusLabel — local-only default (W6)", () => {
+  const local: PlannerPersistStorage = "local";
 
   const cases: Array<{
-    status: Open3dSaveStatus;
+    status: PlannerSaveStatus;
     guestMode: boolean;
     expected: string;
   }> = [
@@ -95,7 +95,7 @@ describe("open3dSaveStatusLabel — local-only default (W6)", () => {
   it.each(cases)(
     "$status guest=$guestMode → $expected",
     ({ status, guestMode, expected }) => {
-      const label = open3dSaveStatusLabel({
+      const label = plannerSaveStatusLabel({
         status,
         storage: local,
         lastSavedAt: status === "saved" ? "2026-07-10T12:00:00.000Z" : null,
@@ -108,7 +108,7 @@ describe("open3dSaveStatusLabel — local-only default (W6)", () => {
   );
 
   it("never returns cloud account labels when cloudEnabled is false even if storage claims cloud", () => {
-    const label = open3dSaveStatusLabel({
+    const label = plannerSaveStatusLabel({
       status: "saved",
       storage: "cloud",
       lastSavedAt: "2026-07-10T12:00:00.000Z",
@@ -121,7 +121,7 @@ describe("open3dSaveStatusLabel — local-only default (W6)", () => {
 
   it("cloud branches only when cloudEnabled true", () => {
     expect(
-      open3dSaveStatusLabel({
+      plannerSaveStatusLabel({
         status: "saving",
         storage: "cloud",
         lastSavedAt: null,
@@ -130,7 +130,7 @@ describe("open3dSaveStatusLabel — local-only default (W6)", () => {
       }),
     ).toBe("Saving to account…");
     expect(
-      open3dSaveStatusLabel({
+      plannerSaveStatusLabel({
         status: "saved",
         storage: "cloud",
         lastSavedAt: "2026-07-10T12:00:00.000Z",
@@ -139,7 +139,7 @@ describe("open3dSaveStatusLabel — local-only default (W6)", () => {
       }),
     ).toBe("Saved to account");
     expect(
-      open3dSaveStatusLabel({
+      plannerSaveStatusLabel({
         status: "error",
         storage: "cloud",
         lastSavedAt: null,
@@ -150,10 +150,10 @@ describe("open3dSaveStatusLabel — local-only default (W6)", () => {
   });
 
   it("forbids synced-to-account style lies across every local status", () => {
-    const statuses: Open3dSaveStatus[] = ["idle", "unsaved", "saving", "saved", "error"];
+    const statuses: PlannerSaveStatus[] = ["idle", "unsaved", "saving", "saved", "error"];
     for (const status of statuses) {
       for (const guestMode of [true, false]) {
-        const label = open3dSaveStatusLabel({
+        const label = plannerSaveStatusLabel({
           status,
           storage: "local",
           lastSavedAt: null,
@@ -168,9 +168,9 @@ describe("open3dSaveStatusLabel — local-only default (W6)", () => {
 });
 
 describe("formatAutosaveStatus delegates to same table (no dual drift)", () => {
-  it("matches open3dSaveStatusLabel for guest/member local", () => {
+  it("matches plannerSaveStatusLabel for guest/member local", () => {
     expect(formatAutosaveStatus("saved", true)).toBe(
-      open3dSaveStatusLabel({
+      plannerSaveStatusLabel({
         status: "saved",
         storage: "local",
         lastSavedAt: null,
@@ -179,7 +179,7 @@ describe("formatAutosaveStatus delegates to same table (no dual drift)", () => {
       }),
     );
     expect(formatAutosaveStatus("saved", false)).toBe(
-      open3dSaveStatusLabel({
+      plannerSaveStatusLabel({
         status: "saved",
         storage: "local",
         lastSavedAt: null,

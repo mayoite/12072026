@@ -8,7 +8,7 @@
  * Handles file validation, preview generation, and storage.
  */
 
-import type { Open3dBackgroundImage, Open3dPoint } from "../../model/types";
+import type { PlannerBackgroundImage, PlannerPoint } from "../../model/types";
 import { validateImageFile, DEFAULT_IMAGE_LIMITS, type ImageImportLimits, loadImageFile } from "../../lib/imageImport";
 
 // ── Types ──
@@ -25,7 +25,7 @@ export interface UploadResult {
 
 /** Background image upload options */
 export interface UploadBackgroundOptions {
-  position?: Open3dPoint;
+  position?: PlannerPoint;
   scale?: number;
   opacity?: number;
   rotation?: number;
@@ -124,7 +124,7 @@ async function uploadToServer(file: File, endpoint: string): Promise<UploadResul
 export function createBackgroundImageFromUpload(
   uploadResult: UploadResult,
   options: UploadBackgroundOptions = {},
-): Open3dBackgroundImage | null {
+): PlannerBackgroundImage | null {
   if (!uploadResult.success || !uploadResult.dataUrl) {
     return null;
   }
@@ -145,7 +145,7 @@ export function createBackgroundImageFromUpload(
 export async function uploadAndCreateBackground(
   file: File,
   options: UploadBackgroundOptions = {},
-): Promise<{ backgroundImage: Open3dBackgroundImage | null; error: string | null }> {
+): Promise<{ backgroundImage: PlannerBackgroundImage | null; error: string | null }> {
   const result = await uploadBackgroundImage(file, options);
 
   if (!result.success) {

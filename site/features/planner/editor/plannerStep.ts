@@ -1,6 +1,6 @@
 /**
- * Live planner step types — used by open3d workspace store / onboarding.
- * No archive Fabric runtime. Gate helpers that need archive canvas stay under _archive.
+ * Live planner step types — used by workspace store / onboarding.
+ * No archive Fabric runtime — `_archive` deleted; live tools only.
  */
 
 export type PlannerStep = "draw" | "place" | "review";

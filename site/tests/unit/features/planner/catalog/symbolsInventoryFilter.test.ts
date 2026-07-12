@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 import { inventoryCategoriesForProduct } from "@/features/planner/project/catalog/inventory/inventoryTaxonomy";
 import { mapDescriptorToCatalogItem } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
 import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
 
-function symbolItem(slug: string): Open3dCatalogItem {
+function symbolItem(slug: string): PlannerCatalogItem {
   const descriptor = {
     schemaVersion: "2026-07-04.v2",
     id: "f81e3a1b-16f4-4000-8000-000000000099",

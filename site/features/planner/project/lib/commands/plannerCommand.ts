@@ -1,42 +1,42 @@
 import type {
-  Open3dEntityCollection,
-  Open3dProjectAction,
+  PlannerEntityCollection,
+  PlannerProjectAction,
 } from "../../model/actions/projectActions";
-import type { Open3dProject } from "../../model/types";
+import type { PlannerProject } from "../../model/types";
 import {
-  dispatchOpen3dAction,
-  dispatchOpen3dTransaction,
-  redoOpen3dAction,
-  type Open3dHistoryState,
-  undoOpen3dAction,
-  updateOpen3dProject,
+  dispatchPlannerAction,
+  dispatchPlannerTransaction,
+  redoPlannerAction,
+  type PlannerHistoryState,
+  undoPlannerAction,
+  updatePlannerProject,
 } from "../../store/history";
 
 export type PlannerCommand =
-  | { type: "document.apply"; action: Open3dProjectAction; now?: string }
-  | { type: "document.transaction"; actions: readonly Open3dProjectAction[]; now?: string }
+  | { type: "document.apply"; action: PlannerProjectAction; now?: string }
+  | { type: "document.transaction"; actions: readonly PlannerProjectAction[]; now?: string }
   | {
       type: "document.update";
-      updater: (project: Open3dProject) => Open3dProject;
+      updater: (project: PlannerProject) => PlannerProject;
       now?: string;
     }
   | { type: "history.undo" }
   | { type: "history.redo" };
 
 export type PlannerCommandResult =
-  | { status: "applied"; history: Open3dHistoryState }
-  | { status: "noop"; history: Open3dHistoryState }
+  | { status: "applied"; history: PlannerHistoryState }
+  | { status: "noop"; history: PlannerHistoryState }
   | {
       status: "rejected";
       reason: "locked-item";
-      collection: Open3dEntityCollection;
+      collection: PlannerEntityCollection;
       entityId: string;
-      history: Open3dHistoryState;
+      history: PlannerHistoryState;
     };
 
 function mutationTarget(
-  project: Open3dProject,
-  action: Open3dProjectAction,
+  project: PlannerProject,
+  action: PlannerProjectAction,
 ): "add" | "missing" | "unlocked" | "locked" {
   if (action.type === "add") return "add";
   const floor = project.floors.find((candidate) => candidate.id === project.activeFloorId);
@@ -46,20 +46,20 @@ function mutationTarget(
 }
 
 export function executePlannerCommand(
-  history: Open3dHistoryState,
+  history: PlannerHistoryState,
   command: PlannerCommand,
 ): PlannerCommandResult {
   if (command.type === "history.undo") {
-    const next = undoOpen3dAction(history);
+    const next = undoPlannerAction(history);
     return { status: next === history ? "noop" : "applied", history: next };
   }
   if (command.type === "history.redo") {
-    const next = redoOpen3dAction(history);
+    const next = redoPlannerAction(history);
     return { status: next === history ? "noop" : "applied", history: next };
   }
 
   if (command.type === "document.update") {
-    const next = updateOpen3dProject(history, command.updater, command.now);
+    const next = updatePlannerProject(history, command.updater, command.now);
     return { status: next === history ? "noop" : "applied", history: next };
   }
 
@@ -79,7 +79,7 @@ export function executePlannerCommand(
   }
 
   const next = command.type === "document.apply"
-    ? dispatchOpen3dAction(history, command.action, command.now)
-    : dispatchOpen3dTransaction(history, command.actions, command.now);
+    ? dispatchPlannerAction(history, command.action, command.now)
+    : dispatchPlannerTransaction(history, command.actions, command.now);
   return { status: next === history ? "noop" : "applied", history: next };
 }

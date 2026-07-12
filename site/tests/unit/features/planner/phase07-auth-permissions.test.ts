@@ -25,7 +25,7 @@ import {
   GUEST_BLOCKED_COMMAND_KEYS,
   isCommandBlockedForContext,
 } from "@/features/planner/project/lib/commands/plannerAccessContext";
-import { toOpen3dDescriptorErrorHttp } from "@/features/planner/project/catalog/svg/svgTypes";
+import { toPlannerDescriptorErrorHttp } from "@/features/planner/project/catalog/svg/svgTypes";
 
 const PLANNER_IDS = Object.keys(PLANNER_IDENTITY_CONFIGS) as Array<
   keyof typeof PLANNER_IDENTITY_CONFIGS
@@ -88,7 +88,7 @@ describe("Phase 07 — 07-AUTH-04 guest blocked actions", () => {
 
 describe("Phase 07 — 07-AUTH-09 additive 422 / auth error taxonomy", () => {
   it("keeps Phase 02/04 descriptor 422 codes unchanged", () => {
-    const invalid = toOpen3dDescriptorErrorHttp({
+    const invalid = toPlannerDescriptorErrorHttp({
       kind: "invalid",
       code: "422.invalid",
       fieldPath: "slug",
@@ -98,7 +98,7 @@ describe("Phase 07 — 07-AUTH-09 additive 422 / auth error taxonomy", () => {
     expect(invalid.status).toBe(422);
     expect(invalid.body.code).toBe("422.invalid");
 
-    const versionMismatch = toOpen3dDescriptorErrorHttp({
+    const versionMismatch = toPlannerDescriptorErrorHttp({
       kind: "versionMismatch",
       code: "422.version_mismatch",
       fieldPath: "schemaVersion",

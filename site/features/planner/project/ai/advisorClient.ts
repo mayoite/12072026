@@ -1,5 +1,5 @@
 /**
- * AI Advisor client for open3d-next-staging.
+ * AI Advisor client for planner-next-staging.
  *
  * Provides typed interfaces for:
  * - Chat mode: Multi-turn conversational assistance

@@ -1,19 +1,19 @@
 import type {
-  Open3dDoor,
-  Open3dFurnitureItem,
-  Open3dFloor,
-  Open3dProject,
-  Open3dPoint,
-  Open3dRoom,
-  Open3dWall,
-  Open3dWindow,
-  Open3dStair,
-  Open3dColumn,
-  Open3dAnnotation,
-  Open3dTextAnnotation,
-  Open3dBackgroundImage,
+  PlannerDoor,
+  PlannerFurnitureItem,
+  PlannerFloor,
+  PlannerProject,
+  PlannerPoint,
+  PlannerRoom,
+  PlannerWall,
+  PlannerWindow,
+  PlannerStair,
+  PlannerColumn,
+  PlannerAnnotation,
+  PlannerTextAnnotation,
+  PlannerBackgroundImage,
 } from "../types";
-import type { Open3dIdFactory } from "../project";
+import type { PlannerIdFactory } from "../project";
 import { themeColorRef } from "../../shared/readThemeColor";
 import { PLANNER_COLOR_TOKENS, ROOM_FILL_TOKENS } from "../../shared/themeColorTokens";
 import { activeFloorOrThrow } from "../actions/projectActions";
@@ -27,35 +27,35 @@ export interface PureAction {
 }
 
 export interface PureActionResult {
-  project: Open3dProject;
+  project: PlannerProject;
   action: PureAction;
 }
 
 export interface ApplyPureActionOptions {
-  idFactory?: Open3dIdFactory;
+  idFactory?: PlannerIdFactory;
 }
 
 export interface AddRectangularRoomOptions extends ApplyPureActionOptions {
   name?: string;
-  roomType?: Open3dRoom["roomType"];
+  roomType?: PlannerRoom["roomType"];
   floorTexture?: string;
   wallHeightMm?: number;
   wallThicknessMm?: number;
 }
 
-function uid(factory?: Open3dIdFactory): string {
+function uid(factory?: PlannerIdFactory): string {
   return factory?.() ?? newEntityId();
 }
 
-function cloneProject(p: Open3dProject): Open3dProject {
+function cloneProject(p: PlannerProject): PlannerProject {
   return JSON.parse(JSON.stringify(p));
 }
 
-function getActiveFloor(project: Open3dProject): Open3dFloor {
+function getActiveFloor(project: PlannerProject): PlannerFloor {
   return activeFloorOrThrow(project);
 }
 
-function withUpdatedFloor(project: Open3dProject, floor: Open3dFloor): Open3dProject {
+function withUpdatedFloor(project: PlannerProject, floor: PlannerFloor): PlannerProject {
   return {
     ...project,
     floors: project.floors.map((f) => (f.id === floor.id ? floor : f)),
@@ -70,15 +70,15 @@ function makeAction(type: string, payload: Record<string, unknown>, description?
 // ── Wall actions ──
 
 export function addWall(
-  project: Open3dProject,
-  start: Open3dPoint,
-  end: Open3dPoint,
+  project: PlannerProject,
+  start: PlannerPoint,
+  end: PlannerPoint,
   options?: ApplyPureActionOptions,
 ): PureActionResult {
   const id = uid(options?.idFactory);
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
-  const wall: Open3dWall = {
+  const wall: PlannerWall = {
     id,
     start: { ...start },
     end: { ...end },
@@ -94,9 +94,9 @@ export function addWall(
 }
 
 export function addRectangularRoom(
-  project: Open3dProject,
-  start: Open3dPoint,
-  end: Open3dPoint,
+  project: PlannerProject,
+  start: PlannerPoint,
+  end: PlannerPoint,
   options?: AddRectangularRoomOptions,
 ): PureActionResult {
   const p = cloneProject(project);
@@ -112,7 +112,7 @@ export function addRectangularRoom(
     throw new Error("Room dimensions must be positive.");
   }
 
-  const points: Open3dPoint[] = [
+  const points: PlannerPoint[] = [
     { x: minX, y: minY },
     { x: maxX, y: minY },
     { x: maxX, y: maxY },
@@ -161,7 +161,7 @@ export function addRectangularRoom(
   };
 }
 
-export function removeWall(project: Open3dProject, id: string): PureActionResult {
+export function removeWall(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.walls = floor.walls.filter((w) => w.id !== id);
@@ -173,7 +173,7 @@ export function removeWall(project: Open3dProject, id: string): PureActionResult
   };
 }
 
-export function updateWall(project: Open3dProject, id: string, updates: Partial<Open3dWall>): PureActionResult {
+export function updateWall(project: PlannerProject, id: string, updates: Partial<PlannerWall>): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const wall = floor.walls.find((w) => w.id === id);
@@ -186,10 +186,10 @@ export function updateWall(project: Open3dProject, id: string, updates: Partial<
 }
 
 export function moveWallEndpoint(
-  project: Open3dProject,
+  project: PlannerProject,
   id: string,
   endpoint: "start" | "end",
-  position: Open3dPoint,
+  position: PlannerPoint,
 ): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
@@ -203,7 +203,7 @@ export function moveWallEndpoint(
 }
 
 export function moveWallParallel(
-  project: Open3dProject,
+  project: PlannerProject,
   id: string,
   dx: number,
   dy: number,
@@ -221,7 +221,7 @@ export function moveWallParallel(
 }
 
 export function splitWall(
-  project: Open3dProject,
+  project: PlannerProject,
   id: string,
   t: number,
   options?: ApplyPureActionOptions,
@@ -232,7 +232,7 @@ export function splitWall(
   if (!wall) throw new Error(`Wall ${id} not found`);
   if (t <= 0.001 || t >= 0.999) throw new Error("Split parameter t must be between 0.001 and 0.999");
   const newId = uid(options?.idFactory);
-  const midPt: Open3dPoint = {
+  const midPt: PlannerPoint = {
     x: wall.start.x + (wall.end.x - wall.start.x) * t,
     y: wall.start.y + (wall.end.y - wall.start.y) * t,
   };
@@ -265,7 +265,7 @@ export function splitWall(
   };
 }
 
-export function duplicateWall(project: Open3dProject, id: string, options?: ApplyPureActionOptions): PureActionResult {
+export function duplicateWall(project: PlannerProject, id: string, options?: ApplyPureActionOptions): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const wall = floor.walls.find((w) => w.id === id);
@@ -285,7 +285,7 @@ export function duplicateWall(project: Open3dProject, id: string, options?: Appl
 
 // ── Door actions ──
 
-const doorDefaults: Record<Open3dDoor["type"], { width: number; height: number }> = {
+const doorDefaults: Record<PlannerDoor["type"], { width: number; height: number }> = {
   single: { width: 900, height: 2100 },
   double: { width: 1500, height: 2100 },
   sliding: { width: 1800, height: 2100 },
@@ -295,10 +295,10 @@ const doorDefaults: Record<Open3dDoor["type"], { width: number; height: number }
 };
 
 export function addDoor(
-  project: Open3dProject,
+  project: PlannerProject,
   wallId: string,
   position: number,
-  doorType: Open3dDoor["type"] = "single",
+  doorType: PlannerDoor["type"] = "single",
   options?: ApplyPureActionOptions,
 ): PureActionResult {
   const id = uid(options?.idFactory);
@@ -321,7 +321,7 @@ export function addDoor(
   };
 }
 
-export function removeDoor(project: Open3dProject, id: string): PureActionResult {
+export function removeDoor(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.doors = floor.doors.filter((d) => d.id !== id);
@@ -331,7 +331,7 @@ export function removeDoor(project: Open3dProject, id: string): PureActionResult
   };
 }
 
-export function updateDoor(project: Open3dProject, id: string, updates: Partial<Open3dDoor>): PureActionResult {
+export function updateDoor(project: PlannerProject, id: string, updates: Partial<PlannerDoor>): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const door = floor.doors.find((d) => d.id === id);
@@ -345,7 +345,7 @@ export function updateDoor(project: Open3dProject, id: string, updates: Partial<
   };
 }
 
-export function duplicateDoor(project: Open3dProject, id: string, options?: ApplyPureActionOptions): PureActionResult {
+export function duplicateDoor(project: PlannerProject, id: string, options?: ApplyPureActionOptions): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const d = floor.doors.find((d) => d.id === id);
@@ -361,7 +361,7 @@ export function duplicateDoor(project: Open3dProject, id: string, options?: Appl
 
 // ── Window actions ──
 
-const windowDefaults: Record<Open3dWindow["type"], { width: number; height: number }> = {
+const windowDefaults: Record<PlannerWindow["type"], { width: number; height: number }> = {
   standard: { width: 1200, height: 1200 },
   fixed: { width: 1000, height: 1000 },
   casement: { width: 800, height: 1300 },
@@ -370,10 +370,10 @@ const windowDefaults: Record<Open3dWindow["type"], { width: number; height: numb
 };
 
 export function addWindow(
-  project: Open3dProject,
+  project: PlannerProject,
   wallId: string,
   position: number,
-  windowType: Open3dWindow["type"] = "standard",
+  windowType: PlannerWindow["type"] = "standard",
   options?: ApplyPureActionOptions,
 ): PureActionResult {
   const id = uid(options?.idFactory);
@@ -395,7 +395,7 @@ export function addWindow(
   };
 }
 
-export function removeWindow(project: Open3dProject, id: string): PureActionResult {
+export function removeWindow(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.windows = floor.windows.filter((w) => w.id !== id);
@@ -405,7 +405,7 @@ export function removeWindow(project: Open3dProject, id: string): PureActionResu
   };
 }
 
-export function updateWindow(project: Open3dProject, id: string, updates: Partial<Open3dWindow>): PureActionResult {
+export function updateWindow(project: PlannerProject, id: string, updates: Partial<PlannerWindow>): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const win = floor.windows.find((w) => w.id === id);
@@ -419,7 +419,7 @@ export function updateWindow(project: Open3dProject, id: string, updates: Partia
   };
 }
 
-export function duplicateWindow(project: Open3dProject, id: string, options?: ApplyPureActionOptions): PureActionResult {
+export function duplicateWindow(project: PlannerProject, id: string, options?: ApplyPureActionOptions): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const w = floor.windows.find((w) => w.id === id);
@@ -436,9 +436,9 @@ export function duplicateWindow(project: Open3dProject, id: string, options?: Ap
 // ── Furniture actions ──
 
 export function addFurniture(
-  project: Open3dProject,
+  project: PlannerProject,
   catalogId: string,
-  position: Open3dPoint,
+  position: PlannerPoint,
   options?: ApplyPureActionOptions,
 ): PureActionResult {
   const id = uid(options?.idFactory);
@@ -457,7 +457,7 @@ export function addFurniture(
   };
 }
 
-export function removeFurniture(project: Open3dProject, id: string): PureActionResult {
+export function removeFurniture(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.furniture = floor.furniture.filter((fi) => fi.id !== id);
@@ -468,9 +468,9 @@ export function removeFurniture(project: Open3dProject, id: string): PureActionR
 }
 
 export function updateFurniture(
-  project: Open3dProject,
+  project: PlannerProject,
   id: string,
-  updates: Partial<Open3dFurnitureItem>,
+  updates: Partial<PlannerFurnitureItem>,
 ): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
@@ -484,9 +484,9 @@ export function updateFurniture(
 }
 
 export function moveFurniture(
-  project: Open3dProject,
+  project: PlannerProject,
   id: string,
-  position: Open3dPoint,
+  position: PlannerPoint,
 ): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
@@ -499,7 +499,7 @@ export function moveFurniture(
   };
 }
 
-export function rotateFurniture(project: Open3dProject, id: string, angle: number): PureActionResult {
+export function rotateFurniture(project: PlannerProject, id: string, angle: number): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const fi = floor.furniture.find((f) => f.id === id);
@@ -511,7 +511,7 @@ export function rotateFurniture(project: Open3dProject, id: string, angle: numbe
   };
 }
 
-export function setFurnitureRotation(project: Open3dProject, id: string, angle: number): PureActionResult {
+export function setFurnitureRotation(project: PlannerProject, id: string, angle: number): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const fi = floor.furniture.find((f) => f.id === id);
@@ -524,7 +524,7 @@ export function setFurnitureRotation(project: Open3dProject, id: string, angle: 
 }
 
 export function scaleFurniture(
-  project: Open3dProject,
+  project: PlannerProject,
   id: string,
   scale: { x: number; y: number },
 ): PureActionResult {
@@ -543,7 +543,7 @@ export function scaleFurniture(
   };
 }
 
-export function duplicateFurniture(project: Open3dProject, id: string, options?: ApplyPureActionOptions): PureActionResult {
+export function duplicateFurniture(project: PlannerProject, id: string, options?: ApplyPureActionOptions): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const fi = floor.furniture.find((f) => f.id === id);
@@ -560,7 +560,7 @@ export function duplicateFurniture(project: Open3dProject, id: string, options?:
   };
 }
 
-export function toggleFurnitureLock(project: Open3dProject, id: string): PureActionResult {
+export function toggleFurnitureLock(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const fi = floor.furniture.find((f) => f.id === id);
@@ -572,7 +572,7 @@ export function toggleFurnitureLock(project: Open3dProject, id: string): PureAct
   };
 }
 
-export function setFurnitureLocked(project: Open3dProject, id: string, locked: boolean): PureActionResult {
+export function setFurnitureLocked(project: PlannerProject, id: string, locked: boolean): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const fi = floor.furniture.find((f) => f.id === id);
@@ -587,8 +587,8 @@ export function setFurnitureLocked(project: Open3dProject, id: string, locked: b
 // ── Stair actions ──
 
 export function addStair(
-  project: Open3dProject,
-  position: Open3dPoint,
+  project: PlannerProject,
+  position: PlannerPoint,
   options?: ApplyPureActionOptions,
 ): PureActionResult {
   const id = uid(options?.idFactory);
@@ -610,7 +610,7 @@ export function addStair(
   };
 }
 
-export function removeStair(project: Open3dProject, id: string): PureActionResult {
+export function removeStair(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.stairs = floor.stairs.filter((s) => s.id !== id);
@@ -620,7 +620,7 @@ export function removeStair(project: Open3dProject, id: string): PureActionResul
   };
 }
 
-export function updateStair(project: Open3dProject, id: string, updates: Partial<Open3dStair>): PureActionResult {
+export function updateStair(project: PlannerProject, id: string, updates: Partial<PlannerStair>): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const s = floor.stairs.find((s) => s.id === id);
@@ -632,7 +632,7 @@ export function updateStair(project: Open3dProject, id: string, updates: Partial
   };
 }
 
-export function moveStair(project: Open3dProject, id: string, position: Open3dPoint): PureActionResult {
+export function moveStair(project: PlannerProject, id: string, position: PlannerPoint): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const s = floor.stairs.find((s) => s.id === id);
@@ -647,8 +647,8 @@ export function moveStair(project: Open3dProject, id: string, position: Open3dPo
 // ── Column actions ──
 
 export function addColumn(
-  project: Open3dProject,
-  position: Open3dPoint,
+  project: PlannerProject,
+  position: PlannerPoint,
   shape: "round" | "square" = "round",
   options?: ApplyPureActionOptions,
 ): PureActionResult {
@@ -670,7 +670,7 @@ export function addColumn(
   };
 }
 
-export function removeColumn(project: Open3dProject, id: string): PureActionResult {
+export function removeColumn(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.columns = floor.columns.filter((c) => c.id !== id);
@@ -680,7 +680,7 @@ export function removeColumn(project: Open3dProject, id: string): PureActionResu
   };
 }
 
-export function updateColumn(project: Open3dProject, id: string, updates: Partial<Open3dColumn>): PureActionResult {
+export function updateColumn(project: PlannerProject, id: string, updates: Partial<PlannerColumn>): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const c = floor.columns.find((c) => c.id === id);
@@ -692,7 +692,7 @@ export function updateColumn(project: Open3dProject, id: string, updates: Partia
   };
 }
 
-export function moveColumn(project: Open3dProject, id: string, position: Open3dPoint): PureActionResult {
+export function moveColumn(project: PlannerProject, id: string, position: PlannerPoint): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const c = floor.columns.find((c) => c.id === id);
@@ -706,7 +706,7 @@ export function moveColumn(project: Open3dProject, id: string, position: Open3dP
 
 // ── Generic element removal ──
 
-export function removeElement(project: Open3dProject, id: string): PureActionResult {
+export function removeElement(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const isWall = floor.walls.some((w) => w.id === id);
@@ -730,13 +730,13 @@ export function removeElement(project: Open3dProject, id: string): PureActionRes
 // ── Floor actions ──
 
 export function addFloor(
-  project: Open3dProject,
+  project: PlannerProject,
   name?: string,
   options?: ApplyPureActionOptions & { copyCurrentLayout?: boolean },
 ): PureActionResult {
   const p = cloneProject(project);
   const level = p.floors.length;
-  const newFloor: Open3dFloor = {
+  const newFloor: PlannerFloor = {
     id: uid(options?.idFactory),
     name: name ?? `Floor ${level}`,
     level,
@@ -767,7 +767,7 @@ export function addFloor(
   };
 }
 
-export function removeFloor(project: Open3dProject, id: string): PureActionResult {
+export function removeFloor(project: PlannerProject, id: string): PureActionResult {
   if (project.floors.length <= 1) throw new Error("Cannot remove the only floor");
   const p = cloneProject(project);
   p.floors = p.floors.filter((f) => f.id !== id);
@@ -780,7 +780,7 @@ export function removeFloor(project: Open3dProject, id: string): PureActionResul
   };
 }
 
-export function setActiveFloor(project: Open3dProject, floorId: string): PureActionResult {
+export function setActiveFloor(project: PlannerProject, floorId: string): PureActionResult {
   if (!project.floors.some((f) => f.id === floorId)) {
     throw new Error(`Floor ${floorId} not found`);
   }
@@ -790,14 +790,14 @@ export function setActiveFloor(project: Open3dProject, floorId: string): PureAct
   };
 }
 
-export function updateProjectName(project: Open3dProject, name: string): PureActionResult {
+export function updateProjectName(project: PlannerProject, name: string): PureActionResult {
   return {
     project: { ...cloneProject(project), name, updatedAt: new Date().toISOString() },
     action: makeAction("UPDATE_PROJECT_NAME", { name }, "Updated project name"),
   };
 }
 
-export function updateDisplayUnit(project: Open3dProject, displayUnit: Open3dProject["displayUnit"]): PureActionResult {
+export function updateDisplayUnit(project: PlannerProject, displayUnit: PlannerProject["displayUnit"]): PureActionResult {
   return {
     project: { ...cloneProject(project), displayUnit, updatedAt: new Date().toISOString() },
     action: makeAction("UPDATE_DISPLAY_UNIT", { displayUnit }, "Changed display unit"),
@@ -807,7 +807,7 @@ export function updateDisplayUnit(project: Open3dProject, displayUnit: Open3dPro
 // ── Guide actions ──
 
 export function addGuide(
-  project: Open3dProject,
+  project: PlannerProject,
   orientation: "horizontal" | "vertical",
   position: number,
   options?: ApplyPureActionOptions,
@@ -822,7 +822,7 @@ export function addGuide(
   };
 }
 
-export function removeGuide(project: Open3dProject, id: string): PureActionResult {
+export function removeGuide(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.guides = floor.guides.filter((g) => g.id !== id);
@@ -832,7 +832,7 @@ export function removeGuide(project: Open3dProject, id: string): PureActionResul
   };
 }
 
-export function moveGuide(project: Open3dProject, id: string, position: number): PureActionResult {
+export function moveGuide(project: PlannerProject, id: string, position: number): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   const g = floor.guides.find((g) => g.id === id);
@@ -847,7 +847,7 @@ export function moveGuide(project: Open3dProject, id: string, position: number):
 // ── Measurement actions ──
 
 export function addMeasurement(
-  project: Open3dProject,
+  project: PlannerProject,
   x1: number,
   y1: number,
   x2: number,
@@ -864,7 +864,7 @@ export function addMeasurement(
   };
 }
 
-export function removeMeasurement(project: Open3dProject, id: string): PureActionResult {
+export function removeMeasurement(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.measurements = floor.measurements.filter((m) => m.id !== id);
@@ -877,7 +877,7 @@ export function removeMeasurement(project: Open3dProject, id: string): PureActio
 // ── Annotation actions ──
 
 export function addAnnotation(
-  project: Open3dProject,
+  project: PlannerProject,
   x1: number,
   y1: number,
   x2: number,
@@ -896,7 +896,7 @@ export function addAnnotation(
   };
 }
 
-export function removeAnnotation(project: Open3dProject, id: string): PureActionResult {
+export function removeAnnotation(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.annotations = floor.annotations.filter((a) => a.id !== id);
@@ -907,9 +907,9 @@ export function removeAnnotation(project: Open3dProject, id: string): PureAction
 }
 
 export function updateAnnotation(
-  project: Open3dProject,
+  project: PlannerProject,
   id: string,
-  updates: Partial<Open3dAnnotation>,
+  updates: Partial<PlannerAnnotation>,
 ): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
@@ -925,7 +925,7 @@ export function updateAnnotation(
 // ── Text annotation actions ──
 
 export function addTextAnnotation(
-  project: Open3dProject,
+  project: PlannerProject,
   x: number,
   y: number,
   text: string,
@@ -944,7 +944,7 @@ export function addTextAnnotation(
   };
 }
 
-export function removeTextAnnotation(project: Open3dProject, id: string): PureActionResult {
+export function removeTextAnnotation(project: PlannerProject, id: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.textAnnotations = floor.textAnnotations.filter((t) => t.id !== id);
@@ -955,9 +955,9 @@ export function removeTextAnnotation(project: Open3dProject, id: string): PureAc
 }
 
 export function updateTextAnnotation(
-  project: Open3dProject,
+  project: PlannerProject,
   id: string,
-  updates: Partial<Open3dTextAnnotation>,
+  updates: Partial<PlannerTextAnnotation>,
 ): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
@@ -971,7 +971,7 @@ export function updateTextAnnotation(
 }
 
 export function moveTextAnnotation(
-  project: Open3dProject,
+  project: PlannerProject,
   id: string,
   position: { x: number; y: number },
 ): PureActionResult {
@@ -990,8 +990,8 @@ export function moveTextAnnotation(
 // ── Background image actions ──
 
 export function setBackgroundImage(
-  project: Open3dProject,
-  bg: Open3dBackgroundImage | undefined,
+  project: PlannerProject,
+  bg: PlannerBackgroundImage | undefined,
 ): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
@@ -1003,8 +1003,8 @@ export function setBackgroundImage(
 }
 
 export function updateBackgroundImage(
-  project: Open3dProject,
-  updates: Partial<Open3dBackgroundImage>,
+  project: PlannerProject,
+  updates: Partial<PlannerBackgroundImage>,
 ): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
@@ -1019,7 +1019,7 @@ export function updateBackgroundImage(
 // ── Group actions ──
 
 export function createGroup(
-  project: Open3dProject,
+  project: PlannerProject,
   elementIds: string[],
   options?: ApplyPureActionOptions,
 ): PureActionResult {
@@ -1041,7 +1041,7 @@ export function createGroup(
   };
 }
 
-export function ungroup(project: Open3dProject, groupId: string): PureActionResult {
+export function ungroup(project: PlannerProject, groupId: string): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.groups = floor.groups.filter((g) => g.id !== groupId);
@@ -1051,7 +1051,7 @@ export function ungroup(project: Open3dProject, groupId: string): PureActionResu
   };
 }
 
-export function ungroupElements(project: Open3dProject, elementIds: string[]): PureActionResult {
+export function ungroupElements(project: PlannerProject, elementIds: string[]): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
   floor.groups = floor.groups.filter(
@@ -1066,9 +1066,9 @@ export function ungroupElements(project: Open3dProject, elementIds: string[]): P
 // ── Room actions ──
 
 export function updateRoom(
-  project: Open3dProject,
+  project: PlannerProject,
   id: string,
-  updates: Partial<Open3dFloor["rooms"][number]>,
+  updates: Partial<PlannerFloor["rooms"][number]>,
 ): PureActionResult {
   const p = cloneProject(project);
   const floor = getActiveFloor(p);
@@ -1084,8 +1084,8 @@ export function updateRoom(
 // ── Import floor ──
 
 export function importFloorIntoCurrentProject(
-  project: Open3dProject,
-  floor: Open3dFloor,
+  project: PlannerProject,
+  floor: PlannerFloor,
 ): PureActionResult {
   const p = cloneProject(project);
   const activeFloor = getActiveFloor(p);

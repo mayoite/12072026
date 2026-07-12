@@ -4,7 +4,7 @@
 
 All assets from the Open3D donor are classified as **demo-only reference assets**, not production catalog items.
 
-- **Runtime/editor assets** (textures, models) may be copied to `site/public/cdn/planner/open3d` after Phase 08 approval.
+- **Runtime/editor assets** (textures, models) may be copied to `site/public/cdn/planner/canvas` after Phase 08 approval (legacy slot `open3d/` is empty — do not write there).
 - **Product/catalog assets** (real furniture images, 3D models) remain R2/DB-backed and never committed to git.
 
 ## Textures

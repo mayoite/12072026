@@ -1,6 +1,6 @@
 # P04 — Orbit continuity (W4)
 
-**Status:** REPROVE — orbit wiring and 2026-07-11 evidence exist. Browser proof was count/orbit-attribute only; exact pose IDs remain unit-only.
+**Status:** **PASS** — agent call 2026-07-12 (owner delegated). Unit pose/orbit/wiring + browser id-set stable 2D↔3D + orbit ON.
 
 **Gate:** **W4** / CP-04 — 2D↔3D preserves **entity pose**; orbit ON with explicit workspace wiring + browser proof.  
 **Evidence:** `results/planner/world-standard-wave/04-orbit-continuity/`  
@@ -15,10 +15,10 @@
 ## Architecture (upgrade)
 
 ```
-Open3dProject (UUID, mm) = sole pose authority
+PlannerProject (UUID, mm) = sole pose authority
   → 2D: PlannerCanvasStage (Fabric) when viewMode === "2d"
   → 3D: Lazy3DViewer → ThreeViewerInner
-        + buildOpen3dSceneNodes → meshes userData.entityId
+        + buildPlannerSceneNodes → meshes userData.entityId
         + OrbitControls when enableControls === true
         + data-orbit-enabled on three-viewer-container
 ```
@@ -33,8 +33,8 @@ Open3dProject (UUID, mm) = sole pose authority
 
 | Layer | Status |
 |-------|--------|
-| (1) Lazy+Inner default ON | `OPEN3D_ORBIT_DEFAULT_ENABLED = true` |
-| (2) Workspace wiring | `{...getOpen3dViewerControlProps()}` on `Lazy3DViewer` — **landed** |
+| (1) Lazy+Inner default ON | `PLANNER_ORBIT_DEFAULT_ENABLED = true` |
+| (2) Workspace wiring | `{...getPlannerViewerControlProps()}` on `Lazy3DViewer` — **landed** |
 | (3) `data-orbit-enabled` | On `ThreeViewerInner` |
 | 2D side of toggle | Fabric stage only — keep it |
 | Units | `poseContinuityW4` · `orbitControlsDefault` · `workspaceOrbitWiring` |
@@ -43,13 +43,13 @@ Open3dProject (UUID, mm) = sole pose authority
 
 ---
 
-## Kill order (unchecked)
+## Kill order
 
-- [ ] Re-run pose + orbit + wiring vitest → `04-orbit-continuity/`
-- [ ] Confirm three-layer still green (NOTES) — Fabric-sole path only
-- [ ] Browser: radio toggle + left-drag + console clean; shots + `browser-run.json`
-- [ ] Honesty: count-only browser ≠ id/pose proof
-- [ ] No competitor assets · no engine rollback
+- [x] Re-run pose + orbit + wiring vitest → `04-orbit-continuity/`
+- [x] Three-layer green (NOTES) — Fabric-sole path only
+- [x] Browser: radio toggle + left-drag + orbit attr; shots + `browser-run.json`
+- [x] Honesty: browser proves **furniture id set** across 2D↔3D (not count-only); mm/rotation = unit document↔nodes
+- [x] No competitor assets · no engine rollback
 
-**W4 red until** fresh unit **and** browser (or owner WAIVE browser in CHECKPOINTS).  
-**Next (sequence):** [P05](./P05-symbols-svg.md) after CP-04.
+**PASS** 2026-07-12. Residual: live Three `userData.entityId` not asserted in browser (unit covers rebuild).  
+**Next (sequence):** [P05](./P05-symbols-svg.md).

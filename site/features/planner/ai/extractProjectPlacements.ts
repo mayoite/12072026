@@ -1,8 +1,8 @@
-import type { Open3dFloor, Open3dFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFloor, PlannerFurnitureItem } from "@/features/planner/project/model/types";
 
 import type { CanvasFurnitureKind, CanvasPlacementSummary } from "./types";
 
-function inferKind(item: Open3dFurnitureItem): CanvasFurnitureKind | null {
+function inferKind(item: PlannerFurnitureItem): CanvasFurnitureKind | null {
   const blob = `${item.catalogId} ${item.material ?? ""} ${item.sourceSku ?? ""}`.toLowerCase();
 
   if (blob.includes("chair") || blob.includes("seat")) {
@@ -31,7 +31,7 @@ function inferKind(item: Open3dFurnitureItem): CanvasFurnitureKind | null {
   return "workstation";
 }
 
-function toPlacement(item: Open3dFurnitureItem): CanvasPlacementSummary | null {
+function toPlacement(item: PlannerFurnitureItem): CanvasPlacementSummary | null {
   const kind = inferKind(item);
   if (!kind) return null;
 
@@ -49,7 +49,7 @@ function toPlacement(item: Open3dFurnitureItem): CanvasPlacementSummary | null {
   };
 }
 
-export function extractProjectPlacements(floor: Open3dFloor | null | undefined): CanvasPlacementSummary[] {
+export function extractProjectPlacements(floor: PlannerFloor | null | undefined): CanvasPlacementSummary[] {
   if (!floor) return [];
 
   return floor.furniture

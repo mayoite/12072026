@@ -35,6 +35,6 @@ A1–A3 foundation → A4 visual engine (disk proof) → A5 ops → A6 systems �
 **Kill list until then:** A5–A8 execution; pen/multi-select/minimap; scoring unit suite as A4.0.1 done.
 
 **Honesty (owner lock):**
-- Live room planner = `open3d/` + Fabric only (accepted).
+- Live room planner = `editor` + `canvas` (Fabric) + `3d` + `project` + `ui` — **no** product `open3d/` folder (accepted).
 - SVG catalog = **inventory publish only** — not plan-draw.
 - A4 studio = **all drawing tools for inventory symbols** (commercial-class authoring destination). Not a second plan canvas.

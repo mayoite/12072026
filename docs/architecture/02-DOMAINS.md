@@ -94,7 +94,7 @@ Not document authority. Mutations → planner commands only. Secrets in `.env.lo
 | Kind | Path | Law |
 |------|------|-----|
 | Site products | `features/catalog/` · shared catalog | Site content |
-| Planner place | `open3d/catalog/` | P07 |
+| Planner place | `project/catalog/` (live host) | P07 |
 | SVG publish | `public/svg-catalog/` | A1/A2 — not plan-draw |
 | Plan symbols | Block2D → Fabric stage | P05 |
 

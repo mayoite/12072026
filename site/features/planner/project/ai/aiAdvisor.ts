@@ -1,8 +1,8 @@
 import type {
-  Open3dProject,
-  Open3dFloor,
-  Open3dWall,
-  Open3dDisplayUnit,
+  PlannerProject,
+  PlannerFloor,
+  PlannerWall,
+  PlannerDisplayUnit,
 } from "../model/types";
 import { mmToDisplayValue, formatFeetAndInches } from "../model/units";
 
@@ -12,7 +12,7 @@ import { mmToDisplayValue, formatFeetAndInches } from "../model/units";
 export interface ProjectStateSummary {
   projectId: string;
   projectName: string;
-  displayUnit: Open3dDisplayUnit;
+  displayUnit: PlannerDisplayUnit;
   floors: FloorSummary[];
   totalWalls: number;
   totalRooms: number;
@@ -79,7 +79,7 @@ export interface AiProposal {
   confidence: number; // 0-1
   description: string;
   details: AiProposalDetails;
-  units: Open3dDisplayUnit;
+  units: PlannerDisplayUnit;
   privacyNotice?: string;
   retentionNotice?: string;
 }
@@ -141,7 +141,7 @@ export const DEFAULT_CATALOG_IDS = [
  * @returns Project state summary
  */
 export function summarizeProjectState(
-  project: Open3dProject,
+  project: PlannerProject,
   selectedItemId?: string,
   selectedItemType?: "wall" | "door" | "window" | "furniture" | "room" | "stair" | "column",
 ): ProjectStateSummary {
@@ -173,7 +173,7 @@ export function summarizeProjectState(
 /**
  * Summarizes a single floor.
  */
-function summarizeFloor(floor: Open3dFloor): FloorSummary {
+function summarizeFloor(floor: PlannerFloor): FloorSummary {
   const walls = floor.walls.map(summarizeWall);
   const bounds = calculateBounds(walls);
 
@@ -194,7 +194,7 @@ function summarizeFloor(floor: Open3dFloor): FloorSummary {
 /**
  * Summarizes a single wall.
  */
-function summarizeWall(wall: Open3dWall): WallSummary {
+function summarizeWall(wall: PlannerWall): WallSummary {
   const dx = wall.end.x - wall.start.x;
   const dy = wall.end.y - wall.start.y;
   const lengthMm = Math.sqrt(dx * dx + dy * dy);
@@ -271,7 +271,7 @@ export function validateAiProposal(
   }
 
   // Validate units
-  const validUnits: Open3dDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
+  const validUnits: PlannerDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
   if (!validUnits.includes(proposal.units)) {
     errors.push(`Invalid units: ${proposal.units}`);
   }
@@ -322,13 +322,13 @@ export function createAiPrivacyNotice(): { privacy: string; retention: string } 
  * @param unit - Display unit
  * @returns Formatted string with units
  */
-export function formatDimensionWithUnit(valueMm: number, unit: Open3dDisplayUnit): string {
+export function formatDimensionWithUnit(valueMm: number, unit: PlannerDisplayUnit): string {
   if (unit === "ft-in") {
     return formatFeetAndInches(valueMm);
   }
 
   const converted = mmToDisplayValue(valueMm, unit);
-  const unitLabels: Record<Open3dDisplayUnit, string> = {
+  const unitLabels: Record<PlannerDisplayUnit, string> = {
     mm: "mm",
     cm: "cm",
     m: "m",

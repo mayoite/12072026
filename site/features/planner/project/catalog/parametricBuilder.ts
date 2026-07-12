@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import type {
-  Open3dFurnitureGeometryMode,
-  Open3dModularCabinetV0Options,
+  PlannerFurnitureGeometryMode,
+  PlannerModularCabinetV0Options,
 } from "../model/types";
 import type { BlockDescriptorParametric } from "./svg/svgTypes";
 import {
@@ -18,8 +18,8 @@ const DEFAULT_FOOTPRINT_MM = 600;
 export type FurnitureFootprintSource = {
   width?: number;
   depth?: number;
-  geometryMode?: Open3dFurnitureGeometryMode;
-  modularOptions?: Open3dModularCabinetV0Options;
+  geometryMode?: PlannerFurnitureGeometryMode;
+  modularOptions?: PlannerModularCabinetV0Options;
 };
 
 function boxFootprintPath(widthMm: number, depthMm: number): string {

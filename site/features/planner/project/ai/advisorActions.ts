@@ -6,15 +6,15 @@
  */
 
 import type {
-  Open3dProject,
-  Open3dFurnitureItem,
-  Open3dWall,
-  Open3dRoom,
+  PlannerProject,
+  PlannerFurnitureItem,
+  PlannerWall,
+  PlannerRoom,
 } from "../model/types";
 import {
-  applyOpen3dProjectAction,
-  applyOpen3dProjectTransaction,
-  type Open3dProjectAction,
+  applyPlannerProjectAction,
+  applyPlannerProjectTransaction,
+  type PlannerProjectAction,
 } from "../model/actions/projectActions";
 import { themeColorRef } from "../shared/readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "../shared/themeColorTokens";
@@ -29,7 +29,7 @@ export interface ApplySuggestionActionResult {
   success: boolean;
   applied: boolean;
   error?: string;
-  previewActions?: Open3dProjectAction[];
+  previewActions?: PlannerProjectAction[];
 }
 
 /**
@@ -52,7 +52,7 @@ function catalogItemToFurnitureType(catalogItemId: string): string {
  */
 function createFurnitureFromLayout(
   item: { catalogItemId: string; label: string; x: number; y: number; rotation?: number },
-): Open3dFurnitureItem {
+): PlannerFurnitureItem {
   return {
     id: newEntityId(),
     catalogId: item.catalogItemId,
@@ -69,7 +69,7 @@ function createFurnitureFromLayout(
 function createWallFromLayout(
   wall: { x: number; y: number; endX: number; endY: number; lengthMm: number },
   heightMm = 2800,
-): Open3dWall {
+): PlannerWall {
   return {
     id: newEntityId(),
     start: { x: wall.x, y: wall.y },
@@ -85,7 +85,7 @@ function createWallFromLayout(
  */
 function createRoomFromLayout(
   room: { label: string; x: number; y: number; widthMm: number; depthMm: number },
-): Open3dRoom {
+): PlannerRoom {
   return {
     id: newEntityId(),
     name: room.label,
@@ -99,10 +99,10 @@ function createRoomFromLayout(
  * Applies a layout suggestion by creating project actions.
  */
 export function applyLayoutToProject(
-  project: Open3dProject,
+  project: PlannerProject,
   layout: SpaceSuggestLayout,
-): { project: Open3dProject; actions: Open3dProjectAction[] } {
-  const actions: Open3dProjectAction[] = [];
+): { project: PlannerProject; actions: PlannerProjectAction[] } {
+  const actions: PlannerProjectAction[] = [];
   const floorId = project.activeFloorId ?? project.floors[0]?.id;
 
   if (!floorId) {
@@ -140,7 +140,7 @@ export function applyLayoutToProject(
   }
 
   // Apply all actions in a transaction
-  const updatedProject = applyOpen3dProjectTransaction(project, actions);
+  const updatedProject = applyPlannerProjectTransaction(project, actions);
 
   return { project: updatedProject, actions };
 }
@@ -149,7 +149,7 @@ export function applyLayoutToProject(
  * Applies a placement suggestion (adding furniture at a position).
  */
 function applyPlacementSuggestion(
-  project: Open3dProject,
+  project: PlannerProject,
   suggestion: AdvisorSuggestion,
 ): ApplySuggestionActionResult {
   const floorId = project.activeFloorId ?? project.floors[0]?.id;
@@ -164,7 +164,7 @@ function applyPlacementSuggestion(
 
   // For placement suggestions, we need catalog info from the description
   // This is a simplified implementation
-  const furniture: Open3dFurnitureItem = {
+  const furniture: PlannerFurnitureItem = {
     id: newEntityId(),
     catalogId: suggestion.type === "placement" ? "desk-standard" : "generic",
     position: { x: 0, y: 0 }, // Would be extracted from suggestion details
@@ -174,7 +174,7 @@ function applyPlacementSuggestion(
   };
 
   try {
-    const _updatedProject = applyOpen3dProjectAction(project, {
+    const _updatedProject = applyPlannerProjectAction(project, {
       type: "add",
       collection: "furniture",
       entity: furniture,
@@ -211,7 +211,7 @@ function applyPlacementSuggestion(
  */
 export async function applySuggestion(
   suggestion: AdvisorSuggestion,
-  project?: Open3dProject,
+  project?: PlannerProject,
 ): Promise<ApplySuggestionActionResult> {
   if (!suggestion) {
     return {
@@ -282,10 +282,10 @@ export async function applySuggestion(
  */
 export function previewSuggestionActions(
   suggestion: AdvisorSuggestion,
-): Open3dProjectAction[] {
+): PlannerProjectAction[] {
   if (suggestion.layout) {
     // Generate preview actions for layout (without applying to project)
-    const actions: Open3dProjectAction[] = [];
+    const actions: PlannerProjectAction[] = [];
 
     if (suggestion.layout.room) {
       const room = createRoomFromLayout(suggestion.layout.room);
@@ -313,9 +313,9 @@ export function previewSuggestionActions(
  * Note: This requires keeping track of applied actions in the store.
  */
 export function revertLastSuggestion(
-  project: Open3dProject,
+  project: PlannerProject,
   _appliedActionIds: string[],
-): Open3dProject {
+): PlannerProject {
   // In a full implementation, this would find and remove the entities
   // that were added by the last suggestion
   console.warn("[advisorActions] revertLastSuggestion not fully implemented");

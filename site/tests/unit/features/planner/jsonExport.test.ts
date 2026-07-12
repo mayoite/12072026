@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createOpen3dProject, createRectangularRoomProject, createOpen3dSceneEnvelope } from "@/features/planner/project/model/project";
+import { createPlannerProject, createRectangularRoomProject, createPlannerSceneEnvelope } from "@/features/planner/project/model/project";
 import { exportToJson, envelopeToJsonString } from "@/features/planner/project/shared/export/jsonExport";
 import {
   importFromJson,
@@ -62,7 +62,7 @@ describe("jsonExport", () => {
   });
 
   it("fails for empty project", () => {
-    const empty = createOpen3dProject({ idFactory: ids("p") });
+    const empty = createPlannerProject({ idFactory: ids("p") });
     empty.floors = [];
     const result = exportToJson(empty);
     expect(result.success).toBe(false);
@@ -101,7 +101,7 @@ describe("jsonExport", () => {
 describe("jsonImport", () => {
   it("parses valid JSON string", () => {
     const p = room();
-    const envelope = createOpen3dSceneEnvelope(p);
+    const envelope = createPlannerSceneEnvelope(p);
     const jsonStr = JSON.stringify(envelope);
     const { envelope: parsed, parseError } = parseJsonToEnvelope(jsonStr);
     expect(parseError).toBeNull();
@@ -130,20 +130,20 @@ describe("jsonImport", () => {
 
   it("validates envelope structure", () => {
     const p = room();
-    const envelope = createOpen3dSceneEnvelope(p);
+    const envelope = createPlannerSceneEnvelope(p);
     const errors = validateEnvelopeStructure(envelope);
     expect(errors.filter((e) => e.severity === "error")).toHaveLength(0);
   });
 
   it("rejects missing type", () => {
-    const envelope = createOpen3dSceneEnvelope(room());
+    const envelope = createPlannerSceneEnvelope(room());
     const envelopeCopy = { ...envelope, type: undefined };
     const errors = validateEnvelopeStructure(envelopeCopy as never);
     expect(errors.some((e) => e.path === "type")).toBe(true);
   });
 
   it("rejects wrong type", () => {
-    const envelope = createOpen3dSceneEnvelope(room());
+    const envelope = createPlannerSceneEnvelope(room());
     const envelopeAny = envelope as unknown as { type: string };
     envelopeAny.type = "something-else";
     const errors = validateEnvelopeStructure(envelopeAny as never);
@@ -151,7 +151,7 @@ describe("jsonImport", () => {
   });
 
   it("rejects invalid version", () => {
-    const envelope = createOpen3dSceneEnvelope(room());
+    const envelope = createPlannerSceneEnvelope(room());
     const envelopeAny = envelope as unknown as { version: number };
     envelopeAny.version = -1;
     const errors = validateEnvelopeStructure(envelopeAny as never);
@@ -159,7 +159,7 @@ describe("jsonImport", () => {
   });
 
   it("rejects unsupported units", () => {
-    const envelope = createOpen3dSceneEnvelope(room());
+    const envelope = createPlannerSceneEnvelope(room());
     const envelopeAny = envelope as unknown as { units: string };
     envelopeAny.units = "inches";
     const errors = validateEnvelopeStructure(envelopeAny as never);
@@ -167,7 +167,7 @@ describe("jsonImport", () => {
   });
 
   it("warns on invalid displayUnit", () => {
-    const envelope = createOpen3dSceneEnvelope(room());
+    const envelope = createPlannerSceneEnvelope(room());
     envelope.displayUnit = "invalid" as never;
     const errors = validateEnvelopeStructure(envelope);
     expect(errors.some((e) => e.path === "displayUnit" && e.severity === "warning")).toBe(true);
@@ -175,7 +175,7 @@ describe("jsonImport", () => {
 
   it("rejects too many floors", () => {
     const p = room();
-    const envelope = createOpen3dSceneEnvelope(p);
+    const envelope = createPlannerSceneEnvelope(p);
     // Add more floors than allowed
     const extraFloors = Array(DEFAULT_IMPORT_LIMITS.maxFloors + 1)
       .fill(null)
@@ -187,7 +187,7 @@ describe("jsonImport", () => {
 
   it("imports valid JSON successfully", () => {
     const p = room();
-    const envelope = createOpen3dSceneEnvelope(p);
+    const envelope = createPlannerSceneEnvelope(p);
     const jsonStr = JSON.stringify(envelope);
     const result = importFromJson(jsonStr);
     expect(result.success).toBe(true);
@@ -204,7 +204,7 @@ describe("jsonImport", () => {
 
   it("round-trips correctly", () => {
     const p = room();
-    const envelope = createOpen3dSceneEnvelope(p);
+    const envelope = createPlannerSceneEnvelope(p);
     const jsonStr = JSON.stringify(envelope, null, 2);
     const result = importFromJson(jsonStr);
     expect(result.success).toBe(true);
@@ -217,7 +217,7 @@ describe("jsonImport", () => {
 
 describe("recoverFromErrors", () => {
   it("sets default displayUnit when missing", () => {
-    const envelope = createOpen3dSceneEnvelope(room());
+    const envelope = createPlannerSceneEnvelope(room());
     envelope.displayUnit = undefined as never;
     const { envelope: recovered, recovered: messages } = recoverFromErrors(envelope);
     expect(recovered.displayUnit).toBe("mm");
@@ -225,7 +225,7 @@ describe("recoverFromErrors", () => {
   });
 
   it("assigns IDs to floors without IDs", () => {
-    const envelope = createOpen3dSceneEnvelope(room());
+    const envelope = createPlannerSceneEnvelope(room());
     envelope.project.floors[0].id = "";
     const { envelope: recovered, recovered: messages } = recoverFromErrors(envelope);
     expect(isEntityUuid(recovered.project.floors[0].id)).toBe(true);
@@ -233,7 +233,7 @@ describe("recoverFromErrors", () => {
   });
 
   it("leaves valid envelope unchanged", () => {
-    const envelope = createOpen3dSceneEnvelope(room());
+    const envelope = createPlannerSceneEnvelope(room());
     const { envelope: recovered, recovered: messages } = recoverFromErrors(envelope);
     expect(recovered).toEqual(envelope);
     expect(messages).toHaveLength(0);

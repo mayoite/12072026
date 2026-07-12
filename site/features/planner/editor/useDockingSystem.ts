@@ -41,8 +41,8 @@ interface DockingSystemActions {
   setFocusedPanel: Dispatch<SetStateAction<PanelId | null>>;
 }
 
-const STORAGE_KEY = "open3d-workspace-docking";
-const PREFS_STORAGE_KEY = "open3d-workspace-preferences";
+const STORAGE_KEY = "planner-workspace-docking";
+const PREFS_STORAGE_KEY = "planner-workspace-preferences";
 
 // GS: Figma UI3 REC-01 (minimize UI on panels), catalogue-first REC-04 (separate catalogue sidebar); persist ratios in workspace prefs per task5 / 02-PHASE-1; use semantic tokens only, anti-copy from 00-benchmark-summary.md
 

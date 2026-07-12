@@ -23,12 +23,12 @@ import { parseAdminPayload } from "@/features/planner/admin/svg-editor/persistBl
 import { publishDescriptorWithPipeline } from "@/features/planner/admin/svg-editor/publishDescriptorWithPipeline";
 import { buildBlockThumbPngUrl } from "@/features/planner/project/catalog/svg/svgPreviewAssets";
 import {
-  toOpen3dDescriptorErrorHttp,
-  type Open3dDescriptorError,
+  toPlannerDescriptorErrorHttp,
+  type PlannerDescriptorError,
 } from "@/features/planner/project/catalog/svg/svgTypes";
 
-function descriptorErrorResponse(descriptorError: Open3dDescriptorError): NextResponse {
-  const http = toOpen3dDescriptorErrorHttp(descriptorError);
+function descriptorErrorResponse(descriptorError: PlannerDescriptorError): NextResponse {
+  const http = toPlannerDescriptorErrorHttp(descriptorError);
   return NextResponse.json(
     {
       success: false,

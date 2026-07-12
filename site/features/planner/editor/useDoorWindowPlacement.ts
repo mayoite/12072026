@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import type { Open3dDoor, Open3dProject, Open3dWindow } from "@/features/planner/project/model/types";
+import type { PlannerDoor, PlannerProject, PlannerWindow } from "@/features/planner/project/model/types";
 import { removeDoor, removeWindow, updateDoor, updateWindow } from "@/features/planner/project/model/operations/pureActions";
 
-export type DoorType = Open3dDoor["type"];
-export type WindowType = Open3dWindow["type"];
+export type DoorType = PlannerDoor["type"];
+export type WindowType = PlannerWindow["type"];
 
 export type PlacementMode = 
   | { mode: "select" }
@@ -27,7 +27,7 @@ export interface DoorWindowPlacementResult {
  * Door/Window placement hook for the workspace canvas.
  * Provides state management and actions for placing and editing doors and windows on walls.
  */
-export function useDoorWindowPlacement(project: Open3dProject | null) {
+export function useDoorWindowPlacement(project: PlannerProject | null) {
   const [placementMode, setPlacementMode] = useState<PlacementMode>({ mode: "select" });
   const [selectedWallId, setSelectedWallId] = useState<string | null>(null);
   const [hoverPosition, setHoverPosition] = useState<number | null>(null);
@@ -92,7 +92,7 @@ export function useDoorWindowPlacement(project: Open3dProject | null) {
 
   // Update door properties
   const updateDoorProperties = useCallback(
-    (updatedProject: Open3dProject, doorId: string, updates: Partial<Open3dDoor>): Open3dProject => {
+    (updatedProject: PlannerProject, doorId: string, updates: Partial<PlannerDoor>): PlannerProject => {
       const floor = updatedProject.floors.find((f) => f.id === updatedProject.activeFloorId);
       if (!floor?.doors.some((door) => door.id === doorId)) {
         return updatedProject;
@@ -104,7 +104,7 @@ export function useDoorWindowPlacement(project: Open3dProject | null) {
 
   // Update window properties
   const updateWindowProperties = useCallback(
-    (updatedProject: Open3dProject, windowId: string, updates: Partial<Open3dWindow>): Open3dProject => {
+    (updatedProject: PlannerProject, windowId: string, updates: Partial<PlannerWindow>): PlannerProject => {
       const floor = updatedProject.floors.find((f) => f.id === updatedProject.activeFloorId);
       if (!floor?.windows.some((window) => window.id === windowId)) {
         return updatedProject;
@@ -116,7 +116,7 @@ export function useDoorWindowPlacement(project: Open3dProject | null) {
 
   // Delete a door
   const deleteDoor = useCallback(
-    (updatedProject: Open3dProject, doorId: string): Open3dProject => {
+    (updatedProject: PlannerProject, doorId: string): PlannerProject => {
       return removeDoor(updatedProject, doorId).project;
     },
     [],
@@ -124,7 +124,7 @@ export function useDoorWindowPlacement(project: Open3dProject | null) {
 
   // Delete a window
   const deleteWindow = useCallback(
-    (updatedProject: Open3dProject, windowId: string): Open3dProject => {
+    (updatedProject: PlannerProject, windowId: string): PlannerProject => {
       return removeWindow(updatedProject, windowId).project;
     },
     [],
@@ -132,7 +132,7 @@ export function useDoorWindowPlacement(project: Open3dProject | null) {
 
   // Get doors on a specific wall
   const getDoorsOnWall = useCallback(
-    (wallId: string): Open3dDoor[] => {
+    (wallId: string): PlannerDoor[] => {
       if (!project) return [];
       const floor = project.floors.find((f) => f.id === project.activeFloorId);
       return floor?.doors.filter((d) => d.wallId === wallId) ?? [];
@@ -142,7 +142,7 @@ export function useDoorWindowPlacement(project: Open3dProject | null) {
 
   // Get windows on a specific wall
   const getWindowsOnWall = useCallback(
-    (wallId: string): Open3dWindow[] => {
+    (wallId: string): PlannerWindow[] => {
       if (!project) return [];
       const floor = project.floors.find((f) => f.id === project.activeFloorId);
       return floor?.windows.filter((w) => w.wallId === wallId) ?? [];

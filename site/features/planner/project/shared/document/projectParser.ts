@@ -1,7 +1,7 @@
 import type {
-  Open3dDisplayUnit, Open3dFloor, Open3dPlannerSceneEnvelope, Open3dProject,
+  PlannerDisplayUnit, PlannerFloor, PlannerSceneEnvelope, PlannerProject,
 } from "../../model/types";
-import { assertOpen3dProject } from "../../model/invariants";
+import { assertPlannerProject } from "../../model/invariants";
 import { assertNoDesignerStaticGlb } from "@/features/planner/lib/glbAssetPolicy";
 
 const DISPLAY_UNITS: readonly string[] = ["mm", "cm", "m", "in", "ft-in"];
@@ -59,7 +59,7 @@ function optionalString(item: Record<string, unknown>, key: string): string | un
   return stringValue(value, key);
 }
 
-function floor(value: unknown, path: string): Open3dFloor {
+function floor(value: unknown, path: string): PlannerFloor {
   const item = record(value, path);
   const parseWall = (raw: unknown, itemPath: string) => {
     const wall = record(raw, itemPath);
@@ -198,26 +198,26 @@ function parseMeasurement(raw: unknown, path: string) {
   return { id: id(item, path), x1: numberValue(item.x1, `${path}.x1`), y1: numberValue(item.y1, `${path}.y1`), x2: numberValue(item.x2, `${path}.x2`), y2: numberValue(item.y2, `${path}.y2`) };
 }
 
-export function parseOpen3dProject(value: unknown): Open3dProject {
+export function parsePlannerProject(value: unknown): PlannerProject {
   const item = record(value, "project");
   const floors = arrayValue(item.floors, "project.floors", floor);
   if (floors.length === 0) throw new Error("project.floors must contain at least one floor.");
-  const project: Open3dProject = {
+  const project: PlannerProject = {
     id: stringValue(item.id, "project.id"), name: stringValue(item.name, "project.name"), floors,
     activeFloorId: stringValue(item.activeFloorId, "project.activeFloorId"),
-    displayUnit: oneOf(item.displayUnit ?? "mm", DISPLAY_UNITS, "project.displayUnit") as Open3dDisplayUnit,
+    displayUnit: oneOf(item.displayUnit ?? "mm", DISPLAY_UNITS, "project.displayUnit") as PlannerDisplayUnit,
     createdAt: stringValue(item.createdAt, "project.createdAt"), updatedAt: stringValue(item.updatedAt, "project.updatedAt"),
     ...(item.description === undefined ? {} : { description: stringValue(item.description, "project.description") }),
   };
-  assertOpen3dProject(project);
+  assertPlannerProject(project);
   return project;
 }
 
-export function parseOpen3dSceneEnvelope(value: unknown): Open3dPlannerSceneEnvelope {
+export function parsePlannerSceneEnvelope(value: unknown): PlannerSceneEnvelope {
   const item = record(value, "scene");
   if (item.type !== "open3d-floorplan-project" || item.version !== 1 || item.units !== "mm") {
     throw new Error("Unsupported Open3D planner scene envelope.");
   }
-  const project = parseOpen3dProject(item.project);
+  const project = parsePlannerProject(item.project);
   return { type: "open3d-floorplan-project", version: 1, units: "mm", displayUnit: project.displayUnit, source: "native-open3d", project };
 }

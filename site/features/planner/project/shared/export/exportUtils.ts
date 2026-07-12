@@ -13,10 +13,10 @@
  */
 
 import type {
-  Open3dProject,
-  Open3dFloor,
-  Open3dWall,
-  Open3dDisplayUnit,
+  PlannerProject,
+  PlannerFloor,
+  PlannerWall,
+  PlannerDisplayUnit,
 } from "../../model/types";
 import { displayCmFromCanonicalMm, displayMFromCanonicalMm, displayInFromCanonicalMm, displayFtInFromCanonicalMm } from "../../catalog/unitConversion";
 import {
@@ -65,8 +65,8 @@ export const DEFAULT_PDF_SETTINGS: PdfExportSettings = {
  * @param displayUnit - Target display unit
  * @returns Formatted string with unit
  */
-export function formatMeasurement(mmValue: number, displayUnit: Open3dDisplayUnit): string {
-  const converters: Record<Open3dDisplayUnit, (v: number) => string> = {
+export function formatMeasurement(mmValue: number, displayUnit: PlannerDisplayUnit): string {
+  const converters: Record<PlannerDisplayUnit, (v: number) => string> = {
     mm: (v) => `${Math.round(v)} mm`,
     cm: (v) => `${displayCmFromCanonicalMm(v)} cm`,
     m: (v) => `${displayMFromCanonicalMm(v)} m`,
@@ -79,14 +79,14 @@ export function formatMeasurement(mmValue: number, displayUnit: Open3dDisplayUni
 // ── Geometry helpers ──
 
 /** Calculate wall length in mm */
-export function getWallLengthMm(wall: Open3dWall): number {
+export function getWallLengthMm(wall: PlannerWall): number {
   const dx = wall.end.x - wall.start.x;
   const dy = wall.end.y - wall.start.y;
   return Math.sqrt(dx * dx + dy * dy);
 }
 
 /** Calculate floor bounding box */
-export function getFloorBounds(floor: Open3dFloor): {
+export function getFloorBounds(floor: PlannerFloor): {
   minX: number;
   minY: number;
   maxX: number;
@@ -124,7 +124,7 @@ export function getFloorBounds(floor: Open3dFloor): {
  * @param pretty - Whether to pretty-print
  * @returns JSON string
  */
-export function exportAsJSON(project: Open3dProject, pretty = false): string {
+export function exportAsJSON(project: PlannerProject, pretty = false): string {
   const envelope = {
     type: "open3d-floorplan-project",
     version: 1,
@@ -153,7 +153,7 @@ function downloadBlob(blob: Blob, filename: string): void {
 /**
  * Download JSON export.
  */
-export function downloadJSON(project: Open3dProject, filename?: string): void {
+export function downloadJSON(project: PlannerProject, filename?: string): void {
   const json = exportAsJSON(project, true);
   const blob = new Blob([json], { type: "application/json" });
   downloadBlob(blob, filename ?? `${project.name || "floorplan"}.json`);
@@ -217,7 +217,7 @@ function escapeXml(s: string): string {
  * Generate SVG from floor geometry.
  * Reuses Phase 03A SVG generation pipeline patterns.
  */
-export function exportAsSVG(project: Open3dProject, floor?: Open3dFloor): string {
+export function exportAsSVG(project: PlannerProject, floor?: PlannerFloor): string {
   const targetFloor = floor ?? project.floors.find((f) => f.id === project.activeFloorId) ?? project.floors[0];
   if (!targetFloor || targetFloor.walls.length === 0) {
     return "";
@@ -322,7 +322,7 @@ ${paths}</svg>`;
 /**
  * Download SVG export.
  */
-export function downloadSVG(project: Open3dProject, floor?: Open3dFloor): void {
+export function downloadSVG(project: PlannerProject, floor?: PlannerFloor): void {
   const svg = exportAsSVG(project, floor);
   if (!svg) return;
 
@@ -375,8 +375,8 @@ type DxfConstructor = new () => DxfDrawing;
 
 function drawFloorToCanvas2d(
   ctx: CanvasRenderingContext2D,
-  project: Open3dProject,
-  floor: Open3dFloor,
+  project: PlannerProject,
+  floor: PlannerFloor,
   pad: number,
 ): { width: number; height: number } {
   const { minX, minY, maxX, maxY } = getFloorBounds(floor);
@@ -473,7 +473,7 @@ function drawFloorToCanvas2d(
 
 export async function exportAsPNG(
   canvas: HTMLCanvasElement,
-  project?: Open3dProject,
+  project?: PlannerProject,
   floorIndex = 0,
 ): Promise<Blob | null> {
   if (!project) {
@@ -512,7 +512,7 @@ export async function exportAsPNG(
 
 export async function downloadPNG(
   canvas: HTMLCanvasElement,
-  project?: Open3dProject,
+  project?: PlannerProject,
   filename?: string,
 ): Promise<void> {
   const blob = await exportAsPNG(canvas, project);
@@ -522,7 +522,7 @@ export async function downloadPNG(
 }
 
 export async function exportAsPDF(
-  project: Open3dProject,
+  project: PlannerProject,
   settings: PdfExportSettings = DEFAULT_PDF_SETTINGS,
 ): Promise<Blob | null> {
   let jsPDF: PdfConstructor | null = null;
@@ -626,7 +626,7 @@ export async function exportAsPDF(
 }
 
 export async function downloadPDF(
-  project: Open3dProject,
+  project: PlannerProject,
   settings?: PdfExportSettings,
   filename?: string,
 ): Promise<void> {
@@ -636,7 +636,7 @@ export async function downloadPDF(
   }
 }
 
-export async function exportAsDXF(project: Open3dProject): Promise<string | null> {
+export async function exportAsDXF(project: PlannerProject): Promise<string | null> {
   let Drawing: DxfConstructor | null = null;
   try {
     const mod = await import("dxf-writer");
@@ -759,7 +759,7 @@ export async function exportAsDXF(project: Open3dProject): Promise<string | null
   return d.toDxfString();
 }
 
-export async function downloadDXF(project: Open3dProject, filename?: string): Promise<void> {
+export async function downloadDXF(project: PlannerProject, filename?: string): Promise<void> {
   const dxf = await exportAsDXF(project);
   if (dxf) {
     downloadBlob(new Blob([dxf], { type: "application/dxf" }), filename ?? `${project.name ?? "floorplan"}.dxf`);

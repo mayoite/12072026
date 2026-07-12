@@ -29,14 +29,14 @@ import {
 } from "@/features/planner/asset-engine/mesh/writeGeneratedGlbToPublic";
 import type { PlacementOptions } from "@/features/planner/project/catalog/placementAction";
 import type {
-  Open3dCatalogItem,
-  Open3dCatalogVariant,
+  PlannerCatalogItem,
+  PlannerCatalogVariant,
 } from "@/features/planner/project/catalog/catalogTypes";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
 export type PlaceModularWithGeneratedGlbPlanOptions = {
   /** Catalog variant (default null). */
-  variant?: Open3dCatalogVariant | null;
+  variant?: PlannerCatalogVariant | null;
   placedFrom?: PlacementOptions["placedFrom"];
   rotation?: number;
   scale?: PlacementOptions["scale"];
@@ -61,11 +61,11 @@ export type PlaceModularWithGeneratedGlbPlanResult =
 /**
  * Place modular catalog item, export G5 binary, write under public, stamp path.
  * Does **not** upload to remote CDN. Product default place stays procedural
- * except open3d inventory cabinet-v0 (browser path).
+ * except planner inventory cabinet-v0 (browser path).
  */
 export async function placeModularWithGeneratedGlbPlan(
-  project: Open3dProject,
-  item: Open3dCatalogItem,
+  project: PlannerProject,
+  item: PlannerCatalogItem,
   position: { x: number; y: number },
   options?: PlaceModularWithGeneratedGlbPlanOptions,
 ): Promise<PlaceModularWithGeneratedGlbPlanResult> {

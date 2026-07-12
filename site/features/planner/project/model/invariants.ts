@@ -1,19 +1,19 @@
-import type { Open3dFloor, Open3dProject, Open3dWall } from "./types";
+import type { PlannerFloor, PlannerProject, PlannerWall } from "./types";
 
-export interface Open3dInvariantIssue {
+export interface PlannerInvariantIssue {
   code: "missing-active-floor" | "duplicate-id" | "invalid-dimension" | "missing-wall";
   path: string;
   message: string;
 }
 
-function hasPositiveDimensions(wall: Open3dWall): boolean {
+function hasPositiveDimensions(wall: PlannerWall): boolean {
   return wall.height > 0 && wall.thickness > 0 && (
     wall.start.x !== wall.end.x || wall.start.y !== wall.end.y
   );
 }
 
-function inspectFloor(floor: Open3dFloor, floorIndex: number): Open3dInvariantIssue[] {
-  const issues: Open3dInvariantIssue[] = [];
+function inspectFloor(floor: PlannerFloor, floorIndex: number): PlannerInvariantIssue[] {
+  const issues: PlannerInvariantIssue[] = [];
   const ids = new Set<string>();
   const collections = [
     floor.walls, floor.rooms, floor.doors, floor.windows, floor.furniture,
@@ -53,7 +53,7 @@ function inspectFloor(floor: Open3dFloor, floorIndex: number): Open3dInvariantIs
   return issues;
 }
 
-export function inspectOpen3dProject(project: Open3dProject): Open3dInvariantIssue[] {
+export function inspectPlannerProject(project: PlannerProject): PlannerInvariantIssue[] {
   const issues = project.floors.flatMap(inspectFloor);
   if (!project.floors.some((floor) => floor.id === project.activeFloorId)) {
     issues.unshift({
@@ -65,7 +65,7 @@ export function inspectOpen3dProject(project: Open3dProject): Open3dInvariantIss
   return issues;
 }
 
-export function assertOpen3dProject(project: Open3dProject): void {
-  const issue = inspectOpen3dProject(project)[0];
+export function assertPlannerProject(project: PlannerProject): void {
+  const issue = inspectPlannerProject(project)[0];
   if (issue) throw new Error(`${issue.path}: ${issue.message}`);
 }

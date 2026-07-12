@@ -11,7 +11,7 @@ import {
 } from "@/lib/catalog/blocks2d";
 import { resolveCatalogItemBlock2D } from "@/features/planner/catalog/catalogBlockBridge";
 import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
-import type { Open3dFurnitureItem } from "../model/types";
+import type { PlannerFurnitureItem } from "../model/types";
 import {
   parseWorkstationConfigKey,
   workstationPlanPrims,
@@ -50,7 +50,7 @@ function boxBlock(widthMm: number, depthMm: number, heightMm: number, label: str
  * Colors are literal hex (CSS vars often fail on Canvas2D / Fabric theme resolver → blob).
  * Body + door face use **distinct fills** so eyes see structure, not one cream rectangle.
  */
-function modularCabinetBlock(item: Open3dFurnitureItem): Block2D {
+function modularCabinetBlock(item: PlannerFurnitureItem): Block2D {
   const opts = item.modularOptions;
   const w = Math.max(1, opts?.widthMm ?? item.width ?? DEFAULT_MM);
   const d = Math.max(1, opts?.depthMm ?? item.depth ?? DEFAULT_MM);
@@ -224,7 +224,7 @@ function roleStroke(role: WorkstationPlanPrimV0["role"]): string {
  * Systems v0 workstation plan symbol from workstationPlanPrims (desk/return/pedestal/panel).
  * Top-left mm origin; canvas centers via renderBlock2DCentered.
  */
-export function workstationBlock2DFromItem(item: Open3dFurnitureItem): Block2D | null {
+export function workstationBlock2DFromItem(item: PlannerFurnitureItem): Block2D | null {
   const config =
     parseWorkstationConfigKey(item.catalogId) ??
     parseWorkstationConfigKey(item.sourceCatalogId ?? "") ??
@@ -290,7 +290,7 @@ export function workstationBlock2DFromItem(item: Open3dFurnitureItem): Block2D |
  * Map open3d catalog dimensions onto buddy CatalogItem shape for block preview builders.
  * Only used to call our own procedural builders — not external assets.
  */
-export function open3dLikeBuddyCatalogItem(input: {
+export function plannerLikeBuddyCatalogItem(input: {
   id: string;
   name: string;
   widthMm: number;
@@ -331,7 +331,7 @@ export function open3dLikeBuddyCatalogItem(input: {
  * Build Block2D for a placed furniture entity (plan-view symbol).
  */
 export function furnitureBlock2DFromItem(
-  item: Open3dFurnitureItem,
+  item: PlannerFurnitureItem,
   catalogMeta?: { name?: string; category?: string },
 ): Block2D {
   const widthMm = Math.max(1, item.width ?? DEFAULT_MM);
@@ -350,7 +350,7 @@ export function furnitureBlock2DFromItem(
 
   // Prefer full procedural symbol via catalog bridge (our SVG prims).
   try {
-    const buddyLike = open3dLikeBuddyCatalogItem({
+    const buddyLike = plannerLikeBuddyCatalogItem({
       id: item.catalogId || item.id,
       name: label,
       widthMm,
@@ -439,6 +439,6 @@ function scaleBlock2D(
  * Canvas centers via renderBlock2DCentered — never via centered prim authorship.
  * Always false (was a dead lie when modular returned true with top-left prims).
  */
-export function furnitureBlockUsesCenteredPath(_item: Open3dFurnitureItem): boolean {
+export function furnitureBlockUsesCenteredPath(_item: PlannerFurnitureItem): boolean {
   return false;
 }

@@ -1,21 +1,21 @@
 "use client";
 
 import { useCallback, memo } from "react";
-import type { Open3dFloor } from "@/features/planner/project/model/types";
+import type { PlannerFloor } from "@/features/planner/project/model/types";
 import {
   summarizeFloorLayers,
   toggleLayerVisibility,
-  type Open3dLayerCategory,
-  type Open3dLayerVisibility,
+  type PlannerLayerCategory,
+  type PlannerLayerVisibility,
 } from "./layerVisibility";
 import styles from "./layers-panel.module.css";
 
 export interface LayersPanelProps {
-  floor: Open3dFloor;
-  visibility: Open3dLayerVisibility;
-  onVisibilityChange: (next: Open3dLayerVisibility) => void;
+  floor: PlannerFloor;
+  visibility: PlannerLayerVisibility;
+  onVisibilityChange: (next: PlannerLayerVisibility) => void;
   selectedElementId?: string | null;
-  onSelectElement?: (id: string, category: Open3dLayerCategory) => void;
+  onSelectElement?: (id: string, category: PlannerLayerCategory) => void;
 }
 
 export const LayersPanel = memo(function LayersPanel({
@@ -26,7 +26,7 @@ export const LayersPanel = memo(function LayersPanel({
   const categories = summarizeFloorLayers(floor);
 
   const handleToggle = useCallback(
-    (category: Open3dLayerCategory) => {
+    (category: PlannerLayerCategory) => {
       onVisibilityChange(toggleLayerVisibility(visibility, category));
     },
     [onVisibilityChange, visibility],

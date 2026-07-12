@@ -12,16 +12,16 @@ import {
   workstationConfigKey,
   workstationFootprintMm,
 } from "@/features/planner/project/catalog/workstationSystemV0";
-import { OPEN3D_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import { PLANNER_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
 function ids(...values: string[]) {
   let index = 0;
   return () => values[index++] ?? `generated-${index}`;
 }
 
-function activeFloor(project: Open3dProject) {
+function activeFloor(project: PlannerProject) {
   const floor = project.floors.find((f) => f.id === project.activeFloorId);
   if (!floor) throw new Error(`Active floor not found: ${project.activeFloorId}`);
   return floor;
@@ -84,7 +84,7 @@ describe("workstationConfigToCatalogItem", () => {
   });
 
   it("demo catalog includes workstation items", () => {
-    const ws = OPEN3D_DEMO_CATALOG_ITEMS.filter((i) =>
+    const ws = PLANNER_DEMO_CATALOG_ITEMS.filter((i) =>
       i.tags.includes("systems-v0"),
     );
     expect(ws.length).toBeGreaterThanOrEqual(8);
@@ -99,7 +99,7 @@ describe("placeCatalogItemInProject systems v0 route", () => {
       modules: ["desk", "pedestal", "panel"],
     });
     const item = workstationConfigToCatalogItem(config);
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "WS Catalog Place",
       now: "2026-07-09T17:00:00.000Z",

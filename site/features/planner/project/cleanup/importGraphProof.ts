@@ -1,5 +1,9 @@
 /**
  * Live route → host graph (Fabric sole planner).
+ *
+ * No fabric-legacy route nodes. Historical route-fabric-guest / route-fabric-canvas
+ * are gone with app planner fabric pages and features/planner/_archive. Legacy URLs
+ * redirect only (next.config → /planner/canvas/). routesStillOnFabricStack() stays empty.
  */
 export type ImportGraphNode = {
   id: string;
@@ -8,6 +12,7 @@ export type ImportGraphNode = {
   stack: "workspace-hybrid" | "workspace-native" | "iframe-embed" | "shared-site";
 };
 
+/** Live production graph only — do not re-add fabric-legacy or open3d page nodes. */
 export const PRODUCTION_IMPORT_GRAPH: readonly ImportGraphNode[] = [
   {
     id: "route-guest",
@@ -41,15 +46,24 @@ export const PRODUCTION_IMPORT_GRAPH: readonly ImportGraphNode[] = [
   },
 ] as const;
 
+/** Always empty: no product fabric-legacy app routes remain. */
 export function routesStillOnFabricStack(): string[] {
   return [];
 }
 
-export function open3dNativeRoutes(): string[] {
+/** Guard for tests — no historical fabric-legacy ids may re-enter the live graph. */
+export const FORBIDDEN_GRAPH_IDS = [
+  "route-fabric-guest",
+  "route-fabric-canvas",
+  "workspace-route-open3d",
+  "route-open3d-pilot",
+] as const;
+
+export function plannerNativeRoutes(): string[] {
   return PRODUCTION_IMPORT_GRAPH.filter((n) => n.stack === "workspace-native").map((n) => n.id);
 }
 
-export function open3dHybridRoutes(): string[] {
+export function plannerHybridRoutes(): string[] {
   return PRODUCTION_IMPORT_GRAPH.filter((n) => n.stack === "workspace-hybrid").map((n) => n.id);
 }
 

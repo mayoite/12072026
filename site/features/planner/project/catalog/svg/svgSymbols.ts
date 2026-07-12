@@ -17,14 +17,14 @@ import {
   type SvgSymbolDimensionAgreement,
   type SvgThemeColors,
 } from "./svgTypes";
-import type { Open3dCatalogDimensions, Open3dCatalogCategory } from "../catalogTypes";
+import type { PlannerCatalogDimensions, PlannerCatalogCategory } from "../catalogTypes";
 
 const SVG_SYMBOL_VERSION = "03a-symbol-v1";
 const SVG_RENDER_GENERATOR_VERSION = "03a-svg-render-v2";
 const MAX_SVG_CACHE_ENTRIES = 2000;
 
 type SvgSymbolGeneratorResult = Omit<SvgSymbolDefinition, "version"> & { version?: SvgSymbolDefinition["version"] };
-type SvgSymbolGenerator = (dimensions: Open3dCatalogDimensions, name: string) => SvgSymbolGeneratorResult;
+type SvgSymbolGenerator = (dimensions: PlannerCatalogDimensions, name: string) => SvgSymbolGeneratorResult;
 
 const UNSAFE_ATTR_NAME = /^(?:on|style$|href$|xlink:href$|src$)/i;
 const UNSAFE_ATTR_VALUE = /(?:javascript:|data:|vbscript:|<\s*script\b|<\/\s*script\b|url\s*\()/i;
@@ -84,7 +84,7 @@ function normalizeDimension(value: number): number {
   return Math.round(value * 1000) / 1000;
 }
 
-function normalizeDimensions(dimensions: Open3dCatalogDimensions): Open3dCatalogDimensions {
+function normalizeDimensions(dimensions: PlannerCatalogDimensions): PlannerCatalogDimensions {
   return {
     ...dimensions,
     widthMm: normalizeDimension(dimensions.widthMm),
@@ -93,7 +93,7 @@ function normalizeDimensions(dimensions: Open3dCatalogDimensions): Open3dCatalog
   };
 }
 
-function stableViewBox(dimensions: Open3dCatalogDimensions): string {
+function stableViewBox(dimensions: PlannerCatalogDimensions): string {
   return `0 0 ${normalizeDimension(dimensions.widthMm)} ${normalizeDimension(dimensions.depthMm)}`;
 }
 
@@ -144,7 +144,7 @@ function createRenderMetadataSignature(definition: SvgSymbolDefinition): string 
 // ── Category-specific symbol generators ──
 
 /** Desk / workstation: rectangular surface with legs */
-function deskSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function deskSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   const w = dims.widthMm;
   const d = dims.depthMm;
   const legW = Math.min(w * 0.05, 80);
@@ -168,7 +168,7 @@ registerSymbolGenerator("desks", deskSymbol);
 registerSymbolGenerator("workstations", deskSymbol);
 
 /** Chair: seat rectangle + backrest */
-function chairSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function chairSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   const w = dims.widthMm;
   const d = dims.depthMm;
   const backH = Math.max(d * 0.15, 30);
@@ -189,7 +189,7 @@ registerSymbolGenerator("chairs", chairSymbol);
 registerSymbolGenerator("seating", chairSymbol);
 
 /** Table: surface with visible top */
-function tableSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function tableSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   const w = dims.widthMm;
   const d = dims.depthMm;
   return {
@@ -204,7 +204,7 @@ function tableSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefi
 registerSymbolGenerator("tables", tableSymbol);
 
 /** Sofa / seating: wider rectangle with armrests */
-function sofaSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function sofaSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   const w = dims.widthMm;
   const d = dims.depthMm;
   const armW = Math.max(w * 0.08, 40);
@@ -226,7 +226,7 @@ registerSymbolGenerator("sofas", sofaSymbol);
 registerSymbolGenerator("sofas-sectionals", sofaSymbol);
 
 /** Bed: rectangle with headboard */
-function bedSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function bedSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   const w = dims.widthMm;
   const d = dims.depthMm;
   const hbH = Math.min(w * 0.1, 100);
@@ -246,7 +246,7 @@ function bedSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefini
 registerSymbolGenerator("beds", bedSymbol);
 
 /** Storage: rectangle with shelf lines */
-function storageSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function storageSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   const w = dims.widthMm;
   const d = dims.depthMm;
   const midY = d / 2;
@@ -266,7 +266,7 @@ registerSymbolGenerator("storage", storageSymbol);
 registerSymbolGenerator("wardrobes", storageSymbol);
 
 /** Lighting: circle with rays */
-function lightSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function lightSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   const cx = dims.widthMm / 2;
   const cy = dims.depthMm / 2;
   const r = Math.min(cx, cy) * 0.7;
@@ -289,7 +289,7 @@ registerSymbolGenerator("lighting", lightSymbol);
 registerSymbolGenerator("ceiling-lights", lightSymbol);
 
 /** Rug: rectangle with dashed border */
-function rugSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function rugSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   return {
     symbolId: `rug-${dims.widthMm}-${dims.depthMm}`,
     version: SVG_SYMBOL_VERSION,
@@ -306,7 +306,7 @@ registerSymbolGenerator("decor", rugSymbol);
 registerSymbolGenerator("rugs", rugSymbol);
 
 /** Plant: circle in circle */
-function plantSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function plantSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   const cx = dims.widthMm / 2;
   const cy = dims.depthMm / 2;
   return {
@@ -324,7 +324,7 @@ function plantSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefi
 registerSymbolGenerator("plants", plantSymbol);
 
 /** Outdoor: rectangle with cross-hatch */
-function outdoorSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function outdoorSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   const w = dims.widthMm;
   const d = dims.depthMm;
   return {
@@ -344,7 +344,7 @@ registerSymbolGenerator("outdoor", outdoorSymbol);
 registerSymbolGenerator("patio", outdoorSymbol);
 
 /** Symbol category: diamond with label */
-function symbolSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function symbolSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   const cx = dims.widthMm / 2;
   const cy = dims.depthMm / 2;
   return {
@@ -364,7 +364,7 @@ registerSymbolGenerator("electrical", symbolSymbol);
 registerSymbolGenerator("plumbing", symbolSymbol);
 
 /** Default box fallback for unknown categories */
-function defaultSymbol(dims: Open3dCatalogDimensions, name: string): SvgSymbolDefinition {
+function defaultSymbol(dims: PlannerCatalogDimensions, name: string): SvgSymbolDefinition {
   return {
     symbolId: `default-${dims.widthMm}-${dims.depthMm}`,
     version: SVG_SYMBOL_VERSION,
@@ -386,7 +386,7 @@ registerSymbolGenerator("default", defaultSymbol);
  * Resolve the best symbol generator for a category/subcategory combination.
  * Falls back through increasingly generic keys.
  */
-export function resolveSymbolGenerator(category: Open3dCatalogCategory, subCategory?: string): SvgSymbolGenerator {
+export function resolveSymbolGenerator(category: PlannerCatalogCategory, subCategory?: string): SvgSymbolGenerator {
   if (subCategory) {
     const subKey = subCategory.toLowerCase().replace(/\s+/g, "-");
     const catSubKey = `${category}-${subCategory}`.toLowerCase().replace(/\s+/g, "-");
@@ -402,9 +402,9 @@ export function resolveSymbolGenerator(category: Open3dCatalogCategory, subCateg
 
 /** Generate a deterministic symbol definition */
 export function generateSymbol(
-  category: Open3dCatalogCategory,
+  category: PlannerCatalogCategory,
   subCategory: string | undefined,
-  dimensions: Open3dCatalogDimensions,
+  dimensions: PlannerCatalogDimensions,
   name: string,
 ): SvgSymbolDefinition {
   const normalized = normalizeDimensions(dimensions);

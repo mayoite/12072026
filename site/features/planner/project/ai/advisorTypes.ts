@@ -6,7 +6,7 @@
  * - space-suggest: Generates structured layout suggestions from seat count/purpose
  */
 
-// (Open3dDisplayUnit import removed: was unused)
+// (PlannerDisplayUnit import removed: was unused)
 
 /**
  * Chat message structure for advisor conversations.

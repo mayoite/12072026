@@ -15,12 +15,12 @@ import {
 import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
 import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
 import type {
-  Open3dCatalogItem,
-  Open3dCatalogVariant,
+  PlannerCatalogItem,
+  PlannerCatalogVariant,
 } from "@/features/planner/project/catalog/catalogTypes";
 import type {
-  Open3dFurnitureItem,
-  Open3dProject,
+  PlannerFurnitureItem,
+  PlannerProject,
 } from "@/features/planner/project/model/types";
 
 export type PlaceModularGlbWriteResult = {
@@ -38,7 +38,7 @@ export type PlaceModularGlbWriter = (
 ) => PlaceModularGlbWriteResult | Promise<PlaceModularGlbWriteResult>;
 
 export type PlaceModularWithGeneratedGlbCoreOptions = {
-  variant?: Open3dCatalogVariant | null;
+  variant?: PlannerCatalogVariant | null;
   placedFrom?: PlacementOptions["placedFrom"];
   rotation?: number;
   scale?: PlacementOptions["scale"];
@@ -58,7 +58,7 @@ export type PlaceModularWithGeneratedGlbCoreOptions = {
 };
 
 export type PlaceModularWithGeneratedGlbCoreResult = {
-  project: Open3dProject;
+  project: PlannerProject;
   furnitureId: string;
   relativePath: string;
   stamped: boolean;
@@ -68,9 +68,9 @@ export type PlaceModularWithGeneratedGlbCoreResult = {
 };
 
 function findFurniture(
-  project: Open3dProject,
+  project: PlannerProject,
   furnitureId: string,
-): Open3dFurnitureItem | undefined {
+): PlannerFurnitureItem | undefined {
   for (const floor of project.floors) {
     const hit = floor.furniture.find((f) => f.id === furnitureId);
     if (hit) return hit;
@@ -79,10 +79,10 @@ function findFurniture(
 }
 
 function replaceFurniture(
-  project: Open3dProject,
+  project: PlannerProject,
   furnitureId: string,
-  next: Open3dFurnitureItem,
-): Open3dProject {
+  next: PlannerFurnitureItem,
+): PlannerProject {
   return {
     ...project,
     floors: project.floors.map((floor) => ({
@@ -97,8 +97,8 @@ function replaceFurniture(
  * Does **not** upload to remote CDN.
  */
 export async function placeModularWithGeneratedGlbCore(
-  project: Open3dProject,
-  item: Open3dCatalogItem,
+  project: PlannerProject,
+  item: PlannerCatalogItem,
   position: { x: number; y: number },
   options?: PlaceModularWithGeneratedGlbCoreOptions,
 ): Promise<PlaceModularWithGeneratedGlbCoreResult> {

@@ -1,9 +1,9 @@
 /**
- * Systems v0 → Open3d catalog items for inventory / click-to-place.
+ * Systems v0 → planner catalog items for inventory / click-to-place.
  * Pure combinatorics live in workstationSystemV0; this is the catalog surface.
  */
 
-import type { Open3dCatalogItem } from "./catalogTypes";
+import type { PlannerCatalogItem } from "./catalogTypes";
 import {
   expandWorkstationV0Matrix,
   workstationConfigKey,
@@ -20,7 +20,7 @@ function shapeLabel(shape: WorkstationConfigV0["shape"]): string {
  */
 export function workstationConfigToCatalogItem(
   config: WorkstationConfigV0,
-): Open3dCatalogItem {
+): PlannerCatalogItem {
   const key = workstationConfigKey(config);
   const footprint = workstationFootprintMm(config);
   const shape = shapeLabel(config.shape);
@@ -77,10 +77,10 @@ export function workstationConfigToCatalogItem(
 }
 
 /** Full v0 matrix as demo/inventory catalog seed (size grid × linear/L). */
-export function expandWorkstationV0CatalogItems(): Open3dCatalogItem[] {
+export function expandWorkstationV0CatalogItems(): PlannerCatalogItem[] {
   return expandWorkstationV0Matrix().map(workstationConfigToCatalogItem);
 }
 
 /** Stable demo list (matrix expand — currently 8 configs). */
-export const WORKSTATION_V0_DEMO_CATALOG_ITEMS: Open3dCatalogItem[] =
+export const WORKSTATION_V0_DEMO_CATALOG_ITEMS: PlannerCatalogItem[] =
   expandWorkstationV0CatalogItems();

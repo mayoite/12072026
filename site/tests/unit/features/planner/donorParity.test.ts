@@ -11,8 +11,8 @@ import {
   toggleLayerVisibility,
 } from "@/features/planner/editor/layerVisibility";
 import { toolFromShortcutKey } from "@/features/planner/editor/useWorkspaceKeyboard";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
-import { addOpen3dWall } from "@/features/planner/project/model/actions/walls";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
 
 describe("donor parity — command palette", () => {
   it("builds searchable palette commands with donor tool shortcuts", () => {
@@ -56,8 +56,8 @@ describe("donor parity — command palette", () => {
 
 describe("donor parity — layers panel state", () => {
   it("summarizes floor layers and toggles visibility", () => {
-    const project = addOpen3dWall(
-      createOpen3dProject({ idFactory: () => "floor-1" }),
+    const project = addPlannerWall(
+      createPlannerProject({ idFactory: () => "floor-1" }),
       { start: { x: 0, y: 0 }, end: { x: 1000, y: 0 } },
       () => "wall-1",
     );

@@ -1,16 +1,16 @@
 /**
- * Load a system-generated GLB into a THREE object for the open3d viewer.
+ * Load a system-generated GLB into a THREE object for the planner viewer.
  * Policy-gated: designer static URLs are rejected; failures return null
  * so the caller can keep the procedural mesh.
  *
  * Relative document paths (`catalog-assets/generated/*`) are resolved to
  * absolute fetch URLs (site origin root) before GLTFLoader — page-relative
- * resolution under /planner/open3d would 404 even when the file is served.
+ * resolution under /planner/canvas would 404 even when the file is served.
  */
 
 import type * as THREE from "three";
 import { shouldLoadGlb } from "@/features/planner/lib/glbAssetPolicy";
-import { mmToMeters, type Open3dSceneNode } from "./buildOpen3dSceneNodes";
+import { mmToMeters, type PlannerSceneNode } from "./buildPlannerSceneNodes";
 
 type ThreeModule = typeof THREE;
 
@@ -51,7 +51,7 @@ function defaultBrowserOrigin(): string | undefined {
  * - absolute `http(s):` — unchanged
  * - root-relative `/catalog-assets/generated/…` → `{origin}/catalog-assets/generated/…`
  * - relative `catalog-assets/generated/…` → same, pinned to **site root**
- *   (never page-relative under `/planner/open3d`)
+ *   (never page-relative under `/planner/canvas`)
  *
  * When no origin is available (SSR / headless without location), returns a
  * root-relative path so the request still targets site root, not the route dir.
@@ -104,7 +104,7 @@ function applyShadowFlags(
  */
 export function poseFurnitureObjectFromNode(
   object: THREE.Object3D,
-  node: Open3dSceneNode,
+  node: PlannerSceneNode,
 ): void {
   object.position.set(mmToMeters(node.xMm), 0, mmToMeters(node.yMm));
   object.rotation.y = -node.rotation;
@@ -142,7 +142,7 @@ export async function createDefaultGltfUrlLoader(): Promise<GltfUrlLoader> {
  */
 export async function loadGeneratedGlbObject(
   THREE: ThreeModule,
-  node: Open3dSceneNode,
+  node: PlannerSceneNode,
   castShadow: boolean,
   loadGltf: GltfUrlLoader,
   options?: ResolveGeneratedGlbFetchUrlOptions,

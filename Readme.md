@@ -2,7 +2,7 @@
 
 pnpm monorepo for `oando.co.in`. Next.js in `site/`.
 
-**Active:** `site/features/planner/` + `site/app/planner/`. Live 2D is Fabric `PlannerCanvasStage` / `open3d-fabric-stage`. Live 3D is imperative Three with orbit. Feasibility / `canvas-feasibility` **does not and will not exist** — not a product or archive proof path.
+**Active:** `site/features/planner/{editor,canvas,3d,project,ui}` + `site/app/planner/`. Live 2D is Fabric `PlannerCanvasStage` / testid `planner-fabric-stage`. Live 3D is imperative Three with orbit. Feasibility / `canvas-feasibility` **does not and will not exist** — not a product or archive proof path.
 
 ## Which doc to open
 

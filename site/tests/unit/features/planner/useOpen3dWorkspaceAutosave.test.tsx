@@ -1,19 +1,19 @@
 /**
- * P06-A2 — useOpen3dWorkspaceAutosave: projectRef freshness + visibilitychange cleanup
+ * P06-A2 — usePlannerWorkspaceAutosave: projectRef freshness + visibilitychange cleanup
  */
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 
-import { useOpen3dWorkspaceAutosave } from "@/features/planner/project/persistence/useOpen3dWorkspaceAutosave";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { usePlannerWorkspaceAutosave } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 import {
   createAutoSaver,
   getPlannerProjectId,
   loadProject,
   migrateGuestProjectToMember,
 } from "@/features/planner/persistence/persistence";
-import { buildOpen3dSessionEnvelope } from "@/features/planner/project/persistence/open3dSession";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import { buildPlannerSessionEnvelope } from "@/features/planner/project/persistence/plannerSession";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
 const scheduleSave = vi.fn();
 const flush = vi.fn(() => Promise.resolve());
@@ -32,7 +32,7 @@ vi.mock("@/features/planner/persistence/persistence", () => ({
   migrateGuestProjectToMember: vi.fn(),
 }));
 
-describe("useOpen3dWorkspaceAutosave", () => {
+describe("usePlannerWorkspaceAutosave", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     scheduleSave.mockClear();
@@ -49,17 +49,17 @@ describe("useOpen3dWorkspaceAutosave", () => {
     vi.restoreAllMocks();
   });
 
-  function parseScheduledProject(callIndex = 0): Open3dProject {
+  function parseScheduledProject(callIndex = 0): PlannerProject {
     const raw = scheduleSave.mock.calls[callIndex]?.[0] as string;
     expect(typeof raw).toBe("string");
-    const envelope = JSON.parse(raw) as { project: Open3dProject };
+    const envelope = JSON.parse(raw) as { project: PlannerProject };
     return envelope.project;
   }
 
   it("exports local storage flags and isLocalSaved alias", () => {
-    const project = createOpen3dProject({ name: "Local flags" });
+    const project = createPlannerProject({ name: "Local flags" });
     const { result } = renderHook(() =>
-      useOpen3dWorkspaceAutosave(project, true, undefined, { hydrated: true }),
+      usePlannerWorkspaceAutosave(project, true, undefined, { hydrated: true }),
     );
 
     expect(result.current.storage).toBe("local");
@@ -70,19 +70,19 @@ describe("useOpen3dWorkspaceAutosave", () => {
   });
 
   it("schedulePersist builds envelope from latest project after mutation (projectRef)", () => {
-    const initial = createOpen3dProject({
+    const initial = createPlannerProject({
       name: "v1",
       now: "2026-07-10T10:00:00.000Z",
     });
     const { result, rerender } = renderHook(
-      ({ project }: { project: Open3dProject }) =>
-        useOpen3dWorkspaceAutosave(project, true, "plan-a", { hydrated: true }),
+      ({ project }: { project: PlannerProject }) =>
+        usePlannerWorkspaceAutosave(project, true, "plan-a", { hydrated: true }),
       { initialProps: { project: initial } },
     );
 
     // Skip first updatedAt effect (hydration skip) by mutating once via effect path already;
     // call schedulePersist with a stale-closure-proof mutation after rerender.
-    const mutated: Open3dProject = {
+    const mutated: PlannerProject = {
       ...initial,
       name: "v2-latest",
       updatedAt: "2026-07-10T10:05:00.000Z",
@@ -104,17 +104,17 @@ describe("useOpen3dWorkspaceAutosave", () => {
   });
 
   it("flushPersist builds envelope from latest project after mutation (projectRef)", async () => {
-    const initial = createOpen3dProject({
+    const initial = createPlannerProject({
       name: "flush-v1",
       now: "2026-07-10T11:00:00.000Z",
     });
     const { result, rerender } = renderHook(
-      ({ project }: { project: Open3dProject }) =>
-        useOpen3dWorkspaceAutosave(project, true, "plan-flush", { hydrated: true }),
+      ({ project }: { project: PlannerProject }) =>
+        usePlannerWorkspaceAutosave(project, true, "plan-flush", { hydrated: true }),
       { initialProps: { project: initial } },
     );
 
-    const mutated: Open3dProject = {
+    const mutated: PlannerProject = {
       ...initial,
       name: "flush-v2-latest",
       updatedAt: "2026-07-10T11:30:00.000Z",
@@ -135,13 +135,13 @@ describe("useOpen3dWorkspaceAutosave", () => {
   });
 
   it("does not capture stale project when schedulePersist identity is stable across renames", () => {
-    const initial = createOpen3dProject({
+    const initial = createPlannerProject({
       name: "stable-fn-v1",
       now: "2026-07-10T12:00:00.000Z",
     });
     const { result, rerender } = renderHook(
-      ({ project }: { project: Open3dProject }) =>
-        useOpen3dWorkspaceAutosave(project, true, "plan-stable", {
+      ({ project }: { project: PlannerProject }) =>
+        usePlannerWorkspaceAutosave(project, true, "plan-stable", {
           hydrated: true,
           // Keep enabled/hydrated fixed so schedulePersist deps do not change.
         }),
@@ -150,7 +150,7 @@ describe("useOpen3dWorkspaceAutosave", () => {
 
     const scheduleFn = result.current.schedulePersist;
 
-    const mutated: Open3dProject = {
+    const mutated: PlannerProject = {
       ...initial,
       name: "stable-fn-v2",
       // Same updatedAt so the auto effect does not fire schedulePersist.
@@ -176,9 +176,9 @@ describe("useOpen3dWorkspaceAutosave", () => {
     const addDoc = vi.spyOn(document, "addEventListener");
     const removeDoc = vi.spyOn(document, "removeEventListener");
 
-    const project = createOpen3dProject({ name: "listeners" });
+    const project = createPlannerProject({ name: "listeners" });
     const { unmount } = renderHook(() =>
-      useOpen3dWorkspaceAutosave(project, true, "plan-listen", { hydrated: true }),
+      usePlannerWorkspaceAutosave(project, true, "plan-listen", { hydrated: true }),
     );
 
     const pagehideAdd = addWindow.mock.calls.find((c) => c[0] === "pagehide");
@@ -206,9 +206,9 @@ describe("useOpen3dWorkspaceAutosave", () => {
   });
 
   it("flushPending on visibility hidden calls saver.flush", () => {
-    const project = createOpen3dProject({ name: "vis-flush" });
+    const project = createPlannerProject({ name: "vis-flush" });
     renderHook(() =>
-      useOpen3dWorkspaceAutosave(project, true, "plan-vis", { hydrated: true }),
+      usePlannerWorkspaceAutosave(project, true, "plan-vis", { hydrated: true }),
     );
 
     flush.mockClear();
@@ -230,9 +230,9 @@ describe("useOpen3dWorkspaceAutosave", () => {
       return { scheduleSave, flush, cancel };
     });
 
-    const project = createOpen3dProject({ name: "saved" });
+    const project = createPlannerProject({ name: "saved" });
     const { result } = renderHook(() =>
-      useOpen3dWorkspaceAutosave(project, true, "plan-saved", { hydrated: true }),
+      usePlannerWorkspaceAutosave(project, true, "plan-saved", { hydrated: true }),
     );
 
     act(() => {
@@ -246,9 +246,9 @@ describe("useOpen3dWorkspaceAutosave", () => {
   });
 
   it("wires createAutoSaver with planner project id", () => {
-    const project = createOpen3dProject({ name: "id-wire" });
+    const project = createPlannerProject({ name: "id-wire" });
     renderHook(() =>
-      useOpen3dWorkspaceAutosave(project, false, "member-plan-9", { hydrated: true }),
+      usePlannerWorkspaceAutosave(project, false, "member-plan-9", { hydrated: true }),
     );
 
     expect(getPlannerProjectId).toHaveBeenCalledWith(false, "member-plan-9");
@@ -261,14 +261,14 @@ describe("useOpen3dWorkspaceAutosave", () => {
     );
   });
 
-  it("buildOpen3dSessionEnvelope shape is what scheduleSave receives", () => {
-    const project = createOpen3dProject({
+  it("buildPlannerSessionEnvelope shape is what scheduleSave receives", () => {
+    const project = createPlannerProject({
       name: "envelope-shape",
       now: "2026-07-10T13:00:00.000Z",
     });
     const { result, rerender } = renderHook(
-      ({ project: p }: { project: Open3dProject }) =>
-        useOpen3dWorkspaceAutosave(p, true, "plan-env", { hydrated: true }),
+      ({ project: p }: { project: PlannerProject }) =>
+        usePlannerWorkspaceAutosave(p, true, "plan-env", { hydrated: true }),
       { initialProps: { project } },
     );
 
@@ -283,7 +283,7 @@ describe("useOpen3dWorkspaceAutosave", () => {
     });
 
     const raw = scheduleSave.mock.calls[0]?.[0] as string;
-    const parsed = JSON.parse(raw) as ReturnType<typeof buildOpen3dSessionEnvelope>;
+    const parsed = JSON.parse(raw) as ReturnType<typeof buildPlannerSessionEnvelope>;
     expect(parsed.version).toBe("open3d-1");
     expect(parsed.engine).toBe("open3d");
     expect(parsed.project.name).toBe("envelope-shape");
@@ -291,18 +291,18 @@ describe("useOpen3dWorkspaceAutosave", () => {
   });
 
   it("restoreSnapshot loads via persistence and returns parsed project", async () => {
-    const live = createOpen3dProject({ name: "from-disk", now: "2026-07-10T14:00:00.000Z" });
-    const envelope = buildOpen3dSessionEnvelope(live);
+    const live = createPlannerProject({ name: "from-disk", now: "2026-07-10T14:00:00.000Z" });
+    const envelope = buildPlannerSessionEnvelope(live);
     vi.mocked(loadProject).mockResolvedValue({
       snapshot: JSON.stringify(envelope),
       updatedAt: live.updatedAt,
     } as Awaited<ReturnType<typeof loadProject>>);
 
     const { result } = renderHook(() =>
-      useOpen3dWorkspaceAutosave(live, false, "plan-restore", { hydrated: true }),
+      usePlannerWorkspaceAutosave(live, false, "plan-restore", { hydrated: true }),
     );
 
-    let restored: Open3dProject | null = null;
+    let restored: PlannerProject | null = null;
     await act(async () => {
       restored = await result.current.restoreSnapshot();
     });

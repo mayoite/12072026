@@ -14,10 +14,10 @@ import { PenNib as PenTool, ShoppingBag, Users, Gear as Settings, Robot as Bot, 
     path: 'features/planner/',
     summary: '2D/3D floorplan designer with Fabric.js canvas and React Three Fiber 3D preview.',
     keyFiles: [
-      'features/planner/canvas-fabric/FloorplanCanvas.tsx',
-      'features/planner/canvas-fabric/FabricCanvasWorkspace.tsx',
-      'features/planner/3d/Planner3DViewer.tsx',
-      'features/planner/canvas-fabric/fabricToViewerShapes.ts',
+      'features/planner/canvas/PlannerFabricStage.tsx',
+      'features/planner/editor/OOPlannerWorkspace.tsx',
+      'features/planner/3d/ThreeLazyViewer.tsx',
+      'features/planner/canvas/',
       'features/planner/store/',
     ],
   },
@@ -106,7 +106,7 @@ const plannerArchitecture = `flowchart TB
     end
 
     subgraph ThreeD["3D Viewer (R3F)"]
-        Viewer["Planner3DViewer"]
+        Viewer["ThreeLazyViewer"]
         Mats["viewerMaterials"]
         Models["models/"]
     end
@@ -190,7 +190,7 @@ export function Features() {
                 <p className="text-xs text-docs-text-subtle">Main Fabric.js canvas instance. Initializes the canvas, handles object events, and bridges to the Zustand store.</p>
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-docs-text mb-1">FabricCanvasWorkspace.tsx</h4>
+                <h4 className="text-sm font-semibold text-docs-text mb-1">PlannerHost.tsx</h4>
                 <p className="text-xs text-docs-text-subtle">Top-level workspace container that lays out the canvas, toolbar, library panel, and 3D viewer in resizable panels.</p>
               </div>
               <div>
@@ -244,20 +244,20 @@ export function fabricToViewerShapes(
           <CollapsibleSection title="3D Viewer" badge="R3F" defaultOpen={false}>
             <div className="space-y-3">
               <p className="text-sm text-docs-text-muted">
-                <code className="text-brand-400 bg-docs-surface px-1 rounded">Planner3DViewer.tsx</code> renders the 
+                <code className="text-brand-400 bg-docs-surface px-1 rounded">ThreeLazyViewer.tsx</code> renders the 
                 Three.js scene declaratively with React Three Fiber. Uses drei for OrbitControls, Environment lighting, 
                 and GLTF model loading.
               </p>
               <CodeBlock
-                title="Planner3DViewer.tsx (simplified)"
+                title="ThreeLazyViewer.tsx (simplified)"
                 language="tsx"
                 code={`import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Environment, ContactShadows } from '@react-three/drei'
 import { usePlannerStore } from '../store'
-import { fabricToViewerShapes } from '../canvas-fabric/fabricToViewerShapes'
+import { fabricToViewerShapes } from '../canvas/fabricToViewerShapes'
 import { FurnitureModel } from './models/FurnitureModel'
 
-export function Planner3DViewer() {
+export function ThreeLazyViewer() {
   const objects = usePlannerStore(s => s.objects)
   const shapes = fabricToViewerShapes(objects)
 

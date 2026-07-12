@@ -1,12 +1,12 @@
 /**
- * First-class open3d project furniture BOQ (Bill of Quantities).
+ * First-class planner project furniture BOQ (Bill of Quantities).
  *
  * Pure: aggregates all placed furniture on the project (not workstation-only).
  * Workstation rows use systems-v0 list pricing when parseable; other rows keep
  * quantity + footprint with unitPriceInr = 0 (honest — no fabricated prices).
  */
 
-import type { Open3dFurnitureItem, Open3dProject } from "../../model/types";
+import type { PlannerFurnitureItem, PlannerProject } from "../../model/types";
 import {
   parseWorkstationConfigKey,
   workstationConfigKey,
@@ -16,19 +16,19 @@ import {
 import { workstationConfigFromOptions } from "../../catalog/workstationMeshV0";
 import { workstationV0UnitPriceInr, WORKSTATION_V0_GST_RATE } from "../../catalog/workstationBoqV0";
 
-export const OPEN3D_FURNITURE_BOQ_KIND = "open3d-furniture-boq-v1" as const;
-export const OPEN3D_FURNITURE_BOQ_GST_RATE = WORKSTATION_V0_GST_RATE;
+export const PLANNER_FURNITURE_BOQ_KIND = "open3d-furniture-boq-v1" as const;
+export const PLANNER_FURNITURE_BOQ_GST_RATE = WORKSTATION_V0_GST_RATE;
 
 /**
  * Honesty label for BOQ money columns.
  * Demo list only — not live ERP / multi-tenant / cloud catalog pricing.
  */
-export const OPEN3D_FURNITURE_BOQ_PRICING_NOTE =
+export const PLANNER_FURNITURE_BOQ_PRICING_NOTE =
   "Workstation unit prices are demo list schedule (systems-v0), not live ERP or cloud pricing. Unpriced rows keep unitPriceInr=0 (quantity + footprint only — no fabricated prices).";
 
-export type Open3dFurnitureBoqPriceSource = "demo-list" | "none";
+export type PlannerFurnitureBoqPriceSource = "demo-list" | "none";
 
-export type Open3dFurnitureBoqLine = {
+export type PlannerFurnitureBoqLine = {
   catalogId: string;
   name: string;
   sku: string;
@@ -46,11 +46,11 @@ export type Open3dFurnitureBoqLine = {
   geometryMode: string;
   priced: boolean;
   /** Where unitPriceInr came from — always labeled (demo-list or none). */
-  priceSource: Open3dFurnitureBoqPriceSource;
+  priceSource: PlannerFurnitureBoqPriceSource;
 };
 
-export type Open3dFurnitureBoqSummary = {
-  kind: typeof OPEN3D_FURNITURE_BOQ_KIND;
+export type PlannerFurnitureBoqSummary = {
+  kind: typeof PLANNER_FURNITURE_BOQ_KIND;
   projectId: string;
   projectName: string;
   generatedAt: string;
@@ -60,7 +60,7 @@ export type Open3dFurnitureBoqSummary = {
   pricingMode: "demo-list-partial";
   /** Human-readable honesty note for download consumers. */
   pricingNote: string;
-  lines: Open3dFurnitureBoqLine[];
+  lines: PlannerFurnitureBoqLine[];
   /** Placed furniture instance count. */
   totalItems: number;
   totalLines: number;
@@ -71,7 +71,7 @@ export type Open3dFurnitureBoqSummary = {
   unpricedItemCount: number;
 };
 
-export type BuildOpen3dFurnitureBoqOptions = {
+export type BuildPlannerFurnitureBoqOptions = {
   /** Default: active floor only. */
   allFloors?: boolean;
   gstRate?: number;
@@ -90,7 +90,7 @@ type GroupBucket = {
   geometryMode: string;
   unitPriceInr: number;
   priced: boolean;
-  priceSource: Open3dFurnitureBoqPriceSource;
+  priceSource: PlannerFurnitureBoqPriceSource;
   quantity: number;
 };
 
@@ -108,7 +108,7 @@ function humanizeCatalogId(catalogId: string): string {
     .trim();
 }
 
-function resolveWorkstationConfig(item: Open3dFurnitureItem): WorkstationConfigV0 | null {
+function resolveWorkstationConfig(item: PlannerFurnitureItem): WorkstationConfigV0 | null {
   if (item.workstationOptions) {
     return workstationConfigFromOptions(item.workstationOptions);
   }
@@ -119,7 +119,7 @@ function resolveWorkstationConfig(item: Open3dFurnitureItem): WorkstationConfigV
   );
 }
 
-function resolveDims(item: Open3dFurnitureItem): {
+function resolveDims(item: PlannerFurnitureItem): {
   widthMm: number;
   depthMm: number;
   heightMm: number;
@@ -147,7 +147,7 @@ function resolveDims(item: Open3dFurnitureItem): {
   };
 }
 
-function resolveIdentity(item: Open3dFurnitureItem): {
+function resolveIdentity(item: PlannerFurnitureItem): {
   catalogId: string;
   name: string;
   sku: string;
@@ -155,7 +155,7 @@ function resolveIdentity(item: Open3dFurnitureItem): {
   geometryMode: string;
   unitPriceInr: number;
   priced: boolean;
-  priceSource: Open3dFurnitureBoqPriceSource;
+  priceSource: PlannerFurnitureBoqPriceSource;
 } {
   const config = resolveWorkstationConfig(item);
   if (config) {
@@ -206,14 +206,14 @@ function groupKey(bucket: Omit<GroupBucket, "quantity">): string {
 }
 
 /**
- * Build a furniture BOQ from the open3d project document.
+ * Build a furniture BOQ from the planner project document.
  * Groups identical catalog/footprint rows and rolls up quantities.
  */
-export function buildOpen3dFurnitureBoq(
-  project: Open3dProject,
-  opts?: BuildOpen3dFurnitureBoqOptions,
-): Open3dFurnitureBoqSummary {
-  const gstRate = opts?.gstRate ?? OPEN3D_FURNITURE_BOQ_GST_RATE;
+export function buildPlannerFurnitureBoq(
+  project: PlannerProject,
+  opts?: BuildPlannerFurnitureBoqOptions,
+): PlannerFurnitureBoqSummary {
+  const gstRate = opts?.gstRate ?? PLANNER_FURNITURE_BOQ_GST_RATE;
   const generatedAt = opts?.now ?? new Date().toISOString();
   const floors = opts?.allFloors
     ? project.floors
@@ -250,7 +250,7 @@ export function buildOpen3dFurnitureBoq(
     }
   }
 
-  const lines: Open3dFurnitureBoqLine[] = [...groups.values()]
+  const lines: PlannerFurnitureBoqLine[] = [...groups.values()]
     .map((g) => {
       const lineSubtotalInr = roundMoneyInr(g.unitPriceInr * g.quantity);
       const lineGstInr = g.priced ? roundMoneyInr(lineSubtotalInr * gstRate) : 0;
@@ -289,14 +289,14 @@ export function buildOpen3dFurnitureBoq(
   const unpricedItemCount = totalItems - pricedItemCount;
 
   return {
-    kind: OPEN3D_FURNITURE_BOQ_KIND,
+    kind: PLANNER_FURNITURE_BOQ_KIND,
     projectId: project.id,
     projectName: project.name,
     generatedAt,
     currencyCode: "INR",
     gstRate,
     pricingMode: "demo-list-partial",
-    pricingNote: OPEN3D_FURNITURE_BOQ_PRICING_NOTE,
+    pricingNote: PLANNER_FURNITURE_BOQ_PRICING_NOTE,
     lines,
     totalItems,
     totalLines: lines.length,
@@ -309,8 +309,8 @@ export function buildOpen3dFurnitureBoq(
 }
 
 /** Pure JSON string for download / snapshot tests. */
-export function exportOpen3dFurnitureBoqToJson(
-  summary: Open3dFurnitureBoqSummary,
+export function exportPlannerFurnitureBoqToJson(
+  summary: PlannerFurnitureBoqSummary,
   pretty = true,
 ): string {
   return JSON.stringify(summary, null, pretty ? 2 : 0);
@@ -324,7 +324,7 @@ function escapeCsvField(val: string): string {
 }
 
 /** Pure CSV for procurement handoff. */
-export function exportOpen3dFurnitureBoqToCsv(summary: Open3dFurnitureBoqSummary): string {
+export function exportPlannerFurnitureBoqToCsv(summary: PlannerFurnitureBoqSummary): string {
   const rows: string[] = [];
   rows.push(`Project,${escapeCsvField(summary.projectName)}`);
   rows.push(`Project ID,${escapeCsvField(summary.projectId)}`);
@@ -388,8 +388,8 @@ export function exportOpen3dFurnitureBoqToCsv(summary: Open3dFurnitureBoqSummary
   return rows.join("\n");
 }
 
-export function buildOpen3dBoqFilename(
-  project: Pick<Open3dProject, "name">,
+export function buildPlannerBoqFilename(
+  project: Pick<PlannerProject, "name">,
   ext: "json" | "csv",
 ): string {
   const slug =

@@ -27,7 +27,7 @@ export const RUNTIME_TEXTURE_ASSETS: readonly ClassifiedAsset[] = [
     ownership: "runtime-editor-cdn",
     license: "CC0-1.0 (ambientCG)",
     productionAllowed: false,
-    cdnDestination: "/cdn/planner/open3d/textures/brick.jpg",
+    cdnDestination: "/cdn/planner/canvas/textures/brick.jpg",
   },
   {
     id: "texture-wood-panel",
@@ -35,7 +35,7 @@ export const RUNTIME_TEXTURE_ASSETS: readonly ClassifiedAsset[] = [
     ownership: "runtime-editor-cdn",
     license: "CC0-1.0 (ambientCG)",
     productionAllowed: false,
-    cdnDestination: "/cdn/planner/open3d/textures/wood-panel.jpg",
+    cdnDestination: "/cdn/planner/canvas/textures/wood-panel.jpg",
   },
 ] as const;
 

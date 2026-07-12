@@ -4,19 +4,20 @@ import {
   applySelectionDelete,
   deleteEntityFromProject,
   resolveSelectedEntity,
+  selectionAfterBatchPlace,
   updateEntityInProject,
 } from "@/features/planner/editor/workspaceEntityHelpers";
 import type { CanvasSelection } from "@/features/planner/editor/useWorkspaceCanvas";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 import {
   addFurniture,
   addWall,
 } from "@/features/planner/project/model/operations/pureActions";
-import type { Open3dFurnitureItem, Open3dProject } from "@/features/planner/project/model/types";
+import type { PlannerFurnitureItem, PlannerProject } from "@/features/planner/project/model/types";
 import {
-  createOpen3dHistory,
-  undoOpen3dAction,
-  updateOpen3dProject,
+  createPlannerHistory,
+  undoPlannerAction,
+  updatePlannerProject,
 } from "@/features/planner/project/store/history";
 
 function ids(...values: string[]) {
@@ -24,21 +25,21 @@ function ids(...values: string[]) {
   return () => values[index++] ?? `generated-${index}`;
 }
 
-function activeFloor(project: Open3dProject) {
+function activeFloor(project: PlannerProject) {
   const floor = project.floors.find((f) => f.id === project.activeFloorId);
   if (!floor) throw new Error("no active floor");
   return floor;
 }
 
-function activeFurniture(project: Open3dProject) {
+function activeFurniture(project: PlannerProject) {
   return activeFloor(project).furniture;
 }
 
 function stampFurniture(
-  project: Open3dProject,
+  project: PlannerProject,
   id: string,
-  patch: Partial<Open3dFurnitureItem>,
-): Open3dProject {
+  patch: Partial<PlannerFurnitureItem>,
+): PlannerProject {
   const floorIndex = project.floors.findIndex((f) => f.id === project.activeFloorId);
   if (floorIndex === -1) throw new Error("no active floor");
   return {
@@ -56,7 +57,7 @@ function stampFurniture(
   };
 }
 
-function poseSnapshot(item: Open3dFurnitureItem) {
+function poseSnapshot(item: PlannerFurnitureItem) {
   return {
     id: item.id,
     catalogId: item.catalogId,
@@ -69,7 +70,7 @@ function poseSnapshot(item: Open3dFurnitureItem) {
 
 describe("applySelectionDelete (W3 pure)", () => {
   it("returns same project reference when selection is none", () => {
-    const project = createOpen3dProject({
+    const project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     const next = applySelectionDelete(project, { type: "none", ids: [] });
@@ -77,7 +78,7 @@ describe("applySelectionDelete (W3 pure)", () => {
   });
 
   it("returns same project reference when furniture selection has empty ids", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
@@ -91,8 +92,66 @@ describe("applySelectionDelete (W3 pure)", () => {
     expect(activeFurniture(next).map((f) => f.id)).toEqual(["furn-1"]);
   });
 
+  it("empty ids is a no-op for every selectable type (wall/door/window/room)", () => {
+    let project = createPlannerProject({
+      idFactory: ids("floor-1", "project-1"),
+    });
+    ({ project } = addWall(project, { x: 0, y: 0 }, { x: 2000, y: 0 }, {
+      idFactory: ids("wall-1"),
+    }));
+    ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
+      idFactory: ids("furn-1"),
+    }));
+    const floor = project.floors[0]!;
+    project = {
+      ...project,
+      floors: [
+        {
+          ...floor,
+          doors: [
+            {
+              id: "door-1",
+              wallId: "wall-1",
+              position: 0.3,
+              width: 900,
+              height: 2100,
+            },
+          ],
+          windows: [
+            {
+              id: "win-1",
+              wallId: "wall-1",
+              position: 0.7,
+              width: 1200,
+              height: 1200,
+            },
+          ],
+          rooms: [
+            {
+              id: "room-1",
+              name: "Kitchen",
+              walls: ["wall-1"],
+              floorTexture: "none",
+              area: 10,
+            },
+          ],
+        },
+      ],
+    };
+
+    for (const type of ["wall", "door", "window", "room"] as const) {
+      const next = applySelectionDelete(project, { type, ids: [] });
+      expect(next).toBe(project);
+    }
+    expect(project.floors[0]!.walls).toHaveLength(1);
+    expect(project.floors[0]!.doors).toHaveLength(1);
+    expect(project.floors[0]!.windows).toHaveLength(1);
+    expect(project.floors[0]!.rooms).toHaveLength(1);
+    expect(activeFurniture(project).map((f) => f.id)).toEqual(["furn-1"]);
+  });
+
   it("removes one furniture id and keeps other entities", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addWall(project, { x: 0, y: 0 }, { x: 2000, y: 0 }, {
@@ -114,8 +173,60 @@ describe("applySelectionDelete (W3 pure)", () => {
     expect(next.floors[0]?.walls).toHaveLength(1);
   });
 
+  it("furniture delete does not cascade walls, doors, or windows", () => {
+    let project = createPlannerProject({
+      idFactory: ids("floor-1", "project-1"),
+    });
+    ({ project } = addWall(project, { x: 0, y: 0 }, { x: 3000, y: 0 }, {
+      idFactory: ids("wall-1"),
+    }));
+    ({ project } = addFurniture(project, "cabinet-v0", { x: 100, y: 100 }, {
+      idFactory: ids("furn-gone"),
+    }));
+    ({ project } = addFurniture(project, "cabinet-v0", { x: 400, y: 100 }, {
+      idFactory: ids("furn-keep"),
+    }));
+    const floor = project.floors[0]!;
+    project = {
+      ...project,
+      floors: [
+        {
+          ...floor,
+          doors: [
+            {
+              id: "door-1",
+              wallId: "wall-1",
+              position: 0.4,
+              width: 900,
+              height: 2100,
+            },
+          ],
+          windows: [
+            {
+              id: "win-1",
+              wallId: "wall-1",
+              position: 0.8,
+              width: 1200,
+              height: 1200,
+            },
+          ],
+        },
+      ],
+    };
+
+    const next = applySelectionDelete(project, {
+      type: "furniture",
+      ids: ["furn-gone"],
+    });
+    const nextFloor = next.floors[0]!;
+    expect(activeFurniture(next).map((f) => f.id)).toEqual(["furn-keep"]);
+    expect(nextFloor.walls.map((w) => w.id)).toEqual(["wall-1"]);
+    expect(nextFloor.doors.map((d) => d.id)).toEqual(["door-1"]);
+    expect(nextFloor.windows.map((w) => w.id)).toEqual(["win-1"]);
+  });
+
   it("skips locked furniture and returns same project reference", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 100, y: 200 }, {
@@ -133,7 +244,7 @@ describe("applySelectionDelete (W3 pure)", () => {
   });
 
   it("deletes unlocked furniture while keeping locked peers in the same multi-id selection", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
@@ -153,7 +264,7 @@ describe("applySelectionDelete (W3 pure)", () => {
   });
 
   it("returns same project when active floor id is missing", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
@@ -168,7 +279,7 @@ describe("applySelectionDelete (W3 pure)", () => {
   });
 
   it("returns same project for unknown selection type (defensive branch)", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
@@ -183,7 +294,7 @@ describe("applySelectionDelete (W3 pure)", () => {
   });
 
   it("removes multi-id furniture in one project revision (single history step)", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 100, y: 100 }, {
@@ -196,7 +307,7 @@ describe("applySelectionDelete (W3 pure)", () => {
       idFactory: ids("c"),
     }));
 
-    let history = createOpen3dHistory(project);
+    let history = createPlannerHistory(project);
     const afterDelete = applySelectionDelete(project, {
       type: "furniture",
       ids: ["a", "b"],
@@ -209,7 +320,7 @@ describe("applySelectionDelete (W3 pure)", () => {
     };
     expect(activeFurniture(history.present).map((f) => f.id)).toEqual(["c"]);
 
-    history = undoOpen3dAction(history);
+    history = undoPlannerAction(history);
     expect(activeFurniture(history.present).map((f) => f.id).sort()).toEqual([
       "a",
       "b",
@@ -217,8 +328,32 @@ describe("applySelectionDelete (W3 pure)", () => {
     ]);
   });
 
-  it("updateOpen3dProject + delete + undo restores same furniture id and pose", () => {
-    let project = createOpen3dProject({
+  /**
+   * Contract doc: N selected furniture ids → N removals (unlocked).
+   * Product path must NOT multi-select after batch place (see selectionAfterBatchPlace).
+   */
+  it("when selection has N furniture ids, applySelectionDelete removes all N", () => {
+    let project = createPlannerProject({
+      idFactory: ids("floor-1", "project-1"),
+    });
+    const placed = ["seat-1", "seat-2", "seat-3"] as const;
+    for (const id of placed) {
+      ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
+        idFactory: ids(id),
+      }));
+    }
+    expect(activeFurniture(project)).toHaveLength(3);
+
+    const next = applySelectionDelete(project, {
+      type: "furniture",
+      ids: [...placed],
+    });
+    expect(activeFurniture(next)).toHaveLength(0);
+    expect(activeFurniture(next).map((f) => f.id)).toEqual([]);
+  });
+
+  it("updatePlannerProject + delete + undo restores same furniture id and pose", () => {
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 420, y: 880 }, {
@@ -234,8 +369,8 @@ describe("applySelectionDelete (W3 pure)", () => {
     expect(before).toBeDefined();
     const expectedPose = poseSnapshot(before!);
 
-    let history = createOpen3dHistory(project);
-    history = updateOpen3dProject(history, (current) =>
+    let history = createPlannerHistory(project);
+    history = updatePlannerProject(history, (current) =>
       applySelectionDelete(current, {
         type: "furniture",
         ids: ["pose-keep"],
@@ -245,14 +380,14 @@ describe("applySelectionDelete (W3 pure)", () => {
     expect(history.past).toHaveLength(1);
     expect(activeFurniture(history.present).map((f) => f.id)).toEqual([]);
 
-    history = undoOpen3dAction(history);
+    history = undoPlannerAction(history);
     const restored = activeFurniture(history.present).find((f) => f.id === "pose-keep");
     expect(restored).toBeDefined();
     expect(poseSnapshot(restored!)).toEqual(expectedPose);
   });
 
-  it("multi-id delete via updateOpen3dProject pushes exactly one past entry", () => {
-    let project = createOpen3dProject({
+  it("multi-id delete via updatePlannerProject pushes exactly one past entry", () => {
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 100, y: 100 }, {
@@ -267,8 +402,8 @@ describe("applySelectionDelete (W3 pure)", () => {
 
     const posesBefore = activeFurniture(project).map(poseSnapshot);
 
-    let history = createOpen3dHistory(project);
-    history = updateOpen3dProject(history, (current) =>
+    let history = createPlannerHistory(project);
+    history = updatePlannerProject(history, (current) =>
       applySelectionDelete(current, {
         type: "furniture",
         ids: ["m1", "m2"],
@@ -278,34 +413,34 @@ describe("applySelectionDelete (W3 pure)", () => {
     expect(history.past).toHaveLength(1);
     expect(activeFurniture(history.present).map((f) => f.id)).toEqual(["m3"]);
 
-    history = undoOpen3dAction(history);
+    history = undoPlannerAction(history);
     expect(activeFurniture(history.present).map(poseSnapshot)).toEqual(posesBefore);
   });
 
-  it("updateOpen3dProject is a no-op when delete does not change membership", () => {
-    let project = createOpen3dProject({
+  it("updatePlannerProject is a no-op when delete does not change membership", () => {
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
       idFactory: ids("keep"),
     }));
-    const history = createOpen3dHistory(project);
-    const next = updateOpen3dProject(history, (current) =>
+    const history = createPlannerHistory(project);
+    const next = updatePlannerProject(history, (current) =>
       applySelectionDelete(current, { type: "furniture", ids: ["missing"] }),
     );
     expect(next).toBe(history);
   });
 
-  it("updateOpen3dProject stamps updatedAt when updater leaves it unchanged", () => {
-    let project = createOpen3dProject({
+  it("updatePlannerProject stamps updatedAt when updater leaves it unchanged", () => {
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
       idFactory: ids("stamp"),
     }));
-    const history = createOpen3dHistory(project);
+    const history = createPlannerHistory(project);
     const stampedAt = "2026-07-10T12:00:00.000Z";
-    const next = updateOpen3dProject(
+    const next = updatePlannerProject(
       history,
       (current) =>
         applySelectionDelete(current, { type: "furniture", ids: ["stamp"] }),
@@ -315,16 +450,16 @@ describe("applySelectionDelete (W3 pure)", () => {
     expect(next.present.updatedAt).not.toBe(history.present.updatedAt);
   });
 
-  it("updateOpen3dProject keeps updater-provided updatedAt when already changed", () => {
-    let project = createOpen3dProject({
+  it("updatePlannerProject keeps updater-provided updatedAt when already changed", () => {
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
       idFactory: ids("pre"),
     }));
-    const history = createOpen3dHistory(project);
+    const history = createPlannerHistory(project);
     const custom = "2026-01-01T00:00:00.000Z";
-    const next = updateOpen3dProject(history, (current) => {
+    const next = updatePlannerProject(history, (current) => {
       const deleted = applySelectionDelete(current, {
         type: "furniture",
         ids: ["pre"],
@@ -335,7 +470,7 @@ describe("applySelectionDelete (W3 pure)", () => {
   });
 
   it("returns same reference when ids do not match any furniture", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
@@ -349,7 +484,7 @@ describe("applySelectionDelete (W3 pure)", () => {
   });
 
   it("deleting a wall cascades doors and windows on that wall (no orphans)", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addWall(project, { x: 0, y: 0 }, { x: 3000, y: 0 }, {
@@ -404,8 +539,128 @@ describe("applySelectionDelete (W3 pure)", () => {
     expect(nextFloor.windows).toEqual([]);
   });
 
+  it("multi-id wall delete cascades doors/windows for every removed wall in one revision", () => {
+    let project = createPlannerProject({
+      idFactory: ids("floor-1", "project-1"),
+    });
+    ({ project } = addWall(project, { x: 0, y: 0 }, { x: 3000, y: 0 }, {
+      idFactory: ids("wall-a"),
+    }));
+    ({ project } = addWall(project, { x: 0, y: 0 }, { x: 0, y: 3000 }, {
+      idFactory: ids("wall-b"),
+    }));
+    ({ project } = addWall(project, { x: 3000, y: 0 }, { x: 3000, y: 3000 }, {
+      idFactory: ids("wall-keep"),
+    }));
+    ({ project } = addFurniture(project, "cabinet-v0", { x: 500, y: 500 }, {
+      idFactory: ids("furn-keep"),
+    }));
+
+    const floor = project.floors[0]!;
+    project = {
+      ...project,
+      floors: [
+        {
+          ...floor,
+          doors: [
+            {
+              id: "door-a",
+              wallId: "wall-a",
+              position: 0.5,
+              width: 900,
+              height: 2100,
+            },
+            {
+              id: "door-b",
+              wallId: "wall-b",
+              position: 0.5,
+              width: 900,
+              height: 2100,
+            },
+            {
+              id: "door-keep",
+              wallId: "wall-keep",
+              position: 0.5,
+              width: 900,
+              height: 2100,
+            },
+          ],
+          windows: [
+            {
+              id: "win-a",
+              wallId: "wall-a",
+              position: 0.2,
+              width: 1000,
+              height: 1000,
+            },
+            {
+              id: "win-keep",
+              wallId: "wall-keep",
+              position: 0.8,
+              width: 1000,
+              height: 1000,
+            },
+          ],
+        },
+      ],
+    };
+
+    let history = createPlannerHistory(project);
+    history = updatePlannerProject(history, (current) =>
+      applySelectionDelete(current, {
+        type: "wall",
+        ids: ["wall-a", "wall-b", "missing-wall"],
+      }),
+    );
+
+    // Exactly one history step for multi-id wall delete (incl. absent id).
+    expect(history.past).toHaveLength(1);
+
+    const nextFloor = history.present.floors[0]!;
+    expect(nextFloor.walls.map((w) => w.id)).toEqual(["wall-keep"]);
+    expect(nextFloor.doors.map((d) => d.id)).toEqual(["door-keep"]);
+    expect(nextFloor.windows.map((w) => w.id)).toEqual(["win-keep"]);
+    // Furniture is independent of wall cascade.
+    expect(activeFurniture(history.present).map((f) => f.id)).toEqual(["furn-keep"]);
+
+    history = undoPlannerAction(history);
+    const restored = history.present.floors[0]!;
+    expect(restored.walls.map((w) => w.id).sort()).toEqual([
+      "wall-a",
+      "wall-b",
+      "wall-keep",
+    ]);
+    expect(restored.doors.map((d) => d.id).sort()).toEqual([
+      "door-a",
+      "door-b",
+      "door-keep",
+    ]);
+    expect(restored.windows.map((w) => w.id).sort()).toEqual(["win-a", "win-keep"]);
+  });
+
+  it("multi-id furniture selection drops only matching present ids (partial miss ok)", () => {
+    let project = createPlannerProject({
+      idFactory: ids("floor-1", "project-1"),
+    });
+    ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
+      idFactory: ids("keep"),
+    }));
+    ({ project } = addFurniture(project, "cabinet-v0", { x: 100, y: 0 }, {
+      idFactory: ids("gone-1"),
+    }));
+    ({ project } = addFurniture(project, "cabinet-v0", { x: 200, y: 0 }, {
+      idFactory: ids("gone-2"),
+    }));
+
+    const next = applySelectionDelete(project, {
+      type: "furniture",
+      ids: ["gone-1", "absent", "gone-2"],
+    });
+    expect(activeFurniture(next).map((f) => f.id)).toEqual(["keep"]);
+  });
+
   it("deletes door and window selection types without touching furniture", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addWall(project, { x: 0, y: 0 }, { x: 3000, y: 0 }, {
@@ -458,8 +713,87 @@ describe("applySelectionDelete (W3 pure)", () => {
     expect(activeFurniture(afterWin).map((f) => f.id)).toEqual(["f1"]);
   });
 
+  it("multi-id door and multi-id window delete in one revision each", () => {
+    let project = createPlannerProject({
+      idFactory: ids("floor-1", "project-1"),
+    });
+    ({ project } = addWall(project, { x: 0, y: 0 }, { x: 4000, y: 0 }, {
+      idFactory: ids("wall-1"),
+    }));
+    const floor = project.floors[0]!;
+    project = {
+      ...project,
+      floors: [
+        {
+          ...floor,
+          doors: [
+            {
+              id: "d1",
+              wallId: "wall-1",
+              position: 0.2,
+              width: 900,
+              height: 2100,
+            },
+            {
+              id: "d2",
+              wallId: "wall-1",
+              position: 0.5,
+              width: 900,
+              height: 2100,
+            },
+            {
+              id: "d-keep",
+              wallId: "wall-1",
+              position: 0.8,
+              width: 900,
+              height: 2100,
+            },
+          ],
+          windows: [
+            {
+              id: "w1",
+              wallId: "wall-1",
+              position: 0.15,
+              width: 1000,
+              height: 1000,
+            },
+            {
+              id: "w2",
+              wallId: "wall-1",
+              position: 0.55,
+              width: 1000,
+              height: 1000,
+            },
+            {
+              id: "w-keep",
+              wallId: "wall-1",
+              position: 0.9,
+              width: 1000,
+              height: 1000,
+            },
+          ],
+        },
+      ],
+    };
+
+    const afterDoors = applySelectionDelete(project, {
+      type: "door",
+      ids: ["d1", "d2"],
+    });
+    expect(afterDoors.floors[0]!.doors.map((d) => d.id)).toEqual(["d-keep"]);
+    expect(afterDoors.floors[0]!.windows).toHaveLength(3);
+    expect(afterDoors.floors[0]!.walls.map((w) => w.id)).toEqual(["wall-1"]);
+
+    const afterWins = applySelectionDelete(afterDoors, {
+      type: "window",
+      ids: ["w1", "w2"],
+    });
+    expect(afterWins.floors[0]!.windows.map((w) => w.id)).toEqual(["w-keep"]);
+    expect(afterWins.floors[0]!.doors.map((d) => d.id)).toEqual(["d-keep"]);
+  });
+
   it("deletes a room selection without cascading walls", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addWall(project, { x: 0, y: 0 }, { x: 2000, y: 0 }, {
@@ -492,9 +826,102 @@ describe("applySelectionDelete (W3 pure)", () => {
   });
 });
 
+/**
+ * Workspace batch place (OOPlannerWorkspace handleWorkstationConfigBatchPlace)
+ * must call this so Delete after Place N seats removes one seat, not N.
+ */
+describe("selectionAfterBatchPlace (W3 batch-place contract)", () => {
+  it("returns none when no ids were placed", () => {
+    expect(selectionAfterBatchPlace([])).toEqual({ type: "none", ids: [] });
+  });
+
+  it("selects the single placed id as furniture", () => {
+    expect(selectionAfterBatchPlace(["only"])).toEqual({
+      type: "furniture",
+      ids: ["only"],
+    });
+  });
+
+  it("keeps only the last placed id when batch place returns N ids", () => {
+    const placed = ["ws-1", "ws-2", "ws-3"];
+    expect(selectionAfterBatchPlace(placed)).toEqual({
+      type: "furniture",
+      ids: ["ws-3"],
+    });
+    // Never multi-select the whole batch (anti-regression for e2e wipe).
+    expect(selectionAfterBatchPlace(placed).ids).toHaveLength(1);
+  });
+
+  it("composed: batch selection + Delete removes one of N; peers stay", () => {
+    let project = createPlannerProject({
+      idFactory: ids("floor-1", "project-1"),
+    });
+    const placed = ["batch-a", "batch-b", "batch-c"] as const;
+    for (const [i, id] of placed.entries()) {
+      ({ project } = addFurniture(
+        project,
+        "cabinet-v0",
+        { x: i * 100, y: 0 },
+        { idFactory: ids(id) },
+      ));
+    }
+
+    const selection = selectionAfterBatchPlace([...placed]);
+    expect(selection).toEqual({ type: "furniture", ids: ["batch-c"] });
+
+    const next = applySelectionDelete(project, selection);
+    expect(activeFurniture(next).map((f) => f.id).sort()).toEqual([
+      "batch-a",
+      "batch-b",
+    ]);
+
+    // Contrast: selecting all N would wipe the batch (the known e2e bug path).
+    const wiped = applySelectionDelete(project, {
+      type: "furniture",
+      ids: [...placed],
+    });
+    expect(activeFurniture(wiped)).toHaveLength(0);
+  });
+
+  it("composed: single-id delete + undo restores same id and pose", () => {
+    let project = createPlannerProject({
+      idFactory: ids("floor-1", "project-1"),
+    });
+    ({ project } = addFurniture(project, "cabinet-v0", { x: 10, y: 20 }, {
+      idFactory: ids("peer"),
+    }));
+    ({ project } = addFurniture(project, "cabinet-v0", { x: 700, y: 900 }, {
+      idFactory: ids("last-seat"),
+    }));
+    project = stampFurniture(project, "last-seat", {
+      rotation: 90,
+      width: 1200,
+      depth: 600,
+    });
+
+    const before = activeFurniture(project).find((f) => f.id === "last-seat");
+    expect(before).toBeDefined();
+    const expectedPose = poseSnapshot(before!);
+
+    const selection = selectionAfterBatchPlace(["peer", "last-seat"]);
+    let history = createPlannerHistory(project);
+    history = updatePlannerProject(history, (current) =>
+      applySelectionDelete(current, selection),
+    );
+    expect(activeFurniture(history.present).map((f) => f.id)).toEqual(["peer"]);
+
+    history = undoPlannerAction(history);
+    const restored = activeFurniture(history.present).find(
+      (f) => f.id === "last-seat",
+    );
+    expect(restored).toBeDefined();
+    expect(poseSnapshot(restored!)).toEqual(expectedPose);
+  });
+});
+
 describe("resolveSelectedEntity", () => {
   it("returns null for none / empty / unknown selection types", () => {
-    const project = createOpen3dProject({
+    const project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     const floor = activeFloor(project);
@@ -509,7 +936,7 @@ describe("resolveSelectedEntity", () => {
   });
 
   it("returns null when the entity id is not on the floor", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
@@ -521,7 +948,7 @@ describe("resolveSelectedEntity", () => {
   });
 
   it("resolves wall, furniture, door, window, and room by first selected id", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addWall(project, { x: 0, y: 0 }, { x: 2000, y: 0 }, {
@@ -586,7 +1013,7 @@ describe("resolveSelectedEntity", () => {
 
 describe("updateEntityInProject", () => {
   it("returns same project when active floor is missing", () => {
-    const project = createOpen3dProject({
+    const project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     const orphaned = { ...project, activeFloorId: "gone" };
@@ -596,7 +1023,7 @@ describe("updateEntityInProject", () => {
   });
 
   it("rejects updates to locked entities", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
@@ -609,7 +1036,7 @@ describe("updateEntityInProject", () => {
   });
 
   it("merges updates into the matching unlocked entity", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 10, y: 20 }, {
@@ -631,7 +1058,7 @@ describe("updateEntityInProject", () => {
   });
 
   it("returns project with unchanged membership when id is missing", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
@@ -647,7 +1074,7 @@ describe("updateEntityInProject", () => {
 
 describe("deleteEntityFromProject", () => {
   it("returns same project when active floor is missing", () => {
-    const project = createOpen3dProject({
+    const project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     const orphaned = { ...project, activeFloorId: "gone" };
@@ -655,7 +1082,7 @@ describe("deleteEntityFromProject", () => {
   });
 
   it("rejects delete of locked entities", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
@@ -668,7 +1095,7 @@ describe("deleteEntityFromProject", () => {
   });
 
   it("removes a single furniture entity", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {
@@ -682,7 +1109,7 @@ describe("deleteEntityFromProject", () => {
   });
 
   it("cascades doors and windows when deleting a wall", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addWall(project, { x: 0, y: 0 }, { x: 3000, y: 0 }, {
@@ -732,7 +1159,7 @@ describe("deleteEntityFromProject", () => {
   });
 
   it("no-ops membership when entity id is absent", () => {
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
     });
     ({ project } = addFurniture(project, "cabinet-v0", { x: 0, y: 0 }, {

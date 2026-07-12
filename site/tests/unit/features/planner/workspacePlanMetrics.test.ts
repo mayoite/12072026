@@ -5,11 +5,11 @@ import {
   createWorkstationConfigV0,
   workstationConfigKey,
 } from "@/features/planner/project/catalog/workstationSystemV0";
-import type { Open3dFloor } from "@/features/planner/project/model/types";
+import type { PlannerFloor } from "@/features/planner/project/model/types";
 
 function floorWithFurniture(
-  furniture: Open3dFloor["furniture"],
-): Open3dFloor {
+  furniture: PlannerFloor["furniture"],
+): PlannerFloor {
   return {
     id: "f1",
     name: "Level 1",

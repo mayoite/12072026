@@ -34,7 +34,7 @@ import {
   buildAccessibleName,
   validateDimensions,
 } from "@/features/planner/project/catalog/unitConversion";
-import type { Open3dCatalogDimensions, Open3dCatalogCategory } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogDimensions, PlannerCatalogCategory } from "@/features/planner/project/catalog/catalogTypes";
 
 describe("03-CAT-03: Unit Conversion", () => {
   describe("canonicalMmFromCatalogCm", () => {
@@ -105,7 +105,7 @@ describe("03-CAT-03: Unit Conversion", () => {
   });
 
   describe("displayDimensions", () => {
-    const dims: Open3dCatalogDimensions = { widthMm: 1400, depthMm: 700, heightMm: 750 };
+    const dims: PlannerCatalogDimensions = { widthMm: 1400, depthMm: 700, heightMm: 750 };
 
     it("formats in cm", () => {
       expect(displayDimensions(dims, "cm")).toBe("140 cm × 70 cm × 75 cm");
@@ -126,14 +126,14 @@ describe("03-CAT-03: Unit Conversion", () => {
 
   describe("buildAccessibleName", () => {
     it("builds accessible name with dimensions", () => {
-      const dims: Open3dCatalogDimensions = { widthMm: 1400, depthMm: 700, heightMm: 750 };
+      const dims: PlannerCatalogDimensions = { widthMm: 1400, depthMm: 700, heightMm: 750 };
       expect(buildAccessibleName("Desk", dims)).toBe("Desk, 140 cm by 70 cm by 75 cm");
     });
   });
 
   describe("validateDimensions", () => {
     it("accepts valid dimensions", () => {
-      const dims: Open3dCatalogDimensions = { widthMm: 1000, depthMm: 500, heightMm: 750 };
+      const dims: PlannerCatalogDimensions = { widthMm: 1000, depthMm: 500, heightMm: 750 };
       const result = validateDimensions(dims);
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
@@ -460,7 +460,7 @@ import {
 } from "@/features/planner/project/catalog/fallbackGeometry";
 
 describe("03-CAT-06a: Fallback Geometry", () => {
-  const dims: Open3dCatalogDimensions = { widthMm: 1200, depthMm: 600, heightMm: 750 };
+  const dims: PlannerCatalogDimensions = { widthMm: 1200, depthMm: 600, heightMm: 750 };
 
   describe("buildFallbackGeometry", () => {
     it("generates box type fallback", () => {
@@ -516,7 +516,7 @@ describe("03-CAT-06a: Fallback Geometry", () => {
     });
 
     it("preserves optional dimension fields", () => {
-      const withExtra: Open3dCatalogDimensions = {
+      const withExtra: PlannerCatalogDimensions = {
         ...dims,
         seatHeightMm: 450,
         weightKg: 12,
@@ -559,14 +559,14 @@ import {
   verifyPlacementIdentity,
   placeCatalogItemInProject,
 } from "@/features/planner/project/catalog/placementAction";
-import type { Open3dCatalogItem, Open3dCatalogVariant } from "@/features/planner/project/catalog/catalogTypes";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import type { PlannerCatalogItem, PlannerCatalogVariant } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 import { isEntityUuid } from "@/features/planner/lib/newEntityId";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 
 describe("03-CAT-08: Placement Action", () => {
   // Helper to create a minimal catalog item for testing
-  function makeItem(overrides: Partial<Open3dCatalogItem> = {}): Open3dCatalogItem {
+  function makeItem(overrides: Partial<PlannerCatalogItem> = {}): PlannerCatalogItem {
     return {
       id: "prod-001",
       slug: "sofa-3-seater",
@@ -598,7 +598,7 @@ describe("03-CAT-08: Placement Action", () => {
     };
   }
 
-  function makeVariant(overrides: Partial<Open3dCatalogVariant> = {}): Open3dCatalogVariant {
+  function makeVariant(overrides: Partial<PlannerCatalogVariant> = {}): PlannerCatalogVariant {
     return {
       variantId: "var-001",
       sku: "SOFA-001-BLUE",
@@ -680,11 +680,12 @@ describe("03-CAT-08: Placement Action", () => {
       expect(s1.placementId).not.toBe(s2.placementId);
     });
 
-    it("placement IDs are crypto.randomUUID() (hyphenated)", () => {
+    it("placement IDs are UUID v7 (hyphenated)", () => {
       const item = makeItem();
       const snapshot = placeCatalogItem(item, null);
+      // version nibble = 7 (RFC 9562 UUID v7)
       expect(snapshot.placementId).toMatch(
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+        /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
       );
     });
 
@@ -693,10 +694,13 @@ describe("03-CAT-08: Placement Action", () => {
       expect(isEntityUuid(snapshot.placementId)).toBe(true);
     });
 
-    it("createOpen3dProject default id isEntityUuid", () => {
-      const project = createOpen3dProject();
+    it("createPlannerProject default id isEntityUuid (v7 mint)", () => {
+      const project = createPlannerProject();
       expect(isEntityUuid(project.id)).toBe(true);
       expect(isEntityUuid(project.floors[0].id)).toBe(true);
+      expect(project.id).toMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+      );
     });
 
     it("records placedAt as ISO 8601 timestamp", () => {
@@ -794,7 +798,7 @@ describe("03-CAT-08: Placement Action", () => {
 
   describe("placeCatalogItemInProject", () => {
     it("places through the project mutation shape and preserves source identity", () => {
-      const project: Open3dProject = {
+      const project: PlannerProject = {
         id: "project",
         name: "Project",
         activeFloorId: "floor-1",
@@ -826,7 +830,7 @@ describe("03-CAT-08: Placement Action", () => {
         name: "Catalog Desk",
         dimensions: { widthMm: 1200, depthMm: 600, heightMm: 750 },
       });
-      const variant: Open3dCatalogVariant = {
+      const variant: PlannerCatalogVariant = {
         variantId: "desk-oak",
         sku: "DESK-OAK",
         parentProductId: "catalog-desk",
@@ -1094,10 +1098,10 @@ describe("03-CAT-07: Recent/Favorites Edge Cases", () => {
 // 03-CAT-06b: Catalog Client
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-import { Open3dCatalogClient } from "@/features/planner/project/catalog/catalogClient";
+import { PlannerCatalogClient } from "@/features/planner/project/catalog/catalogClient";
 
 describe("03-CAT-06b: Catalog Client", () => {
-  function makeItem(overrides: Partial<Open3dCatalogItem> & { id: string; sku: string }): Open3dCatalogItem {
+  function makeItem(overrides: Partial<PlannerCatalogItem> & { id: string; sku: string }): PlannerCatalogItem {
     return {
       id: overrides.id,
       slug: overrides.slug ?? overrides.id,
@@ -1133,17 +1137,17 @@ describe("03-CAT-06b: Catalog Client", () => {
 
   describe("empty client", () => {
     it("isLoaded returns false initially", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       expect(client.isLoaded()).toBe(false);
     });
 
     it("getAll returns empty array", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       expect(client.getAll()).toHaveLength(0);
     });
 
     it("search returns empty result", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       const result = client.search({ text: "test" });
       expect(result.items).toHaveLength(0);
       expect(result.totalCount).toBe(0);
@@ -1152,8 +1156,8 @@ describe("03-CAT-06b: Catalog Client", () => {
   });
 
   describe("loaded client with items", () => {
-    function createLoadedClient(items: Open3dCatalogItem[]): Open3dCatalogClient {
-      const client = new Open3dCatalogClient();
+    function createLoadedClient(items: PlannerCatalogItem[]): PlannerCatalogClient {
+      const client = new PlannerCatalogClient();
       client.load(items, "standard");
       return client;
     }
@@ -1317,18 +1321,18 @@ describe("03-CAT-06b: Catalog Client", () => {
 
   describe("large catalog performance", () => {
     it("handles 1000 items search under 100ms", () => {
-      const largeItems: Open3dCatalogItem[] = [];
+      const largeItems: PlannerCatalogItem[] = [];
       for (let i = 0; i < 1000; i++) {
         largeItems.push(makeItem({
           id: `item-${i}`,
           sku: `SKU-${i}`,
           name: `Product ${i}`,
-          category: ["Furniture", "Lighting", "Decor", "Outdoor"][i % 4] as Open3dCatalogCategory,
+          category: ["Furniture", "Lighting", "Decor", "Outdoor"][i % 4] as PlannerCatalogCategory,
           roomTags: [["Office", "Living Room", "Bedroom"][i % 3] as never],
         }));
       }
 
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       const loadStart = performance.now();
       client.load(largeItems, "standard");
       const loadTime = performance.now() - loadStart;
@@ -1348,7 +1352,7 @@ describe("03-CAT-06b: Catalog Client", () => {
 
   describe("LRU cache eviction", () => {
     it("evicts oldest entries when cache is full", () => {
-      const client = new Open3dCatalogClient({ maxCacheItems: 3 });
+      const client = new PlannerCatalogClient({ maxCacheItems: 3 });
       const items = [
         makeItem({ id: "a", sku: "A", name: "Alpha" }),
         makeItem({ id: "b", sku: "B", name: "Beta" }),
@@ -1371,7 +1375,7 @@ describe("03-CAT-06b: Catalog Client", () => {
 
   describe("search with material and color filters", () => {
     it("filters by material", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       client.load([
         makeItem({ id: "wood", sku: "W", name: "Wood Chair", material: { marketingMaterial: "Oak", normalizedMaterial: "Oak" } }),
         makeItem({ id: "metal", sku: "M", name: "Metal Chair", material: { marketingMaterial: "Steel", normalizedMaterial: "Steel" } }),
@@ -1383,7 +1387,7 @@ describe("03-CAT-06b: Catalog Client", () => {
     });
 
     it("filters by color", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       client.load([
         makeItem({ id: "red", sku: "R", name: "Red Chair", color: { hex: "#FF0000", name: "Red", normalizedFamily: "Red" } }),
         makeItem({ id: "blue", sku: "B", name: "Blue Chair", color: { hex: "#0000FF", name: "Blue", normalizedFamily: "Blue" } }),
@@ -1397,7 +1401,7 @@ describe("03-CAT-06b: Catalog Client", () => {
 
   describe("search with availability filter", () => {
     it("filters by availability status", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       client.load([
         makeItem({ id: "in", sku: "IN", name: "In Stock Chair", availability: "in-stock" }),
         makeItem({ id: "out", sku: "OUT", name: "Discontinued Chair", availability: "discontinued" }),
@@ -1411,7 +1415,7 @@ describe("03-CAT-06b: Catalog Client", () => {
 
   describe("search with Phase 03A facets", () => {
     it("filters by configurability, mounting, and asset readiness", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       client.load([
         makeItem({
           id: "fixed-floor-ready",
@@ -1440,7 +1444,7 @@ describe("03-CAT-06b: Catalog Client", () => {
     });
 
     it("supports deterministic sortField and sortDirection", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       client.load([
         makeItem({ id: "b", sku: "B", name: "Same", pricing: { price: 200, currencyCode: "INR" } }),
         makeItem({ id: "a", sku: "A", name: "Same", pricing: { price: 100, currencyCode: "INR" } }),
@@ -1455,12 +1459,12 @@ describe("03-CAT-06b: Catalog Client", () => {
 
   describe("getSource", () => {
     it("returns null before load", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       expect(client.getSource()).toBeNull();
     });
 
     it("returns the source after load", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       client.load([makeItem({ id: "test", sku: "T", name: "Test" })], "configurator");
       expect(client.getSource()).toBe("configurator");
     });
@@ -1483,7 +1487,7 @@ describe("03-CAT-06b: Catalog Client", () => {
           }],
         }),
       } as Response));
-      const client = new Open3dCatalogClient({ fetchImpl: fetchMock as unknown as typeof fetch });
+      const client = new PlannerCatalogClient({ fetchImpl: fetchMock as unknown as typeof fetch });
 
       const items = await client.loadFromApi("standard", 25);
 
@@ -1500,7 +1504,7 @@ describe("03-CAT-06b: Catalog Client", () => {
         status: 200,
         json: async () => ({ data: { items: [normalized] } }),
       } as Response));
-      const client = new Open3dCatalogClient({
+      const client = new PlannerCatalogClient({
         fetchImpl: fetchMock as unknown as typeof fetch,
         apiBasePath: "https://planner.example",
       });
@@ -1518,7 +1522,7 @@ describe("03-CAT-06b: Catalog Client", () => {
         status: 200,
         json: async () => ({ items: [makeItem({ id: "fresh", sku: "F", name: "Fresh" })] }),
       } as Response));
-      const client = new Open3dCatalogClient({ fetchImpl: fetchMock as unknown as typeof fetch, cacheTtlMs: 1000 });
+      const client = new PlannerCatalogClient({ fetchImpl: fetchMock as unknown as typeof fetch, cacheTtlMs: 1000 });
 
       await client.loadFromApi("standard");
 
@@ -1529,7 +1533,7 @@ describe("03-CAT-06b: Catalog Client", () => {
 
   describe("relevance scoring edge cases", () => {
     it("scores exact SKU match highest", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       client.load([
         makeItem({ id: "exact", sku: "SOFA-001", name: "Exact Sofa" }),
         makeItem({ id: "other", sku: "OTHER", name: "Other Item" }),
@@ -1540,7 +1544,7 @@ describe("03-CAT-06b: Catalog Client", () => {
     });
 
     it("scores exact slug match", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       client.load([
         makeItem({ id: "exact", sku: "A", name: "Exact", slug: "exact-sofa" }),
         makeItem({ id: "other", sku: "B", name: "Other", slug: "other-item" }),
@@ -1551,7 +1555,7 @@ describe("03-CAT-06b: Catalog Client", () => {
     });
 
     it("applies fuzzy prefix matching", () => {
-      const client = new Open3dCatalogClient();
+      const client = new PlannerCatalogClient();
       client.load([
         makeItem({ id: "desk", sku: "D", name: "Executive Desk", tags: ["desk"] }),
       ], "standard");
@@ -1578,7 +1582,14 @@ describe("03-CAT-09: Admin Boundaries", () => {
   }
 
   it("keeps planner runtime free of admin catalog write routes", () => {
-    const source = readAllSourceFiles(join("features", "planner", "open3d")).join("\n");
+    // Live host trees (not admin) — open3d folder deleted; guest/canvas host is editor+canvas+3d+project+ui
+    const source = [
+      ...readAllSourceFiles(join("features", "planner", "editor")),
+      ...readAllSourceFiles(join("features", "planner", "canvas")),
+      ...readAllSourceFiles(join("features", "planner", "3d")),
+      ...readAllSourceFiles(join("features", "planner", "project")),
+      ...readAllSourceFiles(join("features", "planner", "ui")),
+    ].join("\n");
     expect(source).not.toContain("/api/admin/catalogs");
     expect(source).not.toContain("admin-catalogs:post");
     expect(source).not.toContain("admin-catalogs:patch");

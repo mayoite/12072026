@@ -1,14 +1,14 @@
-import type { Open3dProject, Open3dPlannerSceneEnvelope } from "../types";
+import type { PlannerProject, PlannerSceneEnvelope } from "../types";
 
 export interface MigrationResult {
   success: boolean;
-  project: Open3dProject;
-  backup: Open3dPlannerSceneEnvelope;
+  project: PlannerProject;
+  backup: PlannerSceneEnvelope;
   report: string[];
   errors?: string[];
 }
 
-export type MigrationFn = (project: Open3dProject) => { project: Open3dProject; report: string[] };
+export type MigrationFn = (project: PlannerProject) => { project: PlannerProject; report: string[] };
 
 interface MigrationRegistryEntry {
   fromVersion: number;
@@ -31,12 +31,12 @@ export function getRegisteredMigrations(): readonly MigrationRegistryEntry[] {
 }
 
 export function migrateEnvelope(
-  envelope: Open3dPlannerSceneEnvelope,
+  envelope: PlannerSceneEnvelope,
   targetVersion: number = 1,
 ): MigrationResult {
-  const backup: Open3dPlannerSceneEnvelope = JSON.parse(JSON.stringify(envelope));
+  const backup: PlannerSceneEnvelope = JSON.parse(JSON.stringify(envelope));
   const report: string[] = [];
-  let currentProject = JSON.parse(JSON.stringify(envelope.project)) as Open3dProject;
+  let currentProject = JSON.parse(JSON.stringify(envelope.project)) as PlannerProject;
 
   let currentVersion: number = envelope.version;
 
@@ -78,7 +78,7 @@ export function migrateEnvelope(
   };
 }
 
-export function createEnvelopeV1(project: Open3dProject): Open3dPlannerSceneEnvelope {
+export function createEnvelopeV1(project: PlannerProject): PlannerSceneEnvelope {
   return {
     type: "open3d-floorplan-project",
     version: 1,

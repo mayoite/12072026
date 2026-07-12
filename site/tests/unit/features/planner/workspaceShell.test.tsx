@@ -20,8 +20,8 @@ import {
 import { useDoorWindowPlacement } from "@/features/planner/editor/useDoorWindowPlacement";
 import { toolFromShortcutKey } from "@/features/planner/editor/useWorkspaceKeyboard";
 import { runtimeToolFor } from "@/features/planner/editor/canvasTool";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
-import type { Open3dWall } from "@/features/planner/project/model/types";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+import type { PlannerWall } from "@/features/planner/project/model/types";
 
 // TDD mocks for OOPlannerWorkspace render coverage (minimal to isolate; hoisted by vitest)
 vi.mock("@/features/planner/editor/CanvasToolRail", () => ({ CanvasToolRail: () => <div data-testid="tool-rail" /> }));
@@ -43,9 +43,10 @@ import fs from "node:fs";
 import path from "node:path";
 
 function auditStaticPresentationInOpen3d() {
+  // Live editor lives at features/planner/editor (not the retired project/editor path).
   // fixed resolve for vitest cwd (site or root) to avoid double-site path; keeps audit behavior
   const base = process.cwd().endsWith('site') || process.cwd().includes('site') ? process.cwd() : path.join(process.cwd(), 'site');
-  const editorDir = path.resolve(base, "features/planner/project/editor");
+  const editorDir = path.resolve(base, "features/planner/editor");
   const files = fs.readdirSync(editorDir).filter((f) => f.endsWith(".tsx") || f.endsWith(".ts"));
   const violations: string[] = [];
   const hexRe = /#[0-9a-fA-F]{3,8}\b/;
@@ -75,12 +76,12 @@ const { mockCatalogHook } = vi.hoisted(() => ({
     retry: vi.fn(),
   }),
 }));
-vi.mock("@/features/planner/project/catalog/useOpen3dWorkspaceCatalog", () => ({
-  useOpen3dWorkspaceCatalog: mockCatalogHook,
-  useOpen3dSvgCatalog: mockCatalogHook,
+vi.mock("@/features/planner/project/catalog/usePlannerWorkspaceCatalog", () => ({
+  usePlannerWorkspaceCatalog: mockCatalogHook,
+  usePlannerSvgCatalog: mockCatalogHook,
 }));
-vi.mock("@/features/planner/project/persistence/useOpen3dWorkspaceAutosave", () => ({
-  useOpen3dWorkspaceAutosave: () => ({ status: "idle", isModified: false, isSynced: true, schedulePersist: vi.fn(), restoreSnapshot: async () => null }),
+vi.mock("@/features/planner/project/persistence/usePlannerWorkspaceAutosave", () => ({
+  usePlannerWorkspaceAutosave: () => ({ status: "idle", isModified: false, isSynced: true, schedulePersist: vi.fn(), restoreSnapshot: async () => null }),
 }));
 
 describe("useWorkspaceCanvas", () => {
@@ -96,7 +97,7 @@ describe("useWorkspaceCanvas", () => {
     expect(result.current.canUndo).toBe(false);
     expect(result.current.selection).toEqual({ type: "none", ids: [] });
 
-    const wall: Open3dWall = {
+    const wall: PlannerWall = {
       id: "wall-test",
       start: { x: 0, y: 0 },
       end: { x: 2000, y: 0 },
@@ -125,7 +126,7 @@ describe("useWorkspaceCanvas", () => {
   });
 
   it("updates selection and applies direct project updates", () => {
-    const initial = createOpen3dProject({ name: "Direct Update" });
+    const initial = createPlannerProject({ name: "Direct Update" });
     const { result } = renderHook(() => useWorkspaceCanvas({ initialProject: initial }));
 
     act(() => {
@@ -157,7 +158,7 @@ describe("useCanvasDrawing", () => {
   });
 
   it("draws a wall when the segment exceeds the minimum length", () => {
-    vi.stubGlobal("crypto", { randomUUID: () => "drawn-wall-id" });
+    // Entity ids mint via UUID v7 (crypto.getRandomValues); do not replace crypto.
     const { result } = renderHook(() => useCanvasDrawing());
 
     act(() => {
@@ -234,7 +235,7 @@ describe("useDockingSystem", () => {
       result.current.saveLayout();
     });
 
-    const stored = localStorage.getItem("open3d-workspace-docking");
+    const stored = localStorage.getItem("planner-workspace-docking");
     expect(stored).toBeTruthy();
 
     act(() => {
@@ -245,7 +246,7 @@ describe("useDockingSystem", () => {
 
   it("restores layout from localStorage on mount", () => {
     localStorage.setItem(
-      "open3d-workspace-docking",
+      "planner-workspace-docking",
       JSON.stringify({
         left: { id: "left", state: "floating", width: 400, height: 300, x: 50, y: 50, zIndex: 100 },
       }),
@@ -292,13 +293,14 @@ describe("TopBar", () => {
     );
 
     expect(screen.getByRole("heading", { name: "Demo Plan" })).toBeInTheDocument();
-    expect(screen.getByText("Unsaved changes")).toBeInTheDocument();
+    // Brand subline + save pill both say "Unsaved changes" when isModified
+    expect(screen.getAllByText("Unsaved changes").length).toBeGreaterThanOrEqual(1);
 
     fireEvent.click(screen.getByRole("radio", { name: "3D" }));
     expect(onViewModeChange).toHaveBeenCalledWith("3d");
 
     fireEvent.click(screen.getByLabelText("Display unit: cm"));
-    fireEvent.click(screen.getByRole("menuitem", { name: "m" }));
+    fireEvent.click(screen.getByRole("menuitemradio", { name: "m" }));
     expect(onDisplayUnitChange).toHaveBeenCalledWith("m");
 
     fireEvent.click(screen.getByRole("button", { name: /Import/i }));
@@ -309,7 +311,9 @@ describe("TopBar", () => {
     fireEvent.click(screen.getByRole("menuitem", { name: /Export as JSON/i }));
     expect(onExport).toHaveBeenCalled();
 
-    expect(screen.getByText(/Modified/i)).toBeInTheDocument();
+    const savePill = screen.getByTestId("open3d-save-status");
+    expect(savePill).toHaveAttribute("data-status", "unsaved");
+    expect(savePill).toHaveTextContent("Unsaved changes");
     expect(onSave).not.toHaveBeenCalled();
   });
 });
@@ -530,7 +534,9 @@ describe("WorkspaceShell", () => {
     fireEvent.click(within(viewModeGroup).getByRole("radio", { name: "3D" }));
     expect(onViewModeChange).toHaveBeenCalledWith("3d");
 
-    expect(screen.getByText(/Modified/i)).toBeInTheDocument();
+    const savePill = screen.getByTestId("open3d-save-status");
+    expect(savePill).toHaveAttribute("data-status", "unsaved");
+    expect(savePill).toHaveTextContent("Unsaved changes");
     expect(onSave).not.toHaveBeenCalled();
 
     const maximize = screen.getByRole("button", { name: /Focus — maximize canvas|Focus - maximize canvas/i });
@@ -572,19 +578,21 @@ describe("TDD editor coverage additions", () => {
     });
 
     it("maps semantic tools onto the existing canvas runtime", () => {
-      expect(runtimeToolFor("room")).toBe("wall");
+      // Match canvasTool.ts / canvasToolPaletteAuthority: deferred tools arm as select
+      // (no fake geometry); live aliases keep their Fabric pointer path.
+      expect(runtimeToolFor("room")).toBe("select"); // deferred
       expect(runtimeToolFor("opening")).toBe("door");
-      expect(runtimeToolFor("dimension")).toBe("text");
-      expect(runtimeToolFor("placement")).toBe("select");
+      expect(runtimeToolFor("dimension")).toBe("select"); // deferred
+      expect(runtimeToolFor("placement")).toBe("placement");
       expect(runtimeToolFor("pan")).toBe("pan");
     });
   });
 
   describe("useDoorWindowPlacement additional branches (TDD)", () => {
-    let project: ReturnType<typeof createOpen3dProject>;
+    let project: ReturnType<typeof createPlannerProject>;
 
     beforeEach(() => {
-      project = createOpen3dProject({ name: "TDD Placement" });
+      project = createPlannerProject({ name: "TDD Placement" });
     });
 
     it("handleWallClick returns result for door and window modes (exercises placement branches)", () => {
@@ -618,7 +626,7 @@ describe("TDD editor coverage additions", () => {
       expect(result.current.placementMode).toEqual({ mode: "edit-window", windowId: "win-1" });
 
       // update/delete return project transforms (cover fn bodies)
-      const dummyProject = createOpen3dProject({ name: "dummy" });
+      const dummyProject = createPlannerProject({ name: "dummy" });
       const updated = result.current.updateDoorProperties(dummyProject, "d1", { width: 900 });
       expect(updated).toBeDefined();
       const deleted = result.current.deleteWindow(dummyProject, "w1");
@@ -721,7 +729,7 @@ describe("TDD editor coverage additions", () => {
       expect(result.current.viewportTier).toBe("tablet");
     });
 
-    it("WorkspaceShell sets data-viewport after mount to measured tier (no SSR/client attr split)", () => {
+    it("WorkspaceShell sets data-viewport after mount to measured tier (no SSR/client attr split)", async () => {
       Object.defineProperty(window, "innerWidth", {
         configurable: true,
         value: PLANNER_VIEWPORT_BREAKPOINTS.tabletMax - 100,
@@ -731,12 +739,14 @@ describe("TDD editor coverage additions", () => {
           <div>canvas</div>
         </WorkspaceShell>,
       );
-      const withViewport = container.querySelectorAll("[data-viewport]");
-      // After mount both shell + workspace carry the measured tier (tablet)
-      expect(withViewport.length).toBe(2);
-      for (const el of withViewport) {
-        expect(el.getAttribute("data-viewport")).toBe("tablet");
-      }
+      // Attribute omitted until post-mount rAF (viewportAttrReady); then shell + workspace.
+      await waitFor(() => {
+        const withViewport = container.querySelectorAll("[data-viewport]");
+        expect(withViewport.length).toBe(2);
+        for (const el of withViewport) {
+          expect(el.getAttribute("data-viewport")).toBe("tablet");
+        }
+      });
     });
   });
 
@@ -825,13 +835,13 @@ describe("OOPlannerWorkspace (TDD)", () => {
     // initial may show loading
     await waitFor(() => {
       // after timeout/hydrate in effect, but fast path check container has root or status
-      expect(container.querySelector(".open3d-workspace-root") || container.querySelector("[aria-busy]")).toBeTruthy();
+      expect(container.querySelector(".planner-workspace-root") || container.querySelector("[aria-busy]")).toBeTruthy();
     }, { timeout: 100 });
   });
 
   it("professional workspace chrome deferred to browser e2e (TopBar mocked in this file)", () => {
     render(<OOPlannerWorkspace guestMode />);
-    expect(document.querySelector(".open3d-workspace-root")).toBeTruthy();
+    expect(document.querySelector(".planner-workspace-root")).toBeTruthy();
   });
 
   it("docking persists valid panel ratios to workspace prefs schema (task5)", () => {
@@ -840,7 +850,7 @@ describe("OOPlannerWorkspace (TDD)", () => {
       result.current.resize("left", 280, 0);
     });
     // after save effect path, check local has prefs with valid ratio
-    const stored = localStorage.getItem("open3d-workspace-preferences");
+    const stored = localStorage.getItem("planner-workspace-preferences");
     if (stored) {
       const p = JSON.parse(stored);
       expect(p.panelRatios.catalogue).toBeGreaterThanOrEqual(0.15);

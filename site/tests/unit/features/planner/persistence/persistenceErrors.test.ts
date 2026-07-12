@@ -1,41 +1,41 @@
 import { describe, expect, it } from "vitest";
 
-import { Open3dPersistenceError } from "@/features/planner/project/persistence/persistenceErrors";
+import { PlannerPersistenceError } from "@/features/planner/project/persistence/persistenceErrors";
 
 
 // ---------------------------------------------------------------------------
-// Open3dPersistenceError â€” class properties
+// PlannerPersistenceError â€” class properties
 // ---------------------------------------------------------------------------
 
-describe("Open3dPersistenceError", () => {
-  it("sets name to 'Open3dPersistenceError'", () => {
-    const err = new Open3dPersistenceError("network", "oops");
-    expect(err.name).toBe("Open3dPersistenceError");
+describe("PlannerPersistenceError", () => {
+  it("sets name to 'PlannerPersistenceError'", () => {
+    const err = new PlannerPersistenceError("network", "oops");
+    expect(err.name).toBe("PlannerPersistenceError");
   });
 
   it("preserves message", () => {
-    const err = new Open3dPersistenceError("corrupt", "data is broken");
+    const err = new PlannerPersistenceError("corrupt", "data is broken");
     expect(err.message).toBe("data is broken");
   });
 
   it("sets kind correctly", () => {
-    const err = new Open3dPersistenceError("forbidden", "no access");
+    const err = new PlannerPersistenceError("forbidden", "no access");
     expect(err.kind).toBe("forbidden");
   });
 
   it("preserves cause when provided", () => {
     const cause = new Error("root cause");
-    const err = new Open3dPersistenceError("network", "wrap", cause);
+    const err = new PlannerPersistenceError("network", "wrap", cause);
     expect(err.cause).toBe(cause);
   });
 
   it("cause is undefined when not provided", () => {
-    const err = new Open3dPersistenceError("not-found", "missing");
+    const err = new PlannerPersistenceError("not-found", "missing");
     expect(err.cause).toBeUndefined();
   });
 
   it("is an instance of Error", () => {
-    const err = new Open3dPersistenceError("conflict", "conflict");
+    const err = new PlannerPersistenceError("conflict", "conflict");
     expect(err).toBeInstanceOf(Error);
   });
 });

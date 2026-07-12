@@ -16,6 +16,8 @@ app/css/core/locked/{site|admin|planner}/
 | `app/planner/(marketing)/` | `locked/planner/marketing.css` |
 | `app/planner/(workspace)/` | `locked/planner/open3d-workspace.css` |
 
-`workspace-*.css` — open3d editor/canvas globals (formerly `app/css/ooplanner/`). Imported only through `open3d-workspace.css`.
+`workspace-*.css` — planner editor/canvas globals (formerly `app/css/ooplanner/`). Imported only through `open3d-workspace.css`.
+
+**Fence:** do not rename `open3d-workspace.css` / `open3d.css` / class prefixes here without a deliberate CSS unlock. Filenames are historical; live product is Fabric host on `/planner/guest` + `/planner/canvas`.
 
 Base fundamentals (`theme.css`, `utilities.css`, `components.css`) are siblings in `core/` — not inside `locked/`.

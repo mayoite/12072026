@@ -1,7 +1,7 @@
-import type { Open3dProject } from "../model/types";
+import type { PlannerProject } from "../model/types";
 import type { StagingPlannerDocument } from "./plannerDocumentTypes";
 import type { MemberPlanRepository, SaveResult } from "./memberPlanRepository";
-import { exportOpen3dProjectJson } from "./projectJson";
+import { exportPlannerProjectJson } from "./projectJson";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
 
 export type PromoteGuestResult =
@@ -20,7 +20,7 @@ export type PromoteGuestResult =
  * No local storage is read. The source is always the live in-memory project.
  */
 export async function promoteGuestSession(
-  inMemoryProject: Open3dProject | null,
+  inMemoryProject: PlannerProject | null,
   repository: MemberPlanRepository,
   idFactory: () => string = newEntityId,
 ): Promise<PromoteGuestResult> {
@@ -35,7 +35,7 @@ export async function promoteGuestSession(
     id: saveId,
     name: inMemoryProject.name ?? "My plan",
     unit_system: "metric",
-    sceneJson: exportOpen3dProjectJson(inMemoryProject),
+    sceneJson: exportPlannerProjectJson(inMemoryProject),
   };
 
   const result: SaveResult = await repository.save(document);

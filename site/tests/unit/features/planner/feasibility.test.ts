@@ -2,18 +2,18 @@ import { describe, expect, it } from "vitest";
 
 import { convertLegacyRectScene } from "@/features/planner/project/shared/document/legacyProject";
 import { snapDrawingPoint } from "@/features/planner/project/lib/geometry/snapping";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 import {
   displayValueToMm,
   formatFeetAndInches,
   parseFeetAndInches,
 } from "@/features/planner/project/model/units";
-import { addOpen3dWall } from "@/features/planner/project/model/actions/walls";
+import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
 import {
-  exportOpen3dProjectJson,
-  importOpen3dProjectJson,
+  exportPlannerProjectJson,
+  importPlannerProjectJson,
 } from "@/features/planner/project/persistence/projectJson";
-import { createOpen3dGuestProjectRepository } from "@/features/planner/project/persistence/guestProjectRepository";
+import { createPlannerGuestProjectRepository } from "@/features/planner/project/persistence/guestProjectRepository";
 
 function ids(...values: string[]) {
   let index = 0;
@@ -22,17 +22,17 @@ function ids(...values: string[]) {
 
 describe("Phase 01B feasibility", () => {
   it("adds one immutable canonical-mm wall and round-trips JSON", () => {
-    const project = createOpen3dProject({
+    const project = createPlannerProject({
       idFactory: ids("floor", "project"),
       now: "2026-07-03T00:00:00.000Z",
     });
-    const next = addOpen3dWall(
+    const next = addPlannerWall(
       project,
       { start: { x: 0, y: 0 }, end: { x: 6000, y: 0 } },
       ids("wall"),
     );
     expect(project.floors[0].walls).toEqual([]);
-    expect(importOpen3dProjectJson(exportOpen3dProjectJson(next))).toEqual(next);
+    expect(importPlannerProjectJson(exportPlannerProjectJson(next))).toEqual(next);
   });
 
   it("uses deterministic endpoint snapping and supports suppression", () => {
@@ -69,12 +69,12 @@ describe("Phase 01B feasibility", () => {
   });
 
   it("round-trips guest state in memory only", () => {
-    const repository = createOpen3dGuestProjectRepository();
-    const project = createOpen3dProject({
+    const repository = createPlannerGuestProjectRepository();
+    const project = createPlannerProject({
       idFactory: ids("floor", "project"),
     });
     repository.save(project);
     expect(repository.load(project.id)).toEqual(project);
-    expect(createOpen3dGuestProjectRepository().load(project.id)).toBeNull();
+    expect(createPlannerGuestProjectRepository().load(project.id)).toBeNull();
   });
 });

@@ -30,7 +30,9 @@ body.planner-workspace {
   color: var(--text-strong);
 }
 
-.open3d-workspace-root {
+/* Product root uses both names: planner-* (shell tests) + open3d-* (locked host CSS). */
+.open3d-workspace-root,
+.planner-workspace-root {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -51,7 +53,8 @@ body.planner-workspace {
 }
 
 @media (width < 48rem) {
-  .open3d-workspace-root {
+  .open3d-workspace-root,
+  .planner-workspace-root {
     overflow-x: hidden;
   }
 

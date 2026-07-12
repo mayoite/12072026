@@ -1,7 +1,7 @@
 import { Circle, Group, Line, Path, Polyline, Rect, type FabricObject } from "fabric";
 
 import { furnitureBlock2DFromItem } from "@/features/planner/project/catalog/furnitureBlock2D";
-import type { Open3dFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
 import type { Prim } from "@/lib/catalog/blocks2d";
 
 import type { FurnitureFabricPose } from "./furnitureFabricMapper";
@@ -159,7 +159,7 @@ function fabricPrim(
  * The document remains authoritative; Fabric JSON is never persisted.
  */
 export function createFabricFurnitureBlock(
-  item: Open3dFurnitureItem,
+  item: PlannerFurnitureItem,
   pose: FurnitureFabricPose,
   options: FabricBlockOptions,
 ): Group {
@@ -178,6 +178,8 @@ export function createFabricFurnitureBlock(
     evented: options.interactive && !pose.locked,
     hasControls: options.interactive && !pose.locked,
     hasBorders: options.interactive && !pose.locked,
+    // Entity metadata lives on the Group — never select orphan prims.
+    subTargetCheck: false,
     lockScalingX: true,
     lockScalingY: true,
     lockSkewingX: true,

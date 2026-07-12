@@ -1,5 +1,5 @@
 import { PLANNER_VIEWPORT } from "@/features/planner/lib/canvasBounds";
-import type { Open3dFloor } from "../../model/types";
+import type { PlannerFloor } from "../../model/types";
 import { getFloorBounds } from "../../shared/export/exportUtils";
 import type { CanvasTransform } from "./snapping";
 
@@ -71,7 +71,7 @@ function emptyFloorFitTransform(
 
 /** Frame the active floor inside the viewport (mm coordinates, native canvas transform). */
 export function fitCanvasTransformToFloor(
-  floor: Open3dFloor,
+  floor: PlannerFloor,
   viewportWidth: number,
   viewportHeight: number,
   paddingPx = PLANNER_VIEWPORT.fitPaddingPx,

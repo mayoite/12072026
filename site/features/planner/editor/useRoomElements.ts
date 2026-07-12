@@ -2,14 +2,14 @@
 
 import { useCallback, useState } from "react";
 import type {
-  Open3dAnnotation,
-  Open3dColumn,
-  Open3dGuide,
-  Open3dMeasurement,
-  Open3dPoint,
-  Open3dProject,
-  Open3dRoom,
-  Open3dStair,
+  PlannerAnnotation,
+  PlannerColumn,
+  PlannerGuide,
+  PlannerMeasurement,
+  PlannerPoint,
+  PlannerProject,
+  PlannerRoom,
+  PlannerStair,
 } from "@/features/planner/project/model/types";
 import {
   addStair,
@@ -40,12 +40,12 @@ export type RoomElementMode =
  * Provides state management and actions for rooms, labels, measurements,
  * annotations, stairs, columns, guides, and layers.
  */
-export function useRoomElements(project: Open3dProject | null) {
+export function useRoomElements(project: PlannerProject | null) {
   const [elementMode, setElementMode] = useState<RoomElementMode>({ mode: "select" });
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
 
   // Room categories
-  const roomCategories: Open3dRoom["roomType"][] = ["indoor", "outdoor", "garage", "utility"];
+  const roomCategories: PlannerRoom["roomType"][] = ["indoor", "outdoor", "garage", "utility"];
 
   // Stair types
   const stairTypes = ["straight", "l-shaped", "u-shaped", "spiral"] as const;
@@ -66,7 +66,7 @@ export function useRoomElements(project: Open3dProject | null) {
 
   // Update room properties
   const updateRoomProperties = useCallback(
-    (updatedProject: Open3dProject, roomId: string, updates: Partial<Open3dRoom>): Open3dProject => {
+    (updatedProject: PlannerProject, roomId: string, updates: Partial<PlannerRoom>): PlannerProject => {
       return updateRoom(updatedProject, roomId, updates).project;
     },
     [],
@@ -74,7 +74,7 @@ export function useRoomElements(project: Open3dProject | null) {
 
   // Delete room - manually filter since no removeRoom action exists
   const deleteRoom = useCallback(
-    (updatedProject: Open3dProject, roomId: string): Open3dProject => {
+    (updatedProject: PlannerProject, roomId: string): PlannerProject => {
       const p = { ...updatedProject };
       const floorIndex = p.floors.findIndex((f) => f.id === p.activeFloorId);
       if (floorIndex >= 0) {
@@ -91,7 +91,7 @@ export function useRoomElements(project: Open3dProject | null) {
 
   // Get room by ID
   const getRoomById = useCallback(
-    (roomId: string): Open3dRoom | undefined => {
+    (roomId: string): PlannerRoom | undefined => {
       if (!project) return undefined;
       const floor = project.floors.find((f) => f.id === project.activeFloorId);
       return floor?.rooms.find((r) => r.id === roomId);
@@ -100,14 +100,14 @@ export function useRoomElements(project: Open3dProject | null) {
   );
 
   // Get all rooms
-  const getAllRooms = useCallback((): Open3dRoom[] => {
+  const getAllRooms = useCallback((): PlannerRoom[] => {
     if (!project) return [];
     const floor = project.floors.find((f) => f.id === project.activeFloorId);
     return floor?.rooms ?? [];
   }, [project]);
 
   // Calculate room area
-  const calculateRoomArea = useCallback((room: Open3dRoom): number => {
+  const calculateRoomArea = useCallback((room: PlannerRoom): number => {
     return room.area ?? 0;
   }, []);
 
@@ -118,21 +118,21 @@ export function useRoomElements(project: Open3dProject | null) {
   }, []);
 
   const placeStair = useCallback(
-    (updatedProject: Open3dProject, position: Open3dPoint): Open3dProject => {
+    (updatedProject: PlannerProject, position: PlannerPoint): PlannerProject => {
       return addStair(updatedProject, position).project;
     },
     [],
   );
 
   const deleteStair = useCallback(
-    (updatedProject: Open3dProject, stairId: string): Open3dProject => {
+    (updatedProject: PlannerProject, stairId: string): PlannerProject => {
       return removeStair(updatedProject, stairId).project;
     },
     [],
   );
 
   // Get all stairs
-  const getAllStairs = useCallback((): Open3dStair[] => {
+  const getAllStairs = useCallback((): PlannerStair[] => {
     if (!project) return [];
     const floor = project.floors.find((f) => f.id === project.activeFloorId);
     return floor?.stairs ?? [];
@@ -145,21 +145,21 @@ export function useRoomElements(project: Open3dProject | null) {
   }, []);
 
   const placeColumn = useCallback(
-    (updatedProject: Open3dProject, position: Open3dPoint, shape: "square" | "round" = "square"): Open3dProject => {
+    (updatedProject: PlannerProject, position: PlannerPoint, shape: "square" | "round" = "square"): PlannerProject => {
       return addColumn(updatedProject, position, shape).project;
     },
     [],
   );
 
   const deleteColumn = useCallback(
-    (updatedProject: Open3dProject, columnId: string): Open3dProject => {
+    (updatedProject: PlannerProject, columnId: string): PlannerProject => {
       return removeColumn(updatedProject, columnId).project;
     },
     [],
   );
 
   // Get all columns
-  const getAllColumns = useCallback((): Open3dColumn[] => {
+  const getAllColumns = useCallback((): PlannerColumn[] => {
     if (!project) return [];
     const floor = project.floors.find((f) => f.id === project.activeFloorId);
     return floor?.columns ?? [];
@@ -172,21 +172,21 @@ export function useRoomElements(project: Open3dProject | null) {
   }, []);
 
   const placeMeasurement = useCallback(
-    (updatedProject: Open3dProject, x1: number, y1: number, x2: number, y2: number): Open3dProject => {
+    (updatedProject: PlannerProject, x1: number, y1: number, x2: number, y2: number): PlannerProject => {
       return addMeasurement(updatedProject, x1, y1, x2, y2).project;
     },
     [],
   );
 
   const deleteMeasurement = useCallback(
-    (updatedProject: Open3dProject, measurementId: string): Open3dProject => {
+    (updatedProject: PlannerProject, measurementId: string): PlannerProject => {
       return removeMeasurement(updatedProject, measurementId).project;
     },
     [],
   );
 
   // Get all measurements
-  const getAllMeasurements = useCallback((): Open3dMeasurement[] => {
+  const getAllMeasurements = useCallback((): PlannerMeasurement[] => {
     if (!project) return [];
     const floor = project.floors.find((f) => f.id === project.activeFloorId);
     return floor?.measurements ?? [];
@@ -203,21 +203,21 @@ export function useRoomElements(project: Open3dProject | null) {
   }, []);
 
   const placeAnnotation = useCallback(
-    (updatedProject: Open3dProject, x1: number, y1: number, x2: number, y2: number, label?: string): Open3dProject => {
+    (updatedProject: PlannerProject, x1: number, y1: number, x2: number, y2: number, label?: string): PlannerProject => {
       return addAnnotation(updatedProject, x1, y1, x2, y2, 400, label).project;
     },
     [],
   );
 
   const deleteAnnotation = useCallback(
-    (updatedProject: Open3dProject, annotationId: string): Open3dProject => {
+    (updatedProject: PlannerProject, annotationId: string): PlannerProject => {
       return removeAnnotation(updatedProject, annotationId).project;
     },
     [],
   );
 
   // Get all annotations
-  const getAllAnnotations = useCallback((): Open3dAnnotation[] => {
+  const getAllAnnotations = useCallback((): PlannerAnnotation[] => {
     if (!project) return [];
     const floor = project.floors.find((f) => f.id === project.activeFloorId);
     return floor?.annotations ?? [];
@@ -230,21 +230,21 @@ export function useRoomElements(project: Open3dProject | null) {
   }, []);
 
   const placeGuide = useCallback(
-    (updatedProject: Open3dProject, position: number, orientation: "horizontal" | "vertical" = "horizontal"): Open3dProject => {
+    (updatedProject: PlannerProject, position: number, orientation: "horizontal" | "vertical" = "horizontal"): PlannerProject => {
       return addGuide(updatedProject, orientation, position).project;
     },
     [],
   );
 
   const deleteGuide = useCallback(
-    (updatedProject: Open3dProject, guideId: string): Open3dProject => {
+    (updatedProject: PlannerProject, guideId: string): PlannerProject => {
       return removeGuide(updatedProject, guideId).project;
     },
     [],
   );
 
   // Get all guides
-  const getAllGuides = useCallback((): Open3dGuide[] => {
+  const getAllGuides = useCallback((): PlannerGuide[] => {
     if (!project) return [];
     const floor = project.floors.find((f) => f.id === project.activeFloorId);
     return floor?.guides ?? [];

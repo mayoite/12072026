@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildOpen3dSceneNodes } from "@/features/planner/3d/buildOpen3dSceneNodes";
+import { buildPlannerSceneNodes } from "@/features/planner/3d/buildPlannerSceneNodes";
 import {
   defaultCabinetV0Options,
   generateCabinetV0Footprint,
@@ -11,8 +11,8 @@ import {
   addWall,
   updateFurniture,
 } from "@/features/planner/project/model/operations/pureActions";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 import { degreesToRadians } from "@/features/planner/project/model/units";
 
 function ids(...values: string[]) {
@@ -20,7 +20,7 @@ function ids(...values: string[]) {
   return () => values[index++] ?? `generated-${index}`;
 }
 
-function activeFloor(project: Open3dProject) {
+function activeFloor(project: PlannerProject) {
   const floor = project.floors.find((f) => f.id === project.activeFloorId);
   if (!floor) {
     throw new Error(`Active floor not found: ${project.activeFloorId}`);
@@ -29,12 +29,12 @@ function activeFloor(project: Open3dProject) {
 }
 
 /**
- * 2D↔3D continuity via the same Open3dProject document (source of truth).
- * Pure unit path: create → place wall/furniture → buildOpen3dSceneNodes →
+ * 2D↔3D continuity via the same PlannerProject document (source of truth).
+ * Pure unit path: create → place wall/furniture → buildPlannerSceneNodes →
  * updateFurniture pose → rebuild; modular footprint still resolves after place.
  */
 describe("open3d document view continuity (2D↔3D same project)", () => {
-  it("buildOpen3dSceneNodes ids match wall/furniture; pose updates rebuild; modular footprint works after place", () => {
+  it("buildPlannerSceneNodes ids match wall/furniture; pose updates rebuild; modular footprint works after place", () => {
     const modularOptions = defaultCabinetV0Options({
       widthMm: 800,
       depthMm: 580,
@@ -43,7 +43,7 @@ describe("open3d document view continuity (2D↔3D same project)", () => {
       material: "oak",
     });
 
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "Document View Continuity",
       now: "2026-07-09T14:00:00.000Z",
@@ -77,7 +77,7 @@ describe("open3d document view continuity (2D↔3D same project)", () => {
     expect(floor.furniture[0]?.id).toBe("furn-1");
 
     // 3D rebuild from document: node ids match entity ids; pose from document
-    const nodes = buildOpen3dSceneNodes(project);
+    const nodes = buildPlannerSceneNodes(project);
     expect(nodes).toHaveLength(2);
 
     const wallNode = nodes.find((n) => n.kind === "wall");
@@ -122,7 +122,7 @@ describe("open3d document view continuity (2D↔3D same project)", () => {
     expect(floorAfter.walls[0]?.id).toBe("wall-1");
     expect(floorAfter.furniture[0]?.id).toBe("furn-1");
 
-    const rebuilt = buildOpen3dSceneNodes(project);
+    const rebuilt = buildPlannerSceneNodes(project);
     expect(rebuilt).toHaveLength(2);
 
     const wallAfter = rebuilt.find((n) => n.kind === "wall");

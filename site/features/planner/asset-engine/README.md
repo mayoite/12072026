@@ -48,7 +48,7 @@
 ## What is still NOT true
 
 - Admin disk `BlockDescriptor` and CLI fixtures are different shapes — S1 bridges compile, not schema unification.
-- Open3d 3D **does not load** `glbUrl` / `meshUrl`; it rebuilds procedural mesh.
+- Planner 3D **does not load** `glbUrl` / `meshUrl`; it rebuilds procedural mesh.
 - Supabase persist / CDN upload of modular GLB is not wired as automatic publish.
 - Full parametric component library (L/U, hardware) is not this skeleton.
 - V1 `SvgBlockDefinitionV1` is not rewritten into pipelineCore (reference-only).

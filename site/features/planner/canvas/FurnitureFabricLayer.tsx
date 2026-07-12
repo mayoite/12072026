@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Client-only Fabric stage for open3d furniture (Fabric 2B vertical slice).
+ * Client-only Fabric stage for planner furniture (Fabric 2B vertical slice).
  * Mounts fabric.Canvas, rebuilds Rects from document furniture with entityId,
  * and emits object:modified as project-mm pose updates. Never persists Fabric JSON.
  */
@@ -9,7 +9,7 @@
 import { useEffect, useRef } from "react";
 import { Canvas, Rect, type FabricObject, type ModifiedEvent } from "fabric";
 
-import type { Open3dFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
 import type { CanvasTransform } from "@/features/planner/project/lib/geometry/snapping";
 import { resolvePaintColor } from "@/features/planner/project/shared/readThemeColor";
 import { PLANNER_COLOR_TOKENS } from "@/features/planner/project/shared/themeColorTokens";
@@ -24,7 +24,7 @@ import {
 import styles from "./furnitureFabricLayer.module.css";
 
 export type FurnitureFabricLayerProps = {
-  furniture: readonly Open3dFurnitureItem[];
+  furniture: readonly PlannerFurnitureItem[];
   /** Viewport transform; defaults to Fabric stage initial. */
   transform?: CanvasTransform;
   /**
@@ -35,7 +35,7 @@ export type FurnitureFabricLayerProps = {
   onFurnitureModified?: (update: FurnitureDocumentPoseUpdate) => void;
 };
 
-function resolveFurnitureFill(item: Open3dFurnitureItem): string {
+function resolveFurnitureFill(item: PlannerFurnitureItem): string {
   try {
     return resolvePaintColor(item.color, PLANNER_COLOR_TOKENS.furnitureDefault);
   } catch {
@@ -175,7 +175,7 @@ export function FurnitureFabricLayer({
     <div
       ref={hostRef}
       className={hostClassName}
-      data-testid="open3d-fabric-furniture-layer"
+      data-testid="planner-fabric-furniture-layer"
       data-interactive={interactive ? "true" : "false"}
       aria-hidden={interactive ? undefined : true}
     >

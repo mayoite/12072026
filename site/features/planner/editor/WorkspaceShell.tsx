@@ -5,9 +5,9 @@ import { useDockingSystem, type PanelId } from "./useDockingSystem";
 import { PanelContainer } from "./PanelContainer";
 import { TopBar } from "./TopBar";
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
-import type { Open3dDisplayUnit } from "@/features/planner/project/model/types";
-import type { Open3dSaveStatus } from "@/features/planner/project/persistence/useOpen3dWorkspaceAutosave";
-import type { Open3dPersistStorage } from "./workspaceStatusLabels";
+import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
+import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
+import type { PlannerPersistStorage } from "./workspaceStatusLabels";
 import type { WorkspacePlanMetrics } from "./workspacePlanMetrics";
 import styles from "./workspace.module.css";
 
@@ -37,11 +37,11 @@ export interface WorkspaceShellProps {
    * Autosave state machine — pass-through to TopBar only.
    * Label copy is owned by the caller via saveStatusLabel (no dual table here).
    */
-  saveStatus?: Open3dSaveStatus;
-  /** Pre-formatted honest status label (from open3dSaveStatusLabel / caller). */
+  saveStatus?: PlannerSaveStatus;
+  /** Pre-formatted honest status label (from plannerSaveStatusLabel / caller). */
   saveStatusLabel?: string;
   /** Where the last successful persist landed — pass-through for TopBar data attrs. */
-  storage?: Open3dPersistStorage;
+  storage?: PlannerPersistStorage;
   /** When false, UI must not imply account/cloud save. Pass-through only. */
   cloudEnabled?: boolean;
   /** Left panel content */
@@ -72,9 +72,9 @@ export interface WorkspaceShellProps {
   /** Status bar right content */
   statusRight?: React.ReactNode;
   /** Display unit for measurements */
-  displayUnit?: Open3dDisplayUnit;
+  displayUnit?: PlannerDisplayUnit;
   /** Called when display unit changes */
-  onDisplayUnitChange?: (unit: Open3dDisplayUnit) => void;
+  onDisplayUnitChange?: (unit: PlannerDisplayUnit) => void;
   /** When true, shell fills parent height instead of viewport height */
   fillParent?: boolean;
   /** Density mode from workspace prefs (compact | touch) */
@@ -328,7 +328,7 @@ export function WorkspaceShell({
       <div className={styles.workspace} data-viewport={dataViewport}>
         {/* small-screen .panelBackdrop + activePanel (from useDockingSystem) + mobile actions via TopBar.
          * Resolves PLAN-FAIL-0414. GS: design §7, benchmark BP-04/BP-05 + Figma minimize + anti-copy (no donor).
-         * CSS locked in workspace.module.css + planner-responsive.css. Canonical ref: open3d/editor/ + puck registry for admin UI.
+         * CSS locked in workspace.module.css + planner-responsive.css. Canonical ref: editor/ + puck registry for admin UI.
          */}
         {viewportTier === "small" && (activePanel === "left" || activePanel === "right") && (
           <button

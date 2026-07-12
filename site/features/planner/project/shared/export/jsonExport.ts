@@ -1,12 +1,12 @@
-import type { Open3dPlannerSceneEnvelope, Open3dProject } from "../../model/types";
-import { createOpen3dSceneEnvelope } from "../../model/project";
+import type { PlannerSceneEnvelope, PlannerProject } from "../../model/types";
+import { createPlannerSceneEnvelope } from "../../model/project";
 
 /**
  * Export result containing the envelope and any metadata.
  */
 export interface ExportResult {
   success: boolean;
-  envelope: Open3dPlannerSceneEnvelope;
+  envelope: PlannerSceneEnvelope;
   error?: string;
 }
 
@@ -27,7 +27,7 @@ export interface JsonExportOptions {
  * @returns The export result with envelope
  */
 export function exportToJson(
-  project: Open3dProject,
+  project: PlannerProject,
   options: JsonExportOptions = {},
 ): ExportResult {
   try {
@@ -62,12 +62,12 @@ export function exportToJson(
       floors = [floor];
     }
 
-    const filteredProject: Open3dProject = {
+    const filteredProject: PlannerProject = {
       ...project,
       floors,
     };
 
-    const envelope = createOpen3dSceneEnvelope(filteredProject);
+    const envelope = createPlannerSceneEnvelope(filteredProject);
 
     return {
       success: true,
@@ -89,7 +89,7 @@ export function exportToJson(
  * @returns JSON string
  */
 export function envelopeToJsonString(
-  envelope: Open3dPlannerSceneEnvelope,
+  envelope: PlannerSceneEnvelope,
   pretty = false,
 ): string {
   return JSON.stringify(envelope, null, pretty ? 2 : 0);
@@ -98,7 +98,7 @@ export function envelopeToJsonString(
 /**
  * Creates an empty placeholder envelope for error cases.
  */
-function createEnvelopePlaceholder(): Open3dPlannerSceneEnvelope {
+function createEnvelopePlaceholder(): PlannerSceneEnvelope {
   return {
     type: "open3d-floorplan-project",
     version: 1,

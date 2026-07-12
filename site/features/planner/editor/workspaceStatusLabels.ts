@@ -2,7 +2,7 @@ import type { PlannerTool } from "./canvasTool";
 import { CANVAS_TOOL_LABELS } from "./canvasTool";
 import type { SnapKind } from "@/features/planner/project/lib/geometry/snapping";
 import type { CanvasSelection } from "./useWorkspaceCanvas";
-import type { Open3dSaveStatus } from "@/features/planner/project/persistence/useOpen3dWorkspaceAutosave";
+import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
 
 const SELECTION_LABELS: Record<Exclude<CanvasSelection["type"], "none">, string> = {
   wall: "Wall",
@@ -28,11 +28,11 @@ export function formatSelectionStatus(selection: CanvasSelection): string | null
   return count === 1 ? `${label} selected` : `${count} ${label.toLowerCase()}s selected`;
 }
 
-export type Open3dPersistStorage = "local" | "cloud";
+export type PlannerPersistStorage = "local" | "cloud";
 
-export type Open3dSaveStatusLabelInput = {
-  status: Open3dSaveStatus;
-  storage: Open3dPersistStorage;
+export type PlannerSaveStatusLabelInput = {
+  status: PlannerSaveStatus;
+  storage: PlannerPersistStorage;
   lastSavedAt: string | null;
   cloudEnabled: boolean;
   guestMode?: boolean;
@@ -42,9 +42,9 @@ export type Open3dSaveStatusLabelInput = {
  * Single source of truth for TopBar + status-bar save copy (W6).
  * When cloudEnabled is false, storage is forced to local for labeling.
  */
-export function open3dSaveStatusLabel(input: Open3dSaveStatusLabelInput): string {
+export function plannerSaveStatusLabel(input: PlannerSaveStatusLabelInput): string {
   const guestMode = input.guestMode ?? false;
-  const storage: Open3dPersistStorage =
+  const storage: PlannerPersistStorage =
     input.cloudEnabled && input.storage === "cloud" ? "cloud" : "local";
 
   if (storage === "cloud") {
@@ -80,10 +80,10 @@ export function open3dSaveStatusLabel(input: Open3dSaveStatusLabelInput): string
 
 /** Back-compat wrapper — always local-only path used by open3d today. */
 export function formatAutosaveStatus(
-  status: Open3dSaveStatus,
+  status: PlannerSaveStatus,
   guestMode: boolean,
 ): string {
-  return open3dSaveStatusLabel({
+  return plannerSaveStatusLabel({
     status,
     storage: "local",
     lastSavedAt: null,

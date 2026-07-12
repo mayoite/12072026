@@ -1,8 +1,10 @@
 /**
- * Public data surface for the active planner feature.
+ * Top-level planner store surface (domain / portal / API).
+ * Live guest/canvas project store lives under `features/planner/project/store/`.
+ * Do not treat this tree as the plan canvas host.
+ * @see features/planner/CONTENTS.md — Dual trees
  *
- * This gives planner-owned consumers a single stable import point for
- * canonical data stores and persistence helpers.
+ * Stable import point for planner-owned consumers of domain stores + persistence helpers.
  */
 
 export * from "./aiStore";

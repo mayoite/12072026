@@ -9,16 +9,16 @@ import {
   isSystemGeneratedGlbUrl,
   rejectDesignerStaticGlbUrl,
 } from "@/features/planner/lib/glbAssetPolicy";
-import type { Open3dFurnitureItem } from "@/features/planner/project/model/types";
+import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
 import {
   placeCatalogItemInProject,
 } from "@/features/planner/project/catalog/placementAction";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
 function sampleFurniture(
-  overrides: Partial<Open3dFurnitureItem> = {},
-): Open3dFurnitureItem {
+  overrides: Partial<PlannerFurnitureItem> = {},
+): PlannerFurnitureItem {
   return {
     id: "11111111-1111-4111-8111-111111111111",
     catalogId: "cabinet-v0",
@@ -31,7 +31,7 @@ function sampleFurniture(
   };
 }
 
-function emptyProject(): Open3dProject {
+function emptyProject(): PlannerProject {
   return {
     id: "project-glb-stamp",
     name: "GLB stamp",
@@ -61,7 +61,7 @@ function emptyProject(): Open3dProject {
   };
 }
 
-function modularCatalogItem(): Open3dCatalogItem {
+function modularCatalogItem(): PlannerCatalogItem {
   return {
     id: "cabinet-v0",
     slug: "cabinet-v0",

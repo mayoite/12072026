@@ -1,8 +1,8 @@
-import type { Open3dCatalogItem, Open3dCatalogCategory } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem, PlannerCatalogCategory } from "@/features/planner/project/catalog/catalogTypes";
 import { WORKSTATION_V0_DEMO_CATALOG_ITEMS } from "@/features/planner/project/catalog/workstationCatalogV0";
 import { proofCatalogItem } from "@/features/planner/project/catalog/proofCatalog";
 
-function createCatalogItemFromProof(proof: typeof proofCatalogItem): Open3dCatalogItem {
+function createCatalogItemFromProof(proof: typeof proofCatalogItem): PlannerCatalogItem {
   return {
     id: proof.id,
     slug: proof.id,
@@ -10,7 +10,7 @@ function createCatalogItemFromProof(proof: typeof proofCatalogItem): Open3dCatal
     name: proof.name,
     shortName: proof.name.slice(0, 30),
     description: `Proof item: ${proof.name}`,
-    category: "Furniture" as Open3dCatalogCategory,
+    category: "Furniture" as PlannerCatalogCategory,
     subCategory: "Chairs",
     taxonomyPath: "Furniture > Chairs",
     dimensions: {
@@ -42,7 +42,7 @@ function createCatalogItemFromProof(proof: typeof proofCatalogItem): Open3dCatal
 }
 
 /** Offline catalog seed used when the live API is unavailable. */
-export const OPEN3D_DEMO_CATALOG_ITEMS: Open3dCatalogItem[] = [
+export const PLANNER_DEMO_CATALOG_ITEMS: PlannerCatalogItem[] = [
   createCatalogItemFromProof(proofCatalogItem),
   {
     id: "sample-sofa-1",
@@ -170,6 +170,6 @@ export const OPEN3D_DEMO_CATALOG_ITEMS: Open3dCatalogItem[] = [
   ...WORKSTATION_V0_DEMO_CATALOG_ITEMS,
 ];
 
-export function getDemoCatalogItemById(id: string): Open3dCatalogItem | undefined {
-  return OPEN3D_DEMO_CATALOG_ITEMS.find((item) => item.id === id);
+export function getDemoCatalogItemById(id: string): PlannerCatalogItem | undefined {
+  return PLANNER_DEMO_CATALOG_ITEMS.find((item) => item.id === id);
 }

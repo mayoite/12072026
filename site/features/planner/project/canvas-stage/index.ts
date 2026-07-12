@@ -8,6 +8,6 @@ export {
 } from "@/features/planner/canvas/PlannerFabricStage";
 
 export type {
-  Open3dCanvasStageHandle as PlannerCanvasStageHandle,
+  PlannerCanvasStageHandle as PlannerCanvasStageHandle,
   CanvasStatusSnapshot,
 } from "@/features/planner/canvas/canvasStageTypes";

@@ -1,5 +1,5 @@
 /**
- * Pure UI routing: which open3d inventory placements use the modular GLB
+ * Pure UI routing: which planner inventory placements use the modular GLB
  * write+stamp path vs plain placeCatalogItemInProject.
  *
  * Narrow by design: only the demo modular SKU id/slug `cabinet-v0`.
@@ -16,7 +16,7 @@ export type ModularGlbPlaceCatalogRef = {
 };
 
 /**
- * True when open3d inventory place should call the modular write+stamp path
+ * True when planner inventory place should call the modular write+stamp path
  * (`placeModularWithGeneratedGlbPlan` / browser equivalent) so G8 can load.
  *
  * Matches catalog id **or** slug `cabinet-v0` only.

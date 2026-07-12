@@ -1,5 +1,5 @@
 /**
- * Sketch-to-plan client for open3d-next-staging.
+ * Sketch-to-plan client for planner-next-staging.
  *
  * Provides a typed interface for converting sketches/images
  * to editable floor plan geometry through the AI service.

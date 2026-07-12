@@ -3,7 +3,8 @@ import fs from "fs";
 import path from "path";
 
 test.describe("Planner Shell 100dvh Layout constraints", () => {
-  const routes = ["/planner/guest/", "/planner/canvas/", "/planner/open3d/"];
+  // Live hosts only; /planner/open3d is next.config 301 → canvas (not a separate shell)
+  const routes = ["/planner/guest/", "/planner/canvas/"];
   
   test.beforeAll(() => {
     // Ensure the output directory exists for Phase 1 evidence

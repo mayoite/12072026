@@ -86,4 +86,17 @@ describe("selectionFromFabricTarget (Fabric → setSelection)", () => {
     });
     expect(selectionFromFabricTarget(empty)).toBeNull();
   });
+
+  it("walks parent Group when a Block2D prim is the active target", () => {
+    const group = makeCarrier({
+      [CANVAS_ENTITY_TYPE_PROP]: "furniture",
+      [FURNITURE_ENTITY_ID_PROP]: "furn-group",
+    });
+    const prim = makeCarrier({});
+    (prim as { group?: unknown }).group = group;
+    expect(selectionFromFabricTarget(prim as never)).toEqual({
+      type: "furniture",
+      id: "furn-group",
+    });
+  });
 });

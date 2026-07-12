@@ -8,7 +8,7 @@ import {
 } from "@/features/planner/project/ai/aiAdvisor";
 import { createRectangularRoomProject } from "@/features/planner/project/model/project";
 import type { AiProposal } from "@/features/planner/project/ai/aiAdvisor";
-import type { Open3dDisplayUnit } from "@/features/planner/project/model/types";
+import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
 
 function ids(...values: string[]) {
   let index = 0;
@@ -205,7 +205,7 @@ describe("aiAdvisor", () => {
         confidence: 0.8,
         description: "Test",
         details: { catalogId: "chair-standard", position: { x: 0, y: 0 } },
-        units: "invalid" as Open3dDisplayUnit,
+        units: "invalid" as PlannerDisplayUnit,
       };
       const result = validateAiProposal(proposal, summary);
       expect(result.valid).toBe(false);

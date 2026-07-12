@@ -11,10 +11,10 @@ import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/projec
 import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
 import { placeCatalogItemInProject } from "@/features/planner/project/catalog/placementAction";
 import { isSystemGeneratedGlbUrl } from "@/features/planner/lib/glbAssetPolicy";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 import type {
-  Open3dFurnitureItem,
-  Open3dProject,
+  PlannerFurnitureItem,
+  PlannerProject,
 } from "@/features/planner/project/model/types";
 
 const tempRoots: string[] = [];
@@ -38,7 +38,7 @@ afterEach(() => {
   }
 });
 
-function emptyProject(): Open3dProject {
+function emptyProject(): PlannerProject {
   return {
     id: "project-modular-place-stamp",
     name: "Modular place stamp",
@@ -69,8 +69,8 @@ function emptyProject(): Open3dProject {
 }
 
 function modularCatalogItem(
-  overrides: Partial<Open3dCatalogItem> = {},
-): Open3dCatalogItem {
+  overrides: Partial<PlannerCatalogItem> = {},
+): PlannerCatalogItem {
   return {
     id: "cabinet-v0",
     slug: "cabinet-v0",
@@ -102,7 +102,7 @@ function modularCatalogItem(
   };
 }
 
-function boxCatalogItem(): Open3dCatalogItem {
+function boxCatalogItem(): PlannerCatalogItem {
   return {
     id: "sample-desk-1",
     slug: "sample-desk-1",
@@ -134,8 +134,8 @@ function boxCatalogItem(): Open3dCatalogItem {
 }
 
 function sampleModularFurniture(
-  overrides: Partial<Open3dFurnitureItem> = {},
-): Open3dFurnitureItem {
+  overrides: Partial<PlannerFurnitureItem> = {},
+): PlannerFurnitureItem {
   return {
     id: "11111111-1111-4111-8111-111111111111",
     catalogId: "cabinet-v0",

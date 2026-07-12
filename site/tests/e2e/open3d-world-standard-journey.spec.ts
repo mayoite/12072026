@@ -74,7 +74,7 @@ test.beforeAll(() => {
 });
 
 type JourneyProof = {
-  routeUsed: "open3d" | "guest" | "unknown";
+  routeUsed: "canvas" | "guest" | "unknown";
   placePath: "catalog";
   wallsBefore: number;
   wallsAfterDraw: number;
@@ -120,17 +120,17 @@ function emptyProof(): JourneyProof {
   };
 }
 
-/** Primary: /planner/open3d · Fallback: guest (?plannerDevTools=1 owned by helper). */
+/** Primary: /planner/canvas · Fallback: guest (?plannerDevTools=1 owned by helper). */
 async function enterWorldStandardPlanner(
   page: Page,
-): Promise<"open3d" | "guest"> {
+): Promise<"canvas" | "guest"> {
   await clearPlannerStorage(page);
-  await page.goto("/planner/open3d/?plannerDevTools=1", {
+  await page.goto("/planner/canvas/?plannerDevTools=1", {
     waitUntil: "domcontentloaded",
     timeout: 60_000,
   });
   const topbar = page.locator(".pw-topbar");
-  // Live sole 2D host = Fabric stage (archive planner-2d-canvas is not product).
+  // Live sole 2D host = Fabric stage (testid planner-fabric-stage).
   const fabricStage = page.locator(PLANNER_FABRIC_STAGE);
   const canvas = page.locator(PLANNER_PRIMARY_CANVAS);
   const ready = await Promise.race([
@@ -139,7 +139,7 @@ async function enterWorldStandardPlanner(
   ]).catch(() => false);
 
   if (ready) {
-    // open3d may still show guest setup gate — complete it without flipping routeUsed.
+    // Canvas may still show guest setup gate — complete it without flipping routeUsed.
     const setupHeading = page.getByRole("heading", { name: /Set up your space/i });
     if (await setupHeading.isVisible().catch(() => false)) {
       await page.getByLabel("Project name").fill("W1-W2 world-standard");
@@ -152,7 +152,7 @@ async function enterWorldStandardPlanner(
     await expect(fabricStage).toBeVisible({ timeout: 25_000 });
     await expect(canvas).toBeVisible({ timeout: 25_000 });
     await expect(page.locator('[data-testid="planner-2d-canvas"]')).toHaveCount(0);
-    return "open3d";
+    return "canvas";
   }
 
   await enterGuestPlannerWorkspace(page, {

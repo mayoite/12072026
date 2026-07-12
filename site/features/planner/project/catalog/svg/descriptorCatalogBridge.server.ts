@@ -4,7 +4,7 @@ import {
   catalogSlugSearchTags,
   humanizeCatalogSlug,
 } from "../catalogLabelUtils";
-import type { Open3dCatalogItem } from "../catalogTypes";
+import type { PlannerCatalogItem } from "../catalogTypes";
 import { buildShortName } from "../catalogTaxonomy";
 import { buildSvgCatalogPublicUrl } from "./svgPreviewAssets";
 import type { BlockDescriptor } from "./svgTypes";
@@ -12,7 +12,7 @@ import type { BlockDescriptor } from "./svgTypes";
 /** Map on-disk BlockDescriptors to planner catalog items (catalogue-first / BP-06). */
 export function mapDescriptorToCatalogItem(
   descriptor: BlockDescriptor,
-): Open3dCatalogItem {
+): PlannerCatalogItem {
   const svgUrl = buildSvgCatalogPublicUrl(descriptor.slug);
   const displayName = humanizeCatalogSlug(descriptor.slug);
   const shortName = buildShortName(displayName);
@@ -62,6 +62,6 @@ export function mapDescriptorToCatalogItem(
 
 export function mapDescriptorsToCatalogItems(
   descriptors: readonly BlockDescriptor[],
-): Open3dCatalogItem[] {
+): PlannerCatalogItem[] {
   return descriptors.map(mapDescriptorToCatalogItem);
 }

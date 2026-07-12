@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useDoorWindowPlacement } from "@/features/planner/editor/useDoorWindowPlacement";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 
 describe("useDoorWindowPlacement", () => {
-  let project: ReturnType<typeof createOpen3dProject>;
+  let project: ReturnType<typeof createPlannerProject>;
 
   beforeEach(() => {
-    project = createOpen3dProject({ name: "Test Project" });
+    project = createPlannerProject({ name: "Test Project" });
   });
 
   describe("initial state", () => {
@@ -114,10 +114,10 @@ describe("useDoorWindowPlacement", () => {
 
 // TDD RED first: added cases exercising handle + edit/update before any source change
 describe("useDoorWindowPlacement TDD full (placement, edit, update)", () => {
-  let project: ReturnType<typeof createOpen3dProject>;
+  let project: ReturnType<typeof createPlannerProject>;
 
   beforeEach(() => {
-    project = createOpen3dProject({ name: "TDD DoorWin" });
+    project = createPlannerProject({ name: "TDD DoorWin" });
   });
 
   it("cancels and resets hover/selected", () => {
@@ -131,7 +131,7 @@ describe("useDoorWindowPlacement TDD full (placement, edit, update)", () => {
 
   it("update/delete fns return transformed projects", () => {
     const { result } = renderHook(() => useDoorWindowPlacement(project));
-    const p = createOpen3dProject({ name: "p" });
+    const p = createPlannerProject({ name: "p" });
     expect(result.current.updateWindowProperties(p, "x", { height: 1200 })).toBeDefined();
     expect(result.current.deleteDoor(p, "d1")).toBeDefined();
   });

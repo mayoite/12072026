@@ -1,6 +1,6 @@
 /**
  * Suggested layout apply — archive fabric runtime removed.
- * Prefer WorkspaceAiBridge / open3d project apply paths.
+ * Prefer WorkspaceAiBridge / planner project apply paths.
  */
 import type { SuggestedLayoutJson } from "./types";
 import { validateLayoutSchema } from "./aiStatus";

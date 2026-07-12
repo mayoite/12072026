@@ -10,15 +10,15 @@ import {
   workstationConfigKey,
   workstationFootprintMm,
 } from "@/features/planner/project/catalog/workstationSystemV0";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 
 function ids(...values: string[]) {
   let index = 0;
   return () => values[index++] ?? `generated-${index}`;
 }
 
-function activeFloor(project: Open3dProject) {
+function activeFloor(project: PlannerProject) {
   const floor = project.floors.find((f) => f.id === project.activeFloorId);
   if (!floor) {
     throw new Error(`Active floor not found: ${project.activeFloorId}`);
@@ -36,7 +36,7 @@ describe("placeWorkstationConfigOnProject", () => {
     const fp = workstationFootprintMm(config);
     expect(fp).toEqual({ widthMm: 1500, depthMm: 600 });
 
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "WS Place Linear",
       now: "2026-07-09T16:00:00.000Z",
@@ -81,7 +81,7 @@ describe("placeWorkstationConfigOnProject", () => {
     const layouts = layoutWorkstationInstances(config, 3, { columns: 3 });
     expect(layouts).toHaveLength(3);
 
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "WS Place Grid",
       now: "2026-07-09T16:00:00.000Z",
@@ -129,7 +129,7 @@ describe("placeWorkstationInstancesOnProject", () => {
       size: { lengthMm: 1200, depthMm: 600 },
       modules: ["desk", "panel"],
     });
-    let project = createOpen3dProject({
+    let project = createPlannerProject({
       idFactory: ids("floor-1", "project-1"),
       name: "WS Batch",
       now: "2026-07-09T18:00:00.000Z",
@@ -161,7 +161,7 @@ describe("placeWorkstationInstancesOnProject", () => {
     });
 
     for (const count of [2, 4, 10] as const) {
-      const project = createOpen3dProject({
+      const project = createPlannerProject({
         idFactory: ids(`floor-${count}`, `project-${count}`),
         name: `WS Batch ${count}`,
         now: "2026-07-09T18:00:00.000Z",

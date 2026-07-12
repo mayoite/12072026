@@ -1,48 +1,48 @@
 import type {
-  Open3dAnnotation,
-  Open3dColumn,
-  Open3dDoor,
-  Open3dElementGroup,
-  Open3dFurnitureItem,
-  Open3dGuide,
-  Open3dMeasurement,
-  Open3dProject,
-  Open3dRoom,
-  Open3dStair,
-  Open3dTextAnnotation,
-  Open3dWall,
-  Open3dWindow,
+  PlannerAnnotation,
+  PlannerColumn,
+  PlannerDoor,
+  PlannerElementGroup,
+  PlannerFurnitureItem,
+  PlannerGuide,
+  PlannerMeasurement,
+  PlannerProject,
+  PlannerRoom,
+  PlannerStair,
+  PlannerTextAnnotation,
+  PlannerWall,
+  PlannerWindow,
 } from "../types";
 
-export interface Open3dEntityMap {
-  walls: Open3dWall;
-  rooms: Open3dRoom;
-  doors: Open3dDoor;
-  windows: Open3dWindow;
-  furniture: Open3dFurnitureItem;
-  stairs: Open3dStair;
-  columns: Open3dColumn;
-  guides: Open3dGuide;
-  measurements: Open3dMeasurement;
-  annotations: Open3dAnnotation;
-  textAnnotations: Open3dTextAnnotation;
-  groups: Open3dElementGroup;
+export interface PlannerEntityMap {
+  walls: PlannerWall;
+  rooms: PlannerRoom;
+  doors: PlannerDoor;
+  windows: PlannerWindow;
+  furniture: PlannerFurnitureItem;
+  stairs: PlannerStair;
+  columns: PlannerColumn;
+  guides: PlannerGuide;
+  measurements: PlannerMeasurement;
+  annotations: PlannerAnnotation;
+  textAnnotations: PlannerTextAnnotation;
+  groups: PlannerElementGroup;
 }
 
-export type Open3dEntityCollection = keyof Open3dEntityMap;
+export type PlannerEntityCollection = keyof PlannerEntityMap;
 
-export type Open3dProjectAction = {
-  [Collection in Open3dEntityCollection]:
+export type PlannerProjectAction = {
+  [Collection in PlannerEntityCollection]:
     | {
         type: "add";
         collection: Collection;
-        entity: Open3dEntityMap[Collection];
+        entity: PlannerEntityMap[Collection];
       }
     | {
         type: "update";
         collection: Collection;
         id: string;
-        updates: Partial<Open3dEntityMap[Collection]>;
+        updates: Partial<PlannerEntityMap[Collection]>;
       }
     | {
         type: "delete";
@@ -55,19 +55,19 @@ export type Open3dProjectAction = {
         id: string;
         newId: string;
       };
-}[Open3dEntityCollection];
+}[PlannerEntityCollection];
 
-export function activeFloorOrThrow(project: Open3dProject) {
+export function activeFloorOrThrow(project: PlannerProject) {
   const floor = project.floors.find((candidate) => candidate.id === project.activeFloorId);
   if (!floor) throw new Error("Active floor not found");
   return floor;
 }
 
-export function applyOpen3dProjectAction(
-  project: Open3dProject,
-  action: Open3dProjectAction,
+export function applyPlannerProjectAction(
+  project: PlannerProject,
+  action: PlannerProjectAction,
   now = new Date().toISOString(),
-): Open3dProject {
+): PlannerProject {
   const activeFloor = activeFloorOrThrow(project);
   const collection = activeFloor[action.collection] as Array<{ id: string }>;
   let nextCollection: Array<{ id: string }>;
@@ -111,25 +111,25 @@ export function applyOpen3dProjectAction(
   };
 }
 
-export function applyOpen3dProjectTransaction(
-  project: Open3dProject,
-  actions: readonly Open3dProjectAction[],
+export function applyPlannerProjectTransaction(
+  project: PlannerProject,
+  actions: readonly PlannerProjectAction[],
   now = new Date().toISOString(),
-): Open3dProject {
+): PlannerProject {
   return actions.reduce(
-    (current, action) => applyOpen3dProjectAction(current, action, now),
+    (current, action) => applyPlannerProjectAction(current, action, now),
     project,
   );
 }
 
-export function moveOpen3dEntity(
-  project: Open3dProject,
+export function movePlannerEntity(
+  project: PlannerProject,
   collection: "furniture" | "stairs" | "columns",
   id: string,
   position: { x: number; y: number },
   now?: string,
-): Open3dProject {
-  return applyOpen3dProjectAction(
+): PlannerProject {
+  return applyPlannerProjectAction(
     project,
     { type: "update", collection, id, updates: { position } },
     now,

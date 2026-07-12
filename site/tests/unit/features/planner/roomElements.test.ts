@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useRoomElements } from "@/features/planner/editor/useRoomElements";
-import { createOpen3dProject } from "@/features/planner/project/model/project";
+import { createPlannerProject } from "@/features/planner/project/model/project";
 
 describe("useRoomElements", () => {
-  let project: ReturnType<typeof createOpen3dProject>;
+  let project: ReturnType<typeof createPlannerProject>;
 
   beforeEach(() => {
-    project = createOpen3dProject({ name: "Test Project" });
+    project = createPlannerProject({ name: "Test Project" });
   });
 
   describe("initial state", () => {

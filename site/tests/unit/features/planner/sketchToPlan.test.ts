@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Open3dDisplayUnit } from "@/features/planner/project/model/types";
+import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
 import {
   validateSketchToPlanRequest,
   executeSketchToPlan,
@@ -49,7 +49,7 @@ describe("sketchToPlan", () => {
     it("rejects invalid display unit", () => {
       const request = {
         imageDataUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
-        displayUnit: "miles" as Open3dDisplayUnit,
+        displayUnit: "miles" as PlannerDisplayUnit,
       };
       const errors = validateSketchToPlanRequest(request);
       expect(errors.some((e) => e.includes("Invalid display unit"))).toBe(true);

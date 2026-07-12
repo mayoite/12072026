@@ -9,9 +9,9 @@
  */
 
 import type {
-  Open3dCatalogCategory,
-  Open3dRoomTag,
-  Open3dStyleTag,
+  PlannerCatalogCategory,
+  PlannerRoomTag,
+  PlannerStyleTag,
 } from "../catalogTypes";
 
 // ── Icon keys ──
@@ -46,7 +46,7 @@ export interface InventoryCategory {
   /** Stable ID for persistence and URL params */
   id: InventoryCategoryId;
   /** Canonical catalog category */
-  catalogCategory: Open3dCatalogCategory;
+  catalogCategory: PlannerCatalogCategory;
   /** Display name */
   label: string;
   /** Subcategories for drill-down navigation */
@@ -161,7 +161,7 @@ export const INVENTORY_CATEGORIES: InventoryCategory[] = [
 export interface InventoryRoomGroup {
   id: string;
   label: string;
-  roomTags: Open3dRoomTag[];
+  roomTags: PlannerRoomTag[];
   icon: InventoryIconName;
 }
 
@@ -244,7 +244,7 @@ export function inventoryCategoriesForProduct(
 export interface InventoryStyleGroup {
   id: string;
   label: string;
-  styleTags: Open3dStyleTag[];
+  styleTags: PlannerStyleTag[];
 }
 
 export const INVENTORY_STYLE_GROUPS: InventoryStyleGroup[] = [

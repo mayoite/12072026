@@ -23,7 +23,7 @@
  *               bypassed — see AGENTS.md Type Safety rule).
  *
  * Phase 06 integration (PLAN-FAIL-0405/0419): resolver (blocks field) wired into
- * catalogClient (load + search), useOpen3dWorkspaceCatalog, InventoryPanel (inventory).
+ * catalogClient (load + search), usePlannerWorkspaceCatalog, InventoryPanel (inventory).
  * Catalogue-first + search parity per BP-06, design §9/10, GS. TDD: test surface first.
  *
  * Type Safety rule (AGENTS.md):

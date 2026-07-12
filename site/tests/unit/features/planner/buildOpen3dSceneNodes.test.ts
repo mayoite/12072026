@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
-  buildOpen3dSceneNodes,
+  buildPlannerSceneNodes,
   mmToMeters,
-} from "@/features/planner/3d/buildOpen3dSceneNodes";
+} from "@/features/planner/3d/buildPlannerSceneNodes";
 import type {
-  Open3dFurnitureItem,
-  Open3dProject,
+  PlannerFurnitureItem,
+  PlannerProject,
 } from "@/features/planner/project/model/types";
 
 function sampleProject(
-  furnitureOverrides?: Open3dFurnitureItem[],
-): Open3dProject {
+  furnitureOverrides?: PlannerFurnitureItem[],
+): PlannerProject {
   return {
     id: "proj-1",
     name: "Test",
@@ -70,9 +70,9 @@ function sampleProject(
   };
 }
 
-describe("buildOpen3dSceneNodes", () => {
+describe("buildPlannerSceneNodes", () => {
   it("maps walls and furniture with stable entity ids", () => {
-    const nodes = buildOpen3dSceneNodes(sampleProject());
+    const nodes = buildPlannerSceneNodes(sampleProject());
     expect(nodes).toHaveLength(2);
 
     const wall = nodes.find((n) => n.kind === "wall");
@@ -110,7 +110,7 @@ describe("buildOpen3dSceneNodes", () => {
         height: 850,
       },
     ]);
-    const furn = buildOpen3dSceneNodes(project).find(
+    const furn = buildPlannerSceneNodes(project).find(
       (n) => n.kind === "furniture",
     );
     expect(furn?.geometryMode).toBeUndefined();
@@ -140,7 +140,7 @@ describe("buildOpen3dSceneNodes", () => {
         modularOptions,
       },
     ]);
-    const furn = buildOpen3dSceneNodes(project).find((n) => n.id === "furn-mod");
+    const furn = buildPlannerSceneNodes(project).find((n) => n.id === "furn-mod");
     expect(furn?.kind).toBe("furniture");
     expect(furn?.geometryMode).toBe("modular-cabinet-v0");
     expect(furn?.modularOptions).toEqual(modularOptions);
@@ -167,7 +167,7 @@ describe("buildOpen3dSceneNodes", () => {
         generatedGlbUrl: url,
       },
     ]);
-    const furn = buildOpen3dSceneNodes(project).find((n) => n.id === "furn-glb");
+    const furn = buildPlannerSceneNodes(project).find((n) => n.id === "furn-glb");
     expect(furn?.generatedGlbUrl).toBe(url);
     expect(furn?.geometryMode).toBeUndefined();
   });
@@ -196,7 +196,7 @@ describe("buildOpen3dSceneNodes", () => {
         generatedGlbUrl: url,
       },
     ]);
-    const furn = buildOpen3dSceneNodes(project).find(
+    const furn = buildPlannerSceneNodes(project).find(
       (n) => n.id === "furn-mod-glb",
     );
     expect(furn).toMatchObject({
@@ -238,8 +238,8 @@ describe("buildOpen3dSceneNodes", () => {
         height: 750,
       },
     ]);
-    const f90 = buildOpen3dSceneNodes(project).find((n) => n.id === "furn-90");
-    const fNeg = buildOpen3dSceneNodes(project).find((n) => n.id === "furn-neg");
+    const f90 = buildPlannerSceneNodes(project).find((n) => n.id === "furn-90");
+    const fNeg = buildPlannerSceneNodes(project).find((n) => n.id === "furn-neg");
     expect(f90?.rotation).toBeCloseTo(Math.PI / 2, 8);
     expect(fNeg?.rotation).toBeCloseTo((270 * Math.PI) / 180, 8); // normalizeDegrees(-90)=270
   });
@@ -263,7 +263,7 @@ describe("buildOpen3dSceneNodes", () => {
         generatedGlbUrl: "   ",
       },
     ]);
-    const nodes = buildOpen3dSceneNodes(project);
+    const nodes = buildPlannerSceneNodes(project);
     expect(nodes.find((n) => n.id === "furn-static")?.generatedGlbUrl).toBeUndefined();
     expect(nodes.find((n) => n.id === "furn-blank")?.generatedGlbUrl).toBeUndefined();
   });
@@ -281,7 +281,7 @@ describe("buildOpen3dSceneNodes", () => {
         meshUrl: "catalog-assets/generated/c.glb",
       },
     ]);
-    const furn = buildOpen3dSceneNodes(project).find((n) => n.id === "furn-pref");
+    const furn = buildPlannerSceneNodes(project).find((n) => n.id === "furn-pref");
     expect(furn?.generatedGlbUrl).toBe("catalog-assets/generated/a.glb");
   });
 
@@ -305,14 +305,14 @@ describe("buildOpen3dSceneNodes", () => {
         scale: { x: 1, y: 1, z: 1 },
       },
     ]);
-    const scaled = buildOpen3dSceneNodes(project).find(
+    const scaled = buildPlannerSceneNodes(project).find(
       (n) => n.id === "furn-scaled",
     );
     expect(scaled?.widthMm).toBe(1600);
     expect(scaled?.depthMm).toBe(200);
     expect(scaled?.heightMm).toBe(900);
 
-    const defaults = buildOpen3dSceneNodes(project).find(
+    const defaults = buildPlannerSceneNodes(project).find(
       (n) => n.id === "furn-defaults",
     );
     // DEFAULT_FURNITURE_W/D/H = 800/800/750
@@ -323,7 +323,7 @@ describe("buildOpen3dSceneNodes", () => {
 
   it("returns [] for empty floors and maps wall center/rotation", () => {
     expect(
-      buildOpen3dSceneNodes({ floors: [], activeFloorId: "missing" }),
+      buildPlannerSceneNodes({ floors: [], activeFloorId: "missing" }),
     ).toEqual([]);
 
     const project = sampleProject([]);
@@ -337,7 +337,7 @@ describe("buildOpen3dSceneNodes", () => {
         color: "#111111",
       },
     ];
-    const wall = buildOpen3dSceneNodes(project).find((n) => n.id === "wall-diag");
+    const wall = buildPlannerSceneNodes(project).find((n) => n.id === "wall-diag");
     expect(wall?.kind).toBe("wall");
     expect(wall?.xMm).toBe(1500);
     expect(wall?.yMm).toBe(2000);

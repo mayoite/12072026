@@ -1,12 +1,12 @@
 import type {
-  Open3dDoor,
-  Open3dFurnitureItem,
-  Open3dPoint,
-  Open3dWall,
-  Open3dWindow,
+  PlannerDoor,
+  PlannerFurnitureItem,
+  PlannerPoint,
+  PlannerWall,
+  PlannerWindow,
 } from "../../model/types";
 
-function distancePointToSegment(point: Open3dPoint, start: Open3dPoint, end: Open3dPoint): number {
+function distancePointToSegment(point: PlannerPoint, start: PlannerPoint, end: PlannerPoint): number {
   const dx = end.x - start.x;
   const dy = end.y - start.y;
   const lengthSquared = dx * dx + dy * dy;
@@ -19,7 +19,7 @@ function distancePointToSegment(point: Open3dPoint, start: Open3dPoint, end: Ope
   return Math.hypot(point.x - projected.x, point.y - projected.y);
 }
 
-function parameterOnSegment(point: Open3dPoint, start: Open3dPoint, end: Open3dPoint): number {
+function parameterOnSegment(point: PlannerPoint, start: PlannerPoint, end: PlannerPoint): number {
   const dx = end.x - start.x;
   const dy = end.y - start.y;
   const lengthSquared = dx * dx + dy * dy;
@@ -36,8 +36,8 @@ export interface WallPickResult {
 
 /** Pick the nearest wall within tolerance (millimetres). */
 export function pickWallAtPoint(
-  point: Open3dPoint,
-  walls: Open3dWall[],
+  point: PlannerPoint,
+  walls: PlannerWall[],
   toleranceMm: number,
 ): string | null {
   return pickWallWithPosition(point, walls, toleranceMm)?.wallId ?? null;
@@ -45,8 +45,8 @@ export function pickWallAtPoint(
 
 /** Pick wall and normalized click position for door/window placement. */
 export function pickWallWithPosition(
-  point: Open3dPoint,
-  walls: Open3dWall[],
+  point: PlannerPoint,
+  walls: PlannerWall[],
   toleranceMm: number,
 ): WallPickResult | null {
   let best: { wallId: string; distance: number; t: number } | null = null;
@@ -68,11 +68,11 @@ export function pickWallWithPosition(
  */
 export function getRoomPolygon(
   roomWallIds: string[],
-  wallById: Map<string, { start: Open3dPoint; end: Open3dPoint }>,
-): Open3dPoint[] {
+  wallById: Map<string, { start: PlannerPoint; end: PlannerPoint }>,
+): PlannerPoint[] {
   const polygon = roomWallIds
     .map((wallId) => wallById.get(wallId)?.start)
-    .filter((point): point is Open3dPoint => point !== undefined);
+    .filter((point): point is PlannerPoint => point !== undefined);
   return polygon.length >= 3 ? polygon : [];
 }
 
@@ -86,10 +86,10 @@ export type OpeningPickResult = {
  * Prefer nearest within tolerance (millimetres).
  */
 export function pickOpeningAtPoint(
-  point: Open3dPoint,
-  doors: readonly Open3dDoor[],
-  windows: readonly Open3dWindow[],
-  walls: readonly Open3dWall[],
+  point: PlannerPoint,
+  doors: readonly PlannerDoor[],
+  windows: readonly PlannerWindow[],
+  walls: readonly PlannerWall[],
   toleranceMm: number,
 ): OpeningPickResult | null {
   const wallById = new Map(walls.map((wall) => [wall.id, wall]));
@@ -143,8 +143,8 @@ export function pickOpeningAtPoint(
  * Hits top-most item first (last in array = drawn last).
  */
 export function pickFurnitureAtPoint(
-  point: Open3dPoint,
-  furniture: readonly Open3dFurnitureItem[],
+  point: PlannerPoint,
+  furniture: readonly PlannerFurnitureItem[],
   paddingMm = 0,
 ): string | null {
   for (let index = furniture.length - 1; index >= 0; index -= 1) {
@@ -164,7 +164,7 @@ export function pickFurnitureAtPoint(
 }
 
 /** Ray-cast point-in-polygon test (even-odd). Polygons with fewer than 3 verts are outside. */
-export function pointInPolygon(point: Open3dPoint, polygon: Open3dPoint[]): boolean {
+export function pointInPolygon(point: PlannerPoint, polygon: PlannerPoint[]): boolean {
   if (polygon.length < 3) return false;
   let inside = false;
   for (

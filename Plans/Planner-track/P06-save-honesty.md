@@ -30,12 +30,12 @@
 
 | Role | Path |
 |------|------|
-| Autosave hook | `site/features/planner/project/persistence/useOpen3dWorkspaceAutosave.ts` |
+| Autosave hook | `site/features/planner/project/persistence/usePlannerWorkspaceAutosave.ts` |
 | AutoSaver / IDB | `site/features/planner/persistence/persistence.ts` |
-| Session envelope | `�/open3d/persistence/open3dSession.ts` |
-| Workspace / Save | `�/open3d/editor/OOPlannerWorkspace.tsx` |
-| TopBar / Shell | `�/TopBar.tsx` � `WorkspaceShell.tsx` |
-| Status labels | `�/workspaceStatusLabels.ts` (one pure helper for both surfaces) |
+| Session envelope | `site/features/planner/project/persistence/plannerSession.ts` |
+| Workspace / Save | `site/features/planner/editor/OOPlannerWorkspace.tsx` |
+| TopBar / Shell | `site/features/planner/editor/TopBar.tsx` · `WorkspaceShell.tsx` |
+| Status labels | `site/features/planner/editor/workspaceStatusLabels.ts` (one pure helper for both surfaces) |
 | Help | `site/features/planner/help/helpSections.ts` |
 | Units | `planner-autosave.test.ts` � `workspaceStatusLabels.test.ts` � `saveReloadContinuity.test.ts` |
 | E2E | `site/tests/e2e/open3d-save-honesty.spec.ts` (+ guest helpers) |

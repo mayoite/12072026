@@ -15,11 +15,9 @@ export {
   mmToWorld,
   summarizePlannerDocument,
 } from "./types";
-export { Planner3DViewer } from "./Planner3DViewer";
-
-/** Live workspace Three viewer (Fabric plan uses canvas/). */
+/** Live Three viewer for planner editor (Fabric plan uses canvas/). */
 export { Lazy3DViewer } from "./ThreeLazyViewer";
 export {
-  OPEN3D_ORBIT_DEFAULT_ENABLED,
-  getOpen3dViewerControlProps,
+  PLANNER_ORBIT_DEFAULT_ENABLED,
+  getPlannerViewerControlProps,
 } from "./orbitDefaults";

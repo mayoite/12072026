@@ -55,7 +55,7 @@ const plannerDataFlow = `flowchart LR
     Fabric["Fabric.js Canvas<br/>Object Model"]
     Store["Zustand Store<br/>plannerStore"]
     Sync["2D to 3D<br/>Sync Layer"]
-    ThreeD["R3F Scene<br/>Planner3DViewer"]
+    ThreeD["R3F Scene<br/>ThreeLazyViewer"]
     Persist["Supabase<br/>plans table"]
 
     User -->|event| Fabric

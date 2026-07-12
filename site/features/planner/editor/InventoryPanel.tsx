@@ -36,32 +36,33 @@ import {
 } from "@/features/planner/project/catalog/inventory/inventoryTaxonomy";
 import { InventoryIcon } from "./inventoryIcons";
 import {
-  OPEN3D_CATALOG_RESULT_CAP,
+  PLANNER_CATALOG_RESULT_CAP,
   capCatalogResults,
   rankCatalogItems,
 } from "@/features/planner/project/catalog/catalogSearch";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 import {
   filterBuyerFacingCatalogItems,
-  formatCatalogFootprintCm,
+  formatCatalogFootprint,
   prioritizeOfficeSystemsBrowse,
 } from "@/features/planner/project/catalog/catalogBuyerVisibility";
+import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
 import type { WorkstationConfigV0 } from "@/features/planner/project/catalog/workstationSystemV0";
-import { OPEN3D_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
+import { PLANNER_DEMO_CATALOG_ITEMS } from "./demoCatalogItems";
 import { isSvgAssetUrl } from "@/features/planner/project/catalog/svg/svgPreviewAssets";
-import { useOpen3dSvgCatalog } from "@/features/planner/project/catalog/useOpen3dWorkspaceCatalog";
+import { usePlannerSvgCatalog } from "@/features/planner/project/catalog/usePlannerWorkspaceCatalog";
 import { WorkstationConfiguratorPanel } from "./WorkstationConfiguratorPanel";
 import styles from "./inventory.module.css";
 
 // Wiring for PLAN-FAIL-0405/0419: inventory consumer calls svgBlockDescriptorLoader via catalogClient (catalogue-first primary descriptors, resolver blocks, search parity facets).
-// Phase 06: useOpen3dSvgCatalog in panel when catalogItems prop is omitted; workspace may still pass live items.
+// Phase 06: usePlannerSvgCatalog in panel when catalogItems prop is omitted; workspace may still pass live items.
 // Cites: BP-06, design §9/10 (Features: catalogue-first + Sketchfab cursor/facet parity), GS, phase-06. Fuse for local rank, RAC owns a11y.
 
 export interface InventoryPanelProps {
   /** Initial panel state */
   initialState?: InventoryPanelState;
   /** Callback when an item is selected */
-  onItemSelect?: (item: Open3dCatalogItem, variantId: string | null) => void;
+  onItemSelect?: (item: PlannerCatalogItem, variantId: string | null) => void;
   /** Callback when an item is placed */
   onItemPlace?: (
     itemId: string,
@@ -78,7 +79,7 @@ export interface InventoryPanelProps {
   /** Callback when search query changes */
   onSearch?: (query: string) => void;
   /** Live catalog items from the workspace API */
-  catalogItems?: Open3dCatalogItem[];
+  catalogItems?: PlannerCatalogItem[];
   /** Whether the panel is loading */
   isLoading?: boolean;
   /** Catalog lifecycle status (RQ owns remote; Fuse local rank; RAC a11y) */
@@ -94,6 +95,8 @@ export interface InventoryPanelProps {
    * Member full catalog may pass false for residential room filters.
    */
   officeSystemsInventory?: boolean;
+  /** Workspace display unit for footprint labels (document stays mm). */
+  displayUnit?: PlannerDisplayUnit;
 }
 
 export const InventoryPanel = memo(function InventoryPanel({
@@ -107,6 +110,7 @@ export const InventoryPanel = memo(function InventoryPanel({
   isLoading = false,
   catalogStatus = "ready",
   officeSystemsInventory = true,
+  displayUnit = "cm",
 }: InventoryPanelProps) {
   const id = useId();
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -120,7 +124,7 @@ export const InventoryPanel = memo(function InventoryPanel({
     () => inventoryCategoriesForProduct(productMode),
     [productMode],
   );
-  const svgCatalog = useOpen3dSvgCatalog();
+  const svgCatalog = usePlannerSvgCatalog();
   const [state, setState] = useState<InventoryPanelState>(
     initialState ?? defaultInventoryPanelState(),
   );
@@ -134,14 +138,14 @@ export const InventoryPanel = memo(function InventoryPanel({
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
 
   const indexedItems = useMemo(() => {
-    const raw: Open3dCatalogItem[] = (() => {
+    const raw: PlannerCatalogItem[] = (() => {
       if (hasExternalCatalog) {
         const external = catalogItems ?? [];
-        return external.length > 0 ? external : OPEN3D_DEMO_CATALOG_ITEMS;
+        return external.length > 0 ? external : PLANNER_DEMO_CATALOG_ITEMS;
       }
       return svgCatalog.items.length > 0
         ? svgCatalog.items
-        : OPEN3D_DEMO_CATALOG_ITEMS;
+        : PLANNER_DEMO_CATALOG_ITEMS;
     })();
     // P-UI-1: never show proof / missing-geom fallback SKUs in buyer inventory.
     return filterBuyerFacingCatalogItems(raw);
@@ -225,7 +229,7 @@ export const InventoryPanel = memo(function InventoryPanel({
 
   // Handle item click
   const handleItemClick = useCallback(
-    (item: Open3dCatalogItem) => {
+    (item: PlannerCatalogItem) => {
       setSelectedItemId(item.id);
       onItemSelect?.(item, null);
 
@@ -239,7 +243,7 @@ export const InventoryPanel = memo(function InventoryPanel({
 
   // Handle item double-click (place)
   const handleItemDoubleClick = useCallback(
-    (item: Open3dCatalogItem, event: MouseEvent) => {
+    (item: PlannerCatalogItem, event: MouseEvent) => {
       const rect = (event.target as HTMLElement).getBoundingClientRect();
       const position = {
         x: rect.left + rect.width / 2,
@@ -307,7 +311,7 @@ export const InventoryPanel = memo(function InventoryPanel({
       officeSystemsInventory && !(state.searchQuery || "").trim()
         ? prioritizeOfficeSystemsBrowse(ranked)
         : ranked;
-    return capCatalogResults(ordered, OPEN3D_CATALOG_RESULT_CAP);
+    return capCatalogResults(ordered, PLANNER_CATALOG_RESULT_CAP);
   }, [
     indexedItems,
     categories,
@@ -335,7 +339,7 @@ export const InventoryPanel = memo(function InventoryPanel({
         );
       }
     }
-    return capCatalogResults(items, OPEN3D_CATALOG_RESULT_CAP);
+    return capCatalogResults(items, PLANNER_CATALOG_RESULT_CAP);
   }, [
     categories,
     searchResultsItems,
@@ -395,14 +399,14 @@ export const InventoryPanel = memo(function InventoryPanel({
     return collections.recent
       .slice(0, 6)
       .map((entry) => indexedItems.find((item) => item.id === entry.itemId))
-      .filter((item): item is Open3dCatalogItem => item !== undefined);
+      .filter((item): item is PlannerCatalogItem => item !== undefined);
   }, [collections.recent, indexedItems]);
 
   // Get favorite items
   const favoriteItems = useMemo(() => {
     return collections.favorites
       .map((id) => indexedItems.find((item) => item.id === id))
-      .filter((item): item is Open3dCatalogItem => item !== undefined);
+      .filter((item): item is PlannerCatalogItem => item !== undefined);
   }, [collections.favorites, indexedItems]);
 
   // Has active filters
@@ -685,17 +689,18 @@ export const InventoryPanel = memo(function InventoryPanel({
               <div className={styles.itemInfo}>
                 <span className={styles.itemName}>{item.shortName}</span>
                 <span className={styles.itemDimensions}>
-                  {formatCatalogFootprintCm(
+                  {formatCatalogFootprint(
                     item.dimensions.widthMm,
                     item.dimensions.depthMm,
+                    displayUnit,
                   )}
                 </span>
                 <button
                   type="button"
                   className={styles.emptyAction}
-                  // Accessible name kept stable for e2e (`Add … to canvas`); visible label
-                  // is "Place" so guests match toolbar Place (P) + systems configurator.
-                  aria-label={`Add ${item.shortName} to canvas`}
+                  // WCAG 2.5.3: accessible name must contain visible "Place".
+                  // Keep "Add … to canvas" substring so existing e2e locators still match.
+                  aria-label={`Place — Add ${item.shortName} to canvas`}
                   title={`Arm place: click the plan to drop ${item.shortName}`}
                   onClick={(event) => {
                     event.preventDefault();

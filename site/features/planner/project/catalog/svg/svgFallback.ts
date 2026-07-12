@@ -7,7 +7,7 @@
 
 import type { SvgRenderOutput, SvgThemeName } from "./svgTypes";
 import { SVG_THEMES } from "./svgTypes";
-import type { Open3dCatalogDimensions } from "../catalogTypes";
+import type { PlannerCatalogDimensions } from "../catalogTypes";
 
 function escapeXml(value: string): string {
   return value
@@ -27,7 +27,7 @@ function formatMmAsExactCm(value: number): string {
  * Cross-hatched rectangle with accessible label and red border.
  */
 export function generateFallbackSvg(
-  dimensions: Open3dCatalogDimensions,
+  dimensions: PlannerCatalogDimensions,
   name: string,
   reason: string,
   theme: SvgThemeName = "light",

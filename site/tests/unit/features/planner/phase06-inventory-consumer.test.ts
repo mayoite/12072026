@@ -7,9 +7,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextRequest } from "next/server";
 
-import { Open3dCatalogClient } from "@/features/planner/project/catalog/catalogClient";
-import { loadOpen3dCatalog } from "@/features/planner/project/catalog/catalogQuery";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import { PlannerCatalogClient } from "@/features/planner/project/catalog/catalogClient";
+import { loadPlannerCatalog } from "@/features/planner/project/catalog/catalogQuery";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 import { loadAll, clearLoaderCache } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import { GET as getSvgBlocks } from "@/app/api/planner/catalog/svg-blocks/route";
 
@@ -18,8 +18,8 @@ vi.mock("@/app/api/_lib/public", () => ({
 }));
 
 function descriptorCatalogItem(
-  overrides: Partial<Open3dCatalogItem> & Pick<Open3dCatalogItem, "id" | "slug">,
-): Open3dCatalogItem {
+  overrides: Partial<PlannerCatalogItem> & Pick<PlannerCatalogItem, "id" | "slug">,
+): PlannerCatalogItem {
   return {
     sku: `DESC-${overrides.slug}`,
     name: overrides.slug,
@@ -55,15 +55,15 @@ describe("Phase 06 — 06-INV-01 loader path", () => {
       new NextRequest("http://localhost:3000/api/planner/catalog/svg-blocks"),
     );
     const body = (await response.json()) as {
-      items?: Open3dCatalogItem[];
-      data?: { items?: Open3dCatalogItem[] };
+      items?: PlannerCatalogItem[];
+      data?: { items?: PlannerCatalogItem[] };
     };
     const origWindow = globalThis.window;
     // @ts-expect-error test-only removal of browser global
     delete globalThis.window;
 
     try {
-      const client = new Open3dCatalogClient({
+      const client = new PlannerCatalogClient({
         fetchImpl: vi.fn().mockResolvedValue({
           ok: true,
           json: async () => body,
@@ -84,7 +84,7 @@ describe("Phase 06 — 06-INV-01 loader path", () => {
     }
   });
 
-  it("loadOpen3dCatalog prefers descriptor-loader items from svg-blocks API", async () => {
+  it("loadPlannerCatalog prefers descriptor-loader items from svg-blocks API", async () => {
     const descriptorItem = descriptorCatalogItem({
       id: "desc-present-1",
       slug: "desc-present-1",
@@ -93,11 +93,11 @@ describe("Phase 06 — 06-INV-01 loader path", () => {
       ok: true,
       json: async () => ({ items: [descriptorItem] }),
     });
-    const client = new Open3dCatalogClient({
+    const client = new PlannerCatalogClient({
       fetchImpl: fetchMock as unknown as typeof fetch,
     });
 
-    const result = await loadOpen3dCatalog(client);
+    const result = await loadPlannerCatalog(client);
 
     expect(result.source).toBe("remote");
     expect(result.items.some((item) => item.id === "desc-present-1")).toBe(true);
@@ -107,10 +107,10 @@ describe("Phase 06 — 06-INV-01 loader path", () => {
   });
 });
 
-describe("Phase 06 — 06-INV-05 search facets + cursor cap ≤24", () => {
-  function seedManyItems(count: number): Open3dCatalogClient {
-    const client = new Open3dCatalogClient();
-    const items: Open3dCatalogItem[] = Array.from({ length: count }, (_, index) =>
+describe("Phase 06 — 06-INV-05 search facets + cursor pagination (default 50)", () => {
+  function seedManyItems(count: number): PlannerCatalogClient {
+    const client = new PlannerCatalogClient();
+    const items: PlannerCatalogItem[] = Array.from({ length: count }, (_, index) =>
       descriptorCatalogItem({
         id: `item-${index}`,
         slug: `item-${index}`,
@@ -121,16 +121,16 @@ describe("Phase 06 — 06-INV-05 search facets + cursor cap ≤24", () => {
     return client;
   }
 
-  it("caps pageSize at 24 even when a larger value is requested", () => {
-    const client = seedManyItems(40);
-    const page = client.search({ pageSize: 100 });
-    expect(page.items.length).toBeLessThanOrEqual(24);
+  it("honours pageSize 50+ without a hard 24 ceiling", () => {
+    const client = seedManyItems(80);
+    const page = client.search({ pageSize: 50 });
+    expect(page.items.length).toBe(50);
     expect(page.hasMore).toBe(true);
     expect(page.nextCursor).not.toBeNull();
   });
 
   it("supports cursor pagination with facet filters", () => {
-    const client = new Open3dCatalogClient();
+    const client = new PlannerCatalogClient();
     client.load(
       [
         descriptorCatalogItem({
@@ -186,7 +186,7 @@ describe("Phase 06 — 06-TEST-01 corrupt / absent / present fallback", () => {
       }),
     );
 
-    const client = new Open3dCatalogClient();
+    const client = new PlannerCatalogClient();
     await client.loadDescriptorsFromLoader();
 
     expect(client.getById("present-1")?.slug).toBe("present-1");
@@ -201,8 +201,8 @@ describe("Phase 06 — 06-TEST-01 corrupt / absent / present fallback", () => {
         .mockResolvedValueOnce({ ok: true, json: async () => ({ items: [] }) }),
     );
 
-    const client = new Open3dCatalogClient();
-    const result = await loadOpen3dCatalog(client);
+    const client = new PlannerCatalogClient();
+    const result = await loadPlannerCatalog(client);
 
     expect(result.source).toBe("fallback");
     expect(result.items.length).toBeGreaterThan(0);
@@ -219,7 +219,7 @@ describe("Phase 06 — 06-TEST-01 corrupt / absent / present fallback", () => {
       }),
     );
 
-    const client = new Open3dCatalogClient();
+    const client = new PlannerCatalogClient();
     await expect(client.loadDescriptorsFromLoader()).resolves.toEqual([]);
     expect(client.getById("good-1")?.slug).toBe("good-1");
   });

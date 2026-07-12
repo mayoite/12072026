@@ -5,7 +5,7 @@
  * theme separation, and geometry type definitions for every inventory shape.
  */
 
-import type { Open3dCatalogDimensions, Open3dCatalogCategory } from "../catalogTypes";
+import type { PlannerCatalogDimensions, PlannerCatalogCategory } from "../catalogTypes";
 import { z } from "zod";
 import { sha256Hex } from "./sha256";
 
@@ -32,11 +32,11 @@ export interface SvgSymbolDefinition {
   /** Unique symbol ID (stable across versions) */
   symbolId: string;
   /** Catalog category this symbol represents */
-  category: Open3dCatalogCategory;
+  category: PlannerCatalogCategory;
   /** Display name for accessibility */
   name: string;
   /** Canonical dimensions in mm (for viewBox calculation) */
-  dimensions: Open3dCatalogDimensions;
+  dimensions: PlannerCatalogDimensions;
   /** Composed shape commands */
   shapes: SvgShapeCommand[];
   /** Optional label/text overlay */
@@ -200,7 +200,7 @@ export const CATEGORY_SHAPE_COLORS: Record<string, { fill: string; stroke: strin
 // No parallel Zod schemas exist at admin, portal, or planner routes. The
 // schema is re-exported by `./svgBlockDescriptorLoader.ts` (Phase 06 consumer)
 // and may be imported by any reader; downstream consumers must NOT redefine
-// the schema, the discriminated union, or the `Open3dDescriptorError` taxonomy.
+// the schema, the discriminated union, or the `PlannerDescriptorError` taxonomy.
 
 /** Pinned schema version. Increment only via a coordinated migration. */
 export const BLOCK_DESCRIPTOR_SCHEMA_VERSION = "2026-07-04.v2" as const;
@@ -527,17 +527,17 @@ function stripChecksumDeep(value: unknown): unknown {
   return value;
 }
 
-// ── Open3dDescriptorError taxonomy (§02-ERR-01 .. §02-ERR-06) ─────────────────
+// ── PlannerDescriptorError taxonomy (§02-ERR-01 .. §02-ERR-06) ─────────────────
 
-export const Open3dDescriptorErrorKindSchema = z.enum([
+export const PlannerDescriptorErrorKindSchema = z.enum([
   "invalid",
   "notFound",
   "versionMismatch",
   "hashMismatch",
 ]);
-export type Open3dDescriptorErrorKind = z.infer<typeof Open3dDescriptorErrorKindSchema>;
+export type PlannerDescriptorErrorKind = z.infer<typeof PlannerDescriptorErrorKindSchema>;
 
-interface Open3dDescriptorErrorBase {
+interface PlannerDescriptorErrorBase {
   /** Stable machine-readable error code, e.g. `422.invalid`. */
   code: string;
   /** Zod-style field path joined by `.`. */
@@ -546,19 +546,19 @@ interface Open3dDescriptorErrorBase {
   message: string;
 }
 
-export interface Open3dDescriptorErrorInvalid extends Open3dDescriptorErrorBase {
+export interface PlannerDescriptorErrorInvalid extends PlannerDescriptorErrorBase {
   kind: "invalid";
   /** Zod issue paths+messages, exposed for the admin editor UI. */
   issues: ReadonlyArray<{ path: string; message: string }>;
 }
 
-export interface Open3dDescriptorErrorNotFound extends Open3dDescriptorErrorBase {
+export interface PlannerDescriptorErrorNotFound extends PlannerDescriptorErrorBase {
   kind: "notFound";
   /** Slug that was requested. */
   slug: string;
 }
 
-export interface Open3dDescriptorErrorVersionMismatch extends Open3dDescriptorErrorBase {
+export interface PlannerDescriptorErrorVersionMismatch extends PlannerDescriptorErrorBase {
   kind: "versionMismatch";
   /** Schema site pinned version. */
   expected: string;
@@ -566,7 +566,7 @@ export interface Open3dDescriptorErrorVersionMismatch extends Open3dDescriptorEr
   actual: string;
 }
 
-export interface Open3dDescriptorErrorHashMismatch extends Open3dDescriptorErrorBase {
+export interface PlannerDescriptorErrorHashMismatch extends PlannerDescriptorErrorBase {
   kind: "hashMismatch";
   /** SHA-256 hex digest the descriptor declared. */
   expected: string;
@@ -580,13 +580,13 @@ export interface Open3dDescriptorErrorHashMismatch extends Open3dDescriptorError
  * needs to render a stable error envelope; the union is closed, so adding a
  * new variant will fail compile at the consumer switch.
  */
-export type Open3dDescriptorError =
-  | Open3dDescriptorErrorInvalid
-  | Open3dDescriptorErrorNotFound
-  | Open3dDescriptorErrorVersionMismatch
-  | Open3dDescriptorErrorHashMismatch;
+export type PlannerDescriptorError =
+  | PlannerDescriptorErrorInvalid
+  | PlannerDescriptorErrorNotFound
+  | PlannerDescriptorErrorVersionMismatch
+  | PlannerDescriptorErrorHashMismatch;
 
-export interface Open3dDescriptorErrorHttpShape {
+export interface PlannerDescriptorErrorHttpShape {
   status: number;
   body: {
     error: string;
@@ -598,7 +598,7 @@ export interface Open3dDescriptorErrorHttpShape {
 
 /**
  * Phase 02 owns the full `code → HTTP shape` map for the four
- * `Open3dDescriptorError` variants (§02-ERR-02 .. 06). Phase 08 §08-PERS-10
+ * `PlannerDescriptorError` variants (§02-ERR-02 .. 06). Phase 08 §08-PERS-10
  * cites this map; it is not the source of truth.
  *
  *   invalid          → 422.invalid
@@ -606,9 +606,9 @@ export interface Open3dDescriptorErrorHttpShape {
  *   hashMismatch     → 409.hash_mismatch
  *   notFound         → 404.not_found
  */
-export function toOpen3dDescriptorErrorHttp(
-  error: Open3dDescriptorError,
-): Open3dDescriptorErrorHttpShape {
+export function toPlannerDescriptorErrorHttp(
+  error: PlannerDescriptorError,
+): PlannerDescriptorErrorHttpShape {
   switch (error.kind) {
     case "invalid":
       return {
@@ -654,12 +654,12 @@ export function toOpen3dDescriptorErrorHttp(
 }
 
 /** Result type at the loader boundary (§02-LOAD-01). */
-export type Open3dResult<T, E> =
+export type PlannerResult<T, E> =
   | { ok: true; value: T }
   | { ok: false; error: E };
 
-export const open3dOk = <T, E>(value: T): Open3dResult<T, E> => ({ ok: true, value });
-export const open3dErr = <T, E>(error: E): Open3dResult<T, E> => ({ ok: false, error });
+export const plannerOk = <T, E>(value: T): PlannerResult<T, E> => ({ ok: true, value });
+export const plannerErr = <T, E>(error: E): PlannerResult<T, E> => ({ ok: false, error });
 
 // ── Parse entry points (§02-CAT-08 / §02-CAT-11) ────────────────────────────
 
@@ -669,9 +669,9 @@ export const open3dErr = <T, E>(error: E): Open3dResult<T, E> => ({ ok: false, e
  */
 export function parseBlockDescriptor(
   input: unknown,
-): Open3dResult<BlockDescriptor, Open3dDescriptorError> {
+): PlannerResult<BlockDescriptor, PlannerDescriptorError> {
   if (!input || typeof input !== "object") {
-    return open3dErr<BlockDescriptor, Open3dDescriptorError>({
+    return plannerErr<BlockDescriptor, PlannerDescriptorError>({
       kind: "invalid",
       code: "422.invalid",
       fieldPath: "slug:primitive",
@@ -682,7 +682,7 @@ export function parseBlockDescriptor(
   const shape = input as Record<string, unknown>;
 
   if (typeof shape.schemaVersion !== "string") {
-    return open3dErr<BlockDescriptor, Open3dDescriptorError>({
+    return plannerErr<BlockDescriptor, PlannerDescriptorError>({
       kind: "invalid",
       code: "422.invalid",
       fieldPath: "schemaVersion",
@@ -691,7 +691,7 @@ export function parseBlockDescriptor(
     });
   }
   if (shape.schemaVersion !== BLOCK_DESCRIPTOR_SCHEMA_VERSION) {
-    return open3dErr<BlockDescriptor, Open3dDescriptorError>({
+    return plannerErr<BlockDescriptor, PlannerDescriptorError>({
       kind: "versionMismatch",
       code: "422.version_mismatch",
       fieldPath: "schemaVersion",
@@ -708,7 +708,7 @@ export function parseBlockDescriptor(
       path: issue.path.join("."),
       message: issue.message,
     }));
-    return open3dErr<BlockDescriptor, Open3dDescriptorError>({
+    return plannerErr<BlockDescriptor, PlannerDescriptorError>({
       kind: "invalid",
       code: "422.invalid",
       fieldPath: issues[0]?.path ?? "",
@@ -720,7 +720,7 @@ export function parseBlockDescriptor(
   const checksumRecomputed = computeBlockDescriptorChecksum(parsed.data);
   const declared = typeof shape.checksum === "string" ? shape.checksum.toLowerCase() : "";
   if (declared !== checksumRecomputed) {
-    return open3dErr<BlockDescriptor, Open3dDescriptorError>({
+    return plannerErr<BlockDescriptor, PlannerDescriptorError>({
       kind: "hashMismatch",
       code: "409.hash_mismatch",
       fieldPath: "checksum",
@@ -731,7 +731,7 @@ export function parseBlockDescriptor(
     });
   }
 
-  return open3dOk<BlockDescriptor, Open3dDescriptorError>(parsed.data);
+  return plannerOk<BlockDescriptor, PlannerDescriptorError>(parsed.data);
 }
 
 /**
@@ -744,9 +744,9 @@ export function parseBlockDescriptor(
 export function freezeFreshDescriptor(
   input: unknown,
   stampNow: () => number,
-): Open3dResult<BlockDescriptor, Open3dDescriptorError> {
+): PlannerResult<BlockDescriptor, PlannerDescriptorError> {
   if (!input || typeof input !== "object") {
-    return open3dErr<BlockDescriptor, Open3dDescriptorError>({
+    return plannerErr<BlockDescriptor, PlannerDescriptorError>({
       kind: "invalid",
       code: "422.invalid",
       fieldPath: "slug:primitive",
@@ -772,7 +772,7 @@ export function freezeFreshDescriptor(
       path: issue.path.join("."),
       message: issue.message,
     }));
-    return open3dErr<BlockDescriptor, Open3dDescriptorError>({
+    return plannerErr<BlockDescriptor, PlannerDescriptorError>({
       kind: "invalid",
       code: "422.invalid",
       fieldPath: issues[0]?.path ?? "",
@@ -783,21 +783,21 @@ export function freezeFreshDescriptor(
 
   const checksumRecomputed = computeBlockDescriptorChecksum(parsed.data);
   const rewritten = { ...parsed.data, checksum: checksumRecomputed };
-  return open3dOk<BlockDescriptor, Open3dDescriptorError>(rewritten);
+  return plannerOk<BlockDescriptor, PlannerDescriptorError>(rewritten);
 }
 
 /**
  * Validate a rewrite attempt against a previously persisted descriptor.
  * Refuses to mutate `generatedAt` (§02-CAT-08 / §02-CAT-11 annex): any change
- * surfaces {@link Open3dDescriptorErrorHashMismatch} because the recomputed
+ * surfaces {@link PlannerDescriptorErrorHashMismatch} because the recomputed
  * checksum will not match the previously frozen values.
  */
 export function freezeRewriteDescriptor(
   previous: BlockDescriptor,
   nextInput: unknown,
-): Open3dResult<BlockDescriptor, Open3dDescriptorError> {
+): PlannerResult<BlockDescriptor, PlannerDescriptorError> {
   if (!nextInput || typeof nextInput !== "object") {
-    return open3dErr<BlockDescriptor, Open3dDescriptorError>({
+    return plannerErr<BlockDescriptor, PlannerDescriptorError>({
       kind: "invalid",
       code: "422.invalid",
       fieldPath: "",
@@ -810,7 +810,7 @@ export function freezeRewriteDescriptor(
     typeof candidate.generatedAt === "number" &&
     candidate.generatedAt !== previous.generatedAt
   ) {
-    return open3dErr<BlockDescriptor, Open3dDescriptorError>({
+    return plannerErr<BlockDescriptor, PlannerDescriptorError>({
       kind: "hashMismatch",
       code: "409.hash_mismatch",
       fieldPath: "generatedAt",
@@ -826,7 +826,7 @@ export function freezeRewriteDescriptor(
       path: issue.path.join("."),
       message: issue.message,
     }));
-    return open3dErr<BlockDescriptor, Open3dDescriptorError>({
+    return plannerErr<BlockDescriptor, PlannerDescriptorError>({
       kind: "invalid",
       code: "422.invalid",
       fieldPath: issues[0]?.path ?? "",
@@ -838,7 +838,7 @@ export function freezeRewriteDescriptor(
   const a = computeBlockDescriptorChecksum(previous);
   const b = computeBlockDescriptorChecksum(parsed.data);
   if (a !== b) {
-    return open3dErr<BlockDescriptor, Open3dDescriptorError>({
+    return plannerErr<BlockDescriptor, PlannerDescriptorError>({
       kind: "hashMismatch",
       code: "409.hash_mismatch",
       fieldPath: "checksum",
@@ -849,7 +849,7 @@ export function freezeRewriteDescriptor(
     });
   }
 
-  return open3dOk<BlockDescriptor, Open3dDescriptorError>({ ...parsed.data, checksum: a });
+  return plannerOk<BlockDescriptor, PlannerDescriptorError>({ ...parsed.data, checksum: a });
 }
 
 /** Fingerprint identity across processes — alias for {@link computeBlockDescriptorChecksum}. */

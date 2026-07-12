@@ -1,19 +1,28 @@
 /**
- * Single ID policy for planner entities: crypto.randomUUID() only (RFC 4122 string with hyphens).
- * No plc-/timestamp/random suffixes.
+ * Single ID policy for planner entities: **UUID v7** (RFC 9562, time-ordered).
+ * No plc- / timestamp / random suffixes. Package: `uuid` (site pin).
+ *
+ * Reads still accept any valid RFC UUID (legacy v4 documents).
+ */
+import { v7 as uuidv7, validate as uuidValidate, version as uuidVersion } from "uuid";
+
+/** Mint version for new planner project / entity ids. */
+export const PLANNER_ENTITY_UUID_VERSION = 7 as const;
+
+/**
+ * Mint a new planner entity id (UUID v7).
  */
 export function newEntityId(): string {
-  if (typeof globalThis.crypto?.randomUUID === "function") {
-    return globalThis.crypto.randomUUID();
-  }
-  throw new Error(
-    "crypto.randomUUID is required for entity ids (modern browser or Node 19+).",
-  );
+  return uuidv7();
 }
 
-/** UUID v4 shape check (hyphenated). */
+/** True for any valid RFC UUID string (v1–v8) — use when accepting loaded documents. */
 export function isEntityUuid(id: string): boolean {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-    id,
-  );
+  return typeof id === "string" && uuidValidate(id);
+}
+
+/** True when id is UUID v7 (current mint policy). */
+export function isPlannerEntityUuidV7(id: string): boolean {
+  if (!isEntityUuid(id)) return false;
+  return uuidVersion(id) === PLANNER_ENTITY_UUID_VERSION;
 }

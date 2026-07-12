@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 import {
   filterBuyerFacingCatalogItems,
   formatCatalogFootprintCm,
@@ -10,11 +10,11 @@ import {
   inventoryCategoriesForProduct,
   inventoryRoomGroupsForProduct,
 } from "@/features/planner/project/catalog/inventory/inventoryTaxonomy";
-import { OPEN3D_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
+import { PLANNER_DEMO_CATALOG_ITEMS } from "@/features/planner/editor/demoCatalogItems";
 
 function minimalItem(
-  overrides: Partial<Open3dCatalogItem> & Pick<Open3dCatalogItem, "id" | "name">,
-): Open3dCatalogItem {
+  overrides: Partial<PlannerCatalogItem> & Pick<PlannerCatalogItem, "id" | "name">,
+): PlannerCatalogItem {
   return {
     slug: overrides.id,
     sku: overrides.sku ?? overrides.id,
@@ -92,14 +92,14 @@ describe("isInternalCatalogItem", () => {
 
 describe("filterBuyerFacingCatalogItems", () => {
   it("removes proof chair from demo catalog seed", () => {
-    const filtered = filterBuyerFacingCatalogItems(OPEN3D_DEMO_CATALOG_ITEMS);
+    const filtered = filterBuyerFacingCatalogItems(PLANNER_DEMO_CATALOG_ITEMS);
     expect(filtered.some((i) => i.id === "proof-chair")).toBe(false);
-    expect(filtered.length).toBeLessThan(OPEN3D_DEMO_CATALOG_ITEMS.length);
+    expect(filtered.length).toBeLessThan(PLANNER_DEMO_CATALOG_ITEMS.length);
     expect(filtered.some((i) => /proof/i.test(i.name))).toBe(false);
   });
 
   it("keeps modular cabinet and desks", () => {
-    const filtered = filterBuyerFacingCatalogItems(OPEN3D_DEMO_CATALOG_ITEMS);
+    const filtered = filterBuyerFacingCatalogItems(PLANNER_DEMO_CATALOG_ITEMS);
     // demo seed may not include modular; ensure non-proof items remain
     expect(filtered.length).toBeGreaterThan(0);
     for (const item of filtered) {
@@ -110,11 +110,11 @@ describe("filterBuyerFacingCatalogItems", () => {
 
 describe("formatCatalogFootprintCm", () => {
   it("formats 600mm × 600mm as 60 × 60 cm", () => {
-    expect(formatCatalogFootprintCm(600, 600)).toBe("60 × 60 cm");
+    expect(formatCatalogFootprintCm(600, 600)).toBe("60 cm × 60 cm");
   });
 
   it("formats 2200mm × 900mm as 220 × 90 cm", () => {
-    expect(formatCatalogFootprintCm(2200, 900)).toBe("220 × 90 cm");
+    expect(formatCatalogFootprintCm(2200, 900)).toBe("220 cm × 90 cm");
   });
 });
 

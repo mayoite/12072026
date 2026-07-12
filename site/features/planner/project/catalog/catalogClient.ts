@@ -12,13 +12,13 @@
  */
 
 import type {
-  Open3dCatalogItem,
-  Open3dCatalogIndex,
-  Open3dCatalogSearchQuery,
-  Open3dCatalogSearchResult,
-  Open3dCatalogCategory,
-  Open3dRoomTag,
-  Open3dStyleTag,
+  PlannerCatalogItem,
+  PlannerCatalogIndex,
+  PlannerCatalogSearchQuery,
+  PlannerCatalogSearchResult,
+  PlannerCatalogCategory,
+  PlannerRoomTag,
+  PlannerStyleTag,
 } from "./catalogTypes";
 import {
   mapConfiguratorProductToCatalogItem,
@@ -149,7 +149,7 @@ export function tokenize(text: string): string[] {
  * description match (30) > fuzzy token match (10 per token).
  */
 function computeRelevance(
-  item: Open3dCatalogItem,
+  item: PlannerCatalogItem,
   queryTokens: string[],
   queryLower: string,
 ): number {
@@ -209,8 +209,8 @@ function computeRelevance(
 }
 
 function compareCatalogItems(
-  a: Open3dCatalogItem,
-  b: Open3dCatalogItem,
+  a: PlannerCatalogItem,
+  b: PlannerCatalogItem,
 ): number {
   return (
     a.name.localeCompare(b.name) ||
@@ -219,7 +219,7 @@ function compareCatalogItems(
   );
 }
 
-function compareNewest(a: Open3dCatalogItem, b: Open3dCatalogItem): number {
+function compareNewest(a: PlannerCatalogItem, b: PlannerCatalogItem): number {
   const left = Date.parse(a.provenance.importedAt ?? "");
   const right = Date.parse(b.provenance.importedAt ?? "");
   const safeLeft = Number.isFinite(left) ? left : 0;
@@ -245,18 +245,19 @@ interface CatalogApiEnvelope {
   data?: { items?: unknown[] };
 }
 
+/** Default page sizes — floor 50 for multi-SKU browse (was 24 hard-cap / 20 search). */
 const DEFAULT_PAGE_SIZE = 50;
-const DEFAULT_SEARCH_PAGE_SIZE = 20;
+const DEFAULT_SEARCH_PAGE_SIZE = 50;
 
 /**
- * Open3dCatalogClient manages the full catalog lifecycle:
+ * PlannerCatalogClient manages the full catalog lifecycle:
  * loading, indexing, search, filtering, caching, and pagination.
  */
-export class Open3dCatalogClient {
-  private items: Open3dCatalogItem[] = [];
-  private index: Open3dCatalogIndex | null = null;
+export class PlannerCatalogClient {
+  private items: PlannerCatalogItem[] = [];
+  private index: PlannerCatalogIndex | null = null;
   private tokenizedIndex: Map<string, Set<string>> = new Map(); // Pre-tokenized for search
-  private cache: LRUCache<Open3dCatalogSearchResult>;
+  private cache: LRUCache<PlannerCatalogSearchResult>;
   private options: Required<Omit<CatalogClientOptions, "fetchImpl">> & {
     fetchImpl?: typeof fetch;
   };
@@ -282,11 +283,11 @@ export class Open3dCatalogClient {
   }
 
   /**
-   * Load catalog from a normalized array of Open3dCatalogItem.
+   * Load catalog from a normalized array of PlannerCatalogItem.
    * Call this after mapping API responses via catalogMapping.
    * Pre-tokenizes all items for O(1) search lookups.
    */
-  load(items: Open3dCatalogItem[], source: CatalogSource): void {
+  load(items: PlannerCatalogItem[], source: CatalogSource): void {
     this.items = items;
     this.loadedSource = source;
     this.loadedAt = Date.now();
@@ -313,7 +314,7 @@ export class Open3dCatalogClient {
   async loadFromApi(
     source: CatalogSource,
     limit = 200,
-  ): Promise<Open3dCatalogItem[]> {
+  ): Promise<PlannerCatalogItem[]> {
     const fetcher = this.options.fetchImpl ?? globalThis.fetch;
     if (typeof fetcher !== "function") {
       throw new Error("Catalog API loading requires fetch");
@@ -337,7 +338,7 @@ export class Open3dCatalogClient {
         : [];
     const items = rawItems
       .map((raw) => this.normalizeApiItem(raw, source))
-      .filter((item): item is Open3dCatalogItem => item !== null);
+      .filter((item): item is PlannerCatalogItem => item !== null);
 
     this.load(items, source);
     return items;
@@ -346,14 +347,14 @@ export class Open3dCatalogClient {
   /**
    * Return the loaded catalog items.
    */
-  getAll(): Open3dCatalogItem[] {
+  getAll(): PlannerCatalogItem[] {
     return this.items;
   }
 
   /**
    * O(1) lookup by ID.
    */
-  getById(id: string): Open3dCatalogItem | null {
+  getById(id: string): PlannerCatalogItem | null {
     if (!this.index) return null;
     return this.index.byId.get(id) ?? null;
   }
@@ -361,7 +362,7 @@ export class Open3dCatalogClient {
   /**
    * O(1) lookup by slug.
    */
-  getBySlug(slug: string): Open3dCatalogItem | null {
+  getBySlug(slug: string): PlannerCatalogItem | null {
     if (!this.index) return null;
     return this.index.bySlug.get(slug.toLowerCase()) ?? null;
   }
@@ -369,7 +370,7 @@ export class Open3dCatalogClient {
   /**
    * O(1) lookup by SKU.
    */
-  getBySku(sku: string): Open3dCatalogItem | null {
+  getBySku(sku: string): PlannerCatalogItem | null {
     if (!this.index) return null;
     return this.index.bySku.get(sku.toLowerCase()) ?? null;
   }
@@ -377,7 +378,7 @@ export class Open3dCatalogClient {
   /**
    * Get items by category.
    */
-  getByCategory(category: Open3dCatalogCategory): Open3dCatalogItem[] {
+  getByCategory(category: PlannerCatalogCategory): PlannerCatalogItem[] {
     if (!this.index) return [];
     return this.index.byCategory.get(category) ?? [];
   }
@@ -385,7 +386,7 @@ export class Open3dCatalogClient {
   /**
    * Get items by room tag.
    */
-  getByRoom(room: string): Open3dCatalogItem[] {
+  getByRoom(room: string): PlannerCatalogItem[] {
     if (!this.index) return [];
     return this.index.byRoom.get(room as never) ?? [];
   }
@@ -393,7 +394,7 @@ export class Open3dCatalogClient {
   /**
    * Get items by style tag.
    */
-  getByStyle(style: string): Open3dCatalogItem[] {
+  getByStyle(style: string): PlannerCatalogItem[] {
     if (!this.index) return [];
     return this.index.byStyle.get(style as never) ?? [];
   }
@@ -401,7 +402,7 @@ export class Open3dCatalogClient {
   /**
    * Search the catalog with faceted queries.
    */
-  search(query: Open3dCatalogSearchQuery = {}): Open3dCatalogSearchResult {
+  search(query: PlannerCatalogSearchQuery = {}): PlannerCatalogSearchResult {
     const startedAt = performance.now();
 
     if (!this.index || this.items.length === 0) {
@@ -670,13 +671,12 @@ export class Open3dCatalogClient {
       candidates = [...candidates].sort(compareCatalogItems);
     }
 
-    // Step 4: Paginate
-    // Sketchfab parity: cursor-only pagination, explicit cap ≤24 (BP-06 / design §9 / REC-02 / phase-06)
+    // Step 4: Paginate — cursor-only. Default page size 50 (no hard 24 ceiling).
     const totalCount = candidates.length;
     const requested =
       query.pageSize ??
       (query.text ? this.options.searchPageSize : this.options.defaultPageSize);
-    const pageSize = Math.min(24, Math.max(1, requested));
+    const pageSize = Math.max(1, Math.floor(Number(requested) || 50));
 
     let startIndex = 0;
     if (query.cursor) {
@@ -691,7 +691,7 @@ export class Open3dCatalogClient {
     const hasMore = nextStart < totalCount;
     const nextCursor = hasMore ? nextStart.toString(36) : null;
 
-    const result: Open3dCatalogSearchResult = {
+    const result: PlannerCatalogSearchResult = {
       items: pageItems,
       totalCount,
       nextCursor,
@@ -743,7 +743,7 @@ export class Open3dCatalogClient {
    * Client returns pre-loaded (or []) — loader primary data injected via server props / getAll after server load (catalogue-first).
    * Uses resolveBlocks (actually consumes blocks result) for resolver integration.
    * Catalogue-first (descriptors primary source for items) + search parity + resolver wiring.
-   * Cites BP-06, design §9/10, GS. Called from useOpen3dWorkspaceCatalog + InventoryPanel.
+   * Cites BP-06, design §9/10, GS. Called from usePlannerWorkspaceCatalog + InventoryPanel.
    */
   async loadDescriptorsFromLoader(): Promise<BlockDescriptor[]> {
     const fetcher = this.options.fetchImpl ?? globalThis.fetch;
@@ -765,7 +765,7 @@ export class Open3dCatalogClient {
           : [];
       const items = rawItems
         .map((raw) => this.normalizeApiItem(raw, "standard"))
-        .filter((item): item is Open3dCatalogItem => item !== null);
+        .filter((item): item is PlannerCatalogItem => item !== null);
       if (items.length > 0) {
         this.load(items, "standard");
       }
@@ -797,14 +797,14 @@ export class Open3dCatalogClient {
 
   // ── Private helpers ──
 
-  private buildIndex(items: Open3dCatalogItem[]): Open3dCatalogIndex {
-    const byId = new Map<string, Open3dCatalogItem>();
-    const bySlug = new Map<string, Open3dCatalogItem>();
-    const bySku = new Map<string, Open3dCatalogItem>();
-    const byCategory = new Map<Open3dCatalogCategory, Open3dCatalogItem[]>();
-    const byTag = new Map<string, Open3dCatalogItem[]>();
-    const byRoom = new Map<Open3dRoomTag, Open3dCatalogItem[]>();
-    const byStyle = new Map<Open3dStyleTag, Open3dCatalogItem[]>();
+  private buildIndex(items: PlannerCatalogItem[]): PlannerCatalogIndex {
+    const byId = new Map<string, PlannerCatalogItem>();
+    const bySlug = new Map<string, PlannerCatalogItem>();
+    const bySku = new Map<string, PlannerCatalogItem>();
+    const byCategory = new Map<PlannerCatalogCategory, PlannerCatalogItem[]>();
+    const byTag = new Map<string, PlannerCatalogItem[]>();
+    const byRoom = new Map<PlannerRoomTag, PlannerCatalogItem[]>();
+    const byStyle = new Map<PlannerStyleTag, PlannerCatalogItem[]>();
     const textIndex = new Map<string, Set<string>>();
 
     for (const item of items) {
@@ -862,9 +862,9 @@ export class Open3dCatalogClient {
   private normalizeApiItem(
     raw: unknown,
     source: CatalogSource,
-  ): Open3dCatalogItem | null {
+  ): PlannerCatalogItem | null {
     if (!raw || typeof raw !== "object") return null;
-    if (this.isOpen3dCatalogItem(raw)) return raw;
+    if (this.isPlannerCatalogItem(raw)) return raw;
     return source === "configurator"
       ? mapConfiguratorProductToCatalogItem(raw as ConfiguratorProductInput)
       : mapPlannerManagedProductToCatalogItem(
@@ -872,9 +872,9 @@ export class Open3dCatalogClient {
         );
   }
 
-  private isOpen3dCatalogItem(raw: unknown): raw is Open3dCatalogItem {
+  private isPlannerCatalogItem(raw: unknown): raw is PlannerCatalogItem {
     if (!raw || typeof raw !== "object") return false;
-    const item = raw as Partial<Open3dCatalogItem>;
+    const item = raw as Partial<PlannerCatalogItem>;
     return (
       typeof item.id === "string" &&
       typeof item.slug === "string" &&

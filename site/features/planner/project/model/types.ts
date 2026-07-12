@@ -1,32 +1,32 @@
-export interface Open3dPoint {
+export interface PlannerPoint {
   x: number;
   y: number;
 }
 
-export interface Open3dWall {
+export interface PlannerWall {
   id: string;
-  start: Open3dPoint;
-  end: Open3dPoint;
+  start: PlannerPoint;
+  end: PlannerPoint;
   thickness: number;
   height: number;
   color: string;
 }
 
-export type Open3dDisplayUnit = "mm" | "cm" | "m" | "in" | "ft-in";
-export type Open3dRoomCategory = "indoor" | "outdoor" | "garage" | "utility";
+export type PlannerDisplayUnit = "mm" | "cm" | "m" | "in" | "ft-in";
+export type PlannerRoomCategory = "indoor" | "outdoor" | "garage" | "utility";
 
-export interface Open3dRoom {
+export interface PlannerRoom {
   id: string;
   name: string;
   walls: string[];
   floorTexture: string;
   area: number;
   color?: string;
-  roomType?: Open3dRoomCategory;
-  labelOffset?: Open3dPoint;
+  roomType?: PlannerRoomCategory;
+  labelOffset?: PlannerPoint;
 }
 
-export interface Open3dDoor {
+export interface PlannerDoor {
   id: string;
   wallId: string;
   position: number;
@@ -37,7 +37,7 @@ export interface Open3dDoor {
   flipSide: boolean;
 }
 
-export interface Open3dWindow {
+export interface PlannerWindow {
   id: string;
   wallId: string;
   position: number;
@@ -48,7 +48,7 @@ export interface Open3dWindow {
 }
 
 /** Furniture mesh generation mode (document-serializable; no THREE objects). */
-export type Open3dFurnitureGeometryMode =
+export type PlannerFurnitureGeometryMode =
   | "box"
   | "modular-cabinet-v0"
   | "workstation-v0";
@@ -57,7 +57,7 @@ export type Open3dFurnitureGeometryMode =
  * Serializable modular cabinet-v0 options (mirrors ModularCabinetV0Options).
  * Stored on furniture for save/load and 3D rebuild without designer GLB.
  */
-export interface Open3dModularCabinetV0Options {
+export interface PlannerModularCabinetV0Options {
   widthMm: number;
   depthMm: number;
   heightMm: number;
@@ -69,7 +69,7 @@ export interface Open3dModularCabinetV0Options {
  * Serializable systems-v0 workstation options (mirrors WorkstationV0MeshOptions).
  * Stored on furniture for multi-part mesh rebuild without designer GLB.
  */
-export interface Open3dWorkstationV0Options {
+export interface PlannerWorkstationV0Options {
   shape: "linear" | "l-shape";
   lengthMm: number;
   depthMm: number;
@@ -77,10 +77,10 @@ export interface Open3dWorkstationV0Options {
   modules: Array<"desk" | "return" | "pedestal" | "panel" | "overhead">;
 }
 
-export interface Open3dFurnitureItem {
+export interface PlannerFurnitureItem {
   id: string;
   catalogId: string;
-  position: Open3dPoint;
+  position: PlannerPoint;
   rotation: number;
   scale: { x: number; y: number; z: number };
   width?: number;
@@ -93,11 +93,11 @@ export interface Open3dFurnitureItem {
   sourceSlug?: string;
   sourceSku?: string;
   /** When modular-cabinet-v0 / workstation-v0, viewer builds multi-part mesh. */
-  geometryMode?: Open3dFurnitureGeometryMode;
+  geometryMode?: PlannerFurnitureGeometryMode;
   /** Required when geometryMode is modular-cabinet-v0. */
-  modularOptions?: Open3dModularCabinetV0Options;
+  modularOptions?: PlannerModularCabinetV0Options;
   /** Required when geometryMode is workstation-v0. */
-  workstationOptions?: Open3dWorkstationV0Options;
+  workstationOptions?: PlannerWorkstationV0Options;
   /**
    * System-generated GLB URL (catalog-assets/generated/* or blob:).
    * Place leaves unset (procedural default). Stamp after G5 via
@@ -117,9 +117,9 @@ export interface Open3dFurnitureItem {
   previewImageUrl?: string;
 }
 
-export interface Open3dStair {
+export interface PlannerStair {
   id: string;
-  position: Open3dPoint;
+  position: PlannerPoint;
   rotation: number;
   width: number;
   depth: number;
@@ -128,9 +128,9 @@ export interface Open3dStair {
   stairType: "straight" | "l-shaped" | "u-shaped" | "spiral";
 }
 
-export interface Open3dColumn {
+export interface PlannerColumn {
   id: string;
-  position: Open3dPoint;
+  position: PlannerPoint;
   rotation: number;
   shape: "round" | "square";
   diameter: number;
@@ -138,13 +138,13 @@ export interface Open3dColumn {
   color: string;
 }
 
-export interface Open3dGuide {
+export interface PlannerGuide {
   id: string;
   orientation: "horizontal" | "vertical";
   position: number;
 }
 
-export interface Open3dMeasurement {
+export interface PlannerMeasurement {
   id: string;
   x1: number;
   y1: number;
@@ -152,12 +152,12 @@ export interface Open3dMeasurement {
   y2: number;
 }
 
-export interface Open3dAnnotation extends Open3dMeasurement {
+export interface PlannerAnnotation extends PlannerMeasurement {
   label?: string;
   offset: number;
 }
 
-export interface Open3dTextAnnotation {
+export interface PlannerTextAnnotation {
   id: string;
   x: number;
   y: number;
@@ -167,55 +167,55 @@ export interface Open3dTextAnnotation {
   rotation: number;
 }
 
-export interface Open3dElementGroup {
+export interface PlannerElementGroup {
   id: string;
   elementIds: string[];
 }
 
-export interface Open3dBackgroundImage {
+export interface PlannerBackgroundImage {
   dataUrl: string;
-  position: Open3dPoint;
+  position: PlannerPoint;
   scale: number;
   opacity: number;
   rotation: number;
   locked: boolean;
 }
 
-export interface Open3dFloor {
+export interface PlannerFloor {
   id: string;
   name: string;
   level: number;
-  walls: Open3dWall[];
-  rooms: Open3dRoom[];
-  doors: Open3dDoor[];
-  windows: Open3dWindow[];
-  furniture: Open3dFurnitureItem[];
-  stairs: Open3dStair[];
-  columns: Open3dColumn[];
-  guides: Open3dGuide[];
-  measurements: Open3dMeasurement[];
-  annotations: Open3dAnnotation[];
-  textAnnotations: Open3dTextAnnotation[];
-  groups: Open3dElementGroup[];
-  backgroundImage?: Open3dBackgroundImage;
+  walls: PlannerWall[];
+  rooms: PlannerRoom[];
+  doors: PlannerDoor[];
+  windows: PlannerWindow[];
+  furniture: PlannerFurnitureItem[];
+  stairs: PlannerStair[];
+  columns: PlannerColumn[];
+  guides: PlannerGuide[];
+  measurements: PlannerMeasurement[];
+  annotations: PlannerAnnotation[];
+  textAnnotations: PlannerTextAnnotation[];
+  groups: PlannerElementGroup[];
+  backgroundImage?: PlannerBackgroundImage;
 }
 
-export interface Open3dProject {
+export interface PlannerProject {
   id: string;
   name: string;
   description?: string;
-  floors: Open3dFloor[];
+  floors: PlannerFloor[];
   activeFloorId: string;
-  displayUnit: Open3dDisplayUnit;
+  displayUnit: PlannerDisplayUnit;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface Open3dPlannerSceneEnvelope {
+export interface PlannerSceneEnvelope {
   type: "open3d-floorplan-project";
   version: 1;
   units: "mm";
-  displayUnit: Open3dDisplayUnit;
+  displayUnit: PlannerDisplayUnit;
   source: "native-open3d";
-  project: Open3dProject;
+  project: PlannerProject;
 }

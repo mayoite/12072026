@@ -75,7 +75,7 @@ async function main() {
     },
     cursorCap: {
       id: "06-INV-05",
-      note: "pageSize ≤24 enforced in Open3dCatalogClient.search (unit-tested)",
+      note: "pageSize ≤24 enforced in PlannerCatalogClient.search (unit-tested)",
       pass: true,
     },
   };

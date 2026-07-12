@@ -9,12 +9,12 @@
  */
 
 import type {
-  Open3dCatalogItem,
-  Open3dCatalogCategory,
-  Open3dRecentItemEntry,
-  Open3dFavoriteEntry,
-  Open3dRecentItemsData,
-  Open3dFavoritesData,
+  PlannerCatalogItem,
+  PlannerCatalogCategory,
+  PlannerRecentItemEntry,
+  PlannerFavoriteEntry,
+  PlannerRecentItemsData,
+  PlannerFavoritesData,
 } from "./catalogTypes";
 
 // ── Storage keys ──
@@ -34,7 +34,7 @@ const CURRENT_SCHEMA_VERSION = 1;
 /**
  * Validate that parsed data has required schema structure.
  */
-function isValidRecentItemsData(data: unknown): data is Open3dRecentItemsData {
+function isValidRecentItemsData(data: unknown): data is PlannerRecentItemsData {
   if (!data || typeof data !== "object") return false;
   const obj = data as Record<string, unknown>;
   if (typeof obj.schemaVersion !== "number") return false;
@@ -51,7 +51,7 @@ function isValidRecentItemsData(data: unknown): data is Open3dRecentItemsData {
   return true;
 }
 
-function isValidFavoritesData(data: unknown): data is Open3dFavoritesData {
+function isValidFavoritesData(data: unknown): data is PlannerFavoritesData {
   if (!data || typeof data !== "object") return false;
   const obj = data as Record<string, unknown>;
   if (typeof obj.schemaVersion !== "number") return false;
@@ -98,7 +98,7 @@ function safeWrite(key: string, value: unknown): void {
  * Add a catalog item to recent items.
  * Deduplicates by SKU, enforces max count, maintains reverse-chronological order.
  */
-export function addRecentItem(item: Pick<Open3dCatalogItem, "sku" | "id" | "name">): void {
+export function addRecentItem(item: Pick<PlannerCatalogItem, "sku" | "id" | "name">): void {
   const data = readRecentItems();
   const now = new Date().toISOString();
 
@@ -124,7 +124,7 @@ export function addRecentItem(item: Pick<Open3dCatalogItem, "sku" | "id" | "name
 /**
  * Get recent items in reverse-chronological order.
  */
-export function getRecentItems(): Open3dRecentItemEntry[] {
+export function getRecentItems(): PlannerRecentItemEntry[] {
   return readRecentItems().items;
 }
 
@@ -141,7 +141,7 @@ export function clearRecentItems(): void {
  * Add a catalog item to favorites.
  */
 export function addFavoriteItem(
-  item: Pick<Open3dCatalogItem, "id" | "sku" | "name" | "category">,
+  item: Pick<PlannerCatalogItem, "id" | "sku" | "name" | "category">,
 ): void {
   const data = readFavorites();
 
@@ -183,14 +183,14 @@ export function isFavorite(catalogId: string): boolean {
 /**
  * Get all favorite items.
  */
-export function getFavoriteItems(): Open3dFavoriteEntry[] {
+export function getFavoriteItems(): PlannerFavoriteEntry[] {
   return readFavorites().items;
 }
 
 /**
  * Get favorite items filtered by category.
  */
-export function getFavoritesByCategory(category: Open3dCatalogCategory): Open3dFavoriteEntry[] {
+export function getFavoritesByCategory(category: PlannerCatalogCategory): PlannerFavoriteEntry[] {
   return readFavorites().items.filter((entry) => entry.category === category);
 }
 
@@ -222,26 +222,26 @@ export function migrateFavoritesSchema(): void {
 
 // ── Internal read/write ──
 
-function readRecentItems(): Open3dRecentItemsData {
-  return safeRead<Open3dRecentItemsData>(
+function readRecentItems(): PlannerRecentItemsData {
+  return safeRead<PlannerRecentItemsData>(
     RECENT_KEY,
     { schemaVersion: CURRENT_SCHEMA_VERSION, items: [] },
     isValidRecentItemsData,
   );
 }
 
-function writeRecentItems(data: Open3dRecentItemsData): void {
+function writeRecentItems(data: PlannerRecentItemsData): void {
   safeWrite(RECENT_KEY, data);
 }
 
-function readFavorites(): Open3dFavoritesData {
-  return safeRead<Open3dFavoritesData>(
+function readFavorites(): PlannerFavoritesData {
+  return safeRead<PlannerFavoritesData>(
     FAVORITES_KEY,
     { schemaVersion: CURRENT_SCHEMA_VERSION, items: [] },
     isValidFavoritesData,
   );
 }
 
-function writeFavorites(data: Open3dFavoritesData): void {
+function writeFavorites(data: PlannerFavoritesData): void {
   safeWrite(FAVORITES_KEY, data);
 }

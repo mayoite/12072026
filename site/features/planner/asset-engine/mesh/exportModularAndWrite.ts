@@ -61,7 +61,23 @@ export async function exportModularAndWrite(
     };
   }
 
-  const stages = [...binary.stages, "write-public"];
+  // Node-only validate (export path is browser-safe; node:fs must not enter client graph)
+  let validation = binary.validation;
+  const stages = [...binary.stages];
+  if (typeof process !== "undefined" && process.versions?.node) {
+    const { validateGlbAsset } = await import("@/features/planner/lib/assetPipeline");
+    validation = await validateGlbAsset(binary.buffer);
+    stages.push("mesh-g6-validate-glb-node");
+    if (!validation.valid) {
+      return {
+        ok: false,
+        error: validation.errors.join("; ") || "GLB validation failed",
+        failedAt: "mesh-g6-validate-glb-node",
+        stages,
+      };
+    }
+  }
+  stages.push("write-public");
   try {
     const write = writeGeneratedGlbToPublic(
       binary.buffer,
@@ -75,7 +91,7 @@ export async function exportModularAndWrite(
       buffer: binary.buffer,
       byteLength: binary.byteLength,
       plan: binary.plan,
-      validation: binary.validation,
+      validation,
       absolutePath: write.absolutePath,
       publicUrlPath: write.publicUrlPath,
       write,

@@ -7,14 +7,14 @@
 
 import React, { lazy, Suspense } from "react";
 import type { ReactNode } from "react";
-import type { Open3dProject } from "@/features/planner/project/model/types";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 import styles from "./threeLazyViewer.module.css";
-import { readThreeThemeColor } from "../shared/readThemeColor";
-import { OPEN3D_ORBIT_DEFAULT_ENABLED } from "./orbitDefaults";
+import { readThreeThemeColor } from "@/features/planner/project/shared/readThemeColor";
+import { PLANNER_ORBIT_DEFAULT_ENABLED } from "./orbitDefaults";
 
 export {
-  OPEN3D_ORBIT_DEFAULT_ENABLED,
-  getOpen3dViewerControlProps,
+  PLANNER_ORBIT_DEFAULT_ENABLED,
+  getPlannerViewerControlProps,
 } from "./orbitDefaults";
 
 /**
@@ -59,7 +59,7 @@ function ViewerErrorFallback({
  */
 export interface Lazy3DViewerProps {
   /** The project data to render */
-  projectData?: Pick<Open3dProject, "id" | "name" | "floors">;
+  projectData?: Pick<PlannerProject, "id" | "name" | "floors">;
   /** Optional CSS className */
   className?: string;
   /** Callback when 3D view is ready */
@@ -128,7 +128,7 @@ class ViewerErrorBoundary extends React.Component<
  * 
  * Usage:
  * ```tsx
- * import { Lazy3DViewer } from "./three-lazy/Lazy3DViewer";
+ * import { Lazy3DViewer } from "@/features/planner/3d/ThreeLazyViewer";
  * 
  * // Only render when user clicks "View 3D" button
  * {show3DView && <Lazy3DViewer projectData={project} />}
@@ -142,7 +142,7 @@ export function Lazy3DViewer(props: Lazy3DViewerProps): React.JSX.Element {
     onError,
     loadingMessage = "Loading 3D viewer...",
     enableShadows = true,
-    enableControls = OPEN3D_ORBIT_DEFAULT_ENABLED,
+    enableControls = PLANNER_ORBIT_DEFAULT_ENABLED,
     backgroundColor,
   } = props;
 

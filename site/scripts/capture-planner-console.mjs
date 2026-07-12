@@ -39,8 +39,8 @@ async function settle(ms = 2500) {
   await page.waitForTimeout(ms);
 }
 
-// --- open3d pilot ---
-await page.goto(`${baseURL}/planner/open3d/?plannerDevTools=1`, {
+// --- live canvas host ---
+await page.goto(`${baseURL}/planner/canvas/?plannerDevTools=1`, {
   waitUntil: "domcontentloaded",
   timeout: 90_000,
 });
