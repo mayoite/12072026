@@ -12,11 +12,11 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 
-import { loadAll } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+import { loadAll } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import {
   buildBlockThumbPngUrl,
   buildSvgCatalogPublicUrl,
-} from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
+} from "@/features/planner/project/catalog/svg/svgPreviewAssets";
 import { SvgCatalogGrid } from "./SvgCatalogGrid";
 
 function resolveSvgPublicUrl(slug: string): string | undefined {

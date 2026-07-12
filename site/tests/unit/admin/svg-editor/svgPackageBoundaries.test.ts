@@ -10,7 +10,7 @@ describe("SVG package boundaries", () => {
 
   it("marks compiler and authoritative sanitizer server-only", () => {
     for (const file of ["svgCompiler.server.ts", "svgServerSanitizer.ts"]) {
-      const source = readFileSync(path.resolve(process.cwd(), "features/planner/open3d/catalog/svg", file), "utf8");
+      const source = readFileSync(path.resolve(process.cwd(), "features/planner/project/catalog/svg", file), "utf8");
       expect(source).toMatch(/^import "server-only";/);
     }
   });

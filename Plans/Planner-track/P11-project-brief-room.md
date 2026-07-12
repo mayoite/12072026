@@ -26,3 +26,6 @@
 ## Evidence
 
 `results/planner/product-wave/11-project-brief-room/`
+
+**Host:** Fabric sole (`planner-fabric-stage`). second plan host is forbidden.  
+**Next (sequence):** [P12](./P12-workstation-configurator.md) after P11 acceptance green.

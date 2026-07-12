@@ -2,8 +2,10 @@
 
 import { useEffect } from "react";
 
-import type { FabricDrawTool } from "@/features/planner/canvas-fabric/fabricDrawToolTypes";
 import { usePlannerStore } from "@/features/planner/store/plannerStore";
+
+/** Local tool names — archive fabricDrawToolTypes removed with _archive. */
+export type FabricDrawTool = "select" | "pan" | "rectangle" | "line" | "text" | string;
 
 export interface KeyboardShortcutCanvas {
   setDrawTool: (tool: FabricDrawTool) => void;
@@ -52,79 +54,49 @@ export function useKeyboardShortcuts(
       if (isEditableTarget(event.target)) return;
 
       const key = event.key.toLowerCase();
-      const commandKey = event.metaKey || event.ctrlKey;
+      const mod = event.metaKey || event.ctrlKey;
 
-      if (commandKey) {
-        if (key === "z" && event.shiftKey) {
-          event.preventDefault();
-          fabricCanvas.redo();
-          return;
-        }
-        if (key === "z") {
-          event.preventDefault();
-          fabricCanvas.undo();
-          return;
-        }
-        if (key === "c") {
-          event.preventDefault();
-          fabricCanvas.copy();
-          return;
-        }
-        if (key === "v") {
-          event.preventDefault();
-          fabricCanvas.paste();
-          return;
-        }
-        if (key === "=" || key === "+") {
-          event.preventDefault();
-          fabricCanvas.zoomIn();
-          return;
-        }
-        if (key === "-") {
-          event.preventDefault();
-          fabricCanvas.zoomOut();
-          return;
-        }
-        if (key === "a") {
-          event.preventDefault();
-          fabricCanvas.selectAll?.();
-          return;
-        }
+      if (key === "escape") {
+        onEscape?.();
+        fabricCanvas.closeContextMenu?.();
+        return;
       }
 
-      if (event.altKey || commandKey || event.shiftKey) return;
-
-      switch (key) {
-        case "v":
-          event.preventDefault();
-          setTool(fabricCanvas, "select");
-          break;
-        case "h":
-          event.preventDefault();
-          setTool(fabricCanvas, "pan");
-          break;
-        case "r":
-          event.preventDefault();
-          setTool(fabricCanvas, "room");
-          break;
-        case "escape":
-          event.preventDefault();
-          setTool(fabricCanvas, "select");
-          fabricCanvas.closeContextMenu?.();
-          onEscape?.();
-          break;
-        case "delete":
-        case "backspace":
-          event.preventDefault();
-          fabricCanvas.deleteSelection();
-          break;
-        case "0":
-          event.preventDefault();
-          fabricCanvas.fitToContent();
-          break;
-        default:
-          break;
+      if (mod && key === "z" && !event.shiftKey) {
+        event.preventDefault();
+        fabricCanvas.undo();
+        return;
       }
+      if (mod && (key === "y" || (key === "z" && event.shiftKey))) {
+        event.preventDefault();
+        fabricCanvas.redo();
+        return;
+      }
+      if (mod && key === "c") {
+        event.preventDefault();
+        fabricCanvas.copy();
+        return;
+      }
+      if (mod && key === "v") {
+        event.preventDefault();
+        fabricCanvas.paste();
+        return;
+      }
+      if (mod && key === "a") {
+        event.preventDefault();
+        fabricCanvas.selectAll?.();
+        return;
+      }
+
+      if (key === "v") setTool(fabricCanvas, "select");
+      if (key === "h") setTool(fabricCanvas, "pan");
+      if (key === "delete" || key === "backspace") {
+        event.preventDefault();
+        fabricCanvas.deleteSelection();
+      }
+      if (key === "=" || key === "+") fabricCanvas.zoomIn();
+      if (key === "-") fabricCanvas.zoomOut();
+      if (key === "0") fabricCanvas.fitToContent();
     };
 
     window.addEventListener("keydown", onKeyDown);

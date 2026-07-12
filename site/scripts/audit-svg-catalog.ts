@@ -12,7 +12,7 @@ import { readSvgArtifactStatus } from "../features/planner/admin/svg-editor/svgA
 import {
   clearLoaderCache,
   loadAll,
-} from "../features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+} from "../features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import {
   resolveBlockDescriptorsDir,
   resolveSitePackageRoot,

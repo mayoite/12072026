@@ -1,39 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+/**
+ * Archive fabric runtime removed.
+ * Metrics/selection for open3d come from Open3dProject / workspace — not deleted shell.
+ */
 
-import {
-  subscribePlannerFabricRuntimeState,
-} from "@/features/planner/canvas-fabric";
-import { getEditorSelectionStatus } from "@/features/planner/editor/editorSelectionStatus";
-import { getPageMetrics, type PlanMetrics } from "@/features/planner/editor/planMetrics";
+export type PlanMetrics = {
+  wallCount: number;
+  furnitureCount: number;
+  roomAreaSqm: number;
+  zoneAreaSqm: number;
+};
+
+const EMPTY_METRICS: PlanMetrics = {
+  wallCount: 0,
+  furnitureCount: 0,
+  roomAreaSqm: 0,
+  zoneAreaSqm: 0,
+};
 
 export function useFabricPlanMetrics(): PlanMetrics {
-  const [metrics, setMetrics] = useState<PlanMetrics>(() => getPageMetrics(null));
-
-  useEffect(() => {
-    const unsubscribe = subscribePlannerFabricRuntimeState(() => {
-      setMetrics(getPageMetrics(null));
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  return metrics;
+  return EMPTY_METRICS;
 }
 
 export function useFabricSelectionStatus(): string | null {
-  const [status, setStatus] = useState<string | null>(() => getEditorSelectionStatus());
-
-  useEffect(() => {
-    const unsubscribe = subscribePlannerFabricRuntimeState(() => {
-      setStatus(getEditorSelectionStatus());
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  return status;
+  return null;
 }

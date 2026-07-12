@@ -8,7 +8,7 @@
 import type { Metadata } from "next";
 import AdminSvgEditorListView from "@/features/planner/admin/svg-editor/AdminSvgEditorListView";
 import { readSvgArtifactStatuses } from "@/features/planner/admin/svg-editor/svgArtifactStatus.server";
-import { loadAll } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+import { loadAll } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
 export const metadata: Metadata = {
   title: "SVG block editor | Oando Admin",

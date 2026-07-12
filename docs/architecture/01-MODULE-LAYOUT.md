@@ -16,7 +16,7 @@ Typical confusion today:
 
 | Question | Today (haphazard) |
 |----------|-------------------|
-| Where is the planner workspace? | `features/planner/open3d/editor/` **and** legacy `features/planner/editor/` |
+| Where is the planner workspace? | `features/planner/editor/` **and** legacy `features/planner/editor/` |
 | Where is state? | `open3d/store/` **and** `features/planner/store/` |
 | Admin SVG editor? | `features/planner/admin/svg-editor/` + thin `app/admin/svg-editor/` |
 | Marketing UI? | `components/home/` **and** `features/site-assistant/` |
@@ -56,14 +56,14 @@ site/
 | `app/admin/` | Admin route entries | Puck registry, compilers |
 | `app/api/` | Route handlers | Zod schemas + services live in `features/` or `lib/` |
 
-**Pilot route (real):** `app/planner/open3d/page.tsx` → imports `Open3dPlannerHost` from `features/planner/ui/` (shim target: `open3d/ui/` per 1A).
+**Pilot route (real):** `app/planner/open3d/page.tsx` → imports `PlannerHost` from `features/planner/ui/` (shim target: `open3d/ui/` per 1A).
 
 **Max thickness:** import a feature view, pass `searchParams`, set `dynamic` / `metadata`.
 
 ```tsx
 // Good — app/planner/open3d/page.tsx
-import { Open3dPlannerHost } from "@/features/planner/ui/Open3dPlannerHost";
-export default function Page(props) { return <Open3dPlannerHost ... />; }
+import { PlannerHost } from "@/features/planner/ui/PlannerHost";
+export default function Page(props) { return <PlannerHost ... />; }
 ```
 
 ---
@@ -74,11 +74,11 @@ Top level = **product area**, not technology:
 
 | Folder | Owns |
 |--------|------|
-| `features/planner/open3d/` | **Active workspace** — editor, model, store, persistence, catalog, 3d, `canvas-stage` |
-| `features/planner/canvas-fabric-stage/` | **Live Fabric 2D stage** (mounted as `PlannerCanvasStage`) |
+| `features/planner/project/` | **Active workspace** — editor, model, store, persistence, catalog, 3d, `canvas-stage` |
+| `features/planner/canvas/` | **Live Fabric 2D stage** (mounted as `PlannerCanvasStage`) |
 | `features/planner/landing/` | Planner marketing pages |
 | `features/planner/admin/` | Admin **views** for planner domain (svg-editor, catalog admin) |
-| `features/planner/_archive/` | Feasibility + legacy Fabric shell — **no new code** |
+| `features/planner/_archive/` | **Legacy Fabric shell only** (`_archive/fabric/`). **No** `canvas-feasibility` (does not / will not exist). **No new code** under `_archive/` |
 | `features/catalog/` | Site catalog — [`02-DOMAINS.md`](02-DOMAINS.md#catalog-three-authorities) |
 | `features/crm/` | CRM — [`02-DOMAINS.md`](02-DOMAINS.md#crm) |
 | `features/ops/` | Ops UI — [`02-DOMAINS.md`](02-DOMAINS.md#ops) |
@@ -87,7 +87,7 @@ Top level = **product area**, not technology:
 | `features/ai/` | Shared AI advisors — [`02-DOMAINS.md`](02-DOMAINS.md#ai--assistant) |
 | `features/portal/` | Portal-specific (if not under planner) |
 
-#### Inside `features/planner/open3d/` (canonical pilot tree)
+#### Inside `features/planner/project/` (canonical pilot tree)
 
 | Subfolder | Owns |
 |-----------|------|
@@ -97,13 +97,13 @@ Top level = **product area**, not technology:
 | `lib/commands/` | `PlannerCommand` — **exists; not yet wired through `useWorkspaceCanvas`** |
 | `persistence/` | Save/load, autosave, guest repo |
 | `catalog/` | Search, loader, SVG consumer |
-| `canvas-stage/` | Live 2D entry — re-exports Fabric `PlannerCanvasStage` from `canvas-fabric-stage/` |
+| `canvas-stage/` | Live 2D entry — re-exports Fabric `PlannerCanvasStage` from `canvas/` |
 | `3d/` | Three viewer + orbit defaults |
 | `shared/` | Export/import, document bridge |
 | `ai/` | Open3d-scoped AI |
 | `ui/` | Route host adapters **used only by planner routes** |
 
-**New planner workspace code → `open3d/` or `canvas-fabric-stage/`** (live 2D). No new code under `_archive/`.
+**New planner workspace code → `open3d/` or `canvas/`** (live 2D). No new code under `_archive/`.
 
 #### Legacy `features/planner/{editor,model,store,...}` (root)
 
@@ -122,7 +122,7 @@ Top level = **product area**, not technology:
 
 **Must not hold:** planner workspace panels, admin CRUD logic, API clients.
 
-**Rule:** If it only appears on `(site)` marketing routes → `components/`. If it's planner product → `features/planner/open3d/`.
+**Rule:** If it only appears on `(site)` marketing routes → `components/`. If it's planner product → `features/planner/project/`.
 
 ---
 
@@ -139,15 +139,15 @@ No React screens. No `*.module.css`.
 
 ### 5. Styles — never mirror `features/` as folders
 
-All CSS under `app/css/` per [`04-CSS-SOLUTION.md`](04-CSS-SOLUTION.md). Feature code references tokens via layout bundles — does not get `features/planner/open3d/css/`.
+All CSS under `app/css/` per [`04-CSS-SOLUTION.md`](04-CSS-SOLUTION.md). Feature code references tokens via layout bundles — does not get `features/planner/project/css/`.
 
 ---
 
 ### 6. Tests — mirror `features/`, never co-locate
 
 ```text
-site/features/planner/open3d/editor/InventoryPanel.tsx
-site/tests/unit/features/planner/open3d/editor/InventoryPanel.test.tsx  ← if needed
+site/features/planner/editor/InventoryPanel.tsx
+site/tests/unit/features/planner/editor/InventoryPanel.test.tsx  ← if needed
 ```
 
 Enforced by `test:layout:check`.
@@ -201,7 +201,7 @@ Dual models until migration: `BlockDescriptor` (loader consumer) + `SvgBlockDefi
 Is it a URL/route?
   yes → app/{surface}/...
 Is it planner workspace / catalog / save path?
-  yes → features/planner/open3d/{editor|model|store|catalog|persistence|...}
+  yes → features/planner/project/{editor|model|store|catalog|persistence|...}
 Is it admin UI for planner/SVG?
   yes → features/planner/admin/ + app/admin/.../page.tsx
 Is it marketing / homepage?

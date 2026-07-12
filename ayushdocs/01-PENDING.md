@@ -29,7 +29,7 @@ W3 browser must not be count-only.
 
 | Track | One next action |
 |-------|-----------------|
-| Planner | CP-03 id+pose browser |
+| Planner | P01 inventory pack this HEAD — owner accept → **P02** (sequence P01→P12) |
 | Admin | A4.0.1 publish bytes |
 | Site | S1 owner decision |
 | SEO | SEO1 sitemap diff close |
@@ -37,5 +37,5 @@ W3 browser must not be count-only.
 
 ## Live stack (intent)
 
-2D = Fabric sole host. Feasibility archived.  
+2D = Fabric sole host. Feasibility / `canvas-feasibility` **does not and will not exist**.  
 Foreign skill packs under `.agents/skills` are **not** product law — owner deleted them intentionally.

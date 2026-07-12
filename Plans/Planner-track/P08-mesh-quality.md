@@ -8,7 +8,7 @@
 
 **Goal:** Freeze bar in `../../results/planner/world-standard-wave/08-mesh-quality/NOTES.md`; prove with units + headless visual smoke; plan === mesh part list.
 
-**Out of scope:** Photoreal · full kitchens/hardware · 2D host thrash · Feasibility restore · cloud catalog · designer static GLB · non–cabinet-v0 · writes under `site/public/**`. Stay imperative Three — no R3F rewrite for pretty PNGs.
+**Out of scope:** Photoreal · full kitchens/hardware · 2D host thrash · adding a second plan host · cloud catalog · designer static GLB · non–cabinet-v0 · writes under `site/public/**`. Stay imperative Three — no R3F rewrite for pretty PNGs.
 
 **Depends:** P01 path truth. P07 browser place optional — headless mesh PNG is default smoke.
 
@@ -55,7 +55,7 @@ Default slab children **exact order:** `toe` → `carcass` → `door-slab` (pair
 | `modularCabinetV0*.test.ts` · `modularPlaceMesh.test.ts` | TDD |
 | Evidence | NOTES · vitest logs · headless PNGs · `run.json` |
 
-Prefix open3d: `site/features/planner/open3d/`.
+Prefix open3d: `site/features/planner/project/`.
 
 ---
 
@@ -70,4 +70,4 @@ Prefix open3d: `site/features/planner/open3d/`.
 - [ ] Residual honesty (handles/materials still simple) — no world-standard ship claim
 
 **W7 red until** NOTES + units + visual smoke agree toe/carcass/door readable.  
-**Next:** [P09](./P09-shortcuts-chrome.md) per BOARD.
+**Next (sequence):** [P09](./P09-shortcuts-chrome.md).

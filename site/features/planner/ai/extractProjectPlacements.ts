@@ -1,4 +1,4 @@
-import type { Open3dFloor, Open3dFurnitureItem } from "@/features/planner/open3d/model/types";
+import type { Open3dFloor, Open3dFurnitureItem } from "@/features/planner/project/model/types";
 
 import type { CanvasFurnitureKind, CanvasPlacementSummary } from "./types";
 

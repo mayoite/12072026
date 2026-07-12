@@ -15,7 +15,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextRequest } from "next/server";
 import { POST } from "@/app/api/admin/svg-editor/route";
-import type * as SvgBlockDescriptorLoader from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+import type * as SvgBlockDescriptorLoader from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
 vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (
@@ -33,9 +33,9 @@ vi.mock("@/features/planner/admin/svg-editor/svgPipelineRunner", () => ({
   runSvgPipeline: vi.fn(),
 }));
 
-vi.mock("@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader", async () => {
+vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", async () => {
   const actual = await vi.importActual<typeof SvgBlockDescriptorLoader>(
-    "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader",
+    "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader",
   );
   return { ...actual, clearLoaderCache: vi.fn() };
 });

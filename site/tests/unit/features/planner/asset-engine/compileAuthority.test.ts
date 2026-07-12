@@ -18,7 +18,7 @@ import {
   compileSvgForPublish,
   PUBLISH_COMPILE_AUTHORITY as PUBLISH_FROM_ENTRY,
 } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
-import { compileAuthority as v1CompileAuthority } from "@/features/planner/open3d/catalog/svg/svgCompiler.server";
+import { compileAuthority as v1CompileAuthority } from "@/features/planner/project/catalog/svg/svgCompiler.server";
 
 // tests/unit/features/planner/asset-engine → site/
 const siteRoot = path.resolve(__dirname, "../../../../../");

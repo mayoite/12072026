@@ -21,11 +21,11 @@ import { success } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import { parseAdminPayload } from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
 import { publishDescriptorWithPipeline } from "@/features/planner/admin/svg-editor/publishDescriptorWithPipeline";
-import { buildBlockThumbPngUrl } from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
+import { buildBlockThumbPngUrl } from "@/features/planner/project/catalog/svg/svgPreviewAssets";
 import {
   toOpen3dDescriptorErrorHttp,
   type Open3dDescriptorError,
-} from "@/features/planner/open3d/catalog/svg/svgTypes";
+} from "@/features/planner/project/catalog/svg/svgTypes";
 
 function descriptorErrorResponse(descriptorError: Open3dDescriptorError): NextResponse {
   const http = toOpen3dDescriptorErrorHttp(descriptorError);

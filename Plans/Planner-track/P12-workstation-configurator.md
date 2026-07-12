@@ -28,3 +28,6 @@
 ## Dependency
 
 Admin A6 released workstation family.
+
+**Host:** Fabric sole. second plan host is forbidden.  
+**Next (sequence):** [P13](./P13-layout-at-scale.md) only after P01–P12 closed honestly.

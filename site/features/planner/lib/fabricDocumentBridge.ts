@@ -1,3 +1,8 @@
+/**
+ * Document bridge from optional Fabric JSON snapshot.
+ * Planner `_archive` fabric shell is deleted — no live archive runtime.
+ * Snapshots may still round-trip as opaque fabricSnapshot; items empty until open3d owns parse.
+ */
 import {
   createPlannerDocument,
   normalizePlannerDocument,
@@ -12,12 +17,6 @@ import {
 } from "../model";
 import { logPlannerDocumentBuildAttempt } from "../model/plannerDocumentLogging";
 import type { MeasurementUnit } from "./measurements";
-import {
-  fabricObjectCategory,
-  fabricObjectToSceneItem,
-  parseFabricObjects,
-  resolveRoomMmFromFabricObjects,
-} from "@/features/planner/canvas-fabric/fabricSceneUtils";
 
 const DEFAULT_ROOM: PlannerSceneRoom = {
   widthMm: 5000,
@@ -39,39 +38,17 @@ export interface BuildPlannerDocumentFromFabricOptions {
   thumbnailUrl?: string | null;
 }
 
-function fabricObjectsToItems(objects: unknown[]): PlannerSceneItem[] {
-  return parseFabricObjects(
-    objects.length ? JSON.stringify({ objects }) : null,
-  )
-    .filter((object) => {
-      const name = String(object.name ?? "");
-      return fabricObjectCategory(name) === "Furniture";
-    })
-    .map((o, index) => fabricObjectToSceneItem(o, index));
-}
-
 export function buildPlannerDocumentFromFabric(
   serialized: string | null,
   options: BuildPlannerDocumentFromFabricOptions,
 ): PlannerDocument {
-  let room = DEFAULT_ROOM;
-  let items: PlannerSceneItem[] = [];
+  const room = DEFAULT_ROOM;
+  const items: PlannerSceneItem[] = [];
   let fabricSnapshot: unknown = null;
 
   if (serialized) {
     try {
       fabricSnapshot = JSON.parse(serialized);
-      const objects = parseFabricObjects(serialized);
-      items = fabricObjectsToItems(objects);
-      const roomMm = resolveRoomMmFromFabricObjects(objects, {
-        widthMm: DEFAULT_ROOM.widthMm,
-        depthMm: DEFAULT_ROOM.depthMm,
-      });
-      room = {
-        ...DEFAULT_ROOM,
-        widthMm: roomMm.widthMm,
-        depthMm: roomMm.depthMm,
-      };
     } catch {
       fabricSnapshot = null;
     }

@@ -46,7 +46,7 @@ import {
   type BlockDescriptorConfigurable,
   type BlockDescriptorParametric,
   type BlockDescriptorVariant,
-} from "@/features/planner/open3d/catalog/svg/svgTypes";
+} from "@/features/planner/project/catalog/svg/svgTypes";
 import { safeThemeTokens } from "./themeTokens";
 
 // Re-export theme token helpers so registry consumers share one defensive path.

@@ -4,15 +4,9 @@ import {
   type PlannerJsonValue,
 } from "@/features/planner/model/plannerDocument";
 import { toPlannerJsonSafe } from "@/features/planner/model/plannerJsonSafe";
-import { getPlannerFabricRuntime } from "@/features/planner/canvas-fabric";
-import { getPageMetrics } from "@/features/planner/editor/planMetrics";
 import { metadataToDocumentFields } from "@/features/planner/onboarding/projectSetup";
 import { buildPlannerDocumentFromFabric } from "@/features/planner/lib/fabricDocumentBridge";
 import { serializeWorkspaceState, usePlannerWorkspaceStore } from "../store/workspaceStore";
-
-function readFabricExportDraft(): string | null {
-  return getPlannerFabricRuntime()?.exportDraft() ?? null;
-}
 
 function mergeFabricSceneMetadata(
   sceneJson: PlannerJsonValue,
@@ -28,7 +22,10 @@ function mergeFabricSceneMetadata(
   });
 }
 
-/** Build canonical PlannerDocument from fabric canvas + workspace state. */
+/**
+ * Build PlannerDocument from workspace state.
+ * Archive fabric export runtime is deleted — no canvas draft export.
+ */
 export function buildPlannerDocumentFromEditor(
   _editor: null,
   overrides: Partial<PlannerDocument> = {},
@@ -36,46 +33,37 @@ export function buildPlannerDocumentFromEditor(
   const workspace = serializeWorkspaceState();
   const projectMetadata = usePlannerWorkspaceStore.getState().projectMetadata;
   const projectFields = projectMetadata ? metadataToDocumentFields(projectMetadata) : null;
-  const metrics = getPageMetrics(null);
 
-  const metricRoomWidth =
-    metrics.totalFloorAreaSqm > 0 ? Math.round(Math.sqrt(metrics.totalFloorAreaSqm) * 1000) : undefined;
-  const metricRoomDepth =
-    metrics.totalFloorAreaSqm > 0 ? Math.round(Math.sqrt(metrics.totalFloorAreaSqm) * 1000) : undefined;
-  const serializedDraft = readFabricExportDraft();
-
-  const fabricDoc = buildPlannerDocumentFromFabric(serializedDraft, {
-    name: overrides.title ?? projectMetadata?.projectName ?? "Workspace Plan",
-    projectName: projectMetadata?.projectName,
+  const base = buildPlannerDocumentFromFabric(null, {
+    documentId: overrides.id,
+    name: overrides.name,
+    projectName: projectFields?.projectName ?? overrides.projectName,
+    clientName: projectFields?.clientName ?? overrides.clientName,
+    preparedBy: overrides.preparedBy,
+    seatTarget: overrides.seatTarget,
     unitSystem: workspace.unitSystem === "imperial" ? "ft-in" : "mm",
+    thumbnailUrl: overrides.thumbnailUrl,
   });
-  const resolvedRoomWidthMm =
-    fabricDoc.roomWidthMm ?? metricRoomWidth ?? projectFields?.roomWidthMm ?? 6000;
-  const resolvedRoomDepthMm =
-    fabricDoc.roomDepthMm ?? metricRoomDepth ?? projectFields?.roomDepthMm ?? 8000;
-  let fabricSnapshot: unknown = null;
 
-  if (serializedDraft) {
-    try {
-      fabricSnapshot = JSON.parse(serializedDraft);
-    } catch {
-      fabricSnapshot = null;
-    }
-  }
+  const sceneMeta = {
+    layerVisible: workspace.layerVisible,
+    unitSystem: workspace.unitSystem,
+  };
 
-  return createEmptyPlannerDocument({
-    ...fabricDoc,
-    title: overrides.title ?? projectMetadata?.projectName ?? "Workspace Plan",
-    itemCount: fabricDoc.itemCount,
-    ...(projectFields ?? {}),
-    roomWidthMm: resolvedRoomWidthMm,
-    roomDepthMm: resolvedRoomDepthMm,
-    sceneJson: mergeFabricSceneMetadata(fabricDoc.sceneJson, {
-      projectSetup: projectMetadata,
-      workspace,
-      fabricSnapshot,
-    }),
-    updatedAt: new Date().toISOString(),
+  return {
+    ...base,
     ...overrides,
-  });
+    sceneJson: mergeFabricSceneMetadata(base.sceneJson, sceneMeta),
+    projectName: projectFields?.projectName ?? overrides.projectName ?? base.projectName,
+    clientName: projectFields?.clientName ?? overrides.clientName ?? base.clientName,
+  };
+}
+
+export function createBlankPlannerDocument(
+  overrides: Partial<PlannerDocument> = {},
+): PlannerDocument {
+  return {
+    ...createEmptyPlannerDocument(),
+    ...overrides,
+  };
 }

@@ -7,11 +7,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { notFound } from "next/navigation";
 import SvgCatalogSlugPage, { generateMetadata } from "@/app/(site)/portal/svg-catalog/[slug]/page";
-import * as loader from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+import * as loader from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
 vi.mock("next/navigation", () => ({ notFound: vi.fn(() => { throw new Error("404"); }) }));
 
-vi.mock("@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader", () => ({
+vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", () => ({
   tryLoad: vi.fn(),
 }));
 

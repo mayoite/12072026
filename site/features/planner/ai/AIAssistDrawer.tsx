@@ -6,7 +6,6 @@ import { CaretDown as ChevronDown, CircleNotch as Loader2, Chat as MessageSquare
 
 import { CatalogBlockPreview } from "@/features/planner/catalog/CatalogBlockPreview";
 import { PLANNER_CATALOG_ITEMS } from "@/features/planner/catalog/workspaceCatalog";
-import { getPlannerFabricRuntime, subscribePlannerFabricRuntimeState } from "@/features/planner/canvas-fabric";
 
 import {
   PLANNER_PRIMARY_PURPOSE_OPTIONS,
@@ -30,12 +29,9 @@ import type { AIProviderClassification } from "./aiStatus";
 import type { CatalogMatchResult, SuggestedLayoutJson } from "./types";
 import type { WorkspaceAiBridge } from "./workspaceAiBridge";
 
+/** Archive fabric runtime removed — only workspaceBridge supplies counts. */
 function useFabricPlacementCount(): number {
-  return useSyncExternalStore(
-    subscribePlannerFabricRuntimeState,
-    () => extractCanvasPlacements(null).length,
-    () => 0,
-  );
+  return 0;
 }
 
 type AiAssistTab = "suggest-layout" | "match-catalog" | "chat";
@@ -87,9 +83,9 @@ export function AIAssistDrawer({
         workspaceBridge.replaceCatalogMatch(shapeId, catalogItemId);
         return;
       }
-      const item = PLANNER_CATALOG_ITEMS.find((entry) => entry.id === catalogItemId);
-      if (!item) return;
-      getPlannerFabricRuntime()?.placeCatalogItem(item);
+      // No archive fabric runtime — require workspaceBridge for catalog place.
+      void shapeId;
+      void catalogItemId;
     },
     [workspaceBridge],
   );

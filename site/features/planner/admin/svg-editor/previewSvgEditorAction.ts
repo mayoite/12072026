@@ -19,8 +19,8 @@
 import {
   tryLoad,
   type BlockDescriptor,
-} from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
-import { freezeFreshDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
+} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { freezeFreshDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
 import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
 import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/newBlockDescriptorStub";
 import { formStateToDescriptorInput } from "@/features/planner/admin/svg-editor/svgEditorFormAdapters";

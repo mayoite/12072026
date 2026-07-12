@@ -11,7 +11,7 @@ import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
 
 /** Default timeout per Phase 04 §04-SUB-02 (10s). */
 export const DEFAULT_TIMEOUT_MS = 10_000;

@@ -21,12 +21,12 @@
 
 | Engine | Package | Pin (site) | Routes / role |
 |--------|---------|------------|---------------|
-| **2D canvas** | `fabric` | `7.4.0` (exact) | Live open3d/guest/canvas via `canvas-fabric-stage` (`PlannerCanvasStage`); not Feasibility |
+| **2D canvas** | `fabric` | `7.4.0` (exact) | Live open3d/guest/canvas via `canvas` (`PlannerCanvasStage`); not Feasibility |
 | **3D** | `three` | `^0.185.1` | Open3D lazy 3D, product viewers |
 | **3D React** | `@react-three/fiber` | `^9.6.1` | R3F bindings (not a third engine) |
 | **3D helpers** | `@react-three/drei` | `^10.7.7` | Installed; this locked file treats it as Tier-2 reserved — **policy drift** |
 
-No second general canvas engine (Konva, Paper, Pixi, etc.). Do not restore Feasibility as interactive host.
+No second general canvas engine (Konva, Paper, Pixi, etc.). Feasibility / `canvas-feasibility` does not and will not exist — do not recreate it as interactive host or archive.
 
 ## Node / toolchain
 

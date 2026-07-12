@@ -17,8 +17,8 @@
 | `CANVAS_TOOL_SHORTCUTS` | D=door · M=dimension · N=window · T=text · V/R/W/O/P/H as map |
 | `useWorkspaceKeyboard` | Arms via inverted map (`TOOL_BY_SHORTCUT_KEY`) |
 | Units | `toolShortcutTruth.test.ts` — **re-run** under evidence |
-| Live canvas testid | `open3d-fabric-stage` (not archive `planner-2d-canvas`) |
-| Archive aria strings | Ignore `_archive/` Feasibility — do not chase |
+| Live canvas testid | `planner-fabric-stage` (not archive `planner-2d-canvas`) |
+| Archive aria strings | Ignore `_archive/fabric/` legacy strings — do not chase; no `second-plan-host` |
 | Evidence `09-shortcuts-chrome/` | Untrusted until fresh logs |
 
 **Historical smoking gun (fixed — re-prove, don’t re-bind Dimension→D):** old hard-coded handler vs map. Gone in code.
@@ -29,7 +29,7 @@
 
 **In:** Truth table + keyboard RTL · rail/palette regression · hide-tools only · evidence under `09-`.
 
-**Out:** Full chrome redesign · a11y sweep unless hides tools · mesh/P03/P04/P06 thrash · Feasibility restore · archive aria chase.
+**Out:** Full chrome redesign · a11y sweep unless hides tools · mesh/P03/P04/P06 thrash · adding a second plan host · archive aria chase.
 
 ---
 
@@ -43,7 +43,7 @@
 | `lib/commands/paletteCommands.ts` | Palette = map |
 | Units | `toolShortcutTruth.test.ts` + keyboard RTL |
 
-Prefix: `site/features/planner/open3d/`.
+Prefix: `site/features/planner/project/`.
 
 ---
 
@@ -53,7 +53,7 @@ Prefix: `site/features/planner/open3d/`.
 - [ ] NOTES: D→door, M→dimension, N/T from map (line refs)
 - [ ] Rail + palette match maps
 - [ ] Hide-tools chrome: minimal fix or none-found
-- [ ] No archive Feasibility / no Dimension→D rebind
+- [ ] No adding a second plan host / no Dimension→D rebind
 
 **CP-09 green only with fresh evidence.** Code looking right ≠ PASS.  
-**Next:** [P10](./P10-evidence-handover.md).
+**Next (sequence):** [P10](./P10-evidence-handover.md).

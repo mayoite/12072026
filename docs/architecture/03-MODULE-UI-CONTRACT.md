@@ -54,7 +54,7 @@ Guest/canvas shells: **Phase 2** promotion only.
 
 | Surface | Path roots | TSX | CSS |
 |---------|------------|-----|-----|
-| **Planner open3d** | `features/planner/open3d/**` | Structure + behavior only; **no Tailwind utilities** | `*.module.css` with `var(--planner-*)` / `var(--surface-*)` only |
+| **Planner open3d** | `features/planner/project/**` | Structure + behavior only; **no Tailwind utilities** | `*.module.css` with `var(--planner-*)` / `var(--surface-*)` only |
 | **Admin** | `app/admin/**`, `features/planner/admin/**` | Semantic utilities (`text-strong`, `bg-panel`, `border-soft`) + `admin-*` classes | No `slate-*` / `blue-*` / `zinc-*` / `gray-*` / `emerald-*` palette |
 | **Site marketing** | `app/(site)/**`, `components/**` | `typ-*`, scheme utilities; layout Tailwind OK | Route bundles in `app/css/core/site/` |
 

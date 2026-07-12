@@ -54,7 +54,7 @@ const routeExists = (r) => routes.has(r);
 
 const featureChecks = {
   "features/planner/tldraw": fs.existsSync(path.join(siteRoot, "features/planner/tldraw")),
-  "features/planner/open3d": fs.existsSync(path.join(siteRoot, "features/planner/open3d")),
+  "features/planner/workspace": fs.existsSync(path.join(siteRoot, "features/planner/workspace")),
   "features/buddy-planner": fs.existsSync(path.join(siteRoot, "features/buddy-planner")),
   "features/oando-planner": fs.existsSync(path.join(siteRoot, "features/oando-planner")),
   "features/ops-portal": fs.existsSync(path.join(siteRoot, "features/ops-portal")),

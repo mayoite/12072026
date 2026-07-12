@@ -12,7 +12,7 @@
 
 "use client";
 
-import type { BlockDescriptorVariant } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import type { BlockDescriptorVariant } from "@/features/planner/project/catalog/svg/svgTypes";
 import {
   fieldsForVariant,
   type SvgEditorFieldMeta,

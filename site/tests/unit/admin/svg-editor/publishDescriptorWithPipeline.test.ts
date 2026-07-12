@@ -6,8 +6,8 @@
 
 import { describe, it, expect, vi } from "vitest";
 
-import { BLOCK_DESCRIPTOR_SCHEMA_VERSION } from "@/features/planner/open3d/catalog/svg/svgTypes";
-import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import { BLOCK_DESCRIPTOR_SCHEMA_VERSION } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
 import type { PipelineResult } from "@/features/planner/admin/svg-editor/svgPipelineRunner";
 import type { PersistResult } from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
 import type { SvgCompileStagesResult } from "@/features/planner/asset-engine/svg/runSvgCompileStages";

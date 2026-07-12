@@ -13,10 +13,11 @@
 
 - Product ship · CP-10 pack · quality bar complete · Admin A4 done · SEO done · Security track done · plan/product 9.5
 
-## Next (pick one kill)
+## Next (owner corrected)
 
-1. Planner CP-03 browser id+pose **or** Admin A4.0.1 disk proof  
-2. SEO1 finish classification **or** SEC4 advisors  
-3. Site S1 only with owner OK  
+1. **Planner P01→P12 in sequence** (BOARD next = **P01**). Standing seats: TDD + Chrome DevTools · `/using-superpowers`. Law = `AGENTS.md` + `Agents/` (not EXECUTE.md as constitution).
+2. Admin A4.0.1 disk proof only if not on Planner sequence.
+3. Site S1 only with owner OK.
 
-Push may need owner GitHub credentials (403 seen earlier).
+Plan gap fix: kill-jump to CP-03 removed; best path not easiest.  
+Push may need owner GitHub credentials (403 seen earlier). No commit without owner ask.

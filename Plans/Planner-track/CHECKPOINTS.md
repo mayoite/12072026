@@ -1,11 +1,11 @@
 # Checkpoints (CP-00 → CP-10)
 
-**Do not trust historical PASS ticks.** Old packs under `results/planner/world-standard-wave/` are clues, not current product truth. A CP is green only after **fresh** proof on this checkout (see [EXECUTE.md](./EXECUTE.md)).
+**Do not trust historical PASS ticks.** Old packs under `results/planner/world-standard-wave/` are clues, not current product truth. A CP is green only after **fresh** proof on this checkout + Plans status update.
 
+**Law:** [`AGENTS.md`](../../AGENTS.md) · [`Agents/`](../../Agents/) · [BOARD](./BOARD.md)  
 **Checkout:** `.` only · no worktrees  
-**Evidence root:** `results/planner/world-standard-wave/`  
-**Upgrade lock:** Fabric sole 2D — see [BOARD](./BOARD.md) · [CONSTRAINTS](./CONSTRAINTS.md)  
-**Owner law:** [BOARD](./BOARD.md) · [CONSTRAINTS](./CONSTRAINTS.md) · [Agents-Plan](../../Agents/Agents-03-Plan.md)
+**Evidence dump root:** `results/planner/world-standard-wave/` (dump only — not PASS law)  
+**Upgrade lock:** Fabric sole 2D — see [BOARD](./BOARD.md) · [CONSTRAINTS](./CONSTRAINTS.md)
 
 ### Status meanings
 
@@ -13,7 +13,7 @@
 |--------|---------|
 | `OPEN` | Not proven on this tree |
 | `REPROVE` | Old evidence may exist — **must re-run** before claim |
-| `PASS` | Fresh proof this session + path under `results/` (owner may confirm) |
+| `PASS` | Fresh proof this session + Plans updated (owner may confirm) |
 | `WAIVE` | Owner wrote waiver here (date + reason) |
 
 There is **no** separate MASTER-CHECKLIST. Tick theater was deleted.
@@ -36,6 +36,8 @@ There is **no** separate MASTER-CHECKLIST. Tick theater was deleted.
 | CP-09 | [P09](./P09-shortcuts-chrome.md) | **W8** | `09-shortcuts-chrome/` |
 | CP-10 | [P10](./P10-evidence-handover.md) | Pack | `10-handover/` |
 
+Buyer cards [P11](./P11-project-brief-room.md) · [P12](./P12-workstation-configurator.md) follow P10 in owner sequence (no CP number).
+
 ---
 
 ## Status (2026-07-12 live-repo rebaseline)
@@ -43,28 +45,29 @@ There is **no** separate MASTER-CHECKLIST. Tick theater was deleted.
 | CP | Bar (short) | Status |
 |----|-------------|--------|
 | CP-00 | Approach A + unlock recorded — do not re-ask unlock | **PASS** (process only) |
-| CP-01 | Inventory vs claims, paths in evidence | **REPROVE** |
-| CP-02 | CONSTRAINTS = **Fabric-sole**; no Feasibility restore | **WAIVE / REPROVE** before handover |
-| CP-03 | Select · delete · undo **on Fabric** — unit + browser | **REPROVE** — implementation landed |
-| CP-04 | Orbit ON + 2D↔3D pose (Fabric↔Three), browser proof | **REPROVE** — implementation landed; browser pose residual |
-| CP-05 | Symbols readable **on live Fabric**; SVG = publish only | **REPROVE** — multiprim raise landed |
-| CP-06 | Save→reload same ids; honest local/cloud labels | **REPROVE** — implementation landed |
-| CP-07 | Draw/place on Fabric (`open3d-fabric-stage`), screenshots | **REPROVE** — implementation landed |
+| CP-01 | Inventory vs claims, paths + live vitest | **REPROVE** (fresh pack this HEAD under `00-product-truth/`; owner accept) |
+| CP-02 | CONSTRAINTS = **Fabric-sole**; no second plan host (forbidden) | **WAIVE / REPROVE** before handover |
+| CP-03 | Select · delete · undo **on Fabric** — unit + browser id+pose | **REPROVE** |
+| CP-04 | Orbit ON + 2D↔3D pose (Fabric↔Three), browser proof | **REPROVE** |
+| CP-05 | Symbols readable **on live Fabric**; SVG = publish only | **REPROVE** |
+| CP-06 | Save→reload same ids; honest local/cloud labels | **REPROVE** |
+| CP-07 | Draw/place on Fabric (`planner-fabric-stage`), screenshots | **REPROVE** |
 | CP-08 | Modular mesh readable (toe/carcass/door) | **REPROVE** |
 | CP-09 | Shortcut labels = handlers | **REPROVE** |
-| CP-10 | Handover pack on disk — **not product ship** | **OPEN** (`10-handover/` missing) |
+| CP-10 | Handover pack on disk — **not product ship** | **OPEN** |
 
-Honest gaps (do not paper over): W3/W4 browser often **count-only**, not id/pose — see `../../results/planner/world-standard-wave/00-rebaseline/HONEST-STATUS.md` (paths inside that file may be stale; board/INDEX are law).
-
-**Next kill only:** CP-03 — Fabric select→delete→undo with **same id + pose**. Count-only = FAIL. Unit alone = FAIL.
+Honest gaps: W3/W4 browser often **count-only**, not id/pose — raise on Fabric; never archive host.
 
 ---
 
-## Kill order
+## Owner sequence (best path)
 
 ```
-CP-00 → CP-01 → CP-02 → CP-03 → CP-07 → CP-06 → CP-04 → CP-05 → CP-08 → CP-09 → CP-10
+P01 → P02 → P03 → P04 → P05 → P06 → P07 → P08 → P09 → P10 → P11 → P12
 ```
+
+**Next open only:** **P01 / CP-01** — product truth inventory.  
+**Do not** next-kill CP-03 until P01 and P02 are closed honestly on this checkout.
 
 ## Waiver (owner only)
 

@@ -60,6 +60,17 @@ export const VITEST_COMMON_EXCLUDE = [
   "**/*.svg",
   "**/*.stories.*",
   "**/archive/**",
+  "**/tests/integration/planner-editor-**",
+  "**/tests/integration/planner-canvas-fabric-**",
+  "**/tests/unit/planner-editor-**",
+  "**/tests/unit/planner-canvas-fabric-**",
+  "**/tests/unit/planner-fabric-**",
+  "**/tests/unit/planner-lib-fabric**",
+  "**/tests/unit/planner-ai-fabric**",
+  "**/tests/unit/planner-document-plannerDocument**",
+  "**/tests/unit/applySuggestedLayout**",
+  "**/tests/unit/planner-3d-parity**",
+  "**/tests/integration/planner-fabric-**",
   "**/public/**",
   "**/results/**",
   "**/scripts/**",
@@ -90,11 +101,11 @@ export const VITEST_COMMON_COVERAGE_REPORTERS = [
  */
 export const VITEST_PLANNER_GATE_COVERAGE_INCLUDE = [
   // Systems v0 spine (unit-tested; expand only when suite owns the file)
-  "features/planner/open3d/catalog/workstation*.ts",
-  "features/planner/open3d/catalog/placementAction.ts",
-  "features/planner/open3d/catalog/furnitureBlock2D.ts",
-  "features/planner/open3d/catalog/proofCatalog.ts",
-  "features/planner/open3d/lib/geometry/canvasPicking.ts",
+  "features/planner/project/catalog/workstation*.ts",
+  "features/planner/project/catalog/placementAction.ts",
+  "features/planner/project/catalog/furnitureBlock2D.ts",
+  "features/planner/project/catalog/proofCatalog.ts",
+  "features/planner/project/lib/geometry/canvasPicking.ts",
 ] as const;
 
 /** Carve-outs inside allowlist globs only (keep tiny). */

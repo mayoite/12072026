@@ -5,17 +5,16 @@ import dynamic from "next/dynamic";
 import { Providers } from "@/features/planner/components/Providers";
 import { ProjectSetupGate } from "@/features/planner/onboarding/ProjectSetupGate";
 import { PlannerSkeleton } from "@/features/planner/ui/PlannerSkeleton";
-import { PlannerCanvasEnhancements } from "@/features/planner/ui/PlannerCanvasEnhancements";
 
-const PlannerWorkspace = dynamic(
+const PlannerHostLazy = dynamic(
   () =>
-    import("@/features/planner/_archive/fabric/editor/PlannerWorkspace").then((mod) => ({
-      default: mod.PlannerWorkspace,
+    import("@/features/planner/ui/PlannerHost").then((mod) => ({
+      default: mod.PlannerHost,
     })),
   { loading: () => <PlannerSkeleton />, ssr: false },
 );
 
-/** Production planner shell — live `/planner/guest` and `/planner/canvas`. */
+/** Live guest/canvas planner shell — workspace feature tree (Fabric + Three). */
 export function PlannerWorkspaceRoute({
   guestMode = false,
   planId,
@@ -26,8 +25,7 @@ export function PlannerWorkspaceRoute({
   return (
     <Providers>
       <ProjectSetupGate guestMode={guestMode} planId={planId}>
-        <PlannerWorkspace guestMode={guestMode} planId={planId} />
-        <PlannerCanvasEnhancements guestMode={guestMode} />
+        <PlannerHostLazy guestMode={guestMode} planId={planId} />
       </ProjectSetupGate>
     </Providers>
   );

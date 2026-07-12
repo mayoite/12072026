@@ -2,7 +2,10 @@
 
 **Baseline:** 2026-07-05  
 **Revision alignment:** [`Plans/00-QUALITY-BAR.md`](../../Plans/00-QUALITY-BAR.md) · Admin A1/A2.  
-**Honesty:** `public/svg-catalog/` = **publish** only — not live plan-draw (plan symbols = Fabric + Block2D / P05).
+**Honesty (owner lock):**
+- `public/svg-catalog/` = **inventory publish only** — not live plan-draw.
+- Live plan-draw = Fabric + Block2D on `open3d/` (P05).
+- Admin A4 studio draws **inventory symbols** with a full toolset destination; publish path stays catalog bytes only.
 
 ## Cross-links
 

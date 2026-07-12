@@ -20,7 +20,7 @@ import { describe, expect, it } from "vitest";
 import {
   BLOCK_DESCRIPTOR_VARIANTS,
   type BlockDescriptorVariant,
-} from "@/features/planner/open3d/catalog/svg/svgTypes";
+} from "@/features/planner/project/catalog/svg/svgTypes";
 
 import {
   PUCK_BLOCK_REGISTRY,

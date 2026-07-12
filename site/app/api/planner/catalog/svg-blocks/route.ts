@@ -9,8 +9,8 @@ import type { NextRequest } from "next/server";
 
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 import { success } from "@/features/shared/api/apiResponse";
-import { mapDescriptorsToCatalogItems } from "@/features/planner/open3d/catalog/svg/descriptorCatalogBridge.server";
-import { loadAll } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+import { mapDescriptorsToCatalogItems } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
+import { loadAll } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
 export async function GET(req: NextRequest) {
   const rateError = await enforcePublicApiRateLimit(

@@ -11,7 +11,7 @@
 | Overlays | [`Lockedfiles/`](./Lockedfiles/) — 01-planner · 02-svg · 03-engines(+licenses) · 04-UI lock |
 | Reference | [`api/`](./api/) · [`database/`](./database/) |
 
-**Upgrade lock:** Fabric sole 2D — [`CONSTRAINTS`](../Plans/Planner-track/CONSTRAINTS.md).
+**Upgrade lock:** Fabric sole 2D; Feasibility / `canvas-feasibility` does not / will not exist — [`CONSTRAINTS`](../Plans/Planner-track/CONSTRAINTS.md).
 
 | Task | Start |
 |------|-------|

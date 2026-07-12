@@ -1,4 +1,4 @@
-﻿/**
+/**
  * P03 W3 live eyes via Playwright Chromium (Chrome family) â€” place â†’ select â†’ Delete â†’ Ctrl+Z
  * Evidence under chrome/ for Chrome DevTools seat when MCP browser hangs on dynamic hydrate.
  */
@@ -155,7 +155,7 @@ async function main() {
     verdict: pass ? "PASS" : "FAIL",
     fabric: "OFF (NEXT_PUBLIC_OPEN3D_FABRIC_FURNITURE unset)",
     url: URL,
-    tool: "Playwright Chromium (headed) â€” chrome-devtools MCP browser hung on PlannerSkeleton / dynamic Open3dPlannerHost; product flow re-proven live in Chromium",
+    tool: "Playwright Chromium (headed) â€” chrome-devtools MCP browser hung on PlannerSkeleton / dynamic PlannerHost; product flow re-proven live in Chromium",
     chromeDevtoolsMcpNote:
       "chrome-devtools CLI browser stayed on 'Loading planner...' despite Host chunk 200; Playwright Chromium completed placeâ†’selectâ†’Deleteâ†’Ctrl+Z",
     furnitureBefore: before,
@@ -207,7 +207,7 @@ async function main() {
 
 | Layer | Result |
 |-------|--------|
-| **chrome-devtools MCP / CLI browser** | **Could not complete** â€” page stuck on \`Loading planner...\` (dynamic \`Open3dPlannerHost\` never left skeleton). Host chunk network 200; HMR websocket errors only. Multiple retries (headed, isolated, no disk cache). |
+| **chrome-devtools MCP / CLI browser** | **Could not complete** â€” page stuck on \`Loading planner...\` (dynamic \`PlannerHost\` never left skeleton). Host chunk network 200; HMR websocket errors only. Multiple retries (headed, isolated, no disk cache). |
 | **Playwright Chromium headed (this run)** | **PASS** â€” full place â†’ select â†’ Delete â†’ Ctrl+Z with counts above |
 | **Playwright e2e open3d-w3-select-delete.spec.ts** | Also **PASS** (\`playwright-w3.log\`, exit 0) |
 

@@ -8,7 +8,7 @@
 
 **Goal:** Place in Fabric 2D → toggle 3D → same ids + mm + rotation; orbit works; console clean.
 
-**Out of scope:** Mesh (P08) · save (P06) · select (P03) · first-person · camera bookmarks · R3F rewrite · Feasibility restore · legacy J4 e2e as W4 proof.
+**Out of scope:** Mesh (P08) · save (P06) · select (P03) · first-person · camera bookmarks · R3F rewrite · adding a second plan host · legacy J4 e2e as W4 proof.
 
 ---
 
@@ -36,7 +36,7 @@ Open3dProject (UUID, mm) = sole pose authority
 | (1) Lazy+Inner default ON | `OPEN3D_ORBIT_DEFAULT_ENABLED = true` |
 | (2) Workspace wiring | `{...getOpen3dViewerControlProps()}` on `Lazy3DViewer` — **landed** |
 | (3) `data-orbit-enabled` | On `ThreeViewerInner` |
-| 2D side of toggle | Fabric stage (not Feasibility) — keep it |
+| 2D side of toggle | Fabric stage only — keep it |
 | Units | `poseContinuityW4` · `orbitControlsDefault` · `workspaceOrbitWiring` |
 | E2E | `open3d-w4-orbit-continuity.spec.ts` |
 | Old gap | “workspace omits enableControls” — **fixed**; do not re-implement as if missing |
@@ -46,10 +46,10 @@ Open3dProject (UUID, mm) = sole pose authority
 ## Kill order (unchecked)
 
 - [ ] Re-run pose + orbit + wiring vitest → `04-orbit-continuity/`
-- [ ] Confirm three-layer still green (NOTES) — no Feasibility in path
+- [ ] Confirm three-layer still green (NOTES) — Fabric-sole path only
 - [ ] Browser: radio toggle + left-drag + console clean; shots + `browser-run.json`
 - [ ] Honesty: count-only browser ≠ id/pose proof
 - [ ] No competitor assets · no engine rollback
 
 **W4 red until** fresh unit **and** browser (or owner WAIVE browser in CHECKPOINTS).  
-**Next:** [P05](./P05-symbols-svg.md) after CP-04.
+**Next (sequence):** [P05](./P05-symbols-svg.md) after CP-04.

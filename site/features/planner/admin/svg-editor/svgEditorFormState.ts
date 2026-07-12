@@ -16,7 +16,7 @@ import type {
   BlockDescriptorVariant,
   MountPlane,
   BlockDescriptorLiveAnnouncementCategory,
-} from "@/features/planner/open3d/catalog/svg/svgTypes";
+} from "@/features/planner/project/catalog/svg/svgTypes";
 import type { SvgBlockDefinitionV1 } from "./svgBlockSchemas";
 
 export interface FormVec2 {

@@ -20,7 +20,7 @@ $env:DEV_AUTH_BYPASS='1'
 pnpm --filter oando-site run test:e2e:p0-admin-svg
 ```
 
-**Not A1:** full catalog census (A2) · production SSO (A3) · planner place journey · Feasibility restore.
+**Not A1:** full catalog census (A2) · production SSO (A3) · planner place journey · second planner host.
 
 **Next:** [A2-svg-pipeline.md](./A2-svg-pipeline.md)
 

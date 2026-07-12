@@ -7,15 +7,15 @@ import {
   stampFurnitureFromModularOptions,
   stampFurnitureGeneratedGlb,
 } from "@/features/planner/asset-engine";
-import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/open3d/catalog/modularCabinetV0GlbExport";
-import { defaultCabinetV0Options } from "@/features/planner/open3d/catalog/modularCabinetV0";
-import { placeCatalogItemInProject } from "@/features/planner/open3d/catalog/placementAction";
+import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
+import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
+import { placeCatalogItemInProject } from "@/features/planner/project/catalog/placementAction";
 import { isSystemGeneratedGlbUrl } from "@/features/planner/lib/glbAssetPolicy";
-import type { Open3dCatalogItem } from "@/features/planner/open3d/catalog/catalogTypes";
+import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 import type {
   Open3dFurnitureItem,
   Open3dProject,
-} from "@/features/planner/open3d/model/types";
+} from "@/features/planner/project/model/types";
 
 const tempRoots: string[] = [];
 

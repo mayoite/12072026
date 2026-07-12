@@ -27,12 +27,12 @@ import {
   writeGeneratedGlbToPublic,
   type WriteGeneratedGlbToPublicOptions,
 } from "@/features/planner/asset-engine/mesh/writeGeneratedGlbToPublic";
-import type { PlacementOptions } from "@/features/planner/open3d/catalog/placementAction";
+import type { PlacementOptions } from "@/features/planner/project/catalog/placementAction";
 import type {
   Open3dCatalogItem,
   Open3dCatalogVariant,
-} from "@/features/planner/open3d/catalog/catalogTypes";
-import type { Open3dProject } from "@/features/planner/open3d/model/types";
+} from "@/features/planner/project/catalog/catalogTypes";
+import type { Open3dProject } from "@/features/planner/project/model/types";
 
 export type PlaceModularWithGeneratedGlbPlanOptions = {
   /** Catalog variant (default null). */

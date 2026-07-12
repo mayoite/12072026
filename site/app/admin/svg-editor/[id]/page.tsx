@@ -13,7 +13,7 @@ import { AdminSvgEditorEditView } from "@/features/planner/admin/svg-editor/Admi
 import {
   tryLoad,
   type BlockDescriptor,
-} from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/newBlockDescriptorStub";
 import { publishSvgEditorAction } from "@/features/planner/admin/svg-editor/publishSvgEditorAction";
 import { readSvgArtifactStatus } from "@/features/planner/admin/svg-editor/svgArtifactStatus.server";

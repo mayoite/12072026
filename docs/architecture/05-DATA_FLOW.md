@@ -6,7 +6,7 @@
 **Placement:** [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) · [`02-DOMAINS.md`](02-DOMAINS.md)  
 **Locked overlay:** [`01-planner-current.md`](../Lockedfiles/01-planner-current.md) · [`03-dependencies-engines-current.md`](../Lockedfiles/03-dependencies-engines-current.md)
 
-**Upgrade lock:** Live 2D = Fabric `PlannerCanvasStage` (`data-testid="open3d-fabric-stage"`). Feasibility is archive-only.
+**Upgrade lock:** Live 2D = Fabric `PlannerCanvasStage` (`data-testid="planner-fabric-stage"`). Feasibility / `canvas-feasibility` **does not and will not exist** (not live, not archive).
 
 | Sections | Scope |
 |----------|-------|
@@ -42,13 +42,13 @@ sequenceDiagram
 
 | Piece | Path |
 |-------|------|
-| Workspace | `features/planner/open3d/editor/OOPlannerWorkspace.tsx` |
-| 2D entry | `open3d/canvas-stage` → `features/planner/canvas-fabric-stage` |
+| Workspace | `features/planner/editor/OOPlannerWorkspace.tsx` |
+| 2D entry | `project/canvas-stage` → `features/planner/canvas` |
 | Document | `open3d/model/` |
 | 3D | `open3d/3d/` + `getOpen3dViewerControlProps()` |
 | Persist | P06 — IDB first; honest local/cloud labels |
 
-Raise select / Block2D / wall-draw **on Fabric** — see Planner P03/P05/P07. Do not restore Feasibility to “make diagrams match.”
+Raise select / Block2D / wall-draw **on Fabric** — see Planner P03/P05/P07. Do not invent or restore Feasibility / `canvas-feasibility` to “make diagrams match.”
 
 ---
 
@@ -217,7 +217,7 @@ sequenceDiagram
 ## §5. Open3D pilot — save / reload (1A target)
 
 **Route:** `/planner/open3d` (`app/planner/open3d/page.tsx`) — **real pilot route**  
-**Code:** `features/planner/open3d/persistence/`
+**Code:** `features/planner/project/persistence/`
 
 ### On disk today vs 1A target
 

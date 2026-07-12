@@ -16,7 +16,7 @@
 import Link from "next/link";
 import { PencilSimple as Pencil, Plus } from "@phosphor-icons/react";
 
-import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
 import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 import { PublishedSvgPreview } from "./PublishedSvgPreview";
 

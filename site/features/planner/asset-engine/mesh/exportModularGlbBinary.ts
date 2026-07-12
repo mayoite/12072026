@@ -13,12 +13,12 @@ import {
   defaultCabinetV0Options,
   generateCabinetV0Mesh,
   type ModularCabinetV0Options,
-} from "@/features/planner/open3d/catalog/modularCabinetV0";
+} from "@/features/planner/project/catalog/modularCabinetV0";
 import {
   buildModularCabinetV0GlbPlan,
   modularCabinetV0GeneratedRelativePath,
   type ModularCabinetV0GlbPlan,
-} from "@/features/planner/open3d/catalog/modularCabinetV0GlbExport";
+} from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
 
 export type ModularGlbBinaryExportResult = {
   readonly ok: true;

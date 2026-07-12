@@ -23,7 +23,7 @@ import {
   BlockDescriptorParametricSchema,
   BLOCK_DESCRIPTOR_VARIANTS,
   type BlockDescriptorVariant,
-} from "@/features/planner/open3d/catalog/svg/svgTypes";
+} from "@/features/planner/project/catalog/svg/svgTypes";
 
 /** Control kinds the form renderer knows how to draw. */
 export type SvgEditorControlKind =

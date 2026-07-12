@@ -9,7 +9,7 @@
  * plain serializable card data across the server/client boundary.
  *
  * Pattern mirrors the established roving-focus keyboard nav in
- * `site/features/planner/open3d/editor/InventoryPanel.tsx` (ArrowUp/ArrowDown/
+ * `site/features/planner/editor/InventoryPanel.tsx` (ArrowUp/ArrowDown/
  * Home/End, single tabbable item at a time) per WAI-ARIA roving tabindex
  * authoring practice. GS: BP-05 anti-copy (semantic tokens only, no donor UI).
  */
@@ -17,7 +17,7 @@
 import Link from "next/link";
 import { useCallback, useRef, useState, type KeyboardEvent } from "react";
 
-import { buildBlockThumbSrcSet } from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
+import { buildBlockThumbSrcSet } from "@/features/planner/project/catalog/svg/svgPreviewAssets";
 
 export interface SvgCatalogCard {
   readonly slug: string;

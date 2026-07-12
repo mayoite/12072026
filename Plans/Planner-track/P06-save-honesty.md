@@ -1,14 +1,14 @@
-﻿# P06 — Save honesty (W5–W6)
+# P06 � Save honesty (W5�W6)
 
-**Status:** REPROVE — flush/label implementation and 2026-07-11 UUID reload evidence exist, but PASS has not been re-run on this checkout.
+**Status:** REPROVE � flush/label implementation and 2026-07-11 UUID reload evidence exist, but PASS has not been re-run on this checkout.
 
-**Gates:** **W5** save → hard reload → same wall + furniture **ids** · **W6** status copy never implies cloud when only IDB.
+**Gates:** **W5** save ? hard reload ? same wall + furniture **ids** � **W6** status copy never implies cloud when only IDB.
 
 **Evidence:** `results/planner/world-standard-wave/06-save-honesty/`  
-**W5 subfolder:** `…/06-save-honesty/save-reload/`  
-**CP:** [CP-06](./CHECKPOINTS.md) · [BOARD](./BOARD.md)
+**W5 subfolder:** `�/06-save-honesty/save-reload/`  
+**CP:** [CP-06](./CHECKPOINTS.md) � [BOARD](./BOARD.md)
 
-**Goal:** Edit → leave or hard-reload → same entity ids; every status string tells **local browser** vs **cloud** truth.
+**Goal:** Edit ? leave or hard-reload ? same entity ids; every status string tells **local browser** vs **cloud** truth.
 
 ---
 
@@ -18,11 +18,11 @@
 |-------|--------|
 | Debounce 5s; unmount `cancel()` drops pending | `createAutoSaver` / autosave hook cleanup |
 | No flush on leave / Save may only `schedulePersist` | hook + `OOPlannerWorkspace` |
-| Bare **Saved** / “synced to server” lie | TopBar + `formatAutosaveStatus` + Shell JSDoc |
-| Unit JSON ≠ browser IDB reload | `saveReloadContinuity` units alone ≠ W5 |
+| Bare **Saved** / �synced to server� lie | TopBar + `formatAutosaveStatus` + Shell JSDoc |
+| Unit JSON ? browser IDB reload | `saveReloadContinuity` units alone ? W5 |
 | Prefer guest clean IDB | `/planner/guest/?plannerDevTools=1` + `clearPlannerStorage` |
 
-**Default:** `cloudEnabled=false` — local-only honesty. No half-wired cloud labels.
+**Default:** `cloudEnabled=false` � local-only honesty. No half-wired cloud labels.
 
 ---
 
@@ -30,28 +30,28 @@
 
 | Role | Path |
 |------|------|
-| Autosave hook | `site/features/planner/open3d/persistence/useOpen3dWorkspaceAutosave.ts` |
+| Autosave hook | `site/features/planner/project/persistence/useOpen3dWorkspaceAutosave.ts` |
 | AutoSaver / IDB | `site/features/planner/persistence/persistence.ts` |
-| Session envelope | `…/open3d/persistence/open3dSession.ts` |
-| Workspace / Save | `…/open3d/editor/OOPlannerWorkspace.tsx` |
-| TopBar / Shell | `…/TopBar.tsx` · `WorkspaceShell.tsx` |
-| Status labels | `…/workspaceStatusLabels.ts` (one pure helper for both surfaces) |
+| Session envelope | `�/open3d/persistence/open3dSession.ts` |
+| Workspace / Save | `�/open3d/editor/OOPlannerWorkspace.tsx` |
+| TopBar / Shell | `�/TopBar.tsx` � `WorkspaceShell.tsx` |
+| Status labels | `�/workspaceStatusLabels.ts` (one pure helper for both surfaces) |
 | Help | `site/features/planner/help/helpSections.ts` |
-| Units | `planner-autosave.test.ts` · `workspaceStatusLabels.test.ts` · `saveReloadContinuity.test.ts` |
+| Units | `planner-autosave.test.ts` � `workspaceStatusLabels.test.ts` � `saveReloadContinuity.test.ts` |
 | E2E | `site/tests/e2e/open3d-save-honesty.spec.ts` (+ guest helpers) |
 
 **Host:** Fabric stage already live — flush/labels on that path.  
-**Out of scope:** Feasibility restore · full cloud multi-tenant · W7 mesh · W8 chrome · P07 full draw journey.
+**Out of scope:** second plan host · full cloud multi-tenant · W7 mesh · W8 chrome · P07 full draw journey.
 
 ---
 
 ## Contracts (short)
 
-**Labels (W6):** one pure helper for TopBar + status bar. Local → “Saved locally” / “Saving locally…” — **no bare “Saved”**. Cloud strings only if cloud API actually ran.
+**Labels (W6):** one pure helper for TopBar + status bar. Local ? �Saved locally� / �Saving locally�� � **no bare �Saved�**. Cloud strings only if cloud API actually ran.
 
-**Flush (W5):** `createAutoSaver.flush` keeps last pending snapshot; hook `projectRef` + `flushPersist`; call on Save, `pagehide` / `visibilitychange` (hidden), unmount — never `cancel` dirty without flush. Fix double-gate skip after timer.
+**Flush (W5):** `createAutoSaver.flush` keeps last pending snapshot; hook `projectRef` + `flushPersist`; call on Save, `pagehide` / `visibilitychange` (hidden), unmount � never `cancel` dirty without flush. Fix double-gate skip after timer.
 
-**W5 proof:** wait restore-complete → edit/import → flush → hard reload → assert **same ids** — artifacts only under `save-reload/` (unit envelope alone = fail).
+**W5 proof:** wait restore-complete ? edit/import ? flush ? hard reload ? assert **same ids** � artifacts only under `save-reload/` (unit envelope alone = fail).
 
 ---
 
@@ -66,4 +66,5 @@
 - [ ] No new `any`; commits on `.` only
 
 **W5 red until** browser id proof in `save-reload/`.  
-**W6 red until** no buyer-readable cloud lie on IDB-only path.
+**W6 red until** no buyer-readable cloud lie on IDB-only path.  
+**Next (sequence):** [P07](./P07-draw-place-journey.md).

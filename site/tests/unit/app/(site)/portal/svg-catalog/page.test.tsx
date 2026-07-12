@@ -9,9 +9,9 @@ import { render, screen } from "@testing-library/react";
 import { fireEvent } from "@testing-library/react";
 import SvgCatalogIndex from "@/app/(site)/portal/svg-catalog/page";
 import { SvgCatalogGrid } from "@/app/(site)/portal/svg-catalog/SvgCatalogGrid";
-import * as loader from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+import * as loader from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
-vi.mock("@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader", () => ({
+vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", () => ({
   loadAll: vi.fn(),
 }));
 

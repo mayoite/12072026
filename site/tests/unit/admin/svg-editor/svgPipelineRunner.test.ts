@@ -48,7 +48,7 @@ import os from "node:os";
 import {
   computeBlockDescriptorChecksum,
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
-} from "@/features/planner/open3d/catalog/svg/svgTypes";
+} from "@/features/planner/project/catalog/svg/svgTypes";
 
 import {
   runSvgPipeline,

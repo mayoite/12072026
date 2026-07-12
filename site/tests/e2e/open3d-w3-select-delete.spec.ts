@@ -2,7 +2,7 @@
  * W3 browser proof — select furniture → Delete → undo on live Fabric sole host.
  * Evidence: results/planner/world-standard-wave/03-select-delete/
  *
- * Host: Open3dFabricStage (`data-testid="open3d-fabric-stage"`).
+ * Host: PlannerFabricStage (`data-testid="planner-fabric-stage"`).
  * No Fabric-OFF / Feasibility downgrade theater.
  */
 import { expect, test, type Page } from "@playwright/test";

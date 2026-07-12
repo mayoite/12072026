@@ -12,12 +12,12 @@ import {
   placeModularWithGeneratedGlbCore,
   type PlaceModularWithGeneratedGlbCoreResult,
 } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbCore";
-import type { PlacementOptions } from "@/features/planner/open3d/catalog/placementAction";
+import type { PlacementOptions } from "@/features/planner/project/catalog/placementAction";
 import type {
   Open3dCatalogItem,
   Open3dCatalogVariant,
-} from "@/features/planner/open3d/catalog/catalogTypes";
-import type { Open3dProject } from "@/features/planner/open3d/model/types";
+} from "@/features/planner/project/catalog/catalogTypes";
+import type { Open3dProject } from "@/features/planner/project/model/types";
 
 export const GENERATED_GLB_WRITE_API_PATH = "/api/planner/generated-glb";
 

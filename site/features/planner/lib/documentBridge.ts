@@ -1,4 +1,3 @@
-import { getPlannerFabricRuntime } from "@/features/planner/canvas-fabric";
 import { buildPlannerDocumentFromFabric } from "@/features/planner/lib/fabricDocumentBridge";
 import {
   type PlannerDocument,
@@ -10,7 +9,6 @@ import {
 } from "../model";
 import type { MeasurementUnit } from "./measurements";
 
-// Re-export canonical scene types from the model for backwards compatibility.
 export type { PlannerSceneEnvelope, PlannerSceneItem, PlannerSceneRoom };
 export { getPlannerSceneEnvelope, isPlannerSceneEnvelope };
 
@@ -25,16 +23,12 @@ export interface BuildPlannerDocumentFromEditorOptions {
   thumbnailUrl?: string | null;
 }
 
-function readFabricExportDraft(): string | null {
-  return getPlannerFabricRuntime()?.exportDraft() ?? null;
-}
-
-/** @deprecated Use buildPlannerDocumentFromFabric — delegates to fabric canvas export. */
+/** @deprecated Archive fabric runtime removed — builds empty snapshot document. */
 export function buildPlannerDocumentFromEditor(
   _editor: null,
   options: BuildPlannerDocumentFromEditorOptions,
 ): PlannerDocument {
-  return buildPlannerDocumentFromFabric(readFabricExportDraft(), {
+  return buildPlannerDocumentFromFabric(null, {
     documentId: options.documentId,
     name: options.name,
     projectName: options.projectName,
@@ -46,7 +40,7 @@ export function buildPlannerDocumentFromEditor(
   });
 }
 
-/** @deprecated Fabric canvas load not wired here — returns false. */
+/** @deprecated Always false — no archive editor load path. */
 export function loadPlannerDocumentIntoEditor(_editor: null, _document: PlannerDocument): boolean {
   return false;
 }

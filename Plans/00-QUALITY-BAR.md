@@ -4,7 +4,7 @@
 
 Do **not** invent `modules/` plan mazes or second CP numbering.  
 Do **not** claim DONE / PASS / PASS slice without **fresh** proof on **this** checkout under the card’s `results/` path.  
-Do **not** restore Feasibility / archive `planner-2d-canvas` to “prove” gates.
+Do **not** add a second plan host. Do **not** use archive `planner-2d-canvas` to “prove” gates. Live canvas only: Fabric `planner-fabric-stage`.
 
 **Product audit text does not live here.** Checkout snapshot / “what’s red today” → [00-PRODUCT-FLOOR.md](./00-PRODUCT-FLOOR.md).
 
@@ -12,7 +12,7 @@ Do **not** restore Feasibility / archive `planner-2d-canvas` to “prove” gate
 
 | Score | Lives in | Means |
 |-------|----------|--------|
-| **Plan honesty** | This file + track cards | Status enum matches rules; green-when falsifiable; evidence path named; kill order clear |
+| **Plan honesty** | This file + track cards | Status enum matches rules; green-when falsifiable; evidence path named; owner sequence clear (Planner P01→P12) |
 | **Product / engine** | PRODUCT-FLOOR + `results/` | Buyer can finish the outcome on the live surface |
 
 A plan can be honest while product is red. That is truth, not failure.
@@ -40,13 +40,13 @@ A plan can be honest while product is red. That is truth, not failure.
 
 | Layer | Live | Forbidden downgrade |
 |-------|------|---------------------|
-| 2D host | Fabric `PlannerCanvasStage` → `open3d-fabric-stage` | Feasibility restore · dual host |
-| Plan symbols | Block2D / multiprim **on Fabric** | Archive Feasibility “proof” |
-| Select/delete | Fabric host | Archive selectors |
+| 2D host | Fabric `PlannerCanvasStage` → `planner-fabric-stage` | Dual host · any second interactive plan canvas |
+| Plan symbols | Block2D / multiprim **on Fabric** | Non-Fabric host “proof” |
+| Select/delete | Fabric host | Archive `planner-2d-canvas` selectors |
 | Admin SVG | Publish → `public/svg-catalog/` | Claim catalog SVG is plan-draw |
 | 3D | Three + orbit | R3F rewrite as substitute |
 
-## Evidence roots (named only — existence is product proof)
+## Evidence roots (dump only — not PASS law; `AGENTS.md` §5)
 
 | Track | Path |
 |-------|------|
@@ -60,9 +60,9 @@ Old packs = clues. Fresh HEAD only.
 
 ## Raise order (process)
 
-1. Status language honest on the card  
-2. One next kill with green-when  
-3. Product proof lands in `results/`  
+1. Re-read `AGENTS.md` · status language honest on the card  
+2. One next ID per track — **owner sequence** (Planner: P01→P12; no convenience skip)  
+3. Fresh live proof this session; dump under `results/` if card asks (**not** PASS-by-old-dump)  
 4. Only then open the next ID  
 
 ## Ethics

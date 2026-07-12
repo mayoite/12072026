@@ -12,7 +12,7 @@
  * Semantic CSS vars only — no #hex (BlockDescriptorThemeTokensSchema / §02-CAT-07).
  */
 
-import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
 
 export type ThemeTokensMap = BlockDescriptor["themeTokens"];
 

@@ -15,7 +15,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
 
 import {
   DEFAULT_THEME_TOKENS,

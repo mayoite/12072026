@@ -10,9 +10,9 @@
 **Goal:** Buyer selects furniture on Fabric stage, deletes, undoes to same entity.
 
 **Bar:** Furniture only — no multi-select, 3D pick, openings as first-class targets.  
-**Upgrade rule:** Wire select **on Fabric**. Do **not** un-archive Feasibility to “prove W3.”
+**Upgrade rule:** Wire select **on Fabric** (`planner-fabric-stage` only). Do **not** add a second plan host to “prove W3.”
 
-**Out of scope:** Orbit (P04) · save (P06) · full journey (P07) · chrome/W8 · Feasibility restore.
+**Out of scope:** Orbit (P04) · save (P06) · full journey (P07) · chrome/W8 · second plan host.
 
 ---
 
@@ -36,7 +36,7 @@ Document selection only. Rotation stays **degrees** in document.
 
 | File | Role |
 |------|------|
-| `canvas-fabric-stage/Open3dFabricStage.tsx` | Select pointer → selection (raise here) |
+| `canvas-fabric-stage/PlannerFabricStage.tsx` | Select pointer → selection (raise here) |
 | `…/lib/geometry/canvasPicking.ts` | `pickFurnitureAtPoint` (pure) |
 | `…/editor/OOPlannerWorkspace.tsx` | `deleteSelection`, Esc |
 | `…/editor/useWorkspaceKeyboard.ts` | Del/Bksp + `preventDefault` |
@@ -55,7 +55,7 @@ Document selection only. Rotation stays **degrees** in document.
 - [ ] Del/Bksp + Esc on live host
 - [ ] Unit logs under `03-select-delete/`
 - [ ] **Browser:** select → delete → undo; `run.json` + PNGs/trace
-- [ ] No Feasibility mount · no “flag OFF” proof theater
+- [ ] Sole host `planner-fabric-stage` · no flag-OFF alternate-host theater
 
 **W3 red until** browser artifacts under `03-select-delete/`.  
-**Next:** [P07](./P07-draw-place-journey.md) / [P04](./P04-orbit-continuity.md) per BOARD.
+**Next (sequence):** [P04](./P04-orbit-continuity.md) only.

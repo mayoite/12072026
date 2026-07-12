@@ -18,7 +18,9 @@ Honest pack: W-gate summary, HEAD, failures snip, backup log if claimed — **do
 
 ## Forbidden
 
-- Paper PASS without `results/` paths
+- Paper PASS without fresh live proof + dump paths when written
 - Claiming product ship from pack alone
+- adding a second plan host (does not / will not exist)
 
-Pack ≠ product ship. Re-prove gates from [CHECKPOINTS](./CHECKPOINTS.md) — do not cite deleted review stubs.
+Pack ≠ product ship. Re-prove gates from [CHECKPOINTS](./CHECKPOINTS.md) — do not cite deleted review stubs.  
+**Next (sequence):** [P11](./P11-project-brief-room.md).

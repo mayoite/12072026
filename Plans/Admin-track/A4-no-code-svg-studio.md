@@ -2,11 +2,17 @@
 
 **Status:** IN PROGRESS — foundation + authority bridge + canvas-first shell landed on code; browser disk proof still required for A4.0.1 green.
 
-**Outcome:** A non-coder draws a furniture symbol on a stage they can see without scrolling, previews the real compile, and publishes **that** geometry to `public/svg-catalog/{slug}.svg`. Metadata is secondary. No code, JSON, or raw SVG required.
+**Outcome:** A non-coder draws a furniture **inventory symbol** on a stage they can see without scrolling, previews the real compile, and publishes **that** geometry to `public/svg-catalog/{slug}.svg`. Metadata is secondary. No code, JSON, or raw SVG required.
 
-**Boundary:** Authors **publish** SVG artifacts. Planner plan-draw remains Block2D → Fabric until a separate owner decision.
+**Boundary (owner lock 2026-07-12):**
 
-**Honesty bar:** Unit green ≠ product green. Plans score honesty; engine scores buyer path. Target both **9.5** means: no dual geometry, no empty stage, no plan language that grades “partial tools” as progress before shell+authority.
+| Surface | Owns | Does **not** own |
+|---------|------|------------------|
+| **Planner live workspace** | `features/planner/project/` + Fabric stage — room/layout plan-draw | Drawing catalog SVG as the plan canvas |
+| **SVG catalog** | **Inventory only** — published bytes under `public/svg-catalog/` | Live plan-draw |
+| **Admin A4 studio** | **All drawing tools for inventory authoring** — tool richness aims at commercial-class symbol studios (e.g. Planner 5D / 3D Planner *authoring* level for furniture symbols) | Replacing Fabric as the room planner |
+
+**Honesty bar:** Unit green ≠ product green. Catalog SVG ≠ Fabric plan-draw. Full toolset is the **A4 destination** after authority + shell + disk proof — not a reason to skip A4.0.1.
 
 ---
 
@@ -28,7 +34,8 @@ A4.0 foundation ✅
 → A4.6 three-variant browser proof
 ```
 
-**Kill list until shell + authority are buyer-green:** minimap, pen/path node editing, multi-select/group, templates, command palette, GLB polish as product work, a11y matrix theater, more form fields.
+**Kill list until shell + authority are buyer-green (A4.0.1–0.2):** minimap, pen/path node editing, multi-select/group, templates, command palette, GLB polish as product work, a11y matrix theater, more form fields.  
+**After green:** raise full inventory drawing tools (commercial-class authoring) **here** — still publish-to-catalog only; never claim studio is the room planner.
 
 ---
 

@@ -6,11 +6,11 @@ import { Resvg } from "@resvg/resvg-js";
 import {
   compileSvgBlockV1,
   type CompiledSvgBlockV1,
-} from "@/features/planner/open3d/catalog/svg/svgCompiler.server";
+} from "@/features/planner/project/catalog/svg/svgCompiler.server";
 import {
   SVG_RASTER_MASTER_WIDTH,
   SVG_THUMBNAIL_WIDTHS,
-} from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
+} from "@/features/planner/project/catalog/svg/svgPreviewAssets";
 
 export interface SvgRasterDerivative {
   readonly width: number;

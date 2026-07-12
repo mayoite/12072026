@@ -7,7 +7,7 @@
  * until a dedicated G5 binary export is extracted.
  *
  * @see site/features/planner/admin/svg-editor/GlbExtruderPreview.tsx
- * @see site/features/planner/open3d/catalog/modularCabinetV0GlbExport.ts (same plan pattern)
+ * @see site/features/planner/project/catalog/modularCabinetV0GlbExport.ts (same plan pattern)
  */
 
 import {

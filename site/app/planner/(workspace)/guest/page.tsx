@@ -1,8 +1,8 @@
-import { Open3dPlannerWorkspaceRoute } from "@/features/planner/ui/Open3dPlannerWorkspaceRoute";
+﻿import { PlannerWorkspaceRoute } from "@/features/planner/ui/PlannerWorkspaceRoute";
 
 export const dynamic = "force-dynamic";
 
-/** Live guest workspace — Open3dFabricStage (Fabric 2-D) + Three 3-D. */
+/** Live guest workspace â€” Fabric 2-D + Three 3-D. */
 export default async function PlannerGuestRoute({
   searchParams,
 }: {
@@ -11,5 +11,6 @@ export default async function PlannerGuestRoute({
   const resolved = searchParams ? await searchParams : {};
   const rawId = resolved.id;
   const planId = (Array.isArray(rawId) ? rawId[0] : rawId)?.trim() || undefined;
-  return <Open3dPlannerWorkspaceRoute guestMode planId={planId} />;
+  return <PlannerWorkspaceRoute guestMode planId={planId} />;
 }
+

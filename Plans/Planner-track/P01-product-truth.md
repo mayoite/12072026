@@ -1,29 +1,31 @@
 # P01 — Product truth inventory
 
-**Status:** OPEN / REPROVE — not complete. Old `00-product-truth/` pack = clue only (pre–Fabric-sole).
+**Status:** REPROVE → **inventory refreshed this checkout** (hostWiring 4/4 + artifacts). Browser W gates still later cards.
 
 **Gate:** CP-01 — map what open3d **does** vs what docs/UI **claim** (paths required).  
 **Evidence:** `results/planner/world-standard-wave/00-product-truth/`  
 **CP:** [CHECKPOINTS](./CHECKPOINTS.md) · [BOARD](./BOARD.md) · Approach **A**
 
-**Goal:** Inventory so later phases **raise** the live Fabric host — never restore Feasibility as product 2D.
+**Goal:** Inventory so later phases **raise** the **only** live plan canvas — Fabric on open3d. No second plan host.
 
 **Scope:** Inventory only — no product-feature implementation. Evidence under `00-product-truth/` only.
 
 ---
 
-## Upgrade lock (code 2026-07-11 — do not reverse)
+## Live canvas (only real place)
 
-| Layer | Live (upgrade) | Forbidden downgrade |
-|-------|----------------|---------------------|
-| 2D host | `PlannerCanvasStage` → `features/planner/canvas-fabric-stage` (`Open3dFabricStage`) | Mount `FeasibilityCanvas` / `canvas-feasibility` again |
-| Workspace | `OOPlannerWorkspace` mounts **only** `PlannerCanvasStage` | Dual host / flag-gated Feasibility+overlay |
-| Furniture env | Flag module exists; **not wired** in workspace (`hostWiringP01` asserts) | Treat flag-OFF Feasibility as “production proof path” |
-| Walls + furniture draw | In-stage Fabric (`Line` / `Rect`) always when layers on | “Walls on Feasibility, furniture on Fabric overlay” |
+| Layer | Live path | Forbidden |
+|-------|-----------|-----------|
+| Workspace | `features/planner/project/` (`OOPlannerWorkspace`) | Dual plan host |
+| 2D entry | `open3d/canvas-stage` → `PlannerCanvasStage` | Any second interactive plan canvas |
+| Implementation | `features/planner/canvas-fabric-stage` (`PlannerFabricStage`) | Legacy archive shells as product proof |
+| Browser host | `data-testid="planner-fabric-stage"` | Archive testid `planner-2d-canvas` as PASS host |
+| Furniture env flag | Module exists; **not wired** in workspace | Flag as product host switch |
+| Walls + furniture | In-stage Fabric when layers on | Split across two hosts |
 | 3D | Three + `getOpen3dViewerControlProps()` | R3F rewrite as W4 substitute |
-| Archive | `_archive/canvas-feasibility/` · `_archive/fabric/` | Copy archive into live mounts |
+| On-disk archive | `_archive/fabric/` only (historical shell) | Treat any deleted host as restorable product 2D |
 
-Unit already encodes the upgrade: `hostWiringP01.test.ts` (PlannerCanvasStage sole; no Feasibility; no flag in workspace).
+Unit: `hostWiringP01.test.ts` — PlannerCanvasStage sole; no second-host strings in live mounts; no flag in workspace.
 
 ---
 
@@ -31,9 +33,9 @@ Unit already encodes the upgrade: `hostWiringP01.test.ts` (PlannerCanvasStage so
 
 | Gap | Live fact | Upgrade direction |
 |-----|-----------|-------------------|
-| W2 symbols | Fabric multiprim paint has landed through `createFabricFurnitureBlock` | Re-prove buyer-readable cabinet + peer on live Fabric — [P05](./P05-symbols-svg.md) |
-| W3 select | Fabric select/delete/undo implementation and an older dual-gate pack exist | Re-run exact id + pose proof on this checkout — [P03](./P03-select-delete.md) |
-| Stale packs | Old INVENTORY / ENGINE-LOCK still name Feasibility interim | Re-diff artifacts to Fabric-sole |
+| W2 symbols | Fabric multiprim via `createFabricFurnitureBlock` | Re-prove buyer-readable cabinet + peer on live Fabric — [P05](./P05-symbols-svg.md) |
+| W3 select | Fabric select/delete/undo code may exist | Re-run exact id + pose on this checkout — [P03](./P03-select-delete.md) |
+| Stale packs | Old packs name dead second hosts | Re-diff to Fabric-sole only |
 
 ---
 
@@ -42,19 +44,19 @@ Unit already encodes the upgrade: `hostWiringP01.test.ts` (PlannerCanvasStage so
 | File | Role |
 |------|------|
 | `../../results/planner/world-standard-wave/00-product-truth/INVENTORY.md` | Fabric-sole hosts, tools surface, W1–W8 code surface |
-| `../../results/planner/world-standard-wave/00-product-truth/CONTRADICTIONS.md` | Claim vs code — include Block2D/select gaps **without** calling Feasibility live |
+| `../../results/planner/world-standard-wave/00-product-truth/CONTRADICTIONS.md` | Claim vs code — Block2D/select gaps as Fabric raise only |
 | `HEAD.txt` · `run.json` · `NOTES.md` | Checkout, Approach A, vitestSmoke |
 | Vitest | Prefer `hostWiringP01` + smoke — ok \| failed \| skipped + reason |
 
 ---
 
-## Kill order (unchecked)
+## Kill order
 
-- [ ] Inventory matches Fabric-sole (cite `canvas-stage` + `Open3dFabricStage`)
-- [ ] CONTRADICTIONS lists symbol/select gaps as **port-forward**, not Feasibility restore
-- [ ] Route/host graph matches `importGraphProof` / `hostWiringP01`
-- [ ] Claims corpus (`ayushdocs/` + WAVE) vs code
-- [ ] Vitest recorded on this HEAD
-- [ ] CP-01 → [P02](./P02-engine-lock.md)
+- [x] Inventory matches Fabric-sole (cite `canvas-stage` + `PlannerFabricStage` + `planner-fabric-stage`) — `00-product-truth/INVENTORY.md`
+- [x] CONTRADICTIONS lists symbol/select gaps as **port-forward on Fabric** — `CONTRADICTIONS.md`
+- [x] Route/host graph checked vs `hostWiringP01` (graph doc residual: fabric-legacy rows stale)
+- [x] Claims vs code — contradictions file
+- [x] Vitest recorded on this HEAD — `run.json` 4/4
+- [ ] Owner accepts CP-01 → next card only: [P02](./P02-engine-lock.md) (sequence P01→P12)
 
 **Stop log:** `Failures.md` (phase `P01`).

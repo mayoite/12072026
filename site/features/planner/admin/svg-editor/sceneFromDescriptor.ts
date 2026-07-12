@@ -9,7 +9,7 @@
  * survives `BlockDescriptorSchema` (which has no `parts` field).
  */
 
-import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
 import type { SvgSceneDocument, SvgSceneNode } from "./scene/svgSceneDocument";
 import { SCENE_MODEL_VERSION } from "./scene/svgSceneDocument";
 

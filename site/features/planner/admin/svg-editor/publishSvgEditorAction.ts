@@ -13,7 +13,7 @@
 import {
   tryLoad,
   type BlockDescriptor,
-} from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import { formStateToDescriptorInput } from "@/features/planner/admin/svg-editor/svgEditorFormAdapters";
 import type { SvgEditorFormState } from "@/features/planner/admin/svg-editor/svgEditorFormState";
 import {

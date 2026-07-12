@@ -8,7 +8,7 @@
 | **SEO** | [SEO-track/](./SEO-track/) | BOARD queue SEO1–5 | All OPEN; inventory partial |
 | **Security** | [Security-track/](./Security-track/) | SEC1–6 | OPEN; admin A3 slice only proven |
 
-**Upgrade lock:** live 2D = Fabric sole host. Plans that restore Feasibility or prove on archive selectors = **reject**.
+**Upgrade lock:** live 2D = Fabric sole host (`planner-fabric-stage`). Plans that add a second plan host or prove on archive selectors = **reject**.
 
 **Quality bar (plan law):** [00-QUALITY-BAR.md](./00-QUALITY-BAR.md) · **Product checkout floor:** [00-PRODUCT-FLOOR.md](./00-PRODUCT-FLOOR.md)
 

@@ -23,7 +23,10 @@ Buyer-usable planner + **one** workstation family (size grid, linear/L, modules)
 
 | Layer | Live target |
 |-------|-------------|
-| 2D | Fabric.js sole interactive plan canvas (`PlannerCanvasStage`) |
+| Live workspace | `features/planner/project/` + Fabric plan stage (owner accepted) |
+| 2D plan-draw | Fabric.js sole interactive plan canvas (`PlannerCanvasStage`) |
 | 3D | Three + orbit ON for planner |
-| Symbols | Block2D multiprim on Fabric · SVG catalog = publish only |
+| Inventory symbols | Admin A4 studio: full drawing tools for catalog items → publish `svg-catalog/` only |
+| SVG catalog | **Inventory publish only** — never the room plan-draw surface |
+| Plan symbols on stage | Block2D multiprim on Fabric (P05) — not raw catalog SVG as draw engine |
 | Licenses | `docs/Lockedfiles/03-dependencies-engines-current.md` |

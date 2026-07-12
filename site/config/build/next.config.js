@@ -62,13 +62,8 @@ const findRepoRoot = (dir) => {
   return parent === dir ? dir : findRepoRoot(parent);
 };
 
-const siteRoot = path.join(/* turbopackIgnore: true */ __dirname, "..", "..");
-const plannerEditorArchive = path.join(/* turbopackIgnore: true */ siteRoot, "features/planner/_archive/fabric/editor");
-const plannerCanvasArchive = path.join(/* turbopackIgnore: true */ siteRoot, "features/planner/_archive/fabric/canvas-fabric");
-const plannerArchiveAliases = {
-  "@/features/planner/editor": plannerEditorArchive,
-  "@/features/planner/canvas-fabric": plannerCanvasArchive,
-};
+// Live plan host = features/planner/workspace + canvas-fabric-stage.
+// Planner fabric `_archive` is deleted — do not reintroduce.
 
 const nextConfig = {
   output: "standalone",
@@ -203,8 +198,10 @@ const nextConfig = {
       { source: "/buddy-planner/login", destination: "/login/", permanent: true },
       { source: "/buddy-planner/:path*", destination: "/planner/canvas/", permanent: true },
       { source: "/oando-planner/:path*", destination: "/planner/", permanent: true },
-      { source: "/planner/fabric", destination: "/planner/open3d/", permanent: true },
-      { source: "/planner/fabric/:path*", destination: "/planner/open3d/", permanent: true },
+      { source: "/planner/fabric", destination: "/planner/canvas/", permanent: true },
+      { source: "/planner/fabric/:path*", destination: "/planner/canvas/", permanent: true },
+      { source: "/planner/open3d", destination: "/planner/canvas/", permanent: true },
+      { source: "/planner/open3d/:path*", destination: "/planner/canvas/", permanent: true },
     ];
   },
   async headers() {
@@ -271,10 +268,6 @@ const nextConfig = {
     ignoreBuildErrors: false, // PERF-FIX: enforce type safety at build time
   },
   webpack: (config, { isServer }) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      ...plannerArchiveAliases,
-    };
     // Client bundles must not pull node:fs (e.g. gltf-transform NodeIO via modular GLB path).
     if (!isServer) {
       config.resolve.fallback = {
@@ -288,9 +281,10 @@ const nextConfig = {
     }
     return config;
   },
+  // Prefer site package.json "dev": next dev --webpack (turbo optional via dev:turbo).
+  // turbopack.root at monorepo root indexes huge node_modules — memory risk.
   turbopack: {
     root: findRepoRoot(/* turbopackIgnore: true */ __dirname),
-    resolveAlias: plannerArchiveAliases,
   },
 };
 

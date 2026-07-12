@@ -19,7 +19,7 @@ import { mkdtempSync, readdirSync, readFileSync, rmSync, existsSync } from "node
 import path from "node:path";
 import os from "node:os";
 
-import { computeBlockDescriptorChecksum, BLOCK_DESCRIPTOR_SCHEMA_VERSION } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import { computeBlockDescriptorChecksum, BLOCK_DESCRIPTOR_SCHEMA_VERSION } from "@/features/planner/project/catalog/svg/svgTypes";
 
 import {
   persistBlockDescriptor,

@@ -1,11 +1,11 @@
 import { canvasUnitsToMillimeters } from "@/features/planner/lib/canvasBounds";
-import type { Open3dCatalogItem } from "@/features/planner/open3d/catalog/catalogTypes";
-import { placeCatalogItemInProject } from "@/features/planner/open3d/catalog/placementAction";
+import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import { placeCatalogItemInProject } from "@/features/planner/project/catalog/placementAction";
 import {
   addRectangularRoom,
   addWall,
-} from "@/features/planner/open3d/model/operations/pureActions";
-import type { Open3dProject } from "@/features/planner/open3d/model/types";
+} from "@/features/planner/project/model/operations/pureActions";
+import type { Open3dProject } from "@/features/planner/project/model/types";
 
 import { validateLayoutSchema } from "./aiStatus";
 import type { SuggestedLayoutJson } from "./types";

@@ -1,13 +1,13 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
-/** Live sole 2D host = Open3dFabricStage (not archive Feasibility `planner-2d-canvas`). */
-export const PLANNER_FABRIC_STAGE = '[data-testid="open3d-fabric-stage"]';
+/** Live sole 2D host = PlannerFabricStage (not archive Feasibility `planner-2d-canvas`). */
+export const PLANNER_FABRIC_STAGE = '[data-testid="planner-fabric-stage"]';
 /** Fabric mounts lower (pixels) + upper (events). Interact with upper. */
 export const PLANNER_PRIMARY_CANVAS =
-  '[data-testid="open3d-fabric-stage"] canvas.upper-canvas';
+  '[data-testid="planner-fabric-stage"] canvas.upper-canvas';
 /** Painted scene for screenshots / pixel probes (lower canvas holds bitmap). */
 export const PLANNER_PAINT_CANVAS =
-  '[data-testid="open3d-fabric-stage"] canvas.lower-canvas';
+  '[data-testid="planner-fabric-stage"] canvas.lower-canvas';
 
 /** TopBar view-mode radiogroup - product labels are literal "2D" / "3D" (role=radio). */
 export const VIEW_MODE_RADIOGROUP_NAME = "View mode";
@@ -278,7 +278,7 @@ type FabricViewHandle = {
 /**
  * Read the screen (page) coordinates of the first furniture object on the
  * live Fabric stage. Uses `plannerEntityType === "furniture"` (not archive name
- * prefixes). Requires `window.__plannerFabricView` from Open3dFabricStage.
+ * prefixes). Requires `window.__plannerFabricView` from PlannerFabricStage.
  */
 export async function firstFurnitureCenter(
   page: Page,

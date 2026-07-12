@@ -22,7 +22,7 @@ import {
 import {
   compileSvgBlockV1,
   SvgCompileError,
-} from "@/features/planner/open3d/catalog/svg/svgCompiler.server";
+} from "@/features/planner/project/catalog/svg/svgCompiler.server";
 
 const checksum = "a".repeat(64);
 
@@ -167,8 +167,8 @@ describe("Phase 1 SVG completion", () => {
 
   it("full end-to-end: admin draft/preview (V1 compile), publish/revision (disk via persist), planner 2D placement (resolver), thumb png, reload for fixed+configurable+parametric refs", async () => {
     const { persistBlockDescriptor } = await import("@/features/planner/admin/svg-editor/persistBlockDescriptor");
-    const { tryLoad } = await import("@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader");
-    const { resolveBlocks } = await import("@/features/planner/open3d/catalog/svg/blocksResolver");
+    const { tryLoad } = await import("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader");
+    const { resolveBlocks } = await import("@/features/planner/project/catalog/svg/blocksResolver");
     const { compileSvgArtifacts } = await import("@/features/planner/admin/svg-editor/svgArtifactCompiler.server");
     const { mkdtempSync, rmSync, mkdirSync } = await import("node:fs");
     const os = (await import("node:os")).default;

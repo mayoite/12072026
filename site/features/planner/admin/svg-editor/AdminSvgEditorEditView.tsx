@@ -26,7 +26,7 @@ import {
 import type {
   BlockDescriptor,
   BlockDescriptorVariant,
-} from "@/features/planner/open3d/catalog/svg/svgTypes";
+} from "@/features/planner/project/catalog/svg/svgTypes";
 import { SVG_EDITOR_FIELDS } from "./svgEditorFormModel";
 import { descriptorToFormState } from "./svgEditorFormAdapters";
 import type { SvgEditorFormState } from "./svgEditorFormState";

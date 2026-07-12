@@ -25,17 +25,8 @@ export default defineConfig({
       "@/app": path.resolve(VITEST_REPO_ROOT, "app"),
       "@/components": path.resolve(VITEST_REPO_ROOT, "components"),
       "@/data": path.resolve(VITEST_REPO_ROOT, "data"),
-      "@/features/planner/editor": path.resolve(
-        VITEST_REPO_ROOT,
-        "features/planner/_archive/fabric/editor",
-      ),
-      "@/features/planner/canvas-fabric": path.resolve(
-        VITEST_REPO_ROOT,
-        "features/planner/_archive/fabric/canvas-fabric",
-      ),
       "@/features": path.resolve(VITEST_REPO_ROOT, "features"),
       "@/lib": path.resolve(VITEST_REPO_ROOT, "lib"),
-      "@/stores": path.resolve(VITEST_REPO_ROOT, "archive/state/state"),
       "@": VITEST_REPO_ROOT,
     },
   },

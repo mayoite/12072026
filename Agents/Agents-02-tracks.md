@@ -15,6 +15,6 @@
 | **SEO** | SEO1… | `Plans/SEO-track/BOARD.md` only (no phase cards yet) |
 | **Security** | SEC1… | `Plans/Security-track/BOARD.md` · `SEC-hardening.md` |
 
-**Upgrade lock (Planner):** Fabric sole 2D (`open3d-fabric-stage`). Reject Feasibility restore / archive `planner-2d-canvas` proof.
+**Upgrade lock (Planner):** Fabric sole 2D (`open3d-fabric-stage`). Feasibility / `canvas-feasibility` does not / will not exist. Reject archive `planner-2d-canvas` proof.
 
 Status → `Plans/` · evidence → `results/` only. Do not open `Plans/*/phases` or `Plans/*/modules` (removed).

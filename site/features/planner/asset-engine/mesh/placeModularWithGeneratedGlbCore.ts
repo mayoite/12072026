@@ -11,17 +11,17 @@ import { stampFurnitureGeneratedGlb } from "@/features/planner/asset-engine/mesh
 import {
   placeCatalogItemInProject,
   type PlacementOptions,
-} from "@/features/planner/open3d/catalog/placementAction";
-import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/open3d/catalog/modularCabinetV0GlbExport";
-import { defaultCabinetV0Options } from "@/features/planner/open3d/catalog/modularCabinetV0";
+} from "@/features/planner/project/catalog/placementAction";
+import { modularCabinetV0GeneratedRelativePath } from "@/features/planner/project/catalog/modularCabinetV0GlbExport";
+import { defaultCabinetV0Options } from "@/features/planner/project/catalog/modularCabinetV0";
 import type {
   Open3dCatalogItem,
   Open3dCatalogVariant,
-} from "@/features/planner/open3d/catalog/catalogTypes";
+} from "@/features/planner/project/catalog/catalogTypes";
 import type {
   Open3dFurnitureItem,
   Open3dProject,
-} from "@/features/planner/open3d/model/types";
+} from "@/features/planner/project/model/types";
 
 export type PlaceModularGlbWriteResult = {
   readonly absolutePath: string | null;

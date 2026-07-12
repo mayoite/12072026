@@ -8,8 +8,8 @@
  * GS: BP-03, anti-copy. No `any`.
  */
 
-import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
-import type { Open3dDescriptorError, Open3dResult } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { Open3dDescriptorError, Open3dResult } from "@/features/planner/project/catalog/svg/svgTypes";
 import {
   parseAdminPayload,
   persistBlockDescriptor,

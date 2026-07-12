@@ -12,8 +12,7 @@ const monorepoRoot = path.join(/* turbopackIgnore: true */ __dirname, "..");
 
 module.exports = withNextIntl({
   ...baseConfig,
-  turbopack: {
-    root: monorepoRoot,
-  },
-  outputFileTracingRoot: monorepoRoot, // NFT root for tracing
+  // NFT still monorepo-aware; default dev is webpack (see package.json "dev").
+  // turbo (dev:turbo) inherits baseConfig.turbopack — use sparingly (RAM risk).
+  outputFileTracingRoot: monorepoRoot,
 });

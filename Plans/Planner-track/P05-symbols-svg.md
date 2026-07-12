@@ -7,11 +7,11 @@
 **CP:** [CHECKPOINTS](./CHECKPOINTS.md) · [BOARD](./BOARD.md) · Approach **A**
 
 **Goal:** Cabinet-v0 readable on Fabric stage. Never claim `/svg-catalog/*.svg` as plan-draw path.  
-**Upgrade rule:** Port Block2D (or Fabric multiprim equivalent) **onto** `Open3dFabricStage`. Do **not** restore Feasibility to show symbols.
+**Upgrade rule:** Port Block2D (or Fabric multiprim equivalent) **onto** `PlannerFabricStage` only. Do **not** add a second plan host to show symbols.
 
 **Place journey** = [P07](./P07-draw-place-journey.md). **Mesh** = [P08](./P08-mesh-quality.md).
 
-**Out of scope:** Mesh redesign · Feasibility restore · SVGR · CDN SVG · confusing footprint helpers with Block2D.
+**Out of scope:** Mesh redesign · second plan host · SVGR · CDN SVG · confusing footprint helpers with Block2D.
 
 **Depends:** P01 + P02 (Fabric-sole lock).
 
@@ -21,12 +21,12 @@
 
 ```
 Library: furnitureBlock2DFromItem → Block2D prims  (raised; unit-proven)
-Live canvas TODAY: Open3dFabricStage → createFabricFurnitureBlock multiprim
+Live canvas TODAY: PlannerFabricStage → createFabricFurnitureBlock multiprim
 Re-prove: buyer-readable cabinet + peer on the current checkout
 Publish: compileSvgForPublish → public/svg-catalog/{slug}.svg  (not plan-draw)
 ```
 
-Archive Feasibility still calls `renderBlock2DCentered` — **not** a product proof path.
+Live plan paint = Fabric multiprim only. SVG catalog = inventory publish only.
 
 ---
 
@@ -47,7 +47,7 @@ Archive Feasibility still calls `renderBlock2DCentered` — **not** a product pr
 | Path | Role |
 |------|------|
 | `…/catalog/furnitureBlock2D.ts` | Keep multiprim + centeredPath false |
-| `canvas-fabric-stage/Open3dFabricStage.tsx` | Multiprim paint is wired; re-prove final visuals |
+| `canvas-fabric-stage/PlannerFabricStage.tsx` | Multiprim paint is wired; re-prove final visuals |
 | `site/lib/catalog/renderBlock2DToCanvas.ts` | Paint helper (adapt or Fabric port) |
 | Units | cabinet-v0 · stage paint regression when wired |
 | Honesty | Block2D = plan; SVG = publish |
@@ -58,9 +58,9 @@ Archive Feasibility still calls `renderBlock2DCentered` — **not** a product pr
 
 - [ ] Re-run cabinet-v0 vitest → `05-symbols-svg/`
 - [ ] Port multiprim paint to Fabric stage (or prove equivalent)
-- [ ] Visual on **live** canvas (not archive Feasibility)
+- [ ] Visual on **live Fabric** canvas only
 - [ ] SVG honesty NOTES
-- [ ] No competitor art · no Feasibility un-archive
+- [ ] No competitor art · sole Fabric host
 
 **W2 symbol half red until** live Fabric shows readable cabinet-v0 (library-only PASS = incomplete).  
-**Next:** [P06](./P06-save-honesty.md) / BOARD kill order.
+**Next (sequence):** [P06](./P06-save-honesty.md).

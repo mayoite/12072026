@@ -12,7 +12,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/newBlockDescriptorStub";
 import { descriptorToFormState } from "@/features/planner/admin/svg-editor/svgEditorFormAdapters";
-import { tryLoad } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import type { SvgEditorFormState } from "@/features/planner/admin/svg-editor/svgEditorFormState";
 
 const { publishDescriptorWithPipeline } = vi.hoisted(() => ({

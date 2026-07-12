@@ -1,9 +1,9 @@
-import { Open3dPlannerWorkspaceRoute } from "@/features/planner/ui/Open3dPlannerWorkspaceRoute";
+﻿import { PlannerWorkspaceRoute } from "@/features/planner/ui/PlannerWorkspaceRoute";
 import { getOptionalPlannerUser } from "@/lib/auth/plannerSession";
 
 export const dynamic = "force-dynamic";
 
-/** Live member/guest canvas — open3d: Fabric 2-D (`PlannerCanvasStage`) + Three 3-D. Legacy shell: /planner/fabric/canvas */
+/** Live member/guest canvas â€” Fabric 2-D (`PlannerCanvasStage`) + Three 3-D. Legacy shell: /planner/fabric/canvas */
 export default async function PlannerCanvasRoute({
   searchParams,
 }: {
@@ -16,5 +16,6 @@ export default async function PlannerCanvasRoute({
   const rawId = resolvedSearchParams.id;
   const planId = (Array.isArray(rawId) ? rawId[0] : rawId)?.trim() || undefined;
 
-  return <Open3dPlannerWorkspaceRoute guestMode={isGuest} planId={planId} />;
+  return <PlannerWorkspaceRoute guestMode={isGuest} planId={planId} />;
 }
+

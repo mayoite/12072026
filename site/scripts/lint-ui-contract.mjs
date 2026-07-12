@@ -58,7 +58,7 @@ function checkAdminPalette() {
 }
 
 function checkOpen3dTailwindInTsx() {
-  const open3dDir = join(SITE_ROOT, "features/planner/open3d");
+  const open3dDir = join(SITE_ROOT, "features/planner/workspace");
   const files = walk(open3dDir, (p) => /\.tsx$/.test(p));
   for (const file of files) {
     const text = readFileSync(file, "utf8");
@@ -69,7 +69,7 @@ function checkOpen3dTailwindInTsx() {
 }
 
 function checkOpen3dModuleHex() {
-  const open3dDir = join(SITE_ROOT, "features/planner/open3d");
+  const open3dDir = join(SITE_ROOT, "features/planner/workspace");
   const files = walk(open3dDir, (p) => /\.module\.css$/.test(p));
   const hexPattern = /#[0-9a-fA-F]{3,8}\b/;
   for (const file of files) {

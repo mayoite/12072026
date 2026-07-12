@@ -192,7 +192,7 @@ const siteFolders = {
     why: "Single source for /planner workspace: open3d editor, catalog placement, 3D viewer, persistence, AI assist.",
     contains: [
       "open3d/ — destination fabric stage + mesh + catalog + editor shell",
-      "ui/ — Open3dPlannerHost / workspace routes",
+      "ui/ — PlannerHost / workspace routes",
       "catalog/ — ingest + generated items",
       "store/ — Zustand state",
       "3d/ — Three.js scene helpers",
@@ -235,7 +235,7 @@ const siteFolders = {
     ],
     see: ["../../testing-handbook.md", "../../Plans/Planner-track/BOARD.md"],
   },
-  "features/planner/open3d": {
+  "features/planner/workspace": {
     title: "Open3d planner workspace",
     why: "Destination 2D/3D planner: fabric stage, modular mesh, catalog placement, persistence.",
     contains: ["editor/, catalog/, model/, store/, ui/ (Fabric 2-D: ../canvas-fabric-stage/)"],

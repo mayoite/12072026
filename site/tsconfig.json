@@ -7,10 +7,6 @@
       "@/app/*": ["./app/*"],
       "@/components/*": ["./components/*"],
       "@/lib/site-data/*": ["./lib/site-data/*"],
-      "@/features/planner/editor": ["./features/planner/_archive/fabric/editor"],
-      "@/features/planner/editor/*": ["./features/planner/_archive/fabric/editor/*"],
-      "@/features/planner/canvas-fabric": ["./features/planner/_archive/fabric/canvas-fabric"],
-      "@/features/planner/canvas-fabric/*": ["./features/planner/_archive/fabric/canvas-fabric/*"],
       "@/features/*": ["./features/*"],
       "@/lib/*": ["./lib/*"],
       "@/*": ["./*"]
@@ -37,6 +33,7 @@
     "proxy.ts"
   ],
   "exclude": [
+    "features/planner/_archive/**",
     "platform/supabase/functions",
     "platform/drizzle/drizzle.config.ts",
     "node_modules",

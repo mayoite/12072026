@@ -13,7 +13,7 @@ import { resolvePublicDir } from "@/lib/paths/sitePackageRoot.server";
 import { Render } from "@puckeditor/core";
 import {
   tryLoad,
-} from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import {
   puckConfig,
   getPuckData,
@@ -23,7 +23,7 @@ import {
 import {
   buildBlockThumbPngUrl,
   buildBlockThumbSrcSet,
-} from "@/features/planner/open3d/catalog/svg/svgPreviewAssets";
+} from "@/features/planner/project/catalog/svg/svgPreviewAssets";
 
 function readInlineSvg(slug: string): string | null {
   const p = path.join(resolvePublicDir(), "svg-catalog", `${slug}.svg`);

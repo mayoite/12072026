@@ -3,8 +3,8 @@ import {
   placeModularWithGeneratedGlbBrowser,
   writeGeneratedGlbViaApi,
 } from "@/features/planner/asset-engine/mesh/placeModularWithGeneratedGlbBrowser";
-import type { Open3dCatalogItem } from "@/features/planner/open3d/catalog/catalogTypes";
-import type { Open3dProject } from "@/features/planner/open3d/model/types";
+import type { Open3dCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
+import type { Open3dProject } from "@/features/planner/project/model/types";
 
 function emptyProject(): Open3dProject {
   return {

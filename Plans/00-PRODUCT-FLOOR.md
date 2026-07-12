@@ -18,7 +18,7 @@
 
 | Track | Product truth (not flattery) | Next falsifiable product step |
 |-------|------------------------------|-------------------------------|
-| **Planner** | P03–P09 landed candidates common; browser often **count-only**, not id/pose; P11–P16 unbuilt; CP-10 pack missing | CP-03: select→delete→undo **same id + pose** on Fabric |
+| **Planner** | P01–P12 open/REPROVE; browser often **count-only**; P11–P16 unbuilt; CP-10 pack missing; second plan host is forbidden | **P01** inventory first (sequence P01→P12; no skip to P03) |
 | **Admin** | A1–A3 foundation proven historically; A4 code raised (authority + shell); **disk browser proof open**; A5–A8 unbuilt | A4.0.1: draw→publish→bytes on this checkout |
 | **Site** | S2 claimed PASS slice but `results/site/s2-chrome/` **absent** on last path audit — treat product as **REPROVE** until pack or demote | Restore pack or demote S2 status on [Site BOARD](./Site-track/BOARD.md) |
 | **SEO** | STATIC_PATHS diverge from live routes; inventory start only | SEO1: classify gaps index/noindex/bug |

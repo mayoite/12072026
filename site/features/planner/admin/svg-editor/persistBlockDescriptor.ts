@@ -35,12 +35,12 @@ import {
   type BlockDescriptor,
   type Open3dDescriptorError,
   type Open3dResult,
-} from "@/features/planner/open3d/catalog/svg/svgTypes";
+} from "@/features/planner/project/catalog/svg/svgTypes";
 import {
   BLOCK_DESCRIPTORS_DIR_DEFAULT,
   clearLoaderCache,
   loadAll as loaderLoadAll,
-} from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
 import { retainDescriptorArchive } from "./descriptorArchive";
 import {
@@ -54,7 +54,7 @@ import {
   resolveCurrentVersion,
   versionedDescriptorPath,
   writeLatestPointer,
-} from "@/features/planner/open3d/catalog/svg/descriptorPointer";
+} from "@/features/planner/project/catalog/svg/descriptorPointer";
 import { verifyDualRead, writeDualReadEvidence } from "./dualReadHarness";
 
 /** Reasons surfaced to the per-route `withAuth` envelope. */
