@@ -89,25 +89,44 @@ function ToolToggle({
           >
             <IconComponent
               size={18}
-              weight={selected || isSelected ? "fill" : "regular"}
+              weight={
+                selected || isSelected
+                  ? "fill"
+                  : deferred
+                    ? "light"
+                    : "regular"
+              }
               aria-hidden
             />
             <span className={styles.shortcut} aria-hidden>
               {shortcut}
             </span>
             {deferred ? (
-              <span className={styles.deferredDot} aria-hidden title="Deferred" />
+              <span
+                className={styles.deferredDot}
+                aria-hidden
+                data-deferred-marker="true"
+                title="Deferred — not full geometry"
+              />
             ) : null}
           </span>
         )}
       </ToggleButton>
-      <Tooltip className={styles.tooltip} placement="right">
+      <Tooltip
+        className={styles.tooltip}
+        placement="right"
+        data-tool-tier={CANVAS_TOOL_REQUIREMENT[tool]}
+      >
         <span className={styles.tooltipTitle}>{name}</span>
         <span className={styles.tooltipBody}>{tip}</span>
         {deferred ? (
-          <span className={styles.tooltipMeta}>Deferred — not full geometry yet</span>
+          <span className={styles.tooltipMeta} data-tier="deferred">
+            Deferred — arms only, no full geometry yet
+          </span>
         ) : isLiveGeometryTool(tool) ? (
-          <span className={styles.tooltipMeta}>Live on Fabric canvas</span>
+          <span className={styles.tooltipMeta} data-tier="live">
+            Live on Fabric canvas
+          </span>
         ) : null}
       </Tooltip>
     </TooltipTrigger>

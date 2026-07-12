@@ -1,0 +1,45 @@
+{
+  "slice": "P07 / CP-07 world-standard W1-W2 open3d journey",
+  "date": "2026-07-12",
+  "result": "pass",
+  "tests": 1,
+  "failed": 0,
+  "gates": {
+    "W1": "pass",
+    "W2": "pass"
+  },
+  "routeUsed": "guest",
+  "placePath": "catalog",
+  "command": "npx playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-standard-journey.spec.ts --reporter=list",
+  "cwd": "site",
+  "baseURL": "http://localhost:3000",
+  "server": "localhost only (127.0.0.1 rewritten in playwrightBaseURL.cjs)",
+  "spec": "site/tests/e2e/open3d-world-standard-journey.spec.ts",
+  "proof": {
+    "wallsBefore": 4,
+    "wallsAfterDraw": 5,
+    "wallsIncreased": true,
+    "doorOrOpeningPlaced": true,
+    "objectsBefore": 4,
+    "objectsAfterWalls": 5,
+    "objectsAfterOpening": 6,
+    "objectsIncreasedAfterOpening": true,
+    "furnitureBefore": 0,
+    "furnitureAfter": 2,
+    "furnitureAtLeast": 2,
+    "includesCabinetV0": true,
+    "secondCatalogId": "sample-desk-1",
+    "secondPlaceCta": "Place — Add Executive Standing Desk to canvas",
+    "placePath": "catalog",
+    "symbolCheck": "non-blank-canvas-png (P07); quality bar P05",
+    "screenshots": [
+      "01-route-ready.png",
+      "02-walls-drawn.png",
+      "03-door-opening.png",
+      "04-cabinet-v0-placed.png",
+      "05-two-items-placed.png",
+      "06-canvas-2d-symbols.png",
+      "07-journey-complete.png"
+    ]
+  }
+}

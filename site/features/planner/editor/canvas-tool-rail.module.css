@@ -1,45 +1,86 @@
+/**
+ * RAC canvas tool rail — sole tool chrome styles.
+ * Specificity intentionally beats body.planner-workspace .pw-tool-rail legacy shell rules.
+ */
+
+/* Own the rail against legacy .planner-workspace .pw-tool-rail (same class on node). */
+:global(body.planner-workspace) .rail:global(.pw-tool-rail),
 .rail {
+  --rail-gap: var(--space-1);
+  --rail-pad-block: var(--space-2);
+  --rail-pad-inline: var(--space-1);
+  --rail-btn: var(--planner-control-target, 2.5rem);
+  --rail-icon: 1.125rem;
+  --rail-shortcut-size: 0.5625rem;
+
+  position: relative;
+  top: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
-  width: var(--ws-rail-w, 3.25rem);
+  /* Top-align: center + overflow clips first tools on short viewports */
+  justify-content: flex-start;
+  gap: var(--rail-gap);
+  width: var(--ws-rail-w, var(--planner-tool-rail-width, 3.25rem));
+  min-width: var(--ws-rail-w, var(--planner-tool-rail-width, 3.25rem));
   flex-shrink: 0;
   height: 100%;
-  padding: var(--space-2) var(--space-1);
+  min-height: 0;
+  max-height: 100%;
+  padding: var(--rail-pad-block) var(--rail-pad-inline);
   border-right: 1px solid var(--border-soft);
+  /* Flat professional chrome — no gradient (Excel/Sheets class) */
   background: var(--surface-panel);
-  z-index: var(--ws-z-rail, 60);
+  z-index: var(--ws-z-rail, var(--planner-z-rail, 60));
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  box-sizing: border-box;
+}
+
+.rail::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+.rail::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--border-soft) 80%, transparent);
+  border-radius: 999px;
 }
 
 .group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--rail-gap);
   width: 100%;
+  flex-shrink: 0;
 }
 
 .divider {
   width: 1.75rem;
   height: 1px;
-  margin: var(--space-1) 0;
+  margin: var(--rail-gap) 0;
   background: var(--border-soft);
+  flex-shrink: 0;
 }
 
 .toolBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--planner-control-target, 2.5rem);
-  height: var(--planner-control-target, 2.5rem);
+  width: var(--rail-btn);
+  height: var(--rail-btn);
+  min-width: var(--rail-btn);
+  min-height: var(--rail-btn);
   padding: 0;
   border: none;
   border-radius: var(--radius-md, 0.5rem);
   background: transparent;
   color: var(--text-body);
   cursor: pointer;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .toolBtn:disabled,
@@ -57,11 +98,19 @@
   height: 100%;
   border: 1px solid transparent;
   border-radius: var(--radius-md, 0.5rem);
+  box-sizing: border-box;
   transition:
     background 120ms ease,
     border-color 120ms ease,
     color 120ms ease,
-    box-shadow 120ms ease;
+    box-shadow 120ms ease,
+    opacity 120ms ease;
+}
+
+.toolFace :global(svg) {
+  width: var(--rail-icon);
+  height: var(--rail-icon);
+  flex-shrink: 0;
 }
 
 .toolBtn:hover .toolFace,
@@ -77,39 +126,76 @@
   color: var(--color-primary);
 }
 
+/* Inset focus — outline-offset clips against parent overflow:hidden */
 .toolFace[data-focus-visible="true"],
 .toolBtn[data-focus-visible] .toolFace {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--color-primary);
 }
 
 .toolFace[data-pressed="true"] {
   transform: scale(0.96);
 }
 
+/* Deferred honesty: visible but not “live chrome” (no fake geometry claim) */
 .toolBtn[data-deferred="true"] .toolFace {
-  opacity: 0.88;
+  opacity: 0.82;
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--border-soft) 90%, var(--text-muted));
+  color: var(--text-muted);
+}
+
+.toolBtn[data-deferred="true"]:hover .toolFace,
+.toolBtn[data-deferred="true"][data-hovered] .toolFace {
+  opacity: 0.92;
+  color: var(--text-body);
+  background: color-mix(in srgb, var(--surface-soft) 70%, var(--surface-panel));
+}
+
+.toolBtn[data-deferred="true"][data-selected] .toolFace,
+.toolBtn[data-deferred="true"] .toolFace[data-selected="true"] {
+  opacity: 1;
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--color-primary) 40%, var(--text-muted));
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--surface-panel));
+  color: var(--color-primary);
 }
 
 .deferredDot {
   position: absolute;
-  top: 0.2rem;
-  left: 0.2rem;
+  top: 0.18rem;
+  left: 0.18rem;
   width: 0.35rem;
   height: 0.35rem;
   border-radius: 999px;
   background: var(--text-muted);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--surface-panel) 80%, transparent);
+}
+
+.toolBtn[data-deferred="true"][data-selected] .deferredDot,
+.toolBtn[data-deferred="true"] .toolFace[data-selected="true"] .deferredDot {
+  background: var(--color-primary);
 }
 
 .shortcut {
   position: absolute;
-  right: 0.2rem;
-  bottom: 0.15rem;
-  font-size: 0.5625rem;
+  right: 0.15rem;
+  bottom: 0.1rem;
+  font-size: var(--rail-shortcut-size);
   font-weight: 600;
   letter-spacing: 0.02em;
+  line-height: 1;
   color: var(--text-muted);
   pointer-events: none;
+  max-width: 1rem;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.toolBtn[data-selected] .shortcut,
+.toolFace[data-selected="true"] .shortcut {
+  color: color-mix(in srgb, var(--color-primary) 75%, var(--text-muted));
 }
 
 .tooltip {
@@ -122,7 +208,7 @@
   box-shadow: var(--shadow-md, 0 8px 24px color-mix(in srgb, #000 12%, transparent));
   font-size: var(--type-label-size, 0.75rem);
   line-height: 1.35;
-  z-index: calc(var(--ws-z-rail, 60) + 20);
+  z-index: calc(var(--ws-z-rail, var(--planner-z-rail, 60)) + 20);
 }
 
 .tooltipTitle {
@@ -144,6 +230,13 @@
   color: var(--color-primary);
 }
 
+/* Deferred meta stays muted so “Live on Fabric” is the stronger claim */
+.tooltipMeta[data-tier="deferred"],
+.tooltip[data-tool-tier="deferred"] .tooltipMeta {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
 .srOnly {
   position: absolute;
   width: 1px;
@@ -156,13 +249,61 @@
   border: 0;
 }
 
+/* ── Density (shell attribute; default product density is compact) ───────── */
+
+:global([data-planner-density="compact"]) .rail {
+  --rail-btn: 2rem;
+  --rail-icon: 1rem;
+  --rail-gap: 0.125rem;
+  --rail-pad-block: var(--space-1);
+  --rail-pad-inline: 0.125rem;
+  --rail-shortcut-size: 0.5rem;
+  width: 2.875rem;
+  min-width: 2.875rem;
+}
+
 :global([data-planner-density="compact"]) .toolBtn {
   --planner-control-target: 2rem;
 }
 
+:global([data-planner-density="touch"]) .rail {
+  --rail-btn: var(--planner-touch-target, 2.75rem);
+  --rail-icon: 1.25rem;
+  --rail-gap: var(--space-1);
+  --rail-pad-block: var(--space-2);
+  --rail-pad-inline: var(--space-1);
+  --rail-shortcut-size: 0.5625rem;
+  /* Fit 2.75rem hit targets + inline pad without clipping faces */
+  width: calc(var(--planner-touch-target, 2.75rem) + var(--space-2));
+  min-width: calc(var(--planner-touch-target, 2.75rem) + var(--space-2));
+}
+
+:global([data-planner-density="touch"]) .toolBtn {
+  --planner-control-target: var(--planner-touch-target, 2.75rem);
+}
+
+/* Coarse pointer: prefer touch targets unless compact is explicit */
 @media (pointer: coarse) {
+  .rail {
+    --rail-btn: var(--planner-touch-target, 2.75rem);
+    --rail-icon: 1.25rem;
+    width: calc(var(--planner-touch-target, 2.75rem) + var(--space-2));
+    min-width: calc(var(--planner-touch-target, 2.75rem) + var(--space-2));
+  }
+
   .toolBtn {
     --planner-control-target: var(--planner-touch-target, 2.75rem);
+  }
+
+  :global([data-planner-density="compact"]) .rail {
+    --rail-btn: 2.25rem;
+    --rail-icon: 1.125rem;
+    width: 3rem;
+    min-width: 3rem;
+  }
+
+  :global([data-planner-density="compact"]) .toolBtn {
+    --planner-control-target: 2.25rem;
   }
 }
 
@@ -177,29 +318,50 @@
     background: Highlight;
     forced-color-adjust: none;
   }
+
+  .toolBtn[data-deferred="true"] .toolFace {
+    border-style: dashed;
+    border-color: GrayText;
+  }
+
+  .toolFace[data-focus-visible="true"],
+  .toolBtn[data-focus-visible] .toolFace {
+    box-shadow: inset 0 0 0 2px Highlight;
+  }
+
+  .deferredDot {
+    background: GrayText;
+  }
 }
 
+/* ── Narrow / mobile: horizontal bottom rail ─────────────────────────────── */
+
 @media (width < 48rem) {
+  :global(body.planner-workspace) .rail:global(.pw-tool-rail),
   .rail {
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    gap: var(--space-1);
+    gap: var(--rail-gap);
     order: 2;
     width: 100%;
+    min-width: 0;
     height: auto;
-    min-height: calc(var(--planner-touch-target) + var(--space-2));
+    max-height: none;
+    min-height: calc(var(--rail-btn) + var(--rail-pad-block) * 2);
     padding:
-      var(--space-2)
-      calc(var(--space-2) + var(--planner-safe-right))
-      calc(var(--space-2) + var(--planner-safe-bottom))
-      calc(var(--space-2) + var(--planner-safe-left));
+      var(--rail-pad-block)
+      calc(var(--space-2) + var(--planner-safe-right, 0px))
+      calc(var(--rail-pad-block) + var(--planner-safe-bottom, 0px))
+      calc(var(--space-2) + var(--planner-safe-left, 0px));
     border-right: none;
     border-top: 1px solid var(--border-soft);
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: var(--space-2);
   }
 
   .rail::-webkit-scrollbar {
@@ -214,17 +376,27 @@
 
   .divider {
     width: 1px;
-    height: 1.75rem;
-    margin: 0 var(--space-1);
+    height: 1.5rem;
+    margin: 0 var(--rail-gap);
   }
 
+  /* Shortcuts redundant on touch strip; reclaim face space */
   .shortcut {
     display: none;
   }
 
   .tooltip {
-    /* Prefer below on mobile rail */
     max-width: 12rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toolFace {
+    transition: none;
+  }
+
+  .toolFace[data-pressed="true"] {
+    transform: none;
   }
 }
 

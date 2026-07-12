@@ -155,10 +155,13 @@
   color: var(--prop-accent);
 }
 
-/* Content */
+/* Content — sole vertical scroll in properties (header chrome fixed) */
 .content {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--prop-space-3) var(--prop-space-4);
 }
 
