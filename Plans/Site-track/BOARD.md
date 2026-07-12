@@ -2,17 +2,25 @@
 
 > [Plans/INDEX.md](../INDEX.md) · **Bar:** [00-QUALITY-BAR](../00-QUALITY-BAR.md)
 
-**S2 landed as a bounded slice. S1 and named residual site work remain open.**
+## Honest scores
+
+| | Now | Blocker |
+|--|-----|---------|
+| Plan honesty | ~8 | S1/S2 cards match reality |
+| Product / marketing | ~5 | S2 slice only; site not “complete” |
 
 | Card | Status | Owns |
 |------|--------|------|
-| [S1](./S1-deps-cleanup.md) | **OPEN** | Dependency cleanup (plan → owner OK → cut) |
-| [S2](./S2-site-chrome.md) | **PASS SLICE** | Header CTA, mobile drawer, and evidence; not a full redesign |
+| [S1](./S1-deps-cleanup.md) | **OPEN** | Dep cleanup — **plan only** until owner `execute Plan A` |
+| [S2](./S2-site-chrome.md) | **PASS SLICE** | Header CTA + mobile drawer — not full redesign |
 
-S5 catalog image · S6 portal list — residual work not closed; no DONE tick.
+### Next action (only)
+
+**S1:** Get owner decision. Do **not** cut `@fancyapps/ui` without written OK.  
+If owner says execute: confirm unused → remove → `pnpm install` + typecheck → `results/site/s1-deps/`.
+
+**Kill list:** Claiming site DONE; silent dep cuts; redesign as “S2 residual.”
 
 ```
-S1 deps (owner gate) → S2 chrome raise
+S1 (owner gate) → further site work only with new cards
 ```
-
-Do not turn the S2 slice into a “site complete” claim.

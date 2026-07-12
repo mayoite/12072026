@@ -54,7 +54,9 @@ There is **no** separate MASTER-CHECKLIST. Tick theater was deleted.
 | CP-09 | Shortcut labels = handlers | **REPROVE** |
 | CP-10 | Handover pack on disk — **not product ship** | **OPEN** (`10-handover/` missing) |
 
-Honest gaps (do not paper over): W3/W4 browser often **count-only**, not id/pose — see `../../results/planner/world-standard-wave/00-rebaseline/HONEST-STATUS.md`.
+Honest gaps (do not paper over): W3/W4 browser often **count-only**, not id/pose — see `../../results/planner/world-standard-wave/00-rebaseline/HONEST-STATUS.md` (paths inside that file may be stale; board/INDEX are law).
+
+**Next kill only:** CP-03 — Fabric select→delete→undo with **same id + pose**. Count-only = FAIL. Unit alone = FAIL.
 
 ---
 

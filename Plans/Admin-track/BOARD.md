@@ -2,30 +2,36 @@
 
 > [Plans/INDEX.md](../INDEX.md) · **Bar:** [00-QUALITY-BAR](../00-QUALITY-BAR.md)
 
-**A1–A3 are SVG foundations. A4–A8 define the actual admin product.**
+**A1–A3 are SVG foundations. A4–A8 are the admin product. Do not skip A4 proof for A5+.**
+
+## Honest scores
+
+| | Now | Blocker |
+|--|-----|---------|
+| Plan honesty | ~8.5 | A4 card critical path rewritten; A5–A8 still large |
+| Product / engine | ~5 | A4 authority+shell **code** real; **browser disk proof open**; A5–A8 unbuilt |
+
+## Cards
 
 | Card | Status | Owns |
 |------|--------|------|
-| [A1](./A1-admin-svg-publish.md) | **DONE** | Real UI journey: list → editor → Publish → HTTP 200 → visible feedback → bytes |
-| [A2](./A2-svg-pipeline.md) | **DONE** | 5/5 live descriptors published; 16 revisions + 1 pointer excluded; 0 orphans |
-| [A3](./A3-production-auth.md) | **DONE** | Production rejects anonymous page/API access and ignores the bypass flag |
-| [A4](./A4-no-code-svg-studio.md) | **OPEN** | Visual SVG engine — A4.0 foundation + authority bridge + canvas shell in code; browser disk proof next |
-| [A5](./A5-catalog-operations.md) | **OPEN** | Unified catalog lifecycle, bulk import/export, quality queue |
-| [A6](./A6-workstation-system-authoring.md) | **OPEN** | No-code linear/L workstation family, rules, 2D/3D/BOM |
-| [A7](./A7-pricing-boq-governance.md) | **OPEN** | Versioned price books and BOM pricing |
-| [A8](./A8-release-audit-rollback.md) | **OPEN** | Review, release, audit, impact, rollback |
-
-**Honesty:** SVG catalog ≠ Fabric plan canvas. Do not “prove” planner symbols via admin publish alone.
+| [A1](./A1-admin-svg-publish.md) | **DONE** | List → editor → Publish → feedback → bytes |
+| [A2](./A2-svg-pipeline.md) | **DONE** | Live descriptors published; orphans closed at proof time |
+| [A3](./A3-production-auth.md) | **DONE** | Prod rejects anonymous; bypass ignored |
+| [A4](./A4-no-code-svg-studio.md) | **OPEN** | Visual engine — code raised; product green only after disk proof |
+| [A5](./A5-catalog-operations.md) | **OPEN** | Catalog lifecycle / bulk — **frozen until A4.0.1 disk green** |
+| [A6](./A6-workstation-system-authoring.md) | **OPEN** | Workstation family — needs A4 patterns + A5 |
+| [A7](./A7-pricing-boq-governance.md) | **OPEN** | Price books — unblocks Planner P15 |
+| [A8](./A8-release-audit-rollback.md) | **OPEN** | Release governance |
 
 ```
-A1–A3 foundation → A4 visual engine → A5 catalog ops → A6 systems → A7 pricing → A8 release governance
+A1–A3 foundation → A4 visual engine (disk proof) → A5 ops → A6 systems → A7 pricing → A8 release
 ```
 
-## Execution changes
+### Next action (only)
 
-- Admin is not “an SVG page”. It owns the sellable product system.
-- Every mutation needs lifecycle state, permissions, audit, failure handling, and rollback.
-- No-code means visual tools and plain-language rules, not a friendlier JSON form.
-- Every card needs buyer-visible browser proof before status changes.
+**A4.0.1:** Draw rect on canvas-first shell → live compile matches → Publish → bytes in `public/svg-catalog/{slug}.svg` on **this** tree. Evidence: `results/admin/no-code-svg-studio/`.
 
-**Evidence:** `results/planner/p0-1-admin-svg-publish/` · `results/planner/admin-svg-pipeline/` · `results/admin/production-auth/`
+**Kill list until then:** A5–A8 execution; pen/multi-select/minimap; scoring unit suite as A4.0.1 done.
+
+**Honesty:** SVG catalog ≠ Fabric plan canvas.

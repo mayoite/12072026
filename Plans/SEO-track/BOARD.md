@@ -1,18 +1,28 @@
 # SEO-track board
 
 **Scope:** Sitemap, metadata, canonicals, robots/noindex, JSON-LD.  
-**Shape:** BOARD-only — no phase cards yet. Rows below are the execute queue.  
+**Shape:** BOARD-only until a row needs its own card.  
 **Nothing here is complete.**
 
-| ID | Name | Status | Notes |
-|----|------|--------|-------|
-| **SEO1** | Sitemap + static routes in sync | **OPEN** | `sitemap.ts` STATIC_PATHS vs live routes |
-| **SEO2** | Per-page metadata (title, description, OG) | **OPEN** | Audit marketing + product templates |
-| **SEO3** | Product/category URL canonicals | **OPEN** | `productStaticParams` · slug rules |
-| **SEO4** | robots / noindex policy | **OPEN** | tech-stack-docs noindex; planner guest? |
-| **SEO5** | Structured data (JSON-LD) | **OPEN** | Not landed |
+## Honest scores
 
-**Rules:** one SEO-ID at a time · parallel Site / Planner / Admin OK  
-**Not in scope:** paid ads, content marketing copy thrash  
+| | Now | Blocker |
+|--|-----|---------|
+| Plan honesty | ~6 | Queue exists; acceptance was soft |
+| Product | ~3 | No closed SEO evidence pack; STATIC_PATHS diverge from live routes |
 
-**Depends on:** Site-track pages existing (Site cards are OPEN — do not assume marketing DONE).
+| ID | Name | Status | Green when |
+|----|------|--------|------------|
+| **SEO1** | Sitemap ↔ live routes | **OPEN** | Diff of indexable public routes vs sitemap; allowlist for noindex; file in `results/seo/` |
+| **SEO2** | Per-page metadata | **OPEN** | Audit table title/description/OG for marketing templates |
+| **SEO3** | Product/category canonicals | **OPEN** | Canonical rules match `productStaticParams` / slug policy |
+| **SEO4** | robots / noindex | **OPEN** | Policy doc + live headers for app/auth routes |
+| **SEO5** | JSON-LD | **OPEN** | Not landed |
+
+### Next action (only)
+
+**SEO1** — finish inventory started at [`results/seo/seo1-sitemap-diff.md`](../../results/seo/seo1-sitemap-diff.md). Classify each gap: index | noindex | bug. No SEO2 until SEO1 green.
+
+**Depends on:** Site pages existing. Do not assume marketing DONE.
+
+**Kill list:** Content thrash; claiming SEO done from sitemap file existing.

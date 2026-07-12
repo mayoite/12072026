@@ -1,37 +1,52 @@
 # Next steps — all tracks
 
-**Updated:** 2026-07-12 · Live-repo critics + A4 authority/shell raise.  
+**Updated:** 2026-07-12 · Quality paramount · no flattery · no 9.5 theater  
 Boards: [Planner](../Plans/Planner-track/BOARD.md) · [Admin](../Plans/Admin-track/BOARD.md) · [Site](../Plans/Site-track/BOARD.md) · [SEO](../Plans/SEO-track/BOARD.md) · [Security](../Plans/Security-track/BOARD.md) · Bar: [00-QUALITY-BAR](../Plans/00-QUALITY-BAR.md)
 
-> GATE PASS ≠ product ship. File exists ≠ wired path.
+> GATE PASS ≠ ship. Code landed ≠ browser green. Screenshots without bytes ≠ publish proof.
 
-## The one next action per track
+## One next action per track
 
-| Track | Next action | Green when | Depends on | Evidence |
-|-------|-------------|-----------|------------|----------|
-| **Planner** | **P03 / CP-03** — re-run select → delete → undo on Fabric with **id + pose** browser proof | Same id + pose after undo — screenshots + `run.json` | P01/P02 Fabric-sole | `results/planner/world-standard-wave/03-select-delete/` |
-| **Admin** | **A4.0.1 browser disk proof** on this checkout — draw rect → live compile → Publish → bytes; then re-proof **A4.0.2 shell** screenshot | `public/svg-catalog/{slug}.svg` contains drawn coords; stage ≥55vh without form wall | Code authority + shell landed | `results/admin/no-code-svg-studio/` |
-| **Site** | **S1** — owner decision then cut `@fancyapps/ui` | Unused, removed, typecheck green | **Owner gate** | `results/` |
-| **SEO** | **SEO1** — sitemap `STATIC_PATHS` vs live routes | Diff captured | Site pages exist | `results/` |
-| **Security** | **SEC4** — RLS / `db:advisors:security` zero ERROR | Advisor run captured | — | `results/` |
+| Track | Next action | Green when (observable) | Blocked by | Evidence |
+|-------|-------------|-------------------------|------------|----------|
+| **Planner** | **CP-03 / P03** re-prove on **this** tree: Fabric select → delete → undo | Browser asserts **same furniture id + pose** after undo (not count-only); screenshots + `run.json` | Nothing except time/auth for browser | `results/planner/world-standard-wave/03-select-delete/` |
+| **Admin** | **A4.0.1 disk proof** on `E:\12072026`: rect on stage → live compile → Publish | `public/svg-catalog/{slug}.svg` contains drawn geometry; shell stage visible without form wall | Wrong-path servers, missing admin session | `results/admin/no-code-svg-studio/` |
+| **Site** | **S1** — owner decision only until then | Written OK to cut `@fancyapps/ui` **or** explicit “leave” | **Owner gate** — do not cut without OK | `results/site/s1-deps/` when executed |
+| **SEO** | **SEO1** — sitemap vs live routes | Diff file lists missing + extra paths; no silent “looks fine” | — | `results/seo/seo1-sitemap-diff.md` |
+| **Security** | **SEC4** advisors **or** document blocker | `db:advisors:security` **0 ERROR** log, or `results/security/` names the real env blocker | DB credentials / network | `results/security/` |
 
-## Admin A4 after disk proof
+## Do not do until the row above is green
 
-1. Dirty + unsaved-exit guard  
-2. Selected-node inspector  
-3. Move/resize named ops covered by tests  
-4. A4.6 three-variant harness  
+| Track | Kill list |
+|-------|-----------|
+| Planner | P11–P16 product features; Feasibility restore; claiming CP-10 pack |
+| Admin | A5–A8; more A4 tools (pen, multi-select, minimap); GLB theater |
+| Site | “Site complete”; silent dep cuts; redesign as S2 |
+| SEO | SEO2–5 content thrash before SEO1 diff |
+| Security | Weakening CSP for PASS; claiming SEC3 track DONE from A3 slice alone |
 
-**Do not** expand primitives/minimap/GLB theater before 1–2.
+## Ship spine (cross-track)
 
-## Critical path to ship
+1. **Prod gate:** `next build` + `/contact` working — still flagged OPEN in owner pending; do not claim prod-ready.  
+2. **Planner trust:** CP-03 → 07 → 06 → 04 → 05 → 08 → 09 → **10 pack** (pack ≠ ship).  
+3. **Buyer product:** P11–P16; **Admin A6** unblocks P12; **Admin A7** unblocks P15.  
+4. **Admin A4** browser-closed before A5 ops scale.
 
-1. Prod-gate: `next build` + `/contact` (`ayushdocs/01-PENDING.md`)  
-2. Planner trust spine P03→P10  
-3. Buyer product P11–P16; Admin A4→A6→A7 unblocks P12/P15  
+## Honest scores (this checkout — not goals)
+
+| Track | Plan honesty | Product/engine | Why not higher |
+|-------|--------------|----------------|----------------|
+| Planner | ~7.5 | ~4 | REPROVE language good; browser id/pose gap; buyer OPEN |
+| Admin | ~8.5 | ~5 | A4 plan sharpened; authority code real; no disk proof; A5–A8 empty |
+| Site | ~8 | ~5 | S1/S2 honest; marketing not done |
+| SEO | ~6 | ~3 | BOARD exists; no evidence pack; routes diverge |
+| Security | ~7 | ~4 | Rows honest OPEN; only A3 slice has proof |
+
+**9.5 is not claimed.** Plan honesty rises by keeping this table true. Product rises only with proof.
 
 ## What “done” is not
 
 - Green Vitest without `results/` path  
-- Screenshots without published bytes  
-- “PARTIAL” tools before shell+authority buyer-green  
+- Old packs from another machine path  
+- Restoring foreign skill packs  
+- Score inflation  

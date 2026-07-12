@@ -1,18 +1,22 @@
 # Session recap
 
-**Updated:** 2026-07-11
+**Updated:** 2026-07-12
 
-## Last arc
+## What happened (honest)
 
-Active law renumbered (repo-relative): `Plans/00-QUALITY-BAR` · Site `S1`/`S2` · `ayushdocs/01–05` · `Agents-01…09` · `docs/architecture/01–06` · `docs/Lockedfiles/01–04`. Docs maze cut (Lockedfiles proposed/audit/superpowers). Fabric sole 2D stays locked. Pushed `48c1bc1b` (+ this recap).
-
-## Next
-
-1. `git log -5` · read `01-PENDING.md` · `Plans/Planner-track/BOARD.md`
-2. One Planner phase **or** one parallel track (Admin/Site/SEO/Security)
-3. Re-prove before PASS — never restore Feasibility
-4. Product delivery is Planner P11–P16 and Admin A4–A8; technical gates alone are not ship
+1. **A4 engine raise (real code):** scene→`blocks` through parse; load blocks into canvas; undo syncs form; canvas-first shell CSS/layout; unit suite 106 green. **Not** buyer-closed — browser disk proof still required.
+2. **A4 plan honesty raise:** critical path, kill list, code vs product status split.
+3. **Mistake corrected:** restored foreign `.agents/skills` after an earlier wipe — **owner rejected**; skills removed again. Those packs are not ours.
+4. **All-track plan raise:** INDEX, quality bar, every board, NEXT-STEPS, SEO1 inventory start, PENDING — **no 9.5 claims**. Plan honesty improved; product scores stayed honest/low.
 
 ## Do not claim
 
-Product ship · CP-10 pack on disk · quality bar complete · Site/Admin DONE from memory
+- Product ship · CP-10 pack · quality bar complete · Admin A4 done · SEO done · Security track done · plan/product 9.5
+
+## Next (pick one kill)
+
+1. Planner CP-03 browser id+pose **or** Admin A4.0.1 disk proof  
+2. SEO1 finish classification **or** SEC4 advisors  
+3. Site S1 only with owner OK  
+
+Push may need owner GitHub credentials (403 seen earlier).

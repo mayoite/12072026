@@ -1,35 +1,39 @@
 # Pending (owner)
 
-**Updated:** 2026-07-11 · Finish one kill-path before a new epic.
+**Updated:** 2026-07-12 · Quality paramount · no score theater.
 
-**GATE PASS ≠ product done.** Honest read: `../results/planner/world-standard-wave/00-rebaseline/HONEST-STATUS.md`  
-**Execute:** `Plans/Planner-track/BOARD.md` · **Law:** `AGENTS.md` (not duplicated here)
+**GATE PASS ≠ product done.**  
+**Execute:** [Plans/INDEX.md](../Plans/INDEX.md) · [agents-review/NEXT-STEPS.md](../agents-review/NEXT-STEPS.md) · **Law:** `AGENTS.md`
 
 ## Open now
 
 | Item | Status |
 |------|--------|
 | **Product ship** | OPEN — planner not buyer-ready |
-| **Quality bar** | OPEN — SVG publish, Fabric symbols port, mesh, BOQ (`Plans/00-QUALITY-BAR.md`) |
+| **Quality bar** | OPEN — see `Plans/00-QUALITY-BAR.md` (two scores: plan vs product) |
 | **CP-10 pack** | OPEN — `10-handover/` not on disk |
-| **`next build` `/contact`** | OPEN — blocks prod gate |
-| **Select / Block2D / wall-draw on Fabric** | LANDED CANDIDATE — re-prove on final checkout; do not restore Feasibility |
+| **`next build` / contact** | OPEN — still a prod-gate risk; contact **page path exists** under `app/(site)/contact` — verify **build**, do not assume missing page |
+| **Select / Block2D / wall-draw on Fabric** | LANDED CANDIDATE — **REPROVE** id+pose browser; no Feasibility |
 | **Priced BOQ** | Not built |
+| **Admin A4 buyer green** | Code raised; **disk browser proof open** |
+| **S1 deps** | Owner gate — do not cut without OK |
 
 ## W spine
 
-W0 unlocked (Approach A). CP-01…CP-09 = **REPROVE** on this tree. Old packs = clues only.  
-Known gap: W3 browser often count-only vs id/pose.
+W0 unlocked (Approach A). CP-01…CP-09 = **REPROVE**. Old packs = clues.  
+W3 browser must not be count-only.
 
 ## Other tracks
 
-| Track | Board |
-|-------|--------|
-| Admin | A1–A3 foundation DONE · A4.0 engine foundation DONE (`a48a8400`) · A4.1–A8 product OPEN · `Plans/Admin-track/BOARD.md` |
-| Site | `Plans/Site-track/BOARD.md` (S1–S2) — do not assume marketing DONE |
-| SEO | `Plans/SEO-track/BOARD.md` |
-| Security | `Plans/Security-track/BOARD.md` |
+| Track | One next action |
+|-------|-----------------|
+| Planner | CP-03 id+pose browser |
+| Admin | A4.0.1 publish bytes |
+| Site | S1 owner decision |
+| SEO | SEO1 sitemap diff close |
+| Security | SEC4 advisors or BLOCKED.md |
 
 ## Live stack (intent)
 
-2D = Fabric sole host (`open3d-fabric-stage`). Feasibility archived. Details: `Plans/Planner-track/CONSTRAINTS.md`.
+2D = Fabric sole host. Feasibility archived.  
+Foreign skill packs under `.agents/skills` are **not** product law — owner deleted them intentionally.
