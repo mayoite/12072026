@@ -1,30 +1,30 @@
 # P14 — Validation and clearances
 
-**Status:** OPEN — the Planner does not yet provide a complete layout-quality check.
+**Status:** OPEN — blocked by P13 · **Depends:** P13
 
-**Outcome:** A buyer sees actionable issues before sharing or requesting a quote.
+## Outcome
 
-## Functional scope
+A buyer finds and fixes layout issues before export or quote.
 
-- Furniture overlap, wall collision, opening obstruction, and room-boundary checks.
-- Configurable aisle, chair pull-back, and accessibility clearances.
-- Severity, location, affected objects, and one-click focus.
-- Explain the rule in plain language. Never block without a remedy.
-- Waiver with reason for advisory rules. Hard errors remain blocking.
-- Validation summary updates after edits and bulk operations.
+## Build
 
-## Acceptance
+Overlap, wall, opening, boundary, aisle, chair, and accessibility rules. One saved validation authority serves UI, export, and quote.
 
-- [ ] Known invalid layouts produce stable, localized issues.
-- [ ] Fixing geometry clears the issue without reload.
-- [ ] Export/quote gates use the same validation authority.
-- [ ] Waivers are saved and auditable.
-- [ ] Browser proof covers detect → focus → fix → clear.
+## UI gates
 
-## Evidence
+- Summary shows severity, location, objects, and remedy.
+- One action focuses the issue on canvas.
+- Advisory waivers need a saved reason. Hard errors stay blocking.
+- Empty and all-clear states are explicit.
 
-`results/planner/product-wave/14-validation-clearances/`
+## PASS gates
 
-## Dependency
+- Known invalid layouts create stable issue IDs.
+- Detect → focus → fix → clear passes without reload.
+- Waivers survive reload and remain auditable.
+- Export and quote use the same result.
+- Browser screenshots and accessibility checks pass.
 
-P13.
+**Evidence:** `results/planner/product-wave/14-validation-clearances/`
+
+**Next:** P15.

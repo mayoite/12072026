@@ -1,33 +1,30 @@
 # P12 — Workstation configurator
 
-**Status:** OPEN — one complete custom workstation family is not buyer-usable.
+**Status:** OPEN — blocked by Admin A6 · **Depends:** P11 + A6
 
-**Outcome:** A buyer configures and places linear and L-shaped workstation runs without understanding modules or code.
+## Outcome
 
-## Functional scope
+A buyer configures, places, and edits linear and L-shaped workstation runs.
 
-- Seat count, topology, desk size, finish, screen, storage, and cable options.
-- Only valid combinations are selectable.
-- Live dimensions, 2D symbol, 3D preview, and estimated BOQ update together.
-- Plain-language defaults for a fast path. Advanced options stay optional.
-- Edit a placed run without losing identity or position.
-- Replace a released family version through an explicit migration choice.
+## Build
 
-## Acceptance
+Seats, topology, desk size, finish, screen, storage, and cable options. One released family version drives 2D, 3D, and BOQ.
 
-- [ ] Two-seat linear and four-seat L scenarios complete in the browser.
-- [ ] Invalid combinations cannot be added.
-- [ ] Re-edit preserves run ID and placement.
-- [ ] 2D, 3D, and BOM represent the same option set.
-- [ ] No admin SVG artifact is misrepresented as Fabric plan paint.
+## UI gates
 
-## Evidence
+- Fast defaults first. Advanced options stay optional.
+- Invalid choices are disabled with a reason.
+- Live dimensions, preview, price state, and validation update together.
+- Re-edit uses the same panel and preserves ID and pose.
 
-`results/planner/product-wave/12-workstation-configurator/`
+## PASS gates
 
-## Dependency
+- Two-seat linear and four-seat L journeys pass in browser.
+- Invalid combinations cannot be placed.
+- Re-edit preserves run identity and placement.
+- 2D, 3D, and BOQ use the same saved option set.
+- Version replacement requires an explicit migration choice.
 
-Admin A6 released workstation family.
+**Evidence:** `results/planner/product-wave/12-workstation-configurator/`
 
-**Host:** Fabric sole. second plan host is forbidden.  
-**Next (sequence):** [P13](./P13-layout-at-scale.md) only after P01–P12 closed honestly.
+**Next:** P13.

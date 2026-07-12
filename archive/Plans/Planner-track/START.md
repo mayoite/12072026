@@ -1,28 +1,14 @@
-# Planner-track · start
+# Planner start
 
-**W0:** UNLOCKED · Approach **A** (2026-07-09). Do not re-ask unlock.
+1. Read `AGENTS.md` and `Agents/`.
+2. Read [CONSTRAINTS](./CONSTRAINTS.md).
+3. Read [BOARD](./BOARD.md).
+4. Work only on the next card.
+5. Use TDD. Use browser proof for UI.
+6. Update status only after fresh proof.
 
-**Upgrade lock:** Fabric sole 2D host. Second plan host does not / will not exist. Any card/pack that invents it or uses archive `planner-2d-canvas` = downgrade — stop and fix the plan.
+**Locked:** UUID v7 · millimetres · Fabric sole 2D · Three + orbit · local-first honesty.
 
-## Read order (law first)
+**Current:** P10 re-proof. P11 follows. P12–P16 remain sequential.
 
-1. [`AGENTS.md`](../../AGENTS.md) — constitution (re-read every task; session target every ~4 min)
-2. [`Agents/INDEX.md`](../../Agents/INDEX.md) → `Agents-01-STANDARD` + handbooks needed
-3. [Plans/INDEX.md](../INDEX.md)
-4. [CONSTRAINTS.md](./CONSTRAINTS.md)
-5. [BOARD.md](./BOARD.md) — **owner sequence + next action**
-6. Active card: `P0X-*.md` · [CHECKPOINTS](./CHECKPOINTS.md)
-7. [EXECUTE.md](./EXECUTE.md) — reproof helper only (not constitution)
-
-| | |
-|------|--------|
-| Approach | **A** |
-| Live 2D | Fabric `planner-fabric-stage` |
-| Owner sequence | **P01 → P16** (no skip; one open card) |
-| Standing seats | TDD + Chrome DevTools · `/using-superpowers` · **through P16** |
-| CP-00 | Process PASS only — do not re-ask unlock |
-| Pace | **5k before marathon** — see [BOARD calibration](./BOARD.md#owner-calibration-2026-07-12--5k-before-marathon) |
-
-**Bar:** [00-QUALITY-BAR](../00-QUALITY-BAR.md) · **Agents plan map:** [Agents-03-Plan](../../Agents/Agents-03-Plan.md)
-
-**Calibrated (owner 2026-07-12):** get **2D** right (SmartDraw tools/library/canvas); **3D stays open as-is**; full interior 3D later. **P03/W3** owner PASS · **P04/W4** agent PASS. Open card now = [P05](./P05-symbols-svg.md).
+Do not commit or push without owner approval.

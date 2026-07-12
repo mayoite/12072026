@@ -1,30 +1,30 @@
 # P13 — Layout at scale
 
-**Status:** OPEN — single-item placement does not solve projects with hundreds or thousands of seats.
+**Status:** OPEN — blocked by P12 · **Depends:** P12
 
-**Outcome:** A buyer lays out large workstation runs quickly while preserving precise editable geometry.
+## Outcome
 
-## Functional scope
+A buyer lays out hundreds of seats without repeated drag-and-drop.
 
-- Duplicate, array, row, grid, align, distribute, and spacing controls.
-- Aisle and perimeter offsets.
-- Group and ungroup workstation runs.
-- Multi-select with clear selection count and bounded operations.
-- Performance budget for 100, 500, and 2,000 seats.
-- Undo/redo treats one bulk operation as one history step.
+## Build
 
-## Acceptance
+Duplicate, row, array, grid, align, distribute, spacing, offsets, group, multi-select, and one-step bulk undo.
 
-- [ ] Create 100 seats in under two minutes without repeated drag-and-drop.
-- [ ] 2,000-seat document remains navigable within the recorded performance budget.
-- [ ] Bulk edit and undo preserve IDs and option data.
-- [ ] Collision/clearance feedback does not freeze interaction.
-- [ ] Browser performance trace and screenshots are stored.
+## UI gates
 
-## Evidence
+- Selection count and affected scope are always visible.
+- Bulk actions preview before apply.
+- Keyboard and pointer flows share the same commands.
+- Long work never freezes the UI without progress or cancel.
 
-`results/planner/product-wave/13-layout-at-scale/`
+## PASS gates
 
-## Dependency
+- Create 100 seats in under two minutes.
+- A 2,000-seat plan stays navigable within a recorded budget.
+- Bulk edit and undo preserve IDs and option data.
+- Validation feedback remains responsive.
+- Browser trace and screenshots pass.
 
-P12.
+**Evidence:** `results/planner/product-wave/13-layout-at-scale/`
+
+**Next:** P14.

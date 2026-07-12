@@ -1,31 +1,29 @@
-# P16 — Share, review, and quote request
+# P16 — Share, review, and quote
 
-**Status:** OPEN — technical evidence packs do not create a buyer handoff.
+**Status:** OPEN — blocked by P15 and Security · **Depends:** P15 + auth/security gates
 
-**Outcome:** A buyer shares a stable plan, collects review, and requests a quote with the exact plan and BOQ revision attached.
+## Outcome
 
-## Functional scope
+A buyer shares one immutable revision, collects review, and requests a quote for that exact revision.
 
-- Named project revision and read-only share link.
-- Permission and expiry controls.
-- Reviewer comments anchored to a plan location or object.
-- Resolve/reopen comment flow.
-- Quote request captures contact, revision, validation summary, and BOQ version.
-- Status: draft, shared, changes requested, quote requested, quoted.
-- Revoking a link stops future access.
+## Build
 
-## Acceptance
+Named revision, read-only link, permission, expiry, revocation, anchored comments, resolution, quote request, and status history.
 
-- [ ] Anonymous recipient can view only the shared revision.
-- [ ] Reviewer cannot mutate the owner plan.
-- [ ] Quote request cannot silently switch to a newer revision.
-- [ ] Revocation and permission boundaries are browser-proven.
-- [ ] Sales/admin receives one traceable request, not disconnected form data.
+## UI gates
 
-## Evidence
+- Owner sees link scope, expiry, and revocation state before sharing.
+- Reviewer sees read-only status and cannot reach edit controls.
+- Comments focus the exact object or plan location.
+- Quote confirmation names revision, validation result, and BOQ version.
 
-`results/planner/product-wave/16-share-review-quote/`
+## PASS gates
 
-## Dependency
+- Anonymous access is limited to the shared revision.
+- Reviewer cannot mutate the owner plan.
+- Revocation blocks future access.
+- Quote request cannot drift to a newer revision.
+- Sales receives one traceable record.
+- Permission and revocation journeys pass in browser.
 
-P15 plus auth/security gates.
+**Evidence:** `results/planner/product-wave/16-share-review-quote/`

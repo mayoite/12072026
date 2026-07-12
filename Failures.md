@@ -183,3 +183,34 @@ Skipped items must be declared. Shell works; gates are runnable.
 6. **Misc** — dashboard `searchParams`; KpiCounter off-screen expectation; admin hub title; SVG phase-1 test timeouts.
 
 **Prior signal (obsolete):** truncated run / `ECONNREFUSED :3000` — superseded by completed full run above.
+### PLAN-FAIL-0414 — Closed (Planner P10 re-proof typecheck)
+
+**Status:** Closed · verified 2026-07-12
+
+**Command:** `pnpm --filter oando-site typecheck`
+
+**Failure:** Exit 1. Stale `.next` route types still reference removed `/planner/open3d` files. Two live source errors also failed: wrong `CatalogCategory` import in `viewerMaterials.ts`, and a dead `getPlannerFabricRuntime` call in `AIAssistDrawer.tsx`.
+
+**Fix:** Corrected the catalog type import. Removed the deleted Fabric-runtime fallback call. Cleared only `site/.next` after verifying its resolved path stayed inside the repository.
+
+**After:** `pnpm --filter oando-site typecheck` exited 0.
+
+### PLAN-FAIL-0415 — Open (Planner P10 browser re-proof)
+
+**Status:** Open · seen 2026-07-12
+
+**Command:** `pnpm --filter oando-site test:e2e:planner-world`
+
+**Failure:** Exit 1. Four browser journeys passed. `open3d-systems-v0-batch-place.spec.ts` timed out because the test searched for batch buttons while the configurator was intentionally collapsed.
+
+**Next:** Expand the configurator through its accessible header. Re-run the targeted spec. Then re-run the curated gate.
+
+### PLAN-FAIL-0416 — Open (forbidden `site/results/` layout)
+
+**Status:** Open · seen 2026-07-12
+
+**Command:** `pnpm run check:layout`
+
+**Failure:** Exit 1. `site/results/` exists. Repository law forbids that path.
+
+**Blocker:** It may contain owner data. It was not opened or deleted. Owner approval is required before destructive cleanup.

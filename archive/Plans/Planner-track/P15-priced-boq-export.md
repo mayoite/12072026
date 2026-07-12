@@ -1,30 +1,30 @@
 # P15 — Priced BOQ and export
 
-**Status:** OPEN — priced BOQ is not built.
+**Status:** OPEN — blocked by P14 and Admin A7 · **Depends:** P12 + P14 + A7
 
-**Outcome:** A buyer and sales user can understand what is in the plan, what it costs, and what remains unpriced.
+## Outcome
 
-## Functional scope
+Buyer and sales see what is planned, priced, invalid, and unpriced.
 
-- Group BOM by workstation family, configuration, module, finish, and room.
-- Quantity, unit, unit price, adjustment, tax, and total.
-- Trace each BOQ line back to placed object IDs.
-- Explicit unpriced and invalid lines. Never default to zero.
-- PDF, spreadsheet, and machine-readable export from one calculation result.
-- Price-book version and calculation timestamp on every export.
+## Build
 
-## Acceptance
+One calculation groups family, configuration, module, finish, and room. It powers UI, PDF, workbook, and JSON.
 
-- [ ] A representative linear/L project produces a complete BOM.
-- [ ] Totals match Admin A7 price rules.
-- [ ] Deleting or editing a run updates quantities deterministically.
-- [ ] Exported PDF and workbook are visually verified.
-- [ ] Saved project reload reproduces the same BOQ on the same price book.
+## UI gates
 
-## Evidence
+- Totals show quantity, unit price, adjustment, tax, and total.
+- Unpriced never appears as zero.
+- Every line links to placed object IDs.
+- Price-book version and calculation time stay visible.
 
-`results/planner/product-wave/15-priced-boq-export/`
+## PASS gates
 
-## Dependency
+- Linear/L project totals match Admin A7 rules.
+- Edit, delete, save, and reload stay deterministic.
+- P14 hard errors block quote-ready status.
+- PDF and workbook pass visual review.
+- All exports match the same calculation hash.
 
-P12 and Admin A7. P14 hard errors block quote-ready status.
+**Evidence:** `results/planner/product-wave/15-priced-boq-export/`
+
+**Next:** P16.

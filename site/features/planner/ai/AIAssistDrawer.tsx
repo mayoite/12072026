@@ -345,7 +345,6 @@ function SuggestLayoutPane({
       onFitCanvas?.();
     } else {
       applySuggestedLayout(null, previewLayout);
-      getPlannerFabricRuntime()?.fitToContent();
     }
     setLayoutError(null);
   }, [onApplyLayout, onFitCanvas, previewLayout]);

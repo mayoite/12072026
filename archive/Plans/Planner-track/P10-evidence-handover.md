@@ -1,26 +1,22 @@
-# P10 — Evidence handover
+# P10 — Re-proof and handover
 
-**Status:** **PASS** (agent 2026-07-12 — handover pack on disk). Pack ≠ product ship.
+**Status:** OPEN · **CP:** CP-10
 
-**CP:** CP-10 · **Evidence:** `results/planner/world-standard-wave/10-handover/`  
-**CP status:** [CHECKPOINTS](./CHECKPOINTS.md) · [BOARD](./BOARD.md)
+## Outcome
 
-## Goal
+The foundation is reproducible on the current checkout. The pack does not claim product ship.
 
-Honest pack: W-gate summary, HEAD, failures snip, backup log if claimed — **does not mean product shipped**.
+## PASS gates
 
-## Done when
+- Layout, typecheck, and targeted Planner units pass.
+- Required Fabric browser journeys pass.
+- P05, P08, and P09 residuals are closed or owner-waived.
+- CP-01 is accepted or remains visibly open.
+- Board, checkpoints, cards, and HEAD agree.
+- Failures and missing backup proof are named.
 
-- [x] `10-handover/` README + W-GATES + HEAD.txt + FAILURES-SNIP
-- [x] CHECKPOINTS status honest (REPROVE/OPEN/WAIVE recorded — no master tick list)
-- [x] E: backup verified only if claiming backup criterion (not claimed — `GIT-MIRROR-MAYOITE-404` open)
-- [x] CP-00…CP-09 PASS or WAIVE documented with fresh proof paths (`W-GATES.md`; dumps missing on disk named)
+**Current red:** browser batch journey. Forbidden `site/results/` also breaks layout.
 
-## Forbidden
+**Evidence:** `results/planner/world-standard-wave/10-handover/`
 
-- Paper PASS without fresh live proof + dump paths when written
-- Claiming product ship from pack alone
-- adding a second plan host (does not / will not exist)
-
-Pack ≠ product ship. Re-prove gates from [CHECKPOINTS](./CHECKPOINTS.md) — do not cite deleted review stubs.  
-**Next (sequence):** [P11](./P11-project-brief-room.md).
+**Next:** P11 after P10 is honest.

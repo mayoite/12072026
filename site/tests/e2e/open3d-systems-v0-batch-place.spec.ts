@@ -43,6 +43,13 @@ test.describe("Systems v0 batch place", () => {
     });
     await expect(configurator).toBeVisible({ timeout: 15_000 });
 
+    const configuratorToggle = configurator.getByRole("button", {
+      name: "Systems configurator",
+    });
+    if ((await configuratorToggle.getAttribute("aria-expanded")) !== "true") {
+      await configuratorToggle.click();
+    }
+
     await page.screenshot({
       path: path.join(EVIDENCE, "40-batch-ui.png"),
     });

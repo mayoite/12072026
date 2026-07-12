@@ -1,20 +1,34 @@
-# Planner constraints (pins)
+# Planner constraints
 
-**Detail:** engine lock → [P02](./P02-engine-lock.md) · toolbar → [P09](./P09-shortcuts-chrome.md) · save → [P06](./P06-save-honesty.md)
+## Product lock
 
-| Topic | Lock |
-|-------|------|
-| Approach | **A** — product journey first |
-| Document | UUID v7 · mm store · `lib/newEntityId` |
-| 2D host | `PlannerFabricStage` · testid **`planner-fabric-stage` only** |
-| 3D | Three + orbit · not R3F substitute for plan host |
+| Area | Rule |
+|------|------|
+| Document | UUID v7 · millimetres · `lib/newEntityId` |
+| 2D | Fabric `planner-fabric-stage` only |
+| 3D | Three + orbit |
 | Routes | `/planner/guest` · `/planner/canvas` |
-| Legacy | `/planner/open3d` · `/planner/fabric*` → 301 `/planner/canvas/` |
-| Layout | `features/planner/{editor,canvas,3d,project,ui}` — **no** product `open3d/` folder |
-| Toolbar | `react-aria-components@1.19.0` on `CanvasToolRail` |
-| Icons | `@phosphor-icons/react` — no lucide |
-| SVG | `/svg-catalog/` = inventory publish only — not plan-draw |
-| Fabric pin | `7.4.0` exact (`site/package.json`) |
-| Forbidden | Second plan canvas · archive `planner-2d-canvas` proof · `_archive/fabric` as host · `canvas-feasibility` |
+| Code | `editor` · `canvas` · `3d` · `project` · `ui` |
+| Toolbar | React Aria Components + Phosphor |
+| Themes | Semantic tokens · light/dark · saved preference |
+| SVG | Catalog publish only. Never plan-draw. |
+| Storage | Local until a cloud save succeeds |
 
-Override only via [START.md](./START.md). Status → [BOARD](./BOARD.md).
+No second canvas. No archive proof. No fake cloud, price, save, or share labels.
+
+## UI bar
+
+Every UI card must prove:
+
+- Public entry. No dev flags or seeded internal route.
+- Desktop and 375×812 mobile layouts.
+- Keyboard use. Visible focus. Correct names and errors.
+- Empty, loading, error, and success states.
+- No clipped canvas or hidden primary action.
+- Toolbar and theme controls remain reachable at every target size.
+- Light and dark themes cover chrome, Fabric, Three, native controls, and focus states.
+- Honest storage, validation, price, and permission labels.
+- No unexpected console, request, hydration, or accessibility errors.
+- Screenshots and a targeted browser trace.
+
+UI PASS requires a real browser run. Unit tests alone are not enough.
