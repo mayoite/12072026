@@ -82,14 +82,24 @@ function normalizeBlockFromPart(raw: unknown): PipelineBlockRect | null {
   const o = asRecord(raw);
   if (!o) return null;
   if (o.visible === false) return null;
-  if (o.kind !== "rect") return null;
+  const id = typeof o.id === "string" ? o.id : undefined;
+  const kind = typeof o.kind === "string" ? o.kind : "rect";
+
+  if (kind === "circle") {
+    const cx = finiteNumber(o.cx);
+    const cy = finiteNumber(o.cy);
+    const r = finiteNumber(o.r);
+    if (cx === null || cy === null || r === null || r <= 0) return null;
+    return { x: cx - r, y: cy - r, width: r * 2, height: r * 2, id };
+  }
+
+  if (kind !== "rect") return null;
   const x = finiteNumber(o.x);
   const y = finiteNumber(o.y);
   const width = finiteNumber(o.width);
   const height = finiteNumber(o.height);
   if (x === null || y === null || width === null || height === null) return null;
   if (width <= 0 || height <= 0) return null;
-  const id = typeof o.id === "string" ? o.id : undefined;
   return { x, y, width, height, id };
 }
 

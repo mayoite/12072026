@@ -35,8 +35,11 @@ vi.mock('@/lib/analytics/siteEvents', () => ({
 // Mock icons
 vi.mock('@phosphor-icons/react', () => ({
   Filter: () => <span data-testid="icon-filter" />,
+  Funnel: () => <span data-testid="icon-filter" />,
   Search: () => <span data-testid="icon-search" />,
+  MagnifyingGlass: () => <span data-testid="icon-search" />,
   SlidersHorizontal: () => <span data-testid="icon-sliders" />,
+  FadersHorizontal: () => <span data-testid="icon-sliders" />,
   X: () => <span data-testid="icon-x" />,
 }));
 

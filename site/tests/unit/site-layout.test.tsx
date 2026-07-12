@@ -1,6 +1,6 @@
 import "@/tests/helpers/nextIntlServerEnMock";
 import { expect, test, vi } from "vitest";
-import RootLayout from "@/app/(site)/layout";
+import RootLayout from "@/app/layout";
 
 vi.mock("@/lib/layout/siteLayoutContext", () => ({
   getSiteLayoutContext: vi.fn().mockResolvedValue({ messages: {}, locale: "en", lang: "en-IN" }),

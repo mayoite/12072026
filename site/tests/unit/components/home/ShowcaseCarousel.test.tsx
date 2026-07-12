@@ -35,7 +35,9 @@ vi.mock('@/components/home/PartnershipBanner', () => ({
 
 vi.mock('@phosphor-icons/react', () => ({
   ChevronLeft: () => <span data-testid="left-icon" />,
-  ChevronRight: () => <span data-testid="right-icon" />
+  ChevronRight: () => <span data-testid="right-icon" />,
+  CaretLeft: () => <span data-testid="left-icon" />,
+  CaretRight: () => <span data-testid="right-icon" />,
 }));
 
 describe('ShowcaseCarousel Component', () => {

@@ -19,7 +19,9 @@ vi.mock('embla-carousel-react', () => ({
 
 vi.mock('@phosphor-icons/react', () => ({
   ChevronLeft: () => <span data-testid="left-icon" />,
-  ChevronRight: () => <span data-testid="right-icon" />
+  ChevronRight: () => <span data-testid="right-icon" />,
+  CaretLeft: () => <span data-testid="left-icon" />,
+  CaretRight: () => <span data-testid="right-icon" />,
 }));
 
 describe('FeaturedCarousel Component', () => {

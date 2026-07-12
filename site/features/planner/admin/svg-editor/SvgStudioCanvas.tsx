@@ -166,8 +166,21 @@ export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudio
 
   const selected = selectedId ? findNode(document, selectedId) : undefined;
 
-  const handleUndo = useCallback(() => setHistory((h) => undo(h)), []);
-  const handleRedo = useCallback(() => setHistory((h) => redo(h)), []);
+  const handleUndo = useCallback(() => {
+    setHistory((h) => {
+      const next = undo(h);
+      if (next !== h) onDocumentChange?.(next.present.document);
+      return next;
+    });
+  }, [onDocumentChange]);
+
+  const handleRedo = useCallback(() => {
+    setHistory((h) => {
+      const next = redo(h);
+      if (next !== h) onDocumentChange?.(next.present.document);
+      return next;
+    });
+  }, [onDocumentChange]);
 
   const addRect = useCallback(() => {
     const node = centeredRect(document);
@@ -218,6 +231,7 @@ export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudio
   );
 
   const zoomToFit = useCallback(() => adapterRef.current?.zoomToFit(), []);
+  const resetViewport = useCallback(() => adapterRef.current?.resetViewport(), []);
 
   // Layer tree paints top-first (topmost z last in the document array).
   const layers = useMemo(() => [...document.nodes].reverse(), [document.nodes]);
@@ -225,21 +239,48 @@ export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudio
   return (
     <section className="svg-studio" aria-label="Visual SVG authoring canvas">
       <div className="svg-studio__toolbar" role="toolbar" aria-label="Canvas tools">
-        <button type="button" onClick={handleUndo} disabled={!canUndo(history)} title={undoLabel(history) ? `Undo: ${undoLabel(history)}` : "Nothing to undo"}>
+        <button
+          type="button"
+          onClick={handleUndo}
+          disabled={!canUndo(history)}
+          title={undoLabel(history) ? `Undo: ${undoLabel(history)}` : "Nothing to undo"}
+          aria-label={undoLabel(history) ? `Undo: ${undoLabel(history)}` : "Undo unavailable"}
+        >
           <ArrowUUpLeft size={16} aria-hidden /> Undo
         </button>
-        <button type="button" onClick={handleRedo} disabled={!canRedo(history)} title={redoLabel(history) ? `Redo: ${redoLabel(history)}` : "Nothing to redo"}>
+        <button
+          type="button"
+          onClick={handleRedo}
+          disabled={!canRedo(history)}
+          title={redoLabel(history) ? `Redo: ${redoLabel(history)}` : "Nothing to redo"}
+          aria-label={redoLabel(history) ? `Redo: ${redoLabel(history)}` : "Redo unavailable"}
+        >
           <ArrowUUpRight size={16} aria-hidden /> Redo
         </button>
         <span className="svg-studio__sep" aria-hidden />
-        <button type="button" onClick={addRect} title="Add rectangle"><Rectangle size={16} aria-hidden /> Rect</button>
-        <button type="button" onClick={addCircle} title="Add circle"><Circle size={16} aria-hidden /> Circle</button>
+        <button type="button" onClick={addRect} title="Add rectangle" aria-label="Add rectangle">
+          <Rectangle size={16} aria-hidden /> Rect
+        </button>
+        <button type="button" onClick={addCircle} title="Add circle" aria-label="Add circle">
+          <Circle size={16} aria-hidden /> Circle
+        </button>
         <span className="svg-studio__sep" aria-hidden />
-        <button type="button" onClick={bringToFront} disabled={!selected} title="Bring to front"><StackPlus size={16} aria-hidden /></button>
-        <button type="button" onClick={sendToBack} disabled={!selected} title="Send to back"><StackMinus size={16} aria-hidden /></button>
-        <button type="button" onClick={deleteSelected} disabled={!selected} title="Delete selected"><Trash size={16} aria-hidden /></button>
+        <button type="button" onClick={bringToFront} disabled={!selected} title="Bring to front" aria-label="Bring to front">
+          <StackPlus size={16} aria-hidden />
+        </button>
+        <button type="button" onClick={sendToBack} disabled={!selected} title="Send to back" aria-label="Send to back">
+          <StackMinus size={16} aria-hidden />
+        </button>
+        <button type="button" onClick={deleteSelected} disabled={!selected} title="Delete selected" aria-label="Delete selected">
+          <Trash size={16} aria-hidden />
+        </button>
         <span className="svg-studio__sep" aria-hidden />
-        <button type="button" onClick={zoomToFit} title="Zoom to fit"><ArrowsOutSimple size={16} aria-hidden /> Fit</button>
+        <button type="button" onClick={zoomToFit} title="Zoom to fit" aria-label="Zoom to fit">
+          <ArrowsOutSimple size={16} aria-hidden /> Fit
+        </button>
+        <button type="button" onClick={resetViewport} title="Reset viewport" aria-label="Reset viewport">
+          Reset
+        </button>
       </div>
 
       <div className="svg-studio__body">

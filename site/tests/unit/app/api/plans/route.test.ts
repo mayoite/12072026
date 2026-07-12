@@ -30,7 +30,7 @@ vi.mock("@/features/planner/store/plannerPublish", () => ({
 // Provide a stable mocked performance.now
 vi.stubGlobal('performance', { now: vi.fn(() => 1000) });
 
-vi.mock("@/lib/api/routeObservability", () => ({
+vi.mock("@/features/shared/api/routeObservability", () => ({
   applyPlannerRouteTelemetry: vi.fn((res, telemetry) => {
     res.headers.set("x-mock-telemetry", JSON.stringify(telemetry));
     return res;

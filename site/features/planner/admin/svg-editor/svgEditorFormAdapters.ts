@@ -1,12 +1,14 @@
 /**
  * No-code SVG editor — pure adapters (A4).
  *
- * Replaces the Puck adapters `getPuckEditorData` / `puckEditorDataToDescriptorInput`.
  * - `descriptorToFormState(descriptor)` → controlled form state (prefill).
  * - `formStateToDescriptorInput(original, form)` → descriptor-shaped input for
- *   `freezeFreshDescriptor` / publish. Preserves the original's id, schemaVersion,
- *   variant discriminator, `maker`, and any non-editable fields; strips `checksum`
- *   so it is recomputed. Same merge semantics as the retired Puck adapter.
+ *   `freezeFreshDescriptor` / publish.
+ *
+ * Geometry authority: when `form.sceneParts` is set (visual studio), publish
+ * writes **`blocks`** derived from those parts so geometry survives
+ * `BlockDescriptorSchema` (no `parts` field). Stale form `blocks` are replaced,
+ * not merged. Form-only geometry is used only when the scene never committed.
  *
  * Pure + server-safe (no React, no `any`). `themeTokens` defended by
  * `safeThemeTokens`.
@@ -27,6 +29,9 @@ import type {
   FormRovingFocus,
   FormParameter,
 } from "./svgEditorFormState";
+import type { SvgBlockDefinitionV1 } from "./svgBlockSchemas";
+import { sceneFromDescriptor } from "./sceneFromDescriptor";
+import { serializeSceneToDefinition } from "./scene/svgSceneSerializer";
 
 function tokensToRows(tokens: BlockDescriptor["themeTokens"]): FormTokenRow[] {
   const safe = safeThemeTokens(tokens);
@@ -86,6 +91,11 @@ export function descriptorToFormState(descriptor: BlockDescriptor): SvgEditorFor
   const assets =
     descriptor.variant === "fixed" && "assets" in descriptor ? descriptor.assets : undefined;
 
+  // Seed scene authority from the same geometry the canvas will show so live
+  // compile + publish match open without requiring a canvas edit first.
+  const seedScene = sceneFromDescriptor(descriptor);
+  const seedDefinition = serializeSceneToDefinition(seedScene);
+
   return {
     variant: descriptor.variant,
     slug: descriptor.slug,
@@ -116,9 +126,46 @@ export function descriptorToFormState(descriptor: BlockDescriptor): SvgEditorFor
     parameterSchema,
     assetsGlbUrl: assets?.glbUrl ?? "",
     assetsSvgUrl: assets?.svgUrl ?? "",
-    sceneViewBox: descriptor.viewBox,
-    sceneParts: "parts" in descriptor ? (descriptor as unknown as { parts: unknown[] }).parts as never : undefined,
+    sceneViewBox: seedDefinition.viewBox,
+    sceneParts: seedDefinition.parts,
   };
+}
+
+/**
+ * Map V1 scene parts → BlockDescriptor `blocks` (depth = plan Y extent).
+ * Circles become axis-aligned bounding rects so the boolean pipeline can paint them.
+ * Line/path/text are skipped (no block IR yet) — rect/circle cover the studio tools.
+ */
+export function scenePartsToBlocks(
+  parts: SvgBlockDefinitionV1["parts"],
+): FormBlock[] {
+  const out: FormBlock[] = [];
+  for (const part of parts) {
+    if (part.kind === "rect") {
+      if (part.visible === false) continue;
+      if (!(part.width > 0) || !(part.height > 0)) continue;
+      out.push({
+        id: part.id,
+        x: part.x,
+        y: part.y,
+        width: part.width,
+        depth: part.height,
+      });
+      continue;
+    }
+    if (part.kind === "circle") {
+      if (part.visible === false) continue;
+      if (!(part.r > 0)) continue;
+      out.push({
+        id: part.id,
+        x: part.cx - part.r,
+        y: part.cy - part.r,
+        width: part.r * 2,
+        depth: part.r * 2,
+      });
+    }
+  }
+  return out;
 }
 
 function cleanNumber(value: number | undefined): number | undefined {
@@ -175,19 +222,6 @@ export function formStateToDescriptorInput(
     variant,
   };
 
-  // blocks: omit the key entirely when empty (schema treats it as optional).
-  if (form.blocks.length > 0) {
-    base.blocks = form.blocks.map((b) => ({
-      ...(b.id && b.id.trim() !== "" ? { id: b.id.trim() } : {}),
-      x: b.x,
-      y: b.y,
-      width: b.width,
-      depth: b.depth,
-    }));
-  } else {
-    delete base.blocks;
-  }
-
   // mountingPoints: required for parametric; omit if empty for others.
   if (form.mountingPoints.length > 0) {
     base.mountingPoints = form.mountingPoints.map((m) => ({
@@ -232,17 +266,42 @@ export function formStateToDescriptorInput(
     };
   }
 
-  if (form.sceneViewBox) {
-    base.viewBox = {
-      x: form.sceneViewBox.x,
-      y: form.sceneViewBox.y,
-      width: form.sceneViewBox.width,
-      height: form.sceneViewBox.height,
-    };
-  }
-
+  // Scene is sole geometry authority when present (studio open or edited).
   if (form.sceneParts && form.sceneParts.length > 0) {
+    if (form.sceneViewBox) {
+      base.viewBox = {
+        x: form.sceneViewBox.x,
+        y: form.sceneViewBox.y,
+        width: form.sceneViewBox.width,
+        height: form.sceneViewBox.height,
+      };
+    }
+    // Keep parts for raw compile paths that still read them.
     base.parts = form.sceneParts.map((part) => ({ ...part }));
+    // Map to blocks so freezeFreshDescriptor / BlockDescriptorSchema retain geometry.
+    const sceneBlocks = scenePartsToBlocks(form.sceneParts);
+    if (sceneBlocks.length > 0) {
+      base.blocks = sceneBlocks.map((b) => ({
+        ...(b.id && b.id.trim() !== "" ? { id: b.id.trim() } : {}),
+        x: b.x,
+        y: b.y,
+        width: b.width,
+        depth: b.depth,
+      }));
+    } else {
+      delete base.blocks;
+    }
+  } else if (form.blocks.length > 0) {
+    // Legacy form-only path (no studio seed) — keep for non-studio callers.
+    base.blocks = form.blocks.map((b) => ({
+      ...(b.id && b.id.trim() !== "" ? { id: b.id.trim() } : {}),
+      x: b.x,
+      y: b.y,
+      width: b.width,
+      depth: b.depth,
+    }));
+  } else {
+    delete base.blocks;
   }
 
   // Let freezeFreshDescriptor recompute generatedAt/checksum.

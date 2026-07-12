@@ -10,6 +10,7 @@ describe("ai provider chain", () => {
     process.env = { ...originalEnv };
     delete process.env.OPENROUTER_API_KEY_PRIMARY;
     delete process.env.OPENROUTER_API_KEY_BACKUP;
+    delete process.env.GEMINI_API_KEY;
   });
 
   afterAll(() => {

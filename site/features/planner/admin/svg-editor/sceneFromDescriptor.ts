@@ -1,40 +1,88 @@
 /**
- * A4.1 — seed a visual scene from a persisted `BlockDescriptor`.
+ * A4 — seed a visual scene from a persisted `BlockDescriptor`.
  *
- * The descriptor is the marketing/portal shape; the studio edits geometry as an
- * `SvgSceneDocument`. This adapter builds a starter scene: viewBox + metadata are
- * mapped across, and if the descriptor carries no editable geometry yet we drop
- * in a single footprint rectangle so the canvas is never empty. Publishing still
- * flows through the existing form → pipeline path; the scene is the authoring
- * surface, not a new persistence format.
+ * Geometry authority on open:
+ * 1. Explicit `blocks[]` → rect nodes (publish SoT on disk today)
+ * 2. Else a single footprint rect so the canvas is never empty
+ *
+ * Publishing maps the scene back to `blocks` via form adapters so geometry
+ * survives `BlockDescriptorSchema` (which has no `parts` field).
  */
 
 import type { BlockDescriptor } from "@/features/planner/open3d/catalog/svg/svgTypes";
 import type { SvgSceneDocument, SvgSceneNode } from "./scene/svgSceneDocument";
 import { SCENE_MODEL_VERSION } from "./scene/svgSceneDocument";
 
-export function sceneFromDescriptor(descriptor: BlockDescriptor): SvgSceneDocument {
-  const viewBox = descriptor.viewBox ?? { x: 0, y: 0, width: 600, height: 600 };
-  const geometry = descriptor.geometry ?? { widthMm: 600, depthMm: 600, heightMm: 480 };
-
-  // Starter footprint: an inset rectangle covering ~80% of the artboard.
+function footprintNode(
+  viewBox: { x: number; y: number; width: number; height: number },
+): SvgSceneNode {
   const inset = Math.min(viewBox.width, viewBox.height) * 0.1;
-  const footprint: SvgSceneNode = {
+  return {
     kind: "rect",
     id: "footprint",
     name: "Footprint",
     locked: false,
     hidden: false,
-    style: { fillToken: "var(--color-surface-raised)", strokeToken: "currentColor", lineWeight: 2 },
+    style: {
+      fillToken: "var(--color-surface-raised)",
+      strokeToken: "currentColor",
+      lineWeight: 2,
+    },
     x: viewBox.x + inset,
     y: viewBox.y + inset,
     width: Math.max(1, viewBox.width - inset * 2),
     height: Math.max(1, viewBox.height - inset * 2),
   };
+}
+
+function nodesFromBlocks(descriptor: BlockDescriptor): SvgSceneNode[] {
+  const blocks = descriptor.blocks ?? [];
+  if (blocks.length === 0) return [];
+
+  return blocks.map((block, index) => {
+    const id =
+      typeof block.id === "string" && block.id.trim() !== ""
+        ? block.id.trim()
+        : `block-${index + 1}`;
+    const height = block.depth > 0 ? block.depth : (block.height ?? 1);
+    return {
+      kind: "rect" as const,
+      id,
+      name: id,
+      locked: false,
+      hidden: false,
+      style: {
+        fillToken: "var(--color-surface-raised)",
+        strokeToken: "currentColor",
+        lineWeight: 2,
+      },
+      x: block.x,
+      y: block.y,
+      width: Math.max(1, block.width),
+      height: Math.max(1, height),
+    };
+  });
+}
+
+export function sceneFromDescriptor(descriptor: BlockDescriptor): SvgSceneDocument {
+  const viewBox = descriptor.viewBox ?? { x: 0, y: 0, width: 600, height: 600 };
+  const geometry = descriptor.geometry ?? {
+    widthMm: 600,
+    depthMm: 600,
+    heightMm: 480,
+  };
+
+  const fromBlocks = nodesFromBlocks(descriptor);
+  const nodes = fromBlocks.length > 0 ? fromBlocks : [footprintNode(viewBox)];
 
   return {
     modelVersion: SCENE_MODEL_VERSION,
-    viewBox: { x: viewBox.x, y: viewBox.y, width: viewBox.width, height: viewBox.height },
+    viewBox: {
+      x: viewBox.x,
+      y: viewBox.y,
+      width: viewBox.width,
+      height: viewBox.height,
+    },
     metadata: {
       typeId: descriptor.slug || "new-block",
       name: descriptor.slug || "New block",
@@ -49,6 +97,6 @@ export function sceneFromDescriptor(descriptor: BlockDescriptor): SvgSceneDocume
       },
       accessibilityTitle: `${descriptor.slug || "Block"} symbol`,
     },
-    nodes: [footprint],
+    nodes,
   };
 }
