@@ -45,7 +45,7 @@ const SHORTCUTS: Shortcut[] = [
   // Canvas
   { keys: "G", label: "Toggle grid", category: "Canvas" },
   { keys: "L", label: "Toggle layers", category: "Canvas" },
-  { keys: "Tab", label: "Toggle 2D/3D view", category: "Canvas" },
+  { keys: "Ctrl + Tab", label: "Toggle 2D/3D view", category: "Canvas" },
   { keys: "?", label: "Show shortcuts", category: "Canvas" },
   // Export
   { keys: "Ctrl + E", label: "Export PDF", category: "Export" },

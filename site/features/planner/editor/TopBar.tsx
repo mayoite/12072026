@@ -1,6 +1,6 @@
 "use client";
 
-import { CornersIn, CornersOut } from "@phosphor-icons/react";
+import { CaretDown, CornersIn, CornersOut } from "@phosphor-icons/react";
 import {
   MenuTrigger,
   Button,
@@ -32,6 +32,9 @@ import styles from "./workspace.module.css";
  * - brand subline "Unsaved changes" when isModified
  * - pill maps modified→unsaved, synced→saved, else→idle through the helper
  *   (never bare "Ready" / "Modified" / /^Saved$/)
+ *
+ * Chrome (this seat): density + spacing + RAC/Phosphor controls only.
+ * Do not rewrite save labeling logic here.
  */
 export interface TopBarProps {
   accessContext?: PlannerAccessContext;
@@ -68,6 +71,10 @@ export interface TopBarProps {
   activePanel?: Extract<PanelId, "left" | "right"> | null;
   onToggleLeftPanel?: () => void;
   onToggleRightPanel?: () => void;
+  /** Bottom Layers panel open (not collapsed / not canvas-maximized). */
+  isBottomPanelOpen?: boolean;
+  /** Toggle bottom Layers panel — always shown when provided (collapsed by default). */
+  onToggleBottomPanel?: () => void;
   isCanvasMaximized?: boolean;
   onToggleCanvasMaximized?: () => void;
   density?: "compact" | "touch";
@@ -123,6 +130,8 @@ export function TopBar({
   activePanel = null,
   onToggleLeftPanel,
   onToggleRightPanel,
+  isBottomPanelOpen = false,
+  onToggleBottomPanel,
   isCanvasMaximized = false,
   onToggleCanvasMaximized,
   density = "compact",
@@ -150,7 +159,12 @@ export function TopBar({
   const activeFloorName = floors.find((f) => f.id === activeFloorId)?.name ?? "Floor";
 
   return (
-    <header className={`pw-topbar ${styles.header}`} aria-label="Planner workspace">
+    <header
+      className={`pw-topbar ${styles.header}`}
+      aria-label="Planner workspace"
+      data-density={density}
+      data-testid="planner-topbar"
+    >
       <div className={styles.brand}>
         <h1 className={styles.brandTitle}>{projectName}</h1>
         {isModified && <span className={styles.brandSub}>Unsaved changes</span>}
@@ -175,7 +189,7 @@ export function TopBar({
           <MenuTrigger>
             <Button className={styles.btn} aria-label={`Active floor: ${activeFloorName}`}>
               {activeFloorName}
-              <ChevronDownIcon />
+              <CaretDown size={12} weight="bold" aria-hidden />
             </Button>
             <Popover placement="bottom start">
               <Menu
@@ -201,7 +215,7 @@ export function TopBar({
         <MenuTrigger>
           <Button className={styles.btn} aria-label={`Display unit: ${displayUnit}`}>
             {displayUnit}
-            <ChevronDownIcon />
+            <CaretDown size={12} weight="bold" aria-hidden />
           </Button>
           <Popover placement="bottom start">
             <Menu
@@ -226,8 +240,7 @@ export function TopBar({
 
       <div className={styles.actions}>
         {onToggleCanvasMaximized && (
-          <button
-            type="button"
+          <Button
             className={styles.btn}
             aria-pressed={isCanvasMaximized}
             aria-label={
@@ -235,63 +248,75 @@ export function TopBar({
                 ? "Restore — restore workspace panels"
                 : "Focus — maximize canvas"
             }
-            onClick={onToggleCanvasMaximized}
+            onPress={onToggleCanvasMaximized}
           >
-            {isCanvasMaximized ? <CornersIn aria-hidden="true" /> : <CornersOut aria-hidden="true" />}
+            {isCanvasMaximized ? (
+              <CornersIn size={16} aria-hidden />
+            ) : (
+              <CornersOut size={16} aria-hidden />
+            )}
             <span className={styles.canvasModeLabel}>
               {isCanvasMaximized ? "Restore" : "Focus"}
             </span>
-          </button>
+          </Button>
         )}
 
         {(onToggleLeftPanel || onToggleRightPanel) && (
           <div className={styles.mobilePanelActions} role="group" aria-label="Panel toggles">
             {onToggleLeftPanel && (
-              <button
-                type="button"
+              <Button
                 className={`${styles.btn} ${styles.mobilePanelBtn}`}
-                data-active={activePanel === "left"}
+                data-active={activePanel === "left" ? "true" : undefined}
                 aria-pressed={activePanel === "left"}
                 aria-label="Toggle inventory panel"
-                onClick={onToggleLeftPanel}
+                onPress={onToggleLeftPanel}
               >
                 Inventory
-              </button>
+              </Button>
             )}
             {onToggleRightPanel && (
-              <button
-                type="button"
+              <Button
                 className={`${styles.btn} ${styles.mobilePanelBtn}`}
-                data-active={activePanel === "right"}
+                data-active={activePanel === "right" ? "true" : undefined}
                 aria-pressed={activePanel === "right"}
                 aria-label="Toggle properties panel"
-                onClick={onToggleRightPanel}
+                onPress={onToggleRightPanel}
               >
                 Properties
-              </button>
+              </Button>
             )}
           </div>
         )}
 
-        <div className={styles.historyActions} role="group" aria-label="Canvas history">
-          <button
-            type="button"
+        {onToggleBottomPanel && (
+          <Button
             className={styles.btn}
-            disabled={!canUndo}
+            data-active={isBottomPanelOpen ? "true" : undefined}
+            aria-pressed={isBottomPanelOpen}
+            aria-label="Toggle layers panel"
+            onPress={onToggleBottomPanel}
+          >
+            Layers
+          </Button>
+        )}
+
+        <div className={styles.historyActions} role="group" aria-label="Canvas history">
+          <Button
+            className={styles.btn}
+            isDisabled={!canUndo}
             aria-label="Undo"
-            onClick={() => onUndo?.()}
+            onPress={() => onUndo?.()}
           >
             Undo
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             className={styles.btn}
-            disabled={!canRedo}
+            isDisabled={!canRedo}
             aria-label="Redo"
-            onClick={() => onRedo?.()}
+            onPress={() => onRedo?.()}
           >
             Redo
-          </button>
+          </Button>
         </div>
 
         <div
@@ -311,16 +336,19 @@ export function TopBar({
           {resolvedSaveLabel}
         </div>
 
-        <button type="button" className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => onSave?.()}>
+        <Button
+          className={`${styles.btn} ${styles.btnPrimary}`}
+          onPress={() => onSave?.()}
+        >
           {showGuestActions ? "Save draft" : "Save"}
-        </button>
+        </Button>
 
         {/* Guest: honest export surface (JSON + BOQ). No Import / quote-cart / ERP. */}
         {showGuestActions && (
           <MenuTrigger>
             <Button className={styles.btn} aria-label="Export — open export menu">
               Export
-              <ChevronDownIcon />
+              <CaretDown size={12} weight="bold" aria-hidden />
             </Button>
             <Popover placement="bottom end">
               <Menu
@@ -346,7 +374,7 @@ export function TopBar({
             <MenuTrigger>
               <Button className={styles.btn} aria-label="Import — open import menu">
                 Import
-                <ChevronDownIcon />
+                <CaretDown size={12} weight="bold" aria-hidden />
               </Button>
               <Popover placement="bottom end">
                 <Menu
@@ -368,7 +396,7 @@ export function TopBar({
             <MenuTrigger>
               <Button className={styles.btn} aria-label="Export — open export menu">
                 Export
-                <ChevronDownIcon />
+                <CaretDown size={12} weight="bold" aria-hidden />
               </Button>
               <Popover placement="bottom end">
                 <Menu
@@ -401,7 +429,7 @@ export function TopBar({
         <MenuTrigger>
           <Button className={styles.btn} aria-label="Prefs — open preferences menu">
             Prefs
-            <ChevronDownIcon />
+            <CaretDown size={12} weight="bold" aria-hidden />
           </Button>
           <Popover placement="bottom end">
             <Menu
@@ -420,23 +448,5 @@ export function TopBar({
         </MenuTrigger>
       </div>
     </header>
-  );
-}
-
-function ChevronDownIcon() {
-  return (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M6 9l6 6 6-6" />
-    </svg>
   );
 }

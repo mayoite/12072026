@@ -1,11 +1,22 @@
 import { describe, expect, it, vi } from "vitest";
 
 import {
+  CANVAS_TOOLS,
+  CANVAS_TOOL_GUIDANCE,
+  CANVAS_TOOL_LABELS,
   CANVAS_TOOL_REQUIREMENT,
+  CANVAS_TOOL_SHORTCUTS,
   LIVE_GEOMETRY_TOOLS,
+  PALETTE_EXTRA_TOOLS,
   PALETTE_TOOLS,
-  type PlannerTool,
+  RAIL_DRAW_TOOLS,
+  RAIL_NAV_TOOLS,
+  isLiveGeometryTool,
   runtimeToolFor,
+  toolAccessibleName,
+  toolTooltipText,
+  type PlannerTool,
+  type ToolRequirementTier,
 } from "@/features/planner/editor/canvasTool";
 import {
   buildPaletteCommands,
@@ -24,6 +35,18 @@ const LIVE_TOOLS: readonly PlannerTool[] = [
 ];
 
 const DEFERRED_TOOLS: readonly PlannerTool[] = ["room", "dimension", "text"];
+
+/** Every PlannerTool id — maps must stay exhaustive (no silent omit). */
+const ALL_PLANNER_TOOLS: readonly PlannerTool[] = [
+  ...LIVE_TOOLS,
+  ...DEFERRED_TOOLS,
+];
+
+const VALID_TIERS: readonly ToolRequirementTier[] = [
+  "live",
+  "keyboard",
+  "deferred",
+];
 
 function makeHandlers(
   overrides: Partial<PaletteCommandHandlers> = {},
@@ -62,6 +85,23 @@ describe("canvasTool requirement tiers (authority)", () => {
       expect(LIVE_GEOMETRY_TOOLS).not.toContain(tool);
     }
   });
+
+  it("covers every PlannerTool with a known tier (no orphan / unknown)", () => {
+    const requirementKeys = Object.keys(CANVAS_TOOL_REQUIREMENT) as PlannerTool[];
+    expect(new Set(requirementKeys)).toEqual(new Set(ALL_PLANNER_TOOLS));
+    for (const tool of ALL_PLANNER_TOOLS) {
+      expect(VALID_TIERS).toContain(CANVAS_TOOL_REQUIREMENT[tool]);
+    }
+  });
+
+  it("isLiveGeometryTool matches live tier only", () => {
+    for (const tool of LIVE_TOOLS) {
+      expect(isLiveGeometryTool(tool)).toBe(true);
+    }
+    for (const tool of DEFERRED_TOOLS) {
+      expect(isLiveGeometryTool(tool)).toBe(false);
+    }
+  });
 });
 
 describe("runtimeToolFor (Fabric pointer path)", () => {
@@ -88,6 +128,108 @@ describe("runtimeToolFor (Fabric pointer path)", () => {
     expect(runtimeToolFor("select")).toBe("select");
     expect(runtimeToolFor("pan")).toBe("pan");
     expect(runtimeToolFor("placement")).toBe("placement");
+  });
+
+  it("never routes deferred tools to a draw/placement runtime path", () => {
+    const forbiddenRuntime = new Set([
+      "wall",
+      "door",
+      "window",
+      "placement",
+      "opening",
+    ]);
+    for (const tool of DEFERRED_TOOLS) {
+      const runtime = runtimeToolFor(tool);
+      expect(runtime).toBe("select");
+      expect(forbiddenRuntime.has(runtime)).toBe(false);
+    }
+  });
+});
+
+describe("rail / palette composition (honesty)", () => {
+  it("CANVAS_TOOLS is nav + draw with no duplicates", () => {
+    expect(CANVAS_TOOLS).toEqual([...RAIL_NAV_TOOLS, ...RAIL_DRAW_TOOLS]);
+    expect(new Set(CANVAS_TOOLS).size).toBe(CANVAS_TOOLS.length);
+  });
+
+  it("RAIL_NAV_TOOLS is select + pan only", () => {
+    expect(RAIL_NAV_TOOLS).toEqual(["select", "pan"]);
+  });
+
+  it("RAIL_DRAW_TOOLS keeps room/dimension visible but deferred", () => {
+    expect(RAIL_DRAW_TOOLS).toEqual([
+      "room",
+      "wall",
+      "opening",
+      "dimension",
+      "placement",
+    ]);
+    expect(CANVAS_TOOL_REQUIREMENT.room).toBe("deferred");
+    expect(CANVAS_TOOL_REQUIREMENT.dimension).toBe("deferred");
+    expect(CANVAS_TOOL_REQUIREMENT.wall).toBe("live");
+    expect(CANVAS_TOOL_REQUIREMENT.opening).toBe("live");
+    expect(CANVAS_TOOL_REQUIREMENT.placement).toBe("live");
+  });
+
+  it("palette extras are keyboard-path tools not duplicated on the rail", () => {
+    expect(PALETTE_EXTRA_TOOLS).toEqual(["door", "window", "text"]);
+    for (const tool of PALETTE_EXTRA_TOOLS) {
+      expect(CANVAS_TOOLS).not.toContain(tool);
+    }
+    expect(PALETTE_TOOLS).toEqual([...CANVAS_TOOLS, ...PALETTE_EXTRA_TOOLS]);
+  });
+
+  it("label/shortcut/guidance maps are exhaustive for every PlannerTool", () => {
+    for (const tool of ALL_PLANNER_TOOLS) {
+      expect(CANVAS_TOOL_LABELS[tool].length).toBeGreaterThan(0);
+      expect(CANVAS_TOOL_SHORTCUTS[tool].length).toBe(1);
+      expect(CANVAS_TOOL_GUIDANCE[tool].length).toBeGreaterThan(10);
+    }
+  });
+});
+
+describe("toolAccessibleName / toolTooltipText (UI honesty helpers)", () => {
+  it("live tools: Label (Shortcut) without deferred marker", () => {
+    for (const tool of LIVE_TOOLS) {
+      const name = toolAccessibleName(tool);
+      expect(name).toBe(
+        `${CANVAS_TOOL_LABELS[tool]} (${CANVAS_TOOL_SHORTCUTS[tool]})`,
+      );
+      expect(name.toLowerCase()).not.toContain("deferred");
+    }
+  });
+
+  it("deferred tools: append ', deferred' for a11y honesty", () => {
+    for (const tool of DEFERRED_TOOLS) {
+      const name = toolAccessibleName(tool);
+      expect(name).toBe(
+        `${CANVAS_TOOL_LABELS[tool]} (${CANVAS_TOOL_SHORTCUTS[tool]}), deferred`,
+      );
+      expect(name).toMatch(/, deferred$/);
+    }
+  });
+
+  it("toolTooltipText is the authority guidance string", () => {
+    for (const tool of ALL_PLANNER_TOOLS) {
+      expect(toolTooltipText(tool)).toBe(CANVAS_TOOL_GUIDANCE[tool]);
+    }
+  });
+
+  it("deferred guidance does not claim Fabric geometry works", () => {
+    for (const tool of DEFERRED_TOOLS) {
+      const tip = toolTooltipText(tool).toLowerCase();
+      expect(tip).toMatch(/deferred/);
+      expect(tip).not.toMatch(/click start and end/);
+      expect(tip).not.toMatch(/click a wall to add/);
+    }
+  });
+
+  it("wall guidance is drag-to-draw (host press-drag-release), not two-click", () => {
+    const tip = toolTooltipText("wall").toLowerCase();
+    expect(tip).toMatch(/drag/);
+    expect(tip).not.toMatch(/click start and end/);
+    expect(tip).not.toMatch(/start and end points/);
+    expect(tip).toBe(CANVAS_TOOL_GUIDANCE.wall.toLowerCase());
   });
 });
 

@@ -29,9 +29,11 @@ describe("donor parity — command palette", () => {
     expect(commands.some((command) => command.id === "tool-wall" && command.shortcut === "W")).toBe(
       true,
     );
-    expect(commands.some((command) => command.id === "nav-toggle-view" && command.shortcut === "Tab")).toBe(
-      true,
-    );
+    expect(
+      commands.some(
+        (command) => command.id === "nav-toggle-view" && command.shortcut === "Ctrl+Tab",
+      ),
+    ).toBe(true);
     expect(filterPaletteCommands(commands, "wall").some((command) => command.id === "tool-wall")).toBe(
       true,
     );

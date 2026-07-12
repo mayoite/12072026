@@ -55,7 +55,7 @@ export function buildPaletteCommands(): PaletteCommand[] {
     {
       id: "nav-toggle-view",
       label: "Toggle 2D / 3D view",
-      shortcut: "Tab",
+      shortcut: "Ctrl+Tab",
       category: "navigation",
       categoryLabel: "View",
       keywords: ["2d", "3d", "view", "toggle"],

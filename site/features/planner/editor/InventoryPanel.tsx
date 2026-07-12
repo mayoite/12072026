@@ -131,8 +131,10 @@ export const InventoryPanel = memo(function InventoryPanel({
   const [collections, setCollections] = useState<InventoryCollectionsState>(
     defaultCollectionsState(),
   );
+  /* Collapsed by default so fixed chrome stays short and .itemGrid keeps height.
+     Expand on click (category still filters when selected). */
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set(["furniture"]),
+    () => new Set(),
   );
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
@@ -347,9 +349,38 @@ export const InventoryPanel = memo(function InventoryPanel({
     state.selectedSubCategoryId,
   ]);
 
-  // Keyboard navigation (RAC will own more in full, here kept for compat during transition)
+  // Keyboard navigation (panel owns list roving when focus is on the region, not chrome controls)
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
+      const target = event.target;
+      const isEditable =
+        target instanceof HTMLElement
+        && (target.tagName === "INPUT"
+          || target.tagName === "TEXTAREA"
+          || target.tagName === "SELECT"
+          || target.isContentEditable);
+
+      // Escape clears search even from the search field (common pattern).
+      if (event.key === "Escape") {
+        event.preventDefault();
+        if (state.searchQuery) {
+          handleClearSearch();
+        } else {
+          setSelectedItemId(null);
+        }
+        return;
+      }
+
+      // Do not steal Arrow/Enter/Home/End from search, Place, favorite, or filters.
+      if (isEditable) return;
+      if (
+        target instanceof HTMLElement
+        && target !== event.currentTarget
+        && target.closest("button, a[href], input, textarea, select, [role='button']")
+      ) {
+        return;
+      }
+
       const items = displayedItems; // post filter/rank
 
       switch (event.key) {
@@ -362,6 +393,7 @@ export const InventoryPanel = memo(function InventoryPanel({
           setFocusedIndex((current) => Math.max(current - 1, 0));
           break;
         case "Enter":
+        case " ":
           event.preventDefault();
           if (focusedIndex >= 0 && items[focusedIndex]) {
             handleItemClick(items[focusedIndex]);
@@ -374,14 +406,6 @@ export const InventoryPanel = memo(function InventoryPanel({
         case "End":
           event.preventDefault();
           setFocusedIndex(items.length - 1);
-          break;
-        case "Escape":
-          event.preventDefault();
-          if (state.searchQuery) {
-            handleClearSearch();
-          } else {
-            setSelectedItemId(null);
-          }
           break;
       }
     },
@@ -609,7 +633,6 @@ export const InventoryPanel = memo(function InventoryPanel({
         <div className={styles.loadingState}>
           <div className={styles.loadingSpinner} />
           <span>Loading inventory...</span>
-          <div className={styles.skeleton} />
         </div>
       ) : effectiveStatus === "error" && displayedItems.length === 0 ? (
         <section className={styles.emptyState} aria-label="Catalog browser" data-state="error">
@@ -649,10 +672,26 @@ export const InventoryPanel = memo(function InventoryPanel({
               >
                 <article
                   className={`pw-catalog-card ${styles.itemCard} ${selectedItemId === item.id ? styles.itemCardSelected : ""} ${focusedIndex === index ? styles.itemCardFocused : ""}`}
+                  // Roving tab stop for panel arrow keys + focus-visible ring.
+                  // No role=button — Place / favorite stay nested interactive controls.
+                  tabIndex={focusedIndex === index ? 0 : -1}
+                  aria-selected={selectedItemId === item.id ? "true" : "false"}
+                  data-catalog-name={item.shortName}
                   onClick={() => handleItemClick(item)}
                   onDoubleClick={(event) => handleItemDoubleClick(item, event)}
+                  onFocus={() => setFocusedIndex(index)}
                   onKeyDown={(event) => {
-                    if (event.key === "Enter") handleItemClick(item);
+                    if (event.key === "Enter" || event.key === " ") {
+                      // Ignore when Place / favorite owns the event
+                      if (
+                        event.target instanceof HTMLElement
+                        && event.target.closest("button")
+                      ) {
+                        return;
+                      }
+                      event.preventDefault();
+                      handleItemClick(item);
+                    }
                   }}
                 >
               <div className={styles.itemThumbnail}>
@@ -695,25 +734,25 @@ export const InventoryPanel = memo(function InventoryPanel({
                     displayUnit,
                   )}
                 </span>
-                <button
-                  type="button"
-                  className={styles.emptyAction}
-                  // WCAG 2.5.3: accessible name must contain visible "Place".
-                  // Keep "Add … to canvas" substring so existing e2e locators still match.
-                  aria-label={`Place — Add ${item.shortName} to canvas`}
-                  title={`Arm place: click the plan to drop ${item.shortName}`}
-                  onClick={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    onItemPlace?.(item.id, null, { x: 0, y: 0 });
-                    setCollections((current) =>
-                      addInventoryRecent(current, item.id, new Date().toISOString()),
-                    );
-                  }}
-                >
-                  Place
-                </button>
               </div>
+              <button
+                type="button"
+                className={styles.placeAction}
+                // WCAG 2.5.3: accessible name must contain visible "Place".
+                // Keep "Add … to canvas" substring so existing e2e locators still match.
+                aria-label={`Place — Add ${item.shortName} to canvas`}
+                title={`Arm place: click the plan to drop ${item.shortName}`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  onItemPlace?.(item.id, null, { x: 0, y: 0 });
+                  setCollections((current) =>
+                    addInventoryRecent(current, item.id, new Date().toISOString()),
+                  );
+                }}
+              >
+                Place
+              </button>
               <button
                 type="button"
                 className={`${styles.favoriteButton} ${isInventoryFavorite(collections, item.id) ? styles.favoriteButtonActive : ""}`}

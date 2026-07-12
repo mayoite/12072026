@@ -23,6 +23,9 @@
   --ws-z-floating: var(--planner-z-floating);
   --ws-control-h: var(--planner-control-height);
   --ws-header-h: var(--planner-header-height);
+  --ws-status-h: var(--planner-status-height, 2.25rem);
+  /* Dense default chrome; density modes override */
+  --ws-panel-title-h: 2.25rem;
   --ws-rail-w: var(--planner-tool-rail-width);
 
   display: grid;
@@ -57,14 +60,29 @@
   --ws-panel-width: var(--planner-panel-width-desktop);
 }
 
-/* Density modes (compact/touch) per task 3; GS cite: Figma UI3 REC-01 minimize-UI + MODULE-UI-CONTRACT layer→surface→module for planner open3d L1/L3; anti-copy tokens only per 00-benchmark-summary.md */
+/* Density modes (compact/touch): control height, chrome strip heights, shell type scale.
+   Panel title / status / TopBar track these tokens (header also has data-density). */
 .shell[data-planner-density="compact"] {
   --ws-control-h: 2rem;
+  --ws-header-h: 2.75rem;
+  --ws-status-h: 1.75rem;
+  --ws-panel-title-h: 2rem;
+  --ws-header-pad-block: var(--space-1);
+  --ws-header-pad-inline: var(--space-3);
+  --ws-header-gap: var(--space-1) var(--space-2);
+  --ws-action-gap: var(--space-1);
   font-size: 0.8125rem;
 }
 
 .shell[data-planner-density="touch"] {
   --ws-control-h: 2.75rem;
+  --ws-header-h: 3.75rem;
+  --ws-status-h: 2.5rem;
+  --ws-panel-title-h: 2.75rem;
+  --ws-header-pad-block: var(--space-2);
+  --ws-header-pad-inline: var(--space-4);
+  --ws-header-gap: var(--space-2) var(--space-3);
+  --ws-action-gap: var(--space-2);
   font-size: 0.9375rem;
 }
 
@@ -72,6 +90,11 @@
 .shell :focus-visible {
   outline: 2px solid var(--planner-focus-ring);
   outline-offset: 2px;
+}
+
+/* RAC tool rail owns inset focus on .toolFace (parent overflow clips outline-offset). */
+.shell :global(.pw-tool-rail) :focus-visible {
+  outline: none;
 }
 
 .shell [data-selected="true"],
@@ -120,21 +143,45 @@
   }
 }
 
-/* Header / Top bar */
+/* Header / Top bar — flat professional chrome; density via shell tokens + data-density */
 .header {
+  --ws-header-pad-block: var(--space-2);
+  --ws-header-pad-inline: var(--space-4);
+  --ws-header-gap: var(--space-2) var(--space-3);
+  --ws-action-gap: var(--space-2);
+
   grid-area: header;
   display: grid;
   align-items: center;
-  gap: var(--space-2) var(--space-3);
+  gap: var(--ws-header-gap);
   min-height: var(--ws-header-h);
-  padding: var(--space-2) var(--space-4);
+  padding: var(--ws-header-pad-block) var(--ws-header-pad-inline);
   border-bottom: 1px solid var(--ws-panel-border);
   background: var(--ws-header-bg);
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--ws-panel-border) 70%, transparent),
-    0 0.5rem 1.5rem -20px color-mix(in srgb, var(--ws-text-primary) 12%, transparent);
+  /* Flat Excel/Sheets-class chrome — hairline only, no soft drop veil */
+  box-shadow: none;
   z-index: var(--ws-z-topbar);
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  box-sizing: border-box;
+}
+
+/* Header can also host density when rendered outside shell density attr */
+.header[data-density="compact"] {
+  --ws-control-h: 2rem;
+  --ws-header-h: 2.75rem;
+  --ws-header-pad-block: var(--space-1);
+  --ws-header-pad-inline: var(--space-3);
+  --ws-header-gap: var(--space-1) var(--space-2);
+  --ws-action-gap: var(--space-1);
+}
+
+.header[data-density="touch"] {
+  --ws-control-h: 2.75rem;
+  --ws-header-h: 3.75rem;
+  --ws-header-pad-block: var(--space-2);
+  --ws-header-pad-inline: var(--space-4);
+  --ws-header-gap: var(--space-2) var(--space-3);
+  --ws-action-gap: var(--space-2);
 }
 
 .brand {
@@ -158,6 +205,14 @@
   color: var(--ws-text-primary);
 }
 
+.header[data-density="compact"] .brandTitle {
+  font-size: 0.875rem;
+}
+
+.header[data-density="touch"] .brandTitle {
+  font-size: 1rem;
+}
+
 .brandSub {
   flex-shrink: 0;
   margin: 0;
@@ -179,7 +234,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
+  gap: var(--ws-action-gap);
+  min-width: 0;
 }
 
 .actions {
@@ -187,14 +243,16 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--space-2);
+  gap: var(--ws-action-gap);
   min-width: 0;
+  flex-wrap: nowrap;
 }
 
 .historyActions {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
+  flex-shrink: 0;
 }
 
 .mobilePanelActions {
@@ -223,7 +281,8 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  padding: var(--space-1) var(--space-2);
+  min-height: var(--ws-control-h);
+  padding: 0 var(--space-2);
   border-radius: var(--radius-pill);
   border: 1px solid var(--ws-panel-border);
   background: color-mix(in srgb, var(--surface-soft) 90%, var(--ws-panel-bg));
@@ -232,6 +291,23 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--ws-text-muted);
+  box-sizing: border-box;
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 14rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header[data-density="compact"] .saveStatus {
+  font-size: 0.625rem;
+  max-width: 11rem;
+}
+
+.header[data-density="touch"] .saveStatus {
+  font-size: 0.75rem;
+  max-width: 16rem;
 }
 
 .saveStatus[data-modified="true"] {
@@ -450,8 +526,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  min-height: 2.75rem;
-  padding: var(--space-2) var(--space-4);
+  min-height: var(--ws-panel-title-h, 2.25rem);
+  padding: var(--space-1) var(--space-3);
   border-bottom: 1px solid var(--ws-panel-border);
   background: color-mix(in srgb, var(--surface-soft) 92%, var(--ws-panel-bg));
   flex-shrink: 0;
@@ -614,7 +690,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  min-height: 2.25rem;
+  min-height: var(--ws-status-h, 2.25rem);
   padding: var(--space-1) var(--space-4);
   border-top: 1px solid var(--ws-panel-border);
   background: var(--ws-status-bg);
@@ -652,12 +728,16 @@
   border: 1px solid var(--ws-panel-border);
   border-radius: var(--radius-sm);
   background: var(--ws-panel-bg);
+  flex-shrink: 0;
 }
 
 .viewToggleBtn {
-  min-width: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
   min-height: calc(var(--ws-control-h) - 4px);
-  padding: var(--space-1) var(--space-2);
+  padding: 0 var(--space-2);
   border: none;
   border-radius: 2px;
   background: transparent;
@@ -666,19 +746,34 @@
   color: var(--ws-text-muted);
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease;
+  box-sizing: border-box;
 }
 
-.viewToggleBtn:hover {
+.header[data-density="compact"] .viewToggleBtn {
+  min-width: 2rem;
+  font-size: 0.6875rem;
+}
+
+.header[data-density="touch"] .viewToggleBtn {
+  min-width: 2.75rem;
+  font-size: 0.8125rem;
+}
+
+.viewToggleBtn:hover,
+.viewToggleBtn[data-hovered] {
   color: var(--ws-text-primary);
 }
 
+/* RAC Radio sets data-selected; keep data-active for legacy callers */
 .viewToggleBtn[data-active="true"],
-.viewToggleBtn[data-selected] {
+.viewToggleBtn[data-selected],
+.viewToggleBtn[data-selected="true"] {
   background: var(--ws-accent);
   color: var(--text-inverse);
 }
 
-.viewToggleBtn:focus-visible {
+.viewToggleBtn:focus-visible,
+.viewToggleBtn[data-focus-visible] {
   outline: none;
   box-shadow: var(--focus-ring);
 }
@@ -736,7 +831,7 @@
   color: var(--text-inverse);
 }
 
-/* Button styles */
+/* Button styles (RAC Button + native share this chrome) */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -744,6 +839,7 @@
   gap: var(--space-1);
   min-height: var(--ws-control-h);
   padding: var(--space-1) var(--space-3);
+  box-sizing: border-box;
   border: 1px solid var(--ws-panel-border);
   border-radius: var(--radius-sm);
   background: var(--ws-panel-bg);
@@ -754,14 +850,30 @@
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.btn:hover {
+.btn:hover,
+.btn[data-hovered] {
   background: var(--surface-soft);
   border-color: var(--border-hover);
 }
 
-.btn:focus-visible {
+.btn:focus-visible,
+.btn[data-focus-visible] {
   outline: none;
   box-shadow: var(--focus-ring);
+}
+
+.btn[data-pressed] {
+  transform: translateY(0.5px);
+}
+
+.header[data-density="compact"] .btn {
+  padding-inline: var(--space-2);
+  font-size: 0.75rem;
+}
+
+.header[data-density="touch"] .btn {
+  padding-inline: var(--space-3);
+  font-size: 0.875rem;
 }
 
 .btnPrimary {
@@ -770,7 +882,8 @@
   color: var(--text-inverse);
 }
 
-.btnPrimary:hover {
+.btnPrimary:hover,
+.btnPrimary[data-hovered] {
   background: color-mix(in srgb, var(--ws-accent) 85%);
   border-color: color-mix(in srgb, var(--ws-accent) 85%);
 }

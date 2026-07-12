@@ -75,7 +75,7 @@ export const CANVAS_TOOL_GUIDANCE: Record<PlannerTool, string> = {
   select: "Click an object to inspect it. Delete removes the selection.",
   pan: "Drag to move the drawing. Release Space to restore the armed tool.",
   room: "Room outline is deferred — use Wall segments or Starter room for now.",
-  wall: "Click start and end points to draw a wall segment.",
+  wall: "Press and drag to draw a wall segment; release to commit.",
   opening: "Click a wall to add a door opening.",
   dimension: "Dimension annotations are deferred — measure via properties for now.",
   placement: "Choose a catalogue item, then click the canvas to place it.",

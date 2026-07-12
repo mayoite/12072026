@@ -1,0 +1,18 @@
+---
+pid: 83112
+cwd: "E:\12072026"
+command: "pnpm --filter oando-site exec node E:/12072026/results/planner/ui-spot-check-2026-07-12.mjs"
+started_at: 2026-07-12T15:24:46.466Z
+running_for_ms: 239994   
+---
+undefined
+file:///E:/12072026/results/planner/ui-spot-check-2026-07-12.mjs:39
+  throw new Error(`planner-fabric-stage not visible. testids=${preflight.testids.join(",")}`);
+        ^
+
+Error: planner-fabric-stage not visible. testids=
+    at file:///E:/12072026/results/planner/ui-spot-check-2026-07-12.mjs:39:9
+
+Node.js v24.16.0
+E:\12072026\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: node "E:/12072026/results/planner/ui-spot-check-2026-07-12.mjs"

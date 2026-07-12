@@ -42,8 +42,8 @@ export const PLANNER_HELP_SECTIONS: HelpSection[] = [
   {
     id: "walls-and-rooms",
     title: "Walls and rooms",
-    summary: "Draw walls, define rooms, and add door and window openings.",
-    keywords: ["wall", "room", "door", "window"],
+    summary: "Press and drag to draw walls; add door and window openings on wall segments.",
+    keywords: ["wall", "room", "door", "window", "drag"],
   },
   {
     id: "select-and-edit",
@@ -132,7 +132,8 @@ export const PLANNER_HELP_FAQ_ITEMS: HelpFaqItem[] = [
   },
   {
     question: "How do walls, rooms, doors, and windows work?",
-    answer: "Draw walls, define rooms, and add door and window openings.",
+    answer:
+      "Press and drag on the canvas to draw a wall segment (release to commit). Add door and window openings on existing walls. Room outline tooling is deferred — use wall segments or a starter room.",
   },
   {
     question: "How are plans saved?",

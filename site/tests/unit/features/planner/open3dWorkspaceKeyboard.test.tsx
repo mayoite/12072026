@@ -247,25 +247,76 @@ describe("useWorkspaceKeyboard shortcuts", () => {
     expect(handlers.setTool).toHaveBeenCalledWith("opening");
   });
 
-  it("toggles view on Tab without modifiers and preventDefaults", () => {
+  it("toggles view on Ctrl/Cmd+Tab only — bare Tab is free for focus order", () => {
     const handlers = makeHandlers();
     renderHook(() => useWorkspaceKeyboard(handlers));
 
-    const tab = new KeyboardEvent("keydown", {
+    const bareTab = new KeyboardEvent("keydown", {
       bubbles: true,
       key: "Tab",
       cancelable: true,
     });
     act(() => {
-      window.dispatchEvent(tab);
+      window.dispatchEvent(bareTab);
     });
-    expect(tab.defaultPrevented).toBe(true);
+    expect(bareTab.defaultPrevented).toBe(false);
+    expect(handlers.toggleView).not.toHaveBeenCalled();
+
+    const ctrlTab = new KeyboardEvent("keydown", {
+      bubbles: true,
+      key: "Tab",
+      ctrlKey: true,
+      cancelable: true,
+    });
+    act(() => {
+      window.dispatchEvent(ctrlTab);
+    });
+    expect(ctrlTab.defaultPrevented).toBe(true);
     expect(handlers.toggleView).toHaveBeenCalledTimes(1);
 
+    press({ key: "Tab", metaKey: true });
+    expect(handlers.toggleView).toHaveBeenCalledTimes(2);
+
     press({ key: "Tab", shiftKey: true });
-    press({ key: "Tab", ctrlKey: true });
+    press({ key: "Tab", ctrlKey: true, shiftKey: true });
     press({ key: "Tab", altKey: true });
-    expect(handlers.toggleView).toHaveBeenCalledTimes(1);
+    expect(handlers.toggleView).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not steal Space/Enter/letter tools when focus is on a button", () => {
+    const handlers = makeHandlers();
+    renderHook(() => useWorkspaceKeyboard(handlers));
+
+    const button = document.createElement("button");
+    document.body.appendChild(button);
+    act(() => {
+      button.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: " ",
+          code: "Space",
+          cancelable: true,
+        }),
+      );
+      button.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "Enter",
+          cancelable: true,
+        }),
+      );
+      button.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "w",
+          cancelable: true,
+        }),
+      );
+    });
+    expect(handlers.beginTemporaryPan).not.toHaveBeenCalled();
+    expect(handlers.commit).not.toHaveBeenCalled();
+    expect(handlers.setTool).not.toHaveBeenCalled();
+    button.remove();
   });
 
   it("commits on Enter and preventDefaults; omits commit without throw", () => {

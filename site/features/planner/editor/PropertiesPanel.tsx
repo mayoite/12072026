@@ -910,12 +910,16 @@ export const PropertiesPanel = memo(function PropertiesPanel({
   // Empty state when nothing is selected
   if (!selectedEntity) {
     return (
-      <div className={styles.panel}>
-        <div className={styles.emptyState}>
-          <div className={styles.emptyIcon}>
+      <div
+        className={styles.panel}
+        data-state="empty"
+        aria-label="Properties"
+      >
+        <div className={styles.emptyState} role="status">
+          <div className={styles.emptyIcon} aria-hidden="true">
             <svg
-              width="48"
-              height="48"
+              width="22"
+              height="22"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -929,19 +933,27 @@ export const PropertiesPanel = memo(function PropertiesPanel({
               <path d="M9 17h4" />
             </svg>
           </div>
-          <h3 className={styles.emptyTitle}>No Selection</h3>
+          <h3 className={styles.emptyTitle}>No selection</h3>
           <p className={styles.emptyDescription}>
-            Select an element in the canvas to view and edit its properties.
+            Select an element on the canvas to view and edit its properties.
+          </p>
+          <p className={styles.emptyHint}>
+            Walls, doors, windows, rooms, and furniture open contextual fields
+            here.
           </p>
         </div>
       </div>
     );
   }
 
-  // GS: properties grouped... (see early isLocked); Figma REC-01 contextual; locked via command layer.
+  // Contextual groups live inside renderProperties; header chrome stays fixed.
   return (
-    <div className={styles.panel}>
-      {/* Header */}
+    <div
+      className={styles.panel}
+      data-state="selection"
+      data-entity={selectedEntity.collection}
+      aria-label="Properties"
+    >
       <div className={styles.header}>
         <div className={styles.headerContent}>
           <span className={styles.entityType}>
@@ -962,28 +974,30 @@ export const PropertiesPanel = memo(function PropertiesPanel({
           >
             {isLocked ? (
               <svg
-                width="16"
-                height="16"
+                width="14"
+                height="14"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                aria-hidden="true"
               >
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
               </svg>
             ) : (
               <svg
-                width="16"
-                height="16"
+                width="14"
+                height="14"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                aria-hidden="true"
               >
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0 1 9.9-1" />
@@ -994,18 +1008,20 @@ export const PropertiesPanel = memo(function PropertiesPanel({
             type="button"
             className={`${styles.actionButton} ${styles.deleteButton}`}
             onClick={handleDelete}
+            disabled={isLocked}
             aria-label="Delete element"
-            title="Delete"
+            title={isLocked ? "Unlock to delete" : "Delete"}
           >
             <svg
-              width="16"
-              height="16"
+              width="14"
+              height="14"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              aria-hidden="true"
             >
               <polyline points="3,6 5,6 21,6" />
               <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6M8,6V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6" />
@@ -1016,52 +1032,12 @@ export const PropertiesPanel = memo(function PropertiesPanel({
         </div>
       </div>
 
-      {/* Properties */}
-      <div className={styles.content}>
-        {/* Task7 groups per spec: transform, dimensions, placement, appearance, metadata, actions. Unit numeric with commit (blur/enter), cancel (esc), reset, validation. Multi only shared. Locked rejects (see isLocked + upstream command). GS cites: REC-01 Figma minimize+contextual, REC-03 AutoCAD surface, REC-04 catalogue-first, BP-01 fabric pin, anti-copy via tokens only from site/app/css/ */}
-        <div className={styles.propertyGroup} data-group="transform">
-          <h4 className={styles.groupTitle}>Transform</h4>
-          {renderProperties}
-        </div>
-        <div className={styles.propertyGroup} data-group="dimensions">
-          <h4 className={styles.groupTitle}>Dimensions</h4>
-        </div>
-        <div className={styles.propertyGroup} data-group="placement">
-          <h4 className={styles.groupTitle}>Placement</h4>
-        </div>
-        <div className={styles.propertyGroup} data-group="appearance">
-          <h4 className={styles.groupTitle}>Appearance</h4>
-        </div>
-        <div className={styles.propertyGroup} data-group="metadata">
-          <h4 className={styles.groupTitle}>Metadata</h4>
-        </div>
-        <div className={styles.propertyGroup} data-group="actions">
-          <h4 className={styles.groupTitle}>Actions</h4>
-          <button
-            type="button"
-            onClick={() => {
-              /* reset stub - validation would gate */
-            }}
-          >
-            Reset
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              /* commit stub */
-            }}
-          >
-            Commit
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              /* cancel stub */
-            }}
-          >
-            Cancel
-          </button>
-        </div>
+      {/* Sole scrollport — header stays put */}
+      <div
+        className={styles.content}
+        data-locked={isLocked ? "true" : "false"}
+      >
+        {renderProperties}
       </div>
     </div>
   );
@@ -1213,17 +1189,16 @@ function PropertyCheckbox({
 }: PropertyCheckboxProps) {
   return (
     <div className={styles.checkboxField}>
+      <label htmlFor={id} className={styles.checkboxLabel}>
+        {label}
+      </label>
       <input
         id={id}
         type="checkbox"
         className={styles.fieldCheckbox}
         checked={checked}
         onChange={(e) => onChange?.(e.target.checked)}
-        aria-label={label}
       />
-      <label htmlFor={id} className={styles.checkboxLabel}>
-        {label}
-      </label>
     </div>
   );
 }

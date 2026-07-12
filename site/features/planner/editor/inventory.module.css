@@ -1,6 +1,5 @@
-/* Inventory Panel Styles */
+/* Inventory Panel — ordinary tool density (one results scrollport). */
 
-/* CSS custom properties scoped to this module */
 .panel {
   --inv-panel-bg: var(--surface-panel);
   --inv-panel-border: var(--border-soft);
@@ -19,6 +18,11 @@
   --inv-space-2: var(--space-2);
   --inv-space-3: var(--space-3);
   --inv-space-4: var(--space-4);
+  /* Compact tool chrome tokens (local; does not rewrite global theme) */
+  --inv-chrome-pad-x: 0.5rem;
+  --inv-chrome-pad-y: 0.35rem;
+  --inv-row-h: 1.75rem;
+  --inv-thumb: 2.25rem;
 
   display: flex;
   flex-direction: column;
@@ -28,13 +32,14 @@
   background: var(--inv-panel-bg);
   font-family: var(--font-sans, system-ui, sans-serif);
   font-size: 0.8125rem;
-  line-height: 1.5;
+  line-height: 1.35;
   color: var(--inv-text-primary);
 }
 
-/* Search Section */
+/* ── Fixed chrome (no vertical scroll) ── */
+
 .searchSection {
-  padding: var(--inv-space-3);
+  padding: var(--inv-chrome-pad-y) var(--inv-chrome-pad-x);
   border-bottom: 1px solid var(--inv-panel-border);
   flex-shrink: 0;
 }
@@ -47,21 +52,24 @@
 
 .searchIcon {
   position: absolute;
-  left: var(--inv-space-3);
+  left: 0.5rem;
+  width: 0.875rem;
+  height: 0.875rem;
   color: var(--inv-text-muted);
   pointer-events: none;
 }
 
 .searchInput {
   width: 100%;
-  padding: var(--inv-space-2) var(--inv-space-3);
-  padding-left: calc(var(--inv-space-3) + 20px);
+  min-height: var(--inv-row-h);
+  padding: 0.25rem 1.75rem 0.25rem 1.75rem;
   border: 1px solid var(--inv-panel-border);
   border-radius: var(--inv-radius-sm);
   background: var(--inv-panel-bg);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+  line-height: 1.25;
   color: var(--inv-text-primary);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
 }
 
 .searchInput::placeholder {
@@ -76,19 +84,19 @@
 
 .clearButton {
   position: absolute;
-  right: var(--inv-space-2);
+  right: 0.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 1.25rem;
+  height: 1.25rem;
   padding: 0;
   border: none;
   border-radius: var(--inv-radius-sm);
   background: transparent;
   color: var(--inv-text-muted);
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.12s ease, color 0.12s ease;
 }
 
 .clearButton:hover {
@@ -101,14 +109,16 @@
   box-shadow: var(--inv-focus-ring);
 }
 
-/* Quick Filters */
+/* Room chips — horizontal only */
 .quickFilters {
   display: flex;
-  gap: var(--inv-space-2);
-  padding: var(--inv-space-2) var(--inv-space-3);
+  gap: 0.25rem;
+  padding: 0.3rem var(--inv-chrome-pad-x);
   overflow-x: auto;
+  overflow-y: hidden;
   flex-shrink: 0;
   scrollbar-width: none;
+  border-bottom: 1px solid var(--inv-panel-border);
 }
 
 .quickFilters::-webkit-scrollbar {
@@ -118,17 +128,18 @@
 .filterChip {
   display: inline-flex;
   align-items: center;
-  gap: var(--inv-space-1);
-  padding: var(--inv-space-1) var(--inv-space-2);
+  gap: 0.2rem;
+  min-height: 1.5rem;
+  padding: 0.15rem 0.45rem;
   border: 1px solid var(--inv-panel-border);
-  border-radius: var(--inv-radius-pill);
+  border-radius: var(--inv-radius-sm);
   background: var(--inv-panel-bg);
   font-size: 0.6875rem;
   font-weight: 500;
   color: var(--inv-text-secondary);
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
 }
 
 .filterChip:hover {
@@ -148,20 +159,23 @@
 }
 
 .filterChipIcon {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   line-height: 1;
+  display: inline-flex;
 }
 
 .filterChipLabel {
   line-height: 1.2;
 }
 
-/* Categories — chrome only, no second vertical scrollport.
-   Results list (.itemGrid) is the sole vertical scroll (SmartDraw palette bar). */
+/* Categories chrome: cap so results grid keeps the long scroll.
+   Short overflow only when category list is huge (review B1). */
 .categoriesSection {
   flex-shrink: 0;
-  max-height: none;
-  overflow: visible;
+  max-height: min(28vh, 12rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   border-bottom: 1px solid var(--inv-panel-border);
 }
 
@@ -169,14 +183,22 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--inv-space-2) var(--inv-space-3);
-  background: color-mix(in srgb, var(--inv-surface-soft) 92%, var(--inv-panel-bg));
+  min-height: 1.5rem;
+  padding: 0.25rem var(--inv-chrome-pad-x);
+  background: color-mix(in srgb, var(--inv-surface-soft) 88%, var(--inv-panel-bg));
+  border-bottom: 1px solid transparent;
+}
+
+/* Toggle rows (Recent / Favorites) own their own padding — avoid double pad */
+.sectionHeader:has(> .sectionToggle) {
+  padding: 0;
+  background: transparent;
 }
 
 .sectionTitle {
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--inv-text-muted);
 }
@@ -186,13 +208,15 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: var(--inv-space-2) var(--inv-space-3);
+  min-height: 1.5rem;
+  padding: 0.25rem var(--inv-chrome-pad-x);
   border: none;
-  background: transparent;
+  border-bottom: 1px solid var(--inv-panel-border);
+  background: color-mix(in srgb, var(--inv-surface-soft) 88%, var(--inv-panel-bg));
   font-size: inherit;
   color: inherit;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.12s ease;
 }
 
 .sectionToggle:hover {
@@ -201,19 +225,19 @@
 
 .sectionToggle:focus-visible {
   outline: none;
-  box-shadow: var(--inv-focus-ring);
+  box-shadow: inset var(--inv-focus-ring);
 }
 
 .resetButton {
-  padding: var(--inv-space-1) var(--inv-space-2);
+  padding: 0.1rem 0.35rem;
   border: none;
   border-radius: var(--inv-radius-sm);
   background: transparent;
-  font-size: 0.6875rem;
-  font-weight: 500;
+  font-size: 0.625rem;
+  font-weight: 600;
   color: var(--inv-accent);
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.12s ease;
 }
 
 .resetButton:hover {
@@ -226,27 +250,28 @@
 }
 
 .categoryList {
-  padding: var(--inv-space-1) 0;
+  padding: 0.15rem 0;
 }
 
 .categoryItem {
-  /* Container for category + subcategories */
+  /* category row + optional sub-chips */
 }
 
 .categoryButton {
   display: flex;
   align-items: center;
-  gap: var(--inv-space-2);
+  gap: 0.35rem;
   width: 100%;
-  padding: var(--inv-space-2) var(--inv-space-3);
+  min-height: var(--inv-row-h);
+  padding: 0.2rem var(--inv-chrome-pad-x);
   border: none;
   background: transparent;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--inv-text-secondary);
   text-align: left;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.12s ease;
 }
 
 .categoryButton:hover {
@@ -264,18 +289,26 @@
 }
 
 .categoryIcon {
-  font-size: 1rem;
+  font-size: 0.85rem;
   line-height: 1;
+  display: inline-flex;
+  flex-shrink: 0;
+  opacity: 0.9;
 }
 
 .categoryLabel {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .categoryChevron {
   display: flex;
+  flex-shrink: 0;
   color: var(--inv-text-muted);
-  transition: transform 0.2s ease;
+  transition: transform 0.15s ease;
 }
 
 .categoryChevronOpen {
@@ -285,21 +318,22 @@
 .subCategoryList {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--inv-space-1);
-  padding: var(--inv-space-1) var(--inv-space-3);
-  padding-left: calc(var(--inv-space-3) + 28px);
+  gap: 0.2rem;
+  padding: 0.15rem var(--inv-chrome-pad-x) 0.35rem;
+  padding-left: calc(var(--inv-chrome-pad-x) + 1.15rem);
 }
 
 .subCategoryButton {
-  padding: var(--inv-space-1) var(--inv-space-2);
+  min-height: 1.35rem;
+  padding: 0.1rem 0.4rem;
   border: 1px solid var(--inv-panel-border);
   border-radius: var(--inv-radius-sm);
   background: var(--inv-panel-bg);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 500;
   color: var(--inv-text-secondary);
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
 }
 
 .subCategoryButton:hover {
@@ -318,54 +352,58 @@
   box-shadow: var(--inv-focus-ring);
 }
 
-/* Results Info */
+/* Results meta — fixed above scrollport */
 .resultsInfo {
   display: flex;
   align-items: center;
-  gap: var(--inv-space-2);
-  padding: var(--inv-space-2) var(--inv-space-3);
+  gap: 0.35rem;
+  min-height: 1.35rem;
+  padding: 0.2rem var(--inv-chrome-pad-x);
   flex-shrink: 0;
+  border-bottom: 1px solid var(--inv-panel-border);
+  background: var(--inv-panel-bg);
 }
 
 .resultsCount {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   color: var(--inv-text-muted);
+  font-variant-numeric: tabular-nums;
 }
 
 .resultsStatus {
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   color: var(--inv-text-muted);
 }
 
 .relaxedBadge {
-  padding: 2px var(--inv-space-2);
-  border-radius: var(--inv-radius-pill);
+  padding: 1px 0.35rem;
+  border-radius: var(--inv-radius-sm);
   background: color-mix(in srgb, var(--color-warning) 15%, transparent);
-  font-size: 0.625rem;
+  font-size: 0.5625rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-warning);
 }
 
-/* Chevron for collapsible sections */
 .chevron {
   display: flex;
   color: var(--inv-text-muted);
-  transition: transform 0.2s ease;
+  transition: transform 0.15s ease;
 }
 
 .chevronOpen {
   transform: rotate(180deg);
 }
 
-/* Item Grid */
+/* ── Results region: sole vertical scroll on .itemGrid ── */
+
 .catalogBrowser {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
   overflow: hidden;
 }
@@ -376,96 +414,71 @@
 }
 
 .itemGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--inv-space-2);
-  padding: var(--inv-space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 0.25rem 0;
   /* Sole vertical scroll in the library panel */
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  /* Keep Place actions hittable after scroll-into-view */
-  scroll-padding-block: 0.75rem;
+  scroll-padding-block: 0.5rem;
   flex: 1 1 auto;
   min-height: 0;
   margin: 0;
   list-style: none;
+  background: var(--inv-panel-bg);
 }
 
-/* Responsive grid - fewer columns on smaller panels */
-@media (max-width: 320px) {
-  .itemGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (width < 48rem) {
-  .filterChip,
-  .categoryButton,
-  .subCategoryButton,
-  .emptyAction {
-    min-height: var(--planner-touch-target, 2.75rem);
-  }
-
-  .filterChip {
-    padding: var(--space-2) var(--space-3);
-    font-size: 0.75rem;
-  }
-
-  .itemGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--inv-space-3);
-  }
-
-  .favoriteButton {
-    width: 2.75rem;
-    height: 2.75rem;
-    opacity: 1;
-  }
-}
-
+/* Tool-row cards — not shopping tiles */
 .itemCard {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: var(--inv-space-2);
-  border: 1px solid var(--inv-panel-border);
-  border-radius: var(--inv-radius-md);
+  display: grid;
+  grid-template-columns: var(--inv-thumb) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: calc(var(--inv-thumb) + 0.35rem);
+  padding: 0.25rem var(--inv-chrome-pad-x);
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--inv-panel-border) 70%, transparent);
   background: var(--inv-panel-bg);
   cursor: pointer;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  transition: background-color 0.1s ease;
   text-align: left;
 }
 
 .itemCard:hover {
-  border-color: var(--border-hover);
   background: var(--inv-surface-soft);
 }
 
 .itemCardSelected {
-  border-color: var(--inv-accent);
   background: var(--inv-accent-subtle);
+  box-shadow: inset 2px 0 0 var(--inv-accent);
 }
 
 .itemCardFocused {
-  box-shadow: var(--inv-focus-ring);
+  box-shadow: inset 0 0 0 1px var(--inv-accent);
 }
 
 .itemCard:focus-visible {
   outline: none;
-  box-shadow: var(--inv-focus-ring);
+  box-shadow: inset 0 0 0 2px var(--inv-accent);
 }
 
 .itemThumbnail {
   position: relative;
-  aspect-ratio: 1;
+  width: var(--inv-thumb);
+  height: var(--inv-thumb);
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--inv-radius-sm);
   background: var(--inv-surface-page);
+  border: 1px solid color-mix(in srgb, var(--inv-panel-border) 80%, transparent);
   overflow: hidden;
-  margin-bottom: var(--inv-space-2);
+  margin: 0;
 }
 
 .itemImage {
@@ -476,17 +489,7 @@
 
 .itemImageVector {
   object-fit: contain;
-  padding: var(--inv-space-1);
-}
-
-@media (max-width: 480px) {
-  .itemThumbnail {
-    min-height: 4.5rem;
-  }
-
-  .itemImageVector {
-    padding: var(--inv-space-2);
-  }
+  padding: 2px;
 }
 
 .itemPlaceholder {
@@ -496,46 +499,83 @@
   color: var(--inv-text-muted);
 }
 
+.itemPlaceholder svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
 .itemInfo {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0;
   min-width: 0;
+  justify-content: center;
 }
 
 .itemName {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--inv-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 .itemDimensions {
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
   color: var(--inv-text-muted);
-  line-height: 1.3;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Compact Place — tool action, not storefront CTA */
+.placeAction {
+  flex-shrink: 0;
+  align-self: center;
+  min-height: 1.5rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--inv-panel-border);
+  border-radius: var(--inv-radius-sm);
+  background: var(--inv-panel-bg);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--inv-accent);
+  cursor: pointer;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+  scroll-margin-block: 0.5rem;
+}
+
+.placeAction:hover {
+  background: var(--inv-accent-subtle);
+  border-color: var(--inv-accent);
+}
+
+.placeAction:focus-visible {
+  outline: none;
+  box-shadow: var(--inv-focus-ring);
 }
 
 .favoriteButton {
   position: absolute;
-  top: var(--inv-space-1);
-  right: var(--inv-space-1);
+  top: 0.1rem;
+  left: calc(var(--inv-chrome-pad-x) + var(--inv-thumb) - 0.85rem);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 1.1rem;
+  height: 1.1rem;
   padding: 0;
   border: none;
-  border-radius: var(--inv-radius-sm);
-  background: color-mix(in srgb, var(--surface-panel) 90%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-panel) 92%, transparent);
   color: var(--inv-text-muted);
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  transition: opacity 0.12s ease, background-color 0.12s ease, color 0.12s ease;
+  z-index: 1;
 }
 
 .itemCard:hover .favoriteButton,
@@ -553,24 +593,27 @@
 
 .favoriteButton:focus-visible {
   outline: none;
+  opacity: 1;
   box-shadow: var(--inv-focus-ring);
 }
 
-/* Loading State */
+/* Loading / empty fill remaining height; do not scroll themselves */
 .loadingState {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--inv-space-3);
+  gap: var(--inv-space-2);
   padding: var(--inv-space-4);
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   color: var(--inv-text-muted);
+  font-size: 0.75rem;
 }
 
 .loadingSpinner {
-  width: 24px;
-  height: 24px;
+  width: 1.25rem;
+  height: 1.25rem;
   border: 2px solid var(--inv-panel-border);
   border-top-color: var(--inv-accent);
   border-radius: 50%;
@@ -583,41 +626,44 @@
   }
 }
 
-/* Empty State */
 .emptyState {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--inv-space-3);
+  gap: var(--inv-space-2);
   padding: var(--inv-space-4);
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .emptyIcon {
   color: var(--inv-text-muted);
-  opacity: 0.5;
+  opacity: 0.45;
+}
+
+.emptyIcon svg {
+  width: 2rem;
+  height: 2rem;
 }
 
 .emptyText {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--inv-text-muted);
 }
 
 .emptyAction {
-  padding: var(--inv-space-2) var(--inv-space-3);
+  padding: 0.3rem 0.6rem;
   border: 1px solid var(--inv-panel-border);
   border-radius: var(--inv-radius-sm);
   background: var(--inv-panel-bg);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--inv-accent);
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
-  /* Nested overflow: when only the edge of a tall card is visible, the
-     layout-box center can sit under status / results chrome — leave margin. */
-  scroll-margin-block: 0.75rem;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+  scroll-margin-block: 0.5rem;
 }
 
 .emptyAction:hover {
@@ -630,30 +676,57 @@
   box-shadow: var(--inv-focus-ring);
 }
 
-/* Scrollbar styling */
-.itemGrid::-webkit-scrollbar,
-.categoriesSection::-webkit-scrollbar,
-.quickFilters::-webkit-scrollbar {
+/* Scrollbar — results only */
+.itemGrid::-webkit-scrollbar {
   width: 6px;
 }
 
-.itemGrid::-webkit-scrollbar-track,
-.categoriesSection::-webkit-scrollbar-track {
+.itemGrid::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.itemGrid::-webkit-scrollbar-thumb,
-.categoriesSection::-webkit-scrollbar-thumb {
+.itemGrid::-webkit-scrollbar-thumb {
   background: var(--inv-panel-border);
   border-radius: 3px;
 }
 
-.itemGrid::-webkit-scrollbar-thumb:hover,
-.categoriesSection::-webkit-scrollbar-thumb:hover {
+.itemGrid::-webkit-scrollbar-thumb:hover {
   background: var(--inv-text-muted);
 }
 
-/* Reduced motion */
+/* Touch: larger hit targets, keep list density pattern */
+@media (width < 48rem) {
+  .filterChip,
+  .categoryButton,
+  .subCategoryButton,
+  .emptyAction,
+  .placeAction {
+    min-height: var(--planner-touch-target, 2.75rem);
+  }
+
+  .filterChip {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .itemCard {
+    min-height: calc(var(--planner-touch-target, 2.75rem) + 0.25rem);
+    gap: 0.5rem;
+    --inv-thumb: 2.75rem;
+  }
+
+  .placeAction {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+  }
+
+  .favoriteButton {
+    width: 1.75rem;
+    height: 1.75rem;
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .loadingSpinner {
     animation: none;
@@ -664,6 +737,12 @@
 
   .categoryChevron,
   .chevron {
+    transition: none;
+  }
+
+  .itemCard,
+  .filterChip,
+  .placeAction {
     transition: none;
   }
 }

@@ -850,6 +850,17 @@ describe("selectionAfterBatchPlace (W3 batch-place contract)", () => {
     });
     // Never multi-select the whole batch (anti-regression for e2e wipe).
     expect(selectionAfterBatchPlace(placed).ids).toHaveLength(1);
+    // Strict last-id only: first / middle never appear in selection.ids.
+    expect(selectionAfterBatchPlace(placed).ids).not.toContain("ws-1");
+    expect(selectionAfterBatchPlace(placed).ids).not.toContain("ws-2");
+  });
+
+  it("returns none when last id is empty (still never multi-selects prior ids)", () => {
+    expect(selectionAfterBatchPlace([""])).toEqual({ type: "none", ids: [] });
+    expect(selectionAfterBatchPlace(["peer-a", "peer-b", ""])).toEqual({
+      type: "none",
+      ids: [],
+    });
   });
 
   it("composed: batch selection + Delete removes one of N; peers stay", () => {

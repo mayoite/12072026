@@ -1,0 +1,7 @@
+---
+pid: 43320
+cwd: "E:\12072026"
+command: "Start-Sleep -Seconds 15"
+started_at: 2026-07-12T15:22:11.039Z
+running_for_ms: 399993   
+---

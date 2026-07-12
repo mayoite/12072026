@@ -215,6 +215,8 @@ describe("useDockingSystem", () => {
       result.current.undock("left");
     });
     expect(result.current.panels.left.state).toBe("floating");
+    // Undock must set a usable float height (shell passes panels.*.height to PanelContainer).
+    expect(result.current.panels.left.height).toBe(400);
 
     act(() => {
       result.current.move("left", 120, 80);
@@ -530,6 +532,19 @@ describe("WorkspaceShell", () => {
     expect(screen.getByText("Canvas area")).toBeInTheDocument();
     expect(screen.getByText("Custom status")).toBeInTheDocument();
 
+    // Layers: honest title + TopBar toggle (bottom starts collapsed).
+    const layersToggle = screen.getByRole("button", { name: "Toggle layers panel" });
+    expect(layersToggle).toHaveAttribute("aria-pressed", "false");
+    fireEvent.click(layersToggle);
+    expect(layersToggle).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("region", { name: "Layers panel" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Layers", level: 2 })).toBeInTheDocument();
+    expect(screen.getByText("Bottom content")).toBeInTheDocument();
+    // Toggle again collapses layers (discoverability control is sticky state, not fire-and-forget).
+    fireEvent.click(layersToggle);
+    expect(layersToggle).toHaveAttribute("aria-pressed", "false");
+    expect(screen.queryByRole("region", { name: "Layers panel" })).not.toBeInTheDocument();
+
     const viewModeGroup = screen.getAllByRole("radiogroup", { name: "View mode" })[0];
     fireEvent.click(within(viewModeGroup).getByRole("radio", { name: "3D" }));
     expect(onViewModeChange).toHaveBeenCalledWith("3d");
@@ -553,6 +568,32 @@ describe("WorkspaceShell", () => {
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 1100));
     });
+  });
+
+  it("undock passes real height into floating side panel (not 0 / CSS-only fill)", () => {
+    // SCORECARD residual #1: shell wires panels.*.height; undock sets ~400 for left/right.
+    render(
+      <WorkspaceShell
+        projectName="Undock height"
+        leftPanel={<div>Library body</div>}
+        rightPanel={<div>Properties body</div>}
+      >
+        <div>Canvas</div>
+      </WorkspaceShell>,
+    );
+
+    const properties = screen.getByRole("region", { name: "Properties panel" });
+    expect(properties).toHaveAttribute("data-state", "docked");
+    // Docked left/right use height: 100% CSS — numeric height prop is not the layout truth.
+    fireEvent.click(within(properties).getByRole("button", { name: "Undock panel" }));
+
+    const floating = screen.getByRole("region", { name: "Properties panel" });
+    expect(floating).toHaveAttribute("data-state", "floating");
+    expect(floating).toHaveAttribute("data-panel-id", "right");
+    // Floating PanelContainer style uses the docking height number (px).
+    expect(floating).toHaveStyle({ height: "400px" });
+    expect(floating.style.height).not.toBe("0px");
+    expect(floating.style.height).not.toBe("100%");
   });
 });
 

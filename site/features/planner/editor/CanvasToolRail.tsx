@@ -88,7 +88,7 @@ function ToolToggle({
             data-focus-visible={isFocusVisible ? "true" : undefined}
           >
             <IconComponent
-              size={18}
+              size={16}
               weight={
                 selected || isSelected
                   ? "fill"
@@ -226,7 +226,7 @@ export function CanvasToolRail({
                     data-focus-visible={isFocusVisible ? "true" : undefined}
                     data-pressed={isPressed ? "true" : undefined}
                   >
-                    <ArrowsOutSimple size={18} aria-hidden />
+                    <ArrowsOutSimple size={16} aria-hidden />
                   </span>
                 )}
               </Button>

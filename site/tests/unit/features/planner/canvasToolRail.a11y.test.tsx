@@ -4,13 +4,19 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { CanvasToolRail } from "@/features/planner/editor/CanvasToolRail";
 import {
   CANVAS_TOOL_LABELS,
+  CANVAS_TOOL_REQUIREMENT,
   CANVAS_TOOL_SHORTCUTS,
+  RAIL_DRAW_TOOLS,
+  RAIL_NAV_TOOLS,
   toolAccessibleName,
+  type PlannerTool,
 } from "@/features/planner/editor/canvasTool";
 
 afterEach(() => {
   cleanup();
 });
+
+const RAIL_TOOLS: readonly PlannerTool[] = [...RAIL_NAV_TOOLS, ...RAIL_DRAW_TOOLS];
 
 describe("CanvasToolRail RAC upgrade + a11y", () => {
   it("exposes Select with map-owned accessible name and role=radio", () => {
@@ -63,5 +69,43 @@ describe("CanvasToolRail RAC upgrade + a11y", () => {
   it("labels still resolve from maps for live tools", () => {
     expect(`${CANVAS_TOOL_LABELS.wall} (${CANVAS_TOOL_SHORTCUTS.wall})`).toBe("Wall (W)");
     expect(toolAccessibleName("wall")).toBe("Wall (W)");
+  });
+
+  it("stamps data-deferred + data-tier only for deferred rail tools", () => {
+    render(<CanvasToolRail activeTool="select" onToolChange={vi.fn()} />);
+
+    for (const tool of RAIL_TOOLS) {
+      const btn = screen.getByTestId(`canvas-tool-${tool}`);
+      const tier = CANVAS_TOOL_REQUIREMENT[tool];
+      expect(btn).toHaveAttribute("data-tier", tier);
+
+      if (tier === "deferred") {
+        expect(btn).toHaveAttribute("data-deferred", "true");
+        expect(toolAccessibleName(tool)).toMatch(/deferred/i);
+        expect(btn).toHaveAttribute("aria-label", toolAccessibleName(tool));
+      } else {
+        expect(btn).not.toHaveAttribute("data-deferred");
+        expect(toolAccessibleName(tool).toLowerCase()).not.toContain("deferred");
+      }
+    }
+  });
+
+  it("renders both deferred draw tools (room + dimension) on the rail", () => {
+    render(<CanvasToolRail activeTool="wall" onToolChange={vi.fn()} />);
+    for (const tool of ["room", "dimension"] as const) {
+      expect(CANVAS_TOOL_REQUIREMENT[tool]).toBe("deferred");
+      const btn = screen.getByRole("radio", { name: toolAccessibleName(tool) });
+      expect(btn).toHaveAttribute("data-deferred", "true");
+      expect(btn).toHaveAttribute("data-tier", "deferred");
+    }
+  });
+
+  it("keeps live draw tools free of deferred attrs", () => {
+    render(<CanvasToolRail activeTool="wall" onToolChange={vi.fn()} />);
+    for (const tool of ["wall", "opening", "placement"] as const) {
+      const btn = screen.getByTestId(`canvas-tool-${tool}`);
+      expect(btn).toHaveAttribute("data-tier", "live");
+      expect(btn).not.toHaveAttribute("data-deferred");
+    }
   });
 });

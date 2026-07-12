@@ -1,0 +1,26 @@
+---
+pid: 74120
+cwd: "E:\12072026"
+command: "pnpm --filter oando-site exec node E:/12072026/results/planner/ui-spot-check-2026-07-12.mjs"
+started_at: 2026-07-12T15:21:52.630Z
+running_for_ms: 414997   
+---
+undefined
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.waitForSelector: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-testid="planner-fabric-stage"]') to be visible
+
+    at E:\12072026\results\planner\ui-spot-check-2026-07-12.mjs:21:12 {
+  log: [
+    `  - waiting for locator('[data-testid="planner-fabric-stage"]') to be visible`
+  ],
+  name: 'TimeoutError'
+}
+E:\12072026\site:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: node "E:/12072026/results/planner/ui-spot-check-2026-07-12.mjs"
+
+Node.js v24.16.0

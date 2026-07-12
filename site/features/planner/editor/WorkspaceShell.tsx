@@ -132,7 +132,6 @@ export function WorkspaceShell({
   const {
     panels,
     activePanel,
-    focusedPanel,
     viewportTier,
     dock,
     undock,
@@ -177,41 +176,10 @@ export function WorkspaceShell({
     [activePanel, setActivePanel, toggleCollapse, viewportTier],
   );
 
-  // Handle keyboard focus navigation
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Tab" && !event.shiftKey) {
-        // Tab through panels
-        const panelIds: PanelId[] = ["left", "right", "bottom"];
-        const currentIndex = focusedPanel ? panelIds.indexOf(focusedPanel) : -1;
-
-        if (currentIndex >= 0 && currentIndex < panelIds.length - 1) {
-          const nextPanel = panelIds[currentIndex + 1];
-          if (panels[nextPanel].state !== "collapsed") {
-            setFocusedPanel(nextPanel);
-            event.preventDefault();
-          }
-        }
-      }
-
-      if (event.key === "Tab" && event.shiftKey) {
-        // Shift+Tab backwards
-        const panelIds: PanelId[] = ["left", "right", "bottom"];
-        const currentIndex = focusedPanel ? panelIds.indexOf(focusedPanel) : 0;
-
-        if (currentIndex > 0) {
-          const prevPanel = panelIds[currentIndex - 1];
-          if (panels[prevPanel].state !== "collapsed") {
-            setFocusedPanel(prevPanel);
-            event.preventDefault();
-          }
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [focusedPanel, panels, setFocusedPanel]);
+  // Tab/Shift+Tab: native focus order only. Do not preventDefault Tab here —
+  // a prior panel-cycle handler set focusedPanel without focusing the panel DOM
+  // and trapped keyboard users inside inventory/properties chrome (WCAG 2.1.2).
+  // focusedPanel still updates via PanelContainer onFocus/onBlur.
 
   // Auto-save layout on changes
   useEffect(() => {
@@ -236,7 +204,7 @@ export function WorkspaceShell({
   const panelTitles: Record<PanelId, string> = {
     left: "Library",
     right: "Properties",
-    bottom: "Output",
+    bottom: "Layers",
   };
 
   const handleSidePanelToggle = useCallback(
@@ -248,6 +216,11 @@ export function WorkspaceShell({
     },
     [panels, setActivePanel, toggleCollapse],
   );
+
+  /** Toggle bottom Layers panel (collapsed by default; TopBar control for discoverability). */
+  const handleBottomPanelToggle = useCallback(() => {
+    toggleCollapse("bottom");
+  }, [toggleCollapse]);
 
   const resolvePanelOpen = useCallback(
     (id: PanelId) => {
@@ -317,6 +290,8 @@ export function WorkspaceShell({
         activePanel={(viewportTier === "small" && (activePanel === "left" || activePanel === "right")) ? activePanel : null}
         onToggleLeftPanel={leftPanel ? () => handleSidePanelToggle("left") : undefined}
         onToggleRightPanel={rightPanel ? () => handleSidePanelToggle("right") : undefined}
+        isBottomPanelOpen={Boolean(bottomPanel) && panels.bottom.state !== "collapsed" && !isCanvasMaximized}
+        onToggleBottomPanel={bottomPanel ? handleBottomPanelToggle : undefined}
         isCanvasMaximized={isCanvasMaximized}
         onToggleCanvasMaximized={handleCanvasMaximizedToggle}
         density={density}
@@ -339,7 +314,7 @@ export function WorkspaceShell({
           />
         )}
 
-        {/* Left panel - Inventory */}
+        {/* Left panel - Library */}
         {leftPanel && (
           <PanelContainer
             id="left"
@@ -347,7 +322,8 @@ export function WorkspaceShell({
             contentOnly
             state={panels.left.state}
             width={panels.left.width}
-            height={0}
+            /* Docked: PanelContainer uses height 100% CSS. Floating: docking sets ~400 on undock. */
+            height={panels.left.height}
             x={panels.left.x}
             y={panels.left.y}
             zIndex={panels.left.zIndex}
@@ -377,7 +353,8 @@ export function WorkspaceShell({
             title={panelTitles.right}
             state={panels.right.state}
             width={panels.right.width}
-            height={0}
+            /* Docked: PanelContainer uses height 100% CSS. Floating: docking sets ~400 on undock. */
+            height={panels.right.height}
             x={panels.right.x}
             y={panels.right.y}
             zIndex={panels.right.zIndex}
@@ -395,7 +372,7 @@ export function WorkspaceShell({
           </PanelContainer>
         )}
 
-        {/* Bottom panel - Output */}
+        {/* Bottom panel - Layers */}
         {bottomPanel && (
           <PanelContainer
             id="bottom"

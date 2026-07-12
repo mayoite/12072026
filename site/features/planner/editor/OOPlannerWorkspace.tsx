@@ -75,8 +75,6 @@ import { PropertiesPanel } from "./PropertiesPanel";
 import { WorkspaceLeftPanel } from "./WorkspaceLeftPanel";
 import { WorkspaceShell } from "./WorkspaceShell";
 import {
-  CANVAS_TOOL_GUIDANCE,
-  CANVAS_TOOL_SHORTCUTS,
   type PlannerTool,
 } from "./canvasTool";
 import {
@@ -94,6 +92,7 @@ import {
 } from "./workspaceEntityHelpers";
 import {
   plannerSaveStatusLabel,
+  plannerSaveStatusBarLabel,
   formatSelectionStatus,
   formatSnapStatus,
   formatToolStatus,
@@ -326,7 +325,7 @@ export function OOPlannerWorkspace({
         depthMm: 4000,
       }),
     );
-    setWorkspaceMessage("Created a 500 × 400 cm starter room.");
+    setWorkspaceMessage("Created a 5 × 4 m starter room.");
   }, [workspaceCanvas]);
 
   const handleUpdateEntity = useCallback(
@@ -943,7 +942,7 @@ export function OOPlannerWorkspace({
   const saveStorage = autosave.storage ?? "local";
   const saveCloudEnabled = autosave.cloudEnabled ?? false;
   const isLocalSaved = autosave.isLocalSaved ?? autosave.isSynced;
-  /** One helper for status bar + TopBar (via shell saveStatusLabel pass-through). */
+  /** Full copy for TopBar; compact strip for footer (avoids dual save essay). */
   const saveStatusLabel = plannerSaveStatusLabel({
     status: autosave.status,
     storage: saveStorage,
@@ -951,6 +950,18 @@ export function OOPlannerWorkspace({
     cloudEnabled: saveCloudEnabled,
     guestMode,
   });
+  const saveStatusBarLabel = plannerSaveStatusBarLabel({
+    status: autosave.status,
+    storage: saveStorage,
+    lastSavedAt: autosave.lastSavedAt,
+    cloudEnabled: saveCloudEnabled,
+    guestMode,
+  });
+  const showGuestPlaceHint =
+    guestMode &&
+    planMetrics.furniture === 0 &&
+    !pendingCatalogItem &&
+    !pendingWorkstationConfig;
 
   if (!hydrated) {
     return (
@@ -1049,10 +1060,6 @@ export function OOPlannerWorkspace({
             <span className="open3d-status-pill open3d-status-pill--accent">
               {formatToolStatus(activeTool, viewMode)}
             </span>
-            <span className="open3d-status-pill">
-              {CANVAS_TOOL_SHORTCUTS[activeTool]} ·{" "}
-              {CANVAS_TOOL_GUIDANCE[activeTool]}
-            </span>
             {measurementLabel ? (
               <span className="open3d-status-pill">{measurementLabel}</span>
             ) : null}
@@ -1076,20 +1083,28 @@ export function OOPlannerWorkspace({
                     "item")}
               </span>
             ) : null}
-            <span className="open3d-status-pill open3d-status-pill--muted">
-              {catalog.status === "ready"
-                ? "Live catalog"
-                : catalog.status === "fallback"
+            {showGuestPlaceHint ? (
+              <span
+                className="open3d-status-pill open3d-status-pill--accent"
+                data-testid="open3d-guest-place-hint"
+              >
+                Place workstation · library
+              </span>
+            ) : null}
+            {catalog.status !== "ready" ? (
+              <span className="open3d-status-pill open3d-status-pill--muted">
+                {catalog.status === "fallback"
                   ? "Offline catalog"
                   : "Loading catalog…"}
-            </span>
+              </span>
+            ) : null}
             <span
               className="open3d-status-pill open3d-status-pill--muted"
               data-testid="open3d-save-status-bar"
               data-status={autosave.status}
               data-storage={saveCloudEnabled ? saveStorage : "local"}
             >
-              {saveStatusLabel}
+              {saveStatusBarLabel}
             </span>
           </div>
         }
@@ -1136,34 +1151,52 @@ export function OOPlannerWorkspace({
               onFurnitureModified={handleFurnitureModified}
               onStatusChange={setCanvasStatus}
             />
-            {/* P-UI-3: tool guidance lives in status bar only (avoid duplicate chrome) */}
+            {/* Tool guidance: rail tooltips. Empty card only when zero geometry. */}
             {isCanvasEmpty && (
               <section
                 className="open3d-first-use"
                 aria-label="Start the office plan"
               >
-                <p className="open3d-first-use__eyebrow">Office layout</p>
+                <p className="open3d-first-use__eyebrow">
+                  {guestMode
+                    ? "Guest · place from library"
+                    : "Office layout"}
+                </p>
                 <h2>Start the floor plan</h2>
                 <p>
-                  Draw walls, drop a starter room, or arm a workstation and
-                  click the plan to place it.
+                  {guestMode
+                    ? "Place a workstation from the library, or draw walls to shape the room."
+                    : "Draw walls, drop a starter room, or place a workstation then click the plan."}
                 </p>
                 <div className="open3d-first-use__actions">
                   <button type="button" onClick={() => setTool("wall")}>
                     Draw walls
                   </button>
                   <button type="button" onClick={handleStartTemplate}>
-                    Starter room 500 × 400 cm
+                    Starter room 5 × 4 m
                   </button>
                   <button type="button" onClick={handleStartPlaceWorkstation}>
                     Place workstation
                   </button>
-                  <button type="button" onClick={handleImportClick}>
-                    Import plan
-                  </button>
+                  {/* Guest TopBar has no Import — keep empty-state CTAs honest. */}
+                  {!guestMode ? (
+                    <button type="button" onClick={handleImportClick}>
+                      Import plan
+                    </button>
+                  ) : null}
                 </div>
               </section>
             )}
+            {/* Seed walls hide the empty card — non-geometry place hint for guests. */}
+            {showGuestPlaceHint && !isCanvasEmpty && viewMode === "2d" ? (
+              <p
+                className="open3d-canvas-placement-hint"
+                role="status"
+                data-testid="open3d-guest-place-banner"
+              >
+                Guest · place a workstation from the library
+              </p>
+            ) : null}
           </div>
         ) : (
           <Lazy3DViewer

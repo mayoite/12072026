@@ -5,6 +5,7 @@ import {
   shouldCommitWallSegment,
   wallSegmentLengthMm,
 } from "@/features/planner/canvas/wallDrawGeometry";
+import { CANVAS_TOOL_GUIDANCE } from "@/features/planner/editor/canvasTool";
 import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
 import {
   createPlannerProject,
@@ -35,6 +36,29 @@ describe("wallDrawGeometry", () => {
       true,
     );
     expect(shouldCommitWallSegment(start, { x: 100, y: 200 + 2500 })).toBe(true);
+  });
+
+  it("uses Euclidean length for diagonal segments (3-4-5)", () => {
+    const start = { x: 0, y: 0 };
+    // Exactly 10 mm hypotenuse when 6+8 would be wrong if axis-only.
+    expect(wallSegmentLengthMm(start, { x: 6, y: 8 })).toBe(10);
+    expect(shouldCommitWallSegment(start, { x: 6, y: 8 })).toBe(true);
+    // Just under 10 mm diagonal must reject (anti-axis-only / anti-abs(dx) lie).
+    expect(shouldCommitWallSegment(start, { x: 5.9, y: 7.9 })).toBe(false);
+  });
+
+  it("honors an explicit minMm override", () => {
+    const start = { x: 0, y: 0 };
+    expect(shouldCommitWallSegment(start, { x: 50, y: 0 }, 100)).toBe(false);
+    expect(shouldCommitWallSegment(start, { x: 100, y: 0 }, 100)).toBe(true);
+    expect(shouldCommitWallSegment(start, { x: 99.9, y: 0 }, 100)).toBe(false);
+  });
+
+  it("exports MIN_WALL_SEGMENT_MM as the 10 mm product gate", () => {
+    expect(MIN_WALL_SEGMENT_MM).toBe(10);
+    const start = { x: 0, y: 0 };
+    expect(shouldCommitWallSegment(start, { x: 10, y: 0 })).toBe(true);
+    expect(shouldCommitWallSegment(start, { x: 9.999, y: 0 })).toBe(false);
   });
 });
 
@@ -109,5 +133,89 @@ describe("addPlannerWall Δ walls (seed room → draw)", () => {
       () => "first-wall",
     );
     expect(next.floors[0].walls).toHaveLength(1);
+  });
+});
+
+/**
+ * Host path residual (SCORECARD #7): Fabric stage is press→drag→release.
+ * Commit only when shouldCommitWallSegment gates true, then addPlannerWall
+ * mutates the seed room 4 → 5. Pure unit — no Playwright / Fabric.
+ */
+describe("host wall commit path (pointer gate → document Δ)", () => {
+  function seedFourWallRoom() {
+    return createRectangularRoomProject({
+      name: "Host commit seed",
+      widthMm: 5000,
+      depthMm: 4000,
+      idFactory: ids("hf", "hp", "hw1", "hw2", "hw3", "hw4"),
+    });
+  }
+
+  /** Mirrors PlannerFabricStage commitWallAt: gate then onWallDrawn → addPlannerWall. */
+  function commitWallIfLongEnough(
+    project: ReturnType<typeof createRectangularRoomProject>,
+    start: { x: number; y: number },
+    end: { x: number; y: number },
+    wallId: string,
+  ) {
+    if (!shouldCommitWallSegment(start, end)) {
+      return { committed: false as const, project };
+    }
+    return {
+      committed: true as const,
+      project: addPlannerWall(project, { start, end }, () => wallId),
+    };
+  }
+
+  it("press-drag-release long segment: shouldCommit + addPlannerWall grows seed 4→5", () => {
+    const seed = seedFourWallRoom();
+    expect(seed.floors[0].walls).toHaveLength(4);
+
+    // Host drag endpoints in project mm (press at start, release at end).
+    const press = { x: 800, y: 1200 };
+    const release = { x: 3200, y: 1200 };
+    expect(shouldCommitWallSegment(press, release)).toBe(true);
+
+    const result = commitWallIfLongEnough(seed, press, release, "host-wall-5");
+    expect(result.committed).toBe(true);
+    expect(result.project.floors[0].walls).toHaveLength(5);
+    expect(result.project.floors[0].walls.at(-1)?.id).toBe("host-wall-5");
+    expect(result.project.floors[0].walls.at(-1)?.start).toEqual(press);
+    expect(result.project.floors[0].walls.at(-1)?.end).toEqual(release);
+    expect(summarizeFloorMetrics(result.project.floors[0]).walls).toBe(5);
+  });
+
+  it("short drag below MIN_WALL_SEGMENT_MM does not mutate the seed room", () => {
+    const seed = seedFourWallRoom();
+    const press = { x: 100, y: 100 };
+    const release = { x: 100 + (MIN_WALL_SEGMENT_MM - 1), y: 100 };
+    expect(shouldCommitWallSegment(press, release)).toBe(false);
+
+    const result = commitWallIfLongEnough(seed, press, release, "should-not-exist");
+    expect(result.committed).toBe(false);
+    expect(result.project.floors[0].walls).toHaveLength(4);
+    expect(result.project).toBe(seed);
+  });
+
+  it("reverse drag direction at exact min still commits (gate is undirected length)", () => {
+    const seed = seedFourWallRoom();
+    const press = { x: 2000, y: 500 };
+    const release = { x: 2000 - MIN_WALL_SEGMENT_MM, y: 500 };
+    expect(shouldCommitWallSegment(press, release)).toBe(true);
+
+    const result = commitWallIfLongEnough(seed, press, release, "host-wall-rev");
+    expect(result.committed).toBe(true);
+    expect(result.project.floors[0].walls).toHaveLength(5);
+  });
+});
+
+describe("wall tool guidance honesty (drag, not two-click)", () => {
+  it("CANVAS_TOOL_GUIDANCE.wall describes drag-to-draw, not two discrete clicks", () => {
+    const wall = CANVAS_TOOL_GUIDANCE.wall.toLowerCase();
+    expect(wall).toMatch(/drag/);
+    expect(wall).toMatch(/press|release/);
+    expect(wall).not.toMatch(/click start and end/);
+    expect(wall).not.toMatch(/start and end points/);
+    expect(wall).not.toMatch(/two[- ]click/);
   });
 });

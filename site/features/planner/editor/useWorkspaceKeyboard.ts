@@ -11,6 +11,7 @@ const TOOL_BY_SHORTCUT_KEY: Record<string, PlannerTool> = Object.fromEntries(
   ),
 ) as Record<string, PlannerTool>;
 
+/** Typing targets — never steal keys (including Escape) while editing. */
 function isEditableTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
   const tag = target.tagName;
@@ -19,6 +20,29 @@ function isEditableTarget(target: EventTarget | null): boolean {
     || tag === "TEXTAREA"
     || tag === "SELECT"
     || target.isContentEditable
+    || Boolean(
+      target.closest(
+        "input, textarea, select, [contenteditable='true'], [role='textbox'], [role='searchbox'], [role='combobox']",
+      ),
+    )
+  );
+}
+
+/**
+ * Skip canvas shortcuts when focus is on chrome that owns activation keys
+ * (Space/Enter/letters). Bare Tab must never be a shortcut — focus order
+ * (WCAG 2.1.1 / 2.4.3). View toggle is Ctrl/Cmd+Tab (help + onboarding).
+ * Escape still runs unless the target is editable (cancel from rail/buttons OK).
+ */
+function shouldIgnoreWorkspaceShortcut(target: EventTarget | null): boolean {
+  if (isEditableTarget(target)) return true;
+  if (!(target instanceof HTMLElement)) return false;
+  const tag = target.tagName;
+  if (tag === "BUTTON" || tag === "A" || tag === "SUMMARY") return true;
+  return Boolean(
+    target.closest(
+      "button, a[href], summary, [role='button'], [role='menuitem'], [role='option'], [role='tab'], [role='radio'], [role='checkbox'], [role='switch'], [role='listbox'], [role='slider']",
+    ),
   );
 }
 
@@ -44,7 +68,15 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
     if (!enabled) return;
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (isEditableTarget(event.target)) return;
+      // Escape cancels from chrome too; only skip while typing.
+      if (event.key === "Escape") {
+        if (isEditableTarget(event.target)) return;
+        event.preventDefault();
+        handlers.cancel();
+        return;
+      }
+
+      if (shouldIgnoreWorkspaceShortcut(event.target)) return;
 
       const key = event.key.toLowerCase();
       const mod = event.ctrlKey || event.metaKey;
@@ -62,15 +94,11 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
         return;
       }
 
-      if (event.key === "Tab" && !event.shiftKey && !mod && !event.altKey) {
+      // Ctrl/Cmd+Tab only — bare Tab must move focus through chrome (WCAG).
+      // Matches helpSections + onboarding steps + shared ViewToggle.
+      if (event.key === "Tab" && mod && !event.shiftKey && !event.altKey) {
         event.preventDefault();
         handlers.toggleView();
-        return;
-      }
-
-      if (event.key === "Escape") {
-        event.preventDefault();
-        handlers.cancel();
         return;
       }
 

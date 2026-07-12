@@ -5,6 +5,7 @@ import {
   formatSelectionStatus,
   formatSnapStatus,
   formatToolStatus,
+  plannerSaveStatusBarLabel,
   plannerSaveStatusLabel,
   type PlannerPersistStorage,
 } from "@/features/planner/editor/workspaceStatusLabels";
@@ -32,8 +33,10 @@ function assertLocalHonesty(label: string) {
 }
 
 describe("workspaceStatusLabels", () => {
-  it("formats tool and view mode", () => {
-    expect(formatToolStatus("wall", "2d")).toBe("Wall · 2D");
+  it("formats compact tool · shortcut · view (no multi-sentence guidance)", () => {
+    expect(formatToolStatus("wall", "2d")).toBe("Wall · W · 2D");
+    expect(formatToolStatus("select", "3d")).toBe("Select · V · 3D");
+    expect(formatToolStatus("wall", "2d")).not.toMatch(/click|drag|draw/i);
   });
 
   it("formats snap status only when active", () => {
@@ -188,5 +191,75 @@ describe("formatAutosaveStatus delegates to same table (no dual drift)", () => {
       }),
     );
     expect(formatAutosaveStatus("error", false)).toBe("Local save failed");
+  });
+});
+
+describe("plannerSaveStatusBarLabel — compact status strip (not TopBar essay)", () => {
+  const local: PlannerPersistStorage = "local";
+
+  const barCases: Array<{
+    status: PlannerSaveStatus;
+    guestMode: boolean;
+    expected: string;
+  }> = [
+    { status: "idle", guestMode: true, expected: "Guest · local" },
+    { status: "idle", guestMode: false, expected: "Local" },
+    { status: "unsaved", guestMode: true, expected: "Unsaved" },
+    { status: "unsaved", guestMode: false, expected: "Unsaved" },
+    { status: "saving", guestMode: true, expected: "Saving…" },
+    { status: "saving", guestMode: false, expected: "Saving…" },
+    { status: "saved", guestMode: true, expected: "Draft local" },
+    { status: "saved", guestMode: false, expected: "Saved local" },
+    { status: "error", guestMode: true, expected: "Save failed" },
+    { status: "error", guestMode: false, expected: "Save failed" },
+  ];
+
+  it.each(barCases)(
+    "bar $status guest=$guestMode → $expected",
+    ({ status, guestMode, expected }) => {
+      const label = plannerSaveStatusBarLabel({
+        status,
+        storage: local,
+        lastSavedAt: status === "saved" ? "2026-07-10T12:00:00.000Z" : null,
+        cloudEnabled: false,
+        guestMode,
+      });
+      expect(label).toBe(expected);
+      assertLocalHonesty(label);
+      // Shorter than full TopBar table (or equal only if already short).
+      const full = plannerSaveStatusLabel({
+        status,
+        storage: local,
+        lastSavedAt: null,
+        cloudEnabled: false,
+        guestMode,
+      });
+      expect(label.length).toBeLessThanOrEqual(full.length);
+    },
+  );
+
+  it("never returns bare Saved on local bar path", () => {
+    const label = plannerSaveStatusBarLabel({
+      status: "saved",
+      storage: "local",
+      lastSavedAt: "2026-07-10T12:00:00.000Z",
+      cloudEnabled: false,
+      guestMode: false,
+    });
+    expect(label).not.toMatch(/^Saved$/);
+    expect(label).toBe("Saved local");
+  });
+
+  it("forces local bar wording when cloudEnabled is false even if storage claims cloud", () => {
+    const label = plannerSaveStatusBarLabel({
+      status: "saved",
+      storage: "cloud",
+      lastSavedAt: "2026-07-10T12:00:00.000Z",
+      cloudEnabled: false,
+      guestMode: false,
+    });
+    expect(label).toBe("Saved local");
+    expect(label).not.toMatch(/^Saved$/);
+    assertLocalHonesty(label);
   });
 });
