@@ -1,7 +1,7 @@
 # Module layout — where code should live
 
 **Status:** Proposed (execution authority for **new** code)  
-**Authority:** [`Plans/Planner-track/CONSTRAINTS.md`](../../Plans/Planner-track/CONSTRAINTS.md) → **this file** → `AGENTS.md` → [`02-DOMAINS.md`](02-DOMAINS.md)  
+**Authority:** [`plan/QUALITY-BAR.md`](../../plan/QUALITY-BAR.md) → **this file** → `AGENTS.md` → [`02-DOMAINS.md`](02-DOMAINS.md)  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **UI contract:** [`03-MODULE-UI-CONTRACT.md`](03-MODULE-UI-CONTRACT.md) · [`04-CSS-SOLUTION.md`](04-CSS-SOLUTION.md)  
 **Locked overlay:** [docs/Lockedfiles/01-planner-current.md](../Lockedfiles/01-planner-current.md) · engines [docs/Lockedfiles/03-dependencies-engines-current.md](../Lockedfiles/03-dependencies-engines-current.md)
@@ -167,7 +167,7 @@ Enforced by `test:layout:check`.
 | Routes | `app/admin/**` | `page.tsx`, metadata, auth gate; `[id]` may host `<Render>` preview |
 | Views | `features/planner/admin/**` | Page views, svg-editor, list views |
 
-**On disk today:** svg-editor `[id]` is a bespoke schema-driven no-code form with a debounced server-compiled preview. It is not a JSON editor and does not mount `<Puck>`. The Puck registry remains for portal rendering and legacy adapters. Quality work continues in [Admin A4](../../Plans/Admin-track/A4-no-code-svg-studio.md).
+**On disk today:** svg-editor `[id]` is a bespoke schema-driven no-code form with a debounced server-compiled preview. It is not a JSON editor and does not mount `<Puck>`. The Puck registry remains for portal rendering and legacy adapters. Quality work continues in [Admin PHASE-03](../../plan/Admin/PHASE-03-studio-tools.md).
 
 **New admin screen:** route in `app/admin/`, view in `features/planner/admin/` (or `features/crm/` for CRM-only).
 

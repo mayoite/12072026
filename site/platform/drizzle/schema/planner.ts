@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, jsonb, uuid, index, primaryKey } from "drizzle-orm/pg-core";
+import { date, pgTable, text, timestamp, jsonb, uuid, index, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
 
 export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey(),
@@ -63,6 +63,33 @@ export const invites = pgTable("invites", {
   index("invites_invited_by_idx").on(table.invitedBy),
   index("invites_email_idx").on(table.email),
   index("invites_created_at_idx").on(table.createdAt),
+]);
+
+/** Admin P05 — versioned price books (Buyer P04 consumes emitted JSON contract). */
+export const priceBooks = pgTable("price_books", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  familySlug: text("family_slug").notNull(),
+  bookId: text("book_id").notNull(),
+  activeVersionId: text("active_version_id"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [
+  uniqueIndex("price_books_book_id_uidx").on(table.bookId),
+  index("price_books_family_slug_idx").on(table.familySlug),
+]);
+
+export const priceBookVersions = pgTable("price_book_versions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  bookRowId: uuid("book_row_id").notNull().references(() => priceBooks.id, { onDelete: "cascade" }),
+  versionId: text("version_id").notNull(),
+  effectiveFrom: date("effective_from").notNull(),
+  currency: text("currency").notNull(),
+  status: text("status").notNull().default("draft"),
+  rules: jsonb("rules").notNull().default([]),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [
+  uniqueIndex("price_book_versions_book_version_uidx").on(table.bookRowId, table.versionId),
+  index("price_book_versions_status_idx").on(table.status),
 ]);
 
 export const auditEvents = pgTable("audit_events", {

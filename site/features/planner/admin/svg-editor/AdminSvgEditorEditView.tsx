@@ -10,7 +10,7 @@
  * GS: semantic tokens only; no hex in tsx. Catalog publish SVG ≠ Fabric plan-draw.
  */
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -30,6 +30,7 @@ import type {
 import { SVG_EDITOR_FIELDS } from "./svgEditorFormModel";
 import { descriptorToFormState } from "./svgEditorFormAdapters";
 import type { SvgEditorFormState } from "./svgEditorFormState";
+
 import { SvgEditorForm } from "./SvgEditorForm";
 import { LiveCompiledSvgPreview } from "./LiveCompiledSvgPreview";
 import { useDebouncedCompile } from "./useDebouncedCompile";
@@ -37,8 +38,10 @@ import { uploadAssetToSupabase } from "./uploadAsset";
 import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 import type { PublishDescriptorResult } from "./publishDescriptorWithPipeline";
 import { PublishedSvgPreview } from "./PublishedSvgPreview";
+import { DescriptorRevisionPanel } from "./DescriptorRevisionPanel";
 import { sceneFromDescriptor } from "./sceneFromDescriptor";
 import { serializeSceneToDefinition } from "./scene/svgSceneSerializer";
+import type { SvgSceneDocument } from "./scene/svgSceneDocument";
 
 /** Browser-only 3D islands — static import of model-viewer/three breaks RSC SSR. */
 const GlbExtruderPreview = dynamic(
@@ -203,13 +206,65 @@ export function AdminSvgEditorEditView({
 
   // A4.1 — starter scene for the visual studio, seeded from the descriptor.
   const studioScene = useMemo(() => sceneFromDescriptor(descriptor), [descriptor]);
+  const publishedSceneSignature = useMemo(
+    () => JSON.stringify(serializeSceneToDefinition(studioScene).parts),
+    [studioScene],
+  );
+  const sceneDirty = useMemo(() => {
+    const current = JSON.stringify(form.sceneParts ?? []);
+    return current !== publishedSceneSignature;
+  }, [form.sceneParts, publishedSceneSignature]);
+  const [studioResetKey, setStudioResetKey] = useState(0);
+  const studioDocumentGetterRef = useRef<(() => SvgSceneDocument) | null>(null);
+  const studioDocumentRef = useRef(studioScene);
+  studioDocumentRef.current = studioScene;
+  const publishFormRef = useRef(form);
+  publishFormRef.current = form;
+
   const handleStudioDocumentChange = useCallback((document: Parameters<typeof serializeSceneToDefinition>[0]) => {
+    studioDocumentRef.current = document;
     const definition = serializeSceneToDefinition(document);
-    setForm((prev) => ({
-      ...prev,
+    setForm((prev) => {
+      const next = {
+        ...prev,
+        sceneViewBox: definition.viewBox,
+        sceneParts: definition.parts,
+      };
+      publishFormRef.current = next;
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!sceneDirty) return;
+    const onBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [sceneDirty]);
+
+  const handleResetToPublished = useCallback(() => {
+    if (sceneDirty && !window.confirm("Discard unpublished studio edits and restore the last published scene?")) {
+      return;
+    }
+    const seed = descriptorToFormState(descriptor);
+    setForm(seed);
+    publishFormRef.current = seed;
+    studioDocumentRef.current = studioScene;
+    setStudioResetKey((key) => key + 1);
+  }, [descriptor, sceneDirty, studioScene]);
+
+  const publishPayloadFromStudio = useCallback((): SvgEditorFormState => {
+    const liveDocument =
+      studioDocumentGetterRef.current?.() ?? studioDocumentRef.current;
+    const definition = serializeSceneToDefinition(liveDocument);
+    return {
+      ...publishFormRef.current,
       sceneViewBox: definition.viewBox,
       sceneParts: definition.parts,
-    }));
+    };
   }, []);
 
   const handlePublish = useCallback(async () => {
@@ -223,7 +278,7 @@ export function AdminSvgEditorEditView({
         });
         return;
       }
-      const result = await onPublishAction(form);
+      const result = await onPublishAction(publishPayloadFromStudio());
       if (result && result.success === false) {
         setFeedback({
           submitting: false,
@@ -251,7 +306,7 @@ export function AdminSvgEditorEditView({
         successMessage: null,
       });
     }
-  }, [onPublishAction, form, router, slug]);
+  }, [onPublishAction, publishPayloadFromStudio, router, slug]);
 
   const checksumShort =
     typeof descriptor.checksum === "string" && descriptor.checksum.length > 16
@@ -276,6 +331,12 @@ export function AdminSvgEditorEditView({
             {describeVariant(form.variant)} · schema{" "}
             <code>{descriptor.schemaVersion}</code> ·{" "}
             <code className="admin-page__checksum">{checksumShort}</code>
+            {sceneDirty ? (
+              <>
+                {" "}
+                · <span className="admin-badge admin-badge--warn">Unsaved studio edits</span>
+              </>
+            ) : null}
           </p>
         </div>
         <div className="admin-page__actions">
@@ -286,6 +347,14 @@ export function AdminSvgEditorEditView({
             <ArrowLeft size={14} aria-hidden />
             Back
           </Link>
+          <button
+            type="button"
+            className="admin-btn admin-btn--outline"
+            onClick={handleResetToPublished}
+            disabled={feedback.submitting || !sceneDirty}
+          >
+            Reset to published
+          </button>
           <button
             type="button"
             className="admin-btn admin-btn--primary"
@@ -355,13 +424,19 @@ export function AdminSvgEditorEditView({
       </div>
 
       {/* Canvas-first shell: stage owns the viewport; form is a secondary rail. */}
-      <div className="admin-svg-engine-shell" data-testid="admin-svg-engine-shell">
+      <div
+        className="admin-svg-engine-shell"
+        data-testid="admin-svg-engine-shell"
+        data-studio-node-count={form.sceneParts?.length ?? 0}
+      >
         <section
           aria-label="Visual authoring studio"
           className="admin-svg-engine-shell__stage"
         >
           <SvgStudioCanvas
+            key={studioResetKey}
             initialDocument={studioScene}
+            documentGetterRef={studioDocumentGetterRef}
             onDocumentChange={handleStudioDocumentChange}
           />
         </section>
@@ -412,6 +487,8 @@ export function AdminSvgEditorEditView({
               />
             </div>
           </article>
+
+          <DescriptorRevisionPanel slug={slug} />
 
           <details className="admin-panel admin-svg-engine-shell__panel admin-svg-engine-shell__advanced">
             <summary className="admin-panel__header">

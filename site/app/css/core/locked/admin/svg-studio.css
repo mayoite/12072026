@@ -150,3 +150,43 @@
   font-size: 0.8125rem;
   color: var(--text-muted);
 }
+
+[data-admin-layout] .svg-studio__inspector {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+[data-admin-layout] .svg-studio__inspector-meta {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+[data-admin-layout] .svg-studio__inspector-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+[data-admin-layout] .svg-studio__inspector label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+[data-admin-layout] .svg-studio__inspector input {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm, 4px);
+  background: var(--surface-raised);
+  color: var(--text-strong);
+  font-size: 0.8125rem;
+}
+
+[data-admin-layout] .svg-studio__inspector-fill {
+  display: block;
+  margin-top: 0.5rem;
+}

@@ -8,4 +8,4 @@
 - Lockedfiles is **flat** — INDEX + overlays only (no proposed pairs).
 - Generated docs: edit source generator, not output.
 - Big mismatch code vs docs → stop and report.
-- Execute law: flat `Plans/*-track/*.md` only.
+- Execute law: `plan/<Track>/` phase files + `CHECKLIST.md` only.

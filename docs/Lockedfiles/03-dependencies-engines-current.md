@@ -52,7 +52,7 @@ No second general canvas engine (Konva, Paper, Pixi, etc.). Feasibility / `canva
 | `react-resizable-panels` | `^4.11.2` | Panel layout (open3d uses custom docking too) |
 | `vaul` | `^1.1.2` | Drawers (Phase 2 mobile) |
 | `@ark-ui/react` | `5.37.2` | Admin headless primitives |
-| `react-aria-components` | `1.19.0` | **Planner canvas toolbar** (`CanvasToolRail` ToggleButtonGroup) + combobox / dialog / tabs — plan lock: [P09](../../Plans/Planner-track/P09-shortcuts-chrome.md) |
+| `react-aria-components` | `1.19.0` | **Planner canvas toolbar** (`CanvasToolRail` ToggleButtonGroup) + combobox / dialog / tabs — [PHASE-02](../../plan/Planner/PHASE-02-toolbar-truth.md) |
 | `zod` | `^4.4.3` | Descriptors, commands, validation |
 | `uuid` | `^14.0.0` (resolved 14.x) | Planner entity ids **v7** via `lib/newEntityId`; v5 for catalog slug→id |
 
@@ -106,7 +106,7 @@ Fabric pinned exactly at `7.4.0`. Option A SVG stack is present with boundary te
 | `three` / R3F | Planner 3D — no mid-wave thrash |
 | `@google/model-viewer` | Admin/preview only |
 | `gsap` | Site motion — confirm seat if commercial expands |
-| `@fancyapps/ui` | Likely unused — [S1](../../Plans/Site-track/S1-deps-cleanup.md) |
+| `@fancyapps/ui` | Likely unused — [Site P01](../../plan/Site/PHASE-01-deps-cleanup.md) |
 | `@puckeditor/core` | Admin SVG |
 | Supabase / Drizzle | Vendor ToS |
 

@@ -14,9 +14,14 @@
  */
 
 import Link from "next/link";
+import { useCallback, useState } from "react";
 import { PencilSimple as Pencil, Plus } from "@phosphor-icons/react";
 
 import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
+import type { CatalogLifecycleManifest, CatalogLifecycleState } from "./catalogLifecycle";
+import { resolveCatalogLifecycle } from "./catalogLifecycle";
+import { AdminSvgBulkImportPanel } from "./AdminSvgBulkImportPanel";
 import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 import { PublishedSvgPreview } from "./PublishedSvgPreview";
 
@@ -93,10 +98,22 @@ function missingStatus(): SvgArtifactStatus {
   };
 }
 
+function lifecycleBadgeClass(state: CatalogLifecycleState): string {
+  switch (state) {
+    case "live":
+      return "admin-badge admin-badge--active";
+    case "retired":
+      return "admin-badge admin-badge--hidden";
+    case "draft":
+      return "admin-badge admin-badge--warn";
+  }
+}
+
 export interface AdminSvgEditorListViewProps {
   readonly descriptors: ReadonlyArray<BlockDescriptor>;
   readonly refreshedAtLabel: string;
   readonly artifactStatuses: Readonly<Record<string, SvgArtifactStatus>>;
+  readonly lifecycleManifest: CatalogLifecycleManifest;
 }
 
 function artifactLabel(state: SvgArtifactStatus["state"]): string {
@@ -130,7 +147,23 @@ export function AdminSvgEditorListView({
   descriptors,
   refreshedAtLabel,
   artifactStatuses,
+  lifecycleManifest,
 }: AdminSvgEditorListViewProps) {
+  const [lifecycleBusySlug, setLifecycleBusySlug] = useState<string | null>(null);
+  const setLifecycle = useCallback(async (slug: string, state: CatalogLifecycleState) => {
+    setLifecycleBusySlug(slug);
+    try {
+      await browserApiFetch(apiPath(`/api/admin/svg-editor/${slug}/lifecycle`), {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ state }),
+      });
+      window.location.reload();
+    } finally {
+      setLifecycleBusySlug(null);
+    }
+  }, []);
+
   const counts = variantSlugCount(descriptors);
   const publishedCount = descriptors.filter(
     (descriptor) => artifactStatuses[descriptor.slug]?.state === "published",
@@ -199,6 +232,10 @@ export function AdminSvgEditorListView({
         ))}
       </section>
 
+      <div className="mb-6">
+        <AdminSvgBulkImportPanel />
+      </div>
+
       {ordered.length === 0 ? (
         <div className="admin-empty" role="status">
           <p className="admin-table__primary">No block descriptors yet</p>
@@ -234,6 +271,7 @@ export function AdminSvgEditorListView({
                   <th scope="col">Variant</th>
                   <th scope="col">Source</th>
                   <th scope="col">Artifact</th>
+                  <th scope="col">Lifecycle</th>
                   <th scope="col">Created</th>
                   <th scope="col" className="text-end">
                     Actions
@@ -243,6 +281,11 @@ export function AdminSvgEditorListView({
               <tbody>
                 {ordered.map((d) => {
                   const status = artifactStatuses[d.slug] ?? missingStatus();
+                  const lifecycle = resolveCatalogLifecycle(
+                    d.slug,
+                    status.state,
+                    lifecycleManifest,
+                  );
                   return (
                     <tr
                       key={`${d.variant}:${d.slug}`}
@@ -290,6 +333,28 @@ export function AdminSvgEditorListView({
                             </>
                           ) : null}
                         </p>
+                      </td>
+                      <td>
+                        <span className={lifecycleBadgeClass(lifecycle)}>{lifecycle}</span>
+                        {lifecycle !== "retired" ? (
+                          <button
+                            type="button"
+                            className="admin-btn admin-btn--outline mt-2"
+                            disabled={lifecycleBusySlug === d.slug}
+                            onClick={() => void setLifecycle(d.slug, "retired")}
+                          >
+                            Retire
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            className="admin-btn admin-btn--outline mt-2"
+                            disabled={lifecycleBusySlug === d.slug}
+                            onClick={() => void setLifecycle(d.slug, "live")}
+                          >
+                            Restore
+                          </button>
+                        )}
                       </td>
                       <td>
                         <code className="text-muted">

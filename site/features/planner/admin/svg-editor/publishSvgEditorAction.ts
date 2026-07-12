@@ -21,7 +21,9 @@ import {
   type PublishDescriptorResult,
 } from "@/features/planner/admin/svg-editor/publishDescriptorWithPipeline";
 import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/newBlockDescriptorStub";
+import { appendDescriptorAudit } from "@/features/planner/admin/svg-editor/descriptorAuditLog";
 import { resolveAuthContext } from "@/features/shared/api/withAuth";
+import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 
 /**
  * Fail-closed publish for one slug.
@@ -33,8 +35,10 @@ export async function publishSvgEditorAction(
   slug: string,
   formFromEditor: SvgEditorFormState,
 ): Promise<PublishDescriptorResult> {
+  let actorId = DEV_BYPASS_USER.id;
   try {
-    await resolveAuthContext("admin");
+    const auth = await resolveAuthContext("admin");
+    actorId = auth.user?.id ?? DEV_BYPASS_USER.id;
   } catch {
     return { success: false, error: "Admin access required" };
   }
@@ -50,5 +54,14 @@ export async function publishSvgEditorAction(
     descriptor = result.value;
   }
   const input = formStateToDescriptorInput(descriptor, formFromEditor);
-  return publishDescriptorWithPipeline(input);
+  const published = await publishDescriptorWithPipeline(input);
+  if (published.success) {
+    appendDescriptorAudit({
+      actorId,
+      slug: published.descriptor.slug,
+      action: "publish",
+      detail: { checksum: published.descriptor.checksum },
+    });
+  }
+  return published;
 }

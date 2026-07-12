@@ -1,6 +1,5 @@
 /**
- * Plans purity: buyer-law files must not embed implementation tokens.
- * Allowlist: CONSTRAINTS.md, CODE-REVIEW-REPORT.md, museum paths.
+ * plan/ purity: phase files must not embed implementation tokens.
  * Exit 0 = clean. Exit 1 = violations printed.
  */
 import fs from "node:fs";
@@ -8,59 +7,25 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const plansRoot = path.join(root, "Plans");
+const plansRoot = path.join(root, "plan");
 
 const FORBIDDEN_RE =
   /\b(fabric@|@react-three|FeasibilityCanvas|pnpm exec|konva|three@|\bfabric\.js\b)/i;
 
-const ALLOWLIST_SUFFIX = [
-  path.normalize("Planner-track/CONSTRAINTS.md"),
-  path.normalize("CODE-REVIEW-REPORT.md"),
-];
-
 const MAX_LINES = {
-  phaseCard: 45,
-  codeReviewStub: 12,
+  phaseCard: 2000,
   buyerLawDefault: 220,
 };
 
-const SCAN_DIRS = [
-  "Planner-track/BOARD.md",
-  "Planner-track/START.md",
-  "Planner-track/EXECUTE.md",
-  "Planner-track/CONSTRAINTS.md",
-  // CHECKPOINTS are program-law hubs at Planner-track root (length-exempt).
-  "Planner-track",
-  "Admin-track",
-  "Site-track",
-  "SEO-track",
-  "Security-track",
-].map((p) => path.join(plansRoot, p));
-
-/** Reference packs — not buyer-law; skip entirely. */
-function isReferencePack(rel) {
-  const n = path.normalize(rel).replace(/\\/g, "/");
-  return (
-    n.includes("/research/") ||
-    n.includes("/suggestions/") ||
-    n.includes("/benchmark/") ||
-    n.includes("/supporting/") ||
-    n.includes("/library/") ||
-    n.includes("/archive-packs/") ||
-    n.includes("/notes/") ||
-    n.includes("/impl/") ||
-    n.includes("/reviews/") ||
-    n.includes("/Refer/") ||
-    n.includes("/from-") ||
-    n.startsWith("Plans/Refer/") ||
-    n === "Plans/Refer"
-  );
-}
-
-function isAllowlisted(rel) {
-  const n = path.normalize(rel);
-  return ALLOWLIST_SUFFIX.some((a) => n.endsWith(a) || n.includes("CODE-REVIEW-REPORT"));
-}
+const TRACKS = [
+  "Planner",
+  "Admin",
+  "Buyer",
+  "UI",
+  "Site",
+  "SEO",
+  "Security",
+];
 
 function collectMdFiles(abs) {
   if (!fs.existsSync(abs)) return [];
@@ -77,52 +42,33 @@ function collectMdFiles(abs) {
 const violations = [];
 const lengthViolations = [];
 
-function isFlatPhaseCard(rel) {
+function isPhaseCard(rel) {
   const n = path.normalize(rel).replace(/\\/g, "/");
-  return /Plans\/Planner-track\/P\d{2}-[^/]+\.md$/i.test(n);
-}
-
-function isProgramLawHub(rel) {
-  const n = path.normalize(rel).replace(/\\/g, "/");
-  return n === "Plans/Planner-track/CHECKPOINTS.md";
+  return /plan\/[^/]+\/PHASE-\d{2}-[^/]+\.md$/i.test(n);
 }
 
 function lineLimitFor(rel) {
-  const n = path.normalize(rel);
-  if (isProgramLawHub(rel)) {
+  if (isPhaseCard(rel)) return MAX_LINES.phaseCard;
+  const n = path.normalize(rel).replace(/\\/g, "/");
+  if (n === "plan/README.md" || n === "plan/QUALITY-BAR.md" || n === "plan/UI-BAR.md") {
     return 5000;
   }
-  if (isFlatPhaseCard(rel)) {
-    return 2000;
-  }
-  if (
-    n.includes(path.normalize("Planner-track")) &&
-    n.includes(path.normalize(`${path.sep}plan${path.sep}`)) &&
-    /P\d{2}-.+\.md$/i.test(n)
-  ) {
-    return 2000;
-  }
-  if (n.endsWith("CODE-REVIEW-REPORT.md") && n.includes("Planner-track")) {
-    return MAX_LINES.codeReviewStub;
+  if (n.endsWith("/CHECKLIST.md") || n.endsWith("/README.md")) {
+    return 5000;
   }
   return MAX_LINES.buyerLawDefault;
 }
 
-for (const base of SCAN_DIRS) {
+for (const track of TRACKS) {
+  const base = path.join(plansRoot, track);
   for (const file of collectMdFiles(base)) {
     const rel = path.relative(root, file);
-    if (isReferencePack(rel)) continue;
     const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
     const limit = lineLimitFor(rel);
     if (lines.length > limit) {
       lengthViolations.push(`${rel}: ${lines.length} lines (max ${limit})`);
     }
-    if (isAllowlisted(rel)) continue;
-    const norm = path.normalize(rel).replace(/\\/g, "/");
-    if (isFlatPhaseCard(rel)) continue;
-    if (norm.includes("/plan/") && /P\d{2}-/.test(norm)) continue;
-    if (norm.includes("/phases/") && norm.includes("/plan/")) continue;
-    if (norm.includes("/module/plan/")) continue;
+    if (isPhaseCard(rel)) continue;
     for (let i = 0; i < lines.length; i++) {
       if (FORBIDDEN_RE.test(lines[i])) {
         violations.push(`${rel}:${i + 1}: ${lines[i].trim().slice(0, 120)}`);
@@ -133,16 +79,13 @@ for (const base of SCAN_DIRS) {
 
 if (violations.length || lengthViolations.length) {
   if (violations.length) {
-    console.error("check:plans-purity FAIL — implementation tokens in buyer-law Plans files:\n");
+    console.error("check:plans-purity FAIL — implementation tokens in plan/ files:\n");
     for (const v of violations) console.error(`  ${v}`);
   }
   if (lengthViolations.length) {
-    console.error("\ncheck:plans-purity FAIL — Plans files too long (thin buyer law only):\n");
+    console.error("\ncheck:plans-purity FAIL — plan/ files too long:\n");
     for (const v of lengthViolations) console.error(`  ${v}`);
   }
-  console.error(
-    "\nMove stack/detail to CONSTRAINTS.md or Plans/Planner-track/library/from-museum/. Phase cards ~25 lines; CODE-REVIEW stubs ~8 lines.",
-  );
   process.exit(1);
 }
 

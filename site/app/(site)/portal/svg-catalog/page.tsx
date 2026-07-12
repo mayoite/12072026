@@ -12,7 +12,7 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 
-import { loadAll } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { loadBuyerVisibleDescriptors } from "@/features/planner/admin/svg-editor/catalogLifecycle";
 import {
   buildBlockThumbPngUrl,
   buildSvgCatalogPublicUrl,
@@ -25,7 +25,7 @@ function resolveSvgPublicUrl(slug: string): string | undefined {
 }
 
 export default async function SvgCatalogIndex() {
-  const descriptors = loadAll();
+  const descriptors = loadBuyerVisibleDescriptors();
   const version = "2026-07-04.v2";
 
   return (

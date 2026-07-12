@@ -1,7 +1,7 @@
 # Domains — where code lives (HOW)
 
-**Execute law:** [`Plans/`](../../Plans/INDEX.md). This file is placement + honesty only.  
-**Upgrade lock:** Fabric sole 2D — [`CONSTRAINTS`](../../Plans/Planner-track/CONSTRAINTS.md).
+**Execute law:** [`plan/README.md`](../../plan/README.md). This file is placement + honesty only.  
+**Upgrade lock:** Fabric sole 2D — [`QUALITY-BAR`](../../plan/QUALITY-BAR.md).
 
 ---
 
@@ -15,7 +15,7 @@
 | Compile | `site/features/planner/asset-engine/svg/` |
 | Bytes | `site/public/svg-catalog/{slug}.svg` |
 
-SVG catalog = **publish only** — not plan-draw. A1–A3 are the publish foundation; A4–A8 define visual authoring and product operations. Execute: [Admin-track](../../Plans/Admin-track/BOARD.md). UI fence: [`03-MODULE-UI-CONTRACT.md`](03-MODULE-UI-CONTRACT.md).
+SVG catalog = **publish only** — not plan-draw. Execute: [Admin](../../plan/Admin/CHECKLIST.md). UI fence: [`03-MODULE-UI-CONTRACT.md`](03-MODULE-UI-CONTRACT.md).
 
 ---
 
@@ -27,7 +27,7 @@ SVG catalog = **publish only** — not plan-draw. A1–A3 are the publish founda
 | Chrome | `components/site/`, `ui/`, `shared/` |
 | Routes | `site/app/(site)/` |
 
-Planner chrome ≠ marketing (P09 vs S2). Execute: [S2](../../Plans/Site-track/S2-site-chrome.md). Dep cuts: [S1](../../Plans/Site-track/S1-deps-cleanup.md).
+Planner chrome ≠ marketing. Execute: [Site P02](../../plan/Site/PHASE-02-site-chrome.md). Dep cuts: [Site P01](../../plan/Site/PHASE-01-deps-cleanup.md).
 
 ---
 
@@ -38,7 +38,7 @@ Planner chrome ≠ marketing (P09 vs S2). Execute: [S2](../../Plans/Site-track/S
 | Routes | `site/app/crm/` |
 | Feature | `site/features/crm/` |
 
-No CRM Plans track yet. Do not couple into open3d commands. Auth/CSRF with [Security](../../Plans/Security-track/BOARD.md).
+No CRM plan track yet. Do not couple into open3d commands. Auth/CSRF with [Security](../../plan/Security/CHECKLIST.md).
 
 ---
 
@@ -62,7 +62,7 @@ Not planner, not admin SVG. Prod bypass = A3 + SEC3.
 | Clients | `site/platform/supabase/` · `platform/drizzle/` |
 | RLS | [`../database/ADVISORS.md`](../database/ADVISORS.md) |
 
-No `DEV_AUTH_BYPASS` on public hosts — [A3](../../Plans/Admin-track/A3-production-auth.md) · SEC3.
+No `DEV_AUTH_BYPASS` on public hosts — [Security P03](../../plan/Security/PHASE-03-auth-boundaries.md).
 
 ---
 
@@ -72,7 +72,7 @@ No `DEV_AUTH_BYPASS` on public hosts — [A3](../../Plans/Admin-track/A3-product
 |--|--|
 | Route | `site/app/offline/` |
 | UI | `site/components/pwa/` |
-| Planner local save | [P06](../../Plans/Planner-track/P06-save-honesty.md) |
+| Planner local save | [PHASE-06](../../plan/Planner/PHASE-06-onboarding-feedback.md) |
 
 Offline shell ≠ cloud sync. Prove scope under `results/` before claiming.
 

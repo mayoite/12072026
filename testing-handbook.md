@@ -24,7 +24,7 @@ If any required record is missing, status is **INCOMPLETE**, not passed.
 
 All test, lint, typecheck, build, Playwright, accessibility, coverage, and audit runs land under repo-root `results/<module>/<phase>/<cmd>/` in the standardized `<cmd>-run.json` + `<cmd>-raw.log` format (never to the repo root, `E:`, or any other drive path).
 
-Agent reports and review markdown belong under `Plans/*-track/` (live) or `archive/Plans/` (history) — see `Plans/INDEX.md` — not under `results/`.
+Agent reports belong in `agents-work/reports/` (see `plan/README.md`). Raw run artifacts stay under `results/` only.
 
 ### Vitest
 

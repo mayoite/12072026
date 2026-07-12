@@ -50,10 +50,14 @@ export function buildLinearDeskMakerModel(recipe: LinearDeskMakerRecipe): MakerM
   const body = new makerjs.models.Rectangle(widthMm, depthMm - topThicknessMm);
   body.origin = [0, topThicknessMm];
 
+  const kneeSpace = new makerjs.models.Rectangle(Math.round(widthMm * 0.35), 48);
+  kneeSpace.origin = [Math.round(widthMm * 0.325), topThicknessMm + 24];
+
   const model: makerjs.IModel = {
     models: {
-      top,
-      body,
+      "desk-top": top,
+      "desk-body": body,
+      "desk-knee-space": kneeSpace,
     },
   };
 

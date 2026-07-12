@@ -12,7 +12,7 @@ This register separates three things: a false statement, code that exists but is
 | Planner P03–P07 are PASS “on tip” | Their proof packs are from earlier commits. The current checkout was not re-run as a Planner gate | Cards and checkpoints now say **REPROVE** with landed candidates. |
 | Live Fabric still paints furniture as one plain rectangle | `PlannerFabricStage` uses `createFabricFurnitureBlock`; cabinet multiprim code and visual candidate evidence exist | P01/P05 now describe the landed raise and require final visual re-proof. |
 | Cabinet-v0 has no toe | `modularCabinetV0.ts` creates `toe → carcass → door(s)` and GLB export mirrors shared constants | P08 now says implementation landed; visual/evidence gate remains open. |
-| Every Site card is open | S2 is a bounded PASS slice; S1 and site residuals remain open | Site board and Plans index now distinguish slice PASS from site completion. |
+| Every Site card is open | P02 is a bounded PASS slice; P01 and site residuals remain open | `plan/Site/CHECKLIST.md` distinguishes slice PASS from site completion. |
 | Production admin may honor `DEV_AUTH_BYPASS=1` | Production proof recorded `flagSet:true`, `bypassEnabled:false`; anonymous page/API access was rejected | Admin A3 is DONE. Security SEC3 stays open for broader surfaces. |
 | Publish still compiles through `svgCompiler.server.ts` or a child-process CLI | Publish uses `compileSvgForPublish`/`runSvgCompileStages`, then S4-only `runSvgPipeline`, then descriptor persist | Data-flow and SVG current-state docs now name the actual path. |
 

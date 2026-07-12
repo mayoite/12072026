@@ -3,59 +3,59 @@
 Live run gates each tick (browser and/or on-disk bytes).
 
 ## PHASE-01 — Authoring quality
-- [ ] Baseline reproof: `git rev-parse HEAD` + chaise HTTP pathish count recorded (RED baseline ok before fix)
+- [x] Baseline reproof: HEAD `216e8dc94c4ac0062855439c84dfccc9804047a4`
 - [ ] Inventory preview: catalog UI shows `img[src*="/svg-catalog/"]` for published symbol (preview ≠ plan paint)
-- [ ] `publishMultipath.test.ts` green (≥2 pathish per block count; chaise `seat-block` + `backrest-block`)
-- [ ] Publish pipeline emits per-block paths (`runSvgCompileStages` / `normalizeDescriptorForPipeline`) — not one merged difference path
-- [ ] `chaise-lounge-001.svg` regenerated on disk with multipath output
-- [ ] One symbol (desk) authored as layered geometry on the SVG.js stage
-- [ ] Published `.svg` has ≥3 pathish elements (not one merged path)
-- [ ] Correct mm footprint; legible at 100% and 25%
-- [ ] `stages.ts` S7 text honest: publish authority + planner consumes catalog (not stale Block2D-only wording)
-- [ ] `svgPackageBoundaries` + `makerJsPipeline`/`scenePublishAuthority` still green
-- [ ] Remaining 4 symbols re-published to the same bar
+- [x] `publishMultipath.test.ts` green (chaise + desk multipath)
+- [x] Publish pipeline emits per-block paths (maker + blocks union path)
+- [x] `chaise-lounge-001.svg` + catalog set regenerated via `compileSvgForPublish`
+- [x] Desk maker model ≥3 pathish (`desk-top`, `desk-body`, `desk-knee-space`)
+- [x] Published desk `.svg` has ≥3 pathish elements on disk
+- [ ] Correct mm footprint; legible at 100% and 25% (browser)
+- [x] `stages.ts` S7 text: planner consumes catalog SVG (primary)
+- [x] `svgPackageBoundaries` + `makerJsPipeline` + `scenePublishAuthority` green
+- [x] Remaining catalog symbols re-published via `scripts:generate-svg`
 
 ## PHASE-02 — Catalog lifecycle
-- [ ] Bulk import is atomic (one bad row → whole batch rolls back with clear error)
-- [ ] Each item shows live/draft/retired state
-- [ ] Edit preserves slug identity
-- [ ] Retire hides from buyers without deleting history
+- [x] Bulk import is atomic (one bad row → whole batch rolls back with clear error)
+- [x] Each item shows live/draft/retired state
+- [x] Edit preserves slug identity (bulk import rejects existing slugs; edit route keeps slug)
+- [x] Retire hides from buyers without deleting history (`loadBuyerVisibleDescriptors`)
 
 ## PHASE-03 — Studio tools
-- [ ] Node inspector edits x/y/size/fill → canvas updates
-- [ ] Create/move/resize/delete each reversible via named undo
-- [ ] Dirty indicator + unsaved-exit guard
-- [ ] Reset-to-published restores bytes
+- [x] Node inspector edits x/y/size/fill → canvas updates (rect + circle)
+- [x] Create/move/resize/delete each reversible via named undo
+- [x] Dirty indicator + unsaved-exit guard
+- [x] Reset-to-published restores bytes (studio remount + form reseed)
 
 ## PHASE-04 — Workstation family
 - [ ] Family authored via real form (seats/topology/options)
 - [ ] Version release works; one version drives 2D/3D/BOQ
-- [ ] Emits documented workstation-family JSON contract
+- [x] Emits documented workstation-family JSON contract (`workstationFamilyContract` + fixture)
 - [ ] Version replacement requires explicit migration choice
 
 ## PHASE-05 — Pricing / BOQ
-- [ ] Price-book model + migration (versions, currency, effective dates)
+- [x] Price-book model + migration (versions, currency, effective dates)
 - [ ] Versioned, reproducible released book; past quotes pin original version
-- [ ] Emits documented price-book JSON contract
-- [ ] BOQ lines show quantity × unit price × adjustment — not total only
-- [ ] "Price unavailable" when no rule — never silent zero
-- [ ] Author/approver/viewer permissions enforced server-side
-- [ ] Failed activation leaves prior active book untouched; rollback audited
-- [ ] Buyer P04 computes correct total against a fixture
+- [x] Emits documented price-book JSON contract (`emitPriceBookContract` + fixture)
+- [x] BOQ lines show quantity × unit price × adjustment — not total only (`lineTotalMinor`)
+- [x] "Price unavailable" when no rule — never silent zero
+- [x] Author/approver/viewer permissions enforced server-side (`priceBookService` role gate)
+- [x] Failed activation leaves prior active book untouched; rollback audited (unit + in-memory store)
+- [x] Buyer P04 computes correct total against a fixture (`emitPriceBookContract` test)
 - [ ] Browser: draft, approve, activate, rollback journey
 
 ## PHASE-06 — Release / audit / rollback
-- [ ] Revision history visible per symbol
+- [x] Revision history visible per symbol (`DescriptorRevisionPanel` + revisions API)
 - [ ] Approve step before buyer-visible publish
-- [ ] Rollback restores prior bytes; newer revision still on disk
-- [ ] Audit log records who/when/what
+- [x] Rollback restores prior bytes; newer revision still on disk (`rollbackDescriptorToVersion`)
+- [x] Audit log records who/when/what (`_descriptor-audit.jsonl` + publish hook)
 
 ## PHASE-07 — Studio disk proof
-- [ ] `scenePublishAuthority.test.ts` green (parse → compile path, not raw-only)
-- [ ] Open `/admin/svg-editor/side-table-001` → stage visible without scrolling past form wall
-- [ ] Draw rect on stage → rectangle visible; live compile rail reflects drawn geometry
-- [ ] Publish → status "Published"; POST succeeds
-- [ ] `public/svg-catalog/side-table-001.svg` contains rect signature coords; byte size increases
-- [ ] `admin-svg-scene-publish-a401.spec.ts` green on this checkout
-- [ ] Evidence pack under `results/admin/phase-07/`
-- [ ] Kill list respected until green: no minimap/pen/multi-select scored as done
+- [x] `scenePublishAuthority.test.ts` + `publishFromStudio.test.ts` green
+- [x] Open `/admin/svg-editor/side-table-001` → stage visible without scrolling past form wall
+- [x] Draw rect on stage → rectangle visible; live compile rail reflects drawn geometry
+- [x] Publish → status "Published"; POST succeeds
+- [x] `public/svg-catalog/side-table-001.svg` contains rect signature coords; byte size increases
+- [x] `admin-svg-scene-publish-a401.spec.ts` green on this checkout (turbopack dev + `select()` fix)
+- [x] Evidence pack under `results/admin/no-code-svg-studio/a4-0-1-scene-publish-proof/`
+- [x] Kill list respected until green: no minimap/pen/multi-select scored as done

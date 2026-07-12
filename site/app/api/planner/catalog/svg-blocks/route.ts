@@ -10,7 +10,7 @@ import type { NextRequest } from "next/server";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 import { success } from "@/features/shared/api/apiResponse";
 import { mapDescriptorsToCatalogItems } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
-import { loadAll } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { loadBuyerVisibleDescriptors } from "@/features/planner/admin/svg-editor/catalogLifecycle";
 
 export async function GET(req: NextRequest) {
   const rateError = await enforcePublicApiRateLimit(
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
   );
   if (rateError) return rateError;
 
-  const descriptors = loadAll();
+  const descriptors = loadBuyerVisibleDescriptors();
   const items = mapDescriptorsToCatalogItems(descriptors);
 
   return success({

@@ -43,17 +43,25 @@ export async function runPipeline(descriptor) {
   const { normalizeDescriptorForPipeline } = await import(normalizeUrl);
   const normalized = normalizeDescriptorForPipeline(descriptor);
 
-  const coreUrl = pathToFileURL(
-    path.join(__dirname, "generate-svg", "pipelineCore.ts"),
+  const compileUrl = pathToFileURL(
+    path.join(
+      __dirname,
+      "..",
+      "features",
+      "planner",
+      "asset-engine",
+      "svg",
+      "compileSvgForPublish.ts",
+    ),
   ).href;
-  const core = await import(coreUrl);
-  const runPipelineCore = core.runPipelineCore;
-  if (typeof runPipelineCore !== "function") {
-    throw new Error("runPipelineCore export missing from pipelineCore.ts");
+  const { compileSvgForPublish } = await import(compileUrl);
+  const compiled = await compileSvgForPublish(descriptor);
+  if (!compiled.ok) {
+    throw new Error(
+      `compileSvgForPublish failed at ${compiled.failedAt}: ${compiled.error}`,
+    );
   }
-
-  // S2–S3: compile + sanitize + optimise
-  const svg = await runPipelineCore(normalized);
+  const svg = compiled.svg;
 
   // S4: write public catalog SVG
   const outDir = path.resolve(__dirname, "..", "public", "svg-catalog");

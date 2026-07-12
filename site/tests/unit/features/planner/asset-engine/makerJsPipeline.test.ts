@@ -5,7 +5,10 @@ import {
   buildLinearDeskMakerModel,
   buildLDeskMakerModel,
 } from "@/features/planner/asset-engine/svg/makerJsRecipes";
-import { compileMakerRecipeToPath } from "@/features/planner/asset-engine/svg/makerJsToPath";
+import {
+  compileMakerRecipeToPath,
+  compileMakerRecipeToPaths,
+} from "@/features/planner/asset-engine/svg/makerJsToPath";
 import { normalizeDescriptorForPipeline } from "@/features/planner/asset-engine/svg/normalizeDescriptorForPipeline";
 
 describe("makerJsRecipes", () => {
@@ -38,6 +41,18 @@ describe("makerJsRecipes", () => {
     });
     expect(dPath).toMatch(/^M /);
     expect(dPath).toContain("Z");
+  });
+
+  it("exports one path per maker sub-model for linear desk", () => {
+    const { parts } = compileMakerRecipeToPaths({
+      recipe: "linear-desk",
+      widthMm: 1200,
+      depthMm: 600,
+    });
+    expect(parts.length).toBeGreaterThanOrEqual(3);
+    expect(parts.map((part) => part.id)).toEqual(
+      expect.arrayContaining(["desk-top", "desk-body", "desk-knee-space"]),
+    );
   });
 });
 
@@ -80,5 +95,8 @@ describe("maker + pipelineCore publish", () => {
     expect(result.svg).toContain("<svg");
     expect(result.svg).toContain('viewBox="0 0 1200 600"');
     expect(result.svg).toContain('class="desk-linear-1200"');
+    expect(result.svg).toContain('id="desk-top"');
+    expect(result.svg).toContain('id="desk-body"');
+    expect(result.svg).toContain('id="desk-knee-space"');
   });
 });

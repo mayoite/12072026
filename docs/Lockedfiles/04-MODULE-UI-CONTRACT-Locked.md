@@ -4,7 +4,7 @@
 
 **Live file:** `docs/architecture/03-MODULE-UI-CONTRACT.md`. Update this copy only when intentionally locking a new baseline.
 
-**Authority stack:** live plan `Plans/Planner-track/` → `archive/Plans/01-execution/specialists/06-UI-PLAN.md` (historical) → **this file** → `docs/architecture/04-CSS-SOLUTION.md`
+**Authority stack:** `plan/QUALITY-BAR.md` → **this file** → `docs/architecture/04-CSS-SOLUTION.md`
 
 **Problem:** New modules copy the nearest TSX and reintroduce `slate-*`, hex, or a third dialect.
 
@@ -98,7 +98,7 @@ Every new UI module under the path roots above **must** satisfy:
 | Open3d icons | `open3dIconPolicy.test.ts` | TEST-1 (planned) |
 | Module boundary | `plannerCommandBoundary.test.ts` | TEST-1 |
 
-See `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` for full gate matrix.
+See `testing-handbook.md` and `Agents/Agents-04-testing.md` for gate policy.
 
 ---
 
@@ -117,5 +117,5 @@ See `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` for full gate matri
 - `docs/architecture/README.md` — architecture index
 - `docs/architecture/01-MODULE-LAYOUT.md` — where modules live
 - `docs/architecture/04-CSS-SOLUTION.md` — folder ownership
-- `Plans/Admin-track/` · `Plans/Site-track/` — surface execute cards
+- `plan/Admin/` · `plan/Site/` — surface execute phases
 - `site/scripts/lint-ui-contract.mjs` — automated checks

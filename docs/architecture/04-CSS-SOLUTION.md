@@ -1,7 +1,7 @@
 # CSS Solution — Oando Platform
 
 **Status:** Locked folder policy (execution via UI-0 → UI-3)  
-**Authority:** `Plans/00-QUALITY-BAR.md` → `Plans/Admin-track/BOARD.md` / `Plans/Site-track/BOARD.md` → [`03-MODULE-UI-CONTRACT.md`](03-MODULE-UI-CONTRACT.md) → **this file**  
+**Authority:** `plan/QUALITY-BAR.md` → `plan/Admin/` / `plan/Site/` → [`03-MODULE-UI-CONTRACT.md`](03-MODULE-UI-CONTRACT.md) → **this file**  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) — styles live in `app/css/`, never mirrored under `features/`  
 **Locked overlay:** [docs/Lockedfiles/01-planner-current.md](../Lockedfiles/01-planner-current.md) · engines [docs/Lockedfiles/03-dependencies-engines-current.md](../Lockedfiles/03-dependencies-engines-current.md)
@@ -134,5 +134,5 @@ Do not adopt a full design-system program before planner/admin gates land.
 
 ## References
 
-- [Admin-track](../../Plans/Admin-track/BOARD.md) · [Site-track](../../Plans/Site-track/BOARD.md)
+- [Admin](../../plan/Admin/CHECKLIST.md) · [Site](../../plan/Site/CHECKLIST.md)
 - [`02-DOMAINS.md`](02-DOMAINS.md) · [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md)

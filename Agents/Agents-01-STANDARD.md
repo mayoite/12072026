@@ -9,7 +9,7 @@
 | Quality bar | **This file** (raise, never lower) |
 | Facts, PASS, done | **Live repo** only |
 
-Peers: `Agents/INDEX.md` · Plan: `Plans/Planner-track/BOARD.md` · Tracks: `Agents-02-tracks.md` · Owner: `ayushdocs/` (5 files) · Ops: `OPERATIONS_RUNBOOK.md`
+Peers: `Agents/INDEX.md` · Plan: `plan/README.md` · Tracks: `Agents-02-tracks.md` · Owner: `ayushdocs/` (5 files) · Ops: `OPERATIONS_RUNBOOK.md`
 
 ## 2. Head duty
 - One **phase** to completion before the next. Subagents for heavy work.
@@ -24,7 +24,7 @@ No `pass`/DONE/JSON without live proof. Unit ≠ browser gate. Prefer FAIL/OPEN 
 **Parallel:** different packages only; ≤8 seats (max 10); never two writers same package.
 
 ## 5. Truth order
-1. Run commands 2. Read `HEAD` 3. Fresh `results/` 4. Plans/status = hints 5. Old PASS = untrusted
+1. Run commands 2. Read `HEAD` 3. Fresh `results/` 4. `plan/` status = hints 5. Old PASS = untrusted
 
 ## 6. Git backup
 Commit each land · push `origin` when green · `mayoite` ~45m/big land · no force-push. Fail mirror → log `Failures.md`. Detail: `OPERATIONS_RUNBOOK.md`
@@ -32,7 +32,7 @@ Commit each land · push `origin` when green · `mayoite` ~45m/big land · no fo
 ## 7. Pipeline
 `/using-superpowers` → goal → repo scout → task list → TDD execute → browser only if task needs UI → verify → commit/push → `SESSION-RECAP` ~30m
 
-Firecrawl **dead**. No worktrees. Quality bar: `Plans/00-QUALITY-BAR.md` (Fabric-sole). Flat Plans only.
+Firecrawl **dead**. No worktrees. Quality bar: `plan/QUALITY-BAR.md` (Fabric-sole).
 
 ## 8. Judgment
 | PASS | HALF | OPEN | FAIL |

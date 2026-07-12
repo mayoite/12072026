@@ -56,7 +56,7 @@ for (const f of files) {
 if (violations.length) {
   console.error("check:ayushdocs FAIL:\n");
   violations.forEach((v) => console.error(`  ${v}`));
-  console.error("\nKeep ayushdocs at 5 owner files only. Detail → Plans or docs/architecture.");
+  console.error("\nKeep ayushdocs at 5 owner files only. Detail → plan/ or docs/architecture.");
   process.exit(1);
 }
 

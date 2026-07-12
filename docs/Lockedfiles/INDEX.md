@@ -1,7 +1,7 @@
-﻿# Locked files — flat index + routing
+# Locked files — flat index + routing
 
-**Role:** Thin baselines — not execute. **Execute:** [`Plans/INDEX.md`](../../Plans/INDEX.md)  
-**Upgrade lock:** Fabric sole 2D — [`CONSTRAINTS`](../../Plans/Planner-track/CONSTRAINTS.md)
+**Role:** Thin baselines — not execute. **Execute:** [`plan/README.md`](../../plan/README.md)  
+**Upgrade lock:** Fabric sole 2D — [`QUALITY-BAR`](../../plan/QUALITY-BAR.md)
 
 ```
 docs/Lockedfiles/
@@ -13,7 +13,7 @@ docs/Lockedfiles/
 
 | Task | Open |
 |------|------|
-| Execute / W gates | `Plans/Planner-track/BOARD.md` |
+| Execute / gates | `plan/README.md` · track `CHECKLIST.md` |
 | Where code goes | [`../architecture/01-MODULE-LAYOUT.md`](../architecture/01-MODULE-LAYOUT.md) |
 | Domains (admin/site/crm/…) | [`../architecture/02-DOMAINS.md`](../architecture/02-DOMAINS.md) |
 | UI contract | [`04-MODULE-UI-CONTRACT-Locked.md`](./04-MODULE-UI-CONTRACT-Locked.md) |

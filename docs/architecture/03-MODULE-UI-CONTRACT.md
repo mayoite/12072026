@@ -1,7 +1,7 @@
 # Module UI Contract — Anti-drift lock
 
 **Status:** Locked  
-**Authority:** `Plans/00-QUALITY-BAR.md` → `Plans/Admin-track/BOARD.md` / `Plans/Site-track/BOARD.md` → **this file** → [`04-CSS-SOLUTION.md`](04-CSS-SOLUTION.md)  
+**Authority:** `plan/QUALITY-BAR.md` → `plan/Admin/` / `plan/Site/` → **this file** → [`04-CSS-SOLUTION.md`](04-CSS-SOLUTION.md)  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) — path roots below must match  
 **Locked copy:** [`docs/Lockedfiles/04-MODULE-UI-CONTRACT-Locked.md`](../Lockedfiles/04-MODULE-UI-CONTRACT-Locked.md)  
@@ -100,7 +100,7 @@ Every new UI module under the path roots above **must** satisfy:
 | Command boundary | `plannerCommandBoundary.test.ts` | TEST-1 |
 | Command wiring | `plannerCommandWiring.test.ts` | TEST-1 — **fails until `useWorkspaceCanvas` uses `executePlannerCommand`** |
 
-See `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` for full gate matrix.
+See `testing-handbook.md` and `Agents/Agents-04-testing.md` for gate policy.
 
 ---
 
@@ -119,8 +119,6 @@ See `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` for full gate matri
 - [`README.md`](README.md) — architecture index
 - [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) — where modules live
 - [`04-CSS-SOLUTION.md`](04-CSS-SOLUTION.md) — folder ownership
-- [Admin-track](../../Plans/Admin-track/BOARD.md) — admin surface detail (UI-2)
-- [Site-track](../../Plans/Site-track/BOARD.md) — marketing reference (UI-3)
-- `Plans/Admin-track/BOARD.md` / `Plans/Site-track/BOARD.md` — phased execution
-- `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` — test gates
+- [Admin](../../plan/Admin/CHECKLIST.md) — admin surface (UI-2)
+- [Site](../../plan/Site/CHECKLIST.md) — marketing reference (UI-3)
 - `site/scripts/lint-ui-contract.mjs` — automated checks

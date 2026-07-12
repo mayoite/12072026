@@ -227,7 +227,7 @@ export function createSvgJsEngineAdapter(
       if (element && nodeModel && !nodeModel.locked && !nodeModel.hidden) {
         // Paths are not easily editable using simple drag/resize; restrict to primitives
         if (nodeModel.kind !== "path") {
-          element.selectize().resize().draggable();
+          element.select().resize().draggable();
 
           element.on("dragend", () => {
             let patch: Partial<SvgSceneNode> = {};

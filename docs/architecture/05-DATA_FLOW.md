@@ -1,7 +1,7 @@
 # Data Flow Diagrams
 
 **Status:** Live reference — verify against code before gate claims  
-**Authority:** [`Plans/Planner-track/CONSTRAINTS.md`](../../Plans/Planner-track/CONSTRAINTS.md) → **this file**  
+**Authority:** [`plan/QUALITY-BAR.md`](../../plan/QUALITY-BAR.md) → **this file**  
 **Index:** [`README.md`](README.md) · [`docs/Lockedfiles/INDEX.md`](../Lockedfiles/INDEX.md)  
 **Placement:** [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) · [`02-DOMAINS.md`](02-DOMAINS.md)  
 **Locked overlay:** [`01-planner-current.md`](../Lockedfiles/01-planner-current.md) · [`03-dependencies-engines-current.md`](../Lockedfiles/03-dependencies-engines-current.md)
@@ -321,7 +321,7 @@ sequenceDiagram
 
 **Tests:** `svgPackageBoundaries.test.ts`, `svgPhase1Completion.test.ts`, API route tests.
 
-**Admin UI:** [Admin-track](../../Plans/Admin-track/BOARD.md).
+**Admin UI:** [Admin](../../plan/Admin/CHECKLIST.md).
 
 ---
 
@@ -446,4 +446,4 @@ sequenceDiagram
 
 - [`02-DOMAINS.md`](02-DOMAINS.md) — domain surfaces
 - [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) — where code lives
-- `archive/Plans/01-execution/specialists/08-TEST-PLAN.md` — TEST-1 / TEST-2 gates
+- `testing-handbook.md` — gate policy

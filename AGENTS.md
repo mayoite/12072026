@@ -27,11 +27,11 @@ Subagents → same bar · `/using-superpowers` · fit skills.
 - Commit/push only when owner asks. Detail: Standard §6 · `OPERATIONS_RUNBOOK.md`.
 
 ## 5. Layout (hard)
-- **`results/`** = tool **dump only** (write if needed). **Never read `results/` for PASS, status, or done.** Law = `Plans/` + live code. Never write under `site/results/` or `site/test-results/`.
+- **`results/`** = tool **dump only** (write if needed). **Never read `results/` for PASS, status, or done.** Law = `plan/` + live code. Never write under `site/results/` or `site/test-results/`.
 - **`PROTECTED/`** = owner private. **Ignore** — do not open, edit, or cite.
 - **No `agents-review/`** — not law; do not recreate as SoT.
 - **`site/` tracked tree** → product code only. `site/node_modules/` = gitignored workspace shim. **Never** `npm install` under `site/` or `site/tech-stack-generator/`.
-- **Durable** → flat `Plans/*-track/` · `Agents/` · `ayushdocs/` (5 files) · `docs/` (HOW + Lockedfiles).
+- **Durable** → `plan/<Track>/` · `Agents/` · `ayushdocs/` (5 files) · `docs/` (HOW + Lockedfiles).
 - **Install** → `pnpm` from repo root. **Firecrawl dead.** Research → repo-root **`websites/`** (gitignored).
 - `pnpm run check:layout`.
 
@@ -46,7 +46,7 @@ Subagents → same bar · `/using-superpowers` · fit skills.
 | Need | File |
 |------|------|
 | Process / phases / seats | `Agents/INDEX.md` |
-| Execute | `Plans/INDEX.md` + track BOARDs |
+| Execute | `plan/README.md` + `plan/<Track>/CHECKLIST.md` |
 | Owner | `ayushdocs/` |
 | Facts / commands | `Readme.md` · `START.md` |
 | Blockers | `Failures.md` |

@@ -20,7 +20,7 @@ const repoFolders = {
       "tech-stack-generated/ — emitted renderer data",
       "docs/ — reference documentation (architecture, api, database, audit)",
       "archive/ — historical outputs and archive/migrationdocs/",
-      "Plans/ — governance + execution tracks",
+      "plan/ — execution tracks",
       "pnpm-workspace.yaml, pnpm-lock.yaml, package.json",
       "AGENTS.md, Readme.md, CONTENTS.md (this file)",
       "DOC-MAP.md, START.md, testing-handbook.md, OPERATIONS_RUNBOOK.md, Failures.md",

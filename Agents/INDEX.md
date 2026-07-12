@@ -13,4 +13,4 @@
 | Architecture | [`Agents-08-architecture.md`](./Agents-08-architecture.md) |
 | CSS fence | [`Agents-09-css.md`](./Agents-09-css.md) |
 
-Execute: `Plans/INDEX.md` · Owner: `ayushdocs/` (5 files) · Licenses: `docs/Lockedfiles/03-dependencies-engines-current.md`
+Execute: `plan/README.md` · Owner: `ayushdocs/` (5 files) · Licenses: `docs/Lockedfiles/03-dependencies-engines-current.md`

@@ -57,6 +57,16 @@ Skipped items must be declared. Shell works; gates are runnable.
 
 ## Active failures
 
+### PLAN-FAIL-0417 — Closed (Admin P07 scene publish e2e)
+
+**Status:** Closed · observed 2026-07-13 · fixed 2026-07-13
+
+- **Root cause:** `@svgdotjs/svg.select.js` v4 exposes `element.select()`, not `selectize()` — studio crashed on first selection after Add rectangle.
+- **Also fixed:** `SvgStudioCanvas` deferred `onDocumentChange` out of `setHistory` updater (React setState-during-render warning).
+- **Playwright:** dev webServer uses `dev:turbo` when `DEV_AUTH_BYPASS=1`.
+- **Proof:** `admin-svg-scene-publish-a401.spec.ts` green — 481→533 bytes, rect signature on disk (`03-run.json`).
+- **Evidence:** `results/admin/no-code-svg-studio/a4-0-1-scene-publish-proof/`
+
 ### GIT-MIRROR-MAYOITE-404 — mirror backup unavailable
 
 **Status:** Open · observed 2026-07-10

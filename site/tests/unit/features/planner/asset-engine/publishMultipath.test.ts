@@ -12,6 +12,25 @@ function countPathish(svg: string): number {
   );
 }
 
+describe("publishMultipath — desk-linear-1200-001", () => {
+  it("maker compile emits ≥3 pathish elements with named ids", async () => {
+    const raw = JSON.parse(
+      fs.readFileSync(
+        path.join(process.cwd(), "block-descriptors/desk-linear-1200-001.json"),
+        "utf8",
+      ),
+    );
+    const result = await compileSvgForPublish(raw);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    const svg = result.svg;
+    expect(countPathish(svg)).toBeGreaterThanOrEqual(3);
+    expect(svg).toContain('id="desk-top"');
+    expect(svg).toContain('id="desk-body"');
+    expect(svg).toContain('id="desk-knee-space"');
+  });
+});
+
 describe("publishMultipath — chaise-lounge-001", () => {
   it("compileSvgForPublish emits one pathish element per block (inventory preview)", async () => {
     const raw = JSON.parse(

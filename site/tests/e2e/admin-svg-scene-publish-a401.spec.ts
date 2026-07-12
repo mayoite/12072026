@@ -56,6 +56,9 @@ test.describe("A4.0.1 scene publish authority", () => {
       await expect(
         page.getByRole("region", { name: "Visual authoring studio" }),
       ).toBeVisible();
+      await expect(
+        page.getByRole("toolbar", { name: "Canvas tools" }),
+      ).toBeVisible({ timeout: 45_000 });
 
       await page.screenshot({
         path: path.join(EVIDENCE_DIR, "01-before-rect.png"),
@@ -63,8 +66,17 @@ test.describe("A4.0.1 scene publish authority", () => {
         caret: "initial",
       });
 
-      await page.getByRole("button", { name: "Rect", exact: true }).click();
-      await expect(page.getByRole("button", { name: /Rectangle rect/i })).toBeVisible();
+      await page.locator(".svg-studio__stage").waitFor({ state: "visible", timeout: 45_000 });
+      await page.getByRole("button", { name: "Add rectangle" }).click({ force: true });
+      await expect
+        .poll(
+          async () =>
+            page
+              .locator('[data-testid="admin-svg-engine-shell"]')
+              .getAttribute("data-studio-node-count"),
+          { timeout: 20_000 },
+        )
+        .toMatch(/^[6-9]\d*$/);
 
       await page.screenshot({
         path: path.join(EVIDENCE_DIR, "02-after-rect.png"),

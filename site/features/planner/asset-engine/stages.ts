@@ -104,7 +104,7 @@ export const SVG_STAGES: readonly AssetStage[] = [
     entry:
       "descriptorCatalogBridge + placeCatalogItemInProject + catalog previewImageUrl",
     note:
-      "Inventory preview uses /svg-catalog/*.svg from compileSvgForPublish. Live plan paint is Fabric Block2D multiprim on PlannerFabricStage — not catalog drawImage.",
+      "Inventory preview uses /svg-catalog/*.svg from compileSvgForPublish. Planner PHASE-01 renders published catalog SVG on Fabric (primary); Block2D multiprim is fallback only.",
   },
 ] as const;
 

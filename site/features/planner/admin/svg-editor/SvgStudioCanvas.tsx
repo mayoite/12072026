@@ -16,6 +16,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { MutableRefObject } from "react";
 import {
   ArrowsOutSimple,
   ArrowUUpLeft,
@@ -57,6 +58,8 @@ export interface SvgStudioCanvasProps {
   readonly initialDocument: SvgSceneDocument;
   /** Notified after every committed edit so the host can persist / preview. */
   readonly onDocumentChange?: (document: SvgSceneDocument) => void;
+  /** Host reads the live scene at publish time (dynamic import cannot forward refs). */
+  readonly documentGetterRef?: MutableRefObject<(() => SvgSceneDocument) | null>;
 }
 
 function uniqueId(doc: SvgSceneDocument, base: string): string {
@@ -102,7 +105,11 @@ function centeredCircle(doc: SvgSceneDocument): SvgSceneNode {
   };
 }
 
-export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudioCanvasProps) {
+export function SvgStudioCanvas({
+  initialDocument,
+  onDocumentChange,
+  documentGetterRef,
+}: SvgStudioCanvasProps) {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const adapterRef = useRef<SvgEngineAdapter | null>(null);
   const [history, setHistory] = useState<SvgSceneHistory>(() => createHistory(initialDocument, "Open"));
@@ -111,6 +118,14 @@ export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudio
   const document = history.present.document;
   const documentRef = useRef(document);
   documentRef.current = document;
+
+  useEffect(() => {
+    if (!documentGetterRef) return;
+    documentGetterRef.current = () => documentRef.current;
+    return () => {
+      documentGetterRef.current = null;
+    };
+  }, [documentGetterRef, document]);
 
   // Mount the SVG.js engine once, lazily (client-only import).
   useEffect(() => {
@@ -153,34 +168,29 @@ export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudio
     adapterRef.current?.render(document, selectedId);
   }, [document, selectedId]);
 
-  const apply = useCallback(
-    (label: string, next: SvgSceneDocument) => {
-      setHistory((current) => {
-        const committed = commit(current, label, next);
-        if (committed !== current) onDocumentChange?.(next);
-        return committed;
-      });
-    },
-    [onDocumentChange],
-  );
+  const apply = useCallback((label: string, next: SvgSceneDocument) => {
+    setHistory((current) => commit(current, label, next));
+  }, []);
+
+  // Notify host after commit — never call parent setState inside a setHistory updater.
+  const skipInitialDocumentSyncRef = useRef(true);
+  useEffect(() => {
+    if (skipInitialDocumentSyncRef.current) {
+      skipInitialDocumentSyncRef.current = false;
+      return;
+    }
+    onDocumentChange?.(document);
+  }, [document, onDocumentChange]);
 
   const selected = selectedId ? findNode(document, selectedId) : undefined;
 
   const handleUndo = useCallback(() => {
-    setHistory((h) => {
-      const next = undo(h);
-      if (next !== h) onDocumentChange?.(next.present.document);
-      return next;
-    });
-  }, [onDocumentChange]);
+    setHistory((h) => undo(h));
+  }, []);
 
   const handleRedo = useCallback(() => {
-    setHistory((h) => {
-      const next = redo(h);
-      if (next !== h) onDocumentChange?.(next.present.document);
-      return next;
-    });
-  }, [onDocumentChange]);
+    setHistory((h) => redo(h));
+  }, []);
 
   const addRect = useCallback(() => {
     const node = centeredRect(document);
@@ -232,6 +242,26 @@ export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudio
 
   const zoomToFit = useCallback(() => adapterRef.current?.zoomToFit(), []);
   const resetViewport = useCallback(() => adapterRef.current?.resetViewport(), []);
+
+  const patchSelected = useCallback(
+    (label: string, patch: Partial<SvgSceneNode>) => {
+      if (!selectedId) return;
+      apply(
+        label,
+        replaceNode(document, selectedId, (node) => ({ ...node, ...patch }) as SvgSceneNode),
+      );
+    },
+    [apply, document, selectedId],
+  );
+
+  const patchSelectedNumber = useCallback(
+    (field: string, label: string, raw: string, assign: (value: number) => Partial<SvgSceneNode>) => {
+      const value = Number(raw);
+      if (!Number.isFinite(value)) return;
+      patchSelected(label, assign(value));
+    },
+    [patchSelected],
+  );
 
   // Layer tree paints top-first (topmost z last in the document array).
   const layers = useMemo(() => [...document.nodes].reverse(), [document.nodes]);
@@ -304,6 +334,134 @@ export function SvgStudioCanvas({ initialDocument, onDocumentChange }: SvgStudio
             ))}
             {layers.length === 0 && <li className="svg-studio__empty">No shapes yet — add a rectangle to begin.</li>}
           </ul>
+
+          {selected ? (
+            <div
+              className="svg-studio__inspector"
+              aria-label="Node inspector"
+              data-testid="svg-studio-inspector"
+            >
+              <h3 className="svg-studio__layers-title">Inspector</h3>
+              <p className="svg-studio__inspector-meta">
+                <code>{selected.id}</code> · {selected.kind}
+              </p>
+              {selected.kind === "rect" ? (
+                <div className="svg-studio__inspector-grid">
+                  <label>
+                    X
+                    <input
+                      type="number"
+                      defaultValue={selected.x}
+                      key={`${selected.id}-x-${selected.x}`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("x", `Set ${selected.name} X`, event.target.value, (v) => ({
+                          x: v,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    Y
+                    <input
+                      type="number"
+                      defaultValue={selected.y}
+                      key={`${selected.id}-y-${selected.y}`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("y", `Set ${selected.name} Y`, event.target.value, (v) => ({
+                          y: v,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    W
+                    <input
+                      type="number"
+                      min={1}
+                      defaultValue={selected.width}
+                      key={`${selected.id}-w-${selected.width}`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("width", `Set ${selected.name} width`, event.target.value, (v) => ({
+                          width: Math.max(1, v),
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    H
+                    <input
+                      type="number"
+                      min={1}
+                      defaultValue={selected.height}
+                      key={`${selected.id}-h-${selected.height}`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("height", `Set ${selected.name} height`, event.target.value, (v) => ({
+                          height: Math.max(1, v),
+                        }))
+                      }
+                    />
+                  </label>
+                </div>
+              ) : null}
+              {selected.kind === "circle" ? (
+                <div className="svg-studio__inspector-grid">
+                  <label>
+                    CX
+                    <input
+                      type="number"
+                      defaultValue={selected.cx}
+                      key={`${selected.id}-cx-${selected.cx}`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("cx", `Set ${selected.name} CX`, event.target.value, (v) => ({
+                          cx: v,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    CY
+                    <input
+                      type="number"
+                      defaultValue={selected.cy}
+                      key={`${selected.id}-cy-${selected.cy}`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("cy", `Set ${selected.name} CY`, event.target.value, (v) => ({
+                          cy: v,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    R
+                    <input
+                      type="number"
+                      min={1}
+                      defaultValue={selected.r}
+                      key={`${selected.id}-r-${selected.r}`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("r", `Set ${selected.name} radius`, event.target.value, (v) => ({
+                          r: Math.max(1, v),
+                        }))
+                      }
+                    />
+                  </label>
+                </div>
+              ) : null}
+              <label className="svg-studio__inspector-fill">
+                Fill token
+                <input
+                  type="text"
+                  defaultValue={selected.style.fillToken ?? ""}
+                  key={`${selected.id}-fill-${selected.style.fillToken ?? ""}`}
+                  onBlur={(event) =>
+                    patchSelected(`Set ${selected.name} fill`, {
+                      style: { ...selected.style, fillToken: event.target.value },
+                    })
+                  }
+                />
+              </label>
+            </div>
+          ) : null}
         </aside>
       </div>
     </section>

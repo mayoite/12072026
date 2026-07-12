@@ -11,7 +11,7 @@
  * (`publishSvgEditorAction` owns S4/S6.)
  *
  * Honesty: this is catalog **publish** SVG geometry, not the Fabric plan-draw
- * canvas ([Plans/Admin-track/A2], [Planner-track/CONSTRAINTS]).
+ * canvas (Admin PHASE-01 publish path; stack lock in plan/QUALITY-BAR.md).
  */
 
 "use server";

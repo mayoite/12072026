@@ -1,7 +1,7 @@
 # SVG pipeline — current (locked)
 
 **Baseline:** 2026-07-05  
-**Revision alignment:** [`Plans/00-QUALITY-BAR.md`](../../Plans/00-QUALITY-BAR.md) · Admin A1/A2.  
+**Revision alignment:** [`plan/QUALITY-BAR.md`](../../plan/QUALITY-BAR.md) · Admin P01.  
 **Honesty (owner lock):**
 - `public/svg-catalog/` = **inventory publish only** — not live plan-draw.
 - Live plan-draw = Fabric + Block2D on `features/planner/canvas/` (P05).

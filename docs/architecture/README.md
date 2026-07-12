@@ -1,8 +1,8 @@
 # Architecture docs — index
 
-**Authority:** Plans (execute) → this folder (HOW)  
+**Authority:** `plan/` (execute) → this folder (HOW)  
 **Placement:** [`01-MODULE-LAYOUT.md`](01-MODULE-LAYOUT.md) · **Domains:** [`02-DOMAINS.md`](02-DOMAINS.md)  
-**Upgrade lock:** [`CONSTRAINTS`](../../Plans/Planner-track/CONSTRAINTS.md)
+**Upgrade lock:** [`QUALITY-BAR`](../../plan/QUALITY-BAR.md)
 
 | Task | Doc |
 |------|-----|

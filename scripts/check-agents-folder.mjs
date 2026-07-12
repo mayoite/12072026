@@ -56,7 +56,7 @@ for (const f of files) {
 if (violations.length) {
   console.error("check:agents-folder FAIL:\n");
   violations.forEach((v) => console.error(`  ${v}`));
-  console.error("\nMove essays to Plans/Planner-track/library/from-museum/. Keep handbooks tight.");
+  console.error("\nMove essays to archive/. Keep handbooks tight.");
   process.exit(1);
 }
 console.log(`check:agents-folder OK (${files.length} handbooks, STANDARD≤100)`);

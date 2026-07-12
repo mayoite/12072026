@@ -455,6 +455,72 @@ export async function runPipelineCore(descriptor: PipelineDescriptor): Promise<s
 /**
  * S2 maker path: assemble + SVGO + sanitize from a pre-built `d` path (mm plan space).
  */
+export interface MakerPathPart {
+  readonly id: string;
+  readonly dPath: string;
+}
+
+function buildMakerPathsSvgString(
+  slug: string,
+  viewBox: ViewBox,
+  parts: readonly MakerPathPart[],
+  themeTokens: ThemeTokens | undefined,
+  title: string | undefined,
+  desc: string | undefined,
+  variant: string | undefined,
+): string {
+  const titleAttr = `<title>${escXml(title ?? slug)}</title>`;
+  const descAttr = desc ? `<desc>${escXml(desc)}</desc>` : "";
+  const tokens = themeTokens ?? {};
+  const fillAttr = tokens["fill-primary"]
+    ? ` fill="${escXml(tokens["fill-primary"])}"`
+    : ` fill="currentColor"`;
+  const strokeAttr = tokens["stroke-accent"]
+    ? ` stroke="${escXml(tokens["stroke-accent"])}"`
+    : "";
+  const variantAttr = variant ? ` data-block-variant="${escXml(variant)}"` : "";
+  const vb = `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
+  const inner = parts
+    .map((part, index) => {
+      const idAttr = part.id ? ` id="${escXml(part.id)}"` : ` id="maker-part-${index}"`;
+      const classAttr = slug ? ` class="${slug}"` : "";
+      return `<path d="${part.dPath}"${fillAttr}${strokeAttr}${idAttr}${classAttr}/>`;
+    })
+    .join("\n");
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}"${variantAttr}>`,
+    titleAttr,
+    descAttr,
+    `<g>`,
+    inner,
+    `</g>`,
+    `</svg>`,
+  ].join("\n");
+}
+
+export async function runPipelineCoreFromMakerPaths(
+  descriptor: PipelineDescriptor,
+  viewBox: ViewBox,
+  parts: readonly MakerPathPart[],
+): Promise<string> {
+  validateSlug(descriptor.slug);
+  const stableViewBox = assertViewBoxStable({ ...descriptor, viewBox });
+  if (parts.length === 0) {
+    throw new PlannerPipelineError("invalid", "Empty maker path parts");
+  }
+  const assembled = buildMakerPathsSvgString(
+    descriptor.slug,
+    stableViewBox,
+    parts,
+    descriptor.themeTokens,
+    descriptor.name,
+    descriptor.description,
+    descriptor.variant,
+  );
+  const optimised = await optimiseSvg(assembled);
+  return sanitiseSvg(optimised);
+}
+
 export async function runPipelineCoreFromPath(
   descriptor: PipelineDescriptor,
   viewBox: ViewBox,

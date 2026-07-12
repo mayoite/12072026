@@ -57,7 +57,7 @@ export default defineConfig({
     : {
         command:
           process.env.DEV_AUTH_BYPASS === "1"
-            ? "pnpm run dev"
+            ? "pnpm run dev:turbo"
             : "pnpm run build && pnpm run start",
         url: baseURL,
         timeout: 120_000,

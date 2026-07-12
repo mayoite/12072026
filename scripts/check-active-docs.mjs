@@ -15,7 +15,7 @@ const ACTIVE_ROOTS = [
   "DOC-MAP.md",
   "Agents",
   "ayushdocs",
-  "Plans",
+  "plan",
   "docs/INDEX.md",
   "docs/Lockedfiles/INDEX.md",
   "docs/Lockedfiles/01-planner-current.md",
@@ -29,23 +29,7 @@ function collectMd(abs) {
   const out = [];
   for (const ent of fs.readdirSync(abs, { withFileTypes: true })) {
     if (ent.name === "node_modules") continue;
-    // Plans reference packs — consolidated history, not law-layer budget.
-    const underPlans = /[/\\]Plans([/\\]|$)/.test(abs);
-    if (
-      underPlans &&
-      (ent.name === "research" ||
-        ent.name === "suggestions" ||
-        ent.name === "benchmark" ||
-        ent.name === "supporting" ||
-        ent.name === "library" ||
-        ent.name === "archive-packs" ||
-        ent.name === "notes" ||
-        ent.name === "impl" ||
-        ent.name === "reviews" ||
-        ent.name.startsWith("from-"))
-    ) {
-      continue;
-    }
+
     out.push(...collectMd(path.join(abs, ent.name)));
   }
   return out;
@@ -65,7 +49,7 @@ const relPaths = [...files]
 if (relPaths.length > MAX_ACTIVE) {
   console.error(`check:active-docs FAIL: ${relPaths.length} active MDs (max ${MAX_ACTIVE}):\n`);
   relPaths.forEach((p) => console.error(`  ${p}`));
-  console.error("\nMove detail out of active budget or merge into track BOARD.md / Lockedfiles *-current.md.");
+  console.error("\nMove detail out of active budget or merge into track CHECKLIST.md / Lockedfiles *-current.md.");
   process.exit(1);
 }
 
