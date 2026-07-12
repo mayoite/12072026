@@ -119,3 +119,8 @@ results/**/chrome/_cdm/
 # Owner private twin (ignore — not agent law)
 PROTECTED/
 
+
+# Session tool noise
+agent-tools/
+terminals/
+
