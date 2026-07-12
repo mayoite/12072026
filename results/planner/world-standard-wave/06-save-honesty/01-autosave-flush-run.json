@@ -1,9 +1,0 @@
-{
-    "agent":  "P06-A10",
-    "testsPassed":  10,
-    "exitCode":  0,
-    "suite":  "tests/unit/planner-autosave.test.ts",
-    "command":  "pnpm exec vitest run tests/unit/planner-autosave.test.ts",
-    "testFilesPassed":  1,
-    "capturedAt":  "2026-07-10T11:36:02.0401552Z"
-}

@@ -1,2 +1,0 @@
-Successfully clicked on the element
-

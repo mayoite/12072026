@@ -1,5 +1,0 @@
-Script ran on page and returned:
-```json
-{"furniture":8,"mode":"Wall -+ 2D"}
-```
-

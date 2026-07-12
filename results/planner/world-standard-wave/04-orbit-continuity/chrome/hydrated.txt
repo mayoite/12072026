@@ -1,5 +1,0 @@
-Script ran on page and returned:
-```json
-{"bodyLen":20,"sample":"Skip to main content","hasMain":true,"reactRoot":false}
-```
-

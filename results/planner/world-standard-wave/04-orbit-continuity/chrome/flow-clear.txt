@@ -1,2 +1,0 @@
-[{"type":"text","text":"Error: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\npptr:evaluate;performEvaluation%20(file%3A%2F%2F%2FD%3A%2FOandO07072026%2Fresults%2F_tools%2Fchrome-devtools-cli%2Fnode_modules%2Fchrome-devtools-mcp%2Fbuild%2Fsrc%2Ftools%2Fscript.js%3A99%3A42):3:41"}]
-

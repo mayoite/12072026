@@ -1,4 +1,0 @@
-NO_GIT_COPY
-Source repo HEAD before copy: 0d86a5c476666a100c409cb8e444683ffc75ee51
-Source copy path: D:\idiot
-Note: fresh W5/W6 proof uses `unit-w5w6-pack-2026-07-12.log` and `browser-w5w6-raw-2026-07-12.log`.
