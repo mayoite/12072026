@@ -58,6 +58,7 @@ async function handleSvgEditorPost(req: NextRequest) {
     const err = published.error;
     const isParse =
       err.startsWith("invalid:") ||
+      err.startsWith("422.") ||
       err.startsWith("missing_field:") ||
       err.includes("Zod") ||
       err.toLowerCase().includes("parse");

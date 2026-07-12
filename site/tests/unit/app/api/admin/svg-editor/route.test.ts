@@ -152,7 +152,10 @@ describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
     const res = await POST(req as any, {} as any);
     const body = await res.json();
 
-    expect(runSvgPipeline).toHaveBeenCalledWith(validDescriptor);
+    expect(runSvgPipeline).toHaveBeenCalledWith(
+      validDescriptor,
+      expect.objectContaining({ skipCompile: true, precompiledSvg: expect.any(String) }),
+    );
     expect(body.thumb).toMatch(/site-block-thumbs|cdn/);
   });
 
@@ -164,8 +167,9 @@ describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
     const req = makeReq(validDescriptor);
     const res = await POST(req as any, {} as any);
     const body = await res.json();
-    expect(body.success).toBe(true);
-    expect(body.descriptor).toBeTruthy();
+    // Pipeline failure is now fail-closed: publish aborts on non-zero exit.
+    expect(body.success).toBe(false);
+    expect(body.descriptor).toBeUndefined();
   });
 });
 
