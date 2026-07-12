@@ -5,16 +5,12 @@
  * authority remains `SvgSceneDocument`; this adapter only draws it and reports
  * pointer/viewport events back. It is client-only — never import it on the server
  * (the studio loads it via a dynamic import in the canvas component).
- *
- * Spike record (A4.0): @svgdotjs/svg.js core is MIT, ESM, ships types, and mounts
- * cleanly under happy-dom + Next. Its companion `svg.panzoom.js` plugin, however,
- * is a global-scoped IIFE that references `window.SVG` at eval time and throws
- * outside a browser global — so we do NOT depend on it. Pan/zoom is implemented
- * directly on the SVG viewBox here: fewer dependencies, no global coupling, and
- * unit-testable in the DOM environment.
  */
 
 import { SVG, type Svg, type Element as SvgElement } from "@svgdotjs/svg.js";
+import "@svgdotjs/svg.draggable.js";
+import "@svgdotjs/svg.select.js";
+import "@svgdotjs/svg.resize.js";
 
 import { serializeSceneToDefinition } from "./svgSceneSerializer";
 import type { SvgBlockDefinitionV1 } from "@/features/planner/admin/svg-editor/svgBlockSchemas";
@@ -40,7 +36,6 @@ interface ViewBoxRect {
 
 function applyStyle(element: SvgElement, node: SvgSceneNode): void {
   const { style } = node;
-  // Tokens are semantic CSS vars / currentColor — never raw hex (anti-copy law).
   if (style.fillToken !== undefined) element.attr("fill", style.fillToken);
   if (style.strokeToken !== undefined) element.attr("stroke", style.strokeToken);
   if (style.opacity !== undefined) element.attr("opacity", style.opacity);
@@ -72,6 +67,23 @@ function drawNode(root: Svg, node: SvgSceneNode): SvgElement | null {
   return element;
 }
 
+function drawOriginAxes(root: Svg, viewBox: ViewBoxRect): void {
+  // Draw horizontal axis line at y = 0
+  if (0 >= viewBox.y && 0 <= viewBox.y + viewBox.height) {
+    root.line(viewBox.x, 0, viewBox.x + viewBox.width, 0)
+      .addClass("svg-studio-axis-line");
+  }
+  // Draw vertical axis line at x = 0
+  if (0 >= viewBox.x && 0 <= viewBox.x + viewBox.width) {
+    root.line(0, viewBox.y, 0, viewBox.y + viewBox.height)
+      .addClass("svg-studio-axis-line");
+  }
+  // Center anchor point at (0,0)
+  root.circle(6)
+    .center(0, 0)
+    .addClass("svg-studio-axis-center");
+}
+
 export interface SvgJsAdapterOptions {
   /** Enable wheel-to-zoom + drag-to-pan on the empty canvas. Default true. */
   readonly panZoom?: boolean;
@@ -91,10 +103,13 @@ export function createSvgJsEngineAdapter(
   draw.viewbox(home.x, home.y, home.width, home.height);
 
   let current = initial;
+  let selectedId: string | null = null;
   let destroyed = false;
+
   const listeners: { [K in keyof SvgEngineEventMap]: Set<SvgEngineListener<K>> } = {
     "node:pointerdown": new Set(),
     "node:dblclick": new Set(),
+    "node:change": new Set(),
     "viewport:change": new Set(),
   };
 
@@ -175,7 +190,6 @@ export function createSvgJsEngineAdapter(
     const factor = WHEEL_ZOOM_STEP ** -event.deltaY;
     const nextZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, currentZoom * factor));
     if (nextZoom === currentZoom) return;
-    // Zoom toward the cursor: keep the scene point under the pointer fixed.
     const focus = toScenePoint(event);
     const nextWidth = home.width / nextZoom;
     const nextHeight = home.height / nextZoom;
@@ -191,26 +205,102 @@ export function createSvgJsEngineAdapter(
   globalThis.addEventListener?.("pointermove", onPointerMove);
   globalThis.addEventListener?.("pointerup", onPointerUp);
 
-  function repaint(document: SvgSceneDocument): void {
+  function repaint(document: SvgSceneDocument, activeId: string | null): void {
     draw.clear();
-    for (const sceneNode of document.nodes) drawNode(draw, sceneNode);
+
+    // Render the coordinate pivot crosshairs at the bottom layer
+    drawOriginAxes(draw, home);
+
+    const elementsMap = new Map<string, SvgElement>();
+    for (const sceneNode of document.nodes) {
+      const element = drawNode(draw, sceneNode);
+      if (element) {
+        elementsMap.set(sceneNode.id, element);
+      }
+    }
+
+    if (activeId) {
+      const element = elementsMap.get(activeId);
+      const nodeModel = document.nodes.find((n) => n.id === activeId);
+
+      // Do not make locked or hidden nodes interactive
+      if (element && nodeModel && !nodeModel.locked && !nodeModel.hidden) {
+        // Paths are not easily editable using simple drag/resize; restrict to primitives
+        if (nodeModel.kind !== "path") {
+          element.selectize().resize().draggable();
+
+          element.on("dragend", () => {
+            let patch: Partial<SvgSceneNode> = {};
+            if (nodeModel.kind === "rect" || nodeModel.kind === "text") {
+              patch = { x: element.x(), y: element.y() };
+            } else if (nodeModel.kind === "circle") {
+              patch = { cx: element.cx(), cy: element.cy() };
+            } else if (nodeModel.kind === "line") {
+              patch = {
+                x1: Number(element.attr("x1")),
+                y1: Number(element.attr("y1")),
+                x2: Number(element.attr("x2")),
+                y2: Number(element.attr("y2")),
+              };
+            }
+            for (const listener of listeners["node:change"]) {
+              listener({ nodeId: activeId, patch });
+            }
+          });
+
+          element.on("resizedone", () => {
+            let patch: Partial<SvgSceneNode> = {};
+            if (nodeModel.kind === "rect") {
+              patch = {
+                x: element.x(),
+                y: element.y(),
+                width: element.width(),
+                height: element.height(),
+              };
+            } else if (nodeModel.kind === "circle") {
+              patch = {
+                cx: element.cx(),
+                cy: element.cy(),
+                r: element.width() / 2,
+              };
+            } else if (nodeModel.kind === "line") {
+              patch = {
+                x1: Number(element.attr("x1")),
+                y1: Number(element.attr("y1")),
+                x2: Number(element.attr("x2")),
+                y2: Number(element.attr("y2")),
+              };
+            }
+            for (const listener of listeners["node:change"]) {
+              listener({ nodeId: activeId, patch });
+            }
+          });
+        }
+      }
+    }
   }
 
-  repaint(current);
+  repaint(current, selectedId);
 
   return {
-    render(document) {
-      if (destroyed || document === current) return;
+    render(document, nextSelectedId) {
+      if (destroyed) return;
+      const selectChanged = nextSelectedId !== selectedId;
+      const docChanged = document !== current;
+      if (!docChanged && !selectChanged) return;
+
       const viewChanged =
         document.viewBox.width !== home.width || document.viewBox.height !== home.height;
       current = document;
+      selectedId = nextSelectedId !== undefined ? nextSelectedId : selectedId;
+
       if (viewChanged) {
         home.x = document.viewBox.x;
         home.y = document.viewBox.y;
         home.width = document.viewBox.width;
         home.height = document.viewBox.height;
       }
-      repaint(document);
+      repaint(document, selectedId);
     },
     getViewport() {
       return readViewport();
@@ -253,6 +343,7 @@ export function createSvgJsEngineAdapter(
       globalThis.removeEventListener?.("pointerup", onPointerUp);
       listeners["node:pointerdown"].clear();
       listeners["node:dblclick"].clear();
+      listeners["node:change"].clear();
       listeners["viewport:change"].clear();
       draw.remove();
     },

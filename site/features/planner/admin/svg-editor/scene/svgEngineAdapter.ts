@@ -34,9 +34,15 @@ export interface SvgEnginePointerEvent {
   readonly shiftKey: boolean;
 }
 
+export interface SvgEngineNodeChangeEvent {
+  readonly nodeId: string;
+  readonly patch: Partial<SvgSceneNode>;
+}
+
 export interface SvgEngineEventMap {
   readonly "node:pointerdown": SvgEnginePointerEvent;
   readonly "node:dblclick": SvgEnginePointerEvent;
+  readonly "node:change": SvgEngineNodeChangeEvent;
   readonly "viewport:change": SvgEngineViewport;
 }
 
@@ -46,7 +52,7 @@ export type SvgEngineListener<K extends keyof SvgEngineEventMap> = (
 
 export interface SvgEngineAdapter {
   /** Push a new document to render. Idempotent for an unchanged reference. */
-  render(document: SvgSceneDocument): void;
+  render(document: SvgSceneDocument, selectedId?: string | null): void;
   /** Current viewport. */
   getViewport(): SvgEngineViewport;
   /** Set pan/zoom. */
@@ -85,6 +91,7 @@ export function createHeadlessEngineAdapter(
   const listeners: { [K in keyof SvgEngineEventMap]: Set<SvgEngineListener<K>> } = {
     "node:pointerdown": new Set(),
     "node:dblclick": new Set(),
+    "node:change": new Set(),
     "viewport:change": new Set(),
   };
 
@@ -132,6 +139,7 @@ export function createHeadlessEngineAdapter(
       destroyed = true;
       listeners["node:pointerdown"].clear();
       listeners["node:dblclick"].clear();
+      listeners["node:change"].clear();
       listeners["viewport:change"].clear();
     },
   };

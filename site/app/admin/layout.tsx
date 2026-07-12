@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import "@/app/(site)/globals.css";
 import "@/app/css/core/locked/admin/index.css";
+import "@/app/css/admin-overrides.css";
 import AdminLayoutShell from "@/features/planner/admin/AdminLayoutShell";
 import { requireAuthUser } from "@/lib/auth/session";
 
