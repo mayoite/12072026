@@ -1,6 +1,7 @@
 # A5 — Catalog operations
 
-**Status:** OPEN — current admin lists/editors are fragmented. There is no complete catalog operating workflow.
+**Status:** OPEN — current admin lists/editors are fragmented. There is no complete catalog operating workflow.  
+**Kill order (addendum):** [A5a-catalog-operations-kills.md](./A5a-catalog-operations-kills.md) — execute slices there; **this card’s acceptance is still the done bar**.
 
 **Outcome:** A catalog manager can create, classify, search, bulk-update, archive, restore, and inspect every sellable planner item without touching code or the database.
 

@@ -1,7 +1,7 @@
 # Goals (scoreboard)
 
 Thin table only — **not** a second plan.  
-Execute: [Plans/INDEX.md](../Plans/INDEX.md) · [NEXT-STEPS](../agents-review/NEXT-STEPS.md).  
+Execute: [Plans/INDEX.md](../Plans/INDEX.md) · track BOARDs.  
 Bar: [Plans/00-QUALITY-BAR.md](../Plans/00-QUALITY-BAR.md) — **plan honesty ≠ product score**.
 
 | # | Slice | Honest product status |
@@ -12,6 +12,6 @@ Bar: [Plans/00-QUALITY-BAR.md](../Plans/00-QUALITY-BAR.md) — **plan honesty �
 | 6 | Orbit / symbols / mesh / shortcuts | REPROVE — not module-bar done |
 | 7 | Buyer product P11–P16 | OPEN — unbuilt |
 | Admin A4 | Visual SVG studio | Code raised; **disk proof open** |
-| Site / SEO / Security | Parallel tracks | See NEXT-STEPS — none product-closed |
+| Site / SEO / Security | Parallel tracks | See track BOARDs under Plans/ — none product-closed |
 
 **GATE PASS ≠ ship.** No 9.5 theater. Why we build: `03-PRODUCT-CONTEXT.md`.

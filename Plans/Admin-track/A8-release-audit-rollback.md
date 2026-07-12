@@ -1,6 +1,7 @@
 # A8 — Release, audit, and rollback
 
-**Status:** OPEN — publish writes artifacts, but admin-wide release governance is incomplete.
+**Status:** OPEN — publish writes artifacts, but admin-wide release governance is incomplete.  
+**Kill order (addendum):** [A8a-release-audit-kills.md](./A8a-release-audit-kills.md) — slices only; **this card’s acceptance remains the done bar**.
 
 **Outcome:** Every catalog, system, SVG, asset, and price change has an accountable release path and a safe rollback.
 

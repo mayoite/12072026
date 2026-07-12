@@ -12,7 +12,7 @@
 | Card | Status | Owns |
 |------|--------|------|
 | [S1](./S1-deps-cleanup.md) | **OPEN** | Dep cleanup — **plan only** until owner `execute Plan A` |
-| [S2](./S2-site-chrome.md) | **PASS SLICE** | Header CTA + mobile drawer — not full redesign |
+| [S2](./S2-site-chrome.md) | **REPROVE** (was PASS slice) | Evidence path `results/site/s2-chrome/` missing on path audit — restore pack or re-prove; not full redesign |
 
 ### Next action (only)
 

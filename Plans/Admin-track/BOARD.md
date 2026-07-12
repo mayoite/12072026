@@ -19,10 +19,10 @@
 | [A2](./A2-svg-pipeline.md) | **DONE** | Live descriptors published; orphans closed at proof time |
 | [A3](./A3-production-auth.md) | **DONE** | Prod rejects anonymous; bypass ignored |
 | [A4](./A4-no-code-svg-studio.md) | **OPEN** | Visual engine — code raised; product green only after disk proof |
-| [A5](./A5-catalog-operations.md) | **OPEN** | Catalog lifecycle / bulk — **frozen until A4.0.1 disk green** |
-| [A6](./A6-workstation-system-authoring.md) | **OPEN** | Workstation family — needs A4 patterns + A5 |
-| [A7](./A7-pricing-boq-governance.md) | **OPEN** | Price books — unblocks Planner P15 |
-| [A8](./A8-release-audit-rollback.md) | **OPEN** | Release governance |
+| [A5](./A5-catalog-operations.md) | **OPEN** | Catalog lifecycle / bulk — **frozen until A4.0.1 disk green** · kills: [A5a](./A5a-catalog-operations-kills.md) |
+| [A6](./A6-workstation-system-authoring.md) | **OPEN** | Workstation family — needs A4 + A5 · kills: [A6a](./A6a-workstation-system-kills.md) |
+| [A7](./A7-pricing-boq-governance.md) | **OPEN** | Price books — unblocks Planner P15 · kills: [A7a](./A7a-pricing-boq-kills.md) |
+| [A8](./A8-release-audit-rollback.md) | **OPEN** | Release governance · kills: [A8a](./A8a-release-audit-kills.md) |
 
 ```
 A1–A3 foundation → A4 visual engine (disk proof) → A5 ops → A6 systems → A7 pricing → A8 release

@@ -7,7 +7,7 @@
 1. **A4 engine raise (real code):** scene→`blocks` through parse; load blocks into canvas; undo syncs form; canvas-first shell CSS/layout; unit suite 106 green. **Not** buyer-closed — browser disk proof still required.
 2. **A4 plan honesty raise:** critical path, kill list, code vs product status split.
 3. **Mistake corrected:** restored foreign `.agents/skills` after an earlier wipe — **owner rejected**; skills removed again. Those packs are not ours.
-4. **All-track plan raise:** INDEX, quality bar, every board, NEXT-STEPS, SEO1 inventory start, PENDING — **no 9.5 claims**. Plan honesty improved; product scores stayed honest/low.
+4. **All-track plan raise:** INDEX, quality bar, every track BOARD, PENDING — **no 9.5 claims**. Execute law stays in `Plans/*`.
 
 ## Do not claim
 

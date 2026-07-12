@@ -10,9 +10,9 @@
 
 **Upgrade lock:** live 2D = Fabric sole host. Plans that restore Feasibility or prove on archive selectors = **reject**.
 
-**Quality bar:** [00-QUALITY-BAR.md](./00-QUALITY-BAR.md) — plan honesty ≠ product score.
+**Quality bar (plan law):** [00-QUALITY-BAR.md](./00-QUALITY-BAR.md) · **Product checkout floor:** [00-PRODUCT-FLOOR.md](./00-PRODUCT-FLOOR.md)
 
-**Execute pointer:** [agents-review/NEXT-STEPS.md](../agents-review/NEXT-STEPS.md)
+**Execute (Plans only):** track [BOARD](./Planner-track/BOARD.md) · [Admin BOARD](./Admin-track/BOARD.md) · [Site BOARD](./Site-track/BOARD.md) · [SEO BOARD](./SEO-track/BOARD.md) · [Security BOARD](./Security-track/BOARD.md). One open kill-ID per track.
 
 ```
 Plans/

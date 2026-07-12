@@ -19,20 +19,21 @@ Head → `Agents/Agents-01-STANDARD.md` · list → `Agents/INDEX.md`
 Subagents → same bar · `/using-superpowers` · fit skills.
 
 ## 3. Freedom & hard stops
-- **Owner owns intent.** Goal change → stop and align. Else: full execute freedom (code, tests, browser, commands, commits, push/mirror, subagents).
-- **Hard ask only:** purchase/seat · force-push/delete remote branch · destroy owner data · competitor-asset edge · new product area.
+- **Owner owns intent.** Goal change → stop and align. Else: execute freedom (code, tests, browser, commands, subagents).
+- **Hard ask only:** purchase/seat · force-push/delete remote branch · destroy owner data · competitor-asset edge · new product area · **commit/push** (no commit without owner ask).
 
 ## 4. Git (standing)
 - Repo root checkout only — **no worktrees**.
-- Commit each landable slice · push `origin` when green enough · mirror `mayoite` ~45m / big land.
-- Detail: Standard §6 · `OPERATIONS_RUNBOOK.md`.
+- Commit/push only when owner asks. Detail: Standard §6 · `OPERATIONS_RUNBOOK.md`.
 
 ## 5. Layout (hard)
-- **Evidence** → repo-root `results/` only. Never `site/results/` or `site/test-results/`.
-- **`site/` tracked tree** → product code only. `site/node_modules/` = gitignored pnpm workspace shim (expected after root install; not committed). **Never** `npm install` under `site/` or `site/tech-stack-generator/` — no nested `package-lock.json` or `site/tech-stack-generator/node_modules/`.
-- **Durable** → flat `Plans/*-track/` · `Agents/` · `ayushdocs/` (5 files) · `docs/` (HOW + Lockedfiles overlays).
-- **Install** → `pnpm` from repo root. **Firecrawl dead.** Research → repo-root **`websites/`** (gitignored; junction `D:\websites` → same). Never claim benchmarks missing without reading it.
-- Redirect stray tool output to `results/`. `pnpm run check:layout`.
+- **`results/`** = tool **dump only** (write if needed). **Never read `results/` for PASS, status, or done.** Law = `Plans/` + live code. Never write under `site/results/` or `site/test-results/`.
+- **`PROTECTED/`** = owner private. **Ignore** — do not open, edit, or cite.
+- **No `agents-review/`** — not law; do not recreate as SoT.
+- **`site/` tracked tree** → product code only. `site/node_modules/` = gitignored workspace shim. **Never** `npm install` under `site/` or `site/tech-stack-generator/`.
+- **Durable** → flat `Plans/*-track/` · `Agents/` · `ayushdocs/` (5 files) · `docs/` (HOW + Lockedfiles).
+- **Install** → `pnpm` from repo root. **Firecrawl dead.** Research → repo-root **`websites/`** (gitignored).
+- `pnpm run check:layout`.
 
 ## 6. Law (short)
 - **No `any`** in handwritten code.
@@ -45,9 +46,11 @@ Subagents → same bar · `/using-superpowers` · fit skills.
 | Need | File |
 |------|------|
 | Process / phases / seats | `Agents/INDEX.md` |
-| Execute | `Plans/INDEX.md` |
+| Execute | `Plans/INDEX.md` + track BOARDs |
 | Owner | `ayushdocs/` |
 | Facts / commands | `Readme.md` · `START.md` |
 | Blockers | `Failures.md` |
+| Dump (not law) | `results/` |
+| Owner private | `PROTECTED/` — ignore |
 
 **Checks:** `check:agents-md` · `check:agents-folder` · `check:ayushdocs` · `check:active-docs` · `check:plans-purity`

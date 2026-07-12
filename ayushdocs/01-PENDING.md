@@ -3,7 +3,9 @@
 **Updated:** 2026-07-12 · Quality paramount · no score theater.
 
 **GATE PASS ≠ product done.**  
-**Execute:** [Plans/INDEX.md](../Plans/INDEX.md) · [agents-review/NEXT-STEPS.md](../agents-review/NEXT-STEPS.md) · **Law:** `AGENTS.md`
+**Execute:** [Plans/INDEX.md](../Plans/INDEX.md) · track BOARDs under `Plans/*-track/` · **Law:** `AGENTS.md`  
+(Plans are law. Side folders are not plan status.)
+
 
 ## Open now
 

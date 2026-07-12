@@ -115,3 +115,7 @@ results/**/chrome/_cdm/
 
 # Local archives (compressed, not tracked)
 /_archive-local/
+
+# Owner private twin (ignore — not agent law)
+PROTECTED/
+

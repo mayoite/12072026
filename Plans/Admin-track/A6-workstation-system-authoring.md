@@ -1,6 +1,7 @@
 # A6 — Workstation system authoring
 
-**Status:** OPEN — the business-critical workstation family is not authorable as a complete system.
+**Status:** OPEN — the business-critical workstation family is not authorable as a complete system.  
+**Kill order (addendum):** [A6a-workstation-system-kills.md](./A6a-workstation-system-kills.md) — slices only; **this card’s acceptance remains the done bar**.
 
 **Outcome:** A product manager defines one workstation family that the Planner can configure as linear or L-shaped runs at meaningful seat counts.
 

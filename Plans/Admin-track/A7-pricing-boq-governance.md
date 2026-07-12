@@ -1,6 +1,7 @@
 # A7 — Pricing and BOQ governance
 
-**Status:** OPEN — priced BOQ is not built.
+**Status:** OPEN — priced BOQ is not built.  
+**Kill order (addendum):** [A7a-pricing-boq-kills.md](./A7a-pricing-boq-kills.md) — slices only; **this card’s acceptance remains the done bar**.
 
 **Outcome:** Authorized admins map released system modules to cost and sell-price rules without editing Planner code.
 

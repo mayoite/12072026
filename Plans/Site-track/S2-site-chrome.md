@@ -1,6 +1,6 @@
 # S2 — Site chrome
 
-**Status:** PASS (landable slice) — 2026-07-11. Residuals listed in evidence; not a full visual redesign.
+**Status:** REPROVE — 2026-07-12 path audit: `results/site/s2-chrome/` **absent** on this tree. Prior “PASS slice” (2026-07-11) is not proven here until pack restored or re-run. Not a full visual redesign. **Not done** until green-when + owner happy.
 
 **Goal:** Inventory + raise bar for marketing/site chrome (toolbars, dropdowns, motion, CSS) vs home design base — not planner workspace chrome (that is Planner P09).
 

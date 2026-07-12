@@ -17,13 +17,14 @@
 
 | Topic | On disk today | Paths |
 |--------|---------------|-------|
-| Package policy | `@svgdotjs/*` in `package.json` but **unused** in production paths | `site/package.json` |
-| Descriptor schema | `BlockDescriptor` (`svgTypes.ts`) + `SvgBlockDefinitionV1` (dual) | `svgBlockSchemas.ts`, open3d `svgTypes.ts` |
-| Compile | **Two paths:** in-process `svgCompiler.server.ts` + exec `scripts/generate-svg.mjs` | `open3d/catalog/svg/`, `svgPipelineRunner.ts` |
+| Package policy | `@svgdotjs/*` used by Admin A4 studio (`svgJsEngineAdapter`) | `admin/svg-editor/scene/` |
+| Descriptor schema | `BlockDescriptor` (publish SoT) + `SvgBlockDefinitionV1` (studio/parts) | `svgTypes.ts`, `svgBlockSchemas.ts` |
+| Compile (publish) | **`compileSvgForPublish` / `runSvgCompileStages`** (S1–S3); S4 disk via pipeline with `skipCompile` | `asset-engine/svg/`, `svgPipelineRunner.ts` |
+| V1 compiler | `svgCompiler.server.ts` = **reference/tests**, not live publish authority | `open3d/catalog/svg/` |
 | Sanitize | DOMPurify + SVGO | `open3d/catalog/svg/svgServerSanitizer.ts` |
 | Raster | `svgArtifactCompiler.server.ts` — resvg + sharp | `admin/svg-editor/` |
 | Planner browser | `plannerSvgAdapter.ts` — minimal projection | `admin/svg-editor/` |
-| Admin UI | Schema-driven no-code form + debounced compiled preview; no admin Puck mount | `AdminSvgEditorEditView.tsx` |
+| Admin UI | Canvas-first studio + form rail + live compile; no admin Puck mount | `AdminSvgEditorEditView.tsx`, `SvgStudioCanvas.tsx` |
 | Persist | Atomic JSON to `site/block-descriptors/{slug}.json` | `persistBlockDescriptor.ts` |
 
 ## Packages (on disk)
@@ -38,8 +39,8 @@
 | `@resvg/resvg-js` | `^2.6.2` | Canonical PNG |
 | `sharp` | `^0.35.2` | Thumbnails |
 | `zod` | `^4.4.3` | Descriptor schemas |
-| `@svgdotjs/svg.js` + plugins | `^3.2.5` etc. | **Installed, unused** |
-| `fabric` | `7.4.0` | `loadSVGFromString` on canvas (consumer, not compiler) |
+| `@svgdotjs/svg.js` + plugins | `^3.2.5` etc. | Admin A4 visual studio (SVG.js adapter) |
+| `fabric` | `7.4.0` | Planner plan canvas (consumer, not admin compiler) |
 
 **Boundary:** `plannerSvgAdapter.ts` must not import server-only packages — enforced by `svgPackageBoundaries.test.ts`.
 
@@ -47,12 +48,12 @@
 
 ## Summary
 
-SVG has a real no-code authoring foundation. Option A machinery exists — compiler under `open3d/catalog/svg/`, sanitizer, resvg/sharp artifacts, Puck portal registry, persist API, boundary tests, typed form controls, and live compile preview. Two descriptor models remain. Planner consumes `BlockDescriptor` while newer work speaks `SvgBlockDefinitionV1`.
+Publish authority is **`compileSvgForPublish`** (fail-closed) then S4 disk write. Admin A4 studio uses SVG.js + `SvgSceneDocument`; geometry maps to `BlockDescriptor.blocks` for parse. Dual descriptor models remain (BlockDescriptor vs V1 parts). Catalog SVG ≠ Fabric plan-draw.
 
 ## Strengths
 
-Package boundary tests enforce server-only compiler in planner chunks. Deterministic compiler module with checksum story. Phase 1 completion tests prove reference variants compile. Atomic persist and pipeline runner with defined failure taxonomy. Portal `Render` path works for preview. Aligns with locked `03-dependencies-engines-current.md` Option A when code path is unified.
+Package boundary tests; fail-closed publish; atomic persist; A4 scene/adapter/history foundation; live compile preview.
 
 ## Weaknesses
 
-CLI `generate-svg.mjs` and the in-process path can still diverge outside publish. Publish itself now compiles fail-closed before disk persist. Dual schemas still require a publish adapter until single-model migration. Admin A4 remains open for templates, history, drafts, validation focus, accessibility, responsive proof, and performance. Admin publish still does not prove Fabric plan-draw — those are separate paths.
+Dual schemas still need the blocks bridge. A4 product green (disk browser proof, drafts, inspector, a11y) still open. Admin publish does not prove Fabric plan-draw.
