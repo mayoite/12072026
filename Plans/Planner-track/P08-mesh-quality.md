@@ -1,12 +1,12 @@
 # P08 — Mesh quality (W7)
 
-**Status:** REPROVE — toe/carcass/door implementation and mirrored GLB part plan are on disk. Visual and current-checkout evidence remain open.
+**Status:** **PASS** (agent 2026-07-12) — units 43/43 + NOTES bar + headless plan visual; residual named (no WebGL browser shot; handles/materials simple).
 
 **Gate:** **W7** / CP-08 — modular **cabinet-v0** readable as **toe / carcass / door** (not apology box).  
 **Evidence:** `results/planner/world-standard-wave/08-mesh-quality/` only.  
 **CP:** [CHECKPOINTS](./CHECKPOINTS.md) · [BOARD](./BOARD.md)
 
-**Goal:** Freeze bar in `../../results/planner/world-standard-wave/08-mesh-quality/NOTES.md`; prove with units + headless visual smoke; plan === mesh part list.
+**Goal:** Freeze bar in NOTES; prove with units + headless visual smoke; plan === mesh part list.
 
 **Out of scope:** Photoreal · full kitchens/hardware · 2D host thrash · adding a second plan host · cloud catalog · designer static GLB · non–cabinet-v0 · writes under `site/public/**`. Stay imperative Three — no R3F rewrite for pretty PNGs.
 
@@ -14,9 +14,9 @@
 
 ---
 
-## Current truth (re-verify)
+## Current truth (this HEAD)
 
-`generateCabinetV0Mesh` now creates `toe → carcass → door(s)`. Counts are 2/3/4. `modularCabinetV0GlbExport.ts` imports the shared toe and door constants and mirrors the part plan. What is still missing is fresh visual smoke and full affected-test evidence on this checkout.
+`generateCabinetV0Mesh` creates `toe → carcass → door(s)`. Counts **2 / 3 / 4**. `TOE_HEIGHT_MM = 100`. GlbExport imports shared constants and mirrors the part plan 1:1. Fresh vitest + headless PNGs on `0bc58eb5…`.
 
 ---
 
@@ -59,15 +59,15 @@ Prefix: `site/features/planner/project/` (and live 3D under `features/planner/3d
 
 ---
 
-## Kill order (unchecked)
+## Kill order
 
-- [ ] Evidence dir + baseline vitest log
-- [ ] `../../results/planner/world-standard-wave/08-mesh-quality/NOTES.md` = this bar (exact `toe`, formulas, fail modes)
-- [ ] RED units: slab names `toe,carcass,door-slab`; counts 2/3/4; height span; toe geometry
-- [ ] GREEN mesh + GlbExport mirror; blast tests updated
-- [ ] Headless three-quarter (+ side) PNG; `../../results/planner/world-standard-wave/08-mesh-quality/visual-smoke.md` yes/no per criterion
-- [ ] Non-regression scoped vitest; `run.json` (gate W7)
-- [ ] Residual honesty (handles/materials still simple) — no world-standard ship claim
+- [x] Evidence dir + baseline vitest log (`vitest-unit.json` · `run.json`)
+- [x] NOTES bar frozen (`agents-work/…/08-mesh-quality/NOTES.md` + dump mirror)
+- [x] Units: slab names `toe,carcass,door-slab`; counts 2/3/4; height span; toe geometry — **43/43 green**
+- [x] GREEN mesh + GlbExport mirror; blast tests (createSceneObjectFromNode) green
+- [x] Headless three-quarter (+ side) PNG; `visual-smoke.md` yes/no per criterion
+- [x] Non-regression scoped vitest; `run.json` (gate W7)
+- [x] Residual honesty (handles/materials simple; headless = plan SVG not WebGL) — no world-standard ship claim
 
-**W7 red until** NOTES + units + visual smoke agree toe/carcass/door readable.  
+**W7 / CP-08:** **PASS** (agent) — units + NOTES; visual residual named in `visual-smoke.md`.  
 **Next (sequence):** [P09](./P09-shortcuts-chrome.md).

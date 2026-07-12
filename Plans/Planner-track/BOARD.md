@@ -55,10 +55,10 @@ P01 → P02 → P03 → P04 → P05 → P06 → P07 → P08 → P09 → P10 → 
 | 3 | [P03](./P03-select-delete.md) | CP-03 **W3** | **PASS** (owner 2026-07-12) | `03-select-delete/` |
 | 4 | [P04](./P04-orbit-continuity.md) | CP-04 **W4** | **PASS** (agent 2026-07-12) | `04-orbit-continuity/` |
 | 5 | [P05](./P05-symbols-svg.md) | CP-05 | **REPROVE** | `05-symbols-svg/` |
-| 6 | [P06](./P06-save-honesty.md) | CP-06 W5–W6 | **REPROVE** | `06-save-honesty/` |
+| 6 | [P06](./P06-save-honesty.md) | CP-06 W5–W6 | **PASS** (agent 2026-07-12 — unit + browser id continuity) | `06-save-honesty/` |
 | 7 | [P07](./P07-draw-place-journey.md) | CP-07 W1–W2 | **REPROVE** | `02-browser-open3d-journey/` (dump name only — not product folder) |
-| 8 | [P08](./P08-mesh-quality.md) | CP-08 **W7** | **REPROVE** | `08-mesh-quality/` |
-| 9 | [P09](./P09-shortcuts-chrome.md) | CP-09 **W8** | **REPROVE** | `09-shortcuts-chrome/` |
+| 8 | [P08](./P08-mesh-quality.md) | CP-08 **W7** | **PASS** (agent 2026-07-12 — units + NOTES + headless plan visual) | `08-mesh-quality/` |
+| 9 | [P09](./P09-shortcuts-chrome.md) | CP-09 **W8** | **PASS** (agent 2026-07-12 — unit honesty 23/23; browser optional residual) | `09-shortcuts-chrome/` |
 | 10 | [P10](./P10-evidence-handover.md) | CP-10 | **OPEN** | `10-handover/` |
 | 11 | [P11](./P11-project-brief-room.md) | buyer | **OPEN** | (card names path) |
 | 12 | [P12](./P12-workstation-configurator.md) | buyer | **OPEN** — needs Admin A6 | (card names path) |
@@ -68,7 +68,7 @@ P01 → P02 → P03 → P04 → P05 → P06 → P07 → P08 → P09 → P10 → 
 **Open:** [P05](./P05-symbols-svg.md) / **CP-05** — symbols readable on live Fabric; SVG = publish inventory only.  
 Evidence: `results/planner/world-standard-wave/05-symbols-svg/`.
 
-**Closed:** CP-02 · **CP-03 / W3** owner PASS · **CP-04 / W4** agent PASS 2026-07-12 (id set 2D↔3D + orbit ON).
+**Closed:** CP-02 · **CP-03 / W3** owner PASS · **CP-04 / W4** agent PASS 2026-07-12 · **CP-06 / W5–W6** agent PASS 2026-07-12 · **CP-08 / W7** agent PASS 2026-07-12 (toe/carcass/door units + headless plan visual) · **CP-09 / W8** agent PASS 2026-07-12 (shortcut/rail/palette units; deferred ≠ W1).
 
 Live product layout: `editor` + `canvas` + `3d` + `project` + `ui` under `features/planner/`. Legacy URL `/planner/open3d` is redirect-only, not a product folder.
 

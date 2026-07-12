@@ -1,6 +1,6 @@
 # P09 — Shortcuts & blocking chrome (W8)
 
-**Status:** OPEN / REPROVE — **require differently** (live vs deferred tiers); map restored; **fresh evidence still required**.
+**Status:** PASS (unit honesty) — live vs deferred tiers held; fresh vitest 23/23 under `09-shortcuts-chrome/`. Optional browser residual only.
 
 **Gate:** **W8** / CP-09 — for **live** tools only: **id → key → handler → visible label** same truth; fix chrome that hides/blocks live tools.  
 **Evidence:** `results/planner/world-standard-wave/09-shortcuts-chrome/` only (never `08-shortcuts-chrome/`).  
@@ -56,9 +56,9 @@ Source: `CANVAS_TOOL_REQUIREMENT` in `canvasTool.ts`.
 | Maps + tiers | `canvasTool.ts` |
 | Keyboard | `useWorkspaceKeyboard` map-only |
 | RAC rail | `RAIL_NAV_TOOLS` + `RAIL_DRAW_TOOLS` |
-| Units | `toolShortcutTruth` + `canvasToolRail.a11y` |
+| Units | `toolShortcutTruth` + `canvasToolRail.a11y` + `canvasToolPaletteAuthority` — **23/23 green** |
 | Host testid | `planner-fabric-stage` + `role="application"` |
-| Evidence `09-` | Untrusted until fresh |
+| Evidence `09-` | Fresh dump + agents-work NOTES (HEAD `0bc58eb`) |
 
 ---
 
@@ -83,14 +83,14 @@ Source: `CANVAS_TOOL_REQUIREMENT` in `canvasTool.ts`.
 
 ---
 
-## Kill order (unchecked)
+## Kill order
 
-- [ ] Evidence dir + vitest shortcut + RAC rail a11y → `09-shortcuts-chrome/`
-- [ ] NOTES: live tools id→key→handler; deferred only arm
-- [ ] Browser: wall + opening + window (N) + place labels match
-- [ ] No Dimension→D rebind · no lucide · no RAC drop
-- [ ] Do not mark W1 room-rectangle PASS from deferred room tool
+- [x] Evidence dir + vitest shortcut + RAC rail a11y + palette authority → `09-shortcuts-chrome/` (23/23, HEAD `0bc58eb`)
+- [x] NOTES: live tools id→key→handler; deferred only arm (`agents-work/.../09-shortcuts-chrome/NOTES.md`)
+- [ ] Browser: wall + opening + window (N) + place labels match — **optional residual** (no dev server this pass; not blocking unit honesty)
+- [x] No Dimension→D rebind · no lucide · no RAC drop (code read + units)
+- [x] Do not mark W1 room-rectangle PASS from deferred room tool
 
-**CP-09 green only with fresh evidence on live tier.**  
-Live tier proof = shortcut/rail/keyboard units + (optional) browser labels — **do not** wait on P07 journey to close W8 unit honesty. Deferred room ≠ W1.  
+**CP-09 unit honesty green** with fresh evidence on live tier (2026-07-12 Slice D).  
+Live tier proof = shortcut/rail/keyboard/palette units + (optional) browser labels — **do not** wait on P07 journey to close W8 unit honesty. Deferred room ≠ W1.  
 **Next (sequence):** [P10](./P10-evidence-handover.md).

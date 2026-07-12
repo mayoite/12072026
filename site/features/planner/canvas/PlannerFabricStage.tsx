@@ -564,11 +564,29 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       const resize = () => {
         // Prefer layout box (client*) over getBoundingClientRect so a blown
         // scroll height cannot pin Fabric to multi-viewport canvas sizes.
-        const region = host.closest(".canvas");
+        const region =
+          host.closest(".canvas") ??
+          host.closest(".open3d-canvas-with-rail");
         const regionH =
           region instanceof HTMLElement ? region.clientHeight : 0;
-        const w = Math.max(1, Math.floor(host.clientWidth || host.getBoundingClientRect().width));
-        let h = Math.max(1, Math.floor(host.clientHeight || host.getBoundingClientRect().height));
+        const regionW =
+          region instanceof HTMLElement ? region.clientWidth : 0;
+        const w = Math.max(
+          1,
+          Math.floor(
+            host.clientWidth ||
+              regionW ||
+              host.getBoundingClientRect().width,
+          ),
+        );
+        let h = Math.max(
+          1,
+          Math.floor(
+            host.clientHeight ||
+              regionH ||
+              host.getBoundingClientRect().height,
+          ),
+        );
         if (regionH > 0) {
           h = Math.min(h, regionH);
         }
@@ -587,6 +605,10 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       const canvasRegion = host.closest(".canvas");
       if (canvasRegion instanceof HTMLElement) {
         observer.observe(canvasRegion);
+      }
+      const railRegion = host.closest(".open3d-canvas-with-rail");
+      if (railRegion instanceof HTMLElement && railRegion !== canvasRegion) {
+        observer.observe(railRegion);
       }
 
       return () => {
@@ -740,7 +762,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     return (
       <div
         ref={hostRef}
-        className={`${styles.root} ${cursorClass}`}
+        className={`open3d-canvas-embedded ${styles.root} ${cursorClass}`}
         data-testid="planner-fabric-stage"
         role="application"
         onWheel={handleWheel}

@@ -292,22 +292,26 @@
 }
 
 .canvas > * {
-  flex: 1;
+  /* basis 0%: stage pixels must not set min-content and grow past viewport */
+  flex: 1 1 0%;
   min-height: 0;
   min-width: 0;
   max-height: 100%;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .canvas :global(.open3d-canvas-with-rail),
-.canvas :global(.open3d-canvas-embedded) {
-  flex: 1 1 auto;
+.canvas :global(.open3d-canvas-embedded),
+.canvas :global([data-testid="planner-fabric-stage"]) {
+  flex: 1 1 0%;
   min-height: 0;
   min-width: 0;
   max-height: 100%;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 /* Maximize canvas: hide side panels and give the grid column to the plan. */

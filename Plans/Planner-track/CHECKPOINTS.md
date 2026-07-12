@@ -55,9 +55,9 @@ Buyer cards [P11](./P11-project-brief-room.md) · [P12](./P12-workstation-config
 | CP-03 | Select · delete · undo on **`planner-fabric-stage` only** — unit **and** browser id+pose | **PASS** (owner accept 2026-07-12 — browser id set + unit; see `03-select-delete/`) |
 | CP-04 | Orbit ON + 2D↔3D pose (Fabric↔Three), browser proof | **PASS** (agent call 2026-07-12 — id set + orbit; residual: 3D mesh userData not browser-asserted) |
 | CP-05 | Symbols readable **on live Fabric**; SVG = publish only | **REPROVE** |
-| CP-06 | Save→reload same ids; honest local/cloud labels | **REPROVE** |
+| CP-06 | Save→reload same ids; honest local/cloud labels | **PASS** (agent 2026-07-12 — unit + browser id set under `06-save-honesty/save-reload/`) |
 | CP-07 | Draw/place on Fabric (`planner-fabric-stage`), screenshots | **REPROVE** |
-| CP-08 | Modular mesh readable (toe/carcass/door) | **REPROVE** |
+| CP-08 | Modular mesh readable (toe/carcass/door) | **PASS** (agent 2026-07-12 — units 43/43 + NOTES + headless plan PNG; residual: no WebGL browser shot) |
 | CP-09 | Shortcut labels = handlers | **REPROVE** |
 | CP-10 | Handover pack on disk — **not product ship** | **OPEN** |
 

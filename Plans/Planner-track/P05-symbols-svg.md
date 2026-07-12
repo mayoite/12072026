@@ -1,6 +1,6 @@
 # P05 — W2 symbol quality + SVG path honesty
 
-**Status:** REPROVE — live Fabric Block2D multiprim raise landed. The latest visual pack is a candidate, not current-checkout PASS.
+**Status:** REPROVE — multiprim library + Fabric paint + browser eyes green on this checkout; **CP-05 not PASS** (published SVG multipath residual).
 
 **Gate:** **W2 symbol half** / CP-05 — readable **cabinet-v0** on the **live** plan canvas; honest Block2D vs SVG-publish.  
 **Evidence:** `results/planner/world-standard-wave/05-symbols-svg/`  
@@ -30,15 +30,16 @@ Live plan paint = Fabric multiprim only. SVG catalog = inventory publish only.
 
 ---
 
-## Live truth (re-verify 2026-07-11)
+## Live truth (re-verify 2026-07-12 Slice A)
 
 | Piece | Status |
 |-------|--------|
 | `furnitureBlockUsesCenteredPath` | Always **`false`** in library |
 | `modularCabinetBlock` | Multiprim in library — not empty box |
-| Units | `furnitureBlock2D.cabinet-v0.test.ts` exists |
-| **Live Fabric paint** | `createFabricFurnitureBlock` multiprim is wired — re-prove |
-| Evidence pack | `eyes/` shows the raised candidate; still re-run on final checkout |
+| Units | cabinet-v0 + fabricBlock2D + renderBlock2D: **32 tests green** (logs under evidence/) |
+| **Live Fabric paint** | `createFabricFurnitureBlock` multiprim wired; e2e `open3d-p05-cabinet-multiprim` **PASS** (eyes PNG multiprim) |
+| SVG publish honesty | Plan ≠ catalog; NOTES: `agents-work/P05-SVG-HONESTY-NOTES.md` |
+| **CP-05** | **Not green** — `open3d-cp05-symbols-s7` fails published chaise multipath (1 pathish); do **not** forge PASS |
 
 ---
 
@@ -54,14 +55,15 @@ Live plan paint = Fabric multiprim only. SVG catalog = inventory publish only.
 
 ---
 
-## Kill order (unchecked)
+## Kill order
 
-- [ ] Re-run cabinet-v0 vitest → `05-symbols-svg/`
-- [ ] Port multiprim paint to Fabric stage (or prove equivalent)
-- [ ] Visual on **live Fabric** canvas only
-- [ ] SVG honesty NOTES
-- [ ] No competitor art · sole Fabric host
+- [x] Re-run cabinet-v0 vitest → `05-symbols-svg/` (22/22 with fabric + workstation peers)
+- [x] Port multiprim paint to Fabric stage (or prove equivalent) — live path proven; no product gap this slice
+- [x] Visual on **live Fabric** canvas only — `browser/p05-scratch-cabinet-canvas.png` multiprim (body/door/handle)
+- [x] SVG honesty NOTES — `agents-work/P05-SVG-HONESTY-NOTES.md`
+- [x] No competitor art · sole Fabric host (`planner-fabric-stage`)
 
-**W2 symbol half red until** live Fabric shows readable cabinet-v0 (library-only PASS = incomplete).  
-Do **not** wait on P07/P08 to close this card.  
+**W2 symbol half (cabinet multiprim on Fabric):** green on this re-run.  
+**CP-05 full gate:** still red — published `/svg-catalog` multipath residual (not Fabric Block2D).  
+Do **not** wait on P07/P08 to close symbol multiprim.  
 **Next (sequence):** [P06](./P06-save-honesty.md).

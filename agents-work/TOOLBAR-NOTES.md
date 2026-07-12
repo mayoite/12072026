@@ -26,13 +26,16 @@
 
 ```text
 pnpm --filter oando-site exec vitest run \
-  tests/unit/features/planner/canvasToolRail.a11y.test.tsx \
   tests/unit/features/planner/toolShortcutTruth.test.ts \
-  --reporter=dot
+  tests/unit/features/planner/canvasToolRail.a11y.test.tsx \
+  tests/unit/features/planner/canvasToolPaletteAuthority.test.ts \
+  --reporter=json \
+  --outputFile=../results/planner/world-standard-wave/09-shortcuts-chrome/vitest-unit.json
 ```
 
-(Counts filled after run.)
+**Result (2026-07-12 Slice D):** 3 files · **23** tests passed (8 shortcut + 5 a11y + 10 palette/tiers).  
+Detail: `agents-work/world-standard-wave/09-shortcuts-chrome/NOTES.md`
 
 ## Out of scope
 
-Inventory · Properties · Fabric geometry · Plans cards · `results/`
+Inventory · Properties · Fabric geometry · Plans cards · `results/` (dump only)

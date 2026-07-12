@@ -43,13 +43,36 @@ body.planner-workspace {
 }
 
 .open3d-canvas-with-rail {
+  /* Positioning root for first-use / placement overlays (must not push layout). */
+  position: relative;
   display: flex;
   flex-direction: row;
+  flex: 1 1 0%;
   width: 100%;
   height: 100%;
+  max-height: 100%;
   min-height: 0;
+  min-width: 0;
   overflow: hidden;
   background: color-mix(in srgb, var(--surface-soft) 88%, var(--surface-page));
+}
+
+/* Live Fabric stage (testid) + legacy embedded host share the stage flex slot. */
+.open3d-canvas-with-rail > .open3d-canvas-embedded,
+.open3d-canvas-with-rail > [data-testid="planner-fabric-stage"] {
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Absolute overlays inside with-rail never contribute to flex min-content. */
+.open3d-canvas-with-rail > .open3d-first-use,
+.open3d-canvas-with-rail > .open3d-tool-guidance,
+.open3d-canvas-with-rail > .open3d-canvas-placement-hint {
+  position: absolute;
 }
 
 @media (width < 48rem) {
@@ -62,9 +85,10 @@ body.planner-workspace {
     flex-direction: column;
   }
 
-  .open3d-canvas-with-rail > .open3d-canvas-embedded {
+  .open3d-canvas-with-rail > .open3d-canvas-embedded,
+  .open3d-canvas-with-rail > [data-testid="planner-fabric-stage"] {
     order: 1;
-    flex: 1 1 auto;
+    flex: 1 1 0%;
     min-height: 0;
   }
 
@@ -226,17 +250,14 @@ body.planner-workspace {
   }
 }
 
-.open3d-canvas-with-rail > .open3d-canvas-embedded {
-  flex: 1;
-  min-width: 0;
-}
-
 .open3d-canvas-embedded {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .open3d-canvas-embedded .canvas-region {
