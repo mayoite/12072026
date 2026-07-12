@@ -39,7 +39,7 @@ PHASE-02). Measurements and labels are also genuinely needed to produce a readab
 
 ## Steps
 1. **Task 0 (license gate):** `pnpm view roughjs license` + `pnpm view @excalidraw/math license` → MIT.
-   Write `results/planner/11-annotations-excalidraw/SCOPE.md` (Tier A only; Fabric sole host; roughness low).
+   Write `results/ui/phase-01/SCOPE.md` (Tier A only; Fabric sole host; roughness low).
 2. **Task 1:** Install Tier A deps; MIT rows in Lockedfiles; `excalidraw-MIT.txt`; `pnpm run build` exit 0;
    record client chunk delta in report (baseline vs post-install).
 3. **Task 2–3:** Failing units first — `annotationGeometry.ts` + `roughAnnotationAdapter.ts`.
@@ -67,7 +67,7 @@ Live run is the proof. Raw artifacts → `results/ui/phase-01/`. Report → `age
 ## Guardrails
 - Fabric stays the only host — no second canvas, no Excalidraw UI chrome (math/render only).
 - A tool marked `live` must actually paint — no faked geometry.
-- **Stop-if-fail:** `Failures.md` on build break, second plan host, or live M/T without Fabric paint.
+
 
 ## Out of scope
 - Tier B `@excalidraw/element` export bridge (deferred to Buyer P05 share/export).

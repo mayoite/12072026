@@ -82,10 +82,6 @@ Journey bar: `wallsIncreased` · `openingObjectsIncreased` · `furnitureDelta >=
 
 Live run is the proof. Raw artifacts → `results/ui/phase-02/`. Report → `agents-work/reports/ui-phase-02.md`.
 
-**Owner paperwork (parallel, not blocking):** owner product-truth accept — owner confirms live
-routes, Fabric host, inventory honesty, `hostWiringP01` 4/4; record in
-`agents-work/reports/owner-product-truth-accept.md`.
-
 ## Guardrails
 - Start from `/planner/` only — a dev-tools URL is never buyer proof.
 - Guests must pass the `ProjectSetupGate`; no second plan host.

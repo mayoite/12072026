@@ -14,7 +14,7 @@ const auditFindings = [
   ["High", "Catalog ownership", "features/catalog + lib/catalog + features/planner/catalog + planner/store/catalog*", "Catalog schemas, loaders and adapters span four ownership zones.", "Make features/catalog canonical; retain planner placement adapters only."],
   ["High", "Document bridges", "documentBridge + fabricDocumentBridge + plannerDocumentBridge + shared/document", "Multiple bridge layers translate overlapping planner shapes.", "Reduce to one Fabric adapter and one public PlannerDocument API."],
   ["Medium", "Site content", "lib/site-data/* + components/home/* + route copy", "Content ownership is split between data modules and rendered components.", "Keep global constants shared; colocate feature-owned content."],
-  ["Medium", "Stale repo truth", "Readme.md + planner CONTENTS files + canvas-fabric/index.ts", "Files still describe archived docs or tldraw as active.", "Update or remove stale indexes after consolidation."],
+  ["Medium", "Stale repo truth", "Readme.md + planner CONTENTS files", "Files still describe archived docs or tldraw as active.", "Update or remove stale indexes after consolidation."],
 ];
 
 const planPhases = [
@@ -111,7 +111,7 @@ const workflow = [
 const domains = [
   ["Public site", "app/(site), components/site, components/home", "Wired", "Marketing, products, contact, portal entry."],
   ["Planner route", "app/planner -> PlannerWorkspaceRoute -> UnifiedPlannerPage", "Wired", "Thin route into active workspace shell."],
-  ["Fabric canvas", "features/planner/canvas-fabric", "Wired", "Current 2D runtime surface."],
+  ["Fabric canvas", "features/planner/canvas/PlannerFabricStage", "Wired", "Sole 2D host (`planner-fabric-stage`)."],
   ["3D viewer", "features/planner/viewer, features/planner/3d", "Partial", "R3F present; bridge still needs hardening."],
   ["Planner legacy", "tldraw comments, stubs, stale CONTENTS", "Stale", "Remove from live language and drive paths."],
   ["Generated evidence", "results/playwright-report, results/screenshots, results/test-results", "Organized", "All test outputs should land under results/."],

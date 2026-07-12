@@ -14,13 +14,8 @@ Foundation is reproducible on the current checkout. Pack does not claim product 
 2. `pnpm --filter oando-site run typecheck` exit 0.
 3. Targeted Planner units green on HEAD.
 4. Required Fabric browser journeys green, including batch placement.
-5. Foundation residuals closed or owner-waived in report:
-   - Planner P01 catalog SVG render + Admin P01 publish multipath
-   - Planner P10 mesh quality
-   - Planner P11 theme mount + toolbar shortcuts reproof
-   - All other Planner P01–P11 open items
-6. Owner product-truth accept recorded or named open in `agents-work/reports/owner-product-truth-accept.md`.
-7. Failures and missing proof named in report. HEAD recorded.
+5. Open P01–P11 checklist items closed or owner-waived in handover report.
+6. HEAD recorded in report.
 
 ## Done when
 

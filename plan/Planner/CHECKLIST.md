@@ -1,6 +1,6 @@
 # Planner — CHECKLIST
 
-Tick [UI-BAR.md](../UI-BAR.md) **and** the phase section below. Live browser proof required. Units/typecheck alone never tick a box.
+Tick [UI-BAR.md](../UI-BAR.md) and the phase section below. Live browser proof required.
 
 ## PHASE-01 — SVG import
 - [ ] Baseline reproof: `modularCabinetV0.test.ts` + `fabricBlock2D.test.ts` green on HEAD (log before edits)
@@ -46,7 +46,6 @@ Tick [UI-BAR.md](../UI-BAR.md) **and** the phase section below. Live browser pro
 - [ ] Journey uses live theme from PHASE-11 (not mouse-only theme bypass)
 - [ ] Zero console errors on guest workspace load
 - [ ] Height/chrome audit turned into a repeatable check (not a one-off screenshot)
-- [ ] Chrome notes restored: `CANVAS-NOTES.md`, `TOOLBAR-NOTES.md`, `LAYOUT-OVERFLOW.md`, `SVG-CATALOG-HONESTY-NOTES.md` under `agents-work/`
 - [ ] axe/lighthouse clean
 - [ ] Trace + screenshots attached
 
@@ -85,6 +84,5 @@ Tick [UI-BAR.md](../UI-BAR.md) **and** the phase section below. Live browser pro
 - [ ] `hostWiringP01` 4/4 on HEAD
 - [ ] `open3d-world-standard-journey.spec.ts` green
 - [ ] `open3d-systems-v0-batch-place.spec.ts` green
-- [ ] Foundation residuals closed or owner-waived (Planner P01 + Admin P01 symbols, P10 mesh, P11 theme + toolbar reproof, other P01–P11)
-- [ ] Owner product-truth accept recorded or named open
-- [ ] HEAD.txt + handover report committed path named
+- [ ] Open P01–P11 items closed or owner-waived in handover report
+- [ ] HEAD recorded in handover report

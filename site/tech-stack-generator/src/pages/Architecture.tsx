@@ -101,7 +101,7 @@ const featureModules = `flowchart TB
     end
 
     subgraph Features["features/"]
-        Planner["planner/<br/>canvas-fabric<br/>3d, editor, store"]
+        Planner["planner/<br/>canvas, workspace<br/>3d, editor, store"]
         Catalog["catalog/<br/>products, search"]
         CRM["crm/<br/>customers, leads"]
         Admin["admin/<br/>dashboards"]

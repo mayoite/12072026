@@ -1,6 +1,6 @@
 # UI — CHECKLIST
 
-Tick [UI-BAR.md](../UI-BAR.md) **and** the phase section below. `results/` is a dump. Failures → `../FAILURES.md`.
+Tick [UI-BAR.md](../UI-BAR.md) and the phase section below.
 
 ## PHASE-01 — Dimension (M) + Text (T) live
 - [ ] Task 0: `pnpm view roughjs license` + `pnpm view @excalidraw/math license` → MIT each; `SCOPE.md` in results dump (Tier A only, Fabric sole host)

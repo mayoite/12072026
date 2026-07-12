@@ -1,6 +1,6 @@
 # Buyer — CHECKLIST
 
-Tick [UI-BAR.md](../UI-BAR.md) **and** the phase section below. `results/` is a dump. Failures → `../FAILURES.md`.
+Tick [UI-BAR.md](../UI-BAR.md) and the phase section below.
 
 ## PHASE-01 — Workstation configurator
 - [ ] Two-seat linear journey passes in browser

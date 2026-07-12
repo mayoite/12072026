@@ -1,6 +1,6 @@
 # Site — CHECKLIST
 
-One checklist for the track. Live run gates each tick; `results/` is a dump. Failures → `../FAILURES.md`.
+Live run gates each tick.
 
 ## PHASE-01 — Dependency cleanup
 - [ ] Owner said "execute" for the cut list

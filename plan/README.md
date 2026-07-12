@@ -8,17 +8,10 @@ file executable in parallel by its own agent.
   single tickable "done" for that track).
 - **Phases are independent files** (`PHASE-0N-*.md`). Each states its own `Blocks on:` — the only
   real dependency — so unrelated phases run in parallel, even within one track.
-- **One root `FAILURES.md`** ([FAILURES.md](./FAILURES.md)) for the whole effort — real execution
-  red only, not backlog.
+- **Failures:** [../Failures.md](../Failures.md)
 - **Quality bar** ([QUALITY-BAR.md](./QUALITY-BAR.md)) — honesty rules, locked stack, proof model.
 - **UI bar** ([UI-BAR.md](./UI-BAR.md)) — required on every buyer-facing phase close (UI, Planner, Buyer).
-- **Hygiene gates** ([HYGIENE.md](./HYGIENE.md)) — owner product-truth, dead-path cleanup, toolbar reproof, frozen orphan slice.
-- **Proof = a live run** (browser / bytes / headers). Two outputs from a run:
-  **human report → `agents-work/reports/<track>-phase-<nn>.md`** (committed, this is what agents
-  write up), and **raw auto-generated artifacts → `results/…`** (gitignored dump, never the
-  authority).
-- Each phase file is written in plain language first (so a non-expert can follow), then grounded
-  in real file paths, with a Planner-5D-class benchmark where it applies.
+- **Proof:** live run → report in `agents-work/reports/`; raw artifacts in `results/`.
 
 ## Execution order — what can run together, what is blocked
 Phases are for parallel work. This is the only place that gates them. Everything not listed as

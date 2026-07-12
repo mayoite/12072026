@@ -69,7 +69,7 @@ rg "__plannerFabricView" features/
 rg "isPlannerDevToolsEnabled" features/
 ```
 
-Example: `__plannerFabricView` is set in `features/planner/canvas-fabric/hooks/floorplanCanvas.ts`, not the workspace fabric bridge.
+Example: `__plannerFabricView` is set in `features/planner/canvas/PlannerFabricStage.tsx`.
 
 ### Locator vs behavior
 

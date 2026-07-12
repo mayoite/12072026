@@ -86,13 +86,6 @@ export default tsEslint.config(
     },
   },
   {
-    files: ["features/planner/canvas-fabric/lib/helpers.ts"],
-    rules: {
-      eqeqeq: "off",
-      "@typescript-eslint/no-unused-vars": "off",
-    },
-  },
-  {
     // Tests and mocks intentionally construct partial external/runtime shapes.
     // Production source remains strict; this exemption is limited to test support.
     files: ["tests/**/*.{ts,tsx}", "**/__mocks__/**/*.{ts,tsx,js,jsx}"],

@@ -22,7 +22,7 @@ recorded BLOCKED reason instead of a silent skip.
 ## Steps
 1. Run `db:advisors:security` against the DB.
 2. Capture the log; confirm 0 ERROR.
-3. If the DB isn't available, record the real blocker in `../FAILURES.md`.
+3. If the DB isn't available, record the real blocker in the handover report.
 
 ## Done when
 Boxes in `plan/Security/CHECKLIST.md` → PHASE-04.

@@ -1,6 +1,6 @@
 # SEO — CHECKLIST
 
-One checklist for the track. Live run/audit gates each tick; `results/` is a dump. Failures → `../FAILURES.md`.
+Live run gates each tick.
 
 ## PHASE-01 — Sitemap ↔ routes
 - [ ] Real indexable public routes enumerated

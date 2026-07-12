@@ -27,4 +27,4 @@ Proof = live browser run + screenshots + targeted trace. Units alone never close
 | [Planner](./Planner/) | P01–P12 |
 | [Buyer](./Buyer/) | P01–P05 |
 
-Site, Admin, SEO, Security phases tick UI bar only when the work ships buyer-visible planner UI.
+Site / Admin / SEO / Security: tick when shipping buyer-visible planner UI.

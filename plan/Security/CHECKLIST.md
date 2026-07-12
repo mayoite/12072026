@@ -1,6 +1,6 @@
 # Security — CHECKLIST
 
-One checklist for the track. Live run gates each tick; `results/` is a dump. Failures → `../FAILURES.md`.
+Live run gates each tick.
 No secrets in git · no CSP weaken for a green.
 
 ## PHASE-01 — Headers + CSP

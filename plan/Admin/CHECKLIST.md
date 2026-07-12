@@ -1,7 +1,6 @@
 # Admin — CHECKLIST
 
-One checklist for the track. A box ticks only after a live run (browser and/or on-disk bytes).
-`results/` is a dump, not the authority. Failures go to `../FAILURES.md`.
+Live run gates each tick (browser and/or on-disk bytes).
 
 ## PHASE-01 — Authoring quality
 - [ ] Baseline reproof: `git rev-parse HEAD` + chaise HTTP pathish count recorded (RED baseline ok before fix)
@@ -58,5 +57,5 @@ One checklist for the track. A box ticks only after a live run (browser and/or o
 - [ ] Publish → status "Published"; POST succeeds
 - [ ] `public/svg-catalog/side-table-001.svg` contains rect signature coords; byte size increases
 - [ ] `admin-svg-scene-publish-a401.spec.ts` green on this checkout
-- [ ] Evidence pack under `results/admin/phase-07/` (dump)
+- [ ] Evidence pack under `results/admin/phase-07/`
 - [ ] Kill list respected until green: no minimap/pen/multi-select scored as done
