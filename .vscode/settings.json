@@ -34,8 +34,7 @@
     "less.lint.unknownAtRules": "ignore",
     "scss.lint.unknownAtRules": "ignore",
     "vscode-edge-devtools.headless": false,
-    "terminal.explorerKind": "both",
-    "terminal.integrated.accessibleViewFocusOnCommandExecution": true,
+    "terminal.integrated.accessibleViewFocusOnCommandExecution": false,
     "terminal.integrated.accessibleViewPreserveCursorPosition": true,
     "terminal.integrated.allowedLinkSchemes": [
         "file",

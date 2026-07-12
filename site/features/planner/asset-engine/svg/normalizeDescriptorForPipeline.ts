@@ -78,6 +78,21 @@ function normalizeBlock(raw: unknown): PipelineBlockRect | null {
   return { x, y, width, height, id };
 }
 
+function normalizeBlockFromPart(raw: unknown): PipelineBlockRect | null {
+  const o = asRecord(raw);
+  if (!o) return null;
+  if (o.visible === false) return null;
+  if (o.kind !== "rect") return null;
+  const x = finiteNumber(o.x);
+  const y = finiteNumber(o.y);
+  const width = finiteNumber(o.width);
+  const height = finiteNumber(o.height);
+  if (x === null || y === null || width === null || height === null) return null;
+  if (width <= 0 || height <= 0) return null;
+  const id = typeof o.id === "string" ? o.id : undefined;
+  return { x, y, width, height, id };
+}
+
 function synthesizeBlocksFromGeometry(
   geometry: Record<string, unknown> | null,
   viewBox: { width: number; height: number },
@@ -179,12 +194,18 @@ export function normalizeDescriptorForPipeline(
   };
 
   const rawBlocks = Array.isArray(root.blocks) ? root.blocks : [];
+  const rawParts = Array.isArray(root.parts) ? root.parts : [];
   const blocks = rawBlocks
     .map(normalizeBlock)
     .filter((b): b is PipelineBlockRect => b !== null);
+  const partBlocks = rawParts
+    .map(normalizeBlockFromPart)
+    .filter((b): b is PipelineBlockRect => b !== null);
 
   const finalBlocks =
-    blocks.length > 0
+    partBlocks.length > 0
+      ? partBlocks
+      : blocks.length > 0
       ? blocks
       : synthesizeBlocksFromGeometry(geometry ?? dimensions, viewBox);
 

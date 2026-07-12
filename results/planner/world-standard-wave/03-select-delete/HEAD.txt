@@ -1,1 +1,4 @@
-91fd96c704e9f85508d07652408f57ab41005fec
+NO_GIT_COPY
+Source repo HEAD before copy: 0d86a5c476666a100c409cb8e444683ffc75ee51
+Source copy path: D:\idiot
+Note: browser proof used a clean repo-root dev server after removing stale `site/.next`.

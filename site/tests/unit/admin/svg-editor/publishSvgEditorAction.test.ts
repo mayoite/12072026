@@ -10,6 +10,10 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/newBlockDescriptorStub";
+import { descriptorToFormState } from "@/features/planner/admin/svg-editor/svgEditorFormAdapters";
+import { tryLoad } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
+import type { SvgEditorFormState } from "@/features/planner/admin/svg-editor/svgEditorFormState";
 
 const { publishDescriptorWithPipeline } = vi.hoisted(() => ({
   publishDescriptorWithPipeline: vi.fn(),
@@ -32,23 +36,21 @@ vi.mock("@/features/shared/api/withAuth", () => ({
 }));
 
 import { publishSvgEditorAction } from "@/features/planner/admin/svg-editor/publishSvgEditorAction";
-import type { PuckDataShape } from "@/features/planner/admin/svg-editor/puckBlockRegistry";
 
-/** Minimal Puck publish payload — only content[0].props is read by the action. */
-function puckData(slug: string, propOverrides: Record<string, unknown> = {}): PuckDataShape {
+function newFormState(slug: string): SvgEditorFormState {
+  const descriptor = makeNewBlockDescriptorStub();
   return {
-    root: { props: { title: slug } },
-    content: [
-      {
-        type: "BlockFixed",
-        props: {
-          id: "block-0",
-          slug,
-          ...propOverrides,
-        },
-      },
-    ],
-  } as unknown as PuckDataShape;
+    ...descriptorToFormState(descriptor),
+    slug,
+  };
+}
+
+function existingFormState(slug: string): SvgEditorFormState {
+  const result = tryLoad(slug);
+  if (!result.ok) {
+    throw new Error(`Fixture descriptor missing: ${slug}`);
+  }
+  return descriptorToFormState(result.value);
 }
 
 describe("publishSvgEditorAction", () => {
@@ -63,7 +65,7 @@ describe("publishSvgEditorAction", () => {
   });
 
   it('slug "new" builds a default descriptor and calls publishDescriptorWithPipeline', async () => {
-    const data = puckData("new-block");
+    const data = newFormState("new-block");
     const result = await publishSvgEditorAction("new", data);
 
     expect(result).toEqual({
@@ -89,7 +91,10 @@ describe("publishSvgEditorAction", () => {
 
   it("missing slug returns not found and does not call the pipeline", async () => {
     const missingSlug = "missing-block-xyz-999";
-    const result = await publishSvgEditorAction(missingSlug, puckData(missingSlug));
+    const result = await publishSvgEditorAction(
+      missingSlug,
+      newFormState(missingSlug),
+    );
 
     expect(result).toEqual({ success: false, error: "not found" });
     expect(publishDescriptorWithPipeline).not.toHaveBeenCalled();
@@ -103,7 +108,7 @@ describe("publishSvgEditorAction", () => {
 
     const result = await publishSvgEditorAction(
       "side-table-001",
-      puckData("side-table-001"),
+      existingFormState("side-table-001"),
     );
 
     expect(result).toEqual({
@@ -132,7 +137,7 @@ describe("publishSvgEditorAction", () => {
 
     const result = await publishSvgEditorAction(
       "side-table-001",
-      puckData("side-table-001"),
+      existingFormState("side-table-001"),
     );
 
     expect(result).toEqual({

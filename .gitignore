@@ -38,6 +38,7 @@ site/.env*.local
 coverage/
 playwright-report/
 test-results/
+results/
 # Stale root copies of tool output (canonical paths: results/tests/, results/test-results/)
 tsc-errors.txt
 errors.txt
@@ -111,3 +112,6 @@ websites/
 # node_modules/ already ignores nested node_modules; ignore whole _cdm tree if recreated
 results/**/chrome/_cdm/
 .aider*
+
+# Local archives (compressed, not tracked)
+/_archive-local/

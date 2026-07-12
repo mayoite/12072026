@@ -1,33 +1,21 @@
-# NOTES — P02 engine-lock Fabric-sole freeze re-prove
+# NOTES - P02 engine-lock Fabric-sole freeze re-prove
 
-**Approach:** **A** — document + unit-re-prove the live freeze; **do not rebuild engines**.  
-**Canonical evidence:** `results/planner/world-standard-wave/01-engine-lock/` (never `02-engine-lock/`).  
-**Date:** 2026-07-11  
-**HEAD (product tip under test):** `98d654524e202581f4fd4d2a7c37102694991409`
+Approach: `A`
+Canonical evidence: `results/planner/world-standard-wave/01-engine-lock/`
+Date: 2026-07-12
+Checkout under proof: `D:\idiot` (`NO_GIT_COPY`)
+Source repo head before copy: `0d86a5c476666a100c409cb8e444683ffc75ee51`
 
-## Problem fixed this seat
+## This seat
 
-Prior pack text freezed **FeasibilityCanvas as interim 2D** with Fabric as optional flag overlay. Live code (and plan cards) are **Fabric-sole**. That old freeze was a **downgrade freeze** and is superseded.
+1. Re-proved the Fabric-sole lock on the copied checkout.
+2. Re-ran the three-file freeze pack and got `29/29` pass.
+3. Refreshed metadata to stop pointing at the 2026-07-11 git checkout.
+4. Made no product code edits.
 
-## What this seat did
+## Not done here
 
-1. Verified live host: `OOPlannerWorkspace` mounts only `PlannerCanvasStage` (Fabric barrel); no Feasibility; no flag wire; no `FurnitureFabricLayer` mount.
-2. Rewrote `ENGINE-LOCK-RECORD`, `ENTRYPOINT-MAP`, `FLAG-INVENTORY`, `ANTI-THRASH-AUDIT`, refreshed `PACKAGE-PIN`.
-3. Confirmed `Plans/Planner-track/CONSTRAINTS.md` already matches Fabric-sole (no edit required).
-4. Re-ran unit freeze pack from repo root via pnpm; log `unit-freeze-pack.log` — **29/29 pass**.
-5. Refreshed `HEAD.txt`, `run.json`, `RUN-META.json`, `VERDICT.md`, `OWNER-SIGNOFF-STATUS.md` (OPEN, honest).
-6. No product engine source edits. No Feasibility un-archive.
-
-## What this phase did **not** do
-
-- No product / open3d engine source edits.
-- No package upgrades, Konva introduction, or Feasibility restore.
-- No W3/W5/W8 proofs.
-- No invented owner sign-off.
-
-## Honest status
-
-| Layer | Status |
-|-------|--------|
-| Fabric-sole docs + units | **Aligned / green** |
-| CP-02 owner gate | **OPEN** |
+- No engine rebuild.
+- No package changes.
+- No Feasibility restore.
+- No P03 behavior proof.

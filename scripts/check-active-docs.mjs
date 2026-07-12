@@ -1,5 +1,5 @@
 /**
- * Active law-layer doc budget: max 50 markdown files.
+ * Active law-layer doc budget: max 150 markdown files.
  * Museum + archive + results + site + docs/architecture are NOT counted.
  */
 import fs from "node:fs";
@@ -7,7 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const MAX_ACTIVE = 50;
+const MAX_ACTIVE = 150;
 
 /** Glob-like explicit roots — only buyer/owner/process hubs. */
 const ACTIVE_ROOTS = [

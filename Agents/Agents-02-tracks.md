@@ -9,8 +9,8 @@
 
 | Track | Prefix | Live paths (flat — no `phases/`) |
 |-------|--------|----------------------------------|
-| **Planner** | P01–P10 | `Plans/Planner-track/BOARD.md` · `Plans/Planner-track/P0X-*.md` |
-| **Admin** | A1–A3 | `Plans/Admin-track/BOARD.md` · `A1` `A2` `A3` md at track root |
+| **Planner** | P01–P16 | `Plans/Planner-track/BOARD.md` · flat `PXX-*.md` cards |
+| **Admin** | A1–A8 | `Plans/Admin-track/BOARD.md` · flat `AX-*.md` cards |
 | **Site** | S1–S2 | `Plans/Site-track/BOARD.md` · `S1-deps-cleanup.md` · `S2-site-chrome.md` |
 | **SEO** | SEO1… | `Plans/SEO-track/BOARD.md` only (no phase cards yet) |
 | **Security** | SEC1… | `Plans/Security-track/BOARD.md` · `SEC-hardening.md` |

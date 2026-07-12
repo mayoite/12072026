@@ -2,7 +2,7 @@
 
 pnpm monorepo for `oando.co.in`. Next.js in `site/`.
 
-**Active:** `site/features/planner/` + `site/app/planner/` (hybrid planner: FeasibilityCanvas / canvas-feasibility 2D + Three/r3f 3D; Fabric = package + archive until Phase 2B).
+**Active:** `site/features/planner/` + `site/app/planner/`. Live 2D is Fabric `PlannerCanvasStage` / `open3d-fabric-stage`. Live 3D is imperative Three with orbit. Feasibility is archived and is not a product proof path.
 
 ## Which doc to open
 
@@ -93,6 +93,6 @@ Install, dev server, and all other commands: **`START.md`**.
 
 http://localhost:3000 · guest planner `/planner/guest/`
 
-TypeScript **6.x**. Dev: `next dev --webpack`. Vercel Root Directory = `site`. Test output: repo-root `results/` (detail **`testing-handbook.md`**).
+TypeScript **6.x**. Dev: `next dev --turbo`. Vercel Root Directory = `site`. Test output: repo-root `results/` (detail **`testing-handbook.md`**).
 
 Other reference: `docs/architecture/`, `docs/api/ROUTE-INDEX.md`, `Plans/INDEX.md`.

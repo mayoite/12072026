@@ -13,7 +13,7 @@ import { loadAll } from "@/features/planner/open3d/catalog/svg/svgBlockDescripto
 export const metadata: Metadata = {
   title: "SVG block editor | Oando Admin",
   description:
-    "Puck-managed SVG block descriptors — fixed, configurable, and parametric variants.",
+    "No-code SVG block descriptors — fixed, configurable, and parametric variants.",
 };
 
 /** Catalog is disk-backed; always re-read after admin publish/refresh. */

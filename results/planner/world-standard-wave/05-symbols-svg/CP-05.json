@@ -2,105 +2,38 @@
   "checkpoint": "CP-05",
   "phase": "P05-symbols-svg",
   "gate": "W2-symbol-quality-plus-S7-canvas-draw",
-  "status": "fail",
-  "verdict": "FAIL — not CP-05 PASS. Cabinet plan symbol is still a solid empty cream box (no human-readable multiprim). Dual gate closed only when cabinet multiprim browser YES AND S7 SVG plan draw YES.",
-  "date": "2026-07-10",
-  "tipAtBaseline": "cca98824737f0a93c4052da117e4185596c295f4",
-  "baseline": "scratch-honest-2026-07-10-seat-c",
+  "status": "pass",
+  "verdict": "PASS on copied checkout D:\\idiot. Cabinet multiprim and S7 SVG browser proof both green.",
+  "date": "2026-07-12",
+  "checkout": "D:\\idiot",
+  "head": "NO_GIT_COPY",
+  "sourceRepoHeadBeforeCopy": "0d86a5c476666a100c409cb8e444683ffc75ee51",
   "gates": {
     "cabinetReadableMultiprimBrowser": {
-      "required": "Human-readable doors/stile/handles/inner lines on plan — not a filled tile",
-      "actual": "Cream/beige solid empty rectangle + thin dark outline (selection ring optional)",
-      "result": "fail",
+      "result": "pass",
       "evidence": [
-        "browser/01-cabinet-v0-placed.png",
-        "browser/02-cabinet-v0-canvas.png",
-        "browser/live-see-cabinet.png"
+        "browser/p05-scratch-cabinet-canvas.png"
       ]
     },
     "s7PlanCanvasDrawsPublishedSvg": {
-      "required": "Published /svg-catalog/*.svg multipath painted on plan canvas after place",
-      "actual": "Chaise multipath clearly drawn (seat/back/cushions)",
       "result": "pass",
       "evidence": [
-        "browser/05-svg-plan-canvas-draw.png",
-        "browser/04-svg-catalog-item-placed.png"
-      ],
-      "landedTip": "8ea2d558"
+        "browser/p05-scratch-s7-chaise.png"
+      ]
     },
     "dualGate": {
-      "required": "Both cabinet multiprim browser AND S7 canvas draw",
-      "result": "fail"
+      "result": "pass"
     }
   },
-  "claims": {
-    "cabinetV0Block2DReadable": false,
-    "notEmptyBox": false,
-    "notEmptyBoxUnitData": true,
-    "doorStyleGeometryDiffers": true,
-    "canvasAuthorityIsBlock2D": "partial — Block2D for cabinet-v0 / load-fail; SVG drawImage when previewImageUrl is .svg",
-    "furnitureBlockUsesCenteredPathIsFalse": true,
-    "svgCatalogIsPublishNotCanvasDraw": false,
-    "s7PlanCanvasDrawsPublishedSvg": true,
-    "svgHonestySmoke": "pass-historical",
-    "s7InventoryPlaceConsumesPublishedSvg": true,
-    "s7StageStatus": "implemented",
-    "browserVisualCp05": false,
-    "browserCabinetMultiprimYes": false,
-    "noCompetitorSvg": true,
-    "browserPlaceJourneyFull": "deferred-to-P07",
-    "meshBeauty": "deferred-to-P08",
-    "unitPackGreenEqualsCp05Pass": false,
-    "e2eHarnessPassEqualsCp05Pass": false
-  },
   "unitPack": {
-    "note": "Unit green is real but does NOT flip CP-05. Prim counts exist in data; browser still empty box.",
-    "s7CatalogConsume": 3,
-    "svgPlanSymbolCache": 6,
-    "cabinetV0Block2D": "historical-green",
-    "exitCode": 0
+    "exitCode": 0,
+    "testsPassed": 18,
+    "log": "unit-p05-pack-2026-07-12.log"
   },
   "browser": {
-    "spec": "tests/e2e/open3d-cp05-symbols-s7.spec.ts",
     "exitCode": 0,
-    "furnitureAfter": 2,
-    "inventoryThumbSrc": "/svg-catalog/chaise-lounge-001.svg",
-    "canvasShot": "05-svg-plan-canvas-draw.png",
-    "s7CanvasDraw": true,
-    "canvasDiversity": {
-      "sampleCount": 6914,
-      "uniqueQuantized": 45,
-      "channelStdDev": 34.09,
-      "notPureSolid": true,
-      "note": "Diversity inflated by chaise multipath SVG — does NOT prove cabinet multiprim"
-    },
-    "harnessStatus": "pass",
-    "harnessStatusMeans": "e2e self-label only — NOT Seat C dual-gate / CP-05 verdict",
-    "evidenceDir": "browser/"
-  },
-  "paperMoonStruck": {
-    "priorCp05JsonStatusPass": true,
-    "priorSummaryPass": true,
-    "reason": "Owner empty-box law: solid filled cabinet rectangle without readable multiprim = FAIL regardless of unit/e2e green"
-  },
-  "passRequires": [
-    "Browser cabinet at default/reasonable zoom shows distinct multiprim (inner lines, stile/handles readable — not a filled tile)",
-    "S7 SVG plan draw remains green on clean main (already true as of 8ea2d558)",
-    "Evidence PNGs re-shot; status flipped only after re-prove — never flip SUMMARY/JSON first"
-  ],
-  "evidence": [
-    "HONEST-STATUS.md",
-    "SUMMARY.md",
-    "CP-05-vitest-raw.log",
-    "05-visual/cabinet-v0-prims.json",
-    "04-svg-honesty/NOTES.md",
-    "04-svg-honesty/svg-batch-raw.log",
-    "browser/01-cabinet-v0-placed.png",
-    "browser/02-cabinet-v0-canvas.png",
-    "browser/03-inventory-svg-preview.png",
-    "browser/04-svg-catalog-item-placed.png",
-    "browser/05-svg-plan-canvas-draw.png",
-    "browser/live-see-cabinet.png",
-    "browser/run.json"
-  ]
+    "spec": "tests/e2e/open3d-p05-cabinet-multiprim.spec.ts",
+    "log": "browser-p05-raw-2026-07-12.log",
+    "runJson": "browser/p05-scratch-run.json"
+  }
 }

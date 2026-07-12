@@ -798,3 +798,228 @@
     align-items: center;
   }
 }
+
+/* ==========================================================================
+   A4 — No-code SVG editor (bespoke form + live preview + SVG→GLB).
+   Semantic tokens only; no hex. Scoped under [data-admin-layout].
+   ========================================================================== */
+
+[data-admin-layout] .admin-panel__body {
+  padding: 0.85rem 1rem 1.1rem;
+}
+
+/* Split layout: form (left) + live preview (right). */
+[data-admin-layout] .admin-svg-editor-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+[data-admin-layout] .admin-svg-editor-layout__preview {
+  position: sticky;
+  top: 1rem;
+}
+
+@media (max-width: 60rem) {
+  [data-admin-layout] .admin-svg-editor-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  [data-admin-layout] .admin-svg-editor-layout__preview {
+    position: static;
+  }
+}
+
+/* Form scaffold. */
+[data-admin-layout] .admin-svg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+[data-admin-layout] .admin-field__control {
+  min-height: 2.5rem;
+  width: 100%;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.65rem;
+  background: white;
+  padding: 0.45rem 0.75rem;
+  font-size: var(--type-small-size);
+  color: var(--text-strong);
+  transition: border-color var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+[data-admin-layout] .admin-field__control:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.1875rem color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+[data-admin-layout] .admin-field__help {
+  font-size: var(--type-label-size);
+  color: var(--text-subtle);
+  margin: 0;
+}
+
+[data-admin-layout] .admin-field__error {
+  font-size: var(--type-label-size);
+  font-weight: var(--font-weight-copy-medium);
+  color: var(--color-danger, var(--color-primary));
+  margin: 0;
+}
+
+[data-admin-layout] .admin-field__unit {
+  color: var(--text-subtle);
+  font-weight: var(--font-weight-copy-regular, 400);
+}
+
+/* Multi-select checkbox group. */
+[data-admin-layout] .admin-multiselect {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+[data-admin-layout] .admin-multiselect__option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.65rem;
+  background: var(--surface-panel, white);
+  font-size: var(--type-small-size);
+  color: var(--text-strong);
+  cursor: pointer;
+}
+
+/* Number stepper. */
+[data-admin-layout] .admin-number-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+[data-admin-layout] .admin-number-stepper__input {
+  width: 7rem;
+  text-align: right;
+}
+
+[data-admin-layout] .admin-number-stepper__btn {
+  min-width: 2.25rem;
+  padding-inline: 0.5rem;
+}
+
+[data-admin-layout] .admin-number-stepper__unit {
+  color: var(--text-subtle);
+  font-size: var(--type-label-size);
+}
+
+/* Token rows / string list / object array editors. */
+[data-admin-layout] .admin-token-rows,
+[data-admin-layout] .admin-string-list,
+[data-admin-layout] .admin-object-array {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+[data-admin-layout] .admin-token-row,
+[data-admin-layout] .admin-string-list__row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+[data-admin-layout] .admin-object-array__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0.65rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.65rem;
+  background: var(--surface-soft, var(--surface-panel-soft, white));
+}
+
+[data-admin-layout] .admin-object-array__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 8rem;
+  flex: 1 1 8rem;
+}
+
+[data-admin-layout] .admin-object-array__label {
+  font-size: var(--type-label-size);
+  color: var(--text-muted);
+}
+
+[data-admin-layout] .admin-object-array__actions {
+  display: flex;
+  gap: 0.35rem;
+  align-items: flex-end;
+}
+
+/* Live compiled preview stage. */
+[data-admin-layout] .admin-svg-livepreview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+[data-admin-layout] .admin-svg-preview--stale {
+  opacity: 0.4;
+}
+
+/* SVG → GLB panel. */
+[data-admin-layout] .admin-glb-panel {
+  margin-top: 0.85rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+[data-admin-layout] .admin-glb-status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem;
+  border-radius: 0.65rem;
+  font-size: var(--type-small-size);
+  border: 1px dashed var(--border-soft);
+  color: var(--text-muted);
+  background: var(--surface-soft, var(--surface-panel-soft, white));
+}
+
+[data-admin-layout] .admin-glb-status--busy {
+  flex-direction: row;
+  align-items: center;
+}
+
+[data-admin-layout] .admin-glb-status__mount {
+  display: none;
+}
+
+/* Success alert variant (parity with warn/error). */
+[data-admin-layout] .admin-alert--success {
+  border: 1px solid color-mix(in srgb, var(--color-success, var(--color-primary)) 40%, transparent);
+  background: var(--surface-status-ok, color-mix(in srgb, var(--color-success, var(--color-primary)) 10%, white));
+  color: var(--color-success, var(--text-strong));
+}
+
+/* Local spinner (no external asset). */
+[data-admin-layout] .admin-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--border-soft);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: admin-spinner-spin 1s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes admin-spinner-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

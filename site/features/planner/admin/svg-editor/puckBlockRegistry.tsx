@@ -1,7 +1,7 @@
 /**
- * Phase 04 — puckBlockRegistry (single source of truth)
+ * Puck registry for portal rendering and legacy adapters.
  *
- * §04-ADMIN-05: declare every admin-edited BlockDescriptor as a Puck block:
+ * Declares each BlockDescriptor variant as a Puck-renderable block:
  *   - a Zod schema slice keyed on `variant`
  *   - an Ark UI primitive `Component` (placeholder render via local SVG until
  *     Phase 03 SVG pipeline output is wired into the editor preview)
@@ -10,14 +10,11 @@
  * Authority: PACKAGES.md admin panel set, AGENTS.md §Deferred by User Step 3,
  * Phase 02 §02-CAT-02 discriminated union (fixed | configurable | parametric).
  *
- * The registry is referenced from:
- *   - `site/app/admin/svg-editor/[id]/page.tsx` (Phase 04 edit route)
- *   - `site/app/admin/svg-editor/page.tsx` (Phase 04 list route)
+ * The runtime registry is referenced from:
  *   - `site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts`
  *     (Phase 05 one-line alias re-export — verbatim, no fork; see I-D module paths).
- * Full resolution of PLAN-FAIL-0403/0404 (beyond min): actual routes/pages implemented (list + [id] edit using registry + loader + Puck/Render preview; portal index + [slug] with <Render> + alias).
  * One-line alias: site/app/(site)/portal/svg-catalog/puckBlockRegistry.ts does `export * from "@/features/planner/admin/svg-editor/puckBlockRegistry";` (verbatim, no fork, per I-D).
- * Pages use svgBlockDescriptorLoader (loadAll/tryLoad), puck registry (puckConfig + getPuckData), error taxonomy (notFound on !ok).
+ * Admin authoring uses `SvgEditorForm`; it does not mount Puck.
  * Canonical path locked: site/features/planner/admin/svg-editor/puckBlockRegistry.tsx .
  * GS BP-04/BP-05 + design §7/11 + anti-copy (no donor visuals; semantic tokens + Figma minimize principles) + 5-product. See also route-contract _phase* entries.
  *
@@ -741,7 +738,7 @@ type AssertEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T exte
  *
  * Uses single-block content array + root for the descriptor. This keeps
  * 1:1 parity with the registry blocks without forking shape.
- * Used by admin edit preview and portal RSC render.
+ * Used by portal RSC render. Admin live preview uses the real compile action.
  * GS: single source, no any, anti-copy (semantic only).
  */
 export function getPuckData(descriptor: BlockDescriptor): PuckData {
@@ -752,10 +749,10 @@ export function getPuckData(descriptor: BlockDescriptor): PuckData {
   } as PuckData;
 }
 
-// ── Admin editor roundtrip adapters (for full <Puck> mount on /admin/svg-editor/[id]) ──
+// ── Legacy Puck editor roundtrip adapters (not mounted by admin routes) ──
 
 /**
- * Convert descriptor to full Puck Data for the admin <Puck> editor (not the minimal Render path).
+ * Convert descriptor to full Puck Data for legacy/editor compatibility.
  * Populates all registered editable fields (identity, geometry, viewBox, mounting, theme, a11y + variant)
  * so the sidebar fields are prefilled for compose/draft.
  * getPuckData remains minimal for <Render> (BP-05 ≤1 Render/route).
@@ -801,8 +798,7 @@ export function getPuckEditorData(descriptor: BlockDescriptor): PuckData {
 /**
  * Convert Puck-published data (from onPublish) back to a descriptor-shaped input for persist.
  * Merges edited puck block props over the original base (preserves id, schemaVersion, checksum recomputed by freeze).
- * Used inside server action wired to onPublish.
- * GS: BP-04 Puck admin only; validation via registry schema + persist.
+ * Not used by the current no-code admin route.
  */
 export function puckEditorDataToDescriptorInput(
   original: BlockDescriptor,

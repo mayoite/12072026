@@ -45,7 +45,10 @@ import * as childProcess from "node:child_process";
 import path from "node:path";
 import os from "node:os";
 
-import { computeBlockDescriptorChecksum, BLOCK_DESCRIPTOR_SCHEMA_VERSION } from "@/features/planner/open3d/catalog/svg/svgTypes";
+import {
+  computeBlockDescriptorChecksum,
+  BLOCK_DESCRIPTOR_SCHEMA_VERSION,
+} from "@/features/planner/open3d/catalog/svg/svgTypes";
 
 import {
   runSvgPipeline,
@@ -104,10 +107,16 @@ let prevCwd: string;
 
 function createPipelineProjectRoot(): string {
   const root = mkdtempSync(path.join(os.tmpdir(), "phase04-pipeline-root-"));
-  mkdirSync(path.join(root, "site", "scripts", "generate-svg"), { recursive: true });
-  writeFileSync(path.join(root, "site", "scripts", "generate-svg.mjs"), "export {}\n", {
-    encoding: "utf8",
+  mkdirSync(path.join(root, "site", "scripts", "generate-svg"), {
+    recursive: true,
   });
+  writeFileSync(
+    path.join(root, "site", "scripts", "generate-svg.mjs"),
+    "export {}\n",
+    {
+      encoding: "utf8",
+    },
+  );
   return root;
 }
 
@@ -118,7 +127,9 @@ beforeEach(() => {
 
 afterEach(() => {
   if (mockState.originalFsWriteFileSync) {
-    vi.mocked(writeFileSync).mockImplementation(mockState.originalFsWriteFileSync);
+    vi.mocked(writeFileSync).mockImplementation(
+      mockState.originalFsWriteFileSync,
+    );
   }
   vi.mocked(writeFileSync).mockClear();
   vi.mocked(childProcess.execFile).mockReset();
@@ -188,7 +199,9 @@ describe("04-PIPELINE-RUNNER: descriptor input is shape-respecting", () => {
 
 describe("04-PIPELINE-RUNNER: skipCompile (S4-only after compileSvgForPublish)", () => {
   it("writes precompiled SVG without requiring generate-svg.mjs", async () => {
-    const projectRoot = mkdtempSync(path.join(os.tmpdir(), "phase04-skip-compile-"));
+    const projectRoot = mkdtempSync(
+      path.join(os.tmpdir(), "phase04-skip-compile-"),
+    );
     const svgBody =
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10"/></svg>';
     try {
@@ -200,8 +213,13 @@ describe("04-PIPELINE-RUNNER: skipCompile (S4-only after compileSvgForPublish)",
       expect(result.ok).toBe(true);
       if (!result.ok) return;
       expect(result.stdout).toMatch(/\[skipCompile\]/);
-      expect(result.svgPath).toContain(`${path.sep}svg-catalog${path.sep}chaise.svg`);
+      expect(result.svgPath).toContain(
+        `${path.sep}svg-catalog${path.sep}chaise.svg`,
+      );
       expect(existsSync(result.svgPath)).toBe(true);
+      expect(result.fixturePath).toContain(
+        `${path.sep}results${path.sep}admin${path.sep}svg-pipeline-fixtures${path.sep}chaise.json`,
+      );
       expect(existsSync(result.fixturePath)).toBe(true);
       // Read via real fs (mock may wrap writeFileSync only)
       const { readFileSync } = await import("node:fs");

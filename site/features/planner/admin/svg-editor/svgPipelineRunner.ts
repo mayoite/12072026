@@ -151,14 +151,12 @@ export function runSvgPipeline(
   );
   const fixturesDir = path.resolve(
     projectRoot,
-    "site",
-    "scripts",
-    "generate-svg",
-    "_fixtures",
+    "results",
+    "admin",
+    "svg-pipeline-fixtures",
   );
   const svgPath = defaultSvgPath(descriptor.slug, projectRoot);
-  const fixtureSuffix = `${descriptor.slug}.${Math.random().toString(36).slice(2, 10)}`;
-  const fixturePath = path.resolve(fixturesDir, `admin-${fixtureSuffix}.json`);
+  const fixturePath = path.resolve(fixturesDir, `${descriptor.slug}.json`);
   const _timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const _maxStderrBytes = options.maxStderrBytes ?? DEFAULT_MAX_STDERR_BYTES;
   void _timeoutMs;
@@ -252,7 +250,7 @@ export function runSvgPipeline(
   // In-process: dynamic import of thin generate-svg.mjs → normalize + pipelineCore.
   const importModule = new Function(
     "specifier",
-    'return import(specifier);',
+    "return import(specifier);",
   ) as (specifier: string) => Promise<{
     runPipeline?: (descriptor: BlockDescriptor) => Promise<unknown>;
     default?: {

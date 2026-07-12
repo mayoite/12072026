@@ -1,1 +1,4 @@
-cca98824737f0a93c4052da117e4185596c295f4
+NO_GIT_COPY
+Source repo HEAD before copy: 0d86a5c476666a100c409cb8e444683ffc75ee51
+Source copy path: D:\idiot
+Note: fresh P05 proof on this copy used `unit-p05-pack-2026-07-12.log` and `browser-p05-raw-2026-07-12.log`.

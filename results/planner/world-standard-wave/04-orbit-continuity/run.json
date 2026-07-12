@@ -1,10 +1,11 @@
 {
   "phase": "P04",
   "gate": "W4",
-  "date": "2026-07-11",
-  "head": "b24ad691",
+  "date": "2026-07-12",
+  "head": "NO_GIT_COPY",
+  "sourceRepoHeadBeforeCopy": "0d86a5c476666a100c409cb8e444683ffc75ee51",
   "status": "pass",
-  "honesty": "Browser proves furniture count + data-orbit-enabled + 2D↔3D toggle; pose ids/mm/rotation unit-only (poseContinuityW4).",
+  "honesty": "Browser proves furniture count and data-orbit-enabled through 2D<->3D toggles. Pose ids/mm/rotation remain unit-only.",
   "unitPack": {
     "exitCode": 0,
     "tests": "9/9",
@@ -13,12 +14,13 @@
       "poseContinuityW4.test.ts",
       "workspaceOrbitWiring.test.ts"
     ],
-    "log": "unit-w4-pack.log"
+    "log": "unit-w4-pack-2026-07-12.log"
   },
   "browser": {
     "exitCode": 0,
     "spec": "tests/e2e/open3d-w4-orbit-continuity.spec.ts",
     "baseURL": "http://localhost:3000",
-    "tests": "1/1 passed"
+    "tests": "1/1 passed",
+    "log": "browser-w4-raw-2026-07-12.log"
   }
 }

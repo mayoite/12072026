@@ -15,6 +15,7 @@ import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
 import {
   placeCatalogOnCanvas,
   placeSeatsFromConfigurator,
+  switchPlannerViewMode,
   waitForPlannerCanvas,
   PLANNER_PRIMARY_CANVAS,
 } from "./plannerCanvasHelpers";
@@ -172,8 +173,8 @@ test.describe("Mesh/symbol live verify (stroke floor)", () => {
     });
     await waitForPlannerCanvas(page);
 
-    // Ensure 2D
-    await page.getByRole("radio", { name: "2D", exact: true }).click();
+    // Ensure 2D using the shared label-safe helper.
+    await switchPlannerViewMode(page, "2d");
     await waitForPlannerCanvas(page);
 
     const before = await furnitureCount(page);
@@ -293,8 +294,8 @@ test.describe("Mesh/symbol live verify (stroke floor)", () => {
     });
 
     // 3D multi-part mesh
+    await switchPlannerViewMode(page, "3d");
     const radio3d = page.getByRole("radio", { name: "3D", exact: true });
-    await radio3d.click();
     await expect(radio3d).toBeChecked({ timeout: 10_000 });
     await expect(page.getByTestId("planner-3d-canvas")).toBeVisible({
       timeout: 20_000,

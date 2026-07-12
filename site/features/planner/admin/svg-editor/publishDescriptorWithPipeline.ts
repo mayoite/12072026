@@ -1,7 +1,7 @@
 /**
  * Fail-closed publish: asset-engine compile (S1–S3) → disk pipeline (S4) → persist (S6).
  *
- * Mirrors POST /api/admin/svg-editor ordering so Puck onPublish cannot report
+ * Mirrors POST /api/admin/svg-editor ordering so no authoring surface can report
  * success when compilation fails. Pure of Next server-action surface — injectable
  * deps for unit tests.
  *

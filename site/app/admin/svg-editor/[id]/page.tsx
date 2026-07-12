@@ -1,8 +1,8 @@
 /**
- * 04-ADMIN-02 + 1B P0: /admin/svg-editor/[id] edit (or /new).
+ * 04-ADMIN-02 + A4: /admin/svg-editor/[id] edit (or /new).
  * Loads via svgBlockDescriptorLoader.tryLoad (or defaults for "new").
- * Renders AdminSvgEditorEditView with full Puck + server-action publish.
- * Gated by parent admin layout. RSC + client Puck.
+ * Renders AdminSvgEditorEditView (no-code form + live preview) with
+ * server-action publish. Gated by parent admin layout.
  *
  * Server Action rule: pass `publishSvgEditorAction.bind(null, slug)` only —
  * never an arrow wrapper around the action (breaks Server Action identity).

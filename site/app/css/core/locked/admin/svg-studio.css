@@ -1,0 +1,152 @@
+/* A4.1 — Visual SVG authoring studio (canvas + toolbar + layer tree).
+ * Semantic tokens only; no hex. Scoped under the admin layout. */
+
+[data-admin-layout] .svg-studio {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md, 0.5rem);
+  background: var(--color-surface, var(--surface-base));
+  overflow: hidden;
+}
+
+[data-admin-layout] .svg-studio__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--color-surface-raised, var(--surface-raised));
+}
+
+[data-admin-layout] .svg-studio__toolbar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.8125rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm, 0.375rem);
+  background: var(--color-surface, var(--surface-base));
+  color: var(--text-strong);
+  cursor: pointer;
+}
+
+[data-admin-layout] .svg-studio__toolbar button:hover:not(:disabled) {
+  border-color: var(--color-primary);
+}
+
+[data-admin-layout] .svg-studio__toolbar button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+[data-admin-layout] .svg-studio__sep {
+  width: 1px;
+  align-self: stretch;
+  margin: 0 0.25rem;
+  background: var(--border-soft);
+}
+
+[data-admin-layout] .svg-studio__body {
+  display: grid;
+  grid-template-columns: 1fr minmax(200px, 260px);
+  min-height: 420px;
+}
+
+[data-admin-layout] .svg-studio__stage {
+  position: relative;
+  min-height: 420px;
+  background:
+    repeating-conic-gradient(
+      var(--surface-muted, color-mix(in srgb, var(--text-strong) 6%, transparent)) 0% 25%,
+      transparent 0% 50%
+    )
+    50% / 24px 24px;
+  color: var(--text-strong);
+  cursor: crosshair;
+}
+
+[data-admin-layout] .svg-studio__stage svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+[data-admin-layout] .svg-studio__layers {
+  border-left: 1px solid var(--border-soft);
+  background: var(--color-surface-raised, var(--surface-raised));
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+[data-admin-layout] .svg-studio__layers-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+[data-admin-layout] .svg-studio__layer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+[data-admin-layout] .svg-studio__layer-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: var(--radius-sm, 0.375rem);
+}
+
+[data-admin-layout] .svg-studio__layer-list li.is-selected {
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  outline: 1px solid var(--color-primary);
+}
+
+[data-admin-layout] .svg-studio__layer-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.15rem 0.35rem;
+  font-size: 0.8125rem;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: var(--text-strong);
+  cursor: pointer;
+}
+
+[data-admin-layout] .svg-studio__layer-kind {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+}
+
+[data-admin-layout] .svg-studio__layer-list li > button:not(.svg-studio__layer-name) {
+  display: inline-flex;
+  padding: 0.15rem;
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+[data-admin-layout] .svg-studio__layer-list li > button:not(.svg-studio__layer-name):hover {
+  color: var(--text-strong);
+}
+
+[data-admin-layout] .svg-studio__empty {
+  padding: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}

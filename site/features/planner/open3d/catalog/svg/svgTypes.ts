@@ -298,12 +298,16 @@ export const BlockDescriptorIdentitySchema = z.object({
 });
 export type BlockDescriptorIdentity = z.infer<typeof BlockDescriptorIdentitySchema>;
 
-const BlockDescriptorLiveAnnouncementCategorySchema = z.enum([
+export const BlockDescriptorLiveAnnouncementCategorySchema = z.enum([
   "status",
   "error",
   "success",
   "polish",
 ]);
+/** Live-region announcement category (Phase 02 §02-CAT-06). */
+export type BlockDescriptorLiveAnnouncementCategory = z.infer<
+  typeof BlockDescriptorLiveAnnouncementCategorySchema
+>;
 
 const BlockDescriptorRovingFocusEntrySchema = z.object({
   key: z.string().trim().min(1).max(80),

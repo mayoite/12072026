@@ -73,7 +73,10 @@ function timestampLabel(value: number | undefined): string {
     return "—";
   try {
     const normalized = value < 1e12 ? value * 1000 : value;
-    return new Date(normalized).toISOString().replace("T", " ").replace(/\..*$/, "");
+    return new Date(normalized)
+      .toISOString()
+      .replace("T", " ")
+      .replace(/\..*$/, "");
   } catch {
     return String(value);
   }
@@ -151,16 +154,20 @@ export function AdminSvgEditorListView({
           <p className="admin-page__eyebrow">Catalog assets</p>
           <h1 className="admin-page__title">SVG block editor</h1>
           <p className="admin-page__copy">
-            Author Puck-managed SVG block descriptors. Permissions gate through{" "}
-            <code>{"withAuth(['admin'])"}</code>; saves flow through Zod →
-            atomic-rename JSON write → Phase 03 SVG pipeline → public catalog
-            SVG.
+            Author SVG block descriptors through a schema-driven form.
+            Publishing requires a real admin session. The local auth bypass is
+            development-only. Saves flow through Zod → atomic-rename JSON write
+            → SVG pipeline → public catalog SVG.
           </p>
           <p className="admin-page__meta">
             Last loader pass: <code>{refreshedAtLabel}</code> · schemaVersion
             pinned at <code>2026-07-04.v2</code>
           </p>
-          <p className="admin-page__meta" role="status" data-testid="artifact-health">
+          <p
+            className="admin-page__meta"
+            role="status"
+            data-testid="artifact-health"
+          >
             Artifact health: <strong>{publishedCount}</strong> published ·{" "}
             <strong>{missingCount}</strong> missing ·{" "}
             <strong>{invalidCount}</strong> invalid · of{" "}
@@ -235,8 +242,7 @@ export function AdminSvgEditorListView({
               </thead>
               <tbody>
                 {ordered.map((d) => {
-                  const status =
-                    artifactStatuses[d.slug] ?? missingStatus();
+                  const status = artifactStatuses[d.slug] ?? missingStatus();
                   return (
                     <tr
                       key={`${d.variant}:${d.slug}`}

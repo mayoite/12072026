@@ -1,19 +1,29 @@
 {
   "phase": "P05",
   "gate": "W2-symbol-half",
-  "date": "2026-07-11",
-  "headProduct": "b24ad691+",
+  "date": "2026-07-12",
+  "headProduct": "NO_GIT_COPY",
+  "sourceRepoHeadBeforeCopy": "0d86a5c476666a100c409cb8e444683ffc75ee51",
   "status": "pass",
-  "livePaint": "Open3dFabricStage → createFabricFurnitureBlock (Block2D multiprim), not plain Rect",
+  "livePaint": "Open3dFabricStage -> createFabricFurnitureBlock (Block2D multiprim), not plain Rect",
   "unitPack": {
     "exitCode": 0,
-    "log": "unit-p05-pack.log",
-    "suites": ["furnitureBlock2D.cabinet-v0", "canvas-fabric-stage"]
+    "log": "unit-p05-pack-2026-07-12.log",
+    "suites": [
+      "furnitureBlock2D.cabinet-v0",
+      "canvas-fabric-stage/fabricBlock2D"
+    ],
+    "testsPassed": 18
   },
   "browser": {
     "exitCode": 0,
     "spec": "tests/e2e/open3d-p05-cabinet-multiprim.spec.ts",
-    "evidence": "browser/p05-scratch-cabinet-canvas.png (+ chaise S7 shots if deposited)",
-    "note": "Pixel probe uses PLANNER_PAINT_CANVAS (lower-canvas)"
+    "log": "browser-p05-raw-2026-07-12.log",
+    "evidence": [
+      "browser/p05-scratch-cabinet-canvas.png",
+      "browser/p05-scratch-s7-chaise.png",
+      "browser/p05-scratch-run.json"
+    ],
+    "note": "Eyes remain the hard bar; diversity numbers are supporting only."
   }
 }

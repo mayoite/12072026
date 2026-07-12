@@ -1,5 +1,5 @@
 /**
- * Server action for admin SVG editor Puck onPublish.
+ * Server action for admin SVG editor publish (A4 — no-code form).
  * Must live in a "use server" module so it can be passed to Client Components
  * (inline wrappers / page-local "use server" arrow closures are not a stable
  * Server Action ref and crash or mis-wire RSC → client).
@@ -14,10 +14,8 @@ import {
   tryLoad,
   type BlockDescriptor,
 } from "@/features/planner/open3d/catalog/svg/svgBlockDescriptorLoader";
-import {
-  puckEditorDataToDescriptorInput,
-  type PuckDataShape,
-} from "@/features/planner/admin/svg-editor/puckBlockRegistry";
+import { formStateToDescriptorInput } from "@/features/planner/admin/svg-editor/svgEditorFormAdapters";
+import type { SvgEditorFormState } from "@/features/planner/admin/svg-editor/svgEditorFormState";
 import {
   publishDescriptorWithPipeline,
   type PublishDescriptorResult,
@@ -26,14 +24,14 @@ import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/
 import { resolveAuthContext } from "@/features/shared/api/withAuth";
 
 /**
- * Fail-closed Puck publish for one slug.
+ * Fail-closed publish for one slug.
  *
  * @param slug - route slug (`new` or existing block-descriptors slug)
- * @param puckDataFromEditor - Puck document payload from client
+ * @param formFromEditor - no-code form state from the client editor
  */
 export async function publishSvgEditorAction(
   slug: string,
-  puckDataFromEditor: PuckDataShape,
+  formFromEditor: SvgEditorFormState,
 ): Promise<PublishDescriptorResult> {
   try {
     await resolveAuthContext("admin");
@@ -51,6 +49,6 @@ export async function publishSvgEditorAction(
     }
     descriptor = result.value;
   }
-  const input = puckEditorDataToDescriptorInput(descriptor, puckDataFromEditor);
+  const input = formStateToDescriptorInput(descriptor, formFromEditor);
   return publishDescriptorWithPipeline(input);
 }
