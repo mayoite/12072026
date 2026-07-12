@@ -1,7 +1,8 @@
 # A4 — Consolidated analysis (review · status · evidence)
 
-> Single reference for the A4 no-code SVG studio: product review, status audit, and A4.0 foundation evidence.
-> Plan card: [../Plans/Admin-track/A4-no-code-svg-studio.md](../Plans/Admin-track/A4-no-code-svg-studio.md) · Raw test output: [../results/admin/no-code-svg-studio/A4.0-test-output.txt](../results/admin/no-code-svg-studio/A4.0-test-output.txt)
+> **2026-07-12 raise:** authority bridge (`sceneParts` → `blocks` through parse), undo→form sync, load-from-blocks, canvas-first shell CSS/layout. Plan card rewritten for honest critical path. **Browser disk proof still OPEN.**
+>
+> Plan card: [../Plans/Admin-track/A4-no-code-svg-studio.md](../Plans/Admin-track/A4-no-code-svg-studio.md) · Unit log: [../results/admin/no-code-svg-studio/A4-authority-raise.txt](../results/admin/no-code-svg-studio/A4-authority-raise.txt)
 
 ---
 

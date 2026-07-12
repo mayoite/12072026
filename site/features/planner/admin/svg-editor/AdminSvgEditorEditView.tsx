@@ -1,19 +1,13 @@
 "use client";
 
 /**
- * A4 — Admin SVG Editor per-slug edit view (no-code, Puck removed).
+ * A4 — Admin SVG Editor per-slug edit view (canvas-first shell).
  *
- * Replaces the Puck auto-sidebar with a bespoke schema-driven form
- * (`SvgEditorForm`) + a live compiled preview (`LiveCompiledSvgPreview` via
- * `useDebouncedCompile`). Every field is an explicit control — no free-text
- * JSON, no comma-separated strings. SVG→GLB is fed from the just-compiled SVG
- * (no file picker).
+ * Primary surface: visual studio (SvgSceneDocument). Secondary rail: live
+ * compile preview, published artifact, and advanced block metadata form.
+ * Publish: formState (sceneParts → blocks) → publishDescriptorWithPipeline.
  *
- * Publish path is unchanged downstream: `onPublishAction(formState)` →
- * `formStateToDescriptorInput` → `publishDescriptorWithPipeline` (S1–S6).
- *
- * GS: semantic tokens from site/app/css/ only; no hex in tsx; anti-copy.
- * Honesty: catalog **publish** SVG, not the Fabric plan-draw canvas.
+ * GS: semantic tokens only; no hex in tsx. Catalog publish SVG ≠ Fabric plan-draw.
  */
 
 import { useCallback, useMemo, useState } from "react";
@@ -270,25 +264,18 @@ export function AdminSvgEditorEditView({
   const canConvertToGlb = form.variant === "fixed" && compiledSvg !== null;
 
   return (
-    <div className="admin-page">
-      <header className="admin-page__header">
+    <div className="admin-page admin-page--svg-engine">
+      <header className="admin-page__header admin-svg-engine-header">
         <div>
-          <p className="admin-page__eyebrow">
-            Catalog assets · SVG block editor
-          </p>
+          <p className="admin-page__eyebrow">Catalog assets · SVG studio</p>
           <h1 className="admin-page__title">
             <code>{slug}</code>
           </h1>
-          <p className="admin-page__copy">{describeVariant(form.variant)}</p>
           <p className="admin-page__meta">
-            Publishing requires a real admin session. Local auth bypass is for
-            development and test runs only. It is disabled in production.
-          </p>
-          <p className="admin-page__meta">
-            <span className="admin-badge">{variantTitle(form.variant)}</span> ·
-            schema <code>{descriptor.schemaVersion}</code> · checksum{" "}
-            <code className="admin-page__checksum">{checksumShort}</code> ·
-            loaded <code>{updatedAtLabel}</code>
+            <span className="admin-badge">{variantTitle(form.variant)}</span> ·{" "}
+            {describeVariant(form.variant)} · schema{" "}
+            <code>{descriptor.schemaVersion}</code> ·{" "}
+            <code className="admin-page__checksum">{checksumShort}</code>
           </p>
         </div>
         <div className="admin-page__actions">
@@ -297,7 +284,7 @@ export function AdminSvgEditorEditView({
             className="admin-btn admin-btn--outline"
           >
             <ArrowLeft size={14} aria-hidden />
-            Back to list
+            Back
           </Link>
           <button
             type="button"
@@ -315,7 +302,7 @@ export function AdminSvgEditorEditView({
         </div>
       </header>
 
-      <div aria-live="polite" aria-atomic="true">
+      <div aria-live="polite" aria-atomic="true" className="admin-svg-engine-feedback">
         {feedback.submitting ? (
           <div
             role="status"
@@ -367,53 +354,92 @@ export function AdminSvgEditorEditView({
         ) : null}
       </div>
 
-      {/* Split: no-code form (left) + live compiled preview (right). */}
-      <section
-        aria-label="Visual authoring studio"
-        className="admin-panel admin-svg-editor-layout__studio"
-      >
-        <div className="admin-panel__header">Visual studio (A4.1)</div>
-        <div className="admin-panel__body">
+      {/* Canvas-first shell: stage owns the viewport; form is a secondary rail. */}
+      <div className="admin-svg-engine-shell" data-testid="admin-svg-engine-shell">
+        <section
+          aria-label="Visual authoring studio"
+          className="admin-svg-engine-shell__stage"
+        >
           <SvgStudioCanvas
             initialDocument={studioScene}
             onDocumentChange={handleStudioDocumentChange}
           />
-        </div>
-      </section>
+        </section>
 
-      <section
-        aria-label="No-code SVG editor"
-        className="admin-svg-editor-layout"
-      >
-        <div className="admin-svg-editor-layout__form admin-panel">
-          <div className="admin-panel__header">Block fields</div>
-          <div className="admin-panel__body">
-            <SvgEditorForm
-              fields={SVG_EDITOR_FIELDS}
-              state={form}
-              variant={form.variant}
-              issues={preview?.issues ?? []}
-              onChange={setForm}
-            />
-          </div>
-        </div>
-
-        <div className="admin-svg-editor-layout__preview admin-panel">
-          <div className="admin-panel__header">Live preview</div>
-          <div className="admin-panel__body">
-            <LiveCompiledSvgPreview result={preview} pending={previewPending} />
+        <aside
+          aria-label="Preview and block details"
+          className="admin-svg-engine-shell__rail"
+        >
+          <div className="admin-panel admin-svg-engine-shell__panel">
+            <div className="admin-panel__header">Live compile</div>
+            <div className="admin-panel__body">
+              <LiveCompiledSvgPreview result={preview} pending={previewPending} />
+            </div>
           </div>
 
-          {/* SVG → GLB, fed from the compiled preview (no file picker). */}
-          <div className="admin-glb-panel">
-            <div className="admin-panel__header">SVG → generated GLB</div>
+          <article
+            className="admin-panel admin-svg-engine-shell__panel"
+            data-artifact-state={artifactStatus.state}
+            data-testid="admin-svg-artifact-panel"
+          >
+            <div className="admin-panel__header">Published on disk</div>
+            <div className="admin-panel__body">
+              <p className="admin-page__meta">
+                <span
+                  className={
+                    artifactStatus.state === "published"
+                      ? "admin-badge admin-badge--active"
+                      : artifactStatus.state === "invalid"
+                        ? "admin-badge admin-badge--warn"
+                        : "admin-badge admin-badge--hidden"
+                  }
+                >
+                  {artifactStatus.state === "published"
+                    ? "Published"
+                    : artifactStatus.state === "invalid"
+                      ? "Invalid SVG"
+                      : "Missing"}
+                </span>{" "}
+                {artifactStatus.bytes > 0
+                  ? `${artifactStatus.bytes.toLocaleString()} bytes`
+                  : "No bytes"}{" "}
+                · SHA <code className="admin-page__checksum">{artifactHashShort}</code>
+              </p>
+              <PublishedSvgPreview
+                slug={slug}
+                status={artifactStatus}
+                size="panel"
+              />
+            </div>
+          </article>
+
+          <details className="admin-panel admin-svg-engine-shell__panel admin-svg-engine-shell__advanced">
+            <summary className="admin-panel__header">
+              Advanced block fields
+            </summary>
+            <div className="admin-panel__body">
+              <p className="admin-page__meta">
+                Metadata and catalog fields. Geometry for publish comes from the
+                visual studio, not these rows.
+              </p>
+              <SvgEditorForm
+                fields={SVG_EDITOR_FIELDS}
+                state={form}
+                variant={form.variant}
+                issues={preview?.issues ?? []}
+                onChange={setForm}
+              />
+            </div>
+          </details>
+
+          <details className="admin-panel admin-svg-engine-shell__panel">
+            <summary className="admin-panel__header">SVG → generated GLB</summary>
             <div className="admin-panel__body">
               {form.variant === "fixed" ? (
                 <>
                   <p className="admin-page__copy">
                     Convert the current footprint SVG to a system-generated GLB
                     under <code>catalog-assets/generated/</code>.
-                    System-generated only — not a designer static asset.
                   </p>
                   <button
                     type="button"
@@ -474,59 +500,9 @@ export function AdminSvgEditorEditView({
                 </p>
               )}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Published artifact on disk (updates after Publish + refresh). */}
-      <section aria-label="Published artifact" className="admin-page__summary">
-        <article
-          className="admin-page__summary-card admin-panel"
-          data-artifact-state={artifactStatus.state}
-          data-testid="admin-svg-artifact-panel"
-        >
-          <div className="admin-panel__header">Published SVG artifact</div>
-          <div className="admin-panel__body">
-            <p className="admin-page__summary-card-value">
-              <span
-                className={
-                  artifactStatus.state === "published"
-                    ? "admin-badge admin-badge--active"
-                    : artifactStatus.state === "invalid"
-                      ? "admin-badge admin-badge--warn"
-                      : "admin-badge admin-badge--hidden"
-                }
-              >
-                {artifactStatus.state === "published"
-                  ? "Published"
-                  : artifactStatus.state === "invalid"
-                    ? "Invalid SVG"
-                    : "Missing"}
-              </span>
-            </p>
-            <p className="admin-page__meta">
-              {artifactStatus.bytes > 0
-                ? `${artifactStatus.bytes.toLocaleString()} bytes`
-                : "No bytes on disk"}
-              {artifactStatus.publicUrl ? (
-                <>
-                  {" · "}
-                  <code>{artifactStatus.publicUrl}</code>
-                </>
-              ) : null}
-            </p>
-            <p className="admin-page__meta">
-              SHA-256{" "}
-              <code className="admin-page__checksum">{artifactHashShort}</code>
-            </p>
-            <PublishedSvgPreview
-              slug={slug}
-              status={artifactStatus}
-              size="panel"
-            />
-          </div>
-        </article>
-      </section>
+          </details>
+        </aside>
+      </div>
     </div>
   );
 }

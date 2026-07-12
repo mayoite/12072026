@@ -1,0 +1,100 @@
+/* A4 canvas-first shell — non-locked. Tokens only; no hex.
+ * Stage owns the viewport; form/metadata sit in a secondary rail. */
+
+[data-admin-layout] .admin-page--svg-engine {
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: calc(100dvh - 4.5rem);
+}
+
+[data-admin-layout] .admin-svg-engine-header {
+  flex-shrink: 0;
+  padding-bottom: 0.25rem;
+}
+
+[data-admin-layout] .admin-svg-engine-feedback:empty {
+  display: none;
+}
+
+[data-admin-layout] .admin-svg-engine-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 22rem);
+  gap: 0.75rem;
+  flex: 1 1 auto;
+  min-height: min(70vh, calc(100dvh - 9rem));
+  align-items: stretch;
+}
+
+[data-admin-layout] .admin-svg-engine-shell__stage {
+  min-width: 0;
+  min-height: 55vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fill the stage cell: give the studio a definite height so svg height:100% paints. */
+[data-admin-layout] .admin-svg-engine-shell__stage .svg-studio {
+  flex: 1 1 auto;
+  min-height: 55vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-admin-layout] .admin-svg-engine-shell__stage .svg-studio__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
+
+[data-admin-layout] .admin-svg-engine-shell__stage .svg-studio__stage {
+  min-height: 0;
+  height: 100%;
+}
+
+[data-admin-layout] .admin-svg-engine-shell__rail {
+  min-width: 0;
+  max-height: calc(100dvh - 9rem);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+[data-admin-layout] .admin-svg-engine-shell__panel {
+  margin: 0;
+}
+
+[data-admin-layout] .admin-svg-engine-shell__advanced > summary,
+[data-admin-layout] .admin-svg-engine-shell__panel > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+[data-admin-layout] .admin-svg-engine-shell__advanced > summary::-webkit-details-marker,
+[data-admin-layout] .admin-svg-engine-shell__panel > summary::-webkit-details-marker {
+  display: none;
+}
+
+[data-admin-layout] .admin-svg-engine-shell__toolbar-focus:focus-visible,
+[data-admin-layout] .admin-svg-engine-shell .svg-studio__toolbar button:focus-visible {
+  outline: 2px solid var(--color-primary, var(--border-strong));
+  outline-offset: 2px;
+}
+
+@media (max-width: 60rem) {
+  [data-admin-layout] .admin-svg-engine-shell {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: auto;
+  }
+
+  [data-admin-layout] .admin-svg-engine-shell__stage {
+    min-height: 50vh;
+  }
+
+  [data-admin-layout] .admin-svg-engine-shell__rail {
+    max-height: none;
+  }
+}
