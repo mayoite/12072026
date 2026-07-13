@@ -8,6 +8,9 @@
  * Publish: formState (sceneParts → blocks) → publishDescriptorWithPipeline.
  *
  * GS: semantic tokens only; no hex in tsx. Catalog publish SVG ≠ Fabric plan-draw.
+ *
+ * ADM-STATE-01 / ADM-SVG-14: one authoritative lifecycle + field-level draft diff.
+ * ADM-FORM-02 / ADM-PUB-01: linked field errors (SvgEditorForm) + publish blocking.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -49,6 +52,12 @@ import {
   advancePublishedDraft,
   resetEditorDraft,
 } from "./svgEditorDraftState";
+import {
+  deriveAuthoringLifecycle,
+  authoringLifecycleLabel,
+  authoringLifecycleBadgeClass,
+  describeChangedFields,
+} from "./authoringLifecycle";
 
 /** Browser-only 3D islands — static import of model-viewer/three breaks RSC SSR. */
 const GlbExtruderPreview = dynamic(
@@ -466,13 +475,23 @@ export function AdminSvgEditorEditView({
     : "—";
 
   const canConvertToGlb = form.variant === "fixed" && compiledSvg !== null;
-  const validationLabel = previewPending
-    ? "Validation running"
-    : preview?.ok === true
-      ? "Draft valid"
-      : preview
-        ? "Publication blocked"
-        : "Awaiting validation";
+
+  // ADM-STATE-01: one authoritative authoring lifecycle.
+  const authoringLifecycle = deriveAuthoringLifecycle({
+    submitting: feedback.submitting,
+    errorMessage: feedback.errorMessage,
+    successMessage: feedback.successMessage,
+    previewPending,
+    previewOk: preview == null ? null : preview.ok === true,
+    formDirty,
+  });
+
+  // ADM-SVG-14: field-level draft vs published difference.
+  const changedFields = useMemo(
+    () => describeChangedFields(form, publishedForm),
+    [form, publishedForm],
+  );
+
   const canPublish =
     Boolean(onPublishAction) &&
     !feedback.submitting &&
@@ -493,12 +512,15 @@ export function AdminSvgEditorEditView({
             {describeVariant(form.variant)} · schema{" "}
             <code>{descriptor.schemaVersion}</code> ·{" "}
             <code className="admin-page__checksum">{checksumShort}</code>
-            {formDirty ? (
-              <>
-                {" "}
-                · <span className="admin-badge admin-badge--warn">Unpublished changes</span>
-              </>
-            ) : null}
+            {" "}
+            ·{" "}
+            <span
+              className={authoringLifecycleBadgeClass(authoringLifecycle)}
+              data-testid="admin-authoring-lifecycle"
+              data-lifecycle={authoringLifecycle}
+            >
+              {authoringLifecycleLabel(authoringLifecycle)}
+            </span>
             {" "}
             ·{" "}
             <span
@@ -512,8 +534,6 @@ export function AdminSvgEditorEditView({
             >
               {lifecycle}
             </span>
-            {" "}
-            · <span className={preview?.ok === true ? "admin-badge admin-badge--active" : "admin-badge admin-badge--warn"}>{validationLabel}</span>
             {" "}
             · last published {updatedAtLabel}
             {" "}
@@ -581,8 +601,51 @@ export function AdminSvgEditorEditView({
       </header>
 
       <p id="admin-svg-publication-impact" className="admin-page__meta">
-        Publish target: <code>{publishTarget}</code>. Draft state: {formDirty ? "changed" : "unchanged"}. Current artifact: {artifactStatus.state}. A successful publish replaces the released SVG and preserves revision history for rollback.
+        Publish target: <code>{publishTarget}</code>. Authoring state:{" "}
+        <strong>{authoringLifecycleLabel(authoringLifecycle)}</strong>. Current
+        artifact: {artifactStatus.state}. A successful publish replaces the
+        released SVG and preserves revision history for rollback.
       </p>
+
+      {/* ADM-SVG-14 field diff + ADM-PUB-01 blocking note */}
+      {formDirty || authoringLifecycle === "invalid" ? (
+        <div
+          className="admin-alert admin-alert--warn"
+          role="status"
+          data-testid="admin-draft-published-diff"
+        >
+          <strong>Draft vs published</strong>
+          {formDirty ? (
+            <p className="admin-page__meta">
+              Field differences:{" "}
+              {changedFields.length === 0 ? (
+                <span>studio-only changes</span>
+              ) : (
+                changedFields.map((entry, index) => (
+                  <span key={entry.key}>
+                    {index > 0 ? " · " : null}
+                    {entry.targetId ? (
+                      <a href={`#${entry.targetId}`}>{entry.label}</a>
+                    ) : (
+                      entry.label
+                    )}
+                  </span>
+                ))
+              )}
+            </p>
+          ) : null}
+          {authoringLifecycle === "invalid" ? (
+            <p className="admin-page__meta">
+              Publication is blocked. Fix the linked validation errors in Advanced
+              block fields (and the live compile panel) before publishing.
+            </p>
+          ) : null}
+          <p className="admin-page__meta">
+            Visual difference: compare <strong>Live compile</strong> (draft) with{" "}
+            <strong>Published on disk</strong> (released artifact).
+          </p>
+        </div>
+      ) : null}
 
       <div aria-live="polite" aria-atomic="true" className="admin-svg-engine-feedback">
         {feedback.submitting ? (
@@ -715,7 +778,7 @@ export function AdminSvgEditorEditView({
 
           <details
             className="admin-panel admin-svg-engine-shell__panel admin-svg-engine-shell__advanced"
-            open={preview?.ok === false}
+            open={preview?.ok === false || formDirty}
           >
             <summary className="admin-panel__header">
               Advanced block fields
@@ -723,7 +786,8 @@ export function AdminSvgEditorEditView({
             <div className="admin-panel__body">
               <p className="admin-page__meta">
                 Metadata and catalog fields. Geometry for publish comes from the
-                visual studio, not these rows.
+                visual studio, not these rows. Field errors and a linked summary
+                appear here when validation fails.
               </p>
               <SvgEditorForm
                 fields={SVG_EDITOR_FIELDS}
