@@ -80,7 +80,7 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
       "admin-btn--primary",
     );
 
-    expect(screen.getByRole("link", { name: /side-table-001/i })).toHaveAttribute(
+    expect(screen.getByTestId("admin-svg-edit-side-table-001")).toHaveAttribute(
       "href",
       "/admin/svg-editor/side-table-001",
     );

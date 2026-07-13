@@ -14,7 +14,7 @@
  */
 
 import Link from "next/link";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { PencilSimple as Pencil, Plus } from "@phosphor-icons/react";
 
 import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
@@ -25,10 +25,22 @@ import { AdminSvgBulkImportPanel } from "./AdminSvgBulkImportPanel";
 import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 import { PublishedSvgPreview } from "./PublishedSvgPreview";
 import {
+  INVENTORY_PAGE_SIZE_DEFAULT,
+  INVENTORY_SAVED_VIEWS_STORAGE_KEY,
+  availabilityFromLifecycle,
+  createSavedView,
   filterInventoryRows,
+  groupInventoryRowsByFamily,
+  pageInventoryRows,
+  parseSavedViews,
+  serializeSavedViews,
+  sortInventoryRows,
   validationLabelForArtifact,
   type InventoryArtifactFilter,
   type InventoryLifecycleFilter,
+  type InventorySavedView,
+  type InventorySortDir,
+  type InventorySortKey,
   type SvgInventoryRow,
 } from "./svgInventoryFilter";
 
@@ -165,6 +177,12 @@ export function AdminSvgEditorListView({
   const [variantFilter, setVariantFilter] = useState<
     "all" | BlockDescriptor["variant"]
   >("all");
+  const [sortKey, setSortKey] = useState<InventorySortKey>("family");
+  const [sortDir, setSortDir] = useState<InventorySortDir>("asc");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(INVENTORY_PAGE_SIZE_DEFAULT);
+  const [savedViews, setSavedViews] = useState<InventorySavedView[]>([]);
+  const [savedViewName, setSavedViewName] = useState("");
 
   const setLifecycle = useCallback(async (slug: string, state: CatalogLifecycleState) => {
     setLifecycleBusySlug(slug);
@@ -192,38 +210,118 @@ export function AdminSvgEditorListView({
     (descriptor) => artifactStatuses[descriptor.slug]?.state === "invalid",
   ).length;
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = window.localStorage.getItem(INVENTORY_SAVED_VIEWS_STORAGE_KEY);
+      const views = parseSavedViews(raw);
+      if (views.length > 0) setSavedViews(views);
+    } catch {
+      // ignore storage failures
+    }
+  }, []);
+
   const inventoryRows = useMemo((): readonly SvgInventoryRow[] => {
-    const ordered = [...descriptors].sort((a, b) => {
-      const av = a.variant.localeCompare(b.variant);
-      return av !== 0 ? av : a.slug.localeCompare(b.slug);
-    });
-    return ordered.map((descriptor) => {
+    return descriptors.map((descriptor) => {
       const status = artifactStatuses[descriptor.slug] ?? missingStatus();
       const lifecycle = resolveCatalogLifecycle(
         descriptor.slug,
         status.state,
         lifecycleManifest,
       );
+      const epoch =
+        typeof descriptor.generatedAt === "number" &&
+        Number.isFinite(descriptor.generatedAt)
+          ? descriptor.generatedAt < 1e12
+            ? descriptor.generatedAt * 1000
+            : descriptor.generatedAt
+          : 0;
       return {
         descriptor,
         artifactState: status.state,
         lifecycle,
         lastChangeLabel: timestampLabel(descriptor.generatedAt),
+        lastChangeEpoch: epoch,
         validationLabel: validationLabelForArtifact(status.state),
+        family: descriptor.variant,
+        availability: availabilityFromLifecycle(lifecycle),
       };
     });
   }, [artifactStatuses, descriptors, lifecycleManifest]);
 
-  const filteredRows = useMemo(
-    () =>
-      filterInventoryRows(inventoryRows, {
-        query,
-        artifact: artifactFilter,
-        lifecycle: lifecycleFilter,
-        variant: variantFilter,
-      }),
-    [artifactFilter, inventoryRows, lifecycleFilter, query, variantFilter],
+  const filterInput = useMemo(
+    () => ({
+      query,
+      artifact: artifactFilter,
+      lifecycle: lifecycleFilter,
+      variant: variantFilter,
+    }),
+    [artifactFilter, lifecycleFilter, query, variantFilter],
   );
+
+  const filteredRows = useMemo(
+    () => filterInventoryRows(inventoryRows, filterInput),
+    [filterInput, inventoryRows],
+  );
+
+  const sortedRows = useMemo(
+    () => sortInventoryRows(filteredRows, sortKey, sortDir),
+    [filteredRows, sortDir, sortKey],
+  );
+
+  const paged = useMemo(
+    () => pageInventoryRows(sortedRows, page, pageSize),
+    [page, pageSize, sortedRows],
+  );
+
+  const familyGroups = useMemo(
+    () => groupInventoryRowsByFamily(paged.pageRows),
+    [paged.pageRows],
+  );
+
+  const persistSavedViews = useCallback((views: InventorySavedView[]) => {
+    setSavedViews(views);
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(
+        INVENTORY_SAVED_VIEWS_STORAGE_KEY,
+        serializeSavedViews(views),
+      );
+    } catch {
+      // ignore quota / private mode
+    }
+  }, []);
+
+  const saveCurrentView = useCallback(() => {
+    const view = createSavedView(
+      savedViewName,
+      filterInput,
+      sortKey,
+      sortDir,
+      pageSize,
+    );
+    persistSavedViews([...savedViews, view]);
+    setSavedViewName("");
+  }, [
+    filterInput,
+    pageSize,
+    persistSavedViews,
+    savedViewName,
+    savedViews,
+    sortDir,
+    sortKey,
+  ]);
+
+  const applySavedView = useCallback((view: InventorySavedView) => {
+    setQuery(view.filter.query);
+    setArtifactFilter(view.filter.artifact);
+    setLifecycleFilter(view.filter.lifecycle);
+    setVariantFilter(view.filter.variant);
+    setSortKey(view.sortKey);
+    setSortDir(view.sortDir);
+    setPageSize(view.pageSize);
+    setPage(1);
+  }, []);
 
   return (
     <div
@@ -311,18 +409,27 @@ export function AdminSvgEditorListView({
       ) : (
         <div className="admin-panel" data-testid="admin-svg-inventory">
           <div className="admin-panel__header">
-            {filteredRows.length} of {inventoryRows.length} symbol
+            {sortedRows.length} of {inventoryRows.length} symbol
             {inventoryRows.length === 1 ? "" : "s"}
+            {paged.totalPages > 1
+              ? ` · showing page ${paged.page}/${paged.totalPages}`
+              : ""}
           </div>
-          <div className="px-4 py-3 flex flex-wrap gap-3" data-testid="admin-svg-inventory-filters">
+          <div
+            className="px-4 py-3 flex flex-wrap gap-3"
+            data-testid="admin-svg-inventory-filters"
+          >
             <label className="admin-field">
               <span className="admin-field__label">Find</span>
               <input
                 type="search"
                 className="admin-field__control"
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Slug, SKU, variant…"
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setPage(1);
+                }}
+                placeholder="Slug, SKU, family…"
                 data-testid="admin-svg-inventory-search"
                 aria-label="Search SVG inventory"
               />
@@ -332,9 +439,10 @@ export function AdminSvgEditorListView({
               <select
                 className="admin-field__control"
                 value={artifactFilter}
-                onChange={(event) =>
-                  setArtifactFilter(event.target.value as InventoryArtifactFilter)
-                }
+                onChange={(event) => {
+                  setArtifactFilter(event.target.value as InventoryArtifactFilter);
+                  setPage(1);
+                }}
                 data-testid="admin-svg-filter-artifact"
                 aria-label="Filter by artifact state"
               >
@@ -349,9 +457,12 @@ export function AdminSvgEditorListView({
               <select
                 className="admin-field__control"
                 value={lifecycleFilter}
-                onChange={(event) =>
-                  setLifecycleFilter(event.target.value as InventoryLifecycleFilter)
-                }
+                onChange={(event) => {
+                  setLifecycleFilter(
+                    event.target.value as InventoryLifecycleFilter,
+                  );
+                  setPage(1);
+                }}
                 data-testid="admin-svg-filter-lifecycle"
                 aria-label="Filter by lifecycle"
               >
@@ -362,17 +473,18 @@ export function AdminSvgEditorListView({
               </select>
             </label>
             <label className="admin-field">
-              <span className="admin-field__label">Variant</span>
+              <span className="admin-field__label">Family</span>
               <select
                 className="admin-field__control"
                 value={variantFilter}
-                onChange={(event) =>
+                onChange={(event) => {
                   setVariantFilter(
                     event.target.value as "all" | BlockDescriptor["variant"],
-                  )
-                }
+                  );
+                  setPage(1);
+                }}
                 data-testid="admin-svg-filter-variant"
-                aria-label="Filter by variant"
+                aria-label="Filter by family variant"
               >
                 <option value="all">All</option>
                 {VARIANT_ORDER.map((variant) => (
@@ -382,150 +494,333 @@ export function AdminSvgEditorListView({
                 ))}
               </select>
             </label>
+            <label className="admin-field">
+              <span className="admin-field__label">Sort</span>
+              <select
+                className="admin-field__control"
+                value={sortKey}
+                onChange={(event) =>
+                  setSortKey(event.target.value as InventorySortKey)
+                }
+                data-testid="admin-svg-inventory-sort"
+                aria-label="Sort inventory"
+              >
+                <option value="family">Family</option>
+                <option value="slug">Identity</option>
+                <option value="sku">SKU</option>
+                <option value="lifecycle">Lifecycle</option>
+                <option value="lastChange">Last change</option>
+                <option value="widthMm">Width mm</option>
+              </select>
+            </label>
+            <label className="admin-field">
+              <span className="admin-field__label">Direction</span>
+              <select
+                className="admin-field__control"
+                value={sortDir}
+                onChange={(event) =>
+                  setSortDir(event.target.value as InventorySortDir)
+                }
+                data-testid="admin-svg-inventory-sort-dir"
+                aria-label="Sort direction"
+              >
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </label>
+            <label className="admin-field">
+              <span className="admin-field__label">Page size</span>
+              <select
+                className="admin-field__control"
+                value={String(pageSize)}
+                onChange={(event) => {
+                  setPageSize(Number(event.target.value));
+                  setPage(1);
+                }}
+                data-testid="admin-svg-inventory-page-size"
+                aria-label="Rows per page"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </select>
+            </label>
           </div>
-          {filteredRows.length === 0 ? (
-            <div className="admin-empty" role="status" data-testid="admin-svg-inventory-empty">
+
+          <div
+            className="px-4 py-2 flex flex-wrap gap-2 items-end"
+            data-testid="admin-svg-inventory-saved-views"
+          >
+            <label className="admin-field">
+              <span className="admin-field__label">Save view as</span>
+              <input
+                type="text"
+                className="admin-field__control"
+                value={savedViewName}
+                onChange={(event) => setSavedViewName(event.target.value)}
+                placeholder="e.g. Live published"
+                aria-label="Name for saved inventory view"
+                data-testid="admin-svg-inventory-saved-view-name"
+              />
+            </label>
+            <button
+              type="button"
+              className="admin-btn admin-btn--outline"
+              onClick={saveCurrentView}
+              disabled={savedViewName.trim() === ""}
+              data-testid="admin-svg-inventory-save-view"
+            >
+              Save view
+            </button>
+            {savedViews.map((view) => (
+              <button
+                key={view.id}
+                type="button"
+                className="admin-btn admin-btn--outline"
+                onClick={() => applySavedView(view)}
+                data-testid={`admin-svg-inventory-apply-view-${view.id}`}
+                aria-label={`Apply saved view ${view.name}`}
+              >
+                {view.name}
+              </button>
+            ))}
+          </div>
+
+          {sortedRows.length === 0 ? (
+            <div
+              className="admin-empty"
+              role="status"
+              data-testid="admin-svg-inventory-empty"
+            >
               <p className="admin-table__primary">No symbols match these filters</p>
-              <p className="admin-table__secondary">Clear search or filters to see the full inventory.</p>
+              <p className="admin-table__secondary">
+                Clear search or filters to see the full inventory.
+              </p>
             </div>
           ) : (
-          <div className="admin-table-wrap">
-            <table className="admin-table">
-              <caption className="sr-only">
-                SVG product symbols with preview, identity, validation, artifact
-                state, lifecycle, and last change.
-              </caption>
-              <thead>
-                <tr>
-                  <th scope="col">Preview</th>
-                  <th scope="col">Identity</th>
-                  <th scope="col">Variant</th>
-                  <th scope="col">Validation</th>
-                  <th scope="col">Artifact</th>
-                  <th scope="col">Lifecycle</th>
-                  <th scope="col">Last change</th>
-                  <th scope="col" className="text-end">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredRows.map((row) => {
-                  const d = row.descriptor;
-                  const status = artifactStatuses[d.slug] ?? missingStatus();
-                  const lifecycle = row.lifecycle;
-                  return (
-                    <tr
-                      key={`${d.variant}:${d.slug}`}
-                      data-slug={d.slug}
-                      data-artifact-state={status.state}
-                      data-validation={row.validationLabel}
-                      data-lifecycle={lifecycle}
-                    >
-                      <td>
-                        <PublishedSvgPreview
-                          slug={d.slug}
-                          status={status}
-                          size="thumb"
-                        />
-                      </td>
-                      <td>
-                        <p className="admin-table__primary">
-                          <Link href={`/admin/svg-editor/${d.slug}`}>
-                            {d.slug}
-                          </Link>
-                        </p>
-                        {d.sku ? (
-                          <p className="admin-table__secondary">
-                            <span aria-hidden>SKU: </span>
-                            <code>{d.sku}</code>
-                          </p>
-                        ) : null}
-                        <p className="admin-table__secondary">
-                          {d.geometry.widthMm}×{d.geometry.depthMm} mm
-                        </p>
-                      </td>
-                      <td>
-                        <span className={variantBadgeClass(d.variant)}>
-                          {VARIANT_LABEL[d.variant]}
-                        </span>
-                      </td>
-                      <td>
-                        <span
-                          className={
-                            row.validationLabel === "ok"
-                              ? "admin-badge admin-badge--active"
-                              : "admin-badge admin-badge--warn"
-                          }
-                          data-testid={`admin-svg-validation-${d.slug}`}
-                        >
-                          {row.validationLabel === "ok"
-                            ? "Valid"
-                            : row.validationLabel === "invalid"
-                              ? "Invalid"
-                              : "Missing symbol"}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={artifactBadgeClass(status.state)}>
-                          {artifactLabel(status.state)}
-                        </span>
-                        <p className="admin-table__secondary">
-                          {status.bytes > 0
-                            ? formatBytes(status.bytes)
-                            : "No bytes on disk"}
-                          {status.publicUrl ? (
-                            <>
-                              {" · "}
-                              <code>{status.publicUrl}</code>
-                            </>
-                          ) : null}
-                        </p>
-                      </td>
-                      <td>
-                        <span className={lifecycleBadgeClass(lifecycle)}>{lifecycle}</span>
-                        {lifecycle !== "retired" ? (
-                          <button
-                            type="button"
-                            className="admin-btn admin-btn--outline mt-2"
-                            disabled={lifecycleBusySlug === d.slug}
-                            onClick={() => void setLifecycle(d.slug, "retired")}
-                          >
-                            Retire
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            className="admin-btn admin-btn--outline mt-2"
-                            disabled={lifecycleBusySlug === d.slug}
-                            onClick={() => void setLifecycle(d.slug, "live")}
-                          >
-                            Restore
-                          </button>
-                        )}
-                      </td>
-                      <td>
-                        <code className="text-muted" data-testid={`admin-svg-last-change-${d.slug}`}>
-                          {row.lastChangeLabel}
-                        </code>
-                      </td>
-                      <td>
-                        <div className="flex justify-end">
-                          <Link
-                            href={`/admin/svg-editor/${d.slug}`}
-                            className="admin-btn admin-btn--outline"
-                          >
-                            <Pencil size={14} aria-hidden />
-                            Edit
-                          </Link>
-                        </div>
-                      </td>
+            <>
+              <div className="admin-table-wrap">
+                <table
+                  className="admin-table"
+                  data-testid="admin-svg-inventory-table"
+                >
+                  <caption className="sr-only">
+                    SVG product symbols grouped by family with identity, SKU,
+                    dimensions, lifecycle, availability, symbol state, and last
+                    change.
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Preview</th>
+                      <th scope="col">Identity</th>
+                      <th scope="col">SKU</th>
+                      <th scope="col">Family</th>
+                      <th scope="col">Dimensions</th>
+                      <th scope="col">Lifecycle</th>
+                      <th scope="col">Availability</th>
+                      <th scope="col">Symbol</th>
+                      <th scope="col">Last change</th>
+                      <th scope="col" className="text-end">
+                        Actions
+                      </th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                  </thead>
+                  {familyGroups.map((group) => (
+                    <tbody
+                      key={group.family}
+                      data-family={group.family}
+                      data-testid={`admin-svg-family-group-${group.family}`}
+                    >
+                      <tr className="admin-table__group">
+                        <th
+                          scope="colgroup"
+                          colSpan={10}
+                          className="admin-panel__header"
+                        >
+                          Family · {VARIANT_LABEL[group.family]} (
+                          {group.rows.length})
+                        </th>
+                      </tr>
+                      {group.rows.map((row) => {
+                        const d = row.descriptor;
+                        const status =
+                          artifactStatuses[d.slug] ?? missingStatus();
+                        const lifecycle = row.lifecycle;
+                        return (
+                          <tr
+                            key={`${d.variant}:${d.slug}`}
+                            data-slug={d.slug}
+                            data-family={row.family}
+                            data-artifact-state={status.state}
+                            data-validation={row.validationLabel}
+                            data-lifecycle={lifecycle}
+                            data-availability={row.availability}
+                          >
+                            <td>
+                              <PublishedSvgPreview
+                                slug={d.slug}
+                                status={status}
+                                size="thumb"
+                              />
+                            </td>
+                            <td>
+                              <p className="admin-table__primary">
+                                <Link
+                                  href={`/admin/svg-editor/${d.slug}`}
+                                  aria-label={`Open ${d.slug} identity`}
+                                >
+                                  {d.slug}
+                                </Link>
+                              </p>
+                            </td>
+                            <td>
+                              <code data-testid={`admin-svg-sku-${d.slug}`}>
+                                {d.sku ?? "—"}
+                              </code>
+                            </td>
+                            <td>
+                              <span className={variantBadgeClass(d.variant)}>
+                                {VARIANT_LABEL[d.variant]}
+                              </span>
+                            </td>
+                            <td
+                              data-testid={`admin-svg-dimensions-${d.slug}`}
+                            >
+                              {d.geometry.widthMm}×{d.geometry.depthMm}
+                              {d.geometry.heightMm
+                                ? `×${d.geometry.heightMm}`
+                                : ""}{" "}
+                              mm
+                            </td>
+                            <td>
+                              <span
+                                className={lifecycleBadgeClass(lifecycle)}
+                              >
+                                {lifecycle}
+                              </span>
+                            </td>
+                            <td>
+                              <span
+                                className={
+                                  row.availability === "available"
+                                    ? "admin-badge admin-badge--active"
+                                    : row.availability === "retired"
+                                      ? "admin-badge admin-badge--hidden"
+                                      : "admin-badge admin-badge--warn"
+                                }
+                                data-testid={`admin-svg-availability-${d.slug}`}
+                              >
+                                {row.availability}
+                              </span>
+                            </td>
+                            <td>
+                              <span
+                                className={artifactBadgeClass(status.state)}
+                                data-testid={`admin-svg-validation-${d.slug}`}
+                              >
+                                {artifactLabel(status.state)}
+                                {row.validationLabel === "ok"
+                                  ? " · Valid"
+                                  : row.validationLabel === "invalid"
+                                    ? " · Invalid"
+                                    : " · Missing"}
+                              </span>
+                              <p className="admin-table__secondary">
+                                {status.bytes > 0
+                                  ? formatBytes(status.bytes)
+                                  : "No bytes on disk"}
+                              </p>
+                            </td>
+                            <td>
+                              <code
+                                className="text-muted"
+                                data-testid={`admin-svg-last-change-${d.slug}`}
+                              >
+                                {row.lastChangeLabel}
+                              </code>
+                            </td>
+                            <td>
+                              <div className="flex flex-wrap justify-end gap-2">
+                                {lifecycle !== "retired" ? (
+                                  <button
+                                    type="button"
+                                    className="admin-btn admin-btn--outline"
+                                    disabled={lifecycleBusySlug === d.slug}
+                                    onClick={() =>
+                                      void setLifecycle(d.slug, "retired")
+                                    }
+                                    aria-label={`Retire ${d.slug}`}
+                                    data-testid={`admin-svg-retire-${d.slug}`}
+                                  >
+                                    Retire
+                                  </button>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    className="admin-btn admin-btn--outline"
+                                    disabled={lifecycleBusySlug === d.slug}
+                                    onClick={() =>
+                                      void setLifecycle(d.slug, "live")
+                                    }
+                                    aria-label={`Restore ${d.slug} to live`}
+                                    data-testid={`admin-svg-restore-${d.slug}`}
+                                  >
+                                    Restore
+                                  </button>
+                                )}
+                                <Link
+                                  href={`/admin/svg-editor/${d.slug}`}
+                                  className="admin-btn admin-btn--outline"
+                                  aria-label={`Edit ${d.slug} in SVG studio`}
+                                  data-testid={`admin-svg-edit-${d.slug}`}
+                                >
+                                  <Pencil size={14} aria-hidden />
+                                  Edit
+                                </Link>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  ))}
+                </table>
+              </div>
+              <div
+                className="px-4 py-3 flex flex-wrap gap-2 items-center justify-between"
+                data-testid="admin-svg-inventory-paging"
+              >
+                <p className="admin-table__secondary" role="status">
+                  Page {paged.page} of {paged.totalPages} · {paged.total} match
+                  {paged.total === 1 ? "" : "es"}
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--outline"
+                    disabled={paged.page <= 1}
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    data-testid="admin-svg-inventory-page-prev"
+                    aria-label="Previous inventory page"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--outline"
+                    disabled={paged.page >= paged.totalPages}
+                    onClick={() =>
+                      setPage((p) => Math.min(paged.totalPages, p + 1))
+                    }
+                    data-testid="admin-svg-inventory-page-next"
+                    aria-label="Next inventory page"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </>
           )}
         </div>
       )}

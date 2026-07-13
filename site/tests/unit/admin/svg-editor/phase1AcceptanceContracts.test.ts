@@ -36,12 +36,21 @@ function row(
     geometry: { widthMm: 600, depthMm: 600, heightMm: 750 },
     ...partial,
   } as BlockDescriptor;
+  const lifecycle = extras?.lifecycle ?? "draft";
   return {
     descriptor,
     artifactState: "published",
-    lifecycle: "draft",
+    lifecycle,
     lastChangeLabel: "2026-07-13",
+    lastChangeEpoch: 0,
     validationLabel: "ok",
+    family: descriptor.variant,
+    availability:
+      lifecycle === "live"
+        ? "available"
+        : lifecycle === "retired"
+          ? "retired"
+          : "unavailable",
     ...extras,
   };
 }
