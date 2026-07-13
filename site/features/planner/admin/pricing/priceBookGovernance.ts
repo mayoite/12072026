@@ -1,19 +1,11 @@
 /**
- * Phase 4 governance helpers for price books:
+ * Phase 4 governance helpers for price books (client-safe):
  * ADM-PRICE-02 lifecycle labels · ADM-PRICE-03 high-risk confirm ·
  * ADM-ROLE-01 action availability · ADM-AUDIT-01 entry shape ·
  * ADM-PUB-02 release impact summary.
  *
- * Pure functions + optional file audit (injectable dir for tests).
+ * Pure functions only — no node:fs. File audit lives in priceBookGovernance.server.ts.
  */
-
-import {
-  appendFileSync,
-  existsSync,
-  mkdirSync,
-  readFileSync,
-} from "node:fs";
-import path from "node:path";
 
 import type {
   PriceBookContract,
@@ -222,44 +214,6 @@ export function createPriceBookAuditEntry(input: {
     result: input.result,
     resultDetail: input.resultDetail,
   };
-}
-
-const AUDIT_FILE = "_price-book-audit.jsonl";
-
-export function priceBookAuditLogPath(dir: string): string {
-  return path.resolve(dir, AUDIT_FILE);
-}
-
-export function appendPriceBookAudit(
-  entry: PriceBookAuditEntry,
-  dir: string,
-): void {
-  mkdirSync(dir, { recursive: true });
-  appendFileSync(
-    priceBookAuditLogPath(dir),
-    `${JSON.stringify(entry)}\n`,
-    "utf8",
-  );
-}
-
-export function readPriceBookAudit(
-  bookId: string,
-  dir: string,
-  limit = 40,
-): PriceBookAuditEntry[] {
-  const logPath = priceBookAuditLogPath(dir);
-  if (!existsSync(logPath)) return [];
-  const lines = readFileSync(logPath, "utf8").split(/\r?\n/).filter(Boolean);
-  const out: PriceBookAuditEntry[] = [];
-  for (let i = lines.length - 1; i >= 0 && out.length < limit; i--) {
-    try {
-      const parsed = JSON.parse(lines[i]) as PriceBookAuditEntry;
-      if (parsed.bookId === bookId) out.push(parsed);
-    } catch {
-      // skip corrupt
-    }
-  }
-  return out;
 }
 
 /** Format one audit row for Admin history (ADM-AUDIT-01). */

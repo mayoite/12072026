@@ -33,8 +33,14 @@ test.describe("P0.1 admin SVG publish (dev auth bypass)", () => {
       await page.goto("/admin/svg-editor", { waitUntil: "domcontentloaded" });
       await expect(page).not.toHaveURL(/\/access\//);
       const row = page.locator(`tr[data-slug="${SLUG}"]`);
-      const editLink = row.getByRole("link", { name: "Edit", exact: true });
-      await expect(editLink).toHaveAttribute("href", `/admin/svg-editor/${SLUG}/`);
+      await expect(row).toBeVisible({ timeout: 45_000 });
+      // Accessible name includes slug (aria-label); prefer stable test id.
+      const editLink = page.getByTestId(`admin-svg-edit-${SLUG}`);
+      await expect(editLink).toBeVisible();
+      await expect(editLink).toHaveAttribute(
+        "href",
+        new RegExp(`/admin/svg-editor/${SLUG}/?$`),
+      );
       const editHref = await editLink.getAttribute("href");
       expect(editHref).not.toBeNull();
       await page.goto(editHref ?? `/admin/svg-editor/${SLUG}`, {

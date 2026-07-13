@@ -499,8 +499,9 @@
 }
 
 [data-admin-layout] .admin-badge--warn {
-  background: color-mix(in srgb, var(--color-warning) 16%, white);
-  color: color-mix(in srgb, var(--color-warning) 78%, var(--text-heading));
+  /* Keep ≥ 4.5:1 vs badge surface for WCAG 2.2 AA (was 4.29 with lighter mix). */
+  background: color-mix(in srgb, var(--color-warning) 14%, white);
+  color: color-mix(in srgb, var(--color-warning) 55%, var(--text-heading));
 }
 
 /* A1 — published catalog SVG stage (list thumb + editor panel).

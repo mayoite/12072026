@@ -21,11 +21,11 @@ import {
   rollbackPriceBookVersion,
   type PriceBookRole,
 } from "./priceBookService";
+import { createPriceBookAuditEntry } from "./priceBookGovernance";
 import {
   appendPriceBookAudit,
-  createPriceBookAuditEntry,
   readPriceBookAudit,
-} from "./priceBookGovernance";
+} from "./priceBookGovernance.server";
 
 export const DEFAULT_PRICE_BOOK_ID = "pb-linear-2026-q3";
 
@@ -60,27 +60,30 @@ function loadFixtureSeed(): ReturnType<typeof readPriceBookFile> {
   };
 }
 
-export function getPriceBookStore() {
-  return createPriceBookFileStore(PRICE_BOOKS_DIR_DEFAULT);
+export function getPriceBookStore(dir: string = PRICE_BOOKS_DIR_DEFAULT) {
+  return createPriceBookFileStore(dir);
 }
 
-export function ensureDefaultPriceBookSeeded() {
+export function ensureDefaultPriceBookSeeded(dir: string = PRICE_BOOKS_DIR_DEFAULT) {
   const seed = loadFixtureSeed();
   if (!seed) return null;
-  return seedPriceBookIfMissing(DEFAULT_PRICE_BOOK_ID, seed);
+  return seedPriceBookIfMissing(DEFAULT_PRICE_BOOK_ID, seed, dir);
 }
 
 /** E2E/dev reset — restores draft seed so approve→activate→rollback is repeatable. */
-export function resetDefaultPriceBookSeed() {
+export function resetDefaultPriceBookSeed(dir: string = PRICE_BOOKS_DIR_DEFAULT) {
   const seed = loadFixtureSeed();
   if (!seed) return null;
-  writePriceBookFile(seed);
+  writePriceBookFile(seed, dir);
   return seed;
 }
 
-export async function readAdminPriceBook(bookId: string) {
-  ensureDefaultPriceBookSeeded();
-  const store = getPriceBookStore();
+export async function readAdminPriceBook(
+  bookId: string,
+  dir: string = PRICE_BOOKS_DIR_DEFAULT,
+) {
+  ensureDefaultPriceBookSeeded(dir);
+  const store = getPriceBookStore(dir);
   const snapshot = await store.getBook(bookId);
   if (!snapshot) return null;
   const contract = emitPriceBookContract(snapshot.book, snapshot.versions);
@@ -95,10 +98,13 @@ export async function runPriceBookAction(
   options: {
     readonly actorId?: string;
     readonly reason?: string;
+    /** Injectable store/audit root (tests). Defaults to product price-books dir. */
+    readonly dir?: string;
   } = {},
 ) {
-  ensureDefaultPriceBookSeeded();
-  const store = getPriceBookStore();
+  const dir = options.dir ?? PRICE_BOOKS_DIR_DEFAULT;
+  ensureDefaultPriceBookSeeded(dir);
+  const store = getPriceBookStore(dir);
   const actorId = options.actorId ?? "unknown";
   const reason = options.reason ?? "";
 
@@ -124,19 +130,23 @@ export async function runPriceBookAction(
     resultDetail: result.ok ? `${action} ok` : result.error,
   });
   try {
-    appendPriceBookAudit(entry, PRICE_BOOKS_DIR_DEFAULT);
+    appendPriceBookAudit(entry, dir);
   } catch {
     // audit best-effort; do not fail commercial action if log write fails
   }
   return result;
 }
 
-export function readAdminPriceBookAudit(bookId: string, limit = 40) {
-  ensureDefaultPriceBookSeeded();
-  return readPriceBookAudit(bookId, PRICE_BOOKS_DIR_DEFAULT, limit);
+export function readAdminPriceBookAudit(
+  bookId: string,
+  limit = 40,
+  dir: string = PRICE_BOOKS_DIR_DEFAULT,
+) {
+  ensureDefaultPriceBookSeeded(dir);
+  return readPriceBookAudit(bookId, dir, limit);
 }
 
-export function listAdminPriceBooks(): string[] {
-  ensureDefaultPriceBookSeeded();
-  return listPriceBookIds();
+export function listAdminPriceBooks(dir: string = PRICE_BOOKS_DIR_DEFAULT): string[] {
+  ensureDefaultPriceBookSeeded(dir);
+  return listPriceBookIds(dir);
 }

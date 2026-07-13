@@ -59,7 +59,7 @@ Unit gate: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor
 - [x] `ADM-FORM-02` Field errors and a linked error summary work.
 - [x] `ADM-FORM-03` Dirty, save, discard, and recovery states are truthful.
 - [x] `ADM-PUB-01` Errors block publication and warnings remain visible.
-- [ ] `ADM-A11Y-01` The primary Admin journey meets WCAG 2.2 AA (**browser axe**).
+- [x] `ADM-A11Y-01` The primary Admin journey meets WCAG 2.2 AA (**browser axe** on svg-list, svg-edit, price-books — run `2026-07-13T-admin-phases-final`).
 - [x] `ADM-A11Y-02` SVG authoring through publication is keyboard-completable.
 - [x] `ADM-A11Y-03` Every drag action has a non-drag alternative.
 - [x] `ADM-A11Y-04` Focus and dynamic state announcements pass fresh checks.
@@ -190,7 +190,15 @@ Unit gate: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor
 
 ## Residual open (cannot close without browser/DB cutover)
 
-1. **ADM-A11Y-01** WCAG 2.2 AA browser audit.
-2. **DB-SVG-01..05, 17, 18** Products DB authority + migration cutover.
-3. Full multi-surface browser journeys (author, price-book, family release).
-4. End-to-end browser retire/restore placement in live Planner.
+1. **DB-SVG-01..05, 17, 18** Products DB authority + migration cutover.
+2. End-to-end browser retire/restore placement in live Planner (Planner canvas).
+3. Chrome DevTools MCP Lighthouse not run here (system Chrome channel missing; Playwright Chromium + axe used instead).
+
+## Live browser evidence (2026-07-13)
+
+- Playwright Chromium installed via `pnpm --filter oando-site exec playwright install chromium`.
+- Suite (20/20): `admin-phases-live` + inventory preview + publish p01 + scene a401 + price-book p05.
+- Env: `DEV_AUTH_BYPASS=1` (dev turbo).
+- Evidence: `results/admin/2026-07-13T-admin-phases-final/` (screenshots, axe reports, logs).
+- Fixed client bundle break: `priceBookGovernance` pure helpers vs `priceBookGovernance.server` audit I/O (`node:fs` no longer in client).
+- Fixed `.admin-badge--warn` contrast for WCAG AA (was 4.29, target ≥4.5).
