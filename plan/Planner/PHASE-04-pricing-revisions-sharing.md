@@ -15,6 +15,7 @@ The customer can price and share an immutable project revision safely.
 - Prevent draft prices from reaching customers.
 - Keep historical priced outputs reproducible.
 - Preserve the Phase 1 BOQ lines and hash inputs.
+- Keep price status distinct from save and validation status.
 
 ## Named revisions
 
@@ -23,6 +24,7 @@ The customer can price and share an immutable project revision safely.
 - Keep later edits separate from the named revision.
 - Compare the current draft with a named revision.
 - Prevent BOQ and quote records from drifting to later edits.
+- Show whether the customer is viewing the draft or an immutable revision.
 
 ## Sharing and review
 

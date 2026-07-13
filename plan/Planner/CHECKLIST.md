@@ -17,7 +17,11 @@ Treat every item as not done.
 - [ ] Guests do not face a false account requirement.
 - [ ] No developer flag or hidden query is required.
 - [ ] Member, Admin, and private routes remain protected.
-- [ ] Project brief and room setup are complete and persistent.
+- [ ] `UI-ENTRY-01` guest entry reaches useful canvas content after at most one blocking choice.
+- [ ] `UI-ENTRY-02` entry offers template, scratch, and import or trace.
+- [ ] `UI-ENTRY-03` optional metadata can be skipped and edited later.
+- [ ] The second gate never presents only one available choice.
+- [ ] Project brief and room geometry are editable and persistent.
 - [ ] Millimetres remain document authority.
 - [ ] Setup is keyboard-complete with visible focus.
 - [ ] One BOQ calculation authority exists.
@@ -37,19 +41,36 @@ Treat every item as not done.
 - [ ] Primary tools work and silent no-op controls are removed.
 - [ ] Numeric properties are keyboard-editable.
 - [ ] One undo and redo authority covers document mutations.
-- [ ] Public product search, categories, filters, and details work.
+- [ ] `UI-CAT-01` results show image or symbol, name, SKU, dimensions, family, and availability.
+- [ ] `UI-CAT-02` family variants are grouped and comparable.
+- [ ] `UI-CAT-03` search and filters cover commercial product attributes.
+- [ ] `UI-CAT-04` catalog preview and placed 2D representation remain recognizable as the same product.
 - [ ] Only published customer-visible inventory is exposed.
 - [ ] Product, family, version, option, and commercial identity survive placement.
 - [ ] Published SVG is the primary 2D symbol.
 - [ ] Missing assets use an honest fallback without breaking the layout.
 - [ ] One normalized document drives 2D, 3D, persistence, export, and BOQ.
-- [ ] Save states are truthful and failed save never displays success.
+- [ ] `UI-STATE-01` one authoritative save state is shown.
+- [ ] `UI-STATE-02` loading, offline, saving, saved, unsaved, and error are distinct.
+- [ ] Failed save never displays success.
 - [ ] Save, reload, import, and export preserve canonical fields.
 - [ ] 2D and 3D preserve object count, pose, rotation, and options.
 - [ ] View actions do not mutate project data.
-- [ ] Workspace panels do not hide essential work.
-- [ ] Primary desktop, mobile, and keyboard journeys work.
-- [ ] WCAG 2.2 AA checks pass for the primary journey.
+- [ ] `UI-SHELL-01` desktop header remains one row at supported widths.
+- [ ] `UI-SHELL-02` default desktop canvas uses at least 65 percent of viewport area.
+- [ ] `UI-SHELL-03` empty properties do not reserve a permanent panel.
+- [ ] `UI-SHELL-04` panels collapse without losing work or selection.
+- [ ] `UI-EDIT-01` selection opens only relevant properties.
+- [ ] `UI-EDIT-02` dimensions and positions accept exact numeric input.
+- [ ] `UI-EDIT-03` undo and redo communicate the affected action.
+- [ ] `UI-MOB-01` phone chrome stays at or below 40 percent of initial viewport height.
+- [ ] `UI-MOB-02` phone canvas receives at least 60 percent of initial viewport height.
+- [ ] `UI-MOB-03` frequent phone actions use 44 by 44 pixel targets where practical.
+- [ ] `UI-MOB-04` inventory and properties use mutually exclusive sheets.
+- [ ] `UI-A11Y-01` the primary journey meets WCAG 2.2 AA.
+- [ ] `UI-A11Y-02` every drag action has a keyboard and pointer alternative.
+- [ ] `UI-A11Y-03` focus remains visible and unobscured.
+- [ ] `UI-A11Y-04` dynamic save, sync, search, and export states are announced.
 - [ ] Light and dark themes cover primary surfaces.
 - [ ] Primary journeys have no unexplained console, request, or hydration errors.
 
@@ -93,6 +114,9 @@ Treat every item as not done.
 
 ## Phase 5 — handoff and exports
 
+- [ ] `UI-BOQ-01` product count and BOQ readiness are visible from the workspace.
+- [ ] `UI-BOQ-02` customer-ready export is distinct from a draft export.
+- [ ] `UI-BOQ-03` sending the BOQ to Oando is explicit and recoverable.
 - [ ] Customer reviews the exact named revision before submission.
 - [ ] BOQ, pricing, exclusions, and validation status are visible.
 - [ ] Hard validation failures block handoff.
@@ -111,5 +135,6 @@ Treat every item as not done.
 - [ ] An external customer completes the full journey without developer help.
 - [ ] The same product identity flows from discovery to BOQ and handoff.
 - [ ] Oando receives the exact branded package reviewed by the customer.
+- [ ] Every applicable UI benchmark ID has fresh browser evidence.
 - [ ] Fresh commands and exit codes are recorded here.
 - [ ] Only active failures remain in `../../Failures.md`.

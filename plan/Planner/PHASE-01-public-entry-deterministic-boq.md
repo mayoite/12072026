@@ -4,18 +4,32 @@
 
 A public visitor can enter Planner, start a project, and generate a deterministic branded BOQ.
 
+The visitor reaches useful canvas content after at most one blocking choice.
+
+Interface authority: `../../docs/architecture/06-UI-BENCHMARK.md`.
+
 ## Planner entry
 
 - Accept entry from the public Site without hidden flags.
 - Let guests start without a false account requirement.
 - Explain the Planner outcome before project setup.
+- Meet `UI-ENTRY-01` through `UI-ENTRY-03`.
+- Offer template, scratch, and import or trace together.
+- Do not show a second gate with only one available choice.
+- Provide back and skip where the step is not essential.
 - Protect member, Admin, and private routes.
 - Emit the agreed Site conversion events without owning analytics storage.
 
-## Project setup
+## Progressive project setup
 
-- Capture project name, customer, location, seat need, work mode, and units.
-- Capture room dimensions, doors, windows, columns, and keep-out zones.
+- Prefill project name, location, floor area, purpose, and units.
+- Let the customer edit metadata after entering the workspace.
+- Do not block exploration on optional customer or project fields.
+- Ask only for geometry required by the chosen starting mode.
+- Let templates provide valid starting geometry.
+- Let scratch mode use explicit dimensions or an honest editable default.
+- Let import or trace accept the documented plan formats.
+- Capture doors, windows, columns, and keep-out zones in the editor.
 - Keep millimetres as document authority.
 - Give every room object a stable identifier.
 - Preserve the project brief and room through reload.
@@ -49,6 +63,9 @@ A public visitor can enter Planner, start a project, and generate a deterministi
 ## Required proof
 
 - Public-to-Planner guest entry browser journey.
+- Entry-step count at desktop and phone viewports.
+- Template, scratch, and import or trace browser checks.
+- Skip, back, and later metadata-edit checks.
 - Project and room persistence checks.
 - Deterministic BOQ repeatability and hash tests.
 - Unsupported-item exclusion tests.
@@ -57,7 +74,9 @@ A public visitor can enter Planner, start a project, and generate a deterministi
 
 ## Done when
 
-- A public visitor starts a valid Planner project.
+- A public visitor reaches useful canvas content after at most one blocking choice.
+- Template, scratch, and import or trace are honest starting paths.
+- Optional metadata never blocks initial exploration.
 - Identical project inputs produce the same BOQ and hash.
 - The branded unpriced BOQ is usable.
 - Planner emits the agreed customer-journey events without private data.

@@ -6,12 +6,24 @@ Planner serves any external customer.
 
 The customer creates a layout, receives a deterministic branded BOQ, and sends it to Oando.
 
+## Interface benchmark
+
+`../../docs/architecture/06-UI-BENCHMARK.md` is the Planner interface authority.
+
+Its acceptance IDs are mandatory.
+
+They are distributed across the existing phases.
+
+They do not create a separate UI track.
+
+Browser evidence is required to close them.
+
 ## Five phases
 
 1. `PHASE-01-public-entry-deterministic-boq.md`
-   Planner entry, project setup, and deterministic BOQ.
+   Direct guest entry, progressive setup, starting choices, and deterministic BOQ.
 2. `PHASE-02-core-layout-catalog.md`
-   Core layout, Planner catalog, persistence, 2D, 3D, and interface quality.
+   Core layout, commercial catalog, persistence, 2D, 3D, and benchmarked workspace quality.
 3. `PHASE-03-bulk-layout-validation.md`
    Configurable products, bulk layout, scale, and advanced validation.
 4. `PHASE-04-pricing-revisions-sharing.md`
@@ -58,3 +70,5 @@ The phase files explain execution.
 ## Completion
 
 An external customer can design, validate, revise, price, export, and send the exact branded BOQ to Oando.
+
+The journey meets every applicable `UI-*` acceptance ID.

@@ -7,6 +7,7 @@ The customer can create large layouts efficiently and resolve real planning prob
 ## Product configuration
 
 - Consume released Admin product-family versions.
+- Preserve the `UI-CAT-02` grouped-family model during configuration.
 - Show only compatible options.
 - Explain invalid combinations.
 - Preserve family version and options through every edit.
@@ -32,6 +33,8 @@ The customer can create large layouts efficiently and resolve real planning prob
 - Use only approved, versioned accessibility rules.
 - Show severity, location, affected objects, and remedy.
 - Focus affected objects on the canvas.
+- Open only the contextual fields needed to resolve the issue.
+- Keep focus visible when the issue moves or opens a panel.
 - Allow advisory waivers only with a reason.
 - Block quote readiness for hard errors.
 - Recheck immediately after a fix.

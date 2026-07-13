@@ -43,6 +43,10 @@ Professional planning tools join 2D, 3D, product data, and output lists.
 
 Oando should meet that workflow bar without copying their assets or visual identity.
 
+The detailed Planner interface benchmark is `06-UI-BENCHMARK.md`.
+
+The detailed SVG-first Admin benchmark is `07-ADMIN-UI-BENCHMARK.md`.
+
 Useful references:
 
 - [Configura CET](https://www.configura.com/products/cet/commercial-interiors)

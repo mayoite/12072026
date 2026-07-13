@@ -8,6 +8,8 @@
 - `architecture/03-MODULE-UI-CONTRACT.md` — interface quality contract.
 - `architecture/04-CSS-SOLUTION.md` — styling ownership.
 - `architecture/05-DATA_FLOW.md` — catalog-to-BOQ flow.
+- `architecture/06-UI-BENCHMARK.md` — external interface benchmark and acceptance contract.
+- `architecture/07-ADMIN-UI-BENCHMARK.md` — SVG-first Admin benchmark and acceptance contract.
 
 ## Technical references
 
