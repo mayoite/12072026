@@ -22,6 +22,7 @@ import type {
   SvgBlockDefinitionV1,
   SvgStyleV1Schema,
 } from "@/features/planner/admin/svg-editor/svgBlockSchemas";
+import { assertSupportedStudioKinds } from "@/features/planner/admin/svg-editor/supportedSvgAuthoringSubset";
 import type { z } from "zod";
 import {
   SCENE_MODEL_VERSION,
@@ -179,6 +180,13 @@ function metadataToDefinitionHead(meta: SvgSceneMetadata): Omit<SvgBlockDefiniti
  */
 export function serializeSceneToDefinition(doc: SvgSceneDocument): SvgBlockDefinitionV1 {
   validateDocument(doc);
+  // ADM-SVG-08: authoring subset is enforced at serialize (publish authority).
+  const kindCheck = assertSupportedStudioKinds(doc.nodes.map((node) => node.kind));
+  if (!kindCheck.ok) {
+    throw new RangeError(
+      `Unsupported SVG authoring kinds: ${kindCheck.unsupported.join(", ")}. Supported: rect, circle.`,
+    );
+  }
   const parts = doc.nodes.map((node, index) => nodeToPart(node, index));
   return {
     ...metadataToDefinitionHead(doc.metadata),

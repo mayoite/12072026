@@ -63,19 +63,37 @@ function baseDoc(nodes: SvgSceneNode[]): SvgSceneDocument {
 
 describe("svgSceneSerializer — publish boundary", () => {
   it("round-trips a document through the V1 descriptor unchanged", () => {
+    // ADM-SVG-08: publish authority only allows rect/circle authoring kinds.
     const doc = baseDoc([
       rect("desk-top"),
       { kind: "circle", id: "knob", name: "knob", locked: false, hidden: false, style: {}, cx: 300, cy: 300, r: 12 },
-      { kind: "line", id: "edge", name: "edge", locked: false, hidden: false, style: { strokeToken: "currentColor", lineWeight: 2 }, x1: 0, y1: 0, x2: 100, y2: 0 },
     ]);
 
     const back = loadSceneFromDefinition(serializeSceneToDefinition(doc));
 
-    expect(back.nodes.map((n) => n.id)).toEqual(["desk-top", "knob", "edge"]);
+    expect(back.nodes.map((n) => n.id)).toEqual(["desk-top", "knob"]);
     expect(back.metadata).toEqual(doc.metadata);
     expect(back.viewBox).toEqual(doc.viewBox);
     // Re-serializing is a fixed point.
     expect(serializeSceneToDefinition(back)).toEqual(serializeSceneToDefinition(doc));
+  });
+
+  it("rejects unsupported authoring kinds at serialize (ADM-SVG-08)", () => {
+    const doc = baseDoc([
+      {
+        kind: "line",
+        id: "edge",
+        name: "edge",
+        locked: false,
+        hidden: false,
+        style: { strokeToken: "currentColor", lineWeight: 2 },
+        x1: 0,
+        y1: 0,
+        x2: 100,
+        y2: 0,
+      },
+    ]);
+    expect(() => serializeSceneToDefinition(doc)).toThrow(/Unsupported SVG authoring kinds/);
   });
 
   it("preserves author z-order through the compiler's id-sort", () => {

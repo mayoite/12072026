@@ -56,12 +56,33 @@ export interface SvgEditorItemField {
   readonly placeholder?: string;
 }
 
+/** Operator task group for ADM-FORM-01. */
+export type SvgEditorFieldGroup =
+  | "identity"
+  | "geometry"
+  | "assets"
+  | "availability"
+  | "configuration"
+  | "commercial";
+
+export const SVG_EDITOR_FIELD_GROUP_LABEL: Readonly<
+  Record<SvgEditorFieldGroup, string>
+> = Object.freeze({
+  identity: "Identity",
+  geometry: "Geometry",
+  assets: "Assets",
+  availability: "Availability & access",
+  configuration: "Configuration",
+  commercial: "Commercial",
+});
+
 /** Metadata for one editable descriptor field. */
 export interface SvgEditorFieldMeta {
   /** Dot path — equals the zod issue path so validation maps 1:1. */
   readonly path: string;
   readonly label: string;
   readonly kind: SvgEditorControlKind;
+  readonly group: SvgEditorFieldGroup;
   readonly help?: string;
   readonly min?: number;
   readonly max?: number;
@@ -172,20 +193,23 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   // ── Identity ──
   {
     path: "slug",
+    group: "identity",
     label: "Slug",
     kind: "text",
     help: "Lowercase kebab-case, 2–64 chars (e.g. side-table-001). Used in the public URL.",
     placeholder: "side-table-001",
   },
-  { path: "sku", label: "SKU", kind: "text", optional: true, placeholder: "REF-FIX-001" },
+  { path: "sku", group: "identity", label: "SKU", kind: "text", optional: true, placeholder: "REF-FIX-001" },
   {
     path: "sourceProvenance",
+    group: "identity",
     label: "Source",
     kind: "select",
     options: SOURCE_PROVENANCE_OPTIONS,
   },
   {
     path: "createdBy",
+    group: "identity",
     label: "Created by",
     kind: "text",
     optional: true,
@@ -193,6 +217,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "variant",
+    group: "identity",
     label: "Variant",
     kind: "select",
     options: VARIANT_OPTIONS,
@@ -202,6 +227,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   // ── Geometry (mm) — product footprint authority ──
   {
     path: "geometry.widthMm",
+    group: "geometry",
     label: "Width",
     kind: "number",
     min: 1,
@@ -211,6 +237,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "geometry.depthMm",
+    group: "geometry",
     label: "Depth",
     kind: "number",
     min: 1,
@@ -220,6 +247,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "geometry.heightMm",
+    group: "geometry",
     label: "Height",
     kind: "number",
     min: 1,
@@ -229,6 +257,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "geometry.seatHeightMm",
+    group: "geometry",
     label: "Seat height",
     kind: "number",
     min: 1,
@@ -239,6 +268,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "geometry.weightKg",
+    group: "geometry",
     label: "Weight",
     kind: "number",
     min: 0,
@@ -251,6 +281,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   // ── ViewBox ──
   {
     path: "viewBox.x",
+    group: "geometry",
     label: "ViewBox X",
     kind: "number",
     step: 1,
@@ -258,6 +289,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "viewBox.y",
+    group: "geometry",
     label: "ViewBox Y",
     kind: "number",
     step: 1,
@@ -265,6 +297,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "viewBox.width",
+    group: "geometry",
     label: "ViewBox width",
     kind: "number",
     min: 1,
@@ -273,6 +306,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "viewBox.height",
+    group: "geometry",
     label: "ViewBox height",
     kind: "number",
     min: 1,
@@ -283,6 +317,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   // ── Mounting + accessibility ──
   {
     path: "mounting",
+    group: "availability",
     label: "Mounting planes",
     kind: "multiselect",
     options: MOUNT_PLANE_OPTIONS,
@@ -291,6 +326,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "liveAnnouncementCategories",
+    group: "availability",
     label: "Live-announcement categories",
     kind: "multiselect",
     options: LIVE_ANNOUNCEMENT_OPTIONS,
@@ -298,6 +334,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "rovingFocus",
+    group: "availability",
     label: "Roving focus targets",
     kind: "objectArray",
     itemFields: ROVING_FOCUS_ITEM_FIELDS,
@@ -305,6 +342,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "mountingPoints",
+    group: "availability",
     label: "Mounting points",
     kind: "objectArray",
     itemFields: MOUNTING_POINT_ITEM_FIELDS,
@@ -315,6 +353,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   // ── Geometry blocks (numeric no-code editing) ──
   {
     path: "blocks",
+    group: "geometry",
     label: "Blocks (footprint rects)",
     kind: "objectArray",
     itemFields: BLOCK_ITEM_FIELDS,
@@ -325,6 +364,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   // ── Theme tokens ──
   {
     path: "themeTokens",
+    group: "assets",
     label: "Theme tokens",
     kind: "tokenRows",
     tokenKeyOptions: THEME_TOKEN_KEY_OPTIONS,
@@ -335,6 +375,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   // ── Variant-specific ──
   {
     path: "configurable.sizingType",
+    group: "configuration",
     label: "Sizing type",
     kind: "select",
     options: CONFIGURABLE_SIZING_OPTIONS,
@@ -342,6 +383,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "configurable.sizeOptions",
+    group: "configuration",
     label: "Size options",
     kind: "stringList",
     variantScope: "configurable",
@@ -350,6 +392,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "parametric.parameterSchema",
+    group: "configuration",
     label: "Parameter schema",
     kind: "objectArray",
     itemFields: PARAMETER_ITEM_FIELDS,
@@ -358,6 +401,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
   },
   {
     path: "assets.glbUrl",
+    group: "assets",
     label: "Generated GLB URL",
     kind: "text",
     variantScope: "fixed",

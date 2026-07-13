@@ -298,8 +298,19 @@ export function SvgStudioCanvas({
   const layers = useMemo(() => [...document.nodes].reverse(), [document.nodes]);
 
   return (
-    <section className="svg-studio" aria-label="Visual SVG authoring canvas">
-      <div className="svg-studio__toolbar" role="toolbar" aria-label="Canvas tools">
+    <section
+      className="svg-studio"
+      aria-label="Visual SVG authoring canvas"
+      data-testid="admin-svg-studio"
+      data-supported-kinds="rect,circle"
+    >
+      <div
+        className="svg-studio__toolbar"
+        role="toolbar"
+        aria-label="Canvas tools"
+        data-region="command"
+        data-testid="admin-studio-region-command"
+      >
         <button
           type="button"
           onClick={handleUndo}
@@ -375,9 +386,21 @@ export function SvgStudioCanvas({
       </div>
 
       <div className="svg-studio__body">
-        <div ref={mountRef} className="svg-studio__stage" role="application" aria-label="SVG canvas" />
+        <div
+          ref={mountRef}
+          className="svg-studio__stage"
+          role="application"
+          aria-label="SVG canvas"
+          data-region="stage"
+          data-testid="admin-studio-region-stage"
+        />
 
-        <aside className="svg-studio__layers" aria-label="Layers">
+        <aside
+          className="svg-studio__layers"
+          aria-label="Layers"
+          data-region="layers"
+          data-testid="admin-studio-region-layers"
+        >
           <h3 className="svg-studio__layers-title">Layers</h3>
           <ul className="svg-studio__layer-list">
             {layers.map((node) => (
@@ -396,13 +419,20 @@ export function SvgStudioCanvas({
             {layers.length === 0 && <li className="svg-studio__empty">No shapes yet — add a rectangle to begin.</li>}
           </ul>
 
-          {selected ? (
-            <div
-              className="svg-studio__inspector"
-              aria-label="Node inspector"
-              data-testid="svg-studio-inspector"
-            >
-              <h3 className="svg-studio__layers-title">Inspector</h3>
+          <div
+            className="svg-studio__inspector"
+            aria-label="Node inspector"
+            data-testid="svg-studio-inspector"
+            data-region="properties"
+            data-studio-region="properties"
+          >
+            <h3 className="svg-studio__layers-title">Inspector</h3>
+            {!selected ? (
+              <p className="svg-studio__empty" data-testid="svg-studio-inspector-empty">
+                Select a layer to edit properties.
+              </p>
+            ) : (
+              <>
               <p className="svg-studio__inspector-meta">
                 <code>{selected.id}</code> · {selected.kind}
               </p>
@@ -533,8 +563,9 @@ export function SvgStudioCanvas({
                   }
                 />
               </label>
-            </div>
-          ) : null}
+              </>
+            )}
+          </div>
         </aside>
       </div>
     </section>

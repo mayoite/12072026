@@ -36,6 +36,7 @@ const descriptor = {
   variant: "fixed",
   sourceProvenance: "native",
   generatedAt: 1_700_000_000_000,
+  geometry: { widthMm: 600, depthMm: 600, heightMm: 750 },
 } as unknown as BlockDescriptor;
 
 describe("ADM-SVG-01 primary no-code SVG journey", () => {
@@ -83,5 +84,13 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
       "href",
       "/admin/svg-editor/side-table-001",
     );
+
+    // ADM-SVG-02 inventory surfaces
+    expect(screen.getByTestId("admin-svg-inventory-search")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-svg-filter-artifact")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-svg-validation-side-table-001")).toHaveTextContent(
+      /Valid/,
+    );
+    expect(screen.getByTestId("admin-svg-last-change-side-table-001")).toBeInTheDocument();
   });
 });

@@ -15,6 +15,8 @@
 import type { BlockDescriptorVariant } from "@/features/planner/project/catalog/svg/svgTypes";
 import {
   fieldsForVariant,
+  SVG_EDITOR_FIELD_GROUP_LABEL,
+  type SvgEditorFieldGroup,
   type SvgEditorFieldMeta,
 } from "./svgEditorFormModel";
 import type {
@@ -168,30 +170,26 @@ export function SvgEditorForm({
 
   const apply = (patch: Patch) => onChange({ ...state, ...patch });
 
-  return (
-    <div className="admin-svg-form">
-      {summaryIssues.length > 0 ? (
-        <div className="admin-alert admin-alert--warn" role="alert" aria-label="Validation errors">
-          <strong>Fix {summaryIssues.length} validation {summaryIssues.length === 1 ? "error" : "errors"} before publishing:</strong>
-          <ul>
-            {summaryIssues.map((issue, index) => (
-              <li key={`${issue.path}-${index}`}>
-                {issue.targetId ? (
-                  <a href={`#${issue.targetId}`}>{issue.message}</a>
-                ) : (
-                  <>{issue.path ? <code>{issue.path}</code> : null} {issue.message}</>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
+  const groupOrder: readonly SvgEditorFieldGroup[] = [
+    "identity",
+    "geometry",
+    "assets",
+    "availability",
+    "configuration",
+    "commercial",
+  ];
+  const grouped = groupOrder
+    .map((group) => ({
+      group,
+      fields: visible.filter((field) => field.group === group),
+    }))
+    .filter((entry) => entry.fields.length > 0);
 
-      {visible.map((field) => {
+  const renderField = (field: SvgEditorFieldMeta) => {
         const id = `svgfield-${field.path}`;
         const issue = issueByPath.get(field.path);
         return (
-          <div className="admin-field" key={field.path} data-field={field.path}>
+          <div className="admin-field" key={field.path} data-field={field.path} data-group={field.group}>
             <label className="admin-field__label" htmlFor={id}>
               {field.label}
               {field.optional ? null : <span aria-hidden="true"> *</span>}
@@ -314,7 +312,43 @@ export function SvgEditorForm({
             ) : null}
           </div>
         );
-      })}
+  };
+
+  return (
+    <div className="admin-svg-form" data-testid="admin-svg-form">
+      {summaryIssues.length > 0 ? (
+        <div className="admin-alert admin-alert--warn" role="alert" aria-label="Validation errors">
+          <strong>
+            Fix {summaryIssues.length} validation{" "}
+            {summaryIssues.length === 1 ? "error" : "errors"} before publishing:
+          </strong>
+          <ul>
+            {summaryIssues.map((issue, index) => (
+              <li key={`${issue.path}-${index}`}>
+                {issue.targetId ? (
+                  <a href={`#${issue.targetId}`}>{issue.message}</a>
+                ) : (
+                  <>
+                    {issue.path ? <code>{issue.path}</code> : null} {issue.message}
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {grouped.map(({ group, fields: groupFields }) => (
+        <section
+          key={group}
+          className="admin-panel"
+          data-testid={`admin-form-group-${group}`}
+          aria-label={SVG_EDITOR_FIELD_GROUP_LABEL[group]}
+        >
+          <div className="admin-panel__header">{SVG_EDITOR_FIELD_GROUP_LABEL[group]}</div>
+          <div className="admin-panel__body">{groupFields.map(renderField)}</div>
+        </section>
+      ))}
     </div>
   );
 }

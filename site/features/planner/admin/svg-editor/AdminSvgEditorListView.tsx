@@ -14,7 +14,7 @@
  */
 
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { PencilSimple as Pencil, Plus } from "@phosphor-icons/react";
 
 import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
@@ -24,6 +24,13 @@ import { resolveCatalogLifecycle } from "./catalogLifecycle.shared";
 import { AdminSvgBulkImportPanel } from "./AdminSvgBulkImportPanel";
 import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 import { PublishedSvgPreview } from "./PublishedSvgPreview";
+import {
+  filterInventoryRows,
+  validationLabelForArtifact,
+  type InventoryArtifactFilter,
+  type InventoryLifecycleFilter,
+  type SvgInventoryRow,
+} from "./svgInventoryFilter";
 
 const VARIANT_LABEL: Readonly<Record<BlockDescriptor["variant"], string>> = {
   fixed: "Fixed",
@@ -150,6 +157,15 @@ export function AdminSvgEditorListView({
   lifecycleManifest,
 }: AdminSvgEditorListViewProps) {
   const [lifecycleBusySlug, setLifecycleBusySlug] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [artifactFilter, setArtifactFilter] =
+    useState<InventoryArtifactFilter>("all");
+  const [lifecycleFilter, setLifecycleFilter] =
+    useState<InventoryLifecycleFilter>("all");
+  const [variantFilter, setVariantFilter] = useState<
+    "all" | BlockDescriptor["variant"]
+  >("all");
+
   const setLifecycle = useCallback(async (slug: string, state: CatalogLifecycleState) => {
     setLifecycleBusySlug(slug);
     try {
@@ -175,10 +191,39 @@ export function AdminSvgEditorListView({
   const invalidCount = descriptors.filter(
     (descriptor) => artifactStatuses[descriptor.slug]?.state === "invalid",
   ).length;
-  const ordered = [...descriptors].sort((a, b) => {
-    const av = a.variant.localeCompare(b.variant);
-    return av !== 0 ? av : a.slug.localeCompare(b.slug);
-  });
+
+  const inventoryRows = useMemo((): readonly SvgInventoryRow[] => {
+    const ordered = [...descriptors].sort((a, b) => {
+      const av = a.variant.localeCompare(b.variant);
+      return av !== 0 ? av : a.slug.localeCompare(b.slug);
+    });
+    return ordered.map((descriptor) => {
+      const status = artifactStatuses[descriptor.slug] ?? missingStatus();
+      const lifecycle = resolveCatalogLifecycle(
+        descriptor.slug,
+        status.state,
+        lifecycleManifest,
+      );
+      return {
+        descriptor,
+        artifactState: status.state,
+        lifecycle,
+        lastChangeLabel: timestampLabel(descriptor.generatedAt),
+        validationLabel: validationLabelForArtifact(status.state),
+      };
+    });
+  }, [artifactStatuses, descriptors, lifecycleManifest]);
+
+  const filteredRows = useMemo(
+    () =>
+      filterInventoryRows(inventoryRows, {
+        query,
+        artifact: artifactFilter,
+        lifecycle: lifecycleFilter,
+        variant: variantFilter,
+      }),
+    [artifactFilter, inventoryRows, lifecycleFilter, query, variantFilter],
+  );
 
   return (
     <div className="admin-page" data-testid="admin-svg-primary-journey">
@@ -231,7 +276,7 @@ export function AdminSvgEditorListView({
         ))}
       </section>
 
-      {ordered.length === 0 ? (
+      {descriptors.length === 0 ? (
         <div className="admin-empty" role="status">
           <p className="admin-table__primary">No SVG symbols yet</p>
           <p className="admin-table__secondary">
@@ -252,41 +297,116 @@ export function AdminSvgEditorListView({
       ) : (
         <div className="admin-panel" data-testid="admin-svg-inventory">
           <div className="admin-panel__header">
-            {ordered.length} symbol{ordered.length === 1 ? "" : "s"}
+            {filteredRows.length} of {inventoryRows.length} symbol
+            {inventoryRows.length === 1 ? "" : "s"}
           </div>
+          <div className="px-4 py-3 flex flex-wrap gap-3" data-testid="admin-svg-inventory-filters">
+            <label className="admin-field">
+              <span className="admin-field__label">Find</span>
+              <input
+                type="search"
+                className="admin-field__control"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Slug, SKU, variant…"
+                data-testid="admin-svg-inventory-search"
+                aria-label="Search SVG inventory"
+              />
+            </label>
+            <label className="admin-field">
+              <span className="admin-field__label">Artifact</span>
+              <select
+                className="admin-field__control"
+                value={artifactFilter}
+                onChange={(event) =>
+                  setArtifactFilter(event.target.value as InventoryArtifactFilter)
+                }
+                data-testid="admin-svg-filter-artifact"
+                aria-label="Filter by artifact state"
+              >
+                <option value="all">All</option>
+                <option value="published">Published</option>
+                <option value="missing">Missing</option>
+                <option value="invalid">Invalid</option>
+              </select>
+            </label>
+            <label className="admin-field">
+              <span className="admin-field__label">Lifecycle</span>
+              <select
+                className="admin-field__control"
+                value={lifecycleFilter}
+                onChange={(event) =>
+                  setLifecycleFilter(event.target.value as InventoryLifecycleFilter)
+                }
+                data-testid="admin-svg-filter-lifecycle"
+                aria-label="Filter by lifecycle"
+              >
+                <option value="all">All</option>
+                <option value="live">Live</option>
+                <option value="draft">Draft</option>
+                <option value="retired">Retired</option>
+              </select>
+            </label>
+            <label className="admin-field">
+              <span className="admin-field__label">Variant</span>
+              <select
+                className="admin-field__control"
+                value={variantFilter}
+                onChange={(event) =>
+                  setVariantFilter(
+                    event.target.value as "all" | BlockDescriptor["variant"],
+                  )
+                }
+                data-testid="admin-svg-filter-variant"
+                aria-label="Filter by variant"
+              >
+                <option value="all">All</option>
+                {VARIANT_ORDER.map((variant) => (
+                  <option key={variant} value={variant}>
+                    {VARIANT_LABEL[variant]}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          {filteredRows.length === 0 ? (
+            <div className="admin-empty" role="status" data-testid="admin-svg-inventory-empty">
+              <p className="admin-table__primary">No symbols match these filters</p>
+              <p className="admin-table__secondary">Clear search or filters to see the full inventory.</p>
+            </div>
+          ) : (
           <div className="admin-table-wrap">
             <table className="admin-table">
               <caption className="sr-only">
-                SVG product symbols with preview, identity, artifact state, and
-                lifecycle.
+                SVG product symbols with preview, identity, validation, artifact
+                state, lifecycle, and last change.
               </caption>
               <thead>
                 <tr>
                   <th scope="col">Preview</th>
-                  <th scope="col">Slug</th>
+                  <th scope="col">Identity</th>
                   <th scope="col">Variant</th>
-                  <th scope="col">Source</th>
+                  <th scope="col">Validation</th>
                   <th scope="col">Artifact</th>
                   <th scope="col">Lifecycle</th>
-                  <th scope="col">Created</th>
+                  <th scope="col">Last change</th>
                   <th scope="col" className="text-end">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {ordered.map((d) => {
+                {filteredRows.map((row) => {
+                  const d = row.descriptor;
                   const status = artifactStatuses[d.slug] ?? missingStatus();
-                  const lifecycle = resolveCatalogLifecycle(
-                    d.slug,
-                    status.state,
-                    lifecycleManifest,
-                  );
+                  const lifecycle = row.lifecycle;
                   return (
                     <tr
                       key={`${d.variant}:${d.slug}`}
                       data-slug={d.slug}
                       data-artifact-state={status.state}
+                      data-validation={row.validationLabel}
+                      data-lifecycle={lifecycle}
                     >
                       <td>
                         <PublishedSvgPreview
@@ -307,13 +427,31 @@ export function AdminSvgEditorListView({
                             <code>{d.sku}</code>
                           </p>
                         ) : null}
+                        <p className="admin-table__secondary">
+                          {d.geometry.widthMm}×{d.geometry.depthMm} mm
+                        </p>
                       </td>
                       <td>
                         <span className={variantBadgeClass(d.variant)}>
                           {VARIANT_LABEL[d.variant]}
                         </span>
                       </td>
-                      <td className="text-muted">{d.sourceProvenance}</td>
+                      <td>
+                        <span
+                          className={
+                            row.validationLabel === "ok"
+                              ? "admin-badge admin-badge--active"
+                              : "admin-badge admin-badge--warn"
+                          }
+                          data-testid={`admin-svg-validation-${d.slug}`}
+                        >
+                          {row.validationLabel === "ok"
+                            ? "Valid"
+                            : row.validationLabel === "invalid"
+                              ? "Invalid"
+                              : "Missing symbol"}
+                        </span>
+                      </td>
                       <td>
                         <span className={artifactBadgeClass(status.state)}>
                           {artifactLabel(status.state)}
@@ -353,8 +491,8 @@ export function AdminSvgEditorListView({
                         )}
                       </td>
                       <td>
-                        <code className="text-muted">
-                          {timestampLabel(d.generatedAt)}
+                        <code className="text-muted" data-testid={`admin-svg-last-change-${d.slug}`}>
+                          {row.lastChangeLabel}
                         </code>
                       </td>
                       <td>
@@ -374,6 +512,7 @@ export function AdminSvgEditorListView({
               </tbody>
             </table>
           </div>
+          )}
         </div>
       )}
 

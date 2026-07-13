@@ -649,11 +649,22 @@ export function AdminSvgEditorEditView({
         </div>
       </header>
 
-      <p id="admin-svg-publication-impact" className="admin-page__meta">
+      <p
+        id="admin-svg-publication-impact"
+        className="admin-page__meta"
+        data-testid="admin-svg-publication-impact"
+      >
         Publish target: <code>{publishTarget}</code>. Authoring state:{" "}
-        <strong>{authoringLifecycleLabel(authoringLifecycle)}</strong>. Current
-        artifact: {artifactStatus.state}. A successful publish replaces the
-        released SVG and preserves revision history for rollback.
+        <strong>{authoringLifecycleLabel(authoringLifecycle)}</strong>. Live
+        artifact: {artifactStatus.state}
+        {artifactStatus.hash ? (
+          <>
+            {" "}
+            · live revision <code>{artifactHashShort}</code>
+          </>
+        ) : null}
+        . Draft schema <code>{descriptor.schemaVersion}</code>. Primary action
+        Publish replaces the released SVG; prior revisions remain for rollback.
       </p>
 
       {/* ADM-SVG-14 field diff + ADM-PUB-01 blocking note */}
@@ -763,10 +774,12 @@ export function AdminSvgEditorEditView({
         className="admin-svg-engine-shell"
         data-testid="admin-svg-engine-shell"
         data-studio-node-count={form.sceneParts?.length ?? 0}
+        data-stage-layout="1fr-rail"
       >
         <section
           aria-label="Visual authoring studio"
           className="admin-svg-engine-shell__stage"
+          data-testid="admin-svg-engine-stage"
         >
           <SvgStudioCanvas
             key={studioResetKey}
