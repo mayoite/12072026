@@ -34,7 +34,7 @@ function statusBadgeClass(status: PriceBookVersionStatus): string {
     case "active":
       return "admin-badge admin-badge--active";
     case "approved":
-      return "admin-badge admin-badge--active";
+      return "admin-badge admin-badge--approved";
     case "draft":
       return "admin-badge admin-badge--warn";
     case "retired":
@@ -176,14 +176,43 @@ export function AdminPriceBookPageView({
 
   return (
     <div className="admin-page" data-testid="admin-price-book-page">
-      <header className="admin-page__header">
+      <header className="admin-page__header" data-testid="admin-shell-header">
         <div>
-          <p className="admin-page__eyebrow">Catalog governance</p>
-          <h1 className="admin-page__title">Price books</h1>
+          <p className="admin-page__eyebrow" data-testid="admin-shell-scope">
+            Catalog governance · commercial
+          </p>
+          <h1 className="admin-page__title" data-testid="admin-shell-title">
+            Price books
+          </h1>
           <p className="admin-page__copy">
-            Distinct commercial lifecycle states. High-risk approve, activate,
-            and rollback require role, reason, version, impact, and confirmation.
-            Server re-enforces roles; history records actor, action, and result.
+            Review currency prices and lifecycle. Activate is the release action.
+            Approve and rollback stay secondary and high-risk.
+          </p>
+          <p className="admin-page__meta" data-testid="admin-shell-source">
+            Source: local price-book store · book{" "}
+            <code>{bookId}</code>
+          </p>
+          <p
+            className="admin-page__meta"
+            role="status"
+            data-testid="admin-shell-state"
+          >
+            State:{" "}
+            {version ? (
+              <>
+                selected{" "}
+                <span className={statusBadgeClass(version.status)}>
+                  {priceBookStatusLabel(version.status)}
+                </span>
+                {contract?.activeVersionId
+                  ? ` · live ${contract.activeVersionId}`
+                  : " · no live version"}
+              </>
+            ) : loading ? (
+              "loading…"
+            ) : (
+              "no version selected"
+            )}
           </p>
         </div>
       </header>
@@ -305,19 +334,17 @@ export function AdminPriceBookPageView({
                 </p>
 
                 <table
-                  className="admin-table"
+                  className="admin-table admin-price-book-rules"
                   data-testid="admin-price-book-rules"
                 >
                   <caption className="sr-only">
-                    Price rules with currency amounts and technical minor units
+                    Price rules with currency amounts; raw storage is secondary
                   </caption>
                   <thead>
                     <tr>
                       <th scope="col">SKU</th>
                       <th scope="col">Price</th>
-                      <th scope="col">Technical (minor)</th>
-                      <th scope="col">Adj bps</th>
-                      <th scope="col">UoM</th>
+                      <th scope="col">Unit</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -340,22 +367,13 @@ export function AdminPriceBookPageView({
                               {display.primary}
                             </span>
                           </td>
-                          <td>
-                            <span
-                              className="admin-table__secondary"
-                              data-testid={`admin-price-secondary-${rule.sku}`}
-                            >
-                              {display.secondary ?? "—"}
-                            </span>
-                          </td>
-                          <td>{rule.adjustmentBps ?? 0}</td>
                           <td>{rule.uom}</td>
                         </tr>
                       );
                     })}
                     <tr data-sku="__missing_demo__">
                       <td>
-                        <code className="text-muted">UNKNOWN-SKU</code>
+                        <code className="admin-table__secondary">UNKNOWN-SKU</code>
                       </td>
                       <td>
                         <span
@@ -371,39 +389,65 @@ export function AdminPriceBookPageView({
                           }
                         </span>
                       </td>
-                      <td>
-                        <span className="admin-table__secondary">—</span>
-                      </td>
-                      <td>—</td>
                       <td>—</td>
                     </tr>
                   </tbody>
                 </table>
 
-                <div className="flex flex-wrap gap-2 items-start">
-                  <div>
-                    <button
-                      type="button"
-                      className="admin-btn admin-btn--outline"
-                      disabled={
-                        busy !== null || approveAvail?.allowed !== true
-                      }
-                      onClick={() => void runAction("approve")}
-                      data-testid="admin-price-book-approve"
-                      aria-describedby="admin-price-book-release-impact"
-                    >
-                      Approve draft
-                    </button>
-                    {approveAvail && !approveAvail.allowed ? (
-                      <p
-                        className="admin-table__secondary mt-1"
-                        data-testid="admin-price-book-approve-unavailable"
-                      >
-                        {approveAvail.reason}
-                      </p>
-                    ) : null}
+                {/* ADM-PRICE-01 — raw minor units / bps stay advanced */}
+                <details
+                  className="admin-page__section"
+                  data-testid="admin-price-book-technical"
+                >
+                  <summary className="admin-panel__header">
+                    Advanced · raw storage units
+                  </summary>
+                  <div className="admin-panel__body">
+                    <table className="admin-table">
+                      <caption className="sr-only">
+                        Minor currency units and basis-point adjustments
+                      </caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">SKU</th>
+                          <th scope="col">Minor units</th>
+                          <th scope="col">Adj bps</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {version.rules.map((rule) => {
+                          const display = displayPriceForSku(
+                            contract,
+                            version.versionId,
+                            rule.sku,
+                          );
+                          return (
+                            <tr key={`tech-${rule.sku}`}>
+                              <td>
+                                <code>{rule.sku}</code>
+                              </td>
+                              <td>
+                                <span
+                                  className="admin-table__secondary"
+                                  data-testid={`admin-price-secondary-${rule.sku}`}
+                                >
+                                  {display.secondary ?? "—"}
+                                </span>
+                              </td>
+                              <td>{rule.adjustmentBps ?? 0}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
                   </div>
-                  <div>
+                </details>
+
+                <div
+                  className="admin-price-book-actions"
+                  data-testid="admin-price-book-actions"
+                >
+                  <div className="admin-price-book-actions__primary">
                     <button
                       type="button"
                       className="admin-btn admin-btn--primary"
@@ -425,10 +469,30 @@ export function AdminPriceBookPageView({
                       </p>
                     ) : null}
                   </div>
-                  <div>
+                  <div className="admin-price-book-actions__secondary">
                     <button
                       type="button"
                       className="admin-btn admin-btn--outline"
+                      disabled={
+                        busy !== null || approveAvail?.allowed !== true
+                      }
+                      onClick={() => void runAction("approve")}
+                      data-testid="admin-price-book-approve"
+                      aria-describedby="admin-price-book-release-impact"
+                    >
+                      Approve draft
+                    </button>
+                    {approveAvail && !approveAvail.allowed ? (
+                      <p
+                        className="admin-table__secondary mt-1"
+                        data-testid="admin-price-book-approve-unavailable"
+                      >
+                        {approveAvail.reason}
+                      </p>
+                    ) : null}
+                    <button
+                      type="button"
+                      className="admin-btn admin-btn--outline admin-btn--danger"
                       disabled={
                         busy !== null || rollbackAvail?.allowed !== true
                       }
@@ -436,7 +500,7 @@ export function AdminPriceBookPageView({
                       data-testid="admin-price-book-rollback"
                       aria-describedby="admin-price-book-release-impact"
                     >
-                      Rollback
+                      Rollback active
                     </button>
                     {rollbackAvail && !rollbackAvail.allowed ? (
                       <p

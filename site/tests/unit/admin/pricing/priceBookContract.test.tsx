@@ -162,11 +162,25 @@ describe("AdminPriceBookPageView presentation", () => {
         "",
       ),
     ).toMatch(/450000/);
+    // Raw storage stays under Advanced disclosure (still in DOM).
+    const technical = screen.getByTestId("admin-price-book-technical");
+    expect(technical.tagName.toLowerCase()).toBe("details");
+    expect(technical).not.toHaveAttribute("open");
     expect(
       screen.getByTestId("admin-price-secondary-OFL-DSK-LIN-1200"),
     ).toHaveTextContent(/minor/i);
     expect(screen.getByTestId("admin-price-primary-missing")).toHaveTextContent(
       "Price unavailable",
+    );
+    // Activate is the primary commercial action; approve/rollback are not.
+    expect(screen.getByTestId("admin-price-book-activate")).toHaveClass(
+      "admin-btn--primary",
+    );
+    expect(screen.getByTestId("admin-price-book-approve")).not.toHaveClass(
+      "admin-btn--primary",
+    );
+    expect(screen.getByTestId("admin-price-book-rollback")).not.toHaveClass(
+      "admin-btn--primary",
     );
   });
 });
