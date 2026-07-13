@@ -12,6 +12,7 @@
 - `architecture/07-ADMIN-UI-BENCHMARK.md` — SVG-first Admin benchmark and acceptance contract.
 - `architecture/08-DATABASE-SVG-CONTRACT.md` — database-backed SVG publication and Planner import contract.
 - `architecture/09-SITE-UI-BENCHMARK.md` — public Site benchmark and acceptance contract.
+- `architecture/10-SECURITY-BENCHMARK.md` — security, transaction, and security-UX acceptance contract.
 
 ## Technical references
 

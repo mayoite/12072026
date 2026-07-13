@@ -1,7 +1,11 @@
 # Database restore runbook
 
-**Scope:** Products + Admin Supabase Postgres, catalog degraded mode, maintenance flag.  
+**Scope:** Products + Admin Supabase Postgres, immutable SVG artifacts, catalog degraded mode, and maintenance mode.
 **Architecture:** 2 Supabase + Cloudflare R2 + Vercel.
+
+The SVG database tables and release pointer are planned. They are not live yet.
+
+After migration, Products DB backups must include definitions, revisions, artifact metadata, and release pointers.
 
 ---
 
@@ -12,7 +16,8 @@
 | Bad deploy | Vercel → Instant Rollback |
 | Wrong migration / bad data | Supabase dashboard → PITR / daily backup |
 | Supabase project unavailable | R2 `pg_dump` → new Supabase project |
-| Catalog pages empty during outage | R2 `backups/catalog/catalog-latest.json` (auto-served by app) |
+| Catalog pages empty during outage | Serve a verified R2 snapshot and committed immutable SVG artifacts. |
+| SVG artifact missing or corrupt | Stop serving that revision and keep the prior valid release. |
 | Planned maintenance | Set `SITE_MAINTENANCE_MODE=readonly` on Vercel |
 
 ---
@@ -45,7 +50,12 @@ Manual run: **Actions → Supabase backup to R2 → Run workflow** (or `gh workf
 | `backups/products/pgdump-products-*.dump` | Products DB |
 | `backups/admin/pgdump-admin-*.dump` | Admin DB |
 | `backups/catalog/catalog-latest.json` | Full catalog for degraded reads (**85** products = live `catalog_products` count) |
+| Content-addressed SVG artifact keys | Immutable sanitized bytes after SVG cutover |
 | `backups/repo/oofplweb-*.zip` | Git archive |
+
+After cutover, snapshots must include released product, revision, checksum, artifact kind, and storage identity.
+
+They must exclude drafts, credentials, audit internals, and private commercial fields.
 
 Enable GitHub email notifications: **Watch → Custom → Actions**.
 
@@ -116,7 +126,10 @@ Update connection strings and Supabase HTTP keys → redeploy.
 2. Restore latest R2 dumps into staging.
 3. Point a preview Vercel env at staging URLs.
 4. Run `db:test`, smoke catalog + planner guest.
-5. Log result in `Failures.md`.
+5. Verify released pointers belong to the same product.
+6. Verify artifact keys and exact byte checksums.
+7. Verify Planner imports and reloads the exact revision.
+8. Log the result and blockers in `Failures.md`.
 
 ---
 
@@ -136,6 +149,7 @@ Effects:
 - `/admin`, `/crm`, `/ops` → maintenance page
 - POST/PUT/PATCH/DELETE blocked on `/api/plans`, `/api/planner`, `/api/tracking`, `/api/quotes`, `/api/customer-queries`
 - Public catalog + planner **local drafts** (IndexedDB) still work
+- SVG publication, pointer changes, retirement, rollback, and cleanup are blocked
 
 Clear flag when healthy:
 
@@ -149,7 +163,7 @@ SITE_MAINTENANCE_MODE=off
 
 ## 6. Catalog degraded mode (automatic)
 
-When `PRODUCTS_DATABASE_URL` fails, the app reads fallback in order:
+The current catalog fallback reads in this order when `PRODUCTS_DATABASE_URL` fails:
 
 1. R2 `backups/catalog/catalog-latest.json` (nightly export)
 2. Bundled `site/lib/site-data/localCatalogIndex.json` (subset)
@@ -161,6 +175,14 @@ pnpm --filter oando-site run catalog:snapshot:r2
 ```
 
 Live DB row count may differ from seed file (~100 inserts) or bundled fallback (`localCatalogIndex.json`); snapshot always reflects **current** `catalog_products` rows.
+
+After SVG cutover, degraded reads may use only a released R2 snapshot and checksum-verified immutable artifact.
+
+Bundled files are not current SVG authority.
+
+Every degraded response must say it is stale or degraded.
+
+Unverifiable state fails visibly.
 
 ---
 

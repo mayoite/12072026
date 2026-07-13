@@ -266,6 +266,39 @@ Admin-curated workspace library items for the planner (`/api/planner/catalog`, a
 **Indexes**: `idx_planner_managed_products_active`, `_category`, `_updated_at`.
 **RLS**: enabled. Public `select` where `active = true`; service role full access.
 
+### Planned SVG revision schema — not live
+
+No SVG revision migration has been applied yet.
+
+The current live route still reads SVG block descriptors from disk.
+
+The target contract is [Database SVG contract](../architecture/08-DATABASE-SVG-CONTRACT.md).
+
+The planned Products DB schema adds:
+
+| Table or column | Purpose |
+|---|---|
+| `block_descriptors` | Private, version-locked product definitions and authoring scenes. |
+| `published_svg_revisions` | Immutable release metadata and the exact published definition snapshot. |
+| `svg_artifacts` | Immutable artifact kind, checksum, storage key, width, and revision relationship. |
+| `planner_managed_products.published_svg_revision_id` | Same-product pointer to the one released SVG revision. |
+
+Catalog and SVG persistence will use the existing Drizzle and `postgres` boundary.
+
+Do not add a new Supabase `.from()` path for catalog or Planner persistence.
+
+The database will own release identity and pointer state.
+
+Immutable object storage will own artifact bytes.
+
+Public reads will pass through server catalog routes.
+
+Direct public access to drafts, revision metadata, and artifact records will be denied.
+
+The migration must add primary keys, foreign keys, same-product pointer enforcement, uniqueness constraints, RLS, grants, and supporting indexes before cutover.
+
+Do not treat this section as proof that the schema exists.
+
 ### `feature_flags`
 
 Runtime feature toggles merged with local defaults in `/api/admin/features`.

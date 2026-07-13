@@ -28,6 +28,15 @@ This file records architectural limits.
 - Record paid or restricted asset approval before use.
 - Do not copy competitor code, assets, models, or trade dress.
 
+## Persistence
+
+- Drizzle and `postgres` are the catalog and SVG database boundary.
+- Do not add a new Supabase `.from()` catalog or Planner path.
+- The installed AWS S3 client covers immutable R2 artifact storage.
+- The server API is the browser boundary.
+- No new package is approved for this work.
+- This is a target constraint. The SVG database adapter is not live.
+
 ## Catalog assets
 
 - Published SVG must be owned, licensed, or created for Oando.

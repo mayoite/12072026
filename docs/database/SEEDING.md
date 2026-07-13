@@ -134,6 +134,24 @@ pnpm --filter oando-site run db:apply:admin
 
 ---
 
+## SVG migration and test data
+
+The SVG revision tables are planned. They are not live yet.
+
+Routine seeds must not create published revisions.
+
+Disk descriptors are migration inputs only.
+
+Migration must dry-run first, report conflicts and checksums, use non-production targets, and publish through the normal transaction.
+
+Tests must use temporary rows and unique storage prefixes.
+
+Tests must never mutate released rows.
+
+Do not document a command until `site/package.json` provides it.
+
+See [Database SVG contract](../architecture/08-DATABASE-SVG-CONTRACT.md).
+
 ## Idempotency
 
 All seed entry points are safe to re-run:

@@ -5,12 +5,15 @@
 1. Admin edits a draft product and SVG scene.
 2. Server validation checks identity, dimensions, structure, and safety.
 3. The publish compiler produces deterministic SVG bytes.
-4. Publication writes an immutable SVG revision and product pointer in one database transaction.
-5. Planner loads the released database catalog through a server API.
-6. Planner imports the exact SVG revision and renders it first.
-7. `Block2D` is used only while loading or when SVG is unavailable.
+4. The server uploads immutable content-addressed artifact bytes.
+5. One Products DB transaction inserts metadata, updates the same-product pointer, and records audit.
+6. Planner loads the released database catalog through a server API.
+7. Planner imports the exact SVG revision and renders it first.
+8. `Block2D` is used only while loading or when SVG is unavailable.
 
-A failed compile or write leaves the previous publication intact.
+A failed compile, upload, or transaction leaves the previous publication intact.
+
+An uploaded object is not released until the database pointer commits.
 
 ## Customer planning
 
@@ -36,10 +39,16 @@ Commercial pricing is excluded until an approved price authority exists.
 
 The Products database is the released product and SVG authority.
 
+It owns release identity and pointer state.
+
+Immutable object storage owns artifact bytes.
+
 Admin draft data remains private.
 
 Planner pins product and SVG revision identity.
 
 Static files are migration inputs or isolated fixtures only.
+
+The R2 snapshot is a degraded-read layer only.
 
 The exact contract is `08-DATABASE-SVG-CONTRACT.md`.

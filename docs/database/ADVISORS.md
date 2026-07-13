@@ -122,6 +122,17 @@ Re-run: `pnpm --filter oando-site run db:advisors` · `:admin`. Keep SECURITY ER
 
 ---
 
+## Planned SVG schema review
+
+This applies after the SVG migration exists.
+
+- Enable RLS on `block_descriptors`, `published_svg_revisions`, and `svg_artifacts`.
+- Deny direct public access to drafts and revision metadata.
+- Keep Products DB SECURITY ERROR count at zero.
+- Index product, definition, revision, artifact, and release-pointer foreign keys.
+- Verify the product pointer cannot reference another product's revision.
+- Verify least-privilege Drizzle grants and server authorization.
+
 ## Workflow
 
 1. **After applying migrations** — run `pnpm --filter oando-site run db:advisors` to confirm the migrations achieved their intent (RLS enabled, indexes created, no duplicates).

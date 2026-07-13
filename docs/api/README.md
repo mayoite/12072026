@@ -17,3 +17,17 @@ pnpm --filter oando-site run docs:sync:routes
 The repository has no published OpenAPI contract yet.
 
 Add one only after live request and response schemas are stable.
+
+## Planned SVG route
+
+The route index lists live handlers only.
+
+The current SVG-block route still reads disk-backed descriptors.
+
+Target `GET /api/planner/catalog/svg/[revisionId]` is not live.
+
+Do not add it to `ROUTE-INDEX.md` until implementation exists.
+
+It will return exact sanitized bytes for one committed revision.
+
+See [Database SVG contract](../architecture/08-DATABASE-SVG-CONTRACT.md).

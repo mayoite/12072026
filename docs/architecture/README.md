@@ -53,6 +53,8 @@ The database SVG contract is `08-DATABASE-SVG-CONTRACT.md`.
 
 The public Site benchmark is `09-SITE-UI-BENCHMARK.md`.
 
+The security benchmark is `10-SECURITY-BENCHMARK.md`.
+
 Useful references:
 
 - [Configura CET](https://www.configura.com/products/cet/commercial-interiors)

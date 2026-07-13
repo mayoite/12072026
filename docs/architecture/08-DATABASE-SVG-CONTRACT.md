@@ -265,7 +265,7 @@ Rate limits apply at public and Admin boundaries.
 | DB-SVG-01 | The Products database is the released SVG revision and pointer authority. |
 | DB-SVG-02 | Draft scenes and descriptors are private and version-locked. |
 | DB-SVG-03 | Published SVG revisions are immutable. |
-| DB-SVG-04 | Each revision conforms to `PublishedRevisionV1` and stores the exact definition snapshot. |
+| DB-SVG-04 | Each revision conforms to `PublishedRevisionV1`, stores the exact definition snapshot, and has artifact rows matching `SvgArtifactRecord`. |
 | DB-SVG-05 | The product points to one same-product published SVG revision. |
 | DB-SVG-06 | Publication uploads immutable artifacts, then inserts metadata, points, and audits in one transaction. |
 | DB-SVG-07 | Failed publication leaves the prior pointer live. |
@@ -276,7 +276,7 @@ Rate limits apply at public and Admin boundaries.
 | DB-SVG-12 | The SVG resource uses `image/svg+xml`, checksum `ETag`, and safe immutable caching. |
 | DB-SVG-13 | Placed items pin product and SVG revision identity. |
 | DB-SVG-14 | Drafts, credentials, audit internals, and commercial data never enter public responses. |
-| DB-SVG-15 | Database outage and stale cache state are explicit. |
+| DB-SVG-15 | Products DB, artifact storage, R2 snapshot, and stale degraded states are explicit. |
 | DB-SVG-16 | A disk file never silently overrides a database release. |
 | DB-SVG-17 | Migration dry-runs and reports additions, conflicts, rejects, footprints, and hashes. |
 | DB-SVG-18 | Cutover proves database and approved source parity before disk authority is removed. |

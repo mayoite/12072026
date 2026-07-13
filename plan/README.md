@@ -52,6 +52,10 @@ Unrelated read-only work may continue.
 
 1. `Security/PHASE-01-security.md`
 
+Security is one plan with multiple execution sections.
+
+It maps every `SEC-*` acceptance ID.
+
 Admin, Planner, Site, and Security run in parallel after test isolation.
 
 Within each stream, independent sections may run in parallel.
@@ -63,6 +67,7 @@ Within each stream, independent sections may run in parallel.
 | Planner catalog integration | Published catalog contract or isolated fixture. |
 | Planner 2D SVG rendering | Released database revision and artifact contract, or isolated fixture. |
 | Database SVG migration | Owner-approved SQL, target Products database, storage, backup, and rollback. |
+| Database SVG security and operations | Admin and Planner boundaries plus Security-owned `DB-SVG-14` and `DB-SVG-19`. |
 | Family-specific Admin pricing | Released family contract. |
 | Phase 1 deterministic BOQ | Canonical project data or an isolated product-backed fixture. |
 | Site public product discovery | Published catalog contract or isolated fixture. |
@@ -79,6 +84,8 @@ It does not stop either track.
 - SEO belongs to Site.
 - Security verifies every changed boundary.
 - Buyer work is part of the external customer Planner journey.
+- `../Plans/02-recovery/phases/06-database.md` supplies database execution detail.
+- Status for that database work remains in the Admin, Planner, and Security checklists.
 
 ## Verification
 
