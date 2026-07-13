@@ -747,8 +747,117 @@
   font-size: 0.875rem;
 }
 
+[data-admin-layout] .admin-svg-inventory-mix {
+  margin: 0 0 1rem;
+}
+
+[data-admin-layout] .admin-svg-inventory-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: flex-end;
+  padding: 0.85rem 1rem 0.5rem;
+}
+
+[data-admin-layout] .admin-svg-inventory-filters--secondary {
+  padding-top: 0.35rem;
+  padding-bottom: 0.85rem;
+}
+
+[data-admin-layout] .admin-svg-inventory-filters__search {
+  flex: 1 1 14rem;
+  min-width: min(100%, 12rem);
+}
+
+[data-admin-layout] .admin-svg-inventory-more {
+  border-top: 1px solid var(--border-soft);
+}
+
 [data-admin-layout] .admin-svg-inventory-table-wrap {
   margin-top: 0.25rem;
+}
+
+[data-admin-layout] .admin-svg-inventory-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+[data-admin-layout] .admin-svg-inventory-table {
+  min-width: 36rem;
+}
+
+/* Phone: card stack for inventory (ADM-MOB compact review) */
+@media (width < 48rem) {
+  [data-admin-layout] .admin-svg-inventory-table {
+    min-width: 0;
+  }
+
+  [data-admin-layout] .admin-svg-inventory-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  [data-admin-layout] .admin-svg-inventory-table tbody {
+    display: block;
+  }
+
+  [data-admin-layout] .admin-svg-inventory-table .admin-table__group th {
+    display: block;
+    width: 100%;
+  }
+
+  [data-admin-layout] .admin-svg-inventory-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.35rem 0.75rem;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border-soft);
+    background: var(--surface-panel);
+  }
+
+  [data-admin-layout] .admin-svg-inventory-row td {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+
+  [data-admin-layout] .admin-svg-inventory-row td[data-label="Preview"] {
+    grid-row: 1 / span 3;
+    align-self: start;
+  }
+
+  [data-admin-layout] .admin-svg-inventory-row td[data-label="Product"] {
+    grid-column: 2;
+  }
+
+  [data-admin-layout] .admin-svg-inventory-row td[data-label="Size"],
+  [data-admin-layout] .admin-svg-inventory-row td[data-label="Lifecycle"],
+  [data-admin-layout] .admin-svg-inventory-row td[data-label="Symbol"],
+  [data-admin-layout] .admin-svg-inventory-row td[data-label="Updated"] {
+    grid-column: 2;
+  }
+
+  [data-admin-layout] .admin-svg-inventory-row td[data-label="Actions"] {
+    grid-column: 1 / -1;
+    margin-top: 0.35rem;
+  }
+
+  [data-admin-layout] .admin-svg-inventory-actions {
+    justify-content: stretch;
+  }
+
+  [data-admin-layout] .admin-svg-inventory-actions .admin-btn {
+    flex: 1 1 auto;
+  }
 }
 
 @media (width < 48rem) {

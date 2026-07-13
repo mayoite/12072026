@@ -67,17 +67,6 @@ function describeVariant(variant: BlockDescriptor["variant"]): string {
   }
 }
 
-function variantBadgeClass(variant: BlockDescriptor["variant"]): string {
-  switch (variant) {
-    case "parametric":
-      return "admin-badge admin-badge--active";
-    case "configurable":
-      return "admin-badge admin-badge--active";
-    case "fixed":
-      return "admin-badge admin-badge--hidden";
-  }
-}
-
 function variantSlugCount(
   descriptors: ReadonlyArray<BlockDescriptor>,
 ): Readonly<Record<BlockDescriptor["variant"], number>> {
@@ -374,24 +363,20 @@ export function AdminSvgEditorListView({
         </div>
       </header>
 
-      {/* Secondary balance strip — not the primary task chrome */}
-      <section
-        aria-label="Family mix"
-        className="admin-grid-cards mb-6"
+      {/* Compact family counts — not a dashboard of three equal cards */}
+      <p
+        className="admin-page__meta admin-svg-inventory-mix"
         data-testid="admin-svg-family-mix"
+        role="status"
       >
-        {VARIANT_ORDER.map((variant) => (
-          <article key={variant} className="admin-panel" data-variant={variant}>
-            <div className="admin-panel__header">{VARIANT_LABEL[variant]}</div>
-            <div className="admin-panel__body">
-              <p className="admin-table__primary">{counts[variant]}</p>
-              <p className="admin-table__secondary">
-                {describeVariant(variant)}
-              </p>
-            </div>
-          </article>
+        {VARIANT_ORDER.map((variant, index) => (
+          <span key={variant} data-variant={variant}>
+            {index > 0 ? " · " : null}
+            <strong>{counts[variant]}</strong> {VARIANT_LABEL[variant].toLowerCase()}
+            <span className="sr-only">. {describeVariant(variant)}</span>
+          </span>
         ))}
-      </section>
+      </p>
 
       {descriptors.length === 0 ? (
         <div className="admin-empty" role="status">
@@ -412,22 +397,26 @@ export function AdminSvgEditorListView({
           </div>
         </div>
       ) : (
-        <div className="admin-panel" data-testid="admin-svg-inventory">
+        <div
+          className="admin-panel admin-svg-inventory"
+          data-testid="admin-svg-inventory"
+        >
           <div className="admin-panel__header">
             Symbol inventory · {sortedRows.length} of {inventoryRows.length}
             {paged.totalPages > 1
               ? ` · page ${paged.page}/${paged.totalPages}`
               : ""}
           </div>
+          {/* Primary operator controls only */}
           <div
-            className="px-4 py-3 flex flex-wrap gap-3"
+            className="admin-svg-inventory-filters"
             data-testid="admin-svg-inventory-filters"
           >
-            <label className="admin-field">
+            <label className="admin-field admin-field--search admin-svg-inventory-filters__search">
               <span className="admin-field__label">Search</span>
               <input
                 type="search"
-                className="admin-field__control"
+                className="admin-field__control admin-field__input--search"
                 value={query}
                 onChange={(event) => {
                   setQuery(event.target.value);
@@ -437,24 +426,6 @@ export function AdminSvgEditorListView({
                 data-testid="admin-svg-inventory-search"
                 aria-label="Search SVG inventory"
               />
-            </label>
-            <label className="admin-field">
-              <span className="admin-field__label">Symbol status</span>
-              <select
-                className="admin-field__control"
-                value={artifactFilter}
-                onChange={(event) => {
-                  setArtifactFilter(event.target.value as InventoryArtifactFilter);
-                  setPage(1);
-                }}
-                data-testid="admin-svg-filter-artifact"
-                aria-label="Filter by symbol status"
-              >
-                <option value="all">All</option>
-                <option value="published">Published</option>
-                <option value="missing">Missing</option>
-                <option value="invalid">Needs attention</option>
-              </select>
             </label>
             <label className="admin-field">
               <span className="admin-field__label">Lifecycle</span>
@@ -477,80 +448,105 @@ export function AdminSvgEditorListView({
               </select>
             </label>
             <label className="admin-field">
-              <span className="admin-field__label">Family</span>
+              <span className="admin-field__label">Symbol status</span>
               <select
                 className="admin-field__control"
-                value={variantFilter}
+                value={artifactFilter}
                 onChange={(event) => {
-                  setVariantFilter(
-                    event.target.value as "all" | BlockDescriptor["variant"],
-                  );
+                  setArtifactFilter(event.target.value as InventoryArtifactFilter);
                   setPage(1);
                 }}
-                data-testid="admin-svg-filter-variant"
-                aria-label="Filter by family variant"
+                data-testid="admin-svg-filter-artifact"
+                aria-label="Filter by symbol status"
               >
                 <option value="all">All</option>
-                {VARIANT_ORDER.map((variant) => (
-                  <option key={variant} value={variant}>
-                    {VARIANT_LABEL[variant]}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="admin-field">
-              <span className="admin-field__label">Sort</span>
-              <select
-                className="admin-field__control"
-                value={sortKey}
-                onChange={(event) =>
-                  setSortKey(event.target.value as InventorySortKey)
-                }
-                data-testid="admin-svg-inventory-sort"
-                aria-label="Sort inventory"
-              >
-                <option value="family">Family</option>
-                <option value="slug">Identity</option>
-                <option value="sku">SKU</option>
-                <option value="lifecycle">Lifecycle</option>
-                <option value="lastChange">Last change</option>
-                <option value="widthMm">Width mm</option>
-              </select>
-            </label>
-            <label className="admin-field">
-              <span className="admin-field__label">Direction</span>
-              <select
-                className="admin-field__control"
-                value={sortDir}
-                onChange={(event) =>
-                  setSortDir(event.target.value as InventorySortDir)
-                }
-                data-testid="admin-svg-inventory-sort-dir"
-                aria-label="Sort direction"
-              >
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-              </select>
-            </label>
-            <label className="admin-field">
-              <span className="admin-field__label">Page size</span>
-              <select
-                className="admin-field__control"
-                value={String(pageSize)}
-                onChange={(event) => {
-                  setPageSize(Number(event.target.value));
-                  setPage(1);
-                }}
-                data-testid="admin-svg-inventory-page-size"
-                aria-label="Rows per page"
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
+                <option value="published">Published</option>
+                <option value="missing">Missing</option>
+                <option value="invalid">Needs attention</option>
               </select>
             </label>
           </div>
+          <details className="admin-page__section admin-svg-inventory-more">
+            <summary className="admin-panel__header">
+              More filters · family, sort, page size
+            </summary>
+            <div className="admin-svg-inventory-filters admin-svg-inventory-filters--secondary">
+              <label className="admin-field">
+                <span className="admin-field__label">Family</span>
+                <select
+                  className="admin-field__control"
+                  value={variantFilter}
+                  onChange={(event) => {
+                    setVariantFilter(
+                      event.target.value as "all" | BlockDescriptor["variant"],
+                    );
+                    setPage(1);
+                  }}
+                  data-testid="admin-svg-filter-variant"
+                  aria-label="Filter by family variant"
+                >
+                  <option value="all">All</option>
+                  {VARIANT_ORDER.map((variant) => (
+                    <option key={variant} value={variant}>
+                      {VARIANT_LABEL[variant]}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="admin-field">
+                <span className="admin-field__label">Sort</span>
+                <select
+                  className="admin-field__control"
+                  value={sortKey}
+                  onChange={(event) =>
+                    setSortKey(event.target.value as InventorySortKey)
+                  }
+                  data-testid="admin-svg-inventory-sort"
+                  aria-label="Sort inventory"
+                >
+                  <option value="family">Family</option>
+                  <option value="slug">Identity</option>
+                  <option value="sku">SKU</option>
+                  <option value="lifecycle">Lifecycle</option>
+                  <option value="lastChange">Last change</option>
+                  <option value="widthMm">Width mm</option>
+                </select>
+              </label>
+              <label className="admin-field">
+                <span className="admin-field__label">Direction</span>
+                <select
+                  className="admin-field__control"
+                  value={sortDir}
+                  onChange={(event) =>
+                    setSortDir(event.target.value as InventorySortDir)
+                  }
+                  data-testid="admin-svg-inventory-sort-dir"
+                  aria-label="Sort direction"
+                >
+                  <option value="asc">Ascending</option>
+                  <option value="desc">Descending</option>
+                </select>
+              </label>
+              <label className="admin-field">
+                <span className="admin-field__label">Page size</span>
+                <select
+                  className="admin-field__control"
+                  value={String(pageSize)}
+                  onChange={(event) => {
+                    setPageSize(Number(event.target.value));
+                    setPage(1);
+                  }}
+                  data-testid="admin-svg-inventory-page-size"
+                  aria-label="Rows per page"
+                >
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                </select>
+              </label>
+            </div>
+          </details>
 
           {/* Saved views are secondary — do not compete with search/filters */}
           <details
@@ -615,26 +611,23 @@ export function AdminSvgEditorListView({
                 data-phone-layout="cards-priority"
               >
                 <table
-                  className="admin-table"
+                  className="admin-table admin-svg-inventory-table"
                   data-testid="admin-svg-inventory-table"
                   data-phone-layout="cards-priority"
                 >
                   <caption className="sr-only">
-                    SVG product symbols grouped by family with identity, SKU,
-                    dimensions, lifecycle, availability, symbol state, and last
-                    change.
+                    SVG product symbols grouped by family: preview, product
+                    identity, size, lifecycle, symbol status, last change, and
+                    actions.
                   </caption>
                   <thead>
                     <tr>
                       <th scope="col">Preview</th>
-                      <th scope="col">Identity</th>
-                      <th scope="col">SKU</th>
-                      <th scope="col">Family</th>
-                      <th scope="col">Dimensions</th>
+                      <th scope="col">Product</th>
+                      <th scope="col">Size</th>
                       <th scope="col">Lifecycle</th>
-                      <th scope="col">Availability</th>
                       <th scope="col">Symbol</th>
-                      <th scope="col">Last change</th>
+                      <th scope="col">Updated</th>
                       <th scope="col" className="text-end">
                         Actions
                       </th>
@@ -649,11 +642,10 @@ export function AdminSvgEditorListView({
                       <tr className="admin-table__group">
                         <th
                           scope="colgroup"
-                          colSpan={10}
+                          colSpan={7}
                           className="admin-panel__header"
                         >
-                          Family · {VARIANT_LABEL[group.family]} (
-                          {group.rows.length})
+                          {VARIANT_LABEL[group.family]} · {group.rows.length}
                         </th>
                       </tr>
                       {group.rows.map((row) => {
@@ -670,15 +662,16 @@ export function AdminSvgEditorListView({
                             data-validation={row.validationLabel}
                             data-lifecycle={lifecycle}
                             data-availability={row.availability}
+                            className="admin-svg-inventory-row"
                           >
-                            <td>
+                            <td data-label="Preview">
                               <PublishedSvgPreview
                                 slug={d.slug}
                                 status={status}
                                 size="thumb"
                               />
                             </td>
-                            <td>
+                            <td data-label="Product">
                               <p className="admin-table__primary">
                                 <Link
                                   href={`/admin/svg-editor/${d.slug}`}
@@ -687,18 +680,18 @@ export function AdminSvgEditorListView({
                                   {d.slug}
                                 </Link>
                               </p>
-                            </td>
-                            <td>
-                              <code data-testid={`admin-svg-sku-${d.slug}`}>
-                                {d.sku ?? "—"}
-                              </code>
-                            </td>
-                            <td>
-                              <span className={variantBadgeClass(d.variant)}>
-                                {VARIANT_LABEL[d.variant]}
+                              <p
+                                className="admin-table__secondary"
+                                data-testid={`admin-svg-sku-${d.slug}`}
+                              >
+                                SKU {d.sku ?? "—"}
+                              </p>
+                              <span className="sr-only">
+                                Family {VARIANT_LABEL[d.variant]}
                               </span>
                             </td>
                             <td
+                              data-label="Size"
                               data-testid={`admin-svg-dimensions-${d.slug}`}
                             >
                               {d.geometry.widthMm}×{d.geometry.depthMm}
@@ -707,28 +700,20 @@ export function AdminSvgEditorListView({
                                 : ""}{" "}
                               mm
                             </td>
-                            <td>
+                            <td data-label="Lifecycle">
                               <span
                                 className={lifecycleBadgeClass(lifecycle)}
                               >
                                 {lifecycle}
                               </span>
-                            </td>
-                            <td>
                               <span
-                                className={
-                                  row.availability === "available"
-                                    ? "admin-badge admin-badge--active"
-                                    : row.availability === "retired"
-                                      ? "admin-badge admin-badge--hidden"
-                                      : "admin-badge admin-badge--warn"
-                                }
+                                className="sr-only"
                                 data-testid={`admin-svg-availability-${d.slug}`}
                               >
                                 {row.availability}
                               </span>
                             </td>
-                            <td>
+                            <td data-label="Symbol">
                               <span
                                 className={artifactBadgeClass(status.state)}
                                 data-testid={`admin-svg-validation-${d.slug}`}
@@ -746,16 +731,25 @@ export function AdminSvgEditorListView({
                                   : "No published symbol yet"}
                               </p>
                             </td>
-                            <td>
-                              <code
-                                className="text-muted"
+                            <td data-label="Updated">
+                              <span
+                                className="admin-table__secondary"
                                 data-testid={`admin-svg-last-change-${d.slug}`}
                               >
                                 {row.lastChangeLabel}
-                              </code>
+                              </span>
                             </td>
-                            <td>
-                              <div className="flex flex-wrap justify-end gap-2">
+                            <td data-label="Actions">
+                              <div className="admin-svg-inventory-actions">
+                                <Link
+                                  href={`/admin/svg-editor/${d.slug}`}
+                                  className="admin-btn admin-btn--primary"
+                                  aria-label={`Edit ${d.slug} in SVG studio`}
+                                  data-testid={`admin-svg-edit-${d.slug}`}
+                                >
+                                  <Pencil size={14} aria-hidden />
+                                  Edit
+                                </Link>
                                 {lifecycle !== "retired" ? (
                                   <button
                                     type="button"
@@ -783,15 +777,6 @@ export function AdminSvgEditorListView({
                                     Restore
                                   </button>
                                 )}
-                                <Link
-                                  href={`/admin/svg-editor/${d.slug}`}
-                                  className="admin-btn admin-btn--outline"
-                                  aria-label={`Edit ${d.slug} in SVG studio`}
-                                  data-testid={`admin-svg-edit-${d.slug}`}
-                                >
-                                  <Pencil size={14} aria-hidden />
-                                  Edit
-                                </Link>
                               </div>
                             </td>
                           </tr>
