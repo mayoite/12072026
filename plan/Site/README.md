@@ -27,6 +27,28 @@ The journey is truthful, searchable, accessible, fast, and measurable.
 - Site links to Planner through explicit contracts.
 - Site never exposes draft inventory, private projects, or commercial data.
 
+## Interface authority
+
+The public Site benchmark is `../../docs/architecture/09-SITE-UI-BENCHMARK.md`.
+
+Its `SITE-*` IDs are acceptance requirements.
+
+No Site requirement is deferred to a later decision bucket.
+
+No new UI package is planned.
+
+Use the installed stack first.
+
+## Acceptance trace
+
+| Phase | Acceptance groups |
+|---|---|
+| Phase 1 | `SITE-IA-*`, `SITE-MEASURE-*`, `SITE-PERF-*`, baseline `SITE-SEO-*` |
+| Phase 2 | `SITE-NAV-*`, `SITE-HOME-*`, `SITE-FORM-*`, `SITE-MOB-*`, `SITE-A11Y-*` |
+| Phase 3 | `SITE-CONTENT-*`, content lifecycle parts of `SITE-SEO-*` and `SITE-MEASURE-*` |
+| Phase 4 | `SITE-PROD-*`, `SITE-PLAN-*`, product parts of `SITE-MOB-*` and `SITE-A11Y-*` |
+| Phase 5 | Final `SITE-SEO-*`, `SITE-PERF-*`, `SITE-A11Y-*`, and full journey recheck |
+
 ## Parallel execution
 
 - Measurement starts first and continues through every phase.

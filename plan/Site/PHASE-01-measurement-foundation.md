@@ -10,6 +10,10 @@ The public journey has a trustworthy baseline and one measurable conversion cont
 - Treat old reports and screenshots as reference only.
 - Record current indexing, accessibility, performance, and conversion failures.
 - Verify claims in a production-like build.
+- Load root `.env.local` through package-defined scripts before live checks.
+- Classify all 44 current Site page files as public, protected, redirect, not-found, or removed.
+- Record the accepted audience, intent, owner, canonical URL, and primary action for every public page.
+- Record the broken homepage accessible heading, duplicate title suffixes, empty Workstations category, and broken redirected hero request until freshly fixed.
 
 ## Conversion contract
 
@@ -43,6 +47,22 @@ The public journey has a trustworthy baseline and one measurable conversion cont
 - Establish accessibility and performance budgets.
 - Establish supported mobile and desktop widths.
 - Remove critical console, request, hydration, and navigation failures.
+- Enforce unique titles, descriptions, canonical URLs, and coherent H1 text.
+- Prevent duplicate brand suffixes.
+- Require one deliberate redirect chain for legacy routes.
+- Verify every navigation and cart link has an accessible name.
+- Use field Core Web Vitals at the 75th percentile when available.
+
+## Interface acceptance
+
+This phase owns the baseline for:
+
+- `SITE-IA-01` through `SITE-IA-03`.
+- `SITE-MEASURE-01` through `SITE-MEASURE-03`.
+- `SITE-PERF-01` through `SITE-PERF-04`.
+- `SITE-SEO-01` through `SITE-SEO-03`.
+
+The exact requirements are in `../../docs/architecture/09-SITE-UI-BENCHMARK.md`.
 
 ## Parallel work
 

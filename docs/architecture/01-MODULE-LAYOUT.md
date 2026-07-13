@@ -12,7 +12,7 @@
 | `site/app/css/` | Shared styling system. |
 | `site/config/` | Build and route configuration. |
 | `site/tests/` | Unit, integration, and browser tests. |
-| `site/public/` | Public static catalog and product assets. |
+| `site/public/` | Static web assets and isolated catalog fixtures. |
 | `site/scripts/` | Repository tooling. |
 
 ## Product roots
@@ -27,7 +27,7 @@
 | Admin routes | `site/app/admin/` |
 | Admin inventory tools | `site/features/planner/admin/` |
 | Catalog contract | `site/lib/catalog/` and planner catalog adapters |
-| Published SVG | `site/public/svg-catalog/` |
+| Released SVG | Products database through server catalog APIs |
 | Catalog descriptors | `site/block-descriptors/` |
 
 Do not create parallel planner, catalog, or canvas trees.

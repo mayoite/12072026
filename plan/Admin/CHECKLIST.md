@@ -71,8 +71,15 @@ Treat every item as not done.
 - [ ] Product and SVG publish as one safe operation.
 - [ ] Partial publication is impossible.
 - [ ] Repeated unchanged publication is idempotent.
-- [ ] Public static catalog files remain the primary authority.
-- [ ] A future cloud-storage seam is preserved.
+- [ ] `DB-SVG-01` The Products database is the released SVG revision and pointer authority.
+- [ ] `DB-SVG-02` Block definitions and drafts are private and version-locked.
+- [ ] `DB-SVG-03` Published SVG revisions are immutable.
+- [ ] `DB-SVG-04` Revisions and artifact records match the pinned contracts.
+- [ ] `DB-SVG-05` Each released product points to one same-product SVG revision.
+- [ ] `DB-SVG-06` Artifact upload, revision metadata, product pointer, and audit activate safely.
+- [ ] `DB-SVG-07` Failed publication leaves the prior pointer live.
+- [ ] `DB-SVG-08` Unchanged publication is idempotent.
+- [ ] `DB-SVG-09` Stale draft versions are rejected without data loss.
 - [ ] Core products support create, edit, draft, publish, and safe replacement.
 - [ ] Product identity remains stable through edits.
 - [ ] Draft and public versions are clearly identified.
@@ -108,6 +115,9 @@ Treat every item as not done.
 - [ ] `ADM-BULK-01` Previewed bulk edit, validation, publication, retirement, and recovery work.
 - [ ] `ADM-BULK-02` Batch work is atomic and reports exact record and field errors.
 - [ ] `ADM-PUB-03` Partial publication or release is impossible.
+- [ ] `DB-SVG-17` Disk migration dry-runs every change, conflict, reject, footprint, and hash.
+- [ ] `DB-SVG-18` Database and approved source parity passes before cutover.
+- [ ] `DB-SVG-20` Database tests use isolated rows and never mutate releases.
 - [ ] `ADM-MOB-01` Phone review works without page-level horizontal scrolling.
 - [ ] `ADM-MOB-02` Unsupported phone authoring is declared before work begins.
 - [ ] `ADM-MOB-03` Phone records use a deliberate compact layout.
@@ -172,7 +182,7 @@ Treat every item as not done.
 - [ ] Admin releases a valid configurable product family.
 - [ ] Admin activates a reproducible price-book version.
 - [ ] Admin retires and restores a product without losing history.
-- [ ] Planner consumes the same public product and SVG.
+- [ ] Planner consumes the same released database product, SVG revision, and artifact.
 - [ ] Failed publication preserves the previous public product.
 - [ ] Fresh commands and exit codes are recorded here.
 - [ ] Only active residual failures remain in `../../Failures.md`.

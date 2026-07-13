@@ -44,7 +44,9 @@ Published SVG is the primary planner symbol.
 
 ## Catalog direction
 
-Public static catalog data and assets are the first authority.
+The Products database is the released catalog and SVG authority.
+
+Planner imports released SVG revisions through a server API.
 
 Cloud or object storage is a later migration.
 

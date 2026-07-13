@@ -5,9 +5,9 @@
 1. Admin edits a draft product and SVG scene.
 2. Server validation checks identity, dimensions, structure, and safety.
 3. The publish compiler produces deterministic SVG bytes.
-4. Publication writes a versioned descriptor and public SVG atomically.
-5. Planner loads the published catalog contract.
-6. Planner renders the published SVG first.
+4. Publication writes an immutable SVG revision and product pointer in one database transaction.
+5. Planner loads the released database catalog through a server API.
+6. Planner imports the exact SVG revision and renders it first.
 7. `Block2D` is used only while loading or when SVG is unavailable.
 
 A failed compile or write leaves the previous publication intact.
@@ -32,8 +32,14 @@ A failed compile or write leaves the previous publication intact.
 
 Commercial pricing is excluded until an approved price authority exists.
 
-## Storage direction
+## Storage authority
 
-Public static catalog files are the first authority.
+The Products database is the released product and SVG authority.
 
-The contract must permit later object or cloud storage without changing customer documents.
+Admin draft data remains private.
+
+Planner pins product and SVG revision identity.
+
+Static files are migration inputs or isolated fixtures only.
+
+The exact contract is `08-DATABASE-SVG-CONTRACT.md`.

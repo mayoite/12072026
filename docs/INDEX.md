@@ -10,6 +10,8 @@
 - `architecture/05-DATA_FLOW.md` — catalog-to-BOQ flow.
 - `architecture/06-UI-BENCHMARK.md` — external interface benchmark and acceptance contract.
 - `architecture/07-ADMIN-UI-BENCHMARK.md` — SVG-first Admin benchmark and acceptance contract.
+- `architecture/08-DATABASE-SVG-CONTRACT.md` — database-backed SVG publication and Planner import contract.
+- `architecture/09-SITE-UI-BENCHMARK.md` — public Site benchmark and acceptance contract.
 
 ## Technical references
 

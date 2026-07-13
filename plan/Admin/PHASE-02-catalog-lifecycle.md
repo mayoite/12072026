@@ -12,21 +12,30 @@ Admin and Planner cannot maintain separate versions of a product.
 
 The published catalog is their shared contract.
 
-Primary delivery uses public static data and assets.
+Primary delivery uses released Products database records.
 
-Cloud catalog storage comes later.
+SVG revision and artifact metadata live in that database.
+
+Sanitized artifacts use immutable content-addressed storage keys.
+
+Static files are migration inputs or isolated fixtures only.
 
 ## Starting point
 
 The repository already contains:
 
 - Product descriptors.
-- Public SVG catalog files.
+- Existing disk SVG catalog files that require migration.
+- An existing Products database catalog table.
 - Admin publication routes.
 - Planner catalog loaders.
 - Planner SVG rendering with a `Block2D` fallback.
 
 These paths require fresh integration verification.
+
+The target data contract is `../../docs/architecture/08-DATABASE-SVG-CONTRACT.md`.
+
+The detailed database execution plan is `../../Plans/02-recovery/phases/06-database.md`.
 
 ## Work
 
@@ -36,7 +45,9 @@ These paths require fresh integration verification.
 - Include stable identity, name, dimensions, availability, SVG location, and BOQ identity.
 - Reject incomplete or contradictory records.
 - Keep published output deterministic.
-- Keep a clear future seam for cloud or object storage.
+- Use `PublishedRevisionV1` and `SvgArtifactRecord` as the live contract basis.
+- Use Drizzle for catalog persistence.
+- Do not add a new Supabase `.from()` catalog path.
 
 ### Catalog lifecycle
 
@@ -64,7 +75,8 @@ Advanced approval and retirement control is completed in Phase 4.
 
 ### Publication
 
-- Publish the product record and SVG as one safe operation.
+- Upload immutable artifacts before activation.
+- Insert revision and artifact metadata, point the product, and write audit in one transaction.
 - Prevent partial publication.
 - Preserve the previous product when any write fails.
 - Make repeated publication of unchanged input idempotent.
@@ -72,7 +84,8 @@ Advanced approval and retirement control is completed in Phase 4.
 
 ### Planner handoff
 
-- Load the published product through Planner’s catalog boundary.
+- Load the released product through Planner’s server catalog boundary.
+- Import the exact SVG by committed revision and artifact storage key.
 - Render the published SVG as the primary 2D symbol.
 - Use `Block2D` only while loading or when SVG is unavailable.
 - Preserve identity and dimensions when the product is placed.
@@ -149,7 +162,7 @@ The exact requirements are in `../../docs/architecture/07-ADMIN-UI-BENCHMARK.md`
 - Fresh valid and invalid ingestion tests.
 - Fresh Planner catalog integration test.
 - Fresh Admin browser publication journey.
-- On-disk comparison of the public product and SVG.
+- Database row, artifact key, SVG bytes, checksum, footprint, and Planner-import comparison.
 - Focused authorization and malicious-SVG checks.
 - Relevant unchecked items completed in `CHECKLIST.md`.
 
@@ -157,4 +170,4 @@ The exact requirements are in `../../docs/architecture/07-ADMIN-UI-BENCHMARK.md`
 
 - Product families and option compatibility are Phase 3.
 - Price books, approval, and retirement are Phase 4.
-- Cloud catalog migration is not required for primary delivery.
+- No requirement is deferred to a later decision bucket.

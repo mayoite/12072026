@@ -20,6 +20,9 @@ Public visitors understand Oando offers and reach the correct next action.
 - Explain who the offer serves and what happens next.
 - Use one primary action and limited secondary actions.
 - Avoid generic filler, fake urgency, and invented testimonials.
+- Put audience, value, approved proof, and one primary action in the first desktop and phone viewport.
+- Preserve correct text spacing and reading order in animated headings.
+- Give every trust claim an approved source, owner, and review date.
 
 ## Interface quality
 
@@ -29,6 +32,13 @@ Public visitors understand Oando offers and reach the correct next action.
 - Meet WCAG 2.2 AA for primary journeys.
 - Keep images responsive and licensed.
 - Meet the Phase 1 performance budgets.
+- Keep product, solution, proof, Planner, and contact paths stable in desktop and phone navigation.
+- Keep protected and operational routes out of public navigation.
+- Give every icon-only navigation and cart link a clear accessible name.
+- Make Site search scoped, keyboard-usable, and announced.
+- At 390 by 844, show page purpose and the primary action in the first viewport.
+- Avoid page-level horizontal scrolling at 390 pixels.
+- Use 44 by 44 pixel frequent phone targets where practical.
 
 ## Conversion integration
 
@@ -37,6 +47,20 @@ Public visitors understand Oando offers and reach the correct next action.
 - Measure page-to-Planner progression and failure.
 - Keep forms short and truthful.
 - Confirm success only after successful delivery.
+- Preserve valid input after failure.
+- Show precise field errors and a recoverable retry state.
+- Handle duplicate submissions and rate limits truthfully.
+- Explain consent and privacy use before submission.
+
+## Interface acceptance
+
+This phase owns:
+
+- `SITE-NAV-01` through `SITE-NAV-04`.
+- `SITE-HOME-01` through `SITE-HOME-04`.
+- `SITE-FORM-01` through `SITE-FORM-04`.
+- `SITE-MOB-01` through `SITE-MOB-03`.
+- `SITE-A11Y-01` through `SITE-A11Y-04` for landing and form journeys.
 
 ## Parallel work
 

@@ -1,13 +1,11 @@
-# Phase 2
+# Legacy deferred-decision pointer
 
-Phase 2 does not wait for every primary track.
+There is no later decision bucket.
 
-Each point starts when its direct primary dependency is verified.
+This file has no execution authority.
 
-Do not add checkboxes yet.
+Do not add work here.
 
-Do not add implementation detail yet.
+Place every accepted requirement in an execution phase under Admin, Planner, Site, or Security.
 
-Expand a point only when its primary work is near completion.
-
-No deferred points are currently approved.
+This file remains only to preserve old links.

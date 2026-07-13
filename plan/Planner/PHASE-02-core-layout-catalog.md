@@ -32,11 +32,18 @@ The workspace meets `../../docs/architecture/06-UI-BENCHMARK.md`.
 - Keep critical identity visible without hover.
 - Show availability honestly.
 - Preserve product, family, version, option, and commercial identity.
-- Use published SVG as the primary 2D symbol.
+- Read released SVG identity through the server catalog API.
+- Import the exact artifact by committed SVG revision and storage key.
+- Pin SVG revision ID and checksum on placement.
+- Use the released SVG as the primary 2D symbol.
 - Use `Block2D` only while loading or when SVG is unavailable.
 - Keep missing assets from breaking the layout.
 - Keep the placed 2D product recognizable from its catalog preview.
 - Keep an isolated fixture for work before live integration.
+
+The target contract is `../../docs/architecture/08-DATABASE-SVG-CONTRACT.md`.
+
+The detailed database plan is `../../Plans/02-recovery/phases/06-database.md`.
 
 ## One project document
 
@@ -122,6 +129,8 @@ The workspace meets `../../docs/architecture/06-UI-BENCHMARK.md`.
 
 - Geometry, command, undo, and identity tests.
 - Catalog fixture and live-contract tests.
+- Exact artifact byte, storage-key, checksum, `ETag`, and cache tests.
+- Database, artifact-storage, and verified R2 snapshot failure tests.
 - Save, reload, import, and export round-trip tests.
 - 2D-to-3D continuity checks.
 - Desktop 1440 by 900 workspace geometry measurements.

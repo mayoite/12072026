@@ -20,6 +20,8 @@ Oando publishes useful content for verified customer demand.
 - Cite factual and regulatory claims where needed.
 - Avoid thin, duplicated, or mass-generated pages.
 - Keep authorship, review date, and owner visible internally.
+- Keep every claim specific, supportable, owned, and reviewed.
+- Reject filler and mass duplication.
 
 ## Internal journeys
 
@@ -28,6 +30,13 @@ Oando publishes useful content for verified customer demand.
 - Provide useful related content without link stuffing.
 - Prevent dead ends and orphaned pages.
 - Preserve campaign and content-source context.
+- Ensure each page ends in a relevant product, Planner, or contact action.
+
+## Interface acceptance
+
+This phase owns `SITE-CONTENT-01` through `SITE-CONTENT-03`.
+
+It also rechecks content-specific parts of `SITE-SEO-*` and `SITE-MEASURE-*`.
 
 ## Lifecycle
 

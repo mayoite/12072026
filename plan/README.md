@@ -61,7 +61,8 @@ Within each stream, independent sections may run in parallel.
 | Work | Depends on |
 |---|---|
 | Planner catalog integration | Published catalog contract or isolated fixture. |
-| Planner 2D SVG rendering | Published SVG contract or isolated fixture. |
+| Planner 2D SVG rendering | Released database revision and artifact contract, or isolated fixture. |
+| Database SVG migration | Owner-approved SQL, target Products database, storage, backup, and rollback. |
 | Family-specific Admin pricing | Released family contract. |
 | Phase 1 deterministic BOQ | Canonical project data or an isolated product-backed fixture. |
 | Site public product discovery | Published catalog contract or isolated fixture. |
@@ -105,4 +106,6 @@ Site completes when public discovery is truthful, measurable, and leads customer
 
 Security completes when protected data, permissions, integrations, and release provenance pass fresh negative and positive checks.
 
-Each Phase-2 point opens when its direct primary dependency is verified.
+No requirement waits for a later decision bucket.
+
+Every accepted requirement belongs to an execution phase in an active track.

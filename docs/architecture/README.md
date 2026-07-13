@@ -28,8 +28,10 @@ UI, accessibility, and performance apply inside the product tracks.
 
 ## Product boundaries
 
-- Public static catalog files are the first authority.
-- Cloud catalog storage is deferred until the local contract is stable.
+- The Products database is the released catalog and SVG authority.
+- Admin writes released SVG revisions through a server-only transaction.
+- Planner imports released SVGs through a server API.
+- Static catalog files are migration inputs or isolated fixtures only.
 - Published SVG is the primary 2D symbol.
 - `Block2D` is a loading or missing-asset fallback.
 - BOQ is branded and product-backed.
@@ -46,6 +48,10 @@ Oando should meet that workflow bar without copying their assets or visual ident
 The detailed Planner interface benchmark is `06-UI-BENCHMARK.md`.
 
 The detailed SVG-first Admin benchmark is `07-ADMIN-UI-BENCHMARK.md`.
+
+The database SVG contract is `08-DATABASE-SVG-CONTRACT.md`.
+
+The public Site benchmark is `09-SITE-UI-BENCHMARK.md`.
 
 Useful references:
 

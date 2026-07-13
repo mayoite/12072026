@@ -27,7 +27,8 @@
 ## Layout
 
 - Execution lives in the checklists under `plan/Admin/`, `plan/Planner/`, `plan/Site/`, and `plan/Security/`.
-- Deferred decisions live in `plan/Phase-2/README.md`.
+- No work is deferred to a later decision bucket.
+- `plan/Phase-2/README.md` is a legacy pointer only.
 - Product and architecture facts live in `docs/`.
 - Agent process lives in `Agents/`.
 - Active blockers live in `Failures.md`.

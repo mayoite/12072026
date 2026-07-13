@@ -10,9 +10,9 @@
 | Architecture | `Agents-08-architecture.md` |
 | CSS | `Agents-09-css.md` |
 
-Admin and Planner are the only primary tracks.
+Admin, Planner, Site, and Security are the active execution tracks.
 
-Their checklists may run in parallel.
+Their checklists may run in parallel after test isolation.
 
 An item waits only for its named dependency.
 

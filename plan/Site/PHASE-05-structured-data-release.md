@@ -13,6 +13,8 @@ Public pages expose accurate machine-readable information and pass a full releas
 - Include offer and availability data only when published and accurate.
 - Remove markup that cannot be maintained.
 - Never use markup to imply unsupported ratings, reviews, prices, or claims.
+- Match product entities to the released Products database contract.
+- Use the same stable product and family identifiers used by Planner handoff.
 
 ## Search controls
 
@@ -31,6 +33,20 @@ Public pages expose accurate machine-readable information and pass a full releas
 - Recheck conversion event receipt and funnel continuity.
 - Recheck catalog freshness and private-data boundaries.
 - Record only active failures in `Failures.md`.
+- Recheck every `SITE-*` acceptance ID from a production-like build.
+- Recheck the 44-page route classification against live routes.
+- Recheck the Workstations category with the root environment loaded.
+- Recheck the `/catalog` redirect and final hero request.
+- Recheck accessible heading text and unique title suffixes.
+
+## Interface acceptance
+
+This phase closes only after:
+
+- `SITE-SEO-01` through `SITE-SEO-04` pass.
+- `SITE-PERF-01` through `SITE-PERF-04` pass with the required evidence.
+- `SITE-A11Y-01` through `SITE-A11Y-04` pass on representative journeys.
+- Every other `SITE-*` ID is freshly rechecked.
 
 ## Monitoring
 

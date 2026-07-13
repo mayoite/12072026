@@ -28,7 +28,7 @@ The repository already contains:
 - A no-code SVG studio.
 - Descriptor-based product data.
 - Server-side SVG compilation.
-- Public SVG output.
+- Existing disk SVG output that must migrate to the database-backed revision contract.
 
 These are starting points.
 

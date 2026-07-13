@@ -16,7 +16,7 @@ An Admin can:
 2. Enter its identity, dimensions, description, and availability.
 3. Create or edit its 2D SVG symbol.
 4. Preview the product before publication.
-5. Publish the product to the public static catalog.
+5. Publish the product and SVG revision to the Products database.
 6. Confirm that Planner receives the same product and SVG.
 7. Recover safely when validation or publication fails.
 
@@ -83,7 +83,7 @@ Two writers must not edit the same files at the same time.
 - Core product records.
 - SVG authoring.
 - Preview and publication.
-- Public static catalog output.
+- Database-backed catalog, revision, and artifact publication.
 - External catalog ingestion.
 - Planner catalog handoff.
 - Configurable product families.

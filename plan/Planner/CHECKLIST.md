@@ -47,7 +47,13 @@ Treat every item as not done.
 - [ ] `UI-CAT-04` catalog preview and placed 2D representation remain recognizable as the same product.
 - [ ] Only published customer-visible inventory is exposed.
 - [ ] Product, family, version, option, and commercial identity survive placement.
-- [ ] Published SVG is the primary 2D symbol.
+- [ ] `DB-SVG-10` Planner reads released SVG identity through a server catalog API.
+- [ ] `DB-SVG-11` Planner imports exact SVG bytes through the committed revision and artifact key.
+- [ ] `DB-SVG-12` SVG responses use the correct type, checksum ETag, and safe caching.
+- [ ] `DB-SVG-13` Placed items pin product and SVG revision identity.
+- [ ] `DB-SVG-15` Database, storage, and stale snapshot state are explicit.
+- [ ] `DB-SVG-16` Disk files never override a database release.
+- [ ] Released database SVG is the primary 2D symbol.
 - [ ] Missing assets use an honest fallback without breaking the layout.
 - [ ] One normalized document drives 2D, 3D, persistence, export, and BOQ.
 - [ ] `UI-STATE-01` one authoritative save state is shown.
