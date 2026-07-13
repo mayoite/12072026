@@ -355,17 +355,19 @@ export function SvgStudioCanvas({
         </button>
       </div>
 
+      {/* ADM-SVG-06: always show all eight status fields (host fills stageMeta). */}
       <div
         className="svg-studio__status"
         aria-label="Canvas status"
         data-testid="admin-stage-status"
+        data-adm-svg-06-fields="identity,footprint,viewbox,zoom,selection,draft,validation,revision"
       >
-        {stageMeta ? (
-          <>
-            <span data-testid="admin-status-identity">{stageMeta.identity}</span>
-            <span data-testid="admin-status-footprint">{stageMeta.footprint}</span>
-          </>
-        ) : null}
+        <span data-testid="admin-status-identity">
+          {stageMeta?.identity ?? "Identity —"}
+        </span>
+        <span data-testid="admin-status-footprint">
+          {stageMeta?.footprint ?? "Footprint —"}
+        </span>
         <span data-testid="admin-status-viewbox">
           View box {document.viewBox.width} × {document.viewBox.height}
         </span>
@@ -375,13 +377,15 @@ export function SvgStudioCanvas({
         <span data-testid="admin-status-selection">
           {selected ? `Selected: ${selected.name}` : "No selection"}
         </span>
-        {stageMeta ? (
-          <>
-            <span data-testid="admin-status-draft">{stageMeta.draft}</span>
-            <span data-testid="admin-status-validation">{stageMeta.validation}</span>
-            <span data-testid="admin-status-revision">{stageMeta.revision}</span>
-          </>
-        ) : null}
+        <span data-testid="admin-status-draft">
+          {stageMeta?.draft ?? "Draft —"}
+        </span>
+        <span data-testid="admin-status-validation">
+          {stageMeta?.validation ?? "Validation —"}
+        </span>
+        <span data-testid="admin-status-revision">
+          {stageMeta?.revision ?? "Revision —"}
+        </span>
         <span data-testid="admin-status-layers">{document.nodes.length} layers</span>
       </div>
 
