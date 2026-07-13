@@ -5,14 +5,14 @@
   "type": "module",
   "scripts": {
     "preinstall": "node ../scripts/guard-workspace-install.mjs",
-    "dev": "node scripts/emit-renderer-data.mjs && vite",
+    "dev": "vite",
     "generate": "node scripts/generate-all.mjs",
     "check": "node scripts/check.mjs",
     "build": "node scripts/generate-all.mjs --stage-only && vite build && node scripts/publish-all.mjs",
     "gate": "node scripts/gate.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/emit-renderer-data.mjs && vitest run",
+    "test": "vitest run",
     "sync-css": "node scripts/sync-css.mjs",
     "test:coverage": "vitest run --coverage",
     "coverage": "vitest run --coverage"

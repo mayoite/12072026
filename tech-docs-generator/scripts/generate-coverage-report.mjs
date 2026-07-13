@@ -4,9 +4,10 @@ import { fileURLToPath } from 'node:url'
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const packageRoot = path.resolve(scriptDir, '..')
+const repoRoot = path.resolve(packageRoot, '..')
 
-export function renderCoverageReport({ root = packageRoot } = {}) {
-  const summaryPath = path.join(root, 'coverage', 'coverage-summary.json')
+export function renderCoverageReport({ root = repoRoot } = {}) {
+  const summaryPath = path.join(root, 'results', 'tooling', 'tech-docs', 'coverage', 'coverage-summary.json')
   const raw = JSON.parse(readFileSync(summaryPath, 'utf8'))
   const total = raw.total
   const date = new Date().toISOString().slice(0, 10)
@@ -23,7 +24,7 @@ export function renderCoverageReport({ root = packageRoot } = {}) {
 
   return `# Tech Stack Coverage Report
 
-Generated from \`tech-docs-generator/coverage/coverage-summary.json\` after \`pnpm run tech-docs:gate\` on ${date}.
+Generated from \`results/tooling/tech-docs/coverage/coverage-summary.json\` after \`pnpm run tech-docs:gate\` on ${date}.
 
 ## Summary
 

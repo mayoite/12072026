@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 
 import { Providers } from "@/features/planner/components/Providers";
 import { ProjectSetupGate } from "@/features/planner/onboarding/ProjectSetupGate";
+import { PlannerCanvasEnhancements } from "@/features/planner/ui/PlannerCanvasEnhancements";
 import { PlannerSkeleton } from "@/features/planner/ui/PlannerSkeleton";
 
 const PlannerHostLazy = dynamic(
@@ -26,6 +27,7 @@ export function PlannerWorkspaceRoute({
     <Providers>
       <ProjectSetupGate guestMode={guestMode} planId={planId}>
         <PlannerHostLazy guestMode={guestMode} planId={planId} />
+        <PlannerCanvasEnhancements guestMode={guestMode} />
       </ProjectSetupGate>
     </Providers>
   );

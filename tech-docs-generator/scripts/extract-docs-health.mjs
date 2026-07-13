@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createNormalizedRecord } from './normalized-record.mjs'
-import { GENERATED_ROOT_DIR, SOURCE_PACKAGE_DIR } from './output-contract.mjs'
+import { SOURCE_PACKAGE_DIR } from './output-contract.mjs'
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const defaultRepoRoot = path.resolve(scriptDir, '..', '..')
@@ -65,27 +65,6 @@ export function extractDocsHealthRecords({ repoRoot = defaultRepoRoot } = {}) {
         sourcePointer: check.needle,
         factClassification: matches.length === check.files.length ? 'code-proven' : 'partial',
         verificationMode: matches.length === check.files.length ? 'source-backed' : 'manual-verification',
-      }),
-    )
-  }
-
-  const manifestPath = `${GENERATED_ROOT_DIR}/docs/_manifest.json`
-  const accuracyPath = `${GENERATED_ROOT_DIR}/data/_accuracy-renderer.json`
-  for (const [relativePath, kind] of [
-    [manifestPath, 'generated-manifest'],
-    [accuracyPath, 'renderer-accuracy-report'],
-  ]) {
-    const exists = existsSync(path.join(repoRoot, relativePath))
-    records.push(
-      createNormalizedRecord({
-        id: `docs-health.generated.${relativePath.replace(/[^a-z0-9]+/gi, '-')}`,
-        category: 'generated-artifact',
-        label: relativePath,
-        value: exists ? 'present' : 'missing — run tech-docs:generate',
-        sourcePath: relativePath,
-        sourceKind: kind,
-        sourcePointer: 'file.exists',
-        factClassification: exists ? 'code-proven' : 'unknown-gap',
       }),
     )
   }

@@ -13,7 +13,8 @@ Treat every item as not done.
 
 ## Phase 1 — public entry and deterministic BOQ
 
-- [ ] Public visitors can find and enter Planner.
+- [x] Public visitors can find and enter Planner.
+- [x] Public Planner entry links and route shell are freshly verified.
 - [x] Guests do not face a false account requirement.
 - [ ] No developer flag or hidden query is required.
 - [x] Member, Admin, and private routes remain protected.

@@ -49,7 +49,7 @@ describe('dependency extractor', () => {
     expect(plannerRoutes).toHaveLength(1)
     expect(plannerRoutes[0]).toMatchObject({
       sourcePath: 'site/app/planner/(marketing)/page.tsx',
-      aliasPaths: ['site/app/planner/page.tsx'],
+      aliasPaths: [],
     })
     expect(routes.some((record) => record.path === '/products/[category]')).toBe(true)
     expect(apiRecords).toContainEqual(

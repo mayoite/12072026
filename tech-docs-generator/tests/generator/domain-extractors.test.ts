@@ -59,6 +59,12 @@ describe('domain extractors (plan 02)', () => {
     expect(records.some((record) => record.sourcePath === 'site/app/css/core/theme.css')).toBe(true)
     expect(records.some((record) => record.sourceKind === 'theme-token-file')).toBe(true)
   })
+
+  it('keeps docs-health deterministic by excluding generated-artifact self-checks', () => {
+    const model = buildGeneratorModel({ repoRoot })
+
+    expect(model.docsHealth.some((record) => record.category === 'generated-artifact')).toBe(false)
+  }, 30_000)
 })
 
 describe('renderer payloads (plan 02)', () => {

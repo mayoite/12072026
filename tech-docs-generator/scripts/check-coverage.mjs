@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const packageRoot = path.resolve(scriptDir, '..')
+const repoRoot = path.resolve(packageRoot, '..')
 
 const THRESHOLDS = {
   minimum: 95,
@@ -41,8 +42,8 @@ export function evaluateCoverage(summary, pageSummaries = []) {
   return { failures, warnings: [], linesPct, branchesPct, statementsPct, functionsPct }
 }
 
-export function loadCoverageSummary({ root = packageRoot } = {}) {
-  const summaryPath = path.join(root, 'coverage', 'coverage-summary.json')
+export function loadCoverageSummary({ root = repoRoot } = {}) {
+  const summaryPath = path.join(root, 'results', 'tooling', 'tech-docs', 'coverage', 'coverage-summary.json')
   const raw = JSON.parse(readFileSync(summaryPath, 'utf8'))
   const total = raw.total
 

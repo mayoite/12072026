@@ -135,10 +135,10 @@ expect(rendererText).toContain("'generated-documents', 'data'")
 - Modify: generator filesystem/generation tests
 - Create: `tech-docs-generator/tests/generator/publication.test.ts`
 
-- [ ] First write failing tests through existing `generateDocs` and `emitRendererData` exports for every output surface: unknown-file refusal, failed-copy rollback, successful swap, and byte-identical preservation of the previous valid tree. Extract the publisher only after these tests fail behaviorally.
-- [ ] Revision-name collision rollback must restore exact bytes for an existing target revision; it must remove a target only when the target did not exist before the failed publish.
+- [x] First write failing tests through existing `generateDocs` and `emitRendererData` exports for every output surface: unknown-file refusal, failed-copy rollback, successful swap, and byte-identical preservation of the previous valid tree. Extract the publisher only after these tests fail behaviorally.
+- [x] Revision-name collision rollback must restore exact bytes for an existing target revision; it must remove a target only when the target did not exist before the failed publish.
 - [ ] Add a failing source-policy test proving neither dotted nor undotted reference roots can become facts, descriptors, watcher events, inventory inputs, or output targets.
-- [ ] Define the contract once:
+- [x] Define the contract once:
 
 ```js
 export const SOURCE_PACKAGE_DIR = 'tech-docs-generator'
@@ -152,15 +152,15 @@ export const EXCLUDED_REPOSITORY_ROOTS = [
 ]
 ```
 
-- [ ] Make all path helpers consume these constants. Normalize absolute event paths relative to canonical `repoRoot`; reject paths outside it before checking the first segment.
-- [ ] Remove `loadClaimInventory`, archive-backed coverage thresholds, archive inventory writes, and tests asserting archived plan facts. Derive policy only from live configs or emit an explicit unsupported gap.
-- [ ] Make `generate-all.mjs` build the model once, stage docs/data, validate parity and manifests, then publish both as one transaction unless `--stage-only` is supplied.
-- [ ] Stage `data/`, `docs/`, and `site/` under `.tmp/generated-documents/`. Validate marker, manifest, hashes, declared removals, and unknown files before publication.
-- [ ] Make `publish-all.mjs` accept an explicit surface list, rename each selected canonical surface to backup, move staging to canonical, then remove backups. On any error, roll every selected surface back. `generate` selects docs/data; `build` selects docs/data/site.
-- [ ] Preserve separate generated-root markers and manifests for `data/`, `docs/`, and `site/`.
-- [ ] Change Vite to build into `../.tmp/generated-documents/site`, use `emptyOutDir: true` only for staging, and set `base: './'`. A build publishes all three staged surfaces only after Vite and every manifest validation succeed.
-- [ ] Add tests for unknown files inside `data/`, `docs/`, and `site/`, plus an unknown sibling under `generated-documents/`.
-- [ ] Run `pnpm --filter oando-tech-docs exec vitest run tests/generator/filesystem.test.ts tests/generator/generation.test.ts tests/generator/publication.test.ts tests/generator/output-contract.test.ts tests/generator/source-policy.test.ts` and verify GREEN.
+- [x] Make all path helpers consume these constants. Normalize absolute event paths relative to canonical `repoRoot`; reject paths outside it before checking the first segment.
+- [x] Remove `loadClaimInventory`, archive-backed coverage thresholds, archive inventory writes, and tests asserting archived plan facts. Derive policy only from live configs or emit an explicit unsupported gap.
+- [x] Make `generate-all.mjs` build the model once, stage docs/data, validate parity and manifests, then publish both as one transaction unless `--stage-only` is supplied.
+- [x] Stage `data/`, `docs/`, and `site/` under `.tmp/generated-documents/`. Validate marker, manifest, hashes, declared removals, and unknown files before publication.
+- [x] Make `publish-all.mjs` accept an explicit surface list, rename each selected canonical surface to backup, move staging to canonical, then remove backups. On any error, roll every selected surface back. `generate` selects docs/data; `build` selects docs/data/site.
+- [x] Preserve separate generated-root markers and manifests for `data/`, `docs/`, and `site/`.
+- [x] Change Vite to build into `../.tmp/generated-documents/site`, use `emptyOutDir: true` only for staging, and set `base: './'`. A build publishes all three staged surfaces only after Vite and every manifest validation succeed.
+- [x] Add tests for unknown files inside `data/`, `docs/`, and `site/`, plus an unknown sibling under `generated-documents/`.
+- [x] Run `pnpm --filter oando-tech-docs exec vitest run tests/generator/filesystem.test.ts tests/generator/generation.test.ts tests/generator/publication.test.ts tests/generator/output-contract.test.ts tests/generator/source-policy.test.ts` and verify GREEN.
 
 ## Task 4: Make generation and build one reproducible command
 
@@ -174,7 +174,7 @@ export const EXCLUDED_REPOSITORY_ROOTS = [
 - Modify: `.github/workflows/tech-stack-docs.yml`
 - Modify: relevant package and generation tests
 
-- [ ] Add a failing package test requiring these package scripts:
+- [x] Add a failing package test requiring these package scripts:
 
 ```json
 {
@@ -188,12 +188,12 @@ export const EXCLUDED_REPOSITORY_ROOTS = [
 }
 ```
 
-- [ ] Configure Vitest coverage output at root `results/tooling/tech-docs/coverage/`; preserve the existing hardcoding, fake-test, theme-alignment, and 95% coverage checks.
+- [x] Configure Vitest coverage output at root `results/tooling/tech-docs/coverage/`; preserve the existing hardcoding, fake-test, theme-alignment, and 95% coverage checks.
 - [ ] Keep `dev` regeneration inside the Vite plugin from Task 5; do not introduce a second watcher process.
 - [ ] Make `check` generate all surfaces into a fresh temporary root, validate them, compare hashes/parity with canonical output, and never write canonical output.
-- [ ] Make `gate.mjs` run in this order: generate; read-only check; hardcoding audit; fake-test audit; theme alignment; coverage plus `check-coverage.mjs`; typecheck; plain Vitest; build.
-- [ ] Remove CI `paths` filters so changes to any allowed extractor input cannot leave deployed intelligence stale.
-- [ ] Make CI run `pnpm run tech-docs:gate` and upload `generated-documents/site/` only after the gate passes.
+- [x] Make `gate.mjs` run in this order: generate; read-only check; hardcoding audit; fake-test audit; theme alignment; coverage plus `check-coverage.mjs`; typecheck; plain Vitest; build.
+- [x] Remove CI `paths` filters so changes to any allowed extractor input cannot leave deployed intelligence stale.
+- [x] Make CI run `pnpm run tech-docs:gate` and upload `generated-documents/site/` only after the gate passes.
 - [ ] Run `pnpm run tech-docs:generate` twice and compare manifest hashes. They must remain identical when source is unchanged.
 
 ## Task 5: Add live Vite regeneration without races

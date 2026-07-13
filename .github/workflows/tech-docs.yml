@@ -3,21 +3,7 @@ name: Tech docs
 on:
   push:
     branches: [main, master]
-    paths:
-      - '.github/workflows/tech-docs.yml'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - 'site/**'
-      - 'tech-docs-generator/**'
   pull_request:
-    paths:
-      - '.github/workflows/tech-docs.yml'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - 'site/**'
-      - 'tech-docs-generator/**'
   workflow_dispatch:
 
 concurrency:

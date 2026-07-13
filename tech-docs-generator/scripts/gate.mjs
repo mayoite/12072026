@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { generateAll } from './generate-all.mjs'
 import { checkDocs } from './check.mjs'
 import { checkHardcoding } from './hardcoding-guard.mjs'
 import { auditTests } from './fake-test-audit.mjs'
@@ -19,10 +20,13 @@ function run(command, args, cwd) {
 }
 
 export async function runDocsGate({ root = repoRoot } = {}) {
-  console.log('docs:gate — sync/check')
+  console.log('docs:gate - generate')
+  await generateAll({ repoRoot: root })
+
+  console.log('docs:gate - check')
   await checkDocs({ repoRoot: root })
 
-  console.log('docs:gate — hardcoding guard')
+  console.log('docs:gate - hardcoding guard')
   const hardcoding = checkHardcoding({ root: packageRoot })
   if (hardcoding.length > 0) {
     throw new Error(
@@ -32,13 +36,13 @@ export async function runDocsGate({ root = repoRoot } = {}) {
     )
   }
 
-  console.log('docs:gate — fake-test audit')
+  console.log('docs:gate - fake-test audit')
   const fakeTests = auditTests({ root: packageRoot })
   if (fakeTests.length > 0) {
     throw new Error(`Fake-test audit failed (${fakeTests.length})`)
   }
 
-  console.log('docs:gate — theme alignment')
+  console.log('docs:gate - theme alignment')
   const themeViolations = checkThemeAlignment({ root: packageRoot })
   if (themeViolations.length > 0) {
     throw new Error(
@@ -48,9 +52,9 @@ export async function runDocsGate({ root = repoRoot } = {}) {
     )
   }
 
-  console.log('docs:gate — coverage')
+  console.log('docs:gate - coverage')
   run('pnpm', ['--filter', 'oando-tech-docs', 'run', 'test:coverage'], root)
-  const { summary, pageSummaries } = loadCoverageSummary({ root: packageRoot })
+  const { summary, pageSummaries } = loadCoverageSummary({ root })
   const coverage = evaluateCoverage(summary, pageSummaries)
   for (const warning of coverage.warnings) {
     console.warn(`COVERAGE WARN: ${warning}`)
@@ -59,16 +63,16 @@ export async function runDocsGate({ root = repoRoot } = {}) {
     throw new Error(`Coverage failed: ${coverage.failures.join('; ')}`)
   }
 
-  console.log('docs:gate — typecheck')
+  console.log('docs:gate - typecheck')
   run('pnpm', ['--filter', 'oando-tech-docs', 'run', 'typecheck'], root)
 
-  console.log('docs:gate — test')
+  console.log('docs:gate - test')
   run('pnpm', ['--filter', 'oando-tech-docs', 'run', 'test'], root)
 
-  console.log('docs:gate — build')
+  console.log('docs:gate - build')
   run('pnpm', ['--filter', 'oando-tech-docs', 'run', 'build'], root)
 
-  console.log('docs:gate — passed')
+  console.log('docs:gate - passed')
   return true
 }
 

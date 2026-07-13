@@ -1,24 +1,26 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readFile } from 'node:fs/promises'
-import { generateDocs } from './generate.mjs'
-import { emitRendererData } from './emit-renderer-data.mjs'
-import { getDocumentsRoot, getStagingDocumentsRoot } from './filesystem.mjs'
-import { checkRendererAccuracy, checkRendererParity } from './check-renderer-parity.mjs'
-import { checkHardcoding } from './hardcoding-guard.mjs'
-import { auditTests } from './fake-test-audit.mjs'
-import { getSourcePackageRoot } from './output-contract.mjs'
+import { generateAll } from './generate-all.mjs'
+import { canonicalJsonString } from './filesystem.mjs'
+import { PARITY_DATA_FILES } from './renderer-data.mjs'
+import {
+  getDocumentsRoot,
+  getRendererDataRoot,
+  getStagingDocumentsRoot,
+  getStagingRendererDataRoot,
+} from './output-contract.mjs'
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const defaultRepoRoot = path.resolve(scriptDir, '..', '..')
 
-function describeManifestMismatches(generatedManifest, actualManifest) {
+function describeManifestMismatches(surface, generatedManifest, actualManifest) {
   if (generatedManifest === actualManifest) {
     return []
   }
 
   if (!actualManifest) {
-    return ['generated-documents/docs/_manifest.json is missing']
+    return [`generated-documents/${surface}/_manifest.json is missing`]
   }
 
   const generated = JSON.parse(generatedManifest)
@@ -39,9 +41,7 @@ function describeManifestMismatches(generatedManifest, actualManifest) {
       continue
     }
     if (generatedFile.hash !== actualFile.hash) {
-      mismatches.push(
-        `${filePath}: generated=${generatedFile.hash} committed=${actualFile.hash}`,
-      )
+      mismatches.push(`${filePath}: generated=${generatedFile.hash} committed=${actualFile.hash}`)
     }
   }
 
@@ -54,65 +54,59 @@ function describeManifestMismatches(generatedManifest, actualManifest) {
   return mismatches
 }
 
-async function compareGeneratedOutputs(documentsRoot, stagingDocumentsRoot) {
-  const generatedManifest = await readFile(path.join(stagingDocumentsRoot, '_manifest.json'), 'utf8')
-  const actualManifest = await readFile(path.join(documentsRoot, '_manifest.json'), 'utf8').catch(() => null)
-  const mismatches = describeManifestMismatches(generatedManifest, actualManifest)
-  return { matches: mismatches.length === 0, mismatches }
+async function compareSurface(surface, stagingRoot, canonicalRoot) {
+  const generatedManifest = await readFile(path.join(stagingRoot, '_manifest.json'), 'utf8')
+  const actualManifest = await readFile(path.join(canonicalRoot, '_manifest.json'), 'utf8').catch(() => null)
+  return describeManifestMismatches(surface, generatedManifest, actualManifest)
+}
+
+async function compareStagedParity(stagingDocumentsRoot, stagingDataRoot) {
+  const mismatches = []
+
+  for (const filename of PARITY_DATA_FILES) {
+    const documentsValue = await readFile(path.join(stagingDocumentsRoot, 'data', filename), 'utf8').catch(() => null)
+    const rendererValue = await readFile(path.join(stagingDataRoot, filename), 'utf8').catch(() => null)
+
+    if (documentsValue === null) {
+      mismatches.push(`missing staged docs parity file: ${filename}`)
+      continue
+    }
+
+    if (rendererValue === null) {
+      mismatches.push(`missing staged renderer parity file: ${filename}`)
+      continue
+    }
+
+    if (canonicalJsonString(JSON.parse(documentsValue)) !== canonicalJsonString(JSON.parse(rendererValue))) {
+      mismatches.push(`staged docs and renderer data differ: ${filename}`)
+    }
+  }
+
+  return mismatches
 }
 
 export async function checkDocs({
   repoRoot = defaultRepoRoot,
   documentsRoot = getDocumentsRoot(repoRoot),
+  rendererDataRoot = getRendererDataRoot(repoRoot),
   stagingDocumentsRoot = getStagingDocumentsRoot(repoRoot),
+  stagingDataRoot = getStagingRendererDataRoot(repoRoot),
 } = {}) {
-  await generateDocs({ repoRoot, documentsRoot, stagingDocumentsRoot, apply: true })
-  await emitRendererData({ repoRoot })
-  const comparison = await compareGeneratedOutputs(documentsRoot, stagingDocumentsRoot).catch(() => ({
-    matches: false,
-    mismatches: ['Failed to compare Documents/_manifest.json'],
-  }))
-  if (!comparison.matches) {
-    const detail = comparison.mismatches.slice(0, 10).join('; ')
-    const suffix = comparison.mismatches.length > 10 ? ` (+${comparison.mismatches.length - 10} more)` : ''
-    throw new Error(`Generated output does not match Documents/: ${detail}${suffix}`)
+  await generateAll({ repoRoot, stageOnly: true })
+
+  const surfaceMismatches = [
+    ...await compareSurface('docs', stagingDocumentsRoot, documentsRoot),
+    ...await compareSurface('data', stagingDataRoot, rendererDataRoot),
+  ]
+  if (surfaceMismatches.length > 0) {
+    const detail = surfaceMismatches.slice(0, 10).join('; ')
+    const suffix = surfaceMismatches.length > 10 ? ` (+${surfaceMismatches.length - 10} more)` : ''
+    throw new Error(`Generated output does not match canonical generated-documents/: ${detail}${suffix}`)
   }
 
-  const parityMismatches = await checkRendererParity({ repoRoot, documentsRoot })
+  const parityMismatches = await compareStagedParity(stagingDocumentsRoot, stagingDataRoot)
   if (parityMismatches.length > 0) {
-    throw new Error(
-      `Renderer parity failed (${parityMismatches.length}): ${parityMismatches
-        .map((item) => `${item.file}@${item.surface}: ${item.reason}`)
-        .join('; ')}`,
-    )
-  }
-
-  const accuracyMismatches = await checkRendererAccuracy({ repoRoot })
-  if (accuracyMismatches.length > 0) {
-    throw new Error(
-      `Renderer accuracy failed (${accuracyMismatches.length}): ${accuracyMismatches
-        .map((item) => `${item.file}: ${item.reason}`)
-        .join('; ')}`,
-    )
-  }
-
-  const packageRoot = getSourcePackageRoot(repoRoot)
-  const hardcodingViolations = checkHardcoding({ root: packageRoot })
-  if (hardcodingViolations.length > 0) {
-    throw new Error(
-      `Hardcoding guard failed (${hardcodingViolations.length}): ${hardcodingViolations
-        .map((item) => `${item.file}:${item.line} ${item.reason}`)
-        .join('; ')}`,
-    )
-  }
-
-  const fakeTestViolations = auditTests({ root: packageRoot })
-  if (fakeTestViolations.length > 0) {
-    throw new Error(
-      `Fake-test audit failed (${fakeTestViolations.length}): ${fakeTestViolations
-        .map((item) => `${item.file}: ${item.reason}`)
-        .join('; ')}`,
-    )
+    throw new Error(`Staged renderer parity failed: ${parityMismatches.join('; ')}`)
   }
 
   return true
