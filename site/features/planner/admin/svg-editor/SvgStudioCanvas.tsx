@@ -422,7 +422,7 @@ export function SvgStudioCanvas({
           <div
             className="svg-studio__inspector"
             aria-label="Node inspector"
-            data-testid="svg-studio-inspector"
+            data-testid="admin-studio-region-properties"
             data-region="properties"
             data-studio-region="properties"
           >

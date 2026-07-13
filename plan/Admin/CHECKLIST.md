@@ -33,6 +33,7 @@ Implementation is in progress.
 - Validation has a linked summary and field-level messages.
 - Fresh verification 2026-07-13: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/AdminSvgEditorEditView.test.tsx tests/unit/admin/svg-editor/svgEditorDraftState.test.ts tests/unit/admin/svg-editor/authoringLifecycle.test.ts` exited 0 with 14 tests passing.
 - Live code: `authoringLifecycle.ts` + `AdminSvgEditorEditView.tsx` (commits `36ff03d6`, `970a927d`) + stage status strip (`ADM-SVG-06`).
+- ADM-SVG-04/05: existing `admin-svg-engine.css` shell grid (`1fr` + `22rem` rail) + always-mounted studio regions; unit proof in `stageLayoutContract` / `phase1AcceptanceContracts` / EditView shell data attrs. Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/phase1AcceptanceContracts.test.ts tests/unit/admin/svg-editor/AdminSvgEditorEditView.test.tsx` 19 pass.
 - Browser journey for authoring UI not re-run this session.
 
 - [ ] Core product fields are clear and validated.
@@ -56,8 +57,8 @@ Implementation is in progress.
 - [ ] `ADM-SVG-01` No-code SVG authoring is the primary Admin journey.
 - [ ] `ADM-SVG-02` SVG inventory exposes finding, identity, preview, state, validation, and last change.
 - [ ] `ADM-SVG-03` Bulk JSON is an advanced path.
-- [ ] `ADM-SVG-04` The stage receives at least 55 percent of the 1280-pixel content area.
-- [ ] `ADM-SVG-05` Command, stage, layer, and property regions remain stable.
+- [x] `ADM-SVG-04` The stage receives at least 55 percent of the 1280-pixel content area.
+- [x] `ADM-SVG-05` Command, stage, layer, and property regions remain stable.
 - [x] `ADM-SVG-06` Identity, footprint, view box, zoom, selection, draft, validation, and revision are visible.
 - [ ] `ADM-SVG-07` Direct manipulation and numeric geometry remain synchronized.
 - [ ] `ADM-SVG-08` The supported SVG feature subset is documented and enforced.

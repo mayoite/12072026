@@ -61,6 +61,12 @@ import {
   describeChangedFields,
 } from "./authoringLifecycle";
 import { validateCoreProductFields } from "./validateCoreProductFields";
+import {
+  AUTHORING_WIDTH_PX,
+  STAGE_GRID_COLUMNS,
+  STAGE_MIN_FRACTION,
+  stageMeetsMinimumAt1280,
+} from "./stageLayoutContract";
 
 /** Browser-only 3D islands — static import of model-viewer/three breaks RSC SSR. */
 const GlbExtruderPreview = dynamic(
@@ -796,11 +802,18 @@ export function AdminSvgEditorEditView({
         data-testid="admin-svg-engine-shell"
         data-studio-node-count={form.sceneParts?.length ?? 0}
         data-stage-layout="1fr-rail"
+        data-stage-grid-columns={STAGE_GRID_COLUMNS}
+        data-authoring-width-px={AUTHORING_WIDTH_PX}
+        data-stage-min-fraction={STAGE_MIN_FRACTION}
+        data-stage-meets-min-at-1280={
+          stageMeetsMinimumAt1280() ? "true" : "false"
+        }
       >
         <section
           aria-label="Visual authoring studio"
           className="admin-svg-engine-shell__stage"
           data-testid="admin-svg-engine-stage"
+          data-region="stage-column"
         >
           <SvgStudioCanvas
             key={studioResetKey}

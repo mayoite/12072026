@@ -306,6 +306,27 @@ describe("AdminSvgEditorEditView draft recovery", () => {
     expect(screen.getByRole("button", { name: "Publish" })).toBeDisabled();
   });
 
+  it("exposes shell layout contract for ADM-SVG-04 at 1280px", () => {
+    render(
+      <AdminSvgEditorEditView
+        slug={descriptor.slug}
+        descriptor={descriptor}
+        updatedAtLabel="today"
+        artifactStatus={artifactStatus}
+        catalogLifecycle="draft"
+      />,
+    );
+    const shell = screen.getByTestId("admin-svg-engine-shell");
+    expect(shell).toHaveAttribute(
+      "data-stage-grid-columns",
+      "minmax(0, 1fr) minmax(280px, 22rem)",
+    );
+    expect(shell).toHaveAttribute("data-authoring-width-px", "1280");
+    expect(shell).toHaveAttribute("data-stage-min-fraction", "0.55");
+    expect(shell).toHaveAttribute("data-stage-meets-min-at-1280", "true");
+    expect(screen.getByTestId("admin-svg-engine-stage")).toBeInTheDocument();
+  });
+
   it("exposes identity, footprint, view box, zoom, selection, draft, validation, and revision on the stage (ADM-SVG-06)", () => {
     render(
       <AdminSvgEditorEditView

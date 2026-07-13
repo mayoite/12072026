@@ -3,8 +3,11 @@ import { describe, expect, it } from "vitest";
 import {
   stageMeetsMinimumAt1280,
   stageWidthFractionAt,
+  STAGE_GRID_COLUMNS,
   STAGE_MIN_FRACTION,
+  AUTHORING_WIDTH_PX,
   STUDIO_REGION_IDS,
+  STUDIO_REGION_TEST_IDS,
 } from "@/features/planner/admin/svg-editor/stageLayoutContract";
 import {
   assertSupportedStudioKinds,
@@ -83,20 +86,33 @@ describe("ADM-SVG-02 inventory finding", () => {
 });
 
 describe("ADM-SVG-04 stage fraction at 1280", () => {
-  it("gives the stage at least 55 percent of the content width", () => {
-    expect(stageWidthFractionAt(1280)).toBeGreaterThanOrEqual(STAGE_MIN_FRACTION);
+  it("gives the shell stage column at least 55 percent at 1280px (existing CSS grid)", () => {
+    // admin-svg-engine.css: minmax(0,1fr) minmax(280px, 22rem), gap 0.75rem
+    expect(STAGE_GRID_COLUMNS).toBe("minmax(0, 1fr) minmax(280px, 22rem)");
+    expect(AUTHORING_WIDTH_PX).toBe(1280);
+    expect(STAGE_MIN_FRACTION).toBe(0.55);
+    const fraction = stageWidthFractionAt(1280);
+    // 1280 − 12 gap − 352 rail = 916 → 0.716
+    expect(fraction).toBeGreaterThanOrEqual(0.55);
+    expect(fraction).toBeCloseTo(916 / 1280, 5);
     expect(stageMeetsMinimumAt1280()).toBe(true);
   });
 });
 
 describe("ADM-SVG-05 / ADM-SVG-08 regions and subset", () => {
-  it("names the four stable studio regions", () => {
+  it("names the four stable studio regions and their data-testids", () => {
     expect([...STUDIO_REGION_IDS]).toEqual([
       "command",
       "stage",
       "layers",
       "properties",
     ]);
+    expect(STUDIO_REGION_TEST_IDS).toEqual({
+      command: "admin-studio-region-command",
+      stage: "admin-studio-region-stage",
+      layers: "admin-studio-region-layers",
+      properties: "admin-studio-region-properties",
+    });
   });
 
   it("documents and enforces the supported authoring subset", () => {
