@@ -49,7 +49,7 @@ None are accepted without fresh verification.
 
 ### SVG studio
 
-- Support create, select, move, resize, edit, and delete.
+- Support create (rect, circle, line, text), select, move, resize, edit, and delete.
 - Support layers and object properties.
 - Support named undo and redo.
 - Show unsaved changes.
@@ -62,7 +62,7 @@ None are accepted without fresh verification.
 - Keep command, stage, layers, and contextual properties as stable regions.
 - Show identity, millimetre footprint, view box, zoom, selection, validation, and revision.
 - Synchronize direct manipulation and exact numeric geometry.
-- Document and enforce the supported SVG feature subset.
+- Document and enforce the supported SVG feature subset (rect, circle, line, text; freehand paths excluded).
 - Support layer naming, ordering, locking, visibility, and selection.
 - Keep selection and zoom stable when panels change.
 - Separate rare and destructive actions from frequent actions.

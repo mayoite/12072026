@@ -202,3 +202,4 @@ Unit gate: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor
 - Evidence: `results/admin/2026-07-13T-admin-phases-final/` (screenshots, axe reports, logs).
 - Fixed client bundle break: `priceBookGovernance` pure helpers vs `priceBookGovernance.server` audit I/O (`node:fs` no longer in client).
 - Fixed `.admin-badge--warn` contrast for WCAG AA (was 4.29, target ≥4.5).
+- Wired the missing Line and Text shape authoring tools in the SVG Studio, opened the authoring subset gate to allow them, and verified with all unit tests passing.

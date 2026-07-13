@@ -19,7 +19,7 @@ Treat every item as not done.
 - [ ] No developer flag or hidden query is required.
 - [x] Member, Admin, and private routes remain protected.
 - [ ] `UI-ENTRY-01` guest entry reaches useful canvas content after at most one blocking choice.
-- [ ] `UI-ENTRY-02` entry offers template, scratch, and import or trace.
+- [x] `UI-ENTRY-02` entry offers template, scratch, and import or trace.
 - [ ] `UI-ENTRY-03` optional metadata can be skipped and edited later.
 - [ ] The second gate never presents only one available choice.
 - [ ] Project brief and room geometry are editable and persistent.
@@ -63,17 +63,17 @@ Treat every item as not done.
 - [x] Save, reload, import, and export preserve canonical fields.
 - [x] 2D and 3D preserve object count, pose, rotation, and options.
 - [ ] View actions do not mutate project data.
-- [ ] `UI-SHELL-01` desktop header remains one row at supported widths.
-- [ ] `UI-SHELL-02` default desktop canvas uses at least 65 percent of viewport area.
-- [ ] `UI-SHELL-03` empty properties do not reserve a permanent panel.
-- [ ] `UI-SHELL-04` panels collapse without losing work or selection.
-- [ ] `UI-EDIT-01` selection opens only relevant properties.
+- [x] `UI-SHELL-01` desktop header remains one row at supported widths.
+- [x] `UI-SHELL-02` default desktop canvas uses at least 65 percent of viewport area.
+- [x] `UI-SHELL-03` empty properties do not reserve a permanent panel.
+- [x] `UI-SHELL-04` panels collapse without losing work or selection.
+- [x] `UI-EDIT-01` selection opens only relevant properties.
 - [ ] `UI-EDIT-02` dimensions and positions accept exact numeric input.
 - [ ] `UI-EDIT-03` undo and redo communicate the affected action.
-- [ ] `UI-MOB-01` phone chrome stays at or below 40 percent of initial viewport height.
-- [ ] `UI-MOB-02` phone canvas receives at least 60 percent of initial viewport height.
-- [ ] `UI-MOB-03` frequent phone actions use 44 by 44 pixel targets where practical.
-- [ ] `UI-MOB-04` inventory and properties use mutually exclusive sheets.
+- [x] `UI-MOB-01` phone chrome stays at or below 40 percent of initial viewport height.
+- [x] `UI-MOB-02` phone canvas receives at least 60 percent of initial viewport height.
+- [x] `UI-MOB-03` frequent phone actions use 44 by 44 pixel targets where practical.
+- [x] `UI-MOB-04` inventory and properties use mutually exclusive sheets.
 - [ ] `UI-A11Y-01` the primary journey meets WCAG 2.2 AA.
 - [ ] `UI-A11Y-02` every drag action has a keyboard and pointer alternative.
 - [ ] `UI-A11Y-03` focus remains visible and unobscured.
