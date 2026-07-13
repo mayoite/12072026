@@ -42,6 +42,7 @@ import {
   type SvgSceneDocument,
   type SvgSceneNode,
 } from "./scene/svgSceneDocument";
+import { confirmDeleteLayer } from "./destructiveConfirmMessages";
 import {
   canRedo,
   canUndo,
@@ -236,10 +237,8 @@ export function SvgStudioCanvas({
 
   const deleteSelected = useCallback(() => {
     if (!selected) return;
-    const confirmed = window.confirm(
-      `Delete “${selected.name}” from this draft? You can undo this action until the editor is closed.`,
-    );
-    if (!confirmed) return;
+    // ADM-SVG-11: name draft-only impact before delete.
+    if (!window.confirm(confirmDeleteLayer(selected.name))) return;
     apply(`Delete ${selected.name}`, removeNode(document, selected.id));
     setSelectedId(null);
   }, [document, apply, selected]);

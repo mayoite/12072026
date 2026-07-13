@@ -67,6 +67,10 @@ import {
   STAGE_MIN_FRACTION,
   stageMeetsMinimumAt1280,
 } from "./stageLayoutContract";
+import {
+  confirmDiscardUnsavedNavigation,
+  confirmResetToPublished,
+} from "./destructiveConfirmMessages";
 
 /** Browser-only 3D islands — static import of model-viewer/three breaks RSC SSR. */
 const GlbExtruderPreview = dynamic(
@@ -305,9 +309,7 @@ export function AdminSvgEditorEditView({
         destination.search === current.search;
       if (staysOnDocument) return;
 
-      const leave = window.confirm(
-        "Leave this editor and discard all unpublished field and studio changes?",
-      );
+      const leave = window.confirm(confirmDiscardUnsavedNavigation(slug));
       if (leave) return;
 
       event.preventDefault();
@@ -339,14 +341,15 @@ export function AdminSvgEditorEditView({
   }, [artifactStatus.state, router, slug]);
 
   const handleResetToPublished = useCallback(() => {
-    if (formDirty && !window.confirm("Discard every unpublished field and studio edit, then restore the last published revision?")) {
+    // ADM-SVG-11: always require deliberate confirmation when the draft differs.
+    if (formDirty && !window.confirm(confirmResetToPublished(slug))) {
       return;
     }
     const reset = resetEditorDraft({ baseline: publishedForm, draft: form });
     updateDraftForm(reset.draft);
     studioDocumentRef.current = publishedStudioScene;
     setStudioResetKey((key) => key + 1);
-  }, [form, formDirty, publishedForm, publishedStudioScene, updateDraftForm]);
+  }, [form, formDirty, publishedForm, publishedStudioScene, slug, updateDraftForm]);
 
   const publishPayloadFromStudio = useCallback((): SvgEditorFormState => {
     const liveDocument =

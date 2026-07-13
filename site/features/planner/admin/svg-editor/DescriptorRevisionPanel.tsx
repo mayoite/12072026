@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { ArrowCounterClockwise, CircleNotch as Loader2 } from "@phosphor-icons/react";
 import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
+import { confirmRollbackRevision } from "./destructiveConfirmMessages";
 
 type RevisionEntry = {
   version: number;
@@ -48,7 +49,8 @@ export function DescriptorRevisionPanel({ slug }: Props) {
 
   const rollback = useCallback(
     async (version: number) => {
-      if (!window.confirm(`Roll back "${slug}" to revision v${version}?`)) return;
+      // ADM-SVG-11: name republish impact before rollback.
+      if (!window.confirm(confirmRollbackRevision(slug, version))) return;
       setBusyVersion(version);
       setFeedback(null);
       try {
