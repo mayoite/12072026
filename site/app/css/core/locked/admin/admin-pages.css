@@ -735,6 +735,22 @@
   color: var(--text-heading);
 }
 
+/* ADM-SVG-01/03 — advanced bulk tools stay visually secondary to inventory */
+[data-admin-layout] .admin-svg-advanced-import {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--border-soft) 85%, transparent);
+  background: var(--surface-soft);
+}
+
+[data-admin-layout] .admin-svg-advanced-import > summary {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+[data-admin-layout] .admin-svg-inventory-table-wrap {
+  margin-top: 0.25rem;
+}
+
 @media (width < 48rem) {
   [data-admin-layout] .admin-page {
     max-width: 100%;

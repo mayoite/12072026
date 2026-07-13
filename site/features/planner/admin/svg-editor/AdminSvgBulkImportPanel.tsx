@@ -137,19 +137,20 @@ export function AdminSvgBulkImportPanel() {
     <section aria-label="Bulk CSV import" data-testid="admin-svg-bulk-import">
       <div className="flex flex-col gap-3">
         <p className="admin-table__secondary">
-          CSV columns: slug, sku, variant, width_mm, depth_mm, height_mm,
-          lifecycle (optional). Preview all changes first. One bad row blocks
-          the full batch; apply is atomic.
+          Paste a spreadsheet export (columns: product id, SKU, family, width,
+          depth, height, lifecycle). Preview first. One invalid row blocks the
+          whole batch so inventory stays consistent.
         </p>
         <textarea
-          className="admin-input font-mono text-sm min-h-[120px]"
+          className="admin-field__control font-mono text-sm min-h-[5.5rem] max-h-[12rem]"
           value={csv}
           onChange={(event) => {
             setCsv(event.target.value);
             setCanApply(false);
             setPreviewText(null);
           }}
-          aria-label="Bulk import CSV"
+          aria-label="Bulk import spreadsheet text"
+          rows={5}
         />
         <div className="flex flex-wrap gap-2 items-center">
           <button

@@ -73,11 +73,21 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
     const advanced = screen.getByTestId("admin-svg-advanced-import");
     expect(advanced.tagName.toLowerCase()).toBe("details");
     expect(advanced).not.toHaveAttribute("open");
+    expect(screen.getByTestId("admin-svg-advanced-section")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-svg-inventory")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-svg-inventory-search")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-svg-filter-lifecycle")).toBeInTheDocument();
+    // Advanced bulk tools stay demoted (outline only; details closed)
     expect(screen.getByTestId("admin-svg-bulk-import-submit")).toHaveClass(
       "admin-btn--outline",
     );
     expect(screen.getByTestId("admin-svg-bulk-import-submit")).not.toHaveClass(
       "admin-btn--primary",
+    );
+    const source = screen.getByTestId("admin-shell-source");
+    expect(source).toHaveTextContent(/catalog inventory/i);
+    expect(source.textContent ?? "").not.toMatch(
+      /block-descriptor|Zod|pipeline|atomic-rename/i,
     );
 
     expect(screen.getByTestId("admin-svg-edit-side-table-001")).toHaveAttribute(

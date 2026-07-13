@@ -137,7 +137,7 @@ describe("ADM-SHELL-01 list page landmarks", () => {
     expect(screen.getByTestId("admin-shell-title")).toHaveTextContent(/SVG symbols/i);
     expect(screen.getByTestId("admin-shell-scope")).toHaveTextContent(/SVG authoring/i);
     expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /block-descriptors/i,
+      /catalog inventory/i,
     );
     expect(screen.getByTestId("admin-shell-state")).toHaveTextContent(/published/i);
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(

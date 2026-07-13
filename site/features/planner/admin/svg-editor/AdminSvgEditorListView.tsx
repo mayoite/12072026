@@ -59,11 +59,11 @@ const VARIANT_ORDER: ReadonlyArray<BlockDescriptor["variant"]> = [
 function describeVariant(variant: BlockDescriptor["variant"]): string {
   switch (variant) {
     case "fixed":
-      return "Locked dimensions, no parametric controls.";
+      return "Fixed size — edit the symbol, not the dimensions.";
     case "configurable":
-      return "Discrete option set or bounded parametric adjustment.";
+      return "Options or bounded size choices for the same product family.";
     case "parametric":
-      return "Full parametric schema with explicit mounting points.";
+      return "Sized in the studio with clear footprint for Planner.";
   }
 }
 
@@ -339,13 +339,13 @@ export function AdminSvgEditorListView({
             SVG symbols
           </h1>
           <p className="admin-page__copy" data-testid="admin-svg-journey-copy">
-            Draw and edit product symbols in the visual studio. Set identity and
-            millimetre footprint, preview the Planner symbol, then publish. You
-            do not need to edit JSON or source code.
+            Find a product, open the visual studio, set identity and footprint,
+            preview the Planner symbol, then publish. You do not need to edit
+            JSON or source code.
           </p>
           <p className="admin-page__meta" data-testid="admin-shell-source">
-            Source: disk block-descriptors (buyer-visible inventory) · refreshed{" "}
-            <code>{refreshedAtLabel}</code>
+            Source: catalog inventory · refreshed{" "}
+            <time dateTime={refreshedAtLabel}>{refreshedAtLabel}</time>
           </p>
           <p
             className="admin-page__meta"
@@ -355,9 +355,9 @@ export function AdminSvgEditorListView({
             State:{" "}
             <span data-testid="artifact-health">
               <strong>{publishedCount}</strong> published ·{" "}
-              <strong>{missingCount}</strong> missing ·{" "}
-              <strong>{invalidCount}</strong> invalid · of{" "}
-              <strong>{descriptors.length}</strong> symbols
+              <strong>{missingCount}</strong> missing symbol ·{" "}
+              <strong>{invalidCount}</strong> need attention · of{" "}
+              <strong>{descriptors.length}</strong> products
             </span>
           </p>
         </div>
@@ -374,11 +374,16 @@ export function AdminSvgEditorListView({
         </div>
       </header>
 
-      <section aria-label="Variant balances" className="admin-grid-cards mb-6">
+      {/* Secondary balance strip — not the primary task chrome */}
+      <section
+        aria-label="Family mix"
+        className="admin-grid-cards mb-6"
+        data-testid="admin-svg-family-mix"
+      >
         {VARIANT_ORDER.map((variant) => (
           <article key={variant} className="admin-panel" data-variant={variant}>
             <div className="admin-panel__header">{VARIANT_LABEL[variant]}</div>
-            <div className="px-4 py-3">
+            <div className="admin-panel__body">
               <p className="admin-table__primary">{counts[variant]}</p>
               <p className="admin-table__secondary">
                 {describeVariant(variant)}
@@ -392,7 +397,7 @@ export function AdminSvgEditorListView({
         <div className="admin-empty" role="status">
           <p className="admin-table__primary">No SVG symbols yet</p>
           <p className="admin-table__secondary">
-            Start with New SVG symbol. The visual studio is the primary authoring
+            Create a symbol in the visual studio. That is the primary authoring
             path.
           </p>
           <div className="mt-4">
@@ -409,10 +414,9 @@ export function AdminSvgEditorListView({
       ) : (
         <div className="admin-panel" data-testid="admin-svg-inventory">
           <div className="admin-panel__header">
-            {sortedRows.length} of {inventoryRows.length} symbol
-            {inventoryRows.length === 1 ? "" : "s"}
+            Symbol inventory · {sortedRows.length} of {inventoryRows.length}
             {paged.totalPages > 1
-              ? ` · showing page ${paged.page}/${paged.totalPages}`
+              ? ` · page ${paged.page}/${paged.totalPages}`
               : ""}
           </div>
           <div
@@ -420,7 +424,7 @@ export function AdminSvgEditorListView({
             data-testid="admin-svg-inventory-filters"
           >
             <label className="admin-field">
-              <span className="admin-field__label">Find</span>
+              <span className="admin-field__label">Search</span>
               <input
                 type="search"
                 className="admin-field__control"
@@ -429,13 +433,13 @@ export function AdminSvgEditorListView({
                   setQuery(event.target.value);
                   setPage(1);
                 }}
-                placeholder="Slug, SKU, family…"
+                placeholder="Name, SKU, family…"
                 data-testid="admin-svg-inventory-search"
                 aria-label="Search SVG inventory"
               />
             </label>
             <label className="admin-field">
-              <span className="admin-field__label">Artifact</span>
+              <span className="admin-field__label">Symbol status</span>
               <select
                 className="admin-field__control"
                 value={artifactFilter}
@@ -444,12 +448,12 @@ export function AdminSvgEditorListView({
                   setPage(1);
                 }}
                 data-testid="admin-svg-filter-artifact"
-                aria-label="Filter by artifact state"
+                aria-label="Filter by symbol status"
               >
                 <option value="all">All</option>
                 <option value="published">Published</option>
                 <option value="missing">Missing</option>
-                <option value="invalid">Invalid</option>
+                <option value="invalid">Needs attention</option>
               </select>
             </label>
             <label className="admin-field">
@@ -548,44 +552,50 @@ export function AdminSvgEditorListView({
             </label>
           </div>
 
-          <div
-            className="px-4 py-2 flex flex-wrap gap-2 items-end"
+          {/* Saved views are secondary — do not compete with search/filters */}
+          <details
+            className="admin-page__section"
             data-testid="admin-svg-inventory-saved-views"
           >
-            <label className="admin-field">
-              <span className="admin-field__label">Save view as</span>
-              <input
-                type="text"
-                className="admin-field__control"
-                value={savedViewName}
-                onChange={(event) => setSavedViewName(event.target.value)}
-                placeholder="e.g. Live published"
-                aria-label="Name for saved inventory view"
-                data-testid="admin-svg-inventory-saved-view-name"
-              />
-            </label>
-            <button
-              type="button"
-              className="admin-btn admin-btn--outline"
-              onClick={saveCurrentView}
-              disabled={savedViewName.trim() === ""}
-              data-testid="admin-svg-inventory-save-view"
-            >
-              Save view
-            </button>
-            {savedViews.map((view) => (
+            <summary className="admin-panel__header cursor-pointer">
+              Saved views (optional)
+            </summary>
+            <div className="px-4 py-2 flex flex-wrap gap-2 items-end">
+              <label className="admin-field">
+                <span className="admin-field__label">Save view as</span>
+                <input
+                  type="text"
+                  className="admin-field__control"
+                  value={savedViewName}
+                  onChange={(event) => setSavedViewName(event.target.value)}
+                  placeholder="e.g. Live published"
+                  aria-label="Name for saved inventory view"
+                  data-testid="admin-svg-inventory-saved-view-name"
+                />
+              </label>
               <button
-                key={view.id}
                 type="button"
                 className="admin-btn admin-btn--outline"
-                onClick={() => applySavedView(view)}
-                data-testid={`admin-svg-inventory-apply-view-${view.id}`}
-                aria-label={`Apply saved view ${view.name}`}
+                onClick={saveCurrentView}
+                disabled={savedViewName.trim() === ""}
+                data-testid="admin-svg-inventory-save-view"
               >
-                {view.name}
+                Save view
               </button>
-            ))}
-          </div>
+              {savedViews.map((view) => (
+                <button
+                  key={view.id}
+                  type="button"
+                  className="admin-btn admin-btn--outline"
+                  onClick={() => applySavedView(view)}
+                  data-testid={`admin-svg-inventory-apply-view-${view.id}`}
+                  aria-label={`Apply saved view ${view.name}`}
+                >
+                  {view.name}
+                </button>
+              ))}
+            </div>
+          </details>
 
           {sortedRows.length === 0 ? (
             <div
@@ -733,7 +743,7 @@ export function AdminSvgEditorListView({
                               <p className="admin-table__secondary">
                                 {status.bytes > 0
                                   ? formatBytes(status.bytes)
-                                  : "No bytes on disk"}
+                                  : "No published symbol yet"}
                               </p>
                             </td>
                             <td>
@@ -829,18 +839,28 @@ export function AdminSvgEditorListView({
         </div>
       )}
 
-      {/* ADM-SVG-01: bulk CSV is not the primary journey (advanced path). */}
-      <details className="admin-panel mt-6" data-testid="admin-svg-advanced-import">
-        <summary className="admin-panel__header">
-          Advanced · bulk CSV import
-        </summary>
-        <div className="px-4 py-3">
-          <p className="admin-page__meta mb-3">
-            Optional migration tool. The primary path is the visual studio above.
-          </p>
-          <AdminSvgBulkImportPanel />
-        </div>
-      </details>
+      {/* ADM-SVG-01 / 03: bulk import never dominates the inventory journey. */}
+      <section
+        className="admin-page__section mt-8"
+        aria-label="Advanced tools"
+        data-testid="admin-svg-advanced-section"
+      >
+        <details
+          className="admin-panel admin-svg-advanced-import"
+          data-testid="admin-svg-advanced-import"
+        >
+          <summary className="admin-panel__header">
+            Advanced · bulk spreadsheet import
+          </summary>
+          <div className="admin-panel__body">
+            <p className="admin-page__meta mb-3">
+              Migration and batch tools only. Day-to-day work uses Search and
+              New SVG symbol above.
+            </p>
+            <AdminSvgBulkImportPanel />
+          </div>
+        </details>
+      </section>
     </div>
   );
 }
