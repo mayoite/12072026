@@ -290,38 +290,60 @@ export function AdminCatalogManager({
   };
 
   return (
-    <div className="admin-page">
-      <header className="admin-page__header">
+    <div className="admin-page" data-testid="admin-catalog-page">
+      <header className="admin-page__header" data-testid="admin-shell-header">
         <div>
-          <p className="admin-page__eyebrow">Catalog admin</p>
-          <h1 className="admin-page__title">{title}</h1>
+          <p className="admin-page__eyebrow" data-testid="admin-shell-scope">
+            Catalog admin
+          </p>
+          <h1 className="admin-page__title" data-testid="admin-shell-title">
+            {title}
+          </h1>
           <p className="admin-page__copy">{description}</p>
-          {source ? (
-            <p className="admin-page__meta">
-              Data source: <code>{source}</code>
-              {readOnly
-                ? " - read-only until Supabase `planner_managed_products` is configured"
-                : null}
-            </p>
-          ) : null}
+          <p className="admin-page__meta" data-testid="admin-shell-source">
+            Source:{" "}
+            {source ? (
+              <code>{source}</code>
+            ) : (
+              <span>loading…</span>
+            )}
+            {readOnly
+              ? " · read-only (local fallback — edits disabled until managed products are connected)"
+              : " · editable"}
+          </p>
+          <p
+            className="admin-page__meta"
+            role="status"
+            data-testid="admin-shell-state"
+          >
+            State:{" "}
+            <strong>{displayTotal}</strong> shown
+            {hasActiveFilters ? " (filtered)" : ""} ·{" "}
+            {readOnly ? "read-only" : "editable"}
+          </p>
         </div>
-        <div className="admin-page__actions">
+        <div className="admin-page__actions" data-testid="admin-shell-actions">
           <button
             type="button"
-            className="btn-outline inline-flex gap-2 px-3 py-2 text-sm"
+            className="admin-btn admin-btn--outline"
             onClick={() => void loadItems()}
             disabled={loading}
           >
-            {loading ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+            {loading ? (
+              <Loader2 size={14} className="animate-spin" aria-hidden />
+            ) : (
+              <RefreshCw size={14} aria-hidden />
+            )}
             Refresh
           </button>
           <button
             type="button"
-            className="btn-primary inline-flex gap-2 px-3 py-2 text-sm"
+            className="admin-btn admin-btn--primary"
             onClick={openCreate}
             disabled={readOnly}
+            data-testid="admin-shell-primary-action"
           >
-            <Plus size={14} />
+            <Plus size={14} aria-hidden />
             Add item
           </button>
         </div>
@@ -329,8 +351,8 @@ export function AdminCatalogManager({
 
       {readOnly ? (
         <div className="admin-alert admin-alert--warn" role="status">
-          Showing bundled local catalog fallback. Connect Supabase service role and migrate{" "}
-          <code>planner_managed_products</code> to create and edit items from this panel.
+          Read-only local catalog. Writes are disabled until the managed product
+          source is connected. You can still search and review rows.
         </div>
       ) : null}
 

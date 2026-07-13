@@ -1,6 +1,11 @@
 "use client";
 
-import { Archive, CircleNotch as Loader2, PencilSimple as Pencil, Trash as Trash2 } from "@phosphor-icons/react";
+import {
+  Archive,
+  CircleNotch as Loader2,
+  PencilSimple as Pencil,
+  Trash as Trash2,
+} from "@phosphor-icons/react";
 
 import type {
   ConfiguratorCatalogItem,
@@ -21,6 +26,21 @@ type Props = {
   onPageChange: (page: number) => void;
 };
 
+function sizeLabel(item: CatalogManagerItem, isStandard: boolean): string {
+  if (isStandard) {
+    const row = item as StandardCatalogItem;
+    return `${row.width_mm ?? "—"}×${row.depth_mm ?? "—"}×${row.height_mm ?? "—"} mm`;
+  }
+  return (item as ConfiguratorCatalogItem).sizing_type ?? "—";
+}
+
+function categoryLabel(item: CatalogManagerItem): string {
+  const parts = [item.category];
+  if ("subcategory" in item && item.subcategory) parts.push(item.subcategory);
+  if ("family" in item && item.family) parts.push(item.family);
+  return parts.filter(Boolean).join(" · ");
+}
+
 export function AdminCatalogTable({
   items,
   isStandard,
@@ -33,21 +53,39 @@ export function AdminCatalogTable({
   onDelete,
   onPageChange,
 }: Props) {
+  const pageCount = Math.max(1, Math.ceil(total / 50));
+
   return (
-    <div className="admin-panel">
+    <div
+      className="admin-panel admin-catalog-inventory"
+      data-testid="admin-catalog-inventory"
+    >
       <div className="admin-panel__header">
         {isStandard ? total : items.length} items
-        {isStandard && total > 50 ? ` - page ${page}` : null}
+        {isStandard && total > 50 ? ` · page ${page}` : null}
+        {readOnly ? " · read-only" : null}
       </div>
-      <div className="admin-table-wrap">
-        <table className="admin-table">
+      <div
+        className="admin-table-wrap admin-catalog-table-wrap"
+        data-phone-layout="cards-priority"
+      >
+        <table
+          className="admin-table admin-catalog-table"
+          data-testid="admin-catalog-table"
+          data-phone-layout="cards-priority"
+        >
+          <caption className="sr-only">
+            Catalog products with name, category, size, status, and actions.
+          </caption>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Size / type</th>
-              <th>Status</th>
-              <th className="text-end">Actions</th>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Size / type</th>
+              <th scope="col">Status</th>
+              <th scope="col" className="text-end">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -57,69 +95,85 @@ export function AdminCatalogTable({
               const isActive = isStandard
                 ? (item as StandardCatalogItem).visible !== false
                 : (item as ConfiguratorCatalogItem).active !== false;
+              const name = item.name;
+              const slug =
+                "slug" in item && item.slug ? String(item.slug) : null;
 
               return (
-                <tr key={String(id)}>
-                  <td>
-                    <p className="admin-table__primary">{item.name}</p>
-                    {"slug" in item && item.slug ? (
-                      <p className="admin-table__secondary">{item.slug}</p>
+                <tr
+                  key={String(id)}
+                  className="admin-catalog-row"
+                  data-item-id={String(id)}
+                >
+                  <td data-label="Name">
+                    <p className="admin-table__primary">{name}</p>
+                    {slug ? (
+                      <p className="admin-table__secondary">{slug}</p>
                     ) : null}
                   </td>
-                  <td className="text-muted">
-                    {item.category}
-                    {"subcategory" in item && item.subcategory ? ` - ${item.subcategory}` : null}
-                    {"family" in item && item.family ? ` - ${item.family}` : null}
+                  <td data-label="Category">
+                    <span className="admin-table__secondary">
+                      {categoryLabel(item)}
+                    </span>
                   </td>
-                  <td className="text-muted">
-                    {isStandard ? (
-                      <>
-                        {(item as StandardCatalogItem).width_mm ?? "--"} x{" "}
-                        {(item as StandardCatalogItem).depth_mm ?? "--"} x{" "}
-                        {(item as StandardCatalogItem).height_mm ?? "--"} mm
-                      </>
-                    ) : (
-                      (item as ConfiguratorCatalogItem).sizing_type
-                    )}
+                  <td data-label="Size">
+                    <span className="admin-table__secondary">
+                      {sizeLabel(item, isStandard)}
+                    </span>
                   </td>
-                  <td>
+                  <td data-label="Status">
                     <span
                       className={`admin-badge ${isActive ? "admin-badge--active" : "admin-badge--hidden"}`}
                     >
                       {isActive ? "Active" : "Hidden"}
                     </span>
                   </td>
-                  <td>
-                    <div className="justify-end gap-1">
+                  <td data-label="Actions">
+                    <div className="admin-catalog-row-actions">
                       <button
                         type="button"
-                        className="admin-icon-btn"
-                        title="Edit"
+                        className="admin-btn admin-btn--outline"
                         onClick={() => onEdit(item)}
+                        aria-label={`Edit ${name}`}
+                        data-testid={`admin-catalog-edit-${String(id)}`}
                       >
-                        <Pencil size={14} />
+                        <Pencil size={14} aria-hidden />
+                        Edit
                       </button>
                       <button
                         type="button"
-                        className="admin-icon-btn"
-                        title={isActive ? "Hide" : "Show"}
+                        className="admin-btn admin-btn--outline"
+                        title={isActive ? "Hide from Planner" : "Show in Planner"}
+                        aria-label={
+                          isActive
+                            ? `Hide ${name} from Planner`
+                            : `Show ${name} in Planner`
+                        }
                         disabled={readOnly || busy || !item.id}
                         onClick={() => void onToggleVisible(item)}
+                        data-testid={`admin-catalog-toggle-${String(id)}`}
                       >
                         {busy ? (
-                          <Loader2 size={14} className="animate-spin" />
+                          <Loader2
+                            size={14}
+                            className="animate-spin"
+                            aria-hidden
+                          />
                         ) : (
-                          <Archive size={14} />
+                          <Archive size={14} aria-hidden />
                         )}
+                        {isActive ? "Hide" : "Show"}
                       </button>
                       <button
                         type="button"
-                        className="admin-icon-btn admin-icon-btn--danger"
-                        title="Delete"
+                        className="admin-btn admin-btn--outline"
+                        aria-label={`Delete ${name}`}
                         disabled={readOnly || busy || !item.id}
                         onClick={() => void onDelete(item)}
+                        data-testid={`admin-catalog-delete-${String(id)}`}
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={14} aria-hidden />
+                        Delete
                       </button>
                     </div>
                   </td>
@@ -130,23 +184,28 @@ export function AdminCatalogTable({
         </table>
       </div>
       {isStandard && total > 50 ? (
-        <div className="border-t border-soft px-4 py-3 text-sm">
+        <div
+          className="admin-catalog-paging"
+          data-testid="admin-catalog-paging"
+        >
           <button
             type="button"
-            className="btn-outline px-3 py-1"
+            className="admin-btn admin-btn--outline"
             disabled={page <= 1}
             onClick={() => onPageChange(Math.max(1, page - 1))}
+            aria-label="Previous catalog page"
           >
             Previous
           </button>
-          <span className="text-muted">
-            Page {page} of {Math.ceil(total / 50)}
+          <span className="admin-table__secondary" role="status">
+            Page {page} of {pageCount}
           </span>
           <button
             type="button"
-            className="btn-outline px-3 py-1"
-            disabled={page >= Math.ceil(total / 50)}
+            className="admin-btn admin-btn--outline"
+            disabled={page >= pageCount}
             onClick={() => onPageChange(page + 1)}
+            aria-label="Next catalog page"
           >
             Next
           </button>

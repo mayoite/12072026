@@ -266,6 +266,36 @@
   background: color-mix(in srgb, var(--color-success) 85%, black);
 }
 
+[data-admin-layout] .admin-btn--danger {
+  border: 1px solid color-mix(in srgb, var(--color-danger) 40%, var(--border-soft));
+  background: color-mix(in srgb, var(--color-danger) 8%, white);
+  color: color-mix(in srgb, var(--color-danger) 75%, var(--text-heading));
+}
+
+[data-admin-layout] .admin-btn--danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-danger) 14%, white);
+}
+
+[data-admin-layout] .admin-price-book-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  align-items: flex-start;
+  padding-top: 0.5rem;
+}
+
+[data-admin-layout] .admin-price-book-actions__primary {
+  flex: 0 0 auto;
+}
+
+[data-admin-layout] .admin-price-book-actions__secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  align-items: flex-start;
+  flex: 1 1 12rem;
+}
+
 [data-admin-layout] .admin-btn--block {
   width: 100%;
 }
@@ -502,6 +532,104 @@
   /* Keep ≥ 4.5:1 vs badge surface for WCAG 2.2 AA (was 4.29 with lighter mix). */
   background: color-mix(in srgb, var(--color-warning) 14%, white);
   color: color-mix(in srgb, var(--color-warning) 55%, var(--text-heading));
+}
+
+/* Approved commercial state — distinct from active (uses primary token only). */
+[data-admin-layout] .admin-badge--approved {
+  background: color-mix(in srgb, var(--color-primary) 12%, white);
+  color: color-mix(in srgb, var(--color-primary) 72%, var(--text-heading));
+}
+
+[data-admin-layout] .admin-catalog-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+[data-admin-layout] .admin-catalog-paging {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+[data-admin-layout] .admin-catalog-table {
+  min-width: 36rem;
+}
+
+/* ADM-MOB-03 — catalog phone cards, not a flattened desktop table */
+@media (width < 48rem) {
+  [data-admin-layout] .admin-catalog-table {
+    min-width: 0;
+  }
+
+  [data-admin-layout] .admin-catalog-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  [data-admin-layout] .admin-catalog-table tbody {
+    display: block;
+  }
+
+  [data-admin-layout] .admin-catalog-row {
+    display: grid;
+    gap: 0.35rem 0.75rem;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border-soft);
+    background: var(--surface-panel);
+  }
+
+  [data-admin-layout] .admin-catalog-row td {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.5rem;
+    padding: 0;
+    border: 0;
+  }
+
+  [data-admin-layout] .admin-catalog-row td[data-label="Name"] {
+    display: block;
+  }
+
+  [data-admin-layout] .admin-catalog-row td[data-label="Category"]::before,
+  [data-admin-layout] .admin-catalog-row td[data-label="Size"]::before,
+  [data-admin-layout] .admin-catalog-row td[data-label="Status"]::before {
+    content: attr(data-label);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-copy-semibold, 600);
+    min-width: 4.5rem;
+  }
+
+  [data-admin-layout] .admin-catalog-row td[data-label="Actions"] {
+    margin-top: 0.35rem;
+  }
+
+  [data-admin-layout] .admin-catalog-row-actions {
+    justify-content: stretch;
+    width: 100%;
+  }
+
+  [data-admin-layout] .admin-catalog-row-actions .admin-btn {
+    flex: 1 1 auto;
+  }
+
+  [data-admin-layout] .admin-catalog-table-wrap {
+    overflow-x: hidden;
+  }
 }
 
 /* A1 — published catalog SVG stage (list thumb + editor panel).
