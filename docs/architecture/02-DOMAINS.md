@@ -1,101 +1,48 @@
-# Domains — where code lives (HOW)
-
-**Execute law:** [`plan/README.md`](../../plan/README.md). This file is placement + honesty only.  
-**Upgrade lock:** Fabric sole 2D — [`QUALITY-BAR`](../../plan/QUALITY-BAR.md).
-
----
+# Product domains
 
 ## Admin
 
-| | |
-|--|--|
-| Routes | `site/app/admin/` |
-| Views | `site/features/planner/admin/` (svg-editor, catalog) |
-| Publish API | `site/app/api/admin/svg-editor/` |
-| Compile | `site/features/planner/asset-engine/svg/` |
-| Bytes | `site/public/svg-catalog/{slug}.svg` |
+Admin is an internal role.
 
-SVG catalog = **publish only** — not plan-draw. Execute: [Admin](../../plan/Admin/CHECKLIST.md). UI fence: [`03-MODULE-UI-CONTRACT.md`](03-MODULE-UI-CONTRACT.md).
+It owns:
 
----
+- catalog identity and product data;
+- product availability;
+- SVG authoring and publication;
+- product families and options;
+- revisions, rollback, and audit;
+- the public catalog contract consumed by Planner.
 
-## Site marketing
+Admin does not own the customer layout journey.
 
-| | |
-|--|--|
-| Sections | `site/components/home/`, `products/`, `career/`, … |
-| Chrome | `components/site/`, `ui/`, `shared/` |
-| Routes | `site/app/(site)/` |
+## Planner
 
-Planner chrome ≠ marketing. Execute: [Site P02](../../plan/Site/PHASE-02-site-chrome.md). Dep cuts: [Site P01](../../plan/Site/PHASE-01-deps-cleanup.md).
+Planner serves any external website customer.
 
----
+It owns:
 
-## CRM
+- public entry and guest access;
+- room and layout editing;
+- catalog search and placement;
+- synchronized 2D and 3D views;
+- project persistence;
+- branded BOQ generation;
+- customer review and submission to Oando.
 
-| | |
-|--|--|
-| Routes | `site/app/crm/` |
-| Feature | `site/features/crm/` |
+Planner consumes published inventory.
 
-No CRM plan track yet. Do not couple into open3d commands. Auth/CSRF with [Security](../../plan/Security/CHECKLIST.md).
+It does not silently invent catalog data or commercial prices.
 
----
+## Shared contracts
 
-## Ops
+| Contract | Producer | Consumer |
+|---|---|---|
+| Public catalog record | Admin | Planner and public site |
+| Published SVG | Admin | Planner 2D canvas |
+| Product family options | Admin | Planner placement and BOQ |
+| Planner document | Planner | 2D, 3D, save, and export |
+| Branded BOQ | Planner | Customer and Oando |
 
-| | |
-|--|--|
-| Routes | `site/app/ops/` |
-| Feature | `site/features/ops/` |
-| Deploy | root `OPERATIONS_RUNBOOK.md` |
+Contracts use stable identifiers and explicit versions.
 
-Not planner, not admin SVG. Prod bypass = A3 + SEC3.
-
----
-
-## Auth
-
-| | |
-|--|--|
-| Feature | `site/features/shared/auth/` |
-| Clients | `site/platform/supabase/` · `platform/drizzle/` |
-| RLS | [`../database/ADVISORS.md`](../database/ADVISORS.md) |
-
-No `DEV_AUTH_BYPASS` on public hosts — [Security P03](../../plan/Security/PHASE-03-auth-boundaries.md).
-
----
-
-## Offline / PWA
-
-| | |
-|--|--|
-| Route | `site/app/offline/` |
-| UI | `site/components/pwa/` |
-| Planner local save | [PHASE-06](../../plan/Planner/PHASE-06-onboarding-feedback.md) |
-
-Offline shell ≠ cloud sync. Prove scope under `results/` before claiming.
-
----
-
-## AI / assistant
-
-| | |
-|--|--|
-| Shared | `site/features/ai/` |
-| Site bot | `site/features/site-assistant/` |
-
-Not document authority. Mutations → planner commands only. Secrets in `.env.local`.
-
----
-
-## Catalog (three authorities)
-
-| Kind | Path | Law |
-|------|------|-----|
-| Site products | `features/catalog/` · shared catalog | Site content |
-| Planner place | `project/catalog/` (live host) | P07 |
-| SVG publish | `public/svg-catalog/` | A1/A2 — not plan-draw |
-| Plan symbols | Block2D → Fabric stage | P05 |
-
-Never claim catalog SVG is what Fabric draws today.
+Tests use isolated fixtures for each contract.

@@ -8,9 +8,9 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const REMOVE_DIRS = ["site/tech-stack-generator/node_modules"];
+const REMOVE_DIRS = ["tech-stack-generator/node_modules"];
 
-const REMOVE_FILES = ["site/tech-stack-generator/package-lock.json"];
+const REMOVE_FILES = ["tech-stack-generator/package-lock.json"];
 
 let removed = 0;
 

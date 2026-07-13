@@ -337,7 +337,7 @@ importers:
         specifier: ^4.101.0
         version: 4.104.0
 
-  site/tech-stack-generator:
+  tech-stack-generator:
     dependencies:
       '@phosphor-icons/react':
         specifier: ^2.1.10

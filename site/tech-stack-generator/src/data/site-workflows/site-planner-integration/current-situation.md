@@ -1,1 +1,0 @@
-Guest planner available. Token aliases in tech-stack-generator/src/index.css. Some planner chrome still uses legacy palette classes (tracked in Failures).

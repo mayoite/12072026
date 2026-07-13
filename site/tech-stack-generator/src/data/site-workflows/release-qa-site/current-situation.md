@@ -1,1 +1,0 @@
-Gates exist and are wired. Evidence policy is enforced by testing-handbook. Some pre-existing lint in unrelated files.

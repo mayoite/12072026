@@ -1,30 +1,19 @@
-# API documentation
+# API reference
 
-**Last updated:** 2026-06-29
-
-## Contract source
-
-There is no checked-in OpenAPI file. The live contract is:
+The live handlers are authoritative.
 
 | Source | Role |
-|--------|------|
-| [`ROUTE-INDEX.md`](ROUTE-INDEX.md) | Human-readable route/method inventory |
-| `site/app/api/**/route.ts` | Handlers, auth, validation |
-| `site/config/route-contract.json` | Route metadata used by tooling |
+|---|---|
+| `site/app/api/**/route.ts` | Runtime behavior, auth, and validation. |
+| `site/config/route-contract.json` | Tooling metadata. |
+| `ROUTE-INDEX.md` | Generated human inventory. |
 
-Regenerate or refresh `ROUTE-INDEX.md` when handlers change:
+Refresh the inventory after route changes:
 
 ```powershell
 pnpm --filter oando-site run docs:sync:routes
 ```
 
-Included in `pnpm run docs:sync:all` (repo root). Until CI wires this, run the command in the same PR as route edits.
+The repository has no published OpenAPI contract yet.
 
-## Consumers
-
-- **Agents / reviewers:** start at `ROUTE-INDEX.md`, then open the matching `route.ts`.
-- **Clients:** use route handlers + shared types under `site/lib/api/`; do not assume a published OpenAPI URL.
-
-## Related
-
-- `AGENTS.md` — Drizzle for catalog/planner SQL; Supabase HTTP for auth only.
+Add one only after live request and response schemas are stable.

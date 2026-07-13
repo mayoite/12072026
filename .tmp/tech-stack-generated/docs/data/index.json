@@ -1,0 +1,43 @@
+{
+  "pages": [
+    "markdown/architecture/index.md",
+    "markdown/architecture/repository-structure.md",
+    "markdown/build-and-deploy/index.md",
+    "markdown/code-organization/index.md",
+    "markdown/commands/index.md",
+    "markdown/database/index.md",
+    "markdown/dependencies/index.md",
+    "markdown/environment/index.md",
+    "markdown/features/index.md",
+    "markdown/governance/provenance.md",
+    "markdown/governance/unsupported.md",
+    "markdown/overview/index.md",
+    "markdown/performance/index.md",
+    "markdown/routes-and-api/api.md",
+    "markdown/routes-and-api/routes.md",
+    "markdown/security/index.md",
+    "markdown/testing/coverage.md",
+    "markdown/testing/index.md",
+    "markdown/workflows/index.md"
+  ],
+  "summary": {
+    "api": 71,
+    "claimInventory": null,
+    "codeOrganization": 28,
+    "commands": 203,
+    "databaseMigrations": 2,
+    "databaseTables": 14,
+    "dependencies": 264,
+    "environment": 37,
+    "features": 5,
+    "performance": 9,
+    "routes": 79,
+    "security": 29,
+    "testFiles": {
+      "generator": 23,
+      "root": 0,
+      "site": 825
+    },
+    "workflows": 15
+  }
+}

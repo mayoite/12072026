@@ -1,54 +1,46 @@
-# Agents/Agents-01-STANDARD.md
+# Agent standard
 
-**Head + subagent bar** (internal agent law only — not product brand). Constitution: `AGENTS.md`. Honesty > flattery. Pushback always.
+## Truth
 
-## 1. Rank
-| Wins | Who |
-|------|-----|
-| Intent / goal change | Owner |
-| Quality bar | **This file** (raise, never lower) |
-| Facts, PASS, done | **Live repo** only |
+- Live code and fresh commands are authoritative.
+- Plans state required work. They do not prove completion.
+- Old reports and result files prove nothing.
+- Never claim a browser outcome from a unit test.
+- Use `OPEN` when work is unverified.
+- Use `FAIL` when a fresh check fails.
 
-Peers: `Agents/INDEX.md` · Plan: `plan/README.md` · Tracks: `Agents-02-tracks.md` · Owner: `ayushdocs/` (5 files) · Ops: `OPERATIONS_RUNBOOK.md`
+## Work
 
-## 2. Head duty
-- One **phase** to completion before the next. Subagents for heavy work.
-- Clear goal → implement; don't ask how. Weak idea → push back.
-- Re-prove status; never trust ticks/chat.
+- Read the relevant code before changing it.
+- Use the smallest sound change.
+- Avoid parallel writers on the same files.
+- Parallelize independent Admin and Planner items.
+- A blocker stops only its dependent item.
+- Record active blockers in `Failures.md`.
+- Remove a failure when it is resolved.
 
-## 3. NO PAPER MOON
-No `pass`/DONE/JSON without live proof. Unit ≠ browser gate. Prefer FAIL/OPEN with paths. Subagent brief §9.
+## Verification
 
-## 4. Grain
-**Phase** = multi-hour task list. **Not** vibe coding.  
-**Parallel:** different packages only; ≤8 seats (max 10); never two writers same package.
+- Start every checklist from unchecked state.
+- Verify each item against live code.
+- Run focused tests during work.
+- Run broader gates only when their scope changed or shipment is claimed.
+- UI claims require fresh browser verification.
+- Save raw outputs under `results/` when useful.
+- Report the command and exit result in the checklist.
 
-## 5. Truth order
-1. Run commands 2. Read `HEAD` 3. Fresh `results/` 4. `plan/` status = hints 5. Old PASS = untrusted
+## Git
 
-## 6. Git backup
-Commit each land · push `origin` when green · `mayoite` ~45m/big land · no force-push. Fail mirror → log `Failures.md`. Detail: `OPERATIONS_RUNBOOK.md`
+- Use the root checkout.
+- Preserve unrelated user changes.
+- Never destroy owner data.
+- Never force-push.
+- Commit and push only when the owner asks.
 
-## 7. Pipeline
-`/using-superpowers` → goal → repo scout → task list → TDD execute → browser only if task needs UI → verify → commit/push → `SESSION-RECAP` ~30m
+## Quality
 
-Firecrawl **dead**. No worktrees. Quality bar: `plan/QUALITY-BAR.md` (Fabric-sole).
-
-## 8. Judgment
-| PASS | HALF | OPEN | FAIL |
-|------|------|------|------|
-| Fresh proof | Named residual | Unproven | Paper moon / fake backup |
-
-## 9. Subagent brief (paste)
-```
-/using-superpowers · Bar: this file · NO PAPER MOON
-CSS: Agents-09-css.md — never edit core/locked/**
-Tracks: Agents-02-tracks.md — one ID/track
-Seat/phase/package: <…> · Evidence: results/
-Return: DONE|BLOCKED + paths
-```
-
-## 10. Phase done
-Intent match · repo proof · TDD · verify · commit+push · honest recap · residual closed or named
-
-**Full history:** optional museum dump if present on disk — bar is **this file** (do not require a missing archive path).
+- Do not fake unavailable infrastructure.
+- Do not label demo prices as commercial truth.
+- Do not copy competitor assets or trade dress.
+- Accessibility and security are acceptance criteria.
+- A generated file is not a product outcome.

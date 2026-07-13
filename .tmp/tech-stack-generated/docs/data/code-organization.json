@@ -1,0 +1,254 @@
+[
+  {
+    "category": "feature-module",
+    "id": "code-organization.feature.admin",
+    "label": "admin",
+    "sourceKind": "directory",
+    "sourcePath": "site/features/",
+    "sourcePointer": "admin",
+    "value": "site/features/admin/"
+  },
+  {
+    "category": "feature-module",
+    "id": "code-organization.feature.ai",
+    "label": "ai",
+    "sourceKind": "directory",
+    "sourcePath": "site/features/",
+    "sourcePointer": "ai",
+    "value": "site/features/ai/"
+  },
+  {
+    "category": "feature-module",
+    "id": "code-organization.feature.catalog",
+    "label": "catalog",
+    "sourceKind": "directory",
+    "sourcePath": "site/features/",
+    "sourcePointer": "catalog",
+    "value": "site/features/catalog/"
+  },
+  {
+    "category": "feature-module",
+    "id": "code-organization.feature.crm",
+    "label": "crm",
+    "sourceKind": "directory",
+    "sourcePath": "site/features/",
+    "sourcePointer": "crm",
+    "value": "site/features/crm/"
+  },
+  {
+    "category": "feature-module",
+    "id": "code-organization.feature.ops",
+    "label": "ops",
+    "sourceKind": "directory",
+    "sourcePath": "site/features/",
+    "sourcePointer": "ops",
+    "value": "site/features/ops/"
+  },
+  {
+    "category": "feature-module",
+    "id": "code-organization.feature.planner",
+    "label": "planner",
+    "sourceKind": "directory",
+    "sourcePath": "site/features/",
+    "sourcePointer": "planner",
+    "value": "site/features/planner/"
+  },
+  {
+    "category": "feature-module",
+    "id": "code-organization.feature.shared",
+    "label": "shared",
+    "sourceKind": "directory",
+    "sourcePath": "site/features/",
+    "sourcePointer": "shared",
+    "value": "site/features/shared/"
+  },
+  {
+    "category": "feature-module",
+    "id": "code-organization.feature.site-assistant",
+    "label": "site-assistant",
+    "sourceKind": "directory",
+    "sourcePath": "site/features/",
+    "sourcePointer": "site-assistant",
+    "value": "site/features/site-assistant/"
+  },
+  {
+    "category": "path-alias",
+    "id": "code-organization.path.app",
+    "label": "@/app/*",
+    "sourceKind": "tsconfig-path",
+    "sourcePath": "site/tsconfig.json",
+    "sourcePointer": "compilerOptions.paths.@/app/*",
+    "value": "./app/*"
+  },
+  {
+    "category": "path-alias",
+    "id": "code-organization.path.components",
+    "label": "@/components/*",
+    "sourceKind": "tsconfig-path",
+    "sourcePath": "site/tsconfig.json",
+    "sourcePointer": "compilerOptions.paths.@/components/*",
+    "value": "./components/*"
+  },
+  {
+    "category": "path-alias",
+    "id": "code-organization.path.features",
+    "label": "@/features/*",
+    "sourceKind": "tsconfig-path",
+    "sourcePath": "site/tsconfig.json",
+    "sourcePointer": "compilerOptions.paths.@/features/*",
+    "value": "./features/*"
+  },
+  {
+    "category": "path-alias",
+    "id": "code-organization.path.lib",
+    "label": "@/lib/*",
+    "sourceKind": "tsconfig-path",
+    "sourcePath": "site/tsconfig.json",
+    "sourcePointer": "compilerOptions.paths.@/lib/*",
+    "value": "./lib/*"
+  },
+  {
+    "category": "path-alias",
+    "id": "code-organization.path.libsite-data",
+    "label": "@/lib/site-data/*",
+    "sourceKind": "tsconfig-path",
+    "sourcePath": "site/tsconfig.json",
+    "sourcePointer": "compilerOptions.paths.@/lib/site-data/*",
+    "value": "./lib/site-data/*"
+  },
+  {
+    "category": "path-alias",
+    "id": "code-organization.path.root",
+    "label": "@/*",
+    "sourceKind": "tsconfig-path",
+    "sourcePath": "site/tsconfig.json",
+    "sourcePointer": "compilerOptions.paths.@/*",
+    "value": "./*"
+  },
+  {
+    "category": "path-alias",
+    "id": "code-organization.path.types",
+    "label": "@/types/*",
+    "sourceKind": "tsconfig-path",
+    "sourcePath": "site/tsconfig.json",
+    "sourcePointer": "compilerOptions.paths.@/types/*",
+    "value": "./config/database/types/*"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.app",
+    "label": "app",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "app",
+    "value": "site/app/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.block-descriptors",
+    "label": "block-descriptors",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "block-descriptors",
+    "value": "site/block-descriptors/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.components",
+    "label": "components",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "components",
+    "value": "site/components/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.config",
+    "label": "config",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "config",
+    "value": "site/config/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.data",
+    "label": "data",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "data",
+    "value": "site/data/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.features",
+    "label": "features",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "features",
+    "value": "site/features/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.i18n",
+    "label": "i18n",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "i18n",
+    "value": "site/i18n/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.lib",
+    "label": "lib",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "lib",
+    "value": "site/lib/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.platform",
+    "label": "platform",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "platform",
+    "value": "site/platform/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.public",
+    "label": "public",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "public",
+    "value": "site/public/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.scripts",
+    "label": "scripts",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "scripts",
+    "value": "site/scripts/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.tech-stack-generator",
+    "label": "tech-stack-generator",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "tech-stack-generator",
+    "value": "site/tech-stack-generator/"
+  },
+  {
+    "category": "top-level-dir",
+    "id": "code-organization.dir.tests",
+    "label": "tests",
+    "sourceKind": "directory",
+    "sourcePath": "site/",
+    "sourcePointer": "tests",
+    "value": "site/tests/"
+  }
+]

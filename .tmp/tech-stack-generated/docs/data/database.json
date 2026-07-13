@@ -1,0 +1,131 @@
+{
+  "migrations": [
+    {
+      "path": "site/platform/drizzle/migrations/0000_daffy_longshot.sql",
+      "sourceKind": "migration",
+      "sourcePath": "site/platform/drizzle/migrations/0000_daffy_longshot.sql",
+      "sourcePointer": "file"
+    },
+    {
+      "path": "site/platform/drizzle/migrations/0001_add_missing_indexes.sql",
+      "sourceKind": "migration",
+      "sourcePath": "site/platform/drizzle/migrations/0001_add_missing_indexes.sql",
+      "sourcePointer": "file"
+    }
+  ],
+  "schema": {
+    "sourceKind": "drizzle-schema",
+    "sourcePath": "site/platform/drizzle/schema",
+    "sourcePointer": "schema/*.ts pgTable declarations",
+    "tables": [
+      {
+        "name": "audit_events",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/planner.ts",
+        "sourcePointer": "pgTable('audit_events')"
+      },
+      {
+        "name": "business_stats_current",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/catalog.ts",
+        "sourcePointer": "pgTable('business_stats_current')"
+      },
+      {
+        "name": "catalog_categories",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/catalog.ts",
+        "sourcePointer": "pgTable('catalog_categories')"
+      },
+      {
+        "name": "catalog_product_images",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/catalog.ts",
+        "sourcePointer": "pgTable('catalog_product_images')"
+      },
+      {
+        "name": "catalog_product_slug_aliases",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/catalog.ts",
+        "sourcePointer": "pgTable('catalog_product_slug_aliases')"
+      },
+      {
+        "name": "catalog_product_specs",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/catalog.ts",
+        "sourcePointer": "pgTable('catalog_product_specs')"
+      },
+      {
+        "name": "catalog_products",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/catalog.ts",
+        "sourcePointer": "pgTable('catalog_products')"
+      },
+      {
+        "name": "invites",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/planner.ts",
+        "sourcePointer": "pgTable('invites')"
+      },
+      {
+        "name": "oando_plans",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/planner.ts",
+        "sourcePointer": "pgTable('oando_plans')"
+      },
+      {
+        "name": "price_book_versions",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/planner.ts",
+        "sourcePointer": "pgTable('price_book_versions')"
+      },
+      {
+        "name": "price_books",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/planner.ts",
+        "sourcePointer": "pgTable('price_books')"
+      },
+      {
+        "name": "profiles",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/planner.ts",
+        "sourcePointer": "pgTable('profiles')"
+      },
+      {
+        "name": "team_members",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/planner.ts",
+        "sourcePointer": "pgTable('team_members')"
+      },
+      {
+        "name": "teams",
+        "sourceKind": "drizzle-schema",
+        "sourcePath": "site/platform/drizzle/schema/planner.ts",
+        "sourcePointer": "pgTable('teams')"
+      }
+    ]
+  },
+  "split": [
+    {
+      "configured": true,
+      "envName": "PRODUCTS_DATABASE_URL",
+      "id": "database.products-db",
+      "label": "Products DB",
+      "modulePath": "site/platform/drizzle/productsDb.ts",
+      "schemaPath": "site/platform/drizzle/schema/catalog.ts",
+      "sourceKind": "drizzle-schema",
+      "sourcePath": "site/platform/drizzle/productsDb.ts",
+      "sourcePointer": "PRODUCTS_DATABASE_URL"
+    },
+    {
+      "configured": true,
+      "envName": "SUPABASE_AUTH_DATABASE_URL",
+      "id": "database.admin-planner-db",
+      "label": "Admin / planner DB",
+      "modulePath": "site/platform/drizzle/adminDb.ts",
+      "schemaPath": "site/platform/drizzle/schema/planner.ts",
+      "sourceKind": "drizzle-schema",
+      "sourcePath": "site/platform/drizzle/adminDb.ts",
+      "sourcePointer": "SUPABASE_AUTH_DATABASE_URL"
+    }
+  ]
+}

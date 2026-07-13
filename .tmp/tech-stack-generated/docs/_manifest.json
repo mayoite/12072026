@@ -1,0 +1,193 @@
+{
+  "files": [
+    {
+      "bytes": 10213,
+      "hash": "sha256:a5f91bf7b0295ecce415d9283b2272b7c8104d04f9e5cd7b3b4efcc99495d2d7",
+      "path": "data/security.json"
+    },
+    {
+      "bytes": 1142,
+      "hash": "sha256:eebb5755c102a8936c2dc5b56e4f39bb9ecf4fbf5710ead1c88ea7183d1b05e8",
+      "path": "data/index.json"
+    },
+    {
+      "bytes": 14958,
+      "hash": "sha256:a250d10718a89f0a01e4018689f8e64c099a70826a4b79b43e22a3c75e9fc54d",
+      "path": "data/search.json"
+    },
+    {
+      "bytes": 157162,
+      "hash": "sha256:c57363c166efeab6eb4a16e0113bf21c166b78bc69eb96837569998c3f39bc4d",
+      "path": "data/dependencies.json"
+    },
+    {
+      "bytes": 16877,
+      "hash": "sha256:9542f49ee7d761534c45cf26b8318472f332b797a20012970a2b669a7078a692",
+      "path": "data/api.json"
+    },
+    {
+      "bytes": 18274,
+      "hash": "sha256:20d3f7f04585ecca838638f75fbaab74ab37063471ab6770c05a7bb94aee247e",
+      "path": "markdown/governance/unsupported.md"
+    },
+    {
+      "bytes": 18282,
+      "hash": "sha256:28ad5cc23c2898a1abd7826821b1d517e464840175350bc8481b19838cca6d77",
+      "path": "markdown/governance/provenance.md"
+    },
+    {
+      "bytes": 18436,
+      "hash": "sha256:d23be43bf78b0f760ea399792ea52b1b022ce10f2a872eb1f1a1a36ba4a76c62",
+      "path": "markdown/architecture/index.md"
+    },
+    {
+      "bytes": 18444,
+      "hash": "sha256:4c2219b5e68d7a0f3847ff25814e3908499c80ba9507ac6247a86eb5b7d56158",
+      "path": "markdown/architecture/repository-structure.md"
+    },
+    {
+      "bytes": 18446,
+      "hash": "sha256:881f536c7aef7c6296c7c297228e80ea63da7ef97ff661f39276dfd22c1a1b48",
+      "path": "markdown/build-and-deploy/index.md"
+    },
+    {
+      "bytes": 18550,
+      "hash": "sha256:a2d5c60adaf8a54ee6a4bc942b2fa009261e128a8650dcf4a8b0787eb6967bbc",
+      "path": "markdown/overview/index.md"
+    },
+    {
+      "bytes": 18608,
+      "hash": "sha256:bc637a13c92e8e4ada80bab1202ff04685d96002378eafa83d5ae62b071f2704",
+      "path": "markdown/testing/index.md"
+    },
+    {
+      "bytes": 18609,
+      "hash": "sha256:85c216d6024ecb609b45ae36544e145c1cad84e1b5ca2d96b99dbea321de4823",
+      "path": "markdown/testing/coverage.md"
+    },
+    {
+      "bytes": 19316,
+      "hash": "sha256:666dce61f86ecfe9f6bad4f5ea50159805501a5f87f3a5cdd22a7e914ff25b93",
+      "path": "markdown/features/index.md"
+    },
+    {
+      "bytes": 19529,
+      "hash": "sha256:3f6df3e1e840865faa1c010d7c1dcb8f487a152028b6d0d3b5b175213d917c6e",
+      "path": "markdown/performance/index.md"
+    },
+    {
+      "bytes": 19929,
+      "hash": "sha256:3d41f7f974c11db2494aa9104314d41a46a893c461a847b7a72bf67e77f5ad5d",
+      "path": "markdown/database/index.md"
+    },
+    {
+      "bytes": 20892,
+      "hash": "sha256:a6cc2e5f629ae5b53725ae2ed17bbbdf1a5a427a3adaac69f8965dad9983264c",
+      "path": "markdown/workflows/index.md"
+    },
+    {
+      "bytes": 21068,
+      "hash": "sha256:f7a23236780b000db47d20c3ba8d54d6f660d231c2515d1a77f627c412f7a7ba",
+      "path": "data/routes.json"
+    },
+    {
+      "bytes": 21133,
+      "hash": "sha256:dfdb70c2c4a43ef80714236eac774ffa5774cbcf7c004e5273daf8ca41c4b99e",
+      "path": "markdown/environment/index.md"
+    },
+    {
+      "bytes": 21585,
+      "hash": "sha256:6980deab101cd750fac6a13f27e85232d814b3c4a19bd375416eaa6b1e322893",
+      "path": "markdown/code-organization/index.md"
+    },
+    {
+      "bytes": 24530,
+      "hash": "sha256:809f2c2e03769ea16f209c616368b8132a8818d882a5a033b94f4496a59ac8a6",
+      "path": "markdown/security/index.md"
+    },
+    {
+      "bytes": 2488,
+      "hash": "sha256:262e1c575cae2cce730e52dcafa4aa609aa5c5aa79998e2bbc9a9c526417cd14",
+      "path": "data/performance.json"
+    },
+    {
+      "bytes": 25,
+      "hash": "sha256:0881d7833d4021a6a430bcc82cbf3ccfa049181b0a0005ef60da253650794710",
+      "path": ".generated-root"
+    },
+    {
+      "bytes": 25099,
+      "hash": "sha256:4a8efa9ad492b754b3ef59ccf5216cface91efed8fdf3caae5e655de9daafec7",
+      "path": "markdown/routes-and-api/routes.md"
+    },
+    {
+      "bytes": 26486,
+      "hash": "sha256:214a2db659bb7a2cb2caa2f31c99e258fe2a8d3e5716f9a3e52a5ddd60e54952",
+      "path": "markdown/routes-and-api/api.md"
+    },
+    {
+      "bytes": 2705,
+      "hash": "sha256:79625c006e9051ec58bb8e54fff108970b73418b4ea93d5def3d02241382e565",
+      "path": "_accuracy.json"
+    },
+    {
+      "bytes": 3343,
+      "hash": "sha256:4d3ce8e0ef8b5f9dc6457b859cf17591a8d4492267f5397b221a27029c74b844",
+      "path": "data/features.json"
+    },
+    {
+      "bytes": 40686,
+      "hash": "sha256:a739e2068ec2c49c7a62bcb738dcbe8defcb7de75b80da6c26f994f7f9f5b61f",
+      "path": "data/pages.json"
+    },
+    {
+      "bytes": 44737,
+      "hash": "sha256:e4db8a0ded2c906669732f0c8ce9513f058cbcccc7cd9017e77c98e47b6fff22",
+      "path": "data/environment.json"
+    },
+    {
+      "bytes": 4495,
+      "hash": "sha256:36ad7d0d3f8c458993e30ffe8e4ed69618d1865500a639f499628518daaf230b",
+      "path": "data/database.json"
+    },
+    {
+      "bytes": 4626,
+      "hash": "sha256:1caaad03994a15e3623d737a70075e733fdf7148b9225ab49776f06730bd2fe4",
+      "path": "data/workflows.json"
+    },
+    {
+      "bytes": 49692,
+      "hash": "sha256:2b9ed580a06b8c09c268c0eb13cb8786548cc239b8bd4d4695a1a8f1e9808917",
+      "path": "markdown/dependencies/index.md"
+    },
+    {
+      "bytes": 49699,
+      "hash": "sha256:094caed72054991d432447619517ca3010a8b7e53afa83feb62818ad70ae6da0",
+      "path": "markdown/commands/index.md"
+    },
+    {
+      "bytes": 5119,
+      "hash": "sha256:dfd11f3bfd8f509b8c87c8016d8500652ca407012751422b49bdabd735f6a678",
+      "path": "data/coverage-matrix.json"
+    },
+    {
+      "bytes": 55124,
+      "hash": "sha256:e59f71ad7c565e9c359b0178d3ea9be73cd283c2c2da4ece06e60695fbb5e1fc",
+      "path": "_sources.json"
+    },
+    {
+      "bytes": 64594,
+      "hash": "sha256:1354fad57363f5c87bb3d014eead713eea9914a29dabcc0aa15dccaecc5ac3b2",
+      "path": "data/commands.json"
+    },
+    {
+      "bytes": 6864,
+      "hash": "sha256:8bc696a047d73bb785a9f84de2700b3de0b8b550f89941fcb9ae6cd12e1b6ebe",
+      "path": "data/code-organization.json"
+    }
+  ],
+  "hash": "eee3975d4bf5d29e3b2175c1963bee011e7fcca6a59d60eca5b9956cf8027f44",
+  "removed": [],
+  "root": "tech-stack-generated/docs",
+  "version": "v1"
+}

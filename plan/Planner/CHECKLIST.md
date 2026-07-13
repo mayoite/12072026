@@ -1,88 +1,85 @@
-# Planner — CHECKLIST
+# Planner checklist
 
-Tick [UI-BAR.md](../UI-BAR.md) and the phase section below. Live browser proof required.
+Planner serves any external website customer.
 
-## PHASE-01 — SVG import
-- [x] Baseline reproof: `modularCabinetV0.test.ts` + `fabricBlock2D.test.ts` green on HEAD (log before edits)
-- [x] `svgPlanSymbolCache` wired in placement path (`getSvgPlanImage`); Block2D paints while loading
-- [x] Placed item paints published SVG (not flat box)
-- [x] Missing `.svg` → Block2D fallback, no console error (`open3d-p05-cabinet-multiprim.spec.ts` regression guard)
-- [x] `open3d-cp05-symbols-s7.spec.ts` rewritten: planner paints catalog + HTTP multipath honesty; inventory thumb separate from canvas paint
-- [x] Scale/rotate/save/reload preserves symbol (`open3d-p01-svg-symbol-persist.spec.ts` + `projectParser` previewImageUrl round-trip)
-- [x] Screenshots desktop + 375×812 (`results/planner/phase-01-svg-persist/browser/`)
+The customer designs with available inventory and sends a branded BOQ to Oando.
 
-## PHASE-02 — Toolbar truth
-- [x] Grid toggle works + persists
-- [x] Snap toggle works + persists
-- [x] No control is a silent no-op
-- [x] Deferred tools marked, not equal peers
+All items require fresh verification.
 
-## PHASE-03 — Inspector + units
-- [x] Edit width → canvas updates → undo restores (labelled)
-- [x] ft-in display; stored mm unchanged
-- [x] Empty/multi/locked states honest
-- [x] Keyboard-editable, visible focus
+## Public entry and site
 
-## PHASE-04 — Snap/measure
-- [x] Snap-on lands on grid; snap-off freehand
-- [x] Endpoint snap closes room
-- [ ] Dimension tool (M) already live from UI P01 — verify snap + measure work together (do not re-promote M here) — **blocked** UI P01
+- [ ] A clear public route explains the outcome and opens Planner quickly.
+- [ ] Guest entry works without a false account requirement.
+- [ ] Public navigation, product routes, contact paths, and Planner entry agree.
+- [ ] Stable public routes have unique metadata and canonical URLs.
+- [ ] Private, Admin, duplicate, and workspace-only routes are not indexed.
+- [ ] Sitemap, robots rules, and structured data match live routes.
+- [ ] Core Web Vitals are measured on representative mobile and desktop routes.
+- [ ] Claims describe live capability. No fake cloud, price, AI, or sharing claims.
 
-## PHASE-05 — Docking/responsive
-- [ ] Dock/float/collapse persists across reload
-- [ ] Height chain: canvas fills container at 375 / 1280 / 1920 / 2560
-- [ ] No unexpected overflow/scrollbars at any target size
-- [ ] Full journey at 375×812, canvas unclipped
-- [ ] Primary action reachable one-handed
+## Layout workflow
 
-## PHASE-06 — Onboarding/feedback
-- [ ] Empty→first placement in ≤3 steps, no dev flags
-- [ ] Loading + error states visible
-- [ ] Guest never says "cloud" pre-save
-- [ ] No console/hydration errors
+- [ ] The customer can create a room and edit dimensions in millimetres.
+- [ ] Walls, openings, selection, move, rotate, resize, duplicate, and delete work.
+- [ ] Undo and redo cover every document mutation.
+- [ ] Grid, snapping, dimensions, text, zoom, pan, and fit controls are truthful.
+- [ ] Inventory is searchable and placeable from the public catalog contract.
+- [ ] Published SVG renders as the primary 2D symbol.
+- [ ] `Block2D` appears only while SVG loads or when it is unavailable.
+- [ ] Selection and properties remain synchronized.
+- [ ] Save and reload preserve the normalized document.
+- [ ] Failed save never displays success.
+- [ ] Import and export round trips preserve canonical fields.
 
-## PHASE-07 — Workflow + a11y
-- [ ] Full buyer story keyboard-only
-- [ ] Journey uses live theme from PHASE-11 (not mouse-only theme bypass)
-- [ ] Zero console errors on guest workspace load
-- [ ] Height/chrome audit turned into a repeatable check (not a one-off screenshot)
-- [ ] axe/lighthouse clean
-- [ ] Trace + screenshots attached
+## 2D and 3D continuity
 
-## PHASE-08 — Select/delete/undo
-- [x] Pointer selection resolves correct entity ID
-- [x] Delete removes entity from document and canvas
-- [x] Undo restores same ID, pose, rotation, options
-- [x] Selection state and visible count accurate
-- [x] `applySelectionDelete.test.ts` + `open3d-w3-select-delete.spec.ts` green
+- [ ] The same item identity, position, rotation, scale, and options drive both views.
+- [ ] Switching views does not mutate the document.
+- [ ] 3D models use bounded scale, stable origin, and an explicit fallback.
+- [ ] Camera, orbit, selection, and return to 2D are predictable.
+- [ ] Missing models do not break the layout or BOQ.
+- [ ] Representative layouts remain responsive at realistic item counts.
 
-## PHASE-09 — 2D↔3D orbit continuity
-- [x] Three viewer reads live project
-- [x] Orbit does not mutate project
-- [x] IDs, pose, rotations, counts unchanged 2D→3D→2D
-- [x] Loading/error states keep return path
-- [x] `open3d-w4-orbit-continuity.spec.ts` green
+## Customer interface quality
 
-## PHASE-10 — 3D mesh quality
-- [x] Cabinet-v0 toe/carcass/door readable in live Three viewer
-- [x] Part names, order, size, count match option set
-- [x] 2D footprint and mesh height dimensionally true
-- [x] 2D↔3D switch preserves identity and pose
-- [x] WebGL screenshots desktop + 375×812
-- [x] Mesh e2e specs green
+- [ ] The canvas remains the dominant workspace.
+- [ ] Catalog, tools, properties, and view controls have clear ownership.
+- [ ] Contextual panels do not obscure the active design.
+- [ ] Loading, empty, error, offline, saving, and saved states are distinct.
+- [ ] Keyboard users can complete the workflow without dragging.
+- [ ] Focus is visible and unobscured.
+- [ ] Labels, targets, contrast, and announcements meet WCAG 2.2 AA.
+- [ ] Supported mobile and desktop widths expose all essential controls.
+- [ ] Destructive actions are recoverable or explicitly confirmed.
 
-## PHASE-11 — Theme mount
-- [x] `PlannerThemeToggle` mounted in workspace chrome
-- [x] Preference survives reload; no wrong-theme flash
-- [ ] Chrome, Fabric, Three, forms, focus states switch in both themes
-- [x] Theme change does not mutate document geometry
-- [x] Browser proof desktop + 375×812 both themes
+## Branded BOQ and Oando handoff
 
-## PHASE-12 — Handover re-proof
-- [ ] `pnpm run check:layout` exit 0 (no forbidden `site/results/`) — **BLOCKED** `PLAN-FAIL-0416`
-- [x] Typecheck exit 0
-- [x] `hostWiringP01` 4/4 on HEAD
-- [x] `open3d-world-standard-journey.spec.ts` green
-- [x] `open3d-systems-v0-batch-place.spec.ts` green
-- [ ] Open P01–P11 items closed or owner-waived in handover report
-- [ ] HEAD recorded in handover report
+- [ ] BOQ is generated only from placed, catalog-backed products.
+- [ ] Lines contain stable product identity, description, options, quantity, and units.
+- [ ] Unsupported or unbranded items are excluded with a visible reason.
+- [ ] The BOQ carries Oando branding and project context.
+- [ ] JSON, CSV, and PDF totals and lines agree.
+- [ ] Pricing is absent unless an approved price authority exists.
+- [ ] Demo prices are removed from customer-facing output.
+- [ ] The customer can review the BOQ before sending it.
+- [ ] Submission reaches an Oando-controlled endpoint or inbox.
+- [ ] Submission records consent, status, time, project revision, and BOQ hash.
+- [ ] Retry does not create duplicate requests.
+- [ ] The customer receives a truthful confirmation or actionable failure.
+
+## Security and verification
+
+- [ ] Guest and authenticated data boundaries are enforced server-side.
+- [ ] Customer inputs, imports, SVG, and exports are validated and bounded.
+- [ ] State-changing requests use CSRF protection where applicable.
+- [ ] Public submission is rate-limited and abuse-resistant.
+- [ ] Private project data is not exposed through URLs, logs, or client secrets.
+- [ ] Focused unit, integration, and browser journeys pass from clean state.
+- [ ] SEO, accessibility, responsive, and console checks pass on live routes.
+- [ ] Typecheck, lint, and affected build checks pass.
+
+## Completion record
+
+- [ ] Fresh commands and exit codes are recorded here.
+- [ ] Remaining failures are active entries in `../../Failures.md`.
+- [ ] No resolved failure remains in `../../Failures.md`.

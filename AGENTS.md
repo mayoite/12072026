@@ -1,56 +1,63 @@
 # AGENTS.md
 
-## 1. Overrides
-- **User wins** — your message beats all rules.
-- **Re-read this file** before every task.
-- **Unclear product goal** → ask once. Clear goal → implement; don't ask how.
-- **No prompt theater** — short rules, real work. Don't inflate this file or handbooks.
-- **Honesty over comfort** — pushback always welcome. Flattery and soft lies = fail.
-- **Raise the bar, never lower it** — floor: `Agents/Agents-01-STANDARD.md`.
+## Rules
 
-## 2. Routing
-| Layer | Path |
-|-------|------|
-| Constitution | **this file** (~60 lines max) |
-| Agent process | **`Agents/`** — all handbooks |
-| Owner intent | **`ayushdocs/`** — five files only |
+- The user wins.
+- Re-read this file before each task.
+- Do not lie.
+- Say the brutal truth.
+- Verify code. Never trust old ticks or reports.
+- Keep sentences short.
+- Clear goals are executed without ceremony.
+- Goal changes require owner alignment.
+- Quality floor: `Agents/Agents-01-STANDARD.md`.
 
-Head → `Agents/Agents-01-STANDARD.md` · list → `Agents/INDEX.md`  
-Subagents → same bar · `/using-superpowers` · fit skills.
+## Product
 
-## 3. Freedom & hard stops
-- **Owner owns intent.** Goal change → stop and align. Else: execute freedom (code, tests, browser, commands, subagents).
-- **Hard ask only:** purchase/seat · force-push/delete remote branch · destroy owner data · competitor-asset edge · new product area · **commit/push** (no commit without owner ask).
+- Admin manages trusted public inventory.
+- Planner serves any external customer.
+- The customer designs with available inventory.
+- The customer generates a branded BOQ.
+- The customer sends the BOQ to Oando.
+- Site, UI, SEO, accessibility, and security are acceptance concerns.
+- They are not separate product tracks.
 
-## 4. Git (standing)
-- Repo root checkout only — **no worktrees**.
-- Commit/push only when owner asks. Detail: Standard §6 · `OPERATIONS_RUNBOOK.md`.
+## Layout
 
-## 5. Layout (hard)
-- **`results/`** = tool **dump only** (write if needed). **Never read `results/` for PASS, status, or done.** Law = `plan/` + live code. Never write under `site/results/` or `site/test-results/`.
-- **`PROTECTED/`** = owner private. **Ignore** — do not open, edit, or cite.
-- **No `agents-review/`** — not law; do not recreate as SoT.
-- **`site/` tracked tree** → product code only. `site/node_modules/` = gitignored workspace shim. **Never** `npm install` under `site/` or `site/tech-stack-generator/`.
-- **Durable** → `plan/<Track>/` · `Agents/` · `ayushdocs/` (5 files) · `docs/` (HOW + Lockedfiles).
-- **Install** → `pnpm` from repo root. **Firecrawl dead.** Research → repo-root **`websites/`** (gitignored).
-- `pnpm run check:layout`.
+- Execution lives in `plan/Admin/CHECKLIST.md` and `plan/Planner/CHECKLIST.md`.
+- Deferred decisions live in `plan/Phase-2/README.md`.
+- Product and architecture facts live in `docs/`.
+- Agent process lives in `Agents/`.
+- Active blockers live in `Failures.md`.
+- `results/` is tool output only.
+- Never use `results/` as proof of PASS or completion.
+- Never write under `site/results/` or `site/test-results/`.
+- `site/` contains product code only.
+- `websites/` and `archive/` are reference only.
+- `PROTECTED/` is private. Never open, edit, or cite it.
 
-## 6. Law (short)
-- **No `any`** in handwritten code.
-- **No plagiarism** · paid assets = owner buys · licenses: `docs/Lockedfiles/03-dependencies-engines-current.md` (owner thin: `ayushdocs/`).
-- **Secrets** → `.env.local` only.
-- **Tests:** no suppression · no silent pass · see `testing-handbook.md`.
-- **No paper moon** — `pass`/JSON ≠ product. Standard §3 NO PAPER MOON.
+## Execution
 
-## 7. Where detail lives (not here)
-| Need | File |
-|------|------|
-| Process / phases / seats | `Agents/INDEX.md` |
-| Execute | `plan/README.md` + `plan/<Track>/CHECKLIST.md` |
-| Owner | `ayushdocs/` |
-| Facts / commands | `Readme.md` · `START.md` |
-| Blockers | `Failures.md` |
-| Dump (not law) | `results/` |
-| Owner private | `PROTECTED/` — ignore |
+- Test isolation is the first plan task.
+- Tests never mutate canonical catalog files.
+- Block only the exact dependent item.
+- Continue unrelated work.
+- Use `pnpm` from the repository root.
+- Never install under `site/` or `tech-stack-generator/`.
+- No `any` in handwritten code.
+- No plagiarism.
+- Secrets belong in `.env.local` only.
+- No suppressed tests or silent passes.
+- No commit or push unless the owner asks.
+- No worktrees.
 
-**Checks:** `check:agents-md` · `check:agents-folder` · `check:ayushdocs` · `check:active-docs` · `check:plans-purity`
+## Start
+
+- Process: `Agents/INDEX.md`.
+- Execute: `plan/README.md`.
+- Facts: `Readme.md` and `START.md`.
+- Tests: `testing-handbook.md`.
+- Operations: `OPERATIONS_RUNBOOK.md`.
+- Licenses: `docs/Lockedfiles/03-dependencies-engines-current.md`.
+
+Run `pnpm run check:layout` before completion.

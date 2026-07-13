@@ -15,7 +15,7 @@ pnpm monorepo for `oando.co.in`. Next.js in `site/`.
 ```
 repo-root/          ← pnpm workspace wrapper (package.json, pnpm-lock.yaml)
 ├── site/           ← Next.js app (oando-site)
-├── site/tech-stack-generator/  ← Vite source (oando-tech-stack-docs); build output — see `site/tech-stack-generator/README.md`
+├── tech-stack-generator/  ← Vite source (oando-tech-stack-docs); build output — see `tech-stack-generator/README.md`
 ├── docs/           ← reference docs (architecture, api, audit)
 ├── archive/        ← historical outputs + `archive/migrationdocs/`
 ├── plan/           ← execution tracks (see plan/README.md)

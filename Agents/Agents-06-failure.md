@@ -1,9 +1,10 @@
-# Agents/Agents-06-failure.md
+# Failures
 
-**Bar:** `Agents-01-STANDARD.md` · **Log:** `Failures.md` (repo root)
-
-- Stop and log failures; never hide stderr or missing artifacts.
-- Smallest safe fix; archive over delete when history exists.
-- PASS only with **fresh live proof this session** + `plan/` checklist update. Write dumps under `results/` when useful; **never** treat old dumps as PASS (`AGENTS.md` §5).
-- Scope creep or architecture fork → stop and ask. Soft blockers → clear on best path (not easiest skip).
-- Do not cite a missing `resolved-failures.md` as history (file absent on this tree).
+- `Failures.md` contains active failures only.
+- Add a failure after a fresh command or code check exposes it.
+- Include the exact scope, command, symptom, and next action.
+- Do not add PASS records.
+- Do not retain resolved, closed, or historical entries.
+- Remove an entry as part of the verified fix.
+- A blocker stops only its dependent item.
+- Missing optional infrastructure does not block unrelated local work.

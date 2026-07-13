@@ -19,10 +19,10 @@ const FORBIDDEN = [
   "site/.firecrawl",
   "site/tech-stack-docs",
   "site/tech-stack-generated",
-  "site/tech-stack-generator/node_modules",
+  "tech-stack-generator/node_modules",
 ];
 
-const FORBIDDEN_FILES = ["site/tech-stack-generator/package-lock.json"];
+const FORBIDDEN_FILES = ["tech-stack-generator/package-lock.json"];
 
 const REQUIRED_DIRS = ["results"];
 
@@ -52,7 +52,7 @@ for (const rel of REQUIRED_DIRS) {
 try {
   const { execSync } = await import("node:child_process");
   const tracked = execSync(
-    "git ls-files site/results site/test-results site/.cursor site/.firecrawl site/tech-stack-docs site/tech-stack-generated site/tech-stack-generator/package-lock.json site/tech-stack-generator/node_modules",
+    "git ls-files site/results site/test-results site/.cursor site/.firecrawl site/tech-stack-docs site/tech-stack-generated tech-stack-generator/package-lock.json tech-stack-generator/node_modules",
     {
       cwd: root,
       encoding: "utf8",

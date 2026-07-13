@@ -1,0 +1,122 @@
+{
+  "documents": [
+    {
+      "exactMatches": 1,
+      "factualFields": 1,
+      "mismatches": 0,
+      "path": "markdown/governance/unsupported.md"
+    },
+    {
+      "exactMatches": 15,
+      "factualFields": 15,
+      "mismatches": 0,
+      "path": "markdown/features/index.md"
+    },
+    {
+      "exactMatches": 15,
+      "factualFields": 15,
+      "mismatches": 0,
+      "path": "markdown/workflows/index.md"
+    },
+    {
+      "exactMatches": 16,
+      "factualFields": 16,
+      "mismatches": 0,
+      "path": "markdown/database/index.md"
+    },
+    {
+      "exactMatches": 2,
+      "factualFields": 2,
+      "mismatches": 0,
+      "path": "markdown/build-and-deploy/index.md"
+    },
+    {
+      "exactMatches": 2,
+      "factualFields": 2,
+      "mismatches": 0,
+      "path": "markdown/governance/provenance.md"
+    },
+    {
+      "exactMatches": 203,
+      "factualFields": 203,
+      "mismatches": 0,
+      "path": "markdown/commands/index.md"
+    },
+    {
+      "exactMatches": 264,
+      "factualFields": 264,
+      "mismatches": 0,
+      "path": "markdown/dependencies/index.md"
+    },
+    {
+      "exactMatches": 28,
+      "factualFields": 28,
+      "mismatches": 0,
+      "path": "markdown/code-organization/index.md"
+    },
+    {
+      "exactMatches": 29,
+      "factualFields": 29,
+      "mismatches": 0,
+      "path": "markdown/security/index.md"
+    },
+    {
+      "exactMatches": 3,
+      "factualFields": 3,
+      "mismatches": 0,
+      "path": "markdown/architecture/index.md"
+    },
+    {
+      "exactMatches": 3,
+      "factualFields": 3,
+      "mismatches": 0,
+      "path": "markdown/architecture/repository-structure.md"
+    },
+    {
+      "exactMatches": 3,
+      "factualFields": 3,
+      "mismatches": 0,
+      "path": "markdown/testing/coverage.md"
+    },
+    {
+      "exactMatches": 3,
+      "factualFields": 3,
+      "mismatches": 0,
+      "path": "markdown/testing/index.md"
+    },
+    {
+      "exactMatches": 37,
+      "factualFields": 37,
+      "mismatches": 0,
+      "path": "markdown/environment/index.md"
+    },
+    {
+      "exactMatches": 5,
+      "factualFields": 5,
+      "mismatches": 0,
+      "path": "markdown/overview/index.md"
+    },
+    {
+      "exactMatches": 71,
+      "factualFields": 71,
+      "mismatches": 0,
+      "path": "markdown/routes-and-api/api.md"
+    },
+    {
+      "exactMatches": 79,
+      "factualFields": 79,
+      "mismatches": 0,
+      "path": "markdown/routes-and-api/routes.md"
+    },
+    {
+      "exactMatches": 9,
+      "factualFields": 9,
+      "mismatches": 0,
+      "path": "markdown/performance/index.md"
+    }
+  ],
+  "exactSourceMatches": 802,
+  "fieldsWithProvenance": 802,
+  "mismatches": [],
+  "totalFactualFields": 802
+}

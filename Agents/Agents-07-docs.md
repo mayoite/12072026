@@ -1,11 +1,11 @@
-# Agents/Agents-07-docs.md
+# Documentation
 
-**Bar:** `Agents-01-STANDARD.md` · **Hub:** `docs/INDEX.md`
-
-- Docs from verified live state, not intent.
-- No stack essays in plan/law folders.
-- Doc routing: `docs/Lockedfiles/INDEX.md`
-- Lockedfiles is **flat** — INDEX + overlays only (no proposed pairs).
-- Generated docs: edit source generator, not output.
-- Big mismatch code vs docs → stop and report.
-- Execute law: `plan/<Track>/` phase files + `CHECKLIST.md` only.
+- Document verified live behavior.
+- Keep intent separate from current capability.
+- Use `docs/` for architecture and operating facts.
+- Use one checklist for each primary track.
+- Do not create phase cards or shadow plans.
+- Do not create generated folder manifests.
+- Edit generator sources, not generated output.
+- Delete stale documents after retaining useful facts.
+- Reference research and archives. Never treat them as authority.

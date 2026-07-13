@@ -1,16 +1,19 @@
 # Agents index
 
-**Constitution:** `AGENTS.md` (~60 lines). **Bar:** [`Agents-01-STANDARD.md`](./Agents-01-STANDARD.md) (≤100 lines).
+| Need | File |
+|---|---|
+| Standard | `Agents-01-STANDARD.md` |
+| Testing | `Agents-04-testing.md` |
+| Browser checks | `Agents-05-browser.md` |
+| Failures | `Agents-06-failure.md` |
+| Documentation | `Agents-07-docs.md` |
+| Architecture | `Agents-08-architecture.md` |
+| CSS | `Agents-09-css.md` |
 
-| Handbook | File |
-|----------|------|
-| Tracks | [`Agents-02-tracks.md`](./Agents-02-tracks.md) |
-| Plan (+ planner map / W3 / spawn) | [`Agents-03-Plan.md`](./Agents-03-Plan.md) |
-| Testing | [`Agents-04-testing.md`](./Agents-04-testing.md) + root `testing-handbook.md` |
-| Browser | [`Agents-05-browser.md`](./Agents-05-browser.md) |
-| Failures | [`Agents-06-failure.md`](./Agents-06-failure.md) |
-| Docs | [`Agents-07-docs.md`](./Agents-07-docs.md) |
-| Architecture | [`Agents-08-architecture.md`](./Agents-08-architecture.md) |
-| CSS fence | [`Agents-09-css.md`](./Agents-09-css.md) |
+Admin and Planner are the only primary tracks.
 
-Execute: `plan/README.md` · Owner: `ayushdocs/` (5 files) · Licenses: `docs/Lockedfiles/03-dependencies-engines-current.md`
+Their checklists may run in parallel.
+
+An item waits only for its named dependency.
+
+The first execution item is test and catalog isolation.

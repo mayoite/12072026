@@ -1,1 +1,0 @@
-Zero tolerance on missing artifacts. Every workflow module has live visual proof + declared skips only.

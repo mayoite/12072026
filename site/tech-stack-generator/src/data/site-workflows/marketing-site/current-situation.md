@@ -1,1 +1,0 @@
-Content is partially hand-curated; some sections use static data. Visual regression and full a11y gates run in CI via site-ui workflow.

@@ -1,0 +1,758 @@
+[
+  {
+    "aliasPaths": [
+      "site/app/planner/page.tsx"
+    ],
+    "contractPointers": [
+      "site/config/route-contract.json.planner._legacyRedirects.oando-planner",
+      "site/config/route-contract.json.planner.landing",
+      "site/config/route-contract.json.plannerGuestCookie.allowedPaths[0]",
+      "site/config/route-contract.json.redirects.legacyOandoPlanner"
+    ],
+    "id": "/planner",
+    "path": "/planner",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/planner/(marketing)/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json._phase04_admin_routes.editById"
+    ],
+    "id": "/admin/svg-editor/[id]",
+    "path": "/admin/svg-editor/[id]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/svg-editor/[id]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json._phase04_admin_routes.list"
+    ],
+    "id": "/admin/svg-editor",
+    "path": "/admin/svg-editor",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/svg-editor/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json._phase05_portal_svg_routes.bySlug"
+    ],
+    "id": "/portal/svg-catalog/[slug]",
+    "path": "/portal/svg-catalog/[slug]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/portal/svg-catalog/[slug]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json._phase05_portal_svg_routes.index"
+    ],
+    "id": "/portal/svg-catalog",
+    "path": "/portal/svg-catalog",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/portal/svg-catalog/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json.entry.access"
+    ],
+    "id": "/access",
+    "path": "/access",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/access/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json.entry.chooseProduct"
+    ],
+    "id": "/choose-product",
+    "path": "/choose-product",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/choose-product/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json.entry.dashboard",
+      "site/config/route-contract.json.planner.dashboardRedirect",
+      "site/config/route-contract.json.protectedPrefixes[0]",
+      "site/config/route-contract.json.redirects.configuratorDashboard",
+      "site/config/route-contract.json.redirects.plannerDashboard"
+    ],
+    "id": "/dashboard",
+    "path": "/dashboard",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/dashboard/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json.planner._legacyRedirects.buddy-planner",
+      "site/config/route-contract.json.planner.canvas",
+      "site/config/route-contract.json.plannerGuestCookie.allowedPaths[2]",
+      "site/config/route-contract.json.protectedPrefixes[4]",
+      "site/config/route-contract.json.redirects.legacyBuddyPlanner"
+    ],
+    "id": "/planner/canvas",
+    "path": "/planner/canvas",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/planner/(workspace)/canvas/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json.planner.guest",
+      "site/config/route-contract.json.plannerGuestCookie.allowedPaths[1]",
+      "site/config/route-contract.json.publicGuestRoutes[1]"
+    ],
+    "id": "/planner/guest",
+    "path": "/planner/guest",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/planner/(workspace)/guest/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json.planner.help"
+    ],
+    "id": "/planner/help",
+    "path": "/planner/help",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/planner/(marketing)/help/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json.protectedPrefixes[1]"
+    ],
+    "id": "/portal",
+    "path": "/portal",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/portal/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json.protectedPrefixes[2]"
+    ],
+    "id": "/admin",
+    "path": "/admin",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json.protectedPrefixes[3]"
+    ],
+    "id": "/crm",
+    "path": "/crm",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/crm/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [
+      "site/config/route-contract.json.support.ivr"
+    ],
+    "id": "/support-ivr",
+    "path": "/support-ivr",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/support-ivr/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/",
+    "path": "/",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/about",
+    "path": "/about",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/about/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/analytics",
+    "path": "/admin/analytics",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/analytics/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/buddy-catalog",
+    "path": "/admin/buddy-catalog",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/buddy-catalog/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/catalog",
+    "path": "/admin/catalog",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/catalog/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/crm",
+    "path": "/admin/crm",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/crm/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/crm/clients",
+    "path": "/admin/crm/clients",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/crm/clients/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/crm/projects",
+    "path": "/admin/crm/projects",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/crm/projects/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/crm/projects/[id]",
+    "path": "/admin/crm/projects/[id]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/crm/projects/[id]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/crm/quotes",
+    "path": "/admin/crm/quotes",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/crm/quotes/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/customer-queries",
+    "path": "/admin/customer-queries",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/customer-queries/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/features",
+    "path": "/admin/features",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/features/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/inventory",
+    "path": "/admin/inventory",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/inventory/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/planner-catalog",
+    "path": "/admin/planner-catalog",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/planner-catalog/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/plans",
+    "path": "/admin/plans",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/plans/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/plans/[id]",
+    "path": "/admin/plans/[id]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/plans/[id]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/price-books",
+    "path": "/admin/price-books",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/price-books/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/settings",
+    "path": "/admin/settings",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/settings/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/themes",
+    "path": "/admin/themes",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/themes/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/admin/workspace-catalog",
+    "path": "/admin/workspace-catalog",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/admin/workspace-catalog/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/brochure",
+    "path": "/brochure",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/brochure/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/career",
+    "path": "/career",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/career/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/catalog",
+    "path": "/catalog",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/catalog/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/compare",
+    "path": "/compare",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/compare/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/contact",
+    "path": "/contact",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/contact/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/crm/clients",
+    "path": "/crm/clients",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/crm/clients/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/crm/projects",
+    "path": "/crm/projects",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/crm/projects/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/crm/projects/[id]",
+    "path": "/crm/projects/[id]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/crm/projects/[id]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/crm/quotes",
+    "path": "/crm/quotes",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/crm/quotes/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/download-brochure",
+    "path": "/download-brochure",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/download-brochure/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/downloads",
+    "path": "/downloads",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/downloads/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/gallery",
+    "path": "/gallery",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/gallery/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/imprint",
+    "path": "/imprint",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/imprint/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/login",
+    "path": "/login",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/login/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/news",
+    "path": "/news",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/news/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/offline",
+    "path": "/offline",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/offline/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/ops",
+    "path": "/ops",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/ops/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/ops/customer-queries",
+    "path": "/ops/customer-queries",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/ops/customer-queries/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/planner/features",
+    "path": "/planner/features",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/planner/(marketing)/features/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/planner/features/[slug]",
+    "path": "/planner/features/[slug]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/planner/(marketing)/features/[slug]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/planning",
+    "path": "/planning",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/planning/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/portal/[id]",
+    "path": "/portal/[id]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/portal/[id]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/portal/guest",
+    "path": "/portal/guest",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/portal/guest/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/portal/guest/view/[id]",
+    "path": "/portal/guest/view/[id]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/portal/guest/view/[id]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/portfolio",
+    "path": "/portfolio",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/portfolio/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/privacy",
+    "path": "/privacy",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/privacy/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/products",
+    "path": "/products",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/products/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/products/[category]",
+    "path": "/products/[category]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/products/[category]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/products/[category]/[product]",
+    "path": "/products/[category]/[product]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/products/[category]/[product]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/products/category/[slug]",
+    "path": "/products/category/[slug]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/products/category/[slug]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/projects",
+    "path": "/projects",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/projects/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/quote-cart",
+    "path": "/quote-cart",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/quote-cart/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/refund-and-return-policy",
+    "path": "/refund-and-return-policy",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/refund-and-return-policy/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/repo-store",
+    "path": "/repo-store",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/repo-store/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/service",
+    "path": "/service",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/service/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/showrooms",
+    "path": "/showrooms",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/showrooms/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/social",
+    "path": "/social",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/social/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/solutions",
+    "path": "/solutions",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/solutions/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/solutions/[category]",
+    "path": "/solutions/[category]",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/solutions/[category]/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/sustainability",
+    "path": "/sustainability",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/sustainability/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/templates",
+    "path": "/templates",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/templates/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/terms",
+    "path": "/terms",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/terms/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/tracking",
+    "path": "/tracking",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/tracking/page.tsx",
+    "sourcePointer": "default export"
+  },
+  {
+    "aliasPaths": [],
+    "contractPointers": [],
+    "id": "/trusted-by",
+    "path": "/trusted-by",
+    "sourceKind": "page-file",
+    "sourcePath": "site/app/(site)/trusted-by/page.tsx",
+    "sourcePointer": "default export"
+  }
+]

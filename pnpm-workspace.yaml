@@ -1,6 +1,6 @@
 packages:
   - site
-  - site/tech-stack-generator
+  - tech-stack-generator
 
 allowBuilds:
   '@firebase/util': true

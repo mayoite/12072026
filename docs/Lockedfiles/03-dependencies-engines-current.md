@@ -1,113 +1,35 @@
-# Dependencies & engines — current (locked)
+# Dependencies and engines
 
-**Baseline:** 2026-07-05  
-**Source of truth for pins:** `site/package.json` + `pnpm-lock.yaml` (disk may drift — verify lockfile)  
-**Revision alignment:** Option A locked in revision — **1B not accepted**; `@svgdotjs/*` still on disk unused.
+Live package files and `pnpm-lock.yaml` are authoritative.
 
-## Cross-links
+This file records architectural limits.
 
-| Doc | Path |
-|-----|------|
-| Module layout | [`docs/architecture/01-MODULE-LAYOUT.md`](../architecture/01-MODULE-LAYOUT.md) |
-| UI contract | [`docs/architecture/03-MODULE-UI-CONTRACT.md`](../architecture/03-MODULE-UI-CONTRACT.md) |
-| Architecture index | [`docs/architecture/README.md`](../architecture/README.md) |
-| Locked index | [`docs/Lockedfiles/INDEX.md`](./INDEX.md) |
+## Engines
 
-**Per-module breakdown:** each `docs/Lockedfiles/<module>/current.md` has a **Packages (on disk)** section where relevant.
+- Fabric is the sole interactive 2D canvas engine.
+- Three.js is the 3D engine.
+- React Three Fiber and Drei are Three.js bindings and helpers.
+- SVG.js is used by the Admin SVG authoring surface.
+- Server SVG compilation and sanitization remain the publish authority.
+- Do not add a second general canvas engine.
 
----
+## Toolchain
 
-## Runtime engines (two-engine rule)
+- Use the Node version declared by root `package.json`.
+- Use the pnpm version declared by root `package.json`.
+- Install only from the repository root.
+- Do not maintain nested lockfiles.
 
-| Engine | Package | Pin (site) | Routes / role |
-|--------|---------|------------|---------------|
-| **2D canvas** | `fabric` | `7.4.0` (exact) | Live guest/canvas via `features/planner/canvas` (`PlannerCanvasStage`); not Feasibility |
-| **3D** | `three` | `^0.185.1` | Open3D lazy 3D, product viewers |
-| **3D React** | `@react-three/fiber` | `^9.6.1` | R3F bindings (not a third engine) |
-| **3D helpers** | `@react-three/drei` | `^10.7.7` | Installed; this locked file treats it as Tier-2 reserved — **policy drift** |
+## Package decisions
 
-No second general canvas engine (Konva, Paper, Pixi, etc.). Feasibility / `canvas-feasibility` does not and will not exist — do not recreate it as interactive host or archive.
+- Verify a package is used before removing it.
+- Verify its license before adding it.
+- Prefer existing platform libraries when they meet the need.
+- Record paid or restricted asset approval before use.
+- Do not copy competitor code, assets, models, or trade dress.
 
-## Node / toolchain
+## Catalog assets
 
-| Item | Value | Where |
-|------|-------|-------|
-| Node | `>=24.0.0` | root `package.json` `engines` |
-| Package manager | `pnpm@11.9.0` | root `package.json` |
-| Framework | `next ^16.2.9`, `react ^19.0.0` | `site/package.json` |
-| TypeScript | `^6.0.3` | devDependency |
-| Dev bundler | `next dev --webpack` (default) | `site/package.json` scripts |
-
-## Planner workspace (installed)
-
-| Package | Pin | Used for |
-|---------|-----|----------|
-| `zustand` | `^5.0.14` | Workspace / view state |
-| `zundo` | `^2.3.0` | Document undo (commands not fully wired) |
-| `@tanstack/react-query` | `^5.101.0` | Server catalogue lifecycle |
-| `fuse.js` | `^7.4.1` | Client-side catalog ranking |
-| `sonner` | `^2.0.7` | Toasts |
-| `@phosphor-icons/react` | `^2.1.10` | Icons (planner + site) — **lucide-react is not installed** |
-| `framer-motion` / `motion` | `^12.x` | Shell motion |
-| `react-resizable-panels` | `^4.11.2` | Panel layout (open3d uses custom docking too) |
-| `vaul` | `^1.1.2` | Drawers (Phase 2 mobile) |
-| `@ark-ui/react` | `5.37.2` | Admin headless primitives |
-| `react-aria-components` | `1.19.0` | **Planner canvas toolbar** (`CanvasToolRail` ToggleButtonGroup) + combobox / dialog / tabs — [PHASE-02](../../plan/Planner/PHASE-02-toolbar-truth.md) |
-| `zod` | `^4.4.3` | Descriptors, commands, validation |
-| `uuid` | `^14.0.0` (resolved 14.x) | Planner entity ids **v7** via `lib/newEntityId`; v5 for catalog slug→id |
-
-## SVG pipeline (installed)
-
-| Package | Pin | Used for |
-|---------|-----|----------|
-| `@flatten-js/core` | `^1.6.12` | Geometry helpers (Option A) |
-| `polygon-clipping` | `^0.15.7` | Booleans (stale npm publish) |
-| `svgo` | `^4.0.1` | Server optimization |
-| `@resvg/resvg-js` | `^2.6.2` | PNG raster (server) |
-| `sharp` | `^0.35.2` | Thumbnails (server) |
-| `dompurify` | `^3.4.11` | Server SVG sanitization |
-| `@puckeditor/core` | `0.22.0` | Admin registry + portal `Render` |
-| `@svgdotjs/svg.js` + plugins | `^3.2.5` etc. | **Installed, unused** |
-
-## Admin / site (also in bundle graph)
-
-| Package | Pin | Notes |
-|---------|-----|-------|
-| `@radix-ui/react-*` | various | Site marketing + legacy UI |
-| `@xyflow/react` | `^12.11.0` | Installed; not in tier table |
-| `gsap`, `@gsap/react` | `^3.15` / `^2.1` | Marketing motion |
-| `swiper` | `^12.2.0` | Carousels |
-| `drizzle-orm`, `postgres` | — | DB access |
-| `@supabase/ssr`, `@supabase/supabase-js` | — | Auth session |
-
----
-
-## Summary
-
-The repo runs **Next 16 + React 19 on Node 24+** with a deliberate **Fabric + Three** engine pair for planner production. Tier-1 SVG Option A packages are installed and partially wired. The dependency graph is **wider than locked policy**: SVG.js, Lucide in planner-adjacent paths, drei, XYFlow, GSAP, and Swiper sit in `package.json` without full tier documentation or bundle-boundary proof for open3d.
-
-## Strengths
-
-Fabric pinned exactly at `7.4.0`. Option A SVG stack is present with boundary tests. Modern stack (React 19, TS 6, pnpm workspace). Phosphor, Puck, Ark, RAC, and Zod align with admin/planner direction. Single monorepo lockfile for site + tech-stack-generator.
-
-## Weaknesses
-
-**Policy vs disk drift:** `@svgdotjs/*` unused; `@react-three/drei` installed vs Tier-2 in this file; Lucide coexists with Phosphor; XYFlow/GSAP/Swiper not in exclusion list. **polygon-clipping** is stale on npm. **Dual panel libraries** — `react-resizable-panels` vs custom `useDockingSystem` in open3d. This locked inventory is still incomplete for planner runtime. **1A bundle audit not accepted.**
-
----
-
-## Licenses (thin — OPEN until verified)
-
-**Owner buys** paid seats. Not an `ayushdocs/` file.
-
-| Package | Notes |
-|---------|--------|
-| `fabric@7.4.0` | Live planner 2D |
-| `three` / R3F | Planner 3D — no mid-wave thrash |
-| `@google/model-viewer` | Admin/preview only |
-| `gsap` | Site motion — confirm seat if commercial expands |
-| `@fancyapps/ui` | Likely unused — [Site P01](../../plan/Site/PHASE-01-deps-cleanup.md) |
-| `@puckeditor/core` | Admin SVG |
-| Supabase / Drizzle | Vendor ToS |
-
-No plagiarism · no competitor assets · research = external `websites` only. Add row + owner OK before new paid deps.
+- Published SVG must be owned, licensed, or created for Oando.
+- Provenance belongs beside durable asset metadata.
+- External benchmark images are reference only.

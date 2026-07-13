@@ -1,61 +1,64 @@
-# Admin — CHECKLIST
+# Admin checklist
 
-Live run gates each tick (browser and/or on-disk bytes).
+Admin is the internal inventory authority.
 
-## PHASE-01 — Authoring quality
-- [x] Baseline reproof: HEAD `216e8dc94c4ac0062855439c84dfccc9804047a4`
-- [x] Inventory preview: catalog UI shows `img[src*="/svg-catalog/"]` for published symbol (thumb `admin-svg-preview-img`)
-- [x] `publishMultipath.test.ts` green (chaise + desk multipath)
-- [x] Publish pipeline emits per-block paths (maker + blocks union path)
-- [x] `chaise-lounge-001.svg` + catalog set regenerated via `compileSvgForPublish`
-- [x] Desk maker model ≥3 pathish (`desk-top`, `desk-body`, `desk-knee-space`)
-- [x] Published desk `.svg` has ≥3 pathish elements on disk
-- [x] Correct mm footprint; legible at 100% and 25% (browser) (`admin-footprint-mm-proof` + `admin-svg-inventory-preview-p01.spec.ts`)
-- [x] `stages.ts` S7 text: planner consumes catalog SVG (primary)
-- [x] `svgPackageBoundaries` + `makerJsPipeline` + `scenePublishAuthority` green
-- [x] Remaining catalog symbols re-published via `scripts:generate-svg`
+All items require fresh verification.
 
-## PHASE-02 — Catalog lifecycle
-- [x] Bulk import is atomic (one bad row → whole batch rolls back with clear error)
-- [x] Each item shows live/draft/retired state
-- [x] Edit preserves slug identity (bulk import rejects existing slugs; edit route keeps slug)
-- [x] Retire hides from buyers without deleting history (`loadBuyerVisibleDescriptors`)
+## Isolation first
 
-## PHASE-03 — Studio tools
-- [x] Node inspector edits x/y/size/fill → canvas updates (rect + circle)
-- [x] Create/move/resize/delete each reversible via named undo
-- [x] Dirty indicator + unsaved-exit guard
-- [x] Reset-to-published restores bytes (studio remount + form reseed)
+- [ ] Catalog tests use a temporary copy or temporary directory.
+- [ ] Test cleanup runs in `finally` after success, failure, and timeout.
+- [ ] Tests never write to `site/block-descriptors/` or `site/public/svg-catalog/`.
+- [ ] Repeating the focused Admin tests leaves canonical catalog bytes unchanged.
+- [ ] Browser tests use stable controls. No forced clicks hide UI defects.
 
-## PHASE-04 — Workstation family
-- [x] Family authored via real form (seats/topology/options) (`WorkstationFamilyAuthorFields`)
-- [x] Version release works; one version drives 2D/3D/BOQ (`workstationFamilyDrive` + `workstationFamilyDrive.test.ts`)
-- [x] Emits documented workstation-family JSON contract (`workstationFamilyContract` + fixture)
-- [x] Version replacement requires explicit migration choice (`WorkstationFamilyAuthorFields` + `workstationFamilyRelease.test.ts`)
+This section blocks only tests that can mutate the catalog.
 
-## PHASE-05 — Pricing / BOQ
-- [x] Price-book model + migration (versions, currency, effective dates)
-- [x] Versioned, reproducible released book; past quotes pin original version (`quotePriceBookPin` + `reproduciblePinnedTotal`)
-- [x] Emits documented price-book JSON contract (`emitPriceBookContract` + fixture)
-- [x] BOQ lines show quantity × unit price × adjustment — not total only (`lineTotalMinor`)
-- [x] "Price unavailable" when no rule — never silent zero
-- [x] Author/approver/viewer permissions enforced server-side (`priceBookService` role gate)
-- [x] Failed activation leaves prior active book untouched; rollback audited (unit + in-memory store)
-- [x] Buyer P04 computes correct total against a fixture (`emitPriceBookContract` test)
-- [x] Browser: draft, approve, activate, rollback journey (`admin-pricing-pricebook-p05.spec.ts`)
+## Public catalog authority
 
-## PHASE-06 — Release / audit / rollback
-- [x] Revision history visible per symbol (`DescriptorRevisionPanel` + revisions API)
-- [x] Approve step before buyer-visible publish (publish → draft; Approve for buyers → live)
-- [x] Rollback restores prior bytes; newer revision still on disk (`rollbackDescriptorToVersion`)
-- [x] Audit log records who/when/what (`_descriptor-audit.jsonl` + publish hook)
+- [ ] One versioned public catalog contract drives Admin and Planner.
+- [ ] Product identity, dimensions, availability, SVG, and BOQ fields are explicit.
+- [ ] Published files are immutable or revision-addressed.
+- [ ] Draft, published, retired, and rollback states behave consistently.
+- [ ] Invalid or incomplete inventory cannot publish.
+- [ ] The contract has a documented cloud-storage migration seam.
+- [ ] Repeated publication is deterministic and idempotent.
 
-## PHASE-07 — Studio disk proof
-- [x] `scenePublishAuthority.test.ts` + `publishFromStudio.test.ts` green
-- [x] Open `/admin/svg-editor/side-table-001` → stage visible without scrolling past form wall
-- [x] Draw rect on stage → rectangle visible; live compile rail reflects drawn geometry
-- [x] Publish → status "Published"; POST succeeds
-- [x] `public/svg-catalog/side-table-001.svg` contains rect signature coords; byte size increases
-- [x] `admin-svg-scene-publish-a401.spec.ts` green on this checkout (turbopack dev + `select()` fix)
-- [x] Evidence pack under `results/admin/no-code-svg-studio/a4-0-1-scene-publish-proof/`
-- [x] Kill list respected until green: no minimap/pen/multi-select scored as done
+## Admin workflow
+
+- [ ] Admin routes require the Admin role on page and API boundaries.
+- [ ] Admin can create, edit, preview, publish, retire, and restore inventory.
+- [ ] SVG authoring has selection, properties, layers, undo, redo, and recovery.
+- [ ] Preview and published bytes use the same compiler authority.
+- [ ] SVG publication is sanitized, bounded, deterministic, and atomic.
+- [ ] Product families and options drive 2D, 3D, and BOQ identity together.
+- [ ] Invalid option combinations fail with a clear reason.
+- [ ] Audit records identify actor, action, product, revision, and time.
+- [ ] Failure never displays a saved or published success state.
+
+## Admin interface quality
+
+- [ ] The catalog list supports search, filter, status, and clear actions.
+- [ ] The editor exposes the current draft and published revision.
+- [ ] Keyboard access covers every authoring and publishing action.
+- [ ] Focus is visible and unobscured.
+- [ ] Errors identify the field or operation that failed.
+- [ ] The layout works at supported desktop widths without hidden controls.
+- [ ] Loading, empty, error, and success states are distinct.
+
+## Security and release checks
+
+- [ ] CSRF protects state-changing browser requests.
+- [ ] Upload and SVG inputs enforce type, size, structure, and safe names.
+- [ ] Server authorization does not trust client role claims.
+- [ ] Rate limits protect expensive or abusive endpoints.
+- [ ] Secrets and private storage locations never reach client bundles.
+- [ ] Dependency and secret scans run without suppressed findings.
+- [ ] Focused unit, API, and browser checks pass from a clean catalog state.
+- [ ] Typecheck and lint pass for changed Admin surfaces.
+
+## Completion record
+
+- [ ] Fresh commands and exit codes are recorded here.
+- [ ] Remaining failures are active entries in `../../Failures.md`.
+- [ ] No resolved failure remains in `../../Failures.md`.

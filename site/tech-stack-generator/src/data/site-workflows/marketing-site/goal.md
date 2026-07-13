@@ -1,1 +1,0 @@
-100% data-driven where possible, zero-drift from Figma via tokens only, sub-2s LCP on all marketing routes, full evidence-backed screenshots in every gate.
