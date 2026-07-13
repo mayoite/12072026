@@ -556,6 +556,18 @@ export function OOPlannerWorkspace({
     [workspaceCanvas],
   );
 
+  const handleDuplicateEntity = useCallback(
+    (collection: PlannerEntityCollection, id: string) => {
+      workspaceCanvas.dispatch({
+        type: "duplicate",
+        collection,
+        id,
+        newId: newEntityId(),
+      } as const);
+    },
+    [workspaceCanvas],
+  );
+
   /** Delete / Backspace — one history step for the whole selection. */
   const deleteSelection = useCallback(() => {
     const { selection } = workspaceCanvas;
@@ -564,6 +576,23 @@ export function OOPlannerWorkspace({
       applySelectionDelete(project, selection),
     );
     workspaceCanvas.setSelection({ type: "none", ids: [] });
+  }, [workspaceCanvas]);
+
+  /** Ctrl+D — duplicate each selected entity. */
+  const duplicateSelection = useCallback(() => {
+    const { selection } = workspaceCanvas;
+    if (selection.type === "none" || selection.ids.length === 0) return;
+    for (const id of selection.ids) {
+      const resolved = resolveSelectedEntity(selection, workspaceCanvas.activeFloor);
+      if (resolved) {
+        workspaceCanvas.dispatch({
+          type: "duplicate",
+          collection: resolved.collection,
+          id,
+          newId: newEntityId(),
+        } as const);
+      }
+    }
   }, [workspaceCanvas]);
 
   const setTool = useCallback((tool: PlannerTool) => {
@@ -1036,6 +1065,7 @@ export function OOPlannerWorkspace({
     undo: runUndo,
     redo: runRedo,
     deleteSelection,
+    duplicateSelection,
     cancel: () => {
       setPendingCatalogItemId(null);
       canvasRef.current?.cancel();
@@ -1177,13 +1207,14 @@ export function OOPlannerWorkspace({
               selectedEntity={selectedEntity}
               multiSelection={multiSelection}
               displayUnit={displayUnit}
-              callbacks={{
-                onUpdateEntity: handleUpdateEntity,
-                onDeleteEntity: handleDeleteEntity,
-                onToggleLock: handleToggleLock,
-                onDeselect: () =>
-                  workspaceCanvas.setSelection({ type: "none", ids: [] }),
-              }}
+                callbacks={{
+                  onUpdateEntity: handleUpdateEntity,
+                  onDeleteEntity: handleDeleteEntity,
+                  onToggleLock: handleToggleLock,
+                  onDuplicateEntity: handleDuplicateEntity,
+                  onDeselect: () =>
+                    workspaceCanvas.setSelection({ type: "none", ids: [] }),
+                }}
             />
           ) : null
         }
