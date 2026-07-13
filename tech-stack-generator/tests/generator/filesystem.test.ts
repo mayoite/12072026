@@ -35,7 +35,7 @@ describe('tech stack filesystem utilities', () => {
     const repoRoot = createRepoRoot()
     const { documentsRoot, stagingDocumentsRoot, marker } = await initializeDocumentsWorkspace(repoRoot)
 
-    expect(documentsRoot).toBe(path.join(repoRoot, 'site', 'tech-stack-generated', 'docs'))
+    expect(documentsRoot).toBe(path.join(repoRoot, 'tech-stack-generated', 'docs'))
     expect(stagingDocumentsRoot).toBe(path.join(repoRoot, '.tmp', 'tech-stack-generated', 'docs'))
     expect(marker.created).toBe(true)
     expect(readFileSync(path.join(documentsRoot, GENERATED_ROOT_FILENAME), 'utf8')).toBe(
@@ -46,11 +46,11 @@ describe('tech stack filesystem utilities', () => {
 
   it('does not create the marker when Documents is non-empty and missing it', async () => {
     const repoRoot = createRepoRoot()
-    const documentsRoot = path.join(repoRoot, 'documents-generated')
+    const documentsRoot = path.join(repoRoot, 'tech-stack-generated/docs')
     mkdirSync(documentsRoot, { recursive: true })
     writeFileSync(path.join(documentsRoot, 'rogue.txt'), 'leave-me', 'utf8')
     await expect(ensureGeneratedRoot(documentsRoot)).rejects.toThrow(
-      /documents-generated\/ is not empty and is missing \.generated-root/,
+      /tech-stack-generated\/docs\/ is not empty and is missing \.generated-root/,
     )
 
     expect(readFileSync(path.join(documentsRoot, 'rogue.txt'), 'utf8')).toBe('leave-me')
@@ -59,8 +59,8 @@ describe('tech stack filesystem utilities', () => {
 
   it('refuses to delete when Documents contains an unknown file', async () => {
     const repoRoot = createRepoRoot()
-    const documentsRoot = path.join(repoRoot, 'documents-generated')
-    const stagingDocumentsRoot = path.join(repoRoot, '.tmp', 'tech-stack-docs', 'documents-generated')
+    const documentsRoot = path.join(repoRoot, 'tech-stack-generated/docs')
+    const stagingDocumentsRoot = path.join(repoRoot, '.tmp', 'tech-stack-generated', 'docs')
     mkdirSync(documentsRoot, { recursive: true })
     writeFileSync(path.join(documentsRoot, GENERATED_ROOT_FILENAME), GENERATED_ROOT_CONTENT, 'utf8')
     writeFileSync(path.join(documentsRoot, 'rogue.txt'), 'leave-me', 'utf8')
@@ -80,15 +80,15 @@ describe('tech stack filesystem utilities', () => {
         previousManifest,
         nextManifest,
       }),
-    ).rejects.toThrow(/Unknown file\(s\) in documents-generated\/: rogue\.txt/)
+    ).rejects.toThrow(/Unknown file\(s\) in tech-stack-generated\/docs\/: rogue\.txt/)
 
     expect(readFileSync(path.join(documentsRoot, 'rogue.txt'), 'utf8')).toBe('leave-me')
   })
 
   it('replaces only files owned by the previous manifest', async () => {
     const repoRoot = createRepoRoot()
-    const documentsRoot = path.join(repoRoot, 'documents-generated')
-    const stagingDocumentsRoot = path.join(repoRoot, '.tmp', 'tech-stack-docs', 'documents-generated')
+    const documentsRoot = path.join(repoRoot, 'tech-stack-generated/docs')
+    const stagingDocumentsRoot = path.join(repoRoot, '.tmp', 'tech-stack-generated', 'docs')
     mkdirSync(documentsRoot, { recursive: true })
     mkdirSync(stagingDocumentsRoot, { recursive: true })
     writeFileSync(path.join(documentsRoot, GENERATED_ROOT_FILENAME), GENERATED_ROOT_CONTENT, 'utf8')
@@ -129,8 +129,8 @@ describe('tech stack filesystem utilities', () => {
 
   it('rejects undeclared staging files before copying', async () => {
     const repoRoot = createRepoRoot()
-    const documentsRoot = path.join(repoRoot, 'documents-generated')
-    const stagingDocumentsRoot = path.join(repoRoot, '.tmp', 'tech-stack-docs', 'documents-generated')
+    const documentsRoot = path.join(repoRoot, 'tech-stack-generated/docs')
+    const stagingDocumentsRoot = path.join(repoRoot, '.tmp', 'tech-stack-generated', 'docs')
 
     mkdirSync(documentsRoot, { recursive: true })
     writeFileSync(path.join(documentsRoot, GENERATED_ROOT_FILENAME), GENERATED_ROOT_CONTENT, 'utf8')
@@ -154,7 +154,7 @@ describe('tech stack filesystem utilities', () => {
         previousManifest,
         nextManifest,
       }),
-    ).rejects.toThrow(/Staging documents-generated\/ mismatch \(unexpected: rogue\.txt\)/)
+    ).rejects.toThrow(/Staging tech-stack-generated\/docs\/ mismatch \(unexpected: rogue\.txt\)/)
 
     expect(readFileSync(path.join(documentsRoot, 'owned.txt'), 'utf8')).toBe('old-owned')
     expect(existsSync(path.join(documentsRoot, 'rogue.txt'))).toBe(false)
@@ -162,7 +162,7 @@ describe('tech stack filesystem utilities', () => {
 
   it('ignores Vite output under tech-stack-docs when checking ownership', async () => {
     const repoRoot = createRepoRoot()
-    const documentsRoot = path.join(repoRoot, 'documents-generated')
+    const documentsRoot = path.join(repoRoot, 'tech-stack-generated/docs')
     mkdirSync(documentsRoot, { recursive: true })
     writeFileSync(path.join(documentsRoot, GENERATED_ROOT_FILENAME), GENERATED_ROOT_CONTENT, 'utf8')
     writeFileSync(path.join(documentsRoot, 'owned.txt'), 'owned', 'utf8')

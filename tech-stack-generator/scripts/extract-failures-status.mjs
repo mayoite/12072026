@@ -1,11 +1,10 @@
-import { readFileSync, readdirSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createNormalizedRecord } from './normalized-record.mjs'
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const defaultRepoRoot = path.resolve(scriptDir, '..', '..')
-const PLAN_PACK_DIR = 'plans/tech-stack-generator-7-file-plan'
 
 function parseFailuresBullets(text, sourcePath) {
   const records = []
@@ -33,7 +32,7 @@ function parseFailuresBullets(text, sourcePath) {
 export function extractFailuresStatusRecords({ repoRoot = defaultRepoRoot } = {}) {
   const records = []
 
-  for (const relativePath of ['Failures.md', 'HANDOVER.md']) {
+  for (const relativePath of ['Failures.md']) {
     try {
       const text = readFileSync(path.join(repoRoot, relativePath), 'utf8')
       records.push(...parseFailuresBullets(text, relativePath))
@@ -51,29 +50,6 @@ export function extractFailuresStatusRecords({ repoRoot = defaultRepoRoot } = {}
         }),
       )
     }
-  }
-
-  try {
-    const planFiles = readdirSync(path.join(repoRoot, PLAN_PACK_DIR))
-      .filter((name) => name.endsWith('.md'))
-      .sort()
-    for (const fileName of planFiles) {
-      const relativePath = `${PLAN_PACK_DIR}/${fileName}`
-      records.push(
-        createNormalizedRecord({
-          id: `failures.plan.${fileName.replace(/\.md$/, '')}`,
-          category: 'plan-pack',
-          label: fileName,
-          value: 'active plan pack source',
-          sourcePath: relativePath,
-          sourceKind: 'plan-pack',
-          sourcePointer: relativePath,
-          factClassification: 'code-proven',
-        }),
-      )
-    }
-  } catch {
-    /* optional */
   }
 
   return records.sort((left, right) => left.id.localeCompare(right.id))

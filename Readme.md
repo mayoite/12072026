@@ -1,98 +1,59 @@
-# Oando unified planner + marketing site
+# Oando website and planner
 
-pnpm monorepo for `oando.co.in`. Next.js in `site/`.
+This pnpm workspace contains the Oando website, Admin tools, and customer Planner.
 
-**Active:** `site/features/planner/{editor,canvas,3d,project,ui}` + `site/app/planner/`. Live 2D is Fabric `PlannerCanvasStage` / testid `planner-fabric-stage`. Live 3D is imperative Three with orbit. Feasibility / `canvas-feasibility` **does not and will not exist** — not a product or archive proof path.
+## Product loop
 
-## Which doc to open
+Admin publishes trusted inventory.
 
-→ **`docs/Lockedfiles/INDEX.md`** (routing). Repo facts and app paths continue below.
+Any external customer designs with that inventory.
 
-→ **Execute / parallel gates** — [`plan/README.md`](plan/README.md) and per-track `CHECKLIST.md`.
+Planner generates a branded BOQ.
 
-## Layout
+The customer sends the BOQ to Oando.
 
-```
-repo-root/          ← pnpm workspace wrapper (package.json, pnpm-lock.yaml)
-├── site/           ← Next.js app (oando-site)
-├── tech-stack-generator/  ← Vite source (oando-tech-stack-docs); build output — see `tech-stack-generator/README.md`
-├── docs/           ← reference docs (architecture, api, audit)
-├── archive/        ← historical outputs + `archive/migrationdocs/`
-├── plan/           ← execution tracks (see plan/README.md)
-└── archive/1b-5phase-agent-workflow/ (and archive/Agents_work/) ← archived 1b-5phase agent workflow reports, reviews, benchmarks (narratives only; evidence in results/)
-```
+## Repository
 
-Inside `site/`: `app/` · `features/planner/` · `components/` · `lib/` · `tests/` · `scripts/` · `platform/` · `config/` — **no** `results/` (evidence is repo-root `results/` only; see `AGENTS.md`)
+| Path | Purpose |
+|---|---|
+| `site/` | Next.js product code. |
+| `tech-stack-generator/` | Independent Vite documentation tool. |
+| `tech-stack-generated/` | Generated data. |
+| `tech-stack-docs/` | Generated static documentation site. |
+| `plan/` | Admin and Planner execution checklists. |
+| `docs/` | Product and architecture reference. |
+| `Agents/` | Agent process. |
+| `results/` | Raw tool output only. |
+| `websites/` | External research reference. |
+| `archive/` | Historical reference. |
 
-**Where code goes:** [`docs/architecture/01-MODULE-LAYOUT.md`](docs/architecture/01-MODULE-LAYOUT.md) · **Architecture index:** [`docs/architecture/README.md`](docs/architecture/README.md)
+## Product code
 
-## Environment
+- Routes: `site/app/`.
+- Planner: `site/features/planner/`.
+- Shared UI: `site/components/`.
+- Catalog utilities: `site/lib/catalog/`.
+- Platform clients: `site/platform/`.
+- Public catalog assets: `site/public/`.
 
-Copy `.env.example` → repo-root `.env.local`. Minimum keys: `NEXT_PUBLIC_SUPABASE_*`, `SUPABASE_*`, `OPENROUTER_API_KEY_*`, `SUPABASE_AUTH_DATABASE_URL`, `PRODUCTS_DATABASE_URL`. Validate keys: **`START.md`** (First time).
+Fabric is the sole interactive 2D canvas.
 
-## Data access
+Three.js provides 3D.
 
-- All Postgres row CRUD on the server uses **Drizzle** (`productsDb`, `adminDb`). Do not add new Supabase `.from()` queries for catalog/planner data.
-- **Products DB:** `PRODUCTS_DATABASE_URL` → `platform/drizzle/productsDb.ts` + `schema/catalog.ts`
-- **Admin DB:** `SUPABASE_AUTH_DATABASE_URL` → `platform/drizzle/adminDb.ts` + `schema/planner.ts`
-- Supabase HTTP clients → **Auth** (and legacy routes until migrated), not new catalog/planner SQL.
+Published SVG is the primary planner symbol.
 
-## Tech-stack docs
+## Catalog direction
 
-`tech-stack-generator/` → `Documents/tech-stack-docs/`. Regenerate via **`START.md`** (Tech-stack docs); don't hand-edit generated files.
+Public static catalog data and assets are the first authority.
 
-## Static data
+Cloud or object storage is a later migration.
 
-- Site copy, nav trees, and the local catalog index live in `site/lib/site-data/`.
-- `data/` is legacy and should not receive new app-facing content.
-- Mirror CSS only for UI-owned folders; do not mirror `data/`, `lib/`, or `api/` into a parallel style tree.
+Tests must never mutate the canonical public catalog.
 
-## Config
+## Start
 
-- Route contract metadata lives in `site/config/route-contract.json`.
+Read `START.md` for commands.
 
-## i18n
+Read `plan/README.md` for execution.
 
-- Locale message files live in `site/i18n/messages/`.
-- `site/i18n/request.ts` loads the active locale JSON from that folder.
-
-## CSS
-
-- **Base:** `site/app/css/core/animations.css` for global animation primitives.
-- **Tokens:** `site/app/css/core/theme.css` is the single source; no hex in components.
-- **Entry:** `globals.css` -> `site/app/css/index.css` imports `core/theme.css`, `core/utilities/*.css`, `core/components/*.css`.
-- **Site:** `site/app/css/core/locked/site/` — flat `*.css` + `index.css` per layout.
-- **Admin:** `site/app/css/core/locked/admin/` — flat `*.css` + `index.css`.
-- **Planner:** `site/app/css/core/locked/planner/` — flat `*.css`; `marketing.css` / `open3d-workspace.css` entry bundles.
-
-CSS operating model: [`docs/architecture/04-CSS-SOLUTION.md`](docs/architecture/04-CSS-SOLUTION.md). Module folders and ownership: [`docs/architecture/01-MODULE-LAYOUT.md`](docs/architecture/01-MODULE-LAYOUT.md) · [`docs/architecture/README.md`](docs/architecture/README.md).
-
-## Assets & CDN
-
-- **App SDKs** (tldraw, model-viewer, Draco) → `site/public/cdn/` — in git, deployed
-- **Catalog images + 3D** → R2 `oando-asset-cdn` — cloud only
-- **Local mirror / upload source** → `asset-cdn/` — gitignored
-- **Path strings** → Supabase DB only
-
-Upload and audit commands: **`START.md`** · **`OPERATIONS_RUNBOOK.md`** (Assets & catalog).
-
-## Planner delivery loop
-
-1. Define acceptance evidence
-2. Smallest complete increment
-3. Test → critique → revise → retest
-
-## Quick start
-
-Install, dev server, and all other commands: **`START.md`**.
-
-## Testing & Evidence
-
-- **Technical Guide & Paths:** [`Agents/Agents-04-testing.md`](Agents/Agents-04-testing.md)
-- **Universal Policy:** [`testing-handbook.md`](testing-handbook.md) (Mandatory output-integrity policy for both humans and agents).
-
-http://localhost:3000 · guest planner `/planner/guest/`
-
-TypeScript **6.x**. Dev: `next dev --turbo`. Vercel Root Directory = `site`. Test output: repo-root `results/` (detail **`testing-handbook.md`**).
-
-Other reference: `docs/architecture/`, `docs/api/ROUTE-INDEX.md`, `plan/README.md`.
+Read `docs/INDEX.md` for architecture.

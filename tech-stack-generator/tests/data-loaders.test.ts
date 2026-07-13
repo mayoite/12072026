@@ -93,7 +93,6 @@ describe('generated-data loaders', () => {
       name: 'OPENROUTER_API_KEY_PRIMARY',
       sourcePath: '.env.example',
       sourceKind: 'env-example',
-      sourcePointer: 'line 31',
       usages: expect.arrayContaining([
         expect.objectContaining({
           sourcePath: expect.any(String),

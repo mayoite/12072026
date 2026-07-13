@@ -263,12 +263,12 @@ describe('CodeBlock', () => {
     })
 
     expect(writeText).toHaveBeenCalledWith('const answer = 42')
-    expect(container.querySelector('svg.lucide-check')).toBeTruthy()
+    expect(container.querySelector('svg.text-success-400')).toBeTruthy()
     await act(async () => {
       vi.runOnlyPendingTimers()
       await Promise.resolve()
     })
-    expect(container.querySelector('svg.lucide-copy')).toBeTruthy()
+    expect(container.querySelector('button[aria-label="Copy code"] svg')).toBeTruthy()
   })
 
   it('renders untitled blocks with the floating copy controls', async () => {
@@ -283,12 +283,12 @@ describe('CodeBlock', () => {
     })
 
     expect(writeText).toHaveBeenCalledWith("console.log('hi')")
-    expect(container.querySelector('svg.lucide-check')).toBeTruthy()
+    expect(container.querySelector('svg.text-success-400')).toBeTruthy()
     await act(async () => {
       vi.runOnlyPendingTimers()
       await Promise.resolve()
     })
-    expect(container.querySelector('svg.lucide-copy')).toBeTruthy()
+    expect(container.querySelector('button[aria-label="Copy code"] svg')).toBeTruthy()
   })
 })
 

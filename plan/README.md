@@ -1,42 +1,108 @@
 # Execution plan
 
-## Product loop
+This is the execution order.
+
+The checklists record status only.
+
+## Outcome
 
 1. Admin publishes trusted inventory.
-2. A customer enters the public Planner.
-3. The customer designs with available inventory.
-4. Planner generates a branded BOQ.
-5. The customer sends the BOQ to Oando.
+2. Site helps a public visitor discover Oando.
+3. The visitor opens Planner.
+4. The customer designs with available inventory.
+5. Planner generates a branded BOQ.
+6. The customer sends the BOQ to Oando.
 
-## Tracks
+## First gate
 
-- `Admin/CHECKLIST.md` owns catalog creation, governance, and publication.
-- `Planner/CHECKLIST.md` owns the public site, design workflow, BOQ, and handoff.
-- `Phase-2/README.md` holds deferred decisions only.
+Run Admin Step 0 test isolation first.
 
-UI, site, SEO, accessibility, performance, and security are acceptance criteria inside both tracks.
+Step 0 is defined in `Admin/README.md` and `Admin/CHECKLIST.md`.
 
-They are not separate tracks.
+Only catalog-writing tests wait for this gate.
 
-## Execution rules
+Unrelated read-only work may continue.
 
-- Treat every checkbox as not done.
-- Verify live code before checking an item.
-- Run test and catalog isolation first.
-- Admin and Planner may run in parallel after isolation.
-- A failed item blocks only its named dependants.
-- Continue all unrelated items.
-- Record only active blockers in `../Failures.md`.
-- Record the fresh command and result beside completed work.
-- Raw output may go under `results/<track>/<run-id>/`.
-- Raw output never proves completion by itself.
+## Parallel execution
 
-## Current product boundaries
+### Stream A: Admin
 
-- Catalog authority is public static data and assets.
-- Cloud catalog storage is a later migration.
-- Planner renders published SVG first.
-- `Block2D` is a fallback.
-- BOQ contains branded product quantities and identity.
-- Demo prices are not commercial truth.
-- Customer submission must reach an Oando-controlled destination.
+1. `Admin/PHASE-01-authoring-quality.md`
+2. `Admin/PHASE-02-catalog-lifecycle.md`
+3. `Admin/PHASE-03-product-families.md`
+4. `Admin/PHASE-04-commercial-governance.md`
+
+### Stream B: Planner
+
+1. `Planner/PHASE-01-public-entry-deterministic-boq.md`
+2. `Planner/PHASE-02-core-layout-catalog.md`
+3. `Planner/PHASE-03-bulk-layout-validation.md`
+4. `Planner/PHASE-04-pricing-revisions-sharing.md`
+5. `Planner/PHASE-05-handoff-exports.md`
+
+### Stream C: Site
+
+1. `Site/PHASE-01-measurement-foundation.md`
+2. `Site/PHASE-02-commercial-landing-pages.md`
+3. `Site/PHASE-03-search-led-content.md`
+4. `Site/PHASE-04-public-product-discovery.md`
+5. `Site/PHASE-05-structured-data-release.md`
+
+### Stream D: Security
+
+1. `Security/PHASE-01-security.md`
+
+Admin, Planner, Site, and Security run in parallel after test isolation.
+
+Within each stream, independent sections may run in parallel.
+
+## Exact dependencies
+
+| Work | Depends on |
+|---|---|
+| Planner catalog integration | Published catalog contract or isolated fixture. |
+| Planner 2D SVG rendering | Published SVG contract or isolated fixture. |
+| Family-specific Admin pricing | Released family contract. |
+| Phase 1 deterministic BOQ | Canonical project data or an isolated product-backed fixture. |
+| Site public product discovery | Published catalog contract or isolated fixture. |
+| Customer BOQ submission | Branded BOQ and Oando endpoint contract. |
+| Final recheck | All four checklists and all active failures. |
+
+A dependency blocks only the named work.
+
+It does not stop either track.
+
+## Folded concerns
+
+- UI applies to Admin, Planner, and Site.
+- SEO belongs to Site.
+- Security verifies every changed boundary.
+- Buyer work is part of the external customer Planner journey.
+
+## Verification
+
+- Treat every checklist item as not done.
+- Read live code before claiming support.
+- Run focused checks during each phase.
+- Run browser checks for interface claims.
+- Rerun changed checks from clean state.
+- Record active failures in `../Failures.md`.
+- Remove failures after fresh verification.
+
+Raw output uses stable paths under `results/<track>/<command>/`.
+
+Each run cleans and overwrites its own command folder.
+
+Do not create timestamped result dumps.
+
+## Completion
+
+Admin completes when trusted inventory is safely published and consumed.
+
+Planner completes when a customer can design and send a branded BOQ to Oando.
+
+Site completes when public discovery is truthful, measurable, and leads customers into Planner.
+
+Security completes when protected data, permissions, integrations, and release provenance pass fresh negative and positive checks.
+
+Each Phase-2 point opens when its direct primary dependency is verified.

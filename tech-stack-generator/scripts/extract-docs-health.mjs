@@ -7,21 +7,22 @@ const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const defaultRepoRoot = path.resolve(scriptDir, '..', '..')
 
 const ROOT_DOCS = [
+  'AGENTS.md',
   'Readme.md',
-  'HANDOVER.md',
   'START.md',
-  'TESTING.md',
+  'testing-handbook.md',
   'OPERATIONS_RUNBOOK.md',
   'Failures.md',
+  'docs/INDEX.md',
+  'plan/README.md',
 ]
 
 const TECH_STACK_DOCS = [
   'tech-stack-generator/README.md',
-  'tech-stack-generator/Readme_Techstack.md',
 ]
 
 const OUTPUT_PATH_SNIPPETS = [
-  { label: 'Vite outDir', needle: 'documents-generated/tech-stack-docs', files: TECH_STACK_DOCS },
+  { label: 'Vite outDir', needle: 'tech-stack-docs/', files: TECH_STACK_DOCS },
   { label: 'docs:sync script', needle: 'docs:sync:tech-stack', files: ['package.json', ...TECH_STACK_DOCS] },
 ]
 
@@ -67,8 +68,8 @@ export function extractDocsHealthRecords({ repoRoot = defaultRepoRoot } = {}) {
     )
   }
 
-  const manifestPath = 'documents-generated/_manifest.json'
-  const accuracyPath = 'documents-generated/_accuracy.json'
+  const manifestPath = 'tech-stack-generated/docs/_manifest.json'
+  const accuracyPath = 'tech-stack-generated/data/_accuracy-renderer.json'
   for (const [relativePath, kind] of [
     [manifestPath, 'generated-manifest'],
     [accuracyPath, 'renderer-accuracy-report'],

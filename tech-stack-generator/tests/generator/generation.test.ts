@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { generateDocs } from '../../scripts/generate.mjs'
 import { buildGeneratorModel } from '../../scripts/model.mjs'
 
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../../')
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../')
 const tempRoots: string[] = []
 
 function createTempRoot() {

@@ -1,16 +1,9 @@
-# Agents/Agents-09-css.md
+# CSS
 
-**Never edit** `site/app/css/core/locked/**`. Custom CSS only **outside** locked.
-
-| Zone | Rule |
-|------|------|
-| `core/locked/**` | **No edits** |
-| `core/theme.css` | Tokens only when phase explicitly requires |
-| utilities/components | Shared patterns; token-first |
-| Post-locked CSS | New sheet under `app/css/` or module CSS — not locked rewrites |
-
-Fix TSX/structure before new CSS. Wrong locked sheet for whole product → stop and ask.
-
-**Subagent line:** `CSS fence: never touch core/locked/**`
-
-See: `site/app/css/core/locked/README.md` · `Agents-08-architecture.md`
+- Follow `docs/architecture/04-CSS-SOLUTION.md`.
+- Use semantic tokens.
+- Keep repeated presentation out of TSX.
+- Avoid raw palette values and inline colors.
+- Change shared surface CSS only when the task needs it.
+- Run focused UI lint and browser checks after shared CSS changes.
+- Do not create another global styling tree.

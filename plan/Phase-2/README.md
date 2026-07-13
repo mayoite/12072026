@@ -1,19 +1,13 @@
-# Phase 2 decisions
+# Phase 2
 
-Open this only after both primary checklists are reviewed.
+Phase 2 does not wait for every primary track.
 
-Decide the next user and commercial outcome before expanding work.
+Each point starts when its direct primary dependency is verified.
 
-Candidate decisions:
+Do not add checkboxes yet.
 
-- Cloud or object storage for the catalog.
-- Customer accounts, sharing, and collaboration.
-- Approved pricing and quote authority.
-- Advanced layout validation and rule packs.
-- Bulk planning and large-project performance.
-- CRM, ERP, and order integrations.
-- Open data exchange such as IFC or IDS.
+Do not add implementation detail yet.
 
-These are not commitments.
+Expand a point only when its primary work is near completion.
 
-They do not block Admin or Planner completion.
+No deferred points are currently approved.

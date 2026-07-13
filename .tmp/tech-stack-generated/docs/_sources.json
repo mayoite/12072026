@@ -105,13 +105,6 @@
     "sourcePointer": "export GET"
   },
   {
-    "bytes": 11293,
-    "hash": "sha256:971c1338dade00ea1c4f2eb046423bbd828a0d42ab3d100e586621db12123deb",
-    "sourceKind": "env-reader",
-    "sourcePath": "site/tech-stack-generator/src/pages/Security.tsx",
-    "sourcePointer": "match at index 4836"
-  },
-  {
     "bytes": 11357,
     "hash": "sha256:122837a6bc7311f664c9cf3e4e8be7c8483fd3f59ec989354eeb294dc9664af0",
     "sourceKind": "env-reader",
@@ -259,13 +252,6 @@
     "sourcePointer": "match at index 2837"
   },
   {
-    "bytes": 14403,
-    "hash": "sha256:b3dc823b1f83863fcab609e643657afe9e938a6b0ce120cab8e848f82bd8253e",
-    "sourceKind": "env-reader",
-    "sourcePath": "site/tech-stack-generator/src/pages/Architecture.tsx",
-    "sourcePointer": "match at index 10476"
-  },
-  {
     "bytes": 145,
     "hash": "sha256:eab2f20d424ea3e65963794d5864003f064240037a536bdb6aef3edf2195fcd2",
     "sourceKind": "page-file",
@@ -273,10 +259,10 @@
     "sourcePointer": "default export"
   },
   {
-    "bytes": 1493,
-    "hash": "sha256:a9abce202bf766bf638186abc407abeb455fa375b1f2285c094c84284905a78c",
+    "bytes": 1490,
+    "hash": "sha256:b266f5c0b0926229c6bbd70cb68d0762affb7e96f3f67b545873d05d8f31c655",
     "sourceKind": "package-manifest",
-    "sourcePath": "site/tech-stack-generator/package.json",
+    "sourcePath": "tech-stack-generator/package.json",
     "sourcePointer": "dependencies.@phosphor-icons/react"
   },
   {
@@ -336,8 +322,8 @@
     "sourcePointer": "default export"
   },
   {
-    "bytes": 16187,
-    "hash": "sha256:126e9f29c0ec67bd9c863ae27ea81251b846bfc54d11aaa90fd6a70e49e17f14",
+    "bytes": 16075,
+    "hash": "sha256:e1071d822ff7fb475aa4e5ea8ce7a013507972044a511124f9c6143926fa1c51",
     "sourceKind": "package-manifest",
     "sourcePath": "site/package.json",
     "sourcePointer": "dependencies.@aws-sdk/client-s3"
@@ -980,8 +966,8 @@
     "sourcePointer": "line 21"
   },
   {
-    "bytes": 3553,
-    "hash": "sha256:a0d389f94f8e88643631e0fb451c036e155f6055d307ef1c7a5adb1860e9973c",
+    "bytes": 3530,
+    "hash": "sha256:1c33fbcb9f417beeda99eee4b0153405f8b528485611b47765ab4ce79e109906",
     "sourceKind": "package-manifest",
     "sourcePath": "package.json",
     "sourcePointer": "devDependencies.@secretlint/secretlint-rule-preset-recommend"
@@ -1218,8 +1204,8 @@
     "sourcePointer": "import \"server-only\""
   },
   {
-    "bytes": 525587,
-    "hash": "sha256:dbcc7e33a1392782028d6e5d8cda1811adffc7931f4d118352e9f5e243d09134",
+    "bytes": 525582,
+    "hash": "sha256:1531f47a7a43bd3a8ae6a4d29c537d5e58021da9f2a4d73f01b05ae576a51755",
     "sourceKind": "lockfile",
     "sourcePath": "pnpm-lock.yaml",
     "sourcePointer": "importers...devDependencies.@secretlint/secretlint-rule-preset-recommend.version"

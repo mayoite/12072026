@@ -3,8 +3,8 @@
 | Fact ID | Category | Label | Value | Source |
 | --- | --- | --- | --- | --- |
 | `workflows.package.dev.value` | dev-loop | dev | pnpm --filter oando-site dev | `package.json` `scripts.dev` |
-| `workflows.package.docs:check:tech-stack.value` | dev-loop | docs:check:tech-stack | node site/tech-stack-generator/scripts/check.mjs | `package.json` `scripts.docs:check:tech-stack` |
-| `workflows.package.docs:sync:tech-stack.value` | dev-loop | docs:sync:tech-stack | node site/tech-stack-generator/scripts/generate.mjs && node site/tech-stack-generator/scripts/emit-renderer-data.mjs | `package.json` `scripts.docs:sync:tech-stack` |
+| `workflows.package.docs:check:tech-stack.value` | dev-loop | docs:check:tech-stack | node tech-stack-generator/scripts/check.mjs | `package.json` `scripts.docs:check:tech-stack` |
+| `workflows.package.docs:sync:tech-stack.value` | dev-loop | docs:sync:tech-stack | node tech-stack-generator/scripts/generate.mjs && node tech-stack-generator/scripts/emit-renderer-data.mjs | `package.json` `scripts.docs:sync:tech-stack` |
 | `workflows.package.lint:secrets.value` | dev-loop | lint:secrets | secretlint "**/*.{cjs,css,csv,html,js,json,jsx,md,mjs,ps1,py,sql,toml,ts,tsx,txt,yaml,yml}" ".env*" ".gitattributes" ".gitignore" ".npmrc" ".vercelignore" | `package.json` `scripts.lint:secrets` |
 | `workflows.package.release:gate.value` | dev-loop | release:gate | turbo run release:gate | `package.json` `scripts.release:gate` |
 | `workflows.package.vercel:prod.value` | dev-loop | vercel:prod | pnpm run release:gate && vercel --prod --yes | `package.json` `scripts.vercel:prod` |
@@ -232,9 +232,6 @@
 | `site/scripts/test-r2-upload.ts` | `env-reader` | `match at index 744` |
 | `site/scripts/translate-deferred-marketing-flat.mjs` | `env-reader` | `match at index 2447` |
 | `site/scripts/translate-deferred-marketing.mjs` | `env-reader` | `match at index 2802` |
-| `site/tech-stack-generator/package.json` | `package-manifest` | `dependencies.@phosphor-icons/react` |
-| `site/tech-stack-generator/src/pages/Architecture.tsx` | `env-reader` | `match at index 10476` |
-| `site/tech-stack-generator/src/pages/Security.tsx` | `env-reader` | `match at index 4836` |
 | `site/tests/e2e/site-navigation-smoke.spec.ts` | `env-test` | `match at index 81` |
 | `site/tests/integration/planner-store-plannerPersistence.test.ts` | `env-test` | `match at index 2137` |
 | `site/tests/unit/app/admin/themes/page.test.tsx` | `env-test` | `match at index 281` |
@@ -246,3 +243,4 @@
 | `site/tests/unit/platform/supabase/adminServer.test.ts` | `env-test` | `match at index 1433` |
 | `site/tests/unit/shared-providerChain.test.ts` | `env-test` | `match at index 346` |
 | `site/tsconfig.json` | `tsconfig-path` | `compilerOptions.paths.@/app/*` |
+| `tech-stack-generator/package.json` | `package-manifest` | `dependencies.@phosphor-icons/react` |

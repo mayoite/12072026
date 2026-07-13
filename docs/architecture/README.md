@@ -7,10 +7,11 @@ Oando should connect inventory, layout, and commercial handoff without re-keying
 The primary loop is simple:
 
 1. Admin publishes trusted inventory.
-2. Any external customer enters Planner.
-3. The customer designs with available products.
-4. Planner creates a branded BOQ.
-5. The customer sends the BOQ to Oando.
+2. Site helps a public visitor discover Oando.
+3. The visitor enters Planner.
+4. The customer designs with available products.
+5. Planner creates a branded BOQ.
+6. The customer sends the BOQ to Oando.
 
 The canvas is not the whole product.
 
@@ -19,9 +20,11 @@ Catalog truth and BOQ handoff are equally important.
 ## Current tracks
 
 - Admin owns catalog authoring, lifecycle, publication, and audit.
-- Planner owns the public entry, layout, 2D/3D continuity, BOQ, and submission.
+- Site owns public acquisition, content, discovery, SEO, and measurement.
+- Planner owns layout, 2D/3D continuity, BOQ, and submission.
+- Security owns cross-track authorization, permissions, integration security, and release provenance verification.
 
-Site, UI, SEO, accessibility, performance, and security apply inside these tracks.
+UI, accessibility, and performance apply inside the product tracks.
 
 ## Product boundaries
 

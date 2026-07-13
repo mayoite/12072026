@@ -2,7 +2,6 @@
 
 | Fact ID | Package | Script | Command | Source |
 | --- | --- | --- | --- | --- |
-| `oando-site:// docs:* scripts restored for CONTENTS.md + inventory regeneration; use docs:sync or docs:sync:all..command` | oando-site | // docs:* scripts restored for CONTENTS.md + inventory regeneration; use docs:sync or docs:sync:all. |  | `site/package.json` |
 | `oando-site:alt:sync:apply.command` | oando-site | alt:sync:apply | tsx scripts/sync-missing-alt-text.ts --apply | `site/package.json` |
 | `oando-site:alt:sync:dry.command` | oando-site | alt:sync:dry | tsx scripts/sync-missing-alt-text.ts | `site/package.json` |
 | `oando-site:assets:audit:thirdparty.command` | oando-site | assets:audit:thirdparty | python scripts/audit_external_asset_hosts.py --fail-on-hit | `site/package.json` |
@@ -149,26 +148,26 @@
 | `oando-site:tree:xlsx.command` | oando-site | tree:xlsx | node scripts/generate-tree.js && node scripts/format-dir-tree-xlsx.mjs | `site/package.json` |
 | `oando-site:typecheck.command` | oando-site | typecheck | tsc -p tsconfig.json --noEmit | `site/package.json` |
 | `oando-site:typecheck:scripts.command` | oando-site | typecheck:scripts | tsc -p scripts/tsconfig.json --noEmit | `site/package.json` |
-| `oando-site-workflow-docs:build.command` | oando-site-workflow-docs | build | node scripts/emit-renderer-data.mjs && vite build | `site/tech-stack-generator/package.json` |
-| `oando-site-workflow-docs:coverage.command` | oando-site-workflow-docs | coverage | vitest run --coverage | `site/tech-stack-generator/package.json` |
-| `oando-site-workflow-docs:dev.command` | oando-site-workflow-docs | dev | node scripts/emit-renderer-data.mjs && vite | `site/tech-stack-generator/package.json` |
-| `oando-site-workflow-docs:docs:check.command` | oando-site-workflow-docs | docs:check | node scripts/check.mjs | `site/tech-stack-generator/package.json` |
-| `oando-site-workflow-docs:docs:emit.command` | oando-site-workflow-docs | docs:emit | node scripts/emit-renderer-data.mjs | `site/tech-stack-generator/package.json` |
-| `oando-site-workflow-docs:docs:generate.command` | oando-site-workflow-docs | docs:generate | node scripts/generate.mjs | `site/tech-stack-generator/package.json` |
-| `oando-site-workflow-docs:docs:sync-css.command` | oando-site-workflow-docs | docs:sync-css | node scripts/sync-css.mjs | `site/tech-stack-generator/package.json` |
-| `oando-site-workflow-docs:preinstall.command` | oando-site-workflow-docs | preinstall | node ../../scripts/guard-workspace-install.mjs | `site/tech-stack-generator/package.json` |
-| `oando-site-workflow-docs:preview.command` | oando-site-workflow-docs | preview | vite preview | `site/tech-stack-generator/package.json` |
-| `oando-site-workflow-docs:test.command` | oando-site-workflow-docs | test | node scripts/emit-renderer-data.mjs && vitest run | `site/tech-stack-generator/package.json` |
-| `oando-site-workflow-docs:test:coverage.command` | oando-site-workflow-docs | test:coverage | vitest run --coverage | `site/tech-stack-generator/package.json` |
-| `oando-site-workflow-docs:typecheck.command` | oando-site-workflow-docs | typecheck | tsc --noEmit | `site/tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:build.command` | oando-site-workflow-docs | build | node scripts/emit-renderer-data.mjs && vite build | `tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:coverage.command` | oando-site-workflow-docs | coverage | vitest run --coverage | `tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:dev.command` | oando-site-workflow-docs | dev | node scripts/emit-renderer-data.mjs && vite | `tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:docs:check.command` | oando-site-workflow-docs | docs:check | node scripts/check.mjs | `tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:docs:emit.command` | oando-site-workflow-docs | docs:emit | node scripts/emit-renderer-data.mjs | `tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:docs:generate.command` | oando-site-workflow-docs | docs:generate | node scripts/generate.mjs | `tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:docs:sync-css.command` | oando-site-workflow-docs | docs:sync-css | node scripts/sync-css.mjs | `tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:preinstall.command` | oando-site-workflow-docs | preinstall | node ../scripts/guard-workspace-install.mjs | `tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:preview.command` | oando-site-workflow-docs | preview | vite preview | `tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:test.command` | oando-site-workflow-docs | test | node scripts/emit-renderer-data.mjs && vitest run | `tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:test:coverage.command` | oando-site-workflow-docs | test:coverage | vitest run --coverage | `tech-stack-generator/package.json` |
+| `oando-site-workflow-docs:typecheck.command` | oando-site-workflow-docs | typecheck | tsc --noEmit | `tech-stack-generator/package.json` |
 | `oando-workspace:build.command` | oando-workspace | build | pnpm run check-sharp && pnpm --filter oando-site build && pnpm --filter oando-site-workflow-docs build | `package.json` |
 | `oando-workspace:build:tech-stack.command` | oando-workspace | build:tech-stack | pnpm --filter oando-site-workflow-docs build | `package.json` |
 | `oando-workspace:check-sharp.command` | oando-workspace | check-sharp | node scripts/check-sharp.js | `package.json` |
 | `oando-workspace:check:active-docs.command` | oando-workspace | check:active-docs | node scripts/check-active-docs.mjs | `package.json` |
 | `oando-workspace:check:agents-folder.command` | oando-workspace | check:agents-folder | node scripts/check-agents-folder.mjs | `package.json` |
 | `oando-workspace:check:agents-md.command` | oando-workspace | check:agents-md | node scripts/check-agents-md.mjs | `package.json` |
-| `oando-workspace:check:ayushdocs.command` | oando-workspace | check:ayushdocs | node scripts/check-ayushdocs.mjs | `package.json` |
 | `oando-workspace:check:docs-purity.command` | oando-workspace | check:docs-purity | node scripts/check-docs-purity.mjs | `package.json` |
+| `oando-workspace:check:failures.command` | oando-workspace | check:failures | node scripts/check-failures.mjs | `package.json` |
 | `oando-workspace:check:layout.command` | oando-workspace | check:layout | node scripts/check-repo-layout.mjs | `package.json` |
 | `oando-workspace:check:plans-purity.command` | oando-workspace | check:plans-purity | node scripts/check-plans-purity.mjs | `package.json` |
 | `oando-workspace:dev.command` | oando-workspace | dev | pnpm --filter oando-site dev | `package.json` |
@@ -176,13 +175,13 @@
 | `oando-workspace:dev:turbo.command` | oando-workspace | dev:turbo | pnpm --filter oando-site dev:turbo | `package.json` |
 | `oando-workspace:docs:build:tech-stack.command` | oando-workspace | docs:build:tech-stack | pnpm run docs:sync:tech-stack && pnpm run docs:typecheck:tech-stack && pnpm run build:tech-stack | `package.json` |
 | `oando-workspace:docs:check:root-links.command` | oando-workspace | docs:check:root-links | node site/scripts/check-root-markdown-links.mjs | `package.json` |
-| `oando-workspace:docs:check:tech-stack.command` | oando-workspace | docs:check:tech-stack | node site/tech-stack-generator/scripts/check.mjs | `package.json` |
-| `oando-workspace:docs:gate:tech-stack.command` | oando-workspace | docs:gate:tech-stack | node site/tech-stack-generator/scripts/gate.mjs | `package.json` |
+| `oando-workspace:docs:check:tech-stack.command` | oando-workspace | docs:check:tech-stack | node tech-stack-generator/scripts/check.mjs | `package.json` |
+| `oando-workspace:docs:gate:tech-stack.command` | oando-workspace | docs:gate:tech-stack | node tech-stack-generator/scripts/gate.mjs | `package.json` |
 | `oando-workspace:docs:sync:all.command` | oando-workspace | docs:sync:all | pnpm --filter oando-site docs:sync:all | `package.json` |
-| `oando-workspace:docs:sync:tech-stack.command` | oando-workspace | docs:sync:tech-stack | node site/tech-stack-generator/scripts/generate.mjs && node site/tech-stack-generator/scripts/emit-renderer-data.mjs | `package.json` |
+| `oando-workspace:docs:sync:tech-stack.command` | oando-workspace | docs:sync:tech-stack | node tech-stack-generator/scripts/generate.mjs && node tech-stack-generator/scripts/emit-renderer-data.mjs | `package.json` |
 | `oando-workspace:docs:test:tech-stack.command` | oando-workspace | docs:test:tech-stack | pnpm --filter oando-site-workflow-docs test | `package.json` |
 | `oando-workspace:docs:typecheck:tech-stack.command` | oando-workspace | docs:typecheck:tech-stack | pnpm --filter oando-site-workflow-docs typecheck | `package.json` |
-| `oando-workspace:gate.command` | oando-workspace | gate | pnpm run check:layout && pnpm run check:ayushdocs && pnpm run check:agents-md && pnpm run check:agents-folder && pnpm run check:active-docs && pnpm run check:plans-purity && pnpm run check:docs-purity && pnpm --filter oando-site gate | `package.json` |
+| `oando-workspace:gate.command` | oando-workspace | gate | pnpm run check:layout && pnpm run check:failures && pnpm run check:agents-md && pnpm run check:agents-folder && pnpm run check:active-docs && pnpm run check:plans-purity && pnpm run check:docs-purity && pnpm --filter oando-site gate | `package.json` |
 | `oando-workspace:gate:full.command` | oando-workspace | gate:full | pnpm run check:layout && pnpm --filter oando-site gate:full | `package.json` |
 | `oando-workspace:gate:planner.command` | oando-workspace | gate:planner | pnpm --filter oando-site gate:planner | `package.json` |
 | `oando-workspace:lint.command` | oando-workspace | lint | pnpm --filter oando-site lint | `package.json` |
@@ -420,9 +419,6 @@
 | `site/scripts/test-r2-upload.ts` | `env-reader` | `match at index 744` |
 | `site/scripts/translate-deferred-marketing-flat.mjs` | `env-reader` | `match at index 2447` |
 | `site/scripts/translate-deferred-marketing.mjs` | `env-reader` | `match at index 2802` |
-| `site/tech-stack-generator/package.json` | `package-manifest` | `dependencies.@phosphor-icons/react` |
-| `site/tech-stack-generator/src/pages/Architecture.tsx` | `env-reader` | `match at index 10476` |
-| `site/tech-stack-generator/src/pages/Security.tsx` | `env-reader` | `match at index 4836` |
 | `site/tests/e2e/site-navigation-smoke.spec.ts` | `env-test` | `match at index 81` |
 | `site/tests/integration/planner-store-plannerPersistence.test.ts` | `env-test` | `match at index 2137` |
 | `site/tests/unit/app/admin/themes/page.test.tsx` | `env-test` | `match at index 281` |
@@ -434,3 +430,4 @@
 | `site/tests/unit/platform/supabase/adminServer.test.ts` | `env-test` | `match at index 1433` |
 | `site/tests/unit/shared-providerChain.test.ts` | `env-test` | `match at index 346` |
 | `site/tsconfig.json` | `tsconfig-path` | `compilerOptions.paths.@/app/*` |
+| `tech-stack-generator/package.json` | `package-manifest` | `dependencies.@phosphor-icons/react` |

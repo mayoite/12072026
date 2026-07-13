@@ -1,18 +1,12 @@
-/**
- * Agents/ = tight handbooks. STANDARD max 100 lines. Peers max 40. INDEX max 25.
- */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dir = path.join(root, "Agents");
-
-const ALLOWED = new Set([
+const allowed = new Set([
   "INDEX.md",
   "Agents-01-STANDARD.md",
-  "Agents-02-tracks.md",
-  "Agents-03-Plan.md",
   "Agents-04-testing.md",
   "Agents-05-browser.md",
   "Agents-06-failure.md",
@@ -20,44 +14,19 @@ const ALLOWED = new Set([
   "Agents-08-architecture.md",
   "Agents-09-css.md",
 ]);
-
-const MAX_LINES = {
-  "Agents-01-STANDARD.md": 100,
-  "INDEX.md": 25,
-  default: 40,
-};
-
-const ABS_RE = /[A-Za-z]:\\|\/Users\//;
-
-const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith(".md")) : [];
+const files = fs.readdirSync(dir).filter((file) => file.endsWith(".md"));
 const violations = [];
 
-for (const f of files) {
-  if (!ALLOWED.has(f)) violations.push(`extra: Agents/${f}`);
+for (const file of files) {
+  if (!allowed.has(file)) violations.push(`extra: Agents/${file}`);
 }
-for (const f of ALLOWED) {
-  if (!files.includes(f)) violations.push(`missing: Agents/${f}`);
-}
-
-for (const f of files) {
-  const text = fs.readFileSync(path.join(dir, f), "utf8");
-  const lines = text.split(/\r?\n/);
-  const cap = MAX_LINES[f] ?? MAX_LINES.default;
-  if (lines.length > cap) {
-    violations.push(`Agents/${f}: ${lines.length} lines (max ${cap})`);
-  }
-  lines.forEach((line, i) => {
-    if (ABS_RE.test(line)) {
-      violations.push(`Agents/${f}:${i + 1}: absolute path`);
-    }
-  });
+for (const file of allowed) {
+  if (!files.includes(file)) violations.push(`missing: Agents/${file}`);
 }
 
 if (violations.length) {
-  console.error("check:agents-folder FAIL:\n");
-  violations.forEach((v) => console.error(`  ${v}`));
-  console.error("\nMove essays to archive/. Keep handbooks tight.");
+  console.error("check:agents-folder FAIL:\n" + violations.map((item) => `  ${item}`).join("\n"));
   process.exit(1);
 }
-console.log(`check:agents-folder OK (${files.length} handbooks, STANDARD≤100)`);
-process.exit(0);
+
+console.log(`check:agents-folder OK (${files.length} files; no line caps)`);

@@ -235,15 +235,6 @@
   },
   {
     "category": "top-level-dir",
-    "id": "code-organization.dir.tech-stack-generator",
-    "label": "tech-stack-generator",
-    "sourceKind": "directory",
-    "sourcePath": "site/",
-    "sourcePointer": "tech-stack-generator",
-    "value": "site/tech-stack-generator/"
-  },
-  {
-    "category": "top-level-dir",
     "id": "code-organization.dir.tests",
     "label": "tests",
     "sourceKind": "directory",

@@ -1,4 +1,4 @@
-import workflowsJson from '../../tech-stack-generated/data/workflows.json'
+import workflowsJson from '../../../tech-stack-generated/data/workflows.json'
 import type { RouteDomainRecord } from './routeDomainTypes'
 
 // Site-workflows support + updated data handling (loader for site vs root; filterable).

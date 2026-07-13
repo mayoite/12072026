@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     fs: {
       // Allow dev server to serve files from site/app/css/ (parent dir)
-      allow: [path.resolve(__dirname, '../..')],
+      allow: [path.resolve(__dirname, '..')],
     },
   },
   build: {

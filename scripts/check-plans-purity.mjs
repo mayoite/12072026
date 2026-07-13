@@ -1,93 +1,56 @@
-/**
- * plan/ purity: phase files must not embed implementation tokens.
- * Exit 0 = clean. Exit 1 = violations printed.
- */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const plansRoot = path.join(root, "plan");
-
-const FORBIDDEN_RE =
-  /\b(fabric@|@react-three|FeasibilityCanvas|pnpm exec|konva|three@|\bfabric\.js\b)/i;
-
-const MAX_LINES = {
-  phaseCard: 2000,
-  buyerLawDefault: 220,
-};
-
-const TRACKS = [
-  "Planner",
-  "Admin",
-  "Buyer",
-  "UI",
-  "Site",
-  "SEO",
-  "Security",
-];
-
-function collectMdFiles(abs) {
-  if (!fs.existsSync(abs)) return [];
-  const st = fs.statSync(abs);
-  if (st.isFile() && abs.endsWith(".md")) return [abs];
-  if (!st.isDirectory()) return [];
-  const out = [];
-  for (const ent of fs.readdirSync(abs, { withFileTypes: true })) {
-    out.push(...collectMdFiles(path.join(abs, ent.name)));
-  }
-  return out;
-}
-
+const planRoot = path.join(root, "plan");
+const allowedRoots = new Set(["Admin", "Planner", "Site", "Security", "Phase-2"]);
 const violations = [];
-const lengthViolations = [];
 
-function isPhaseCard(rel) {
-  const n = path.normalize(rel).replace(/\\/g, "/");
-  return /plan\/[^/]+\/PHASE-\d{2}-[^/]+\.md$/i.test(n);
+function collect(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const absolute = path.join(dir, entry.name);
+    return entry.isDirectory() ? collect(absolute) : [path.relative(planRoot, absolute).replace(/\\/g, "/")];
+  });
 }
 
-function lineLimitFor(rel) {
-  if (isPhaseCard(rel)) return MAX_LINES.phaseCard;
-  const n = path.normalize(rel).replace(/\\/g, "/");
-  if (n === "plan/README.md" || n === "plan/QUALITY-BAR.md" || n === "plan/UI-BAR.md") {
-    return 5000;
-  }
-  if (n.endsWith("/CHECKLIST.md") || n.endsWith("/README.md")) {
-    return 5000;
-  }
-  return MAX_LINES.buyerLawDefault;
-}
-
-for (const track of TRACKS) {
-  const base = path.join(plansRoot, track);
-  for (const file of collectMdFiles(base)) {
-    const rel = path.relative(root, file);
-    const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
-    const limit = lineLimitFor(rel);
-    if (lines.length > limit) {
-      lengthViolations.push(`${rel}: ${lines.length} lines (max ${limit})`);
-    }
-    if (isPhaseCard(rel)) continue;
-    for (let i = 0; i < lines.length; i++) {
-      if (FORBIDDEN_RE.test(lines[i])) {
-        violations.push(`${rel}:${i + 1}: ${lines[i].trim().slice(0, 120)}`);
-      }
-    }
+for (const entry of fs.readdirSync(planRoot, { withFileTypes: true })) {
+  if (entry.isDirectory() && !allowedRoots.has(entry.name)) {
+    violations.push(`extra track: plan/${entry.name}`);
   }
 }
 
-if (violations.length || lengthViolations.length) {
-  if (violations.length) {
-    console.error("check:plans-purity FAIL — implementation tokens in plan/ files:\n");
-    for (const v of violations) console.error(`  ${v}`);
+const markdown = collect(planRoot).filter((file) => file.endsWith(".md"));
+for (const required of [
+  "README.md",
+  "Admin/README.md",
+  "Admin/CHECKLIST.md",
+  "Planner/README.md",
+  "Planner/CHECKLIST.md",
+  "Site/README.md",
+  "Site/CHECKLIST.md",
+  "Security/README.md",
+  "Security/CHECKLIST.md",
+  "Phase-2/README.md",
+]) {
+  if (!markdown.includes(required)) violations.push(`missing: plan/${required}`);
+}
+
+for (const track of ["Admin", "Planner", "Site", "Security"]) {
+  const checklists = markdown.filter((file) => file.startsWith(`${track}/`) && file.endsWith("CHECKLIST.md"));
+  if (checklists.length !== 1) violations.push(`${track} must have exactly one checklist`);
+  for (const file of checklists) {
+    const text = fs.readFileSync(path.join(planRoot, file), "utf8");
+    if (/\[x\]/i.test(text)) violations.push(`checked item: plan/${file}`);
   }
-  if (lengthViolations.length) {
-    console.error("\ncheck:plans-purity FAIL — plan/ files too long:\n");
-    for (const v of lengthViolations) console.error(`  ${v}`);
-  }
+}
+
+const phaseTwo = fs.readFileSync(path.join(planRoot, "Phase-2/README.md"), "utf8");
+if (/\[[ x]\]/i.test(phaseTwo)) violations.push("Phase-2 must not contain checkboxes");
+
+if (violations.length) {
+  console.error("check:plans-purity FAIL:\n" + violations.map((item) => `  ${item}`).join("\n"));
   process.exit(1);
 }
 
 console.log("check:plans-purity OK");
-process.exit(0);

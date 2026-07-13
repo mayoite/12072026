@@ -1,29 +1,12 @@
-# Agents/Agents-08-architecture.md
+# Architecture
 
-**Bar:** `Agents-01-STANDARD.md` · **HOW:** `docs/architecture/` · **Execute:** `plan/Planner/`
-
-## Document stack (locked)
-
-```
-Document (UUID v7, mm)
-  → 2D: Fabric stage (sole) · 3D: Three + orbit
-  → Persist: local first (guest save honesty — PHASE-06)
-```
-
-Host: guest/canvas → Host → OOPlannerWorkspace · testid `planner-fabric-stage`  
-Layout: `editor` / `canvas` / `3d` / `project` / `ui` · mint: `lib/newEntityId`
-
-## Forbidden downgrade
-
-- Dual interactive plan canvas
-- Prove gates on archive `planner-2d-canvas`
-- Re-add `_archive/fabric` as product host
-- R3F rewrite as substitute for workspace Lazy3D path
-- Drop RAC toolbar without owner explain
-
-## Also
-
-- Read `docs/architecture/01-MODULE-LAYOUT.md` before placing code.
-- Flags / non-hosts: [P02 FLAG dump](../results/planner/world-standard-wave/01-engine-lock/FLAG-INVENTORY.md) (not a second host)
-- Toolbar RAC + tools: [PHASE-02](../plan/Planner/PHASE-02-toolbar-truth.md) · `canvasTool.ts`
-- CSS: `Agents-09-css.md` · [QUALITY-BAR](../plan/QUALITY-BAR.md)
+- Read `docs/architecture/` before placing code.
+- Admin and Planner are the product domains.
+- Fabric is the sole interactive 2D canvas.
+- Three.js is the 3D engine.
+- One normalized document drives 2D, 3D, save, and BOQ.
+- Published SVG is the primary 2D product symbol.
+- `Block2D` is a fallback.
+- Public static catalog files are the first authority.
+- Do not create parallel canvas, catalog, or planner trees.
+- Preserve stable identity and millimetre units.

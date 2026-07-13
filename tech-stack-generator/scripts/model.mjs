@@ -29,7 +29,7 @@ import { normalizeDependencyRecords } from './normalize.mjs'
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const defaultRepoRoot = path.resolve(scriptDir, '..', '..')
-const COVERAGE_CONTRACT_PATH = 'plans/tech-stack-generator-7-file-plan/01-source-coverage-contract.md'
+const COVERAGE_CONTRACT_PATH = 'plan/README.md'
 const COVERAGE_REQUIRED_DOMAINS = [
   'workspace',
   'next-app',
@@ -58,9 +58,8 @@ export const COVERAGE_EXCLUDED_PATH_PREFIXES = [
   'coverage/',
   'results/',
   'archive/',
-  'documents-generated/tech-stack-docs/',
-  'site/tech-stack-generated/data/',
-  'site/tech-stack-generated/css/',
+  'tech-stack-docs/',
+  'tech-stack-generated/',
 ]
 
 /** Maps each coverage-matrix domain to a `source-policy.mjs` policy key. */
@@ -275,8 +274,8 @@ function toFacts(model) {
     ['overview.features', 'overview', 'features', 'Features', String(model.features.length)],
     ['architecture.rootScripts', 'architecture', 'rootScripts', 'Root scripts location', 'tech-stack-generator/scripts/'],
     ['architecture.separateVite', 'architecture', 'separateVite', 'Separate Vite package', 'tech-stack-generator/'],
-    ['architecture.generatedOutput', 'architecture', 'generatedOutput', 'Generated output', 'documents-generated/tech-stack-docs/'],
-    ['build.outDir', 'build', 'outDir', 'Output directory', 'documents-generated/tech-stack-docs'],
+    ['architecture.generatedOutput', 'architecture', 'generatedOutput', 'Generated output', 'tech-stack-docs/'],
+    ['build.outDir', 'build', 'outDir', 'Output directory', 'tech-stack-docs'],
     ['build.syncCss', 'build', 'syncCss', 'CSS snapshot', 'site/tech-stack-generated/css/'],
     ['provenance.total', 'governance', 'total', 'Total factual fields', 'derived from source facts'],
     ['provenance.exact', 'governance', 'exact', 'Exact source matches', 'derived from source facts'],

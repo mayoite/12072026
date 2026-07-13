@@ -9,9 +9,14 @@ import { fileURLToPath } from "node:url";
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 const FILES = [
-  "DOC-MAP.md",
+  "AGENTS.md",
   "Readme.md",
+  "START.md",
+  "Agents/INDEX.md",
+  "plan/README.md",
+  "docs/INDEX.md",
   "docs/Lockedfiles/INDEX.md",
+  "tech-stack-generator/README.md",
 ];
 
 const LINK_RE = /\[([^\]]*)\]\(([^)]+)\)/g;

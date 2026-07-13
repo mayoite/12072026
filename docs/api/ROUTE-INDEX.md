@@ -2,7 +2,7 @@
 
 **Source of truth:** `site/app/api/**/route.ts`
 
-Generated from route handlers on 2026-06-29.
+Generated from route handlers on 2026-07-13.
 
 Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 
@@ -20,7 +20,16 @@ Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 | GET, POST | `/api/admin/planner-catalog` *(deprecated shim → GET/POST /api/admin/catalogs/configurator)* |
 | GET, PATCH | `/api/admin/plans/[id]` |
 | GET, PATCH, DELETE | `/api/admin/plans` |
+| POST | `/api/admin/price-books/[bookId]/action` |
+| GET | `/api/admin/price-books/[bookId]` |
+| GET | `/api/admin/price-books` |
+| PATCH | `/api/admin/svg-editor/[slug]/lifecycle` |
+| GET | `/api/admin/svg-editor/[slug]/revisions` |
+| POST | `/api/admin/svg-editor/[slug]/rollback` |
+| POST | `/api/admin/svg-editor/bulk-import` |
+| POST | `/api/admin/svg-editor` |
 | POST | `/api/admin/themes/publish` |
+| GET | `/api/admin/themes` |
 | POST | `/api/ai-advisor` |
 | POST | `/api/ai-assist` *(deprecated shim → POST /api/planner/ai-advisor)* |
 | POST | `/api/ai/advisor` *(deprecated shim → POST /api/planner/ai-advisor)* |
@@ -32,6 +41,7 @@ Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 | GET, PATCH | `/api/customer-queries/manage` |
 | POST | `/api/customer-queries` |
 | GET | `/api/dev-tools/lighthouse` |
+| GET | `/api/dev/auth-bypass-status` |
 | POST | `/api/filter` |
 | POST | `/api/generate-alt` |
 | POST | `/api/log-error` |
@@ -39,7 +49,9 @@ Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 | GET, POST | `/api/nav-search` |
 | POST | `/api/planner/ai-advisor` |
 | GET | `/api/planner/catalog/configurator` |
+| GET | `/api/planner/catalog/svg-blocks` |
 | GET | `/api/planner/catalog` |
+| POST | `/api/planner/generated-glb` |
 | POST | `/api/planner/sketch-to-plan` |
 | GET, PUT, DELETE | `/api/plans/[id]` |
 | GET, POST | `/api/plans` |

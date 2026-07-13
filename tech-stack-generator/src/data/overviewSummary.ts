@@ -1,4 +1,4 @@
-import summaryJson from '../../tech-stack-generated/data/summary.json'
+import summaryJson from '../../../tech-stack-generated/data/summary.json'
 
 type OverviewSummary = {
   stats: Array<{ label: string; value: string }>

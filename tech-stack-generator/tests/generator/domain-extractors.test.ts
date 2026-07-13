@@ -9,7 +9,7 @@ import { extractDependabotRecords } from '../../scripts/extract-dependabot.mjs'
 import { extractAiRecords } from '../../scripts/extract-ai.mjs'
 import { extractThemeRecords } from '../../scripts/extract-theme.mjs'
 
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../../')
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../')
 
 const PLAN_PAYLOADS = [
   'deployment.json',

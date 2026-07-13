@@ -1,6 +1,6 @@
-import routesJson from '../../tech-stack-generated/data/routes.json'
-import summaryJson from '../../tech-stack-generated/data/summary.json'
-import codeOrganizationJson from '../../tech-stack-generated/data/code-organization.json'
+import routesJson from '../../../tech-stack-generated/data/routes.json'
+import summaryJson from '../../../tech-stack-generated/data/summary.json'
+import codeOrganizationJson from '../../../tech-stack-generated/data/code-organization.json'
 import type { RouteDomainRecord } from './routeDomainTypes'
 
 export type RouteRecord = {

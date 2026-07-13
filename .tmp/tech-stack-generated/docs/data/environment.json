@@ -80,18 +80,6 @@
       },
       {
         "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-        "sourceKind": "env-reader",
-        "sourcePath": "site/tech-stack-generator/src/pages/Architecture.tsx",
-        "sourcePointer": "match at index 10476"
-      },
-      {
-        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-        "sourceKind": "env-reader",
-        "sourcePath": "site/tech-stack-generator/src/pages/Security.tsx",
-        "sourcePointer": "match at index 4836"
-      },
-      {
-        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
         "sourceKind": "env-test",
         "sourcePath": "site/tests/unit/app/admin/themes/ThemeEditor.test.tsx",
         "sourcePointer": "match at index 305"
@@ -253,18 +241,6 @@
         "sourceKind": "env-reader",
         "sourcePath": "site/scripts/sync-missing-alt-text.ts",
         "sourcePointer": "match at index 1736"
-      },
-      {
-        "name": "NEXT_PUBLIC_SUPABASE_URL",
-        "sourceKind": "env-reader",
-        "sourcePath": "site/tech-stack-generator/src/pages/Architecture.tsx",
-        "sourcePointer": "match at index 10433"
-      },
-      {
-        "name": "NEXT_PUBLIC_SUPABASE_URL",
-        "sourceKind": "env-reader",
-        "sourcePath": "site/tech-stack-generator/src/pages/Security.tsx",
-        "sourcePointer": "match at index 4802"
       },
       {
         "name": "NEXT_PUBLIC_SUPABASE_URL",
@@ -1369,12 +1345,6 @@
         "sourceKind": "env-reader",
         "sourcePath": "site/scripts/sync-missing-alt-text.ts",
         "sourcePointer": "match at index 1817"
-      },
-      {
-        "name": "SUPABASE_SERVICE_ROLE_KEY",
-        "sourceKind": "env-reader",
-        "sourcePath": "site/tech-stack-generator/src/pages/Security.tsx",
-        "sourcePointer": "match at index 5328"
       },
       {
         "name": "SUPABASE_SERVICE_ROLE_KEY",

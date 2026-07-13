@@ -1,20 +1,20 @@
-@import "../../app/css/core/theme.css";
-@import "../../app/css/core/utilities/animations.css";
-@import "../../app/css/core/utilities/typography.css";
-@import "../../app/css/core/utilities/layout.css";
-@import "../../app/css/core/utilities/colors.css";
-@import "../../app/css/core/utilities/schemes.css";
-@import "../../app/css/core/utilities/buttons.css";
-@import "../../app/css/core/utilities/badges.css";
-@import "../../app/css/core/utilities/nav.css";
-@import "../../app/css/core/utilities/misc.css";
-@import "../../app/css/core/components/buttons.css";
-@import "../../app/css/core/components/cards.css";
-@import "../../app/css/core/components/stats.css";
-@import "../../app/css/core/components/client-badge.css";
-@import "../../app/css/core/components/nav.css";
-@import "../../app/css/core/components/custom.css";
-@import "../../app/css/core/components/missing-components.css";
+@import "../../site/app/css/core/theme.css";
+@import "../../site/app/css/core/utilities/animations.css";
+@import "../../site/app/css/core/utilities/typography.css";
+@import "../../site/app/css/core/utilities/layout.css";
+@import "../../site/app/css/core/utilities/colors.css";
+@import "../../site/app/css/core/utilities/schemes.css";
+@import "../../site/app/css/core/utilities/buttons.css";
+@import "../../site/app/css/core/utilities/badges.css";
+@import "../../site/app/css/core/utilities/nav.css";
+@import "../../site/app/css/core/utilities/misc.css";
+@import "../../site/app/css/core/components/buttons.css";
+@import "../../site/app/css/core/components/cards.css";
+@import "../../site/app/css/core/components/stats.css";
+@import "../../site/app/css/core/components/client-badge.css";
+@import "../../site/app/css/core/components/nav.css";
+@import "../../site/app/css/core/components/custom.css";
+@import "../../site/app/css/core/components/missing-components.css";
 
 
 /* World-class static site: direct use of site/app/css/core/{theme,utilities/*,components/*}.css for consistency (no isolated theme).

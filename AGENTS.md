@@ -15,16 +15,18 @@
 ## Product
 
 - Admin manages trusted public inventory.
+- Site informs public visitors and sends qualified customers to Planner.
 - Planner serves any external customer.
+- Security verifies protected data, permissions, integrations, and releases.
 - The customer designs with available inventory.
 - The customer generates a branded BOQ.
 - The customer sends the BOQ to Oando.
-- Site, UI, SEO, accessibility, and security are acceptance concerns.
+- UI and accessibility are acceptance concerns.
 - They are not separate product tracks.
 
 ## Layout
 
-- Execution lives in `plan/Admin/CHECKLIST.md` and `plan/Planner/CHECKLIST.md`.
+- Execution lives in the checklists under `plan/Admin/`, `plan/Planner/`, `plan/Site/`, and `plan/Security/`.
 - Deferred decisions live in `plan/Phase-2/README.md`.
 - Product and architecture facts live in `docs/`.
 - Agent process lives in `Agents/`.
@@ -43,7 +45,7 @@
 - Block only the exact dependent item.
 - Continue unrelated work.
 - Use `pnpm` from the repository root.
-- Never install under `site/` or `tech-stack-generator/`.
+- Never run package installation inside `site/` or `tech-stack-generator/`.
 - No `any` in handwritten code.
 - No plagiarism.
 - Secrets belong in `.env.local` only.

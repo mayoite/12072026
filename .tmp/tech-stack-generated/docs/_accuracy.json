@@ -37,8 +37,8 @@
       "path": "markdown/governance/provenance.md"
     },
     {
-      "exactMatches": 203,
-      "factualFields": 203,
+      "exactMatches": 202,
+      "factualFields": 202,
       "mismatches": 0,
       "path": "markdown/commands/index.md"
     },
@@ -49,8 +49,8 @@
       "path": "markdown/dependencies/index.md"
     },
     {
-      "exactMatches": 28,
-      "factualFields": 28,
+      "exactMatches": 27,
+      "factualFields": 27,
       "mismatches": 0,
       "path": "markdown/code-organization/index.md"
     },
@@ -115,8 +115,8 @@
       "path": "markdown/performance/index.md"
     }
   ],
-  "exactSourceMatches": 802,
-  "fieldsWithProvenance": 802,
+  "exactSourceMatches": 800,
+  "fieldsWithProvenance": 800,
   "mismatches": [],
-  "totalFactualFields": 802
+  "totalFactualFields": 800
 }

@@ -1,5 +1,5 @@
-import databaseJson from '../../tech-stack-generated/data/database.json'
-import commandsJson from '../../tech-stack-generated/data/commands.json'
+import databaseJson from '../../../tech-stack-generated/data/database.json'
+import commandsJson from '../../../tech-stack-generated/data/commands.json'
 
 export type DatabaseTable = {
   name: string

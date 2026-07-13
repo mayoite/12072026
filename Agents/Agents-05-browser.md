@@ -1,9 +1,9 @@
-# Agents/Agents-05-browser.md
+# Browser verification
 
-**Bar:** `Agents-01-STANDARD.md` · **Policy:** `Failures.md`
-
-- No UI claim without Playwright trace/screenshot or live browser proof in `results/`.
-- Run browser/E2E only when task, gate, release, or owner requires it — not every task.
-- Targeted specs/routes; not full monorepo suite unless gate says so.
-- No ignoring console errors or a11y to force pass.
-- Unscriptable visual judgment → optional owner ask.
+- Use browser verification for UI claims.
+- Target the changed route and journey.
+- Capture console errors, failed requests, and accessibility failures.
+- Do not use forced clicks to hide blocked controls.
+- Do not raise timeouts without identifying the cause.
+- Verify representative desktop and mobile widths.
+- Store raw browser output under the current result run.

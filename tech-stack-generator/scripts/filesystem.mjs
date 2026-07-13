@@ -144,7 +144,7 @@ export async function ensureGeneratedRoot(documentsRoot) {
 
   if (entries.length > 0 && !markerEntry) {
     throw new Error(
-      `documents-generated/ is not empty and is missing ${GENERATED_ROOT_FILENAME}; refusing to modify ${documentsRoot}.`,
+      `tech-stack-generated/docs/ is not empty and is missing ${GENERATED_ROOT_FILENAME}; refusing to modify ${documentsRoot}.`,
     )
   }
 
@@ -205,7 +205,7 @@ export async function assertDocumentsTreeOwned(documentsRoot, ownedPaths) {
   )
 
   if (unknownFiles.length > 0) {
-    throw new Error(`Unknown file(s) in documents-generated/: ${unknownFiles.join(', ')}`)
+    throw new Error(`Unknown file(s) in tech-stack-generated/docs/: ${unknownFiles.join(', ')}`)
   }
 
   return { files: currentFiles }
@@ -322,7 +322,7 @@ export async function applyManifestedDocuments({
     if (missingStagingFiles.length > 0) {
       details.push(`missing: ${missingStagingFiles.join(', ')}`)
     }
-    throw new Error(`Staging documents-generated/ mismatch (${details.join('; ')}).`)
+    throw new Error(`Staging tech-stack-generated/docs/ mismatch (${details.join('; ')}).`)
   }
 
   const previousOwned = new Set(previousOwnedPaths.map((value) => normalizeRelativePosixPath(value)))

@@ -1,4 +1,4 @@
-import apiJson from '../../tech-stack-generated/data/api.json'
+import apiJson from '../../../tech-stack-generated/data/api.json'
 
 export type ApiRouteRecord = {
   id: string

@@ -218,54 +218,54 @@
 | `site:devDependencies:whatwg-fetch.resolved-version` | Whatwg Fetch resolved version | 3.6.20 | `pnpm-lock.yaml` |
 | `site:devDependencies:wrangler.requested-range` | Wrangler requested range | ^4.101.0 | `site/package.json` |
 | `site:devDependencies:wrangler.resolved-version` | Wrangler resolved version | 4.104.0 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:dependencies:@phosphor-icons/react.requested-range` | React requested range | ^2.1.10 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:dependencies:@phosphor-icons/react.resolved-version` | React resolved version | 2.1.10 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:dependencies:clsx.requested-range` | Clsx requested range | ^2.1.1 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:dependencies:clsx.resolved-version` | Clsx resolved version | 2.1.1 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:dependencies:framer-motion.requested-range` | Framer Motion requested range | ^12.41.0 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:dependencies:framer-motion.resolved-version` | Framer Motion resolved version | 12.41.0 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:dependencies:fuse.js.requested-range` | Fuse Js requested range | ^7.4.1 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:dependencies:fuse.js.resolved-version` | Fuse Js resolved version | 7.4.2 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:dependencies:highlight.js.requested-range` | Highlight Js requested range | ^11.10.0 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:dependencies:highlight.js.resolved-version` | Highlight Js resolved version | 11.11.1 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:dependencies:mermaid.requested-range` | Mermaid requested range | ^11.4.1 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:dependencies:mermaid.resolved-version` | Mermaid resolved version | 11.16.0 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:dependencies:react-dom.requested-range` | React Dom requested range | ^19.0.0 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:dependencies:react-dom.resolved-version` | React Dom resolved version | 19.2.7 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:dependencies:react-router-dom.requested-range` | React Router Dom requested range | ^7.18.0 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:dependencies:react-router-dom.resolved-version` | React Router Dom resolved version | 7.18.0 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:dependencies:react.requested-range` | React requested range | ^19.0.0 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:dependencies:react.resolved-version` | React resolved version | 19.2.7 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:@tailwindcss/vite.requested-range` | Vite requested range | ^4.3.0 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:@tailwindcss/vite.resolved-version` | Vite resolved version | 4.3.2 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:@testing-library/react.requested-range` | React requested range | ^16.3.2 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:@testing-library/react.resolved-version` | React resolved version | 16.3.2 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:@types/node.requested-range` | Node requested range | ^26.1.0 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:@types/node.resolved-version` | Node resolved version | 26.1.0 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:@types/react-dom.requested-range` | React Dom requested range | ^19.0.0 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:@types/react-dom.resolved-version` | React Dom resolved version | 19.2.3 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:@types/react.requested-range` | React requested range | ^19.0.0 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:@types/react.resolved-version` | React resolved version | 19.2.17 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:@vitejs/plugin-react.requested-range` | Plugin React requested range | ^4.3.4 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:@vitejs/plugin-react.resolved-version` | Plugin React resolved version | 4.7.0 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:@vitest/coverage-v8.requested-range` | Coverage V8 requested range | ^4.1.9 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:@vitest/coverage-v8.resolved-version` | Coverage V8 resolved version | 4.1.9 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:jsdom.requested-range` | Jsdom requested range | ^29.1.1 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:jsdom.resolved-version` | Jsdom resolved version | 29.1.1 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:postcss.requested-range` | Postcss requested range | ^8.5.15 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:postcss.resolved-version` | Postcss resolved version | 8.5.15 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:tailwindcss.requested-range` | Tailwindcss requested range | ^4.3.0 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:tailwindcss.resolved-version` | Tailwindcss resolved version | 4.3.1 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:ts-morph.requested-range` | Ts Morph requested range | ^28.0.0 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:ts-morph.resolved-version` | Ts Morph resolved version | 28.0.0 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:typescript.requested-range` | Typescript requested range | ^6.0.3 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:typescript.resolved-version` | Typescript resolved version | 6.0.3 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:vite.requested-range` | Vite requested range | ^6.0.5 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:vite.resolved-version` | Vite resolved version | 6.4.3 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:vitest.requested-range` | Vitest requested range | ^4.1.9 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:vitest.resolved-version` | Vitest resolved version | 4.1.9 | `pnpm-lock.yaml` |
-| `site/tech-stack-generator:devDependencies:zod.requested-range` | Zod requested range | ^4.4.3 | `site/tech-stack-generator/package.json` |
-| `site/tech-stack-generator:devDependencies:zod.resolved-version` | Zod resolved version | 4.4.3 | `pnpm-lock.yaml` |
+| `tech-stack-generator:dependencies:@phosphor-icons/react.requested-range` | React requested range | ^2.1.10 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:dependencies:@phosphor-icons/react.resolved-version` | React resolved version | 2.1.10 | `pnpm-lock.yaml` |
+| `tech-stack-generator:dependencies:clsx.requested-range` | Clsx requested range | ^2.1.1 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:dependencies:clsx.resolved-version` | Clsx resolved version | 2.1.1 | `pnpm-lock.yaml` |
+| `tech-stack-generator:dependencies:framer-motion.requested-range` | Framer Motion requested range | ^12.41.0 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:dependencies:framer-motion.resolved-version` | Framer Motion resolved version | 12.41.0 | `pnpm-lock.yaml` |
+| `tech-stack-generator:dependencies:fuse.js.requested-range` | Fuse Js requested range | ^7.4.1 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:dependencies:fuse.js.resolved-version` | Fuse Js resolved version | 7.4.2 | `pnpm-lock.yaml` |
+| `tech-stack-generator:dependencies:highlight.js.requested-range` | Highlight Js requested range | ^11.10.0 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:dependencies:highlight.js.resolved-version` | Highlight Js resolved version | 11.11.1 | `pnpm-lock.yaml` |
+| `tech-stack-generator:dependencies:mermaid.requested-range` | Mermaid requested range | ^11.4.1 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:dependencies:mermaid.resolved-version` | Mermaid resolved version | 11.16.0 | `pnpm-lock.yaml` |
+| `tech-stack-generator:dependencies:react-dom.requested-range` | React Dom requested range | ^19.0.0 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:dependencies:react-dom.resolved-version` | React Dom resolved version | 19.2.7 | `pnpm-lock.yaml` |
+| `tech-stack-generator:dependencies:react-router-dom.requested-range` | React Router Dom requested range | ^7.18.0 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:dependencies:react-router-dom.resolved-version` | React Router Dom resolved version | 7.18.0 | `pnpm-lock.yaml` |
+| `tech-stack-generator:dependencies:react.requested-range` | React requested range | ^19.0.0 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:dependencies:react.resolved-version` | React resolved version | 19.2.7 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:@tailwindcss/vite.requested-range` | Vite requested range | ^4.3.0 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:@tailwindcss/vite.resolved-version` | Vite resolved version | 4.3.2 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:@testing-library/react.requested-range` | React requested range | ^16.3.2 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:@testing-library/react.resolved-version` | React resolved version | 16.3.2 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:@types/node.requested-range` | Node requested range | ^26.1.0 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:@types/node.resolved-version` | Node resolved version | 26.1.0 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:@types/react-dom.requested-range` | React Dom requested range | ^19.0.0 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:@types/react-dom.resolved-version` | React Dom resolved version | 19.2.3 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:@types/react.requested-range` | React requested range | ^19.0.0 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:@types/react.resolved-version` | React resolved version | 19.2.17 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:@vitejs/plugin-react.requested-range` | Plugin React requested range | ^4.3.4 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:@vitejs/plugin-react.resolved-version` | Plugin React resolved version | 4.7.0 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:@vitest/coverage-v8.requested-range` | Coverage V8 requested range | ^4.1.9 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:@vitest/coverage-v8.resolved-version` | Coverage V8 resolved version | 4.1.9 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:jsdom.requested-range` | Jsdom requested range | ^29.1.1 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:jsdom.resolved-version` | Jsdom resolved version | 29.1.1 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:postcss.requested-range` | Postcss requested range | ^8.5.15 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:postcss.resolved-version` | Postcss resolved version | 8.5.15 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:tailwindcss.requested-range` | Tailwindcss requested range | ^4.3.0 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:tailwindcss.resolved-version` | Tailwindcss resolved version | 4.3.1 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:ts-morph.requested-range` | Ts Morph requested range | ^28.0.0 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:ts-morph.resolved-version` | Ts Morph resolved version | 28.0.0 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:typescript.requested-range` | Typescript requested range | ^6.0.3 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:typescript.resolved-version` | Typescript resolved version | 6.0.3 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:vite.requested-range` | Vite requested range | ^6.0.5 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:vite.resolved-version` | Vite resolved version | 6.4.3 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:vitest.requested-range` | Vitest requested range | ^4.1.9 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:vitest.resolved-version` | Vitest resolved version | 4.1.9 | `pnpm-lock.yaml` |
+| `tech-stack-generator:devDependencies:zod.requested-range` | Zod requested range | ^4.4.3 | `tech-stack-generator/package.json` |
+| `tech-stack-generator:devDependencies:zod.resolved-version` | Zod resolved version | 4.4.3 | `pnpm-lock.yaml` |
 
 ## Sources
 
@@ -481,9 +481,6 @@
 | `site/scripts/test-r2-upload.ts` | `env-reader` | `match at index 744` |
 | `site/scripts/translate-deferred-marketing-flat.mjs` | `env-reader` | `match at index 2447` |
 | `site/scripts/translate-deferred-marketing.mjs` | `env-reader` | `match at index 2802` |
-| `site/tech-stack-generator/package.json` | `package-manifest` | `dependencies.@phosphor-icons/react` |
-| `site/tech-stack-generator/src/pages/Architecture.tsx` | `env-reader` | `match at index 10476` |
-| `site/tech-stack-generator/src/pages/Security.tsx` | `env-reader` | `match at index 4836` |
 | `site/tests/e2e/site-navigation-smoke.spec.ts` | `env-test` | `match at index 81` |
 | `site/tests/integration/planner-store-plannerPersistence.test.ts` | `env-test` | `match at index 2137` |
 | `site/tests/unit/app/admin/themes/page.test.tsx` | `env-test` | `match at index 281` |
@@ -495,3 +492,4 @@
 | `site/tests/unit/platform/supabase/adminServer.test.ts` | `env-test` | `match at index 1433` |
 | `site/tests/unit/shared-providerChain.test.ts` | `env-test` | `match at index 346` |
 | `site/tsconfig.json` | `tsconfig-path` | `compilerOptions.paths.@/app/*` |
+| `tech-stack-generator/package.json` | `package-manifest` | `dependencies.@phosphor-icons/react` |

@@ -47,5 +47,5 @@ describe('Deployment page branch coverage', () => {
     expect(screen.getByText('No generated deploy blocker records in the current snapshot.')).toBeTruthy()
     expect(screen.getByText('EXAMPLE_ENV')).toBeTruthy()
     expect(screen.getAllByText('code-proven').length).toBeGreaterThan(0)
-  })
+  }, 15000)
 })

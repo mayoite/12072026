@@ -1,4 +1,4 @@
-import featuresJson from '../../tech-stack-generated/data/features.json'
+import featuresJson from '../../../tech-stack-generated/data/features.json'
 
 export type FeatureRecord = {
   slug: string

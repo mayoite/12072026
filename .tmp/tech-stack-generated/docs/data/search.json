@@ -63,7 +63,7 @@
     "title": "Turbo resolved version"
   },
   {
-    "excerpt": "28 extracted facts from the live repo",
+    "excerpt": "27 extracted facts from the live repo",
     "factIds": [
       "code-organization.dir.app.value",
       "code-organization.dir.block-descriptors.value",

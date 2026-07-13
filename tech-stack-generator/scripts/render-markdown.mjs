@@ -151,7 +151,7 @@ export function renderMarkdownOutputs(model, jsonOutputs) {
   )}\n${sourcesSection(model.sources)}`
 
   docs['markdown/build-and-deploy/index.md'] = `# Build And Deploy\n\n${table([
-    { 'Fact ID': '`build.outDir`', Value: 'documents-generated/tech-stack-docs', Source: '`archive/plans/done/tech-stack-docs-3-file-plan/01-execution-plan.md`' },
+    { 'Fact ID': '`build.outDir`', Value: 'tech-stack-docs', Source: '`archive/plans/done/tech-stack-docs-3-file-plan/01-execution-plan.md`' },
     { 'Fact ID': '`build.syncCss`', Value: 'site/tech-stack-generated/css/', Source: '`archive/plans/done/tech-stack-docs-3-file-plan/01-execution-plan.md`' },
   ])}\n${sourcesSection(model.sources)}`
 
@@ -167,12 +167,12 @@ export function renderMarkdownOutputs(model, jsonOutputs) {
   docs['markdown/architecture/index.md'] = `# Architecture\n\n${table([
     { 'Fact ID': '`architecture.rootScripts`', Value: 'tech-stack-generator/scripts/', Source: '`_generated`' },
     { 'Fact ID': '`architecture.separateVite`', Value: 'tech-stack-generator/', Source: '`_generated`' },
-    { 'Fact ID': '`architecture.generatedOutput`', Value: 'documents-generated/tech-stack-docs/', Source: '`_generated`' },
+    { 'Fact ID': '`architecture.generatedOutput`', Value: 'tech-stack-docs/', Source: '`_generated`' },
   ])}\n${sourcesSection(model.sources)}`
   docs['markdown/architecture/repository-structure.md'] = `# Repository Structure\n\n${table([
     { 'Fact ID': '`architecture.rootScripts`', Value: 'tech-stack-generator/scripts/', Source: '`_generated`' },
     { 'Fact ID': '`architecture.separateVite`', Value: 'tech-stack-generator/', Source: '`_generated`' },
-    { 'Fact ID': '`architecture.generatedOutput`', Value: 'documents-generated/tech-stack-docs/', Source: '`_generated`' },
+    { 'Fact ID': '`architecture.generatedOutput`', Value: 'tech-stack-docs/', Source: '`_generated`' },
   ])}\n${sourcesSection(model.sources)}`
 
   docs['markdown/workflows/index.md'] = `# Workflows\n\n${domainTable(model.workflows)}\n${sourcesSection(model.sources)}`

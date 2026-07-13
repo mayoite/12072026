@@ -6,7 +6,7 @@ import { navItems } from '../src/data/navigation'
 import { techStack } from '../src/data/techStack'
 
 describe('tech-stack-generator', () => {
-  it('vite outDir points at the current site-owned output folder', () => {
+  it('vite outDir points at the root generated output folder', () => {
     const here = path.dirname(fileURLToPath(import.meta.url))
     const vite = readFileSync(path.resolve(here, '../vite.config.ts'), 'utf8')
     expect(vite).toMatch(/tech-stack-docs/)

@@ -1,5 +1,5 @@
-import commandsJson from '../../tech-stack-generated/data/commands.json'
-import testingPolicyJson from '../../tech-stack-generated/data/testing-policy.json'
+import commandsJson from '../../../tech-stack-generated/data/commands.json'
+import testingPolicyJson from '../../../tech-stack-generated/data/testing-policy.json'
 
 export type TestingPolicyRecord = {
   id: string

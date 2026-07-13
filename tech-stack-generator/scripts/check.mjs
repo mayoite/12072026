@@ -17,7 +17,7 @@ function describeManifestMismatches(generatedManifest, actualManifest) {
   }
 
   if (!actualManifest) {
-    return ['documents-generated/_manifest.json is missing']
+    return ['tech-stack-generated/docs/_manifest.json is missing']
   }
 
   const generated = JSON.parse(generatedManifest)

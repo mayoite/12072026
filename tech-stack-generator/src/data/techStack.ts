@@ -1,5 +1,5 @@
 import type { TechItem } from '../types'
-import dependenciesJson from '../../tech-stack-generated/data/dependencies.json'
+import dependenciesJson from '../../../tech-stack-generated/data/dependencies.json'
 
 type GeneratedDependency = {
   id: string

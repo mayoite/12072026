@@ -15,7 +15,7 @@
     "sourceKind": "package-script",
     "sourcePath": "package.json",
     "sourcePointer": "scripts.docs:check:tech-stack",
-    "value": "node site/tech-stack-generator/scripts/check.mjs"
+    "value": "node tech-stack-generator/scripts/check.mjs"
   },
   {
     "category": "dev-loop",
@@ -24,7 +24,7 @@
     "sourceKind": "package-script",
     "sourcePath": "package.json",
     "sourcePointer": "scripts.docs:sync:tech-stack",
-    "value": "node site/tech-stack-generator/scripts/generate.mjs && node site/tech-stack-generator/scripts/emit-renderer-data.mjs"
+    "value": "node tech-stack-generator/scripts/generate.mjs && node tech-stack-generator/scripts/emit-renderer-data.mjs"
   },
   {
     "category": "dev-loop",

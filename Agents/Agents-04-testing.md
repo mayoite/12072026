@@ -1,9 +1,11 @@
-# Agents/Agents-04-testing.md
+# Testing
 
-**Bar:** `Agents-01-STANDARD.md` · **Handbook:** `testing-handbook.md`
-
-- Real tests for real behavior; purpose over %.
-- No suppression, no silent skip, no `expect(true)` theater.
-- Artifacts under repo-root `results/`.
-- Unit alone ≠ browser gate when phase says browser.
-- Type exceptions: adjacent reason + owner + removal condition in code.
+- Test real behavior.
+- Never suppress failures or skips.
+- Tests must not mutate canonical catalog files.
+- Use temporary fixtures and cleanup in `finally`.
+- Run focused checks during work.
+- UI acceptance requires a browser check.
+- Store raw output under `results/<track>/<run-id>/`.
+- Never treat result files as completion status.
+- Record fresh commands in the relevant checklist.

@@ -1,51 +1,34 @@
-/**
- * Docs law purity: ayushdocs hub + Agents INDEX must not embed stack implementation.
- * Lockedfiles current.md stubs are allowlisted.
- */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-
-const FORBIDDEN_RE =
-  /\b(fabric@|@react-three|FeasibilityCanvas|pnpm exec|konva|three@|\bfabric\.js\b)/i;
-
-const SCAN = [
-  "Agents/INDEX.md",
-  "docs/INDEX.md",
-  "docs/Lockedfiles/INDEX.md",
-].map((p) => path.join(root, p));
-
-const ALLOWLIST = [
-  path.normalize("docs/Lockedfiles/01-planner-current.md"),
-  path.normalize("docs/Lockedfiles/03-dependencies-engines-current.md"),
+const forbidden = [
+  /plan\/(Buyer|UI|Site|SEO|Security)\//i,
+  /plan\/[^\s)`]+\/PHASE-/i,
+  /ayushdocs\//i,
+  /agents-work\/reports/i,
+  /results\/[^\s)`]+.*\b(pass|done|accepted)\b/i,
 ];
 
-function allowed(rel) {
-  const n = path.normalize(rel);
-  if (n.includes("museum") || n.includes("conduct/AgentsLocked")) return true;
-  return ALLOWLIST.some((a) => n.startsWith(a) || n.endsWith(a));
+function collect(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const absolute = path.join(dir, entry.name);
+    return entry.isDirectory() ? collect(absolute) : absolute.endsWith(".md") ? [absolute] : [];
+  });
 }
 
 const violations = [];
-
-for (const file of SCAN) {
-  if (!fs.existsSync(file)) continue;
-  const rel = path.relative(root, file);
-  if (allowed(rel)) continue;
-  const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
-  for (let i = 0; i < lines.length; i++) {
-    if (FORBIDDEN_RE.test(lines[i])) {
-      violations.push(`${rel}:${i + 1}: ${lines[i].trim().slice(0, 100)}`);
+for (const file of collect(path.join(root, "docs"))) {
+  fs.readFileSync(file, "utf8").split(/\r?\n/).forEach((line, index) => {
+    if (forbidden.some((pattern) => pattern.test(line))) {
+      violations.push(`${path.relative(root, file)}:${index + 1}`);
     }
-  }
+  });
 }
 
 if (violations.length) {
-  console.error("check:docs-purity FAIL:\n");
-  violations.forEach((v) => console.error(`  ${v}`));
+  console.error("check:docs-purity FAIL:\n" + violations.map((item) => `  ${item}`).join("\n"));
   process.exit(1);
 }
 console.log("check:docs-purity OK");
-process.exit(0);

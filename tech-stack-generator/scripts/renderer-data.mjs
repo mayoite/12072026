@@ -2,7 +2,7 @@ import { filterBrowserRendererRecords } from './normalized-record.mjs'
 import { renderSearchRecords } from './render-search.mjs'
 import { checkHardcoding } from './hardcoding-guard.mjs'
 
-/** Domains that must match `documents-generated/data/<name>` byte-for-byte after canonical JSON. */
+/** Domains that must match `tech-stack-generated/docs/data/<name>` byte-for-byte after canonical JSON. */
 export const PARITY_DATA_FILES = [
   'dependencies.json',
   'database.json',
@@ -134,7 +134,7 @@ function recordCount(value) {
   return 1
 }
 
-/** Companion to `documents-generated/_accuracy.json` for renderer + generated-data surfaces. */
+/** Companion to `tech-stack-generated/docs/_accuracy.json` for renderer + generated-data surfaces. */
 export function buildRendererAccuracyReport(model, payloads, { packageRoot } = {}) {
   const files = Object.entries(payloads)
     .sort(([left], [right]) => left.localeCompare(right))

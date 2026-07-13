@@ -1,5 +1,5 @@
 {
-  "contractSourcePath": "plans/tech-stack-generator-7-file-plan/01-source-coverage-contract.md",
+  "contractSourcePath": "plan/README.md",
   "rows": [
     {
       "codeProvenCount": 1,

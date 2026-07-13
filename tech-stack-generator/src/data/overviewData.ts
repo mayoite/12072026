@@ -1,4 +1,4 @@
-import commandsJson from '../../tech-stack-generated/data/commands.json'
+import commandsJson from '../../../tech-stack-generated/data/commands.json'
 import { navItems } from './navigation'
 import { overviewKeyTech, overviewStats } from './overviewSummary'
 

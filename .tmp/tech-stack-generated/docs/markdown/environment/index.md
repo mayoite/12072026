@@ -24,9 +24,9 @@
 | `NEXT_ADMIN_PUBLISHABLE_KEY.env` | NEXT_ADMIN_PUBLISHABLE_KEY | 0 | `.env.example` |
 | `NEXT_ADMIN_SUPABASE_ANON_KEY.env` | NEXT_ADMIN_SUPABASE_ANON_KEY | 0 | `.env.example` |
 | `NEXT_ADMIN_SUPABASE_URL.env` | NEXT_ADMIN_SUPABASE_URL | 2 | `.env.example` |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY.env` | NEXT_PUBLIC_SUPABASE_ANON_KEY | 16 | `.env.example` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY.env` | NEXT_PUBLIC_SUPABASE_ANON_KEY | 14 | `.env.example` |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.env` | NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY | 1 | `.env.example` |
-| `NEXT_PUBLIC_SUPABASE_URL.env` | NEXT_PUBLIC_SUPABASE_URL | 25 | `.env.example` |
+| `NEXT_PUBLIC_SUPABASE_URL.env` | NEXT_PUBLIC_SUPABASE_URL | 23 | `.env.example` |
 | `OPENAI_API_KEY.env` | OPENAI_API_KEY | 4 | `.env.example` |
 | `OPENROUTER_API_KEY_BACKUP.env` | OPENROUTER_API_KEY_BACKUP | 7 | `.env.example` |
 | `OPENROUTER_API_KEY_PRIMARY.env` | OPENROUTER_API_KEY_PRIMARY | 9 | `.env.example` |
@@ -37,7 +37,7 @@
 | `STAFF_NOTIFY_EMAIL.env` | STAFF_NOTIFY_EMAIL | 0 | `.env.example` |
 | `SUPABASE_ADMIN_SERVICE_ROLE_KEY.env` | SUPABASE_ADMIN_SERVICE_ROLE_KEY | 1 | `.env.example` |
 | `SUPABASE_AUTH_DATABASE_URL.env` | SUPABASE_AUTH_DATABASE_URL | 7 | `.env.example` |
-| `SUPABASE_SERVICE_ROLE_KEY.env` | SUPABASE_SERVICE_ROLE_KEY | 20 | `.env.example` |
+| `SUPABASE_SERVICE_ROLE_KEY.env` | SUPABASE_SERVICE_ROLE_KEY | 19 | `.env.example` |
 | `SUPABASE_URL.env` | SUPABASE_URL | 10 | `.env.example` |
 
 ## Sources
@@ -254,9 +254,6 @@
 | `site/scripts/test-r2-upload.ts` | `env-reader` | `match at index 744` |
 | `site/scripts/translate-deferred-marketing-flat.mjs` | `env-reader` | `match at index 2447` |
 | `site/scripts/translate-deferred-marketing.mjs` | `env-reader` | `match at index 2802` |
-| `site/tech-stack-generator/package.json` | `package-manifest` | `dependencies.@phosphor-icons/react` |
-| `site/tech-stack-generator/src/pages/Architecture.tsx` | `env-reader` | `match at index 10476` |
-| `site/tech-stack-generator/src/pages/Security.tsx` | `env-reader` | `match at index 4836` |
 | `site/tests/e2e/site-navigation-smoke.spec.ts` | `env-test` | `match at index 81` |
 | `site/tests/integration/planner-store-plannerPersistence.test.ts` | `env-test` | `match at index 2137` |
 | `site/tests/unit/app/admin/themes/page.test.tsx` | `env-test` | `match at index 281` |
@@ -268,3 +265,4 @@
 | `site/tests/unit/platform/supabase/adminServer.test.ts` | `env-test` | `match at index 1433` |
 | `site/tests/unit/shared-providerChain.test.ts` | `env-test` | `match at index 346` |
 | `site/tsconfig.json` | `tsconfig-path` | `compilerOptions.paths.@/app/*` |
+| `tech-stack-generator/package.json` | `package-manifest` | `dependencies.@phosphor-icons/react` |

@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { extractDeploymentRecords } from '../../scripts/extract-deployment.mjs'
 import { stableManifestForCompare } from '../../scripts/sync-css.mjs'
 
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../../')
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../')
 
 describe('extractor mutation proof (plan 05)', () => {
   it('changes deployment build command when vercel.json changes', () => {

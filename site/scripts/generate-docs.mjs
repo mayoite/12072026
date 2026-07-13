@@ -2,7 +2,7 @@
  * One generator — one pass. No separate "check" that regenerates again.
  *
  * npm run docs:sync              test inventory + JSON (fast; after test changes)
- * npm run docs:sync:all          above + all CONTENTS.md (folder manifest edits)
+ * npm run docs:sync:all          above + API route inventory
  * npm run docs:sync:coverage     sync + vitest coverage summary
  * npm run docs:check             sync + fail if tracked JSON/INVENTORY stale
  * npm run docs:check:coverage    coverage sync + fail if stale
@@ -21,15 +21,10 @@ const withCheck = argv.includes("--check");
 
 const TRACKED = [
   "site/tests/INVENTORY.md",
-  "results/test-inventory.json",
-  "results/test-migration-map.json",
-  ...(withCoverage
-    ? ["results/coverage-summary.json", "results/COVERAGE-REPORT.md"]
-    : []),
 ];
 
 const steps = [
-  ...(withAll ? ["generate-contents-md.mjs", "generate-route-index.mjs"] : []),
+  ...(withAll ? ["generate-route-index.mjs"] : []),
   "generate-test-inventory.mjs",
   ...(withCoverage
     ? ["generate-coverage-summary.mjs", "analyze-coverage-report.mjs"]

@@ -88,7 +88,7 @@ function looksLikePath(text) {
     isUrl(text) ||
     /(?:^|[^\w])(?:\.\.?\/|\/|\\)/.test(text) ||
     /\.(?:md|ts|tsx|json|mjs|js|css|html)\b/i.test(text) ||
-    /package\.json|vite\.config\.ts|Readme_Techstack\.md|README\.md|tech-stack-docs|documents-generated/i.test(text)
+    /package\.json|vite\.config\.ts|Readme_Techstack\.md|README\.md|tech-stack-docs|tech-stack-generated/docs/i.test(text)
   )
 }
 

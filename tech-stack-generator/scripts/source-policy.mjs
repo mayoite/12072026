@@ -95,7 +95,7 @@ export const sourcePolicy = {
       { sourceKind: 'architecture-doc', label: 'docs/architecture/**', mode: 'reference-doc' },
       { sourceKind: 'api-doc', label: 'docs/api/**', mode: 'reference-doc' },
       { sourceKind: 'renderer-accuracy-report', label: 'renderer accuracy report', mode: 'build-output-health' },
-      { sourceKind: 'generated-manifest', label: 'documents-generated/tech-stack-docs/_manifest.json', mode: 'build-output-health' },
+      { sourceKind: 'generated-manifest', label: 'tech-stack-docs/_manifest.json', mode: 'build-output-health' },
       { sourceKind: 'fake-test-audit', label: 'fake-test audit result shape', mode: 'build-output-health' },
     ],
     conflictMode: 'reject-mismatch',

@@ -13,7 +13,7 @@ import { renderJsonOutputs } from '../../scripts/render-json.mjs'
 import { coverageMatrixSchema } from '../../scripts/schema.mjs'
 import { getPolicy, sourcePolicy } from '../../scripts/source-policy.mjs'
 
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../../')
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../')
 const requiredDomains = COVERAGE_REQUIRED_DOMAINS
 const rowFields = [
   'domain',
@@ -32,7 +32,7 @@ describe('source coverage contract', () => {
     const model = buildGeneratorModel({ repoRoot })
     const matrix = coverageMatrixSchema.parse(model.coverageMatrix)
 
-    expect(matrix.contractSourcePath).toBe('plans/tech-stack-generator-7-file-plan/01-source-coverage-contract.md')
+    expect(matrix.contractSourcePath).toBe('plan/README.md')
     expect(matrix.rows.map((row) => row.domain).sort()).toEqual([...requiredDomains].sort())
 
     for (const row of matrix.rows) {
@@ -72,7 +72,7 @@ describe('source coverage contract', () => {
     }
 
     expect(isAcceptedCoverageSourcePath('site/app/page.tsx')).toBe(true)
-    expect(isAcceptedCoverageSourcePath('plans/tech-stack-generator-7-file-plan/01-source-coverage-contract.md')).toBe(true)
+    expect(isAcceptedCoverageSourcePath('plan/README.md')).toBe(true)
     expect(isAcceptedCoverageSourcePath('archive/plans/wip/tech-stack-docs/claim-inventory.json')).toBe(false)
     expect(isAcceptedCoverageSourcePath('_generated')).toBe(false)
     expect(isAcceptedCoverageSourcePath('.env.local')).toBe(false)

@@ -15,7 +15,7 @@ describe('dependency extractor', () => {
 
     expect(ids).toContain('site:dependencies:next')
     expect(ids).toContain('tech-stack-generator:dependencies:react')
-    expect(ids).toContain('.:devDependencies:zod')
+    expect(ids).toContain('.:devDependencies:turbo')
 
     const next = records.find((record) => record.id === 'site:dependencies:next')
     expect(next?.requested).toMatchObject({
@@ -97,6 +97,6 @@ describe('dependency extractor', () => {
     })
 
     expect(commandRecords.some((record) => record.scriptName === 'build')).toBe(true)
-    expect(commandRecords.some((record) => record.packageName === 'oando-tech-stack-docs')).toBe(true)
+    expect(commandRecords.some((record) => record.packageName === 'oando-site-workflow-docs')).toBe(true)
   }, 20000)
 })

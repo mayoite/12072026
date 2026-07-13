@@ -7,7 +7,7 @@ Generated documentation for the Oando Platform tech stack.
 | Fact ID | Metric | Value | Source |
 | --- | --- | --- | --- |
 | `overview.dependencies` | `Dependencies` | 264 | `_generated` |
-| `overview.commands` | `Commands` | 203 | `_generated` |
+| `overview.commands` | `Commands` | 202 | `_generated` |
 | `overview.routes` | `Routes` | 79 | `_generated` |
 | `overview.api` | `API` | 71 | `_generated` |
 | `overview.features` | `Features` | 5 | `_generated` |
@@ -225,9 +225,6 @@ Generated documentation for the Oando Platform tech stack.
 | `site/scripts/test-r2-upload.ts` | `env-reader` | `match at index 744` |
 | `site/scripts/translate-deferred-marketing-flat.mjs` | `env-reader` | `match at index 2447` |
 | `site/scripts/translate-deferred-marketing.mjs` | `env-reader` | `match at index 2802` |
-| `site/tech-stack-generator/package.json` | `package-manifest` | `dependencies.@phosphor-icons/react` |
-| `site/tech-stack-generator/src/pages/Architecture.tsx` | `env-reader` | `match at index 10476` |
-| `site/tech-stack-generator/src/pages/Security.tsx` | `env-reader` | `match at index 4836` |
 | `site/tests/e2e/site-navigation-smoke.spec.ts` | `env-test` | `match at index 81` |
 | `site/tests/integration/planner-store-plannerPersistence.test.ts` | `env-test` | `match at index 2137` |
 | `site/tests/unit/app/admin/themes/page.test.tsx` | `env-test` | `match at index 281` |
@@ -239,3 +236,4 @@ Generated documentation for the Oando Platform tech stack.
 | `site/tests/unit/platform/supabase/adminServer.test.ts` | `env-test` | `match at index 1433` |
 | `site/tests/unit/shared-providerChain.test.ts` | `env-test` | `match at index 346` |
 | `site/tsconfig.json` | `tsconfig-path` | `compilerOptions.paths.@/app/*` |
+| `tech-stack-generator/package.json` | `package-manifest` | `dependencies.@phosphor-icons/react` |

@@ -2171,12 +2171,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.dependencies.@phosphor-icons/react.version",
+      "sourcePointer": "importers.tech-stack-generator.dependencies.@phosphor-icons/react.version",
       "value": "2.1.10",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:dependencies:@phosphor-icons/react.resolved-version",
+    "id": "tech-stack-generator:dependencies:@phosphor-icons/react.resolved-version",
     "label": "React resolved version"
   },
   {
@@ -2191,12 +2191,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.dependencies.clsx.version",
+      "sourcePointer": "importers.tech-stack-generator.dependencies.clsx.version",
       "value": "2.1.1",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:dependencies:clsx.resolved-version",
+    "id": "tech-stack-generator:dependencies:clsx.resolved-version",
     "label": "Clsx resolved version"
   },
   {
@@ -2211,12 +2211,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.dependencies.framer-motion.version",
+      "sourcePointer": "importers.tech-stack-generator.dependencies.framer-motion.version",
       "value": "12.41.0",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:dependencies:framer-motion.resolved-version",
+    "id": "tech-stack-generator:dependencies:framer-motion.resolved-version",
     "label": "Framer Motion resolved version"
   },
   {
@@ -2231,12 +2231,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.dependencies.fuse.js.version",
+      "sourcePointer": "importers.tech-stack-generator.dependencies.fuse.js.version",
       "value": "7.4.2",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:dependencies:fuse.js.resolved-version",
+    "id": "tech-stack-generator:dependencies:fuse.js.resolved-version",
     "label": "Fuse Js resolved version"
   },
   {
@@ -2251,12 +2251,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.dependencies.highlight.js.version",
+      "sourcePointer": "importers.tech-stack-generator.dependencies.highlight.js.version",
       "value": "11.11.1",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:dependencies:highlight.js.resolved-version",
+    "id": "tech-stack-generator:dependencies:highlight.js.resolved-version",
     "label": "Highlight Js resolved version"
   },
   {
@@ -2271,12 +2271,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.dependencies.mermaid.version",
+      "sourcePointer": "importers.tech-stack-generator.dependencies.mermaid.version",
       "value": "11.16.0",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:dependencies:mermaid.resolved-version",
+    "id": "tech-stack-generator:dependencies:mermaid.resolved-version",
     "label": "Mermaid resolved version"
   },
   {
@@ -2291,12 +2291,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.dependencies.react-dom.version",
+      "sourcePointer": "importers.tech-stack-generator.dependencies.react-dom.version",
       "value": "19.2.7",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:dependencies:react-dom.resolved-version",
+    "id": "tech-stack-generator:dependencies:react-dom.resolved-version",
     "label": "React Dom resolved version"
   },
   {
@@ -2311,12 +2311,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.dependencies.react-router-dom.version",
+      "sourcePointer": "importers.tech-stack-generator.dependencies.react-router-dom.version",
       "value": "7.18.0",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:dependencies:react-router-dom.resolved-version",
+    "id": "tech-stack-generator:dependencies:react-router-dom.resolved-version",
     "label": "React Router Dom resolved version"
   },
   {
@@ -2331,12 +2331,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.dependencies.react.version",
+      "sourcePointer": "importers.tech-stack-generator.dependencies.react.version",
       "value": "19.2.7",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:dependencies:react.resolved-version",
+    "id": "tech-stack-generator:dependencies:react.resolved-version",
     "label": "React resolved version"
   },
   {
@@ -2351,12 +2351,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.@tailwindcss/vite.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.@tailwindcss/vite.version",
       "value": "4.3.2",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:@tailwindcss/vite.resolved-version",
+    "id": "tech-stack-generator:devDependencies:@tailwindcss/vite.resolved-version",
     "label": "Vite resolved version"
   },
   {
@@ -2371,12 +2371,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.@testing-library/react.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.@testing-library/react.version",
       "value": "16.3.2",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:@testing-library/react.resolved-version",
+    "id": "tech-stack-generator:devDependencies:@testing-library/react.resolved-version",
     "label": "React resolved version"
   },
   {
@@ -2391,12 +2391,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.@types/node.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.@types/node.version",
       "value": "26.1.0",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:@types/node.resolved-version",
+    "id": "tech-stack-generator:devDependencies:@types/node.resolved-version",
     "label": "Node resolved version"
   },
   {
@@ -2411,12 +2411,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.@types/react-dom.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.@types/react-dom.version",
       "value": "19.2.3",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:@types/react-dom.resolved-version",
+    "id": "tech-stack-generator:devDependencies:@types/react-dom.resolved-version",
     "label": "React Dom resolved version"
   },
   {
@@ -2431,12 +2431,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.@types/react.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.@types/react.version",
       "value": "19.2.17",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:@types/react.resolved-version",
+    "id": "tech-stack-generator:devDependencies:@types/react.resolved-version",
     "label": "React resolved version"
   },
   {
@@ -2451,12 +2451,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.@vitejs/plugin-react.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.@vitejs/plugin-react.version",
       "value": "4.7.0",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:@vitejs/plugin-react.resolved-version",
+    "id": "tech-stack-generator:devDependencies:@vitejs/plugin-react.resolved-version",
     "label": "Plugin React resolved version"
   },
   {
@@ -2471,12 +2471,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.@vitest/coverage-v8.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.@vitest/coverage-v8.version",
       "value": "4.1.9",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:@vitest/coverage-v8.resolved-version",
+    "id": "tech-stack-generator:devDependencies:@vitest/coverage-v8.resolved-version",
     "label": "Coverage V8 resolved version"
   },
   {
@@ -2491,12 +2491,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.jsdom.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.jsdom.version",
       "value": "29.1.1",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:jsdom.resolved-version",
+    "id": "tech-stack-generator:devDependencies:jsdom.resolved-version",
     "label": "Jsdom resolved version"
   },
   {
@@ -2511,12 +2511,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.postcss.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.postcss.version",
       "value": "8.5.15",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:postcss.resolved-version",
+    "id": "tech-stack-generator:devDependencies:postcss.resolved-version",
     "label": "Postcss resolved version"
   },
   {
@@ -2531,12 +2531,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.tailwindcss.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.tailwindcss.version",
       "value": "4.3.1",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:tailwindcss.resolved-version",
+    "id": "tech-stack-generator:devDependencies:tailwindcss.resolved-version",
     "label": "Tailwindcss resolved version"
   },
   {
@@ -2551,12 +2551,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.ts-morph.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.ts-morph.version",
       "value": "28.0.0",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:ts-morph.resolved-version",
+    "id": "tech-stack-generator:devDependencies:ts-morph.resolved-version",
     "label": "Ts Morph resolved version"
   },
   {
@@ -2571,12 +2571,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.typescript.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.typescript.version",
       "value": "6.0.3",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:typescript.resolved-version",
+    "id": "tech-stack-generator:devDependencies:typescript.resolved-version",
     "label": "Typescript resolved version"
   },
   {
@@ -2591,12 +2591,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.vite.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.vite.version",
       "value": "6.4.3",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:vite.resolved-version",
+    "id": "tech-stack-generator:devDependencies:vite.resolved-version",
     "label": "Vite resolved version"
   },
   {
@@ -2611,12 +2611,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.vitest.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.vitest.version",
       "value": "4.1.9",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:vitest.resolved-version",
+    "id": "tech-stack-generator:devDependencies:vitest.resolved-version",
     "label": "Vitest resolved version"
   },
   {
@@ -2631,12 +2631,12 @@
       "secretRisk": "none",
       "sourceKind": "lockfile",
       "sourcePath": "pnpm-lock.yaml",
-      "sourcePointer": "importers.site/tech-stack-generator.devDependencies.zod.version",
+      "sourcePointer": "importers.tech-stack-generator.devDependencies.zod.version",
       "value": "4.4.3",
       "verificationMode": "source-backed"
     },
     "field": "resolvedVersion",
-    "id": "site/tech-stack-generator:devDependencies:zod.resolved-version",
+    "id": "tech-stack-generator:devDependencies:zod.resolved-version",
     "label": "Zod resolved version"
   },
   {
@@ -4810,13 +4810,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "dependencies.@phosphor-icons/react",
       "value": "^2.1.10",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:dependencies:@phosphor-icons/react.requested-range",
+    "id": "tech-stack-generator:dependencies:@phosphor-icons/react.requested-range",
     "label": "React requested range"
   },
   {
@@ -4830,13 +4830,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "dependencies.clsx",
       "value": "^2.1.1",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:dependencies:clsx.requested-range",
+    "id": "tech-stack-generator:dependencies:clsx.requested-range",
     "label": "Clsx requested range"
   },
   {
@@ -4850,13 +4850,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "dependencies.framer-motion",
       "value": "^12.41.0",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:dependencies:framer-motion.requested-range",
+    "id": "tech-stack-generator:dependencies:framer-motion.requested-range",
     "label": "Framer Motion requested range"
   },
   {
@@ -4870,13 +4870,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "dependencies.fuse.js",
       "value": "^7.4.1",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:dependencies:fuse.js.requested-range",
+    "id": "tech-stack-generator:dependencies:fuse.js.requested-range",
     "label": "Fuse Js requested range"
   },
   {
@@ -4890,13 +4890,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "dependencies.highlight.js",
       "value": "^11.10.0",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:dependencies:highlight.js.requested-range",
+    "id": "tech-stack-generator:dependencies:highlight.js.requested-range",
     "label": "Highlight Js requested range"
   },
   {
@@ -4910,13 +4910,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "dependencies.mermaid",
       "value": "^11.4.1",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:dependencies:mermaid.requested-range",
+    "id": "tech-stack-generator:dependencies:mermaid.requested-range",
     "label": "Mermaid requested range"
   },
   {
@@ -4930,13 +4930,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "dependencies.react",
       "value": "^19.0.0",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:dependencies:react.requested-range",
+    "id": "tech-stack-generator:dependencies:react.requested-range",
     "label": "React requested range"
   },
   {
@@ -4950,13 +4950,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "dependencies.react-dom",
       "value": "^19.0.0",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:dependencies:react-dom.requested-range",
+    "id": "tech-stack-generator:dependencies:react-dom.requested-range",
     "label": "React Dom requested range"
   },
   {
@@ -4970,13 +4970,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "dependencies.react-router-dom",
       "value": "^7.18.0",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:dependencies:react-router-dom.requested-range",
+    "id": "tech-stack-generator:dependencies:react-router-dom.requested-range",
     "label": "React Router Dom requested range"
   },
   {
@@ -4990,13 +4990,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.@tailwindcss/vite",
       "value": "^4.3.0",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:@tailwindcss/vite.requested-range",
+    "id": "tech-stack-generator:devDependencies:@tailwindcss/vite.requested-range",
     "label": "Vite requested range"
   },
   {
@@ -5010,13 +5010,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.@testing-library/react",
       "value": "^16.3.2",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:@testing-library/react.requested-range",
+    "id": "tech-stack-generator:devDependencies:@testing-library/react.requested-range",
     "label": "React requested range"
   },
   {
@@ -5030,13 +5030,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.@types/node",
       "value": "^26.1.0",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:@types/node.requested-range",
+    "id": "tech-stack-generator:devDependencies:@types/node.requested-range",
     "label": "Node requested range"
   },
   {
@@ -5050,13 +5050,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.@types/react",
       "value": "^19.0.0",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:@types/react.requested-range",
+    "id": "tech-stack-generator:devDependencies:@types/react.requested-range",
     "label": "React requested range"
   },
   {
@@ -5070,13 +5070,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.@types/react-dom",
       "value": "^19.0.0",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:@types/react-dom.requested-range",
+    "id": "tech-stack-generator:devDependencies:@types/react-dom.requested-range",
     "label": "React Dom requested range"
   },
   {
@@ -5090,13 +5090,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.@vitejs/plugin-react",
       "value": "^4.3.4",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:@vitejs/plugin-react.requested-range",
+    "id": "tech-stack-generator:devDependencies:@vitejs/plugin-react.requested-range",
     "label": "Plugin React requested range"
   },
   {
@@ -5110,13 +5110,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.@vitest/coverage-v8",
       "value": "^4.1.9",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:@vitest/coverage-v8.requested-range",
+    "id": "tech-stack-generator:devDependencies:@vitest/coverage-v8.requested-range",
     "label": "Coverage V8 requested range"
   },
   {
@@ -5130,13 +5130,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.jsdom",
       "value": "^29.1.1",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:jsdom.requested-range",
+    "id": "tech-stack-generator:devDependencies:jsdom.requested-range",
     "label": "Jsdom requested range"
   },
   {
@@ -5150,13 +5150,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.postcss",
       "value": "^8.5.15",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:postcss.requested-range",
+    "id": "tech-stack-generator:devDependencies:postcss.requested-range",
     "label": "Postcss requested range"
   },
   {
@@ -5170,13 +5170,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.tailwindcss",
       "value": "^4.3.0",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:tailwindcss.requested-range",
+    "id": "tech-stack-generator:devDependencies:tailwindcss.requested-range",
     "label": "Tailwindcss requested range"
   },
   {
@@ -5190,13 +5190,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.ts-morph",
       "value": "^28.0.0",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:ts-morph.requested-range",
+    "id": "tech-stack-generator:devDependencies:ts-morph.requested-range",
     "label": "Ts Morph requested range"
   },
   {
@@ -5210,13 +5210,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.typescript",
       "value": "^6.0.3",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:typescript.requested-range",
+    "id": "tech-stack-generator:devDependencies:typescript.requested-range",
     "label": "Typescript requested range"
   },
   {
@@ -5230,13 +5230,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.vite",
       "value": "^6.0.5",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:vite.requested-range",
+    "id": "tech-stack-generator:devDependencies:vite.requested-range",
     "label": "Vite requested range"
   },
   {
@@ -5250,13 +5250,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.vitest",
       "value": "^4.1.9",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:vitest.requested-range",
+    "id": "tech-stack-generator:devDependencies:vitest.requested-range",
     "label": "Vitest requested range"
   },
   {
@@ -5270,13 +5270,13 @@
       ],
       "secretRisk": "none",
       "sourceKind": "package-manifest",
-      "sourcePath": "site/tech-stack-generator/package.json",
+      "sourcePath": "tech-stack-generator/package.json",
       "sourcePointer": "devDependencies.zod",
       "value": "^4.4.3",
       "verificationMode": "source-backed"
     },
     "field": "requestedRange",
-    "id": "site/tech-stack-generator:devDependencies:zod.requested-range",
+    "id": "tech-stack-generator:devDependencies:zod.requested-range",
     "label": "Zod requested range"
   }
 ]

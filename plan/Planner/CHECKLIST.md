@@ -1,85 +1,115 @@
 # Planner checklist
 
-Planner serves any external website customer.
+This file records status only.
 
-The customer designs with available inventory and sends a branded BOQ to Oando.
+Treat every item as not done.
 
-All items require fresh verification.
+## Shared start gate
 
-## Public entry and site
+- [ ] Catalog-writing tests satisfy Admin Step 0 isolation.
+- [ ] Planner fixtures never change canonical catalog files.
+- [ ] Browser tests use normal controls without forced clicks.
+- [ ] Each Planner command overwrites its stable results folder.
 
-- [ ] A clear public route explains the outcome and opens Planner quickly.
-- [ ] Guest entry works without a false account requirement.
-- [ ] Public navigation, product routes, contact paths, and Planner entry agree.
-- [ ] Stable public routes have unique metadata and canonical URLs.
-- [ ] Private, Admin, duplicate, and workspace-only routes are not indexed.
-- [ ] Sitemap, robots rules, and structured data match live routes.
-- [ ] Core Web Vitals are measured on representative mobile and desktop routes.
-- [ ] Claims describe live capability. No fake cloud, price, AI, or sharing claims.
+## Phase 1 — public entry and deterministic BOQ
 
-## Layout workflow
+- [ ] Public visitors can find and enter Planner.
+- [ ] Guests do not face a false account requirement.
+- [ ] No developer flag or hidden query is required.
+- [ ] Member, Admin, and private routes remain protected.
+- [ ] Project brief and room setup are complete and persistent.
+- [ ] Millimetres remain document authority.
+- [ ] Setup is keyboard-complete with visible focus.
+- [ ] One BOQ calculation authority exists.
+- [ ] BOQ uses only product-backed placements.
+- [ ] BOQ groups stable product, family, option, and commercial identity.
+- [ ] BOQ includes quantities, units, and source object identifiers.
+- [ ] Unsupported and unbranded objects are visibly excluded.
+- [ ] Identical inputs produce identical lines, order, and hash.
+- [ ] A branded unpriced BOQ works without live pricing.
+- [ ] Planner emits the agreed Site events without duplicates or private geometry.
 
-- [ ] The customer can create a room and edit dimensions in millimetres.
-- [ ] Walls, openings, selection, move, rotate, resize, duplicate, and delete work.
-- [ ] Undo and redo cover every document mutation.
-- [ ] Grid, snapping, dimensions, text, zoom, pan, and fit controls are truthful.
-- [ ] Inventory is searchable and placeable from the public catalog contract.
-- [ ] Published SVG renders as the primary 2D symbol.
-- [ ] `Block2D` appears only while SVG loads or when it is unavailable.
-- [ ] Selection and properties remain synchronized.
-- [ ] Save and reload preserve the normalized document.
-- [ ] Failed save never displays success.
-- [ ] Import and export round trips preserve canonical fields.
+## Phase 2 — core layout, catalog, and continuity
 
-## 2D and 3D continuity
+- [ ] Walls, doors, and windows can be created and edited.
+- [ ] Selection and object editing preserve identity.
+- [ ] Metric and imperial display keep stored millimetres unchanged.
+- [ ] Primary tools work and silent no-op controls are removed.
+- [ ] Numeric properties are keyboard-editable.
+- [ ] One undo and redo authority covers document mutations.
+- [ ] Public product search, categories, filters, and details work.
+- [ ] Only published customer-visible inventory is exposed.
+- [ ] Product, family, version, option, and commercial identity survive placement.
+- [ ] Published SVG is the primary 2D symbol.
+- [ ] Missing assets use an honest fallback without breaking the layout.
+- [ ] One normalized document drives 2D, 3D, persistence, export, and BOQ.
+- [ ] Save states are truthful and failed save never displays success.
+- [ ] Save, reload, import, and export preserve canonical fields.
+- [ ] 2D and 3D preserve object count, pose, rotation, and options.
+- [ ] View actions do not mutate project data.
+- [ ] Workspace panels do not hide essential work.
+- [ ] Primary desktop, mobile, and keyboard journeys work.
+- [ ] WCAG 2.2 AA checks pass for the primary journey.
+- [ ] Light and dark themes cover primary surfaces.
+- [ ] Primary journeys have no unexplained console, request, or hydration errors.
 
-- [ ] The same item identity, position, rotation, scale, and options drive both views.
-- [ ] Switching views does not mutate the document.
-- [ ] 3D models use bounded scale, stable origin, and an explicit fallback.
-- [ ] Camera, orbit, selection, and return to 2D are predictable.
-- [ ] Missing models do not break the layout or BOQ.
-- [ ] Representative layouts remain responsive at realistic item counts.
+## Phase 3 — bulk layout and advanced validation
 
-## Customer interface quality
+- [ ] Released Admin family versions are consumed.
+- [ ] Compatible options work and invalid combinations explain why.
+- [ ] Configuration survives 2D, 3D, validation, and BOQ.
+- [ ] Multi-select, duplicate, row, array, and grid work.
+- [ ] Align, distribute, exact spacing, group, and ungroup work.
+- [ ] Bulk changes preview before application.
+- [ ] One bulk operation is one undoable command.
+- [ ] Bulk edits preserve identity, options, and BOQ output.
+- [ ] A 100-seat layout is practical within a recorded target.
+- [ ] A representative 2,000-seat plan meets recorded navigation and edit budgets.
+- [ ] Overlap, wall, opening, boundary, aisle, and chair rules work.
+- [ ] Approved accessibility rules are versioned.
+- [ ] Issues show severity, location, objects, and remedy.
+- [ ] Issues can focus affected objects on the canvas.
+- [ ] Advisory waivers require a reason.
+- [ ] Hard errors block quote readiness.
+- [ ] Validation clears after a correct fix without reload.
+- [ ] Revisions, BOQ, and handoff use the same validation result.
 
-- [ ] The canvas remains the dominant workspace.
-- [ ] Catalog, tools, properties, and view controls have clear ownership.
-- [ ] Contextual panels do not obscure the active design.
-- [ ] Loading, empty, error, offline, saving, and saved states are distinct.
-- [ ] Keyboard users can complete the workflow without dragging.
-- [ ] Focus is visible and unobscured.
-- [ ] Labels, targets, contrast, and announcements meet WCAG 2.2 AA.
-- [ ] Supported mobile and desktop widths expose all essential controls.
-- [ ] Destructive actions are recoverable or explicitly confirmed.
+## Phase 4 — live pricing, revisions, sharing, and review
 
-## Branded BOQ and Oando handoff
+- [ ] Approved price-book version and currency are pinned.
+- [ ] Quantity, unit price, adjustment, tax, and line total are visible.
+- [ ] Missing price is unavailable, never zero.
+- [ ] Draft prices never reach customers.
+- [ ] Historical priced outputs remain reproducible.
+- [ ] Named revisions are immutable.
+- [ ] Revisions record project, catalog, family, validation, and price versions.
+- [ ] Later edits do not change an existing revision.
+- [ ] BOQ and quote records cannot drift to a newer draft.
+- [ ] Read-only review links support permission, expiry, and revocation.
+- [ ] Reviewers cannot mutate the owner project.
+- [ ] Comments preserve object anchor, reviewer, and time where supported.
+- [ ] Revocation blocks future access.
+- [ ] Private projects and commercial data remain private.
 
-- [ ] BOQ is generated only from placed, catalog-backed products.
-- [ ] Lines contain stable product identity, description, options, quantity, and units.
-- [ ] Unsupported or unbranded items are excluded with a visible reason.
-- [ ] The BOQ carries Oando branding and project context.
-- [ ] JSON, CSV, and PDF totals and lines agree.
-- [ ] Pricing is absent unless an approved price authority exists.
-- [ ] Demo prices are removed from customer-facing output.
-- [ ] The customer can review the BOQ before sending it.
-- [ ] Submission reaches an Oando-controlled endpoint or inbox.
-- [ ] Submission records consent, status, time, project revision, and BOQ hash.
-- [ ] Retry does not create duplicate requests.
-- [ ] The customer receives a truthful confirmation or actionable failure.
+## Phase 5 — handoff and exports
 
-## Security and verification
+- [ ] Customer reviews the exact named revision before submission.
+- [ ] BOQ, pricing, exclusions, and validation status are visible.
+- [ ] Hard validation failures block handoff.
+- [ ] Submission sends the exact revision, BOQ, price version, validation result, and hash.
+- [ ] Consent, status, time, revision, and hash are recorded.
+- [ ] Idempotency prevents duplicate requests.
+- [ ] Failed submission supports safe retry.
+- [ ] Successful records do not drift to later edits.
+- [ ] PDF, workbook, JSON, and approved exports use one calculation authority.
+- [ ] Every export preserves product, revision, price, validation, and hash identity.
+- [ ] Handoff completion and failure events follow the Site event contract.
+- [ ] Commercial authorization, CSRF, rate-limit, privacy, and provenance checks pass.
 
-- [ ] Guest and authenticated data boundaries are enforced server-side.
-- [ ] Customer inputs, imports, SVG, and exports are validated and bounded.
-- [ ] State-changing requests use CSRF protection where applicable.
-- [ ] Public submission is rate-limited and abuse-resistant.
-- [ ] Private project data is not exposed through URLs, logs, or client secrets.
-- [ ] Focused unit, integration, and browser journeys pass from clean state.
-- [ ] SEO, accessibility, responsive, and console checks pass on live routes.
-- [ ] Typecheck, lint, and affected build checks pass.
+## Completion
 
-## Completion record
-
+- [ ] An external customer completes the full journey without developer help.
+- [ ] The same product identity flows from discovery to BOQ and handoff.
+- [ ] Oando receives the exact branded package reviewed by the customer.
 - [ ] Fresh commands and exit codes are recorded here.
-- [ ] Remaining failures are active entries in `../../Failures.md`.
-- [ ] No resolved failure remains in `../../Failures.md`.
+- [ ] Only active failures remain in `../../Failures.md`.

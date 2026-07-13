@@ -23,8 +23,8 @@
   "summary": {
     "api": 71,
     "claimInventory": null,
-    "codeOrganization": 28,
-    "commands": 203,
+    "codeOrganization": 27,
+    "commands": 202,
     "databaseMigrations": 2,
     "databaseTables": 14,
     "dependencies": 264,

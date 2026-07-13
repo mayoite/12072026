@@ -1,7 +1,7 @@
-import ciJson from '../../tech-stack-generated/data/ci.json'
-import dependabotJson from '../../tech-stack-generated/data/dependabot.json'
-import deploymentJson from '../../tech-stack-generated/data/deployment.json'
-import environmentJson from '../../tech-stack-generated/data/environment.json'
+import ciJson from '../../../tech-stack-generated/data/ci.json'
+import dependabotJson from '../../../tech-stack-generated/data/dependabot.json'
+import deploymentJson from '../../../tech-stack-generated/data/deployment.json'
+import environmentJson from '../../../tech-stack-generated/data/environment.json'
 
 export type NormalizedDomainRecord = {
   id: string
