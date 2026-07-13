@@ -26,6 +26,12 @@ const WORKER_PATH = path.join(
   "helpers",
   "isolatedAdminSvgPublishWorker.ts",
 );
+const DEFAULT_WORKER_TIMEOUT_MS = 45_000;
+
+export type IsolatedAdminSvgWorkspaceOptions = {
+  readonly workerPath?: string;
+  readonly workerTimeoutMs?: number;
+};
 
 export type IsolatedPublishResult =
   | { readonly success: true }
@@ -58,6 +64,7 @@ export type IsolatedAdminSvgWorkspace = {
 
 export function createIsolatedAdminSvgWorkspace(
   slug: string,
+  options: IsolatedAdminSvgWorkspaceOptions = {},
 ): IsolatedAdminSvgWorkspace {
   const canonical = canonicalSvgPaths(slug);
   if (!existsSync(canonical.descriptor) || !existsSync(canonical.svg)) {
@@ -100,14 +107,23 @@ export function createIsolatedAdminSvgWorkspace(
           "oando-site",
           "exec",
           "tsx",
-          WORKER_PATH,
+          options.workerPath ?? WORKER_PATH,
           inputPath,
           resultPath,
           root,
           descriptorDir,
         ],
-        { cwd: REPO_ROOT, encoding: "utf8" },
+        {
+          cwd: REPO_ROOT,
+          encoding: "utf8",
+          timeout: options.workerTimeoutMs ?? DEFAULT_WORKER_TIMEOUT_MS,
+        },
       );
+      if (run.error && "code" in run.error && run.error.code === "ETIMEDOUT") {
+        throw new Error(
+          `Isolated SVG publish worker timed out after ${options.workerTimeoutMs ?? DEFAULT_WORKER_TIMEOUT_MS}ms`,
+        );
+      }
       if (run.status !== 0) {
         throw new Error(
           `Isolated SVG publish worker failed (${run.status ?? "no exit"}): ${run.error?.message ?? run.stderr ?? run.stdout}`,

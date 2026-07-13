@@ -6,7 +6,7 @@
 
 **Architecture:** `tech-docs-generator/` remains the handwritten Vite source package and continues consuming the shared CSS contract from `site/app/css/`. Its extractors create source-backed data and Markdown under `generated-documents/data/` and `generated-documents/docs/`; Vite builds into staging and publishes the deployable app transactionally to `generated-documents/site/`. Development mode watches explicit allowed repository roots, regenerates through one serialized coordinator, and reloads the Vite client without scanning reference, private, generated, result, dependency, or build roots.
 
-**Tech Stack:** Node.js 24, pnpm workspace, Vite 6, React 19, TypeScript 6, Vitest, Testing Library, ts-morph, Fuse.js, Mermaid, Framer Motion.
+**Tech Stack:** Node.js 24, pnpm workspace, Vite 6, React 19, TypeScript 6, Vitest, Testing Library, ts-morph, Fuse.js, Mermaid, Framer Motion, and `@xyflow/react` for the interactive graph.
 
 ---
 
@@ -24,6 +24,9 @@
 - The UI must not invent scores, coverage, ownership, freshness, or status.
 - Tests and generation must not read or write `archive/`, `websites/`, `.archive/`, `.websites/`, or `PROTECTED/`.
 - Focused tests and checks use temporary roots and never mutate canonical generated output.
+- Every generator test lives under `tech-docs-generator/tests/`; do not create generator tests in root `tests/`, `site/tests/`, or another package.
+- The generator uses the workspace root's hoisted `node_modules/`; never create `tech-docs-generator/node_modules/`, a nested lockfile, or a separate installation.
+- A generator failure blocks only its dependent generator task or tech-docs CI job. It does not block unrelated Site, Admin, Planner, or Security work.
 - Only explicit `generate`, `build`, and live-development commands may publish generated output.
 - Data, docs, and site publication must stage, validate, and swap; a failed run preserves the last valid output.
 
@@ -58,6 +61,8 @@
 - `tech-docs-generator/src/pages/SystemMap.tsx` — architecture relationship explorer.
 - `tech-docs-generator/src/pages/Impact.tsx` — inbound/outbound change-impact explorer.
 - `tech-docs-generator/src/pages/TestMap.tsx` — production-to-test mapping and verified gaps.
+- `tech-docs-generator/tests/generator/publication.test.ts` — transactional publication and rollback.
+- `tech-docs-generator/tests/changes-page.test.tsx` — snapshot comparison interactions.
 - Focused tests beside the existing generator test suites.
 
 ## Task 1: Lock the rename and output contract with isolated failing tests
@@ -85,6 +90,8 @@ expect(rendererText).toContain("'generated-documents', 'data'")
 
 **Files:**
 - Rename: `tech-stack-generator/` to `tech-docs-generator/`
+- Create: `tech-docs-generator/scripts/output-contract.mjs`
+- Create: `tech-docs-generator/scripts/output-contract.d.mts`
 - Modify: root workspace/configuration files listed in the file map
 - Modify: all live path strings found by `rg -l "tech-stack-generator|tech-stack-generated|tech-stack-docs|\.tech-stack-generated"`
 
@@ -108,8 +115,9 @@ expect(rendererText).toContain("'generated-documents', 'data'")
 
 - [ ] Inventory references with the safe exclusions from Task 9. Classify each match; change only live package/output contracts, not historical evidence.
 - [ ] Update workspace, CI, cleanup scripts, layout guards, secretlint paths, generator README, all extractors/checkers, source data imports, tests, user docs, generated facts, and lockfile references in the same change.
-- [ ] Validate the old generated roots using their markers/manifests. Migrate or remove only generator-owned files; stop if an unknown file exists.
+- [ ] Validate the old generated roots using their markers/manifests. Migrate or remove only generator-owned files. An unknown-file conflict blocks only generator migration; continue unrelated repository work.
 - [ ] From the root run `pnpm install --lockfile-only --ignore-scripts`; verify only the workspace importer rename and required metadata changed.
+- [ ] Confirm dependency resolution uses root `node_modules/` and that neither `tech-docs-generator/node_modules/` nor a nested lockfile exists.
 - [ ] Run `pnpm --filter oando-tech-docs exec vitest run tests/generator/output-contract.test.ts tests/package.test.ts`.
 - [ ] Verify GREEN.
 
@@ -125,8 +133,9 @@ expect(rendererText).toContain("'generated-documents', 'data'")
 - Modify: `tech-docs-generator/scripts/emit-renderer-data.mjs`
 - Modify: `tech-docs-generator/vite.config.ts`
 - Modify: generator filesystem/generation tests
+- Create: `tech-docs-generator/tests/generator/publication.test.ts`
 
-- [ ] First write failing tests for every output surface: unknown-file refusal, failed-copy rollback, successful swap, and byte-identical preservation of the previous valid tree.
+- [ ] First write failing tests through existing `generateDocs` and `emitRendererData` exports for every output surface: unknown-file refusal, failed-copy rollback, successful swap, and byte-identical preservation of the previous valid tree. Extract the publisher only after these tests fail behaviorally.
 - [ ] Add a failing source-policy test proving neither dotted nor undotted reference roots can become facts, descriptors, watcher events, inventory inputs, or output targets.
 - [ ] Define the contract once:
 
@@ -150,7 +159,7 @@ export const EXCLUDED_REPOSITORY_ROOTS = [
 - [ ] Preserve separate generated-root markers and manifests for `data/`, `docs/`, and `site/`.
 - [ ] Change Vite to build into `../.tmp/generated-documents/site`, use `emptyOutDir: true` only for staging, and set `base: './'`. A build publishes all three staged surfaces only after Vite and every manifest validation succeed.
 - [ ] Add tests for unknown files inside `data/`, `docs/`, and `site/`, plus an unknown sibling under `generated-documents/`.
-- [ ] Run `pnpm --filter oando-tech-docs exec vitest run tests/generator/filesystem.test.ts tests/generator/generation.test.ts tests/generator/output-contract.test.ts tests/generator/source-policy.test.ts` and verify GREEN.
+- [ ] Run `pnpm --filter oando-tech-docs exec vitest run tests/generator/filesystem.test.ts tests/generator/generation.test.ts tests/generator/publication.test.ts tests/generator/output-contract.test.ts tests/generator/source-policy.test.ts` and verify GREEN.
 
 ## Task 4: Make generation and build one reproducible command
 
@@ -158,6 +167,9 @@ export const EXCLUDED_REPOSITORY_ROOTS = [
 - Modify: `tech-docs-generator/package.json`
 - Modify: `tech-docs-generator/scripts/check.mjs`
 - Modify: `tech-docs-generator/scripts/gate.mjs`
+- Modify: `tech-docs-generator/scripts/check-coverage.mjs`
+- Modify: `tech-docs-generator/scripts/generate-coverage-report.mjs`
+- Modify: `tech-docs-generator/vitest.config.ts`
 - Modify: `.github/workflows/tech-stack-docs.yml`
 - Modify: relevant package and generation tests
 
@@ -191,7 +203,7 @@ export const EXCLUDED_REPOSITORY_ROOTS = [
 - Create: `tech-docs-generator/tests/generator/live-regeneration.test.ts`
 - Modify: `tech-docs-generator/vite.config.ts`
 
-- [ ] Write failing tests for initial generation, debounce coalescing, active-run serialization, absolute-path containment, exclusions, and recovery after a failed generation:
+- [ ] First add a failing assertion against the existing Vite config requiring a plugin named `oando-repo-live`; verify RED, then add the minimal plugin registration. After that module exists, write failing coordinator tests for initial generation, debounce coalescing, active-run serialization, absolute-path containment, exclusions, and recovery:
 
 ```ts
 function deferred<T>() {
@@ -249,7 +261,7 @@ it('queues exactly one follow-up while a run is active', async () => {
 - Modify: `tech-docs-generator/scripts/renderer-data.mjs`
 - Modify: `tech-docs-generator/scripts/schema.mjs`
 
-- [ ] First write failing fixture tests for static import, re-export, literal dynamic import, unresolved computed import, alias resolution, route/API roots, package dependencies, runner selection, source hashes, and excluded roots. Verify RED for absent graph output.
+- [ ] First write failing fixture assertions through the existing `buildGeneratorModel()` and renderer payload APIs, requiring graph and runner-selection output. Verify assertion failures, then add the minimal model fields. Add focused extractor cases only after the extractor surface exists.
 - [ ] Define graph records with evidence:
 
 ```ts
@@ -290,17 +302,18 @@ type RepoEdge = {
 - Create the explorer files listed in the file map
 - Modify: `tech-docs-generator/src/App.tsx`
 - Modify: `tech-docs-generator/src/data/navigation.ts`
-- Modify: `tech-docs-generator/src/styles/index.css`
+- Create: `tech-docs-generator/src/styles/index.css`
 - Modify: `tech-docs-generator/src/index.css`
 - Create: `tech-docs-generator/tests/system-map.test.tsx`
 - Create: `tech-docs-generator/tests/impact-explorer.test.tsx`
 - Create: `tech-docs-generator/tests/test-map.test.tsx`
 - Create: `tech-docs-generator/tests/search-worker.test.ts`
+- Modify: `tech-docs-generator/tests/setup.ts`
 - Modify: `tech-docs-generator/src/pages/TechStack.tsx`
 - Modify: `tech-docs-generator/src/pages/ApiDesign.tsx`
 
-- [ ] First write failing interaction tests for hash deep links, URL restoration, keyboard graph selection, worker search, dependency filters, route/API filters, impact traversal, runner selection, and evidence display.
-- [ ] Move the current shared CSS imports into `src/styles/index.css` and change their depth from `../../site/` to `../../../site/`. Add a resolution/build test for every imported stylesheet.
+- [ ] First write failing interaction assertions through the existing App, Tech Stack, API Design, and search surfaces: require hash routing, new navigation entries, URL restoration, Worker construction, dependency filters, and route/API filters. Add component-level graph/impact/test-map cases only after the route components exist.
+- [ ] Move the current shared CSS imports into `src/styles/index.css` and change their depth from `../../site/` to `../../../site/`. Import `@xyflow/react/dist/style.css` after the Tailwind/site imports, as required by React Flow. Add a resolution/build test for every imported stylesheet.
 - [ ] Replace `BrowserRouter` with `HashRouter`. Test a nested deployment URL and reload of `#/system-map?selected=...` without server rewrite support.
 - [ ] Add routes `/system-map`, `/impact`, and `/test-map` while preserving existing factual pages.
 - [ ] Keep explorer state in URL parameters:
@@ -317,11 +330,14 @@ type ExplorerState = {
 - [ ] Build the Fuse index in `search-index.ts`; run queries in `search.worker.ts`; use the same pure search function as a fallback when Worker construction fails.
 - [ ] Test that changing search/filter/selection updates the hash query and that reloading restores the same view.
 - [ ] Add `@xyflow/react` from the root with `pnpm add --filter oando-tech-docs @xyflow/react`; use it for the System Map with an accessible synchronized result list and details panel.
+- [ ] Run dependency changes only through the filtered root command; never install from inside `tech-docs-generator/`.
+- [ ] Import React Flow's stylesheet after the shared Tailwind CSS, give its parent an explicit responsive height, and add deterministic `ResizeObserver`/layout shims only in `tests/setup.ts`.
 - [ ] System Map must filter nodes and edges, expose keyboard-selectable results, and show evidence for the selected item.
 - [ ] Impact must traverse only verified graph edges and call the result “structural impact”; unresolved edges remain unknown.
 - [ ] Test Map must show direct import links, runner selection, no-direct-link files, and not-selected tests as separate evidence-backed sets. It must not claim coverage unless a real coverage artifact supplies it.
 - [ ] Upgrade Tech Stack with importer/category/version filters and source evidence. Upgrade API Design with method/path/relationship filters; auth state is shown only when an extractor supplies direct evidence, otherwise `unknown`.
 - [ ] Use reduced-motion media queries and disable graph transition animation when requested.
+- [ ] Component tests must use in-memory graph/search fixtures; they must not require or rewrite canonical `generated-documents/`.
 - [ ] Run `pnpm --filter oando-tech-docs exec vitest run tests/system-map.test.tsx tests/impact-explorer.test.tsx tests/test-map.test.tsx tests/search-worker.test.ts tests/generated-tables.test.tsx` and verify GREEN.
 
 ## Task 8: Add snapshot identity and change comparison
@@ -332,7 +348,7 @@ type ExplorerState = {
 - Modify: renderer generation and UI navigation
 - Create: `tech-docs-generator/src/pages/Changes.tsx`
 
-- [ ] First write failing tests for identical snapshots, changed node/edge hashes, removal, no baseline, traversal, absolute paths, forbidden roots, and symlink escape. Verify RED.
+- [ ] First write failing assertions through existing model and renderer APIs requiring snapshot identity and `baseline: null`. After the snapshot surface exists, add focused failing cases for identical snapshots, changed node/edge hashes, removal, traversal, absolute paths, forbidden roots, and symlink escape.
 - [ ] Derive `snapshotId` from canonical source descriptors and graph content. Do not use wall-clock time in the hash.
 - [ ] Accept only a relative baseline filename resolved beneath `generated-documents/baselines/`. Reject absolute paths, traversal, separators in filenames, escaped symlinks, and any path outside the canonical baseline root. Baselines are comparison inputs, never source facts.
 - [ ] When no baseline is supplied, report `baseline: null`; never call all current records “added”.
