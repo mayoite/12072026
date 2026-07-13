@@ -39,6 +39,7 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
+  renameSync,
   writeFileSync,
   readdirSync,
 } from "node:fs";
@@ -207,14 +208,18 @@ describe("04-PIPELINE-RUNNER: skipCompile (S4-only after compileSvgForPublish)",
     mkdirSync(path.dirname(svgPath), { recursive: true });
     writeFileSync(svgPath, "old-svg\n", "utf8");
     try {
-      const result = await runSvgPipeline(fixedDescriptorFixture() as never, {
+      const options = {
         projectRoot, skipCompile: true, precompiledSvg: "<svg>new</svg>",
-      });
+        recoveryFs: {
+          rename: (source: string, target: string) => {
+            if (source.includes(".stage-") && target === fixturePath) throw new Error("injected second replace failure");
+            return renameSync(source, target);
+          },
+        },
+      } as unknown as Parameters<typeof runSvgPipeline>[1];
+      const result = await runSvgPipeline(fixedDescriptorFixture() as never, options);
       expect(result.ok).toBe(true);
       if (!result.ok) return;
-      const stagedFixture = readdirSync(path.dirname(fixturePath)).find((entry) => entry.includes(".stage-"));
-      expect(stagedFixture).toBeDefined();
-      rmSync(path.join(path.dirname(fixturePath), stagedFixture ?? "missing"));
       expect(() => result.commit?.()).toThrow();
       result.rollback?.();
       expect(readFileSync(svgPath, "utf8")).toBe("old-svg\n");

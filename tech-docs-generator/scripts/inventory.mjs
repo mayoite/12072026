@@ -3,7 +3,7 @@ import path from 'node:path'
 import crypto from 'node:crypto'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
-import { getRendererDataRoot, getSourcePackageRoot } from './output-contract.mjs'
+import { getSourcePackageRoot } from './output-contract.mjs'
 
 const require = createRequire(import.meta.url)
 
@@ -21,7 +21,6 @@ const scope = {
     path.join(packageRoot, 'README.md'),
     path.join(packageRoot, 'Readme_Techstack.md'),
   ],
-  outFile: path.join(getRendererDataRoot(repoRoot), 'claim-inventory.json'),
 }
 
 const STYLE_ATTRS = new Set(['className', 'class', 'style'])
@@ -568,16 +567,12 @@ function summarize() {
     }),
   }
 
-  fs.mkdirSync(path.dirname(scope.outFile), { recursive: true })
-  fs.writeFileSync(scope.outFile, `${JSON.stringify(output, null, 2)}\n`, 'utf8')
-
   return { output, counts, blockers }
 }
 
 function main() {
   scan()
   const { counts, blockers } = summarize()
-  console.log(`Wrote ${relative(scope.outFile)}`)
   console.log(
     `Claims: ${counts.total} (generated fact ${counts.generatedFact}, typed metadata ${counts.typedMetadata}, ui-only ${counts.uiOnly}, unsupported ${counts.unsupported})`,
   )

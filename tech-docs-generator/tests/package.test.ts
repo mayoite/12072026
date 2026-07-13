@@ -79,4 +79,15 @@ describe('tech docs package contract', () => {
     expect(start).toContain('pnpm run tech-docs:dev')
     expect(start).not.toContain('pnpm run dev:tech-stack')
   })
+
+  it('uses transactional generation and build publication commands', () => {
+    const packageJson = JSON.parse(readSource(path.join(packageRoot, 'package.json'))) as {
+      scripts?: Record<string, string>
+    }
+
+    expect(packageJson.scripts?.generate).toBe('node scripts/generate-all.mjs')
+    expect(packageJson.scripts?.build).toBe(
+      'node scripts/generate-all.mjs --stage-only && vite build && node scripts/publish-all.mjs',
+    )
+  })
 })

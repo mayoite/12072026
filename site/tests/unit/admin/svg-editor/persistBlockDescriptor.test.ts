@@ -203,6 +203,41 @@ describe("04-PERSIST: atomic-rename behaviour", () => {
     expect(readFileSync(path.join(workDir, "chaise.latest.json"), "utf8")).toBe(pointerBefore);
   });
 
+  it("preserves a pre-existing colliding next revision byte-for-byte", () => {
+    const collisionPath = path.join(workDir, "chaise.1.json");
+    const collision = "pre-existing-revision\n";
+    writeFileSync(collisionPath, collision, "utf8");
+    const result = persistBlockDescriptor(fixedDescriptorFixture(), {
+      dir: workDir, clock: () => 1700000000, writeArchive: false,
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    result.rollback?.();
+    expect(readFileSync(collisionPath, "utf8")).toBe(collision);
+  });
+
+  it("restores captured archive entries even when rollback enumeration fails", () => {
+    const first = persistBlockDescriptor(fixedDescriptorFixture(), { dir: workDir, clock: () => 1700000000, writeArchive: false });
+    expect(first.ok).toBe(true);
+    if (!first.ok) return;
+    const archiveDir = path.join(workDir, "_archive");
+    const archivePath = path.join(archiveDir, "chaise.1.json");
+    mkdirSync(archiveDir);
+    writeFileSync(archivePath, "archive-before\n", "utf8");
+    const options = {
+      dir: workDir,
+      clock: () => 1700000001,
+      writeArchive: false,
+      recoveryFs: { readdir: () => { throw new Error("injected archive readdir failure"); } },
+    } as unknown as NonNullable<Parameters<typeof persistBlockDescriptor>[1]>;
+    const second = persistBlockDescriptor({ ...fixedDescriptorFixture(), sku: "OFL-ARCHIVE" }, options);
+    expect(second.ok).toBe(true);
+    if (!second.ok) return;
+    writeFileSync(archivePath, "archive-mutated\n", "utf8");
+    expect(() => second.rollback?.()).toThrow(/archive readdir failure/);
+    expect(readFileSync(archivePath, "utf8")).toBe("archive-before\n");
+  });
+
   it("preserves the canonical {slug}.json filename after atomic rename", () => {
     const result = persistBlockDescriptor(fixedDescriptorFixture(), {
       dir: workDir,

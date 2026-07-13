@@ -106,6 +106,34 @@ describe('transactional generated-tree publication', () => {
     }
   })
 
+  it('restores a colliding revision byte-identically after post-install failure', async () => {
+    const repoRoot = fixtureRoot()
+    const stagingRoot = path.join(repoRoot, '.tmp', 'generated-documents', 'data')
+    const revision = path.join('revisions', 'side-table-001.8.json')
+    mkdirSync(path.join(stagingRoot, 'revisions'), { recursive: true })
+    writeFileSync(path.join(stagingRoot, revision), Buffer.from([0, 1, 2, 255, 10]))
+    await writeSurfaceManifest({ stagingRoot, surface: 'data' })
+    await publishGeneratedTrees({ repoRoot, surfaces: ['data'] })
+    const canonicalRevision = path.join(repoRoot, 'generated-documents', 'data', revision)
+    const oldBytes = readFileSync(canonicalRevision)
+
+    mkdirSync(path.join(stagingRoot, 'revisions'), { recursive: true })
+    writeFileSync(path.join(stagingRoot, revision), Buffer.from('new revision bytes'))
+    writeFileSync(path.join(stagingRoot, 'new-partial.json'), 'must disappear')
+    await writeSurfaceManifest({ stagingRoot, surface: 'data' })
+
+    await expect(publishGeneratedTrees({
+      repoRoot,
+      surfaces: ['data'],
+      operations: {
+        afterInstall: async () => { throw new Error('injected post-install failure') },
+      },
+    })).rejects.toThrow(/injected post-install failure/)
+
+    expect(readFileSync(canonicalRevision)).toEqual(oldBytes)
+    expect(() => readFileSync(path.join(repoRoot, 'generated-documents', 'data', 'new-partial.json'))).toThrow()
+  })
+
   it('preserves byte-identical canonical trees without renaming them', async () => {
     const repoRoot = fixtureRoot()
     for (const surface of surfaces) await stage(repoRoot, surface, 'same')

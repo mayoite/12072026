@@ -5,6 +5,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
 import { generateDocs } from '../../scripts/generate.mjs'
+import { emitRendererData } from '../../scripts/emit-renderer-data.mjs'
 import { buildGeneratorModel } from '../../scripts/model.mjs'
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../')
@@ -62,6 +63,29 @@ describe('tech stack generation', () => {
     })).rejects.toThrow(/injected staged swap failure/)
 
     expect(snapshotTree(documentsRoot)).toEqual(previous)
+  }, 60_000)
+
+  it('refuses unknown renderer data and preserves an identical previous tree', async () => {
+    const outDir = path.join(createTempRoot(), 'generated-documents', 'data')
+    const stagingDataRoot = path.join(createTempRoot(), '.tmp', 'generated-documents', 'data')
+    const model = buildGeneratorModel({ repoRoot })
+    await emitRendererData({ repoRoot, model, outDir, stagingDataRoot, apply: true })
+    const previous = snapshotTree(outDir)
+
+    await emitRendererData({
+      repoRoot,
+      model,
+      outDir,
+      stagingDataRoot,
+      apply: true,
+      publishOptions: { operations: { rename: async () => { throw new Error('identical data must not swap') } } },
+    })
+    expect(snapshotTree(outDir)).toEqual(previous)
+
+    writeFileSync(path.join(outDir, 'rogue.txt'), 'owner-data')
+    await expect(emitRendererData({ repoRoot, model, outDir, stagingDataRoot, apply: true }))
+      .rejects.toThrow(/Unknown file\(s\) in generated-documents\/data\/: rogue\.txt/)
+    expect(readFileSync(path.join(outDir, 'rogue.txt'), 'utf8')).toBe('owner-data')
   }, 60_000)
 
   it('writes stable staged and applied output', async () => {

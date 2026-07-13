@@ -116,6 +116,8 @@ export interface PersistOptions {
   /** Optional results root override for dual-read evidence. */
   dualReadResultsRoot?: string;
   lock?: AcquireDescriptorLockOptions;
+  /** Narrow filesystem seam for deterministic recovery fault tests. */
+  recoveryFs?: { readdir: (dir: string) => string[] };
 }
 
 function sanitizeSlug(slug: string): PlannerResult<string, PersistError> {
@@ -327,6 +329,7 @@ export function persistBlockDescriptor(
   const archiveDir = path.resolve(dir, "_archive");
   const tempPath = buildTempPath(slug, dir, nextVersion);
   const body = `${canonicalJsonStringify(descriptor)}\n`;
+  const versionedBefore = existsSync(versionedPath) ? readFileSync(versionedPath, "utf8") : null;
   const legacyBefore = existsSync(legacyPath) ? readFileSync(legacyPath, "utf8") : null;
   const pointerBefore = existsSync(pointerPath) ? readFileSync(pointerPath, "utf8") : null;
   const archiveBefore = new Map<string, string>();
@@ -343,35 +346,34 @@ export function persistBlockDescriptor(
       return;
     }
     const restoreTemp = `${targetPath}.restore-${randomBytes(8).toString("hex")}`;
-    try {
-      writeAtomicUtf8(restoreTemp, prior);
-      rmSync(targetPath, { force: true });
-      renameSync(restoreTemp, targetPath);
-    } finally {
-      rmSync(restoreTemp, { force: true });
-    }
+    writeAtomicUtf8(restoreTemp, prior);
+    renameSync(restoreTemp, targetPath);
   };
   const rollback = (): void => {
     const errors: unknown[] = [];
     const attempt = (operation: () => void): void => {
       try { operation(); } catch (error) { errors.push(error); }
     };
-    attempt(() => rmSync(versionedPath, { force: true }));
+    attempt(() => restoreFile(versionedPath, versionedBefore));
     attempt(() => restoreFile(legacyPath, legacyBefore));
     attempt(() => restoreFile(pointerPath, pointerBefore));
     attempt(() => mkdirSync(archiveDir, { recursive: true }));
-    if (existsSync(archiveDir)) {
-      for (const entry of readdirSync(archiveDir)) {
+    let archiveEntries: string[] = [];
+    const recoveryReaddir = options.recoveryFs?.readdir ?? readdirSync;
+    attempt(() => { archiveEntries = existsSync(archiveDir) ? recoveryReaddir(archiveDir) : []; });
+    for (const entry of archiveEntries) {
         if (entry.startsWith(`${slug}.`) && entry.endsWith(".json") && !archiveBefore.has(entry)) {
           attempt(() => rmSync(path.resolve(archiveDir, entry), { force: true }));
         }
-      }
     }
     for (const [entry, bodyBefore] of archiveBefore) {
       attempt(() => restoreFile(path.resolve(archiveDir, entry), bodyBefore));
     }
     clearLoaderCache();
-    if (errors.length > 0) throw new AggregateError(errors, `Descriptor rollback incomplete for "${slug}"`);
+    if (errors.length > 0) {
+      const details = errors.map((error) => error instanceof Error ? error.message : String(error)).join("; ");
+      throw new AggregateError(errors, `Descriptor rollback incomplete for "${slug}": ${details}`);
+    }
   };
 
   try {

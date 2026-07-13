@@ -9,7 +9,7 @@ import {
   manifestHash,
   normalizeRelativePosixPath,
 } from './filesystem.mjs'
-import { GENERATED_SURFACES, getGeneratedRoot, getStagingGeneratedRoot } from './output-contract.mjs'
+import { GENERATED_ROOT_DIR, GENERATED_SURFACES, getGeneratedRoot, getStagingGeneratedRoot } from './output-contract.mjs'
 
 const MANIFEST_FILENAME = '_manifest.json'
 
@@ -45,14 +45,14 @@ async function fileRecord(root, relativePath) {
 
 export async function writeSurfaceManifest({ stagingRoot, surface }) {
   if (!GENERATED_SURFACES.includes(surface)) throw new Error(`Unknown generated surface: ${surface}`)
-  await mkdir(stagingRoot, { recursive: true })
+  if (!await exists(stagingRoot)) throw new Error(`Missing staged generated surface: ${stagingRoot}`)
   await writeFile(path.join(stagingRoot, GENERATED_ROOT_FILENAME), GENERATED_ROOT_CONTENT, 'utf8')
   const files = (await collectFiles(stagingRoot)).filter((file) => file !== MANIFEST_FILENAME)
   const records = []
   for (const file of files) records.push(await fileRecord(stagingRoot, file))
   const manifest = createManifestRecord({
     version: 'v1',
-    root: `generated-documents/${surface}`,
+    root: `${GENERATED_ROOT_DIR}/${surface}`,
     files: records,
   })
   await writeFile(path.join(stagingRoot, MANIFEST_FILENAME), canonicalJsonString(manifest), 'utf8')
@@ -69,7 +69,7 @@ export async function validateGeneratedSurface({ root, surface, allowMissing = f
   const marker = await readFile(markerPath, 'utf8').catch(() => null)
   if (marker !== GENERATED_ROOT_CONTENT) throw new Error(`Invalid or missing generated-root marker for ${surface}: ${root}`)
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8').catch(() => 'null'))
-  if (!manifest || manifest.root !== `generated-documents/${surface}`) {
+  if (!manifest || manifest.root !== `${GENERATED_ROOT_DIR}/${surface}`) {
     throw new Error(`Invalid or missing manifest for ${surface}: ${root}`)
   }
   const declared = new Set(manifest.files.map((entry) => normalizeRelativePosixPath(entry.path)))
@@ -81,17 +81,17 @@ export async function validateGeneratedSurface({ root, surface, allowMissing = f
   const allowed = new Set([...declared, MANIFEST_FILENAME])
   const unknown = actual.filter((file) => !allowed.has(file))
   const missing = [...declared].filter((file) => !actual.includes(file))
-  if (unknown.length) throw new Error(`Unknown file(s) in generated-documents/${surface}/: ${unknown.join(', ')}`)
-  if (missing.length) throw new Error(`Missing manifested file(s) in generated-documents/${surface}/: ${missing.join(', ')}`)
+  if (unknown.length) throw new Error(`Unknown file(s) in ${GENERATED_ROOT_DIR}/${surface}/: ${unknown.join(', ')}`)
+  if (missing.length) throw new Error(`Missing manifested file(s) in ${GENERATED_ROOT_DIR}/${surface}/: ${missing.join(', ')}`)
   for (const entry of manifest.files) {
     const actualRecord = await fileRecord(root, entry.path)
     if (actualRecord.hash !== entry.hash || actualRecord.bytes !== entry.bytes) {
-      throw new Error(`Manifest hash mismatch in generated-documents/${surface}/: ${entry.path}`)
+      throw new Error(`Manifest hash mismatch in ${GENERATED_ROOT_DIR}/${surface}/: ${entry.path}`)
     }
   }
   for (const removed of manifest.removed ?? []) {
     if (actual.includes(normalizeRelativePosixPath(removed))) {
-      throw new Error(`Declared removal still exists in generated-documents/${surface}/: ${removed}`)
+      throw new Error(`Declared removal still exists in ${GENERATED_ROOT_DIR}/${surface}/: ${removed}`)
     }
   }
   return manifest
@@ -104,7 +104,7 @@ export async function assertGeneratedRootSiblings(repoRoot) {
     .filter((entry) => !GENERATED_SURFACES.includes(entry.name))
     .map((entry) => entry.name)
     .sort()
-  if (unknown.length) throw new Error(`Unknown sibling(s) in generated-documents/: ${unknown.join(', ')}`)
+  if (unknown.length) throw new Error(`Unknown sibling(s) in ${GENERATED_ROOT_DIR}/: ${unknown.join(', ')}`)
 }
 
 export async function publishGeneratedTrees({ repoRoot, surfaces, roots = {}, operations = {} }) {
@@ -133,6 +133,7 @@ export async function publishGeneratedTrees({ repoRoot, surfaces, roots = {}, op
       }
       await renamePath(state.stagingRoot, state.canonicalRoot)
       state.installed = true
+      if (operations.afterInstall) await operations.afterInstall(state)
     }
   } catch (error) {
     for (const state of [...changed].reverse()) {

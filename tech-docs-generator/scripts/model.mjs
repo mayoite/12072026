@@ -128,10 +128,9 @@ export function isAcceptedCoverageSourcePath(sourcePath, repoRoot = defaultRepoR
   if (!normalizedPath) return false
   if (normalizedPath === '_generated') return false
   if (normalizedPath === '.env.local' || normalizedPath.endsWith('/.env.local')) return false
-  if (path.isAbsolute(normalizedPath) || /^[a-zA-Z]:\//.test(normalizedPath)) {
-    return normalizeRepositoryInput(repoRoot, normalizedPath) !== null
-  }
-  return !COVERAGE_EXCLUDED_PATH_PREFIXES.some((prefix) => normalizedPath.startsWith(prefix))
+  const relativePath = normalizeRepositoryInput(repoRoot, normalizedPath)
+  if (relativePath === null) return false
+  return !COVERAGE_EXCLUDED_PATH_PREFIXES.some((prefix) => relativePath.startsWith(prefix))
 }
 
 function readSourceEvidence(repoRoot, relativePath, sourceKind, sourcePointer = relativePath) {
@@ -278,7 +277,6 @@ function toFacts(model) {
     ['build.syncCss', 'build', 'syncCss', 'CSS snapshot', `${GENERATED_ROOT_DIR}/data/css/`],
     ['provenance.total', 'governance', 'total', 'Total factual fields', 'derived from source facts'],
     ['provenance.exact', 'governance', 'exact', 'Exact source matches', 'derived from source facts'],
-    ['unsupported.count', 'governance', 'unsupported', 'Unsupported claim count', String(model.summary.claimInventory?.unsupported ?? 0)],
   ]
 
   for (const [id, domain, field, label, value] of summaryFacts) {
@@ -430,7 +428,6 @@ function buildSummary(model, repoRoot) {
       site: countTests(siteTestFiles),
       generator: countTests(generatorTestFiles),
     },
-    claimInventory: null,
   }
 }
 
@@ -448,7 +445,7 @@ function buildTestingPolicyFacts(repoRoot) {
       domain: 'testing',
       field: 'coverageWarning',
       label: 'Coverage warning band',
-      fact: fact('No warning band is configured', '_generated', 'unsupported-gap', 'testing.coverage-warning', { factClassification: 'unknown-gap', verificationMode: 'explicit-gap' }),
+      fact: fact('No warning band is configured', '_generated', 'unsupported-gap', 'testing.coverage-warning', { factClassification: 'unknown-gap', verificationMode: 'manual-verification' }),
     },
     {
       id: 'testing.coverage-complete',

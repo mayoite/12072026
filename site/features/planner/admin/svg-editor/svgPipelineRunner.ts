@@ -69,6 +69,8 @@ export interface PipelineOptions {
    * `skipCompile` is true; ignored otherwise.
    */
   precompiledSvg?: string;
+  /** Narrow filesystem seam for deterministic recovery fault tests. */
+  recoveryFs?: { rename: (source: string, target: string) => void };
 }
 
 /**
@@ -187,6 +189,7 @@ export function runSvgPipeline(
     }
 
     const startedAt = Date.now();
+    const recoveryRename = options.recoveryFs?.rename ?? renameSync;
     const suffix = randomBytes(8).toString("hex");
     const stagedSvgPath = `${svgPath}.stage-${suffix}`;
     const stagedFixturePath = `${fixturePath}.stage-${suffix}`;
@@ -221,7 +224,7 @@ export function runSvgPipeline(
         try {
           if (file.swapped) rmSync(file.livePath, { force: true });
           if (file.backupReady && existsSync(file.backupPath)) {
-            renameSync(file.backupPath, file.livePath);
+            recoveryRename(file.backupPath, file.livePath);
             file.backupReady = false;
           }
           file.swapped = false;
@@ -239,10 +242,10 @@ export function runSvgPipeline(
         for (const file of files) {
           file.hadLive = existsSync(file.livePath);
           if (file.hadLive) {
-            renameSync(file.livePath, file.backupPath);
+            recoveryRename(file.livePath, file.backupPath);
             file.backupReady = true;
           }
-          renameSync(file.stagedPath, file.livePath);
+          recoveryRename(file.stagedPath, file.livePath);
           file.swapped = true;
         }
       } catch (cause) {

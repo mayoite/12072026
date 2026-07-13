@@ -160,9 +160,7 @@ export function renderMarkdownOutputs(model, jsonOutputs) {
     { 'Fact ID': '`provenance.exact`', Value: String(jsonOutputs['_accuracy.json'].exactSourceMatches), Source: '`_accuracy.json`' },
   ])}\n${sourcesSection(model.sources)}`
 
-  docs['markdown/governance/unsupported.md'] = `# Unsupported\n\n${table([
-    { 'Fact ID': '`unsupported.count`', Value: String(model.summary.claimInventory?.unsupported ?? 0), Source: '`_generated`' },
-  ])}\n${sourcesSection(model.sources)}`
+  docs['markdown/governance/unsupported.md'] = `# Unsupported\n\nNo claim inventory is published. Unsupported claims remain explicit unknown gaps in live model records.\n\n${sourcesSection(model.sources)}`
 
   docs['markdown/architecture/index.md'] = `# Architecture\n\n${table([
     { 'Fact ID': '`architecture.rootScripts`', Value: 'tech-docs-generator/scripts/', Source: '`_generated`' },

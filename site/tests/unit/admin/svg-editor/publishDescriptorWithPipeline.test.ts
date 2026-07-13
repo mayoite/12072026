@@ -148,6 +148,19 @@ describe("publishDescriptorWithPipeline (fail-closed)", () => {
     expect(persist).toHaveBeenCalledWith(validDescriptor);
   });
 
+  it("returns failure when post-commit cleanup fails", async () => {
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => ({ ...pipelineOk(), cleanup: () => { throw new Error("backup cleanup denied"); } }),
+      persist: () => persistOk(),
+    });
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toContain("cleanup incomplete");
+    expect(result.error).toContain("backup cleanup denied");
+  });
+
   it("returns success:false and skips pipeline+persist when compileSvg !ok", async () => {
     const compileSvg = vi.fn(async () => compileErr("empty blocks"));
     const runPipeline = vi.fn(async () => pipelineOk());

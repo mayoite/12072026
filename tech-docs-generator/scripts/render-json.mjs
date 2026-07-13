@@ -43,7 +43,7 @@ export function renderJsonOutputs(model = buildGeneratorModel()) {
       factIds: model.features.flatMap((record) => [`${record.slug}.slug`, `${record.slug}.title`, `${record.slug}.tagline`]),
     },
     { path: 'markdown/governance/provenance.md', title: 'Provenance', factIds: ['provenance.total', 'provenance.exact'] },
-    { path: 'markdown/governance/unsupported.md', title: 'Unsupported', factIds: ['unsupported.count'] },
+    { path: 'markdown/governance/unsupported.md', title: 'Unsupported', factIds: [] },
     {
       path: 'markdown/workflows/index.md',
       title: 'Workflows',

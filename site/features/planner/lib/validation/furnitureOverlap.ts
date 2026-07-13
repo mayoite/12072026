@@ -22,8 +22,44 @@ export function aabbsOverlap(a: PlacedFurniture, b: PlacedFurniture): boolean {
  * Stub: not yet integrated with workspace document or live revalidation.
  */
 export function detectFurnitureOverlaps(
-  _furniture: readonly PlacedFurniture[],
+  furniture: readonly PlacedFurniture[],
 ): ValidationIssue[] {
-  // TODO(P14): wire aabbsOverlap into issue builder; red TDD tests document target behavior.
-  return [];
+  const orderedFurniture = [...furniture].sort((a, b) =>
+    a.id === b.id ? 0 : a.id < b.id ? -1 : 1,
+  );
+  const issues: ValidationIssue[] = [];
+  const seenPairs = new Set<string>();
+
+  for (let firstIndex = 0; firstIndex < orderedFurniture.length; firstIndex += 1) {
+    const first = orderedFurniture[firstIndex];
+    if (!first) continue;
+
+    for (let secondIndex = firstIndex + 1; secondIndex < orderedFurniture.length; secondIndex += 1) {
+      const second = orderedFurniture[secondIndex];
+      if (
+        !second ||
+        first.id === second.id ||
+        !aabbsOverlap(first, second)
+      ) continue;
+
+      const pairKey = `${first.id}\u0000${second.id}`;
+      if (seenPairs.has(pairKey)) continue;
+      seenPairs.add(pairKey);
+
+      issues.push({
+        id: `furniture-overlap:${first.id}:${second.id}`,
+        ruleId: "furniture-overlap",
+        severity: "error",
+        objectIds: [first.id, second.id],
+        message: `Furniture items "${first.id}" and "${second.id}" overlap.`,
+        remedy: `Move "${second.id}" away from "${first.id}" to clear the overlap.`,
+        focusMm: {
+          x: (first.xMm + second.xMm) / 2,
+          y: (first.yMm + second.yMm) / 2,
+        },
+      });
+    }
+  }
+
+  return issues;
 }

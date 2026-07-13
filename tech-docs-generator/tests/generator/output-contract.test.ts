@@ -25,6 +25,6 @@ describe('generated output contract', () => {
     expect(getRendererDataRoot(repoRoot)).toBe(
       path.join(repoRoot, 'generated-documents', 'data'),
     )
-    expect(rendererSource).toContain('const outDir = getRendererDataRoot(repoRoot)')
+    expect(rendererSource).toContain('outDir = getRendererDataRoot(repoRoot)')
   })
 })

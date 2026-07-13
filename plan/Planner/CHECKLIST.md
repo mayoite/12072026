@@ -14,22 +14,22 @@ Treat every item as not done.
 ## Phase 1 — public entry and deterministic BOQ
 
 - [ ] Public visitors can find and enter Planner.
-- [ ] Guests do not face a false account requirement.
+- [x] Guests do not face a false account requirement.
 - [ ] No developer flag or hidden query is required.
-- [ ] Member, Admin, and private routes remain protected.
+- [x] Member, Admin, and private routes remain protected.
 - [ ] `UI-ENTRY-01` guest entry reaches useful canvas content after at most one blocking choice.
 - [ ] `UI-ENTRY-02` entry offers template, scratch, and import or trace.
 - [ ] `UI-ENTRY-03` optional metadata can be skipped and edited later.
 - [ ] The second gate never presents only one available choice.
 - [ ] Project brief and room geometry are editable and persistent.
-- [ ] Millimetres remain document authority.
+- [x] Millimetres remain document authority.
 - [ ] Setup is keyboard-complete with visible focus.
 - [ ] One BOQ calculation authority exists.
 - [ ] BOQ uses only product-backed placements.
 - [ ] BOQ groups stable product, family, option, and commercial identity.
-- [ ] BOQ includes quantities, units, and source object identifiers.
+- [x] BOQ includes quantities, units, and source object identifiers.
 - [ ] Unsupported and unbranded objects are visibly excluded.
-- [ ] Identical inputs produce identical lines, order, and hash.
+- [x] Identical inputs produce identical lines, order, and hash.
 - [ ] A branded unpriced BOQ works without live pricing.
 - [ ] Planner emits the agreed Site events without duplicates or private geometry.
 
@@ -37,7 +37,7 @@ Treat every item as not done.
 
 - [ ] Walls, doors, and windows can be created and edited.
 - [ ] Selection and object editing preserve identity.
-- [ ] Metric and imperial display keep stored millimetres unchanged.
+- [x] Metric and imperial display keep stored millimetres unchanged.
 - [ ] Primary tools work and silent no-op controls are removed.
 - [ ] Numeric properties are keyboard-editable.
 - [ ] One undo and redo authority covers document mutations.
@@ -59,8 +59,8 @@ Treat every item as not done.
 - [ ] `UI-STATE-01` one authoritative save state is shown.
 - [ ] `UI-STATE-02` loading, offline, saving, saved, unsaved, and error are distinct.
 - [ ] Failed save never displays success.
-- [ ] Save, reload, import, and export preserve canonical fields.
-- [ ] 2D and 3D preserve object count, pose, rotation, and options.
+- [x] Save, reload, import, and export preserve canonical fields.
+- [x] 2D and 3D preserve object count, pose, rotation, and options.
 - [ ] View actions do not mutate project data.
 - [ ] `UI-SHELL-01` desktop header remains one row at supported widths.
 - [ ] `UI-SHELL-02` default desktop canvas uses at least 65 percent of viewport area.
@@ -105,9 +105,9 @@ Treat every item as not done.
 
 - [ ] Approved price-book version and currency are pinned.
 - [ ] Quantity, unit price, adjustment, tax, and line total are visible.
-- [ ] Missing price is unavailable, never zero.
+- [x] Missing price is unavailable, never zero.
 - [ ] Draft prices never reach customers.
-- [ ] Historical priced outputs remain reproducible.
+- [x] Historical priced outputs remain reproducible.
 - [ ] Named revisions are immutable.
 - [ ] Revisions record project, catalog, family, validation, and price versions.
 - [ ] Later edits do not change an existing revision.

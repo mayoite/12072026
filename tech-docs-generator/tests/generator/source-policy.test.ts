@@ -2,6 +2,11 @@ import { describe, expect, it } from 'vitest'
 import { getPolicy, selectPreferredSource, sourceKinds, sourcePolicy } from '../../scripts/source-policy.mjs'
 import * as outputContract from '../../scripts/output-contract.mjs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { buildGeneratorModel } from '../../scripts/model.mjs'
+import { readFileSync } from 'node:fs'
+import { renderJsonOutputs } from '../../scripts/render-json.mjs'
+import { renderMarkdownOutputs } from '../../scripts/render-markdown.mjs'
 
 describe('source policy', () => {
   it('rejects reference, protected, generated, and outside-root inputs before classification', () => {
@@ -19,6 +24,35 @@ describe('source policy', () => {
     expect(contract.normalizeRepositoryInput?.(repoRoot, path.resolve(repoRoot, '..', 'outside.ts'))).toBeNull()
     expect(contract.normalizeRepositoryInput?.(repoRoot, path.join(repoRoot, 'site', 'page.tsx'))).toBe('site/page.tsx')
   })
+
+  it('keeps excluded roots out of facts and source descriptors', () => {
+    const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
+    const model = buildGeneratorModel({ repoRoot: path.resolve(packageRoot, '..') })
+    const excluded = new Set(outputContract.EXCLUDED_REPOSITORY_ROOTS)
+    const sourcePaths = [
+      ...model.facts.map((record) => record.fact.sourcePath),
+      ...model.sources.map((record) => record.sourcePath),
+    ]
+
+    for (const sourcePath of sourcePaths) {
+      const firstSegment = sourcePath.replace(/\\/g, '/').split('/')[0]
+      expect(excluded.has(firstSegment), sourcePath).toBe(false)
+    }
+  }, 30_000)
+
+  it('does not publish or summarize a claim inventory', () => {
+    const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
+    const repoRoot = path.resolve(packageRoot, '..')
+    const model = buildGeneratorModel({ repoRoot })
+    const markdown = renderMarkdownOutputs(model, renderJsonOutputs(model))
+    const inventorySource = readFileSync(path.join(packageRoot, 'scripts', 'inventory.mjs'), 'utf8')
+
+    expect(model.summary).not.toHaveProperty('claimInventory')
+    expect(model.facts.map((record) => record.id)).not.toContain('unsupported.count')
+    expect(markdown['markdown/governance/unsupported.md']).not.toContain('claimInventory')
+    expect(inventorySource).not.toContain('claim-inventory.json')
+    expect(inventorySource).not.toContain('writeFileSync(')
+  }, 30_000)
 
   it('stores the precedence rules as data', () => {
     expect(sourcePolicy.dependencies.precedence.map((entry) => entry.sourceKind)).toEqual([

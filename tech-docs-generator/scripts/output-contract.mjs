@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { existsSync, realpathSync } from 'node:fs'
 
 export const SOURCE_PACKAGE_DIR = 'tech-docs-generator'
 export const SOURCE_PACKAGE_NAME = 'oando-tech-docs'
@@ -42,6 +43,16 @@ export function normalizeRepositoryInput(repoRoot, inputPath) {
     ? path.resolve(inputPath)
     : path.resolve(canonicalRoot, inputPath)
   if (!isWithinRoot(canonicalRoot, absolute)) return null
+  if (existsSync(canonicalRoot)) {
+    const realRoot = realpathSync.native(canonicalRoot)
+    let existingAncestor = absolute
+    while (!existsSync(existingAncestor) && isWithinRoot(canonicalRoot, existingAncestor)) {
+      const parent = path.dirname(existingAncestor)
+      if (parent === existingAncestor) break
+      existingAncestor = parent
+    }
+    if (existsSync(existingAncestor) && !isWithinRoot(realRoot, realpathSync.native(existingAncestor))) return null
+  }
   const relative = path.relative(canonicalRoot, absolute).replace(/\\/g, '/')
   if (!relative || relative === '.') return null
   const firstSegment = relative.split('/')[0]

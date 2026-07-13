@@ -136,6 +136,7 @@ expect(rendererText).toContain("'generated-documents', 'data'")
 - Create: `tech-docs-generator/tests/generator/publication.test.ts`
 
 - [ ] First write failing tests through existing `generateDocs` and `emitRendererData` exports for every output surface: unknown-file refusal, failed-copy rollback, successful swap, and byte-identical preservation of the previous valid tree. Extract the publisher only after these tests fail behaviorally.
+- [ ] Revision-name collision rollback must restore exact bytes for an existing target revision; it must remove a target only when the target did not exist before the failed publish.
 - [ ] Add a failing source-policy test proving neither dotted nor undotted reference roots can become facts, descriptors, watcher events, inventory inputs, or output targets.
 - [ ] Define the contract once:
 

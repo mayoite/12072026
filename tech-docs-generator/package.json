@@ -6,9 +6,9 @@
   "scripts": {
     "preinstall": "node ../scripts/guard-workspace-install.mjs",
     "dev": "node scripts/emit-renderer-data.mjs && vite",
-    "generate": "node scripts/generate.mjs && node scripts/emit-renderer-data.mjs",
+    "generate": "node scripts/generate-all.mjs",
     "check": "node scripts/check.mjs",
-    "build": "pnpm run generate && vite build",
+    "build": "node scripts/generate-all.mjs --stage-only && vite build && node scripts/publish-all.mjs",
     "gate": "node scripts/gate.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",

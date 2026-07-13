@@ -37,4 +37,28 @@ describe("furnitureOverlap (P14 TDD)", () => {
       detectFurnitureOverlaps([desk("desk-1", 0, 0), desk("desk-2", 3000, 0)]),
     ).toEqual([]);
   });
+
+  it("emits each overlapping pair once in deterministic id order", () => {
+    const issues = detectFurnitureOverlaps([
+      desk("desk-3", 100, 0),
+      desk("desk-1", 0, 0),
+      desk("desk-2", 50, 0),
+    ]);
+
+    expect(issues.map((issue) => issue.objectIds)).toEqual([
+      ["desk-1", "desk-2"],
+      ["desk-1", "desk-3"],
+      ["desk-2", "desk-3"],
+    ]);
+  });
+
+  it("skips self-pairs and duplicate logical pairs", () => {
+    const issues = detectFurnitureOverlaps([
+      desk("desk-b", 20, 0),
+      desk("desk-a", 0, 0),
+      desk("desk-a", 10, 0),
+    ]);
+
+    expect(issues.map((issue) => issue.objectIds)).toEqual([["desk-a", "desk-b"]]);
+  });
 });

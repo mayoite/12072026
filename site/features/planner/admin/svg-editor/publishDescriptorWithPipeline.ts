@@ -189,7 +189,13 @@ export async function publishDescriptorWithPipeline(
     return { success: false, error: withRecoveryErrors(`500.io: Publication commit failed. ${details}`, recoveryErrors) };
   }
 
-  runAllBestEffort(persistResult.cleanup, pipeline.cleanup);
+  const cleanupErrors = runAllBestEffort(persistResult.cleanup, pipeline.cleanup);
+  if (cleanupErrors.length > 0) {
+    return {
+      success: false,
+      error: `500.io: Publication committed but cleanup incomplete: ${cleanupErrors.join("; ")}`,
+    };
+  }
 
   return { success: true, descriptor: persistResult.descriptor };
 }

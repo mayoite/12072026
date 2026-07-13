@@ -2,9 +2,14 @@ import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { mkdir, readFile, readdir, rm, stat, writeFile, copyFile } from 'node:fs/promises'
 import path from 'node:path'
-import { GENERATED_ROOT_DIR, GENERATED_DOCS_DIR } from './output-contract.mjs'
+import {
+  GENERATED_ROOT_DIR,
+  GENERATED_DOCS_DIR,
+  getDocumentsRoot,
+  getStagingDocumentsRoot,
+} from './output-contract.mjs'
 
-export { getDocumentsRoot, getStagingDocumentsRoot } from './output-contract.mjs'
+export { getDocumentsRoot, getStagingDocumentsRoot }
 
 /** Normalize text to LF so byte offsets and hashes match across Windows and Linux checkouts. */
 export function normalizeSourceText(content) {
