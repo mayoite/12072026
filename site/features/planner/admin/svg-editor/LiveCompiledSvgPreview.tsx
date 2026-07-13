@@ -14,9 +14,18 @@
 import { useState } from "react";
 import type { SvgPreviewResult } from "./previewSvgEditorAction";
 
+/** ADM-SVG-13 — identity / footprint / validation shown with the Planner symbol. */
+export interface LiveCompiledSvgPreviewMeta {
+  readonly identity: string;
+  readonly footprint: string;
+  readonly validation: string;
+}
+
 export interface LiveCompiledSvgPreviewProps {
   readonly result: SvgPreviewResult | null;
   readonly pending: boolean;
+  /** Product identity, mm footprint, and validation status for the live preview. */
+  readonly meta?: LiveCompiledSvgPreviewMeta;
 }
 
 function isRenderableSvg(svg: string | undefined): svg is string {
@@ -43,6 +52,7 @@ function failureCopy(result: SvgPreviewResult): string {
 export function LiveCompiledSvgPreview({
   result,
   pending,
+  meta,
 }: LiveCompiledSvgPreviewProps) {
   // Remember the last successfully-compiled SVG so a later failure can keep
   // showing the last good geometry (dimmed) instead of a blank stage. Tracked
@@ -59,15 +69,45 @@ export function LiveCompiledSvgPreview({
 
   const showFailure = result !== null && !currentOk;
   const dimmedSvg = showFailure ? lastGood : null;
+  const fallbackState = currentOk
+    ? "live"
+    : dimmedSvg
+      ? "stale"
+      : "empty";
 
   return (
     <div
       className="admin-svg-livepreview"
       data-testid="admin-svg-livepreview"
       data-pending={pending ? "true" : "false"}
+      data-fallback-state={fallbackState}
+      data-compiler-authority="compileSvgForPublish"
     >
+      {meta ? (
+        <p
+          className="admin-page__meta"
+          data-testid="admin-svg-livepreview-meta"
+        >
+          <span data-testid="admin-svg-livepreview-identity">{meta.identity}</span>
+          {" · "}
+          <span data-testid="admin-svg-livepreview-footprint">{meta.footprint}</span>
+          {" · "}
+          <span data-testid="admin-svg-livepreview-validation">
+            {meta.validation}
+          </span>
+          {" · "}
+          <span data-testid="admin-svg-livepreview-planner-symbol">
+            Planner 2D symbol (same compile as publish)
+          </span>
+        </p>
+      ) : null}
+
       {showFailure ? (
-        <div className="admin-alert admin-alert--error" role="alert">
+        <div
+          className="admin-alert admin-alert--error"
+          role="alert"
+          data-testid="admin-svg-livepreview-validation-error"
+        >
           {failureCopy(result)}
         </div>
       ) : null}
@@ -76,11 +116,12 @@ export function LiveCompiledSvgPreview({
         <div
           className="admin-svg-preview admin-svg-preview--panel"
           data-artifact-state="published"
+          data-testid="admin-svg-livepreview-symbol"
         >
           <div
             className="admin-svg-preview__stage"
             role="img"
-            aria-label="Live compiled SVG preview"
+            aria-label="Live compiled SVG preview — Planner symbol"
             aria-busy={pending ? "true" : undefined}
             // Server-sanitized compile output only (S3 sanitize/optimize).
             dangerouslySetInnerHTML={{ __html: okSvg ?? "" }}
@@ -95,6 +136,7 @@ export function LiveCompiledSvgPreview({
         <div
           className="admin-svg-preview admin-svg-preview--panel admin-svg-preview--stale"
           data-artifact-state="stale"
+          data-testid="admin-svg-livepreview-fallback"
           aria-hidden="true"
         >
           <div
@@ -102,11 +144,15 @@ export function LiveCompiledSvgPreview({
             // Last good compile output (server-sanitized).
             dangerouslySetInnerHTML={{ __html: dimmedSvg }}
           />
+          <p className="admin-page__meta" data-testid="admin-svg-livepreview-fallback-note">
+            Fallback: last valid compile (current draft failed validation or compile).
+          </p>
         </div>
       ) : (
         <div
           className="admin-svg-preview admin-svg-preview--panel"
           data-artifact-state="missing"
+          data-testid="admin-svg-livepreview-empty"
         >
           <div className="admin-svg-preview__stage admin-svg-preview__stage--empty">
             <span className="admin-svg-preview__empty">

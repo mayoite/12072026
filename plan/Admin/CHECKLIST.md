@@ -37,6 +37,7 @@ Implementation is in progress.
 - ADM-SVG-07: drag/resize (`node:change`) and inspector numbers both call `applySceneNodeGeometryPatch` → history present → `onDocumentChange`. Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/geometrySync.admSvg07.test.ts`.
 - ADM-SVG-09/10: layers select/order/lock/visibility/delete + named undo/redo on `svgSceneHistory` / `svgSceneDocument` (same paths as SvgStudioCanvas). Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/layersHistory.admSvg09_10.test.ts`.
 - ADM-SVG-11: `destructiveConfirmMessages` names impact for reset, discard navigation, layer delete, rollback; wired into EditView / SvgStudioCanvas / DescriptorRevisionPanel. Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/destructiveConfirmMessages.admSvg11.test.ts`.
+- ADM-SVG-12/13: preview + publish both call `compileSvgForPublish`; LiveCompiledSvgPreview shows identity/footprint/validation/Planner-symbol note and stale fallback. Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/compilerAuthority.admSvg12_13.test.tsx`.
 - Browser journey for authoring UI not re-run this session.
 
 - [ ] Core product fields are clear and validated.
@@ -68,8 +69,8 @@ Implementation is in progress.
 - [x] `ADM-SVG-09` Layer selection, ordering, lock, visibility, and state work.
 - [x] `ADM-SVG-10` Named undo and redo preserve a valid document.
 - [x] `ADM-SVG-11` Reset, discard, delete, and rollback explain impact.
-- [ ] `ADM-SVG-12` Preview and publication share one compiler authority.
-- [ ] `ADM-SVG-13` Preview matches the Planner symbol, footprint, identity, validation, and fallback.
+- [x] `ADM-SVG-12` Preview and publication share one compiler authority.
+- [x] `ADM-SVG-13` Preview matches the Planner symbol, footprint, identity, validation, and fallback.
 - [x] `ADM-SVG-14` Draft and published revisions have a field and visual diff.
 - [ ] `ADM-SVG-15` One primary publish action names its target and versions.
 - [ ] `ADM-SVG-16` Failure preserves the live artifact and never reports false success.

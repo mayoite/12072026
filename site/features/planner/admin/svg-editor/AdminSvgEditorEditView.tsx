@@ -834,7 +834,15 @@ export function AdminSvgEditorEditView({
           <div className="admin-panel admin-svg-engine-shell__panel">
             <div className="admin-panel__header">Live compile</div>
             <div className="admin-panel__body">
-              <LiveCompiledSvgPreview result={preview} pending={previewPending} />
+              <LiveCompiledSvgPreview
+                result={preview}
+                pending={previewPending}
+                meta={{
+                  identity: stageMeta.identity,
+                  footprint: stageMeta.footprint,
+                  validation: stageMeta.validation,
+                }}
+              />
             </div>
           </div>
 
