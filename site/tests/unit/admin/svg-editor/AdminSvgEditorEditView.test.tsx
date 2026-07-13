@@ -281,6 +281,31 @@ describe("AdminSvgEditorEditView draft recovery", () => {
     expect(reset).toHaveFocus();
   });
 
+  it("surfaces core product field errors in a linked page summary", () => {
+    const invalid = {
+      ...descriptor,
+      slug: "",
+      geometry: { ...descriptor.geometry, widthMm: 0 },
+    };
+    render(
+      <AdminSvgEditorEditView
+        slug="side-table-001"
+        descriptor={invalid}
+        updatedAtLabel="today"
+        artifactStatus={artifactStatus}
+        catalogLifecycle="draft"
+        onPublishAction={vi.fn()}
+      />,
+    );
+
+    const summary = screen.getByTestId("admin-core-field-errors");
+    expect(summary).toHaveAttribute("role", "alert");
+    expect(summary).toHaveTextContent(/core field/i);
+    expect(summary.querySelector('a[href="#svgfield-slug"]')).toBeTruthy();
+    expect(summary.querySelector('a[href="#svgfield-geometry.widthMm"]')).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Publish" })).toBeDisabled();
+  });
+
   it("exposes identity, footprint, view box, zoom, selection, draft, validation, and revision on the stage (ADM-SVG-06)", () => {
     render(
       <AdminSvgEditorEditView

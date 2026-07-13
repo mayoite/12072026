@@ -667,6 +667,27 @@ export function AdminSvgEditorEditView({
         Publish replaces the released SVG; prior revisions remain for rollback.
       </p>
 
+      {coreFieldIssues.length > 0 ? (
+        <div
+          className="admin-alert admin-alert--warn"
+          role="alert"
+          data-testid="admin-core-field-errors"
+        >
+          <strong>
+            Fix {coreFieldIssues.length} core field{" "}
+            {coreFieldIssues.length === 1 ? "error" : "errors"} before
+            publishing:
+          </strong>
+          <ul>
+            {coreFieldIssues.map((issue) => (
+              <li key={issue.path}>
+                <a href={`#svgfield-${issue.path}`}>{issue.message}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       {/* ADM-SVG-14 field diff + ADM-PUB-01 blocking note */}
       {formDirty || authoringLifecycle === "invalid" ? (
         <div
@@ -841,7 +862,11 @@ export function AdminSvgEditorEditView({
 
           <details
             className="admin-panel admin-svg-engine-shell__panel admin-svg-engine-shell__advanced"
-            open={preview?.ok === false || formDirty}
+            open={
+              preview?.ok === false ||
+              formDirty ||
+              coreFieldIssues.length > 0
+            }
           >
             <summary className="admin-panel__header">
               Advanced block fields
