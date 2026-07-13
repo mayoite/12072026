@@ -844,6 +844,21 @@
   [data-admin-layout] .admin-svg-inventory-row td[data-label="Symbol"],
   [data-admin-layout] .admin-svg-inventory-row td[data-label="Updated"] {
     grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.5rem;
+  }
+
+  [data-admin-layout] .admin-svg-inventory-row td[data-label="Size"]::before,
+  [data-admin-layout] .admin-svg-inventory-row td[data-label="Lifecycle"]::before,
+  [data-admin-layout] .admin-svg-inventory-row td[data-label="Symbol"]::before,
+  [data-admin-layout] .admin-svg-inventory-row td[data-label="Updated"]::before {
+    content: attr(data-label);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-copy-semibold, 600);
+    min-width: 4.5rem;
   }
 
   [data-admin-layout] .admin-svg-inventory-row td[data-label="Actions"] {

@@ -743,7 +743,7 @@ export function AdminSvgEditorListView({
                               <div className="admin-svg-inventory-actions">
                                 <Link
                                   href={`/admin/svg-editor/${d.slug}`}
-                                  className="admin-btn admin-btn--primary"
+                                  className="admin-btn admin-btn--outline"
                                   aria-label={`Edit ${d.slug} in SVG studio`}
                                   data-testid={`admin-svg-edit-${d.slug}`}
                                 >
@@ -835,12 +835,13 @@ export function AdminSvgEditorListView({
           data-testid="admin-svg-advanced-import"
         >
           <summary className="admin-panel__header">
-            Advanced · bulk spreadsheet import
+            Advanced · bulk import
           </summary>
           <div className="admin-panel__body">
             <p className="admin-page__meta mb-3">
-              Migration and batch tools only. Day-to-day work uses Search and
-              New SVG symbol above.
+              Migration tool only — paste spreadsheet rows, preview, then apply.
+              Day-to-day work uses Search and New SVG symbol above. Not required
+              for authoring.
             </p>
             <AdminSvgBulkImportPanel />
           </div>

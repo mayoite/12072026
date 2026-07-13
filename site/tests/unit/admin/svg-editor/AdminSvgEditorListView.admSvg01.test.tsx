@@ -90,17 +90,29 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
       /block-descriptor|Zod|pipeline|atomic-rename/i,
     );
 
-    expect(screen.getByTestId("admin-svg-edit-side-table-001")).toHaveAttribute(
-      "href",
-      "/admin/svg-editor/side-table-001",
-    );
+    const edit = screen.getByTestId("admin-svg-edit-side-table-001");
+    expect(edit).toHaveAttribute("href", "/admin/svg-editor/side-table-001");
+    // Row edit must not compete with header "New SVG symbol"
+    expect(edit).toHaveClass("admin-btn--outline");
+    expect(edit).not.toHaveClass("admin-btn--primary");
 
-    // ADM-SVG-02 inventory surfaces
+    // ADM-SVG-02 inventory surfaces (primary chrome)
     expect(screen.getByTestId("admin-svg-inventory-search")).toBeInTheDocument();
     expect(screen.getByTestId("admin-svg-filter-artifact")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-svg-filter-lifecycle")).toBeInTheDocument();
+    expect(screen.getByTestId("preview-stub")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Open side-table-001 identity/i })).toBeInTheDocument();
     expect(screen.getByTestId("admin-svg-validation-side-table-001")).toHaveTextContent(
       /Valid/,
     );
     expect(screen.getByTestId("admin-svg-last-change-side-table-001")).toBeInTheDocument();
+
+    // Only header New symbol is primary on the list surface
+    const primaries = document.querySelectorAll(".admin-btn--primary");
+    expect(primaries).toHaveLength(1);
+    expect(primaries[0]).toHaveAttribute(
+      "data-testid",
+      "admin-shell-primary-action",
+    );
   });
 });
