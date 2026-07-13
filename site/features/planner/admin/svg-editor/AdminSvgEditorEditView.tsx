@@ -60,6 +60,7 @@ import {
   authoringLifecycleBadgeClass,
   describeChangedFields,
 } from "./authoringLifecycle";
+import { validateCoreProductFields } from "./validateCoreProductFields";
 
 /** Browser-only 3D islands — static import of model-viewer/three breaks RSC SSR. */
 const GlbExtruderPreview = dynamic(
@@ -374,6 +375,16 @@ export function AdminSvgEditorEditView({
       });
       return;
     }
+    const coreIssues = validateCoreProductFields(form);
+    if (coreIssues.length > 0) {
+      setFeedback({
+        submitting: false,
+        errorMessage: `Publish is blocked: fix ${coreIssues.length} core field ${coreIssues.length === 1 ? "error" : "errors"} (see Advanced block fields).`,
+        successMessage: null,
+        publishedSlug: null,
+      });
+      return;
+    }
     if (previewPending || preview?.ok !== true) {
       setFeedback({
         submitting: false,
@@ -494,12 +505,26 @@ export function AdminSvgEditorEditView({
     [form, publishedForm],
   );
 
+  const coreFieldIssues = useMemo(
+    () => validateCoreProductFields(form),
+    [form],
+  );
+  const formIssues = useMemo(() => {
+    const previewIssues = preview?.issues ?? [];
+    const corePaths = new Set(coreFieldIssues.map((issue) => issue.path));
+    return [
+      ...coreFieldIssues,
+      ...previewIssues.filter((issue) => !corePaths.has(issue.path)),
+    ];
+  }, [coreFieldIssues, preview?.issues]);
+
   const canPublish =
     Boolean(onPublishAction) &&
     !feedback.submitting &&
     !previewPending &&
     preview?.ok === true &&
-    footprintProof.aligned;
+    footprintProof.aligned &&
+    coreFieldIssues.length === 0;
 
   const validationStatus =
     authoringLifecycle === "validating" || previewPending
@@ -814,7 +839,7 @@ export function AdminSvgEditorEditView({
                 fields={SVG_EDITOR_FIELDS}
                 state={form}
                 variant={form.variant}
-                issues={preview?.issues ?? []}
+                issues={formIssues}
                 onChange={updateDraftForm}
               />
             </div>

@@ -199,10 +199,34 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
     help: "Fixed = locked size · Configurable = size options · Parametric = full parameter schema.",
   },
 
-  // ── Geometry (mm) ──
-  { path: "geometry.widthMm", label: "Width", kind: "number", min: 1, step: 1, unit: "mm" },
-  { path: "geometry.depthMm", label: "Depth", kind: "number", min: 1, step: 1, unit: "mm" },
-  { path: "geometry.heightMm", label: "Height", kind: "number", min: 1, step: 1, unit: "mm" },
+  // ── Geometry (mm) — product footprint authority ──
+  {
+    path: "geometry.widthMm",
+    label: "Width",
+    kind: "number",
+    min: 1,
+    step: 1,
+    unit: "mm",
+    help: "Product width in millimetres. Must match the SVG view box width for publish.",
+  },
+  {
+    path: "geometry.depthMm",
+    label: "Depth",
+    kind: "number",
+    min: 1,
+    step: 1,
+    unit: "mm",
+    help: "Product depth in millimetres. Must match the SVG view box height for publish.",
+  },
+  {
+    path: "geometry.heightMm",
+    label: "Height",
+    kind: "number",
+    min: 1,
+    step: 1,
+    unit: "mm",
+    help: "Product height in millimetres (3D and BOQ context).",
+  },
   {
     path: "geometry.seatHeightMm",
     label: "Seat height",
@@ -211,6 +235,7 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
     step: 1,
     unit: "mm",
     optional: true,
+    help: "Optional seat height for seating products.",
   },
   {
     path: "geometry.weightKg",
@@ -220,13 +245,40 @@ export const SVG_EDITOR_FIELDS: readonly SvgEditorFieldMeta[] = Object.freeze([
     step: 0.1,
     unit: "kg",
     optional: true,
+    help: "Optional shipping or product weight in kilograms.",
   },
 
   // ── ViewBox ──
-  { path: "viewBox.x", label: "ViewBox X", kind: "number", step: 1 },
-  { path: "viewBox.y", label: "ViewBox Y", kind: "number", step: 1 },
-  { path: "viewBox.width", label: "ViewBox width", kind: "number", min: 1, step: 1 },
-  { path: "viewBox.height", label: "ViewBox height", kind: "number", min: 1, step: 1 },
+  {
+    path: "viewBox.x",
+    label: "ViewBox X",
+    kind: "number",
+    step: 1,
+    help: "SVG origin X. Prefer 0 unless the symbol is offset.",
+  },
+  {
+    path: "viewBox.y",
+    label: "ViewBox Y",
+    kind: "number",
+    step: 1,
+    help: "SVG origin Y. Prefer 0 unless the symbol is offset.",
+  },
+  {
+    path: "viewBox.width",
+    label: "ViewBox width",
+    kind: "number",
+    min: 1,
+    step: 1,
+    help: "Must equal product width (mm) when publishing.",
+  },
+  {
+    path: "viewBox.height",
+    label: "ViewBox height",
+    kind: "number",
+    min: 1,
+    step: 1,
+    help: "Must equal product depth (mm) when publishing.",
+  },
 
   // ── Mounting + accessibility ──
   {
