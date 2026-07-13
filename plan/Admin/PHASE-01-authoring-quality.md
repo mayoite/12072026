@@ -1,8 +1,12 @@
-# Admin Phase 1 — authoring quality
+# Admin Phase 1 — SVG-first authoring quality
 
 ## In plain words
 
 This phase makes the Admin product editor reliable.
+
+It is the primary Admin phase.
+
+SVG authoring leads the workflow.
 
 An Admin should not need to edit JSON or source code.
 
@@ -39,6 +43,9 @@ None are accepted without fresh verification.
 - Keep stable product identity during edits.
 - Show draft changes separately from published data.
 - Show exact validation errors beside the failed field or action.
+- Group identity, geometry, assets, availability, configuration, and commercial fields.
+- Add a linked error summary without replacing field-level errors.
+- Expose one truthful dirty, validation, save, and publication state.
 
 ### SVG studio
 
@@ -49,6 +56,16 @@ None are accepted without fresh verification.
 - Warn before losing an unsaved draft.
 - Restore the last published symbol when requested.
 - Keep the stage visible and usable at supported Admin widths.
+- Make the no-code SVG path primary.
+- Move bulk JSON behind an advanced path.
+- At 1280 pixels wide, give the initial stage at least 55 percent of the content area.
+- Keep command, stage, layers, and contextual properties as stable regions.
+- Show identity, millimetre footprint, view box, zoom, selection, validation, and revision.
+- Synchronize direct manipulation and exact numeric geometry.
+- Document and enforce the supported SVG feature subset.
+- Support layer naming, ordering, locking, visibility, and selection.
+- Keep selection and zoom stable when panels change.
+- Separate rare and destructive actions from frequent actions.
 
 ### Preview and compilation
 
@@ -57,6 +74,11 @@ None are accepted without fresh verification.
 - Reject unsafe or invalid SVG content.
 - Produce deterministic SVG bytes for the same valid input.
 - Keep browser code separate from server-only compilation tools.
+- Preview the exact Planner symbol and fallback state.
+- Show a field and visual difference between draft and published revisions.
+- Make publication one primary action.
+- Name the target product, draft revision, live revision, and impact.
+- Link a successful publication to the released artifact and Planner verification.
 
 ### Failure safety
 
@@ -64,6 +86,29 @@ None are accepted without fresh verification.
 - Keep the previous publication when compilation fails.
 - Never display “Published” after a failed operation.
 - Return an actionable error to the Admin.
+- Explain the effect of reset, discard, delete, and rollback before confirmation.
+- Preserve focus and the draft after recoverable errors.
+
+### Accessibility
+
+- Meet WCAG 2.2 AA for the author-to-publish journey.
+- Complete the journey with a keyboard.
+- Provide a non-drag alternative for every drag action.
+- Keep focus visible and unobscured.
+- Announce validation, save, publication, and error states.
+
+## Interface acceptance
+
+This phase owns:
+
+- `ADM-SVG-01` through `ADM-SVG-17`.
+- `ADM-SHELL-01` and `ADM-SHELL-02`.
+- `ADM-STATE-01`.
+- `ADM-FORM-01` through `ADM-FORM-03`.
+- `ADM-PUB-01`.
+- `ADM-A11Y-01` through `ADM-A11Y-04`.
+
+The exact requirements are in `../../docs/architecture/07-ADMIN-UI-BENCHMARK.md`.
 
 ## Parallel execution
 
@@ -95,7 +140,7 @@ Read-only code review and unit work do not wait.
 - A failed-publication test proving the previous publication survives.
 - Relevant unchecked items completed in `CHECKLIST.md`.
 
-## Not in this phase
+## Owned by later execution phases
 
 - Catalog ingestion and lifecycle are Phase 2.
 - Product families and option compatibility are Phase 3.

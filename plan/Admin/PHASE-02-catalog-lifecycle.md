@@ -59,6 +59,8 @@ Advanced approval and retirement control is completed in Phase 4.
 - Preview import changes before applying them.
 - Record the source and time of the import.
 - Keep imported assets subject to the same license and provenance rules.
+- Keep bulk SVG JSON behind an advanced path.
+- Preview additions, changes, conflicts, and rejected records before applying.
 
 ### Publication
 
@@ -83,6 +85,28 @@ Advanced approval and retirement control is completed in Phase 4.
 - Show preview, publication progress, success, and failure clearly.
 - Make the published result easy to inspect.
 - Keep keyboard access and visible focus for every action.
+- Show the data source and read-only or editable state before a write starts.
+- Support search, multiple filters, sorting, paging, and saved views.
+- Expose identity, SKU, family, dimensions, lifecycle, availability, symbol state, and last change.
+- Give every row action a visible or unambiguous accessible name.
+- Group family variants for comparison.
+- Support previewed bulk edit, validation, publication, retirement, and recovery.
+- Report the exact record and field for batch failures.
+- Use a deliberate phone review layout instead of a flattened desktop table.
+- Declare unavailable phone authoring tools before work starts.
+
+## Interface acceptance
+
+This phase owns:
+
+- `ADM-SVG-18`.
+- `ADM-STATE-02`.
+- `ADM-LIST-01` through `ADM-LIST-04`.
+- `ADM-BULK-01` and `ADM-BULK-02`.
+- `ADM-PUB-03`.
+- `ADM-MOB-01` through `ADM-MOB-03`.
+
+The exact requirements are in `../../docs/architecture/07-ADMIN-UI-BENCHMARK.md`.
 
 ### Security
 
@@ -129,7 +153,7 @@ Advanced approval and retirement control is completed in Phase 4.
 - Focused authorization and malicious-SVG checks.
 - Relevant unchecked items completed in `CHECKLIST.md`.
 
-## Not in this phase
+## Owned by later execution phases
 
 - Product families and option compatibility are Phase 3.
 - Price books, approval, and retirement are Phase 4.

@@ -376,9 +376,9 @@ High-risk actions require role, reason, version, impact, confirmation, recovery,
 
 These IDs are stable.
 
-All Admin work is one delivery phase.
+The Admin plan may use several execution phases.
 
-Numbered plan files are workstreams inside it.
+No requirement is deferred to a later decision bucket.
 
 | ID | Requirement |
 |---|---|

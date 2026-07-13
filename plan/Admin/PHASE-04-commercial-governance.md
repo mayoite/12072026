@@ -36,6 +36,9 @@ An authorized Admin can:
 - Never convert a missing price into zero.
 - Keep prior price-book versions available for reproduction.
 - Pin every priced commercial output to one price-book version.
+- Format operator-facing amounts as currency.
+- Keep raw minor units and basis points in an advanced technical view.
+- Make draft, approved, active, retired, and rolled-back states distinct.
 
 ### Approval
 
@@ -44,6 +47,7 @@ An authorized Admin can:
 - Require explicit approval before activation.
 - Prevent approval of invalid or incomplete data.
 - Keep the previous active version when activation fails.
+- Show the authorized role, reason, version, and impact before confirmation.
 
 ### Retirement and restoration
 
@@ -68,6 +72,19 @@ An authorized Admin can:
 - Protect state-changing requests from CSRF.
 - Rate-limit expensive release actions.
 - Keep secrets and commercial data out of public responses.
+- Explain unavailable actions without leaking protected data.
+- Show actor, action, object, versions, reason, time, and result in history.
+
+## Interface acceptance
+
+This phase owns:
+
+- `ADM-PUB-02`.
+- `ADM-PRICE-01` through `ADM-PRICE-03`.
+- `ADM-ROLE-01`.
+- `ADM-AUDIT-01`.
+
+The exact requirements are in `../../docs/architecture/07-ADMIN-UI-BENCHMARK.md`.
 
 ## Parallel execution
 
@@ -103,7 +120,7 @@ Core product pricing does not wait for family-specific pricing.
 - Fresh security, typecheck, and lint results.
 - Relevant unchecked items completed in `CHECKLIST.md`.
 
-## Not in this phase
+## Outside the current product boundary
 
 - Customer-facing live pricing.
 - Named customer revisions.

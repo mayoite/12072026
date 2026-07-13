@@ -20,7 +20,7 @@ An Admin can:
 6. Confirm that Planner receives the same product and SVG.
 7. Recover safely when validation or publication fails.
 
-## Execution order
+## Execution phases
 
 ### Step 0 — test isolation
 
@@ -30,11 +30,13 @@ It prevents tests from changing the real public catalog.
 
 Read the first section of `CHECKLIST.md`.
 
-### Phase 1 — authoring quality
+### Phase 1 — SVG-first authoring quality
 
 Plan: `PHASE-01-authoring-quality.md`.
 
-This makes product and SVG editing usable, deterministic, and safe.
+This is the primary Admin phase.
+
+It makes product and SVG editing usable, deterministic, and safe.
 
 ### Phase 2 — catalog lifecycle, ingestion, and Planner handoff
 
@@ -92,6 +94,29 @@ Two writers must not edit the same files at the same time.
 - Input and SVG safety.
 - Publication and commercial audit.
 - Fresh verification.
+
+## Interface authority
+
+The SVG-first Admin benchmark is `../../docs/architecture/07-ADMIN-UI-BENCHMARK.md`.
+
+Its `ADM-*` IDs are acceptance requirements.
+
+SVG authoring is the primary Admin journey.
+
+Catalog, family, price, audit, and release interfaces support it.
+
+No new UI package is planned.
+
+Use the installed stack first.
+
+## Acceptance trace
+
+| Execution phase | Acceptance IDs |
+|---|---|
+| Phase 1 — SVG-first authoring | `ADM-SVG-01` through `ADM-SVG-17`, `ADM-SHELL-01`, `ADM-SHELL-02`, `ADM-STATE-01`, `ADM-FORM-01` through `ADM-FORM-03`, `ADM-PUB-01`, `ADM-A11Y-01` through `ADM-A11Y-04` |
+| Phase 2 — catalog and handoff | `ADM-SVG-18`, `ADM-STATE-02`, `ADM-LIST-01` through `ADM-LIST-04`, `ADM-BULK-01`, `ADM-BULK-02`, `ADM-PUB-03`, `ADM-MOB-01` through `ADM-MOB-03` |
+| Phase 3 — product families | `ADM-FAM-01`, `ADM-FAM-02` |
+| Phase 4 — commercial governance | `ADM-PUB-02`, `ADM-PRICE-01` through `ADM-PRICE-03`, `ADM-ROLE-01`, `ADM-AUDIT-01` |
 
 ## Completion
 

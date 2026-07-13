@@ -66,6 +66,14 @@ An Admin can:
 - Show unresolved compatibility errors before release.
 - Show which family version is draft and which is released.
 - Require an explicit migration choice when replacing a released version.
+- Use plain language for options and compatibility rules.
+- Preview matching 2D, 3D, and BOQ identity before release.
+
+## Interface acceptance
+
+This phase owns `ADM-FAM-01` and `ADM-FAM-02`.
+
+The exact requirements are in `../../docs/architecture/07-ADMIN-UI-BENCHMARK.md`.
 
 ## Parallel execution
 
@@ -99,7 +107,7 @@ They do not block option, 2D, or BOQ identity work.
 - Planner fixture-consumption test.
 - Relevant unchecked items completed in `CHECKLIST.md`.
 
-## Not in this phase
+## Owned by later execution phases
 
 - Price calculation.
 - Price-book approval.

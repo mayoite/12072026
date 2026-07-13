@@ -32,6 +32,37 @@ Treat every item as not done.
 - [ ] Failure never displays a false success state.
 - [ ] Focused unit, API, and browser checks pass.
 
+### SVG-first interface acceptance
+
+- [ ] `ADM-SVG-01` No-code SVG authoring is the primary Admin journey.
+- [ ] `ADM-SVG-02` SVG inventory exposes finding, identity, preview, state, validation, and last change.
+- [ ] `ADM-SVG-03` Bulk JSON is an advanced path.
+- [ ] `ADM-SVG-04` The stage receives at least 55 percent of the 1280-pixel content area.
+- [ ] `ADM-SVG-05` Command, stage, layer, and property regions remain stable.
+- [ ] `ADM-SVG-06` Identity, footprint, view box, zoom, selection, draft, validation, and revision are visible.
+- [ ] `ADM-SVG-07` Direct manipulation and numeric geometry remain synchronized.
+- [ ] `ADM-SVG-08` The supported SVG feature subset is documented and enforced.
+- [ ] `ADM-SVG-09` Layer selection, ordering, lock, visibility, and state work.
+- [ ] `ADM-SVG-10` Named undo and redo preserve a valid document.
+- [ ] `ADM-SVG-11` Reset, discard, delete, and rollback explain impact.
+- [ ] `ADM-SVG-12` Preview and publication share one compiler authority.
+- [ ] `ADM-SVG-13` Preview matches the Planner symbol, footprint, identity, validation, and fallback.
+- [ ] `ADM-SVG-14` Draft and published revisions have a field and visual diff.
+- [ ] `ADM-SVG-15` One primary publish action names its target and versions.
+- [ ] `ADM-SVG-16` Failure preserves the live artifact and never reports false success.
+- [ ] `ADM-SVG-17` Success links to the released artifact and Planner verification.
+- [ ] `ADM-SHELL-01` Each page exposes title, scope, source, state, and one primary action.
+- [ ] `ADM-SHELL-02` Secondary and destructive actions do not compete with the primary action.
+- [ ] `ADM-STATE-01` One authoritative state covers the full authoring lifecycle.
+- [ ] `ADM-FORM-01` Forms group fields by operator task.
+- [ ] `ADM-FORM-02` Field errors and a linked error summary work.
+- [ ] `ADM-FORM-03` Dirty, save, discard, and recovery states are truthful.
+- [ ] `ADM-PUB-01` Errors block publication and warnings remain visible.
+- [ ] `ADM-A11Y-01` The primary Admin journey meets WCAG 2.2 AA.
+- [ ] `ADM-A11Y-02` SVG authoring through publication is keyboard-completable.
+- [ ] `ADM-A11Y-03` Every drag action has a non-drag alternative.
+- [ ] `ADM-A11Y-04` Focus and dynamic state announcements pass fresh checks.
+
 ## Phase 2 — catalog lifecycle, ingestion, and Planner handoff
 
 - [ ] One versioned core product contract drives Admin and Planner.
@@ -66,6 +97,21 @@ Treat every item as not done.
 - [ ] Publication records Admin, product, action, and time.
 - [ ] Fresh integration and browser checks pass.
 
+### Catalog interface acceptance
+
+- [ ] `ADM-SVG-18` SVG import previews every change and applies atomically.
+- [ ] `ADM-STATE-02` Data-source editability is clear before a write.
+- [ ] `ADM-LIST-01` Search, multi-filter, sort, paging, and saved views work.
+- [ ] `ADM-LIST-02` Rows expose the required inventory and symbol data.
+- [ ] `ADM-LIST-03` Row actions have clear visible or accessible names.
+- [ ] `ADM-LIST-04` Family variants are grouped and comparable.
+- [ ] `ADM-BULK-01` Previewed bulk edit, validation, publication, retirement, and recovery work.
+- [ ] `ADM-BULK-02` Batch work is atomic and reports exact record and field errors.
+- [ ] `ADM-PUB-03` Partial publication or release is impossible.
+- [ ] `ADM-MOB-01` Phone review works without page-level horizontal scrolling.
+- [ ] `ADM-MOB-02` Unsupported phone authoring is declared before work begins.
+- [ ] `ADM-MOB-03` Phone records use a deliberate compact layout.
+
 ## Phase 3 — configurable product families
 
 - [ ] Families and released versions have stable identifiers.
@@ -81,6 +127,11 @@ Treat every item as not done.
 - [ ] Release blocks unresolved compatibility errors.
 - [ ] Version replacement requires an explicit migration decision.
 - [ ] Family, compatibility, parity, and browser checks pass.
+
+### Family interface acceptance
+
+- [ ] `ADM-FAM-01` Options and compatibility use plain language and precise errors.
+- [ ] `ADM-FAM-02` One configuration previews matching 2D, 3D, and BOQ identity.
 
 ## Phase 4 — commercial governance
 
@@ -104,6 +155,15 @@ Treat every item as not done.
 - [ ] Audit records actor, action, object, versions, reason, and time.
 - [ ] CSRF, rate-limit, and commercial-data checks pass.
 - [ ] Draft, approve, activate, retire, restore, and rollback browser journey passes.
+
+### Commercial interface acceptance
+
+- [ ] `ADM-PUB-02` Release shows exact versions and impact before confirmation.
+- [ ] `ADM-PRICE-01` Prices are formatted as currency.
+- [ ] `ADM-PRICE-02` Commercial lifecycle states are visually distinct.
+- [ ] `ADM-PRICE-03` High-risk actions show role, reason, version, impact, and confirmation.
+- [ ] `ADM-ROLE-01` Server roles are enforced and unavailable actions are explained safely.
+- [ ] `ADM-AUDIT-01` History shows actor, action, object, versions, reason, time, and result.
 
 ## Completion
 
