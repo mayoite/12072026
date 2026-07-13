@@ -21,6 +21,11 @@ import {
   rollbackPriceBookVersion,
   type PriceBookRole,
 } from "./priceBookService";
+import {
+  appendPriceBookAudit,
+  createPriceBookAuditEntry,
+  readPriceBookAudit,
+} from "./priceBookGovernance";
 
 export const DEFAULT_PRICE_BOOK_ID = "pb-linear-2026-q3";
 
@@ -87,12 +92,48 @@ export async function runPriceBookAction(
   action: "approve" | "activate" | "rollback",
   versionId: string,
   role: PriceBookRole,
+  options: {
+    readonly actorId?: string;
+    readonly reason?: string;
+  } = {},
 ) {
   ensureDefaultPriceBookSeeded();
   const store = getPriceBookStore();
-  if (action === "approve") return approvePriceBookVersion(store, bookId, versionId, role);
-  if (action === "activate") return activatePriceBookVersion(store, bookId, versionId, role);
-  return rollbackPriceBookVersion(store, bookId, versionId, role);
+  const actorId = options.actorId ?? "unknown";
+  const reason = options.reason ?? "";
+
+  let result;
+  if (action === "approve") {
+    result = await approvePriceBookVersion(store, bookId, versionId, role);
+  } else if (action === "activate") {
+    result = await activatePriceBookVersion(store, bookId, versionId, role);
+  } else {
+    result = await rollbackPriceBookVersion(store, bookId, versionId, role);
+  }
+
+  const entry = createPriceBookAuditEntry({
+    actorId,
+    role,
+    action: result.ok ? action : "deny",
+    bookId,
+    versionId,
+    previousVersionId: result.previousActiveVersionId,
+    newVersionId: result.ok ? result.newActiveVersionId : null,
+    reason,
+    result: result.ok ? "success" : "failure",
+    resultDetail: result.ok ? `${action} ok` : result.error,
+  });
+  try {
+    appendPriceBookAudit(entry, PRICE_BOOKS_DIR_DEFAULT);
+  } catch {
+    // audit best-effort; do not fail commercial action if log write fails
+  }
+  return result;
+}
+
+export function readAdminPriceBookAudit(bookId: string, limit = 40) {
+  ensureDefaultPriceBookSeeded();
+  return readPriceBookAudit(bookId, PRICE_BOOKS_DIR_DEFAULT, limit);
 }
 
 export function listAdminPriceBooks(): string[] {

@@ -1,9 +1,11 @@
 /**
  * Admin P05 — price-book activation + rollback (fail-closed; prior active untouched on failure).
+ * Roles enforced server-side (ADM-ROLE-01). Audit fields returned for ADM-AUDIT-01.
  */
 
 import type { PriceBookContract, PriceBookVersion } from "./priceBookContract";
 import { emitPriceBookContract, type PriceBookRow, type PriceBookVersionRow } from "./emitPriceBookContract";
+import type { PriceBookHighRiskAction } from "./priceBookGovernance";
 
 export type PriceBookRole = "author" | "approver" | "viewer";
 
@@ -19,8 +21,19 @@ export type PriceBookStore = {
 };
 
 export type ActivateResult =
-  | { readonly ok: true; readonly contract: PriceBookContract }
-  | { readonly ok: false; readonly error: string };
+  | {
+      readonly ok: true;
+      readonly contract: PriceBookContract;
+      readonly action: PriceBookHighRiskAction;
+      readonly previousActiveVersionId: string | null;
+      readonly newActiveVersionId: string | null;
+    }
+  | {
+      readonly ok: false;
+      readonly error: string;
+      readonly action: PriceBookHighRiskAction;
+      readonly previousActiveVersionId: string | null;
+    };
 
 function canActivate(role: PriceBookRole): boolean {
   return role === "approver";
@@ -46,17 +59,43 @@ export async function activatePriceBookVersion(
   versionId: string,
   role: PriceBookRole,
 ): Promise<ActivateResult> {
+  const action = "activate" as const;
   if (!canActivate(role)) {
-    return { ok: false, error: "Approver role required to activate a price book" };
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: null,
+      error: "Approver role required to activate a price book",
+    };
   }
 
   const snapshot = await store.getBook(bookId);
-  if (!snapshot) return { ok: false, error: `Price book "${bookId}" not found` };
+  if (!snapshot) {
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: null,
+      error: `Price book "${bookId}" not found`,
+    };
+  }
+  const previousActive = snapshot.book.activeVersionId;
 
   const target = snapshot.versions.find((v) => v.versionId === versionId);
-  if (!target) return { ok: false, error: `Version "${versionId}" not found` };
+  if (!target) {
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: previousActive,
+      error: `Version "${versionId}" not found`,
+    };
+  }
   if (target.status !== "approved" && target.status !== "draft") {
-    return { ok: false, error: `Version "${versionId}" cannot be activated from status ${target.status}` };
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: previousActive,
+      error: `Version "${versionId}" cannot be activated from status ${target.status}`,
+    };
   }
 
   const previous = snapshot;
@@ -70,20 +109,43 @@ export async function activatePriceBookVersion(
     await store.saveBook(nextBook, nextVersions);
   } catch (cause) {
     const message = cause instanceof Error ? cause.message : String(cause);
-    return { ok: false, error: message };
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: previousActive,
+      error: message,
+    };
   }
 
   const contract = emitPriceBookContract(nextBook, nextVersions);
-  if (!contract) return { ok: false, error: "Activated book failed contract emission" };
+  if (!contract) {
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: previousActive,
+      error: "Activated book failed contract emission",
+    };
+  }
 
   // Fail-closed verification: store must still hold prior versions count.
   const verify = await store.getBook(bookId);
   if (!verify || verify.versions.length < previous.versions.length) {
     await store.saveBook(previous.book, previous.versions);
-    return { ok: false, error: "Activation aborted — version history would have been lost" };
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: previousActive,
+      error: "Activation aborted — version history would have been lost",
+    };
   }
 
-  return { ok: true, contract };
+  return {
+    ok: true,
+    contract,
+    action,
+    previousActiveVersionId: previousActive,
+    newActiveVersionId: versionId,
+  };
 }
 
 export async function approvePriceBookVersion(
@@ -92,17 +154,43 @@ export async function approvePriceBookVersion(
   versionId: string,
   role: PriceBookRole,
 ): Promise<ActivateResult> {
+  const action = "approve" as const;
   if (role === "viewer") {
-    return { ok: false, error: "Viewer cannot approve price-book versions" };
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: null,
+      error: "Viewer cannot approve price-book versions",
+    };
   }
 
   const snapshot = await store.getBook(bookId);
-  if (!snapshot) return { ok: false, error: `Price book "${bookId}" not found` };
+  if (!snapshot) {
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: null,
+      error: `Price book "${bookId}" not found`,
+    };
+  }
+  const previousActive = snapshot.book.activeVersionId;
 
   const target = snapshot.versions.find((v) => v.versionId === versionId);
-  if (!target) return { ok: false, error: `Version "${versionId}" not found` };
+  if (!target) {
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: previousActive,
+      error: `Version "${versionId}" not found`,
+    };
+  }
   if (target.status !== "draft") {
-    return { ok: false, error: `Only draft versions can be approved (got ${target.status})` };
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: previousActive,
+      error: `Only draft versions can be approved (got ${target.status})`,
+    };
   }
 
   const nextVersions = snapshot.versions.map((version) =>
@@ -110,8 +198,21 @@ export async function approvePriceBookVersion(
   );
   await store.saveBook(snapshot.book, nextVersions);
   const contract = emitPriceBookContract(snapshot.book, nextVersions);
-  if (!contract) return { ok: false, error: "Approve failed contract emission" };
-  return { ok: true, contract };
+  if (!contract) {
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: previousActive,
+      error: "Approve failed contract emission",
+    };
+  }
+  return {
+    ok: true,
+    contract,
+    action,
+    previousActiveVersionId: previousActive,
+    newActiveVersionId: previousActive,
+  };
 }
 
 export async function rollbackPriceBookVersion(
@@ -120,15 +221,36 @@ export async function rollbackPriceBookVersion(
   versionId: string,
   role: PriceBookRole,
 ): Promise<ActivateResult> {
+  const action = "rollback" as const;
   if (!canActivate(role)) {
-    return { ok: false, error: "Approver role required to roll back a price book" };
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: null,
+      error: "Approver role required to roll back a price book",
+    };
   }
 
   const snapshot = await store.getBook(bookId);
-  if (!snapshot) return { ok: false, error: `Price book "${bookId}" not found` };
+  if (!snapshot) {
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: null,
+      error: `Price book "${bookId}" not found`,
+    };
+  }
+  const previousActive = snapshot.book.activeVersionId;
 
   const target = snapshot.versions.find((v) => v.versionId === versionId);
-  if (!target) return { ok: false, error: `Version "${versionId}" not found` };
+  if (!target) {
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: previousActive,
+      error: `Version "${versionId}" not found`,
+    };
+  }
 
   const nextVersions = snapshot.versions.map((version) => {
     if (version.versionId === versionId) return { ...version, status: "rolled_back" as const };
@@ -146,6 +268,19 @@ export async function rollbackPriceBookVersion(
 
   await store.saveBook(nextBook, nextVersions);
   const contract = emitPriceBookContract(nextBook, nextVersions);
-  if (!contract) return { ok: false, error: "Rollback failed contract emission" };
-  return { ok: true, contract };
+  if (!contract) {
+    return {
+      ok: false,
+      action,
+      previousActiveVersionId: previousActive,
+      error: "Rollback failed contract emission",
+    };
+  }
+  return {
+    ok: true,
+    contract,
+    action,
+    previousActiveVersionId: previousActive,
+    newActiveVersionId: fallbackActive,
+  };
 }
