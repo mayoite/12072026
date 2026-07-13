@@ -100,7 +100,7 @@ describe('component branch coverage', () => {
     render(<TableOfContents />)
 
     await screen.findByRole('link', { name: 'First' })
-    expect(screen.getByText('Second')).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Second' })).toBeTruthy()
     fireEvent.click(screen.getByRole('link', { name: 'First' }))
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' })
   })
