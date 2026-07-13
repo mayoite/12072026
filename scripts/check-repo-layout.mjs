@@ -3,13 +3,19 @@
  * Exit 0 = clean. Exit 1 = violations.
  *
  * Forbidden under site/: results, test-results, .cursor, .firecrawl,
- * tech-stack-docs, tech-stack-generated
+ * generated documents and legacy generated roots
  * Required: repo-root results/ and agent-reports/ (directories may be empty)
  * Results may not contain Markdown reports.
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  GENERATED_ROOT_DIR,
+  LEGACY_GENERATED_ROOTS,
+  LEGACY_SOURCE_PACKAGE_DIR,
+  SOURCE_PACKAGE_DIR,
+} from "../tech-docs-generator/scripts/output-contract.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -18,12 +24,16 @@ const FORBIDDEN = [
   "site/test-results",
   "site/.cursor",
   "site/.firecrawl",
-  "site/tech-stack-docs",
-  "site/tech-stack-generated",
-  "tech-stack-generator/node_modules",
+  `site/${GENERATED_ROOT_DIR}`,
+  `${SOURCE_PACKAGE_DIR}/node_modules`,
+  LEGACY_SOURCE_PACKAGE_DIR,
+  ...LEGACY_GENERATED_ROOTS,
 ];
 
-const FORBIDDEN_FILES = ["tech-stack-generator/package-lock.json"];
+const FORBIDDEN_FILES = [
+  `${SOURCE_PACKAGE_DIR}/package-lock.json`,
+  `${LEGACY_SOURCE_PACKAGE_DIR}/package-lock.json`,
+];
 
 const REQUIRED_DIRS = ["results", "agent-reports"];
 
@@ -63,7 +73,7 @@ if (fs.existsSync(resultsDir) && fs.statSync(resultsDir).isDirectory()) {
 try {
   const { execSync } = await import("node:child_process");
   const tracked = execSync(
-    "git ls-files site/results site/test-results site/.cursor site/.firecrawl site/tech-stack-docs site/tech-stack-generated tech-stack-generator/package-lock.json tech-stack-generator/node_modules",
+    `git ls-files site/results site/test-results site/.cursor site/.firecrawl site/${GENERATED_ROOT_DIR} ${LEGACY_SOURCE_PACKAGE_DIR} ${LEGACY_GENERATED_ROOTS.join(" ")} ${SOURCE_PACKAGE_DIR}/package-lock.json ${SOURCE_PACKAGE_DIR}/node_modules`,
     {
       cwd: root,
       encoding: "utf8",
@@ -73,7 +83,9 @@ try {
     .split(/\r?\n/)
     .filter(Boolean);
   for (const f of tracked) {
-    violations.push(`FORBIDDEN tracked in git: ${f}`);
+    if (fs.existsSync(path.join(root, f))) {
+      violations.push(`FORBIDDEN tracked in git: ${f}`);
+    }
   }
 } catch {
   // no git — skip index check

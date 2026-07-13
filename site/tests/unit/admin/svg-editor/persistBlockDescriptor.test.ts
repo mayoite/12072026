@@ -15,7 +15,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { mkdtempSync, readdirSync, readFileSync, rmSync, existsSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, existsSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import os from "node:os";
 
@@ -159,6 +159,48 @@ describe("04-PERSIST: atomic-rename behaviour", () => {
     if (!second.ok) return;
     expect(second.replaced).toBe(true);
     expect(second.descriptor.sku).toBe("OFL-CHS-002");
+  });
+
+  it("restores descriptor bytes and revision pointer when a publication rollback is requested", () => {
+    const first = persistBlockDescriptor(fixedDescriptorFixture(), {
+      dir: workDir,
+      clock: () => 1700000000,
+      writeArchive: false,
+    });
+    expect(first.ok).toBe(true);
+    if (!first.ok) return;
+    const legacyBefore = readFileSync(path.join(workDir, "chaise.json"), "utf8");
+    const pointerBefore = readFileSync(path.join(workDir, "chaise.latest.json"), "utf8");
+
+    const second = persistBlockDescriptor(
+      { ...fixedDescriptorFixture(), sku: "OFL-CHS-ROLLBACK" },
+      { dir: workDir, clock: () => 1700000001, writeArchive: false },
+    );
+    expect(second.ok).toBe(true);
+    if (!second.ok) return;
+    second.rollback?.();
+
+    expect(readFileSync(path.join(workDir, "chaise.json"), "utf8")).toBe(legacyBefore);
+    expect(readFileSync(path.join(workDir, "chaise.latest.json"), "utf8")).toBe(pointerBefore);
+    expect(existsSync(path.join(workDir, "chaise.2.json"))).toBe(false);
+  });
+
+  it("restores legacy descriptor and pointer even when new revision removal fails", () => {
+    const first = persistBlockDescriptor(fixedDescriptorFixture(), { dir: workDir, clock: () => 1700000000, writeArchive: false });
+    expect(first.ok).toBe(true);
+    if (!first.ok) return;
+    const legacyBefore = readFileSync(path.join(workDir, "chaise.json"), "utf8");
+    const pointerBefore = readFileSync(path.join(workDir, "chaise.latest.json"), "utf8");
+    const second = persistBlockDescriptor({ ...fixedDescriptorFixture(), sku: "OFL-CHS-FAIL" }, { dir: workDir, clock: () => 1700000001, writeArchive: false });
+    expect(second.ok).toBe(true);
+    if (!second.ok) return;
+    rmSync(second.path);
+    mkdirSync(second.path);
+    writeFileSync(path.join(second.path, "blocker"), "x", "utf8");
+
+    expect(() => second.rollback?.()).toThrow();
+    expect(readFileSync(path.join(workDir, "chaise.json"), "utf8")).toBe(legacyBefore);
+    expect(readFileSync(path.join(workDir, "chaise.latest.json"), "utf8")).toBe(pointerBefore);
   });
 
   it("preserves the canonical {slug}.json filename after atomic rename", () => {

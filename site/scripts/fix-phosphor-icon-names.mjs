@@ -98,7 +98,7 @@ const FIX = {
 
 function walk(dir, out = []) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (ent.name === "node_modules" || ent.name === ".next" || ent.name === "tech-stack-docs") continue;
+    if (ent.name === "node_modules" || ent.name === ".next" || ent.name === "generated-documents") continue;
     const p = path.join(dir, ent.name);
     if (ent.isDirectory()) walk(p, out);
     else if (/\.(tsx?|jsx?)$/.test(ent.name)) out.push(p);

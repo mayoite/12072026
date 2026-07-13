@@ -16,7 +16,7 @@ if (!ua.includes("pnpm")) {
       "",
       "Then use root scripts or pnpm --filter, e.g.:",
       "  pnpm dev",
-      "  pnpm --filter oando-site-workflow-docs dev",
+      "  pnpm --filter oando-tech-docs dev",
     ].join("\n"),
   );
   process.exit(1);

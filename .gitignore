@@ -7,24 +7,22 @@ site/block-descriptors/*.*.json
 node_modules/
 # Hoisted at repo root (.npmrc node-linker=hoisted) � never install-only under site/
 site/node_modules/
-site/tech-stack-generator/node_modules/
+tech-docs-generator/node_modules/
 
 # Site build output
 site/.next/
 site/.swc/
 site/tsconfig.tsbuildinfo
 
-# Tech-stack generated static site output (repo root only)
-tech-stack-generated/*
-!tech-stack-generated/.gitkeep
+# Generated tech-docs output (repo root only)
+generated-documents/
+.tmp/generated-documents/
 
 # FORBIDDEN under site/ (canonical layout � see AGENTS.md)
 site/results/
 site/test-results/
 site/.cursor/
 site/.firecrawl/
-site/tech-stack-docs/
-site/tech-stack-generated/
 
 # Local environment files
 .env.local

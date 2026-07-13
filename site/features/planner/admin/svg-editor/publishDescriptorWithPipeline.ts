@@ -66,6 +66,22 @@ const DEFAULT_DEPS: Required<PublishDescriptorWithPipelineDeps> = {
   persist: persistBlockDescriptor,
 };
 
+function runAllBestEffort(...operations: ReadonlyArray<(() => void) | undefined>): string[] {
+  const errors: string[] = [];
+  for (const operation of operations) {
+    try { operation?.(); } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+    }
+  }
+  return errors;
+}
+
+function withRecoveryErrors(error: string, recoveryErrors: readonly string[]): string {
+  return recoveryErrors.length === 0
+    ? error
+    : `${error} (rollback incomplete: ${recoveryErrors.join("; ")})`;
+}
+
 /**
  * Validate → compileSvgForPublish (S1–S3) → runSvgPipeline S4-only → persist (S6).
  * Compile or pipeline failure aborts before descriptor persist.
@@ -139,13 +155,41 @@ export async function publishDescriptorWithPipeline(
   // Persist only after successful compilation + disk write. If this fails, SVG
   // may already be on disk from the pipeline step — surface the write error;
   // do not claim publish success.
-  const persistResult = persist(descriptor);
+  let persistResult: PersistResult;
+  try {
+    persistResult = persist(descriptor);
+  } catch (err) {
+    const details = err instanceof Error ? err.message : String(err);
+    const recoveryErrors = runAllBestEffort(pipeline.rollback, pipeline.cleanup);
+    return { success: false, error: withRecoveryErrors(`500.io: Descriptor persistence threw. ${details}`, recoveryErrors) };
+  }
   if (!persistResult.ok) {
+    const recoveryErrors = runAllBestEffort(
+      persistResult.rollback,
+      pipeline.rollback,
+      persistResult.cleanup,
+      pipeline.cleanup,
+    );
     return {
       success: false,
-      error: `${persistResult.error.code}: ${persistResult.error.message}`,
+      error: withRecoveryErrors(`${persistResult.error.code}: ${persistResult.error.message}`, recoveryErrors),
     };
   }
+
+  try {
+    pipeline.commit?.();
+  } catch (err) {
+    const details = err instanceof Error ? err.message : String(err);
+    const recoveryErrors = runAllBestEffort(
+      persistResult.rollback,
+      pipeline.rollback,
+      persistResult.cleanup,
+      pipeline.cleanup,
+    );
+    return { success: false, error: withRecoveryErrors(`500.io: Publication commit failed. ${details}`, recoveryErrors) };
+  }
+
+  runAllBestEffort(persistResult.cleanup, pipeline.cleanup);
 
   return { success: true, descriptor: persistResult.descriptor };
 }

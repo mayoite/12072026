@@ -232,7 +232,7 @@ const nextConfig = {
         ]
       },
       {
-        source: "/tech-stack-docs/:path*",
+        source: "/tech-docs/:path*",
         headers: [
           {
             key: "X-Robots-Tag",
@@ -247,8 +247,8 @@ const nextConfig = {
       afterFiles: [
         // Tech stack docs SPA — catch-all for client-side routes
         {
-          source: '/tech-stack-docs/:path*',
-          destination: '/tech-stack-docs/index.html',
+          source: '/tech-docs/:path*',
+          destination: '/tech-docs/index.html',
         },
       ],
     };

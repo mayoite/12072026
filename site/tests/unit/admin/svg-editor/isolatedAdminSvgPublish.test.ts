@@ -11,12 +11,17 @@ describe("isolated Admin SVG publish worker", () => {
         __dirname,
         "fixtures/hangingIsolatedPublishWorker.ts",
       ),
-      workerTimeoutMs: 50,
+      workerTimeoutMs: 1_000,
     });
 
     try {
       await expect(workspace.publish(workspace.load())).rejects.toThrow(
-        /timed out after 50ms/,
+        /timed out after 1000ms/,
+      );
+      expect(existsSync(path.join(workspace.root, "worker-started"))).toBe(true);
+      await new Promise((resolve) => setTimeout(resolve, 1_750));
+      expect(existsSync(path.join(workspace.root, "worker-survived"))).toBe(
+        false,
       );
     } finally {
       workspace.cleanup();

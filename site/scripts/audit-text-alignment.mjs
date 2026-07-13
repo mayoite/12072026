@@ -23,7 +23,7 @@ const OUT = join(REPO_ROOT, "results", "text-alignment-audit.csv");
 
 const SKIP_DIRS = new Set([
   "node_modules", ".next", "dist", "results", "outputs", ".git",
-  "tech-stack-docs", "tech-stack-generator", "_archive",
+  "generated-documents", "tech-docs-generator", "_archive",
 ]);
 
 // Match text-left, text-right, text-center, text-start, text-end (with optional variant)

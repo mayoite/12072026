@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 function getFiles(dir, filter, fileList = []) {
-  if (dir.includes('node_modules') || dir.includes('.next') || dir.includes('results') || dir.includes('tech-stack-docs') || dir.includes('archive')) {
+  if (dir.includes('node_modules') || dir.includes('.next') || dir.includes('results') || dir.includes('generated-documents') || dir.includes('archive')) {
     return fileList;
   }
   const files = fs.readdirSync(dir);

@@ -12,12 +12,11 @@ const repoRoot = path.resolve(siteRoot, "..");
 const repoFolders = {
   ".": {
     title: "Repository root (pnpm workspace)",
-    why: "Thin wrapper: root package.json proxies scripts into site/ and site/tech-stack-generator/.",
+    why: "Thin wrapper: root package.json proxies scripts into site/ and tech-docs-generator/.",
     contains: [
       "site/ — Next.js app (oando-site)",
-      "site/tech-stack-generator/ — Vite source for tech-stack docs",
-      "tech-stack-docs/ — generated static site build",
-      "tech-stack-generated/ — emitted renderer data",
+      "tech-docs-generator/ — Vite source for tech docs",
+      "generated-documents/ — generated data, docs, and static site",
       "docs/ — reference documentation (architecture, api, database, audit)",
       "archive/ — historical outputs and archive/migrationdocs/",
       "plan/ — execution tracks",
@@ -59,10 +58,10 @@ const repoFolders = {
     ],
     see: ["DOC-MAP.md", "Failures.md"],
   },
-  "tech-stack-generator": {
+  "tech-docs-generator": {
     title: "Tech stack docs (source)",
-    why: "Vite + React mini-site in `site/tech-stack-generator/`; build output is written to `site/tech-stack-docs/`.",
-    contains: ["src/ — pages and data", "vite.config.ts — outDir `Documents/tech-stack-generated`"],
+    why: "Vite + React mini-site in `tech-docs-generator/`; build output is written to `generated-documents/site/`.",
+    contains: ["src/ — pages and data", "vite.config.ts — outDir `.tmp/generated-documents/site`"],
     see: ["README.md", "Readme_Techstack.md", "COVERAGE-REPORT.md"],
   },
 };

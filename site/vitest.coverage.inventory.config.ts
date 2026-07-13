@@ -65,7 +65,7 @@ export default defineConfig({
         "**/tests/**",
         "**/public/**",
         "**/results/**",
-        "**/tech-stack-generated/**",
+        "**/generated-documents/**",
       ],
       // intentionally NO thresholds
     },

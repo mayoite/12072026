@@ -21,7 +21,7 @@ const SKIP_DIRS = new Set([
   "results",
   "outputs",
   ".git",
-  "tech-stack-docs",
+  "generated-documents",
 ]);
 
 /** Base / token CSS — design-system foundation, excluded from hardcoding audit. */

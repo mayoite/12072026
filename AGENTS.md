@@ -48,7 +48,7 @@
 - Block only the exact dependent item.
 - Continue unrelated work.
 - Use `pnpm` from the repository root.
-- Never run package installation inside `site/` or `tech-stack-generator/`.
+- Never run package installation inside `site/` or `tech-docs-generator/`.
 - No `any` in handwritten code.
 - No plagiarism.
 - Secrets belong in `.env.local` only.

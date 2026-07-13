@@ -20,7 +20,7 @@ const SITE_ROOT = join(__dirname, "..");
 
 const SKIP_DIRS = new Set([
   "node_modules", ".next", "dist", "results", "outputs", ".git",
-  "tech-stack-docs", "tech-stack-generator", "_archive",
+  "generated-documents", "tech-docs-generator", "_archive",
 ]);
 
 // Match text-left or text-right with optional variant prefix

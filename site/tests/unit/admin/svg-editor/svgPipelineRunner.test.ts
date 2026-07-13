@@ -38,12 +38,14 @@ import {
   rmSync,
   existsSync,
   mkdirSync,
+  readFileSync,
   writeFileSync,
   readdirSync,
 } from "node:fs";
 import * as childProcess from "node:child_process";
 import path from "node:path";
 import os from "node:os";
+import { createHash } from "node:crypto";
 
 import {
   computeBlockDescriptorChecksum,
@@ -198,6 +200,99 @@ describe("04-PIPELINE-RUNNER: descriptor input is shape-respecting", () => {
 });
 
 describe("04-PIPELINE-RUNNER: skipCompile (S4-only after compileSvgForPublish)", () => {
+  it("restores the first live swap when the second staged rename fails", async () => {
+    const projectRoot = mkdtempSync(path.join(os.tmpdir(), "phase04-partial-commit-"));
+    const svgPath = path.join(projectRoot, "site", "public", "svg-catalog", "chaise.svg");
+    const fixturePath = path.join(projectRoot, "results", "admin", "svg-pipeline-fixtures", "chaise.json");
+    mkdirSync(path.dirname(svgPath), { recursive: true });
+    writeFileSync(svgPath, "old-svg\n", "utf8");
+    try {
+      const result = await runSvgPipeline(fixedDescriptorFixture() as never, {
+        projectRoot, skipCompile: true, precompiledSvg: "<svg>new</svg>",
+      });
+      expect(result.ok).toBe(true);
+      if (!result.ok) return;
+      const stagedFixture = readdirSync(path.dirname(fixturePath)).find((entry) => entry.includes(".stage-"));
+      expect(stagedFixture).toBeDefined();
+      rmSync(path.join(path.dirname(fixturePath), stagedFixture ?? "missing"));
+      expect(() => result.commit?.()).toThrow();
+      result.rollback?.();
+      expect(readFileSync(svgPath, "utf8")).toBe("old-svg\n");
+    } finally { rmSync(projectRoot, { recursive: true, force: true }); }
+  });
+
+  it("attempts fixture restoration when SVG restoration fails and retains recovery backups", async () => {
+    const projectRoot = mkdtempSync(path.join(os.tmpdir(), "phase04-independent-rollback-"));
+    const svgPath = path.join(projectRoot, "site", "public", "svg-catalog", "chaise.svg");
+    const fixturePath = path.join(projectRoot, "results", "admin", "svg-pipeline-fixtures", "chaise.json");
+    mkdirSync(path.dirname(svgPath), { recursive: true });
+    mkdirSync(path.dirname(fixturePath), { recursive: true });
+    writeFileSync(svgPath, "old-svg\n", "utf8");
+    writeFileSync(fixturePath, "old-fixture\n", "utf8");
+    try {
+      const result = await runSvgPipeline(fixedDescriptorFixture() as never, {
+        projectRoot, skipCompile: true, precompiledSvg: "<svg>new</svg>",
+      });
+      expect(result.ok).toBe(true);
+      if (!result.ok) return;
+      result.commit?.();
+      rmSync(svgPath);
+      mkdirSync(svgPath);
+      writeFileSync(path.join(svgPath, "blocker"), "x", "utf8");
+      expect(() => result.rollback?.()).toThrow();
+      expect(readFileSync(fixturePath, "utf8")).toBe("old-fixture\n");
+      result.cleanup?.();
+      expect(readdirSync(path.dirname(svgPath)).some((entry) => entry.includes(".backup-"))).toBe(true);
+    } finally { rmSync(projectRoot, { recursive: true, force: true }); }
+  });
+
+  it("publishes identical SVG bytes and hashes on repeated valid commits", async () => {
+    const projectRoot = mkdtempSync(path.join(os.tmpdir(), "phase04-repeat-"));
+    try {
+      const hashes: string[] = [];
+      const bytes: string[] = [];
+      for (let run = 0; run < 2; run += 1) {
+        const result = await runSvgPipeline(fixedDescriptorFixture() as never, {
+          projectRoot, skipCompile: true, precompiledSvg: "<svg>stable</svg>",
+        });
+        expect(result.ok).toBe(true);
+        if (!result.ok) return;
+        result.commit?.();
+        const body = readFileSync(result.svgPath, "utf8");
+        bytes.push(body);
+        hashes.push(createHash("sha256").update(body).digest("hex"));
+        result.cleanup?.();
+      }
+      expect(bytes[1]).toBe(bytes[0]);
+      expect(hashes[1]).toBe(hashes[0]);
+    } finally { rmSync(projectRoot, { recursive: true, force: true }); }
+  });
+
+  it("stages validated SVG and restores prior bytes after a committed rollback", async () => {
+    const projectRoot = mkdtempSync(path.join(os.tmpdir(), "phase04-atomic-stage-"));
+    const svgPath = path.join(projectRoot, "site", "public", "svg-catalog", "chaise.svg");
+    const prior = '<svg data-revision="old"/>\n';
+    mkdirSync(path.dirname(svgPath), { recursive: true });
+    writeFileSync(svgPath, prior, "utf8");
+    try {
+      const result = await runSvgPipeline(fixedDescriptorFixture() as never, {
+        projectRoot,
+        skipCompile: true,
+        precompiledSvg: '<svg data-revision="new"/>',
+      });
+      expect(result.ok).toBe(true);
+      if (!result.ok) return;
+      expect(readFileSync(svgPath, "utf8")).toBe(prior);
+      result.commit?.();
+      expect(readFileSync(svgPath, "utf8")).toContain('data-revision="new"');
+      result.rollback?.();
+      expect(readFileSync(svgPath, "utf8")).toBe(prior);
+      result.cleanup?.();
+    } finally {
+      rmSync(projectRoot, { recursive: true, force: true });
+    }
+  });
+
   it("writes precompiled SVG without requiring generate-svg.mjs", async () => {
     const projectRoot = mkdtempSync(
       path.join(os.tmpdir(), "phase04-skip-compile-"),
@@ -213,6 +308,7 @@ describe("04-PIPELINE-RUNNER: skipCompile (S4-only after compileSvgForPublish)",
       expect(result.ok).toBe(true);
       if (!result.ok) return;
       expect(result.stdout).toMatch(/\[skipCompile\]/);
+      result.commit?.();
       expect(result.svgPath).toContain(
         `${path.sep}svg-catalog${path.sep}chaise.svg`,
       );

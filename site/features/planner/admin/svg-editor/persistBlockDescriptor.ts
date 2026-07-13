@@ -15,11 +15,11 @@ import {
   fsyncSync,
   mkdirSync,
   openSync,
+  readdirSync,
   readFileSync,
   renameSync,
   rmSync,
   unlinkSync,
-  writeFileSync,
   writeSync,
 } from "node:fs";
 import path from "node:path";
@@ -89,11 +89,15 @@ export interface PersistSuccess {
   readonly version: number;
   /** Dual-read evidence path when captureDualReadEvidence is enabled. */
   readonly dualReadEvidencePath?: string;
+  readonly rollback?: () => void;
+  readonly cleanup?: () => void;
 }
 
 export interface PersistFailure {
   readonly ok: false;
   readonly error: PersistError;
+  readonly rollback?: () => void;
+  readonly cleanup?: () => void;
 }
 
 export type PersistResult = PersistSuccess | PersistFailure;
@@ -271,8 +275,6 @@ export function persistBlockDescriptor(
   const currentVersion = resolveCurrentVersion(slug, dir);
   const replaced = currentVersion > 0;
   const previousRaw = readCurrentRaw(slug, dir);
-  const rollbackBuffer: string | null = previousRaw;
-
   let shapeForFreeze: Record<string, unknown> = shape;
   if (previousRaw) {
     try {
@@ -321,8 +323,56 @@ export function persistBlockDescriptor(
   const nextVersion = currentVersion + 1;
   const versionedPath = versionedDescriptorPath(slug, nextVersion, dir);
   const legacyPath = legacyDescriptorPath(slug, dir);
+  const pointerPath = path.resolve(dir, `${slug}.latest.json`);
+  const archiveDir = path.resolve(dir, "_archive");
   const tempPath = buildTempPath(slug, dir, nextVersion);
   const body = `${canonicalJsonStringify(descriptor)}\n`;
+  const legacyBefore = existsSync(legacyPath) ? readFileSync(legacyPath, "utf8") : null;
+  const pointerBefore = existsSync(pointerPath) ? readFileSync(pointerPath, "utf8") : null;
+  const archiveBefore = new Map<string, string>();
+  if (existsSync(archiveDir)) {
+    for (const entry of readdirSync(archiveDir)) {
+      if (entry.startsWith(`${slug}.`) && entry.endsWith(".json")) {
+        archiveBefore.set(entry, readFileSync(path.resolve(archiveDir, entry), "utf8"));
+      }
+    }
+  }
+  const restoreFile = (targetPath: string, prior: string | null): void => {
+    if (prior === null) {
+      rmSync(targetPath, { force: true });
+      return;
+    }
+    const restoreTemp = `${targetPath}.restore-${randomBytes(8).toString("hex")}`;
+    try {
+      writeAtomicUtf8(restoreTemp, prior);
+      rmSync(targetPath, { force: true });
+      renameSync(restoreTemp, targetPath);
+    } finally {
+      rmSync(restoreTemp, { force: true });
+    }
+  };
+  const rollback = (): void => {
+    const errors: unknown[] = [];
+    const attempt = (operation: () => void): void => {
+      try { operation(); } catch (error) { errors.push(error); }
+    };
+    attempt(() => rmSync(versionedPath, { force: true }));
+    attempt(() => restoreFile(legacyPath, legacyBefore));
+    attempt(() => restoreFile(pointerPath, pointerBefore));
+    attempt(() => mkdirSync(archiveDir, { recursive: true }));
+    if (existsSync(archiveDir)) {
+      for (const entry of readdirSync(archiveDir)) {
+        if (entry.startsWith(`${slug}.`) && entry.endsWith(".json") && !archiveBefore.has(entry)) {
+          attempt(() => rmSync(path.resolve(archiveDir, entry), { force: true }));
+        }
+      }
+    }
+    for (const [entry, bodyBefore] of archiveBefore) {
+      attempt(() => restoreFile(path.resolve(archiveDir, entry), bodyBefore));
+    }
+    clearLoaderCache();
+    if (errors.length > 0) throw new AggregateError(errors, `Descriptor rollback incomplete for "${slug}"`);
+  };
 
   try {
     writeAtomicUtf8(tempPath, body);
@@ -342,18 +392,9 @@ export function persistBlockDescriptor(
     } catch {
       /* ignore */
     }
-    if (rollbackBuffer && currentVersion > 0) {
-      try {
-        const versionedCurrent = versionedDescriptorPath(slug, currentVersion, dir);
-        const rollbackTarget = existsSync(versionedCurrent)
-          ? versionedCurrent
-          : legacyPath;
-        const rollbackTemp = `${rollbackTarget}.rollback-${randomBytes(4).toString("hex")}`;
-        writeFileSync(rollbackTemp, rollbackBuffer, "utf8");
-        renameSync(rollbackTemp, rollbackTarget);
-      } catch {
-        // Rollback is best-effort; original error still surfaces.
-      }
+    let rollbackDetail = "";
+    try { rollback(); } catch (rollbackError) {
+      rollbackDetail = rollbackError instanceof Error ? rollbackError.message : String(rollbackError);
     }
     releaseLock();
     return {
@@ -362,14 +403,19 @@ export function persistBlockDescriptor(
         reason: "ioError",
         code: "500.io",
         fieldPath: `slug:${slug}`,
-        message: `Atomic rename failed for "${slug}": ${detail}`,
+        message: `Atomic rename failed for "${slug}": ${detail}${rollbackDetail ? ` (rollback incomplete: ${rollbackDetail})` : ""}`,
       },
+      rollback,
     };
   }
 
   clearLoaderCache();
   const dualRead = verifyDualRead({ slug, dir, expected: descriptor });
   if (!dualRead.pass) {
+    let rollbackDetail = "";
+    try { rollback(); } catch (rollbackError) {
+      rollbackDetail = rollbackError instanceof Error ? rollbackError.message : String(rollbackError);
+    }
     releaseLock();
     return {
       ok: false,
@@ -377,8 +423,9 @@ export function persistBlockDescriptor(
         reason: "dualReadMismatch",
         code: "500.dual_read",
         fieldPath: `slug:${slug}`,
-        message: `Dual-read verification failed for "${slug}" after persist`,
+        message: `Dual-read verification failed for "${slug}" after persist${rollbackDetail ? ` (rollback incomplete: ${rollbackDetail})` : ""}`,
       },
+      rollback,
     };
   }
 
@@ -400,6 +447,7 @@ export function persistBlockDescriptor(
     replaced,
     version: nextVersion,
     dualReadEvidencePath,
+    rollback,
   };
 }
 

@@ -17,9 +17,10 @@ The customer sends the BOQ to Oando.
 | Path | Purpose |
 |---|---|
 | `site/` | Next.js product code. |
-| `tech-stack-generator/` | Independent Vite documentation tool. |
-| `tech-stack-generated/` | Generated data. |
-| `tech-stack-docs/` | Generated static documentation site. |
+| `tech-docs-generator/` | Independent Vite repository-intelligence tool. |
+| `generated-documents/data/` | Generated renderer data. |
+| `generated-documents/docs/` | Generated Markdown and JSON documentation. |
+| `generated-documents/site/` | Generated static documentation site. |
 | `plan/` | Admin and Planner execution checklists. |
 | `docs/` | Product and architecture reference. |
 | `Agents/` | Agent process. |

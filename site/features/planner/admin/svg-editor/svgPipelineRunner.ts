@@ -7,7 +7,8 @@
  * GS: BP-03, anti-copy. Contract preserved for callers. No explicit any.
  */
 
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { randomBytes } from "node:crypto";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -33,6 +34,9 @@ export interface PipelineResultOk {
   readonly fixturePath: string;
   readonly svgPath: string;
   readonly durationMs: number;
+  readonly rollback?: () => void;
+  readonly commit?: () => void;
+  readonly cleanup?: () => void;
 }
 
 export interface PipelineResultErr {
@@ -183,13 +187,80 @@ export function runSvgPipeline(
     }
 
     const startedAt = Date.now();
+    const suffix = randomBytes(8).toString("hex");
+    const stagedSvgPath = `${svgPath}.stage-${suffix}`;
+    const stagedFixturePath = `${fixturePath}.stage-${suffix}`;
+    const backupSvgPath = `${svgPath}.backup-${suffix}`;
+    const backupFixturePath = `${fixturePath}.backup-${suffix}`;
+    type RecoveryFile = {
+      readonly livePath: string;
+      readonly stagedPath: string;
+      readonly backupPath: string;
+      hadLive: boolean;
+      backupReady: boolean;
+      swapped: boolean;
+      restoreFailed: boolean;
+    };
+    const files: RecoveryFile[] = [
+      { livePath: svgPath, stagedPath: stagedSvgPath, backupPath: backupSvgPath, hadLive: false, backupReady: false, swapped: false, restoreFailed: false },
+      { livePath: fixturePath, stagedPath: stagedFixturePath, backupPath: backupFixturePath, hadLive: false, backupReady: false, swapped: false, restoreFailed: false },
+    ];
+    const cleanup = (): void => {
+      const errors: unknown[] = [];
+      for (const file of files) {
+        try { rmSync(file.stagedPath, { force: true }); } catch (error) { errors.push(error); }
+        if (!file.restoreFailed) {
+          try { rmSync(file.backupPath, { force: true }); } catch (error) { errors.push(error); }
+        }
+      }
+      if (errors.length > 0) throw new AggregateError(errors, "Publication cleanup incomplete");
+    };
+    const rollback = (): void => {
+      const errors: unknown[] = [];
+      for (const file of files) {
+        try {
+          if (file.swapped) rmSync(file.livePath, { force: true });
+          if (file.backupReady && existsSync(file.backupPath)) {
+            renameSync(file.backupPath, file.livePath);
+            file.backupReady = false;
+          }
+          file.swapped = false;
+          file.restoreFailed = false;
+        } catch (error) {
+          file.restoreFailed = true;
+          errors.push(error);
+        }
+      }
+      if (errors.length > 0) throw new AggregateError(errors, "Publication rollback incomplete");
+    };
+    const commit = (): void => {
+      const errors: unknown[] = [];
+      try {
+        for (const file of files) {
+          file.hadLive = existsSync(file.livePath);
+          if (file.hadLive) {
+            renameSync(file.livePath, file.backupPath);
+            file.backupReady = true;
+          }
+          renameSync(file.stagedPath, file.livePath);
+          file.swapped = true;
+        }
+      } catch (cause) {
+        errors.push(cause);
+        try { rollback(); } catch (rollbackError) { errors.push(rollbackError); }
+        throw new AggregateError(errors, "Publication commit failed and rollback was attempted");
+      }
+    };
     try {
       mkdirSync(fixturesDir, { recursive: true });
-      writeFileSync(fixturePath, `${JSON.stringify(descriptor, null, 2)}\n`, {
+      writeFileSync(stagedFixturePath, `${JSON.stringify(descriptor, null, 2)}\n`, {
         encoding: "utf8",
       });
       mkdirSync(path.dirname(svgPath), { recursive: true });
-      writeFileSync(svgPath, `${precompiledSvg}\n`, { encoding: "utf8" });
+      writeFileSync(stagedSvgPath, `${precompiledSvg}\n`, { encoding: "utf8" });
+      if (readFileSync(stagedSvgPath, "utf8") !== `${precompiledSvg}\n`) {
+        throw new Error("staged SVG validation mismatch");
+      }
       return Promise.resolve({
         ok: true as const,
         exitCode: 0,
@@ -198,8 +269,12 @@ export function runSvgPipeline(
         fixturePath,
         svgPath,
         durationMs: Date.now() - startedAt,
+        rollback,
+        commit,
+        cleanup,
       });
     } catch (writeError) {
+      cleanup();
       const message =
         writeError instanceof Error ? writeError.message : String(writeError);
       return Promise.resolve({

@@ -18,7 +18,7 @@ Keep secrets in `.env.local`.
 
 ```powershell
 pnpm run dev
-pnpm run dev:tech-stack
+pnpm run tech-docs:dev
 ```
 
 Main routes:
@@ -41,21 +41,21 @@ pnpm run check:docs-purity
 
 Run browser tests only for affected UI journeys or shipment claims.
 
-## Tech-stack generator
+## Tech docs generator
 
 ```powershell
-pnpm run docs:sync:tech-stack
-pnpm run docs:check:tech-stack
-pnpm run docs:typecheck:tech-stack
-pnpm run docs:test:tech-stack
-pnpm run docs:build:tech-stack
+pnpm run tech-docs:generate
+pnpm run tech-docs:check
+pnpm run tech-docs:typecheck
+pnpm run tech-docs:test
+pnpm run tech-docs:build
 ```
 
-Source: `tech-stack-generator/`.
+Source: `tech-docs-generator/`.
 
-Generated data: `tech-stack-generated/`.
+Generated data: `generated-documents/data/`.
 
-Static build: `tech-stack-docs/`.
+Static build: `generated-documents/site/`.
 
 ## Route inventory
 

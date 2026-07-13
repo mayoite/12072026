@@ -24,7 +24,7 @@ const OUT = join(REPO_ROOT, "results", "fixed-containers-audit.csv");
 
 const SKIP_DIRS = new Set([
   "node_modules", ".next", "dist", "results", "outputs", ".git",
-  "tech-stack-docs", "tech-stack-generator", "_archive",
+  "generated-documents", "tech-docs-generator", "_archive",
 ]);
 
 // Match w-[...], h-[...], min-w-[...], min-h-[...], max-w-[...], max-h-[...]

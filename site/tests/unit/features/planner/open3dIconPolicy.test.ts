@@ -12,7 +12,7 @@ function walkTsFiles(dir: string, out: string[] = []): string[] {
     if (
       ent.name === "node_modules" ||
       ent.name === ".next" ||
-      ent.name === "tech-stack-docs" ||
+      ent.name === "generated-documents" ||
       ent.name === "scripts"
     ) {
       continue;

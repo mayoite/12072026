@@ -11,6 +11,7 @@ import {
 import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { createRequire } from "node:module";
 
 import {
   loadBySlug,
@@ -19,6 +20,9 @@ import {
 
 const SITE_ROOT = path.resolve(__dirname, "../../..");
 const REPO_ROOT = path.resolve(SITE_ROOT, "..");
+const TSX_CLI_PATH = createRequire(path.join(SITE_ROOT, "package.json")).resolve(
+  "tsx/cli",
+);
 const WORKER_PATH = path.join(
   SITE_ROOT,
   "tests",
@@ -89,24 +93,10 @@ export function createIsolatedAdminSvgWorkspace(
       const inputPath = path.join(root, "publish-input.json");
       const resultPath = path.join(root, "publish-result.json");
       writeFileSync(inputPath, `${JSON.stringify(input)}\n`, "utf8");
-      const pnpmCli = path.join(
-        path.dirname(process.execPath),
-        "node_modules",
-        "corepack",
-        "dist",
-        "pnpm.js",
-      );
-      if (!existsSync(pnpmCli)) {
-        throw new Error(`Corepack pnpm entry is missing: ${pnpmCli}`);
-      }
       const run = spawnSync(
         process.execPath,
         [
-          pnpmCli,
-          "--filter",
-          "oando-site",
-          "exec",
-          "tsx",
+          TSX_CLI_PATH,
           options.workerPath ?? WORKER_PATH,
           inputPath,
           resultPath,

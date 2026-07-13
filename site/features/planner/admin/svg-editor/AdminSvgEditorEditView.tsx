@@ -11,6 +11,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { SetStateAction } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -44,6 +45,10 @@ import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
 import { sceneFromDescriptor } from "./sceneFromDescriptor";
 import { serializeSceneToDefinition } from "./scene/svgSceneSerializer";
 import type { SvgSceneDocument } from "./scene/svgSceneDocument";
+import {
+  advancePublishedDraft,
+  resetEditorDraft,
+} from "./svgEditorDraftState";
 
 /** Browser-only 3D islands — static import of model-viewer/three breaks RSC SSR. */
 const GlbExtruderPreview = dynamic(
@@ -153,9 +158,21 @@ export function AdminSvgEditorEditView({
   const [form, setForm] = useState<SvgEditorFormState>(() =>
     descriptorToFormState(descriptor),
   );
+  const [publishedForm, setPublishedForm] = useState<SvgEditorFormState>(() =>
+    descriptorToFormState(descriptor),
+  );
   const [publishedFormSignature, setPublishedFormSignature] = useState(() =>
     JSON.stringify(descriptorToFormState(descriptor)),
   );
+  const formRef = useRef(form);
+  const draftRevisionRef = useRef(0);
+  const updateDraftForm = useCallback((next: SetStateAction<SvgEditorFormState>) => {
+    const resolved =
+      typeof next === "function" ? next(formRef.current) : next;
+    formRef.current = resolved;
+    draftRevisionRef.current += 1;
+    setForm(resolved);
+  }, []);
 
   // Live compiled preview (debounced real compile; no disk I/O).
   const { result: preview, pending: previewPending } = useDebouncedCompile(
@@ -191,7 +208,7 @@ export function AdminSvgEditorEditView({
         if (permanentUrl) {
           setGlbUrl(permanentUrl);
           // Record the generated GLB on the fixed-variant descriptor field.
-          setForm((prev) => ({ ...prev, assetsGlbUrl: permanentUrl }));
+          updateDraftForm((prev) => ({ ...prev, assetsGlbUrl: permanentUrl }));
         } else {
           setGlbUploadError(
             "Upload returned no URL — blob preview still available locally.",
@@ -204,7 +221,7 @@ export function AdminSvgEditorEditView({
         setGlbUploading(false);
       }
     },
-    [slug],
+    [slug, updateDraftForm],
   );
 
   const clearFeedback = useCallback(() => {
@@ -218,10 +235,9 @@ export function AdminSvgEditorEditView({
 
   // A4.1 — starter scene for the visual studio, seeded from the descriptor.
   const studioScene = useMemo(() => sceneFromDescriptor(descriptor), [descriptor]);
-  const formDirty = useMemo(
-    () => JSON.stringify(form) !== publishedFormSignature,
-    [form, publishedFormSignature],
-  );
+  const [publishedStudioScene, setPublishedStudioScene] = useState(studioScene);
+  const formSignature = useMemo(() => JSON.stringify(form), [form]);
+  const formDirty = formSignature !== publishedFormSignature;
   const [studioResetKey, setStudioResetKey] = useState(0);
   const studioDocumentGetterRef = useRef<(() => SvgSceneDocument) | null>(null);
   const studioDocumentRef = useRef(studioScene);
@@ -229,7 +245,7 @@ export function AdminSvgEditorEditView({
   const handleStudioDocumentChange = useCallback((document: Parameters<typeof serializeSceneToDefinition>[0]) => {
     studioDocumentRef.current = document;
     const definition = serializeSceneToDefinition(document);
-    setForm((prev) => {
+    updateDraftForm((prev) => {
       const next = {
         ...prev,
         sceneViewBox: definition.viewBox,
@@ -237,7 +253,7 @@ export function AdminSvgEditorEditView({
       };
       return next;
     });
-  }, []);
+  }, [updateDraftForm]);
 
   useEffect(() => {
     if (!formDirty) return;
@@ -308,11 +324,11 @@ export function AdminSvgEditorEditView({
     if (formDirty && !window.confirm("Discard every unpublished field and studio edit, then restore the last published revision?")) {
       return;
     }
-    const seed = descriptorToFormState(descriptor);
-    setForm(seed);
-    studioDocumentRef.current = studioScene;
+    const reset = resetEditorDraft({ baseline: publishedForm, draft: form });
+    updateDraftForm(reset.draft);
+    studioDocumentRef.current = publishedStudioScene;
     setStudioResetKey((key) => key + 1);
-  }, [descriptor, formDirty, studioScene]);
+  }, [form, formDirty, publishedForm, publishedStudioScene, updateDraftForm]);
 
   const publishPayloadFromStudio = useCallback((): SvgEditorFormState => {
     const liveDocument =
@@ -379,7 +395,13 @@ export function AdminSvgEditorEditView({
         });
         return;
       }
+      const submittedScene =
+        studioDocumentGetterRef.current?.() ?? studioDocumentRef.current;
+      studioDocumentRef.current = submittedScene;
       const payload = publishPayloadFromStudio();
+      const submittedFormSignature = JSON.stringify(payload);
+      const submittedSceneSignature = JSON.stringify(submittedScene);
+      const submittedRevision = draftRevisionRef.current;
       const result = await onPublishAction(payload);
       if (result.success === false) {
         setFeedback({
@@ -391,7 +413,29 @@ export function AdminSvgEditorEditView({
         return;
       }
       const publishedSlug = result.descriptor.slug;
-      setPublishedFormSignature(JSON.stringify(payload));
+      const authoritativePublishedForm = descriptorToFormState(result.descriptor);
+      const authoritativePublishedScene = sceneFromDescriptor(result.descriptor);
+      const published = advancePublishedDraft(
+        { baseline: publishedForm, draft: form },
+        authoritativePublishedForm,
+      );
+      setPublishedForm(published.baseline);
+      const authoritativeFormSignature = JSON.stringify(authoritativePublishedForm);
+      const authoritativeSceneSignature = JSON.stringify(authoritativePublishedScene);
+      setPublishedFormSignature(authoritativeFormSignature);
+      setPublishedStudioScene(authoritativePublishedScene);
+      const currentScene = studioDocumentRef.current;
+      const draftStillSubmitted =
+        draftRevisionRef.current === submittedRevision &&
+        JSON.stringify(formRef.current) === submittedFormSignature &&
+        JSON.stringify(currentScene) === submittedSceneSignature;
+      if (draftStillSubmitted) {
+        updateDraftForm(published.draft);
+        if (authoritativeSceneSignature !== submittedSceneSignature) {
+          studioDocumentRef.current = authoritativePublishedScene;
+          setStudioResetKey((key) => key + 1);
+        }
+      }
       setFeedback({
         submitting: false,
         errorMessage: null,
@@ -411,7 +455,7 @@ export function AdminSvgEditorEditView({
         publishedSlug: null,
       });
     }
-  }, [footprintProof.aligned, onPublishAction, preview, previewPending, publishPayloadFromStudio, publishTarget, router, slug]);
+  }, [footprintProof.aligned, form, onPublishAction, preview, previewPending, publishPayloadFromStudio, publishTarget, publishedForm, router, slug, updateDraftForm]);
 
   const checksumShort =
     typeof descriptor.checksum === "string" && descriptor.checksum.length > 16
@@ -614,7 +658,7 @@ export function AdminSvgEditorEditView({
         >
           <SvgStudioCanvas
             key={studioResetKey}
-            initialDocument={studioScene}
+            initialDocument={publishedStudioScene}
             documentGetterRef={studioDocumentGetterRef}
             onDocumentChange={handleStudioDocumentChange}
           />
@@ -686,7 +730,7 @@ export function AdminSvgEditorEditView({
                 state={form}
                 variant={form.variant}
                 issues={preview?.issues ?? []}
-                onChange={setForm}
+                onChange={updateDraftForm}
               />
             </div>
           </details>

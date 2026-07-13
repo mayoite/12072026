@@ -4,7 +4,11 @@
  * and invalid payload (no compile/pipeline/persist calls).
  */
 
-import { describe, it, expect, vi } from "vitest";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+
+import { afterEach, describe, it, expect, vi } from "vitest";
 
 import { BLOCK_DESCRIPTOR_SCHEMA_VERSION } from "@/features/planner/project/catalog/svg/svgTypes";
 import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
@@ -12,6 +16,12 @@ import type { PipelineResult } from "@/features/planner/admin/svg-editor/svgPipe
 import type { PersistResult } from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
 import type { SvgCompileStagesResult } from "@/features/planner/asset-engine/svg/runSvgCompileStages";
 import { publishDescriptorWithPipeline } from "@/features/planner/admin/svg-editor/publishDescriptorWithPipeline";
+
+const tempDirs: string[] = [];
+
+afterEach(() => {
+  for (const dir of tempDirs.splice(0)) rmSync(dir, { recursive: true, force: true });
+});
 
 const validDescriptor = {
   schemaVersion: BLOCK_DESCRIPTOR_SCHEMA_VERSION,
@@ -235,6 +245,55 @@ describe("publishDescriptorWithPipeline (fail-closed)", () => {
     if (result.success) return;
     expect(result.error).toContain("500.io");
     expect(result.error).toContain("lock busy");
+  });
+
+  it("restores prior SVG and descriptor bytes when descriptor persistence fails after the pipeline writes", async () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "atomic-svg-publish-"));
+    tempDirs.push(dir);
+    const svgPath = path.join(dir, "test-block.svg");
+    const descriptorPath = path.join(dir, "test-block.latest.json");
+    const priorSvg = '<svg data-revision="old"/>\n';
+    const priorDescriptor = '{"revision":7,"checksum":"old"}\n';
+    writeFileSync(svgPath, priorSvg, "utf8");
+    writeFileSync(descriptorPath, priorDescriptor, "utf8");
+
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => {
+        writeFileSync(svgPath, '<svg data-revision="new"/>\n', "utf8");
+        return { ...pipelineOk(), svgPath, rollback: () => writeFileSync(svgPath, priorSvg, "utf8") };
+      },
+      persist: () => {
+        writeFileSync(descriptorPath, '{"revision":8,"checksum":"new"}\n', "utf8");
+        return {
+          ...persistErr("descriptor fsync failed"),
+          rollback: () => writeFileSync(descriptorPath, priorDescriptor, "utf8"),
+        };
+      },
+    });
+
+    expect(result.success).toBe(false);
+    expect(readFileSync(svgPath, "utf8")).toBe(priorSvg);
+    expect(readFileSync(descriptorPath, "utf8")).toBe(priorDescriptor);
+  });
+
+  it("still rolls back the SVG when descriptor rollback itself throws", async () => {
+    const rollbackSvg = vi.fn();
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => ({ ...pipelineOk(), rollback: rollbackSvg }),
+      persist: () => ({
+        ...persistErr("descriptor write failed"),
+        rollback: () => { throw new Error("descriptor rollback failed"); },
+      }),
+    });
+
+    expect(result.success).toBe(false);
+    expect(rollbackSvg).toHaveBeenCalledOnce();
+    if (result.success) return;
+    expect(result.error).toContain("rollback incomplete");
   });
 
   it("returns success:false on invalid payload without calling compile, pipeline or persist", async () => {

@@ -31,6 +31,8 @@ Implementation is in progress and unverified.
 - Canvas status exposes view box, zoom, selection, and layer count.
 - Layer renaming and explained deletion are available without dragging.
 - Validation has a linked summary and field-level messages.
+- Fresh dirty-state verification: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/AdminSvgEditorEditView.test.tsx tests/unit/admin/svg-editor/svgEditorDraftState.test.ts` exited 0 with 10 tests passing on 2026-07-13.
+- Independent specification and code-quality review found no remaining issue in the dirty-state and reset slice.
 
 - [ ] Core product fields are clear and validated.
 - [ ] Stable product identity survives editing.
@@ -38,14 +40,14 @@ Implementation is in progress and unverified.
 - [ ] SVG create, select, move, resize, edit, and delete work.
 - [ ] Layers and object properties work.
 - [ ] Undo and redo restore the expected state.
-- [ ] Unsaved changes and exit recovery work.
-- [ ] Reset restores the current published symbol.
+- [x] Unsaved changes and exit recovery work.
+- [x] Reset restores the current published symbol.
 - [ ] Preview and publication use one compiler authority.
 - [ ] Product footprint remains correct in millimetres.
 - [ ] Unsafe or invalid SVG input is rejected.
 - [ ] Repeated valid compilation is deterministic.
 - [ ] Failed compilation preserves the previous publication.
-- [ ] Failure never displays a false success state.
+- [x] Failure never displays a false success state.
 - [ ] Focused unit, API, and browser checks pass.
 
 ### SVG-first interface acceptance

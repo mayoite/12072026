@@ -16,7 +16,7 @@ const FILES = [
   "plan/README.md",
   "docs/INDEX.md",
   "docs/Lockedfiles/INDEX.md",
-  "tech-stack-generator/README.md",
+  "tech-docs-generator/README.md",
 ];
 
 const LINK_RE = /\[([^\]]*)\]\(([^)]+)\)/g;

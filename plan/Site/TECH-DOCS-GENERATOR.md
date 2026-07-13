@@ -71,8 +71,8 @@
 - Modify: `tech-stack-generator/tests/package.test.ts`
 - Create: `tech-stack-generator/tests/generator/output-contract.test.ts`
 
-- [ ] Remove `techStack` and generated-JSON imports from `tests/package.test.ts`; package/config tests must read source text only.
-- [ ] Add source-text expectations for the approved package, workspace, Vite, filesystem, and renderer paths before changing production code:
+- [x] Remove `techStack` and generated-JSON imports from `tests/package.test.ts`; package/config tests must read source text only.
+- [x] Add source-text expectations for the approved package, workspace, Vite, filesystem, and renderer paths before changing production code:
 
 ```ts
 expect(workspaceText).toContain('tech-docs-generator')
@@ -83,8 +83,8 @@ expect(getDocumentsRoot(repoRoot)).toBe(path.join(repoRoot, 'generated-documents
 expect(rendererText).toContain("'generated-documents', 'data'")
 ```
 
-- [ ] Run `pnpm --filter oando-site-workflow-docs exec vitest run tests/generator/output-contract.test.ts tests/package.test.ts`.
-- [ ] Verify RED: failures must name the old package/output paths, not syntax or fixture errors.
+- [x] Run `pnpm --filter oando-site-workflow-docs exec vitest run tests/generator/output-contract.test.ts tests/package.test.ts`.
+- [x] Verify RED: failures must name the old package/output paths, not syntax or fixture errors.
 
 ## Task 2: Perform the atomic package rename
 
@@ -95,11 +95,11 @@ expect(rendererText).toContain("'generated-documents', 'data'")
 - Modify: root workspace/configuration files listed in the file map
 - Modify: all live path strings found by `rg -l "tech-stack-generator|tech-stack-generated|tech-stack-docs|\.tech-stack-generated"`
 
-- [ ] Move the directory only after Task 1 has produced the expected failures.
-- [ ] Rename the package to `oando-tech-docs`.
-- [ ] Create `scripts/output-contract.mjs` plus `scripts/output-contract.d.mts`; make filesystem, renderer, Vite, model, checks, and extractors consume its names and exclusions.
-- [ ] Point Vite at staging with `base: './'` so the Task 1 contract reaches GREEN; transactional publication is completed in Task 3 before any build runs.
-- [ ] Replace root scripts with this stable surface:
+- [x] Move the directory only after Task 1 has produced the expected failures.
+- [x] Rename the package to `oando-tech-docs`.
+- [x] Create `scripts/output-contract.mjs` plus `scripts/output-contract.d.mts`; make filesystem, renderer, Vite, model, checks, and extractors consume its names and exclusions.
+- [x] Point Vite at staging with `base: './'` so the Task 1 contract reaches GREEN; transactional publication is completed in Task 3 before any build runs.
+- [x] Replace root scripts with this stable surface:
 
 ```json
 {
@@ -113,13 +113,13 @@ expect(rendererText).toContain("'generated-documents', 'data'")
 }
 ```
 
-- [ ] Inventory references with the safe exclusions from Task 9. Classify each match; change only live package/output contracts, not historical evidence.
-- [ ] Update workspace, CI, cleanup scripts, layout guards, secretlint paths, generator README, all extractors/checkers, source data imports, tests, user docs, generated facts, and lockfile references in the same change.
-- [ ] Validate the old generated roots using their markers/manifests. Migrate or remove only generator-owned files. An unknown-file conflict blocks only generator migration; continue unrelated repository work.
-- [ ] From the root run `pnpm install --lockfile-only --ignore-scripts`; verify only the workspace importer rename and required metadata changed.
-- [ ] Confirm dependency resolution uses root `node_modules/` and that neither `tech-docs-generator/node_modules/` nor a nested lockfile exists.
-- [ ] Run `pnpm --filter oando-tech-docs exec vitest run tests/generator/output-contract.test.ts tests/package.test.ts`.
-- [ ] Verify GREEN.
+- [x] Inventory references with the safe exclusions from Task 9. Classify each match; change only live package/output contracts, not historical evidence.
+- [x] Update workspace, CI, cleanup scripts, layout guards, secretlint paths, generator README, all extractors/checkers, source data imports, tests, user docs, generated facts, and lockfile references in the same change.
+- [x] Validate the old generated roots using their markers/manifests. Migrate or remove only generator-owned files. An unknown-file conflict blocks only generator migration; continue unrelated repository work.
+- [x] From the root run `pnpm install --lockfile-only --ignore-scripts`; verify only the workspace importer rename and required metadata changed.
+- [x] Confirm dependency resolution uses root `node_modules/` and that neither `tech-docs-generator/node_modules/` nor a nested lockfile exists.
+- [x] Run `pnpm --filter oando-tech-docs exec vitest run tests/generator/output-contract.test.ts tests/package.test.ts`.
+- [x] Verify GREEN.
 
 ## Task 3: Enforce source isolation and transactional output
 

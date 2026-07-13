@@ -75,8 +75,7 @@ export const VITEST_COMMON_EXCLUDE = [
   "**/Plans/**",
   "**/docs/**",
   "**/Agents/**",
-  "**/tech-stack-docs/**",
-  "**/tech-stack-generated/**",
+  "**/generated-documents/**",
 ] as const;
 
 export const VITEST_COMMON_COVERAGE_REPORTERS = [

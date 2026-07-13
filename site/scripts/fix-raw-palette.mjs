@@ -214,8 +214,8 @@ const SKIP_DIRS = new Set([
   "results",
   "outputs",
   ".git",
-  "tech-stack-docs",
-  "tech-stack-generator",
+  "generated-documents",
+  "tech-docs-generator",
   "_archive",
 ]);
 
