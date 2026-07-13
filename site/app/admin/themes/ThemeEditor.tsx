@@ -136,9 +136,9 @@ export function ThemeEditor() {
             </p>
           </div>
 
-          <div className="flex min-h-64 flex-col items-center justify-center text-muted">
-            <p className="m-0 italic">Material property editor UI components will render here...</p>
-            <p className="mt-2 text-sm">Waiting for Database Sync to populate JSON dictionary.</p>
+          <div className="admin-empty min-h-64">
+            <h3 className="admin-empty__title">No tokens loaded</h3>
+            <p className="admin-empty__copy">Select a theme from the sidebar to view and edit its material tokens.</p>
           </div>
         </div>
       </section>

@@ -8,6 +8,8 @@ export type WorkspacePlanMetrics = {
   /** Systems v0 seats (1 per ws-v0 furniture instance on this floor). */
   workstationSeats: number;
   floorLabel: string;
+  /** True when at least one catalog-backed item is placed — BOQ can be generated. */
+  boqReady: boolean;
 };
 
 function countWorkstationSeats(floor: PlannerFloor): number {
@@ -33,6 +35,7 @@ export function summarizeFloorMetrics(
       furniture: 0,
       workstationSeats: 0,
       floorLabel: "Floor 1",
+      boqReady: false,
     };
   }
 
@@ -48,11 +51,14 @@ export function summarizeFloorMetrics(
     floor.stairs.length +
     floor.columns.length;
 
+  const boqReady = furniture > 0;
+
   return {
     objects,
     walls,
     furniture,
     workstationSeats,
     floorLabel: floor.name,
+    boqReady,
   };
 }

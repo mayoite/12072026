@@ -64,6 +64,8 @@ export interface PropertiesPanelCallbacks {
   onDeleteEntity?: (collection: PlannerEntityCollection, id: string) => void;
   /** Called when lock toggle is requested */
   onToggleLock?: (collection: PlannerEntityCollection, id: string) => void;
+  /** Called when duplicate is requested */
+  onDuplicateEntity?: (collection: PlannerEntityCollection, id: string) => void;
   /** Called when user clicks outside to deselect */
   onDeselect?: () => void;
 }
@@ -252,6 +254,18 @@ export const PropertiesPanel = memo(function PropertiesPanel({
       event.preventDefault();
       if (!selectedEntity || isLocked) return; // locked reject
       callbacks?.onDeleteEntity?.(selectedEntity.collection, selectedEntity.id);
+    },
+    [selectedEntity, callbacks, isLocked],
+  );
+
+  /**
+   * Handle duplicate button click
+   */
+  const handleDuplicate = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      if (!selectedEntity || isLocked) return;
+      callbacks?.onDuplicateEntity?.(selectedEntity.collection, selectedEntity.id);
     },
     [selectedEntity, callbacks, isLocked],
   );
@@ -1050,6 +1064,29 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 <path d="M7 11V7a5 5 0 0 1 9.9-1" />
               </svg>
             )}
+          </button>
+          <button
+            type="button"
+            className={`${styles.actionButton} ${styles.duplicateButton}`}
+            onClick={handleDuplicate}
+            disabled={isLocked}
+            aria-label="Duplicate element"
+            title={isLocked ? "Unlock to duplicate" : "Duplicate"}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
           </button>
           <button
             type="button"

@@ -72,6 +72,7 @@ import { CanvasToolRail } from "./CanvasToolRail";
 import { CommandPalette } from "./CommandPalette";
 import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
 import { LayersPanel } from "./LayersPanel";
+import workspaceStyles from "./workspace.module.css";
 import { PropertiesPanel } from "./PropertiesPanel";
 import {
   describePlannerRedoLabel,
@@ -106,6 +107,8 @@ import {
   formatToolStatus,
 } from "./workspaceStatusLabels";
 import { summarizeFloorMetrics } from "./workspacePlanMetrics";
+import { useValidation } from "./useValidation";
+import { ValidationPanel } from "./ValidationPanel";
 import type { PlannerDisplayUnit, PlannerPoint } from "@/features/planner/project/model/types";
 import { formatLengthDisplay } from "@/features/planner/project/model/units";
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
@@ -149,6 +152,15 @@ export function OOPlannerWorkspace({
         })
       : undefined,
   });
+  const handleProjectNameChange = useCallback(
+    (name: string) => {
+      workspaceCanvas.updateProject((project) => ({
+        ...project,
+        name,
+      }));
+    },
+    [workspaceCanvas],
+  );
   const addQuoteItem = useQuoteCart((state) => state.addItem);
   // Immediate hydrated: avoids blocking render/restore waterfall; first paint uses default project, restore applies async if present.
   const [hydrated] = useState(true);
@@ -225,6 +237,7 @@ export function OOPlannerWorkspace({
     useState<WorkstationConfigV0 | null>(null);
   /** Consume-once arm — state alone races on double pointer-up before re-render. */
   const pendingWorkstationConfigRef = useRef<WorkstationConfigV0 | null>(null);
+  const [showValidation, setShowValidation] = useState(false);
   const [canvasStatus, setCanvasStatus] = useState<CanvasStatusSnapshot | null>(
     null,
   );
@@ -298,6 +311,14 @@ export function OOPlannerWorkspace({
     workspaceCanvas.project.floors.find(
       (floor) => floor.id === workspaceCanvas.project.activeFloorId,
     ) ?? workspaceCanvas.project.floors[0];
+
+  const validationResult = useValidation(activeFloor);
+  const handleFocusIssue = useCallback(
+    (focusMm: { x: number; y: number }) => {
+      canvasRef.current?.focusOnPoint(focusMm.x, focusMm.y);
+    },
+    [],
+  );
 
   const workspaceSelection = workspaceCanvas.selection;
   const multiSelection = useMemo(() => {
@@ -1121,6 +1142,7 @@ export function OOPlannerWorkspace({
         redoLabel={redoLabel}
         onUndo={runUndo}
         onRedo={runRedo}
+        onProjectNameChange={handleProjectNameChange}
         onSave={handleSave}
         onExport={(format) => handleExport(format ?? "json")}
         onImport={handleImportClick}
@@ -1167,11 +1189,43 @@ export function OOPlannerWorkspace({
         }
         bottomPanel={
           activeFloor ? (
-            <LayersPanel
-              floor={activeFloor}
-              visibility={layerVisibility}
-              onVisibilityChange={setLayerVisibility}
-            />
+            <div className={workspaceStyles.bottomPanelWrapper}>
+              <div className={workspaceStyles.bottomTabBar}>
+                <button
+                  type="button"
+                  className={workspaceStyles.bottomTab}
+                  data-active={!showValidation}
+                  onClick={() => setShowValidation(false)}
+                >
+                  Layers
+                </button>
+                <button
+                  type="button"
+                  className={workspaceStyles.bottomTab}
+                  data-active={showValidation}
+                  onClick={() => setShowValidation(true)}
+                >
+                  Validation
+                  {validationResult.issues.length > 0
+                    ? ` (${validationResult.issues.length})`
+                    : ""}
+                </button>
+              </div>
+              <div className={workspaceStyles.bottomTabContent}>
+                {showValidation ? (
+                  <ValidationPanel
+                    result={validationResult}
+                    onFocusIssue={handleFocusIssue}
+                  />
+                ) : (
+                  <LayersPanel
+                    floor={activeFloor}
+                    visibility={layerVisibility}
+                    onVisibilityChange={setLayerVisibility}
+                  />
+                )}
+              </div>
+            </div>
           ) : null
         }
         planMetrics={planMetrics}
@@ -1226,6 +1280,17 @@ export function OOPlannerWorkspace({
             >
               {saveStatusBarLabel}
             </span>
+            {validationResult.issues.length > 0 ? (
+              <button
+                type="button"
+                className={`open3d-status-pill open3d-status-pill--accent ${workspaceStyles.validationPill}`}
+                onClick={() => setShowValidation((v) => !v)}
+              >
+                {validationResult.errors > 0
+                  ? `${validationResult.errors} error${validationResult.errors > 1 ? "s" : ""}`
+                  : `${validationResult.issues.length} issue${validationResult.issues.length > 1 ? "s" : ""}`}
+              </button>
+            ) : null}
           </div>
         }
         statusRight={

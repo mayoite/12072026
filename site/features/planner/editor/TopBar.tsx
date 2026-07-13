@@ -1,5 +1,6 @@
 "use client";
 
+import { type ChangeEvent, type KeyboardEvent, useCallback, useRef, useState } from "react";
 import { CaretDown, CornersIn, CornersOut } from "@phosphor-icons/react";
 import {
   MenuTrigger,
@@ -85,6 +86,8 @@ export interface TopBarProps {
   snapEnabled?: boolean;
   onToggleGrid?: () => void;
   onToggleSnap?: () => void;
+  /** Called when the project name is edited inline. */
+  onProjectNameChange?: (name: string) => void;
 }
 
 function resolveSaveStatusFromLegacy(
@@ -147,8 +150,35 @@ export function TopBar({
   gridEnabled = true,
   snapEnabled = true,
   onToggleGrid,
+  onProjectNameChange,
   onToggleSnap,
 }: TopBarProps) {
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editName, setEditName] = useState(projectName);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+
+  const handleNameStartEdit = useCallback(() => {
+    setEditName(projectName);
+    setIsEditingName(true);
+    requestAnimationFrame(() => nameInputRef.current?.select());
+  }, [projectName]);
+
+  const handleNameCommit = useCallback(() => {
+    const trimmed = editName.trim();
+    if (trimmed && trimmed !== projectName) {
+      onProjectNameChange?.(trimmed);
+    }
+    setIsEditingName(false);
+  }, [editName, projectName, onProjectNameChange]);
+
+  const handleNameKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.currentTarget.blur();
+    } else if (e.key === "Escape") {
+      setEditName(projectName);
+      setIsEditingName(false);
+    }
+  }, [projectName]);
   const showPersistenceActions = accessContext !== "guest";
   const showGuestActions = accessContext === "guest";
   const guestMode = accessContext === "guest";
@@ -178,7 +208,29 @@ export function TopBar({
       data-testid="planner-topbar"
     >
       <div className={styles.brand}>
-        <h1 className={styles.brandTitle}>{projectName}</h1>
+        {isEditingName ? (
+          <input
+            ref={nameInputRef}
+            className={styles.brandTitleInput}
+            value={editName}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setEditName(e.target.value)}
+            onBlur={handleNameCommit}
+            onKeyDown={handleNameKeyDown}
+            aria-label="Project name"
+            autoFocus
+          />
+        ) : (
+          <h1
+            className={styles.brandTitle}
+            onClick={handleNameStartEdit}
+            onKeyDown={(e: KeyboardEvent<HTMLHeadingElement>) => {
+              if (e.key === "Enter" || e.key === " ") handleNameStartEdit();
+            }}
+            tabIndex={0}
+          >
+            {projectName}
+          </h1>
+        )}
         {isModified && <span className={styles.brandSub}>Unsaved changes</span>}
       </div>
 

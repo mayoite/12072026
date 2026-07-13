@@ -286,6 +286,7 @@ describe("ADM-A11Y-03 every drag has non-drag alternative", () => {
     for (const id of STUDIO_NON_DRAG_ALTERNATIVES.move) {
       if (id === "admin-studio-nudge-hint") continue;
       if (id.includes("cx") || id.includes("cy")) continue; // rect selection
+      if (id.includes("x1") || id.includes("y1") || id.includes("x2") || id.includes("y2")) continue; // rect selection
       expect(screen.getByTestId(id)).toBeInTheDocument();
     }
     for (const id of ["admin-studio-geom-w", "admin-studio-geom-h"]) {

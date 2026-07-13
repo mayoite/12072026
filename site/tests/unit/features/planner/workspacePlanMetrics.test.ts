@@ -119,6 +119,7 @@ describe("summarizeFloorMetrics walls / objects / label (status honesty)", () =>
       furniture: 0,
       workstationSeats: 0,
       floorLabel: "Floor 1",
+      boqReady: false,
     });
   });
 

@@ -225,3 +225,17 @@
   display: block;
   margin-top: 0.5rem;
 }
+
+/* Origin crosshairs rendered by svgJsEngineAdapter drawOriginAxes */
+[data-admin-layout] .svg-studio__stage .svg-studio-axis-line {
+  stroke: var(--color-primary, var(--border-strong));
+  stroke-width: 0.5;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+[data-admin-layout] .svg-studio__stage .svg-studio-axis-center {
+  fill: var(--color-primary, var(--border-strong));
+  opacity: 0.35;
+  pointer-events: none;
+}

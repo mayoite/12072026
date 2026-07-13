@@ -81,6 +81,7 @@ export const PLANNER_FEATURE_PAGES: PlannerFeaturePage[] = [
     summary:
       "Tell the planner how many people you need to seat and what kind of space you have — it suggests a starting arrangement you can adjust.",
     bullets: [
+      "Upload a hand-drawn sketch to instantly generate your floor plan",
       "Chat about your room size, headcount, and layout goals",
       "Pick from common office templates — open plan, cabins, hybrid",
       "Preview suggested furniture placements before you commit",

@@ -3,9 +3,13 @@ import OpenAI from "openai";
 import { env } from "../env.server";
 import { SITE_URL } from "../siteUrl";
 
+export type ServerChatMessageContentPart =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string } };
+
 export type ServerChatMessage = {
   role: "system" | "user" | "assistant";
-  content: string;
+  content: string | ServerChatMessageContentPart[];
 };
 
 export type ProviderId = "openrouter" | "gemini";
@@ -137,7 +141,7 @@ async function requestOpenAiCompatibleText(
     : createOpenRouterClient(provider.apiKey);
   const requestBody = {
     model: provider.model,
-    messages,
+    messages: messages as any,
     temperature: options.temperature ?? 0.4,
     ...(options.jsonMode ? { response_format: { type: "json_object" as const } } : {}),
   };

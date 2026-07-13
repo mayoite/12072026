@@ -205,6 +205,23 @@
   color: var(--ws-text-primary);
 }
 
+.brandTitleInput {
+  margin: 0;
+  border: none;
+  border-bottom: 1.5px solid var(--planner-accent);
+  background: transparent;
+  font-family: var(--font-display, system-ui);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--ws-text-primary);
+  outline: none;
+  min-width: 120px;
+  max-width: 300px;
+  padding: 0;
+}
+
 .header[data-density="compact"] .brandTitle {
   font-size: 0.875rem;
 }
@@ -714,6 +731,59 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
+}
+
+.boqReady {
+  color: var(--color-success, #16a34a);
+  font-weight: 600;
+}
+
+.boqNotReady {
+  color: var(--color-muted, #a1a1aa);
+  font-style: italic;
+}
+
+/* Bottom panel tab bar */
+.bottomTabBar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-bottom: 1px solid var(--border-soft);
+  flex-shrink: 0;
+}
+
+.bottomTab {
+  flex: 1;
+  padding: 6px 12px;
+  border: 0;
+  background: transparent;
+  color: var(--text-strong);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.bottomTab[data-active="true"] {
+  background: var(--surface-soft);
+  font-weight: 600;
+}
+
+.bottomTabContent {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.bottomPanelWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.validationPill {
+  cursor: pointer;
+  border: 0;
+  font: inherit;
 }
 
 /* View mode toggle */

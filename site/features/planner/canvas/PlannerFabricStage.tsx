@@ -319,6 +319,19 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         fitToView: () => setTransform(DEFAULT_FABRIC_STAGE_TRANSFORM),
         setTool: () => {},
         getProject: () => workspaceCanvas?.project ?? createPlannerProject(),
+        focusOnPoint: (xMm: number, yMm: number) => {
+          const host = hostRef.current;
+          if (!host) return;
+          const width = host.clientWidth;
+          const height = host.clientHeight;
+          setTransform((current) => ({
+            ...current,
+            origin: {
+              x: xMm - width / 2 / current.scale,
+              y: yMm - height / 2 / current.scale,
+            },
+          }));
+        },
       }),
       [workspaceCanvas],
     );

@@ -134,7 +134,7 @@ export async function generateMetadata({
   );
 
   const productName = typeof product.name === "string" ? product.name : "";
-  const title = `${productName} | ${PDP_ROUTE_COPY.productBrand}`;
+  const title = productName;
   const descriptionFallback = PDP_ROUTE_COPY.fallbackDescription.replace(
     "{name}",
     productName,

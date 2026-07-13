@@ -6,6 +6,8 @@
 export const SUPPORTED_SVG_AUTHORING_KINDS = [
   "rect",
   "circle",
+  "line",
+  "text",
 ] as const;
 
 export type SupportedSvgAuthoringKind =

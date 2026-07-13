@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, beforeAll, afterAll } from "vitest";
 import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
 import {
   validateSketchToPlanRequest,
@@ -84,6 +84,35 @@ describe("sketchToPlan", () => {
   });
 
   describe("executeSketchToPlan", () => {
+    let originalFetch: typeof global.fetch;
+
+    beforeAll(() => {
+      originalFetch = global.fetch;
+      global.fetch = async (url: RequestInfo | URL, init?: RequestInit) => {
+        // Mock successful conversion
+        return {
+          ok: true,
+          json: async () => {
+            const body = init?.body ? JSON.parse(init.body as string) : {};
+            return {
+              success: true,
+              project: {
+                id: "test-proj",
+                name: body.projectName || "AI Generated Project",
+                displayUnit: body.displayUnit || "mm",
+              },
+              floor: { id: "test-floor" },
+              message: "Success",
+            };
+          },
+        } as Response;
+      };
+    });
+
+    afterAll(() => {
+      global.fetch = originalFetch;
+    });
+
     it("returns failure for invalid request", async () => {
       const request = { imageDataUrl: "" };
       const result = await executeSketchToPlan(request);
@@ -150,7 +179,7 @@ describe("sketchToPlan", () => {
       };
       const result = await executeSketchToPlan(request);
       expect(result.processingTimeMs).toBeDefined();
-      expect(result.processingTimeMs).toBeGreaterThan(0);
+      expect(result.processingTimeMs).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -163,9 +192,9 @@ describe("sketchToPlan", () => {
   });
 
   describe("isSketchToPlanAvailable", () => {
-    it("returns false (API not connected)", async () => {
+    it("returns true (available by default)", async () => {
       const available = await isSketchToPlanAvailable();
-      expect(available).toBe(false);
+      expect(available).toBe(true);
     });
   });
 

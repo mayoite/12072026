@@ -36,7 +36,7 @@ export async function generateMetadata({
     canonicalCategoryId,
     category.description,
   );
-  const title = `${displayName} | ${CATEGORY_ROUTE_COPY.metadataSuffix}`;
+  const title = displayName;
   const description = `${displayDescription} ${CATEGORY_ROUTE_COPY.metadataTail.replace(
     "{category}",
     displayName.toLowerCase(),

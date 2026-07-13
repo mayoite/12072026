@@ -264,17 +264,17 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
               {PLANNER_PRIMARY_PURPOSE_OPTIONS.map((option) => {
                 const selected = draft.primaryPurpose === option.value;
                 return (
-                  <label
-                    key={option.value}
-                    className={`cursor-pointer rounded-[var(--radius-lg)] border px-3 py-3 transition-colors ${ selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]" }`}
-                  >
-                    <input
-                      type="radio"
-                      name="project-setup-purpose"
-                      className="sr-only"
-                      checked={selected}
-                      onChange={() => updateDraft("primaryPurpose", option.value as PlannerPrimaryPurpose)}
-                    />
+                    <label
+                      key={option.value}
+                      className={`cursor-pointer rounded-[var(--radius-lg)] border px-3 py-3 transition-[border-color,box-shadow] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_30%,transparent)] ${ selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]" }`}
+                    >
+                      <input
+                        type="radio"
+                        name="project-setup-purpose"
+                        className="sr-only"
+                        checked={selected}
+                        onChange={() => updateDraft("primaryPurpose", option.value as PlannerPrimaryPurpose)}
+                      />
                     <span className="typ-label text-[color:var(--text-strong)]">{option.label}</span>
                     <span className="typ-caption mt-0.5 text-[color:var(--text-muted)]">
                       {PURPOSE_SUMMARIES[option.value as PlannerPrimaryPurpose]}
@@ -315,7 +315,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                 return (
                   <label
                     key={option.value}
-                    className={`cursor-pointer rounded-[var(--radius-lg)] border p-3 transition-colors ${selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]"}`}
+                    className={`cursor-pointer rounded-[var(--radius-lg)] border p-3 transition-[border-color,box-shadow] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_30%,transparent)] ${selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]"}`}
                   >
                     <input
                       type="radio"
@@ -346,7 +346,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
 
           <button
             type="submit"
-            className="btn-primary typ-cta mt-auto inline-flex gap-2 px-6 py-3"
+            className="btn-primary typ-cta mt-auto inline-flex gap-2 px-6 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-primary)]"
             disabled={!isHydrated}
             aria-label={isHydrated ? "Start placing furniture" : "Preparing workspace"}
           >

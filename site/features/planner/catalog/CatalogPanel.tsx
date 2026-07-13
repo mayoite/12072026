@@ -124,22 +124,33 @@ export function CatalogPanel({
     let items = purposeScopedItems;
 
     if (q) {
-      return items.filter(
+      items = items.filter(
         (item) =>
           item.name.toLowerCase().includes(q.toLowerCase()) ||
           item.description.toLowerCase().includes(q.toLowerCase()) ||
           item.tags.some((tag) => tag.toLowerCase().includes(q.toLowerCase())) ||
           (item.sku ?? "").toLowerCase().includes(q.toLowerCase()) ||
           (item.shortName ?? "").toLowerCase().includes(q.toLowerCase()) ||
-          (item.material ?? "").toLowerCase().includes(q.toLowerCase()),
+          (item.material ?? "").toLowerCase().includes(q.toLowerCase()) ||
+          (item.family ?? "").toLowerCase().includes(q.toLowerCase()) ||
+          (item.availability ?? "").toLowerCase().includes(q.toLowerCase()),
       );
+    } else {
+      items = items.filter((item) => item.purposeTab === purposeTab);
+      if (activeSubCategory !== "all") {
+        items = items.filter((item) => item.subCategory === activeSubCategory);
+      }
     }
 
-    items = items.filter((item) => item.purposeTab === purposeTab);
-    if (activeSubCategory !== "all") {
-      items = items.filter((item) => item.subCategory === activeSubCategory);
-    }
-    return items;
+    // Sort by family, then by name for UI-CAT-02 variant grouping
+    return [...items].sort((a, b) => {
+      const familyA = a.family ?? "zzz";
+      const familyB = b.family ?? "zzz";
+      if (familyA !== familyB) {
+        return familyA.localeCompare(familyB);
+      }
+      return a.name.localeCompare(b.name);
+    });
   }, [activeSubCategory, purposeScopedItems, purposeTab, searchQuery]);
 
   const handlePurposeChange = useCallback(
@@ -288,15 +299,44 @@ export function CatalogPanel({
 
         {visibleItems.length > 0 ? (
           <div className="pw-catalog-grid pw-catalog-grid--cards">
-            {visibleItems.map((item) => (
-              <CatalogItemCard
-                key={item.id}
-                item={item}
-                onDragStart={handleDragStart}
-                onDragEnd={handleDragEnd}
-                onItemClick={handleItemClick}
-              />
-            ))}
+            {visibleItems.reduce<React.ReactNode[]>((nodes, item, idx) => {
+              const prev = idx > 0 ? visibleItems[idx - 1] : null;
+              const prevFamily = prev?.family ?? "";
+              const currFamily = item.family ?? "";
+              if (currFamily && currFamily !== prevFamily) {
+                nodes.push(
+                  <div
+                    key={`fh-${currFamily}`}
+                    className="pw-catalog-family-header"
+                    role="heading"
+                    aria-level={2}
+                    style={{
+                      gridColumn: "1 / -1",
+                      fontSize: "0.75rem",
+                      fontWeight: 600,
+                      letterSpacing: "0.05em",
+                      textTransform: "uppercase",
+                      color: "var(--text-muted)",
+                      padding: "var(--space-2) var(--space-1) var(--space-1)",
+                      borderBottom: "1px solid var(--border-soft)",
+                      marginTop: idx > 0 ? "var(--space-3)" : 0,
+                    }}
+                  >
+                    {currFamily}
+                  </div>,
+                );
+              }
+              nodes.push(
+                <CatalogItemCard
+                  key={item.id}
+                  item={item}
+                  onDragStart={handleDragStart}
+                  onDragEnd={handleDragEnd}
+                  onItemClick={handleItemClick}
+                />,
+              );
+              return nodes;
+            }, [])}
           </div>
         ) : (
           <div className="pw-catalog-empty">
@@ -416,6 +456,20 @@ function CatalogItemCard({
         aria-label={`Add ${enriched.shortName} to canvas`}
         data-command-id="catalog.place-item"
       >
+        <div className="pw-catalog-card-meta">
+          {enriched.family && <span className="pw-catalog-card-family">{enriched.family}</span>}
+          {enriched.availability && (
+            <span
+              className={`pw-catalog-card-avail ${
+                enriched.availability === "in-stock"
+                  ? "pw-catalog-card-avail--stock"
+                  : "pw-catalog-card-avail--mto"
+              }`}
+            >
+              {enriched.availability === "in-stock" ? "In stock" : "Made to order"}
+            </span>
+          )}
+        </div>
         <p className="pw-catalog-card-sku">{enriched.sku}</p>
         <p className="pw-catalog-card-name" title={enriched.name}>
           {enriched.shortName}

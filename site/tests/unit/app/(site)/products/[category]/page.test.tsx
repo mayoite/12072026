@@ -75,9 +75,8 @@ describe('Category Page Route Handler', () => {
     it('returns built page metadata if category exists', async () => {
       const meta = await generateMetadata({ params: Promise.resolve({ category: 'seating' }) });
       expect(meta).toEqual({
-        title: 'Label for seating (Chairs) | One&Only',
-        description:
-          'Desc for seating (Comfortable chairs) Browse our full range of label for seating (chairs) for practical office planning and delivery.',
+        title: 'Label for seating (Chairs)',
+        description: 'Desc for seating (Comfortable chairs) Browse our full range of label for seating (chairs) for practical office planning and delivery.',
         alternates: { canonical: '/products/seating' },
       });
     });

@@ -81,16 +81,13 @@ describe("svgSceneSerializer — publish boundary", () => {
   it("rejects unsupported authoring kinds at serialize (ADM-SVG-08)", () => {
     const doc = baseDoc([
       {
-        kind: "line",
-        id: "edge",
-        name: "edge",
+        kind: "path",
+        id: "freehand",
+        name: "freehand",
         locked: false,
         hidden: false,
         style: { strokeToken: "currentColor", lineWeight: 2 },
-        x1: 0,
-        y1: 0,
-        x2: 100,
-        y2: 0,
+        d: "M0 0 L100 0",
       },
     ]);
     expect(() => serializeSceneToDefinition(doc)).toThrow(/Unsupported SVG authoring kinds/);

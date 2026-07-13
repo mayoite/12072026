@@ -73,6 +73,9 @@ export type PlannerFurnitureBoqSummary = {
   totalInr: number;
   pricedItemCount: number;
   unpricedItemCount: number;
+  /** Items without a recognized catalog identity — separated for visibility. */
+  unsupportedLines: PlannerFurnitureBoqLine[];
+  totalUnsupportedItems: number;
 };
 
 export type BuildPlannerFurnitureBoqOptions = {
@@ -202,6 +205,7 @@ function resolveIdentity(item: PlannerFurnitureItem): {
 function groupKey(bucket: Omit<GroupBucket, "quantity" | "sourceObjectIds">): string {
   return [
     bucket.catalogId,
+    bucket.sku,
     bucket.widthMm,
     bucket.depthMm,
     bucket.heightMm,
@@ -227,6 +231,8 @@ export function buildPlannerFurnitureBoq(
   const groups = new Map<string, GroupBucket>();
   let totalItems = 0;
 
+  const unsupportedGroups = new Map<string, GroupBucket>();
+
   for (const floor of floors) {
     for (const item of floor.furniture) {
       totalItems += 1;
@@ -245,42 +251,46 @@ export function buildPlannerFurnitureBoq(
         priced: identity.priced,
         priceSource: identity.priceSource,
       };
+      const isUnsupported = identity.catalogId === "unknown" || identity.catalogId === "";
+      const bucket = isUnsupported ? unsupportedGroups : groups;
       const key = groupKey(base);
-      const existing = groups.get(key);
+      const existing = bucket.get(key);
       if (existing) {
         existing.quantity += 1;
         existing.sourceObjectIds.push(item.id);
       } else {
-        groups.set(key, { ...base, quantity: 1, sourceObjectIds: [item.id] });
+        bucket.set(key, { ...base, quantity: 1, sourceObjectIds: [item.id] });
       }
     }
   }
 
+  function bucketToLine(g: GroupBucket): PlannerFurnitureBoqLine {
+    const lineSubtotalInr = roundMoneyInr(g.unitPriceInr * g.quantity);
+    const lineGstInr = g.priced ? roundMoneyInr(lineSubtotalInr * gstRate) : 0;
+    const lineTotalInr = lineSubtotalInr + lineGstInr;
+    return {
+      catalogId: g.catalogId,
+      name: g.name,
+      sku: g.sku,
+      category: g.category,
+      quantity: g.quantity,
+      widthMm: g.widthMm,
+      depthMm: g.depthMm,
+      heightMm: g.heightMm,
+      unitPriceInr: g.unitPriceInr,
+      lineSubtotalInr,
+      gstRate,
+      lineGstInr,
+      lineTotalInr,
+      geometryMode: g.geometryMode,
+      priced: g.priced,
+      priceSource: g.priceSource,
+      sourceObjectIds: [...g.sourceObjectIds].sort(),
+    };
+  }
+
   const lines: PlannerFurnitureBoqLine[] = [...groups.values()]
-    .map((g) => {
-      const lineSubtotalInr = roundMoneyInr(g.unitPriceInr * g.quantity);
-      const lineGstInr = g.priced ? roundMoneyInr(lineSubtotalInr * gstRate) : 0;
-      const lineTotalInr = lineSubtotalInr + lineGstInr;
-      return {
-        catalogId: g.catalogId,
-        name: g.name,
-        sku: g.sku,
-        category: g.category,
-        quantity: g.quantity,
-        widthMm: g.widthMm,
-        depthMm: g.depthMm,
-        heightMm: g.heightMm,
-        unitPriceInr: g.unitPriceInr,
-        lineSubtotalInr,
-        gstRate,
-        lineGstInr,
-        lineTotalInr,
-        geometryMode: g.geometryMode,
-        priced: g.priced,
-        priceSource: g.priceSource,
-        sourceObjectIds: [...g.sourceObjectIds].sort(),
-      };
-    })
+    .map(bucketToLine)
     .sort(
       (a, b) =>
         a.category.localeCompare(b.category) ||
@@ -288,12 +298,24 @@ export function buildPlannerFurnitureBoq(
         a.catalogId.localeCompare(b.catalogId),
     );
 
+  const unsupportedLines: PlannerFurnitureBoqLine[] = [...unsupportedGroups.values()]
+    .map(bucketToLine)
+    .sort(
+      (a, b) =>
+        a.category.localeCompare(b.category) ||
+        a.name.localeCompare(b.name),
+    );
+
   const subtotalInr = lines.reduce((sum, line) => sum + line.lineSubtotalInr, 0);
   const gstInr = lines.reduce((sum, line) => sum + line.lineGstInr, 0);
   const pricedItemCount = lines
     .filter((l) => l.priced)
     .reduce((sum, l) => sum + l.quantity, 0);
-  const unpricedItemCount = totalItems - pricedItemCount;
+  const unpricedItemCount = lines
+    .filter((l) => !l.priced)
+    .reduce((sum, l) => sum + l.quantity, 0);
+  const totalUnsupportedItems = [...unsupportedGroups.values()]
+    .reduce((sum, g) => sum + g.quantity, 0);
   const calculationHash = sha256Hex(
     JSON.stringify({
       kind: PLANNER_FURNITURE_BOQ_KIND,
@@ -326,6 +348,8 @@ export function buildPlannerFurnitureBoq(
     totalInr: subtotalInr + gstInr,
     pricedItemCount,
     unpricedItemCount,
+    unsupportedLines,
+    totalUnsupportedItems,
   };
 }
 
@@ -407,6 +431,39 @@ export function exportPlannerFurnitureBoqToCsv(summary: PlannerFurnitureBoqSumma
   rows.push(`Grand total INR,${summary.totalInr}`);
   rows.push(`Priced items,${summary.pricedItemCount}`);
   rows.push(`Unpriced items,${summary.unpricedItemCount}`);
+
+  if (summary.unsupportedLines.length > 0) {
+    rows.push("");
+    rows.push("UNSUPPORTED ITEMS (no recognized catalog identity)");
+    rows.push(
+      [
+        "Category",
+        "Item",
+        "Catalog ID",
+        "Width (mm)",
+        "Depth (mm)",
+        "Height (mm)",
+        "Geometry",
+        "Source object IDs",
+      ].join(","),
+    );
+    for (const li of summary.unsupportedLines) {
+      rows.push(
+        [
+          escapeCsvField(li.category),
+          escapeCsvField(li.name),
+          escapeCsvField(li.catalogId),
+          String(li.widthMm),
+          String(li.depthMm),
+          String(li.heightMm),
+          escapeCsvField(li.geometryMode),
+          escapeCsvField(li.sourceObjectIds.join(" | ")),
+        ].join(","),
+      );
+    }
+    rows.push(`Total unsupported items,${summary.totalUnsupportedItems}`);
+  }
+
   rows.push(`Calculation hash,${summary.calculationHash}`);
 
   return rows.join("\n");

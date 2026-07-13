@@ -121,8 +121,15 @@ export async function buildCatalogLive(): Promise<CompatCategory[]> {
 
   for (const product of products) {
     const categoryId = product.category_id;
-    const categoryEntry = categoryMap.get(categoryId);
-    if (!categoryEntry) continue;
+    let categoryEntry = categoryMap.get(categoryId);
+    if (!categoryEntry) {
+      const fallbackName = categoryId.replace("oando-", "");
+      categoryEntry = {
+        info: { id: categoryId, name: fallbackName.charAt(0).toUpperCase() + fallbackName.slice(1) },
+        products: []
+      };
+      categoryMap.set(categoryId, categoryEntry);
+    }
     categoryEntry.products.push(product);
   }
 

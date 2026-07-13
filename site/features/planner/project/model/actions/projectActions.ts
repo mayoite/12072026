@@ -89,7 +89,12 @@ export function applyPlannerProjectAction(
     }
     const source = collection.find((entity) => entity.id === action.id);
     if (!source) return project;
-    nextCollection = [...collection, { ...source, id: action.newId }];
+    const clone = JSON.parse(JSON.stringify(source));
+    clone.id = action.newId;
+    if ("position" in clone && clone.position) {
+      clone.position = { x: clone.position.x + 300, y: clone.position.y + 300 };
+    }
+    nextCollection = [...collection, clone];
   }
 
   const updatedFloor = {

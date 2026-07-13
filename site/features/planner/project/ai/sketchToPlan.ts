@@ -122,90 +122,72 @@ export function validateSketchToPlanRequest(
   return errors;
 }
 
-/**
- * Executes sketch-to-plan conversion.
- * 
- * Note: This is a stub implementation that returns a placeholder result.
- * The actual AI-powered conversion would be implemented through an API call.
- * 
- * @param request - The sketch-to-plan request
- * @param onProgress - Optional progress callback
- * @returns The result of the conversion
- */
 export async function executeSketchToPlan(
   request: SketchToPlanRequest,
   onProgress?: SketchToPlanProgressCallback,
 ): Promise<SketchToPlanResult> {
   const startTime = Date.now();
 
-  // Validate request
   const errors = validateSketchToPlanRequest(request);
   if (errors.length > 0) {
     return createFailureResult("Validation failed", errors.join("; "));
   }
 
-  // Report pending status
   onProgress?.({
     status: "pending",
     message: "Preparing sketch...",
-    progressPercent: 0,
+    progressPercent: 10,
   });
 
-  // Report processing status
-  onProgress?.({
-    status: "processing",
-    message: "Analyzing sketch...",
-    progressPercent: 25,
-  });
+  try {
+    onProgress?.({
+      status: "processing",
+      message: "Analyzing sketch with AI...",
+      progressPercent: 50,
+    });
 
-  // Stub: In a real implementation, this would call the AI API
-  // For now, create a placeholder project
-  onProgress?.({
-    status: "processing",
-    message: "Generating floor plan...",
-    progressPercent: 50,
-  });
+    const response = await fetch("/api/planner/project-sketch", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    });
 
-  // Simulate processing time
-  await new Promise((resolve) => setTimeout(resolve, 100));
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`);
+    }
 
-  onProgress?.({
-    status: "processing",
-    message: "Finalizing...",
-    progressPercent: 75,
-  });
+    const data = await response.json();
 
-  // Create a placeholder result
-  // In production, this would parse the AI response into floor data
-  const displayUnit = request.displayUnit ?? "mm";
-  const projectName = request.projectName ?? "Sketch Conversion";
+    if (!data.success) {
+      throw new Error(data.error || "Unknown conversion error");
+    }
 
-  // Create a default room as placeholder
-  const placeholderProject = createRectangularRoomProject({
-    name: projectName,
-    widthMm: request.hints?.knownDimensions?.widthMm ?? 6000,
-    depthMm: request.hints?.knownDimensions?.depthMm ?? 4000,
-  });
+    const processingTimeMs = Date.now() - startTime;
 
-  const processingTimeMs = Date.now() - startTime;
+    onProgress?.({
+      status: "completed",
+      message: "Sketch converted successfully",
+      progressPercent: 100,
+    });
 
-  onProgress?.({
-    status: "completed",
-    message: "Sketch converted successfully",
-    progressPercent: 100,
-  });
-
-  return {
-    success: true,
-    status: "completed",
-    project: {
-      ...placeholderProject,
-      displayUnit,
-    },
-    floor: placeholderProject.floors[0],
-    message: "Sketch converted (placeholder - API not connected)",
-    processingTimeMs,
-  };
+    return {
+      success: true,
+      status: "completed",
+      project: data.project,
+      floor: data.floor,
+      message: data.message,
+      processingTimeMs,
+    };
+  } catch (err) {
+    onProgress?.({
+      status: "failed",
+      message: "Conversion failed",
+      progressPercent: 0,
+    });
+    return createFailureResult("API request failed", String(err));
+  }
 }
 
 /**
@@ -234,9 +216,7 @@ export const SKETCH_TO_PLAN_API_ROUTE = "/api/planner/sketch-to-plan";
  * @returns Whether the feature is available
  */
 export async function isSketchToPlanAvailable(): Promise<boolean> {
-  // Stub: In production, this would ping the API endpoint
-  // For now, return false to indicate API is not connected
-  return false;
+  return true;
 }
 
 /**

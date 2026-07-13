@@ -57,6 +57,7 @@ export interface WorkspaceKeyboardHandlers {
   beginTemporaryPan?: () => void;
   endTemporaryPan?: () => void;
   deleteSelection?: () => void;
+  duplicateSelection?: () => void;
   enabled?: boolean;
 }
 
@@ -111,6 +112,12 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
       if ((event.key === "Delete" || event.key === "Backspace") && !mod) {
         event.preventDefault();
         handlers.deleteSelection?.();
+        return;
+      }
+
+      if (mod && key === "d") {
+        event.preventDefault();
+        handlers.duplicateSelection?.();
         return;
       }
 

@@ -108,6 +108,7 @@ export function HomepageHero() {
                     variants={wordVariants}
                   >
                     {line}
+                    {i < title.length - 1 && " "}
                   </motion.span>
                 </span>
               ))}

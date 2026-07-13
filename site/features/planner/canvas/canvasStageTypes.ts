@@ -25,4 +25,6 @@ export interface PlannerCanvasStageHandle {
   fitToView: () => void;
   setTool: (tool: PlannerTool) => void;
   getProject: () => PlannerProject;
+  /** Pan the viewport so that project-space point is centered at current zoom. */
+  focusOnPoint: (xMm: number, yMm: number) => void;
 }

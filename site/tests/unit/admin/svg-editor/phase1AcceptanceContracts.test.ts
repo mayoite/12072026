@@ -125,10 +125,12 @@ describe("ADM-SVG-05 / ADM-SVG-08 regions and subset", () => {
   });
 
   it("documents and enforces the supported authoring subset", () => {
-    expect(SUPPORTED_SVG_AUTHORING_DOC.kinds).toEqual(["rect", "circle"]);
+    expect(SUPPORTED_SVG_AUTHORING_DOC.kinds).toEqual(["rect", "circle", "line", "text"]);
     expect(isSupportedSvgAuthoringKind("rect")).toBe(true);
+    expect(isSupportedSvgAuthoringKind("line")).toBe(true);
+    expect(isSupportedSvgAuthoringKind("text")).toBe(true);
     expect(isSupportedSvgAuthoringKind("path")).toBe(false);
-    expect(assertSupportedStudioKinds(["rect", "circle"])).toEqual({ ok: true });
+    expect(assertSupportedStudioKinds(["rect", "circle", "line", "text"])).toEqual({ ok: true });
     expect(assertSupportedStudioKinds(["rect", "path"])).toEqual({
       ok: false,
       unsupported: ["path"],

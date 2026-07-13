@@ -218,6 +218,12 @@
   color: var(--prop-accent);
 }
 
+.duplicateButton:not(:disabled):hover {
+  background: var(--prop-accent-subtle);
+  border-color: var(--prop-accent);
+  color: var(--prop-accent);
+}
+
 /* ── Content — sole vertical scrollport in properties ────────────────────── */
 
 .content {

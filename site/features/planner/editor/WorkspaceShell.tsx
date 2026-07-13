@@ -57,6 +57,8 @@ export interface WorkspaceShellProps {
   /** Called when floor selection changes */
   onFloorChange?: (floorId: string) => void;
   /** Called when save is triggered */
+  /** Called when the project name is edited inline. */
+  onProjectNameChange?: (name: string) => void;
   onSave?: () => void;
   /** Called when export is triggered */
   onExport?: (format?: string) => void;
@@ -109,6 +111,7 @@ export function WorkspaceShell({
   rightPanel,
   bottomPanel,
   children,
+  onProjectNameChange,
   onViewModeChange,
   onFloorChange,
   onSave,
@@ -292,6 +295,7 @@ export function WorkspaceShell({
         onDisplayUnitChange={onDisplayUnitChange}
         onViewModeChange={handleViewModeChange}
         onFloorChange={onFloorChange}
+        onProjectNameChange={onProjectNameChange}
         onSave={onSave}
         onExport={onExport}
         onImport={onImport}
@@ -426,6 +430,12 @@ export function WorkspaceShell({
             {planMetrics.workstationSeats > 0 ? (
               <span>{planMetrics.workstationSeats} seats</span>
             ) : null}
+            <span
+              className={planMetrics.boqReady ? styles.boqReady : styles.boqNotReady}
+              data-boq-ready={planMetrics.boqReady ? "true" : "false"}
+            >
+              {planMetrics.boqReady ? "BOQ ready" : "BOQ: add furniture"}
+            </span>
             <span>Floor {planMetrics.floorLabel}</span>
           </>
         ) : null}

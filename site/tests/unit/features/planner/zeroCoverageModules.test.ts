@@ -2,7 +2,7 @@
  * Covers modules that were at 0% in the benchmark-exceed coverage run.
  */
 
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi, beforeAll, afterAll } from "vitest";
 import { createPlannerProject, createRectangularRoomProject } from "@/features/planner/project/model/project";
 import {
   createAiPrivacyNotice,
@@ -76,6 +76,24 @@ describe("aiAdvisor summaries", () => {
 });
 
 describe("sketchToPlan command module", () => {
+  let originalFetch: typeof global.fetch;
+
+  beforeAll(() => {
+    originalFetch = global.fetch;
+    global.fetch = async () => ({
+      ok: true,
+      json: async () => ({
+        success: true,
+        project: { name: "Sketch Import" },
+        floor: { id: "test" },
+      }),
+    } as Response);
+  });
+
+  afterAll(() => {
+    global.fetch = originalFetch;
+  });
+
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -86,7 +104,7 @@ describe("sketchToPlan command module", () => {
     expect(SKETCH_TO_PLAN_API_ROUTE).toContain("sketch-to-plan");
     expect(estimateProcessingTime(PNG_DATA_URL)).toBeGreaterThan(0);
     expect(cancelSketchToPlan().status).toBe("cancelled");
-    expect(await isSketchToPlanAvailable()).toBe(false);
+    expect(await isSketchToPlanAvailable()).toBe(true);
 
     const progress: string[] = [];
     const result = await executeSketchToPlan(

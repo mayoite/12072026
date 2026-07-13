@@ -23,6 +23,10 @@ export const STUDIO_NON_DRAG_ALTERNATIVES: Record<
     "admin-studio-geom-y",
     "admin-studio-geom-cx",
     "admin-studio-geom-cy",
+    "admin-studio-geom-x1",
+    "admin-studio-geom-y1",
+    "admin-studio-geom-x2",
+    "admin-studio-geom-y2",
     "admin-studio-nudge-hint",
   ],
   resize: [
@@ -43,6 +47,8 @@ export const STUDIO_NON_DRAG_ALTERNATIVES: Record<
 export const STUDIO_KEYBOARD_CONTROL_LABELS = [
   "Add rectangle",
   "Add circle",
+  "Add line",
+  "Add text",
   "Undo unavailable",
   "Zoom to fit",
   "Zoom in",

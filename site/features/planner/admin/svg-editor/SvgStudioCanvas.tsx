@@ -24,11 +24,13 @@ import {
   Circle,
   Eye,
   EyeSlash,
+  LineSegment,
   Lock,
   LockOpen,
   Rectangle,
   StackMinus,
   StackPlus,
+  TextT,
   Trash,
 } from "@phosphor-icons/react";
 
@@ -127,6 +129,38 @@ function centeredCircle(doc: SvgSceneDocument): SvgSceneNode {
     cx: viewBox.x + viewBox.width / 2,
     cy: viewBox.y + viewBox.height / 2,
     r: Math.min(viewBox.width, viewBox.height) / 6,
+  };
+}
+
+function centeredLine(doc: SvgSceneDocument): SvgSceneNode {
+  const { viewBox } = doc;
+  const inset = Math.min(viewBox.width, viewBox.height) * 0.2;
+  return {
+    kind: "line",
+    id: uniqueId(doc, "line"),
+    name: "Line",
+    locked: false,
+    hidden: false,
+    style: { strokeToken: "currentColor", lineWeight: 2 },
+    x1: viewBox.x + inset,
+    y1: viewBox.y + inset,
+    x2: viewBox.x + viewBox.width - inset,
+    y2: viewBox.y + viewBox.height - inset,
+  };
+}
+
+function centeredText(doc: SvgSceneDocument): SvgSceneNode {
+  const { viewBox } = doc;
+  return {
+    kind: "text",
+    id: uniqueId(doc, "text"),
+    name: "Text",
+    locked: false,
+    hidden: false,
+    style: { fillToken: "currentColor" },
+    x: viewBox.x + viewBox.width / 4,
+    y: viewBox.y + viewBox.height / 2,
+    text: "Text",
   };
 }
 
@@ -240,6 +274,18 @@ export function SvgStudioCanvas({
 
   const addCircle = useCallback(() => {
     const node = centeredCircle(document);
+    apply(`Add ${node.name}`, addNode(document, node));
+    setSelectedId(node.id);
+  }, [document, apply]);
+
+  const addLine = useCallback(() => {
+    const node = centeredLine(document);
+    apply(`Add ${node.name}`, addNode(document, node));
+    setSelectedId(node.id);
+  }, [document, apply]);
+
+  const addText = useCallback(() => {
+    const node = centeredText(document);
     apply(`Add ${node.name}`, addNode(document, node));
     setSelectedId(node.id);
   }, [document, apply]);
@@ -382,7 +428,7 @@ export function SvgStudioCanvas({
       className="svg-studio"
       aria-label="Visual SVG authoring canvas"
       data-testid="admin-svg-studio"
-      data-supported-kinds="rect,circle"
+      data-supported-kinds="rect,circle,line,text"
       data-drag-actions={STUDIO_DRAG_ACTIONS.join(",")}
     >
       <div
@@ -416,6 +462,12 @@ export function SvgStudioCanvas({
         </button>
         <button type="button" onClick={addCircle} title="Add circle" aria-label="Add circle">
           <Circle size={16} aria-hidden /> Circle
+        </button>
+        <button type="button" onClick={addLine} title="Add line" aria-label="Add line">
+          <LineSegment size={16} aria-hidden /> Line
+        </button>
+        <button type="button" onClick={addText} title="Add text" aria-label="Add text">
+          <TextT size={16} aria-hidden /> Text
         </button>
         <span className="svg-studio__sep" aria-hidden />
         <button type="button" onClick={bringToFront} disabled={!selected} title="Bring to front" aria-label="Bring to front">
@@ -714,6 +766,133 @@ export function SvgStudioCanvas({
                     />
                   </label>
                 </div>
+              ) : null}
+              {selected.kind === "line" ? (
+                <div className="svg-studio__inspector-grid">
+                  <label htmlFor={`studio-geom-${selected.id}-x1`}>
+                    X1
+                    <input
+                      id={`studio-geom-${selected.id}-x1`}
+                      type="number"
+                      defaultValue={selected.x1}
+                      key={`${selected.id}-x1-${selected.x1}`}
+                      data-testid="admin-studio-geom-x1"
+                      data-non-drag-for="move"
+                      aria-label={`${selected.name} X1`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("x1", `Set ${selected.name} X1`, event.target.value, (v) => ({
+                          x1: v,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label htmlFor={`studio-geom-${selected.id}-y1`}>
+                    Y1
+                    <input
+                      id={`studio-geom-${selected.id}-y1`}
+                      type="number"
+                      defaultValue={selected.y1}
+                      key={`${selected.id}-y1-${selected.y1}`}
+                      data-testid="admin-studio-geom-y1"
+                      data-non-drag-for="move"
+                      aria-label={`${selected.name} Y1`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("y1", `Set ${selected.name} Y1`, event.target.value, (v) => ({
+                          y1: v,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label htmlFor={`studio-geom-${selected.id}-x2`}>
+                    X2
+                    <input
+                      id={`studio-geom-${selected.id}-x2`}
+                      type="number"
+                      defaultValue={selected.x2}
+                      key={`${selected.id}-x2-${selected.x2}`}
+                      data-testid="admin-studio-geom-x2"
+                      data-non-drag-for="move"
+                      aria-label={`${selected.name} X2`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("x2", `Set ${selected.name} X2`, event.target.value, (v) => ({
+                          x2: v,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label htmlFor={`studio-geom-${selected.id}-y2`}>
+                    Y2
+                    <input
+                      id={`studio-geom-${selected.id}-y2`}
+                      type="number"
+                      defaultValue={selected.y2}
+                      key={`${selected.id}-y2-${selected.y2}`}
+                      data-testid="admin-studio-geom-y2"
+                      data-non-drag-for="move"
+                      aria-label={`${selected.name} Y2`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("y2", `Set ${selected.name} Y2`, event.target.value, (v) => ({
+                          y2: v,
+                        }))
+                      }
+                    />
+                  </label>
+                </div>
+              ) : null}
+              {selected.kind === "text" ? (
+                <>
+                <div className="svg-studio__inspector-grid">
+                  <label htmlFor={`studio-geom-${selected.id}-x`}>
+                    X
+                    <input
+                      id={`studio-geom-${selected.id}-x`}
+                      type="number"
+                      defaultValue={selected.x}
+                      key={`${selected.id}-x-${selected.x}`}
+                      data-testid="admin-studio-geom-x"
+                      data-non-drag-for="move"
+                      aria-label={`${selected.name} X`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("x", `Set ${selected.name} X`, event.target.value, (v) => ({
+                          x: v,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label htmlFor={`studio-geom-${selected.id}-y`}>
+                    Y
+                    <input
+                      id={`studio-geom-${selected.id}-y`}
+                      type="number"
+                      defaultValue={selected.y}
+                      key={`${selected.id}-y-${selected.y}`}
+                      data-testid="admin-studio-geom-y"
+                      data-non-drag-for="move"
+                      aria-label={`${selected.name} Y`}
+                      onBlur={(event) =>
+                        patchSelectedNumber("y", `Set ${selected.name} Y`, event.target.value, (v) => ({
+                          y: v,
+                        }))
+                      }
+                    />
+                  </label>
+                </div>
+                <label className="svg-studio__inspector-fill">
+                  Text content
+                  <input
+                    type="text"
+                    defaultValue={selected.text}
+                    key={`${selected.id}-text-${selected.text}`}
+                    data-testid="admin-studio-geom-text"
+                    aria-label={`${selected.name} text content`}
+                    onBlur={(event) =>
+                      patchSelected(`Set ${selected.name} text`, {
+                        text: event.target.value,
+                      })
+                    }
+                  />
+                </label>
+                </>
               ) : null}
               <label className="svg-studio__inspector-fill">
                 Fill token
