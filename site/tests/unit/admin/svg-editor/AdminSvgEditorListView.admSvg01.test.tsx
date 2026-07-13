@@ -85,7 +85,8 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
       "admin-btn--primary",
     );
     const source = screen.getByTestId("admin-shell-source");
-    expect(source).toHaveTextContent(/catalog inventory/i);
+    expect(source).toHaveTextContent(/local disk inventory/i);
+    expect(source).toHaveTextContent(/Products DB not live/i);
     expect(source.textContent ?? "").not.toMatch(
       /block-descriptor|Zod|pipeline|atomic-rename/i,
     );
