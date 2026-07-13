@@ -111,6 +111,30 @@ function persistErr(message = "disk full"): PersistResult {
 }
 
 describe("publishDescriptorWithPipeline (fail-closed)", () => {
+  it("rejects incomplete/contradictory products before compile (Phase 2 released contract)", async () => {
+    const broken = {
+      ...validDescriptor,
+      geometry: { ...validDescriptor.geometry, widthMm: 0 },
+    };
+    const compileSvg = vi.fn(async () => compileOk());
+    const runPipeline = vi.fn(async () => pipelineOk());
+    const persist = vi.fn(() => persistOk());
+
+    const result = await publishDescriptorWithPipeline(broken, {
+      parsePayload: () => ({ ok: true, value: broken }),
+      compileSvg,
+      runPipeline,
+      persist,
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toMatch(/released_contract/);
+    expect(compileSvg).not.toHaveBeenCalled();
+    expect(runPipeline).not.toHaveBeenCalled();
+    expect(persist).not.toHaveBeenCalled();
+  });
+
   it("runs compileSvg then pipeline before persist and returns success when all ok", async () => {
     const order: string[] = [];
     const compileSvg = vi.fn(async () => {

@@ -31,6 +31,29 @@ describe("ReleasedCatalogProductV1 — one versioned core contract (Phase 2)", (
     expect(RELEASED_CATALOG_PRODUCT_SCHEMA_VERSION).toBe(1);
   });
 
+  it("includes identity, dimensions, availability, SVG, and BOQ identity keys", () => {
+    const parsed = parseReleasedCatalogProductV1({
+      schemaVersion: 1,
+      ...validParts,
+    });
+    expect(parsed).toMatchObject({
+      productId: expect.any(String),
+      slug: expect.any(String),
+      name: expect.any(String),
+      boqIdentity: expect.any(String),
+      availability: "available",
+      dimensionsMm: {
+        width: expect.any(Number),
+        depth: expect.any(Number),
+      },
+      svg: {
+        revisionId: expect.any(String),
+        checksum: expect.any(String),
+        resourceUrl: expect.any(String),
+      },
+    });
+  });
+
   it("is the same module from Admin and Planner entry points", async () => {
     const admin = await import(
       "@/features/planner/admin/catalog/releasedCatalogContract"

@@ -22,6 +22,10 @@ import {
 } from "@/features/planner/admin/svg-editor/svgPipelineRunner";
 import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
 import type { SvgCompileStagesResult } from "@/features/planner/asset-engine/svg/runSvgCompileStages";
+import {
+  assertDescriptorPublishable,
+  buildReleasedProductFromPublish,
+} from "@/features/planner/admin/svg-editor/releasedCatalogPublishGate";
 
 export type PublishDescriptorSuccess = {
   readonly success: true;
@@ -111,6 +115,12 @@ export async function publishDescriptorWithPipeline(
 
   const descriptor = parsed.value;
 
+  // Phase 2: incomplete / contradictory products cannot publish.
+  const contractGate = assertDescriptorPublishable(descriptor);
+  if (!contractGate.ok) {
+    return { success: false, error: contractGate.error };
+  }
+
   // S1–S3: asset-engine authority (normalize + pipelineCore + sanitize)
   let compile: SvgCompileStagesResult;
   try {
@@ -128,6 +138,17 @@ export async function publishDescriptorWithPipeline(
       success: false,
       error: `compiler_failed: Backend SVG compilation failed. ${compile.error} (failedAt=${compile.failedAt})`,
     };
+  }
+
+  const released = buildReleasedProductFromPublish({
+    descriptor,
+    svgMarkup: compile.svg,
+    revisionId: `${descriptor.slug}-r1`,
+    publishedAt: new Date().toISOString(),
+    availability: "available",
+  });
+  if (!released.ok) {
+    return { success: false, error: released.error };
   }
 
   // S4: disk write only — reuse validated SVG from compileSvgForPublish (no S1–S3 recompile)
