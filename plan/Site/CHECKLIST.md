@@ -13,9 +13,9 @@ Treat every item as not done.
 
 ## Phase 1 — conversion measurement and foundation
 
-- [ ] Live public routes, navigation, forms, metadata, and analytics code are freshly checked.
-- [ ] Public, private, duplicate, redirected, and dead routes are classified.
-- [ ] Indexing, accessibility, performance, and conversion failures are recorded.
+- [x] Live public routes, navigation, forms, metadata, and analytics code are freshly checked.
+- [x] Public, private, duplicate, redirected, and dead routes are classified.
+- [x] Indexing, accessibility, performance, and conversion failures are recorded.
 - [ ] One funnel covers landing entry through Planner handoff.
 - [ ] Every event has a stable name, trigger, fields, and owner.
 - [ ] Site and Planner use the same event meanings.
@@ -28,12 +28,12 @@ Treat every item as not done.
 - [ ] Missing measurement is visible and never reported as success.
 - [ ] Canonical, indexing, sitemap, and robots ownership is defined.
 - [ ] Accessibility and performance budgets are recorded.
-- [ ] Critical console, request, hydration, and navigation failures are removed.
+- [x] Critical console, request, hydration, and navigation failures are removed.
 
 ### Foundation acceptance
 
-- [ ] `SITE-IA-01` Every page file has one accepted access and lifecycle classification.
-- [ ] `SITE-IA-02` Every public page has an audience, intent, owner, canonical URL, and primary action.
+- [x] `SITE-IA-01` Every page file has one accepted access and lifecycle classification.
+- [x] `SITE-IA-02` Every public page has an audience, intent, owner, canonical URL, and primary action.
 - [ ] `SITE-IA-03` Duplicate and legacy routes use one deliberate redirect chain.
 - [ ] `SITE-MEASURE-01` One event contract covers the complete commercial journey.
 - [ ] `SITE-MEASURE-02` Rerenders, retries, redirects, and route changes do not duplicate events.
@@ -41,9 +41,9 @@ Treat every item as not done.
 - [ ] `SITE-PERF-01` Field LCP is at most 2.5 seconds at the 75th percentile.
 - [ ] `SITE-PERF-02` Field INP is at most 200 milliseconds at the 75th percentile.
 - [ ] `SITE-PERF-03` Field CLS is at most 0.1 at the 75th percentile.
-- [ ] `SITE-PERF-04` Responsive images have no broken request and below-fold media is deferred.
+- [x] `SITE-PERF-04` Responsive images have no broken request and below-fold media is deferred.
 - [ ] `SITE-SEO-01` Every indexable page has unique metadata, canonical URL, and a coherent H1.
-- [ ] `SITE-SEO-02` Titles do not duplicate the brand suffix.
+- [x] `SITE-SEO-02` Titles do not duplicate the brand suffix.
 - [ ] `SITE-SEO-03` Sitemap, robots, redirects, not-found behavior, and access classification agree.
 
 ## Phase 2 — commercial landing-page expansion
