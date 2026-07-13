@@ -536,8 +536,12 @@ export function AdminSvgEditorEditView({
             ? "Validation ok"
             : "Validation blocked (footprint)"
           : "Validation pending";
+  const identityIdShort =
+    typeof descriptor.id === "string" && descriptor.id.length > 12
+      ? `${descriptor.id.slice(0, 8)}…`
+      : descriptor.id;
   const stageMeta = {
-    identity: `Identity ${publishTarget} · SKU ${form.sku.trim() || "—"}`,
+    identity: `Identity ${publishTarget} · id ${identityIdShort} · SKU ${form.sku.trim() || "—"}`,
     footprint: `Footprint ${footprintProof.widthMm}×${footprintProof.depthMm} mm`,
     draft: `Draft ${authoringLifecycleLabel(authoringLifecycle)}`,
     validation: validationStatus,

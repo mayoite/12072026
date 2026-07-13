@@ -185,8 +185,14 @@ export function formStateToDescriptorInput(
 ): unknown {
   const variant: BlockDescriptorVariant = form.variant;
 
+  // Stable product identity: UUID and parent stay on the original record.
+  // Operators may edit slug/SKU/geometry; they must not mint a new product id.
   const base: Record<string, unknown> = {
     ...original,
+    id: original.id,
+    ...(original.parentProductId !== undefined
+      ? { parentProductId: original.parentProductId }
+      : {}),
     slug: form.slug,
     sku: form.sku.trim() === "" ? undefined : form.sku.trim(),
     sourceProvenance: form.sourceProvenance,
