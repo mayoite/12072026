@@ -63,6 +63,7 @@ Interface authority: `../../docs/architecture/06-UI-BENCHMARK.md`.
 ## Required proof
 
 - 2026-07-13: Public Planner entry links and guest/member route shell verified with focused unit/integration tests, exit 0, 21 tests.
+- 2026-07-13: Branded unpriced BOQ verified with focused unit/integration tests, exit 0, 14 tests.
 - Public-to-Planner guest entry browser journey.
 - Entry-step count at desktop and phone viewports.
 - Template, scratch, and import or trace browser checks.

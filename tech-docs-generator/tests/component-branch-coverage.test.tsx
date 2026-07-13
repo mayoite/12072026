@@ -93,17 +93,15 @@ describe('component branch coverage', () => {
   })
 
   it('builds table of contents links and scrolls to headings', async () => {
-    vi.useFakeTimers()
     const scrollIntoView = vi.fn()
     document.body.innerHTML = '<h2 id="first">First</h2><h3 id="second">Second</h3>'
     Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', { configurable: true, value: scrollIntoView })
 
     render(<TableOfContents />)
-    vi.advanceTimersByTime(100)
 
-    const first = await screen.findByText('First')
+    await screen.findByRole('link', { name: 'First' })
     expect(screen.getByText('Second')).toBeTruthy()
-    fireEvent.click(first)
+    fireEvent.click(screen.getByRole('link', { name: 'First' }))
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' })
   })
 

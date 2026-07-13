@@ -31,7 +31,7 @@ Treat every item as not done.
 - [x] BOQ includes quantities, units, and source object identifiers.
 - [ ] Unsupported and unbranded objects are visibly excluded.
 - [x] Identical inputs produce identical lines, order, and hash.
-- [ ] A branded unpriced BOQ works without live pricing.
+- [x] A branded unpriced BOQ works without live pricing.
 - [ ] Planner emits the agreed Site events without duplicates or private geometry.
 
 ## Phase 2 — core layout, catalog, and continuity
