@@ -35,6 +35,7 @@ Implementation is in progress.
 - Live code: `authoringLifecycle.ts` + `AdminSvgEditorEditView.tsx` (commits `36ff03d6`, `970a927d`) + stage status strip (`ADM-SVG-06`).
 - ADM-SVG-04/05: existing `admin-svg-engine.css` shell grid (`1fr` + `22rem` rail) + always-mounted studio regions; unit proof in `stageLayoutContract` / `phase1AcceptanceContracts` / EditView shell data attrs.
 - ADM-SVG-07: drag/resize (`node:change`) and inspector numbers both call `applySceneNodeGeometryPatch` → history present → `onDocumentChange`. Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/geometrySync.admSvg07.test.ts`.
+- ADM-SVG-09/10: layers select/order/lock/visibility/delete + named undo/redo on `svgSceneHistory` / `svgSceneDocument` (same paths as SvgStudioCanvas). Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/layersHistory.admSvg09_10.test.ts`.
 - Browser journey for authoring UI not re-run this session.
 
 - [ ] Core product fields are clear and validated.
@@ -63,8 +64,8 @@ Implementation is in progress.
 - [x] `ADM-SVG-06` Identity, footprint, view box, zoom, selection, draft, validation, and revision are visible.
 - [x] `ADM-SVG-07` Direct manipulation and numeric geometry remain synchronized.
 - [ ] `ADM-SVG-08` The supported SVG feature subset is documented and enforced.
-- [ ] `ADM-SVG-09` Layer selection, ordering, lock, visibility, and state work.
-- [ ] `ADM-SVG-10` Named undo and redo preserve a valid document.
+- [x] `ADM-SVG-09` Layer selection, ordering, lock, visibility, and state work.
+- [x] `ADM-SVG-10` Named undo and redo preserve a valid document.
 - [ ] `ADM-SVG-11` Reset, discard, delete, and rollback explain impact.
 - [ ] `ADM-SVG-12` Preview and publication share one compiler authority.
 - [ ] `ADM-SVG-13` Preview matches the Planner symbol, footprint, identity, validation, and fallback.
