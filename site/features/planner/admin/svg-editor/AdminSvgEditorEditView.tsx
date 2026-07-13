@@ -144,6 +144,11 @@ function nowStampLabel(): string {
   return new Date().toISOString().replace("T", " ").replace(/\..*$/, " UTC");
 }
 
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  return `${(bytes / 1024).toFixed(1)} KB`;
+}
+
 function variantTitle(variant: BlockDescriptorVariant): string {
   switch (variant) {
     case "fixed":
@@ -158,11 +163,11 @@ function variantTitle(variant: BlockDescriptorVariant): string {
 function describeVariant(variant: BlockDescriptorVariant): string {
   switch (variant) {
     case "fixed":
-      return "Locked dimensions; no parametric controls.";
+      return "Fixed size product.";
     case "configurable":
-      return "Discrete option set or bounded parametric adjustment.";
+      return "Options or bounded size choices.";
     case "parametric":
-      return "Full parametric schema with explicit mounting points.";
+      return "Sized in the studio with a clear footprint.";
   }
 }
 
@@ -602,16 +607,12 @@ export function AdminSvgEditorEditView({
             ? "Validation ok"
             : "Validation blocked (footprint)"
           : "Validation pending";
-  const identityIdShort =
-    typeof descriptor.id === "string" && descriptor.id.length > 12
-      ? `${descriptor.id.slice(0, 8)}…`
-      : descriptor.id;
   const stageMeta = {
-    identity: `Identity ${publishTarget} · id ${identityIdShort} · SKU ${form.sku.trim() || "—"}`,
+    identity: `Identity ${publishTarget} · SKU ${form.sku.trim() || "—"}`,
     footprint: `Footprint ${footprintProof.widthMm}×${footprintProof.depthMm} mm`,
     draft: `Draft ${authoringLifecycleLabel(authoringLifecycle)}`,
     validation: validationStatus,
-    revision: `Revision schema ${descriptor.schemaVersion} · ${updatedAtLabel} · ${artifactHashShort}`,
+    revision: `Revision ${updatedAtLabel} · checksum ${artifactHashShort}`,
   };
 
   return (
@@ -633,8 +634,8 @@ export function AdminSvgEditorEditView({
             <code>{slug}</code>
           </h1>
           <p className="admin-page__meta" data-testid="admin-shell-source">
-            Source: block-descriptor draft + published SVG on disk · schema{" "}
-            <code>{descriptor.schemaVersion}</code> ·{" "}
+            Source: local disk draft + published symbol · Products DB not live ·
+            checksum{" "}
             <code className="admin-page__checksum">{checksumShort}</code>
           </p>
           <p
@@ -678,7 +679,7 @@ export function AdminSvgEditorEditView({
               }
             >
               {footprintProof.widthMm}×{footprintProof.depthMm} mm
-              {footprintProof.aligned ? "" : " · viewBox mismatch"}
+              {footprintProof.aligned ? "" : " · drawing does not match footprint"}
             </span>
           </p>
         </div>
@@ -822,13 +823,13 @@ export function AdminSvgEditorEditView({
           ) : null}
           {authoringLifecycle === "invalid" ? (
             <p className="admin-page__meta">
-              Publication is blocked. Fix the linked validation errors in Advanced
-              block fields (and the live compile panel) before publishing.
+              Publication is blocked. Fix the linked validation errors and the
+              draft preview before publishing.
             </p>
           ) : null}
           <p className="admin-page__meta">
-            Visual difference: compare <strong>Live compile</strong> (draft) with{" "}
-            <strong>Published on disk</strong> (released artifact).
+            Visual difference: compare <strong>Draft preview</strong> with{" "}
+            <strong>Published symbol</strong>.
           </p>
         </div>
       ) : null}
@@ -847,8 +848,8 @@ export function AdminSvgEditorEditView({
           >
             <Loader2 size={16} className="animate-spin shrink-0" aria-hidden />
             <span>
-              Publishing <code>{slug}</code>… Persist + SVG pipeline in
-              progress.
+              Publishing <code>{slug}</code>… saving draft and releasing the
+              Planner symbol.
             </span>
           </div>
         ) : null}
@@ -947,7 +948,7 @@ export function AdminSvgEditorEditView({
           className="admin-svg-engine-shell__rail"
         >
           <div className="admin-panel admin-svg-engine-shell__panel">
-            <div className="admin-panel__header">Live compile</div>
+            <div className="admin-panel__header">Draft preview</div>
             <div className="admin-panel__body">
               <LiveCompiledSvgPreview
                 result={preview}
@@ -966,7 +967,7 @@ export function AdminSvgEditorEditView({
             data-artifact-state={artifactStatus.state}
             data-testid="admin-svg-artifact-panel"
           >
-            <div className="admin-panel__header">Published on disk</div>
+            <div className="admin-panel__header">Published symbol</div>
             <div className="admin-panel__body">
               <p className="admin-page__meta">
                 <span
@@ -981,13 +982,14 @@ export function AdminSvgEditorEditView({
                   {artifactStatus.state === "published"
                     ? "Published"
                     : artifactStatus.state === "invalid"
-                      ? "Invalid SVG"
+                      ? "Needs attention"
                       : "Missing"}
                 </span>{" "}
                 {artifactStatus.bytes > 0
-                  ? `${artifactStatus.bytes.toLocaleString()} bytes`
-                  : "No bytes"}{" "}
-                · SHA <code className="admin-page__checksum">{artifactHashShort}</code>
+                  ? formatBytes(artifactStatus.bytes)
+                  : "No published symbol yet"}{" "}
+                · checksum{" "}
+                <code className="admin-page__checksum">{artifactHashShort}</code>
               </p>
               <PublishedSvgPreview
                 slug={slug}

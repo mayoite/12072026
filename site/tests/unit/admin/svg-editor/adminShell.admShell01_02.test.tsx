@@ -137,7 +137,7 @@ describe("ADM-SHELL-01 list page landmarks", () => {
     expect(screen.getByTestId("admin-shell-title")).toHaveTextContent(/SVG symbols/i);
     expect(screen.getByTestId("admin-shell-scope")).toHaveTextContent(/SVG authoring/i);
     expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /catalog inventory/i,
+      /local disk inventory/i,
     );
     expect(screen.getByTestId("admin-shell-state")).toHaveTextContent(/published/i);
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(
@@ -165,7 +165,10 @@ describe("ADM-SHELL-01 edit page landmarks", () => {
     );
     expect(screen.getByTestId("admin-shell-scope")).toHaveTextContent(/SVG studio/i);
     expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /block-descriptor/i,
+      /local disk/i,
+    );
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+      /Products DB not live/i,
     );
     expect(screen.getByTestId("admin-shell-state")).toBeInTheDocument();
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(

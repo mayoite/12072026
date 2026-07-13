@@ -349,7 +349,7 @@ describe("AdminSvgEditorEditView draft recovery", () => {
     expect(screen.getByTestId("admin-status-selection")).toHaveTextContent(/selection/i);
     expect(screen.getByTestId("admin-status-draft")).toHaveTextContent(/Draft /);
     expect(screen.getByTestId("admin-status-validation")).toHaveTextContent(/Validation /);
-    expect(screen.getByTestId("admin-status-revision")).toHaveTextContent(/Revision schema/);
-    expect(screen.getByTestId("admin-status-revision")).toHaveTextContent("today");
+    expect(screen.getByTestId("admin-status-revision")).toHaveTextContent(/Revision today/);
+    expect(screen.getByTestId("admin-status-revision")).toHaveTextContent(/checksum/i);
   });
 });
