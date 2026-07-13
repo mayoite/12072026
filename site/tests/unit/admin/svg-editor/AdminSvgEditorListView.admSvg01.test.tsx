@@ -65,7 +65,7 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
     expect(copy).toHaveTextContent(/do not need to edit JSON/i);
     expect(copy.textContent ?? "").not.toMatch(/Zod|atomic-rename|pipeline/i);
 
-    const primary = screen.getByTestId("admin-svg-primary-new");
+    const primary = screen.getByTestId("admin-shell-primary-action");
     expect(primary).toHaveAttribute("href", "/admin/svg-editor/new");
     expect(primary).toHaveClass("admin-btn--primary");
     expect(primary).toHaveTextContent(/New SVG symbol/);

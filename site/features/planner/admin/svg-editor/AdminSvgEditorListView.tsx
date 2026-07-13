@@ -226,35 +226,49 @@ export function AdminSvgEditorListView({
   );
 
   return (
-    <div className="admin-page" data-testid="admin-svg-primary-journey">
-      <header className="admin-page__header">
+    <div
+      className="admin-page"
+      data-testid="admin-svg-primary-journey"
+      data-admin-shell="list"
+    >
+      <header className="admin-page__header" data-testid="admin-shell-header">
         <div>
-          <p className="admin-page__eyebrow">Catalog assets · SVG authoring</p>
-          <h1 className="admin-page__title">SVG symbols</h1>
+          {/* ADM-SHELL-01: title, scope, source, state */}
+          <p className="admin-page__eyebrow" data-testid="admin-shell-scope">
+            Catalog assets · SVG authoring
+          </p>
+          <h1 className="admin-page__title" data-testid="admin-shell-title">
+            SVG symbols
+          </h1>
           <p className="admin-page__copy" data-testid="admin-svg-journey-copy">
             Draw and edit product symbols in the visual studio. Set identity and
             millimetre footprint, preview the Planner symbol, then publish. You
             do not need to edit JSON or source code.
           </p>
-          <p className="admin-page__meta">
-            Inventory refreshed <code>{refreshedAtLabel}</code>
+          <p className="admin-page__meta" data-testid="admin-shell-source">
+            Source: disk block-descriptors (buyer-visible inventory) · refreshed{" "}
+            <code>{refreshedAtLabel}</code>
           </p>
           <p
             className="admin-page__meta"
             role="status"
-            data-testid="artifact-health"
+            data-testid="admin-shell-state"
           >
-            Artifact health: <strong>{publishedCount}</strong> published ·{" "}
-            <strong>{missingCount}</strong> missing ·{" "}
-            <strong>{invalidCount}</strong> invalid · of{" "}
-            <strong>{descriptors.length}</strong> symbols.
+            State:{" "}
+            <span data-testid="artifact-health">
+              <strong>{publishedCount}</strong> published ·{" "}
+              <strong>{missingCount}</strong> missing ·{" "}
+              <strong>{invalidCount}</strong> invalid · of{" "}
+              <strong>{descriptors.length}</strong> symbols
+            </span>
           </p>
         </div>
-        <div className="admin-page__actions">
+        {/* ADM-SHELL-02: only one primary action in the header */}
+        <div className="admin-page__actions" data-testid="admin-shell-actions">
           <Link
             href="/admin/svg-editor/new"
             className="admin-btn admin-btn--primary"
-            data-testid="admin-svg-primary-new"
+            data-testid="admin-shell-primary-action"
           >
             <Plus size={14} aria-hidden />
             New SVG symbol
