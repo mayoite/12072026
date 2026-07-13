@@ -1,85 +1,212 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { CircleNotch as Loader2, UploadSimple } from "@phosphor-icons/react";
+import { CircleNotch as Loader2, UploadSimple, Eye } from "@phosphor-icons/react";
 import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
 
 const SAMPLE_CSV = `slug,sku,variant,width_mm,depth_mm,height_mm,lifecycle
 import-demo-001,OFL-IMP-001,fixed,600,600,750,draft`;
+
+type BulkError = { row: number; message: string; field?: string };
+
+type PreviewPayload = {
+  success?: boolean;
+  dryRun?: boolean;
+  summary?: string;
+  additions?: Array<{ slug: string; sku: string; csvRow?: number }>;
+  rejects?: BulkError[];
+  conflicts?: BulkError[];
+  canApply?: boolean;
+  error?: string;
+};
+
+type ApplyPayload = {
+  success?: boolean;
+  imported?: string[];
+  provenance?: { source?: string; importedAt?: string; createdBy?: string };
+  errors?: BulkError[];
+  error?: string;
+};
+
+function formatErrors(errors: BulkError[] | undefined): string {
+  if (!errors?.length) return "";
+  return errors
+    .map((row) => {
+      const field = row.field ? ` field ${row.field}` : "";
+      return `Row ${row.row}${field}: ${row.message}`;
+    })
+    .join(" · ");
+}
 
 export function AdminSvgBulkImportPanel() {
   const [csv, setCsv] = useState(SAMPLE_CSV);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [previewText, setPreviewText] = useState<string | null>(null);
+  const [canApply, setCanApply] = useState(false);
 
-  const runImport = useCallback(async () => {
-    setBusy(true);
-    setMessage(null);
-    setError(null);
-    try {
-      const response = await browserApiFetch(apiPath("/api/admin/svg-editor/bulk-import"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ csv }),
-      });
-      const payload = (await response.json()) as {
-        success?: boolean;
-        imported?: string[];
-        errors?: Array<{ row: number; message: string }>;
-        error?: string;
-      };
-      if (!response.ok || payload.success === false) {
-        const detail =
-          payload.errors?.map((row) => `Row ${row.row}: ${row.message}`).join(" · ") ??
-          payload.error ??
-          `Import failed (${response.status})`;
-        setError(detail);
-        return;
+  const postImport = useCallback(
+    async (dryRun: boolean) => {
+      setBusy(true);
+      setMessage(null);
+      setError(null);
+      if (dryRun) setPreviewText(null);
+      try {
+        const response = await browserApiFetch(
+          apiPath("/api/admin/svg-editor/bulk-import"),
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ csv, dryRun }),
+          },
+        );
+        const payload = (await response.json()) as PreviewPayload & ApplyPayload;
+
+        if (dryRun) {
+          if (!response.ok && payload.success === false) {
+            const detail =
+              formatErrors(payload.rejects ?? payload.errors) ||
+              formatErrors(payload.conflicts) ||
+              payload.error ||
+              `Preview failed (${response.status})`;
+            setError(detail);
+            setCanApply(false);
+            setPreviewText(payload.summary ?? null);
+            return;
+          }
+          const lines: string[] = [];
+          if (payload.summary) lines.push(payload.summary);
+          if (payload.additions?.length) {
+            lines.push(
+              `Additions (${payload.additions.length}): ${payload.additions
+                .map((a) => a.slug)
+                .join(", ")}`,
+            );
+          }
+          if (payload.conflicts?.length) {
+            lines.push(`Conflicts: ${formatErrors(payload.conflicts)}`);
+          }
+          if (payload.rejects?.length) {
+            lines.push(`Rejects: ${formatErrors(payload.rejects)}`);
+          }
+          setPreviewText(lines.join("\n") || "Empty preview.");
+          setCanApply(payload.canApply === true);
+          if (payload.canApply !== true) {
+            setError(
+              formatErrors([
+                ...(payload.rejects ?? []),
+                ...(payload.conflicts ?? []),
+                ...(payload.errors ?? []),
+              ]) || "Batch blocked — fix errors before apply.",
+            );
+          }
+          return;
+        }
+
+        if (!response.ok || payload.success === false) {
+          const detail =
+            formatErrors(payload.errors) ||
+            payload.error ||
+            `Import failed (${response.status})`;
+          setError(detail);
+          setCanApply(false);
+          return;
+        }
+        const prov = payload.provenance;
+        setMessage(
+          `Imported ${payload.imported?.length ?? 0} descriptor(s)` +
+            (prov?.importedAt
+              ? ` · provenance ${prov.source ?? "bulk-csv-import"} at ${prov.importedAt}`
+              : "") +
+            ". Reload to see the list.",
+        );
+        setCanApply(false);
+        setPreviewText(null);
+      } catch (cause) {
+        setError(cause instanceof Error ? cause.message : String(cause));
+        setCanApply(false);
+      } finally {
+        setBusy(false);
       }
-      setMessage(`Imported ${payload.imported?.length ?? 0} descriptor(s). Reload to see the list.`);
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : String(cause));
-    } finally {
-      setBusy(false);
-    }
-  }, [csv]);
+    },
+    [csv],
+  );
 
   return (
     <section aria-label="Bulk CSV import" data-testid="admin-svg-bulk-import">
       <div className="flex flex-col gap-3">
         <p className="admin-table__secondary">
-          CSV columns: slug, sku, variant, width_mm, depth_mm, height_mm, lifecycle (optional).
-          One bad row rolls back the whole batch.
+          CSV columns: slug, sku, variant, width_mm, depth_mm, height_mm,
+          lifecycle (optional). Preview all changes first. One bad row blocks
+          the full batch; apply is atomic.
         </p>
         <textarea
           className="admin-input font-mono text-sm min-h-[120px]"
           value={csv}
-          onChange={(event) => setCsv(event.target.value)}
+          onChange={(event) => {
+            setCsv(event.target.value);
+            setCanApply(false);
+            setPreviewText(null);
+          }}
           aria-label="Bulk import CSV"
         />
         <div className="flex flex-wrap gap-2 items-center">
           <button
             type="button"
             className="admin-btn admin-btn--outline"
-            onClick={runImport}
+            onClick={() => void postImport(true)}
             disabled={busy}
+            data-testid="admin-svg-bulk-import-preview"
+          >
+            {busy ? (
+              <Loader2 size={14} className="animate-spin" aria-hidden />
+            ) : (
+              <Eye size={14} aria-hidden />
+            )}
+            Preview changes
+          </button>
+          <button
+            type="button"
+            className="admin-btn admin-btn--outline"
+            onClick={() => void postImport(false)}
+            disabled={busy || !canApply}
             data-testid="admin-svg-bulk-import-submit"
           >
-            {busy ? <Loader2 size={14} className="animate-spin" aria-hidden /> : <UploadSimple size={14} aria-hidden />}
-            Import batch
+            {busy ? (
+              <Loader2 size={14} className="animate-spin" aria-hidden />
+            ) : (
+              <UploadSimple size={14} aria-hidden />
+            )}
+            Apply batch
           </button>
           {message ? (
-            <p className="admin-table__secondary" role="status">
+            <p
+              className="admin-table__secondary"
+              role="status"
+              data-testid="admin-svg-bulk-import-success"
+            >
               {message}
             </p>
           ) : null}
           {error ? (
-            <p className="admin-table__secondary text-[var(--color-danger)]" role="alert">
+            <p
+              className="admin-table__secondary text-[var(--color-danger)]"
+              role="alert"
+              data-testid="admin-svg-bulk-import-error"
+            >
               {error}
             </p>
           ) : null}
         </div>
+        {previewText ? (
+          <pre
+            className="admin-table__secondary whitespace-pre-wrap font-mono text-xs"
+            data-testid="admin-svg-bulk-import-preview-result"
+          >
+            {previewText}
+          </pre>
+        ) : null}
       </div>
     </section>
   );

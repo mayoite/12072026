@@ -15,7 +15,10 @@ import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svg
 import type { PipelineResult } from "@/features/planner/admin/svg-editor/svgPipelineRunner";
 import type { PersistResult } from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
 import type { SvgCompileStagesResult } from "@/features/planner/asset-engine/svg/runSvgCompileStages";
-import { publishDescriptorWithPipeline } from "@/features/planner/admin/svg-editor/publishDescriptorWithPipeline";
+import {
+  publishDescriptorWithPipeline,
+  sha256Utf8,
+} from "@/features/planner/admin/svg-editor/publishDescriptorWithPipeline";
 
 const tempDirs: string[] = [];
 
@@ -449,5 +452,146 @@ describe("publishDescriptorWithPipeline skipCompile path (S4 reuses S1–S3 SVG)
       precompiledSvg: compiledSvg,
     });
     expect(persist).not.toHaveBeenCalled();
+  });
+});
+
+/**
+ * Disk-path mapping for dual publish safety (not Products DB transaction yet).
+ * ADM-PUB-03 / DB-SVG-06 (ordered dual write) · DB-SVG-07 (prior live) · DB-SVG-08 (idempotent).
+ */
+describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-06..08 disk path)", () => {
+  it("ADM-PUB-03 / DB-SVG-06: success only after compile then pipeline then persist (one operation)", async () => {
+    const order: string[] = [];
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => {
+        order.push("compile");
+        return compileOk();
+      },
+      runPipeline: async () => {
+        order.push("pipeline");
+        return pipelineOk();
+      },
+      persist: () => {
+        order.push("persist");
+        return persistOk();
+      },
+    });
+    expect(result.success).toBe(true);
+    expect(order).toEqual(["compile", "pipeline", "persist"]);
+  });
+
+  it("ADM-PUB-03: never succeeds when any dual-write step fails (partial impossible)", async () => {
+    const cases = await Promise.all([
+      publishDescriptorWithPipeline(validDescriptor, {
+        parsePayload: () => ({ ok: true, value: validDescriptor }),
+        compileSvg: async () => compileErr(),
+        runPipeline: async () => pipelineOk(),
+        persist: () => persistOk(),
+      }),
+      publishDescriptorWithPipeline(validDescriptor, {
+        parsePayload: () => ({ ok: true, value: validDescriptor }),
+        compileSvg: async () => compileOk(),
+        runPipeline: async () => pipelineErr(),
+        persist: () => persistOk(),
+      }),
+      publishDescriptorWithPipeline(validDescriptor, {
+        parsePayload: () => ({ ok: true, value: validDescriptor }),
+        compileSvg: async () => compileOk(),
+        runPipeline: async () => pipelineOk(),
+        persist: () => persistErr(),
+      }),
+    ]);
+    for (const result of cases) {
+      expect(result.success).toBe(false);
+    }
+  });
+
+  it("DB-SVG-07: failed persist after pipeline leaves prior SVG and descriptor pointer live", async () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "db-svg-07-"));
+    tempDirs.push(dir);
+    const svgPath = path.join(dir, "test-block.svg");
+    const descriptorPath = path.join(dir, "test-block.latest.json");
+    const priorSvg = '<svg data-revision="live-prior"/>\n';
+    const priorDescriptor = '{"revision":3,"checksum":"prior-live"}\n';
+    writeFileSync(svgPath, priorSvg, "utf8");
+    writeFileSync(descriptorPath, priorDescriptor, "utf8");
+
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => {
+        writeFileSync(svgPath, '<svg data-revision="new-partial"/>\n', "utf8");
+        return {
+          ...pipelineOk(),
+          svgPath,
+          rollback: () => writeFileSync(svgPath, priorSvg, "utf8"),
+        };
+      },
+      persist: () => {
+        writeFileSync(descriptorPath, '{"revision":4,"checksum":"new"}\n', "utf8");
+        return {
+          ...persistErr("pointer update failed"),
+          rollback: () => writeFileSync(descriptorPath, priorDescriptor, "utf8"),
+        };
+      },
+    });
+
+    expect(result.success).toBe(false);
+    expect(readFileSync(svgPath, "utf8")).toBe(priorSvg);
+    expect(readFileSync(descriptorPath, "utf8")).toBe(priorDescriptor);
+  });
+
+  it("DB-SVG-08: unchanged released SVG + descriptor is idempotent (no pipeline/persist)", async () => {
+    const compiled = compileOk();
+    const svgChecksum = sha256Utf8(compiled.svg);
+    const compileSvg = vi.fn(async () => compiled);
+    const runPipeline = vi.fn(async () => pipelineOk());
+    const persist = vi.fn(() => persistOk());
+
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg,
+      runPipeline,
+      persist,
+      readReleasedSnapshot: (slug) => {
+        expect(slug).toBe("test-block");
+        return {
+          svgChecksum,
+          descriptorChecksum: validDescriptor.checksum,
+        };
+      },
+    });
+
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect(result.idempotent).toBe(true);
+    expect(result.descriptor).toEqual(validDescriptor);
+    expect(compileSvg).toHaveBeenCalledOnce();
+    expect(runPipeline).not.toHaveBeenCalled();
+    expect(persist).not.toHaveBeenCalled();
+  });
+
+  it("DB-SVG-08: changed SVG still runs full dual write (not idempotent)", async () => {
+    const compileSvg = vi.fn(async () => compileOk());
+    const runPipeline = vi.fn(async () => pipelineOk());
+    const persist = vi.fn(() => persistOk());
+
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg,
+      runPipeline,
+      persist,
+      readReleasedSnapshot: () => ({
+        svgChecksum: "0".repeat(64),
+        descriptorChecksum: validDescriptor.checksum,
+      }),
+    });
+
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect(result.idempotent).toBeUndefined();
+    expect(runPipeline).toHaveBeenCalledOnce();
+    expect(persist).toHaveBeenCalledOnce();
   });
 });

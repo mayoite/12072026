@@ -5,8 +5,15 @@
  * success when compilation fails. Pure of Next server-action surface — injectable
  * deps for unit tests.
  *
+ * Phase 2 disk-path mapping (not full Products DB transaction yet):
+ * - ADM-PUB-03 / dual-write: success only after compile + S4 + persist; failures roll back.
+ * - DB-SVG-07: prior SVG/descriptor restored when post-pipeline persist fails.
+ * - DB-SVG-08: unchanged released SVG + descriptor short-circuits (no partial rewrite).
+ *
  * GS: BP-03, anti-copy. No `any`.
  */
+
+import { createHash } from "node:crypto";
 
 import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
 import type { PlannerDescriptorError, PlannerResult } from "@/features/planner/project/catalog/svg/svgTypes";
@@ -30,6 +37,11 @@ import {
 export type PublishDescriptorSuccess = {
   readonly success: true;
   readonly descriptor: BlockDescriptor;
+  /**
+   * True when compile matched the already-released SVG + product fingerprint
+   * and no disk rewrite ran (DB-SVG-08 disk path).
+   */
+  readonly idempotent?: boolean;
 };
 
 export type PublishDescriptorFailure = {
@@ -40,6 +52,17 @@ export type PublishDescriptorFailure = {
 export type PublishDescriptorResult =
   | PublishDescriptorSuccess
   | PublishDescriptorFailure;
+
+/**
+ * Snapshot of the currently released product for idempotent republish detection.
+ * Injected in tests; production may load live SVG + descriptor checksums.
+ */
+export type ReleasedPublishSnapshot = {
+  /** SHA-256 hex of the live released SVG bytes. */
+  readonly svgChecksum: string;
+  /** Canonical descriptor checksum of the last published product JSON. */
+  readonly descriptorChecksum: string;
+};
 
 export type PublishDescriptorWithPipelineDeps = {
   readonly parsePayload?: (
@@ -61,14 +84,32 @@ export type PublishDescriptorWithPipelineDeps = {
     options?: PipelineOptions,
   ) => Promise<PipelineResult>;
   readonly persist?: (input: unknown) => PersistResult;
+  /**
+   * Optional live released snapshot. When present and matches the compiled
+   * release, publish returns success without pipeline/persist (DB-SVG-08).
+   */
+  readonly readReleasedSnapshot?: (
+    slug: string,
+  ) => ReleasedPublishSnapshot | null;
 };
 
-const DEFAULT_DEPS: Required<PublishDescriptorWithPipelineDeps> = {
+const DEFAULT_DEPS: Required<
+  Omit<PublishDescriptorWithPipelineDeps, "readReleasedSnapshot">
+> & {
+  readonly readReleasedSnapshot: (
+    slug: string,
+  ) => ReleasedPublishSnapshot | null;
+} = {
   parsePayload: parseAdminPayload,
   compileSvg: compileSvgForPublish,
   runPipeline: runSvgPipeline,
   persist: persistBlockDescriptor,
+  readReleasedSnapshot: () => null,
 };
+
+export function sha256Utf8(body: string): string {
+  return createHash("sha256").update(body, "utf8").digest("hex");
+}
 
 function runAllBestEffort(...operations: ReadonlyArray<(() => void) | undefined>): string[] {
   const errors: string[] = [];
@@ -104,6 +145,8 @@ export async function publishDescriptorWithPipeline(
   const compileSvg = deps.compileSvg ?? DEFAULT_DEPS.compileSvg;
   const runPipeline = deps.runPipeline ?? DEFAULT_DEPS.runPipeline;
   const persist = deps.persist ?? DEFAULT_DEPS.persist;
+  const readReleasedSnapshot =
+    deps.readReleasedSnapshot ?? DEFAULT_DEPS.readReleasedSnapshot;
 
   const parsed = parsePayload(descriptorInput);
   if (!parsed.ok) {
@@ -149,6 +192,21 @@ export async function publishDescriptorWithPipeline(
   });
   if (!released.ok) {
     return { success: false, error: released.error };
+  }
+
+  // DB-SVG-08 (disk path): unchanged released SVG + descriptor → no rewrite.
+  // Success without pipeline/persist — cannot leave a partial dual-write.
+  const live = readReleasedSnapshot(descriptor.slug);
+  if (
+    live &&
+    live.svgChecksum === released.product.svg.checksum &&
+    live.descriptorChecksum === descriptor.checksum
+  ) {
+    return {
+      success: true,
+      descriptor,
+      idempotent: true,
+    };
   }
 
   // S4: disk write only — reuse validated SVG from compileSvgForPublish (no S1–S3 recompile)

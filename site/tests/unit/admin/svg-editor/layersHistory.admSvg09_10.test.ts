@@ -6,6 +6,8 @@
  * svgSceneDocument + svgSceneHistory (same authority as the UI).
  */
 
+import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -28,6 +30,16 @@ import {
   undo,
   undoLabel,
 } from "@/features/planner/admin/svg-editor/scene/svgSceneHistory";
+
+function readCanvasSource(): string {
+  return fs.readFileSync(
+    path.join(
+      process.cwd(),
+      "features/planner/admin/svg-editor/SvgStudioCanvas.tsx",
+    ),
+    "utf8",
+  );
+}
 
 function rect(id: string, over: Partial<SvgSceneNode> = {}): SvgSceneNode {
   return {
@@ -161,5 +173,26 @@ describe("ADM-SVG-10 named undo/redo preserve valid document", () => {
     history = undo(history);
     expect(findNode(history.present.document, "b")?.hidden).toBe(false);
     expect(() => validateDocument(history.present.document)).not.toThrow();
+  });
+
+  it("SvgStudioCanvas wires layer ops and named undo/redo labels", () => {
+    const src = readCanvasSource();
+    // ADM-SVG-09: select, order, lock, visibility, clear (delete).
+    expect(src).toMatch(/setSelectedId\(node\.id\)/);
+    expect(src).toMatch(/reorderNode\(document,\s*selected\.id,\s*document\.nodes\.length - 1\)/);
+    expect(src).toMatch(/reorderNode\(document,\s*selected\.id,\s*0\)/);
+    expect(src).toMatch(/locked: !n\.locked/);
+    expect(src).toMatch(/hidden: !n\.hidden/);
+    expect(src).toMatch(/removeNode\(document,\s*selected\.id\)/);
+    // ADM-SVG-10: named commits + named undo/redo chrome.
+    expect(src).toMatch(/commit\(current,\s*label,\s*next\)/);
+    expect(src).toMatch(/`Bring \$\{selected\.name\} to front`/);
+    expect(src).toMatch(/`Lock \$\{node\.name\}`|`Unlock \$\{node\.name\}`/);
+    expect(src).toMatch(/`Hide \$\{node\.name\}`|`Show \$\{node\.name\}`/);
+    expect(src).toMatch(/`Delete \$\{selected\.name\}`/);
+    expect(src).toMatch(/undoLabel\(history\)/);
+    expect(src).toMatch(/redoLabel\(history\)/);
+    expect(src).toMatch(/Undo: \$\{undoLabel\(history\)\}/);
+    expect(src).toMatch(/Redo: \$\{redoLabel\(history\)\}/);
   });
 });

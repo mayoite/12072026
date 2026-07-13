@@ -79,6 +79,12 @@ import {
   publishSuccessMessage,
   releasedSvgHref,
 } from "./publishActionMessages";
+import {
+  declareSvgEditSources,
+  formatDataSourceBanner,
+} from "./adminDataSourceEditability";
+import { phoneAuthoringBlockedMessage } from "@/features/planner/admin/adminMobileReview";
+import { assertDraftNotStale } from "./staleDraftPublishGate";
 
 /** Browser-only 3D islands — static import of model-viewer/three breaks RSC SSR. */
 const GlbExtruderPreview = dynamic(
@@ -188,6 +194,9 @@ export function AdminSvgEditorEditView({
   const [form, setForm] = useState<SvgEditorFormState>(() =>
     descriptorToFormState(descriptor),
   );
+  /** Baseline stamp at open — DB-SVG-09 stale draft detection. */
+  const [openedBaselineGeneratedAt] = useState(() => descriptor.generatedAt);
+
   const [publishedForm, setPublishedForm] = useState<SvgEditorFormState>(() =>
     descriptorToFormState(descriptor),
   );
@@ -383,6 +392,21 @@ export function AdminSvgEditorEditView({
   const publishTarget = form.slug.trim() || slug;
 
   const handlePublish = useCallback(async () => {
+    // DB-SVG-09 disk path: refuse publish if baseline moved under the draft.
+    const stale = assertDraftNotStale({
+      slug,
+      clientBaselineGeneratedAt: openedBaselineGeneratedAt,
+      serverBaselineGeneratedAt: descriptor.generatedAt,
+    });
+    if (!stale.ok) {
+      setFeedback({
+        submitting: false,
+        errorMessage: stale.error,
+        successMessage: null,
+        publishedSlug: null,
+      });
+      return;
+    }
     if (!footprintProof.aligned) {
       setFeedback({
         submitting: false,
@@ -505,10 +529,12 @@ export function AdminSvgEditorEditView({
   }, [
     artifactStatus.hash,
     artifactStatus.state,
+    descriptor.generatedAt,
     descriptor.schemaVersion,
     footprintProof.aligned,
     form,
     onPublishAction,
+    openedBaselineGeneratedAt,
     preview,
     previewPending,
     publishPayloadFromStudio,
@@ -706,6 +732,30 @@ export function AdminSvgEditorEditView({
           </button>
         </div>
       </header>
+
+      {/* ADM-STATE-02 — editability explicit before write */}
+      <p
+        className="admin-page__meta"
+        data-testid="admin-data-source-editability"
+        data-editable={
+          lifecycle === "retired" || !onPublishAction ? "false" : "true"
+        }
+      >
+        {formatDataSourceBanner(
+          declareSvgEditSources({
+            catalogLifecycle: lifecycle,
+            hasOnPublishAction: Boolean(onPublishAction),
+          }),
+        )}
+      </p>
+
+      {/* ADM-MOB-02 — declare unsupported phone authoring before work */}
+      <p
+        className="admin-page__meta admin-phone-authoring-notice"
+        data-testid="admin-phone-authoring-notice"
+      >
+        {phoneAuthoringBlockedMessage()}
+      </p>
 
       <p
         id="admin-svg-publication-impact"

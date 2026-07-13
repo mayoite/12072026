@@ -1,6 +1,13 @@
 /**
- * Admin P02 — atomic CSV bulk import for new block descriptors.
- * Validates the full batch before any persist; rolls back partial writes on failure.
+ * ADM-SVG-18 + Phase 2 catalog import — CSV bulk import for new block descriptors.
+ *
+ * - Preview lists additions, conflicts, and rejects before any write.
+ * - Apply is atomic: one invalid/conflict row blocks the full batch; partial
+ *   writes roll back.
+ * - Errors carry exact row (+ field when known).
+ * - Provenance: sourceProvenance=migrated, createdBy=bulk-csv-import@iso-time.
+ *
+ * Tests must pass an isolated `dir` — never mutate the canonical catalog.
  */
 
 import { existsSync } from "node:fs";
@@ -33,16 +40,21 @@ export type BulkImportRow = {
   readonly depthMm: number;
   readonly heightMm: number;
   readonly lifecycle: CatalogLifecycleState;
+  /** 1-based CSV line number (header is line 1). */
+  readonly csvRow: number;
 };
 
 export type BulkImportRowError = {
   readonly row: number;
   readonly message: string;
+  /** CSV column / field path when known. */
+  readonly field?: string;
 };
 
 export type BulkImportSuccess = {
   readonly ok: true;
   readonly imported: readonly string[];
+  readonly provenance: BulkImportProvenance;
 };
 
 export type BulkImportFailure = {
@@ -55,6 +67,26 @@ export type BulkImportResult = BulkImportSuccess | BulkImportFailure;
 export type BulkImportParseSuccess = {
   readonly ok: true;
   readonly rows: readonly BulkImportRow[];
+};
+
+/** Recorded on every imported descriptor. */
+export type BulkImportProvenance = {
+  readonly source: "bulk-csv-import";
+  readonly sourceProvenance: "migrated";
+  readonly createdBy: string;
+  readonly importedAt: string;
+};
+
+/**
+ * ADM-SVG-18 preview — all changes without writing.
+ * canApply is true only when there are additions and zero rejects/conflicts.
+ */
+export type BulkImportPreview = {
+  readonly additions: readonly BulkImportRow[];
+  readonly rejects: readonly BulkImportRowError[];
+  readonly conflicts: readonly BulkImportRowError[];
+  readonly canApply: boolean;
+  readonly summary: string;
 };
 
 const REQUIRED_HEADERS = [
@@ -108,17 +140,52 @@ function positiveNumber(raw: string): number | null {
   return value;
 }
 
-export function parseBulkImportCsv(csv: string): BulkImportParseSuccess | BulkImportFailure {
-  const lines = csv.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+export function buildBulkImportProvenance(
+  clock: () => Date = () => new Date(),
+): BulkImportProvenance {
+  const importedAt = clock().toISOString();
+  return {
+    source: "bulk-csv-import",
+    sourceProvenance: "migrated",
+    createdBy: `bulk-csv-import@${importedAt}`,
+    importedAt,
+  };
+}
+
+export function parseBulkImportCsv(
+  csv: string,
+): BulkImportParseSuccess | BulkImportFailure {
+  const lines = csv
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
   if (lines.length < 2) {
-    return { ok: false, errors: [{ row: 0, message: "CSV must include a header row and at least one data row" }] };
+    return {
+      ok: false,
+      errors: [
+        {
+          row: 0,
+          field: "csv",
+          message: "CSV must include a header row and at least one data row",
+        },
+      ],
+    };
   }
 
   const headers = parseCsvLine(lines[0]).map((h) => h.toLowerCase());
   const index = (name: string) => headers.indexOf(name);
   for (const required of REQUIRED_HEADERS) {
     if (index(required) < 0) {
-      return { ok: false, errors: [{ row: 0, message: `Missing required column: ${required}` }] };
+      return {
+        ok: false,
+        errors: [
+          {
+            row: 0,
+            field: required,
+            message: `Missing required column: ${required}`,
+          },
+        ],
+      };
     }
   }
 
@@ -136,28 +203,66 @@ export function parseBulkImportCsv(csv: string): BulkImportParseSuccess | BulkIm
     const widthMm = positiveNumber(cols[index("width_mm")] ?? "");
     const depthMm = positiveNumber(cols[index("depth_mm")] ?? "");
     const heightMm = positiveNumber(cols[index("height_mm")] ?? "");
-    const lifecycle = parseLifecycle(lifecycleIdx >= 0 ? cols[lifecycleIdx] : undefined);
+    const lifecycle = parseLifecycle(
+      lifecycleIdx >= 0 ? cols[lifecycleIdx] : undefined,
+    );
 
     if (!BLOCK_DESCRIPTOR_SLUG_REGEX.test(slug)) {
-      errors.push({ row: rowNumber, message: `Invalid slug "${slug}"` });
+      errors.push({
+        row: rowNumber,
+        field: "slug",
+        message: `Invalid slug "${slug}"`,
+      });
       continue;
     }
     if (seenSlugs.has(slug)) {
-      errors.push({ row: rowNumber, message: `Duplicate slug "${slug}" in batch` });
+      errors.push({
+        row: rowNumber,
+        field: "slug",
+        message: `Duplicate slug "${slug}" in batch`,
+      });
       continue;
     }
     seenSlugs.add(slug);
     const variant = parseVariant(variantRaw);
     if (!variant) {
-      errors.push({ row: rowNumber, message: `Invalid variant "${variantRaw}"` });
+      errors.push({
+        row: rowNumber,
+        field: "variant",
+        message: `Invalid variant "${variantRaw}"`,
+      });
       continue;
     }
-    if (widthMm === null || depthMm === null || heightMm === null) {
-      errors.push({ row: rowNumber, message: "width_mm, depth_mm, and height_mm must be positive numbers" });
+    if (widthMm === null) {
+      errors.push({
+        row: rowNumber,
+        field: "width_mm",
+        message: "width_mm must be a positive number",
+      });
+      continue;
+    }
+    if (depthMm === null) {
+      errors.push({
+        row: rowNumber,
+        field: "depth_mm",
+        message: "depth_mm must be a positive number",
+      });
+      continue;
+    }
+    if (heightMm === null) {
+      errors.push({
+        row: rowNumber,
+        field: "height_mm",
+        message: "height_mm must be a positive number",
+      });
       continue;
     }
     if (sku.trim() === "") {
-      errors.push({ row: rowNumber, message: "sku is required" });
+      errors.push({
+        row: rowNumber,
+        field: "sku",
+        message: "sku is required",
+      });
       continue;
     }
 
@@ -169,17 +274,86 @@ export function parseBulkImportCsv(csv: string): BulkImportParseSuccess | BulkIm
       depthMm,
       heightMm,
       lifecycle,
+      csvRow: rowNumber,
     });
   }
 
   if (errors.length > 0) return { ok: false, errors };
   if (rows.length === 0) {
-    return { ok: false, errors: [{ row: 0, message: "No import rows found" }] };
+    return {
+      ok: false,
+      errors: [{ row: 0, field: "csv", message: "No import rows found" }],
+    };
   }
   return { ok: true, rows };
 }
 
-function descriptorInputFromRow(row: BulkImportRow): Record<string, unknown> {
+function defaultSlugExists(
+  slug: string,
+  dir: string,
+): boolean {
+  const legacyPath = path.join(dir, `${slug}.json`);
+  const pointerPath = path.join(dir, `${slug}.latest.json`);
+  return (
+    existsSync(legacyPath) ||
+    existsSync(pointerPath) ||
+    tryLoad(slug, { dir }).ok
+  );
+}
+
+/**
+ * Preview every addition, reject, and conflict without writing (ADM-SVG-18).
+ * `slugExists` is injectable so tests never touch the canonical catalog.
+ */
+export function previewBulkImport(
+  csv: string,
+  slugExists: (slug: string) => boolean = () => false,
+): BulkImportPreview {
+  const parsed = parseBulkImportCsv(csv);
+  if (!parsed.ok) {
+    return {
+      additions: [],
+      rejects: parsed.errors,
+      conflicts: [],
+      canApply: false,
+      summary: `Blocked: ${parsed.errors.length} validation error(s). No rows will be written.`,
+    };
+  }
+
+  const conflicts: BulkImportRowError[] = [];
+  const additions: BulkImportRow[] = [];
+  for (const row of parsed.rows) {
+    if (slugExists(row.slug)) {
+      conflicts.push({
+        row: row.csvRow,
+        field: "slug",
+        message: `Slug "${row.slug}" already exists — bulk import only creates new descriptors`,
+      });
+    } else {
+      additions.push(row);
+    }
+  }
+
+  const canApply = conflicts.length === 0 && additions.length > 0;
+  const summary = canApply
+    ? `Preview: will add ${additions.length} descriptor(s). No conflicts.`
+    : conflicts.length > 0
+      ? `Blocked: ${conflicts.length} conflict(s), ${additions.length} would-be addition(s). Nothing will be written.`
+      : "Blocked: nothing to import.";
+
+  return {
+    additions,
+    rejects: [],
+    conflicts,
+    canApply,
+    summary,
+  };
+}
+
+function descriptorInputFromRow(
+  row: BulkImportRow,
+  provenance: BulkImportProvenance,
+): Record<string, unknown> {
   const viewWidth = Math.max(1, Math.round(row.widthMm));
   const viewHeight = Math.max(1, Math.round(row.depthMm));
   const base: Record<string, unknown> = {
@@ -187,8 +361,8 @@ function descriptorInputFromRow(row: BulkImportRow): Record<string, unknown> {
     id: "00000000-0000-4000-8000-000000000001",
     slug: row.slug,
     sku: row.sku,
-    sourceProvenance: "native",
-    createdBy: "bulk-import",
+    sourceProvenance: provenance.sourceProvenance,
+    createdBy: provenance.createdBy,
     geometry: {
       widthMm: row.widthMm,
       depthMm: row.depthMm,
@@ -246,39 +420,53 @@ function descriptorInputFromRow(row: BulkImportRow): Record<string, unknown> {
   return base;
 }
 
+export type BulkImportOptions = {
+  readonly dir?: string;
+  readonly clock?: () => Date;
+  readonly dryRun?: boolean;
+};
+
+/**
+ * Preview (dryRun) or atomic apply. Full batch blocked on any reject/conflict.
+ */
 export function bulkImportBlockDescriptors(
   csv: string,
-  dir: string = BLOCK_DESCRIPTORS_DIR_DEFAULT,
-): BulkImportResult {
-  const parsed = parseBulkImportCsv(csv);
-  if (!parsed.ok) return parsed;
-  const rows = parsed.rows;
+  dirOrOptions: string | BulkImportOptions = BLOCK_DESCRIPTORS_DIR_DEFAULT,
+): BulkImportResult | (BulkImportPreview & { readonly ok: true; readonly dryRun: true }) {
+  const options: BulkImportOptions =
+    typeof dirOrOptions === "string" ? { dir: dirOrOptions } : dirOrOptions;
+  const dir = options.dir ?? BLOCK_DESCRIPTORS_DIR_DEFAULT;
+  const slugExists = (slug: string) => defaultSlugExists(slug, dir);
+  const preview = previewBulkImport(csv, slugExists);
 
-  const preflightErrors: BulkImportRowError[] = [];
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const legacyPath = path.join(dir, `${row.slug}.json`);
-    const pointerPath = path.join(dir, `${row.slug}.latest.json`);
-    if (existsSync(legacyPath) || existsSync(pointerPath) || tryLoad(row.slug, { dir }).ok) {
-      preflightErrors.push({
-        row: i + 2,
-        message: `Slug "${row.slug}" already exists — bulk import only creates new descriptors`,
-      });
-    }
+  if (options.dryRun) {
+    return { ok: true, dryRun: true, ...preview };
   }
-  if (preflightErrors.length > 0) return { ok: false, errors: preflightErrors };
 
+  if (!preview.canApply) {
+    return {
+      ok: false,
+      errors: [...preview.rejects, ...preview.conflicts],
+    };
+  }
+
+  const provenance = buildBulkImportProvenance(options.clock);
   const imported: string[] = [];
   try {
-    for (const row of rows) {
-      const persisted = persistBlockDescriptor(descriptorInputFromRow(row), { dir });
+    for (const row of preview.additions) {
+      const persisted = persistBlockDescriptor(
+        descriptorInputFromRow(row, provenance),
+        { dir },
+      );
       if (!persisted.ok) {
-        throw new Error(`row ${row.slug}: ${persisted.error.message}`);
+        throw new Error(
+          `row ${row.csvRow} field slug: ${persisted.error.message}`,
+        );
       }
       setCatalogLifecycle(row.slug, row.lifecycle, dir);
       imported.push(row.slug);
     }
-    return { ok: true, imported };
+    return { ok: true, imported, provenance };
   } catch (cause) {
     for (const slug of imported) {
       try {
@@ -290,7 +478,13 @@ export function bulkImportBlockDescriptors(
     const message = cause instanceof Error ? cause.message : String(cause);
     return {
       ok: false,
-      errors: [{ row: 0, message: `Import rolled back: ${message}` }],
+      errors: [
+        {
+          row: 0,
+          field: "batch",
+          message: `Import rolled back: ${message}`,
+        },
+      ],
     };
   }
 }

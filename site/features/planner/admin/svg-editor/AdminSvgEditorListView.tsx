@@ -600,10 +600,14 @@ export function AdminSvgEditorListView({
             </div>
           ) : (
             <>
-              <div className="admin-table-wrap">
+              <div
+                className="admin-table-wrap admin-svg-inventory-table-wrap"
+                data-phone-layout="cards-priority"
+              >
                 <table
                   className="admin-table"
                   data-testid="admin-svg-inventory-table"
+                  data-phone-layout="cards-priority"
                 >
                   <caption className="sr-only">
                     SVG product symbols grouped by family with identity, SKU,

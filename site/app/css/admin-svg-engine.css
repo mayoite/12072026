@@ -107,4 +107,44 @@
   [data-admin-layout] .admin-svg-engine-shell__rail {
     max-height: none;
   }
+
+  /* ADM-MOB-01 — no page-level horizontal scroll on phone review */
+  [data-admin-layout] .admin-page {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* ADM-MOB-03 — inventory as priority cards, not wide table */
+  [data-admin-layout] .admin-svg-inventory-table-wrap {
+    overflow-x: auto;
+  }
+
+  [data-admin-layout] .admin-table[data-testid="admin-svg-inventory-table"] thead {
+    display: none;
+  }
+
+  [data-admin-layout] .admin-table[data-testid="admin-svg-inventory-table"] tbody tr {
+    display: block;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-md, 0.5rem);
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+  }
+
+  [data-admin-layout] .admin-table[data-testid="admin-svg-inventory-table"] tbody td {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border: 0;
+    padding: 0.25rem 0;
+  }
+
+  [data-admin-layout] .admin-phone-authoring-notice {
+    display: block;
+  }
+}
+
+/* Desktop: phone authoring notice is still visible as policy text but soft */
+[data-admin-layout] .admin-phone-authoring-notice {
+  color: var(--text-muted);
 }

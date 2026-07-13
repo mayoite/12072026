@@ -4,6 +4,8 @@
  * through applySceneNodeGeometryPatch (same authority).
  */
 
+import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -16,6 +18,16 @@ import {
   commit,
   createHistory,
 } from "@/features/planner/admin/svg-editor/scene/svgSceneHistory";
+
+function readCanvasSource(): string {
+  return fs.readFileSync(
+    path.join(
+      process.cwd(),
+      "features/planner/admin/svg-editor/SvgStudioCanvas.tsx",
+    ),
+    "utf8",
+  );
+}
 
 function baseRectDoc(): SvgSceneDocument {
   const rect: SvgSceneNode = {
@@ -143,5 +155,22 @@ describe("ADM-SVG-07 geometry synchronization", () => {
     expect(() =>
       applySceneNodeGeometryPatch(start, "desk-top", { height: -1 }),
     ).toThrow(/height must be positive/);
+  });
+
+  it("SvgStudioCanvas wires drag node:change and inspector numbers to applySceneNodeGeometryPatch", () => {
+    const src = readCanvasSource();
+    // Single authority import.
+    expect(src).toMatch(/applySceneNodeGeometryPatch/);
+    // Direct manipulation path.
+    expect(src).toMatch(/adapter\.on\("node:change"/);
+    expect(src).toMatch(
+      /node:change[\s\S]*?applySceneNodeGeometryPatch\([\s\S]*?event\.nodeId/,
+    );
+    // Numeric inspector path.
+    expect(src).toMatch(
+      /patchSelected[\s\S]*?applySceneNodeGeometryPatch\(document,\s*selectedId/,
+    );
+    // Host notify after history present changes (both paths).
+    expect(src).toMatch(/onDocumentChange\?\.\(document\)/);
   });
 });
