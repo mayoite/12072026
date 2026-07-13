@@ -168,6 +168,18 @@ export function replaceNode(
   return { ...doc, nodes };
 }
 
+/**
+ * ADM-SVG-07 — single geometry write path for canvas drag/resize and inspector numbers.
+ * Both direct manipulation (`node:change`) and numeric fields merge the same way.
+ */
+export function applySceneNodeGeometryPatch(
+  doc: SvgSceneDocument,
+  nodeId: string,
+  patch: Partial<SvgSceneNode>,
+): SvgSceneDocument {
+  return replaceNode(doc, nodeId, (node) => ({ ...node, ...patch }) as SvgSceneNode);
+}
+
 /** Append a node on top of the stack. */
 export function addNode(doc: SvgSceneDocument, node: SvgSceneNode): SvgSceneDocument {
   if (findNode(doc, node.id)) {

@@ -37,6 +37,7 @@ import {
   findNode,
   removeNode,
   reorderNode,
+  applySceneNodeGeometryPatch,
   replaceNode,
   type SvgSceneDocument,
   type SvgSceneNode,
@@ -171,11 +172,13 @@ export function SvgStudioCanvas({
         setSelectedId(event.nodeId);
       });
       offChange = adapter.on("node:change", (event) => {
+        // ADM-SVG-07: drag/resize uses the same document patch authority as inspector numbers.
         const latestDoc = documentRef.current;
-        const updated = replaceNode(latestDoc, event.nodeId, (node) => ({
-          ...node,
-          ...event.patch,
-        } as SvgSceneNode));
+        const updated = applySceneNodeGeometryPatch(
+          latestDoc,
+          event.nodeId,
+          event.patch as Partial<SvgSceneNode>,
+        );
         apply(`Transform ${findNode(latestDoc, event.nodeId)?.name || "shape"}`, updated);
       });
       setViewport(adapter.getViewport());
@@ -277,10 +280,8 @@ export function SvgStudioCanvas({
   const patchSelected = useCallback(
     (label: string, patch: Partial<SvgSceneNode>) => {
       if (!selectedId) return;
-      apply(
-        label,
-        replaceNode(document, selectedId, (node) => ({ ...node, ...patch }) as SvgSceneNode),
-      );
+      // ADM-SVG-07: numeric inspector geometry uses the same patch authority as drag/resize.
+      apply(label, applySceneNodeGeometryPatch(document, selectedId, patch));
     },
     [apply, document, selectedId],
   );

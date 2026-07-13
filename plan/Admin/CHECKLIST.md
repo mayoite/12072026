@@ -33,7 +33,8 @@ Implementation is in progress.
 - Validation has a linked summary and field-level messages.
 - Fresh verification 2026-07-13: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/AdminSvgEditorEditView.test.tsx tests/unit/admin/svg-editor/svgEditorDraftState.test.ts tests/unit/admin/svg-editor/authoringLifecycle.test.ts` exited 0 with 14 tests passing.
 - Live code: `authoringLifecycle.ts` + `AdminSvgEditorEditView.tsx` (commits `36ff03d6`, `970a927d`) + stage status strip (`ADM-SVG-06`).
-- ADM-SVG-04/05: existing `admin-svg-engine.css` shell grid (`1fr` + `22rem` rail) + always-mounted studio regions; unit proof in `stageLayoutContract` / `phase1AcceptanceContracts` / EditView shell data attrs. Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/phase1AcceptanceContracts.test.ts tests/unit/admin/svg-editor/AdminSvgEditorEditView.test.tsx` 19 pass.
+- ADM-SVG-04/05: existing `admin-svg-engine.css` shell grid (`1fr` + `22rem` rail) + always-mounted studio regions; unit proof in `stageLayoutContract` / `phase1AcceptanceContracts` / EditView shell data attrs.
+- ADM-SVG-07: drag/resize (`node:change`) and inspector numbers both call `applySceneNodeGeometryPatch` → history present → `onDocumentChange`. Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/geometrySync.admSvg07.test.ts`.
 - Browser journey for authoring UI not re-run this session.
 
 - [ ] Core product fields are clear and validated.
@@ -60,7 +61,7 @@ Implementation is in progress.
 - [x] `ADM-SVG-04` The stage receives at least 55 percent of the 1280-pixel content area.
 - [x] `ADM-SVG-05` Command, stage, layer, and property regions remain stable.
 - [x] `ADM-SVG-06` Identity, footprint, view box, zoom, selection, draft, validation, and revision are visible.
-- [ ] `ADM-SVG-07` Direct manipulation and numeric geometry remain synchronized.
+- [x] `ADM-SVG-07` Direct manipulation and numeric geometry remain synchronized.
 - [ ] `ADM-SVG-08` The supported SVG feature subset is documented and enforced.
 - [ ] `ADM-SVG-09` Layer selection, ordering, lock, visibility, and state work.
 - [ ] `ADM-SVG-10` Named undo and redo preserve a valid document.
