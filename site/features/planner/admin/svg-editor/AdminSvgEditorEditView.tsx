@@ -71,6 +71,14 @@ import {
   confirmDiscardUnsavedNavigation,
   confirmResetToPublished,
 } from "./destructiveConfirmMessages";
+import {
+  PLANNER_VERIFY_HREF,
+  publishConfirmMessage,
+  publishFailureMessage,
+  publishImpactSummary,
+  publishSuccessMessage,
+  releasedSvgHref,
+} from "./publishActionMessages";
 
 /** Browser-only 3D islands — static import of model-viewer/three breaks RSC SSR. */
 const GlbExtruderPreview = dynamic(
@@ -405,10 +413,16 @@ export function AdminSvgEditorEditView({
       });
       return;
     }
-    const confirmed = window.confirm(
-      `Publish “${publishTarget}”?\n\nThis will replace the current released SVG artifact. The previous revision remains available for rollback.`,
-    );
-    if (!confirmed) return;
+    const impactInput = {
+      targetSlug: publishTarget,
+      draftSchemaVersion: String(descriptor.schemaVersion),
+      liveArtifactState: artifactStatus.state,
+      liveRevisionShort: artifactStatus.hash
+        ? `${artifactStatus.hash.slice(0, 16)}…`
+        : null,
+    };
+    // ADM-SVG-15: primary publish names target + draft/live versions before run.
+    if (!window.confirm(publishConfirmMessage(impactInput))) return;
 
     setFeedback({
       submitting: true,
@@ -435,9 +449,10 @@ export function AdminSvgEditorEditView({
       const submittedRevision = draftRevisionRef.current;
       const result = await onPublishAction(payload);
       if (result.success === false) {
+        // ADM-SVG-16: never show success; live artifact remains the previous release.
         setFeedback({
           submitting: false,
-          errorMessage: `Publish failed for “${slug}”: ${result.error}`,
+          errorMessage: publishFailureMessage(slug, result.error),
           successMessage: null,
           publishedSlug: null,
         });
@@ -470,7 +485,8 @@ export function AdminSvgEditorEditView({
       setFeedback({
         submitting: false,
         errorMessage: null,
-        successMessage: `Published “${publishedSlug}” at ${nowStampLabel()}. Refreshing artifact preview…`,
+        // ADM-SVG-17: success text + publishedSlug drives artifact/Planner links.
+        successMessage: publishSuccessMessage(publishedSlug, nowStampLabel()),
         publishedSlug,
       });
       router.refresh();
@@ -481,12 +497,27 @@ export function AdminSvgEditorEditView({
           : String(networkError);
       setFeedback({
         submitting: false,
-        errorMessage: `Publish failed for “${slug}”: ${message}`,
+        errorMessage: publishFailureMessage(slug, message),
         successMessage: null,
         publishedSlug: null,
       });
     }
-  }, [footprintProof.aligned, form, onPublishAction, preview, previewPending, publishPayloadFromStudio, publishTarget, publishedForm, router, slug, updateDraftForm]);
+  }, [
+    artifactStatus.hash,
+    artifactStatus.state,
+    descriptor.schemaVersion,
+    footprintProof.aligned,
+    form,
+    onPublishAction,
+    preview,
+    previewPending,
+    publishPayloadFromStudio,
+    publishTarget,
+    publishedForm,
+    router,
+    slug,
+    updateDraftForm,
+  ]);
 
   const checksumShort =
     typeof descriptor.checksum === "string" && descriptor.checksum.length > 16
@@ -647,6 +678,7 @@ export function AdminSvgEditorEditView({
             onClick={handlePublish}
             disabled={!canPublish}
             aria-describedby="admin-svg-publication-impact"
+            data-testid="admin-svg-publish-primary"
           >
             {feedback.submitting ? (
               <Loader2 size={14} className="animate-spin" aria-hidden />
@@ -663,17 +695,14 @@ export function AdminSvgEditorEditView({
         className="admin-page__meta"
         data-testid="admin-svg-publication-impact"
       >
-        Publish target: <code>{publishTarget}</code>. Authoring state:{" "}
-        <strong>{authoringLifecycleLabel(authoringLifecycle)}</strong>. Live
-        artifact: {artifactStatus.state}
-        {artifactStatus.hash ? (
-          <>
-            {" "}
-            · live revision <code>{artifactHashShort}</code>
-          </>
-        ) : null}
-        . Draft schema <code>{descriptor.schemaVersion}</code>. Primary action
-        Publish replaces the released SVG; prior revisions remain for rollback.
+        {publishImpactSummary({
+          targetSlug: publishTarget,
+          draftSchemaVersion: String(descriptor.schemaVersion),
+          liveArtifactState: artifactStatus.state,
+          liveRevisionShort: artifactStatus.hash ? artifactHashShort : null,
+        })}{" "}
+        Authoring state:{" "}
+        <strong>{authoringLifecycleLabel(authoringLifecycle)}</strong>.
       </p>
 
       {coreFieldIssues.length > 0 ? (
@@ -755,6 +784,7 @@ export function AdminSvgEditorEditView({
           <div
             role="alert"
             className="admin-alert admin-alert--error flex flex-wrap items-center gap-3"
+            data-testid="admin-svg-publish-failure"
           >
             <WarningCircle size={16} className="shrink-0" aria-hidden />
             <span className="min-w-0 flex-1">{feedback.errorMessage}</span>
@@ -773,6 +803,7 @@ export function AdminSvgEditorEditView({
           <div
             role="status"
             className="admin-alert admin-alert--info flex flex-wrap items-center gap-3"
+            data-testid="admin-svg-publish-success"
           >
             <CheckCircle size={16} className="shrink-0" aria-hidden />
             <span className="min-w-0 flex-1">
@@ -780,9 +811,21 @@ export function AdminSvgEditorEditView({
               {feedback.publishedSlug ? (
                 <>
                   {" "}
-                  <a href={`/svg-catalog/${feedback.publishedSlug}.svg`} target="_blank" rel="noreferrer">Open released SVG</a>
+                  <a
+                    href={releasedSvgHref(feedback.publishedSlug)}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-testid="admin-svg-publish-success-artifact"
+                  >
+                    Open released SVG
+                  </a>
                   {" · "}
-                  <Link href="/planner/guest">Verify in Planner</Link>
+                  <Link
+                    href={PLANNER_VERIFY_HREF}
+                    data-testid="admin-svg-publish-success-planner"
+                  >
+                    Verify in Planner
+                  </Link>
                 </>
               ) : null}
             </span>

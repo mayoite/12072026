@@ -38,6 +38,7 @@ Implementation is in progress.
 - ADM-SVG-09/10: layers select/order/lock/visibility/delete + named undo/redo on `svgSceneHistory` / `svgSceneDocument` (same paths as SvgStudioCanvas). Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/layersHistory.admSvg09_10.test.ts`.
 - ADM-SVG-11: `destructiveConfirmMessages` names impact for reset, discard navigation, layer delete, rollback; wired into EditView / SvgStudioCanvas / DescriptorRevisionPanel. Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/destructiveConfirmMessages.admSvg11.test.ts`.
 - ADM-SVG-12/13: preview + publish both call `compileSvgForPublish`; LiveCompiledSvgPreview shows identity/footprint/validation/Planner-symbol note and stale fallback. Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/compilerAuthority.admSvg12_13.test.tsx`.
+- ADM-SVG-15/16/17: primary Publish names target + draft/live versions; failure copy states artifact not replaced; success links Open released SVG + Verify in Planner. Fresh: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/publishActionMessages.admSvg15_17.test.tsx`.
 - Browser journey for authoring UI not re-run this session.
 
 - [ ] Core product fields are clear and validated.
@@ -72,9 +73,9 @@ Implementation is in progress.
 - [x] `ADM-SVG-12` Preview and publication share one compiler authority.
 - [x] `ADM-SVG-13` Preview matches the Planner symbol, footprint, identity, validation, and fallback.
 - [x] `ADM-SVG-14` Draft and published revisions have a field and visual diff.
-- [ ] `ADM-SVG-15` One primary publish action names its target and versions.
-- [ ] `ADM-SVG-16` Failure preserves the live artifact and never reports false success.
-- [ ] `ADM-SVG-17` Success links to the released artifact and Planner verification.
+- [x] `ADM-SVG-15` One primary publish action names its target and versions.
+- [x] `ADM-SVG-16` Failure preserves the live artifact and never reports false success.
+- [x] `ADM-SVG-17` Success links to the released artifact and Planner verification.
 - [ ] `ADM-SHELL-01` Each page exposes title, scope, source, state, and one primary action.
 - [ ] `ADM-SHELL-02` Secondary and destructive actions do not compete with the primary action.
 - [x] `ADM-STATE-01` One authoritative state covers the full authoring lifecycle.
