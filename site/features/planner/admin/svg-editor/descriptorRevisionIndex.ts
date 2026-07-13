@@ -3,7 +3,6 @@
  */
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";
-import path from "node:path";
 
 import { BLOCK_DESCRIPTORS_DIR_DEFAULT } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import {

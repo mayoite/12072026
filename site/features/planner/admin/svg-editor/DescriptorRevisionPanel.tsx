@@ -29,7 +29,6 @@ export function DescriptorRevisionPanel({ slug }: Props) {
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    setLoading(true);
     try {
       const response = await browserApiFetch(apiPath(`/api/admin/svg-editor/${slug}/revisions`));
       const payload = (await response.json()) as {

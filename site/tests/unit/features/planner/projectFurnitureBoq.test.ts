@@ -114,6 +114,7 @@ describe("buildPlannerFurnitureBoq (pure first-class BOQ)", () => {
     expect(wsLine!.depthMm).toBe(600);
     expect(wsLine!.priced).toBe(true);
     expect(wsLine!.priceSource).toBe("demo-list");
+    expect(wsLine!.sourceObjectIds).toEqual(["w0", "w1", "w2"]);
     expect(wsLine!.unitPriceInr).toBeGreaterThan(0);
     expect(wsLine!.lineTotalInr).toBeGreaterThan(wsLine!.lineSubtotalInr);
 
@@ -125,6 +126,7 @@ describe("buildPlannerFurnitureBoq (pure first-class BOQ)", () => {
     expect(tableLine!.sku).toBe("ST-001");
     expect(tableLine!.priced).toBe(false);
     expect(tableLine!.priceSource).toBe("none");
+    expect(tableLine!.sourceObjectIds).toEqual(["t0", "t1"]);
     expect(tableLine!.unitPriceInr).toBe(0);
     expect(tableLine!.lineGstInr).toBe(0);
 
@@ -133,6 +135,13 @@ describe("buildPlannerFurnitureBoq (pure first-class BOQ)", () => {
     expect(summary.pricingNote).toBe(PLANNER_FURNITURE_BOQ_PRICING_NOTE);
     expect(summary.pricingNote.toLowerCase()).toContain("demo");
     expect(summary.pricingNote.toLowerCase()).toContain("not live");
+    expect(summary.calculationHash).toMatch(/^[a-f0-9]{64}$/);
+
+    const repeated = buildPlannerFurnitureBoq(project, {
+      now: "2026-07-10T08:00:00.000Z",
+    });
+    expect(repeated.generatedAt).not.toBe(summary.generatedAt);
+    expect(repeated.calculationHash).toBe(summary.calculationHash);
 
     const json = exportPlannerFurnitureBoqToJson(summary);
     const parsed = JSON.parse(json) as typeof summary;
@@ -156,6 +165,8 @@ describe("buildPlannerFurnitureBoq (pure first-class BOQ)", () => {
     expect(csv).toContain("ST-001");
     expect(csv).toContain("Total items,5");
     expect(csv).toContain("Unpriced items,2");
+    expect(csv).toContain(`Calculation hash,${summary.calculationHash}`);
+    expect(csv).toContain("Source object IDs");
 
     expect(buildPlannerBoqFilename(project, "json")).toBe(
       "client-boq-plan-furniture-boq-v1.json",

@@ -122,6 +122,7 @@ import {
 import { applyLayoutToWorkspace } from "@/features/planner/ai/applyLayoutToWorkspace";
 import { extractProjectPlacements } from "@/features/planner/ai/extractProjectPlacements";
 import type { WorkspaceAiBridge } from "@/features/planner/ai/workspaceAiBridge";
+import { takePlannerStartupIntent } from "@/features/planner/onboarding/projectSetup";
 
 export type OOPlannerWorkspaceProps = {
   guestMode: boolean;
@@ -230,6 +231,15 @@ export function OOPlannerWorkspace({
   const [workspaceMessage, setWorkspaceMessage] = useState<string | null>(null);
   const armedToolRef = useRef<PlannerTool>("wall");
 
+  useEffect(() => {
+    const intent = takePlannerStartupIntent(guestMode, planId);
+    if (intent !== "import-trace") return;
+    const frame = window.requestAnimationFrame(() => {
+      setWorkspaceMessage("Import or trace selected. Use File, then Import Plan JSON.");
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [guestMode, planId]);
+
   // Density/grid/snap wired from workspace prefs (not hardcoded).
   const [density, setDensity] = useState<"compact" | "touch">(
     DEFAULT_PLANNER_WORKSPACE_PREFERENCES.density,
@@ -289,11 +299,12 @@ export function OOPlannerWorkspace({
       (floor) => floor.id === workspaceCanvas.project.activeFloorId,
     ) ?? workspaceCanvas.project.floors[0];
 
+  const workspaceSelection = workspaceCanvas.selection;
   const multiSelection = useMemo(() => {
-    const { selection } = workspaceCanvas;
+    const selection = workspaceSelection;
     if (selection.type === "none" || selection.ids.length <= 1) return null;
     return { type: selection.type, count: selection.ids.length };
-  }, [workspaceCanvas.selection]);
+  }, [workspaceSelection]);
 
   const selectedEntity = useMemo(() => {
     if (workspaceCanvas.selection.ids.length !== 1) return null;

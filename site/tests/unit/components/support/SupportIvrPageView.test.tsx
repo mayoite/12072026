@@ -38,7 +38,7 @@ describe('SupportIvrPageView Component', () => {
     expect(hero).toBeInTheDocument();
     expect(hero).toHaveTextContent(SUPPORT_IVR_PAGE_COPY.heroTitle);
     expect(hero).toHaveTextContent(SUPPORT_IVR_PAGE_COPY.heroSubtitle);
-    expect(hero.getAttribute('data-bg')).toBe('/images/hero/hero-3.webp');
+    expect(hero.getAttribute('data-bg')).toBe('/images/hero/dmrc-hero.webp');
     expect(hero.getAttribute('data-showbutton')).toBe('false');
 
     const intro = screen.getByTestId('mock-section-intro');

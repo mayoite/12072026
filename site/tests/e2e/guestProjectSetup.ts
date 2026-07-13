@@ -13,6 +13,7 @@ import {
  * localStorage prefixes cleared:
  *   - "cad-suite:planner:"          (draft envelopes)
  *   - "oando-project-setup-complete-" (setup gate completion flag)
+ *   - "oando-planner-startup-intent-" (consume-once starting mode)
  *   - "planner-"                    (chrome layout, preferences, claimed flag, migration flag)
  *
  * IndexedDB databases deleted:
@@ -24,6 +25,7 @@ import {
 const PLANNER_LS_PREFIXES = [
   "cad-suite:planner:",
   "oando-project-setup-complete-",
+  "oando-planner-startup-intent-",
   "planner-",
 ] as const;
 
@@ -69,7 +71,7 @@ export async function clearPlannerStorage(page: Page): Promise<void> {
   }, [...PLANNER_LS_PREFIXES]);
 }
 
-/** Complete metadata + starting-point wizard when the setup gate is showing. */
+/** Complete the single Planner setup step when the gate is showing. */
 export async function completePlannerSetupGate(
   page: Page,
   projectName: string,
@@ -93,11 +95,6 @@ export async function completePlannerSetupGate(
     const submit = page.getByRole("button", { name: /Start placing furniture/i });
     await expect(submit).toBeEnabled({ timeout: 30_000 });
     await submit.click();
-  }
-
-  const startFromScratch = page.getByRole("button", { name: /Start from Scratch/i });
-  if (await startFromScratch.isVisible({ timeout: 15_000 }).catch(() => false)) {
-    await startFromScratch.click();
   }
 
   await expect

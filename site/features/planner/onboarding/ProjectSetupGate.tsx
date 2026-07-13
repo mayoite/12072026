@@ -3,7 +3,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 
 import { ProjectSetupStep } from "./ProjectSetupStep";
-import { StartingPointStep } from "./StartingPointStep";
 import { isProjectSetupCompleteInStorage } from "./projectSetup";
 import { PlannerSkeleton } from "@/features/planner/ui/PlannerSkeleton";
 
@@ -23,9 +22,6 @@ export function ProjectSetupGate({
   children,
 }: ProjectSetupGateProps) {
   const [isFullyComplete, setIsFullyComplete] = useState(false);
-  const [wizardStep, setWizardStep] = useState<"metadata" | "startingPoint">(
-    "metadata",
-  );
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -49,27 +45,11 @@ export function ProjectSetupGate({
     return <>{children}</>;
   }
 
-  // Step 1: Collect Project Metadata
-  if (wizardStep === "metadata") {
-    return (
-      <ProjectSetupStep
-        guestMode={guestMode}
-        planId={planId}
-        onComplete={() => setWizardStep("startingPoint")}
-      />
-    );
-  }
-
-  // Step 2: Choose Starting Point
-  if (wizardStep === "startingPoint") {
-    return (
-      <StartingPointStep
-        guestMode={guestMode}
-        planId={planId}
-        onComplete={() => setIsFullyComplete(true)}
-      />
-    );
-  }
-
-  return null;
+  return (
+    <ProjectSetupStep
+      guestMode={guestMode}
+      planId={planId}
+      onComplete={() => setIsFullyComplete(true)}
+    />
+  );
 }

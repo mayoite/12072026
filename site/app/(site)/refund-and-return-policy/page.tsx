@@ -25,7 +25,7 @@ export default async function RefundAndReturnPolicyPage() {
         title={t("refund.heroTitle")}
         subtitle={t("refund.heroSubtitle")}
         showButton={false}
-        backgroundImage="/images/hero/hero-3.webp"
+        backgroundImage="/images/hero/dmrc-hero.webp"
       />
 
       <HomeSection variant="white" spacing="md">

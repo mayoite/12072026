@@ -24,6 +24,9 @@ export type PlannerProjectMetadata = {
 export type PlannerProjectSetupDraft = Omit<PlannerProjectMetadata, "completedAt">;
 
 export const PLANNER_PROJECT_SETUP_STORAGE_KEY = "oando-project-setup-complete";
+export const PLANNER_STARTUP_INTENT_STORAGE_KEY = "oando-planner-startup-intent";
+
+export type PlannerStartingMode = "template" | "scratch" | "import-trace";
 
 export const PLANNER_INDIAN_CITIES = [
   "Patna",
@@ -106,6 +109,33 @@ export function isProjectSetupCompleteInStorage(guestMode: boolean, planId?: str
 export function markProjectSetupCompleteInStorage(guestMode: boolean, planId?: string): void {
   if (typeof window === "undefined") return;
   localStorage.setItem(projectSetupStorageKey(guestMode, planId), "true");
+}
+
+export function plannerStartupIntentStorageKey(guestMode: boolean, planId?: string): string {
+  const scope = guestMode ? "guest" : "member";
+  return `${PLANNER_STARTUP_INTENT_STORAGE_KEY}-${scope}-${planId ?? "new"}`;
+}
+
+export function writePlannerStartupIntent(
+  mode: PlannerStartingMode,
+  guestMode: boolean,
+  planId?: string,
+): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(plannerStartupIntentStorageKey(guestMode, planId), mode);
+}
+
+export function takePlannerStartupIntent(
+  guestMode: boolean,
+  planId?: string,
+): PlannerStartingMode | null {
+  if (typeof window === "undefined") return null;
+  const key = plannerStartupIntentStorageKey(guestMode, planId);
+  const value = localStorage.getItem(key);
+  localStorage.removeItem(key);
+  return value === "template" || value === "scratch" || value === "import-trace"
+    ? value
+    : null;
 }
 
 export function filterCatalogItemsByPurpose(

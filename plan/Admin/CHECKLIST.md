@@ -8,6 +8,12 @@ Treat every item as not done.
 
 ## Step 0 — test isolation
 
+Fresh verification on 2026-07-13 isolated both Admin SVG publication browser specs.
+
+The focused sequential run passed two tests.
+
+Canonical descriptor and SVG hashes were identical before and after.
+
 - [ ] Catalog-writing tests use temporary descriptors and SVG files.
 - [ ] Tests never write to the canonical public catalog.
 - [ ] Cleanup runs after success, failure, and timeout.
@@ -15,6 +21,16 @@ Treat every item as not done.
 - [ ] Browser tests use normal controls without forced clicks.
 
 ## Phase 1 — authoring quality
+
+Implementation is in progress and unverified.
+
+- The editor now tracks all form and studio changes as one dirty state.
+- Invalid or pending preview state blocks publication.
+- Publication names the target and impact before execution.
+- Successful publication links the artifact and Planner.
+- Canvas status exposes view box, zoom, selection, and layer count.
+- Layer renaming and explained deletion are available without dragging.
+- Validation has a linked summary and field-level messages.
 
 - [ ] Core product fields are clear and validated.
 - [ ] Stable product identity survives editing.

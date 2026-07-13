@@ -102,7 +102,7 @@ function parseVariant(raw: string): BlockDescriptorVariant | null {
   return null;
 }
 
-function positiveNumber(raw: string, field: string): number | null {
+function positiveNumber(raw: string): number | null {
   const value = Number(raw);
   if (!Number.isFinite(value) || value <= 0) return null;
   return value;
@@ -133,9 +133,9 @@ export function parseBulkImportCsv(csv: string): BulkImportParseSuccess | BulkIm
     const slug = cols[index("slug")] ?? "";
     const sku = cols[index("sku")] ?? "";
     const variantRaw = cols[index("variant")] ?? "";
-    const widthMm = positiveNumber(cols[index("width_mm")] ?? "", "width_mm");
-    const depthMm = positiveNumber(cols[index("depth_mm")] ?? "", "depth_mm");
-    const heightMm = positiveNumber(cols[index("height_mm")] ?? "", "height_mm");
+    const widthMm = positiveNumber(cols[index("width_mm")] ?? "");
+    const depthMm = positiveNumber(cols[index("depth_mm")] ?? "");
+    const heightMm = positiveNumber(cols[index("height_mm")] ?? "");
     const lifecycle = parseLifecycle(lifecycleIdx >= 0 ? cols[lifecycleIdx] : undefined);
 
     if (!BLOCK_DESCRIPTOR_SLUG_REGEX.test(slug)) {

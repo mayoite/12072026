@@ -155,10 +155,13 @@ export function buildPageMetadata(siteUrl: string, input: PageMetadataInput): Me
   const canonicalUrl = buildCanonicalUrl(siteUrl, input.path);
   const image = input.image || SITE_BRAND.ogImage;
   const includeAlternates = input.alternates !== false;
+  const title: Metadata["title"] = input.title.includes(SITE_BRAND.titleSuffix)
+    ? { absolute: input.title }
+    : input.title;
 
   return {
     metadataBase: new URL(siteUrl),
-    title: input.title,
+    title,
     description: input.description,
     keywords: input.keywords,
     alternates: {

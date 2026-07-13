@@ -9,6 +9,7 @@
  * Never from arbitrary user HTML.
  */
 
+import Image from "next/image";
 import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 
 export type PublishedSvgPreviewSize = "thumb" | "panel";
@@ -74,9 +75,12 @@ export function PublishedSvgPreview({
       data-slug={slug}
     >
       {size === "thumb" && status.publicUrl ? (
-        <img
+        <Image
           src={status.publicUrl}
           alt=""
+          width={96}
+          height={96}
+          unoptimized
           className="admin-svg-preview__img"
           data-testid="admin-svg-preview-img"
         />

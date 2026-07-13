@@ -45,7 +45,7 @@ The Products database owns:
 - Immutable SVG revisions.
 - Immutable artifact metadata and storage keys.
 - The current published revision pointer.
-- Publication audit data.
+- The append-only publication event ledger.
 
 The Admin server owns writes.
 
@@ -130,6 +130,46 @@ The object key includes or is bound to its checksum.
 
 An object without a committed database revision is not public truth.
 
+### `svg_publication_events`
+
+Publication success audit must commit in the Products database.
+
+The existing Admin database `audit_events` table cannot join the Products database transaction.
+
+It is not the atomic publication ledger.
+
+The Products database therefore receives an append-only publication event table.
+
+Required fields are:
+
+| Field | Purpose |
+|---|---|
+| `id` | Stable event UUID and downstream idempotency key. |
+| `product_id` | Published product identity. |
+| `revision_id` | Committed SVG revision identity. |
+| `actor_id` | Authenticated Admin actor. |
+| `action` | Publish, rollback, retire, or restore transition. |
+| `reason` | Required operator reason. |
+| `prior_revision_id` | Pointer value before the transition. |
+| `next_revision_id` | Pointer value after the transition. |
+| `artifact_bundle_checksum` | Checksum identity authorized for the transition. |
+| `occurred_at` | Database-assigned event time. |
+| `delivery_state` | Optional outbox delivery state for downstream projection. |
+
+The row is inserted in the same Products database transaction as revision metadata and the product pointer.
+
+It is the authoritative success audit for the release transition.
+
+After commit, an outbox worker may project the event into Admin DB reporting.
+
+Projection is at-least-once and deduplicates by event `id`.
+
+A projection failure never rolls back or misreports the committed Products database release.
+
+Failed attempts cannot be recorded inside a transaction that rolls back.
+
+They are recorded separately in server security telemetry with the attempted product, actor, reason, and failure class.
+
 ### Product release pointer
 
 `planner_managed_products` receives `published_svg_revision_id`.
@@ -156,7 +196,7 @@ The server performs these steps:
 10. Reject a stale draft lock version.
 11. Insert one immutable revision and its artifact metadata.
 12. Update the product's published revision pointer.
-13. Insert the audit record.
+13. Insert the append-only `svg_publication_events` success record.
 14. Commit.
 
 Any failed step rolls back the transaction.
@@ -256,6 +296,10 @@ Responses use a restrictive SVG content policy.
 
 Publication, rollback, and retirement are audited.
 
+Products database publication events are the atomic release ledger.
+
+Admin database audit rows are a post-commit projection only.
+
 Rate limits apply at public and Admin boundaries.
 
 ## Acceptance contract
@@ -267,7 +311,7 @@ Rate limits apply at public and Admin boundaries.
 | DB-SVG-03 | Published SVG revisions are immutable. |
 | DB-SVG-04 | Each revision conforms to `PublishedRevisionV1`, stores the exact definition snapshot, and has artifact rows matching `SvgArtifactRecord`. |
 | DB-SVG-05 | The product points to one same-product published SVG revision. |
-| DB-SVG-06 | Publication uploads immutable artifacts, then inserts metadata, points, and audits in one transaction. |
+| DB-SVG-06 | Publication uploads immutable artifacts, then inserts metadata, the pointer, and a Products DB publication event in one transaction. |
 | DB-SVG-07 | Failed publication leaves the prior pointer live. |
 | DB-SVG-08 | Repeated unchanged publication is idempotent. |
 | DB-SVG-09 | Stale draft versions are rejected without data loss. |

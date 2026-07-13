@@ -1,13 +1,13 @@
 /**
  * Site P02 — marketing + planner entry chrome reachable at desktop and 375×812.
  */
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
 
 const EVIDENCE = path.join(process.cwd(), "..", "results", "site", "phase-02");
 
-async function assertMarketingChrome(page: import("@playwright/test").Page): Promise<void> {
+async function assertMarketingChrome(page: Page): Promise<void> {
   await expect(page.locator("header").first()).toBeVisible({ timeout: 15_000 });
   await expect(page.locator("footer").first()).toBeVisible({ timeout: 15_000 });
   await expect(page.getByRole("link", { name: /Products|Solutions|About/i }).first()).toBeVisible();

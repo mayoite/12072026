@@ -1,0 +1,133 @@
+import { createHash } from "node:crypto";
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
+
+import {
+  loadBySlug,
+  type BlockDescriptor,
+} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+
+const SITE_ROOT = path.resolve(__dirname, "../../..");
+const REPO_ROOT = path.resolve(SITE_ROOT, "..");
+const WORKER_PATH = path.join(
+  SITE_ROOT,
+  "tests",
+  "e2e",
+  "helpers",
+  "isolatedAdminSvgPublishWorker.ts",
+);
+
+export type IsolatedPublishResult =
+  | { readonly success: true }
+  | { readonly success: false; readonly error: string };
+
+export function sha256File(filePath: string): string {
+  return createHash("sha256").update(readFileSync(filePath)).digest("hex");
+}
+
+export type CanonicalSvgPaths = {
+  readonly descriptor: string;
+  readonly svg: string;
+};
+
+export function canonicalSvgPaths(slug: string): CanonicalSvgPaths {
+  return {
+    descriptor: path.join(SITE_ROOT, "block-descriptors", `${slug}.json`),
+    svg: path.join(SITE_ROOT, "public", "svg-catalog", `${slug}.svg`),
+  };
+}
+
+export type IsolatedAdminSvgWorkspace = {
+  readonly root: string;
+  readonly descriptorDir: string;
+  readonly svgPath: string;
+  load(): BlockDescriptor;
+  publish(input: unknown): Promise<IsolatedPublishResult>;
+  cleanup(): void;
+};
+
+export function createIsolatedAdminSvgWorkspace(
+  slug: string,
+): IsolatedAdminSvgWorkspace {
+  const canonical = canonicalSvgPaths(slug);
+  if (!existsSync(canonical.descriptor) || !existsSync(canonical.svg)) {
+    throw new Error(`Canonical SVG fixture is missing for ${slug}`);
+  }
+
+  const root = mkdtempSync(path.join(os.tmpdir(), "oando-admin-svg-"));
+  const descriptorDir = path.join(root, "site", "block-descriptors");
+  const svgDir = path.join(root, "site", "public", "svg-catalog");
+  const svgPath = path.join(svgDir, `${slug}.svg`);
+  mkdirSync(descriptorDir, { recursive: true });
+  mkdirSync(svgDir, { recursive: true });
+  copyFileSync(canonical.descriptor, path.join(descriptorDir, `${slug}.json`));
+  copyFileSync(canonical.svg, svgPath);
+
+  return {
+    root,
+    descriptorDir,
+    svgPath,
+    load: () => loadBySlug(slug, { dir: descriptorDir }),
+    publish: async (input) => {
+      const inputPath = path.join(root, "publish-input.json");
+      const resultPath = path.join(root, "publish-result.json");
+      writeFileSync(inputPath, `${JSON.stringify(input)}\n`, "utf8");
+      const pnpmCli = path.join(
+        path.dirname(process.execPath),
+        "node_modules",
+        "corepack",
+        "dist",
+        "pnpm.js",
+      );
+      if (!existsSync(pnpmCli)) {
+        throw new Error(`Corepack pnpm entry is missing: ${pnpmCli}`);
+      }
+      const run = spawnSync(
+        process.execPath,
+        [
+          pnpmCli,
+          "--filter",
+          "oando-site",
+          "exec",
+          "tsx",
+          WORKER_PATH,
+          inputPath,
+          resultPath,
+          root,
+          descriptorDir,
+        ],
+        { cwd: REPO_ROOT, encoding: "utf8" },
+      );
+      if (run.status !== 0) {
+        throw new Error(
+          `Isolated SVG publish worker failed (${run.status ?? "no exit"}): ${run.error?.message ?? run.stderr ?? run.stdout}`,
+        );
+      }
+      const parsed: unknown = JSON.parse(readFileSync(resultPath, "utf8"));
+      if (!parsed || typeof parsed !== "object" || !("success" in parsed)) {
+        throw new Error("Isolated SVG publish worker returned an invalid result");
+      }
+      const candidate = parsed as { success: unknown; error?: unknown };
+      return candidate.success === true
+        ? { success: true }
+        : {
+            success: false,
+            error:
+              typeof candidate.error === "string"
+                ? candidate.error
+                : "unknown publish failure",
+          };
+    },
+    cleanup: () => rmSync(root, { recursive: true, force: true }),
+  };
+}

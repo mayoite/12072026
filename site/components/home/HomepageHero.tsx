@@ -96,17 +96,22 @@ export function HomepageHero() {
           initial={revealMotion ? "hidden" : "visible"}
           animate="visible"
         >
-          <h1 className="home-hero-title-homepage text-inverse">
-            {title.map((line, i) => (
-              <span key={line} className="block overflow-hidden">
-                <motion.span
-                  className={`inline-block${i === title.length - 1 ? " text-accent-italic-on-dark" : ""}`}
-                  variants={wordVariants}
-                >
-                  {line}
-                </motion.span>
-              </span>
-            ))}
+          <h1
+            className="home-hero-title-homepage text-inverse"
+            aria-label={title.join(" ")}
+          >
+            <span aria-hidden="true">
+              {title.map((line, i) => (
+                <span key={line} className="block overflow-hidden">
+                  <motion.span
+                    className={`inline-block${i === title.length - 1 ? " text-accent-italic-on-dark" : ""}`}
+                    variants={wordVariants}
+                  >
+                    {line}
+                  </motion.span>
+                </span>
+              ))}
+            </span>
           </h1>
 
           <motion.p

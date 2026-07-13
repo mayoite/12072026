@@ -23,7 +23,6 @@ export function AdminPriceBookPageView({
   const [message, setMessage] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    setLoading(true);
     try {
       const response = await browserApiFetch(apiPath(`/api/admin/price-books/${bookId}`));
       const payload = (await response.json()) as { contract?: PriceBookContract };

@@ -487,6 +487,43 @@ describe("PropertiesPanel", () => {
     expect(screen.getByText("Wall", { selector: "span" })).toBeInTheDocument();
     expect(screen.getByLabelText(/Thickness/i)).toBeInTheDocument();
   });
+
+  it("rejects invalid numeric property input before document mutation", () => {
+    const onUpdateEntity = vi.fn();
+    render(
+      <PropertiesPanel
+        selectedEntity={{
+          collection: "furniture",
+          id: "chair-1",
+          entity: {
+            id: "chair-1",
+            catalogId: "chair-001",
+            position: { x: 1000, y: 1500 },
+            rotation: 15,
+            scale: { x: 1, y: 1, z: 1 },
+          },
+        }}
+        callbacks={{ onUpdateEntity }}
+      />,
+    );
+
+    const rotation = screen.getByRole("textbox", { name: "Rotation" });
+    fireEvent.change(rotation, { target: { value: "not-a-number" } });
+    fireEvent.keyDown(rotation, { key: "Enter" });
+
+    expect(onUpdateEntity).not.toHaveBeenCalled();
+    expect(rotation).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByRole("alert")).toHaveTextContent("Enter a valid value");
+
+    fireEvent.change(rotation, { target: { value: "45" } });
+    fireEvent.keyDown(rotation, { key: "Enter" });
+
+    expect(onUpdateEntity).toHaveBeenCalledWith(
+      "furniture",
+      "chair-1",
+      { rotation: 45 },
+    );
+  });
 });
 
 describe("WorkspaceShell", () => {

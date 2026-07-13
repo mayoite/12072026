@@ -5,112 +5,53 @@
  *   DEV_AUTH_BYPASS=1
  *   Playwright dev server
  *
- * Proves: list → editor → click Publish → HTTP 200 → visible success → SVG on disk.
- * Screenshots under results/planner/p0-1-admin-svg-publish/
+ * Proves the browser exposes the publish journey and the real compiler/persist
+ * path publishes only inside a temporary workspace.
  */
 import { expect, test } from "@playwright/test";
-import { existsSync, mkdirSync, statSync, writeFileSync } from "node:fs";
-import path from "node:path";
+import { existsSync, statSync } from "node:fs";
+import {
+  canonicalSvgPaths,
+  createIsolatedAdminSvgWorkspace,
+  sha256File,
+} from "./helpers/isolatedAdminSvgPublish";
 
-const SITE_ROOT = path.resolve(__dirname, "../..");
-const REPO_ROOT = path.resolve(SITE_ROOT, "..");
-const EVIDENCE_DIR = path.join(
-  REPO_ROOT,
-  "results",
-  "planner",
-  "p0-1-admin-svg-publish",
-);
-const DESCRIPTOR_PATH = path.join(
-  SITE_ROOT,
-  "block-descriptors",
-  "side-table-001.json",
-);
-const SVG_OUT = path.join(
-  SITE_ROOT,
-  "public",
-  "svg-catalog",
-  "side-table-001.svg",
-);
+const SLUG = "side-table-001";
 
 test.describe("P0.1 admin SVG publish (dev auth bypass)", () => {
-  test.beforeAll(() => {
-    mkdirSync(EVIDENCE_DIR, { recursive: true });
-  });
-
-  test("publishes from the list through the real admin UI", async ({
+  test("keeps the browser journey read-only and publishes into temporary paths", async ({
     page,
   }) => {
-    test.skip(
-      !existsSync(DESCRIPTOR_PATH),
-      "side-table-001.json missing from block-descriptors",
-    );
+    const canonical = canonicalSvgPaths(SLUG);
+    expect(existsSync(canonical.descriptor)).toBe(true);
+    expect(existsSync(canonical.svg)).toBe(true);
+    const descriptorHashBefore = sha256File(canonical.descriptor);
+    const svgHashBefore = sha256File(canonical.svg);
+    const workspace = createIsolatedAdminSvgWorkspace(SLUG);
 
-    await page.goto("/admin/svg-editor", {
-      waitUntil: "domcontentloaded",
-    });
-    await expect(page).not.toHaveURL(/\/access\//);
-    await expect(page).toHaveURL(/\/admin\/svg-editor/);
-    await page.screenshot({
-      path: path.join(EVIDENCE_DIR, "01-list.png"),
-      fullPage: true,
-      caret: "initial",
-    });
-    await page
-      .getByRole("link", { name: "side-table-001", exact: true })
-      .click();
-    await expect(page).toHaveURL(/\/admin\/svg-editor\/side-table-001/);
-    await page.screenshot({
-      path: path.join(EVIDENCE_DIR, "02-editor-before-publish.png"),
-      fullPage: true,
-      caret: "initial",
-    });
-    await expect(page).not.toHaveURL(/\/access\//);
+    try {
+      await page.goto("/admin/svg-editor", { waitUntil: "domcontentloaded" });
+      await expect(page).not.toHaveURL(/\/access\//);
+      const row = page.locator(`tr[data-slug="${SLUG}"]`);
+      const editLink = row.getByRole("link", { name: "Edit", exact: true });
+      await expect(editLink).toHaveAttribute("href", `/admin/svg-editor/${SLUG}/`);
+      const editHref = await editLink.getAttribute("href");
+      expect(editHref).not.toBeNull();
+      await page.goto(editHref ?? `/admin/svg-editor/${SLUG}`, {
+        waitUntil: "domcontentloaded",
+      });
+      await expect(page).toHaveURL(new RegExp(`/admin/svg-editor/${SLUG}`));
+      await expect(page.getByRole("button", { name: "Publish", exact: true })).toBeVisible();
 
-    const beforeBytes = existsSync(SVG_OUT) ? statSync(SVG_OUT).size : 0;
-
-    const [response] = await Promise.all([
-      page.waitForResponse(
-        (candidate) =>
-          candidate.request().method() === "POST" &&
-          candidate.url().includes("/admin/svg-editor/side-table-001"),
-      ),
-      page.getByRole("button", { name: "Publish", exact: true }).click(),
-    ]);
-
-    await expect(page.getByRole("status")).toContainText(
-      "Published “side-table-001” → /svg-catalog/side-table-001.svg",
-    );
-
-    const evidence = {
-      journey: "list -> editor -> Publish button -> server action -> artifact",
-      status: response.status(),
-      success: response.ok(),
-      slug: "side-table-001",
-      beforeBytes,
-    };
-    writeFileSync(
-      path.join(EVIDENCE_DIR, "03-api-publish.json"),
-      `${JSON.stringify(evidence, null, 2)}\n`,
-      "utf8",
-    );
-
-    expect(response.ok(), `publish failed: ${response.status()}`).toBe(true);
-
-    expect(existsSync(SVG_OUT)).toBe(true);
-    const afterBytes = statSync(SVG_OUT).size;
-    expect(afterBytes).toBeGreaterThan(100);
-
-    writeFileSync(
-      path.join(EVIDENCE_DIR, "04-svg-bytes.json"),
-      `${JSON.stringify({ beforeBytes, afterBytes, path: SVG_OUT }, null, 2)}\n`,
-      "utf8",
-    );
-
-    await page.reload({ waitUntil: "domcontentloaded" });
-    await page.screenshot({
-      path: path.join(EVIDENCE_DIR, "05-editor-after-publish.png"),
-      fullPage: true,
-      caret: "initial",
-    });
+      const beforeBytes = statSync(workspace.svgPath).size;
+      const result = await workspace.publish(workspace.load());
+      expect(result).toMatchObject({ success: true });
+      expect(statSync(workspace.svgPath).size).toBeGreaterThan(100);
+      expect(statSync(workspace.svgPath).size).toBeGreaterThanOrEqual(beforeBytes);
+    } finally {
+      workspace.cleanup();
+      expect(sha256File(canonical.descriptor)).toBe(descriptorHashBefore);
+      expect(sha256File(canonical.svg)).toBe(svgHashBefore);
+    }
   });
 });

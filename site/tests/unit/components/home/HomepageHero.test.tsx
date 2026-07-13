@@ -30,6 +30,13 @@ describe('HomepageHero Component', () => {
   it('renders hero title and details correctly', () => {
     render(<HomepageHero />);
 
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: HOMEPAGE_HERO_CONTENT.title.join(' '),
+      }),
+    ).toBeInTheDocument();
+
     // Verify Title Lines
     HOMEPAGE_HERO_CONTENT.title.forEach((line) => {
       expect(screen.getByText(line)).toBeInTheDocument();

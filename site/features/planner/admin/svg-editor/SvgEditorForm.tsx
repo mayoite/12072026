@@ -151,7 +151,7 @@ export function SvgEditorForm({
   const visible = fieldsForVariant(variant, fields);
 
   const issueByPath = new Map<string, string>();
-  const orphanIssues: FieldIssue[] = [];
+  const summaryIssues: Array<FieldIssue & { targetId?: string }> = [];
   for (const issue of issues) {
     // Match a field whose path is a prefix of the issue path (e.g. issue
     // "themeTokens.--fill-primary" → field "themeTokens").
@@ -160,8 +160,9 @@ export function SvgEditorForm({
     );
     if (owner) {
       if (!issueByPath.has(owner.path)) issueByPath.set(owner.path, issue.message);
+      summaryIssues.push({ ...issue, targetId: `svgfield-${owner.path}` });
     } else {
-      orphanIssues.push(issue);
+      summaryIssues.push(issue);
     }
   }
 
@@ -169,13 +170,17 @@ export function SvgEditorForm({
 
   return (
     <div className="admin-svg-form">
-      {orphanIssues.length > 0 ? (
-        <div className="admin-alert admin-alert--warn" role="alert">
-          <strong>Other validation issues:</strong>
+      {summaryIssues.length > 0 ? (
+        <div className="admin-alert admin-alert--warn" role="alert" aria-label="Validation errors">
+          <strong>Fix {summaryIssues.length} validation {summaryIssues.length === 1 ? "error" : "errors"} before publishing:</strong>
           <ul>
-            {orphanIssues.map((issue, index) => (
+            {summaryIssues.map((issue, index) => (
               <li key={`${issue.path}-${index}`}>
-                {issue.path ? <code>{issue.path}</code> : null} {issue.message}
+                {issue.targetId ? (
+                  <a href={`#${issue.targetId}`}>{issue.message}</a>
+                ) : (
+                  <>{issue.path ? <code>{issue.path}</code> : null} {issue.message}</>
+                )}
               </li>
             ))}
           </ul>

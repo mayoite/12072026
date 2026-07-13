@@ -1,19 +1,36 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowRight, Buildings as Building2, MapPin, Ruler } from "@phosphor-icons/react";
+import {
+  ArrowRight,
+  Buildings as Building2,
+  FileArrowUp,
+  Layout,
+  MapPin,
+  PencilSimpleLine,
+  Ruler,
+} from "@phosphor-icons/react";
 
 import {
   PLANNER_INDIAN_CITIES,
   PLANNER_PRIMARY_PURPOSE_OPTIONS,
   applyProjectSetup,
   createDefaultProjectSetupDraft,
+  markProjectSetupCompleteInStorage,
+  metadataToSpaceSuggestInput,
   type PlannerProjectMetadata,
   type PlannerProjectSetupDraft,
   type PlannerPrimaryPurpose,
+  type PlannerStartingMode,
+  writePlannerStartupIntent,
 } from "./projectSetup";
-import { estimateRoomMm } from "@/features/planner/ai/spaceSuggest";
+import {
+  buildShellOnlyLayout,
+  estimateRoomMm,
+  suggestLayoutGridPack,
+} from "@/features/planner/ai/spaceSuggest";
 import { PLANNER_MAX_CANVAS_MM, PLANNER_MAX_CANVAS_METERS } from "@/features/planner/lib/canvasBounds";
+import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
 import { Z } from "@/lib/z-index";
 
 
@@ -45,6 +62,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
     createDefaultProjectSetupDraft({ guestMode }),
   );
   const [error, setError] = useState<string | null>(null);
+  const [startingMode, setStartingMode] = useState<PlannerStartingMode>("scratch");
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -106,6 +124,16 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
 
     try {
       applyProjectSetup(metadata);
+      const { setPendingBootstrapLayout } = usePlannerWorkspaceStore.getState();
+      setPendingBootstrapLayout(
+        startingMode === "template"
+          ? suggestLayoutGridPack(metadataToSpaceSuggestInput(metadata))
+          : startingMode === "scratch"
+            ? buildShellOnlyLayout(metadata)
+            : null,
+      );
+      writePlannerStartupIntent(startingMode, guestMode, _planId);
+      markProjectSetupCompleteInStorage(guestMode, _planId);
     } catch (storageErr) {
       const message =
         storageErr instanceof DOMException && storageErr.name === "QuotaExceededError"
@@ -251,6 +279,54 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                     <span className="typ-caption mt-0.5 text-[color:var(--text-muted)]">
                       {PURPOSE_SUMMARIES[option.value as PlannerPrimaryPurpose]}
                     </span>
+                  </label>
+                );
+              })}
+            </div>
+          </fieldset>
+
+          <fieldset className={SETUP_FIELDSET}>
+            <legend className="px-1 text-[0.8125rem] font-semibold text-[color:var(--text-body)]">
+              Start with
+            </legend>
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              {([
+                {
+                  value: "template",
+                  label: "Template",
+                  description: "Create a purpose-based starter layout.",
+                  icon: Layout,
+                },
+                {
+                  value: "scratch",
+                  label: "Scratch",
+                  description: "Create an editable empty room shell.",
+                  icon: PencilSimpleLine,
+                },
+                {
+                  value: "import-trace",
+                  label: "Import or trace",
+                  description: "Open the workspace, then import a plan file.",
+                  icon: FileArrowUp,
+                },
+              ] as const).map((option) => {
+                const selected = startingMode === option.value;
+                const Icon = option.icon;
+                return (
+                  <label
+                    key={option.value}
+                    className={`cursor-pointer rounded-[var(--radius-lg)] border p-3 transition-colors ${selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]"}`}
+                  >
+                    <input
+                      type="radio"
+                      name="project-starting-mode"
+                      className="sr-only"
+                      checked={selected}
+                      onChange={() => setStartingMode(option.value)}
+                    />
+                    <Icon className="mb-2 h-5 w-5 text-[color:var(--color-primary)]" aria-hidden="true" />
+                    <span className="typ-label text-[color:var(--text-strong)]">{option.label}</span>
+                    <span className="typ-caption mt-1 text-[color:var(--text-muted)]">{option.description}</span>
                   </label>
                 );
               })}

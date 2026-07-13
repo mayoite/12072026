@@ -104,7 +104,7 @@ export function createHeadlessEngineAdapter(
   }
 
   return {
-    render(document, selectedId) {
+    render(document) {
       assertLive();
       current = document;
     },

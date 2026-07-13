@@ -15,7 +15,7 @@ import { randomBytes } from "node:crypto";
 
 import { resolveSitePackageRoot } from "@/lib/paths/sitePackageRoot";
 import type { PriceBookLineRule } from "./priceBookContract";
-import type { PriceBookRow, PriceBookVersionRow } from "./emitPriceBookContract";
+import type { PriceBookVersionRow } from "./emitPriceBookContract";
 import type { PriceBookStore } from "./priceBookService";
 
 export type PriceBookFileRecord = {

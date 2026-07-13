@@ -52,7 +52,10 @@ import {
   undoLabel,
   type SvgSceneHistory,
 } from "./scene/svgSceneHistory";
-import type { SvgEngineAdapter } from "./scene/svgEngineAdapter";
+import type {
+  SvgEngineAdapter,
+  SvgEngineViewport,
+} from "./scene/svgEngineAdapter";
 
 export interface SvgStudioCanvasProps {
   readonly initialDocument: SvgSceneDocument;
@@ -114,10 +117,18 @@ export function SvgStudioCanvas({
   const adapterRef = useRef<SvgEngineAdapter | null>(null);
   const [history, setHistory] = useState<SvgSceneHistory>(() => createHistory(initialDocument, "Open"));
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [viewport, setViewport] = useState<SvgEngineViewport>({
+    panX: 0,
+    panY: 0,
+    zoom: 1,
+  });
 
   const document = history.present.document;
   const documentRef = useRef(document);
-  documentRef.current = document;
+
+  useEffect(() => {
+    documentRef.current = document;
+  }, [document]);
 
   useEffect(() => {
     if (!documentGetterRef) return;
@@ -125,7 +136,11 @@ export function SvgStudioCanvas({
     return () => {
       documentGetterRef.current = null;
     };
-  }, [documentGetterRef, document]);
+  }, [documentGetterRef]);
+
+  const apply = useCallback((label: string, next: SvgSceneDocument) => {
+    setHistory((current) => commit(current, label, next));
+  }, []);
 
   // Mount the SVG.js engine once, lazily (client-only import).
   useEffect(() => {
@@ -134,6 +149,7 @@ export function SvgStudioCanvas({
     let disposed = false;
     let offPointer: (() => void) | undefined;
     let offChange: (() => void) | undefined;
+    let offViewport: (() => void) | undefined;
 
     void import("./scene/svgJsEngineAdapter").then(({ createSvgJsEngineAdapter }) => {
       if (disposed || !mountRef.current) return;
@@ -150,12 +166,15 @@ export function SvgStudioCanvas({
         } as SvgSceneNode));
         apply(`Transform ${findNode(latestDoc, event.nodeId)?.name || "shape"}`, updated);
       });
+      setViewport(adapter.getViewport());
+      offViewport = adapter.on("viewport:change", setViewport);
     });
 
     return () => {
       disposed = true;
       offPointer?.();
       offChange?.();
+      offViewport?.();
       adapterRef.current?.destroy();
       adapterRef.current = null;
     };
@@ -167,10 +186,6 @@ export function SvgStudioCanvas({
   useEffect(() => {
     adapterRef.current?.render(document, selectedId);
   }, [document, selectedId]);
-
-  const apply = useCallback((label: string, next: SvgSceneDocument) => {
-    setHistory((current) => commit(current, label, next));
-  }, []);
 
   // Notify host after commit — never call parent setState inside a setHistory updater.
   const skipInitialDocumentSyncRef = useRef(true);
@@ -206,6 +221,10 @@ export function SvgStudioCanvas({
 
   const deleteSelected = useCallback(() => {
     if (!selected) return;
+    const confirmed = window.confirm(
+      `Delete “${selected.name}” from this draft? You can undo this action until the editor is closed.`,
+    );
+    if (!confirmed) return;
     apply(`Delete ${selected.name}`, removeNode(document, selected.id));
     setSelectedId(null);
   }, [document, apply, selected]);
@@ -313,6 +332,15 @@ export function SvgStudioCanvas({
         </button>
       </div>
 
+      <div className="svg-studio__status" aria-label="Canvas status">
+        <span>
+          View box {document.viewBox.width} × {document.viewBox.height}
+        </span>
+        <span>Zoom {Math.round(viewport.zoom * 100)}%</span>
+        <span>{selected ? `Selected: ${selected.name}` : "No selection"}</span>
+        <span>{document.nodes.length} layers</span>
+      </div>
+
       <div className="svg-studio__body">
         <div ref={mountRef} className="svg-studio__stage" role="application" aria-label="SVG canvas" />
 
@@ -345,6 +373,18 @@ export function SvgStudioCanvas({
               <p className="svg-studio__inspector-meta">
                 <code>{selected.id}</code> · {selected.kind}
               </p>
+              <label className="svg-studio__inspector-fill">
+                Layer name
+                <input
+                  type="text"
+                  value={selected.name}
+                  onChange={(event) =>
+                    patchSelected(`Rename ${selected.name}`, {
+                      name: event.target.value,
+                    })
+                  }
+                />
+              </label>
               {selected.kind === "rect" ? (
                 <div className="svg-studio__inspector-grid">
                   <label>

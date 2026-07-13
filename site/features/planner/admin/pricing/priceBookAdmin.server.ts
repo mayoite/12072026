@@ -11,7 +11,7 @@ import {
   PRICE_BOOKS_DIR_DEFAULT,
   createPriceBookFileStore,
   listPriceBookIds,
-  readPriceBookFile,
+  type readPriceBookFile,
   seedPriceBookIfMissing,
   writePriceBookFile,
 } from "./priceBookFileStore";

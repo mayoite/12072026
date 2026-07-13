@@ -13,7 +13,7 @@ export function SupportIvrPageView() {
         title={SUPPORT_IVR_PAGE_COPY.heroTitle}
         subtitle={SUPPORT_IVR_PAGE_COPY.heroSubtitle}
         showButton={false}
-        backgroundImage="/images/hero/hero-3.webp"
+        backgroundImage="/images/hero/dmrc-hero.webp"
       />
 
       <HomeSection variant="white" spacing="md">

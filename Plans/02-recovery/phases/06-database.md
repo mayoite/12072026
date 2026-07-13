@@ -80,6 +80,7 @@ It creates:
 - `block_descriptors`.
 - `published_svg_revisions` matching `PublishedRevisionV1`.
 - `svg_artifacts` matching `SvgArtifactRecord`.
+- `svg_publication_events` as the append-only Products DB release ledger and transactional outbox.
 - `planner_managed_products.published_svg_revision_id`.
 - Same-product pointer enforcement.
 - Unique product-scoped revision numbers.
@@ -101,12 +102,14 @@ Do not apply it until the owner approves the exact SQL and target database.
 4. Compile and sanitize on the server.
 5. Calculate SHA-256 from every exact artifact.
 6. Upload artifacts to immutable content-addressed keys.
-7. Insert revision and artifact metadata, update the product pointer, and write audit in one transaction.
+7. Insert revision and artifact metadata, update the product pointer, and append the Products DB publication event in one transaction.
 8. Return the existing revision for an unchanged valid publish.
 9. Preserve the prior pointer on every failure.
 10. Keep uncommitted objects unreachable and clean verified orphans safely.
 11. Return product, revision, checksums, and outcome to Admin.
 12. Keep draft and audit fields out of public responses.
+13. Project committed publication events to Admin DB reporting after commit, with event-ID deduplication.
+14. Record failed attempts in separate server security telemetry; never call a rolled-back write an atomic audit.
 
 ## Execution phase 3 — Planner import and cutover
 
@@ -148,15 +151,16 @@ It is not a permanent fallback.
 5. Prove malicious SVG input is rejected.
 6. Prove stored and served SVG stays sanitized.
 7. Prove rate limits for publication and public reads.
-8. Prove audit records actor, product, revision, reason, result, and time.
-9. Prove backup and restore include SVG tables and release pointers.
-10. Prove the R2 degraded snapshot includes committed SVG revision and artifact identity.
-11. Prove database or artifact-storage outage behavior does not invent success.
+8. Prove the Products DB publication event records actor, product, revision, reason, transition, and time in the release transaction.
+9. Prove Admin DB audit projection is idempotent and cannot change release truth.
+10. Prove backup and restore include SVG tables, publication events, and release pointers.
+11. Prove the R2 degraded snapshot includes committed SVG revision and artifact identity.
+12. Prove database or artifact-storage outage behavior does not invent success.
 
 ## Initial commands
 
 ```powershell
-pnpm --filter oando-site exec node scripts/validate-launch-env.mjs
+pnpm --filter oando-site run launch:env
 pnpm --filter oando-site run db:test
 pnpm --filter oando-site run db:advisors
 ```

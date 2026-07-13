@@ -15,6 +15,7 @@ import {
 } from "../../catalog/workstationSystemV0";
 import { workstationConfigFromOptions } from "../../catalog/workstationMeshV0";
 import { workstationV0UnitPriceInr, WORKSTATION_V0_GST_RATE } from "../../catalog/workstationBoqV0";
+import { sha256Hex } from "../../catalog/svg/sha256";
 
 export const PLANNER_FURNITURE_BOQ_KIND = "open3d-furniture-boq-v1" as const;
 export const PLANNER_FURNITURE_BOQ_GST_RATE = WORKSTATION_V0_GST_RATE;
@@ -47,6 +48,7 @@ export type PlannerFurnitureBoqLine = {
   priced: boolean;
   /** Where unitPriceInr came from — always labeled (demo-list or none). */
   priceSource: PlannerFurnitureBoqPriceSource;
+  sourceObjectIds: string[];
 };
 
 export type PlannerFurnitureBoqSummary = {
@@ -60,6 +62,8 @@ export type PlannerFurnitureBoqSummary = {
   pricingMode: "demo-list-partial";
   /** Human-readable honesty note for download consumers. */
   pricingNote: string;
+  /** SHA-256 of canonical calculation inputs and outputs. Excludes generation time. */
+  calculationHash: string;
   lines: PlannerFurnitureBoqLine[];
   /** Placed furniture instance count. */
   totalItems: number;
@@ -92,6 +96,7 @@ type GroupBucket = {
   priced: boolean;
   priceSource: PlannerFurnitureBoqPriceSource;
   quantity: number;
+  sourceObjectIds: string[];
 };
 
 function roundMoneyInr(value: number): number {
@@ -194,7 +199,7 @@ function resolveIdentity(item: PlannerFurnitureItem): {
   };
 }
 
-function groupKey(bucket: Omit<GroupBucket, "quantity">): string {
+function groupKey(bucket: Omit<GroupBucket, "quantity" | "sourceObjectIds">): string {
   return [
     bucket.catalogId,
     bucket.widthMm,
@@ -227,7 +232,7 @@ export function buildPlannerFurnitureBoq(
       totalItems += 1;
       const dims = resolveDims(item);
       const identity = resolveIdentity(item);
-      const base: Omit<GroupBucket, "quantity"> = {
+      const base: Omit<GroupBucket, "quantity" | "sourceObjectIds"> = {
         catalogId: identity.catalogId,
         name: identity.name,
         sku: identity.sku,
@@ -244,8 +249,9 @@ export function buildPlannerFurnitureBoq(
       const existing = groups.get(key);
       if (existing) {
         existing.quantity += 1;
+        existing.sourceObjectIds.push(item.id);
       } else {
-        groups.set(key, { ...base, quantity: 1 });
+        groups.set(key, { ...base, quantity: 1, sourceObjectIds: [item.id] });
       }
     }
   }
@@ -272,6 +278,7 @@ export function buildPlannerFurnitureBoq(
         geometryMode: g.geometryMode,
         priced: g.priced,
         priceSource: g.priceSource,
+        sourceObjectIds: [...g.sourceObjectIds].sort(),
       };
     })
     .sort(
@@ -287,6 +294,19 @@ export function buildPlannerFurnitureBoq(
     .filter((l) => l.priced)
     .reduce((sum, l) => sum + l.quantity, 0);
   const unpricedItemCount = totalItems - pricedItemCount;
+  const calculationHash = sha256Hex(
+    JSON.stringify({
+      kind: PLANNER_FURNITURE_BOQ_KIND,
+      projectId: project.id,
+      currencyCode: "INR",
+      gstRate,
+      lines,
+      totalItems,
+      subtotalInr,
+      gstInr,
+      totalInr: subtotalInr + gstInr,
+    }),
+  );
 
   return {
     kind: PLANNER_FURNITURE_BOQ_KIND,
@@ -297,6 +317,7 @@ export function buildPlannerFurnitureBoq(
     gstRate,
     pricingMode: "demo-list-partial",
     pricingNote: PLANNER_FURNITURE_BOQ_PRICING_NOTE,
+    calculationHash,
     lines,
     totalItems,
     totalLines: lines.length,
@@ -351,6 +372,7 @@ export function exportPlannerFurnitureBoqToCsv(summary: PlannerFurnitureBoqSumma
       "Priced",
       "Price source",
       "Geometry",
+      "Source object IDs",
     ].join(","),
   );
 
@@ -372,6 +394,7 @@ export function exportPlannerFurnitureBoqToCsv(summary: PlannerFurnitureBoqSumma
         li.priced ? "yes" : "no",
         li.priceSource,
         escapeCsvField(li.geometryMode),
+        escapeCsvField(li.sourceObjectIds.join(" | ")),
       ].join(","),
     );
   }
@@ -384,6 +407,7 @@ export function exportPlannerFurnitureBoqToCsv(summary: PlannerFurnitureBoqSumma
   rows.push(`Grand total INR,${summary.totalInr}`);
   rows.push(`Priced items,${summary.pricedItemCount}`);
   rows.push(`Unpriced items,${summary.unpricedItemCount}`);
+  rows.push(`Calculation hash,${summary.calculationHash}`);
 
   return rows.join("\n");
 }

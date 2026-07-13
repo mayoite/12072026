@@ -49,6 +49,16 @@
   height: 100%;
 }
 
+[data-admin-layout] .svg-studio__status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
 [data-admin-layout] .admin-svg-engine-shell__stage .svg-studio__stage {
   min-height: 0;
   height: 100%;

@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ProjectSetupGate } from "@/features/planner/onboarding/ProjectSetupGate";
@@ -44,5 +44,29 @@ describe("ProjectSetupGate", () => {
 
     expect(screen.getByTestId("canvas-child")).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: /Set up your space/i })).not.toBeInTheDocument();
+  });
+
+  it("offers every starting mode in the single blocking setup step", () => {
+    render(
+      <ProjectSetupGate guestMode planId="one-step-plan">
+        <div data-testid="canvas-child">Canvas</div>
+      </ProjectSetupGate>,
+    );
+
+    act(() => {
+      vi.runAllTimers();
+    });
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(screen.getByRole("radio", { name: /Template/i })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: /Scratch/i })).toBeChecked();
+    expect(screen.getByRole("radio", { name: /Import or trace/i })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Start placing furniture" }));
+
+    expect(screen.getByTestId("canvas-child")).toBeInTheDocument();
+    expect(localStorage.getItem(projectSetupStorageKey(true, "one-step-plan"))).toBe("true");
   });
 });

@@ -39,7 +39,6 @@ import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 import type { PublishDescriptorResult } from "./publishDescriptorWithPipeline";
 import { PublishedSvgPreview } from "./PublishedSvgPreview";
 import { DescriptorRevisionPanel } from "./DescriptorRevisionPanel";
-import { proveDescriptorFootprintMm } from "./footprintMmProof";
 import type { CatalogLifecycleState } from "./catalogLifecycle.shared";
 import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
 import { sceneFromDescriptor } from "./sceneFromDescriptor";
@@ -90,12 +89,14 @@ interface FeedbackState {
   readonly submitting: boolean;
   readonly errorMessage: string | null;
   readonly successMessage: string | null;
+  readonly publishedSlug: string | null;
 }
 
 const INITIAL_FEEDBACK: FeedbackState = {
   submitting: false,
   errorMessage: null,
   successMessage: null,
+  publishedSlug: null,
 };
 
 function nowStampLabel(): string {
@@ -133,7 +134,7 @@ export interface AdminSvgEditorEditViewProps {
   /** Server action wired by the RSC page: persists + runs the SVG pipeline. */
   readonly onPublishAction?: (
     data: SvgEditorFormState,
-  ) => Promise<void | PublishDescriptorResult>;
+  ) => Promise<PublishDescriptorResult>;
 }
 
 export function AdminSvgEditorEditView({
@@ -151,6 +152,9 @@ export function AdminSvgEditorEditView({
   // Controlled form state, seeded from the persisted descriptor.
   const [form, setForm] = useState<SvgEditorFormState>(() =>
     descriptorToFormState(descriptor),
+  );
+  const [publishedFormSignature, setPublishedFormSignature] = useState(() =>
+    JSON.stringify(descriptorToFormState(descriptor)),
   );
 
   // Live compiled preview (debounced real compile; no disk I/O).
@@ -208,25 +212,19 @@ export function AdminSvgEditorEditView({
       ...prev,
       errorMessage: null,
       successMessage: null,
+      publishedSlug: null,
     }));
   }, []);
 
   // A4.1 — starter scene for the visual studio, seeded from the descriptor.
   const studioScene = useMemo(() => sceneFromDescriptor(descriptor), [descriptor]);
-  const publishedSceneSignature = useMemo(
-    () => JSON.stringify(serializeSceneToDefinition(studioScene).parts),
-    [studioScene],
+  const formDirty = useMemo(
+    () => JSON.stringify(form) !== publishedFormSignature,
+    [form, publishedFormSignature],
   );
-  const sceneDirty = useMemo(() => {
-    const current = JSON.stringify(form.sceneParts ?? []);
-    return current !== publishedSceneSignature;
-  }, [form.sceneParts, publishedSceneSignature]);
   const [studioResetKey, setStudioResetKey] = useState(0);
   const studioDocumentGetterRef = useRef<(() => SvgSceneDocument) | null>(null);
   const studioDocumentRef = useRef(studioScene);
-  studioDocumentRef.current = studioScene;
-  const publishFormRef = useRef(form);
-  publishFormRef.current = form;
 
   const handleStudioDocumentChange = useCallback((document: Parameters<typeof serializeSceneToDefinition>[0]) => {
     studioDocumentRef.current = document;
@@ -237,20 +235,19 @@ export function AdminSvgEditorEditView({
         sceneViewBox: definition.viewBox,
         sceneParts: definition.parts,
       };
-      publishFormRef.current = next;
       return next;
     });
   }, []);
 
   useEffect(() => {
-    if (!sceneDirty) return;
+    if (!formDirty) return;
     const onBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
       event.returnValue = "";
     };
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
-  }, [sceneDirty]);
+  }, [formDirty]);
 
   const handleApproveForBuyers = useCallback(async () => {
     if (artifactStatus.state !== "published") return;
@@ -270,53 +267,98 @@ export function AdminSvgEditorEditView({
   }, [artifactStatus.state, router, slug]);
 
   const handleResetToPublished = useCallback(() => {
-    if (sceneDirty && !window.confirm("Discard unpublished studio edits and restore the last published scene?")) {
+    if (formDirty && !window.confirm("Discard every unpublished field and studio edit, then restore the last published revision?")) {
       return;
     }
     const seed = descriptorToFormState(descriptor);
     setForm(seed);
-    publishFormRef.current = seed;
     studioDocumentRef.current = studioScene;
     setStudioResetKey((key) => key + 1);
-  }, [descriptor, sceneDirty, studioScene]);
+  }, [descriptor, formDirty, studioScene]);
 
   const publishPayloadFromStudio = useCallback((): SvgEditorFormState => {
     const liveDocument =
       studioDocumentGetterRef.current?.() ?? studioDocumentRef.current;
     const definition = serializeSceneToDefinition(liveDocument);
     return {
-      ...publishFormRef.current,
+      ...form,
       sceneViewBox: definition.viewBox,
       sceneParts: definition.parts,
     };
-  }, []);
+  }, [form]);
+
+  const footprintProof = useMemo(() => {
+    const viewBox = form.sceneViewBox ?? form.viewBox;
+    return {
+      widthMm: form.geometry.widthMm,
+      depthMm: form.geometry.depthMm,
+      aligned:
+        viewBox.width === form.geometry.widthMm &&
+        viewBox.height === form.geometry.depthMm,
+    };
+  }, [form.geometry.depthMm, form.geometry.widthMm, form.sceneViewBox, form.viewBox]);
+  const publishTarget = form.slug.trim() || slug;
 
   const handlePublish = useCallback(async () => {
-    setFeedback({ submitting: true, errorMessage: null, successMessage: null });
+    if (!footprintProof.aligned) {
+      setFeedback({
+        submitting: false,
+        errorMessage: "Publish is blocked because the SVG view box does not match the product width and depth in millimetres.",
+        successMessage: null,
+        publishedSlug: null,
+      });
+      return;
+    }
+    if (previewPending || preview?.ok !== true) {
+      setFeedback({
+        submitting: false,
+        errorMessage: previewPending
+          ? "Publish is blocked while validation is running."
+          : "Publish is blocked until the current draft has a valid compiled preview.",
+        successMessage: null,
+        publishedSlug: null,
+      });
+      return;
+    }
+    const confirmed = window.confirm(
+      `Publish “${publishTarget}”?\n\nThis will replace the current released SVG artifact. The previous revision remains available for rollback.`,
+    );
+    if (!confirmed) return;
+
+    setFeedback({
+      submitting: true,
+      errorMessage: null,
+      successMessage: null,
+      publishedSlug: null,
+    });
     try {
       if (!onPublishAction) {
         setFeedback({
           submitting: false,
           errorMessage: "Publish is unavailable (no server action wired).",
           successMessage: null,
+          publishedSlug: null,
         });
         return;
       }
-      const result = await onPublishAction(publishPayloadFromStudio());
-      if (result && result.success === false) {
+      const payload = publishPayloadFromStudio();
+      const result = await onPublishAction(payload);
+      if (result.success === false) {
         setFeedback({
           submitting: false,
           errorMessage: `Publish failed for “${slug}”: ${result.error}`,
           successMessage: null,
+          publishedSlug: null,
         });
         return;
       }
-      const publishedSlug =
-        result && result.success === true ? result.descriptor.slug : slug;
+      const publishedSlug = result.descriptor.slug;
+      setPublishedFormSignature(JSON.stringify(payload));
       setFeedback({
         submitting: false,
         errorMessage: null,
-        successMessage: `Published “${publishedSlug}” → /svg-catalog/${publishedSlug}.svg · ${nowStampLabel()}. Refreshing artifact preview…`,
+        successMessage: `Published “${publishedSlug}” at ${nowStampLabel()}. Refreshing artifact preview…`,
+        publishedSlug,
       });
       router.refresh();
     } catch (networkError) {
@@ -328,11 +370,10 @@ export function AdminSvgEditorEditView({
         submitting: false,
         errorMessage: `Publish failed for “${slug}”: ${message}`,
         successMessage: null,
+        publishedSlug: null,
       });
     }
-  }, [onPublishAction, publishPayloadFromStudio, router, slug]);
-
-  const footprintProof = useMemo(() => proveDescriptorFootprintMm(descriptor), [descriptor]);
+  }, [footprintProof.aligned, onPublishAction, preview, previewPending, publishPayloadFromStudio, publishTarget, router, slug]);
 
   const checksumShort =
     typeof descriptor.checksum === "string" && descriptor.checksum.length > 16
@@ -343,6 +384,19 @@ export function AdminSvgEditorEditView({
     : "—";
 
   const canConvertToGlb = form.variant === "fixed" && compiledSvg !== null;
+  const validationLabel = previewPending
+    ? "Validation running"
+    : preview?.ok === true
+      ? "Draft valid"
+      : preview
+        ? "Publication blocked"
+        : "Awaiting validation";
+  const canPublish =
+    Boolean(onPublishAction) &&
+    !feedback.submitting &&
+    !previewPending &&
+    preview?.ok === true &&
+    footprintProof.aligned;
 
   return (
     <div className="admin-page admin-page--svg-engine">
@@ -357,10 +411,10 @@ export function AdminSvgEditorEditView({
             {describeVariant(form.variant)} · schema{" "}
             <code>{descriptor.schemaVersion}</code> ·{" "}
             <code className="admin-page__checksum">{checksumShort}</code>
-            {sceneDirty ? (
+            {formDirty ? (
               <>
                 {" "}
-                · <span className="admin-badge admin-badge--warn">Unsaved studio edits</span>
+                · <span className="admin-badge admin-badge--warn">Unpublished changes</span>
               </>
             ) : null}
             {" "}
@@ -376,6 +430,10 @@ export function AdminSvgEditorEditView({
             >
               {lifecycle}
             </span>
+            {" "}
+            · <span className={preview?.ok === true ? "admin-badge admin-badge--active" : "admin-badge admin-badge--warn"}>{validationLabel}</span>
+            {" "}
+            · last published {updatedAtLabel}
             {" "}
             ·{" "}
             <span
@@ -406,7 +464,7 @@ export function AdminSvgEditorEditView({
             type="button"
             className="admin-btn admin-btn--outline"
             onClick={handleResetToPublished}
-            disabled={feedback.submitting || !sceneDirty}
+            disabled={feedback.submitting || !formDirty}
           >
             Reset to published
           </button>
@@ -427,7 +485,8 @@ export function AdminSvgEditorEditView({
             type="button"
             className="admin-btn admin-btn--primary"
             onClick={handlePublish}
-            disabled={feedback.submitting}
+            disabled={!canPublish}
+            aria-describedby="admin-svg-publication-impact"
           >
             {feedback.submitting ? (
               <Loader2 size={14} className="animate-spin" aria-hidden />
@@ -438,6 +497,10 @@ export function AdminSvgEditorEditView({
           </button>
         </div>
       </header>
+
+      <p id="admin-svg-publication-impact" className="admin-page__meta">
+        Publish target: <code>{publishTarget}</code>. Draft state: {formDirty ? "changed" : "unchanged"}. Current artifact: {artifactStatus.state}. A successful publish replaces the released SVG and preserves revision history for rollback.
+      </p>
 
       <div aria-live="polite" aria-atomic="true" className="admin-svg-engine-feedback">
         {feedback.submitting ? (
@@ -477,7 +540,17 @@ export function AdminSvgEditorEditView({
             className="admin-alert admin-alert--info flex flex-wrap items-center gap-3"
           >
             <CheckCircle size={16} className="shrink-0" aria-hidden />
-            <span className="min-w-0 flex-1">{feedback.successMessage}</span>
+            <span className="min-w-0 flex-1">
+              {feedback.successMessage}
+              {feedback.publishedSlug ? (
+                <>
+                  {" "}
+                  <a href={`/svg-catalog/${feedback.publishedSlug}.svg`} target="_blank" rel="noreferrer">Open released SVG</a>
+                  {" · "}
+                  <Link href="/planner/guest">Verify in Planner</Link>
+                </>
+              ) : null}
+            </span>
             <button
               type="button"
               className="admin-btn admin-btn--outline"
@@ -558,7 +631,10 @@ export function AdminSvgEditorEditView({
 
           <DescriptorRevisionPanel slug={slug} />
 
-          <details className="admin-panel admin-svg-engine-shell__panel admin-svg-engine-shell__advanced">
+          <details
+            className="admin-panel admin-svg-engine-shell__panel admin-svg-engine-shell__advanced"
+            open={preview?.ok === false}
+          >
             <summary className="admin-panel__header">
               Advanced block fields
             </summary>

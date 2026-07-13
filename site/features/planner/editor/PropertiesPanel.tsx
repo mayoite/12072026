@@ -2,7 +2,6 @@
 
 import {
   useCallback,
-  useEffect,
   useId,
   useMemo,
   useState,
@@ -165,15 +164,10 @@ export const PropertiesPanel = memo(function PropertiesPanel({
    */
   const commitNumberValue = useCallback(
     (raw: string, field: string, subField?: string) => {
-      if (!selectedEntity || isLocked) return;
+      if (!selectedEntity || isLocked) return false;
 
-      let value: number | string = raw;
-      if (value !== "") {
-        const parsed = parseFloat(value);
-        if (!isNaN(parsed)) {
-          value = parsed;
-        }
-      }
+      const value = Number(raw.trim());
+      if (raw.trim() === "" || !Number.isFinite(value)) return false;
 
       let updates: Record<string, unknown>;
       if (subField) {
@@ -195,16 +189,17 @@ export const PropertiesPanel = memo(function PropertiesPanel({
         selectedEntity.id,
         updates,
       );
+      return true;
     },
     [selectedEntity, callbacks, isLocked],
   );
 
   const commitLengthValue = useCallback(
     (raw: string, field: string, subField?: string) => {
-      if (!selectedEntity || isLocked) return;
+      if (!selectedEntity || isLocked) return false;
 
       const mm = parseLengthInput(raw, displayUnit);
-      if (mm === null) return;
+      if (mm === null || !Number.isFinite(mm)) return false;
 
       let updates: Record<string, unknown>;
       if (subField) {
@@ -226,6 +221,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
         selectedEntity.id,
         updates,
       );
+      return true;
     },
     [selectedEntity, callbacks, isLocked, displayUnit],
   );
@@ -1104,7 +1100,7 @@ interface PropertyFieldProps {
   label: string;
   value: string | number;
   unit?: string;
-  onCommit?: (value: string) => void;
+  onCommit?: (value: string) => boolean | void;
   readOnly?: boolean;
   min?: number;
   max?: number;
@@ -1123,31 +1119,48 @@ function PropertyField({
   const displayValue = String(value);
   const [draft, setDraft] = useState(displayValue);
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!isEditing) {
-      setDraft(displayValue);
+  const commitDraft = useCallback((): boolean => {
+    if (readOnly || !onCommit) return true;
+    if (draft === displayValue) {
+      setError(null);
+      setIsEditing(false);
+      return true;
     }
-  }, [displayValue, isEditing]);
 
-  const commitDraft = useCallback(() => {
-    if (readOnly || !onCommit) return;
-    if (draft !== displayValue) {
-      onCommit(draft);
+    const numericValue = Number(draft.trim());
+    if (min !== undefined && Number.isFinite(numericValue) && numericValue < min) {
+      setError(`Enter ${min} or more.`);
+      return false;
     }
+    if (max !== undefined && Number.isFinite(numericValue) && numericValue > max) {
+      setError(`Enter ${max} or less.`);
+      return false;
+    }
+
+    if (onCommit(draft) === false) {
+      setError(unit ? `Enter a valid value in ${unit}.` : "Enter a valid number.");
+      return false;
+    }
+
+    setError(null);
     setIsEditing(false);
-  }, [draft, displayValue, onCommit, readOnly]);
+    return true;
+  }, [draft, displayValue, max, min, onCommit, readOnly, unit]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key === "Escape") {
         setDraft(displayValue);
+        setError(null);
         setIsEditing(false);
         event.currentTarget.blur();
       }
       if (event.key === "Enter") {
-        commitDraft();
-        event.currentTarget.blur();
+        if (commitDraft()) {
+          event.currentTarget.blur();
+        }
       }
     },
     [commitDraft, displayValue],
@@ -1161,6 +1174,7 @@ function PropertyField({
       (isNaN(numValue) || /['"a-zA-Z°²]/.test(value)));
 
   if (forceText || onCommit) {
+    const errorId = `${id}-error`;
     return (
       <div className={styles.field}>
         <label htmlFor={id} className={styles.fieldLabel}>
@@ -1172,13 +1186,20 @@ function PropertyField({
             type="text"
             inputMode={unit && unit !== "ft-in" && unit !== "°" ? "decimal" : "text"}
             className={styles.fieldInput}
-            value={draft}
+            value={isEditing ? draft : displayValue}
             aria-label={label}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? errorId : undefined}
             onChange={(event) => {
               setIsEditing(true);
               setDraft(event.target.value);
+              setError(null);
             }}
-            onFocus={() => setIsEditing(true)}
+            onFocus={() => {
+              setDraft(displayValue);
+              setError(null);
+              setIsEditing(true);
+            }}
             onBlur={commitDraft}
             onKeyDown={handleKeyDown}
             readOnly={readOnly}
@@ -1186,6 +1207,11 @@ function PropertyField({
           />
           {unit ? <span className={styles.fieldUnit}>{unit}</span> : null}
         </div>
+        {error ? (
+          <span id={errorId} className={styles.fieldError} role="alert">
+            {error}
+          </span>
+        ) : null}
       </div>
     );
   }

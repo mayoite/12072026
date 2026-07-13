@@ -3,7 +3,6 @@
  */
 
 import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
 
 import { withAuth } from "@/features/shared/api/withAuth";
 import { success } from "@/features/shared/api/apiResponse";

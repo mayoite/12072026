@@ -346,6 +346,17 @@
   box-shadow: var(--prop-focus-ring);
 }
 
+.fieldInput[aria-invalid="true"] {
+  border-color: var(--color-danger, #dc2626);
+}
+
+.fieldError {
+  grid-column: 2;
+  color: var(--color-danger, #dc2626);
+  font-size: 0.6875rem;
+  line-height: 1.25;
+}
+
 .fieldInput:read-only,
 .fieldInput[readonly] {
   background: var(--prop-surface-soft);
