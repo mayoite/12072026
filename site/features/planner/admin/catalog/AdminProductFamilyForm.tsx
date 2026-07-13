@@ -106,7 +106,7 @@ export function AdminProductFamilyForm({
         <div className="admin-panel__header">
           <code>{family.familySlug}</code> · <code>{family.familyId}</code>
         </div>
-        <div className="px-4 py-3 space-y-3">
+        <div style={{ padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <label className="admin-field">
             <span className="admin-field__label">Display name</span>
             <input
@@ -120,7 +120,7 @@ export function AdminProductFamilyForm({
             Version: <code>{version?.versionId}</code> · status{" "}
             <span className="admin-badge">{version?.status}</span>
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
             <button
               type="button"
               className="admin-btn admin-btn--outline"

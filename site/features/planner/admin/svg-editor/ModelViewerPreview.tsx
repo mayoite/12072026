@@ -31,12 +31,12 @@ const ModelViewerElementTag = "model-viewer" as unknown as React.ComponentType<
 
 const shellStyle: React.CSSProperties = {
   width: "100%",
-  height: "400px",
+  height: "300px",
+  backgroundColor: "var(--surface-muted)",
+  borderRadius: "0.5rem",
   position: "relative",
-  backgroundColor: "#f3f4f6",
-  borderRadius: "8px",
+  border: "1px solid var(--border-soft)",
   overflow: "hidden",
-  border: "1px solid #e5e7eb",
 };
 
 const messageStyle: React.CSSProperties = {
@@ -142,8 +142,8 @@ export function ModelViewerPreview({
         data-testid="model-viewer-preview-empty"
         role="status"
       >
-        <div style={{ ...messageStyle, color: "#6b7280" }}>
-          <strong style={{ color: "#374151" }}>No GLB to preview</strong>
+        <div style={{ ...messageStyle, color: "var(--text-muted)" }}>
+          <strong style={{ color: "var(--text-heading)" }}>No GLB to preview</strong>
           <span>
             Extrude an SVG first, or paste a generated GLB URL (system path under{" "}
             <code>catalog-assets/generated/</code>).
@@ -161,7 +161,7 @@ export function ModelViewerPreview({
     >
       {error ? (
         <div
-          style={{ ...messageStyle, color: "#b91c1c" }}
+          style={{ ...messageStyle, color: "var(--color-danger)" }}
           data-testid="model-viewer-preview-error"
           role="alert"
         >
@@ -170,7 +170,7 @@ export function ModelViewerPreview({
         </div>
       ) : !ready ? (
         <div
-          style={{ ...messageStyle, color: "#6b7280" }}
+          style={{ ...messageStyle, color: "var(--text-muted)" }}
           data-testid="model-viewer-preview-loading"
           role="status"
         >

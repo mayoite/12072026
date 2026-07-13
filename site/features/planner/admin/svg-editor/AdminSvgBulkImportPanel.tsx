@@ -135,7 +135,7 @@ export function AdminSvgBulkImportPanel() {
 
   return (
     <section aria-label="Bulk CSV import" data-testid="admin-svg-bulk-import">
-      <div className="flex flex-col gap-3">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         <p className="admin-table__secondary">
           Paste a spreadsheet export (columns: product id, SKU, family, width,
           depth, height, lifecycle). Preview first. One invalid row blocks the
@@ -152,7 +152,7 @@ export function AdminSvgBulkImportPanel() {
           aria-label="Bulk import spreadsheet text"
           rows={5}
         />
-        <div className="flex flex-wrap gap-2 items-center">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
           <button
             type="button"
             className="admin-btn admin-btn--outline"

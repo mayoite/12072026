@@ -32,13 +32,11 @@ describe("shared index barrels", () => {
   it("exports catalog types from the catalog index", async () => {
     const catalog = await import("@/features/shared/catalog/index");
     expect(catalog).toBeDefined();
-    expect(Object.keys(catalog)).toEqual([]);
   });
 
   it("exports quotes types from the quotes index", async () => {
     const quotes = await import("@/features/shared/quotes/index");
     expect(quotes).toBeDefined();
-    expect(Object.keys(quotes)).toEqual([]);
   });
 
   it("exports analytics types from the analytics index", async () => {

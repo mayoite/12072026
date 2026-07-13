@@ -13,6 +13,7 @@ vi.mock("next/navigation", () => ({ notFound: vi.fn(() => { throw new Error("404
 
 vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", () => ({
   tryLoad: vi.fn(),
+  BLOCK_DESCRIPTORS_DIR_DEFAULT: "mock-dir",
 }));
 
 vi.mock("@/app/(site)/portal/svg-catalog/puckBlockRegistry", () => ({

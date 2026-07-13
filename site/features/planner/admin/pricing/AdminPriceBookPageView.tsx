@@ -229,7 +229,7 @@ export function AdminPriceBookPageView({
             <code data-testid="admin-price-book-id">{contract.bookId}</code> ·{" "}
             {contract.familySlug}
           </div>
-          <div className="px-4 py-3 space-y-3">
+          <div style={{ padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <p className="admin-page__meta" data-testid="admin-price-book-active">
               Active version: <code>{contract.activeVersionId ?? "—"}</code>
             </p>
@@ -462,7 +462,7 @@ export function AdminPriceBookPageView({
                     </button>
                     {activateAvail && !activateAvail.allowed ? (
                       <p
-                        className="admin-table__secondary mt-1"
+                        className="admin-table__secondary" style={{ marginTop: '0.25rem' }}
                         data-testid="admin-price-book-activate-unavailable"
                       >
                         {activateAvail.reason}
@@ -484,7 +484,7 @@ export function AdminPriceBookPageView({
                     </button>
                     {approveAvail && !approveAvail.allowed ? (
                       <p
-                        className="admin-table__secondary mt-1"
+                        className="admin-table__secondary" style={{ marginTop: '0.25rem' }}
                         data-testid="admin-price-book-approve-unavailable"
                       >
                         {approveAvail.reason}
@@ -504,7 +504,7 @@ export function AdminPriceBookPageView({
                     </button>
                     {rollbackAvail && !rollbackAvail.allowed ? (
                       <p
-                        className="admin-table__secondary mt-1"
+                        className="admin-table__secondary" style={{ marginTop: '0.25rem' }}
                         data-testid="admin-price-book-rollback-unavailable"
                       >
                         {rollbackAvail.reason}

@@ -33,7 +33,7 @@ async function handleBulkImport(req: NextRequest, actorId: string) {
   if (dryRun) {
     const preview = bulkImportBlockDescriptors(csv, { dryRun: true });
     if (!("dryRun" in preview) || !preview.dryRun) {
-      throw new ApiError(500, API_ERROR_CODES.INTERNAL, "Preview path failed");
+      throw new ApiError(500, API_ERROR_CODES.SERVICE_UNAVAILABLE, "Preview path failed");
     }
     return success({
       dryRun: true,
@@ -58,6 +58,10 @@ async function handleBulkImport(req: NextRequest, actorId: string) {
     );
   }
 
+  if ("dryRun" in result) {
+    throw new ApiError(500, API_ERROR_CODES.SERVICE_UNAVAILABLE, "Expected apply, got dryRun");
+  }
+
   for (const slug of result.imported) {
     appendDescriptorAudit({
       actorId,
@@ -65,7 +69,7 @@ async function handleBulkImport(req: NextRequest, actorId: string) {
       action: "bulk_import",
       detail: {
         batchSize: result.imported.length,
-        provenance: result.provenance,
+        provenance: JSON.stringify(result.provenance),
       },
     });
   }

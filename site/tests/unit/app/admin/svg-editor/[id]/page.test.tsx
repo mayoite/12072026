@@ -15,6 +15,7 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", () => ({
   tryLoad: vi.fn(),
+  BLOCK_DESCRIPTORS_DIR_DEFAULT: "mock-dir",
 }));
 
 vi.mock("@/features/planner/admin/svg-editor/AdminSvgEditorEditView", () => ({

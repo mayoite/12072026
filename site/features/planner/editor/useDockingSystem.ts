@@ -228,14 +228,32 @@ export function useDockingSystem(): DockingSystemState & DockingSystemActions {
   }, [viewportTier]);
 
   const toggleCollapse = useCallback((panelId: PanelId) => {
-    setPanels((current) => ({
-      ...current,
-      [panelId]: {
-        ...current[panelId],
-        state: current[panelId].state === "collapsed" ? "docked" : "collapsed",
-      },
-    }));
-  }, []);
+    setPanels((current) => {
+      const isOpening = current[panelId].state === "collapsed";
+      const nextState = isOpening ? "docked" : "collapsed";
+      
+      const nextPanels = {
+        ...current,
+        [panelId]: {
+          ...current[panelId],
+          state: nextState,
+        },
+      };
+
+      // Mutually exclusive panels on small viewports (UI-MOB-04)
+      if (isOpening && viewportTier === "small") {
+        const otherPanelId = panelId === "left" ? "right" : "left";
+        if (nextPanels[otherPanelId]) {
+          nextPanels[otherPanelId] = {
+            ...nextPanels[otherPanelId],
+            state: "collapsed",
+          };
+        }
+      }
+
+      return nextPanels;
+    });
+  }, [viewportTier]);
 
   const move = useCallback(
     (panelId: PanelId, x: number, y: number) => {

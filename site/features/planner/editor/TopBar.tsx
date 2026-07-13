@@ -18,7 +18,6 @@ import {
   plannerSaveStatusLabel,
   type PlannerPersistStorage,
 } from "./workspaceStatusLabels";
-import { PlannerThemeToggle } from "@/features/planner/components/PlannerThemeToggle";
 import styles from "./workspace.module.css";
 
 /**
@@ -438,8 +437,6 @@ export function TopBar({
             </MenuTrigger>
           </>
         )}
-
-        <PlannerThemeToggle />
 
         <MenuTrigger>
           <Button className={styles.btn} aria-label="Prefs — open preferences menu">

@@ -11,6 +11,7 @@ import * as loader from "@/features/planner/project/catalog/svg/svgBlockDescript
 
 vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", () => ({
   loadAll: vi.fn(),
+  BLOCK_DESCRIPTORS_DIR_DEFAULT: "mock-dir",
 }));
 
 vi.mock("@/features/planner/admin/svg-editor/AdminSvgEditorListView", () => ({

@@ -215,7 +215,7 @@ export function GlbExtruderPreview({
   if (status === "loading-engine" || status === "processing") {
     return (
       <div
-        className="admin-glb-status admin-glb-status--busy flex items-center gap-3"
+        className="admin-glb-status admin-glb-status--busy" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}
         data-testid="glb-extruder-processing"
         role="status"
         aria-busy="true"

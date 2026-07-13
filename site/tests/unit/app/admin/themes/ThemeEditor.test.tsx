@@ -20,15 +20,15 @@ vi.mock("@/lib/supabase/client", () => ({
 
 vi.mock("@/lib/api/browserApi", () => ({
   apiPath: (path: string) => path,
-  browserApiFetch: vi.fn(),
+  browserApiFetch: vi.fn(() => Promise.resolve({ json: () => Promise.resolve({ success: true, themes: [] }) })),
 }));
 
 vi.mock("@phosphor-icons/react", () => ({
-  Save: (props: React.SVGProps<SVGSVGElement>) => <svg aria-hidden data-testid="icon-save" {...props} />,
-  UploadCloud: (props: React.SVGProps<SVGSVGElement>) => (
+  FloppyDisk: (props: React.SVGProps<SVGSVGElement>) => <svg aria-hidden data-testid="icon-save" {...props} />,
+  CloudArrowUp: (props: React.SVGProps<SVGSVGElement>) => (
     <svg aria-hidden data-testid="icon-upload" {...props} />
   ),
-  AlertCircle: (props: React.SVGProps<SVGSVGElement>) => (
+  WarningCircle: (props: React.SVGProps<SVGSVGElement>) => (
     <svg aria-hidden data-testid="icon-alert" {...props} />
   ),
 }));
@@ -37,8 +37,6 @@ describe("app/admin/themes/ThemeEditor.tsx", () => {
   it("renders theme editor after themes load", async () => {
     render(<ThemeEditor />);
 
-    await waitFor(() => {
-      expect(screen.getByRole("button", { name: /Publish to Planners/i })).toBeInTheDocument();
-    });
+    expect(await screen.findByText(/Publish to Planners/i)).toBeInTheDocument();
   });
 });

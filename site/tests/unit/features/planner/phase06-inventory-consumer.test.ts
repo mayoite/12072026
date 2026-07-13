@@ -11,6 +11,7 @@ import { PlannerCatalogClient } from "@/features/planner/project/catalog/catalog
 import { loadPlannerCatalog } from "@/features/planner/project/catalog/catalogQuery";
 import type { PlannerCatalogItem } from "@/features/planner/project/catalog/catalogTypes";
 import { loadAll, clearLoaderCache } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { loadBuyerVisibleDescriptors } from "@/features/planner/admin/svg-editor/catalogLifecycle";
 import { GET as getSvgBlocks } from "@/app/api/planner/catalog/svg-blocks/route";
 
 vi.mock("@/app/api/_lib/public", () => ({
@@ -241,7 +242,7 @@ describe("Phase 06 — portal → planner sync evidence", () => {
     const apiSlugs = (body.data?.items ?? body.items ?? [])
       .map((item) => item.slug)
       .sort();
-    const loaderSlugs = loadAll()
+    const loaderSlugs = loadBuyerVisibleDescriptors()
       .map((descriptor) => descriptor.slug)
       .sort();
 

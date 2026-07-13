@@ -120,7 +120,7 @@ describe("AdminCatalogManager", () => {
 
       await renderStandardCatalog();
 
-      const editButtons = screen.getAllByTitle("Edit");
+      const editButtons = screen.getAllByTestId(/admin-catalog-edit-/);
       fireEvent.click(editButtons[0]);
 
       expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -157,7 +157,7 @@ describe("AdminCatalogManager", () => {
 
       await renderStandardCatalog();
 
-      const hideButtons = screen.getAllByTitle("Hide");
+      const hideButtons = screen.getAllByTestId(/admin-catalog-toggle-/);
       fireEvent.click(hideButtons[0]);
 
       await waitFor(() => {
@@ -170,7 +170,7 @@ describe("AdminCatalogManager", () => {
 
       await renderStandardCatalog();
 
-      const deleteButtons = screen.getAllByTitle("Delete");
+      const deleteButtons = screen.getAllByTestId(/admin-catalog-delete-/);
       fireEvent.click(deleteButtons[0]);
 
       expect(confirmSpy).toHaveBeenCalledWith(

@@ -385,7 +385,7 @@ export function AdminSvgEditorListView({
             Create a symbol in the visual studio. That is the primary authoring
             path.
           </p>
-          <div className="mt-4">
+          <div style={{ marginTop: '1rem' }}>
             <Link
               href="/admin/svg-editor/new"
               className="admin-btn admin-btn--primary"
@@ -556,7 +556,7 @@ export function AdminSvgEditorListView({
             <summary className="admin-panel__header cursor-pointer">
               Saved views (optional)
             </summary>
-            <div className="px-4 py-2 flex flex-wrap gap-2 items-end">
+            <div style={{ padding: '0.5rem 1rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'flex-end' }}>
               <label className="admin-field">
                 <span className="admin-field__label">Save view as</span>
                 <input
@@ -787,14 +787,14 @@ export function AdminSvgEditorListView({
                 </table>
               </div>
               <div
-                className="px-4 py-3 flex flex-wrap gap-2 items-center justify-between"
+                className="admin-catalog-paging"
                 data-testid="admin-svg-inventory-paging"
               >
                 <p className="admin-table__secondary" role="status">
                   Page {paged.page} of {paged.totalPages} · {paged.total} match
                   {paged.total === 1 ? "" : "es"}
                 </p>
-                <div className="flex gap-2">
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <button
                     type="button"
                     className="admin-btn admin-btn--outline"

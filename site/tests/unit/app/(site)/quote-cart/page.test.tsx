@@ -8,7 +8,8 @@ import { expectHomeMarketingShell } from '@/tests/unit/app/(site)/_template.home
 vi.mock('@phosphor-icons/react', () => ({
   Minus: () => <span data-testid="icon-minus" />,
   Plus: () => <span data-testid="icon-plus" />,
-  Trash2: () => <span data-testid="icon-trash" />,
+  Trash2: () => <span data-testid="icon-trash2" />,
+  Trash: () => <span data-testid="icon-trash" />,
 }));
 
 // Mock store

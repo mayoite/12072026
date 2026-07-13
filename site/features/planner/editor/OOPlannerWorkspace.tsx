@@ -1150,18 +1150,20 @@ export function OOPlannerWorkspace({
           />
         }
         rightPanel={
-          <PropertiesPanel
-            selectedEntity={selectedEntity}
-            multiSelection={multiSelection}
-            displayUnit={displayUnit}
-            callbacks={{
-              onUpdateEntity: handleUpdateEntity,
-              onDeleteEntity: handleDeleteEntity,
-              onToggleLock: handleToggleLock,
-              onDeselect: () =>
-                workspaceCanvas.setSelection({ type: "none", ids: [] }),
-            }}
-          />
+          selectedEntity || multiSelection ? (
+            <PropertiesPanel
+              selectedEntity={selectedEntity}
+              multiSelection={multiSelection}
+              displayUnit={displayUnit}
+              callbacks={{
+                onUpdateEntity: handleUpdateEntity,
+                onDeleteEntity: handleDeleteEntity,
+                onToggleLock: handleToggleLock,
+                onDeselect: () =>
+                  workspaceCanvas.setSelection({ type: "none", ids: [] }),
+              }}
+            />
+          ) : null
         }
         bottomPanel={
           activeFloor ? (

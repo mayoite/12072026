@@ -400,8 +400,8 @@ export function AdminSvgEditorEditView({
     // DB-SVG-09 disk path: refuse publish if baseline moved under the draft.
     const stale = assertDraftNotStale({
       slug,
-      clientBaselineGeneratedAt: openedBaselineGeneratedAt,
-      serverBaselineGeneratedAt: descriptor.generatedAt,
+      clientBaselineGeneratedAt: openedBaselineGeneratedAt ?? 0,
+      serverBaselineGeneratedAt: descriptor.generatedAt ?? 0,
     });
     if (!stale.ok) {
       setFeedback({
@@ -843,7 +843,7 @@ export function AdminSvgEditorEditView({
         {feedback.submitting ? (
           <div
             role="status"
-            className="admin-alert admin-alert--info flex flex-wrap items-center gap-3"
+            className="admin-alert admin-alert--info" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.75rem' }}
             aria-busy="true"
           >
             <Loader2 size={16} className="animate-spin shrink-0" aria-hidden />
@@ -856,7 +856,7 @@ export function AdminSvgEditorEditView({
         {feedback.errorMessage ? (
           <div
             role="alert"
-            className="admin-alert admin-alert--error flex flex-wrap items-center gap-3"
+            className="admin-alert admin-alert--error" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.75rem' }}
             data-testid="admin-svg-publish-failure"
           >
             <WarningCircle size={16} className="shrink-0" aria-hidden />
@@ -875,7 +875,7 @@ export function AdminSvgEditorEditView({
         {feedback.successMessage ? (
           <div
             role="status"
-            className="admin-alert admin-alert--info flex flex-wrap items-center gap-3"
+            className="admin-alert admin-alert--info" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.75rem' }}
             data-testid="admin-svg-publish-success"
           >
             <CheckCircle size={16} className="shrink-0" aria-hidden />
@@ -947,6 +947,61 @@ export function AdminSvgEditorEditView({
           aria-label="Preview and block details"
           className="admin-svg-engine-shell__rail"
         >
+          <div className="admin-panel admin-svg-engine-shell__panel" data-testid="admin-svg-ai-panel">
+            <div className="admin-panel__header">✨ AI Generate</div>
+            <div className="admin-panel__body">
+              <p className="admin-page__meta">
+                Generate an SVG footprint from a text prompt.
+              </p>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const form = e.currentTarget;
+                  const prompt = new FormData(form).get("prompt") as string;
+                  if (!prompt) return;
+                  
+                  const btn = form.querySelector('button');
+                  if (btn) btn.disabled = true;
+                  
+                  try {
+                    const res = await fetch("/api/admin/svg-editor/ai-generate", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ prompt }),
+                    });
+                    const data = await res.json();
+                    if (data.success && data.svg) {
+                      // Inject the generated SVG directly into the studio document
+                      handleStudioDocumentChange(data.svg);
+                    } else {
+                      alert(data.error?.message || "Generation failed");
+                    }
+                  } catch (err) {
+                    alert("Generation failed");
+                  } finally {
+                    if (btn) btn.disabled = false;
+                  }
+                }}
+                className="admin-field" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}
+              >
+                <div className="admin-field">
+                  <label className="admin-field__label" htmlFor="ai-prompt">Prompt</label>
+                  <input
+                    id="ai-prompt"
+                    type="text"
+                    name="prompt"
+                    placeholder="e.g. Minimalist top-down office chair"
+                    className="admin-field__input"
+                    required
+                  />
+                </div>
+                <button type="submit" className="admin-btn admin-btn--primary admin-btn--block">
+                  Generate SVG
+                </button>
+              </form>
+            </div>
+          </div>
+
           <div className="admin-panel admin-svg-engine-shell__panel">
             <div className="admin-panel__header">Draft preview</div>
             <div className="admin-panel__body">
@@ -1060,7 +1115,7 @@ export function AdminSvgEditorEditView({
                   {glbUploading ? (
                     <div
                       role="status"
-                      className="admin-alert admin-alert--info flex flex-wrap items-center gap-3"
+                      className="admin-alert admin-alert--info" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.75rem' }}
                       aria-busy="true"
                     >
                       <Loader2
@@ -1074,7 +1129,7 @@ export function AdminSvgEditorEditView({
                   {glbUploadError ? (
                     <div
                       role="alert"
-                      className="admin-alert admin-alert--warn flex flex-wrap items-center gap-3"
+                      className="admin-alert admin-alert--warn" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.75rem' }}
                     >
                       <WarningCircle
                         size={14}

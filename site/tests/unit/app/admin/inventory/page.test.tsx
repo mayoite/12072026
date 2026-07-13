@@ -5,8 +5,12 @@ import React from 'react';
 vi.mock('node:path', () => ({
   default: {
     join: (...parts: string[]) => parts.join('/'),
+    basename: (p: string) => p.split('/').pop(),
+    resolve: (...parts: string[]) => parts.join('/'),
   },
   join: (...parts: string[]) => parts.join('/'),
+  basename: (p: string) => p.split('/').pop(),
+  resolve: (...parts: string[]) => parts.join('/'),
 }));
 
 vi.mock('node:fs', () => ({
