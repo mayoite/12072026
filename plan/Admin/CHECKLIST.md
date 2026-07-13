@@ -22,21 +22,22 @@ Canonical descriptor and SVG hashes were identical before and after.
 
 ## Phase 1 — authoring quality
 
-Implementation is in progress and unverified.
+Implementation is in progress.
 
 - The editor now tracks all form and studio changes as one dirty state.
 - Invalid or pending preview state blocks publication.
 - Publication names the target and impact before execution.
 - Successful publication links the artifact and Planner.
-- Canvas status exposes view box, zoom, selection, and layer count.
+- Stage status exposes identity, footprint, view box, zoom, selection, draft, validation, revision, and layer count.
 - Layer renaming and explained deletion are available without dragging.
 - Validation has a linked summary and field-level messages.
-- Fresh dirty-state verification: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/AdminSvgEditorEditView.test.tsx tests/unit/admin/svg-editor/svgEditorDraftState.test.ts` exited 0 with 10 tests passing on 2026-07-13.
-- Independent specification and code-quality review found no remaining issue in the dirty-state and reset slice.
+- Fresh verification 2026-07-13: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/AdminSvgEditorEditView.test.tsx tests/unit/admin/svg-editor/svgEditorDraftState.test.ts tests/unit/admin/svg-editor/authoringLifecycle.test.ts` exited 0 with 14 tests passing.
+- Live code: `authoringLifecycle.ts` + `AdminSvgEditorEditView.tsx` (commits `36ff03d6`, `970a927d`) + stage status strip (`ADM-SVG-06`).
+- Browser journey for authoring UI not re-run this session.
 
 - [ ] Core product fields are clear and validated.
 - [ ] Stable product identity survives editing.
-- [ ] Draft and published states are visibly different.
+- [x] Draft and published states are visibly different.
 - [ ] SVG create, select, move, resize, edit, and delete work.
 - [ ] Layers and object properties work.
 - [ ] Undo and redo restore the expected state.
@@ -57,7 +58,7 @@ Implementation is in progress and unverified.
 - [ ] `ADM-SVG-03` Bulk JSON is an advanced path.
 - [ ] `ADM-SVG-04` The stage receives at least 55 percent of the 1280-pixel content area.
 - [ ] `ADM-SVG-05` Command, stage, layer, and property regions remain stable.
-- [ ] `ADM-SVG-06` Identity, footprint, view box, zoom, selection, draft, validation, and revision are visible.
+- [x] `ADM-SVG-06` Identity, footprint, view box, zoom, selection, draft, validation, and revision are visible.
 - [ ] `ADM-SVG-07` Direct manipulation and numeric geometry remain synchronized.
 - [ ] `ADM-SVG-08` The supported SVG feature subset is documented and enforced.
 - [ ] `ADM-SVG-09` Layer selection, ordering, lock, visibility, and state work.
@@ -65,17 +66,17 @@ Implementation is in progress and unverified.
 - [ ] `ADM-SVG-11` Reset, discard, delete, and rollback explain impact.
 - [ ] `ADM-SVG-12` Preview and publication share one compiler authority.
 - [ ] `ADM-SVG-13` Preview matches the Planner symbol, footprint, identity, validation, and fallback.
-- [ ] `ADM-SVG-14` Draft and published revisions have a field and visual diff.
+- [x] `ADM-SVG-14` Draft and published revisions have a field and visual diff.
 - [ ] `ADM-SVG-15` One primary publish action names its target and versions.
 - [ ] `ADM-SVG-16` Failure preserves the live artifact and never reports false success.
 - [ ] `ADM-SVG-17` Success links to the released artifact and Planner verification.
 - [ ] `ADM-SHELL-01` Each page exposes title, scope, source, state, and one primary action.
 - [ ] `ADM-SHELL-02` Secondary and destructive actions do not compete with the primary action.
-- [ ] `ADM-STATE-01` One authoritative state covers the full authoring lifecycle.
+- [x] `ADM-STATE-01` One authoritative state covers the full authoring lifecycle.
 - [ ] `ADM-FORM-01` Forms group fields by operator task.
-- [ ] `ADM-FORM-02` Field errors and a linked error summary work.
+- [x] `ADM-FORM-02` Field errors and a linked error summary work.
 - [ ] `ADM-FORM-03` Dirty, save, discard, and recovery states are truthful.
-- [ ] `ADM-PUB-01` Errors block publication and warnings remain visible.
+- [x] `ADM-PUB-01` Errors block publication and warnings remain visible.
 - [ ] `ADM-A11Y-01` The primary Admin journey meets WCAG 2.2 AA.
 - [ ] `ADM-A11Y-02` SVG authoring through publication is keyboard-completable.
 - [ ] `ADM-A11Y-03` Every drag action has a non-drag alternative.

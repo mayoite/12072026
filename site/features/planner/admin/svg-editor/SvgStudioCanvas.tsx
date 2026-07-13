@@ -57,12 +57,23 @@ import type {
   SvgEngineViewport,
 } from "./scene/svgEngineAdapter";
 
+/** Host-owned ADM-SVG-06 fields that the stage status must keep visible. */
+export interface SvgStudioStageMeta {
+  readonly identity: string;
+  readonly footprint: string;
+  readonly draft: string;
+  readonly validation: string;
+  readonly revision: string;
+}
+
 export interface SvgStudioCanvasProps {
   readonly initialDocument: SvgSceneDocument;
   /** Notified after every committed edit so the host can persist / preview. */
   readonly onDocumentChange?: (document: SvgSceneDocument) => void;
   /** Host reads the live scene at publish time (dynamic import cannot forward refs). */
   readonly documentGetterRef?: MutableRefObject<(() => SvgSceneDocument) | null>;
+  /** Product identity, draft, validation, and revision for the stage status strip. */
+  readonly stageMeta?: SvgStudioStageMeta;
 }
 
 function uniqueId(doc: SvgSceneDocument, base: string): string {
@@ -112,6 +123,7 @@ export function SvgStudioCanvas({
   initialDocument,
   onDocumentChange,
   documentGetterRef,
+  stageMeta,
 }: SvgStudioCanvasProps) {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const adapterRef = useRef<SvgEngineAdapter | null>(null);
@@ -332,13 +344,34 @@ export function SvgStudioCanvas({
         </button>
       </div>
 
-      <div className="svg-studio__status" aria-label="Canvas status">
-        <span>
+      <div
+        className="svg-studio__status"
+        aria-label="Canvas status"
+        data-testid="admin-stage-status"
+      >
+        {stageMeta ? (
+          <>
+            <span data-testid="admin-status-identity">{stageMeta.identity}</span>
+            <span data-testid="admin-status-footprint">{stageMeta.footprint}</span>
+          </>
+        ) : null}
+        <span data-testid="admin-status-viewbox">
           View box {document.viewBox.width} × {document.viewBox.height}
         </span>
-        <span>Zoom {Math.round(viewport.zoom * 100)}%</span>
-        <span>{selected ? `Selected: ${selected.name}` : "No selection"}</span>
-        <span>{document.nodes.length} layers</span>
+        <span data-testid="admin-status-zoom">
+          Zoom {Math.round(viewport.zoom * 100)}%
+        </span>
+        <span data-testid="admin-status-selection">
+          {selected ? `Selected: ${selected.name}` : "No selection"}
+        </span>
+        {stageMeta ? (
+          <>
+            <span data-testid="admin-status-draft">{stageMeta.draft}</span>
+            <span data-testid="admin-status-validation">{stageMeta.validation}</span>
+            <span data-testid="admin-status-revision">{stageMeta.revision}</span>
+          </>
+        ) : null}
+        <span data-testid="admin-status-layers">{document.nodes.length} layers</span>
       </div>
 
       <div className="svg-studio__body">

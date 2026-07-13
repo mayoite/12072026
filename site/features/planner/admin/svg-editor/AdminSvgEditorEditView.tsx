@@ -11,6 +11,8 @@
  *
  * ADM-STATE-01 / ADM-SVG-14: one authoritative lifecycle + field-level draft diff.
  * ADM-FORM-02 / ADM-PUB-01: linked field errors (SvgEditorForm) + publish blocking.
+ * ADM-SVG-06: stage status shows identity, footprint, view box, zoom, selection,
+ * draft, validation, and revision.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -499,6 +501,24 @@ export function AdminSvgEditorEditView({
     preview?.ok === true &&
     footprintProof.aligned;
 
+  const validationStatus =
+    authoringLifecycle === "validating" || previewPending
+      ? "Validation running"
+      : authoringLifecycle === "invalid" || preview?.ok === false
+        ? `Validation blocked${preview?.issues?.length ? ` (${preview.issues.length})` : ""}`
+        : preview?.ok === true
+          ? footprintProof.aligned
+            ? "Validation ok"
+            : "Validation blocked (footprint)"
+          : "Validation pending";
+  const stageMeta = {
+    identity: `Identity ${publishTarget} · SKU ${form.sku.trim() || "—"}`,
+    footprint: `Footprint ${footprintProof.widthMm}×${footprintProof.depthMm} mm`,
+    draft: `Draft ${authoringLifecycleLabel(authoringLifecycle)}`,
+    validation: validationStatus,
+    revision: `Revision schema ${descriptor.schemaVersion} · ${updatedAtLabel} · ${artifactHashShort}`,
+  };
+
   return (
     <div className="admin-page admin-page--svg-engine">
       <header className="admin-page__header admin-svg-engine-header">
@@ -724,6 +744,7 @@ export function AdminSvgEditorEditView({
             initialDocument={publishedStudioScene}
             documentGetterRef={studioDocumentGetterRef}
             onDocumentChange={handleStudioDocumentChange}
+            stageMeta={stageMeta}
           />
         </section>
 

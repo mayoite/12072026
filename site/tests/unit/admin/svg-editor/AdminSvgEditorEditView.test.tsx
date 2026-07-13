@@ -38,6 +38,15 @@ vi.mock("next/dynamic", () => ({
     const [liveDocument, setLiveDocument] = useState(document);
     const [mountId] = useState(() => ++studioMetrics.mounts);
     const getterRef = props.documentGetterRef as MutableRefObject<(() => SvgSceneDocument) | null> | undefined;
+    const stageMeta = props.stageMeta as
+      | {
+          identity: string;
+          footprint: string;
+          draft: string;
+          validation: string;
+          revision: string;
+        }
+      | undefined;
     useEffect(() => {
       if (!getterRef || !liveDocument) return;
       getterRef.current = () => liveDocument;
@@ -46,6 +55,27 @@ vi.mock("next/dynamic", () => ({
     if (!liveDocument) return null;
     return (
       <div>
+        <div data-testid="admin-stage-status" aria-label="Canvas status">
+          {stageMeta ? (
+            <>
+              <span data-testid="admin-status-identity">{stageMeta.identity}</span>
+              <span data-testid="admin-status-footprint">{stageMeta.footprint}</span>
+            </>
+          ) : null}
+          <span data-testid="admin-status-viewbox">
+            View box {liveDocument.viewBox.width} × {liveDocument.viewBox.height}
+          </span>
+          <span data-testid="admin-status-zoom">Zoom 100%</span>
+          <span data-testid="admin-status-selection">No selection</span>
+          {stageMeta ? (
+            <>
+              <span data-testid="admin-status-draft">{stageMeta.draft}</span>
+              <span data-testid="admin-status-validation">{stageMeta.validation}</span>
+              <span data-testid="admin-status-revision">{stageMeta.revision}</span>
+            </>
+          ) : null}
+          <span data-testid="admin-status-layers">{liveDocument.nodes.length} layers</span>
+        </div>
         <span data-testid="studio-node-count">{liveDocument.nodes.length}</span>
         <span data-testid="studio-mount-id">{mountId}</span>
         <button
@@ -84,6 +114,13 @@ import { AdminSvgEditorEditView } from "@/features/planner/admin/svg-editor/Admi
 const descriptor = JSON.parse(fs.readFileSync(path.join(process.cwd(), "block-descriptors/side-table-001.json"), "utf8")) as BlockDescriptor;
 const artifactStatus = { state: "published" as const, bytes: 1, updatedAt: 1, hash: "hash", publicUrl: "/symbol.svg", markup: "<svg></svg>" };
 
+/** Prefer the lifecycle badge — "Unpublished changes" also appears in impact copy. */
+function expectAuthoringLifecycle(state: string, label: string) {
+  const badge = screen.getByTestId("admin-authoring-lifecycle");
+  expect(badge).toHaveAttribute("data-lifecycle", state);
+  expect(badge).toHaveTextContent(label);
+}
+
 describe("AdminSvgEditorEditView draft recovery", () => {
   beforeEach(() => {
     refresh.mockReset();
@@ -112,7 +149,7 @@ describe("AdminSvgEditorEditView draft recovery", () => {
     await waitFor(() => expect(screen.getByRole("button", { name: "Publish" })).not.toBeDisabled());
 
     expect(screen.getByTestId("studio-node-count")).toHaveTextContent(postSubmitCount ?? "");
-    expect(screen.getByText("Unpublished changes")).toBeInTheDocument();
+    expectAuthoringLifecycle("dirty", "Unpublished changes");
     expect(studioMetrics.mounts).toBe(1);
   });
 
@@ -130,7 +167,7 @@ describe("AdminSvgEditorEditView draft recovery", () => {
     });
 
     expect(screen.getByTestId("form-sku")).toHaveTextContent(/-edited$/);
-    expect(screen.getByText("Unpublished changes")).toBeInTheDocument();
+    expectAuthoringLifecycle("dirty", "Unpublished changes");
     expect(studioMetrics.mounts).toBe(1);
   });
 
@@ -202,7 +239,8 @@ describe("AdminSvgEditorEditView draft recovery", () => {
     fireEvent.click(publishButton);
 
     expect(await screen.findByRole("alert")).toHaveTextContent("pipeline stopped");
-    expect(screen.getByText("Unpublished changes")).toBeInTheDocument();
+    // Error wins over dirty in the single lifecycle; draft fields stay intact.
+    expectAuthoringLifecycle("error", "Publish error");
     expect(screen.getByTestId("form-sku")).toHaveTextContent(editedSku ?? "");
     expect(publishButton).toHaveFocus();
     expect(screen.queryByText(/Published “.*” at/)).not.toBeInTheDocument();
@@ -239,7 +277,33 @@ describe("AdminSvgEditorEditView draft recovery", () => {
 
     fireEvent.click(reset);
 
-    expect(screen.getByText("Unpublished changes")).toBeInTheDocument();
+    expectAuthoringLifecycle("dirty", "Unpublished changes");
     expect(reset).toHaveFocus();
+  });
+
+  it("exposes identity, footprint, view box, zoom, selection, draft, validation, and revision on the stage (ADM-SVG-06)", () => {
+    render(
+      <AdminSvgEditorEditView
+        slug={descriptor.slug}
+        descriptor={descriptor}
+        updatedAtLabel="today"
+        artifactStatus={artifactStatus}
+        catalogLifecycle="draft"
+      />,
+    );
+
+    expect(screen.getByTestId("admin-stage-status")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-status-identity")).toHaveTextContent(
+      new RegExp(`Identity ${descriptor.slug}`),
+    );
+    expect(screen.getByTestId("admin-status-identity")).toHaveTextContent(/SKU/);
+    expect(screen.getByTestId("admin-status-footprint")).toHaveTextContent(/Footprint \d+×\d+ mm/);
+    expect(screen.getByTestId("admin-status-viewbox")).toHaveTextContent(/View box/);
+    expect(screen.getByTestId("admin-status-zoom")).toHaveTextContent(/Zoom \d+%/);
+    expect(screen.getByTestId("admin-status-selection")).toHaveTextContent(/selection/i);
+    expect(screen.getByTestId("admin-status-draft")).toHaveTextContent(/Draft /);
+    expect(screen.getByTestId("admin-status-validation")).toHaveTextContent(/Validation /);
+    expect(screen.getByTestId("admin-status-revision")).toHaveTextContent(/Revision schema/);
+    expect(screen.getByTestId("admin-status-revision")).toHaveTextContent("today");
   });
 });
