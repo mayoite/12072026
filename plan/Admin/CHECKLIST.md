@@ -84,9 +84,16 @@ Implementation is in progress.
 
 ## Phase 2 — catalog lifecycle, ingestion, and Planner handoff
 
-- [ ] One versioned core product contract drives Admin and Planner.
-- [ ] The contract includes identity, dimensions, availability, SVG, and BOQ identity.
-- [ ] Incomplete or contradictory products cannot publish.
+Fresh unit evidence 2026-07-13:
+
+- Contract: `pnpm --filter oando-site exec vitest run tests/unit/shared/catalog/releasedCatalogProductContract.test.ts` (7 pass).
+- Publish gate: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/releasedCatalogPublishGate.test.ts tests/unit/admin/svg-editor/publishDescriptorWithPipeline.test.ts` (16 pass).
+- Commits: `07b8cbe1` (contract), `0a0fc3b2` (publish gate).
+- Not claimed: DB SVG authority, full Planner live handoff, browser journey.
+
+- [x] One versioned core product contract drives Admin and Planner.
+- [x] The contract includes identity, dimensions, availability, SVG, and BOQ identity.
+- [x] Incomplete or contradictory products cannot publish.
 - [ ] Product and SVG publish as one safe operation.
 - [ ] Partial publication is impossible.
 - [ ] Repeated unchanged publication is idempotent.
