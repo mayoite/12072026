@@ -9,14 +9,14 @@ No secrets in git · no CSP weaken for a green.
 - [ ] Over-permissive directives flagged for tightening
 
 ## PHASE-02 — CSRF
-- [ ] Mutating routes enumerated (admin + public)
-- [ ] Forged/missing-token requests rejected
-- [ ] Valid-token requests succeed
+- [x] Mutating routes enumerated (admin + public)
+- [x] Forged/missing-token requests rejected
+- [x] Valid-token requests succeed
 
 ## PHASE-03 — Auth boundaries
-- [ ] Admin/crm/ops reject anonymous in production
-- [ ] Guest allowlist is exactly the three planner paths
-- [ ] Each surface proven (not just admin slice)
+- [x] Admin/crm/ops reject anonymous in production
+- [x] Guest allowlist is exactly the three planner paths
+- [x] Each surface proven (not just admin slice)
 
 ## PHASE-04 — RLS / advisors
 - [ ] `db:advisors:security` run

@@ -9,12 +9,16 @@ const DEFAULT_BOOK = "pb-linear-2026-q3";
 
 type Props = {
   readonly initialBookId?: string;
+  readonly initialContract?: PriceBookContract | null;
 };
 
-export function AdminPriceBookPageView({ initialBookId = DEFAULT_BOOK }: Props) {
+export function AdminPriceBookPageView({
+  initialBookId = DEFAULT_BOOK,
+  initialContract = null,
+}: Props) {
   const [bookId] = useState(initialBookId);
-  const [contract, setContract] = useState<PriceBookContract | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [contract, setContract] = useState<PriceBookContract | null>(initialContract);
+  const [loading, setLoading] = useState(initialContract === null);
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -30,8 +34,10 @@ export function AdminPriceBookPageView({ initialBookId = DEFAULT_BOOK }: Props) 
   }, [bookId]);
 
   useEffect(() => {
-    void load();
-  }, [load]);
+    if (initialContract === null) {
+      void load();
+    }
+  }, [initialContract, load]);
 
   const runAction = useCallback(
     async (action: "approve" | "activate" | "rollback", versionId: string, role: "author" | "approver") => {

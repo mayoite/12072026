@@ -2,8 +2,8 @@
  * CP-05 browser: W2 cabinet-v0 on Fabric + publish/inventory SVG honesty.
  * Evidence: results/planner/world-standard-wave/05-symbols-svg/browser/
  *
- * Honesty: `/svg-catalog/*.svg` = inventory publish + catalog preview only.
- * Live plan paint = Fabric Block2D multiprim (not drawImage on catalog SVG).
+ * Honesty: `/svg-catalog/*.svg` = inventory publish + catalog preview.
+ * Catalog items with stamped previewImageUrl paint SVG on Fabric; cabinet-v0 stays Block2D.
  */
 import { expect, test, type Page } from "@playwright/test";
 import fs from "node:fs";
@@ -227,7 +227,22 @@ test.describe("CP-05 W2 Fabric + publish SVG honesty", () => {
       .poll(async () => furnitureCount(page), { timeout: 25_000 })
       .toBeGreaterThan(mid);
 
-    await page.waitForTimeout(600);
+    await expect
+      .poll(
+        async () =>
+          page.evaluate(() => {
+            const canvas = (
+              window as unknown as { __plannerFabricView?: { getObjects?: () => unknown[] } }
+            ).__plannerFabricView;
+            if (!canvas?.getObjects) return 0;
+            return canvas.getObjects().filter((obj) => {
+              const mode = (obj as { planPaintMode?: string }).planPaintMode;
+              return mode === "svg";
+            }).length;
+          }),
+        { timeout: 15_000 },
+      )
+      .toBeGreaterThan(0);
 
     await page.screenshot({
       path: path.join(EVIDENCE, "04-chaise-placed.png"),
@@ -238,7 +253,6 @@ test.describe("CP-05 W2 Fabric + publish SVG honesty", () => {
     });
 
     const diversity = await sampleCanvasFillDiversity(page);
-    // Fabric multiprim / Block2D place — not catalog SVG drawImage on plan canvas.
     expect(diversity.sampleCount).toBeGreaterThan(20);
     expect(diversity.notPureSolid).toBe(true);
 
@@ -255,7 +269,7 @@ test.describe("CP-05 W2 Fabric + publish SVG honesty", () => {
           furnitureBefore: before,
           furnitureAfter: await furnitureCount(page),
           canvasDiversity: diversity,
-          planDrawPath: "fabric-block2d",
+          planDrawPath: "svg-catalog-primary-with-block2d-fallback",
           status: "pass",
         },
         null,

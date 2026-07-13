@@ -11,8 +11,8 @@ describe("workstationFamilyDrive", () => {
       depthMm: 600,
       optionIds: ["panel", "pedestal"],
     });
-    expect("versionId" in result).toBe(true);
-    if (!("versionId" in result)) return;
+    expect("error" in result).toBe(false);
+    if ("error" in result) return;
 
     expect(result.versionId).toBe("v1");
     expect(result.footprint2d).toEqual({ widthMm: 1200, depthMm: 600 });
@@ -31,8 +31,8 @@ describe("workstationFamilyDrive", () => {
       depthMm: 600,
       optionIds: [],
     });
-    expect("versionId" in result).toBe(true);
-    if (!("versionId" in result)) return;
+    expect("error" in result).toBe(false);
+    if ("error" in result) return;
     expect(result.footprint2d.depthMm).toBe(1200);
     expect(result.meshPlan.footprint.depthMm).toBe(1200);
   });

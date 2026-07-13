@@ -2,14 +2,17 @@
 
 import {
   useCallback,
+  useEffect,
   useId,
   useMemo,
+  useState,
   type ChangeEvent,
   type KeyboardEvent,
-  type KeyboardEventHandler,
   type MouseEvent,
   memo,
 } from "react";
+import type { CanvasSelection } from "./useWorkspaceCanvas";
+import { entityCollectionLabel } from "./plannerHistoryLabels";
 import type {
   PlannerEntityCollection,
   PlannerEntityMap,
@@ -75,9 +78,16 @@ export interface PropertiesPanelCallbacks {
  * - Furniture: position, rotation, dimensions, catalog info
  * - Rooms: area, dimensions, floor
  */
+export interface PropertiesPanelMultiSelection {
+  type: Exclude<CanvasSelection["type"], "none">;
+  count: number;
+}
+
 export interface PropertiesPanelProps {
   /** Selected entity to display */
   selectedEntity: SelectedEntity | null;
+  /** When more than one entity is selected, show an honest multi-select state. */
+  multiSelection?: PropertiesPanelMultiSelection | null;
   /** Action callbacks */
   callbacks?: PropertiesPanelCallbacks;
   /** Display unit for dimensions (document store stays mm). */
@@ -135,6 +145,7 @@ function calculateWallLength(
  */
 export const PropertiesPanel = memo(function PropertiesPanel({
   selectedEntity,
+  multiSelection = null,
   callbacks,
   displayUnit = "mm",
 }: PropertiesPanelProps) {
@@ -152,99 +163,71 @@ export const PropertiesPanel = memo(function PropertiesPanel({
   /**
    * Handle number input change (non-length fields: rotation, counts, plain numbers).
    */
-  const handleNumberChange = useCallback(
-    (field: string, subField?: string) =>
-      (event: ChangeEvent<HTMLInputElement>) => {
-        if (!selectedEntity || isLocked) return; // locked reject mutations (task7 + plannerCommand)
-
-        let value: number | string = event.target.value;
-
-        // Parse number if not empty
-        if (value !== "") {
-          const parsed = parseFloat(value);
-          if (!isNaN(parsed)) {
-            value = parsed;
-          }
-        }
-
-        let updates: Record<string, unknown>;
-
-        if (subField) {
-          // Nested field (e.g., position.x)
-          const existingNested = selectedEntity.entity[
-            field as keyof SelectedEntity["entity"]
-          ] as unknown as Record<string, unknown> | undefined;
-          updates = {
-            [field]: {
-              ...(existingNested || {}),
-              [subField]: value,
-            },
-          };
-        } else {
-          // Direct field
-          updates = { [field]: value };
-        }
-
-        callbacks?.onUpdateEntity?.(
-          selectedEntity.collection,
-          selectedEntity.id,
-          updates,
-        );
-      },
-    [selectedEntity, callbacks, isLocked],
-  );
-
-  /**
-   * Length fields: UI shows displayUnit; document stores canonical mm.
-   */
-  const handleLengthChange = useCallback(
-    (field: string, subField?: string) =>
-      (event: ChangeEvent<HTMLInputElement>) => {
-        if (!selectedEntity || isLocked) return;
-
-        const mm = parseLengthInput(event.target.value, displayUnit);
-        if (mm === null) return;
-
-        let updates: Record<string, unknown>;
-        if (subField) {
-          const existingNested = selectedEntity.entity[
-            field as keyof SelectedEntity["entity"]
-          ] as unknown as Record<string, unknown> | undefined;
-          updates = {
-            [field]: {
-              ...(existingNested || {}),
-              [subField]: mm,
-            },
-          };
-        } else {
-          updates = { [field]: mm };
-        }
-
-        callbacks?.onUpdateEntity?.(
-          selectedEntity.collection,
-          selectedEntity.id,
-          updates,
-        );
-      },
-    [selectedEntity, callbacks, isLocked, displayUnit],
-  );
-
-  /**
-   * Handle text input change
-   */
-  const handleTextChange = useCallback(
-    (field: string) => (event: ChangeEvent<HTMLInputElement>) => {
+  const commitNumberValue = useCallback(
+    (raw: string, field: string, subField?: string) => {
       if (!selectedEntity || isLocked) return;
+
+      let value: number | string = raw;
+      if (value !== "") {
+        const parsed = parseFloat(value);
+        if (!isNaN(parsed)) {
+          value = parsed;
+        }
+      }
+
+      let updates: Record<string, unknown>;
+      if (subField) {
+        const existingNested = selectedEntity.entity[
+          field as keyof SelectedEntity["entity"]
+        ] as unknown as Record<string, unknown> | undefined;
+        updates = {
+          [field]: {
+            ...(existingNested || {}),
+            [subField]: value,
+          },
+        };
+      } else {
+        updates = { [field]: value };
+      }
 
       callbacks?.onUpdateEntity?.(
         selectedEntity.collection,
         selectedEntity.id,
-        {
-          [field]: event.target.value,
-        },
+        updates,
       );
     },
     [selectedEntity, callbacks, isLocked],
+  );
+
+  const commitLengthValue = useCallback(
+    (raw: string, field: string, subField?: string) => {
+      if (!selectedEntity || isLocked) return;
+
+      const mm = parseLengthInput(raw, displayUnit);
+      if (mm === null) return;
+
+      let updates: Record<string, unknown>;
+      if (subField) {
+        const existingNested = selectedEntity.entity[
+          field as keyof SelectedEntity["entity"]
+        ] as unknown as Record<string, unknown> | undefined;
+        updates = {
+          [field]: {
+            ...(existingNested || {}),
+            [subField]: mm,
+          },
+        };
+      } else {
+        updates = { [field]: mm };
+      }
+
+      callbacks?.onUpdateEntity?.(
+        selectedEntity.collection,
+        selectedEntity.id,
+        updates,
+      );
+    },
+    [selectedEntity, callbacks, isLocked, displayUnit],
   );
 
   /**
@@ -289,18 +272,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
     [selectedEntity, callbacks],
   );
 
-  /**
-   * Handle keyboard navigation within inputs
-   */
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLInputElement>) => {
-      // Enter to confirm, Escape to blur
-      if (event.key === "Escape") {
-        (event.target as HTMLInputElement).blur();
-      }
-    },
-    [],
-  );
+  const fieldReadOnly = isLocked;
 
   /**
    * Render wall properties
@@ -332,16 +304,16 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 label="Thickness"
                 value={formatLengthInput(wall.thickness, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("thickness")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "thickness")}
+                readOnly={fieldReadOnly}
               />
               <PropertyField
                 id={`${id}-height`}
                 label="Height"
                 value={formatLengthInput(wall.height, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("height")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "height")}
+                readOnly={fieldReadOnly}
               />
             </div>
           </div>
@@ -353,16 +325,16 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 label="X"
                 value={formatLengthInput(wall.start.x, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("start", "x")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "start", "x")}
+                readOnly={fieldReadOnly}
               />
               <PropertyField
                 id={`${id}-startY`}
                 label="Y"
                 value={formatLengthInput(wall.start.y, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("start", "y")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "start", "y")}
+                readOnly={fieldReadOnly}
               />
             </div>
           </div>
@@ -374,23 +346,23 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 label="X"
                 value={formatLengthInput(wall.end.x, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("end", "x")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "end", "x")}
+                readOnly={fieldReadOnly}
               />
               <PropertyField
                 id={`${id}-endY`}
                 label="Y"
                 value={formatLengthInput(wall.end.y, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("end", "y")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "end", "y")}
+                readOnly={fieldReadOnly}
               />
             </div>
           </div>
         </>
       );
     },
-    [id, displayUnit, handleLengthChange, handleKeyDown],
+    [id, displayUnit, commitLengthValue, fieldReadOnly],
   );
 
   /**
@@ -417,16 +389,16 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 label="Width"
                 value={formatLengthInput(door.width, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("width")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "width")}
+                readOnly={fieldReadOnly}
               />
               <PropertyField
                 id={`${id}-height`}
                 label="Height"
                 value={formatLengthInput(door.height, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("height")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "height")}
+                readOnly={fieldReadOnly}
               />
             </div>
           </div>
@@ -438,8 +410,8 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 label="Position"
                 value={formatLengthInput(door.position, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("position")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "position")}
+                readOnly={fieldReadOnly}
               />
             </div>
           </div>
@@ -494,11 +466,11 @@ export const PropertiesPanel = memo(function PropertiesPanel({
     [
       id,
       displayUnit,
-      handleLengthChange,
+      commitLengthValue,
       handleSelectChange,
-      handleKeyDown,
       selectedEntity,
       callbacks,
+      fieldReadOnly,
     ],
   );
 
@@ -525,24 +497,24 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 label="Width"
                 value={formatLengthInput(window.width, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("width")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "width")}
+                readOnly={fieldReadOnly}
               />
               <PropertyField
                 id={`${id}-height`}
                 label="Height"
                 value={formatLengthInput(window.height, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("height")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "height")}
+                readOnly={fieldReadOnly}
               />
               <PropertyField
                 id={`${id}-sill`}
                 label="Sill Height"
                 value={formatLengthInput(window.sillHeight, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("sillHeight")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "sillHeight")}
+                readOnly={fieldReadOnly}
               />
             </div>
           </div>
@@ -554,8 +526,8 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 label="Position"
                 value={formatLengthInput(window.position, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("position")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "position")}
+                readOnly={fieldReadOnly}
               />
             </div>
           </div>
@@ -580,7 +552,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
         </>
       );
     },
-    [id, displayUnit, handleLengthChange, handleSelectChange, handleKeyDown],
+    [id, displayUnit, commitLengthValue, handleSelectChange, fieldReadOnly],
   );
 
   /**
@@ -649,16 +621,16 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 label="X"
                 value={formatLengthInput(furniture.position.x, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("position", "x")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "position", "x")}
+                readOnly={fieldReadOnly}
               />
               <PropertyField
                 id={`${id}-posY`}
                 label="Y"
                 value={formatLengthInput(furniture.position.y, displayUnit)}
                 unit={displayUnit}
-                onChange={handleLengthChange("position", "y")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitLengthValue(value, "position", "y")}
+                readOnly={fieldReadOnly}
               />
             </div>
           </div>
@@ -670,8 +642,8 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 label="Rotation"
                 value={furniture.rotation}
                 unit="°"
-                onChange={handleNumberChange("rotation")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => commitNumberValue(value, "rotation")}
+                readOnly={fieldReadOnly}
                 min={0}
                 max={360}
               />
@@ -687,8 +659,8 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                     label="Width"
                     value={formatLengthInput(furniture.width, displayUnit)}
                     unit={displayUnit}
-                    onChange={handleLengthChange("width")}
-                    onKeyDown={handleKeyDown}
+                    onCommit={(value) => commitLengthValue(value, "width")}
+                    readOnly={fieldReadOnly}
                   />
                 )}
                 {furniture.depth && (
@@ -697,8 +669,8 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                     label="Depth"
                     value={formatLengthInput(furniture.depth, displayUnit)}
                     unit={displayUnit}
-                    onChange={handleLengthChange("depth")}
-                    onKeyDown={handleKeyDown}
+                    onCommit={(value) => commitLengthValue(value, "depth")}
+                    readOnly={fieldReadOnly}
                   />
                 )}
                 {furniture.height && (
@@ -707,8 +679,8 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                     label="Height"
                     value={formatLengthInput(furniture.height, displayUnit)}
                     unit={displayUnit}
-                    onChange={handleLengthChange("height")}
-                    onKeyDown={handleKeyDown}
+                    onCommit={(value) => commitLengthValue(value, "height")}
+                    readOnly={fieldReadOnly}
                   />
                 )}
               </div>
@@ -756,8 +728,15 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                     id={`${id}-color`}
                     label="Color"
                     value={furniture.color}
-                    onChange={handleTextChange("color")}
-                    onKeyDown={handleKeyDown}
+                    onCommit={(value) => {
+                      if (!selectedEntity || isLocked) return;
+                      callbacks?.onUpdateEntity?.(
+                        selectedEntity.collection,
+                        selectedEntity.id,
+                        { color: value },
+                      );
+                    }}
+                    readOnly={fieldReadOnly}
                   />
                 )}
                 {furniture.material && (
@@ -765,8 +744,15 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                     id={`${id}-material`}
                     label="Material"
                     value={furniture.material}
-                    onChange={handleTextChange("material")}
-                    onKeyDown={handleKeyDown}
+                    onCommit={(value) => {
+                      if (!selectedEntity || isLocked) return;
+                      callbacks?.onUpdateEntity?.(
+                        selectedEntity.collection,
+                        selectedEntity.id,
+                        { material: value },
+                      );
+                    }}
+                    readOnly={fieldReadOnly}
                   />
                 )}
               </div>
@@ -778,10 +764,12 @@ export const PropertiesPanel = memo(function PropertiesPanel({
     [
       id,
       displayUnit,
-      handleLengthChange,
-      handleNumberChange,
-      handleTextChange,
-      handleKeyDown,
+      commitLengthValue,
+      commitNumberValue,
+      selectedEntity,
+      callbacks,
+      isLocked,
+      fieldReadOnly,
     ],
   );
 
@@ -807,8 +795,15 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                 id={`${id}-name`}
                 label="Name"
                 value={room.name}
-                onChange={handleTextChange("name")}
-                onKeyDown={handleKeyDown}
+                onCommit={(value) => {
+                  if (!selectedEntity || isLocked) return;
+                  callbacks?.onUpdateEntity?.(
+                    selectedEntity.collection,
+                    selectedEntity.id,
+                    { name: value },
+                  );
+                }}
+                readOnly={fieldReadOnly}
               />
               {room.roomType && (
                 <PropertySelect
@@ -840,8 +835,15 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                   id={`${id}-floorTexture`}
                   label="Texture"
                   value={room.floorTexture}
-                  onChange={handleTextChange("floorTexture")}
-                  onKeyDown={handleKeyDown}
+                  onCommit={(value) => {
+                    if (!selectedEntity || isLocked) return;
+                    callbacks?.onUpdateEntity?.(
+                      selectedEntity.collection,
+                      selectedEntity.id,
+                      { floorTexture: value },
+                    );
+                  }}
+                  readOnly={fieldReadOnly}
                 />
               )}
               {room.color && (
@@ -849,8 +851,15 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                   id={`${id}-roomColor`}
                   label="Color"
                   value={room.color}
-                  onChange={handleTextChange("color")}
-                  onKeyDown={handleKeyDown}
+                  onCommit={(value) => {
+                    if (!selectedEntity || isLocked) return;
+                    callbacks?.onUpdateEntity?.(
+                      selectedEntity.collection,
+                      selectedEntity.id,
+                      { color: value },
+                    );
+                  }}
+                  readOnly={fieldReadOnly}
                 />
               )}
             </div>
@@ -858,7 +867,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
         </>
       );
     },
-    [id, displayUnit, handleTextChange, handleSelectChange, handleKeyDown],
+    [id, displayUnit, handleSelectChange, selectedEntity, callbacks, isLocked, fieldReadOnly],
   );
 
   /**
@@ -906,6 +915,48 @@ export const PropertiesPanel = memo(function PropertiesPanel({
   ]);
 
   // Task 7: groups = transform | dimensions | placement | appearance | metadata | actions. Unit-aware numeric: commit/esc/reset/validation. Multi shared ops only. Locked reject (command layer).
+
+  if (multiSelection && multiSelection.count > 1) {
+    const typeLabel = entityCollectionLabel(
+      multiSelection.type,
+      multiSelection.count,
+    );
+    return (
+      <div
+        className={styles.panel}
+        data-state="multi"
+        data-entity={multiSelection.type}
+        aria-label="Properties"
+      >
+        <div className={styles.emptyState} role="status">
+          <div className={styles.emptyIcon} aria-hidden="true">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="3" width="8" height="8" rx="1" />
+              <rect x="13" y="3" width="8" height="8" rx="1" />
+              <rect x="3" y="13" width="8" height="8" rx="1" />
+              <rect x="13" y="13" width="8" height="8" rx="1" />
+            </svg>
+          </div>
+          <h3 className={styles.emptyTitle}>
+            {multiSelection.count} {typeLabel} selected
+          </h3>
+          <p className={styles.emptyDescription}>
+            Select a single item to edit position, size, and rotation. Shared
+            delete still applies to the whole selection.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Empty state when nothing is selected
   if (!selectedEntity) {
@@ -1053,8 +1104,7 @@ interface PropertyFieldProps {
   label: string;
   value: string | number;
   unit?: string;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
+  onCommit?: (value: string) => void;
   readOnly?: boolean;
   min?: number;
   max?: number;
@@ -1065,22 +1115,52 @@ function PropertyField({
   label,
   value,
   unit,
-  onChange,
-  onKeyDown,
+  onCommit,
   readOnly = false,
   min,
   max,
 }: PropertyFieldProps) {
-  // Use React Aria NumberField for numeric strictness and accessibility
+  const displayValue = String(value);
+  const [draft, setDraft] = useState(displayValue);
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (!isEditing) {
+      setDraft(displayValue);
+    }
+  }, [displayValue, isEditing]);
+
+  const commitDraft = useCallback(() => {
+    if (readOnly || !onCommit) return;
+    if (draft !== displayValue) {
+      onCommit(draft);
+    }
+    setIsEditing(false);
+  }, [draft, displayValue, onCommit, readOnly]);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === "Escape") {
+        setDraft(displayValue);
+        setIsEditing(false);
+        event.currentTarget.blur();
+      }
+      if (event.key === "Enter") {
+        commitDraft();
+        event.currentTarget.blur();
+      }
+    },
+    [commitDraft, displayValue],
+  );
+
   const numValue = typeof value === "string" ? parseFloat(value) : value;
-  // ft-in and mixed label strings must stay text (NumberField cannot own 6' 8").
   const forceText =
     unit === "ft-in" ||
+    onCommit !== undefined ||
     (typeof value === "string" &&
       (isNaN(numValue) || /['"a-zA-Z°²]/.test(value)));
 
-  if (forceText) {
-    // Text path: names, colors, ft-in, area labels
+  if (forceText || onCommit) {
     return (
       <div className={styles.field}>
         <label htmlFor={id} className={styles.fieldLabel}>
@@ -1090,11 +1170,19 @@ function PropertyField({
           <input
             id={id}
             type="text"
+            inputMode={unit && unit !== "ft-in" && unit !== "°" ? "decimal" : "text"}
             className={styles.fieldInput}
-            value={String(value)}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
+            value={draft}
+            aria-label={label}
+            onChange={(event) => {
+              setIsEditing(true);
+              setDraft(event.target.value);
+            }}
+            onFocus={() => setIsEditing(true)}
+            onBlur={commitDraft}
+            onKeyDown={handleKeyDown}
             readOnly={readOnly}
+            disabled={readOnly}
           />
           {unit ? <span className={styles.fieldUnit}>{unit}</span> : null}
         </div>
@@ -1106,12 +1194,6 @@ function PropertyField({
     <NumberField
       className={styles.field}
       value={isNaN(numValue) ? undefined : numValue}
-      onChange={(v) => {
-        if (onChange) {
-          onChange({ target: { value: String(v) } } as unknown as ChangeEvent<HTMLInputElement>);
-        }
-      }}
-      onKeyDown={onKeyDown as unknown as KeyboardEventHandler}
       isReadOnly={readOnly}
       minValue={min}
       maxValue={max}
@@ -1119,7 +1201,7 @@ function PropertyField({
     >
       <Label className={styles.fieldLabel}>{label}</Label>
       <Group className={styles.inputWrapper}>
-        <Input className={styles.fieldInput} id={id} />
+        <Input className={styles.fieldInput} id={id} aria-label={label} />
         {unit && <span className={styles.fieldUnit}>{unit}</span>}
       </Group>
     </NumberField>

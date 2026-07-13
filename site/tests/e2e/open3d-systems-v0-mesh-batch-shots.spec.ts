@@ -7,7 +7,11 @@ import path from "node:path";
 import fs from "node:fs";
 
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
-import { waitForPlannerCanvas } from "./plannerCanvasHelpers";
+import {
+  placeSeatsFromConfigurator,
+  switchPlannerViewMode,
+  waitForPlannerCanvas,
+} from "./plannerCanvasHelpers";
 
 test.describe.configure({ mode: "serial", timeout: 120_000 });
 
@@ -38,12 +42,7 @@ test.describe("Systems v0 mesh + batch shots", () => {
     const before = await furnitureCount(page);
     expect(before).toBeGreaterThanOrEqual(0);
 
-    const configurator = page.getByRole("region", {
-      name: "Workstation systems configurator",
-    });
-    await expect(configurator).toBeVisible({ timeout: 15_000 });
-
-    await configurator.getByRole("button", { name: "Place 4 seats" }).click();
+    await placeSeatsFromConfigurator(page, 4);
 
     await expect
       .poll(async () => furnitureCount(page), { timeout: 25_000 })
@@ -53,7 +52,7 @@ test.describe("Systems v0 mesh + batch shots", () => {
       path: path.join(EVIDENCE, "41-batch-4-2d.png"),
     });
 
-    await page.getByRole("radio", { name: "3D", exact: true }).click();
+    await switchPlannerViewMode(page, "3d");
     await expect(page.getByTestId("planner-3d-canvas")).toBeVisible({
       timeout: 20_000,
     });

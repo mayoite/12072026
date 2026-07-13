@@ -9,6 +9,7 @@ import {
   getWallCount,
   PLANNER_PRIMARY_CANVAS,
   selectPlannerTool,
+  switchPlannerViewMode,
   waitForPlannerCanvas,
 } from "./plannerCanvasHelpers";
 
@@ -61,10 +62,11 @@ test.describe("Planner guest workspace — plan 06 UI bar", () => {
   });
 
   test("view mode toggles without error", async ({ page }) => {
-    await page.getByRole("radio", { name: "3D", exact: true }).click();
+    await waitForPlannerCanvas(page);
+    await switchPlannerViewMode(page, "3d");
     await expect(page.getByTestId("planner-3d-canvas")).toBeVisible({ timeout: 20_000 });
 
-    await page.getByRole("radio", { name: "2D", exact: true }).click();
+    await switchPlannerViewMode(page, "2d");
     await expect(page.locator(PLANNER_PRIMARY_CANVAS)).toBeVisible();
   });
 });

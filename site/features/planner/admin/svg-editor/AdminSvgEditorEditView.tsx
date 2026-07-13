@@ -40,7 +40,7 @@ import type { PublishDescriptorResult } from "./publishDescriptorWithPipeline";
 import { PublishedSvgPreview } from "./PublishedSvgPreview";
 import { DescriptorRevisionPanel } from "./DescriptorRevisionPanel";
 import { proveDescriptorFootprintMm } from "./footprintMmProof";
-import type { CatalogLifecycleState } from "./catalogLifecycle";
+import type { CatalogLifecycleState } from "./catalogLifecycle.shared";
 import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
 import { sceneFromDescriptor } from "./sceneFromDescriptor";
 import { serializeSceneToDefinition } from "./scene/svgSceneSerializer";

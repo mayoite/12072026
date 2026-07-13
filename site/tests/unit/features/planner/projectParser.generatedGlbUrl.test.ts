@@ -77,6 +77,19 @@ describe("projectParser furniture.generatedGlbUrl accept", () => {
     expect(parsed.floors[0]?.furniture[0]?.generatedGlbUrl).toBe(url);
   });
 
+  it("round-trips previewImageUrl on furniture (S7 SVG persist)", () => {
+    const raw = JSON.parse(JSON.stringify(baseProject())) as {
+      floors: Array<{ furniture: Array<Record<string, unknown>> }>;
+    };
+    raw.floors[0]!.furniture[0]!.previewImageUrl =
+      "/svg-catalog/chaise-lounge-001.svg";
+
+    const parsed = parsePlannerProject(raw);
+    expect(parsed.floors[0]?.furniture[0]?.previewImageUrl).toBe(
+      "/svg-catalog/chaise-lounge-001.svg",
+    );
+  });
+
   it("omits generatedGlbUrl when field is absent", () => {
     const parsed = parsePlannerProject(baseProject());
     expect(parsed.floors[0]?.furniture[0]?.generatedGlbUrl).toBeUndefined();

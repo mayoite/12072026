@@ -18,6 +18,7 @@ import {
   plannerSaveStatusLabel,
   type PlannerPersistStorage,
 } from "./workspaceStatusLabels";
+import { PlannerThemeToggle } from "@/features/planner/components/PlannerThemeToggle";
 import styles from "./workspace.module.css";
 
 /**
@@ -66,6 +67,8 @@ export interface TopBarProps {
   onImport?: () => void;
   canUndo?: boolean;
   canRedo?: boolean;
+  undoLabel?: string;
+  redoLabel?: string;
   onUndo?: () => void;
   onRedo?: () => void;
   activePanel?: Extract<PanelId, "left" | "right"> | null;
@@ -79,6 +82,10 @@ export interface TopBarProps {
   onToggleCanvasMaximized?: () => void;
   density?: "compact" | "touch";
   onToggleDensity?: () => void;
+  gridEnabled?: boolean;
+  snapEnabled?: boolean;
+  onToggleGrid?: () => void;
+  onToggleSnap?: () => void;
 }
 
 function resolveSaveStatusFromLegacy(
@@ -125,6 +132,8 @@ export function TopBar({
   onImport,
   canUndo = false,
   canRedo = false,
+  undoLabel,
+  redoLabel,
   onUndo,
   onRedo,
   activePanel = null,
@@ -136,6 +145,10 @@ export function TopBar({
   onToggleCanvasMaximized,
   density = "compact",
   onToggleDensity,
+  gridEnabled = true,
+  snapEnabled = true,
+  onToggleGrid,
+  onToggleSnap,
 }: TopBarProps) {
   const showPersistenceActions = accessContext !== "guest";
   const showGuestActions = accessContext === "guest";
@@ -304,7 +317,7 @@ export function TopBar({
           <Button
             className={styles.btn}
             isDisabled={!canUndo}
-            aria-label="Undo"
+            aria-label={undoLabel ? `Undo: ${undoLabel}` : "Undo unavailable"}
             onPress={() => onUndo?.()}
           >
             Undo
@@ -312,7 +325,7 @@ export function TopBar({
           <Button
             className={styles.btn}
             isDisabled={!canRedo}
-            aria-label="Redo"
+            aria-label={redoLabel ? `Redo: ${redoLabel}` : "Redo unavailable"}
             onPress={() => onRedo?.()}
           >
             Redo
@@ -426,6 +439,8 @@ export function TopBar({
           </>
         )}
 
+        <PlannerThemeToggle />
+
         <MenuTrigger>
           <Button className={styles.btn} aria-label="Prefs — open preferences menu">
             Prefs
@@ -436,13 +451,19 @@ export function TopBar({
               className={styles.dropdownMenu}
               onAction={(key) => {
                 if (key === "density") onToggleDensity?.();
+                if (key === "grid") onToggleGrid?.();
+                if (key === "snap") onToggleSnap?.();
               }}
             >
               <MenuItem id="density" className={styles.dropdownItem}>
                 Toggle density ({density === "touch" ? "compact" : "touch"})
               </MenuItem>
-              <MenuItem id="grid" className={styles.dropdownItem}>Toggle grid</MenuItem>
-              <MenuItem id="snap" className={styles.dropdownItem}>Toggle snap</MenuItem>
+              <MenuItem id="grid" className={styles.dropdownItem}>
+                Toggle grid ({gridEnabled ? "off" : "on"})
+              </MenuItem>
+              <MenuItem id="snap" className={styles.dropdownItem}>
+                Toggle snap ({snapEnabled ? "off" : "on"})
+              </MenuItem>
             </Menu>
           </Popover>
         </MenuTrigger>

@@ -61,6 +61,64 @@ async function primaryCanvas(page: Page): Promise<Locator> {
  * A tall shell + scrollIntoView on the tool rail used to shove the stage to
  * negative Y so wall drags hit nothing and walls stayed at seed (4).
  */
+/** Guest inventory can show "Loading catalog…" — wait before search/filter. */
+export async function waitForPlannerCatalogReady(
+  page: Page,
+  timeoutMs = 60_000,
+): Promise<void> {
+  await expect
+    .poll(
+      async () => {
+        const loading = await page
+          .getByText(/Loading catalog/i)
+          .isVisible()
+          .catch(() => false);
+        return !loading;
+      },
+      { timeout: timeoutMs },
+    )
+    .toBe(true);
+}
+
+/** On 375px tier, slide-over panels block canvas hits — dismiss before placement. */
+export async function dismissMobilePlannerPanels(page: Page): Promise<void> {
+  const inventoryToggle = page.getByRole("button", {
+    name: /Toggle inventory panel/i,
+  });
+  const propertiesToggle = page.getByRole("button", {
+    name: /Toggle properties panel/i,
+  });
+
+  for (const toggle of [inventoryToggle, propertiesToggle]) {
+    if (!(await toggle.isVisible().catch(() => false))) continue;
+    if ((await toggle.getAttribute("aria-pressed").catch(() => null)) === "true") {
+      await toggle.evaluate((el: HTMLElement) => {
+        el.click();
+      });
+      await page.waitForTimeout(150);
+    }
+  }
+
+  const leftPanel = page.locator('#panel-left[data-open="true"]');
+  if (await leftPanel.isVisible().catch(() => false)) {
+    if (await inventoryToggle.isVisible().catch(() => false)) {
+      await inventoryToggle.evaluate((el: HTMLElement) => {
+        el.click();
+      });
+      await page.waitForTimeout(150);
+    }
+  }
+
+  const backdrop = page.getByRole("button", { name: "Dismiss side panel" });
+  if (await backdrop.isVisible().catch(() => false)) {
+    // Backdrop sits under panel chrome — DOM click avoids hit-target interception.
+    await backdrop.evaluate((el: HTMLElement) => {
+      el.click();
+    });
+    await page.waitForTimeout(150);
+  }
+}
+
 export async function ensurePlannerCanvasOnScreen(page: Page): Promise<void> {
   const stage = page.locator(PLANNER_FABRIC_STAGE);
   await expect(stage).toBeVisible({ timeout: 25_000 });
@@ -108,8 +166,14 @@ async function canvasBox(page: Page) {
   return { canvas, box };
 }
 
-export async function waitForPlannerCanvas(page: Page): Promise<void> {
-  await expect(page.locator(PLANNER_PRIMARY_CANVAS)).toBeVisible({ timeout: 25_000 });
+export async function waitForPlannerCanvas(
+  page: Page,
+  options: { timeoutMs?: number } = {},
+): Promise<void> {
+  const timeout =
+    options.timeoutMs ??
+    (process.env.OPEN3D_WORLD_GATE === "1" ? 90_000 : 25_000);
+  await expect(page.locator(PLANNER_PRIMARY_CANVAS)).toBeVisible({ timeout });
   await ensurePlannerCanvasOnScreen(page);
 }
 
@@ -253,6 +317,98 @@ export async function getWallCount(page: Page): Promise<number> {
     .textContent();
   const match = text?.match(/^(\d+)\s+walls/i);
   return match ? Number.parseInt(match[1], 10) : 0;
+}
+
+/** Default plan grid spacing (mm) — matches snapDrawingPoint / fabricStageGridOverlay. */
+export const PLANNER_GRID_MM = 100;
+
+export type LiveWallSegment = {
+  id: string;
+  start: { x: number; y: number };
+  end: { x: number; y: number };
+};
+
+/** Read committed wall segments from the live open3d project (Playwright webdriver hook). */
+export async function readLiveWalls(page: Page): Promise<LiveWallSegment[]> {
+  return page.evaluate(() => {
+    const project = (
+      window as unknown as {
+        __plannerLiveProject?: {
+          activeFloorId?: string;
+          floors?: Array<{
+            id: string;
+            walls?: Array<{
+              id: string;
+              start: { x: number; y: number };
+              end: { x: number; y: number };
+            }>;
+          }>;
+        };
+      }
+    ).__plannerLiveProject;
+    if (!project?.floors?.length) return [];
+    const floor =
+      project.floors.find((f) => f.id === project.activeFloorId) ??
+      project.floors[0];
+    return (floor.walls ?? []).map((wall) => ({
+      id: wall.id,
+      start: wall.start,
+      end: wall.end,
+    }));
+  });
+}
+
+export function isOnGridMm(value: number, gridMm = PLANNER_GRID_MM): boolean {
+  const mod = Math.abs(value % gridMm);
+  return mod < 0.5 || mod > gridMm - 0.5;
+}
+
+export function wallEndpointsOnGrid(
+  walls: readonly LiveWallSegment[],
+  gridMm = PLANNER_GRID_MM,
+): boolean {
+  for (const wall of walls) {
+    if (
+      !isOnGridMm(wall.start.x, gridMm) ||
+      !isOnGridMm(wall.start.y, gridMm) ||
+      !isOnGridMm(wall.end.x, gridMm) ||
+      !isOnGridMm(wall.end.y, gridMm)
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function hasFreehandEndpoint(
+  walls: readonly LiveWallSegment[],
+  gridMm = PLANNER_GRID_MM,
+): boolean {
+  for (const wall of walls) {
+    const coords = [wall.start.x, wall.start.y, wall.end.x, wall.end.y];
+    if (coords.some((value) => !isOnGridMm(value, gridMm))) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export async function setPlannerSnapEnabled(
+  page: Page,
+  enabled: boolean,
+): Promise<void> {
+  const stage = page.locator(PLANNER_FABRIC_STAGE);
+  const current = await stage.getAttribute("data-snap-enabled");
+  const isOn = current === "true";
+  if (isOn === enabled) return;
+  await page.getByRole("button", { name: "Prefs — open preferences menu" }).click();
+  await page
+    .getByRole("menuitem", { name: new RegExp(`Toggle snap \\(${enabled ? "on" : "off"}\\)`, "i") })
+    .click();
+  await expect(stage).toHaveAttribute(
+    "data-snap-enabled",
+    enabled ? "true" : "false",
+  );
 }
 
 /** Status-bar furniture metric only — no body-text fallback (CP-07 / false-green bar). */
@@ -491,6 +647,46 @@ export async function placeSeatsFromConfigurator(
     await expect(placeBtn).toBeVisible({ timeout: 10_000 });
   }
   await placeBtn.click();
+}
+
+/**
+ * Place armed catalog item — retries alternate canvas coords when mobile layout
+ * eats the first tap (inventory overlay, scroll, status chrome).
+ */
+export async function placeArmedCatalogOnCanvas(
+  page: Page,
+  options: {
+    beforeCount?: number;
+    points?: Array<{ rx: number; ry: number }>;
+    furnitureTimeoutMs?: number;
+  } = {},
+): Promise<void> {
+  const before =
+    options.beforeCount ?? (await getFurnitureCount(page));
+  const target = before + 1;
+  const points = options.points ?? [
+    { rx: 0.52, ry: 0.48 },
+    { rx: 0.62, ry: 0.55 },
+    { rx: 0.45, ry: 0.42 },
+  ];
+  const furnitureTimeoutMs = options.furnitureTimeoutMs ?? 35_000;
+  const deadline = Date.now() + furnitureTimeoutMs;
+
+  for (const point of points) {
+    if (Date.now() > deadline) break;
+    await dismissMobilePlannerPanels(page);
+    await ensurePlannerCanvasOnScreen(page);
+    await clickOnCanvas(page, point.rx, point.ry);
+    const count = await getFurnitureCount(page);
+    if (count >= target) return;
+    await page.waitForTimeout(200);
+  }
+
+  await expect
+    .poll(async () => getFurnitureCount(page), {
+      timeout: Math.max(5_000, deadline - Date.now()),
+    })
+    .toBeGreaterThanOrEqual(target);
 }
 
 /** Click at absolute page coordinates (down + micro-move + up). */

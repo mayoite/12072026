@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useState, type Dispatch, type SetStateAction } from "react";
 
+import { parsePlannerWorkspacePreferences } from "@/features/planner/project/store/workspacePreferences";
 import {
-  parsePlannerWorkspacePreferences,
-  DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
-} from "@/features/planner/project/store/workspacePreferences";
+  patchPlannerWorkspacePreferences,
+  PLANNER_WORKSPACE_PREFS_STORAGE_KEY,
+} from "@/features/planner/project/store/workspacePreferencesStorage";
 
 export type PanelId = "left" | "right" | "bottom";
 export type PanelState = "docked" | "floating" | "collapsed";
@@ -42,7 +43,7 @@ interface DockingSystemActions {
 }
 
 const STORAGE_KEY = "planner-workspace-docking";
-const PREFS_STORAGE_KEY = "planner-workspace-preferences";
+const PREFS_STORAGE_KEY = PLANNER_WORKSPACE_PREFS_STORAGE_KEY;
 
 // GS: Figma UI3 REC-01 (minimize UI on panels), catalogue-first REC-04 (separate catalogue sidebar); persist ratios in workspace prefs per task5 / 02-PHASE-1; use semantic tokens only, anti-copy from 00-benchmark-summary.md
 
@@ -284,11 +285,7 @@ export function useDockingSystem(): DockingSystemState & DockingSystemActions {
         // Persist ratios on resize for workspace prefs (task5)
         try {
           const ratios = widthsToRatios(next.left.width, next.right.width);
-          const prefs = parsePlannerWorkspacePreferences({
-            ...DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
-            panelRatios: ratios,
-          });
-          localStorage.setItem(PREFS_STORAGE_KEY, JSON.stringify(prefs));
+          patchPlannerWorkspacePreferences({ panelRatios: ratios });
         } catch { /* ignore storage quota / parse (expected in private mode) */ }
         return next;
       });
@@ -317,11 +314,7 @@ export function useDockingSystem(): DockingSystemState & DockingSystemActions {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
       // Task 5: also persist valid panel ratios as workspace preferences (GS: REC-01 minimize, no Figma px; ratios clamped 0.15-0.4 per schema; catalogue sidebar first)
       const ratios = widthsToRatios(panels.left.width, panels.right.width);
-      const prefs = parsePlannerWorkspacePreferences({
-        ...DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
-        panelRatios: ratios,
-      });
-      localStorage.setItem(PREFS_STORAGE_KEY, JSON.stringify(prefs));
+      patchPlannerWorkspacePreferences({ panelRatios: ratios });
     } catch { /* ignore storage (task5 persist ratios; expected diagnostic) */ }
   }, [panels]);
 

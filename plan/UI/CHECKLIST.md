@@ -14,15 +14,15 @@ Tick [UI-BAR.md](../UI-BAR.md) and the phase section below.
 - [ ] `toolShortcutTruth` + `canvasToolRail.a11y` (23/23); `hostWiringP01` 4/4
 
 ## PHASE-02 — Public entry + brief/room
-- [ ] `/planner/` → guest CTA → setup gate → canvas, no dev flags
-- [ ] Brief fields: project name, **client**, **location**, **seats**, **work mode**, **budget**, units
-- [ ] Room fields: width, depth, doors, windows, **columns**, **keep-out zones**
-- [ ] Start **blank** or from an **owned template** — path honest (implement or document omission)
+- [x] `/planner/` → guest CTA → setup gate → canvas, no dev flags
+- [x] Brief fields: project name, **client**, **location**, **seats**, **work mode**, **budget**, units
+- [x] Room fields: width, depth, doors, windows, **columns**, **keep-out zones**
+- [x] Start **blank** or from an **owned template** — path honest (implement or document omission)
 - [ ] Brief-derived room keeps IDs after hard reload (openings, columns, constraints)
-- [ ] **Millimetres** remain document authority under metric or imperial display
-- [ ] Honest storage labels (guest chip + TopBar + `PlannerSessionDialog` consistent)
-- [ ] One short wizard: plain defaults, inline correction, full keyboard path, visible focus
-- [ ] Keyboard path through setup; room renders at 375×812 and desktop (main action visible)
-- [ ] `DEV_AUTH_BYPASS` / canvas route buyer vs dev path documented
-- [ ] Onboarding vitest + public-entry playwright green; `hostWiringP01` 4/4 after edits
-- [ ] `open3d-world-standard-journey.spec.ts` green (walls/openings/furniture deltas)
+- [x] **Millimetres** remain document authority under metric or imperial display
+- [x] Honest storage labels (guest chip + TopBar + `PlannerSessionDialog` consistent)
+- [x] One short wizard: plain defaults, inline correction, full keyboard path, visible focus
+- [x] Keyboard path through setup; room renders at 375×812 and desktop (main action visible)
+- [x] `DEV_AUTH_BYPASS` / canvas route buyer vs dev path documented
+- [x] Onboarding vitest + public-entry playwright green; `hostWiringP01` 4/4 after edits
+- [x] `open3d-world-standard-journey.spec.ts` green (walls/openings/furniture deltas)

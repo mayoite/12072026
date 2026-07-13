@@ -24,6 +24,7 @@ import {
 import {
   CANVAS_TOOL_REQUIREMENT,
   CANVAS_TOOL_SHORTCUTS,
+  RAIL_DEFERRED_TOOLS,
   RAIL_DRAW_TOOLS,
   RAIL_NAV_TOOLS,
   isLiveGeometryTool,
@@ -203,6 +204,16 @@ export function CanvasToolRail({
       <ToolGroup
         tools={RAIL_DRAW_TOOLS}
         label="Drawing tools"
+        activeTool={activeTool}
+        onToolChange={onToolChange}
+        disabled={disabled}
+      />
+
+      <div className={styles.divider} aria-hidden />
+
+      <ToolGroup
+        tools={RAIL_DEFERRED_TOOLS}
+        label="Coming soon"
         activeTool={activeTool}
         onToolChange={onToolChange}
         disabled={disabled}

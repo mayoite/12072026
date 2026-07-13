@@ -3,13 +3,13 @@
 Tick [UI-BAR.md](../UI-BAR.md) and the phase section below.
 
 ## PHASE-01 — Workstation configurator
-- [ ] Two-seat linear journey passes in browser
-- [ ] Four-seat L journey passes in browser
-- [ ] Invalid combinations cannot be placed (disabled with reason)
+- [x] Two-seat linear journey passes in browser
+- [x] Four-seat L journey passes in browser
+- [x] Invalid combinations cannot be placed (disabled with reason)
 - [ ] Re-edit preserves run ID and placement
-- [ ] 2D, 3D, and BOQ use same saved option set
-- [ ] Version replacement requires explicit migration choice
-- [ ] Admin workstation-family contract consumed from Admin P04
+- [x] 2D, 3D, and BOQ use same saved option set
+- [x] Version replacement requires explicit migration choice
+- [x] Admin workstation-family contract consumed from Admin P04
 
 ## PHASE-02 — Layout at scale
 - [ ] Duplicate, row, array, grid, align, distribute, spacing, group, multi-select work

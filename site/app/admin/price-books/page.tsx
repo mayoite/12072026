@@ -1,5 +1,9 @@
 import { AdminPriceBookPageView } from "@/features/planner/admin/pricing/AdminPriceBookPageView";
-import { ensureDefaultPriceBookSeeded } from "@/features/planner/admin/pricing/priceBookAdmin.server";
+import {
+  DEFAULT_PRICE_BOOK_ID,
+  ensureDefaultPriceBookSeeded,
+  readAdminPriceBook,
+} from "@/features/planner/admin/pricing/priceBookAdmin.server";
 
 export const metadata = {
   title: "Price books | Oando Admin",
@@ -7,7 +11,8 @@ export const metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function AdminPriceBooksPage() {
+export default async function AdminPriceBooksPage() {
   ensureDefaultPriceBookSeeded();
-  return <AdminPriceBookPageView />;
+  const payload = await readAdminPriceBook(DEFAULT_PRICE_BOOK_ID);
+  return <AdminPriceBookPageView initialContract={payload?.contract ?? null} />;
 }

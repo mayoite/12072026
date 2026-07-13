@@ -112,7 +112,7 @@ export interface PlannerFurnitureItem {
   /**
    * S7 — published catalog preview consumed at place time (e.g. `/svg-catalog/{slug}.svg`).
    * Inventory shows this URL; place stamps it onto the furniture entity.
-   * Plan-canvas draw authority remains Block2D (`furnitureBlock2DFromItem`), not rasterizing this SVG.
+   * Plan canvas paints this SVG via `getSvgPlanImage`; Block2D is fallback while loading or on miss.
    */
   previewImageUrl?: string;
 }

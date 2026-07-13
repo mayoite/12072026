@@ -18,9 +18,11 @@ export default defineConfig({
   testMatch: ["**/*.spec.ts", "**/*.spec.tsx"],
   testIgnore: ["**/*.test.ts", "**/*.test.tsx"],
   outputDir: "../../../results/test-results",
+  globalSetup: "../../tests/e2e/globalSetup.mjs",
+  globalTeardown: "../../tests/e2e/globalTeardown.mjs",
   fullyParallel: true,
   workers: isCI ? 2 : 2,
-  timeout: 60_000,
+  timeout: process.env.OPEN3D_WORLD_GATE === "1" ? 180_000 : 60_000,
 
   retries: isCI ? 2 : 0,
 
@@ -60,8 +62,9 @@ export default defineConfig({
             ? "pnpm run dev:turbo"
             : "pnpm run build && pnpm run start",
         url: baseURL,
-        timeout: 120_000,
-        reuseExistingServer: !isCI,
+        timeout: process.env.OPEN3D_WORLD_GATE === "1" ? 180_000 : 120_000,
+        // Gate must not attach to a stale dev server left by overlapping Playwright jobs.
+        reuseExistingServer: !isCI && process.env.OPEN3D_WORLD_GATE !== "1",
         env: {
           ...process.env,
           PLAYWRIGHT_BASE_URL: baseURL,

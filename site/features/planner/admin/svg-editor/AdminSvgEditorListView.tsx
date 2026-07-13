@@ -19,8 +19,8 @@ import { PencilSimple as Pencil, Plus } from "@phosphor-icons/react";
 
 import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
 import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
-import type { CatalogLifecycleManifest, CatalogLifecycleState } from "./catalogLifecycle";
-import { resolveCatalogLifecycle } from "./catalogLifecycle";
+import type { CatalogLifecycleManifest, CatalogLifecycleState } from "./catalogLifecycle.shared";
+import { resolveCatalogLifecycle } from "./catalogLifecycle.shared";
 import { AdminSvgBulkImportPanel } from "./AdminSvgBulkImportPanel";
 import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 import { PublishedSvgPreview } from "./PublishedSvgPreview";

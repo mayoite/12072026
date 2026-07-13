@@ -44,6 +44,7 @@ import {
   addPlannerWindow,
 } from "@/features/planner/project/model/actions/openings";
 import { newEntityId } from "@/features/planner/lib/newEntityId";
+import type { PlannerProject } from "@/features/planner/project/model/types";
 import { preflightPlannerExport } from "@/features/planner/project/shared/export/exportPreflight";
 import {
   downloadJSON,
@@ -72,6 +73,10 @@ import { CommandPalette } from "./CommandPalette";
 import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
 import { LayersPanel } from "./LayersPanel";
 import { PropertiesPanel } from "./PropertiesPanel";
+import {
+  describePlannerRedoLabel,
+  describePlannerUndoLabel,
+} from "./plannerHistoryLabels";
 import { WorkspaceLeftPanel } from "./WorkspaceLeftPanel";
 import { WorkspaceShell } from "./WorkspaceShell";
 import {
@@ -82,7 +87,10 @@ import {
   type PlannerLayerVisibility,
 } from "./layerVisibility";
 import { useWorkspaceKeyboard } from "./useWorkspaceKeyboard";
-import { useWorkspaceCanvas } from "./useWorkspaceCanvas";
+import {
+  useWorkspaceCanvas,
+  type CanvasSelection,
+} from "./useWorkspaceCanvas";
 import {
   applySelectionDelete,
   deleteEntityFromProject,
@@ -103,10 +111,14 @@ import { formatLengthDisplay } from "@/features/planner/project/model/units";
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
 import type { PlannerEntityCollection } from "@/features/planner/project/model/actions/projectActions";
 import type { PaletteCommandHandlers } from "@/features/planner/project/lib/commands/paletteCommands";
+import { buildSnapStatusLabel } from "@/features/planner/lib/snapStatusLabel";
 import {
-  parsePlannerWorkspacePreferences,
   DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
 } from "@/features/planner/project/store/workspacePreferences";
+import {
+  patchPlannerWorkspacePreferences,
+  readPlannerWorkspacePreferencesFromStorage,
+} from "@/features/planner/project/store/workspacePreferencesStorage";
 import { applyLayoutToWorkspace } from "@/features/planner/ai/applyLayoutToWorkspace";
 import { extractProjectPlacements } from "@/features/planner/ai/extractProjectPlacements";
 import type { WorkspaceAiBridge } from "@/features/planner/ai/workspaceAiBridge";
@@ -198,7 +210,9 @@ export function OOPlannerWorkspace({
     return () => cancelAnimationFrame(frame);
   }, [viewMode]);
   const [activeTool, setActiveTool] = useState<PlannerTool>("wall");
-  const [displayUnit, setDisplayUnit] = useState<PlannerDisplayUnit>("cm");
+  const [displayUnit, setDisplayUnit] = useState<PlannerDisplayUnit>(
+    DEFAULT_PLANNER_WORKSPACE_PREFERENCES.units,
+  );
   const [layerVisibility, setLayerVisibility] = useState<PlannerLayerVisibility>(
     DEFAULT_LAYER_VISIBILITY,
   );
@@ -216,22 +230,51 @@ export function OOPlannerWorkspace({
   const [workspaceMessage, setWorkspaceMessage] = useState<string | null>(null);
   const armedToolRef = useRef<PlannerTool>("wall");
 
-  // Density wired from workspace prefs (not hardcoded); GS: Figma UI3 REC-01 minimize UI, thin sidebars, contextual; benchmark 00 + anti-copy semantic only site/app/css/; fixes critic density/prefs partial + task5
+  // Density/grid/snap wired from workspace prefs (not hardcoded).
   const [density, setDensity] = useState<"compact" | "touch">(
     DEFAULT_PLANNER_WORKSPACE_PREFERENCES.density,
   );
+  const [gridEnabled, setGridEnabled] = useState(
+    DEFAULT_PLANNER_WORKSPACE_PREFERENCES.gridEnabled,
+  );
+  const [snapEnabled, setSnapEnabled] = useState(
+    DEFAULT_PLANNER_WORKSPACE_PREFERENCES.snapEnabled,
+  );
   useEffect(() => {
     if (typeof window === "undefined") return;
-    try {
-      const raw = localStorage.getItem("planner-workspace-preferences");
-      const prefs = parsePlannerWorkspacePreferences(
-        raw ? JSON.parse(raw) : null,
-      );
-      setTimeout(() => setDensity(prefs.density), 0);
-    } catch {
-      // keep default
-    }
+    const prefs = readPlannerWorkspacePreferencesFromStorage();
+    if (!prefs) return;
+    setTimeout(() => {
+      setDensity(prefs.density);
+      setGridEnabled(prefs.gridEnabled);
+      setSnapEnabled(prefs.snapEnabled);
+      setDisplayUnit(prefs.units);
+    }, 0);
   }, []);
+
+  const handleDisplayUnitChange = useCallback((unit: PlannerDisplayUnit) => {
+    setDisplayUnit(unit);
+    patchPlannerWorkspacePreferences({ units: unit });
+  }, []);
+
+  // Playwright reads live wall geometry via this hook (see plannerCanvasHelpers).
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !navigator.webdriver) return;
+    const w = window as unknown as { __plannerLiveProject?: PlannerProject };
+    w.__plannerLiveProject = workspaceCanvas.project;
+    return () => {
+      delete w.__plannerLiveProject;
+    };
+  }, [workspaceCanvas.project]);
+
+  const undoLabel = useMemo(
+    () => describePlannerUndoLabel(workspaceCanvas.history),
+    [workspaceCanvas.history],
+  );
+  const redoLabel = useMemo(
+    () => describePlannerRedoLabel(workspaceCanvas.history),
+    [workspaceCanvas.history],
+  );
 
   const pendingCatalogItem = useMemo(
     () =>
@@ -246,14 +289,19 @@ export function OOPlannerWorkspace({
       (floor) => floor.id === workspaceCanvas.project.activeFloorId,
     ) ?? workspaceCanvas.project.floors[0];
 
-  const selectedEntity = useMemo(
-    () =>
-      resolveSelectedEntity(
-        workspaceCanvas.selection,
-        workspaceCanvas.activeFloor,
-      ),
-    [workspaceCanvas.activeFloor, workspaceCanvas.selection],
-  );
+  const multiSelection = useMemo(() => {
+    const { selection } = workspaceCanvas;
+    if (selection.type === "none" || selection.ids.length <= 1) return null;
+    return { type: selection.type, count: selection.ids.length };
+  }, [workspaceCanvas.selection]);
+
+  const selectedEntity = useMemo(() => {
+    if (workspaceCanvas.selection.ids.length !== 1) return null;
+    return resolveSelectedEntity(
+      workspaceCanvas.selection,
+      workspaceCanvas.activeFloor,
+    );
+  }, [workspaceCanvas.activeFloor, workspaceCanvas.selection]);
   const isCanvasEmpty = activeFloor
     ? activeFloor.walls.length === 0 &&
       activeFloor.rooms.length === 0 &&
@@ -300,19 +348,23 @@ export function OOPlannerWorkspace({
   const toggleDensity = useCallback(() => {
     setDensity((current) => {
       const next = current === "compact" ? "touch" : "compact";
-      try {
-        const raw = localStorage.getItem("planner-workspace-preferences");
-        const base = parsePlannerWorkspacePreferences(
-          raw ? JSON.parse(raw) : null,
-        );
-        const updated = { ...base, density: next };
-        localStorage.setItem(
-          "planner-workspace-preferences",
-          JSON.stringify(updated),
-        );
-      } catch {
-        // ignore storage (matches useDocking pattern)
-      }
+      patchPlannerWorkspacePreferences({ density: next });
+      return next;
+    });
+  }, []);
+
+  const toggleGrid = useCallback(() => {
+    setGridEnabled((current) => {
+      const next = !current;
+      patchPlannerWorkspacePreferences({ gridEnabled: next });
+      return next;
+    });
+  }, []);
+
+  const toggleSnap = useCallback(() => {
+    setSnapEnabled((current) => {
+      const next = !current;
+      patchPlannerWorkspacePreferences({ snapEnabled: next });
       return next;
     });
   }, []);
@@ -334,9 +386,53 @@ export function OOPlannerWorkspace({
       id: string,
       updates: Record<string, unknown>,
     ) => {
-      workspaceCanvas.updateProject((project) =>
-        updateEntityInProject(project, collection, id, updates),
-      );
+      workspaceCanvas.dispatch({
+        type: "update",
+        collection,
+        id,
+        updates,
+      });
+    },
+    [workspaceCanvas],
+  );
+
+  const handleToggleLock = useCallback(
+    (collection: PlannerEntityCollection, id: string) => {
+      workspaceCanvas.updateProject((project) => {
+        const floor =
+          project.floors.find((f) => f.id === project.activeFloorId) ??
+          project.floors[0];
+        const items = floor[collection] as Array<{ id: string; locked?: boolean }>;
+        const entity = items.find((item) => item.id === id);
+        if (!entity) return project;
+        return updateEntityInProject(project, collection, id, {
+          locked: !entity.locked,
+        });
+      });
+      // Panel chrome clicks clear Fabric selection — keep inspector on the locked entity.
+      const selectionType: CanvasSelection["type"] | undefined =
+        collection === "walls"
+          ? "wall"
+          : collection === "doors"
+            ? "door"
+            : collection === "windows"
+              ? "window"
+              : collection === "furniture"
+                ? "furniture"
+                : collection === "rooms"
+                  ? "room"
+                  : undefined;
+      if (selectionType) {
+        const nextSelection: CanvasSelection = {
+          type: selectionType,
+          ids: [id],
+        };
+        workspaceCanvas.setSelection(nextSelection);
+        // Fabric clears activeObject when panel chrome is clicked — restore after that event.
+        queueMicrotask(() => {
+          workspaceCanvas.setSelection(nextSelection);
+        });
+      }
     },
     [workspaceCanvas],
   );
@@ -928,11 +1024,14 @@ export function OOPlannerWorkspace({
     },
   });
 
+  const snapPrefsLabel = buildSnapStatusLabel(snapEnabled, gridEnabled);
   const measurementLabel =
     canvasStatus?.previewLengthMm !== null &&
     canvasStatus?.previewLengthMm !== undefined
       ? formatLengthDisplay(canvasStatus.previewLengthMm, displayUnit)
-      : formatSnapStatus(canvasStatus?.snapKind ?? "none");
+      : canvasStatus?.snapKind && canvasStatus.snapKind !== "none"
+        ? formatSnapStatus(canvasStatus.snapKind)
+        : `Snap: ${snapPrefsLabel}`;
 
   const selectionLabel = formatSelectionStatus(workspaceCanvas.selection);
   const planMetrics = summarizeFloorMetrics(activeFloor);
@@ -997,7 +1096,7 @@ export function OOPlannerWorkspace({
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         displayUnit={displayUnit}
-        onDisplayUnitChange={setDisplayUnit}
+        onDisplayUnitChange={handleDisplayUnitChange}
         isModified={autosave.isModified}
         isLocalSaved={isLocalSaved}
         isSynced={isLocalSaved}
@@ -1007,6 +1106,8 @@ export function OOPlannerWorkspace({
         cloudEnabled={saveCloudEnabled}
         canUndo={workspaceCanvas.canUndo}
         canRedo={workspaceCanvas.canRedo}
+        undoLabel={undoLabel}
+        redoLabel={redoLabel}
         onUndo={runUndo}
         onRedo={runRedo}
         onSave={handleSave}
@@ -1021,6 +1122,10 @@ export function OOPlannerWorkspace({
         fillParent
         density={density}
         onToggleDensity={toggleDensity}
+        gridEnabled={gridEnabled}
+        snapEnabled={snapEnabled}
+        onToggleGrid={toggleGrid}
+        onToggleSnap={toggleSnap}
         leftPanel={
           <WorkspaceLeftPanel
             catalogItems={catalog.items}
@@ -1036,10 +1141,12 @@ export function OOPlannerWorkspace({
         rightPanel={
           <PropertiesPanel
             selectedEntity={selectedEntity}
+            multiSelection={multiSelection}
             displayUnit={displayUnit}
             callbacks={{
               onUpdateEntity: handleUpdateEntity,
               onDeleteEntity: handleDeleteEntity,
+              onToggleLock: handleToggleLock,
               onDeselect: () =>
                 workspaceCanvas.setSelection({ type: "none", ids: [] }),
             }}
@@ -1133,6 +1240,8 @@ export function OOPlannerWorkspace({
               layerVisibility={layerVisibility}
               workspaceCanvas={workspaceCanvas}
               activeFloor={activeFloor}
+              gridEnabled={gridEnabled}
+              snapEnabled={snapEnabled}
               pendingCatalogPlacement={
                 pendingCatalogItemId !== null ||
                 pendingWorkstationConfig !== null

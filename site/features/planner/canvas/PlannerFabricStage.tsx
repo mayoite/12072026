@@ -22,10 +22,15 @@ import type { WorkspaceCanvasContext } from "@/features/planner/editor/useWorksp
 import {
   projectToScreen,
   screenToProject,
+  snapDrawingPoint,
   zoomTransformAt,
   type CanvasTransform,
   type SnapKind,
 } from "@/features/planner/project/lib/geometry/snapping";
+import {
+  PLANNER_STAGE_GRID_MM,
+  plannerGridOverlayStyle,
+} from "./fabricStageGridOverlay";
 import { createPlannerProject } from "@/features/planner/project/model/project";
 import type { PlannerFloor, PlannerPoint, PlannerWall } from "@/features/planner/project/model/types";
 import { resolvePaintColor } from "@/features/planner/project/shared/readThemeColor";
@@ -47,7 +52,7 @@ import {
   writeCanvasEntityType,
   type FabricCanvasEntityType,
 } from "./fabricSelection";
-import { createFabricFurnitureBlock } from "./fabricBlock2D";
+import { createFabricFurnitureSymbol } from "./fabricBlock2D";
 import {
   shouldCommitWallSegment,
   wallSegmentLengthMm,
@@ -82,6 +87,9 @@ export type PlannerFabricStageProps = {
   activeFloor?: PlannerFloor;
   pendingCatalogPlacement?: boolean;
   placementItemLabel?: string | null;
+  gridEnabled?: boolean;
+  snapEnabled?: boolean;
+  gridMm?: number;
   onPlaceAtPoint?: (point: PlannerPoint) => void;
   onWallDrawn?: (start: PlannerPoint, end: PlannerPoint) => void;
   /** kind restored: door vs window (opening tool defaults to door). */
@@ -100,6 +108,36 @@ type PanSession = {
 function hostPoint(host: HTMLElement, clientX: number, clientY: number): PlannerPoint {
   const rect = host.getBoundingClientRect();
   return { x: clientX - rect.left, y: clientY - rect.top };
+}
+
+function wallEndpoints(walls: ReadonlyArray<PlannerWall>): PlannerPoint[] {
+  const points: PlannerPoint[] = [];
+  for (const wall of walls) {
+    points.push(wall.start, wall.end);
+  }
+  return points;
+}
+
+function snapProjectPoint(input: {
+  raw: PlannerPoint;
+  start: PlannerPoint | null;
+  walls: ReadonlyArray<PlannerWall>;
+  transform: CanvasTransform;
+  snapEnabled: boolean;
+  gridMm: number;
+}): { point: PlannerPoint; kind: SnapKind } {
+  if (!input.snapEnabled) {
+    return { point: input.raw, kind: "none" };
+  }
+  const snapped = snapDrawingPoint({
+    raw: input.raw,
+    start: input.start,
+    endpoints: wallEndpoints(input.walls),
+    zoom: input.transform.scale,
+    suppress: false,
+    gridMm: input.gridMm,
+  });
+  return { point: snapped.point, kind: snapped.kind };
 }
 
 /**
@@ -132,6 +170,9 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       activeFloor,
       pendingCatalogPlacement = false,
       placementItemLabel = null,
+      gridEnabled = true,
+      snapEnabled = true,
+      gridMm = PLANNER_STAGE_GRID_MM,
       onPlaceAtPoint,
       onWallDrawn,
       onOpeningPlaced,
@@ -145,6 +186,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     const lowerCanvasRef = useRef<HTMLCanvasElement>(null);
     const fabricRef = useRef<Canvas | null>(null);
     const [transform, setTransform] = useState<CanvasTransform>(DEFAULT_FABRIC_STAGE_TRANSFORM);
+    const [svgPaintEpoch, setSvgPaintEpoch] = useState(0);
     const transformRef = useRef(transform);
     const activeToolRef = useRef(activeTool);
     const rebuildingRef = useRef(false);
@@ -157,6 +199,9 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     const onStatusChangeRef = useRef(onStatusChange);
     const pendingPlaceRef = useRef(pendingCatalogPlacement);
     const activeFloorRef = useRef(activeFloor);
+    const gridEnabledRef = useRef(gridEnabled);
+    const snapEnabledRef = useRef(snapEnabled);
+    const gridMmRef = useRef(gridMm);
     const wallDrawRef = useRef<{ start: PlannerPoint; pointerId: number } | null>(null);
     const previewLineRef = useRef<Line | null>(null);
 
@@ -199,6 +244,18 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     useEffect(() => {
       pendingPlaceRef.current = pendingCatalogPlacement;
     }, [pendingCatalogPlacement]);
+
+    useEffect(() => {
+      gridEnabledRef.current = gridEnabled;
+    }, [gridEnabled]);
+
+    useEffect(() => {
+      snapEnabledRef.current = snapEnabled;
+    }, [snapEnabled]);
+
+    useEffect(() => {
+      gridMmRef.current = gridMm;
+    }, [gridMm]);
 
     const emitStatus = useCallback(
       (nextTransform: CanvasTransform, tool: PlannerTool) => {
@@ -318,7 +375,17 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         const preview = previewLineRef.current;
         if (!wallSession) return;
         const screen = hostPoint(host, clientX, clientY);
-        const end = screenToProject(screen, transformRef.current);
+        const rawEnd = screenToProject(screen, transformRef.current);
+        const floor = activeFloorRef.current;
+        const snappedEnd = snapProjectPoint({
+          raw: rawEnd,
+          start: wallSession.start,
+          walls: floor?.walls ?? [],
+          transform: transformRef.current,
+          snapEnabled: snapEnabledRef.current,
+          gridMm: gridMmRef.current,
+        });
+        const end = snappedEnd.point;
         if (shouldCommitWallSegment(wallSession.start, end)) {
           onWallDrawnRef.current?.(wallSession.start, end);
         }
@@ -333,19 +400,33 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
 
       const startWallAt = (clientX: number, clientY: number, pointerId: number) => {
         const screen = hostPoint(host, clientX, clientY);
-        const start = screenToProject(screen, transformRef.current);
+        const rawStart = screenToProject(screen, transformRef.current);
+        const floor = activeFloorRef.current;
+        const snappedStart = snapProjectPoint({
+          raw: rawStart,
+          start: null,
+          walls: floor?.walls ?? [],
+          transform: transformRef.current,
+          snapEnabled: snapEnabledRef.current,
+          gridMm: gridMmRef.current,
+        });
+        const start = snappedStart.point;
+        const startScreen = projectToScreen(start, transformRef.current);
         // Drop any prior preview (stale session / double-down).
         if (previewLineRef.current) {
           canvas.remove(previewLineRef.current);
           previewLineRef.current = null;
         }
-        const preview = new Line([screen.x, screen.y, screen.x, screen.y], {
-          stroke: resolveStageColor(PLANNER_COLOR_TOKENS.wallStroke, "#64748b"),
-          strokeWidth: 5,
-          selectable: false,
-          evented: false,
-          objectCaching: false,
-        });
+        const preview = new Line(
+          [startScreen.x, startScreen.y, startScreen.x, startScreen.y],
+          {
+            stroke: resolveStageColor(PLANNER_COLOR_TOKENS.wallStroke, "#64748b"),
+            strokeWidth: 5,
+            selectable: false,
+            evented: false,
+            objectCaching: false,
+          },
+        );
         canvas.add(preview);
         previewLineRef.current = preview;
         wallDrawRef.current = { start, pointerId };
@@ -357,10 +438,21 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         const preview = previewLineRef.current;
         if (!wallSession || !preview) return;
         const screen = hostPoint(host, clientX, clientY);
-        preview.set({ x2: screen.x, y2: screen.y });
-        const end = screenToProject(screen, transformRef.current);
+        const rawEnd = screenToProject(screen, transformRef.current);
+        const floor = activeFloorRef.current;
+        const snappedEnd = snapProjectPoint({
+          raw: rawEnd,
+          start: wallSession.start,
+          walls: floor?.walls ?? [],
+          transform: transformRef.current,
+          snapEnabled: snapEnabledRef.current,
+          gridMm: gridMmRef.current,
+        });
+        const end = snappedEnd.point;
+        const endScreen = projectToScreen(end, transformRef.current);
+        preview.set({ x2: endScreen.x, y2: endScreen.y });
         onStatusChangeRef.current?.({
-          snapKind: "none",
+          snapKind: snappedEnd.kind,
           activeTool: "wall",
           drawingState: "drawing",
           wallCount: activeFloorRef.current?.walls.length ?? 0,
@@ -683,10 +775,15 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       if (showFurniture) {
         for (const item of activeFloor.furniture) {
           const pose = furnitureToFabricPose(item, transform);
-          const symbol = createFabricFurnitureBlock(item, pose, {
-            interactive,
-            resolveColor: resolveStageColor,
-          });
+          const symbol = createFabricFurnitureSymbol(
+            item,
+            pose,
+            {
+              interactive,
+              resolveColor: resolveStageColor,
+            },
+            () => setSvgPaintEpoch((epoch) => epoch + 1),
+          );
           writeCanvasEntityType(symbol, "furniture");
           writeFurnitureEntityId(symbol, pose.entityId);
           canvas.add(symbol);
@@ -740,7 +837,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       canvas.skipTargetFind = !interactive;
       canvas.requestRenderAll();
       rebuildingRef.current = false;
-    }, [activeFloor, activeTool, layerVisibility, transform]);
+    }, [activeFloor, activeTool, layerVisibility, transform, svgPaintEpoch]);
 
     const handleWheel = useCallback((event: ReactWheelEvent<HTMLDivElement>) => {
       event.preventDefault();
@@ -759,11 +856,15 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           ? styles.cursorPan
           : styles.cursorDefault;
 
+    const gridOverlayStyle = plannerGridOverlayStyle(transform, gridMm);
+
     return (
       <div
         ref={hostRef}
         className={`open3d-canvas-embedded ${styles.root} ${cursorClass}`}
         data-testid="planner-fabric-stage"
+        data-grid-enabled={gridEnabled ? "true" : "false"}
+        data-snap-enabled={snapEnabled ? "true" : "false"}
         role="application"
         onWheel={handleWheel}
         aria-label={
@@ -772,6 +873,14 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
             : "Office plan canvas"
         }
       >
+        {gridEnabled ? (
+          <div
+            className={styles.gridOverlay}
+            style={gridOverlayStyle}
+            aria-hidden
+            data-testid="planner-grid-overlay"
+          />
+        ) : null}
         <canvas ref={lowerCanvasRef} className={styles.canvasHost} />
       </div>
     );

@@ -65,17 +65,16 @@ export function configFromFamilyVersion(
   contract: WorkstationFamilyContract,
   version: WorkstationFamilyVersion,
   selection: WorkstationFamilySelection,
-): WorkstationConfigV0 | { ok: false; error: string } {
+): WorkstationConfigV0 | { error: string } {
   const topology = version.topologies.find((entry) => entry.topologyId === selection.topologyId);
   if (!topology) {
-    return { ok: false, error: `Topology "${selection.topologyId}" not in version ${version.versionId}` };
+    return { error: `Topology "${selection.topologyId}" not in version ${version.versionId}` };
   }
   const sizeAllowed = version.sizeGrid.some(
     (size) => size.lengthMm === selection.lengthMm && size.depthMm === selection.depthMm,
   );
   if (!sizeAllowed) {
     return {
-      ok: false,
       error: `Size ${selection.lengthMm}×${selection.depthMm} mm not in version ${version.versionId} grid`,
     };
   }
@@ -91,14 +90,15 @@ export function configFromFamilyVersion(
 export function driveWorkstationFamily(
   contract: WorkstationFamilyContract,
   selection: WorkstationFamilySelection,
-): WorkstationFamilyDrive | { ok: false; error: string } {
+): WorkstationFamilyDrive | { error: string } {
   const version = activeReleasedVersion(contract);
   if (!version) {
-    return { ok: false, error: "No released active version on workstation family" };
+    return { error: "No released active version on workstation family" };
   }
 
-  const config = configFromFamilyVersion(contract, version, selection);
-  if ("ok" in config && config.ok === false) return config;
+  const configResult = configFromFamilyVersion(contract, version, selection);
+  if ("error" in configResult) return configResult;
+  const config = configResult;
 
   const footprint2d = workstationFootprintMm(config);
   const meshPlan = generateWorkstationV0MeshPlan(config);
@@ -112,7 +112,7 @@ export function driveWorkstationFamily(
     meshPlan.footprint.widthMm !== footprint2d.widthMm ||
     meshPlan.footprint.depthMm !== footprint2d.depthMm
   ) {
-    return { ok: false, error: "2D footprint diverged from 3D mesh plan footprint" };
+    return { error: "2D footprint diverged from 3D mesh plan footprint" };
   }
 
   return {

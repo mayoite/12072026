@@ -65,6 +65,8 @@ export interface WorkspaceShellProps {
   /** Undo/redo controls for top bar */
   canUndo?: boolean;
   canRedo?: boolean;
+  undoLabel?: string;
+  redoLabel?: string;
   onUndo?: () => void;
   onRedo?: () => void;
   /** Status bar left content */
@@ -81,6 +83,10 @@ export interface WorkspaceShellProps {
   density?: "compact" | "touch";
   /** Forward density toggle (wired from TopBar prefs per task5/GS REC-01) */
   onToggleDensity?: () => void;
+  gridEnabled?: boolean;
+  snapEnabled?: boolean;
+  onToggleGrid?: () => void;
+  onToggleSnap?: () => void;
   /** Flat plan metrics for status bar contract (E2E + operator glance) */
   planMetrics?: WorkspacePlanMetrics;
 }
@@ -110,6 +116,8 @@ export function WorkspaceShell({
   onImport,
   canUndo,
   canRedo,
+  undoLabel,
+  redoLabel,
   onUndo,
   onRedo,
   statusLeft,
@@ -119,6 +127,10 @@ export function WorkspaceShell({
   fillParent = false,
   density = "compact",
   onToggleDensity,
+  gridEnabled = true,
+  snapEnabled = true,
+  onToggleGrid,
+  onToggleSnap,
   planMetrics,
 }: WorkspaceShellProps) {
   const id = useId();
@@ -285,6 +297,8 @@ export function WorkspaceShell({
         onImport={onImport}
         canUndo={canUndo}
         canRedo={canRedo}
+        undoLabel={undoLabel}
+        redoLabel={redoLabel}
         onUndo={onUndo}
         onRedo={onRedo}
         activePanel={(viewportTier === "small" && (activePanel === "left" || activePanel === "right")) ? activePanel : null}
@@ -296,6 +310,10 @@ export function WorkspaceShell({
         onToggleCanvasMaximized={handleCanvasMaximizedToggle}
         density={density}
         onToggleDensity={onToggleDensity}
+        gridEnabled={gridEnabled}
+        snapEnabled={snapEnabled}
+        onToggleGrid={onToggleGrid}
+        onToggleSnap={onToggleSnap}
         {...topBarSaveStatusProps}
       />
 

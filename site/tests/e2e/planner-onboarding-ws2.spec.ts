@@ -1,6 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
-import { getObjectCount, waitForPlannerCanvas } from "./plannerCanvasHelpers";
+import {
+  getObjectCount,
+  PLANNER_PRIMARY_CANVAS,
+  waitForPlannerCanvas,
+} from "./plannerCanvasHelpers";
 
 test.describe.configure({ timeout: 60_000 });
 
@@ -27,7 +31,7 @@ test.describe("Planner onboarding — WS2", () => {
     await enterGuestPlannerWorkspace(page);
     await waitForPlannerCanvas(page);
     
-    const canvas = page.locator('[data-testid="planner-2d-canvas"] canvas');
+    const canvas = page.locator(PLANNER_PRIMARY_CANVAS);
     await expect(canvas).toBeVisible();
     
     const count = await getObjectCount(page);

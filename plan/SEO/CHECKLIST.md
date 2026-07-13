@@ -3,10 +3,10 @@
 Live run gates each tick.
 
 ## PHASE-01 — Sitemap ↔ routes
-- [ ] Real indexable public routes enumerated
-- [ ] Diff against sitemap output produced
-- [ ] Every gap classified index | noindex | bug
-- [ ] Noindex routes allowlisted
+- [x] Real indexable public routes enumerated
+- [x] Diff against sitemap output produced
+- [x] Every gap classified index | noindex | bug
+- [x] Noindex routes allowlisted
 
 ## PHASE-02 — Metadata
 - [ ] Title/description/OG recorded per template

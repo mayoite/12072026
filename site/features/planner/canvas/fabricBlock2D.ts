@@ -1,10 +1,26 @@
-import { Circle, Group, Line, Path, Polyline, Rect, type FabricObject } from "fabric";
+import {
+  Circle,
+  FabricImage,
+  Group,
+  Line,
+  Path,
+  Polyline,
+  Rect,
+  type FabricObject,
+} from "fabric";
 
 import { furnitureBlock2DFromItem } from "@/features/planner/project/catalog/furnitureBlock2D";
+import {
+  getSvgPlanImage,
+  isPublishedSvgPlanUrl,
+} from "@/features/planner/project/catalog/svg/svgPlanSymbolCache";
 import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
 import type { Prim } from "@/lib/catalog/blocks2d";
 
 import type { FurnitureFabricPose } from "./furnitureFabricMapper";
+
+export const PLAN_PAINT_MODE_PROP = "planPaintMode" as const;
+export type PlanPaintMode = "svg" | "block2d";
 
 export type FabricBlockOptions = {
   readonly interactive: boolean;
@@ -152,6 +168,68 @@ function fabricPrim(
         strokeLineCap: prim.lineCap ?? "round",
       });
   }
+}
+
+export function furniturePlanSvgUrl(item: PlannerFurnitureItem): string | null {
+  const url = item.previewImageUrl;
+  if (!isPublishedSvgPlanUrl(url)) return null;
+  return url ?? null;
+}
+
+function writePlanPaintMode(target: FabricObject, mode: PlanPaintMode): void {
+  (target as FabricObject & { [PLAN_PAINT_MODE_PROP]?: PlanPaintMode })[
+    PLAN_PAINT_MODE_PROP
+  ] = mode;
+}
+
+function createFabricSvgSymbol(
+  img: HTMLImageElement,
+  pose: FurnitureFabricPose,
+  options: FabricBlockOptions,
+): FabricImage {
+  const naturalW = Math.max(1, img.naturalWidth || img.width || 1);
+  const naturalH = Math.max(1, img.naturalHeight || img.height || 1);
+  const fabricImg = new FabricImage(img, {
+    left: pose.left,
+    top: pose.top,
+    angle: pose.angle,
+    originX: "center",
+    originY: "center",
+    scaleX: pose.width / naturalW,
+    scaleY: pose.height / naturalH,
+    selectable: options.interactive && !pose.locked,
+    evented: options.interactive && !pose.locked,
+    hasControls: options.interactive && !pose.locked,
+    hasBorders: options.interactive && !pose.locked,
+    lockScalingX: true,
+    lockScalingY: true,
+    lockSkewingX: true,
+    lockSkewingY: true,
+    objectCaching: false,
+  });
+  writePlanPaintMode(fabricImg, "svg");
+  return fabricImg;
+}
+
+/**
+ * Primary plan paint: published `/svg-catalog/*.svg` when loaded; Block2D while loading or on miss.
+ */
+export function createFabricFurnitureSymbol(
+  item: PlannerFurnitureItem,
+  pose: FurnitureFabricPose,
+  options: FabricBlockOptions,
+  onSvgLoaded?: () => void,
+): Group | FabricImage {
+  const url = furniturePlanSvgUrl(item);
+  if (url) {
+    const img = getSvgPlanImage(url, onSvgLoaded);
+    if (img) {
+      return createFabricSvgSymbol(img, pose, options);
+    }
+  }
+  const block = createFabricFurnitureBlock(item, pose, options);
+  writePlanPaintMode(block, "block2d");
+  return block;
 }
 
 /**

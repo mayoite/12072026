@@ -14,7 +14,9 @@ import {
   enterGuestPlannerWorkspace,
 } from "./guestProjectSetup";
 import {
+  drawWallByTwoClicks,
   getFurnitureCount,
+  getWallCount,
   placeSeatsFromConfigurator,
   waitForPlannerCanvas,
 } from "./plannerCanvasHelpers";
@@ -37,18 +39,13 @@ const GUEST_PROJECT_ID = "planner-guest-local";
 
 type EntityIds = { wallIds: string[]; furnitureIds: string[] };
 
-/** Wait until autosave / explicit Save reports local saved (TopBar or status bar). */
+/** Wait until explicit Save flushes to local storage (TopBar save status). */
 async function waitForSavedLocally(page: Page): Promise<void> {
-  await expect
-    .poll(
-      async () => {
-        const body = await page.locator("body").innerText();
-        if (/Saved locally|Draft saved locally/i.test(body)) return "saved";
-        return "pending";
-      },
-      { timeout: 25_000 },
-    )
-    .toBe("saved");
+  await expect(page.locator('[data-testid="open3d-save-status"]')).toHaveAttribute(
+    "data-status",
+    "saved",
+    { timeout: 30_000 },
+  );
 }
 
 /**
@@ -145,14 +142,16 @@ test.describe("W5 save honesty / hard reload (browser)", () => {
   }) => {
     mkdirSync(EVIDENCE, { recursive: true });
 
-    // Origin + one-shot clear — no addInitScript so reload preserves planner-workspace-db.
+    // One-shot clear + reload — no init script so hard reload keeps IDB.
     await page.goto("/planner/guest/?plannerDevTools=1", {
       waitUntil: "domcontentloaded",
     });
     await clearPlannerStorageInPage(page);
+    await page.reload({ waitUntil: "domcontentloaded" });
 
     await enterGuestPlannerWorkspace(page, {
       projectName: PROJECT_NAME,
+      navigate: false,
       preservePlannerState: true,
     });
     await waitForPlannerCanvas(page);
@@ -170,25 +169,52 @@ test.describe("W5 save honesty / hard reload (browser)", () => {
       .toBe(furnitureBefore + 4);
 
     const afterPlaceCount = await getFurnitureCount(page);
+
+    // W5 continuity needs persisted wall ids — draw one if scratch start left none.
+    if ((await getWallCount(page)) === 0) {
+      await drawWallByTwoClicks(
+        page,
+        { rx: 0.2, ry: 0.35 },
+        { rx: 0.8, ry: 0.35 },
+      );
+      await expect
+        .poll(async () => getWallCount(page), { timeout: 15_000 })
+        .toBeGreaterThan(0);
+    }
+
     await page.screenshot({ path: path.join(EVIDENCE, "01-before-save.png") });
+
+    // Dirty project before explicit flush (avoid false-green "saved" on idle chrome).
+    await expect
+      .poll(
+        async () =>
+          page.locator('[data-testid="open3d-save-status"]').getAttribute("data-status"),
+        { timeout: 15_000 },
+      )
+      .toMatch(/unsaved|saving/);
 
     // Explicit Save draft → flushPersist (not 5s debounce alone).
     await page.getByRole("button", { name: /Save draft|Save/i }).first().click();
-    await waitForSavedLocally(page);
-    await page.screenshot({ path: path.join(EVIDENCE, "02-saved-local.png") });
 
     // Capture entity UUIDs from IDB snapshot BEFORE hard reload.
     await expect
       .poll(
         async () => {
           const ids = await readEntityIdsFromIdb(page);
-          return ids.furnitureIds.length > 0 && ids.wallIds.length > 0
-            ? "ready"
-            : "empty";
+          if (ids.furnitureIds.length >= afterPlaceCount && ids.wallIds.length > 0) {
+            return "ready";
+          }
+          const status = await page
+            .locator('[data-testid="open3d-save-status"]')
+            .getAttribute("data-status");
+          return `pending:${status}:f${ids.furnitureIds.length}:w${ids.wallIds.length}`;
         },
-        { timeout: 15_000 },
+        { timeout: 45_000 },
       )
       .toBe("ready");
+
+    await waitForSavedLocally(page);
+    await page.screenshot({ path: path.join(EVIDENCE, "02-saved-local.png") });
 
     const beforeReload = await readEntityIdsFromIdb(page);
     expect(beforeReload.furnitureIds.length).toBeGreaterThan(0);

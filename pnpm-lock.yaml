@@ -23,9 +23,6 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.1071.0
         version: 3.1075.0
-      '@fancyapps/ui':
-        specifier: ^6.1.14
-        version: 6.1.14
       '@flatten-js/core':
         specifier: ^1.6.12
         version: 1.6.12
@@ -822,7 +819,7 @@ packages:
 
   '@esbuild-kit/core-utils@3.3.2':
     resolution: {integrity: sha512-sPRAnw9CdSsRmEtnsl2WXWdyquogVpB3yZ3dgwJfe8zrOzTsV7cJvmwrKVa+0ma5BoiGJ+BoqkMvawbayKUsqQ==}
-    deprecated: 'Merged into tsx: https://tsx.is'
+    deprecated: 'Merged into tsx: https://tsx.hirok.io'
 
   '@esbuild-kit/esm-loader@2.6.5':
     resolution: {integrity: sha512-FxEMIkJKnodyA1OaCUoEvbYRkoZlLZ4d/eXFu9Fh8CbBBgP5EmZxrfTRyN0qpXZ4vOvqnE5YdRdcrmUUXuU+dA==}
@@ -1318,9 +1315,6 @@ packages:
     peerDependenciesMeta:
       '@noble/hashes':
         optional: true
-
-  '@fancyapps/ui@6.1.14':
-    resolution: {integrity: sha512-cBV73XXHrc0qMca+PJJ6qay3xweIgsoYse13rGRstgUs0xA5WAv1tgbSzPCIOOjiLs2S2jiVFJxyszgvgyfxMg==}
 
   '@flatten-js/core@1.6.12':
     resolution: {integrity: sha512-FwTv9YuAPNojrw5XHT74TRjUYN/yEjeHejklNEoEZYEeT9VELZwnHmd1N4BMds6p/y1hBzeltEyHZpRIUyAsAg==}
@@ -8661,8 +8655,6 @@ snapshots:
       levn: 0.4.1
 
   '@exodus/bytes@1.15.1': {}
-
-  '@fancyapps/ui@6.1.14': {}
 
   '@flatten-js/core@1.6.12':
     dependencies:

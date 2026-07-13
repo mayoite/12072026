@@ -15,6 +15,10 @@ import {
   type WorkstationShapeV0,
   type WorkstationSizeMm,
 } from "./workstationSystemV0";
+import {
+  BUYER_WORKSTATION_FAMILY_CONTRACT,
+  buyerConfiguratorPreview,
+} from "./workstationFamilyBuyer";
 
 /** Modules the buyer may toggle (desk always required; return forced on L). */
 export const WORKSTATION_V0_TOGGLE_MODULES: readonly WorkstationModuleKindV0[] = [
@@ -132,16 +136,21 @@ export function configuratorPreview(draft: WorkstationConfiguratorDraftV0): {
   sizeLabel: string;
   shapeLabel: string;
   modulesLabel: string;
+  placeable: boolean;
+  placeDisabledReason: string | null;
+  familyVersionId: string | null;
 } {
-  const config = resolveWorkstationConfigFromDraft(draft);
-  const footprint = workstationFootprintMm(config);
+  const preview = buyerConfiguratorPreview(BUYER_WORKSTATION_FAMILY_CONTRACT, draft);
   return {
-    config,
-    catalogId: workstationConfigKey(config),
-    footprint,
-    sizeLabel: `${config.size.lengthMm}×${config.size.depthMm}`,
-    shapeLabel: config.shape === "l-shape" ? "L-shape" : "Linear",
-    modulesLabel: config.modules.join(", "),
+    config: preview.config,
+    catalogId: preview.catalogId,
+    footprint: preview.footprint,
+    sizeLabel: preview.sizeLabel,
+    shapeLabel: preview.shapeLabel,
+    modulesLabel: preview.modulesLabel,
+    placeable: preview.placeable,
+    placeDisabledReason: preview.placeDisabledReason,
+    familyVersionId: preview.familyVersionId,
   };
 }
 

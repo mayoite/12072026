@@ -17,6 +17,7 @@ import {
   placeSeatsFromConfigurator,
   switchPlannerViewMode,
   waitForPlannerCanvas,
+  PLANNER_PAINT_CANVAS,
   PLANNER_PRIMARY_CANVAS,
 } from "./plannerCanvasHelpers";
 
@@ -80,7 +81,7 @@ async function sampleCanvasFillDiversity(page: Page): Promise<{
   channelStdDev: number;
   notPureSolid: boolean;
 }> {
-  const canvas = page.locator(PLANNER_PRIMARY_CANVAS);
+  const canvas = page.locator(PLANNER_PAINT_CANVAS);
   await expect(canvas).toBeVisible({ timeout: 10_000 });
 
   const stats = await canvas.evaluate((el) => {
@@ -232,7 +233,7 @@ test.describe("Mesh/symbol live verify (stroke floor)", () => {
     zoom = await zoomPercent(page);
 
     // Canvas-only crop via element screenshot when possible
-    const canvas2d = page.locator('[data-testid="planner-2d-canvas"]');
+    const canvas2d = page.locator(PLANNER_PAINT_CANVAS);
     if (await canvas2d.isVisible().catch(() => false)) {
       await canvas2d.screenshot({
         path: path.join(EVIDENCE, "03-cabinet-v0-2d-canvas-zoom.png"),

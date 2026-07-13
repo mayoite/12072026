@@ -1,6 +1,6 @@
 /**
  * Admin P02 — per-slug catalog lifecycle (live / draft / retired).
- * Sidecar manifest; retire hides from buyer routes without deleting descriptor history.
+ * Server-only manifest I/O; client code imports `catalogLifecycle.shared.ts`.
  */
 
 import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
@@ -13,18 +13,27 @@ import {
   loadAll,
   type BlockDescriptor,
 } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
-import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 
-export type CatalogLifecycleState = "live" | "draft" | "retired";
+export type {
+  CatalogLifecycleEntry,
+  CatalogLifecycleManifest,
+  CatalogLifecycleState,
+} from "./catalogLifecycle.shared";
+export {
+  CATALOG_LIFECYCLE_MANIFEST,
+  inferLifecycleFromArtifact,
+  isBuyerVisibleLifecycle,
+  isBuyerVisibleSlug,
+  resolveCatalogLifecycle,
+} from "./catalogLifecycle.shared";
 
-export const CATALOG_LIFECYCLE_MANIFEST = "_catalog-lifecycle.json";
-
-export interface CatalogLifecycleEntry {
-  readonly state: CatalogLifecycleState;
-  readonly updatedAt: string;
-}
-
-export type CatalogLifecycleManifest = Record<string, CatalogLifecycleEntry>;
+import {
+  CATALOG_LIFECYCLE_MANIFEST,
+  isBuyerVisibleSlug,
+  type CatalogLifecycleEntry,
+  type CatalogLifecycleManifest,
+  type CatalogLifecycleState,
+} from "./catalogLifecycle.shared";
 
 export function lifecycleManifestPath(dir: string = BLOCK_DESCRIPTORS_DIR_DEFAULT): string {
   return path.resolve(dir, CATALOG_LIFECYCLE_MANIFEST);
@@ -67,27 +76,6 @@ export function writeLifecycleManifest(
   renameSync(temp, manifestPath);
 }
 
-export function inferLifecycleFromArtifact(
-  artifactState: SvgArtifactStatus["state"] | undefined,
-): CatalogLifecycleState {
-  if (artifactState === "published") return "live";
-  return "draft";
-}
-
-export function resolveCatalogLifecycle(
-  slug: string,
-  artifactState: SvgArtifactStatus["state"] | undefined,
-  manifest: CatalogLifecycleManifest = readLifecycleManifest(),
-): CatalogLifecycleState {
-  const entry = manifest[slug];
-  if (entry) return entry.state;
-  return inferLifecycleFromArtifact(artifactState);
-}
-
-export function isBuyerVisibleLifecycle(state: CatalogLifecycleState): boolean {
-  return state === "live";
-}
-
 export function setCatalogLifecycle(
   slug: string,
   state: CatalogLifecycleState,
@@ -102,16 +90,6 @@ export function setCatalogLifecycle(
   writeLifecycleManifest(manifest, dir);
   clearLoaderCache();
   return entry;
-}
-
-/** Legacy descriptors without a manifest entry remain buyer-visible until explicitly set. */
-export function isBuyerVisibleSlug(
-  slug: string,
-  manifest: CatalogLifecycleManifest = readLifecycleManifest(),
-): boolean {
-  const entry = manifest[slug];
-  if (!entry) return true;
-  return entry.state === "live";
 }
 
 export function loadBuyerVisibleDescriptors(

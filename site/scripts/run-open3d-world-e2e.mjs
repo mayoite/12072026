@@ -8,6 +8,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  acquirePlaywrightDevLock,
+  releasePlaywrightDevLock,
+} from "./playwright-dev-lock.mjs";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(__dirname, "..");
 const repoRoot = path.resolve(siteRoot, "..");
@@ -24,7 +29,6 @@ const evidenceDir = path.join(
   "world-standard-wave",
   "gate-e2e",
 );
-
 function fail(message) {
   console.error(`[open3d-world-e2e] ${message}`);
   process.exit(1);
@@ -49,7 +53,11 @@ if (missing.length > 0) {
   fail(`spec files missing on disk:\n${missing.map((m) => `  - ${m}`).join("\n")}`);
 }
 
-fs.mkdirSync(evidenceDir, { recursive: true });
+try {
+  acquirePlaywrightDevLock("open3d-world-gate");
+} catch (err) {
+  fail(err instanceof Error ? err.message : String(err));
+}
 
 const workers = String(manifest.workers ?? 1);
 const args = [
@@ -66,35 +74,75 @@ const startedAt = new Date().toISOString();
 const logPath = path.join(evidenceDir, "playwright-raw.log");
 const runPath = path.join(evidenceDir, "run.json");
 
-console.log(`[open3d-world-e2e] running ${manifest.specs.length} specs (workers=${workers})`);
-const result = spawnSync("npx", args, {
-  cwd: siteRoot,
-  encoding: "utf8",
-  env: {
-    ...process.env,
-    NEXT_PUBLIC_PLANNER_DEV_TOOLS: process.env.NEXT_PUBLIC_PLANNER_DEV_TOOLS ?? "true",
-  },
-  shell: true,
-  maxBuffer: 20 * 1024 * 1024,
-});
-
-const combined = `${result.stdout ?? ""}${result.stderr ?? ""}`;
-fs.writeFileSync(logPath, combined, "utf8");
-
-const exitCode = result.status ?? 1;
-const endedAt = new Date().toISOString();
-const run = {
-  phase: "open3d-world-e2e-gate",
-  startedAt,
-  endedAt,
-  exitCode,
-  workers: Number(workers),
-  specs: manifest.specs,
-  log: "playwright-raw.log",
-  status: exitCode === 0 ? "PASS" : "FAIL",
-  cwd: siteRoot,
+const gateEnv = {
+  ...process.env,
+  // Match curated admin/planner e2e: turbopack dev + auth bypass (not stale prod build).
+  DEV_AUTH_BYPASS: process.env.DEV_AUTH_BYPASS ?? "1",
+  NEXT_PUBLIC_PLANNER_DEV_TOOLS: process.env.NEXT_PUBLIC_PLANNER_DEV_TOOLS ?? "true",
+  // Fresh dev server for gate — avoids stale reuse on port 3000.
+  OPEN3D_WORLD_GATE: "1",
+  // Parent holds the shared dev lock; Playwright globalSetup must not re-acquire.
+  PLAYWRIGHT_DEV_LOCK_SKIP: "1",
 };
-fs.writeFileSync(runPath, `${JSON.stringify(run, null, 2)}\n`, "utf8");
 
-console.log(`[open3d-world-e2e] exit=${exitCode} log=${logPath}`);
+/** One retry only for dead/stale dev server — not workspace assertion failures. */
+const TRANSIENT_GATE =
+  /ERR_CONNECTION_REFUSED|net::ERR_|Port 3000 is in use|Another next dev server is already running/i;
+
+function pause(ms) {
+  const end = Date.now() + ms;
+  while (Date.now() < end) {
+    // short spin — gate runner only
+  }
+}
+
+function runPack() {
+  return spawnSync("npx", args, {
+    cwd: siteRoot,
+    encoding: "utf8",
+    env: gateEnv,
+    shell: true,
+    maxBuffer: 20 * 1024 * 1024,
+  });
+}
+
+let exitCode = 1;
+let combined = "";
+
+try {
+  console.log(`[open3d-world-e2e] running ${manifest.specs.length} specs (workers=${workers})`);
+  let result = runPack();
+  combined = `${result.stdout ?? ""}${result.stderr ?? ""}`;
+  exitCode = result.status ?? 1;
+
+  if (exitCode !== 0 && TRANSIENT_GATE.test(combined)) {
+    console.log("[open3d-world-e2e] transient infra flake — retrying once after 8s");
+    pause(8_000);
+    const retry = runPack();
+    const retryOut = `${retry.stdout ?? ""}${retry.stderr ?? ""}`;
+    combined = `${combined}\n\n--- RETRY ---\n\n${retryOut}`;
+    exitCode = retry.status ?? 1;
+    result = retry;
+  }
+
+  fs.writeFileSync(logPath, combined, "utf8");
+  const endedAt = new Date().toISOString();
+  const run = {
+    phase: "open3d-world-e2e-gate",
+    startedAt,
+    endedAt,
+    exitCode,
+    workers: Number(workers),
+    specs: manifest.specs,
+    log: "playwright-raw.log",
+    status: exitCode === 0 ? "PASS" : "FAIL",
+    cwd: siteRoot,
+  };
+  fs.writeFileSync(runPath, `${JSON.stringify(run, null, 2)}\n`, "utf8");
+
+  console.log(`[open3d-world-e2e] exit=${exitCode} log=${logPath}`);
+} finally {
+  releasePlaywrightDevLock();
+}
+
 process.exit(exitCode);

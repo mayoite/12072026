@@ -174,11 +174,23 @@ export const WorkstationConfiguratorPanel = memo(
                 mm
               </div>
               <div className={styles.previewMeta}>{preview.modulesLabel}</div>
+              {preview.familyVersionId ? (
+                <div className={styles.previewMeta}>
+                  Family version {preview.familyVersionId}
+                </div>
+              ) : null}
+              {!preview.placeable && preview.placeDisabledReason ? (
+                <div className={styles.previewWarn} role="status">
+                  {preview.placeDisabledReason}
+                </div>
+              ) : null}
             </div>
 
             <button
               type="button"
               className={styles.placeBtn}
+              disabled={!preview.placeable}
+              title={preview.placeDisabledReason ?? undefined}
               onClick={() => onPlaceConfig(preview.config)}
             >
               Place this workstation
@@ -195,6 +207,8 @@ export const WorkstationConfiguratorPanel = memo(
                     key={count}
                     type="button"
                     className={styles.batchBtn}
+                    disabled={!preview.placeable}
+                    title={preview.placeDisabledReason ?? undefined}
                     onClick={() => onPlaceBatchConfig(preview.config, count)}
                   >
                     {batchPlaceButtonLabel(count)}

@@ -7,7 +7,7 @@
       "versionId": "v1",
       "effectiveFrom": "2026-07-01",
       "currency": "INR",
-      "status": "draft",
+      "status": "rolled_back",
       "rules": [
         {
           "sku": "OFL-DSK-LIN-1200",

@@ -152,13 +152,16 @@ export function releaseWorkstationAuthorDraft(
     nextVersion,
     migration: draft.migrationChoice,
   });
-  if ("ok" in released && released.ok === false) {
-    return released;
+  if ("error" in released) {
+    return { ok: false, error: released.error };
   }
 
   const legacy = JSON.parse(workstationJson) as LegacyWorkstationPayload;
-  legacy.oandoWorkstationFamily = released;
-  return { ok: true, json: JSON.stringify(legacy, null, 2) };
+  const nextLegacy: LegacyWorkstationPayload = {
+    ...legacy,
+    oandoWorkstationFamily: released,
+  };
+  return { ok: true, json: JSON.stringify(nextLegacy, null, 2) };
 }
 
 export function workstationJsonFromAuthor(draft: WorkstationAuthorDraft): string {

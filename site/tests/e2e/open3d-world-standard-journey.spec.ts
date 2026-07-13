@@ -19,6 +19,7 @@ import path from "node:path";
 
 import {
   clearPlannerStorage,
+  completePlannerSetupGate,
   enterGuestPlannerWorkspace,
 } from "./guestProjectSetup";
 import {
@@ -29,6 +30,7 @@ import {
   placeCatalogOnCanvas,
   placeOpeningOnCanvas,
   PLANNER_FABRIC_STAGE,
+  PLANNER_PAINT_CANVAS,
   PLANNER_PRIMARY_CANVAS,
   selectPlannerTool,
   switchPlannerViewMode,
@@ -91,6 +93,8 @@ type JourneyProof = {
   secondCatalogId: string;
   secondPlaceCta: string;
   symbolCheck: string;
+  canvasShotBytes: number;
+  paintSamples: number;
   baseURL: string;
   server: string;
 };
@@ -113,7 +117,9 @@ function emptyProof(): JourneyProof {
     includesCabinetV0: false,
     secondCatalogId: "",
     secondPlaceCta: "",
-    symbolCheck: "non-blank-canvas-png (P07); quality bar P05",
+    symbolCheck: "non-blank-paint-canvas-pixels (P07); quality bar P05",
+    canvasShotBytes: 0,
+    paintSamples: 0,
     // Forced to localhost by playwright.config (never 127.0.0.1)
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000",
     server: "localhost only (127.0.0.1 rewritten in playwrightBaseURL.cjs)",
@@ -140,15 +146,7 @@ async function enterWorldStandardPlanner(
 
   if (ready) {
     // Canvas may still show guest setup gate — complete it without flipping routeUsed.
-    const setupHeading = page.getByRole("heading", { name: /Set up your space/i });
-    if (await setupHeading.isVisible().catch(() => false)) {
-      await page.getByLabel("Project name").fill("W1-W2 world-standard");
-      await page.getByRole("button", { name: /Start placing furniture/i }).click();
-    }
-    const startFromScratch = page.getByRole("button", { name: /Start from Scratch/i });
-    if (await startFromScratch.isVisible({ timeout: 5_000 }).catch(() => false)) {
-      await startFromScratch.click();
-    }
+    await completePlannerSetupGate(page, "W1-W2 world-standard");
     await expect(fabricStage).toBeVisible({ timeout: 25_000 });
     await expect(canvas).toBeVisible({ timeout: 25_000 });
     await expect(page.locator('[data-testid="planner-2d-canvas"]')).toHaveCount(0);
@@ -319,13 +317,28 @@ test.describe("W1–W2 open3d world-standard journey (browser)", () => {
       path: path.join(EVIDENCE_DIR, "05-two-items-placed.png"),
     });
 
-    // --- Non-blank 2D canvas PNG (byteLength > 5000) on Fabric sole host ---
-    const canvasEl = page.locator(PLANNER_PRIMARY_CANVAS);
+    // --- Non-blank 2D canvas on Fabric paint layer (pixel probe, not PNG byte size) ---
+    const canvasEl = page.locator(PLANNER_PAINT_CANVAS);
     await expect(canvasEl).toBeVisible({ timeout: 15_000 });
+    const paintNonBlank = await canvasEl.evaluate((el) => {
+      const c = el as HTMLCanvasElement;
+      const ctx = c.getContext("2d", { willReadFrequently: true });
+      if (!ctx || c.width < 8 || c.height < 8) return { ok: false, samples: 0 };
+      const img = ctx.getImageData(0, 0, c.width, c.height);
+      let samples = 0;
+      for (let i = 0; i + 3 < img.data.length; i += 64) {
+        if ((img.data[i + 3] ?? 0) > 32) samples += 1;
+      }
+      return { ok: samples > 40, samples };
+    });
+    expect(paintNonBlank.ok, `paint canvas blank (samples=${paintNonBlank.samples})`).toBe(
+      true,
+    );
+    proof.paintSamples = paintNonBlank.samples;
     const shot06 = await canvasEl.screenshot({
       path: path.join(EVIDENCE_DIR, "06-canvas-2d-symbols.png"),
     });
-    expect(shot06.byteLength).toBeGreaterThan(5_000);
+    proof.canvasShotBytes = shot06.byteLength;
 
     // Soft 2D↔3D (does not claim W4) — use helper (label intercepts bare radio.click)
     await switchPlannerViewMode(page, "3d");

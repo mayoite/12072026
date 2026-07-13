@@ -205,15 +205,17 @@ Skipped items must be declared. Shell works; gates are runnable.
 
 **After:** `pnpm --filter oando-site typecheck` exited 0.
 
-### PLAN-FAIL-0415 — Open (Planner P10 browser re-proof)
+### PLAN-FAIL-0415 — Closed (Planner P10 browser re-proof)
 
-**Status:** Open · seen 2026-07-12
+**Status:** Closed · observed 2026-07-12 · fixed 2026-07-13
 
 **Command:** `pnpm --filter oando-site test:e2e:planner-world`
 
-**Failure:** Exit 1. Four browser journeys passed. `open3d-systems-v0-batch-place.spec.ts` timed out because the test searched for batch buttons while the configurator was intentionally collapsed.
+**Was:** Exit 1 — batch-place configurator collapsed; gate used stale prod build (no `DEV_AUTH_BYPASS`); W5 IDB read used `planner-guest-local` while canvas+bypass saved `planner-member-local`.
 
-**Next:** Expand the configurator through its accessible header. Re-run the targeted spec. Then re-run the curated gate.
+**Fix:** `placeSeatsFromConfigurator` in batch specs; `DEV_AUTH_BYPASS=1` in `run-open3d-world-e2e.mjs`; guest route first in `guestProjectSetup`; W5 renamed `open3d-w5-save-honesty.spec.ts` (sort order); IDB poll + setup hardening.
+
+**After:** `test:e2e:planner-world` exit **0** — 5/5 pass (2.8m). Evidence: `results/planner/world-standard-wave/gate-e2e/run.json`.
 
 ### PLAN-FAIL-0416 — Open (forbidden `site/results/` layout)
 

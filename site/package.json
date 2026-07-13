@@ -70,8 +70,10 @@
     "test:planner-catalog": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/admin-smoke.spec.ts tests/e2e/planner-catalog.spec.ts tests/e2e/planner-guest-workspace.spec.ts tests/e2e/planner-custom-tools.spec.ts tests/e2e/planner-chrome.spec.ts tests/e2e/sketch-to-plan-pipeline.spec.ts tests/e2e/planner-offline-sync.spec.ts",
     "test:e2e:p0-admin-svg": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/admin-svg-publish-p01.spec.ts --reporter=list",
     "test:e2e:planner-world": "npm run test:clean && node scripts/run-open3d-world-e2e.mjs",
+    "test:e2e:open3d-world": "npm run test:clean && node scripts/run-open3d-world-e2e.mjs",
     "test:e2e:world-standard-w1w2": "playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-standard-journey.spec.ts --reporter=list",
     "gate:planner": "npm run typecheck && npm run test:e2e:planner-world",
+    "gate:open3d": "npm run gate:planner",
     "test:e2e:assistant": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/site-assistant-shell.spec.ts",
     "test:audit:hollow": "node scripts/audit-hollow-tests.mjs",
     "test:audit:gate-skips": "node scripts/audit-gate-skips.mjs",
@@ -151,7 +153,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1071.0",
-    "@fancyapps/ui": "^6.1.14",
+
     "@flatten-js/core": "^1.6.12",
     "@gltf-transform/core": "^4.1.1",
     "@gltf-transform/extensions": "^4.1.1",

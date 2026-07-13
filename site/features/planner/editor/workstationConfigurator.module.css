@@ -128,6 +128,12 @@
   margin-top: 0.1rem;
 }
 
+.previewWarn {
+  color: var(--color-danger, #b91c1c);
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
 .placeBtn {
   width: 100%;
   border: 0;
@@ -141,8 +147,14 @@
   color: #fff;
 }
 
-.placeBtn:hover {
+.placeBtn:hover:not(:disabled) {
   filter: brightness(1.05);
+}
+
+.placeBtn:disabled,
+.batchBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .placeBtn:focus-visible {

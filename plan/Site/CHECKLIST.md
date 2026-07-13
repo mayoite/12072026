@@ -3,13 +3,13 @@
 Live run gates each tick.
 
 ## PHASE-01 — Dependency cleanup
-- [ ] Owner said "execute" for the cut list
-- [ ] Each removed dep grep-proven unused (starting `@fancyapps/ui`)
-- [ ] `pnpm install` clean
-- [ ] Typecheck green
+- [x] Owner said "execute" for the cut list
+- [x] Each removed dep grep-proven unused (starting `@fancyapps/ui`)
+- [x] `pnpm install` clean
+- [x] Typecheck green
 
 ## PHASE-02 — Site chrome parity
-- [ ] Nav + theme reachable at desktop and 375×812
-- [ ] Light/dark parity across chrome
-- [ ] No clipped/overflowing chrome on mobile
-- [ ] Screenshots captured (marketing + planner entry, both themes)
+- [x] Nav + theme reachable at desktop and 375×812
+- [x] Light/dark parity across chrome
+- [x] No clipped/overflowing chrome on mobile
+- [x] Screenshots captured (marketing + planner entry, both themes)

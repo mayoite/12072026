@@ -675,7 +675,7 @@ export const InventoryPanel = memo(function InventoryPanel({
                   // Roving tab stop for panel arrow keys + focus-visible ring.
                   // No role=button — Place / favorite stay nested interactive controls.
                   tabIndex={focusedIndex === index ? 0 : -1}
-                  aria-selected={selectedItemId === item.id ? "true" : "false"}
+                  data-selected={selectedItemId === item.id ? "true" : "false"}
                   data-catalog-name={item.shortName}
                   onClick={() => handleItemClick(item)}
                   onDoubleClick={(event) => handleItemDoubleClick(item, event)}

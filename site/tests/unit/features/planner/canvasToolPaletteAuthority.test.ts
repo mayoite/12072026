@@ -9,6 +9,7 @@ import {
   LIVE_GEOMETRY_TOOLS,
   PALETTE_EXTRA_TOOLS,
   PALETTE_TOOLS,
+  RAIL_DEFERRED_TOOLS,
   RAIL_DRAW_TOOLS,
   RAIL_NAV_TOOLS,
   isLiveGeometryTool,
@@ -147,8 +148,12 @@ describe("runtimeToolFor (Fabric pointer path)", () => {
 });
 
 describe("rail / palette composition (honesty)", () => {
-  it("CANVAS_TOOLS is nav + draw with no duplicates", () => {
-    expect(CANVAS_TOOLS).toEqual([...RAIL_NAV_TOOLS, ...RAIL_DRAW_TOOLS]);
+  it("CANVAS_TOOLS is nav + draw + deferred with no duplicates", () => {
+    expect(CANVAS_TOOLS).toEqual([
+      ...RAIL_NAV_TOOLS,
+      ...RAIL_DRAW_TOOLS,
+      ...RAIL_DEFERRED_TOOLS,
+    ]);
     expect(new Set(CANVAS_TOOLS).size).toBe(CANVAS_TOOLS.length);
   });
 
@@ -156,14 +161,9 @@ describe("rail / palette composition (honesty)", () => {
     expect(RAIL_NAV_TOOLS).toEqual(["select", "pan"]);
   });
 
-  it("RAIL_DRAW_TOOLS keeps room/dimension visible but deferred", () => {
-    expect(RAIL_DRAW_TOOLS).toEqual([
-      "room",
-      "wall",
-      "opening",
-      "dimension",
-      "placement",
-    ]);
+  it("RAIL_DRAW_TOOLS is live-only; deferred tools sit in their own rail group", () => {
+    expect(RAIL_DRAW_TOOLS).toEqual(["wall", "opening", "placement"]);
+    expect(RAIL_DEFERRED_TOOLS).toEqual(["room", "dimension"]);
     expect(CANVAS_TOOL_REQUIREMENT.room).toBe("deferred");
     expect(CANVAS_TOOL_REQUIREMENT.dimension).toBe("deferred");
     expect(CANVAS_TOOL_REQUIREMENT.wall).toBe("live");

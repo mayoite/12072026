@@ -10,7 +10,7 @@ Live run gates each tick (browser and/or on-disk bytes).
 - [x] `chaise-lounge-001.svg` + catalog set regenerated via `compileSvgForPublish`
 - [x] Desk maker model ≥3 pathish (`desk-top`, `desk-body`, `desk-knee-space`)
 - [x] Published desk `.svg` has ≥3 pathish elements on disk
-- [ ] Correct mm footprint; legible at 100% and 25% (browser)
+- [x] Correct mm footprint; legible at 100% and 25% (browser) (`admin-footprint-mm-proof` + `admin-svg-inventory-preview-p01.spec.ts`)
 - [x] `stages.ts` S7 text: planner consumes catalog SVG (primary)
 - [x] `svgPackageBoundaries` + `makerJsPipeline` + `scenePublishAuthority` green
 - [x] Remaining catalog symbols re-published via `scripts:generate-svg`
@@ -29,20 +29,20 @@ Live run gates each tick (browser and/or on-disk bytes).
 
 ## PHASE-04 — Workstation family
 - [x] Family authored via real form (seats/topology/options) (`WorkstationFamilyAuthorFields`)
-- [ ] Version release works; one version drives 2D/3D/BOQ
+- [x] Version release works; one version drives 2D/3D/BOQ (`workstationFamilyDrive` + `workstationFamilyDrive.test.ts`)
 - [x] Emits documented workstation-family JSON contract (`workstationFamilyContract` + fixture)
-- [ ] Version replacement requires explicit migration choice
+- [x] Version replacement requires explicit migration choice (`WorkstationFamilyAuthorFields` + `workstationFamilyRelease.test.ts`)
 
 ## PHASE-05 — Pricing / BOQ
 - [x] Price-book model + migration (versions, currency, effective dates)
-- [ ] Versioned, reproducible released book; past quotes pin original version
+- [x] Versioned, reproducible released book; past quotes pin original version (`quotePriceBookPin` + `reproduciblePinnedTotal`)
 - [x] Emits documented price-book JSON contract (`emitPriceBookContract` + fixture)
 - [x] BOQ lines show quantity × unit price × adjustment — not total only (`lineTotalMinor`)
 - [x] "Price unavailable" when no rule — never silent zero
 - [x] Author/approver/viewer permissions enforced server-side (`priceBookService` role gate)
 - [x] Failed activation leaves prior active book untouched; rollback audited (unit + in-memory store)
 - [x] Buyer P04 computes correct total against a fixture (`emitPriceBookContract` test)
-- [ ] Browser: draft, approve, activate, rollback journey
+- [x] Browser: draft, approve, activate, rollback journey (`admin-pricing-pricebook-p05.spec.ts`)
 
 ## PHASE-06 — Release / audit / rollback
 - [x] Revision history visible per symbol (`DescriptorRevisionPanel` + revisions API)

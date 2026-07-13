@@ -56,7 +56,7 @@ describe("playwright-open3d-world-specs (gate contract)", () => {
     expect(joined).toMatch(/open3d-world-standard-journey\.spec\.ts/);
     expect(joined).toMatch(/open3d-w3-select-delete\.spec\.ts/);
     expect(joined).toMatch(/open3d-w4-orbit-continuity\.spec\.ts/);
-    expect(joined).toMatch(/open3d-save-honesty\.spec\.ts/);
+    expect(joined).toMatch(/open3d-w5-save-honesty\.spec\.ts/);
   });
 
   it("gates map keys W3/W4 (and pack peers) resolve into declared specs", () => {
@@ -68,7 +68,7 @@ describe("playwright-open3d-world-specs (gate contract)", () => {
     expect(gates.W3).toBe("open3d-w3-select-delete.spec.ts");
     expect(gates.W4).toBe("open3d-w4-orbit-continuity.spec.ts");
     expect(gates["W1-W2"]).toBe("open3d-world-standard-journey.spec.ts");
-    expect(gates["W5-W6"]).toBe("open3d-save-honesty.spec.ts");
+    expect(gates["W5-W6"]).toBe("open3d-w5-save-honesty.spec.ts");
     const basenames = new Set(
       manifest.specs.map((rel) => path.basename(rel)),
     );

@@ -125,8 +125,20 @@ function floor(value: unknown, path: string): PlannerFloor {
     return { id: id(furniture, itemPath), catalogId: stringValue(furniture.catalogId, `${itemPath}.catalogId`),
       position: point(furniture.position, `${itemPath}.position`), rotation: numberValue(furniture.rotation, `${itemPath}.rotation`),
       scale: { x: numberValue(scale.x, `${itemPath}.scale.x`, 0.001), y: numberValue(scale.y, `${itemPath}.scale.y`, 0.001), z: numberValue(scale.z, `${itemPath}.scale.z`, 0.001) },
-      ...Object.fromEntries(["color", "material", "sourceCatalogId", "sourceSlug", "sourceSku"].flatMap((key) =>
-        furniture[key] === undefined ? [] : [[key, stringValue(furniture[key], `${itemPath}.${key}`)]])),
+      ...Object.fromEntries(
+        [
+          "color",
+          "material",
+          "sourceCatalogId",
+          "sourceSlug",
+          "sourceSku",
+          "previewImageUrl",
+          "meshUrl",
+          "glbUrl",
+        ].flatMap((key) =>
+          furniture[key] === undefined ? [] : [[key, stringValue(furniture[key], `${itemPath}.${key}`)]],
+        ),
+      ),
       ...(furniture.locked === undefined ? {} : { locked: booleanValue(furniture.locked, `${itemPath}.locked`) }),
       ...Object.fromEntries(["width", "depth", "height"].flatMap((key) =>
         furniture[key] === undefined ? [] : [[key, numberValue(furniture[key], `${itemPath}.${key}`, 0)]])),

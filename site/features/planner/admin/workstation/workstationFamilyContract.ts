@@ -83,6 +83,7 @@ export const WORKSTATION_FAMILY_V0_FIXTURE = emitWorkstationFamilyContract({
       options: [
         { optionId: "panel", label: "Privacy panel", module: "panel" },
         { optionId: "pedestal", label: "Pedestal storage", module: "pedestal" },
+        { optionId: "overhead", label: "Overhead storage", module: "overhead" },
       ],
       sizeGrid: [...WORKSTATION_V0_SIZE_GRID],
     },

@@ -5,8 +5,12 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   createFabricFurnitureBlock,
+  createFabricFurnitureSymbol,
+  furniturePlanSvgUrl,
+  PLAN_PAINT_MODE_PROP,
   resolveFabricPrimPaint,
 } from "@/features/planner/canvas/fabricBlock2D";
+import { clearSvgPlanSymbolCacheForTests } from "@/features/planner/project/catalog/svg/svgPlanSymbolCache";
 import type { PlannerFurnitureItem } from "@/features/planner/project/model/types";
 
 function cabinetItem(): PlannerFurnitureItem {
@@ -83,5 +87,46 @@ describe("fabricBlock2D paint", () => {
         .filter((f) => f && f !== "transparent" && f !== "none"),
     );
     expect(fills.size).toBeGreaterThanOrEqual(2);
+  });
+
+  it("furniturePlanSvgUrl accepts published /svg-catalog/ URLs only", () => {
+    expect(
+      furniturePlanSvgUrl({
+        ...cabinetItem(),
+        previewImageUrl: "/svg-catalog/chaise-lounge-001.svg",
+      }),
+    ).toBe("/svg-catalog/chaise-lounge-001.svg");
+    expect(
+      furniturePlanSvgUrl({
+        ...cabinetItem(),
+        previewImageUrl: "/images/cabinet-thumb.png",
+      }),
+    ).toBeNull();
+  });
+
+  it("createFabricFurnitureSymbol falls back to Block2D when SVG is absent", () => {
+    clearSvgPlanSymbolCacheForTests();
+    const symbol = createFabricFurnitureSymbol(
+      cabinetItem(),
+      {
+        entityId: "cab-fabric-1",
+        left: 200,
+        top: 150,
+        width: 60,
+        height: 58,
+        angle: 0,
+        widthMm: 600,
+        depthMm: 580,
+        locked: false,
+      },
+      {
+        interactive: true,
+        resolveColor: (_t, fb) => fb,
+      },
+    );
+    expect(
+      (symbol as unknown as { [PLAN_PAINT_MODE_PROP]?: string })[PLAN_PAINT_MODE_PROP],
+    ).toBe("block2d");
+    expect(symbol.type).toBe("group");
   });
 });

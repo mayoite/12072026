@@ -104,17 +104,22 @@ export const CANVAS_TOOL_REQUIREMENT: Record<PlannerTool, ToolRequirementTier> =
 /** Tools on the RAC rail (nav group). */
 export const RAIL_NAV_TOOLS: readonly PlannerTool[] = ["select", "pan"];
 
-/** Tools on the RAC rail (draw group). Room/dimension stay visible but deferred. */
+/** Live draw tools on the RAC rail (geometry works on Fabric today). */
 export const RAIL_DRAW_TOOLS: readonly PlannerTool[] = [
-  "room",
   "wall",
   "opening",
-  "dimension",
   "placement",
 ];
 
-/** Full rail order (nav + draw). Palette tool list must match this + keyboard extras. */
-export const CANVAS_TOOLS: PlannerTool[] = [...RAIL_NAV_TOOLS, ...RAIL_DRAW_TOOLS];
+/** Deferred tools — labelled "Coming soon" on the rail, not peers with live draw tools. */
+export const RAIL_DEFERRED_TOOLS: readonly PlannerTool[] = ["room", "dimension"];
+
+/** Full rail order (nav + draw + deferred). Palette tool list must match this + keyboard extras. */
+export const CANVAS_TOOLS: PlannerTool[] = [
+  ...RAIL_NAV_TOOLS,
+  ...RAIL_DRAW_TOOLS,
+  ...RAIL_DEFERRED_TOOLS,
+];
 
 /** Palette / keyboard-only extras not duplicated on the rail (still live when armed). */
 export const PALETTE_EXTRA_TOOLS: readonly PlannerTool[] = ["door", "window", "text"];

@@ -1,5 +1,11 @@
 import { expect, type Page } from "@playwright/test";
 
+import {
+  PLANNER_FABRIC_STAGE,
+  PLANNER_PRIMARY_CANVAS,
+  waitForPlannerCanvas,
+} from "./plannerCanvasHelpers";
+
 /**
  * Clears all planner-owned browser storage (localStorage + IndexedDB).
  * Scoped to planner keys only — does NOT clear auth tokens or unrelated keys.
@@ -63,6 +69,94 @@ export async function clearPlannerStorage(page: Page): Promise<void> {
   }, [...PLANNER_LS_PREFIXES]);
 }
 
+/** Complete metadata + starting-point wizard when the setup gate is showing. */
+export async function completePlannerSetupGate(
+  page: Page,
+  projectName: string,
+): Promise<void> {
+  const fabricStage = page.locator(PLANNER_FABRIC_STAGE);
+  if (await fabricStage.isVisible().catch(() => false)) {
+    return;
+  }
+
+  const setupHeading = page.getByRole("heading", { name: /Set up your space/i });
+  const onMetadataStep = await setupHeading
+    .waitFor({ state: "visible", timeout: 30_000 })
+    .then(() => true)
+    .catch(() => false);
+
+  if (onMetadataStep) {
+    const nameInput = page.getByLabel("Project name");
+    await expect(nameInput).toBeVisible({ timeout: 10_000 });
+    await nameInput.fill(projectName);
+
+    const submit = page.getByRole("button", { name: /Start placing furniture/i });
+    await expect(submit).toBeEnabled({ timeout: 30_000 });
+    await submit.click();
+  }
+
+  const startFromScratch = page.getByRole("button", { name: /Start from Scratch/i });
+  if (await startFromScratch.isVisible({ timeout: 15_000 }).catch(() => false)) {
+    await startFromScratch.click();
+  }
+
+  await expect
+    .poll(async () => fabricStage.isVisible().catch(() => false), {
+      timeout: 60_000,
+    })
+    .toBe(true);
+}
+
+/**
+ * After hard reload with preserved localStorage, wait for either the setup gate
+ * or live Fabric — cold dev under contention can exceed a single 25s canvas wait.
+ */
+export async function resumeGuestPlannerAfterReload(
+  page: Page,
+  projectName: string,
+): Promise<void> {
+  const fabricStage = page.locator(PLANNER_FABRIC_STAGE);
+  await expect
+    .poll(
+      async () => {
+        if (await fabricStage.isVisible().catch(() => false)) return "canvas";
+        if (
+          await page
+            .getByRole("heading", { name: /Set up your space/i })
+            .isVisible()
+            .catch(() => false)
+        ) {
+          return "setup";
+        }
+        if (await page.locator(".pw-topbar").isVisible().catch(() => false)) {
+          return "chrome";
+        }
+        return "";
+      },
+      { timeout: 60_000 },
+    )
+    .not.toBe("");
+
+  await completePlannerSetupGate(page, projectName);
+  await waitForPlannerCanvas(page, { timeoutMs: 60_000 });
+}
+
+async function navigatePlannerWorkspace(page: Page): Promise<void> {
+  // Guest route first — canvas with DEV_AUTH_BYPASS may resolve as member (wrong IDB key).
+  const paths = [
+    "/planner/guest/?plannerDevTools=1",
+    "/planner/canvas/?plannerDevTools=1",
+  ];
+  for (const target of paths) {
+    await page.goto(target, { waitUntil: "domcontentloaded", timeout: 60_000 });
+    const is404 = await page
+      .getByRole("heading", { name: "404" })
+      .isVisible()
+      .catch(() => false);
+    if (!is404) return;
+  }
+}
+
 /** Complete the guest project setup gate when it appears (fresh session). */
 export async function enterGuestPlannerWorkspace(
   page: Page,
@@ -72,26 +166,32 @@ export async function enterGuestPlannerWorkspace(
     await clearPlannerStorage(page);
   }
   if (options.navigate !== false) {
-    await page.goto("/planner/guest/?plannerDevTools=1", { waitUntil: "domcontentloaded" });
+    await navigatePlannerWorkspace(page);
   }
 
-  const setupHeading = page.getByRole("heading", { name: /Set up your space/i });
-  const topbar = page.locator(".pw-topbar");
+  const fabricStage = page.locator(PLANNER_FABRIC_STAGE);
 
   await Promise.race([
-    setupHeading.waitFor({ state: "visible", timeout: 25_000 }),
-    topbar.waitFor({ state: "visible", timeout: 25_000 }),
+    page.locator(".pw-topbar").waitFor({ state: "visible", timeout: 60_000 }),
+    fabricStage.waitFor({ state: "visible", timeout: 60_000 }),
   ]).catch(() => {});
 
-  if (await setupHeading.isVisible()) {
-    await page.getByLabel("Project name").fill(options.projectName ?? "E2E guest workspace");
-    await page.getByRole("button", { name: /Start placing furniture/i }).click();
+  await completePlannerSetupGate(
+    page,
+    options.projectName ?? "E2E guest workspace",
+  );
+
+  const canvasReady = async (): Promise<boolean> =>
+    page.locator(PLANNER_PRIMARY_CANVAS).isVisible().catch(() => false);
+
+  if (!(await canvasReady())) {
+    await navigatePlannerWorkspace(page);
+    await completePlannerSetupGate(
+      page,
+      options.projectName ?? "E2E guest workspace",
+    );
   }
 
-  const startFromScratchButton = page.getByRole("button", { name: /Start from Scratch/i });
-  if (await startFromScratchButton.isVisible({ timeout: 10_000 }).catch(() => false)) {
-    await startFromScratchButton.click();
-  }
-
-  await expect(topbar).toBeVisible({ timeout: 25_000 });
+  // Canvas is the gate — TopBar can lag Fabric on cold dev; metrics specs poll topbar separately.
+  await waitForPlannerCanvas(page, { timeoutMs: 60_000 });
 }

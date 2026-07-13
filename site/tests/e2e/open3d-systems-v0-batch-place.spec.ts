@@ -7,7 +7,10 @@ import path from "node:path";
 import fs from "node:fs";
 
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
-import { waitForPlannerCanvas } from "./plannerCanvasHelpers";
+import {
+  placeSeatsFromConfigurator,
+  waitForPlannerCanvas,
+} from "./plannerCanvasHelpers";
 
 test.describe.configure({ mode: "serial", timeout: 120_000 });
 
@@ -38,23 +41,11 @@ test.describe("Systems v0 batch place", () => {
     const before = await furnitureCount(page);
     expect(before).toBeGreaterThanOrEqual(0);
 
-    const configurator = page.getByRole("region", {
-      name: "Workstation systems configurator",
-    });
-    await expect(configurator).toBeVisible({ timeout: 15_000 });
-
-    const configuratorToggle = configurator.getByRole("button", {
-      name: "Systems configurator",
-    });
-    if ((await configuratorToggle.getAttribute("aria-expanded")) !== "true") {
-      await configuratorToggle.click();
-    }
-
     await page.screenshot({
       path: path.join(EVIDENCE, "40-batch-ui.png"),
     });
 
-    await configurator.getByRole("button", { name: "Place 4 seats" }).click();
+    await placeSeatsFromConfigurator(page, 4);
 
     await expect
       .poll(async () => furnitureCount(page), { timeout: 25_000 })
@@ -65,7 +56,7 @@ test.describe("Systems v0 batch place", () => {
     });
 
     // Place 2 more (offset origin should not fail)
-    await configurator.getByRole("button", { name: "Place 2 seats" }).click();
+    await placeSeatsFromConfigurator(page, 2);
     await expect
       .poll(async () => furnitureCount(page), { timeout: 25_000 })
       .toBe(before + 6);

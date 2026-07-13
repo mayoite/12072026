@@ -6,6 +6,7 @@ import {
   CANVAS_TOOL_LABELS,
   CANVAS_TOOL_REQUIREMENT,
   CANVAS_TOOL_SHORTCUTS,
+  RAIL_DEFERRED_TOOLS,
   RAIL_DRAW_TOOLS,
   RAIL_NAV_TOOLS,
   toolAccessibleName,
@@ -16,7 +17,11 @@ afterEach(() => {
   cleanup();
 });
 
-const RAIL_TOOLS: readonly PlannerTool[] = [...RAIL_NAV_TOOLS, ...RAIL_DRAW_TOOLS];
+const RAIL_TOOLS: readonly PlannerTool[] = [
+  ...RAIL_NAV_TOOLS,
+  ...RAIL_DRAW_TOOLS,
+  ...RAIL_DEFERRED_TOOLS,
+];
 
 describe("CanvasToolRail RAC upgrade + a11y", () => {
   it("exposes Select with map-owned accessible name and role=radio", () => {

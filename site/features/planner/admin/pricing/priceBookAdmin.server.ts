@@ -5,6 +5,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
+import { resolveSitePackageRoot } from "@/lib/paths/sitePackageRoot";
 import { emitPriceBookContract } from "./emitPriceBookContract";
 import {
   PRICE_BOOKS_DIR_DEFAULT,
@@ -12,6 +13,7 @@ import {
   listPriceBookIds,
   readPriceBookFile,
   seedPriceBookIfMissing,
+  writePriceBookFile,
 } from "./priceBookFileStore";
 import {
   activatePriceBookVersion,
@@ -20,11 +22,11 @@ import {
   type PriceBookRole,
 } from "./priceBookService";
 
-const DEFAULT_BOOK_ID = "pb-linear-2026-q3";
+export const DEFAULT_PRICE_BOOK_ID = "pb-linear-2026-q3";
 
 function loadFixtureSeed(): ReturnType<typeof readPriceBookFile> {
   const fixturePath = path.join(
-    process.cwd(),
+    resolveSitePackageRoot(),
     "features/planner/admin/pricing/fixtures/linear-desk-2026-q3.json",
   );
   const fixture = JSON.parse(fs.readFileSync(fixturePath, "utf8")) as {
@@ -60,7 +62,15 @@ export function getPriceBookStore() {
 export function ensureDefaultPriceBookSeeded() {
   const seed = loadFixtureSeed();
   if (!seed) return null;
-  return seedPriceBookIfMissing(DEFAULT_BOOK_ID, seed);
+  return seedPriceBookIfMissing(DEFAULT_PRICE_BOOK_ID, seed);
+}
+
+/** E2E/dev reset — restores draft seed so approve→activate→rollback is repeatable. */
+export function resetDefaultPriceBookSeed() {
+  const seed = loadFixtureSeed();
+  if (!seed) return null;
+  writePriceBookFile(seed);
+  return seed;
 }
 
 export async function readAdminPriceBook(bookId: string) {

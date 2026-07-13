@@ -47,6 +47,9 @@ test.describe("Systems v0 configurator", () => {
       name: "Workstation systems configurator",
     });
     await expect(configurator).toBeVisible({ timeout: 15_000 });
+    await configurator
+      .getByRole("button", { name: /Systems configurator/i })
+      .click();
     // Standing evidence: 30–32 (first pack) + 33–35 (re-capture pack)
     await page.screenshot({
       path: path.join(EVIDENCE, "30-configurator-open.png"),
