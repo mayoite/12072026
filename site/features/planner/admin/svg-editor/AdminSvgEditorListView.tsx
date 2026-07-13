@@ -181,20 +181,18 @@ export function AdminSvgEditorListView({
   });
 
   return (
-    <div className="admin-page">
+    <div className="admin-page" data-testid="admin-svg-primary-journey">
       <header className="admin-page__header">
         <div>
-          <p className="admin-page__eyebrow">Catalog assets</p>
-          <h1 className="admin-page__title">SVG block editor</h1>
-          <p className="admin-page__copy">
-            Author SVG block descriptors through a schema-driven form.
-            Publishing requires a real admin session. The local auth bypass is
-            development-only. Saves flow through Zod → atomic-rename JSON write
-            → SVG pipeline → public catalog SVG.
+          <p className="admin-page__eyebrow">Catalog assets · SVG authoring</p>
+          <h1 className="admin-page__title">SVG symbols</h1>
+          <p className="admin-page__copy" data-testid="admin-svg-journey-copy">
+            Draw and edit product symbols in the visual studio. Set identity and
+            millimetre footprint, preview the Planner symbol, then publish. You
+            do not need to edit JSON or source code.
           </p>
           <p className="admin-page__meta">
-            Last loader pass: <code>{refreshedAtLabel}</code> · schemaVersion
-            pinned at <code>2026-07-04.v2</code>
+            Inventory refreshed <code>{refreshedAtLabel}</code>
           </p>
           <p
             className="admin-page__meta"
@@ -204,16 +202,17 @@ export function AdminSvgEditorListView({
             Artifact health: <strong>{publishedCount}</strong> published ·{" "}
             <strong>{missingCount}</strong> missing ·{" "}
             <strong>{invalidCount}</strong> invalid · of{" "}
-            <strong>{descriptors.length}</strong> descriptors.
+            <strong>{descriptors.length}</strong> symbols.
           </p>
         </div>
         <div className="admin-page__actions">
           <Link
             href="/admin/svg-editor/new"
             className="admin-btn admin-btn--primary"
+            data-testid="admin-svg-primary-new"
           >
             <Plus size={14} aria-hidden />
-            New block
+            New SVG symbol
           </Link>
         </div>
       </header>
@@ -232,37 +231,34 @@ export function AdminSvgEditorListView({
         ))}
       </section>
 
-      <div className="mb-6">
-        <AdminSvgBulkImportPanel />
-      </div>
-
       {ordered.length === 0 ? (
         <div className="admin-empty" role="status">
-          <p className="admin-table__primary">No block descriptors yet</p>
+          <p className="admin-table__primary">No SVG symbols yet</p>
           <p className="admin-table__secondary">
-            Author the first variant with New block. Slug input is a kebab regex
-            pinned at the schema layer.
+            Start with New SVG symbol. The visual studio is the primary authoring
+            path.
           </p>
           <div className="mt-4">
             <Link
               href="/admin/svg-editor/new"
               className="admin-btn admin-btn--primary"
+              data-testid="admin-svg-primary-new-empty"
             >
               <Plus size={14} aria-hidden />
-              New block
+              New SVG symbol
             </Link>
           </div>
         </div>
       ) : (
-        <div className="admin-panel">
+        <div className="admin-panel" data-testid="admin-svg-inventory">
           <div className="admin-panel__header">
-            {ordered.length} descriptor{ordered.length === 1 ? "" : "s"}
+            {ordered.length} symbol{ordered.length === 1 ? "" : "s"}
           </div>
           <div className="admin-table-wrap">
             <table className="admin-table">
               <caption className="sr-only">
-                Persisted BlockDescriptor entries grouped by variant, with
-                published SVG preview and artifact state.
+                SVG product symbols with preview, identity, artifact state, and
+                lifecycle.
               </caption>
               <thead>
                 <tr>
@@ -380,6 +376,19 @@ export function AdminSvgEditorListView({
           </div>
         </div>
       )}
+
+      {/* ADM-SVG-01: bulk CSV is not the primary journey (advanced path). */}
+      <details className="admin-panel mt-6" data-testid="admin-svg-advanced-import">
+        <summary className="admin-panel__header">
+          Advanced · bulk CSV import
+        </summary>
+        <div className="px-4 py-3">
+          <p className="admin-page__meta mb-3">
+            Optional migration tool. The primary path is the visual studio above.
+          </p>
+          <AdminSvgBulkImportPanel />
+        </div>
+      </details>
     </div>
   );
 }

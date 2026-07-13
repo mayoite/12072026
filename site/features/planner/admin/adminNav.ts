@@ -77,9 +77,9 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
       },
       {
         href: "/admin/svg-editor",
-        label: "SVG block editor",
+        label: "SVG symbols",
         description:
-          "No-code SVG block descriptors (fixed, configurable, parametric)",
+          "Primary no-code path: visual studio, footprint, preview, and publish",
         icon: PenSquare,
       },
       {

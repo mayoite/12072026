@@ -46,9 +46,8 @@ export function AdminSvgBulkImportPanel() {
   }, [csv]);
 
   return (
-    <section className="admin-panel" aria-label="Bulk CSV import">
-      <div className="admin-panel__header">Bulk import (atomic)</div>
-      <div className="px-4 py-3 flex flex-col gap-3">
+    <section aria-label="Bulk CSV import" data-testid="admin-svg-bulk-import">
+      <div className="flex flex-col gap-3">
         <p className="admin-table__secondary">
           CSV columns: slug, sku, variant, width_mm, depth_mm, height_mm, lifecycle (optional).
           One bad row rolls back the whole batch.
@@ -62,9 +61,10 @@ export function AdminSvgBulkImportPanel() {
         <div className="flex flex-wrap gap-2 items-center">
           <button
             type="button"
-            className="admin-btn admin-btn--primary"
+            className="admin-btn admin-btn--outline"
             onClick={runImport}
             disabled={busy}
+            data-testid="admin-svg-bulk-import-submit"
           >
             {busy ? <Loader2 size={14} className="animate-spin" aria-hidden /> : <UploadSimple size={14} aria-hidden />}
             Import batch
