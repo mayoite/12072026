@@ -27,6 +27,7 @@
 - Run broader gates only when their scope changed or shipment is claimed.
 - UI claims require fresh browser verification.
 - Save raw outputs under `results/` when useful.
+- Save agent-authored reports under `agent-reports/`, never under `results/`.
 - Report the command and exit result in the checklist.
 
 ## Git

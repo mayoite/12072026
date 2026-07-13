@@ -4,7 +4,8 @@
  *
  * Forbidden under site/: results, test-results, .cursor, .firecrawl,
  * tech-stack-docs, tech-stack-generated
- * Required: repo-root results/ (directory may be empty)
+ * Required: repo-root results/ and agent-reports/ (directories may be empty)
+ * Results may not contain Markdown reports.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -24,7 +25,7 @@ const FORBIDDEN = [
 
 const FORBIDDEN_FILES = ["tech-stack-generator/package-lock.json"];
 
-const REQUIRED_DIRS = ["results"];
+const REQUIRED_DIRS = ["results", "agent-reports"];
 
 const violations = [];
 
@@ -46,6 +47,16 @@ for (const rel of REQUIRED_DIRS) {
   const abs = path.join(root, rel);
   if (!fs.existsSync(abs) || !fs.statSync(abs).isDirectory()) {
     violations.push(`REQUIRED missing: ${rel}/`);
+  }
+}
+
+const resultsDir = path.join(root, "results");
+if (fs.existsSync(resultsDir) && fs.statSync(resultsDir).isDirectory()) {
+  const entries = fs.readdirSync(resultsDir, { recursive: true, withFileTypes: true });
+  for (const entry of entries) {
+    if (entry.isFile() && entry.name.toLowerCase().endsWith(".md")) {
+      violations.push(`FORBIDDEN Markdown report in results/: ${entry.parentPath ? path.relative(root, path.join(entry.parentPath, entry.name)) : entry.name}`);
+    }
   }
 }
 

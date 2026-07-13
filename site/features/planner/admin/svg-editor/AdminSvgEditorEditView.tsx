@@ -245,8 +245,46 @@ export function AdminSvgEditorEditView({
       event.preventDefault();
       event.returnValue = "";
     };
+    const onDocumentClick = (event: MouseEvent) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        !(event.target instanceof Element)
+      ) {
+        return;
+      }
+
+      const anchor = event.target.closest("a[href]");
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+      if (anchor.hasAttribute("download")) return;
+      if (anchor.target && anchor.target !== "_self") return;
+
+      const destination = new URL(anchor.href, window.location.href);
+      const current = new URL(window.location.href);
+      const staysOnDocument =
+        destination.origin === current.origin &&
+        destination.pathname === current.pathname &&
+        destination.search === current.search;
+      if (staysOnDocument) return;
+
+      const leave = window.confirm(
+        "Leave this editor and discard all unpublished field and studio changes?",
+      );
+      if (leave) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+    };
     window.addEventListener("beforeunload", onBeforeUnload);
-    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+    document.addEventListener("click", onDocumentClick, true);
+    return () => {
+      window.removeEventListener("beforeunload", onBeforeUnload);
+      document.removeEventListener("click", onDocumentClick, true);
+    };
   }, [formDirty]);
 
   const handleApproveForBuyers = useCallback(async () => {

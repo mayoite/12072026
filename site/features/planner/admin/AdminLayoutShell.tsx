@@ -30,6 +30,15 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
   }, [mobileOpen]);
 
   useEffect(() => {
+    if (!mobileOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
     if (!mobileOpen || !sidebarRef.current) return;
 
     const sidebar = sidebarRef.current;
@@ -105,7 +114,9 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
           ref={sidebarRef}
           id="admin-mobile-sidebar"
           className={`shell-admin-sidebar ${mobileOpen ? "shell-admin-sidebar--open" : ""}`}
-          aria-label="Admin navigation"
+          role={mobileOpen ? "dialog" : undefined}
+          aria-modal={mobileOpen ? true : undefined}
+          aria-label={mobileOpen ? "Admin navigation menu" : "Admin navigation"}
         >
           <nav className="shell-admin-sidebar__nav">
             {ADMIN_NAV_GROUPS.map((group) => (
@@ -147,7 +158,13 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
           />
         ) : null}
 
-        <div className="shell-admin-main">{children}</div>
+        <div
+          className="shell-admin-main"
+          inert={mobileOpen ? true : undefined}
+          aria-hidden={mobileOpen ? true : undefined}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

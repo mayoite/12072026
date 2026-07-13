@@ -65,6 +65,30 @@ export const catalogProductSlugAliases = pgTable("catalog_product_slug_aliases",
   updated_at: timestamp("updated_at", { withTimezone: true }),
 });
 
+/** Products Supabase — parametric catalog consumed by Planner. */
+export const configuratorProducts = pgTable("configurator_products", {
+  id: uuid("id").primaryKey(),
+  slug: text("slug").notNull(),
+  name: text("name").notNull(),
+  category: text("category").notNull(),
+  family: text("family"),
+  brand_name: text("brand_name"),
+  sizing_type: text("sizing_type")
+    .$type<"parametric" | "discrete" | "fixed">()
+    .notNull(),
+  workstation: jsonb("workstation"),
+  size_options: jsonb("size_options").notNull(),
+  default_footprint: jsonb("default_footprint"),
+  derived_rules: jsonb("derived_rules"),
+  materials: text("materials").array().notNull(),
+  thumbnail_url: text("thumbnail_url"),
+  model_3d_url: text("model_3d_url"),
+  description: text("description"),
+  active: boolean("active").notNull(),
+  created_at: timestamp("created_at", { withTimezone: true, mode: "string" }).notNull(),
+  updated_at: timestamp("updated_at", { withTimezone: true, mode: "string" }).notNull(),
+});
+
 export const businessStatsCurrent = pgTable("business_stats_current", {
   id: uuid("id").primaryKey(),
   is_active: boolean("is_active").notNull(),

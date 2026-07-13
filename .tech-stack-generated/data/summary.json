@@ -1,0 +1,22 @@
+{
+  "keyPackages": [],
+  "stats": [
+    {
+      "label": "API routes",
+      "value": "71"
+    },
+    {
+      "label": "Dependencies",
+      "value": "264"
+    },
+    {
+      "label": "Routes",
+      "value": "79"
+    },
+    {
+      "label": "Test files",
+      "value": "848"
+    }
+  ]
+}
+

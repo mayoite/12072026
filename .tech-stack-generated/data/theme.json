@@ -1,0 +1,37 @@
+[
+  {
+    "browserExposure": "public-safe",
+    "category": "theme-token",
+    "factClassification": "code-proven",
+    "id": "theme.token-source",
+    "label": "Design token source",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "theme-token-file",
+    "sourcePath": "site/app/css/core/theme.css",
+    "sourcePointer": "theme.css",
+    "value": "site/app/css/core/theme.css",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "theme-token",
+    "factClassification": "code-proven",
+    "id": "theme.token-source.bytes",
+    "label": "Token file size (bytes)",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "theme-token-file",
+    "sourcePath": "site/app/css/core/theme.css",
+    "sourcePointer": "file.size",
+    "value": "17088",
+    "verificationMode": "source-backed"
+  }
+]
+

@@ -1,0 +1,1821 @@
+[
+  {
+    "command": "eslint -c config/build/eslint.config.mjs app components features lib tests --max-warnings=0",
+    "id": "oando-site:lint",
+    "packageName": "oando-site",
+    "scriptName": "lint",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.lint"
+  },
+  {
+    "command": "next build && node scripts/prepare-standalone.cjs",
+    "id": "oando-site:build",
+    "packageName": "oando-site",
+    "scriptName": "build",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.build"
+  },
+  {
+    "command": "next dev --turbo",
+    "id": "oando-site:dev:turbo",
+    "packageName": "oando-site",
+    "scriptName": "dev:turbo",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.dev:turbo"
+  },
+  {
+    "command": "next dev --webpack",
+    "id": "oando-site:dev",
+    "packageName": "oando-site",
+    "scriptName": "dev",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.dev"
+  },
+  {
+    "command": "next dev --webpack",
+    "id": "oando-site:dev:webpack",
+    "packageName": "oando-site",
+    "scriptName": "dev:webpack",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.dev:webpack"
+  },
+  {
+    "command": "node ../scripts/check-repo-layout.mjs && npm run lint && npm run typecheck && npm run test && npm run test:audit:hollow -- --exclude-marketing && npm run test:audit:eslint-disable && npm run lint:ui:strict",
+    "id": "oando-site:release:gate:fast",
+    "packageName": "oando-site",
+    "scriptName": "release:gate:fast",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.release:gate:fast"
+  },
+  {
+    "command": "node ../scripts/check-repo-layout.mjs && npm run test:audit:hollow && npm run test:audit:gate-skips && npm run test:audit:eslint-disable && npm run lint && npm run typecheck && npm run test && npm run build && npm run test:a11y && npm run test:planner-catalog && npm run test:coverage && npm run test:coverage:site",
+    "id": "oando-site:release:gate",
+    "packageName": "oando-site",
+    "scriptName": "release:gate",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.release:gate"
+  },
+  {
+    "command": "node ../scripts/guard-workspace-install.mjs",
+    "id": "oando-site-workflow-docs:preinstall",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "preinstall",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.preinstall"
+  },
+  {
+    "command": "node ../scripts/guard-workspace-install.mjs",
+    "id": "oando-site:preinstall",
+    "packageName": "oando-site",
+    "scriptName": "preinstall",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.preinstall"
+  },
+  {
+    "command": "node scripts/audit-eslint-disable.mjs",
+    "id": "oando-site:test:audit:eslint-disable",
+    "packageName": "oando-site",
+    "scriptName": "test:audit:eslint-disable",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:audit:eslint-disable"
+  },
+  {
+    "command": "node scripts/audit-gate-skips.mjs",
+    "id": "oando-site:test:audit:gate-skips",
+    "packageName": "oando-site",
+    "scriptName": "test:audit:gate-skips",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:audit:gate-skips"
+  },
+  {
+    "command": "node scripts/audit-hollow-tests.mjs",
+    "id": "oando-site:test:audit:hollow",
+    "packageName": "oando-site",
+    "scriptName": "test:audit:hollow",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:audit:hollow"
+  },
+  {
+    "command": "node scripts/audit-hosted-runtime.mjs",
+    "id": "oando-site:audit:hosted:runtime",
+    "packageName": "oando-site",
+    "scriptName": "audit:hosted:runtime",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.audit:hosted:runtime"
+  },
+  {
+    "command": "node scripts/chat-snapshot.mjs",
+    "id": "oando-site:recovery:chat-snapshot",
+    "packageName": "oando-site",
+    "scriptName": "recovery:chat-snapshot",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.recovery:chat-snapshot"
+  },
+  {
+    "command": "node scripts/check-active-docs.mjs",
+    "id": "oando-workspace:check:active-docs",
+    "packageName": "oando-workspace",
+    "scriptName": "check:active-docs",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.check:active-docs"
+  },
+  {
+    "command": "node scripts/check-agents-folder.mjs",
+    "id": "oando-workspace:check:agents-folder",
+    "packageName": "oando-workspace",
+    "scriptName": "check:agents-folder",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.check:agents-folder"
+  },
+  {
+    "command": "node scripts/check-agents-md.mjs",
+    "id": "oando-workspace:check:agents-md",
+    "packageName": "oando-workspace",
+    "scriptName": "check:agents-md",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.check:agents-md"
+  },
+  {
+    "command": "node scripts/check-docs-purity.mjs",
+    "id": "oando-workspace:check:docs-purity",
+    "packageName": "oando-workspace",
+    "scriptName": "check:docs-purity",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.check:docs-purity"
+  },
+  {
+    "command": "node scripts/check-failures.mjs",
+    "id": "oando-workspace:check:failures",
+    "packageName": "oando-workspace",
+    "scriptName": "check:failures",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.check:failures"
+  },
+  {
+    "command": "node scripts/check-homepage-dialect.mjs",
+    "id": "oando-site:check:site-ui:dialect",
+    "packageName": "oando-site",
+    "scriptName": "check:site-ui:dialect",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.check:site-ui:dialect"
+  },
+  {
+    "command": "node scripts/check-i18n-key-parity.mjs",
+    "id": "oando-site:check:i18n:parity",
+    "packageName": "oando-site",
+    "scriptName": "check:i18n:parity",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.check:i18n:parity"
+  },
+  {
+    "command": "node scripts/check-marketing-copy-source.mjs",
+    "id": "oando-site:check:site-ui:copy",
+    "packageName": "oando-site",
+    "scriptName": "check:site-ui:copy",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.check:site-ui:copy"
+  },
+  {
+    "command": "node scripts/check-marketing-inline-style.mjs",
+    "id": "oando-site:check:site-ui:inline-style",
+    "packageName": "oando-site",
+    "scriptName": "check:site-ui:inline-style",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.check:site-ui:inline-style"
+  },
+  {
+    "command": "node scripts/check-plans-purity.mjs",
+    "id": "oando-workspace:check:plans-purity",
+    "packageName": "oando-workspace",
+    "scriptName": "check:plans-purity",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.check:plans-purity"
+  },
+  {
+    "command": "node scripts/check-repo-layout.mjs",
+    "id": "oando-workspace:check:layout",
+    "packageName": "oando-workspace",
+    "scriptName": "check:layout",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.check:layout"
+  },
+  {
+    "command": "node scripts/check-sharp.js",
+    "id": "oando-workspace:check-sharp",
+    "packageName": "oando-workspace",
+    "scriptName": "check-sharp",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.check-sharp"
+  },
+  {
+    "command": "node scripts/check-site-page-shell.mjs",
+    "id": "oando-site:check:site-ui:shell",
+    "packageName": "oando-site",
+    "scriptName": "check:site-ui:shell",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.check:site-ui:shell"
+  },
+  {
+    "command": "node scripts/check-test-layout.mjs",
+    "id": "oando-site:test:layout:check",
+    "packageName": "oando-site",
+    "scriptName": "test:layout:check",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:layout:check"
+  },
+  {
+    "command": "node scripts/check.mjs",
+    "id": "oando-site-workflow-docs:docs:check",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "docs:check",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.docs:check"
+  },
+  {
+    "command": "node scripts/clean-test-artifacts.mjs",
+    "id": "oando-site:test:clean",
+    "packageName": "oando-site",
+    "scriptName": "test:clean",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:clean"
+  },
+  {
+    "command": "node scripts/cleanup-nested-installs.mjs",
+    "id": "oando-workspace:postinstall",
+    "packageName": "oando-workspace",
+    "scriptName": "postinstall",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.postinstall"
+  },
+  {
+    "command": "node scripts/codemods/homepage-dialect.mjs",
+    "id": "oando-site:codemod:homepage-dialect",
+    "packageName": "oando-site",
+    "scriptName": "codemod:homepage-dialect",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.codemod:homepage-dialect"
+  },
+  {
+    "command": "node scripts/count-r2-objects.mjs",
+    "id": "oando-site:assets:r2:count",
+    "packageName": "oando-site",
+    "scriptName": "assets:r2:count",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.assets:r2:count"
+  },
+  {
+    "command": "node scripts/emit-renderer-data.mjs && vite build",
+    "id": "oando-site-workflow-docs:build",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "build",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.build"
+  },
+  {
+    "command": "node scripts/emit-renderer-data.mjs && vite",
+    "id": "oando-site-workflow-docs:dev",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "dev",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.dev"
+  },
+  {
+    "command": "node scripts/emit-renderer-data.mjs && vitest run",
+    "id": "oando-site-workflow-docs:test",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "test",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.test"
+  },
+  {
+    "command": "node scripts/emit-renderer-data.mjs",
+    "id": "oando-site-workflow-docs:docs:emit",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "docs:emit",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.docs:emit"
+  },
+  {
+    "command": "node scripts/export-pending-failures.mjs",
+    "id": "oando-site:failures:sync",
+    "packageName": "oando-site",
+    "scriptName": "failures:sync",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.failures:sync"
+  },
+  {
+    "command": "node scripts/generate-app-inventory-csv.mjs",
+    "id": "oando-site:inventory:app-pages",
+    "packageName": "oando-site",
+    "scriptName": "inventory:app-pages",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.inventory:app-pages"
+  },
+  {
+    "command": "node scripts/generate-docs.mjs --all",
+    "id": "oando-site:docs:sync:all",
+    "packageName": "oando-site",
+    "scriptName": "docs:sync:all",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.docs:sync:all"
+  },
+  {
+    "command": "node scripts/generate-docs.mjs --check",
+    "id": "oando-site:docs:check",
+    "packageName": "oando-site",
+    "scriptName": "docs:check",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.docs:check"
+  },
+  {
+    "command": "node scripts/generate-docs.mjs --coverage --check",
+    "id": "oando-site:docs:check:coverage",
+    "packageName": "oando-site",
+    "scriptName": "docs:check:coverage",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.docs:check:coverage"
+  },
+  {
+    "command": "node scripts/generate-docs.mjs --coverage",
+    "id": "oando-site:docs:sync:coverage",
+    "packageName": "oando-site",
+    "scriptName": "docs:sync:coverage",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.docs:sync:coverage"
+  },
+  {
+    "command": "node scripts/generate-docs.mjs",
+    "id": "oando-site:docs:sync",
+    "packageName": "oando-site",
+    "scriptName": "docs:sync",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.docs:sync"
+  },
+  {
+    "command": "node scripts/generate-route-index.mjs",
+    "id": "oando-site:docs:sync:routes",
+    "packageName": "oando-site",
+    "scriptName": "docs:sync:routes",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.docs:sync:routes"
+  },
+  {
+    "command": "node scripts/generate-scripts-inventory.mjs",
+    "id": "oando-site:inventory:scripts",
+    "packageName": "oando-site",
+    "scriptName": "inventory:scripts",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.inventory:scripts"
+  },
+  {
+    "command": "node scripts/generate-site-ui-route-matrix.mjs",
+    "id": "oando-site:site-ui:matrix",
+    "packageName": "oando-site",
+    "scriptName": "site-ui:matrix",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.site-ui:matrix"
+  },
+  {
+    "command": "node scripts/generate-tree.js && node scripts/format-dir-tree-xlsx.mjs",
+    "id": "oando-site:tree:xlsx",
+    "packageName": "oando-site",
+    "scriptName": "tree:xlsx",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.tree:xlsx"
+  },
+  {
+    "command": "node scripts/generate-tree.js",
+    "id": "oando-site:tree:csv",
+    "packageName": "oando-site",
+    "scriptName": "tree:csv",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.tree:csv"
+  },
+  {
+    "command": "node scripts/generate-vitest-report.mjs ../results/tests/vitest-results.json",
+    "id": "oando-site:posttest",
+    "packageName": "oando-site",
+    "scriptName": "posttest",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.posttest"
+  },
+  {
+    "command": "node scripts/generate.mjs",
+    "id": "oando-site-workflow-docs:docs:generate",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "docs:generate",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.docs:generate"
+  },
+  {
+    "command": "node scripts/guard-workspace-install.mjs",
+    "id": "oando-workspace:preinstall",
+    "packageName": "oando-workspace",
+    "scriptName": "preinstall",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.preinstall"
+  },
+  {
+    "command": "node scripts/launch-smoke.mjs",
+    "id": "oando-site:launch:smoke",
+    "packageName": "oando-site",
+    "scriptName": "launch:smoke",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.launch:smoke"
+  },
+  {
+    "command": "node scripts/lint-ui-contract.mjs --strict",
+    "id": "oando-site:lint:ui:strict",
+    "packageName": "oando-site",
+    "scriptName": "lint:ui:strict",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.lint:ui:strict"
+  },
+  {
+    "command": "node scripts/lint-ui-contract.mjs",
+    "id": "oando-site:lint:ui",
+    "packageName": "oando-site",
+    "scriptName": "lint:ui",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.lint:ui"
+  },
+  {
+    "command": "node scripts/recovery-handover.mjs",
+    "id": "oando-site:recovery:handover",
+    "packageName": "oando-site",
+    "scriptName": "recovery:handover",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.recovery:handover"
+  },
+  {
+    "command": "node scripts/recovery-state.mjs --watch --interval=45",
+    "id": "oando-site:recovery:watch",
+    "packageName": "oando-site",
+    "scriptName": "recovery:watch",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.recovery:watch"
+  },
+  {
+    "command": "node scripts/recovery-state.mjs",
+    "id": "oando-site:recovery:snapshot",
+    "packageName": "oando-site",
+    "scriptName": "recovery:snapshot",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.recovery:snapshot"
+  },
+  {
+    "command": "node scripts/render_project_docs.mjs",
+    "id": "oando-site:project:render",
+    "packageName": "oando-site",
+    "scriptName": "project:render",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.project:render"
+  },
+  {
+    "command": "node scripts/scan_secrets.mjs",
+    "id": "oando-site:scan:secrets",
+    "packageName": "oando-site",
+    "scriptName": "scan:secrets",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.scan:secrets"
+  },
+  {
+    "command": "node scripts/startStandalone.cjs",
+    "id": "oando-site:start",
+    "packageName": "oando-site",
+    "scriptName": "start",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.start"
+  },
+  {
+    "command": "node scripts/sync-css.mjs",
+    "id": "oando-site-workflow-docs:docs:sync-css",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "docs:sync-css",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.docs:sync-css"
+  },
+  {
+    "command": "node scripts/sync-deferred-locale-messages.mjs",
+    "id": "oando-site:i18n:sync:deferred-locales",
+    "packageName": "oando-site",
+    "scriptName": "i18n:sync:deferred-locales",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.i18n:sync:deferred-locales"
+  },
+  {
+    "command": "node scripts/sync-hi-wave1-messages.mjs",
+    "id": "oando-site:i18n:sync:hi-wave1",
+    "packageName": "oando-site",
+    "scriptName": "i18n:sync:hi-wave1",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.i18n:sync:hi-wave1"
+  },
+  {
+    "command": "node scripts/sync-marketing-i18n-messages.mjs",
+    "id": "oando-site:i18n:sync:marketing",
+    "packageName": "oando-site",
+    "scriptName": "i18n:sync:marketing",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.i18n:sync:marketing"
+  },
+  {
+    "command": "node scripts/syncVendorCdnAssets.mjs",
+    "id": "oando-site:assets:cdn:sync",
+    "packageName": "oando-site",
+    "scriptName": "assets:cdn:sync",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.assets:cdn:sync"
+  },
+  {
+    "command": "node scripts/take-planner-screenshot.mjs",
+    "id": "oando-site:screenshot:planner",
+    "packageName": "oando-site",
+    "scriptName": "screenshot:planner",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.screenshot:planner"
+  },
+  {
+    "command": "node scripts/translate-deferred-marketing-flat.mjs",
+    "id": "oando-site:i18n:translate:deferred-locales",
+    "packageName": "oando-site",
+    "scriptName": "i18n:translate:deferred-locales",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.i18n:translate:deferred-locales"
+  },
+  {
+    "command": "node scripts/validate-launch-env.mjs",
+    "id": "oando-site:launch:env",
+    "packageName": "oando-site",
+    "scriptName": "launch:env",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.launch:env"
+  },
+  {
+    "command": "node site/scripts/check-root-markdown-links.mjs",
+    "id": "oando-workspace:docs:check:root-links",
+    "packageName": "oando-workspace",
+    "scriptName": "docs:check:root-links",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.docs:check:root-links"
+  },
+  {
+    "command": "node tech-stack-generator/scripts/check.mjs",
+    "id": "oando-workspace:docs:check:tech-stack",
+    "packageName": "oando-workspace",
+    "scriptName": "docs:check:tech-stack",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.docs:check:tech-stack"
+  },
+  {
+    "command": "node tech-stack-generator/scripts/gate.mjs",
+    "id": "oando-workspace:docs:gate:tech-stack",
+    "packageName": "oando-workspace",
+    "scriptName": "docs:gate:tech-stack",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.docs:gate:tech-stack"
+  },
+  {
+    "command": "node tech-stack-generator/scripts/generate.mjs && node tech-stack-generator/scripts/emit-renderer-data.mjs",
+    "id": "oando-workspace:docs:sync:tech-stack",
+    "packageName": "oando-workspace",
+    "scriptName": "docs:sync:tech-stack",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.docs:sync:tech-stack"
+  },
+  {
+    "command": "npm run check:site-ui:shell && npm run check:i18n:parity && npm run check:site-ui:copy && npm run check:site-ui:inline-style && npm run check:site-ui:dialect",
+    "id": "oando-site:check:site-ui",
+    "packageName": "oando-site",
+    "scriptName": "check:site-ui",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.check:site-ui"
+  },
+  {
+    "command": "npm run gate:planner",
+    "id": "oando-site:gate:open3d",
+    "packageName": "oando-site",
+    "scriptName": "gate:open3d",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.gate:open3d"
+  },
+  {
+    "command": "npm run p0:unit && npm run p0:svg",
+    "id": "oando-site:p0",
+    "packageName": "oando-site",
+    "scriptName": "p0",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.p0"
+  },
+  {
+    "command": "npm run release:gate",
+    "id": "oando-site:gate:full",
+    "packageName": "oando-site",
+    "scriptName": "gate:full",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.gate:full"
+  },
+  {
+    "command": "npm run release:gate:fast",
+    "id": "oando-site:gate",
+    "packageName": "oando-site",
+    "scriptName": "gate",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.gate"
+  },
+  {
+    "command": "npm run scripts:smoke:svg:batch",
+    "id": "oando-site:p0:svg",
+    "packageName": "oando-site",
+    "scriptName": "p0:svg",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.p0:svg"
+  },
+  {
+    "command": "npm run test:auth:seed-users && npm run test:auth:env",
+    "id": "oando-site:test:auth:env-check",
+    "packageName": "oando-site",
+    "scriptName": "test:auth:env-check",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:auth:env-check"
+  },
+  {
+    "command": "npm run test:clean && node scripts/run-open3d-world-e2e.mjs",
+    "id": "oando-site:test:e2e:open3d-world",
+    "packageName": "oando-site",
+    "scriptName": "test:e2e:open3d-world",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:e2e:open3d-world"
+  },
+  {
+    "command": "npm run test:clean && node scripts/run-open3d-world-e2e.mjs",
+    "id": "oando-site:test:e2e:planner-world",
+    "packageName": "oando-site",
+    "scriptName": "test:e2e:planner-world",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:e2e:planner-world"
+  },
+  {
+    "command": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/accessibility.spec.ts",
+    "id": "oando-site:test:a11y",
+    "packageName": "oando-site",
+    "scriptName": "test:a11y",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:a11y"
+  },
+  {
+    "command": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/admin-smoke.spec.ts tests/e2e/planner-catalog.spec.ts tests/e2e/planner-guest-workspace.spec.ts tests/e2e/planner-custom-tools.spec.ts tests/e2e/planner-chrome.spec.ts tests/e2e/sketch-to-plan-pipeline.spec.ts tests/e2e/planner-offline-sync.spec.ts",
+    "id": "oando-site:test:planner-catalog",
+    "packageName": "oando-site",
+    "scriptName": "test:planner-catalog",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:planner-catalog"
+  },
+  {
+    "command": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/admin-svg-publish-p01.spec.ts --reporter=list",
+    "id": "oando-site:test:e2e:p0-admin-svg",
+    "packageName": "oando-site",
+    "scriptName": "test:e2e:p0-admin-svg",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:e2e:p0-admin-svg"
+  },
+  {
+    "command": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/site-assistant-shell.spec.ts",
+    "id": "oando-site:test:e2e:assistant",
+    "packageName": "oando-site",
+    "scriptName": "test:e2e:assistant",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:e2e:assistant"
+  },
+  {
+    "command": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/site-locale-switch.spec.ts tests/e2e/site-visual-regression.spec.ts",
+    "id": "oando-site:test:site-ui",
+    "packageName": "oando-site",
+    "scriptName": "test:site-ui",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:site-ui"
+  },
+  {
+    "command": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/site-navigation-smoke.spec.ts tests/e2e/navigation-smoke.spec.ts",
+    "id": "oando-site:test:e2e:nav",
+    "packageName": "oando-site",
+    "scriptName": "test:e2e:nav",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:e2e:nav"
+  },
+  {
+    "command": "npm run test:clean && vitest run --coverage && node scripts/generate-coverage-report.mjs planner && node scripts/generate-vitest-report.mjs ../results/tests/vitest-results.json",
+    "id": "oando-site:test:coverage",
+    "packageName": "oando-site",
+    "scriptName": "test:coverage",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:coverage"
+  },
+  {
+    "command": "npm run test:clean && vitest run --coverage --config vitest.coverage.inventory.config.ts",
+    "id": "oando-site:test:coverage:inventory",
+    "packageName": "oando-site",
+    "scriptName": "test:coverage:inventory",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:coverage:inventory"
+  },
+  {
+    "command": "npm run test:clean && vitest run --coverage --config vitest.site.config.ts && node scripts/generate-coverage-report.mjs site && node scripts/generate-vitest-report.mjs ../results/tests/vitest-site-results.json",
+    "id": "oando-site:test:coverage:site",
+    "packageName": "oando-site",
+    "scriptName": "test:coverage:site",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:coverage:site"
+  },
+  {
+    "command": "npm run test:clean",
+    "id": "oando-site:pretest",
+    "packageName": "oando-site",
+    "scriptName": "pretest",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.pretest"
+  },
+  {
+    "command": "npm run test:coverage && npm run test:coverage:site",
+    "id": "oando-site:test:results",
+    "packageName": "oando-site",
+    "scriptName": "test:results",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:results"
+  },
+  {
+    "command": "npm run test:e2e:p0-admin-svg",
+    "id": "oando-site:p0:admin-svg",
+    "packageName": "oando-site",
+    "scriptName": "p0:admin-svg",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.p0:admin-svg"
+  },
+  {
+    "command": "npm run typecheck && npm run test:e2e:planner-world",
+    "id": "oando-site:gate:planner",
+    "packageName": "oando-site",
+    "scriptName": "gate:planner",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.gate:planner"
+  },
+  {
+    "command": "npx -y supabase gen types --linked --schema public > config/database/types/database.types.ts",
+    "id": "oando-site:db:types",
+    "packageName": "oando-site",
+    "scriptName": "db:types",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:types"
+  },
+  {
+    "command": "npx playwright install chromium",
+    "id": "oando-site:test:browsers:install",
+    "packageName": "oando-site",
+    "scriptName": "test:browsers:install",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:browsers:install"
+  },
+  {
+    "command": "npx tsx scripts/audit-product-quality.ts",
+    "id": "oando-site:audit:products:quality",
+    "packageName": "oando-site",
+    "scriptName": "audit:products:quality",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.audit:products:quality"
+  },
+  {
+    "command": "npx tsx scripts/auditCdnAssetFailures.ts --apply",
+    "id": "oando-site:assets:cdn:fix",
+    "packageName": "oando-site",
+    "scriptName": "assets:cdn:fix",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.assets:cdn:fix"
+  },
+  {
+    "command": "npx tsx scripts/auditCdnAssetFailures.ts",
+    "id": "oando-site:assets:cdn:audit",
+    "packageName": "oando-site",
+    "scriptName": "assets:cdn:audit",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.assets:cdn:audit"
+  },
+  {
+    "command": "npx tsx scripts/auditUnresolvedCdnPaths.ts",
+    "id": "oando-site:assets:cdn:replacements",
+    "packageName": "oando-site",
+    "scriptName": "assets:cdn:replacements",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.assets:cdn:replacements"
+  },
+  {
+    "command": "npx tsx scripts/audit_slug_id_integrity.ts",
+    "id": "oando-site:audit:slug-id",
+    "packageName": "oando-site",
+    "scriptName": "audit:slug-id",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.audit:slug-id"
+  },
+  {
+    "command": "npx tsx scripts/audit_supabase_admin.ts",
+    "id": "oando-site:audit:supabase:admin",
+    "packageName": "oando-site",
+    "scriptName": "audit:supabase:admin",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.audit:supabase:admin"
+  },
+  {
+    "command": "npx tsx scripts/audit_supabase_catalog.ts",
+    "id": "oando-site:audit:supabase:catalog",
+    "packageName": "oando-site",
+    "scriptName": "audit:supabase:catalog",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.audit:supabase:catalog"
+  },
+  {
+    "command": "npx tsx scripts/backfill_canonical_catalog_metadata.ts",
+    "id": "oando-site:supabase:backfill:canonical",
+    "packageName": "oando-site",
+    "scriptName": "supabase:backfill:canonical",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.supabase:backfill:canonical"
+  },
+  {
+    "command": "npx tsx scripts/backfill_missing_product_images.ts",
+    "id": "oando-site:supabase:backfill:images",
+    "packageName": "oando-site",
+    "scriptName": "supabase:backfill:images",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.supabase:backfill:images"
+  },
+  {
+    "command": "npx tsx scripts/backup_supabase.ts",
+    "id": "oando-site:supabase:backup",
+    "packageName": "oando-site",
+    "scriptName": "supabase:backup",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.supabase:backup"
+  },
+  {
+    "command": "npx tsx scripts/catalog_snapshot_upload_r2.ts",
+    "id": "oando-site:catalog:snapshot:r2",
+    "packageName": "oando-site",
+    "scriptName": "catalog:snapshot:r2",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.catalog:snapshot:r2"
+  },
+  {
+    "command": "npx tsx scripts/checkAuthEnv.ts",
+    "id": "oando-site:test:auth:env",
+    "packageName": "oando-site",
+    "scriptName": "test:auth:env",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:auth:env"
+  },
+  {
+    "command": "npx tsx scripts/create-bucket.ts",
+    "id": "oando-site:assets:r2:create-bucket",
+    "packageName": "oando-site",
+    "scriptName": "assets:r2:create-bucket",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.assets:r2:create-bucket"
+  },
+  {
+    "command": "npx tsx scripts/db_advisors.ts --performance",
+    "id": "oando-site:db:advisors:performance",
+    "packageName": "oando-site",
+    "scriptName": "db:advisors:performance",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:advisors:performance"
+  },
+  {
+    "command": "npx tsx scripts/db_advisors.ts --security",
+    "id": "oando-site:db:advisors:security",
+    "packageName": "oando-site",
+    "scriptName": "db:advisors:security",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:advisors:security"
+  },
+  {
+    "command": "npx tsx scripts/db_advisors.ts",
+    "id": "oando-site:db:advisors",
+    "packageName": "oando-site",
+    "scriptName": "db:advisors",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:advisors"
+  },
+  {
+    "command": "npx tsx scripts/db_advisors_admin.ts",
+    "id": "oando-site:db:advisors:admin",
+    "packageName": "oando-site",
+    "scriptName": "db:advisors:admin",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:advisors:admin"
+  },
+  {
+    "command": "npx tsx scripts/db_apply_migrations.ts --target admin",
+    "id": "oando-site:db:apply:admin",
+    "packageName": "oando-site",
+    "scriptName": "db:apply:admin",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:apply:admin"
+  },
+  {
+    "command": "npx tsx scripts/db_apply_migrations.ts",
+    "id": "oando-site:db:apply",
+    "packageName": "oando-site",
+    "scriptName": "db:apply",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:apply"
+  },
+  {
+    "command": "npx tsx scripts/db_backup_dropped_tables.ts",
+    "id": "oando-site:db:backup-dropped",
+    "packageName": "oando-site",
+    "scriptName": "db:backup-dropped",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:backup-dropped"
+  },
+  {
+    "command": "npx tsx scripts/db_backup_pg_dump.ts",
+    "id": "oando-site:db:backup:pgdump",
+    "packageName": "oando-site",
+    "scriptName": "db:backup:pgdump",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:backup:pgdump"
+  },
+  {
+    "command": "npx tsx scripts/db_backup_upload_r2.ts && npx tsx scripts/repo_backup_upload_r2.ts",
+    "id": "oando-site:backup:r2",
+    "packageName": "oando-site",
+    "scriptName": "backup:r2",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.backup:r2"
+  },
+  {
+    "command": "npx tsx scripts/db_backup_upload_r2.ts",
+    "id": "oando-site:backup:supabase:r2",
+    "packageName": "oando-site",
+    "scriptName": "backup:supabase:r2",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.backup:supabase:r2"
+  },
+  {
+    "command": "npx tsx scripts/db_backup_upload_r2.ts",
+    "id": "oando-site:db:backup:r2",
+    "packageName": "oando-site",
+    "scriptName": "db:backup:r2",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:backup:r2"
+  },
+  {
+    "command": "npx tsx scripts/db_ensure_plans_table.ts",
+    "id": "oando-site:db:ensure-plans",
+    "packageName": "oando-site",
+    "scriptName": "db:ensure-plans",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:ensure-plans"
+  },
+  {
+    "command": "npx tsx scripts/db_gen_admin_types.ts",
+    "id": "oando-site:db:types:admin",
+    "packageName": "oando-site",
+    "scriptName": "db:types:admin",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:types:admin"
+  },
+  {
+    "command": "npx tsx scripts/db_sync_drizzle_schema.ts",
+    "id": "oando-site:db:sync-drizzle",
+    "packageName": "oando-site",
+    "scriptName": "db:sync-drizzle",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:sync-drizzle"
+  },
+  {
+    "command": "npx tsx scripts/db_test_connection.ts",
+    "id": "oando-site:db:test",
+    "packageName": "oando-site",
+    "scriptName": "db:test",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.db:test"
+  },
+  {
+    "command": "npx tsx scripts/deleteR2Bucket.ts",
+    "id": "oando-site:assets:r2:delete-bucket",
+    "packageName": "oando-site",
+    "scriptName": "assets:r2:delete-bucket",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.assets:r2:delete-bucket"
+  },
+  {
+    "command": "npx tsx scripts/downloadCdnAssets.ts",
+    "id": "oando-site:assets:cdn:catalog",
+    "packageName": "oando-site",
+    "scriptName": "assets:cdn:catalog",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.assets:cdn:catalog"
+  },
+  {
+    "command": "npx tsx scripts/ensureAuthTestUsers.ts",
+    "id": "oando-site:test:auth:seed-users",
+    "packageName": "oando-site",
+    "scriptName": "test:auth:seed-users",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:auth:seed-users"
+  },
+  {
+    "command": "npx tsx scripts/live_openrouter_failover_stress.ts",
+    "id": "oando-site:live:openrouter:failover",
+    "packageName": "oando-site",
+    "scriptName": "live:openrouter:failover",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.live:openrouter:failover"
+  },
+  {
+    "command": "npx tsx scripts/repo_backup_upload_r2.ts",
+    "id": "oando-site:repo:backup:r2",
+    "packageName": "oando-site",
+    "scriptName": "repo:backup:r2",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.repo:backup:r2"
+  },
+  {
+    "command": "npx tsx scripts/seed-block-descriptors.ts",
+    "id": "oando-site:seed:block-descriptors",
+    "packageName": "oando-site",
+    "scriptName": "seed:block-descriptors",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.seed:block-descriptors"
+  },
+  {
+    "command": "npx tsx scripts/seed.ts",
+    "id": "oando-site:seed",
+    "packageName": "oando-site",
+    "scriptName": "seed",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.seed"
+  },
+  {
+    "command": "npx tsx scripts/seed_configurator_catalog.ts",
+    "id": "oando-site:seed:configurator",
+    "packageName": "oando-site",
+    "scriptName": "seed:configurator",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.seed:configurator"
+  },
+  {
+    "command": "npx tsx scripts/seed_planner_managed_catalog.ts",
+    "id": "oando-site:seed:managed",
+    "packageName": "oando-site",
+    "scriptName": "seed:managed",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.seed:managed"
+  },
+  {
+    "command": "npx tsx scripts/sync-descriptor-svgs.ts",
+    "id": "oando-site:sync:descriptor-svgs",
+    "packageName": "oando-site",
+    "scriptName": "sync:descriptor-svgs",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.sync:descriptor-svgs"
+  },
+  {
+    "command": "npx tsx scripts/uploadCdnAssets.ts --skip-existing",
+    "id": "oando-site:assets:cdn:upload:incremental",
+    "packageName": "oando-site",
+    "scriptName": "assets:cdn:upload:incremental",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.assets:cdn:upload:incremental"
+  },
+  {
+    "command": "npx tsx scripts/uploadCdnAssets.ts",
+    "id": "oando-site:assets:cdn:upload",
+    "packageName": "oando-site",
+    "scriptName": "assets:cdn:upload",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.assets:cdn:upload"
+  },
+  {
+    "command": "playwright test -c config/build/playwright.config.ts tests/e2e/open3d-world-standard-journey.spec.ts --reporter=list",
+    "id": "oando-site:test:e2e:world-standard-w1w2",
+    "packageName": "oando-site",
+    "scriptName": "test:e2e:world-standard-w1w2",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:e2e:world-standard-w1w2"
+  },
+  {
+    "command": "playwright test -c config/build/playwright.config.ts tests/e2e/planner-catalog.spec.ts --ui",
+    "id": "oando-site:test:planner-catalog:watch",
+    "packageName": "oando-site",
+    "scriptName": "test:planner-catalog:watch",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:planner-catalog:watch"
+  },
+  {
+    "command": "playwright test -c config/build/playwright.config.ts tests/e2e/site-visual-regression.spec.ts",
+    "id": "oando-site:test:e2e:visual",
+    "packageName": "oando-site",
+    "scriptName": "test:e2e:visual",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:e2e:visual"
+  },
+  {
+    "command": "pnpm --filter oando-site dev",
+    "id": "oando-workspace:dev",
+    "packageName": "oando-workspace",
+    "scriptName": "dev",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.dev"
+  },
+  {
+    "command": "pnpm --filter oando-site dev:turbo",
+    "id": "oando-workspace:dev:turbo",
+    "packageName": "oando-workspace",
+    "scriptName": "dev:turbo",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.dev:turbo"
+  },
+  {
+    "command": "pnpm --filter oando-site docs:sync:all",
+    "id": "oando-workspace:docs:sync:all",
+    "packageName": "oando-workspace",
+    "scriptName": "docs:sync:all",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.docs:sync:all"
+  },
+  {
+    "command": "pnpm --filter oando-site gate:planner",
+    "id": "oando-workspace:gate:planner",
+    "packageName": "oando-workspace",
+    "scriptName": "gate:planner",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.gate:planner"
+  },
+  {
+    "command": "pnpm --filter oando-site lint",
+    "id": "oando-workspace:lint",
+    "packageName": "oando-workspace",
+    "scriptName": "lint",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.lint"
+  },
+  {
+    "command": "pnpm --filter oando-site p0",
+    "id": "oando-workspace:p0",
+    "packageName": "oando-workspace",
+    "scriptName": "p0",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.p0"
+  },
+  {
+    "command": "pnpm --filter oando-site p0:admin-svg",
+    "id": "oando-workspace:p0:admin-svg",
+    "packageName": "oando-workspace",
+    "scriptName": "p0:admin-svg",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.p0:admin-svg"
+  },
+  {
+    "command": "pnpm --filter oando-site p0:g8",
+    "id": "oando-workspace:p0:g8",
+    "packageName": "oando-workspace",
+    "scriptName": "p0:g8",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.p0:g8"
+  },
+  {
+    "command": "pnpm --filter oando-site p0:svg",
+    "id": "oando-workspace:p0:svg",
+    "packageName": "oando-workspace",
+    "scriptName": "p0:svg",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.p0:svg"
+  },
+  {
+    "command": "pnpm --filter oando-site p0:unit",
+    "id": "oando-workspace:p0:unit",
+    "packageName": "oando-workspace",
+    "scriptName": "p0:unit",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.p0:unit"
+  },
+  {
+    "command": "pnpm --filter oando-site start",
+    "id": "oando-workspace:start",
+    "packageName": "oando-workspace",
+    "scriptName": "start",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.start"
+  },
+  {
+    "command": "pnpm --filter oando-site test",
+    "id": "oando-workspace:test",
+    "packageName": "oando-workspace",
+    "scriptName": "test",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.test"
+  },
+  {
+    "command": "pnpm --filter oando-site test:e2e:planner-world",
+    "id": "oando-workspace:test:e2e:planner-world",
+    "packageName": "oando-workspace",
+    "scriptName": "test:e2e:planner-world",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.test:e2e:planner-world"
+  },
+  {
+    "command": "pnpm --filter oando-site typecheck",
+    "id": "oando-workspace:typecheck",
+    "packageName": "oando-workspace",
+    "scriptName": "typecheck",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.typecheck"
+  },
+  {
+    "command": "pnpm --filter oando-site-workflow-docs build",
+    "id": "oando-workspace:build:tech-stack",
+    "packageName": "oando-workspace",
+    "scriptName": "build:tech-stack",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.build:tech-stack"
+  },
+  {
+    "command": "pnpm --filter oando-site-workflow-docs dev",
+    "id": "oando-workspace:dev:tech-stack",
+    "packageName": "oando-workspace",
+    "scriptName": "dev:tech-stack",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.dev:tech-stack"
+  },
+  {
+    "command": "pnpm --filter oando-site-workflow-docs preview",
+    "id": "oando-workspace:preview:tech-stack",
+    "packageName": "oando-workspace",
+    "scriptName": "preview:tech-stack",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.preview:tech-stack"
+  },
+  {
+    "command": "pnpm --filter oando-site-workflow-docs test",
+    "id": "oando-workspace:docs:test:tech-stack",
+    "packageName": "oando-workspace",
+    "scriptName": "docs:test:tech-stack",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.docs:test:tech-stack"
+  },
+  {
+    "command": "pnpm --filter oando-site-workflow-docs test",
+    "id": "oando-workspace:test:tech-stack",
+    "packageName": "oando-workspace",
+    "scriptName": "test:tech-stack",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.test:tech-stack"
+  },
+  {
+    "command": "pnpm --filter oando-site-workflow-docs typecheck",
+    "id": "oando-workspace:docs:typecheck:tech-stack",
+    "packageName": "oando-workspace",
+    "scriptName": "docs:typecheck:tech-stack",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.docs:typecheck:tech-stack"
+  },
+  {
+    "command": "pnpm --filter oando-site-workflow-docs typecheck",
+    "id": "oando-workspace:typecheck:tech-stack",
+    "packageName": "oando-workspace",
+    "scriptName": "typecheck:tech-stack",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.typecheck:tech-stack"
+  },
+  {
+    "command": "pnpm run check-sharp && pnpm --filter oando-site build && pnpm --filter oando-site-workflow-docs build",
+    "id": "oando-workspace:build",
+    "packageName": "oando-workspace",
+    "scriptName": "build",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.build"
+  },
+  {
+    "command": "pnpm run check:layout && pnpm --filter oando-site gate:full",
+    "id": "oando-workspace:gate:full",
+    "packageName": "oando-workspace",
+    "scriptName": "gate:full",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.gate:full"
+  },
+  {
+    "command": "pnpm run check:layout && pnpm run check:failures && pnpm run check:agents-md && pnpm run check:agents-folder && pnpm run check:active-docs && pnpm run check:plans-purity && pnpm run check:docs-purity && pnpm --filter oando-site gate",
+    "id": "oando-workspace:gate",
+    "packageName": "oando-workspace",
+    "scriptName": "gate",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.gate"
+  },
+  {
+    "command": "pnpm run docs:sync:tech-stack && pnpm run docs:typecheck:tech-stack && pnpm run build:tech-stack",
+    "id": "oando-workspace:docs:build:tech-stack",
+    "packageName": "oando-workspace",
+    "scriptName": "docs:build:tech-stack",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.docs:build:tech-stack"
+  },
+  {
+    "command": "pnpm run release:gate && vercel --prod --yes",
+    "id": "oando-workspace:vercel:prod",
+    "packageName": "oando-workspace",
+    "scriptName": "vercel:prod",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.vercel:prod"
+  },
+  {
+    "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/install-backup-sync.ps1",
+    "id": "oando-site:backup:sync:install",
+    "packageName": "oando-site",
+    "scriptName": "backup:sync:install",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.backup:sync:install"
+  },
+  {
+    "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/sync-backup-to-15062026.ps1",
+    "id": "oando-site:backup:sync",
+    "packageName": "oando-site",
+    "scriptName": "backup:sync",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.backup:sync"
+  },
+  {
+    "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/sync-github-backup-secrets.ps1",
+    "id": "oando-site:backup:github-secrets:sync",
+    "packageName": "oando-site",
+    "scriptName": "backup:github-secrets:sync",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.backup:github-secrets:sync"
+  },
+  {
+    "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/watch-backup-sync.ps1",
+    "id": "oando-site:backup:sync:watch",
+    "packageName": "oando-site",
+    "scriptName": "backup:sync:watch",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.backup:sync:watch"
+  },
+  {
+    "command": "python scripts/audit_external_asset_hosts.py --fail-on-hit",
+    "id": "oando-site:assets:audit:thirdparty",
+    "packageName": "oando-site",
+    "scriptName": "assets:audit:thirdparty",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.assets:audit:thirdparty"
+  },
+  {
+    "command": "secretlint \"**/*.{cjs,css,csv,html,js,json,jsx,md,mjs,ps1,py,sql,toml,ts,tsx,txt,yaml,yml}\" \".env*\" \".gitattributes\" \".gitignore\" \".npmrc\" \".vercelignore\"",
+    "id": "oando-workspace:lint:secrets",
+    "packageName": "oando-workspace",
+    "scriptName": "lint:secrets",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.lint:secrets"
+  },
+  {
+    "command": "tsc --noEmit",
+    "id": "oando-site-workflow-docs:typecheck",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "typecheck",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.typecheck"
+  },
+  {
+    "command": "tsc -p scripts/tsconfig.json --noEmit",
+    "id": "oando-site:typecheck:scripts",
+    "packageName": "oando-site",
+    "scriptName": "typecheck:scripts",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.typecheck:scripts"
+  },
+  {
+    "command": "tsc -p tsconfig.json --noEmit",
+    "id": "oando-site:typecheck",
+    "packageName": "oando-site",
+    "scriptName": "typecheck",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.typecheck"
+  },
+  {
+    "command": "tsx scripts/arrange_supabase_catalog_assets.ts",
+    "id": "oando-site:supabase:assets:arrange",
+    "packageName": "oando-site",
+    "scriptName": "supabase:assets:arrange",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.supabase:assets:arrange"
+  },
+  {
+    "command": "tsx scripts/audit-svg-catalog.ts",
+    "id": "oando-site:audit:svg-catalog",
+    "packageName": "oando-site",
+    "scriptName": "audit:svg-catalog",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.audit:svg-catalog"
+  },
+  {
+    "command": "tsx scripts/generate-svg.mjs scripts/generate-svg/_fixtures/chaise.json",
+    "id": "oando-site:scripts:smoke:svg",
+    "packageName": "oando-site",
+    "scriptName": "scripts:smoke:svg",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.scripts:smoke:svg"
+  },
+  {
+    "command": "tsx scripts/generate-svg.mjs",
+    "id": "oando-site:scripts:generate-svg",
+    "packageName": "oando-site",
+    "scriptName": "scripts:generate-svg",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.scripts:generate-svg"
+  },
+  {
+    "command": "tsx scripts/generate_blocks.ts",
+    "id": "oando-site:catalog:blocks:qa",
+    "packageName": "oando-site",
+    "scriptName": "catalog:blocks:qa",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.catalog:blocks:qa"
+  },
+  {
+    "command": "tsx scripts/ingest-planner-catalog.ts",
+    "id": "oando-site:catalog:ingest",
+    "packageName": "oando-site",
+    "scriptName": "catalog:ingest",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.catalog:ingest"
+  },
+  {
+    "command": "tsx scripts/organize-catalog-images.ts --apply",
+    "id": "oando-site:catalog:organize:apply",
+    "packageName": "oando-site",
+    "scriptName": "catalog:organize:apply",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.catalog:organize:apply"
+  },
+  {
+    "command": "tsx scripts/organize-catalog-images.ts --dry-run",
+    "id": "oando-site:catalog:organize:dry",
+    "packageName": "oando-site",
+    "scriptName": "catalog:organize:dry",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.catalog:organize:dry"
+  },
+  {
+    "command": "tsx scripts/organize-catalog-images.ts --sync-db --sync-catalog",
+    "id": "oando-site:catalog:organize:sync",
+    "packageName": "oando-site",
+    "scriptName": "catalog:organize:sync",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.catalog:organize:sync"
+  },
+  {
+    "command": "tsx scripts/render-catalog-qa-sheet.ts",
+    "id": "oando-site:catalog:qa:sheet",
+    "packageName": "oando-site",
+    "scriptName": "catalog:qa:sheet",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.catalog:qa:sheet"
+  },
+  {
+    "command": "tsx scripts/smoke-svg-fixtures.mjs",
+    "id": "oando-site:scripts:smoke:svg:batch",
+    "packageName": "oando-site",
+    "scriptName": "scripts:smoke:svg:batch",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.scripts:smoke:svg:batch"
+  },
+  {
+    "command": "tsx scripts/sync-missing-alt-text.ts --apply",
+    "id": "oando-site:alt:sync:apply",
+    "packageName": "oando-site",
+    "scriptName": "alt:sync:apply",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.alt:sync:apply"
+  },
+  {
+    "command": "tsx scripts/sync-missing-alt-text.ts",
+    "id": "oando-site:alt:sync:dry",
+    "packageName": "oando-site",
+    "scriptName": "alt:sync:dry",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.alt:sync:dry"
+  },
+  {
+    "command": "turbo run release:gate",
+    "id": "oando-workspace:release:gate",
+    "packageName": "oando-workspace",
+    "scriptName": "release:gate",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.release:gate"
+  },
+  {
+    "command": "turbo run release:gate:fast",
+    "id": "oando-workspace:release:gate:fast",
+    "packageName": "oando-workspace",
+    "scriptName": "release:gate:fast",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.release:gate:fast"
+  },
+  {
+    "command": "vercel --yes",
+    "id": "oando-workspace:vercel:preview",
+    "packageName": "oando-workspace",
+    "scriptName": "vercel:preview",
+    "sourceKind": "package-script",
+    "sourcePath": "package.json",
+    "sourcePointer": "scripts.vercel:preview"
+  },
+  {
+    "command": "vite preview",
+    "id": "oando-site-workflow-docs:preview",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "preview",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.preview"
+  },
+  {
+    "command": "vitest --ui",
+    "id": "oando-site:test:ui",
+    "packageName": "oando-site",
+    "scriptName": "test:ui",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:ui"
+  },
+  {
+    "command": "vitest planner",
+    "id": "oando-site:test:planner:watch",
+    "packageName": "oando-site",
+    "scriptName": "test:planner:watch",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:planner:watch"
+  },
+  {
+    "command": "vitest run --coverage",
+    "id": "oando-site-workflow-docs:coverage",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "coverage",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.coverage"
+  },
+  {
+    "command": "vitest run --coverage",
+    "id": "oando-site-workflow-docs:test:coverage",
+    "packageName": "oando-site-workflow-docs",
+    "scriptName": "test:coverage",
+    "sourceKind": "package-script",
+    "sourcePath": "tech-stack-generator/package.json",
+    "sourcePointer": "scripts.test:coverage"
+  },
+  {
+    "command": "vitest run --exclude **/planner*",
+    "id": "oando-site:test:unit",
+    "packageName": "oando-site",
+    "scriptName": "test:unit",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:unit"
+  },
+  {
+    "command": "vitest run planner",
+    "id": "oando-site:test:planner",
+    "packageName": "oando-site",
+    "scriptName": "test:planner",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:planner"
+  },
+  {
+    "command": "vitest run tests/unit/features/planner/asset-engine tests/unit/features/planner/project/g8RoundTrip.test.ts tests/unit/features/planner/project/modularPlaceMesh.test.ts tests/unit/lib/auth/devAuthBypass.test.ts",
+    "id": "oando-site:p0:unit",
+    "packageName": "oando-site",
+    "scriptName": "p0:unit",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.p0:unit"
+  },
+  {
+    "command": "vitest run tests/unit/features/planner/project/g8RoundTrip.test.ts tests/unit/features/planner/project/loadGeneratedGlbObject.test.ts tests/unit/features/planner/lib/shouldLoadGlb.test.ts tests/unit/features/planner/lib/glbAssetPolicy.test.ts tests/unit/features/planner/project/modularCabinetV0GlbExport.test.ts tests/unit/features/planner/project/modularPlaceMesh.test.ts tests/unit/features/planner/asset-engine/meshStages.test.ts tests/unit/features/planner/asset-engine/placeModularWithGeneratedGlbPlan.test.ts tests/unit/features/planner/asset-engine/stampFurnitureGeneratedGlb.test.ts",
+    "id": "oando-site:p0:g8",
+    "packageName": "oando-site",
+    "scriptName": "p0:g8",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.p0:g8"
+  },
+  {
+    "command": "vitest run",
+    "id": "oando-site:test",
+    "packageName": "oando-site",
+    "scriptName": "test",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test"
+  },
+  {
+    "command": "vitest",
+    "id": "oando-site:test:watch",
+    "packageName": "oando-site",
+    "scriptName": "test:watch",
+    "sourceKind": "package-script",
+    "sourcePath": "site/package.json",
+    "sourcePointer": "scripts.test:watch"
+  }
+]
+

@@ -1,0 +1,360 @@
+[
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-file",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.release-gate-fast.file",
+    "label": "release-gate-fast.yml",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/release-gate-fast.yml",
+    "sourcePointer": "name",
+    "value": "Release gate (fast)",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-file",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.release-gate.file",
+    "label": "release-gate.yml",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/release-gate.yml",
+    "sourcePointer": "name",
+    "value": "Release gate (full)",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-file",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.site-ui.file",
+    "label": "site-ui.yml",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/site-ui.yml",
+    "sourcePointer": "name",
+    "value": "Site UI",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-file",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.supabase-backup-r2.file",
+    "label": "supabase-backup-r2.yml",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/supabase-backup-r2.yml",
+    "sourcePointer": "name",
+    "value": "Supabase backup to R2",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-file",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.tech-stack-docs.file",
+    "label": "tech-stack-docs.yml",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/tech-stack-docs.yml",
+    "sourcePointer": "name",
+    "value": "Tech stack docs",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-runtime",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.release-gate-fast.pnpm",
+    "label": "release-gate-fast pnpm version",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/release-gate-fast.yml",
+    "sourcePointer": "pnpm/action-setup.with.version",
+    "value": "11.9.0",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-runtime",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.release-gate.pnpm",
+    "label": "release-gate pnpm version",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/release-gate.yml",
+    "sourcePointer": "pnpm/action-setup.with.version",
+    "value": "11.9.0",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-runtime",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.site-ui.pnpm",
+    "label": "site-ui pnpm version",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/site-ui.yml",
+    "sourcePointer": "pnpm/action-setup.with.version",
+    "value": "11.9.0",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-runtime",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.site-ui.working-directory",
+    "label": "site-ui working directory",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/site-ui.yml",
+    "sourcePointer": "defaults.run.working-directory",
+    "value": "site",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-runtime",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.supabase-backup-r2.pnpm",
+    "label": "supabase-backup-r2 pnpm version",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/supabase-backup-r2.yml",
+    "sourcePointer": "pnpm/action-setup.with.version",
+    "value": "11.9.0",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-runtime",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.supabase-backup-r2.working-directory",
+    "label": "supabase-backup-r2 working directory",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/supabase-backup-r2.yml",
+    "sourcePointer": "defaults.run.working-directory",
+    "value": "site",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-runtime",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.tech-stack-docs.pnpm",
+    "label": "tech-stack-docs pnpm version",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/tech-stack-docs.yml",
+    "sourcePointer": "pnpm/action-setup.with.version",
+    "value": "11.9.0",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-schedule",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.release-gate.schedule.0",
+    "label": "release-gate cron",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/release-gate.yml",
+    "sourcePointer": "on.schedule[0].cron",
+    "value": "30 3 * * *",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-schedule",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.supabase-backup-r2.schedule.0",
+    "label": "supabase-backup-r2 cron",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/supabase-backup-r2.yml",
+    "sourcePointer": "on.schedule[0].cron",
+    "value": "15 2 * * *",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-trigger",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.release-gate-fast.triggers",
+    "label": "release-gate-fast triggers",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/release-gate-fast.yml",
+    "sourcePointer": "on",
+    "value": "pull_request, workflow_dispatch",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-trigger",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.release-gate.triggers",
+    "label": "release-gate triggers",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/release-gate.yml",
+    "sourcePointer": "on",
+    "value": "push, schedule, workflow_dispatch",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-trigger",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.site-ui.triggers",
+    "label": "site-ui triggers",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/site-ui.yml",
+    "sourcePointer": "on",
+    "value": "push, pull_request, workflow_dispatch",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-trigger",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.supabase-backup-r2.triggers",
+    "label": "supabase-backup-r2 triggers",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/supabase-backup-r2.yml",
+    "sourcePointer": "on",
+    "value": "schedule, workflow_dispatch",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "workflow-trigger",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.tech-stack-docs.triggers",
+    "label": "tech-stack-docs triggers",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/tech-stack-docs.yml",
+    "sourcePointer": "on",
+    "value": "push, pull_request, workflow_dispatch",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "category": "workflow-secret-names",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.release-gate.secrets",
+    "label": "release-gate secret names",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/release-gate.yml",
+    "sourcePointer": "secrets.*",
+    "value": "NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_SUPABASE_URL, PRODUCTS_DATABASE_URL, SUPABASE_SERVICE_ROLE_KEY",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "category": "workflow-secret-names",
+    "factClassification": "code-proven",
+    "id": "ci.workflow.supabase-backup-r2.secrets",
+    "label": "supabase-backup-r2 secret names",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "workflow-file",
+    "sourcePath": ".github/workflows/supabase-backup-r2.yml",
+    "sourcePointer": "secrets.*",
+    "value": "CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_R2_CATALOG_BUCKET, CLOULDFLARE_S3_SECRET_ACCESS_KEY, CLOULDFLARE_S3_URL, CLOULD_ACCESS_KEY_ID, PRODUCTS_DATABASE_URL, SUPABASE_AUTH_DATABASE_URL",
+    "verificationMode": "source-backed"
+  }
+]
+

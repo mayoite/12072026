@@ -281,7 +281,6 @@ The planned Products DB schema adds:
 | `block_descriptors` | Private, version-locked product definitions and authoring scenes. |
 | `published_svg_revisions` | Immutable release metadata and the exact published definition snapshot. |
 | `svg_artifacts` | Immutable artifact kind, checksum, storage key, width, and revision relationship. |
-| `svg_publication_events` | Append-only Products DB release ledger and transactional outbox. |
 | `planner_managed_products.published_svg_revision_id` | Same-product pointer to the one released SVG revision. |
 
 Catalog and SVG persistence will use the existing Drizzle and `postgres` boundary.
@@ -296,15 +295,7 @@ Public reads will pass through server catalog routes.
 
 Direct public access to drafts, revision metadata, and artifact records will be denied.
 
-The existing Admin DB `audit_events` table is not part of a Products DB transaction.
-
-Each successful release transition will insert `svg_publication_events` in the same Products DB transaction as the revision metadata and product pointer.
-
-Any Admin DB audit copy will be an idempotent post-commit projection keyed by the publication event ID.
-
-Failed attempts will use separate server security telemetry because rolled-back transactions cannot retain their own failure audit row.
-
-The migration must add primary keys, foreign keys, same-product pointer enforcement, uniqueness constraints, append-only event enforcement, RLS, grants, and supporting indexes before cutover.
+The migration must add primary keys, foreign keys, same-product pointer enforcement, uniqueness constraints, RLS, grants, and supporting indexes before cutover.
 
 Do not treat this section as proof that the schema exists.
 

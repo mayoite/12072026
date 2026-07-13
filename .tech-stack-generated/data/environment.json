@@ -1,0 +1,1447 @@
+[
+  {
+    "browserExposure": "public-safe",
+    "factClassification": "code-proven",
+    "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 12",
+    "usages": [
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/features/planner/admin/svg-editor/uploadAsset.ts",
+        "sourcePointer": "match at index 284"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/auth/e2eAuthEnv.ts",
+        "sourcePointer": "match at index 667"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/platform/supabase/env.ts",
+        "sourcePointer": "match at index 420"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/audit-product-quality.ts",
+        "sourcePointer": "match at index 1035"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/auditCdnAssetFailures.ts",
+        "sourcePointer": "match at index 734"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/auditUnresolvedCdnPaths.ts",
+        "sourcePointer": "match at index 857"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/audit_supabase_catalog.ts",
+        "sourcePointer": "match at index 2837"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/backup_supabase.ts",
+        "sourcePointer": "match at index 5154"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/downloadCdnAssets.ts",
+        "sourcePointer": "match at index 409"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/organize-catalog-images.ts",
+        "sourcePointer": "match at index 11655"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/sync-missing-alt-text.ts",
+        "sourcePointer": "match at index 1872"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/app/admin/themes/ThemeEditor.test.tsx",
+        "sourcePointer": "match at index 305"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/app/admin/themes/page.test.tsx",
+        "sourcePointer": "match at index 281"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/lib/supabase/env.test.ts",
+        "sourcePointer": "match at index 606"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "factClassification": "code-proven",
+    "name": "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 33",
+    "usages": [
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/auth/e2eAuthEnv.ts",
+        "sourcePointer": "match at index 611"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "factClassification": "code-proven",
+    "name": "NEXT_PUBLIC_SUPABASE_URL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 11",
+    "usages": [
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/admin/features/route.ts",
+        "sourcePointer": "match at index 1444"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/features/planner/admin/svg-editor/uploadAsset.ts",
+        "sourcePointer": "match at index 216"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/rateLimit.ts",
+        "sourcePointer": "match at index 793"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/platform/supabase/adminServer.ts",
+        "sourcePointer": "match at index 251"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/platform/supabase/env.ts",
+        "sourcePointer": "match at index 356"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/platform/supabase/supabaseAdmin.ts",
+        "sourcePointer": "match at index 627"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/audit-product-quality.ts",
+        "sourcePointer": "match at index 868"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/auditCdnAssetFailures.ts",
+        "sourcePointer": "match at index 670"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/auditUnresolvedCdnPaths.ts",
+        "sourcePointer": "match at index 758"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/audit_supabase_catalog.ts",
+        "sourcePointer": "match at index 2670"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/backfill_canonical_catalog_metadata.ts",
+        "sourcePointer": "match at index 785"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/backfill_missing_product_images.ts",
+        "sourcePointer": "match at index 578"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/backup_supabase.ts",
+        "sourcePointer": "match at index 5022"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/downloadCdnAssets.ts",
+        "sourcePointer": "match at index 347"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/fix-chairs-supabase-paths.ts",
+        "sourcePointer": "match at index 432"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/migrate-chairs-to-catalog.ts",
+        "sourcePointer": "match at index 705"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/organize-catalog-images.ts",
+        "sourcePointer": "match at index 11558"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/sync-missing-alt-text.ts",
+        "sourcePointer": "match at index 1736"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/e2e/site-navigation-smoke.spec.ts",
+        "sourcePointer": "match at index 81"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/app/admin/themes/ThemeEditor.test.tsx",
+        "sourcePointer": "match at index 238"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/app/admin/themes/page.test.tsx",
+        "sourcePointer": "match at index 214"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/lib/rateLimit.test.ts",
+        "sourcePointer": "match at index 787"
+      },
+      {
+        "name": "NEXT_PUBLIC_SUPABASE_URL",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/lib/supabase/env.test.ts",
+        "sourcePointer": "match at index 555"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "ADMIN_EMAILS",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 21",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "ADMIN_TOKEN",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 22",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "CLOUDFLARE_ACCESS_KEY_ID",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 65",
+    "usages": [
+      {
+        "name": "CLOUDFLARE_ACCESS_KEY_ID",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/env.server.ts",
+        "sourcePointer": "match at index 1363"
+      },
+      {
+        "name": "CLOUDFLARE_ACCESS_KEY_ID",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/storage/r2Catalog.ts",
+        "sourcePointer": "match at index 1117"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "CLOUDFLARE_ACCOUNT_ID",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 59",
+    "usages": [
+      {
+        "name": "CLOUDFLARE_ACCOUNT_ID",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/features/planner/project/catalog/svg/svgPreviewAssets.ts",
+        "sourcePointer": "match at index 1410"
+      },
+      {
+        "name": "CLOUDFLARE_ACCOUNT_ID",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/env.server.ts",
+        "sourcePointer": "match at index 1591"
+      },
+      {
+        "name": "CLOUDFLARE_ACCOUNT_ID",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/storage/r2Catalog.ts",
+        "sourcePointer": "match at index 745"
+      },
+      {
+        "name": "CLOUDFLARE_ACCOUNT_ID",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/count-r2-objects.mjs",
+        "sourcePointer": "match at index 548"
+      },
+      {
+        "name": "CLOUDFLARE_ACCOUNT_ID",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/list-r2-buckets.mjs",
+        "sourcePointer": "match at index 434"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "CLOUDFLARE_API_TOKEN",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 60",
+    "usages": [
+      {
+        "name": "CLOUDFLARE_API_TOKEN",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/env.server.ts",
+        "sourcePointer": "match at index 1113"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "CLOUDFLARE_R2_ACCESS_KEY_ID",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 67",
+    "usages": [
+      {
+        "name": "CLOUDFLARE_R2_ACCESS_KEY_ID",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/storage/r2Catalog.ts",
+        "sourcePointer": "match at index 1014"
+      },
+      {
+        "name": "CLOUDFLARE_R2_ACCESS_KEY_ID",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/count-r2-objects.mjs",
+        "sourcePointer": "match at index 741"
+      },
+      {
+        "name": "CLOUDFLARE_R2_ACCESS_KEY_ID",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/list-r2-buckets.mjs",
+        "sourcePointer": "match at index 628"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "CLOUDFLARE_R2_BUCKET",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 71",
+    "usages": [
+      {
+        "name": "CLOUDFLARE_R2_BUCKET",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/storage/r2Catalog.ts",
+        "sourcePointer": "match at index 395"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "CLOUDFLARE_R2_CATALOG_BUCKET",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 69",
+    "usages": [
+      {
+        "name": "CLOUDFLARE_R2_CATALOG_BUCKET",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/storage/r2Catalog.ts",
+        "sourcePointer": "match at index 339"
+      },
+      {
+        "name": "CLOUDFLARE_R2_CATALOG_BUCKET",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/count-r2-objects.mjs",
+        "sourcePointer": "match at index 367"
+      },
+      {
+        "name": "CLOUDFLARE_R2_CATALOG_BUCKET",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/test-r2-upload.ts",
+        "sourcePointer": "match at index 744"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "CLOUDFLARE_R2_SECRET_ACCESS_KEY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 68",
+    "usages": [
+      {
+        "name": "CLOUDFLARE_R2_SECRET_ACCESS_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/storage/r2Catalog.ts",
+        "sourcePointer": "match at index 1194"
+      },
+      {
+        "name": "CLOUDFLARE_R2_SECRET_ACCESS_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/count-r2-objects.mjs",
+        "sourcePointer": "match at index 863"
+      },
+      {
+        "name": "CLOUDFLARE_R2_SECRET_ACCESS_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/list-r2-buckets.mjs",
+        "sourcePointer": "match at index 755"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "CLOUDFLARE_S3_URL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 64",
+    "usages": [
+      {
+        "name": "CLOUDFLARE_S3_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/env.server.ts",
+        "sourcePointer": "match at index 1263"
+      },
+      {
+        "name": "CLOUDFLARE_S3_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/storage/r2Catalog.ts",
+        "sourcePointer": "match at index 641"
+      },
+      {
+        "name": "CLOUDFLARE_S3_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/count-r2-objects.mjs",
+        "sourcePointer": "match at index 494"
+      },
+      {
+        "name": "CLOUDFLARE_S3_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/list-r2-buckets.mjs",
+        "sourcePointer": "match at index 388"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "CLOUDFLARE_SECRET_ACCESS_KEY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 66",
+    "usages": [
+      {
+        "name": "CLOUDFLARE_SECRET_ACCESS_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/env.server.ts",
+        "sourcePointer": "match at index 1453"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "CUSTOMER_QUERIES_ADMIN_TOKEN",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 23",
+    "usages": [
+      {
+        "name": "CUSTOMER_QUERIES_ADMIN_TOKEN",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/customer-queries/manage/route.ts",
+        "sourcePointer": "match at index 1941"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "E2E_SUPABASE_ADMIN_EMAIL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 26",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "E2E_SUPABASE_ADMIN_PASSWORD",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 27",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "E2E_SUPABASE_USER_EMAIL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 28",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "E2E_SUPABASE_USER_PASSWORD",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 29",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "EMAIL_FROM",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 54",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "GEMINI_API_KEY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 47",
+    "usages": [
+      {
+        "name": "GEMINI_API_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/ai/providerChain.ts",
+        "sourcePointer": "match at index 1499"
+      },
+      {
+        "name": "GEMINI_API_KEY",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/lib/env.server.test.ts",
+        "sourcePointer": "match at index 575"
+      },
+      {
+        "name": "GEMINI_API_KEY",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/shared-providerChain.test.ts",
+        "sourcePointer": "match at index 346"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "GEMINI_MODEL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 48",
+    "usages": [
+      {
+        "name": "GEMINI_MODEL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/ai/providerChain.ts",
+        "sourcePointer": "match at index 1714"
+      },
+      {
+        "name": "GEMINI_MODEL",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/lib/env.server.test.ts",
+        "sourcePointer": "match at index 627"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "NEXT_ADMIN_PUBLISHABLE_KEY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 37",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "NEXT_ADMIN_SUPABASE_ANON_KEY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 38",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "NEXT_ADMIN_SUPABASE_URL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 36",
+    "usages": [
+      {
+        "name": "NEXT_ADMIN_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/platform/supabase/auth-admin.ts",
+        "sourcePointer": "match at index 875"
+      },
+      {
+        "name": "NEXT_ADMIN_SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_test_connection.ts",
+        "sourcePointer": "match at index 1967"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "OPENAI_API_KEY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 46",
+    "usages": [
+      {
+        "name": "OPENAI_API_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/filter/route.ts",
+        "sourcePointer": "match at index 4584"
+      },
+      {
+        "name": "OPENAI_API_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/generate-alt/route.ts",
+        "sourcePointer": "match at index 5667"
+      },
+      {
+        "name": "OPENAI_API_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/sync-missing-alt-text.ts",
+        "sourcePointer": "match at index 2279"
+      },
+      {
+        "name": "OPENAI_API_KEY",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/lib/env.server.test.ts",
+        "sourcePointer": "match at index 358"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "OPENROUTER_API_KEY_BACKUP",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 44",
+    "usages": [
+      {
+        "name": "OPENROUTER_API_KEY_BACKUP",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/filter/route.ts",
+        "sourcePointer": "match at index 4547"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_BACKUP",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/generate-alt/route.ts",
+        "sourcePointer": "match at index 5628"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_BACKUP",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/nav-search/route.ts",
+        "sourcePointer": "match at index 5012"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_BACKUP",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/ai/providerChain.ts",
+        "sourcePointer": "match at index 2142"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_BACKUP",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/translate-deferred-marketing-flat.mjs",
+        "sourcePointer": "match at index 2447"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_BACKUP",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/lib/env.server.test.ts",
+        "sourcePointer": "match at index 478"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_BACKUP",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/shared-providerChain.test.ts",
+        "sourcePointer": "match at index 296"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "OPENROUTER_API_KEY_PRIMARY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 43",
+    "usages": [
+      {
+        "name": "OPENROUTER_API_KEY_PRIMARY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/filter/route.ts",
+        "sourcePointer": "match at index 4509"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_PRIMARY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/generate-alt/route.ts",
+        "sourcePointer": "match at index 5588"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_PRIMARY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/nav-search/route.ts",
+        "sourcePointer": "match at index 4966"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_PRIMARY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/ai/providerChain.ts",
+        "sourcePointer": "match at index 1788"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_PRIMARY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/loadEnvLocal.cjs",
+        "sourcePointer": "match at index 613"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_PRIMARY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/translate-deferred-marketing-flat.mjs",
+        "sourcePointer": "match at index 2395"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_PRIMARY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/translate-deferred-marketing.mjs",
+        "sourcePointer": "match at index 2802"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_PRIMARY",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/lib/env.server.test.ts",
+        "sourcePointer": "match at index 410"
+      },
+      {
+        "name": "OPENROUTER_API_KEY_PRIMARY",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/shared-providerChain.test.ts",
+        "sourcePointer": "match at index 245"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "OPENROUTER_BASE_URL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 42",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "OPENROUTER_MODEL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 45",
+    "usages": [
+      {
+        "name": "OPENROUTER_MODEL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/filter/route.ts",
+        "sourcePointer": "match at index 5987"
+      },
+      {
+        "name": "OPENROUTER_MODEL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/generate-alt/route.ts",
+        "sourcePointer": "match at index 6242"
+      },
+      {
+        "name": "OPENROUTER_MODEL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/nav-search/route.ts",
+        "sourcePointer": "match at index 5535"
+      },
+      {
+        "name": "OPENROUTER_MODEL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/ai/providerChain.ts",
+        "sourcePointer": "match at index 784"
+      },
+      {
+        "name": "OPENROUTER_MODEL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/translate-deferred-marketing-flat.mjs",
+        "sourcePointer": "match at index 2531"
+      },
+      {
+        "name": "OPENROUTER_MODEL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/translate-deferred-marketing.mjs",
+        "sourcePointer": "match at index 2987"
+      },
+      {
+        "name": "OPENROUTER_MODEL",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/lib/env.server.test.ts",
+        "sourcePointer": "match at index 526"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "PRODUCTS_DATABASE_URL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 17",
+    "usages": [
+      {
+        "name": "PRODUCTS_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/platform/drizzle/databaseUrls.ts",
+        "sourcePointer": "match at index 205"
+      },
+      {
+        "name": "PRODUCTS_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_advisors.ts",
+        "sourcePointer": "match at index 8822"
+      },
+      {
+        "name": "PRODUCTS_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_advisors_admin.ts",
+        "sourcePointer": "match at index 273"
+      },
+      {
+        "name": "PRODUCTS_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_apply_migrations.ts",
+        "sourcePointer": "match at index 1495"
+      },
+      {
+        "name": "PRODUCTS_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_backup_dropped_tables.ts",
+        "sourcePointer": "match at index 1159"
+      },
+      {
+        "name": "PRODUCTS_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_backup_pre_split.ts",
+        "sourcePointer": "match at index 3151"
+      },
+      {
+        "name": "PRODUCTS_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/fix_and_reseed.ts",
+        "sourcePointer": "match at index 97"
+      },
+      {
+        "name": "PRODUCTS_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/seed.ts",
+        "sourcePointer": "match at index 532"
+      },
+      {
+        "name": "PRODUCTS_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/seed_configurator_catalog.ts",
+        "sourcePointer": "match at index 815"
+      },
+      {
+        "name": "PRODUCTS_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/seed_direct.ts",
+        "sourcePointer": "match at index 153"
+      },
+      {
+        "name": "PRODUCTS_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/seed_planner_managed_catalog.ts",
+        "sourcePointer": "match at index 602"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "RESEND_API_KEY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 56",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "STAFF_NOTIFY_EMAIL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 55",
+    "usages": [],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "SUPABASE_ADMIN_SERVICE_ROLE_KEY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 39",
+    "usages": [
+      {
+        "name": "SUPABASE_ADMIN_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_test_connection.ts",
+        "sourcePointer": "match at index 2031"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "SUPABASE_AUTH_DATABASE_URL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 18",
+    "usages": [
+      {
+        "name": "SUPABASE_AUTH_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/platform/drizzle/databaseUrls.ts",
+        "sourcePointer": "match at index 496"
+      },
+      {
+        "name": "SUPABASE_AUTH_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_advisors_admin.ts",
+        "sourcePointer": "match at index 309"
+      },
+      {
+        "name": "SUPABASE_AUTH_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_apply_migrations.ts",
+        "sourcePointer": "match at index 1294"
+      },
+      {
+        "name": "SUPABASE_AUTH_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_backup_pre_split.ts",
+        "sourcePointer": "match at index 3263"
+      },
+      {
+        "name": "SUPABASE_AUTH_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_gen_admin_types.ts",
+        "sourcePointer": "match at index 2038"
+      },
+      {
+        "name": "SUPABASE_AUTH_DATABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/db_sync_drizzle_schema.ts",
+        "sourcePointer": "match at index 375"
+      },
+      {
+        "name": "SUPABASE_AUTH_DATABASE_URL",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/integration/planner-store-plannerPersistence.test.ts",
+        "sourcePointer": "match at index 2137"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "SUPABASE_SERVICE_ROLE_KEY",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "name-only",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 14",
+    "usages": [
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/admin/features/route.ts",
+        "sourcePointer": "match at index 1515"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/rateLimit.ts",
+        "sourcePointer": "match at index 693"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/platform/supabase/adminServer.ts",
+        "sourcePointer": "match at index 332"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/audit-product-quality.ts",
+        "sourcePointer": "match at index 982"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/auditCdnAssetFailures.ts",
+        "sourcePointer": "match at index 779"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/auditUnresolvedCdnPaths.ts",
+        "sourcePointer": "match at index 816"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/audit_slug_id_integrity.ts",
+        "sourcePointer": "match at index 1642"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/audit_supabase_catalog.ts",
+        "sourcePointer": "match at index 2784"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/backfill_canonical_catalog_metadata.ts",
+        "sourcePointer": "match at index 851"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/backfill_missing_product_images.ts",
+        "sourcePointer": "match at index 644"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/backup_supabase.ts",
+        "sourcePointer": "match at index 5089"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/downloadCdnAssets.ts",
+        "sourcePointer": "match at index 454"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/fix-chairs-supabase-paths.ts",
+        "sourcePointer": "match at index 491"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/migrate-chairs-to-catalog.ts",
+        "sourcePointer": "match at index 764"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/organize-catalog-images.ts",
+        "sourcePointer": "match at index 11614"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/sync-missing-alt-text.ts",
+        "sourcePointer": "match at index 1817"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/app/api/admin/_lib/server.test.ts",
+        "sourcePointer": "match at index 1721"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/lib/rateLimit.test.ts",
+        "sourcePointer": "match at index 737"
+      },
+      {
+        "name": "SUPABASE_SERVICE_ROLE_KEY",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/platform/supabase/adminServer.test.ts",
+        "sourcePointer": "match at index 1433"
+      }
+    ],
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "server-name-safe",
+    "factClassification": "code-proven",
+    "name": "SUPABASE_URL",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "env-example",
+    "sourcePath": ".env.example",
+    "sourcePointer": "line 13",
+    "usages": [
+      {
+        "name": "SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/app/api/admin/features/route.ts",
+        "sourcePointer": "match at index 1408"
+      },
+      {
+        "name": "SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/lib/rateLimit.ts",
+        "sourcePointer": "match at index 749"
+      },
+      {
+        "name": "SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/platform/supabase/adminServer.ts",
+        "sourcePointer": "match at index 211"
+      },
+      {
+        "name": "SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/platform/supabase/supabaseAdmin.ts",
+        "sourcePointer": "match at index 587"
+      },
+      {
+        "name": "SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/audit-product-quality.ts",
+        "sourcePointer": "match at index 920"
+      },
+      {
+        "name": "SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/audit_supabase_catalog.ts",
+        "sourcePointer": "match at index 2722"
+      },
+      {
+        "name": "SUPABASE_URL",
+        "sourceKind": "env-reader",
+        "sourcePath": "site/scripts/sync-missing-alt-text.ts",
+        "sourcePointer": "match at index 1768"
+      },
+      {
+        "name": "SUPABASE_URL",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/app/api/admin/_lib/server.test.ts",
+        "sourcePointer": "match at index 1682"
+      },
+      {
+        "name": "SUPABASE_URL",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/lib/rateLimit.test.ts",
+        "sourcePointer": "match at index 700"
+      },
+      {
+        "name": "SUPABASE_URL",
+        "sourceKind": "env-test",
+        "sourcePath": "site/tests/unit/platform/supabase/adminServer.test.ts",
+        "sourcePointer": "match at index 1394"
+      }
+    ],
+    "verificationMode": "source-backed"
+  }
+]
+

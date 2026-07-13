@@ -1,0 +1,63 @@
+[
+  {
+    "domain": "testing",
+    "fact": {
+      "browserExposure": "public-safe",
+      "factClassification": "code-proven",
+      "renderSurface": [
+        "markdown",
+        "renderer"
+      ],
+      "secretRisk": "none",
+      "sourceKind": "plan-contract",
+      "sourcePath": "archive/plans/done/tech-stack-docs-3-file-plan/01-execution-plan.md",
+      "sourcePointer": "Phase 3 Task 10",
+      "value": "80% to 94.99%",
+      "verificationMode": "source-backed"
+    },
+    "field": "coverageWarning",
+    "id": "testing.coverage-warning",
+    "label": "Coverage warning band"
+  },
+  {
+    "domain": "testing",
+    "fact": {
+      "browserExposure": "public-safe",
+      "factClassification": "code-proven",
+      "renderSurface": [
+        "markdown",
+        "renderer"
+      ],
+      "secretRisk": "none",
+      "sourceKind": "plan-contract",
+      "sourcePath": "archive/plans/done/tech-stack-docs-3-file-plan/01-execution-plan.md",
+      "sourcePointer": "Phase 3 Task 10",
+      "value": "80%",
+      "verificationMode": "source-backed"
+    },
+    "field": "coverageFloor",
+    "id": "testing.coverage-floor",
+    "label": "Coverage floor"
+  },
+  {
+    "domain": "testing",
+    "fact": {
+      "browserExposure": "public-safe",
+      "factClassification": "code-proven",
+      "renderSurface": [
+        "markdown",
+        "renderer"
+      ],
+      "secretRisk": "none",
+      "sourceKind": "plan-contract",
+      "sourcePath": "archive/plans/done/tech-stack-docs-3-file-plan/01-execution-plan.md",
+      "sourcePointer": "Phase 3 Task 10",
+      "value": "95%+",
+      "verificationMode": "source-backed"
+    },
+    "field": "coverageComplete",
+    "id": "testing.coverage-complete",
+    "label": "Coverage completion threshold"
+  }
+]
+

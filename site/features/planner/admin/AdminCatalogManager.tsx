@@ -132,7 +132,44 @@ export function AdminCatalogManager({
     return rows;
   }, [categoryFilter, isStandard, items, search, visibleFilter]);
 
-  const displayItems = isStandard ? items : filteredConfiguratorItems;
+  const filteredStandardFallbackItems = useMemo(() => {
+    if (!readOnly) return items;
+
+    let rows = items as StandardCatalogItem[];
+
+    if (categoryFilter) {
+      rows = rows.filter((item) => item.category === categoryFilter);
+    }
+
+    if (visibleFilter) {
+      const visible = visibleFilter === "true";
+      rows = rows.filter(
+        (item) => (item.visible !== false && item.active !== false) === visible,
+      );
+    }
+
+    const query = search.trim().toLowerCase();
+    if (query) {
+      rows = rows.filter((item) =>
+        [item.id, item.name, item.category, item.subcategory, item.description]
+          .filter(Boolean)
+          .some((value) => String(value).toLowerCase().includes(query)),
+      );
+    }
+
+    return rows;
+  }, [categoryFilter, items, readOnly, search, visibleFilter]);
+
+  const displayItems = isStandard ? filteredStandardFallbackItems : filteredConfiguratorItems;
+  const hasActiveFilters = Boolean(search.trim() || categoryFilter || visibleFilter);
+  const displayTotal = readOnly && hasActiveFilters ? displayItems.length : total;
+
+  const clearFilters = () => {
+    setSearch("");
+    setCategoryFilter("");
+    setVisibleFilter("");
+    setPage(1);
+  };
 
   const openCreate = () => {
     if (readOnly) return;
@@ -308,6 +345,7 @@ export function AdminCatalogManager({
           <div className="min-w-[12.5rem]">
             <Search size={14} className="admin-field__search-icon" />
             <AdminTextInput
+              type="search"
               value={search}
               onChange={(event) => {
                 setSearch(event.target.value);
@@ -356,13 +394,32 @@ export function AdminCatalogManager({
           <Loader2 size={16} className="animate-spin" />
           Loading catalog...
         </div>
+      ) : error && items.length === 0 ? null
+      : items.length === 0 ? (
+        <div className="admin-empty" role="status">
+          <p>The catalog source returned no items.</p>
+          <p className="admin-page__meta mt-2">
+            Data source: <code>{source ?? "unreported"}</code>. Refresh to check again.
+          </p>
+        </div>
       ) : displayItems.length === 0 ? (
-        <div className="admin-empty">No items match filters.</div>
+        <div className="admin-empty" role="status">
+          <p>No items match the current filters.</p>
+          {hasActiveFilters ? (
+            <button
+              type="button"
+              className="admin-btn admin-btn--outline mt-3"
+              onClick={clearFilters}
+            >
+              Clear filters
+            </button>
+          ) : null}
+        </div>
       ) : (
         <AdminCatalogTable
           items={displayItems}
           isStandard={isStandard}
-          total={total}
+          total={displayTotal}
           page={page}
           pendingId={pendingId}
           readOnly={readOnly}

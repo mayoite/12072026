@@ -31,8 +31,10 @@
 - `plan/Phase-2/README.md` is a legacy pointer only.
 - Product and architecture facts live in `docs/`.
 - Agent process lives in `Agents/`.
+- Agent-authored reports belong only in `agent-reports/`.
 - Active blockers live in `Failures.md`.
 - `results/` is tool output only.
+- Do not write Markdown reports under `results/`.
 - Never use `results/` as proof of PASS or completion.
 - Never write under `site/results/` or `site/test-results/`.
 - `site/` contains product code only.

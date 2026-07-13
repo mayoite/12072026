@@ -118,8 +118,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.25rem;
-  min-height: 2.25rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   border: 1px solid var(--glass-white-20);
   border-radius: 0.55rem;
   background: var(--overlay-panel-08);

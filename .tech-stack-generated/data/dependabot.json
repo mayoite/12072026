@@ -1,0 +1,122 @@
+[
+  {
+    "browserExposure": "public-safe",
+    "category": "dependabot-ecosystem",
+    "factClassification": "code-proven",
+    "id": "dependabot.ecosystem.0",
+    "label": "Ecosystem 1",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "dependabot-config",
+    "sourcePath": ".github/dependabot.yml",
+    "sourcePointer": "updates[0].package-ecosystem",
+    "value": "npm",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "dependabot-ecosystem",
+    "factClassification": "code-proven",
+    "id": "dependabot.ecosystem.1",
+    "label": "Ecosystem 2",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "dependabot-config",
+    "sourcePath": ".github/dependabot.yml",
+    "sourcePointer": "updates[1].package-ecosystem",
+    "value": "github-actions",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "dependabot-group",
+    "factClassification": "code-proven",
+    "id": "dependabot.groups.minor-and-patch",
+    "label": "Update groups",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "dependabot-config",
+    "sourcePath": ".github/dependabot.yml",
+    "sourcePointer": "updates[].groups",
+    "value": "minor-and-patch group for npm ecosystem",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "dependabot-ignore",
+    "factClassification": "code-proven",
+    "id": "dependabot.ignore-rules",
+    "label": "Ignore rules",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "dependabot-config",
+    "sourcePath": ".github/dependabot.yml",
+    "sourcePointer": "updates[].ignore",
+    "value": "semver-major updates ignored for npm ecosystem",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "dependabot-pr-limit",
+    "factClassification": "code-proven",
+    "id": "dependabot.pr-limit.npm",
+    "label": "Open PR limit (npm)",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "dependabot-config",
+    "sourcePath": ".github/dependabot.yml",
+    "sourcePointer": "updates[].open-pull-requests-limit",
+    "value": "2",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "dependabot-schedule",
+    "factClassification": "code-proven",
+    "id": "dependabot.schedule.0",
+    "label": "Schedule 1",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "dependabot-config",
+    "sourcePath": ".github/dependabot.yml",
+    "sourcePointer": "updates[0].schedule",
+    "value": "weekly (monday)",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "dependabot-schedule",
+    "factClassification": "code-proven",
+    "id": "dependabot.schedule.1",
+    "label": "Schedule 2",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "dependabot-config",
+    "sourcePath": ".github/dependabot.yml",
+    "sourcePointer": "updates[1].schedule",
+    "value": "weekly (monday)",
+    "verificationMode": "source-backed"
+  }
+]
+

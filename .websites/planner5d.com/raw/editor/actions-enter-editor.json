@@ -1,0 +1,13 @@
+[
+  { "type": "wait", "milliseconds": 2000 },
+  { "type": "click", "selector": "button, a, [role='button'], label, input[type='checkbox']", "all": false },
+  { "type": "wait", "milliseconds": 1000 },
+  { "type": "executeJavascript", "script": "(() => { const texts = ['I agree', 'Continue', 'Start from scratch', 'OK', 'Accept', 'Accept All']; for (const t of texts) { const el = [...document.querySelectorAll('button, a, label, div, span')].find(e => (e.innerText||'').trim().includes(t) && e.offsetParent !== null); if (el) { el.click(); return 'clicked:'+t; } } return 'none'; })()" },
+  { "type": "wait", "milliseconds": 2500 },
+  { "type": "executeJavascript", "script": "(() => { const texts = ['I agree', 'Continue', 'Start from scratch', 'OK', 'Accept All']; for (const t of texts) { const el = [...document.querySelectorAll('button, a, label, div, span')].find(e => (e.innerText||'').trim().includes(t) && e.offsetParent !== null); if (el) { el.click(); return 'clicked2:'+t; } } return 'none2'; })()" },
+  { "type": "wait", "milliseconds": 4000 },
+  { "type": "executeJavascript", "script": "(() => { const texts = ['Start from scratch', 'OK', 'Continue']; for (const t of texts) { const el = [...document.querySelectorAll('button, a, label, div, span')].find(e => (e.innerText||'').trim().toLowerCase().includes(t.toLowerCase()) && e.offsetParent !== null); if (el) { el.click(); return 'clicked3:'+t; } } return 'none3'; })()" },
+  { "type": "wait", "milliseconds": 8000 },
+  { "type": "screenshot", "fullPage": true },
+  { "type": "executeJavascript", "script": "(() => { const out = { title: document.title, buttons: [], titles: [], aria: [], texts: [] }; document.querySelectorAll('button, [role=button], [title], [aria-label], .toolbar *, [class*=tool], [class*=Tool], [class*=toolbar], [class*=Toolbar]').forEach(el => { const t = (el.getAttribute('title')||el.getAttribute('aria-label')||el.innerText||'').trim().replace(/\\s+/g,' ').slice(0,80); if (t && t.length < 60) out.buttons.push(t); }); out.buttons = [...new Set(out.buttons)].slice(0,200); out.bodyTextSample = (document.body.innerText||'').slice(0,4000); return JSON.stringify(out); })()" }
+]

@@ -14,11 +14,11 @@ The focused sequential run passed two tests.
 
 Canonical descriptor and SVG hashes were identical before and after.
 
-- [ ] Catalog-writing tests use temporary descriptors and SVG files.
-- [ ] Tests never write to the canonical public catalog.
-- [ ] Cleanup runs after success, failure, and timeout.
-- [ ] Focused Admin tests pass twice without changing canonical hashes.
-- [ ] Browser tests use normal controls without forced clicks.
+- [x] Catalog-writing tests use temporary descriptors and SVG files.
+- [x] Tests never write to the canonical public catalog.
+- [x] Cleanup runs after success, failure, and timeout.
+- [x] Focused Admin tests pass twice without changing canonical hashes.
+- [x] Browser tests use normal controls without forced clicks.
 
 ## Phase 1 — authoring quality
 

@@ -23,6 +23,7 @@ import {
 import { furnitureCatalog, categoryLabels } from "@/features/planner/store/catalogData";
 import { normalizePlannerManagedProductRow } from "@/features/planner/store/plannerManagedProductsShared";
 import { buildConfiguratorRow } from "@/lib/catalog/configuratorCatalogPayload";
+import { fetchAdminConfiguratorCatalog } from "@/lib/catalog/configuratorCatalog.server";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import { success, error, validationError } from "@/features/shared/api/apiResponse";
 import {
@@ -473,37 +474,29 @@ export async function listConfiguratorCatalog(req: NextRequest): Promise<NextRes
   if (!parsed.success) return validationError(parsed.error.issues);
   const { category, active } = parsed.data;
 
-  const supabase = createAdminServiceClient();
-  if (!supabase) {
+  const activeFilter =
+    active === "true" || active === "false" ? active === "true" : undefined;
+
+  let items;
+  try {
+    items = await fetchAdminConfiguratorCatalog({ category, active: activeFilter });
+  } catch {
     return error(
-      new ApiError(503, API_ERROR_CODES.SERVICE_UNAVAILABLE, "Catalog storage is not configured"),
+      new ApiError(500, API_ERROR_CODES.DATABASE_ERROR, "Failed to fetch configurator catalog"),
     );
   }
 
-  let query = (supabase as SupabaseClient)
-    .from(CONFIGURATOR_TABLE)
-    .select("*")
-    .order("category")
-    .order("name");
-  if (category) query = query.eq("category", category);
-  if (active === "true" || active === "false") {
-    query = query.eq("active", active === "true");
-  }
-
-  const { data, error: dbError } = await query;
-  if (dbError) {
+  if (!items) {
     return error(
       new ApiError(
-        isMissingTableError(dbError.message) ? 503 : 500,
-        isMissingTableError(dbError.message)
-          ? API_ERROR_CODES.SERVICE_UNAVAILABLE
-          : API_ERROR_CODES.DATABASE_ERROR,
-        "Failed to fetch configurator catalog",
+        503,
+        API_ERROR_CODES.SERVICE_UNAVAILABLE,
+        "Products catalog storage is not configured",
       ),
     );
   }
 
-  return success({ items: data ?? [], total: (data ?? []).length });
+  return success({ items, total: items.length, source: CONFIGURATOR_TABLE });
 }
 
 /** POST handler for the configurator catalog. */

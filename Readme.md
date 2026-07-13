@@ -23,6 +23,7 @@ The customer sends the BOQ to Oando.
 | `plan/` | Admin and Planner execution checklists. |
 | `docs/` | Product and architecture reference. |
 | `Agents/` | Agent process. |
+| `agent-reports/` | Agent-authored reports. |
 | `results/` | Raw tool output only. |
 | `websites/` | External research reference. |
 | `archive/` | Historical reference. |

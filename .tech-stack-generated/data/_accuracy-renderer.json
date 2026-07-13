@@ -1,0 +1,165 @@
+{
+  "exactSourceMatches": 904,
+  "fieldsWithProvenance": 904,
+  "files": [
+    {
+      "factualFields": 0,
+      "parityWithDocuments": false,
+      "path": "failures-status.json"
+    },
+    {
+      "factualFields": 10,
+      "parityWithDocuments": false,
+      "path": "ai.json"
+    },
+    {
+      "factualFields": 14,
+      "parityWithDocuments": false,
+      "path": "gaps.json"
+    },
+    {
+      "factualFields": 15,
+      "parityWithDocuments": true,
+      "path": "workflows.json"
+    },
+    {
+      "factualFields": 16,
+      "parityWithDocuments": false,
+      "path": "docs-health.json"
+    },
+    {
+      "factualFields": 2,
+      "parityWithDocuments": false,
+      "path": "summary.json"
+    },
+    {
+      "factualFields": 2,
+      "parityWithDocuments": false,
+      "path": "theme.json"
+    },
+    {
+      "factualFields": 2,
+      "parityWithDocuments": true,
+      "path": "coverage-matrix.json"
+    },
+    {
+      "factualFields": 202,
+      "parityWithDocuments": true,
+      "path": "commands.json"
+    },
+    {
+      "factualFields": 21,
+      "parityWithDocuments": false,
+      "path": "ci.json"
+    },
+    {
+      "factualFields": 264,
+      "parityWithDocuments": true,
+      "path": "dependencies.json"
+    },
+    {
+      "factualFields": 27,
+      "parityWithDocuments": true,
+      "path": "code-organization.json"
+    },
+    {
+      "factualFields": 29,
+      "parityWithDocuments": true,
+      "path": "security.json"
+    },
+    {
+      "factualFields": 3,
+      "parityWithDocuments": false,
+      "path": "testing-policy.json"
+    },
+    {
+      "factualFields": 3,
+      "parityWithDocuments": true,
+      "path": "database.json"
+    },
+    {
+      "factualFields": 37,
+      "parityWithDocuments": true,
+      "path": "environment.json"
+    },
+    {
+      "factualFields": 40,
+      "parityWithDocuments": false,
+      "path": "deployment.json"
+    },
+    {
+      "factualFields": 46,
+      "parityWithDocuments": false,
+      "path": "search-items.json"
+    },
+    {
+      "factualFields": 5,
+      "parityWithDocuments": true,
+      "path": "features.json"
+    },
+    {
+      "factualFields": 7,
+      "parityWithDocuments": false,
+      "path": "dependabot.json"
+    },
+    {
+      "factualFields": 71,
+      "parityWithDocuments": true,
+      "path": "api.json"
+    },
+    {
+      "factualFields": 79,
+      "parityWithDocuments": true,
+      "path": "routes.json"
+    },
+    {
+      "factualFields": 9,
+      "parityWithDocuments": true,
+      "path": "performance.json"
+    }
+  ],
+  "mismatches": [],
+  "modelFacts": 800,
+  "parityWithDocuments": [
+    "api.json",
+    "code-organization.json",
+    "commands.json",
+    "coverage-matrix.json",
+    "database.json",
+    "dependencies.json",
+    "environment.json",
+    "features.json",
+    "performance.json",
+    "routes.json",
+    "security.json",
+    "workflows.json"
+  ],
+  "surfaces": {
+    "generatedData": {
+      "factualFields": 904,
+      "files": 23
+    },
+    "spa": {
+      "allowlistedUiModules": 5,
+      "enforcedBy": "hardcoding-guard.mjs",
+      "hardcodingViolations": 0,
+      "measured": true,
+      "routes": 12,
+      "wiredRoutes": [
+        "/",
+        "/api",
+        "/architecture",
+        "/code-organization",
+        "/database",
+        "/deployment",
+        "/features",
+        "/performance",
+        "/security",
+        "/tech-stack",
+        "/testing",
+        "/workflows"
+      ]
+    }
+  }
+}
+

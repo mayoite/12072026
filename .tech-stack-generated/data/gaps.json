@@ -1,0 +1,254 @@
+[
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.admin",
+    "label": "admin",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.admin",
+    "value": "1 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.ai-openrouter",
+    "label": "ai-openrouter",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.ai-openrouter",
+    "value": "1 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.css-theme",
+    "label": "css-theme",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.css-theme",
+    "value": "2 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.docs-health",
+    "label": "docs-health",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.docs-health",
+    "value": "3 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.github-actions",
+    "label": "github-actions",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.github-actions",
+    "value": "1 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.i18n",
+    "label": "i18n",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.i18n",
+    "value": "1 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.next-app",
+    "label": "next-app",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.next-app",
+    "value": "7 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.planner",
+    "label": "planner",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.planner",
+    "value": "2 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.r2-assets",
+    "label": "r2-assets",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.r2-assets",
+    "value": "1 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.route-contracts",
+    "label": "route-contracts",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.route-contracts",
+    "value": "1 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.supabase",
+    "label": "supabase",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.supabase",
+    "value": "2 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.testing",
+    "label": "testing",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.testing",
+    "value": "3 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "coverage-gap",
+    "factClassification": "unknown-gap",
+    "id": "gaps.domain.workspace",
+    "label": "workspace",
+    "renderSurface": [
+      "internal-report",
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.workspace",
+    "value": "1 required fact(s) still unknown-gap",
+    "verificationMode": "source-backed"
+  },
+  {
+    "browserExposure": "public-safe",
+    "category": "manual-verification",
+    "factClassification": "manual-verification",
+    "id": "gaps.manual.deployment",
+    "label": "deployment dashboard checks",
+    "renderSurface": [
+      "markdown",
+      "renderer"
+    ],
+    "secretRisk": "none",
+    "sourceKind": "coverage-contract",
+    "sourcePath": "plan/README.md",
+    "sourcePointer": "domain.deployment.manualVerificationCount",
+    "value": "2 record(s) require manual verification",
+    "verificationMode": "manual-verification"
+  }
+]
+

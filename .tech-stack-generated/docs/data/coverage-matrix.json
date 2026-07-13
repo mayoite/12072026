@@ -1,0 +1,203 @@
+{
+  "contractSourcePath": "plan/README.md",
+  "rows": [
+    {
+      "codeProvenCount": 1,
+      "domain": "css-theme",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 3,
+      "status": "partial",
+      "unknownGapCount": 2,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 1,
+      "domain": "i18n",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 2,
+      "status": "partial",
+      "unknownGapCount": 1,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 1,
+      "domain": "next-app",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 8,
+      "status": "partial",
+      "unknownGapCount": 7,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 2,
+      "domain": "route-contracts",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 3,
+      "status": "partial",
+      "unknownGapCount": 1,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 2,
+      "domain": "supabase",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 4,
+      "status": "partial",
+      "unknownGapCount": 2,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 3,
+      "domain": "admin",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 4,
+      "status": "partial",
+      "unknownGapCount": 1,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 3,
+      "domain": "ai-openrouter",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 4,
+      "status": "partial",
+      "unknownGapCount": 1,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 3,
+      "domain": "deployment",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 1,
+      "manualVerificationCount": 2,
+      "recordCount": 6,
+      "status": "partial",
+      "unknownGapCount": 0,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 3,
+      "domain": "docs-health",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 6,
+      "status": "partial",
+      "unknownGapCount": 3,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 3,
+      "domain": "r2-assets",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 4,
+      "status": "partial",
+      "unknownGapCount": 1,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 3,
+      "domain": "testing",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 6,
+      "status": "partial",
+      "unknownGapCount": 3,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 3,
+      "domain": "workspace",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 4,
+      "status": "partial",
+      "unknownGapCount": 1,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 4,
+      "domain": "api",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 4,
+      "status": "covered",
+      "unknownGapCount": 0,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 4,
+      "domain": "environment",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 4,
+      "status": "covered",
+      "unknownGapCount": 0,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 4,
+      "domain": "github-actions",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 5,
+      "status": "partial",
+      "unknownGapCount": 1,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 4,
+      "domain": "planner",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 6,
+      "status": "partial",
+      "unknownGapCount": 2,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 5,
+      "domain": "database",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 5,
+      "status": "covered",
+      "unknownGapCount": 0,
+      "unsupportedClaimCount": 0
+    },
+    {
+      "codeProvenCount": 5,
+      "domain": "dependabot",
+      "handoverProvenCount": 0,
+      "liveStatusCount": 0,
+      "manualVerificationCount": 0,
+      "recordCount": 5,
+      "status": "covered",
+      "unknownGapCount": 0,
+      "unsupportedClaimCount": 0
+    }
+  ]
+}
