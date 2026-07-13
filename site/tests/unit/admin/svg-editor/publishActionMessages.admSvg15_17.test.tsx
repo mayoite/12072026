@@ -103,7 +103,7 @@ describe("ADM-SVG-15 publish names target and versions", () => {
         onPublishAction={vi.fn()}
       />,
     );
-    const publish = screen.getByTestId("admin-svg-publish-primary");
+    const publish = screen.getByTestId("admin-shell-primary-action");
     expect(publish).toHaveAttribute(
       "aria-describedby",
       "admin-svg-publication-impact",
@@ -140,7 +140,7 @@ describe("ADM-SVG-16 failure never false success", () => {
         onPublishAction={publish}
       />,
     );
-    fireEvent.click(screen.getByTestId("admin-svg-publish-primary"));
+    fireEvent.click(screen.getByTestId("admin-shell-primary-action"));
     expect(await screen.findByTestId("admin-svg-publish-failure")).toHaveTextContent(
       /not replaced|pipeline stopped/i,
     );
@@ -176,7 +176,7 @@ describe("ADM-SVG-17 success links artifact and Planner", () => {
         onPublishAction={publish}
       />,
     );
-    fireEvent.click(screen.getByTestId("admin-svg-publish-primary"));
+    fireEvent.click(screen.getByTestId("admin-shell-primary-action"));
     await waitFor(() => {
       expect(screen.getByTestId("admin-svg-publish-success")).toBeInTheDocument();
     });

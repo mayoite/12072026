@@ -16,7 +16,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { MutableRefObject } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent, MutableRefObject } from "react";
 import {
   ArrowsOutSimple,
   ArrowUUpLeft,
@@ -42,6 +42,7 @@ import {
   type SvgSceneDocument,
   type SvgSceneNode,
 } from "./scene/svgSceneDocument";
+import { nudgeSceneNodePatch } from "./scene/nudgeSceneNode";
 import { confirmDeleteLayer } from "./destructiveConfirmMessages";
 import {
   canRedo,
@@ -58,6 +59,14 @@ import type {
   SvgEngineAdapter,
   SvgEngineViewport,
 } from "./scene/svgEngineAdapter";
+import {
+  STUDIO_DRAG_ACTIONS,
+  STUDIO_NUDGE_STEP,
+  STUDIO_NUDGE_STEP_FAST,
+  STUDIO_ZOOM_MAX,
+  STUDIO_ZOOM_MIN,
+  STUDIO_ZOOM_STEP,
+} from "./studioA11yContract";
 
 /** Host-owned ADM-SVG-06 fields that the stage status must keep visible. */
 export interface SvgStudioStageMeta {
@@ -273,8 +282,31 @@ export function SvgStudioCanvas({
     [document, apply],
   );
 
-  const zoomToFit = useCallback(() => adapterRef.current?.zoomToFit(), []);
-  const resetViewport = useCallback(() => adapterRef.current?.resetViewport(), []);
+  const zoomToFit = useCallback(() => {
+    adapterRef.current?.zoomToFit();
+    const next = adapterRef.current?.getViewport();
+    if (next) setViewport(next);
+  }, []);
+  const resetViewport = useCallback(() => {
+    adapterRef.current?.resetViewport();
+    const next = adapterRef.current?.getViewport();
+    if (next) setViewport(next);
+  }, []);
+
+  const zoomBy = useCallback((factor: number) => {
+    const adapter = adapterRef.current;
+    if (!adapter) return;
+    const current = adapter.getViewport();
+    const zoom = Math.min(
+      STUDIO_ZOOM_MAX,
+      Math.max(STUDIO_ZOOM_MIN, current.zoom * factor),
+    );
+    adapter.setViewport({ zoom });
+    setViewport(adapter.getViewport());
+  }, []);
+
+  const zoomIn = useCallback(() => zoomBy(STUDIO_ZOOM_STEP), [zoomBy]);
+  const zoomOut = useCallback(() => zoomBy(1 / STUDIO_ZOOM_STEP), [zoomBy]);
 
   const patchSelected = useCallback(
     (label: string, patch: Partial<SvgSceneNode>) => {
@@ -294,6 +326,54 @@ export function SvgStudioCanvas({
     [patchSelected],
   );
 
+  /** ADM-A11Y-02/03 — keyboard on the stage: nudge, delete, undo/redo, escape. */
+  const handleStageKeyDown = useCallback(
+    (event: ReactKeyboardEvent<HTMLDivElement>) => {
+      const key = event.key;
+      const mod = event.ctrlKey || event.metaKey;
+
+      if (mod && key.toLowerCase() === "z" && !event.shiftKey) {
+        event.preventDefault();
+        handleUndo();
+        return;
+      }
+      if (mod && (key.toLowerCase() === "y" || (key.toLowerCase() === "z" && event.shiftKey))) {
+        event.preventDefault();
+        handleRedo();
+        return;
+      }
+      if (key === "Escape") {
+        event.preventDefault();
+        setSelectedId(null);
+        return;
+      }
+      if ((key === "Delete" || key === "Backspace") && selected) {
+        event.preventDefault();
+        deleteSelected();
+        return;
+      }
+
+      if (!selected || selected.locked) return;
+      const arrows: Record<string, { dx: number; dy: number }> = {
+        ArrowLeft: { dx: -1, dy: 0 },
+        ArrowRight: { dx: 1, dy: 0 },
+        ArrowUp: { dx: 0, dy: -1 },
+        ArrowDown: { dx: 0, dy: 1 },
+      };
+      const dir = arrows[key];
+      if (!dir) return;
+      event.preventDefault();
+      const step = event.shiftKey ? STUDIO_NUDGE_STEP_FAST : STUDIO_NUDGE_STEP;
+      const patch = nudgeSceneNodePatch(selected, dir.dx * step, dir.dy * step);
+      if (!patch) return;
+      apply(
+        `Nudge ${selected.name}`,
+        applySceneNodeGeometryPatch(document, selected.id, patch),
+      );
+    },
+    [selected, document, apply, handleUndo, handleRedo, deleteSelected],
+  );
+
   // Layer tree paints top-first (topmost z last in the document array).
   const layers = useMemo(() => [...document.nodes].reverse(), [document.nodes]);
 
@@ -303,6 +383,7 @@ export function SvgStudioCanvas({
       aria-label="Visual SVG authoring canvas"
       data-testid="admin-svg-studio"
       data-supported-kinds="rect,circle"
+      data-drag-actions={STUDIO_DRAG_ACTIONS.join(",")}
     >
       <div
         className="svg-studio__toolbar"
@@ -347,18 +428,65 @@ export function SvgStudioCanvas({
           <Trash size={16} aria-hidden />
         </button>
         <span className="svg-studio__sep" aria-hidden />
-        <button type="button" onClick={zoomToFit} title="Zoom to fit" aria-label="Zoom to fit">
+        <button
+          type="button"
+          onClick={zoomOut}
+          title="Zoom out"
+          aria-label="Zoom out"
+          data-testid="admin-studio-zoom-out"
+          data-non-drag-for="zoom"
+        >
+          −
+        </button>
+        <button
+          type="button"
+          onClick={zoomIn}
+          title="Zoom in"
+          aria-label="Zoom in"
+          data-testid="admin-studio-zoom-in"
+          data-non-drag-for="zoom"
+        >
+          +
+        </button>
+        <button
+          type="button"
+          onClick={zoomToFit}
+          title="Zoom to fit"
+          aria-label="Zoom to fit"
+          data-testid="admin-studio-zoom-fit"
+          data-non-drag-for="pan,zoom"
+        >
           <ArrowsOutSimple size={16} aria-hidden /> Fit
         </button>
-        <button type="button" onClick={resetViewport} title="Reset viewport" aria-label="Reset viewport">
+        <button
+          type="button"
+          onClick={resetViewport}
+          title="Reset viewport"
+          aria-label="Reset viewport"
+          data-testid="admin-studio-zoom-reset"
+          data-non-drag-for="pan,zoom"
+        >
           Reset
         </button>
       </div>
+
+      <p
+        className="svg-studio__a11y-hint"
+        data-testid="admin-studio-nudge-hint"
+        id="admin-studio-keyboard-help"
+      >
+        Keyboard: Tab tools and layers. Focus the canvas, then Arrow keys nudge
+        the selection (Shift = 10×). Numbers in Inspector set exact geometry
+        without dragging. Delete removes the selection. Ctrl+Z / Ctrl+Y undo and
+        redo.
+      </p>
 
       {/* ADM-SVG-06: always show all eight status fields (host fills stageMeta). */}
       <div
         className="svg-studio__status"
         aria-label="Canvas status"
+        aria-live="polite"
+        aria-atomic="false"
         data-testid="admin-stage-status"
         data-adm-svg-06-fields="identity,footprint,viewbox,zoom,selection,draft,validation,revision"
       >
@@ -395,8 +523,13 @@ export function SvgStudioCanvas({
           className="svg-studio__stage"
           role="application"
           aria-label="SVG canvas"
+          aria-describedby="admin-studio-keyboard-help"
+          aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown Delete Escape Control+Z Control+Y"
+          tabIndex={0}
+          onKeyDown={handleStageKeyDown}
           data-region="stage"
           data-testid="admin-studio-region-stage"
+          data-non-drag-for="move,resize,pan,zoom"
         />
 
         <aside
@@ -454,12 +587,16 @@ export function SvgStudioCanvas({
               </label>
               {selected.kind === "rect" ? (
                 <div className="svg-studio__inspector-grid">
-                  <label>
+                  <label htmlFor={`studio-geom-${selected.id}-x`}>
                     X
                     <input
+                      id={`studio-geom-${selected.id}-x`}
                       type="number"
                       defaultValue={selected.x}
                       key={`${selected.id}-x-${selected.x}`}
+                      data-testid="admin-studio-geom-x"
+                      data-non-drag-for="move"
+                      aria-label={`${selected.name} X`}
                       onBlur={(event) =>
                         patchSelectedNumber("x", `Set ${selected.name} X`, event.target.value, (v) => ({
                           x: v,
@@ -467,12 +604,16 @@ export function SvgStudioCanvas({
                       }
                     />
                   </label>
-                  <label>
+                  <label htmlFor={`studio-geom-${selected.id}-y`}>
                     Y
                     <input
+                      id={`studio-geom-${selected.id}-y`}
                       type="number"
                       defaultValue={selected.y}
                       key={`${selected.id}-y-${selected.y}`}
+                      data-testid="admin-studio-geom-y"
+                      data-non-drag-for="move"
+                      aria-label={`${selected.name} Y`}
                       onBlur={(event) =>
                         patchSelectedNumber("y", `Set ${selected.name} Y`, event.target.value, (v) => ({
                           y: v,
@@ -480,13 +621,17 @@ export function SvgStudioCanvas({
                       }
                     />
                   </label>
-                  <label>
+                  <label htmlFor={`studio-geom-${selected.id}-w`}>
                     W
                     <input
+                      id={`studio-geom-${selected.id}-w`}
                       type="number"
                       min={1}
                       defaultValue={selected.width}
                       key={`${selected.id}-w-${selected.width}`}
+                      data-testid="admin-studio-geom-w"
+                      data-non-drag-for="resize"
+                      aria-label={`${selected.name} width`}
                       onBlur={(event) =>
                         patchSelectedNumber("width", `Set ${selected.name} width`, event.target.value, (v) => ({
                           width: Math.max(1, v),
@@ -494,13 +639,17 @@ export function SvgStudioCanvas({
                       }
                     />
                   </label>
-                  <label>
+                  <label htmlFor={`studio-geom-${selected.id}-h`}>
                     H
                     <input
+                      id={`studio-geom-${selected.id}-h`}
                       type="number"
                       min={1}
                       defaultValue={selected.height}
                       key={`${selected.id}-h-${selected.height}`}
+                      data-testid="admin-studio-geom-h"
+                      data-non-drag-for="resize"
+                      aria-label={`${selected.name} height`}
                       onBlur={(event) =>
                         patchSelectedNumber("height", `Set ${selected.name} height`, event.target.value, (v) => ({
                           height: Math.max(1, v),
@@ -512,12 +661,16 @@ export function SvgStudioCanvas({
               ) : null}
               {selected.kind === "circle" ? (
                 <div className="svg-studio__inspector-grid">
-                  <label>
+                  <label htmlFor={`studio-geom-${selected.id}-cx`}>
                     CX
                     <input
+                      id={`studio-geom-${selected.id}-cx`}
                       type="number"
                       defaultValue={selected.cx}
                       key={`${selected.id}-cx-${selected.cx}`}
+                      data-testid="admin-studio-geom-cx"
+                      data-non-drag-for="move"
+                      aria-label={`${selected.name} center X`}
                       onBlur={(event) =>
                         patchSelectedNumber("cx", `Set ${selected.name} CX`, event.target.value, (v) => ({
                           cx: v,
@@ -525,12 +678,16 @@ export function SvgStudioCanvas({
                       }
                     />
                   </label>
-                  <label>
+                  <label htmlFor={`studio-geom-${selected.id}-cy`}>
                     CY
                     <input
+                      id={`studio-geom-${selected.id}-cy`}
                       type="number"
                       defaultValue={selected.cy}
                       key={`${selected.id}-cy-${selected.cy}`}
+                      data-testid="admin-studio-geom-cy"
+                      data-non-drag-for="move"
+                      aria-label={`${selected.name} center Y`}
                       onBlur={(event) =>
                         patchSelectedNumber("cy", `Set ${selected.name} CY`, event.target.value, (v) => ({
                           cy: v,
@@ -538,13 +695,17 @@ export function SvgStudioCanvas({
                       }
                     />
                   </label>
-                  <label>
+                  <label htmlFor={`studio-geom-${selected.id}-r`}>
                     R
                     <input
+                      id={`studio-geom-${selected.id}-r`}
                       type="number"
                       min={1}
                       defaultValue={selected.r}
                       key={`${selected.id}-r-${selected.r}`}
+                      data-testid="admin-studio-geom-r"
+                      data-non-drag-for="resize"
+                      aria-label={`${selected.name} radius`}
                       onBlur={(event) =>
                         patchSelectedNumber("r", `Set ${selected.name} radius`, event.target.value, (v) => ({
                           r: Math.max(1, v),

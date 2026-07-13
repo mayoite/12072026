@@ -589,28 +589,43 @@ export function AdminSvgEditorEditView({
   };
 
   return (
-    <div className="admin-page admin-page--svg-engine">
-      <header className="admin-page__header admin-svg-engine-header">
+    <div
+      className="admin-page admin-page--svg-engine"
+      data-admin-shell="edit"
+      data-testid="admin-svg-edit-shell"
+    >
+      <header
+        className="admin-page__header admin-svg-engine-header"
+        data-testid="admin-shell-header"
+      >
         <div>
-          <p className="admin-page__eyebrow">Catalog assets · SVG studio</p>
-          <h1 className="admin-page__title">
+          {/* ADM-SHELL-01: title, scope, source, state */}
+          <p className="admin-page__eyebrow" data-testid="admin-shell-scope">
+            Catalog assets · SVG studio
+          </p>
+          <h1 className="admin-page__title" data-testid="admin-shell-title">
             <code>{slug}</code>
           </h1>
-          <p className="admin-page__meta">
-            <span className="admin-badge">{variantTitle(form.variant)}</span> ·{" "}
-            {describeVariant(form.variant)} · schema{" "}
+          <p className="admin-page__meta" data-testid="admin-shell-source">
+            Source: block-descriptor draft + published SVG on disk · schema{" "}
             <code>{descriptor.schemaVersion}</code> ·{" "}
             <code className="admin-page__checksum">{checksumShort}</code>
-            {" "}
-            ·{" "}
+          </p>
+          <p
+            className="admin-page__meta"
+            data-testid="admin-shell-state"
+            aria-live="polite"
+            aria-atomic="false"
+          >
+            <span className="admin-badge">{variantTitle(form.variant)}</span> ·{" "}
+            {describeVariant(form.variant)} ·{" "}
             <span
               className={authoringLifecycleBadgeClass(authoringLifecycle)}
               data-testid="admin-authoring-lifecycle"
               data-lifecycle={authoringLifecycle}
             >
               {authoringLifecycleLabel(authoringLifecycle)}
-            </span>
-            {" "}
+            </span>{" "}
             ·{" "}
             <span
               className={
@@ -620,13 +635,11 @@ export function AdminSvgEditorEditView({
                     ? "admin-badge admin-badge--hidden"
                     : "admin-badge admin-badge--warn"
               }
+              data-testid="admin-shell-catalog-lifecycle"
             >
               {lifecycle}
-            </span>
-            {" "}
-            · last published {updatedAtLabel}
-            {" "}
-            ·{" "}
+            </span>{" "}
+            · last published {updatedAtLabel} ·{" "}
             <span
               data-testid="admin-footprint-mm-proof"
               data-aligned={footprintProof.aligned ? "true" : "false"}
@@ -643,10 +656,12 @@ export function AdminSvgEditorEditView({
             </span>
           </p>
         </div>
-        <div className="admin-page__actions">
+        {/* ADM-SHELL-02: primary Publish only; secondary/destructive stay outline */}
+        <div className="admin-page__actions" data-testid="admin-shell-actions">
           <Link
             href="/admin/svg-editor"
             className="admin-btn admin-btn--outline"
+            data-testid="admin-shell-secondary-back"
           >
             <ArrowLeft size={14} aria-hidden />
             Back
@@ -656,6 +671,7 @@ export function AdminSvgEditorEditView({
             className="admin-btn admin-btn--outline"
             onClick={handleResetToPublished}
             disabled={feedback.submitting || !formDirty}
+            data-testid="admin-shell-destructive-reset"
           >
             Reset to published
           </button>
@@ -669,6 +685,7 @@ export function AdminSvgEditorEditView({
               lifecycle === "live" ||
               artifactStatus.state !== "published"
             }
+            data-testid="admin-shell-secondary-approve"
           >
             Approve for buyers
           </button>
@@ -678,7 +695,7 @@ export function AdminSvgEditorEditView({
             onClick={handlePublish}
             disabled={!canPublish}
             aria-describedby="admin-svg-publication-impact"
-            data-testid="admin-svg-publish-primary"
+            data-testid="admin-shell-primary-action"
           >
             {feedback.submitting ? (
               <Loader2 size={14} className="animate-spin" aria-hidden />
@@ -766,7 +783,12 @@ export function AdminSvgEditorEditView({
         </div>
       ) : null}
 
-      <div aria-live="polite" aria-atomic="true" className="admin-svg-engine-feedback">
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="admin-svg-engine-feedback"
+        data-testid="admin-svg-a11y-live-feedback"
+      >
         {feedback.submitting ? (
           <div
             role="status"

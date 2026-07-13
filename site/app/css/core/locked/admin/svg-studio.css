@@ -43,6 +43,23 @@
   cursor: not-allowed;
 }
 
+/* ADM-A11Y-04 — visible focus on command tools */
+[data-admin-layout] .svg-studio__toolbar button:focus-visible {
+  outline: 2px solid var(--color-primary, var(--border-strong));
+  outline-offset: 2px;
+}
+
+/* Keyboard help — visible so non-pointer authors know the alts */
+[data-admin-layout] .svg-studio__a11y-hint {
+  margin: 0;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--color-surface-raised, var(--surface-raised));
+}
+
 [data-admin-layout] .svg-studio__sep {
   width: 1px;
   align-self: stretch;
@@ -67,6 +84,12 @@
     50% / 24px 24px;
   color: var(--text-strong);
   cursor: crosshair;
+}
+
+/* ADM-A11Y-04 — stage keyboard focus ring (role=application tabIndex=0) */
+[data-admin-layout] .svg-studio__stage:focus-visible {
+  outline: 2px solid var(--color-primary, var(--border-strong));
+  outline-offset: -2px;
 }
 
 [data-admin-layout] .svg-studio__stage svg {
@@ -145,6 +168,12 @@
   color: var(--text-strong);
 }
 
+/* ADM-A11Y-04 — layer tree focus */
+[data-admin-layout] .svg-studio__layer-list button:focus-visible {
+  outline: 2px solid var(--color-primary, var(--border-strong));
+  outline-offset: 1px;
+}
+
 [data-admin-layout] .svg-studio__empty {
   padding: 0.5rem;
   font-size: 0.8125rem;
@@ -184,6 +213,12 @@
   background: var(--surface-raised);
   color: var(--text-strong);
   font-size: 0.8125rem;
+}
+
+/* ADM-A11Y-04 — inspector numeric fields focus (non-drag geometry path) */
+[data-admin-layout] .svg-studio__inspector input:focus-visible {
+  outline: 2px solid var(--color-primary, var(--border-strong));
+  outline-offset: 1px;
 }
 
 [data-admin-layout] .svg-studio__inspector-fill {
