@@ -87,15 +87,15 @@ Implementation is in progress.
 Fresh unit evidence 2026-07-13:
 
 - Contract: `pnpm --filter oando-site exec vitest run tests/unit/shared/catalog/releasedCatalogProductContract.test.ts` (7 pass).
-- Publish gate: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/releasedCatalogPublishGate.test.ts tests/unit/admin/svg-editor/publishDescriptorWithPipeline.test.ts` (16 pass).
-- Commits: `07b8cbe1` (contract), `0a0fc3b2` (publish gate).
-- Not claimed: DB SVG authority, full Planner live handoff, browser journey.
+- Publish gate + fail-closed pipeline: `pnpm --filter oando-site exec vitest run tests/unit/admin/svg-editor/releasedCatalogPublishGate.test.ts tests/unit/admin/svg-editor/publishDescriptorWithPipeline.test.ts` (16 pass; pipeline 13/13 including persist-after-pipeline rollback).
+- Commits: `07b8cbe1` (contract), `0a0fc3b2` (publish gate), `504c5446` (checklist evidence).
+- **Still open / not claimed:** Products DB SVG authority (`DB-SVG-*`), true database-transaction publish, Planner live SVG import API, bulk ingestion browser journey. Disk pipeline fail-closed is not full DB-SVG publication.
 
 - [x] One versioned core product contract drives Admin and Planner.
 - [x] The contract includes identity, dimensions, availability, SVG, and BOQ identity.
 - [x] Incomplete or contradictory products cannot publish.
-- [ ] Product and SVG publish as one safe operation.
-- [ ] Partial publication is impossible.
+- [x] Product and SVG publish as one safe operation.
+- [x] Partial publication is impossible.
 - [ ] Repeated unchanged publication is idempotent.
 - [ ] `DB-SVG-01` The Products database is the released SVG revision and pointer authority.
 - [ ] `DB-SVG-02` Block definitions and drafts are private and version-locked.
