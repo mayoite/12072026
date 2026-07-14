@@ -4,9 +4,9 @@ import { ContactTeaser } from "@/components/shared/ContactTeaser";
 import { RouteActionCard } from "@/components/shared/RouteActionCard";
 import { SectionIntro } from "@/components/shared/SectionIntro";
 import { TrackedLink } from "@/components/ui/TrackedLink";
-import { SITE_CONTACT, buildWhatsAppHref } from "@/lib/site-data/contact";
-import { DOWNLOADS_PAGE_COPY, DOWNLOADS_RESOURCE_CATEGORIES } from "@/lib/site-data/routeCopy";
-import { DOWNLOADS_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { SITE_CONTACT, buildWhatsAppHref } from "@/features/site/data/contact";
+import { DOWNLOADS_PAGE_COPY, DOWNLOADS_RESOURCE_CATEGORIES } from "@/features/site/data/routeCopy";
+import { DOWNLOADS_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = DOWNLOADS_PAGE_METADATA;
 

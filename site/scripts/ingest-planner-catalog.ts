@@ -2,9 +2,9 @@
  * Ingest planner CSVs into the canonical planner catalog output family.
  *
  * Canonical output:
- *   - features/planner/catalog/generatedCatalogItems.ts
- *   - features/planner/catalog/generatedCatalogItemsPart1.ts
- *   - features/planner/catalog/generatedCatalogItemsPart2.ts
+ *   - features/planner/catalog-api/generatedCatalogItems.ts
+ *   - features/planner/catalog-api/generatedCatalogItemsPart1.ts
+ *   - features/planner/catalog-api/generatedCatalogItemsPart2.ts
  *
  * Audit outputs:
  *   - results/audits/planner-catalog-golden.json
@@ -27,14 +27,14 @@ import {
   dedupeCatalogItems,
   parseCsvFileWithAudit,
   type CatalogIngestWarning,
-} from "@/features/planner/catalog/ingest/csvCatalogIngest";
+} from "@/features/planner/catalog-api/ingest/csvCatalogIngest";
 import { FURNITURE_ASSET_REGISTRY } from "@/features/planner/lib/assetPipeline";
-import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
+import type { CatalogItem } from "@/features/planner/catalog-api/catalogTypes";
 
 const ROOT = process.cwd();
 const SITE_ROOT = path.basename(ROOT) === "site" ? ROOT : path.join(ROOT, "site");
 const REPO_ROOT = path.basename(ROOT) === "site" ? path.resolve(ROOT, "..") : ROOT;
-const CATALOG_DIR = path.join(SITE_ROOT, "features/planner/catalog");
+const CATALOG_DIR = path.join(SITE_ROOT, "features/planner/catalog-api");
 const PART1_OUT = path.join(CATALOG_DIR, "generatedCatalogItemsPart1.ts");
 const PART2_OUT = path.join(CATALOG_DIR, "generatedCatalogItemsPart2.ts");
 const WRAPPER_OUT = path.join(CATALOG_DIR, "generatedCatalogItems.ts");
@@ -94,7 +94,7 @@ function renderModule(name: string, items: CatalogItem[]): string {
  * Regenerate: npm.cmd run catalog:ingest
  * ${name}
  */
-import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
+import type { CatalogItem } from "@/features/planner/catalog-api/catalogTypes";
 
 export const ${name}: CatalogItem[] = ${JSON.stringify(items, null, 2)} as CatalogItem[];
 `;
@@ -108,7 +108,7 @@ function renderWrapper(): string {
  * Canonical planner catalog entrypoint. The part files are a generated
  * implementation detail so the catalog payload stays manageable.
  */
-import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
+import type { CatalogItem } from "@/features/planner/catalog-api/catalogTypes";
 import { GENERATED_CATALOG_ITEMS_PART1 } from "./generatedCatalogItemsPart1";
 import { GENERATED_CATALOG_ITEMS_PART2 } from "./generatedCatalogItemsPart2";
 

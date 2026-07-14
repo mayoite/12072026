@@ -9,7 +9,7 @@ import {
   useState,
   type ChangeEvent,
 } from "react";
-import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
+import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 import {
   Lazy3DViewer,
   getPlannerViewerControlProps,

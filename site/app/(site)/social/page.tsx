@@ -6,9 +6,9 @@ import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
 import { RouteCtaBand } from "@/components/shared/RouteCtaBand";
 import { SectionIntro } from "@/components/shared/SectionIntro";
-import { getProducts } from '@/features/catalog/getProducts';
-import { SOCIAL_PAGE_COPY, SOCIAL_PAGE_POSTS } from "@/lib/site-data/routeCopy";
-import { SOCIAL_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { getProducts } from '@/lib/catalog/site/getProducts';
+import { SOCIAL_PAGE_COPY, SOCIAL_PAGE_POSTS } from "@/features/site/data/routeCopy";
+import { SOCIAL_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = SOCIAL_PAGE_METADATA;
 

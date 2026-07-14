@@ -30,7 +30,7 @@ import {
   suggestLayoutGridPack,
 } from "@/features/planner/ai/spaceSuggest";
 import { PLANNER_MAX_CANVAS_MM, PLANNER_MAX_CANVAS_METERS } from "@/features/planner/lib/canvasBounds";
-import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
+import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 import { Z } from "@/lib/z-index";
 
 

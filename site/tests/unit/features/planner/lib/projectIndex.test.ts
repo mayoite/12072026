@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { getProjectIdFromKey, getProjectIndex, saveProjectIndex, readSavedProjectPayload, getSavedPlans, getSavedPlanById, getSavedPlanByKey, renameSavedPlan, updateSavedPlanMetadata, duplicateSavedPlan, deleteSavedPlan, getSavedPlanSnapshots } from "@/features/planner/lib/projectIndex";
 
-vi.mock("@/features/planner/store/plannerStore", () => ({
+vi.mock("@/features/planner/cloud-store/plannerStore", () => ({
   usePlannerStore: {
     getState: () => ({
       document: {

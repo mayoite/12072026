@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { PartnershipBanner } from '@/components/home/PartnershipBanner';
-import { HOMEPAGE_PARTNERSHIP_CONTENT } from '@/lib/site-data/homepage';
+import { HOMEPAGE_PARTNERSHIP_CONTENT } from '@/features/site/data/homepage';
 
 vi.mock('framer-motion', () => ({
   motion: {

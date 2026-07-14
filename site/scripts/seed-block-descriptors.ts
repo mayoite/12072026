@@ -1,5 +1,5 @@
 /**
- * Seed site/block-descriptors/ from public/svg-catalog fixtures.
+ * Seed site/inventory/descriptors/ from public/svg-catalog fixtures.
  * Run: pnpm --filter oando-site run seed:block-descriptors
  */
 

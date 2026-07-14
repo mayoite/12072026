@@ -1,7 +1,7 @@
 import Image from "next/image";
 import clsx from "clsx";
 
-import { resolveClientLogoSrc } from "@/lib/site-data/clientLogos";
+import { resolveClientLogoSrc } from "@/features/site/data/clientLogos";
 
 export interface ClientBadgeData {
   name: string;

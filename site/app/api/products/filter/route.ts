@@ -1,16 +1,16 @@
 import type { NextRequest} from "next/server";
 import { NextResponse } from "next/server";
 import Fuse from "fuse.js";
-import { buildRequestedCategoryCatalog } from '@/features/catalog/categories';
-import { getCatalog, type CompatProduct } from '@/features/catalog/getProducts';
-import { hasVerifiedHeadrest, hasVerifiedHeightAdjustable } from '@/features/catalog/traits';
+import { buildRequestedCategoryCatalog } from '@/lib/catalog/site/categories';
+import { getCatalog, type CompatProduct } from '@/lib/catalog/site/getProducts';
+import { hasVerifiedHeadrest, hasVerifiedHeightAdjustable } from '@/lib/catalog/site/traits';
 import {
   PRICE_RANGES,
   parseEcoMin,
   parseSortOption,
   normalizeOptionValue,
   type SortOption,
-} from '@/features/catalog/filters';
+} from '@/lib/catalog/site/filters';
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 
 export const dynamic = "force-dynamic";

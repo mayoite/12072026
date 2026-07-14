@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
-import { getCatalog } from '@/features/catalog/getProducts';
-import { buildRequestedCategoryCatalog } from '@/features/catalog/categories';
+import { getCatalog } from '@/lib/catalog/site/getProducts';
+import { buildRequestedCategoryCatalog } from '@/lib/catalog/site/categories';
 import { SITE_URL } from "@/lib/siteUrl";
 
 const BASE_URL = SITE_URL.replace(/\/+$/, "");
@@ -42,7 +42,7 @@ const STATIC_PATHS = [
   "/planner/help",
   "/planner/features",
   "/planner/features/measure",
-  "/planner/features/catalog",
+  "/planner/lib/catalog/site",
   "/planner/features/3d-view",
   "/planner/features/ai-assist",
   "/planner/features/export",

@@ -1,4 +1,4 @@
-import { normalizeRequestedCategoryId } from '@/features/catalog/categories';
+import { normalizeRequestedCategoryId } from '@/lib/catalog/site/categories';
 import { notFound } from "next/navigation";
 import { CategoryPageView } from "../../[category]/CategoryPageView";
 

@@ -2,13 +2,13 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { POST } from "@/app/api/filter/route";
 import { rateLimit } from "@/lib/rateLimit";
-import { getProducts } from "@/features/catalog/getProducts";
+import { getProducts } from "@/lib/catalog/site/getProducts";
 
 vi.mock("@/lib/rateLimit", () => ({
   rateLimit: vi.fn(),
 }));
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/platform/supabase/server", () => ({
   createServerClient: vi.fn(() =>
     Promise.resolve({
       auth: {
@@ -29,7 +29,7 @@ vi.mock("@/lib/supabase/server", () => ({
   ),
 }));
 
-vi.mock("@/features/catalog/getProducts", () => ({
+vi.mock("@/lib/catalog/site/getProducts", () => ({
   getProducts: vi.fn(),
 }));
 

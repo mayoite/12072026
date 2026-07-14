@@ -3,8 +3,8 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { EditorialArrowLink } from "@/components/site/EditorialRoute";
 import { HomeMarketingLayout } from "@/components/home/layout";
-import { TRUSTED_BY_STATS } from "@/lib/site-data/proof";
-import { buildPageMetadata } from "@/lib/site-data/seo";
+import { TRUSTED_BY_STATS } from "@/features/site/data/proof";
+import { buildPageMetadata } from "@/features/site/data/seo";
 import { SITE_URL } from "@/lib/siteUrl";
 
 export const metadata: Metadata = buildPageMetadata(SITE_URL, {

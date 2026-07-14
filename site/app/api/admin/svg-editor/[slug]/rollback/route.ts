@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 import { withAuth } from "@/features/shared/api/withAuth";
 import { success } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
-import { rollbackDescriptorToVersion } from "@/features/planner/admin/svg-editor/rollbackDescriptorVersion";
+import { rollbackDescriptorToVersion } from "@/features/admin/svg-editor/rollbackDescriptorVersion";
 import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 

@@ -16,13 +16,13 @@ describe("publishMultipath — desk-linear-1200-001", () => {
   it("maker compile emits ≥3 pathish elements with named ids", async () => {
     const raw = JSON.parse(
       fs.readFileSync(
-        path.join(process.cwd(), "block-descriptors/desk-linear-1200-001.json"),
+        path.join(process.cwd(), "inventory/descriptors/desk-linear-1200-001.json"),
         "utf8",
       ),
     );
     const result = await compileSvgForPublish(raw);
     expect(result.ok).toBe(true);
-    if (!result.ok) return;
+    if (!result.ok) throw new Error("expected result.ok");
     const svg = result.svg;
     expect(countPathish(svg)).toBeGreaterThanOrEqual(3);
     expect(svg).toContain('id="desk-top"');
@@ -35,13 +35,13 @@ describe("publishMultipath — chaise-lounge-001", () => {
   it("compileSvgForPublish emits one pathish element per block (inventory preview)", async () => {
     const raw = JSON.parse(
       fs.readFileSync(
-        path.join(process.cwd(), "block-descriptors/chaise-lounge-001.json"),
+        path.join(process.cwd(), "inventory/descriptors/chaise-lounge-001.json"),
         "utf8",
       ),
     );
     const result = await compileSvgForPublish(raw);
     expect(result.ok).toBe(true);
-    if (!result.ok) return;
+    if (!result.ok) throw new Error("expected result.ok");
     const svg = result.svg;
     expect(countPathish(svg)).toBeGreaterThanOrEqual(2);
     expect(svg).toContain('id="seat-block"');

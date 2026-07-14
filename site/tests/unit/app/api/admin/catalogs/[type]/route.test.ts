@@ -7,13 +7,13 @@ import {
   listStandardCatalog,
   createStandardCatalog,
   resolveCatalogType,
-} from "@/features/planner/admin/api/catalogAdminHandlers";
+} from "@/features/admin/api/catalogAdminHandlers";
 
 vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: unknown) => handler,
 }));
 
-vi.mock("@/features/planner/admin/api/catalogAdminHandlers", () => ({
+vi.mock("@/features/admin/api/catalogAdminHandlers", () => ({
   listConfiguratorCatalog: vi.fn(),
   createConfiguratorCatalog: vi.fn(),
   listStandardCatalog: vi.fn(),

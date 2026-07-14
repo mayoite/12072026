@@ -6,15 +6,15 @@
  */
 
 import type { NextRequest } from "next/server";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/platform/supabase/server";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 import { isMissingTableError } from "@/platform/supabase/adminServer";
 import { success, error } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import {
   managedProductRowToCatalogItem,
-} from "@/features/planner/catalog/managedProductCatalogBridge";
-import { normalizePlannerManagedProductRow } from "@/features/planner/catalog/plannerManagedProductsShared";
+} from "@/features/planner/catalog-api/managedProductCatalogBridge";
+import { normalizePlannerManagedProductRow } from "@/features/planner/catalog-api/plannerManagedProductsShared";
 import { applyPlannerRouteTelemetry } from "@/features/shared/api/routeObservability";
 
 export async function GET(req: NextRequest) {

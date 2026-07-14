@@ -1,8 +1,0 @@
-export {
-  SITE_CTA_LINKS,
-  SITE_FOOTER_NAV,
-  SITE_HEADER_MORE_LINKS,
-  SITE_HEADER_PRIMARY_LINKS,
-  SITE_NAV_LINKS,
-  SITE_SOCIAL_LINKS,
-} from "@/lib/site-data/navigation";

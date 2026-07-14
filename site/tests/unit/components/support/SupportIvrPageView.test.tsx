@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { SupportIvrPageView } from '@/components/support/SupportIvrPageView';
-import { SUPPORT_IVR_PAGE_COPY } from '@/lib/site-data/routeCopy';
+import { SUPPORT_IVR_PAGE_COPY } from '@/features/site/data/routeCopy';
 
 vi.mock('@/components/home/Hero', () => ({
   Hero: ({ title, subtitle, backgroundImage, showButton }: any) => (

@@ -3,18 +3,18 @@ import Link from "next/link";
 import { CompareColumnActions } from "@/components/products/CompareColumnActions";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 import { HomeMarketingLayout } from "@/components/home/layout";
-import { getProducts, type Product } from "@/features/catalog/getProducts";
+import { getProducts, type Product } from "@/lib/catalog/site/getProducts";
 import {
   getCatalogCategoryLabel,
   normalizeRequestedCategoryId,
-} from "@/features/catalog/categories";
+} from "@/lib/catalog/site/categories";
 import {
   filterMeaningfulDimensionText,
   filterMeaningfulMaterialList,
 } from "@/lib/displayText";
 import { normalizeAssetPath } from "@/lib/assetPaths";
-import { COMPARE_ROUTE_COPY } from "@/lib/site-data/routeCopy";
-import { COMPARE_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { COMPARE_ROUTE_COPY } from "@/features/site/data/routeCopy";
+import { COMPARE_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = COMPARE_PAGE_METADATA;
 

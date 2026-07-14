@@ -12,11 +12,11 @@ import {
   buildFallbackFacets,
 } from '@/app/(site)/products/[category]/FilterGrid.helpers';
 
-vi.mock('@/features/catalog/filters', () => ({
+vi.mock('@/lib/catalog/site/filters', () => ({
   PRICE_RANGES: ['Under 5,000', '5,000-10,000', '10,000-20,000', '20,000+'],
 }));
 
-vi.mock('@/features/catalog/traits', () => ({
+vi.mock('@/lib/catalog/site/traits', () => ({
   hasVerifiedHeadrest: vi.fn(() => false),
   hasVerifiedHeightAdjustable: vi.fn(() => false),
 }));

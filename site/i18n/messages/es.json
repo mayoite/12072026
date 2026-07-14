@@ -555,14 +555,14 @@
     ]
   },
   "products": {
-  "heroSubtitle": "Categorías de mobiliario diseñadas para flujos de trabajo reales de oficina, durabilidad a largo plazo y crecimiento escalable.",
-  "headlineLead": "Productos seleccionados para",
-  "headlineAccent": "el rendimiento, no solo la presentación.",
-  "pillarsKicker": "Por qué estas categorías",
-  "pillarsTitleLead": "Diseñadas para",
-  "pillarsTitleAccent": "flujos de trabajo reales de oficina",
-  "pillarsIntro": "Cada categoría se selecciona por durabilidad, claridad de especificación y soporte después de la entrega, no solo por la presentación.",
-  "pillars": [
+    "heroSubtitle": "Categorías de mobiliario diseñadas para flujos de trabajo reales de oficina, durabilidad a largo plazo y crecimiento escalable.",
+    "headlineLead": "Productos seleccionados para",
+    "headlineAccent": "el rendimiento, no solo la presentación.",
+    "pillarsKicker": "Por qué estas categorías",
+    "pillarsTitleLead": "Diseñadas para",
+    "pillarsTitleAccent": "flujos de trabajo reales de oficina",
+    "pillarsIntro": "Cada categoría se selecciona por durabilidad, claridad de especificación y soporte después de la entrega, no solo por la presentación.",
+    "pillars": [
       {
         "title": "Orientación guiada por especificaciones",
         "detail": "Definimos la cantidad de personal, los patrones de uso y el presupuesto para que las elecciones de producto sean prácticas desde el primer día.",
@@ -893,5 +893,10 @@
     "introDescription": "Esta página funciona mejor cuando dirige rápidamente a los visitantes a la ruta de soporte correcta en lugar de forzar solicitudes de contacto genéricas. Debe mantenerse alineada con los flujos de servicio, seguimiento y Resource Desk.",
     "noteTitle": "Mejor uso",
     "noteDescription": "Comience aquí cuando sepa que necesita ayuda, pero aún no esté seguro de si la solicitud pertenece a servicio, documentación, seguimiento de entrega o soporte de planificación."
+  },
+  "workspace": {
+    "backToHome": "Back to Home",
+    "accessPanelTitle": "Precision in Planning",
+    "accessPanelDescription": "Experience the Oando Suite. Our architectural tools are designed for accuracy, performance, and clear collaboration across teams."
   }
 }

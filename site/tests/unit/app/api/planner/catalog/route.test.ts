@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
-import { createServerClient } from "@/lib/supabase/server";
-import { managedProductRowToCatalogItem } from "@/features/planner/catalog/managedProductCatalogBridge";
-import { normalizePlannerManagedProductRow } from "@/features/planner/catalog/plannerManagedProductsShared";
+import { createServerClient } from "@/platform/supabase/server";
+import { managedProductRowToCatalogItem } from "@/features/planner/catalog-api/managedProductCatalogBridge";
+import { normalizePlannerManagedProductRow } from "@/features/planner/catalog-api/plannerManagedProductsShared";
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/platform/supabase/server", () => ({
   createServerClient: vi.fn(),
 }));
 
@@ -16,11 +16,11 @@ vi.mock("@/app/api/admin/_lib/server", () => ({
   isMissingTableError: vi.fn((msg: string) => msg.includes("does not exist")),
 }));
 
-vi.mock("@/features/planner/catalog/managedProductCatalogBridge", () => ({
+vi.mock("@/features/planner/catalog-api/managedProductCatalogBridge", () => ({
   managedProductRowToCatalogItem: vi.fn((row) => ({ id: row.id, name: row.name })),
 }));
 
-vi.mock("@/features/planner/catalog/plannerManagedProductsShared", () => ({
+vi.mock("@/features/planner/catalog-api/plannerManagedProductsShared", () => ({
   normalizePlannerManagedProductRow: vi.fn((row) => row),
 }));
 

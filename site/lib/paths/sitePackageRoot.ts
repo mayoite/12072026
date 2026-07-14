@@ -18,8 +18,11 @@ export function resolveSitePackageRoot(): string {
 }
 
 export function resolveBlockDescriptorsDir(): string {
-  return path.join(resolveSitePackageRoot(), "block-descriptors");
+  return path.join(resolveSitePackageRoot(), "inventory", "descriptors");
 }
+
+/** @deprecated Use resolveBlockDescriptorsDir — legacy path name for docs and migrations. */
+export const BLOCK_DESCRIPTORS_DIR_SEGMENT = "inventory/descriptors" as const;
 
 export function resolvePublicDir(): string {
   return path.join(resolveSitePackageRoot(), "public");

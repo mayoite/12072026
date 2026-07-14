@@ -53,7 +53,7 @@ async function main() {
         capturedAt,
         checkIds: ["08-PERS-09", "dual-read"],
         pass,
-        disk: { enabled: true, source: "site/block-descriptors" },
+        disk: { enabled: true, source: "site/inventory/descriptors" },
         mirror: { enabled: false, deferred: "PLAN-FAIL-0409" },
         note: "Vitest-backed disk dual-read; Supabase mirror not promoted.",
       },

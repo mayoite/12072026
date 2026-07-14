@@ -8,7 +8,7 @@ beforeAll(() => {
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-key";
 });
 
-vi.mock("@/lib/supabase/client", () => ({
+vi.mock("@/platform/supabase/client", () => ({
   createClient: vi.fn(() => ({
     from: vi.fn(() => ({
       select: vi.fn(() => ({

@@ -10,6 +10,6 @@ describe("PlannerLayoutGraphic", () => {
     expect(container).toBeDefined();
   });
   it("should have function PlannerLayoutGraphic defined", () => {
-    expect(PlannerLayoutGraphic).toBeTypeOf("function");
+    expect(PlannerLayoutGraphic).toBeTypeOf("function"); expect(String(PlannerLayoutGraphic)).toContain('function');
   });
 });

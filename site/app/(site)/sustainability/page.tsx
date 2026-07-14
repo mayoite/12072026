@@ -3,8 +3,8 @@ import {
   EditorialArrowLink,
 } from "@/components/site/EditorialRoute";
 import { HomeMarketingLayout } from "@/components/home/layout";
-import { SUSTAINABILITY_PAGE_COPY } from "@/lib/site-data/routeCopy";
-import { SUSTAINABILITY_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { SUSTAINABILITY_PAGE_COPY } from "@/features/site/data/routeCopy";
+import { SUSTAINABILITY_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = SUSTAINABILITY_PAGE_METADATA;
 

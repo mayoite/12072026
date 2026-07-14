@@ -16,7 +16,7 @@ const manifest = JSON.parse(
 
 const en = JSON.parse(fs.readFileSync(path.join(messagesDir, "en.json"), "utf8"));
 
-function mergePreserveTranslations(existing, enSource) {
+export function mergePreserveTranslations(existing, enSource) {
   if (enSource === null || typeof enSource !== "object") {
     return existing !== undefined ? existing : enSource;
   }
@@ -42,23 +42,50 @@ function mergePreserveTranslations(existing, enSource) {
   return out;
 }
 
-function marketingSubtree(messages) {
+export function marketingSubtree(messages, namespaces = manifest.allMarketingNamespaces) {
   const out = {};
-  for (const namespace of manifest.allMarketingNamespaces) {
+  for (const namespace of namespaces) {
     if (messages[namespace]) out[namespace] = structuredClone(messages[namespace]);
   }
   return out;
 }
 
-for (const locale of manifest.deferredLocales) {
-  const file = path.join(messagesDir, `${locale}.json`);
-  const existing = fs.existsSync(file)
-    ? JSON.parse(fs.readFileSync(file, "utf8"))
-    : {};
-  const merged = { ...existing };
-  for (const [namespace, enSubtree] of Object.entries(marketingSubtree(en))) {
-    merged[namespace] = mergePreserveTranslations(existing[namespace], enSubtree);
+export function syncDeferredLocaleMessages({
+  messagesDir: dir = messagesDir,
+  locales = manifest.deferredLocales,
+  enSource = en,
+  namespaces = manifest.allMarketingNamespaces,
+  write = true,
+} = {}) {
+  const results = [];
+  for (const locale of locales) {
+    const file = path.join(dir, `${locale}.json`);
+    const existing = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, "utf8")) : {};
+    const merged = { ...existing };
+    const subtree = marketingSubtree(enSource, namespaces);
+    for (const [namespace, enSubtree] of Object.entries(subtree)) {
+      merged[namespace] = mergePreserveTranslations(existing[namespace], enSubtree);
+    }
+    if (write) {
+      fs.writeFileSync(file, `${JSON.stringify(merged, null, 2)}\n`, "utf8");
+    }
+    results.push({ locale, namespaces: Object.keys(subtree).length, merged });
   }
-  fs.writeFileSync(file, `${JSON.stringify(merged, null, 2)}\n`, "utf8");
-  console.log(`Updated ${locale}.json with ${manifest.allMarketingNamespaces.length} marketing namespaces`);
+  return results;
+}
+
+function isDirectRun() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectRun()) {
+  for (const result of syncDeferredLocaleMessages()) {
+    console.log(`Updated ${result.locale}.json with ${result.namespaces} marketing namespaces`);
+  }
 }

@@ -7,7 +7,7 @@ import { Minus, Plus, Trash as Trash2 } from "@phosphor-icons/react";
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { useQuoteCart } from "@/lib/store/quoteCart";
-import { QUOTE_CART_ROUTE_COPY } from "@/lib/site-data/routeCopy";
+import { QUOTE_CART_ROUTE_COPY } from "@/features/site/data/routeCopy";
 import { normalizeAssetPath } from "@/lib/assetPaths";
 
 function getCompareHref(items: Array<{ href?: string }>) {

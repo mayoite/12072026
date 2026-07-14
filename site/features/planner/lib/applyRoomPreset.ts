@@ -1,4 +1,4 @@
-import type { RoomPreset } from "@/features/planner/catalog/roomPresets";
+import type { RoomPreset } from "@/features/planner/catalog-api/roomPresets";
 
 /**
  * Archive fabric runtime removed.

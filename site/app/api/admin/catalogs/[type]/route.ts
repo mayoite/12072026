@@ -23,7 +23,7 @@ import {
   listConfiguratorCatalog,
   listStandardCatalog,
   resolveCatalogType,
-} from "@/features/planner/admin/api/catalogAdminHandlers";
+} from "@/features/admin/api/catalogAdminHandlers";
 
 type RouteContext = {
   params: Promise<{ type: string }>;

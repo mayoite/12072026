@@ -27,8 +27,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const CORE_DIR = join(__dirname, "..", "app", "css", "core");
 const INDEX_PATH = join(__dirname, "..", "app", "css", "index.css");
 
-const MAX_SOFT = 350;
-const MAX_HARD = 500;
+export const MAX_SOFT = 350;
+export const MAX_HARD = 500;
 
 const SECTION_RE = /^\/\* --- ([a-zA-Z0-9_-]+\.css) --- \*\//;
 
@@ -45,7 +45,7 @@ function readLines(rel) {
  * marker. Returns [{ name, lines[] }] preserving order. Content before the
  * first marker becomes a `_header` section (banner comment).
  */
-function splitByMarkers(lines) {
+export function splitByMarkers(lines) {
   const sections = [];
   let current = null;
   for (const line of lines) {
@@ -69,7 +69,7 @@ function splitByMarkers(lines) {
  * Sub-split an oversized section by `/* ââââ ... ââââ *\/` sub-headers or
  * `@utility`/`@keyframes` block starts. Returns [{ name, lines[] }].
  */
-function subSplit(section, baseName) {
+export function subSplit(section, baseName) {
   const out = [];
   let current = { name: baseName.replace(/\.css$/, "-1.css"), lines: [] };
   let idx = 1;
@@ -100,13 +100,13 @@ function subSplit(section, baseName) {
   return out;
 }
 
-function trimTrailingBlank(lines) {
+export function trimTrailingBlank(lines) {
   const out = [...lines];
   while (out.length && out[out.length - 1].trim() === "") out.pop();
   return out;
 }
 
-function planFile(name, lines) {
+export function planFile(name, lines) {
   const trimmed = trimTrailingBlank(lines);
   const count = trimmed.length;
   // Strip redundant directory-name prefix (utilities-foo.css -> foo.css)
@@ -222,4 +222,17 @@ function run() {
   console.log(`\n✅ Wrote ${plan.length} files + regenerated index.css`);
 }
 
-run();
+
+function isDirectRun() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectRun()) {
+  run();
+}

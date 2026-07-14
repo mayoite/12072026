@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Envelope as Mail, ChatCircle as MessageCircle, Phone, X } from "@phosphor-icons/react";
 import { hasConsentChoice } from "@/lib/consent";
 import { trackSiteCtaClick } from "@/lib/analytics/siteEvents";
-import { buildMailtoHref, buildWhatsAppHref, SITE_CONTACT, toTelHref } from "@/lib/site-data/contact";
+import { buildMailtoHref, buildWhatsAppHref, SITE_CONTACT, toTelHref } from "@/features/site/data/contact";
 import { routeSuppressesFloatingQuickContact } from '@/features/crm/contactSurfaces';
 
 export function WhatsAppCTA() {

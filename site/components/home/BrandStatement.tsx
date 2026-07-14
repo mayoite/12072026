@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/shared/Reveal";
-import { HOMEPAGE_BRAND_STATEMENT_CONTENT } from "@/lib/site-data/homepage";
+import { HOMEPAGE_BRAND_STATEMENT_CONTENT } from "@/features/site/data/homepage";
 
 export function BrandStatement() {
   return (

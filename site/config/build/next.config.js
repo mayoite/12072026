@@ -202,6 +202,18 @@ const nextConfig = {
       { source: "/planner/fabric/:path*", destination: "/planner/canvas/", permanent: true },
       { source: "/planner/open3d", destination: "/planner/canvas/", permanent: true },
       { source: "/planner/open3d/:path*", destination: "/planner/canvas/", permanent: true },
+      // Legacy admin catalog shims (routes removed; handlers at /api/admin/catalogs/*)
+      { source: "/admin/buddy-catalog", destination: "/admin/planner-catalog/", permanent: true },
+      { source: "/admin/buddy-catalog/:path*", destination: "/admin/planner-catalog/:path*", permanent: true },
+      { source: "/api/admin/buddy-catalog", destination: "/api/admin/catalogs/configurator/", permanent: true },
+      { source: "/api/admin/buddy-catalog/:id", destination: "/api/admin/catalogs/configurator/:id/", permanent: true },
+      // Legacy CRM / ops portals (canonical: /admin/crm, /admin/customer-queries)
+      { source: "/crm", destination: "/admin/crm/", permanent: true },
+      { source: "/crm/:path*", destination: "/admin/crm/:path*", permanent: true },
+      { source: "/ops", destination: "/admin/customer-queries/", permanent: true },
+      { source: "/ops/customer-queries", destination: "/admin/customer-queries/", permanent: true },
+      { source: "/ops/customer-queries/:path*", destination: "/admin/customer-queries/", permanent: true },
+      { source: "/ops/:path*", destination: "/admin/customer-queries/", permanent: true },
     ];
   },
   async headers() {
@@ -257,9 +269,8 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     unoptimized: useUnoptimizedImages,
     remotePatterns: imageRemotePatterns,
-    // Allow SVG only if something still points at category.svg; product paths prefer raster fallback.
-    dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Raster-only via next/image. SVG catalog assets load as static files / <img>, not Image optimizer.
+    dangerouslyAllowSVG: false,
   },
   experimental: {
     optimizePackageImports: ["@phosphor-icons/react", "framer-motion", "three", "@react-three/fiber", "@react-three/drei"], // PERF-FIX: tree-shake heavy deps

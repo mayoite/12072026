@@ -60,9 +60,7 @@
 
 - Process: `Agents/INDEX.md`.
 - Execute: `plan/README.md`.
-- Facts: `Readme.md` and `START.md`.
-- Tests: `testing-handbook.md`.
-- Operations: `OPERATIONS_RUNBOOK.md`.
+- Facts, tests, and operations: `Readme.md`.
 - Licenses: `docs/Lockedfiles/03-dependencies-engines-current.md`.
 
 Run `pnpm run check:layout` before completion.

@@ -4,10 +4,10 @@
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { PLANNER_CATALOG_ITEMS } from "@/features/planner/catalog/workspaceCatalog";
-import { resolveCatalogItemBlock2D } from "@/features/planner/catalog/catalogBlockBridge";
+import { PLANNER_CATALOG_ITEMS } from "@/features/planner/catalog-api/workspaceCatalog";
+import { resolveCatalogItemBlock2D } from "@/features/planner/catalog-api/catalogBlockBridge";
 import { blockToSvg, type Block2D } from "@/lib/catalog/blocks2d";
-import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
+import type { CatalogItem } from "@/features/planner/catalog-api/catalogTypes";
 import { loadBlockCss, rasterizeSvg, RASTER_BG, styleTag } from "./blockRenderUtils";
 
 const REPO = resolve(__dirname, "../..");

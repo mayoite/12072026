@@ -18,7 +18,7 @@ Reconciled against `site/` on 2026-07-14. **Implemented-in-code items live in FE
 - [x] `SITE-IA-03` `/catalog` redirects to downloads (`catalog/page.tsx`).
 - [x] `SITE-MEASURE-02` conversion dedupe (`conversionContract.test.ts`).
 - [x] `SITE-MEASURE-03` analytics privacy filter (`conversionContract.test.ts`).
-- [x] `SITE-SEO-02` title suffix dedup in `buildPageMetadata` (`lib/site-data/seo.ts`).
+- [x] `SITE-SEO-02` title suffix dedup in `buildPageMetadata` (`features/site/data/seo.ts`).
 - [ ] `SITE-MEASURE-01` full funnel measurable in production (`PAGE_VIEW` + downstream events unwired).
 - [ ] Source and campaign context survives Site → Planner entry.
 - [ ] Consent gating wired before emit.

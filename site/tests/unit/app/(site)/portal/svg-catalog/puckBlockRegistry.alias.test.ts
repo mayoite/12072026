@@ -7,7 +7,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
-import * as canonical from "@/features/planner/admin/svg-editor/puckBlockRegistry";
+import * as canonical from "@/features/admin/svg-editor/puckBlockRegistry";
 import * as alias from "@/app/(site)/portal/svg-catalog/puckBlockRegistry";
 
 describe("portal/svg-catalog/puckBlockRegistry.ts alias (Phase 05)", () => {
@@ -18,7 +18,7 @@ describe("portal/svg-catalog/puckBlockRegistry.ts alias (Phase 05)", () => {
     );
     const source = readFileSync(aliasPath, "utf8").trim();
     expect(source).toBe(
-      'export * from "@/features/planner/admin/svg-editor/puckBlockRegistry";',
+      'export * from "@/features/admin/svg-editor/puckBlockRegistry";',
     );
   });
 

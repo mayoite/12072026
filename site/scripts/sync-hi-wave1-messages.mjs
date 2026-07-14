@@ -14,10 +14,7 @@ const manifest = JSON.parse(
   fs.readFileSync(path.join(siteRoot, "i18n", "marketing-parity-manifest.json"), "utf8"),
 );
 
-const en = JSON.parse(fs.readFileSync(path.join(messagesDir, "en.json"), "utf8"));
-const hi = JSON.parse(fs.readFileSync(path.join(messagesDir, "hi.json"), "utf8"));
-
-const HI_OVERRIDES = {
+export const HI_OVERRIDES = {
   home: {
     title: "ओआंडो प्लेटफॉर्म",
     subtitle: "पेशेवर स्पेस प्लानिंग और डिज़ाइन टूल",
@@ -49,7 +46,7 @@ const HI_OVERRIDES = {
   },
 };
 
-function deepMerge(base, overrides) {
+export function deepMerge(base, overrides) {
   if (!overrides) return base;
   const out = { ...base };
   for (const [key, value] of Object.entries(overrides)) {
@@ -61,9 +58,38 @@ function deepMerge(base, overrides) {
   return out;
 }
 
-for (const namespace of manifest.wave1Namespaces) {
-  hi[namespace] = deepMerge(structuredClone(en[namespace]), HI_OVERRIDES[namespace]);
+export function buildHiWave1Messages(en, hi, namespaces = manifest.wave1Namespaces, overrides = HI_OVERRIDES) {
+  const next = { ...hi };
+  for (const namespace of namespaces) {
+    next[namespace] = deepMerge(structuredClone(en[namespace]), overrides[namespace]);
+  }
+  return next;
 }
 
-fs.writeFileSync(path.join(messagesDir, "hi.json"), `${JSON.stringify(hi, null, 2)}\n`, "utf8");
-console.log(`Updated hi.json wave1 namespaces: ${manifest.wave1Namespaces.join(", ")}`);
+export function syncHiWave1Messages({
+  messagesDir: dir = messagesDir,
+  write = true,
+} = {}) {
+  const en = JSON.parse(fs.readFileSync(path.join(dir, "en.json"), "utf8"));
+  const hi = JSON.parse(fs.readFileSync(path.join(dir, "hi.json"), "utf8"));
+  const next = buildHiWave1Messages(en, hi);
+  if (write) {
+    fs.writeFileSync(path.join(dir, "hi.json"), `${JSON.stringify(next, null, 2)}\n`, "utf8");
+  }
+  return { namespaces: manifest.wave1Namespaces, next };
+}
+
+function isDirectRun() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectRun()) {
+  const { namespaces } = syncHiWave1Messages();
+  console.log(`Updated hi.json wave1 namespaces: ${namespaces.join(", ")}`);
+}

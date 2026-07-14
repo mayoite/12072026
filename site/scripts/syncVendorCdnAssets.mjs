@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PUBLIC_DIR = path.join(ROOT, "public");
 
-const VENDOR_DOWNLOADS = [
+export const VENDOR_DOWNLOADS = [
   {
     url: "https://cdn.jsdelivr.net/npm/@google/model-viewer@4.3.1/dist/model-viewer.min.js",
     dest: "cdn/vendor/model-viewer@4.3.1/model-viewer.min.js",
@@ -34,7 +34,7 @@ const VENDOR_DOWNLOADS = [
   },
 ];
 
-const REQUIRED_LOCAL_PATHS = [
+export const REQUIRED_LOCAL_PATHS = [
   "cdn/vendor/model-viewer@4.3.1/model-viewer.min.js",
   "cdn/vendor/draco/1.5.6/draco_wasm_wrapper.js",
   "cdn/vendor/basis-universal/2021-04-15-ba1c3e4/basis_transcoder.wasm",
@@ -43,8 +43,8 @@ const REQUIRED_LOCAL_PATHS = [
   "cdn/potsdamer_platz_1k.hdr",
 ];
 
-async function downloadFile(url, destPath) {
-  const absoluteDest = path.join(PUBLIC_DIR, destPath);
+export async function downloadFile(url, destPath, publicDir = PUBLIC_DIR, fetchImpl = fetch) {
+  const absoluteDest = path.join(publicDir, destPath);
   const dir = path.dirname(absoluteDest);
   fs.mkdirSync(dir, { recursive: true });
 
@@ -53,7 +53,7 @@ async function downloadFile(url, destPath) {
     return true;
   }
 
-  const response = await fetch(url);
+  const response = await fetchImpl(url);
   if (!response.ok) {
     console.error(`failed: ${url} (${response.status})`);
     return false;
@@ -65,9 +65,9 @@ async function downloadFile(url, destPath) {
   return true;
 }
 
-function verifyRequiredPaths() {
-  const missing = REQUIRED_LOCAL_PATHS.filter((relPath) => {
-    const absolute = path.join(PUBLIC_DIR, relPath);
+export function verifyRequiredPaths(publicDir = PUBLIC_DIR, required = REQUIRED_LOCAL_PATHS) {
+  const missing = required.filter((relPath) => {
+    const absolute = path.join(publicDir, relPath);
     return !fs.existsSync(absolute) || fs.statSync(absolute).size === 0;
   });
 
@@ -76,32 +76,55 @@ function verifyRequiredPaths() {
     for (const relPath of missing) {
       console.error(`  - public/${relPath}`);
     }
-    return false;
+    return { ok: false, missing };
   }
 
-  console.log(`verified ${REQUIRED_LOCAL_PATHS.length} required local assets`);
-  return true;
+  console.log(`verified ${required.length} required local assets`);
+  return { ok: true, missing: [] };
 }
 
-async function main() {
+export async function syncVendorCdnAssets({
+  publicDir = PUBLIC_DIR,
+  downloads = VENDOR_DOWNLOADS,
+  fetchImpl = fetch,
+  download = true,
+} = {}) {
   console.log("syncing vendor CDN assets into public/...");
 
   let ok = true;
-  for (const item of VENDOR_DOWNLOADS) {
-    const success = await downloadFile(item.url, item.dest);
-    ok = ok && success;
+  if (download) {
+    for (const item of downloads) {
+      const success = await downloadFile(item.url, item.dest, publicDir, fetchImpl);
+      ok = ok && success;
+    }
   }
 
-  ok = verifyRequiredPaths() && ok;
+  const verified = verifyRequiredPaths(publicDir);
+  ok = verified.ok && ok;
+  return { ok, missing: verified.missing };
+}
 
-  if (!ok) {
+async function main() {
+  const result = await syncVendorCdnAssets();
+  if (!result.ok) {
     process.exit(1);
   }
-
   console.log("vendor CDN sync complete");
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+function isDirectRun() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectRun()) {
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}

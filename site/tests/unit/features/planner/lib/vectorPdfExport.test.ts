@@ -4,5 +4,6 @@ import { createPlannerPdf } from "@/features/planner/lib/vectorPdfExport";
 describe("vectorPdfExport", () => {
   it("should have function createPlannerPdf defined", () => {
     expect(createPlannerPdf).toBeTypeOf("function");
+    expect(createPlannerPdf.name.length).toBeGreaterThan(0);
   });
 });

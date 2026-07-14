@@ -17,20 +17,20 @@ const manifest = JSON.parse(
   fs.readFileSync(path.join(siteRoot, "i18n", "marketing-parity-manifest.json"), "utf8"),
 );
 
-const LANG = { de: "German", es: "Spanish", fr: "French" };
-const BATCH_SIZE = 35;
-const SKIP_VALUE = /^(https?:\/\/|\/|mailto:|\+?\d[\d\s-]{8,}|[^@\s]+@[^@\s]+\.[^@\s]+)$/;
+export const LANG = { de: "German", es: "Spanish", fr: "French" };
+export const BATCH_SIZE = 35;
+// Prefix match for urls/paths/mailto; full match for phones/emails.
+export const SKIP_VALUE =
+  /^(https?:\/\/\S*|\/\S*|mailto:\S*|\+?\d[\d\s-]{8,}|[^@\s]+@[^@\s]+\.[^@\s]+)$/;
 
-loadEnvLocal();
-
-function shouldSkipTranslation(value) {
+export function shouldSkipTranslation(value) {
   if (!value || typeof value !== "string") return true;
   if (SKIP_VALUE.test(value.trim())) return true;
   if (/^[\d+.,\s%-]+$/.test(value.trim())) return true;
   return false;
 }
 
-function collectLeaves(value, prefix = "", out = []) {
+export function collectLeaves(value, prefix = "", out = []) {
   if (typeof value === "string") {
     if (!shouldSkipTranslation(value)) out.push({ path: prefix, value });
     return out;
@@ -48,7 +48,7 @@ function collectLeaves(value, prefix = "", out = []) {
   return out;
 }
 
-function setByPath(root, pathExpr, value) {
+export function setByPath(root, pathExpr, value) {
   const tokens = [];
   const re = /([^.\[\]]+)|\[(\d+)\]/g;
   let match = re.exec(pathExpr);
@@ -69,11 +69,31 @@ function setByPath(root, pathExpr, value) {
   cursor[tokens.at(-1)] = value;
 }
 
-function chunk(items, size) {
+export function chunk(items, size) {
   const out = [];
   for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
   return out;
 }
+
+export function deepMergeStructure(base, overrides) {
+  const out = structuredClone(base);
+  for (const [key, value] of Object.entries(overrides ?? {})) {
+    if (
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      out[key] &&
+      typeof out[key] === "object" &&
+      !Array.isArray(out[key])
+    ) {
+      out[key] = deepMergeStructure(out[key], value);
+    } else {
+      out[key] = value;
+    }
+  }
+  return out;
+}
+
 
 async function translateBatch(entries, locale, label) {
   const keys = [
@@ -137,6 +157,7 @@ async function translateBatch(entries, locale, label) {
 }
 
 async function main() {
+  loadEnvLocal();
   const en = JSON.parse(fs.readFileSync(path.join(messagesDir, "en.json"), "utf8"));
 
   for (const locale of manifest.deferredLocales) {
@@ -178,19 +199,19 @@ async function main() {
   }
 }
 
-function deepMergeStructure(base, overrides) {
-  const out = structuredClone(base);
-  for (const [key, value] of Object.entries(overrides ?? {})) {
-    if (value && typeof value === "object" && !Array.isArray(value) && out[key] && typeof out[key] === "object" && !Array.isArray(out[key])) {
-      out[key] = deepMergeStructure(out[key], value);
-    } else {
-      out[key] = value;
-    }
+function isDirectRun() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
   }
-  return out;
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+if (isDirectRun()) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

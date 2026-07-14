@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { CategoryGrid } from '@/components/home/CategoryGrid';
 import enMessages from '@/i18n/messages/en.json';
-import { HOMEPAGE_COLLECTIONS_CONTENT } from '@/lib/site-data/homepage';
+import { HOMEPAGE_COLLECTIONS_CONTENT } from '@/features/site/data/homepage';
 
 vi.mock('next-intl/server', async () => {
   const messages = (await import('@/i18n/messages/en.json')).default;
@@ -31,11 +31,11 @@ vi.mock('@phosphor-icons/react', () => ({
   ShieldCheck: () => <span data-testid="shield" />
 }));
 
-vi.mock('@/features/catalog/getProducts', () => ({
+vi.mock('@/lib/catalog/site/getProducts', () => ({
   getCatalog: vi.fn().mockResolvedValue([])
 }));
 
-vi.mock('@/features/catalog/categories', () => ({
+vi.mock('@/lib/catalog/site/categories', () => ({
   buildRequestedCategoryCatalog: vi.fn().mockReturnValue([
     {
       id: 'cat-seating',

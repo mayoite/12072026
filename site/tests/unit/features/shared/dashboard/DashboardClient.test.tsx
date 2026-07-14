@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import React from "react";
 import { DashboardClient } from "@/features/shared/dashboard/DashboardClient";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/platform/supabase/client";
 
 // Mock next/navigation
 const mockReplace = vi.fn();
@@ -15,7 +15,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 // Mock supabase client
-vi.mock("@/lib/supabase/client", () => {
+vi.mock("@/platform/supabase/client", () => {
   const mockAuth = {
     signOut: vi.fn(() => Promise.resolve()),
   };

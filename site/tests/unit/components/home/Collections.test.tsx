@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Collections } from '@/components/home/Collections';
-import { HOMEPAGE_COLLECTIONS_CONTENT } from '@/lib/site-data/homepage';
+import { HOMEPAGE_COLLECTIONS_CONTENT } from '@/features/site/data/homepage';
 
 // Mock Swiper
 vi.mock('swiper/react', () => ({

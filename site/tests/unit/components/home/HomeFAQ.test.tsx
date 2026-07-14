@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { HomeFAQ } from '@/components/home/HomeFAQ';
-import { HOMEPAGE_FAQ_CONTENT } from '@/lib/site-data/homepage';
+import { HOMEPAGE_FAQ_CONTENT } from '@/features/site/data/homepage';
 
 // Mock phosphor icons
 vi.mock('@phosphor-icons/react', () => ({

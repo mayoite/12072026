@@ -3,16 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle as CheckCircle2, Clock as Clock3, ShieldCheck } from "@phosphor-icons/react/dist/ssr";
 import { getTranslations } from "next-intl/server";
-import { getCatalog } from "@/features/catalog/getProducts";
+import { getCatalog } from "@/lib/catalog/site/getProducts";
 import {
   buildRequestedCategoryCatalog,
   getCatalogCategoryHref,
   getCatalogCategoryLabel,
-} from "@/features/catalog/categories";
+} from "@/lib/catalog/site/categories";
 import { CollectionsSectionHeading } from "@/components/home/CollectionsSectionHeading";
 import { HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { SectionIntro } from "@/components/shared/SectionIntro";
-import { DEFAULT_HERO_FALLBACK } from "@/lib/site-data/homepage";
+import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
 
 const PILLAR_ICONS = {
   "check-circle": CheckCircle2,

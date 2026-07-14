@@ -589,7 +589,7 @@ erDiagram
 
 ### Admin / Planner DB
 
-The admin DB is accessed exclusively through `createSupabaseAdminClient()`-equivalent patterns using the service role, which bypasses RLS. No per-user RLS policies are defined on the planner tables; access is enforced in the application layer (`features/planner/store/plannerPersistence.ts`, `lib/audit/auditRepository.ts`).
+The admin DB is accessed exclusively through `createSupabaseAdminClient()`-equivalent patterns using the service role, which bypasses RLS. No per-user RLS policies are defined on the planner tables; access is enforced in the application layer (`features/planner/cloud-store/plannerPersistence.ts`, `lib/audit/auditRepository.ts`).
 
 ---
 

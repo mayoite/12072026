@@ -2,80 +2,70 @@
 
 ## Vision
 
-Oando should connect inventory, layout, and commercial handoff without re-keying.
-
-The primary loop is simple:
+Connect inventory, layout, and commercial handoff without re-keying.
 
 1. Admin publishes trusted inventory.
-2. Site helps a public visitor discover Oando.
-3. The visitor enters Planner.
-4. The customer designs with available products.
+2. Site helps visitors discover Oando.
+3. Visitor enters Planner.
+4. Customer designs with available products.
 5. Planner creates a branded BOQ.
-6. The customer sends the BOQ to Oando.
+6. Customer sends the BOQ to Oando.
 
-The canvas is not the whole product.
+Canvas, catalog truth, and BOQ handoff are equally important.
 
-Catalog truth and BOQ handoff are equally important.
+## Tracks
 
-## Current tracks
+| Track | Owns |
+|---|---|
+| Admin | Catalog authoring, lifecycle, publication, audit |
+| Site | Acquisition, content, discovery, SEO, measurement |
+| Planner | Layout, 2D/3D, BOQ, submission |
+| Security | Auth, permissions, integration security, release provenance |
 
-- Admin owns catalog authoring, lifecycle, publication, and audit.
-- Site owns public acquisition, content, discovery, SEO, and measurement.
-- Planner owns layout, 2D/3D continuity, BOQ, and submission.
-- Security owns cross-track authorization, permissions, integration security, and release provenance verification.
+UI, accessibility, and performance apply inside product tracks.
 
-UI, accessibility, and performance apply inside the product tracks.
+## Current vs target
 
-## Product boundaries
+When docs and code differ, code wins until cutover is proven.
 
-- The Products database is the released catalog and SVG authority.
-- Admin writes released SVG revisions through a server-only transaction.
-- Planner imports released SVGs through a server API.
-- Static catalog files are migration inputs or isolated fixtures only.
-- Published SVG is the primary 2D symbol.
-- `Block2D` is a loading or missing-asset fallback.
-- BOQ is branded and product-backed.
-- Commercial pricing requires an approved price authority.
-- Demo prices must not reach customers as truth.
-- Archives, research, and screenshots are reference only.
+| Area | Target | Live (2026-07) |
+|---|---|---|
+| Released SVG | Products DB + R2 artifact bytes | **Disk** — `inventory/descriptors/`, `public/svg-catalog/` |
+| Planner SVG read | DB revision bytes via API | **Disk** — `svg-blocks` / `loadBuyerVisibleDescriptors()` |
+| Marketing catalog | Products DB | Products DB — `catalog_products` |
+| Planner managed catalog | Products DB | Products DB — `planner_managed_products` |
+| Publish dual-write | One DB transaction + pointer | Stub on `publishSvgEditorAction.ts` only |
+| Lifecycle + audit | Durable store | `results/admin/catalog-ops/` |
 
-## External benchmark
+Remove split authority via `plan/Admin/CHECKLIST.md` (`DB-SVG-01` … `05`) and `08-DATABASE-SVG-CONTRACT.md`.
 
-Professional planning tools join 2D, 3D, product data, and output lists.
+## Boundaries (target)
 
-Oando should meet that workflow bar without copying their assets or visual identity.
+- Products DB: target catalog + SVG authority; **live SVG is disk** until cutover.
+- Admin: server-only publish transaction (target); disk write first (live).
+- Planner: server API import (target); disk descriptors (live).
+- Static files: fixtures, migration input, or **current live SVG** — never silent DB override after cutover.
+- Published SVG primary; `Block2D` only for load/missing.
+- BOQ branded and product-backed; no demo prices as commercial truth.
+- Pricing needs approved authority. Archives/research are reference only.
 
-The detailed Planner interface benchmark is `06-UI-BENCHMARK.md`.
+## Benchmarks
 
-The detailed SVG-first Admin benchmark is `07-ADMIN-UI-BENCHMARK.md`.
+| Contract | Doc |
+|---|---|
+| Planner UI | `06-UI-BENCHMARK.md` |
+| Admin SVG UI | `07-ADMIN-UI-BENCHMARK.md` |
+| DB SVG publication | `08-DATABASE-SVG-CONTRACT.md` |
+| Site UI | `09-SITE-UI-BENCHMARK.md` |
+| Security | `10-SECURITY-BENCHMARK.md` |
 
-The database SVG contract is `08-DATABASE-SVG-CONTRACT.md`.
-
-The public Site benchmark is `09-SITE-UI-BENCHMARK.md`.
-
-The security benchmark is `10-SECURITY-BENCHMARK.md`.
-
-Useful references:
-
-- [Configura CET](https://www.configura.com/products/cet/commercial-interiors)
-- [pCon.planner](https://docs.pcon-solutions.com/pCon/planner/8.14/pCon.planner_8.14_Features_EN.pdf)
-- [WCAG 2.2](https://www.w3.org/TR/WCAG22/)
-- [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/)
-- [Core Web Vitals](https://web.dev/articles/defining-core-web-vitals-thresholds)
-- [Google Search guidance](https://developers.google.com/search/docs)
-- [OpenAPI](https://spec.openapis.org/oas/)
-- [buildingSMART IFC](https://www.buildingsmart.org/standards/bsi-standards/industry-foundation-classes/)
+References: [Configura CET](https://www.configura.com/products/cet/commercial-interiors) · [pCon.planner](https://docs.pcon-solutions.com/pCon/planner/8.14/pCon.planner_8.14_Features_EN.pdf) · [WCAG 2.2](https://www.w3.org/TR/WCAG22/) · [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) · [Core Web Vitals](https://web.dev/articles/defining-core-web-vitals-thresholds) · [Google Search](https://developers.google.com/search/docs) · [OpenAPI](https://spec.openapis.org/oas/) · [IFC](https://www.buildingsmart.org/standards/bsi-standards/industry-foundation-classes/)
 
 ## Quality targets
 
-- WCAG 2.2 AA for customer and Admin workflows.
-- Risk-based OWASP ASVS Level 2 target.
-- LCP at most 2.5 seconds at the 75th percentile.
-- INP at most 200 milliseconds at the 75th percentile.
-- CLS at most 0.1 at the 75th percentile.
-- Stable versioned internal document and catalog contracts.
-- OpenAPI and IFC evaluation only after the core workflow is trustworthy.
+WCAG 2.2 AA · OWASP ASVS L2 (risk-based) · LCP ≤2.5s · INP ≤200ms · CLS ≤0.1 (75th pctl) · versioned internal contracts. OpenAPI/IFC only after core workflow is trustworthy. Targets raise quality; they do not replace owner intent.
 
-These targets raise quality.
+## Package map
 
-They do not replace owner intent.
+Live `site/` decision tree: **`docs/site/ARCHITECTURE.md`**.  
+Tests layout: **`docs/site/tests-CONTENTS.md`**.

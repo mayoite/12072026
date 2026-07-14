@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { HOMEPAGE_PARTNERSHIP_CONTENT } from "@/lib/site-data/homepage";
+import { HOMEPAGE_PARTNERSHIP_CONTENT } from "@/features/site/data/homepage";
 import { fadeUp } from "@/lib/helpers/motion";
 
 export function PartnershipPanel() {

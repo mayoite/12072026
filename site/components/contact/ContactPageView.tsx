@@ -5,8 +5,8 @@ import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { CustomerQueryForm } from "@/components/contact/CustomerQueryForm";
 import { RouteCtaBand } from "@/components/shared/RouteCtaBand";
-import { SITE_CONTACT } from "@/lib/site-data/contact";
-import { buildPageJsonLd } from "@/lib/site-data/seo";
+import { SITE_CONTACT } from "@/features/site/data/contact";
+import { buildPageJsonLd } from "@/features/site/data/seo";
 import { SITE_URL } from "@/lib/siteUrl";
 import { sanitizeJsonForScript } from "@/lib/security/sanitize";
 

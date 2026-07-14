@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/supabase/types";
+import type { Database } from "@/platform/supabase/types";
 
 function readOptionalServiceEnv() {
   const url =

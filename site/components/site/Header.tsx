@@ -12,7 +12,7 @@ import {
   groupCategories,
   type GroupedCategory,
 } from "@/lib/navigation";
-import { SITE_HEADER_MORE_LINKS, SITE_HEADER_PRIMARY_LINKS } from "@/lib/siteNav";
+import { SITE_HEADER_MORE_LINKS, SITE_HEADER_PRIMARY_LINKS } from "@/features/site/data/navigation";
 
 /** Frozen at module load so SSR and client hydration always see the same nav order. */
 const HEADER_PRIMARY_LINKS = [...SITE_HEADER_PRIMARY_LINKS];

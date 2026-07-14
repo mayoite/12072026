@@ -25,9 +25,8 @@ import {
 } from "@/features/planner/project/persistence/memberPlanRepository";
 import type { StagingPlannerDocument } from "@/features/planner/project/persistence/plannerDocumentTypes";
 
-/** Perf budgets belong in dedicated benchmark gates; coverage instrumentation skews timings. */
-const describePhase04Benchmarks =
-  process.env.VITEST_COVERAGE_RUN === "1" ? describe.skip : describe;
+/** Perf budgets always run — no silent skip under coverage. */
+const describePhase04Benchmarks = describe;
 
 function percentile95(durations: number[]): number {
   const sorted = [...durations].sort((a, b) => a - b);

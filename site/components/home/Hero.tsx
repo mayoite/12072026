@@ -7,7 +7,7 @@ import { ArrowRight } from "@phosphor-icons/react";
 import type { Variants } from "framer-motion";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-import { DEFAULT_HERO_FALLBACK } from "@/lib/site-data/homepage";
+import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
 
 export interface HeroProps {
   title?: React.ReactNode;

@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 
-import type { CompatCategory as Category } from "@/features/catalog/getProducts";
+import type { CompatCategory as Category } from "@/lib/catalog/site/getProducts";
 
 import { AdvancedFilterGridInner } from "./FilterGridInner";
 

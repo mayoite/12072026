@@ -34,9 +34,9 @@ Remove an entry when its fix is freshly verified.
 
 ## FAIL: Admin code coverage below 80% (full tree)
 
-- **Scope:** `features/planner/admin/**/*.{ts,tsx}` unit coverage meter.
+- **Scope:** `features/admin/**/*.{ts,tsx}` unit coverage meter.
 - **Command (baseline 2026-07-13):**  
-  `pnpm --filter oando-site exec vitest run --coverage tests/unit/admin --coverage.include="features/planner/admin/**/*.{ts,tsx}" --coverage.all=true`  
+  `pnpm --filter oando-site exec vitest run --coverage tests/unit/admin --coverage.include="features/admin/**/*.{ts,tsx}" --coverage.all=true`  
   → ~**44% statements / 35% branches / 40% functions / 46% lines**.
 - **Later work:** Three agents added large unit suites (pricing file store/admin server, admin core utils/nav/inventory, SVG residual form-controls/revision/lock/rollback/etc.). **Full Admin tree not re-measured after those suites at ≥80%.**
 - **Symptom:** Page shells, `catalogAdminHandlers`, many preview panels, and other UI modules still dilute overall %. Pricing pure modules and several core pure files are high coverage in isolation.
@@ -79,10 +79,11 @@ Remove an entry when its fix is freshly verified.
 
 - **Scope:** Working tree hygiene (not a product PASS/FAIL of features).
 - **Symptom observed:** dirty or untracked  
-  - `site/block-descriptors/_catalog-lifecycle.json`  
-  - `site/block-descriptors/_descriptor-audit.jsonl`  
-  - `site/data/admin/price-books/_price-book-audit.jsonl`  
-  - `.tmp/...`, `.websites/svg-tools/FUXA`  
+  - `results/admin/catalog-ops/_catalog-lifecycle.json`  
+  - `results/admin/catalog-ops/_descriptor-audit.jsonl`  
+  - `site/features/admin/data/price-books/_price-book-audit.jsonl`  
+  - `.tmp/...`  
+  - (resolved) `.websites/` — untracked and deleted locally; gitignored  
 - **Rule:** Tests must never mutate canonical catalog files.
 - **Next:** Diff and restore accidental catalog/seed changes before release commits; keep tests on temp dirs only.
 - **Blocks:** Clean commit hygiene if noise is staged by mistake.

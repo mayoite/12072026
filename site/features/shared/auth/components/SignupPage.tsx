@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { CheckCircle as CheckCircle2, CircleNotch as Loader2 } from "@phosphor-icons/react";import { createClient } from '@/lib/supabase/client'
+import { CheckCircle as CheckCircle2, CircleNotch as Loader2 } from "@phosphor-icons/react";import { createClient } from '@/platform/supabase/client'
 import { ResendVerificationButton } from './ResendVerificationButton'
 import { humanizeAuthError } from '../lib/humanizeAuthError'
 import { Button, Input } from './AuthControls'

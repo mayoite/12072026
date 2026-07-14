@@ -10,7 +10,7 @@ import { withAuth } from "@/features/shared/api/withAuth";
 import {
   deleteStandardCatalog,
   patchStandardCatalog,
-} from "@/features/planner/admin/api/catalogAdminHandlers";
+} from "@/features/admin/api/catalogAdminHandlers";
 
 type RouteContext = {
   params: Promise<{ id: string }>;

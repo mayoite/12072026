@@ -20,20 +20,20 @@ type SeatingEntry = {
 const REPO_ROOT = process.cwd();
 const PUBLIC_ROOT = path.join(REPO_ROOT, "public");
 
-function toFsPath(assetPath: string): string {
-  return path.join(PUBLIC_ROOT, assetPath.replace(/^\/+/, "").split("/").join(path.sep));
+export function toFsPath(assetPath: string, publicRoot = PUBLIC_ROOT): string {
+  return path.join(publicRoot, assetPath.replace(/^\/+/, "").split("/").join(path.sep));
 }
 
-function fileExists(assetPath: string): boolean {
+export function fileExists(assetPath: string, publicRoot = PUBLIC_ROOT): boolean {
   if (!assetPath.startsWith("/")) return false;
-  return fs.existsSync(toFsPath(assetPath));
+  return fs.existsSync(toFsPath(assetPath, publicRoot));
 }
 
-function normalizeImageName(name: string): string {
+export function normalizeImageName(name: string): string {
   return name.replace(/\s+/g, "-").toLowerCase();
 }
 
-function candidateNames(baseName: string): string[] {
+export function candidateNames(baseName: string): string[] {
   const match = baseName.match(/^image-(\d+)$/i);
   if (!match) return [baseName];
   const number = Number.parseInt(match[1], 10);
@@ -42,13 +42,13 @@ function candidateNames(baseName: string): string[] {
   return [baseName, padded2];
 }
 
-function candidateExtensions(ext: string): string[] {
+export function candidateExtensions(ext: string): string[] {
   const normalized = ext.toLowerCase();
   const base = [normalized, ".webp", ".jpg", ".jpeg", ".png"];
   return Array.from(new Set(base));
 }
 
-function buildCandidates(assetPath: string): string[] {
+export function buildCandidates(assetPath: string): string[] {
   const parsed = path.posix.parse(assetPath);
   const baseVariants = candidateNames(parsed.name);
   const extVariants = candidateExtensions(parsed.ext || "");
@@ -63,9 +63,13 @@ function buildCandidates(assetPath: string): string[] {
   return Array.from(new Set(candidates));
 }
 
-async function copyOrConvert(sourcePath: string, targetPath: string): Promise<void> {
-  const sourceFs = toFsPath(sourcePath);
-  const targetFs = toFsPath(targetPath);
+export async function copyOrConvert(
+  sourcePath: string,
+  targetPath: string,
+  publicRoot = PUBLIC_ROOT,
+): Promise<void> {
+  const sourceFs = toFsPath(sourcePath, publicRoot);
+  const targetFs = toFsPath(targetPath, publicRoot);
   const targetDir = path.dirname(targetFs);
 
   if (!fs.existsSync(targetDir)) {
@@ -98,9 +102,9 @@ async function copyOrConvert(sourcePath: string, targetPath: string): Promise<vo
   fs.copyFileSync(sourceFs, targetFs);
 }
 
-function collectCatalogImages(): string[] {
-  const catalogPath = path.join(REPO_ROOT, "data", "site", "localCatalogIndex.json");
-  const seatingPath = path.join(REPO_ROOT, "tools", "scripts", "catalog-seating.json");
+export function collectCatalogImages(repoRoot = REPO_ROOT): string[] {
+  const catalogPath = path.join(repoRoot, "data", "site", "localCatalogIndex.json");
+  const seatingPath = path.join(repoRoot, "tools", "scripts", "catalog-seating.json");
 
   const catalogRaw = fs.readFileSync(catalogPath, "utf-8");
   const catalog = JSON.parse(catalogRaw) as CatalogEntry[];
@@ -127,27 +131,34 @@ function collectCatalogImages(): string[] {
   return Array.from(new Set(images));
 }
 
-async function main(): Promise<void> {
-  const images = collectCatalogImages();
+export async function syncCatalogImages(options: {
+  repoRoot?: string;
+  publicRoot?: string;
+} = {}): Promise<{ created: number; skipped: number; unresolved: number }> {
+  const repoRoot = options.repoRoot ?? REPO_ROOT;
+  const publicRoot = options.publicRoot ?? path.join(repoRoot, "public");
+  const images = collectCatalogImages(repoRoot);
   let created = 0;
   let skipped = 0;
   let unresolved = 0;
 
   for (const imagePath of images) {
-    if (fileExists(imagePath)) {
+    if (fileExists(imagePath, publicRoot)) {
       skipped++;
       continue;
     }
 
     const candidates = buildCandidates(imagePath);
-    const existing = candidates.find((candidate) => candidate !== imagePath && fileExists(candidate));
+    const existing = candidates.find(
+      (candidate) => candidate !== imagePath && fileExists(candidate, publicRoot),
+    );
 
     if (!existing) {
       unresolved++;
       continue;
     }
 
-    await copyOrConvert(existing, imagePath);
+    await copyOrConvert(existing, imagePath, publicRoot);
     created++;
   }
 
@@ -155,9 +166,16 @@ async function main(): Promise<void> {
   console.log(`Created: ${created}`);
   console.log(`Already present: ${skipped}`);
   console.log(`Unresolved: ${unresolved}`);
+  return { created, skipped, unresolved };
 }
 
-main().catch((error) => {
-  console.error("Catalog image sync failed:", error);
-  process.exit(1);
-});
+async function main(): Promise<void> {
+  await syncCatalogImages();
+}
+
+if (process.env.NODE_ENV !== "test" && process.argv[1]?.includes("sync_catalog_images")) {
+  main().catch((error) => {
+    console.error("Catalog image sync failed:", error);
+    process.exit(1);
+  });
+}

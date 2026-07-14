@@ -3,14 +3,8 @@ import { NextResponse } from "next/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { resolveAuthContext } from "@/features/shared/api/withAuth";
 import { ApiError } from "@/features/shared/api/ApiError";
-import {
-  createAdminServiceClient,
-  getClientIp,
-  isMissingTableError,
-} from "@/platform/supabase/adminServer";
+import { getClientIp } from "@/platform/supabase/adminServer";
 
-/** @deprecated Import from `@/platform/supabase/adminServer` instead. */
-export { createAdminServiceClient, getClientIp, isMissingTableError };
 
 export async function enforceAdminRateLimit(
   req: NextRequest,

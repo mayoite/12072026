@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { HomeClosingCta } from '@/components/home/HomeClosingCta';
-import { HOMEPAGE_CLOSING_CTA_CONTENT } from '@/lib/site-data/homepage';
+import { HOMEPAGE_CLOSING_CTA_CONTENT } from '@/features/site/data/homepage';
 
 vi.mock('@/components/shared/RouteCtaBand', () => ({
   RouteCtaBand: ({ kicker, title, description, actions }: any) => (
@@ -20,7 +20,7 @@ vi.mock('@/components/shared/RouteCtaBand', () => ({
   )
 }));
 
-vi.mock('@/lib/site-data/contact', () => ({
+vi.mock('@/features/site/data/contact', () => ({
   buildWhatsAppHref: (msg: string) => `https://wa.me/mock?text=${encodeURIComponent(msg)}`,
   toTelHref: (phone: string) => `tel:${phone}`,
   SITE_CONTACT: {

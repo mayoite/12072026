@@ -13,7 +13,7 @@ It proves that protected data, actions, integrations, and releases fail closed.
 - Security acceptance: `../../docs/architecture/10-SECURITY-BENCHMARK.md`.
 - Database SVG contract: `../../docs/architecture/08-DATABASE-SVG-CONTRACT.md`.
 - Database execution detail: `../../Plans/02-recovery/phases/06-database.md`.
-- Operations: `../../OPERATIONS_RUNBOOK.md`.
+- Operations: `../../Readme.md` (Operations section).
 
 OWASP ASVS 5.0.0 Level 2 is the verification target.
 

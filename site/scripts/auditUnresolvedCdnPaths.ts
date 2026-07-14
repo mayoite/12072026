@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 
-import { resolveProductImages } from "@/features/catalog/imageMetadata";
+import { resolveProductImages } from "@/lib/catalog/site/imageMetadata";
 import { buildBasenameIndex, localAssetExists } from "./lib/cdnAssetResolver";
 import { REPO_ROOT, SITE_PACKAGE_ROOT } from "./lib/repoRoot";
 
@@ -261,7 +261,7 @@ function collectLocalReferences(relPath: string): ProductRef[] {
     }
   }
 
-  const indexPath = path.resolve(process.cwd(), "lib/site-data/localCatalogIndex.json");
+  const indexPath = path.resolve(process.cwd(), "features/site/data/localCatalogIndex.json");
   if (fs.existsSync(indexPath)) {
     const index = JSON.parse(fs.readFileSync(indexPath, "utf8")) as Array<Record<string, unknown>>;
     for (const item of index) {
@@ -326,7 +326,7 @@ async function main() {
     const productSuggestion = suggestFromProductRefs(referencedBy);
     if (productSuggestion && !suggestedPath) {
       suggestedPath = productSuggestion;
-      reason = "Resolved via features/catalog/imageMetadata for referenced product";
+      reason = "Resolved via lib/catalog/site/imageMetadata for referenced product";
       confidence = "medium";
     } else if (productSuggestion && confidence === "none") {
       suggestedPath = productSuggestion;

@@ -3,6 +3,6 @@ import * as Module from "@/features/planner/lib/snapManager";
 
 describe("snapManager", () => {
   it("should import successfully", () => {
-    expect(Module).toBeDefined();
+    expect(Module).toBeDefined();`n    expect(Object.keys(Module).length).toBeGreaterThan(0);
   });
 });

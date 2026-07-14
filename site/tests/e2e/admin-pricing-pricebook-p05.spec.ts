@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { resetDefaultPriceBookSeed } from "@/features/planner/admin/pricing/priceBookAdmin.server";
+import { resetDefaultPriceBookSeed } from "@/features/admin/pricing/priceBookAdmin.server";
 
 test.describe("Admin P05 price book journey", () => {
   test.beforeEach(() => {

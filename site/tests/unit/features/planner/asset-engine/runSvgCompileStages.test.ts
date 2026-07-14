@@ -9,12 +9,12 @@ const siteRoot = path.resolve(__dirname, "../../../../../");
 
 describe("runSvgCompileStages (SVG S1–S3)", () => {
   it("compiles admin-shaped side-table BlockDescriptor to non-empty SVG", async () => {
-    const adminPath = path.join(siteRoot, "block-descriptors", "side-table-001.json");
+    const adminPath = path.join(siteRoot, "inventory", "descriptors", "side-table-001.json");
     const raw = JSON.parse(readFileSync(adminPath, "utf8")) as unknown;
 
     const result = await runSvgCompileStages(raw);
     expect(result.ok).toBe(true);
-    if (!result.ok) return;
+    if (!result.ok) throw new Error("expected result.ok");
 
     expect(result.stages).toContain("svg-s1-normalize");
     expect(result.stages).toContain("svg-s2-compile");
@@ -26,7 +26,7 @@ describe("runSvgCompileStages (SVG S1–S3)", () => {
   });
 
   it("admin side-table via runSvgCompileStages still works (authority gate)", async () => {
-    const adminPath = path.join(siteRoot, "block-descriptors", "side-table-001.json");
+    const adminPath = path.join(siteRoot, "inventory", "descriptors", "side-table-001.json");
     const raw = JSON.parse(readFileSync(adminPath, "utf8")) as unknown;
 
     const viaStages = await runSvgCompileStages(raw);
@@ -34,7 +34,7 @@ describe("runSvgCompileStages (SVG S1–S3)", () => {
 
     expect(viaStages.ok).toBe(true);
     expect(viaPublish.ok).toBe(true);
-    if (!viaStages.ok || !viaPublish.ok) return;
+    if (!viaStages.ok || !viaPublish.ok) throw new Error("expected compile stages ok");
 
     expect(viaPublish.stages).toEqual(viaStages.stages);
     expect(viaPublish.svg).toBe(viaStages.svg);
@@ -55,7 +55,7 @@ describe("runSvgCompileStages (SVG S1–S3)", () => {
     const raw = JSON.parse(readFileSync(fixturePath, "utf8")) as unknown;
     const result = await runSvgCompileStages(raw);
     expect(result.ok).toBe(true);
-    if (!result.ok) return;
+    if (!result.ok) throw new Error("expected result.ok");
     expect(result.svg).toContain("<svg");
   });
 });

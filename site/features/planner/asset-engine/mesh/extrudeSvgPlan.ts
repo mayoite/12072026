@@ -6,7 +6,7 @@
  * catalog-assets/generated/ only. Binary GLB remains GlbExtruderPreview (admin island)
  * until a dedicated G5 binary export is extracted.
  *
- * @see site/features/planner/admin/svg-editor/GlbExtruderPreview.tsx
+ * @see site/features/admin/svg-editor/GlbExtruderPreview.tsx
  * @see site/features/planner/project/catalog/modularCabinetV0GlbExport.ts (same plan pattern)
  */
 
@@ -92,7 +92,7 @@ export interface ExtrudeSvgGeneratedAssetPathResult {
 
 const BINARY_EXPORT_NOTE =
   "This plan is metadata only (P1 skeleton). Binary export today: " +
-  "features/planner/admin/svg-editor/GlbExtruderPreview.tsx (admin island). " +
+  "features/admin/svg-editor/GlbExtruderPreview.tsx (admin island). " +
   "Upload still must land under catalog-assets/generated/ only.";
 
 /** FNV-1a 32-bit hex fingerprint for stable path slugs (no node:crypto). */

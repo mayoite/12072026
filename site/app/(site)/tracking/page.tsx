@@ -3,8 +3,8 @@ import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
 import { RouteCtaBand } from "@/components/shared/RouteCtaBand";
 import { SectionIntro } from "@/components/shared/SectionIntro";
-import { TRACKING_PAGE_COPY } from "@/lib/site-data/routeCopy";
-import { TRACKING_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { TRACKING_PAGE_COPY } from "@/features/site/data/routeCopy";
+import { TRACKING_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = TRACKING_PAGE_METADATA;
 

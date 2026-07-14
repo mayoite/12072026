@@ -48,12 +48,12 @@ It covered these viewports:
 
 The reviewed implementation includes:
 
-- `site/features/planner/admin/svg-editor/AdminSvgEditorListView.tsx`
-- `site/features/planner/admin/svg-editor/AdminSvgEditorEditView.tsx`
-- `site/features/planner/admin/svg-editor/SvgEditorForm.tsx`
-- `site/features/planner/admin/svg-editor/SvgStudioCanvas.tsx`
-- `site/features/planner/admin/AdminCatalogTable.tsx`
-- `site/features/planner/admin/pricing/AdminPriceBookPageView.tsx`
+- `site/features/admin/svg-editor/AdminSvgEditorListView.tsx`
+- `site/features/admin/svg-editor/AdminSvgEditorEditView.tsx`
+- `site/features/admin/svg-editor/SvgEditorForm.tsx`
+- `site/features/admin/svg-editor/SvgStudioCanvas.tsx`
+- `site/features/admin/AdminCatalogTable.tsx`
+- `site/features/admin/pricing/AdminPriceBookPageView.tsx`
 
 The routes returned a page.
 

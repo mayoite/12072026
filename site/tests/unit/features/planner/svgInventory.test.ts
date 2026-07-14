@@ -8,8 +8,8 @@
 
 import { describe, it, expect, beforeEach } from "vitest";
 
-/** Perf budgets belong in dedicated benchmark gates; coverage instrumentation skews timings. */
-const describeInventoryBenchmarks = process.env.VITEST_COVERAGE_RUN === "1" ? describe.skip : describe;
+/** Perf budgets always run — no silent skip under coverage. */
+const describeInventoryBenchmarks = describe;
 
 // ────────────────────────────────────────────────────────────────
 // SVG Types & Themes

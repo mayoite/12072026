@@ -67,12 +67,12 @@ describe("SVG compile authority (publish vs V1)", () => {
   });
 
   it("compileSvgForPublish is THE no-I/O publish entry (same stages as runSvgCompileStages)", async () => {
-    const adminPath = path.join(siteRoot, "block-descriptors", "side-table-001.json");
+    const adminPath = path.join(siteRoot, "inventory", "descriptors", "side-table-001.json");
     const raw = JSON.parse(readFileSync(adminPath, "utf8")) as unknown;
 
     const result = await compileSvgForPublish(raw);
     expect(result.ok).toBe(true);
-    if (!result.ok) return;
+    if (!result.ok) throw new Error("expected result.ok");
 
     expect(result.stages).toEqual(
       expect.arrayContaining([...PUBLISH_SVG_COMPILE_STAGES]),
@@ -109,7 +109,7 @@ describe("SVG compile authority (publish vs V1)", () => {
       blocks: [{ x: 0, y: 0, width: 100, depth: 80 }],
     });
     expect(result.ok).toBe(true);
-    if (!result.ok) return;
+    if (!result.ok) throw new Error("expected result.ok");
     expect(result.normalized.slug).toBe("unit-box-001");
     expect(result.normalized.variant).toBe("union");
     expect(result.normalized.blocks[0]?.height).toBe(80);

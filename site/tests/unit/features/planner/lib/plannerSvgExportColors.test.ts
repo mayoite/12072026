@@ -3,18 +3,18 @@ import { collectPlannerExportCss, createPlannerSvgColorResolver, getPlannerCanva
 
 describe("plannerSvgExportColors", () => {
   it("should have function collectPlannerExportCss defined", () => {
-    expect(collectPlannerExportCss).toBeTypeOf("function");
+    expect(collectPlannerExportCss).toBeTypeOf("function"); expect(String(collectPlannerExportCss)).toContain('function');
   });
   it("should have function createPlannerSvgColorResolver defined", () => {
-    expect(createPlannerSvgColorResolver).toBeTypeOf("function");
+    expect(createPlannerSvgColorResolver).toBeTypeOf("function"); expect(String(createPlannerSvgColorResolver)).toContain('function');
   });
   it("should have function getPlannerCanvasColorResolver defined", () => {
-    expect(getPlannerCanvasColorResolver).toBeTypeOf("function");
+    expect(getPlannerCanvasColorResolver).toBeTypeOf("function"); expect(String(getPlannerCanvasColorResolver)).toContain('function');
   });
   it("should have function resetPlannerCanvasColorResolver defined", () => {
-    expect(resetPlannerCanvasColorResolver).toBeTypeOf("function");
+    expect(resetPlannerCanvasColorResolver).toBeTypeOf("function"); expect(String(resetPlannerCanvasColorResolver)).toContain('function');
   });
   it("should have function finalizePlannerExportSvg defined", () => {
-    expect(finalizePlannerExportSvg).toBeTypeOf("function");
+    expect(finalizePlannerExportSvg).toBeTypeOf("function"); expect(String(finalizePlannerExportSvg)).toContain('function');
   });
 });

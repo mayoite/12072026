@@ -1,6 +1,6 @@
-import type { CatalogCategory, CatalogItem } from "@/features/planner/catalog/catalogTypes";
-import { usePlannerCatalogStore } from "@/features/planner/catalog/catalogStore";
-import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
+import type { CatalogCategory, CatalogItem } from "@/features/planner/catalog-api/catalogTypes";
+import { usePlannerCatalogStore } from "@/features/planner/catalog-api/catalogStore";
+import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 import type { SpaceSuggestInput } from "@/features/planner/ai/types";
 
 /** Primary layout goal collected before the user enters the canvas. */

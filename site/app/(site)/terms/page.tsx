@@ -3,8 +3,8 @@ import { getTranslations } from "next-intl/server";
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
-import { DEFAULT_HERO_FALLBACK } from "@/lib/site-data/homepage";
-import { TERMS_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
+import { TERMS_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = TERMS_PAGE_METADATA;
 

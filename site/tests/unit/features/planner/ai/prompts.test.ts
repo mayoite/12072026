@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-vi.mock("@/features/planner/catalog/shapeTypeRegistry", () => ({
+vi.mock("@/features/planner/catalog-api/shapeTypeRegistry", () => ({
   PlannerCatalogShapeType: {
     desk: "desk",
     bench: "bench",

@@ -2,13 +2,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import PortalPlanViewerPage from '@/app/(site)/portal/[id]/page';
 import { requireAuthUser } from '@/lib/auth/session';
-import { loadPlannerDocumentFromStore } from '@/features/planner/store/plannerSaves';
+import { loadPlannerDocumentFromStore } from '@/features/planner/cloud-store/plannerSaves';
 
 vi.mock('@/lib/auth/session', () => ({
   requireAuthUser: vi.fn(),
 }));
 
-vi.mock('@/features/planner/store/plannerSaves', () => ({
+vi.mock('@/features/planner/cloud-store/plannerSaves', () => ({
   loadPlannerDocumentFromStore: vi.fn(),
 }));
 

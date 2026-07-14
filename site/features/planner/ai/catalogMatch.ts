@@ -1,5 +1,5 @@
-import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
-import { PLANNER_CATALOG_ITEMS } from "@/features/planner/catalog/workspaceCatalog";
+import type { CatalogItem } from "@/features/planner/catalog-api/catalogTypes";
+import { PLANNER_CATALOG_ITEMS } from "@/features/planner/catalog-api/workspaceCatalog";
 
 import type {
   CanvasFurnitureKind,

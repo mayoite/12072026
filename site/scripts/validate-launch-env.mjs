@@ -1,64 +1,80 @@
 #!/usr/bin/env node
 
 import { createRequire } from "node:module";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
-require("./loadEnvLocal.cjs").loadEnvLocal();
 
-const REQUIRED_PUBLIC_ENVS = [
+export const REQUIRED_PUBLIC_ENVS = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
 ];
 
-const REQUIRED_SERVER_ENVS = [
+export const REQUIRED_SERVER_ENVS = [
   "SUPABASE_URL",
   "SUPABASE_SERVICE_ROLE_KEY",
 ];
 
-const PRODUCTION_REQUIRED_ENVS = [
+export const PRODUCTION_REQUIRED_ENVS = [
   "PRODUCTS_DATABASE_URL",
   "SUPABASE_AUTH_DATABASE_URL",
 ];
 
-const FORBIDDEN_PUBLIC_SECRET_PATTERNS = [
+export const FORBIDDEN_PUBLIC_SECRET_PATTERNS = [
   /^NEXT_PUBLIC_.*SECRET/i,
   /^NEXT_PUBLIC_.*SERVICE_ROLE/i,
   /^NEXT_PUBLIC_.*PRIVATE/i,
   /^NEXT_PUBLIC_.*TOKEN/i,
 ];
 
-function hasValue(name) {
-  return Boolean(process.env[name]?.trim());
+export function hasValue(name, env = process.env) {
+  return Boolean(env[name]?.trim());
 }
 
-const missingPublic = REQUIRED_PUBLIC_ENVS.filter((name) => !hasValue(name));
-const missingServer = REQUIRED_SERVER_ENVS.filter((name) => !hasValue(name));
-const missingProduction =
-  process.env.NODE_ENV === "production"
-    ? PRODUCTION_REQUIRED_ENVS.filter((name) => !hasValue(name))
-    : [];
-const forbiddenPublic = Object.keys(process.env).filter((name) =>
-  FORBIDDEN_PUBLIC_SECRET_PATTERNS.some((pattern) => pattern.test(name)),
-);
+export function validateLaunchEnv(env = process.env) {
+  const missingPublic = REQUIRED_PUBLIC_ENVS.filter((name) => !hasValue(name, env));
+  const missingServer = REQUIRED_SERVER_ENVS.filter((name) => !hasValue(name, env));
+  const missingProduction =
+    env.NODE_ENV === "production"
+      ? PRODUCTION_REQUIRED_ENVS.filter((name) => !hasValue(name, env))
+      : [];
+  const forbiddenPublic = Object.keys(env).filter((name) =>
+    FORBIDDEN_PUBLIC_SECRET_PATTERNS.some((pattern) => pattern.test(name)),
+  );
 
-const result = {
-  ok:
-    missingPublic.length === 0 &&
-    missingServer.length === 0 &&
-    missingProduction.length === 0 &&
-    forbiddenPublic.length === 0,
-  checkedAt: new Date().toISOString(),
-  requiredPublic: REQUIRED_PUBLIC_ENVS,
-  requiredServer: REQUIRED_SERVER_ENVS,
-  productionRequired: PRODUCTION_REQUIRED_ENVS,
-  missingPublic,
-  missingServer,
-  missingProduction,
-  forbiddenPublic,
-};
+  return {
+    ok:
+      missingPublic.length === 0 &&
+      missingServer.length === 0 &&
+      missingProduction.length === 0 &&
+      forbiddenPublic.length === 0,
+    checkedAt: new Date().toISOString(),
+    requiredPublic: REQUIRED_PUBLIC_ENVS,
+    requiredServer: REQUIRED_SERVER_ENVS,
+    productionRequired: PRODUCTION_REQUIRED_ENVS,
+    missingPublic,
+    missingServer,
+    missingProduction,
+    forbiddenPublic,
+  };
+}
 
-process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+function isDirectRun() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
 
-if (!result.ok) {
-  process.exitCode = 1;
+if (isDirectRun()) {
+  require("./loadEnvLocal.cjs").loadEnvLocal();
+  const result = validateLaunchEnv();
+  process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+  if (!result.ok) {
+    process.exitCode = 1;
+  }
 }

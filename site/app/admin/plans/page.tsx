@@ -1,8 +1,8 @@
 "use client";
 
-import AdminPlansPageView from "@/features/planner/admin/AdminPlansPageView";
+import AdminPlansPageView from "@/features/admin/AdminPlansPageView";
 
-// Thin route layer only. Admin implementation lives in features/planner/admin/.
+// Thin route layer only. Admin implementation lives in features/admin/.
 export default function PlansManagement() {
   return <AdminPlansPageView />;
 }

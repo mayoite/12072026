@@ -38,7 +38,7 @@ vi.mock('@/lib/helpers/motion', () => ({
 }));
 
 // Mock site-data & analytics
-vi.mock('@/lib/site-data/contact', () => ({
+vi.mock('@/features/site/data/contact', () => ({
   buildWhatsAppHref: (msg: string) => `https://wa.me/12345?text=${encodeURIComponent(msg)}`,
   SITE_CONTACT: {
     supportPhone: '+91 99999 99999',
@@ -46,7 +46,7 @@ vi.mock('@/lib/site-data/contact', () => ({
   toTelHref: (num: string) => `tel:${num}`,
 }));
 
-vi.mock('@/lib/site-data/homepage', () => ({
+vi.mock('@/features/site/data/homepage', () => ({
   HOMEPAGE_CONTACT_CONTENT: {
     titleLead: 'Quick project',
     titleAccent: 'brief',

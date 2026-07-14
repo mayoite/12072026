@@ -2,11 +2,11 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import ShowroomsPage, { metadata } from '@/app/(site)/showrooms/page';
 
-vi.mock('@/lib/site-data/routeMetadata', () => ({
+vi.mock('@/features/site/data/routeMetadata', () => ({
   SHOWROOMS_PAGE_METADATA: { title: 'Showrooms Title' },
 }));
 
-vi.mock('@/lib/site-data/routeCopy', () => ({
+vi.mock('@/features/site/data/routeCopy', () => ({
   SHOWROOMS_HIGHLIGHTS: [
     { title: 'Highlight 1', detail: 'Detail 1' },
     { title: 'Highlight 2', detail: 'Detail 2' },

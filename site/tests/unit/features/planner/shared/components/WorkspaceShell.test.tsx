@@ -15,9 +15,9 @@ describe("WorkspaceShell", () => {
     expect(container).toBeDefined();
   });
   it("should have function WorkspaceShell defined", () => {
-    expect(WorkspaceShell).toBeTypeOf("function");
+    expect(WorkspaceShell).toBeTypeOf("function"); expect(String(WorkspaceShell)).toContain('function');
   });
   it("should have function WorkspaceSplitPane defined", () => {
-    expect(WorkspaceSplitPane).toBeTypeOf("function");
+    expect(WorkspaceSplitPane).toBeTypeOf("function"); expect(String(WorkspaceSplitPane)).toContain('function');
   });
 });

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ArrowRight, CompassTool } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 
-import { PRODUCT_SUITE } from "@/lib/site-data/productSuite";
+import { PRODUCT_SUITE } from "@/features/site/data/productSuite";
 
 interface ChooseProductPageProps {
   guestMode: boolean;

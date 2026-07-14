@@ -166,7 +166,7 @@ SITE_MAINTENANCE_MODE=off
 The current catalog fallback reads in this order when `PRODUCTS_DATABASE_URL` fails:
 
 1. R2 `backups/catalog/catalog-latest.json` (nightly export)
-2. Bundled `site/lib/site-data/localCatalogIndex.json` (subset)
+2. Bundled `site/features/site/data/localCatalogIndex.json` (subset)
 
 No manual step unless R2 snapshot is stale — re-run:
 

@@ -1,12 +1,12 @@
 import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
-import { addNode } from "@/features/planner/admin/svg-editor/scene/svgSceneDocument";
-import { sceneFromDescriptor } from "@/features/planner/admin/svg-editor/sceneFromDescriptor";
-import { serializeSceneToDefinition } from "@/features/planner/admin/svg-editor/scene/svgSceneSerializer";
+import { addNode } from "@/features/admin/svg-editor/scene/svgSceneDocument";
+import { sceneFromDescriptor } from "@/features/admin/svg-editor/sceneFromDescriptor";
+import { serializeSceneToDefinition } from "@/features/admin/svg-editor/scene/svgSceneSerializer";
 import {
   descriptorToFormState,
   formStateToDescriptorInput,
-} from "@/features/planner/admin/svg-editor/svgEditorFormAdapters";
+} from "@/features/admin/svg-editor/svgEditorFormAdapters";
 import {
   canonicalSvgPaths,
   createIsolatedAdminSvgWorkspace,

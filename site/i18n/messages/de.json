@@ -555,14 +555,14 @@
     ]
   },
   "products": {
-  "heroSubtitle": "Möbelkategorien, die für echte Büroabläufe, langfristige Haltbarkeit und skalierbares Wachstum entwickelt wurden.",
-  "headlineLead": "Ausgewählte Produkte für",
-  "headlineAccent": "Leistung, nicht nur Präsentation.",
-  "pillarsKicker": "Warum diese Kategorien",
-  "pillarsTitleLead": "Gebaut für",
-  "pillarsTitleAccent": "echte Büroabläufe",
-  "pillarsIntro": "Jede Kategorie wird auf Haltbarkeit, klare Spezifikation und Unterstützung nach der Übergabe ausgewählt, nicht nur auf die Präsentation.",
-  "pillars": [
+    "heroSubtitle": "Möbelkategorien, die für echte Büroabläufe, langfristige Haltbarkeit und skalierbares Wachstum entwickelt wurden.",
+    "headlineLead": "Ausgewählte Produkte für",
+    "headlineAccent": "Leistung, nicht nur Präsentation.",
+    "pillarsKicker": "Warum diese Kategorien",
+    "pillarsTitleLead": "Gebaut für",
+    "pillarsTitleAccent": "echte Büroabläufe",
+    "pillarsIntro": "Jede Kategorie wird auf Haltbarkeit, klare Spezifikation und Unterstützung nach der Übergabe ausgewählt, nicht nur auf die Präsentation.",
+    "pillars": [
       {
         "title": "Spezifikationsgeleitete Beratung",
         "detail": "Wir erfassen Mitarbeiterzahl, Nutzungsmuster und Budget, damit Produktauswahl von Tag eins an praktisch ist.",
@@ -893,5 +893,10 @@
     "introDescription": "Diese Seite funktioniert am besten, wenn sie Besucher schnell in den richtigen Support-Kanal leitet, statt generische Kontaktanfragen zu erzwingen. Sie sollte auf Service-, Tracking- und Resource-Desk-Abläufe abgestimmt bleiben.",
     "noteTitle": "Beste Nutzung",
     "noteDescription": "Beginnen Sie hier, wenn Sie wissen, dass Sie Hilfe benötigen, aber noch nicht sicher sind, ob Ihre Anfrage zu Service, Dokumentation, Lieferverfolgung oder Planungsunterstützung gehört."
+  },
+  "workspace": {
+    "backToHome": "Back to Home",
+    "accessPanelTitle": "Precision in Planning",
+    "accessPanelDescription": "Experience the Oando Suite. Our architectural tools are designed for accuracy, performance, and clear collaboration across teams."
   }
 }

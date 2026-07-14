@@ -35,7 +35,7 @@
 ### Rename and modify
 
 - Rename `tech-stack-generator/` to `tech-docs-generator/`.
-- Modify root `package.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, `.gitignore`, `.secretlintrc.json`, `AGENTS.md`, `Readme.md`, and `START.md`.
+- Modify root `package.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, `.gitignore`, `.secretlintrc.json`, `AGENTS.md`, and `Readme.md`.
 - Modify `.github/workflows/tech-stack-docs.yml` and `scripts/check-repo-layout.mjs`.
 - Modify generator `package.json`, `vite.config.ts`, `vitest.config.ts`, `src/App.tsx`, `src/index.css`, `src/data/navigation.ts`, `scripts/filesystem.mjs`, `scripts/model.mjs`, `scripts/generate.mjs`, `scripts/emit-renderer-data.mjs`, `scripts/renderer-data.mjs`, `scripts/check.mjs`, and `scripts/gate.mjs`.
 
@@ -137,7 +137,7 @@ expect(rendererText).toContain("'generated-documents', 'data'")
 
 - [x] First write failing tests through existing `generateDocs` and `emitRendererData` exports for every output surface: unknown-file refusal, failed-copy rollback, successful swap, and byte-identical preservation of the previous valid tree. Extract the publisher only after these tests fail behaviorally.
 - [x] Revision-name collision rollback must restore exact bytes for an existing target revision; it must remove a target only when the target did not exist before the failed publish.
-- [ ] Add a failing source-policy test proving neither dotted nor undotted reference roots can become facts, descriptors, watcher events, inventory inputs, or output targets.
+- [x] Add a failing source-policy test proving neither dotted nor undotted reference roots can become facts, descriptors, watcher events, inventory inputs, or output targets.
 - [x] Define the contract once:
 
 ```js
@@ -189,12 +189,12 @@ export const EXCLUDED_REPOSITORY_ROOTS = [
 ```
 
 - [x] Configure Vitest coverage output at root `results/tooling/tech-docs/coverage/`; preserve the existing hardcoding, fake-test, theme-alignment, and 95% coverage checks.
-- [ ] Keep `dev` regeneration inside the Vite plugin from Task 5; do not introduce a second watcher process.
-- [ ] Make `check` generate all surfaces into a fresh temporary root, validate them, compare hashes/parity with canonical output, and never write canonical output.
+- [x] Keep `dev` regeneration inside the Vite plugin from Task 5; do not introduce a second watcher process.
+- [x] Make `check` generate all surfaces into a fresh temporary root, validate them, compare hashes/parity with canonical output, and never write canonical output.
 - [x] Make `gate.mjs` run in this order: generate; read-only check; hardcoding audit; fake-test audit; theme alignment; coverage plus `check-coverage.mjs`; typecheck; plain Vitest; build.
 - [x] Remove CI `paths` filters so changes to any allowed extractor input cannot leave deployed intelligence stale.
 - [x] Make CI run `pnpm run tech-docs:gate` and upload `generated-documents/site/` only after the gate passes.
-- [ ] Run `pnpm run tech-docs:generate` twice and compare manifest hashes. They must remain identical when source is unchanged.
+- [x] Run `pnpm run tech-docs:generate` twice and compare manifest hashes. They must remain identical when source is unchanged.
 
 ## Task 5: Add live Vite regeneration without races
 
@@ -204,7 +204,7 @@ export const EXCLUDED_REPOSITORY_ROOTS = [
 - Create: `tech-docs-generator/tests/generator/live-regeneration.test.ts`
 - Modify: `tech-docs-generator/vite.config.ts`
 
-- [ ] First add a failing assertion against the existing Vite config requiring a plugin named `oando-repo-live`; verify RED, then add the minimal plugin registration. After that module exists, write failing coordinator tests for initial generation, debounce coalescing, active-run serialization, absolute-path containment, exclusions, and recovery:
+- [x] First add a failing assertion against the existing Vite config requiring a plugin named `oando-repo-live`; verify RED, then add the minimal plugin registration. After that module exists, write failing coordinator tests for initial generation, debounce coalescing, active-run serialization, absolute-path containment, exclusions, and recovery:
 
 ```ts
 function deferred<T>() {
@@ -245,12 +245,12 @@ it('queues exactly one follow-up while a run is active', async () => {
 })
 ```
 
-- [ ] Implement a coordinator with one active run, one dirty flag, a 150 ms debounce, and only the operational `request()`, `idle()`, and `close()` surface.
-- [ ] In `configureServer`, call `server.watcher.add()` for explicit allowed roots. Convert every watcher event to a real path relative to `repoRoot`; reject outside-root paths, escaped symlinks, and excluded first segments.
-- [ ] Complete one staged generation before declaring the dev server ready. On later allowed changes, stage and transactionally publish docs/data, then send `server.ws.send({ type: 'full-reload' })`.
-- [ ] Surface failures in the Vite console and browser overlay. Transactional publication must keep the previous valid output intact.
-- [ ] Use a temporary fixture repository for watcher integration. Never modify a canonical source file to test live reload.
-- [ ] Run `pnpm --filter oando-tech-docs exec vitest run tests/generator/live-regeneration.test.ts` and verify GREEN.
+- [x] Implement a coordinator with one active run, one dirty flag, a 150 ms debounce, and only the operational `request()`, `idle()`, and `close()` surface.
+- [x] In `configureServer`, call `server.watcher.add()` for explicit allowed roots. Convert every watcher event to a real path relative to `repoRoot`; reject outside-root paths, escaped symlinks, and excluded first segments.
+- [x] Complete one staged generation before declaring the dev server ready. On later allowed changes, stage and transactionally publish docs/data, then send `server.ws.send({ type: 'full-reload' })`.
+- [x] Surface failures in the Vite console and browser overlay. Transactional publication must keep the previous valid output intact.
+- [x] Use a temporary fixture repository for watcher integration. Never modify a canonical source file to test live reload.
+- [x] Run `pnpm --filter oando-tech-docs exec vitest run tests/generator/live-regeneration.test.ts` and verify GREEN.
 
 ## Task 6: Generate a truthful repository relationship graph
 
@@ -262,8 +262,8 @@ it('queues exactly one follow-up while a run is active', async () => {
 - Modify: `tech-docs-generator/scripts/renderer-data.mjs`
 - Modify: `tech-docs-generator/scripts/schema.mjs`
 
-- [ ] First write failing fixture assertions through the existing `buildGeneratorModel()` and renderer payload APIs, requiring graph and runner-selection output. Verify assertion failures, then add the minimal model fields. Add focused extractor cases only after the extractor surface exists.
-- [ ] Define graph records with evidence:
+- [x] First write failing fixture assertions through the existing `buildGeneratorModel()` and renderer payload APIs, requiring graph and runner-selection output. Verify assertion failures, then add the minimal model fields. Add focused extractor cases only after the extractor surface exists.
+- [x] Define graph records with evidence:
 
 ```ts
 type RepoNode = {
@@ -288,14 +288,14 @@ type RepoEdge = {
 }
 ```
 
-- [ ] Build import/re-export edges from TypeScript/JavaScript source using ts-morph. Treat Next route files, package manifests, workflow files, and test files as explicit roots.
-- [ ] Resolve aliases from the real TypeScript configuration. Record unresolved or computed imports as gaps; never guess their targets.
-- [ ] Create route, API, feature, package, test, and workflow nodes only from existing extractor evidence.
-- [ ] Extract runner-selection evidence from workspace/package scripts plus Vitest include/exclude and Playwright `testDir`, `testMatch`, and `testIgnore`. Record `selected-by` evidence independently from import edges.
-- [ ] Write `repo-graph.json` and `runner-selection.json`; add both to schema, renderer parity, search, and source coverage checks.
-- [ ] Label import-backed test relations as `direct-import-link`, runner reachability as `selected-by-runner`, and absence as `no-direct-link` or `not-selected`. Never translate these into “covered” or “untested.”
-- [ ] Assert no graph node or source descriptor starts with an excluded root.
-- [ ] Run `pnpm --filter oando-tech-docs exec vitest run tests/generator/repo-graph.test.ts tests/generator/schema.test.ts tests/generator/source-policy.test.ts` and verify GREEN.
+- [x] Build import/re-export edges from TypeScript/JavaScript source using ts-morph. Treat Next route files, package manifests, workflow files, and test files as explicit roots.
+- [x] Resolve aliases from the real TypeScript configuration. Record unresolved or computed imports as gaps; never guess their targets.
+- [x] Create route, API, feature, package, test, and workflow nodes only from existing extractor evidence.
+- [x] Extract runner-selection evidence from workspace/package scripts plus Vitest include/exclude and Playwright `testDir`, `testMatch`, and `testIgnore`. Record `selected-by` evidence independently from import edges.
+- [x] Write `repo-graph.json` and `runner-selection.json`; add both to schema, renderer parity, search, and source coverage checks.
+- [x] Label import-backed test relations as `direct-import-link`, runner reachability as `selected-by-runner`, and absence as `no-direct-link` or `not-selected`. Never translate these into “covered” or “untested.”
+- [x] Assert no graph node or source descriptor starts with an excluded root.
+- [x] Run `pnpm --filter oando-tech-docs exec vitest run tests/generator/repo-graph.test.ts tests/generator/schema.test.ts tests/generator/source-policy.test.ts` and verify GREEN.
 
 ## Task 7: Replace brochure navigation with repository explorers
 
@@ -363,7 +363,7 @@ type ExplorerState = {
 - Modify: `scripts/check-repo-layout.mjs`
 - Modify: generator checks and all live documentation/configuration references
 
-- [ ] Make the layout check fail if `tech-stack-generator/`, `tech-stack-generated/`, `.tech-stack-generated/`, or `tech-stack-docs/` exists after migration.
+- [x] Make the layout check fail if `tech-stack-generator/`, `tech-stack-generated/`, `.tech-stack-generated/`, or `tech-stack-docs/` exists after migration.
 - [ ] Search live files while excluding generated output and forbidden/reference roots:
 
 ```powershell

@@ -6,7 +6,7 @@ import {
   fetchCatalogProductBySlugLive,
   fetchCatalogSlugAliasLive,
 } from "@/lib/catalog/catalogDrizzle";
-import { CATALOG_REVALIDATE_SECONDS } from "@/lib/site-data/fallbacks";
+import { CATALOG_REVALIDATE_SECONDS } from "@/features/site/data/fallbacks";
 
 export type ProductSlugResolution<T> = {
   row: T | null;

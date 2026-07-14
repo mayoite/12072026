@@ -9,14 +9,14 @@ import {
   isPlannerDatabaseConfigured,
   loadPlannerDocumentAdmin,
   planRowToAdminDetail,
-} from "@/features/planner/store/plannerPersistence";
+} from "@/features/planner/cloud-store/plannerPersistence";
 
 vi.mock("@/app/api/admin/_lib/server", () => ({
   enforceAdminRateLimit: vi.fn(),
   requireAdminSession: vi.fn(),
 }));
 
-vi.mock("@/features/planner/store/plannerPersistence", () => ({
+vi.mock("@/features/planner/cloud-store/plannerPersistence", () => ({
   isPlannerDatabaseConfigured: vi.fn(),
   loadPlannerDocumentAdmin: vi.fn(),
   planRowToAdminDetail: vi.fn(async (row) => row),

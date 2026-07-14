@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
@@ -12,179 +12,231 @@ import {
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+export const CDN_BASE_URL = "https://oando-worker-proxy.mayoite.workers.dev";
+export const PUBLIC_DIR = path.resolve(process.cwd(), "public");
 
-const CDN_BASE_URL = "https://oando-worker-proxy.mayoite.workers.dev";
-const PUBLIC_DIR = path.resolve(process.cwd(), "public");
-
-async function downloadFile(
+export async function downloadFile(
   url: string,
   destPath: string,
   relPath: string,
   basenameIndex: Map<string, string[]>,
+  deps: {
+    exists?: typeof fs.existsSync;
+    mkdir?: typeof fs.mkdirSync;
+    writeFile?: typeof fs.writeFileSync;
+    localExists?: typeof localAssetExists;
+    resolveMissing?: typeof resolveMissingAssetPath;
+    copyLocal?: typeof copyWebAsset;
+    fetchImpl?: typeof fetch;
+    log?: typeof console.log;
+    warn?: typeof console.warn;
+    error?: typeof console.error;
+  } = {},
 ): Promise<boolean> {
+  const exists = deps.exists ?? fs.existsSync;
+  const mkdir = deps.mkdir ?? fs.mkdirSync;
+  const writeFile = deps.writeFile ?? fs.writeFileSync;
+  const localExists = deps.localExists ?? localAssetExists;
+  const resolveMissing = deps.resolveMissing ?? resolveMissingAssetPath;
+  const copyLocal = deps.copyLocal ?? copyWebAsset;
+  const fetchImpl = deps.fetchImpl ?? fetch;
+  const log = deps.log ?? console.log;
+  const warn = deps.warn ?? console.warn;
+  const error = deps.error ?? console.error;
+
   const dir = path.dirname(destPath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+  if (!exists(dir)) {
+    mkdir(dir, { recursive: true });
   }
 
-  if (localAssetExists(relPath)) {
+  if (localExists(relPath)) {
     return true;
   }
 
-  const resolution = resolveMissingAssetPath(relPath, basenameIndex);
+  const resolution = resolveMissing(relPath, basenameIndex);
   if (resolution.kind === "copy") {
-    copyWebAsset(resolution.sourceWebPath, relPath);
-    console.log(`✅ Copied local fallback: ${resolution.sourceWebPath} -> ${relPath}`);
+    copyLocal(resolution.sourceWebPath, relPath);
+    log(`✅ Copied local fallback: ${resolution.sourceWebPath} -> ${relPath}`);
     return true;
   }
 
   try {
-    const res = await fetch(url);
+    const res = await fetchImpl(url);
     if (!res.ok) {
-      console.warn(`⚠️ Failed to download: ${url} (Status: ${res.status})`);
+      warn(`⚠️ Failed to download: ${url} (Status: ${res.status})`);
       return false;
     }
     const buffer = Buffer.from(await res.arrayBuffer());
-    fs.writeFileSync(destPath, buffer);
-    console.log(`✅ Downloaded: ${url} -> ${path.relative(process.cwd(), destPath)}`);
+    writeFile(destPath, buffer);
+    log(`✅ Downloaded: ${url} -> ${path.relative(process.cwd(), destPath)}`);
     return true;
   } catch (err) {
-    console.error(`❌ Error downloading ${url}:`, err);
+    error(`❌ Error downloading ${url}:`, err);
     return false;
   }
 }
 
-async function run() {
-  console.log("🔍 Scanning for CDN assets to download locally...");
+export function collectPathsFromCatalogItems(data: unknown): string[] {
+  const paths: string[] = [];
+  if (!Array.isArray(data)) return paths;
+  for (const item of data) {
+    if (!item || typeof item !== "object") continue;
+    const row = item as Record<string, unknown>;
+    if (Array.isArray(row.images)) {
+      for (const img of row.images) {
+        if (typeof img === "string") paths.push(img);
+      }
+    }
+    if (typeof row.flagship_image === "string") {
+      paths.push(row.flagship_image);
+    }
+    if (Array.isArray(row.scene_images)) {
+      for (const img of row.scene_images) {
+        if (typeof img === "string") paths.push(img);
+      }
+    }
+    if (row.metadata && typeof row.metadata === "object") {
+      const m = row.metadata as Record<string, unknown>;
+      if (typeof m.threeDModelUrl === "string") paths.push(m.threeDModelUrl);
+      if (typeof m["3d_model"] === "string") paths.push(m["3d_model"]);
+    }
+    if (typeof row.image_url === "string") paths.push(row.image_url);
+  }
+  return paths;
+}
+
+export function filterLocalRelativePaths(assetPaths: Iterable<string>): string[] {
+  return Array.from(assetPaths)
+    .map((p) => p.trim())
+    .filter((p) => p.startsWith("/") && !p.startsWith("//"));
+}
+
+export async function collectAssetPathsFromSources(
+  deps: {
+    cwd?: () => string;
+    exists?: typeof fs.existsSync;
+    readFile?: typeof fs.readFileSync;
+    createSupabase?: typeof createClient;
+    supabaseUrl?: string | undefined;
+    supabaseKey?: string | undefined;
+    error?: typeof console.error;
+    log?: typeof console.log;
+    warn?: typeof console.warn;
+  } = {},
+): Promise<string[]> {
+  const cwd = deps.cwd ?? (() => process.cwd());
+  const exists = deps.exists ?? fs.existsSync;
+  const readFile = deps.readFile ?? fs.readFileSync;
+  const createSupabase = deps.createSupabase ?? createClient;
+  const error = deps.error ?? console.error;
+  const log = deps.log ?? console.log;
+  const warn = deps.warn ?? console.warn;
+  const supabaseUrl =
+    deps.supabaseUrl ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey =
+    deps.supabaseKey ??
+    (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      process.env.SUPABASE_SERVICE_ROLE_KEY);
+
   const assetPaths = new Set<string>();
 
-  // 1. Read from localCatalogIndex.json
-  const localIndex = path.resolve(process.cwd(), "lib/site-data/localCatalogIndex.json");
-  if (fs.existsSync(localIndex)) {
+  const localIndex = path.resolve(cwd(), "features/site/data/localCatalogIndex.json");
+  if (exists(localIndex)) {
     try {
-      const content = fs.readFileSync(localIndex, "utf8");
-      const data = JSON.parse(content);
-      if (Array.isArray(data)) {
-        for (const item of data) {
-          if (item.images && Array.isArray(item.images)) {
-            for (const img of item.images) {
-              if (typeof img === "string") assetPaths.add(img);
-            }
-          }
-          if (item.flagship_image && typeof item.flagship_image === "string") {
-            assetPaths.add(item.flagship_image);
-          }
-        }
-      }
+      const data = JSON.parse(readFile(localIndex, "utf8"));
+      for (const p of collectPathsFromCatalogItems(data)) assetPaths.add(p);
     } catch (e) {
-      console.error("Error reading localCatalogIndex.json:", e);
+      error("Error reading localCatalogIndex.json:", e);
     }
   }
 
-  // 2. Read from catalog-seating.json
-  const seatingPath = path.resolve(process.cwd(), "scripts/catalog-seating.json");
-  if (fs.existsSync(seatingPath)) {
+  const seatingPath = path.resolve(cwd(), "scripts/catalog-seating.json");
+  if (exists(seatingPath)) {
     try {
-      const content = fs.readFileSync(seatingPath, "utf8");
-      const data = JSON.parse(content);
-      if (Array.isArray(data)) {
-        for (const item of data) {
-          if (item.images && Array.isArray(item.images)) {
-            for (const img of item.images) {
-              if (typeof img === "string") assetPaths.add(img);
-            }
-          }
-        }
-      }
+      const data = JSON.parse(readFile(seatingPath, "utf8"));
+      for (const p of collectPathsFromCatalogItems(data)) assetPaths.add(p);
     } catch (e) {
-      console.error("Error reading catalog-seating.json:", e);
+      error("Error reading catalog-seating.json:", e);
     }
   }
 
-  // 3. Read from Supabase DB tables if connected
-  if (supabaseUrl && supabaseAnonKey) {
+  if (supabaseUrl && supabaseKey) {
     try {
-      console.log(`Connecting to Supabase at ${supabaseUrl}...`);
-      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+      log(`Connecting to Supabase at ${supabaseUrl}...`);
+      const supabase = createSupabase(supabaseUrl, supabaseKey) as SupabaseClient;
 
-      // Check catalog_products
       const { data: catProdData, error: catProdErr } = await supabase
         .from("catalog_products")
         .select("images, flagship_image, scene_images, metadata");
-      
+
       if (!catProdErr && catProdData) {
-        for (const p of catProdData) {
-          if (p.images && Array.isArray(p.images)) {
-            for (const img of p.images) assetPaths.add(img);
-          }
-          if (p.flagship_image) assetPaths.add(p.flagship_image);
-          if (p.scene_images && Array.isArray(p.scene_images)) {
-            for (const img of p.scene_images) assetPaths.add(img);
-          }
-          if (p.metadata && typeof p.metadata === "object") {
-            const m = p.metadata as Record<string, unknown>;
-            if (m.threeDModelUrl) assetPaths.add(m.threeDModelUrl as string);
-            if (m["3d_model"]) assetPaths.add(m["3d_model"] as string);
-          }
-        }
+        for (const p of collectPathsFromCatalogItems(catProdData)) assetPaths.add(p);
       }
 
-      // Check products
       const { data: prodData, error: prodErr } = await supabase
         .from("products")
         .select("images, flagship_image, metadata");
 
       if (!prodErr && prodData) {
-        for (const p of prodData) {
-          if (p.images && Array.isArray(p.images)) {
-            for (const img of p.images) assetPaths.add(img);
-          }
-          if (p.flagship_image) assetPaths.add(p.flagship_image);
-          if (p.metadata && typeof p.metadata === "object") {
-            const m = p.metadata as Record<string, unknown>;
-            if (m.threeDModelUrl) assetPaths.add(m.threeDModelUrl as string);
-            if (m["3d_model"]) assetPaths.add(m["3d_model"] as string);
-          }
-        }
+        for (const p of collectPathsFromCatalogItems(prodData)) assetPaths.add(p);
       }
 
-      // Check product_images table if exists
       const { data: pImgData, error: pImgErr } = await supabase
         .from("product_images")
         .select("image_url");
       if (!pImgErr && pImgData) {
-        for (const pi of pImgData) {
-          if (pi.image_url) assetPaths.add(pi.image_url);
-        }
+        for (const p of collectPathsFromCatalogItems(pImgData)) assetPaths.add(p);
       }
     } catch (dbErr) {
-      console.warn("Could not query Supabase tables for assets:", dbErr);
+      warn("Could not query Supabase tables for assets:", dbErr);
     }
   }
 
-  // Filter asset paths: we only care about local paths that are hosted on the CDN (starting with /images/ or /models/ etc.)
-  const localRelativePaths = Array.from(assetPaths)
-    .map(p => p.trim())
-    .filter(p => p.startsWith("/") && !p.startsWith("//"));
-
-  console.log(`Found ${localRelativePaths.length} unique asset paths referenced.`);
-
-  let successCount = 0;
-  const basenameIndex = buildBasenameIndex("images");
-
-  for (const relPath of localRelativePaths) {
-    const cdnUrl = `${CDN_BASE_URL}${relPath}`;
-    const localDest = path.join(PUBLIC_DIR, relPath.replace(/\//g, path.sep));
-
-    const success = await downloadFile(cdnUrl, localDest, relPath, basenameIndex);
-    if (success) {
-      successCount++;
-    }
-  }
-
-  console.log(`Finished downloading CDN assets locally. Success: ${successCount}/${localRelativePaths.length}`);
+  return filterLocalRelativePaths(assetPaths);
 }
 
-run().catch(console.error);
+export async function run(
+  deps: {
+    collect?: typeof collectAssetPathsFromSources;
+    download?: typeof downloadFile;
+    buildIndex?: typeof buildBasenameIndex;
+    publicDir?: string;
+    cdnBase?: string;
+    log?: typeof console.log;
+  } = {},
+): Promise<{ total: number; successCount: number }> {
+  const collect = deps.collect ?? collectAssetPathsFromSources;
+  const download = deps.download ?? downloadFile;
+  const buildIndex = deps.buildIndex ?? buildBasenameIndex;
+  const publicDir = deps.publicDir ?? PUBLIC_DIR;
+  const cdnBase = deps.cdnBase ?? CDN_BASE_URL;
+  const log = deps.log ?? console.log;
+
+  log("🔍 Scanning for CDN assets to download locally...");
+  const localRelativePaths = await collect();
+  log(`Found ${localRelativePaths.length} unique asset paths referenced.`);
+
+  let successCount = 0;
+  const basenameIndex = buildIndex("images");
+
+  for (const relPath of localRelativePaths) {
+    const cdnUrl = `${cdnBase}${relPath}`;
+    const localDest = path.join(publicDir, relPath.replace(/\//g, path.sep));
+    const success = await download(cdnUrl, localDest, relPath, basenameIndex);
+    if (success) successCount += 1;
+  }
+
+  log(
+    `Finished downloading CDN assets locally. Success: ${successCount}/${localRelativePaths.length}`,
+  );
+  return { total: localRelativePaths.length, successCount };
+}
+
+function isMain(): boolean {
+  const entry = (process.argv[1] ?? "").replace(/\\/g, "/");
+  return entry.endsWith("downloadCdnAssets.ts") || entry.endsWith("downloadCdnAssets.js");
+}
+
+if (isMain()) {
+  run().catch(console.error);
+}

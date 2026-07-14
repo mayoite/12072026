@@ -48,14 +48,13 @@ export default defineConfig({
       all: true, // include all files matching 'include' even if not imported during tests (otherwise only executed files appear, making total small and untested files invisible)
       // Site-logic scope (see plans/SITE-COVERAGE.md).
       include: [
-        'lib/site-data/**/*.{ts,tsx}',
+        'features/site/data/**/*.{ts,tsx}',
         'lib/catalog/**/*.{ts,tsx}',
         'lib/configurator/**/*.ts',
-        'features/catalog/**/*.{ts,tsx}',
-        'features/shared/**/*.{ts,tsx}',
-        'features/site-assistant/**/*.{ts,tsx}',
+        'lib/catalog/site/**/*.{ts,tsx}',
+        'features/site/assistant/**/*.{ts,tsx}',
         'features/ops/**/*.{ts,tsx}',
-        'features/ai/aiAdvisor.ts',
+        'features/site/advisor/**/*.{ts,tsx}',
       ],
       exclude: [
         '**/*.d.ts',

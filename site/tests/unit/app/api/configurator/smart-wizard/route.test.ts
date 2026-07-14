@@ -12,7 +12,7 @@ vi.mock("@/lib/rateLimit", () => ({
   rateLimit: vi.fn(),
 }));
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/platform/supabase/server", () => ({
   createServerClient: vi.fn(() =>
     Promise.resolve({
       auth: {

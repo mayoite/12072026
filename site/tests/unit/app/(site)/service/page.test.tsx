@@ -39,18 +39,18 @@ vi.mock('@/components/ui/TrackedLink', () => ({
 }));
 
 // Mock metadata & copies
-vi.mock('@/lib/site-data/routeMetadata', () => ({
+vi.mock('@/features/site/data/routeMetadata', () => ({
   SERVICE_PAGE_METADATA: { title: 'Service & Support' },
 }));
 
-vi.mock('@/lib/site-data/contact', () => ({
+vi.mock('@/features/site/data/contact', () => ({
   SITE_CONTACT: {
     supportPhone: '+91 99999 99999',
     salesEmail: 'sales@oando.local',
   },
 }));
 
-vi.mock('@/lib/site-data/routeCopy', () => ({
+vi.mock('@/features/site/data/routeCopy', () => ({
   SERVICE_PAGE_COPY: {
     heroTitle: 'Service and Support',
     heroSubtitle: 'Help center',

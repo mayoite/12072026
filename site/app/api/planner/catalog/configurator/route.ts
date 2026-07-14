@@ -7,10 +7,10 @@
 
 import type { NextRequest } from "next/server";
 
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/platform/supabase/server";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 import { isMissingTableError } from "@/platform/supabase/adminServer";
-import { productToCatalogItem } from "@/features/planner/catalog/configuratorProductCatalogBridge";
+import { productToCatalogItem } from "@/features/planner/catalog-api/configuratorProductCatalogBridge";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import { success, error } from "@/features/shared/api/apiResponse";
 import { applyPlannerRouteTelemetry } from "@/features/shared/api/routeObservability";

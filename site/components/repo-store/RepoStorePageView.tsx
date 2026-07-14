@@ -11,9 +11,9 @@ const metrics = [
 const auditFindings = [
   ["Critical", "Planner persistence", "features/planner/store/* + features/planner/persistence/*", "Duplicate draft, save, import and persistence responsibilities.", "Keep persistence/ canonical; migrate callers and remove store copies."],
   ["High", "Planner 3D", "features/planner/viewer/* + features/planner/3d/*", "Two R3F packages model and render the planner scene.", "Merge into one scene package and one document contract."],
-  ["High", "Catalog ownership", "features/catalog + lib/catalog + features/planner/catalog + planner/store/catalog*", "Catalog schemas, loaders and adapters span four ownership zones.", "Make features/catalog canonical; retain planner placement adapters only."],
+  ["High", "Catalog ownership", "lib/catalog/site + lib/catalog + features/planner/catalog + planner/store/catalog*", "Catalog schemas, loaders and adapters span four ownership zones.", "Make lib/catalog/site canonical; retain planner placement adapters only."],
   ["High", "Document bridges", "documentBridge + fabricDocumentBridge + plannerDocumentBridge + shared/document", "Multiple bridge layers translate overlapping planner shapes.", "Reduce to one Fabric adapter and one public PlannerDocument API."],
-  ["Medium", "Site content", "lib/site-data/* + components/home/* + route copy", "Content ownership is split between data modules and rendered components.", "Keep global constants shared; colocate feature-owned content."],
+  ["Medium", "Site content", "features/site/data/* + components/home/* + route copy", "Content ownership is split between data modules and rendered components.", "Keep global constants shared; colocate feature-owned content."],
   ["Medium", "Stale repo truth", "Readme.md + planner CONTENTS files", "Files still describe archived docs or tldraw as active.", "Update or remove stale indexes after consolidation."],
 ];
 

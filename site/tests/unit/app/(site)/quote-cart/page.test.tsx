@@ -30,7 +30,7 @@ vi.mock('@/lib/store/quoteCart', () => ({
     }),
 }));
 
-vi.mock('@/lib/site-data/routeCopy', () => ({
+vi.mock('@/features/site/data/routeCopy', () => ({
   QUOTE_CART_ROUTE_COPY: {
     kicker: 'Your shortlist',
     title: 'Quote Cart',

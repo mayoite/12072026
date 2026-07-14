@@ -4,7 +4,7 @@
  * Handles explicit conflict detection based on contentHash and remoteRevision
  */
 
-import type { OfflinePlan } from "@/features/planner/store/offlineStorage";
+import type { OfflinePlan } from "@/features/planner/cloud-store/offlineStorage";
 
 export interface HydrationResult {
   plan: OfflinePlan | null;

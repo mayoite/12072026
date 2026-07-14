@@ -88,6 +88,10 @@ remedyplan/
 # Git worktree for isolation (moved inside repo)
 worktrees/
 
+# Admin price-book runtime (seed from features/admin/pricing/fixtures/)
+site/features/admin/data/price-books/*.json
+site/features/admin/data/price-books/_price-book-audit.jsonl
+
 # Generated modular GLBs (written by P0.2 place/export path)
 site/public/catalog-assets/generated/*.glb
 

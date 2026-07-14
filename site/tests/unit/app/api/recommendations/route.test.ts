@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { POST } from "@/app/api/recommendations/route";
-import { getProducts } from "@/features/catalog/getProducts";
+import { getProducts } from "@/lib/catalog/site/getProducts";
 import { createSupabaseAuthAdminClient } from "@/platform/supabase/auth-admin";
 import { rateLimit } from "@/lib/rateLimit";
 import { createAnonymousUserId } from "@/lib/tracking/anonymousUserId";
 
-vi.mock("@/features/catalog/getProducts", () => ({
+vi.mock("@/lib/catalog/site/getProducts", () => ({
   getProducts: vi.fn(),
 }));
 
@@ -14,7 +14,7 @@ vi.mock("@/platform/supabase/auth-admin", () => ({
   createSupabaseAuthAdminClient: vi.fn(),
 }));
 
-vi.mock("@/features/catalog/categories", () => ({
+vi.mock("@/lib/catalog/site/categories", () => ({
   getCatalogProductHref: vi.fn((cat, slug) => `/catalog/${cat}/${slug}`),
 }));
 

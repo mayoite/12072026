@@ -16,35 +16,40 @@ const ASSET_CDN_DIR = path.join(ROOT, "asset-cdn");
 const PUBLIC_DIR = path.join(ROOT, "public");
 
 // Catalog bytes only — SDKs live in public/cdn (deployed with Next; tldraw-assets removed).
-const UPLOAD_ROOTS = ["images", "models"] as const;
+export const UPLOAD_ROOTS = ["images", "models"] as const;
 
-type UploadRoot = (typeof UPLOAD_ROOTS)[number];
+export type UploadRoot = (typeof UPLOAD_ROOTS)[number];
 
-function hasFlag(flag: string): boolean {
-  return process.argv.includes(flag);
+export function hasFlag(flag: string, argv: string[] = process.argv): boolean {
+  return argv.includes(flag);
 }
 
-function readLimit(): number | null {
-  const arg = process.argv.find((item) => item.startsWith("--limit="));
+export function readLimit(argv: string[] = process.argv): number | null {
+  const arg = argv.find((item) => item.startsWith("--limit="));
   if (!arg) return null;
   const value = Number.parseInt(arg.slice("--limit=".length), 10);
   return Number.isFinite(value) && value > 0 ? value : null;
 }
 
-function readOnlyRoot(): UploadRoot | null {
-  const arg = process.argv.find((item) => item.startsWith("--only="));
+export function readOnlyRoot(argv: string[] = process.argv): UploadRoot | null {
+  const arg = argv.find((item) => item.startsWith("--only="));
   if (!arg) return null;
   const value = arg.slice("--only=".length).trim() as UploadRoot;
   return UPLOAD_ROOTS.includes(value) ? value : null;
 }
 
-function resolveSourceDir(root: UploadRoot): { absDir: string; label: string } | null {
-  const assetCdnAbs = path.join(ASSET_CDN_DIR, root);
+export function resolveSourceDir(
+  root: UploadRoot,
+  options: { assetCdnDir?: string; publicDir?: string } = {},
+): { absDir: string; label: string } | null {
+  const assetCdnDir = options.assetCdnDir ?? ASSET_CDN_DIR;
+  const publicDir = options.publicDir ?? PUBLIC_DIR;
+  const assetCdnAbs = path.join(assetCdnDir, root);
   if (fs.existsSync(assetCdnAbs)) {
     return { absDir: assetCdnAbs, label: `asset-cdn/${root}` };
   }
 
-  const publicAbs = path.join(PUBLIC_DIR, root);
+  const publicAbs = path.join(publicDir, root);
   if (fs.existsSync(publicAbs)) {
     return { absDir: publicAbs, label: `public/${root} (migrate to asset-cdn/${root})` };
   }
@@ -52,7 +57,7 @@ function resolveSourceDir(root: UploadRoot): { absDir: string; label: string } |
   return null;
 }
 
-function walkFiles(absDir: string, relPrefix: string): string[] {
+export function walkFiles(absDir: string, relPrefix: string): string[] {
   const files: string[] = [];
 
   function walk(currentAbs: string, currentRel: string) {
@@ -65,7 +70,6 @@ function walkFiles(absDir: string, relPrefix: string): string[] {
         continue;
       }
       if (entry.isFile()) {
-        // use stat for size (Dirent from withFileTypes has no .size); reason: correct fs api instead of any cast; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: n/a (correct impl)
         const st = fs.statSync(entryAbs);
         if (st.size > 0) {
           files.push(path.posix.join(relPrefix, entryRel).replace(/^\/+/, ""));
@@ -78,7 +82,7 @@ function walkFiles(absDir: string, relPrefix: string): string[] {
   return files.sort();
 }
 
-async function objectExists(
+export async function objectExists(
   client: ReturnType<typeof createR2CatalogClient>,
   bucket: string,
   key: string,
@@ -91,7 +95,7 @@ async function objectExists(
   }
 }
 
-async function uploadFile(
+export async function uploadFile(
   client: ReturnType<typeof createR2CatalogClient>,
   bucket: string,
   key: string,
@@ -122,12 +126,16 @@ async function uploadFile(
   return "uploaded";
 }
 
-async function run() {
-  const dryRun = hasFlag("--dry-run");
-  // Policy: catalog updates must full-upload (overwrite). Use --skip-existing only for gap-fill.
-  const skipExisting = hasFlag("--skip-existing");
-  const limit = readLimit();
-  const onlyRoot = readOnlyRoot();
+export async function run(argv: string[] = process.argv): Promise<{
+  uploaded: number;
+  skipped: number;
+  failed: number;
+  selected: number;
+}> {
+  const dryRun = hasFlag("--dry-run", argv);
+  const skipExisting = hasFlag("--skip-existing", argv);
+  const limit = readLimit(argv);
+  const onlyRoot = readOnlyRoot(argv);
   const bucket = resolveCatalogBucketName();
   const client = dryRun ? null : createR2CatalogClient();
 
@@ -155,7 +163,8 @@ async function run() {
 
   if (keysToUpload.length === 0) {
     console.error("No upload files found under asset-cdn/ or public/.");
-    process.exit(1);
+    process.exitCode = 1;
+    return { uploaded: 0, skipped: 0, failed: 0, selected: 0 };
   }
 
   const selected = limit ? keysToUpload.slice(0, limit) : keysToUpload;
@@ -185,7 +194,9 @@ async function run() {
       if (result === "uploaded" || result === "dry-run") uploaded += 1;
       if (result === "skipped") skipped += 1;
       if ((index + 1) % 100 === 0) {
-        console.log(`progress: ${index + 1}/${selected.length} (uploaded=${uploaded} skipped=${skipped} failed=${failed})`);
+        console.log(
+          `progress: ${index + 1}/${selected.length} (uploaded=${uploaded} skipped=${skipped} failed=${failed})`,
+        );
       }
     } catch (error) {
       failed += 1;
@@ -196,11 +207,14 @@ async function run() {
 
   console.log(`Done. uploaded=${uploaded} skipped=${skipped} failed=${failed} bucket=${bucket}`);
   if (failed > 0) {
-    process.exit(1);
+    process.exitCode = 1;
   }
+  return { uploaded, skipped, failed, selected: selected.length };
 }
 
-run().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (process.env.NODE_ENV !== "test" && process.argv[1]?.includes("uploadCdnAssets")) {
+  run().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}

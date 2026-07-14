@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/platform/supabase/client";
 import { Button } from "./AuthControls";
 import { CircleNotch as Loader2 } from "@phosphor-icons/react";
 

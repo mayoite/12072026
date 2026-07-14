@@ -8,7 +8,7 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 | This file | What exists in code today |
 | `CHECKLIST.md` | Open acceptance work only |
 
-**Code roots:** `site/features/planner/admin/` · `site/app/admin/` · `site/app/api/admin/` · `site/platform/drizzle/schema/catalog.ts` · `site/block-descriptors/` · `site/public/svg-catalog/`
+**Code roots:** `site/features/admin/` · `site/app/admin/` · `site/app/api/admin/` · `site/platform/drizzle/schema/catalog.ts` · `site/block-descriptors/` · `site/public/svg-catalog/`
 
 ---
 
@@ -21,6 +21,7 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 | `svgPipelineRunner.ts` S4 | `public/svg-catalog/` | No | |
 | `publishSvgEditorAction.ts` | Yes | Best-effort if `PRODUCTS_DATABASE_URL` | Injects `dbRepository`; failure logged, publish still succeeds |
 | `POST /api/admin/svg-editor` | Yes | **No** | `route.ts` calls pipeline without `dbRepository` |
+| Lifecycle manifest + audit log | `results/admin/catalog-ops/` | No | `_catalog-lifecycle.json`, `_descriptor-audit.jsonl` — not in `block-descriptors/` |
 
 **UI admits disk authority:** `AdminSvgEditorListView.tsx` — “Source: local disk inventory · Products DB not live”.
 
@@ -53,7 +54,7 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 
 | Feature | Code | Gap |
 |---|---|---|
-| Tmp-dir catalog writes | `tests/unit/admin/svg-editor/`, `isolatedAdminSvgPublish.ts` | Convention, not CI hash gate |
+| Tmp-dir catalog writes | `tests/unit/features/admin/svg-editor/`, `isolatedAdminSvgPublish.ts` | Convention, not CI hash gate |
 | E2E isolated publish | `admin-svg-publish-p01.spec.ts`, `admin-svg-scene-publish-a401.spec.ts` | Uses `DEV_AUTH_BYPASS=1` |
 
 ---
@@ -70,7 +71,7 @@ Plan: `PHASE-01-authoring-quality.md`
 | Bulk JSON import | `AdminSvgBulkImportPanel.tsx`, `bulkImportBlockDescriptors.ts` | **Implemented** (advanced path) |
 | AI SVG generate | `app/api/admin/svg-editor/ai-generate/route.ts` | **Implemented** |
 | 3D previews | `GlbExtruderPreview.tsx`, `ModelViewerPreview.tsx` | Partial |
-| `ADM-SVG-01`…`17`, shell, form, pub, a11y | Unit coverage in `tests/unit/admin/svg-editor/` (208 tests, 2026-07-13) | Fresh browser proof; prod auth smoke |
+| `ADM-SVG-01`…`17`, shell, form, pub, a11y | Unit coverage in `tests/unit/features/admin/svg-editor/` (208 tests, 2026-07-13) | Fresh browser proof; prod auth smoke |
 
 ---
 
@@ -108,7 +109,7 @@ Plan: `PHASE-04-commercial-governance.md`
 
 | Feature | Code | Gap |
 |---|---|---|
-| Price books (filesystem) | `AdminPriceBookPageView.tsx`, `priceBookService.ts`, `priceBookFileStore.ts` | **Implemented** |
+| Price books (filesystem) | `AdminPriceBookPageView.tsx`, `priceBookService.ts`, `priceBookFileStore.ts` → `features/admin/data/price-books/` | **Implemented** |
 | Governance API | `app/api/admin/price-books/[bookId]/action/route.ts` | **Implemented** |
 | Retire / restore | `catalogRetirement.ts`, `placementPolicyForLifecycle` | Unit only; live Planner canvas open |
 | `ADM-PUB-02`, `ADM-PRICE-*`, `ADM-ROLE-01`, `ADM-AUDIT-01` | Unit + `admin-pricing-pricebook-p05.spec.ts` | Retire/restore browser journey incomplete |
@@ -132,7 +133,7 @@ Plan: `PHASE-04-commercial-governance.md`
 
 | Suite | Path | Notes |
 |---|---|---|
-| SVG editor unit | `tests/unit/admin/svg-editor/` | 208 tests, exit 0 on 2026-07-13 |
+| SVG editor unit | `tests/unit/features/admin/svg-editor/` | 208 tests, exit 0 on 2026-07-13 |
 | Playwright admin | `tests/e2e/admin-phases-live.spec.ts`, `admin-svg-publish-p01.spec.ts`, `admin-pricing-pricebook-p05.spec.ts` | `DEV_AUTH_BYPASS=1`; evidence `results/admin/2026-07-13T-admin-phases-final/` |
 | Auth smoke | `admin-smoke.spec.ts` | Skipped when bypass on |
 

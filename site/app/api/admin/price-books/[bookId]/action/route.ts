@@ -12,8 +12,8 @@ import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import {
   readAdminPriceBookAudit,
   runPriceBookAction,
-} from "@/features/planner/admin/pricing/priceBookAdmin.server";
-import type { PriceBookRole } from "@/features/planner/admin/pricing/priceBookService";
+} from "@/features/admin/pricing/priceBookAdmin.server";
+import type { PriceBookRole } from "@/features/admin/pricing/priceBookService";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 
 type RouteContext = { params: Promise<{ bookId: string }> };

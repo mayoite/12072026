@@ -19,8 +19,11 @@ import { NextResponse } from "next/server";
 import { withAuth } from "@/features/shared/api/withAuth";
 import { success } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
-import { parseAdminPayload } from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
-import { publishDescriptorWithPipeline } from "@/features/planner/admin/svg-editor/publishDescriptorWithPipeline";
+import { parseAdminPayload } from "@/features/admin/svg-editor/persistBlockDescriptor";
+import { publishDescriptorWithPipeline } from "@/features/admin/svg-editor/publishDescriptorWithPipeline";
+import { DrizzleSvgRevisionPersistence } from "@/features/admin/svg-editor/drizzleSvgPersistence.server";
+import { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
+import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
 import { buildBlockThumbPngUrl } from "@/features/planner/project/catalog/svg/svgPreviewAssets";
 import {
   toPlannerDescriptorErrorHttp,
@@ -53,7 +56,11 @@ async function handleSvgEditorPost(req: NextRequest) {
 
   // Fail-closed 1B path: parse → compileSvgForPublish (S1–S3) → S4 write → persist.
   // Avoids broken full recompile via incomplete .next/standalone generate-svg tree.
-  const published = await publishDescriptorWithPipeline(payload);
+  const dbRepository: ImmutableSvgRevisionRepository | undefined =
+    isProductsDatabaseConfigured()
+      ? new ImmutableSvgRevisionRepository(new DrizzleSvgRevisionPersistence())
+      : undefined;
+  const published = await publishDescriptorWithPipeline(payload, { dbRepository });
   if (!published.success) {
     const err = published.error;
     const isParse =

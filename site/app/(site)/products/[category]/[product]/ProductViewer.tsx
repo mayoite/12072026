@@ -6,7 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import type {
   CompatProduct as Product,
   ProductVariant,
-} from '@/features/catalog/getProducts';
+} from '@/lib/catalog/site/getProducts';
 import { ArrowLeft, CaretRight as ChevronRight, ShareNetwork as Share2, ShoppingCart, GitDiff as GitCompareArrows } from "@phosphor-icons/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -35,13 +35,13 @@ import {
 import {
   buildFilterParams,
   parseFiltersFromSearchParams,
-} from '@/features/catalog/filters';
+} from '@/lib/catalog/site/filters';
 import {
   trackCompareToggled,
   trackQuoteCartAdded,
   trackSiteCtaClick,
 } from "@/lib/analytics/siteEvents";
-import { PDP_ROUTE_COPY } from "@/lib/site-data/routeCopy";
+import { PDP_ROUTE_COPY } from "@/features/site/data/routeCopy";
 
 interface ProductViewerProps {
   product: Product;

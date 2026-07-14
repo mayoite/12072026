@@ -39,11 +39,11 @@ vi.mock('@/components/shared/SectionIntro', () => ({
 }));
 
 // Mock metadata & copies
-vi.mock('@/lib/site-data/routeMetadata', () => ({
+vi.mock('@/features/site/data/routeMetadata', () => ({
   SOCIAL_PAGE_METADATA: { title: 'Social Title' },
 }));
 
-vi.mock('@/lib/site-data/routeCopy', () => ({
+vi.mock('@/features/site/data/routeCopy', () => ({
   SOCIAL_PAGE_COPY: {
     heroTitle: 'Hero Title',
     heroSubtitle: 'Hero Subtitle',
@@ -77,7 +77,7 @@ vi.mock('@/lib/site-data/routeCopy', () => ({
   ],
 }));
 
-vi.mock('@/features/catalog/getProducts', () => ({
+vi.mock('@/lib/catalog/site/getProducts', () => ({
   getProducts: vi.fn().mockResolvedValue([
     {
       id: 'prod-1',

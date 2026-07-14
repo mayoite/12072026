@@ -28,15 +28,15 @@ const COVERAGE_RUN_EXCLUDE = [];
 
 /** Paths aggregated into scopes["site"] — mirrors vitest.site.config.ts coverage.include. */
 const SITE_SCOPE_PREFIXES = [
-  "lib/site-data/",
+  "features/site/data/",
   "lib/catalog/",
   "lib/configurator/",
-  "features/catalog/",
+  "lib/catalog/site/",
   "features/shared/",
-  "features/site-assistant/",
+  "features/site/assistant/",
   "features/ops/",
 ];
-const SITE_SCOPE_EXACT = "features/ai/aiadvisor.ts";
+const SITE_SCOPE_EXACT = "features/site/advisor/aiadvisor.ts";
 
 function pct(n, d) {
   return d ? Math.round((1000 * n) / d) / 10 : 0;

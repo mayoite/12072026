@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { CollectionsSectionHeading } from '@/components/home/CollectionsSectionHeading';
-import { HOMEPAGE_COLLECTIONS_CONTENT } from '@/lib/site-data/homepage';
+import { HOMEPAGE_COLLECTIONS_CONTENT } from '@/features/site/data/homepage';
 
 describe('CollectionsSectionHeading Component', () => {
   it('renders heading with default tag (h2) and content', () => {

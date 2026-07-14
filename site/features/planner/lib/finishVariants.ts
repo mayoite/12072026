@@ -5,7 +5,7 @@
  * Initially curated (not user-extensible) to maintain design consistency.
  */
 
-import type { FurnitureCategory } from "../store/catalogData";
+import type { FurnitureCategory } from "../cloud-store/catalogData";
 
 export interface FinishVariant {
   id: string;

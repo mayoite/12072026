@@ -16,7 +16,7 @@ vi.mock("@/components/shared/ContactTeaser", () => ({
   ContactTeaser: () => <div data-testid="mock-contact-teaser">Contact Teaser</div>,
 }));
 
-vi.mock("@/lib/site-data/routeMetadata", () => ({
+vi.mock("@/features/site/data/routeMetadata", () => ({
   REFUND_POLICY_PAGE_METADATA: { title: "Refund Policy" },
 }));
 

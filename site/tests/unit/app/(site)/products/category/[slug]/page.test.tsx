@@ -8,7 +8,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 // Mock categories helpers
-vi.mock('@/features/catalog/categories', () => ({
+vi.mock('@/lib/catalog/site/categories', () => ({
   normalizeRequestedCategoryId: (slug: string) => {
     if (slug === 'valid-slug') return 'seating';
     return null;

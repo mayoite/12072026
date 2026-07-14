@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { WhyChooseUs } from '@/components/home/WhyChooseUs';
-import { HOMEPAGE_WHY_CHOOSE_US_CONTENT } from '@/lib/site-data/homepage';
+import { HOMEPAGE_WHY_CHOOSE_US_CONTENT } from '@/features/site/data/homepage';
 
 // Mock phosphor icons
 vi.mock('@phosphor-icons/react', () => ({

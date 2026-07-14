@@ -3,11 +3,11 @@
 import type {
   CompatCategory as Category,
   CompatProduct as Product,
-} from "@/features/catalog/getProducts";
+} from "@/lib/catalog/site/getProducts";
 import { useEffect, useState } from "react";
 
-import { PRICE_RANGES } from "@/features/catalog/filters";
-import { hasVerifiedHeadrest, hasVerifiedHeightAdjustable } from "@/features/catalog/traits";
+import { PRICE_RANGES } from "@/lib/catalog/site/filters";
+import { hasVerifiedHeadrest, hasVerifiedHeightAdjustable } from "@/lib/catalog/site/traits";
 import {
   sanitizeDisplayText,
   filterMeaningfulDimensionText,

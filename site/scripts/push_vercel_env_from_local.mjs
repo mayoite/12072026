@@ -8,16 +8,16 @@ const repoRoot = path.resolve(scriptDir, '..', '..')
 const siteRoot = path.resolve(scriptDir, '..')
 const envPath = path.join(repoRoot, '.env.local')
 
-const SKIP_KEYS = new Set([
+export const SKIP_KEYS = new Set([
   'DATABASE_URL',
   'PLANNER_DATABASE_URL',
   'ORIGIN_ENDPOINT',
   'VERCEL_OIDC_TOKEN',
 ])
 
-const SKIP_PREFIXES = ['DO_', 'DIGITALOCEAN_']
+export const SKIP_PREFIXES = ['DO_', 'DIGITALOCEAN_']
 
-function parseEnvFile(content) {
+export function parseEnvFile(content) {
   const vars = new Map()
   for (const line of content.split(/\r?\n/)) {
     const trimmed = line.trim()
@@ -38,12 +38,12 @@ function parseEnvFile(content) {
   return vars
 }
 
-function shouldSkip(key) {
+export function shouldSkip(key) {
   if (SKIP_KEYS.has(key)) return true
   return SKIP_PREFIXES.some((prefix) => key.startsWith(prefix))
 }
 
-function addEnv(key, value, target) {
+export function addEnv(key, value, target) {
   const isPublic = key.startsWith('NEXT_PUBLIC_')
   const sensitivity =
     target === 'development' ? ['--no-sensitive'] : [isPublic ? '--no-sensitive' : '--sensitive']
@@ -77,26 +77,38 @@ function addEnv(key, value, target) {
   return true
 }
 
-const envText = readFileSync(envPath, 'utf8')
-const vars = parseEnvFile(envText)
-const targets = ['production', 'preview', 'development']
-const pushed = []
-const skipped = []
-
-for (const [key] of vars) {
-  if (shouldSkip(key)) skipped.push(key)
-}
-
-for (const target of targets) {
-  for (const [key, value] of vars) {
-    if (shouldSkip(key)) continue
-    addEnv(key, value, target)
-    pushed.push(`${key}@${target}`)
-    process.stdout.write(`ok ${key} → ${target}\n`)
+function isMainModule() {
+  const entry = process.argv[1]
+  if (!entry) return false
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url)
+  } catch {
+    return false
   }
 }
 
-console.log(`\nDone: ${pushed.length} sets (${vars.size - skipped.length} keys × ${targets.length} targets)`)
-if (skipped.length) {
-  console.log(`Skipped: ${[...new Set(skipped)].join(', ')}`)
+if (isMainModule()) {
+  const envText = readFileSync(envPath, 'utf8')
+  const vars = parseEnvFile(envText)
+  const targets = ['production', 'preview', 'development']
+  const pushed = []
+  const skipped = []
+
+  for (const [key] of vars) {
+    if (shouldSkip(key)) skipped.push(key)
+  }
+
+  for (const target of targets) {
+    for (const [key, value] of vars) {
+      if (shouldSkip(key)) continue
+      addEnv(key, value, target)
+      pushed.push(`${key}@${target}`)
+      process.stdout.write(`ok ${key} → ${target}\n`)
+    }
+  }
+
+  console.log(`\nDone: ${pushed.length} sets (${vars.size - skipped.length} keys × ${targets.length} targets)`)
+  if (skipped.length) {
+    console.log(`Skipped: ${[...new Set(skipped)].join(', ')}`)
+  }
 }

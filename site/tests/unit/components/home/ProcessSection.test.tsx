@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { ProcessSection } from '@/components/home/ProcessSection';
-import { HOMEPAGE_PROCESS_CONTENT } from '@/lib/site-data/homepage';
+import { HOMEPAGE_PROCESS_CONTENT } from '@/features/site/data/homepage';
 
 vi.mock('framer-motion', () => ({
   motion: {

@@ -6,8 +6,8 @@ import {
   EditorialHero,
 } from "@/components/site/EditorialRoute";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
-import { PORTFOLIO_CLIENTS } from "@/lib/site-data/routeCopy";
-import { PORTFOLIO_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { PORTFOLIO_CLIENTS } from "@/features/site/data/routeCopy";
+import { PORTFOLIO_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = PORTFOLIO_PAGE_METADATA;
 

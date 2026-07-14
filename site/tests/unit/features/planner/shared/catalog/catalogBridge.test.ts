@@ -3,12 +3,12 @@ import { catalogToBuddyLibrary, catalogToOandoFurniture, filterCatalog } from "@
 
 describe("catalogBridge", () => {
   it("should have function catalogToBuddyLibrary defined", () => {
-    expect(catalogToBuddyLibrary).toBeTypeOf("function");
+    expect(catalogToBuddyLibrary).toBeTypeOf("function"); expect(String(catalogToBuddyLibrary)).toContain('function');
   });
   it("should have function catalogToOandoFurniture defined", () => {
-    expect(catalogToOandoFurniture).toBeTypeOf("function");
+    expect(catalogToOandoFurniture).toBeTypeOf("function"); expect(String(catalogToOandoFurniture)).toContain('function');
   });
   it("should have function filterCatalog defined", () => {
-    expect(filterCatalog).toBeTypeOf("function");
+    expect(filterCatalog).toBeTypeOf("function"); expect(String(filterCatalog)).toContain('function');
   });
 });

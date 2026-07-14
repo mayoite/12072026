@@ -4,5 +4,6 @@ import { PlannerToolsShowcase } from "@/features/planner/landing/PlannerToolsSho
 describe("PlannerToolsShowcase", () => {
   it("exports PlannerToolsShowcase component", () => {
     expect(PlannerToolsShowcase).toBeTypeOf("function");
+    expect(PlannerToolsShowcase.name.length).toBeGreaterThan(0);
   });
 });

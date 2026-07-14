@@ -9,7 +9,7 @@ import {
   ActiveChips,
 } from '@/app/(site)/products/[category]/FilterGrid.components';
 import type { FlatProduct } from '@/app/(site)/products/[category]/FilterGrid.helpers';
-import type { ActiveFilters } from '@/features/catalog/filters';
+import type { ActiveFilters } from '@/lib/catalog/site/filters';
 import type {
   trackCompareToggled,
   trackQuoteCartAdded,
@@ -27,7 +27,7 @@ const { mockTrackCompareToggled, mockTrackQuoteCartAdded } = vi.hoisted(() => ({
 }));
 
 // Mock dependencies
-vi.mock('@/lib/site-data/routeCopy', () => ({
+vi.mock('@/features/site/data/routeCopy', () => ({
   CATEGORY_ROUTE_COPY: {
     activeSearchLabel: 'Search',
     activeFiltersLabel: 'Active Filters',
@@ -36,7 +36,7 @@ vi.mock('@/lib/site-data/routeCopy', () => ({
   },
 }));
 
-vi.mock('@/features/catalog/filters', () => ({
+vi.mock('@/lib/catalog/site/filters', () => ({
   SUSTAINABILITY_THRESHOLDS: [4, 7, 9],
 }));
 

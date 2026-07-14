@@ -11,14 +11,19 @@ import { compileSvgForPublish } from "../features/planner/asset-engine/svg/compi
 import { resolveBlockDescriptorsDir, resolvePublicDir } from "../lib/paths/sitePackageRoot";
 import { clearLoaderCache, loadAll } from "../features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
-async function main(): Promise<void> {
+export async function syncDescriptorSvgs(options: {
+  outDir?: string;
+  descriptors?: ReturnType<typeof loadAll>;
+  forceReload?: boolean;
+} = {}): Promise<{ ok: number; fail: number; failures: string[] }> {
   clearLoaderCache();
-  const descriptors = loadAll({ forceReload: true });
-  const outDir = path.join(resolvePublicDir(), "svg-catalog");
+  const descriptors = options.descriptors ?? loadAll({ forceReload: options.forceReload ?? true });
+  const outDir = options.outDir ?? path.join(resolvePublicDir(), "svg-catalog");
   mkdirSync(outDir, { recursive: true });
 
   let ok = 0;
   let fail = 0;
+  const failures: string[] = [];
 
   for (const descriptor of descriptors) {
     const jsonPath = path.join(resolveBlockDescriptorsDir(), `${descriptor.slug}.json`);
@@ -27,6 +32,7 @@ async function main(): Promise<void> {
     if (!result.ok) {
       console.error(`FAIL ${descriptor.slug}: ${result.error}`);
       fail += 1;
+      failures.push(descriptor.slug);
       continue;
     }
     const outPath = path.join(outDir, `${descriptor.slug}.svg`);
@@ -36,7 +42,19 @@ async function main(): Promise<void> {
   }
 
   console.log(`sync:descriptor-svgs done ok=${ok} fail=${fail}`);
-  if (fail > 0) process.exitCode = 1;
+  return { ok, fail, failures };
 }
 
-void main();
+async function main(): Promise<void> {
+  const result = await syncDescriptorSvgs();
+  if (result.fail > 0) process.exitCode = 1;
+}
+
+const isDirect =
+  typeof process !== "undefined" &&
+  process.argv[1] &&
+  path.resolve(process.argv[1]).includes("sync-descriptor-svgs");
+
+if (isDirect && process.env.NODE_ENV !== "test") {
+  void main();
+}

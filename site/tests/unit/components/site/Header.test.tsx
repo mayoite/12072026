@@ -34,7 +34,7 @@ vi.mock('@/lib/navigation', () => ({
   groupCategories: vi.fn((cats) => cats),
 }));
 
-vi.mock('@/lib/siteNav', () => ({
+vi.mock('@/features/site/data/navigation', () => ({
   SITE_HEADER_PRIMARY_LINKS: [
     { label: 'Home', href: '/' },
     { label: 'Products', href: '/products', hasMega: true },

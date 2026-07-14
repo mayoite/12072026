@@ -1,19 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { GET } from "@/app/api/products/route";
-import { getProducts } from "@/features/catalog/getProducts";
-import { getCatalogProductHref } from "@/features/catalog/categories";
+import { getProducts } from "@/lib/catalog/site/getProducts";
+import { getCatalogProductHref } from "@/lib/catalog/site/categories";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 
 vi.mock("@/app/api/_lib/public", () => ({
   enforcePublicApiRateLimit: vi.fn(),
 }));
 
-vi.mock("@/features/catalog/getProducts", () => ({
+vi.mock("@/lib/catalog/site/getProducts", () => ({
   getProducts: vi.fn(),
 }));
 
-vi.mock("@/features/catalog/categories", () => ({
+vi.mock("@/lib/catalog/site/categories", () => ({
   getCatalogProductHref: vi.fn((cat, slug) => `/catalog/${cat}/${slug}`),
 }));
 

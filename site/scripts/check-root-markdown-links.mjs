@@ -11,7 +11,6 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../
 const FILES = [
   "AGENTS.md",
   "Readme.md",
-  "START.md",
   "Agents/INDEX.md",
   "plan/README.md",
   "docs/INDEX.md",

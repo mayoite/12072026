@@ -4,7 +4,7 @@ import OpenAI from "openai";
 import { withAuth } from "@/features/shared/api/withAuth";
 import { validationError } from "@/features/shared/api/apiResponse";
 import { FilterRankSchema } from "@/features/shared/api/schemas";
-import { getProducts } from "@/features/catalog/getProducts";
+import { getProducts } from "@/lib/catalog/site/getProducts";
 import type { Product } from "@/lib/catalog/types";
 import { env } from "@/lib/env.server";
 

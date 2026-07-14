@@ -166,12 +166,11 @@ async function collectPageErrors(page: Page): Promise<string[]> {
 }
 
 test.describe("Admin phases live — smoke + screenshots + a11y", () => {
-  test.skip(
-    !authBypassOn,
-    "Set DEV_AUTH_BYPASS=1 for authenticated Admin live suite",
-  );
-
   test.beforeAll(() => {
+    expect(
+      authBypassOn,
+      "Admin live suite requires DEV_AUTH_BYPASS=1",
+    ).toBe(true);
     ensureDirs();
     writeFileSync(
       path.join(LOGS, "run-meta.json"),

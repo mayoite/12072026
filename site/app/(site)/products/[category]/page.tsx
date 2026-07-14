@@ -1,17 +1,17 @@
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 
-import { CATEGORY_ROUTE_COPY } from "@/lib/site-data/routeCopy";
-import { buildPageMetadata } from "@/lib/site-data/seo";
+import { CATEGORY_ROUTE_COPY } from "@/features/site/data/routeCopy";
+import { buildPageMetadata } from "@/features/site/data/seo";
 import {
   Catalog_CATEGORY_ORDER,
   buildRequestedCategoryCatalog,
   getCatalogCategoryDescription,
   getCatalogCategoryLabel,
   normalizeRequestedCategoryId,
-} from "@/features/catalog/categories";
-import type { CompatCategory } from "@/features/catalog/getProducts";
-import { getCatalog } from "@/features/catalog/getProducts";
+} from "@/lib/catalog/site/categories";
+import type { CompatCategory } from "@/lib/catalog/site/getProducts";
+import { getCatalog } from "@/lib/catalog/site/getProducts";
 import { fetchCategoryIdsLive } from "@/lib/catalog/sources";
 import { SITE_URL } from "@/lib/siteUrl";
 

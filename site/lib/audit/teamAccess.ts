@@ -3,7 +3,7 @@ import "server-only";
 import { and, eq } from "drizzle-orm";
 
 import { getAdminDb } from "@/platform/drizzle/adminDb";
-import { teamMembers } from "@/platform/drizzle/schema";
+import { teamMembers } from "@/platform/drizzle/schema/planner";
 import { isPlannerDatabaseUrlConfigured } from "@/platform/drizzle/databaseUrls";
 
 const UUID_RE =

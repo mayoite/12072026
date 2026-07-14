@@ -1,5 +1,5 @@
 -- SVG revision + artifact DB storage (Phase 2: Products DB authority).
--- Replaces disk-based block-descriptors/ and public/svg-catalog/ as source of truth.
+-- Replaces disk-based inventory/descriptors/ and public/svg-catalog/ as source of truth.
 
 -- Immutable SVG revision published via the pipeline.
 create table if not exists public.svg_revisions (

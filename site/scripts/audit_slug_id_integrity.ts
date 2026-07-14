@@ -7,7 +7,7 @@ import {
   buildCanonicalSeriesId,
   getCanonicalCategoryId,
   resolveCanonicalSubcategory,
-} from "@/features/catalog/categories";
+} from "@/lib/catalog/site/categories";
 import { REPO_ROOT } from "./lib/repoRoot";
 
 type ProductRow = {

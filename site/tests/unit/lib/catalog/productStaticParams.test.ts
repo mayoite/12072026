@@ -11,7 +11,7 @@ vi.mock("@/lib/catalog/fallback", () => ({
   buildLocalCatalogFallbackProducts: vi.fn(() => []),
 }));
 
-vi.mock("@/features/catalog/categories", () => ({
+vi.mock("@/lib/catalog/site/categories", () => ({
   normalizeRequestedCategoryId: vi.fn((c) => c),
   classifyToRequestedCategory: vi.fn(() => "seating"),
 }));

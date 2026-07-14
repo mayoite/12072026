@@ -6,9 +6,9 @@ import {
   formatSitePostalAddress,
   SITE_CONTACT,
   toTelHref,
-} from "@/lib/site-data/contact";
-import { SITE_FOOTER_NAV, SITE_SOCIAL_LINKS } from "@/lib/siteNav";
-import { PRODUCT_SUITE } from "@/lib/site-data/productSuite";
+} from "@/features/site/data/contact";
+import { SITE_FOOTER_NAV, SITE_SOCIAL_LINKS } from "@/features/site/data/navigation";
+import { PRODUCT_SUITE } from "@/features/site/data/productSuite";
 
 function FacebookIcon() {
   return (

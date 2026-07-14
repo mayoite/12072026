@@ -17,12 +17,12 @@ describe("ViewToggle", () => {
     expect(container).toBeDefined();
   });
   it("should have function ViewToggle defined", () => {
-    expect(ViewToggle).toBeTypeOf("function");
+    expect(ViewToggle).toBeTypeOf("function"); expect(String(ViewToggle)).toContain('function');
   });
   it("should have function useViewToggle defined", () => {
-    expect(useViewToggle).toBeTypeOf("function");
+    expect(useViewToggle).toBeTypeOf("function"); expect(String(useViewToggle)).toContain('function');
   });
   it("should have hook useViewToggle defined", () => {
-    expect(useViewToggle).toBeTypeOf("function");
+    expect(useViewToggle).toBeTypeOf("function"); expect(String(useViewToggle)).toContain('function');
   });
 });

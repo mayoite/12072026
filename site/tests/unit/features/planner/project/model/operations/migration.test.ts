@@ -1,0 +1,37 @@
+import { describe, expect, it, beforeEach } from "vitest";
+import {
+  registerMigration,
+  resetMigrations,
+  getRegisteredMigrations,
+  migrateEnvelope,
+  createEnvelopeV1,
+  validateEnvelope,
+} from "@/features/planner/project/model/operations/migration";
+import { createPlannerProject } from "@/features/planner/project/model/project";
+
+describe("operations/migration", () => {
+  beforeEach(() => {
+    resetMigrations();
+  });
+
+  it("creates and validates v1 envelopes", () => {
+    const project = createPlannerProject({ name: "Mig" });
+    const env = createEnvelopeV1(project);
+    expect(env.version).toBe(1);
+    expect(validateEnvelope(env).valid).toBe(true);
+  });
+
+  it("registers and runs migrations", () => {
+    registerMigration(1, 2, (project) => ({
+      project: { ...project, name: `${project.name}-v2` },
+      report: ["bumped"],
+    }));
+    expect(getRegisteredMigrations().length).toBe(1);
+    const project = createPlannerProject({ name: "Base" });
+    const env = createEnvelopeV1(project);
+    const result = migrateEnvelope(env, 2);
+    expect(result.success).toBe(true);
+    expect(result.project.name).toBe("Base-v2");
+    expect(result.report.some((r) => r.includes("v2") || r.includes("bumped"))).toBe(true);
+  });
+});

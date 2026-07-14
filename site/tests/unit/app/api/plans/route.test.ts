@@ -1,16 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { GET, POST } from "@/app/api/plans/route";
-import { createServerClient } from "@/lib/supabase/server";
-import { listPlannerDocumentsFromStore, savePlannerDocumentToStore } from "@/features/planner/store/plannerSaves";
+import { createServerClient } from "@/platform/supabase/server";
+import { listPlannerDocumentsFromStore, savePlannerDocumentToStore } from "@/features/planner/cloud-store/plannerSaves";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/platform/supabase/server", () => ({
   createServerClient: vi.fn(),
 }));
 
-vi.mock("@/features/planner/store/plannerSaves", () => ({
+vi.mock("@/features/planner/cloud-store/plannerSaves", () => ({
   listPlannerDocumentsFromStore: vi.fn(),
   savePlannerDocumentToStore: vi.fn(),
 }));
@@ -23,7 +23,7 @@ vi.mock("@/lib/security/csrf", () => ({
   validateCsrfRequest: vi.fn(),
 }));
 
-vi.mock("@/features/planner/store/plannerPublish", () => ({
+vi.mock("@/features/planner/cloud-store/plannerPublish", () => ({
   buildPlannerDocumentFromPortalPublishData: vi.fn((data, opts) => ({ ...data, ...opts, mockDoc: true })),
 }));
 

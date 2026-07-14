@@ -14,8 +14,8 @@ import {
   migrateGuestProjectToMember,
   type BuddyProject,
 } from "@/features/planner/persistence/persistence";
-import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
-import type { LocalSaveState, SyncState } from "@/features/planner/store/offlineStorage";
+import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
+import type { LocalSaveState, SyncState } from "@/features/planner/cloud-store/offlineStorage";
 
 export type PlannerSaveStatus = "idle" | "unsaved" | "saving" | "saved" | "error";
 

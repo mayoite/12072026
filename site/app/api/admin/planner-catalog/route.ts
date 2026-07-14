@@ -10,7 +10,7 @@ import { withAuth } from "@/features/shared/api/withAuth";
 import {
   createConfiguratorCatalog,
   listConfiguratorCatalog,
-} from "@/features/planner/admin/api/catalogAdminHandlers";
+} from "@/features/admin/api/catalogAdminHandlers";
 
 /** @deprecated List configurator catalog items. Prefer `/api/admin/catalogs/configurator`. */
 export const GET = withAuth(

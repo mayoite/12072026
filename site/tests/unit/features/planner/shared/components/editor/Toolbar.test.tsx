@@ -30,12 +30,12 @@ vi.mock("@/components/ui/Logo", () => ({
   OneAndOnlyLogo: () => <div data-testid="logo" />,
 }));
 
-vi.mock("@/features/planner/store/toastStore", () => ({
+vi.mock("@/features/planner/cloud-store/toastStore", () => ({
   useToastStore: (selector: (state: { addToast: () => void }) => unknown) =>
     selector({ addToast: vi.fn() }),
 }));
 
-vi.mock("@/features/planner/store/plannerStore", () => ({
+vi.mock("@/features/planner/cloud-store/plannerStore", () => ({
   usePlannerStore: (selector: (state: Record<string, unknown>) => unknown) =>
     selector({
       activeTool: "select",

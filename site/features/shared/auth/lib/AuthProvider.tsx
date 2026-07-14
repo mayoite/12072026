@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/platform/supabase/client'
 import type { SessionState } from '@/features/shared/auth/types'
 
 const supabase = createClient()

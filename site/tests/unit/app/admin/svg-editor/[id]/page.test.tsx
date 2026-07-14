@@ -18,7 +18,7 @@ vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", () =>
   BLOCK_DESCRIPTORS_DIR_DEFAULT: "mock-dir",
 }));
 
-vi.mock("@/features/planner/admin/svg-editor/AdminSvgEditorEditView", () => ({
+vi.mock("@/features/admin/svg-editor/AdminSvgEditorEditView", () => ({
   // Updated stub simulates the post-Puck-mount behavior (Puck inside provides the editor testid).
   AdminSvgEditorEditView: ({ slug }: { slug: string }) => (
     <div data-testid="edit-view" data-slug={slug}>

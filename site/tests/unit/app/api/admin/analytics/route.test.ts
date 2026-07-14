@@ -5,7 +5,7 @@ vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: unknown) => handler,
 }));
 
-vi.mock("@/features/planner/store/plannerPersistence", () => ({
+vi.mock("@/features/planner/cloud-store/plannerPersistence", () => ({
   isPlannerDatabaseConfigured: vi.fn(() => false),
   listPlannerAnalyticsRows: vi.fn(),
 }));

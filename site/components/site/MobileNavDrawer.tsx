@@ -7,7 +7,7 @@ import { Drawer } from "vaul";
 import { CaretDown, MagnifyingGlass, Sparkle, X } from "@phosphor-icons/react";
 import { OneAndOnlyLogo } from "@/components/ui/Logo";
 import { type GroupedCategory } from "@/lib/navigation";
-import { SITE_NAV_LINKS, SITE_CTA_LINKS } from "@/lib/siteNav";
+import { SITE_NAV_LINKS, SITE_CTA_LINKS } from "@/features/site/data/navigation";
 import { trackSiteSearchSubmitted } from "@/lib/analytics/siteEvents";
 import { cn } from "@/lib/utils";
 

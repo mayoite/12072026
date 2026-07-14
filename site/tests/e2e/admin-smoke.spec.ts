@@ -22,12 +22,11 @@ const authBypassOn = process.env.DEV_AUTH_BYPASS === "1";
 test.describe("admin smoke — unauthenticated gate", () => {
   test.beforeAll(() => {
     mkdirSync(EVIDENCE_DIR, { recursive: true });
+    expect(
+      authBypassOn,
+      "unauth admin smoke requires DEV_AUTH_BYPASS!=1 (bypass disables redirect gates)",
+    ).toBe(false);
   });
-
-  test.skip(
-    authBypassOn,
-    "DEV_AUTH_BYPASS=1 — unauth redirects disabled for local/P0.1 development",
-  );
 
   for (const route of ADMIN_ROUTES) {
     test(`${route.path} redirects to access with next=`, async ({ page }) => {

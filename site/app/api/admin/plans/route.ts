@@ -12,7 +12,7 @@ import {
   listPlannerDocumentsAdmin,
   patchPlannerDocumentAdmin,
   planRowToAdminSummary,
-} from "@/features/planner/store/plannerPersistence";
+} from "@/features/planner/cloud-store/plannerPersistence";
 import {
   applyPlannerRouteTelemetry,
   jsonWithPlannerRouteTelemetry,

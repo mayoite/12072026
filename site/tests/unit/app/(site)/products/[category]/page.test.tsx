@@ -14,7 +14,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 // Mock seo builder
-vi.mock('@/lib/site-data/seo', () => ({
+vi.mock('@/features/site/data/seo', () => ({
   buildPageMetadata: (_base: string, opts: any) => ({
     title: opts.title,
     description: opts.description,
@@ -23,7 +23,7 @@ vi.mock('@/lib/site-data/seo', () => ({
 }));
 
 // Mock category helpers
-vi.mock('@/features/catalog/categories', () => ({
+vi.mock('@/lib/catalog/site/categories', () => ({
   Catalog_CATEGORY_ORDER: ['seating', 'desks'],
   normalizeRequestedCategoryId: (id: string) => {
     if (id === 'SEATING') return 'seating';
@@ -36,7 +36,7 @@ vi.mock('@/features/catalog/categories', () => ({
 }));
 
 // Mock getCatalog
-vi.mock('@/features/catalog/getProducts', () => ({
+vi.mock('@/lib/catalog/site/getProducts', () => ({
   getCatalog: vi.fn(async () => [
     { id: 'seating', name: 'Chairs', description: 'Comfortable chairs' },
   ]),

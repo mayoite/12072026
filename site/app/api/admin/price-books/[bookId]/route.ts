@@ -5,7 +5,7 @@
 import { withAuth } from "@/features/shared/api/withAuth";
 import { success } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
-import { readAdminPriceBook } from "@/features/planner/admin/pricing/priceBookAdmin.server";
+import { readAdminPriceBook } from "@/features/admin/pricing/priceBookAdmin.server";
 
 type RouteContext = { params: Promise<{ bookId: string }> };
 

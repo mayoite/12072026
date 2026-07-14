@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getCatalog } from '@/features/catalog/getProducts';
-import { Catalog_CATEGORY_ORDER, buildRequestedCategoryCatalog } from '@/features/catalog/categories';
+import { getCatalog } from '@/lib/catalog/site/getProducts';
+import { Catalog_CATEGORY_ORDER, buildRequestedCategoryCatalog } from '@/lib/catalog/site/categories';
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 
 export async function GET(request: Request) {

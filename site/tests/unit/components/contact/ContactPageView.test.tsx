@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { ContactPageView } from '@/components/contact/ContactPageView';
 import enMessages from '@/i18n/messages/en.json';
-import { SITE_CONTACT } from '@/lib/site-data/contact';
+import { SITE_CONTACT } from '@/features/site/data/contact';
 
 vi.mock('next-intl/server', async () => {
   const messages = (await import('@/i18n/messages/en.json')).default;
@@ -44,7 +44,7 @@ vi.mock('@phosphor-icons/react', () => ({
   Mail: () => <span data-testid="mail-icon" />
 }));
 
-vi.mock('@/lib/site-data/seo', () => ({
+vi.mock('@/features/site/data/seo', () => ({
   buildPageJsonLd: vi.fn().mockReturnValue({ '@context': 'https://schema.org', '@type': 'ContactPage' })
 }));
 

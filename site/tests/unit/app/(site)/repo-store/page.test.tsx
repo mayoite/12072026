@@ -6,7 +6,7 @@ vi.mock('@/components/repo-store/RepoStorePageView', () => ({
   RepoStorePageView: () => <div data-testid="mock-repo-view">Repo Store View</div>,
 }));
 
-vi.mock('@/lib/site-data/seo', () => ({
+vi.mock('@/features/site/data/seo', () => ({
   buildPageMetadata: (_base: string, opts: any) => ({
     title: opts.title,
     description: opts.description,

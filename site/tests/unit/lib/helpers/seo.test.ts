@@ -7,7 +7,7 @@ import {
   buildProductJsonLd,
 } from "@/lib/helpers/seo";
 
-vi.mock("@/lib/site-data/seo", () => ({
+vi.mock("@/features/site/data/seo", () => ({
   buildBreadcrumbJsonLd: vi.fn(),
   buildCanonicalUrl: vi.fn(),
   buildGlobalJsonLd: vi.fn(),

@@ -16,7 +16,7 @@ vi.mock('@/components/site/LanguageSwitcher', () => ({
 }));
 
 // Mock contact site-data
-vi.mock('@/lib/site-data/contact', () => ({
+vi.mock('@/features/site/data/contact', () => ({
   buildMailtoHref: () => 'mailto:sales@oando.local',
   formatSitePostalAddress: () => 'Patna office address',
   SITE_CONTACT: {
@@ -27,7 +27,7 @@ vi.mock('@/lib/site-data/contact', () => ({
 }));
 
 // Mock site navigation
-vi.mock('@/lib/siteNav', () => ({
+vi.mock('@/features/site/data/navigation', () => ({
   SITE_SOCIAL_LINKS: [
     { id: 'facebook', label: 'Facebook', href: 'https://facebook.com' },
     { id: 'youtube', label: 'YouTube', href: 'https://youtube.com' },
@@ -46,7 +46,7 @@ vi.mock('@/lib/siteNav', () => ({
 }));
 
 // Mock productSuite route
-vi.mock('@/lib/site-data/productSuite', () => ({
+vi.mock('@/features/site/data/productSuite', () => ({
   PRODUCT_SUITE: {
     admin: {
       routes: {

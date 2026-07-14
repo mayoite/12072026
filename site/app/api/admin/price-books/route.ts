@@ -4,7 +4,7 @@
 
 import { withAuth } from "@/features/shared/api/withAuth";
 import { success } from "@/features/shared/api/apiResponse";
-import { listAdminPriceBooks } from "@/features/planner/admin/pricing/priceBookAdmin.server";
+import { listAdminPriceBooks } from "@/features/admin/pricing/priceBookAdmin.server";
 
 export const GET = withAuth(
   async () => success({ books: listAdminPriceBooks() }),

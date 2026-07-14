@@ -2,8 +2,8 @@ import type { NextRequest} from "next/server";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import Fuse from "fuse.js";
-import { getCatalog } from '@/features/catalog/getProducts';
-import { buildRequestedCategoryCatalog } from '@/features/catalog/categories';
+import { getCatalog } from '@/lib/catalog/site/getProducts';
+import { buildRequestedCategoryCatalog } from '@/lib/catalog/site/categories';
 import { rateLimit } from "@/lib/rateLimit";
 import { SITE_URL } from "@/lib/siteUrl";
 

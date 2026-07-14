@@ -39,7 +39,7 @@ describe("exportModularCabinetV0GlbBinary (mesh G5–G6)", () => {
     });
 
     expect(result.ok).toBe(true);
-    if (!result.ok) return;
+    if (!result.ok) throw new Error("expected result.ok");
 
     expect(isSystemGeneratedGlbUrl(result.relativePath)).toBe(true);
     expect(result.byteLength).toBeGreaterThan(100);
@@ -54,7 +54,7 @@ describe("runModularMeshStages (G1–G6)", () => {
   it("runs footprint + mesh + binary without claiming G8", async () => {
     const result = await runModularMeshStages({ doorStyle: "pair" });
     expect(result.ok).toBe(true);
-    if (!result.ok) return;
+    if (!result.ok) throw new Error("expected result.ok");
 
     expect(result.footprint.startsWith("M ")).toBe(true);
     expect(result.runtimeMeshChildren).toBe(4);

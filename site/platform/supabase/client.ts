@@ -1,6 +1,6 @@
 import { createBrowserClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/supabase/types";
+import type { Database } from "@/platform/supabase/types";
 import { getOptionalPublicSupabaseEnv, getPublicSupabaseEnv } from "./env";
 
 export type { Database };

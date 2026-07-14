@@ -9,16 +9,32 @@ import { resolvePlannerDatabaseUrl } from "../platform/drizzle/databaseUrls";
 const require = createRequire(import.meta.url);
 require("./loadEnvLocal.cjs").loadEnvLocal();
 
-async function main() {
-  const url = resolvePlannerDatabaseUrl();
+export type EnsurePlansResult =
+  | { ok: true; message: string }
+  | { ok: false; message: string; exitCode: number };
+
+export async function ensurePlansTable(
+  deps: {
+    resolveUrl?: typeof resolvePlannerDatabaseUrl;
+    sqlFactory?: typeof postgres;
+    log?: typeof console.log;
+    error?: typeof console.error;
+  } = {},
+): Promise<EnsurePlansResult> {
+  const resolveUrl = deps.resolveUrl ?? resolvePlannerDatabaseUrl;
+  const sqlFactory = deps.sqlFactory ?? postgres;
+  const log = deps.log ?? console.log;
+  const error = deps.error ?? console.error;
+
+  const url = resolveUrl();
   if (!url) {
-    console.error(
-      "❌ Planner DB URL missing (set SUPABASE_AUTH_DATABASE_URL in repo-root .env.local)",
-    );
-    process.exit(1);
+    const message =
+      "❌ Planner DB URL missing (set SUPABASE_AUTH_DATABASE_URL in repo-root .env.local)";
+    error(message);
+    return { ok: false, message, exitCode: 1 };
   }
 
-  const sql = postgres(url, { max: 1 });
+  const sql = sqlFactory(url, { max: 1 });
 
   try {
     const [{ exists }] = await sql`
@@ -29,19 +45,38 @@ async function main() {
     `;
 
     if (exists) {
-      console.log("✅ oando_plans table present.");
-      return;
+      const message = "✅ oando_plans table present.";
+      log(message);
+      return { ok: true, message };
     }
 
-    console.error("❌ oando_plans missing — run: pnpm --filter oando-site run db:apply:admin");
-    process.exit(1);
-  } catch (error) {
-    console.error("❌ Failed to check oando_plans:");
-    console.error(error);
-    process.exit(1);
+    const message =
+      "❌ oando_plans missing — run: pnpm --filter oando-site run db:apply:admin";
+    error(message);
+    return { ok: false, message, exitCode: 1 };
+  } catch (err) {
+    error("❌ Failed to check oando_plans:");
+    error(err);
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : String(err),
+      exitCode: 1,
+    };
   } finally {
     await sql.end({ timeout: 5 });
   }
 }
 
-main();
+export async function main(): Promise<void> {
+  const result = await ensurePlansTable();
+  if (!result.ok) process.exit(result.exitCode);
+}
+
+function isMain(): boolean {
+  const entry = (process.argv[1] ?? "").replace(/\\/g, "/");
+  return entry.endsWith("db_ensure_plans_table.ts") || entry.endsWith("db_ensure_plans_table.js");
+}
+
+if (isMain()) {
+  void main();
+}

@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
-import { REFUND_POLICY_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { REFUND_POLICY_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = REFUND_POLICY_PAGE_METADATA;
 

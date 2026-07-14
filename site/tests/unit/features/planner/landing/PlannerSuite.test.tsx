@@ -10,6 +10,6 @@ describe("PlannerSuite", () => {
     expect(container).toBeDefined();
   });
   it("should have function PlannerSuite defined", () => {
-    expect(PlannerSuite).toBeTypeOf("function");
+    expect(PlannerSuite).toBeTypeOf("function"); expect(String(PlannerSuite)).toContain('function');
   });
 });

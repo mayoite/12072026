@@ -9,8 +9,8 @@ import {
   type Block2D,
   type Prim,
 } from "@/lib/catalog/blocks2d";
-import { resolveCatalogItemBlock2D } from "@/features/planner/catalog/catalogBlockBridge";
-import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
+import { resolveCatalogItemBlock2D } from "@/features/planner/catalog-api/catalogBlockBridge";
+import type { CatalogItem } from "@/features/planner/catalog-api/catalogTypes";
 import type { PlannerFurnitureItem } from "../model/types";
 import {
   parseWorkstationConfigKey,

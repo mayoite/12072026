@@ -1,5 +1,5 @@
 import { adminDb } from '@/platform/drizzle/adminDb'
-import { auditEvents } from '@/platform/drizzle/schema'
+import { auditEvents } from '@/platform/drizzle/schema/planner'
 
 export interface AuditEventRow {
   team_id: string

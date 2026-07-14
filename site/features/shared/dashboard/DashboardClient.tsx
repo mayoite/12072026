@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "@phosphor-icons/react";
 import { PLANNER_GUEST_COOKIE } from "@/lib/auth/constants";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/platform/supabase/client";
 import { GlobalNavHeader } from "@/features/shared/shell/GlobalNavHeader";
 import { WORKSPACE_HUB_SECTIONS, type WorkspaceHubItem } from "./workspaceHub";
 

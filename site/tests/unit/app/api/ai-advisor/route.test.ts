@@ -9,7 +9,7 @@ vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: (req: NextRequest) => Promise<Response>) => handler,
 }));
 
-vi.mock("@/features/catalog/getProducts", () => ({
+vi.mock("@/lib/catalog/site/getProducts", () => ({
   getProductsFresh,
 }));
 

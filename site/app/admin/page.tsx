@@ -1,6 +1,6 @@
 "use client";
 
-import AdminDashboardPageView from "@/features/planner/admin/AdminDashboardPageView";
+import AdminDashboardPageView from "@/features/admin/AdminDashboardPageView";
 
 export default function AdminDashboard() {
   return <AdminDashboardPageView />;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import type { PlannerSaveSummary } from "@/features/planner/store/plannerSaves";
+import type { PlannerSaveSummary } from "@/features/planner/cloud-store/plannerSaves";
 
 interface PortalPageViewProps {
   databaseConfigured: boolean;

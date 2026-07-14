@@ -31,7 +31,7 @@ export function alignEntities(
 ): EntityPositionUpdate[] {
   if (entities.length < 2) return [];
 
-  const { min, max } = extents(entities);
+  const { min, max } = extents(entities, axis);
 
   let target: number;
   if (anchor === "min") {

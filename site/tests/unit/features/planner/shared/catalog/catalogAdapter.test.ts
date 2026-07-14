@@ -3,18 +3,18 @@ import { loadPlannerCatalog, normalizeCatalogItem, normalizeCatalogBatch, filter
 
 describe("catalogAdapter", () => {
   it("should have function loadPlannerCatalog defined", () => {
-    expect(loadPlannerCatalog).toBeTypeOf("function");
+    expect(loadPlannerCatalog).toBeTypeOf("function"); expect(String(loadPlannerCatalog)).toContain('function');
   });
   it("should have function normalizeCatalogItem defined", () => {
-    expect(normalizeCatalogItem).toBeTypeOf("function");
+    expect(normalizeCatalogItem).toBeTypeOf("function"); expect(String(normalizeCatalogItem)).toContain('function');
   });
   it("should have function normalizeCatalogBatch defined", () => {
-    expect(normalizeCatalogBatch).toBeTypeOf("function");
+    expect(normalizeCatalogBatch).toBeTypeOf("function"); expect(String(normalizeCatalogBatch)).toContain('function');
   });
   it("should have function filterByCategory defined", () => {
-    expect(filterByCategory).toBeTypeOf("function");
+    expect(filterByCategory).toBeTypeOf("function"); expect(String(filterByCategory)).toContain('function');
   });
   it("should have function searchCatalog defined", () => {
-    expect(searchCatalog).toBeTypeOf("function");
+    expect(searchCatalog).toBeTypeOf("function"); expect(String(searchCatalog)).toContain('function');
   });
 });

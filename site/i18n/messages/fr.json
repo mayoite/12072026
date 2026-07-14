@@ -555,14 +555,14 @@
     ]
   },
   "products": {
-  "heroSubtitle": "Des categories de mobilier concues pour de vrais flux de travail de bureau, une durabilite a long terme et une croissance evolutive.",
-  "headlineLead": "Des produits selectionnes pour la",
-  "headlineAccent": "performance, pas seulement la presentation.",
-  "pillarsKicker": "Pourquoi ces categories",
-  "pillarsTitleLead": "Conçues pour",
-  "pillarsTitleAccent": "les vrais flux de travail de bureau",
-  "pillarsIntro": "Chaque catégorie est sélectionnée pour sa durabilité, la clarté de ses spécifications et l’assistance après livraison, pas seulement pour la présentation.",
-  "pillars": [
+    "heroSubtitle": "Des categories de mobilier concues pour de vrais flux de travail de bureau, une durabilite a long terme et une croissance evolutive.",
+    "headlineLead": "Des produits selectionnes pour la",
+    "headlineAccent": "performance, pas seulement la presentation.",
+    "pillarsKicker": "Pourquoi ces categories",
+    "pillarsTitleLead": "Conçues pour",
+    "pillarsTitleAccent": "les vrais flux de travail de bureau",
+    "pillarsIntro": "Chaque catégorie est sélectionnée pour sa durabilité, la clarté de ses spécifications et l’assistance après livraison, pas seulement pour la présentation.",
+    "pillars": [
       {
         "title": "Conseils guides par la specification",
         "detail": "Nous cartographions les effectifs, les usages et le budget pour que les choix produits soient pratiques des le premier jour.",
@@ -893,5 +893,10 @@
     "introDescription": "Cette page fonctionne au mieux lorsqu'elle dirige rapidement les visiteurs vers le bon parcours d'assistance au lieu de forcer des demandes de contact generiques. Elle doit rester alignee sur les flux de service, de suivi et du Resource Desk.",
     "noteTitle": "Meilleure utilisation",
     "noteDescription": "Commencez ici lorsque vous savez que vous avez besoin d'aide, mais que vous n'etes pas encore sur de savoir si la demande releve du service, de la documentation, du suivi de livraison ou de l'assistance de planification."
+  },
+  "workspace": {
+    "backToHome": "Back to Home",
+    "accessPanelTitle": "Precision in Planning",
+    "accessPanelDescription": "Experience the Oando Suite. Our architectural tools are designed for accuracy, performance, and clear collaboration across teams."
   }
 }

@@ -1,5 +1,5 @@
-import type { CatalogItem } from "@/features/planner/catalog/catalogTypes";
-import { PLANNER_CATALOG_ITEMS } from "@/features/planner/catalog/workspaceCatalog";
+import type { CatalogItem } from "@/features/planner/catalog-api/catalogTypes";
+import { PLANNER_CATALOG_ITEMS } from "@/features/planner/catalog-api/workspaceCatalog";
 import { millimetersToCanvasUnits } from "@/features/planner/lib/calibrationScale";
 import {
   PLANNER_CANVAS_CONFIG,
@@ -13,7 +13,7 @@ import { metadataToSpaceSuggestInput } from "@/features/planner/onboarding/proje
 import {
   normalizeCatalogMm,
   plannerCanvasUnits,
-} from "@/features/planner/catalog/catalogBlockBridge";
+} from "@/features/planner/catalog-api/catalogBlockBridge";
 
 import { buildSpaceSuggestUserPrompt, SPACE_SUGGEST_SYSTEM_PROMPT } from "./prompts";
 import type { SpaceSuggestInput, SuggestedLayoutJson } from "./types";

@@ -1,7 +1,7 @@
 import type { NextRequest} from "next/server";
 import { NextResponse } from "next/server";
-import { getProducts } from '@/features/catalog/getProducts';
-import { getCatalogProductHref } from '@/features/catalog/categories';
+import { getProducts } from '@/lib/catalog/site/getProducts';
+import { getCatalogProductHref } from '@/lib/catalog/site/categories';
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 
 export const dynamic = "force-dynamic";

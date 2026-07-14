@@ -12,7 +12,7 @@ import {
   patchPlannerDocumentAdmin,
   deletePlannerDocument,
   planRowToAdminSummary,
-} from "@/features/planner/store/plannerPersistence";
+} from "@/features/planner/cloud-store/plannerPersistence";
 
 vi.mock("@/app/api/admin/_lib/server", () => ({
   enforceAdminRateLimit: vi.fn(),
@@ -23,7 +23,7 @@ vi.mock("@/lib/security/csrf", () => ({
   validateCsrfRequest: vi.fn(),
 }));
 
-vi.mock("@/features/planner/store/plannerPersistence", () => ({
+vi.mock("@/features/planner/cloud-store/plannerPersistence", () => ({
   isPlannerDatabaseConfigured: vi.fn(),
   listPlannerDocumentsAdmin: vi.fn(),
   patchPlannerDocumentAdmin: vi.fn(),

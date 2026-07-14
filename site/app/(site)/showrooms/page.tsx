@@ -5,8 +5,8 @@ import {
   EditorialHero,
 } from "@/components/site/EditorialRoute";
 import { HomeMarketingLayout } from "@/components/home/layout";
-import { SHOWROOMS_HIGHLIGHTS } from "@/lib/site-data/routeCopy";
-import { SHOWROOMS_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { SHOWROOMS_HIGHLIGHTS } from "@/features/site/data/routeCopy";
+import { SHOWROOMS_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = SHOWROOMS_PAGE_METADATA;
 

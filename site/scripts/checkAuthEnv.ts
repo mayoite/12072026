@@ -1,7 +1,7 @@
 import { config as loadEnv } from "dotenv";
 import { createClient } from "@supabase/supabase-js";
 import { getE2EAuthEnv } from "@/lib/auth/e2eAuthEnv";
-import type { Database } from "@/lib/supabase/types";
+import type { Database } from "@/platform/supabase/types";
 
 loadEnv({ path: ".env.local", override: false, quiet: true });
 loadEnv({ override: false, quiet: true });

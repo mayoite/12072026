@@ -3,9 +3,9 @@ import { exportBrandedPdf, exportBoqOnly } from "@/features/planner/shared/expor
 
 describe("brandedPdfExport", () => {
   it("should have function exportBrandedPdf defined", () => {
-    expect(exportBrandedPdf).toBeTypeOf("function");
+    expect(exportBrandedPdf).toBeTypeOf("function"); expect(String(exportBrandedPdf)).toContain('function');
   });
   it("should have function exportBoqOnly defined", () => {
-    expect(exportBoqOnly).toBeTypeOf("function");
+    expect(exportBoqOnly).toBeTypeOf("function"); expect(String(exportBoqOnly)).toContain('function');
   });
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import type { CompatCategory as Category } from "@/features/catalog/getProducts";
+import type { CompatCategory as Category } from "@/lib/catalog/site/getProducts";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Funnel as Filter, MagnifyingGlass as SearchIcon, FadersHorizontal as SlidersHorizontal, X } from "@phosphor-icons/react";
@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { CompareDock } from "@/components/products/CompareDock";
-import { CATEGORY_ROUTE_COPY } from "@/lib/site-data/routeCopy";
+import { CATEGORY_ROUTE_COPY } from "@/features/site/data/routeCopy";
 import {
   DEFAULT_FILTERS,
   buildFilterParams,
@@ -16,7 +16,7 @@ import {
   countActiveFilters,
   parseFiltersFromSearchParams,
   type ActiveFilters,
-} from "@/features/catalog/filters";
+} from "@/lib/catalog/site/filters";
 import { trackSiteCtaClick } from "@/lib/analytics/siteEvents";
 import { useProductCompare } from "@/lib/store/productCompare";
 

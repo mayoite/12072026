@@ -10,12 +10,12 @@ import type {
   ProductDetailedInfo,
   ProductMetadata,
   ProductVariant,
-} from "@/features/catalog/getProducts";
+} from "@/lib/catalog/site/getProducts";
 import {
   auditCompatProduct,
   collectProductDocuments,
   collectProductImages,
-} from "@/features/catalog/specSchema";
+} from "@/lib/catalog/site/specSchema";
 
 config({ path: resolve(process.cwd(), ".env.local") });
 

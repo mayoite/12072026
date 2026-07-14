@@ -20,11 +20,11 @@ import type { NextResponse } from "next/server";
 import { withAuth } from "@/features/shared/api/withAuth";
 import { success, error } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
-import { furnitureCatalog } from "@/features/planner/store/catalogData";
+import { furnitureCatalog } from "@/features/planner/cloud-store/catalogData";
 import {
   isPlannerDatabaseConfigured,
   listPlannerAnalyticsRows,
-} from "@/features/planner/store/plannerPersistence";
+} from "@/features/planner/cloud-store/plannerPersistence";
 
 type PlannerAnalyticsRow = {
   id: string;

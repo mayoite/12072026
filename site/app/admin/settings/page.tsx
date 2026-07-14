@@ -1,4 +1,4 @@
-import AdminSettingsPageView from "@/features/planner/admin/AdminSettingsPageView";
+import AdminSettingsPageView from "@/features/admin/AdminSettingsPageView";
 
 export default function AdminSettingsPage() {
   return <AdminSettingsPageView />;

@@ -60,7 +60,7 @@ const featureChecks = {
   "features/ops-portal": fs.existsSync(path.join(siteRoot, "features/ops-portal")),
   "lib/configurator": fs.existsSync(path.join(siteRoot, "lib/configurator")),
   "public/tldraw-assets": fs.existsSync(path.join(siteRoot, "public/tldraw-assets")),
-  "block-descriptors": fs.existsSync(path.join(siteRoot, "block-descriptors")),
+  "inventory/descriptors": fs.existsSync(path.join(siteRoot, "inventory", "descriptors")),
   "lib/db.ts": fs.existsSync(path.join(siteRoot, "lib/db.ts")),
 };
 

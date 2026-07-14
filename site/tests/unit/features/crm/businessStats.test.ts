@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type * as businessStatsType0 from "@/features/crm/businessStats";
-import { BUSINESS_STATS_SAFE_DEFAULTS } from '@/lib/site-data/fallbacks';
+import { BUSINESS_STATS_SAFE_DEFAULTS } from '@/features/site/data/fallbacks';
 
 vi.mock('server-only', () => ({}));
 

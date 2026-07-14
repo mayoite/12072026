@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import type { CompatProduct } from '@/features/catalog/getProducts';
-import { getCatalog } from '@/features/catalog/getProducts';
+import type { CompatProduct } from '@/lib/catalog/site/getProducts';
+import { getCatalog } from '@/lib/catalog/site/getProducts';
 import {
   Catalog_CATEGORY_ORDER,
   Catalog_SUBCATEGORY_LABELS,
@@ -8,7 +8,7 @@ import {
   classifyToRequestedSubcategory,
   getCanonicalSubcategoryId,
   getCatalogCategoryLabel,
-} from '@/features/catalog/categories';
+} from '@/lib/catalog/site/categories';
 import { groupCategories, type CategoryApiItem } from "@/lib/navigation";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 

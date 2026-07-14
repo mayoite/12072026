@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
-import { HOMEPAGE_COLLECTIONS_CONTENT } from "@/lib/site-data/homepage";
+import { HOMEPAGE_COLLECTIONS_CONTENT } from "@/features/site/data/homepage";
 import { CollectionsSectionHeading } from "@/components/home/CollectionsSectionHeading";
 import { fadeUp, useMotionSafeHover } from "@/lib/helpers/motion";
 

@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { GET, POST } from "@/app/api/nav-search/route";
-import { getCatalog } from "@/features/catalog/getProducts";
-import { buildRequestedCategoryCatalog } from "@/features/catalog/categories";
+import { getCatalog } from "@/lib/catalog/site/getProducts";
+import { buildRequestedCategoryCatalog } from "@/lib/catalog/site/categories";
 import { rateLimit } from "@/lib/rateLimit";
 
-vi.mock("@/features/catalog/getProducts", () => ({
+vi.mock("@/lib/catalog/site/getProducts", () => ({
   getCatalog: vi.fn(),
 }));
 
-vi.mock("@/features/catalog/categories", () => ({
+vi.mock("@/lib/catalog/site/categories", () => ({
   buildRequestedCategoryCatalog: vi.fn(),
 }));
 

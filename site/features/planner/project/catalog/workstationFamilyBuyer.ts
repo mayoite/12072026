@@ -6,13 +6,13 @@ import {
   driveWorkstationFamily,
   type WorkstationFamilyDrive,
   type WorkstationFamilySelection,
-} from "@/features/planner/admin/workstation/workstationFamilyDrive";
+} from "@/features/admin/workstation/workstationFamilyDrive";
 import {
   WORKSTATION_FAMILY_V0_FIXTURE,
   type WorkstationFamilyContract,
   type WorkstationFamilyVersion,
-} from "@/features/planner/admin/workstation/workstationFamilyContract";
-import { requiresMigrationChoice } from "@/features/planner/admin/workstation/workstationFamilyRelease";
+} from "@/features/admin/workstation/workstationFamilyContract";
+import { requiresMigrationChoice } from "@/features/admin/workstation/workstationFamilyRelease";
 import { workstationV0UnitPriceInr } from "@/features/planner/project/catalog/workstationBoqV0";
 import {
   generateWorkstationV0MeshPlan,
@@ -75,9 +75,9 @@ export function optionIdsFromDraft(
 ): string[] {
   const allowed = new Set(version.options.map((entry) => entry.optionId));
   const optionIds: string[] = [];
-  for (const module of draft.toggledModules) {
-    if (!BUYER_TOGGLE_MODULES.includes(module)) continue;
-    const match = version.options.find((entry) => entry.module === module);
+  for (const moduleKind of draft.toggledModules) {
+    if (!BUYER_TOGGLE_MODULES.includes(moduleKind)) continue;
+    const match = version.options.find((entry) => entry.module === moduleKind);
     if (!match || !allowed.has(match.optionId)) continue;
     optionIds.push(match.optionId);
   }
@@ -101,10 +101,10 @@ function unsupportedModuleReason(
   draft: WorkstationConfiguratorDraftV0,
 ): string | null {
   const supportedModules = new Set(version.options.map((entry) => entry.module));
-  for (const module of draft.toggledModules) {
-    if (!BUYER_TOGGLE_MODULES.includes(module)) continue;
-    if (!supportedModules.has(module)) {
-      return `${module} is not offered on the active family version`;
+  for (const moduleKind of draft.toggledModules) {
+    if (!BUYER_TOGGLE_MODULES.includes(moduleKind)) continue;
+    if (!supportedModules.has(moduleKind)) {
+      return `${moduleKind} is not offered on the active family version`;
     }
   }
   return null;

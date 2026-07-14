@@ -2,13 +2,15 @@ name = "oneandonly-site"
 main = ".open-next/worker.js"
 compatibility_date = "2024-05-03"
 
+# Non-secret deploy bindings. Set real values in Cloudflare dashboard or via
+# `wrangler secret put` / env-specific vars — do not commit environment-specific
+# production hostnames into git.
 [vars]
-NEXT_PUBLIC_SUPABASE_URL = "https://erpweaiypimorcunaimz.supabase.co"
-# NOTE: NEXT_PUBLIC_SUPABASE_ANON_KEY should be set via Cloudflare Environment Variables (wrangler secrets set),
-# not hardcoded here. Use: `wrangler secret put NEXT_PUBLIC_SUPABASE_ANON_KEY`
-NEXT_PUBLIC_ASSET_BASE_URL = "https://oando-worker-proxy.mayoite.workers.dev"
+NEXT_PUBLIC_SUPABASE_URL = ""
+# NEXT_PUBLIC_SUPABASE_ANON_KEY: wrangler secret put NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_ASSET_BASE_URL = ""
 NEXT_IMAGE_UNOPTIMIZED = "true"
-NEXT_PUBLIC_SITE_URL = "https://oneandonly-site.mayoite.workers.dev"
+NEXT_PUBLIC_SITE_URL = ""
 
 # R2 Bucket for OpenNext Cache (Standard binding name)
 [[r2_buckets]]

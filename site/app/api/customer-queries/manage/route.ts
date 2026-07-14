@@ -2,7 +2,7 @@ import { timingSafeEqual } from "crypto";
 import type { NextRequest} from "next/server";
 import { createSupabaseAuthAdminClient } from '@/platform/supabase/auth-admin';
 import { getClientIp } from "@/platform/supabase/adminServer";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/platform/supabase/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 import { isAppAdmin } from "@/lib/auth/roles";

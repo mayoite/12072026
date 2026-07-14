@@ -32,7 +32,7 @@ vi.mock("@/features/planner/persistence/plannerSession", () => ({
   parseSessionSnapshot: vi.fn((snapshot) => ({ store: JSON.parse(snapshot) })),
 }));
 
-vi.mock("@/features/planner/store/workspaceStore", () => ({
+vi.mock("@/features/planner/cloud-store/workspaceStore", () => ({
   usePlannerWorkspaceStore: {
     subscribe: vi.fn(() => vi.fn()),
   },

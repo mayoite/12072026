@@ -2,9 +2,9 @@
  * @deprecated Use `POST /api/planner/ai-advisor` instead.
  *
  * Legacy mock AI advisor endpoint. Returns a static, rule-based response
- * (no real AI provider). Kept as a thin shim for backwards compatibility —
- * the orphaned `useAiAdvisor` hook still targets this route, though it is
- * not mounted in any active UI. Prefer the canonical planner advisor.
+ * (no real AI provider). Kept as a thin HTTP shim for external callers only —
+ * `useAiAdvisor` targets `POST /api/planner/ai-advisor`. Prefer the canonical
+ * planner advisor.
  *
  * Auth: guest (anonymous allowed). Rate-limited per IP.
  *

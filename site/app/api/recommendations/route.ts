@@ -1,8 +1,8 @@
 import type { NextRequest} from "next/server";
 import { NextResponse } from "next/server";
-import { getProducts, type Product } from '@/features/catalog/getProducts';
+import { getProducts, type Product } from '@/lib/catalog/site/getProducts';
 import { createSupabaseAuthAdminClient } from '@/platform/supabase/auth-admin';
-import { getCatalogProductHref } from '@/features/catalog/categories';
+import { getCatalogProductHref } from '@/lib/catalog/site/categories';
 import { rateLimit } from "@/lib/rateLimit";
 import {
   createAnonymousUserId,

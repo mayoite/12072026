@@ -4,10 +4,10 @@ import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components
 import { ClientBadge } from "@/components/ClientBadge";
 import { KpiIntegrityMonitor } from "@/components/analytics/KpiIntegrityMonitor";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
-import { PROJECTS_PAGE_CLIENTS, PROJECTS_PAGE_COPY } from "@/lib/site-data/routeCopy";
+import { PROJECTS_PAGE_CLIENTS, PROJECTS_PAGE_COPY } from "@/features/site/data/routeCopy";
 import { getBusinessStats } from "@/features/crm/businessStats";
 import { formatKpiAsOf, formatKpiValuePlus } from "@/lib/kpiFormat";
-import { PROJECTS_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { PROJECTS_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = PROJECTS_PAGE_METADATA;
 

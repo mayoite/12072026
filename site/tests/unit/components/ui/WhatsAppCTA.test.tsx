@@ -13,7 +13,7 @@ vi.mock('@/lib/analytics/siteEvents', () => ({
   trackSiteCtaClick: vi.fn(),
 }));
 
-vi.mock('@/lib/site-data/contact', () => ({
+vi.mock('@/features/site/data/contact', () => ({
   buildWhatsAppHref: vi.fn((text) => `https://wa.me/mock?text=${encodeURIComponent(text)}`),
   buildMailtoHref: vi.fn((subject) => `mailto:mock@example.com?subject=${encodeURIComponent(subject)}`),
   toTelHref: vi.fn((phone) => `tel:${phone}`),

@@ -4,7 +4,7 @@ import {
   metadataToSpaceSuggestInput,
   type PlannerPrimaryPurpose,
 } from "@/features/planner/onboarding/projectSetup";
-import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
+import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 
 const DEFAULT_QUICK_LAYOUT_INPUT: SpaceSuggestInput = {
   seatCount: 12,

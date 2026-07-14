@@ -2,12 +2,12 @@ import { notFound } from "next/navigation";
 import { ProductViewer } from "./ProductViewer";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import type { Product, CompatProduct, ProductVariant } from '@/features/catalog/getProducts';
+import type { Product, CompatProduct, ProductVariant } from '@/lib/catalog/site/getProducts';
 import {
   classifyToRequestedCategory,
   getCatalogCategoryLabel,
   normalizeRequestedCategoryId,
-} from '@/features/catalog/categories';
+} from '@/lib/catalog/site/categories';
 import { fetchCatalogProductsSlugFieldsByCategoryLive } from "@/lib/catalog/catalogDrizzle";
 import { normalizeAssetList, normalizeAssetPath } from "@/lib/assetPaths";
 import {
@@ -17,8 +17,8 @@ import {
 import { buildProductStaticParams } from "@/lib/catalog/productStaticParams";
 import { resolveProductByUrlKey } from "@/lib/productSlugResolver";
 import { SITE_URL } from "@/lib/siteUrl";
-import { PDP_ROUTE_COPY } from "@/lib/site-data/routeCopy";
-import { buildBreadcrumbJsonLd, buildPageMetadata } from "@/lib/site-data/seo";
+import { PDP_ROUTE_COPY } from "@/features/site/data/routeCopy";
+import { buildBreadcrumbJsonLd, buildPageMetadata } from "@/features/site/data/seo";
 import { sanitizeJsonForScript } from "@/lib/security/sanitize";
 
 const BASE_URL = SITE_URL;

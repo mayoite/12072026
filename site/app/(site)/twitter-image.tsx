@@ -1,5 +1,5 @@
 import OpengraphImage from "./opengraph-image";
-import { SITE_BRAND } from "@/lib/site-data/brand";
+import { SITE_BRAND } from "@/features/site/data/brand";
 
 export const runtime = "edge";
 export const alt = SITE_BRAND.defaultTitle;

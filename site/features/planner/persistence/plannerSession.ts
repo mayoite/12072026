@@ -1,10 +1,10 @@
-import { usePlannerCatalogStore } from "../catalog/catalogStore";
+import { usePlannerCatalogStore } from "../catalog-api/catalogStore";
 import {
   DEFAULT_LAYERS,
   hydrateWorkspaceState,
   serializeWorkspaceState,
   type WorkspacePersisted,
-} from "../store/workspaceStore";
+} from "../cloud-store/workspaceStore";
 
 export const PLANNER_SESSION_VERSION = "2.0.0";
 

@@ -25,11 +25,11 @@ vi.mock('@/components/shared/ContactTeaser', () => ({
 }));
 
 // Mock metadata and copy
-vi.mock('@/lib/site-data/routeMetadata', () => ({
+vi.mock('@/features/site/data/routeMetadata', () => ({
   PROJECTS_PAGE_METADATA: { title: 'Projects' },
 }));
 
-vi.mock('@/lib/site-data/routeCopy', () => ({
+vi.mock('@/features/site/data/routeCopy', () => ({
   PROJECTS_PAGE_COPY: {
     heroTitle: 'Our Projects',
     heroSubtitleTemplate: 'Serving {clients} client organizations.',

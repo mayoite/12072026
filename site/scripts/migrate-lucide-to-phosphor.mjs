@@ -10,7 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(__dirname, "..");
 
 /** @type {Record<string, string>} */
-const ICON_MAP = {
+export const ICON_MAP = {
   AlertCircle: "WarningCircle",
   AlertTriangle: "Warning",
   ArrowLeft: "ArrowLeft",
@@ -89,7 +89,7 @@ const ICON_MAP = {
   Zap: "Lightning",
 };
 
-function walk(dir, out = []) {
+export function walk(dir, out = []) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
     if (ent.name === "node_modules" || ent.name === ".next") continue;
     const p = path.join(dir, ent.name);
@@ -99,7 +99,7 @@ function walk(dir, out = []) {
   return out;
 }
 
-function rewriteFile(filePath) {
+export function rewriteFile(filePath) {
   let src = fs.readFileSync(filePath, "utf8");
   if (!src.includes("lucide-react")) return false;
 
@@ -147,12 +147,24 @@ function rewriteFile(filePath) {
   return true;
 }
 
-const files = walk(siteRoot);
-let n = 0;
-for (const f of files) {
-  if (rewriteFile(f)) {
-    n++;
-    console.log("rewrote", path.relative(siteRoot, f));
+function isMainModule() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
   }
 }
-console.log(`done: ${n} files`);
+
+if (isMainModule()) {
+  const files = walk(siteRoot);
+  let n = 0;
+  for (const f of files) {
+    if (rewriteFile(f)) {
+      n++;
+      console.log("rewrote", path.relative(siteRoot, f));
+    }
+  }
+  console.log(`done: ${n} files`);
+}

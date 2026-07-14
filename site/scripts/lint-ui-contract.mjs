@@ -43,7 +43,7 @@ function walk(dir, filter) {
 function checkAdminPalette() {
   const roots = [
     join(SITE_ROOT, "app/admin"),
-    join(SITE_ROOT, "features/planner/admin"),
+    join(SITE_ROOT, "features/admin"),
     join(SITE_ROOT, "features/planner/ui"),
   ];
   for (const root of roots) {

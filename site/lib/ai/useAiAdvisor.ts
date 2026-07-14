@@ -20,6 +20,25 @@ interface UseAiAdvisorOptions {
   context?: AiAdvisorContext;
 }
 
+/** Map UI context to planner ai-advisor canonical context fields. */
+function toPlannerContext(context: AiAdvisorContext | undefined): Record<string, unknown> | undefined {
+  if (!context) return undefined;
+  const out: Record<string, unknown> = {};
+  if (context.plannerType === "oando" || context.plannerType === "buddy") {
+    out.planner = context.plannerType;
+  }
+  if (typeof context.teamSize === "number" && Number.isFinite(context.teamSize)) {
+    out.seatCount = context.teamSize;
+  }
+  if (typeof context.roomArea === "number" && Number.isFinite(context.roomArea)) {
+    out.floorAreaSqFt = context.roomArea;
+  }
+  if (typeof context.currentElements === "number" && Number.isFinite(context.currentElements)) {
+    out.currentShapeCount = context.currentElements;
+  }
+  return Object.keys(out).length > 0 ? out : undefined;
+}
+
 export function useAiAdvisor(options: UseAiAdvisorOptions = {}) {
   const [messages, setMessages] = useState<AiMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,26 +63,42 @@ export function useAiAdvisor(options: UseAiAdvisorOptions = {}) {
           content: m.content,
         }));
 
-        const res = await fetch("/api/ai/advisor/", {
+        const res = await fetch("/api/planner/ai-advisor", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            mode: "chat",
             messages: chatHistory,
-            context: options.context,
+            context: toPlannerContext(options.context),
           }),
         });
 
+        const data = (await res.json().catch(() => ({}))) as {
+          success?: boolean;
+          content?: string;
+          error?: string | { message?: string };
+        };
+
         if (!res.ok) {
-          const data = await res.json().catch(() => ({ error: "Request failed" }));
-          throw new Error(data.error || `HTTP ${res.status}`);
+          const message =
+            (typeof data.error === "object" && data.error?.message) ||
+            (typeof data.error === "string" ? data.error : null) ||
+            `HTTP ${res.status}`;
+          throw new Error(message);
         }
 
-        const data = await res.json();
+        const reply =
+          typeof data.content === "string" && data.content.trim().length > 0
+            ? data.content
+            : null;
+        if (!reply) {
+          throw new Error("Advisor returned empty content");
+        }
 
         const assistantMsg: AiMessage = {
           id: `msg-${Date.now()}-assistant`,
           role: "assistant",
-          content: data.response,
+          content: reply,
           timestamp: Date.now(),
         };
 
@@ -74,7 +109,7 @@ export function useAiAdvisor(options: UseAiAdvisorOptions = {}) {
         setIsLoading(false);
       }
     },
-    [messages, options.context]
+    [messages, options.context],
   );
 
   const clearMessages = useCallback(() => {

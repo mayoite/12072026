@@ -90,7 +90,7 @@ describe("maker + pipelineCore publish", () => {
     });
 
     expect(result.ok).toBe(true);
-    if (!result.ok) return;
+    if (!result.ok) throw new Error("expected result.ok");
     expect(result.stages).toContain("svg-s2-maker-compile");
     expect(result.svg).toContain("<svg");
     expect(result.svg).toContain('viewBox="0 0 1200 600"');

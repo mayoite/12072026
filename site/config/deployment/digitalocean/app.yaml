@@ -24,7 +24,9 @@ services:
     #   branch: dev
     #   deploy_on_push: true
 
-    build_command: npm run build
+    # Monorepo uses pnpm (packageManager in root package.json). Enable pnpm on DO
+    # (corepack enable / install command) so build_command resolves.
+    build_command: pnpm run build
     run_command: node .next/standalone/server.js
 
     environment_slug: node-js

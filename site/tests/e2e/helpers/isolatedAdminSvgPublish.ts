@@ -52,7 +52,7 @@ export type CanonicalSvgPaths = {
 
 export function canonicalSvgPaths(slug: string): CanonicalSvgPaths {
   return {
-    descriptor: path.join(SITE_ROOT, "block-descriptors", `${slug}.json`),
+    descriptor: path.join(SITE_ROOT, "inventory", "descriptors", `${slug}.json`),
     svg: path.join(SITE_ROOT, "public", "svg-catalog", `${slug}.svg`),
   };
 }
@@ -76,7 +76,7 @@ export function createIsolatedAdminSvgWorkspace(
   }
 
   const root = mkdtempSync(path.join(os.tmpdir(), "oando-admin-svg-"));
-  const descriptorDir = path.join(root, "site", "block-descriptors");
+  const descriptorDir = path.join(root, "site", "inventory", "descriptors");
   const svgDir = path.join(root, "site", "public", "svg-catalog");
   const svgPath = path.join(svgDir, `${slug}.svg`);
   mkdirSync(descriptorDir, { recursive: true });

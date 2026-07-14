@@ -20,7 +20,7 @@ async function fetchJson(urlPath) {
 }
 
 function listDescriptorSlugs() {
-  const dir = resolve(process.cwd(), "block-descriptors");
+  const dir = resolve(process.cwd(), "inventory", "descriptors");
   if (!existsSync(dir)) return [];
   return readdirSync(dir)
     .filter((name) => name.endsWith(".json"))

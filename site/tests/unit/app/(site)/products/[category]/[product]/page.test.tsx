@@ -21,7 +21,7 @@ vi.mock('@/app/(site)/products/[category]/[product]/ProductViewer', () => ({
 }));
 
 // Mock DB/Platform
-vi.mock('@/platform/drizzle/db', () => ({
+vi.mock('@/platform/drizzle/productsDb', () => ({
   supabase: {
     from: () => ({
       select: () => Promise.resolve({ data: [] }),
@@ -41,7 +41,7 @@ vi.mock('@/lib/productDataTables', () => ({
 }));
 
 // Mock seo utilities
-vi.mock('@/lib/site-data/seo', () => ({
+vi.mock('@/features/site/data/seo', () => ({
   buildBreadcrumbJsonLd: () => ({}),
   buildPageMetadata: (_base: string, opts: any) => ({
     title: opts.title,
@@ -63,14 +63,14 @@ vi.mock('@/lib/siteUrl', () => ({
   SITE_URL: 'http://localhost:3000',
 }));
 
-vi.mock('@/lib/site-data/routeCopy', () => ({
+vi.mock('@/features/site/data/routeCopy', () => ({
   PDP_ROUTE_COPY: {
     productBrand: 'Oando',
     fallbackDescription: 'Check out {name}',
   },
 }));
 
-vi.mock('@/features/catalog/categories', () => ({
+vi.mock('@/lib/catalog/site/categories', () => ({
   classifyToRequestedCategory: () => 'seating',
   getCatalogCategoryLabel: (id: string) => id,
   normalizeRequestedCategoryId: (id: string) => id,

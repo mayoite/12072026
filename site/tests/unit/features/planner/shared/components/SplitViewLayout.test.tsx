@@ -16,6 +16,6 @@ describe("SplitViewLayout", () => {
     expect(container).toBeDefined();
   });
   it("should have function SplitViewLayout defined", () => {
-    expect(SplitViewLayout).toBeTypeOf("function");
+    expect(SplitViewLayout).toBeTypeOf("function"); expect(String(SplitViewLayout)).toContain('function');
   });
 });

@@ -9,18 +9,18 @@
  */
 
 import { notFound } from "next/navigation";
-import { AdminSvgEditorEditView } from "@/features/planner/admin/svg-editor/AdminSvgEditorEditView";
+import { AdminSvgEditorEditView } from "@/features/admin/svg-editor/AdminSvgEditorEditView";
 import {
   tryLoad,
   type BlockDescriptor,
 } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
-import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/newBlockDescriptorStub";
-import { publishSvgEditorAction } from "@/features/planner/admin/svg-editor/publishSvgEditorAction";
+import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/newBlockDescriptorStub";
+import { publishSvgEditorAction } from "@/features/admin/svg-editor/publishSvgEditorAction";
 import {
   readLifecycleManifest,
   resolveCatalogLifecycle,
-} from "@/features/planner/admin/svg-editor/catalogLifecycle";
-import { readSvgArtifactStatus } from "@/features/planner/admin/svg-editor/svgArtifactStatus.server";
+} from "@/features/admin/svg-editor/catalogLifecycle";
+import { readSvgArtifactStatus } from "@/features/admin/svg-editor/svgArtifactStatus.server";
 
 /** Disk descriptors can change under admin publish — never static-cache this route. */
 export const dynamic = "force-dynamic";

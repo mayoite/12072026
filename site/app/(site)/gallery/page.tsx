@@ -2,9 +2,9 @@
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
-import { GALLERY_PAGE_COPY, GALLERY_PROJECTS } from "@/lib/site-data/routeCopy";
+import { GALLERY_PAGE_COPY, GALLERY_PROJECTS } from "@/features/site/data/routeCopy";
 import { Masonry, MasonryItem } from "@/components/ui/Masonry";
-import { GALLERY_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { GALLERY_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = GALLERY_PAGE_METADATA;
 

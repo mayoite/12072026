@@ -20,7 +20,7 @@ function relPath(filePath) {
   const markers = [
     "features/planner/",
     "features/",
-    "lib/site-data/",
+    "features/site/data/",
     "lib/catalog/",
     "lib/configurator/",
     "data/",
@@ -128,14 +128,14 @@ function plannerBucket(rel) {
 }
 
 const SITE_RULES = [
-  ["lib/site-data", /^lib\/site-data/],
+  ["features/site/data", /^features\/site\/data/],
   ["lib/catalog", /^lib\/catalog/],
   ["lib/configurator", /^lib\/configurator/],
-  ["features/catalog", /^features\/catalog/],
+  ["lib/catalog/site", /^features\/catalog/],
   ["features/shared", /^features\/shared/],
-  ["features/site-assistant", /^features\/site-assistant/],
+  ["features/site/assistant", /^features\/site\/assistant/],
   ["features/ops", /^features\/ops/],
-  ["features/ai", /^features\/ai\/aiadvisor/],
+  ["features/site/advisor", /^features\/site\/advisor\/aiadvisor/],
 ];
 
 function siteBucket(rel) {

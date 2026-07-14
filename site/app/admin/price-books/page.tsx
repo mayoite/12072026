@@ -1,9 +1,9 @@
-import { AdminPriceBookPageView } from "@/features/planner/admin/pricing/AdminPriceBookPageView";
+import { AdminPriceBookPageView } from "@/features/admin/pricing/AdminPriceBookPageView";
 import {
   DEFAULT_PRICE_BOOK_ID,
   ensureDefaultPriceBookSeeded,
   readAdminPriceBook,
-} from "@/features/planner/admin/pricing/priceBookAdmin.server";
+} from "@/features/admin/pricing/priceBookAdmin.server";
 
 export const metadata = {
   title: "Price books | Oando Admin",

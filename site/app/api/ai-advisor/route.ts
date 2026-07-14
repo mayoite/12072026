@@ -1,8 +1,8 @@
 import type { NextRequest} from "next/server";
 import type { NextResponse } from "next/server";
-import { getProductsFresh } from '@/features/catalog/getProducts';
+import { getProductsFresh } from '@/lib/catalog/site/getProducts';
 import { createSupabaseAuthAdminClient } from '@/platform/supabase/auth-admin';
-import { normalizeRequestedCategoryId } from '@/features/catalog/categories';
+import { normalizeRequestedCategoryId } from '@/lib/catalog/site/categories';
 import {
   requestProviderText,
   resolveProviderChain,
@@ -17,7 +17,7 @@ import {
   type AdvisorResult,
   type AdvisorStreamEvent,
   type ConfiguratorAdvisorContext,
-} from '@/features/ai/aiAdvisor';
+} from '@/features/site/advisor/aiAdvisor';
 import { withAuth } from "@/features/shared/api/withAuth";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import { success, error } from "@/features/shared/api/apiResponse";

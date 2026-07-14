@@ -8,8 +8,6 @@ import {
   WORKSTATION_V0_SIZE_GRID,
   createWorkstationConfigV0,
   normalizeModules,
-  workstationConfigKey,
-  workstationFootprintMm,
   type WorkstationConfigV0,
   type WorkstationModuleKindV0,
   type WorkstationShapeV0,

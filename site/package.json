@@ -93,7 +93,7 @@
     "test:auth:env-check": "npm run test:auth:seed-users && npm run test:auth:env",
     "test:e2e:nav": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/site-navigation-smoke.spec.ts tests/e2e/navigation-smoke.spec.ts",
     "test:e2e:visual": "playwright test -c config/build/playwright.config.ts tests/e2e/site-visual-regression.spec.ts",
-    "test:a11y": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/accessibility.spec.ts",
+    "test:a11y": "npm run test:clean && playwright test -c config/build/playwright.config.ts tests/e2e/accessibility.spec.ts",
     "alt:sync:dry": "tsx scripts/sync-missing-alt-text.ts",
     "alt:sync:apply": "tsx scripts/sync-missing-alt-text.ts --apply",
     "supabase:backup": "npx tsx scripts/backup_supabase.ts",

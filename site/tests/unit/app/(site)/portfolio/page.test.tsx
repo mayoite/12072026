@@ -3,11 +3,11 @@ import { render, screen } from "@testing-library/react";
 import fs from "node:fs/promises";
 import PortfolioPage from "@/app/(site)/portfolio/page";
 
-vi.mock("@/lib/site-data/routeMetadata", () => ({
+vi.mock("@/features/site/data/routeMetadata", () => ({
   PORTFOLIO_PAGE_METADATA: {},
 }));
 
-vi.mock("@/lib/site-data/routeCopy", () => ({
+vi.mock("@/features/site/data/routeCopy", () => ({
   PORTFOLIO_CLIENTS: [
     { id: "alpha", folder: "Alpha Team", name: "Alpha Team", location: "Patna", summary: "Alpha summary" },
     { id: "beta", folder: "Beta", name: "Beta", location: "Delhi", summary: "Beta summary" },

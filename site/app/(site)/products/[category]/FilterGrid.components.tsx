@@ -7,8 +7,8 @@ import { useState, type ReactNode } from "react";
 import clsx from "clsx";
 
 import { sanitizeDisplayText } from "@/lib/displayText";
-import { CATEGORY_ROUTE_COPY } from "@/lib/site-data/routeCopy";
-import { SUSTAINABILITY_THRESHOLDS, type ActiveFilters } from "@/features/catalog/filters";
+import { CATEGORY_ROUTE_COPY } from "@/features/site/data/routeCopy";
+import { SUSTAINABILITY_THRESHOLDS, type ActiveFilters } from "@/lib/catalog/site/filters";
 import { trackCompareToggled, trackQuoteCartAdded } from "@/lib/analytics/siteEvents";
 import { useProductCompare } from "@/lib/store/productCompare";
 import { useQuoteCart } from "@/lib/store/quoteCart";

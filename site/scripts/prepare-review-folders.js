@@ -71,7 +71,7 @@ const folders = {
       { dir: "features/planner/ui", filter: (p) => isCodeFile(p) },
       { dir: "lib/theme", filter: (p) => isCodeFile(p) },
       { dir: "lib/ui", filter: (p) => isCodeFile(p) },
-      { dir: "lib/site-data", filter: (p) => isCodeFile(p) },
+      { dir: "features/site/data", filter: (p) => isCodeFile(p) },
       { dir: "public", filter: (p) => p.endsWith(".svg") || p.endsWith(".html") },
     ],
   },
@@ -84,21 +84,21 @@ const folders = {
       { dir: "app", filter: (p) => isRouteFile(p) },
       { dir: "lib/auth", filter: (p) => isCodeFile(p) },
       { dir: "lib/navigation.ts", single: true },
-      { dir: "lib/siteNav.ts", single: true },
+      { dir: "features/site/data/navigation.ts", single: true },
       { dir: "lib/siteUrl.ts", single: true },
       { dir: "lib/rateLimit.ts", single: true },
-      { dir: "lib/supabase", filter: (p) => isCodeFile(p) },
+      { dir: "platform/supabase", filter: (p) => isCodeFile(p) },
       { dir: "config", filter: (p) => isCodeFile(p) },
       { dir: "docs/ops/context/route-classification.md", single: true },
     ],
   },
   "Code-Expert-Frontend": {
-    description: "Marketing app — app/(site), components, lib/site-data",
+    description: "Marketing app — app/(site), components, features/site/data",
     sources: [
       { dir: "app/(site)", filter: (p) => isCodeFile(p) },
       { dir: "components", filter: (p) => isCodeFile(p) },
-      { dir: "lib/site-data", filter: (p) => isCodeFile(p) },
-      { dir: "features/site-assistant", filter: (p) => isCodeFile(p) },
+      { dir: "features/site/data", filter: (p) => isCodeFile(p) },
+      { dir: "features/site/assistant", filter: (p) => isCodeFile(p) },
       { dir: "package.json", single: true },
       { dir: "tsconfig.json", single: true },
       { dir: "config/build/next.config.js", single: true },
@@ -131,8 +131,8 @@ const folders = {
 const briefIntro = {
   "UX-UI-Critic": "Pages, layouts, FOCSS (`app/css/`), marketing components, theme tokens, and static copy.",
   "Route-Engineer": "App Router tree, API handlers, `proxy.ts`, auth guards, navigation data, route classification.",
-  "Code-Expert-Frontend": "Public marketing surface: `app/(site)/`, `components/`, `lib/site-data/`, site assistant.",
-  "Code-Expert-Packages": "All `features/`, `lib/`, and `data/` — domain logic for planner, catalog, auth, ops.",
+  "Code-Expert-Frontend": "Public marketing surface: `app/(site)/`, `components/`, `features/site/data/`, site assistant.",
+  "Code-Expert-Packages": "All `features/`, `lib/` — domain logic for planner, catalog, auth, ops.",
   "Code-Expert-Platform": "`platform/`, `config/`, flat `tests/`, maintenance `scripts/`, build configs.",
 };
 
@@ -215,4 +215,18 @@ ${Object.entries(stats)
   console.log(`\nDone — ${OUT}`);
 }
 
-main();
+module.exports = {
+  CODE_EXTS,
+  SITE_ROOT,
+  OUT,
+  folders,
+  isCodeFile,
+  isRouteFile,
+  buildBrief,
+  walkDir,
+  main,
+};
+
+if (require.main === module) {
+  main();
+}

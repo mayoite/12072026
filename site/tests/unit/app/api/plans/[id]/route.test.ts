@@ -1,20 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { GET, PUT, DELETE } from "@/app/api/plans/[id]/route";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/platform/supabase/server";
 import {
   loadPlannerDocumentFromStore,
   savePlannerDocumentToStore,
   deletePlannerDocumentFromStore,
-} from "@/features/planner/store/plannerSaves";
+} from "@/features/planner/cloud-store/plannerSaves";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/platform/supabase/server", () => ({
   createServerClient: vi.fn(),
 }));
 
-vi.mock("@/features/planner/store/plannerSaves", () => ({
+vi.mock("@/features/planner/cloud-store/plannerSaves", () => ({
   loadPlannerDocumentFromStore: vi.fn(),
   savePlannerDocumentToStore: vi.fn(),
   deletePlannerDocumentFromStore: vi.fn(),

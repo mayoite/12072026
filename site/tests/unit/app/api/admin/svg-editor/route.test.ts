@@ -24,12 +24,12 @@ vi.mock("@/features/shared/api/withAuth", () => ({
   ) => handler,
 }));
 
-vi.mock("@/features/planner/admin/svg-editor/persistBlockDescriptor", () => ({
+vi.mock("@/features/admin/svg-editor/persistBlockDescriptor", () => ({
   persistBlockDescriptor: vi.fn(),
   parseAdminPayload: vi.fn(),
 }));
 
-vi.mock("@/features/planner/admin/svg-editor/svgPipelineRunner", () => ({
+vi.mock("@/features/admin/svg-editor/svgPipelineRunner", () => ({
   runSvgPipeline: vi.fn(),
 }));
 
@@ -40,8 +40,8 @@ vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", async
   return { ...actual, clearLoaderCache: vi.fn() };
 });
 
-const { persistBlockDescriptor, parseAdminPayload } = await import("@/features/planner/admin/svg-editor/persistBlockDescriptor");
-const { runSvgPipeline } = await import("@/features/planner/admin/svg-editor/svgPipelineRunner");
+const { persistBlockDescriptor, parseAdminPayload } = await import("@/features/admin/svg-editor/persistBlockDescriptor");
+const { runSvgPipeline } = await import("@/features/admin/svg-editor/svgPipelineRunner");
 
 function makeReq(body: unknown): NextRequest {
   return new NextRequest("http://localhost:3000/api/admin/svg-editor", {
@@ -187,7 +187,7 @@ describe("04-TEST-06 lint guard (source scan)", () => {
         if (entry.isDirectory()) scan(p);
         else if (p.endsWith(".ts") || p.endsWith(".tsx")) {
           const content = fs.readFileSync(p, "utf8");
-          if (content.includes("puckBlockRegistry") || content.includes("from \"@/features/planner/admin/svg-editor/puckBlockRegistry\"")) {
+          if (content.includes("puckBlockRegistry") || content.includes("from \"@/features/admin/svg-editor/puckBlockRegistry\"")) {
             if (!content.includes("withAuth") && !p.includes("svg-editor")) {
               violations.push(p);
             }

@@ -12,7 +12,7 @@ import postgres from "postgres";
 
 config({ path: resolve(process.cwd(), ".env.local") });
 
-type Col = {
+export type Col = {
   column_name: string;
   data_type: string;
   udt_name: string;
@@ -21,7 +21,7 @@ type Col = {
   is_identity: "YES" | "NO";
 };
 
-type FK = {
+export type FK = {
   table_name: string;
   constraint_name: string;
   column_name: string;
@@ -29,7 +29,7 @@ type FK = {
   foreign_column: string;
 };
 
-function tsTypeFor(col: Col): string {
+export function tsTypeFor(col: Col): string {
   const dt = col.data_type;
   const udt = col.udt_name;
   let base: string;
@@ -57,12 +57,18 @@ function tsTypeFor(col: Col): string {
   return base;
 }
 
-function indent(s: string, n: number): string {
+export function indent(s: string, n: number): string {
   const pad = " ".repeat(n);
   return s.split("\n").map((l) => l ? pad + l : l).join("\n");
 }
 
-async function main() {
+export function colToRowField(c: Col): string {
+  const t = tsTypeFor(c);
+  const nullable = c.is_nullable === "YES" ? " | null" : "";
+  return `          ${c.column_name}: ${t}${nullable}`;
+}
+
+export async function main(): Promise<void> {
   const url = process.env.SUPABASE_AUTH_DATABASE_URL?.trim();
   if (!url) {
     console.error("Missing SUPABASE_AUTH_DATABASE_URL");
@@ -234,4 +240,14 @@ ${viewBlocks.length ? viewBlocks.join("\n") : "      [_ in never]: never"}
   await sql.end({ timeout: 5 });
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+function isMain(): boolean {
+  const entry = (process.argv[1] ?? "").replace(/\\/g, "/");
+  return entry.endsWith("db_gen_admin_types.ts") || entry.endsWith("db_gen_admin_types.js");
+}
+
+if (isMain()) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

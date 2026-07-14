@@ -1,4 +1,4 @@
-import { HOMEPAGE_COLLECTIONS_CONTENT } from "@/lib/site-data/homepage";
+import { HOMEPAGE_COLLECTIONS_CONTENT } from "@/features/site/data/homepage";
 
 type CollectionsSectionHeadingProps = {
   as?: "h1" | "h2";

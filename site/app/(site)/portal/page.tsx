@@ -4,11 +4,11 @@ import PortalPageView from "@/features/planner/portal/PortalPageView";
 import {
   isMissingOandoPlansTableError,
   isPlannerDatabaseConfigured,
-} from "@/features/planner/store/plannerPersistence";
+} from "@/features/planner/cloud-store/plannerPersistence";
 import {
   listPlannerDocumentsFromStore,
   type PlannerSaveSummary,
-} from "@/features/planner/store/plannerSaves";
+} from "@/features/planner/cloud-store/plannerSaves";
 
 // Thin route layer only. Portal implementation lives in features/planner/portal/.
 export default async function PortalPage() {

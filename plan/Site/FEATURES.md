@@ -8,7 +8,7 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 | This file | What exists in code today |
 | `CHECKLIST.md` | Open acceptance work only |
 
-**Code roots:** `site/app/(site)/` · `site/components/` · `site/lib/site-data/` · `site/lib/analytics/` · `site/features/catalog/`
+**Code roots:** `site/app/(site)/` · `site/components/` · `site/features/site/` (`data/`, `assistant/`, `advisor/`) · `site/lib/analytics/` · `site/lib/catalog/site/`
 
 ---
 
@@ -18,11 +18,11 @@ Plan: `PHASE-01-measurement-foundation.md`
 
 | Feature | Code | Gap |
 |---|---|---|
-| Route classification | `lib/site-data/routeClassification.ts`, `routeClassification.test.ts` | Not consumed by sitemap/robots |
+| Route classification | `features/site/data/routeClassification.ts`, `tests/unit/features/site/data/routeClassification.test.ts` | Not consumed by sitemap/robots |
 | Conversion contract | `lib/analytics/conversionContract.ts`, `conversionContract.test.ts` | **Defined**; funnel not wired end-to-end |
 | Site emitters | `lib/analytics/siteEvents.ts`, `TrackedLink.tsx`, `Header.tsx` | Only `PLANNER_ENTRY` via `trackPlannerLaunchClicked` |
 | Planner workspace events | `conversionContract.ts` defines `PROJECT_START`, `BOQ_*`, `HANDOFF_*` | **Planner never imports** `trackConversionEvent` |
-| SEO helpers | `lib/site-data/seo.ts`, `lib/analytics/seo.ts` | Partial page coverage |
+| SEO helpers | `features/site/data/seo.ts`, `lib/analytics/seo.ts` | Partial page coverage |
 | Sitemap / robots | `app/(site)/sitemap.ts`, `robots.ts` | Manual `STATIC_PATHS`; includes `/quote-cart`, `/tracking` while classification marks some non-indexable |
 | Legacy redirect | `app/(site)/catalog/page.tsx` | `/catalog` → `/downloads` |
 
@@ -34,7 +34,7 @@ Plan: `PHASE-02-commercial-landing-pages.md`
 
 | Feature | Code | Gap |
 |---|---|---|
-| Homepage | `app/(site)/page.tsx`, `HomepageHero.tsx`, `lib/site-data/homepage.ts` | Trust provenance in data; **no** CWV/mobile proof |
+| Homepage | `app/(site)/page.tsx`, `HomepageHero.tsx`, `features/site/data/homepage.ts` | Trust provenance in data; **no** CWV/mobile proof |
 | Generic hero fallback | `components/home/Hero.tsx` `onError` | Homepage uses `HomepageHero.tsx` without same fallback |
 | Global nav | `components/site/Header.tsx`, `MobileNavDrawer.tsx` | Quote-cart `aria-label` done; `SITE-NAV-01/02/04` open |
 | Forms | `components/contact/CustomerQueryForm.tsx` | Success/error exist; consent + `SITE-FORM-*` open |
@@ -50,7 +50,7 @@ Plan: `PHASE-03-search-led-content.md`
 | Feature | Code | Gap |
 |---|---|---|
 | Content pages | `app/(site)/about/`, `planning/`, `solutions/`, `news/`, etc. | No search-evidence workflow or `SITE-CONTENT-*` proof |
-| Route copy | `lib/site-data/routeCopy.ts` | Not systematically measured |
+| Route copy | `features/site/data/routeCopy.ts` | Not systematically measured |
 
 ---
 
@@ -60,7 +60,7 @@ Plan: `PHASE-04-public-product-discovery.md`
 
 | Feature | Code | Gap |
 |---|---|---|
-| Catalog source | `features/catalog/getProducts.ts` → `lib/catalog/sources.ts` | Drizzle when configured; fixture fallback when not |
+| Catalog source | `lib/catalog/site/getProducts.ts` → `lib/catalog/sources.ts` | Drizzle when configured; fixture fallback when not |
 | Category grid | `products/[category]/FilterGridInner.tsx` | Loading/error/empty states; **no** stale/recovery UI |
 | Product detail | `products/[category]/[product]/page.tsx`, `ProductViewer.tsx` | JSON-LD; always `InStock`; no Site→Planner identity handoff |
 | Choose product | `features/shared/entry/ChooseProductPage.tsx` | Routes to canvas/guest; **no** conversion tracking |
@@ -89,7 +89,7 @@ Plan: `PHASE-05-structured-data-release.md`
 
 ## Tests
 
-`tests/unit/lib/analytics/conversionContract.test.ts` · `tests/unit/lib/site-data/routeClassification.test.ts` · `tests/unit/components/home/HomepageHero.test.tsx` · `tests/e2e/site-a11y-smoke.spec.ts`
+`tests/unit/lib/analytics/conversionContract.test.ts` · `tests/unit/features/site/data/routeClassification.test.ts` · `tests/unit/components/home/HomepageHero.test.tsx` · `tests/e2e/site-a11y-smoke.spec.ts`
 
 ---
 

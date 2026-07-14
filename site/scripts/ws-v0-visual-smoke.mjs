@@ -11,7 +11,7 @@
  */
 
 import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import path, { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
@@ -30,16 +30,16 @@ const outDir =
 /** @typedef {{ name: string; sizeM: {x:number;y:number;z:number}; positionM: {x:number;y:number;z:number}; color?: string }} Part */
 
 // --- Locked constants (must match workstationMeshV0.ts exports) ---
-const WORKTOP_THICKNESS_MM = 30;
-const LEG_SECTION_MM = 50;
-const LEG_INSET_MM = 40;
-const STRETCHER_SECTION_MM = 40;
-const STRETCHER_HEIGHT_FRAC = 0.28;
-const MM = 0.001;
+export const WORKTOP_THICKNESS_MM = 30;
+export const LEG_SECTION_MM = 50;
+export const LEG_INSET_MM = 40;
+export const STRETCHER_SECTION_MM = 40;
+export const STRETCHER_HEIGHT_FRAC = 0.28;
+export const MM = 0.001;
 
-const LEG_COLOR = "#57534e";
-const STRETCHER_COLOR = "#78716c";
-const ROLE_COLOR = {
+export const LEG_COLOR = "#57534e";
+export const STRETCHER_COLOR = "#78716c";
+export const ROLE_COLOR = {
   desk: "#c4a574",
   pedestal: "#6b7280",
 };
@@ -57,7 +57,7 @@ const options = {
  * Plan prims for linear desk±pedestal (must match workstationPlanPrims linear path).
  * @returns {{ footprint: {widthMm:number; depthMm:number}; prims: Array<{x:number;y:number;w:number;h:number;role:string}> }}
  */
-function planPrimsLinear(lengthMm, depthMm, modules) {
+export function planPrimsLinear(lengthMm, depthMm, modules) {
   const prims = [{ x: 0, y: 0, w: lengthMm, h: depthMm, role: "desk" }];
   if (modules.includes("pedestal")) {
     const pw = Math.min(400, lengthMm * 0.35);
@@ -83,7 +83,7 @@ function planPrimsLinear(lengthMm, depthMm, modules) {
  * @param {number} heightMm
  * @param {"desk"|"return"} runKey
  */
-function legsForWorktopPrim(prim, footprint, heightMm, runKey) {
+export function legsForWorktopPrim(prim, footprint, heightMm, runKey) {
   const section = LEG_SECTION_MM;
   const legH = Math.max(1, heightMm - WORKTOP_THICKNESS_MM);
   const inset = Math.min(
@@ -117,7 +117,7 @@ function legsForWorktopPrim(prim, footprint, heightMm, runKey) {
  * @param {number} heightMm
  * @param {"desk"|"return"} runKey
  */
-function stretchersForWorktopPrim(prim, footprint, heightMm, runKey) {
+export function stretchersForWorktopPrim(prim, footprint, heightMm, runKey) {
   const section = STRETCHER_SECTION_MM;
   const legH = Math.max(1, heightMm - WORKTOP_THICKNESS_MM);
   const inset = Math.min(
@@ -148,7 +148,7 @@ function stretchersForWorktopPrim(prim, footprint, heightMm, runKey) {
  * Build plan parts in mm then convert to metres for SVG (cabinet smoke units).
  * @returns {Part[]}
  */
-function buildParts() {
+export function buildParts() {
   const { lengthMm, depthMm, heightMm, modules } = options;
   const { footprint, prims } = planPrimsLinear(lengthMm, depthMm, modules);
   /** @type {Array<{name:string; sizeMm:{x:number;y:number;z:number}; positionMm:{x:number;y:number;z:number}; color:string}>} */
@@ -204,14 +204,14 @@ function buildParts() {
   }));
 }
 
-function fillFor(name, color) {
+export function fillFor(name, color) {
   if (color) return color;
   if (name.startsWith("leg-")) return LEG_COLOR;
   if (name.startsWith("stretcher-")) return STRETCHER_COLOR;
   return "#ccc";
 }
 
-function strokeFor(name) {
+export function strokeFor(name) {
   if (name.startsWith("leg-")) return "#292524";
   if (name.startsWith("stretcher-")) return "#44403c";
   if (name === "desk") return "#78716c";
@@ -222,7 +222,7 @@ function strokeFor(name) {
 /**
  * @param {"three-quarter"|"side"} view
  */
-function project(x, y, z, view, W, H, scale) {
+export function project(x, y, z, view, W, H, scale) {
   const ox = W / 2;
   const oy = H * 0.82;
   if (view === "side") {
@@ -233,7 +233,7 @@ function project(x, y, z, view, W, H, scale) {
   return { sx: ox + isoX * scale, sy: oy - isoY * scale };
 }
 
-function boxCorners(part) {
+export function boxCorners(part) {
   const { x: cx, y: cy, z: cz } = part.positionM;
   const hx = part.sizeM.x / 2;
   const hy = part.sizeM.y / 2;
@@ -264,7 +264,7 @@ const FACE_INDICES = [
  * @param {Part[]} parts
  * @param {"three-quarter"|"side"} view
  */
-function renderSvg(parts, view) {
+export function renderSvg(parts, view) {
   const W = 900;
   const H = 640;
   // Desk is larger than cabinet SKU — lower scale to fit.
@@ -344,8 +344,8 @@ function renderSvg(parts, view) {
 </svg>`;
 }
 
-async function main() {
-  mkdirSync(outDir, { recursive: true });
+export async function runWsV0VisualSmoke(targetOutDir = outDir) {
+  mkdirSync(targetOutDir, { recursive: true });
   const parts = buildParts();
   const names = parts.map((p) => p.name);
 
@@ -370,7 +370,7 @@ async function main() {
 
   for (const [file, view] of views) {
     const svg = renderSvg(parts, /** @type {"three-quarter"|"side"} */ (view));
-    const pngPath = join(outDir, file);
+    const pngPath = join(targetOutDir, file);
     await sharp(Buffer.from(svg)).png().toFile(pngPath);
     console.log("wrote", pngPath);
   }
@@ -389,20 +389,33 @@ async function main() {
     },
     constantsSource:
       "site/features/planner/project/catalog/workstationMeshV0.ts (must match)",
-    outDir,
+    outDir: targetOutDir,
     source:
       "scripts/ws-v0-visual-smoke.mjs (plan formulas; no designer GLB / browser)",
   };
   writeFileSync(
-    join(outDir, "visual-smoke-meta.json"),
+    join(targetOutDir, "visual-smoke-meta.json"),
     JSON.stringify(meta, null, 2),
   );
   console.log("parts", names.join(" → "));
   console.log("legs", legs.join(", "));
   console.log("stretchers", stretchers.join(", "));
+  return meta;
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+function isDirectRun() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectRun()) {
+  runWsV0VisualSmoke().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

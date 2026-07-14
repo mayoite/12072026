@@ -1,14 +1,14 @@
 import { describe, it, expect, vi } from "vitest";
 import { buildLayoutPreviewModel } from "@/features/planner/ai/layoutPreviewBounds";
 
-vi.mock("@/features/planner/catalog/workspaceCatalog", () => ({
+vi.mock("@/features/planner/catalog-api/workspaceCatalog", () => ({
   PLANNER_CATALOG_ITEMS: [
     { id: "sku-chair", widthMm: 500, heightMm: 500 },
     { id: "sku-desk", widthMm: 1200, heightMm: 600 },
   ],
 }));
 
-vi.mock("@/features/planner/catalog/catalogBlockBridge", () => ({
+vi.mock("@/features/planner/catalog-api/catalogBlockBridge", () => ({
   plannerCanvasUnits: (mm: number) => mm / 10,
 }));
 

@@ -1,7 +1,7 @@
 import { requireAuthUser } from "@/lib/auth/session";
 
 import PortalPlanPageView from "@/features/planner/portal/PortalPlanPageView";
-import { loadPlannerDocumentFromStore } from "@/features/planner/store/plannerSaves";
+import { loadPlannerDocumentFromStore } from "@/features/planner/cloud-store/plannerSaves";
 
 interface PageProps {
   params: Promise<{ id: string }>;

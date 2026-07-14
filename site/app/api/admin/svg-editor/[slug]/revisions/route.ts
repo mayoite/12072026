@@ -5,8 +5,8 @@
 import { withAuth } from "@/features/shared/api/withAuth";
 import { success } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
-import { listDescriptorRevisions } from "@/features/planner/admin/svg-editor/descriptorRevisionIndex";
-import { readDescriptorAuditForSlug } from "@/features/planner/admin/svg-editor/descriptorAuditLog";
+import { listDescriptorRevisions } from "@/features/admin/svg-editor/descriptorRevisionIndex";
+import { readDescriptorAuditForSlug } from "@/features/admin/svg-editor/descriptorAuditLog";
 import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
 type RouteContext = {

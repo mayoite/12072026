@@ -14,7 +14,7 @@ vi.mock("@/platform/drizzle/adminDb", () => {
   };
 });
 
-vi.mock("@/platform/drizzle/schema", () => ({
+vi.mock("@/platform/drizzle/schema/planner", () => ({
   auditEvents: {},
 }));
 

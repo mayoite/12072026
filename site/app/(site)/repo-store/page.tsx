@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { HomeMarketingLayout } from "@/components/home/layout";
 import { RepoStorePageView } from "@/components/repo-store/RepoStorePageView";
-import { buildPageMetadata } from "@/lib/site-data/seo";
+import { buildPageMetadata } from "@/features/site/data/seo";
 import { SITE_URL } from "@/lib/siteUrl";
 
 export const metadata: Metadata = buildPageMetadata(SITE_URL, {

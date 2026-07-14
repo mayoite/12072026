@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { GET, PATCH } from "@/app/api/customer-queries/manage/route";
 import { createSupabaseAuthAdminClient } from "@/platform/supabase/auth-admin";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/platform/supabase/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 import { API_ERROR_CODES } from "@/features/shared/api/ApiError";
@@ -11,7 +11,7 @@ vi.mock("@/platform/supabase/auth-admin", () => ({
   createSupabaseAuthAdminClient: vi.fn(),
 }));
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/platform/supabase/server", () => ({
   createServerClient: vi.fn(),
 }));
 

@@ -1,15 +1,15 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import { CATEGORY_ROUTE_COPY } from "@/lib/site-data/routeCopy";
-import { buildBreadcrumbJsonLd, buildPageJsonLd } from "@/lib/site-data/seo";
+import { CATEGORY_ROUTE_COPY } from "@/features/site/data/routeCopy";
+import { buildBreadcrumbJsonLd, buildPageJsonLd } from "@/features/site/data/seo";
 import {
   buildRequestedCategoryCatalog,
   getCatalogCategoryDescription,
   getCatalogCategoryLabel,
-} from "@/features/catalog/categories";
-import type { CompatCategory } from "@/features/catalog/getProducts";
-import { getCatalog } from "@/features/catalog/getProducts";
+} from "@/lib/catalog/site/categories";
+import type { CompatCategory } from "@/lib/catalog/site/getProducts";
+import { getCatalog } from "@/lib/catalog/site/getProducts";
 import { HomeCatalogLayout } from "@/components/home/layout";
 import { SITE_URL } from "@/lib/siteUrl";
 import { sanitizeJsonForScript } from "@/lib/security/sanitize";

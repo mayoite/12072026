@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   emitWorkstationFamilyContract,
   WORKSTATION_FAMILY_V0_FIXTURE,
-} from "@/features/planner/admin/workstation/workstationFamilyContract";
+} from "@/features/admin/workstation/workstationFamilyContract";
 import { buyerNeedsMigrationChoice } from "@/features/planner/project/catalog/workstationFamilyBuyer";
 import {
   assessBuyerPlacement,

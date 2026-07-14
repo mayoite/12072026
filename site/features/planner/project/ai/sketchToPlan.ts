@@ -6,7 +6,6 @@
  */
 
 import type { PlannerProject, PlannerFloor, PlannerDisplayUnit } from "../model/types";
-import { createRectangularRoomProject } from "../model/project"; // (removed unused createPlannerProject)
 
 /**
  * Sketch-to-plan request options.

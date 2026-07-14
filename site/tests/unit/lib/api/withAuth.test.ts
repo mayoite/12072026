@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { withAuth, resolveAuthContext } from "@/features/shared/api/withAuth";
 import { NextRequest } from "next/server";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/platform/supabase/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 import { success } from "@/features/shared/api/apiResponse";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 
-vi.mock("@/lib/supabase/server", () => {
+vi.mock("@/platform/supabase/server", () => {
   const mockSupabase = {
     auth: {
       getUser: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),

@@ -5,14 +5,14 @@ import { requireAuthUser } from '@/lib/auth/session';
 import {
   isMissingOandoPlansTableError,
   isPlannerDatabaseConfigured,
-} from '@/features/planner/store/plannerPersistence';
-import { listPlannerDocumentsFromStore } from '@/features/planner/store/plannerSaves';
+} from '@/features/planner/cloud-store/plannerPersistence';
+import { listPlannerDocumentsFromStore } from '@/features/planner/cloud-store/plannerSaves';
 
 vi.mock('@/lib/auth/session', () => ({
   requireAuthUser: vi.fn(),
 }));
 
-vi.mock('@/features/planner/store/plannerPersistence', async (importOriginal) => {
+vi.mock('@/features/planner/cloud-store/plannerPersistence', async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
@@ -20,7 +20,7 @@ vi.mock('@/features/planner/store/plannerPersistence', async (importOriginal) =>
   };
 });
 
-vi.mock('@/features/planner/store/plannerSaves', () => ({
+vi.mock('@/features/planner/cloud-store/plannerSaves', () => ({
   listPlannerDocumentsFromStore: vi.fn(),
 }));
 

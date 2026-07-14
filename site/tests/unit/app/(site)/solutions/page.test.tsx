@@ -18,7 +18,7 @@ vi.mock('next-intl/server', async () => {
   };
 });
 
-vi.mock('@/lib/site-data/routeMetadata', () => ({
+vi.mock('@/features/site/data/routeMetadata', () => ({
   SOLUTIONS_PAGE_METADATA: { title: 'Solutions Title' },
 }));
 

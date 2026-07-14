@@ -1,39 +1,44 @@
-import { describe, expect, it, vi } from "vitest";
-import { render } from "@testing-library/react";
-import React from "react";
-import PortalPlanPageView from "@/features/planner/portal/PortalPlanPageView";
+import { render, screen } from '@testing-library/react';
+import { expect, test } from 'vitest';
+import PortalPlanPageView from '@/features/planner/portal/PortalPlanPageView';
+import type { PlannerDocument } from '@/features/planner/model';
 
-vi.mock("fabric", () => {
-  const mockCanvas = {
-    add: vi.fn(),
-    remove: vi.fn(),
-    renderAll: vi.fn(),
-    on: vi.fn(),
-    off: vi.fn(),
-    getWidth: vi.fn(() => 800),
-    getHeight: vi.fn(() => 600),
-    setWidth: vi.fn(),
-    setHeight: vi.fn(),
-    getZoom: vi.fn(() => 1),
-    setZoom: vi.fn(),
-    getObjects: vi.fn(() => []),
-    setActiveObject: vi.fn(),
-    discardActiveObject: vi.fn(),
-  };
-  return {
-    fabric: {
-      Canvas: vi.fn(() => mockCanvas),
-      Rect: vi.fn(() => ({})),
-      Circle: vi.fn(() => ({})),
-      Path: vi.fn(() => ({})),
-      Group: vi.fn(() => ({})),
-    }
-  };
+test('renders not found state for null document', () => {
+  render(<PortalPlanPageView document={null} />);
+  expect(screen.getByText('Plan not found')).toBeInTheDocument();
 });
 
-describe("PortalPlanPageView", () => {
-  it("should render default component PortalPlanPageView", () => {
-    const { container } = render(React.createElement(PortalPlanPageView, {} as any));
-    expect(container).toBeDefined();
-  });
+test('renders plan details for valid document', () => {
+  const doc: PlannerDocument = {
+    id: 'doc-1',
+    title: 'Awesome Layout',
+    name: 'Layout v1',
+    projectName: 'Acme Project',
+    clientName: null,
+    preparedBy: null,
+    updatedAt: '2026-01-01T00:00:00Z',
+    createdAt: '2026-01-01T00:00:00Z',
+    roomWidthMm: 10000,
+    roomDepthMm: 8000,
+    itemCount: 15,
+    seatTarget: 5,
+    unitSystem: 'metric',
+    status: 'active',
+    thumbnailUrl: null,
+    sceneJson: JSON.stringify({
+      version: 1,
+      room: { widthMm: 10000, depthMm: 8000 },
+      items: [
+        { id: 'i1', name: 'Desk A', category: 'Furniture', sizeMm: { widthMm: 1200, depthMm: 600, heightMm: 750 }, rotationDeg: 0, positionMm: { x: 0, y: 0, z: 0 } }
+      ]
+    })
+  };
+  render(<PortalPlanPageView document={doc} />);
+  expect(screen.getByText('Awesome Layout')).toBeInTheDocument();
+  expect(screen.getByText(/Acme Project/)).toBeInTheDocument();
+  // itemCount renders in its own <dd>
+  expect(screen.getByText('15')).toBeInTheDocument();
+  // status and unitSystem render in their own <dd> elements
+  expect(screen.getByText('metric')).toBeInTheDocument();
+  expect(screen.getByText('active')).toBeInTheDocument();
 });

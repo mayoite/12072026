@@ -5,13 +5,13 @@ import { ContactTeaser } from "@/components/shared/ContactTeaser";
 import { RouteCtaBand } from "@/components/shared/RouteCtaBand";
 import { SectionIntro } from "@/components/shared/SectionIntro";
 import { TrackedLink } from "@/components/ui/TrackedLink";
-import { DEFAULT_HERO_FALLBACK } from "@/lib/site-data/homepage";
-import { buildPageMetadata } from "@/lib/site-data/seo";
+import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
+import { buildPageMetadata } from "@/features/site/data/seo";
 import {
   PLANNING_PAGE_COPY,
   PLANNING_PAGE_DELIVERABLES,
   PLANNING_PAGE_STEPS,
-} from "@/lib/site-data/routeCopy";
+} from "@/features/site/data/routeCopy";
 import { SITE_URL } from "@/lib/siteUrl";
 
 export const metadata: Metadata = buildPageMetadata(SITE_URL, {

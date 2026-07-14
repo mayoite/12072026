@@ -31,12 +31,12 @@ vi.mock("fabric", () => {
 
 describe("fabricDocumentBridge", () => {
   it("should have function buildPlannerDocumentFromFabric defined", () => {
-    expect(buildPlannerDocumentFromFabric).toBeTypeOf("function");
+    expect(buildPlannerDocumentFromFabric).toBeTypeOf("function"); expect(String(buildPlannerDocumentFromFabric)).toContain('function');
   });
   it("should have function getFabricSnapshotFromDocument defined", () => {
-    expect(getFabricSnapshotFromDocument).toBeTypeOf("function");
+    expect(getFabricSnapshotFromDocument).toBeTypeOf("function"); expect(String(getFabricSnapshotFromDocument)).toContain('function');
   });
   it("should have function loadPlannerDocumentIntoFabric defined", () => {
-    expect(loadPlannerDocumentIntoFabric).toBeTypeOf("function");
+    expect(loadPlannerDocumentIntoFabric).toBeTypeOf("function"); expect(String(loadPlannerDocumentIntoFabric)).toContain('function');
   });
 });

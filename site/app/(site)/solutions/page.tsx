@@ -3,7 +3,7 @@ import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
 import { HomeMarketingLayout } from "@/components/home/layout";
-import { SOLUTIONS_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { SOLUTIONS_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = SOLUTIONS_PAGE_METADATA;
 

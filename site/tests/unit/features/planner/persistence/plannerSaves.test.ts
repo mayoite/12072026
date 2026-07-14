@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { savePlannerDocumentToSupabase, loadPlannerDocumentFromSupabase, listPlannerDocumentsFromSupabase, deletePlannerDocumentFromSupabase } from "@/features/planner/persistence/plannerSaves";
 
-vi.mock("@/lib/supabase/client", () => ({
+vi.mock("@/platform/supabase/client", () => ({
   supabase: {
     from: vi.fn(() => ({
       select: vi.fn(() => ({
@@ -16,15 +16,15 @@ vi.mock("@/lib/supabase/client", () => ({
 
 describe("plannerSaves", () => {
   it("should have function savePlannerDocumentToSupabase defined", () => {
-    expect(savePlannerDocumentToSupabase).toBeTypeOf("function");
+    expect(savePlannerDocumentToSupabase).toBeTypeOf("function"); expect(String(savePlannerDocumentToSupabase)).toContain('function');
   });
   it("should have function loadPlannerDocumentFromSupabase defined", () => {
-    expect(loadPlannerDocumentFromSupabase).toBeTypeOf("function");
+    expect(loadPlannerDocumentFromSupabase).toBeTypeOf("function"); expect(String(loadPlannerDocumentFromSupabase)).toContain('function');
   });
   it("should have function listPlannerDocumentsFromSupabase defined", () => {
-    expect(listPlannerDocumentsFromSupabase).toBeTypeOf("function");
+    expect(listPlannerDocumentsFromSupabase).toBeTypeOf("function"); expect(String(listPlannerDocumentsFromSupabase)).toContain('function');
   });
   it("should have function deletePlannerDocumentFromSupabase defined", () => {
-    expect(deletePlannerDocumentFromSupabase).toBeTypeOf("function");
+    expect(deletePlannerDocumentFromSupabase).toBeTypeOf("function"); expect(String(deletePlannerDocumentFromSupabase)).toContain('function');
   });
 });

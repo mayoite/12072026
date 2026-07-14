@@ -1,6 +1,6 @@
 import { defineConfig } from "drizzle-kit";
 import { createRequire } from "node:module";
-import { resolvePlannerDatabaseUrl } from "./plannerDatabaseUrl";
+import { resolvePlannerDatabaseUrl } from "./databaseUrls";
 
 const require = createRequire(import.meta.url);
 require("../../scripts/loadEnvLocal.cjs").loadEnvLocal();

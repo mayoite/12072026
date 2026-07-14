@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Projects } from '@/components/home/Projects';
-import { HOMEPAGE_PROJECTS_CONTENT } from '@/lib/site-data/homepage';
+import { HOMEPAGE_PROJECTS_CONTENT } from '@/features/site/data/homepage';
 
 vi.mock('@phosphor-icons/react', () => ({
   ArrowRight: () => <span data-testid="arrow-right" />

@@ -12,7 +12,7 @@
 
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three-stdlib";
-import type { CatalogCategory } from "@/features/planner/catalog/catalogTypes";
+import type { CatalogCategory } from "@/features/planner/catalog-api/catalogTypes";
 
 // ---------------------------------------------------------------------------
 // FOCSS token mirrors

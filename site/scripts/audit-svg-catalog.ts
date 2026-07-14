@@ -8,7 +8,7 @@
 import { mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-import { readSvgArtifactStatus } from "../features/planner/admin/svg-editor/svgArtifactStatus.server";
+import { readSvgArtifactStatus } from "../features/admin/svg-editor/svgArtifactStatus.server";
 import {
   clearLoaderCache,
   loadAll,
@@ -47,7 +47,7 @@ function main(): void {
     const status = readSvgArtifactStatus(descriptor.slug);
     return {
       slug: descriptor.slug,
-      descriptorPath: `site/block-descriptors/${descriptor.slug}.json`,
+      descriptorPath: `site/inventory/descriptors/${descriptor.slug}.json`,
       artifactPath: `site/public/svg-catalog/${descriptor.slug}.svg`,
       state: status.state,
       bytes: status.bytes,

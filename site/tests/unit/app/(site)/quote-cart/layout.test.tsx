@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import QuoteCartLayout, { metadata } from '@/app/(site)/quote-cart/layout';
 
-vi.mock('@/lib/site-data/routeMetadata', () => ({
+vi.mock('@/features/site/data/routeMetadata', () => ({
   QUOTE_CART_PAGE_METADATA: { title: 'Quote Cart' },
 }));
 

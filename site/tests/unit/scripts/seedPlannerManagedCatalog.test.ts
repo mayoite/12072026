@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { MANAGED_CATALOG_SEED } from "@/features/planner/catalog/managedCatalogSeed";
+import { MANAGED_CATALOG_SEED } from "@/features/planner/catalog-api/managedCatalogSeed";
 
 describe("seed_planner_managed_catalog", () => {
   it("defines seed rows with planner footprint specs in mm", () => {

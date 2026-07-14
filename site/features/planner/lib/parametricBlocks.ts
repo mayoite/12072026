@@ -6,7 +6,7 @@
  * sensible min/max ranges.
  */
 
-import type { CatalogItem, FurnitureCategory, FurnitureShape } from "../store/catalogData";
+import type { CatalogItem, FurnitureCategory, FurnitureShape } from "../cloud-store/catalogData";
 
 // --- Types ---
 

@@ -20,6 +20,6 @@ describe("ProjectSetupStep", () => {
     expect(container).toBeDefined();
   });
   it("should have function ProjectSetupStep defined", () => {
-    expect(ProjectSetupStep).toBeTypeOf("function");
+    expect(ProjectSetupStep).toBeTypeOf("function"); expect(String(ProjectSetupStep)).toContain('function');
   });
 });

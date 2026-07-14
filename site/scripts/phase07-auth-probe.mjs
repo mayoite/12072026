@@ -9,6 +9,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const BASE = process.env.PROBE_BASE_URL ?? "http://localhost:3000";
 
@@ -28,7 +29,7 @@ async function postJson(urlPath, body) {
   return { status: res.status, json };
 }
 
-function adminRouteAuthGuardPass() {
+export function adminRouteAuthGuardPass() {
   const adminRoot = resolve(process.cwd(), "app/api/admin");
   if (!existsSync(adminRoot)) return false;
 
@@ -101,7 +102,19 @@ async function main() {
   console.log(`\nWrote ${jsonPath}`);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+function isMainModule() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isMainModule()) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

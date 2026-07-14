@@ -3,9 +3,9 @@ import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { WhyChooseUs } from "@/components/home/WhyChooseUs";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
-import { TRUSTED_BY_CLIENTS, TRUSTED_BY_STATS } from "@/lib/site-data/proof";
-import { TRUSTED_BY_PAGE_COPY } from "@/lib/site-data/routeCopy";
-import { TRUSTED_BY_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { TRUSTED_BY_CLIENTS, TRUSTED_BY_STATS } from "@/features/site/data/proof";
+import { TRUSTED_BY_PAGE_COPY } from "@/features/site/data/routeCopy";
+import { TRUSTED_BY_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = TRUSTED_BY_PAGE_METADATA;
 

@@ -32,5 +32,6 @@ vi.mock("fabric", () => {
 describe("compliance", () => {
   it("should have function runPlannerComplianceCheck defined", () => {
     expect(runPlannerComplianceCheck).toBeTypeOf("function");
+    expect(runPlannerComplianceCheck.name.length).toBeGreaterThan(0);
   });
 });

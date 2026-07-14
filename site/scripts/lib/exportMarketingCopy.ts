@@ -23,7 +23,7 @@ import {
   TRACKING_PAGE_COPY,
   TRUSTED_BY_PAGE_COPY,
   SUPPORT_IVR_PAGE_COPY,
-} from "../../lib/site-data/routeCopy";
+} from "../../features/site/data/routeCopy";
 import {
   HOMEPAGE_BRAND_STATEMENT_CONTENT,
   HOMEPAGE_COLLECTIONS_CONTENT,
@@ -32,7 +32,7 @@ import {
   HOMEPAGE_SHOWCASE_CONTENT,
   HOMEPAGE_TRUST_CONTENT,
   HOMEPAGE_WHY_CHOOSE_US_CONTENT,
-} from "../../lib/site-data/homepage";
+} from "../../features/site/data/homepage";
 
 const marketing = {
   about: ABOUT_PAGE_COPY,

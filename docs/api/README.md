@@ -1,33 +1,24 @@
 # API reference
 
-The live handlers are authoritative.
+Live handlers in `site/app/api/**/route.ts` are authoritative.
 
 | Source | Role |
 |---|---|
-| `site/app/api/**/route.ts` | Runtime behavior, auth, and validation. |
-| `site/config/route-contract.json` | Tooling metadata. |
-| `ROUTE-INDEX.md` | Generated human inventory. |
-
-Refresh the inventory after route changes:
+| `site/app/api/**/route.ts` | Runtime behavior, auth, validation |
+| `site/config/route-contract.json` | Tooling metadata |
+| `ROUTE-INDEX.md` | Generated inventory — refresh after route changes |
 
 ```powershell
 pnpm --filter oando-site run docs:sync:routes
 ```
 
-The repository has no published OpenAPI contract yet.
+No published OpenAPI yet. Add only when request/response schemas are stable.
 
-Add one only after live request and response schemas are stable.
+## SVG catalog routes (live vs planned)
 
-## Planned SVG route
+| Route | Status | Authority |
+|---|---|---|
+| Planner SVG-block handlers (e.g. `svg-blocks`) | **Live** | Disk — `loadBuyerVisibleDescriptors()` |
+| `GET /api/planner/catalog/svg/[revisionId]` | **Not live** | Target: exact DB revision bytes — do not list in `ROUTE-INDEX.md` until implemented |
 
-The route index lists live handlers only.
-
-The current SVG-block route still reads disk-backed descriptors.
-
-Target `GET /api/planner/catalog/svg/[revisionId]` is not live.
-
-Do not add it to `ROUTE-INDEX.md` until implementation exists.
-
-It will return exact sanitized bytes for one committed revision.
-
-See [Database SVG contract](../architecture/08-DATABASE-SVG-CONTRACT.md).
+Contract: [08-DATABASE-SVG-CONTRACT.md](../architecture/08-DATABASE-SVG-CONTRACT.md).

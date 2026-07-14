@@ -11,17 +11,17 @@ vi.mock('next/navigation', () => ({
   redirect: vi.fn(),
 }));
 
-vi.mock('@/features/catalog/categories', () => ({
+vi.mock('@/lib/catalog/site/categories', () => ({
   buildRequestedCategoryCatalog: vi.fn(),
   getCatalogCategoryDescription: vi.fn((id, desc) => desc || 'mock desc'),
   getCatalogCategoryLabel: vi.fn((id, name) => name || 'mock name'),
 }));
 
-vi.mock('@/features/catalog/getProducts', () => ({
+vi.mock('@/lib/catalog/site/getProducts', () => ({
   getCatalog: vi.fn().mockResolvedValue([]),
 }));
 
-vi.mock('@/lib/site-data/seo', () => ({
+vi.mock('@/features/site/data/seo', () => ({
   buildPageJsonLd: vi.fn(() => ({ '@type': 'CollectionPage' })),
   buildBreadcrumbJsonLd: vi.fn(() => ({ '@type': 'BreadcrumbList' })),
 }));
@@ -34,7 +34,7 @@ vi.mock('@/app/(site)/products/[category]/FilterGrid', () => ({
   FilterGrid: () => <div data-testid="filter-grid" />,
 }));
 
-vi.mock('@/lib/site-data/routeCopy', () => ({
+vi.mock('@/features/site/data/routeCopy', () => ({
   CATEGORY_ROUTE_COPY: {
     offlineTitle: 'Offline',
     offlineDescription: 'Offline description',
@@ -42,7 +42,7 @@ vi.mock('@/lib/site-data/routeCopy', () => ({
   },
 }));
 
-import { buildRequestedCategoryCatalog } from '@/features/catalog/categories';
+import { buildRequestedCategoryCatalog } from '@/lib/catalog/site/categories';
 
 describe('CategoryPageView', () => {
   beforeEach(() => {

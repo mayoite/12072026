@@ -4,7 +4,7 @@ import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components
 import { JobCard } from "@/components/career/JobCard";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
 import { RouteCtaBand } from "@/components/shared/RouteCtaBand";
-import { CAREER_PAGE_COPY, CAREER_PAGE_JOBS } from "@/lib/site-data/routeCopy";
+import { CAREER_PAGE_COPY, CAREER_PAGE_JOBS } from "@/features/site/data/routeCopy";
 
 const CAREER_PILLAR_ICONS = {
   users: Users,

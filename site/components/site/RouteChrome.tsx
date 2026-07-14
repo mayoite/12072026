@@ -4,9 +4,9 @@ import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
 import { FooterLogoMarquee } from "@/components/site/FooterLogoMarquee";
 import { CookieConsentBar } from "@/components/site/CookieConsentBar";
-import DynamicBotWrapper from "@/features/site-assistant/DynamicBotWrapper";
+import DynamicBotWrapper from "@/features/site/assistant/DynamicBotWrapper";
 import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
-import { resolveRouteChromeMode } from "@/lib/site-data/routeChromeRules";
+import { resolveRouteChromeMode } from "@/features/site/data/routeChromeRules";
 import { usePathname, useSearchParams } from "next/navigation";
 
 export function RouteChrome({

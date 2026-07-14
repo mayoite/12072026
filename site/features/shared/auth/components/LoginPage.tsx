@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { CircleNotch as Loader2 } from "@phosphor-icons/react";import { createClient } from '@/lib/supabase/client'
+import { CircleNotch as Loader2 } from "@phosphor-icons/react";import { createClient } from '@/platform/supabase/client'
 import {
   humanizeAuthError,
   isSuspendedAuthError,

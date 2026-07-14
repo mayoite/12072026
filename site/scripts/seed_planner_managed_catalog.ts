@@ -7,7 +7,7 @@
 import { createRequire } from "node:module";
 import postgres from "postgres";
 
-import { MANAGED_CATALOG_SEED } from "@/features/planner/catalog/managedCatalogSeed";
+import { MANAGED_CATALOG_SEED } from "@/features/planner/catalog-api/managedCatalogSeed";
 
 const require = createRequire(import.meta.url);
 require("./loadEnvLocal.cjs").loadEnvLocal();

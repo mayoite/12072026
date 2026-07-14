@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { GET } from "@/app/api/nav-categories/route";
-import { getCatalog } from "@/features/catalog/getProducts";
+import { getCatalog } from "@/lib/catalog/site/getProducts";
 import {
   _Catalog_CATEGORY_ORDER,
   _Catalog_SUBCATEGORY_LABELS,
@@ -8,7 +8,7 @@ import {
   classifyToRequestedSubcategory,
   getCanonicalSubcategoryId,
   getCatalogCategoryLabel,
-} from "@/features/catalog/categories";
+} from "@/lib/catalog/site/categories";
 import { groupCategories } from "@/lib/navigation";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 
@@ -16,11 +16,11 @@ vi.mock("@/app/api/_lib/public", () => ({
   enforcePublicApiRateLimit: vi.fn(),
 }));
 
-vi.mock("@/features/catalog/getProducts", () => ({
+vi.mock("@/lib/catalog/site/getProducts", () => ({
   getCatalog: vi.fn(),
 }));
 
-vi.mock("@/features/catalog/categories", () => ({
+vi.mock("@/lib/catalog/site/categories", () => ({
   Catalog_CATEGORY_ORDER: ["seating"],
   Catalog_SUBCATEGORY_LABELS: { seating: ["Executive"] },
   classifyToRequestedCategory: vi.fn(() => "seating"),

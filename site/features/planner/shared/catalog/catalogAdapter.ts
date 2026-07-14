@@ -1,7 +1,7 @@
 import type { MeshFamily } from "../mesh-contract";
 import type { CatalogItem, CatalogItemDimensions } from "./types";
 
-import { PLANNER_CATALOG_ITEMS } from "@/features/planner/catalog/workspaceCatalog";
+import { PLANNER_CATALOG_ITEMS } from "@/features/planner/catalog-api/workspaceCatalog";
 
 const PLANNER_CATALOG_JSON_PATH = "/planner-app/data/planner-catalog.v1.json";
 

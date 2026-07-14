@@ -91,6 +91,97 @@ try {
   // no git — skip index check
 }
 
+const STALE_NAME_PATTERN =
+  "tech-stack-generator|tech-stack-generated|tech-stack-docs|\\.tech-stack-generated";
+const STALE_NAME_EXCLUDES = [
+  "node_modules",
+  ".git",
+  "archive",
+  "websites",
+  ".archive",
+  ".websites",
+  "PROTECTED",
+  "results",
+  "generated-documents",
+  "plan/Site/TECH-DOCS-GENERATOR.md",
+  "scripts/check-repo-layout.mjs",
+  "tech-docs-generator/scripts/output-contract.mjs",
+  "tech-docs-generator/scripts/output-contract.d.mts",
+  "tech-docs-generator/tests",
+];
+
+function shouldSkipStaleNameScan(relativePath) {
+  const normalized = relativePath.replace(/\\/g, "/");
+  return STALE_NAME_EXCLUDES.some((entry) => normalized === entry || normalized.startsWith(`${entry}/`));
+}
+
+const STALE_SCAN_SKIP_DIRS = new Set([
+  "node_modules",
+  ".git",
+  ".next",
+  "vendor",
+  "dist",
+  "build",
+  "coverage",
+]);
+
+function scanStaleNamesWithNode(startDir) {
+  const stalePattern = /tech-stack-generator|tech-stack-generated|tech-stack-docs|\.tech-stack-generated/;
+  const matches = [];
+
+  function walk(currentDir) {
+    for (const entry of fs.readdirSync(currentDir, { withFileTypes: true })) {
+      const abs = path.join(currentDir, entry.name);
+      const relative = path.relative(root, abs).replace(/\\/g, "/");
+      if (shouldSkipStaleNameScan(relative)) continue;
+      if (entry.isDirectory()) {
+        if (STALE_SCAN_SKIP_DIRS.has(entry.name)) continue;
+        walk(abs);
+        continue;
+      }
+      if (!entry.isFile()) continue;
+      if (!/\.(?:md|mdx|json|jsonc|ya?ml|toml|txt|css|scss|sql|ts|tsx|js|jsx|mjs|cjs|html|sh|ps1)$/i.test(entry.name)) {
+        continue;
+      }
+      const text = fs.readFileSync(abs, "utf8");
+      if (!stalePattern.test(text)) continue;
+      const lineNumber = text.split(/\r?\n/).findIndex((line) => stalePattern.test(line)) + 1;
+      matches.push(`${relative}:${lineNumber}`);
+    }
+  }
+
+  walk(startDir);
+  return matches;
+}
+
+try {
+  const { execSync } = await import("node:child_process");
+  const excludeArgs = STALE_NAME_EXCLUDES.flatMap((entry) => ["-g", `!${entry}/**`]);
+  const matches = execSync(
+    ["rg", "-n", "--hidden", ...excludeArgs, STALE_NAME_PATTERN, "."].join(" "),
+    {
+      cwd: root,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    },
+  )
+    .trim()
+    .split(/\r?\n/)
+    .filter(Boolean);
+  for (const match of matches) {
+    violations.push(`STALE tech-stack name reference: ${match}`);
+  }
+} catch (error) {
+  const exitCode = typeof error === "object" && error !== null && "status" in error ? error.status : null;
+  if (exitCode === 1) {
+    // rg exit 1 = no matches
+  } else {
+    for (const match of scanStaleNamesWithNode(root)) {
+      violations.push(`STALE tech-stack name reference: ${match}`);
+    }
+  }
+}
+
 if (violations.length > 0) {
   console.error("check-repo-layout FAILED (AGENTS.md layout):\n");
   for (const v of violations) console.error(`  - ${v}`);

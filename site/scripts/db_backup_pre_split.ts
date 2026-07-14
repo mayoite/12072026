@@ -10,11 +10,11 @@ import postgres from "postgres";
 
 config({ path: resolve(process.cwd(), ".env.local") });
 
-function quoteIdent(name: string): string {
+export function quoteIdent(name: string): string {
   return `"${name.replace(/"/g, '""')}"`;
 }
 
-function quoteValue(v: unknown): string {
+export function quoteValue(v: unknown): string {
   if (v === null || v === undefined) return "NULL";
   if (typeof v === "number") return String(v);
   if (typeof v === "boolean") return v ? "true" : "false";
@@ -24,26 +24,43 @@ function quoteValue(v: unknown): string {
   return `'${String(v).replace(/'/g, "''")}'`;
 }
 
-async function dumpTables(
+export async function dumpTables(
   url: string,
   label: string,
   tables: string[],
-): Promise<void> {
-  const sql = postgres(url, { prepare: false, max: 1 });
-  if (!existsSync("backups")) mkdirSync("backups", { recursive: true });
-  const ts = new Date()
+  deps: {
+    sqlFactory?: typeof postgres;
+    writeFile?: typeof writeFileSync;
+    mkdir?: typeof mkdirSync;
+    exists?: typeof existsSync;
+    now?: () => Date;
+    log?: typeof console.log;
+  } = {},
+): Promise<string> {
+  const sqlFactory = deps.sqlFactory ?? postgres;
+  const writeFile = deps.writeFile ?? writeFileSync;
+  const mkdir = deps.mkdir ?? mkdirSync;
+  const exists = deps.exists ?? existsSync;
+  const now = deps.now ?? (() => new Date());
+  const log = deps.log ?? console.log;
+
+  const sql = sqlFactory(url, { prepare: false, max: 1 });
+  if (!exists("backups")) mkdir("backups", { recursive: true });
+  const ts = now()
     .toISOString()
     .replace(/[-:T.Z]/g, "")
     .slice(0, 14);
   const out = `backups/pre-split-${label}-${ts}.sql`;
   const lines: string[] = [
-    `-- Backup: ${label} pre-split @ ${new Date().toISOString()}`,
+    `-- Backup: ${label} pre-split @ ${now().toISOString()}`,
     `-- Tables: ${tables.join(", ")}`,
     "",
   ];
   for (const t of tables) {
     try {
-      const rows = (await sql.unsafe(`select * from public.${quoteIdent(t).slice(1, -1)}`)) as unknown as Record<string, unknown>[];
+      const rows = (await sql.unsafe(
+        `select * from public.${quoteIdent(t).slice(1, -1)}`,
+      )) as unknown as Record<string, unknown>[];
       lines.push(`-- ${t}: ${rows.length} rows`);
       if (rows.length === 0) {
         lines.push("");
@@ -63,12 +80,13 @@ async function dumpTables(
       lines.push("");
     }
   }
-  writeFileSync(out, lines.join("\n"), "utf8");
-  console.log(`Wrote ${out}`);
+  writeFile(out, lines.join("\n"), "utf8");
+  log(`Wrote ${out}`);
   await sql.end({ timeout: 5 });
+  return out;
 }
 
-const PRODUCTS_TABLES_TO_BACKUP = [
+export const PRODUCTS_TABLES_TO_BACKUP = [
   // empty admin-domain tables in oando we will drop
   "clients",
   "customer_queries",
@@ -88,7 +106,7 @@ const PRODUCTS_TABLES_TO_BACKUP = [
   "users",
 ];
 
-const ADMIN_TABLES_TO_BACKUP = [
+export const ADMIN_TABLES_TO_BACKUP = [
   // catalog duplicates we will drop
   "catalog_products",
   "catalog_categories",
@@ -108,7 +126,7 @@ const ADMIN_TABLES_TO_BACKUP = [
   "auth_verification",
 ];
 
-(async () => {
+export async function main(): Promise<void> {
   await dumpTables(
     process.env.PRODUCTS_DATABASE_URL!,
     "products",
@@ -119,7 +137,16 @@ const ADMIN_TABLES_TO_BACKUP = [
     "admin",
     ADMIN_TABLES_TO_BACKUP,
   );
-})().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+}
+
+function isMain(): boolean {
+  const entry = (process.argv[1] ?? "").replace(/\\/g, "/");
+  return entry.endsWith("db_backup_pre_split.ts") || entry.endsWith("db_backup_pre_split.js");
+}
+
+if (isMain()) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

@@ -4,14 +4,14 @@ import { useCallback, useRef, useState } from "react";
 import { CaretDown as ChevronDown, CircleNotch as Loader2, Chat as MessageSquare, Sparkle as Sparkles, MagicWand as Wand2 } from "@phosphor-icons/react";
 
 
-import { CatalogBlockPreview } from "@/features/planner/catalog/CatalogBlockPreview";
-import { PLANNER_CATALOG_ITEMS } from "@/features/planner/catalog/workspaceCatalog";
+import { CatalogBlockPreview } from "@/features/planner/catalog-api/CatalogBlockPreview";
+import { PLANNER_CATALOG_ITEMS } from "@/features/planner/catalog-api/workspaceCatalog";
 
 import {
   PLANNER_PRIMARY_PURPOSE_OPTIONS,
   type PlannerPrimaryPurpose,
 } from "@/features/planner/onboarding/projectSetup";
-import { usePlannerWorkspaceStore } from "@/features/planner/store/workspaceStore";
+import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 
 import { AiAdvisorChatPane } from "./AiAdvisorChatPane";
 import { applySuggestedLayout } from "./applySuggestedLayout";

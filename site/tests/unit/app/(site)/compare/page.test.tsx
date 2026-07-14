@@ -1,10 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import ComparePage from '@/app/(site)/compare/page';
-import { COMPARE_ROUTE_COPY } from '@/lib/site-data/routeCopy';
-import { getProducts } from '@/features/catalog/getProducts';
+import { COMPARE_ROUTE_COPY } from '@/features/site/data/routeCopy';
+import { getProducts } from '@/lib/catalog/site/getProducts';
 
-vi.mock('@/features/catalog/getProducts', () => ({
+vi.mock('@/lib/catalog/site/getProducts', () => ({
   getProducts: vi.fn(async () => []),
 }));
 

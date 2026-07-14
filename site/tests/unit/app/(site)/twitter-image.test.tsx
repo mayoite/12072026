@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import TwitterImage, { alt, size, contentType } from '@/app/(site)/twitter-image';
-import { SITE_BRAND } from '@/lib/site-data/brand';
+import { SITE_BRAND } from '@/features/site/data/brand';
 
 vi.mock('next/og', () => ({
   ImageResponse: class MockImageResponse {

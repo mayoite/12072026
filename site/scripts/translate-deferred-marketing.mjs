@@ -19,12 +19,10 @@ const manifest = JSON.parse(
   fs.readFileSync(path.join(siteRoot, "i18n", "marketing-parity-manifest.json"), "utf8"),
 );
 
-const LANG = { de: "German", es: "Spanish", fr: "French" };
-const REQUEST_TIMEOUT_MS = 300_000;
+export const LANG = { de: "German", es: "Spanish", fr: "French" };
+export const REQUEST_TIMEOUT_MS = 300_000;
 
-loadEnvLocal();
-
-function deepMergeStructure(base, overrides) {
+export function deepMergeStructure(base, overrides) {
   const out = structuredClone(base);
   for (const [key, value] of Object.entries(overrides ?? {})) {
     if (
@@ -43,14 +41,14 @@ function deepMergeStructure(base, overrides) {
   return out;
 }
 
-function parseJsonResponse(text) {
+export function parseJsonResponse(text) {
   const trimmed = text.trim();
   const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/);
   const payload = fenced ? fenced[1].trim() : trimmed;
   return JSON.parse(payload);
 }
 
-function namespaceLooksTranslated(namespace, localeMessages, enMessages) {
+export function namespaceLooksTranslated(namespace, localeMessages, enMessages) {
   if (!localeMessages || !enMessages) return false;
 
   if (namespace === "legal") {
@@ -167,6 +165,7 @@ async function translateNamespace(namespace, enSubtree, locale) {
 }
 
 async function main() {
+  loadEnvLocal();
   const en = JSON.parse(fs.readFileSync(path.join(messagesDir, "en.json"), "utf8"));
   const namespaces = manifest.allMarketingNamespaces;
 
@@ -190,7 +189,19 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+function isDirectRun() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectRun()) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

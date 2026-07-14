@@ -8,8 +8,8 @@ import {
   deletePlannerDocumentFromStore,
   loadPlannerDocumentFromStore,
   savePlannerDocumentToStore,
-} from "@/features/planner/store/plannerSaves";
-import { createServerClient } from "@/lib/supabase/server";
+} from "@/features/planner/cloud-store/plannerSaves";
+import { createServerClient } from "@/platform/supabase/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 import { applyPlannerRouteTelemetry } from "@/features/shared/api/routeObservability";

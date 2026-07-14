@@ -3,7 +3,7 @@ import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
 import { SectionIntro } from "@/components/shared/SectionIntro";
 import { VisualIVR } from "@/components/support/VisualIVR";
-import { SUPPORT_IVR_PAGE_COPY } from "@/lib/site-data/routeCopy";
+import { SUPPORT_IVR_PAGE_COPY } from "@/features/site/data/routeCopy";
 
 export function SupportIvrPageView() {
   return (

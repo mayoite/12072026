@@ -38,7 +38,7 @@ vi.mock('@/components/shared/SectionIntro', () => ({
 }));
 
 // Mock seo utils
-vi.mock('@/lib/site-data/seo', () => ({
+vi.mock('@/features/site/data/seo', () => ({
   buildPageMetadata: (_url: string, opts: any) => ({
     title: opts.title,
     description: opts.description,

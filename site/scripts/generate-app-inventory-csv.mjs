@@ -149,7 +149,7 @@ function extractDependencies(content, kind) {
     if (imp.startsWith("@/features/")) groups.features.add(imp.slice("@/features/".length));
     else if (imp.startsWith("@/components/")) groups.components.add(imp.slice("@/components/".length));
     else if (imp.startsWith("@/lib/")) groups.lib.add(imp.slice("@/lib/".length));
-    else if (imp.startsWith("@/lib/site-data/")) groups.data.add(imp.slice("@/lib/site-data/".length));
+    else if (imp.startsWith("@/features/site/data/")) groups.data.add(imp.slice("@/features/site/data/".length));
     else if (imp.startsWith("@/platform/")) groups.platform.add(imp.slice("@/platform/".length));
     else if (imp.startsWith("@/app/css/")) groups.css.add(imp.slice("@/app/css/".length));
     else if (imp.startsWith("@/")) groups.lib.add(imp.slice(2));

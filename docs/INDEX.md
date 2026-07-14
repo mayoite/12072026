@@ -1,25 +1,46 @@
 # Documentation index
 
-## Product and architecture
+Start: `architecture/README.md` (vision + **current vs target** table). Live SVG = disk; target = Products DB (`08-DATABASE-SVG-CONTRACT.md`).
 
-- `architecture/README.md` — product vision, benchmarks, and boundaries.
-- `architecture/01-MODULE-LAYOUT.md` — code ownership.
-- `architecture/02-DOMAINS.md` — Admin and Planner domains.
-- `architecture/03-MODULE-UI-CONTRACT.md` — interface quality contract.
-- `architecture/04-CSS-SOLUTION.md` — styling ownership.
-- `architecture/05-DATA_FLOW.md` — catalog-to-BOQ flow.
-- `architecture/06-UI-BENCHMARK.md` — external interface benchmark and acceptance contract.
-- `architecture/07-ADMIN-UI-BENCHMARK.md` — SVG-first Admin benchmark and acceptance contract.
-- `architecture/08-DATABASE-SVG-CONTRACT.md` — database-backed SVG publication and Planner import contract.
-- `architecture/09-SITE-UI-BENCHMARK.md` — public Site benchmark and acceptance contract.
-- `architecture/10-SECURITY-BENCHMARK.md` — security, transaction, and security-UX acceptance contract.
+## Architecture
 
-## Technical references
+| Doc | Content |
+|---|---|
+| `architecture/README.md` | Vision, tracks, boundaries, benchmarks, quality |
+| `architecture/01-MODULE-LAYOUT.md` | Code ownership, product roots |
+| `architecture/02-DOMAINS.md` | Site, Admin, Planner, contracts |
+| `architecture/03-MODULE-UI-CONTRACT.md` | Interface quality |
+| `architecture/04-CSS-SOLUTION.md` | Styling ownership |
+| `architecture/05-DATA_FLOW.md` | Live disk path + target DB flow, BOQ |
+| `architecture/06-UI-BENCHMARK.md` | Planner acceptance |
+| `architecture/07-ADMIN-UI-BENCHMARK.md` | Admin SVG acceptance |
+| `architecture/08-DATABASE-SVG-CONTRACT.md` | DB SVG publication contract |
+| `architecture/09-SITE-UI-BENCHMARK.md` | Site acceptance |
+| `architecture/10-SECURITY-BENCHMARK.md` | Security acceptance |
 
-- `api/README.md` — API source and route inventory.
-- `database/` — database schema and operations.
-- `Lockedfiles/03-dependencies-engines-current.md` — engines and licenses.
+## Technical
 
-Execution is not stored here.
+| Doc | Content |
+|---|---|
+| `api/README.md` | API sources |
+| `api/ROUTE-INDEX.md` | Generated routes — `pnpm --filter oando-site run docs:sync:routes` |
+| `database/SCHEMA.md` | Tables, indexes, RLS |
+| `database/SEEDING.md` | Seed commands |
+| `database/ADVISORS.md` | DB security/performance lints |
+| `database/RESTORE-RUNBOOK.md` | Backup, restore, degraded mode |
+| `Lockedfiles/03-dependencies-engines-current.md` | Engines, i18n, persistence, licenses |
 
-Use `../plan/README.md`.
+## Site package (moved from `site/*.md`)
+
+Product code stays in `site/`. Package maps live here:
+
+| Doc | Content |
+|---|---|
+| `site/ARCHITECTURE.md` | `site/` package decision tree + folders |
+| `site/tests-CONTENTS.md` | Unit name-mirror layout |
+| `site/tests-INVENTORY.md` | Test file counts |
+| `site/inventory.md` | Descriptor inventory path |
+| `site/features-*.md` | Feature folder maps |
+| `site/route-classification.md` | Generated live routes |
+
+Execution: `../plan/README.md`. Commands / ops / testing: `../Readme.md`.

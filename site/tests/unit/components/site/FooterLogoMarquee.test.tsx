@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { FooterLogoMarquee } from '@/components/site/FooterLogoMarquee';
 
-vi.mock('@/lib/site-data/homepage', () => ({
+vi.mock('@/features/site/data/homepage', () => ({
   HOMEPAGE_TRUST_CONTENT: {
     logos: [
       { name: 'Logo A', src: '/logos/a.png' },

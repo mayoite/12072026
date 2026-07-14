@@ -2,6 +2,7 @@ import fs from "fs";
 import { mkdir, readFile, writeFile, access, copyFile } from "fs/promises";
 import { createReadStream, createWriteStream } from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import sharp from "sharp";
 import { config as loadEnv } from "dotenv";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
@@ -135,7 +136,7 @@ const CATALOG_SLUG_OVERRIDES_BY_PRODUCT_KEY: Record<string, string[]> = {
   "oando-tables::conference-8-seater": ["conference-8-seater"],
 };
 
-function parseFlags(argv: string[]): Flags {
+export function parseFlags(argv: string[]): Flags {
   return {
     dryRun: argv.includes("--dry-run"),
     apply: argv.includes("--apply"),
@@ -145,7 +146,7 @@ function parseFlags(argv: string[]): Flags {
   };
 }
 
-function normalizeCategoryToken(value: string): string {
+export function normalizeCategoryToken(value: string): string {
   return value
     .trim()
     .toLowerCase()
@@ -155,7 +156,7 @@ function normalizeCategoryToken(value: string): string {
     .trim();
 }
 
-function resolveCategory(value: string): CanonicalCategory | null {
+export function resolveCategory(value: string): CanonicalCategory | null {
   const normalized = normalizeCategoryToken(value);
   const canonicalValues: CanonicalCategory[] = [
     "seating",
@@ -172,7 +173,7 @@ function resolveCategory(value: string): CanonicalCategory | null {
   return CATEGORY_ALIAS_MAP[normalized] ?? null;
 }
 
-function parseCsvLine(line: string): string[] {
+export function parseCsvLine(line: string): string[] {
   const out: string[] = [];
   let current = "";
   let inQuotes = false;
@@ -200,7 +201,7 @@ function parseCsvLine(line: string): string[] {
   return out;
 }
 
-function parseManifest(manifestCsv: string): ManifestRow[] {
+export function parseManifest(manifestCsv: string): ManifestRow[] {
   const lines = manifestCsv
     .split(/\r?\n/)
     .map((line) => line.trim())
@@ -803,8 +804,20 @@ async function main(): Promise<void> {
   );
 }
 
-main().catch((err) => {
-  const msg = err instanceof Error ? err.message : String(err);
-  console.error(msg);
-  process.exit(1);
-});
+function isMainModule(): boolean {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isMainModule()) {
+  main().catch((err) => {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(msg);
+    process.exit(1);
+  });
+}

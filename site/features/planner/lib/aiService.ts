@@ -6,9 +6,9 @@
  * placements, actions, and warnings for one-click apply in the editor.
  */
 
-import type { CatalogItem } from "@/features/planner/store/catalogData";
-import { furnitureCatalog } from "@/features/planner/store/catalogData";
-import type { Room, FurnitureItem } from "@/features/planner/store/plannerStore";
+import type { CatalogItem } from "@/features/planner/cloud-store/catalogData";
+import { furnitureCatalog } from "@/features/planner/cloud-store/catalogData";
+import type { Room, FurnitureItem } from "@/features/planner/cloud-store/plannerTypes";
 
 export type StylePreset = "Modern" | "Traditional" | "Minimalist";
 

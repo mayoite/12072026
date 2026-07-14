@@ -11,7 +11,7 @@ import { withAuth } from "@/features/shared/api/withAuth";
 import {
   createStandardCatalog,
   listStandardCatalog,
-} from "@/features/planner/admin/api/catalogAdminHandlers";
+} from "@/features/admin/api/catalogAdminHandlers";
 
 /** @deprecated List standard catalog items. Prefer `/api/admin/catalogs/standard`. */
 export const GET = withAuth(

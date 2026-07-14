@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { POST } from "@/app/api/audit/route";
 import { insertEvent } from "@/lib/audit/auditRepository";
 import { rateLimit } from "@/lib/rateLimit";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/platform/supabase/server";
 import { validateCsrfRequest } from "@/lib/security/csrf";
 import { userBelongsToTeam } from "@/lib/audit/teamAccess";
 import { API_ERROR_CODES } from "@/features/shared/api/ApiError";
@@ -22,7 +22,7 @@ vi.mock("@/lib/rateLimit", () => ({
   rateLimit: vi.fn(),
 }));
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/platform/supabase/server", () => ({
   createServerClient: vi.fn(),
 }));
 

@@ -2,7 +2,7 @@ import { insertEvent } from '@/lib/audit/auditRepository'
 import { isAuditTeamId, userBelongsToTeam } from '@/lib/audit/teamAccess'
 import { isAppAdmin } from '@/lib/auth/roles'
 import { rateLimit } from "@/lib/rateLimit"
-import { createServerClient } from "@/lib/supabase/server"
+import { createServerClient } from "@/platform/supabase/server"
 import { validateCsrfRequest } from "@/lib/security/csrf"
 import { success, error, rateLimitedError } from "@/features/shared/api/apiResponse"
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError"

@@ -7,7 +7,7 @@ import {
   buildCanonicalSeriesId,
   normalizeRequestedCategoryId,
   resolveCanonicalSubcategory,
-} from "@/features/catalog/categories";
+} from "@/lib/catalog/site/categories";
 import { REPO_ROOT, SITE_PACKAGE_ROOT } from "./lib/repoRoot";
 
 config({ path: resolve(SITE_PACKAGE_ROOT, ".env.local") });

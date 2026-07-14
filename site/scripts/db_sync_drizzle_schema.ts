@@ -7,16 +7,33 @@ import postgres from "postgres";
 
 dotenv.config({ path: ".env.local" });
 
-const EXPECTED_TABLES = ["oando_plans", "audit_events"] as const;
+export const EXPECTED_TABLES = ["oando_plans", "audit_events"] as const;
 
-async function main() {
-  const url = process.env.SUPABASE_AUTH_DATABASE_URL?.trim();
+export type SyncDrizzleResult =
+  | { ok: true; present: string[] }
+  | { ok: false; missing?: string[]; message: string; exitCode: number };
+
+export async function checkDrizzleSchema(
+  deps: {
+    env?: NodeJS.ProcessEnv;
+    sqlFactory?: typeof postgres;
+    log?: typeof console.log;
+    error?: typeof console.error;
+  } = {},
+): Promise<SyncDrizzleResult> {
+  const env = deps.env ?? process.env;
+  const sqlFactory = deps.sqlFactory ?? postgres;
+  const log = deps.log ?? console.log;
+  const error = deps.error ?? console.error;
+
+  const url = env.SUPABASE_AUTH_DATABASE_URL?.trim();
   if (!url) {
-    console.error("❌ SUPABASE_AUTH_DATABASE_URL missing from .env.local");
-    process.exit(1);
+    const message = "❌ SUPABASE_AUTH_DATABASE_URL missing from .env.local";
+    error(message);
+    return { ok: false, message, exitCode: 1 };
   }
 
-  const sql = postgres(url, { max: 1 });
+  const sql = sqlFactory(url, { max: 1 });
 
   try {
     const rows = await sql<{ table_name: string }[]>`
@@ -26,24 +43,50 @@ async function main() {
         AND table_name = ANY(${[...EXPECTED_TABLES]})
       ORDER BY table_name
     `;
-    const present = new Set(rows.map((row) => row.table_name));
-    console.log(`Present: ${[...present].join(", ") || "(none)"}`);
+    const present = rows.map((row) => row.table_name);
+    const presentSet = new Set(present);
+    log(`Present: ${present.join(", ") || "(none)"}`);
 
-    const missing = EXPECTED_TABLES.filter((name) => !present.has(name));
+    const missing = EXPECTED_TABLES.filter((name) => !presentSet.has(name));
     if (missing.length > 0) {
-      console.error(`❌ Missing tables: ${missing.join(", ")}`);
-      console.error("Run: pnpm --filter oando-site run db:apply:admin");
-      process.exit(1);
+      error(`❌ Missing tables: ${missing.join(", ")}`);
+      error("Run: pnpm --filter oando-site run db:apply:admin");
+      return {
+        ok: false,
+        missing: [...missing],
+        message: `Missing tables: ${missing.join(", ")}`,
+        exitCode: 1,
+      };
     }
 
-    console.log("✅ Admin planner Drizzle tables present. Use db:apply:admin for schema changes.");
-  } catch (error) {
-    console.error("❌ Drizzle schema check failed:");
-    console.error(error);
-    process.exit(1);
+    log("✅ Admin planner Drizzle tables present. Use db:apply:admin for schema changes.");
+    return { ok: true, present };
+  } catch (err) {
+    error("❌ Drizzle schema check failed:");
+    error(err);
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : String(err),
+      exitCode: 1,
+    };
   } finally {
     await sql.end({ timeout: 5 });
   }
 }
 
-main();
+export async function main(): Promise<void> {
+  const result = await checkDrizzleSchema();
+  if (!result.ok) process.exit(result.exitCode);
+}
+
+function isMain(): boolean {
+  const entry = (process.argv[1] ?? "").replace(/\\/g, "/");
+  return (
+    entry.endsWith("db_sync_drizzle_schema.ts") ||
+    entry.endsWith("db_sync_drizzle_schema.js")
+  );
+}
+
+if (isMain()) {
+  void main();
+}

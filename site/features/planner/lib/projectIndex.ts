@@ -8,7 +8,7 @@ import type {
   Wall,
   WindowItem,
   Zone,
-} from "@/features/planner/store/plannerStore";
+} from "@/features/planner/cloud-store/plannerTypes";
 import { deleteSnapshotsFor, getLatestSnapshot, getSnapshotCount } from "./versioning";
 import { newEntityId } from "./newEntityId";
 

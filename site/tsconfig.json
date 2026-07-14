@@ -6,7 +6,6 @@
       "@/types/*": ["./config/database/types/*"],
       "@/app/*": ["./app/*"],
       "@/components/*": ["./components/*"],
-      "@/lib/site-data/*": ["./lib/site-data/*"],
       "@/features/*": ["./features/*"],
       "@/lib/*": ["./lib/*"],
       "@/*": ["./*"]
@@ -22,8 +21,6 @@
     "features/**/*.tsx",
     "lib/**/*.ts",
     "lib/**/*.tsx",
-    "lib/site-data/**/*.ts",
-    "lib/site-data/**/*.tsx",
     "platform/**/*.ts",
     "platform/**/*.tsx",
     "config/database/types/**/*.ts",

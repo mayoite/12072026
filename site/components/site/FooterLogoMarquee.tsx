@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { HOMEPAGE_TRUST_CONTENT } from "@/lib/site-data/homepage";
+import { HOMEPAGE_TRUST_CONTENT } from "@/features/site/data/homepage";
 
 export function FooterLogoMarquee() {
   const trackLogos = [...HOMEPAGE_TRUST_CONTENT.logos, ...HOMEPAGE_TRUST_CONTENT.logos];

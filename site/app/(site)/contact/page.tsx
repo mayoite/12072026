@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { ContactPageView } from "@/components/contact/ContactPageView";
-import { buildPageMetadata } from "@/lib/site-data/seo";
+import { buildPageMetadata } from "@/features/site/data/seo";
 import { SITE_URL } from "@/lib/siteUrl";
 
 export async function generateMetadata(): Promise<Metadata> {

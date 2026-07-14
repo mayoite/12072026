@@ -1,13 +1,13 @@
 import { describe, it, expect, vi } from 'vitest';
 import sitemap from '@/app/(site)/sitemap';
-import * as getProducts from '@/features/catalog/getProducts';
-import * as categories from '@/features/catalog/categories';
+import * as getProducts from '@/lib/catalog/site/getProducts';
+import * as categories from '@/lib/catalog/site/categories';
 
-vi.mock('@/features/catalog/getProducts', () => ({
+vi.mock('@/lib/catalog/site/getProducts', () => ({
   getCatalog: vi.fn(),
 }));
 
-vi.mock('@/features/catalog/categories', () => ({
+vi.mock('@/lib/catalog/site/categories', () => ({
   buildRequestedCategoryCatalog: vi.fn(),
 }));
 

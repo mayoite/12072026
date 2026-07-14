@@ -35,7 +35,7 @@ vi.mock('vaul', () => ({
 }));
 
 // Mock site data & analytics
-vi.mock('@/lib/siteNav', () => ({
+vi.mock('@/features/site/data/navigation', () => ({
   SITE_NAV_LINKS: [
     { label: 'Home', href: '/' },
     { label: 'Products', href: '/products', hasMega: true },

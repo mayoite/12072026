@@ -693,7 +693,7 @@
   }
 }
 
-/* Onboarding surfaces (ProjectSetupGate / StartingPointStep) */
+/* Onboarding surfaces (ProjectSetupGate / ProjectSetupStep) */
 .pw-starting-point-btn {
   display: flex;
   align-items: flex-start;

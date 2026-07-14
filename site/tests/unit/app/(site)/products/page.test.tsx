@@ -16,7 +16,7 @@ vi.mock("@/components/shared/ContactTeaser", () => ({
   ContactTeaser: () => <div data-testid="contact-teaser" />,
 }));
 
-vi.mock("@/lib/site-data/seo", () => ({
+vi.mock("@/features/site/data/seo", () => ({
   buildPageJsonLd: vi.fn(() => ({ "@type": "CollectionPage" })),
 }));
 

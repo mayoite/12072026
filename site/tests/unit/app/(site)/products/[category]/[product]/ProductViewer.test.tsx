@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { ProductViewer, sanitizeDisplayText, escapeHtmlAttribute } from '@/app/(site)/products/[category]/[product]/ProductViewer';
-import type { CompatProduct } from '@/features/catalog/getProducts';
+import type { CompatProduct } from '@/lib/catalog/site/getProducts';
 
 // Mocks
 vi.mock('next/navigation', () => ({
@@ -60,7 +60,7 @@ vi.mock('@/lib/analytics/siteEvents', () => ({
   trackSiteCtaClick: vi.fn(),
 }));
 
-vi.mock('@/lib/site-data/routeCopy', () => ({
+vi.mock('@/features/site/data/routeCopy', () => ({
   PDP_ROUTE_COPY: {
     productBrand: 'Oando',
     fallbackDescription: 'Fallback',

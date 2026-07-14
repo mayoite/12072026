@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { getFeatureFlags, setFeatureFlags, resetFeatureFlags, isFeatureEnabled, getFlagsInGroup, isAnyFlagInGroupEnabled, areAllFlagsInGroupEnabled, fetchFeatureFlagsFromSupabase, updateFeatureFlagInSupabase, updateMultipleFeatureFlagsInSupabase, getAllFlagNames, getFlagMetadata, getAllFlagsGrouped, DEFAULT_FLAGS, FLAG_GROUPS } from "@/features/planner/lib/featureFlags";
 
-vi.mock("@/lib/supabase/client", () => ({
+vi.mock("@/platform/supabase/client", () => ({
   supabase: {
     from: vi.fn(() => ({
       select: vi.fn(() => ({

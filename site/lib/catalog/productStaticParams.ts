@@ -3,7 +3,7 @@ import "server-only";
 import {
   classifyToRequestedCategory,
   normalizeRequestedCategoryId,
-} from "@/features/catalog/categories";
+} from "@/lib/catalog/site/categories";
 import { fetchCatalogProductsLive } from "./catalogDrizzle";
 import { buildLocalCatalogFallbackProducts } from "./fallback";
 

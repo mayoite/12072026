@@ -5,7 +5,6 @@
       "@/types/*": ["../config/database/types/*"],
       "@/app/*": ["../app/*"],
       "@/components/*": ["../components/*"],
-      "@/lib/site-data/*": ["../lib/site-data/*"],
       "@/features/*": ["../features/*"],
       "@/lib/*": ["../lib/*"],
       "@/*": ["../*"]

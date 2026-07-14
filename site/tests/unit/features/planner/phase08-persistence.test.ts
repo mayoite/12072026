@@ -19,16 +19,16 @@ import {
   acquireDescriptorLock,
   DESCRIPTOR_LOCK_TIMEOUT_MS,
   sweepStaleDescriptorLocks,
-} from "@/features/planner/admin/svg-editor/descriptorLock";
+} from "@/features/admin/svg-editor/descriptorLock";
 import {
   archiveDirFor,
   listArchiveVersions,
-} from "@/features/planner/admin/svg-editor/descriptorArchive";
+} from "@/features/admin/svg-editor/descriptorArchive";
 import {
   persistBlockDescriptor,
   readPersistedRaw,
-} from "@/features/planner/admin/svg-editor/persistBlockDescriptor";
-import { verifyDualRead } from "@/features/planner/admin/svg-editor/dualReadHarness";
+} from "@/features/admin/svg-editor/persistBlockDescriptor";
+import { verifyDualRead } from "@/features/admin/svg-editor/dualReadHarness";
 import * as descriptorPointer from "@/features/planner/project/catalog/svg/descriptorPointer";
 import {
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,
@@ -86,7 +86,7 @@ describe("Phase 08 — 08-PERS-04 advisory lock", () => {
   it("returns 409.lock_busy when a second writer cannot acquire the lock in time", () => {
     const first = acquireDescriptorLock("chaise", workDir, { holdForMs: 50 });
     expect(first.ok).toBe(true);
-    if (!first.ok) return;
+    if (!first.ok) throw new Error("expected first.ok");
 
     const second = acquireDescriptorLock("chaise", workDir, {
       timeoutMs: 5,
@@ -104,7 +104,7 @@ describe("Phase 08 — 08-PERS-04 advisory lock", () => {
   it("maps lock contention through persistBlockDescriptor", () => {
     const hold = acquireDescriptorLock("chaise", workDir, { holdForMs: 50 });
     expect(hold.ok).toBe(true);
-    if (!hold.ok) return;
+    if (!hold.ok) throw new Error("expected hold.ok");
 
     const blocked = persistBlockDescriptor(stampChecksum(fixedDescriptorFixture()), {
       dir: workDir,
@@ -146,7 +146,7 @@ describe("Phase 08 — versioned layout + dual-read", () => {
       clock: () => 1700000000,
     });
     expect(result.ok).toBe(true);
-    if (!result.ok) return;
+    if (!result.ok) throw new Error("expected result.ok");
 
     expect(result.version).toBe(1);
     expect(existsSync(path.join(workDir, "chaise.1.json"))).toBe(true);
@@ -164,11 +164,11 @@ describe("Phase 08 — versioned layout + dual-read", () => {
       clock: () => 1700000000,
     });
     expect(first.ok).toBe(true);
-    if (!first.ok) return;
+    if (!first.ok) throw new Error("expected first.ok");
 
     const loaded = tryLoad("chaise", { dir: workDir });
     expect(loaded.ok).toBe(true);
-    if (!loaded.ok) return;
+    if (!loaded.ok) throw new Error("expected loaded.ok");
     expect(loaded.value.checksum).toBe(first.descriptor.checksum);
     expect(readPersistedRaw("chaise", workDir)).toContain('"slug":"chaise"');
   });
@@ -179,7 +179,7 @@ describe("Phase 08 — versioned layout + dual-read", () => {
       clock: () => 1700000000,
     });
     expect(saved.ok).toBe(true);
-    if (!saved.ok) return;
+    if (!saved.ok) throw new Error("expected saved.ok");
 
     const evidence = verifyDualRead({
       slug: "chaise",
@@ -233,7 +233,7 @@ describe("Phase 08 — 08-TEST-05 recovery", () => {
       clock: () => 1700000000,
     });
     expect(saved.ok).toBe(true);
-    if (!saved.ok) return;
+    if (!saved.ok) throw new Error("expected saved.ok");
 
     const pointerSpy = vi
       .spyOn(descriptorPointer, "writeLatestPointer")
@@ -249,7 +249,7 @@ describe("Phase 08 — 08-TEST-05 recovery", () => {
 
     const reloaded = tryLoad("chaise", { dir: workDir });
     expect(reloaded.ok).toBe(true);
-    if (!reloaded.ok) return;
+    if (!reloaded.ok) throw new Error("expected reloaded.ok");
     expect(reloaded.value.sku).toBe("OFL-CHS-001");
     expect(readdirSync(workDir).some((entry) => entry.includes(".tmp-"))).toBe(false);
 

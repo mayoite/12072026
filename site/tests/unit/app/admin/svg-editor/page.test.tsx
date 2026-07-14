@@ -14,7 +14,7 @@ vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", () =>
   BLOCK_DESCRIPTORS_DIR_DEFAULT: "mock-dir",
 }));
 
-vi.mock("@/features/planner/admin/svg-editor/AdminSvgEditorListView", () => ({
+vi.mock("@/features/admin/svg-editor/AdminSvgEditorListView", () => ({
   default: ({ descriptors, refreshedAtLabel }: { descriptors: any[]; refreshedAtLabel: string }) => (
     <div data-testid="list-view" data-count={descriptors.length} data-label={refreshedAtLabel} />
   ),

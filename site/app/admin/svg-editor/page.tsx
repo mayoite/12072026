@@ -6,9 +6,9 @@
  */
 
 import type { Metadata } from "next";
-import AdminSvgEditorListView from "@/features/planner/admin/svg-editor/AdminSvgEditorListView";
-import { readLifecycleManifest } from "@/features/planner/admin/svg-editor/catalogLifecycle";
-import { readSvgArtifactStatuses } from "@/features/planner/admin/svg-editor/svgArtifactStatus.server";
+import AdminSvgEditorListView from "@/features/admin/svg-editor/AdminSvgEditorListView";
+import { readLifecycleManifest } from "@/features/admin/svg-editor/catalogLifecycle";
+import { readSvgArtifactStatuses } from "@/features/admin/svg-editor/svgArtifactStatus.server";
 import { loadAll } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
 export const metadata: Metadata = {

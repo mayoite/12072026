@@ -1,4 +1,4 @@
-import { PlannerCatalogShapeType } from "@/features/planner/catalog/shapeTypeRegistry";
+import { PlannerCatalogShapeType } from "@/features/planner/catalog-api/shapeTypeRegistry";
 
 import type { SpaceSuggestInput } from "./types";
 

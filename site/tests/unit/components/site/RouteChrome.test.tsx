@@ -19,7 +19,7 @@ vi.mock('@/components/site/CookieConsentBar', () => ({
   CookieConsentBar: () => <div data-testid="cookie-consent-bar">Cookie Bar</div>,
 }));
 
-vi.mock('@/features/site-assistant/DynamicBotWrapper', () => ({
+vi.mock('@/features/site/assistant/DynamicBotWrapper', () => ({
   default: () => <div data-testid="dynamic-bot-wrapper">Bot Wrapper</div>,
 }));
 

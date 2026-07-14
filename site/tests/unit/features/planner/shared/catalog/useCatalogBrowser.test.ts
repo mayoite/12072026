@@ -3,9 +3,9 @@ import { useCatalogBrowser } from "@/features/planner/shared/catalog/useCatalogB
 
 describe("useCatalogBrowser", () => {
   it("should have function useCatalogBrowser defined", () => {
-    expect(useCatalogBrowser).toBeTypeOf("function");
+    expect(useCatalogBrowser).toBeTypeOf("function"); expect(String(useCatalogBrowser)).toContain('function');
   });
   it("should have hook useCatalogBrowser defined", () => {
-    expect(useCatalogBrowser).toBeTypeOf("function");
+    expect(useCatalogBrowser).toBeTypeOf("function"); expect(String(useCatalogBrowser)).toContain('function');
   });
 });

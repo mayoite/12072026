@@ -2,7 +2,7 @@ import { config } from "dotenv";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { createClient } from "@supabase/supabase-js";
-import { resolveProductImages } from "@/features/catalog/imageMetadata";
+import { resolveProductImages } from "@/lib/catalog/site/imageMetadata";
 import { REPO_ROOT } from "./lib/repoRoot";
 
 config({ path: resolve(process.cwd(), ".env.local") });

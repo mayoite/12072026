@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { HomeTrustStrip } from '@/components/home/HomeTrustStrip';
-import { HOMEPAGE_TRUST_CONTENT } from '@/lib/site-data/homepage';
+import { HOMEPAGE_TRUST_CONTENT } from '@/features/site/data/homepage';
 
 describe('HomeTrustStrip Component', () => {
   it('renders logo list marquee correctly', () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { PlannerToolsShowcase } from "@/features/planner/landing/PlannerToolsShowcase";
-import { HOMEPAGE_PLANNER_SUITE_CONTENT } from "@/lib/site-data/homepage";
+import { HOMEPAGE_PLANNER_SUITE_CONTENT } from "@/features/site/data/homepage";
 
 export function InteractiveTools() {
   return (

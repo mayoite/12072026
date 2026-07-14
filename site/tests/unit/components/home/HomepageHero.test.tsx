@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { HomepageHero } from '@/components/home/HomepageHero';
-import { HOMEPAGE_HERO_CONTENT, HOMEPAGE_HERO_IMAGES } from '@/lib/site-data/homepage';
+import { HOMEPAGE_HERO_CONTENT, HOMEPAGE_HERO_IMAGES } from '@/features/site/data/homepage';
 
 // Mock phosphor icons
 vi.mock('@phosphor-icons/react', () => ({

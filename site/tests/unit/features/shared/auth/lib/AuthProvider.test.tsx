@@ -2,9 +2,9 @@ import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import React from "react";
 import { AuthProvider, useSession } from "@/features/shared/auth/lib/AuthProvider";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/platform/supabase/client";
 
-vi.mock("@/lib/supabase/client", () => {
+vi.mock("@/platform/supabase/client", () => {
   const mockSubscription = {
     unsubscribe: vi.fn(),
   };

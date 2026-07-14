@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { crmUi } from "./crmUi";
 import { CRM_PROJECTS_PATH } from "./crmRoutes";
 import { getSavedPlans } from "@/features/planner/lib/projectIndex";
-import type { PlannerSaveSummary } from "@/features/planner/store/plannerSaves";
+import type { PlannerSaveSummary } from "@/features/planner/cloud-store/plannerSaves";
 import { ArrowLeft, ArrowRight, Envelope as Mail, Phone, Clock, FileText, Cube as Box, WarningCircle as AlertCircle, Plus, X } from "@phosphor-icons/react";
 
 interface ProjectDetailViewProps {

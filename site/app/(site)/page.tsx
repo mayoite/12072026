@@ -11,8 +11,8 @@ import { ContactTeaser } from "@/components/shared/ContactTeaser";
 
 import { SITE_BRAND } from "@/lib/analytics/seo";
 import { buildPageJsonLd, buildPageMetadata } from "@/lib/analytics/seo";
-import { buildLocalBusinessJsonLd } from "@/lib/site-data/seo";
-import { HOMEPAGE_SHOWCASE_CONTENT } from "@/lib/site-data/homepage";
+import { buildLocalBusinessJsonLd } from "@/features/site/data/seo";
+import { HOMEPAGE_SHOWCASE_CONTENT } from "@/features/site/data/homepage";
 import { getBusinessStats } from "@/features/crm/businessStats";
 import { SITE_URL } from "@/lib/siteUrl";
 import { sanitizeJsonForScript } from "@/lib/security/sanitize";

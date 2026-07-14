@@ -9,7 +9,13 @@ import { createR2CatalogClient } from "./lib/r2Catalog";
 
 dotenv.config({ path: ".env.local" });
 
-async function emptyBucket(
+export const PROTECTED_BUCKET = "oando-asset-cdn";
+
+export function isProtectedBucket(bucket: string): boolean {
+  return bucket === PROTECTED_BUCKET;
+}
+
+export async function emptyBucket(
   client: ReturnType<typeof createR2CatalogClient>,
   bucket: string,
 ): Promise<number> {
@@ -49,31 +55,67 @@ async function emptyBucket(
   return removed;
 }
 
-async function deleteBucket(bucket: string) {
-  const client = createR2CatalogClient();
-  const removed = await emptyBucket(client, bucket);
+export async function deleteBucket(
+  bucket: string,
+  deps: {
+    createClient?: typeof createR2CatalogClient;
+    empty?: typeof emptyBucket;
+    log?: typeof console.log;
+  } = {},
+): Promise<number> {
+  const createClient = deps.createClient ?? createR2CatalogClient;
+  const empty = deps.empty ?? emptyBucket;
+  const log = deps.log ?? console.log;
+
+  const client = createClient();
+  const removed = await empty(client, bucket);
   await client.send(new DeleteBucketCommand({ Bucket: bucket }));
-  console.log(`deleted bucket "${bucket}" (objects removed: ${removed})`);
+  log(`deleted bucket "${bucket}" (objects removed: ${removed})`);
+  return removed;
 }
 
-const buckets = process.argv.slice(2).filter((arg) => !arg.startsWith("-"));
-
-if (buckets.length === 0) {
-  console.error("Usage: npx tsx scripts/deleteR2Bucket.ts <bucket> [bucket...]");
-  process.exit(1);
+export function parseBuckets(argv: string[] = process.argv): string[] {
+  return argv.slice(2).filter((arg) => !arg.startsWith("-"));
 }
 
-async function main() {
+export async function main(
+  argv: string[] = process.argv,
+  deps: {
+    deleteOne?: typeof deleteBucket;
+    error?: typeof console.error;
+    exit?: (code: number) => void;
+  } = {},
+): Promise<void> {
+  const deleteOne = deps.deleteOne ?? deleteBucket;
+  const error = deps.error ?? console.error;
+  const exit = deps.exit ?? ((code: number) => process.exit(code));
+
+  const buckets = parseBuckets(argv);
+
+  if (buckets.length === 0) {
+    error("Usage: npx tsx scripts/deleteR2Bucket.ts <bucket> [bucket...]");
+    exit(1);
+    return;
+  }
+
   for (const bucket of buckets) {
-    if (bucket === "oando-asset-cdn") {
-      console.error('Refusing to delete protected bucket "oando-asset-cdn".');
-      process.exit(1);
+    if (isProtectedBucket(bucket)) {
+      error(`Refusing to delete protected bucket "${PROTECTED_BUCKET}".`);
+      exit(1);
+      return;
     }
-    await deleteBucket(bucket);
+    await deleteOne(bucket);
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+function isMain(): boolean {
+  const entry = (process.argv[1] ?? "").replace(/\\/g, "/");
+  return entry.endsWith("deleteR2Bucket.ts") || entry.endsWith("deleteR2Bucket.js");
+}
+
+if (isMain()) {
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}

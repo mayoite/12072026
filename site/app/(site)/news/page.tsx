@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
-import { NEWS_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { NEWS_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = NEWS_PAGE_METADATA;
 

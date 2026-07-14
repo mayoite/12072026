@@ -2,15 +2,13 @@
 
 **Source of truth:** `site/app/api/**/route.ts`
 
-Generated from route handlers on 2026-07-13.
+Generated from route handlers on 2026-07-14.
 
 Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 
 | Methods | Path |
 |---------|------|
 | GET | `/api/admin/analytics` |
-| PATCH, DELETE | `/api/admin/buddy-catalog/[id]` *(deprecated shim → PATCH/DELETE /api/admin/catalogs/configurator/[id])* |
-| GET, POST | `/api/admin/buddy-catalog` *(deprecated shim → GET/POST /api/admin/catalogs/configurator)* |
 | PATCH, DELETE | `/api/admin/catalog/[id]` *(deprecated shim → PATCH/DELETE /api/admin/catalogs/standard/[id])* |
 | GET, POST | `/api/admin/catalog` *(deprecated shim → GET /api/admin/catalogs/standard)* |
 | PATCH, DELETE | `/api/admin/catalogs/[type]/[id]` |
@@ -26,6 +24,7 @@ Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 | PATCH | `/api/admin/svg-editor/[slug]/lifecycle` |
 | GET | `/api/admin/svg-editor/[slug]/revisions` |
 | POST | `/api/admin/svg-editor/[slug]/rollback` |
+| POST | `/api/admin/svg-editor/ai-generate` |
 | POST | `/api/admin/svg-editor/bulk-import` |
 | POST | `/api/admin/svg-editor` |
 | POST | `/api/admin/themes/publish` |
@@ -52,6 +51,7 @@ Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 | GET | `/api/planner/catalog/svg-blocks` |
 | GET | `/api/planner/catalog` |
 | POST | `/api/planner/generated-glb` |
+| POST | `/api/planner/project-sketch` |
 | POST | `/api/planner/sketch-to-plan` |
 | GET, PUT, DELETE | `/api/plans/[id]` |
 | GET, POST | `/api/plans` |

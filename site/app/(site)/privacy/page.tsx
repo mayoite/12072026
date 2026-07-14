@@ -3,8 +3,8 @@ import { getTranslations } from "next-intl/server";
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
-import { SITE_CONTACT } from "@/lib/site-data/contact";
-import { PRIVACY_PAGE_METADATA } from "@/lib/site-data/routeMetadata";
+import { SITE_CONTACT } from "@/features/site/data/contact";
+import { PRIVACY_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
 export const metadata = PRIVACY_PAGE_METADATA;
 

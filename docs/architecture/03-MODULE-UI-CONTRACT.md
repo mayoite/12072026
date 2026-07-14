@@ -2,64 +2,21 @@
 
 ## Shared rules
 
-- Use semantic design tokens.
-- Use the same state vocabulary across surfaces.
-- Show loading, empty, error, offline, saving, and success distinctly.
-- Never hide a failure behind forced interaction or silent fallback.
-- Every action needs a visible result.
-- Destructive actions need recovery or confirmation.
-- Meet WCAG 2.2 AA.
-- Support keyboard completion without dragging.
-- Keep focus visible and unobscured.
+- Semantic design tokens; same state vocabulary on every surface.
+- Distinct loading, empty, error, offline, saving, and success states.
+- No silent fallback or forced interaction to hide failure.
+- Every action has a visible result; destructive actions need confirmation or recovery.
+- WCAG 2.2 AA; keyboard completion without dragging; focus visible and unobscured.
 
-## Planner
+## Surface rules
 
-- The canvas is the dominant surface.
-- Tools, catalog, properties, and view controls have clear regions.
-- Contextual panels follow selection.
-- Panels must not cover essential work.
-- Essential controls remain reachable at supported widths.
-- 2D and 3D use one document and one selection model.
-
-Reference screenshots set density and workflow benchmarks only.
-
-Do not copy their assets or trade dress.
-
-Detailed acceptance: `06-UI-BENCHMARK.md`.
-
-## Site
-
-- The first viewport states purpose and one primary action.
-- Product loading, empty, unavailable, and degraded states are distinct.
-- Site-to-Planner handoff preserves product and revision identity.
-- Mobile layouts keep core workflows usable.
-
-Detailed acceptance: `09-SITE-UI-BENCHMARK.md`.
-
-## Admin
-
-- Catalog status and current revision are always visible.
-- SVG authoring is canvas-first.
-- Draft version, database source, released revision, and artifact state are visible.
-- Create, edit, preview, publish, retire, and restore are explicit actions.
-- Draft and published states cannot be confused.
-- Validation identifies the exact field or operation.
-- Publication requires an intentional action.
-- Conflict, authorization, storage, and transaction failures are distinct.
-
-Detailed acceptance: `07-ADMIN-UI-BENCHMARK.md`.
-
-## Security experience
-
-- Unauthenticated, unauthorized, expired, stale, rate-limited, offline, and server failures are distinct.
-- Recoverable failure preserves safe work and offers one next action.
-- Messages reveal no protected detail.
-- Recovery is keyboard and assistive-technology usable.
-
-Detailed acceptance: `10-SECURITY-BENCHMARK.md`.
+| Surface | Rules | Acceptance |
+|---|---|---|
+| **Planner** | Canvas dominant; clear tool/catalog/properties/view regions; panels follow selection without covering work; controls reachable at supported widths; one document and selection for 2D + 3D. Benchmark screenshots = density/workflow only — no copied assets or trade dress. | `06-UI-BENCHMARK.md` |
+| **Site** | First viewport: purpose + one primary action; distinct loading/empty/unavailable/degraded; Site→Planner handoff keeps product + revision identity; mobile keeps core workflows usable. | `09-SITE-UI-BENCHMARK.md` |
+| **Admin** | Catalog status + current revision always visible; canvas-first SVG authoring; draft version, DB source, released revision, artifact state visible; explicit create/edit/preview/publish/retire/restore; draft ≠ published; field-level validation; intentional publish; distinct conflict/auth/storage/transaction errors. **Live:** disk is publish authority until DB cutover — UI must not imply DB release when only disk wrote. | `07-ADMIN-UI-BENCHMARK.md` |
+| **Security UX** | Distinct unauthenticated/unauthorized/expired/stale/rate-limited/offline/server errors; recoverable failure preserves safe work + one next action; no protected detail in messages; keyboard/AT recovery. | `10-SECURITY-BENCHMARK.md` |
 
 ## Verification
 
-UI acceptance requires a fresh browser run.
-
-Unit tests alone cannot close UI work.
+UI acceptance needs a fresh browser run. Unit tests alone cannot close UI work.

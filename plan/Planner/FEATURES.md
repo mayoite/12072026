@@ -10,7 +10,7 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 
 **Code roots:** `site/features/planner/` · `site/app/planner/` · `site/app/api/planner/` · `site/platform/drizzle/schema/planner.ts` · `site/block-descriptors/` · `site/public/svg-catalog/`
 
-**Live host:** `editor/OOPlannerWorkspace.tsx` wires canvas, catalog, export, AI, validation. Parallel trees (`catalog/`, `shared/`, top-level `store/`, `persistence/`) still serve APIs, portal, and legacy paths.
+**Live host:** `editor/OOPlannerWorkspace.tsx` wires canvas, catalog, export, AI, validation. Parallel trees (`catalog-api/`, `shared/`, `cloud-store/`, `persistence/`) still serve APIs, portal, and legacy paths.
 
 ---
 
@@ -51,7 +51,7 @@ Plan: `PHASE-02-design-workspace.md`
 | SVG on canvas | `fabricBlock2D.ts`, `furnitureBlock2D.ts`, `svgPlanSymbolCache.ts` | Block2D fallback common; DB-SVG-* open |
 | Asset publish | `asset-engine/`, `admin/svg-editor/publishDescriptorWithPipeline.ts` | PNG thumb stub; consumer still disk-first |
 | 3D | `3d/ThreeLazyViewer.tsx`, `buildPlannerSceneNodes.ts`, `loadGeneratedGlbObject.ts` | GLB load partial |
-| Persistence | `usePlannerWorkspaceAutosave.ts`, `store/plannerPersistence.ts`, `offlineStorage.ts`, `syncQueueProcessor.ts` | Save-state UI not browser-closed |
+| Persistence | `usePlannerWorkspaceAutosave.ts`, `cloud-store/plannerPersistence.ts`, `cloud-store/offlineStorage.ts`, `cloud-store/syncQueueProcessor.ts` | Save-state UI not browser-closed |
 | Import / templates | `importUtils.ts`, `floorPlanImageImport.ts`, `templates/layoutTemplates.ts` | — |
 | AI assist | `ai/AIAssistDrawer.tsx`, `workspaceAiBridge.ts`, `app/api/planner/ai-advisor/` | Browser proof open |
 | Sketch-to-plan | `ai/sketchToPlan.ts`, `app/api/planner/sketch-to-plan/`, `project-sketch/` | — |
@@ -71,8 +71,8 @@ Plan: `PHASE-03-scale-validate-price.md`
 | Live pricing (admin) | `admin/pricing/priceBookService.ts`, `AdminPriceBookPageView.tsx` | Not pinned in workspace BOQ |
 | Workspace BOQ price display | `projectFurnitureBoq.ts` | Demo-list INR in CSV export path |
 | Named revisions | — | `versioning.ts` is local snapshots only |
-| Review links | `store/reviewPersistence.ts`, `schema/planner.ts` | No API routes or review UI |
-| Portal / admin plans | `portal/PortalPlanPageView.tsx`, `admin/AdminPlansPageView.tsx`, `store/plannerPublish.ts` | Live-data proof open |
+| Review links | `cloud-store/reviewPersistence.ts`, `schema/planner.ts` | No API routes or review UI |
+| Portal / admin plans | `portal/PortalPlanPageView.tsx`, `admin/AdminPlansPageView.tsx`, `cloud-store/plannerPublish.ts` | Live-data proof open |
 
 ---
 
@@ -124,14 +124,14 @@ Not a customer phase. Publish is **disk-authoritative** today; optional DB dual-
 
 - **BOQ:** `projectFurnitureBoq` vs `workstationBoqV0` vs `shared/boq/buildBoq` vs `buddyBoqAdapter.ts`
 - **Catalog read:** disk `block-descriptors/` + `svg-blocks` vs Drizzle SVG revision tables
-- **Catalog trees:** `project/catalog/` (live host) vs top-level `catalog/`
+- **Catalog trees:** `project/catalog/` (live host) vs top-level `catalog-api/`
 - **SVG compile:** `compileSvgForPublish` (publish) vs `svgCompiler.server.ts` (reference)
 
 ---
 
 ## Tests
 
-`site/tests/unit/features/planner/` · `site/tests/unit/features/planner/asset-engine/` · `site/tests/integration/plannerPersistence.test.ts` · `site/tests/integration/planner-store-plannerPersistence.test.ts`
+`site/tests/unit/features/planner/` (incl. `cloud-store/`, `catalog-api/`) · `site/tests/integration/features/planner/`
 
 ---
 

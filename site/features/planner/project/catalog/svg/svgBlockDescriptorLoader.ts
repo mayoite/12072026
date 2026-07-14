@@ -2,7 +2,7 @@
  * Phase 02 — svgBlockDescriptorLoader (`§02-LOAD`)
  *
  * The single loader entry point for `BlockDescriptor` JSON files on disk.
- * Reads from `site/block-descriptors/{slug}.json` synchronously, validates
+ * Reads from `site/inventory/descriptors/{slug}.json` synchronously, validates
  * structure + checksum via the canonical Zod schema (see ./svgTypes), and
  * returns either a typed descriptor or an `PlannerDescriptorError` variant.
  *
@@ -85,7 +85,7 @@ export {
   type MountingPoint,
 } from "./svgTypes";
 
-/** Default loader directory pinned to `site/block-descriptors/` (cwd-safe). */
+/** Default loader directory pinned to `site/inventory/descriptors/` (cwd-safe). */
 export const BLOCK_DESCRIPTORS_DIR_DEFAULT = resolveBlockDescriptorsDir();
 
 /** Type guard for `unknown` inputs at the loader boundary (JSON.parse). */

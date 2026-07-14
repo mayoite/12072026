@@ -12,27 +12,61 @@ const siteRoot = path.resolve(scriptsDir, "..");
 const enFile = path.join(siteRoot, "i18n", "messages", "en.json");
 const exportScript = path.join(scriptsDir, "lib", "exportMarketingCopy.ts");
 
-const marketingJson = execFileSync(
-  process.execPath,
-  [path.join(siteRoot, "node_modules", "tsx", "dist", "cli.mjs"), exportScript],
-  {
-    cwd: siteRoot,
-    encoding: "utf8",
-    stdio: ["ignore", "pipe", "inherit"],
-  },
-);
+export function mergeMarketingIntoEn(en, marketing) {
+  return {
+    ...en,
+    ...marketing,
+    home: {
+      ...en.home,
+      ...marketing.home,
+    },
+  };
+}
 
-const marketing = JSON.parse(marketingJson);
-const en = JSON.parse(fs.readFileSync(enFile, "utf8"));
+export function loadMarketingExport({
+  siteRoot: root = siteRoot,
+  exportScriptPath = exportScript,
+} = {}) {
+  const marketingJson = execFileSync(
+    process.execPath,
+    [path.join(root, "node_modules", "tsx", "dist", "cli.mjs"), exportScriptPath],
+    {
+      cwd: root,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "inherit"],
+    },
+  );
+  return JSON.parse(marketingJson);
+}
 
-const merged = {
-  ...en,
-  ...marketing,
-  home: {
-    ...en.home,
-    ...marketing.home,
-  },
-};
+export function syncMarketingI18nMessages({
+  enPath = enFile,
+  marketing,
+  write = true,
+  siteRoot: root = siteRoot,
+} = {}) {
+  const payload = marketing ?? loadMarketingExport({ siteRoot: root });
+  const en = JSON.parse(fs.readFileSync(enPath, "utf8"));
+  const merged = mergeMarketingIntoEn(en, payload);
+  if (write) {
+    fs.writeFileSync(enPath, `${JSON.stringify(merged, null, 2)}\n`, "utf8");
+  }
+  return { merged, marketingKeys: Object.keys(payload) };
+}
 
-fs.writeFileSync(enFile, `${JSON.stringify(merged, null, 2)}\n`, "utf8");
-console.log(`Updated ${path.relative(siteRoot, enFile)} with ${Object.keys(marketing).length} marketing namespaces`);
+function isDirectRun() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return path.resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectRun()) {
+  const { marketingKeys } = syncMarketingI18nMessages();
+  console.log(
+    `Updated ${path.relative(siteRoot, enFile)} with ${marketingKeys.length} marketing namespaces`,
+  );
+}

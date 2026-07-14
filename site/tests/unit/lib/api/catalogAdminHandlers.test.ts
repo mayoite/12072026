@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { resolveCatalogType, listStandardCatalog } from "@/features/planner/admin/api/catalogAdminHandlers";
+import { resolveCatalogType, listStandardCatalog } from "@/features/admin/api/catalogAdminHandlers";
 import { NextRequest } from "next/server";
 
 vi.mock("@/platform/supabase/adminServer", () => {

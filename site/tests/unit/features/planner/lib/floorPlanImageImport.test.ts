@@ -4,5 +4,6 @@ import { readFloorPlanImageFile } from "@/features/planner/lib/floorPlanImageImp
 describe("floorPlanImageImport", () => {
   it("should have function readFloorPlanImageFile defined", () => {
     expect(readFloorPlanImageFile).toBeTypeOf("function");
+    expect(readFloorPlanImageFile.name.length).toBeGreaterThan(0);
   });
 });

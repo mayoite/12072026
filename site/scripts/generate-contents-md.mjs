@@ -22,7 +22,7 @@ const repoFolders = {
       "plan/ — execution tracks",
       "pnpm-workspace.yaml, pnpm-lock.yaml, package.json",
       "AGENTS.md, Readme.md, CONTENTS.md (this file)",
-      "DOC-MAP.md, START.md, testing-handbook.md, OPERATIONS_RUNBOOK.md, Failures.md",
+      "Failures.md",
     ],
     see: ["Readme.md", "AGENTS.md", "DOC-MAP.md"],
     rules: ["Application code lives in site/, not at repo root"],
@@ -33,7 +33,7 @@ const repoFolders = {
     contains: [
       "architecture/ — 01-MODULE-LAYOUT, 02-DOMAINS, 03-UI, 04-CSS, 05-DATA_FLOW",
       "api/ — README.md (contract source), ROUTE-INDEX.md",
-      "database/ — schema, seeding, advisors",
+      "database/ — schema, seeding, advisors, restore runbook",
       "audit/ — lane audits (pending only; see audit/README.md)",
     ],
     see: ["DOC-MAP.md", "site/app/api/"],
@@ -156,20 +156,20 @@ const siteFolders = {
       "planner/ — canonical workspace planner (editor, 3D, catalog, AI)",
       "catalog/ — product catalog domain (filters, resolvers, schemas)",
       "shared/ — auth UI, shell, cross-feature hooks",
-      "admin/, ops/, crm/, ai/, site-assistant/",
+      "admin/, ops/, crm/, site/ (data, assistant, advisor)",
     ],
     ownership: [
       {
         area: "Catalog filters & product resolution",
-        canonical: "features/catalog/",
-        consumers: "app/(site)/products, components/products, features/planner/catalog",
+        canonical: "lib/catalog/site/",
+        consumers: "app/(site)/products, components/products, features/planner/catalog-api",
         doNotDuplicate: "lib/catalog/ — SSG merge, blocks2d, seed scripts only",
       },
       {
         area: "Marketing copy & local catalog index",
-        canonical: "lib/site-data/",
-        consumers: "features/catalog, components/home, lib/helpers/seo",
-        doNotDuplicate: "features/catalog/ — no hardcoded nav/copy",
+        canonical: "features/site/data/",
+        consumers: "lib/catalog/site, components/home, lib/helpers/seo",
+        doNotDuplicate: "lib/catalog/site/ — no hardcoded nav/copy",
       },
       {
         area: "Auth UI & session types",
@@ -190,15 +190,12 @@ const siteFolders = {
     title: "Canonical planner",
     why: "Single source for /planner workspace: open3d editor, catalog placement, 3D viewer, persistence, AI assist.",
     contains: [
-      "open3d/ — destination fabric stage + mesh + catalog + editor shell",
-      "ui/ — PlannerHost / workspace routes",
-      "catalog/ — ingest + generated items",
-      "store/ — Zustand state",
-      "3d/ — Three.js scene helpers",
+      "project/ — live canvas document host (model, store, catalog, export)",
+      "editor/, canvas/, 3d/ — workspace UI",
+      "catalog-api/ — panel UI, bridges, ingest",
+      "cloud-store/ — cloud saves, review persistence, workspace stores",
       "landing/, onboarding/ — guest funnel",
-      "persistence/, document/, model/",
-      "shared/ — BOQ, export, engine types",
-      "_archive/fabric/ — retired fabric prototype (do not import)",
+      "shared/, lib/, hooks/ — cross-cutting helpers",
     ],
     ownership: [
       {
@@ -215,7 +212,7 @@ const siteFolders = {
       },
       {
         area: "Client state (Zustand)",
-        canonical: "features/planner/store/",
+        canonical: "features/planner/cloud-store/",
         consumers: "editor, hooks, persistence",
         doNotDuplicate: "lib/store/ — site quote cart only",
       },
@@ -227,28 +224,28 @@ const siteFolders = {
       },
       {
         area: "Site product catalog",
-        canonical: "features/catalog/ + lib/catalog/",
-        consumers: "features/planner/catalog via catalogBridge",
-        doNotDuplicate: "Duplicate ingest in planner/catalog/ except placement adapters",
+        canonical: "lib/catalog/site/ + lib/catalog/",
+        consumers: "features/planner/catalog-api via catalogBridge",
+        doNotDuplicate: "Duplicate ingest in planner/catalog-api/ except placement adapters",
       },
     ],
-    see: ["../../testing-handbook.md", "../../Plans/Planner-track/BOARD.md"],
+    see: ["../../Readme.md", "../../Plans/Planner-track/BOARD.md"],
   },
-  "features/planner/workspace": {
-    title: "Open3d planner workspace",
-    why: "Destination 2D/3D planner: fabric stage, modular mesh, catalog placement, persistence.",
-    contains: ["editor/, catalog/, model/, store/, ui/ (Fabric 2-D: ../canvas-fabric-stage/)"],
+  "features/planner/project": {
+    title: "Live planner canvas host",
+    why: "Plan document, placement catalog, workspace store, export — start here for canvas behavior.",
+    contains: ["model/, store/, catalog/, persistence/, shared/document/"],
   },
-  "features/planner/catalog": {
-    title: "Planner catalog",
-    why: "Furniture catalog for placement: generated items, ingest pipeline, block bridge to canvas.",
-    contains: ["ingest/ — CSV ingest scripts target", "generatedCatalogItems.ts — generated output"],
-    see: ["scripts/ingest-planner-catalog.ts"],
+  "features/planner/catalog-api": {
+    title: "Planner catalog API",
+    why: "Catalog panel, bridges, ingest — not the live canvas document host (see project/catalog/).",
+    contains: ["ingest/", "CatalogPanel.tsx", "catalogStore.ts", "catalogBlockBridge.ts"],
+    see: ["scripts/ingest-planner-catalog.ts", "features/planner/project/catalog/README.md"],
   },
-  "features/planner/store": {
-    title: "Planner client state",
-    why: "Zustand stores for geometry, furniture, project metadata, catalog filters.",
-    contains: ["plannerFurnitureStore, plannerGeometryStore, plannerProjectData, etc."],
+  "features/planner/cloud-store": {
+    title: "Planner cloud persistence",
+    why: "Zustand stores, cloud saves, review persistence, offline queue.",
+    contains: ["plannerPersistence, workspaceStore, plannerProjectStore, reviewPersistence, etc."],
   },
   "features/planner/3d": {
     title: "Planner 3D",
@@ -280,21 +277,25 @@ const siteFolders = {
     why: "Auth, shell layout, analytics hooks used by site, planner, and admin.",
     contains: ["auth/ — AuthShell, session hooks", "components/ — GuestBadge, etc.", "shell/, entry/, dashboard/"],
   },
-  "features/catalog": {
+  "lib/catalog/site": {
     title: "Catalog domain",
     why: "Product filtering, schemas, and resolvers shared by site catalog and planner.",
     contains: ["Filter logic, category trees, product resolution"],
   },
 
-  "features/ai": {
-    title: "AI advisor (site-wide)",
-    why: "AI assist features outside the planner canvas (advisor config, prompts).",
-    contains: ["Advisor configuration and client wrappers"],
+  "features/site": {
+    title: "Site product module",
+    why: "Public marketing site behavior — copy, advisor, chat assistant.",
+    contains: [
+      "data/ — marketing copy, navigation, SEO, route classification",
+      "assistant/ — marketing chat widget",
+      "advisor/ — catalog advisor types and helpers",
+    ],
   },
   "features/admin": {
     title: "Admin feature module",
-    why: "Admin-specific UI logic separated from app/admin routes.",
-    contains: ["ui/ — admin components"],
+    why: "Internal inventory tools — SVG editor, publish pipeline, pricing, catalog admin APIs.",
+    contains: ["svg-editor/", "api/", "pricing/", "data/price-books/", "ui/ (legacy shell components)"],
   },
   "features/crm": {
     title: "CRM feature module",
@@ -306,7 +307,7 @@ const siteFolders = {
     why: "Internal ops surfaces (customer queries management).",
     contains: ["Ops page views and data hooks"],
   },
-  "features/site-assistant": {
+  "features/site/assistant": {
     title: "Site chat assistant",
     why: "Marketing site bot widget (AdvancedBot).",
     contains: ["Chat UI and message handling"],
@@ -387,8 +388,8 @@ const siteFolders = {
       {
         area: "Catalog SSG & merge pipeline",
         canonical: "lib/catalog/",
-        consumers: "features/catalog/getProducts, app/(site)/products",
-        doNotDuplicate: "features/catalog/ — filter UX and domain types",
+        consumers: "lib/catalog/site/getProducts, app/(site)/products",
+        doNotDuplicate: "lib/catalog/site/ — filter UX and domain types",
       },
       {
         area: "Supabase browser client",
@@ -400,7 +401,7 @@ const siteFolders = {
         area: "Site quote cart",
         canonical: "lib/store/",
         consumers: "marketing quote flows",
-        doNotDuplicate: "features/planner/store/ — planner Zustand only",
+        doNotDuplicate: "features/planner/cloud-store/ — planner Zustand only",
       },
     ],
   },
@@ -450,12 +451,12 @@ const siteFolders = {
     why: "Documented env var shapes and example configs.",
     contains: ["Env documentation and templates"],
   },
-  data: {
-    title: "Static data",
-    why: "JSON/TS data files that ship with the app (copy, indexes, planner fixtures).",
-    contains: ["site/ — navigation, homepage copy, localCatalogIndex.json"],
+  "features/admin/data": {
+    title: "Admin local runtime data",
+    why: "Mutable dev/E2E files (price-book JSON + audit log). Seeds live in pricing/fixtures/.",
+    contains: ["price-books/*.json", "price-books/_price-book-audit.jsonl"],
   },
-  "lib/site-data": {
+  "features/site/data": {
     title: "Site static data",
     why: "Marketing copy, nav trees, and local catalog index for SSG.",
     contains: ["localCatalogIndex.json, navigation-data, homepage content modules"],
@@ -470,7 +471,7 @@ const siteFolders = {
       "setup.ts, guestProjectSetup.ts — helpers",
       "INVENTORY.md — auto file list (pnpm run docs:sync)",
     ],
-    see: ["../../testing-handbook.md", "INVENTORY.md"],
+    see: ["../../Readme.md", "INVENTORY.md"],
     rules: ["No subfolders — flat layout with prefixed names", "No co-located tests in features/"],
   },
   scripts: {

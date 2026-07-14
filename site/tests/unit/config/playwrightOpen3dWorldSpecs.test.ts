@@ -40,11 +40,18 @@ describe("playwright-open3d-world-specs (gate contract)", () => {
     const manifest = JSON.parse(
       fs.readFileSync(manifestPath, "utf8"),
     ) as Manifest;
+    const seen = new Set<string>();
     for (const rel of manifest.specs) {
+      expect(typeof rel).toBe("string");
+      expect(rel.trim().length, `empty spec path: ${JSON.stringify(rel)}`).toBeGreaterThan(0);
+      expect(seen.has(rel), `duplicate spec: ${rel}`).toBe(false);
+      seen.add(rel);
       const abs = path.join(siteRoot, rel);
       expect(fs.existsSync(abs), `missing ${rel}`).toBe(true);
+      expect(fs.statSync(abs).isFile(), `not a file: ${rel}`).toBe(true);
       expect(rel.startsWith("tests/e2e/")).toBe(true);
       expect(rel.endsWith(".spec.ts")).toBe(true);
+      expect(path.isAbsolute(rel), `must be relative: ${rel}`).toBe(false);
     }
   });
 

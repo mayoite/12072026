@@ -42,7 +42,7 @@ const options = {
 };
 
 /** @returns {Part[]} */
-function buildParts() {
+export function buildParts() {
   const w = options.widthMm * MM;
   const d = options.depthMm * MM;
   const h = options.heightMm * MM;
@@ -91,7 +91,7 @@ const PART_STROKE = {
  * Project world (x,y,z) metres → SVG px for three-quarter or side view.
  * @param {"three-quarter"|"side"} view
  */
-function project(x, y, z, view, W, H, scale) {
+export function project(x, y, z, view, W, H, scale) {
   const ox = W / 2;
   const oy = H * 0.82;
   if (view === "side") {
@@ -137,7 +137,7 @@ const FACE_INDICES = [
  * @param {Part[]} parts
  * @param {"three-quarter"|"side"} view
  */
-function renderSvg(parts, view) {
+export function renderSvg(parts, view) {
   const W = 720;
   const H = 540;
   const scale = view === "side" ? 380 : 320;
@@ -207,6 +207,8 @@ function renderSvg(parts, view) {
 </svg>`;
 }
 
+export { TOE_HEIGHT_MM, TOE_INSET_MM, DOOR_THICKNESS_MM, options, outDir };
+
 async function main() {
   mkdirSync(outDir, { recursive: true });
   const parts = buildParts();
@@ -238,7 +240,19 @@ async function main() {
   console.log("parts", names.join(" → "));
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+function isMainModule() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return resolve(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isMainModule()) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

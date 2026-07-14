@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { CareerPageView } from '@/components/career/CareerPageView';
-import { CAREER_PAGE_COPY } from '@/lib/site-data/routeCopy';
+import { CAREER_PAGE_COPY } from '@/features/site/data/routeCopy';
 
 vi.mock('@/components/home/Hero', () => ({
   Hero: ({ title, subtitle }: any) => (

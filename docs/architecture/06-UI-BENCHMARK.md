@@ -53,10 +53,10 @@ No request failure occurred in that journey.
 The reviewed implementation includes:
 
 - `site/features/planner/onboarding/ProjectSetupGate.tsx`
-- `site/features/planner/onboarding/StartingPointStep.tsx`
+- `ProjectSetupStep (StartingPointStep removed)`
 - `site/features/planner/editor/TopBar.tsx`
 - `site/features/planner/editor/WorkspaceShell.tsx`
-- `site/features/planner/catalog/CatalogPanel.tsx`
+- `site/features/planner/catalog-api/CatalogPanel.tsx`
 
 This is a dated baseline.
 
