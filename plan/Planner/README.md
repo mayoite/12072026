@@ -6,30 +6,20 @@ Planner serves any external customer.
 
 The customer creates a layout, receives a deterministic branded BOQ, and sends it to Oando.
 
-## Interface benchmark
+## Four phases
 
-`../../docs/architecture/06-UI-BENCHMARK.md` is the Planner interface authority.
+1. `PHASE-01-start-and-boq.md` — entry, marketing, setup, conversion events, deterministic BOQ.
+2. `PHASE-02-design-workspace.md` — shell, layout, catalog, SVG consumption, AI assist, 2D/3D, persistence, interface quality.
+3. `PHASE-03-scale-validate-price.md` — bulk layout, validation, live pricing, named revisions, review links.
+4. `PHASE-04-deliver-handoff.md` — exports, Send to Oando, handoff security, measurement events.
 
-Its acceptance IDs are mandatory.
+## Features
 
-They are distributed across the existing phases.
+`FEATURES.md` maps each plan phase to code paths and known gaps.
 
-They do not create a separate UI track.
+## Status
 
-Browser evidence is required to close them.
-
-## Five phases
-
-1. `PHASE-01-public-entry-deterministic-boq.md`
-   Direct guest entry, progressive setup, starting choices, and deterministic BOQ.
-2. `PHASE-02-core-layout-catalog.md`
-   Core layout, commercial catalog, persistence, 2D, 3D, and benchmarked workspace quality.
-3. `PHASE-03-bulk-layout-validation.md`
-   Configurable products, bulk layout, scale, and advanced validation.
-4. `PHASE-04-pricing-revisions-sharing.md`
-   Live pricing, named revisions, sharing, and review.
-5. `PHASE-05-handoff-exports.md`
-   Quote handoff and external exports.
+`CHECKLIST.md` records open acceptance work and browser proof only.
 
 ## Start gate
 
@@ -39,36 +29,16 @@ Only catalog-writing work waits.
 
 Read-only and isolated Planner work continues.
 
-## Parallel execution
+## Blockers
 
-- Phase 1 entry, setup, and BOQ can run as separate lanes.
-- Phase 2 editor, catalog, persistence, 3D, and interface work can run in parallel.
-- Phase 3 bulk commands and validation rules can run in parallel.
-- Phase 4 pricing and revision-sharing can run in parallel against stable contracts.
-- Phase 5 handoff and exports can run in parallel.
-- Security is implemented with each boundary.
-
-Two writers do not edit the same file at the same time.
-
-## Limited blockers
-
-- Missing live catalog blocks only live catalog acceptance.
-- An isolated fixture keeps Planner work moving.
-- Missing 3D assets block only affected 3D proof.
-- Missing approved prices block only live-price proof.
-- Missing delivery infrastructure blocks only final submission proof.
-- Every unrelated item continues.
-
-## Status
-
-`CHECKLIST.md` is the only Planner status record.
-
-Every item starts unchecked.
-
-The phase files explain execution.
+| Gap | Blocks only |
+|---|---|
+| Live catalog blocks | Live catalog acceptance |
+| Isolated fixture | — (core work continues) |
+| Missing 3D assets | Affected 3D proof |
+| Approved prices | Live-price proof |
+| Delivery infrastructure | Live handoff proof |
 
 ## Completion
 
 An external customer can design, validate, revise, price, export, and send the exact branded BOQ to Oando.
-
-The journey meets every applicable `UI-*` acceptance ID.

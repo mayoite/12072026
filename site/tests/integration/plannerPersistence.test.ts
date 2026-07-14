@@ -47,7 +47,7 @@ describe("plannerPersistence row mapping", () => {
     expect(restored.updatedAt).toBe("2026-06-14T12:00:00.000Z");
   });
 
-  it("maps drizzle rows to admin summaries and detail payloads", () => {
+  it("maps drizzle rows to admin summaries and detail payloads", async () => {
     const document = createPlannerDocument({
       name: "Executive Floor",
       projectName: "Client A",
@@ -66,12 +66,12 @@ describe("plannerPersistence row mapping", () => {
     };
 
     const summary = planRowToAdminSummary(row);
-    const detail = planRowToAdminDetail(row);
+    const detail = await planRowToAdminDetail(row);
 
     expect(summary.title).toBe("Executive Floor");
     expect(summary.item_count).toBe(8);
     expect(summary.status).toBe("active");
     expect(detail.review_status).toBe("approved");
-    expect(detail.review_features).toEqual({ status: false, comments: false });
+    expect(detail.review_features).toEqual({ status: true, comments: true });
   });
 });

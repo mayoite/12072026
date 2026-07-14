@@ -7,6 +7,8 @@ import { ArrowRight } from "@phosphor-icons/react";
 import type { Variants } from "framer-motion";
 import { motion, useScroll, useTransform } from "framer-motion";
 
+import { DEFAULT_HERO_FALLBACK } from "@/lib/site-data/homepage";
+
 export interface HeroProps {
   title?: React.ReactNode;
   subtitle?: React.ReactNode;
@@ -63,7 +65,12 @@ export function Hero({
 }: HeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [motionReady, setMotionReady] = useState(false);
-  const normalizedBackgroundImage = backgroundImage || null;
+  const [backgroundImageFailed, setBackgroundImageFailed] = useState(false);
+  const requestedBackgroundImage = backgroundImage || null;
+  const normalizedBackgroundImage =
+    backgroundImageFailed && requestedBackgroundImage !== DEFAULT_HERO_FALLBACK
+      ? DEFAULT_HERO_FALLBACK
+      : requestedBackgroundImage;
   const normalizedVideoBackground = videoBackground || null;
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -119,6 +126,7 @@ export function Hero({
             sizes="100vw"
             className={`object-cover scale-105 ${imageClassName}`.trim()}
             priority
+            onError={() => setBackgroundImageFailed(true)}
           />
         ) : (
           <div className="w-full h-full" />

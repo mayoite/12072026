@@ -8,6 +8,7 @@ export const GENERATED_SITE_DIR: 'site'
 export const LEGACY_GENERATED_ROOTS: readonly string[]
 export const EXCLUDED_REPOSITORY_ROOTS: readonly string[]
 export const GENERATED_SURFACES: readonly string[]
+export const LIVE_WATCH_ROOTS: readonly string[]
 
 export function getSourcePackageRoot(repoRoot: string): string
 export function getGeneratedRoot(repoRoot: string): string

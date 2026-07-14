@@ -10,6 +10,8 @@ export type WorkspacePlanMetrics = {
   floorLabel: string;
   /** True when at least one catalog-backed item is placed — BOQ can be generated. */
   boqReady: boolean;
+  /** Number of hard validation errors blocking BOQ readiness. */
+  validationErrors: number;
 };
 
 function countWorkstationSeats(floor: PlannerFloor): number {
@@ -27,6 +29,7 @@ function countWorkstationSeats(floor: PlannerFloor): number {
 
 export function summarizeFloorMetrics(
   floor: PlannerFloor | undefined,
+  validationErrors = 0,
 ): WorkspacePlanMetrics {
   if (!floor) {
     return {
@@ -36,6 +39,7 @@ export function summarizeFloorMetrics(
       workstationSeats: 0,
       floorLabel: "Floor 1",
       boqReady: false,
+      validationErrors: 0,
     };
   }
 
@@ -51,7 +55,7 @@ export function summarizeFloorMetrics(
     floor.stairs.length +
     floor.columns.length;
 
-  const boqReady = furniture > 0;
+  const boqReady = furniture > 0 && validationErrors === 0;
 
   return {
     objects,
@@ -60,5 +64,6 @@ export function summarizeFloorMetrics(
     workstationSeats,
     floorLabel: floor.name,
     boqReady,
+    validationErrors,
   };
 }

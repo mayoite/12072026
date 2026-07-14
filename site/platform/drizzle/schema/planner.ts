@@ -108,3 +108,33 @@ export const auditEvents = pgTable("audit_events", {
   index("audit_events_created_at_idx").on(table.createdAt),
   index("audit_events_team_id_created_at_idx").on(table.teamId, table.createdAt),
 ]);
+
+export const reviewLinks = pgTable("review_links", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  planId: uuid("plan_id").notNull().references(() => plans.id, { onDelete: "cascade" }),
+  token: text("token").notNull(),
+  permission: text("permission").notNull().default("view"),
+  expiresAt: timestamp("expires_at"),
+  isRevoked: text("is_revoked").notNull().default("false"),
+  createdBy: uuid("created_by").notNull().references(() => profiles.id),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => [
+  uniqueIndex("review_links_token_uidx").on(table.token),
+  index("review_links_plan_id_idx").on(table.planId),
+  index("review_links_created_by_idx").on(table.createdBy),
+]);
+
+export const reviewComments = pgTable("review_comments", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  planId: uuid("plan_id").notNull().references(() => plans.id, { onDelete: "cascade" }),
+  linkId: uuid("link_id").references(() => reviewLinks.id, { onDelete: "set null" }),
+  objectId: text("object_id"),
+  objectType: text("object_type"),
+  authorName: text("author_name").notNull(),
+  text: text("text").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => [
+  index("review_comments_plan_id_idx").on(table.planId),
+  index("review_comments_link_id_idx").on(table.linkId),
+  index("review_comments_created_at_idx").on(table.createdAt),
+]);

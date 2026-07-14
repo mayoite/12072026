@@ -66,6 +66,10 @@ export interface PropertiesPanelCallbacks {
   onToggleLock?: (collection: PlannerEntityCollection, id: string) => void;
   /** Called when duplicate is requested */
   onDuplicateEntity?: (collection: PlannerEntityCollection, id: string) => void;
+  /** Called when align is requested */
+  onAlignEntities?: (axis: "x" | "y", anchor: "min" | "center" | "max") => void;
+  /** Called when distribute is requested */
+  onDistributeEntities?: (axis: "x" | "y") => void;
   /** Called when user clicks outside to deselect */
   onDeselect?: () => void;
 }
@@ -960,9 +964,42 @@ export const PropertiesPanel = memo(function PropertiesPanel({
             {multiSelection.count} {typeLabel} selected
           </h3>
           <p className={styles.emptyDescription}>
-            Select a single item to edit position, size, and rotation. Shared
-            delete still applies to the whole selection.
+            Select a single item to edit position, size, and rotation.
           </p>
+
+          <div className={styles.multiActions}>
+            <span className={styles.multiActionLabel}>Align</span>
+            <div className={styles.multiActionRow}>
+              <button type="button" className={styles.multiActionBtn} onClick={() => callbacks?.onAlignEntities?.("x", "min")} title="Align left" aria-label="Align left">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="3" y1="3" x2="3" y2="21" /><rect x="7" y="5" width="8" height="6" /><rect x="7" y="13" width="14" height="6" /></svg>
+              </button>
+              <button type="button" className={styles.multiActionBtn} onClick={() => callbacks?.onAlignEntities?.("x", "center")} title="Align center X" aria-label="Align center X">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21" /><rect x="5" y="5" width="8" height="6" /><rect x="5" y="13" width="14" height="6" /></svg>
+              </button>
+              <button type="button" className={styles.multiActionBtn} onClick={() => callbacks?.onAlignEntities?.("x", "max")} title="Align right" aria-label="Align right">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="21" y1="3" x2="21" y2="21" /><rect x="9" y="5" width="8" height="6" /><rect x="3" y="13" width="14" height="6" /></svg>
+              </button>
+              <button type="button" className={styles.multiActionBtn} onClick={() => callbacks?.onAlignEntities?.("y", "min")} title="Align top" aria-label="Align top">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="3" y1="3" x2="21" y2="3" /><rect x="5" y="7" width="6" height="8" /><rect x="13" y="7" width="6" height="14" /></svg>
+              </button>
+              <button type="button" className={styles.multiActionBtn} onClick={() => callbacks?.onAlignEntities?.("y", "center")} title="Align center Y" aria-label="Align center Y">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12" /><rect x="5" y="5" width="6" height="8" /><rect x="13" y="5" width="6" height="14" /></svg>
+              </button>
+              <button type="button" className={styles.multiActionBtn} onClick={() => callbacks?.onAlignEntities?.("y", "max")} title="Align bottom" aria-label="Align bottom">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="3" y1="21" x2="21" y2="21" /><rect x="5" y="7" width="6" height="10" /><rect x="13" y="7" width="6" height="14" /></svg>
+              </button>
+            </div>
+
+            <span className={styles.multiActionLabel}>Distribute</span>
+            <div className={styles.multiActionRow}>
+              <button type="button" className={styles.multiActionBtn} onClick={() => callbacks?.onDistributeEntities?.("x")} title="Distribute horizontally" aria-label="Distribute horizontally">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="4" height="18" /><rect x="17" y="3" width="4" height="18" /><line x1="10" y1="12" x2="14" y2="12" /><polyline points="12,10 14,12 12,14" /></svg>
+              </button>
+              <button type="button" className={styles.multiActionBtn} onClick={() => callbacks?.onDistributeEntities?.("y")} title="Distribute vertically" aria-label="Distribute vertically">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="4" /><rect x="3" y="17" width="18" height="4" /><line x1="12" y1="10" x2="12" y2="14" /><polyline points="10,12 12,14 14,12" /></svg>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );

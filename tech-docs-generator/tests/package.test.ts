@@ -61,6 +61,14 @@ describe('tech docs package contract', () => {
     expect(vite).toMatch(/base:\s*['"]\.\/['"]/)
   })
 
+  it('registers the live repository regeneration plugin', () => {
+    const vite = readSource(path.join(packageRoot, 'vite.config.ts'))
+    const plugin = readSource(path.join(packageRoot, 'scripts', 'vite-plugin-repo-live.ts'))
+
+    expect(vite).toContain('repoLivePlugin')
+    expect(plugin).toContain("name: 'oando-repo-live'")
+  })
+
   it('uses the approved temporary Vite site output', () => {
     const vite = readSource(path.join(packageRoot, 'vite.config.ts'))
 

@@ -1,8 +1,8 @@
 # Planner checklist
 
-This file records status only.
+Status only. Code map: `FEATURES.md`. Requirements: `PHASE-01` … `PHASE-04`.
 
-Treat every item as not done.
+Treat every item as not done unless noted. Reconciled against `site/` on 2026-07-14.
 
 ## Shared start gate
 
@@ -11,137 +11,70 @@ Treat every item as not done.
 - [ ] Browser tests use normal controls without forced clicks.
 - [ ] Each Planner command overwrites its stable results folder.
 
-## Phase 1 — public entry and deterministic BOQ
+## Phase 1 — start and BOQ
 
-- [x] Public visitors can find and enter Planner.
-- [x] Public Planner entry links and route shell are freshly verified.
-- [x] Guests do not face a false account requirement.
-- [x] No developer flag or hidden query is required.
-- [x] Member, Admin, and private routes remain protected.
-- [x] `UI-ENTRY-01` guest entry reaches useful canvas content after at most one blocking choice.
-- [x] `UI-ENTRY-02` entry offers template, scratch, and import or trace.
-- [x] `UI-ENTRY-03` optional metadata can be skipped and edited later.
-- [x] The second gate never presents only one available choice.
-- [x] Project brief and room geometry are editable and persistent.
-- [x] Millimetres remain document authority.
-- [x] Setup is keyboard-complete with visible focus.
-- [ ] One BOQ calculation authority exists.
-- [x] BOQ uses only product-backed placements.
+- [ ] Member, Admin, and private routes remain protected (fresh auth proof).
+- [ ] `UI-ENTRY-03` optional setup metadata can be skipped and edited later.
+- [ ] Setup is keyboard-complete with visible focus.
+- [ ] One BOQ calculation authority (`projectFurnitureBoq`; unify or retire `workstationBoqV0`, `buildBoq`).
 - [ ] BOQ groups stable product, family, option, and commercial identity.
-- [x] BOQ includes quantities, units, and source object identifiers.
-- [x] Unsupported and unbranded objects are visibly excluded.
-- [x] Identical inputs produce identical lines, order, and hash.
-- [x] A branded unpriced BOQ works without live pricing.
-- [ ] Planner emits the agreed Site events without duplicates or private geometry.
+- [ ] Site conversion events wired without duplicates or private geometry (`PROJECT_START`, `FIRST_PLACEMENT`, `BOQ_GENERATED`).
+- [ ] Marketing, help, coach, and guest-command behavior verified in browser.
+- [ ] Remove or wire dead `StartingPointStep.tsx`.
 
-## Phase 2 — core layout, catalog, and continuity
+## Phase 2 — design workspace
 
-- [x] Walls, doors, and windows can be created and edited.
-- [x] Selection and object editing preserve identity.
-- [x] Metric and imperial display keep stored millimetres unchanged.
-- [x] Primary tools work and silent no-op controls are removed.
-- [x] Numeric properties are keyboard-editable.
-- [x] One undo and redo authority covers document mutations.
-- [x] `UI-CAT-01` results show image or symbol, name, SKU, dimensions, family, and availability.
-- [x] `UI-CAT-02` family variants are grouped and comparable.
-- [x] `UI-CAT-03` search and filters cover commercial product attributes.
-- [ ] `UI-CAT-04` catalog preview and placed 2D representation remain recognizable as the same product (block2D fallback parity not enforced).
-- [x] Only published customer-visible inventory is exposed.
-- [x] Product, family, version, option, and commercial identity survive placement.
-- [x] `DB-SVG-10` Planner reads released SVG identity through a server catalog API.
-- [x] `DB-SVG-11` Planner imports exact SVG bytes through the committed revision and artifact key.
-- [x] `DB-SVG-12` SVG responses use the correct type, checksum ETag, and safe caching.
-- [x] `DB-SVG-13` Placed items pin product and SVG revision identity.
-- [x] `DB-SVG-15` Database, storage, and stale snapshot state are explicit.
-- [x] `DB-SVG-16` Disk files never override a database release.
-- [x] Released database SVG is the primary 2D symbol.
-- [x] Missing assets use an honest fallback without breaking the layout.
-- [x] One normalized document drives 2D, 3D, persistence, export, and BOQ.
-- [x] `UI-STATE-01` one authoritative save state is shown.
-- [x] `UI-STATE-02` loading, offline, saving, saved, unsaved, and error are distinct.
-- [x] Failed save never displays success.
-- [x] Save, reload, import, and export preserve canonical fields.
-- [x] 2D and 3D preserve object count, pose, rotation, and options.
-- [x] View actions do not mutate project data.
-- [x] `UI-SHELL-01` desktop header remains one row at supported widths.
-- [x] `UI-SHELL-02` default desktop canvas uses at least 65 percent of viewport area.
-- [x] `UI-SHELL-03` empty properties do not reserve a permanent panel.
-- [x] `UI-SHELL-04` panels collapse without losing work or selection.
-- [x] `UI-EDIT-01` selection opens only relevant properties.
-- [x] `UI-EDIT-02` dimensions and positions accept exact numeric input.
-- [x] `UI-EDIT-03` undo and redo communicate the affected action.
-- [x] `UI-MOB-01` phone chrome stays at or below 40 percent of initial viewport height.
-- [x] `UI-MOB-02` phone canvas receives at least 60 percent of initial viewport height.
-- [x] `UI-MOB-03` frequent phone actions use 44 by 44 pixel targets where practical.
-- [x] `UI-MOB-04` inventory and properties use mutually exclusive sheets.
-- [ ] `UI-A11Y-01` the primary journey meets WCAG 2.2 AA (no formal audit).
-- [ ] `UI-A11Y-02` every drag action has a keyboard and pointer alternative (canvas drag limited).
-- [x] `UI-A11Y-03` focus remains visible and unobscured.
-- [x] `UI-A11Y-04` dynamic save, sync, search, and export states are announced.
-- [x] Light and dark themes cover primary surfaces.
-- [ ] Primary journeys have no unexplained console, request, or hydration errors (no systematic audit).
+- [ ] Deferred tools removed or implemented (room, dimension, text on rail).
+- [ ] Columns and keep-outs creatable from canvas.
+- [ ] `UI-CAT-01` … `UI-CAT-04` catalog presentation verified in browser.
+- [ ] `DB-SVG-10` … `DB-SVG-16` released SVG authority through server catalog (not disk-only).
+- [ ] Released SVG is primary 2D symbol; honest fallback only on load/miss.
+- [ ] `UI-STATE-01` … `UI-STATE-02` save states distinct; failed save never shows success.
+- [ ] `UI-SHELL-01` … `UI-SHELL-04` desktop shell benchmarks closed in browser.
+- [ ] `UI-MOB-01` … `UI-MOB-04` phone layout benchmarks closed in browser.
+- [ ] `UI-A11Y-01` … `UI-A11Y-04` primary journey accessibility verified.
+- [ ] Primary journeys free of unexplained console, request, or hydration errors.
+- [ ] Generated GLB loads when policy allows (end-to-end proof).
+- [ ] AI assisted layout verified in browser without errors.
+- [ ] Asset engine: PNG thumb stage; DB SVG revision tables live for planner reads.
+- [ ] Quote cart covers all placed catalog furniture (not workstation-only).
 
-## Phase 3 — bulk layout and advanced validation
+## Phase 3 — scale, validate, and price
 
-- [x] Released Admin family versions are consumed.
-- [x] Compatible options work and invalid combinations explain why.
-- [x] Configuration survives 2D, 3D, validation, and BOQ.
-- [ ] Multi-select, duplicate, row, array, and grid work (multi-select + grid placement done; duplicate/row/array missing).
-- [ ] Align, distribute, exact spacing, group, and ungroup work.
-- [ ] Bulk changes preview before application.
-- [x] One bulk operation is one undoable command.
-- [x] Bulk edits preserve identity, options, and BOQ output.
-- [ ] A 100-seat layout is practical within a recorded target (grid placement supports any count; UI only shows 2/4/10 batch buttons).
-- [ ] A representative 2,000-seat plan meets recorded navigation and edit budgets.
-- [x] Overlap rule works; wall, opening, boundary, aisle, and chair rules planned but not implemented.
-- [ ] Approved accessibility rules are versioned.
-- [x] Issues show severity, location, objects, and remedy.
-- [x] Issues can focus affected objects on the canvas.
-- [ ] Advisory waivers require a reason.
-- [ ] Hard errors block quote readiness.
-- [x] Validation clears after a correct fix without reload.
-- [ ] Revisions, BOQ, and handoff use the same validation result.
+- [ ] Configuration survives 2D, 3D, validation, and BOQ end-to-end.
+- [ ] Row, array, grid bulk placement; group/ungroup; exact spacing; bulk preview.
+- [ ] 100-seat and 2,000-seat layout performance budgets recorded and met.
+- [ ] Production validation: overlaps (rotate-aware), walls, openings, boundaries, aisles, chairs.
+- [ ] Approved accessibility rules versioned; advisory waivers require a reason.
+- [ ] Revisions, BOQ, and handoff share the same validation result.
+- [ ] Live price-book version and currency pinned in workspace BOQ.
+- [ ] Workspace shows qty, unit price, adjustment, tax, line total; draft/demo prices never reach customers.
+- [ ] Historical priced outputs reproducible from approved price book.
+- [ ] Named immutable revisions record project, catalog, family, validation, and price versions.
+- [ ] Read-only review links, comments, and revocation work end-to-end (API + UI).
+- [ ] Portal and admin plan views verified with live data.
 
-## Phase 4 — live pricing, revisions, sharing, and review
+## Phase 4 — deliver and handoff
 
-- [x] Approved price-book version and currency are pinned.
-- [x] Quantity, unit price, adjustment, tax, and line total are visible.
-- [x] Missing price is unavailable, never zero.
-- [ ] Draft prices never reach customers (governance prevents draft activation; demo-list BOQ bypasses price book entirely).
-- [x] Historical priced outputs remain reproducible.
-- [x] Named revisions are immutable.
-- [ ] Revisions record project, catalog, family, validation, and price versions (separate systems exist; no unified record).
-- [x] Later edits do not change an existing revision.
-- [ ] BOQ and quote records cannot drift to a newer draft.
-- [ ] Read-only review links support permission, expiry, and revocation.
-- [ ] Reviewers cannot mutate the owner project.
-- [ ] Comments preserve object anchor, reviewer, and time where supported.
-- [ ] Revocation blocks future access.
-- [ ] Private projects and commercial data remain private (guest isolation exists; no data-at-rest encryption).
+- [ ] `UI-BOQ-02` customer-ready export distinct from draft export.
+- [ ] `UI-BOQ-03` Send to Oando explicit, recoverable, and idempotent.
+- [ ] Handoff shows named revision, BOQ, pricing, exclusions, validation; blocks on hard errors.
+- [ ] Submission delivers revision, BOQ, price version, validation result, and hash to Oando.
+- [ ] Consent, status, time, revision, and hash recorded; safe retry on failure.
+- [ ] All exports use one calculation authority and preserve product, revision, price, validation, hash.
+- [ ] `HANDOFF_INTENT`, `HANDOFF_SUCCESS`, `HANDOFF_FAILURE` emitted per Site contract.
+- [ ] Handoff passes commercial authorization, CSRF, rate-limit, privacy, and provenance checks.
 
-## Phase 5 — handoff and exports
+## Admin dependency
 
-- [x] `UI-BOQ-01` product count and BOQ readiness are visible from the workspace.
-- [ ] `UI-BOQ-02` customer-ready export is distinct from a draft export.
-- [ ] `UI-BOQ-03` sending the BOQ to Oando is explicit and recoverable.
-- [ ] Customer reviews the exact named revision before submission.
-- [ ] BOQ, pricing, exclusions, and validation status are visible.
-- [ ] Hard validation failures block handoff.
-- [ ] Submission sends the exact revision, BOQ, price version, validation result, and hash.
-- [ ] Consent, status, time, revision, and hash are recorded.
-- [ ] Idempotency prevents duplicate requests (SVG publish has idempotency; no system-wide support).
-- [ ] Failed submission supports safe retry.
-- [ ] Successful records do not drift to later edits.
-- [ ] PDF, workbook, JSON, and approved exports use one calculation authority (projectFurnitureBoq is primary; separate buildBoq and workstationBoqV0 exist).
-- [ ] Every export preserves product, revision, price, validation, and hash identity.
-- [ ] Handoff completion and failure events follow the Site event contract.
-- [ ] Commercial authorization, CSRF, rate-limit, privacy, and provenance checks pass.
+- [ ] Admin DB-SVG authority cutover (`DB-SVG-01`…`05`); Planner `svg-blocks` reads DB bytes not disk descriptors.
+- [ ] Admin publish + catalog browser proof without false success (`FEATURES.md` Admin section).
 
 ## Completion
 
-- [ ] An external customer completes the full journey without developer help.
-- [ ] The same product identity flows from discovery to BOQ and handoff.
-- [ ] Oando receives the exact branded package reviewed by the customer.
+- [ ] External customer completes full journey without developer help.
+- [ ] Same product identity from discovery through BOQ and handoff.
+- [ ] Oando receives the exact branded package the customer reviewed.
 - [ ] Every applicable UI benchmark ID has fresh browser evidence.
-- [ ] Fresh commands and exit codes are recorded here.
+- [ ] Fresh commands and exit codes recorded here.
 - [ ] Only active failures remain in `../../Failures.md`.

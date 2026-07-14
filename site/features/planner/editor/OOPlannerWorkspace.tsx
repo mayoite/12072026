@@ -109,6 +109,7 @@ import {
 import { summarizeFloorMetrics } from "./workspacePlanMetrics";
 import { useValidation } from "./useValidation";
 import { ValidationPanel } from "./ValidationPanel";
+import { alignEntities, distributeEntities, type PositionedEntity } from "@/features/planner/lib/geometry/alignDistribute";
 import type { PlannerDisplayUnit, PlannerPoint } from "@/features/planner/project/model/types";
 import { formatLengthDisplay } from "@/features/planner/project/model/units";
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
@@ -594,6 +595,72 @@ export function OOPlannerWorkspace({
       }
     }
   }, [workspaceCanvas]);
+
+  const handleAlignEntities = useCallback(
+    (axis: "x" | "y", anchor: "min" | "center" | "max") => {
+      const { selection } = workspaceCanvas;
+      if (selection.type === "none" || selection.ids.length < 2) return;
+      const entities: PositionedEntity[] = [];
+      for (const id of selection.ids) {
+        const floor = workspaceCanvas.activeFloor;
+        const item = floor.furniture.find((f) => f.id === id);
+        if (item) {
+          entities.push({
+            id: item.id,
+            xMm: item.position.x,
+            yMm: item.position.y,
+            widthMm: item.width ?? 600,
+            depthMm: item.depth ?? 600,
+          });
+        }
+      }
+      if (entities.length < 2) return;
+      const updates = alignEntities(entities, axis, anchor);
+      workspaceCanvas.updateProject((project) => {
+        let p = project;
+        for (const u of updates) {
+          p = updateEntityInProject(p, "furniture", u.id, {
+            position: { x: u.xMm, y: u.yMm },
+          });
+        }
+        return p;
+      });
+    },
+    [workspaceCanvas],
+  );
+
+  const handleDistributeEntities = useCallback(
+    (axis: "x" | "y") => {
+      const { selection } = workspaceCanvas;
+      if (selection.type === "none" || selection.ids.length < 3) return;
+      const entities: PositionedEntity[] = [];
+      for (const id of selection.ids) {
+        const floor = workspaceCanvas.activeFloor;
+        const item = floor.furniture.find((f) => f.id === id);
+        if (item) {
+          entities.push({
+            id: item.id,
+            xMm: item.position.x,
+            yMm: item.position.y,
+            widthMm: item.width ?? 600,
+            depthMm: item.depth ?? 600,
+          });
+        }
+      }
+      if (entities.length < 3) return;
+      const updates = distributeEntities(entities, axis);
+      workspaceCanvas.updateProject((project) => {
+        let p = project;
+        for (const u of updates) {
+          p = updateEntityInProject(p, "furniture", u.id, {
+            position: { x: u.xMm, y: u.yMm },
+          });
+        }
+        return p;
+      });
+    },
+    [workspaceCanvas],
+  );
 
   const setTool = useCallback((tool: PlannerTool) => {
     setActiveTool(tool);
@@ -1096,7 +1163,7 @@ export function OOPlannerWorkspace({
         : `Snap: ${snapPrefsLabel}`;
 
   const selectionLabel = formatSelectionStatus(workspaceCanvas.selection);
-  const planMetrics = summarizeFloorMetrics(activeFloor);
+  const planMetrics = summarizeFloorMetrics(activeFloor, validationResult.errors);
 
   // Prefer autosave honesty exports (storage / cloudEnabled / isLocalSaved).
   // cloudEnabled stays false today — label table must never imply account save.
@@ -1212,6 +1279,8 @@ export function OOPlannerWorkspace({
                   onDeleteEntity: handleDeleteEntity,
                   onToggleLock: handleToggleLock,
                   onDuplicateEntity: handleDuplicateEntity,
+                  onAlignEntities: handleAlignEntities,
+                  onDistributeEntities: handleDistributeEntities,
                   onDeselect: () =>
                     workspaceCanvas.setSelection({ type: "none", ids: [] }),
                 }}

@@ -20,6 +20,9 @@ import {
   publishDescriptorWithPipeline,
   type PublishDescriptorResult,
 } from "@/features/planner/admin/svg-editor/publishDescriptorWithPipeline";
+import { DrizzleSvgRevisionPersistence } from "@/features/planner/admin/svg-editor/drizzleSvgPersistence.server";
+import { ImmutableSvgRevisionRepository } from "@/features/planner/admin/svg-editor/svgRevisionRepository.server";
+import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
 import { makeNewBlockDescriptorStub } from "@/features/planner/admin/svg-editor/newBlockDescriptorStub";
 import { setCatalogLifecycle } from "@/features/planner/admin/svg-editor/catalogLifecycle";
 import { appendDescriptorAudit } from "@/features/planner/admin/svg-editor/descriptorAuditLog";
@@ -55,7 +58,14 @@ export async function publishSvgEditorAction(
     descriptor = result.value;
   }
   const input = formStateToDescriptorInput(descriptor, formFromEditor);
-  const published = await publishDescriptorWithPipeline(input);
+
+  // Inject DB dual-write repository when Products DB is configured.
+  const dbRepository: ImmutableSvgRevisionRepository | undefined =
+    isProductsDatabaseConfigured()
+      ? new ImmutableSvgRevisionRepository(new DrizzleSvgRevisionPersistence())
+      : undefined;
+
+  const published = await publishDescriptorWithPipeline(input, { dbRepository });
   if (published.success) {
     setCatalogLifecycle(published.descriptor.slug, "draft");
     appendDescriptorAudit({

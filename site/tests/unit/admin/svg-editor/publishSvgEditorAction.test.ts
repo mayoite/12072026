@@ -23,6 +23,15 @@ vi.mock("@/features/planner/admin/svg-editor/publishDescriptorWithPipeline", () 
   publishDescriptorWithPipeline,
 }));
 
+vi.mock("@/platform/drizzle/databaseUrls", () => ({
+  isProductsDatabaseConfigured: vi.fn().mockReturnValue(false),
+}));
+
+vi.mock("@/platform/drizzle/productsDb", () => {
+  const proxy = new Proxy({}, { get: () => vi.fn() });
+  return { productsDb: proxy, default: proxy };
+});
+
 vi.mock("@/features/shared/api/withAuth", () => ({
   resolveAuthContext: vi.fn().mockResolvedValue({
     user: {
@@ -85,8 +94,12 @@ describe("publishSvgEditorAction", () => {
     expect(input.sourceProvenance).toBe("native");
     // freeze/persist recomputes checksum — action strips it via puck merge
     expect(input.checksum).toBeUndefined();
-    // pipeline is not given deps from the action (defaults on the pipeline side)
-    expect(publishDescriptorWithPipeline.mock.calls[0]?.[1]).toBeUndefined();
+    // action passes deps with optional dbRepository for dual-write
+    const deps = publishDescriptorWithPipeline.mock.calls[0]?.[1] as Record<string, unknown> | undefined;
+    expect(deps).toBeDefined();
+    if (deps) {
+      expect(deps).toHaveProperty("dbRepository");
+    }
   });
 
   it("missing slug returns not found and does not call the pipeline", async () => {

@@ -431,10 +431,20 @@ export function WorkspaceShell({
               <span>{planMetrics.workstationSeats} seats</span>
             ) : null}
             <span
-              className={planMetrics.boqReady ? styles.boqReady : styles.boqNotReady}
+              className={
+                planMetrics.validationErrors > 0
+                  ? styles.boqBlocked
+                  : planMetrics.boqReady
+                    ? styles.boqReady
+                    : styles.boqNotReady
+              }
               data-boq-ready={planMetrics.boqReady ? "true" : "false"}
             >
-              {planMetrics.boqReady ? "BOQ ready" : "BOQ: add furniture"}
+              {planMetrics.validationErrors > 0
+                ? `BOQ blocked: ${planMetrics.validationErrors} error${planMetrics.validationErrors > 1 ? "s" : ""}`
+                : planMetrics.boqReady
+                  ? "BOQ ready"
+                  : "BOQ: add furniture"}
             </span>
             <span>Floor {planMetrics.floorLabel}</span>
           </>

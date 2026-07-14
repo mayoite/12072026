@@ -472,21 +472,36 @@ export function AdvancedFilterGridInner({
                 />
               ))}
             </div>
-          ) : navigableProducts.length === 0 ? (
+          ) : navigableProducts.length === 0 && error ? (
+            <div
+              role="alert"
+              className="scheme-panel scheme-border rounded-2xl border px-6 py-10 text-center"
+            >
+              <h2 className="home-heading text-balance">{CATEGORY_ROUTE_COPY.errorTitle}</h2>
+              <p className="page-copy text-body mt-4 max-w-lg mx-auto">
+                {CATEGORY_ROUTE_COPY.errorDescription}
+              </p>
+            </div>
+          ) : navigableProducts.length === 0 && activeCount > 0 ? (
             <div className="scheme-panel scheme-border rounded-2xl border px-6 py-10 text-center">
               <h2 className="home-heading text-balance">{CATEGORY_ROUTE_COPY.emptyTitle}</h2>
               <p className="page-copy text-body mt-4 max-w-lg mx-auto">
                 {CATEGORY_ROUTE_COPY.emptyDescription}
               </p>
-              {activeCount > 0 ? (
-                <button
-                  type="button"
-                  onClick={clearAll}
-                  className="btn-outline mt-5"
-                >
-                  {CATEGORY_ROUTE_COPY.clearFiltersCta}
-                </button>
-              ) : null}
+              <button
+                type="button"
+                onClick={clearAll}
+                className="btn-outline mt-5"
+              >
+                {CATEGORY_ROUTE_COPY.clearFiltersCta}
+              </button>
+            </div>
+          ) : navigableProducts.length === 0 ? (
+            <div className="scheme-panel scheme-border rounded-2xl border px-6 py-10 text-center">
+              <h2 className="home-heading text-balance">{CATEGORY_ROUTE_COPY.emptyCategoryTitle}</h2>
+              <p className="page-copy text-body mt-4 max-w-lg mx-auto">
+                {CATEGORY_ROUTE_COPY.emptyCategoryDescription}
+              </p>
             </div>
           ) : (
             <div

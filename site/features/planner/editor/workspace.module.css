@@ -743,6 +743,11 @@
   font-style: italic;
 }
 
+.boqBlocked {
+  color: var(--color-danger, #dc2626);
+  font-weight: 600;
+}
+
 /* Bottom panel tab bar */
 .bottomTabBar {
   display: flex;

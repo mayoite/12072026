@@ -96,15 +96,15 @@ describe("plannerPersistence", () => {
     expect(merged.projectName).toBe("HQ");
   });
 
-  it("maps admin summary and detail projections", () => {
+  it("maps admin summary and detail projections", async () => {
     const row = makePlanRow({ status: "active" });
     const summary = planRowToAdminSummary(row as never);
     expect(summary.project_name).toBe("HQ");
-    const detail = planRowToAdminDetail(row as never);
+    const detail = await planRowToAdminDetail(row as never);
     expect(detail.review_status).toBe("approved");
     expect(detail.scene_json).toEqual(document.sceneJson);
 
-    const draftDetail = planRowToAdminDetail(makePlanRow({ status: "draft" }) as never);
+    const draftDetail = await planRowToAdminDetail(makePlanRow({ status: "draft" }) as never);
     expect(draftDetail.review_status).toBe("pending");
   });
 

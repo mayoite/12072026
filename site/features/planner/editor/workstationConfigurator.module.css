@@ -191,3 +191,27 @@
   outline: 2px solid var(--color-primary, #2563eb);
   outline-offset: 2px;
 }
+
+.customBatchRow {
+  display: flex;
+  gap: 0.25rem;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.customBatchInput {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--border-soft, #e2e8f0);
+  border-radius: var(--radius-sm, 0.25rem);
+  padding: 0.25rem 0.4rem;
+  font-size: 0.6875rem;
+  background: var(--surface-panel, #fff);
+  color: var(--text-body, #334155);
+  width: 3.75rem;
+}
+
+.customBatchInput:focus-visible {
+  outline: 2px solid var(--color-primary, #2563eb);
+  outline-offset: 2px;
+}

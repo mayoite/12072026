@@ -1,8 +1,8 @@
 # Site checklist
 
-This file records status only.
+Status only. Code map: `FEATURES.md`. Requirements: `PHASE-01` … `PHASE-05`.
 
-Treat every item as not done.
+Reconciled against `site/` on 2026-07-14. **Implemented-in-code items live in FEATURES.md, not here.**
 
 ## Shared start gate
 
@@ -11,162 +11,58 @@ Treat every item as not done.
 - [ ] Browser tests use normal controls without forced clicks.
 - [ ] Each Site command overwrites its stable results folder.
 
-## Phase 1 — conversion measurement and foundation
+## Phase 1 — measurement and foundation
 
-- [x] Live public routes, navigation, forms, metadata, and analytics code are freshly checked.
-- [x] Public, private, duplicate, redirected, and dead routes are classified.
-- [x] Indexing, accessibility, performance, and conversion failures are recorded.
-- [ ] One funnel covers landing entry through Planner handoff.
-- [ ] Every event has a stable name, trigger, fields, and owner.
-- [ ] Site and Planner use the same event meanings.
-- [ ] Source and campaign context survives entry into Planner.
-- [ ] Rerenders, retries, and route transitions do not duplicate events.
-- [ ] Analytics excludes private geometry, BOQ lines, secrets, and unnecessary personal data.
-- [ ] Consent and identifier scope are enforced.
-- [ ] Event receipt is verified in a production-like build.
-- [ ] Funnel, source, failure, and page reports work.
-- [ ] Missing measurement is visible and never reported as success.
-- [ ] Canonical, indexing, sitemap, and robots ownership is defined.
-- [ ] Accessibility and performance budgets are recorded.
-- [x] Critical console, request, hydration, and navigation failures are removed.
+- [x] `SITE-IA-01` every `(site)` `page.tsx` route classified (`routeClassification.test.ts`).
+- [x] `SITE-IA-02` public routes have audience, intent, owner, canonical, primary action in registry.
+- [x] `SITE-IA-03` `/catalog` redirects to downloads (`catalog/page.tsx`).
+- [x] `SITE-MEASURE-02` conversion dedupe (`conversionContract.test.ts`).
+- [x] `SITE-MEASURE-03` analytics privacy filter (`conversionContract.test.ts`).
+- [x] `SITE-SEO-02` title suffix dedup in `buildPageMetadata` (`lib/site-data/seo.ts`).
+- [ ] `SITE-MEASURE-01` full funnel measurable in production (`PAGE_VIEW` + downstream events unwired).
+- [ ] Source and campaign context survives Site → Planner entry.
+- [ ] Consent gating wired before emit.
+- [ ] Production-like `window.va` event receipt verified.
+- [ ] Funnel, source, failure, and page reporting dashboards.
+- [ ] `SITE-SEO-01`, `SITE-SEO-03` metadata / sitemap / robots aligned with `routeClassification.ts`.
+- [ ] `SITE-PERF-01` … `SITE-PERF-03` field CWV budgets recorded and met.
+- [ ] Critical console, request, hydration failures removed (fresh prod-like run).
 
-### Foundation acceptance
+## Phase 2 — commercial landing pages
 
-- [x] `SITE-IA-01` Every page file has one accepted access and lifecycle classification.
-- [x] `SITE-IA-02` Every public page has an audience, intent, owner, canonical URL, and primary action.
-- [ ] `SITE-IA-03` Duplicate and legacy routes use one deliberate redirect chain.
-- [ ] `SITE-MEASURE-01` One event contract covers the complete commercial journey.
-- [ ] `SITE-MEASURE-02` Rerenders, retries, redirects, and route changes do not duplicate events.
-- [ ] `SITE-MEASURE-03` Analytics excludes private and unnecessary data.
-- [ ] `SITE-PERF-01` Field LCP is at most 2.5 seconds at the 75th percentile.
-- [ ] `SITE-PERF-02` Field INP is at most 200 milliseconds at the 75th percentile.
-- [ ] `SITE-PERF-03` Field CLS is at most 0.1 at the 75th percentile.
-- [x] `SITE-PERF-04` Responsive images have no broken request and below-fold media is deferred.
-- [ ] `SITE-SEO-01` Every indexable page has unique metadata, canonical URL, and a coherent H1.
-- [x] `SITE-SEO-02` Titles do not duplicate the brand suffix.
-- [ ] `SITE-SEO-03` Sitemap, robots, redirects, not-found behavior, and access classification agree.
+- [x] `SITE-NAV-03` quote-cart link has accessible name (`Header.tsx`).
+- [x] `SITE-HOME-01` … `SITE-HOME-04` homepage audience, value, proof, CTA, hero reading order, trust provenance (`homepage.ts`, `HomepageHero.test.tsx`).
+- [ ] Customer segments, pages, and nav mapped to one intent + next action.
+- [ ] `SITE-NAV-01`, `SITE-NAV-02`, `SITE-NAV-04`.
+- [ ] `SITE-FORM-01` … `SITE-FORM-04`.
+- [ ] `SITE-MOB-01` … `SITE-MOB-03`.
+- [ ] `SITE-A11Y-01` … `SITE-A11Y-04` (smoke spec is not full AA sign-off).
+- [ ] Page-to-Planner conversion events on all primary CTAs (not header-only).
 
-## Phase 2 — commercial landing-page expansion
+## Phase 3 — search-led content
 
-- [ ] Customer segments, needs, offers, and decisions are mapped.
-- [ ] Every page has one primary intent and next action.
-- [ ] Navigation is shallow and understandable.
-- [ ] Duplicate, orphaned, and conflicting routes are resolved.
-- [ ] Value propositions are specific and supportable.
-- [ ] Product, capability, proof, and commercial claims are truthful.
-- [ ] Generic filler, fake urgency, and invented testimonials are absent.
-- [ ] Planner, contact, and product-discovery actions have clear roles.
-- [ ] Responsive hierarchy works at supported widths.
-- [ ] Primary journeys meet WCAG 2.2 AA.
-- [ ] Images are approved, licensed, responsive, and performant.
-- [ ] Pages meet recorded performance budgets.
-- [ ] Forms show truthful success, failure, and retry states.
-- [ ] Page-to-Planner conversion events are verified.
-
-### Landing and form acceptance
-
-- [ ] `SITE-NAV-01` Desktop and phone navigation expose the stable primary paths.
-- [ ] `SITE-NAV-02` Protected and operational routes are absent from public navigation.
-- [ ] `SITE-NAV-03` Every navigation and cart link has a clear accessible name.
-- [ ] `SITE-NAV-04` Site search is scoped, keyboard-usable, and announced.
-- [ ] `SITE-HOME-01` The first desktop and phone viewport states audience, value, proof, and one primary action.
-- [ ] `SITE-HOME-02` Animated and split headings preserve correct text and reading order.
-- [ ] `SITE-HOME-03` Trust claims have an approved source, owner, and review date.
-- [ ] `SITE-HOME-04` Unsupported testimonials, ratings, urgency, and scale claims are absent.
-- [ ] `SITE-FORM-01` Forms use minimal fields, visible labels, precise validation, and preserved valid input.
-- [ ] `SITE-FORM-02` Form success appears only after accepted server receipt.
-- [ ] `SITE-FORM-03` Failure, retry, duplicate, and rate-limit states are truthful.
-- [ ] `SITE-FORM-04` Consent and privacy use are clear before submission.
-- [ ] `SITE-MOB-01` The first 844 phone pixels include purpose and the primary action.
-- [ ] `SITE-MOB-02` Phone pages do not scroll horizontally at 390 pixels.
-- [ ] `SITE-MOB-03` Frequent phone actions use 44 by 44 pixel targets where practical.
-- [ ] `SITE-A11Y-01` Primary Site journeys meet WCAG 2.2 AA.
-- [ ] `SITE-A11Y-02` Primary navigation, discovery, form, and Planner-entry tasks are keyboard-completable.
-- [ ] `SITE-A11Y-03` Focus stays visible and recovers correctly.
-- [ ] `SITE-A11Y-04` Dynamic Site states are announced.
-
-## Phase 3 — search-led content expansion
-
-- [ ] Topic decisions use current dated search evidence.
-- [ ] Commercial, product, planning, and informational intent are separated.
-- [ ] Approved topics match Oando capability and inventory.
-- [ ] Every page has an accepted audience, query set, purpose, and action.
-- [ ] Content provides original Oando value.
-- [ ] Factual and regulatory claims have adequate sources.
-- [ ] Thin, duplicated, and mass-generated pages are rejected.
-- [ ] Every page has an owner and review date.
-- [ ] Content links to relevant commercial pages, products, and Planner actions.
-- [ ] Orphaned pages and dead ends are absent.
-- [ ] Weak pages are refreshed, consolidated, redirected, or removed.
-- [ ] Redirects are intentional and limited.
-- [ ] Search entries, Planner entries, and assisted conversions are measured.
-- [ ] Traffic alone is not treated as commercial success.
-
-### Content acceptance
-
-- [ ] `SITE-CONTENT-01` Claims are specific, supportable, owned, and reviewed.
-- [ ] `SITE-CONTENT-02` Content provides original Oando value without filler or mass duplication.
-- [ ] `SITE-CONTENT-03` Every content page leads to a relevant product, Planner, or contact action.
+- [ ] `SITE-CONTENT-01` … `SITE-CONTENT-03`.
+- [ ] Search-evidence workflow, ownership, and review dates on content pages.
 
 ## Phase 4 — public product discovery
 
-- [ ] Only the released Products database catalog contract is consumed through a server API.
-- [ ] Drafts, internal prices, approval data, and private retired records are excluded.
-- [ ] Product, family, version, option, and asset identity are preserved.
-- [ ] Categories, search, filters, sorting, and pagination work.
-- [ ] Filter combinations are understandable and reversible.
-- [ ] Product routes are stable and canonical.
-- [ ] Availability and lead-time claims are supported.
-- [ ] Loading, empty, error, and no-result states are distinct.
-- [ ] Product discovery is keyboard and assistive-technology usable.
-- [ ] Product details show accurate identity, dimensions, options, assets, and availability.
-- [ ] Configurable choices do not expose invalid combinations.
-- [ ] Exact product or family identity can enter Planner.
-- [ ] Retired products are never silently substituted.
-- [ ] Approved replacements and historical links are handled honestly.
-- [ ] Sitemap and canonical behavior match product lifecycle state.
-- [ ] Public search cannot expose unpublished or commercial data.
-- [ ] Catalog responses and images meet recorded performance budgets.
-
-### Product and Planner acceptance
-
-- [ ] `SITE-PROD-01` Released categories with active inventory never render as false empty categories.
-- [ ] `SITE-PROD-02` Product results expose the required identity and comparison data.
-- [ ] `SITE-PROD-03` Search, filter, sort, paging, and comparison are clear and reversible.
-- [ ] `SITE-PROD-04` Loading, empty catalog, no result, error, stale snapshot, and recovery are distinct.
-- [ ] `SITE-PROD-05` Product detail matches the released database contract and visible structured data.
-- [ ] `SITE-PROD-06` Public responses exclude drafts, internal prices, audit data, and private retired records.
-- [ ] `SITE-PLAN-01` Product or family identity survives Site-to-Planner entry.
-- [ ] `SITE-PLAN-02` Source, campaign, locale, and intent survive Site-to-Planner entry.
-- [ ] `SITE-PLAN-03` Planner confirms imported context and provides recoverable failure.
-- [ ] `SITE-MOB-04` Product filters and comparison use a deliberate phone composition.
+- [x] `SITE-PROD-04` (partial) loading, error, filter-empty, category-empty in `FilterGridInner.tsx`.
+- [ ] Released Products DB catalog only through server API (no fixture fallback in production).
+- [ ] `SITE-PROD-01` … `SITE-PROD-03`, `SITE-PROD-05`, `SITE-PROD-06`.
+- [ ] `SITE-PLAN-01` … `SITE-PLAN-03` product/family identity and campaign context into Planner.
+- [ ] `SITE-MOB-04` phone product filters and comparison.
 
 ## Phase 5 — structured data and release proof
 
-- [ ] Eligible page types use supported structured-data types.
-- [ ] Structured-data fields match visible content.
-- [ ] Canonical entity identifiers are stable.
-- [ ] Organization, breadcrumb, article, and product entities are consistent.
-- [ ] Offer and availability markup uses only accurate published data.
-- [ ] Unsupported ratings, reviews, prices, and claims are absent.
-- [ ] Every indexable page has unique metadata and one canonical URL.
-- [ ] Private, duplicate, filtered, and workspace routes are not indexed.
-- [ ] Sitemap contains only canonical public routes.
-- [ ] Redirect, not-found, and retired-product behavior is correct.
-- [ ] Robots controls match actual route access.
-- [ ] Representative rendered pages pass structured-data validation.
-- [ ] Landing, content, product, and Planner-entry journeys pass.
-- [ ] Accessibility, performance, responsive, and browser checks pass.
-- [ ] Conversion funnel continuity passes.
-- [ ] Catalog freshness and private-data boundaries pass.
-- [ ] Monitoring detects route, schema, analytics, catalog, and conversion failures.
-- [ ] `SITE-SEO-04` Structured data matches visible released content and stable identifiers.
-- [ ] Every `SITE-*` acceptance ID is freshly rechecked in a production-like build.
+- [ ] `SITE-SEO-04` structured data matches visible released content.
+- [ ] Sitemap, robots, redirects, and lifecycle agree.
+- [ ] Full journey recheck in production-like build.
+- [ ] Monitoring for route, schema, analytics, catalog, and conversion failures.
 
 ## Completion
 
-- [ ] Public visitors can discover truthful Oando content and products.
-- [ ] Product identity survives entry into Planner.
-- [ ] The journey from discovery to handoff is measurable.
-- [ ] Fresh commands and exit codes are recorded here.
+- [ ] Public visitors discover truthful content and products without developer help.
+- [ ] Product identity survives Site → Planner entry.
+- [ ] Discovery → handoff journey measurable end-to-end.
+- [ ] Fresh commands and exit codes recorded here.
 - [ ] Only active failures remain in `../../Failures.md`.

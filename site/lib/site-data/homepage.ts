@@ -15,19 +15,44 @@ export const HOMEPAGE_HERO_IMAGES = [
   { src: "/images/hero/27-06-2025 Image 06.webp", alt: "Enterprise workspace fit-out by One&Only" },
 ] as const;
 
+export interface HomepageHeroGlassProof {
+  badge: string;
+  lead: string;
+  support: string;
+  href: string;
+  cta: string;
+  /** Where the trust claim is sourced from (must be an approved, auditable source). */
+  source: string;
+  /** Functional owner accountable for the claim's accuracy. */
+  owner: string;
+  /** Date the claim was last reviewed for accuracy (ISO 8601). */
+  reviewDate: string;
+}
+
+export interface HomepageHeroContent {
+  title: readonly string[];
+  kicker: string;
+  primaryCta: { label: string; href: string };
+  secondaryCta: { label: string; href: string };
+  glassProof: HomepageHeroGlassProof;
+}
+
 export const HOMEPAGE_HERO_CONTENT = {
   title: ["Spaces that work", "as hard as", "your team"],
-  kicker: "Pan-India · Since 2011",
+  kicker: "Office furniture for teams across India · Since 2011",
   primaryCta: { label: "Explore Products", href: "/products" },
   secondaryCta: { label: "Request a quote", href: "/#contact" },
   glassProof: {
     badge: "Trusted by",
-    lead: "Executed over 400+ workplace projects since 2011 — Fortune 500 and growing teams.",
+    lead: "Executed 400+ workplace projects since 2011 — verified through internal project records.",
     support: "Serving India's biggest companies and government.",
     href: "/trusted-by",
     cta: "View clients",
+    source: "Internal project records",
+    owner: "Marketing",
+    reviewDate: "2026-07-14",
   },
-} as const;
+} as const satisfies HomepageHeroContent;
 
 export const HOMEPAGE_PLANNER_SUITE_CONTENT = {
   titleLead: "Oando",
@@ -38,6 +63,18 @@ export const HOMEPAGE_PLANNER_SUITE_CONTENT = {
   overviewHref: "/planner",
   overviewLabel: "Learn more",
 } as const;
+
+export interface HomepageTrustContent {
+  logoLabel: string;
+  logos: ReadonlyArray<{ name: string; src: string }>;
+  projectsCta: string;
+  /** Where the client list is sourced from (must be an approved, auditable source). */
+  source: string;
+  /** Functional owner accountable for the list's accuracy. */
+  owner: string;
+  /** Date the list was last reviewed for accuracy (ISO 8601). */
+  reviewDate: string;
+}
 
 export const HOMEPAGE_TRUST_CONTENT = {
   logoLabel: "Selected organisations",
@@ -62,7 +99,10 @@ export const HOMEPAGE_TRUST_CONTENT = {
     { name: "MECON", src: "/images/client-logos/MECON.jpg" },
   ],
   projectsCta: "View projects",
-} as const;
+  source: "Internal client records",
+  owner: "Marketing",
+  reviewDate: "2026-07-14",
+} as const satisfies HomepageTrustContent;
 
 export const HOMEPAGE_BRAND_STATEMENT_CONTENT = {
   lead:

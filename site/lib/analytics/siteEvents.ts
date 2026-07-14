@@ -1,5 +1,5 @@
 type SiteEventPrimitive = string | number | boolean | null;
-type SiteEventPayload = Record<string, SiteEventPrimitive>;
+export type SiteEventPayload = Record<string, SiteEventPrimitive>;
 
 declare global {
   interface Window {
@@ -9,7 +9,12 @@ declare global {
   }
 }
 
-function emitSiteEvent(eventName: string, payload: SiteEventPayload) {
+import {
+  trackConversionEvent,
+  CONVERSION_EVENTS,
+} from "@/lib/analytics/conversionContract";
+
+export function emitSiteEvent(eventName: string, payload: SiteEventPayload) {
   if (typeof window === "undefined") return;
   const track = window.va?.track;
   if (typeof track !== "function") return;
@@ -60,6 +65,10 @@ export function trackSiteCtaClick(params: {
 
 export function trackPlannerLaunchClicked(params: { pathname: string; surface: string }) {
   emitSiteEvent("planner_launch_clicked", params);
+  trackConversionEvent(CONVERSION_EVENTS.PLANNER_ENTRY, {
+    sourcePage: params.pathname,
+    locale: "en",
+  });
 }
 
 export function trackSiteSearchSubmitted(params: {

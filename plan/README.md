@@ -34,11 +34,10 @@ Unrelated read-only work may continue.
 
 ### Stream B: Planner
 
-1. `Planner/PHASE-01-public-entry-deterministic-boq.md`
-2. `Planner/PHASE-02-core-layout-catalog.md`
-3. `Planner/PHASE-03-bulk-layout-validation.md`
-4. `Planner/PHASE-04-pricing-revisions-sharing.md`
-5. `Planner/PHASE-05-handoff-exports.md`
+1. `Planner/PHASE-01-start-and-boq.md`
+2. `Planner/PHASE-02-design-workspace.md`
+3. `Planner/PHASE-03-scale-validate-price.md`
+4. `Planner/PHASE-04-deliver-handoff.md`
 
 ### Stream C: Site
 

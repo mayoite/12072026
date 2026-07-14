@@ -67,11 +67,13 @@ Two writers do not edit the same file at the same time.
 - Missing structured-data eligibility blocks only that schema type.
 - Unrelated Site work continues.
 
+## Features
+
+`FEATURES.md` maps each plan phase to code paths and known gaps.
+
 ## Status
 
-`CHECKLIST.md` is the only Site status record.
-
-Every item starts unchecked.
+`CHECKLIST.md` records open acceptance work only.
 
 The phase files explain execution.
 

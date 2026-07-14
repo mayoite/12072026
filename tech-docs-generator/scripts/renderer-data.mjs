@@ -121,6 +121,8 @@ export function buildRendererDataPayloads(model) {
     'gaps.json': filterBrowserRendererRecords(model.gaps ?? []),
     'docs-health.json': filterBrowserRendererRecords(model.docsHealth ?? []),
     'failures-status.json': filterBrowserRendererRecords(model.failuresStatus ?? []),
+    'repo-graph.json': model.repoGraph,
+    'runner-selection.json': model.runnerSelection,
   }
 }
 

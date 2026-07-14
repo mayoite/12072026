@@ -453,8 +453,42 @@ export function planSummaryRowToAdminSummary(row: PlannerSummaryRow) {
   };
 }
 
-export function planRowToAdminDetail(row: PlanRow) {
+export async function planRowToAdminDetail(row: PlanRow) {
   const document = planRowToDocument(row);
+  let reviewCommentsData: Array<{
+    id: string; text: string; author: string; createdAt: string;
+  }> = [];
+  let reviewLinksData: Array<{ id: string; token: string; permission: string; expiresAt: string | null; isActive: boolean }> = [];
+
+  if (isPlannerDatabaseUrlConfigured()) {
+    try {
+      const { listReviewComments, listReviewLinks } = await import("./reviewPersistence");
+      const [commentsRes, linksRes] = await Promise.all([
+        listReviewComments(row.id),
+        listReviewLinks(row.id),
+      ]);
+      if (commentsRes.success) {
+        reviewCommentsData = commentsRes.data.map((c) => ({
+          id: c.id,
+          text: c.text,
+          author: c.authorName,
+          createdAt: c.createdAt.toISOString(),
+        }));
+      }
+      if (linksRes.success) {
+        reviewLinksData = linksRes.data.map((l) => ({
+          id: l.id,
+          token: l.token,
+          permission: l.permission,
+          expiresAt: l.expiresAt?.toISOString() ?? null,
+          isActive: l.isRevoked !== "true",
+        }));
+      }
+    } catch {
+      // DB query failed — fall through with empty data
+    }
+  }
+
   return {
     id: row.id,
     user_id: row.userId,
@@ -471,15 +505,11 @@ export function planRowToAdminDetail(row: PlanRow) {
     scene_json: document.sceneJson,
     status: document.status,
     review_status: document.status === "active" ? "approved" : "pending",
-    review_comments: [] as Array<{
-      id: string;
-      text: string;
-      author: string;
-      createdAt: string;
-    }>,
+    review_comments: reviewCommentsData,
+    review_links: reviewLinksData,
     created_at: row.createdAt.toISOString(),
     updated_at: row.updatedAt.toISOString(),
-    review_features: { status: false, comments: false },
+    review_features: { status: true, comments: true },
   };
 }
 

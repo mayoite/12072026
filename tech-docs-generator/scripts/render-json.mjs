@@ -83,6 +83,8 @@ export function renderJsonOutputs(model = buildGeneratorModel()) {
     'data/performance.json': model.performance,
     'data/code-organization.json': model.codeOrganization,
     'data/coverage-matrix.json': model.coverageMatrix,
+    'data/repo-graph.json': model.repoGraph,
+    'data/runner-selection.json': model.runnerSelection,
     'data/search.json': search,
     'data/pages.json': pages,
     '_sources.json': model.sources,

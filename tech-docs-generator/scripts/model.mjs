@@ -20,6 +20,8 @@ import { extractDependencyRecords } from './extract-dependencies.mjs'
 import { extractEnvironmentRecords } from './extract-environment.mjs'
 import { extractFailuresStatusRecords } from './extract-failures-status.mjs'
 import { extractFeatureRecords } from './extract-features.mjs'
+import { extractRepoGraph } from './extract-repo-graph.mjs'
+import { extractRunnerSelection } from './extract-runner-selection.mjs'
 import { extractRouteRecords } from './extract-routes.mjs'
 import { extractThemeRecords } from './extract-theme.mjs'
 import { buildGapRecords } from './build-gaps.mjs'
@@ -239,6 +241,11 @@ function collectSourceDescriptors(model, repoRoot) {
   for (const record of model.security) add(record.sourcePath, record.sourceKind, record.sourcePointer)
   for (const record of model.performance) add(record.sourcePath, record.sourceKind, record.sourcePointer)
   for (const record of model.codeOrganization) add(record.sourcePath, record.sourceKind, record.sourcePointer)
+  for (const node of model.repoGraph?.nodes ?? []) add(node.sourcePath, 'repo-graph-node', node.sourcePointer)
+  for (const edge of model.repoGraph?.edges ?? []) add(edge.sourcePath, 'repo-graph-edge', edge.sourcePointer)
+  for (const runner of model.runnerSelection?.runners ?? []) add(runner.sourcePath, 'runner-config', runner.sourcePointer)
+  for (const selection of model.runnerSelection?.selections ?? []) add(selection.sourcePath, 'runner-selection', selection.sourcePointer)
+  for (const gap of model.runnerSelection?.gaps ?? []) add(gap.sourcePath, 'runner-gap', gap.sourcePointer)
 
   return [...seen.values()].sort((left, right) => comparePaths(left.sourcePath, right.sourcePath))
 }
@@ -1014,8 +1021,24 @@ export function buildGeneratorModel({ repoRoot = defaultRepoRoot } = {}) {
     category: record.category ?? record.domain,
     ...record,
   }))
+  const repoGraph = extractRepoGraph({ repoRoot })
+  const runnerSelection = extractRunnerSelection({ repoRoot })
   const sources = collectSourceDescriptors(
-    { dependencies, commands, routes, api, environment, database, features, workflows, security, performance, codeOrganization },
+    {
+      dependencies,
+      commands,
+      routes,
+      api,
+      environment,
+      database,
+      features,
+      workflows,
+      security,
+      performance,
+      codeOrganization,
+      repoGraph,
+      runnerSelection,
+    },
     repoRoot,
   )
 
@@ -1045,5 +1068,7 @@ export function buildGeneratorModel({ repoRoot = defaultRepoRoot } = {}) {
     gaps,
     facts,
     sources,
+    repoGraph,
+    runnerSelection,
   }
 }

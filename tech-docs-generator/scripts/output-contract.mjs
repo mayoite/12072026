@@ -31,6 +31,27 @@ export const EXCLUDED_REPOSITORY_ROOTS = [
 
 export const GENERATED_SURFACES = [GENERATED_DATA_DIR, GENERATED_DOCS_DIR, GENERATED_SITE_DIR]
 
+/** Explicit repository roots watched during Vite development regeneration. */
+export const LIVE_WATCH_ROOTS = [
+  'site',
+  'plan',
+  'docs',
+  'Agents',
+  '.github',
+  SOURCE_PACKAGE_DIR,
+  'scripts',
+  'package.json',
+  'pnpm-workspace.yaml',
+  'pnpm-lock.yaml',
+  'Readme.md',
+  'START.md',
+  'OPERATIONS_RUNBOOK.md',
+  'Failures.md',
+  'AGENTS.md',
+  'HANDOVER.md',
+  'testing-handbook.md',
+]
+
 function isWithinRoot(root, candidate) {
   const relative = path.relative(root, candidate)
   return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative))

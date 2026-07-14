@@ -3,7 +3,7 @@
 /**
  * Systems v0 — pick size / shape / modules then arm place (not fixed 8 SKUs).
  */
-import { useMemo, useState, memo } from "react";
+import { useCallback, useMemo, useState, memo } from "react";
 import {
   WORKSTATION_V0_SIZE_GRID,
   type WorkstationConfigV0,
@@ -54,8 +54,17 @@ export const WorkstationConfiguratorPanel = memo(
     const [draft, setDraft] = useState<WorkstationConfiguratorDraftV0>(
       defaultWorkstationConfiguratorDraftV0,
     );
+    const [customCount, setCustomCount] = useState("");
 
     const preview = useMemo(() => configuratorPreview(draft), [draft]);
+
+    const handleCustomBatchPlace = useCallback(() => {
+      const n = parseInt(customCount, 10);
+      if (n > 0 && onPlaceBatchConfig) {
+        onPlaceBatchConfig(preview.config, n);
+        setCustomCount("");
+      }
+    }, [customCount, onPlaceBatchConfig, preview.config]);
 
     return (
       <section
@@ -214,6 +223,29 @@ export const WorkstationConfiguratorPanel = memo(
                     {batchPlaceButtonLabel(count)}
                   </button>
                 ))}
+                <div className={styles.customBatchRow}>
+                  <input
+                    type="number"
+                    min="1"
+                    max="1000"
+                    className={styles.customBatchInput}
+                    placeholder="Custom"
+                    value={customCount}
+                    onChange={(e) => setCustomCount(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleCustomBatchPlace();
+                    }}
+                    aria-label="Custom seat count"
+                  />
+                  <button
+                    type="button"
+                    className={styles.batchBtn}
+                    disabled={!preview.placeable || !customCount}
+                    onClick={handleCustomBatchPlace}
+                  >
+                    Place
+                  </button>
+                </div>
               </div>
             ) : null}
           </div>

@@ -1,4 +1,4 @@
-import { boolean, date, integer, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, date, integer, jsonb, pgTable, text, timestamp, uuid, index, uniqueIndex } from "drizzle-orm/pg-core";
 
 /** Products Supabase — marketing catalog (canonical table name). */
 export const catalogProducts = pgTable("catalog_products", {
@@ -102,3 +102,63 @@ export const businessStatsCurrent = pgTable("business_stats_current", {
   updated_at: timestamp("updated_at", { withTimezone: true }),
   updated_by: text("updated_by"),
 });
+
+// ─── Products DB (SVG revisions + artifacts) ────────────────────────────
+
+/** Immutable SVG revision published via the pipeline. */
+export const svgRevisions = pgTable(
+  "svg_revisions",
+  {
+    revisionId: text("revision_id").primaryKey(),
+    schemaVersion: integer("schema_version").notNull(),
+    definitionTypeId: text("definition_type_id").notNull(),
+    definitionVersion: integer("definition_version").notNull(),
+    compilerVersion: text("compiler_version"),
+    sourceRevision: integer("source_revision"),
+    artifactChecksums: jsonb("artifact_checksums"),
+    validation: jsonb("validation"),
+    actorId: text("actor_id").notNull(),
+    publishedAt: timestamp("published_at", { withTimezone: true }).notNull().defaultNow(),
+    reason: text("reason"),
+    slug: text("slug").notNull(),
+    version: integer("version").notNull(),
+    definition: jsonb("definition").notNull(),
+    releasedProduct: jsonb("released_product"),
+  },
+  (table) => [
+    index("svg_revisions_slug_idx").on(table.slug),
+    uniqueIndex("svg_revisions_slug_version_idx").on(table.slug, table.version),
+  ],
+);
+
+/** Artifact records (descriptor JSON + compiled SVG + generated PNG/thumbnail). */
+export const svgRevisionArtifacts = pgTable(
+  "svg_revision_artifacts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    revisionId: text("revision_id")
+      .notNull()
+      .references(() => svgRevisions.revisionId, { onDelete: "cascade" }),
+    kind: text("kind").notNull(),
+    checksum: text("checksum").notNull(),
+    storageKey: text("storage_key").notNull(),
+    width: integer("width"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("svg_revision_artifacts_revision_id_idx").on(table.revisionId),
+  ],
+);
+
+/** Live block descriptor (latest released descriptor per slug). */
+export const blockDescriptors = pgTable(
+  "block_descriptors",
+  {
+    slug: text("slug").primaryKey(),
+    currentVersion: integer("current_version").notNull(),
+    currentChecksum: text("current_checksum"),
+    descriptor: jsonb("descriptor").notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedBy: text("updated_by"),
+  },
+);

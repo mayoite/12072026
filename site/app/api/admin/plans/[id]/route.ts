@@ -66,7 +66,7 @@ export async function GET(req: NextRequest, context: RouteContext) {
   }
 
   return jsonWithPlannerRouteTelemetry(
-    { plan: planRowToAdminDetail(loaded.row) },
+    { plan: await planRowToAdminDetail(loaded.row) },
     { ...telemetry(), rowCount: 1, source: "drizzle_plans" },
   );
 }
@@ -157,7 +157,7 @@ export async function PATCH(req: NextRequest, context: RouteContext) {
   }
 
   return jsonWithPlannerRouteTelemetry(
-    { plan: planRowToAdminDetail(result.row) },
+    { plan: await planRowToAdminDetail(result.row) },
     { ...telemetry(), rowCount: 1, source: "drizzle_plans" },
   );
 }

@@ -19,7 +19,7 @@ vi.mock("@/app/api/admin/_lib/server", () => ({
 vi.mock("@/features/planner/store/plannerPersistence", () => ({
   isPlannerDatabaseConfigured: vi.fn(),
   loadPlannerDocumentAdmin: vi.fn(),
-  planRowToAdminDetail: vi.fn((row) => row),
+  planRowToAdminDetail: vi.fn(async (row) => row),
 }));
 
 vi.mock("@/lib/api/routeObservability", () => ({

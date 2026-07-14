@@ -33,6 +33,8 @@ import {
   assertDescriptorPublishable,
   buildReleasedProductFromPublish,
 } from "@/features/planner/admin/svg-editor/releasedCatalogPublishGate";
+import { DrizzleSvgRevisionPersistence } from "@/features/planner/admin/svg-editor/drizzleSvgPersistence.server";
+import { ImmutableSvgRevisionRepository } from "@/features/planner/admin/svg-editor/svgRevisionRepository.server";
 
 export type PublishDescriptorSuccess = {
   readonly success: true;
@@ -91,14 +93,23 @@ export type PublishDescriptorWithPipelineDeps = {
   readonly readReleasedSnapshot?: (
     slug: string,
   ) => ReleasedPublishSnapshot | null;
+
+  /**
+   * Optional DB revision repository for dual-write (DB-SVG-01..05).
+   * When provided, revisions + artifacts are also persisted to the Products DB
+   * after the disk pipeline commits. DB failures are logged but do not fail
+   * the overall publish during Phase 2 disk-authority cutover.
+   */
+  readonly dbRepository?: ImmutableSvgRevisionRepository;
 };
 
 const DEFAULT_DEPS: Required<
-  Omit<PublishDescriptorWithPipelineDeps, "readReleasedSnapshot">
+  Omit<PublishDescriptorWithPipelineDeps, "readReleasedSnapshot" | "dbRepository">
 > & {
   readonly readReleasedSnapshot: (
     slug: string,
   ) => ReleasedPublishSnapshot | null;
+  readonly dbRepository?: ImmutableSvgRevisionRepository;
 } = {
   parsePayload: parseAdminPayload,
   compileSvg: compileSvgForPublish,
@@ -266,6 +277,98 @@ export async function publishDescriptorWithPipeline(
       pipeline.cleanup,
     );
     return { success: false, error: withRecoveryErrors(`500.io: Publication commit failed. ${details}`, recoveryErrors) };
+  }
+
+  // DB-SVG-01..05: Dual-write to Products DB after disk commit succeeds.
+  // Phase 2: DB write is additive; failures are logged but don't abort.
+  if (deps.dbRepository) {
+    try {
+      const compiledSvgChecksum = sha256Utf8(compile.svg);
+      const definitionChecksum = descriptor.checksum;
+      const now = new Date().toISOString();
+      await deps.dbRepository.publish(
+        {
+          schemaVersion: 1,
+          revisionId: `${descriptor.slug}-r1`,
+          definitionTypeId: descriptor.slug,
+          definitionVersion: 1,
+          compilerVersion: "oando-asset-engine-v1",
+          sourceRevision: 0,
+          artifactChecksums: {
+            descriptor: definitionChecksum,
+            svg: compiledSvgChecksum,
+            png: compiledSvgChecksum,
+            thumbnails: {},
+          },
+          validation: {
+            valid: true,
+            diagnostics: [],
+          },
+          actorId: "system",
+          publishedAt: now,
+          reason: "publish",
+        },
+        {
+          schemaVersion: 1,
+          typeId: descriptor.slug,
+          name: descriptor.slug,
+          category: "uncategorized",
+          tags: [],
+          lifecycle: {
+            status: "published",
+            ownerId: "system",
+          },
+          viewBox: {
+            x: 0,
+            y: 0,
+            width: descriptor.geometry.widthMm,
+            height: descriptor.geometry.depthMm,
+          },
+          physicalDimensionsMm: {
+            width: descriptor.geometry.widthMm,
+            depth: descriptor.geometry.depthMm,
+            height: descriptor.geometry.heightMm,
+          },
+          parts: [
+            {
+              kind: "rect" as const,
+              id: "root",
+              visible: true,
+              x: 0,
+              y: 0,
+              width: descriptor.geometry.widthMm,
+              height: descriptor.geometry.depthMm,
+              customerEditable: false,
+            },
+          ],
+          parameters: [],
+          actions: [],
+          constraints: [],
+          variants: [],
+          mounting: [{ plane: "floor" as const, anchor: { x: 0, y: 0 }, rotationDegrees: 0 }],
+          accessibility: { title: descriptor.slug },
+        },
+        [
+          {
+            revisionId: `${descriptor.slug}-r1`,
+            kind: "descriptor",
+            checksum: definitionChecksum,
+            storageKey: `descriptors/${descriptor.slug}/${descriptor.slug}.json`,
+          },
+          {
+            revisionId: `${descriptor.slug}-r1`,
+            kind: "svg",
+            checksum: compiledSvgChecksum,
+            storageKey: `svg-catalog/${descriptor.slug}.svg`,
+          },
+        ],
+      );
+    } catch (dbError) {
+      console.error(
+        `[DB-SVG] Dual-write failed for ${descriptor.slug}:`,
+        dbError instanceof Error ? dbError.message : String(dbError),
+      );
+    }
   }
 
   const cleanupErrors = runAllBestEffort(persistResult.cleanup, pipeline.cleanup);
