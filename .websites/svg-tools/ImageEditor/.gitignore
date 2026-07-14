@@ -1,7 +1,0 @@
-node_modules/
-dist/
-uploads/
-public/bundle.js
-public/bundle.js.map
-*.tgz
-

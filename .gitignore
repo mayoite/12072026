@@ -5,7 +5,7 @@ site/block-descriptors/_archive/
 site/block-descriptors/*.*.json
 
 node_modules/
-# Hoisted at repo root (.npmrc node-linker=hoisted) ÔøΩ never install-only under site/
+# Hoisted at repo root (.npmrc node-linker=hoisted) ù never install-only under site/
 site/node_modules/
 tech-docs-generator/node_modules/
 
@@ -18,7 +18,7 @@ site/tsconfig.tsbuildinfo
 generated-documents/
 .tmp/generated-documents/
 
-# FORBIDDEN under site/ (canonical layout ÔøΩ see AGENTS.md)
+# FORBIDDEN under site/ (canonical layout ù see AGENTS.md)
 site/results/
 site/test-results/
 site/.cursor/
@@ -94,15 +94,16 @@ site/public/catalog-assets/generated/*.glb
 
 .firecrawl/
 
-# Competitive research packs (~1.8GB Firecrawl/raw) ‚Äî live at repo-root websites/; not product
+# Competitive research packs (~1.8GB Firecrawl/raw) ó reference only; not product
 websites/
+.websites/
 
 # Local IDE workspace (do not track)
 *.code-workspace
 
 
 # Root results/ stays tracked for evidence artifacts (screenshots/logs).
-# Durable docs belong in Plans/ Agents/ ayushdocs/ ÔøΩ not results/.
+# Durable docs belong in Plans/ Agents/ ayushdocs/ ù not results/.
 # Never gitignore results/ entirely.
 
 
@@ -114,11 +115,12 @@ results/**/chrome/_cdm/
 # Local archives (compressed, not tracked)
 /_archive-local/
 
-# Owner private twin (ignore ó not agent law)
+# Owner private twin (ignore ù not agent law)
 PROTECTED/
 
 
 # Session tool noise
 agent-tools/
 terminals/
+mcps/
 

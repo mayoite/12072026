@@ -28,6 +28,19 @@ This file records architectural limits.
 - Record paid or restricted asset approval before use.
 - Do not copy competitor code, assets, models, or trade dress.
 
+## Internationalization (i18n)
+
+- `next-intl` is the sole i18n layer for public Site marketing pages.
+- Do not add a second i18n framework (`react-intl`, `i18next`, etc.).
+- Supported locales: `en` (default), `hi`, `fr`, `de`, `es` — declared in `site/i18n/config.ts`.
+- Locale negotiation runs in `site/proxy.ts` via `next-intl/middleware`.
+- Routing uses `localePrefix: 'never'` — no locale segment in public URLs (`site/i18n/routing.ts`).
+- Message catalogs live in `site/i18n/messages/`. Wave-1 parity locales and namespaces are declared in `site/i18n/marketing-parity-manifest.json`.
+- Marketing copy parity is gated by `pnpm --filter oando-site run check:i18n:parity` (`site/scripts/check-i18n-key-parity.mjs`).
+- SEO hreflang alternates use the same locale list via `site/lib/site-data/seo.ts`.
+- Planner and Admin workspace UI are English-only today. Do not wire partial locale without an explicit plan item.
+- Conversion analytics carry a `locale` field where the contract requires it (`site/lib/analytics/conversionContract.ts`).
+
 ## Persistence
 
 - Drizzle and `postgres` are the catalog and SVG database boundary.
@@ -35,7 +48,9 @@ This file records architectural limits.
 - The installed AWS S3 client covers immutable R2 artifact storage.
 - The server API is the browser boundary.
 - No new package is approved for this work.
-- This is a target constraint. The SVG database adapter is not live.
+- SVG publish and Planner catalog read are **disk-authoritative** today (`block-descriptors/`, `public/svg-catalog/`).
+- Optional additive DB dual-write exists on the Admin server-action publish path only when `PRODUCTS_DATABASE_URL` is set. It is not live authority. `block_descriptors` and product revision pointers are not fully wired.
+- Cutover to DB authority requires `DB-SVG-01` … `DB-SVG-05` in `plan/Admin/CHECKLIST.md`.
 
 ## Catalog assets
 
