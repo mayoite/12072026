@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { mapDescriptorsToCatalogItems } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
-import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/catalogLifecycle.db.server";
+import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 
 vi.mock("@/app/api/_lib/public", () => ({
@@ -15,7 +15,7 @@ vi.mock(
   }),
 );
 
-vi.mock("@/features/admin/svg-editor/catalogLifecycle.db.server", () => ({
+vi.mock("@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server", () => ({
   loadBuyerVisibleDescriptorsWithDb: vi.fn(),
 }));
 

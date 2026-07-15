@@ -69,7 +69,7 @@ describe("GlbExtruderPreview", () => {
 
   it("shows empty admin UI when svgString is blank", async () => {
     const { GlbExtruderPreview } = await import(
-      "@/features/admin/svg-editor/GlbExtruderPreview"
+      "@/features/admin/svg-editor/publish/GlbExtruderPreview"
     );
 
     render(<GlbExtruderPreview svgString="  " />);
@@ -96,7 +96,7 @@ describe("GlbExtruderPreview", () => {
 
     const onGlbGenerated = vi.fn();
     const { GlbExtruderPreview } = await import(
-      "@/features/admin/svg-editor/GlbExtruderPreview"
+      "@/features/admin/svg-editor/publish/GlbExtruderPreview"
     );
 
     render(
@@ -123,7 +123,7 @@ describe("GlbExtruderPreview", () => {
     parseMock.mockReturnValue({ paths: [] });
 
     const { GlbExtruderPreview } = await import(
-      "@/features/admin/svg-editor/GlbExtruderPreview"
+      "@/features/admin/svg-editor/publish/GlbExtruderPreview"
     );
 
     render(

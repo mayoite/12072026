@@ -1,6 +1,6 @@
 "use client";
 
-import AdminAnalyticsPageView from "@/features/admin/AdminAnalyticsPageView";
+import AdminAnalyticsPageView from "@/features/admin/analytics/AdminAnalyticsPageView";
 
 export default function AnalyticsDashboard() {
   return <AdminAnalyticsPageView />;

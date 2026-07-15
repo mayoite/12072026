@@ -20,7 +20,7 @@ describe("ModelViewerPreview", () => {
 
   it("shows admin-friendly empty state when src is blank", async () => {
     const { ModelViewerPreview } = await import(
-      "@/features/admin/svg-editor/ModelViewerPreview"
+      "@/features/admin/svg-editor/publish/ModelViewerPreview"
     );
 
     render(<ModelViewerPreview src="   " />);
@@ -32,7 +32,7 @@ describe("ModelViewerPreview", () => {
 
   it("loads model-viewer in the browser and mounts the custom element", async () => {
     const { ModelViewerPreview } = await import(
-      "@/features/admin/svg-editor/ModelViewerPreview"
+      "@/features/admin/svg-editor/publish/ModelViewerPreview"
     );
 
     render(<ModelViewerPreview src="/catalog-assets/generated/demo.glb" alt="Demo" />);
@@ -55,7 +55,7 @@ describe("ModelViewerPreview", () => {
     loadModelViewer.mockRejectedValueOnce(new Error("network down"));
 
     const { ModelViewerPreview } = await import(
-      "@/features/admin/svg-editor/ModelViewerPreview"
+      "@/features/admin/svg-editor/publish/ModelViewerPreview"
     );
 
     render(<ModelViewerPreview src="/catalog-assets/generated/demo.glb" />);

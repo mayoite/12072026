@@ -19,16 +19,16 @@ import {
   acquireDescriptorLock,
   DESCRIPTOR_LOCK_TIMEOUT_MS,
   sweepStaleDescriptorLocks,
-} from "@/features/admin/svg-editor/descriptorLock";
+} from "@/features/admin/svg-editor/storage/descriptorLock";
 import {
   archiveDirFor,
   listArchiveVersions,
-} from "@/features/admin/svg-editor/descriptorArchive";
+} from "@/features/admin/svg-editor/storage/descriptorArchive";
 import {
   persistBlockDescriptor,
   readPersistedRaw,
-} from "@/features/admin/svg-editor/persistBlockDescriptor";
-import { verifyDualRead } from "@/features/admin/svg-editor/dualReadHarness";
+} from "@/features/admin/svg-editor/storage/persistBlockDescriptor";
+import { verifyDualRead } from "@/features/admin/svg-editor/storage/dualReadHarness";
 import * as descriptorPointer from "@/features/planner/project/catalog/svg/descriptorPointer";
 import {
   BLOCK_DESCRIPTOR_SCHEMA_VERSION,

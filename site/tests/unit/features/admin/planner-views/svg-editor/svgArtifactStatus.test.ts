@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { sanitizeCatalogSvgMarkup } from "@/features/admin/svg-editor/svgArtifactStatus.server";
+import { sanitizeCatalogSvgMarkup } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
 
 describe("sanitizeCatalogSvgMarkup", () => {
   it("accepts a minimal catalog SVG", () => {

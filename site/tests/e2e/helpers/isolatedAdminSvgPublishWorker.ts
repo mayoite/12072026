@@ -1,8 +1,8 @@
 import { readFileSync, writeFileSync } from "node:fs";
 
-import { persistBlockDescriptor } from "@/features/admin/svg-editor/persistBlockDescriptor";
-import { publishDescriptorWithPipeline } from "@/features/admin/svg-editor/publishDescriptorWithPipeline";
-import { runSvgPipeline } from "@/features/admin/svg-editor/svgPipelineRunner";
+import { persistBlockDescriptor } from "@/features/admin/svg-editor/storage/persistBlockDescriptor";
+import { publishDescriptorWithPipeline } from "@/features/admin/svg-editor/publish/publishDescriptorWithPipeline";
+import { runSvgPipeline } from "@/features/admin/svg-editor/publish/svgPipelineRunner";
 
 async function main(): Promise<void> {
   const [inputPath, resultPath, projectRoot, descriptorDir] = process.argv.slice(2);

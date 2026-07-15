@@ -24,12 +24,12 @@ vi.mock("@/features/shared/api/withAuth", () => ({
   ) => handler,
 }));
 
-vi.mock("@/features/admin/svg-editor/persistBlockDescriptor", () => ({
+vi.mock("@/features/admin/svg-editor/storage/persistBlockDescriptor", () => ({
   persistBlockDescriptor: vi.fn(),
   parseAdminPayload: vi.fn(),
 }));
 
-vi.mock("@/features/admin/svg-editor/svgPipelineRunner", () => ({
+vi.mock("@/features/admin/svg-editor/publish/svgPipelineRunner", () => ({
   runSvgPipeline: vi.fn(),
 }));
 
@@ -40,8 +40,8 @@ vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", async
   return { ...actual, clearLoaderCache: vi.fn() };
 });
 
-const { persistBlockDescriptor, parseAdminPayload } = await import("@/features/admin/svg-editor/persistBlockDescriptor");
-const { runSvgPipeline } = await import("@/features/admin/svg-editor/svgPipelineRunner");
+const { persistBlockDescriptor, parseAdminPayload } = await import("@/features/admin/svg-editor/storage/persistBlockDescriptor");
+const { runSvgPipeline } = await import("@/features/admin/svg-editor/publish/svgPipelineRunner");
 
 function makeReq(body: unknown): NextRequest {
   return new NextRequest("http://localhost:3000/api/admin/svg-editor", {

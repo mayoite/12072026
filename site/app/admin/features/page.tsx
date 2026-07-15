@@ -1,6 +1,6 @@
 "use client";
 
-import AdminFeatureFlagsPageView from "@/features/admin/AdminFeatureFlagsPageView";
+import AdminFeatureFlagsPageView from "@/features/admin/feature-flags/AdminFeatureFlagsPageView";
 
 export default function FeatureFlagsAdmin() {
   return <AdminFeatureFlagsPageView />;

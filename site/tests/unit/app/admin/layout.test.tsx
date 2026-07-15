@@ -19,8 +19,8 @@ vi.mock('next/font/google', () => ({
 }));
 
 
-vi.mock('@/features/admin/AdminLayoutShell', async () => {
-  const actual = await vi.importActual('@/features/admin/AdminLayoutShell');
+vi.mock('@/features/admin/ui/AdminLayoutShell', async () => {
+  const actual = await vi.importActual('@/features/admin/ui/AdminLayoutShell');
   return {
     ...actual,
     default: (props: any) => <div data-testid="mock---features-planner-admin-AdminLayoutShell">{JSON.stringify(props)}</div>,

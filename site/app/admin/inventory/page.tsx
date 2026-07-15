@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import AdminInventoryPageView from "@/features/admin/AdminInventoryPageView";
+import AdminInventoryPageView from "@/features/admin/inventory/AdminInventoryPageView";
 
 const SITE_ROOT = process.cwd();
 const REPO_ROOT =

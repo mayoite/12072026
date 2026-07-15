@@ -12,7 +12,7 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 
-import { loadBuyerVisibleDescriptors } from "@/features/admin/svg-editor/catalogLifecycle";
+import { loadBuyerVisibleDescriptors } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
 import {
   buildBlockThumbPngUrl,
   buildSvgCatalogPublicUrl,

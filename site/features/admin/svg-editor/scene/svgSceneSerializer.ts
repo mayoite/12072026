@@ -21,8 +21,8 @@
 import type {
   SvgBlockDefinitionV1,
   SvgStyleV1Schema,
-} from "@/features/admin/svg-editor/svgBlockSchemas";
-import { assertSupportedStudioKinds } from "@/features/admin/svg-editor/supportedSvgAuthoringSubset";
+} from "@/features/admin/svg-editor/contracts/svgBlockSchemas";
+import { assertSupportedStudioKinds } from "@/features/admin/svg-editor/contracts/supportedSvgAuthoringSubset";
 import type { z } from "zod";
 import {
   SCENE_MODEL_VERSION,

@@ -9,8 +9,8 @@ import { NextResponse } from "next/server";
 import { withAuth } from "@/features/shared/api/withAuth";
 import { success } from "@/features/shared/api/apiResponse";
 import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
-import { bulkImportBlockDescriptors } from "@/features/admin/svg-editor/bulkImportBlockDescriptors";
-import { appendDescriptorAudit } from "@/features/admin/svg-editor/descriptorAuditLog";
+import { bulkImportBlockDescriptors } from "@/features/admin/svg-editor/storage/bulkImportBlockDescriptors";
+import { appendDescriptorAudit } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 
 async function handleBulkImport(req: NextRequest, actorId: string) {

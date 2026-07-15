@@ -1,4 +1,4 @@
-import AdminWorkspaceCatalogPageView from "@/features/admin/AdminWorkspaceCatalogPageView";
+import AdminWorkspaceCatalogPageView from "@/features/admin/workspace-catalog/AdminWorkspaceCatalogPageView";
 
 export default function AdminWorkspaceCatalogPage() {
   return <AdminWorkspaceCatalogPageView />;

@@ -7,15 +7,15 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 
 import { POST } from "@/app/api/admin/svg-editor/route";
-import type * as PersistBlockDescriptor from "@/features/admin/svg-editor/persistBlockDescriptor";
+import type * as PersistBlockDescriptor from "@/features/admin/svg-editor/storage/persistBlockDescriptor";
 
 vi.mock("@/features/shared/api/withAuth", () => ({
   withAuth: (handler: (req: NextRequest) => Promise<Response>) => handler,
 }));
 
-vi.mock("@/features/admin/svg-editor/persistBlockDescriptor", async () => {
+vi.mock("@/features/admin/svg-editor/storage/persistBlockDescriptor", async () => {
   const actual = await vi.importActual<typeof PersistBlockDescriptor>(
-    "@/features/admin/svg-editor/persistBlockDescriptor",
+    "@/features/admin/svg-editor/storage/persistBlockDescriptor",
   );
   return {
     ...actual,
@@ -23,12 +23,12 @@ vi.mock("@/features/admin/svg-editor/persistBlockDescriptor", async () => {
   };
 });
 
-vi.mock("@/features/admin/svg-editor/svgPipelineRunner", () => ({
+vi.mock("@/features/admin/svg-editor/publish/svgPipelineRunner", () => ({
   runSvgPipeline: vi.fn(),
 }));
 
 const { persistBlockDescriptor } = await import(
-  "@/features/admin/svg-editor/persistBlockDescriptor"
+  "@/features/admin/svg-editor/storage/persistBlockDescriptor"
 );
 
 function postJson(body: unknown): NextRequest {

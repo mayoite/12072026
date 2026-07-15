@@ -24,7 +24,7 @@ vi.mock('node:fs', () => ({
   statSync: vi.fn(() => ({ mtime: new Date('2026-06-28T00:00:00.000Z') })),
 }));
 
-vi.mock('@/features/admin/AdminInventoryPageView', () => ({
+vi.mock('@/features/admin/inventory/AdminInventoryPageView', () => ({
   default: ({ rowCount }: { rowCount: number }) => (
     <div data-testid="admin-inventory-view">rows:{rowCount}</div>
   ),

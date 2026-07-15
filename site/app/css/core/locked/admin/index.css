@@ -1,7 +1,9 @@
-/* Admin surface — layout imports this file only */
+/* Admin surface — ordered by dependency. */
 @reference "../../../index.css";
-@import "./admin.css";
-@import "./admin-pages-1.css";
-@import "./admin-pages-2.css";
 @import "./surfaces.css";
+@import "./admin-primitives.css";
+@import "./admin-pages.css";
+@import "./svg-editor-previews.css";
+@import "./svg-editor-inventory.css";
 @import "./svg-studio.css";
+@import "./svg-editor-shell.css";

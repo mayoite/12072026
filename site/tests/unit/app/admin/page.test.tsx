@@ -14,8 +14,8 @@ vi.mock('next/font/google', () => ({
 }));
 
 
-vi.mock('@/features/admin/AdminDashboardPageView', async () => {
-  const actual = await vi.importActual('@/features/admin/AdminDashboardPageView');
+vi.mock('@/features/admin/dashboard/AdminDashboardPageView', async () => {
+  const actual = await vi.importActual('@/features/admin/dashboard/AdminDashboardPageView');
   return {
     ...actual,
     default: (props: any) => <div data-testid="mock---features-planner-admin-AdminDashboardPageView">{JSON.stringify(props)}</div>,

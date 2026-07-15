@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
-import { bulkImportBlockDescriptors } from "@/features/admin/svg-editor/bulkImportBlockDescriptors";
-import { appendDescriptorAudit } from "@/features/admin/svg-editor/descriptorAuditLog";
+import { bulkImportBlockDescriptors } from "@/features/admin/svg-editor/storage/bulkImportBlockDescriptors";
+import { appendDescriptorAudit } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
 
 vi.mock("@/features/shared/api/withAuth", async () => {
   const { error: errorFn } = await import("@/features/shared/api/apiResponse");
@@ -33,11 +33,11 @@ vi.mock("@/features/shared/api/withAuth", async () => {
   };
 });
 
-vi.mock("@/features/admin/svg-editor/bulkImportBlockDescriptors", () => ({
+vi.mock("@/features/admin/svg-editor/storage/bulkImportBlockDescriptors", () => ({
   bulkImportBlockDescriptors: vi.fn(),
 }));
 
-vi.mock("@/features/admin/svg-editor/descriptorAuditLog", () => ({
+vi.mock("@/features/admin/svg-editor/storage/descriptorAuditLog", () => ({
   appendDescriptorAudit: vi.fn(),
 }));
 

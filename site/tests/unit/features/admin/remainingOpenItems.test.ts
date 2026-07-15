@@ -10,7 +10,7 @@ import path from "node:path";
 import {
   declareSvgEditSources,
   formatDataSourceBanner,
-} from "@/features/admin/svg-editor/adminDataSourceEditability";
+} from "@/features/admin/svg-editor/lifecycle/adminDataSourceEditability";
 import {
   loadProductFamilyFromSerialized,
   planFamilyVersionReplacement,
@@ -26,20 +26,20 @@ import {
   placementPolicyForLifecycle,
   preservesRetiredIdentityInExistingDesigns,
   retirementConfirmMessage,
-} from "@/features/admin/svg-editor/catalogRetirement";
+} from "@/features/admin/svg-editor/lifecycle/catalogRetirement";
 import {
   applyBulkLifecycle,
   previewBulkLifecycle,
-} from "@/features/admin/svg-editor/bulkLifecycleBatch";
+} from "@/features/admin/svg-editor/lifecycle/bulkLifecycleBatch";
 import {
   adminPhoneCapabilities,
   phoneAuthoringBlockedMessage,
   phoneListLayoutMode,
-} from "@/features/admin/adminMobileReview";
-import { assertDraftNotStale } from "@/features/admin/svg-editor/staleDraftPublishGate";
+} from "@/features/admin/ui/adminMobileReview";
+import { assertDraftNotStale } from "@/features/admin/svg-editor/lifecycle/staleDraftPublishGate";
 import { placementPolicyForReleasedSlug } from "@/features/planner/catalog-api/releasedCatalogBoundary";
-import { setCatalogLifecycle, readLifecycleManifest } from "@/features/admin/svg-editor/catalogLifecycle";
-import { bulkImportBlockDescriptors } from "@/features/admin/svg-editor/bulkImportBlockDescriptors";
+import { setCatalogLifecycle, readLifecycleManifest } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
+import { bulkImportBlockDescriptors } from "@/features/admin/svg-editor/storage/bulkImportBlockDescriptors";
 
 describe("ADM-STATE-02 data-source editability", () => {
   it("declares editable vs read-only sources before write", () => {

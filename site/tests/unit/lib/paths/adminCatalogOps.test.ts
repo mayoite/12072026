@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import path from "node:path";
 
 import { ADMIN_CATALOG_OPS_DIR_DEFAULT } from "@/lib/paths/adminCatalogOps";
-import { descriptorAuditLogPath } from "@/features/admin/svg-editor/descriptorAuditLog";
-import { lifecycleManifestPath } from "@/features/admin/svg-editor/catalogLifecycle";
+import { descriptorAuditLogPath } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
+import { lifecycleManifestPath } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
 
 describe("admin catalog ops paths", () => {
   it("defaults lifecycle and audit under results/admin/catalog-ops", () => {

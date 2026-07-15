@@ -1,0 +1,138 @@
+/* SVG editor — inventory list, filters, pagination, block preview thumbnails.
+ * Depends on: admin-primitives.css, admin-pages.css */
+
+/* ── Inventory wrapper ── */
+
+.admin-svg-inventory {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Toolbar: search + filters ── */
+
+.admin-svg-inventory-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-svg-inventory-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-svg-inventory-filters--secondary {
+  margin-top: 0.25rem;
+}
+
+.admin-svg-inventory-filters__search {
+  position: relative;
+  flex: 1 1 12rem;
+}
+
+/* ── Table rows ── */
+
+.admin-svg-inventory-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+}
+
+.admin-svg-inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.admin-svg-inventory-table th,
+.admin-svg-inventory-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-soft);
+  white-space: nowrap;
+}
+
+.admin-svg-inventory-table th {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  background: var(--color-surface-raised);
+  cursor: pointer;
+  user-select: none;
+}
+
+.admin-svg-inventory-table th:hover {
+  color: var(--text-strong);
+}
+
+.admin-svg-inventory-row {
+  transition: background 0.1s;
+}
+
+.admin-svg-inventory-row:hover {
+  background: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface-raised));
+}
+
+/* ── Mix / summary row ── */
+
+.admin-svg-inventory-mix {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* ── Load-more / paging ── */
+
+.admin-svg-inventory-more {
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem 0;
+}
+
+.admin-catalog-paging {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* ── Block thumbnail previews ── */
+
+.block-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background:
+    repeating-conic-gradient(
+      color-mix(in srgb, var(--text-strong) 5%, transparent) 0% 25%,
+      transparent 0% 50%
+    ) 50% / 10px 10px;
+  overflow: hidden;
+}
+
+.block-preview--fixed {
+  border-color: var(--color-primary);
+}
+
+.block-preview--configurable {
+  border-style: dashed;
+}
+
+.block-preview--parametric {
+  border-style: dotted;
+}

@@ -1,0 +1,136 @@
+/* SVG editor — preview panels, live preview, model viewer, GLB status.
+ * Depends on: admin-primitives.css, admin-pages.css */
+
+/* ── Published / compiled SVG preview ── */
+
+.admin-svg-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-svg-preview__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background:
+    repeating-conic-gradient(
+      color-mix(in srgb, var(--text-strong) 5%, transparent) 0% 25%,
+      transparent 0% 50%
+    ) 50% / 16px 16px;
+  overflow: hidden;
+}
+
+.admin-svg-preview__stage--empty {
+  background: var(--color-surface-raised);
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+
+.admin-svg-preview__img {
+  display: block;
+  max-width: 100%;
+  max-height: 12rem;
+}
+
+.admin-svg-preview__empty {
+  padding: 1.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.admin-svg-preview__meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.admin-svg-preview--panel {
+  padding: 0.75rem;
+}
+
+.admin-svg-preview--stale {
+  opacity: 0.55;
+}
+
+/* ── Live compiled preview ── */
+
+.admin-svg-livepreview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ── Advanced import ── */
+
+.admin-svg-advanced-import {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── 3D model viewer ── */
+
+.admin-model-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-model-viewer__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-model-viewer__element {
+  display: block;
+  width: 100%;
+  height: 14rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+}
+
+.admin-model-viewer__message {
+  padding: 0.5rem;
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.admin-model-viewer__message--muted {
+  color: var(--text-muted);
+}
+
+.admin-model-viewer__message--error {
+  color: var(--color-error, red);
+}
+
+/* ── GLB generation status ── */
+
+.admin-glb-status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.8125rem;
+}
+
+.admin-glb-status__mount {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+}
+
+.admin-glb-status--busy {
+  opacity: 0.7;
+}
+
+.admin-glb-status--empty {
+  color: var(--text-muted);
+}

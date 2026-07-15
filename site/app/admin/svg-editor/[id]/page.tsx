@@ -3,12 +3,12 @@ import path from "node:path";
 
 import { notFound } from "next/navigation";
 
-import { AdminSvgEditorEditView } from "@/features/admin/svg-editor/AdminSvgEditorEditView";
-import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/newBlockDescriptorStub";
+import { AdminSvgEditorEditView } from "@/features/admin/svg-editor/views/AdminSvgEditorEditView";
+import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
 import { tryLoad, type BlockDescriptor } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
-import { readSvgArtifactStatus } from "@/features/admin/svg-editor/svgArtifactStatus.server";
-import { readLifecycleManifest, resolveCatalogLifecycle } from "@/features/admin/svg-editor/catalogLifecycle";
-import { publishSvgEditorAction } from "@/features/admin/svg-editor/publishSvgEditorAction";
+import { readSvgArtifactStatus } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
+import { readLifecycleManifest, resolveCatalogLifecycle } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
+import { publishSvgEditorAction } from "@/features/admin/svg-editor/publish/publishSvgEditorAction";
 
 export const dynamic = "force-dynamic";
 

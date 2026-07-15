@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
-import { listDescriptorRevisions } from "@/features/admin/svg-editor/descriptorRevisionIndex";
-import { readDescriptorAuditForSlug } from "@/features/admin/svg-editor/descriptorAuditLog";
+import { listDescriptorRevisions } from "@/features/admin/svg-editor/lifecycle/descriptorRevisionIndex";
+import { readDescriptorAuditForSlug } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
 import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
 vi.mock("@/features/shared/api/withAuth", async () => {
@@ -34,11 +34,11 @@ vi.mock("@/features/shared/api/withAuth", async () => {
   };
 });
 
-vi.mock("@/features/admin/svg-editor/descriptorRevisionIndex", () => ({
+vi.mock("@/features/admin/svg-editor/lifecycle/descriptorRevisionIndex", () => ({
   listDescriptorRevisions: vi.fn(),
 }));
 
-vi.mock("@/features/admin/svg-editor/descriptorAuditLog", () => ({
+vi.mock("@/features/admin/svg-editor/storage/descriptorAuditLog", () => ({
   readDescriptorAuditForSlug: vi.fn(),
 }));
 

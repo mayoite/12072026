@@ -1,5 +1,5 @@
 import type { PlannerManagedProductRow } from "@/features/planner/model";
-import type { StandardCatalogItem } from "@/features/admin/adminCatalogClient";
+import type { StandardCatalogItem } from "@/features/admin/api/adminCatalogClient";
 import type { CatalogCategory, CatalogItem } from "./catalogTypes";
 import { PlannerCatalogShapeType } from "./shapeTypeRegistry";
 

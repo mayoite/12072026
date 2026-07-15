@@ -10,8 +10,8 @@ import { ApiError, API_ERROR_CODES } from "@/features/shared/api/ApiError";
 import {
   type CatalogLifecycleState,
   setCatalogLifecycle,
-} from "@/features/admin/svg-editor/catalogLifecycle";
-import { appendDescriptorAudit } from "@/features/admin/svg-editor/descriptorAuditLog";
+} from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
+import { appendDescriptorAudit } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
 import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 

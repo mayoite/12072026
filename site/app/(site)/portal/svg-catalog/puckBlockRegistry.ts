@@ -1,1 +1,1 @@
-export * from "@/features/admin/svg-editor/puckBlockRegistry";
+export * from "@/lib/catalog/puckBlockRegistry";

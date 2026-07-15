@@ -1,0 +1,57 @@
+/* SVG Editor — 3-column engine shell.
+ * Semantic tokens only; no hex. Scoped under .admin-svg-engine-shell.
+ *
+ * Columns: preview rail | canvas stage | details rail
+ */
+
+.admin-svg-engine-shell {
+  display: grid;
+  grid-template-columns: minmax(200px, 15rem) minmax(0, 1fr) minmax(260px, 21rem);
+  gap: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
+  align-items: stretch;
+  padding: 0 12px 12px;
+}
+
+/* ── Rails ── */
+.admin-svg-engine-shell__rail {
+  min-width: 0;
+  max-height: calc(100dvh - 9rem);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-svg-engine-shell__rail > * {
+  flex-shrink: 0;
+}
+
+/* ── Canvas stage ── */
+.admin-svg-engine-shell__stage {
+  min-width: 0;
+  min-height: 55vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Collapsible panels inside rails ── */
+.admin-svg-engine-shell__panel > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.admin-svg-engine-shell__panel > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ── Dimensions label inside canvas sidebar ── */
+.admin-svg-engine-shell__dim-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}

@@ -1,7 +1,7 @@
 import "server-only";
 
-import type { SvgBlockDefinitionV1 } from "@/features/admin/svg-editor/svgBlockSchemas";
-import { SvgBlockDefinitionV1Schema } from "@/features/admin/svg-editor/svgBlockSchemas";
+import type { SvgBlockDefinitionV1 } from "@/features/admin/svg-editor/contracts/svgBlockSchemas";
+import { SvgBlockDefinitionV1Schema } from "@/features/admin/svg-editor/contracts/svgBlockSchemas";
 import { sha256Hex } from "./sha256";
 import { sanitizeAndOptimizeSvg } from "./svgServerSanitizer";
 import type { ZodIssue } from "zod";

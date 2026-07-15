@@ -17,8 +17,8 @@ import { cloneReleasedCatalogProductFixture } from "@/features/planner/catalog-a
 import {
   placementPolicyForLifecycle,
   type PlacementPolicy,
-} from "@/features/admin/svg-editor/catalogRetirement";
-import type { CatalogLifecycleState } from "@/features/admin/svg-editor/catalogLifecycle.shared";
+} from "@/features/admin/svg-editor/lifecycle/catalogRetirement";
+import type { CatalogLifecycleState } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.shared";
 
 /** Placement fields stamped from a released product onto a plan entity. */
 export type PlannerReleasedPlacement = {

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
-import { rollbackDescriptorToVersion } from "@/features/admin/svg-editor/rollbackDescriptorVersion";
+import { rollbackDescriptorToVersion } from "@/features/admin/svg-editor/lifecycle/rollbackDescriptorVersion";
 import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
 vi.mock("@/features/shared/api/withAuth", async () => {
@@ -33,7 +33,7 @@ vi.mock("@/features/shared/api/withAuth", async () => {
   };
 });
 
-vi.mock("@/features/admin/svg-editor/rollbackDescriptorVersion", () => ({
+vi.mock("@/features/admin/svg-editor/lifecycle/rollbackDescriptorVersion", () => ({
   rollbackDescriptorToVersion: vi.fn(),
 }));
 

@@ -29,6 +29,7 @@ export const PRICE_BOOKS_DIR_DEFAULT = path.join(
   resolveSitePackageRoot(),
   "features",
   "admin",
+  "pricing",
   "data",
   "price-books",
 );

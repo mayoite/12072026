@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import "@/app/(site)/globals.css";
 import "@/app/css/core/locked/admin/index.css";
-import AdminLayoutShell from "@/features/admin/AdminLayoutShell";
+import AdminLayoutShell from "@/features/admin/ui/AdminLayoutShell";
 import { requireAuthUser } from "@/lib/auth/session";
 
 export const metadata: Metadata = {
