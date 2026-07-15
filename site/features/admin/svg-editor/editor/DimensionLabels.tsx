@@ -24,7 +24,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
-import { UnitSystem, pixelsToDimensionString } from "./units";
+import { pixelsToDimensionString } from "./units";
+import type { UnitSystem } from "./units";
 import type { ExcalidrawAPI, ExcalidrawElement } from "./elementUtils";
 
 // ─── Types ────────────────────────────────────────────────────────────────
@@ -44,10 +45,10 @@ interface Label {
   lines: string[];
 }
 
-interface DimensionLabelStyle extends CSSProperties {
+type DimensionLabelStyle = CSSProperties & {
   readonly "--label-x": string;
   readonly "--label-y": string;
-}
+};
 
 // ─── Coordinate helpers ───────────────────────────────────────────────────
 
@@ -166,8 +167,9 @@ export function DimensionLabels({ excalidrawAPI, unitSystem }: DimensionLabelsPr
 
   useEffect(() => {
     if (!excalidrawAPI) {
-      setLabels([]);
-      return;
+      // Defer setState out of the effect body (react-hooks/set-state-in-effect).
+      const clearId = requestAnimationFrame(() => setLabels([]));
+      return () => cancelAnimationFrame(clearId);
     }
 
     let running = true;
@@ -199,7 +201,7 @@ export function DimensionLabels({ excalidrawAPI, unitSystem }: DimensionLabelsPr
           if (!selected[el.id]) continue;
 
           const label = buildLabel(
-            el as ExcalidrawElement & Record<string, unknown>,
+            el as DimensionLineElement,
             appState,
             unitSystem
           );
@@ -235,7 +237,7 @@ export function DimensionLabels({ excalidrawAPI, unitSystem }: DimensionLabelsPr
             {
               "--label-x": `${label.screenX}px`,
               "--label-y": `${label.screenY}px`,
-            } satisfies DimensionLabelStyle
+            } as DimensionLabelStyle
           }
         >
           {label.lines.map((line, i) => (

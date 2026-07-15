@@ -14,7 +14,7 @@ import {
   patchAdminCatalogItem,
   type ConfiguratorCatalogItem,
   type StandardCatalogItem,
-} from "./adminCatalogClient";
+} from "../api/adminCatalogClient";
 import {
   type CatalogListProps,
   type CatalogManagerItem,

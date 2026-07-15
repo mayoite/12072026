@@ -1,14 +1,11 @@
 import type { SvgEditorFormState } from "../../form/svgEditorFormState";
 import type { AuthoringLifecycle } from "../../lifecycle/authoringLifecycle";
 import type { CatalogLifecycleState } from "../../lifecycle/catalogLifecycle.shared";
+import type { SvgPreviewResult } from "../../publish/previewSvgEditorAction";
 import type { SvgArtifactStatus } from "../../publish/svgArtifactStatus.server";
 import type { FeedbackState } from "./useAdminSvgEditorPublish";
 
-export interface AdminSvgPreviewResult {
-  readonly ok: boolean;
-  readonly svg?: string;
-  readonly issues?: ReadonlyArray<{ path: string; message: string }>;
-}
+export type AdminSvgPreviewResult = SvgPreviewResult;
 
 export interface AdminSvgStageMeta {
   readonly identity: string;
@@ -53,4 +50,3 @@ export interface AdminSvgEditorShellProps {
   readonly onDocument: (svg: string, excalidrawElements: unknown) => void;
   readonly onError: (message: string) => void;
 }
-

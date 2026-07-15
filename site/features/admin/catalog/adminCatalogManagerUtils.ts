@@ -1,7 +1,7 @@
 import type {
   ConfiguratorCatalogItem,
   StandardCatalogItem,
-} from "./adminCatalogClient";
+} from "../api/adminCatalogClient";
 import { assertNoDesignerStaticGlb } from "@/features/planner/lib/glbAssetPolicy";
 
 /** Procedural / system mesh kinds only — no designer static glb/gltf product type. */

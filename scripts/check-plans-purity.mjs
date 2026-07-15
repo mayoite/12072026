@@ -4,7 +4,15 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const planRoot = path.join(root, "plan");
-const allowedRoots = new Set(["Admin", "Planner", "Site", "Security", "Phase-2"]);
+// svgblunder = SVG-Edit recovery plan (reference track; Admin checklist is Excalidraw-first).
+const allowedRoots = new Set([
+  "Admin",
+  "Planner",
+  "Site",
+  "Security",
+  "Phase-2",
+  "svgblunder",
+]);
 const violations = [];
 
 function collect(dir) {
@@ -43,6 +51,12 @@ for (const track of ["Admin", "Planner", "Site", "Security"]) {
     const text = fs.readFileSync(path.join(planRoot, file), "utf8");
     if (/\[x\]/i.test(text)) violations.push(`checked item: plan/${file}`);
   }
+}
+
+// Recovery plan may keep task [x] marks; it is not a product-track checklist.
+// Still forbid accidental CHECKLIST.md under svgblunder.
+for (const file of markdown.filter((f) => f.startsWith("svgblunder/") && f.endsWith("CHECKLIST.md"))) {
+  violations.push(`svgblunder must not use product CHECKLIST.md: plan/${file}`);
 }
 
 const phaseTwo = fs.readFileSync(path.join(planRoot, "Phase-2/README.md"), "utf8");

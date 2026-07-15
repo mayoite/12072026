@@ -204,7 +204,10 @@ export function AdminSvgEditorListView({
     try {
       const raw = window.localStorage.getItem(INVENTORY_SAVED_VIEWS_STORAGE_KEY);
       const views = parseSavedViews(raw);
-      if (views.length > 0) setSavedViews(views);
+      if (views.length === 0) return;
+      // Defer setState out of the effect body (react-hooks/set-state-in-effect).
+      const id = requestAnimationFrame(() => setSavedViews(views));
+      return () => cancelAnimationFrame(id);
     } catch {
       // ignore storage failures
     }

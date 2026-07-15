@@ -360,7 +360,7 @@ export function SiteHeader() {
 
   const openGuidedPlanner = () => {
     trackPlannerLaunchClicked({
-      pathname: pathname || "",
+      sourcePage: pathname || "",
       surface: "header",
     });
     window.dispatchEvent(new CustomEvent("oando-assistant:open"));

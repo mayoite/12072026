@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useMemo } from "react";
+import type { ReactNode } from "react";
 import {
   Excalidraw,
   MainMenu,
@@ -10,14 +11,31 @@ import {
   restoreElements,
 } from "@excalidraw/excalidraw";
 import type {
+  BinaryFiles,
+  DataURL,
   ExcalidrawInitialDataState,
   ExcalidrawProps,
 } from "@excalidraw/excalidraw/types";
+import type { FileId } from "@excalidraw/excalidraw/element/types";
 import "@excalidraw/excalidraw/index.css";
 import { DimensionPanel } from "./DimensionPanel";
 import { DimensionLabels } from "./DimensionLabels";
 import type { ExcalidrawAPI } from "./elementUtils";
 import type { UnitSystem } from "./units";
+
+const LEGACY_SVG_FILE_ID = "legacy-svg-bg" as FileId;
+const LEGACY_SVG_TIMESTAMP = 1;
+
+export interface ExcalidrawClientProps {
+  readonly initialSvg: string;
+  readonly initialExcalidrawElements?: unknown;
+  readonly checksum: string;
+  readonly readRequest: number;
+  readonly onDocument: (svg: string, excalidrawElements: unknown) => void;
+  readonly onError: (message: string) => void;
+  readonly renderCustomSidebar?: () => ReactNode;
+  readonly unitSystem?: UnitSystem;
+}
 
 export default function ExcalidrawClient({
   initialSvg,
@@ -28,16 +46,7 @@ export default function ExcalidrawClient({
   onError,
   renderCustomSidebar,
   unitSystem = "metric",
-}: {
-  readonly initialSvg: string;
-  readonly initialExcalidrawElements?: unknown;
-  readonly checksum: string;
-  readonly readRequest: number;
-  readonly onDocument: (svg: string, excalidrawElements: unknown) => void;
-  readonly onError: (message: string) => void;
-  readonly renderCustomSidebar?: () => React.ReactNode;
-  readonly unitSystem?: UnitSystem;
-}) {
+}: ExcalidrawClientProps) {
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawAPI | null>(null);
 
   const debouncer = useRef<NodeJS.Timeout | null>(null);
@@ -61,16 +70,18 @@ export default function ExcalidrawClient({
   const initialData = useMemo((): ExcalidrawInitialDataState | undefined => {
     if (Array.isArray(initialExcalidrawElements)) {
       return {
-        elements: restoreElements(initialExcalidrawElements, null, {
-          normalizeIndices: true,
+        elements: restoreElements(
+          initialExcalidrawElements as ExcalidrawInitialDataState["elements"],
+          null,
+          {
           repairBindings: true,
           refreshDimensions: false,
-        }),
+          },
+        ),
         scrollToContent: true,
       };
     }
     if (initialSvg) {
-      const fileId = "legacy-svg-bg";
       let b64 = "";
       try {
         b64 = btoa(unescape(encodeURIComponent(initialSvg)));
@@ -82,7 +93,7 @@ export default function ExcalidrawClient({
           {
             type: "image",
             version: 1,
-            versionNonce: Date.now(),
+            versionNonce: LEGACY_SVG_TIMESTAMP,
             isDeleted: false,
             id: "legacy-bg-element",
             fillStyle: "hachure",
@@ -101,21 +112,21 @@ export default function ExcalidrawClient({
             groupIds: [],
             strokeSharpness: "sharp",
             boundElements: [],
-            updated: Date.now(),
-            fileId,
+            updated: LEGACY_SVG_TIMESTAMP,
+            fileId: LEGACY_SVG_FILE_ID,
             status: "saved",
             locked: true,
           },
-        ],
+        ] as unknown as ExcalidrawInitialDataState["elements"],
         files: {
-          [fileId]: {
-            id: fileId,
-            dataURL: `data:image/svg+xml;base64,${b64}`,
+          [LEGACY_SVG_FILE_ID]: {
+            id: LEGACY_SVG_FILE_ID,
+            dataURL: `data:image/svg+xml;base64,${b64}` as DataURL,
             mimeType: "image/svg+xml",
-            created: Date.now(),
-            lastRetrieved: Date.now(),
+            created: LEGACY_SVG_TIMESTAMP,
+            lastRetrieved: LEGACY_SVG_TIMESTAMP,
           },
-        } as ExcalidrawInitialDataState["files"],
+        } as unknown as BinaryFiles,
         scrollToContent: true,
       };
     }

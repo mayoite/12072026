@@ -62,7 +62,7 @@ interface UseAdminSvgEditorPublishArgs {
   readonly slug: string;
   readonly descriptor: BlockDescriptor;
   readonly artifactStatus: SvgArtifactStatus;
-  readonly openedBaselineGeneratedAt: number;
+  readonly openedBaselineGeneratedAt: number | undefined;
   readonly lifecycle: CatalogLifecycleState;
   readonly setLifecycle: Dispatch<SetStateAction<CatalogLifecycleState>>;
   readonly form: SvgEditorFormState;

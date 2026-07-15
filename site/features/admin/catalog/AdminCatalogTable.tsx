@@ -10,7 +10,7 @@ import {
 import type {
   ConfiguratorCatalogItem,
   StandardCatalogItem,
-} from "./adminCatalogClient";
+} from "../api/adminCatalogClient";
 import type { CatalogManagerItem } from "./adminCatalogManagerUtils";
 
 type Props = {

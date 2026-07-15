@@ -6,7 +6,7 @@ import {
   AdminFieldGroup,
   AdminNumberInput,
   AdminTextInput,
-} from "../AdminFormFields";
+} from "../ui/AdminFormFields";
 import {
   defaultWorkstationAuthorDraft,
   releaseWorkstationAuthorDraft,

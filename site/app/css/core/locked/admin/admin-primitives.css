@@ -2,7 +2,7 @@
  * All admin surfaces share these primitives.
  * Semantic tokens only. No hex. No inline overrides. */
 
-@reference "../../../../index.css";
+@reference "../../../index.css";
 
 /* ── Buttons ── */
 

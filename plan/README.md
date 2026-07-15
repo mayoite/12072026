@@ -48,6 +48,14 @@ Security is one plan with multiple execution sections.
 
 It maps every `SEC-*` acceptance ID.
 
+### Reference: `svgblunder/`
+
+SVG-Edit V2 recovery plan under `plan/svgblunder/`.
+
+Active Admin authoring in the checklist is **Excalidraw-first**.
+
+Do not treat svgblunder as the default product track unless the owner reopens it.
+
 Admin, Planner, Site, and Security run in parallel after test isolation.
 
 Within each stream, independent sections may run in parallel.

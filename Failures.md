@@ -76,7 +76,7 @@ Remove an entry when its fix is freshly verified.
 - **Scope:** Admin catalog lifecycle → Planner canvas after retire/restore (`side-table-001`).
 - **Spec:** `site/tests/e2e/admin-svg-retire-restore.spec.ts` step 4b — guest workspace, catalog search, zero Place CTA when retired.
 - **Progress (2026-07-15):** Fixed false-pass selector (`/Add side-table/i` → `/Place — Add Side Table|Add Side Table to canvas/i`); added `waitForPlannerCatalogReady`. Run script: `pnpm run test:e2e:admin-retire-restore` → `results/admin/retire-restore-canvas/run-meta.json`.
-- **Precondition:** `side-table-001` must be `live` in admin inventory before run (prior failed run may leave it retired).
-- **Command:** `$env:DEV_AUTH_BYPASS='1'; pnpm run test:e2e:admin-retire-restore`
+- **Precondition:** Script `ensure-retire-restore-precondition.mjs` sets `side-table-001` → `live` in `results/admin/catalog-ops/_catalog-lifecycle.json` before run.
+- **Command:** `pnpm run test:e2e:admin-retire-restore` (on exit `0` auto-updates checklists + removes this entry)
 - **Next:** Green exit `0`; tick `plan/Admin/CHECKLIST.md` Phase 4 retire/restore + Planner canvas lines; remove this entry.
 - **Blocks:** Closing `ADM-PUB` retire/restore browser journey and Planner retired-symbol placement proof.

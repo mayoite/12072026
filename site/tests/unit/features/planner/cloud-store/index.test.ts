@@ -34,6 +34,7 @@ vi.mock("@/features/planner/cloud-store/plannerStore", () => ({
 
 describe("index", () => {
   it("should import successfully", () => {
-    expect(Module).toBeDefined();`n    expect(Object.keys(Module).length).toBeGreaterThan(0);
+    expect(Module).toBeDefined();
+    expect(Object.keys(Module).length).toBeGreaterThan(0);
   });
 });

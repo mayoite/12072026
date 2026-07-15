@@ -96,10 +96,10 @@ export function AdminSvgEditorEditView({
   // With Excalidraw, the SVG is generated instantly on the client side, so we don't need server compilation!
   const preview = useMemo(() => {
     return {
-      ok: true as boolean,
+      ok: true,
+      phase: "ok" as const,
       svg: excalidrawSvg || "",
       issues: [] as { path: string; message: string }[],
-      phase: "compile" as const
     };
   }, [excalidrawSvg]);
   const previewPending = false;
