@@ -6,10 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ArrowSquareOut as ExternalLink, List as Menu, X } from "@phosphor-icons/react";
 import { OneAndOnlyLogo } from "@/components/ui/Logo";
 import { ADMIN_NAV_GROUPS } from "./adminNav";
-import {
-  isSvgEditorFocusRoute,
-  SvgEditorNavigationToggle,
-} from "./svg-editor-v2/ui/SvgEditorNavigationToggle";
+const isSvgEditorFocusRoute = (pathname: string) => pathname.startsWith("/admin/svg-editor/");
 
 function isActivePath(pathname: string, href: string): boolean {
   if (href === "/admin") return pathname === "/admin" || pathname === "/admin/";
@@ -82,16 +79,10 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
 
   return (
     <div className="shell-admin-layout" data-admin-layout>
-      <header className="shell-admin-header shell-admin-header--brand">
-        <div className="shell-admin-bar shell-admin-bar--brand">
-          <div className="shell-admin-bar__group">
-            {editorFocusMode ? (
-              <SvgEditorNavigationToggle
-                expanded={mobileOpen}
-                onToggle={() => setMobileOpen((open) => !open)}
-                buttonRef={mobileToggleRef}
-              />
-            ) : (
+      {!editorFocusMode && (
+        <header className="shell-admin-header shell-admin-header--brand">
+          <div className="shell-admin-bar shell-admin-bar--brand">
+            <div className="shell-admin-bar__group">
               <button
                 ref={mobileToggleRef}
                 type="button"
@@ -103,24 +94,24 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
               >
                 {mobileOpen ? <X size={18} /> : <Menu size={18} />}
               </button>
-            )}
-            <Link href="/admin" className="shell-admin-brand" onClick={closeMobile}>
-              <OneAndOnlyLogo variant="white" className="h-7 w-auto" />
-              <span className="shell-admin-brand__badge">Admin</span>
-            </Link>
+              <Link href="/admin" className="shell-admin-brand" onClick={closeMobile}>
+                <OneAndOnlyLogo variant="white" className="h-7 w-auto" />
+                <span className="shell-admin-brand__badge">Admin</span>
+              </Link>
+            </div>
+            <div className="shell-admin-bar__actions">
+              <Link href="/" className="shell-admin-header-link" aria-label="View site">
+                <span className="shell-admin-header-link__label">View site</span>
+                <ArrowUpRight size={14} aria-hidden />
+              </Link>
+              <Link href="/planner/guest" className="shell-admin-header-cta" aria-label="Open planner">
+                <span className="shell-admin-header-cta__label">Open planner</span>
+                <ExternalLink size={14} aria-hidden />
+              </Link>
+            </div>
           </div>
-          <div className="shell-admin-bar__actions">
-            <Link href="/" className="shell-admin-header-link" aria-label="View site">
-              <span className="shell-admin-header-link__label">View site</span>
-              <ArrowUpRight size={14} aria-hidden />
-            </Link>
-            <Link href="/planner/guest" className="shell-admin-header-cta" aria-label="Open planner">
-              <span className="shell-admin-header-cta__label">Open planner</span>
-              <ExternalLink size={14} aria-hidden />
-            </Link>
-          </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       <div className="shell-admin-frame">
         {(!editorFocusMode || mobileOpen) ? <aside

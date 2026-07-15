@@ -96,6 +96,8 @@ export interface SvgEditorFormState {
   /** A4.0.1: visual scene is the publish authority for SVG geometry. */
   sceneViewBox?: SvgBlockDefinitionV1["viewBox"];
   sceneParts?: SvgBlockDefinitionV1["parts"];
+  excalidrawElements?: unknown;
+  compiledSvg?: string;
 }
 
 /** Field issue shape shared with `parseBlockDescriptor` / `freezeFreshDescriptor`. */

@@ -119,3 +119,13 @@ Remove an entry when its fix is freshly verified.
 - **Result:** **63 files, 422 tests, exit 0** (fresh run after coverage agents).
 - **Comment:** Earlier intermittent fails (`AdminInventoryPageView` multi-match, `useDebouncedCompile` pending race) are **not** active on this run. Do not re-add as FAIL without a new red command.
 - **Not a PASS record for DB or coverage floor** — unit green only.
+
+---
+
+## FAIL: SVG Editor V2 durable draft storage is not provisioned
+
+- **Scope:** `POST /api/admin/svg-editor/v2/draft/` against the configured private Supabase storage.
+- **Live check (2026-07-15):** The editor bridge returned the edited SVG, CSRF/auth passed, and the API returned HTTP `500` during verified object storage.
+- **Impact:** Manual SVG editing and document readback work, but durable Save Draft is not complete; Publish remains blocked by the unapplied V2 database/storage migration.
+- **Next:** Owner-approved provisioning of the `svg-editor-v2-private` bucket and V2 Products DB migration, then rerun save/reopen/publish browser journeys.
+- **Blocks:** Claiming the V2 editor is production-complete.

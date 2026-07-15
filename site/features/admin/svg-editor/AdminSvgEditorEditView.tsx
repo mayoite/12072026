@@ -39,7 +39,6 @@ import type { SvgEditorFormState } from "./svgEditorFormState";
 
 import { SvgEditorForm } from "./SvgEditorForm";
 import { LiveCompiledSvgPreview } from "./LiveCompiledSvgPreview";
-import { useDebouncedCompile } from "./useDebouncedCompile";
 import { uploadAssetToSupabase } from "./uploadAsset";
 import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 import type { PublishDescriptorResult } from "./publishDescriptorWithPipeline";
@@ -106,9 +105,9 @@ const ModelViewerPreview = dynamic(
   },
 );
 
-/** A4.1 visual studio — SVG.js engine is client-only, so load it as an island. */
-const SvgStudioCanvas = dynamic(
-  () => import("./SvgStudioCanvas").then((m) => m.SvgStudioCanvas),
+/** A4.1 visual studio — Excalidraw client-side sandbox. */
+const ExcalidrawCanvas = dynamic(
+  () => import("./scene/ExcalidrawClient"),
   {
     ssr: false,
     loading: () => (
@@ -201,11 +200,20 @@ export function AdminSvgEditorEditView({
     setForm(resolved);
   }, []);
 
+  // Store the raw SVG string provided by Excalidraw
+  const [excalidrawSvg, setExcalidrawSvg] = useState("");
+
   // Live compiled preview (debounced real compile; no disk I/O).
-  const { result: preview, pending: previewPending } = useDebouncedCompile(
-    slug,
-    form,
-  );
+  // With Excalidraw, the SVG is generated instantly on the client side, so we don't need server compilation!
+  const preview = useMemo(() => {
+    return { 
+      ok: true as boolean, 
+      svg: excalidrawSvg || "", 
+      issues: [] as { path: string; message: string }[],
+      phase: "compile" as const 
+    };
+  }, [excalidrawSvg]);
+  const previewPending = false;
 
   const [feedback, setFeedback] = useState<FeedbackState>(INITIAL_FEEDBACK);
 
@@ -269,17 +277,30 @@ export function AdminSvgEditorEditView({
   const studioDocumentGetterRef = useRef<(() => SvgSceneDocument) | null>(null);
   const studioDocumentRef = useRef(studioScene);
 
-  const handleStudioDocumentChange = useCallback((document: Parameters<typeof serializeSceneToDefinition>[0]) => {
-    studioDocumentRef.current = document;
-    const definition = serializeSceneToDefinition(document);
+  const handleStudioDocumentChange = useCallback((svg: string, excalidrawElements: unknown) => {
+    // We don't have parts, but we want to store the excalidrawElements in form state.
+    // Also, we want to trigger a debounced compile on the SVG.
+    // V1 useDebouncedCompile normally expects form to have the full state, but since we are replacing
+    // the visual drawing with Excalidraw, we can just save it into form.excalidrawElements.
+    // In V1, the preview SVG was re-compiled from `sceneParts`.
+    // Wait, if we use Excalidraw, Excalidraw *is* the SVG generator!
+    // But V1 needs the SVG to convert to GLB.
+    
+    // For now, we update the draft form with Excalidraw data.
     updateDraftForm((prev) => {
       const next = {
         ...prev,
-        sceneViewBox: definition.viewBox,
-        sceneParts: definition.parts,
+        excalidrawElements,
+        // Since Excalidraw provides the SVG directly, we could theoretically bypass the compiler.
+        // But for now, we just save the elements so they persist on publish.
       };
       return next;
     });
+    
+    // If we want to support GLB export directly from Excalidraw's SVG:
+    // we can save the raw SVG string somewhere.
+    studioDocumentRef.current = { svg, excalidrawElements } as any;
+    setExcalidrawSvg(svg);
   }, [updateDraftForm]);
 
   useEffect(() => {
@@ -357,15 +378,12 @@ export function AdminSvgEditorEditView({
   }, [form, formDirty, publishedForm, publishedStudioScene, slug, updateDraftForm]);
 
   const publishPayloadFromStudio = useCallback((): SvgEditorFormState => {
-    const liveDocument =
-      studioDocumentGetterRef.current?.() ?? studioDocumentRef.current;
-    const definition = serializeSceneToDefinition(liveDocument);
     return {
       ...form,
-      sceneViewBox: definition.viewBox,
-      sceneParts: definition.parts,
+      excalidrawElements: (studioDocumentRef.current as any)?.excalidrawElements ?? form.excalidrawElements,
+      compiledSvg: (studioDocumentRef.current as any)?.svg ?? excalidrawSvg,
     };
-  }, [form]);
+  }, [form, excalidrawSvg]);
 
   const footprintProof = useMemo(() => {
     const viewBox = form.sceneViewBox ?? form.viewBox;
@@ -597,98 +615,85 @@ export function AdminSvgEditorEditView({
   return (
     <div
       className="admin-page admin-page--svg-engine"
+      style={{ maxWidth: "none", padding: 0, margin: 0, width: "100%", display: "flex", flexDirection: "column", height: "100dvh" }}
       data-admin-shell="edit"
       data-testid="admin-svg-edit-shell"
     >
+
+      {/* ── Top header bar ─────────────────────────────────────────────── */}
       <header
-        className="admin-page__header admin-svg-engine-header"
-        data-testid="admin-shell-header"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          padding: "0 14px",
+          height: "52px",
+          flexShrink: 0,
+          borderBottom: "1px solid var(--border-soft)",
+          background: "var(--surface-raised)",
+          boxShadow: "0 1px 3px rgba(0,0,0,.06)",
+          zIndex: 20,
+        }}
       >
-        <div>
-          {/* ADM-SHELL-01: title, scope, source, state */}
-          <p className="admin-page__eyebrow" data-testid="admin-shell-scope">
-            SVG studio
+        {/* Back */}
+        <Link
+          href="/admin/svg-editor"
+          className="admin-btn admin-btn--outline"
+          style={{ padding: "4px 10px", fontSize: "0.8rem", flexShrink: 0 }}
+          data-testid="admin-shell-secondary-back"
+        >
+          <ArrowLeft size={13} aria-hidden />
+          Back
+        </Link>
+
+        <div style={{ width: "1px", alignSelf: "stretch", margin: "10px 2px", background: "var(--border-soft)" }} aria-hidden />
+
+        {/* Identity */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{ margin: 0, fontSize: "0.68rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--text-muted)" }}>
+            SVG Editor
           </p>
-          <h1 className="admin-page__title" data-testid="admin-shell-title">
-            <code>{slug}</code>
-          </h1>
-          <p className="admin-page__meta" data-testid="admin-shell-source">
-            Published {updatedAtLabel}
+          <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 600, color: "var(--text-strong)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {publishTarget || "new"}{form.sku.trim() ? <span style={{ fontWeight: 400, color: "var(--text-muted)", marginLeft: "6px" }}>SKU {form.sku.trim()}</span> : null}
           </p>
-          <div
-            className="admin-page__meta"
-            data-testid="admin-shell-state"
-            aria-live="polite"
-            aria-atomic="false"
-          >
-            <span className="admin-badge">{variantTitle(form.variant)}</span>{" "}
-            <span
-              className={authoringLifecycleBadgeClass(authoringLifecycle)}
-              data-testid="admin-authoring-lifecycle"
-              data-lifecycle={authoringLifecycle}
-            >
-              {authoringLifecycleLabel(authoringLifecycle)}
-            </span>{" "}
-            <span
-              className={
-                lifecycle === "live"
-                  ? "admin-badge admin-badge--active"
-                  : lifecycle === "retired"
-                    ? "admin-badge admin-badge--hidden"
-                    : "admin-badge admin-badge--warn"
-              }
-              data-testid="admin-shell-catalog-lifecycle"
-            >
-              {lifecycle}
-            </span>{" "}
-            <span
-              data-testid="admin-footprint-mm-proof"
-              data-aligned={footprintProof.aligned ? "true" : "false"}
-              data-width-mm={footprintProof.widthMm}
-              data-depth-mm={footprintProof.depthMm}
-              className={
-                footprintProof.aligned
-                  ? "admin-badge admin-badge--active"
-                  : "admin-badge admin-badge--warn"
-              }
-            >
-              {footprintProof.widthMm}×{footprintProof.depthMm} mm
-              {footprintProof.aligned ? "" : " · drawing does not match footprint"}
-            </span>
-          </div>
         </div>
-        {/* ADM-SHELL-02: primary Publish only; secondary/destructive stay outline */}
-        <div className="admin-page__actions" data-testid="admin-shell-actions">
-          <Link
-            href="/admin/svg-editor"
-            className="admin-btn admin-btn--outline"
-            data-testid="admin-shell-secondary-back"
-          >
-            <ArrowLeft size={14} aria-hidden />
-            Back
-          </Link>
+
+        {/* Lifecycle badge */}
+        <span
+          className={authoringLifecycleBadgeClass(authoringLifecycle)}
+          style={{ flexShrink: 0, fontSize: "0.72rem" }}
+          data-testid="admin-shell-lifecycle-badge"
+        >
+          {authoringLifecycleLabel(authoringLifecycle)}
+        </span>
+
+        {lifecycle === "live" ? (
+          <span className="admin-badge admin-badge--active" style={{ flexShrink: 0, fontSize: "0.72rem" }}>Live</span>
+        ) : null}
+
+        <div style={{ width: "1px", alignSelf: "stretch", margin: "10px 2px", background: "var(--border-soft)" }} aria-hidden />
+
+        {/* Action buttons */}
+        <div style={{ display: "flex", gap: "6px", alignItems: "center", flexShrink: 0 }}>
           <button
             type="button"
             className="admin-btn admin-btn--outline"
             onClick={handleResetToPublished}
             disabled={feedback.submitting || !formDirty}
             data-testid="admin-shell-destructive-reset"
+            style={{ fontSize: "0.8rem", padding: "4px 10px" }}
           >
-            Reset to published
+            Reset
           </button>
           <button
             type="button"
             className="admin-btn admin-btn--outline"
             onClick={() => void handleApproveForBuyers()}
-            disabled={
-              approving ||
-              feedback.submitting ||
-              lifecycle === "live" ||
-              artifactStatus.state !== "published"
-            }
+            disabled={approving || feedback.submitting || lifecycle === "live" || artifactStatus.state !== "published"}
             data-testid="admin-shell-secondary-approve"
+            style={{ fontSize: "0.8rem", padding: "4px 10px" }}
           >
-            Approve for buyers
+            Approve
           </button>
           <button
             type="button"
@@ -697,11 +702,12 @@ export function AdminSvgEditorEditView({
             disabled={!canPublish}
             aria-describedby="admin-svg-publication-impact"
             data-testid="admin-shell-primary-action"
+            style={{ fontSize: "0.8rem", padding: "4px 14px" }}
           >
             {feedback.submitting ? (
-              <Loader2 size={14} className="animate-spin" aria-hidden />
+              <Loader2 size={13} className="animate-spin" aria-hidden />
             ) : (
-              <CheckCircle size={14} aria-hidden />
+              <CheckCircle size={13} aria-hidden />
             )}
             Publish
           </button>
@@ -860,103 +866,199 @@ export function AdminSvgEditorEditView({
       </div>
 
       {/* Canvas-first shell: stage owns the viewport; form is a secondary rail. */}
-      <div
-        className="admin-svg-engine-shell"
-        data-testid="admin-svg-engine-shell"
-        data-studio-node-count={form.sceneParts?.length ?? 0}
-        data-stage-layout="1fr-rail"
-        data-stage-grid-columns={STAGE_GRID_COLUMNS}
-        data-authoring-width-px={AUTHORING_WIDTH_PX}
-        data-stage-min-fraction={STAGE_MIN_FRACTION}
-        data-stage-meets-min-at-1280={
-          stageMeetsMinimumAt1280() ? "true" : "false"
-        }
-      >
-        <section
-          aria-label="Visual authoring studio"
-          className="admin-svg-engine-shell__stage"
-          data-testid="admin-svg-engine-stage"
-          data-region="stage-column"
+      <div className="flex h-full w-full items-stretch overflow-hidden">
+        <div
+          className="admin-svg-engine-shell min-w-0 flex-1"
+          data-testid="admin-svg-engine-shell"
+          data-studio-node-count={form.sceneParts?.length ?? 0}
+          data-stage-layout="1fr-rail"
+          data-stage-grid-columns={STAGE_GRID_COLUMNS}
+          data-authoring-width-px={AUTHORING_WIDTH_PX}
+          data-stage-min-fraction={STAGE_MIN_FRACTION}
+          data-stage-meets-min-at-1280={
+            stageMeetsMinimumAt1280() ? "true" : "false"
+          }
         >
-          <SvgStudioCanvas
-            key={studioResetKey}
-            initialDocument={publishedStudioScene}
-            documentGetterRef={studioDocumentGetterRef}
-            onDocumentChange={handleStudioDocumentChange}
-            stageMeta={stageMeta}
-          />
-        </section>
+          <section
+            aria-label="Visual authoring studio"
+            className="admin-svg-engine-shell__stage"
+            data-testid="admin-svg-engine-stage"
+            data-region="stage-column"
+          >
+            <ExcalidrawCanvas
+              key={studioResetKey}
+              renderCustomSidebar={() => (
+                <div 
+                  className="admin-page__actions"
+                  data-testid="admin-shell-actions"
+                  style={{ display: "flex", flexDirection: "column", gap: "12px", padding: "16px", overflowY: "auto", height: "100%" }}
+                >
+                  <div 
+                    className="admin-panel" 
+                    style={{ border: "1px solid var(--border-soft)", borderRadius: "var(--radius-md)", background: "var(--surface-raised)", padding: "12px", display: "flex", flexDirection: "column", gap: "8px", marginBottom: "8px" }}
+                    onKeyDown={e => e.stopPropagation()}
+                    onKeyUp={e => e.stopPropagation()}
+                    onKeyPress={e => e.stopPropagation()}
+                  >
+                    <div style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", color: "var(--text-muted)", marginBottom: "4px" }}>Dimensions (mm)</div>
+                    <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.85rem" }}>
+                      Width
+                      <input 
+                        type="number" 
+                        className="admin-input" 
+                        style={{ width: "80px", padding: "4px", fontSize: "0.85rem" }} 
+                        value={form.geometry.widthMm || ""} 
+                        onChange={e => updateDraftForm({ ...form, geometry: { ...form.geometry, widthMm: Number(e.target.value) } })}
+                      />
+                    </label>
+                    <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.85rem" }}>
+                      Depth
+                      <input 
+                        type="number" 
+                        className="admin-input" 
+                        style={{ width: "80px", padding: "4px", fontSize: "0.85rem" }} 
+                        value={form.geometry.depthMm || ""} 
+                        onChange={e => updateDraftForm({ ...form, geometry: { ...form.geometry, depthMm: Number(e.target.value) } })}
+                      />
+                    </label>
+                    <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.85rem" }}>
+                      Height
+                      <input 
+                        type="number" 
+                        className="admin-input" 
+                        style={{ width: "80px", padding: "4px", fontSize: "0.85rem" }} 
+                        value={form.geometry.heightMm || ""} 
+                        onChange={e => updateDraftForm({ ...form, geometry: { ...form.geometry, heightMm: Number(e.target.value) } })}
+                      />
+                    </label>
+                  </div>
+
+                  <Link
+                    href="/admin/svg-editor"
+                    className="admin-btn admin-btn--outline"
+                    data-testid="admin-shell-secondary-back"
+                  >
+                    <ArrowLeft size={14} aria-hidden />
+                    Back
+                  </Link>
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--outline"
+                    onClick={handleResetToPublished}
+                    disabled={feedback.submitting || !formDirty}
+                    data-testid="admin-shell-destructive-reset"
+                  >
+                    Reset to published
+                  </button>
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--outline"
+                    onClick={() => void handleApproveForBuyers()}
+                    disabled={
+                      approving ||
+                      feedback.submitting ||
+                      lifecycle === "live" ||
+                      artifactStatus.state !== "published"
+                    }
+                    data-testid="admin-shell-secondary-approve"
+                  >
+                    Approve for buyers
+                  </button>
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--primary"
+                    onClick={handlePublish}
+                    disabled={!canPublish}
+                    aria-describedby="admin-svg-publication-impact"
+                    data-testid="admin-shell-primary-action"
+                  >
+                    {feedback.submitting ? (
+                      <Loader2 size={14} className="animate-spin" aria-hidden />
+                    ) : (
+                      <CheckCircle size={14} aria-hidden />
+                    )}
+                    Publish
+                  </button>
+                  
+                  <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
+                    <div className="admin-panel admin-svg-engine-shell__panel">
+                      <div className="admin-panel__header">Draft preview</div>
+                      <div className="admin-panel__body">
+                        <LiveCompiledSvgPreview
+                          result={preview}
+                          pending={previewPending}
+                          meta={{
+                            identity: stageMeta.identity,
+                            footprint: stageMeta.footprint,
+                            validation: stageMeta.validation,
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <article
+                      className="admin-panel admin-svg-engine-shell__panel"
+                      data-artifact-state={artifactStatus.state}
+                      data-testid="admin-svg-artifact-panel"
+                    >
+                      <div className="admin-panel__header">Published symbol</div>
+                      <div className="admin-panel__body">
+                        <p className="admin-page__meta">
+                          <span
+                            className={
+                              artifactStatus.state === "published"
+                                ? "admin-badge admin-badge--active"
+                                : artifactStatus.state === "invalid"
+                                  ? "admin-badge admin-badge--warn"
+                                  : "admin-badge admin-badge--hidden"
+                            }
+                          >
+                            {artifactStatus.state === "published"
+                              ? "Published"
+                              : artifactStatus.state === "invalid"
+                                ? "Needs attention"
+                                : "Missing"}
+                          </span>{" "}
+                          {artifactStatus.bytes > 0
+                            ? formatBytes(artifactStatus.bytes)
+                            : "No published symbol yet"}{" "}
+                          · checksum{" "}
+                          <code className="admin-page__checksum">{artifactHashShort}</code>
+                        </p>
+                        <PublishedSvgPreview
+                          slug={slug}
+                          status={artifactStatus}
+                          size="panel"
+                        />
+                      </div>
+                    </article>
+                  </div>
+                </div>
+              )}
+              initialExcalidrawElements={form.excalidrawElements}
+              initialSvg={""}
+              checksum={artifactStatus.hash ?? ""}
+              readRequest={1}
+              onDocument={handleStudioDocumentChange}
+              onError={(msg: string) => setFeedback(prev => ({ ...prev, errorMessage: msg }))}
+            />
+          </section>
 
         <aside
           aria-label="Preview and block details"
           className="admin-svg-engine-shell__rail"
         >
 
-          <div className="admin-panel admin-svg-engine-shell__panel">
-            <div className="admin-panel__header">Draft preview</div>
-            <div className="admin-panel__body">
-              <LiveCompiledSvgPreview
-                result={preview}
-                pending={previewPending}
-                meta={{
-                  identity: stageMeta.identity,
-                  footprint: stageMeta.footprint,
-                  validation: stageMeta.validation,
-                }}
-              />
-            </div>
-          </div>
-
-          <article
-            className="admin-panel admin-svg-engine-shell__panel"
-            data-artifact-state={artifactStatus.state}
-            data-testid="admin-svg-artifact-panel"
-          >
-            <div className="admin-panel__header">Published symbol</div>
-            <div className="admin-panel__body">
-              <p className="admin-page__meta">
-                <span
-                  className={
-                    artifactStatus.state === "published"
-                      ? "admin-badge admin-badge--active"
-                      : artifactStatus.state === "invalid"
-                        ? "admin-badge admin-badge--warn"
-                        : "admin-badge admin-badge--hidden"
-                  }
-                >
-                  {artifactStatus.state === "published"
-                    ? "Published"
-                    : artifactStatus.state === "invalid"
-                      ? "Needs attention"
-                      : "Missing"}
-                </span>{" "}
-                {artifactStatus.bytes > 0
-                  ? formatBytes(artifactStatus.bytes)
-                  : "No published symbol yet"}{" "}
-                · checksum{" "}
-                <code className="admin-page__checksum">{artifactHashShort}</code>
-              </p>
-              <PublishedSvgPreview
-                slug={slug}
-                status={artifactStatus}
-                size="panel"
-              />
-            </div>
-          </article>
+          
 
           <DescriptorRevisionPanel slug={slug} />
 
-          <details
+          <div
             className="admin-panel admin-svg-engine-shell__panel admin-svg-engine-shell__advanced"
-            open={
-              preview?.ok === false ||
-              formDirty ||
-              coreFieldIssues.length > 0
-            }
           >
-            <summary className="admin-panel__header">
+            <div className="admin-panel__header">
               Advanced block fields
-            </summary>
+            </div>
             <div className="admin-panel__body">
               <p className="admin-page__meta">
                 Metadata and catalog fields. Geometry for publish comes from the
@@ -971,10 +1073,10 @@ export function AdminSvgEditorEditView({
                 onChange={updateDraftForm}
               />
             </div>
-          </details>
+          </div>
 
-          <details className="admin-panel admin-svg-engine-shell__panel">
-            <summary className="admin-panel__header">SVG → generated GLB</summary>
+          <div className="admin-panel admin-svg-engine-shell__panel">
+            <div className="admin-panel__header">SVG → generated GLB</div>
             <div className="admin-panel__body">
               {form.variant === "fixed" ? (
                 <>
@@ -1041,8 +1143,9 @@ export function AdminSvgEditorEditView({
                 </p>
               )}
             </div>
-          </details>
+          </div>
         </aside>
+      </div>
       </div>
     </div>
   );

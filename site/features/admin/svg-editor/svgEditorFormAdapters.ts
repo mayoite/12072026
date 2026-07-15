@@ -128,6 +128,7 @@ export function descriptorToFormState(descriptor: BlockDescriptor): SvgEditorFor
     assetsSvgUrl: assets?.svgUrl ?? "",
     sceneViewBox: seedDefinition.viewBox,
     sceneParts: seedDefinition.parts,
+    excalidrawElements: (descriptor as any).excalidrawElements,
   };
 }
 
@@ -308,6 +309,10 @@ export function formStateToDescriptorInput(
     }));
   } else {
     delete base.blocks;
+  }
+
+  if (form.excalidrawElements) {
+    base.excalidrawElements = form.excalidrawElements;
   }
 
   // Let freezeFreshDescriptor recompute generatedAt/checksum.

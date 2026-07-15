@@ -154,6 +154,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1071.0",
+    "@excalidraw/excalidraw": "^0.18.1",
     "@flatten-js/core": "^1.6.12",
     "@gltf-transform/core": "^4.1.1",
     "@gltf-transform/extensions": "^4.1.1",

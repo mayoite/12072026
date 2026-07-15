@@ -30,14 +30,24 @@ export function DescriptorRevisionPanel({ slug }: Props) {
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const load = useCallback(async () => {
+    if (slug === "new-block" || !slug) {
+      setLoading(false);
+      return;
+    }
     try {
       const response = await browserApiFetch(apiPath(`/api/admin/svg-editor/${slug}/revisions`));
+      if (!response.ok) {
+        setLoading(false);
+        return;
+      }
       const payload = (await response.json()) as {
         revisions?: RevisionEntry[];
         audit?: AuditEntry[];
       };
       setRevisions(payload.revisions ?? []);
       setAudit(payload.audit ?? []);
+    } catch (e) {
+      console.error(e);
     } finally {
       setLoading(false);
     }

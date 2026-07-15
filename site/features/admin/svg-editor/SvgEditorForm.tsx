@@ -190,11 +190,19 @@ export function SvgEditorForm({
         const issue = issueByPath.get(field.path);
         return (
           <div className="admin-field" key={field.path} data-field={field.path} data-group={field.group}>
-            <label className="admin-field__label" htmlFor={id}>
-              {field.label}
-              {field.optional ? null : <span aria-hidden="true"> *</span>}
-              {field.unit ? <span className="admin-field__unit"> ({field.unit})</span> : null}
-            </label>
+            {["text", "number", "select"].includes(field.kind) ? (
+              <label className="admin-field__label" htmlFor={id}>
+                {field.label}
+                {field.optional ? null : <span aria-hidden="true"> *</span>}
+                {field.unit ? <span className="admin-field__unit"> ({field.unit})</span> : null}
+              </label>
+            ) : (
+              <div className="admin-field__label" id={`${id}-label`}>
+                {field.label}
+                {field.optional ? null : <span aria-hidden="true"> *</span>}
+                {field.unit ? <span className="admin-field__unit"> ({field.unit})</span> : null}
+              </div>
+            )}
 
             {field.kind === "text" ? (
               <TextControl

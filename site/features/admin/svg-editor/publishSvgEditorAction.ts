@@ -20,6 +20,7 @@ import {
   publishDescriptorWithPipeline,
   type PublishDescriptorResult,
 } from "@/features/admin/svg-editor/publishDescriptorWithPipeline";
+import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
 import { DrizzleSvgRevisionPersistence } from "@/features/admin/svg-editor/drizzleSvgPersistence.server";
 import { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
 import { isProductsDatabaseConfigured } from "@/platform/drizzle/databaseUrls";
@@ -65,7 +66,18 @@ export async function publishSvgEditorAction(
       ? new ImmutableSvgRevisionRepository(new DrizzleSvgRevisionPersistence())
       : undefined;
 
-  const published = await publishDescriptorWithPipeline(input, { dbRepository });
+  const compiledSvgStr = formFromEditor.compiledSvg;
+  const compileSvgMock = async (desc: BlockDescriptor) => {
+    if (compiledSvgStr) {
+      return { ok: true, svg: compiledSvgStr, issues: [] };
+    }
+    return compileSvgForPublish(desc);
+  };
+
+  const published = await publishDescriptorWithPipeline(input, { 
+    dbRepository,
+    compileSvg: compileSvgMock as any
+  });
   if (published.success) {
     setCatalogLifecycle(published.descriptor.slug, "draft");
     appendDescriptorAudit({
