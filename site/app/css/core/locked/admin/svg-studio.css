@@ -5,14 +5,25 @@
  * command bar, so only this route lets the document remain its scroll root. */
 html:has(.admin-page--svg-engine),
 body:has(.admin-page--svg-engine) {
-  overflow-x: clip;
-  overflow-y: visible;
+  overflow: hidden;
+  height: 100%;
 }
 
 .shell-admin-layout:has(.admin-page--svg-engine),
 .shell-admin-frame:has(.admin-page--svg-engine),
 .shell-admin-main:has(.admin-page--svg-engine) {
-  overflow: visible;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The page itself is a flex column taking 100dvh */
+.admin-page--svg-engine {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 [data-admin-layout] .svg-studio {

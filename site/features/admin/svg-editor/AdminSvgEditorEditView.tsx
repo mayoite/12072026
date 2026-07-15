@@ -1,13 +1,13 @@
 "use client";
 
 /**
- * A4 — Admin SVG Editor per-slug edit view (canvas-first shell).
+ * A4 â€” Admin SVG Editor per-slug edit view (canvas-first shell).
  *
  * Primary surface: visual studio (SvgSceneDocument). Secondary rail: live
  * compile preview, published artifact, and advanced block metadata form.
- * Publish: formState (sceneParts → blocks) → publishDescriptorWithPipeline.
+ * Publish: formState (sceneParts â†’ blocks) â†’ publishDescriptorWithPipeline.
  *
- * GS: semantic tokens only; no hex in tsx. Catalog publish SVG ≠ Fabric plan-draw.
+ * GS: semantic tokens only; no hex in tsx. Catalog publish SVG â‰  Fabric plan-draw.
  *
  * ADM-STATE-01 / ADM-SVG-14: one authoritative lifecycle + field-level draft diff.
  * ADM-FORM-02 / ADM-PUB-01: linked field errors (SvgEditorForm) + publish blocking.
@@ -79,7 +79,7 @@ import {
 } from "./publishActionMessages";
 import { assertDraftNotStale } from "./staleDraftPublishGate";
 
-/** Browser-only 3D islands — static import of model-viewer/three breaks RSC SSR. */
+/** Browser-only 3D islands â€” static import of model-viewer/three breaks RSC SSR. */
 const GlbExtruderPreview = dynamic(
   () => import("./GlbExtruderPreview").then((m) => m.GlbExtruderPreview),
   {
@@ -87,7 +87,7 @@ const GlbExtruderPreview = dynamic(
     loading: () => (
       <p className="admin-page__meta" role="status">
         <Loader2 size={14} className="animate-spin" aria-hidden /> Loading
-        extruder…
+        extruderâ€¦
       </p>
     ),
   },
@@ -99,13 +99,13 @@ const ModelViewerPreview = dynamic(
     loading: () => (
       <p className="admin-page__meta" role="status">
         <Loader2 size={14} className="animate-spin" aria-hidden /> Loading 3D
-        preview…
+        previewâ€¦
       </p>
     ),
   },
 );
 
-/** A4.1 visual studio — Excalidraw client-side sandbox. */
+/** A4.1 visual studio â€” Excalidraw client-side sandbox. */
 const ExcalidrawCanvas = dynamic(
   () => import("./scene/ExcalidrawClient"),
   {
@@ -113,7 +113,7 @@ const ExcalidrawCanvas = dynamic(
     loading: () => (
       <p className="admin-page__meta" role="status">
         <Loader2 size={14} className="animate-spin" aria-hidden /> Loading visual
-        studio…
+        studioâ€¦
       </p>
     ),
   },
@@ -181,7 +181,7 @@ export function AdminSvgEditorEditView({
   const [form, setForm] = useState<SvgEditorFormState>(() =>
     descriptorToFormState(descriptor),
   );
-  /** Baseline stamp at open — DB-SVG-09 stale draft detection. */
+  /** Baseline stamp at open â€” DB-SVG-09 stale draft detection. */
   const [openedBaselineGeneratedAt] = useState(() => descriptor.generatedAt);
 
   const [publishedForm, setPublishedForm] = useState<SvgEditorFormState>(() =>
@@ -217,7 +217,7 @@ export function AdminSvgEditorEditView({
 
   const [feedback, setFeedback] = useState<FeedbackState>(INITIAL_FEEDBACK);
 
-  // SVG → GLB flow, fed by the just-compiled preview SVG (no file picker).
+  // SVG â†’ GLB flow, fed by the just-compiled preview SVG (no file picker).
   const [glbSourceSvg, setGlbSourceSvg] = useState<string | null>(null);
   const [glbUrl, setGlbUrl] = useState<string>("");
   const [glbUploading, setGlbUploading] = useState(false);
@@ -246,7 +246,7 @@ export function AdminSvgEditorEditView({
           updateDraftForm((prev) => ({ ...prev, assetsGlbUrl: permanentUrl }));
         } else {
           setGlbUploadError(
-            "Upload returned no URL — blob preview still available locally.",
+            "Upload returned no URL â€” blob preview still available locally.",
           );
         }
       } catch (err) {
@@ -268,7 +268,7 @@ export function AdminSvgEditorEditView({
     }));
   }, []);
 
-  // A4.1 — starter scene for the visual studio, seeded from the descriptor.
+  // A4.1 â€” starter scene for the visual studio, seeded from the descriptor.
   const studioScene = useMemo(() => sceneFromDescriptor(descriptor), [descriptor]);
   const [publishedStudioScene, setPublishedStudioScene] = useState(studioScene);
   const formSignature = useMemo(() => JSON.stringify(form), [form]);
@@ -448,7 +448,7 @@ export function AdminSvgEditorEditView({
       draftSchemaVersion: String(descriptor.schemaVersion),
       liveArtifactState: artifactStatus.state,
       liveRevisionShort: artifactStatus.hash
-        ? `${artifactStatus.hash.slice(0, 16)}…`
+        ? `${artifactStatus.hash.slice(0, 16)}â€¦`
         : null,
     };
     // ADM-SVG-15: primary publish names target + draft/live versions before run.
@@ -552,8 +552,8 @@ export function AdminSvgEditorEditView({
   ]);
 
   const artifactHashShort = artifactStatus.hash
-    ? `${artifactStatus.hash.slice(0, 16)}…`
-    : "—";
+    ? `${artifactStatus.hash.slice(0, 16)}â€¦`
+    : "â€”";
 
   const canConvertToGlb = form.variant === "fixed" && compiledSvg !== null;
 
@@ -605,11 +605,11 @@ export function AdminSvgEditorEditView({
             : "Validation blocked (footprint)"
           : "Validation pending";
   const stageMeta = {
-    identity: `Identity ${publishTarget} · SKU ${form.sku.trim() || "—"}`,
-    footprint: `Footprint ${footprintProof.widthMm}×${footprintProof.depthMm} mm`,
+    identity: `Identity ${publishTarget} Â· SKU ${form.sku.trim() || "â€”"}`,
+    footprint: `Footprint ${footprintProof.widthMm}Ã—${footprintProof.depthMm} mm`,
     draft: `Draft ${authoringLifecycleLabel(authoringLifecycle)}`,
     validation: validationStatus,
-    revision: `Revision ${updatedAtLabel} · checksum ${artifactHashShort}`,
+    revision: `Revision ${updatedAtLabel} Â· checksum ${artifactHashShort}`,
   };
 
   return (
@@ -620,7 +620,7 @@ export function AdminSvgEditorEditView({
       data-testid="admin-svg-edit-shell"
     >
 
-      {/* ── Top header bar ─────────────────────────────────────────────── */}
+      {/* â”€â”€ Top header bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <header
         style={{
           display: "flex",
@@ -760,7 +760,7 @@ export function AdminSvgEditorEditView({
               ) : (
                 changedFields.map((entry, index) => (
                   <span key={entry.key}>
-                    {index > 0 ? " · " : null}
+                    {index > 0 ? " Â· " : null}
                     {entry.targetId ? (
                       <a href={`#${entry.targetId}`}>{entry.label}</a>
                     ) : (
@@ -789,6 +789,7 @@ export function AdminSvgEditorEditView({
         aria-atomic="true"
         className="admin-svg-engine-feedback"
         data-testid="admin-svg-a11y-live-feedback"
+        style={{ flexShrink: 0 }}
       >
         {feedback.submitting ? (
           <div
@@ -798,7 +799,7 @@ export function AdminSvgEditorEditView({
           >
             <Loader2 size={16} className="animate-spin shrink-0" aria-hidden />
             <span>
-              Publishing <code>{slug}</code>… saving draft and releasing the
+              Publishing <code>{slug}</code>â€¦ saving draft and releasing the
               Planner symbol.
             </span>
           </div>
@@ -842,7 +843,7 @@ export function AdminSvgEditorEditView({
                   >
                     Open released SVG
                   </a>
-                  {" · "}
+                  {" Â· "}
                   <Link
                     href={PLANNER_VERIFY_HREF}
                     data-testid="admin-svg-publish-success-planner"
@@ -865,205 +866,141 @@ export function AdminSvgEditorEditView({
         ) : null}
       </div>
 
-      {/* Canvas-first shell: stage owns the viewport; form is a secondary rail. */}
-      <div className="flex h-full w-full items-stretch overflow-hidden">
-        <div
-          className="admin-svg-engine-shell min-w-0 flex-1"
-          data-testid="admin-svg-engine-shell"
-          data-studio-node-count={form.sceneParts?.length ?? 0}
-          data-stage-layout="1fr-rail"
-          data-stage-grid-columns={STAGE_GRID_COLUMNS}
-          data-authoring-width-px={AUTHORING_WIDTH_PX}
-          data-stage-min-fraction={STAGE_MIN_FRACTION}
-          data-stage-meets-min-at-1280={
-            stageMeetsMinimumAt1280() ? "true" : "false"
-          }
+      {/* ── Two-viewport shell ─────────────────────────────────────────── */}
+      {/* Left: Excalidraw canvas  |  Right: preview rail (always visible) */}
+      <div
+        className="admin-svg-engine-shell"
+        data-testid="admin-svg-engine-shell"
+        data-studio-node-count={form.sceneParts?.length ?? 0}
+        data-stage-layout="1fr-rail"
+        data-stage-grid-columns={STAGE_GRID_COLUMNS}
+        data-authoring-width-px={AUTHORING_WIDTH_PX}
+        data-stage-min-fraction={STAGE_MIN_FRACTION}
+        data-stage-meets-min-at-1280={stageMeetsMinimumAt1280() ? "true" : "false"}
+        style={{ flex: 1, minHeight: 0, display: "grid", gridTemplateColumns: "1fr 300px", padding: "12px", gap: "12px" }}
+      >
+        {/* ── Left: canvas stage ── */}
+        <section
+          aria-label="Visual authoring studio"
+          className="admin-svg-engine-shell__stage"
+          data-testid="admin-svg-engine-stage"
+          data-region="stage-column"
+          style={{ minHeight: 0, height: "100%", display: "flex", flexDirection: "column" }}
         >
-          <section
-            aria-label="Visual authoring studio"
-            className="admin-svg-engine-shell__stage"
-            data-testid="admin-svg-engine-stage"
-            data-region="stage-column"
-          >
-            <ExcalidrawCanvas
-              key={studioResetKey}
-              renderCustomSidebar={() => (
-                <div 
-                  className="admin-page__actions"
-                  data-testid="admin-shell-actions"
-                  style={{ display: "flex", flexDirection: "column", gap: "12px", padding: "16px", overflowY: "auto", height: "100%" }}
-                >
-                  <div 
-                    className="admin-panel" 
-                    style={{ border: "1px solid var(--border-soft)", borderRadius: "var(--radius-md)", background: "var(--surface-raised)", padding: "12px", display: "flex", flexDirection: "column", gap: "8px", marginBottom: "8px" }}
-                    onKeyDown={e => e.stopPropagation()}
-                    onKeyUp={e => e.stopPropagation()}
-                    onKeyPress={e => e.stopPropagation()}
-                  >
-                    <div style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", color: "var(--text-muted)", marginBottom: "4px" }}>Dimensions (mm)</div>
-                    <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.85rem" }}>
-                      Width
-                      <input 
-                        type="number" 
-                        className="admin-input" 
-                        style={{ width: "80px", padding: "4px", fontSize: "0.85rem" }} 
-                        value={form.geometry.widthMm || ""} 
-                        onChange={e => updateDraftForm({ ...form, geometry: { ...form.geometry, widthMm: Number(e.target.value) } })}
-                      />
-                    </label>
-                    <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.85rem" }}>
-                      Depth
-                      <input 
-                        type="number" 
-                        className="admin-input" 
-                        style={{ width: "80px", padding: "4px", fontSize: "0.85rem" }} 
-                        value={form.geometry.depthMm || ""} 
-                        onChange={e => updateDraftForm({ ...form, geometry: { ...form.geometry, depthMm: Number(e.target.value) } })}
-                      />
-                    </label>
-                    <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.85rem" }}>
-                      Height
-                      <input 
-                        type="number" 
-                        className="admin-input" 
-                        style={{ width: "80px", padding: "4px", fontSize: "0.85rem" }} 
-                        value={form.geometry.heightMm || ""} 
-                        onChange={e => updateDraftForm({ ...form, geometry: { ...form.geometry, heightMm: Number(e.target.value) } })}
-                      />
-                    </label>
-                  </div>
-
-                  <Link
-                    href="/admin/svg-editor"
-                    className="admin-btn admin-btn--outline"
-                    data-testid="admin-shell-secondary-back"
-                  >
-                    <ArrowLeft size={14} aria-hidden />
-                    Back
-                  </Link>
-                  <button
-                    type="button"
-                    className="admin-btn admin-btn--outline"
-                    onClick={handleResetToPublished}
-                    disabled={feedback.submitting || !formDirty}
-                    data-testid="admin-shell-destructive-reset"
-                  >
-                    Reset to published
-                  </button>
-                  <button
-                    type="button"
-                    className="admin-btn admin-btn--outline"
-                    onClick={() => void handleApproveForBuyers()}
-                    disabled={
-                      approving ||
-                      feedback.submitting ||
-                      lifecycle === "live" ||
-                      artifactStatus.state !== "published"
-                    }
-                    data-testid="admin-shell-secondary-approve"
-                  >
-                    Approve for buyers
-                  </button>
-                  <button
-                    type="button"
-                    className="admin-btn admin-btn--primary"
-                    onClick={handlePublish}
-                    disabled={!canPublish}
-                    aria-describedby="admin-svg-publication-impact"
-                    data-testid="admin-shell-primary-action"
-                  >
-                    {feedback.submitting ? (
-                      <Loader2 size={14} className="animate-spin" aria-hidden />
-                    ) : (
-                      <CheckCircle size={14} aria-hidden />
-                    )}
-                    Publish
-                  </button>
-                  
-                  <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
-                    <div className="admin-panel admin-svg-engine-shell__panel">
-                      <div className="admin-panel__header">Draft preview</div>
-                      <div className="admin-panel__body">
-                        <LiveCompiledSvgPreview
-                          result={preview}
-                          pending={previewPending}
-                          meta={{
-                            identity: stageMeta.identity,
-                            footprint: stageMeta.footprint,
-                            validation: stageMeta.validation,
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    <article
-                      className="admin-panel admin-svg-engine-shell__panel"
-                      data-artifact-state={artifactStatus.state}
-                      data-testid="admin-svg-artifact-panel"
-                    >
-                      <div className="admin-panel__header">Published symbol</div>
-                      <div className="admin-panel__body">
-                        <p className="admin-page__meta">
-                          <span
-                            className={
-                              artifactStatus.state === "published"
-                                ? "admin-badge admin-badge--active"
-                                : artifactStatus.state === "invalid"
-                                  ? "admin-badge admin-badge--warn"
-                                  : "admin-badge admin-badge--hidden"
-                            }
-                          >
-                            {artifactStatus.state === "published"
-                              ? "Published"
-                              : artifactStatus.state === "invalid"
-                                ? "Needs attention"
-                                : "Missing"}
-                          </span>{" "}
-                          {artifactStatus.bytes > 0
-                            ? formatBytes(artifactStatus.bytes)
-                            : "No published symbol yet"}{" "}
-                          · checksum{" "}
-                          <code className="admin-page__checksum">{artifactHashShort}</code>
-                        </p>
-                        <PublishedSvgPreview
-                          slug={slug}
-                          status={artifactStatus}
-                          size="panel"
-                        />
-                      </div>
-                    </article>
-                  </div>
+          <ExcalidrawCanvas
+            key={studioResetKey}
+            renderCustomSidebar={() => (
+              <div
+                data-testid="admin-shell-actions"
+                style={{ display: "flex", flexDirection: "column", gap: "10px", padding: "14px", overflowY: "auto", height: "100%" }}
+                onKeyDown={e => e.stopPropagation()}
+                onKeyUp={e => e.stopPropagation()}
+              >
+                {/* Dimensions box inside the canvas sidebar */}
+                <div style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-muted)", marginBottom: "2px" }}>
+                  Dimensions (mm)
                 </div>
-              )}
-              initialExcalidrawElements={form.excalidrawElements}
-              initialSvg={""}
-              checksum={artifactStatus.hash ?? ""}
-              readRequest={1}
-              onDocument={handleStudioDocumentChange}
-              onError={(msg: string) => setFeedback(prev => ({ ...prev, errorMessage: msg }))}
-            />
-          </section>
+                <label style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: "6px", fontSize: "0.82rem" }}>
+                  <span>Width</span>
+                  <input type="number" className="admin-input" style={{ width: "72px", padding: "4px 6px", fontSize: "0.82rem" }}
+                    value={form.geometry.widthMm || ""} onChange={e => updateDraftForm({ ...form, geometry: { ...form.geometry, widthMm: Number(e.target.value) } })} />
+                </label>
+                <label style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: "6px", fontSize: "0.82rem" }}>
+                  <span>Depth</span>
+                  <input type="number" className="admin-input" style={{ width: "72px", padding: "4px 6px", fontSize: "0.82rem" }}
+                    value={form.geometry.depthMm || ""} onChange={e => updateDraftForm({ ...form, geometry: { ...form.geometry, depthMm: Number(e.target.value) } })} />
+                </label>
+                <label style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: "6px", fontSize: "0.82rem" }}>
+                  <span>Height</span>
+                  <input type="number" className="admin-input" style={{ width: "72px", padding: "4px 6px", fontSize: "0.82rem" }}
+                    value={form.geometry.heightMm || ""} onChange={e => updateDraftForm({ ...form, geometry: { ...form.geometry, heightMm: Number(e.target.value) } })} />
+                </label>
+                <hr style={{ border: "none", borderTop: "1px solid var(--border-soft)", margin: "4px 0" }} />
+                <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--text-muted)", lineHeight: 1.4 }}>
+                  {stageMeta.footprint}<br />{stageMeta.validation}
+                </p>
+              </div>
+            )}
+            initialExcalidrawElements={form.excalidrawElements}
+            initialSvg={""}
+            checksum={artifactStatus.hash ?? ""}
+            readRequest={1}
+            onDocument={handleStudioDocumentChange}
+            onError={(msg: string) => setFeedback(prev => ({ ...prev, errorMessage: msg }))}
+          />
+        </section>
 
+        {/* ── Right: always-visible preview rail ── */}
         <aside
           aria-label="Preview and block details"
           className="admin-svg-engine-shell__rail"
+          style={{ height: "100%", display: "flex", flexDirection: "column", gap: "12px" }}
         >
-
-          
-
-          <DescriptorRevisionPanel slug={slug} />
-
-          <div
-            className="admin-panel admin-svg-engine-shell__panel admin-svg-engine-shell__advanced"
-          >
-            <div className="admin-panel__header">
-              Advanced block fields
+          {/* Draft preview */}
+          <div className="admin-panel admin-svg-engine-shell__panel" style={{ flexShrink: 0 }}>
+            <div className="admin-panel__header">Draft preview</div>
+            <div className="admin-panel__body">
+              <LiveCompiledSvgPreview
+                result={preview}
+                pending={previewPending}
+                meta={{
+                  identity: stageMeta.identity,
+                  footprint: stageMeta.footprint,
+                  validation: stageMeta.validation,
+                }}
+              />
             </div>
+          </div>
+
+          {/* Published symbol */}
+          <article
+            className="admin-panel admin-svg-engine-shell__panel"
+            data-artifact-state={artifactStatus.state}
+            data-testid="admin-svg-artifact-panel"
+            style={{ flexShrink: 0 }}
+          >
+            <div className="admin-panel__header">Published symbol</div>
+            <div className="admin-panel__body">
+              <p className="admin-page__meta">
+                <span
+                  className={
+                    artifactStatus.state === "published"
+                      ? "admin-badge admin-badge--active"
+                      : 0 > 1 // fake warn state condition helper
+                        ? "admin-badge admin-badge--warn"
+                        : "admin-badge admin-badge--hidden"
+                  }
+                >
+                  {artifactStatus.state === "published" ? "Published" : "Missing"}
+                </span>{" "}
+                {artifactStatus.bytes > 0
+                  ? formatBytes(artifactStatus.bytes)
+                  : "No published symbol yet"}{" "}
+                · checksum{" "}
+                <code className="admin-page__checksum">{artifactHashShort}</code>
+              </p>
+              <PublishedSvgPreview slug={slug} status={artifactStatus} size="panel" />
+            </div>
+          </article>
+
+          {/* Descriptor revision */}
+          <div style={{ flexShrink: 0 }}>
+            <DescriptorRevisionPanel slug={slug} />
+          </div>
+
+          {/* Advanced block fields */}
+          <details
+            className="admin-panel admin-svg-engine-shell__panel admin-svg-engine-shell__advanced"
+            open={preview?.ok === false || formDirty || coreFieldIssues.length > 0}
+            style={{ flexShrink: 0 }}
+          >
+            <summary className="admin-panel__header" style={{ cursor: "pointer", listStyle: "none" }}>
+              Advanced block fields
+            </summary>
             <div className="admin-panel__body">
               <p className="admin-page__meta">
                 Metadata and catalog fields. Geometry for publish comes from the
-                visual studio, not these rows. Field errors and a linked summary
-                appear here when validation fails.
+                visual studio, not these rows.
               </p>
               <SvgEditorForm
                 fields={SVG_EDITOR_FIELDS}
@@ -1073,10 +1010,16 @@ export function AdminSvgEditorEditView({
                 onChange={updateDraftForm}
               />
             </div>
-          </div>
+          </details>
 
-          <div className="admin-panel admin-svg-engine-shell__panel">
-            <div className="admin-panel__header">SVG → generated GLB</div>
+          {/* SVG → GLB */}
+          <details
+            className="admin-panel admin-svg-engine-shell__panel"
+            style={{ flexShrink: 0 }}
+          >
+            <summary className="admin-panel__header" style={{ cursor: "pointer", listStyle: "none" }}>
+              SVG → generated GLB
+            </summary>
             <div className="admin-panel__body">
               {form.variant === "fixed" ? (
                 <>
@@ -1094,40 +1037,20 @@ export function AdminSvgEditorEditView({
                     Convert to 3D (GLB)
                   </button>
                   {!canConvertToGlb ? (
-                    <p className="admin-page__meta">
-                      Generate a valid preview first, then convert.
-                    </p>
+                    <p className="admin-page__meta">Generate a valid preview first, then convert.</p>
                   ) : null}
                   {glbSourceSvg ? (
-                    <GlbExtruderPreview
-                      svgString={glbSourceSvg}
-                      onGlbGenerated={handleGlbGenerated}
-                    />
+                    <GlbExtruderPreview svgString={glbSourceSvg} onGlbGenerated={handleGlbGenerated} />
                   ) : null}
                   {glbUploading ? (
-                    <div
-                      role="status"
-                      className="admin-alert admin-alert--info flex flex-wrap items-center gap-3"
-                      aria-busy="true"
-                    >
-                      <Loader2
-                        size={14}
-                        className="animate-spin shrink-0"
-                        aria-hidden
-                      />
-                      Uploading generated GLB…
+                    <div role="status" className="admin-alert admin-alert--info flex flex-wrap items-center gap-3" aria-busy="true">
+                      <Loader2 size={14} className="animate-spin shrink-0" aria-hidden />
+                      Uploading generated GLBâ€¦
                     </div>
                   ) : null}
                   {glbUploadError ? (
-                    <div
-                      role="alert"
-                      className="admin-alert admin-alert--warn flex flex-wrap items-center gap-3"
-                    >
-                      <WarningCircle
-                        size={14}
-                        className="shrink-0"
-                        aria-hidden
-                      />
+                    <div role="alert" className="admin-alert admin-alert--warn flex flex-wrap items-center gap-3">
+                      <WarningCircle size={14} className="shrink-0" aria-hidden />
                       <span>{glbUploadError}</span>
                     </div>
                   ) : null}
@@ -1138,17 +1061,14 @@ export function AdminSvgEditorEditView({
                   ) : null}
                 </>
               ) : (
-                <p className="admin-page__meta">
-                  3D generation is available for fixed-variant blocks.
-                </p>
+                <p className="admin-page__meta">3D generation is available for fixed-variant blocks.</p>
               )}
             </div>
-          </div>
+          </details>
         </aside>
-      </div>
       </div>
     </div>
   );
 }
 
-export default AdminSvgEditorEditView;
+export default AdminSvgEditorEditView;
