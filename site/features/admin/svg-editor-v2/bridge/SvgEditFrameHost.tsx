@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
 import {
   createHostMessage,
@@ -80,31 +80,28 @@ export function createSvgEditBridgeController(options: BridgeControllerOptions) 
 }
 
 export function SvgEditFrameHost({ title = "SVG-Edit iframe" }: { readonly title?: string }) {
-  const frameRef = useRef<HTMLIFrameElement>(null);
-  const origin = typeof window === "undefined" ? "" : window.location.origin;
-  const controllerRef = useRef<ReturnType<typeof createSvgEditBridgeController> | null>(null);
-  if (!controllerRef.current && origin) {
-    controllerRef.current = createSvgEditBridgeController({
-      expectedOrigin: origin,
-      expectedFrameSrc: `${origin}/vendor/svgedit/index.html`,
-      getFrameWindow: () => frameRef.current?.contentWindow ?? null,
+  const [controller] = useState(() => {
+    if (typeof window === "undefined") return null;
+    return createSvgEditBridgeController({
+      expectedOrigin: window.location.origin,
+      expectedFrameSrc: `${window.location.origin}/vendor/svgedit/index.html`,
+      getFrameWindow: () => document.querySelector<HTMLIFrameElement>("#svg-editor-v2-frame")?.contentWindow ?? null,
     });
-  }
+  });
   useEffect(() => {
-    const controller = controllerRef.current;
     if (!controller) return;
     const receive = (event: MessageEvent) => controller.receiveMessage(event);
     window.addEventListener("message", receive);
     return () => window.removeEventListener("message", receive);
-  }, []);
+  }, [controller]);
   return (
     <iframe
-      ref={frameRef}
+      id="svg-editor-v2-frame"
       aria-label={title}
       className="svg-editor-v2__frame"
       src="/vendor/svgedit/index.html"
       title={title}
-      onLoad={() => controllerRef.current?.reset()}
+      onLoad={() => controller?.reset()}
     />
   );
 }

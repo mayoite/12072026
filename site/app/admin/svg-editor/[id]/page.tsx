@@ -1,83 +1,71 @@
-/**
- * 04-ADMIN-02 + A4: /admin/svg-editor/[id] edit (or /new).
- * Loads via svgBlockDescriptorLoader.tryLoad (or defaults for "new").
- * Renders AdminSvgEditorEditView (no-code form + live preview) with
- * server-action publish. Gated by parent admin layout.
- *
- * Server Action rule: pass `publishSvgEditorAction.bind(null, slug)` only —
- * never an arrow wrapper around the action (breaks Server Action identity).
- */
+import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
 
 import { notFound } from "next/navigation";
-import { AdminSvgEditorEditView } from "@/features/admin/svg-editor/AdminSvgEditorEditView";
-import {
-  tryLoad,
-  type BlockDescriptor,
-} from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
-import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/newBlockDescriptorStub";
-import { publishSvgEditorAction } from "@/features/admin/svg-editor/publishSvgEditorAction";
-import {
-  readLifecycleManifest,
-  resolveCatalogLifecycle,
-} from "@/features/admin/svg-editor/catalogLifecycle";
-import { readSvgArtifactStatus } from "@/features/admin/svg-editor/svgArtifactStatus.server";
 
-/** Disk descriptors can change under admin publish — never static-cache this route. */
+import { AdminSvgEditorV2 } from "@/features/admin/svg-editor-v2/ui/AdminSvgEditorV2";
+import type { SvgAssetManifestV2 } from "@/features/admin/svg-editor-v2/model/svgAssetManifestV2";
+import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/newBlockDescriptorStub";
+import { compileSvgForPublish } from "@/features/planner/asset-engine/svg/compileSvgForPublish";
+import { tryLoad, type BlockDescriptor } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { resolvePublicDir } from "@/lib/paths/sitePackageRoot.server";
+
 export const dynamic = "force-dynamic";
 
-function formatDescriptorStamp(value: number | undefined): string {
-  if (typeof value !== "number" || !Number.isFinite(value) || value <= 0) {
-    return "—";
-  }
-  const normalized = value < 1e12 ? value * 1000 : value;
+function readReleasedSvg(slug: string): string | null {
+  const file = path.join(resolvePublicDir(), "svg-catalog", `${slug}.svg`);
+  if (!existsSync(file)) return null;
   try {
-    return new Date(normalized)
-      .toISOString()
-      .replace("T", " ")
-      .replace(/\.\d{3}Z$/, " UTC");
+    return readFileSync(file, "utf8");
   } catch {
-    return String(value);
+    return null;
   }
 }
 
-export default async function AdminSvgEditorDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id: rawSlug } = await params;
-  const slug = rawSlug === "new" ? "new" : rawSlug;
+function toManifest(descriptor: BlockDescriptor): SvgAssetManifestV2 {
+  const timestamp = new Date(descriptor.generatedAt ?? Date.now()).toISOString();
+  return {
+    version: 2,
+    assetId: descriptor.id,
+    productId: descriptor.parentProductId ?? null,
+    slug: descriptor.slug,
+    name: descriptor.sku ?? descriptor.slug.replaceAll("-", " "),
+    assetKind: descriptor.variant,
+    dimensionsMm: {
+      width: descriptor.geometry.widthMm,
+      depth: descriptor.geometry.depthMm,
+      height: descriptor.geometry.heightMm,
+    },
+    sourceChecksum: descriptor.checksum,
+    lifecycle: "draft",
+    currentVersion: 1,
+    capabilities: ["geometry"],
+    createdAt: timestamp,
+    updatedAt: timestamp,
+  };
+}
 
+async function resolveInitialSvg(descriptor: BlockDescriptor, isNew: boolean): Promise<string> {
+  if (isNew) {
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${descriptor.viewBox.width} ${descriptor.viewBox.height}" />`;
+  }
+  const released = readReleasedSvg(descriptor.slug);
+  if (released) return released;
+  const compiled = await compileSvgForPublish(descriptor);
+  if (!compiled.ok) throw new Error(`Unable to compile SVG editor asset: ${descriptor.slug}`);
+  return compiled.svg;
+}
+
+export default async function AdminSvgEditorDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const isNew = id === "new";
   let descriptor: BlockDescriptor;
-  if (slug === "new") {
+  if (isNew) {
     descriptor = makeNewBlockDescriptorStub();
   } else {
-    const result = tryLoad(slug);
-    if (!result.ok) {
-      notFound();
-    }
+    const result = tryLoad(id);
+    if (!result.ok) notFound();
     descriptor = result.value;
   }
-
-  const updatedAtLabel = formatDescriptorStamp(descriptor.generatedAt);
-
-  // Bind slug so Client Component receives a Server Action ref (not a page wrapper fn).
-  const onPublishAction = publishSvgEditorAction.bind(null, slug);
-  const artifactStatus = readSvgArtifactStatus(slug);
-  const lifecycle = resolveCatalogLifecycle(
-    slug,
-    artifactStatus.state,
-    readLifecycleManifest(),
-  );
-
-  return (
-    <AdminSvgEditorEditView
-      slug={slug}
-      descriptor={descriptor}
-      updatedAtLabel={updatedAtLabel}
-      artifactStatus={artifactStatus}
-      catalogLifecycle={lifecycle}
-      onPublishAction={onPublishAction}
-    />
-  );
+  return <AdminSvgEditorV2 manifest={toManifest(descriptor)} initialSvg={await resolveInitialSvg(descriptor, isNew)} />;
 }
