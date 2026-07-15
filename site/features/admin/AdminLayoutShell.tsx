@@ -6,6 +6,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ArrowSquareOut as ExternalLink, List as Menu, X } from "@phosphor-icons/react";
 import { OneAndOnlyLogo } from "@/components/ui/Logo";
 import { ADMIN_NAV_GROUPS } from "./adminNav";
+import {
+  isSvgEditorFocusRoute,
+  SvgEditorNavigationToggle,
+} from "./svg-editor-v2/ui/SvgEditorNavigationToggle";
 
 function isActivePath(pathname: string, href: string): boolean {
   if (href === "/admin") return pathname === "/admin" || pathname === "/admin/";
@@ -14,6 +18,7 @@ function isActivePath(pathname: string, href: string): boolean {
 
 export default function AdminLayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? "";
+  const editorFocusMode = isSvgEditorFocusRoute(pathname);
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLElement>(null);
@@ -80,17 +85,25 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
       <header className="shell-admin-header shell-admin-header--brand">
         <div className="shell-admin-bar shell-admin-bar--brand">
           <div className="shell-admin-bar__group">
-            <button
-              ref={mobileToggleRef}
-              type="button"
-              className="shell-admin-mobile-toggle md:hidden"
-              onClick={() => setMobileOpen((open) => !open)}
-              aria-expanded={mobileOpen}
-              aria-controls="admin-mobile-sidebar"
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            >
-              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
+            {editorFocusMode ? (
+              <SvgEditorNavigationToggle
+                expanded={mobileOpen}
+                onToggle={() => setMobileOpen((open) => !open)}
+                buttonRef={mobileToggleRef}
+              />
+            ) : (
+              <button
+                ref={mobileToggleRef}
+                type="button"
+                className="shell-admin-mobile-toggle md:hidden"
+                onClick={() => setMobileOpen((open) => !open)}
+                aria-expanded={mobileOpen}
+                aria-controls="admin-mobile-sidebar"
+                aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              >
+                {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+              </button>
+            )}
             <Link href="/admin" className="shell-admin-brand" onClick={closeMobile}>
               <OneAndOnlyLogo variant="white" className="h-7 w-auto" />
               <span className="shell-admin-brand__badge">Admin</span>
@@ -110,7 +123,7 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
       </header>
 
       <div className="shell-admin-frame">
-        <aside
+        {(!editorFocusMode || mobileOpen) ? <aside
           ref={sidebarRef}
           id="admin-mobile-sidebar"
           className={`shell-admin-sidebar ${mobileOpen ? "shell-admin-sidebar--open" : ""}`}
@@ -147,7 +160,7 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
           <footer className="shell-admin-sidebar__footer">
             <p className="shell-admin-sidebar__footnote">O&amp;O workspace platform</p>
           </footer>
-        </aside>
+        </aside> : null}
 
         {mobileOpen ? (
           <button

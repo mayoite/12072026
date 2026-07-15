@@ -8,7 +8,7 @@
 |---|---|---|
 | 2D canvas | Fabric | Sole interactive 2D engine |
 | 3D | Three.js + R3F + Drei | Bindings/helpers only |
-| Admin SVG authoring | SVG.js | Authoring surface |
+| Admin SVG authoring | SVG-Edit 7.4.2 + @svgedit/svgcanvas 7.4.2 | Same-origin iframe authoring surface; host controls persistence and publish |
 | Publish authority | Server compile + sanitize | Not client engines |
 
 No second general canvas engine.
