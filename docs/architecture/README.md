@@ -68,4 +68,4 @@ WCAG 2.2 AA · OWASP ASVS L2 (risk-based) · LCP ≤2.5s · INP ≤200ms · CLS 
 ## Package map
 
 Live `site/` decision tree: **`docs/site/ARCHITECTURE.md`**.  
-Tests layout: **`docs/site/tests-CONTENTS.md`**.
+Features: **`docs/site/features.md`**. Tests: **`docs/site/tests.md`**.

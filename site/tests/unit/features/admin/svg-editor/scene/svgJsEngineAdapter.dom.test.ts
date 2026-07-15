@@ -55,15 +55,21 @@ describe("svgJsEngineAdapter — real DOM lifecycle", () => {
       kind: "circle",
       id: "b",
       name: "b",
-      locked: false,
+      locked: true,
       hidden: false,
       style: {},
       cx: 100,
       cy: 100,
       r: 20,
     });
-    adapter.render(next);
+    adapter.render(next, "b");
     expect(host.querySelectorAll("[data-scene-node]").length).toBe(2);
+    expect(host.querySelector('[data-scene-node="a"]')).toHaveClass(
+      "svg-studio__node",
+    );
+    expect(host.querySelector('[data-scene-node="b"]')).toHaveClass(
+      "svg-studio__node--selected",
+    );
 
     // Serialization reflects the current document.
     expect(adapter.serialize().parts.map((p) => p.id)).toEqual(["z0000-a", "z0001-b"]);

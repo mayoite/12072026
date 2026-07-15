@@ -30,7 +30,7 @@ Only catalog-writing work waits. Read-only and isolated work continues.
 | Gap | Blocks only |
 |---|---|
 | Failed test isolation | Catalog-writing tests |
-| Disk-only publish | Live DB-SVG cutover proof |
+| Stub DB dual-write (disk still authority) | Live DB-SVG cutover proof |
 | Missing external service | That service’s direct check |
 
 ## Interface authority

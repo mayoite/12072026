@@ -52,7 +52,7 @@ Do not invent a third tree. Prefer consolidating duplicates over growing both.
 ## Tests
 
 Name-mirror: `site/<path>/File.ts` → `site/tests/unit/<path>/File.test.ts`.  
-Rules: `docs/site/tests-CONTENTS.md`.
+Rules: `docs/site/tests.md`.
 
 ## Quality floor
 

@@ -124,4 +124,4 @@ Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-
 - `/buddy-planner/editor` → `/planner/canvas/`
 - `/buddy-planner/:path*` → `/planner/canvas/`
 
-See also: `config/route-contract.json`, `proxy.ts`, `docs/Handover.md`.
+See also: `site/config/route-contract.json`, `docs/site/ARCHITECTURE.md`, `docs/api/ROUTE-INDEX.md`.

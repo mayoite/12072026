@@ -21,8 +21,9 @@ describe("ModelViewerPreview", () => {
     const { ModelViewerPreview } = await import(
       "@/features/admin/svg-editor/ModelViewerPreview"
     );
-    render(<ModelViewerPreview src="   " />);
+    const { container } = render(<ModelViewerPreview src="   " />);
     expect(screen.getByTestId("model-viewer-preview-empty")).toBeInTheDocument();
+    expect(container.querySelector("[data-testid='model-viewer-preview-empty'] [style], [data-testid='model-viewer-preview-empty'][style]")).toBeNull();
     cleanup();
     render(<ModelViewerPreview src="/models/demo.glb" />);
     await waitFor(() => expect(loadModelViewer).toHaveBeenCalled());

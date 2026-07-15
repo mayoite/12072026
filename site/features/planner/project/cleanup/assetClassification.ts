@@ -1,7 +1,7 @@
 /**
  * Phase 08 asset ownership classification.
  * @see plannnerplan/08-cleanup-archive-and-evidence-gates.md:45-47
- * @see site/features/planner/project/catalog/ASSET-PROVENANCE.md
+ * @see docs/site/ARCHITECTURE.md (CDN / demo assets)
  */
 
 export type AssetOwnershipClass =

@@ -38,7 +38,7 @@ describe("app/api/planner/catalog/svg-blocks/route.ts", () => {
   });
 
   it("returns empty source when no descriptors map", async () => {
-    vi.mocked(loadBuyerVisibleDescriptorsWithDb).mockReturnValue([]);
+    vi.mocked(loadBuyerVisibleDescriptorsWithDb).mockResolvedValue([]);
     vi.mocked(mapDescriptorsToCatalogItems).mockReturnValue([]);
 
     const res = await GET(
@@ -53,7 +53,7 @@ describe("app/api/planner/catalog/svg-blocks/route.ts", () => {
   });
 
   it("returns mapped svg-block catalog items", async () => {
-    vi.mocked(loadBuyerVisibleDescriptorsWithDb).mockReturnValue([
+    vi.mocked(loadBuyerVisibleDescriptorsWithDb).mockResolvedValue([
       { slug: "desk-a" },
     ] as never);
     vi.mocked(mapDescriptorsToCatalogItems).mockReturnValue([

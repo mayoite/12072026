@@ -117,7 +117,6 @@ export default async function SvgCatalogSlugPage({
           height={256}
           sizes="(max-width: 640px) 100vw, 512px"
           className="svg-catalog-thumb"
-          style={{ maxWidth: "100%", height: "auto" }}
           loading="lazy"
           decoding="async"
         />

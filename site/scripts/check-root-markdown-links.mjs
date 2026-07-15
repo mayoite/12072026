@@ -14,7 +14,6 @@ const FILES = [
   "Agents/INDEX.md",
   "plan/README.md",
   "docs/INDEX.md",
-  "docs/Lockedfiles/INDEX.md",
   "tech-docs-generator/README.md",
 ];
 

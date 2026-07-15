@@ -84,7 +84,7 @@ function assertShellLandmarks() {
   expect(screen.getByTestId("admin-shell-header")).toBeInTheDocument();
   expect(screen.getByTestId("admin-shell-scope")).toHaveTextContent(/\S/);
   expect(screen.getByTestId("admin-shell-title")).toHaveTextContent(/\S/);
-  expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(/Source:/i);
+  expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(/\S/);
   expect(screen.getByTestId("admin-shell-state")).toHaveTextContent(/\S/);
   expect(screen.getByTestId("admin-shell-primary-action")).toBeInTheDocument();
 }
@@ -165,14 +165,14 @@ describe("ADM-SHELL-01 edit page landmarks", () => {
     );
     expect(screen.getByTestId("admin-shell-scope")).toHaveTextContent(/SVG studio/i);
     expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /local disk/i,
-    );
-    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /Products DB not live/i,
+      /Published today/i,
     );
     expect(screen.getByTestId("admin-shell-state")).toBeInTheDocument();
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(
       /Publish/i,
+    );
+    expect(screen.getByTestId("admin-shell-header")).not.toHaveTextContent(
+      /Products DB not live|checksum|Block descriptor draft|Publish target:/i,
     );
   });
 });

@@ -1,6 +1,20 @@
 /* A4.1 — Visual SVG authoring studio (canvas + toolbar + layer tree).
  * Semantic tokens only; no hex. Scoped under the admin layout. */
 
+/* The admin shell normally clips its route body. The studio owns a sticky
+ * command bar, so only this route lets the document remain its scroll root. */
+html:has(.admin-page--svg-engine),
+body:has(.admin-page--svg-engine) {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.shell-admin-layout:has(.admin-page--svg-engine),
+.shell-admin-frame:has(.admin-page--svg-engine),
+.shell-admin-main:has(.admin-page--svg-engine) {
+  overflow: visible;
+}
+
 [data-admin-layout] .svg-studio {
   display: flex;
   flex-direction: column;
@@ -8,17 +22,22 @@
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md, 0.5rem);
   background: var(--color-surface, var(--surface-base));
-  overflow: hidden;
+  overflow: visible;
 }
 
 [data-admin-layout] .svg-studio__toolbar {
+  position: sticky;
+  top: var(--admin-header-height);
+  z-index: 4;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.25rem;
   padding: 0.5rem;
   border-bottom: 1px solid var(--border-soft);
+  border-radius: var(--radius-md, 0.5rem) var(--radius-md, 0.5rem) 0 0;
   background: var(--color-surface-raised, var(--surface-raised));
+  box-shadow: var(--shadow-soft);
 }
 
 [data-admin-layout] .svg-studio__toolbar button {
@@ -69,8 +88,10 @@
 
 [data-admin-layout] .svg-studio__body {
   display: grid;
-  grid-template-columns: 1fr minmax(200px, 260px);
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 220px);
   min-height: 420px;
+  overflow: hidden;
+  border-radius: 0 0 var(--radius-md, 0.5rem) var(--radius-md, 0.5rem);
 }
 
 [data-admin-layout] .svg-studio__stage {
@@ -96,6 +117,41 @@
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* Authoring paint stays distinct from the exact published preview. */
+[data-admin-layout] .svg-studio__stage .svg-studio__node {
+  vector-effect: non-scaling-stroke;
+}
+
+[data-admin-layout]
+  .svg-studio__stage
+  .svg-studio__node:is(rect, circle, path) {
+  fill: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface-raised));
+  fill-opacity: 0.68;
+  stroke: var(--text-strong);
+}
+
+[data-admin-layout]
+  .svg-studio__stage
+  .svg-studio__node.svg-studio__node--selected:is(rect, circle, path) {
+  fill: color-mix(in srgb, var(--color-primary) 28%, var(--color-surface-raised));
+  fill-opacity: 0.82;
+  stroke: var(--color-primary);
+  stroke-width: 4;
+  paint-order: stroke fill;
+}
+
+[data-admin-layout]
+  .svg-studio__stage
+  .svg-studio__node.svg-studio__node--selected:is(line, polyline) {
+  stroke: var(--color-primary);
+}
+
+[data-admin-layout]
+  .svg-studio__stage
+  .svg-studio__node.svg-studio__node--selected:is(text) {
+  fill: var(--color-primary);
 }
 
 [data-admin-layout] .svg-studio__layers {

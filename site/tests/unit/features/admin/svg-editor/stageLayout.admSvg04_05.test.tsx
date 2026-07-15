@@ -1,14 +1,14 @@
 /**
- * ADM-SVG-04 — stage ≥55% of content width at 1280px (existing admin-svg-engine.css).
+ * ADM-SVG-04 — stage ≥55% of content width at 1280px (locked admin theme).
  * ADM-SVG-05 — stable command / stage / layers / properties regions always mounted.
  *
- * No new CSS. Contract must lockstep with live admin-svg-engine.css.
+ * Contract must lockstep with the live locked admin theme.
  */
 
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import {
   AUTHORING_WIDTH_PX,
@@ -58,16 +58,16 @@ function emptyDoc(): SvgSceneDocument {
   };
 }
 
-function readAdminSvgEngineCss(): string {
+function readLockedAdminPagesCss(): string {
   return fs.readFileSync(
-    path.join(process.cwd(), "app/css/admin-svg-engine.css"),
+    path.join(process.cwd(), "app/css/core/locked/admin/admin-pages.css"),
     "utf8",
   );
 }
 
 describe("ADM-SVG-04 stage share at 1280px", () => {
-  it("locks STAGE_GRID_COLUMNS to live admin-svg-engine.css shell grid", () => {
-    const css = readAdminSvgEngineCss();
+  it("locks STAGE_GRID_COLUMNS to the locked admin theme shell grid", () => {
+    const css = readLockedAdminPagesCss();
     expect(css).toContain(
       `.admin-svg-engine-shell`,
     );
@@ -113,6 +113,33 @@ describe("ADM-SVG-05 stable studio regions", () => {
     }
 
     // Properties region stays mounted with no selection (empty inspector).
-    expect(screen.getByTestId("svg-studio-inspector-empty")).toBeInTheDocument();
+    expect(screen.getByTestId("svg-studio-inspector-empty")).toHaveTextContent(
+      /Select a shape on the canvas or choose a layer/i,
+    );
+  });
+
+  it("shows useful selected-layer state instead of the internal layer id", () => {
+    const document = emptyDoc();
+    document.nodes = [
+      {
+        kind: "rect",
+        id: "z0000-z0000-machine-tabletop",
+        name: "Tabletop",
+        locked: false,
+        hidden: false,
+        style: {},
+        x: 0,
+        y: 0,
+        width: 600,
+        height: 600,
+      },
+    ];
+    render(<SvgStudioCanvas initialDocument={document} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /^Tabletop\s+rect$/i }));
+
+    const inspector = screen.getByTestId("admin-studio-region-properties");
+    expect(inspector).toHaveTextContent(/rect · Editable/i);
+    expect(inspector).not.toHaveTextContent(/z0000-z0000-machine-tabletop/);
   });
 });

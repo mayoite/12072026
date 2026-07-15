@@ -64,6 +64,7 @@ function drawNode(root: Svg, node: SvgSceneNode): SvgElement | null {
   }
   applyStyle(element, node);
   element.attr(NODE_ATTR, node.id);
+  element.addClass("svg-studio__node");
   return element;
 }
 
@@ -222,6 +223,8 @@ export function createSvgJsEngineAdapter(
     if (activeId) {
       const element = elementsMap.get(activeId);
       const nodeModel = document.nodes.find((n) => n.id === activeId);
+
+      element?.addClass("svg-studio__node--selected");
 
       // Do not make locked or hidden nodes interactive
       if (element && nodeModel && !nodeModel.locked && !nodeModel.hidden) {

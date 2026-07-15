@@ -11,7 +11,7 @@ export default function AdminDashboardPageView() {
     <div className="admin-page shell-admin-dashboard">
       <section className="admin-hero" aria-labelledby="admin-hero-title">
         <div className="admin-hero__inner">
-          <div className="admin-hero__copy" style={{ gridColumn: "1 / -1" }}>
+          <div className="admin-hero__copy">
             <p className="admin-page__eyebrow admin-hero__eyebrow">Admin backend</p>
             <h1 id="admin-hero-title" className="admin-hero__title">
               Platform control

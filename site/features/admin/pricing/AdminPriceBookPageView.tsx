@@ -225,18 +225,18 @@ export function AdminPriceBookPageView({
 
       {contract ? (
         <div className="admin-panel" data-testid="admin-price-book-panel">
-          <div className="admin-panel__header">
-            <code data-testid="admin-price-book-id">{contract.bookId}</code> ·{" "}
-            {contract.familySlug}
-          </div>
-          <div style={{ padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div className="admin-panel__header">
+          <code data-testid="admin-price-book-id">{contract.bookId}</code> ·{" "}
+          {contract.familySlug}
+        </div>
+          <div className="admin-panel__body admin-stack">
             <p className="admin-page__meta" data-testid="admin-price-book-active">
               Active version: <code>{contract.activeVersionId ?? "—"}</code>
             </p>
 
             {/* ADM-PRICE-02 — all version lifecycle states listed */}
             <ul
-              className="admin-page__meta space-y-1"
+              className="admin-page__meta admin-list-compact"
               data-testid="admin-price-book-lifecycle-list"
             >
               {contract.versions.map((entry) => (
@@ -462,7 +462,7 @@ export function AdminPriceBookPageView({
                     </button>
                     {activateAvail && !activateAvail.allowed ? (
                       <p
-                        className="admin-table__secondary" style={{ marginTop: '0.25rem' }}
+                        className="admin-table__secondary admin-note"
                         data-testid="admin-price-book-activate-unavailable"
                       >
                         {activateAvail.reason}
@@ -484,7 +484,7 @@ export function AdminPriceBookPageView({
                     </button>
                     {approveAvail && !approveAvail.allowed ? (
                       <p
-                        className="admin-table__secondary" style={{ marginTop: '0.25rem' }}
+                        className="admin-table__secondary admin-note"
                         data-testid="admin-price-book-approve-unavailable"
                       >
                         {approveAvail.reason}
@@ -504,7 +504,7 @@ export function AdminPriceBookPageView({
                     </button>
                     {rollbackAvail && !rollbackAvail.allowed ? (
                       <p
-                        className="admin-table__secondary" style={{ marginTop: '0.25rem' }}
+                        className="admin-table__secondary admin-note"
                         data-testid="admin-price-book-rollback-unavailable"
                       >
                         {rollbackAvail.reason}
@@ -527,7 +527,7 @@ export function AdminPriceBookPageView({
               {history.length === 0 ? (
                 <p className="admin-page__meta">No audit events yet.</p>
               ) : (
-                <ul className="admin-page__meta space-y-1">
+                <ul className="admin-page__meta admin-list-compact">
                   {history.map((entry) => (
                     <li key={entry.id} data-testid={`admin-price-audit-${entry.id}`}>
                       {formatPriceBookAuditLine(entry)}

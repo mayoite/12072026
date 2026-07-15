@@ -96,7 +96,7 @@ describe("ADM-SVG-02 inventory finding", () => {
 
 describe("ADM-SVG-04 stage fraction at 1280", () => {
   it("gives the shell stage column at least 55 percent at 1280px (existing CSS grid)", () => {
-    // admin-svg-engine.css: minmax(0,1fr) minmax(280px, 22rem), gap 0.75rem
+    // Locked admin theme: minmax(0,1fr) minmax(280px, 22rem), gap 0.75rem
     expect(STAGE_GRID_COLUMNS).toBe("minmax(0, 1fr) minmax(280px, 22rem)");
     expect(AUTHORING_WIDTH_PX).toBe(1280);
     expect(STAGE_MIN_FRACTION).toBe(0.55);

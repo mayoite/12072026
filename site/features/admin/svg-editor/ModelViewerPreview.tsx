@@ -25,31 +25,8 @@ const ModelViewerElementTag = "model-viewer" as unknown as React.ComponentType<
     "camera-controls"?: boolean;
     "auto-rotate"?: boolean;
     "shadow-intensity"?: string;
-    style?: React.CSSProperties;
   }
 >;
-
-const shellStyle: React.CSSProperties = {
-  width: "100%",
-  height: "300px",
-  backgroundColor: "var(--surface-muted)",
-  borderRadius: "0.5rem",
-  position: "relative",
-  border: "1px solid var(--border-soft)",
-  overflow: "hidden",
-};
-
-const messageStyle: React.CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  height: "100%",
-  padding: "16px",
-  textAlign: "center",
-  gap: "6px",
-  boxSizing: "border-box",
-};
 
 /**
  * Admin-only GLB preview island.
@@ -138,12 +115,12 @@ export function ModelViewerPreview({
   if (!trimmedSrc) {
     return (
       <div
-        style={shellStyle}
+        className="admin-model-viewer"
         data-testid="model-viewer-preview-empty"
         role="status"
       >
-        <div style={{ ...messageStyle, color: "var(--text-muted)" }}>
-          <strong style={{ color: "var(--text-heading)" }}>No GLB to preview</strong>
+        <div className="admin-model-viewer__message admin-model-viewer__message--muted">
+          <strong className="admin-model-viewer__title">No GLB to preview</strong>
           <span>
             Extrude an SVG first, or paste a generated GLB URL (system path under{" "}
             <code>catalog-assets/generated/</code>).
@@ -155,13 +132,13 @@ export function ModelViewerPreview({
 
   return (
     <div
-      style={shellStyle}
+      className="admin-model-viewer"
       data-testid="model-viewer-preview"
       data-ready={ready ? "true" : "false"}
     >
       {error ? (
         <div
-          style={{ ...messageStyle, color: "var(--color-danger)" }}
+          className="admin-model-viewer__message admin-model-viewer__message--error"
           data-testid="model-viewer-preview-error"
           role="alert"
         >
@@ -170,7 +147,7 @@ export function ModelViewerPreview({
         </div>
       ) : !ready ? (
         <div
-          style={{ ...messageStyle, color: "var(--text-muted)" }}
+          className="admin-model-viewer__message admin-model-viewer__message--muted"
           data-testid="model-viewer-preview-loading"
           role="status"
         >
@@ -184,7 +161,7 @@ export function ModelViewerPreview({
           camera-controls
           auto-rotate
           shadow-intensity="1"
-          style={{ width: "100%", height: "100%" }}
+          className="admin-model-viewer__element"
           data-testid="model-viewer-element"
         />
       )}

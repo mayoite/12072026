@@ -12,12 +12,13 @@ vi.mock("@/lib/api/browserApi", () => ({
 
 describe("DescriptorRevisionPanel", () => {
   it("mounts for a product slug and finishes loading", async () => {
-    render(<DescriptorRevisionPanel slug="side-table-001" />);
+    const { container } = render(<DescriptorRevisionPanel slug="side-table-001" />);
     await waitFor(() => {
       expect(screen.getByText("Revision history")).toBeInTheDocument();
     });
     expect(
       screen.getByText("No versioned revisions on disk yet."),
     ).toBeInTheDocument();
+    expect(container.querySelector("[aria-label='Revision history'] [style]")).toBeNull();
   });
 });

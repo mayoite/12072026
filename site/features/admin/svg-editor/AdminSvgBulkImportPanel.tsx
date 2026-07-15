@@ -135,14 +135,14 @@ export function AdminSvgBulkImportPanel() {
 
   return (
     <section aria-label="Bulk CSV import" data-testid="admin-svg-bulk-import">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <div className="admin-stack">
         <p className="admin-table__secondary">
           Paste a spreadsheet export (columns: product id, SKU, family, width,
           depth, height, lifecycle). Preview first. One invalid row blocks the
           whole batch so inventory stays consistent.
         </p>
         <textarea
-          className="admin-field__control font-mono text-sm min-h-[5.5rem] max-h-[12rem]"
+          className="admin-field__control admin-field__control--multiline admin-field__control--mono"
           value={csv}
           onChange={(event) => {
             setCsv(event.target.value);
@@ -152,7 +152,7 @@ export function AdminSvgBulkImportPanel() {
           aria-label="Bulk import spreadsheet text"
           rows={5}
         />
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+        <div className="admin-actions-row">
           <button
             type="button"
             className="admin-btn admin-btn--outline"
@@ -192,7 +192,7 @@ export function AdminSvgBulkImportPanel() {
           ) : null}
           {error ? (
             <p
-              className="admin-table__secondary text-[var(--color-danger)]"
+              className="admin-field__error"
               role="alert"
               data-testid="admin-svg-bulk-import-error"
             >
@@ -202,7 +202,7 @@ export function AdminSvgBulkImportPanel() {
         </div>
         {previewText ? (
           <pre
-            className="admin-table__secondary whitespace-pre-wrap font-mono text-xs"
+            className="admin-table__secondary admin-preformatted"
             data-testid="admin-svg-bulk-import-preview-result"
           >
             {previewText}

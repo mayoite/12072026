@@ -38,7 +38,7 @@ const descriptor = {
 
 describe("AdminSvgEditorListView (name-mirror)", () => {
   it("renders inventory row for descriptor", () => {
-    render(
+    const { container } = render(
       <AdminSvgEditorListView
         descriptors={[descriptor]}
         refreshedAtLabel="test-time"
@@ -52,5 +52,6 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
       />,
     );
     expect(screen.getByText(/side-table-001/i)).toBeInTheDocument();
+    expect(container.querySelector("[data-testid='admin-svg-inventory'] [style]")).toBeNull();
   });
 });

@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
   );
   if (rateError) return rateError;
 
-  const descriptors = loadBuyerVisibleDescriptorsWithDb();
+  const descriptors = await loadBuyerVisibleDescriptorsWithDb();
   const items = mapDescriptorsToCatalogItems(descriptors);
 
   return success({

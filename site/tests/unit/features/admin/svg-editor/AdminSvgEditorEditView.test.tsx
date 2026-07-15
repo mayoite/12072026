@@ -306,6 +306,31 @@ describe("AdminSvgEditorEditView draft recovery", () => {
     expect(screen.getByRole("button", { name: "Publish" })).toBeDisabled();
   });
 
+  it("keeps the svg editor shell compact and moves verbose operator copy out", () => {
+    render(
+      <AdminSvgEditorEditView
+        slug={descriptor.slug}
+        descriptor={descriptor}
+        updatedAtLabel="today"
+        artifactStatus={artifactStatus}
+        catalogLifecycle="draft"
+        onPublishAction={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+      /Published today/i,
+    );
+    expect(screen.getByTestId("admin-shell-header")).not.toHaveTextContent(
+      /Products DB not live|checksum|Block descriptor draft|Publish target:/i,
+    );
+    expect(screen.getByTestId("admin-svg-publication-impact")).toHaveClass(
+      "sr-only",
+    );
+    expect(screen.queryByTestId("admin-svg-publishing-details")).toBeNull();
+    expect(screen.queryByTestId("admin-svg-advanced-details")).toBeNull();
+  });
+
   it("exposes shell layout contract for ADM-SVG-04 at 1280px", () => {
     render(
       <AdminSvgEditorEditView

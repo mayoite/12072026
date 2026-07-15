@@ -1,9 +1,9 @@
 /**
  * ADM-SVG-04 / ADM-SVG-05 — stage layout contract without inventing CSS.
- * Mirrors admin-svg-engine.css shell grid: minmax(0,1fr) minmax(280px, 22rem).
+ * Mirrors the locked admin theme shell grid: minmax(0,1fr) minmax(280px, 22rem).
  */
 
-/** Must stay in lockstep with [data-admin-layout] .admin-svg-engine-shell */
+/** Must stay in lockstep with [data-admin-layout] .admin-svg-engine-shell. */
 export const STAGE_GRID_COLUMNS = "minmax(0, 1fr) minmax(280px, 22rem)";
 export const STAGE_GAP_REM = 0.75;
 export const RAIL_MAX_REM = 22;

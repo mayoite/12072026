@@ -1,0 +1,2879 @@
+$ pnpm --filter oando-site dev
+$ next dev --webpack
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+[admin/features] GET error: permission denied for table feature_flags
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/rollbackDescriptorVersion.ts
+./app/api/admin/svg-editor/[slug]/rollback/route.ts
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/rollbackDescriptorVersion.ts
+./app/api/admin/svg-editor/[slug]/rollback/route.ts
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/rollbackDescriptorVersion.ts
+./app/api/admin/svg-editor/[slug]/rollback/route.ts
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/rollbackDescriptorVersion.ts
+./app/api/admin/svg-editor/[slug]/rollback/route.ts
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/rollbackDescriptorVersion.ts
+./app/api/admin/svg-editor/[slug]/rollback/route.ts
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/rollbackDescriptorVersion.ts
+./app/api/admin/svg-editor/[slug]/rollback/route.ts
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/rollbackDescriptorVersion.ts
+./app/api/admin/svg-editor/[slug]/rollback/route.ts
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/rollbackDescriptorVersion.ts
+./app/api/admin/svg-editor/[slug]/rollback/route.ts
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/rollbackDescriptorVersion.ts
+./app/api/admin/svg-editor/[slug]/rollback/route.ts
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/rollbackDescriptorVersion.ts
+./app/api/admin/svg-editor/[slug]/rollback/route.ts
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+[browser] The final argument passed to useEffect changed size between renders. The order and size of this array must remain constant.
+
+Previous: [false]
+Incoming: [false, chaise-lounge-001] 
+    at AdminSvgEditorEditView (features\admin\svg-editor\AdminSvgEditorEditView.tsx:285:12)
+  283 |   }, [updateDraftForm]);
+  284 |
+> 285 |   useEffect(() => {
+      |            ^
+  286 |     if (!formDirty) return;
+  287 |     const onBeforeUnload = (event: BeforeUnloadEvent) => {
+  288 |       event.preventDefault(); (features\admin\svg-editor\AdminSvgEditorEditView.tsx:285:12)
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+⚠ ./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/previewSvgEditorAction.ts
+
+./scripts/generate-svg/pipelineCore.ts
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+
+../node_modules/svgo/dist/svgo-node.cjs
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+../node_modules/svgo/dist/svgo-node.cjs
+./scripts/generate-svg/pipelineCore.ts
+./features/planner/asset-engine/svg/runSvgCompileStages.ts
+./features/planner/asset-engine/svg/compileSvgForPublish.ts
+./features/admin/svg-editor/publishDescriptorWithPipeline.ts
+./features/admin/svg-editor/publishSvgEditorAction.ts
+./app/admin/svg-editor/[id]/page.tsx
+Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}
+⨯ uncaughtException: Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}
+⨯ uncaughtException:  Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}

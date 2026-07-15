@@ -13,6 +13,22 @@ import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svg
 import type { SvgSceneDocument, SvgSceneNode } from "./scene/svgSceneDocument";
 import { SCENE_MODEL_VERSION } from "./scene/svgSceneDocument";
 
+function readableLayerName(id: string, index: number): string {
+  const withoutGeneratedOrder = id.replace(/^(?:z\d{4}-)+/i, "");
+  const rectangleMatch = /^rect-(\d+)$/i.exec(withoutGeneratedOrder);
+  if (rectangleMatch) return `Rectangle ${rectangleMatch[1]}`;
+
+  const words = withoutGeneratedOrder
+    .split("-")
+    .filter(Boolean)
+    .map((word) =>
+      /^(?:nw|ne|sw|se)$/i.test(word) ? word.toUpperCase() : word.toLowerCase(),
+    );
+  if (words.length === 0) return `Layer ${index + 1}`;
+  words[0] = `${words[0]?.charAt(0).toUpperCase()}${words[0]?.slice(1)}`;
+  return words.join(" ");
+}
+
 function footprintNode(
   viewBox: { x: number; y: number; width: number; height: number },
 ): SvgSceneNode {
@@ -48,7 +64,7 @@ function nodesFromBlocks(descriptor: BlockDescriptor): SvgSceneNode[] {
     return {
       kind: "rect" as const,
       id,
-      name: id,
+      name: readableLayerName(id, index),
       locked: false,
       hidden: false,
       style: {

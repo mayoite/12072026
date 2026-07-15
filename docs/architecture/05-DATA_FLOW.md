@@ -6,10 +6,10 @@
 2. Validate + compile in `publishDescriptorWithPipeline.ts`.
 3. SVG bytes → `site/public/svg-catalog/`; descriptor JSON → `site/inventory/descriptors/` (`{slug}.json` / `{slug}.{n}.json` / `{slug}.latest.json`).
 4. Lifecycle/audit → `results/admin/catalog-ops/` when configured.
-5. Optional dual-write from `publishSvgEditorAction.ts` if `PRODUCTS_DATABASE_URL` set — logged on failure; disk wins.
-6. Planner reads disk via `svg-blocks` routes. `Block2D` only while loading or missing SVG.
+5. Both publish entrypoints contain a best-effort Products DB adapter behind `PRODUCTS_DATABASE_URL`, but the SVG tables have no released migration yet. This path is not production authority; failures are logged and disk wins.
+6. The Planner `svg-blocks` route contains an awaited DB-read adapter with disk fallback. Treat it as pre-cutover code until the schema migration and isolated database verification close `DB-SVG-01..05`. `Block2D` remains the loading/missing-SVG fallback.
 
-`POST /api/admin/svg-editor`: disk only (no `dbRepository`). Failed compile/write keeps prior on-disk release.
+Both publish paths behave the same way: DB dual-write is a best-effort stub, so failed compile/write keeps the prior on-disk release and disk stays the real authority.
 
 ## Target path — Products DB
 

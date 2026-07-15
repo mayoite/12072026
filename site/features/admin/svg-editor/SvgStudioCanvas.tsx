@@ -618,12 +618,13 @@ export function SvgStudioCanvas({
             <h3 className="svg-studio__layers-title">Inspector</h3>
             {!selected ? (
               <p className="svg-studio__empty" data-testid="svg-studio-inspector-empty">
-                Select a layer to edit properties.
+                Select a shape on the canvas or choose a layer to edit its
+                position, size, name, visibility, and lock state.
               </p>
             ) : (
               <>
               <p className="svg-studio__inspector-meta">
-                <code>{selected.id}</code> · {selected.kind}
+                {selected.kind} · {selected.locked ? "Locked" : "Editable"}
               </p>
               <label className="svg-studio__inspector-fill">
                 Layer name

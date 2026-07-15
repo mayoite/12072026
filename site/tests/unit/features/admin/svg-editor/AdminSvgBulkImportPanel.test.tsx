@@ -9,7 +9,8 @@ vi.mock("@/lib/api/browserApi", () => ({
 
 describe("AdminSvgBulkImportPanel", () => {
   it("renders bulk import chrome", () => {
-    render(<AdminSvgBulkImportPanel />);
+    const { container } = render(<AdminSvgBulkImportPanel />);
     expect(document.body.textContent?.toLowerCase()).toMatch(/import|csv|bulk/);
+    expect(container.querySelector("[data-testid='admin-svg-bulk-import'] [style]")).toBeNull();
   });
 });

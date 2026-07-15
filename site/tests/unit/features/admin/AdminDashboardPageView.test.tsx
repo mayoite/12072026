@@ -4,8 +4,9 @@ import AdminDashboardPageView from "@/features/admin/AdminDashboardPageView";
 
 describe("AdminDashboardPageView (name-mirror)", () => {
   it("renders platform control hub", () => {
-    render(<AdminDashboardPageView />);
+    const { container } = render(<AdminDashboardPageView />);
     expect(screen.getByText("Platform control")).toBeInTheDocument();
     expect(screen.getByText("Admin backend")).toBeInTheDocument();
+    expect(container.querySelector(".admin-hero__copy")).not.toHaveAttribute("style");
   });
 });

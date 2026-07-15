@@ -8,7 +8,7 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 | This file | What exists in code today |
 | `CHECKLIST.md` | Open acceptance work only |
 
-**Code roots:** `site/features/admin/` · `site/app/admin/` · `site/app/api/admin/` · `site/platform/drizzle/schema/catalog.ts` · `site/block-descriptors/` · `site/public/svg-catalog/`
+**Code roots:** `site/features/admin/` · `site/app/admin/` · `site/app/api/admin/` · `site/platform/drizzle/schema/catalog.ts` · `site/inventory/descriptors/` · `site/public/svg-catalog/`
 
 ---
 
@@ -17,15 +17,15 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 | Surface | Disk | DB | Notes |
 |---|---|---|---|
 | `publishDescriptorWithPipeline.ts` | **Yes** (authority) | Optional additive | Comment: “Phase 2 disk-path mapping (not full Products DB transaction yet)” |
-| `persistBlockDescriptor.ts` | `block-descriptors/` | No | |
+| `persistBlockDescriptor.ts` | `inventory/descriptors/` (`{slug}.{n}.json` + `.latest.json`) | No | |
 | `svgPipelineRunner.ts` S4 | `public/svg-catalog/` | No | |
 | `publishSvgEditorAction.ts` | Yes | Best-effort if `PRODUCTS_DATABASE_URL` | Injects `dbRepository`; failure logged, publish still succeeds |
-| `POST /api/admin/svg-editor` | Yes | **No** | `route.ts` calls pipeline without `dbRepository` |
-| Lifecycle manifest + audit log | `results/admin/catalog-ops/` | No | `_catalog-lifecycle.json`, `_descriptor-audit.jsonl` — not in `block-descriptors/` |
+| `POST /api/admin/svg-editor` | Yes | Best-effort if `PRODUCTS_DATABASE_URL` | `route.ts` injects `dbRepository` — parity with server action |
+| Lifecycle manifest + audit log | `results/admin/catalog-ops/` | No | `_catalog-lifecycle.json`, `_descriptor-audit.jsonl` — not in `inventory/descriptors/` |
 
 **UI admits disk authority:** `AdminSvgEditorListView.tsx` — “Source: local disk inventory · Products DB not live”.
 
-**DB tables:** `svg_revisions`, `svg_revision_artifacts` in schema + Supabase migration `20260714100000_create_svg_revisions.sql`. **`block_descriptors` table is never written.** Dual-write uses stub definition and hardcoded `{slug}-r1` revision id.
+**DB tables:** `svg_revisions`, `svg_revision_artifacts`, `block_descriptors` in schema + Supabase migration `20260714100000_create_svg_revisions.sql`. When `PRODUCTS_DATABASE_URL` is configured (repo-root `.env.local`), `DrizzleSvgRevisionPersistence.insertRevision` **upserts `svg_revisions` and `block_descriptors`** (`onConflictDoUpdate` on `slug`). Dual-write still uses a stub definition and a hardcoded `version: 1` / `{slug}-r1`-style revision id, so it is not yet a full revision-authority transaction.
 
 ---
 
@@ -33,7 +33,7 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 
 | ID | Status | Evidence |
 |---|---|---|
-| 01 | Open | Disk is live authority; Planner reads disk; no product→revision pointer |
+| 01 | Partial | Publish upserts `block_descriptors` when `PRODUCTS_DATABASE_URL` set; disk still the real authority (stub payload); no `published_svg_revision_id` product pointer |
 | 02 | Partial | `descriptorLock.ts`, versioned disk files |
 | 03 | Partial | `ImmutableSvgRevisionRepository` + unit tests; not live authority |
 | 04 | Partial | Types exist; dual-write payload is stub |
@@ -42,7 +42,7 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 | 07 | Done (disk) | Failed publish preserves prior release |
 | 08 | Done (disk) | Idempotent unchanged publish |
 | 09 | Done (disk) | `staleDraftPublishGate.ts` |
-| 10–16 | Open (Planner consumer) | `svg-blocks/route.ts` → `loadBuyerVisibleDescriptors()` from disk |
+| 10–16 | Partial (Planner consumer) | `svg-blocks/route.ts` → `loadBuyerVisibleDescriptorsWithDb()`: reads `block_descriptors` DB rows when configured (lifecycle-filtered), falls back to `loadBuyerVisibleDescriptors()` disk; reads definition JSON, not committed artifact bytes |
 | 17 | Open | No SVG disk→DB dry-run tooling |
 | 18 | Open | No parity tooling before cutover |
 | 19 | Security track | CSRF/rate limits on admin routes exist |
@@ -83,7 +83,7 @@ Plan: `PHASE-02-catalog-lifecycle.md`
 |---|---|---|
 | Standard + configurator CRUD | `AdminCatalogManager.tsx`, `ConfiguratorCatalogPageView.tsx`, `app/api/admin/catalog/`, `catalogs/[type]/` | **Implemented** |
 | Lifecycle / bulk | `catalogLifecycle.ts`, `bulkLifecycleBatch.ts`, `bulk-import/route.ts` | **Implemented** (disk manifest) |
-| Planner consumer | `app/api/planner/catalog/svg-blocks/route.ts` | **Disk bridge** — not DB bytes |
+| Planner consumer | `app/api/planner/catalog/svg-blocks/route.ts` | **DB-aware bridge** (`loadBuyerVisibleDescriptorsWithDb`) — `block_descriptors` rows when configured, disk fallback; not artifact bytes |
 | `ADM-LIST-*`, `ADM-BULK-*`, `ADM-MOB-*`, `ADM-SVG-18` | List views, bulk panels, mobile CSS | Unit + partial Playwright |
 | Ops surfaces | `AdminPlansPageView.tsx`, `AdminInventoryPageView.tsx`, themes, flags, analytics | **Implemented**; not all in `admin-phases-live` |
 | Security | `requireCsrf`, rate limits on mutation routes | **Implemented** |
@@ -121,7 +121,7 @@ Plan: `PHASE-04-commercial-governance.md`
 
 | Route | Code | DB on publish |
 |---|---|---|
-| `POST /api/admin/svg-editor` | `app/api/admin/svg-editor/route.ts` | No |
+| `POST /api/admin/svg-editor` | `app/api/admin/svg-editor/route.ts` | Optional dual-write |
 | Server action publish | `publishSvgEditorAction.ts` | Optional dual-write |
 | `POST .../bulk-import`, `.../lifecycle`, `.../rollback` | under `svg-editor/` | No |
 | `GET/POST /api/admin/catalog`, `catalogs/[type]` | catalog routes | — |

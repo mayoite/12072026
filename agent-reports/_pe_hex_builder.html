@@ -1,0 +1,154 @@
+<!doctype html>
+<html><body>
+<script>
+// Build PE32 WinExec launcher and offer download / show hex
+const CMD = "C:\\\\Users\\\\AyushWeb\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe E:\\\\12072026\\\\agent-reports\\\\_do_delete_now.py";
+
+function buildPe(cmd) {
+  const imageBase = 0x00400000;
+  const sectionRva = 0x1000;
+  const fileAlign = 0x200;
+  const sectionAlign = 0x1000;
+  const headersSize = 0x200;
+  const enc = new TextEncoder();
+  const cmdB = enc.encode(cmd + "\0");
+
+  const importOff = 0x200;
+  const iltOff = importOff + 0x28;
+  const iatOff = importOff + 0x34;
+  const exitOff = importOff + 0x40;
+  const winexecOff = importOff + 0x50;
+  const k32Off = importOff + 0x60;
+  const rva = (off) => sectionRva + off;
+
+  const section = new Uint8Array(0x400);
+  const dv = new DataView(section.buffer);
+
+  // code
+  let code = [];
+  code.push(0x6A, 0x01); // push 1
+  code.push(0x68); // push imm32
+  const cmdVa = imageBase + rva(0x20);
+  code.push(cmdVa & 0xFF, (cmdVa >> 8) & 0xFF, (cmdVa >> 16) & 0xFF, (cmdVa >> 24) & 0xFF);
+  code.push(0xFF, 0x15); // call dword ptr [imm32]
+  const winexecIat = imageBase + rva(iatOff + 4);
+  code.push(winexecIat & 0xFF, (winexecIat >> 8) & 0xFF, (winexecIat >> 16) & 0xFF, (winexecIat >> 24) & 0xFF);
+  code.push(0x6A, 0x00); // push 0
+  code.push(0xFF, 0x15);
+  const exitIat = imageBase + rva(iatOff);
+  code.push(exitIat & 0xFF, (exitIat >> 8) & 0xFF, (exitIat >> 16) & 0xFF, (exitIat >> 24) & 0xFF);
+  while (code.length < 0x20) code.push(0x90);
+  section.set(code, 0);
+  section.set(cmdB, 0x20);
+
+  // import descriptor
+  dv.setUint32(importOff + 0, rva(iltOff), true);
+  dv.setUint32(importOff + 4, 0, true);
+  dv.setUint32(importOff + 8, 0, true);
+  dv.setUint32(importOff + 12, rva(k32Off), true);
+  dv.setUint32(importOff + 16, rva(iatOff), true);
+  // null descriptor already zero
+
+  // ILT
+  dv.setUint32(iltOff + 0, rva(exitOff), true);
+  dv.setUint32(iltOff + 4, rva(winexecOff), true);
+  dv.setUint32(iltOff + 8, 0, true);
+  // IAT
+  dv.setUint32(iatOff + 0, rva(exitOff), true);
+  dv.setUint32(iatOff + 4, rva(winexecOff), true);
+  dv.setUint32(iatOff + 8, 0, true);
+
+  // hint names
+  section[exitOff] = 0; section[exitOff+1] = 0;
+  section.set(enc.encode("ExitProcess\0"), exitOff + 2);
+  section[winexecOff] = 0; section[winexecOff+1] = 0;
+  section.set(enc.encode("WinExec\0"), winexecOff + 2);
+  section.set(enc.encode("KERNEL32.dll\0"), k32Off);
+
+  const rawSize = 0x400;
+  const virtSize = 0x300;
+  const sizeOfImage = 0x2000;
+
+  // headers
+  const headers = new Uint8Array(headersSize);
+  const hdv = new DataView(headers.buffer);
+  headers[0] = 0x4D; headers[1] = 0x5A; // MZ
+  hdv.setUint32(0x3C, 0x80, true);
+
+  let o = 0x80;
+  headers[o++] = 0x50; headers[o++] = 0x45; headers[o++] = 0; headers[o++] = 0; // PE
+  // COFF
+  hdv.setUint16(o, 0x14C, true); o += 2; // machine
+  hdv.setUint16(o, 1, true); o += 2; // sections
+  hdv.setUint32(o, 0, true); o += 4;
+  hdv.setUint32(o, 0, true); o += 4;
+  hdv.setUint32(o, 0, true); o += 4;
+  hdv.setUint16(o, 0xE0, true); o += 2; // optional size
+  hdv.setUint16(o, 0x103, true); o += 2; // characteristics
+
+  // Optional PE32
+  const optStart = o;
+  hdv.setUint16(o, 0x10B, true); o += 2;
+  headers[o++] = 14; headers[o++] = 0;
+  hdv.setUint32(o, rawSize, true); o += 4; // SizeOfCode
+  hdv.setUint32(o, 0, true); o += 4;
+  hdv.setUint32(o, 0, true); o += 4;
+  hdv.setUint32(o, rva(0), true); o += 4; // entry
+  hdv.setUint32(o, sectionRva, true); o += 4; // BaseOfCode
+  hdv.setUint32(o, sectionRva, true); o += 4; // BaseOfData
+  hdv.setUint32(o, imageBase, true); o += 4;
+  hdv.setUint32(o, sectionAlign, true); o += 4;
+  hdv.setUint32(o, fileAlign, true); o += 4;
+  hdv.setUint16(o, 5, true); o += 2;
+  hdv.setUint16(o, 1, true); o += 2;
+  hdv.setUint16(o, 0, true); o += 2;
+  hdv.setUint16(o, 0, true); o += 2;
+  hdv.setUint16(o, 5, true); o += 2;
+  hdv.setUint16(o, 1, true); o += 2;
+  hdv.setUint32(o, 0, true); o += 4;
+  hdv.setUint32(o, sizeOfImage, true); o += 4;
+  hdv.setUint32(o, headersSize, true); o += 4;
+  hdv.setUint32(o, 0, true); o += 4; // checksum
+  hdv.setUint16(o, 3, true); o += 2; // console
+  hdv.setUint16(o, 0, true); o += 2;
+  hdv.setUint32(o, 0x100000, true); o += 4;
+  hdv.setUint32(o, 0x1000, true); o += 4;
+  hdv.setUint32(o, 0x100000, true); o += 4;
+  hdv.setUint32(o, 0x1000, true); o += 4;
+  hdv.setUint32(o, 0, true); o += 4;
+  hdv.setUint32(o, 16, true); o += 4;
+  // data dirs
+  // import dir index 1
+  hdv.setUint32(o + 1*8, rva(importOff), true);
+  hdv.setUint32(o + 1*8 + 4, 40, true);
+  // IAT index 12
+  hdv.setUint32(o + 12*8, rva(iatOff), true);
+  hdv.setUint32(o + 12*8 + 4, 12, true);
+  o += 16*8;
+
+  // section header
+  headers.set(enc.encode(".text\0\0\0"), o); o += 8;
+  hdv.setUint32(o, virtSize, true); o += 4;
+  hdv.setUint32(o, sectionRva, true); o += 4;
+  hdv.setUint32(o, rawSize, true); o += 4;
+  hdv.setUint32(o, headersSize, true); o += 4;
+  hdv.setUint32(o, 0, true); o += 4;
+  hdv.setUint32(o, 0, true); o += 4;
+  hdv.setUint16(o, 0, true); o += 2;
+  hdv.setUint16(o, 0, true); o += 2;
+  hdv.setUint32(o, 0xE0000060, true); o += 4;
+
+  const pe = new Uint8Array(headersSize + rawSize);
+  pe.set(headers, 0);
+  pe.set(section.subarray(0, rawSize), headersSize);
+  return pe;
+}
+
+const pe = buildPe(CMD);
+const hex = Array.from(pe).map(b => b.toString(16).padStart(2,'0')).join('');
+document.body.innerHTML = '<pre id="hex">' + hex + '</pre><p>len=' + pe.length + '</p>';
+// Also expose for evaluate
+window.__PE_HEX__ = hex;
+window.__PE_LEN__ = pe.length;
+</script>
+</body></html>

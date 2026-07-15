@@ -106,7 +106,7 @@ export function AdminProductFamilyForm({
         <div className="admin-panel__header">
           <code>{family.familySlug}</code> · <code>{family.familyId}</code>
         </div>
-        <div style={{ padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div className="admin-panel__body admin-stack">
           <label className="admin-field">
             <span className="admin-field__label">Display name</span>
             <input
@@ -120,7 +120,7 @@ export function AdminProductFamilyForm({
             Version: <code>{version?.versionId}</code> · status{" "}
             <span className="admin-badge">{version?.status}</span>
           </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div className="admin-actions-row">
             <button
               type="button"
               className="admin-btn admin-btn--outline"
@@ -161,7 +161,7 @@ export function AdminProductFamilyForm({
           ) : null}
           {previewText ? (
             <pre
-              className="admin-page__meta whitespace-pre-wrap font-mono text-xs"
+              className="admin-page__meta admin-preformatted"
               data-testid="admin-family-preview-result"
             >
               {previewText}

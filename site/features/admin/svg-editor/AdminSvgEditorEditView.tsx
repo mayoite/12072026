@@ -75,15 +75,9 @@ import {
   PLANNER_VERIFY_HREF,
   publishConfirmMessage,
   publishFailureMessage,
-  publishImpactSummary,
   publishSuccessMessage,
   releasedSvgHref,
 } from "./publishActionMessages";
-import {
-  declareSvgEditSources,
-  formatDataSourceBanner,
-} from "./adminDataSourceEditability";
-import { phoneAuthoringBlockedMessage } from "@/features/admin/adminMobileReview";
 import { assertDraftNotStale } from "./staleDraftPublishGate";
 
 /** Browser-only 3D islands — static import of model-viewer/three breaks RSC SSR. */
@@ -157,17 +151,6 @@ function variantTitle(variant: BlockDescriptorVariant): string {
       return "Configurable variant";
     case "parametric":
       return "Parametric variant";
-  }
-}
-
-function describeVariant(variant: BlockDescriptorVariant): string {
-  switch (variant) {
-    case "fixed":
-      return "Fixed size product.";
-    case "configurable":
-      return "Options or bounded size choices.";
-    case "parametric":
-      return "Sized in the studio with a clear footprint.";
   }
 }
 
@@ -343,7 +326,7 @@ export function AdminSvgEditorEditView({
       window.removeEventListener("beforeunload", onBeforeUnload);
       document.removeEventListener("click", onDocumentClick, true);
     };
-  }, [formDirty]);
+  }, [formDirty, slug]);
 
   const handleApproveForBuyers = useCallback(async () => {
     if (artifactStatus.state !== "published") return;
@@ -550,10 +533,6 @@ export function AdminSvgEditorEditView({
     updateDraftForm,
   ]);
 
-  const checksumShort =
-    typeof descriptor.checksum === "string" && descriptor.checksum.length > 16
-      ? `${descriptor.checksum.slice(0, 16)}…`
-      : (descriptor.checksum ?? "—");
   const artifactHashShort = artifactStatus.hash
     ? `${artifactStatus.hash.slice(0, 16)}…`
     : "—";
@@ -566,7 +545,7 @@ export function AdminSvgEditorEditView({
     errorMessage: feedback.errorMessage,
     successMessage: feedback.successMessage,
     previewPending,
-    previewOk: preview == null ? null : preview.ok === true,
+    previewOk: preview === null ? null : preview.ok === true,
     formDirty,
   });
 
@@ -628,24 +607,21 @@ export function AdminSvgEditorEditView({
         <div>
           {/* ADM-SHELL-01: title, scope, source, state */}
           <p className="admin-page__eyebrow" data-testid="admin-shell-scope">
-            Catalog assets · SVG studio
+            SVG studio
           </p>
           <h1 className="admin-page__title" data-testid="admin-shell-title">
             <code>{slug}</code>
           </h1>
           <p className="admin-page__meta" data-testid="admin-shell-source">
-            Source: local disk draft + published symbol · Products DB not live ·
-            checksum{" "}
-            <code className="admin-page__checksum">{checksumShort}</code>
+            Published {updatedAtLabel}
           </p>
-          <p
+          <div
             className="admin-page__meta"
             data-testid="admin-shell-state"
             aria-live="polite"
             aria-atomic="false"
           >
-            <span className="admin-badge">{variantTitle(form.variant)}</span> ·{" "}
-            {describeVariant(form.variant)} ·{" "}
+            <span className="admin-badge">{variantTitle(form.variant)}</span>{" "}
             <span
               className={authoringLifecycleBadgeClass(authoringLifecycle)}
               data-testid="admin-authoring-lifecycle"
@@ -653,7 +629,6 @@ export function AdminSvgEditorEditView({
             >
               {authoringLifecycleLabel(authoringLifecycle)}
             </span>{" "}
-            ·{" "}
             <span
               className={
                 lifecycle === "live"
@@ -666,7 +641,6 @@ export function AdminSvgEditorEditView({
             >
               {lifecycle}
             </span>{" "}
-            · last published {updatedAtLabel} ·{" "}
             <span
               data-testid="admin-footprint-mm-proof"
               data-aligned={footprintProof.aligned ? "true" : "false"}
@@ -681,7 +655,7 @@ export function AdminSvgEditorEditView({
               {footprintProof.widthMm}×{footprintProof.depthMm} mm
               {footprintProof.aligned ? "" : " · drawing does not match footprint"}
             </span>
-          </p>
+          </div>
         </div>
         {/* ADM-SHELL-02: primary Publish only; secondary/destructive stay outline */}
         <div className="admin-page__actions" data-testid="admin-shell-actions">
@@ -734,43 +708,13 @@ export function AdminSvgEditorEditView({
         </div>
       </header>
 
-      {/* ADM-STATE-02 — editability explicit before write */}
       <p
-        className="admin-page__meta"
-        data-testid="admin-data-source-editability"
-        data-editable={
-          lifecycle === "retired" || !onPublishAction ? "false" : "true"
-        }
-      >
-        {formatDataSourceBanner(
-          declareSvgEditSources({
-            catalogLifecycle: lifecycle,
-            hasOnPublishAction: Boolean(onPublishAction),
-          }),
-        )}
-      </p>
-
-      {/* ADM-MOB-02 — declare unsupported phone authoring before work */}
-      <p
-        className="admin-page__meta admin-phone-authoring-notice"
-        data-testid="admin-phone-authoring-notice"
-      >
-        {phoneAuthoringBlockedMessage()}
-      </p>
-
-      <p
+        className="sr-only"
         id="admin-svg-publication-impact"
-        className="admin-page__meta"
         data-testid="admin-svg-publication-impact"
       >
-        {publishImpactSummary({
-          targetSlug: publishTarget,
-          draftSchemaVersion: String(descriptor.schemaVersion),
-          liveArtifactState: artifactStatus.state,
-          liveRevisionShort: artifactStatus.hash ? artifactHashShort : null,
-        })}{" "}
-        Authoring state:{" "}
-        <strong>{authoringLifecycleLabel(authoringLifecycle)}</strong>.
+        Publishing replaces the released SVG for <code>{publishTarget}</code>.
+        Previous revisions remain available.
       </p>
 
       {coreFieldIssues.length > 0 ? (

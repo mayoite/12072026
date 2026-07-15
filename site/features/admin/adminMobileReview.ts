@@ -3,7 +3,7 @@
  * Pure copy + breakpoints for existing admin media queries.
  */
 
-/** Matches admin-svg-engine.css max-width: 60rem phone/tablet stack. */
+/** Matches the locked admin theme max-width: 60rem phone/tablet stack. */
 export const ADMIN_PHONE_MAX_WIDTH_REM = 60;
 
 export type AdminPhoneCapability =

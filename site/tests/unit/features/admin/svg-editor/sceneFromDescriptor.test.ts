@@ -38,4 +38,27 @@ describe("sceneFromDescriptor", () => {
     );
     expect(scene.nodes.some((n) => n.id === "top")).toBe(true);
   });
+
+  it("turns generated block ids into readable layer names without changing ids", () => {
+    const id =
+      "z0001-z0001-z0001-z0001-z0001-z0001-leg-cutout-nw";
+    const scene = sceneFromDescriptor(
+      fixed({
+        blocks: [{ id, x: 25, y: 25, width: 50, depth: 50 }],
+      } as Partial<BlockDescriptor>),
+    );
+
+    expect(scene.nodes[0]?.id).toBe(id);
+    expect(scene.nodes[0]?.name).toBe("Leg cutout NW");
+  });
+
+  it("uses a readable fallback for generated rectangle ids", () => {
+    const scene = sceneFromDescriptor(
+      fixed({
+        blocks: [{ id: "z0005-rect-6", x: 0, y: 0, width: 50, depth: 50 }],
+      } as Partial<BlockDescriptor>),
+    );
+
+    expect(scene.nodes[0]?.name).toBe("Rectangle 6");
+  });
 });

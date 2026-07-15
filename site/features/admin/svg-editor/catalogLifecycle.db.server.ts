@@ -14,13 +14,13 @@ import {
  * Load buyer-visible descriptors from the Products DB when configured,
  * falling back to disk-based inventory/descriptors/ otherwise.
  */
-export function loadBuyerVisibleDescriptorsWithDb(): BlockDescriptor[] {
+export async function loadBuyerVisibleDescriptorsWithDb(): Promise<BlockDescriptor[]> {
   if (!isProductsDatabaseConfigured()) {
     return loadBuyerVisibleDescriptors();
   }
 
   try {
-    const rows = productsDb.select().from(blockDescriptors).execute() as unknown as {
+    const rows = await productsDb.select().from(blockDescriptors).execute() as {
       slug: string;
       descriptor: unknown;
     }[];

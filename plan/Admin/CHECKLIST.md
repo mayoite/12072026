@@ -6,7 +6,6 @@ Reconciled against `site/` on 2026-07-14. **Unit-complete items live in FEATURES
 
 ## Step 0 — test isolation
 
-- [x] Catalog-writing unit/e2e tests use tmp dirs (`tests/unit/features/admin/svg-editor/`, isolated publish workers).
 - [ ] Automated canonical `inventory/descriptors/` hash gate in CI (not in `check:layout` today).
 
 ## Phase 1 — SVG-first authoring
@@ -16,12 +15,12 @@ Reconciled against `site/` on 2026-07-14. **Unit-complete items live in FEATURES
 
 ## Phase 2 — catalog lifecycle and Planner handoff
 
-- [ ] `DB-SVG-01` … `DB-SVG-05` Products DB is released SVG revision and pointer authority (`block_descriptors` never written).
+- [ ] `DB-SVG-01` … `DB-SVG-05` Products DB is released SVG revision and pointer authority. Today: publish upserts `svg_revisions` + `block_descriptors` when `PRODUCTS_DATABASE_URL` is set, but with a stub payload and no `published_svg_revision_id` product pointer — disk remains the real authority.
 - [ ] `DB-SVG-17` disk→DB migration dry-run report.
 - [ ] `DB-SVG-18` database and approved source parity before cutover.
 - [ ] One DB transaction publish (artifact + revision + pointer + audit).
-- [ ] API publish matches server-action DB dual-write (`POST /api/admin/svg-editor` has no `dbRepository` today).
-- [ ] Planner `svg-blocks` reads committed DB artifact bytes (today: `loadBuyerVisibleDescriptors()` from disk).
+- [ ] Real DB dual-write payload — `POST /api/admin/svg-editor` and `publishSvgEditorAction.ts` both inject `dbRepository` when `PRODUCTS_DATABASE_URL` is set (wiring parity done), but the revision payload is still a hardcoded `{slug}-r1` stub and DB is not yet authority.
+- [ ] Planner `svg-blocks` reads committed DB **artifact bytes** by revision/storage key. Today: `loadBuyerVisibleDescriptorsWithDb()` reads `block_descriptors` definition JSON when configured (disk fallback), not artifact bytes.
 - [ ] Fresh integration + browser proof for catalog publication journey.
 
 ## Phase 3 — product families

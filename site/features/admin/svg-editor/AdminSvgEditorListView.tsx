@@ -385,7 +385,7 @@ export function AdminSvgEditorListView({
             Create a symbol in the visual studio. That is the primary authoring
             path.
           </p>
-          <div style={{ marginTop: '1rem' }}>
+          <div className="admin-section-top">
             <Link
               href="/admin/svg-editor/new"
               className="admin-btn admin-btn--primary"
@@ -553,10 +553,10 @@ export function AdminSvgEditorListView({
             className="admin-page__section"
             data-testid="admin-svg-inventory-saved-views"
           >
-            <summary className="admin-panel__header cursor-pointer">
+            <summary className="admin-panel__header">
               Saved views (optional)
             </summary>
-            <div style={{ padding: '0.5rem 1rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'flex-end' }}>
+            <div className="admin-panel__body admin-actions-row admin-actions-row--end">
               <label className="admin-field">
                 <span className="admin-field__label">Save view as</span>
                 <input
@@ -628,7 +628,7 @@ export function AdminSvgEditorListView({
                       <th scope="col">Lifecycle</th>
                       <th scope="col">Symbol</th>
                       <th scope="col">Updated</th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="admin-table__actions-head">
                         Actions
                       </th>
                     </tr>
@@ -794,7 +794,7 @@ export function AdminSvgEditorListView({
                   Page {paged.page} of {paged.totalPages} · {paged.total} match
                   {paged.total === 1 ? "" : "es"}
                 </p>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <div className="admin-actions-row">
                   <button
                     type="button"
                     className="admin-btn admin-btn--outline"
@@ -826,7 +826,7 @@ export function AdminSvgEditorListView({
 
       {/* ADM-SVG-01 / 03: bulk import never dominates the inventory journey. */}
       <section
-        className="admin-page__section mt-8"
+        className="admin-page__section admin-page__section--spaced"
         aria-label="Advanced tools"
         data-testid="admin-svg-advanced-section"
       >
@@ -838,12 +838,14 @@ export function AdminSvgEditorListView({
             Advanced · bulk import
           </summary>
           <div className="admin-panel__body">
-            <p className="admin-page__meta mb-3">
-              Migration tool only — paste spreadsheet rows, preview, then apply.
-              Day-to-day work uses Search and New SVG symbol above. Not required
-              for authoring.
-            </p>
-            <AdminSvgBulkImportPanel />
+            <div className="admin-stack">
+              <p className="admin-page__meta">
+                Migration tool only — paste spreadsheet rows, preview, then apply.
+                Day-to-day work uses Search and New SVG symbol above. Not required
+                for authoring.
+              </p>
+              <AdminSvgBulkImportPanel />
+            </div>
           </div>
         </details>
       </section>

@@ -112,8 +112,13 @@ describe("ADM-SVG-15 publish names target and versions", () => {
       descriptor.slug,
     );
     expect(screen.getByTestId("admin-svg-publication-impact")).toHaveTextContent(
-      /Draft schema|live revision|Live artifact/i,
+      /Previous revisions remain available/i,
     );
+    expect(screen.getByTestId("admin-svg-publication-impact")).toHaveClass(
+      "sr-only",
+    );
+    expect(screen.queryByTestId("admin-svg-publication-detail-copy")).toBeNull();
+    expect(screen.queryByTestId("admin-svg-advanced-details")).toBeNull();
   });
 });
 

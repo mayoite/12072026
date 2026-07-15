@@ -1,18 +1,17 @@
 // @vitest-environment node
+import { execFile } from "node:child_process";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import type { AddressInfo } from "node:net";
-import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const scriptPath = path.join(siteRoot, "scripts/phase0412-runtime-probe.mjs");
-const evidencePath = path.resolve(
-  siteRoot,
-  "../results/site/release-gates/runtime-0412/runtime-0412-evidence.json",
-);
+const evidencePath = path.resolve(siteRoot, "../results/site/release-gates/runtime-0412/runtime-0412-evidence.json");
+const execFileAsync = promisify(execFile);
 
 function html(body: string) {
   return `<!DOCTYPE html><html><body>${body}</body></html>`;
@@ -63,8 +62,8 @@ describe("phase0412-runtime-probe (name-mirror)", () => {
     });
   });
 
-  it("records PLAN-FAIL-0412 runtime pass with route and API probes", () => {
-    const output = execFileSync(process.execPath, [scriptPath], {
+  it("records PLAN-FAIL-0412 runtime pass with route and API probes", async () => {
+    const { stdout } = await execFileAsync(process.execPath, [scriptPath], {
       cwd: siteRoot,
       encoding: "utf8",
       env: {
@@ -74,8 +73,8 @@ describe("phase0412-runtime-probe (name-mirror)", () => {
         PLAYWRIGHT_BASE_URL: baseUrl,
       },
     });
-    expect(output).toContain("PLAN-FAIL-0412");
-    expect(output).toMatch(/pass=true/);
+    expect(stdout).toContain("PLAN-FAIL-0412");
+    expect(stdout).toMatch(/pass=true/);
     const evidence = JSON.parse(fs.readFileSync(evidencePath, "utf8")) as {
       pass: boolean;
       checkIds: string[];

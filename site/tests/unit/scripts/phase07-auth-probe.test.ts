@@ -1,19 +1,18 @@
 // @vitest-environment node
+import { execFile } from "node:child_process";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import type { AddressInfo } from "node:net";
-import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { adminRouteAuthGuardPass } from "../../../scripts/phase07-auth-probe.mjs";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const scriptPath = path.join(siteRoot, "scripts/phase07-auth-probe.mjs");
-const evidencePath = path.resolve(
-  siteRoot,
-  "../results/site/phase-07/http-probe/http-probe-evidence.json",
-);
+const evidencePath = path.resolve(siteRoot, "../results/site/phase-07/http-probe/http-probe-evidence.json");
+const execFileAsync = promisify(execFile);
 
 function handler(req: IncomingMessage, res: ServerResponse) {
   if ((req.url ?? "").startsWith("/api/admin/svg-editor") && req.method === "POST") {
@@ -48,14 +47,14 @@ describe("phase07-auth-probe (name-mirror)", () => {
     expect(adminRouteAuthGuardPass()).toBe(true);
   });
 
-  it("records auth-blocked admin POST evidence", () => {
-    const output = execFileSync(process.execPath, [scriptPath], {
+  it("records auth-blocked admin POST evidence", async () => {
+    const { stdout } = await execFileAsync(process.execPath, [scriptPath], {
       cwd: siteRoot,
       encoding: "utf8",
       env: { ...process.env, PROBE_BASE_URL: baseUrl },
     });
-    expect(output).toContain("Phase 07 auth probe");
-    expect(output).toContain("authBlocked=true");
+    expect(stdout).toContain("Phase 07 auth probe");
+    expect(stdout).toContain("authBlocked=true");
     const evidence = JSON.parse(fs.readFileSync(evidencePath, "utf8")) as {
       checkIds: string[];
       adminApi: { pass: boolean; status: number };

@@ -2,7 +2,8 @@
 
 Navigation map for `site/` (oando-site). Routes stay thin; behavior lives in `features/`, `lib/`, and `platform/`.
 
-Repo-wide layout: `../Readme.md`. Product domains: `../docs/architecture/02-DOMAINS.md`.
+Repo-wide layout: `../../Readme.md`. Product domains: `../architecture/02-DOMAINS.md`.  
+Feature maps: `features.md`. Tests: `tests.md`. Live routes: `route-classification.md`.
 
 ---
 
@@ -25,7 +26,7 @@ Repo-wide layout: `../Readme.md`. Product domains: `../docs/architecture/02-DOMA
 | Catalog lifecycle / audit logs | repo-root `results/admin/catalog-ops/` (gitignored) |
 | DB schema / migrations | `platform/drizzle/`, `platform/supabase/` |
 | Shared CSS tokens | `app/css/core/` |
-| Unit / integration / E2E | `tests/` — see [Tests](#tests) |
+| Unit / integration / E2E | `tests/` — see `tests.md` |
 | npm script implementation | `scripts/` |
 
 ---
@@ -48,7 +49,7 @@ Repo-wide layout: `../Readme.md`. Product domains: `../docs/architecture/02-DOMA
 
 Build artifacts (not product): `.next/`, `node_modules/`, `.tmp/`.
 
-**Removed / do not restore as live:** `block-descriptors/` (orphan folder). Live descriptors: `inventory/descriptors/` only.
+**Removed / do not restore as live:** `block-descriptors/`. Live descriptors: `inventory/descriptors/` only.
 
 ---
 
@@ -63,9 +64,11 @@ Build artifacts (not product): `.next/`, `node_modules/`, `.tmp/`.
 | Ops | `features/ops/` | Customer-queries ops UI |
 | Shared | `features/shared/` | Auth shell, API envelope, contracts, entry |
 
+Detail maps: **`features.md`**.
+
 ---
 
-## Catalog and SVG
+## Catalog and SVG inventory
 
 | Layer | Path | Authority |
 |---|---|---|
@@ -75,6 +78,54 @@ Build artifacts (not product): `.next/`, `node_modules/`, `.tmp/`.
 | SVG symbols | `inventory/descriptors/`, `public/svg-catalog/` | Disk (live); versions as `{slug}.{n}.json` |
 
 Publish: `features/admin/svg-editor/`. Path helper: `resolveBlockDescriptorsDir()` → `inventory/descriptors`.
+
+### Descriptor file layout (`inventory/descriptors/`)
+
+| Layout | Meaning |
+|--------|---------|
+| `{slug}.json` | Legacy single file (still supported) |
+| `{slug}.latest.json` | Pointer to current version |
+| `{slug}.{n}.json` | Version `n` of the descriptor |
+
+No separate `descriptors/_archive/`. Older versions are co-located as numbered files.  
+Compiled SVG: `public/svg-catalog/`. Do not load from `block-descriptors/` (removed).
+
+Lifecycle/audit logs: repo-root `results/admin/catalog-ops/` (gitignored).  
+Target DB authority: `../architecture/08-DATABASE-SVG-CONTRACT.md`.  
+Tests must not mutate `inventory/descriptors/` — use tmp fixtures.
+
+---
+
+## CSS
+
+| Path | Role |
+|------|------|
+| `app/css/core/theme.css` | Tokens |
+| `app/css/core/components/` | Shared component styles |
+| `app/css/core/utilities/` | Utility classes |
+| `app/css/core/locked/site/` | Public marketing chrome (locked) |
+| `app/css/core/locked/admin/` | Admin shell (locked) |
+| `app/css/core/locked/planner/` | Planner workspace chrome (locked) |
+
+Entry: `app/css/index.css`. Do not invent parallel token systems.
+
+---
+
+## Config / environment
+
+Secrets and runtime env belong in the **repo-root** `.env.local` only.  
+`site/config/` holds tool stubs (lint, Playwright, route contract). Do not commit API keys, service-role tokens, or database URLs there.
+
+---
+
+## CDN / demo assets
+
+| Path | Role |
+|------|------|
+| `public/cdn/planner/canvas/` | Static assets for 2D canvas host (`/planner/guest`, `/planner/canvas`) |
+| Open3D-related static | Demo-only; live entry is `/planner/canvas` (open3d URLs 301 to canvas) |
+
+**Open3D donor assets are demo-only**, not production catalog items. Textures (ambientCG CC0) and GLB models under vendor/open3d paths are reference/fallback only. Real product models stay R2/DB-backed. SVG symbols come from typed catalog definitions + sanitization, not external markup as source.
 
 ---
 
@@ -86,7 +137,7 @@ Publish: `features/admin/svg-editor/`. Path helper: `resolveBlockDescriptorsDir(
 | Examples | `lib/catalog/`, `lib/analytics/` | `platform/drizzle/`, `platform/supabase/` |
 | Rule | No raw credentials | Migrations and schema live here |
 
-Supabase product clients: `@/platform/supabase/*` (not `@/lib/supabase/*` shims — removed).
+Supabase product clients: `@/platform/supabase/*` (not `@/lib/supabase/*` — removed).
 
 ---
 
@@ -98,27 +149,12 @@ Marketing and shared UI only (`home/`, `site/`, `ui/`, `products/`, …). Domain
 
 ## Tests
 
-Layout map: `tests-CONTENTS.md` (this folder).
+Full layout and counts: **`tests.md`**.
 
-**Name-mirror rule:**  
-`site/<path>/<file>.ts(x)` → `tests/unit/<path>/<file>.test.ts(x)`  
-(for handwritten product modules; exclude generated DB types).
+**Name-mirror:** `site/<path>/<file>.ts(x)` → `tests/unit/<path>/<file>.test.ts(x)`  
+(handwritten product modules; exclude generated DB types).
 
-| Pattern | Location | Mirrors |
-|---|---|---|
-| App routes / API | `tests/unit/app/` | `app/` |
-| Components | `tests/unit/components/` | `components/` |
-| Features (all domains) | `tests/unit/features/` | `features/` |
-| Lib | `tests/unit/lib/` | `lib/` |
-| Platform | `tests/unit/platform/` | `platform/` |
-| Config contracts | `tests/unit/config/` | `config/` |
-| i18n | `tests/unit/i18n/` | `i18n/` |
-| Integration | `tests/integration/` | multi-module flows |
-| E2E | `tests/e2e/` | journeys (not 1:1 file mirror) |
-
-Inventory snapshot: `tests-INVENTORY.md`.
-
-**Rules:** isolated fixtures only — never mutate `inventory/descriptors/` or live DB catalog rows. No `test.skip` as a silent pass. Export-surface-only tests kept under ~5% of unit files.
+Isolated fixtures only. No silent skips. Export-surface-only tests under ~5% of unit files.
 
 ---
 
@@ -126,7 +162,7 @@ Inventory snapshot: `tests-INVENTORY.md`.
 
 | Item | Status |
 |---|---|
-| `site/inventory/descriptors/` | **Deleted** — use `inventory/descriptors/` |
+| `site/inventory/descriptors/` under wrong root | **Deleted** — use `inventory/descriptors/` |
 | `/planner/fabric/**`, `/planner/open3d/**` | **301** → `/planner/canvas` |
 | `/admin/buddy-catalog` | **301** → `/admin/planner-catalog` |
 | `/crm/*`, `/ops/*` app routes | **301** → `/admin/crm/*`, `/admin/customer-queries/` |
@@ -147,11 +183,10 @@ Inventory snapshot: `tests-INVENTORY.md`.
 
 ---
 
-## Related docs (this folder)
+## Related
 
-- `features-planner-project.md` — live vs parallel planner trees  
-- `features-planner-asset-engine.md` — SVG compile / asset engine  
-- `features-site-CONTENTS.md` — site marketing feature map  
-- `inventory.md` — descriptor inventory  
+- `features.md` — planner / site / admin feature maps  
+- `tests.md` — name-mirror + inventory counts  
+- `route-classification.md` — generated live routes  
 - `../architecture/02-DOMAINS.md` — product domains  
-- Live route contract JSON still in package: `site/config/route-contract.json`
+- Package route contract JSON: `site/config/route-contract.json`

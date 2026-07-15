@@ -79,7 +79,7 @@ export function DescriptorRevisionPanel({ slug }: Props) {
   return (
     <section className="admin-panel" aria-label="Revision history">
       <div className="admin-panel__header">Revision history</div>
-      <div style={{ padding: '0.75rem 1rem' }}>
+      <div className="admin-panel__body">
         {loading ? (
           <p className="admin-page__meta" role="status">
             <Loader2 size={14} className="animate-spin" aria-hidden /> Loading revisions…
@@ -87,9 +87,9 @@ export function DescriptorRevisionPanel({ slug }: Props) {
         ) : revisions.length === 0 ? (
           <p className="admin-table__secondary">No versioned revisions on disk yet.</p>
         ) : (
-          <ul className="admin-table__secondary space-y-2">
+          <ul className="admin-table__secondary admin-list-roomy">
             {revisions.map((revision) => (
-              <li key={revision.version} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem' }}>
+              <li key={revision.version} className="admin-inline-row">
                 <span>
                   v{revision.version}
                   {revision.isCurrent ? " · current" : ""}
@@ -115,14 +115,14 @@ export function DescriptorRevisionPanel({ slug }: Props) {
           </ul>
         )}
         {feedback ? (
-          <p className="admin-page__meta" style={{ marginTop: '0.75rem' }} role="status">
+          <p className="admin-page__meta admin-feedback" role="status">
             {feedback}
           </p>
         ) : null}
         {audit.length > 0 ? (
-          <div style={{ marginTop: '1rem' }}>
-            <h3 className="admin-table__primary text-sm">Audit trail</h3>
-            <ul className="admin-table__secondary" style={{ marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+          <div className="admin-section-top">
+            <h3 className="admin-table__primary">Audit trail</h3>
+            <ul className="admin-table__secondary admin-list-compact">
               {audit.map((entry) => (
                 <li key={`${entry.at}-${entry.action}`}>
                   <code>{entry.at}</code> · {entry.action}

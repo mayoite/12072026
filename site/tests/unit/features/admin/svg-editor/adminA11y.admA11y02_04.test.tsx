@@ -358,9 +358,36 @@ describe("ADM-A11Y-04 focus visible and state announced", () => {
     const studioCss = readSiteCss(
       "app/css/core/locked/admin/svg-studio.css",
     );
-    const engineCss = readSiteCss("app/css/admin-svg-engine.css");
-    expect(studioCss + engineCss).toMatch(/:focus-visible/);
+    const adminPagesCss = readSiteCss(
+      "app/css/core/locked/admin/admin-pages.css",
+    );
+    const adminShellCss = readSiteCss(
+      "app/css/core/locked/admin/admin.css",
+    );
+    expect(studioCss + adminPagesCss).toMatch(/:focus-visible/);
     expect(studioCss).toMatch(/svg-studio__toolbar button:focus-visible|svg-studio__layer/);
     expect(studioCss).toMatch(/svg-studio__stage:focus-visible|svg-studio__inspector input:focus-visible/);
+    expect(studioCss).toMatch(
+      /\.svg-studio__toolbar\s*\{[\s\S]*position:\s*sticky[\s\S]*top:\s*var\(--admin-header-height\)/,
+    );
+    expect(adminShellCss).toMatch(/--admin-header-height:/);
+    expect(studioCss).toMatch(
+      /\.shell-admin-layout:has\(\.admin-page--svg-engine\)[\s\S]*overflow:\s*visible/,
+    );
+    expect(studioCss).toMatch(
+      /html:has\(\.admin-page--svg-engine\)[\s\S]*overflow-x:\s*clip[\s\S]*overflow-y:\s*visible/,
+    );
+    expect(studioCss).toMatch(
+      /\.svg-studio__node\.svg-studio__node--selected:is\(rect, circle, path\)/,
+    );
+    expect(studioCss).toMatch(
+      /\.svg-studio__node\.svg-studio__node--selected:is\(line, polyline\)/,
+    );
+    expect(studioCss).toMatch(
+      /\.svg-studio__node\.svg-studio__node--selected:is\(text\)/,
+    );
+    expect(studioCss).not.toContain("var(--surface-panel)");
+    expect(studioCss).not.toMatch(/color-mix\([^\n]*var\(--surface-raised\)/);
+    expect(studioCss).toContain("var(--color-surface-raised)");
   });
 });

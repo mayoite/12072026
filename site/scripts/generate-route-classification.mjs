@@ -1,14 +1,15 @@
 /**
- * Scan app/ pages + API routes; write docs/ops/context/route-classification.md
+ * Scan app/ pages + API routes; write docs/site/route-classification.md
  * Run: node scripts/generate-route-classification.mjs
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const appDir = path.join(repoRoot, "app");
-const outPath = path.join(repoRoot, "docs", "ops", "context", "route-classification.md");
+const siteRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const repoRoot = path.join(siteRoot, "..");
+const appDir = path.join(siteRoot, "app");
+const outPath = path.join(repoRoot, "docs", "site", "route-classification.md");
 
 const LEGACY_REDIRECTS = [
   ["/oando-planner", "/planner/"],
@@ -103,7 +104,7 @@ const lines = [
   "",
   ...LEGACY_REDIRECTS.map(([src, dest]) => `- \`${src}\` → \`${dest}\``),
   "",
-  "See also: `config/route-contract.json`, `proxy.ts`, `docs/Handover.md`.",
+  "See also: `site/config/route-contract.json`, `docs/site/ARCHITECTURE.md`, `docs/api/ROUTE-INDEX.md`.",
   "",
 ];
 

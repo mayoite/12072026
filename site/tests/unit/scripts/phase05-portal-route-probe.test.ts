@@ -1,27 +1,24 @@
 // @vitest-environment node
+import { execFile } from "node:child_process";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import type { AddressInfo } from "node:net";
-import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const scriptPath = path.join(siteRoot, "scripts/phase05-portal-route-probe.mjs");
-const evidencePath = path.resolve(
-  siteRoot,
-  "../results/site/phase-05/http-probe/http-probe-evidence.json",
-);
+const evidencePath = path.resolve(siteRoot, "../results/site/phase-05/http-probe/http-probe-evidence.json");
 const SAMPLE = "side-table-001";
+const execFileAsync = promisify(execFile);
 
 function handler(req: IncomingMessage, res: ServerResponse) {
   const url = req.url ?? "/";
   if (url === "/portal/svg-catalog" || url === "/portal/svg-catalog/") {
     res.writeHead(200, { "content-type": "text/html" });
-    res.end(
-      "<html><head><title>SVG catalog</title></head><body><p>12 blocks available</p></body></html>",
-    );
+    res.end("<html><head><title>SVG catalog</title></head><body><p>12 blocks available</p></body></html>");
     return;
   }
   if (url.includes(`/portal/svg-catalog/${SAMPLE}`)) {
@@ -56,8 +53,8 @@ describe("phase05-portal-route-probe (name-mirror)", () => {
     });
   });
 
-  it("checks portal index/slug and og:image R2 policy", () => {
-    const output = execFileSync(process.execPath, [scriptPath], {
+  it("checks portal index/slug and og:image R2 policy", async () => {
+    const { stdout } = await execFileAsync(process.execPath, [scriptPath], {
       cwd: siteRoot,
       encoding: "utf8",
       env: {
@@ -66,17 +63,15 @@ describe("phase05-portal-route-probe (name-mirror)", () => {
         PHASE05_PROBE_SLUG: SAMPLE,
       },
     });
-    expect(output).toContain("Phase 05 portal route probe");
-    expect(output).toContain("05-PORT-01");
+    expect(stdout).toContain("Phase 05 portal route probe");
+    expect(stdout).toContain("05-PORT-01");
     const evidence = JSON.parse(fs.readFileSync(evidencePath, "utf8")) as {
       checkIds: string[];
       index: { pass: boolean };
       slug: { pass: boolean };
       metadata: { pass: boolean; ogImageIsR2: boolean };
     };
-    expect(evidence.checkIds).toEqual(
-      expect.arrayContaining(["05-PORT-01", "05-PORT-02", "05-PORT-09"]),
-    );
+    expect(evidence.checkIds).toEqual(expect.arrayContaining(["05-PORT-01", "05-PORT-02", "05-PORT-09"]));
     expect(evidence.index.pass).toBe(true);
     expect(evidence.slug.pass).toBe(true);
     expect(evidence.metadata.ogImageIsR2).toBe(true);
