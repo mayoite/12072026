@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowRight, CompassTool } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 
+import { PlannerLaunchLink } from "@/components/ui/PlannerLaunchLink";
 import { PRODUCT_SUITE } from "@/features/site/data/productSuite";
 
 interface ChooseProductPageProps {
@@ -69,8 +70,10 @@ export function ChooseProductPage({
               <h2 className="home-heading mt-4">Start with the path that matches the session.</h2>
             </div>
 
-            <Link
+            <PlannerLaunchLink
               href={entryHref}
+              surface="choose-product"
+              label={PLANNER.label}
               className="group mt-8 grid gap-6 border border-[var(--border-soft)] bg-[var(--surface-page)] p-6 transition-colors hover:bg-[var(--surface-soft)] md:grid-cols-[4rem_1fr_auto] md:items-center"
             >
               <span className="flex h-16 w-16 items-center justify-center border border-[var(--border-soft)] text-[var(--color-bronze-500)]">
@@ -84,7 +87,7 @@ export function ChooseProductPage({
               <span className="flex h-11 w-11 items-center justify-center border border-[var(--border-soft)] text-strong transition-transform group-hover:translate-x-1">
                 <ArrowRight size={18} weight="bold" aria-hidden="true" />
               </span>
-            </Link>
+            </PlannerLaunchLink>
 
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {[

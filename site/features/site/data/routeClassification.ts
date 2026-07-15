@@ -137,23 +137,25 @@ export const SITE_ROUTE_CLASSIFICATION: SiteRouteMeta[] = [
   },
   {
     route: "/brochure",
-    classification: "public",
+    classification: "redirect",
     audience: "Public visitor / buyer",
-    intent: "View the company brochure",
+    intent: "Legacy brochure path redirected to /downloads/",
     owner: "Marketing",
-    canonicalUrl: canonicalFor("/brochure"),
-    primaryAction: "Open brochure",
-    indexable: true,
+    canonicalUrl: canonicalFor("/downloads"),
+    primaryAction: "Redirect to downloads",
+    indexable: false,
+    notes: "Redirects to /downloads/; not a standalone indexable document.",
   },
   {
     route: "/download-brochure",
-    classification: "public",
+    classification: "redirect",
     audience: "Public visitor / buyer",
-    intent: "Download the company brochure",
+    intent: "Legacy brochure download path redirected to /downloads/",
     owner: "Marketing",
-    canonicalUrl: canonicalFor("/download-brochure"),
-    primaryAction: "Download brochure",
-    indexable: true,
+    canonicalUrl: canonicalFor("/downloads"),
+    primaryAction: "Redirect to downloads",
+    indexable: false,
+    notes: "Redirects to /downloads/; not a standalone indexable document.",
   },
   {
     route: "/career",
@@ -243,7 +245,8 @@ export const SITE_ROUTE_CLASSIFICATION: SiteRouteMeta[] = [
     owner: "Ops",
     canonicalUrl: canonicalFor("/support-ivr"),
     primaryAction: "Resolve a query",
-    indexable: true,
+    indexable: false,
+    notes: "Operational IVR utility; noindex.",
   },
   {
     route: "/templates",
@@ -259,11 +262,12 @@ export const SITE_ROUTE_CLASSIFICATION: SiteRouteMeta[] = [
     route: "/choose-product",
     classification: "public",
     audience: "Public visitor / buyer",
-    intent: "Guided product selection",
+    intent: "Guided product selection (auth or guest mode)",
     owner: "Site",
     canonicalUrl: canonicalFor("/choose-product"),
     primaryAction: "Start product picker",
-    indexable: true,
+    indexable: false,
+    notes: "Auth/guest workspace entry; noindex utility.",
   },
   {
     route: "/privacy",
@@ -533,3 +537,47 @@ export function getRouteClassification(route: string): SiteRouteMeta | undefined
 export const PUBLIC_INDEXABLE_ROUTES: string[] = SITE_ROUTE_CLASSIFICATION.filter(
   (meta) => meta.classification === "public" && meta.indexable,
 ).map((meta) => meta.route);
+
+/** Concrete marketing paths for sitemap generation (no dynamic segments). */
+export const PUBLIC_INDEXABLE_STATIC_PATHS: string[] = PUBLIC_INDEXABLE_ROUTES.filter(
+  (route) => !route.includes("["),
+);
+
+/** Planner marketing routes live outside `(site)` but remain indexable launch surfaces. */
+export const PLANNER_MARKETING_SITEMAP_PATHS = [
+  "/planner",
+  "/planner/help",
+  "/planner/features",
+  "/planner/features/measure",
+  "/planner/features/3d-view",
+  "/planner/features/ai-assist",
+  "/planner/features/export",
+] as const;
+
+/** Concrete solution category paths mirrored from `app/(site)/solutions/[category]/page.tsx`. */
+export const SOLUTION_CATEGORY_SITEMAP_PATHS = [
+  "/solutions/seating",
+  "/solutions/workstations",
+  "/solutions/tables",
+  "/solutions/storages",
+  "/solutions/soft-seating",
+  "/solutions/education",
+] as const;
+
+export const ROBOTS_DISALLOW_PREFIXES = [
+  "/api/",
+  "/admin/",
+  "/crm/",
+  "/ops/",
+  "/portal/",
+  "/dashboard/",
+  "/login/",
+  "/access/",
+  "/repo-store/",
+  "/quote-cart/",
+  "/tracking/",
+  "/choose-product/",
+  "/support-ivr/",
+  "/planner/canvas/",
+  "/planner/guest/",
+] as const;

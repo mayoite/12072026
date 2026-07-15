@@ -6,9 +6,9 @@ import SvgCatalogLayout, {
 } from "@/app/(site)/portal/svg-catalog/layout";
 
 describe("app/(site)/portal/svg-catalog/layout.tsx", () => {
-  it("exports indexable SVG catalog metadata (overrides portal noindex)", () => {
+  it("exports noindex SVG catalog metadata (protected portal subtree)", () => {
     expect(metadata.title).toBe("SVG catalog | One&Only");
-    expect(metadata.robots).toEqual({ index: true, follow: true });
+    expect(metadata.robots).toEqual({ index: false, follow: false });
   });
 
   it("renders children directly", () => {

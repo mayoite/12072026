@@ -1212,6 +1212,7 @@ export const PDP_ROUTE_COPY = {
     addToCompare: "Add To Compare",
     addedToCompare: "Added To Compare",
     requestQuote: "Request Quote",
+    designInPlanner: "Design in Planner",
     consultation: "Book a Consultation",
     planning: "Open Planning Service",
     resourceDesk: "Open Resource Desk",

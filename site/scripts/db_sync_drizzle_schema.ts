@@ -76,7 +76,10 @@ export async function checkDrizzleSchema(
 
 export async function main(): Promise<void> {
   const result = await checkDrizzleSchema();
-  if (!result.ok) process.exit(result.exitCode);
+  if (!result.ok) {
+    process.exit(result.exitCode);
+  }
+  process.exit(0);
 }
 
 function isMain(): boolean {

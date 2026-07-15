@@ -18,7 +18,7 @@ export function publishImpactSummary(input: PublishImpactInput): string {
     `Publish target: ${input.targetSlug}.`,
     `Draft schema ${input.draftSchemaVersion}.`,
     `Live artifact: ${input.liveArtifactState} (${liveRev}).`,
-    "Primary Publish replaces the released SVG; prior revisions remain for rollback.",
+    "Primary Publish replaces the released SVG; Previous revisions remain available for rollback.",
   ].join(" ");
 }
 

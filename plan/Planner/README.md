@@ -6,16 +6,15 @@ Planner serves any external customer.
 
 The customer creates a layout, receives a deterministic branded BOQ, and sends it to Oando.
 
-## Four phases
+## Files (5)
 
-1. `PHASE-01-start-and-boq.md` — entry, marketing, setup, conversion events, deterministic BOQ.
-2. `PHASE-02-design-workspace.md` — shell, layout, catalog, SVG consumption, AI assist, 2D/3D, persistence, interface quality.
-3. `PHASE-03-scale-validate-price.md` — bulk layout, validation, live pricing, named revisions, review links.
-4. `PHASE-04-deliver-handoff.md` — exports, Send to Oando, handoff security, measurement events.
-
-## Features
-
-`FEATURES.md` maps each plan phase to code paths and known gaps.
+| File | Role |
+|---|---|
+| `README.md` | Track outcome, start gate, blockers |
+| `PHASES-01-02.md` | Start, BOQ, and design workspace |
+| `PHASES-03-04.md` | Scale, validate, price, deliver, handoff |
+| `FEATURES.md` | Plan phase → code path → honest gap |
+| `CHECKLIST.md` | Open acceptance work and browser proof only |
 
 ## Status
 

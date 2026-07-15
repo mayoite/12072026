@@ -13,9 +13,16 @@ import {
   trackConversionEvent,
   CONVERSION_EVENTS,
 } from "@/lib/analytics/conversionContract";
+import { hasAnalyticsConsent } from "@/lib/consent";
+import {
+  buildPlannerEntryCampaign,
+  isPlannerEntryHref,
+  type PlannerEntryContext,
+} from "@/lib/analytics/plannerEntry";
 
 export function emitSiteEvent(eventName: string, payload: SiteEventPayload) {
   if (typeof window === "undefined") return;
+  if (!hasAnalyticsConsent()) return;
   const track = window.va?.track;
   if (typeof track !== "function") return;
   track(eventName, payload);
@@ -28,6 +35,14 @@ function normalizeHref(href: string): string {
 function isWhatsAppHref(href: string): boolean {
   const value = normalizeHref(href);
   return value.includes("wa.me") || value.includes("whatsapp");
+}
+
+export function trackSitePageView(params: {
+  pathname: string;
+  locale: string;
+  referrer?: string;
+}) {
+  trackConversionEvent(CONVERSION_EVENTS.PAGE_VIEW, params);
 }
 
 export function trackSiteCtaClick(params: {
@@ -63,11 +78,43 @@ export function trackSiteCtaClick(params: {
   });
 }
 
-export function trackPlannerLaunchClicked(params: { pathname: string; surface: string }) {
-  emitSiteEvent("planner_launch_clicked", params);
+export function trackPlannerLaunchClicked(params: PlannerEntryContext) {
+  emitSiteEvent("planner_launch_clicked", {
+    pathname: params.sourcePage,
+    surface: params.surface,
+    productSlug: params.productSlug ?? null,
+    categoryId: params.categoryId ?? null,
+  });
   trackConversionEvent(CONVERSION_EVENTS.PLANNER_ENTRY, {
-    sourcePage: params.pathname,
+    sourcePage: params.sourcePage,
     locale: "en",
+    campaign: buildPlannerEntryCampaign(params),
+  });
+}
+
+export function handlePlannerEntryNavigation(params: {
+  href: string;
+  pathname: string;
+  surface: string;
+  label: string;
+  productSlug?: string;
+  categoryId?: string;
+}) {
+  if (!isPlannerEntryHref(params.href)) {
+    trackSiteCtaClick({
+      href: params.href,
+      label: params.label,
+      pathname: params.pathname,
+      surface: params.surface,
+    });
+    return;
+  }
+
+  trackPlannerLaunchClicked({
+    sourcePage: params.pathname,
+    surface: params.surface,
+    productSlug: params.productSlug,
+    categoryId: params.categoryId,
   });
 }
 
@@ -106,3 +153,8 @@ export function trackContactSubmission(params: {
 }) {
   emitSiteEvent("contact_submission", params);
 }
+
+/** @internal test-only aliases */
+export const _trackCompareToggled = trackCompareToggled;
+export const _trackQuoteCartAdded = trackQuoteCartAdded;
+export const _trackContactSubmission = trackContactSubmission;

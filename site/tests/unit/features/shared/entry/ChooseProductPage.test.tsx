@@ -3,18 +3,21 @@
  */
 
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { ChooseProductPage } from "@/features/shared/entry/ChooseProductPage";
+
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/choose-product",
+}));
 
 describe("ChooseProductPage", () => {
   it("renders guest mode with guest canvas entry", () => {
     render(<ChooseProductPage guestMode authenticated={false} />);
 
     expect(screen.getByText("Guest access")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Workspace Planner/i })).toHaveAttribute(
-      "href",
-      "/planner/guest",
-    );
+    const entry = screen.getByRole("link", { name: /Workspace Planner/i });
+    expect(entry.getAttribute("href")).toContain("/planner/guest");
+    expect(entry.getAttribute("href")).toContain("siteSource=");
     expect(screen.queryByRole("link", { name: "Open portal" })).not.toBeInTheDocument();
   });
 
@@ -22,10 +25,9 @@ describe("ChooseProductPage", () => {
     render(<ChooseProductPage guestMode={false} authenticated />);
 
     expect(screen.getByText("Member access")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Workspace Planner/i })).toHaveAttribute(
-      "href",
-      "/planner/canvas",
-    );
+    const entry = screen.getByRole("link", { name: /Workspace Planner/i });
+    expect(entry.getAttribute("href")).toContain("/planner/canvas");
+    expect(entry.getAttribute("href")).toContain("siteSource=");
     expect(screen.getByRole("link", { name: "Open portal" })).toHaveAttribute(
       "href",
       "/portal",

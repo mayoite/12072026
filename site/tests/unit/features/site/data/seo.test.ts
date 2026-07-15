@@ -6,6 +6,7 @@ import {
   buildBreadcrumbJsonLd,
   buildGlobalJsonLd,
   buildLocaleAlternates,
+  buildProductJsonLd,
   LOCALE_HREFLANG,
 } from '@/features/site/data/seo';
 import { SITE_BRAND } from '@/features/site/data/brand';
@@ -289,5 +290,44 @@ describe('buildGlobalJsonLd', () => {
     });
     const images = meta.openGraph!.images as Array<{ url: string }>;
     expect(images[0].url).toBe('/custom-og.webp');
+  });
+
+  it('sets robots indexable by default and noindex when indexable false', () => {
+    const on = buildPageMetadata(TEST_SITE_URL, {
+      title: 'On',
+      description: 'Indexable page description text.',
+      path: '/on',
+    });
+    expect(on.robots).toEqual({ index: true, follow: true });
+    const off = buildPageMetadata(TEST_SITE_URL, {
+      title: 'Off',
+      description: 'Utility page description text here.',
+      path: '/off',
+      indexable: false,
+    });
+    expect(off.robots).toEqual({ index: false, follow: false });
+  });
+});
+
+describe('buildProductJsonLd', () => {
+  it('mirrors visible fields and omits invented offers', () => {
+    const ld = buildProductJsonLd(TEST_SITE_URL, {
+      name: 'Chair A',
+      description: 'Ergonomic task chair.',
+      url: `${TEST_SITE_URL}/products/seating/chair-a`,
+      image: ['/img/a.webp', '/img/b.webp'],
+      sku: 'chair-a',
+      category: 'Seating',
+    });
+    expect(ld['@type']).toBe('Product');
+    expect(ld.name).toBe('Chair A');
+    expect(ld.description).toBe('Ergonomic task chair.');
+    expect(ld.sku).toBe('chair-a');
+    expect(ld.category).toBe('Seating');
+    expect(ld.image).toEqual([
+      `${TEST_SITE_URL}/img/a.webp`,
+      `${TEST_SITE_URL}/img/b.webp`,
+    ]);
+    expect(ld).not.toHaveProperty('offers');
   });
 });

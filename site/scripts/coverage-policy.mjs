@@ -18,6 +18,9 @@
  *    Scoped marketing/catalog logic; thresholds 85/75/85/85 (eased from 90 —
  *    still high on a small include, not full SVG/script universe).
  *
+ * 4) **Admin** (`pnpm run test:coverage:admin`)
+ *    Full `features/admin/**` tree; thresholds 80/75/80/80.
+ *
  * SVG / scripts / public assets are NOT in the gate denominator.
  * Source of include globs: vitest.shared.ts (VITEST_PLANNER_GATE_*).
  */
@@ -31,6 +34,16 @@ export const COVERAGE_GATE_PLANNER = {
   profile: "planner-gate",
   meaning:
     "Allowlist: workstation* + placementAction + furnitureBlock2D + proofCatalog + canvasPicking. Expand only when suite owns the file.",
+};
+
+/** Admin ship gate — matches vitest.admin.coverage.config.ts */
+export const COVERAGE_GATE_ADMIN = {
+  statements: 80,
+  branches: 75,
+  functions: 80,
+  lines: 80,
+  profile: "admin",
+  meaning: "Full features/admin tree — Excalidraw editor TSX may remain partial until browser-owned",
 };
 
 /** Site ship gate — matches vitest.site.config.ts */
@@ -61,7 +74,9 @@ export function fileStatusVsGate(pct, metric = "lines", profile = "site") {
   const gate =
     profile === "planner"
       ? (COVERAGE_GATE_PLANNER[metric] ?? COVERAGE_GATE_PLANNER.lines)
-      : (COVERAGE_GATE_SITE[metric] ?? COVERAGE_GATE_SITE.lines);
+      : profile === "admin"
+        ? (COVERAGE_GATE_ADMIN[metric] ?? COVERAGE_GATE_ADMIN.lines)
+        : (COVERAGE_GATE_SITE[metric] ?? COVERAGE_GATE_SITE.lines);
   if (pct >= gate) return `PASS (>= ${gate}% ${profile} gate)`;
   if (pct > 0 && pct >= gate * 0.5) return `PARTIAL (< ${gate}% ${profile} gate)`;
   if (pct > 0) return `LOW (< ${Math.round(gate * 0.5)}%)`;

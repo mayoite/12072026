@@ -4,7 +4,7 @@ import { SITE_CONTACT } from "@/features/site/data/contact";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
 import { routing } from "@/i18n/routing";
 
-type PageMetadataInput = {
+export type PageMetadataInput = {
   title: string;
   description: string;
   path: string;
@@ -13,6 +13,24 @@ type PageMetadataInput = {
   type?: "website" | "article";
   /** Set false to skip hreflang alternates (e.g. legal/utility pages). */
   alternates?: boolean;
+  /**
+   * SITE-SEO-01 / 03 — when false, emit robots noindex/nofollow.
+   * Defaults true for marketing pages.
+   */
+  indexable?: boolean;
+};
+
+export type ProductJsonLdInput = {
+  name: string;
+  description: string;
+  /** Canonical product URL (already absolute). */
+  url: string;
+  /** Absolute or site-root-relative image path(s) shown on the page. */
+  image: string | readonly string[];
+  /** Stable product identifier (slug or SKU) when visible or released. */
+  sku?: string;
+  brandName?: string;
+  category?: string;
 };
 
 /** Locale → BCP 47 language tag used for OG / hreflang. */
@@ -155,6 +173,7 @@ export function buildPageMetadata(siteUrl: string, input: PageMetadataInput): Me
   const canonicalUrl = buildCanonicalUrl(siteUrl, input.path);
   const image = input.image || SITE_BRAND.ogImage;
   const includeAlternates = input.alternates !== false;
+  const indexable = input.indexable !== false;
   const title: Metadata["title"] = input.title.includes(SITE_BRAND.titleSuffix)
     ? { absolute: input.title }
     : input.title;
@@ -164,9 +183,14 @@ export function buildPageMetadata(siteUrl: string, input: PageMetadataInput): Me
     title,
     description: input.description,
     keywords: input.keywords,
+    robots: indexable
+      ? { index: true, follow: true }
+      : { index: false, follow: false },
     alternates: {
       canonical: canonicalUrl,
-      ...(includeAlternates ? { languages: buildLocaleAlternates(siteUrl, input.path) } : {}),
+      ...(includeAlternates && indexable
+        ? { languages: buildLocaleAlternates(siteUrl, input.path) }
+        : {}),
     },
     openGraph: {
       title: input.title,
@@ -191,6 +215,46 @@ export function buildPageMetadata(siteUrl: string, input: PageMetadataInput): Me
       description: input.description,
       images: [image],
     },
+  };
+}
+
+function toAbsoluteAssetUrl(siteUrl: string, asset: string): string {
+  if (!asset) return siteUrl;
+  if (/^https?:\/\//i.test(asset)) return asset;
+  const path = asset.startsWith("/") ? asset : `/${asset}`;
+  return new URL(path, siteUrl.endsWith("/") ? siteUrl : `${siteUrl}/`).toString();
+}
+
+/**
+ * SITE-SEO-04 — Product structured data from visible released fields only.
+ * Does not invent price or InStock availability.
+ */
+export function buildProductJsonLd(siteUrl: string, input: ProductJsonLdInput) {
+  const pageUrl = input.url.includes("://")
+    ? input.url.replace(/\/+$/, "")
+    : buildCanonicalUrl(siteUrl, input.url).replace(/\/+$/, "");
+  const rawImages = Array.isArray(input.image) ? input.image : [input.image];
+  const images = rawImages
+    .map((entry) => entry.trim())
+    .filter((entry) => entry.length > 0)
+    .map((entry) => toAbsoluteAssetUrl(siteUrl, entry));
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": `${pageUrl}#product`,
+    name: input.name,
+    description: input.description,
+    url: pageUrl,
+    ...(images.length > 0
+      ? { image: images.length === 1 ? images[0] : images }
+      : {}),
+    ...(input.sku ? { sku: input.sku } : {}),
+    brand: {
+      "@type": "Brand",
+      name: input.brandName ?? SITE_BRAND.companyName,
+    },
+    ...(input.category ? { category: input.category } : {}),
   };
 }
 

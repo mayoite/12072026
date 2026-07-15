@@ -29,12 +29,14 @@ export const VITEST_CONSOLE_REPORTER = path.resolve(
 export const VITEST_COVERAGE_DIRS = {
   full: path.resolve(VITEST_WORKSPACE_ROOT, "results/coverage"),
   site: path.resolve(VITEST_WORKSPACE_ROOT, "results/coverage-site"),
+  admin: path.resolve(VITEST_WORKSPACE_ROOT, "results/coverage-admin"),
 } as const;
 
 /** Human-readable coverage reports (CSV/HTML/JSON) — separate from raw Vitest output. */
 export const VITEST_COVERAGE_REPORT_DIRS = {
   full: path.resolve(VITEST_WORKSPACE_ROOT, "results/coverage-reports/planner"),
   site: path.resolve(VITEST_WORKSPACE_ROOT, "results/coverage-reports/site"),
+  admin: path.resolve(VITEST_WORKSPACE_ROOT, "results/coverage-reports/admin"),
 } as const;
 
 export const VITEST_SETUP_FILE = path.resolve(VITEST_REPO_ROOT, "tests/setup.ts");

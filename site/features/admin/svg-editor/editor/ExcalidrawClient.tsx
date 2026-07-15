@@ -1,10 +1,22 @@
 "use client";
 
 import { useState, useRef, useMemo } from "react";
-import { Excalidraw, MainMenu, WelcomeScreen, Sidebar, exportToSvg } from "@excalidraw/excalidraw";
+import {
+  Excalidraw,
+  MainMenu,
+  WelcomeScreen,
+  Sidebar,
+  exportToSvg,
+  restoreElements,
+} from "@excalidraw/excalidraw";
+import type {
+  ExcalidrawInitialDataState,
+  ExcalidrawProps,
+} from "@excalidraw/excalidraw/types";
 import "@excalidraw/excalidraw/index.css";
 import { DimensionPanel } from "./DimensionPanel";
 import { DimensionLabels } from "./DimensionLabels";
+import type { ExcalidrawAPI } from "./elementUtils";
 import type { UnitSystem } from "./units";
 
 export default function ExcalidrawClient({
@@ -26,11 +38,15 @@ export default function ExcalidrawClient({
   readonly renderCustomSidebar?: () => React.ReactNode;
   readonly unitSystem?: UnitSystem;
 }) {
-  const [excalidrawAPI, setExcalidrawAPI] = useState<any>(null);
+  const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawAPI | null>(null);
 
   const debouncer = useRef<NodeJS.Timeout | null>(null);
 
-  const handleChange = (elements: readonly any[], appState: any, files: any) => {
+  const handleChange: NonNullable<ExcalidrawProps["onChange"]> = (
+    elements,
+    appState,
+    files,
+  ) => {
     if (debouncer.current) clearTimeout(debouncer.current);
     debouncer.current = setTimeout(async () => {
       try {
@@ -42,9 +58,16 @@ export default function ExcalidrawClient({
     }, 300);
   };
 
-  const initialData = useMemo(() => {
-    if (initialExcalidrawElements) {
-      return { elements: initialExcalidrawElements as any };
+  const initialData = useMemo((): ExcalidrawInitialDataState | undefined => {
+    if (Array.isArray(initialExcalidrawElements)) {
+      return {
+        elements: restoreElements(initialExcalidrawElements, null, {
+          normalizeIndices: true,
+          repairBindings: true,
+          refreshDimensions: false,
+        }),
+        scrollToContent: true,
+      };
     }
     if (initialSvg) {
       const fileId = "legacy-svg-bg";
@@ -92,19 +115,19 @@ export default function ExcalidrawClient({
             created: Date.now(),
             lastRetrieved: Date.now(),
           },
-        },
-      } as any;
+        } as ExcalidrawInitialDataState["files"],
+        scrollToContent: true,
+      };
     }
     return undefined;
   }, [initialExcalidrawElements, initialSvg]);
 
   return (
-    <div style={{ width: "100%", height: "100%", position: "relative", flex: 1, display: "flex", flexDirection: "column" }}>
+    <div className="admin-svg-excalidraw-host">
       <DimensionPanel excalidrawAPI={excalidrawAPI} />
-      {/* Excalidraw fills remaining space; wrapper is position:relative for the overlay */}
-      <div style={{ position: "relative", flex: 1, minHeight: 0 }}>
+      <div className="admin-svg-excalidraw-canvas">
         <Excalidraw
-          excalidrawAPI={(api: any) => setExcalidrawAPI(api)}
+          excalidrawAPI={(api) => setExcalidrawAPI(api as ExcalidrawAPI)}
           initialData={initialData}
           onChange={handleChange}
           UIOptions={{
@@ -133,7 +156,6 @@ export default function ExcalidrawClient({
             <WelcomeScreen.Hints.HelpHint />
           </WelcomeScreen>
         </Excalidraw>
-        {/* Dimension labels overlay — sits above canvas, pointer-events:none */}
         <DimensionLabels excalidrawAPI={excalidrawAPI} unitSystem={unitSystem} />
       </div>
     </div>

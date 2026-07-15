@@ -94,7 +94,10 @@ export async function checkDatabaseConnection(
 
 export async function main(): Promise<void> {
   const result = await checkDatabaseConnection();
-  process.exit(result.ok ? 0 : result.exitCode);
+  if (!result.ok) {
+    process.exit(result.exitCode);
+  }
+  process.exit(0);
 }
 
 function isMain(): boolean {

@@ -24,6 +24,11 @@ const PROFILES = {
     dataDir: "results/coverage-site",
     reportDir: "results/coverage-reports/site",
   },
+  admin: {
+    label: "Admin (vitest.admin.coverage.config)",
+    dataDir: "results/coverage-admin",
+    reportDir: "results/coverage-reports/admin",
+  },
 };
 
 function resolveWorkspaceRoot(repoRoot = process.cwd()) {

@@ -9,27 +9,11 @@
  * honour that convention — setRectangleDimensions only touches width/height.
  */
 
-// ─── Lightweight local types ──────────────────────────────────────────────
-// We intentionally avoid importing from @excalidraw/excalidraw so this file
-// stays usable even before the dynamic import resolves.
+import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
+import type { ExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 
-export interface ExcalidrawElement {
-  readonly id: string;
-  readonly type: string;
-  readonly x: number;
-  readonly y: number;
-  readonly width: number;
-  readonly height: number;
-  /** Rotation in radians (clockwise). */
-  readonly angle: number;
-  readonly [key: string]: unknown;
-}
-
-export interface ExcalidrawAPI {
-  getAppState(): { selectedElementIds: Record<string, boolean>; [key: string]: unknown };
-  getSceneElements(): readonly ExcalidrawElement[];
-  updateScene(opts: { elements: readonly ExcalidrawElement[] }): void;
-}
+export type { ExcalidrawElement };
+export type ExcalidrawAPI = ExcalidrawImperativeAPI;
 
 // ─── 1. getSelectedRectangle ─────────────────────────────────────────────
 
@@ -92,7 +76,7 @@ export function setRectangleDimensions(
 
   const elements = api.getSceneElements().map((el) =>
     el.id === target.id
-      ? ({ ...el, width: widthPx, height: heightPx } as ExcalidrawElement)
+      ? ({ ...el, width: widthPx, height: heightPx } as unknown as ExcalidrawElement)
       : el
   );
 

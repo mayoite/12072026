@@ -27,25 +27,18 @@ Unrelated read-only work may continue.
 
 ### Stream A: Admin
 
-1. `Admin/PHASE-01-authoring-quality.md`
-2. `Admin/PHASE-02-catalog-lifecycle.md`
-3. `Admin/PHASE-03-product-families.md`
-4. `Admin/PHASE-04-commercial-governance.md`
+1. `Admin/PHASES-01-02.md`
+2. `Admin/PHASES-03-04.md`
 
 ### Stream B: Planner
 
-1. `Planner/PHASE-01-start-and-boq.md`
-2. `Planner/PHASE-02-design-workspace.md`
-3. `Planner/PHASE-03-scale-validate-price.md`
-4. `Planner/PHASE-04-deliver-handoff.md`
+1. `Planner/PHASES-01-02.md`
+2. `Planner/PHASES-03-04.md`
 
 ### Stream C: Site
 
-1. `Site/PHASE-01-measurement-foundation.md`
-2. `Site/PHASE-02-commercial-landing-pages.md`
-3. `Site/PHASE-03-search-led-content.md`
-4. `Site/PHASE-04-public-product-discovery.md`
-5. `Site/PHASE-05-structured-data-release.md`
+1. `Site/PHASES-01-02.md`
+2. `Site/PHASES-03-05.md`
 
 ### Stream D: Security
 

@@ -1,0 +1,67 @@
+[
+  {
+    "label": "check:layout",
+    "ok": true,
+    "code": 0,
+    "ms": 1012,
+    "stdout": "check-repo-layout OK — no forbidden site/ paths\n",
+    "stderr": "$ node scripts/check-repo-layout.mjs\n",
+    "commandLine": "pnpm run check:layout"
+  },
+  {
+    "label": "check:agents-md",
+    "ok": true,
+    "code": 0,
+    "ms": 551,
+    "stdout": "check:agents-md OK (67 lines; no artificial cap)\n",
+    "stderr": "$ node scripts/check-agents-md.mjs\n",
+    "commandLine": "pnpm run check:agents-md"
+  },
+  {
+    "label": "check:agents-folder",
+    "ok": true,
+    "code": 0,
+    "ms": 585,
+    "stdout": "check:agents-folder OK (8 files; no line caps)\n",
+    "stderr": "$ node scripts/check-agents-folder.mjs\n",
+    "commandLine": "pnpm run check:agents-folder"
+  },
+  {
+    "label": "check:active-docs",
+    "ok": true,
+    "code": 0,
+    "ms": 635,
+    "stdout": "check:active-docs OK (65 active Markdown files; no artificial cap)\n",
+    "stderr": "$ node scripts/check-active-docs.mjs\n",
+    "commandLine": "pnpm run check:active-docs"
+  },
+  {
+    "label": "check:plans-purity",
+    "ok": false,
+    "code": 1,
+    "ms": 710,
+    "stdout": "[ELIFECYCLE] Command failed with exit code 1.\n",
+    "stderr": "$ node scripts/check-plans-purity.mjs\ncheck:plans-purity FAIL:\n  extra track: plan/svgblunder\n  checked item: plan/Site/CHECKLIST.md\n",
+    "message": "Command failed: cmd.exe /c pnpm run check:plans-purity\n$ node scripts/check-plans-purity.mjs\ncheck:plans-purity FAIL:\n  extra track: plan/svgblunder\n  checked item: plan/Site/CHECKLIST.md\n",
+    "commandLine": "pnpm run check:plans-purity"
+  },
+  {
+    "label": "check:docs-purity",
+    "ok": true,
+    "code": 0,
+    "ms": 493,
+    "stdout": "check:docs-purity OK\n",
+    "stderr": "$ node scripts/check-docs-purity.mjs\n",
+    "commandLine": "pnpm run check:docs-purity"
+  },
+  {
+    "label": "check:failures",
+    "ok": false,
+    "code": 1,
+    "ms": 670,
+    "stdout": "[ELIFECYCLE] Command failed with exit code 1.\n",
+    "stderr": "$ node scripts/check-failures.mjs\ncheck:failures FAIL:\n  Failures.md:128: - **Live check (2026-07-15):** The editor bridge returned the edited SVG, CSRF/auth passed, and the API returned HTTP `500` during verified object storage.\n",
+    "message": "Command failed: cmd.exe /c pnpm run check:failures\n$ node scripts/check-failures.mjs\ncheck:failures FAIL:\n  Failures.md:128: - **Live check (2026-07-15):** The editor bridge returned the edited SVG, CSRF/auth passed, and the API returned HTTP `500` during verified object storage.\n",
+    "commandLine": "pnpm run check:failures"
+  }
+]

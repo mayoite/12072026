@@ -10,6 +10,7 @@ export const metadata: Metadata = buildPageMetadata(SITE_URL, {
     "The page you were looking for could not be found. Browse our office furniture catalog, workspace planner, or contact our team for help.",
   path: "/404",
   alternates: false,
+  indexable: false,
 });
 
 const POPULAR_LINKS = [

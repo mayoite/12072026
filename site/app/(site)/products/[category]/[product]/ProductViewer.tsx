@@ -11,6 +11,7 @@ import { ArrowLeft, CaretRight as ChevronRight, ShareNetwork as Share2, Shopping
 import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
+import { PlannerLaunchLink } from "@/components/ui/PlannerLaunchLink";
 import { Reviews } from "@/components/Reviews";
 import { ProductGallery } from "@/components/ProductGallery";
 import { loadModelViewer } from "@/lib/ui/loadModelViewer";
@@ -837,6 +838,19 @@ export function ProductViewer({
                   </span>
                   <ArrowLeft className="w-4 h-4 rotate-180 transition-transform group-hover:translate-x-1" />
                 </Link>
+                <PlannerLaunchLink
+                  href="/planner/guest"
+                  surface="pdp"
+                  label={PDP_ROUTE_COPY.ctas.designInPlanner}
+                  productSlug={product.slug || product.id}
+                  categoryId={categoryId ?? categoryRoute}
+                  className="pdp-cta-secondary group mb-2 flex w-full items-center justify-between"
+                >
+                  <span className="pdp-action-label">
+                    {PDP_ROUTE_COPY.ctas.designInPlanner}
+                  </span>
+                  <ArrowLeft className="w-4 h-4 rotate-180 transition-transform group-hover:translate-x-1" />
+                </PlannerLaunchLink>
                 <div className="mt-2 grid gap-2 sm:grid-cols-2">
                   <Link
                     href="/planning"

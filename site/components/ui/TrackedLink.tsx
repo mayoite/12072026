@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { trackSiteCtaClick } from "@/lib/analytics/siteEvents";
+import { isPlannerEntryHref } from "@/lib/analytics/plannerEntry";
+import { handlePlannerEntryNavigation, trackSiteCtaClick } from "@/lib/analytics/siteEvents";
 
 interface TrackedLinkProps {
   href: string;
@@ -33,6 +34,10 @@ export function TrackedLink({
   const pathname = usePathname() || "";
 
   const handleClick = () => {
+    if (isPlannerEntryHref(href)) {
+      handlePlannerEntryNavigation({ href, label, pathname, surface });
+      return;
+    }
     trackSiteCtaClick({
       href,
       label,

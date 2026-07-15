@@ -123,14 +123,14 @@ describe("seo helpers", () => {
         image: "http://example.com/product.jpg",
       };
       const result = buildProductJsonLd(data);
-      expect(result).toEqual({
-        "@context": "https://schema.org",
-        "@type": "Product",
-        name: "Test Product",
-        description: "Best Product",
-        url: "http://example.com/product",
-        image: "http://example.com/product.jpg",
-      });
+      expect(result["@context"]).toBe("https://schema.org");
+      expect(result["@type"]).toBe("Product");
+      expect(result.name).toBe("Test Product");
+      expect(result.description).toBe("Best Product");
+      expect(result.url).toBe("http://example.com/product");
+      expect(result.image).toBe("http://example.com/product.jpg");
+      expect(result["@id"]).toBe("http://example.com/product#product");
+      expect(result).not.toHaveProperty("offers");
     });
   });
 });

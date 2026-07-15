@@ -1,31 +1,10 @@
 # API route index
 
-Live handlers in `site/app/api/**/route.ts` are authoritative.
+**Source of truth:** `site/app/api/**/route.ts`
 
-| Source | Role |
-|---|---|
-| `site/app/api/**/route.ts` | Runtime behavior, auth, validation |
-| `site/config/route-contract.json` | Tooling metadata |
-| This file | Generated inventory — refresh after route changes |
+Generated from route handlers on 2026-07-15.
 
-```powershell
-pnpm --filter oando-site run docs:sync:routes
-```
-
-No published OpenAPI yet. Add only when request/response schemas are stable.
-
-## SVG catalog routes (live vs planned)
-
-| Route | Status | Authority |
-|---|---|---|
-| Planner SVG-block handlers (e.g. `svg-blocks`) | **Live** | Disk — `loadBuyerVisibleDescriptors()` |
-| `GET /api/planner/catalog/svg/[revisionId]` | **Not live** | Target: exact DB revision bytes — do not list until implemented |
-
-Contract: [08-DATABASE-SVG-CONTRACT.md](../architecture/08-DATABASE-SVG-CONTRACT.md).
-
-## Generated route table
-
-Generated from route handlers on 2026-07-14.
+Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 
 | Methods | Path |
 |---------|------|
@@ -45,7 +24,6 @@ Generated from route handlers on 2026-07-14.
 | PATCH | `/api/admin/svg-editor/[slug]/lifecycle` |
 | GET | `/api/admin/svg-editor/[slug]/revisions` |
 | POST | `/api/admin/svg-editor/[slug]/rollback` |
-| POST | `/api/admin/svg-editor/ai-generate` |
 | POST | `/api/admin/svg-editor/bulk-import` |
 | POST | `/api/admin/svg-editor` |
 | POST | `/api/admin/themes/publish` |

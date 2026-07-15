@@ -16,13 +16,14 @@
  *
  *   Recommended wiring in ExcalidrawClient:
  *
- *     <div style={{ position:"relative", flex:1 }}>
+ *     <div className="admin-svg-excalidraw-canvas">
  *       <Excalidraw excalidrawAPI={setAPI} ... />
  *       <DimensionLabels excalidrawAPI={api} unitSystem={unit} />
  *     </div>
  */
 
 import { useState, useEffect, useRef } from "react";
+import type { CSSProperties } from "react";
 import { UnitSystem, pixelsToDimensionString } from "./units";
 import type { ExcalidrawAPI, ExcalidrawElement } from "./elementUtils";
 
@@ -41,6 +42,11 @@ interface Label {
   screenY: number;
   /** One or two lines of text to display. */
   lines: string[];
+}
+
+interface DimensionLabelStyle extends CSSProperties {
+  readonly "--label-x": string;
+  readonly "--label-y": string;
 }
 
 // ─── Coordinate helpers ───────────────────────────────────────────────────
@@ -79,9 +85,14 @@ function polylinePixelLength(points: ReadonlyArray<readonly [number, number]>): 
 /**
  * Midpoint of a polyline in *canvas* (absolute) coordinates.
  */
-function polylineMidpoint(
-  el: any
-): { x: number; y: number } {
+type DimensionLineElement = ExcalidrawElement & {
+  readonly points?: ReadonlyArray<readonly [number, number]>;
+  readonly customData?: {
+    readonly heightPx?: number;
+  };
+};
+
+function polylineMidpoint(el: DimensionLineElement): { x: number; y: number } {
   const pts: ReadonlyArray<readonly [number, number]> =
     el.points ?? [[0, 0], [el.width ?? 0, el.height ?? 0]];
   const first = pts[0];
@@ -95,20 +106,20 @@ function polylineMidpoint(
 // ─── Label builder ────────────────────────────────────────────────────────
 
 function buildLabel(
-  el: ExcalidrawElement & Record<string, unknown>,
+  el: DimensionLineElement,
   appState: AppStateView,
   unitSystem: UnitSystem
 ): Label | null {
   const type = el.type;
 
   // Optional 3-D height stored in element.customData.heightPx by convention
-  const heightPx = (el as any).customData?.heightPx as number | undefined;
+  const heightPx = el.customData?.heightPx;
 
   if (type === "line" || type === "arrow") {
     const pts: ReadonlyArray<readonly [number, number]> =
-      (el as any).points ?? [[0, 0], [(el as any).width ?? 0, (el as any).height ?? 0]];
+      el.points ?? [[0, 0], [el.width, el.height]];
     const lengthPx = polylinePixelLength(pts);
-    const mid = polylineMidpoint(el as any);
+    const mid = polylineMidpoint(el);
 
     const lines: string[] = [
       `L: ${pixelsToDimensionString(lengthPx, unitSystem)}`,
@@ -214,34 +225,18 @@ export function DimensionLabels({ excalidrawAPI, unitSystem }: DimensionLabelsPr
   return (
     <div
       aria-hidden="true"
-      style={{
-        position: "absolute",
-        inset: 0,
-        pointerEvents: "none",
-        overflow: "hidden",
-        zIndex: 10,
-      }}
+      className="admin-svg-dimension-labels"
     >
       {labels.map((label) => (
         <div
           key={label.id}
-          style={{
-            position: "absolute",
-            left: label.screenX,
-            top: label.screenY,
-            // Offset upward so the label sits above the element's midpoint
-            transform: "translate(-50%, calc(-100% - 6px))",
-            background: "rgba(0,0,0,0.65)",
-            color: "#fff",
-            fontSize: "11px",
-            fontFamily: "monospace, monospace",
-            padding: "3px 7px",
-            borderRadius: "4px",
-            lineHeight: 1.6,
-            whiteSpace: "nowrap",
-            pointerEvents: "none",
-            userSelect: "none",
-          }}
+          className="admin-svg-dimension-label"
+          style={
+            {
+              "--label-x": `${label.screenX}px`,
+              "--label-y": `${label.screenY}px`,
+            } satisfies DimensionLabelStyle
+          }
         >
           {label.lines.map((line, i) => (
             <div key={i}>{line}</div>

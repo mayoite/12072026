@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { buildBlock2D, type BasePrim } from '@/lib/catalog/blocks2d';
+import { buildBlock2D, type Prim } from '@/lib/catalog/blocks2d';
 
 const REPO_ROOT = path.resolve(__dirname, '../..');
 
@@ -119,7 +119,7 @@ if (!fs.existsSync(resultsDir)) {
   fs.mkdirSync(resultsDir, { recursive: true });
 }
 
-function primToSvg(p: BasePrim): string {
+function primToSvg(p: Prim): string {
   const shadow = p.shadowColor ? ` filter="drop-shadow(0 ${p.shadowOffsetY || 0}px ${p.shadowBlur || 0}px ${p.shadowColor})"` : "";
   const transform = p.rotation ? ` transform="rotate(${p.rotation} ${p.offsetX || 0} ${p.offsetY || 0})"` : "";
   const baseAttr = `${shadow}${transform}`;

@@ -8,6 +8,35 @@ export {
   canonicalPath,
 } from "@/features/site/data/seo";
 
+export type {
+  PageMetadataInput,
+  ProductJsonLdInput,
+} from "@/features/site/data/seo";
+
+import { buildProductJsonLd as buildProductJsonLdCore } from "@/features/site/data/seo";
+import type { ProductJsonLdInput } from "@/features/site/data/seo";
+
+/** Prefer `(siteUrl, input)`. Single-object form kept for older call sites. */
+export function buildProductJsonLd(
+  siteUrlOrData: string | ProductJsonLdInput,
+  input?: ProductJsonLdInput,
+) {
+  if (typeof siteUrlOrData === "string") {
+    if (!input) {
+      throw new Error("buildProductJsonLd requires product fields when siteUrl is a string");
+    }
+    return buildProductJsonLdCore(siteUrlOrData, input);
+  }
+  const data = siteUrlOrData;
+  let origin = "https://oneonly.in";
+  try {
+    origin = new URL(data.url).origin;
+  } catch {
+    // keep default
+  }
+  return buildProductJsonLdCore(origin, data);
+}
+
 export type BreadcrumbItem = {
   name: string;
   path: string;
@@ -28,22 +57,6 @@ export type PageJsonLdInput = {
   title: string;
   description: string;
   pageType: "WebPage" | "CollectionPage" | "ContactPage" | "ItemPage";
-};
-
-export type PageMetadataInput = {
-  title: string;
-  description: string;
-  path: string;
-  image?: string;
-  keywords?: string[];
-  type?: "website" | "article";
-};
-
-export type ProductJsonLdInput = {
-  name: string;
-  description: string;
-  url: string;
-  image: string;
 };
 
 export function buildFAQJsonLd(items: FaqJsonLdItem[]) {
@@ -102,18 +115,4 @@ export function buildOrganizationJsonLd(data: {
   };
 }
 
-export function buildProductJsonLd(data: {
-  name: string;
-  description: string;
-  url: string;
-  image: string;
-}) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: data.name,
-    description: data.description,
-    url: data.url,
-    image: data.image,
-  };
-}
+

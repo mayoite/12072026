@@ -1,6 +1,6 @@
 # Planner checklist
 
-Status only. Code map: `FEATURES.md`. Requirements: `PHASE-01` … `PHASE-04`.
+Status only. Code map: `FEATURES.md`. Requirements: `PHASES-01-02.md`, `PHASES-03-04.md`.
 
 Treat every item as not done unless noted. Reconciled against `site/` on 2026-07-14.
 
@@ -69,6 +69,7 @@ Treat every item as not done unless noted. Reconciled against `site/` on 2026-07
 
 - [ ] Admin DB-SVG authority cutover (`DB-SVG-01`…`05`); Planner `svg-blocks` reads DB bytes not disk descriptors.
 - [ ] Admin publish + catalog browser proof without false success (`FEATURES.md` Admin section).
+- [ ] Retired admin SVG hidden from guest Planner inventory (`admin-svg-retire-restore.spec.ts` step 4b); pending Playwright exit `0`.
 
 ## Completion
 

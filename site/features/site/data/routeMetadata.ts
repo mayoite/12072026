@@ -165,6 +165,7 @@ export const QUOTE_CART_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   description: QUOTE_CART_ROUTE_COPY.description,
   path: "/quote-cart",
   alternates: false,
+  indexable: false,
 });
 
 export const SHOWROOMS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
@@ -257,6 +258,7 @@ export const TRACKING_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   description: TRACKING_PAGE_COPY.heroSubtitle,
   path: "/tracking",
   alternates: false,
+  indexable: false,
 });
 
 export const SUPPORT_IVR_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
@@ -264,6 +266,38 @@ export const SUPPORT_IVR_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   description: SUPPORT_IVR_PAGE_COPY.heroSubtitle,
   path: "/support-ivr",
   alternates: false,
+  indexable: false,
+});
+
+export const ACCESS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
+  title: "Sign in | One&Only",
+  description:
+    "Sign in or continue as a guest to open the workspace planner and product tools.",
+  path: "/access",
+  alternates: false,
+  indexable: false,
+});
+
+export const CHOOSE_PRODUCT_PAGE_METADATA: Metadata = buildPageMetadata(
+  SITE_URL,
+  {
+    title: "Choose a product | One&Only",
+    description:
+      "Pick a released product to start planning. Guest and signed-in workspace entry.",
+    path: "/choose-product",
+    alternates: false,
+    indexable: false,
+  },
+);
+
+export const REPO_STORE_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
+  title: "Repo Store",
+  description:
+    "Current repository map and target operating model for the Oando platform.",
+  path: "/repo-store",
+  image: "/logo-v2.webp",
+  alternates: false,
+  indexable: false,
 });
 
 export const CAREER_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {

@@ -6,9 +6,9 @@ This is the interface benchmark for Admin work.
 
 It is not an execution plan.
 
-It was refreshed on 2026-07-13.
+It was refreshed on 2026-07-15.
 
-SVG authoring is the primary Admin workflow.
+Excalidraw-first SVG authoring is the primary Admin workflow.
 
 Catalog and commercial governance support it.
 
@@ -18,7 +18,7 @@ The current Admin is not ready for production use.
 
 The shell is coherent.
 
-The SVG area is not yet a professional no-code studio.
+The Excalidraw studio shell still needs fresh browser proof on draw, dimensions, compile preview, and publish.
 
 Bulk JSON dominates its entry page.
 
@@ -50,8 +50,9 @@ The reviewed implementation includes:
 
 - `site/features/admin/svg-editor/AdminSvgEditorListView.tsx`
 - `site/features/admin/svg-editor/AdminSvgEditorEditView.tsx`
+- `site/features/admin/svg-editor/views/edit-shell/AdminSvgEditorShell.tsx`
+- `site/features/admin/svg-editor/editor/ExcalidrawClient.tsx`
 - `site/features/admin/svg-editor/SvgEditorForm.tsx`
-- `site/features/admin/svg-editor/SvgStudioCanvas.tsx`
 - `site/features/admin/AdminCatalogTable.tsx`
 - `site/features/admin/pricing/AdminPriceBookPageView.tsx`
 
@@ -228,7 +229,7 @@ The installed stack already covers the work:
 | Accessible controls, dialogs, menus, and focus | `react-aria-components` |
 | Resizable desktop regions | `react-resizable-panels` |
 | Narrow-screen sheets | `vaul` |
-| SVG scene editing | Existing SVG.js adapter and scene document |
+| SVG scene editing | `@excalidraw/excalidraw` via `ExcalidrawClient.tsx`; legacy `sceneParts` bridge only for older descriptors |
 | Form and contract validation | Existing Zod contracts |
 | Remote state | `@tanstack/react-query` |
 | Icons | `@phosphor-icons/react` |

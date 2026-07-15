@@ -4,7 +4,7 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 
 | Doc | Role |
 |---|---|
-| `PHASE-01` … `PHASE-04` | What to build and prove |
+| `PHASES-01-02`, `PHASES-03-04` | What to build and prove |
 | This file | Where it lives in code |
 | `CHECKLIST.md` | Status only — verify in browser |
 
@@ -16,7 +16,7 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 
 ## Phase 1 — start and BOQ
 
-Plan: `PHASE-01-start-and-boq.md`
+Plan: `PHASES-01-02.md` (Phase 1)
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -36,7 +36,7 @@ Plan: `PHASE-01-start-and-boq.md`
 
 ## Phase 2 — design workspace
 
-Plan: `PHASE-02-design-workspace.md`
+Plan: `PHASES-01-02.md` (Phase 2)
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -61,7 +61,7 @@ Plan: `PHASE-02-design-workspace.md`
 
 ## Phase 3 — scale, validate, and price
 
-Plan: `PHASE-03-scale-validate-price.md`
+Plan: `PHASES-03-04.md` (Phase 3)
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -78,7 +78,7 @@ Plan: `PHASE-03-scale-validate-price.md`
 
 ## Phase 4 — deliver and handoff
 
-Plan: `PHASE-04-deliver-handoff.md`
+Plan: `PHASES-03-04.md` (Phase 4)
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -137,4 +137,4 @@ Not a customer phase. Publish is **disk-authoritative** today; optional DB dual-
 
 ## Reference (not truth)
 
-`CHECKLIST.md` · `PHASE-01` … `PHASE-04` · `docs/architecture/06-UI-BENCHMARK.md` · `docs/architecture/08-DATABASE-SVG-CONTRACT.md`
+`CHECKLIST.md` · `PHASES-01-02` · `PHASES-03-04` · `docs/architecture/06-UI-BENCHMARK.md` · `docs/architecture/08-DATABASE-SVG-CONTRACT.md`

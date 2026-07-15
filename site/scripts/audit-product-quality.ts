@@ -62,6 +62,11 @@ function createSupabaseAdminClient() {
   });
 }
 
+function toStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.map((item) => String(item).trim()).filter((text) => text.length > 0);
+}
+
 function toCompatProduct(product: Product): CompatProduct {
   const specsObject =
     product.specs && typeof product.specs === "object" && !Array.isArray(product.specs)
@@ -83,7 +88,7 @@ function toCompatProduct(product: Product): CompatProduct {
     description: product.description || "",
     flagshipImage: product.flagship_image || "",
     // shape cast for legacy/row fields not on CompatProduct; reason: db row has snake_case extras (scene_images, variants); owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: when CompatProduct or audit input includes them or mapper used
-    sceneImages: Array.isArray((product as { scene_images?: unknown }).scene_images) ? (product as { scene_images?: unknown }).scene_images : [],
+    sceneImages: toStringArray((product as { scene_images?: unknown }).scene_images),
     variants: Array.isArray((product as { variants?: unknown }).variants) ? ((product as { variants?: unknown }).variants as ProductVariant[]) : [],
     detailedInfo: {
       overview: product.description || "",

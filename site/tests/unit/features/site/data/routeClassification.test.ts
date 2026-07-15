@@ -3,6 +3,9 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   PUBLIC_INDEXABLE_ROUTES,
+  PUBLIC_INDEXABLE_STATIC_PATHS,
+  PLANNER_MARKETING_SITEMAP_PATHS,
+  ROBOTS_DISALLOW_PREFIXES,
   SITE_ROUTE_CLASSIFICATION,
   getRouteClassification,
 } from "@/features/site/data/routeClassification";
@@ -78,6 +81,27 @@ describe("PUBLIC_INDEXABLE_ROUTES derivation", () => {
     expect(PUBLIC_INDEXABLE_ROUTES).toContain("/about");
     expect(PUBLIC_INDEXABLE_ROUTES).not.toContain("/tracking");
     expect(PUBLIC_INDEXABLE_ROUTES).not.toContain("/quote-cart");
+    expect(PUBLIC_INDEXABLE_ROUTES).not.toContain("/choose-product");
+    expect(PUBLIC_INDEXABLE_ROUTES).not.toContain("/brochure");
     expect(PUBLIC_INDEXABLE_ROUTES).not.toContain("/portal");
+  });
+
+  it("exposes concrete static paths without dynamic segments", () => {
+    expect(PUBLIC_INDEXABLE_STATIC_PATHS).toContain("/about");
+    expect(PUBLIC_INDEXABLE_STATIC_PATHS).not.toContain("/choose-product");
+    expect(PUBLIC_INDEXABLE_STATIC_PATHS.every((route) => !route.includes("["))).toBe(true);
+  });
+
+  it("lists planner marketing sitemap paths outside (site)", () => {
+    expect(PLANNER_MARKETING_SITEMAP_PATHS).toContain("/planner");
+    expect(PLANNER_MARKETING_SITEMAP_PATHS).not.toContain("/planner/guest");
+  });
+
+  it("disallows protected and utility prefixes in robots", () => {
+    expect(ROBOTS_DISALLOW_PREFIXES).toContain("/portal/");
+    expect(ROBOTS_DISALLOW_PREFIXES).toContain("/planner/guest/");
+    expect(ROBOTS_DISALLOW_PREFIXES).toContain("/quote-cart/");
+    expect(ROBOTS_DISALLOW_PREFIXES).toContain("/tracking/");
+    expect(ROBOTS_DISALLOW_PREFIXES).toContain("/choose-product/");
   });
 });

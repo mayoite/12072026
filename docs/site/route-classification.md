@@ -1,6 +1,6 @@
 # Live route classification
 
-*Generated: 2026-07-14 — `node scripts/generate-route-classification.mjs`*
+*Generated: 2026-07-15 — `node scripts/generate-route-classification.mjs`*
 
 Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-planner/**` and `/buddy-planner/**` redirect via `config/build/next.config.js`.
 
@@ -98,7 +98,6 @@ Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-
 - `/api/admin/svg-editor/[slug]/lifecycle` → `app/api/admin/svg-editor/[slug]/lifecycle/route.ts`
 - `/api/admin/svg-editor/[slug]/revisions` → `app/api/admin/svg-editor/[slug]/revisions/route.ts`
 - `/api/admin/svg-editor/[slug]/rollback` → `app/api/admin/svg-editor/[slug]/rollback/route.ts`
-- `/api/admin/svg-editor/ai-generate` → `app/api/admin/svg-editor/ai-generate/route.ts`
 - `/api/admin/svg-editor/bulk-import` → `app/api/admin/svg-editor/bulk-import/route.ts`
 - `/api/admin/svg-editor` → `app/api/admin/svg-editor/route.ts`
 - `/api/admin/themes/publish` → `app/api/admin/themes/publish/route.ts`
@@ -112,7 +111,8 @@ Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-
 - `/api/configurator/smart-wizard` → `app/api/configurator/smart-wizard/route.ts`
 - `/api/csrf` → `app/api/csrf/route.ts`
 - `/api/customer-queries/manage` → `app/api/customer-queries/manage/route.ts`
-- … +23 more API routes
+- `/api/customer-queries` → `app/api/customer-queries/route.ts`
+- … +22 more API routes
 
 ## Legacy redirects (301)
 

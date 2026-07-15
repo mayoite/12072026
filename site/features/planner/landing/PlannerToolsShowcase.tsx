@@ -4,6 +4,8 @@ import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { ArrowRight, Sparkle as Sparkles } from "@phosphor-icons/react";
 
+import { PlannerLaunchLink } from "@/components/ui/PlannerLaunchLink";
+import { isPlannerEntryHref } from "@/lib/analytics/plannerEntry";
 import { PlannerHeroDemo } from "@/features/planner/landing/PlannerHeroDemo";
 import {
   MOTION_EASE,
@@ -75,6 +77,9 @@ export function PlannerToolsShowcase({
     headingLevel === "h1" ? "home-hero-title-homepage text-inverse" : "home-heading text-inverse";
   const isLanding = variant === "landing";
 
+  const PrimaryCtaLink = isPlannerEntryHref(primaryCta.href) ? PlannerLaunchLink : Link;
+  const DemoLink = isPlannerEntryHref(demoHref) ? PlannerLaunchLink : Link;
+
   const motionProps = isLanding
     ? { initial: false as const }
     : reveal === "mount"
@@ -121,13 +126,15 @@ export function PlannerToolsShowcase({
 
               {variant === "landing" ? (
                 <motion.div variants={staggerItem} className="home-actions mt-8">
-                  <Link
+                  <PrimaryCtaLink
                     href={primaryCta.href}
+                    surface="planner-tools-showcase"
+                    label={primaryCta.label}
                     className="btn-hero-primary btn-primary inline-flex gap-2 shadow-theme-panel"
                   >
                     {primaryCta.label}
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                  </Link>
+                  </PrimaryCtaLink>
                   {secondaryCta ? (
                     <Link
                       href={secondaryCta.href}
@@ -144,8 +151,10 @@ export function PlannerToolsShowcase({
                   whileHover={reduceMotion ? undefined : "hover"}
                   className="mt-8"
                 >
-                  <Link
+                  <PrimaryCtaLink
                     href={primaryCta.href}
+                    surface="planner-tools-showcase"
+                    label={primaryCta.label}
                     className="home-tool-card home-tool-card--dark home-tool-card--animated home-tool-card--row group inline-flex max-w-md"
                   >
                     <div className="home-tool-card__body">
@@ -169,15 +178,17 @@ export function PlannerToolsShowcase({
                         </motion.span>
                       </span>
                     </div>
-                  </Link>
+                  </PrimaryCtaLink>
                 </motion.div>
               )}
             </motion.div>
           </motion.div>
 
           <div className="home-tools-panel__diagram home-floorplan-showcase">
-            <Link
+            <DemoLink
               href={demoHref}
+              surface="planner-tools-showcase-demo"
+              label={demoCaption}
               className="home-tools-floor-demo group"
               aria-label={demoAriaLabel}
               data-testid={demoTestId}
@@ -186,7 +197,7 @@ export function PlannerToolsShowcase({
               <span className="home-tools-floor-demo__caption typ-label text-inverse-muted">
                 {demoCaption}
               </span>
-            </Link>
+            </DemoLink>
           </div>
         </div>
 

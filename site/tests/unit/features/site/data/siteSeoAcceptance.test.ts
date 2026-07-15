@@ -1,0 +1,196 @@
+/**
+ * SITE-SEO-01, SITE-SEO-03, SITE-SEO-04 — unit contracts.
+ * Browser/prod recheck still required before checklist PASS.
+ */
+
+import { describe, expect, it } from "vitest";
+import robots from "@/app/(site)/robots";
+import sitemap from "@/app/(site)/sitemap";
+import {
+  PLANNER_MARKETING_SITEMAP_PATHS,
+  PUBLIC_INDEXABLE_STATIC_PATHS,
+  ROBOTS_DISALLOW_PREFIXES,
+  SITE_ROUTE_CLASSIFICATION,
+  getRouteClassification,
+} from "@/features/site/data/routeClassification";
+import {
+  SEO01_STATIC_METADATA,
+  expectedStaticSitemapPaths,
+  indexableStaticPathsMissingMetadata,
+  listDuplicateTitles,
+  metadataTitleString,
+  productJsonLdMatchesVisible,
+  publicNoindexRoutes,
+  sitemapMustExcludePaths,
+} from "@/features/site/data/siteSeoContract";
+import { buildPageMetadata, buildProductJsonLd } from "@/features/site/data/seo";
+import {
+  ACCESS_PAGE_METADATA,
+  CHOOSE_PRODUCT_PAGE_METADATA,
+  QUOTE_CART_PAGE_METADATA,
+  REPO_STORE_PAGE_METADATA,
+  TRACKING_PAGE_METADATA,
+} from "@/features/site/data/routeMetadata";
+import { metadata as svgCatalogLayoutMetadata } from "@/app/(site)/portal/svg-catalog/layout";
+
+describe("SITE-SEO-01 unique title, description, canonical", () => {
+  it("registers metadata for every static indexable public path", () => {
+    expect(indexableStaticPathsMissingMetadata()).toEqual([]);
+  });
+
+  it("gives each static marketing page a unique non-empty title and description", () => {
+    const dups = listDuplicateTitles(SEO01_STATIC_METADATA);
+    expect(dups).toEqual([]);
+
+    for (const entry of SEO01_STATIC_METADATA) {
+      const title = metadataTitleString(entry.metadata);
+      expect(title.length, entry.path).toBeGreaterThan(3);
+      expect(String(entry.metadata.description ?? "").length, entry.path).toBeGreaterThan(
+        20,
+      );
+      const canonical = entry.metadata.alternates?.canonical;
+      expect(canonical, entry.path).toBeTruthy();
+      expect(String(canonical), entry.path).toContain(entry.path === "/" ? "" : entry.path);
+    }
+  });
+
+  it("covers the same set as PUBLIC_INDEXABLE_STATIC_PATHS", () => {
+    expect(expectedStaticSitemapPaths().sort()).toEqual(
+      [...PUBLIC_INDEXABLE_STATIC_PATHS].sort(),
+    );
+  });
+});
+
+describe("SITE-SEO-03 sitemap, robots, classification agreement", () => {
+  it("classifies brochure aliases as redirects (not indexable documents)", () => {
+    expect(getRouteClassification("/brochure")?.classification).toBe("redirect");
+    expect(getRouteClassification("/brochure")?.indexable).toBe(false);
+    expect(getRouteClassification("/download-brochure")?.classification).toBe(
+      "redirect",
+    );
+    expect(getRouteClassification("/download-brochure")?.indexable).toBe(false);
+  });
+
+  it("marks auth and cart utilities noindex in classification", () => {
+    for (const route of [
+      "/quote-cart",
+      "/tracking",
+      "/access",
+      "/repo-store",
+      "/choose-product",
+    ]) {
+      expect(getRouteClassification(route)?.indexable, route).toBe(false);
+    }
+  });
+
+  it("emits robots noindex on utility page metadata", () => {
+    for (const meta of [
+      QUOTE_CART_PAGE_METADATA,
+      TRACKING_PAGE_METADATA,
+      ACCESS_PAGE_METADATA,
+      CHOOSE_PRODUCT_PAGE_METADATA,
+      REPO_STORE_PAGE_METADATA,
+    ]) {
+      expect(meta.robots).toEqual({ index: false, follow: false });
+    }
+  });
+
+  it("keeps portal SVG catalog noindex (protected)", () => {
+    expect(svgCatalogLayoutMetadata.robots).toEqual({
+      index: false,
+      follow: false,
+    });
+  });
+
+  it("robots.txt disallows protected and utility prefixes", () => {
+    const config = robots();
+    const disallow = config.rules[0]?.disallow ?? [];
+    for (const prefix of ROBOTS_DISALLOW_PREFIXES) {
+      expect(disallow).toContain(prefix);
+    }
+    expect(disallow).toContain("/quote-cart/");
+    expect(disallow).toContain("/tracking/");
+    expect(disallow).toContain("/choose-product/");
+    expect(disallow).toContain("/portal/");
+  });
+
+  it("sitemap includes only indexable static + planner marketing paths", async () => {
+    const entries = await sitemap();
+    const urls = entries.map((entry) => entry.url);
+
+    for (const path of PUBLIC_INDEXABLE_STATIC_PATHS) {
+      const needle = path === "/" ? "oneonly.in/" : `${path}/`;
+      expect(
+        urls.some((url) => url.includes(needle)),
+        `missing ${path}`,
+      ).toBe(true);
+    }
+    for (const path of PLANNER_MARKETING_SITEMAP_PATHS) {
+      expect(urls.some((url) => url.includes(`${path}/`))).toBe(true);
+    }
+
+    for (const path of sitemapMustExcludePaths()) {
+      if (path === "/_not-found") continue;
+      expect(
+        urls.some((url) => url.includes(`${path}/`)),
+        `must exclude ${path}`,
+      ).toBe(false);
+    }
+  });
+
+  it("does not list redirect-only or noindex utilities as public indexable", () => {
+    expect(PUBLIC_INDEXABLE_STATIC_PATHS).not.toContain("/brochure");
+    expect(PUBLIC_INDEXABLE_STATIC_PATHS).not.toContain("/download-brochure");
+    expect(PUBLIC_INDEXABLE_STATIC_PATHS).not.toContain("/choose-product");
+    expect(publicNoindexRoutes()).toContain("/quote-cart");
+  });
+
+  it("buildPageMetadata defaults indexable and can force noindex", () => {
+    const indexed = buildPageMetadata("https://example.com", {
+      title: "A",
+      description: "A long enough description for SEO tests.",
+      path: "/a",
+    });
+    expect(indexed.robots).toEqual({ index: true, follow: true });
+
+    const blocked = buildPageMetadata("https://example.com", {
+      title: "B",
+      description: "A long enough description for SEO tests.",
+      path: "/b",
+      indexable: false,
+    });
+    expect(blocked.robots).toEqual({ index: false, follow: false });
+  });
+});
+
+describe("SITE-SEO-04 structured data matches visible product fields", () => {
+  it("buildProductJsonLd copies name, description, url, sku and invents no offers", () => {
+    const visible = {
+      name: "Desk Pro X",
+      description: "Modular workstation for open offices.",
+      url: "https://example.com/products/workstations/desk-pro-x",
+      image: "/images/desk.webp",
+      sku: "desk-pro-x",
+    };
+    expect(productJsonLdMatchesVisible("https://example.com", visible)).toBe(
+      true,
+    );
+    const ld = buildProductJsonLd("https://example.com", visible);
+    expect(ld["@type"]).toBe("Product");
+    expect(ld["@id"]).toBe(
+      "https://example.com/products/workstations/desk-pro-x#product",
+    );
+    expect(ld.image).toBe("https://example.com/images/desk.webp");
+    expect(ld).not.toHaveProperty("offers");
+  });
+
+  it("classifies every (site) route with an access decision", () => {
+    expect(SITE_ROUTE_CLASSIFICATION.length).toBeGreaterThan(20);
+    for (const meta of SITE_ROUTE_CLASSIFICATION) {
+      expect(["public", "protected", "redirect", "not-found", "removed"]).toContain(
+        meta.classification,
+      );
+      expect(typeof meta.indexable).toBe("boolean");
+    }
+  });
+});

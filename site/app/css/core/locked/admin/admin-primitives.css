@@ -53,6 +53,11 @@
   background: transparent;
 }
 
+.admin-btn--compact {
+  padding: 0.3rem 0.625rem;
+  font-size: 0.8rem;
+}
+
 /* ── Badges ── */
 
 .admin-badge {
@@ -76,6 +81,10 @@
 
 .admin-badge--hidden {
   color: var(--text-muted);
+}
+
+.admin-badge--compact {
+  font-size: 0.72rem;
 }
 
 /* ── Alerts ── */

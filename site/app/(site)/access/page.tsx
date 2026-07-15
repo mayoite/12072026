@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { getOptionalUser } from "@/lib/auth/session";
@@ -6,6 +7,9 @@ import { AccessForm } from "./AccessForm";
 import { SiteWorkspaceShell } from "@/components/home/layout";
 import Link from "next/link";
 import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
+import { ACCESS_PAGE_METADATA } from "@/features/site/data/routeMetadata";
+
+export const metadata: Metadata = ACCESS_PAGE_METADATA;
 
 export default async function AccessRoute({
   searchParams,

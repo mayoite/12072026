@@ -7,15 +7,8 @@ import {
   pixelsToMeters,
   feetInchesToPixels,
   pixelsToFeetInches,
-  pixelsToDimensionString,
-  parseDimensionInput,
 } from "./units";
-import {
-  ExcalidrawAPI,
-  getSelectedRectangle,
-  getRectangleDimensions,
-  setRectangleDimensions,
-} from "./elementUtils";
+import type { ExcalidrawAPI } from "./elementUtils";
 
 // Local alias kept for backwards compat within this file
 type UnitMode = UnitSystem;
@@ -47,7 +40,7 @@ function parseFloat2(v: string): number {
 export function DimensionPanel({
   excalidrawAPI,
 }: {
-  readonly excalidrawAPI: any | null;
+  readonly excalidrawAPI: ExcalidrawAPI | null;
 }) {
   const [unit, setUnit] = useState<UnitMode>("metric");
   const [metric, setMetric] = useState<MetricDims>({ widthM: "", heightM: "" });
@@ -64,8 +57,8 @@ export function DimensionPanel({
   const syncFromAPI = useCallback(() => {
     if (!excalidrawAPI) return;
 
-    const appState: any = excalidrawAPI.getAppState();
-    const elements: any[] = excalidrawAPI.getSceneElements() ?? [];
+    const appState = excalidrawAPI.getAppState();
+    const elements = excalidrawAPI.getSceneElements() ?? [];
     const ids: Record<string, boolean> = appState.selectedElementIds ?? {};
     const selectedIds = Object.keys(ids).filter((id) => ids[id]);
 
@@ -75,7 +68,7 @@ export function DimensionPanel({
       return;
     }
 
-    const el = elements.find((e: any) => e.id === selectedIds[0]);
+    const el = elements.find((e) => e.id === selectedIds[0]);
     if (!el || el.type !== "rectangle") {
       setDisabled(true);
       setSelectedId(null);
@@ -122,8 +115,8 @@ export function DimensionPanel({
   const handleApply = useCallback(() => {
     if (!excalidrawAPI || !selectedId || disabled) return;
 
-    const elements: any[] = excalidrawAPI.getSceneElements() ?? [];
-    const el = elements.find((e: any) => e.id === selectedId);
+    const elements = excalidrawAPI.getSceneElements() ?? [];
+    const el = elements.find((e) => e.id === selectedId);
     if (!el) return;
 
     const newWidth =
@@ -142,7 +135,7 @@ export function DimensionPanel({
     if (newWidth <= 0 || newHeight <= 0) return;
 
     excalidrawAPI.updateScene({
-      elements: elements.map((e: any) =>
+      elements: elements.map((e) =>
         e.id === selectedId
           ? {
               ...e,
@@ -163,74 +156,11 @@ export function DimensionPanel({
     [handleApply]
   );
 
-  // ── Styles ───────────────────────────────────────────────────────────────
-  const panelStyle: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-    padding: "6px 14px",
-    background: "var(--surface-raised, #f9fafb)",
-    borderBottom: "1px solid var(--border-soft, #e5e7eb)",
-    flexWrap: "wrap",
-    fontSize: "0.82rem",
-    minHeight: "42px",
-    userSelect: "none",
-  };
-
-  const labelStyle: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    gap: "5px",
-    color: disabled ? "var(--text-muted, #9ca3af)" : "inherit",
-    whiteSpace: "nowrap",
-  };
-
-  const inputStyle: React.CSSProperties = {
-    width: "72px",
-    padding: "3px 6px",
-    border: "1px solid var(--border-soft, #d1d5db)",
-    borderRadius: "4px",
-    fontSize: "0.82rem",
-    background: disabled ? "var(--surface-primary, #f3f4f6)" : "#fff",
-    color: disabled ? "var(--text-muted, #9ca3af)" : "inherit",
-  };
-
-  const smallInputStyle: React.CSSProperties = { ...inputStyle, width: "56px" };
-
-  const btnStyle: React.CSSProperties = {
-    padding: "4px 12px",
-    borderRadius: "4px",
-    border: "none",
-    background: disabled ? "var(--border-soft, #e5e7eb)" : "var(--accent, #6366f1)",
-    color: disabled ? "var(--text-muted, #9ca3af)" : "#fff",
-    cursor: disabled ? "not-allowed" : "pointer",
-    fontSize: "0.82rem",
-    fontWeight: 600,
-    whiteSpace: "nowrap",
-  };
-
-  const toggleStyle = (active: boolean): React.CSSProperties => ({
-    padding: "3px 10px",
-    borderRadius: "4px",
-    border: "1px solid var(--border-soft, #d1d5db)",
-    background: active ? "var(--accent, #6366f1)" : "transparent",
-    color: active ? "#fff" : "inherit",
-    cursor: "pointer",
-    fontSize: "0.79rem",
-    fontWeight: active ? 600 : 400,
-  });
-
-  const sep: React.CSSProperties = {
-    color: "var(--text-muted, #9ca3af)",
-    fontSize: "0.9rem",
-  };
-
   return (
-    <div style={panelStyle} onKeyDown={onKeyDown}>
-      {/* Unit toggle */}
-      <div style={{ display: "flex", gap: "4px" }}>
+    <div className="admin-svg-dimension-panel" onKeyDown={onKeyDown}>
+      <div className="admin-svg-dimension-panel__unit-toggle">
         <button
-          style={toggleStyle(unit === "metric")}
+          className="admin-svg-dimension-panel__toggle"
           onClick={() => setUnit("metric")}
           type="button"
           aria-pressed={unit === "metric"}
@@ -238,7 +168,7 @@ export function DimensionPanel({
           Meters (m)
         </button>
         <button
-          style={toggleStyle(unit === "imperial")}
+          className="admin-svg-dimension-panel__toggle"
           onClick={() => setUnit("imperial")}
           type="button"
           aria-pressed={unit === "imperial"}
@@ -247,14 +177,13 @@ export function DimensionPanel({
         </button>
       </div>
 
-      <span style={sep}>|</span>
+      <span className="admin-svg-dimension-panel__separator">|</span>
 
-      {/* Width */}
-      <label style={labelStyle}>
+      <label className="admin-svg-dimension-panel__field" data-disabled={disabled}>
         W:
         {unit === "metric" ? (
           <input
-            style={inputStyle}
+            className="admin-svg-dimension-panel__input"
             type="number"
             step="0.001"
             min="0"
@@ -266,7 +195,7 @@ export function DimensionPanel({
         ) : (
           <>
             <input
-              style={smallInputStyle}
+              className="admin-svg-dimension-panel__input admin-svg-dimension-panel__input--small"
               type="number"
               step="1"
               min="0"
@@ -277,7 +206,7 @@ export function DimensionPanel({
             />
             <span>ft</span>
             <input
-              style={smallInputStyle}
+              className="admin-svg-dimension-panel__input admin-svg-dimension-panel__input--small"
               type="number"
               step="0.1"
               min="0"
@@ -292,14 +221,13 @@ export function DimensionPanel({
         {unit === "metric" && <span>m</span>}
       </label>
 
-      <span style={sep}>×</span>
+      <span className="admin-svg-dimension-panel__separator">x</span>
 
-      {/* Height */}
-      <label style={labelStyle}>
+      <label className="admin-svg-dimension-panel__field" data-disabled={disabled}>
         H:
         {unit === "metric" ? (
           <input
-            style={inputStyle}
+            className="admin-svg-dimension-panel__input"
             type="number"
             step="0.001"
             min="0"
@@ -311,7 +239,7 @@ export function DimensionPanel({
         ) : (
           <>
             <input
-              style={smallInputStyle}
+              className="admin-svg-dimension-panel__input admin-svg-dimension-panel__input--small"
               type="number"
               step="1"
               min="0"
@@ -322,7 +250,7 @@ export function DimensionPanel({
             />
             <span>ft</span>
             <input
-              style={smallInputStyle}
+              className="admin-svg-dimension-panel__input admin-svg-dimension-panel__input--small"
               type="number"
               step="0.1"
               min="0"
@@ -337,9 +265,8 @@ export function DimensionPanel({
         {unit === "metric" && <span>m</span>}
       </label>
 
-      {/* Apply */}
       <button
-        style={btnStyle}
+        className="admin-svg-dimension-panel__apply"
         disabled={disabled}
         onClick={handleApply}
         type="button"
@@ -349,7 +276,7 @@ export function DimensionPanel({
       </button>
 
       {disabled && (
-        <span style={{ color: "var(--text-muted, #9ca3af)", fontStyle: "italic", fontSize: "0.78rem" }}>
+        <span className="admin-svg-dimension-panel__hint">
           Select a rectangle to set dimensions
         </span>
       )}

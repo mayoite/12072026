@@ -18,7 +18,11 @@ import { buildProductStaticParams } from "@/lib/catalog/productStaticParams";
 import { resolveProductByUrlKey } from "@/lib/productSlugResolver";
 import { SITE_URL } from "@/lib/siteUrl";
 import { PDP_ROUTE_COPY } from "@/features/site/data/routeCopy";
-import { buildBreadcrumbJsonLd, buildPageMetadata } from "@/features/site/data/seo";
+import {
+  buildBreadcrumbJsonLd,
+  buildPageMetadata,
+  buildProductJsonLd,
+} from "@/features/site/data/seo";
 import { sanitizeJsonForScript } from "@/lib/security/sanitize";
 
 const BASE_URL = SITE_URL;
@@ -306,22 +310,28 @@ async function ProductContent({
     },
     { name: p.name, path: `/products/${resolvedCategoryId}/${canonicalProductUrlKey}` },
   ]);
-  const productJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
+  // SITE-SEO-04: structured data mirrors visible name/description/images only.
+  // No invented price or InStock claim.
+  const visibleDescription =
+    (typeof p.description === "string" && p.description.trim()) ||
+    (typeof compatProduct.detailedInfo?.overview === "string" &&
+      compatProduct.detailedInfo.overview.trim()) ||
+    aiOverview;
+  const visibleImages =
+    mergedImages.length > 0
+      ? mergedImages
+      : mergedFlagship
+        ? [mergedFlagship]
+        : [];
+  const productJsonLd = buildProductJsonLd(BASE_URL, {
     name: p.name,
-    description: aiOverview,
-    image: mergedImages.length > 0 ? mergedImages : [mergedFlagship],
+    description: visibleDescription,
     url,
-    brand: { "@type": "Brand", name: PDP_ROUTE_COPY.productBrand },
-    offers: {
-      "@type": "Offer",
-      availability: "https://schema.org/InStock",
-      priceCurrency: "INR",
-      seller: { "@type": "Organization", name: PDP_ROUTE_COPY.productBrand },
-    },
-    category: resolvedCategoryId,
-  };
+    image: visibleImages,
+    sku: canonicalProductUrlKey,
+    brandName: PDP_ROUTE_COPY.productBrand,
+    category: getCatalogCategoryLabel(resolvedCategoryId, resolvedCategoryId),
+  });
 
   return (
     <>

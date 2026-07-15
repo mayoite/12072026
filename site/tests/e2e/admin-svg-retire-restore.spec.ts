@@ -12,6 +12,9 @@
 
 import { expect, test } from "@playwright/test";
 
+import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
+import { waitForPlannerCatalogReady } from "./plannerCanvasHelpers";
+
 const SLUG = "side-table-001";
 const ADMIN_SVG_EDITOR = "/admin/svg-editor";
 const SVG_BLOCKS_API = "/api/planner/catalog/svg-blocks";
@@ -61,6 +64,28 @@ test.describe("Admin SVG retire → restore lifecycle", () => {
       (i: { slug: string }) => i.slug,
     );
     expect(afterRetireSlugs).not.toContain(SLUG);
+
+    // ── 4b. Planner canvas catalog must not offer retired placement ───
+    await enterGuestPlannerWorkspace(page);
+    await waitForPlannerCatalogReady(page);
+    const catalogSearch = page.getByLabel("Search catalog elements");
+    await expect(catalogSearch).toBeVisible({ timeout: 45_000 });
+    await catalogSearch.fill("side-table");
+    const catalog = page.getByRole("region", { name: "Catalog browser" });
+    await expect(
+      catalog.getByRole("button", {
+        name: /Place — Add Side Table|Add Side Table to canvas/i,
+      }),
+    ).toHaveCount(0, { timeout: 15_000 });
+
+    await page.goto(ADMIN_SVG_EDITOR, { waitUntil: "domcontentloaded" });
+    await expect(page.getByTestId("admin-svg-primary-journey")).toBeVisible({
+      timeout: 45_000,
+    });
+    await expect(page.locator(`tr[data-slug="${SLUG}"]`)).toHaveAttribute(
+      "data-lifecycle",
+      "retired",
+    );
 
     // ── 5. Verify the row now shows the Restore button ───────────────
     const restoreButton = page.getByTestId(`admin-svg-restore-${SLUG}`);

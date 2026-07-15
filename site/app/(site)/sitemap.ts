@@ -1,6 +1,11 @@
 import type { MetadataRoute } from "next";
 import { getCatalog } from '@/lib/catalog/site/getProducts';
 import { buildRequestedCategoryCatalog } from '@/lib/catalog/site/categories';
+import {
+  PLANNER_MARKETING_SITEMAP_PATHS,
+  PUBLIC_INDEXABLE_STATIC_PATHS,
+  SOLUTION_CATEGORY_SITEMAP_PATHS,
+} from "@/features/site/data/routeClassification";
 import { SITE_URL } from "@/lib/siteUrl";
 
 const BASE_URL = SITE_URL.replace(/\/+$/, "");
@@ -11,71 +16,20 @@ function sitemapUrl(path: string): string {
   return `${BASE_URL}${normalized.replace(/\/+$/, "")}/`;
 }
 
-const STATIC_PATHS = [
-  "/",
-  "/about",
-  "/products",
-  "/solutions",
-  "/projects",
-  "/portfolio",
-  "/trusted-by",
-  "/gallery",
-  "/contact",
-  "/compare",
-  "/service",
-  "/showrooms",
-  "/sustainability",
-  "/refund-and-return-policy",
-  "/privacy",
-  "/terms",
-  "/imprint",
-  "/quote-cart",
-  "/planning",
-  "/downloads",
-  "/career",
-  "/news",
-  "/social",
-  "/tracking",
-  "/support-ivr",
-  "/templates",
-  "/planner",
-  "/planner/help",
-  "/planner/features",
-  "/planner/features/measure",
-  "/planner/lib/catalog/site",
-  "/planner/features/3d-view",
-  "/planner/features/ai-assist",
-  "/planner/features/export",
-];
-
-/** Solution category slugs mirrored from `app/(site)/solutions/[category]/page.tsx`. */
-const SOLUTION_CATEGORY_PATHS = [
-  "/solutions/seating",
-  "/solutions/workstations",
-  "/solutions/tables",
-  "/solutions/storages",
-  "/solutions/soft-seating",
-  "/solutions/education",
+const STATIC_SITEMAP_PATHS = [
+  ...PUBLIC_INDEXABLE_STATIC_PATHS,
+  ...PLANNER_MARKETING_SITEMAP_PATHS,
+  ...SOLUTION_CATEGORY_SITEMAP_PATHS,
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  const entries: MetadataRoute.Sitemap = STATIC_PATHS.map((path) => ({
+  const entries: MetadataRoute.Sitemap = STATIC_SITEMAP_PATHS.map((path) => ({
     url: sitemapUrl(path),
     lastModified: now,
     changeFrequency: path === "/" ? "daily" : "weekly",
     priority: path === "/" ? 1 : path.startsWith("/planner") ? 0.8 : 0.7,
   }));
-
-  // Solution category landing pages.
-  for (const path of SOLUTION_CATEGORY_PATHS) {
-    entries.push({
-      url: sitemapUrl(path),
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    });
-  }
 
   try {
     const catalog = buildRequestedCategoryCatalog(await getCatalog());
@@ -105,4 +59,3 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return entries;
 }
-

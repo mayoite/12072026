@@ -69,6 +69,7 @@ vi.mock('@/features/site/data/routeCopy', () => ({
       addToCompare: 'Add to Compare',
       addedToCompare: 'Added to Compare',
       requestQuote: 'Request Quote',
+      designInPlanner: 'Design in Planner',
       planning: 'Planning',
       resourceDesk: 'Resource Desk',
       copyLink: 'Copy Link',

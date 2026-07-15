@@ -1,16 +1,18 @@
 # Admin checklist
 
-Status only. Code map: `FEATURES.md`. Requirements: `PHASE-01` … `PHASE-04`.
+Status only. Code map: `FEATURES.md`. Requirements: `PHASES-01-02.md`, `PHASES-03-04.md`.
 
-Reconciled against `site/` on 2026-07-14. **Unit-complete items live in FEATURES.md, not here.**
+Reconciled against `site/` on 2026-07-15. **Unit-complete items live in FEATURES.md, not here.**
+
+**Editor:** Excalidraw (`ExcalidrawClient.tsx`). SVG.js / `SvgStudioCanvas` and SVG-Edit are not the active authoring path.
 
 ## Step 0 — test isolation
 
 - [ ] Automated canonical `inventory/descriptors/` hash gate in CI (not in `check:layout` today).
 
-## Phase 1 — SVG-first authoring
+## Phase 1 — Excalidraw-first authoring
 
-- [ ] Fresh browser proof recorded with commands and exit codes (`admin-phases-live`, `admin-svg-publish-p01`; 2026-07-13 evidence ages out).
+- [ ] Fresh browser proof on the Excalidraw edit shell: draw, dimension panel, compile preview, publish (`admin-phases-live`, `admin-svg-publish-p01`; 2026-07-13 evidence ages out).
 - [ ] Production auth smoke without `DEV_AUTH_BYPASS` (`admin-smoke.spec.ts`).
 
 ## Phase 2 — catalog lifecycle and Planner handoff
@@ -31,7 +33,7 @@ Reconciled against `site/` on 2026-07-14. **Unit-complete items live in FEATURES
 ## Phase 4 — commercial governance
 
 - [ ] Full browser journey: draft → approve → activate → **retire → restore** → rollback (P05 covers approve/activate/rollback only).
-- [ ] Retired product blocked on live Planner canvas (unit `placementPolicyForLifecycle` only today).
+- [ ] Retired product blocked on live Planner canvas — spec `admin-svg-retire-restore.spec.ts` step 4b (selector fixed 2026-07-15); run `pnpm run test:e2e:admin-retire-restore` exit `0` + evidence `results/admin/retire-restore-canvas/`.
 - [ ] `ADM-PUB-02`, `ADM-PRICE-*`, `ADM-ROLE-01`, `ADM-AUDIT-01` fresh browser proof.
 
 ## Completion

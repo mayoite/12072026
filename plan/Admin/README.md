@@ -4,16 +4,31 @@
 
 Admin governs trusted inventory. Planner customers consume only published products, SVG revisions, families, and approved prices.
 
-## Phases
+## Editor authority
 
-1. `PHASE-01-authoring-quality.md` — SVG-first authoring, preview, deterministic publish.
-2. `PHASE-02-catalog-lifecycle.md` — catalog contract, ingestion, DB publication, Planner handoff.
-3. `PHASE-03-product-families.md` — configurable families, compatibility, 2D/3D/BOQ parity.
-4. `PHASE-04-commercial-governance.md` — price books, approval, retirement, rollback, audit.
+Manual SVG authoring uses **Excalidraw** (`@excalidraw/excalidraw`) embedded in the Admin shell.
+
+- **Live code:** `features/admin/svg-editor/editor/ExcalidrawClient.tsx`, loaded from `AdminSvgEditorShell.tsx`.
+- **Host owns:** identity, millimetre footprint, dimension panel, grid snapping, validation, draft state, compile preview, and publish.
+- **Editor exports:** sanitized SVG bytes via `exportToSvg`; `excalidrawElements` persist with the descriptor for reopen.
+- **Not in use:** SVG.js scene canvas (`SvgStudioCanvas`), SVG-Edit iframe, or a second SVG engine.
+- **Legacy bridge:** `scene/sceneFromDescriptor` and `sceneParts` remain for older descriptors until migration is proven.
+
+`plan/svgblunder/` described an SVG-Edit recovery path. Excalidraw is the active Admin editor decision.
+
+## Files (5)
+
+| File | Role |
+|---|---|
+| `README.md` | Track outcome, editor authority, phase index |
+| `PHASES-01-02.md` | Excalidraw authoring + catalog lifecycle |
+| `PHASES-03-04.md` | Product families + commercial governance |
+| `FEATURES.md` | Plan phase → code path → honest gap |
+| `CHECKLIST.md` | Open acceptance work and browser proof only |
 
 ## Features
 
-`FEATURES.md` maps each plan phase to code paths and known gaps. Reconciled against `site/` on 2026-07-14.
+`FEATURES.md` maps each plan phase to code paths and known gaps. Reconciled against `site/` on 2026-07-15.
 
 ## Status
 

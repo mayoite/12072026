@@ -1,14 +1,16 @@
 # Admin features
 
-Repo-sourced index: **plan phase → code path → honest gap**. Reconciled against `site/` on 2026-07-14.
+Repo-sourced index: **plan phase → code path → honest gap**. Reconciled against `site/` on 2026-07-15.
 
 | Doc | Role |
 |---|---|
-| `PHASE-01` … `PHASE-04` | What to build and prove |
+| `PHASES-01-02`, `PHASES-03-04` | What to build and prove |
 | This file | What exists in code today |
 | `CHECKLIST.md` | Open acceptance work only |
 
 **Code roots:** `site/features/admin/` · `site/app/admin/` · `site/app/api/admin/` · `site/platform/drizzle/schema/catalog.ts` · `site/inventory/descriptors/` · `site/public/svg-catalog/`
+
+**Manual SVG editor:** `@excalidraw/excalidraw` via `editor/ExcalidrawClient.tsx`. Retired: `SvgStudioCanvas` (SVG.js scene canvas; tests archived only). Not active: SVG-Edit iframe (`plan/svgblunder/`).
 
 ---
 
@@ -59,13 +61,14 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 
 ---
 
-## Phase 1 — SVG-first authoring
+## Phase 1 — Excalidraw-first authoring
 
-Plan: `PHASE-01-authoring-quality.md`
+Plan: `PHASES-01-02.md` (Phase 1)
 
 | Feature | Code | Gap |
 |---|---|---|
-| SVG inventory + studio | `AdminSvgEditorListView.tsx`, `SvgStudioCanvas.tsx`, `SvgEditorForm.tsx` | **Implemented** |
+| SVG inventory + Excalidraw studio | `AdminSvgEditorListView.tsx`, `AdminSvgEditorShell.tsx`, `ExcalidrawClient.tsx`, `DimensionPanel.tsx`, `gridSnapping.ts`, `SvgEditorForm.tsx` | **Implemented** |
+| Excalidraw draft persistence | `svgEditorFormState.ts` (`excalidrawElements`, `compiledSvg`), `svgEditorFormAdapters.ts`, `publishSvgEditorAction.ts` | Publish uses Excalidraw-exported SVG; legacy `sceneParts` bridge remains |
 | Publish + compile | `publishDescriptorWithPipeline.ts`, `compileSvgForPublish`, `sharedCompilerAuthority.ts` | Disk authority; browser re-proof open |
 | Undo / rollback / lock | `descriptorLock.ts`, `rollbackDescriptorVersion.ts`, `staleDraftPublishGate.ts` | **Implemented** |
 | Bulk JSON import | `AdminSvgBulkImportPanel.tsx`, `bulkImportBlockDescriptors.ts` | **Implemented** (advanced path) |
@@ -77,7 +80,7 @@ Plan: `PHASE-01-authoring-quality.md`
 
 ## Phase 2 — catalog lifecycle and Planner handoff
 
-Plan: `PHASE-02-catalog-lifecycle.md`
+Plan: `PHASES-01-02.md` (Phase 2)
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -92,7 +95,7 @@ Plan: `PHASE-02-catalog-lifecycle.md`
 
 ## Phase 3 — product families
 
-Plan: `PHASE-03-product-families.md`
+Plan: `PHASES-03-04.md` (Phase 3)
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -105,7 +108,7 @@ Plan: `PHASE-03-product-families.md`
 
 ## Phase 4 — commercial governance
 
-Plan: `PHASE-04-commercial-governance.md`
+Plan: `PHASES-03-04.md` (Phase 4)
 
 | Feature | Code | Gap |
 |---|---|---|
@@ -141,4 +144,4 @@ Plan: `PHASE-04-commercial-governance.md`
 
 ## Reference (not truth)
 
-`CHECKLIST.md` · `PHASE-01` … `PHASE-04` · `07-ADMIN-UI-BENCHMARK.md` · `08-DATABASE-SVG-CONTRACT.md`
+`CHECKLIST.md` · `PHASES-01-02` · `PHASES-03-04` · `07-ADMIN-UI-BENCHMARK.md` · `08-DATABASE-SVG-CONTRACT.md`

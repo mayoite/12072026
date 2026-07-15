@@ -249,11 +249,15 @@ export function tryLoad(
   options?: { dir?: string },
 ): PlannerResult<BlockDescriptor, PlannerDescriptorError> {
   const slugCheck = validateSlug(slug);
-  if (!slugCheck.ok) return slugCheck;
+  if (!slugCheck.ok) {
+    return { ok: false, error: slugCheck.error };
+  }
 
   const dir = options?.dir ?? BLOCK_DESCRIPTORS_DIR_DEFAULT;
   const fileResult = readDescriptorFile(slugCheck.value, dir);
-  if (!fileResult.ok) return fileResult;
+  if (!fileResult.ok) {
+    return { ok: false, error: fileResult.error };
+  }
 
   // JSON.parse is the `unknown` boundary — past this point, the value is
   // typed by the canonical Zod schema. No `as any`, no `@ts-ignore`.
