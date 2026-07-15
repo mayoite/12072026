@@ -1,4 +1,5 @@
-import { boolean, date, integer, jsonb, pgTable, text, timestamp, uuid, index, uniqueIndex } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+import { boolean, check, date, index, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
 /** Products Supabase — marketing catalog (canonical table name). */
 export const catalogProducts = pgTable("catalog_products", {
@@ -161,4 +162,96 @@ export const blockDescriptors = pgTable(
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
     updatedBy: text("updated_by"),
   },
+);
+
+// V2 remains isolated from the V1 tables above until the reversible cutover.
+export const svgAssetsV2 = pgTable(
+  "svg_assets_v2",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    productId: uuid("product_id").references(() => catalogProducts.id, { onDelete: "set null" }),
+    slug: text("slug").notNull(),
+    name: text("name").notNull(),
+    assetKind: text("asset_kind").$type<"fixed" | "configurable" | "parametric">().notNull(),
+    dimensionsMm: jsonb("dimensions_mm").notNull(),
+    lifecycle: text("lifecycle").$type<"draft" | "review" | "live" | "retired">().notNull(),
+    currentVersion: integer("current_version").notNull().default(0),
+    currentVersionId: uuid("current_version_id"),
+    currentSourceChecksum: text("current_source_checksum").notNull(),
+    capabilities: text("capabilities").array().notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("svg_assets_v2_slug_uidx").on(table.slug),
+    index("svg_assets_v2_product_id_idx").on(table.productId),
+    index("svg_assets_v2_lifecycle_idx").on(table.lifecycle),
+    index("svg_assets_v2_current_version_id_idx").on(table.currentVersionId),
+    check("svg_assets_v2_current_version_check", sql`${table.currentVersion} >= 0`),
+  ],
+);
+
+export const svgAssetVersionsV2 = pgTable(
+  "svg_asset_versions_v2",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    assetId: uuid("asset_id").notNull().references(() => svgAssetsV2.id, { onDelete: "restrict" }),
+    version: integer("version").notNull(),
+    manifest: jsonb("manifest").notNull(),
+    sourceChecksum: text("source_checksum").notNull(),
+    createdBy: text("created_by").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("svg_asset_versions_v2_asset_version_uidx").on(table.assetId, table.version),
+    index("svg_asset_versions_v2_asset_id_idx").on(table.assetId),
+    index("svg_asset_versions_v2_checksum_idx").on(table.sourceChecksum),
+    check("svg_asset_versions_v2_version_check", sql`${table.version} > 0`),
+  ],
+);
+
+export const svgAssetArtifactsV2 = pgTable(
+  "svg_asset_artifacts_v2",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    versionId: uuid("version_id").notNull().references(() => svgAssetVersionsV2.id, { onDelete: "restrict" }),
+    provider: text("provider").$type<"supabase" | "r2">().notNull(),
+    bucket: text("bucket").notNull(),
+    objectKey: text("object_key").notNull(),
+    mimeType: text("mime_type").notNull(),
+    sizeBytes: integer("size_bytes").notNull(),
+    checksum: text("checksum").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("svg_asset_artifacts_v2_object_uidx").on(table.provider, table.bucket, table.objectKey),
+    index("svg_asset_artifacts_v2_version_id_idx").on(table.versionId),
+    index("svg_asset_artifacts_v2_checksum_idx").on(table.checksum),
+    check("svg_asset_artifacts_v2_size_check", sql`${table.sizeBytes} >= 0`),
+  ],
+);
+
+export const svgAiRunsV2 = pgTable(
+  "svg_ai_runs_v2",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    assetId: uuid("asset_id").notNull().references(() => svgAssetsV2.id, { onDelete: "restrict" }),
+    baseVersionId: uuid("base_version_id").references(() => svgAssetVersionsV2.id, { onDelete: "set null" }),
+    actorId: text("actor_id").notNull(),
+    mode: text("mode").$type<"edit" | "audit">().notNull(),
+    status: text("status").$type<"requested" | "completed" | "failed" | "applied" | "discarded">().notNull(),
+    provider: text("provider"),
+    model: text("model"),
+    inputSnapshotKey: text("input_snapshot_key").notNull(),
+    outputSnapshotKey: text("output_snapshot_key"),
+    inputChecksum: text("input_checksum").notNull(),
+    outputChecksum: text("output_checksum"),
+    errorCode: text("error_code"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("svg_ai_runs_v2_asset_id_idx").on(table.assetId),
+    index("svg_ai_runs_v2_status_idx").on(table.status),
+    index("svg_ai_runs_v2_base_version_id_idx").on(table.baseVersionId),
+  ],
 );

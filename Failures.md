@@ -32,6 +32,22 @@ Remove an entry when its fix is freshly verified.
 
 ---
 
+## FAIL: Broad scripts typecheck currently fails
+
+- **Scope:** `site/scripts/tsconfig.json` broad script compilation.
+- **Command (2026-07-15):** `pnpm --filter oando-site run typecheck:scripts` → exit `1`.
+- **Current errors include:**
+  1. `features/planner/project/catalog/svg/svgBlockDescriptorLoader.ts` returns `PlannerResult<string, PlannerDescriptorError>` where `PlannerResult<BlockDescriptor, PlannerDescriptorError>` is expected and narrows `.error` unsafely.
+  2. `scripts/audit-product-quality.ts` has `{}` where `string[]` is expected.
+  3. `scripts/db_ensure_plans_table.ts`, `scripts/db_sync_drizzle_schema.ts`, and `scripts/db_test_connection.ts` read `exitCode` from successful result variants.
+  4. `scripts/generate_blocks.ts` reads primitive fields from `BasePrim` without narrowing.
+  5. `scripts/seed-block-descriptors.ts`, `scripts/seed_configurator_catalog.ts`, and `scripts/sync-descriptor-svgs.ts` have additional result/SQL/JSON typing errors.
+- **Not the DB authority blocker:** This is a TypeScript compile gate for scripts; it does not duplicate `DB-SVG-01..05` Products DB authority.
+- **Next:** Fix the listed script/loader type errors or narrow `scripts/tsconfig.json` only with owner approval.
+- **Blocks:** Claiming broad scripts typecheck is green.
+
+---
+
 ## FAIL: Admin code coverage below 80% (full tree)
 
 - **Scope:** `features/admin/**/*.{ts,tsx}` unit coverage meter.
