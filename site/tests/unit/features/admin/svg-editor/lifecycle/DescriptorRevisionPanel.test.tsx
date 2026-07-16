@@ -15,7 +15,7 @@ describe("DescriptorRevisionPanel", () => {
     const { container } = render(<DescriptorRevisionPanel slug="side-table-001" />);
     await waitFor(() => {
       expect(
-        screen.getByText("No versioned revisions on disk yet."),
+        screen.getByText("No prior releases recorded yet."),
       ).toBeInTheDocument();
     });
     expect(screen.getByText("Revision history")).toBeInTheDocument();

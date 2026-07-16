@@ -101,7 +101,7 @@ describe('source coverage contract', () => {
 
     expect(isAcceptedCoverageSourcePath('site/app/page.tsx')).toBe(true)
     expect(isAcceptedCoverageSourcePath('plan/README.md')).toBe(true)
-    expect(isAcceptedCoverageSourcePath('archive/plans/wip/tech-stack-docs/claim-inventory.json')).toBe(false)
+    expect(isAcceptedCoverageSourcePath('archive/plans/wip/tech-docs/claim-inventory.json')).toBe(false)
     expect(isAcceptedCoverageSourcePath('_generated')).toBe(false)
     expect(isAcceptedCoverageSourcePath('.env.local')).toBe(false)
   })

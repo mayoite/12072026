@@ -2,7 +2,7 @@
 
 **Source of truth:** `site/app/api/**/route.ts`
 
-Generated from route handlers on 2026-07-15.
+Generated from route handlers on 2026-07-16.
 
 Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 

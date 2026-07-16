@@ -1,6 +1,6 @@
 # Live route classification
 
-*Generated: 2026-07-15 — `node scripts/generate-route-classification.mjs`*
+*Generated: 2026-07-16 — `node scripts/generate-route-classification.mjs`*
 
 Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-planner/**` and `/buddy-planner/**` redirect via `config/build/next.config.js`.
 

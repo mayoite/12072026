@@ -44,7 +44,7 @@ describe('tech docs package contract', () => {
     const workspace = readSource(path.join(repoRoot, 'pnpm-workspace.yaml'))
     const packages = readWorkspacePackages(workspace)
 
-    expect(packages).not.toContain('tech-stack-generator')
+    expect(packages).not.toContain('legacy-tech-docs-generator')
   })
 
   it('uses the approved package name', () => {
@@ -94,14 +94,14 @@ describe('tech docs package contract', () => {
     }
 
     expect(packageJson.scripts?.dev).toBe('vite')
-    expect(packageJson.scripts?.generate).toBe('node scripts/generate-all.mjs')
-    expect(packageJson.scripts?.test).toBe('vitest run')
-    expect(packageJson.scripts?.['test:coverage']).toBe('vitest run --coverage')
-    expect(packageJson.scripts?.check).toBe('node scripts/check.mjs')
+    expect(packageJson.scripts?.generate).toBe('node --max-old-space-size=24576 scripts/generate-all.mjs')
+    expect(packageJson.scripts?.test).toBe('node --max-old-space-size=24576 ../node_modules/vitest/vitest.mjs run')
+    expect(packageJson.scripts?.['test:coverage']).toBe('node --max-old-space-size=24576 ../node_modules/vitest/vitest.mjs run --coverage')
+    expect(packageJson.scripts?.check).toBe('node --max-old-space-size=24576 scripts/check.mjs')
     expect(packageJson.scripts?.build).toBe(
-      'node scripts/generate-all.mjs --stage-only && vite build && node scripts/publish-all.mjs',
+      'node --max-old-space-size=24576 scripts/generate-all.mjs --stage-only && vite build && node --max-old-space-size=24576 scripts/publish-all.mjs',
     )
-    expect(packageJson.scripts?.gate).toBe('node scripts/gate.mjs')
+    expect(packageJson.scripts?.gate).toBe('node --max-old-space-size=24576 scripts/gate.mjs')
   })
 
   it('writes coverage output under root results tooling paths', () => {
