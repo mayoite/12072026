@@ -620,13 +620,22 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
     );
   });
 
-  it("dual-write: DB failure is logged and does not fail publish", async () => {
-    const errSpy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+  it("dual-write: DB failure fails publish and rolls back disk commit", async () => {
+    const persistRollback = vi.fn();
+    const pipelineRollback = vi.fn();
+    const pipelineCleanup = vi.fn();
     const result = await publishDescriptorWithPipeline(validDescriptor, {
       parsePayload: () => ({ ok: true, value: validDescriptor }),
       compileSvg: async () => compileOk(),
-      runPipeline: async () => pipelineOk(),
-      persist: () => persistOk(),
+      runPipeline: async () => ({
+        ...pipelineOk(),
+        rollback: pipelineRollback,
+        cleanup: pipelineCleanup,
+      }),
+      persist: () => ({
+        ...persistOk(),
+        rollback: persistRollback,
+      }),
       dbRepository: {
         publish: async () => {
           throw new Error("db down");
@@ -634,9 +643,13 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
         load: async () => null,
       } as never,
     });
-    expect(result.success).toBe(true);
-    expect(errSpy).toHaveBeenCalled();
-    errSpy.mockRestore();
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toContain("Products DB publish failed");
+    expect(result.error).toContain("db down");
+    expect(persistRollback).toHaveBeenCalledOnce();
+    expect(pipelineRollback).toHaveBeenCalledOnce();
+    expect(pipelineCleanup).toHaveBeenCalledOnce();
   });
 
   it("rolls back when persist throws after pipeline success", async () => {

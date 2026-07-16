@@ -96,8 +96,8 @@ export type PublishDescriptorWithPipelineDeps = {
   /**
    * Optional DB revision repository for dual-write (DB-SVG-01..05).
    * When provided, revisions + artifacts are also persisted to the Products DB
-   * after the disk pipeline commits. DB failures are logged but do not fail
-   * the overall publish during Phase 2 disk-authority cutover.
+   * after the disk pipeline commits. DB failures fail the publish and trigger
+   * rollback so DB-configured environments are not disk-authoritative.
    */
   readonly dbRepository?: ImmutableSvgRevisionRepository;
 };
@@ -278,8 +278,8 @@ export async function publishDescriptorWithPipeline(
     return { success: false, error: withRecoveryErrors(`500.io: Publication commit failed. ${details}`, recoveryErrors) };
   }
 
-  // DB-SVG-01..05: Dual-write to Products DB after disk commit succeeds.
-  // Phase 2: DB write is additive; failures are logged but don't abort.
+  // DB-SVG-01..05 minimal cutover: when DB publish is enabled, DB failure must
+  // fail the overall publish so disk cannot silently become the authority.
   if (deps.dbRepository) {
     try {
       const compiledSvgChecksum = sha256Utf8(compile.svg);
@@ -363,10 +363,21 @@ export async function publishDescriptorWithPipeline(
         ],
       );
     } catch (dbError) {
-      console.error(
-        `[DB-SVG] Dual-write failed for ${descriptor.slug}:`,
-        dbError instanceof Error ? dbError.message : String(dbError),
+      const details =
+        dbError instanceof Error ? dbError.message : String(dbError);
+      const recoveryErrors = runAllBestEffort(
+        persistResult.rollback,
+        pipeline.rollback,
+        persistResult.cleanup,
+        pipeline.cleanup,
       );
+      return {
+        success: false,
+        error: withRecoveryErrors(
+          `500.db: Products DB publish failed. ${details}`,
+          recoveryErrors,
+        ),
+      };
     }
   }
 

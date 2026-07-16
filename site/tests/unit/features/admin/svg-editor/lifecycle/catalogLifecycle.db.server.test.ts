@@ -88,7 +88,7 @@ describe("loadBuyerVisibleDescriptorsWithDb", () => {
     expect(loadBuyerVisibleDescriptors).not.toHaveBeenCalled();
   });
 
-  it("falls back to disk when DB rows lack usable geometry", async () => {
+  it("returns empty when DB rows lack usable geometry in DB-authority mode", async () => {
     isProductsDatabaseConfigured.mockReturnValue(true);
     execute.mockResolvedValue([
       { slug: "stub", descriptor: { slug: "stub" } },
@@ -118,7 +118,39 @@ describe("loadBuyerVisibleDescriptorsWithDb", () => {
       "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server"
     );
     const rows = await loadBuyerVisibleDescriptorsWithDb();
-    expect(rows).toEqual([{ slug: "disk-only" }]);
-    expect(loadBuyerVisibleDescriptors).toHaveBeenCalled();
+    expect(rows).toEqual([]);
+    expect(loadBuyerVisibleDescriptors).not.toHaveBeenCalled();
+  });
+
+  it("returns empty when DB read throws in DB-authority mode", async () => {
+    isProductsDatabaseConfigured.mockReturnValue(true);
+    execute.mockRejectedValue(new Error("db unavailable"));
+    vi.resetModules();
+    vi.doMock("server-only", () => ({}));
+    vi.doMock("@/features/admin/svg-editor/lifecycle/catalogLifecycle", () => ({
+      loadBuyerVisibleDescriptors,
+      readLifecycleManifest: () => ({}),
+      isBuyerVisibleSlug: () => true,
+    }));
+    vi.doMock("@/platform/drizzle/databaseUrls", () => ({
+      isProductsDatabaseConfigured,
+    }));
+    vi.doMock("@/platform/drizzle/productsDb", () => ({
+      productsDb: {
+        select: () => ({
+          from: () => ({ execute }),
+        }),
+      },
+    }));
+    vi.doMock("@/platform/drizzle/schema/catalog", () => ({
+      blockDescriptors: {},
+    }));
+
+    const { loadBuyerVisibleDescriptorsWithDb } = await import(
+      "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server"
+    );
+    const rows = await loadBuyerVisibleDescriptorsWithDb();
+    expect(rows).toEqual([]);
+    expect(loadBuyerVisibleDescriptors).not.toHaveBeenCalled();
   });
 });
