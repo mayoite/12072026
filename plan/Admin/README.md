@@ -28,7 +28,7 @@ Manual SVG authoring uses **Excalidraw** (`@excalidraw/excalidraw`) embedded in 
 
 ## Features
 
-`FEATURES.md` maps each plan phase to code paths and known gaps. Reconciled against `site/` on 2026-07-15.
+`FEATURES.md` maps each plan phase to code paths and known gaps. Live code and fresh checks are authoritative.
 
 ## Status
 

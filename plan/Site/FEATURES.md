@@ -1,6 +1,6 @@
 # Site features
 
-Repo-sourced index: **plan phase → code path → honest gap**. Reconciled against `site/` on 2026-07-15.
+Repo-sourced index: **plan phase → code path → honest gap**. Live code and fresh checks are authoritative.
 
 | Doc | Role |
 |---|---|

@@ -10,7 +10,7 @@ Locales: `site/i18n/`. Marketing data: `features/site/data/`. Presentation: `com
 
 Internal role. Owns catalog identity, availability, SVG authoring/publication, families/options, revisions, rollback, audit, and the released catalog contract for Planner and Site.
 
-**Live:** disk publish (`inventory/descriptors/`, `public/svg-catalog/`). Optional DB dual-write on server-action path — not authority. **Target:** Products DB transaction — `08-DATABASE-SVG-CONTRACT.md`. Does not own customer layout.
+**Live:** disk publish (`inventory/descriptors/`, `public/svg-catalog/`). Both Admin publish entrypoints optionally dual-write when the Products DB is configured; that additive stub is not authority. **Target:** Products DB transaction — `08-DATABASE-SVG-CONTRACT.md`. Does not own customer layout.
 
 Routes: `app/admin/**`. Behavior: `features/admin/**`.
 

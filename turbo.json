@@ -6,8 +6,7 @@
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "test": {
-      "dependsOn": ["build"],
-      "inputs": ["src/**/*.tsx", "src/**/*.ts", "tests/**/*.ts", "tests/**/*.tsx"]
+      "dependsOn": ["build"]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -19,6 +18,7 @@
       "dependsOn": ["build", "lint", "typecheck", "test"],
       "outputs": ["results/**"]
     },
+    "release:gate:fast": {},
     "dev": {
       "cache": false,
       "persistent": true

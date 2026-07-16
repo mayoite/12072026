@@ -1,6 +1,6 @@
 # Admin features
 
-Repo-sourced index: **plan phase → code path → honest gap**. Reconciled against `site/` on 2026-07-15.
+Repo-sourced index: **plan phase → code path → honest gap**. Live code and fresh checks are authoritative.
 
 | Doc | Role |
 |---|---|
@@ -41,11 +41,11 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 | 04 | Partial | Types exist; dual-write payload is stub |
 | 05 | Open | No `published_svg_revision_id` pointer write |
 | 06 | Disk only | Pipeline rollback tested; not one DB transaction |
-| 07 | Done (disk) | Failed publish preserves prior release |
-| 08 | Done (disk) | Idempotent unchanged publish |
-| 09 | Done (disk) | `staleDraftPublishGate.ts` |
+| 07 | Source present; status unverified | Failed-publish rollback handling exists in `publishDescriptorWithPipeline.ts`; not run in this repair |
+| 08 | Source present; status unverified | Idempotent unchanged-publish handling exists in `publishDescriptorWithPipeline.ts`; not run in this repair |
+| 09 | Source present; status unverified | `staleDraftPublishGate.ts` is wired into the editor publish flow; not run in this repair |
 | 10–16 | Partial (Planner consumer) | `svg-blocks/route.ts` → `loadBuyerVisibleDescriptorsWithDb()`: reads `block_descriptors` DB rows when configured (lifecycle-filtered), falls back to `loadBuyerVisibleDescriptors()` disk; reads definition JSON, not committed artifact bytes |
-| 17 | Done (inventory only) | `scripts/svg-disk-db-dry-run.ts` exit `0` 2026-07-16 → `results/admin/svg-disk-db-dry-run/dry-run.json` (5 descriptors, 0 missing SVG). Disk read only; not DB write/authority |
+| 17 | Source present; status unverified | `scripts/svg-disk-db-dry-run.ts` inventories disk inputs and writes report output; it does not prove DB write or authority |
 | 18 | Open | No parity tooling before cutover |
 | 19 | Security track | CSRF/rate limits on admin routes exist |
 | 20 | Partial | Tmp-dir pattern in unit/e2e publish; no automated canonical hash gate; some tests read canonical fixtures |
@@ -74,7 +74,7 @@ Plan: `PHASES-01-02.md` (Phase 1)
 | Bulk JSON import | `AdminSvgBulkImportPanel.tsx`, `bulkImportBlockDescriptors.ts` | **Implemented** (advanced path) |
 | AI SVG generate | `app/api/admin/svg-editor/ai-generate/route.ts` | **Implemented** |
 | 3D previews | `GlbExtruderPreview.tsx`, `ModelViewerPreview.tsx` | Partial |
-| `ADM-SVG-01`…`17`, shell, form, pub, a11y | Unit coverage in `tests/unit/features/admin/svg-editor/` (208 tests, 2026-07-13) | Fresh browser proof; prod auth smoke |
+| `ADM-SVG-01`…`17`, shell, form, pub, a11y | Test sources in `tests/unit/features/admin/svg-editor/` | Not run in this repair |
 
 ---
 
@@ -114,8 +114,8 @@ Plan: `PHASES-03-04.md` (Phase 4)
 |---|---|---|
 | Price books (filesystem) | `AdminPriceBookPageView.tsx`, `priceBookService.ts`, `priceBookFileStore.ts` → `features/admin/data/price-books/` | **Implemented** |
 | Governance API | `app/api/admin/price-books/[bookId]/action/route.ts` | **Implemented** |
-| Retire / restore | `catalogRetirement.ts`, lifecycle PATCH, `admin-svg-retire-restore.spec.ts` | Playwright exit `0` 2026-07-15 (`results/admin/retire-restore-canvas/run-meta.json`); guest catalog no Place CTA when retired; product left `live` |
-| `ADM-PUB-02`, `ADM-PRICE-*`, `ADM-ROLE-01`, `ADM-AUDIT-01` | Unit + `admin-pricing-pricebook-p05.spec.ts` | Full commercial browser chain still open (retire/restore canvas is covered above) |
+| Retire / restore | `catalogRetirement.ts`, lifecycle PATCH, `admin-svg-retire-restore.spec.ts` | Source and browser spec exist; not run in this repair |
+| `ADM-PUB-02`, `ADM-PRICE-*`, `ADM-ROLE-01`, `ADM-AUDIT-01` | Unit + `admin-pricing-pricebook-p05.spec.ts` | Current browser status not verified in this repair |
 | CRM / queries | `features/crm/`, `app/admin/customer-queries/` | **localStorage demo** — not production CRM |
 
 ---
@@ -132,14 +132,14 @@ Plan: `PHASES-03-04.md` (Phase 4)
 
 ---
 
-## Tests (repo truth)
+## Test inventory
 
 | Suite | Path | Notes |
 |---|---|---|
-| SVG editor unit | `tests/unit/features/admin/svg-editor/` | 208 tests, exit 0 on 2026-07-13 |
-| Playwright admin | `tests/e2e/admin-phases-live.spec.ts`, `admin-svg-publish-p01.spec.ts`, `admin-pricing-pricebook-p05.spec.ts` | `DEV_AUTH_BYPASS=1`; evidence `results/admin/2026-07-13T-admin-phases-final/` |
-| Auth smoke | `admin-smoke.spec.ts` via `pnpm run test:admin:production-auth` | Exit `0` 2026-07-16; evidence `results/admin/production-auth/run-meta.json` (PORT 3105, `DEV_AUTH_BYPASS=0`, production start) |
-| Admin unit coverage | `vitest.admin.coverage.config.ts` | 2026-07-16: statements **81.68%**, lines **83.35%**, functions 79.97%, branches 72.13%; 796 tests green; Vitest thresholds still fail functions/branches (exit 1) |
+| SVG editor unit | `tests/unit/features/admin/svg-editor/` | Not run in this repair |
+| Playwright admin | `tests/e2e/admin-phases-live.spec.ts`, `admin-svg-publish-p01.spec.ts`, `admin-pricing-pricebook-p05.spec.ts` | Not run in this repair; development-auth output would not prove production authorization |
+| Auth smoke | `admin-smoke.spec.ts` via `pnpm run test:admin:production-auth` | Not run in this repair |
+| Admin unit coverage | `vitest.admin.coverage.config.ts` | Not run in this repair; no current coverage status claimed |
 
 ---
 

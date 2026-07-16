@@ -31,10 +31,10 @@ When docs and code differ, code wins until cutover is proven.
 | Area | Target | Live (2026-07) |
 |---|---|---|
 | Released SVG | Products DB + R2 artifact bytes | **Disk** — `inventory/descriptors/`, `public/svg-catalog/` |
-| Planner SVG read | DB revision bytes via API | **Disk** — `svg-blocks` / `loadBuyerVisibleDescriptors()` |
+| Planner SVG read | DB revision bytes via API | `svg-blocks` reads usable `block_descriptors` rows when configured, with disk fallback; not revision artifact bytes |
 | Marketing catalog | Products DB | Products DB — `catalog_products` |
 | Planner managed catalog | Products DB | Products DB — `planner_managed_products` |
-| Publish dual-write | One DB transaction + pointer | Stub on `publishSvgEditorAction.ts` only |
+| Publish dual-write | One DB transaction + pointer | Best-effort stub on both Admin publish entrypoints; disk remains authority |
 | Lifecycle + audit | Durable store | `results/admin/catalog-ops/` |
 
 Remove split authority via `plan/Admin/CHECKLIST.md` (`DB-SVG-01` … `05`) and `08-DATABASE-SVG-CONTRACT.md`.

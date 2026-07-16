@@ -10,12 +10,12 @@ Two workspace packages (`pnpm-workspace.yaml`):
 - **`site/`** (`oando-site`) — the Next.js 16 / React 19 application; the only product code.
 - **`tech-docs-generator/`** (`oando-tech-docs`) — optional repo-intelligence tool.
 
-Everything else at the repo root (`docs/`, `plan/`, `Agents/`, `scripts/`, `results/`, `agent-reports/`) is process, execution checklists, gates, or generated output — not shipped code.
+Everything else at the repo root (`docs/`, `plan/`, `Agents/`, `scripts/`, `results/`, `agent-reports/`) contains process guidance, execution tracking, gates, reports, or generated output — not shipped code.
 
 ## Environment & workflow rules
 
 - **pnpm only, from the repo root.** Never run `pnpm install` (or any install) inside `site/` or `tech-docs-generator/` — a `preinstall` guard (`scripts/guard-workspace-install.mjs`) enforces this.
-- Node `>=24`, `pnpm@11.9.0`. `nodeLinker: hoisted`.
+- Node `>=24`, `pnpm@11.13.0` through Corepack's root `packageManager` declaration. `nodeLinker: hoisted`. Keep explicit CI pnpm pins aligned with the root declaration.
 - Windows / PowerShell is the dev environment (scripts use `.ps1`, `pwsh`). Vitest uses `pool: 'forks'` for Windows V8-coverage safety.
 - Secrets live **only** in repo-root `.env.local` (copy from `.env.example`). `site/` reads the root env.
 - **No handwritten `any`.** No silent test skips or suppressed tests. No `results/` file is ever proof of PASS/completion.
@@ -83,7 +83,7 @@ There is a deliberate split between the current live state and the target. **Whe
 | Surface | **Live authority (2026-07)** | Target |
 |---|---|---|
 | Admin publish | **Disk** — `site/inventory/descriptors/` + `site/public/svg-catalog/` (`publishDescriptorWithPipeline.ts`) | Products DB + R2 |
-| Planner SVG read | **Disk** — `loadBuyerVisibleDescriptors()` | DB revision bytes via API |
+| Planner SVG read | DB-aware descriptor loader when configured, with disk fallback; no committed revision artifact-byte read | DB revision bytes via API |
 | Marketing catalog | Products DB — `catalog_products` | (same) |
 | Planner managed catalog | Products DB — `planner_managed_products` | (same) |
 | Lifecycle + audit | `results/admin/catalog-ops/` (gitignored) | Durable store |

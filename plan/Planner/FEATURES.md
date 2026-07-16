@@ -1,6 +1,6 @@
 # Planner features
 
-Repo-sourced index: **plan phase → code path → honest gap**. Reconciled against `site/` on 2026-07-14.
+Repo-sourced index: **plan phase → code path → honest gap**. Live code and fresh checks are authoritative.
 
 | Doc | Role |
 |---|---|
@@ -8,7 +8,7 @@ Repo-sourced index: **plan phase → code path → honest gap**. Reconciled agai
 | This file | Where it lives in code |
 | `CHECKLIST.md` | Status only — verify in browser |
 
-**Code roots:** `site/features/planner/` · `site/app/planner/` · `site/app/api/planner/` · `site/platform/drizzle/schema/planner.ts` · `site/block-descriptors/` · `site/public/svg-catalog/`
+**Code roots:** `site/features/planner/` · `site/app/planner/` · `site/app/api/planner/` · `site/platform/drizzle/schema/planner.ts` · `site/inventory/descriptors/` · `site/public/svg-catalog/`
 
 **Live host:** `editor/OOPlannerWorkspace.tsx` wires canvas, catalog, export, AI, validation. Parallel trees (`catalog-api/`, `shared/`, `cloud-store/`, `persistence/`) still serve APIs, portal, and legacy paths.
 
@@ -47,9 +47,9 @@ Plan: `PHASES-01-02.md` (Phase 2)
 | Edit / undo | `PropertiesPanel.tsx`, `project/store/history.ts`, `lib/geometry/alignDistribute.ts` | Row/array/grid/group/ungroup missing |
 | Catalog UI | `editor/InventoryPanel.tsx`, `catalogSearch.ts`, `catalogBuyerVisibility.ts` | UI-CAT-* browser proof open |
 | Workstation config | `WorkstationConfiguratorPanel.tsx`, `workstationConfiguratorV0.ts` | — |
-| Catalog APIs | `app/api/planner/catalog/route.ts`, `.../configurator/`, `.../svg-blocks/` | `svg-blocks` → `loadBuyerVisibleDescriptors()` from disk (`catalogLifecycle.ts`) |
+| Catalog APIs | `app/api/planner/catalog/route.ts`, `.../configurator/`, `.../svg-blocks/` | `svg-blocks` uses `loadBuyerVisibleDescriptorsWithDb()`; usable DB rows first, disk fallback |
 | SVG on canvas | `fabricBlock2D.ts`, `furnitureBlock2D.ts`, `svgPlanSymbolCache.ts` | Block2D fallback common; DB-SVG-* open |
-| Asset publish | `asset-engine/`, `admin/svg-editor/publishDescriptorWithPipeline.ts` | PNG thumb stub; consumer still disk-first |
+| Asset publish | `asset-engine/`, `admin/svg-editor/publishDescriptorWithPipeline.ts` | PNG thumb stub; consumer does not read committed revision artifact bytes |
 | 3D | `3d/ThreeLazyViewer.tsx`, `buildPlannerSceneNodes.ts`, `loadGeneratedGlbObject.ts` | GLB load partial |
 | Persistence | `usePlannerWorkspaceAutosave.ts`, `cloud-store/plannerPersistence.ts`, `cloud-store/offlineStorage.ts`, `cloud-store/syncQueueProcessor.ts` | Save-state UI not browser-closed |
 | Import / templates | `importUtils.ts`, `floorPlanImageImport.ts`, `templates/layoutTemplates.ts` | — |
@@ -95,12 +95,12 @@ Plan: `PHASES-03-04.md` (Phase 4)
 
 ## Admin dependency (blocks live catalog / SVG / prices)
 
-Not a customer phase. Publish is **disk-authoritative** today; optional DB dual-write on server action only.
+Not a customer phase. Publish is **disk-authoritative** today; both Admin publish entrypoints optionally dual-write when the Products DB is configured.
 
 | Area | Code | Gap |
 |---|---|---|
-| SVG publish | `admin/svg-editor/publishDescriptorWithPipeline.ts` | API route has no `dbRepository`; `block_descriptors` DB table never written |
-| Planner read | `app/api/planner/catalog/svg-blocks/route.ts` → `loadBuyerVisibleDescriptors()` | Disk `block-descriptors/`; not DB artifact bytes |
+| SVG publish | `admin/svg-editor/publishDescriptorWithPipeline.ts` | Best-effort DB stub writes `block_descriptors`; failures do not replace disk authority |
+| Planner read | `app/api/planner/catalog/svg-blocks/route.ts` → `loadBuyerVisibleDescriptorsWithDb()` | DB definitions when configured and usable, disk fallback; not DB artifact bytes |
 | Catalog admin | `admin/AdminCatalogTable.tsx`, `admin/catalog/` | Live browser proof open |
 | Price books | `admin/pricing/priceBookService.ts` | Filesystem store; workspace pin open |
 
@@ -123,7 +123,7 @@ Not a customer phase. Publish is **disk-authoritative** today; optional DB dual-
 ## Parallel paths (reconcile before ship)
 
 - **BOQ:** `projectFurnitureBoq` vs `workstationBoqV0` vs `shared/boq/buildBoq` vs `buddyBoqAdapter.ts`
-- **Catalog read:** disk `block-descriptors/` + `svg-blocks` vs Drizzle SVG revision tables
+- **Catalog read:** disk `inventory/descriptors/` fallback + DB-aware `svg-blocks` definitions vs committed SVG revision bytes
 - **Catalog trees:** `project/catalog/` (live host) vs top-level `catalog-api/`
 - **SVG compile:** `compileSvgForPublish` (publish) vs `svgCompiler.server.ts` (reference)
 
