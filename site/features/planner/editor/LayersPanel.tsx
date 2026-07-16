@@ -16,12 +16,15 @@ export interface LayersPanelProps {
   onVisibilityChange: (next: PlannerLayerVisibility) => void;
   selectedElementId?: string | null;
   onSelectElement?: (id: string, category: PlannerLayerCategory) => void;
+  /** When embedded in bottom tabs, shell chrome already labels the panel. */
+  showHeader?: boolean;
 }
 
 export const LayersPanel = memo(function LayersPanel({
   floor,
   visibility,
   onVisibilityChange,
+  showHeader = true,
 }: LayersPanelProps) {
   const categories = summarizeFloorLayers(floor);
 
@@ -34,12 +37,14 @@ export const LayersPanel = memo(function LayersPanel({
 
   return (
     <section className={styles.layersPanel} aria-label="Layers">
-      <header className={styles.layersPanelHeader}>
-        <span>Layers</span>
-        <span className={styles.layerCount}>
-          {categories.reduce((sum, category) => sum + category.count, 0)} items
-        </span>
-      </header>
+      {showHeader ? (
+        <header className={styles.layersPanelHeader}>
+          <span>Layers</span>
+          <span className={styles.layerCount}>
+            {categories.reduce((sum, category) => sum + category.count, 0)} items
+          </span>
+        </header>
+      ) : null}
       <div className={styles.layersPanelList}>
         {categories.map((category) => {
           const visible = visibility[category.key];

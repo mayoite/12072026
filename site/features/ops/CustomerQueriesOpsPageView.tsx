@@ -53,6 +53,19 @@ function formatDate(value: string): string {
 
 const tokenStorageKey = "customer_queries_admin_token";
 
+function formatApiError(value: unknown, fallback: string): string {
+  if (typeof value === "string" && value.trim().length > 0) {
+    return value;
+  }
+  if (value && typeof value === "object" && "message" in value) {
+    const message = (value as { message?: unknown }).message;
+    if (typeof message === "string" && message.trim().length > 0) {
+      return message;
+    }
+  }
+  return fallback;
+}
+
 async function patchCustomerQuery(
   body: string,
   adminToken: string,
@@ -135,9 +148,12 @@ export default function CustomerQueriesOpsPageView({ embedded = false }: { embed
         headers: adminToken ? { "x-admin-token": adminToken } : undefined,
         cache: "no-store",
       });
-      const json = (await response.json()) as { items?: CustomerQuery[]; error?: string };
+      const json = (await response.json()) as {
+        items?: CustomerQuery[];
+        error?: string | { code?: string; message?: string };
+      };
       if (!response.ok) {
-        setError(json.error || "Unable to load queries.");
+        setError(formatApiError(json.error, "Unable to load queries."));
         setItems([]);
         return;
       }
@@ -179,9 +195,12 @@ export default function CustomerQueriesOpsPageView({ embedded = false }: { embed
         followUpNotes: draft.followUpNotes,
       });
       const response = await patchCustomerQuery(requestBody, adminToken);
-      const json = (await response.json()) as { item?: CustomerQuery; error?: string };
+      const json = (await response.json()) as {
+        item?: CustomerQuery;
+        error?: string | { code?: string; message?: string };
+      };
       if (!response.ok || !json.item) {
-        setError(json.error || "Unable to update query.");
+        setError(formatApiError(json.error, "Unable to update query."));
         return;
       }
 
@@ -273,8 +292,14 @@ export default function CustomerQueriesOpsPageView({ embedded = false }: { embed
       ) : null}
 
       <div className="mb-6 flex flex-wrap items-center gap-3">
-        <label className="text-xs uppercase tracking-wide text-muted">Filter</label>
+        <label
+          htmlFor="customer-queries-status-filter"
+          className="text-xs uppercase tracking-wide text-muted"
+        >
+          Filter
+        </label>
         <select
+          id="customer-queries-status-filter"
           value={statusFilter}
           onChange={(event) => setStatusFilter(event.target.value as "all" | QueryStatus)}
           className="rounded-md border border-muted px-3 py-2 text-sm"
@@ -292,7 +317,7 @@ export default function CustomerQueriesOpsPageView({ embedded = false }: { embed
       </div>
 
       {error ? (
-        <div className="admin-alert admin-alert--danger mb-6" role="alert">
+        <div className="admin-alert admin-alert--error mb-6" role="alert">
           {error}
         </div>
       ) : null}

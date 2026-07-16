@@ -314,17 +314,15 @@ describe("useAdminSvgEditorPublish", () => {
   });
 
   it("publishes successfully and advances baseline", async () => {
-    const descriptor = makeNewBlockDescriptorStub();
-    const published = {
-      ...descriptor,
-      slug: "published-slug",
-    };
     const onPublishAction = vi.fn().mockResolvedValue({
       success: true,
-      descriptor: published,
+      descriptor: {
+        ...makeNewBlockDescriptorStub(),
+        slug: "published-slug",
+      },
     } satisfies PublishDescriptorResult);
 
-    const { result, setPublishedForm, setPublishedFormSignature, refreshRoute } =
+    const { result, setPublishedForm, setPublishedFormSignature, refreshRoute, descriptor } =
       setupHook({ onPublishAction });
 
     await act(async () => {
@@ -332,6 +330,8 @@ describe("useAdminSvgEditorPublish", () => {
     });
 
     expect(onPublishAction).toHaveBeenCalledTimes(1);
+    const payload = onPublishAction.mock.calls[0]?.[0];
+    expect(payload?.openedBaselineGeneratedAt).toBe(descriptor.generatedAt);
     expect(setPublishedForm).toHaveBeenCalled();
     expect(setPublishedFormSignature).toHaveBeenCalled();
     expect(result.current.feedback.successMessage).toMatch(/Published/);

@@ -55,12 +55,10 @@ export function PlannerFloorplanHero() {
             animate="visible"
           >
             <h1 className="home-hero-title-homepage planner-landing-hero__title">
-              <span className="">
-                <motion.span className="" variants={titleVariants}>
-                  {titleLead}
-                  <span className="text-accent-italic-on-dark">{titleAccent}</span>
-                </motion.span>
-              </span>
+              <motion.span variants={titleVariants}>
+                {titleLead}
+                <span className="text-accent-italic-on-dark">{titleAccent}</span>
+              </motion.span>
             </h1>
 
             <motion.div variants={fadeUpVariants} className="home-actions planner-landing-hero__actions">

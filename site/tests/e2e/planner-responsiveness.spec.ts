@@ -1,17 +1,20 @@
 import { expect, test } from "@playwright/test";
 import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
-import path from "path";
-import fs from "fs";
+import fs from "node:fs";
+import path from "node:path";
 
 test.describe("Planner Workspace Responsiveness", () => {
-  const screenshotsDir = path.resolve(
-    "e:/12072026/.agents/teamwork_preview_challenger_layout_4/screenshots"
+  const screenshotsDir = path.join(
+    process.cwd(),
+    "..",
+    "results",
+    "planner",
+    "planner-responsiveness",
+    "screenshots",
   );
 
   test.beforeAll(() => {
-    if (!fs.existsSync(screenshotsDir)) {
-      fs.mkdirSync(screenshotsDir, { recursive: true });
-    }
+    fs.mkdirSync(screenshotsDir, { recursive: true });
   });
 
   test("Check header layout and element visibility across viewports", async ({ page }) => {
@@ -22,9 +25,9 @@ test.describe("Planner Workspace Responsiveness", () => {
     const topBar = page.locator(".pw-topbar");
     await expect(topBar).toBeVisible();
 
-    // Verify Grid/Snap buttons are visible on desktop
-    const gridBtn = page.locator('button:has-text("Grid")');
-    const snapBtn = page.locator('button:has-text("Snap")');
+    // Verify Grid/Snap buttons are visible on desktop (restored to TopBar actions group)
+    const gridBtn = page.getByRole("button", { name: /^(Enable|Disable) grid$/i });
+    const snapBtn = page.getByRole("button", { name: /^(Enable|Disable) snap$/i });
     await expect(gridBtn).toBeVisible();
     await expect(snapBtn).toBeVisible();
 
@@ -44,9 +47,14 @@ test.describe("Planner Workspace Responsiveness", () => {
     // Allow styles to apply
     await page.waitForTimeout(500);
 
-    // Grid and Snap buttons should be hidden (display: none !important)
+    // Grid and Snap buttons should be hidden on small viewports (desktopOnly); use Prefs menu
+    const prefsBtn = page.getByRole("button", { name: /Prefs — open preferences menu/i });
     await expect(gridBtn).toBeHidden();
     await expect(snapBtn).toBeHidden();
+    await prefsBtn.click();
+    await expect(page.getByRole("menuitem", { name: /Grid/i })).toBeVisible();
+    await expect(page.getByRole("menuitem", { name: /Snap/i })).toBeVisible();
+    await page.keyboard.press("Escape");
 
     // Verify header does not overflow
     const tabletMetrics = await topBar.evaluate((el) => ({

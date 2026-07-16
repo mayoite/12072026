@@ -44,6 +44,8 @@ export interface PdfExportSettings {
   showDimensions?: boolean;
   showRoomNames?: boolean;
   showFurnitureLabels?: boolean;
+  /** Cap floor-plan raster edge length (PDF only; defaults to 4096). */
+  maxRasterEdgePx?: number;
 }
 
 /** Default PDF settings */
@@ -373,6 +375,139 @@ interface DxfDrawing {
 
 type DxfConstructor = new () => DxfDrawing;
 
+/** Browser canvas edge limit — oversize rasters yield invalid PNG data for jsPDF. */
+export const MAX_EXPORT_CANVAS_EDGE_PX = 8192;
+
+export function getFinitePlanDimensions(
+  floor: PlannerFloor,
+  pad: number,
+): { planW: number; planH: number } | null {
+  const { minX, minY, maxX, maxY } = getFloorBounds(floor);
+  if (![minX, minY, maxX, maxY].every(Number.isFinite)) {
+    return null;
+  }
+  return {
+    planW: Math.max(1, maxX - minX + pad * 2),
+    planH: Math.max(1, maxY - minY + pad * 2),
+  };
+}
+
+export function clampRasterPixelDimensions(
+  widthPx: number,
+  heightPx: number,
+  maxEdge = MAX_EXPORT_CANVAS_EDGE_PX,
+): { widthPx: number; heightPx: number; shrink: number } {
+  const w = Math.max(1, Math.round(widthPx));
+  const h = Math.max(1, Math.round(heightPx));
+  const shrink = Math.min(1, maxEdge / w, maxEdge / h);
+  return {
+    widthPx: Math.max(1, Math.round(w * shrink)),
+    heightPx: Math.max(1, Math.round(h * shrink)),
+    shrink,
+  };
+}
+
+type PdfImagePayload = {
+  dataUrl: string;
+  format: "PNG" | "JPEG";
+};
+
+function blobToDataUrl(blob: Blob): Promise<string> {
+  return blob.arrayBuffer().then((buffer) => {
+    const bytes = new Uint8Array(buffer);
+    let binary = "";
+    for (const byte of bytes) binary += String.fromCharCode(byte);
+    return `data:${blob.type || "application/octet-stream"};base64,${btoa(binary)}`;
+  });
+}
+
+function isValidRasterDataUrl(dataUrl: string, mime: "image/png" | "image/jpeg"): boolean {
+  const prefix = `data:${mime};base64,`;
+  if (!dataUrl.startsWith(prefix) || dataUrl.length <= prefix.length + 8) {
+    return false;
+  }
+  const base64 = dataUrl.slice(prefix.length);
+  if (mime === "image/png") {
+    return base64.startsWith("iVBORw0KGgo");
+  }
+  return base64.length > 16;
+}
+
+function canvasToBlob(
+  canvas: HTMLCanvasElement,
+  type: string,
+  quality?: number,
+): Promise<Blob | null> {
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => resolve(blob), type, quality);
+  });
+}
+
+async function canvasToPdfImage(canvas: HTMLCanvasElement): Promise<PdfImagePayload | null> {
+  const pngBlob = await canvasToBlob(canvas, "image/png");
+  if (pngBlob && pngBlob.size > 0) {
+    const dataUrl = await blobToDataUrl(pngBlob);
+    if (isValidRasterDataUrl(dataUrl, "image/png")) {
+      return { dataUrl, format: "PNG" };
+    }
+  }
+
+  try {
+    const pngDataUrl = canvas.toDataURL("image/png");
+    if (isValidRasterDataUrl(pngDataUrl, "image/png")) {
+      return { dataUrl: pngDataUrl, format: "PNG" };
+    }
+  } catch {
+    // Fall through to JPEG attempts.
+  }
+
+  const jpegBlob = await canvasToBlob(canvas, "image/jpeg", 0.92);
+  if (!jpegBlob || jpegBlob.size === 0) {
+    try {
+      const jpegDataUrl = canvas.toDataURL("image/jpeg", 0.92);
+      if (isValidRasterDataUrl(jpegDataUrl, "image/jpeg")) {
+        return { dataUrl: jpegDataUrl, format: "JPEG" };
+      }
+    } catch {
+      return null;
+    }
+    return null;
+  }
+  const jpegDataUrl = await blobToDataUrl(jpegBlob);
+  if (!isValidRasterDataUrl(jpegDataUrl, "image/jpeg")) {
+    return null;
+  }
+  return { dataUrl: jpegDataUrl, format: "JPEG" };
+}
+
+function createFloorExportCanvas(
+  project: PlannerProject,
+  floor: PlannerFloor,
+  pad: number,
+  baseScale = 2,
+  maxEdge = MAX_EXPORT_CANVAS_EDGE_PX,
+): HTMLCanvasElement | null {
+  const dims = getFinitePlanDimensions(floor, pad);
+  if (!dims) return null;
+
+  const { widthPx, heightPx, shrink } = clampRasterPixelDimensions(
+    dims.planW * baseScale,
+    dims.planH * baseScale,
+    maxEdge,
+  );
+  const drawScale = baseScale * shrink;
+
+  const offscreen = document.createElement("canvas");
+  offscreen.width = widthPx;
+  offscreen.height = heightPx;
+  const ctx = offscreen.getContext("2d");
+  if (!ctx) return null;
+
+  ctx.scale(drawScale, drawScale);
+  drawFloorToCanvas2d(ctx, project, floor, pad);
+  return offscreen;
+}
+
 function drawFloorToCanvas2d(
   ctx: CanvasRenderingContext2D,
   project: PlannerProject,
@@ -492,22 +627,11 @@ export async function exportAsPNG(
 
   const pad = 2000;
   const scale = 2;
-  const { minX, minY, maxX, maxY } = getFloorBounds(floor);
-  const width = maxX - minX + pad * 2;
-  const height = maxY - minY + pad * 2;
 
-  const offscreen = document.createElement("canvas");
-  offscreen.width = Math.max(1, Math.round(width * scale));
-  offscreen.height = Math.max(1, Math.round(height * scale));
-  const ctx = offscreen.getContext("2d");
-  if (!ctx) return null;
+  const offscreen = createFloorExportCanvas(project, floor, pad, scale);
+  if (!offscreen) return null;
 
-  ctx.scale(scale, scale);
-  drawFloorToCanvas2d(ctx, project, floor, pad);
-
-  return new Promise((resolve) => {
-    offscreen.toBlob((blob) => resolve(blob));
-  });
+  return canvasToBlob(offscreen, "image/png");
 }
 
 export async function downloadPNG(
@@ -542,18 +666,20 @@ export async function exportAsPDF(
 
   const pad = 2000;
   const scale = 2;
-  const { minX, minY, maxX, maxY } = getFloorBounds(floor);
-  const planW = maxX - minX + pad * 2;
-  const planH = maxY - minY + pad * 2;
+  const dims = getFinitePlanDimensions(floor, pad);
+  if (!dims) return null;
 
-  const offscreen = document.createElement("canvas");
-  offscreen.width = Math.max(1, Math.round(planW * scale));
-  offscreen.height = Math.max(1, Math.round(planH * scale));
-  const ctx = offscreen.getContext("2d");
-  if (!ctx) return null;
-  ctx.scale(scale, scale);
-  drawFloorToCanvas2d(ctx, project, floor, pad);
+  const maxRasterEdgePx = settings.maxRasterEdgePx ?? 4096;
+  const offscreen = createFloorExportCanvas(project, floor, pad, scale, maxRasterEdgePx);
+  if (!offscreen) return null;
 
+  const raster = await canvasToPdfImage(offscreen);
+  if (!raster) {
+    console.warn("PDF export: floor raster could not be encoded");
+    return null;
+  }
+
+  const { planW, planH } = dims;
   const orientation = settings.orientation ?? "landscape";
   const format = settings.format ?? "a4";
   const pdf = new jsPDF({ orientation, unit: "mm", format });
@@ -605,7 +731,12 @@ export async function exportAsPDF(
   }
   const imgX = margin + 2 + (drawAreaW - imgW) / 2;
   const imgY = margin + 2 + (drawAreaH - imgH) / 2;
-  pdf.addImage(offscreen.toDataURL("image/png"), "PNG", imgX, imgY, imgW, imgH);
+  try {
+    pdf.addImage(raster.dataUrl, raster.format, imgX, imgY, imgW, imgH);
+  } catch (error) {
+    console.warn("PDF export: jsPDF rejected floor raster", error);
+    return null;
+  }
 
   if (settings.includeRoomSchedule) {
     pdf.addPage();
@@ -629,10 +760,15 @@ export async function downloadPDF(
   project: PlannerProject,
   settings?: PdfExportSettings,
   filename?: string,
-): Promise<void> {
-  const blob = await exportAsPDF(project, settings);
-  if (blob) {
+): Promise<boolean> {
+  try {
+    const blob = await exportAsPDF(project, settings);
+    if (!blob) return false;
     downloadBlob(blob, filename ?? `${project.name ?? "floorplan"}.pdf`);
+    return true;
+  } catch (error) {
+    console.warn("PDF export failed", error);
+    return false;
   }
 }
 

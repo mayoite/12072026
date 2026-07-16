@@ -29,4 +29,16 @@ describe("PlannerBodyTheme", () => {
     expect(document.body.classList.contains("planner-workspace")).toBe(false);
     expect(document.body.classList.contains("scheme-page")).toBe(true);
   });
+
+  it("unlocks document scroll when leaving workspace routes", () => {
+    vi.mocked(usePathname).mockReturnValue("/planner/canvas");
+    const { rerender } = render(<PlannerBodyTheme />);
+    expect(document.body.classList.contains("overflow-hidden")).toBe(true);
+
+    vi.mocked(usePathname).mockReturnValue("/planner");
+    rerender(<PlannerBodyTheme />);
+
+    expect(document.body.classList.contains("overflow-hidden")).toBe(false);
+    expect(document.body.style.overflow).toBe("");
+  });
 });

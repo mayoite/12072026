@@ -50,6 +50,10 @@
   cursor: copy;
 }
 
+.rootWithGrid {
+  background: var(--planner-surface-canvas, #f8fafc);
+}
+
 .gridOverlay {
   position: absolute;
   inset: 0;
@@ -58,12 +62,12 @@
   background-image:
     linear-gradient(
       to right,
-      color-mix(in srgb, var(--border-soft) 65%, transparent) 1px,
+      color-mix(in srgb, var(--planner-border-default, #94a3b8) 42%, transparent) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      color-mix(in srgb, var(--border-soft) 65%, transparent) 1px,
+      color-mix(in srgb, var(--planner-border-default, #94a3b8) 42%, transparent) 1px,
       transparent 1px
     );
   background-size:

@@ -30,10 +30,16 @@ export function PlannerBodyTheme() {
       document.body.classList.add("h-dvh", "w-screen", "overflow-hidden");
     } else {
       document.body.classList.remove("h-dvh", "w-screen", "overflow-hidden");
+      document.documentElement.style.removeProperty("overflow");
+      document.body.style.removeProperty("overflow");
+      document.body.style.removeProperty("height");
     }
 
     return () => {
       document.body.classList.remove("planner-workspace", "planner-root", "scheme-page", "h-dvh", "w-screen", "overflow-hidden");
+      document.documentElement.style.removeProperty("overflow");
+      document.body.style.removeProperty("overflow");
+      document.body.style.removeProperty("height");
     };
   }, [pathname]);
 

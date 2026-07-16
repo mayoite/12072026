@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useState, type CSSProperties } from "react";
 import { useDockingSystem, type PanelId } from "./useDockingSystem";
 import { PanelContainer } from "./PanelContainer";
 import { TopBar } from "./TopBar";
@@ -273,12 +273,18 @@ export function WorkspaceShell({
     ...(cloudEnabled !== undefined ? { saveCloudEnabled: cloudEnabled } : {}),
   };
 
+  const bottomPanelOpen =
+    Boolean(bottomPanel) &&
+    panels.bottom.state !== "collapsed" &&
+    !isCanvasMaximized;
+
   return (
     <div
       className={styles.shell}
       data-viewport={dataViewport}
       data-panel-active={activePanel}
       data-canvas-maximized={isCanvasMaximized}
+      data-bottom-panel-open={bottomPanelOpen ? "true" : undefined}
       data-fill-parent={fillParent ? "true" : undefined}
       data-planner-density={density}
       id={`workspace-shell-${id.replace(/:/g, "")}`}
@@ -308,7 +314,7 @@ export function WorkspaceShell({
         activePanel={(viewportTier === "small" && (activePanel === "left" || activePanel === "right")) ? activePanel : null}
         onToggleLeftPanel={leftPanel ? () => handleSidePanelToggle("left") : undefined}
         onToggleRightPanel={rightPanel ? () => handleSidePanelToggle("right") : undefined}
-        isBottomPanelOpen={Boolean(bottomPanel) && panels.bottom.state !== "collapsed" && !isCanvasMaximized}
+        isBottomPanelOpen={bottomPanelOpen}
         onToggleBottomPanel={bottomPanel ? handleBottomPanelToggle : undefined}
         isCanvasMaximized={isCanvasMaximized}
         onToggleCanvasMaximized={handleCanvasMaximizedToggle}
@@ -322,7 +328,18 @@ export function WorkspaceShell({
       />
 
       {/* Main workspace with panels */}
-      <div className={styles.workspace} data-viewport={dataViewport}>
+      <div
+        className={styles.workspace}
+        data-viewport={dataViewport}
+        data-bottom-panel-open={bottomPanelOpen ? "true" : undefined}
+        style={
+          bottomPanelOpen
+            ? ({
+                ["--ws-bottom-panel-h" as string]: `${panels.bottom.height}px`,
+              } as CSSProperties)
+            : undefined
+        }
+      >
         {/* small-screen .panelBackdrop + activePanel (from useDockingSystem) + mobile actions via TopBar.
          * Resolves PLAN-FAIL-0414. GS: design §7, benchmark BP-04/BP-05 + Figma minimize + anti-copy (no donor).
          * CSS locked in workspace.module.css + planner-responsive.css. Canonical ref: editor/ + puck registry for admin UI.
@@ -399,6 +416,7 @@ export function WorkspaceShell({
           <PanelContainer
             id="bottom"
             title={panelTitles.bottom}
+            contentOnly
             state={panels.bottom.state}
             width={0}
             height={panels.bottom.height}

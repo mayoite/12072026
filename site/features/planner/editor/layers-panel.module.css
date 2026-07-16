@@ -34,6 +34,10 @@
   padding: var(--space-1);
 }
 
+.layersPanel:not(:has(.layersPanelHeader)) .layersPanelList {
+  padding-top: var(--space-2);
+}
+
 .layerRow {
   display: grid;
   grid-template-columns: auto 1fr auto;

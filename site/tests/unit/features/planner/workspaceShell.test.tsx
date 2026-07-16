@@ -576,7 +576,6 @@ describe("WorkspaceShell", () => {
     fireEvent.click(layersToggle);
     expect(layersToggle).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("region", { name: "Layers panel" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Layers", level: 2 })).toBeInTheDocument();
     expect(screen.getByText("Bottom content")).toBeInTheDocument();
     // Toggle again collapses layers (discoverability control is sticky state, not fire-and-forget).
     fireEvent.click(layersToggle);

@@ -12,7 +12,7 @@ export function HomeMarketingLayout({
   contactTeaser = false,
 }: HomeMarketingLayoutProps) {
   return (
-    <div data-testid="home-marketing-layout" className="min-h-screen overflow-x-hidden">
+    <div data-testid="home-marketing-layout" className="min-h-screen overflow-x-hidden overflow-y-visible">
       {children}
       {contactTeaser ? <ContactTeaser /> : null}
     </div>

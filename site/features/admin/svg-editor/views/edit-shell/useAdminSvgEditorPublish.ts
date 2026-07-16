@@ -15,7 +15,7 @@ import {
   advancePublishedDraft,
 } from "../../lifecycle/svgEditorDraftState";
 import type { CatalogLifecycleState } from "../../lifecycle/catalogLifecycle.shared";
-import { assertDraftNotStale } from "../../lifecycle/staleDraftPublishGate";
+import { assertDraftNotStale, readOpenedBaselineStamp } from "../../lifecycle/staleDraftPublishGate";
 import { sceneFromDescriptor } from "../../scene/sceneFromDescriptor";
 import type { SvgSceneDocument } from "../../scene/svgSceneDocument";
 import {
@@ -190,7 +190,9 @@ export function useAdminSvgEditorPublish({
   const handlePublish = useCallback(async () => {
     const stale = assertDraftNotStale({
       slug,
-      clientBaselineGeneratedAt: openedBaselineGeneratedAt ?? 0,
+      clientBaselineGeneratedAt: readOpenedBaselineStamp({
+        openedBaselineGeneratedAt,
+      }),
       serverBaselineGeneratedAt: descriptor.generatedAt ?? 0,
     });
     if (!stale.ok) {
@@ -274,6 +276,7 @@ export function useAdminSvgEditorPublish({
       studioDocumentRef.current = submittedScene;
       const payload: SvgEditorFormState = {
         ...form,
+        openedBaselineGeneratedAt,
         excalidrawElements:
           getStudioElements(studioDocumentRef.current) ?? form.excalidrawElements,
         compiledSvg: getStudioSvg(studioDocumentRef.current) ?? "",

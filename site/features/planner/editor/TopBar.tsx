@@ -251,6 +251,27 @@ export function TopBar({
       </div>
 
       <div className={styles.center}>
+        <div className={styles.historyActions} role="group" aria-label="Canvas history">
+          <Button
+            className={styles.btn}
+            isDisabled={!canUndo}
+            aria-label={undoLabel ? `Undo: ${undoLabel}` : "Undo unavailable"}
+            onPress={() => onUndo?.()}
+          >
+            Undo
+          </Button>
+          <Button
+            className={styles.btn}
+            isDisabled={!canRedo}
+            aria-label={redoLabel ? `Redo: ${redoLabel}` : "Redo unavailable"}
+            onPress={() => onRedo?.()}
+          >
+            Redo
+          </Button>
+        </div>
+
+        <span className={styles.actionDivider} aria-hidden />
+
         <RadioGroup
           className={styles.viewToggle}
           value={viewMode}
@@ -319,6 +340,7 @@ export function TopBar({
       </div>
 
       <div className={styles.actions}>
+        <div className={styles.actionGroup} role="group" aria-label="View controls">
         {onToggleCanvasMaximized && (
           <Button
             className={styles.btn}
@@ -380,25 +402,42 @@ export function TopBar({
           </Button>
         )}
 
-        <div className={styles.historyActions} role="group" aria-label="Canvas history">
-          <Button
-            className={styles.btn}
-            isDisabled={!canUndo}
-            aria-label={undoLabel ? `Undo: ${undoLabel}` : "Undo unavailable"}
-            onPress={() => onUndo?.()}
+        {(onToggleGrid || onToggleSnap) && (
+          <div
+            className={`${styles.gridSnapActions} ${styles.desktopOnly}`}
+            role="group"
+            aria-label="Canvas grid and snap"
           >
-            Undo
-          </Button>
-          <Button
-            className={styles.btn}
-            isDisabled={!canRedo}
-            aria-label={redoLabel ? `Redo: ${redoLabel}` : "Redo unavailable"}
-            onPress={() => onRedo?.()}
-          >
-            Redo
-          </Button>
+            {onToggleGrid && (
+              <Button
+                className={styles.btn}
+                data-active={gridEnabled ? "true" : undefined}
+                aria-pressed={gridEnabled}
+                aria-label={gridEnabled ? "Disable grid" : "Enable grid"}
+                onPress={onToggleGrid}
+              >
+                Grid
+              </Button>
+            )}
+            {onToggleSnap && (
+              <Button
+                className={styles.btn}
+                data-active={snapEnabled ? "true" : undefined}
+                aria-pressed={snapEnabled}
+                aria-label={snapEnabled ? "Disable snap" : "Enable snap"}
+                onPress={onToggleSnap}
+              >
+                Snap
+              </Button>
+            )}
+          </div>
+        )}
+
         </div>
 
+        <span className={styles.actionDivider} aria-hidden />
+
+        <div className={styles.actionGroup} role="group" aria-label="Save status">
         <div
           className={styles.saveStatus}
           role="status"
@@ -432,7 +471,11 @@ export function TopBar({
         >
           {saveButtonLabel}
         </Button>
+        </div>
 
+        <span className={styles.actionDivider} aria-hidden />
+
+        <div className={styles.fileActions} role="group" aria-label="File actions">
         {/* Guest: honest export surface (JSON + BOQ). No Import / quote-cart / ERP. */}
         {showGuestActions && (
           <MenuTrigger>
@@ -515,6 +558,7 @@ export function TopBar({
             </MenuTrigger>
           </>
         )}
+        </div>
 
         <MenuTrigger>
           <Button className={styles.btn} aria-label="Prefs — open preferences menu">
@@ -533,12 +577,16 @@ export function TopBar({
               <MenuItem id="density" className={styles.dropdownItem}>
                 Toggle density ({density === "touch" ? "compact" : "touch"})
               </MenuItem>
-              <MenuItem id="grid" className={styles.dropdownItem}>
-                Toggle grid ({gridEnabled ? "off" : "on"})
-              </MenuItem>
-              <MenuItem id="snap" className={styles.dropdownItem}>
-                Toggle snap ({snapEnabled ? "off" : "on"})
-              </MenuItem>
+              {onToggleGrid && (
+                <MenuItem id="grid" className={`${styles.dropdownItem} ${styles.mobileOnly}`}>
+                  {gridEnabled ? "Disable Grid" : "Enable Grid"}
+                </MenuItem>
+              )}
+              {onToggleSnap && (
+                <MenuItem id="snap" className={`${styles.dropdownItem} ${styles.mobileOnly}`}>
+                  {snapEnabled ? "Disable Snap" : "Enable Snap"}
+                </MenuItem>
+              )}
             </Menu>
           </Popover>
         </MenuTrigger>

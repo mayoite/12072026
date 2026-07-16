@@ -68,14 +68,15 @@ describe("CustomerQueriesOpsPageView", () => {
     expect(await screen.findByText("No queries found.")).toBeInTheDocument();
   });
 
-  it("hides standalone heading and admin token controls when embedded", async () => {
+  it("uses admin shell heading and hides token controls when embedded", async () => {
     vi.spyOn(global, "fetch").mockImplementation(() => okJson({ items: [] }));
 
     render(<CustomerQueriesOpsPageView embedded />);
 
     expect(
-      screen.queryByRole("heading", { level: 1, name: "Customer queries" }),
-    ).not.toBeInTheDocument();
+      screen.getByRole("heading", { level: 1, name: "Customer queries" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Live inbox with 10-second auto-refresh/i)).toBeInTheDocument();
     expect(screen.queryByText("Admin token")).not.toBeInTheDocument();
     expect(
       screen.queryByPlaceholderText(/Paste CUSTOMER_QUERIES_ADMIN_TOKEN/i),
@@ -106,6 +107,19 @@ describe("CustomerQueriesOpsPageView", () => {
 
     expect(await screen.findByText("Invalid token")).toBeInTheDocument();
     expect(screen.getByText("Not synced yet")).toBeInTheDocument();
+  });
+
+  it("renders envelope error objects as human-readable alert text when embedded", async () => {
+    vi.spyOn(global, "fetch").mockImplementation(() =>
+      errorJson(401, {
+        success: false,
+        error: { code: "AUTH_REQUIRED", message: "Unauthorized" },
+      }),
+    );
+
+    render(<CustomerQueriesOpsPageView embedded />);
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("Unauthorized");
   });
 
   it("shows empty inbox after a successful load with no items", async () => {

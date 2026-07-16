@@ -1037,8 +1037,12 @@ export function OOPlannerWorkspace({
       }
       if (format === "pdf") {
         void downloadPDF(workspaceCanvas.project, undefined, check.filename).then(
-          () => {
-            setWorkspaceMessage(`Exported ${check.filename}`);
+          (ok) => {
+            setWorkspaceMessage(
+              ok
+                ? `Exported ${check.filename}`
+                : "PDF export failed. Try SVG export or reduce plan size.",
+            );
           },
         );
         return;
@@ -1322,6 +1326,7 @@ export function OOPlannerWorkspace({
                     floor={activeFloor}
                     visibility={layerVisibility}
                     onVisibilityChange={setLayerVisibility}
+                    showHeader={false}
                   />
                 )}
               </div>

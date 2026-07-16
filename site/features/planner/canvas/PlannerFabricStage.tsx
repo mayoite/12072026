@@ -144,6 +144,8 @@ function snapProjectPoint(input: {
  * Theme token → paint string for walls/background.
  * Literal hex/rgb pass through so furniture multiprim contrast is not destroyed.
  */
+const STAGE_BG_FALLBACK = "#f8fafc";
+
 function resolveStageColor(token: string, fallback: string): string {
   if (!token) return fallback;
   if (/^#([0-9a-f]{3,8})$/i.test(token) || /^(rgb|hsl)a?\(/i.test(token)) {
@@ -159,6 +161,18 @@ function resolveStageColor(token: string, fallback: string): string {
   } catch {
     return fallback;
   }
+}
+
+function stageBackgroundPaint(): string {
+  return resolveStageColor(
+    PLANNER_COLOR_TOKENS.exportBackground,
+    STAGE_BG_FALLBACK,
+  );
+}
+
+/** Grid overlay sits under Fabric; canvas must stay transparent when grid is on. */
+function fabricBackgroundPaint(gridEnabled: boolean): string {
+  return gridEnabled ? "transparent" : stageBackgroundPaint();
 }
 
 export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFabricStageProps>(
@@ -352,10 +366,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         // Prefer pointer events so Playwright/Chromium drag gestures do not
         // enter HTML5 drag mode mid wall stroke.
         enablePointerEvents: true,
-        backgroundColor: resolveStageColor(
-          PLANNER_COLOR_TOKENS.exportBackground,
-          "#f8fafc",
-        ),
+        backgroundColor: fabricBackgroundPaint(gridEnabledRef.current),
       });
       fabricRef.current = canvas;
       // Scene-aware E2E helpers (firstFurnitureCenter) read this hook.
@@ -756,10 +767,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       // stroke is not wiped mid-drag (HTML5 drag residual / status re-render).
       const livePreview = previewLineRef.current;
       canvas.clear();
-      canvas.backgroundColor = resolveStageColor(
-        PLANNER_COLOR_TOKENS.exportBackground,
-        "#f8fafc",
-      );
+      canvas.backgroundColor = fabricBackgroundPaint(gridEnabledRef.current);
 
       const showWalls = layerVisibility?.walls !== false;
       const showFurniture = layerVisibility?.furniture !== false;
@@ -853,6 +861,13 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       rebuildingRef.current = false;
     }, [activeFloor, activeTool, layerVisibility, transform, svgPaintEpoch]);
 
+    useEffect(() => {
+      const canvas = fabricRef.current;
+      if (!canvas) return;
+      canvas.backgroundColor = fabricBackgroundPaint(gridEnabled);
+      canvas.requestRenderAll();
+    }, [gridEnabled]);
+
     const handleWheel = useCallback((event: ReactWheelEvent<HTMLDivElement>) => {
       event.preventDefault();
       const host = hostRef.current;
@@ -875,7 +890,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
     return (
       <div
         ref={hostRef}
-        className={`open3d-canvas-embedded ${styles.root} ${cursorClass}`}
+        className={`open3d-canvas-embedded ${styles.root} ${gridEnabled ? styles.rootWithGrid : ""} ${cursorClass}`}
         data-testid="planner-fabric-stage"
         data-grid-enabled={gridEnabled ? "true" : "false"}
         data-snap-enabled={snapEnabled ? "true" : "false"}

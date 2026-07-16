@@ -316,6 +316,54 @@
   flex-shrink: 0;
 }
 
+.actionGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.actionDivider {
+  width: 1px;
+  align-self: stretch;
+  min-height: 1.25rem;
+  margin-inline: var(--space-1);
+  background: color-mix(in srgb, var(--ws-panel-border) 85%, transparent);
+  flex-shrink: 0;
+}
+
+.fileActions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.gridSnapActions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.desktopOnly {
+  display: inline-flex;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+@media (max-width: 48rem) {
+  .desktopOnly {
+    display: none !important;
+  }
+
+  .mobileOnly {
+    display: flex;
+  }
+}
+
 .mobilePanelActions {
   display: none;
   align-items: center;
@@ -567,6 +615,102 @@
   overflow: hidden;
 }
 
+/* AI Assist panel — segment tabs and panes (no global pw-* stylesheet ships separately). */
+.leftPanelBody :global(.pw-ai-drawer) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.leftPanelBody :global(.pw-ai-drawer-body) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 0;
+  flex: 1 1 auto;
+  padding: var(--space-2) var(--inv-chrome-pad-x, var(--space-3));
+  overflow: hidden;
+}
+
+.leftPanelBody :global(.pw-ai-drawer-tabs.pw-segment) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.125rem;
+  padding: 0.125rem;
+  border: 1px solid var(--ws-panel-border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--surface-soft) 88%, var(--ws-panel-bg));
+  flex-shrink: 0;
+}
+
+.leftPanelBody :global(.pw-segment-btn) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.35rem 0.4rem;
+  border: none;
+  border-radius: calc(var(--radius-sm) - 2px);
+  background: transparent;
+  color: var(--ws-text-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.leftPanelBody :global(.pw-segment-btn[data-active="true"]) {
+  background: var(--ws-panel-bg);
+  color: var(--ws-text-primary);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--text-heading) 8%, transparent);
+}
+
+.leftPanelBody :global(.pw-ai-drawer-pane) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
+.leftPanelBody :global(.pw-ai-drawer-lead) {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--ws-text-muted);
+}
+
+.leftPanelBody :global(.pw-ai-drawer-primary),
+.leftPanelBody :global(.pw-ai-drawer-secondary) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.leftPanelBody :global(.pw-ai-drawer-primary) {
+  border: 1px solid color-mix(in srgb, var(--ws-accent) 35%, transparent);
+  background: var(--ws-accent);
+  color: var(--text-on-accent, #fff);
+}
+
+.leftPanelBody :global(.pw-ai-drawer-note) {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--ws-text-muted);
+}
+
 /* Side panels */
 .panel {
   display: flex;
@@ -624,11 +768,18 @@
   right: 0;
   height: 200px;
   border-top: 1px solid var(--ws-panel-border);
-  transform: translateY(100%);
+  z-index: var(--ws-z-panel);
 }
 
-.panelBottom[data-state="docked"] {
-  transform: translateY(0);
+.panelBottom[data-state="floating"] {
+  bottom: auto;
+  left: auto;
+  right: auto;
+}
+
+.workspace[data-bottom-panel-open="true"] .canvas {
+  padding-bottom: var(--ws-bottom-panel-h, 200px);
+  box-sizing: border-box;
 }
 
 /* Collapsed state */

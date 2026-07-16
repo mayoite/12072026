@@ -138,6 +138,7 @@ export function descriptorToFormState(descriptor: BlockDescriptor): SvgEditorFor
         ? (descriptor as BlockDescriptor & { excalidrawElements?: unknown })
             .excalidrawElements
         : undefined,
+    openedBaselineGeneratedAt: descriptor.generatedAt,
   };
 }
 

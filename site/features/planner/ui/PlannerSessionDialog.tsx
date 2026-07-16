@@ -484,7 +484,7 @@ export function PlannerSessionDialog({
                       {managedProducts.length === 0 ? <div className={SESSION_EMPTY_STATE_CLASS}>No planner-managed products found yet.</div> : null}
                       {managedProducts.map((product) => (
                         <div key={product.id} className="pwx-session-item pwx-session-item--compact">
-                          <div className="items-start gap-3">
+                          <div className="flex items-start justify-between gap-3">
                             <div className="">
                               <div className={SESSION_CARD_TITLE_CLASS}>{product.name}</div>
                               <div className={cn("mt-1", SESSION_CARD_META_CLASS)}>{product.slug} | {product.active ? "Active" : "Archived"}</div>

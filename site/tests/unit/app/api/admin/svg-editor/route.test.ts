@@ -76,6 +76,16 @@ const validDescriptor = {
   generatedAt: 1700000000,
 };
 
+/** Publish body must carry DB-SVG-09 client stamp alongside descriptor fields. */
+function publishBody(
+  descriptor: typeof validDescriptor = validDescriptor,
+): Record<string, unknown> {
+  return {
+    ...descriptor,
+    openedBaselineGeneratedAt: descriptor.generatedAt,
+  };
+}
+
 describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -139,7 +149,7 @@ describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
       descriptor: validDescriptor,
     });
 
-    const req = makeReq(validDescriptor);
+    const req = makeReq(publishBody());
     const res = await POST(req as any, {} as any);
     const body = await res.json();
 
@@ -147,6 +157,20 @@ describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
     expect(body.success).toBe(true);
     expect(body.descriptor.slug).toBe("test-block");
     expect(body.thumb).toBeDefined();
+  });
+
+  it("04-TEST-03b: rejects publish when openedBaselineGeneratedAt is missing (DB-SVG-09)", async () => {
+    vi.mocked(tryLoad).mockReturnValue({ ok: true, value: validDescriptor } as never);
+    vi.mocked(parseAdminPayload).mockReturnValue({ ok: true, value: validDescriptor } as any);
+
+    const req = makeReq(validDescriptor);
+    const res = await POST(req as any, {} as any);
+    const body = await res.json();
+
+    expect(res.status).toBe(409);
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe("stale_draft");
+    expect(publishDescriptorWithPipeline).not.toHaveBeenCalled();
   });
 
   it("04-TEST-04: pipeline (R2 side-effect via generate) returns thumb on success", async () => {
@@ -157,12 +181,15 @@ describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
       descriptor: validDescriptor,
     });
 
-    const req = makeReq(validDescriptor);
+    const req = makeReq(publishBody());
     const res = await POST(req as any, {} as any);
     const body = await res.json();
 
     expect(publishDescriptorWithPipeline).toHaveBeenCalledWith(
-      validDescriptor,
+      expect.objectContaining({
+        slug: validDescriptor.slug,
+        generatedAt: validDescriptor.generatedAt,
+      }),
       expect.objectContaining({ dbRepository: expect.anything() }),
     );
     expect(body.thumb).toMatch(/site-block-thumbs|cdn/);

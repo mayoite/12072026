@@ -19,6 +19,24 @@ export type StaleDraftCheckResult =
       readonly error: string;
     };
 
+/** Read DB-SVG-09 client stamp; returns NaN when absent so publish fails closed. */
+export function readOpenedBaselineStamp(
+  source: { readonly openedBaselineGeneratedAt?: number },
+): number {
+  const value = source.openedBaselineGeneratedAt;
+  return typeof value === "number" && Number.isFinite(value) ? value : Number.NaN;
+}
+
+/** Extract client stamp from a publish JSON body before descriptor parse/freeze. */
+export function readOpenedBaselineFromPayload(payload: unknown): number {
+  if (!payload || typeof payload !== "object") {
+    return Number.NaN;
+  }
+  return readOpenedBaselineStamp(
+    payload as { readonly openedBaselineGeneratedAt?: number },
+  );
+}
+
 /**
  * If the server baseline moved since the client loaded the draft, refuse publish.
  * Does not mutate catalog data.

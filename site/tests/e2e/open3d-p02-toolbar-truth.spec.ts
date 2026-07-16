@@ -43,13 +43,23 @@ async function openPrefsMenu(page: Page) {
 }
 
 async function toggleGridOff(page: Page) {
+  const desktopGrid = page.getByRole("button", { name: /Disable grid/i });
+  if (await desktopGrid.isVisible()) {
+    await desktopGrid.click();
+    return;
+  }
   await openPrefsMenu(page);
-  await page.getByRole("menuitem", { name: /Toggle grid \(off\)/i }).click();
+  await page.getByRole("menuitem", { name: /Disable Grid/i }).click();
 }
 
 async function toggleSnapOff(page: Page) {
+  const desktopSnap = page.getByRole("button", { name: /Disable snap/i });
+  if (await desktopSnap.isVisible()) {
+    await desktopSnap.click();
+    return;
+  }
   await openPrefsMenu(page);
-  await page.getByRole("menuitem", { name: /Toggle snap \(off\)/i }).click();
+  await page.getByRole("menuitem", { name: /Disable Snap/i }).click();
 }
 
 async function readWorkspacePrefs(page: Page) {

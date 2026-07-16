@@ -30,7 +30,7 @@
     font-synthesis-weight: none;
   }
 
-  .planner-root {
+  body.planner-workspace.planner-root {
     overscroll-behavior: none;
     overflow: hidden;
     height: 100dvh;
