@@ -146,7 +146,7 @@ function buildDescriptor(seed: SeedInput) {
   };
 
   const frozen = freezeFreshDescriptor(base, () => seed.generatedAt);
-  if (!frozen.ok) {
+  if (frozen.ok === false) {
     throw new Error(
       `Failed to freeze ${seed.slug}: ${frozen.error.message}`,
     );

@@ -68,7 +68,7 @@ async function handleAction(
       { status: 422 },
     );
   }
-  const history = readAdminPriceBookAudit(bookId, 20);
+  const history = await readAdminPriceBookAudit(bookId, 20);
   return success({
     contract: result.contract,
     history,

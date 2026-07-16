@@ -8,7 +8,7 @@
 import { mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-import { readSvgArtifactStatus } from "../features/admin/svg-editor/svgArtifactStatus.server";
+import { readSvgArtifactStatus } from "../features/admin/svg-editor/publish/svgArtifactStatus.server";
 import {
   clearLoaderCache,
   loadAll,

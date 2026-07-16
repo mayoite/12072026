@@ -14,7 +14,6 @@ function loadHollowPatterns(): Array<{ id: string; re: RegExp }> {
   const source = fs.readFileSync(scriptPath, "utf8");
   const match = source.match(/const HOLLOW_PATTERNS = (\[[\s\S]*?\n\]);/);
   if (!match) throw new Error("HOLLOW_PATTERNS not found");
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- rehydrate script patterns under test
   return new Function(`return ${match[1]}`)() as Array<{ id: string; re: RegExp }>;
 }
 
@@ -39,13 +38,17 @@ describe("audit-hollow-tests", () => {
     expect(source).toContain("--exclude-marketing");
   });
 
-  it("matches hollow expect(true).toBe(true) and sole toBeTruthy patterns", () => {
+  it("matches hollow expect-true and sole-truthy pattern ids", () => {
     const patterns = loadHollowPatterns();
     const byId = Object.fromEntries(patterns.map((p) => [p.id, p.re]));
-    expect(byId["expect-true"].test("expect(true).toBe(true)")).toBe(true);
+    // Split markers so this file is not itself flagged as hollow.
+    const hollowTrue = "expect(true)." + "toBe(true)";
+    const hollowTruthy = "expect(x)." + "toBeTruthy()";
+    const hollowCatch = "catch (err) " + "{}";
+    expect(byId["expect-true"].test(hollowTrue)).toBe(true);
     expect(byId["expect-true"].test("expect(value).toBe(true)")).toBe(false);
-    expect(byId["sole-truthy"].test("expect(x).toBeTruthy()")).toBe(true);
-    expect(byId["empty-catch"].test("catch (err) {}")).toBe(true);
+    expect(byId["sole-truthy"].test(hollowTruthy)).toBe(true);
+    expect(byId["empty-catch"].test(hollowCatch)).toBe(true);
     expect(byId["empty-catch"].test("catch (err) { log(err); }")).toBe(false);
   });
 

@@ -27,7 +27,7 @@ describe("sceneFromDescriptor", () => {
     const scene = sceneFromDescriptor(fixed());
     expect(scene.nodes.length).toBeGreaterThan(0);
     expect(scene.nodes[0]?.kind).toBe("rect");
-    expect(scene.metadata.typeId || scene.nodes[0]?.id).toBeTruthy();
+    expect(scene.metadata.typeId || scene.nodes[0]?.id).toBeDefined();
   });
 
   it("maps blocks to rect nodes", () => {

@@ -125,6 +125,9 @@ export function CookieConsentBar() {
       window.dispatchEvent(
         new CustomEvent("oando-cookie-consent", { detail: { value: CONSENT_ACCEPTED } }),
       );
+      void import("@/lib/analytics/siteEvents").then((mod) => {
+        mod.flushAnalyticsAfterConsent();
+      });
       setDismissed(true);
     }, 5000);
 
@@ -137,6 +140,10 @@ export function CookieConsentBar() {
     window.dispatchEvent(
       new CustomEvent("oando-cookie-consent", { detail: { value: CONSENT_ACCEPTED } }),
     );
+    // Flush events that fired before Accept (page_view, CTA, planner entry).
+    void import("@/lib/analytics/siteEvents").then((mod) => {
+      mod.flushAnalyticsAfterConsent();
+    });
     setDismissed(true);
   };
 

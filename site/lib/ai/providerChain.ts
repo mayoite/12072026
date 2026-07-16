@@ -141,7 +141,8 @@ async function requestOpenAiCompatibleText(
     : createOpenRouterClient(provider.apiKey);
   const requestBody = {
     model: provider.model,
-    messages: messages as any,
+    // OpenAI SDK message union is wider than our server chat shape; cast at boundary only.
+    messages: messages as OpenAI.Chat.ChatCompletionMessageParam[],
     temperature: options.temperature ?? 0.4,
     ...(options.jsonMode ? { response_format: { type: "json_object" as const } } : {}),
   };

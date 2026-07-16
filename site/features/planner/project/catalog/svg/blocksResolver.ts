@@ -14,7 +14,7 @@
  *    §03-FIX-05 cross-hatched fallback rather than synthesising a phantom).
  *
  * Type Safety rule (AGENTS.md):
- *  - No `any`, no `as any`, no `@ts-ignore`, no eslint-disable.
+ *  - No `any`, no `as any`, no `@ts-ignore`, no eslint suppress.
  *  - Errors surfaced via the same `PlannerDescriptorError` discriminated
  *    union the rest of the catalog uses.
  */

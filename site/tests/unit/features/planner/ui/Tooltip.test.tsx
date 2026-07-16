@@ -28,8 +28,8 @@ describe("Tooltip", () => {
         <button type="button">Select</button>
       </Tooltip>,
     );
-    expect(screen.getByText("Select tool")).toBeTruthy();
-    expect(screen.getByText("V")).toBeTruthy();
+    expect(screen.getByText("Select tool")).toBeDefined();
+    expect(screen.getByText("V")).toBeDefined();
     expect(screen.getByTestId("rac-tooltip").getAttribute("data-placement")).toBe(
       "top",
     );

@@ -25,7 +25,7 @@ vi.mock("@/features/admin/pricing/AdminPriceBookPageView", () => ({
   }) => (
     <div
       data-testid="admin-price-book-view"
-      data-has-contract={String(initialContract != null)}
+      data-has-contract={String(initialContract !== null && initialContract !== undefined)}
     />
   ),
 }));

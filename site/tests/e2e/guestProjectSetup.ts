@@ -94,12 +94,13 @@ export async function completePlannerSetupGate(
 
     const submit = page.getByRole("button", { name: /Start placing furniture/i });
     await expect(submit).toBeEnabled({ timeout: 30_000 });
-    await submit.click();
+    // Label / marketing chrome can intercept the first pointer hit.
+    await submit.click({ force: true });
   }
 
   await expect
     .poll(async () => fabricStage.isVisible().catch(() => false), {
-      timeout: 60_000,
+      timeout: 90_000,
     })
     .toBe(true);
 }

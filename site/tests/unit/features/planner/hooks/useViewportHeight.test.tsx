@@ -1,5 +1,5 @@
 import { describe, expect, it, afterEach, vi } from "vitest";
-import { act, renderHook } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
 import { useViewportHeight } from "@/features/planner/hooks/useViewportHeight";
 
 describe("useViewportHeight", () => {

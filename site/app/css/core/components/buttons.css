@@ -60,6 +60,18 @@
   border-color: var(--color-primary-hover);
 }
 
+.btn-primary:focus-visible,
+.btn-outline:focus-visible,
+.btn-outline-light:focus-visible,
+.btn-hero-primary:focus-visible,
+.btn-hero-secondary:focus-visible,
+.btn-nav-primary:focus-visible,
+.home-btn-primary:focus-visible,
+.home-btn-secondary:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
 .btn-outline {
   color: var(--text-strong);
   border: 1px solid var(--border-muted);

@@ -54,14 +54,14 @@ describe("placeModularWithGeneratedGlbCore", () => {
       { writeToPublic: true, writeBytes },
     );
 
-    expect(result.furnitureId).toBeTruthy();
+    expect(result.furnitureId).toBeDefined();
     expect(result.stamped).toBe(true);
     expect(result.written).toBe(true);
     expect(writeBytes).toHaveBeenCalled();
     const furniture = result.project.floors
       .flatMap((f) => f.furniture)
       .find((f) => f.id === result.furnitureId);
-    expect(furniture?.generatedGlbUrl).toBeTruthy();
+    expect(furniture?.generatedGlbUrl).toBeDefined();
   }, 30_000);
 
   it("skips write when writeToPublic is false", async () => {
@@ -73,6 +73,6 @@ describe("placeModularWithGeneratedGlbCore", () => {
       { writeToPublic: false },
     );
     expect(result.written).toBe(false);
-    expect(result.furnitureId).toBeTruthy();
+    expect(result.furnitureId).toBeDefined();
   }, 30_000);
 });

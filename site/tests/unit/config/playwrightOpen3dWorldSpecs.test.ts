@@ -93,8 +93,8 @@ describe("playwright-open3d-world-specs (gate contract)", () => {
     const pkg = JSON.parse(fs.readFileSync(packageJsonPath, "utf8")) as {
       scripts: Record<string, string>;
     };
-    expect(pkg.scripts["test:e2e:open3d-world"]).toBeTruthy();
-    expect(pkg.scripts["gate:open3d"]).toBeTruthy();
+    expect(pkg.scripts["test:e2e:open3d-world"]).toBeDefined();
+    expect(pkg.scripts["gate:open3d"]).toBeDefined();
     expect(pkg.scripts["test:e2e:open3d-world"]).toContain(
       "run-open3d-world-e2e.mjs",
     );

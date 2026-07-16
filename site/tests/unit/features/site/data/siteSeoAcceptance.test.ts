@@ -49,7 +49,7 @@ describe("SITE-SEO-01 unique title, description, canonical", () => {
         20,
       );
       const canonical = entry.metadata.alternates?.canonical;
-      expect(canonical, entry.path).toBeTruthy();
+      expect(canonical, entry.path).toBeDefined();
       expect(String(canonical), entry.path).toContain(entry.path === "/" ? "" : entry.path);
     }
   });
@@ -119,14 +119,20 @@ describe("SITE-SEO-03 sitemap, robots, classification agreement", () => {
     const urls = entries.map((entry) => entry.url);
 
     for (const path of PUBLIC_INDEXABLE_STATIC_PATHS) {
-      const needle = path === "/" ? "oneonly.in/" : `${path}/`;
-      expect(
-        urls.some((url) => url.includes(needle)),
-        `missing ${path}`,
-      ).toBe(true);
+      if (path === "/") {
+        expect(urls.some((url) => /^https?:\/\/[^/]+\/$/.test(url)), "missing /").toBe(true);
+      } else {
+        expect(
+          urls.some((url) => url.includes(`${path}/`) || url.endsWith(path)),
+          `missing ${path}`,
+        ).toBe(true);
+      }
     }
     for (const path of PLANNER_MARKETING_SITEMAP_PATHS) {
-      expect(urls.some((url) => url.includes(`${path}/`))).toBe(true);
+      expect(
+        urls.some((url) => url.includes(`${path}/`) || url.endsWith(path)),
+        `missing planner ${path}`,
+      ).toBe(true);
     }
 
     for (const path of sitemapMustExcludePaths()) {

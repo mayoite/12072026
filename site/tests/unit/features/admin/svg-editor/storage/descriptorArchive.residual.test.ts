@@ -12,8 +12,8 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 
 import {
   archiveDirFor,
@@ -122,5 +122,41 @@ describe("descriptorArchive residual", () => {
 
   it("clearDescriptorArchive is a no-op when archive dir is absent", () => {
     expect(() => clearDescriptorArchive("chaise", workDir)).not.toThrow();
+  });
+
+  it("retainDescriptorArchive copies live versions and evicts older archive entries", () => {
+    // Seed versioned live files 1..7; liveN=7 keeps archive of versions 2..6.
+    for (let n = 1; n <= 7; n += 1) {
+      writeFileSync(
+        path.join(workDir, `chaise.${n}.json`),
+        JSON.stringify({ n }),
+        "utf8",
+      );
+    }
+    const archive = archiveDirFor(workDir);
+    mkdirSync(archive, { recursive: true });
+    // Stale archive entry that should be evicted (version < minKeep).
+    writeFileSync(path.join(archive, "chaise.1.json"), '{"old":true}', "utf8");
+    // Unrelated slug must stay.
+    writeFileSync(path.join(archive, "other.9.json"), "{}", "utf8");
+
+    retainDescriptorArchive("chaise", workDir, 7);
+
+    const versions = listArchiveVersions("chaise", workDir);
+    expect(versions).toEqual([2, 3, 4, 5, 6]);
+    expect(existsSync(path.join(archive, "chaise.1.json"))).toBe(false);
+    expect(existsSync(path.join(archive, "other.9.json"))).toBe(true);
+  });
+
+  it("listArchiveVersions ignores non-integer suffixes and sorts ascending", () => {
+    const archive = archiveDirFor(workDir);
+    mkdirSync(archive, { recursive: true });
+    writeFileSync(path.join(archive, "chaise.3.json"), "{}", "utf8");
+    writeFileSync(path.join(archive, "chaise.1.json"), "{}", "utf8");
+    writeFileSync(path.join(archive, "chaise.2.json"), "{}", "utf8");
+    writeFileSync(path.join(archive, "chaise.not-a-number.json"), "{}", "utf8");
+    writeFileSync(path.join(archive, "other.5.json"), "{}", "utf8");
+
+    expect(listArchiveVersions("chaise", workDir)).toEqual([1, 2, 3]);
   });
 });

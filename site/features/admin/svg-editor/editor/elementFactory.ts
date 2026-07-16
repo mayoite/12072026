@@ -23,10 +23,9 @@
  */
 
 import {
-  PIXELS_PER_METER,
   metersToPixels,
   pixelsToDimensionString,
-  UnitSystem,
+  type UnitSystem,
 } from "./units";
 import type { ExcalidrawAPI, ExcalidrawElement } from "./elementUtils";
 

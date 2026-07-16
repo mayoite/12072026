@@ -18,20 +18,24 @@ export function CookieConsent() {
     if (!show) return null;
 
     return (
-        <div className="fixed bottom-0 left-0 w-full scheme-panel-dark p-6 z-50 flex flex-col md:flex-row items-center justify-between gap-4 shadow-theme-float">
-            <div className="text-sm font-light max-w-2xl">
+        <div
+            role="region"
+            aria-label="Cookie consent"
+            className="fixed bottom-0 left-0 z-50 flex w-full flex-col items-center justify-between gap-4 scheme-panel-dark p-6 shadow-theme-float md:flex-row"
+        >
+            <div className="max-w-2xl text-sm font-light">
                 <p>
                     We use cookies to optimize our website and our service.
-                    <Link href="/privacy" className="underline hover:text-inverse-muted ml-1 focus-ring-theme">
+                    <Link href="/privacy" className="ml-1 underline focus-ring-theme hover:text-inverse-muted">
                         Privacy Policy
                     </Link>
                 </p>
             </div>
-            <div className="flex gap-4">
-                <Button variant="outline" onClick={() => setShow(false)} className="btn-outline-light">
+            <div className="flex flex-wrap gap-4">
+                <Button variant="outline" onClick={() => setShow(false)} className="btn-outline-light min-h-11">
                     Decline
                 </Button>
-                <Button onClick={handleAccept} className="btn-primary">
+                <Button onClick={handleAccept} className="btn-primary min-h-11">
                     Accept All
                 </Button>
             </div>

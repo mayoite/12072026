@@ -46,7 +46,7 @@ describe("app/api/admin/price-books/route.ts", () => {
   });
 
   it("GET returns listed price books", async () => {
-    vi.mocked(listAdminPriceBooks).mockReturnValue([
+    vi.mocked(listAdminPriceBooks).mockResolvedValue([
       "pb-linear-2026-q3",
       "pb-other",
     ]);

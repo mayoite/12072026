@@ -11,8 +11,8 @@ import {
   utimesSync,
   writeFileSync,
 } from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 
 import {
   acquireDescriptorLock,
@@ -74,5 +74,58 @@ describe("descriptorLock residual", () => {
     const removed = sweepStaleDescriptorLocks(workDir, 60_000, () => Date.now());
     expect(removed).toBe(0);
     expect(existsSync(path.join(workDir, "chaise.lock"))).toBe(true);
+  });
+
+  it("returns 409.lock_busy when the lock is held through the timeout", () => {
+    const held = acquireDescriptorLock("busy", workDir, {
+      timeoutMs: 50,
+      pollMs: 1,
+      sleep: () => undefined,
+    });
+    expect(held.ok).toBe(true);
+
+    let clock = 1_000;
+    const result = acquireDescriptorLock("busy", workDir, {
+      timeoutMs: 20,
+      pollMs: 5,
+      staleLockMs: 60_000,
+      now: () => clock,
+      sleep: (ms) => {
+        clock += ms;
+      },
+    });
+    expect(result.ok).toBe(false);
+    if (result.ok) throw new Error("expected lock busy");
+    expect(result.error.code).toBe("409.lock_busy");
+    expect(result.error.reason).toBe("lockBusy");
+    expect(result.error.message).toMatch(/timed out/);
+
+    if (held.ok) held.handle.release();
+  });
+
+  it("sweepStaleDescriptorLocks removes only aged .lock files", () => {
+    writeFileSync(path.join(workDir, "old.lock"), "pid\n", "utf8");
+    writeFileSync(path.join(workDir, "keep.lock"), "pid\n", "utf8");
+    writeFileSync(path.join(workDir, "not-a-lock.txt"), "x\n", "utf8");
+    const old = new Date(Date.now() - 120_000);
+    utimesSync(path.join(workDir, "old.lock"), old, old);
+
+    const removed = sweepStaleDescriptorLocks(workDir, 60_000, () => Date.now());
+    expect(removed).toBe(1);
+    expect(existsSync(path.join(workDir, "old.lock"))).toBe(false);
+    expect(existsSync(path.join(workDir, "keep.lock"))).toBe(true);
+    expect(existsSync(path.join(workDir, "not-a-lock.txt"))).toBe(true);
+  });
+
+  it("release is best-effort when the lock file is already gone", () => {
+    const result = acquireDescriptorLock("gone", workDir, {
+      timeoutMs: 50,
+      pollMs: 1,
+      sleep: () => undefined,
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error("expected result.ok");
+    rmSync(path.join(workDir, "gone.lock"), { force: true });
+    expect(() => result.handle.release()).not.toThrow();
   });
 });

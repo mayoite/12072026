@@ -6,8 +6,11 @@ import { useRouter } from "next/navigation";
 import { Drawer } from "vaul";
 import { CaretDown, MagnifyingGlass, Sparkle, X } from "@phosphor-icons/react";
 import { OneAndOnlyLogo } from "@/components/ui/Logo";
+import { PlannerLaunchLink } from "@/components/ui/PlannerLaunchLink";
+import { TrackedLink } from "@/components/ui/TrackedLink";
 import { type GroupedCategory } from "@/lib/navigation";
 import { SITE_NAV_LINKS, SITE_CTA_LINKS } from "@/features/site/data/navigation";
+import { isPlannerEntryHref } from "@/lib/analytics/plannerEntry";
 import { trackSiteSearchSubmitted } from "@/lib/analytics/siteEvents";
 import { cn } from "@/lib/utils";
 
@@ -53,16 +56,15 @@ interface MobileNavDrawerProps {
   groupedCategories: GroupedCategory[];
 }
 
-const drawerSearchClass = "shell-glass-panel flex items-center gap-2 rounded-lg px-3 py-2.5";
+const drawerSearchClass = "shell-glass-panel flex min-h-11 items-center gap-2 rounded-lg px-3 py-2.5";
 const drawerGroupLabelClass = "shell-search-kind px-3 pb-1 pt-2";
 const drawerLinkClass = "shell-list-link flex min-h-12 items-center rounded-xl px-3 font-normal text-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary [font-size:var(--type-body-size)]";
-const drawerSubtleLinkClass = "shell-list-link flex min-h-11 items-center justify-between rounded-lg px-3 text-base text-body";
-const drawerSubcategoryLinkClass = "shell-list-link flex min-h-9 items-center justify-between rounded-md px-2 py-1 text-sm text-muted";
+const drawerSubtleLinkClass = "shell-list-link flex min-h-11 items-center justify-between rounded-lg px-3 text-base text-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+const drawerSubcategoryLinkClass = "shell-list-link flex min-h-11 items-center justify-between rounded-md px-2 py-1.5 text-sm text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
 const drawerCallLinkClass =
-  "shell-call-link mb-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+  "shell-call-link mb-3 inline-flex min-h-11 items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
 const drawerSearchNoteClass = "shell-search-meta";
 const drawerCountClass = "shell-search-meta";
-const _drawerShellClass = "shell-drawer";
 
 export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategories }: MobileNavDrawerProps) {
   const router = useRouter();
@@ -203,6 +205,14 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
     handleClose();
   };
 
+  const searchStatusAnnouncement = !searchQuery.trim()
+    ? "Search products. Type at least two characters."
+    : searchLoading
+      ? "Searching products."
+      : searchResults.length > 0
+        ? `${searchResults.length} search result${searchResults.length === 1 ? "" : "s"} available.`
+        : "No search results. Type at least two characters.";
+
   return (
     <Drawer.Root
       direction="right"
@@ -234,9 +244,9 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
               type="button"
               onClick={handleClose}
               aria-label="Close navigation"
-              className="shell-icon-button inline-flex h-10 w-10 text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="shell-icon-button inline-flex h-11 w-11 text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              <X size={16} weight="bold" />
+              <X size={18} weight="bold" aria-hidden="true" />
             </button>
           </div>
 
@@ -244,14 +254,16 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
           <div className="mb-4">
             <form
               className={drawerSearchClass}
+              role="search"
+              aria-label="Mobile product search"
               onSubmit={(event) => {
                 event.preventDefault();
                 void submitSearch();
               }}
             >
-              <MagnifyingGlass size={16} weight="bold" className="text-muted" />
+              <MagnifyingGlass size={16} weight="bold" className="text-muted" aria-hidden="true" />
               <label htmlFor="mobile-nav-search" className="sr-only">
-                Mobile product search
+                Search products
               </label>
               <input
                 id="mobile-nav-search"
@@ -263,16 +275,23 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
                 placeholder="Search products..."
                 className="w-full bg-transparent text-sm text-strong outline-none placeholder:text-subtle"
                 autoComplete="off"
-                aria-label="Mobile product search"
+                aria-label="Search products"
+                aria-describedby="mobile-nav-search-status"
               />
-              <Sparkle size={16} weight="duotone" className="text-accent1" />
+              <Sparkle size={16} weight="duotone" className="text-accent1" aria-hidden="true" />
               <button type="submit" className="sr-only">
                 Submit mobile search
               </button>
             </form>
+            <p id="mobile-nav-search-status" className="sr-only" role="status" aria-live="polite">
+              {searchStatusAnnouncement}
+            </p>
 
             {(showSearchPanel || searchQuery.trim().length >= 2) && (
-              <div className="shell-floating-panel-soft mt-2 rounded-2xl p-3">
+              <div
+                id="mobile-nav-search-panel"
+                className="shell-floating-panel-soft mt-2 rounded-2xl p-3"
+              >
                 <p className={drawerSearchNoteClass}>
                   {searchLoading
                     ? "Searching"
@@ -386,15 +405,33 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
                 );
               }
 
+              if (isPlannerEntryHref(link.href)) {
+                return (
+                  <li key={link.label}>
+                    <PlannerLaunchLink
+                      href={link.href}
+                      surface="mobile-nav"
+                      label={link.label}
+                      className={drawerLinkClass}
+                      onClick={handleClose}
+                    >
+                      {link.label}
+                    </PlannerLaunchLink>
+                  </li>
+                );
+              }
+
               return (
                 <li key={link.label}>
-                  <Link
+                  <TrackedLink
                     href={link.href}
-                    onClick={handleClose}
+                    label={link.label}
+                    surface="mobile-nav"
                     className={drawerLinkClass}
+                    onClick={handleClose}
                   >
                     {link.label}
-                  </Link>
+                  </TrackedLink>
                 </li>
               );
             })}
@@ -402,27 +439,31 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
         </nav>
 
         <div className="shrink-0 border-t border-soft bg-panel px-5 py-4">
-          <a
+          <TrackedLink
             href="tel:+919835630940"
-            onClick={handleClose}
+            label="Call +91 98356 30940"
+            surface="mobile-nav"
             className={drawerCallLinkClass}
             aria-label="Call +91 98356 30940"
+            onClick={handleClose}
           >
             Call +91 98356 30940
-          </a>
+          </TrackedLink>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {SITE_CTA_LINKS.map((cta) => (
-              <Link
+              <TrackedLink
                 key={cta.label}
                 href={cta.href}
+                label={cta.label}
+                surface="mobile-nav-cta"
                 onClick={handleClose}
                 className={cn(
                   cta.variant === "primary" ? "btn-primary" : "btn-outline",
-                  "w-full justify-center",
+                  "min-h-11 w-full justify-center",
                 )}
               >
                 {cta.label}
-              </Link>
+              </TrackedLink>
             ))}
           </div>
         </div>

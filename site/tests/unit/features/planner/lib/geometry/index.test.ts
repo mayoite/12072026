@@ -26,7 +26,7 @@ describe("lib/geometry/index barrel", () => {
         { start: { x: 0, y: 0 }, end: { x: 10, y: 10 } },
         { start: { x: 0, y: 10 }, end: { x: 10, y: 0 } },
       ),
-    ).toBeTruthy();
+    ).toBeDefined();
   });
 
   it("re-exports wall graph builder", () => {

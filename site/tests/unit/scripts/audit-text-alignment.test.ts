@@ -12,7 +12,6 @@ function loadAlignRe(): RegExp {
   const source = fs.readFileSync(scriptPath, "utf8");
   const match = source.match(/const ALIGN_RE = (\/.*?\/g);/);
   if (!match) throw new Error("ALIGN_RE not found");
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- rehydrate script regex under test
   return new Function(`return ${match[1]}`)() as RegExp;
 }
 

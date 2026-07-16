@@ -104,7 +104,7 @@ describe("ADM-SVG-01 primary no-code SVG journey", () => {
     expect(screen.getByTestId("preview-stub")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Open side-table-001 identity/i })).toBeInTheDocument();
     expect(screen.getByTestId("admin-svg-validation-side-table-001")).toHaveTextContent(
-      /Valid/,
+      /^Published$/,
     );
     expect(screen.getByTestId("admin-svg-last-change-side-table-001")).toBeInTheDocument();
 

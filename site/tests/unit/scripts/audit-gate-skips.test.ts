@@ -48,7 +48,6 @@ describe("audit-gate-skips", () => {
     const source = fs.readFileSync(scriptPath, "utf8");
     const reMatch = source.match(/const skipRe = (\/.*?\/);/);
     expect(reMatch).not.toBeNull();
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval -- rehydrate script regex under test
     const skipRe = new Function(`return ${reMatch![1]}`)() as RegExp;
     expect(skipRe.test("test.skip('x', () => {})")).toBe(true);
     expect(skipRe.test("describe.skip('x', () => {})")).toBe(true);

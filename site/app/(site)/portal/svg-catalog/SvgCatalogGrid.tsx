@@ -14,6 +14,7 @@
  * authoring practice. GS: BP-05 anti-copy (semantic tokens only, no donor UI).
  */
 
+import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useRef, useState, type KeyboardEvent } from "react";
 
@@ -95,28 +96,27 @@ export function SvgCatalogGrid({
         >
           <div className="mb-2 svg-catalog-thumb-wrap">
             {card.svgUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element -- vector catalog preview; next/image rasterizes SVGs
-              <img
+              <Image
                 src={card.svgUrl}
                 alt={`${card.slug} vector preview`}
                 width={512}
                 height={256}
                 className="svg-catalog-thumb svg-catalog-thumb--vector w-full h-auto"
                 loading="lazy"
-                decoding="async"
+                unoptimized
               />
             ) : (
-              // eslint-disable-next-line @next/next/no-img-element -- retina R2 thumbs need explicit srcSet; next/image omits srcSet
-              <img
+              <Image
                 src={card.thumbUrl}
-                srcSet={buildBlockThumbSrcSet(card.slug)}
                 alt={`${card.slug} thumbnail`}
                 width={512}
                 height={256}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 240px"
                 className="svg-catalog-thumb w-full h-auto"
                 loading="lazy"
-                decoding="async"
+                unoptimized
+                // Retina variants remain available as metadata for future next/image loaders.
+                data-srcset={buildBlockThumbSrcSet(card.slug)}
               />
             )}
           </div>

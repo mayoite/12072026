@@ -66,7 +66,7 @@ vi.mock("dotenv", () => ({
 
 // Hoisted mock so the script never depends on a shared on-disk fixture race.
 vi.mock("fs", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("fs")>();
+  const actual = await importOriginal() as Record<string, unknown> & { readFileSync?: (...args: never[]) => unknown; default?: unknown };
   const fixture = JSON.stringify({
     unresolved: [{ path: "/images/chairs/task-chair/image-01.jpg" }],
     failures: [

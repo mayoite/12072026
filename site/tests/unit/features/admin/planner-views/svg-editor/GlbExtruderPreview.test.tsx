@@ -141,25 +141,27 @@ describe("GlbExtruderPreview", () => {
   it("keeps three off the static import graph (SSR-safe)", async () => {
     const fs = await import("node:fs/promises");
     const path = await import("node:path");
-    let source: string;
-    try {
-      source = await fs.readFile(
-        path.resolve(process.cwd(), "features/admin/svg-editor/GlbExtruderPreview.tsx"),
-        "utf8",
-      );
-    } catch {
-      source = await fs.readFile(
-        path.resolve(
-          process.cwd(),
-          "site/features/admin/svg-editor/GlbExtruderPreview.tsx",
-        ),
-        "utf8",
-      );
+    const candidates = [
+      path.resolve(process.cwd(), "features/admin/svg-editor/publish/GlbExtruderPreview.tsx"),
+      path.resolve(
+        process.cwd(),
+        "site/features/admin/svg-editor/publish/GlbExtruderPreview.tsx",
+      ),
+    ];
+    let source: string | null = null;
+    for (const file of candidates) {
+      try {
+        source = await fs.readFile(file, "utf8");
+        break;
+      } catch {
+        // try next path (vitest cwd may be site/ or repo root)
+      }
     }
+    expect(source, "GlbExtruderPreview.tsx not found under publish/").toBeDefined();
 
-    expect(source).not.toMatch(/import\s+\*\s+as\s+THREE\s+from\s+["']three["']/);
-    expect(source).not.toMatch(/from\s+["']three-stdlib["']/);
-    expect(source).toMatch(/import\(["']three["']\)/);
-    expect(source).toMatch(/import\(["']three-stdlib["']\)/);
+    expect(source!).not.toMatch(/import\s+\*\s+as\s+THREE\s+from\s+["']three["']/);
+    expect(source!).not.toMatch(/from\s+["']three-stdlib["']/);
+    expect(source!).toMatch(/import\(["']three["']\)/);
+    expect(source!).toMatch(/import\(["']three-stdlib["']\)/);
   });
 });

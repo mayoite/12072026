@@ -22,25 +22,24 @@ import {
 import styles from "./workspace.module.css";
 
 /**
- * Prop contract for WorkspaceShell / OOPlanner wiring (next agent):
+ * Prop contract for WorkspaceShell / OOPlanner wiring:
  *
  * Prefer honest save pill via one of:
  * 1. `saveStatusLabel` — parent already resolved plannerSaveStatusLabel text
  * 2. `saveStatus` (+ optional `saveStorage`, `saveCloudEnabled`) — TopBar calls
  *    plannerSaveStatusLabel; guestMode from accessContext === "guest"
  *
- * `isModified` / `isSynced` remain optional fallback only:
- * - brand subline "Unsaved changes" when isModified
- * - pill maps modified→unsaved, synced→saved, else→idle through the helper
- *   (never bare "Ready" / "Modified" / /^Saved$/)
+ * `isModified` / `isSynced` are fallback for pill status only when saveStatus omitted
+ * (never bare "Ready" / "Modified" / /^Saved$/). The pill is the sole save authority —
+ * no brand subline duplicate of "Unsaved changes".
  *
- * Chrome (this seat): density + spacing + RAC/Phosphor controls only.
+ * Chrome: density + spacing + RAC/Phosphor controls only.
  * Do not rewrite save labeling logic here.
  */
 export interface TopBarProps {
   accessContext?: PlannerAccessContext;
   projectName: string;
-  /** Brand subline only when true; also fallback for pill status when saveStatus omitted. */
+  /** Fallback for pill status when saveStatus omitted (modified → "unsaved"). */
   isModified?: boolean;
   /** Fallback for pill status when saveStatus omitted (synced → "saved"). */
   isSynced?: boolean;
@@ -200,6 +199,23 @@ export function TopBar({
   const unitOptions: PlannerDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
   const activeFloorName = floors.find((f) => f.id === activeFloorId)?.name ?? "Floor";
 
+  const saveButtonLabel =
+    resolvedSaveStatus === "error"
+      ? "Retry save"
+      : resolvedSaveStatus === "saving"
+        ? "Saving…"
+        : showGuestActions
+          ? "Save draft"
+          : "Save";
+  const saveButtonAriaLabel =
+    resolvedSaveStatus === "error"
+      ? `Retry save — ${resolvedSaveLabel}`
+      : resolvedSaveStatus === "saving"
+        ? `Saving — ${resolvedSaveLabel}`
+        : showGuestActions
+          ? "Save draft to this device"
+          : "Save project";
+
   return (
     <header
       className={`pw-topbar ${styles.header}`}
@@ -227,11 +243,11 @@ export function TopBar({
               if (e.key === "Enter" || e.key === " ") handleNameStartEdit();
             }}
             tabIndex={0}
+            title="Rename project"
           >
             {projectName}
           </h1>
         )}
-        {isModified && <span className={styles.brandSub}>Unsaved changes</span>}
       </div>
 
       <div className={styles.center}>
@@ -393,7 +409,12 @@ export function TopBar({
           data-storage={effectiveStorage}
           data-modified={isModified || resolvedSaveStatus === "unsaved"}
           data-synced={
-            (isSynced && !isModified) || resolvedSaveStatus === "saved"
+            resolvedSaveStatus === "saved" ||
+            (resolvedSaveStatus !== "error" &&
+              resolvedSaveStatus !== "unsaved" &&
+              resolvedSaveStatus !== "saving" &&
+              isSynced &&
+              !isModified)
           }
         >
           <span aria-hidden="true">{saveStatusGlyph(resolvedSaveStatus)}</span>{" "}
@@ -401,10 +422,15 @@ export function TopBar({
         </div>
 
         <Button
-          className={`${styles.btn} ${styles.btnPrimary}`}
+          className={`${styles.btn} ${
+            resolvedSaveStatus === "error" ? styles.btnDanger : styles.btnPrimary
+          }`}
           onPress={() => onSave?.()}
+          isDisabled={resolvedSaveStatus === "saving"}
+          aria-label={saveButtonAriaLabel}
+          data-status={resolvedSaveStatus}
         >
-          {showGuestActions ? "Save draft" : "Save"}
+          {saveButtonLabel}
         </Button>
 
         {/* Guest: honest export surface (JSON + BOQ). No Import / quote-cart / ERP. */}

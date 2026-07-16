@@ -45,6 +45,7 @@ type CustomerQueryFormProps = {
 export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
   const pathname = usePathname();
   const [form, setForm] = useState<FormState>(initialState);
+  const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<SubmitResult | null>(null);
@@ -62,9 +63,10 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
     return (
       form.name.trim().length > 0 &&
       form.message.trim().length > 0 &&
-      (form.email.trim().length > 0 || form.phone.trim().length > 0)
+      (form.email.trim().length > 0 || form.phone.trim().length > 0) &&
+      consent
     );
-  }, [form]);
+  }, [consent, form]);
 
   useEffect(() => {
     if (!contextCopy) return;
@@ -84,7 +86,11 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
     setResult(null);
 
     if (!canSubmit) {
-      setError("Add name, message, and at least email or phone.");
+      if (!consent) {
+        setError("Confirm privacy consent before sending.");
+      } else {
+        setError("Add name, message, and at least email or phone.");
+      }
       return;
     }
 
@@ -124,6 +130,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
       });
       setResult({ queryId: json.queryId, followUp: json.followUp });
       setForm(initialState);
+      setConsent(false);
     } catch {
       trackContactSubmission({
         pathname,
@@ -137,11 +144,19 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
     }
   }
 
+  const hasContactChannel =
+    form.email.trim().length > 0 || form.phone.trim().length > 0;
+  const showNameInvalid = Boolean(error) && form.name.trim().length === 0;
+  const showMessageInvalid = Boolean(error) && form.message.trim().length === 0;
+  const showContactInvalid = Boolean(error) && !hasContactChannel;
+  const showConsentInvalid = Boolean(error) && !consent;
+
   return (
     <form
       className="contact-page-form"
       data-testid="contact-page-form"
       onSubmit={handleSubmit}
+      noValidate
     >
       {contextCopy ? (
         <div className="contact-form-context">
@@ -150,7 +165,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
           <p className="contact-form-context__copy">{contextCopy.description}</p>
         </div>
       ) : null}
-      <p className="contact-form-intro">
+      <p className="contact-form-intro" id="contact-form-intro">
         Fields marked <span className="font-semibold text-primary">*</span> are required. Share
         either email or phone and we will respond within 1 business day.
       </p>
@@ -160,12 +175,17 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
         </label>
         <input
           id="name"
+          name="name"
           type="text"
           placeholder="Your Name"
           value={form.name}
           onChange={(event) => setForm({ ...form, name: event.target.value })}
           className="contact-form-input"
           required
+          autoComplete="name"
+          aria-required="true"
+          aria-invalid={showNameInvalid || undefined}
+          aria-describedby={showNameInvalid ? "contact-form-error" : "contact-form-intro"}
         />
       </div>
       <div className="contact-page-form__field">
@@ -174,11 +194,13 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
         </label>
         <input
           id="company"
+          name="company"
           type="text"
           placeholder="Company Name (optional)"
           value={form.company}
           onChange={(event) => setForm({ ...form, company: event.target.value })}
           className="contact-form-input"
+          autoComplete="organization"
         />
       </div>
       <div className="contact-page-form__row">
@@ -188,11 +210,17 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
           </label>
           <input
             id="email"
+            name="email"
             type="email"
             placeholder="your@email.com"
             value={form.email}
             onChange={(event) => setForm({ ...form, email: event.target.value })}
             className="contact-form-input"
+            autoComplete="email"
+            aria-invalid={showContactInvalid || undefined}
+            aria-describedby={
+              showContactInvalid ? "contact-form-error" : "contact-form-intro"
+            }
           />
         </div>
         <div className="contact-page-form__field">
@@ -201,11 +229,17 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
           </label>
           <input
             id="phone"
+            name="phone"
             type="tel"
             placeholder="+91..."
             value={form.phone}
             onChange={(event) => setForm({ ...form, phone: event.target.value })}
             className="contact-form-input"
+            autoComplete="tel"
+            aria-invalid={showContactInvalid || undefined}
+            aria-describedby={
+              showContactInvalid ? "contact-form-error" : "contact-form-intro"
+            }
           />
         </div>
       </div>
@@ -215,6 +249,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
         </label>
         <select
           id="preferredContact"
+          name="preferredContact"
           value={form.preferredContact}
           onChange={(event) =>
             setForm({
@@ -236,23 +271,60 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
         </label>
         <textarea
           id="message"
+          name="message"
           placeholder="What do you need for your workspace?"
           rows={4}
           value={form.message}
           onChange={(event) => setForm({ ...form, message: event.target.value })}
           className="contact-form-input"
           required
+          aria-required="true"
+          aria-invalid={showMessageInvalid || undefined}
+          aria-describedby={showMessageInvalid ? "contact-form-error" : "contact-form-intro"}
         />
       </div>
 
+      <div className="contact-page-form__field">
+        <label
+          htmlFor="contact-consent"
+          className="contact-form-label flex items-start gap-3 font-normal"
+        >
+          <input
+            id="contact-consent"
+            name="consent"
+            type="checkbox"
+            checked={consent}
+            onChange={(event) => setConsent(event.target.checked)}
+            className="mt-1 h-4 w-4 shrink-0 accent-[var(--color-primary)]"
+            required
+            aria-required="true"
+            aria-invalid={showConsentInvalid || undefined}
+            aria-describedby={
+              showConsentInvalid ? "contact-form-error" : "contact-consent-hint"
+            }
+            data-testid="contact-form-consent"
+          />
+          <span>
+            I agree that One&Only may use these details to respond to my enquiry.{" "}
+            <a href="/privacy" className="font-semibold text-primary hover:text-primary-hover">
+              Privacy policy
+            </a>
+            <span className="text-primary"> *</span>
+          </span>
+        </label>
+        <p id="contact-consent-hint" className="contact-form-intro">
+          Required to send. We do not sell contact data.
+        </p>
+      </div>
+
       {error ? (
-        <p role="alert" className="text-sm text-danger">
+        <p id="contact-form-error" role="alert" className="text-sm text-danger">
           {error}
         </p>
       ) : null}
 
       {result ? (
-        <div className="contact-form-success">
+        <div className="contact-form-success" role="status">
           <p>
             Query submitted. Reference: <span className="font-medium">{result.queryId}</span>
           </p>
@@ -281,6 +353,7 @@ export function CustomerQueryForm({ intent, source }: CustomerQueryFormProps) {
           type="submit"
           disabled={!canSubmit || isSubmitting}
           className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
+          data-testid="contact-form-submit"
         >
           {isSubmitting ? "Sending..." : "Send - we respond within 1 business day"}
         </button>

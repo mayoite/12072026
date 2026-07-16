@@ -55,7 +55,7 @@ export function HotspotImage({ src, alt, hotspots }: HotspotImageProps) {
             onClick={() =>
               setActiveId(activeId === hotspot.id ? null : hotspot.id)
             }
-            className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full shadow-theme-lift transition-colors focus-ring-theme ${
+            className={`relative z-10 flex h-11 w-11 min-h-[2.75rem] min-w-[2.75rem] items-center justify-center rounded-full shadow-theme-lift transition-colors focus-ring-theme ${
               activeId === hotspot.id
                 ? "bg-primary text-inverse"
                 : "bg-page text-primary bg-hover-soft"

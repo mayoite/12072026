@@ -210,7 +210,13 @@ describe("seo helpers", () => {
 
   it("builds metadata with title and description", () => {
     const md = buildPageMetadata("https://example.com", { title: "Test", description: "Desc", path: "/t" });
-    expect(md.title).toContain("Test");
+    const titleText =
+      typeof md.title === "string"
+        ? md.title
+        : md.title && typeof md.title === "object" && "absolute" in md.title
+          ? String(md.title.absolute)
+          : JSON.stringify(md.title);
+    expect(titleText).toContain("Test");
     expect(md.description).toBe("Desc");
   });
 });

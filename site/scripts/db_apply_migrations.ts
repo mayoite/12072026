@@ -11,7 +11,8 @@
  *   npm run db:apply -- --target admin # apply pending to admin
  *   npm run db:apply -- --dry          # plan only
  *
- * Applies migrations prefixed 20260524* or 202606* (split batch + June 2026 tables).
+ * Applies migrations prefixed 20260524*, 202606*, or 202607*
+ * (split batch + June/July 2026 tables including SVG revisions + price books).
  */
 import { createRequire } from "node:module";
 import { resolve, basename } from "node:path";
@@ -55,12 +56,18 @@ async function main() {
   const files = readdirSync(cfg.dir)
     .filter((f) => f.endsWith(".sql"))
     .sort();
+  // Include May–July 2026 batches (SVG revisions, price books, planner managed, etc.).
   const candidates = files.filter(
-    (f) => f.startsWith("20260524") || f.startsWith("202606"),
+    (f) =>
+      f.startsWith("20260524") ||
+      f.startsWith("202606") ||
+      f.startsWith("202607"),
   );
 
   if (candidates.length === 0) {
-    console.log(`No migrations matching prefix ${cfg.batchPrefix}.`);
+    console.log(
+      "No migrations matching prefixes 20260524* / 202606* / 202607*.",
+    );
     return;
   }
 

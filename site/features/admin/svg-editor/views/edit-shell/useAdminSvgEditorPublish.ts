@@ -217,7 +217,7 @@ export function useAdminSvgEditorPublish({
     if (coreFieldIssuesCount > 0) {
       setFeedback({
         submitting: false,
-        errorMessage: `Publish is blocked: fix ${coreFieldIssuesCount} core field ${coreFieldIssuesCount === 1 ? "error" : "errors"} (see Advanced block fields).`,
+        errorMessage: `Publish is blocked: fix ${coreFieldIssuesCount} product field ${coreFieldIssuesCount === 1 ? "issue" : "issues"} under Product details.`,
         successMessage: null,
         publishedSlug: null,
       });
@@ -228,8 +228,8 @@ export function useAdminSvgEditorPublish({
       setFeedback({
         submitting: false,
         errorMessage: previewPending
-          ? "Publish is blocked while validation is running."
-          : "Publish is blocked until the current draft has a valid compiled preview.",
+          ? "Publish is blocked while the draft is still being checked."
+          : "Publish is blocked until the draft has a valid Planner preview.",
         successMessage: null,
         publishedSlug: null,
       });

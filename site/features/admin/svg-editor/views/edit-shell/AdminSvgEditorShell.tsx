@@ -21,7 +21,7 @@ const ExcalidrawCanvas = dynamic(() => import("../../editor/ExcalidrawClient"), 
   loading: () => (
     <p className="admin-page__meta" role="status">
       <Loader2 size={14} className="animate-spin" aria-hidden /> Loading visual
-      studio...
+      studio…
     </p>
   ),
 });
@@ -97,6 +97,41 @@ export function AdminSvgEditorShell({
         publishArtifactHref={publishArtifactHref}
         onDismiss={onDismissFeedback}
       />
+
+      <div
+        className="admin-svg-engine-shell__status-band"
+        data-testid="admin-svg-studio-status"
+        aria-label="Studio draft status"
+      >
+        <span data-testid="admin-svg-studio-status-draft">{stageMeta.draft}</span>
+        <span aria-hidden className="admin-svg-engine-shell__status-sep">
+          ·
+        </span>
+        <span data-testid="admin-svg-studio-status-validation">
+          {stageMeta.validation}
+        </span>
+        <span aria-hidden className="admin-svg-engine-shell__status-sep">
+          ·
+        </span>
+        <span data-testid="admin-svg-studio-status-footprint">
+          {stageMeta.footprint}
+        </span>
+        <span aria-hidden className="admin-svg-engine-shell__status-sep">
+          ·
+        </span>
+        <span data-testid="admin-svg-studio-status-revision">
+          {stageMeta.revision}
+        </span>
+        {canPublish ? (
+          <span className="admin-badge admin-badge--active admin-badge--compact admin-svg-engine-shell__status-ready">
+            Ready to publish
+          </span>
+        ) : (
+          <span className="admin-badge admin-badge--warn admin-badge--compact admin-svg-engine-shell__status-ready">
+            Publish blocked
+          </span>
+        )}
+      </div>
 
       <div
         className="admin-svg-engine-shell"

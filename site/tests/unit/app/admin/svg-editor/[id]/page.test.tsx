@@ -40,7 +40,8 @@ describe("app/admin/svg-editor/[id]/page.tsx", () => {
   it("new slug: renders with default props from registry", async () => {
     const Page = await SvgEditorDetailPage({ params: Promise.resolve({ id: "new" }) });
     render(Page);
-    expect(screen.getByTestId("edit-view")).toHaveAttribute("data-slug", "new");
+    // makeNewBlockDescriptorStub() uses slug "new-block", not the route id "new"
+    expect(screen.getByTestId("edit-view")).toHaveAttribute("data-slug", "new-block");
   });
 
   it("loads existing via tryLoad and renders EditView (now with full Puck editor)", async () => {

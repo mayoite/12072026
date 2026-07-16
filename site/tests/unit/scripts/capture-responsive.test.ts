@@ -21,7 +21,7 @@ vi.mock("playwright", () => ({
 }));
 
 vi.mock("fs", async () => {
-  const actual = await vi.importActual<typeof import("fs")>("fs");
+  const actual = await vi.importActual("fs") as Record<string, unknown> & { readFileSync?: (...args: never[]) => unknown; default?: unknown };
   return {
     ...actual,
     mkdirSync: vi.fn(),

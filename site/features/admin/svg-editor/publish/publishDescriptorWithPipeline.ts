@@ -33,8 +33,7 @@ import {
   assertDescriptorPublishable,
   buildReleasedProductFromPublish,
 } from "@/features/admin/svg-editor/publish/releasedCatalogPublishGate";
-import { DrizzleSvgRevisionPersistence } from "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server";
-import { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
+import type { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
 
 export type PublishDescriptorSuccess = {
   readonly success: true;

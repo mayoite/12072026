@@ -1,5 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { requestProviderText, resolveProviderChain, ServerChatMessage } from "@/lib/ai/providerChain";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import {
+  requestProviderText,
+  resolveProviderChain,
+  type ServerChatMessage,
+} from "@/lib/ai/providerChain";
 import { createRectangularRoomProject } from "@/features/planner/project/model/project";
 
 export async function POST(request: NextRequest) {
@@ -55,7 +60,7 @@ export async function POST(request: NextRequest) {
       const parsed = JSON.parse(resultText);
       if (typeof parsed.widthMm === "number") widthMm = parsed.widthMm;
       if (typeof parsed.depthMm === "number") depthMm = parsed.depthMm;
-    } catch (err) {
+    } catch {
       console.error("Failed to parse sketch-to-plan JSON:", resultText);
     }
 

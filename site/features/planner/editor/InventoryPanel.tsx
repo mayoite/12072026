@@ -11,6 +11,7 @@ import {
   type MouseEvent,
   memo,
 } from "react";
+import Image from "next/image";
 import {
   SearchField,
   Input,
@@ -448,20 +449,21 @@ export const InventoryPanel = memo(function InventoryPanel({
       onKeyDown={handleKeyDown}
       id={`inventory-panel-${id.replace(/:/g, "")}`}
     >
-      {/* Search - React Aria SearchField owns accessible search behavior (task7) */}
+      {/* Search - React Aria SearchField owns accessible search behavior */}
       <div className={styles.searchSection}>
         <SearchField
           value={state.searchQuery}
           onChange={handleSearchValueChange}
           className={styles.searchWrapper}
         >
-          <Label className="sr-only">Search catalog elements</Label>
-          <SearchIcon className={styles.searchIcon} />
+          <Label className="sr-only">Search inventory by name or SKU</Label>
+          <SearchIcon className={styles.searchIcon} aria-hidden />
           <Input
             ref={searchInputRef}
             type="search"
             className={styles.searchInput}
-            placeholder="Search furniture (e.g. cabinet)"
+            placeholder="Search by name or SKU"
+            aria-describedby={`inventory-search-hint-${id.replace(/:/g, "")}`}
           />
           {state.searchQuery && (
             <button
@@ -474,6 +476,12 @@ export const InventoryPanel = memo(function InventoryPanel({
             </button>
           )}
         </SearchField>
+        <p
+          id={`inventory-search-hint-${id.replace(/:/g, "")}`}
+          className={styles.searchHint}
+        >
+          Filter furniture to place on the plan
+        </p>
       </div>
 
       {onWorkstationConfigPlace ? (
@@ -513,6 +521,7 @@ export const InventoryPanel = memo(function InventoryPanel({
               type="button"
               className={styles.resetButton}
               onClick={handleResetFilters}
+              aria-label="Reset inventory filters"
             >
               Reset
             </button>
@@ -636,7 +645,11 @@ export const InventoryPanel = memo(function InventoryPanel({
         </div>
       ) : effectiveStatus === "error" && displayedItems.length === 0 ? (
         <section className={styles.emptyState} aria-label="Catalog browser" data-state="error">
-          <p>Error loading catalog.</p>
+          <div className={styles.emptyIcon} aria-hidden>
+            <EmptyIcon />
+          </div>
+          <p className={styles.emptyText}>Could not load inventory</p>
+          <p className={styles.emptyHint}>Check your connection, then try again.</p>
           <button
             type="button"
             className={styles.emptyAction}
@@ -647,11 +660,24 @@ export const InventoryPanel = memo(function InventoryPanel({
         </section>
       ) : displayedItems.length === 0 ? (
         <section className={styles.emptyState} aria-label="Catalog browser">
-          <div className={styles.emptyIcon}>
+          <div className={styles.emptyIcon} aria-hidden>
             <EmptyIcon />
           </div>
-          <p className={styles.emptyText}>No elements found</p>
-          {state.searchQuery && (
+          <p className={styles.emptyText}>
+            {state.searchQuery
+              ? "No products match this search"
+              : hasActiveFilters
+                ? "No products in this filter"
+                : "No products available"}
+          </p>
+          <p className={styles.emptyHint}>
+            {state.searchQuery
+              ? "Try another name or SKU, or clear the search."
+              : hasActiveFilters
+                ? "Reset filters to see the full inventory."
+                : "Inventory will appear here when the catalog is ready."}
+          </p>
+          {state.searchQuery ? (
             <button
               type="button"
               className={styles.emptyAction}
@@ -659,7 +685,15 @@ export const InventoryPanel = memo(function InventoryPanel({
             >
               Clear search
             </button>
-          )}
+          ) : hasActiveFilters ? (
+            <button
+              type="button"
+              className={styles.emptyAction}
+              onClick={handleResetFilters}
+            >
+              Reset filters
+            </button>
+          ) : null}
         </section>
       ) : (
         <section className={styles.catalogBrowser} aria-label="Catalog browser">
@@ -694,17 +728,16 @@ export const InventoryPanel = memo(function InventoryPanel({
                     }
                   }}
                 >
-              <div className={styles.itemThumbnail}>
+              <div className={styles.itemThumbnail} aria-hidden="true">
                 {item.assets.previewImageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- native img for R2 preview thumbnails in virtual list (external urls, lazy, no known intrinsic size at render); reason: avoids next/image layout constraints + domain config for dynamic catalog assets; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: switch to next/image + sizes or remotePatterns when asset ui standardized
-                  <img
+                  <Image
                     src={item.assets.previewImageUrl}
                     alt=""
                     className={`${styles.itemImage}${ isSvgAssetUrl(item.assets.previewImageUrl) ? ` ${styles.itemImageVector}` : "" }`}
                     width={256}
                     height={256}
                     loading="lazy"
-                    decoding="async"
+                    unoptimized
                     onError={(event) => {
                       // Residual 404 thumbs: hide broken image, show icon fallback.
                       const img = event.currentTarget;
@@ -726,14 +759,42 @@ export const InventoryPanel = memo(function InventoryPanel({
                 )}
               </div>
               <div className={styles.itemInfo}>
-                <span className={styles.itemName}>{item.shortName}</span>
-                <span className={styles.itemDimensions}>
-                  {formatCatalogFootprint(
-                    item.dimensions.widthMm,
-                    item.dimensions.depthMm,
-                    displayUnit,
-                  )}
+                <span className={styles.itemName} title={item.name || item.shortName}>
+                  {item.shortName || item.name}
                 </span>
+                <span className={styles.itemMeta}>
+                  {item.sku ? (
+                    <span className={styles.itemSku} title={`SKU ${item.sku}`}>
+                      {item.sku}
+                    </span>
+                  ) : null}
+                  <span className={styles.itemDimensions}>
+                    {formatCatalogFootprint(
+                      item.dimensions.widthMm,
+                      item.dimensions.depthMm,
+                      displayUnit,
+                    )}
+                  </span>
+                  {item.category ? (
+                    <span className={styles.itemCategory}>{item.category}</span>
+                  ) : null}
+                </span>
+                {item.availability && item.availability !== "in-stock" ? (
+                  <span
+                    className={styles.itemAvailability}
+                    data-availability={item.availability}
+                  >
+                    {item.availability === "out-of-stock"
+                      ? "Unavailable"
+                      : item.availability === "discontinued"
+                        ? "Discontinued"
+                        : item.availability === "preorder"
+                          ? "Pre-order"
+                          : item.availability === "backorder"
+                            ? "Backorder"
+                            : item.availability}
+                  </span>
+                ) : null}
               </div>
               <button
                 type="button"
@@ -784,7 +845,7 @@ export const InventoryPanel = memo(function InventoryPanel({
 });
 
 // Icons
-function SearchIcon({ className }: { className?: string }) {
+function SearchIcon({ className, "aria-hidden": ariaHidden }: { className?: string; "aria-hidden"?: boolean | "true" | "false" }) {
   return (
     <svg
       className={className}
@@ -796,6 +857,7 @@ function SearchIcon({ className }: { className?: string }) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      aria-hidden={ariaHidden ?? true}
     >
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.35-4.35" />

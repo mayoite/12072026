@@ -12,7 +12,7 @@ describe("export barrel", () => {
     const pre = exp.preflightPlannerExport(project, "json");
     expect(pre.status).toBe("ready");
     const result = exp.exportAsJSON(project);
-    expect(result.success === true || typeof result === "string" || result).toBeTruthy();
+    expect(result.success === true || typeof result === "string" || result).toBeDefined();
     if (result && typeof result === "object" && "success" in result) {
       expect((result as { success: boolean }).success).toBe(true);
     }

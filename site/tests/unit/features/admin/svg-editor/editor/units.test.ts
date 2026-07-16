@@ -34,10 +34,42 @@ describe("admin svg editor units", () => {
 
   it("parses metric and imperial user input", () => {
     expect(parseDimensionInput("2.5 m", "metric")).toBe(250);
+    expect(parseDimensionInput("2.5 meters", "metric")).toBe(250);
     expect(parseDimensionInput("8ft 4.5in", "imperial")).toBe(
       feetInchesToPixels(8, 4.5),
     );
     expect(parseDimensionInput("garbage", "metric")).toBeNull();
+    expect(parseDimensionInput("", "metric")).toBeNull();
+    expect(parseDimensionInput("-1", "metric")).toBeNull();
+  });
+
+  it("parses imperial feet-only, inches-only, bare number, and rejects junk", () => {
+    expect(parseDimensionInput("8ft", "imperial")).toBe(feetInchesToPixels(8, 0));
+    expect(parseDimensionInput("8'", "imperial")).toBe(feetInchesToPixels(8, 0));
+    expect(parseDimensionInput("4.5in", "imperial")).toBe(
+      feetInchesToPixels(0, 4.5),
+    );
+    expect(parseDimensionInput('4.5"', "imperial")).toBe(
+      feetInchesToPixels(0, 4.5),
+    );
+    expect(parseDimensionInput("8", "imperial")).toBe(feetInchesToPixels(8, 0));
+    expect(parseDimensionInput("8'4.5\"", "imperial")).toBe(
+      feetInchesToPixels(8, 4.5),
+    );
+    expect(parseDimensionInput("nope", "imperial")).toBeNull();
+    expect(parseDimensionInput("-2ft", "imperial")).toBeNull();
+  });
+
+  it("formats zero and fractional imperial inches", () => {
+    expect(pixelsToDimensionString(0, "imperial")).toBe("0 ft 0 in");
+    expect(pixelsToFeetInches(0)).toEqual({ feet: 0, inches: 0 });
+    expect(pixelsToFeetInches(-5)).toEqual({ feet: 0, inches: 0 });
+    const fractional = pixelsToDimensionString(
+      feetInchesToPixels(1, 1.5),
+      "imperial",
+    );
+    expect(fractional).toMatch(/1 ft/);
+    expect(fractional).toMatch(/in/);
   });
 
   it("round-trips feet and inches from pixels", () => {

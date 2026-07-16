@@ -114,7 +114,7 @@ describe("previewSvgEditorAction", () => {
     const result = await previewSvgEditorAction("new", form);
     expect(result.ok).toBe(false);
     expect(result.phase).toBe("validate");
-    expect(result.error).toBeTruthy();
+    expect(result.error).toBeDefined();
     expect(Array.isArray(result.issues)).toBe(true);
     expect(compileSvgForPublish).not.toHaveBeenCalled();
   });

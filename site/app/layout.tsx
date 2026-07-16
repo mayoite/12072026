@@ -14,6 +14,7 @@ import { SITE_URL } from "@/lib/siteUrl";
 import { buildGlobalJsonLd, buildSiteMetadata } from "@/lib/analytics/seo";
 import { SITE_VIEWPORT } from "@/lib/siteViewport";
 import { MaintenanceBanner } from "@/components/site/MaintenanceBanner";
+import { SiteAnalytics } from "@/components/site/SiteAnalytics";
 import { ServiceWorkerRegister } from "@/components/pwa/ServiceWorkerRegister";
 import { CsrfBootstrap } from "@/components/security/CsrfBootstrap";
 import { sanitizeJsonForScript } from "@/lib/security/sanitize";
@@ -53,13 +54,15 @@ export default async function RootLayout({
         <CsrfBootstrap />
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-9999 focus:bg-panel focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:outline-none focus:ring-2 focus:ring-primary"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-9999 focus:inline-flex focus:min-h-11 focus:items-center focus:rounded-md focus:bg-panel focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-strong focus:outline-none focus:ring-2 focus:ring-primary"
         >
           Skip to main content
         </a>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <MaintenanceBanner />
           {children}
+          {/* Without this, window.va is undefined and all siteEvents no-op. */}
+          <SiteAnalytics />
         </NextIntlClientProvider>
       </body>
     </html>

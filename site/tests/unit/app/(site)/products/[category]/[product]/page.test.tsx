@@ -40,13 +40,14 @@ vi.mock('@/lib/productDataTables', () => ({
   fetchProductImagesMap: vi.fn(async () => new Map()),
 }));
 
-// Mock seo utilities
+// Mock seo utilities — mirror absolute title shape from buildPageMetadata
 vi.mock('@/features/site/data/seo', () => ({
   buildBreadcrumbJsonLd: () => ({}),
-  buildPageMetadata: (_base: string, opts: any) => ({
-    title: opts.title,
+  buildPageMetadata: (_base: string, opts: { title: string; description: string }) => ({
+    title: { absolute: `${opts.title} | One&Only` },
     description: opts.description,
   }),
+  buildProductJsonLd: () => ({}),
 }));
 
 // Mock helper assets
@@ -113,7 +114,7 @@ describe('ProductPage Route', () => {
       const meta = await generateMetadata({
         params: Promise.resolve({ category: 'seating', product: 'some-product' }),
       });
-      expect(meta.title).toContain('Super Chair');
+      expect(meta.title).toEqual({ absolute: 'Super Chair | One&Only' });
       expect(meta.description).toContain('A great chair');
     });
   });

@@ -7,6 +7,7 @@ import {
   buildGlobalJsonLd,
   buildLocaleAlternates,
   buildProductJsonLd,
+  resolveDocumentTitle,
   LOCALE_HREFLANG,
 } from '@/features/site/data/seo';
 import { SITE_BRAND } from '@/features/site/data/brand';
@@ -97,6 +98,24 @@ describe('buildLocaleAlternates', () => {
 // buildPageMetadata
 // ---------------------------------------------------------------------------
 
+describe('resolveDocumentTitle', () => {
+  it('appends brand once for plain titles', () => {
+    expect(resolveDocumentTitle('Workstations')).toBe(
+      `Workstations | ${SITE_BRAND.titleSuffix}`,
+    );
+  });
+
+  it('collapses repeated brand suffixes', () => {
+    expect(
+      resolveDocumentTitle(`Workstations | ${SITE_BRAND.titleSuffix} | ${SITE_BRAND.titleSuffix}`),
+    ).toBe(`Workstations | ${SITE_BRAND.titleSuffix}`);
+  });
+
+  it('keeps default title intact', () => {
+    expect(resolveDocumentTitle(SITE_BRAND.defaultTitle)).toBe(SITE_BRAND.defaultTitle);
+  });
+});
+
 describe('buildPageMetadata', () => {
   const input = {
     title: 'Test Page',
@@ -104,9 +123,12 @@ describe('buildPageMetadata', () => {
     path: '/about',
   };
 
-  it('sets the title from input', () => {
+  it('sets an absolute title with a single brand suffix', () => {
     const meta = buildPageMetadata(TEST_SITE_URL, input);
-    expect(meta.title).toBe('Test Page');
+    expect(meta.title).toEqual({
+      absolute: `Test Page | ${SITE_BRAND.titleSuffix}`,
+    });
+    expect(meta.openGraph!.title).toBe(`Test Page | ${SITE_BRAND.titleSuffix}`);
   });
 
   it('sets the description from input', () => {

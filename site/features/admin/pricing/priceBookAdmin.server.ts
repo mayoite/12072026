@@ -15,6 +15,7 @@ import {
   seedPriceBookIfMissing,
   writePriceBookFile,
 } from "./priceBookFileStore";
+import { tryCreatePriceBookDrizzleStore } from "./priceBookDrizzleStore.server";
 import {
   activatePriceBookVersion,
   approvePriceBookVersion,
@@ -60,14 +61,46 @@ function loadFixtureSeed(): ReturnType<typeof readPriceBookFile> {
   };
 }
 
+/**
+ * Prefer Planner/Auth Postgres when configured; file store remains for
+ * isolated tests (custom dir) and offline seed fallback.
+ */
 export function getPriceBookStore(dir: string = PRICE_BOOKS_DIR_DEFAULT) {
+  // Custom dirs are test isolation — always file-backed.
+  if (dir !== PRICE_BOOKS_DIR_DEFAULT) {
+    return createPriceBookFileStore(dir);
+  }
+  const drizzle = tryCreatePriceBookDrizzleStore();
+  if (drizzle) return drizzle;
   return createPriceBookFileStore(dir);
 }
 
-export function ensureDefaultPriceBookSeeded(dir: string = PRICE_BOOKS_DIR_DEFAULT) {
+export async function ensureDefaultPriceBookSeeded(
+  dir: string = PRICE_BOOKS_DIR_DEFAULT,
+) {
   const seed = loadFixtureSeed();
   if (!seed) return null;
-  return seedPriceBookIfMissing(DEFAULT_PRICE_BOOK_ID, seed, dir);
+  // Always keep a local file seed for offline tools; also upsert into DB store.
+  const fileSeed = seedPriceBookIfMissing(DEFAULT_PRICE_BOOK_ID, seed, dir);
+  if (dir === PRICE_BOOKS_DIR_DEFAULT) {
+    try {
+      const store = getPriceBookStore(dir);
+      const existing = await store.getBook(DEFAULT_PRICE_BOOK_ID);
+      if (!existing) {
+        await store.saveBook(
+          {
+            familySlug: seed.familySlug,
+            bookId: seed.bookId,
+            activeVersionId: seed.activeVersionId,
+          },
+          seed.versions,
+        );
+      }
+    } catch {
+      // DB optional for pure file flows
+    }
+  }
+  return fileSeed;
 }
 
 /** E2E/dev reset — restores draft seed so approve→activate→rollback is repeatable. */
@@ -82,7 +115,7 @@ export async function readAdminPriceBook(
   bookId: string,
   dir: string = PRICE_BOOKS_DIR_DEFAULT,
 ) {
-  ensureDefaultPriceBookSeeded(dir);
+  await ensureDefaultPriceBookSeeded(dir);
   const store = getPriceBookStore(dir);
   const snapshot = await store.getBook(bookId);
   if (!snapshot) return null;
@@ -103,7 +136,7 @@ export async function runPriceBookAction(
   } = {},
 ) {
   const dir = options.dir ?? PRICE_BOOKS_DIR_DEFAULT;
-  ensureDefaultPriceBookSeeded(dir);
+  await ensureDefaultPriceBookSeeded(dir);
   const store = getPriceBookStore(dir);
   const actorId = options.actorId ?? "unknown";
   const reason = options.reason ?? "";
@@ -137,16 +170,27 @@ export async function runPriceBookAction(
   return result;
 }
 
-export function readAdminPriceBookAudit(
+export async function readAdminPriceBookAudit(
   bookId: string,
   limit = 40,
   dir: string = PRICE_BOOKS_DIR_DEFAULT,
 ) {
-  ensureDefaultPriceBookSeeded(dir);
+  await ensureDefaultPriceBookSeeded(dir);
   return readPriceBookAudit(bookId, dir, limit);
 }
 
-export function listAdminPriceBooks(dir: string = PRICE_BOOKS_DIR_DEFAULT): string[] {
-  ensureDefaultPriceBookSeeded(dir);
+export async function listAdminPriceBooks(
+  dir: string = PRICE_BOOKS_DIR_DEFAULT,
+): Promise<string[]> {
+  await ensureDefaultPriceBookSeeded(dir);
+  if (dir === PRICE_BOOKS_DIR_DEFAULT) {
+    try {
+      const store = getPriceBookStore(dir);
+      const seeded = await store.getBook(DEFAULT_PRICE_BOOK_ID);
+      if (seeded) return [DEFAULT_PRICE_BOOK_ID];
+    } catch {
+      // fall through to file list
+    }
+  }
   return listPriceBookIds(dir);
 }

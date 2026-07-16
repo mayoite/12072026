@@ -2,8 +2,8 @@
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 
 import { afterEach, describe, expect, it } from "vitest";
 

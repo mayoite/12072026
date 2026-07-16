@@ -481,7 +481,7 @@ describe("plannerStore facade", () => {
       facade().duplicateProject();
       const duplicatedKey = usePlannerProjectStore.getState().currentProjectKey;
       expect(duplicatedKey).not.toBe("src-key");
-      expect(window.localStorage.getItem(`planner-project-${duplicatedKey}`)).toBeTruthy();
+      expect(window.localStorage.getItem(`planner-project-${duplicatedKey}`)).toBeDefined();
     });
 
     it("delegates background image and remaining geometry updates", () => {

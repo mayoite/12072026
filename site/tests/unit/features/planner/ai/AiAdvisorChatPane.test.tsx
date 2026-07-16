@@ -42,9 +42,9 @@ describe("AiAdvisorChatPane", () => {
         }}
       />,
     );
-    expect(screen.getByRole("tabpanel")).toBeTruthy();
-    expect(screen.getByText(/plan Hub/i)).toBeTruthy();
-    expect(screen.getByLabelText("Suggested prompts")).toBeTruthy();
+    expect(screen.getByRole("tabpanel")).toBeDefined();
+    expect(screen.getByText(/plan Hub/i)).toBeDefined();
+    expect(screen.getByLabelText("Suggested prompts")).toBeDefined();
   });
 
   it("sends a message from the input", async () => {
@@ -56,7 +56,7 @@ describe("AiAdvisorChatPane", () => {
     const send = screen.getByRole("button", { name: /send/i });
     fireEvent.click(send);
     await waitFor(() => {
-      expect(screen.getByText(/Suggest 8 desks/i)).toBeTruthy();
+      expect(screen.getByText(/Suggest 8 desks/i)).toBeDefined();
     });
   });
 });

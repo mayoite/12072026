@@ -13,7 +13,7 @@ import {
   type AuthoringLifecycle,
 } from "../../lifecycle/authoringLifecycle";
 import type { CatalogLifecycleState } from "../../lifecycle/catalogLifecycle.shared";
-import type { SvgArtifactStatus } from "../../publish/svgArtifactStatus.server";
+import type { SvgArtifactState } from "../../publish/svgArtifactStatus.server";
 
 interface AdminSvgEditorTopBarProps {
   readonly slug: string;
@@ -21,7 +21,7 @@ interface AdminSvgEditorTopBarProps {
   readonly sku: string;
   readonly authoringLifecycle: AuthoringLifecycle;
   readonly lifecycle: CatalogLifecycleState;
-  readonly artifactState: SvgArtifactStatus["state"];
+  readonly artifactState: SvgArtifactState;
   readonly approving: boolean;
   readonly submitting: boolean;
   readonly formDirty: boolean;
@@ -29,6 +29,29 @@ interface AdminSvgEditorTopBarProps {
   readonly onReset: () => void;
   readonly onApprove: () => void;
   readonly onPublish: () => void;
+}
+
+function releasedSymbolLabel(state: SvgArtifactState): string {
+  switch (state) {
+    case "published":
+      return "Symbol released";
+    case "missing":
+      return "No released symbol";
+    case "invalid":
+      return "Released symbol invalid";
+  }
+}
+
+function publishButtonTitle(args: {
+  readonly canPublish: boolean;
+  readonly submitting: boolean;
+  readonly formDirty: boolean;
+}): string {
+  if (args.submitting) return "Publishing…";
+  if (args.canPublish) {
+    return "Release this draft as the Planner symbol for this product";
+  }
+  return "Publish is blocked until the draft is valid and ready to release";
 }
 
 export function AdminSvgEditorTopBar({
@@ -46,6 +69,18 @@ export function AdminSvgEditorTopBar({
   onApprove,
   onPublish,
 }: AdminSvgEditorTopBarProps) {
+  const approveDisabled =
+    approving || submitting || lifecycle === "live" || artifactState !== "published";
+  const approveTitle = approveDisabled
+    ? lifecycle === "live"
+      ? "Already approved for buyers"
+      : artifactState !== "published"
+        ? "Release a symbol with Publish before approving for buyers"
+        : approving
+          ? "Approving…"
+          : "Approve unavailable"
+    : "Mark the released symbol as available to buyers";
+
   return (
     <header
       className="admin-svg-engine-shell__topbar"
@@ -53,11 +88,12 @@ export function AdminSvgEditorTopBar({
     >
       <Link
         href="/admin/svg-editor"
-        className="admin-btn admin-btn--outline admin-btn--compact"
+        className="admin-btn admin-btn--outline admin-btn--compact admin-svg-engine-shell__back"
         data-testid="admin-shell-secondary-back"
+        aria-label="Back to SVG inventory"
       >
-        <ArrowLeft size={13} aria-hidden />
-        Back
+        <ArrowLeft size={14} aria-hidden />
+        <span>Inventory</span>
       </Link>
 
       <div className="admin-svg-engine-shell__divider" aria-hidden />
@@ -79,26 +115,47 @@ export function AdminSvgEditorTopBar({
           ) : null}
         </h1>
         <p className="admin-svg-engine-shell__source" data-testid="admin-shell-source">
-          Published <time dateTime={updatedAtLabel}>{updatedAtLabel}</time>
+          Last published <time dateTime={updatedAtLabel}>{updatedAtLabel}</time>
         </p>
         <p className="admin-svg-engine-shell__source" data-testid="admin-shell-state">
-          State: {authoringLifecycleLabel(authoringLifecycle)} · artifact{" "}
-          {artifactState}
-          {lifecycle === "live" ? " · approved for buyers" : ""}
-          {formDirty ? " · draft changed" : ""}
+          {authoringLifecycleLabel(authoringLifecycle)}
+          {" · "}
+          {releasedSymbolLabel(artifactState)}
+          {lifecycle === "live" ? " · Approved for buyers" : " · Not yet approved for buyers"}
+          {formDirty ? " · Unsaved draft changes" : ""}
         </p>
       </div>
 
-      <div className="admin-svg-engine-shell__state-pills">
+      <div className="admin-svg-engine-shell__state-pills" aria-label="Draft and release status">
         <span
           className={`${authoringLifecycleBadgeClass(authoringLifecycle)} admin-badge--compact`}
           data-testid="admin-shell-lifecycle-badge"
         >
           {authoringLifecycleLabel(authoringLifecycle)}
         </span>
+        <span
+          className={`admin-badge admin-badge--compact ${
+            artifactState === "published"
+              ? "admin-badge--active"
+              : artifactState === "invalid"
+                ? "admin-badge--warn"
+                : "admin-badge--hidden"
+          }`}
+          data-testid="admin-shell-symbol-badge"
+        >
+          {releasedSymbolLabel(artifactState)}
+        </span>
         {lifecycle === "live" ? (
           <span className="admin-badge admin-badge--active admin-badge--compact">
-            Live
+            Live for buyers
+          </span>
+        ) : null}
+        {formDirty ? (
+          <span
+            className="admin-badge admin-badge--warn admin-badge--compact"
+            data-testid="admin-shell-dirty-badge"
+          >
+            Unsaved changes
           </span>
         ) : null}
       </div>
@@ -108,41 +165,48 @@ export function AdminSvgEditorTopBar({
       <div className="admin-svg-engine-shell__actions" data-testid="admin-shell-actions">
         <button
           type="button"
-          className="admin-btn admin-btn--outline admin-btn--compact"
+          className="admin-btn admin-btn--outline admin-btn--compact admin-svg-engine-shell__action-reset"
           onClick={onReset}
           disabled={submitting || !formDirty}
+          title={
+            formDirty
+              ? "Discard draft edits and restore the last published revision"
+              : "No unpublished changes to discard"
+          }
           data-testid="admin-shell-destructive-reset"
         >
-          Reset
+          Reset draft
         </button>
         <button
           type="button"
-          className="admin-btn admin-btn--outline admin-btn--compact"
+          className="admin-btn admin-btn--outline admin-btn--compact admin-svg-engine-shell__action-approve"
           onClick={onApprove}
-          disabled={
-            approving || submitting || lifecycle === "live" || artifactState !== "published"
-          }
+          disabled={approveDisabled}
+          title={approveTitle}
           data-testid="admin-shell-secondary-approve"
         >
-          Approve
+          {approving ? (
+            <Loader2 size={14} className="animate-spin" aria-hidden />
+          ) : null}
+          Approve for buyers
         </button>
         <button
           type="button"
-          className="admin-btn admin-btn--primary admin-btn--compact"
+          className="admin-btn admin-btn--primary admin-btn--compact admin-svg-engine-shell__action-publish"
           onClick={onPublish}
           disabled={!canPublish}
+          title={publishButtonTitle({ canPublish, submitting, formDirty })}
           aria-describedby="admin-svg-publication-impact"
           data-testid="admin-shell-primary-action"
         >
           {submitting ? (
-            <Loader2 size={13} className="animate-spin" aria-hidden />
+            <Loader2 size={14} className="animate-spin" aria-hidden />
           ) : (
-            <CheckCircle size={13} aria-hidden />
+            <CheckCircle size={14} aria-hidden />
           )}
-          Publish
+          {submitting ? "Publishing…" : "Publish"}
         </button>
       </div>
     </header>
   );
 }
-

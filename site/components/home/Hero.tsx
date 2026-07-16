@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react";
 import type { Variants } from "framer-motion";
 import { motion, useScroll, useTransform } from "framer-motion";
 
+import { TrackedLink } from "@/components/ui/TrackedLink";
 import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
 
 export interface HeroProps {
@@ -90,8 +90,10 @@ export function Hero({
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- set once after mount to gate motion reveal (prevents flash); reason: motionReady state for framer initial; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: hoist to useState initializer or layout effect when hero animation revised
-    setMotionReady(true);
+    const id = requestAnimationFrame(() => {
+      setMotionReady(true);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   return (
@@ -185,15 +187,20 @@ export function Hero({
 
             {showButton && (
               <motion.div variants={titleVariants} className="pt-6">
-                <Link
+                <TrackedLink
                   href={buttonLink}
-                  className="btn-primary group px-8 py-4 md:px-10"
+                  label={buttonText}
+                  surface={`route-hero:${sectionId}`}
+                  className="btn-primary group min-h-11 px-8 py-4 md:px-10"
                 >
                   <span className="text-sm font-bold uppercase tracking-wide">
                     {buttonText}
                   </span>
-                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
-                </Link>
+                  <ArrowRight
+                    className="h-5 w-5 transition-transform group-hover:translate-x-2"
+                    aria-hidden="true"
+                  />
+                </TrackedLink>
               </motion.div>
             )}
           </motion.div>

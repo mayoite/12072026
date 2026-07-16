@@ -6,12 +6,13 @@ import { describe, expect, it } from "vitest";
 import {
   existsSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 
 import {
   createPriceBookFileStore,
@@ -63,9 +64,9 @@ function withTempDir<T>(run: (dir: string) => T | Promise<T>): Promise<T> {
 }
 
 describe("priceBookFileStore", () => {
-  it("PRICE_BOOKS_DIR_DEFAULT lives under features/admin/data/price-books", () => {
+  it("PRICE_BOOKS_DIR_DEFAULT lives under features/admin/pricing/data/price-books", () => {
     expect(PRICE_BOOKS_DIR_DEFAULT.replace(/\\/g, "/")).toMatch(
-      /features\/admin\/data\/price-books$/,
+      /features\/admin\/pricing\/data\/price-books$/,
     );
   });
 
@@ -201,5 +202,51 @@ describe("priceBookFileStore", () => {
     expect(copy[0]).not.toBe(rules[0]);
     copy[0]!.sku = "mutated";
     expect(rules[0]!.sku).toBe("SKU-1");
+  });
+
+  it("normalizeRules returns empty array for empty input", () => {
+    expect(normalizeRules([])).toEqual([]);
+  });
+
+  it("writePriceBookFile overwrites an existing book in place", async () => {
+    await withTempDir((dir) => {
+      writePriceBookFile(sampleRecord({ bookId: "pb-ow", familySlug: "first" }), dir);
+      writePriceBookFile(
+        sampleRecord({
+          bookId: "pb-ow",
+          familySlug: "second",
+          activeVersionId: "v1",
+        }),
+        dir,
+      );
+      const read = readPriceBookFile("pb-ow", dir);
+      expect(read?.familySlug).toBe("second");
+      expect(read?.activeVersionId).toBe("v1");
+      // no leftover temp files
+      const leftovers = readdirSync(dir).filter((e) => e.includes(".tmp-"));
+      expect(leftovers).toEqual([]);
+    });
+  });
+
+  it("createPriceBookFileStore copies versions array on save (no shared ref)", async () => {
+    await withTempDir(async (dir) => {
+      const store = createPriceBookFileStore(dir);
+      const versions = [
+        {
+          versionId: "v1",
+          effectiveFrom: "2026-07-01",
+          currency: "INR" as const,
+          status: "draft" as const,
+          rules: [] as const,
+        },
+      ];
+      await store.saveBook(
+        { familySlug: "f", bookId: "pb-ref", activeVersionId: null },
+        versions,
+      );
+      const snap = await store.getBook("pb-ref");
+      expect(snap?.versions).toEqual(versions);
+      expect(snap?.versions).not.toBe(versions);
+    });
   });
 });

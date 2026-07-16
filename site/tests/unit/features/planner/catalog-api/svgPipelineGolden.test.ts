@@ -22,7 +22,7 @@
  * 03-SVG-GS-01: all token values in themeTokens reference 'currentColor'
  *   or CSS var() references — no hardcoded #hex literals.
  *
- * Type Safety (AGENTS.md): no any, no @ts-ignore, no eslint-disable.
+ * Type Safety (AGENTS.md): no any, no @ts-ignore, no eslint suppress.
  */
 
 import { describe, it, expect } from "vitest";

@@ -185,7 +185,7 @@ describe("promoteGuestSession", () => {
 
     it("preserves existing project id and does not call idFactory", async () => {
       const project = makeProject();
-      expect(project.id).toBeTruthy();
+      expect(project.id).toBeDefined();
 
       const idFactory = vi.fn().mockReturnValue("should-not-be-used");
       const savedDoc = makeSavedDoc(project);

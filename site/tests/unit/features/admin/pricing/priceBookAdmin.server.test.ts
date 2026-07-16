@@ -9,8 +9,8 @@ import {
   mkdtempSync,
   rmSync,
 } from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 
 import {
   DEFAULT_PRICE_BOOK_ID,
@@ -43,8 +43,8 @@ function withTempDir<T>(run: (dir: string) => T | Promise<T>): Promise<T> {
 
 describe("priceBookAdmin.server", () => {
   it("ensureDefaultPriceBookSeeded loads fixture as draft and does not overwrite", async () => {
-    await withTempDir((dir) => {
-      const first = ensureDefaultPriceBookSeeded(dir);
+    await withTempDir(async (dir) => {
+      const first = await ensureDefaultPriceBookSeeded(dir);
       expect(first).not.toBeNull();
       expect(first?.bookId).toBe(DEFAULT_PRICE_BOOK_ID);
       expect(first?.activeVersionId).toBeNull();
@@ -59,14 +59,14 @@ describe("priceBookAdmin.server", () => {
         },
         dir,
       );
-      const second = ensureDefaultPriceBookSeeded(dir);
+      const second = await ensureDefaultPriceBookSeeded(dir);
       expect(second?.familySlug).toBe("custom-after-seed");
     });
   });
 
   it("resetDefaultPriceBookSeed force-writes draft seed", async () => {
-    await withTempDir((dir) => {
-      ensureDefaultPriceBookSeeded(dir);
+    await withTempDir(async (dir) => {
+      await ensureDefaultPriceBookSeeded(dir);
       writePriceBookFile(
         {
           familySlug: "mutated",
@@ -95,7 +95,7 @@ describe("priceBookAdmin.server", () => {
 
   it("getPriceBookStore reads books from the injected dir", async () => {
     await withTempDir(async (dir) => {
-      ensureDefaultPriceBookSeeded(dir);
+      await ensureDefaultPriceBookSeeded(dir);
       const store = getPriceBookStore(dir);
       const snap = await store.getBook(DEFAULT_PRICE_BOOK_ID);
       expect(snap?.book.bookId).toBe(DEFAULT_PRICE_BOOK_ID);
@@ -115,21 +115,21 @@ describe("priceBookAdmin.server", () => {
 
   it("readAdminPriceBook returns null for unknown book id after seed", async () => {
     await withTempDir(async (dir) => {
-      ensureDefaultPriceBookSeeded(dir);
+      await ensureDefaultPriceBookSeeded(dir);
       expect(await readAdminPriceBook("pb-unknown", dir)).toBeNull();
     });
   });
 
   it("listAdminPriceBooks seeds default and lists ids", async () => {
-    await withTempDir((dir) => {
-      const ids = listAdminPriceBooks(dir);
+    await withTempDir(async (dir) => {
+      const ids = await listAdminPriceBooks(dir);
       expect(ids).toContain(DEFAULT_PRICE_BOOK_ID);
     });
   });
 
   it("runPriceBookAction approve → activate → rollback with audit trail", async () => {
     await withTempDir(async (dir) => {
-      const seeded = ensureDefaultPriceBookSeeded(dir);
+      const seeded = await ensureDefaultPriceBookSeeded(dir);
       const versionId = seeded!.versions[0]!.versionId;
 
       const denied = await runPriceBookAction(
@@ -174,7 +174,7 @@ describe("priceBookAdmin.server", () => {
       if (!rolled.ok) throw new Error("expected rolled.ok");
       expect(rolled.action).toBe("rollback");
 
-      const audit = readAdminPriceBookAudit(DEFAULT_PRICE_BOOK_ID, 40, dir);
+      const audit = await readAdminPriceBookAudit(DEFAULT_PRICE_BOOK_ID, 40, dir);
       expect(audit.length).toBeGreaterThanOrEqual(4);
       expect(audit.some((e) => e.action === "deny" && e.result === "failure")).toBe(
         true,
@@ -195,7 +195,7 @@ describe("priceBookAdmin.server", () => {
 
   it("runPriceBookAction defaults actor to unknown and reason to empty → (none)", async () => {
     await withTempDir(async (dir) => {
-      ensureDefaultPriceBookSeeded(dir);
+      await ensureDefaultPriceBookSeeded(dir);
       await runPriceBookAction(
         DEFAULT_PRICE_BOOK_ID,
         "approve",
@@ -214,7 +214,7 @@ describe("priceBookAdmin.server", () => {
   it("runPriceBookAction still returns commercial result if audit append fails", async () => {
     await withTempDir(async (dir) => {
       // Make audit path a directory so appendFileSync throws
-      ensureDefaultPriceBookSeeded(dir);
+      await ensureDefaultPriceBookSeeded(dir);
       mkdirSync(priceBookAuditLogPath(dir), { recursive: true });
 
       const seeded = readPriceBookFile(DEFAULT_PRICE_BOOK_ID, dir);
@@ -232,7 +232,7 @@ describe("priceBookAdmin.server", () => {
 
   it("readAdminPriceBookAudit respects limit after seed", async () => {
     await withTempDir(async (dir) => {
-      ensureDefaultPriceBookSeeded(dir);
+      await ensureDefaultPriceBookSeeded(dir);
       const versionId = "v1";
       for (let i = 0; i < 5; i++) {
         await runPriceBookAction(
@@ -243,7 +243,7 @@ describe("priceBookAdmin.server", () => {
           { actorId: `u-${i}`, reason: `attempt ${i}`, dir },
         );
       }
-      const limited = readAdminPriceBookAudit(DEFAULT_PRICE_BOOK_ID, 2, dir);
+      const limited = await readAdminPriceBookAudit(DEFAULT_PRICE_BOOK_ID, 2, dir);
       expect(limited).toHaveLength(2);
     });
   });

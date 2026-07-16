@@ -26,10 +26,10 @@ describe("AIAssistDrawer", () => {
 
   it("renders AI Assist with tabs in embedded mode", () => {
     render(<AIAssistDrawer embedded defaultTab="chat" />);
-    expect(screen.getByLabelText("AI Assist")).toBeTruthy();
-    expect(screen.getByRole("tab", { name: /Suggest/i })).toBeTruthy();
-    expect(screen.getByRole("tab", { name: /Match/i })).toBeTruthy();
-    expect(screen.getByRole("tab", { name: /Chat/i })).toBeTruthy();
+    expect(screen.getByLabelText("AI Assist")).toBeDefined();
+    expect(screen.getByRole("tab", { name: /Suggest/i })).toBeDefined();
+    expect(screen.getByRole("tab", { name: /Match/i })).toBeDefined();
+    expect(screen.getByRole("tab", { name: /Chat/i })).toBeDefined();
   });
 
   it("scans placements via workspace bridge on Match tab", () => {

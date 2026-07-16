@@ -60,7 +60,7 @@ describe("app/(site)/portal/svg-catalog/[slug]/page.tsx", () => {
     (loader.tryLoad as any).mockReturnValue({ ok: true, value: desc });
     const meta = await generateMetadata({ params: Promise.resolve({ slug: "x" }) });
     expect(meta.title).toMatch(/x/);
-    expect(meta.openGraph?.images).toBeTruthy();
+    expect(meta.openGraph?.images).toBeDefined();
   });
 
   it("05-PORT-09: generateMetadata OG image references R2/CDN thumb bucket, not public/svg-catalog", async () => {

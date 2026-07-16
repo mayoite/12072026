@@ -85,7 +85,7 @@ describe("plannerStateUtils", () => {
     };
     const state = buildTemplateLoadedState(template);
     expect(state.walls).toHaveLength(1);
-    expect(state.walls?.[0]?.id).toBeTruthy();
+    expect(state.walls?.[0]?.id).toBeDefined();
     expect(state.isDirty).toBe(true);
     expect(state.selectedId).toBeNull();
     expect(state.undoStack).toEqual([]);

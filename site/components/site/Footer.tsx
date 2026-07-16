@@ -42,7 +42,12 @@ export function SiteFooter() {
       <div className="shell-container py-12 md:py-14">
         <div className="site-footer__columns">
           <div className="site-footer__brand-col flex flex-col gap-4">
-            <Link href="/" prefetch={false} className={`site-footer__link ${footerInteractiveClass} block`}>
+            <Link
+              href="/"
+              prefetch={false}
+              aria-label="One&Only - home"
+              className={`site-footer__link ${footerInteractiveClass} inline-flex min-h-11 items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary`}
+            >
               <OneAndOnlyLogo variant="orange" className="h-10" />
             </Link>
 

@@ -9,7 +9,7 @@ describe("ChooseProductPage", () => {
     expect(screen.getByText("Guest access")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Workspace Planner/i })).toHaveAttribute(
       "href",
-      "/planner/guest",
+      expect.stringMatching(/^\/planner\/guest(\?|$)/),
     );
     expect(screen.queryByRole("link", { name: "Open portal" })).not.toBeInTheDocument();
   });
@@ -20,7 +20,7 @@ describe("ChooseProductPage", () => {
     expect(screen.getByText("Member access")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Workspace Planner/i })).toHaveAttribute(
       "href",
-      "/planner/canvas",
+      expect.stringMatching(/^\/planner\/canvas(\?|$)/),
     );
     expect(screen.getByRole("link", { name: "Open portal" })).toHaveAttribute(
       "href",

@@ -25,7 +25,6 @@ function loadPatterns(): Array<{ id: string; re: RegExp; label: string }> {
   const source = fs.readFileSync(scriptPath, "utf8");
   const match = source.match(/const PATTERNS = (\[[\s\S]*?\n\]);/);
   if (!match) throw new Error("PATTERNS not found");
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- rehydrate script patterns under test
   return new Function(`return ${match[1]}`)() as Array<{
     id: string;
     re: RegExp;

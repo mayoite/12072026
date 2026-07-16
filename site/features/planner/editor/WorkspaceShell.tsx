@@ -217,7 +217,7 @@ export function WorkspaceShell({
   }, [activePanel, panels, setActivePanel]);
 
   const panelTitles: Record<PanelId, string> = {
-    left: "Library",
+    left: "Inventory",
     right: "Properties",
     bottom: "Layers",
   };
@@ -420,8 +420,8 @@ export function WorkspaceShell({
         )}
       </div>
 
-      {/* Status bar */}
-      <footer className={`${styles.status} pw-status-bar`}>
+      {/* Status bar — customer/operator language (no internal viewport jargon) */}
+      <footer className={`${styles.status} pw-status-bar`} aria-label="Plan status">
         {planMetrics ? (
           <>
             <span>{planMetrics.objects} objects</span>
@@ -441,34 +441,31 @@ export function WorkspaceShell({
               data-boq-ready={planMetrics.boqReady ? "true" : "false"}
             >
               {planMetrics.validationErrors > 0
-                ? `BOQ blocked: ${planMetrics.validationErrors} error${planMetrics.validationErrors > 1 ? "s" : ""}`
+                ? `Quote blocked · ${planMetrics.validationErrors} error${planMetrics.validationErrors > 1 ? "s" : ""}`
                 : planMetrics.boqReady
-                  ? "BOQ ready"
-                  : "BOQ: add furniture"}
+                  ? "Quote ready"
+                  : "Add furniture for quote"}
             </span>
-            <span>Floor {planMetrics.floorLabel}</span>
+            <span>{planMetrics.floorLabel}</span>
           </>
         ) : null}
         <div className={styles.statusLeft}>
           {statusLeft ?? (
             <>
-              <span className={styles.statusItem}>Ready</span>
-              <span className={styles.statusItem}>Zoom: 100%</span>
+              <span className={styles.statusItem}>Canvas ready</span>
+              <span className={styles.statusItem}>Zoom 100%</span>
             </>
           )}
         </div>
         <div className={styles.statusRight}>
           {statusRight ?? (
-            <>
-              <span className={styles.statusItem}>
-                {viewportTier === "desktop"
-                  ? "Desktop"
-                  : viewportTier === "tablet"
-                    ? "Tablet"
-                    : "Mobile"}{" "}
-                view
-              </span>
-            </>
+            <span className={styles.statusItem} data-viewport-tier={viewportTier}>
+              {viewportTier === "desktop"
+                ? "Wide layout"
+                : viewportTier === "tablet"
+                  ? "Medium layout"
+                  : "Phone layout"}
+            </span>
           )}
         </div>
       </footer>

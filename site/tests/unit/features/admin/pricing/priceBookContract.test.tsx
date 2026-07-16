@@ -11,6 +11,7 @@ import {
   describePriceBookVersion,
   displayPriceForSku,
   formatPriceBookCurrency,
+  formatPriceBookMinorSecondary,
   getPriceBookVersion,
   lineTotalMinor,
   priceForSku,
@@ -133,6 +134,133 @@ describe("ADM-PRICE-01 currency primary, raw minor secondary", () => {
     expect(display.secondary).toMatch(/45000000/);
     expect(display.secondary).toMatch(/minor/i);
     expect(display.unitPriceMinor).toBe(450_000_00);
+  });
+
+  it("returns Price unavailable for non-finite minor units (never 0)", () => {
+    expect(formatPriceBookCurrency(Number.NaN, "INR")).toBe("Price unavailable");
+    expect(formatPriceBookCurrency(Number.POSITIVE_INFINITY, "USD")).toBe(
+      "Price unavailable",
+    );
+    expect(formatPriceBookMinorSecondary(Number.NaN, "INR")).toBe("—");
+    expect(formatPriceBookMinorSecondary(Number.NEGATIVE_INFINITY, "USD")).toBe(
+      "—",
+    );
+  });
+
+  it("formats minor secondary with trunc and currency code", () => {
+    expect(formatPriceBookMinorSecondary(12_345.9, "USD")).toBe(
+      "12345 USD minor units",
+    );
+    expect(formatPriceBookMinorSecondary(0, "INR")).toBe("0 INR minor units");
+  });
+
+  it("formats USD with en-US locale", () => {
+    const formatted = formatPriceBookCurrency(199_99, "USD", "en-US");
+    expect(formatted).toMatch(/\$|USD/i);
+    expect(formatted.replace(/[^\d]/g, "")).toMatch(/19999|199\.99|19999/);
+  });
+});
+
+describe("lineTotalMinor edge cases", () => {
+  const freeRule = {
+    sku: "FREE",
+    unitPriceMinor: 0,
+    currency: "INR" as const,
+    uom: "each" as const,
+  };
+  const baseRule = {
+    sku: "X",
+    unitPriceMinor: 1000,
+    currency: "INR" as const,
+    uom: "each" as const,
+  };
+
+  it("returns null for non-positive or non-finite quantity", () => {
+    expect(lineTotalMinor(baseRule, 0)).toBeNull();
+    expect(lineTotalMinor(baseRule, -2)).toBeNull();
+    expect(lineTotalMinor(baseRule, Number.NaN)).toBeNull();
+    expect(lineTotalMinor(baseRule, Number.POSITIVE_INFINITY)).toBeNull();
+  });
+
+  it("returns null for negative unit price; free line (0) is a valid total", () => {
+    expect(
+      lineTotalMinor(
+        { ...baseRule, unitPriceMinor: -1 },
+        1,
+      ),
+    ).toBeNull();
+    expect(lineTotalMinor(freeRule, 3)).toBe(0);
+  });
+
+  it("defaults missing adjustmentBps to 0 and applies positive bps", () => {
+    expect(lineTotalMinor(baseRule, 2)).toBe(2000);
+    expect(
+      lineTotalMinor({ ...baseRule, adjustmentBps: 1000 }, 1),
+    ).toBe(Math.round(1000 * (1 + 1000 / 10_000)));
+  });
+});
+
+describe("priceForSku / getPriceBookVersion / displayPriceForSku edges", () => {
+  it("returns null for unknown version", () => {
+    expect(getPriceBookVersion(FIXTURE, "nope")).toBeNull();
+    expect(priceForSku(FIXTURE, "nope", "OFL-TBL-001")).toBeNull();
+    const missingVersion = displayPriceForSku(FIXTURE, "nope", "OFL-TBL-001");
+    expect(missingVersion.available).toBe(false);
+    expect(missingVersion.primary).toBe("Price unavailable");
+    expect(missingVersion.secondary).toBeNull();
+    expect(missingVersion.currency).toBeNull();
+  });
+
+  it("treats free line (0 minor) as available, not missing", () => {
+    const freeBook: PriceBookContract = {
+      ...FIXTURE,
+      versions: [
+        {
+          versionId: "v-free",
+          effectiveFrom: "2026-07-01",
+          currency: "INR",
+          status: "active",
+          rules: [
+            {
+              sku: "PROMO-FREE",
+              unitPriceMinor: 0,
+              currency: "INR",
+              uom: "each",
+            },
+          ],
+        },
+      ],
+    };
+    const display = displayPriceForSku(freeBook, "v-free", "PROMO-FREE");
+    expect(display.available).toBe(true);
+    if (!display.available) throw new Error("expected available");
+    expect(display.unitPriceMinor).toBe(0);
+    expect(display.secondary).toMatch(/0 INR minor/);
+  });
+
+  it("marks negative stored unit price as unavailable", () => {
+    const badBook: PriceBookContract = {
+      ...FIXTURE,
+      versions: [
+        {
+          versionId: "v-bad",
+          effectiveFrom: "2026-07-01",
+          currency: "INR",
+          status: "draft",
+          rules: [
+            {
+              sku: "BAD",
+              unitPriceMinor: -50,
+              currency: "INR",
+              uom: "each",
+            },
+          ],
+        },
+      ],
+    };
+    const display = displayPriceForSku(badBook, "v-bad", "BAD");
+    expect(display.available).toBe(false);
+    expect(display.unitPriceMinor).toBeNull();
   });
 });
 

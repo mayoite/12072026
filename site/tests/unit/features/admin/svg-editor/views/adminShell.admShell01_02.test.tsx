@@ -31,6 +31,9 @@ vi.mock("@/features/admin/svg-editor/publish/PublishedSvgPreview", () => ({
 vi.mock("@/features/admin/svg-editor/lifecycle/DescriptorRevisionPanel", () => ({
   DescriptorRevisionPanel: () => null,
 }));
+vi.mock("@/features/admin/svg-editor/publish/uploadAsset", () => ({
+  uploadAssetToSupabase: vi.fn(),
+}));
 vi.mock("next/dynamic", () => ({
   default: () => () => null,
 }));
@@ -165,7 +168,7 @@ describe("ADM-SHELL-01 edit page landmarks", () => {
     );
     expect(screen.getByTestId("admin-shell-scope")).toHaveTextContent(/SVG studio/i);
     expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
-      /Published today/i,
+      /Last published today/i,
     );
     expect(screen.getByTestId("admin-shell-state")).toBeInTheDocument();
     expect(screen.getByTestId("admin-shell-primary-action")).toHaveTextContent(

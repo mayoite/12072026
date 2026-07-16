@@ -18,6 +18,7 @@ describe('CookieConsent Component', () => {
   it('renders cookie consent bar when consent is not yet given', () => {
     render(<CookieConsent />);
 
+    expect(screen.getByRole('region', { name: 'Cookie consent' })).toBeInTheDocument();
     expect(screen.getByText(/We use cookies to optimize our website/i)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute('href', '/privacy');
     expect(screen.getByRole('button', { name: 'Decline' })).toBeInTheDocument();

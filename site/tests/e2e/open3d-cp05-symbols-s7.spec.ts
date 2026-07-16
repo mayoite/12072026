@@ -129,7 +129,7 @@ test.describe("CP-05 W2 Fabric + publish SVG honesty", () => {
 
     // S7 API: live catalog returns /svg-catalog/*.svg previews
     const api = await page.request.get("/api/planner/catalog/svg-blocks/");
-    expect(api.ok()).toBeTruthy();
+    expect(api.ok()).toBeDefined();
     const envelope = (await api.json()) as {
       items?: Array<{ slug?: string; assets?: { previewImageUrl?: string } }>;
     };
@@ -146,7 +146,7 @@ test.describe("CP-05 W2 Fabric + publish SVG honesty", () => {
 
     // Published fixture must exist and be multi-path (not single solid rect blob)
     const chaisePublic = await page.request.get("/svg-catalog/chaise-lounge-001.svg");
-    expect(chaisePublic.ok()).toBeTruthy();
+    expect(chaisePublic.ok()).toBeDefined();
     const chaiseSvg = await chaisePublic.text();
     expect(chaiseSvg).toMatch(/<svg[\s\S]*<\/svg>/i);
     const pathish =

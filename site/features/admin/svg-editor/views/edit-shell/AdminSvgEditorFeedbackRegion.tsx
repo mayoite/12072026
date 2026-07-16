@@ -35,13 +35,13 @@ export function AdminSvgEditorFeedbackRegion({
       {feedback.submitting ? (
         <div
           role="status"
-          className="admin-alert admin-alert--info flex flex-wrap items-center gap-3"
+          className="admin-alert admin-alert--info admin-svg-engine-feedback__item"
           aria-busy="true"
         >
           <Loader2 size={16} className="animate-spin shrink-0" aria-hidden />
-          <span>
-            Publishing <code>{slug}</code>... saving draft and releasing the Planner
-            symbol.
+          <span className="min-w-0 flex-1">
+            Publishing <strong>{slug || "symbol"}</strong>… saving the draft and
+            releasing the Planner symbol. Keep this page open until finish.
           </span>
         </div>
       ) : null}
@@ -49,7 +49,7 @@ export function AdminSvgEditorFeedbackRegion({
       {feedback.errorMessage ? (
         <div
           role="alert"
-          className="admin-alert admin-alert--error flex flex-wrap items-center gap-3"
+          className="admin-alert admin-alert--error admin-svg-engine-feedback__item"
           data-testid="admin-svg-publish-failure"
         >
           <WarningCircle size={16} className="shrink-0" aria-hidden />
@@ -69,7 +69,7 @@ export function AdminSvgEditorFeedbackRegion({
       {feedback.successMessage ? (
         <div
           role="status"
-          className="admin-alert admin-alert--info flex flex-wrap items-center gap-3"
+          className="admin-alert admin-alert--success admin-svg-engine-feedback__item"
           data-testid="admin-svg-publish-success"
         >
           <CheckCircle size={16} className="shrink-0" aria-hidden />
@@ -110,4 +110,3 @@ export function AdminSvgEditorFeedbackRegion({
     </div>
   );
 }
-

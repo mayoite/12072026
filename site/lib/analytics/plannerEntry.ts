@@ -34,9 +34,15 @@ export function buildPlannerEntryCampaign(context: PlannerEntryContext): string 
   return parts.length > 0 ? parts.join("|") : context.campaign;
 }
 
+export interface BuildPlannerEntryHrefOptions {
+  /** Cookie-based utm_* params differ between SSR and client — omit in rendered links. */
+  readonly includeAttribution?: boolean;
+}
+
 export function buildPlannerEntryHref(
   baseHref: string,
   context: Pick<PlannerEntryContext, "sourcePage" | "productSlug" | "categoryId">,
+  options?: BuildPlannerEntryHrefOptions,
 ): string {
   const url = new URL(baseHref, "https://oneonly.in");
   if (context.productSlug) {
@@ -46,15 +52,17 @@ export function buildPlannerEntryHref(
     url.searchParams.set("siteCategory", context.categoryId);
   }
   url.searchParams.set("siteSource", context.sourcePage);
-  const attribution = readSiteAttribution();
-  if (attribution.source && attribution.source !== "direct") {
-    url.searchParams.set("utm_source", attribution.source);
-  }
-  if (attribution.medium && attribution.medium !== "none") {
-    url.searchParams.set("utm_medium", attribution.medium);
-  }
-  if (attribution.campaign) {
-    url.searchParams.set("utm_campaign", attribution.campaign);
+  if (options?.includeAttribution) {
+    const attribution = readSiteAttribution();
+    if (attribution.source && attribution.source !== "direct") {
+      url.searchParams.set("utm_source", attribution.source);
+    }
+    if (attribution.medium && attribution.medium !== "none") {
+      url.searchParams.set("utm_medium", attribution.medium);
+    }
+    if (attribution.campaign) {
+      url.searchParams.set("utm_campaign", attribution.campaign);
+    }
   }
   return `${url.pathname}${url.search}`;
 }

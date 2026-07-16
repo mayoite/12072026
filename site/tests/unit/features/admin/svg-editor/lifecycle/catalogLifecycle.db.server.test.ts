@@ -49,16 +49,76 @@ describe("loadBuyerVisibleDescriptorsWithDb", () => {
 
   it("awaits and returns configured Products DB descriptors", async () => {
     isProductsDatabaseConfigured.mockReturnValue(true);
+    const dbDescriptor = {
+      slug: "db-only",
+      geometry: { widthMm: 1200, depthMm: 600, heightMm: 750 },
+    };
     execute.mockResolvedValue([
-      { slug: "db-only", descriptor: { slug: "db-only" } },
+      { slug: "db-only", descriptor: dbDescriptor },
     ]);
+
+    // Fresh module so mocks from this case bind after first import cache if needed.
+    vi.resetModules();
+    vi.doMock("server-only", () => ({}));
+    vi.doMock("@/features/admin/svg-editor/lifecycle/catalogLifecycle", () => ({
+      loadBuyerVisibleDescriptors,
+      readLifecycleManifest: () => ({}),
+      isBuyerVisibleSlug: () => true,
+    }));
+    vi.doMock("@/platform/drizzle/databaseUrls", () => ({
+      isProductsDatabaseConfigured,
+    }));
+    vi.doMock("@/platform/drizzle/productsDb", () => ({
+      productsDb: {
+        select: () => ({
+          from: () => ({ execute }),
+        }),
+      },
+    }));
+    vi.doMock("@/platform/drizzle/schema/catalog", () => ({
+      blockDescriptors: {},
+    }));
 
     const { loadBuyerVisibleDescriptorsWithDb } = await import(
       "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server"
     );
     const rows = await loadBuyerVisibleDescriptorsWithDb();
 
-    expect(rows).toEqual([{ slug: "db-only" }]);
+    expect(rows).toEqual([dbDescriptor]);
     expect(loadBuyerVisibleDescriptors).not.toHaveBeenCalled();
+  });
+
+  it("falls back to disk when DB rows lack usable geometry", async () => {
+    isProductsDatabaseConfigured.mockReturnValue(true);
+    execute.mockResolvedValue([
+      { slug: "stub", descriptor: { slug: "stub" } },
+    ]);
+    vi.resetModules();
+    vi.doMock("server-only", () => ({}));
+    vi.doMock("@/features/admin/svg-editor/lifecycle/catalogLifecycle", () => ({
+      loadBuyerVisibleDescriptors,
+      readLifecycleManifest: () => ({}),
+      isBuyerVisibleSlug: () => true,
+    }));
+    vi.doMock("@/platform/drizzle/databaseUrls", () => ({
+      isProductsDatabaseConfigured,
+    }));
+    vi.doMock("@/platform/drizzle/productsDb", () => ({
+      productsDb: {
+        select: () => ({
+          from: () => ({ execute }),
+        }),
+      },
+    }));
+    vi.doMock("@/platform/drizzle/schema/catalog", () => ({
+      blockDescriptors: {},
+    }));
+
+    const { loadBuyerVisibleDescriptorsWithDb } = await import(
+      "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server"
+    );
+    const rows = await loadBuyerVisibleDescriptorsWithDb();
+    expect(rows).toEqual([{ slug: "disk-only" }]);
+    expect(loadBuyerVisibleDescriptors).toHaveBeenCalled();
   });
 });

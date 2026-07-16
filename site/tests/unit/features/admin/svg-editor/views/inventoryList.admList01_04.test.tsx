@@ -4,7 +4,8 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 
 import {
@@ -229,5 +230,92 @@ describe("ADM-LIST-02/03 list view rows and actions", () => {
     );
     const retire = screen.getByTestId("admin-svg-retire-side-table-001");
     expect(retire).toHaveAttribute("aria-label", "Retire side-table-001");
+
+    // Status chips use intentional title case, not raw enum tokens
+    const lifecycleBadges = document.querySelectorAll(
+      "td[data-label='Lifecycle'] .admin-badge",
+    );
+    const badgeText = Array.from(lifecycleBadges).map((el) => el.textContent);
+    expect(badgeText).toContain("Live");
+    expect(badgeText).toContain("Draft");
+    expect(badgeText).not.toContain("live");
+    expect(badgeText).not.toContain("draft");
+
+    // Symbol status is operator language (no pipeline/validation jargon)
+    expect(
+      screen.getByTestId("admin-svg-validation-side-table-001"),
+    ).toHaveTextContent(/^Published$/);
+    expect(
+      screen.getByTestId("admin-svg-validation-desk-cfg-001"),
+    ).toHaveTextContent(/^Missing$/);
+
+    // Phone-oriented card markup present for CSS cards-priority layout
+    expect(
+      screen.getByTestId("admin-svg-inventory-table"),
+    ).toHaveAttribute("data-phone-layout", "cards-priority");
+    expect(
+      document.querySelector(
+        ".admin-table-wrap[data-phone-layout='cards-priority']",
+      ),
+    ).not.toBeNull();
+
+    // Edit is labeled (not icon-only); retire has accessible name
+    expect(screen.getByTestId("admin-svg-edit-side-table-001")).toHaveTextContent(
+      /Edit/i,
+    );
+    expect(
+      screen.getByTestId("admin-svg-retire-side-table-001"),
+    ).toHaveClass("admin-svg-inventory-actions__retire");
+
+    // Advanced bulk stays demoted (closed details)
+    const advanced = screen.getByTestId("admin-svg-advanced-import");
+    expect(advanced.tagName.toLowerCase()).toBe("details");
+    expect(advanced).not.toHaveAttribute("open");
+  });
+
+  it("shows clear filters when filters active and resets inventory", async () => {
+    const user = userEvent.setup();
+    render(
+      <AdminSvgEditorListView
+        descriptors={descriptors}
+        refreshedAtLabel="test"
+        artifactStatuses={{
+          "side-table-001": {
+            state: "published",
+            bytes: 12,
+            updatedAt: 1,
+            hash: "abc",
+            publicUrl: "/svg-catalog/side-table-001.svg",
+            markup: "<svg></svg>",
+          },
+          "desk-cfg-001": {
+            state: "missing",
+            bytes: 0,
+            updatedAt: null,
+            hash: null,
+            publicUrl: null,
+            markup: null,
+          },
+        }}
+        lifecycleManifest={{}}
+      />,
+    );
+
+    expect(
+      screen.queryByTestId("admin-svg-inventory-clear-filters"),
+    ).not.toBeInTheDocument();
+
+    await user.type(screen.getByTestId("admin-svg-inventory-search"), "no-match-xyz");
+    expect(screen.getByTestId("admin-svg-inventory-empty")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("admin-svg-inventory-clear-filters"),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByTestId("admin-svg-inventory-clear-filters-empty"));
+    expect(
+      screen.queryByTestId("admin-svg-inventory-empty"),
+    ).not.toBeInTheDocument();
+    expect(screen.getByTestId("admin-svg-inventory-search")).toHaveValue("");
+    expect(screen.getByTestId("admin-svg-edit-side-table-001")).toBeInTheDocument();
   });
 });

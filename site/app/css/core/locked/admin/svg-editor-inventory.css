@@ -1,45 +1,198 @@
 /* SVG editor — inventory list, filters, pagination, block preview thumbnails.
- * Depends on: admin-primitives.css, admin-pages.css */
+ * Depends on: admin-primitives.css, admin-pages.css
+ * Phone card layout: admin-pages.css [data-phone-layout="cards-priority"]. */
 
 /* ── Inventory wrapper ── */
 
 .admin-svg-inventory {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
+  min-width: 0;
 }
 
-/* ── Toolbar: search + filters ── */
+/* ── Status band (header → status → filters hierarchy) ── */
+
+.admin-svg-inventory-status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+}
+
+.admin-svg-inventory-status__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.5rem;
+  min-width: 0;
+}
+
+.admin-svg-inventory-status__chips .admin-badge {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+}
+
+.admin-svg-inventory-status__total {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin-inline-start: 0.15rem;
+}
+
+/* ── Row actions ── */
 
 .admin-svg-inventory-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: flex-end;
+  gap: 0.4rem;
 }
+
+/* Edit is the row primary; retire is quieter */
+.admin-svg-inventory-actions__edit {
+  font-weight: 700;
+}
+
+.admin-svg-inventory-actions__retire {
+  color: var(--text-muted);
+  border-color: var(--border-soft);
+  font-weight: 500;
+}
+
+.admin-svg-inventory-actions__retire:hover:not(:disabled) {
+  color: var(--color-error, #b91c1c);
+  border-color: color-mix(
+    in srgb,
+    var(--color-error, #b91c1c) 45%,
+    var(--border-soft)
+  );
+  background: color-mix(
+    in srgb,
+    var(--color-error, #b91c1c) 6%,
+    var(--color-surface-raised)
+  );
+}
+
+.admin-svg-inventory-actions__restore {
+  font-weight: 600;
+}
+
+/* ── Toolbar: search + primary filters ── */
 
 .admin-svg-inventory-filters {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: flex-end;
+  gap: 0.65rem 0.75rem;
+  padding: 0.75rem 0.85rem;
+  min-width: 0;
+  border-bottom: 1px solid var(--border-soft);
+  background: color-mix(
+    in srgb,
+    var(--color-surface-raised) 70%,
+    var(--surface-base, var(--color-surface-raised))
+  );
+}
+
+.admin-svg-inventory-filters .admin-field {
+  margin-bottom: 0;
+  min-width: 7.5rem;
+  flex: 0 1 auto;
 }
 
 .admin-svg-inventory-filters--secondary {
-  margin-top: 0.25rem;
+  margin-top: 0;
+  padding-top: 0.75rem;
+  border-bottom: none;
+  background: transparent;
 }
 
 .admin-svg-inventory-filters__search {
   position: relative;
-  flex: 1 1 12rem;
+  flex: 1 1 14rem;
+  min-width: min(100%, 12rem);
 }
 
-/* ── Table rows ── */
+.admin-svg-inventory-filters__clear {
+  display: flex;
+  align-items: flex-end;
+  flex: 0 0 auto;
+  padding-bottom: 0.05rem;
+}
+
+/* ── Secondary disclosures (more filters / saved views) ── */
+
+.admin-svg-inventory > details.admin-page__section,
+.admin-svg-inventory-more {
+  display: block;
+  margin: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  overflow: hidden;
+}
+
+.admin-svg-inventory > details.admin-page__section > summary,
+.admin-svg-inventory-more > summary {
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  position: relative;
+  padding-inline-end: 1.75rem;
+}
+
+.admin-svg-inventory > details.admin-page__section > summary::-webkit-details-marker,
+.admin-svg-inventory-more > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Discoverable disclosure chevron */
+.admin-svg-inventory > details.admin-page__section > summary::after,
+.admin-svg-inventory-more > summary::after {
+  content: "";
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: translateY(-65%) rotate(45deg);
+  transition: transform 0.12s ease;
+}
+
+.admin-svg-inventory > details.admin-page__section[open] > summary::after,
+.admin-svg-inventory-more[open] > summary::after {
+  transform: translateY(-35%) rotate(225deg);
+}
+
+.admin-svg-inventory > details.admin-page__section > summary:focus-visible,
+.admin-svg-inventory-more > summary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.admin-svg-inventory > details.admin-page__section > .admin-panel__body,
+.admin-svg-inventory-more > .admin-svg-inventory-filters {
+  border-top: 1px solid var(--border-soft);
+}
+
+/* ── Table (desktop). Phone: cards via admin-pages.css ── */
 
 .admin-svg-inventory-table-wrap {
   overflow-x: auto;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-sm);
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .admin-svg-inventory-table {
@@ -50,10 +203,53 @@
 
 .admin-svg-inventory-table th,
 .admin-svg-inventory-table td {
-  padding: 0.5rem 0.75rem;
+  padding: 0.45rem 0.65rem;
   text-align: left;
   border-bottom: 1px solid var(--border-soft);
-  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Desktop 1440: dense but scannable columns */
+@media (min-width: 48.01rem) {
+  .admin-svg-inventory-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    box-shadow: 0 1px 0 var(--border-soft);
+  }
+
+  .admin-svg-inventory-table th,
+  .admin-svg-inventory-table td {
+    white-space: nowrap;
+  }
+
+  .admin-svg-inventory-table td[data-label="Product"],
+  .admin-svg-inventory-table td[data-label="Symbol"] {
+    white-space: normal;
+    max-width: 16rem;
+  }
+
+  .admin-svg-inventory-table td[data-label="Actions"] {
+    text-align: right;
+    width: 1%;
+  }
+
+  .admin-svg-inventory-table td[data-label="Preview"] {
+    width: 3.5rem;
+  }
+
+  .admin-svg-inventory-table td[data-label="Size"],
+  .admin-svg-inventory-table td[data-label="Updated"] {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+  }
+
+  .admin-svg-inventory-row .admin-badge {
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 0.72rem;
+  }
 }
 
 .admin-svg-inventory-table th {
@@ -63,12 +259,9 @@
   letter-spacing: 0.04em;
   color: var(--text-muted);
   background: var(--color-surface-raised);
-  cursor: pointer;
+  /* Headers are labels only — sort lives in filters */
+  cursor: default;
   user-select: none;
-}
-
-.admin-svg-inventory-table th:hover {
-  color: var(--text-strong);
 }
 
 .admin-svg-inventory-row {
@@ -76,26 +269,33 @@
 }
 
 .admin-svg-inventory-row:hover {
-  background: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface-raised));
+  background: color-mix(
+    in srgb,
+    var(--color-primary) 5%,
+    var(--color-surface-raised)
+  );
 }
 
-/* ── Mix / summary row ── */
+.admin-svg-inventory-row:focus-within {
+  background: color-mix(
+    in srgb,
+    var(--color-primary) 7%,
+    var(--color-surface-raised)
+  );
+}
+
+/* ── Family mix line (not three dashboard cards) ── */
 
 .admin-svg-inventory-mix {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.15rem 0;
   font-size: 0.8125rem;
   color: var(--text-muted);
+  margin: 0;
 }
 
-/* ── Load-more / paging ── */
-
-.admin-svg-inventory-more {
-  display: flex;
-  justify-content: center;
-  padding: 0.75rem 0;
-}
+/* ── Paging ── */
 
 .admin-catalog-paging {
   display: flex;
@@ -105,6 +305,169 @@
   flex-wrap: wrap;
   font-size: 0.8125rem;
   color: var(--text-muted);
+  padding: 0.35rem 0.5rem 0.5rem;
+}
+
+/* ── Advanced bulk stays demoted (never primary chrome) ── */
+
+.admin-page__section--spaced {
+  margin-top: 0.5rem;
+}
+
+.admin-svg-advanced-import {
+  border: 1px dashed var(--border-soft);
+  opacity: 0.88;
+}
+
+.admin-svg-advanced-import > summary {
+  cursor: pointer;
+  list-style: none;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  position: relative;
+  padding-inline-end: 1.75rem;
+}
+
+.admin-svg-advanced-import > summary::-webkit-details-marker {
+  display: none;
+}
+
+.admin-svg-advanced-import > summary::after {
+  content: "";
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: translateY(-65%) rotate(45deg);
+}
+
+.admin-svg-advanced-import[open] > summary::after {
+  transform: translateY(-35%) rotate(225deg);
+}
+
+.admin-svg-advanced-import > summary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.admin-svg-advanced-import[open] {
+  opacity: 1;
+  border-style: solid;
+}
+
+/* Focusable controls: visible ring on inventory actions */
+.admin-svg-inventory .admin-btn:focus-visible,
+.admin-svg-inventory .admin-field__control:focus-visible,
+.admin-svg-inventory-status .admin-badge:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ── Larger thumb on inventory cards ── */
+
+.admin-svg-inventory-table .block-preview {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+/* ── Phone inventory tweaks (pairs with admin-pages phone cards) ── */
+
+@media (max-width: 48rem) {
+  .admin-svg-inventory {
+    gap: 0.65rem;
+  }
+
+  .admin-svg-inventory-status {
+    padding: 0.7rem 0.75rem;
+  }
+
+  .admin-svg-inventory-status__chips .admin-badge {
+    min-height: 1.75rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .admin-svg-inventory-table-wrap {
+    overflow-x: visible;
+    border: none;
+    border-radius: 0;
+  }
+
+  .admin-svg-inventory-filters {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.7rem 0.75rem;
+    border-bottom: none;
+  }
+
+  .admin-svg-inventory-filters .admin-field {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .admin-svg-inventory-filters .admin-field__control {
+    min-height: 2.75rem; /* ≥44px */
+    font-size: 1rem; /* avoid iOS zoom */
+  }
+
+  .admin-svg-inventory-filters__search {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .admin-svg-inventory-filters__clear {
+    width: 100%;
+  }
+
+  .admin-svg-inventory-filters__clear .admin-btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 2.75rem;
+  }
+
+  .admin-svg-inventory-table .block-preview {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .admin-svg-inventory-actions {
+    justify-content: stretch;
+  }
+
+  .admin-catalog-paging {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.5rem 0.15rem;
+  }
+
+  .admin-catalog-paging .admin-actions-row {
+    width: 100%;
+  }
+
+  .admin-catalog-paging .admin-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-height: 2.75rem;
+  }
+
+  .admin-svg-inventory > details.admin-page__section > summary,
+  .admin-svg-inventory-more > summary,
+  .admin-svg-advanced-import > summary {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Lifecycle / symbol badges readable on cards */
+  .admin-svg-inventory-table .admin-badge {
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
 }
 
 /* ── Block thumbnail previews ── */
@@ -121,7 +484,8 @@
     repeating-conic-gradient(
       color-mix(in srgb, var(--text-strong) 5%, transparent) 0% 25%,
       transparent 0% 50%
-    ) 50% / 10px 10px;
+    )
+    50% / 10px 10px;
   overflow: hidden;
 }
 

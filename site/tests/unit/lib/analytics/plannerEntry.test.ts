@@ -41,7 +41,7 @@ describe("plannerEntry", () => {
     expect(campaign).toContain("utm:spring");
   });
 
-  it("carries site product identity and attribution into planner href", () => {
+  it("carries site product identity without cookie utm in default href (SSR-safe)", () => {
     const href = buildPlannerEntryHref("/planner/guest", {
       sourcePage: "/products/seating/chair",
       productSlug: "chair",
@@ -50,6 +50,16 @@ describe("plannerEntry", () => {
     expect(href).toContain("siteProduct=chair");
     expect(href).toContain("siteCategory=seating");
     expect(href).toContain("siteSource=%2Fproducts%2Fseating%2Fchair");
+    expect(href).not.toContain("utm_source=");
+    expect(href).not.toContain("utm_medium=");
+  });
+
+  it("adds cookie utm params only when includeAttribution is set", () => {
+    const href = buildPlannerEntryHref(
+      "/planner/guest",
+      { sourcePage: "/", productSlug: "chair", categoryId: "seating" },
+      { includeAttribution: true },
+    );
     expect(href).toContain("utm_source=google");
     expect(href).toContain("utm_medium=cpc");
     expect(href).toContain("utm_campaign=spring");

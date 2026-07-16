@@ -240,7 +240,7 @@ describe("placeModularWithGeneratedGlbPlan (write + stamp matrix)", () => {
     expect(isSystemGeneratedGlbUrl(result.relativePath)).toBe(true);
     expect(result.relativePath).toBe(defaultCabinetPath);
     expect(result.publicUrlPath).toBe(`/${defaultCabinetPath}`);
-    expect(result.writtenAbsolutePath).toBeTruthy();
+    expect(result.writtenAbsolutePath).toBeDefined();
     expect(existsSync(result.writtenAbsolutePath!)).toBe(true);
     // File lives under injectable publicRoot (tmpdir), not real site/public.
     expect(result.writtenAbsolutePath!.startsWith(publicRoot)).toBe(true);

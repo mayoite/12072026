@@ -1,4 +1,5 @@
 import { emitSiteEvent, type SiteEventPayload } from "@/lib/analytics/siteEvents";
+import { hasAnalyticsConsent } from "@/lib/consent";
 
 export const CONVERSION_EVENTS = {
   PAGE_VIEW: "page_view",
@@ -110,11 +111,20 @@ export function filterEventPrivacy<T extends Record<string, unknown>>(
   return filterValue(payload, allowPersonalData) as T;
 }
 
+/**
+ * Site funnel events emit via consent-gated `emitSiteEvent`.
+ *
+ * OPEN (Planner): PROJECT_START, FIRST_PLACEMENT, BOQ_*, HANDOFF_* are defined
+ * here but Planner never imports `trackConversionEvent`. Do not claim those
+ * funnel steps are wired until a planner call site exists.
+ */
 export function trackConversionEvent<K extends ConversionEventName>(
   name: K,
   fields: ConversionEventMap[K],
 ): void {
   if (typeof window === "undefined") return;
+  // Consent before dedupe so a pre-accept page_view does not burn the TTL slot.
+  if (!hasAnalyticsConsent()) return;
 
   if (DEDUPE_EVENTS.has(name)) {
     const key = `${name}:${dedupeKeyFor(name, fields as unknown as Record<string, unknown>)}`;

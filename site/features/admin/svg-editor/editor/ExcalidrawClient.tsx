@@ -40,8 +40,8 @@ export interface ExcalidrawClientProps {
 export default function ExcalidrawClient({
   initialSvg,
   initialExcalidrawElements,
-  checksum,
-  readRequest,
+  checksum: _checksum,
+  readRequest: _readRequest,
   onDocument,
   onError,
   renderCustomSidebar,

@@ -28,7 +28,7 @@ describe("pureActions", () => {
   });
 
   it("adds furniture and renames project", () => {
-    let p = createRectangularRoomProject({
+    const p = createRectangularRoomProject({
       widthMm: 4000,
       depthMm: 3000,
       idFactory: ids("floor", "project", "w1", "w2", "w3", "w4"),

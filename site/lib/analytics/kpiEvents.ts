@@ -1,4 +1,7 @@
 import type { StatsSource } from "@/lib/types/businessStats";
+import { hasAnalyticsConsent } from "@/lib/consent";
+import { sendAnalyticsEvent } from "@/lib/analytics/emitTransport";
+import { enqueueSiteEvent } from "@/lib/analytics/eventQueue";
 
 export type KpiEventSource = StatsSource;
 
@@ -6,9 +9,13 @@ type KpiPayload = Record<string, string | number | boolean | null>;
 
 function emitEvent(eventName: string, payload: KpiPayload) {
   if (typeof window === "undefined") return;
-  const track = window.va?.track;
-  if (typeof track !== "function") return;
-  track(eventName, payload);
+  if (!hasAnalyticsConsent()) {
+    enqueueSiteEvent(eventName, payload);
+    return;
+  }
+  if (!sendAnalyticsEvent(eventName, payload)) {
+    enqueueSiteEvent(eventName, payload);
+  }
 }
 
 export function trackKpiRendered(params: { asOfDate: string; source: KpiEventSource }) {

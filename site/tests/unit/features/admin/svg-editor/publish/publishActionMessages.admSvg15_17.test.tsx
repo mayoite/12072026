@@ -38,6 +38,9 @@ vi.mock("@/features/admin/svg-editor/publish/PublishedSvgPreview", () => ({
 vi.mock("@/features/admin/svg-editor/lifecycle/DescriptorRevisionPanel", () => ({
   DescriptorRevisionPanel: () => null,
 }));
+vi.mock("@/features/admin/svg-editor/publish/uploadAsset", () => ({
+  uploadAssetToSupabase: vi.fn(),
+}));
 vi.mock("next/dynamic", () => ({
   default: () => () => null,
 }));
@@ -75,7 +78,7 @@ const artifactStatus = {
 };
 
 describe("ADM-SVG-15 publish names target and versions", () => {
-  it("impact and confirm copy name target, draft schema, and live revision", () => {
+  it("impact and confirm copy name target, draft version, and released revision", () => {
     const input = {
       targetSlug: "side-table-001",
       draftSchemaVersion: "2026-07-04.v2",
@@ -85,10 +88,11 @@ describe("ADM-SVG-15 publish names target and versions", () => {
     const impact = publishImpactSummary(input);
     expect(impact).toContain("side-table-001");
     expect(impact).toContain("2026-07-04.v2");
-    expect(impact).toMatch(/live revision|Live artifact/i);
+    expect(impact).toMatch(/current revision|Released symbol/i);
+    expect(impact).not.toMatch(/schema|pipeline|Zod/i);
     const confirm = publishConfirmMessage(input);
     expect(confirm).toContain("Target product");
-    expect(confirm).toContain("Draft schema version");
+    expect(confirm).toContain("Draft version");
     expect(confirm).toMatch(/Impact/);
   });
 

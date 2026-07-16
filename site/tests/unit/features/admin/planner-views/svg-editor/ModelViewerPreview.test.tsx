@@ -72,23 +72,29 @@ describe("ModelViewerPreview", () => {
     // Re-read source contract: loadModelViewer only — no package import string.
     const fs = await import("node:fs/promises");
     const path = await import("node:path");
-    const file = path.resolve(
-      process.cwd(),
-      "features/admin/svg-editor/ModelViewerPreview.tsx",
-    );
-    // vitest cwd may be repo root or site/ — try both.
-    let source: string;
-    try {
-      source = await fs.readFile(file, "utf8");
-    } catch {
-      source = await fs.readFile(
-        path.resolve(process.cwd(), "site/features/admin/svg-editor/ModelViewerPreview.tsx"),
-        "utf8",
-      );
+    const candidates = [
+      path.resolve(
+        process.cwd(),
+        "features/admin/svg-editor/publish/ModelViewerPreview.tsx",
+      ),
+      path.resolve(
+        process.cwd(),
+        "site/features/admin/svg-editor/publish/ModelViewerPreview.tsx",
+      ),
+    ];
+    let source: string | null = null;
+    for (const file of candidates) {
+      try {
+        source = await fs.readFile(file, "utf8");
+        break;
+      } catch {
+        // try next path (vitest cwd may be site/ or repo root)
+      }
     }
+    expect(source, "ModelViewerPreview.tsx not found under publish/").toBeDefined();
 
-    expect(source).not.toMatch(/from\s+["']@google\/model-viewer["']/);
-    expect(source).not.toMatch(/import\(["']@google\/model-viewer["']\)/);
-    expect(source).toMatch(/loadModelViewer/);
+    expect(source!).not.toMatch(/from\s+["']@google\/model-viewer["']/);
+    expect(source!).not.toMatch(/import\(["']@google\/model-viewer["']\)/);
+    expect(source!).toMatch(/loadModelViewer/);
   });
 });

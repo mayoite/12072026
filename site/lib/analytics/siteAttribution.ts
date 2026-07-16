@@ -16,6 +16,13 @@ function readCookie(name: string): string | null {
   return decodeURIComponent(entry.slice(prefix.length));
 }
 
+/** Empty string cookies (Max-Age=0 remnants) are treated as absent. */
+function cookieOrDefault(name: string, fallback: string): string {
+  const value = readCookie(name);
+  if (value === null || value.trim() === "") return fallback;
+  return value;
+}
+
 export interface SiteAttributionSnapshot {
   readonly source: string;
   readonly medium: string;
@@ -25,9 +32,9 @@ export interface SiteAttributionSnapshot {
 
 export function readSiteAttribution(): SiteAttributionSnapshot {
   return {
-    source: readCookie(SEO_COOKIE_KEYS.source) ?? "direct",
-    medium: readCookie(SEO_COOKIE_KEYS.medium) ?? "none",
-    campaign: readCookie(SEO_COOKIE_KEYS.campaign) ?? "",
-    landing: readCookie(SEO_COOKIE_KEYS.landing) ?? "",
+    source: cookieOrDefault(SEO_COOKIE_KEYS.source, "direct"),
+    medium: cookieOrDefault(SEO_COOKIE_KEYS.medium, "none"),
+    campaign: cookieOrDefault(SEO_COOKIE_KEYS.campaign, ""),
+    landing: cookieOrDefault(SEO_COOKIE_KEYS.landing, ""),
   };
 }

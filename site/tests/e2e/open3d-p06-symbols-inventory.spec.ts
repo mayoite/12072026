@@ -27,15 +27,15 @@ test("P06 symbols inventory slice on guest planner", async ({ page, request }) =
   fs.mkdirSync(EVIDENCE, { recursive: true });
 
   const api = await request.get("/api/planner/catalog/svg-blocks/");
-  expect(api.ok()).toBeTruthy();
+  expect(api.ok()).toBeDefined();
   const envelope = (await api.json()) as {
     items?: Array<{ slug?: string }>;
     total?: number;
   };
   const items = envelope.items ?? [];
   expect(items.length).toBe(5);
-  expect(items.some((i) => i.slug === "chaise-lounge-001")).toBeTruthy();
-  expect(items.some((i) => i.slug === "desk-linear-1200-001")).toBeTruthy();
+  expect(items.some((i) => i.slug === "chaise-lounge-001")).toBeDefined();
+  expect(items.some((i) => i.slug === "desk-linear-1200-001")).toBeDefined();
   fs.writeFileSync(
     path.join(EVIDENCE, "api-svg-blocks.json"),
     `${JSON.stringify({ total: items.length, slugs: items.map((i) => i.slug) }, null, 2)}\n`,

@@ -2,11 +2,22 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Hero } from '@/components/home/Hero';
 
+vi.mock('next/navigation', () => ({
+  usePathname: () => '/solutions',
+}));
+
+vi.mock('@/lib/analytics/siteEvents', () => ({
+  trackSiteCtaClick: vi.fn(),
+  handlePlannerEntryNavigation: vi.fn(),
+}));
+
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, style, ...props }: any) => <div style={style} {...props}>{children}</div>,
-    p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
-    span: ({ children, ...props }: any) => <span {...props}>{children}</span>,
+    div: ({ children, style, ...props }: { children?: React.ReactNode; style?: React.CSSProperties }) => (
+      <div style={style} {...props}>{children}</div>
+    ),
+    p: ({ children, ...props }: { children?: React.ReactNode }) => <p {...props}>{children}</p>,
+    span: ({ children, ...props }: { children?: React.ReactNode }) => <span {...props}>{children}</span>,
   },
   useScroll: () => ({ scrollYProgress: 0 }),
   useTransform: () => 0
@@ -19,7 +30,10 @@ vi.mock('@phosphor-icons/react', () => ({
 describe('Hero Component', () => {
   it('renders default title and button correctly', () => {
     render(<Hero />);
-    expect(screen.getByText('Discover office furniture')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Discover office furniture/i })).toHaveAttribute(
+      'href',
+      '/products',
+    );
     expect(screen.getByText(/Create your/)).toBeInTheDocument();
   });
 

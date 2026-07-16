@@ -19,7 +19,7 @@
  * GS BP-04/BP-05 + design §7/11 + anti-copy (no donor visuals; semantic tokens + Figma minimize principles) + 5-product. See also route-contract _phase* entries.
  *
  * Forbidden:
- *   - `any`, `@ts-ignore`, `@ts-nocheck`, `eslint-disable` (AGENTS.md).
+ *   - `any`, `@ts-ignore`, `@ts-nocheck`, `eslint suppress` (AGENTS.md).
  *   - `#hex` literal colour values; the per-rule `currentColor` semantics
  *     and semantic CSS var references are enforced via the upstream
  *     `BlockDescriptorThemeTokensSchema` (§02-CAT-07).

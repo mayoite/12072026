@@ -238,7 +238,7 @@ describe("useDockingSystem", () => {
     });
 
     const stored = localStorage.getItem("planner-workspace-docking");
-    expect(stored).toBeTruthy();
+    expect(stored).toBeDefined();
 
     act(() => {
       result.current.reset();
@@ -295,8 +295,9 @@ describe("TopBar", () => {
     );
 
     expect(screen.getByRole("heading", { name: "Demo Plan" })).toBeInTheDocument();
-    // Brand subline + save pill both say "Unsaved changes" when isModified
-    expect(screen.getAllByText("Unsaved changes").length).toBeGreaterThanOrEqual(1);
+    // Single authoritative save pill (no brand subline duplicate)
+    expect(screen.getAllByText("Unsaved changes")).toHaveLength(1);
+    expect(screen.getByRole("button", { name: /Save project/i })).toHaveTextContent("Save");
 
     fireEvent.click(screen.getByRole("radio", { name: "3D" }));
     expect(onViewModeChange).toHaveBeenCalledWith("3d");
@@ -441,7 +442,7 @@ describe("InventoryPanel", () => {
       null,
     );
 
-    const search = screen.getByLabelText(/Search catalog elements/i);
+    const search = screen.getByLabelText(/Search inventory by name or SKU/i);
     fireEvent.change(search, { target: { value: "desk" } });
     await waitFor(() => {
       expect(onSearch).toHaveBeenCalledWith("desk");
@@ -913,13 +914,13 @@ describe("OOPlannerWorkspace (TDD)", () => {
     // initial may show loading
     await waitFor(() => {
       // after timeout/hydrate in effect, but fast path check container has root or status
-      expect(container.querySelector(".planner-workspace-root") || container.querySelector("[aria-busy]")).toBeTruthy();
+      expect(container.querySelector(".planner-workspace-root") || container.querySelector("[aria-busy]")).toBeDefined();
     }, { timeout: 100 });
   });
 
   it("professional workspace chrome deferred to browser e2e (TopBar mocked in this file)", () => {
     render(<OOPlannerWorkspace guestMode />);
-    expect(document.querySelector(".planner-workspace-root")).toBeTruthy();
+    expect(document.querySelector(".planner-workspace-root")).toBeDefined();
   });
 
   it("docking persists valid panel ratios to workspace prefs schema (task5)", () => {

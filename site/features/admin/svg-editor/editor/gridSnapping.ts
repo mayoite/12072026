@@ -34,7 +34,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
-import { UnitSystem, PIXELS_PER_METER } from "./units";
+import { PIXELS_PER_METER, type UnitSystem } from "./units";
 import type { ExcalidrawAPI, ExcalidrawElement } from "./elementUtils";
 
 // ─── Constants ────────────────────────────────────────────────────────────
@@ -115,10 +115,9 @@ export function generateGridLines(
 
 // ─── Element builder ──────────────────────────────────────────────────────
 
-let _idCounter = 0;
-function nextId(): string {
-  return `grid-${Date.now()}-${++_idCounter}`;
-}
+type GridAwareElement = ExcalidrawElement & {
+  customData?: { isGridLine?: boolean };
+};
 
 function buildGridLineElement(
   id: string,
@@ -284,7 +283,7 @@ export function useGridSnapping(
       let dirty = false;
       const snapped = elements.map((el) => {
         // Never touch grid lines or unselected elements
-        if ((el as any).customData?.isGridLine) return el;
+        if ((el as GridAwareElement).customData?.isGridLine) return el;
         if (!selectedIds[el.id]) return el;
 
         const sx = snapToGrid(el.x, unit);

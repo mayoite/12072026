@@ -40,7 +40,7 @@ describe("PlannerFeatureRoute", () => {
     const validSlug = PLANNER_FEATURE_PAGES[0].slug;
     const metadata = await generateMetadata({ params: Promise.resolve({ slug: validSlug }) });
     expect(metadata).toBeDefined();
-    expect(metadata.title).toContain("Workspace Planner");
+    expect(JSON.stringify(metadata.title)).toContain("Workspace Planner");
     expect(metadata.alternates?.canonical).toBe(`https://mock-site-url.com/planner/features/${validSlug}/`);
   });
 

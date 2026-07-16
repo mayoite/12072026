@@ -44,8 +44,8 @@ describe("Button", () => {
         +
       </Button>,
     );
-    expect(screen.getByRole("button", { name: "Icon action" })).toHaveClass("h-10");
-    expect(screen.getByRole("button", { name: "Icon action" })).toHaveClass("w-10");
+    expect(screen.getByRole("button", { name: "Icon action" })).toHaveClass("h-11");
+    expect(screen.getByRole("button", { name: "Icon action" })).toHaveClass("w-11");
   });
 
   it("merges custom className and forwards ref", () => {

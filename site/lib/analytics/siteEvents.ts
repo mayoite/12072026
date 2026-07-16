@@ -1,14 +1,6 @@
 type SiteEventPrimitive = string | number | boolean | null;
 export type SiteEventPayload = Record<string, SiteEventPrimitive>;
 
-declare global {
-  interface Window {
-    va?: {
-      track?: (eventName: string, payload: SiteEventPayload) => void;
-    };
-  }
-}
-
 import {
   trackConversionEvent,
   CONVERSION_EVENTS,
@@ -19,13 +11,30 @@ import {
   isPlannerEntryHref,
   type PlannerEntryContext,
 } from "@/lib/analytics/plannerEntry";
+import {
+  enqueueSiteEvent,
+  flushSiteEventQueue,
+} from "@/lib/analytics/eventQueue";
+import { sendAnalyticsEvent } from "@/lib/analytics/emitTransport";
 
 export function emitSiteEvent(eventName: string, payload: SiteEventPayload) {
   if (typeof window === "undefined") return;
+  if (!hasAnalyticsConsent()) {
+    // Queue until accept so first-page CTA/page_view are not lost forever.
+    enqueueSiteEvent(eventName, payload);
+    return;
+  }
+  const ok = sendAnalyticsEvent(eventName, payload);
+  if (!ok) {
+    enqueueSiteEvent(eventName, payload);
+  }
+}
+
+/** Call after consent accept so queued page_view / CTA events flush. */
+export function flushAnalyticsAfterConsent(): void {
+  if (typeof window === "undefined") return;
   if (!hasAnalyticsConsent()) return;
-  const track = window.va?.track;
-  if (typeof track !== "function") return;
-  track(eventName, payload);
+  flushSiteEventQueue();
 }
 
 function normalizeHref(href: string): string {

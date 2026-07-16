@@ -1,11 +1,11 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 
 vi.mock("node:fs", async () => {
-  const actual = await vi.importActual<typeof import("node:fs")>("node:fs");
+  const actual = await vi.importActual("node:fs") as Record<string, unknown> & { readFileSync?: (...args: never[]) => unknown; default?: unknown };
   return {
     ...actual,
     readFileSync: vi.fn((file: fs.PathOrFileDescriptor, encoding?: unknown) => {

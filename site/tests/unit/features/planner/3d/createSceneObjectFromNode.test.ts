@@ -41,7 +41,7 @@ function wallNode(overrides: Partial<PlannerSceneNode> = {}): PlannerSceneNode {
 describe("createSceneObjectFromNode", () => {
   it("builds a parametric-box furniture mesh with entity userData", () => {
     const obj = createSceneObjectFromNode(THREE, boxNode(), true);
-    expect(obj).toBeTruthy();
+    expect(obj).toBeDefined();
     expect(obj?.name).toBe("box-1");
     expect(obj?.userData.entityId).toBe("box-1");
     expect(obj?.userData.kind).toBe("furniture");
@@ -49,7 +49,7 @@ describe("createSceneObjectFromNode", () => {
 
   it("builds a wall mesh", () => {
     const obj = createSceneObjectFromNode(THREE, wallNode(), false);
-    expect(obj).toBeTruthy();
+    expect(obj).toBeDefined();
     expect(obj?.userData.kind).toBe("wall");
   });
 

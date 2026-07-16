@@ -24,13 +24,17 @@ describe('sitemap.ts', () => {
     const urls = result.map((entry) => entry.url);
 
     for (const path of PUBLIC_INDEXABLE_STATIC_PATHS) {
-      expect(urls.some((url) => url.includes(path === '/' ? 'oneonly.in/' : `${path}/`))).toBe(true);
+      if (path === '/') {
+        expect(urls.some((url) => /^https?:\/\/[^/]+\/$/.test(url))).toBe(true);
+      } else {
+        expect(urls.some((url) => url.includes(`${path}/`) || url.endsWith(path))).toBe(true);
+      }
     }
     for (const path of PLANNER_MARKETING_SITEMAP_PATHS) {
-      expect(urls.some((url) => url.includes(`${path}/`))).toBe(true);
+      expect(urls.some((url) => url.includes(`${path}/`) || url.endsWith(path))).toBe(true);
     }
     for (const path of SOLUTION_CATEGORY_SITEMAP_PATHS) {
-      expect(urls.some((url) => url.includes(`${path}/`))).toBe(true);
+      expect(urls.some((url) => url.includes(`${path}/`) || url.endsWith(path))).toBe(true);
     }
 
     expect(urls.some((url) => url.includes('/quote-cart/'))).toBe(false);

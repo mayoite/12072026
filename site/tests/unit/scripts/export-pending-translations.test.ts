@@ -1,6 +1,5 @@
 // @vitest-environment node
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -32,7 +31,7 @@ function collectLeaves(value: unknown, prefix = "", out: { path: string; value: 
 
 function setByPath(root: Record<string, unknown>, pathExpr: string, value: unknown) {
   const tokens: (string | number)[] = [];
-  const re = /([^.\[\]]+)|\[(\d+)\]/g;
+  const re = /([^.[\]]+)|\[(\d+)\]/g;
   let match = re.exec(pathExpr);
   while (match) {
     tokens.push(match[1] !== undefined ? match[1] : Number(match[2]));

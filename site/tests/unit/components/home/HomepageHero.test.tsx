@@ -3,6 +3,15 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { HomepageHero } from '@/components/home/HomepageHero';
 import { HOMEPAGE_HERO_CONTENT, HOMEPAGE_HERO_IMAGES } from '@/features/site/data/homepage';
 
+vi.mock('next/navigation', () => ({
+  usePathname: () => '/',
+}));
+
+vi.mock('@/lib/analytics/siteEvents', () => ({
+  trackSiteCtaClick: vi.fn(),
+  handlePlannerEntryNavigation: vi.fn(),
+}));
+
 // Mock phosphor icons
 vi.mock('@phosphor-icons/react', () => ({
   ArrowRight: () => <span data-testid="arrow-right" />,
@@ -11,11 +20,11 @@ vi.mock('@phosphor-icons/react', () => ({
 
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
-  AnimatePresence: ({ children }: any) => <>{children}</>,
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    span: ({ children, ...props }: any) => <span {...props}>{children}</span>,
-    p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
+    div: ({ children, ...props }: { children?: React.ReactNode }) => <div {...props}>{children}</div>,
+    span: ({ children, ...props }: { children?: React.ReactNode }) => <span {...props}>{children}</span>,
+    p: ({ children, ...props }: { children?: React.ReactNode }) => <p {...props}>{children}</p>,
   },
   useReducedMotion: vi.fn().mockReturnValue(false)
 }));
@@ -30,29 +39,31 @@ describe('HomepageHero Component', () => {
   it('renders hero title and details correctly', () => {
     render(<HomepageHero />);
 
+    const accessibleTitle = HOMEPAGE_HERO_CONTENT.title.join(' ');
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: HOMEPAGE_HERO_CONTENT.title.join(' '),
+        name: accessibleTitle,
       }),
     ).toBeInTheDocument();
 
-    // Verify Title Lines
+    // Accessible name includes spaces between animated lines (SITE-A11Y)
+    expect(accessibleTitle).toBe('Spaces that work as hard as your team');
+    expect(accessibleTitle).not.toMatch(/workas|asyour/);
+
+    // Visual line copy still present (aria-hidden decoration)
     HOMEPAGE_HERO_CONTENT.title.forEach((line) => {
       expect(screen.getByText(line)).toBeInTheDocument();
     });
 
-    // Verify kicker
     expect(screen.getByText(HOMEPAGE_HERO_CONTENT.kicker)).toBeInTheDocument();
 
-    // Verify CTAs
     const primaryBtn = screen.getByRole('link', { name: HOMEPAGE_HERO_CONTENT.primaryCta.label });
     expect(primaryBtn).toHaveAttribute('href', HOMEPAGE_HERO_CONTENT.primaryCta.href);
 
     const secondaryBtn = screen.getByRole('link', { name: HOMEPAGE_HERO_CONTENT.secondaryCta.label });
     expect(secondaryBtn).toHaveAttribute('href', HOMEPAGE_HERO_CONTENT.secondaryCta.href);
 
-    // Verify glass proof panel content
     expect(screen.getByText(HOMEPAGE_HERO_CONTENT.glassProof.badge)).toBeInTheDocument();
     expect(screen.getByText(HOMEPAGE_HERO_CONTENT.glassProof.lead)).toBeInTheDocument();
   });
@@ -60,16 +71,35 @@ describe('HomepageHero Component', () => {
   it('cycles background images on slide button clicks', () => {
     render(<HomepageHero />);
 
-    // Check first image initially
     const activeImg = screen.getByAltText(HOMEPAGE_HERO_IMAGES[0].alt);
     expect(activeImg).toHaveAttribute('src', HOMEPAGE_HERO_IMAGES[0].src);
 
-    // Click second dot button
-    const dotBtn = screen.getByRole('button', { name: 'Show project image 2' });
+    const total = HOMEPAGE_HERO_IMAGES.length;
+    const dotBtn = screen.getByRole('button', {
+      name: `Show project image 2 of ${total}`,
+    });
     fireEvent.click(dotBtn);
 
-    // Check second image active
     const nextImg = screen.getByAltText(HOMEPAGE_HERO_IMAGES[1].alt);
     expect(nextImg).toHaveAttribute('src', HOMEPAGE_HERO_IMAGES[1].src);
+  });
+
+  it('exposes 44px-class slide controls and tracks hero CTAs via links', () => {
+    render(<HomepageHero />);
+
+    const firstDot = screen.getByRole('button', {
+      name: `Show project image 1 of ${HOMEPAGE_HERO_IMAGES.length}`,
+    });
+    expect(firstDot.className).toMatch(/h-11/);
+    expect(firstDot.className).toMatch(/min-w-11/);
+
+    const primary = screen.getByRole('link', {
+      name: HOMEPAGE_HERO_CONTENT.primaryCta.label,
+    });
+    const secondary = screen.getByRole('link', {
+      name: HOMEPAGE_HERO_CONTENT.secondaryCta.label,
+    });
+    expect(primary).toHaveAttribute('href', HOMEPAGE_HERO_CONTENT.primaryCta.href);
+    expect(secondary).toHaveAttribute('href', HOMEPAGE_HERO_CONTENT.secondaryCta.href);
   });
 });

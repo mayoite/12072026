@@ -1,25 +1,22 @@
 /**
- * Phase 05 — portal puckBlockRegistry alias must re-export canonical registry (no fork).
- * Cites I-D module paths + BP-05 anti-drift gate.
+ * Portal puckBlockRegistry alias must re-export canonical registry (no fork).
  */
 
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
-import * as canonical from "@/features/admin/svg-editor/puckBlockRegistry";
+import * as canonical from "@/lib/catalog/puckBlockRegistry";
 import * as alias from "@/app/(site)/portal/svg-catalog/puckBlockRegistry";
 
-describe("portal/svg-catalog/puckBlockRegistry.ts alias (Phase 05)", () => {
-  it("is a one-line verbatim re-export of the canonical registry module", () => {
+describe("portal/svg-catalog/puckBlockRegistry.ts alias", () => {
+  it("is a one-line re-export of the canonical registry module", () => {
     const aliasPath = path.resolve(
       process.cwd(),
       "app/(site)/portal/svg-catalog/puckBlockRegistry.ts",
     );
     const source = readFileSync(aliasPath, "utf8").trim();
-    expect(source).toBe(
-      'export * from "@/features/admin/svg-editor/puckBlockRegistry";',
-    );
+    expect(source).toBe('export * from "@/lib/catalog/puckBlockRegistry";');
   });
 
   it("re-exports the same puckConfig and getPuckData references as canonical", () => {

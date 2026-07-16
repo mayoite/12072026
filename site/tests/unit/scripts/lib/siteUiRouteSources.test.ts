@@ -1,7 +1,7 @@
 // @vitest-environment node
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -74,7 +74,7 @@ describe("siteUiRouteSources (name-mirror)", () => {
   it("resolveAlias and collectPageSources pull @/ PageView modules", () => {
     const { siteRoot, appDir } = makeSiteTree();
     const alias = resolveAlias(siteRoot, "@/features/site/HomePageView");
-    expect(alias).toBeTruthy();
+    expect(alias).toBeDefined();
     expect(fs.existsSync(alias!)).toBe(true);
 
     const home = path.join(appDir, "(site)", "page.tsx");

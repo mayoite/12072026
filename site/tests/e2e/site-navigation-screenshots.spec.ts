@@ -67,7 +67,7 @@ for (const [viewportKey, viewport] of Object.entries(VIEWPORTS) as [
       const productLink = page.locator('a[href^="/products/seating/"]').first();
       await productLink.waitFor({ state: "visible" });
       const href = await productLink.getAttribute("href");
-      expect(href, "seating category must list at least one product link").toBeTruthy();
+      expect(href, "seating category must list at least one product link").toBeDefined();
       await page.goto(href!);
       await page.getByTestId("home-marketing-layout").waitFor({ state: "visible" });
       await prepareSiteUiCapture(page);

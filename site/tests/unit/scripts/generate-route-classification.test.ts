@@ -7,8 +7,10 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
+const repoRoot = path.resolve(siteRoot, "..");
 const scriptPath = path.join(siteRoot, "scripts/generate-route-classification.mjs");
-const outPath = path.join(siteRoot, "docs/ops/context/route-classification.md");
+// Script writes under repo docs/site/ (not site/docs).
+const outPath = path.join(repoRoot, "docs/site/route-classification.md");
 
 describe("generate-route-classification (name-mirror)", () => {
   it("writes live route classification markdown with planner and API sections", () => {

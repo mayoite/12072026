@@ -1,6 +1,7 @@
 /* Admin surface — ordered by dependency. */
 @reference "../../../index.css";
 @import "./surfaces.css";
+@import "./admin.css";
 @import "./admin-primitives.css";
 @import "./admin-pages.css";
 @import "./svg-editor-previews.css";

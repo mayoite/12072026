@@ -18,6 +18,7 @@ export function ContactTeaser() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [brief, setBrief] = useState("");
+  const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<{
     type: "idle" | "success" | "error";
@@ -34,12 +35,24 @@ export function ContactTeaser() {
     external: action.type === "whatsapp",
   }));
 
+  const hasContactChannel = email.trim().length > 0 || phone.trim().length > 0;
+  const showContactInvalid = formStatus.type === "error" && !hasContactChannel;
+  const showConsentInvalid = formStatus.type === "error" && !consent;
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (isSubmitting) return;
 
     const trimmedEmail = email.trim();
     const trimmedPhone = phone.trim();
+
+    if (!consent) {
+      setFormStatus({
+        type: "error",
+        message: "Confirm privacy consent before sending.",
+      });
+      return;
+    }
 
     if (!trimmedEmail && !trimmedPhone) {
       setFormStatus({
@@ -82,6 +95,7 @@ export function ContactTeaser() {
       setPhone("");
       setEmail("");
       setBrief("");
+      setConsent(false);
       trackContactSubmission({
         pathname: window.location.pathname,
         surface: "contact-teaser",
@@ -172,6 +186,12 @@ export function ContactTeaser() {
                     inputMode="tel"
                     maxLength={50}
                     placeholder="+91 …"
+                    aria-invalid={showContactInvalid || undefined}
+                    aria-describedby={
+                      showContactInvalid
+                        ? "contact-teaser-status"
+                        : "contact-teaser-channel-hint"
+                    }
                   />
                 </label>
                 <label className="contact-teaser__field" htmlFor="contact-teaser-email">
@@ -187,10 +207,16 @@ export function ContactTeaser() {
                     inputMode="email"
                     maxLength={180}
                     placeholder="you@company.com"
+                    aria-invalid={showContactInvalid || undefined}
+                    aria-describedby={
+                      showContactInvalid
+                        ? "contact-teaser-status"
+                        : "contact-teaser-channel-hint"
+                    }
                   />
                 </label>
               </div>
-              <p className="contact-teaser__hint typ-body-sm text-muted">
+              <p id="contact-teaser-channel-hint" className="contact-teaser__hint typ-body-sm text-muted">
                 Phone or email — at least one is required.
               </p>
 
@@ -214,8 +240,43 @@ export function ContactTeaser() {
                 />
               </label>
 
+              <label
+                htmlFor="contact-teaser-consent"
+                className="contact-teaser__field flex items-start gap-3 font-normal"
+              >
+                <input
+                  id="contact-teaser-consent"
+                  name="consent"
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(event) => setConsent(event.target.checked)}
+                  className="mt-1 h-4 w-4 shrink-0 accent-[var(--color-primary)]"
+                  required
+                  aria-required="true"
+                  aria-invalid={showConsentInvalid || undefined}
+                  aria-describedby={
+                    showConsentInvalid ? "contact-teaser-status" : "contact-teaser-consent-hint"
+                  }
+                  data-testid="contact-teaser-consent"
+                />
+                <span>
+                  I agree that One&Only may use these details to respond to my enquiry.{" "}
+                  <a href="/privacy" className="font-semibold text-primary hover:text-primary-hover">
+                    Privacy policy
+                  </a>
+                  <span className="text-primary"> *</span>
+                </span>
+              </label>
+              <p id="contact-teaser-consent-hint" className="contact-teaser__hint typ-body-sm text-muted">
+                Required to send. We do not sell contact data.
+              </p>
+
               <div className="contact-teaser__cta-stack">
-                <button type="submit" disabled={isSubmitting} className="btn-primary">
+                <button
+                  type="submit"
+                  disabled={isSubmitting || !consent || !hasContactChannel}
+                  className="btn-primary min-h-11 disabled:cursor-not-allowed disabled:opacity-60"
+                >
                   <ChatText size={16} weight="duotone" aria-hidden="true" />
                   {isSubmitting ? "Sending..." : "Send Brief"}
                 </button>
@@ -229,7 +290,7 @@ export function ContactTeaser() {
                         href={action.href}
                         target={action.external ? "_blank" : undefined}
                         rel={action.external ? "noopener noreferrer" : undefined}
-                        className={`contact-teaser__support-link typ-cta${
+                        className={`contact-teaser__support-link typ-cta min-h-11${
                           action.type === "whatsapp" ? " contact-teaser__support-link--whatsapp" : ""
                         }`}
                         onClick={() =>
@@ -242,10 +303,10 @@ export function ContactTeaser() {
                         }
                       >
                         <span className="contact-teaser__support-link-icon">
-                          <Icon size={16} weight="duotone" />
+                          <Icon size={16} weight="duotone" aria-hidden="true" />
                         </span>
                         <span>{action.label}</span>
-                        <ArrowUpRight size={14} weight="bold" />
+                        <ArrowUpRight size={14} weight="bold" aria-hidden="true" />
                       </a>
                     );
                   })}
@@ -253,7 +314,11 @@ export function ContactTeaser() {
               </div>
 
               {formStatus.type !== "idle" ? (
-                <p className={`contact-teaser__status contact-teaser__status--${formStatus.type}`} role="status">
+                <p
+                  id="contact-teaser-status"
+                  className={`contact-teaser__status contact-teaser__status--${formStatus.type}`}
+                  role={formStatus.type === "error" ? "alert" : "status"}
+                >
                   {formStatus.message}
                 </p>
               ) : null}

@@ -26,7 +26,7 @@ describe("PlannerHost", () => {
       <PlannerHost planId="plan-1" guestMode />,
     );
     const host = container.querySelector(".planner-route-host.open3d-route-host");
-    expect(host).toBeTruthy();
+    expect(host).toBeDefined();
     expect(getByTestId("oo-workspace").getAttribute("data-guest")).toBe("true");
     expect(getByTestId("oo-workspace").getAttribute("data-plan-id")).toBe(
       "plan-1",

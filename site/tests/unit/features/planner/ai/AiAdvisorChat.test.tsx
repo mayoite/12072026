@@ -20,8 +20,8 @@ describe("AiAdvisorChat", () => {
   it("renders dialog and pane when open", () => {
     const onClose = vi.fn();
     render(<AiAdvisorChat isOpen onClose={onClose} />);
-    expect(screen.getByRole("dialog", { name: /AI Layout Advisor/i })).toBeTruthy();
-    expect(screen.getByTestId("chat-pane")).toBeTruthy();
+    expect(screen.getByRole("dialog", { name: /AI Layout Advisor/i })).toBeDefined();
+    expect(screen.getByTestId("chat-pane")).toBeDefined();
     fireEvent.click(screen.getByRole("button", { name: /Close advisor/i }));
     expect(onClose).toHaveBeenCalled();
   });

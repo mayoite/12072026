@@ -60,7 +60,7 @@ function makeReq(body: unknown): NextRequest {
 describe("app/api/admin/price-books/[bookId]/action/route.ts", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(readAdminPriceBookAudit).mockReturnValue([]);
+    vi.mocked(readAdminPriceBookAudit).mockResolvedValue([]);
   });
 
   it("POST returns 400 when action is invalid", async () => {
@@ -105,7 +105,7 @@ describe("app/api/admin/price-books/[bookId]/action/route.ts", () => {
       previousActiveVersionId: null,
       newActiveVersionId: "v1",
     } as never);
-    vi.mocked(readAdminPriceBookAudit).mockReturnValue([
+    vi.mocked(readAdminPriceBookAudit).mockResolvedValue([
       { action: "approve", versionId: "v1" },
     ] as never);
 

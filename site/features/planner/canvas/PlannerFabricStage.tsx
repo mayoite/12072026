@@ -271,6 +271,8 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       },
       [],
     );
+    const emitStatusRef = useRef(emitStatus);
+    emitStatusRef.current = emitStatus;
 
     useEffect(() => {
       emitStatus(transform, activeTool);
@@ -408,7 +410,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         }
         wallDrawRef.current = null;
         canvas.requestRenderAll();
-        emitStatus(transformRef.current, "wall");
+        emitStatusRef.current(transformRef.current, "wall");
       };
 
       const startWallAt = (clientX: number, clientY: number, pointerId: number) => {
@@ -443,7 +445,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         canvas.add(preview);
         previewLineRef.current = preview;
         wallDrawRef.current = { start, pointerId };
-        emitStatus(transformRef.current, "wall");
+        emitStatusRef.current(transformRef.current, "wall");
       };
 
       const updateWallAt = (clientX: number, clientY: number) => {
@@ -743,7 +745,6 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
       };
       // Mount once — scene rebuild + refs handle document/tool updates.
       // Do not recreate Fabric when wall count changes (that aborted draws).
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional single mount
     }, []);
 
     useEffect(() => {

@@ -64,12 +64,12 @@ describe("WorkstationConfiguratorPanel", () => {
     );
     expect(
       screen.getByRole("button", { name: "Place 2 seats" }),
-    ).toBeTruthy();
+    ).toBeDefined();
     expect(
       screen.getByRole("button", { name: "Place 4 seats" }),
-    ).toBeTruthy();
+    ).toBeDefined();
     expect(
       screen.getByRole("button", { name: "Place 10 seats" }),
-    ).toBeTruthy();
+    ).toBeDefined();
   });
 });

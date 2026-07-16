@@ -242,6 +242,7 @@ export function PanelContainer({
       data-state={state}
       data-panel-id={id}
       data-open={isOpen ? "true" : "false"}
+      data-floating={isFloating ? "true" : "false"}
       style={panelStyle}
     >
       {/* Title bar */}
@@ -253,7 +254,12 @@ export function PanelContainer({
         onMouseDown={handleTitleMouseDown}
       >
         {/* h2 under TopBar brand h1 — avoids Lighthouse heading-order H1→H3 skip */}
-        <h2 className={styles.panelTitle}>{title}</h2>
+        <h2 className={styles.panelTitle}>
+          {title}
+          {isFloating ? (
+            <span className={styles.panelModeBadge}>Floating</span>
+          ) : null}
+        </h2>
         <div className={styles.panelActions}>
           {state === "floating" && onDock && (
             <button
@@ -261,7 +267,7 @@ export function PanelContainer({
               className={styles.panelActionBtn}
               onClick={onDock}
               aria-label="Dock panel"
-              title="Dock"
+              title={`Dock ${title} to workspace edge`}
             >
               <DockIcon />
             </button>
@@ -272,7 +278,7 @@ export function PanelContainer({
               className={styles.panelActionBtn}
               onClick={onUndock}
               aria-label="Undock panel"
-              title="Undock"
+              title={`Float ${title} over canvas`}
             >
               <UndockIcon />
             </button>
@@ -283,7 +289,7 @@ export function PanelContainer({
               className={styles.panelActionBtn}
               onClick={onMinimize}
               aria-label="Minimize panel"
-              title="Minimize"
+              title={`Minimize ${title}`}
             >
               <MinimizeIcon />
             </button>
@@ -294,7 +300,7 @@ export function PanelContainer({
               className={styles.panelActionBtn}
               onClick={onClose}
               aria-label="Close panel"
-              title="Close"
+              title={`Close ${title}`}
             >
               <CloseIcon />
             </button>

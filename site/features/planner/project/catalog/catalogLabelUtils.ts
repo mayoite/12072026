@@ -8,7 +8,8 @@
  * (`Chaise Lounge`). Trailing numeric serials (`-001`) are dropped for
  * display; version tokens like `v0` stay.
  */
-export function humanizeCatalogSlug(slug: string): string {
+export function humanizeCatalogSlug(slug: string | null | undefined): string {
+  if (typeof slug !== "string") return "Catalog item";
   const trimmed = slug.trim();
   if (!trimmed) return "Catalog item";
 
@@ -31,7 +32,8 @@ export function humanizeCatalogSlug(slug: string): string {
 }
 
 /** Words from a slug usable as search tags (minus pure numeric serials). */
-export function catalogSlugSearchTags(slug: string): string[] {
+export function catalogSlugSearchTags(slug: string | null | undefined): string[] {
+  if (typeof slug !== "string") return [];
   const trimmed = slug.trim().toLowerCase();
   if (!trimmed) return [];
   return trimmed

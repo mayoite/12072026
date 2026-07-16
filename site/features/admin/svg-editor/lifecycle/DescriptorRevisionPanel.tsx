@@ -54,7 +54,10 @@ export function DescriptorRevisionPanel({ slug }: Props) {
   }, [slug]);
 
   useEffect(() => {
-    void load();
+    const id = requestAnimationFrame(() => {
+      void load();
+    });
+    return () => cancelAnimationFrame(id);
   }, [load]);
 
   const rollback = useCallback(
@@ -90,34 +93,39 @@ export function DescriptorRevisionPanel({ slug }: Props) {
     <section className="admin-panel" aria-label="Revision history">
       <div className="admin-panel__header">Revision history</div>
       <div className="admin-panel__body">
+        <p className="admin-page__meta">
+          Prior releases you can restore. Rollback re-publishes that revision as a new
+          version — the live Planner symbol changes.
+        </p>
         {loading ? (
           <p className="admin-page__meta" role="status">
             <Loader2 size={14} className="animate-spin" aria-hidden /> Loading revisions…
           </p>
         ) : revisions.length === 0 ? (
-          <p className="admin-table__secondary">No versioned revisions on disk yet.</p>
+          <p className="admin-table__secondary">No prior releases recorded yet.</p>
         ) : (
           <ul className="admin-table__secondary admin-list-roomy">
             {revisions.map((revision) => (
               <li key={revision.version} className="admin-inline-row">
                 <span>
                   v{revision.version}
-                  {revision.isCurrent ? " · current" : ""}
+                  {revision.isCurrent ? " · current release" : ""}
                 </span>
-                <code>{revision.checksum.slice(0, 12)}…</code>
+                <code title="Revision id">{revision.checksum.slice(0, 12)}…</code>
                 {!revision.isCurrent ? (
                   <button
                     type="button"
-                    className="admin-btn admin-btn--outline"
+                    className="admin-btn admin-btn--outline admin-btn--compact"
                     onClick={() => void rollback(revision.version)}
                     disabled={busyVersion !== null}
+                    title={`Restore revision v${revision.version} and re-publish it`}
                   >
                     {busyVersion === revision.version ? (
                       <Loader2 size={14} className="animate-spin" aria-hidden />
                     ) : (
                       <ArrowCounterClockwise size={14} aria-hidden />
                     )}
-                    Roll back
+                    Restore release
                   </button>
                 ) : null}
               </li>
@@ -131,7 +139,7 @@ export function DescriptorRevisionPanel({ slug }: Props) {
         ) : null}
         {audit.length > 0 ? (
           <div className="admin-section-top">
-            <h3 className="admin-table__primary">Audit trail</h3>
+            <h3 className="admin-table__primary">Recent activity</h3>
             <ul className="admin-table__secondary admin-list-compact">
               {audit.map((entry) => (
                 <li key={`${entry.at}-${entry.action}`}>

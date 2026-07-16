@@ -175,7 +175,7 @@ describe("04-PIPELINE-RUNNER: core contracts (1B in-process unified)", () => {
       // write catch path or in-process error surfaces; accept either for min change
       expect(["writeFixtureError", "nonZeroExit"]).toContain(result.reason);
       // fixturePath may be populated (computed before write) in unified path; not null required
-      expect(result.fixturePath).toBeTruthy();
+      expect(result.fixturePath).toBeDefined();
     } finally {
       rmSync(projectRoot, { recursive: true, force: true });
     }

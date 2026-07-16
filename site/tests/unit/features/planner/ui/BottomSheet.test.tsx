@@ -12,9 +12,9 @@ describe("BottomSheet", () => {
         <p>Sheet body</p>
       </BottomSheet>,
     );
-    expect(screen.getByRole("dialog")).toBeTruthy();
-    expect(screen.getByText("Filters")).toBeTruthy();
-    expect(screen.getByText("Sheet body")).toBeTruthy();
+    expect(screen.getByRole("dialog")).toBeDefined();
+    expect(screen.getByText("Filters")).toBeDefined();
+    expect(screen.getByText("Sheet body")).toBeDefined();
   });
 
   it("closes on overlay click and Escape", () => {

@@ -6,6 +6,7 @@
 
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
@@ -108,17 +109,16 @@ export default async function SvgCatalogSlugPage({
       )}
 
       <section aria-label="PNG thumb">
-        {/* eslint-disable-next-line @next/next/no-img-element -- retina R2 thumbs need explicit srcSet */}
-        <img
+        <Image
           src={pngUrl}
-          srcSet={pngSrcSet}
           alt={`${slug} thumbnail`}
           width={512}
           height={256}
           sizes="(max-width: 640px) 100vw, 512px"
           className="svg-catalog-thumb"
           loading="lazy"
-          decoding="async"
+          unoptimized
+          data-srcset={pngSrcSet}
         />
       </section>
 

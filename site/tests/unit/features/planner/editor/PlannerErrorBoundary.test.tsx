@@ -18,8 +18,8 @@ describe("PlannerErrorBoundary", () => {
         <Boom />
       </PlannerErrorBoundary>,
     );
-    expect(screen.getByText(/unavailable/i)).toBeTruthy();
-    expect(screen.getByText(/boom-render/)).toBeTruthy();
+    expect(screen.getByText(/unavailable/i)).toBeDefined();
+    expect(screen.getByText(/boom-render/)).toBeDefined();
     fireEvent.click(screen.getByRole("button", { name: /try again/i }));
     spy.mockRestore();
   });
@@ -30,6 +30,6 @@ describe("PlannerErrorBoundary", () => {
         <span>ok-child</span>
       </PlannerErrorBoundary>,
     );
-    expect(screen.getByText("ok-child")).toBeTruthy();
+    expect(screen.getByText("ok-child")).toBeDefined();
   });
 });

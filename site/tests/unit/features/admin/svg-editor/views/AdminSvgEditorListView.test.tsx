@@ -54,4 +54,27 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     expect(screen.getByText(/side-table-001/i)).toBeInTheDocument();
     expect(container.querySelector("[data-testid='admin-svg-inventory'] [style]")).toBeNull();
   });
+
+  it("exposes status chips and demoted advanced bulk", () => {
+    render(
+      <AdminSvgEditorListView
+        descriptors={[descriptor]}
+        refreshedAtLabel="test-time"
+        artifactStatuses={{
+          "side-table-001": {
+            state: "published",
+            publicUrl: "/svg-catalog/side-table-001.svg",
+          } as never,
+        }}
+        lifecycleManifest={{}}
+      />,
+    );
+    const health = screen.getByTestId("artifact-health");
+    expect(health).toHaveTextContent(/published/i);
+    expect(health).toHaveTextContent(/missing/i);
+    expect(screen.getByTestId("admin-shell-state")).toBe(health.closest("[data-testid='admin-shell-state']"));
+    const advanced = screen.getByTestId("admin-svg-advanced-import");
+    expect(advanced).not.toHaveAttribute("open");
+    expect(advanced).toHaveTextContent(/bulk import/i);
+  });
 });

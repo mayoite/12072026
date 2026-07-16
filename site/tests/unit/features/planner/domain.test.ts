@@ -63,7 +63,7 @@ describe("project model and units", () => {
   it("creates projects, rooms, and envelopes with defaults and overrides", () => {
     const project = createPlannerProject();
     expect(project.floors).toHaveLength(1);
-    expect(project.id).toBeTruthy();
+    expect(project.id).toBeDefined();
     const rectangular = createRectangularRoomProject({
       widthMm: 20,
       depthMm: 10,

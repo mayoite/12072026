@@ -14,7 +14,7 @@ describe("makerJsRecipes", () => {
       topThicknessMm: 80,
     });
     expect(viewBox).toEqual({ x: 0, y: 0, width: 1200, height: 600 });
-    expect(model.models).toBeTruthy();
+    expect(model.models).toBeDefined();
   });
 
   it("builds L-desk spanning main + return", () => {

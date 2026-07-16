@@ -67,6 +67,16 @@ describe("priceBookService", () => {
       if (denied.ok) return;
       expect(denied.error).toMatch(/Approver role required/i);
       expect(denied.previousActiveVersionId).toBeNull();
+
+      const viewerDenied = await activatePriceBookVersion(
+        store,
+        "pb-1",
+        "v1",
+        "viewer",
+      );
+      expect(viewerDenied.ok).toBe(false);
+      if (viewerDenied.ok) return;
+      expect(viewerDenied.error).toMatch(/Approver role required/i);
     });
 
     it("rejects missing book", async () => {
@@ -543,6 +553,70 @@ describe("priceBookService", () => {
       expect(result.ok).toBe(false);
       if (result.ok) return;
       expect(result.error).toMatch(/Rollback failed contract emission/);
+    });
+
+    it("rolling back a non-active version marks it rolled_back and demotes live active", async () => {
+      // Implementation marks the target rolled_back and any active → approved.
+      const store = memoryStore({
+        bookId: "pb-1",
+        activeVersionId: "v-live",
+        versions: [
+          {
+            versionId: "v-live",
+            effectiveFrom: "2026-07-01",
+            currency: "INR",
+            status: "active",
+            rules: [rule],
+          },
+          {
+            versionId: "v-old",
+            effectiveFrom: "2026-01-01",
+            currency: "INR",
+            status: "approved",
+            rules: [rule],
+          },
+        ],
+      });
+      const result = await rollbackPriceBookVersion(
+        store,
+        "pb-1",
+        "v-old",
+        "approver",
+      );
+      expect(result.ok).toBe(true);
+      if (!result.ok) throw new Error("expected result.ok");
+      const state = store.getState();
+      expect(state.versions.find((v) => v.versionId === "v-old")?.status).toBe(
+        "rolled_back",
+      );
+      expect(state.versions.find((v) => v.versionId === "v-live")?.status).toBe(
+        "approved",
+      );
+      // reverse-find first approved → v-live remains available as fallback
+      expect(result.newActiveVersionId).toBe("v-live");
+      expect(result.previousActiveVersionId).toBe("v-live");
+    });
+  });
+
+  describe("approve allows author and approver", () => {
+    it("approves draft as approver", async () => {
+      const store = memoryStore({
+        bookId: "pb-1",
+        versions: [
+          {
+            versionId: "v1",
+            effectiveFrom: "2026-07-01",
+            currency: "INR",
+            status: "draft",
+            rules: [rule],
+          },
+        ],
+      });
+      const result = await approvePriceBookVersion(store, "pb-1", "v1", "approver");
+      expect(result.ok).toBe(true);
+      if (!result.ok) throw new Error("expected result.ok");
+      expect(result.action).toBe("approve");
+      expect(store.getState().versions[0]?.status).toBe("approved");
     });
   });
 });

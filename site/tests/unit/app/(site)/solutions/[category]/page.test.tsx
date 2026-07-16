@@ -37,10 +37,10 @@ vi.mock('@/components/shared/SectionIntro', () => ({
   ),
 }));
 
-// Mock seo utils
+// Mock seo utils — mirror absolute title shape from buildPageMetadata
 vi.mock('@/features/site/data/seo', () => ({
-  buildPageMetadata: (_url: string, opts: any) => ({
-    title: opts.title,
+  buildPageMetadata: (_url: string, opts: { title: string; description: string }) => ({
+    title: { absolute: `${opts.title} | One&Only` },
     description: opts.description,
   }),
 }));
@@ -71,7 +71,7 @@ describe('SolutionsCategoryPage Route', () => {
       const meta = await generateMetadata({
         params: Promise.resolve({ category: 'seating' }),
       });
-      expect(meta.title).toBe('Seating Solutions');
+      expect(meta.title).toEqual({ absolute: 'Seating Solutions | One&Only' });
       expect(meta.description).toContain('Ergonomic seating solutions');
     });
 
@@ -79,7 +79,7 @@ describe('SolutionsCategoryPage Route', () => {
       const meta = await generateMetadata({
         params: Promise.resolve({ category: 'invalid-cat' }),
       });
-      expect(meta.title).toBe('Solutions');
+      expect(meta.title).toEqual({ absolute: 'Solutions | One&Only' });
       expect(meta.description).toContain('Tailored furniture solutions');
     });
   });

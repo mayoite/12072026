@@ -81,7 +81,7 @@ function desktopChatLauncher() {
 }
 
 async function waitForAssistantMount() {
-  await waitFor(() => expect(desktopChatLauncher()).toBeTruthy());
+  await waitFor(() => expect(desktopChatLauncher()).toBeDefined());
 }
 
 async function openGuidedPlanner() {

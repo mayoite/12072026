@@ -110,5 +110,49 @@ describe("TopBar save status pill — plannerSaveStatusLabel table", () => {
     expect(pill).toHaveTextContent("Unsaved changes");
     expect(pill).not.toHaveTextContent("Modified");
     expect(pill).toHaveAttribute("data-status", "unsaved");
+    // Pill is sole save authority — no brand subline duplicate
+    expect(screen.getAllByText("Unsaved changes")).toHaveLength(1);
+  });
+
+  it("error status never looks like success; Save becomes Retry save", () => {
+    render(
+      <TopBar
+        {...baseProps}
+        accessContext="authenticated"
+        saveStatus="error"
+        saveStorage="local"
+        isSynced
+        isModified={false}
+      />,
+    );
+
+    const pill = screen.getByTestId("open3d-save-status");
+    expect(pill).toHaveAttribute("data-status", "error");
+    expect(pill).toHaveTextContent("Local save failed");
+    expect(pill).not.toHaveAttribute("data-synced", "true");
+    expect(pill.textContent).not.toMatch(/Saved/i);
+
+    const saveBtn = screen.getByRole("button", { name: /Retry save/i });
+    expect(saveBtn).toHaveTextContent("Retry save");
+    expect(saveBtn).toHaveAttribute("data-status", "error");
+  });
+
+  it("saving disables primary save and keeps distinct pill", () => {
+    render(
+      <TopBar
+        {...baseProps}
+        accessContext="guest"
+        saveStatus="saving"
+        saveStorage="local"
+      />,
+    );
+
+    const pill = screen.getByTestId("open3d-save-status");
+    expect(pill).toHaveAttribute("data-status", "saving");
+    expect(pill).toHaveTextContent("Saving locally…");
+
+    const saveBtn = screen.getByRole("button", { name: /Saving/i });
+    expect(saveBtn).toBeDisabled();
+    expect(saveBtn).toHaveTextContent("Saving…");
   });
 });

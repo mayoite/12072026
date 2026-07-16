@@ -116,7 +116,7 @@ describe("app/(site)/portal/svg-catalog/SvgCatalogGrid.tsx", () => {
     const thumb = screen.getByAltText("a thumbnail");
     expect(thumb).toHaveAttribute("src", "https://cdn/a.png");
     expect(thumb).toHaveAttribute(
-      "srcset",
+      "data-srcset",
       "https://cdn/a@1x.png 1x, https://cdn/a@2x.png 2x",
     );
   });

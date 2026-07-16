@@ -224,16 +224,27 @@ describe('SiteHeader Component', () => {
     const dispatchSpy = vi.spyOn(window, 'dispatchEvent');
     await renderSettledHeader();
 
-    const plannerBtn = screen.getByRole('button', { name: 'Guided Planner' });
+    const plannerBtn = screen.getByRole('button', { name: /Guided Planner/i });
     fireEvent.click(plannerBtn);
 
     expect(trackPlannerLaunchClicked).toHaveBeenCalledWith({
-      pathname: '/products',
+      sourcePage: '/products',
       surface: 'header',
     });
     expect(dispatchSpy).toHaveBeenCalledWith(
       expect.objectContaining({ type: 'oando-assistant:open' })
     );
+  });
+
+  it('names quote cart and announces search status for assistive tech', async () => {
+    await renderSettledHeader();
+
+    expect(screen.getByRole('link', { name: 'View Quote Cart' })).toHaveAttribute(
+      'href',
+      '/quote-cart',
+    );
+    expect(screen.getByRole('search', { name: 'Site product search' })).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent(/Search products/i);
   });
 
   it('collapses secondary destinations under More flyout', async () => {

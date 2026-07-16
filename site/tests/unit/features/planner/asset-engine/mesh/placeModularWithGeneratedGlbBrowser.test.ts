@@ -135,7 +135,7 @@ describe("placeModularWithGeneratedGlbBrowser", () => {
       "/catalog-assets/generated/placeholder.glb",
     );
     const furniture = result.project.floors[0]?.furniture[0];
-    expect(furniture?.generatedGlbUrl).toBeTruthy();
+    expect(furniture?.generatedGlbUrl).toBeDefined();
     expect(furniture?.geometryMode).toBe("modular-cabinet-v0");
     expect(fetchImpl).toHaveBeenCalled();
   });
@@ -173,6 +173,6 @@ describe("placeModularWithGeneratedGlbBrowser", () => {
     expect(result.stamped).toBe(true);
     expect(result.written).toBe(false);
     expect(fetchImpl).not.toHaveBeenCalled();
-    expect(result.project.floors[0]?.furniture[0]?.generatedGlbUrl).toBeTruthy();
+    expect(result.project.floors[0]?.furniture[0]?.generatedGlbUrl).toBeDefined();
   });
 });

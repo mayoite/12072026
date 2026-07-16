@@ -50,7 +50,7 @@ describe('Modal Component', () => {
   });
 
   it('renders title and triggers onClose when clicking the close button', () => {
-    render(
+    const { container } = render(
       <Modal open={true} onClose={mockOnClose} title="Test Modal Title">
         <div>Modal Content</div>
       </Modal>
@@ -59,7 +59,13 @@ describe('Modal Component', () => {
     expect(screen.getByText('Test Modal Title')).toBeInTheDocument();
     expect(screen.getByText('Modal Content')).toBeInTheDocument();
 
+    const title = screen.getByRole('heading', { name: 'Test Modal Title' });
+    const dialog = container.querySelector('dialog') as HTMLDialogElement;
+    expect(dialog.getAttribute('aria-labelledby')).toBe(title.id);
+    expect(dialog).not.toHaveAttribute('aria-label');
+
     const closeBtn = screen.getByRole('button', { name: 'Close dialog' });
+    expect(closeBtn.className).toMatch(/min-h-\[2\.75rem\]|h-11/);
     fireEvent.click(closeBtn);
 
     expect(mockOnClose).toHaveBeenCalled();

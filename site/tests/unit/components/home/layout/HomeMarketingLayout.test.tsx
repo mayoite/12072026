@@ -16,7 +16,7 @@ describe("HomeMarketingLayout", () => {
 
     expect(screen.getByTestId("home-marketing-layout")).toHaveClass("overflow-x-hidden");
     expect(screen.getByText("Page body")).toBeInTheDocument();
-    expect(container.querySelector(".min-h-screen")).toBeTruthy();
+    expect(container.querySelector(".min-h-screen")).toBeDefined();
     expect(screen.queryByTestId("ContactTeaser")).not.toBeInTheDocument();
   });
 

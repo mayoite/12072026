@@ -37,10 +37,10 @@ describe("PlannerLayoutShell", () => {
         <span>child-content</span>
       </PlannerLayoutShell>,
     );
-    expect(screen.getByText("child-content")).toBeTruthy();
+    expect(screen.getByText("child-content")).toBeDefined();
     expect(screen.getByRole("main")).toHaveAttribute("id", "main-content");
-    expect(screen.getByTestId("chrome-top")).toBeTruthy();
-    expect(screen.getByTestId("chrome-bottom")).toBeTruthy();
+    expect(screen.getByTestId("chrome-top")).toBeDefined();
+    expect(screen.getByTestId("chrome-bottom")).toBeDefined();
     expect(screen.getByTestId("error-boundary")).toHaveAttribute("data-label", "Planner");
   });
 });

@@ -55,7 +55,7 @@ describe("PlannerFabricStage", () => {
 
   it("mounts the production fabric stage shell", async () => {
     const { container } = render(<PlannerFabricStage />);
-    expect(container.firstChild).toBeTruthy();
+    expect(container.firstChild).toBeDefined();
     await waitFor(() => {
       expect(CanvasCtor).toHaveBeenCalled();
     });

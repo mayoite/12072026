@@ -32,7 +32,6 @@ function loadContainerRe(): RegExp {
     /const CONTAINER_RE =\s*(\/[\s\S]*?\/g);/,
   );
   if (!match) throw new Error("CONTAINER_RE not found");
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- rehydrate script regex under test
   return new Function(`return ${match[1]}`)() as RegExp;
 }
 

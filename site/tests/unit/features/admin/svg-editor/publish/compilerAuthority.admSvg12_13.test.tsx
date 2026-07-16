@@ -27,10 +27,10 @@ describe("ADM-SVG-12 one compiler authority", () => {
 
   it("preview and publish source both import the same compile entry", () => {
     const previewSrc = readSiteSource(
-      "features/admin/svg-editor/previewSvgEditorAction.ts",
+      "features/admin/svg-editor/publish/previewSvgEditorAction.ts",
     );
     const publishSrc = readSiteSource(
-      "features/admin/svg-editor/publishDescriptorWithPipeline.ts",
+      "features/admin/svg-editor/publish/publishDescriptorWithPipeline.ts",
     );
     expect(previewSrc).toContain('from "@/features/planner/asset-engine/svg/compileSvgForPublish"');
     expect(previewSrc).toContain("compileSvgForPublish");

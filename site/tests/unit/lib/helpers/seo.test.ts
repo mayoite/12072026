@@ -7,15 +7,18 @@ import {
   buildProductJsonLd,
 } from "@/lib/helpers/seo";
 
-vi.mock("@/features/site/data/seo", () => ({
-  buildBreadcrumbJsonLd: vi.fn(),
-  buildCanonicalUrl: vi.fn(),
-  buildGlobalJsonLd: vi.fn(),
-  buildPageJsonLd: vi.fn(),
-  buildPageMetadata: vi.fn(),
-  buildSiteMetadata: vi.fn(),
-  canonicalPath: vi.fn(),
-}));
+vi.mock("@/features/site/data/seo", async (importOriginal) => {
+  const actual = (await importOriginal()) as Record<string, unknown>;
+  return {
+    ...actual,
+    buildBreadcrumbJsonLd: vi.fn(),
+    buildGlobalJsonLd: vi.fn(),
+    buildPageJsonLd: vi.fn(),
+    buildPageMetadata: vi.fn(),
+    buildSiteMetadata: vi.fn(),
+    canonicalPath: vi.fn(),
+  };
+});
 
 describe("seo helpers", () => {
   describe("buildFAQJsonLd", () => {

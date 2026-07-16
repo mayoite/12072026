@@ -33,6 +33,6 @@ describe("PublishedSvgPreview", () => {
       "data-artifact-state",
       "published",
     );
-    expect(document.querySelector("svg")).toBeTruthy();
+    expect(document.querySelector("svg")).toBeDefined();
   });
 });

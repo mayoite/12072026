@@ -1,25 +1,41 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+
+const mockTrack = vi.fn();
+vi.mock("@vercel/analytics", () => ({
+  track: (...args: unknown[]) => mockTrack(...args),
+}));
+
 import {
   trackKpiRendered,
   trackKpiFallbackUsed,
   trackKpiMismatchDetected,
   compareKpiField,
 } from "@/lib/analytics/kpiEvents";
+import { CONSENT_ACCEPTED, CONSENT_COOKIE } from "@/lib/consent";
+import { _clearSiteEventQueueForTests } from "@/lib/analytics/eventQueue";
 
 describe("kpiEvents", () => {
-  let mockTrack: any;
-
   beforeEach(() => {
-    mockTrack = vi.fn();
+    mockTrack.mockClear();
+    _clearSiteEventQueueForTests();
     vi.stubGlobal("window", {
-      va: {
-        track: mockTrack,
-      },
+      va: vi.fn(),
+      vaq: [],
     });
+    document.cookie = `${CONSENT_COOKIE}=${CONSENT_ACCEPTED}; path=/`;
   });
 
   afterEach(() => {
+    document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    _clearSiteEventQueueForTests();
+  });
+
+  it("does not emit without analytics consent", () => {
+    document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
+    trackKpiRendered({ asOfDate: "2026-06-26", source: "supabase" });
+    expect(mockTrack).not.toHaveBeenCalled();
   });
 
   it("calls track when trackKpiRendered is called", () => {
@@ -31,33 +47,31 @@ describe("kpiEvents", () => {
   });
 
   it("calls track when trackKpiFallbackUsed is called", () => {
-    trackKpiFallbackUsed({ source: "local" });
+    trackKpiFallbackUsed({ source: "fallback" });
     expect(mockTrack).toHaveBeenCalledWith("kpi_fallback_used", {
-      source: "local",
+      source: "fallback",
     });
   });
 
   it("calls track when trackKpiMismatchDetected is called", () => {
-    trackKpiMismatchDetected({ page: "home", field: "revenue", expected: 100, actual: 90 });
+    trackKpiMismatchDetected({
+      page: "/home",
+      field: "projects",
+      expected: 10,
+      actual: 8,
+    });
     expect(mockTrack).toHaveBeenCalledWith("kpi_mismatch_detected", {
-      page: "home",
-      field: "revenue",
-      expected: 100,
-      actual: 90,
+      page: "/home",
+      field: "projects",
+      expected: 10,
+      actual: 8,
     });
   });
 
-  it("compares KPI fields and calls track if mismatch is detected", () => {
-    compareKpiField("home", "revenue", 90, 100);
-    expect(mockTrack).toHaveBeenCalledWith("kpi_mismatch_detected", {
-      page: "home",
-      field: "revenue",
-      expected: 100,
-      actual: 90,
-    });
-
-    mockTrack.mockClear();
-    compareKpiField("home", "revenue", 100, 100);
+  it("compareKpiField emits only on mismatch", () => {
+    compareKpiField("/home", "projects", 10, 10);
     expect(mockTrack).not.toHaveBeenCalled();
+    compareKpiField("/home", "projects", 8, 10);
+    expect(mockTrack).toHaveBeenCalled();
   });
 });

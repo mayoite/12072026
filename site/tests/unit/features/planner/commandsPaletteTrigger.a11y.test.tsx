@@ -20,7 +20,7 @@ describe("CommandsPaletteTrigger a11y — label-in-name (Commands)", () => {
     const btn = screen.getByRole("button", { name: /Commands/i });
     const ariaLabel = btn.getAttribute("aria-label");
 
-    expect(ariaLabel).toBeTruthy();
+    expect(ariaLabel).toBeDefined();
     expect(ariaLabel).toContain("Commands");
     expect(btn).toHaveTextContent("Commands");
 

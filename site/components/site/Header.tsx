@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { CaretDown, List, MagnifyingGlass, Sparkle } from "@phosphor-icons/react";
 import { OneAndOnlyLogo } from "@/components/ui/Logo";
+import { PlannerLaunchLink } from "@/components/ui/PlannerLaunchLink";
 import {
   NAV_CATEGORY_GROUP_ORDER,
   NAV_CATEGORY_GROUPS,
@@ -18,6 +19,7 @@ import { SITE_HEADER_MORE_LINKS, SITE_HEADER_PRIMARY_LINKS } from "@/features/si
 const HEADER_PRIMARY_LINKS = [...SITE_HEADER_PRIMARY_LINKS];
 const HEADER_MORE_LINKS = [...SITE_HEADER_MORE_LINKS];
 import { MobileNavDrawer } from "@/components/site/MobileNavDrawer";
+import { isPlannerEntryHref } from "@/lib/analytics/plannerEntry";
 import {
   trackPlannerLaunchClicked,
   trackSiteSearchSubmitted,
@@ -286,6 +288,14 @@ export function SiteHeader() {
         ? "Results"
         : "No results";
 
+  const searchStatusAnnouncement = !searchQuery.trim()
+    ? "Search products. Type at least two characters."
+    : searchLoading
+      ? "Searching products."
+      : searchResults.length > 0
+        ? `${searchResults.length} search result${searchResults.length === 1 ? "" : "s"} available.`
+        : "No search results.";
+
   const onSearchResultClick = () => {
     setShowSearchPanel(false);
     setSearchQuery("");
@@ -432,17 +442,32 @@ export function SiteHeader() {
                   );
                 }
 
+                const navClassName = cn(
+                  "typ-nav shell-nav-link shell-nav-link--desktop relative whitespace-nowrap px-1.5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary 2xl:px-2.5",
+                  isActive ? "shell-nav-link-current" : "",
+                );
+
+                if (isPlannerEntryHref(link.href)) {
+                  return (
+                    <PlannerLaunchLink
+                      key={link.label}
+                      href={link.href}
+                      surface="header-nav"
+                      label={link.label}
+                      onMouseEnter={closeMegaMenu}
+                      className={navClassName}
+                    >
+                      {link.label}
+                    </PlannerLaunchLink>
+                  );
+                }
+
                 return (
                   <Link
                     key={link.label}
                     href={link.href}
                     onMouseEnter={closeMegaMenu}
-                    className={cn(
-                      "typ-nav shell-nav-link shell-nav-link--desktop relative whitespace-nowrap px-1.5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary 2xl:px-2.5",
-                      isActive
-                        ? "shell-nav-link-current"
-                        : "",
-                    )}
+                    className={navClassName}
                   >
                     {link.label}
                   </Link>
@@ -532,6 +557,8 @@ export function SiteHeader() {
               >
                 <form
                   className={headerSearchShellClass}
+                  role="search"
+                  aria-label="Site product search"
                   suppressHydrationWarning
                   onSubmit={(event) => {
                     event.preventDefault();
@@ -541,7 +568,7 @@ export function SiteHeader() {
                   <label htmlFor="site-header-search" className="sr-only">
                     Search products
                   </label>
-                  <MagnifyingGlass size={16} weight="bold" className="text-muted" />
+                  <MagnifyingGlass size={16} weight="bold" className="text-muted" aria-hidden="true" />
                   <input
                     id="site-header-search"
                     name="search"
@@ -552,16 +579,22 @@ export function SiteHeader() {
                     placeholder="Search products..."
                     className="w-28 bg-transparent typ-body text-strong outline-none placeholder:text-subtle xl:w-36 2xl:w-44"
                     autoComplete="off"
-                    aria-label="Search products with AI"
+                    aria-label="Search products"
+                    aria-describedby="site-header-search-status"
+                    aria-controls={showSearchPanel ? "site-header-search-panel" : undefined}
                   />
-                  <Sparkle size={16} weight="duotone" className="text-contrast-accent" />
+                  <Sparkle size={16} weight="duotone" className="text-contrast-accent" aria-hidden="true" />
                   <button type="submit" className="sr-only">
                     Submit header search
                   </button>
                 </form>
+                <p id="site-header-search-status" className="sr-only" role="status" aria-live="polite">
+                  {searchStatusAnnouncement}
+                </p>
 
                   {showSearchPanel && (
                     <div
+                      id="site-header-search-panel"
                       className={`${headerSearchPanelClass} site-header-flyout animate-in fade-in slide-in-from-top-2 duration-300`}
                     >
                       <div className={headerSearchMetaClass}>
@@ -638,8 +671,8 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={openGuidedPlanner}
-                className="btn-primary whitespace-nowrap px-3 text-sm xl:px-4"
-                aria-label="Guided Planner"
+                className="btn-primary min-h-11 whitespace-nowrap px-3 text-sm xl:px-4"
+                aria-label="Open Guided Planner"
               >
                 Guided Planner
               </button>

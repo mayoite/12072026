@@ -1,8 +1,8 @@
 // @vitest-environment node
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
@@ -51,7 +51,7 @@ function loadHelpers() {
         const byLine = new Map<number, boolean>();
         for (const id of Object.keys(s)) {
           const line = cov.statementMap[id]?.start?.line;
-          if (line == null) continue;
+          if (line === null || line === undefined) continue;
           byLine.set(line, Boolean(byLine.get(line) || s[id] > 0));
         }
         lineTotal = byLine.size;

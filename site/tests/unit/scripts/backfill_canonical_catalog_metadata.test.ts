@@ -80,7 +80,7 @@ vi.mock("dotenv", () => ({
 }));
 
 vi.mock("fs", async () => {
-  const actual = await vi.importActual<typeof import("fs")>("fs");
+  const actual = await vi.importActual("fs") as Record<string, unknown> & { readFileSync?: (...args: never[]) => unknown; default?: unknown };
   return {
     ...actual,
     mkdirSync: vi.fn(),
@@ -116,9 +116,9 @@ describe("backfill_canonical_catalog_metadata (name-mirror)", () => {
     expect(createClient).toHaveBeenCalled();
     expect(productUpdates.length).toBe(1);
     expect(productUpdates[0]?.id).toBe("p1");
-    expect(productUpdates[0]?.metadata.categoryIdCanonical).toBeTruthy();
-    expect(productUpdates[0]?.metadata.canonicalSlugV2).toBeTruthy();
-    expect(productUpdates[0]?.metadata.canonicalSeriesId).toBeTruthy();
+    expect(productUpdates[0]?.metadata.categoryIdCanonical).toBeDefined();
+    expect(productUpdates[0]?.metadata.canonicalSlugV2).toBeDefined();
+    expect(productUpdates[0]?.metadata.canonicalSeriesId).toBeDefined();
 
     const reportWrite = writes.find((w) =>
       w.file.replace(/\\/g, "/").endsWith("canonical-metadata-backfill-report.json"),

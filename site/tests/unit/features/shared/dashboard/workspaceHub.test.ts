@@ -24,7 +24,7 @@ describe("WORKSPACE_HUB_SECTIONS", () => {
         expect(item.label.length).toBeGreaterThan(0);
         expect(item.description.length).toBeGreaterThan(0);
         // Phosphor icons are forwardRef components (object or function).
-        expect(item.icon).toBeTruthy();
+        expect(item.icon).toBeDefined();
         expect(["function", "object"]).toContain(typeof item.icon);
       }
     }

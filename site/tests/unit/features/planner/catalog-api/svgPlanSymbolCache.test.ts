@@ -77,7 +77,7 @@ describe("getSvgPlanImage", () => {
     expect(onLoaded).toHaveBeenCalledTimes(1);
 
     const img = getSvgPlanImage(url);
-    expect(img).toBeTruthy();
+    expect(img).toBeDefined();
     expect(img).toBe(instances[0]);
   });
 

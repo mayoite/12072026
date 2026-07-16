@@ -47,10 +47,14 @@ vi.mock('@/features/site/data/navigation', () => ({
 
 vi.mock('@/lib/analytics/siteEvents', () => ({
   trackSiteSearchSubmitted: vi.fn(),
+  trackSiteCtaClick: vi.fn(),
+  handlePlannerEntryNavigation: vi.fn(),
+  trackPlannerLaunchClicked: vi.fn(),
 }));
 
 const mockPush = vi.fn();
 vi.mock('next/navigation', () => ({
+  usePathname: () => '/',
   useRouter: () => ({
     push: mockPush,
   }),
@@ -206,5 +210,23 @@ describe('MobileNavDrawer Component', () => {
 
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(onCloseMock).toHaveBeenCalled();
+  });
+
+  it('uses 44px close control and live search status region', async () => {
+    render(
+      <MobileNavDrawer
+        open={true}
+        onClose={vi.fn()}
+        closeButtonRef={closeButtonRef}
+        groupedCategories={categories}
+      />
+    );
+    await act(async () => {});
+
+    const closeBtn = screen.getByRole('button', { name: 'Close navigation' });
+    expect(closeBtn.className).toMatch(/h-11/);
+    expect(closeBtn.className).toMatch(/w-11/);
+    expect(screen.getByRole('search', { name: 'Mobile product search' })).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent(/Search products/i);
   });
 });

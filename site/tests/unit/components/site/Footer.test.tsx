@@ -64,6 +64,7 @@ describe('SiteFooter Component', () => {
     const logo = screen.getByTestId('logo');
     expect(logo).toBeInTheDocument();
     expect(logo).toHaveAttribute('data-variant', 'orange');
+    expect(screen.getByRole('link', { name: /One&Only - home/i })).toHaveAttribute('href', '/');
 
     // Contact details check
     expect(screen.getByText('Patna office address')).toBeInTheDocument();

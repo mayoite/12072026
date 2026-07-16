@@ -63,10 +63,13 @@ export function AdminSvgDetailsRail({
   onStartGlbConversion,
   onGlbGenerated,
 }: AdminSvgDetailsRailProps) {
+  const issueCount = formIssues.length;
+
   return (
     <aside
-      aria-label="Block details"
+      aria-label="Product details and history"
       className="admin-svg-engine-shell__rail admin-svg-engine-shell__rail--details"
+      data-testid="admin-svg-details-rail"
     >
       <div>
         <DescriptorRevisionPanel slug={slug} />
@@ -75,11 +78,18 @@ export function AdminSvgDetailsRail({
         className="admin-panel admin-svg-engine-shell__panel admin-svg-engine-shell__advanced"
         open={advancedOpen}
       >
-        <summary className="admin-panel__header">Advanced block fields</summary>
+        <summary className="admin-panel__header">
+          Product details
+          {issueCount > 0 ? (
+            <span className="admin-badge admin-badge--warn admin-badge--compact admin-svg-engine-shell__issue-count">
+              {issueCount} {issueCount === 1 ? "issue" : "issues"}
+            </span>
+          ) : null}
+        </summary>
         <div className="admin-panel__body">
           <p className="admin-page__meta">
-            Metadata and catalog fields. Geometry for publish comes from the visual
-            studio, not these rows.
+            Identity, SKU, and catalog fields. Symbol geometry for publish comes from
+            the visual studio and footprint controls, not these rows.
           </p>
           <SvgEditorForm
             fields={SVG_EDITOR_FIELDS}
@@ -92,13 +102,13 @@ export function AdminSvgDetailsRail({
       </details>
 
       <details className="admin-panel admin-svg-engine-shell__panel">
-        <summary className="admin-panel__header">SVG to generated GLB</summary>
+        <summary className="admin-panel__header">3D model (optional)</summary>
         <div className="admin-panel__body">
           {form.variant === "fixed" ? (
             <>
               <p className="admin-page__copy">
-                Convert the current footprint SVG to a system-generated GLB under{" "}
-                <code>catalog-assets/generated/</code>.
+                Build a system-generated 3D model from the current draft symbol. Optional
+                for most releases — 2D Planner symbol publish does not require it.
               </p>
               <button
                 type="button"
@@ -107,11 +117,11 @@ export function AdminSvgDetailsRail({
                 disabled={!canConvertToGlb}
               >
                 <Cube size={14} aria-hidden />
-                Convert to 3D (GLB)
+                Convert draft to 3D
               </button>
               {!canConvertToGlb ? (
                 <p className="admin-page__meta">
-                  Generate a valid preview first, then convert.
+                  Generate a valid draft preview first, then convert.
                 </p>
               ) : null}
               {glbSourceSvg ? (
@@ -127,7 +137,7 @@ export function AdminSvgDetailsRail({
                   aria-busy="true"
                 >
                   <Loader2 size={14} className="animate-spin shrink-0" aria-hidden />
-                  Uploading generated GLB...
+                  Uploading generated 3D model…
                 </div>
               ) : null}
               {glbUploadError ? (
@@ -147,7 +157,7 @@ export function AdminSvgDetailsRail({
             </>
           ) : (
             <p className="admin-page__meta">
-              3D generation is available for fixed-variant blocks.
+              3D generation is available for fixed-size products only.
             </p>
           )}
         </div>

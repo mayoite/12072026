@@ -5,7 +5,7 @@
  * Existing admin CSS only. Uses pure contract + persistence helpers.
  */
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   PRODUCT_FAMILY_V1_FIXTURE,
   buildDraftFamilyFromForm,
@@ -34,7 +34,7 @@ export function AdminProductFamilyForm({
   const [previewText, setPreviewText] = useState<string | null>(null);
 
   const version = family.versions[0];
-  const selection = ["size-1200", "finish-oak"];
+  const selection = useMemo(() => ["size-1200", "finish-oak"] as const, []);
 
   const save = useCallback(() => {
     const next = buildDraftFamilyFromForm({

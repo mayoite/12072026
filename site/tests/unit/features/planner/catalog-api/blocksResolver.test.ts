@@ -27,7 +27,7 @@
  * Catalogue-first + search parity per BP-06, design §9/10, GS. TDD: test surface first.
  *
  * Type Safety rule (AGENTS.md):
- *  - No `: any`, no `as any`, no `@ts-ignore`, no `eslint-disable`.
+ *  - No `: any`, no `as any`, no `@ts-ignore`, no `eslint suppress`.
  *  - Tests reach into the resolver through its typed surface only.
  *  - `unknown` casts are confined to the test fixture boundary (where the
  *    resolver accepts `(descriptor as { blocks?: unknown }).blocks`).

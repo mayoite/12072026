@@ -1,6 +1,6 @@
 /**
  * Name-mirror: app/(site)/portal/svg-catalog/puckBlockRegistry.ts
- * Alias must re-export the canonical admin registry (no fork).
+ * Alias re-exports lib/catalog/puckBlockRegistry (canonical after admin path retire).
  */
 
 import { readFileSync } from "node:fs";
@@ -8,7 +8,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import * as alias from "@/app/(site)/portal/svg-catalog/puckBlockRegistry";
-import * as canonical from "@/features/admin/svg-editor/puckBlockRegistry";
+import * as canonical from "@/lib/catalog/puckBlockRegistry";
 
 describe("app/(site)/portal/svg-catalog/puckBlockRegistry.ts", () => {
   it("is a one-line re-export of the canonical registry", () => {
@@ -17,9 +17,7 @@ describe("app/(site)/portal/svg-catalog/puckBlockRegistry.ts", () => {
       "app/(site)/portal/svg-catalog/puckBlockRegistry.ts",
     );
     const source = readFileSync(aliasPath, "utf8").trim();
-    expect(source).toBe(
-      'export * from "@/features/admin/svg-editor/puckBlockRegistry";',
-    );
+    expect(source).toBe('export * from "@/lib/catalog/puckBlockRegistry";');
   });
 
   it("re-exports the same core symbols as the canonical module", () => {

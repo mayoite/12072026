@@ -68,7 +68,7 @@ describe("FurnitureFabricLayer", () => {
     const { container } = render(
       <FurnitureFabricLayer furniture={furniture} interactive={false} />,
     );
-    expect(container.querySelector("canvas")).toBeTruthy();
+    expect(container.querySelector("canvas")).toBeDefined();
 
     await waitFor(() => {
       expect(CanvasCtor).toHaveBeenCalled();

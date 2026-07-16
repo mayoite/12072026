@@ -18,7 +18,7 @@ describe("PlannerEmptyCanvas", () => {
         onUploadFloorPlan={onUploadFloorPlan}
       />,
     );
-    expect(screen.getByLabelText("Empty canvas guidance")).toBeTruthy();
+    expect(screen.getByLabelText("Empty canvas guidance")).toBeDefined();
     fireEvent.click(screen.getByRole("button", { name: /Draw walls/i }));
     fireEvent.click(screen.getByRole("button", { name: /Use template/i }));
     fireEvent.click(screen.getByRole("button", { name: /Quick layout/i }));
@@ -37,6 +37,6 @@ describe("PlannerEmptyCanvas", () => {
         onOpenTemplates={vi.fn()}
       />,
     );
-    expect(screen.getByText(/Guest session/i)).toBeTruthy();
+    expect(screen.getByText(/Guest session/i)).toBeDefined();
   });
 });

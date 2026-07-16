@@ -4,8 +4,8 @@
 
 import { describe, expect, it } from "vitest";
 import { appendFileSync, mkdtempSync, rmSync } from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 
 import {
   PRICE_BOOK_STATUS_LABEL,
@@ -95,6 +95,42 @@ describe("ADM-ROLE-01 server roles + safe unavailable explanations", () => {
     expect(avail.allowed).toBe(true);
     expect(avail.reason).toBeNull();
     expect(avail.requiredRole).toBe("author");
+  });
+
+  it("allows approve for approver on draft; denies viewer activate", () => {
+    expect(
+      describePriceBookActionAvailability("approve", "approver", "draft").allowed,
+    ).toBe(true);
+    const viewerActivate = describePriceBookActionAvailability(
+      "activate",
+      "viewer",
+      "approved",
+    );
+    expect(viewerActivate.allowed).toBe(false);
+    expect(viewerActivate.reason).toMatch(/approver/i);
+    expect(viewerActivate.requiredRole).toBe("approver");
+  });
+
+  it("denies activate from active and rolled_back", () => {
+    for (const status of ["active", "rolled_back"] as const) {
+      const avail = describePriceBookActionAvailability(
+        "activate",
+        "approver",
+        status,
+      );
+      expect(avail.allowed).toBe(false);
+      expect(avail.reason).toMatch(new RegExp(status));
+    }
+  });
+
+  it("denies rollback for viewer even when version is active", () => {
+    const avail = describePriceBookActionAvailability(
+      "rollback",
+      "viewer",
+      "active",
+    );
+    expect(avail.allowed).toBe(false);
+    expect(avail.reason).toMatch(/approver/i);
   });
 
   it("rollback requires approver and active status", () => {
@@ -368,6 +404,48 @@ describe("listDistinctVersionStatuses", () => {
     };
     expect(listDistinctVersionStatuses(contract).sort()).toEqual(
       ["active", "rolled_back"].sort(),
+    );
+  });
+
+  it("dedupes repeated statuses and returns empty for no versions", () => {
+    const empty: PriceBookContract = {
+      type: "oando-price-book",
+      schemaVersion: 1,
+      familySlug: "f",
+      bookId: "pb",
+      activeVersionId: null,
+      versions: [],
+    };
+    expect(listDistinctVersionStatuses(empty)).toEqual([]);
+
+    const dupes: PriceBookContract = {
+      ...empty,
+      versions: [
+        {
+          versionId: "v1",
+          effectiveFrom: "2026-07-01",
+          currency: "INR",
+          status: "draft",
+          rules: [],
+        },
+        {
+          versionId: "v2",
+          effectiveFrom: "2026-08-01",
+          currency: "INR",
+          status: "draft",
+          rules: [],
+        },
+        {
+          versionId: "v3",
+          effectiveFrom: "2026-09-01",
+          currency: "USD",
+          status: "approved",
+          rules: [],
+        },
+      ],
+    };
+    expect(listDistinctVersionStatuses(dupes).sort()).toEqual(
+      ["approved", "draft"].sort(),
     );
   });
 });

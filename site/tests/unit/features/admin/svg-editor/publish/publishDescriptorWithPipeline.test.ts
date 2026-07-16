@@ -594,4 +594,93 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
     expect(runPipeline).toHaveBeenCalledOnce();
     expect(persist).toHaveBeenCalledOnce();
   });
+
+  it("dual-write: invokes dbRepository.publish after disk commit and still succeeds", async () => {
+    const publish = vi.fn(async () => undefined);
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => pipelineOk(),
+      persist: () => persistOk(),
+      dbRepository: { publish, load: async () => null } as never,
+    });
+    expect(result.success).toBe(true);
+    expect(publish).toHaveBeenCalledOnce();
+    const [revision, definition, artifacts] = publish.mock.calls[0] ?? [];
+    expect(revision).toMatchObject({
+      definitionTypeId: "test-block",
+      reason: "publish",
+    });
+    expect(definition).toMatchObject({ typeId: "test-block" });
+    expect(artifacts).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: "svg" }),
+        expect.objectContaining({ kind: "descriptor" }),
+      ]),
+    );
+  });
+
+  it("dual-write: DB failure is logged and does not fail publish", async () => {
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => pipelineOk(),
+      persist: () => persistOk(),
+      dbRepository: {
+        publish: async () => {
+          throw new Error("db down");
+        },
+        load: async () => null,
+      } as never,
+    });
+    expect(result.success).toBe(true);
+    expect(errSpy).toHaveBeenCalled();
+    errSpy.mockRestore();
+  });
+
+  it("rolls back when persist throws after pipeline success", async () => {
+    const rollback = vi.fn();
+    const cleanup = vi.fn();
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => ({ ...pipelineOk(), rollback, cleanup }),
+      persist: () => {
+        throw new Error("persist exploded");
+      },
+    });
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toContain("Descriptor persistence threw");
+    expect(result.error).toContain("persist exploded");
+    expect(rollback).toHaveBeenCalledOnce();
+    expect(cleanup).toHaveBeenCalledOnce();
+  });
+
+  it("rolls back when pipeline.commit throws after persist", async () => {
+    const persistRollback = vi.fn();
+    const pipelineRollback = vi.fn();
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compileOk(),
+      runPipeline: async () => ({
+        ...pipelineOk(),
+        commit: () => {
+          throw new Error("commit denied");
+        },
+        rollback: pipelineRollback,
+      }),
+      persist: () => ({
+        ...persistOk(),
+        rollback: persistRollback,
+      }),
+    });
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error).toContain("Publication commit failed");
+    expect(result.error).toContain("commit denied");
+    expect(persistRollback).toHaveBeenCalledOnce();
+    expect(pipelineRollback).toHaveBeenCalledOnce();
+  });
 });

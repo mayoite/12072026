@@ -98,6 +98,39 @@ export function buildCanonicalUrl(siteUrl: string, path: string): string {
   return new URL(canonicalPath(path), siteUrl).toString();
 }
 
+/**
+ * Collapse repeated brand suffixes and produce one document title.
+ * Prevents "Workstations | One&Only | One&Only" from template + manual suffix.
+ */
+export function resolveDocumentTitle(rawTitle: string): string {
+  const suffix = SITE_BRAND.titleSuffix;
+  const trimmed = rawTitle.trim().replace(/\s+/g, " ");
+  if (!trimmed) return SITE_BRAND.defaultTitle;
+  if (trimmed === SITE_BRAND.defaultTitle) return SITE_BRAND.defaultTitle;
+
+  const trailingBrand = new RegExp(
+    `(?:\\s*[|–—-]\\s*${suffix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})+$`,
+    "i",
+  );
+  const body = trimmed.replace(trailingBrand, "").trim();
+  if (!body || body === suffix) return SITE_BRAND.defaultTitle;
+
+  // defaultTitle style ("One&Only | Premium…") — brand not only as trailing suffix
+  if (body === SITE_BRAND.defaultTitle || trimmed === SITE_BRAND.defaultTitle) {
+    return SITE_BRAND.defaultTitle;
+  }
+
+  // Already complete without trailing-only pattern (brand mid-title)
+  if (
+    !trailingBrand.test(trimmed) &&
+    new RegExp(suffix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(trimmed)
+  ) {
+    return trimmed;
+  }
+
+  return `${body} | ${suffix}`;
+}
+
 export function buildSiteMetadata(siteUrl: string): Metadata {
   return {
     metadataBase: new URL(siteUrl),
@@ -174,9 +207,9 @@ export function buildPageMetadata(siteUrl: string, input: PageMetadataInput): Me
   const image = input.image || SITE_BRAND.ogImage;
   const includeAlternates = input.alternates !== false;
   const indexable = input.indexable !== false;
-  const title: Metadata["title"] = input.title.includes(SITE_BRAND.titleSuffix)
-    ? { absolute: input.title }
-    : input.title;
+  const resolvedTitle = resolveDocumentTitle(input.title);
+  // Always absolute so the root template cannot re-append the brand.
+  const title: Metadata["title"] = { absolute: resolvedTitle };
 
   return {
     metadataBase: new URL(siteUrl),
@@ -193,7 +226,7 @@ export function buildPageMetadata(siteUrl: string, input: PageMetadataInput): Me
         : {}),
     },
     openGraph: {
-      title: input.title,
+      title: resolvedTitle,
       description: input.description,
       url: canonicalUrl,
       type: input.type || "website",
@@ -205,13 +238,13 @@ export function buildPageMetadata(siteUrl: string, input: PageMetadataInput): Me
           url: image,
           width: 1200,
           height: 630,
-          alt: input.title,
+          alt: resolvedTitle,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: input.title,
+      title: resolvedTitle,
       description: input.description,
       images: [image],
     },

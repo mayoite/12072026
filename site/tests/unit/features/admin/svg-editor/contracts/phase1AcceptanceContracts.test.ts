@@ -177,8 +177,8 @@ describe("ADM-SVG-05 / ADM-SVG-08 regions and subset", () => {
 describe("ADM-FORM-01 field groups", () => {
   it("assigns every cartography field to an operator task group", () => {
     for (const field of SVG_EDITOR_FIELDS) {
-      expect(field.group).toBeTruthy();
-      expect(SVG_EDITOR_FIELD_GROUP_LABEL[field.group]).toBeTruthy();
+      expect(field.group).toBeDefined();
+      expect(SVG_EDITOR_FIELD_GROUP_LABEL[field.group]).toBeDefined();
     }
     const groups = new Set(SVG_EDITOR_FIELDS.map((field) => field.group));
     expect(groups.has("identity")).toBe(true);

@@ -2425,7 +2425,7 @@ describe("Placement Action — crypto fallback + project map ?? (PLAN-FAIL-0408)
     const itm = makePlacementItem({ id: "cat1", color: { hex: "#fff" } as any });
     const res = placeCatalogItemInProject(proj as any, itm, null, { placedFrom: "api", materialOverride: "M", colorOverride: "C" });
     const placedF = res.result.project.floors[0].furniture.find((f: any) => f.sourceCatalogId === "cat1");
-    expect(placedF).toBeTruthy();
+    expect(placedF).toBeDefined();
     expect(placedF!.material).toBe("M");
   });
 
@@ -2626,7 +2626,7 @@ describe("Inventory Taxonomy — categories/rooms/styles/sorts/density (TDD)", (
     expect(INVENTORY_CATEGORIES.length).toBe(6); // GREEN
     expect(INVENTORY_CATEGORIES[0].id).toBe("furniture");
     expect(INVENTORY_CATEGORIES[0].subCategories.length).toBeGreaterThan(0);
-    expect(INVENTORY_CATEGORIES.find((c) => c.id === "symbols")).toBeTruthy();
+    expect(INVENTORY_CATEGORIES.find((c) => c.id === "symbols")).toBeDefined();
   });
 
   it("INVENTORY_ROOM_GROUPS has all-rooms empty + specific room tags", () => {

@@ -133,7 +133,11 @@ export function descriptorToFormState(descriptor: BlockDescriptor): SvgEditorFor
     assetsSvgUrl: assets?.svgUrl ?? "",
     sceneViewBox: seedDefinition.viewBox,
     sceneParts: seedDefinition.parts,
-    excalidrawElements: (descriptor as any).excalidrawElements,
+    excalidrawElements:
+      "excalidrawElements" in descriptor
+        ? (descriptor as BlockDescriptor & { excalidrawElements?: unknown })
+            .excalidrawElements
+        : undefined,
   };
 }
 

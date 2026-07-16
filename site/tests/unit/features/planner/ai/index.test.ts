@@ -28,7 +28,7 @@ describe("ai/index barrel", () => {
 
   it("re-exports advisor config and prompts", () => {
     expect(typeof AI_ADVISOR_PLANNER_ID).toBe("string");
-    expect(CATALOG_TIER_LABELS.budget).toBeTruthy();
+    expect(CATALOG_TIER_LABELS.budget).toBeDefined();
     expect(SPACE_SUGGEST_SYSTEM_PROMPT.length).toBeGreaterThan(10);
   });
 

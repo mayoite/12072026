@@ -188,9 +188,12 @@ export function AdminPriceBookPageView({
             Review currency prices and lifecycle. Activate is the release action.
             Approve and rollback stay secondary and high-risk.
           </p>
+          <p className="admin-page__meta" data-testid="admin-shell-scope-detail">
+            Commercial book for this family · set currency prices and release
+            versions. Technical units stay under Advanced.
+          </p>
           <p className="admin-page__meta" data-testid="admin-shell-source">
-            Source: local price-book store · book{" "}
-            <code>{bookId}</code>
+            Book ID: <code>{bookId}</code>
           </p>
           <p
             className="admin-page__meta"
@@ -338,7 +341,7 @@ export function AdminPriceBookPageView({
                   data-testid="admin-price-book-rules"
                 >
                   <caption className="sr-only">
-                    Price rules with currency amounts; raw storage is secondary
+                    Price rules with currency amounts
                   </caption>
                   <thead>
                     <tr>
@@ -400,7 +403,7 @@ export function AdminPriceBookPageView({
                   data-testid="admin-price-book-technical"
                 >
                   <summary className="admin-panel__header">
-                    Advanced · raw storage units
+                    Advanced · minor units
                   </summary>
                   <div className="admin-panel__body">
                     <table className="admin-table">
@@ -516,7 +519,7 @@ export function AdminPriceBookPageView({
             ) : null}
 
             {message ? (
-              <p className="admin-page__meta" role="status">
+              <p className="admin-page__meta" role="status" aria-live="polite">
                 {message}
               </p>
             ) : null}

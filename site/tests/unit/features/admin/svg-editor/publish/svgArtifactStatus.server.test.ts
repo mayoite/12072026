@@ -11,8 +11,8 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 import { createHash } from "node:crypto";
 
 const publicRoot = { current: "" };
@@ -112,5 +112,17 @@ describe("readSvgArtifactStatus / readSvgArtifactStatuses", () => {
     const map = readSvgArtifactStatuses(["a", "missing"]);
     expect(map.a?.state).toBe("published");
     expect(map.missing?.state).toBe("missing");
+  });
+
+  it("reports invalid when the artifact path exists but is unreadable as a file", () => {
+    // Directory at the expected file path → stat/read fails closed.
+    mkdirSync(path.join(workDir, "svg-catalog", "dir-slug.svg"), {
+      recursive: true,
+    });
+    const status = readSvgArtifactStatus("dir-slug");
+    expect(status.state).toBe("invalid");
+    expect(status.publicUrl).toBe("/svg-catalog/dir-slug.svg");
+    expect(status.markup).toBeNull();
+    expect(status.hash).toBeNull();
   });
 });

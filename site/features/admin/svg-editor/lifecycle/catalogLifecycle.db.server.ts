@@ -14,6 +14,21 @@ import {
  * Load buyer-visible descriptors from the Products DB when configured,
  * falling back to disk-based inventory/descriptors/ otherwise.
  */
+function isUsableDescriptor(value: unknown): value is BlockDescriptor {
+  if (!value || typeof value !== "object") return false;
+  const row = value as BlockDescriptor;
+  const geometry = row.geometry;
+  if (!geometry || typeof geometry !== "object") return false;
+  return (
+    typeof geometry.widthMm === "number" &&
+    Number.isFinite(geometry.widthMm) &&
+    typeof geometry.depthMm === "number" &&
+    Number.isFinite(geometry.depthMm) &&
+    typeof row.slug === "string" &&
+    row.slug.trim() !== ""
+  );
+}
+
 export async function loadBuyerVisibleDescriptorsWithDb(): Promise<BlockDescriptor[]> {
   if (!isProductsDatabaseConfigured()) {
     return loadBuyerVisibleDescriptors();
@@ -29,9 +44,16 @@ export async function loadBuyerVisibleDescriptorsWithDb(): Promise<BlockDescript
     }
 
     const manifest = readLifecycleManifest();
-    return rows
+    const fromDb = rows
       .filter((row) => isBuyerVisibleSlug(row.slug, manifest))
-      .map((row) => row.descriptor as BlockDescriptor);
+      .map((row) => row.descriptor)
+      .filter(isUsableDescriptor);
+
+    // Empty or corrupt dual-write rows must not blank the planner catalog.
+    if (fromDb.length === 0) {
+      return loadBuyerVisibleDescriptors();
+    }
+    return fromDb;
   } catch {
     return loadBuyerVisibleDescriptors();
   }

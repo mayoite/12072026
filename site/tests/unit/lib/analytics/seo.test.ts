@@ -9,6 +9,7 @@ vi.mock("@/features/site/data/seo", () => ({
   buildGlobalJsonLd: vi.fn(() => ({ "@type": "WebSite" })),
   buildPageJsonLd: vi.fn(() => ({ "@type": "WebPage" })),
   buildPageMetadata: vi.fn(() => ({ title: "page" })),
+  buildProductJsonLd: vi.fn(() => ({ "@type": "Product" })),
   buildSiteMetadata: vi.fn(() => ({ title: "site" })),
   canonicalPath: vi.fn((path: string) => path),
 }));

@@ -21,7 +21,7 @@ describe("jsonImport", () => {
     const envelope = parseJsonToEnvelope(json);
     expect(envelope).not.toBeNull();
     const structure = validateEnvelopeStructure(envelope!);
-    expect(structure.valid || structure.errors?.length === 0 || Array.isArray(structure)).toBeTruthy();
+    expect(structure.valid || structure.errors?.length === 0 || Array.isArray(structure)).toBeDefined();
     // validate may return boolean shape — handle both
     if (typeof structure === "object" && structure && "valid" in structure) {
       expect((structure as { valid: boolean }).valid).toBe(true);

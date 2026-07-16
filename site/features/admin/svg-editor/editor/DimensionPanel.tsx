@@ -2,11 +2,11 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import {
-  UnitSystem,
   metersToPixels,
   pixelsToMeters,
   feetInchesToPixels,
   pixelsToFeetInches,
+  type UnitSystem,
 } from "./units";
 import type { ExcalidrawAPI } from "./elementUtils";
 
@@ -105,11 +105,13 @@ export function DimensionPanel({
     };
   }, [syncFromAPI]);
 
-  // Re-populate inputs when unit mode changes
+  // Re-populate inputs when unit mode changes (defer setState out of effect body).
   useEffect(() => {
-    syncFromAPI();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [unit]);
+    const id = requestAnimationFrame(() => {
+      syncFromAPI();
+    });
+    return () => cancelAnimationFrame(id);
+  }, [unit, syncFromAPI]);
 
   // ── Apply ────────────────────────────────────────────────────────────────
   const handleApply = useCallback(() => {

@@ -33,9 +33,7 @@ describe("audit-svg-catalog", () => {
     expect(versioned).not.toBeNull();
     expect(latest).not.toBeNull();
 
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval -- rehydrate script regex under test
     const VERSIONED_DESCRIPTOR_RE = new Function(`return ${versioned![1]}`)() as RegExp;
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval -- rehydrate script regex under test
     const LATEST_POINTER_RE = new Function(`return ${latest![1]}`)() as RegExp;
 
     expect(VERSIONED_DESCRIPTOR_RE.test("chair.1.json")).toBe(true);

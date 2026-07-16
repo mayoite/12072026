@@ -3,8 +3,8 @@
  * Name-mirror: scripts/sync-descriptor-svgs.ts
  */
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 import { describe, expect, it } from "vitest";
 import { loadAll } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import { syncDescriptorSvgs } from "../../../scripts/sync-descriptor-svgs";

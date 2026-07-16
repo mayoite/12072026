@@ -15,7 +15,7 @@ vi.mock("@/features/planner/landing/PlannerLandingPage", () => ({
 describe("PlannerLandingRoute", () => {
   it("exports correct metadata", () => {
     expect(metadata).toBeDefined();
-    expect(metadata.title).toContain("Workspace Planner");
+    expect(JSON.stringify(metadata.title)).toContain("Workspace Planner");
     expect(metadata.alternates?.canonical).toBe("https://mock-site-url.com/planner/");
   });
 

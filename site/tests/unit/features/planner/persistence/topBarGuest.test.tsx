@@ -17,7 +17,8 @@ describe("TopBar guest persistence gate", () => {
       />,
     );
 
-    expect(screen.getByRole("button", { name: "Save draft" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Save draft/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Save draft/i })).toHaveTextContent("Save draft");
     expect(screen.getByRole("button", { name: /Export/i })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /^Import/ })).not.toBeInTheDocument();
   });

@@ -40,7 +40,7 @@ vi.mock("@supabase/supabase-js", () => ({
 }));
 
 vi.mock("node:module", async () => {
-  const actual = await vi.importActual<typeof import("node:module")>("node:module");
+  const actual = await vi.importActual("node:module") as Record<string, unknown> & { readFileSync?: (...args: never[]) => unknown; default?: unknown };
   return {
     ...actual,
     createRequire: () => () => ({
@@ -87,7 +87,7 @@ describe("backup_supabase (name-mirror)", () => {
 
     await vi.waitFor(() => {
       const dir = latestBackupDir();
-      expect(dir).toBeTruthy();
+      expect(dir).toBeDefined();
       expect(fs.existsSync(path.join(dir!, "manifest.json"))).toBe(true);
       const name = path.basename(dir!);
       // prefer a newly created run when possible

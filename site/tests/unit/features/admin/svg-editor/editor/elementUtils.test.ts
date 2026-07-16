@@ -60,4 +60,24 @@ describe("elementUtils", () => {
     setRectangleDimensions(api, 0, 150);
     expect(api.updateScene).toHaveBeenCalledTimes(1);
   });
+
+  it("returns null for non-rectangle selection and no-ops set without target", () => {
+    const line = {
+      id: "line-1",
+      type: "line",
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 0,
+      angle: 0,
+    } as ExcalidrawElement;
+    const api = mockApi({ selected: { "line-1": true }, elements: [line] });
+    expect(getSelectedRectangle(api)).toBeNull();
+    setRectangleDimensions(api, 50, 50);
+    expect(api.updateScene).not.toHaveBeenCalled();
+
+    const emptyApi = mockApi({ selected: { r1: true }, elements: [] });
+    setRectangleDimensions(emptyApi, 50, 50);
+    expect(emptyApi.updateScene).not.toHaveBeenCalled();
+  });
 });

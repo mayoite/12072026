@@ -301,8 +301,8 @@ describe("AdminSvgEditorEditView draft recovery", () => {
     const summary = screen.getByTestId("admin-core-field-errors");
     expect(summary).toHaveAttribute("role", "alert");
     expect(summary).toHaveTextContent(/core field/i);
-    expect(summary.querySelector('a[href="#svgfield-slug"]')).toBeTruthy();
-    expect(summary.querySelector('a[href="#svgfield-geometry.widthMm"]')).toBeTruthy();
+    expect(summary.querySelector('a[href="#svgfield-slug"]')).toBeDefined();
+    expect(summary.querySelector('a[href="#svgfield-geometry.widthMm"]')).toBeDefined();
     expect(screen.getByRole("button", { name: "Publish" })).toBeDisabled();
   });
 

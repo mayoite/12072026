@@ -1,26 +1,38 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+
+const mockTrack = vi.fn();
+
+vi.mock("@vercel/analytics", () => ({
+  track: (...args: unknown[]) => mockTrack(...args),
+}));
+
 import {
   trackSiteCtaClick,
   trackPlannerLaunchClicked,
   trackSiteSearchSubmitted,
   trackSitePageView,
+  emitSiteEvent,
+  flushAnalyticsAfterConsent,
   _trackCompareToggled,
   _trackQuoteCartAdded,
   _trackContactSubmission,
 } from "@/lib/analytics/siteEvents";
 import { CONSENT_ACCEPTED, CONSENT_COOKIE } from "@/lib/consent";
 import { clearConversionDedupe } from "@/lib/analytics/conversionContract";
+import {
+  _clearSiteEventQueueForTests,
+  _queuedSiteEventCountForTests,
+} from "@/lib/analytics/eventQueue";
 
 describe("siteEvents", () => {
-  const mockTrack = vi.fn();
-
   beforeEach(() => {
     mockTrack.mockClear();
     clearConversionDedupe();
+    _clearSiteEventQueueForTests();
+    // Mark transport ready (va as function — real Vercel shape)
     vi.stubGlobal("window", {
-      va: {
-        track: mockTrack,
-      },
+      va: vi.fn(),
+      vaq: [],
     });
     document.cookie = `${CONSENT_COOKIE}=${CONSENT_ACCEPTED}; path=/`;
   });
@@ -29,9 +41,10 @@ describe("siteEvents", () => {
     vi.restoreAllMocks();
     document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
     clearConversionDedupe();
+    _clearSiteEventQueueForTests();
   });
 
-  it("does not emit when analytics consent is missing", () => {
+  it("queues when analytics consent is missing (does not drop forever)", () => {
     document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
     trackSiteCtaClick({
       href: "/contact",
@@ -40,6 +53,7 @@ describe("siteEvents", () => {
       surface: "hero",
     });
     expect(mockTrack).not.toHaveBeenCalled();
+    expect(_queuedSiteEventCountForTests()).toBeGreaterThan(0);
   });
 
   it("emits events correctly based on href category", () => {
@@ -77,68 +91,65 @@ describe("siteEvents", () => {
       productSlug: "chair",
       categoryId: "seating",
     });
-    expect(mockTrack).toHaveBeenCalledWith("planner_launch_clicked", {
-      pathname: "/home",
-      surface: "hero",
-      productSlug: "chair",
-      categoryId: "seating",
-    });
     expect(mockTrack).toHaveBeenCalledWith(
-      "planner_entry",
+      "planner_launch_clicked",
       expect.objectContaining({
-        sourcePage: "/home",
-        locale: "en",
+        pathname: "/home",
+        surface: "hero",
+        productSlug: "chair",
+        categoryId: "seating",
       }),
     );
 
     trackSiteSearchSubmitted({
-      pathname: "/home",
+      pathname: "/",
       surface: "header",
-      queryLength: 5,
-      destination: "/search",
+      queryLength: 3,
+      destination: "/products",
     });
-    expect(mockTrack).toHaveBeenCalledWith("site_search_submitted", {
-      pathname: "/home",
-      surface: "header",
-      queryLength: 5,
-      destination: "/search",
-    });
+    expect(mockTrack).toHaveBeenCalledWith(
+      "site_search_submitted",
+      expect.objectContaining({ surface: "header", queryLength: 3 }),
+    );
 
     _trackCompareToggled({
-      pathname: "/products",
-      surface: "grid",
+      pathname: "/compare",
+      surface: "dock",
       categoryId: "seating",
-      productId: "chair",
+      productId: "p1",
       nextState: "added",
     });
-    expect(mockTrack).toHaveBeenCalledWith("compare_toggled", expect.any(Object));
-
     _trackQuoteCartAdded({
       pathname: "/products",
       surface: "pdp",
-      productId: "chair",
+      productId: "p1",
     });
-    expect(mockTrack).toHaveBeenCalledWith("quote_cart_added", expect.any(Object));
-
     _trackContactSubmission({
       pathname: "/contact",
       surface: "form",
-      source: "contact-page",
+      source: "home",
       status: "success",
     });
-    expect(mockTrack).toHaveBeenCalledWith("contact_submission", expect.any(Object));
+    expect(mockTrack).toHaveBeenCalledWith(
+      "contact_submission",
+      expect.objectContaining({ status: "success" }),
+    );
   });
 
-  it("emits consent-gated page_view conversion events", () => {
-    trackSitePageView({
-      pathname: "/about",
-      locale: "en",
-      referrer: "https://google.com",
-    });
-    expect(mockTrack).toHaveBeenCalledWith("page_view", {
-      pathname: "/about",
-      locale: "en",
-      referrer: "https://google.com",
-    });
+  it("page view uses conversion contract path", () => {
+    trackSitePageView({ pathname: "/about", locale: "en" });
+    expect(mockTrack).toHaveBeenCalledWith(
+      "page_view",
+      expect.objectContaining({ pathname: "/about", locale: "en" }),
+    );
+  });
+
+  it("flushes queue after consent", () => {
+    document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; path=/`;
+    emitSiteEvent("queued_event", { x: 1 });
+    expect(mockTrack).not.toHaveBeenCalled();
+    document.cookie = `${CONSENT_COOKIE}=${CONSENT_ACCEPTED}; path=/`;
+    flushAnalyticsAfterConsent();
+    expect(mockTrack).toHaveBeenCalledWith("queued_event", { x: 1 });
   });
 });

@@ -11,6 +11,13 @@ vi.mock('@/lib/analytics/siteEvents', () => ({
   trackContactSubmission: vi.fn()
 }));
 
+function fillRequiredFields() {
+  fireEvent.change(screen.getByLabelText(/Name/i), { target: { value: 'John Doe' } });
+  fireEvent.change(screen.getByLabelText(/Message/i), { target: { value: 'I need a workstation' } });
+  fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'john@example.com' } });
+  fireEvent.click(screen.getByTestId('contact-form-consent'));
+}
+
 describe('CustomerQueryForm Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -23,30 +30,41 @@ describe('CustomerQueryForm Component', () => {
 
   it('renders form elements with initial empty state', () => {
     render(<CustomerQueryForm />);
-    
+
     expect(screen.getByLabelText(/Name/i)).toHaveValue('');
     expect(screen.getByLabelText(/Company/i)).toHaveValue('');
     expect(screen.getByLabelText(/Email/i)).toHaveValue('');
     expect(screen.getByLabelText(/Phone/i)).toHaveValue('');
     expect(screen.getByLabelText(/Message/i)).toHaveValue('');
+    expect(screen.getByTestId('contact-form-consent')).not.toBeChecked();
   });
 
-  it('validates required fields before submitting', () => {
+  it('validates required fields and consent before submitting', () => {
     render(<CustomerQueryForm />);
-    const submitBtn = screen.getByRole('button');
+    const submitBtn = screen.getByTestId('contact-form-submit');
     expect(submitBtn).toBeDisabled();
 
-    // Fill Name
     fireEvent.change(screen.getByLabelText(/Name/i), { target: { value: 'John Doe' } });
     expect(submitBtn).toBeDisabled();
 
-    // Fill Message
     fireEvent.change(screen.getByLabelText(/Message/i), { target: { value: 'Hello workspace' } });
-    expect(submitBtn).toBeDisabled(); // Still disabled because neither email nor phone is filled
+    expect(submitBtn).toBeDisabled();
 
-    // Fill Email
     fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'john@example.com' } });
+    // Still disabled until privacy consent
+    expect(submitBtn).toBeDisabled();
+
+    fireEvent.click(screen.getByTestId('contact-form-consent'));
     expect(submitBtn).toBeEnabled();
+  });
+
+  it('exposes consent label linked to privacy policy', () => {
+    render(<CustomerQueryForm />);
+    expect(screen.getByTestId('contact-form-consent')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Privacy policy/i })).toHaveAttribute(
+      'href',
+      '/privacy',
+    );
   });
 
   it('submits correctly on success', async () => {
@@ -57,16 +75,12 @@ describe('CustomerQueryForm Component', () => {
         queryId: 'Q-12345',
         followUp: { email: 'mailto:ops@oando.co.in', whatsapp: 'https://wa.me/xyz' }
       })
-    } as any);
+    } as Response);
 
     render(<CustomerQueryForm />);
-    
-    fireEvent.change(screen.getByLabelText(/Name/i), { target: { value: 'John Doe' } });
-    fireEvent.change(screen.getByLabelText(/Message/i), { target: { value: 'I need a workstation' } });
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'john@example.com' } });
+    fillRequiredFields();
 
-    const submitBtn = screen.getByRole('button');
-    fireEvent.click(submitBtn);
+    fireEvent.click(screen.getByTestId('contact-form-submit'));
 
     await waitFor(() => {
       expect(screen.getByText(/Query submitted/i)).toBeInTheDocument();
@@ -81,7 +95,6 @@ describe('CustomerQueryForm Component', () => {
       status: 'success'
     });
 
-    // Check action links
     expect(screen.getByRole('link', { name: 'Reply by Email' })).toHaveAttribute('href', 'mailto:ops@oando.co.in');
     expect(screen.getByRole('link', { name: 'Reply on WhatsApp' })).toHaveAttribute('href', 'https://wa.me/xyz');
   });
@@ -89,12 +102,11 @@ describe('CustomerQueryForm Component', () => {
   it('seeds context message when intent is quote and source is compare', async () => {
     render(<CustomerQueryForm intent="quote" source="compare" />);
 
-    // Wait for seeding promise to resolve
     await waitFor(() => {
       expect(screen.getByLabelText(/Message/i)).not.toHaveValue('');
     });
 
-    expect(screen.getByLabelText(/Message/i).value).toContain('compare');
+    expect((screen.getByLabelText(/Message/i) as HTMLTextAreaElement).value).toContain('compare');
   });
 
   it('handles response errors', async () => {
@@ -102,15 +114,12 @@ describe('CustomerQueryForm Component', () => {
     fetchMock.mockResolvedValue({
       ok: false,
       json: async () => ({ error: 'Form validation failed' })
-    } as any);
+    } as Response);
 
     render(<CustomerQueryForm />);
-    
-    fireEvent.change(screen.getByLabelText(/Name/i), { target: { value: 'John Doe' } });
-    fireEvent.change(screen.getByLabelText(/Message/i), { target: { value: 'I need a workstation' } });
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'john@example.com' } });
+    fillRequiredFields();
 
-    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByTestId('contact-form-submit'));
 
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent('Form validation failed');
@@ -129,12 +138,9 @@ describe('CustomerQueryForm Component', () => {
     fetchMock.mockRejectedValue(new Error('Network error'));
 
     render(<CustomerQueryForm />);
-    
-    fireEvent.change(screen.getByLabelText(/Name/i), { target: { value: 'John Doe' } });
-    fireEvent.change(screen.getByLabelText(/Message/i), { target: { value: 'I need a workstation' } });
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'john@example.com' } });
+    fillRequiredFields();
 
-    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByTestId('contact-form-submit'));
 
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent('Network error. Please try again.');

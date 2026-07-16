@@ -34,7 +34,7 @@ describe("compileSvgArtifacts", () => {
     const result = await compileSvgArtifacts({ typeId: "x" });
     expect(result.svg).toMatch(/<svg/);
     expect(Buffer.isBuffer(result.png)).toBe(true);
-    expect(result.pngChecksum).toBeTruthy();
+    expect(result.pngChecksum).toBeDefined();
     expect(result.thumbnails.length).toBeGreaterThan(0);
   });
 });

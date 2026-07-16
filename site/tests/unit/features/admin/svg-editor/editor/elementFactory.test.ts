@@ -33,6 +33,33 @@ describe("elementFactory", () => {
     ).toBe(true);
   });
 
+  it("stores height customData on room and door when provided", () => {
+    const room = createRoom(0, 0, 2, 2, 2.4);
+    expect(
+      (room as { customData?: { heightM?: number; heightPx?: number } }).customData?.heightM,
+    ).toBe(2.4);
+    expect(
+      (room as { customData?: { heightPx?: number } }).customData?.heightPx,
+    ).toBe(metersToPixels(2.4));
+
+    const door = createDoor(0, 0, 50, 0, 0.9, 2.1);
+    expect((door as { customData?: { heightM?: number } }).customData?.heightM).toBe(2.1);
+    expect((door as { customData?: { isDoor?: boolean } }).customData?.isDoor).toBe(true);
+  });
+
+  it("omits height customData when height is zero or omitted", () => {
+    const wall = createWall(0, 0, 1, 90);
+    expect((wall as { customData?: unknown }).customData).toBeUndefined();
+    const room = createRoom(0, 0, 1, 1, 0);
+    expect((room as { customData?: unknown }).customData).toBeUndefined();
+  });
+
+  it("formats dimension labels in imperial", () => {
+    const label = createDimensionAnnotation(0, 0, 1, "imperial");
+    expect(label.type).toBe("text");
+    expect((label as { text?: string }).text).toMatch(/ft/);
+  });
+
   it("appends factory elements without replacing the scene", () => {
     const existing = [{ id: "keep", type: "rectangle" }];
     const updateScene = vi.fn();

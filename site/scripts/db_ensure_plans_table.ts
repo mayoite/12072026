@@ -69,7 +69,8 @@ export async function ensurePlansTable(
 
 export async function main(): Promise<void> {
   const result = await ensurePlansTable();
-  if (!result.ok) process.exit(result.exitCode);
+  if (result.ok === false) process.exit(result.exitCode);
+  process.exit(0);
 }
 
 function isMain(): boolean {

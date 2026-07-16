@@ -62,7 +62,7 @@ vi.mock("@/lib/storage/r2Catalog", () => ({
 }));
 
 vi.mock("node:module", async () => {
-  const actual = await vi.importActual<typeof import("node:module")>("node:module");
+  const actual = await vi.importActual("node:module") as Record<string, unknown> & { readFileSync?: (...args: never[]) => unknown; default?: unknown };
   return {
     ...actual,
     createRequire: () => () => ({

@@ -132,8 +132,11 @@
   color: var(--text-subtle);
 }
 
-.contact-form-input:focus {
+.contact-form-input:focus,
+.contact-form-input:focus-visible {
   border-color: var(--color-primary);
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .contact-form-context {

@@ -30,7 +30,6 @@ describe("audit-quality-gate", () => {
       /const requiredTokens = (\[[\s\S]*?\]);/,
     );
     expect(tokenBlock).not.toBeNull();
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval -- rehydrate gate token list under test
     const requiredTokens = new Function(`return ${tokenBlock![1]}`)() as string[];
     expect(requiredTokens).toEqual([
       "block-surface",

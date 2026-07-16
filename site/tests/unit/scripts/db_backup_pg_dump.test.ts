@@ -1,7 +1,7 @@
 // @vitest-environment node
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const spawnSync = vi.fn(() => ({ status: 0, error: undefined }));

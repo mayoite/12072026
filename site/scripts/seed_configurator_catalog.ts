@@ -59,9 +59,9 @@ async function main() {
              thumbnail_url, model_3d_url, description, active)
           values
             (${r.slug}, ${r.name}, ${r.category}, ${r.family}, ${r.brand_name},
-             ${r.sizing_type}, ${r.workstation}, ${sql.json(r.size_options)},
-             ${r.default_footprint}, ${r.derived_rules},
-             ${r.materials}, ${r.thumbnail_url}, ${r.model_3d_url}, ${r.description}, true)
+             ${r.sizing_type}, ${JSON.stringify(r.workstation)}, ${sql.json(r.size_options as unknown as Parameters<typeof sql.json>[0])},
+             ${JSON.stringify(r.default_footprint)}, ${JSON.stringify(r.derived_rules)},
+             ${JSON.stringify(r.materials)}, ${r.thumbnail_url}, ${r.model_3d_url}, ${r.description}, true)
           on conflict (slug) do update set
             name = excluded.name,
             category = excluded.category,

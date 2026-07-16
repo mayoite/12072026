@@ -67,16 +67,19 @@ export async function publishSvgEditorAction(
       : undefined;
 
   const compiledSvgStr = formFromEditor.compiledSvg;
-  const compileSvgMock = async (desc: BlockDescriptor) => {
-    if (compiledSvgStr) {
-      return { ok: true, svg: compiledSvgStr, issues: [] };
-    }
-    return compileSvgForPublish(desc);
-  };
+  const compileSvg =
+    typeof compiledSvgStr === "string" && compiledSvgStr.trim().length > 0
+      ? async (desc: BlockDescriptor) => {
+          const base = await compileSvgForPublish(desc);
+          if (!base.ok) return base;
+          // Prefer studio-compiled SVG bytes when the form already has them.
+          return { ...base, svg: compiledSvgStr };
+        }
+      : compileSvgForPublish;
 
-  const published = await publishDescriptorWithPipeline(input, { 
+  const published = await publishDescriptorWithPipeline(input, {
     dbRepository,
-    compileSvg: compileSvgMock as any
+    compileSvg,
   });
   if (published.success) {
     setCatalogLifecycle(published.descriptor.slug, "draft");

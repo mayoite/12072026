@@ -1,13 +1,13 @@
 "use client";
 
 /**
- * A4 â€” Admin SVG Editor per-slug edit view (canvas-first shell).
+ * A4 — Admin SVG Editor per-slug edit view (canvas-first shell).
  *
  * Primary surface: visual studio (SvgSceneDocument). Secondary rail: live
  * compile preview, published artifact, and advanced block metadata form.
- * Publish: formState (sceneParts â†’ blocks) â†’ publishDescriptorWithPipeline.
+ * Publish: formState (sceneParts → blocks) → publishDescriptorWithPipeline.
  *
- * GS: semantic tokens only; no hex in tsx. Catalog publish SVG â‰  Fabric plan-draw.
+ * GS: semantic tokens only; no hex in tsx. Catalog publish SVG != Fabric plan-draw.
  *
  * ADM-STATE-01 / ADM-SVG-14: one authoritative lifecycle + field-level draft diff.
  * ADM-FORM-02 / ADM-PUB-01: linked field errors (SvgEditorForm) + publish blocking.
@@ -293,10 +293,6 @@ export function AdminSvgEditorEditView({
     refreshRoute: () => router.refresh(),
   });
 
-  const artifactHashShort = artifactStatus.hash
-    ? `${artifactStatus.hash.slice(0, 16)}…`
-    : "\u2014";
-
   const canConvertToGlb = form.variant === "fixed" && compiledSvg !== null;
 
   // ADM-STATE-01: one authoritative authoring lifecycle.
@@ -328,20 +324,20 @@ export function AdminSvgEditorEditView({
 
   const validationStatus =
     authoringLifecycle === "validating" || previewPending
-      ? "Validation running"
+      ? "Checking draft"
       : authoringLifecycle === "invalid" || preview?.ok === false
-        ? `Validation blocked${preview?.issues?.length ? ` (${preview.issues.length})` : ""}`
+        ? `Publish blocked${preview?.issues?.length ? ` (${preview.issues.length} issues)` : ""}`
         : preview?.ok === true
           ? footprintProof.aligned
-            ? "Validation ok"
-            : "Validation blocked (footprint)"
-          : "Validation pending";
+            ? "Draft ready"
+            : "Publish blocked — footprint mismatch"
+          : "Waiting for draft preview";
   const stageMeta = {
-    identity: `Identity ${publishTarget} \u00B7 SKU ${form.sku.trim() || "\u2014"}`,
+    identity: `${publishTarget} \u00B7 SKU ${form.sku.trim() || "\u2014"}`,
     footprint: `Footprint ${footprintProof.widthMm}\u00D7${footprintProof.depthMm} mm`,
-    draft: `Draft ${authoringLifecycleLabel(authoringLifecycle)}`,
+    draft: authoringLifecycleLabel(authoringLifecycle),
     validation: validationStatus,
-    revision: `Revision ${updatedAtLabel} \u00B7 checksum ${artifactHashShort}`,
+    revision: `Last published ${updatedAtLabel}`,
   };
 
   return (

@@ -16,7 +16,7 @@ vi.mock("@/features/planner/help/PlannerHelpPage", () => ({
 describe("PlannerHelpRoute", () => {
   it("exports correct metadata", () => {
     expect(metadata).toBeDefined();
-    expect(metadata.title).toContain("Planner Help");
+    expect(JSON.stringify(metadata.title)).toContain("Planner Help");
     expect(metadata.alternates?.canonical).toBe("https://mock-site-url.com/planner/help/");
   });
 

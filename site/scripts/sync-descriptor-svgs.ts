@@ -29,7 +29,7 @@ export async function syncDescriptorSvgs(options: {
     const jsonPath = path.join(resolveBlockDescriptorsDir(), `${descriptor.slug}.json`);
     const raw = JSON.parse(readFileSync(jsonPath, "utf8")) as unknown;
     const result = await compileSvgForPublish(raw);
-    if (!result.ok) {
+    if (result.ok === false) {
       console.error(`FAIL ${descriptor.slug}: ${result.error}`);
       fail += 1;
       failures.push(descriptor.slug);

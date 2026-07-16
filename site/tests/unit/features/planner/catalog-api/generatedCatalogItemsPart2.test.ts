@@ -24,7 +24,7 @@ describe("generatedCatalogItemsPart2", () => {
 
   it("does not overlap part1 id prefix sample", () => {
     const sample = GENERATED_CATALOG_ITEMS_PART2[0];
-    expect(sample?.id).toBeTruthy();
+    expect(sample?.id).toBeDefined();
     expect(sample?.id).not.toMatch(/^table-top-25mm-thick-pre-laminate-particle-board-1-seater/);
   });
 });

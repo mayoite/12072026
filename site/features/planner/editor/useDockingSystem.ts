@@ -127,25 +127,6 @@ function widthsToRatios(leftW: number, rightW: number): { catalogue: number; pro
 }
 
 export function useDockingSystem(): DockingSystemState & DockingSystemActions {
-  const [panels, setPanels] = useState<Record<PanelId, PanelConfig>>(DEFAULT_PANEL_CONFIG);
-  const [activePanel, setActivePanel] = useState<PanelId | null>(null);
-  const [focusedPanel, setFocusedPanel] = useState<PanelId | null>(null);
-  // Stable default matches SSR HTML; measure real width only after mount.
-  const [viewportTier, setViewportTier] = useState<ViewportTier>(SSR_VIEWPORT_TIER);
-
-  // Measure on mount + resize. Initial state stays SSR_VIEWPORT_TIER so React
-  // hydration of data-viewport / layout branches matches server markup.
-  useEffect(() => {
-    const applyTier = () => {
-      const newTier = getViewportTier();
-      setViewportTier((current) => (current !== newTier ? newTier : current));
-    };
-
-    applyTier();
-    window.addEventListener("resize", applyTier);
-    return () => window.removeEventListener("resize", applyTier);
-  }, []);
-
   // Shared restore parser (consolidates dupe logic from mount + restoreLayout; fixes seam for coverage)
   const parseStoredLayout = (stored: string | null): Record<PanelId, PanelConfig> | null => {
     if (!stored) return null;
@@ -171,30 +152,44 @@ export function useDockingSystem(): DockingSystemState & DockingSystemActions {
     }
   };
 
-  // Load persisted layout on mount
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    const restored = parseStoredLayout(stored);
-    if (restored) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- conditional set from localStorage restore on mount; reason: one-time hydration of persisted layout; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: use useSyncExternalStore or init state from storage when docking system revised
-      setPanels(restored);
-    } else {
-      // Task 5: seed from workspace prefs panelRatios if present (valid per schema)
-      try {
-        const prefsRaw = localStorage.getItem(PREFS_STORAGE_KEY);
-        if (prefsRaw) {
-          const prefs = parsePlannerWorkspacePreferences(JSON.parse(prefsRaw));
-          const ws = ratiosToWidths(prefs.panelRatios);
-          setPanels((cur) => ({
-            ...cur,
-            left: { ...cur.left, width: ws.left },
-            right: { ...cur.right, width: ws.right },
-          }));
-        }
-      } catch {
-        // ignore
+  function readInitialPanels(): Record<PanelId, PanelConfig> {
+    if (typeof window === "undefined") return DEFAULT_PANEL_CONFIG;
+    try {
+      const restored = parseStoredLayout(localStorage.getItem(STORAGE_KEY));
+      if (restored) return restored;
+      const prefsRaw = localStorage.getItem(PREFS_STORAGE_KEY);
+      if (prefsRaw) {
+        const prefs = parsePlannerWorkspacePreferences(JSON.parse(prefsRaw));
+        const ws = ratiosToWidths(prefs.panelRatios);
+        return {
+          ...DEFAULT_PANEL_CONFIG,
+          left: { ...DEFAULT_PANEL_CONFIG.left, width: ws.left },
+          right: { ...DEFAULT_PANEL_CONFIG.right, width: ws.right },
+        };
       }
+    } catch {
+      // ignore
     }
+    return DEFAULT_PANEL_CONFIG;
+  }
+
+  const [panels, setPanels] = useState<Record<PanelId, PanelConfig>>(readInitialPanels);
+  const [activePanel, setActivePanel] = useState<PanelId | null>(null);
+  const [focusedPanel, setFocusedPanel] = useState<PanelId | null>(null);
+  // Stable default matches SSR HTML; measure real width only after mount.
+  const [viewportTier, setViewportTier] = useState<ViewportTier>(SSR_VIEWPORT_TIER);
+
+  // Measure on mount + resize. Initial state stays SSR_VIEWPORT_TIER so React
+  // hydration of data-viewport / layout branches matches server markup.
+  useEffect(() => {
+    const applyTier = () => {
+      const newTier = getViewportTier();
+      setViewportTier((current) => (current !== newTier ? newTier : current));
+    };
+
+    applyTier();
+    window.addEventListener("resize", applyTier);
+    return () => window.removeEventListener("resize", applyTier);
   }, []);
 
   const dock = useCallback((panelId: PanelId) => {

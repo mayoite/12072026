@@ -1,15 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowRight, SealCheck } from "@phosphor-icons/react";
 import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 
 import {
+  DEFAULT_HERO_FALLBACK,
   HOMEPAGE_HERO_CONTENT,
   HOMEPAGE_HERO_IMAGES,
 } from "@/features/site/data/homepage";
+import { TrackedLink } from "@/components/ui/TrackedLink";
 import {
   MOTION_EASE,
   MOTION_TOKENS,
@@ -44,19 +45,26 @@ export function HomepageHero() {
   const { kicker, title, primaryCta, secondaryCta, glassProof } = HOMEPAGE_HERO_CONTENT;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [motionReady, setMotionReady] = useState(false);
+  const [failedImageSrc, setFailedImageSrc] = useState<string | null>(null);
   const reduceMotion = useReducedMotion();
   const primaryCtaHover = useMotionSafeHover({ scale: 1.02, y: -2 }, { scale: 0.98 });
   const secondaryCtaHover = useMotionSafeHover({ scale: 1.02, y: -2 }, { scale: 0.98 });
 
   const currentImage = HOMEPAGE_HERO_IMAGES[currentIndex];
+  const resolvedImageSrc =
+    failedImageSrc === currentImage.src && currentImage.src !== DEFAULT_HERO_FALLBACK
+      ? DEFAULT_HERO_FALLBACK
+      : currentImage.src;
 
   const imageTransition = reduceMotion
     ? { duration: 0 }
     : { duration: MOTION_TOKENS.medium, ease: MOTION_EASE };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- set once after mount to gate motion reveal (prevents flash); reason: motionReady state for framer initial; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: hoist to useState initializer or layout effect when hero animation revised
-    setMotionReady(true);
+    const id = requestAnimationFrame(() => {
+      setMotionReady(true);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   const revealMotion = motionReady && !reduceMotion;
@@ -65,10 +73,11 @@ export function HomepageHero() {
     <section
       id="home-hero"
       className="relative min-h-[min(78vh,44rem)] w-full overflow-hidden bg-inverse pt-20 md:min-h-[85vh] md:pt-24"
+      aria-labelledby="home-hero-heading"
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
-          key={currentIndex}
+          key={resolvedImageSrc}
           className="absolute inset-0 h-[115%] w-full -top-[7%] origin-center"
           initial={reduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -76,13 +85,14 @@ export function HomepageHero() {
           transition={imageTransition}
         >
           <Image
-            src={currentImage.src}
+            src={resolvedImageSrc}
             alt={currentImage.alt}
             fill
             priority={currentIndex === 0}
             loading={currentIndex === 0 ? "eager" : undefined}
             sizes="100vw"
             className="object-cover object-[68%_52%] md:object-[64%_48%]"
+            onError={() => setFailedImageSrc(currentImage.src)}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/62 to-black/48 lg:bg-gradient-to-r lg:from-black/86 lg:via-black/58 lg:to-black/18" />
           <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-black/78 via-black/28 to-transparent" />
@@ -96,10 +106,9 @@ export function HomepageHero() {
           initial={revealMotion ? "hidden" : "visible"}
           animate="visible"
         >
-          <h1
-            className="home-hero-title-homepage text-inverse"
-            aria-label={title.join(" ")}
-          >
+          <h1 id="home-hero-heading" className="home-hero-title-homepage text-inverse">
+            {/* SITE-HOME-02: accessible name is full sentence with spaces; animated lines are decorative. */}
+            <span className="sr-only">{title.join(" ")}</span>
             <span aria-hidden="true">
               {title.map((line, i) => (
                 <span key={line} className="block overflow-hidden">
@@ -108,7 +117,6 @@ export function HomepageHero() {
                     variants={wordVariants}
                   >
                     {line}
-                    {i < title.length - 1 && " "}
                   </motion.span>
                 </span>
               ))}
@@ -124,20 +132,24 @@ export function HomepageHero() {
 
           <motion.div variants={fadeUpVariants} className="home-actions">
             <motion.div {...primaryCtaHover}>
-              <Link
+              <TrackedLink
                 href={primaryCta.href}
+                label={primaryCta.label}
+                surface="homepage-hero"
                 className="btn-hero-primary btn-primary shadow-theme-panel"
               >
                 {primaryCta.label}
-              </Link>
+              </TrackedLink>
             </motion.div>
             <motion.div {...secondaryCtaHover}>
-              <Link
+              <TrackedLink
                 href={secondaryCta.href}
+                label={secondaryCta.label}
+                surface="homepage-hero"
                 className="btn-hero-secondary btn-accent shadow-theme-panel"
               >
                 {secondaryCta.label}
-              </Link>
+              </TrackedLink>
             </motion.div>
           </motion.div>
         </motion.div>
@@ -148,7 +160,12 @@ export function HomepageHero() {
           initial={revealMotion ? "hidden" : "visible"}
           animate="visible"
         >
-          <Link href={glassProof.href} className="home-hero-proof-panel group typ-body-sm text-inverse">
+          <TrackedLink
+            href={glassProof.href}
+            label={glassProof.cta}
+            surface="homepage-hero-proof"
+            className="home-hero-proof-panel group typ-body-sm text-inverse"
+          >
             <span className="home-hero-proof-panel__badge">
               <SealCheck className="shrink-0" size={16} weight="fill" aria-hidden="true" />
               {glassProof.badge}
@@ -159,19 +176,23 @@ export function HomepageHero() {
               {glassProof.cta}
               <ArrowRight className="shrink-0" size={16} weight="bold" aria-hidden="true" />
             </span>
-          </Link>
+          </TrackedLink>
         </motion.div>
       </div>
 
-      <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+      <div
+        className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-0.5 sm:bottom-6"
+        role="group"
+        aria-label="Hero project images"
+      >
         {HOMEPAGE_HERO_IMAGES.map((_, i) => (
           <button
             key={i}
             type="button"
             onClick={() => setCurrentIndex(i)}
-            aria-label={`Show project image ${i + 1}`}
+            aria-label={`Show project image ${i + 1} of ${HOMEPAGE_HERO_IMAGES.length}`}
             aria-current={i === currentIndex ? "true" : undefined}
-            className="inline-flex h-6 min-w-6 items-center justify-center rounded-full"
+            className="inline-flex h-11 min-w-11 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           >
             <span
               aria-hidden="true"

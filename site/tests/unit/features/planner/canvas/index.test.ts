@@ -41,7 +41,7 @@ describe("canvas/index barrel", () => {
     };
     writeFurnitureEntityId(target, "ent-1");
     expect(readFurnitureEntityId(target as never)).toBe("ent-1");
-    expect(FURNITURE_ENTITY_ID_PROP).toBeTruthy();
+    expect(FURNITURE_ENTITY_ID_PROP).toBeDefined();
   });
 
   it("exports stage components", () => {

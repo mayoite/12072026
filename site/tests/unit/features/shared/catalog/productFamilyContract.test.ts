@@ -46,7 +46,7 @@ describe("ProductFamilyV1 — stable family and version IDs", () => {
 describe("option groups — stable IDs and selection rules", () => {
   it("declares required single-choice and optional multi-choice groups", () => {
     const version = getFamilyVersion(PRODUCT_FAMILY_V1_FIXTURE, "v1");
-    expect(version, "fixture must expose v1").toBeTruthy();
+    expect(version, "fixture must expose v1").toBeDefined();
     if (!version) throw new Error("expected family version v1");
     const size = version.optionGroups.find((g) => g.groupId === "size");
     const accessories = version.optionGroups.find(

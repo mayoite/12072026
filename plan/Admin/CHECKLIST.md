@@ -1,44 +1,38 @@
 # Admin checklist
 
-Status only. Code map: `FEATURES.md`. Requirements: `PHASES-01-02.md`, `PHASES-03-04.md`.
+Status only. Code map: `FEATURES.md`. Phase detail: `PHASES-01-02.md`, `PHASES-03-04.md`.
 
-Reconciled against `site/` on 2026-07-15. **Unit-complete items live in FEATURES.md, not here.**
+Open work only (plan purity: no completed ticks here). Done work lives in `FEATURES.md`.
 
-**Editor:** Excalidraw (`ExcalidrawClient.tsx`). SVG.js / `SvgStudioCanvas` and SVG-Edit are not the active authoring path.
+**Editor:** Excalidraw. Disk SVG still live authority until DB cutover.
 
-## Step 0 — test isolation
+## Step 0
 
-- [ ] Automated canonical `inventory/descriptors/` hash gate in CI (not in `check:layout` today).
+- [ ] Canonical `inventory/descriptors/` hash gate in CI.
 
-## Phase 1 — Excalidraw-first authoring
+## Phase 1 — authoring proof
 
-- [ ] Fresh browser proof on the Excalidraw edit shell: draw, dimension panel, compile preview, publish (`admin-phases-live`, `admin-svg-publish-p01`; 2026-07-13 evidence ages out).
-- [ ] Production auth smoke without `DEV_AUTH_BYPASS` (`admin-smoke.spec.ts`).
+- [ ] Fresh browser: Excalidraw draw → dimensions → preview → publish (prior live evidence aged out).
+  - Note: production auth smoke done 2026-07-16 — see FEATURES.
 
-## Phase 2 — catalog lifecycle and Planner handoff
+## Phase 2 — DB SVG cutover (blocks Planner DB reads)
 
-- [ ] `DB-SVG-01` … `DB-SVG-05` Products DB is released SVG revision and pointer authority. Today: publish upserts `svg_revisions` + `block_descriptors` when `PRODUCTS_DATABASE_URL` is set, but with a stub payload and no `published_svg_revision_id` product pointer — disk remains the real authority.
-- [ ] `DB-SVG-17` disk→DB migration dry-run report.
-- [ ] `DB-SVG-18` database and approved source parity before cutover.
-- [ ] One DB transaction publish (artifact + revision + pointer + audit).
-- [ ] Real DB dual-write payload — `POST /api/admin/svg-editor` and `publishSvgEditorAction.ts` both inject `dbRepository` when `PRODUCTS_DATABASE_URL` is set (wiring parity done), but the revision payload is still a hardcoded `{slug}-r1` stub and DB is not yet authority.
-- [ ] Planner `svg-blocks` reads committed DB **artifact bytes** by revision/storage key. Today: `loadBuyerVisibleDescriptorsWithDb()` reads `block_descriptors` definition JSON when configured (disk fallback), not artifact bytes.
-- [ ] Fresh integration + browser proof for catalog publication journey.
+- [ ] `DB-SVG-01`…`05`: real dual-write payload + one transaction (revision, artifacts, product pointer, audit); DB is publish authority.
+- [ ] `DB-SVG-18`: DB vs approved-source parity tooling before removing disk.
+  - Note: DB-SVG-17 dry-run inventory exit `0` 2026-07-16 — see FEATURES; not authority.
+- [ ] Planner `svg-blocks` serves committed artifact bytes (not disk-only fallback).
+- [ ] Fresh publish → Planner browser journey under DB authority.
 
-## Phase 3 — product families
+## Phase 3 — families
 
-- [ ] 2D / 3D / BOQ parity browser journey with released family fixture.
-- [ ] `ADM-FAM-01`, `ADM-FAM-02` fresh browser proof.
+- [ ] `ADM-FAM-01`/`02` browser: 2D / 3D / BOQ parity on released family fixture.
 
-## Phase 4 — commercial governance
+## Phase 4 — commercial
 
-- [ ] Full browser journey: draft → approve → activate → **retire → restore** → rollback (P05 covers approve/activate/rollback only).
-- [ ] Retired product blocked on live Planner canvas — spec `admin-svg-retire-restore.spec.ts` step 4b (selector fixed 2026-07-15); run `pnpm run test:e2e:admin-retire-restore` exit `0` + evidence `results/admin/retire-restore-canvas/`.
-- [ ] `ADM-PUB-02`, `ADM-PRICE-*`, `ADM-ROLE-01`, `ADM-AUDIT-01` fresh browser proof.
+- [ ] Full price-book journey: draft → approve → activate → retire/restore → rollback + `ADM-PUB-02` / `ADM-PRICE-*` / `ADM-ROLE-01` / `ADM-AUDIT-01` browser proof.
+  - Note: SVG inventory retire/restore canvas is done (see FEATURES + `results/admin/retire-restore-canvas/`).
 
-## Completion
+## Close
 
-- [ ] End-to-end publish → Planner consume under **DB authority** (not disk-only).
-- [ ] Failed publication preserves prior public product under DB authority.
-- [ ] Fresh commands and exit codes recorded here.
-- [ ] Only active failures remain in `../../Failures.md`.
+- [ ] Failed publish preserves prior public product under DB authority.
+- [ ] Only active items remain in `../../Failures.md`.

@@ -42,7 +42,7 @@ describe("PlannerTooltip", () => {
       </PlannerTooltip>,
     );
     expect(screen.queryByTestId("tooltip")).toBeNull();
-    expect(screen.getByText("plain")).toBeTruthy();
+    expect(screen.getByText("plain")).toBeDefined();
   });
 
   it("PlannerIconButton sets aria-label", () => {
@@ -51,6 +51,6 @@ describe("PlannerTooltip", () => {
         Z
       </PlannerIconButton>,
     );
-    expect(screen.getByRole("button", { name: "Zoom fit" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Zoom fit" })).toBeDefined();
   });
 });

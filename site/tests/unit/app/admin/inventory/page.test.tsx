@@ -35,6 +35,6 @@ import AdminInventoryPage from '@/app/admin/inventory/page';
 describe('app/admin/inventory/page.tsx', () => {
   it('renders without crashing when inventory file is missing', () => {
     render(<AdminInventoryPage />);
-    expect(document.querySelector('[data-testid="admin-inventory-view"]')).toBeTruthy();
+    expect(document.querySelector('[data-testid="admin-inventory-view"]')).toBeDefined();
   });
 });

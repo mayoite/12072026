@@ -13,21 +13,21 @@ export function KpiCounter({ value, className = "typ-stat text-primary" }: KpiCo
   const ref = useRef<HTMLParagraphElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.45 });
   const reduceMotion = useReducedMotion();
-  const [displayValue, setDisplayValue] = useState(value);
+  // Start at 0 so motion path can animate up; static paths render `value` below.
+  const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
     if (reduceMotion) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional set on mount/reduce for animation skip; reason: avoid initial 0 render + respect user motion pref; owner: Resolve Failures Agent (PLAN-FAIL-0411); removal: refactor to useLayoutEffect + ref or CSS transition when animation policy updated
-      setDisplayValue(value);
-      return;
+      const id = requestAnimationFrame(() => {
+        setDisplayValue(value);
+      });
+      return () => cancelAnimationFrame(id);
     }
     if (!isInView) return;
 
-    setDisplayValue(0);
-
     const durationMs = 2200;
-    const start = performance.now();
     let frameId = 0;
+    const start = performance.now();
 
     const tick = (now: number) => {
       const progress = Math.min(1, (now - start) / durationMs);

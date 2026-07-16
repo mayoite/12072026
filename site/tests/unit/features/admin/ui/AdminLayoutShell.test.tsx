@@ -27,4 +27,22 @@ describe("AdminLayoutShell (name-mirror)", () => {
     expect(screen.getByTestId("mock-logo")).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: /Dashboard/i }).length).toBeGreaterThan(0);
   });
+
+  it("exposes mobile menu toggle and landmark labels", () => {
+    render(
+      <AdminLayoutShell>
+        <div>content</div>
+      </AdminLayoutShell>,
+    );
+
+    const toggle = screen.getByRole("button", { name: "Open menu" });
+    expect(toggle).toHaveAttribute("aria-controls", "admin-mobile-sidebar");
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByLabelText("Admin navigation")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "View site" })).toHaveAttribute("href", "/");
+    expect(screen.getByRole("link", { name: "Open planner" })).toHaveAttribute(
+      "href",
+      "/planner/guest",
+    );
+  });
 });

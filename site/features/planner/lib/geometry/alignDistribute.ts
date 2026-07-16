@@ -63,9 +63,9 @@ export function distributeEntities(
     axis === "x" ? a.xMm - b.xMm : a.yMm - b.yMm,
   );
 
-  const { min, max } = extents(sorted, axis);
   const first = sorted[0];
   const last = sorted[sorted.length - 1];
+  // Span from first leading edge to last trailing edge (same as extents span).
   const firstEdge = axis === "x" ? first.xMm : first.yMm;
   const lastEdge = axis === "x" ? last.xMm + last.widthMm : last.yMm + last.depthMm;
   const totalSpan = lastEdge - firstEdge;

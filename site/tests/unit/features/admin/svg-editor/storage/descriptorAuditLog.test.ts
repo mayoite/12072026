@@ -5,8 +5,8 @@
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
-import os from "node:os";
 import path from "node:path";
+import os from "node:os";
 
 import {
   appendDescriptorAudit,
@@ -92,5 +92,30 @@ describe("descriptorAuditLog", () => {
 
     const all = readDescriptorAuditForSlug("chaise", workDir, 50);
     expect(all.map((e) => e.id)).toEqual(["good-2", "good-1"]);
+  });
+
+  it("supports lifecycle_change and bulk_import actions", () => {
+    const life = appendDescriptorAudit(
+      {
+        actorId: "ops",
+        slug: "desk",
+        action: "lifecycle_change",
+        detail: { status: "retired" },
+      },
+      workDir,
+    );
+    const bulk = appendDescriptorAudit(
+      {
+        actorId: "ops",
+        slug: "desk",
+        action: "bulk_import",
+        detail: { count: 3 },
+      },
+      workDir,
+    );
+    const rows = readDescriptorAuditForSlug("desk", workDir);
+    expect(rows.map((r) => r.action)).toEqual(["bulk_import", "lifecycle_change"]);
+    expect(life.detail).toEqual({ status: "retired" });
+    expect(bulk.detail).toEqual({ count: 3 });
   });
 });

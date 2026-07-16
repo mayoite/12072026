@@ -85,18 +85,33 @@ describe('ContactTeaser Component', () => {
     expect(phoneLink).toHaveAttribute('href', 'tel:+91 99999 99999');
   });
 
-  it('shows error if neither phone nor email is supplied', async () => {
+  it('requires consent and a contact channel before submit is enabled', () => {
     render(<ContactTeaser />);
 
     fireEvent.change(screen.getByLabelText(/^Name/i), { target: { value: 'Ayush' } });
     fireEvent.change(screen.getByLabelText(/^City/i), { target: { value: 'Patna' } });
-    fireEvent.change(screen.getByPlaceholderText(/Team size, scope, or timeline/i), { target: { value: 'Looking for tables.' } });
+    fireEvent.change(screen.getByPlaceholderText(/Team size, scope, or timeline/i), {
+      target: { value: 'Looking for tables.' },
+    });
 
     const submitBtn = screen.getByRole('button', { name: /Send Brief/i });
-    fireEvent.click(submitBtn);
+    expect(submitBtn).toBeDisabled();
 
-    expect(screen.getByText('Please add a phone number or email so we can reach you.')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('contact-teaser-consent'));
+    expect(submitBtn).toBeDisabled();
+
+    fireEvent.change(screen.getByLabelText(/^Phone/i), { target: { value: '+91 8888888888' } });
+    expect(submitBtn).toBeEnabled();
     expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it('exposes privacy consent and policy link', () => {
+    render(<ContactTeaser />);
+    expect(screen.getByTestId('contact-teaser-consent')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Privacy policy/i })).toHaveAttribute(
+      'href',
+      '/privacy',
+    );
   });
 
   it('submits form successfully and calls API when fields are valid', async () => {
@@ -111,6 +126,7 @@ describe('ContactTeaser Component', () => {
     fireEvent.change(screen.getByLabelText(/^City/i), { target: { value: 'Patna' } });
     fireEvent.change(screen.getByLabelText(/^Phone/i), { target: { value: '+91 8888888888' } });
     fireEvent.change(screen.getByPlaceholderText(/Team size, scope, or timeline/i), { target: { value: 'Looking for seating.' } });
+    fireEvent.click(screen.getByTestId('contact-teaser-consent'));
 
     const submitBtn = screen.getByRole('button', { name: /Send Brief/i });
     fireEvent.click(submitBtn);
@@ -158,6 +174,7 @@ describe('ContactTeaser Component', () => {
     fireEvent.change(screen.getByPlaceholderText(/Team size, scope, or timeline/i), {
       target: { value: 'Need pricing guidance.' },
     });
+    fireEvent.click(screen.getByTestId('contact-teaser-consent'));
 
     const submitBtn = screen.getByRole('button', { name: /Send Brief/i });
     fireEvent.click(submitBtn);
@@ -171,7 +188,7 @@ describe('ContactTeaser Component', () => {
       });
     });
 
-    expect(screen.getByText('Database offline')).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent('Database offline');
   });
 
   it('tracks CTA click on external support link', () => {

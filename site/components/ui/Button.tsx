@@ -21,7 +21,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(
-          "inline-flex items-center justify-center whitespace-nowrap disabled:pointer-events-none disabled:opacity-50",
+          "inline-flex items-center justify-center whitespace-nowrap focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
           {
             "btn-primary": variant === "primary",
             "btn-outline": variant === "outline",
@@ -30,7 +30,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             "text-sm": size === "default",
             "min-h-[var(--control-height-sm)] px-4 text-xs": size === "sm",
             "min-h-[var(--control-height-lg)] px-8 text-base": size === "lg",
-            "h-10 w-10 rounded-full p-0": size === "icon",
+            "h-11 w-11 min-h-[2.75rem] min-w-[2.75rem] rounded-full p-0": size === "icon",
           },
           className,
         )}

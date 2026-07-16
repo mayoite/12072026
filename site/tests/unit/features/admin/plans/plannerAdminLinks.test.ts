@@ -76,4 +76,16 @@ describe("buildAdminPlansListQuery", () => {
       "/api/admin/plans?limit=25&page=2&sortBy=created_at&sortOrder=asc&status=draft&search=acme",
     );
   });
+
+  it("does not include page when page is 0 or negative", () => {
+    // Only page > 1 is emitted
+    expect(buildAdminPlansListQuery({ page: 0 })).not.toContain("page=");
+    expect(buildAdminPlansListQuery({ page: -1 })).not.toContain("page=");
+  });
+
+  it("encodes special characters in search", () => {
+    const href = buildAdminPlansListQuery({ search: "a&b=c" });
+    expect(href).toContain("search=");
+    expect(href).toMatch(/search=a%26b%3Dc|search=a%26b=c/);
+  });
 });

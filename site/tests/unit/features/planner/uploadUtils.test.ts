@@ -66,7 +66,7 @@ describe("upload utilities", () => {
     const badFile = new File(["bad"], "notes.txt", { type: "text/plain" });
     const result = await uploadBackgroundImage(badFile);
     expect(result.success).toBe(false);
-    expect(result.error).toBeTruthy();
+    expect(result.error).toBeDefined();
   });
 
   it("uploads a background image client-side and builds a background object", async () => {
@@ -267,7 +267,7 @@ describe("upload utilities", () => {
     );
     const sketch = await uploadSketchImage(makePngFile(), { processEndpoint: "/api/sketch" });
     expect(sketch.success).toBe(true);
-    expect(sketch.error).toBeTruthy();
+    expect(sketch.error).toBeDefined();
   });
 
   it("returns an error when image loading fails client-side", async () => {
@@ -280,7 +280,7 @@ describe("upload utilities", () => {
 
     const failed = await uploadBackgroundImage(makePngFile());
     expect(failed.success).toBe(false);
-    expect(failed.error).toBeTruthy();
+    expect(failed.error).toBeDefined();
   });
 
   it("creates background images with optional scale and opacity", () => {

@@ -47,6 +47,44 @@ describe("releasedCatalogPublishGate — incomplete cannot publish", () => {
     ).toBe(false);
   });
 
+  it("rejects bad UUID, empty mounting, non-positive depth/height, and empty BOQ", () => {
+    const badId = assertDescriptorPublishable({
+      ...base,
+      id: "not-a-uuid" as BlockDescriptor["id"],
+    });
+    expect(badId.ok).toBe(false);
+    if (!badId.ok) expect(badId.issues.some((i) => /UUID/i.test(i))).toBe(true);
+
+    const noMount = assertDescriptorPublishable({
+      ...base,
+      mounting: [] as unknown as BlockDescriptor["mounting"],
+    });
+    expect(noMount.ok).toBe(false);
+    if (!noMount.ok) {
+      expect(noMount.issues.some((i) => /mounting/i.test(i))).toBe(true);
+    }
+
+    expect(
+      assertDescriptorPublishable({
+        ...base,
+        geometry: { ...base.geometry, depthMm: -1 },
+      }).ok,
+    ).toBe(false);
+    expect(
+      assertDescriptorPublishable({
+        ...base,
+        geometry: { ...base.geometry, heightMm: 0 },
+      }).ok,
+    ).toBe(false);
+
+    // slug is also BOQ fallback; empty slug already fails slug regex first.
+    const noSkuUsesSlug = assertDescriptorPublishable({
+      ...base,
+      sku: "  ",
+    });
+    expect(noSkuUsesSlug.ok).toBe(true);
+  });
+
   it("builds a ReleasedCatalogProductV1 only when svg artifacts are complete", () => {
     const svg =
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"></svg>';
@@ -62,7 +100,33 @@ describe("releasedCatalogPublishGate — incomplete cannot publish", () => {
       expect(ok.product.schemaVersion).toBe(1);
       expect(ok.product.boqIdentity).toBe("SKU-1");
       expect(ok.product.svg.checksum).toHaveLength(64);
+      expect(ok.product.svg.resourceUrl).toContain("test-block-r1");
     }
+
+    const usesSlugForBoq = buildReleasedProductFromPublish({
+      descriptor: { ...base, sku: undefined },
+      svgMarkup: svg,
+      revisionId: "test-block-r1",
+      publishedAt: "2026-07-13T12:00:00.000Z",
+      availability: "available",
+    });
+    expect(usesSlugForBoq.ok).toBe(true);
+    if (usesSlugForBoq.ok) {
+      expect(usesSlugForBoq.product.boqIdentity).toBe("test-block");
+    }
+
+    const preGate = buildReleasedProductFromPublish({
+      descriptor: {
+        ...base,
+        geometry: { ...base.geometry, widthMm: 0 },
+      },
+      svgMarkup: svg,
+      revisionId: "x",
+      publishedAt: "2026-07-13T12:00:00.000Z",
+      availability: "available",
+    });
+    expect(preGate.ok).toBe(false);
+    if (!preGate.ok) expect(preGate.error).toMatch(/released_contract/);
 
     const bad = buildReleasedProductFromPublish({
       descriptor: { ...base, slug: "Bad_Slug" as BlockDescriptor["slug"] },

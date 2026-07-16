@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import type { MouseEventHandler, ReactNode } from "react";
 
 import {
   buildPlannerEntryHref,
@@ -19,6 +19,8 @@ interface PlannerLaunchLinkProps {
   productSlug?: string;
   categoryId?: string;
   prefetch?: boolean;
+  onMouseEnter?: MouseEventHandler<HTMLAnchorElement>;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
   "aria-label"?: string;
   "data-testid"?: string;
 }
@@ -32,30 +34,33 @@ export function PlannerLaunchLink({
   productSlug,
   categoryId,
   prefetch,
+  onMouseEnter,
+  onClick,
   "aria-label": ariaLabel,
   "data-testid": dataTestId,
 }: PlannerLaunchLinkProps) {
   const pathname = usePathname() || "/";
+  const entryContext = {
+    sourcePage: pathname,
+    productSlug,
+    categoryId,
+  };
   const resolvedHref = isPlannerEntryHref(href)
-    ? buildPlannerEntryHref(href, {
-        sourcePage: pathname,
-        productSlug,
-        categoryId,
-      })
+    ? buildPlannerEntryHref(href, entryContext)
     : href;
 
-  const onClick = () => {
+  const handleClick: MouseEventHandler<HTMLAnchorElement> = (event) => {
     if (isPlannerEntryHref(href)) {
       handlePlannerEntryNavigation({
-        href: resolvedHref,
+        href: buildPlannerEntryHref(href, entryContext, { includeAttribution: true }),
         pathname,
         surface,
         label,
         productSlug,
         categoryId,
       });
-      return;
     }
+    onClick?.(event);
   };
 
   return (
@@ -63,7 +68,8 @@ export function PlannerLaunchLink({
       href={resolvedHref}
       className={className}
       prefetch={prefetch}
-      onClick={onClick}
+      onClick={handleClick}
+      onMouseEnter={onMouseEnter}
       aria-label={ariaLabel}
       data-testid={dataTestId}
     >

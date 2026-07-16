@@ -529,4 +529,64 @@ describe("configuratorDraftToPayload", () => {
     expect(payload.family).toBeUndefined();
     expect(payload.brand_name).toBeUndefined();
   });
+
+  it("allows blob: and generated GLB paths; rejects marker spoofed via query", () => {
+    const blob = configuratorDraftToPayload({
+      ...emptyConfiguratorDraft(),
+      name: "Desk",
+      model_3d_url: "blob:https://example.com/uuid",
+    });
+    expect(blob.model_3d_url).toBe("blob:https://example.com/uuid");
+
+    expect(() =>
+      configuratorDraftToPayload({
+        ...emptyConfiguratorDraft(),
+        name: "Desk",
+        model_3d_url: "https://cdn.example/x.glb?catalog-assets/generated/",
+      }),
+    ).toThrow(/model_3d_url/);
+  });
+
+  it("throws on invalid derived_rules JSON when non-empty", () => {
+    expect(() =>
+      configuratorDraftToPayload({
+        ...emptyConfiguratorDraft(),
+        name: "Desk",
+        sizing_type: "fixed",
+        derivedRulesJson: "{not-json",
+      }),
+    ).toThrow("Invalid JSON in derived_rules");
+  });
+});
+
+describe("empty sizing JSON validation", () => {
+  it("treats blank sizing JSON as undefined (no parse error) for active type", () => {
+    const parametric = getConfiguratorJsonErrors({
+      ...emptyConfiguratorDraft(),
+      sizing_type: "parametric",
+      workstationJson: "   ",
+    });
+    expect(parametric).toEqual({});
+
+    const discrete = getConfiguratorJsonErrors({
+      ...emptyConfiguratorDraft(),
+      sizing_type: "discrete",
+      sizeOptionsJson: "",
+    });
+    expect(discrete).toEqual({});
+
+    const fixed = getConfiguratorJsonErrors({
+      ...emptyConfiguratorDraft(),
+      sizing_type: "fixed",
+      defaultFootprintJson: "\n",
+    });
+    expect(fixed).toEqual({});
+  });
+});
+
+describe("standardFromItem price undefined vs null", () => {
+  it("maps undefined price to empty string like null", () => {
+    const draft = standardFromItem(baseStandardItem({ price: undefined }));
+    expect(draft.price).toBe("");
+  });
 });

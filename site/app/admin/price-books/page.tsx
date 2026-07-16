@@ -12,7 +12,7 @@ export const metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AdminPriceBooksPage() {
-  ensureDefaultPriceBookSeeded();
+  await ensureDefaultPriceBookSeeded();
   const payload = await readAdminPriceBook(DEFAULT_PRICE_BOOK_ID);
   return <AdminPriceBookPageView initialContract={payload?.contract ?? null} />;
 }

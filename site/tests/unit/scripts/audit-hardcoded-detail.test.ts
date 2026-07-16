@@ -29,13 +29,11 @@ function loadPatterns(): {
   const tsxMatch = source.match(/const TSX_PATTERNS = (\[[\s\S]*?\n\]);/);
   const cssMatch = source.match(/const CSS_PATTERNS = (\[[\s\S]*?\n\]);/);
   if (!tsxMatch || !cssMatch) throw new Error("pattern arrays not found");
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- rehydrate script pattern tables under test
   const TSX_PATTERNS = new Function(`return ${tsxMatch[1]}`)() as Array<{
     id: string;
     re: RegExp;
     label: string;
   }>;
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- rehydrate script pattern tables under test
   const CSS_PATTERNS = new Function(`return ${cssMatch[1]}`)() as Array<{
     id: string;
     re: RegExp;
