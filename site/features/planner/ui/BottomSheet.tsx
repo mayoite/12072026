@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useId, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 import { Z } from "@/lib/z-index";
+import styles from "./bottom-sheet.module.css";
 
 interface BottomSheetProps {
   open: boolean;
@@ -19,44 +20,90 @@ export function BottomSheet({
   snapPoints: _snapPoints,
 }: BottomSheetProps) {
   const titleId = useId();
+  const dialogRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!open) return;
 
+    const previouslyFocused = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+    const dialog = dialogRef.current;
+    const frame = requestAnimationFrame(() => {
+      const firstControl = dialog?.querySelector<HTMLElement>(
+        "button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex='-1'])",
+      );
+      (firstControl ?? dialog)?.focus();
+    });
+
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab" || !dialog) return;
+      const controls = Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          "button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex='-1'])",
+        ),
+      ).filter((control) => control.getClientRects().length > 0);
+      if (controls.length === 0) {
+        event.preventDefault();
+        dialog.focus();
+        return;
+      }
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
     document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    return () => {
+      cancelAnimationFrame(frame);
+      document.removeEventListener("keydown", onKeyDown);
+      previouslyFocused?.focus();
+    };
   }, [onClose, open]);
 
   return (
     <>
       <button
         type="button"
-        className={`bg-inverse/40 transition-opacity duration-300 md:hidden ${ open ? "opacity-100" : "pointer-events-none opacity-0" }`}
+        className={styles.backdrop}
+        data-open={open ? "true" : "false"}
         style={{ zIndex: Z.panel - 1 }}
         aria-label="Close bottom sheet"
+        aria-hidden={!open}
+        tabIndex={open ? 0 : -1}
         onClick={onClose}
       />
       <section
-        className={`bottom-0 left-0 right-0 max-h-[90dvh] rounded-t-2xl border border-soft bg-panel pb-[env(safe-area-inset-bottom)] shadow-2xl transition-transform duration-300 md:hidden ${ open ? "translate-y-0" : "pointer-events-none translate-y-full" }`}
+        ref={dialogRef}
+        className={styles.sheet}
+        data-open={open ? "true" : "false"}
         style={{ zIndex: Z.panel }}
         role="dialog"
         aria-modal="true"
         aria-hidden={!open}
         aria-labelledby={title ? titleId : undefined}
+        tabIndex={-1}
       >
-        <div className="py-3">
-          <span className="h-1 w-10 rounded-full bg-soft" aria-hidden />
+        <div className={styles.handle}>
+          <span className={styles.handleMark} aria-hidden />
         </div>
         {title ? (
-          <h2 id={titleId} className="px-4 pb-3 text-sm font-semibold text-strong">
+          <h2 id={titleId} className={styles.title}>
             {title}
           </h2>
         ) : null}
-        <div className="max-h-[calc(90dvh-56px)] overscroll-contain">
+        <div className={styles.content}>
           {children}
         </div>
       </section>

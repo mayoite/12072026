@@ -5,6 +5,7 @@ import { X, CaretRight as ChevronRight, CaretLeft as ChevronLeft, Lightbulb, Spa
 import { BottomSheet } from "@/features/planner/ui/BottomSheet";
 import { useIsMobile } from "@/features/planner/hooks/useIsMobile";
 import { Z } from "@/lib/z-index";
+import styles from "./onboarding-coach.module.css";
 
 export type CoachStep = {
   id: string;
@@ -141,7 +142,7 @@ export function OnboardingCoach({
 
     return (
       <BottomSheet open onClose={handleSkip} title={mobileStep.title}>
-        <div className="min-h-[calc(90dvh-56px)] px-6 pb-6">
+        <div className={styles.mobileContent}>
           <button
             type="button"
             onClick={handleSkip}
@@ -179,19 +180,25 @@ export function OnboardingCoach({
   }
 
   return (
-    <div className="pointer-events-none" style={{ zIndex: Z.sidebar }} aria-hidden={false}>
+    <div className={styles.overlay} style={{ zIndex: Z.sidebar }} aria-hidden={false}>
       {displaySpotlight ? (
         <div
-          className="rounded-xl pointer-events-none ring-2 ring-[var(--color-primary)] ring-offset-2 ring-offset-transparent transition-all duration-300"
+          className={`${styles.spotlight} rounded-xl pointer-events-none ring-2 ring-[var(--color-primary)] ring-offset-2 ring-offset-transparent transition-all duration-300`}
           style={spotlightStyle}
           aria-hidden
         />
       ) : null}
 
       <div
-        className="bottom-8 left-1/2 -translate-x-1/2 pointer-events-auto w-[26.25rem] max-w-[calc(100vw-2rem)] rounded-xl shadow-2xl bg-page border border-soft"
+        className={`${styles.dialog} rounded-xl shadow-2xl bg-page border border-soft`}
         role="dialog"
         aria-label="Onboarding Guide"
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            event.preventDefault();
+            handleSkip();
+          }
+        }}
       >
         <div className="h-1 bg-muted">
           <div
@@ -213,6 +220,7 @@ export function OnboardingCoach({
                   onClick={handleSkip}
                   className="p-1 rounded text-muted bg-hover-soft"
                   aria-label="Skip onboarding"
+                  autoFocus
                 >
                   <X size={14} />
                 </button>

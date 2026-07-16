@@ -1,0 +1,31 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.spotlight {
+  position: fixed;
+}
+
+.dialog {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--planner-safe-bottom) + var(--space-8));
+  width: min(26.25rem, calc(100vw - var(--space-8)));
+  max-height: calc(100dvh - var(--planner-safe-top) - var(--planner-safe-bottom) - var(--space-8));
+  overflow-y: auto;
+  pointer-events: auto;
+  transform: translateX(-50%);
+}
+
+.mobileContent {
+  min-height: calc(90dvh - var(--planner-header-height));
+  padding: 0 var(--space-6) var(--space-6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spotlight {
+    transition: none;
+  }
+}

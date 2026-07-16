@@ -836,7 +836,7 @@
 }
 
 .boqNotReady {
-  color: var(--color-muted, #a1a1aa);
+  color: var(--ws-text-secondary);
   font-style: italic;
 }
 
@@ -1125,8 +1125,23 @@
 /* Phone shell: two compact rows (brand+primary | tools), not a three-stack desktop toolbar */
 @media (width < 48rem) {
   .shell {
+    --ws-mobile-panel-inline-size: min(
+      calc(100% - var(--space-4)),
+      var(--planner-panel-width-mobile-max)
+    );
     grid-template-rows: auto minmax(0, 1fr) auto;
     overflow-x: hidden;
+  }
+
+  /* Beat the legacy locked `.planner-workspace .pw-topbar` one-row grid while
+     retaining `pw-topbar` as the live compatibility/test hook. */
+  :global(body.planner-workspace) .header:global(.pw-topbar) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "brand"
+      "center"
+      "actions";
   }
 
   .header {
@@ -1137,10 +1152,11 @@
       calc(var(--space-2) + var(--planner-safe-right))
       var(--space-1)
       calc(var(--space-2) + var(--planner-safe-left));
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
-      "brand actions"
-      "center center";
+      "brand"
+      "center"
+      "actions";
     gap: var(--space-1);
     overflow-x: hidden;
   }
@@ -1152,16 +1168,29 @@
 
   .center {
     grid-area: center;
+    width: 100%;
     justify-content: flex-start;
+    flex-wrap: nowrap;
     gap: var(--space-1);
+    overflow-x: auto;
+    scrollbar-width: none;
   }
 
   .actions {
     grid-area: actions;
-    justify-content: flex-end;
+    width: 100%;
+    justify-content: flex-start;
+    justify-self: stretch;
     gap: var(--space-1);
     flex-wrap: nowrap;
-    max-width: min(100%, 16rem);
+    max-width: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .center::-webkit-scrollbar,
+  .actions::-webkit-scrollbar {
+    display: none;
   }
 
   .brandTitle {
@@ -1214,7 +1243,7 @@
 
   .panelBackdrop {
     position: absolute;
-    inset: 0;
+    inset-block: 0;
     z-index: calc(var(--ws-z-floating) - 1);
     display: block;
     padding: 0;
@@ -1223,13 +1252,23 @@
     cursor: pointer;
   }
 
+  .shell[data-panel-active="left"] .panelBackdrop {
+    left: var(--ws-mobile-panel-inline-size);
+    right: 0;
+  }
+
+  .shell[data-panel-active="right"] .panelBackdrop {
+    left: 0;
+    right: var(--ws-mobile-panel-inline-size);
+  }
+
   .panelLeft,
   .panelRight {
     position: absolute;
     top: 0;
     bottom: 0;
     z-index: var(--ws-z-floating);
-    width: calc(100% - var(--space-4));
+    width: var(--ws-mobile-panel-inline-size);
     max-width: var(--planner-panel-width-mobile-max);
     transform: translateX(-100%);
     transition: transform var(--planner-motion-panel) var(--planner-motion-easing);
@@ -1265,10 +1304,32 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  .status > span,
   .statusLeft,
   .statusRight {
-    min-width: 0;
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .statusRight {
+    position: sticky;
+    right: calc(var(--space-2) + var(--planner-safe-right));
+    z-index: 1;
+    padding-left: var(--space-2);
+    background: var(--ws-status-bg);
+  }
+
+  .statusLeft,
+  .statusRight {
     flex-wrap: nowrap;
+  }
+
+  .statusLeft {
+    min-width: 0;
+  }
+
+  .statusRight {
+    min-width: max-content;
   }
 }
 

@@ -31,6 +31,14 @@
   color: var(--cp-text);
 }
 
+.commandPalettePanel > [role="dialog"] {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .commandPaletteSearch {
   display: flex;
   align-items: center;
@@ -61,6 +69,7 @@
 
 .commandPaletteResults {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: var(--space-2);
 }

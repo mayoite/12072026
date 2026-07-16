@@ -77,21 +77,24 @@ export function useWorkspaceKeyboard(handlers: WorkspaceKeyboardHandlers): void 
         return;
       }
 
-      if (shouldIgnoreWorkspaceShortcut(event.target)) return;
-
       const key = event.key.toLowerCase();
       const mod = event.ctrlKey || event.metaKey;
+
+      // Command palette is global workspace chrome. Keep it available after a
+      // keyboard user activates any button, but never steal it while typing.
+      if (mod && key === "k") {
+        if (isEditableTarget(event.target)) return;
+        event.preventDefault();
+        handlers.openPalette();
+        return;
+      }
+
+      if (shouldIgnoreWorkspaceShortcut(event.target)) return;
 
       if (event.code === "Space" && !mod && !event.repeat) {
         event.preventDefault();
         spacePanActive.current = true;
         handlers.beginTemporaryPan?.();
-        return;
-      }
-
-      if (mod && key === "k") {
-        event.preventDefault();
-        handlers.openPalette();
         return;
       }
 
