@@ -27,9 +27,9 @@ import { GitCommit, GitBranch, Rocket, Wrench, Database, Package, Shield, Eye, T
     Merge --> Prod
     Merge --> Main
 
-    style Prod fill:var(--color-dark-midnight-blue-750),stroke:#22c55e
-    style Gate fill:var(--color-ecru-950),stroke:#f97316
-    style PR fill:var(--color-dark-midnight-blue-700),stroke:#a855f7`
+    style Prod fill:#0E1925,stroke:#22c55e
+    style Gate fill:#221E16,stroke:#f97316
+    style PR fill:#111E2D,stroke:#a855f7`
 
 const devWorkflow = [
   { step: '1', title: 'Create feature branch', cmd: 'git checkout -b feature/<name>', detail: 'Branch from main. Use descriptive names.' },

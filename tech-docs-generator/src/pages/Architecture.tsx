@@ -45,10 +45,10 @@ const highLevelDiagram = `flowchart TB
     Canvas --> Assets
     ThreeD --> Assets
 
-    style Client fill:var(--color-dark-midnight-blue-750),stroke:#0ea5e9
-    style Edge fill:var(--color-dark-midnight-blue-700),stroke:#a855f7
-    style Supabase fill:var(--color-dark-midnight-blue-750),stroke:#22c55e
-    style CDN fill:var(--color-ecru-950),stroke:#f97316`
+    style Client fill:#0E1925,stroke:#0ea5e9
+    style Edge fill:#111E2D,stroke:#a855f7
+    style Supabase fill:#0E1925,stroke:#22c55e
+    style CDN fill:#221E16,stroke:#f97316`
 
 const plannerDataFlow = `flowchart LR
     User["User Action<br/>draw / place / select"]
@@ -65,9 +65,9 @@ const plannerDataFlow = `flowchart LR
     Store -->|debounce| Persist
     Persist -->|load| Store
 
-    style Fabric fill:var(--color-ecru-950),stroke:#f59e0b
-    style Store fill:var(--color-dark-midnight-blue-700),stroke:#f97316
-    style ThreeD fill:var(--color-ocean-boat-blue-750),stroke:#0ea5e9`
+    style Fabric fill:#221E16,stroke:#f59e0b
+    style Store fill:#111E2D,stroke:#f97316
+    style ThreeD fill:#244A6A,stroke:#0ea5e9`
 
 const authFlow = `sequenceDiagram
     participant U as User
@@ -131,8 +131,8 @@ const featureModules = `flowchart TB
     Admin --> Lib
     Lib --> Config
 
-    style Features fill:var(--color-dark-midnight-blue-750),stroke:#0ea5e9
-    style Lib fill:var(--color-dark-midnight-blue-750),stroke:#22c55e`
+    style Features fill:#0E1925,stroke:#0ea5e9
+    style Lib fill:#0E1925,stroke:#22c55e`
 
 export function Architecture() {
   return (

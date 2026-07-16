@@ -127,9 +127,9 @@ const plannerArchitecture = `flowchart TB
     Store --> Persist
     Hooks --> Store
 
-    style Canvas fill:var(--color-ecru-950),stroke:#f59e0b
-    style Bridge fill:var(--color-dark-midnight-blue-700),stroke:#a855f7
-    style ThreeD fill:var(--color-ocean-boat-blue-750),stroke:#0ea5e9`
+    style Canvas fill:#221E16,stroke:#f59e0b
+    style Bridge fill:#111E2D,stroke:#a855f7
+    style ThreeD fill:#244A6A,stroke:#0ea5e9`
 
 export function Features() {
   return (

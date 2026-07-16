@@ -91,9 +91,9 @@ const rlsDiagram = `flowchart LR
     Result -->|user owns| Pass["Rows returned"]
     Result -->|not owner| Empty["No rows"]
 
-    style RLS fill:var(--color-dark-midnight-blue-750),stroke:#22c55e
-    style Pass fill:var(--color-dark-midnight-blue-750),stroke:#22c55e
-    style Empty fill:var(--color-ecru-950),stroke:#ef4444`
+    style RLS fill:#0E1925,stroke:#22c55e
+    style Pass fill:#0E1925,stroke:#22c55e
+    style Empty fill:#221E16,stroke:#ef4444`
 
 const migrationCommands = [
   { cmd: 'npm.cmd run db:apply', desc: 'Apply pending migrations to linked Supabase' },
