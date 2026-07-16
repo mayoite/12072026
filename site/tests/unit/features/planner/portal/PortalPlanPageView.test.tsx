@@ -5,6 +5,7 @@ import type { PlannerDocument } from '@/features/planner/model';
 
 test('renders not found state for null document', () => {
   render(<PortalPlanPageView document={null} />);
+  expect(screen.getByTestId('portal-plan-not-found')).toBeInTheDocument();
   expect(screen.getByText('Plan not found')).toBeInTheDocument();
 });
 

@@ -79,13 +79,11 @@ export default function PortalPageView({
         </section>
       ) : (
         <section className="mt-6">
-          <div className="gap-3">
-            <div>
-              <h2 className="shell-portal-section-title">Saved layouts</h2>
-              <p className="shell-portal-table-meta">
-                {plans.length} plan{plans.length === 1 ? "" : "s"} available
-              </p>
-            </div>
+          <div className="mb-4">
+            <h2 className="shell-portal-section-title">Saved layouts</h2>
+            <p className="shell-portal-table-meta">
+              {plans.length} plan{plans.length === 1 ? "" : "s"} available
+            </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

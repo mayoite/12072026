@@ -206,8 +206,27 @@ export default function CustomerQueriesOpsPageView({ embedded = false }: { embed
   }
 
   return (
-    <section className={embedded ? "" : "container py-12"}>
-      {!embedded ? (
+    <section className={embedded ? "admin-page" : "container py-12"}>
+      {embedded ? (
+        <header className="admin-page__header">
+          <div>
+            <p className="admin-page__eyebrow">CRM &amp; ops</p>
+            <h1 className="admin-page__title">Customer queries</h1>
+            <p className="admin-page__lead">Live inbox with 10-second auto-refresh.</p>
+          </div>
+          <div className="admin-page__actions">
+            <button
+              type="button"
+              onClick={() => void fetchItems()}
+              disabled={loading}
+              className="btn-outline inline-flex items-center gap-2 px-3 py-2 text-sm"
+            >
+              <RefreshCw size={14} className={loading ? "animate-spin" : ""} aria-hidden />
+              Refresh
+            </button>
+          </div>
+        </header>
+      ) : (
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="typ-h1 text-heading">Customer queries</h1>
@@ -221,19 +240,7 @@ export default function CustomerQueriesOpsPageView({ embedded = false }: { embed
             disabled={loading}
             className="inline-flex items-center gap-2 rounded-md border border-muted px-3 py-2 text-sm text-body hover:bg-page disabled:opacity-50"
           >
-            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-            Refresh
-          </button>
-        </div>
-      ) : (
-        <div className="admin-page__actions mb-4 justify-end">
-          <button
-            type="button"
-            onClick={() => void fetchItems()}
-            disabled={loading}
-            className="btn-outline inline-flex items-center gap-2 px-3 py-2 text-sm"
-          >
-            <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} aria-hidden />
             Refresh
           </button>
         </div>
@@ -285,19 +292,19 @@ export default function CustomerQueriesOpsPageView({ embedded = false }: { embed
       </div>
 
       {error ? (
-        <div className="mb-6 rounded-md border border-accent bg-danger-soft px-3 py-2 text-sm text-red-700">
+        <div className="admin-alert admin-alert--danger mb-6" role="alert">
           {error}
         </div>
       ) : null}
 
       {!canLoad && items.length === 0 && !loading && !error && !lastUpdatedAt ? (
-        <div className="rounded-xl border border-soft bg-page p-6 text-sm text-neutral-600">
+        <div className={embedded ? "admin-empty" : "rounded-xl border border-soft bg-page p-6 text-sm text-neutral-600"}>
           Sign in as admin or enter the customer queries token to load queries.
         </div>
       ) : null}
 
       {items.length === 0 && !loading && !error && lastUpdatedAt ? (
-        <div className="rounded-xl border border-soft bg-page p-6 text-sm text-neutral-600">
+        <div className={embedded ? "admin-empty" : "rounded-xl border border-soft bg-page p-6 text-sm text-neutral-600"}>
           No queries found.
         </div>
       ) : null}
@@ -312,7 +319,10 @@ export default function CustomerQueriesOpsPageView({ embedded = false }: { embed
           };
 
           return (
-            <article key={item.id} className="rounded-xl border border-soft bg-white p-4">
+            <article
+              key={item.id}
+              className={embedded ? "admin-panel p-4" : "rounded-xl border border-soft bg-white p-4"}
+            >
               <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <h2 className="text-base font-semibold text-heading">{item.name}</h2>

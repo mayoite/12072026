@@ -24,7 +24,7 @@ export function PlannerLandingPage() {
           viewport={{ once: true, margin: "-90px" }}
           transition={{ duration: 0.7, ease: MOTION_EASE }}
         >
-          <div className="mb-10 items-end gap-4">
+          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <h2 className="home-heading">
               Built for{" "}
               <span className="text-accent-italic">office teams</span>

@@ -28,7 +28,7 @@ export function PlannerSuite() {
             <p className="page-copy-sm mt-3 text-muted">{description}</p>
           </div>
 
-          <div className="shrink-0 flex-wrap gap-3">
+          <div className="flex shrink-0 flex-wrap gap-3">
             <Link
               href={loginHref}
               data-testid="home-planner-link-unified"

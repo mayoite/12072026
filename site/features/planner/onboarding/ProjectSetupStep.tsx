@@ -208,19 +208,19 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
             />
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div className={SETUP_FIELD_SHELL}>
               <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-city">
                 City
               </label>
-              <div className="">
+              <div className="relative min-w-0 flex-1">
                 <MapPin
-                  className="pointer-events-none left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-muted)]"
+                  className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-muted)]"
                   aria-hidden="true"
                 />
                 <select
                   id="project-setup-city"
-                  className={`${SETUP_FIELD_INPUT} pl-9`}
+                  className={`${SETUP_FIELD_INPUT} pl-6`}
                   value={draft.city}
                   onChange={(event) => updateDraft("city", event.target.value)}
                 >
@@ -249,6 +249,24 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                 />
               </div>
               <p className="typ-caption mt-1 px-2 text-[color:var(--text-muted)]">Start with 1000 sq ft if unsure.</p>
+            </div>
+
+            <div>
+              <div className={SETUP_FIELD_SHELL}>
+                <label className={SETUP_FIELD_LABEL} htmlFor="project-setup-seats">
+                  People to seat
+                </label>
+                <input
+                  id="project-setup-seats"
+                  className={SETUP_FIELD_INPUT}
+                  type="number"
+                  min={1}
+                  step={1}
+                  value={draft.seatTarget}
+                  onChange={(event) => updateDraft("seatTarget", Number(event.target.value))}
+                />
+              </div>
+              <p className="typ-caption mt-1 px-2 text-[color:var(--text-muted)]">Used to size the room grid.</p>
             </div>
           </div>
 
@@ -285,8 +303,8 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
             </div>
           </fieldset>
 
-          <fieldset className={SETUP_FIELDSET}>
-            <legend className="px-1 text-[0.8125rem] font-semibold text-[color:var(--text-body)]">
+          <fieldset className={SETUP_FIELDSET} aria-labelledby="project-setup-start-label">
+            <legend id="project-setup-start-label" className="px-1 text-[0.8125rem] font-semibold text-[color:var(--text-body)]">
               Start with
             </legend>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">

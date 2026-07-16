@@ -56,7 +56,7 @@ export function PlannerFeaturesHubPage() {
                   {PLANNER_HERO.description}
                 </p>
 
-                <div className="mt-8 flex-wrap gap-3">
+                <div className="mt-8 flex flex-wrap gap-3">
                   <Link
                     href={PLANNER_HERO.primaryCta.href}
                     className="btn-hero-primary btn-primary typ-cta inline-flex gap-2 px-6 py-3"
@@ -81,7 +81,7 @@ export function PlannerFeaturesHubPage() {
                   ))}
                 </div>
 
-                <div className="mt-6 flex-wrap gap-4 text-sm">
+                <div className="mt-6 flex flex-wrap gap-4 text-sm">
                   <Link href={PLANNER_HERO.featuresCta.href} className="pfp-inline-link pfp-inline-link--inverse">
                     {PLANNER_HERO.featuresCta.label}
                   </Link>
@@ -116,7 +116,7 @@ export function PlannerFeaturesHubPage() {
                   href={`/planner/features/${feature.slug}/`}
                   className="pfp-feature-pill group"
                 >
-                  <div className="items-start gap-3">
+                  <div className="flex items-start gap-3">
                     <span className="pfp-feature-pill__icon">
                       <Icon className="h-4 w-4" aria-hidden="true" />
                     </span>

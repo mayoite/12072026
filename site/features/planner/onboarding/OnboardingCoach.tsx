@@ -165,7 +165,7 @@ export function OnboardingCoach({
               {mobileLast ? "Get started" : "Next"}
             </button>
           </div>
-          <div className="gap-1.5">
+          <div className="flex gap-1.5">
             {mobileSteps.map((item, index) => (
               <span
                 key={item.title}
@@ -208,12 +208,12 @@ export function OnboardingCoach({
         </div>
 
         <div className="px-5 py-4">
-          <div className="items-start gap-3">
-            <div className="w-8 h-8 rounded-lg flex-shrink-0 bg-primary text-inverse">
+          <div className="flex items-start gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-inverse">
               <Lightbulb size={16} />
             </div>
-            <div className="">
-              <div className="">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-start justify-between gap-2">
                 <h4 className="text-sm font-semibold text-strong">{step.title}</h4>
                 <button
                   type="button"
@@ -232,17 +232,17 @@ export function OnboardingCoach({
           </div>
         </div>
 
-        <div className="px-5 py-3 border-t border-soft">
+        <div className="flex items-center justify-between gap-3 border-t border-soft px-5 py-3">
           <span className="text-xs text-subtle">
             {currentStep + 1} of {steps.length}
           </span>
-          <div className="gap-2">
+          <div className="flex gap-2">
             {!isFirst && (
               <button
                 type="button"
                 onClick={handlePrev}
                 aria-label="Previous onboarding step"
-                className="gap-1 px-3 py-1.5 text-xs rounded-lg border border-soft text-body bg-hover-soft transition-colors"
+                className="inline-flex items-center gap-1 rounded-lg border border-soft bg-hover-soft px-3 py-1.5 text-xs text-body transition-colors"
               >
                 <ChevronLeft size={12} /> Back
               </button>
@@ -251,7 +251,7 @@ export function OnboardingCoach({
               type="button"
               onClick={handleNext}
               aria-label={isLast ? "Finish onboarding" : "Next onboarding step"}
-              className="gap-1 px-3 py-1.5 text-xs rounded-lg bg-primary text-inverse hover:bg-primary-hover transition-colors"
+              className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs text-inverse transition-colors hover:bg-primary-hover"
             >
               {isLast ? (
                 <>

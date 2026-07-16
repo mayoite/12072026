@@ -158,7 +158,7 @@ export function PlannerToolsShowcase({
                     className="home-tool-card home-tool-card--dark home-tool-card--animated home-tool-card--row group inline-flex max-w-md"
                   >
                     <div className="home-tool-card__body">
-                      <div className="mb-2 flex-wrap gap-x-3 gap-y-1">
+                      <div className="mb-2 flex flex-wrap gap-x-3 gap-y-1">
                         <h3 className="home-tool-title--dark">Oando Planner</h3>
                         <span className="home-tool-badge home-tool-badge--dark home-tool-badge--inline">
                           Flagship

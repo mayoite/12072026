@@ -49,7 +49,7 @@ export function PlannerFeaturePageView({ slug }: { slug: PlannerFeatureSlug }) {
               <p className="typ-eyebrow text-[color:var(--color-bronze-500)]">{feature.tagline}</p>
               <h1 className="home-heading mt-3">{feature.title}</h1>
               <p className="page-copy-sm text-muted">{feature.summary}</p>
-              <div className="mt-8 flex-wrap gap-3">
+              <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href={feature.tryPath}
                   className="btn-primary typ-cta inline-flex gap-2 px-6 py-3"
@@ -78,7 +78,7 @@ export function PlannerFeaturePageView({ slug }: { slug: PlannerFeatureSlug }) {
             </h2>
             <ul className="mt-6 grid gap-4 sm:grid-cols-2">
               {feature.bullets.map((bullet) => (
-                <li key={bullet} className="shell-card items-start gap-3 p-5">
+                <li key={bullet} className="shell-card flex items-start gap-3 p-5">
                   <span
                     className="scheme-accent-wash mt-0.5 h-6 w-6 shrink-0 rounded-full text-[color:var(--color-accent-strong)]"
                     aria-hidden="true"
@@ -93,7 +93,7 @@ export function PlannerFeaturePageView({ slug }: { slug: PlannerFeatureSlug }) {
 
           {related.length > 0 && (
             <section aria-labelledby="feature-related" className="border-t border-theme-soft py-12">
-              <div className="mb-6 flex-wrap items-end gap-4">
+              <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
                 <h2 id="feature-related" className="typ-subsection-title">
                   Works well <span className="text-accent-italic">with</span>
                 </h2>
@@ -110,7 +110,7 @@ export function PlannerFeaturePageView({ slug }: { slug: PlannerFeatureSlug }) {
                   const RelatedIcon = item.icon;
                   return (
                     <Link key={item.slug} href={`/planner/features/${item.slug}/`} className="pfp-card group">
-                      <div className="gap-3">
+                      <div className="flex items-start gap-3">
                         <span className="scheme-accent-wash h-10 w-10 rounded-xl text-[color:var(--color-accent-strong)]">
                           <RelatedIcon className="h-5 w-5" aria-hidden="true" />
                         </span>
@@ -131,7 +131,7 @@ export function PlannerFeaturePageView({ slug }: { slug: PlannerFeatureSlug }) {
             </section>
           )}
 
-          <nav aria-label="Feature pages" className="flex-wrap gap-3 border-t border-theme-soft py-8">
+          <nav aria-label="Feature pages" className="flex flex-wrap gap-3 border-t border-theme-soft py-8">
             {previous ? (
               <Link href={`/planner/features/${previous.slug}/`} className="pfp-card-link typ-label">
                 <ArrowLeft className="h-4 w-4" aria-hidden="true" />
