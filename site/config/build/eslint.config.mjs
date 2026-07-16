@@ -38,6 +38,7 @@ export default tsEslint.config(
       "**/.next/**",
       "**/out/**",
       "**/build/**",
+      "!config/build/**",
       "**/.codex-runtime/**",
       "**/config/environment/next-env.d.ts",
       "**/oando_assets/**",
@@ -82,6 +83,22 @@ export default tsEslint.config(
       "no-console": ["error", { allow: ["warn", "error"] }],
       "prefer-const": "error",
       "eqeqeq": ["error", "always"],
+    },
+  },
+  {
+    files: ["next.config.js", "config/build/next.config.js"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
+  {
+    files: ["config/build/playwrightBaseURL.cjs"],
+    languageOptions: {
+      globals: {
+        module: "readonly",
+        process: "readonly",
+        URL: "readonly",
+      },
     },
   },
   {

@@ -1,6 +1,4 @@
 import { NextResponse, type NextRequest } from "next/server";
-import createIntlMiddleware from "next-intl/middleware";
-import { routing } from "./i18n/routing";
 import { PLANNER_GUEST_COOKIE } from "./lib/auth/constants";
 import { isDevAuthBypassEnabled } from "./lib/auth/devAuthBypass";
 import { isMaintenanceReadonly } from "./lib/platform/maintenanceMode";
@@ -16,9 +14,6 @@ const BLOCKED_WRITE_API_PREFIXES = [
   "/api/quotes",
   "/api/customer-queries",
 ];
-
-/** next-intl locale negotiation/rewrite middleware (i18n layer). */
-const intlMiddleware = createIntlMiddleware(routing);
 
 function normalizePathname(pathname: string): string {
   if (pathname.length > 1 && pathname.endsWith("/")) {
@@ -156,15 +151,6 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // ── i18n layer ────────────────────────────────────────────────────────────
-  // Run next-intl locale negotiation first. If it rewrites/redirects (e.g. to
-  // add a locale prefix or honor the NEXT_LOCALE cookie), return that response
-  // and skip the security/auth logic below. A plain `next()` falls through.
-  const intlResponse = undefined; // Bypassed: locales resolved in request.ts via cookies/headers to support prefixless dynamic translations
-  if (intlResponse && !(intlResponse as NextResponse).headers.get("x-middleware-next")) {
-    return intlResponse;
-  }
-
   const isProtected = isProtectedPath(pathname);
   const hasPlannerGuestPass = request.cookies.has(PLANNER_GUEST_COOKIE);
   const allowPlannerGuest = hasPlannerGuestPass && isPlannerGuestAllowedPath(pathname);
@@ -217,10 +203,8 @@ export async function proxy(request: NextRequest) {
   // The actual session validation is handled by getOptionalUser() in session.ts
   // at the page/layout level. The edge proxy just does a fast cookie existence check.
   
-  // If the i18n middleware produced a passthrough `next()` response (e.g. it set
-  // the x-next-intl-locale header without rewriting), reuse it so the header is
-  // preserved; otherwise create a fresh response.
-  const response = intlResponse ?? NextResponse.next({ request });
+  // Locale selection is prefixless and handled by i18n/request.ts.
+  const response = NextResponse.next({ request });
 
   // ── Security Headers ──────────────────────────────────────────────────────
   response.headers.set("X-Content-Type-Options", "nosniff");
@@ -250,4 +234,3 @@ export const config = {
     "/((?!_next|_vercel|api|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|otf|eot)$).*)",
   ],
 };
-
