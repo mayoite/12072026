@@ -66,7 +66,7 @@ export default function SustainabilityPage() {
                 </div>
               ))}
             </div>
-            <EditorialArrowLink href="/products" className="mt-9 text-[var(--text-inverse)]">
+            <EditorialArrowLink href="/products" className="mt-9 !text-inverse">
               Explore products
             </EditorialArrowLink>
           </div>

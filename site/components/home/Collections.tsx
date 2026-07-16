@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import type { Swiper as SwiperInstance } from "swiper";
 import { HOMEPAGE_COLLECTIONS_CONTENT } from "@/features/site/data/homepage";
 import { CollectionsSectionHeading } from "@/components/home/CollectionsSectionHeading";
 import { fadeUp, useMotionSafeHover } from "@/lib/helpers/motion";
@@ -16,6 +18,18 @@ import "swiper/css/navigation";
 export function Collections() {
   const { catalogCta, items } = HOMEPAGE_COLLECTIONS_CONTENT;
   const navHover = useMotionSafeHover({ y: -1 }, { y: 0 });
+  const [swiper, setSwiper] = useState<SwiperInstance | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+
+  function toggleAutoplay() {
+    if (!swiper) return;
+    if (isPaused) {
+      swiper.autoplay.start();
+    } else {
+      swiper.autoplay.stop();
+    }
+    setIsPaused((paused) => !paused);
+  }
 
   return (
     <section
@@ -49,6 +63,19 @@ export function Collections() {
                   <ArrowRight className="h-5 w-5" aria-hidden="true" />
                 </motion.button>
               </div>
+              <motion.button
+                type="button"
+                aria-label={isPaused ? "Play collection carousel" : "Pause collection carousel"}
+                aria-pressed={isPaused}
+                onClick={toggleAutoplay}
+                disabled={!swiper}
+                className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-soft text-body transition-all duration-300 hover:border-strong hover:bg-hover disabled:cursor-not-allowed disabled:opacity-20"
+                {...navHover}
+              >
+                <span className="text-base leading-none" aria-hidden="true">
+                  {isPaused ? "▶" : "Ⅱ"}
+                </span>
+              </motion.button>
               <Link
                 href={catalogCta.href}
                 className="home-catalog-cta group typ-label inline-flex items-center gap-1.5 whitespace-nowrap sm:ml-2"
@@ -64,6 +91,7 @@ export function Collections() {
 
           <motion.div {...fadeUp(18, 0.14)}>
             <Swiper
+              onSwiper={setSwiper}
               modules={[Navigation, Autoplay]}
               spaceBetween={24}
               slidesPerView={1}
@@ -90,6 +118,7 @@ export function Collections() {
                       <Image
                         src={item.image}
                         alt={item.name}
+                        aria-hidden="true"
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
                         className="home-collection-card__media object-cover transition-transform duration-1000 ease-out group-hover:scale-105"

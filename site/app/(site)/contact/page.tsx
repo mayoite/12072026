@@ -28,5 +28,9 @@ export default async function ContactPage({
   const intent = firstValue(resolvedSearchParams.intent);
   const source = firstValue(resolvedSearchParams.source);
 
-  return <ContactPageView intent={intent} source={source} />;
+  return (
+    <div className="[&_a[href='/privacy']]:underline [&_a[href='/privacy']]:underline-offset-2">
+      <ContactPageView intent={intent} source={source} />
+    </div>
+  );
 }

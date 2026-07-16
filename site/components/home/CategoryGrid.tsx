@@ -90,8 +90,9 @@ export async function CategoryGrid() {
                     <Image
                       src={flagshipImage}
                       alt={categoryName}
+                      aria-hidden="true"
                       fill
-                      sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 20vw"
+                      sizes="(max-width: 519px) 100vw, (max-width: 1024px) 45vw, 30vw"
                       className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                     />
                     <div className="home-collection-card__overlay" />

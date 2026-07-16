@@ -171,6 +171,7 @@ export function ShowcaseCarousel({
                     <Image
                       src={item.image}
                       alt={item.name}
+                      aria-hidden="true"
                       fill
                       sizes="(max-width: 768px) 88vw, (max-width: 1280px) 42vw, 28rem"
                       className="home-showcase-card__media object-cover transition-transform duration-1000 group-hover:scale-105"
@@ -203,6 +204,7 @@ export function ShowcaseCarousel({
                   key={index}
                   type="button"
                   aria-label={`Go to slide ${index + 1}`}
+                  aria-current={selectedIndex === index ? "true" : undefined}
                   onClick={() => emblaApi?.scrollTo(index)}
                   className={`home-showcase-dot ${
                     selectedIndex === index

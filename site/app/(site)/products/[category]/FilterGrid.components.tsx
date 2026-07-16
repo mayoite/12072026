@@ -281,7 +281,7 @@ export function ProductCard({
         </div>
         <div className="catalog-card__body">
           {eyebrow ? <p className="catalog-card__eyebrow">{eyebrow}</p> : null}
-          <h3 className="typ-h3 text-strong transition-colors group-hover:text-primary">{displayName}</h3>
+          <h2 className="typ-h3 text-strong transition-colors group-hover:text-primary">{displayName}</h2>
           {dimensions ? (
             <p className="page-copy-sm text-muted line-clamp-1">{dimensions}</p>
           ) : null}
