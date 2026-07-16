@@ -10,6 +10,7 @@ import type { NextRequest } from "next/server";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
 import { success } from "@/features/shared/api/apiResponse";
 import { mapDescriptorsToCatalogItems } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
+import { filterBuyerFacingCatalogItems } from "@/features/planner/project/catalog/catalogBuyerVisibility";
 import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server";
 
 export async function GET(req: NextRequest) {
@@ -21,7 +22,9 @@ export async function GET(req: NextRequest) {
   if (rateError) return rateError;
 
   const descriptors = await loadBuyerVisibleDescriptorsWithDb();
-  const items = mapDescriptorsToCatalogItems(descriptors);
+  const items = filterBuyerFacingCatalogItems(
+    mapDescriptorsToCatalogItems(descriptors),
+  );
 
   return success({
     items,

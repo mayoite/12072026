@@ -9,10 +9,10 @@ afterEach(() => {
 
 /**
  * WCAG 2.5.3 Label in Name: accessible name must contain the visible label text.
- * Focus / Prefs buttons use aria-label that includes the visible word so
+ * Focus / Density buttons use aria-label that includes the visible word so
  * speech control and SR users match what they see on the control.
  */
-describe("TopBar a11y — label-in-name (Focus / Prefs)", () => {
+describe("TopBar a11y — label-in-name (Focus / Density)", () => {
   const baseProps = {
     projectName: "A11y Plan",
     viewMode: "2d" as const,
@@ -36,15 +36,15 @@ describe("TopBar a11y — label-in-name (Focus / Prefs)", () => {
     expect(focusBtn).toHaveTextContent("Focus");
   });
 
-  it('Prefs button aria-label includes visible word "Prefs"', () => {
+  it('Density button aria-label includes visible word "Density"', () => {
     render(<TopBar {...baseProps} />);
 
-    const prefsBtn = screen.getByRole("button", { name: /Prefs/i });
-    const ariaLabel = prefsBtn.getAttribute("aria-label");
+    const densityBtn = screen.getByRole("button", { name: /Density/i });
+    const ariaLabel = densityBtn.getAttribute("aria-label");
 
     expect(ariaLabel).toBeDefined();
-    expect(ariaLabel).toContain("Prefs");
-    expect(prefsBtn).toHaveTextContent("Prefs");
+    expect(ariaLabel).toContain("Density");
+    expect(densityBtn).toHaveTextContent("Density");
   });
 
   it('aria-label includes "Restore" when canvas is maximized (pair of Focus)', () => {

@@ -2,7 +2,7 @@ import type { DockviewApi } from "dockview-react";
 
 import type { LayoutPresetId } from "../workspaceLayout";
 
-export const PLANNER_DOCKVIEW_STORAGE_KEY = "planner-dockview-layout-v2";
+export const PLANNER_DOCKVIEW_STORAGE_KEY = "planner-dockview-layout-v3";
 
 export type PlannerDockPanelId =
   | "canvas"
@@ -66,24 +66,25 @@ export function ensurePlannerDockPanel(
       api.addPanel({
         ...meta,
         position: { direction: "left", referencePanel: "canvas" },
-        initialWidth: 300,
+        initialWidth: 288,
       });
       return;
     case "tools":
       api.addPanel({
         ...meta,
         position: {
-          direction: "left",
-          referencePanel: api.getPanel("inventory") ? "inventory" : "canvas",
+          direction: "above",
+          referencePanel: "canvas",
         },
-        initialWidth: 64,
+        initialHeight: 80,
+        minimumHeight: 72,
       });
       return;
     case "properties":
       api.addPanel({
         ...meta,
         position: { direction: "right", referencePanel: "canvas" },
-        initialWidth: 288,
+        initialWidth: 268,
       });
       return;
     case "layers":
@@ -101,7 +102,8 @@ export function ensurePlannerDockPanel(
 }
 
 /**
- * Build a CAD-like default: tools | inventory | plan | properties, layers below plan.
+ * Build a canvas-first CAD default. Context panels stay available from Panels
+ * without permanently reducing the drawing area.
  */
 export function applyPlannerDockPreset(
   api: DockviewApi,
@@ -119,8 +121,9 @@ export function applyPlannerDockPreset(
       });
       api.addPanel({
         ...PANEL_META.tools,
-        position: { direction: "left", referencePanel: "inventory" },
-        initialWidth: 64,
+        position: { direction: "above", referencePanel: "canvas" },
+        initialHeight: 80,
+        minimumHeight: 72,
       });
       return;
 
@@ -156,25 +159,10 @@ export function applyPlannerDockPreset(
     default:
       addCanvas(api);
       api.addPanel({
-        ...PANEL_META.inventory,
-        position: { direction: "left", referencePanel: "canvas" },
-        initialWidth: 300,
-      });
-      api.addPanel({
         ...PANEL_META.tools,
-        position: { direction: "left", referencePanel: "inventory" },
-        initialWidth: 64,
-      });
-      api.addPanel({
-        ...PANEL_META.properties,
-        position: { direction: "right", referencePanel: "canvas" },
-        initialWidth: 288,
-      });
-      api.addPanel({
-        ...PANEL_META.layers,
-        position: { direction: "below", referencePanel: "canvas" },
-        initialHeight: 160,
-        inactive: true,
+        position: { direction: "above", referencePanel: "canvas" },
+        initialHeight: 80,
+        minimumHeight: 72,
       });
       return;
   }

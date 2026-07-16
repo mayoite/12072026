@@ -1,7 +1,14 @@
 "use client";
 
 import { type ChangeEvent, type KeyboardEvent, type ReactNode, useCallback, useRef, useState } from "react";
-import { CaretDown, CornersIn, CornersOut } from "@phosphor-icons/react";
+import {
+  CaretDown,
+  CornersIn,
+  CornersOut,
+  Package,
+  SlidersHorizontal,
+  Stack,
+} from "@phosphor-icons/react";
 import {
   MenuTrigger,
   Button,
@@ -242,8 +249,13 @@ export function TopBar({
   ];
   const packs = chromePacks ?? defaultPacks;
   const packById = new Map(packs.map((p) => [p.id, p]));
-  const resolvePack = (id: ChromePackId): ChromePackLayout =>
-    packById.get(id) ?? defaultPacks.find((p) => p.id === id)!;
+  const resolvePack = (id: ChromePackId): ChromePackLayout => {
+    const pack = packById.get(id) ?? defaultPacks.find((candidate) => candidate.id === id);
+    if (!pack) {
+      throw new Error(`Missing Planner chrome pack: ${id}`);
+    }
+    return pack;
+  };
 
   const modular = chromeMode === "full" && Boolean(onChromePlacement && onMoveChromePack);
   const wrapPack = (id: ChromePackId, label: string, body: ReactNode) => {
@@ -430,7 +442,7 @@ export function TopBar({
         <div className={styles.actionGroup} role="group" aria-label="View controls">
         {onToggleCanvasMaximized && (
           <Button
-            className={styles.btn}
+            className={`${styles.btn} ${styles.focusButton}`}
             aria-pressed={isCanvasMaximized}
             aria-label={
               isCanvasMaximized
@@ -460,7 +472,8 @@ export function TopBar({
                 aria-label="Toggle inventory panel"
                 onPress={onToggleLeftPanel}
               >
-                Inventory
+                <Package size={18} aria-hidden />
+                <span className={styles.mobilePanelLabel}>Inventory</span>
               </Button>
             )}
             {onToggleRightPanel && (
@@ -471,7 +484,8 @@ export function TopBar({
                 aria-label="Toggle properties panel"
                 onPress={onToggleRightPanel}
               >
-                Properties
+                <SlidersHorizontal size={18} aria-hidden />
+                <span className={styles.mobilePanelLabel}>Properties</span>
               </Button>
             )}
           </div>
@@ -485,7 +499,8 @@ export function TopBar({
             aria-label="Toggle layers panel"
             onPress={onToggleBottomPanel}
           >
-            Layers
+            <Stack size={18} aria-hidden />
+            <span className={styles.mobilePanelLabel}>Layers</span>
           </Button>
         )}
 
@@ -554,11 +569,6 @@ export function TopBar({
           onPress={() => onSave?.()}
           isDisabled={resolvedSaveStatus === "saving"}
           aria-label={saveButtonAriaLabel}
-          title={
-            showGuestActions
-              ? "Save draft to this browser (not cloud)"
-              : "Save plan to this device"
-          }
           data-status={resolvedSaveStatus}
           data-testid="planner-save-button"
         >
@@ -577,7 +587,6 @@ export function TopBar({
                 <Button
                   className={styles.btn}
                   aria-label="Export — download plan or BOQ to this device"
-                  title="Download files to this device (guest has no cloud export)"
                   data-testid="planner-guest-export"
                 >
                   Export
@@ -667,51 +676,15 @@ export function TopBar({
 
         {wrapPack(
           "prefs",
-          "Prefs",
-          <MenuTrigger>
-            <Button className={styles.btn} aria-label="Prefs — open preferences menu">
-              Prefs
-              <CaretDown size={12} weight="bold" aria-hidden />
-            </Button>
-            <Popover placement="bottom end">
-              <Menu
-                className={styles.dropdownMenu}
-                onAction={(key) => {
-                  if (key === "density") onToggleDensity?.();
-                  if (key === "grid") onToggleGrid?.();
-                  if (key === "snap") onToggleSnap?.();
-                }}
-              >
-                <MenuItem id="density" className={styles.dropdownItem}>
-                  Toggle density ({density === "touch" ? "compact" : "touch"})
-                </MenuItem>
-              {onToggleGrid && (
-                <MenuItem
-                  id="grid"
-                  className={
-                    chromeMode === "slim"
-                      ? styles.dropdownItem
-                      : `${styles.dropdownItem} ${styles.mobileOnly}`
-                  }
-                >
-                  {gridEnabled ? "Disable Grid" : "Enable Grid"}
-                </MenuItem>
-              )}
-              {onToggleSnap && (
-                <MenuItem
-                  id="snap"
-                  className={
-                    chromeMode === "slim"
-                      ? styles.dropdownItem
-                      : `${styles.dropdownItem} ${styles.mobileOnly}`
-                  }
-                >
-                  {snapEnabled ? "Disable Snap" : "Enable Snap"}
-                </MenuItem>
-              )}
-              </Menu>
-            </Popover>
-          </MenuTrigger>,
+          "Density",
+          <Button
+            className={styles.btn}
+            aria-label={`Density — switch to ${density === "touch" ? "compact" : "touch"} spacing`}
+            onPress={onToggleDensity}
+            data-testid="planner-density-toggle"
+          >
+            Density
+          </Button>,
         )}
 
         {wrapPack(
@@ -719,11 +692,11 @@ export function TopBar({
           "Layout",
           <MenuTrigger>
             <Button
-              className={styles.btn}
-              aria-label={`Layout presets — ${layoutPresetId === "custom" ? "custom" : LAYOUT_PRESET_LABELS[layoutPresetId]}`}
+              className={`${styles.btn} ${styles.layoutTrigger}`}
+              aria-label={`Panels and layouts — ${layoutPresetId === "custom" ? "custom" : LAYOUT_PRESET_LABELS[layoutPresetId]}`}
               data-testid="layout-presets-trigger"
             >
-              Layout
+              Panels
               <CaretDown size={12} weight="bold" aria-hidden />
             </Button>
             <Popover placement="bottom end">
@@ -771,16 +744,16 @@ export function TopBar({
                 {onShowDockPanel ? (
                   <>
                     <MenuItem id="show:inventory" className={styles.dropdownItem}>
-                      Show Inventory
+                      Open Inventory
                     </MenuItem>
                     <MenuItem id="show:tools" className={styles.dropdownItem}>
-                      Show Tools
+                      Open Tools
                     </MenuItem>
                     <MenuItem id="show:properties" className={styles.dropdownItem}>
-                      Show Properties
+                      Open Properties
                     </MenuItem>
                     <MenuItem id="show:layers" className={styles.dropdownItem}>
-                      Show Layers
+                      Open Layers
                     </MenuItem>
                   </>
                 ) : null}

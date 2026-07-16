@@ -35,15 +35,15 @@ describe("TopBar guest persistence gate", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: /Export/i }));
-    fireEvent.click(screen.getByRole("menuitem", { name: /Export BOQ \(JSON\)/i }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /Download BOQ \(JSON\)/i }));
     expect(onExport).toHaveBeenCalledWith("boq-json");
 
     fireEvent.click(screen.getByRole("button", { name: /Export/i }));
-    fireEvent.click(screen.getByRole("menuitem", { name: /Export BOQ \(CSV\)/i }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /Download BOQ \(CSV\)/i }));
     expect(onExport).toHaveBeenCalledWith("boq-csv");
 
     fireEvent.click(screen.getByRole("button", { name: /Export/i }));
-    fireEvent.click(screen.getByRole("menuitem", { name: /Export as JSON/i }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /Download plan \(JSON\)/i }));
     expect(onExport).toHaveBeenCalledWith("json");
 
     // Guest surface stays honest: no quote cart / workstation-only ERP theater.

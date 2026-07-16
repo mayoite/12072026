@@ -58,7 +58,7 @@ export function SplitViewLayout({ view, children2D, children3D, onClose3D }: Spl
         <Panel defaultSize={60} minSize={30} className="pw-split-pane pw-split-pane--2d min-w-[18.75rem]">
           {children2D}
         </Panel>
-        <PanelResizeHandle className="pw-split-divider w-1 shrink-0 cursor-col-resize bg-muted hover:bg-gray-300" />
+        <PanelResizeHandle className="pw-split-divider w-1 shrink-0 cursor-col-resize bg-muted hover:bg-hover" />
         <Panel defaultSize={40} minSize={30} className="pw-split-pane pw-split-pane--3d min-w-[300px]">
           {shouldRender3D ? children3D : null}
         </Panel>

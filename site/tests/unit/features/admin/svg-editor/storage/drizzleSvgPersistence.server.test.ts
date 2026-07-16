@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
 
 const insertMock = vi.fn();
 const selectMock = vi.fn();
@@ -64,6 +65,10 @@ describe("DrizzleSvgRevisionPersistence", () => {
       "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server"
     );
     const store = new DrizzleSvgRevisionPersistence();
+    const liveDescriptor = {
+      ...makeNewBlockDescriptorStub(),
+      slug: "desk",
+    };
 
     await store.insertRevision(
       {
@@ -83,10 +88,13 @@ describe("DrizzleSvgRevisionPersistence", () => {
         typeId: "desk",
         lifecycle: { status: "published" },
       } as never,
+      liveDescriptor,
+      {} as never,
     );
 
     expect(insertMock).toHaveBeenCalledTimes(2);
     expect(valuesCalls.length).toBe(2);
+    expect(valuesCalls[1]).toMatchObject({ descriptor: liveDescriptor });
   });
 
   it("insertRevision handles non-object checksums and non-published version", async () => {
@@ -100,6 +108,10 @@ describe("DrizzleSvgRevisionPersistence", () => {
       "@/features/admin/svg-editor/storage/drizzleSvgPersistence.server"
     );
     const store = new DrizzleSvgRevisionPersistence();
+    const liveDescriptor = {
+      ...makeNewBlockDescriptorStub(),
+      slug: "desk",
+    };
 
     await store.insertRevision(
       {
@@ -119,6 +131,8 @@ describe("DrizzleSvgRevisionPersistence", () => {
         typeId: "desk",
         lifecycle: { status: "draft" },
       } as never,
+      liveDescriptor,
+      {} as never,
     );
 
     expect(insertMock).toHaveBeenCalled();

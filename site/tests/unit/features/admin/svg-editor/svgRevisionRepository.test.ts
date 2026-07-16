@@ -9,6 +9,8 @@ import type {
   PublishedRevisionV1,
   SvgBlockDefinitionV1,
 } from "@/features/admin/svg-editor/contracts/svgBlockSchemas";
+import { makeNewBlockDescriptorStub } from "@/features/admin/svg-editor/publish/newBlockDescriptorStub";
+import type { ReleasedCatalogProductV1 } from "@/features/admin/catalog/releasedCatalogContract";
 
 const revision: PublishedRevisionV1 = {
   schemaVersion: 1,
@@ -56,31 +58,67 @@ const artifacts: SvgArtifactRecord[] = [
   },
 ];
 
+const liveDescriptor = {
+  ...makeNewBlockDescriptorStub(),
+  slug: definition.typeId,
+};
+
+const releasedProduct = {
+  schemaVersion: 1,
+  productId: liveDescriptor.id,
+  slug: definition.typeId,
+  name: definition.name,
+  boqIdentity: definition.typeId,
+  availability: "available",
+  dimensionsMm: { width: 1200, depth: 600, height: 750 },
+  svg: {
+    revisionId: revision.revisionId,
+    checksum: revision.artifactChecksums.svg,
+    resourceUrl: `/api/planner/catalog/svg/${revision.revisionId}`,
+  },
+  definitionTypeId: definition.typeId,
+  definitionVersion: 1,
+  publishedAt: revision.publishedAt,
+} satisfies ReleasedCatalogProductV1;
+
 describe("ImmutableSvgRevisionRepository", () => {
   it("writes revision then artifacts through persistence", async () => {
+    const publishRelease = vi.fn(async () => undefined);
     const insertRevision = vi.fn(async () => undefined);
     const insertArtifacts = vi.fn(async () => undefined);
     const loadRevision = vi.fn(async () => null);
 
     const persistence: SupabaseSvgRevisionPersistence = {
+      publishRelease,
       insertRevision,
       insertArtifacts,
       loadRevision,
+      updateProductPointer: vi.fn(),
     };
 
     const repo = new ImmutableSvgRevisionRepository(persistence);
-    await repo.publish(revision, definition, artifacts);
+    await repo.publish(revision, definition, artifacts, liveDescriptor, releasedProduct);
 
-    expect(insertRevision).toHaveBeenCalledWith(revision, definition);
-    expect(insertArtifacts).toHaveBeenCalledWith(artifacts);
+    expect(publishRelease).toHaveBeenCalledWith(
+      revision,
+      definition,
+      artifacts,
+      liveDescriptor,
+      releasedProduct,
+      definition.typeId,
+    );
+    expect(insertRevision).not.toHaveBeenCalled();
+    expect(insertArtifacts).not.toHaveBeenCalled();
   });
 
   it("delegates load to persistence", async () => {
     const payload = { revision, definition, artifacts };
     const persistence: SupabaseSvgRevisionPersistence = {
+      publishRelease: vi.fn(),
       insertRevision: vi.fn(),
       insertArtifacts: vi.fn(),
       loadRevision: vi.fn(async () => payload),
+      updateProductPointer: vi.fn(),
     };
 
     const repo = new ImmutableSvgRevisionRepository(persistence);

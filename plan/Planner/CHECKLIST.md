@@ -34,7 +34,7 @@ Fresh commands and exit codes must be recorded here. Old reports prove nothing.
 - [ ] Columns and keep-outs creatable from canvas.
 - [ ] `UI-CAT-01`…`UI-CAT-04` catalog presentation verified in browser.
 - [ ] `DB-SVG-10`…`DB-SVG-16` released SVG served through server catalog API — not disk-only.
-  - Gap: `svg-blocks` reads `block_descriptors` definitions when DB configured; falls back to disk; not committed artifact bytes.
+  - Gap: Admin now writes the released `BlockDescriptor`, and Planner strictly dual-reads native and legacy rows. The live Products DB has no buyer-visible released SVG row. Artifact bytes still come from disk.
 - [ ] Released SVG is primary 2D symbol; honest fallback only on load/miss.
 - [ ] `UI-STATE-01`/`02` save states distinct; failed save never shows success.
 - [ ] `UI-SHELL-01`…`UI-SHELL-04` desktop shell benchmarks closed in browser.
@@ -72,13 +72,13 @@ Fresh commands and exit codes must be recorded here. Old reports prove nothing.
 
 - [ ] `UI-BOQ-02` customer-ready export distinct from draft export.
 - [ ] `UI-BOQ-03` Send to Oando: explicit, recoverable, and idempotent.
-  - Gap: not implemented.
+  - Gap: `POST /api/planner/handoff` is a member-only, rate-limited stub. It returns success without delivery. Planner has no caller. CSRF and idempotency are absent.
 - [ ] Handoff shows named revision, BOQ, pricing, exclusions, validation; blocks on hard errors.
 - [ ] Submission delivers revision, BOQ, price version, validation result, and hash to Oando.
 - [ ] Consent, status, time, revision, and hash recorded; safe retry on failure.
 - [ ] All exports use one calculation authority; preserve product, revision, price, validation, hash.
 - [ ] Handoff events defined in `conversionContract.ts` and emitted from Planner.
-  - Gap: `HANDOFF_INTENT/SUCCESS/FAILURE` do not exist anywhere in codebase — define and implement from scratch.
+  - Gap: `HANDOFF_INTENT/SUCCESS/FAILURE` are defined, but Planner never imports or emits them.
 - [ ] Handoff passes commercial authorization, CSRF, rate-limit, privacy, and provenance checks.
 
 ---
@@ -86,6 +86,7 @@ Fresh commands and exit codes must be recorded here. Old reports prove nothing.
 ## Admin dependency
 
 - [ ] Admin DB-SVG cutover (`DB-SVG-01`…`05`) complete; `svg-blocks` reads DB artifact bytes, not disk descriptors.
+  - Gap: descriptor shapes are compatible. DB artifact rows contain keys and checksums, not bytes. The live DB currently exposes zero buyer-visible SVG items.
 - [ ] Admin publish + catalog browser proof without false success.
 
 ---

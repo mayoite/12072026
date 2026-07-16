@@ -34,6 +34,7 @@ import {
   buildReleasedProductFromPublish,
 } from "@/features/admin/svg-editor/publish/releasedCatalogPublishGate";
 import type { ImmutableSvgRevisionRepository } from "@/features/admin/svg-editor/svgRevisionRepository.server";
+import type { SvgBlockDefinitionV1 } from "@/features/admin/svg-editor/contracts/svgBlockSchemas";
 
 export type PublishDescriptorSuccess = {
   readonly success: true;
@@ -100,10 +101,17 @@ export type PublishDescriptorWithPipelineDeps = {
    * rollback so DB-configured environments are not disk-authoritative.
    */
   readonly dbRepository?: ImmutableSvgRevisionRepository;
+  /** Authenticated admin actor recorded on immutable database revisions. */
+  readonly actorId?: string;
+  /** Human-readable publication reason recorded with the revision. */
+  readonly reason?: string;
 };
 
 const DEFAULT_DEPS: Required<
-  Omit<PublishDescriptorWithPipelineDeps, "readReleasedSnapshot" | "dbRepository">
+  Omit<
+    PublishDescriptorWithPipelineDeps,
+    "readReleasedSnapshot" | "dbRepository" | "actorId" | "reason"
+  >
 > & {
   readonly readReleasedSnapshot: (
     slug: string,
@@ -119,6 +127,125 @@ const DEFAULT_DEPS: Required<
 
 export function sha256Utf8(body: string): string {
   return createHash("sha256").update(body, "utf8").digest("hex");
+}
+
+export function buildReleaseRevisionId(
+  descriptor: BlockDescriptor,
+  svgMarkup: string,
+): string {
+  const fingerprint = sha256Utf8(
+    `${descriptor.checksum}:${sha256Utf8(svgMarkup)}`,
+  );
+  return `${descriptor.slug}-r-${fingerprint.slice(0, 20)}`;
+}
+
+function safeDefinitionPartId(candidate: string | undefined, index: number): string {
+  const normalized = candidate
+    ?.trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 64);
+  return normalized && /^[a-z][a-z0-9-]{1,63}$/.test(normalized)
+    ? normalized
+    : `part-${index + 1}`;
+}
+
+export function blockDescriptorToDefinition(
+  descriptor: BlockDescriptor,
+  actorId: string,
+): SvgBlockDefinitionV1 {
+  const blocks = descriptor.blocks?.length
+    ? descriptor.blocks
+    : [
+        {
+          x: descriptor.viewBox.x,
+          y: descriptor.viewBox.y,
+          width: descriptor.geometry.widthMm,
+          depth: descriptor.geometry.depthMm,
+        },
+      ];
+
+  const parameters =
+    descriptor.variant === "parametric"
+      ? descriptor.parametric.parameterSchema.map((parameter, index) => {
+          const id = safeDefinitionPartId(parameter.key, index);
+          if (parameter.kind === "select") {
+            const values = parameter.options?.filter((value) => value.length > 0) ?? [];
+            return {
+              id,
+              kind: "enum" as const,
+              label: parameter.label,
+              customerEditable: true,
+              defaultValue:
+                typeof parameter.default === "string"
+                  ? parameter.default
+                  : (values[0] ?? "default"),
+              values: values.length > 0 ? values : ["default"],
+            };
+          }
+          if (parameter.kind === "boolean") {
+            return {
+              id,
+              kind: "boolean" as const,
+              label: parameter.label,
+              customerEditable: true,
+              defaultValue:
+                typeof parameter.default === "boolean" ? parameter.default : false,
+            };
+          }
+          return {
+            id,
+            kind: "number" as const,
+            label: parameter.label,
+            customerEditable: true,
+            defaultValue:
+              typeof parameter.default === "number" ? parameter.default : 0,
+            ...(parameter.bounds
+              ? { minimum: parameter.bounds[0], maximum: parameter.bounds[1] }
+              : {}),
+          };
+        })
+      : [];
+
+  return {
+    schemaVersion: 1,
+    typeId: descriptor.slug,
+    name: descriptor.slug,
+    ...(descriptor.sku ? { sku: descriptor.sku } : {}),
+    category: "uncategorized",
+    tags: [descriptor.variant, descriptor.sourceProvenance],
+    lifecycle: {
+      status: "published",
+      ownerId: actorId,
+    },
+    viewBox: descriptor.viewBox,
+    physicalDimensionsMm: {
+      width: descriptor.geometry.widthMm,
+      depth: descriptor.geometry.depthMm,
+      height: descriptor.geometry.heightMm,
+    },
+    parts: blocks.map((block, index) => ({
+      kind: "rect" as const,
+      id: safeDefinitionPartId(block.id, index),
+      visible: true,
+      x: block.x,
+      y: block.y,
+      width: block.width,
+      height: block.depth,
+      customerEditable: false,
+    })),
+    parameters,
+    actions: [],
+    constraints: [],
+    variants: [],
+    mounting: descriptor.mounting.map((plane) => ({
+      plane,
+      anchor: { x: 0, y: 0 },
+      rotationDegrees: 0,
+    })),
+    accessibility: { title: descriptor.slug },
+  };
 }
 
 function runAllBestEffort(...operations: ReadonlyArray<(() => void) | undefined>): string[] {
@@ -157,6 +284,8 @@ export async function publishDescriptorWithPipeline(
   const persist = deps.persist ?? DEFAULT_DEPS.persist;
   const readReleasedSnapshot =
     deps.readReleasedSnapshot ?? DEFAULT_DEPS.readReleasedSnapshot;
+  const actorId = deps.actorId?.trim() || "system";
+  const reason = deps.reason?.trim() || "publish";
 
   const parsed = parsePayload(descriptorInput);
   if (!parsed.ok) {
@@ -193,15 +322,47 @@ export async function publishDescriptorWithPipeline(
     };
   }
 
+  const revisionId = buildReleaseRevisionId(descriptor, compile.svg);
+  const publishedAt = new Date().toISOString();
   const released = buildReleasedProductFromPublish({
     descriptor,
     svgMarkup: compile.svg,
-    revisionId: `${descriptor.slug}-r1`,
-    publishedAt: new Date().toISOString(),
+    revisionId,
+    publishedAt,
     availability: "available",
   });
   if (!released.ok) {
     return { success: false, error: released.error };
+  }
+
+  // DB-SVG-08: the content-derived revision ID makes unchanged publication
+  // deterministic. Resolve it before any disk write. A matching immutable
+  // revision is a successful no-op; a collision fails closed.
+  if (deps.dbRepository) {
+    try {
+      const existing = await deps.dbRepository.load(revisionId);
+      if (existing) {
+        const checksums = existing.revision.artifactChecksums;
+        if (
+          checksums.descriptor !== descriptor.checksum ||
+          checksums.svg !== released.product.svg.checksum
+        ) {
+          return {
+            success: false,
+            error: `500.db: Immutable revision collision for ${revisionId}.`,
+          };
+        }
+        await deps.dbRepository.updateProductPointer(descriptor.slug, revisionId);
+        return { success: true, descriptor, idempotent: true };
+      }
+    } catch (dbError) {
+      const details =
+        dbError instanceof Error ? dbError.message : String(dbError);
+      return {
+        success: false,
+        error: `500.db: Products DB revision lookup failed. ${details}`,
+      };
+    }
   }
 
   // DB-SVG-08 (disk path): unchanged released SVG + descriptor → no rewrite.
@@ -284,15 +445,26 @@ export async function publishDescriptorWithPipeline(
     try {
       const compiledSvgChecksum = sha256Utf8(compile.svg);
       const definitionChecksum = descriptor.checksum;
-      const now = new Date().toISOString();
+      const definitionVersion = persistResult.version;
+      const releasedForDatabase = buildReleasedProductFromPublish({
+        descriptor,
+        svgMarkup: compile.svg,
+        revisionId,
+        definitionVersion,
+        publishedAt,
+        availability: "available",
+      });
+      if (!releasedForDatabase.ok) {
+        throw new Error(releasedForDatabase.error);
+      }
       await deps.dbRepository.publish(
         {
           schemaVersion: 1,
-          revisionId: `${descriptor.slug}-r1`,
+          revisionId,
           definitionTypeId: descriptor.slug,
-          definitionVersion: 1,
+          definitionVersion,
           compilerVersion: "oando-asset-engine-v1",
-          sourceRevision: 0,
+          sourceRevision: Math.max(0, definitionVersion - 1),
           artifactChecksums: {
             descriptor: definitionChecksum,
             svg: compiledSvgChecksum,
@@ -303,71 +475,28 @@ export async function publishDescriptorWithPipeline(
             valid: true,
             diagnostics: [],
           },
-          actorId: "system",
-          publishedAt: now,
-          reason: "publish",
+          actorId,
+          publishedAt,
+          reason,
         },
-        {
-          schemaVersion: 1,
-          typeId: descriptor.slug,
-          name: descriptor.slug,
-          category: "uncategorized",
-          tags: [],
-          lifecycle: {
-            status: "published",
-            ownerId: "system",
-          },
-          viewBox: {
-            x: 0,
-            y: 0,
-            width: descriptor.geometry.widthMm,
-            height: descriptor.geometry.depthMm,
-          },
-          physicalDimensionsMm: {
-            width: descriptor.geometry.widthMm,
-            depth: descriptor.geometry.depthMm,
-            height: descriptor.geometry.heightMm,
-          },
-          parts: [
-            {
-              kind: "rect" as const,
-              id: "root",
-              visible: true,
-              x: 0,
-              y: 0,
-              width: descriptor.geometry.widthMm,
-              height: descriptor.geometry.depthMm,
-              customerEditable: false,
-            },
-          ],
-          parameters: [],
-          actions: [],
-          constraints: [],
-          variants: [],
-          mounting: [{ plane: "floor" as const, anchor: { x: 0, y: 0 }, rotationDegrees: 0 }],
-          accessibility: { title: descriptor.slug },
-        },
+        blockDescriptorToDefinition(descriptor, actorId),
         [
           {
-            revisionId: `${descriptor.slug}-r1`,
+            revisionId,
             kind: "descriptor",
             checksum: definitionChecksum,
             storageKey: `descriptors/${descriptor.slug}/${descriptor.slug}.json`,
           },
           {
-            revisionId: `${descriptor.slug}-r1`,
+            revisionId,
             kind: "svg",
             checksum: compiledSvgChecksum,
             storageKey: `svg-catalog/${descriptor.slug}.svg`,
           },
         ],
+        descriptor,
+        releasedForDatabase.product,
       );
-      // DB-SVG-05: set the published revision pointer on the product row.
-      await deps.dbRepository.updateProductPointer(
-        descriptor.slug,
-        `${descriptor.slug}-r1`,
-      );
-
     } catch (dbError) {
       const details =
         dbError instanceof Error ? dbError.message : String(dbError);

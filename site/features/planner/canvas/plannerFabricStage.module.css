@@ -51,7 +51,7 @@
 }
 
 .rootWithGrid {
-  background: var(--planner-surface-canvas, #f1f5f9);
+  background: var(--planner-surface-canvas);
 }
 
 .rootWithGrid :global(.canvas-container),
@@ -68,22 +68,22 @@
   background-image:
     linear-gradient(
       to right,
-      color-mix(in srgb, #334155 55%, transparent) 1px,
+      color-mix(in srgb, var(--text-body) 55%, transparent) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      color-mix(in srgb, #334155 55%, transparent) 1px,
+      color-mix(in srgb, var(--text-body) 55%, transparent) 1px,
       transparent 1px
     ),
     linear-gradient(
       to right,
-      color-mix(in srgb, #64748b 28%, transparent) 1px,
+      color-mix(in srgb, var(--text-muted) 28%, transparent) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      color-mix(in srgb, #64748b 28%, transparent) 1px,
+      color-mix(in srgb, var(--text-muted) 28%, transparent) 1px,
       transparent 1px
     );
   background-size:

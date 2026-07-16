@@ -427,6 +427,7 @@ export function WorkspaceShell({
             onDropCommit={(cx, cy) => commitDrop("left", cx, cy) !== null}
             onFocus={() => setFocusedPanel("left")}
             onBlur={() => setFocusedPanel(null)}
+            responsiveOverlay={viewportTier === "small"}
           >
             {leftPanel}
           </PanelContainer>
@@ -461,6 +462,7 @@ export function WorkspaceShell({
             onDropCommit={(cx, cy) => commitDrop("right", cx, cy) !== null}
             onFocus={() => setFocusedPanel("right")}
             onBlur={() => setFocusedPanel(null)}
+            responsiveOverlay={viewportTier === "small"}
           >
             {rightPanel}
           </PanelContainer>

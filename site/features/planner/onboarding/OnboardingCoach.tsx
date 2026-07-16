@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import { X, CaretRight as ChevronRight, CaretLeft as ChevronLeft, Lightbulb, Sparkle as Sparkles, Armchair, ArrowsOutCardinal as Move, MagnifyingGlassPlus as ZoomIn } from "@phosphor-icons/react";
 import { BottomSheet } from "@/features/planner/ui/BottomSheet";
 import { useIsMobile } from "@/features/planner/hooks/useIsMobile";
-import { Z } from "@/lib/z-index";
 import styles from "./onboarding-coach.module.css";
 
 export type CoachStep = {
@@ -152,7 +151,7 @@ export function OnboardingCoach({
             Skip
           </button>
           <div className="text-center">
-            <div className="mb-5 h-12 w-12 rounded-2xl bg-blue-50 text-brand">
+            <div className="mb-5 h-12 w-12 rounded-2xl bg-soft text-brand">
               <Icon size={48} strokeWidth={1.75} aria-hidden />
             </div>
             <h2 className="text-[1.125rem] font-bold text-heading">{mobileStep.title}</h2>
@@ -169,7 +168,7 @@ export function OnboardingCoach({
             {mobileSteps.map((item, index) => (
               <span
                 key={item.title}
-                className={`h-1.5 w-1.5 rounded-full ${index === mobileStepIndex ? "bg-primary" : "bg-gray-300"}`}
+                className={`h-1.5 w-1.5 rounded-full ${index === mobileStepIndex ? "bg-primary" : "bg-muted"}`}
                 aria-hidden
               />
             ))}
@@ -180,7 +179,7 @@ export function OnboardingCoach({
   }
 
   return (
-    <div className={styles.overlay} style={{ zIndex: Z.sidebar }} aria-hidden={false}>
+    <div className={styles.overlay} aria-hidden={false}>
       {displaySpotlight ? (
         <div
           className={`${styles.spotlight} rounded-xl pointer-events-none ring-2 ring-[var(--color-primary)] ring-offset-2 ring-offset-transparent transition-all duration-300`}

@@ -31,6 +31,7 @@ import {
 } from "@/features/planner/project/catalog/svg/svgTypes";
 import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 import { assertDraftNotStale, readOpenedBaselineFromPayload } from "@/features/admin/svg-editor/lifecycle/staleDraftPublishGate";
+import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
 
 function descriptorErrorResponse(descriptorError: PlannerDescriptorError): NextResponse {
   const http = toPlannerDescriptorErrorHttp(descriptorError);
@@ -48,7 +49,7 @@ function descriptorErrorResponse(descriptorError: PlannerDescriptorError): NextR
   );
 }
 
-async function handleSvgEditorPost(req: NextRequest) {
+async function handleSvgEditorPost(req: NextRequest, actorId: string) {
   let payload: unknown;
   try {
     payload = await req.json();
@@ -86,7 +87,10 @@ async function handleSvgEditorPost(req: NextRequest) {
     isProductsDatabaseConfigured()
       ? new ImmutableSvgRevisionRepository(new DrizzleSvgRevisionPersistence())
       : undefined;
-  const published = await publishDescriptorWithPipeline(payload, { dbRepository });
+  const published = await publishDescriptorWithPipeline(payload, {
+    dbRepository,
+    actorId,
+  });
   if (!published.success) {
     const err = published.error;
     const isParse =
@@ -128,7 +132,8 @@ async function handleSvgEditorPost(req: NextRequest) {
 }
 
 export const POST = withAuth(
-  async (req: NextRequest) => handleSvgEditorPost(req),
+  async (req: NextRequest, auth) =>
+    handleSvgEditorPost(req, auth.user?.id ?? DEV_BYPASS_USER.id),
   {
     role: "admin",
     rateLimitScope: "svg-editor:post",

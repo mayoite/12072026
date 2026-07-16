@@ -6,7 +6,6 @@ import { Providers } from "@/features/planner/components/Providers";
 import { ProjectSetupGate } from "@/features/planner/onboarding/ProjectSetupGate";
 import { PlannerHost } from "@/features/planner/ui/PlannerHost";
 import { PlannerCanvasEnhancements } from "@/features/planner/ui/PlannerCanvasEnhancements";
-import { PlannerSkeleton } from "@/features/planner/ui/PlannerSkeleton";
 import { PlannerWorkspaceLoadError } from "@/features/planner/ui/PlannerWorkspaceLoadError";
 
 /** Soft cap so a hung dynamic import cannot block deploy forever. */
@@ -49,28 +48,27 @@ function WorkspaceWithLoadTimeout({
   guestMode: boolean;
   planId?: string;
 }) {
-  const [timedOut, setTimedOut] = useState(false);
+  const [timedOutKey, setTimedOutKey] = useState<string | null>(null);
   const [retryKey, setRetryKey] = useState(0);
+  const loadKey = `${guestMode ? "guest" : "member"}:${planId ?? "new"}:${retryKey}`;
 
   useEffect(() => {
-    setTimedOut(false);
     const id = window.setTimeout(() => {
       const hostMounted = Boolean(
         document.querySelector(".planner-route-host, .open3d-route-host"),
       );
       if (!hostMounted) {
-        setTimedOut(true);
+        setTimedOutKey(loadKey);
       }
     }, WORKSPACE_LOAD_TIMEOUT_MS);
     return () => window.clearTimeout(id);
-  }, [retryKey, guestMode, planId]);
+  }, [loadKey]);
 
   const retry = useCallback(() => {
-    setTimedOut(false);
     setRetryKey((k) => k + 1);
   }, []);
 
-  if (timedOut) {
+  if (timedOutKey === loadKey) {
     return (
       <PlannerWorkspaceLoadError
         message="The workspace took too long to start. This is often a slow first load or a blocked script."

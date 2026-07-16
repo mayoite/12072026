@@ -40,15 +40,15 @@
 }
 
 .severityDotError {
-  background: #dc2626;
+  background: var(--color-danger);
 }
 
 .severityDotWarning {
-  background: #f59e0b;
+  background: var(--color-warning);
 }
 
 .severityDotAdvisory {
-  background: #3b82f6;
+  background: var(--color-primary);
 }
 
 .issueList {
@@ -88,15 +88,15 @@
 }
 
 .issueRow[data-severity="error"] {
-  border-left: 3px solid #dc2626;
+  border-left: 3px solid var(--color-danger);
 }
 
 .issueRow[data-severity="warning"] {
-  border-left: 3px solid #f59e0b;
+  border-left: 3px solid var(--color-warning);
 }
 
 .issueRow[data-severity="advisory"] {
-  border-left: 3px solid #3b82f6;
+  border-left: 3px solid var(--color-primary);
 }
 
 .issueMessage {

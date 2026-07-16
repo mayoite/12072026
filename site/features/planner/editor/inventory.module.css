@@ -602,13 +602,13 @@
   font-size: 0.5625rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: color-mix(in srgb, var(--color-warning, #ca8a04) 70%, var(--inv-text-muted));
+  color: color-mix(in srgb, var(--color-warning) 70%, var(--inv-text-muted));
   line-height: 1.2;
 }
 
 .itemAvailability[data-availability="out-of-stock"],
 .itemAvailability[data-availability="discontinued"] {
-  color: color-mix(in srgb, var(--color-error-red, #dc2626) 65%, var(--inv-text-muted));
+  color: color-mix(in srgb, var(--color-error-red) 65%, var(--inv-text-muted));
 }
 
 /* Compact Place — tool action, not storefront CTA */

@@ -11,8 +11,10 @@ import {
   ArrowsOutSimple,
   Cursor,
   DoorOpen,
+  GridFour,
   Hand,
   HouseLine,
+  Magnet,
   Package,
   Ruler,
   Square,
@@ -28,8 +30,6 @@ import {
   Popover,
   ToggleButton,
   ToggleButtonGroup,
-  Tooltip,
-  TooltipTrigger,
 } from "react-aria-components";
 
 import {
@@ -38,9 +38,7 @@ import {
   RAIL_DEFERRED_TOOLS,
   RAIL_DRAW_TOOLS,
   RAIL_NAV_TOOLS,
-  isLiveGeometryTool,
   toolAccessibleName,
-  toolTooltipText,
   type PlannerTool,
 } from "./canvasTool";
 import { useWorkspaceChrome } from "./workspaceChromeContext";
@@ -84,6 +82,10 @@ export interface CanvasToolRailProps {
   activeTool: PlannerTool;
   onToolChange: (tool: PlannerTool) => void;
   onZoomReset?: () => void;
+  gridEnabled?: boolean;
+  snapEnabled?: boolean;
+  onToggleGrid?: () => void;
+  onToggleSnap?: () => void;
   disabled?: boolean;
   /** When true, Dockview owns float/dock — hide local layout chrome. */
   dockManaged?: boolean;
@@ -103,65 +105,75 @@ function ToolToggle({
   const deferred = CANVAS_TOOL_REQUIREMENT[tool] === "deferred";
   const selected = activeTool === tool;
   const name = toolAccessibleName(tool);
-  const tip = toolTooltipText(tool);
-
   return (
-    <TooltipTrigger delay={400} closeDelay={100}>
-      <ToggleButton
-        id={tool}
-        className={styles.toolBtn}
-        isDisabled={disabled}
-        aria-label={name}
-        aria-description={deferred ? tip : undefined}
-        data-deferred={deferred ? "true" : undefined}
-        data-tier={CANVAS_TOOL_REQUIREMENT[tool]}
-        data-testid={`canvas-tool-${tool}`}
-      >
-        {({ isSelected, isFocusVisible }) => (
-          <span
-            className={styles.toolFace}
-            data-selected={isSelected || selected ? "true" : undefined}
-            data-focus-visible={isFocusVisible ? "true" : undefined}
-          >
-            <IconComponent
-              size={16}
-              weight={
-                selected || isSelected ? "fill" : deferred ? "light" : "regular"
-              }
-              aria-hidden
-            />
-            <span className={styles.shortcut} aria-hidden>
-              {shortcut}
-            </span>
-            {deferred ? (
-              <span
-                className={styles.deferredDot}
-                aria-hidden
-                data-deferred-marker="true"
-                title="Deferred — not full geometry"
-              />
-            ) : null}
+    <ToggleButton
+      id={tool}
+      className={styles.toolBtn}
+      isDisabled={disabled}
+      aria-label={name}
+      data-deferred={deferred ? "true" : undefined}
+      data-tier={CANVAS_TOOL_REQUIREMENT[tool]}
+      data-testid={`canvas-tool-${tool}`}
+    >
+      {({ isSelected, isFocusVisible }) => (
+        <span
+          className={styles.toolFace}
+          data-selected={isSelected || selected ? "true" : undefined}
+          data-focus-visible={isFocusVisible ? "true" : undefined}
+        >
+          <IconComponent
+            size={16}
+            weight={selected || isSelected ? "fill" : deferred ? "light" : "regular"}
+            aria-hidden
+          />
+          <span className={styles.shortcut} aria-hidden>
+            {shortcut}
           </span>
-        )}
-      </ToggleButton>
-      <Tooltip
-        className={styles.tooltip}
-        placement="right"
-        data-tool-tier={CANVAS_TOOL_REQUIREMENT[tool]}
-      >
-        <span className={styles.tooltipTitle}>{name}</span>
-        <span className={styles.tooltipBody}>{tip}</span>
-        {deferred ? (
-          <span className={styles.tooltipMeta} data-tier="deferred">
-            Deferred — arms only, no full geometry yet
-          </span>
-        ) : isLiveGeometryTool(tool) ? (
-          <span className={styles.tooltipMeta} data-tier="live">
-            Live on Fabric canvas
-          </span>
-        ) : null}
-      </Tooltip>
-    </TooltipTrigger>
+          {deferred ? (
+            <span className={styles.deferredDot} aria-hidden data-deferred-marker="true" />
+          ) : null}
+        </span>
+      )}
+    </ToggleButton>
+  );
+}
+
+function ViewToggle({
+  label,
+  enabled,
+  onPress,
+  icon: IconComponent,
+  testId,
+  disabled,
+}: {
+  label: "Grid" | "Snap";
+  enabled: boolean;
+  onPress: () => void;
+  icon: Icon;
+  testId: string;
+  disabled: boolean;
+}) {
+  return (
+    <Button
+      className={styles.toolBtn}
+      isDisabled={disabled}
+      aria-label={`${enabled ? "Disable" : "Enable"} ${label}`}
+      aria-pressed={enabled}
+      onPress={onPress}
+      data-selected={enabled ? "true" : undefined}
+      data-testid={testId}
+    >
+      {({ isFocusVisible, isPressed }) => (
+        <span
+          className={styles.toolFace}
+          data-selected={enabled ? "true" : undefined}
+          data-focus-visible={isFocusVisible ? "true" : undefined}
+          data-pressed={isPressed ? "true" : undefined}
+        >
+          <IconComponent size={16} weight={enabled ? "fill" : "regular"} aria-hidden />
+        </span>
+      )}
+    </Button>
   );
 }
 
@@ -213,6 +225,10 @@ export function CanvasToolRail({
   activeTool,
   onToolChange,
   onZoomReset,
+  gridEnabled = true,
+  snapEnabled = true,
+  onToggleGrid,
+  onToggleSnap,
   disabled = false,
   dockManaged = false,
 }: CanvasToolRailProps) {
@@ -240,7 +256,11 @@ export function CanvasToolRail({
   );
 
   useEffect(() => {
-    if (!chrome) setLocalRail(readLocalRail());
+    if (chrome) return;
+    const frame = window.requestAnimationFrame(() => {
+      setLocalRail(readLocalRail());
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, [chrome]);
 
   // Sync local fallback when presets write storage from shell
@@ -511,7 +531,6 @@ export function CanvasToolRail({
           ? {
               width: "100%",
               minWidth: 0,
-              height: "100%",
               borderRight: "none",
             }
           : isFloating
@@ -610,11 +629,11 @@ export function CanvasToolRail({
 
       {renderGroups(dockManaged ? false : rail.splitGroups)}
 
-      {onZoomReset ? (
+      {onZoomReset || onToggleGrid || onToggleSnap ? (
         <>
           <div className={styles.divider} aria-hidden data-orientation={orientation} />
           <div className={styles.group} role="group" aria-label="View tools" data-orientation={orientation}>
-            <TooltipTrigger delay={400} closeDelay={100}>
+            {onZoomReset ? (
               <Button
                 className={styles.toolBtn}
                 isDisabled={disabled}
@@ -632,13 +651,27 @@ export function CanvasToolRail({
                   </span>
                 )}
               </Button>
-              <Tooltip className={styles.tooltip} placement="right">
-                <span className={styles.tooltipTitle}>Zoom to fit</span>
-                <span className={styles.tooltipBody}>
-                  Reset canvas view transform (bounds fit when available).
-                </span>
-              </Tooltip>
-            </TooltipTrigger>
+            ) : null}
+            {onToggleGrid ? (
+              <ViewToggle
+                label="Grid"
+                enabled={gridEnabled}
+                onPress={onToggleGrid}
+                icon={GridFour}
+                testId="canvas-tool-grid"
+                disabled={disabled}
+              />
+            ) : null}
+            {onToggleSnap ? (
+              <ViewToggle
+                label="Snap"
+                enabled={snapEnabled}
+                onPress={onToggleSnap}
+                icon={Magnet}
+                testId="canvas-tool-snap"
+                disabled={disabled}
+              />
+            ) : null}
           </div>
         </>
       ) : null}

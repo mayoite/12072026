@@ -95,8 +95,6 @@ export function PlannerDockHost({
   className,
 }: PlannerDockHostProps) {
   const apiRef = useRef<DockviewApi | null>(null);
-  const layoutPresetIdRef = useRef(layoutPresetId);
-  layoutPresetIdRef.current = layoutPresetId;
   const disposablesRef = useRef<Disposable[]>([]);
   const persistTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -117,7 +115,7 @@ export function PlannerDockHost({
       for (const d of disposablesRef.current) d.dispose();
       disposablesRef.current = [];
 
-      seedLayout(event.api, layoutPresetIdRef.current);
+      seedLayout(event.api, layoutPresetId);
 
       disposablesRef.current.push(
         event.api.onDidRemovePanel((removed) => {
@@ -129,7 +127,7 @@ export function PlannerDockHost({
         event.api.onDidLayoutChange(() => schedulePersist()),
       );
     },
-    [onApiReady, schedulePersist],
+    [layoutPresetId, onApiReady, schedulePersist],
   );
 
   useEffect(() => {

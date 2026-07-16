@@ -6,7 +6,8 @@
  * Surfaces:
  * - open3d TSX: no Tailwind utilities (CSS modules + tokens only)
  * - open3d CSS modules: no raw hex
- * - admin app + planner admin/ui: no raw Tailwind palette (slate/blue/zinc/gray/emerald)
+ * - admin + planner: no raw Tailwind palette (slate/blue/zinc/gray/emerald)
+ * - planner CSS: no raw hex/rgb literals outside the token source
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
@@ -40,11 +41,12 @@ function walk(dir, filter) {
   return entries;
 }
 
-function checkAdminPalette() {
+function checkSurfacePalette() {
   const roots = [
     join(SITE_ROOT, "app/admin"),
     join(SITE_ROOT, "features/admin"),
-    join(SITE_ROOT, "features/planner/ui"),
+    join(SITE_ROOT, "features/planner"),
+    join(SITE_ROOT, "app/planner"),
   ];
   for (const root of roots) {
     const files = walk(root, (p) => /\.tsx$/.test(p));
@@ -68,15 +70,17 @@ function checkOpen3dTailwindInTsx() {
   }
 }
 
-function checkOpen3dModuleHex() {
-  const plannerDir = join(SITE_ROOT, "features/planner/workspace");
-  const files = walk(plannerDir, (p) => /\.module\.css$/.test(p));
-  const hexPattern = /#[0-9a-fA-F]{3,8}\b/;
+function checkPlannerCssRawColors() {
+  const roots = [
+    join(SITE_ROOT, "features/planner"),
+    join(SITE_ROOT, "app/css/core/locked/planner"),
+  ];
+  const files = roots.flatMap((root) => walk(root, (p) => /\.css$/.test(p)));
+  const rawColorPattern = /#[0-9a-fA-F]{3,8}\b|rgba?\s*\(/;
   for (const file of files) {
     const text = readFileSync(file, "utf8");
-    // Allow only empty / comment-only files with no hex; flag real hex
-    if (hexPattern.test(text)) {
-      violations.push(`${relative(SITE_ROOT, file)}: hex color in open3d CSS module`);
+    if (rawColorPattern.test(text)) {
+      violations.push(`${relative(SITE_ROOT, file)}: raw color in planner CSS`);
     }
   }
 }
@@ -98,9 +102,9 @@ function checkNoLucideInPlanner() {
   }
 }
 
-checkAdminPalette();
+checkSurfacePalette();
 checkOpen3dTailwindInTsx();
-checkOpen3dModuleHex();
+checkPlannerCssRawColors();
 checkNoLucideInPlanner();
 
 if (violations.length === 0) {

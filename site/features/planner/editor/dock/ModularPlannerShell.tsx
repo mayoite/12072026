@@ -13,6 +13,8 @@ import { TopBar } from "../TopBar";
 import type { LayoutPresetId } from "../workspaceLayout";
 import type { PlannerPersistStorage } from "../workspaceStatusLabels";
 import type { WorkspacePlanMetrics } from "../workspacePlanMetrics";
+import { WorkspaceShell } from "../WorkspaceShell";
+import { useIsMobile } from "../../hooks/useIsMobile";
 import styles from "../workspace.module.css";
 import { PlannerDockHost, type DockviewApi } from "./PlannerDockHost";
 import {
@@ -121,6 +123,7 @@ export function ModularPlannerShell({
   showTools = true,
 }: ModularPlannerShellProps) {
   const id = useId();
+  const isMobile = useIsMobile();
   const dockApiRef = useRef<DockviewApi | null>(null);
   const [layoutPresetId, setLayoutPresetId] = useState<LayoutPresetId | "custom">(
     "custom",
@@ -164,31 +167,120 @@ export function ModularPlannerShell({
     dockApiRef.current = api;
   }, []);
 
-  const toolsNode = showTools ? (
-    <CanvasToolRail
-      activeTool={activeTool}
-      onToolChange={onToolChange}
-      onZoomReset={onZoomReset}
-      dockManaged
-    />
-  ) : (
-    <div className={styles.dockEmptyHint}>Tools available in 2D</div>
-  );
-
   const slots: PlannerDockSlots = useMemo(
     () => ({
       canvas: children,
       inventory,
       properties: properties ?? (
-        <div className={styles.dockEmptyHint}>Select an object for properties</div>
+        <div className={styles.dockEmptyHint}>
+          <strong>Nothing selected</strong>
+          <span>Select a wall, opening, or catalog item to edit its dimensions and placement.</span>
+        </div>
       ),
       layers: layers ?? (
-        <div className={styles.dockEmptyHint}>No floor layers</div>
+        <div className={styles.dockEmptyHint}>
+          <strong>No floor layers</strong>
+          <span>Layers appear as plan elements are added.</span>
+        </div>
       ),
-      tools: toolsNode,
+      tools: showTools ? (
+        <CanvasToolRail
+          activeTool={activeTool}
+          onToolChange={onToolChange}
+          onZoomReset={onZoomReset}
+          gridEnabled={gridEnabled}
+          snapEnabled={snapEnabled}
+          onToggleGrid={onToggleGrid}
+          onToggleSnap={onToggleSnap}
+          dockManaged
+        />
+      ) : (
+        <div className={styles.dockEmptyHint}>
+          <strong>2D tools paused</strong>
+          <span>Switch to 2D to draw walls, place openings, and add inventory.</span>
+        </div>
+      ),
     }),
-    [children, inventory, properties, layers, toolsNode],
+    [
+      activeTool,
+      children,
+      inventory,
+      layers,
+      onToolChange,
+      onZoomReset,
+      properties,
+      showTools,
+      gridEnabled,
+      snapEnabled,
+      onToggleGrid,
+      onToggleSnap,
+    ],
   );
+
+  if (isMobile) {
+    return (
+      <WorkspaceShell
+        accessContext={accessContext}
+        projectName={projectName}
+        viewMode={viewMode}
+        floors={floors}
+        activeFloorId={activeFloorId}
+        isModified={isModified}
+        isLocalSaved={resolvedLocalSaved}
+        saveStatus={saveStatus}
+        saveStatusLabel={saveStatusLabel}
+        storage={storage}
+        cloudEnabled={cloudEnabled}
+        leftPanel={slots.inventory}
+        rightPanel={slots.properties}
+        bottomPanel={slots.layers}
+        onViewModeChange={onViewModeChange}
+        onFloorChange={onFloorChange}
+        onProjectNameChange={onProjectNameChange}
+        onSave={onSave}
+        onExport={onExport}
+        onImport={onImport}
+        canUndo={canUndo}
+        canRedo={canRedo}
+        undoLabel={undoLabel}
+        redoLabel={redoLabel}
+        onUndo={onUndo}
+        onRedo={onRedo}
+        statusLeft={statusLeft}
+        statusRight={statusRight}
+        displayUnit={displayUnit}
+        onDisplayUnitChange={onDisplayUnitChange}
+        fillParent={fillParent}
+        density={density}
+        onToggleDensity={onToggleDensity}
+        gridEnabled={gridEnabled}
+        snapEnabled={snapEnabled}
+        onToggleGrid={onToggleGrid}
+        onToggleSnap={onToggleSnap}
+        planMetrics={planMetrics}
+      >
+        <div className={styles.mobileCanvasStack}>
+          <div className={styles.mobileCanvasStage}>{children}</div>
+          {showTools ? (
+            <CanvasToolRail
+              activeTool={activeTool}
+              onToolChange={onToolChange}
+              onZoomReset={onZoomReset}
+              gridEnabled={gridEnabled}
+              snapEnabled={snapEnabled}
+              onToggleGrid={onToggleGrid}
+              onToggleSnap={onToggleSnap}
+              dockManaged
+            />
+          ) : (
+            <div className={styles.mobileToolsUnavailable}>
+              Switch to 2D to use drawing tools
+            </div>
+          )}
+        </div>
+      </WorkspaceShell>
+    );
+  }
 
   return (
     <div

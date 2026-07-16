@@ -2,17 +2,14 @@ import type { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("next/dynamic", () => ({
-  default: () =>
-    function MockPlannerWorkspace(props: { guestMode?: boolean; planId?: string }) {
-      return (
-        <div
-          data-testid="planner-workspace"
-          data-guest-mode={props.guestMode ? "true" : "false"}
-          data-plan-id={props.planId ?? ""}
-        />
-      );
-    },
+vi.mock("@/features/planner/ui/PlannerHost", () => ({
+  PlannerHost: (props: { guestMode?: boolean; planId?: string }) => (
+    <div
+      data-testid="planner-workspace"
+      data-guest-mode={props.guestMode ? "true" : "false"}
+      data-plan-id={props.planId ?? ""}
+    />
+  ),
 }));
 
 vi.mock("@/features/planner/components/Providers", () => ({

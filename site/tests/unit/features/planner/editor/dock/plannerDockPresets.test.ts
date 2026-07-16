@@ -46,14 +46,25 @@ describe("plannerDockPresets", () => {
     localStorage.clear();
   });
 
-  it("default preset adds canvas + four chrome modules", () => {
+  it("default preset keeps a canvas-first dock and leaves layers available on demand", () => {
     const api = createFakeApi();
     applyPlannerDockPreset(api as never, "default");
     const ids = api.addPanel.mock.calls.map((c) => c[0].id);
-    expect(ids).toContain("canvas");
-    for (const id of PLANNER_DOCK_MODULE_IDS) {
-      expect(ids).toContain(id);
-    }
+    expect(ids).toEqual(["canvas", "tools"]);
+    expect(PLANNER_DOCK_MODULE_IDS).toContain("layers");
+
+    const tools = api.addPanel.mock.calls.find(([options]) => options.id === "tools")?.[0] as
+      | {
+          position?: { direction: string; referencePanel: string };
+          initialHeight?: number;
+        }
+      | undefined;
+    expect(tools).toEqual(
+      expect.objectContaining({
+        position: { direction: "above", referencePanel: "canvas" },
+        initialHeight: 80,
+      }),
+    );
   });
 
   it("canvas preset keeps plan + floating tools only", () => {
@@ -67,9 +78,9 @@ describe("plannerDockPresets", () => {
     const api = createFakeApi();
     applyPlannerDockPreset(api as never, "default");
     const before = api.addPanel.mock.calls.length;
-    ensurePlannerDockPanel(api as never, "inventory");
+    ensurePlannerDockPanel(api as never, "tools");
     expect(api.addPanel.mock.calls.length).toBe(before);
-    expect(api.getPanel("inventory")?.api.setActive).toHaveBeenCalled();
+    expect(api.getPanel("tools")?.api.setActive).toHaveBeenCalled();
   });
 
   it("ensurePlannerDockPanel re-adds a closed module", () => {

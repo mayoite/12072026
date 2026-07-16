@@ -405,12 +405,12 @@
 }
 
 .fieldInput[aria-invalid="true"] {
-  border-color: var(--color-danger, #dc2626);
+  border-color: var(--color-danger);
 }
 
 .fieldError {
   grid-column: 2;
-  color: var(--color-danger, #dc2626);
+  color: var(--color-danger);
   font-size: 0.6875rem;
   line-height: 1.25;
 }

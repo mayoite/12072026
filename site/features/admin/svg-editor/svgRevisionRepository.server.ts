@@ -4,6 +4,8 @@ import type {
   PublishedRevisionV1,
   SvgBlockDefinitionV1,
 } from "./contracts/svgBlockSchemas";
+import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgTypes";
+import type { ReleasedCatalogProductV1 } from "@/features/admin/catalog/releasedCatalogContract";
 
 export type SvgArtifactKind = "descriptor" | "svg" | "png" | "thumbnail";
 
@@ -16,9 +18,19 @@ export interface SvgArtifactRecord {
 }
 
 export interface SupabaseSvgRevisionPersistence {
+  publishRelease(
+    revision: PublishedRevisionV1,
+    definition: SvgBlockDefinitionV1,
+    artifacts: readonly SvgArtifactRecord[],
+    liveDescriptor: BlockDescriptor,
+    releasedProduct: ReleasedCatalogProductV1,
+    plannerSourceSlug: string,
+  ): Promise<void>;
   insertRevision(
     revision: PublishedRevisionV1,
     definition: SvgBlockDefinitionV1,
+    liveDescriptor: BlockDescriptor,
+    releasedProduct: ReleasedCatalogProductV1,
   ): Promise<void>;
   insertArtifacts(artifacts: readonly SvgArtifactRecord[]): Promise<void>;
   loadRevision(
@@ -43,9 +55,17 @@ export class ImmutableSvgRevisionRepository {
     revision: PublishedRevisionV1,
     definition: SvgBlockDefinitionV1,
     artifacts: readonly SvgArtifactRecord[],
+    liveDescriptor: BlockDescriptor,
+    releasedProduct: ReleasedCatalogProductV1,
   ): Promise<void> {
-    await this.persistence.insertRevision(revision, definition);
-    await this.persistence.insertArtifacts(artifacts);
+    await this.persistence.publishRelease(
+      revision,
+      definition,
+      artifacts,
+      liveDescriptor,
+      releasedProduct,
+      definition.typeId,
+    );
   }
 
   /** DB-SVG-05: update the product pointer after a successful publish. */

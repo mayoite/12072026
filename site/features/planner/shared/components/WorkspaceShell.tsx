@@ -20,7 +20,7 @@ export function WorkspaceShell({
   workspace,
 }: WorkspaceShellProps) {
   return (
-    <div className="bg-inverse text-slate-100">
+    <div className="bg-inverse text-inverse-body">
       {topbar}
       <div className="">
         {/* Tool Rail */}
@@ -71,7 +71,7 @@ export function WorkspaceSplitPane({
           </div>
         </Panel>
 
-        <PanelResizeHandle className="w-1 bg-slate-600 hover:bg-primary transition-colors cursor-col-resize" />
+        <PanelResizeHandle className="w-1 cursor-col-resize bg-inverse-soft transition-colors hover:bg-primary" />
 
         <Panel defaultSize={50} minSize={20}>
           <div className="">

@@ -60,6 +60,8 @@ export interface PanelContainerProps {
   onDropProbe?: (clientX: number | null, clientY?: number) => void;
   /** On drag end — dock if over an edge zone. Return true if docked. */
   onDropCommit?: (clientX: number, clientY: number) => boolean;
+  /** Let the phone overlay CSS own side-panel width and safe-area sizing. */
+  responsiveOverlay?: boolean;
 }
 
 interface ResizeState {
@@ -96,6 +98,7 @@ export function PanelContainer({
   dockEdge,
   onDropProbe,
   onDropCommit,
+  responsiveOverlay = false,
 }: PanelContainerProps) {
   const panelRef = useRef<HTMLElement>(null);
   const titleBarRef = useRef<HTMLDivElement>(null);
@@ -304,7 +307,7 @@ export function PanelContainer({
         zIndex,
       }
     : {
-        width: id === "bottom" ? "100%" : width,
+        width: id === "bottom" ? "100%" : responsiveOverlay ? undefined : width,
         height: id === "bottom" ? height : "100%",
       };
 

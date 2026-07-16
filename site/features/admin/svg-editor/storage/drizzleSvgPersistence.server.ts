@@ -1,6 +1,6 @@
 import "server-only";
 
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { productsDb } from "@/platform/drizzle/productsDb";
 import {
   svgRevisions,
@@ -16,9 +16,90 @@ import type {
 export class DrizzleSvgRevisionPersistence
   implements SupabaseSvgRevisionPersistence
 {
+  async publishRelease(
+    revision: Parameters<SupabaseSvgRevisionPersistence["publishRelease"]>[0],
+    definition: Parameters<SupabaseSvgRevisionPersistence["publishRelease"]>[1],
+    artifacts: Parameters<SupabaseSvgRevisionPersistence["publishRelease"]>[2],
+    liveDescriptor: Parameters<SupabaseSvgRevisionPersistence["publishRelease"]>[3],
+    releasedProduct: Parameters<SupabaseSvgRevisionPersistence["publishRelease"]>[4],
+    plannerSourceSlug: Parameters<SupabaseSvgRevisionPersistence["publishRelease"]>[5],
+  ): Promise<void> {
+    const checksum = revision.artifactChecksums.descriptor;
+
+    await productsDb.transaction(async (transaction) => {
+      await transaction.insert(svgRevisions).values({
+        revisionId: revision.revisionId,
+        schemaVersion: revision.schemaVersion,
+        definitionTypeId: revision.definitionTypeId,
+        definitionVersion: revision.definitionVersion,
+        compilerVersion: revision.compilerVersion,
+        sourceRevision: revision.sourceRevision,
+        artifactChecksums: revision.artifactChecksums,
+        validation: revision.validation,
+        actorId: revision.actorId,
+        publishedAt: new Date(revision.publishedAt),
+        reason: revision.reason,
+        slug: definition.typeId,
+        version: revision.definitionVersion,
+        definition,
+        releasedProduct,
+      });
+
+      await transaction
+        .insert(blockDescriptors)
+        .values({
+          slug: definition.typeId,
+          currentVersion: revision.definitionVersion,
+          currentChecksum: checksum,
+          descriptor: liveDescriptor,
+          updatedAt: new Date(),
+          updatedBy: revision.actorId,
+        })
+        .onConflictDoUpdate({
+          target: blockDescriptors.slug,
+          set: {
+            currentVersion: revision.definitionVersion,
+            currentChecksum: checksum,
+            descriptor: liveDescriptor,
+            updatedAt: new Date(),
+            updatedBy: revision.actorId,
+          },
+        });
+
+      if (artifacts.length > 0) {
+        await transaction.insert(svgRevisionArtifacts).values(
+          artifacts.map((artifact) => ({
+            revisionId: artifact.revisionId,
+            kind: artifact.kind,
+            checksum: artifact.checksum,
+            storageKey: artifact.storageKey,
+            width: artifact.width ?? null,
+          })),
+        );
+      }
+
+      const pointedProducts = await transaction
+        .update(plannerManagedProducts)
+        .set({
+          publishedSvgRevisionId: revision.revisionId,
+          updatedAt: new Date(),
+        })
+        .where(eq(plannerManagedProducts.plannerSourceSlug, plannerSourceSlug))
+        .returning({ id: plannerManagedProducts.id });
+
+      if (pointedProducts.length !== 1) {
+        throw new Error(
+          `Expected one product for planner source "${plannerSourceSlug}", found ${pointedProducts.length}.`,
+        );
+      }
+    });
+  }
+
   async insertRevision(
     revision: Parameters<SupabaseSvgRevisionPersistence["insertRevision"]>[0],
     definition: Parameters<SupabaseSvgRevisionPersistence["insertRevision"]>[1],
+    liveDescriptor: Parameters<SupabaseSvgRevisionPersistence["insertRevision"]>[2],
+    releasedProduct: Parameters<SupabaseSvgRevisionPersistence["insertRevision"]>[3],
   ): Promise<void> {
     await productsDb.insert(svgRevisions).values({
       revisionId: revision.revisionId,
@@ -33,9 +114,9 @@ export class DrizzleSvgRevisionPersistence
       publishedAt: new Date(revision.publishedAt),
       reason: revision.reason,
       slug: definition.typeId,
-      version: definition.lifecycle.status === "published" ? 1 : 0,
+      version: revision.definitionVersion,
       definition,
-      releasedProduct: null,
+      releasedProduct,
     });
 
     // Sync block_descriptors with the latest published descriptor
@@ -49,18 +130,18 @@ export class DrizzleSvgRevisionPersistence
       .insert(blockDescriptors)
       .values({
         slug: definition.typeId,
-        currentVersion: 1,
+        currentVersion: revision.definitionVersion,
         currentChecksum: checksum,
-        descriptor: definition,
+        descriptor: liveDescriptor,
         updatedAt: new Date(),
         updatedBy: revision.actorId,
       })
       .onConflictDoUpdate({
         target: blockDescriptors.slug,
         set: {
-          currentVersion: sql`${blockDescriptors.currentVersion} + 1`,
+          currentVersion: revision.definitionVersion,
           currentChecksum: checksum,
-          descriptor: definition,
+          descriptor: liveDescriptor,
           updatedAt: new Date(),
           updatedBy: revision.actorId,
         },

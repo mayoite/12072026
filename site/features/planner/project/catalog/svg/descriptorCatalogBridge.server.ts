@@ -9,10 +9,25 @@ import { buildShortName } from "../catalogTaxonomy";
 import { buildSvgCatalogPublicUrl } from "./svgPreviewAssets";
 import type { BlockDescriptor } from "./svgTypes";
 
+export interface PlannerSvgCatalogDescriptor {
+  readonly id: string;
+  readonly slug: string;
+  readonly sku?: string;
+  readonly name?: string;
+  readonly tags?: readonly string[];
+  readonly geometry: {
+    readonly widthMm: number;
+    readonly depthMm: number;
+    readonly heightMm: number;
+  };
+}
+
+type MappableDescriptor = BlockDescriptor | PlannerSvgCatalogDescriptor;
+
 /** Map on-disk BlockDescriptors to planner catalog items (catalogue-first / BP-06). */
 function isMappableDescriptor(
-  descriptor: BlockDescriptor | null | undefined,
-): descriptor is BlockDescriptor {
+  descriptor: MappableDescriptor | null | undefined,
+): descriptor is MappableDescriptor {
   if (!descriptor || typeof descriptor !== "object") return false;
   const geometry = (descriptor as BlockDescriptor).geometry;
   if (!geometry || typeof geometry !== "object") return false;
@@ -25,7 +40,7 @@ function isMappableDescriptor(
 }
 
 export function mapDescriptorToCatalogItem(
-  descriptor: BlockDescriptor,
+  descriptor: MappableDescriptor,
 ): PlannerCatalogItem {
   const slug =
     typeof descriptor.slug === "string" && descriptor.slug.trim() !== ""
@@ -34,7 +49,12 @@ export function mapDescriptorToCatalogItem(
         ? descriptor.id
         : "unknown";
   const svgUrl = buildSvgCatalogPublicUrl(slug);
-  const displayName = humanizeCatalogSlug(slug);
+  const preferredName = "name" in descriptor ? descriptor.name : undefined;
+  const descriptorTags = "tags" in descriptor ? descriptor.tags : undefined;
+  const displayName =
+    typeof preferredName === "string" && preferredName.trim() !== ""
+      ? preferredName.trim()
+      : humanizeCatalogSlug(slug);
   const shortName = buildShortName(displayName);
   const slugTags = catalogSlugSearchTags(slug);
   const widthMm = descriptor.geometry?.widthMm ?? 0;
@@ -70,7 +90,14 @@ export function mapDescriptorToCatalogItem(
     assemblyType: "fully-assembled",
     flatPack: false,
     tags: Array.from(
-      new Set([slug, ...slugTags, "descriptor", "symbol", "svg"]),
+      new Set([
+        slug,
+        ...slugTags,
+        ...(descriptorTags ?? []),
+        "descriptor",
+        "symbol",
+        "svg",
+      ]),
     ),
     variants: [],
     provenance: { source: "descriptor-loader" },
@@ -84,7 +111,7 @@ export function mapDescriptorToCatalogItem(
 }
 
 export function mapDescriptorsToCatalogItems(
-  descriptors: readonly BlockDescriptor[],
+  descriptors: readonly MappableDescriptor[],
 ): PlannerCatalogItem[] {
   return descriptors
     .filter(isMappableDescriptor)

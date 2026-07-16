@@ -12,7 +12,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--planner-surface-canvas, #f8fafc);
+  background: var(--planner-surface-canvas);
 }
 
 .host > :first-child {
@@ -38,7 +38,7 @@
   min-height: 0;
   min-width: 0;
   overflow: hidden;
-  background: var(--planner-surface-panel, #fff);
+  background: var(--planner-surface-panel);
 }
 
 .panelFill > * {
@@ -51,40 +51,40 @@
 
 /* Theme bridge — dockview-theme-light class on host */
 .host:global(.dockview-theme-light) {
-  --dv-background-color: var(--planner-surface-canvas, #f8fafc);
-  --dv-group-view-background-color: var(--planner-surface-panel, #fff);
+  --dv-background-color: var(--planner-surface-canvas);
+  --dv-group-view-background-color: var(--planner-surface-panel);
   --dv-tabs-and-actions-container-background-color: color-mix(
     in srgb,
-    var(--planner-surface-panel, #fff) 92%,
-    var(--planner-surface-subtle, #f1f5f9)
+    var(--planner-surface-panel) 92%,
+    var(--planner-surface-subtle)
   );
-  --dv-activegroup-visiblepanel-tab-background-color: var(--planner-surface-panel, #fff);
+  --dv-activegroup-visiblepanel-tab-background-color: var(--planner-surface-panel);
   --dv-activegroup-hiddenpanel-tab-background-color: transparent;
   --dv-inactivegroup-visiblepanel-tab-background-color: color-mix(
     in srgb,
-    var(--planner-surface-subtle, #f1f5f9) 80%,
+    var(--planner-surface-subtle) 80%,
     transparent
   );
   --dv-inactivegroup-hiddenpanel-tab-background-color: transparent;
-  --dv-tab-divider-color: var(--planner-border-default, #e2e8f0);
-  --dv-activegroup-visiblepanel-tab-color: var(--planner-text-primary, #0f172a);
-  --dv-activegroup-hiddenpanel-tab-color: var(--planner-text-muted, #64748b);
-  --dv-inactivegroup-visiblepanel-tab-color: var(--planner-text-secondary, #334155);
-  --dv-inactivegroup-hiddenpanel-tab-color: var(--planner-text-muted, #64748b);
-  --dv-separator-border: var(--planner-border-default, #e2e8f0);
-  --dv-paneview-header-border-color: var(--planner-border-default, #e2e8f0);
-  --dv-tabs-container-scrollbar-color: var(--planner-border-default, #cbd5e1);
+  --dv-tab-divider-color: var(--planner-border-default);
+  --dv-activegroup-visiblepanel-tab-color: var(--planner-text-primary);
+  --dv-activegroup-hiddenpanel-tab-color: var(--planner-text-muted);
+  --dv-inactivegroup-visiblepanel-tab-color: var(--planner-text-secondary);
+  --dv-inactivegroup-hiddenpanel-tab-color: var(--planner-text-muted);
+  --dv-separator-border: var(--planner-border-default);
+  --dv-paneview-header-border-color: var(--planner-border-default);
+  --dv-tabs-container-scrollbar-color: var(--planner-border-default);
   --dv-icon-hover-background-color: color-mix(
     in srgb,
-    var(--planner-accent, #2563eb) 12%,
+    var(--planner-accent) 12%,
     transparent
   );
-  --dv-floating-box-shadow: var(--planner-shadow-floating, 0 8px 28px rgba(0, 0, 0, 0.16));
+  --dv-floating-box-shadow: var(--planner-shadow-floating);
   --dv-overlay-z-index: 120;
 }
 
 .host :global(.dv-groupview) {
-  border: 1px solid var(--planner-border-default, #e2e8f0);
+  border: 1px solid var(--planner-border-default);
 }
 
 .host :global(.dv-tabs-and-actions-container) {

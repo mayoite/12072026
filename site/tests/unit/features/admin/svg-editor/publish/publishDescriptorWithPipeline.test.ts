@@ -602,6 +602,7 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
       compileSvg: async () => compileOk(),
       runPipeline: async () => pipelineOk(),
       persist: () => persistOk(),
+      actorId: "admin-42",
       dbRepository: {
         publish,
         load: async () => null,
@@ -614,14 +615,68 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
     expect(revision).toMatchObject({
       definitionTypeId: "test-block",
       reason: "publish",
+      actorId: "admin-42",
+      revisionId: expect.stringMatching(/^test-block-r-[a-f0-9]{20}$/),
     });
     expect(definition).toMatchObject({ typeId: "test-block" });
+    expect(definition).toMatchObject({
+      lifecycle: { ownerId: "admin-42", status: "published" },
+      parts: [expect.objectContaining({ kind: "rect", width: 100, height: 100 })],
+    });
     expect(artifacts).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ kind: "svg" }),
         expect.objectContaining({ kind: "descriptor" }),
       ]),
     );
+  });
+
+  it("DB-SVG-08: unchanged immutable DB revision is a no-op before disk writes", async () => {
+    const compile = compileOk();
+    const revisionId = `test-block-r-${sha256Utf8(
+      `${validDescriptor.checksum}:${sha256Utf8(compile.svg)}`,
+    ).slice(0, 20)}`;
+    const runPipeline = vi.fn(async () => pipelineOk());
+    const persist = vi.fn(() => persistOk());
+    const updateProductPointer = vi.fn(async () => undefined);
+
+    const result = await publishDescriptorWithPipeline(validDescriptor, {
+      parsePayload: () => ({ ok: true, value: validDescriptor }),
+      compileSvg: async () => compile,
+      runPipeline,
+      persist,
+      dbRepository: {
+        publish: vi.fn(),
+        updateProductPointer,
+        load: async () => ({
+          revision: {
+            schemaVersion: 1,
+            revisionId,
+            definitionTypeId: validDescriptor.slug,
+            definitionVersion: 4,
+            compilerVersion: "oando-asset-engine-v1",
+            sourceRevision: 3,
+            artifactChecksums: {
+              descriptor: validDescriptor.checksum,
+              svg: sha256Utf8(compile.svg),
+              png: sha256Utf8(compile.svg),
+              thumbnails: {},
+            },
+            validation: { valid: true, diagnostics: [] },
+            actorId: "admin-1",
+            publishedAt: "2026-07-16T00:00:00.000Z",
+            reason: "publish",
+          },
+          definition: {} as never,
+          artifacts: [],
+        }),
+      } as never,
+    });
+
+    expect(result).toMatchObject({ success: true, idempotent: true });
+    expect(runPipeline).not.toHaveBeenCalled();
+    expect(persist).not.toHaveBeenCalled();
+    expect(updateProductPointer).toHaveBeenCalledWith("test-block", revisionId);
   });
 
   it("dual-write: DB failure fails publish and rolls back disk commit", async () => {

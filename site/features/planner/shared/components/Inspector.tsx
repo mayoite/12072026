@@ -82,7 +82,7 @@ const InspectorInput = forwardRef<HTMLInputElement, InspectorInputProps>(
           type="number"
           step="any"
           aria-label={label}
-          className={`h-7 rounded border border-soft px-2 py-1 text-xs tabular-nums text-heading transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-blue-500 ${className}`}
+          className={`focus-ring-theme h-7 rounded border border-soft px-2 py-1 text-xs tabular-nums text-heading transition-colors focus:border-accent focus:outline-none ${className}`}
           {...props}
         />
       </div>

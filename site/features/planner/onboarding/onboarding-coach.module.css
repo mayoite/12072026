@@ -1,6 +1,7 @@
 .overlay {
   position: fixed;
   inset: 0;
+  z-index: var(--z-planner-modal, 999);
   pointer-events: none;
 }
 

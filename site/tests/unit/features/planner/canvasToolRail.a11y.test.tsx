@@ -71,6 +71,42 @@ describe("CanvasToolRail RAC upgrade + a11y", () => {
     expect(zoom).not.toHaveAttribute("aria-label", expect.stringContaining("(0)"));
   });
 
+  it("exposes Grid and Snap as direct pressed-state controls", () => {
+    const onToggleGrid = vi.fn();
+    const onToggleSnap = vi.fn();
+    render(
+      <CanvasToolRail
+        activeTool="select"
+        onToolChange={vi.fn()}
+        gridEnabled
+        snapEnabled={false}
+        onToggleGrid={onToggleGrid}
+        onToggleSnap={onToggleSnap}
+      />,
+    );
+
+    const grid = screen.getByRole("button", { name: "Disable Grid" });
+    const snap = screen.getByRole("button", { name: "Enable Snap" });
+    expect(grid).toHaveAttribute("aria-pressed", "true");
+    expect(snap).toHaveAttribute("aria-pressed", "false");
+
+    fireEvent.click(grid);
+    fireEvent.click(snap);
+    expect(onToggleGrid).toHaveBeenCalledTimes(1);
+    expect(onToggleSnap).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not render hover tooltips", () => {
+    render(
+      <CanvasToolRail
+        activeTool="select"
+        onToolChange={vi.fn()}
+        onZoomReset={vi.fn()}
+      />,
+    );
+    expect(screen.queryByRole("tooltip")).toBeNull();
+  });
+
   it("labels still resolve from maps for live tools", () => {
     expect(`${CANVAS_TOOL_LABELS.wall} (${CANVAS_TOOL_SHORTCUTS.wall})`).toBe("Wall (W)");
     expect(toolAccessibleName("wall")).toBe("Wall (W)");

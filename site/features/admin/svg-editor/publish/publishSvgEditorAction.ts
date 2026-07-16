@@ -91,6 +91,7 @@ export async function publishSvgEditorAction(
   const published = await publishDescriptorWithPipeline(input, {
     dbRepository,
     compileSvg,
+    actorId,
   });
   if (published.success) {
     setCatalogLifecycle(published.descriptor.slug, "draft");

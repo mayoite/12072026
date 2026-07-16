@@ -89,6 +89,7 @@ export type BuildReleasedProductInput = {
   readonly descriptor: BlockDescriptor;
   readonly svgMarkup: string;
   readonly revisionId: string;
+  readonly definitionVersion?: number;
   readonly publishedAt: string;
   readonly availability: ReleasedAvailability;
 };
@@ -136,7 +137,7 @@ export function buildReleasedProductFromPublish(
         resourceUrl: `/api/planner/catalog/svg/${input.revisionId}`,
       },
       definitionTypeId: input.descriptor.slug,
-      definitionVersion: 1,
+      definitionVersion: input.definitionVersion ?? 1,
       publishedAt: input.publishedAt,
     });
     return { ok: true, product };

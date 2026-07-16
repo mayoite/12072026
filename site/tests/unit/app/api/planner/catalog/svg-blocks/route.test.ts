@@ -70,4 +70,45 @@ describe("app/api/planner/catalog/svg-blocks/route.ts", () => {
     expect(body.source).toBe("svg-blocks");
     expect(body.total).toBe(1);
   });
+
+  it("does not expose internal SVG fixtures through the public catalog", async () => {
+    vi.mocked(loadBuyerVisibleDescriptorsWithDb).mockResolvedValue([
+      { slug: "test-block" },
+    ] as never);
+    vi.mocked(mapDescriptorsToCatalogItems).mockReturnValue([
+      {
+        id: "test-block",
+        slug: "test-block",
+        sku: "DESC-test-block",
+        name: "test-block",
+        shortName: "test-block",
+        description: "Internal fixture",
+        category: "Symbols",
+        subCategory: "SVG Catalog",
+        taxonomyPath: "Symbols > SVG Catalog > test-block",
+        dimensions: { widthMm: 100, depthMm: 100, heightMm: 100 },
+        displayUnit: "mm",
+        assets: { imageUrls: [] },
+        material: { marketingMaterial: "SVG", normalizedMaterial: "svg" },
+        roomTags: [],
+        styleTags: [],
+        availability: "in-stock",
+        assemblyType: "fully-assembled",
+        flatPack: false,
+        tags: ["test"],
+        variants: [],
+        provenance: { source: "descriptor-loader" },
+        symbolOnly: true,
+      },
+    ]);
+
+    const res = await GET(
+      new NextRequest("http://localhost/api/planner/catalog/svg-blocks"),
+    );
+    const body = await res.json();
+
+    expect(body.items).toEqual([]);
+    expect(body.source).toBe("none");
+    expect(body.total).toBe(0);
+  });
 });
