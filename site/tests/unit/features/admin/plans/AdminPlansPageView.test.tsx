@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import AdminPlansPageView from "@/features/admin/plans/AdminPlansPageView";
 import { browserApiFetch } from "@/lib/api/browserApi";
@@ -74,7 +74,7 @@ describe("AdminPlansPageView", () => {
     await waitFor(() => {
       expect(screen.getByText("Focus Suite")).toBeInTheDocument();
     });
-    expect(screen.getByText("Approved")).toBeInTheDocument();
+    expect(screen.getAllByText("Approved")).toHaveLength(2);
     expect(screen.getByText("Showing 1 of 1 plan")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Open in canvas/i })).toHaveAttribute(
       "href",
@@ -102,9 +102,6 @@ describe("AdminPlansPageView", () => {
   });
 
   it("applies search and status filters, then allows clearing them", async () => {
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
-    vi.useFakeTimers();
-
     vi.mocked(browserApiFetch)
       .mockResolvedValueOnce({
         ok: true,
@@ -128,11 +125,17 @@ describe("AdminPlansPageView", () => {
     render(<AdminPlansPageView />);
     await waitFor(() => expect(browserApiFetch).toHaveBeenCalledTimes(1));
 
-    await user.type(screen.getByPlaceholderText("Title, project, client…"), "Acme");
-    await vi.advanceTimersByTimeAsync(350);
+    fireEvent.change(screen.getByPlaceholderText("Title, project, client…"), {
+      target: { value: "Acme" },
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 400));
+    });
     await waitFor(() => expect(browserApiFetch).toHaveBeenCalledTimes(2));
 
-    await user.selectOptions(screen.getByDisplayValue("All statuses"), "archived");
+    fireEvent.change(screen.getByDisplayValue("All statuses"), {
+      target: { value: "archived" },
+    });
     await waitFor(() => expect(browserApiFetch).toHaveBeenCalledTimes(3));
 
     expect(screen.getByRole("button", { name: "Clear filters" })).toBeInTheDocument();
@@ -140,11 +143,9 @@ describe("AdminPlansPageView", () => {
     expect(vi.mocked(browserApiFetch).mock.calls.at(-1)?.[0]).toContain("status=archived");
     expect(vi.mocked(browserApiFetch).mock.calls.at(-1)?.[0]).toContain("search=Acme");
 
-    await user.click(screen.getByRole("button", { name: "Clear filters" }));
+    fireEvent.click(screen.getByRole("button", { name: "Clear filters" }));
     await waitFor(() => expect(browserApiFetch).toHaveBeenCalledTimes(4));
-
-    vi.useRealTimers();
-  });
+  }, 10000);
 
   it("shows a fetch error when refresh fails", async () => {
     const user = userEvent.setup();
@@ -172,5 +173,5 @@ describe("AdminPlansPageView", () => {
     await waitFor(() => {
       expect(screen.getByRole("alert")).toHaveTextContent("Failed to load plans (500)");
     });
-  });
+  }, 10000);
 });

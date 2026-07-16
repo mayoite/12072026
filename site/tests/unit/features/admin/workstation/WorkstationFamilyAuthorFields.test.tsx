@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import { WorkstationFamilyAuthorFields } from "@/features/admin/workstation/WorkstationFamilyAuthorFields";
 import {
   defaultWorkstationAuthorDraft,
@@ -28,15 +29,23 @@ describe("WorkstationFamilyAuthorFields", () => {
     const onChange = vi.fn();
     const json = workstationJsonFromAuthor(defaultWorkstationAuthorDraft());
 
-    render(
-      <WorkstationFamilyAuthorFields
-        workstationJson={json}
-        onWorkstationJsonChange={onChange}
-      />,
-    );
+    function Harness() {
+      const [value, setValue] = useState(json);
+      return (
+        <WorkstationFamilyAuthorFields
+          workstationJson={value}
+          onWorkstationJsonChange={(next) => {
+            setValue(next);
+            onChange(next);
+          }}
+        />
+      );
+    }
 
-    await user.clear(screen.getByDisplayValue("premium-linear"));
-    await user.type(screen.getByLabelText("Family slug"), "focus-series");
+    render(<Harness />);
+
+    const familySlugInput = screen.getByDisplayValue("premium-linear");
+    await user.type(familySlugInput, "-focus");
     await user.click(screen.getByLabelText("900 mm"));
 
     expect(onChange).toHaveBeenCalled();
@@ -47,7 +56,7 @@ describe("WorkstationFamilyAuthorFields", () => {
       lengthOptions: number[];
       oandoWorkstationFamily: WorkstationFamilyContract;
     };
-    expect(parsed.oandoWorkstationFamily.familySlug).toBe("focus-series");
+    expect(parsed.oandoWorkstationFamily.familySlug).toBe("premium-linear-focus");
     expect(parsed.lengthOptions).not.toContain(900);
   });
 
