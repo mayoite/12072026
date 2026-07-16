@@ -123,7 +123,7 @@ export function AdminCatalogTable({
                   </td>
                   <td data-label="Status">
                     <span
-                      className={`admin-badge ${isActive ? "admin-badge--active" : "admin-badge--hidden"}`}
+                      className={`admin-badge ${isActive ? "admin-badge--active !text-strong" : "admin-badge--hidden"}`}
                     >
                       {isActive ? "Active" : "Hidden"}
                     </span>

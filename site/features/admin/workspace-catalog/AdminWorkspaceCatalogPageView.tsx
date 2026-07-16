@@ -37,32 +37,34 @@ export default function AdminWorkspaceCatalogPageView() {
   );
 
   return (
-    <div className="mx-auto max-w-7xl md:p-8">
-      <div className="mb-6">
-        <p className="text-xs uppercase tracking-wide text-soft">Static ingest</p>
-        <h1 className="text-2xl font-semibold text-strong">Workspace element library</h1>
-        <p className="mt-1 max-w-3xl text-sm text-muted">
+    <div className="admin-page">
+      <header className="admin-page__header">
+        <div>
+        <p className="admin-page__eyebrow">Static ingest</p>
+        <h1 className="admin-page__title">Workspace element library</h1>
+        <p className="admin-page__copy max-w-3xl">
           Read-only view of <code>workspaceCatalog</code>, the bundled static layer in the guest
           planner library. This route is for browse and audit only; editable products live in{" "}
-          <Link href="/admin/catalog" className="text-primary hover:underline">
+          <Link href="/admin/catalog" className="text-primary underline underline-offset-2">
             Standard catalog
           </Link>{" "}
           and{" "}
-          <Link href="/admin/planner-catalog" className="text-primary hover:underline">
+          <Link href="/admin/planner-catalog" className="text-primary underline underline-offset-2">
             Configurator catalog
           </Link>
           . Live hydration also merges{" "}
-          <Link href="/admin/planner-catalog" className="text-primary hover:underline">
+          <Link href="/admin/planner-catalog" className="text-primary underline underline-offset-2">
             configurator SKUs
           </Link>{" "}
           and{" "}
-          <Link href="/admin/catalog" className="text-primary hover:underline">
+          <Link href="/admin/catalog" className="text-primary underline underline-offset-2">
             managed products
           </Link>
           . Regenerate static items from CSV via{" "}
           <code className="rounded bg-subtle px-1">npx tsx scripts/ingest-planner-catalog.ts</code>.
         </p>
-      </div>
+        </div>
+      </header>
 
       <div className="mb-4 flex flex-col gap-3 rounded-xl border border-soft bg-panel p-4 sm:flex-row sm:items-end">
         <label className="min-w-0 flex-1">
@@ -179,14 +181,15 @@ export default function AdminWorkspaceCatalogPageView() {
 
           <div className="hidden overflow-x-auto rounded-xl border border-soft bg-panel md:block">
             <table className="w-full min-w-[50rem] text-start text-sm">
+              <caption className="sr-only">Workspace catalog items</caption>
               <thead className="border-b border-soft bg-subtle/50 text-xs uppercase tracking-wide text-soft">
                 <tr>
-                  <th className="px-4 py-3">SKU / ID</th>
-                  <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">Category</th>
-                  <th className="px-4 py-3">Seats</th>
-                  <th className="px-4 py-3">Footprint</th>
-                  <th className="px-4 py-3">Raw fields</th>
+                  <th scope="col" className="px-4 py-3">SKU / ID</th>
+                  <th scope="col" className="px-4 py-3">Name</th>
+                  <th scope="col" className="px-4 py-3">Category</th>
+                  <th scope="col" className="px-4 py-3">Seats</th>
+                  <th scope="col" className="px-4 py-3">Footprint</th>
+                  <th scope="col" className="px-4 py-3">Raw fields</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,12 +237,14 @@ export function AdminCanvasConfigSection() {
           From <code>config/planner-canvas.json</code> — edit in repo and redeploy to change bounds, scale, and viewport.
         </p>
       </header>
-      <table className="text-sm">
+      <div className="admin-table-wrap" role="region" aria-label="Canvas configuration table" tabIndex={0}>
+      <table className="admin-table min-w-[28rem]">
+        <caption className="sr-only">Planner canvas configuration values</caption>
         <thead className="border-b border-soft text-xs uppercase text-soft">
           <tr>
-            <th className="px-4 py-2 text-start">Group</th>
-            <th className="px-4 py-2 text-start">Parameter</th>
-            <th className="px-4 py-2 text-start">Value</th>
+            <th scope="col">Group</th>
+            <th scope="col">Parameter</th>
+            <th scope="col">Value</th>
           </tr>
         </thead>
         <tbody>
@@ -252,6 +257,7 @@ export function AdminCanvasConfigSection() {
           ))}
         </tbody>
       </table>
+      </div>
     </section>
   );
 }

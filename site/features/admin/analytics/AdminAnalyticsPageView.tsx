@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { CircleNotch as Loader2, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
 import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
+import { AdminField, AdminSelect } from "../ui/AdminFormFields";
 
 type AnalyticsSummary = {
   avgArea: number;
@@ -62,31 +63,32 @@ export default function AdminAnalyticsPageView() {
   }, [loadAnalytics]);
 
   return (
-    <div className="mx-auto max-w-6xl p-6 md:p-8">
-      <div className="mb-6 flex-wrap gap-3">
+    <div className="admin-page">
+      <header className="admin-page__header">
         <div>
-          <p className="text-xs uppercase tracking-wide text-soft">Planner usage</p>
-          <h1 className="text-2xl font-semibold text-strong">Analytics</h1>
-          <p className="mt-1 text-sm text-muted">
+          <p className="admin-page__eyebrow">Planner usage</p>
+          <h1 className="admin-page__title">Analytics</h1>
+          <p className="admin-page__copy">
             Plan volume, furniture popularity, and export breakdown from the planner database.
           </p>
-          {data?.source ? <p className="mt-1 text-xs text-soft">Source: {data.source}</p> : null}
+          {data?.source ? <p className="admin-page__meta">Source: {data.source}</p> : null}
         </div>
-        <div className="flex-wrap gap-2">
-          <select
-            className="rounded-lg border border-soft bg-panel px-3 py-2 text-sm"
+        <div className="admin-page__actions">
+          <AdminField label="Period">
+            <AdminSelect
             value={period}
             onChange={(event) => setPeriod(event.target.value as (typeof PERIODS)[number]["value"])}
-          >
-            {PERIODS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            >
+              {PERIODS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </AdminSelect>
+          </AdminField>
           <button
             type="button"
-            className="btn-outline inline-flex gap-2 px-3 py-2 text-sm"
+            className="admin-btn admin-btn--outline"
             onClick={() => void loadAnalytics()}
             disabled={loading}
           >
@@ -94,42 +96,42 @@ export default function AdminAnalyticsPageView() {
             Refresh
           </button>
         </div>
-      </div>
+      </header>
 
       {error ? (
-        <div className="rounded-xl border border-accent bg-danger-soft text-sm text-red-700" role="alert">
+        <div className="admin-alert admin-alert--error" role="alert">
           {error}
         </div>
       ) : null}
 
       {loading && !data ? (
-        <div className="gap-2 text-sm text-muted">
+        <div className="admin-inline-row text-sm text-muted" role="status" aria-live="polite">
           <Loader2 size={16} className="animate-spin" aria-hidden />
           Loading analytics…
         </div>
       ) : data ? (
         <div className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-xl border border-soft bg-panel">
+            <div className="admin-panel p-4">
               <p className="text-xs uppercase tracking-wide text-soft">Total plans</p>
               <p className="mt-1 text-2xl font-semibold text-strong">{data.summary.totalPlans}</p>
             </div>
-            <div className="rounded-xl border border-soft bg-panel">
+            <div className="admin-panel p-4">
               <p className="text-xs uppercase tracking-wide text-soft">Avg items / plan</p>
               <p className="mt-1 text-2xl font-semibold text-strong">{data.summary.avgItems}</p>
             </div>
-            <div className="rounded-xl border border-soft bg-panel">
+            <div className="admin-panel p-4">
               <p className="text-xs uppercase tracking-wide text-soft">Avg area (m²)</p>
               <p className="mt-1 text-2xl font-semibold text-strong">{data.summary.avgArea}</p>
             </div>
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <section className="rounded-xl border border-soft bg-panel">
+            <section className="admin-panel p-4">
               <h2 className="text-sm font-semibold text-strong">Top furniture</h2>
               <ul className="mt-3 divide-y divide-soft text-sm">
                 {data.topFurniture.map((item) => (
-                  <li key={item.name} className="gap-4 py-2">
+                  <li key={item.name} className="flex items-center justify-between gap-4 py-2">
                     <span>{item.name}</span>
                     <span className="text-muted">
                       {item.category} · {item.count}
@@ -137,30 +139,40 @@ export default function AdminAnalyticsPageView() {
                   </li>
                 ))}
               </ul>
+              {data.topFurniture.length === 0 ? (
+                <p className="admin-empty">No furniture usage recorded for this period.</p>
+              ) : null}
             </section>
 
-            <section className="rounded-xl border border-soft bg-panel">
+            <section className="admin-panel p-4">
               <h2 className="text-sm font-semibold text-strong">Export breakdown</h2>
               <ul className="mt-3 divide-y divide-soft text-sm">
                 {data.exports.map((row) => (
-                  <li key={row.format} className="gap-4 py-2">
+                  <li key={row.format} className="flex items-center justify-between gap-4 py-2">
                     <span>{row.format}</span>
                     <span className="text-muted">{row.count}</span>
                   </li>
                 ))}
               </ul>
+              {data.exports.length === 0 ? (
+                <p className="admin-empty">No exports recorded for this period.</p>
+              ) : null}
             </section>
           </div>
 
-          <section className="rounded-xl border border-soft bg-panel">
+          <section className="admin-panel p-4">
             <h2 className="text-sm font-semibold text-strong">Plans created</h2>
-            <div className="mt-3 overflow-x-auto">
-              <table className="min-w-[28rem] text-start text-sm">
+            {data.plansCreated.length === 0 ? (
+              <p className="admin-empty">No plan activity recorded for this period.</p>
+            ) : (
+            <div className="admin-table-wrap mt-3" role="region" aria-label="Plan activity table" tabIndex={0}>
+              <table className="admin-table min-w-[28rem]">
+                <caption className="sr-only">Plans created and active users by date</caption>
                 <thead className="text-xs uppercase tracking-wide text-soft">
                   <tr>
-                    <th className="px-2 py-2 font-medium">Date</th>
-                    <th className="px-2 py-2 font-medium">New plans</th>
-                    <th className="px-2 py-2 font-medium">Active users (series)</th>
+                    <th scope="col" className="px-2 py-2 font-medium">Date</th>
+                    <th scope="col" className="px-2 py-2 font-medium">New plans</th>
+                    <th scope="col" className="px-2 py-2 font-medium">Active users (series)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -176,6 +188,7 @@ export default function AdminAnalyticsPageView() {
                 </tbody>
               </table>
             </div>
+            )}
           </section>
         </div>
       ) : null}

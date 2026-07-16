@@ -308,17 +308,17 @@ export default function AdminPlansPageView() {
 
   return (
 
-    <div className="mx-auto max-w-6xl p-6 md:p-8">
+    <div className="admin-page">
 
-      <div className="mb-6 flex-wrap gap-3">
+      <header className="admin-page__header">
 
         <div>
 
-          <p className="text-xs uppercase tracking-wide text-soft">Admin review</p>
+          <p className="admin-page__eyebrow">Admin review</p>
 
-          <h1 className="text-2xl font-semibold text-strong">Planner plans</h1>
+          <h1 className="admin-page__title">Planner plans</h1>
 
-          <p className="mt-1 text-sm text-muted">
+          <p className="admin-page__copy">
 
             Filter saved documents, review metadata, and open any plan in the canvas workspace.
 
@@ -330,7 +330,7 @@ export default function AdminPlansPageView() {
 
           type="button"
 
-          className="btn-outline inline-flex gap-2"
+          className="admin-btn admin-btn--outline"
 
           onClick={() => void loadPlans()}
 
@@ -344,19 +344,19 @@ export default function AdminPlansPageView() {
 
         </button>
 
-      </div>
+      </header>
 
 
 
-      <div className="flex-wrap items-end gap-3 rounded-xl border border-soft bg-panel">
+      <div className="admin-toolbar">
 
-        <label className="min-w-[12rem] gap-1 text-sm">
+        <label className="admin-field min-w-0 flex-1 sm:min-w-[12rem]">
 
-          <span className="text-xs uppercase tracking-wide text-soft">Search</span>
+          <span className="admin-field__label">Search</span>
 
-          <span className="">
+          <span className="relative">
 
-            <Search size={14} className="pointer-events-none left-3 top-1/2 -translate-y-1/2 text-soft" aria-hidden />
+            <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-soft" aria-hidden />
 
             <input
 
@@ -368,7 +368,7 @@ export default function AdminPlansPageView() {
 
               placeholder="Title, project, client…"
 
-              className="rounded-lg border border-soft bg-subtle py-2 pl-9 pr-3 text-sm"
+              className="admin-field__control w-full pl-9"
 
             />
 
@@ -376,13 +376,13 @@ export default function AdminPlansPageView() {
 
         </label>
 
-        <label className="gap-1 text-sm">
+        <label className="admin-field">
 
-          <span className="text-xs uppercase tracking-wide text-soft">Status</span>
+          <span className="admin-field__label">Status</span>
 
           <select
 
-            className="rounded-lg border border-soft bg-subtle px-3 py-2 text-sm"
+            className="admin-field__control"
 
             value={statusFilter}
 
@@ -404,13 +404,13 @@ export default function AdminPlansPageView() {
 
         </label>
 
-        <label className="gap-1 text-sm">
+        <label className="admin-field">
 
-          <span className="text-xs uppercase tracking-wide text-soft">Sort</span>
+          <span className="admin-field__label">Sort</span>
 
           <select
 
-            className="rounded-lg border border-soft bg-subtle px-3 py-2 text-sm"
+            className="admin-field__control"
 
             value={sortValue}
 
@@ -438,7 +438,7 @@ export default function AdminPlansPageView() {
 
             type="button"
 
-            className="btn-outline"
+            className="admin-btn admin-btn--outline"
 
             onClick={() => {
 
@@ -464,7 +464,7 @@ export default function AdminPlansPageView() {
 
       {source === "unconfigured" ? (
 
-        <div className="rounded-xl border border-soft bg-panel text-sm text-muted">
+        <div className="admin-alert admin-alert--info" role="status">
 
           Database storage is not configured. Plan review will appear here once persistence is enabled.
 
@@ -476,7 +476,7 @@ export default function AdminPlansPageView() {
 
       {error ? (
 
-        <div className="rounded-xl border border-accent bg-danger-soft text-sm text-red-700" role="alert">
+        <div className="admin-alert admin-alert--error" role="alert">
 
           {error}
 
@@ -500,7 +500,7 @@ export default function AdminPlansPageView() {
 
       {loading ? (
 
-        <div className="gap-2 text-sm text-muted">
+        <div className="admin-inline-row text-sm text-muted" role="status" aria-live="polite">
 
           <Loader2 size={16} className="animate-spin" aria-hidden />
 
@@ -510,7 +510,7 @@ export default function AdminPlansPageView() {
 
       ) : plans.length === 0 ? (
 
-        <div className="rounded-xl border border-soft bg-panel p-6 text-sm text-muted">
+        <div className="admin-empty" role="status">
 
           {hasActiveFilters ? "No plans match the current filters." : "No plans found yet."}
 
@@ -518,25 +518,27 @@ export default function AdminPlansPageView() {
 
       ) : (
 
-        <div className="rounded-xl border border-soft bg-panel">
+        <div className="admin-panel admin-table-wrap" data-phone-layout="cards-priority">
 
-          <table className="text-start text-sm">
+          <table className="admin-table" data-phone-layout="cards-priority">
+
+            <caption className="sr-only">Planner plans available for Admin review</caption>
 
             <thead className="border-b border-soft bg-subtle text-xs uppercase tracking-wide text-soft">
 
               <tr>
 
-                <th className="px-4 py-3 font-medium">Plan</th>
+                <th scope="col">Plan</th>
 
-                <th className="px-4 py-3 font-medium">Room</th>
+                <th scope="col">Room</th>
 
-                <th className="px-4 py-3 font-medium">Items</th>
+                <th scope="col">Items</th>
 
-                <th className="px-4 py-3 font-medium">Status</th>
+                <th scope="col">Status</th>
 
-                <th className="px-4 py-3 font-medium">Updated</th>
+                <th scope="col">Updated</th>
 
-                <th className="px-4 py-3 font-medium">Actions</th>
+                <th scope="col">Actions</th>
 
               </tr>
 
@@ -548,7 +550,7 @@ export default function AdminPlansPageView() {
 
                 <tr key={plan.id} className="border-b border-soft last:border-b-0">
 
-                  <td className="px-4 py-3">
+                  <td data-label="Plan">
 
                     <Link href={`/admin/plans/${plan.id}`} className="font-medium text-strong hover:underline">
 
@@ -560,15 +562,15 @@ export default function AdminPlansPageView() {
 
                   </td>
 
-                  <td className="px-4 py-3 text-muted">
+                  <td data-label="Room" className="text-muted">
 
                     {plan.room_width_mm} × {plan.room_depth_mm} mm
 
                   </td>
 
-                  <td className="px-4 py-3 text-muted">{plan.item_count}</td>
+                  <td data-label="Items" className="text-muted">{plan.item_count}</td>
 
-                  <td className="px-4 py-3">
+                  <td data-label="Status">
 
                     <span className="rounded-full bg-subtle px-2 py-1 text-xs text-muted">
 
@@ -578,9 +580,9 @@ export default function AdminPlansPageView() {
 
                   </td>
 
-                  <td className="px-4 py-3 text-muted">{formatTimestamp(plan.updated_at)}</td>
+                  <td data-label="Updated" className="text-muted">{formatTimestamp(plan.updated_at)}</td>
 
-                  <td className="px-4 py-3">
+                  <td data-label="Actions">
 
                     <Link
 
@@ -615,4 +617,3 @@ export default function AdminPlansPageView() {
   );
 
 }
-

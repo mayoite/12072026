@@ -25,7 +25,7 @@ export default function AdminSettingsPageView() {
           <p className="admin-page__copy">
           Reference for planner canvas limits, feature-flag defaults, environment variables, and catalog data sources.
           Toggle live flags on the{" "}
-          <Link href="/admin/features" className="text-primary hover:underline">
+          <Link href="/admin/features" className="text-primary underline underline-offset-2">
             Features
           </Link>{" "}
           page.
@@ -48,13 +48,13 @@ export default function AdminSettingsPageView() {
               <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-soft">{group.group}</h3>
               <ul className="space-y-1">
                 {group.flags.map((flag) => (
-                  <li key={flag.name} className="gap-4 text-sm">
+                  <li key={flag.name} className="flex items-start justify-between gap-4 text-sm">
                     <span>
                       <code className="text-xs">{flag.name}</code>
                       <span className="ml-2 text-muted">{flag.description}</span>
                     </span>
                     <span
-                      className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${ DEFAULT_FLAGS[flag.name as FeatureFlagName] ? "bg-green-100 text-green-800" : "bg-subtle text-soft" }`}
+                      className={`admin-badge shrink-0 ${DEFAULT_FLAGS[flag.name as FeatureFlagName] ? "text-strong" : "admin-badge--hidden"}`}
                     >
                       {DEFAULT_FLAGS[flag.name as FeatureFlagName] ? "on" : "off"}
                     </span>
@@ -66,8 +66,8 @@ export default function AdminSettingsPageView() {
         </div>
       </section>
 
-      <section className="rounded-xl border border-soft bg-panel">
-        <header className="border-b border-soft px-4 py-3">
+      <section className="admin-panel">
+        <header className="admin-panel__header">
           <h2 className="text-sm font-semibold text-strong">Environment variables</h2>
           <p className="mt-1 text-xs text-muted">Set in Render dashboard or local <code>.env.local</code>.</p>
         </header>
@@ -81,23 +81,23 @@ export default function AdminSettingsPageView() {
         </ul>
       </section>
 
-      <section className="rounded-xl border border-soft bg-panel">
+      <section className="admin-panel p-4">
         <h2 className="text-sm font-semibold text-strong">Catalog data paths</h2>
         <ul className="mt-3 space-y-2 text-sm text-muted">
           <li>
-            <Link href="/admin/workspace-catalog" className="text-primary hover:underline">
+            <Link href="/admin/workspace-catalog" className="text-primary underline underline-offset-2">
               Workspace library
             </Link>{" "}
             — read-only static ingest (<code>features/planner/catalog-api/workspaceCatalog</code>)
           </li>
           <li>
-            <Link href="/admin/catalog" className="text-primary hover:underline">
+            <Link href="/admin/catalog" className="text-primary underline underline-offset-2">
               Standard catalog
             </Link>{" "}
             — editable managed products in <code>planner_managed_products</code>
           </li>
           <li>
-            <Link href="/admin/planner-catalog" className="text-primary hover:underline">
+            <Link href="/admin/planner-catalog" className="text-primary underline underline-offset-2">
               Configurator catalog
             </Link>{" "}
             — editable <code>configurator_products</code> payloads for parametric, discrete, and fixed SKUs
@@ -106,7 +106,7 @@ export default function AdminSettingsPageView() {
             Guest planner library — static + configurator + managed (hydrated at runtime)
           </li>
           <li>
-            <Link href="/admin/inventory" className="inline-flex gap-1 text-primary hover:underline">
+            <Link href="/admin/inventory" className="inline-flex gap-1 text-primary underline underline-offset-2">
               Route inventory <ExternalLink size={12} />
             </Link>{" "}
             — app routes and API map (not product stock)

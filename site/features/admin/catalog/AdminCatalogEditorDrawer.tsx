@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { CaretDown as ChevronDown, CaretUp as ChevronUp, CircleNotch as Loader2, FloppyDisk as Save, X } from "@phosphor-icons/react";
 
 import {
@@ -257,7 +258,7 @@ function ConfiguratorCatalogForm({
         </AdminField>
 
         <div className="rounded-lg border border-soft bg-panel p-3">
-          <div className="flex-wrap items-start gap-3">
+          <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="space-y-1">
               <p className="text-sm font-medium text-strong">Advanced JSON sizing data</p>
               <p className="text-xs text-muted">
@@ -418,25 +419,97 @@ export function AdminCatalogEditorDrawer({
   onStandardDraftChange,
   onConfiguratorDraftChange,
 }: Props) {
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!editorMode) return;
+
+    const previouslyFocused = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+    const dialog = dialogRef.current;
+    const backdrop = backdropRef.current;
+    const siblings = backdrop?.parentElement
+      ? Array.from(backdrop.parentElement.children).filter((node) => node !== backdrop)
+      : [];
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    for (const sibling of siblings) {
+      if (sibling instanceof HTMLElement) sibling.inert = true;
+    }
+
+    const focusable = () =>
+      dialog
+        ? Array.from(
+            dialog.querySelectorAll<HTMLElement>(
+              'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+            ),
+          ).filter((node) => node.tabIndex !== -1)
+        : [];
+
+    focusable()[0]?.focus({ preventScroll: true });
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const nodes = focusable();
+      if (nodes.length === 0) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      for (const sibling of siblings) {
+        if (sibling instanceof HTMLElement) sibling.inert = false;
+      }
+      previouslyFocused?.focus({ preventScroll: true });
+    };
+  }, [editorMode, onClose]);
+
   if (!editorMode) return null;
 
   return (
-    <div className="admin-drawer-backdrop" role="presentation">
+    <div
+      ref={backdropRef}
+      className="fixed inset-0 z-[70] flex justify-end bg-scrim"
+      role="presentation"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
       <div
-        className="admin-drawer"
+        ref={dialogRef}
+        className="flex h-dvh w-full max-w-2xl flex-col bg-panel shadow-theme-float"
         role="dialog"
         aria-modal="true"
         aria-label={editorMode === "create" ? "Create catalog item" : "Edit catalog item"}
       >
-        <header className="admin-drawer__header">
-          <h2 className="admin-drawer__title">
+        <header className="flex items-center justify-between gap-3 border-b border-soft p-4">
+          <h2 className="text-lg font-semibold text-strong">
             {editorMode === "create" ? "New catalog item" : "Edit catalog item"}
           </h2>
-          <button type="button" className="admin-icon-btn" onClick={onClose} aria-label="Close">
-            <X size={16} />
+          <button type="button" className="admin-btn admin-btn--outline" onClick={onClose} aria-label="Close">
+            <X size={16} aria-hidden />
           </button>
         </header>
-        <div className="admin-drawer__body">
+        <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
           {isStandard ? (
             <StandardCatalogForm
               draft={standardDraft}
@@ -454,17 +527,17 @@ export function AdminCatalogEditorDrawer({
             />
           )}
         </div>
-        <footer className="admin-drawer__footer">
-          <button type="button" className="btn-outline px-4 py-2 text-sm" onClick={onClose}>
+        <footer className="flex flex-wrap justify-end gap-2 border-t border-soft p-4">
+          <button type="button" className="admin-btn admin-btn--outline" onClick={onClose}>
             Cancel
           </button>
           <button
             type="button"
-            className="btn-primary inline-flex gap-2 px-4 py-2 text-sm"
+            className="admin-btn admin-btn--primary"
             disabled={readOnly || saving}
             onClick={() => void onSave()}
           >
-            {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+            {saving ? <Loader2 size={14} className="animate-spin" aria-hidden /> : <Save size={14} aria-hidden />}
             {editorMode === "create" ? "Create" : "Save changes"}
           </button>
         </footer>

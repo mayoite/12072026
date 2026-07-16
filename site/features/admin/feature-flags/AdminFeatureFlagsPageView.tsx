@@ -76,43 +76,43 @@ export default function AdminFeatureFlagsPageView() {
   const grouped = getAllFlagsGrouped();
 
   return (
-    <div className="mx-auto max-w-5xl p-6 md:p-8">
-      <div className="mb-6 flex-wrap gap-3">
+    <div className="admin-page">
+      <header className="admin-page__header">
         <div>
-          <p className="text-xs uppercase tracking-wide text-soft">Planner toolbar</p>
-          <h1 className="text-2xl font-semibold text-strong">Feature flags</h1>
-          <p className="mt-1 text-sm text-muted">
+          <p className="admin-page__eyebrow">Planner toolbar</p>
+          <h1 className="admin-page__title">Feature flags</h1>
+          <p className="admin-page__copy">
             Toggle planner toolbar items, export actions, panels, and sync behavior. Changes apply to new sessions after refresh.
           </p>
-          {source ? <p className="mt-1 text-xs text-soft">Source: {source}</p> : null}
+          {source ? <p className="admin-page__meta">Source: {source}</p> : null}
         </div>
         <button
           type="button"
-          className="btn-outline inline-flex gap-2 px-3 py-2 text-sm"
+          className="admin-btn admin-btn--outline"
           onClick={() => void loadFlags()}
           disabled={loading}
         >
           {loading ? <Loader2 size={14} className="animate-spin" aria-hidden /> : <RefreshCw size={14} aria-hidden />}
           Refresh
         </button>
-      </div>
+      </header>
 
       {error ? (
-        <div className="rounded-xl border border-accent bg-danger-soft text-sm text-red-700" role="alert">
+        <div className="admin-alert admin-alert--error" role="alert">
           {error}
         </div>
       ) : null}
 
       {loading && !flags ? (
-        <div className="gap-2 text-sm text-muted">
+        <div className="admin-inline-row text-sm text-muted" role="status" aria-live="polite">
           <Loader2 size={16} className="animate-spin" aria-hidden />
           Loading flags…
         </div>
       ) : (
         <div className="space-y-6">
           {grouped.map((group) => (
-            <section key={group.group} className="rounded-xl border border-soft bg-panel">
-              <header className="border-b border-soft px-4 py-3">
+            <section key={group.group} className="admin-panel">
+              <header className="admin-panel__header">
                 <h2 className="text-sm font-semibold text-strong">{group.group}</h2>
               </header>
               <ul className="divide-y divide-soft">
@@ -120,7 +120,7 @@ export default function AdminFeatureFlagsPageView() {
                   const enabled = flags?.[flag.name] ?? flag.defaultValue;
                   const busy = pendingKey === flag.name;
                   return (
-                    <li key={flag.name} className="gap-4 px-4 py-3">
+                    <li key={flag.name} className="flex items-center justify-between gap-4 px-4 py-3">
                       <div>
                         <p className="font-medium text-strong">{flag.description}</p>
                         <p className="text-xs text-soft">{flag.name}</p>
@@ -129,13 +129,13 @@ export default function AdminFeatureFlagsPageView() {
                         type="button"
                         role="switch"
                         aria-checked={enabled}
-                        aria-label={`${flag.description} ${enabled ? "enabled" : "disabled"}`}
+                        aria-label={flag.description}
                         className={`inline-flex h-7 w-12 shrink-0 rounded-full transition-colors ${ enabled ? "bg-primary" : "bg-soft" } ${busy ? "opacity-60" : ""}`}
                         disabled={busy || !flags}
                         onClick={() => void toggleFlag(flag.name, !enabled)}
                       >
                         <span
-                          className={`h-5 w-5 transform rounded-full shadow transition-transform ${ enabled ? "translate-x-6" : "translate-x-1" }`}
+                          className={`h-5 w-5 transform rounded-full bg-panel shadow transition-transform ${ enabled ? "translate-x-6" : "translate-x-1" }`}
                         />
                       </button>
                     </li>

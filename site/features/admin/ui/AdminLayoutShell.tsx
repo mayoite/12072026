@@ -79,8 +79,14 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
 
   return (
     <div className="shell-admin-layout" data-admin-layout>
+      <a
+        href="#main-content"
+        className="admin-btn admin-btn--primary fixed start-4 top-4 z-[60] -translate-y-24 focus:translate-y-0"
+      >
+        Skip to main content
+      </a>
       {!editorFocusMode && (
-        <header className="shell-admin-header shell-admin-header--brand">
+        <header className="shell-admin-header shell-admin-header--brand !bg-primary">
           <div className="shell-admin-bar shell-admin-bar--brand">
             <div className="shell-admin-bar__group">
               <button

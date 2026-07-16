@@ -194,11 +194,11 @@ export function AdminCatalogManager({
     setError(null);
   };
 
-  const closeEditor = () => {
+  const closeEditor = useCallback(() => {
     setEditorMode(null);
     setShowAdvancedJson(false);
     setSaving(false);
-  };
+  }, []);
 
   const handleSave = async () => {
     if (readOnly) return;
@@ -230,7 +230,9 @@ export function AdminCatalogManager({
 
       closeEditor();
       await loadItems();
-      void usePlannerCatalogStore.getState().hydrateCatalog();
+      void usePlannerCatalogStore.getState().hydrateCatalog().catch((hydrateError: unknown) => {
+        setError(hydrateError instanceof Error ? hydrateError.message : "Failed to refresh planner catalog");
+      });
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : "Failed to save item");
       setSaving(false);
@@ -253,7 +255,9 @@ export function AdminCatalogManager({
         isStandard ? { visible: nextVisible } : { active: nextVisible },
       );
       await loadItems();
-      void usePlannerCatalogStore.getState().hydrateCatalog();
+      void usePlannerCatalogStore.getState().hydrateCatalog().catch((hydrateError: unknown) => {
+        setError(hydrateError instanceof Error ? hydrateError.message : "Failed to refresh planner catalog");
+      });
     } catch (toggleError) {
       setError(
         toggleError instanceof Error ? toggleError.message : "Failed to update visibility",
@@ -281,7 +285,9 @@ export function AdminCatalogManager({
       await deleteAdminCatalogItem(catalogType, item.id);
       if (editorMode === "edit") closeEditor();
       await loadItems();
-      void usePlannerCatalogStore.getState().hydrateCatalog();
+      void usePlannerCatalogStore.getState().hydrateCatalog().catch((hydrateError: unknown) => {
+        setError(hydrateError instanceof Error ? hydrateError.message : "Failed to refresh planner catalog");
+      });
     } catch (deleteError) {
       setError(deleteError instanceof Error ? deleteError.message : "Failed to delete item");
     } finally {
@@ -412,8 +418,8 @@ export function AdminCatalogManager({
       </div>
 
       {loading && items.length === 0 ? (
-        <div className="gap-2 text-sm text-muted">
-          <Loader2 size={16} className="animate-spin" />
+        <div className="admin-inline-row text-sm text-muted" role="status" aria-live="polite">
+          <Loader2 size={16} className="animate-spin" aria-hidden />
           Loading catalog...
         </div>
       ) : error && items.length === 0 ? null

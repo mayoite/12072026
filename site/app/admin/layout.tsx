@@ -20,7 +20,7 @@ export default async function AdminLayout({
 
   return (
     <AdminLayoutShell>
-      <main id="main-content">{children}</main>
+      <main id="main-content" tabIndex={-1}>{children}</main>
     </AdminLayoutShell>
   );
 }

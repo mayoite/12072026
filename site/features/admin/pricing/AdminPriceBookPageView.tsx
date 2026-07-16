@@ -36,7 +36,7 @@ function statusBadgeClass(status: PriceBookVersionStatus): string {
     case "approved":
       return "admin-badge admin-badge--approved";
     case "draft":
-      return "admin-badge admin-badge--warn";
+      return "admin-badge admin-badge--warn !text-strong";
     case "retired":
     case "rolled_back":
       return "admin-badge admin-badge--hidden";
@@ -56,6 +56,7 @@ export function AdminPriceBookPageView({
   const [loading, setLoading] = useState(initialContract === null);
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [selectedVersionId, setSelectedVersionId] = useState<string | null>(
     initialContract?.versions[0]?.versionId ?? null,
   );
@@ -66,10 +67,14 @@ export function AdminPriceBookPageView({
   );
 
   const load = useCallback(async () => {
+    setError(null);
     try {
       const response = await browserApiFetch(
         apiPath(`/api/admin/price-books/${bookId}`),
       );
+      if (!response.ok) {
+        throw new Error(`Failed to load price book (${response.status})`);
+      }
       const payload = (await response.json()) as {
         contract?: PriceBookContract;
         history?: PriceBookAuditEntry[];
@@ -80,6 +85,8 @@ export function AdminPriceBookPageView({
         next?.activeVersionId ?? next?.versions[0]?.versionId ?? null,
       );
       if (payload.history) setHistory(payload.history);
+    } catch (loadError) {
+      setError(loadError instanceof Error ? loadError.message : "Failed to load price book");
     } finally {
       setLoading(false);
     }
@@ -87,7 +94,10 @@ export function AdminPriceBookPageView({
 
   useEffect(() => {
     if (initialContract === null) {
-      void load();
+      const timeoutId = window.setTimeout(() => {
+        void load();
+      }, 0);
+      return () => window.clearTimeout(timeoutId);
     }
   }, [initialContract, load]);
 
@@ -139,6 +149,7 @@ export function AdminPriceBookPageView({
 
       setBusy(`${action}:${version.versionId}`);
       setMessage(null);
+      setError(null);
       try {
         const response = await browserApiFetch(
           apiPath(`/api/admin/price-books/${bookId}/action`),
@@ -167,6 +178,8 @@ export function AdminPriceBookPageView({
         setContract(payload.contract ?? null);
         if (payload.history) setHistory(payload.history);
         setMessage(`${action} complete for ${version.versionId}`);
+      } catch (actionError) {
+        setError(actionError instanceof Error ? actionError.message : "Price book action failed");
       } finally {
         setBusy(null);
       }
@@ -224,6 +237,12 @@ export function AdminPriceBookPageView({
         <p className="admin-page__meta" role="status">
           <Loader2 size={14} className="animate-spin" aria-hidden /> Loading…
         </p>
+      ) : null}
+
+      {error ? (
+        <div className="admin-alert admin-alert--error" role="alert">
+          {error}
+        </div>
       ) : null}
 
       {contract ? (
@@ -336,10 +355,8 @@ export function AdminPriceBookPageView({
                   {releaseImpact}
                 </p>
 
-                <table
-                  className="admin-table admin-price-book-rules"
-                  data-testid="admin-price-book-rules"
-                >
+                <div className="admin-table-wrap">
+                <table className="admin-table admin-price-book-rules" data-testid="admin-price-book-rules">
                   <caption className="sr-only">
                     Price rules with currency amounts
                   </caption>
@@ -396,6 +413,7 @@ export function AdminPriceBookPageView({
                     </tr>
                   </tbody>
                 </table>
+                </div>
 
                 {/* ADM-PRICE-01 — raw minor units / bps stay advanced */}
                 <details
@@ -406,6 +424,7 @@ export function AdminPriceBookPageView({
                     Advanced · minor units
                   </summary>
                   <div className="admin-panel__body">
+                    <div className="admin-table-wrap">
                     <table className="admin-table">
                       <caption className="sr-only">
                         Minor currency units and basis-point adjustments
@@ -443,14 +462,15 @@ export function AdminPriceBookPageView({
                         })}
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 </details>
 
                 <div
-                  className="admin-price-book-actions"
+                  className="admin-actions-row items-start"
                   data-testid="admin-price-book-actions"
                 >
-                  <div className="admin-price-book-actions__primary">
+                  <div className="admin-stack gap-1">
                     <button
                       type="button"
                       className="admin-btn admin-btn--primary"
@@ -472,7 +492,7 @@ export function AdminPriceBookPageView({
                       </p>
                     ) : null}
                   </div>
-                  <div className="admin-price-book-actions__secondary">
+                  <div className="admin-actions-row">
                     <button
                       type="button"
                       className="admin-btn admin-btn--outline"
@@ -526,7 +546,7 @@ export function AdminPriceBookPageView({
 
             {/* ADM-AUDIT-01 */}
             <div data-testid="admin-price-book-history">
-              <p className="admin-panel__header">Commercial history</p>
+              <h2 className="admin-panel__header">Commercial history</h2>
               {history.length === 0 ? (
                 <p className="admin-page__meta">No audit events yet.</p>
               ) : (
@@ -541,6 +561,8 @@ export function AdminPriceBookPageView({
             </div>
           </div>
         </div>
+      ) : !loading && !error ? (
+        <div className="admin-empty" role="status">No price book data is available.</div>
       ) : null}
     </div>
   );

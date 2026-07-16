@@ -131,31 +131,45 @@ export default function AdminPlanDetailPageView() {
   }, [planId]);
 
   if (!planId) {
-    return <div className="p-8 text-sm text-muted">Missing plan id.</div>;
+    return (
+      <div className="admin-page">
+        <h1 className="text-2xl font-semibold text-strong">Plan detail</h1>
+        <div className="admin-alert admin-alert--error" role="alert">
+          Missing plan id.
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="mx-auto max-w-5xl p-6 md:p-8">
+    <div className="admin-page">
       <Link href="/admin/plans" className="inline-flex gap-2 text-sm text-muted hover:text-strong">
         <ArrowLeft size={14} aria-hidden />
         Back to plans
       </Link>
 
+      {!plan ? (
+        <header>
+          <p className="text-xs uppercase tracking-wide text-soft">Plan review</p>
+          <h1 className="mt-1 text-2xl font-semibold text-strong">Plan detail</h1>
+        </header>
+      ) : null}
+
       {loading ? (
-        <div className="gap-2 text-sm text-muted">
+        <div className="admin-inline-row text-sm text-muted" role="status" aria-live="polite">
           <Loader2 size={16} className="animate-spin" aria-hidden />
           Loading plan…
         </div>
       ) : null}
 
       {error ? (
-        <div className="rounded-xl border border-accent bg-danger-soft text-sm text-red-700" role="alert">
+        <div className="admin-alert admin-alert--error" role="alert">
           {error}
         </div>
       ) : null}
 
       {statusMessage ? (
-        <div className="rounded-xl border border-accent bg-success-soft text-sm text-green-800" role="status">
+        <div className="admin-alert admin-alert--success" role="status">
           <Check size={14} className="mr-1 inline" aria-hidden />
           {statusMessage}
         </div>
@@ -169,17 +183,17 @@ export default function AdminPlanDetailPageView() {
             <p className="mt-2 text-sm text-muted">
               {plan.project_name ?? "No project"} · {plan.client_name ?? "No client"} · Updated {formatTimestamp(plan.updated_at)}
             </p>
-            <div className="flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
               <Link
                 href={buildPlannerCanvasHref(plan.id)}
-                className="btn-primary inline-flex gap-2"
+                className="admin-btn admin-btn--primary"
               >
                 <ExternalLink size={14} aria-hidden />
                 Open in canvas
               </Link>
               <button
                 type="button"
-                className="btn-outline disabled:opacity-60"
+                className="admin-btn admin-btn--outline"
                 disabled={saving || plan.status === "active"}
                 onClick={() => void updateStatus("active")}
               >
@@ -187,7 +201,7 @@ export default function AdminPlanDetailPageView() {
               </button>
               <button
                 type="button"
-                className="btn-outline disabled:opacity-60"
+                className="admin-btn admin-btn--outline"
                 disabled={saving || plan.status === "draft"}
                 onClick={() => void updateStatus("draft")}
               >
@@ -195,7 +209,7 @@ export default function AdminPlanDetailPageView() {
               </button>
               <button
                 type="button"
-                className="btn-outline disabled:opacity-60"
+                className="admin-btn admin-btn--outline"
                 disabled={saving || plan.status === "archived"}
                 onClick={() => void updateStatus("archived")}
               >
@@ -205,48 +219,48 @@ export default function AdminPlanDetailPageView() {
           </header>
 
           <section className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-xl border border-soft bg-panel">
+            <div className="admin-panel p-4">
               <h2 className="text-sm font-semibold text-strong">Document summary</h2>
               <dl className="mt-3 space-y-2 text-sm">
-                <div className="gap-4">
+                <div className="flex justify-between gap-4">
                   <dt className="text-muted">Room</dt>
                   <dd>{plan.room_width_mm} × {plan.room_depth_mm} mm</dd>
                 </div>
-                <div className="gap-4">
+                <div className="flex justify-between gap-4">
                   <dt className="text-muted">Items</dt>
                   <dd>{plan.item_count}</dd>
                 </div>
-                <div className="gap-4">
+                <div className="flex justify-between gap-4">
                   <dt className="text-muted">Seat target</dt>
                   <dd>{plan.seat_target}</dd>
                 </div>
-                <div className="gap-4">
+                <div className="flex justify-between gap-4">
                   <dt className="text-muted">Units</dt>
                   <dd>{plan.unit_system}</dd>
                 </div>
-                <div className="gap-4">
+                <div className="flex justify-between gap-4">
                   <dt className="text-muted">Status</dt>
                   <dd>{plan.status}</dd>
                 </div>
               </dl>
             </div>
 
-            <div className="rounded-xl border border-soft bg-panel">
+            <div className="admin-panel p-4">
               <h2 className="text-sm font-semibold text-strong">Fabric scene readiness</h2>
               <dl className="mt-3 space-y-2 text-sm">
-                <div className="gap-4">
+                <div className="flex justify-between gap-4">
                   <dt className="text-muted">Canonical scene</dt>
                   <dd>{readiness.hasScene ? "Present" : "Missing"}</dd>
                 </div>
-                <div className="gap-4">
+                <div className="flex justify-between gap-4">
                   <dt className="text-muted">Fabric snapshot</dt>
                   <dd>{readiness.hasFabricSnapshot ? "Present" : "Missing"}</dd>
                 </div>
-                <div className="gap-4">
+                <div className="flex justify-between gap-4">
                   <dt className="text-muted">Scene items</dt>
                   <dd>{readiness.itemCount}</dd>
                 </div>
-                <div className="gap-4">
+                <div className="flex justify-between gap-4">
                   <dt className="text-muted">Scene room</dt>
                   <dd>{readiness.roomLabel}</dd>
                 </div>
@@ -255,11 +269,11 @@ export default function AdminPlanDetailPageView() {
           </section>
 
           {scene?.items?.length ? (
-            <section className="rounded-xl border border-soft bg-panel">
+            <section className="admin-panel p-4">
               <h2 className="text-sm font-semibold text-strong">Scene items</h2>
               <ul className="mt-3 divide-y divide-soft text-sm">
                 {scene.items.slice(0, 12).map((item) => (
-                  <li key={item.id} className="gap-4 py-2">
+                  <li key={item.id} className="flex flex-wrap justify-between gap-4 py-2">
                     <span className="text-strong">{item.name}</span>
                     <span className="text-muted">
                       {item.category} · {item.sizeMm.widthMm} × {item.sizeMm.depthMm} mm
@@ -273,9 +287,14 @@ export default function AdminPlanDetailPageView() {
             </section>
           ) : null}
 
-          <section className="rounded-xl border border-soft bg-panel">
+          <section className="admin-panel p-4">
             <h2 className="text-sm font-semibold text-strong">Scene JSON</h2>
-            <pre className="mt-3 max-h-80 rounded-lg bg-subtle p-3 text-xs text-muted">
+            <pre
+              className="admin-preformatted mt-3 max-h-80 overflow-auto rounded-lg bg-subtle p-3 text-muted"
+              role="region"
+              aria-label="Scene JSON"
+              tabIndex={0}
+            >
               {JSON.stringify(plan.scene_json, null, 2)}
             </pre>
           </section>

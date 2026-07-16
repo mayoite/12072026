@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { AdminField, AdminSelect, AdminTextInput } from "../ui/AdminFormFields";
 
 export type InventoryRow = {
   kind: string;
@@ -40,7 +41,6 @@ function parseInventoryCsv(csv: string): InventoryRow[] {
 
   const headers = parseCsvLine(lines[0]);
   const index = (name: string) => headers.indexOf(name);
-
   const kindIdx = index("kind");
   const routeIdx = index("url_route");
   const areaIdx = index("area");
@@ -92,90 +92,89 @@ export default function AdminInventoryPageView({ csv, generatedAt, rowCount }: P
   }, [rows, kindFilter, areaFilter, query]);
 
   return (
-    <div className="mx-auto max-w-7xl p-6 md:p-8">
-      <div className="mb-6">
-        <p className="text-xs uppercase tracking-wide text-soft">Route inventory</p>
-        <h1 className="text-2xl font-semibold text-strong">App pages & APIs</h1>
-        <p className="mt-1 text-sm text-muted">
-          Live view of <code className="text-xs">results/app-pages-inventory.csv</code> — regenerate with{" "}
-          <code className="text-xs">node scripts/generate-app-inventory-csv.mjs</code>.
-        </p>
-        <p className="mt-1 text-xs text-soft">
-          {rowCount} rows
-          {generatedAt ? ` · file updated ${new Date(generatedAt).toLocaleString("en-IN")}` : ""}
-        </p>
-      </div>
+    <div className="admin-page">
+      <header className="admin-page__header">
+        <div>
+          <p className="admin-page__eyebrow">Route inventory</p>
+          <h1 className="admin-page__title">App pages &amp; APIs</h1>
+          <p className="admin-page__copy">
+            Live view of <code className="text-xs">results/app-pages-inventory.csv</code> — regenerate with{" "}
+            <code className="text-xs">node scripts/generate-app-inventory-csv.mjs</code>.
+          </p>
+          <p className="admin-page__meta">
+            {rowCount} rows
+            {generatedAt ? ` · file updated ${new Date(generatedAt).toLocaleString("en-IN")}` : ""}
+          </p>
+        </div>
+      </header>
 
-      <div className="flex-wrap gap-3">
-        <input
-          type="search"
-          placeholder="Search route, file, summary…"
-          className="min-w-[16rem] rounded-lg border border-soft bg-panel px-3 py-2 text-sm"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-        />
-        <select
-          className="rounded-lg border border-soft bg-panel px-3 py-2 text-sm"
-          value={kindFilter}
-          onChange={(event) => setKindFilter(event.target.value)}
-        >
-          <option value="all">All kinds</option>
-          {kinds.map((kind) => (
-            <option key={kind} value={kind}>
-              {kind}
-            </option>
-          ))}
-        </select>
-        <select
-          className="rounded-lg border border-soft bg-panel px-3 py-2 text-sm"
-          value={areaFilter}
-          onChange={(event) => setAreaFilter(event.target.value)}
-        >
-          <option value="all">All areas</option>
-          {areas.map((area) => (
-            <option key={area} value={area}>
-              {area}
-            </option>
-          ))}
-        </select>
+      <div className="admin-toolbar">
+        <AdminField label="Search">
+          <AdminTextInput
+            type="search"
+            placeholder="Search route, file, summary…"
+            className="min-w-0 sm:min-w-[16rem]"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </AdminField>
+        <AdminField label="Kind">
+          <AdminSelect value={kindFilter} onChange={(event) => setKindFilter(event.target.value)}>
+            <option value="all">All kinds</option>
+            {kinds.map((kind) => (
+              <option key={kind} value={kind}>{kind}</option>
+            ))}
+          </AdminSelect>
+        </AdminField>
+        <AdminField label="Area">
+          <AdminSelect value={areaFilter} onChange={(event) => setAreaFilter(event.target.value)}>
+            <option value="all">All areas</option>
+            {areas.map((area) => (
+              <option key={area} value={area}>{area}</option>
+            ))}
+          </AdminSelect>
+        </AdminField>
       </div>
 
       {rows.length === 0 ? (
-        <div className="rounded-xl border border-soft bg-panel p-6 text-sm text-muted">
+        <div className="admin-empty" role="status">
           Inventory file is missing or empty. Run the generator script to populate{" "}
           <code className="text-xs">results/app-pages-inventory.csv</code>.
         </div>
       ) : (
-        <div className="rounded-xl border border-soft bg-panel">
-          <div className="border-b border-soft px-4 py-3 text-sm text-muted">
-            Showing {filtered.length} of {rows.length}
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-[48rem] text-start text-sm">
-              <thead className="border-b border-soft bg-subtle text-xs uppercase tracking-wide text-soft">
-                <tr>
-                  <th className="px-4 py-3 font-medium">Kind</th>
-                  <th className="px-4 py-3 font-medium">Route</th>
-                  <th className="px-4 py-3 font-medium">Area</th>
-                  <th className="px-4 py-3 font-medium">Auth</th>
-                  <th className="px-4 py-3 font-medium">File</th>
-                  <th className="px-4 py-3 font-medium">Summary</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((row) => (
-                  <tr key={`${row.kind}-${row.urlRoute}-${row.file}`} className="border-b border-soft align-top last:border-b-0">
-                    <td className="px-4 py-3 text-muted">{row.kind}</td>
-                    <td className="px-4 py-3 font-mono text-xs text-strong">{row.urlRoute || "—"}</td>
-                    <td className="px-4 py-3 text-muted">{row.area}</td>
-                    <td className="px-4 py-3 text-muted">{row.auth}</td>
-                    <td className="px-4 py-3 font-mono text-xs text-muted">{row.file}</td>
-                    <td className="max-w-md px-4 py-3 text-muted">{row.summary}</td>
+        <div className="admin-panel">
+          <div className="admin-panel__header">Showing {filtered.length} of {rows.length}</div>
+          {filtered.length === 0 ? (
+            <div className="admin-empty" role="status">No routes match the current filters.</div>
+          ) : (
+            <div className="admin-table-wrap" data-phone-layout="cards-priority">
+              <table className="admin-table" data-phone-layout="cards-priority">
+                <caption className="sr-only">Application routes and API inventory</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Kind</th>
+                    <th scope="col">Route</th>
+                    <th scope="col">Area</th>
+                    <th scope="col">Auth</th>
+                    <th scope="col">File</th>
+                    <th scope="col">Summary</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {filtered.map((row) => (
+                    <tr key={`${row.kind}-${row.urlRoute}-${row.file}`}>
+                      <td data-label="Kind" className="text-muted">{row.kind}</td>
+                      <td data-label="Route" className="font-mono text-xs text-strong">{row.urlRoute || "—"}</td>
+                      <td data-label="Area" className="text-muted">{row.area}</td>
+                      <td data-label="Auth" className="text-muted">{row.auth}</td>
+                      <td data-label="File" className="font-mono text-xs text-muted">{row.file}</td>
+                      <td data-label="Summary" className="max-w-md text-muted">{row.summary}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
     </div>
