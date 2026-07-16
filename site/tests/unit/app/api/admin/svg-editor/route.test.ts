@@ -29,19 +29,27 @@ vi.mock("@/features/admin/svg-editor/storage/persistBlockDescriptor", () => ({
   parseAdminPayload: vi.fn(),
 }));
 
+vi.mock("@/features/admin/svg-editor/publish/publishDescriptorWithPipeline", () => ({
+  publishDescriptorWithPipeline: vi.fn(),
+}));
+
 vi.mock("@/features/admin/svg-editor/publish/svgPipelineRunner", () => ({
   runSvgPipeline: vi.fn(),
+}));
+
+const { tryLoad } = vi.hoisted(() => ({
+  tryLoad: vi.fn(),
 }));
 
 vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", async () => {
   const actual = await vi.importActual<typeof SvgBlockDescriptorLoader>(
     "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader",
   );
-  return { ...actual, clearLoaderCache: vi.fn() };
+  return { ...actual, clearLoaderCache: vi.fn(), tryLoad };
 });
 
-const { persistBlockDescriptor, parseAdminPayload } = await import("@/features/admin/svg-editor/storage/persistBlockDescriptor");
-const { runSvgPipeline } = await import("@/features/admin/svg-editor/publish/svgPipelineRunner");
+const { parseAdminPayload } = await import("@/features/admin/svg-editor/storage/persistBlockDescriptor");
+const { publishDescriptorWithPipeline } = await import("@/features/admin/svg-editor/publish/publishDescriptorWithPipeline");
 
 function makeReq(body: unknown): NextRequest {
   return new NextRequest("http://localhost:3000/api/admin/svg-editor", {
@@ -71,6 +79,7 @@ const validDescriptor = {
 describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(tryLoad).mockReturnValue({ ok: false, error: { kind: "not_found" } } as never);
   });
 
   afterEach(() => {
@@ -87,6 +96,10 @@ describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
       ok: false,
       error: { kind: "invalid", code: "422.invalid", fieldPath: "", message: "auth boundary" },
     } as any);
+    vi.mocked(publishDescriptorWithPipeline).mockResolvedValue({
+      success: false,
+      error: "invalid: auth boundary",
+    });
 
     const res = await POST(req as any, {} as any);
     expect(res.status).toBe(422); // mapped; auth 401/403 exercised in withAuth layer + integration
@@ -103,6 +116,10 @@ describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
         issues: [{ path: "slug", message: "invalid" }],
       },
     } as any);
+    vi.mocked(publishDescriptorWithPipeline).mockResolvedValue({
+      success: false,
+      error: "invalid: slug must match kebab",
+    });
 
     const req = makeReq({ schemaVersion: "bad" });
     const res = await POST(req as any, {} as any);
@@ -115,54 +132,48 @@ describe("POST /api/admin/svg-editor (04-ADMIN-06 + tests)", () => {
   });
 
   it("04-TEST-03 + atomic: persist success path + cache clear", async () => {
+    vi.mocked(tryLoad).mockReturnValue({ ok: true, value: validDescriptor } as never);
     vi.mocked(parseAdminPayload).mockReturnValue({ ok: true, value: validDescriptor } as any);
-    vi.mocked(persistBlockDescriptor).mockReturnValue({
-      ok: true,
+    vi.mocked(publishDescriptorWithPipeline).mockResolvedValue({
+      success: true,
       descriptor: validDescriptor,
-      path: "/tmp/test-block.json",
-      historyPath: "/tmp/test-block.1700000000-abc.json",
-      replaced: false,
-    } as any);
-    vi.mocked(runSvgPipeline).mockResolvedValue({ ok: true, exitCode: 0, stdout: "", stderr: "", fixturePath: "", svgPath: "", durationMs: 10 } as any);
+    });
 
     const req = makeReq(validDescriptor);
     const res = await POST(req as any, {} as any);
     const body = await res.json();
 
-    expect(persistBlockDescriptor).toHaveBeenCalled();
+    expect(publishDescriptorWithPipeline).toHaveBeenCalled();
     expect(body.success).toBe(true);
     expect(body.descriptor.slug).toBe("test-block");
     expect(body.thumb).toBeDefined();
   });
 
   it("04-TEST-04: pipeline (R2 side-effect via generate) returns thumb on success", async () => {
+    vi.mocked(tryLoad).mockReturnValue({ ok: true, value: validDescriptor } as never);
     vi.mocked(parseAdminPayload).mockReturnValue({ ok: true, value: validDescriptor } as any);
-    vi.mocked(persistBlockDescriptor).mockReturnValue({ ok: true, descriptor: validDescriptor, path: "", historyPath: "", replaced: false } as any);
-    vi.mocked(runSvgPipeline).mockResolvedValue({
-      ok: true,
-      exitCode: 0,
-      stdout: "wrote png",
-      stderr: "",
-      fixturePath: "/f",
-      svgPath: "/s",
-      durationMs: 42,
-    } as any);
+    vi.mocked(publishDescriptorWithPipeline).mockResolvedValue({
+      success: true,
+      descriptor: validDescriptor,
+    });
 
     const req = makeReq(validDescriptor);
     const res = await POST(req as any, {} as any);
     const body = await res.json();
 
-    expect(runSvgPipeline).toHaveBeenCalledWith(
+    expect(publishDescriptorWithPipeline).toHaveBeenCalledWith(
       validDescriptor,
-      expect.objectContaining({ skipCompile: true, precompiledSvg: expect.any(String) }),
+      expect.objectContaining({ dbRepository: expect.anything() }),
     );
     expect(body.thumb).toMatch(/site-block-thumbs|cdn/);
   });
 
   it("non-zero pipeline still returns descriptor (R2 is best-effort)", async () => {
     vi.mocked(parseAdminPayload).mockReturnValue({ ok: true, value: validDescriptor } as any);
-    vi.mocked(persistBlockDescriptor).mockReturnValue({ ok: true, descriptor: validDescriptor, path: "", historyPath: "", replaced: false } as any);
-    vi.mocked(runSvgPipeline).mockResolvedValue({ ok: false, reason: "nonZeroExit", stderr: "fail", stdout: "", exitCode: 1, error: "boom", fixturePath: null } as any);
+    vi.mocked(publishDescriptorWithPipeline).mockResolvedValue({
+      success: false,
+      error: "pipeline_failed: nonZeroExit",
+    });
 
     const req = makeReq(validDescriptor);
     const res = await POST(req as any, {} as any);

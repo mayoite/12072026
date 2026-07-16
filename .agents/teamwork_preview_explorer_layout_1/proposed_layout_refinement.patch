@@ -1,0 +1,89 @@
+diff --git a/site/features/planner/editor/TopBar.tsx b/site/features/planner/editor/TopBar.tsx
+index d7a65b4..e4070a9 100644
+--- a/site/features/planner/editor/TopBar.tsx
++++ b/site/features/planner/editor/TopBar.tsx
+@@ -20,6 +20,7 @@ import {
+   type PlannerPersistStorage,
+ } from "./workspaceStatusLabels";
+ import styles from "./workspace.module.css";
++import { OneAndOnlyLogo } from "@/components/ui/Logo";
+ 
+ /**
+  * Prop contract for WorkspaceShell / OOPlanner wiring:
+@@ -227,6 +228,7 @@ export function TopBar({
+       data-testid="planner-topbar"
+     >
+       <div className={styles.brand}>
++        <OneAndOnlyLogo className={styles.brandLogo} />
+         {isEditingName ? (
+           <input
+             ref={nameInputRef}
+@@ -562,9 +564,27 @@ export function TopBar({
+             <Menu
+               className={styles.dropdownMenu}
+               onAction={(key) => {
+                 if (key === "density") onToggleDensity?.();
++                if (key === "grid") onToggleGrid?.();
++                if (key === "snap") onToggleSnap?.();
++                if (key === "handoff") onHandoff?.();
+               }}
+             >
+               <MenuItem id="density" className={styles.dropdownItem}>
+                 Toggle density ({density === "touch" ? "compact" : "touch"})
+               </MenuItem>
++              {onToggleGrid && (
++                <MenuItem id="grid" className={`${styles.dropdownItem} ${styles.mobileOnly}`}>
++                  {gridEnabled ? "Disable Grid" : "Enable Grid"}
++                </MenuItem>
++              )}
++              {onToggleSnap && (
++                <MenuItem id="snap" className={`${styles.dropdownItem} ${styles.mobileOnly}`}>
++                  {snapEnabled ? "Disable Snap" : "Enable Snap"}
++                </MenuItem>
++              )}
++              {onHandoff && (
++                <MenuItem id="handoff" className={`${styles.dropdownItem} ${styles.mobileOnly}`}>
++                  Send to Oando
++                </MenuItem>
++              )}
+             </Menu>
+           </Popover>
+         </MenuTrigger>
+diff --git a/site/features/planner/editor/workspace.module.css b/site/features/planner/editor/workspace.module.css
+index ac887c2..74f6da1 100644
+--- a/site/features/planner/editor/workspace.module.css
++++ b/site/features/planner/editor/workspace.module.css
+@@ -232,6 +232,15 @@
+   --ws-action-gap: var(--space-2);
+ }
+ 
++.brandLogo {
++  height: 1.25rem;
++  width: auto;
++  flex-shrink: 0;
++}
++
++.header[data-density="touch"] .brandLogo {
++  height: 1.5rem;
++}
++
+ .brand {
+   grid-column: 1;
+   display: flex;
+@@ -321,6 +330,17 @@
+   flex-shrink: 0;
+ }
+ 
++.mobileOnly {
++  display: none;
++}
++
++@media (max-width: 48rem) {
++  .mobileOnly {
++    display: flex;
++  }
++}
++
+ .mobilePanelActions {
+   display: none;
+   align-items: center;

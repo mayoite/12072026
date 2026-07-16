@@ -455,6 +455,36 @@
   color: var(--text-inverse);
 }
 
+/* Below lg: centered stack — title block centers as one unit; lines share a left edge inside it. */
+@media (width < theme(--breakpoint-lg)) {
+  .home-hero__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .home-hero-title-homepage [aria-hidden="true"] {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    text-align: left;
+  }
+
+  .home-hero-title-homepage [aria-hidden="true"] > span {
+    width: auto;
+    max-width: 100%;
+  }
+
+  .home-hero__copy .home-kicker,
+  .home-hero__copy .home-actions {
+    width: fit-content;
+    max-width: 100%;
+  }
+}
+
 @media (width >= theme(--breakpoint-lg)) {
   .home-hero__copy {
     padding-bottom: var(--container-padding-desktop);

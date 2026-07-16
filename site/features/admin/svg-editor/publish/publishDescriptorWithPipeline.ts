@@ -362,6 +362,12 @@ export async function publishDescriptorWithPipeline(
           },
         ],
       );
+      // DB-SVG-05: set the published revision pointer on the product row.
+      await deps.dbRepository.updateProductPointer(
+        descriptor.slug,
+        `${descriptor.slug}-r1`,
+      );
+
     } catch (dbError) {
       const details =
         dbError instanceof Error ? dbError.message : String(dbError);

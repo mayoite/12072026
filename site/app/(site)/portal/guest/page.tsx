@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
+import { buildAccessRedirect } from "@/lib/auth/plannerRedirect";
 
 export default function GuestPortalPage() {
-  redirect("/access?next=%2Fportal");
+  redirect(buildAccessRedirect("/portal"));
 }

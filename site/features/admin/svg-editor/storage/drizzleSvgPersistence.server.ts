@@ -6,6 +6,7 @@ import {
   svgRevisions,
   svgRevisionArtifacts,
   blockDescriptors,
+  plannerManagedProducts,
 } from "@/platform/drizzle/schema/catalog";
 import type {
   SupabaseSvgRevisionPersistence,
@@ -134,5 +135,13 @@ export class DrizzleSvgRevisionPersistence
         width: a.width ?? undefined,
       })),
     };
+  }
+
+  /** DB-SVG-05: update the published_svg_revision_id pointer on the matching product row. */
+  async updateProductPointer(plannerSourceSlug: string, revisionId: string): Promise<void> {
+    await productsDb
+      .update(plannerManagedProducts)
+      .set({ publishedSvgRevisionId: revisionId, updatedAt: new Date() })
+      .where(eq(plannerManagedProducts.plannerSourceSlug, plannerSourceSlug));
   }
 }

@@ -28,6 +28,8 @@ export interface SupabaseSvgRevisionPersistence {
     definition: SvgBlockDefinitionV1;
     artifacts: readonly SvgArtifactRecord[];
   } | null>;
+  /** DB-SVG-05: set published_svg_revision_id on planner_managed_products by planner_source_slug. */
+  updateProductPointer(plannerSourceSlug: string, revisionId: string): Promise<void>;
 }
 
 /**
@@ -44,6 +46,11 @@ export class ImmutableSvgRevisionRepository {
   ): Promise<void> {
     await this.persistence.insertRevision(revision, definition);
     await this.persistence.insertArtifacts(artifacts);
+  }
+
+  /** DB-SVG-05: update the product pointer after a successful publish. */
+  async updateProductPointer(plannerSourceSlug: string, revisionId: string): Promise<void> {
+    await this.persistence.updateProductPointer(plannerSourceSlug, revisionId);
   }
 
   async load(

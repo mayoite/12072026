@@ -38,10 +38,14 @@ export function isCanvasHeavyPath(pathname: string): boolean {
   );
 }
 
+/** Trusted third-party script/beacon origins (verified need — see SiteAnalytics + docs/architecture/10-SECURITY-BENCHMARK.md). */
+const CSP_VERCEL_ANALYTICS_ORIGINS =
+  "https://va.vercel-scripts.com https://vitals.vercel-insights.com https://vercel.live";
+
 export function buildContentSecurityPolicy(pathname: string): string {
   const scriptSrc = allowsUnsafeEval(pathname)
-    ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.googletagmanager.com https://www.google-analytics.com https://esm.sh"
-    : "script-src 'self' 'unsafe-inline' blob: https://www.googletagmanager.com https://www.google-analytics.com https://esm.sh";
+    ? `script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.googletagmanager.com https://www.google-analytics.com https://esm.sh ${CSP_VERCEL_ANALYTICS_ORIGINS}`
+    : `script-src 'self' 'unsafe-inline' blob: https://www.googletagmanager.com https://www.google-analytics.com https://esm.sh ${CSP_VERCEL_ANALYTICS_ORIGINS}`;
 
   return [
     "default-src 'self'",
@@ -50,7 +54,7 @@ export function buildContentSecurityPolicy(pathname: string): string {
     "style-src 'self' 'unsafe-inline' data: https://fonts.googleapis.com https://unpkg.com https://esm.sh",
     "img-src 'self' data: blob: https: http:",
     "font-src 'self' data: https://fonts.gstatic.com https://cdn.tldraw.com https://unpkg.com https://esm.sh",
-    "connect-src 'self' blob: https://*.supabase.co https://*.supabase.in wss://*.supabase.co https://api.openai.com https://openrouter.ai https://www.google-analytics.com https://unpkg.com https://cdn.tldraw.com https://esm.sh",
+    `connect-src 'self' blob: https://*.supabase.co https://*.supabase.in wss://*.supabase.co https://api.openai.com https://openrouter.ai https://www.google-analytics.com https://unpkg.com https://cdn.tldraw.com https://esm.sh ${CSP_VERCEL_ANALYTICS_ORIGINS}`,
     "frame-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",

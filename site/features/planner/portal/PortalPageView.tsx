@@ -26,7 +26,7 @@ export default function PortalPageView({
     <div className="shell-portal-page mx-auto max-w-6xl px-6 py-10 md:px-8 md:py-12">
       <header className="shell-portal-panel p-6 md:p-8">
         <p className="shell-portal-table-label">Member portal</p>
-        <h1 className="shell-portal-table-header mt-2">
+        <h1 className="shell-portal-page-title mt-2">
           {userName ? `${userName}'s plans` : "Your saved plans"}
         </h1>
         <p className="shell-portal-table-meta mt-3 max-w-3xl">
@@ -49,7 +49,7 @@ export default function PortalPageView({
           role="status"
           data-testid="portal-list-error"
         >
-          <h2 className="shell-portal-table-header text-base">Plans could not be loaded</h2>
+          <h2 className="shell-portal-section-title text-base">Plans could not be loaded</h2>
           <p className="shell-portal-table-meta mt-2">
             Storage is configured, but the plan list query failed. You can still open the planner; saving
             may fail until the database is repaired.
@@ -67,7 +67,7 @@ export default function PortalPageView({
         </section>
       ) : plans.length === 0 ? (
         <section className="shell-portal-panel mt-6 p-6">
-          <h2 className="shell-portal-table-header">No saved plans yet</h2>
+          <h2 className="shell-portal-section-title">No saved plans yet</h2>
           <p className="shell-portal-table-meta mt-2">
             Start a workspace in the planner and save it to create a portal-ready plan history for this account.
           </p>
@@ -81,7 +81,7 @@ export default function PortalPageView({
         <section className="mt-6">
           <div className="gap-3">
             <div>
-              <h2 className="shell-portal-table-header">Saved layouts</h2>
+              <h2 className="shell-portal-section-title">Saved layouts</h2>
               <p className="shell-portal-table-meta">
                 {plans.length} plan{plans.length === 1 ? "" : "s"} available
               </p>
@@ -94,7 +94,7 @@ export default function PortalPageView({
                 <div className="flex items-start gap-4">
                   <div className="min-w-0 flex-1">
                     <p className="shell-portal-table-label">Workspace plan</p>
-                    <h3 className="shell-portal-table-header mt-2 truncate">{plan.name}</h3>
+                    <h3 className="shell-portal-card-title mt-2 truncate">{plan.name}</h3>
                     <p className="shell-portal-table-meta mt-1 truncate">
                       {plan.project_name ?? plan.client_name ?? "No project metadata"}
                     </p>

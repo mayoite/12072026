@@ -49,12 +49,12 @@ export async function loadBuyerVisibleDescriptorsWithDb(): Promise<BlockDescript
       .map((row) => row.descriptor)
       .filter(isUsableDescriptor);
 
-    // Empty or corrupt dual-write rows must not blank the planner catalog.
+    // Empty DB during cutover may still fall back to disk; stub/corrupt rows must not.
     if (fromDb.length === 0) {
-      return loadBuyerVisibleDescriptors();
+      return rows.length > 0 ? [] : loadBuyerVisibleDescriptors();
     }
     return fromDb;
   } catch {
-    return loadBuyerVisibleDescriptors();
+    return [];
   }
 }

@@ -50,6 +50,7 @@ Regenerate: `pnpm --filter oando-site run docs:sync:routes` (from repo root).
 | GET | `/api/planner/catalog/svg-blocks` |
 | GET | `/api/planner/catalog` |
 | POST | `/api/planner/generated-glb` |
+| POST | `/api/planner/handoff` |
 | POST | `/api/planner/project-sketch` |
 | POST | `/api/planner/sketch-to-plan` |
 | GET, PUT, DELETE | `/api/plans/[id]` |

@@ -255,3 +255,43 @@ export const svgAiRunsV2 = pgTable(
     index("svg_ai_runs_v2_base_version_id_idx").on(table.baseVersionId),
   ],
 );
+
+/**
+ * Products Supabase — admin-curated Planner workspace library.
+ * Schema: migrations/20260628100000_create_planner_managed_products_and_feature_flags.sql
+ * published_svg_revision_id: migrations/20260716100000_add_published_svg_revision_id.sql
+ */
+export const plannerManagedProducts = pgTable(
+  "planner_managed_products",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    legacyProductId: text("legacy_product_id"),
+    slug: text("slug").notNull(),
+    plannerSourceSlug: text("planner_source_slug").notNull(),
+    name: text("name").notNull(),
+    description: text("description").notNull().default(""),
+    category: text("category").notNull(),
+    categoryId: text("category_id").notNull(),
+    categoryName: text("category_name").notNull(),
+    seriesId: text("series_id").notNull(),
+    seriesName: text("series_name").notNull(),
+    price: integer("price").notNull().default(0),
+    flagshipImage: text("flagship_image").notNull().default(""),
+    images: text("images").array().notNull().default([]),
+    specs: jsonb("specs").notNull().default({}),
+    metadata: jsonb("metadata").notNull().default({}),
+    active: boolean("active").notNull().default(true),
+    createdBy: uuid("created_by"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+    /** DB-SVG-05: pointer to the current published SVG revision for this product. */
+    publishedSvgRevisionId: text("published_svg_revision_id"),
+  },
+  (table) => [
+    uniqueIndex("planner_managed_products_slug_uidx").on(table.slug),
+    index("planner_managed_products_active_idx").on(table.active),
+    index("planner_managed_products_category_idx").on(table.category),
+    index("planner_managed_products_updated_at_idx").on(table.updatedAt),
+    index("planner_managed_products_planner_source_slug_idx").on(table.plannerSourceSlug),
+  ],
+);

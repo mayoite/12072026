@@ -13,9 +13,6 @@ function splitPathAndSearch(input: string | null): { pathname: string | null; se
   return { pathname: input.slice(0, queryIndex), search: input.slice(queryIndex + 1) };
 }
 
-function matchesPath(pathname: string | null, exact: string): boolean {
-  return pathname === exact;
-}
 
 function matchesPrefix(pathname: string | null, prefix: string): boolean {
   if (!pathname) return false;
@@ -28,20 +25,14 @@ function matchesAnyPrefix(pathname: string | null, prefixes: string[]): boolean 
 
 const LOGIN_PREFIXES = [
   "/login",
-  "/oando-planner/login",
-  "/buddy-planner/login",
 ];
 
 const CAD_PREFIXES = [
   "/planner/canvas",
   "/planner/guest",
   "/planner/open3d",
-  "/oando-planner/canvas",
   "/planners",
-  "/buddy-planner/editor",
 ];
-
-const BUDDY_EDITOR_PREFIX = "/buddy-planner/t/";
 
 const WORKSPACE_PREFIXES = [
   "/access",
@@ -51,18 +42,9 @@ const WORKSPACE_PREFIXES = [
   "/admin",
 ];
 
-function isPlannerMarketingRoute(pathname: string | null): boolean {
-  return matchesPath(pathname, "/oando-planner") || matchesPath(pathname, "/buddy-planner");
-}
-
-function isBuddyMarketingRoute(pathname: string | null): boolean {
-  return matchesPath(pathname, "/buddy-planner");
-}
-
 function isCadRoute(pathname: string | null): boolean {
   if (!pathname) return false;
-  if (matchesAnyPrefix(pathname, CAD_PREFIXES)) return true;
-  return pathname.startsWith(BUDDY_EDITOR_PREFIX);
+  return matchesAnyPrefix(pathname, CAD_PREFIXES);
 }
 
 function isLoginPath(pathname: string | null): boolean {
@@ -76,15 +58,7 @@ function loginHasNextParam(search: string): boolean {
 
 function isWorkspaceRoute(pathname: string | null): boolean {
   if (!pathname) return false;
-  if (matchesAnyPrefix(pathname, WORKSPACE_PREFIXES)) return true;
-
-  const plannerMarketing = isPlannerMarketingRoute(pathname);
-  const buddyMarketing = isBuddyMarketingRoute(pathname);
-
-  if (!plannerMarketing && matchesPrefix(pathname, "/oando-planner")) return true;
-  if (!buddyMarketing && matchesPrefix(pathname, "/buddy-planner")) return true;
-
-  return false;
+  return matchesAnyPrefix(pathname, WORKSPACE_PREFIXES);
 }
 
 export function resolveRouteChromeMode(pathInput: string | null): RouteChromeMode {

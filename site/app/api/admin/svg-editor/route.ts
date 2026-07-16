@@ -29,6 +29,8 @@ import {
   toPlannerDescriptorErrorHttp,
   type PlannerDescriptorError,
 } from "@/features/planner/project/catalog/svg/svgTypes";
+import { tryLoad } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import { assertDraftNotStale } from "@/features/admin/svg-editor/lifecycle/staleDraftPublishGate";
 
 function descriptorErrorResponse(descriptorError: PlannerDescriptorError): NextResponse {
   const http = toPlannerDescriptorErrorHttp(descriptorError);
@@ -56,6 +58,30 @@ async function handleSvgEditorPost(req: NextRequest) {
 
   // Fail-closed 1B path: parse → compileSvgForPublish (S1–S3) → S4 write → persist.
   // Avoids broken full recompile via incomplete .next/standalone generate-svg tree.
+
+  // DB-SVG-09: server-side stale check — parse client payload first to extract slug + generatedAt.
+  const parsedForStale = parseAdminPayload(payload);
+  if (parsedForStale.ok) {
+    const clientSlug = parsedForStale.value.slug;
+    const clientGeneratedAt = parsedForStale.value.generatedAt ?? 0;
+    if (clientSlug && clientSlug !== "new") {
+      const serverDescriptor = tryLoad(clientSlug);
+      if (serverDescriptor.ok) {
+        const staleCheck = assertDraftNotStale({
+          slug: clientSlug,
+          clientBaselineGeneratedAt: clientGeneratedAt,
+          serverBaselineGeneratedAt: serverDescriptor.value.generatedAt ?? 0,
+        });
+        if (!staleCheck.ok) {
+          return NextResponse.json(
+            { success: false, error: { code: "stale_draft", message: staleCheck.error } },
+            { status: 409 },
+          );
+        }
+      }
+    }
+  }
+
   const dbRepository: ImmutableSvgRevisionRepository | undefined =
     isProductsDatabaseConfigured()
       ? new ImmutableSvgRevisionRepository(new DrizzleSvgRevisionPersistence())

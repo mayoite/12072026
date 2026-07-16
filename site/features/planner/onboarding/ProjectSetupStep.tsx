@@ -152,7 +152,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
       style={{ zIndex: Z.panel }}
     >
       <div className="grid max-w-5xl rounded-[var(--radius-xl)] border border-[color:var(--border-soft)] bg-[color:var(--surface-panel-strong)] shadow-[var(--shadow-soft)] lg:grid-cols-[1fr_1.05fr]">
-        <aside className="gap-8 border-b border-[color:var(--border-soft)] bg-[color:var(--surface-accent-wash)] p-8 lg:border-b-0 lg:border-r">
+        <aside className="flex flex-col gap-8 border-b border-[color:var(--border-soft)] bg-[color:var(--surface-accent-wash)] p-8 lg:border-b-0 lg:border-r">
           <div>
             <p className="typ-eyebrow text-[color:var(--color-bronze-500)]">Project setup</p>
             <h1 className="typ-h2 mt-3 text-[color:var(--text-strong)]">
@@ -164,7 +164,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
           </div>
 
           <ul className="space-y-3">
-            <li className="items-start gap-3">
+            <li className="flex items-start gap-3">
               <span className="scheme-accent-wash h-10 w-10 shrink-0 rounded-xl text-[color:var(--color-primary)]">
                 <Building2 className="h-5 w-5" aria-hidden="true" />
               </span>
@@ -173,7 +173,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                 <p className="typ-caption-lg text-[color:var(--text-muted)]">Local cities and seat counts.</p>
               </div>
             </li>
-            <li className="items-start gap-3">
+            <li className="flex items-start gap-3">
               <span className="scheme-accent-wash h-10 w-10 shrink-0 rounded-xl text-[color:var(--color-primary)]">
                 <Ruler className="h-5 w-5" aria-hidden="true" />
               </span>
@@ -186,7 +186,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
         </aside>
 
         <form
-          className="gap-5 p-8"
+          className="flex flex-col gap-5 p-8"
           onSubmit={handleSubmit}
           aria-label="Project setup"
           aria-busy={!isHydrated}
@@ -266,7 +266,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                 return (
                     <label
                       key={option.value}
-                      className={`cursor-pointer rounded-[var(--radius-lg)] border px-3 py-3 transition-[border-color,box-shadow] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_30%,transparent)] ${ selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]" }`}
+                      className={`flex flex-col items-start gap-1 cursor-pointer rounded-[var(--radius-lg)] border px-3 py-3 transition-[border-color,box-shadow] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_30%,transparent)] ${ selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]" }`}
                     >
                       <input
                         type="radio"
@@ -315,7 +315,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                 return (
                   <label
                     key={option.value}
-                    className={`cursor-pointer rounded-[var(--radius-lg)] border p-3 transition-[border-color,box-shadow] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_30%,transparent)] ${selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]"}`}
+                    className={`flex flex-col items-start gap-1 cursor-pointer rounded-[var(--radius-lg)] border p-3 transition-[border-color,box-shadow] focus-within:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-primary)_30%,transparent)] ${selected ? "border-[color:color-mix(in_srgb,var(--color-primary)_45%,var(--border-soft))] bg-[color:var(--surface-accent-wash)]" : "border-[color:var(--border-soft)] bg-[color:var(--surface-panel)]"}`}
                   >
                     <input
                       type="radio"

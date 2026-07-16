@@ -98,6 +98,11 @@ export interface SvgEditorFormState {
   sceneParts?: SvgBlockDefinitionV1["parts"];
   excalidrawElements?: unknown;
   compiledSvg?: string;
+  /**
+   * DB-SVG-09: the generatedAt stamp of the descriptor when the editor session opened.
+   * Sent with every publish so the server can reject a stale draft without data loss.
+   */
+  openedBaselineGeneratedAt?: number;
 }
 
 /** Field issue shape shared with `parseBlockDescriptor` / `freezeFreshDescriptor`. */

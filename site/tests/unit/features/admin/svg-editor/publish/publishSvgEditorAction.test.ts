@@ -59,7 +59,10 @@ function existingFormState(slug: string): SvgEditorFormState {
   if (!result.ok) {
     throw new Error(`Fixture descriptor missing: ${slug}`);
   }
-  return descriptorToFormState(result.value);
+  return {
+    ...descriptorToFormState(result.value),
+    openedBaselineGeneratedAt: result.value.generatedAt,
+  };
 }
 
 describe("publishSvgEditorAction", () => {

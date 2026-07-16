@@ -137,6 +137,12 @@ describe('proxy.ts', () => {
       expect(isCanvasHeavyPath('/planner/guest')).toBe(true);
       expect(buildContentSecurityPolicy('/planner/guest')).toContain("'unsafe-eval'");
     });
+
+    it('allows Vercel Analytics and Speed Insights (dev scripts on va.vercel-scripts.com)', () => {
+      const csp = buildContentSecurityPolicy('/contact');
+      expect(csp).toContain('https://va.vercel-scripts.com');
+      expect(csp).toContain('https://vitals.vercel-insights.com');
+    });
   });
 
   describe('proxy', () => {

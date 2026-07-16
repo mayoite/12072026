@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { buildAccessRedirect } from "@/lib/auth/plannerRedirect";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -6,5 +7,5 @@ interface PageProps {
 
 export default async function GuestPortalPlanViewerPage({ params }: PageProps) {
   const { id } = await params;
-  redirect(`/access?next=${encodeURIComponent(`/portal/${id}`)}`);
+  redirect(buildAccessRedirect(`/portal/${id}`));
 }

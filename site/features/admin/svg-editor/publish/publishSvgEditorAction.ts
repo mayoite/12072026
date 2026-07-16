@@ -29,6 +29,7 @@ import { setCatalogLifecycle } from "@/features/admin/svg-editor/lifecycle/catal
 import { appendDescriptorAudit } from "@/features/admin/svg-editor/storage/descriptorAuditLog";
 import { resolveAuthContext } from "@/features/shared/api/withAuth";
 import { DEV_BYPASS_USER } from "@/lib/auth/devAuthBypass";
+import { assertDraftNotStale } from "@/features/admin/svg-editor/lifecycle/staleDraftPublishGate";
 
 /**
  * Fail-closed publish for one slug.
@@ -57,6 +58,16 @@ export async function publishSvgEditorAction(
       return { success: false, error: "not found" };
     }
     descriptor = result.value;
+
+    // DB-SVG-09: server-side stale check — rejects concurrent overwrites.
+    const staleCheck = assertDraftNotStale({
+      slug,
+      clientBaselineGeneratedAt: formFromEditor.openedBaselineGeneratedAt ?? 0,
+      serverBaselineGeneratedAt: descriptor.generatedAt ?? 0,
+    });
+    if (!staleCheck.ok) {
+      return { success: false, error: staleCheck.error };
+    }
   }
   const input = formStateToDescriptorInput(descriptor, formFromEditor);
 

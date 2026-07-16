@@ -602,7 +602,11 @@ describe("publishDescriptorWithPipeline dual-write safety (ADM-PUB-03 / DB-SVG-0
       compileSvg: async () => compileOk(),
       runPipeline: async () => pipelineOk(),
       persist: () => persistOk(),
-      dbRepository: { publish, load: async () => null } as never,
+      dbRepository: {
+        publish,
+        load: async () => null,
+        updateProductPointer: vi.fn(async () => undefined),
+      } as never,
     });
     expect(result.success).toBe(true);
     expect(publish).toHaveBeenCalledOnce();

@@ -108,6 +108,7 @@ export function setCatalogLifecycle(
 export function loadBuyerVisibleDescriptors(
   options?: { dir?: string; forceReload?: boolean },
 ): BlockDescriptor[] {
-  const manifest = readLifecycleManifest();
+  const manifestDir = options?.dir ?? ADMIN_CATALOG_OPS_DIR_DEFAULT;
+  const manifest = readLifecycleManifest(manifestDir);
   return loadAll(options).filter((descriptor) => isBuyerVisibleSlug(descriptor.slug, manifest));
 }
