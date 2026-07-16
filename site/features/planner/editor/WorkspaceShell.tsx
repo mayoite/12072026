@@ -363,9 +363,6 @@ export function WorkspaceShell({
         snapEnabled={snapEnabled}
         onToggleGrid={onToggleGrid}
         onToggleSnap={onToggleSnap}
-        chromePacks={chrome}
-        onChromePlacement={setChromePlacement}
-        onMoveChromePack={moveChromePack}
         layoutPresetId={presetId}
         onApplyLayoutPreset={applyPreset}
         onResetLayout={reset}

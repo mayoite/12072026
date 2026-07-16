@@ -25,9 +25,14 @@ export default async function AdminSvgEditorDetailPage({ params }: { params: Pro
   const manifest = readLifecycleManifest();
   const catalogLifecycle = isNew ? "draft" : resolveCatalogLifecycle(descriptor.slug, artifactStatus.state, manifest);
   
-  // Format dates for UI
-  const generatedAt = descriptor.generatedAt ? new Date(descriptor.generatedAt) : new Date();
-  const updatedAtLabel = generatedAt.toLocaleString();
+  // Format dates for UI — descriptors store Unix seconds; Date expects ms.
+  const generatedAtMs =
+    typeof descriptor.generatedAt === "number" && Number.isFinite(descriptor.generatedAt)
+      ? descriptor.generatedAt < 1e12
+        ? descriptor.generatedAt * 1000
+        : descriptor.generatedAt
+      : Date.now();
+  const updatedAtLabel = new Date(generatedAtMs).toLocaleString();
 
   // If descriptor has excalidrawElements, they will be loaded automatically into FormState via descriptorToFormState
 

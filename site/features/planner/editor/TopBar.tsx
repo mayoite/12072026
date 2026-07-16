@@ -106,6 +106,11 @@ export interface TopBarProps {
   layoutPresetId?: LayoutPresetId | "custom";
   onApplyLayoutPreset?: (presetId: LayoutPresetId) => void;
   onResetLayout?: () => void;
+  /**
+   * slim = Dockview owns modules; TopBar is brand + history + view + save + Layout/overflow.
+   * full = legacy chrome packs + desktop Grid/Snap strip.
+   */
+  chromeMode?: "full" | "slim";
 }
 
 function resolveSaveStatusFromLegacy(
@@ -176,6 +181,7 @@ export function TopBar({
   layoutPresetId = "custom",
   onApplyLayoutPreset,
   onResetLayout,
+  chromeMode = "full",
 }: TopBarProps) {
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState(projectName);
@@ -236,7 +242,7 @@ export function TopBar({
   const resolvePack = (id: ChromePackId): ChromePackLayout =>
     packById.get(id) ?? defaultPacks.find((p) => p.id === id)!;
 
-  const modular = Boolean(onChromePlacement && onMoveChromePack);
+  const modular = chromeMode === "full" && Boolean(onChromePlacement && onMoveChromePack);
   const wrapPack = (id: ChromePackId, label: string, body: ReactNode) => {
     if (!modular || !onChromePlacement || !onMoveChromePack) return body;
     const pack = resolvePack(id);
@@ -471,7 +477,7 @@ export function TopBar({
           </Button>
         )}
 
-        {(onToggleGrid || onToggleSnap) && (
+        {(onToggleGrid || onToggleSnap) && chromeMode === "full" && (
           <div
             className={`${styles.gridSnapActions} ${styles.desktopOnly}`}
             role="group"
@@ -652,16 +658,30 @@ export function TopBar({
                 <MenuItem id="density" className={styles.dropdownItem}>
                   Toggle density ({density === "touch" ? "compact" : "touch"})
                 </MenuItem>
-                {onToggleGrid && (
-                  <MenuItem id="grid" className={`${styles.dropdownItem} ${styles.mobileOnly}`}>
-                    {gridEnabled ? "Disable Grid" : "Enable Grid"}
-                  </MenuItem>
-                )}
-                {onToggleSnap && (
-                  <MenuItem id="snap" className={`${styles.dropdownItem} ${styles.mobileOnly}`}>
-                    {snapEnabled ? "Disable Snap" : "Enable Snap"}
-                  </MenuItem>
-                )}
+              {onToggleGrid && (
+                <MenuItem
+                  id="grid"
+                  className={
+                    chromeMode === "slim"
+                      ? styles.dropdownItem
+                      : `${styles.dropdownItem} ${styles.mobileOnly}`
+                  }
+                >
+                  {gridEnabled ? "Disable Grid" : "Enable Grid"}
+                </MenuItem>
+              )}
+              {onToggleSnap && (
+                <MenuItem
+                  id="snap"
+                  className={
+                    chromeMode === "slim"
+                      ? styles.dropdownItem
+                      : `${styles.dropdownItem} ${styles.mobileOnly}`
+                  }
+                >
+                  {snapEnabled ? "Disable Snap" : "Enable Snap"}
+                </MenuItem>
+              )}
               </Menu>
             </Popover>
           </MenuTrigger>,

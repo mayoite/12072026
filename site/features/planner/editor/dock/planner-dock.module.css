@@ -1,0 +1,92 @@
+/**
+ * Planner Dockview theme — maps to workspace/planner tokens.
+ * Import dockview.css in PlannerDockHost; this overrides colors only.
+ */
+
+.host {
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--planner-surface-canvas, #f8fafc);
+}
+
+.dockview {
+  flex: 1 1 0%;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.panelFill {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--planner-surface-panel, #fff);
+}
+
+.panelFill > * {
+  flex: 1 1 0%;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+  max-height: 100%;
+}
+
+/* Theme bridge — dockview-theme-light class on host */
+.host:global(.dockview-theme-light) {
+  --dv-background-color: var(--planner-surface-canvas, #f8fafc);
+  --dv-group-view-background-color: var(--planner-surface-panel, #fff);
+  --dv-tabs-and-actions-container-background-color: color-mix(
+    in srgb,
+    var(--planner-surface-panel, #fff) 92%,
+    var(--planner-surface-subtle, #f1f5f9)
+  );
+  --dv-activegroup-visiblepanel-tab-background-color: var(--planner-surface-panel, #fff);
+  --dv-activegroup-hiddenpanel-tab-background-color: transparent;
+  --dv-inactivegroup-visiblepanel-tab-background-color: color-mix(
+    in srgb,
+    var(--planner-surface-subtle, #f1f5f9) 80%,
+    transparent
+  );
+  --dv-inactivegroup-hiddenpanel-tab-background-color: transparent;
+  --dv-tab-divider-color: var(--planner-border-default, #e2e8f0);
+  --dv-activegroup-visiblepanel-tab-color: var(--planner-text-primary, #0f172a);
+  --dv-activegroup-hiddenpanel-tab-color: var(--planner-text-muted, #64748b);
+  --dv-inactivegroup-visiblepanel-tab-color: var(--planner-text-secondary, #334155);
+  --dv-inactivegroup-hiddenpanel-tab-color: var(--planner-text-muted, #64748b);
+  --dv-separator-border: var(--planner-border-default, #e2e8f0);
+  --dv-paneview-header-border-color: var(--planner-border-default, #e2e8f0);
+  --dv-tabs-container-scrollbar-color: var(--planner-border-default, #cbd5e1);
+  --dv-icon-hover-background-color: color-mix(
+    in srgb,
+    var(--planner-accent, #2563eb) 12%,
+    transparent
+  );
+  --dv-floating-box-shadow: var(--planner-shadow-floating, 0 8px 28px rgba(0, 0, 0, 0.16));
+  --dv-overlay-z-index: 120;
+}
+
+.host :global(.dv-groupview) {
+  border: 1px solid var(--planner-border-default, #e2e8f0);
+}
+
+.host :global(.dv-tabs-and-actions-container) {
+  min-height: 1.75rem;
+  font-size: 0.75rem;
+}
+
+.host :global(.dv-tab) {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+}

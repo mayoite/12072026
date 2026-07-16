@@ -172,7 +172,9 @@ function stageBackgroundPaint(): string {
 
 /** Grid overlay sits under Fabric; canvas must stay transparent when grid is on. */
 function fabricBackgroundPaint(gridEnabled: boolean): string {
-  return gridEnabled ? "transparent" : stageBackgroundPaint();
+  // Fabric treats the string "transparent" inconsistently across clears —
+  // rgba keeps the lower canvas see-through so the CSS grid shows.
+  return gridEnabled ? "rgba(0,0,0,0)" : stageBackgroundPaint();
 }
 
 export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFabricStageProps>(

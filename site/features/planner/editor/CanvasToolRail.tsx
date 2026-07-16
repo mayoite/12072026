@@ -22,6 +22,10 @@ import {
 } from "@phosphor-icons/react";
 import {
   Button,
+  Menu,
+  MenuItem,
+  MenuTrigger,
+  Popover,
   ToggleButton,
   ToggleButtonGroup,
   Tooltip,
@@ -81,6 +85,8 @@ export interface CanvasToolRailProps {
   onToolChange: (tool: PlannerTool) => void;
   onZoomReset?: () => void;
   disabled?: boolean;
+  /** When true, Dockview owns float/dock — hide local layout chrome. */
+  dockManaged?: boolean;
 }
 
 function ToolToggle({
@@ -208,6 +214,7 @@ export function CanvasToolRail({
   onToolChange,
   onZoomReset,
   disabled = false,
+  dockManaged = false,
 }: CanvasToolRailProps) {
   const chrome = useWorkspaceChrome();
   const [localRail, setLocalRail] = useState<RailLayoutConfig>(DEFAULT_RAIL_LAYOUT);
@@ -494,8 +501,16 @@ export function CanvasToolRail({
       data-floating={isFloating ? "true" : undefined}
       data-docked-top={dockedTop ? "true" : undefined}
       data-split={rail.splitGroups ? "true" : undefined}
+      data-dock-managed={dockManaged ? "true" : undefined}
       style={
-        isFloating
+        dockManaged
+          ? {
+              width: "100%",
+              minWidth: 0,
+              height: "100%",
+              borderRight: "none",
+            }
+          : isFloating
           ? {
               position: "absolute",
               left: rail.x,
@@ -508,6 +523,7 @@ export function CanvasToolRail({
           : undefined
       }
     >
+      {!dockManaged ? (
       <div
         className={styles.railChrome}
         data-floating={isFloating ? "true" : undefined}
@@ -529,71 +545,66 @@ export function CanvasToolRail({
             <circle cx="7" cy="10" r="1.2" />
           </svg>
         </span>
-        {isFloating || dockedTop ? (
-          <button
-            type="button"
-            className={styles.railDockBtn}
-            onClick={dockLeft}
-            aria-label="Dock tool rail left"
-            title="Dock tools to left edge"
-            data-testid="canvas-tool-rail-dock"
+        <MenuTrigger>
+          <Button
+            className={styles.railMenuBtn}
+            aria-label="Tool rail layout"
+            data-testid="canvas-tool-rail-menu"
           >
-            Left
-          </button>
-        ) : (
-          <button
-            type="button"
-            className={styles.railDockBtn}
-            onClick={() => undock()}
-            aria-label="Undock tool rail"
-            title="Float tools over canvas"
-            data-testid="canvas-tool-rail-undock"
-          >
-            Float
-          </button>
-        )}
-        <button
-          type="button"
-          className={styles.railDockBtn}
-          onClick={dockTop}
-          aria-label="Dock tool rail top"
-          title="Dock tools along top of canvas"
-          data-testid="canvas-tool-rail-dock-top"
-        >
-          Top
-        </button>
-        <button
-          type="button"
-          className={styles.railDockBtn}
-          onClick={() =>
-            setRail({
-              orientation: orientation === "vertical" ? "horizontal" : "vertical",
-              state: "floating",
-            })
-          }
-          aria-label="Toggle tool rail orientation"
-          title="Flip vertical / horizontal"
-          data-testid="canvas-tool-rail-orient"
-        >
-          {orientation === "vertical" ? "H" : "V"}
-        </button>
-        <button
-          type="button"
-          className={styles.railDockBtn}
-          onClick={() => setRail({ splitGroups: !rail.splitGroups, state: "floating" })}
-          aria-label="Split tool groups"
-          title="Split Nav / Draw / Deferred into modules"
-          data-testid="canvas-tool-rail-split"
-        >
-          {rail.splitGroups ? "Join" : "Split"}
-        </button>
+            ⋯
+          </Button>
+          <Popover placement="right top" className={styles.railMenuPopover}>
+            <Menu
+              className={styles.railMenu}
+              onAction={(key) => {
+                const id = String(key);
+                if (id === "float") undock();
+                if (id === "left") dockLeft();
+                if (id === "top") dockTop();
+                if (id === "orient") {
+                  setRail({
+                    orientation: orientation === "vertical" ? "horizontal" : "vertical",
+                    state: "floating",
+                  });
+                }
+                if (id === "split") {
+                  setRail({ splitGroups: !rail.splitGroups, state: "floating" });
+                }
+              }}
+            >
+              {!isFloating ? (
+                <MenuItem id="float" className={styles.railMenuItem}>
+                  Float over canvas
+                </MenuItem>
+              ) : null}
+              {isFloating || dockedTop ? (
+                <MenuItem id="left" className={styles.railMenuItem} data-testid="canvas-tool-rail-dock">
+                  Dock left
+                </MenuItem>
+              ) : null}
+              <MenuItem id="top" className={styles.railMenuItem} data-testid="canvas-tool-rail-dock-top">
+                Dock top
+              </MenuItem>
+              <MenuItem id="orient" className={styles.railMenuItem} data-testid="canvas-tool-rail-orient">
+                {orientation === "vertical" ? "Make horizontal" : "Make vertical"}
+              </MenuItem>
+              <MenuItem id="split" className={styles.railMenuItem} data-testid="canvas-tool-rail-split">
+                {rail.splitGroups ? "Join tool groups" : "Split tool groups"}
+              </MenuItem>
+            </Menu>
+          </Popover>
+        </MenuTrigger>
       </div>
+      ) : null}
 
       <span className={styles.srOnly}>
-        Canvas drawing tools. Drag the grip to float. Drop on left or top edge to dock.
+        Canvas drawing tools.
+        {dockManaged
+          ? " Drag the Dockview tab to float or dock this module."
+          : " Drag the grip to float. Drop on left or top edge to dock."}
       </span>
 
-      {renderGroups(rail.splitGroups)}
+      {renderGroups(dockManaged ? false : rail.splitGroups)}
 
       {onZoomReset ? (
         <>

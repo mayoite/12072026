@@ -184,34 +184,34 @@ export function ChromePackFrame({
             onClick={() => onPlacementChange(packId, "topbar")}
             aria-label={`Dock ${label} to top bar`}
           >
-            Dock
+            ↩
           </button>
         ) : (
-          <button
-            type="button"
-            className={styles.chromePackBtn}
-            onClick={() =>
-              onPlacementChange(packId, "floating", {
-                x: typeof window !== "undefined" ? window.innerWidth * 0.35 : 200,
-                y: 64,
-              })
-            }
-            aria-label={`Float ${label} module`}
-          >
-            Float
-          </button>
+          <>
+            <button
+              type="button"
+              className={styles.chromePackBtn}
+              onClick={() =>
+                onPlacementChange(packId, "floating", {
+                  x: typeof window !== "undefined" ? window.innerWidth * 0.35 : 200,
+                  y: 64,
+                })
+              }
+              aria-label={`Float ${label} module`}
+            >
+              ↗
+            </button>
+            <button
+              type="button"
+              className={styles.chromePackBtn}
+              onClick={() => onPlacementChange(packId, "overflow")}
+              aria-label={`Hide ${label} into Layout menu`}
+              title="Move to Layout overflow"
+            >
+              −
+            </button>
+          </>
         )}
-        {!isFloating ? (
-          <button
-            type="button"
-            className={styles.chromePackBtn}
-            onClick={() => onPlacementChange(packId, "overflow")}
-            aria-label={`Hide ${label} into Layout menu`}
-            title="Move to Layout overflow"
-          >
-            −
-          </button>
-        ) : null}
       </div>
       <div className={styles.chromePackBody}>{children}</div>
     </div>

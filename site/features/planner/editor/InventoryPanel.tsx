@@ -705,7 +705,7 @@ export const InventoryPanel = memo(function InventoryPanel({
                 data-catalog-item={item.id}
               >
                 <article
-                  className={`pw-catalog-card ${styles.itemCard} ${selectedItemId === item.id ? styles.itemCardSelected : ""} ${focusedIndex === index ? styles.itemCardFocused : ""}`}
+                  className={`${styles.itemCard} ${selectedItemId === item.id ? styles.itemCardSelected : ""} ${focusedIndex === index ? styles.itemCardFocused : ""}`}
                   // Roving tab stop for panel arrow keys + focus-visible ring.
                   // No role=button — Place / favorite stay nested interactive controls.
                   tabIndex={focusedIndex === index ? 0 : -1}

@@ -8,9 +8,13 @@ test.describe("Admin P01 inventory preview", () => {
     const row = page.locator('tr[data-slug="side-table-001"]');
     await expect(row).toBeVisible({ timeout: 45_000 });
 
-    const img = row.locator('[data-testid="admin-svg-preview-img"]');
-    await expect(img).toBeVisible();
-    await expect(img).toHaveAttribute("src", /\/svg-catalog\/side-table-001\.svg/);
+    const preview = row.locator('[data-testid="admin-svg-preview-stage"]');
+    await expect(preview).toBeVisible();
+    await expect(preview).toHaveAttribute(
+      "data-public-url",
+      /\/svg-catalog\/side-table-001\.svg/,
+    );
+    await expect(preview.locator("svg")).toBeVisible();
   });
 
   test("descriptor mm footprint aligns with viewBox", async ({ page }) => {

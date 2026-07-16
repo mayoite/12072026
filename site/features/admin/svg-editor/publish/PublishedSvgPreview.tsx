@@ -9,7 +9,6 @@
  * Never from arbitrary user HTML.
  */
 
-import Image from "next/image";
 import type { SvgArtifactStatus } from "./svgArtifactStatus.server";
 
 export type PublishedSvgPreviewSize = "thumb" | "panel";
@@ -74,21 +73,12 @@ export function PublishedSvgPreview({
       data-testid="admin-svg-preview"
       data-slug={slug}
     >
-      {size === "thumb" && status.publicUrl ? (
-        <Image
-          src={status.publicUrl}
-          alt=""
-          width={96}
-          height={96}
-          unoptimized
-          className="admin-svg-preview__img"
-          data-testid="admin-svg-preview-img"
-        />
-      ) : null}
       <div
         className="admin-svg-preview__stage"
         role="img"
         aria-label={aria}
+        data-testid="admin-svg-preview-stage"
+        data-public-url={status.publicUrl ?? undefined}
         // Trusted catalog bytes only (validated + script-stripped in server reader).
         dangerouslySetInnerHTML={{ __html: status.markup }}
       />

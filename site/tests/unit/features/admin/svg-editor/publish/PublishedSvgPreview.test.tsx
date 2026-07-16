@@ -1,10 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { PublishedSvgPreview } from "@/features/admin/svg-editor/publish/PublishedSvgPreview";
-
-vi.mock("next/image", () => ({
-  default: (props: { alt?: string }) => <img alt={props.alt ?? ""} />,
-}));
 
 describe("PublishedSvgPreview", () => {
   it("shows missing state copy", () => {
@@ -32,6 +28,10 @@ describe("PublishedSvgPreview", () => {
     expect(screen.getByTestId("admin-svg-preview")).toHaveAttribute(
       "data-artifact-state",
       "published",
+    );
+    expect(screen.getByTestId("admin-svg-preview-stage")).toHaveAttribute(
+      "data-public-url",
+      "/svg-catalog/desk.svg",
     );
     expect(document.querySelector("svg")).toBeDefined();
   });

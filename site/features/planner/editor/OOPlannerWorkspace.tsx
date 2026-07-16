@@ -68,7 +68,6 @@ import {
 } from "@/features/planner/project/catalog/workstationBoqV0";
 import { useQuoteCart } from "@/lib/store/quoteCart";
 import { usePlannerSvgCatalog } from "@/features/planner/project/catalog/usePlannerWorkspaceCatalog";
-import { CanvasToolRail } from "./CanvasToolRail";
 import { CommandPalette } from "./CommandPalette";
 import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
 import { LayersPanel } from "./LayersPanel";
@@ -79,7 +78,7 @@ import {
   describePlannerUndoLabel,
 } from "./plannerHistoryLabels";
 import { WorkspaceLeftPanel } from "./WorkspaceLeftPanel";
-import { WorkspaceShell } from "./WorkspaceShell";
+import { ModularPlannerShell } from "./dock/ModularPlannerShell";
 import {
   type PlannerTool,
 } from "./canvasTool";
@@ -1223,7 +1222,7 @@ export function OOPlannerWorkspace({
         aria-label="Import project file"
         onChange={handleImportFile}
       />
-      <WorkspaceShell
+      <ModularPlannerShell
         accessContext={accessContext}
         projectName={workspaceCanvas.project.name}
         viewMode={viewMode}
@@ -1260,7 +1259,11 @@ export function OOPlannerWorkspace({
         snapEnabled={snapEnabled}
         onToggleGrid={toggleGrid}
         onToggleSnap={toggleSnap}
-        leftPanel={
+        activeTool={activeTool}
+        onToolChange={setTool}
+        onZoomReset={() => canvasRef.current?.fitToView()}
+        showTools={viewMode === "2d"}
+        inventory={
           <WorkspaceLeftPanel
             catalogItems={catalog.items}
             isLoading={catalog.isLoading && catalog.items.length === 0}
@@ -1272,7 +1275,7 @@ export function OOPlannerWorkspace({
             displayUnit={displayUnit}
           />
         }
-        rightPanel={
+        properties={
           selectedEntity || multiSelection ? (
             <PropertiesPanel
               selectedEntity={selectedEntity}
@@ -1291,7 +1294,7 @@ export function OOPlannerWorkspace({
             />
           ) : null
         }
-        bottomPanel={
+        layers={
           activeFloor ? (
             <div className={workspaceStyles.bottomPanelWrapper}>
               <div className={workspaceStyles.bottomTabBar}>
@@ -1406,17 +1409,13 @@ export function OOPlannerWorkspace({
           <div
             className="open3d-canvas-with-rail"
             data-tool={activeTool}
+            data-dock-canvas="true"
             data-pending-placement={
               pendingCatalogItemId !== null || pendingWorkstationConfig !== null
                 ? "true"
                 : undefined
             }
           >
-            <CanvasToolRail
-              activeTool={activeTool}
-              onToolChange={setTool}
-              onZoomReset={() => canvasRef.current?.fitToView()}
-            />
             <PlannerCanvasStage
               ref={canvasRef}
               activeTool={activeTool}
@@ -1496,7 +1495,7 @@ export function OOPlannerWorkspace({
             {...getPlannerViewerControlProps()}
           />
         )}
-      </WorkspaceShell>
+      </ModularPlannerShell>
       <CommandPalette
         open={paletteOpen}
         onOpenChange={setPaletteOpen}

@@ -16,12 +16,29 @@
   min-height: 8rem;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-sm);
+  color: var(--color-primary);
   background:
     repeating-conic-gradient(
       color-mix(in srgb, var(--text-strong) 5%, transparent) 0% 25%,
       transparent 0% 50%
     ) 50% / 16px 16px;
   overflow: hidden;
+}
+
+/* Inline catalog SVG must never expand to native viewBox pixels. */
+.admin-svg-preview__stage > svg {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+.admin-svg-preview--thumb .admin-svg-preview__stage > svg {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .admin-svg-preview__stage--empty {
@@ -33,6 +50,28 @@
 .admin-svg-preview__img {
   display: block;
   max-width: 100%;
+  max-height: 12rem;
+}
+
+/* Inventory thumbs: fixed cell — prevents 1200×600+ SVGs from shattering the table. */
+.admin-svg-preview--thumb {
+  width: 4.5rem;
+  max-width: 4.5rem;
+}
+
+.admin-svg-preview--thumb .admin-svg-preview__stage {
+  width: 4.5rem;
+  height: 4.5rem;
+  min-height: 0;
+  padding: 0.35rem;
+  box-sizing: border-box;
+}
+
+.admin-svg-preview--panel .admin-svg-preview__stage {
+  max-height: 14rem;
+}
+
+.admin-svg-preview--panel .admin-svg-preview__stage > svg {
   max-height: 12rem;
 }
 
