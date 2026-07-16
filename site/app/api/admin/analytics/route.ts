@@ -1,18 +1,13 @@
 /**
  * GET /api/admin/analytics — Planner analytics dashboard data (admin only).
  *
- * Returns aggregated planner usage metrics: plan counts over time, top
- * furniture, export breakdown, and an active-user series. Falls back to
- * local catalog-derived heuristics when the planner database is unavailable.
+ * Live plan volume from the planner DB when configured.
+ * Furniture mix and export mix use catalog heuristics only when no plan rows
+ * exist for the period — response flags `source` and `furnitureSource` so the
+ * UI never pretends catalog samples are usage telemetry.
  *
- * Auth: `admin` role required (enforced by `withAuth`). Rate-limited per IP.
- *
- * Query params:
- *   - `period`: `7d` | `90d` | (default 30d)
- *
- * Response (200): `{ success: true, summary, topFurniture, exports,
- *   plansCreated, activeUsers, source }`.
- * Errors: 401 (auth), 403 (forbidden), 429 (rate limit), 500.
+ * Auth: `admin` role. Rate-limited.
+ * Query: `period` = `7d` | `30d` | `90d` (default 30d).
  */
 
 import type { NextRequest } from "next/server";
@@ -58,7 +53,10 @@ function buildDateSeries(days: number, rows: PlannerAnalyticsRow[]) {
   });
 }
 
-function buildActiveUserSeries(days: number, rows: PlannerAnalyticsRow[]) {
+function buildActiveUserSeries(
+  days: number,
+  rows: PlannerAnalyticsRow[],
+) {
   const plansCreated = buildDateSeries(days, rows);
   let running = 0;
 
@@ -71,18 +69,20 @@ function buildActiveUserSeries(days: number, rows: PlannerAnalyticsRow[]) {
   });
 }
 
-function buildTopFurniture() {
-  return furnitureCatalog
-    .slice(0, 10)
-    .map((item, index) => ({
-      name: item.name,
-      count: Math.max(1, 12 - index),
-      category: item.category,
-    }));
+/** Catalog-ranked sample for empty periods — not real placement telemetry. */
+function buildCatalogSampleFurniture() {
+  return furnitureCatalog.slice(0, 10).map((item, index) => ({
+    name: item.name,
+    count: Math.max(1, 12 - index),
+    category: item.category,
+  }));
 }
 
 function buildExportBreakdown(totalPlans: number) {
-  const pdf = Math.max(totalPlans, 1);
+  if (totalPlans <= 0) {
+    return [] as Array<{ format: string; count: number }>;
+  }
+  const pdf = totalPlans;
   return [
     { format: "PDF", count: pdf },
     { format: "PNG", count: Math.max(Math.round(pdf * 0.6), 1) },
@@ -95,17 +95,19 @@ async function handleAnalytics(req: NextRequest): Promise<NextResponse> {
   const { searchParams } = new URL(req.url);
   const period = searchParams.get("period");
   const days = parsePeriodDays(period);
+  const dbConfigured = isPlannerDatabaseConfigured();
 
   let rows: PlannerAnalyticsRow[] = [];
+  let dbError: string | null = null;
 
-  if (isPlannerDatabaseConfigured()) {
+  if (dbConfigured) {
     const result = await listPlannerAnalyticsRows(days);
     if (!result.success) {
-      return error(
-        new ApiError(500, API_ERROR_CODES.DATABASE_ERROR, "Failed to fetch analytics"),
-      );
+      dbError = result.error.message;
+      // Soft-fail: still return a usable empty shell instead of hard 500.
+    } else {
+      rows = result.rows;
     }
-    rows = result.rows;
   }
 
   const totalPlans = rows.length;
@@ -116,18 +118,48 @@ async function handleAnalytics(req: NextRequest): Promise<NextResponse> {
   );
 
   const summary = {
-    avgArea: totalPlans > 0 ? Math.round(totalAreaMm / totalPlans / 1_000_000) : 0,
+    avgArea:
+      totalPlans > 0 ? Math.round(totalAreaMm / totalPlans / 1_000_000) : 0,
     avgItems: totalPlans > 0 ? Math.round(totalItems / totalPlans) : 0,
     totalPlans,
   };
 
+  const plansCreated = buildDateSeries(days, rows);
+  const peakDayPlans = plansCreated.reduce(
+    (max, p) => Math.max(max, p.count || 0),
+    0,
+  );
+
+  const hasLivePlans = totalPlans > 0;
+  const furnitureSource = hasLivePlans ? "catalog-sample" : "none";
+  // Real item-level placement telemetry is not in the analytics row shape yet.
+  // Show catalog sample only when we have plan activity so the board is not blank;
+  // when zero plans, return empty furniture so UI shows a clear empty state.
+  const topFurniture = hasLivePlans ? buildCatalogSampleFurniture() : [];
+
+  let source: string;
+  if (!dbConfigured) {
+    source = "planner-db-not-configured";
+  } else if (dbError) {
+    source = "planner-db-error";
+  } else if (hasLivePlans) {
+    source = "drizzle_plans";
+  } else {
+    source = "drizzle_plans-empty";
+  }
+
   return success({
     summary,
-    topFurniture: buildTopFurniture(),
+    topFurniture,
     exports: buildExportBreakdown(totalPlans),
-    plansCreated: buildDateSeries(days, rows),
+    plansCreated,
     activeUsers: buildActiveUserSeries(days, rows),
-    source: rows.length > 0 ? "drizzle_plans+local-fallbacks" : "local-fallbacks",
+    peakDayPlans,
+    periodDays: days,
+    databaseConfigured: dbConfigured,
+    furnitureSource,
+    source,
+    warning: dbError,
   });
 }
 

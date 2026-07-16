@@ -266,9 +266,13 @@ export function CanvasToolRail({
   } | null>(null);
 
   const isFloating = rail.state === "floating";
-  const orientation =
-    rail.state === "docked" && rail.edge === "top" ? "horizontal" : rail.orientation;
-  const dockedTop = rail.state === "docked" && rail.edge === "top";
+  // Dockview TOOLS panel: always a horizontal toolbar strip (not a tall vertical rail).
+  const orientation: "vertical" | "horizontal" = dockManaged
+    ? "horizontal"
+    : rail.state === "docked" && rail.edge === "top"
+      ? "horizontal"
+      : rail.orientation;
+  const dockedTop = !dockManaged && rail.state === "docked" && rail.edge === "top";
 
   const dockLeft = useCallback(() => {
     setRail({

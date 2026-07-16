@@ -1,4 +1,5 @@
 import ProjectDetailView from "@/features/crm/ProjectDetailView";
+import { CrmSubnav } from "@/features/crm/CrmSubnav";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +19,7 @@ export default async function AdminCrmProjectDetailPage({ params }: PageProps) {
           <p className="admin-page__copy">Linked planner documents and client context.</p>
         </div>
       </header>
+      <CrmSubnav />
       <ProjectDetailView projectId={id} embedded />
     </div>
   );

@@ -17,12 +17,15 @@ export const CLIENT_LOGO_SRC_BY_NAME: Readonly<Record<string, string>> = {
   "Government of Bihar": "/images/client-logos/BiharGovernment.jpg",
   "Bihar Government": "/images/client-logos/BiharGovernment.jpg",
   HDFC: "/images/client-logos/HDFCLogo.jpg",
+  "HDFC Bank": "/images/client-logos/HDFCLogo.jpg",
   Hyundai: "/images/client-logos/HyundaiLogo.jpg",
   "IDBI Bank": "/images/client-logos/IDBIBankLogo.png",
   "Income Tax Department": "/images/client-logos/IncomeTaxdepartment.png",
   IndianOil: "/images/client-logos/GOILogo.jpg",
+  "Indian Oil": "/images/client-logos/GOILogo.jpg",
   JSW: "/images/client-logos/JSW.png",
   "L&T": "/images/client-logos/LandT.png",
+  "Larsen & Toubro": "/images/client-logos/LandT.png",
   "Maruti Suzuki": "/images/client-logos/MarutiSuzuki.png",
   MECON: "/images/client-logos/MECON.jpg",
   "Paradeep Phosphates": "/images/client-logos/ParadeepPhospates.jpg",
@@ -43,5 +46,12 @@ export const CLIENT_LOGO_SRC_BY_NAME: Readonly<Record<string, string>> = {
 
 export function resolveClientLogoSrc(name: string, explicitSrc?: string): string | undefined {
   if (explicitSrc) return explicitSrc;
-  return CLIENT_LOGO_SRC_BY_NAME[name];
+  const direct = CLIENT_LOGO_SRC_BY_NAME[name];
+  if (direct) return direct;
+  // Case-insensitive fallback
+  const lower = name.trim().toLowerCase();
+  for (const [key, src] of Object.entries(CLIENT_LOGO_SRC_BY_NAME)) {
+    if (key.toLowerCase() === lower) return src;
+  }
+  return undefined;
 }

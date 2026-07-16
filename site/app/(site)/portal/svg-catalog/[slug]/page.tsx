@@ -7,6 +7,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 
@@ -80,51 +81,72 @@ export default async function SvgCatalogSlugPage({
   const schemaVersion = descriptor.schemaVersion;
 
   return (
-    <main className="portal-svg-detail">
-      <div className="pillbar text-xs flex gap-2 mb-3" aria-label="Versions">
-        <span className="px-2 py-0.5 border rounded">registry: {registryVersion}</span>
-        <span className="px-2 py-0.5 border rounded">schema: {schemaVersion}</span>
-      </div>
+    <div className="shell-portal-page portal-svg-detail mx-auto max-w-6xl px-4 py-6 sm:px-6 md:px-8 md:py-12">
+      <nav className="portal-svg-catalog__nav mb-4 md:mb-5" aria-label="Portal">
+        <Link href="/portal/svg-catalog/" className="portal-svg-catalog__back">
+          Back to SVG catalog
+        </Link>
+      </nav>
 
-      <h1>
-        <code>{slug}</code> <span className="text-sm">({descriptor.variant})</span>
-      </h1>
+      <header className="shell-portal-panel p-5 sm:p-6 md:p-8">
+        <p className="shell-portal-table-label">Block descriptor</p>
+        <h1 className="shell-portal-page-title mt-2 break-all">
+          <code>{slug}</code>
+        </h1>
+        <p className="shell-portal-table-meta mt-2">
+          {descriptor.variant} · schema {schemaVersion}
+        </p>
+        <div className="portal-svg-detail__pillbar mt-4 flex flex-wrap gap-2" aria-label="Versions">
+          <span className="shell-portal-panel-soft px-2.5 py-1 text-xs">
+            registry: {registryVersion}
+          </span>
+          <span className="shell-portal-panel-soft px-2.5 py-1 text-xs">
+            schema: {schemaVersion}
+          </span>
+        </div>
+      </header>
 
-      <section aria-label="Puck render" className="my-4 border p-3">
-        {/* <Render> (Puck.Render per task/phase) using alias + registry. 1 mount per route (BP-05). 
-           GS-BP-05 · handover-routing.md · anti-copy · design §9 · I-D module paths 
+      <section
+        aria-label="Puck render"
+        className="shell-portal-panel mt-5 overflow-x-auto p-4 md:mt-6 md:p-6"
+      >
+        {/* <Render> (Puck.Render per task/phase) using alias + registry. 1 mount per route (BP-05).
+           GS-BP-05 · handover-routing.md · anti-copy · design §9 · I-D module paths
            No donor trade dress; semantic + roving a11y per benchmark. */}
         <Render config={puckConfig as unknown as PuckConfig} data={data as unknown as PuckDataShape} />
       </section>
 
       {inlineSvg && (
-        <section aria-label="Inline SVG source" className="my-4">
-          <h2 className="text-sm">SVG</h2>
+        <section aria-label="Inline SVG source" className="shell-portal-panel mt-5 overflow-x-auto p-4 md:mt-6 md:p-6">
+          <h2 className="shell-portal-section-title">SVG</h2>
           <div
             dangerouslySetInnerHTML={{ __html: inlineSvg }}
-            className="svg-inline svg-catalog-vector"
+            className="svg-inline svg-catalog-vector mt-3"
             // role/img + aria from Phase 03 sanitize + descriptor.title
           />
         </section>
       )}
 
-      <section aria-label="PNG thumb">
-        <Image
-          src={pngUrl}
-          alt={`${slug} thumbnail`}
-          width={512}
-          height={256}
-          sizes="(max-width: 640px) 100vw, 512px"
-          className="svg-catalog-thumb"
-          loading="lazy"
-          unoptimized
-          data-srcset={pngSrcSet}
-        />
+      <section aria-label="PNG thumb" className="shell-portal-panel mt-5 p-4 md:mt-6 md:p-6">
+        <h2 className="shell-portal-section-title">PNG preview</h2>
+        <div className="svg-catalog-thumb-wrap shell-portal-thumbnail mt-3">
+          <Image
+            src={pngUrl}
+            alt={`${slug} thumbnail`}
+            width={512}
+            height={256}
+            sizes="(max-width: 640px) 100vw, 512px"
+            className="svg-catalog-thumb"
+            loading="lazy"
+            unoptimized
+            data-srcset={pngSrcSet}
+          />
+        </div>
       </section>
 
       <div role="status" aria-live="polite" className="sr-only">
         Loaded {slug} version {schemaVersion}
       </div>
-    </main>
+    </div>
   );
 }

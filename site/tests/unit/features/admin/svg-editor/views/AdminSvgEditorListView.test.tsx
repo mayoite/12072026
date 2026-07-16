@@ -77,4 +77,25 @@ describe("AdminSvgEditorListView (name-mirror)", () => {
     expect(advanced).not.toHaveAttribute("open");
     expect(advanced).toHaveTextContent(/bulk import/i);
   });
+
+  it("shows empty source inventory with primary New SVG symbol CTA", () => {
+    render(
+      <AdminSvgEditorListView
+        descriptors={[]}
+        refreshedAtLabel="test-time"
+        artifactStatuses={{}}
+        lifecycleManifest={{}}
+      />,
+    );
+    const empty = screen.getByTestId("admin-svg-inventory-empty-source");
+    expect(empty).toHaveTextContent(/No SVG symbols yet/i);
+    expect(empty).toHaveTextContent(/visual studio/i);
+    const cta = screen.getByTestId("admin-svg-primary-new-empty");
+    expect(cta).toHaveAttribute("href", "/admin/svg-editor/new");
+    expect(cta).toHaveClass("admin-btn--primary");
+    expect(screen.getByTestId("admin-shell-primary-action")).toHaveAttribute(
+      "href",
+      "/admin/svg-editor/new",
+    );
+  });
 });

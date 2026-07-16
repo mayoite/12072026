@@ -66,8 +66,10 @@ describe("getRouteClassification resolution", () => {
     expect(getRouteClassification("/portal/guest/view/abc")?.classification).toBe(
       "protected",
     );
-    expect(getRouteClassification("/tracking")?.classification).toBe("public");
+    expect(getRouteClassification("/tracking")?.classification).toBe("redirect");
     expect(getRouteClassification("/tracking")?.indexable).toBe(false);
+    expect(getRouteClassification("/news")?.classification).toBe("redirect");
+    expect(getRouteClassification("/gallery")?.classification).toBe("redirect");
   });
 
   it("ignores query strings when matching", () => {

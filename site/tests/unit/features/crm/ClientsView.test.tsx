@@ -13,13 +13,25 @@ const mockProjects = [
 const mockAddClient = vi.fn();
 const mockDeleteClient = vi.fn();
 
+const mockStoreState = {
+  clients: mockClients,
+  projects: mockProjects,
+  quotes: [],
+  addClient: mockAddClient,
+  deleteClient: mockDeleteClient,
+  seedDemoData: vi.fn(),
+  clearAll: vi.fn(),
+  exportSnapshot: vi.fn(() => ({ version: 1 as const, exportedAt: '', clients: [], projects: [], quotes: [] })),
+  importSnapshot: vi.fn(() => true),
+};
+
 vi.mock('@/features/crm/stores/crmStore', () => ({
-  useCrmStore: vi.fn(() => ({
-    clients: mockClients,
-    projects: mockProjects,
-    addClient: mockAddClient,
-    deleteClient: mockDeleteClient,
-  })),
+  useCrmStore: (selector?: (s: typeof mockStoreState) => unknown) =>
+    typeof selector === 'function' ? selector(mockStoreState) : mockStoreState,
+}));
+
+vi.mock('@/features/crm/CrmWorkspaceBanner', () => ({
+  CrmWorkspaceBanner: () => <div data-testid="crm-workspace-banner">Browser-only CRM</div>,
 }));
 
 vi.mock('@/features/shared/shell/GlobalNavHeader', () => ({
@@ -90,7 +102,7 @@ describe('ClientsView Component', () => {
     expect(screen.getByText('No projects linked to this client yet.')).toBeInTheDocument();
 
     // Close details
-    const closeBtn = screen.getByRole('button', { name: '' }); // X icon button
+    const closeBtn = screen.getByRole('button', { name: /Close client details/i });
     fireEvent.click(closeBtn);
     expect(screen.getByText('Select a contact')).toBeInTheDocument();
   });

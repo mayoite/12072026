@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/*
+ * Tailwind v4 — CSS-first config (no tailwind.config.js).
+ * @source: scan app + feature trees so utility classes in TSX are never purged.
+ * Paths are relative to this file (site/app/css/).
+ */
+@source "../**/*.{ts,tsx,js,jsx}";
+@source "../../features/**/*.{ts,tsx,js,jsx}";
+@source "../../components/**/*.{ts,tsx,js,jsx}";
+@source "../../lib/**/*.{ts,tsx,js,jsx}";
+
+/* App dark mode is html.dark (ThemeProvider), not prefers-color-scheme alone */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @import "./core/theme.css";
 @import "./core/utilities/animations.css";
 @import "./core/utilities/typography.css";
@@ -10,6 +23,7 @@
 @import "./core/utilities/badges.css";
 @import "./core/utilities/nav.css";
 @import "./core/utilities/misc.css";
+@import "./core/utilities/planner-shell.css";
 @import "./core/components/buttons.css";
 @import "./core/components/cards.css";
 @import "./core/components/catalog-card-media.css";

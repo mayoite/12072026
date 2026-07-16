@@ -6,15 +6,26 @@ import { useCrmStore } from "./stores/crmStore";
 import { GlobalNavHeader } from "@/features/shared/shell/GlobalNavHeader";
 import { cn } from "@/lib/utils";
 import { crmUi } from "./crmUi";
-import { CrmDemoBanner } from "./CrmDemoBanner";
-import { Users, Plus, MagnifyingGlass as Search, Trash as Trash2, Envelope as Mail, Phone, MapPin, Buildings as Building2, ArrowRight, X, Clock } from "@phosphor-icons/react";
+import { CrmWorkspaceBanner } from "./CrmWorkspaceBanner";
+import {
+  Users,
+  Plus,
+  MagnifyingGlass as Search,
+  Trash as Trash2,
+  Envelope as Mail,
+  Phone,
+  MapPin,
+  Buildings as Building2,
+  ArrowRight,
+  X,
+  Clock,
+} from "@phosphor-icons/react";
 
 export default function ClientsView({ embedded = false }: { embedded?: boolean }) {
   const { clients, projects, addClient, deleteClient } = useCrmStore();
   const [search, setSearch] = useState("");
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-  
-  // Create Modal State
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
@@ -29,7 +40,7 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
       (c) =>
         c.name.toLowerCase().includes(q) ||
         c.company.toLowerCase().includes(q) ||
-        c.email.toLowerCase().includes(q)
+        c.email.toLowerCase().includes(q),
     );
   }, [clients, search]);
 
@@ -37,6 +48,23 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
     if (!selectedClient) return [];
     return projects.filter((p) => p.clientId === selectedClient.id);
   }, [projects, selectedClient]);
+
+  const stats = useMemo(
+    () => [
+      { label: "Total Clients", value: clients.length, tone: "text-strong" },
+      {
+        label: "Corporate Accounts",
+        value: clients.filter((c) => c.company).length,
+        tone: "text-strong",
+      },
+      {
+        label: "Linked Projects",
+        value: projects.filter((p) => p.clientId !== "none").length,
+        tone: "text-strong",
+      },
+    ],
+    [clients, projects],
+  );
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,7 +79,6 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
       notes: notes.trim(),
     });
 
-    // Reset Form & Close
     setName("");
     setCompany("");
     setEmail("");
@@ -61,19 +88,34 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
     setIsModalOpen(false);
   };
 
+  const shell = embedded
+    ? "crm-clients-view"
+    : "shell-workspace-page min-h-screen";
+
+  const inner = embedded
+    ? "flex w-full flex-col gap-5 sm:gap-6"
+    : "mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6";
+
   return (
-    <section className={embedded ? "shell-workspace-page" : "shell-workspace-page min-h-screen"}>
+    <section className={shell}>
       {!embedded ? <GlobalNavHeader /> : null}
 
-      <div className={`mx-auto flex w-full max-w-7xl flex-col gap-8 px-6 ${embedded ? "py-4" : "py-8"}`}>
-        {embedded ? <CrmDemoBanner /> : null}
+      <div className={inner}>
+        {embedded ? <CrmWorkspaceBanner /> : null}
+
         {embedded ? (
-          <div className="flex justify-end">
+          <div className="crm-clients-toolbar">
+            <p className="crm-clients-toolbar__hint text-xs text-muted">
+              {clients.length === 0
+                ? "Start with sample data or add a client."
+                : `${clients.length} client${clients.length === 1 ? "" : "s"} in this browser.`}
+            </p>
             <button
+              type="button"
               onClick={() => setIsModalOpen(true)}
-              className="btn-primary flex items-center gap-2 self-start rounded-full px-5 py-2.5 text-xs font-semibold"
+              className="admin-btn admin-btn--primary inline-flex w-full items-center justify-center gap-2 sm:w-auto"
             >
-              <Plus className="h-4 w-4" /> New Client
+              <Plus className="h-4 w-4" aria-hidden /> New Client
             </button>
           </div>
         ) : (
@@ -91,73 +133,96 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
             </div>
 
             <button
+              type="button"
               onClick={() => setIsModalOpen(true)}
-              className="btn-primary flex items-center gap-2 self-start rounded-full px-5 py-2.5 text-xs font-semibold"
+              className="btn-primary flex min-h-11 w-full items-center justify-center gap-2 self-start rounded-full px-5 py-2.5 text-xs font-semibold sm:w-auto"
             >
-              <Plus className="h-4 w-4" /> New Client
+              <Plus className="h-4 w-4" aria-hidden /> New Client
             </button>
           </div>
         )}
 
-        {/* Stats Grid */}
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div className="shell-workspace-card p-5">
-            <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">Total Clients</p>
-            <p className="mt-2 text-2xl font-bold text-strong">{clients.length}</p>
-          </div>
-          <div className="shell-workspace-card p-5">
-            <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">Corporate Accounts</p>
-            <p className="mt-2 text-2xl font-bold text-strong">
-              {clients.filter((c) => c.company).length}
-            </p>
-          </div>
-          <div className="shell-workspace-card p-5">
-            <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">Linked Projects</p>
-            <p className="mt-2 text-2xl font-bold text-strong">
-              {projects.filter((p) => p.clientId !== "none").length}
-            </p>
-          </div>
+        <div
+          className="crm-clients-kpi-grid"
+          role="group"
+          aria-label="Client statistics"
+        >
+          {stats.map((stat) => (
+            <div key={stat.label} className="admin-panel crm-clients-kpi p-3 sm:p-5">
+              <p className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted sm:tracking-[0.2em]">
+                {stat.label}
+              </p>
+              <p className={cn("mt-1.5 text-xl font-bold sm:mt-2 sm:text-2xl", stat.tone)}>
+                {stat.value}
+              </p>
+            </div>
+          ))}
         </div>
 
-        {/* Toolbar */}
-        <div className="relative max-w-md w-full">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted" />
+        <div className="relative w-full max-w-md">
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
+            aria-hidden
+          />
           <input
-            type="text"
+            type="search"
             placeholder="Search by name, company, or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="shell-workspace-auth-input pl-10 text-sm"
+            className="admin-field__control min-h-11 pl-10 text-sm"
+            aria-label="Search clients"
           />
         </div>
 
-        {/* Main Content Area */}
-        <div className="grid gap-6 lg:grid-cols-[1.6fr_1.4fr]">
-          {/* Client List */}
-          <div className="shell-workspace-panel">
-            <h2 className="mb-4 text-xl font-semibold tracking-tight text-strong">
+        <div className="grid gap-4 lg:grid-cols-[1.6fr_1.4fr] lg:gap-6">
+          <div className="admin-panel p-4 sm:p-5">
+            <h2 className="m-0 mb-3 text-base font-semibold tracking-tight text-strong sm:text-lg">
               All Contacts
             </h2>
 
             {filteredClients.length === 0 ? (
-              <div className={cn("rounded-2xl py-16 text-center text-sm shell-workspace-muted", crmUi.emptyState)}>
-                <Users className="mx-auto mb-4 h-10 w-10 text-subtle" />
-                <p className="font-semibold text-strong">No clients found</p>
-                <p className="mt-1">Add a new client to start building your directory.</p>
+              <div className="admin-empty" role="status">
+                <Users className="h-10 w-10 text-subtle" aria-hidden />
+                <h3 className="admin-empty__title">No clients found</h3>
+                <p className="admin-empty__copy">
+                  {clients.length === 0
+                    ? "Add a new client to start building your directory, or load sample data above."
+                    : "No contacts match this search. Try another name, company, or email."}
+                </p>
+                {clients.length === 0 ? (
+                  <div className="admin-empty__actions">
+                    <button
+                      type="button"
+                      onClick={() => setIsModalOpen(true)}
+                      className="admin-btn admin-btn--primary"
+                    >
+                      New Client
+                    </button>
+                  </div>
+                ) : null}
               </div>
             ) : (
               <div className={cn("space-y-1 divide-y", crmUi.softBorder)}>
                 {filteredClients.map((client) => (
                   <div
                     key={client.id}
+                    role="button"
+                    tabIndex={0}
                     onClick={() => setSelectedClient(client)}
-                    className={`flex items-center justify-between p-4 rounded-xl cursor-pointer transition ${
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setSelectedClient(client);
+                      }
+                    }}
+                    className={cn(
+                      "flex min-h-11 cursor-pointer items-center justify-between rounded-xl p-3 transition sm:p-4",
                       selectedClient?.id === client.id
                         ? `${crmUi.softSurface} border ${crmUi.panelBorder}`
-                        : `border border-transparent ${crmUi.hoverSurface}`
-                    }`}
+                        : `border border-transparent ${crmUi.hoverSurface}`,
+                    )}
                   >
-                    <div className="flex items-center gap-4 min-w-0">
+                    <div className="flex min-w-0 items-center gap-3 sm:gap-4">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-inverse">
                         {client.name
                           .split(" ")
@@ -170,27 +235,33 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
                         <p className="truncate text-sm font-semibold text-strong">
                           {client.name}
                         </p>
-                        {client.company && (
-                          <p className="shell-workspace-subtle text-xs flex items-center gap-1.5 mt-0.5">
-                            <Building2 className="h-3.5 w-3.5 opacity-60" /> {client.company}
+                        {client.company ? (
+                          <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted">
+                            <Building2 className="h-3.5 w-3.5 shrink-0 opacity-60" aria-hidden />
+                            <span className="truncate">{client.company}</span>
                           </p>
-                        )}
+                        ) : null}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 shrink-0">
+                    <div className="flex shrink-0 items-center gap-2 sm:gap-3">
                       <button
+                        type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           deleteClient(client.id);
                           if (selectedClient?.id === client.id) setSelectedClient(null);
                         }}
-                        className={cn("rounded-lg p-2", crmUi.ghostDanger)}
+                        className={cn(
+                          "inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg",
+                          crmUi.ghostDanger,
+                        )}
                         title="Delete client"
+                        aria-label={`Delete client ${client.name}`}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4" aria-hidden />
                       </button>
-                      <ArrowRight className="h-4 w-4 text-subtle" />
+                      <ArrowRight className="hidden h-4 w-4 text-subtle sm:block" aria-hidden />
                     </div>
                   </div>
                 ))}
@@ -198,13 +269,12 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
             )}
           </div>
 
-          {/* Client Detail Side Panel */}
-          <div className="shell-workspace-panel flex flex-col justify-between">
+          <div className="admin-panel flex min-h-[16rem] flex-col justify-between p-4 sm:p-5">
             {selectedClient ? (
-              <div className="space-y-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-lg font-bold text-inverse">
+              <div className="space-y-5 sm:space-y-6">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-inverse">
                       {selectedClient.name
                         .split(" ")
                         .map((n) => n[0])
@@ -212,75 +282,83 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
                         .toUpperCase()
                         .slice(0, 2)}
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-strong">
+                    <div className="min-w-0">
+                      <h3 className="truncate text-base font-semibold text-strong sm:text-lg">
                         {selectedClient.name}
                       </h3>
-                      {selectedClient.company && (
-                        <p className="shell-workspace-muted text-sm mt-0.5">
+                      {selectedClient.company ? (
+                        <p className="mt-0.5 truncate text-sm text-muted">
                           {selectedClient.company}
                         </p>
-                      )}
+                      ) : null}
                     </div>
                   </div>
                   <button
+                    type="button"
                     onClick={() => setSelectedClient(null)}
-                    className={cn("rounded-lg p-1", crmUi.ghostInverse)}
+                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-muted hover:bg-soft"
+                    aria-label="Close client details"
                   >
-                    <X className="h-5 w-5" />
+                    <X className="h-5 w-5" aria-hidden />
                   </button>
                 </div>
 
                 <hr className={crmUi.panelBorder} />
 
-                {/* Contact Information */}
                 <div className="space-y-3">
-                  <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">
+                  <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-muted">
                     Contact Details
                   </p>
                   <div className="space-y-2 text-sm">
-                    {selectedClient.email && (
+                    {selectedClient.email ? (
                       <div className="flex items-center gap-3 text-body">
-                        <Mail className="h-4 w-4 opacity-70 shrink-0" />
-                        <a href={`mailto:${selectedClient.email}`} className="hover:underline">
+                        <Mail className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+                        <a href={`mailto:${selectedClient.email}`} className="break-all hover:underline">
                           {selectedClient.email}
                         </a>
                       </div>
-                    )}
-                    {selectedClient.phone && (
+                    ) : null}
+                    {selectedClient.phone ? (
                       <div className="flex items-center gap-3 text-body">
-                        <Phone className="h-4 w-4 opacity-70 shrink-0" />
+                        <Phone className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
                         <span>{selectedClient.phone}</span>
                       </div>
-                    )}
-                    {selectedClient.address && (
+                    ) : null}
+                    {selectedClient.address ? (
                       <div className="flex items-center gap-3 text-body">
-                        <MapPin className="h-4 w-4 opacity-70 shrink-0" />
+                        <MapPin className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
                         <span>{selectedClient.address}</span>
                       </div>
-                    )}
+                    ) : null}
+                    {!selectedClient.email && !selectedClient.phone && !selectedClient.address ? (
+                      <p className="text-xs text-muted italic">No contact details on file.</p>
+                    ) : null}
                   </div>
                 </div>
 
-                {/* Notes */}
-                {selectedClient.notes && (
+                {selectedClient.notes ? (
                   <div className="space-y-3">
-                    <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">
+                    <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-muted">
                       Correspondence Notes
                     </p>
-                    <div className={cn("rounded-xl border p-4 text-xs leading-relaxed text-body whitespace-pre-wrap", crmUi.softSurface, crmUi.panelBorder)}>
+                    <div
+                      className={cn(
+                        "whitespace-pre-wrap rounded-xl border p-4 text-xs leading-relaxed text-body",
+                        crmUi.softSurface,
+                        crmUi.panelBorder,
+                      )}
+                    >
                       {selectedClient.notes}
                     </div>
                   </div>
-                )}
+                ) : null}
 
-                {/* Projects */}
                 <div className="space-y-3">
-                  <p className="shell-workspace-faint text-[0.6875rem] font-semibold uppercase tracking-[0.2em]">
+                  <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-muted">
                     Associated Projects ({clientProjects.length})
                   </p>
                   {clientProjects.length === 0 ? (
-                    <p className="text-xs shell-workspace-muted italic">
+                    <p className="text-xs italic text-muted">
                       No projects linked to this client yet.
                     </p>
                   ) : (
@@ -288,15 +366,20 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
                       {clientProjects.map((p) => (
                         <div
                           key={p.id}
-                          className={cn("flex items-center justify-between rounded-xl border p-3", crmUi.softSurface, crmUi.softBorder)}
+                          className={cn(
+                            "flex items-center justify-between rounded-xl border p-3",
+                            crmUi.softSurface,
+                            crmUi.softBorder,
+                          )}
                         >
-                          <div>
-                            <p className="text-xs font-semibold text-strong">{p.name}</p>
-                            <p className="text-[0.6875rem] shell-workspace-muted mt-1">
-                              Status: <span className="capitalize">{p.status.replace("_", " ")}</span>
+                          <div className="min-w-0">
+                            <p className="truncate text-xs font-semibold text-strong">{p.name}</p>
+                            <p className="mt-1 text-[0.6875rem] text-muted">
+                              Status:{" "}
+                              <span className="capitalize">{p.status.replace("_", " ")}</span>
                             </p>
                           </div>
-                          <Clock className="h-3.5 w-3.5 text-subtle" />
+                          <Clock className="h-3.5 w-3.5 shrink-0 text-subtle" aria-hidden />
                         </div>
                       ))}
                     </div>
@@ -304,11 +387,12 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
                 </div>
               </div>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center py-16 shell-workspace-muted">
-                <Users className="mb-4 h-12 w-12 animate-pulse text-subtle" />
-                <p className="text-sm font-medium">Select a contact</p>
-                <p className="text-xs mt-1 max-w-[16rem]">
-                  Click on any client card to view their full detail sheet, contact info, and linked projects.
+              <div className="admin-empty flex-1 justify-center py-12 sm:py-16">
+                <Users className="h-12 w-12 text-subtle" aria-hidden />
+                <p className="admin-empty__title">Select a contact</p>
+                <p className="admin-empty__copy">
+                  Click on any client card to view their full detail sheet, contact info, and
+                  linked projects.
                 </p>
               </div>
             )}
@@ -316,98 +400,123 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
         </div>
       </div>
 
-      {/* Add Client Dialog Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className={cn("flex w-full max-w-lg flex-col gap-6 p-8", crmUi.modal)}>
-            <div>
-              <h2 className="text-2xl font-semibold text-strong">Add New Client</h2>
-              <p className="shell-workspace-muted text-xs mt-1">
-                Enter client details to create a new contact profile.
-              </p>
+      {isModalOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="crm-new-client-title"
+        >
+          <div
+            className={cn(
+              "flex max-h-[92dvh] w-full max-w-lg flex-col gap-5 overflow-y-auto p-5 sm:gap-6 sm:p-8",
+              crmUi.modal,
+              "rounded-t-2xl sm:rounded-[2rem]",
+            )}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h2
+                  id="crm-new-client-title"
+                  className="text-xl font-semibold text-strong sm:text-2xl"
+                >
+                  Add New Client
+                </h2>
+                <p className="mt-1 text-xs text-muted">
+                  Enter client details to create a new contact profile.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-muted hover:bg-soft"
+                aria-label="Close dialog"
+              >
+                <X className="h-5 w-5" aria-hidden />
+              </button>
             </div>
 
-            <form onSubmit={handleCreate} className="space-y-4">
-              <label className="shell-workspace-auth-label">
-                <span className="typ-label shell-workspace-auth-label-text">Name *</span>
+            <form onSubmit={handleCreate} className="space-y-1">
+              <label className="admin-field">
+                <span className="admin-field__label">Name *</span>
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="shell-workspace-auth-input text-sm"
+                  className="admin-field__control"
                   placeholder="Full Name"
                 />
               </label>
 
-              <label className="shell-workspace-auth-label">
-                <span className="typ-label shell-workspace-auth-label-text">Company / Organisation</span>
+              <label className="admin-field">
+                <span className="admin-field__label">Company / Organisation</span>
                 <input
                   type="text"
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
-                  className="shell-workspace-auth-input text-sm"
+                  className="admin-field__control"
                   placeholder="e.g. Nexus Tech"
                 />
               </label>
 
-              <div className="grid grid-cols-2 gap-4">
-                <label className="shell-workspace-auth-label">
-                  <span className="typ-label shell-workspace-auth-label-text">Email</span>
+              <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-4">
+                <label className="admin-field">
+                  <span className="admin-field__label">Email</span>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="shell-workspace-auth-input text-sm"
+                    className="admin-field__control"
                     placeholder="name@company.com"
                   />
                 </label>
-                <label className="shell-workspace-auth-label">
-                  <span className="typ-label shell-workspace-auth-label-text">Phone</span>
+                <label className="admin-field">
+                  <span className="admin-field__label">Phone</span>
                   <input
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="shell-workspace-auth-input text-sm"
+                    className="admin-field__control"
                     placeholder="+91..."
                   />
                 </label>
               </div>
 
-              <label className="shell-workspace-auth-label">
-                <span className="typ-label shell-workspace-auth-label-text">Address</span>
+              <label className="admin-field">
+                <span className="admin-field__label">Address</span>
                 <input
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="shell-workspace-auth-input text-sm"
+                  className="admin-field__control"
                   placeholder="Office Address"
                 />
               </label>
 
-              <label className="shell-workspace-auth-label">
-                <span className="typ-label shell-workspace-auth-label-text">Notes</span>
+              <label className="admin-field">
+                <span className="admin-field__label">Notes</span>
                 <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   rows={3}
-                  className="shell-workspace-auth-input text-sm py-2"
+                  className="admin-field__control admin-field__control--multiline"
                   placeholder="Client preferences, project scoping details..."
                 />
               </label>
 
-              <div className="flex items-center justify-end gap-3 pt-4">
+              <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="btn-outline px-5 py-2 text-xs font-semibold"
+                  className="admin-btn admin-btn--outline w-full sm:w-auto"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={!name.trim()}
-                  className="btn-primary px-5 py-2 text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="admin-btn admin-btn--primary w-full sm:w-auto disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Save Client
                 </button>
@@ -415,7 +524,7 @@ export default function ClientsView({ embedded = false }: { embedded?: boolean }
             </form>
           </div>
         </div>
-      )}
+      ) : null}
     </section>
   );
 }

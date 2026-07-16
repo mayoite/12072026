@@ -90,7 +90,8 @@ describe('SiteFooter Component', () => {
     expect(screen.getByRole('link', { name: 'Refund Policy' })).toHaveAttribute('href', '/refund-and-return-policy');
     expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute('href', '/privacy');
     expect(screen.getByRole('link', { name: 'Terms' })).toHaveAttribute('href', '/terms');
-    expect(screen.getByRole('link', { name: 'Imprint' })).toHaveAttribute('href', '/imprint');
+    expect(screen.getByRole('link', { name: 'Terms' })).toHaveAttribute('href', '/terms');
+    expect(screen.queryByRole('link', { name: 'Imprint' })).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Admin' })).toHaveAttribute('href', '/admin-route');
 
     // Current Year copy

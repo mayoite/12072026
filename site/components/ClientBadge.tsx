@@ -44,10 +44,12 @@ export function ClientBadge({
         {logoSrc ? (
           <Image
             src={logoSrc}
-            alt=""
-            width={140}
-            height={40}
+            alt={`${name} logo`}
+            width={160}
+            height={48}
+            sizes="(max-width: 640px) 40vw, 160px"
             className="client-badge__logo"
+            style={{ width: "auto", height: "2.75rem", maxWidth: "100%", objectFit: "contain" }}
           />
         ) : (
           <span className="client-badge__monogram" aria-hidden="true">

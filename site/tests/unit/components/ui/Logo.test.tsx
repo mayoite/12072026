@@ -24,6 +24,16 @@ describe('OneAndOnlyLogo Component', () => {
     expect(img).toHaveAttribute('src', '/images/brand/logo-sharp-white.png');
   });
 
+  it('renders mark monogram for admin compact chrome', () => {
+    render(<OneAndOnlyLogo variant="mark" />);
+
+    const img = screen.getByRole("img", { name: "One&Only" });
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('src', '/icon.png');
+    expect(img).toHaveAttribute('width', '192');
+    expect(img).toHaveAttribute('height', '192');
+  });
+
   it('applies custom className to wrapper', () => {
     const { container } = render(<OneAndOnlyLogo className="custom-wrapper-class" />);
 
@@ -32,3 +42,4 @@ describe('OneAndOnlyLogo Component', () => {
     expect(wrapper.className).toContain('relative');
   });
 });
+

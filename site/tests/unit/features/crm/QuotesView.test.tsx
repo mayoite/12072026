@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import QuotesView from '@/features/crm/QuotesView';
 
@@ -18,15 +18,26 @@ const mockAddQuote = vi.fn();
 const mockUpdateQuote = vi.fn();
 const mockDeleteQuote = vi.fn();
 
+const mockStoreState = {
+  quotes: mockQuotes,
+  clients: mockClients,
+  projects: mockProjects,
+  addQuote: mockAddQuote,
+  updateQuote: mockUpdateQuote,
+  deleteQuote: mockDeleteQuote,
+  seedDemoData: vi.fn(),
+  clearAll: vi.fn(),
+  exportSnapshot: vi.fn(() => ({ version: 1 as const, exportedAt: '', clients: [], projects: [], quotes: [] })),
+  importSnapshot: vi.fn(() => true),
+};
+
 vi.mock('@/features/crm/stores/crmStore', () => ({
-  useCrmStore: vi.fn(() => ({
-    quotes: mockQuotes,
-    clients: mockClients,
-    projects: mockProjects,
-    addQuote: mockAddQuote,
-    updateQuote: mockUpdateQuote,
-    deleteQuote: mockDeleteQuote,
-  })),
+  useCrmStore: (selector?: (s: typeof mockStoreState) => unknown) =>
+    typeof selector === 'function' ? selector(mockStoreState) : mockStoreState,
+}));
+
+vi.mock('@/features/crm/CrmWorkspaceBanner', () => ({
+  CrmWorkspaceBanner: () => <div data-testid="crm-workspace-banner">Browser-only CRM</div>,
 }));
 
 vi.mock('@/features/shared/shell/GlobalNavHeader', () => ({
@@ -89,9 +100,7 @@ describe('QuotesView Component', () => {
   it('calls deleteQuote when delete button clicked', () => {
     render(<QuotesView />);
 
-    const quoteAlphaCard = screen.getByText('Quote Alpha').closest('div[class*="rounded-xl"]');
-    expect(quoteAlphaCard).not.toBeNull();
-    const deleteBtn = within(quoteAlphaCard as HTMLElement).getByTitle('Delete quote');
+    const deleteBtn = screen.getByRole('button', { name: /Delete quote Quote Alpha/i });
     fireEvent.click(deleteBtn);
 
     expect(mockDeleteQuote).toHaveBeenCalledWith('q1');

@@ -16,7 +16,12 @@ site/tsconfig.tsbuildinfo
 
 # Generated tech-docs output (repo root only)
 generated-documents/
+.tmp/
 .tmp/generated-documents/
+
+# Agent/session scratch (never commit)
+scripts/_tmp*
+agent-reports/tech-stack-shots/
 
 # FORBIDDEN under site/ (canonical layout � see AGENTS.md)
 site/results/

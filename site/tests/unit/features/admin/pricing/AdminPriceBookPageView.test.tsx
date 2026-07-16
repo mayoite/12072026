@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { AdminPriceBookPageView } from "@/features/admin/pricing/AdminPriceBookPageView";
 import { browserApiFetch } from "@/lib/api/browserApi";
 import type { PriceBookContract } from "@/features/admin/pricing/priceBookContract";
@@ -68,5 +68,16 @@ describe("AdminPriceBookPageView", () => {
   it("renders price book panel without inline presentation", () => {
     const { container } = render(<AdminPriceBookPageView initialContract={FIXTURE} />);
     expect(container.querySelector("[data-testid='admin-price-book-panel'] [style]")).toBeNull();
+  });
+
+  it("shows empty state with purpose copy and retry when no contract", async () => {
+    render(<AdminPriceBookPageView initialContract={null} />);
+    await waitFor(() => {
+      expect(screen.getByTestId("admin-price-book-empty")).toBeInTheDocument();
+    });
+    expect(screen.getByTestId("admin-price-book-empty")).toHaveTextContent(
+      /versioned currency rules/i,
+    );
+    expect(screen.getByTestId("admin-price-book-empty-retry")).toBeInTheDocument();
   });
 });

@@ -124,9 +124,6 @@ export function SiteFooter() {
             <Link href="/terms" prefetch={false} className={`site-footer__legal ${footerInteractiveClass}`}>
               Terms
             </Link>
-            <Link href="/imprint" prefetch={false} className={`site-footer__legal ${footerInteractiveClass}`}>
-              Imprint
-            </Link>
             <Link href={PRODUCT_SUITE.admin.routes.landing} prefetch={false} className={`site-footer__legal ${footerInteractiveClass}`}>
               Admin
             </Link>

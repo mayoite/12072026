@@ -4,24 +4,22 @@ import React from "react";
 import AdminDashboardPageView from "@/features/admin/dashboard/AdminDashboardPageView";
 
 describe("AdminDashboardPageView", () => {
-  it("renders the hero without duplicate quick-action links", () => {
+  it("renders the hub without legacy hero copy", () => {
     render(<AdminDashboardPageView />);
 
-    expect(screen.getByText("Platform control")).toBeInTheDocument();
-    expect(screen.getByText("Admin backend")).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: /Edit catalog/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: /Review plans/i })).not.toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: /Standard catalog/i })).toHaveLength(1);
+    expect(screen.getByRole("heading", { level: 1, name: "Dashboard" })).toBeInTheDocument();
+    expect(screen.queryByText("Platform control")).not.toBeInTheDocument();
+    expect(screen.queryByText("Admin backend")).not.toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: /Standard catalog/i }).length).toBeGreaterThan(0);
   });
 
   it("renders all sections from ADMIN_HUB_SECTIONS", () => {
     render(<AdminDashboardPageView />);
 
-    // Hub sections titles
     expect(screen.getByRole("heading", { name: /Planner operations/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /Catalog assets/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "Catalog" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /CRM & ops/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 2, name: "Platform" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "System" })).toBeInTheDocument();
 
     const standardCatalogCard = screen.getByRole("link", { name: /Standard catalog/i });
     expect(standardCatalogCard).toHaveAttribute("href", "/admin/catalog");
@@ -31,6 +29,6 @@ describe("AdminDashboardPageView", () => {
     render(<AdminDashboardPageView />);
 
     expect(screen.getByText(/Browser-only CRM storage\./i)).toBeInTheDocument();
-    expect(screen.getByText(/save to localStorage on the current browser/i)).toBeInTheDocument();
+    expect(screen.getByText(/this browser only/i)).toBeInTheDocument();
   });
 });

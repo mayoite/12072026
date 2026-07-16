@@ -7,7 +7,7 @@ import type {
   SharedClient as Client,
   SharedProject as Project,
   SharedCrmQuoteItem as QuoteItem,
-  SharedCrmQuote as Quote
+  SharedCrmQuote as Quote,
 } from "../../shared/crm/types";
 
 export type { Client, Project, QuoteItem, Quote };
@@ -18,33 +18,50 @@ import {
   CRM_DEMO_QUOTES,
   isCrmDemoModeEnabled,
 } from "./crmDemoSeed";
+import {
+  buildCrmSnapshot,
+  parseCrmSnapshot,
+  type CrmSnapshot,
+} from "../crmMetrics";
+
+function newId(prefix: string): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return `${prefix}-${crypto.randomUUID()}`;
+  }
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
 
 interface CrmStore {
   clients: Client[];
   projects: Project[];
   quotes: Quote[];
-  
-  // Client actions
+
   addClient: (client: Omit<Client, "id" | "createdAt">) => Client;
   updateClient: (id: string, updates: Partial<Client>) => void;
   deleteClient: (id: string) => void;
-  
-  // Project actions
-  addProject: (project: Omit<Project, "id" | "createdAt" | "updatedAt" | "planIds">) => Project;
+
+  addProject: (
+    project: Omit<Project, "id" | "createdAt" | "updatedAt" | "planIds">,
+  ) => Project;
   updateProject: (id: string, updates: Partial<Project>) => void;
   deleteProject: (id: string) => void;
   assignPlanToProject: (projectId: string, planId: string) => void;
   removePlanFromProject: (projectId: string, planId: string) => void;
-  
-  // Quote actions
+
   addQuote: (quote: Omit<Quote, "id" | "createdAt" | "updatedAt">) => Quote;
   updateQuote: (id: string, updates: Partial<Quote>) => void;
   deleteQuote: (id: string) => void;
+
+  /** Replace workspace with packaged sample data (any env). */
+  seedDemoData: () => void;
+  clearAll: () => void;
+  exportSnapshot: () => CrmSnapshot;
+  importSnapshot: (raw: unknown) => boolean;
 }
 
 export const useCrmStore = create<CrmStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       clients: isCrmDemoModeEnabled() ? CRM_DEMO_CLIENTS : [],
       projects: isCrmDemoModeEnabled() ? CRM_DEMO_PROJECTS : [],
       quotes: isCrmDemoModeEnabled() ? CRM_DEMO_QUOTES : [],
@@ -52,7 +69,7 @@ export const useCrmStore = create<CrmStore>()(
       addClient: (data) => {
         const client: Client = {
           ...data,
-          id: `client-${Date.now()}`,
+          id: newId("client"),
           createdAt: new Date().toISOString(),
         };
         set((state) => ({ clients: [...state.clients, client] }));
@@ -60,20 +77,24 @@ export const useCrmStore = create<CrmStore>()(
       },
       updateClient: (id, updates) => {
         set((state) => ({
-          clients: state.clients.map((c) => (c.id === id ? { ...c, ...updates } : c)),
+          clients: state.clients.map((c) =>
+            c.id === id ? { ...c, ...updates } : c,
+          ),
         }));
       },
       deleteClient: (id) => {
         set((state) => ({
           clients: state.clients.filter((c) => c.id !== id),
-          projects: state.projects.map((p) => (p.clientId === id ? { ...p, clientId: "none" } : p)),
+          projects: state.projects.map((p) =>
+            p.clientId === id ? { ...p, clientId: "none" } : p,
+          ),
         }));
       },
 
       addProject: (data) => {
         const project: Project = {
           ...data,
-          id: `project-${Date.now()}`,
+          id: newId("project"),
           planIds: [],
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
@@ -84,7 +105,9 @@ export const useCrmStore = create<CrmStore>()(
       updateProject: (id, updates) => {
         set((state) => ({
           projects: state.projects.map((p) =>
-            p.id === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p
+            p.id === id
+              ? { ...p, ...updates, updatedAt: new Date().toISOString() }
+              : p,
           ),
         }));
       },
@@ -113,7 +136,7 @@ export const useCrmStore = create<CrmStore>()(
             if (p.id !== projectId) return p;
             return {
               ...p,
-              planIds: p.planIds.filter((id) => id !== planId),
+              planIds: p.planIds.filter((pid) => pid !== planId),
               updatedAt: new Date().toISOString(),
             };
           }),
@@ -123,7 +146,7 @@ export const useCrmStore = create<CrmStore>()(
       addQuote: (data) => {
         const quote: Quote = {
           ...data,
-          id: `quote-${Date.now()}`,
+          id: newId("quote"),
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
@@ -133,7 +156,9 @@ export const useCrmStore = create<CrmStore>()(
       updateQuote: (id, updates) => {
         set((state) => ({
           quotes: state.quotes.map((q) =>
-            q.id === id ? { ...q, ...updates, updatedAt: new Date().toISOString() } : q
+            q.id === id
+              ? { ...q, ...updates, updatedAt: new Date().toISOString() }
+              : q,
           ),
         }));
       },
@@ -142,9 +167,43 @@ export const useCrmStore = create<CrmStore>()(
           quotes: state.quotes.filter((q) => q.id !== id),
         }));
       },
+
+      seedDemoData: () => {
+        const stamp = new Date().toISOString();
+        set({
+          clients: CRM_DEMO_CLIENTS.map((c) => ({ ...c, createdAt: stamp })),
+          projects: CRM_DEMO_PROJECTS.map((p) => ({
+            ...p,
+            createdAt: stamp,
+            updatedAt: stamp,
+          })),
+          quotes: CRM_DEMO_QUOTES.map((q) => ({
+            ...q,
+            createdAt: stamp,
+            updatedAt: stamp,
+          })),
+        });
+      },
+      clearAll: () => {
+        set({ clients: [], projects: [], quotes: [] });
+      },
+      exportSnapshot: () => {
+        const { clients, projects, quotes } = get();
+        return buildCrmSnapshot(clients, projects, quotes);
+      },
+      importSnapshot: (raw) => {
+        const snapshot = parseCrmSnapshot(raw);
+        if (!snapshot) return false;
+        set({
+          clients: snapshot.clients,
+          projects: snapshot.projects,
+          quotes: snapshot.quotes,
+        });
+        return true;
+      },
     }),
     {
       name: "oando-crm-storage",
-    }
-  )
+    },
+  ),
 );

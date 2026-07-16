@@ -56,7 +56,7 @@ describe("CustomerQueriesOpsPageView", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: "Customer queries" }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/Live inbox with 10-second auto-refresh/i)).toBeInTheDocument();
+    expect(screen.getByText(/Live server inbox with 10-second auto-refresh/i)).toBeInTheDocument();
     expect(screen.getByText("Admin token")).toBeInTheDocument();
     expect(screen.getByText("Filter")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Refresh" })).toBeInTheDocument();
@@ -65,7 +65,7 @@ describe("CustomerQueriesOpsPageView", () => {
       screen.getByPlaceholderText(/Paste CUSTOMER_QUERIES_ADMIN_TOKEN/i),
     ).toBeInTheDocument();
     expect(screen.getByRole("combobox")).toBeInTheDocument();
-    expect(await screen.findByText("No queries found.")).toBeInTheDocument();
+    expect(await screen.findByText("No queries yet")).toBeInTheDocument();
   });
 
   it("uses admin shell heading and hides token controls when embedded", async () => {
@@ -76,7 +76,8 @@ describe("CustomerQueriesOpsPageView", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: "Customer queries" }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/Live inbox with 10-second auto-refresh/i)).toBeInTheDocument();
+    expect(screen.getByText(/Live server inbox from contact forms/i)).toBeInTheDocument();
+    expect(screen.getByText(/Server-backed inbox/i)).toBeInTheDocument();
     expect(screen.queryByText("Admin token")).not.toBeInTheDocument();
     expect(
       screen.queryByPlaceholderText(/Paste CUSTOMER_QUERIES_ADMIN_TOKEN/i),
@@ -84,7 +85,9 @@ describe("CustomerQueriesOpsPageView", () => {
     expect(screen.queryByRole("button", { name: "Apply token" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Refresh" })).toBeInTheDocument();
     expect(screen.getByText("Filter")).toBeInTheDocument();
-    expect(await screen.findByText("No queries found.")).toBeInTheDocument();
+    expect(await screen.findByText("No queries yet")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Open public contact form/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Open CRM hub/i })).toBeInTheDocument();
   });
 
   it("shows network error state when the inbox fetch rejects", async () => {
@@ -93,8 +96,10 @@ describe("CustomerQueriesOpsPageView", () => {
     render(<CustomerQueriesOpsPageView />);
 
     expect(await screen.findByText("Unable to load queries.")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("Could not load queries");
+    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument();
     expect(screen.getByText("Not synced yet")).toBeInTheDocument();
-    expect(screen.queryByText("No queries found.")).not.toBeInTheDocument();
+    expect(screen.queryByText("No queries yet")).not.toBeInTheDocument();
   });
 
   it("shows API error message when the manage endpoint rejects the load", async () => {
@@ -106,6 +111,8 @@ describe("CustomerQueriesOpsPageView", () => {
     render(<CustomerQueriesOpsPageView />);
 
     expect(await screen.findByText("Invalid token")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("Sign-in or token required");
+    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument();
     expect(screen.getByText("Not synced yet")).toBeInTheDocument();
   });
 
@@ -119,7 +126,10 @@ describe("CustomerQueriesOpsPageView", () => {
 
     render(<CustomerQueriesOpsPageView embedded />);
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("Unauthorized");
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent("Unauthorized");
+    expect(alert).toHaveTextContent("Sign-in or token required");
+    expect(screen.getByRole("link", { name: /Open CRM hub/i })).toBeInTheDocument();
   });
 
   it("shows empty inbox after a successful load with no items", async () => {
@@ -128,7 +138,8 @@ describe("CustomerQueriesOpsPageView", () => {
 
     render(<CustomerQueriesOpsPageView />);
 
-    expect(await screen.findByText("No queries found.")).toBeInTheDocument();
+    expect(await screen.findByText("No queries yet")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Open public contact form/i })).toBeInTheDocument();
     expect(screen.getByText(/^Last sync:/)).toBeInTheDocument();
   });
 
@@ -184,7 +195,7 @@ describe("CustomerQueriesOpsPageView", () => {
         "fresh-token",
       ),
     );
-    expect(await screen.findByText("No queries found.")).toBeInTheDocument();
+    expect(await screen.findByText("No queries yet")).toBeInTheDocument();
     expect(fetchSpy).toHaveBeenCalledWith(
       expect.stringContaining("/api/customer-queries/manage?"),
       expect.objectContaining({
@@ -227,7 +238,7 @@ describe("CustomerQueriesOpsPageView", () => {
         }),
       ),
     );
-    expect(await screen.findByText("No queries found.")).toBeInTheDocument();
+    expect(await screen.findByText("No queries yet")).toBeInTheDocument();
     expect(screen.queryByText(sampleQuery.message)).not.toBeInTheDocument();
   });
 
@@ -352,7 +363,7 @@ describe("CustomerQueriesOpsPageView", () => {
         }),
       ),
     );
-    expect(await screen.findByText("No queries found.")).toBeInTheDocument();
+    expect(await screen.findByText("No queries match this filter")).toBeInTheDocument();
   });
 
   it("refetches the inbox when Refresh is clicked", async () => {

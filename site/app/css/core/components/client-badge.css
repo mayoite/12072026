@@ -1,5 +1,6 @@
 
-/* Client roster badges — trusted-by, projects, about */
+/* Client roster badges — trusted-by, projects, about
+   Logo-first: mark area is the visual anchor; name is secondary label. */
 
 .client-badge-group {
   display: grid;
@@ -19,9 +20,15 @@
   }
 }
 
-/* Extended / dense rosters: 3 cols md, 5 cols xl — still wider than old 6-col crush. */
+/* Dense logo wall (trusted-by roster) */
 .client-badge-group--dense {
   gap: 0.75rem;
+}
+
+@media (width >= theme(--breakpoint-sm)) {
+  .client-badge-group--dense {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (width >= theme(--breakpoint-md)) {
@@ -45,10 +52,11 @@
 .client-badge {
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;
+  gap: 0.75rem;
   min-width: 0;
   height: 100%;
-  padding: 1.25rem;
+  min-height: 9.5rem;
+  padding: 1.1rem 1.15rem 1.15rem;
   border: 0.0625rem solid var(--border-soft);
   border-radius: var(--radius-lg);
   background: var(--surface-card);
@@ -60,17 +68,21 @@
 .client-badge__body {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
   margin-top: auto;
   min-width: 0;
 }
 
+/* Logo / monogram stage — fixed height so grid rows align */
 .client-badge__mark {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  min-height: 3rem;
+  flex: 0 0 auto;
+  width: 100%;
+  height: 3.25rem;
+  min-height: 3.25rem;
   min-width: 0;
   isolation: isolate;
   overflow: hidden;
@@ -78,12 +90,25 @@
 
 .client-badge__logo {
   display: block;
-  width: auto;
-  max-width: min(100%, 8.75rem);
-  height: 2.5rem;
+  width: auto !important;
+  max-width: min(100%, 9.5rem);
+  height: 2.75rem !important;
+  max-height: 2.75rem;
   object-fit: contain;
   object-position: left center;
-  opacity: 0.92;
+  opacity: 0.94;
+  filter: none;
+}
+
+/* Next/Image often wraps; force contained img inside */
+.client-badge__mark img.client-badge__logo,
+.client-badge__mark :is(img) {
+  width: auto !important;
+  max-width: min(100%, 9.5rem);
+  height: 2.75rem !important;
+  max-height: 2.75rem;
+  object-fit: contain;
+  object-position: left center;
 }
 
 .client-badge__monogram {
@@ -107,7 +132,8 @@
   box-shadow: var(--shadow-soft);
 }
 
-.client-badge:hover .client-badge__logo {
+.client-badge:hover .client-badge__logo,
+.client-badge:hover .client-badge__mark :is(img) {
   opacity: 1;
 }
 
@@ -133,7 +159,7 @@
 }
 
 .client-badge__name {
-  font-size: var(--type-body-size);
+  font-size: var(--type-body-sm-size, 0.875rem);
   font-weight: var(--font-weight-copy-semibold);
   line-height: 1.3;
   color: var(--text-strong);
@@ -146,16 +172,29 @@
 }
 
 .client-badge__location {
-  margin-top: 0.25rem;
+  margin-top: 0.125rem;
   font-size: var(--type-label-size);
   font-weight: var(--font-weight-copy-medium);
   color: var(--text-muted);
   overflow-wrap: anywhere;
 }
 
-/* Slightly tighter padding when grid is dense (5-up). */
+/* Dense wall: slightly tighter card chrome */
 @media (width >= theme(--breakpoint-xl)) {
   .client-badge-group--dense .client-badge {
-    padding: 1rem 1.1rem;
+    padding: 0.95rem 1rem 1rem;
+    min-height: 8.75rem;
+  }
+
+  .client-badge-group--dense .client-badge__mark {
+    height: 3rem;
+    min-height: 3rem;
+  }
+}
+
+/* Reduced motion: no hover elevation noise beyond color */
+@media (prefers-reduced-motion: reduce) {
+  .client-badge {
+    transition: none;
   }
 }

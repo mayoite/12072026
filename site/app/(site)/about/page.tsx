@@ -4,16 +4,10 @@ import { getTranslations } from "next-intl/server";
 import { EditorialArrowLink } from "@/components/site/EditorialRoute";
 import { HomeMarketingLayout } from "@/components/home/layout";
 import { TRUSTED_BY_STATS } from "@/features/site/data/proof";
-import { buildPageMetadata } from "@/features/site/data/seo";
-import { SITE_URL } from "@/lib/siteUrl";
+import { ABOUT_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
-export const metadata: Metadata = buildPageMetadata(SITE_URL, {
-  title: "About One&Only",
-  description:
-    "Planning-led office furniture systems for modern workplaces. Learn about our approach to workspace design.",
-  path: "/about",
-  image: "/images/hero/usha-hero.webp",
-});
+/** Canonical SEO for /about (title length, description, OG, Twitter, canonical, hreflang). */
+export const metadata: Metadata = ABOUT_PAGE_METADATA;
 
 type AboutPillar = { title: string; detail: string };
 

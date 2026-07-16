@@ -37,14 +37,24 @@ import { SITE_URL } from "@/lib/siteUrl";
  */
 
 export const ABOUT_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: `${ABOUT_PAGE_COPY.heroTitle} | Planning-led workspace partner`,
+  title:
+    "About One&Only | Office furniture Patna, Ranchi, Bihar & Jharkhand — Steelcase, Featherlite, Humanscale",
   description: ABOUT_PAGE_COPY.heroSubtitle,
   path: "/about",
   keywords: [
+    "office furniture Patna",
+    "office furniture Ranchi",
+    "office furniture Bihar",
+    "office furniture Jharkhand",
+    "office furniture dealer Patna",
+    "office furniture dealer Ranchi",
+    "Steelcase dealer Bihar",
+    "Steelcase dealer Jharkhand",
+    "Featherlite office furniture Patna",
+    "Humanscale ergonomic seating Ranchi",
+    "authorized office furniture dealer",
+    "workspace planning partner East India",
     "about One&Only",
-    "office furniture company Patna",
-    "workspace planning partner India",
-    "furniture dealer Bihar",
   ],
 });
 
@@ -61,26 +71,34 @@ export const SOLUTIONS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
 });
 
 export const CONTACT_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: `${CONTACT_PAGE_COPY.heroTitle} | One&Only`,
+  title:
+    "Contact office furniture sales | Patna, Ranchi, Bihar & Jharkhand | One&Only",
   description: CONTACT_PAGE_COPY.heroSubtitle,
   path: "/contact",
+  image: "/images/hero/tvs-patna-enhanced.webp",
   keywords: [
     "contact office furniture Patna",
-    "workspace enquiry Bihar",
+    "office furniture dealer Ranchi",
+    "office furniture quote Bihar",
+    "office furniture support Jharkhand",
+    "Steelcase Featherlite Humanscale contact",
+    "workspace planning enquiry Patna",
     "quote request office furniture",
     "sales contact One&Only",
   ],
 });
 
 export const SUSTAINABILITY_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: `${SUSTAINABILITY_PAGE_COPY.heroTitle} | One&Only`,
+  title:
+    "Sustainable office furniture | Long-life systems | One&Only Patna, Bihar & Jharkhand",
   description: SUSTAINABILITY_PAGE_COPY.heroSubtitle,
   path: "/sustainability",
+  image: "/images/hero/dmrc-hero.webp",
   keywords: [
     "sustainable office furniture",
     "long-life workspace systems",
-    "eco-friendly furniture India",
-    "durable office furniture",
+    "durable office furniture Patna",
+    "eco-conscious furniture Bihar Jharkhand",
   ],
 });
 
@@ -88,6 +106,8 @@ export const SERVICE_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   title: `${SERVICE_PAGE_COPY.heroTitle} | One&Only`,
   description: SERVICE_PAGE_COPY.heroSubtitle,
   path: "/service",
+  /** Same family hero as planning / privacy / downloads for visual parity. */
+  image: "/images/hero/dmrc-hero.webp",
   keywords: [
     "office furniture service support",
     "after-sales support furniture",
@@ -121,17 +141,28 @@ export const DOWNLOADS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
 });
 
 export const PRIVACY_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: `${LEGAL_PAGE_COPY.privacy.title} | One&Only`,
-  description: LEGAL_PAGE_COPY.privacy.heroSubtitle,
+  title:
+    "Privacy Policy | Enquiry data & cookies | One&Only Patna, Ranchi",
+  description:
+    "How One&Only handles enquiry data, attribution cookies, and communication records for office furniture planning and support across Patna, Ranchi, Bihar and Jharkhand.",
   path: "/privacy",
-  alternates: false,
+  image: "/images/hero/dmrc-hero.webp",
+  keywords: [
+    "One&Only privacy policy",
+    "office furniture privacy Patna",
+    "enquiry data cookies India",
+    "privacy policy Bihar Jharkhand",
+  ],
 });
 
 export const TERMS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: `${LEGAL_PAGE_COPY.terms.title} | One&Only`,
-  description: LEGAL_PAGE_COPY.terms.heroSubtitle,
+  title:
+    "Terms & Conditions | Office furniture sales & support | One&Only Patna",
+  description:
+    "Website, quotation, delivery, warranty, and support terms for One&Only office furniture across Patna, Ranchi, Bihar and Jharkhand. Includes company identity formerly listed under imprint.",
   path: "/terms",
   alternates: false,
+  image: "/images/hero/dmrc-hero.webp",
 });
 
 export const REFUND_POLICY_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
@@ -141,22 +172,29 @@ export const REFUND_POLICY_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL,
   alternates: false,
 });
 
+/** @deprecated Imprint route redirects to /terms — keep export only if tests reference name. */
 export const IMPRINT_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: `${LEGAL_PAGE_COPY.imprint.title} | One&Only`,
-  description: LEGAL_PAGE_COPY.imprint.heroSubtitle,
-  path: "/imprint",
+  title: `${LEGAL_PAGE_COPY.terms.title} | One&Only`,
+  description: LEGAL_PAGE_COPY.terms.heroSubtitle,
+  path: "/terms",
   alternates: false,
+  indexable: false,
 });
 
 export const COMPARE_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: `${COMPARE_ROUTE_COPY.title} | One&Only`,
+  title:
+    "Compare office furniture | Patna, Ranchi, Bihar & Jharkhand | One&Only",
   description: COMPARE_ROUTE_COPY.description,
   path: "/compare",
   keywords: [
     "compare office furniture",
-    "product comparison workspace",
-    "compare chairs tables storage",
-    "furniture comparison India",
+    "compare office furniture Patna",
+    "compare office furniture Ranchi",
+    "office furniture comparison Bihar",
+    "office furniture comparison Jharkhand",
+    "compare workstations chairs storage",
+    "Steelcase Featherlite Humanscale compare",
+    "furniture shortlist India",
   ],
 });
 
@@ -169,9 +207,10 @@ export const QUOTE_CART_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
 });
 
 export const SHOWROOMS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: `${SHOWROOMS_PAGE_COPY.heroTitle} | One&Only`,
+  title: `${SHOWROOMS_PAGE_COPY.heroTitle} | One&Only Patna`,
   description: SHOWROOMS_PAGE_COPY.heroSubtitle,
   path: "/showrooms",
+  image: "/images/hero/dmrc-hero.webp",
   keywords: [
     "office furniture showroom Patna",
     "furniture display Bihar",
@@ -181,27 +220,34 @@ export const SHOWROOMS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
 });
 
 export const PROJECTS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: `${PROJECTS_PAGE_COPY.heroTitle} | One&Only`,
+  title:
+    "Office furniture projects | Patna, Ranchi, Bihar & Jharkhand | One&Only",
   description:
-    "Client roster and delivery proof across government, finance, energy, manufacturing, and institutional sectors.",
+    "Client roster and delivery proof across government, finance, energy, manufacturing, and institutional sectors in Patna, Ranchi, Bihar and Jharkhand.",
   path: "/projects",
+  image: "/images/hero/dmrc-hero.webp",
   keywords: [
     "office furniture projects India",
-    "client roster workspace furniture",
-    "government furniture projects",
-    "enterprise furniture delivery",
+    "office furniture projects Patna",
+    "office furniture projects Ranchi",
+    "client roster workspace furniture Bihar",
+    "government furniture projects Jharkhand",
+    "enterprise furniture delivery India",
   ],
 });
 
 export const PORTFOLIO_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: `${PORTFOLIO_PAGE_COPY.heroTitle} | One&Only`,
+  title:
+    "Office furniture portfolio | Patna, Ranchi, Bihar & Jharkhand projects | One&Only",
   description: PORTFOLIO_PAGE_COPY.heroSubtitle,
   path: "/portfolio",
   keywords: [
-    "office furniture portfolio",
-    "project gallery workspace",
-    "delivery photos office furniture",
-    "installation gallery India",
+    "office furniture portfolio Patna",
+    "office furniture projects Bihar",
+    "office furniture installation Jharkhand",
+    "workspace delivery photos Ranchi",
+    "enterprise office furniture projects India",
+    "DMRC Titan TVS office furniture",
   ],
 });
 
@@ -221,6 +267,7 @@ export const TRUSTED_BY_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
   title: `${TRUSTED_BY_PAGE_COPY.heroTitle} | One&Only`,
   description: TRUSTED_BY_PAGE_COPY.heroSubtitle,
   path: "/trusted-by",
+  image: "/images/hero/dmrc-hero.webp",
   keywords: [
     "trusted office furniture clients",
     "enterprise furniture clients India",
@@ -270,9 +317,9 @@ export const SUPPORT_IVR_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
 });
 
 export const ACCESS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: "Sign in | One&Only",
+  title: "Sign in | One&Only office furniture planner",
   description:
-    "Sign in or continue as a guest to open the workspace planner and product tools.",
+    "Sign in or continue as a guest to plan office furniture layouts and product selections. Not indexed — account entry only.",
   path: "/access",
   alternates: false,
   indexable: false,
@@ -281,34 +328,30 @@ export const ACCESS_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
 export const CHOOSE_PRODUCT_PAGE_METADATA: Metadata = buildPageMetadata(
   SITE_URL,
   {
-    title: "Choose a product | One&Only",
+    title: "Choose planner entry | Office furniture workspace | One&Only",
     description:
-      "Pick a released product to start planning. Guest and signed-in workspace entry.",
+      "Start the office furniture planner as guest or signed-in member. Layout, catalog placement, and BOQ export for Patna, Ranchi, Bihar and Jharkhand. Workspace entry — not indexed.",
     path: "/choose-product",
     alternates: false,
     indexable: false,
   },
 );
 
-export const REPO_STORE_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: "Repo Store",
-  description:
-    "Current repository map and target operating model for the Oando platform.",
-  path: "/repo-store",
-  image: "/logo-v2.webp",
-  alternates: false,
-  indexable: false,
-});
-
 export const CAREER_PAGE_METADATA: Metadata = buildPageMetadata(SITE_URL, {
-  title: `${CAREER_PAGE_COPY.heroTitle} | One&Only`,
+  title:
+    "Careers | Office furniture jobs Patna, Ranchi, Bihar & Jharkhand | One&Only",
   description: CAREER_PAGE_COPY.heroSubtitle,
   path: "/career",
   keywords: [
     "office furniture jobs Patna",
-    "workspace planning careers",
+    "office furniture jobs Ranchi",
+    "office furniture careers Bihar",
+    "office furniture careers Jharkhand",
+    "Steelcase Featherlite Humanscale careers",
+    "workspace planning jobs Patna",
     "furniture sales jobs Bihar",
-    "One&Only careers India",
+    "furniture operations jobs Ranchi",
+    "One&Only careers",
   ],
 });
 

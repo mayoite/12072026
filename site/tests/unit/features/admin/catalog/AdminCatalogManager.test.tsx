@@ -22,7 +22,12 @@ describe("AdminCatalogManager", () => {
     vi.mocked(browserApiFetch).mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => ({ success: true, items: [], total: 0 }),
+      json: async () => ({
+        success: true,
+        items: [],
+        total: 0,
+        source: "products-db",
+      }),
     } as Response);
   });
 
@@ -38,5 +43,41 @@ describe("AdminCatalogManager", () => {
     await waitFor(() => {
       expect(browserApiFetch).toHaveBeenCalled();
     });
+  });
+
+  it("shows empty state with primary add CTA when catalog is empty", async () => {
+    render(
+      <AdminCatalogManager
+        title="Standard catalog"
+        description="Editable managed products"
+        catalogType="standard"
+      />,
+    );
+    expect(await screen.findByTestId("admin-catalog-empty")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-catalog-empty-add")).toHaveTextContent(/Add item/i);
+    expect(screen.getByTestId("admin-catalog-empty")).toHaveTextContent(
+      /read-only workspace element library/i,
+    );
+  });
+
+  it("shows retry empty state when load fails", async () => {
+    vi.mocked(browserApiFetch).mockResolvedValue({
+      ok: false,
+      status: 503,
+      json: async () => ({ error: "Database unavailable" }),
+    } as Response);
+
+    render(
+      <AdminCatalogManager
+        title="Configurator catalog"
+        description="Editable configurator SKUs"
+        catalogType="configurator"
+      />,
+    );
+    expect(await screen.findByTestId("admin-catalog-error-empty")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-catalog-retry")).toBeInTheDocument();
+    expect(screen.getByTestId("admin-catalog-error-empty")).toHaveTextContent(
+      /configurator SKUs/i,
+    );
   });
 });

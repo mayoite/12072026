@@ -25,6 +25,7 @@ describe('ClientBadge Component', () => {
     const { container } = render(<ClientBadge name="Titan" sector="Manufacturing" />);
     const logo = container.querySelector('img.client-badge__logo');
     expect(logo).toHaveAttribute('src', '/images/client-logos/Titan.png');
+    expect(logo).toHaveAttribute('alt', 'Titan logo');
     expect(container.querySelector('.client-badge__monogram')).toBeNull();
   });
 

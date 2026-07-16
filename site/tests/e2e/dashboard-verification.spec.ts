@@ -95,7 +95,9 @@ test.describe("Dashboard verification", () => {
       );
 
       // Hero content
-      await expect(page.getByRole("heading", { name: /Your planner workspace/i })).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: /Your office furniture planner hub/i }),
+      ).toBeVisible();
 
       // Header metrics
       const headerBox = await header.boundingBox();

@@ -4,12 +4,12 @@ import { buildWhatsAppHref } from "@/features/site/data/contact";
 export const ABOUT_PAGE_COPY = {
   heroTitle: "About One&Only",
   heroSubtitle:
-    "We design and deliver workspace systems that stay practical, durable, and scalable as teams grow.",
+    "Office furniture partner for Patna, Ranchi, Bihar and Jharkhand — planning, supply, and delivery of Steelcase, Featherlite, Humanscale, and other leading workplace brands.",
   sectionKicker: "Who we are",
-  sectionTitle: "A planning-first furniture partner for modern offices.",
+  sectionTitle: "A planning-first office furniture partner for modern workplaces.",
   paragraphs: [
     "We combine workplace planning, product selection, and execution support so teams can move from concept to handover with fewer delays and better outcomes.",
-    "Our projects cover ergonomic seating, modular workstations, meeting environments, storage, and support services tailored to enterprise and institutional needs.",
+    "Our projects cover ergonomic seating, modular workstations, meeting environments, storage, and support services — including systems from Steelcase, Featherlite, Humanscale, and other authorized brands for enterprise and institutional needs.",
     "Every engagement is managed for clarity: documented scope, practical timelines, and accountable after-sales support.",
   ],
   confidenceKicker: "Client confidence",
@@ -64,11 +64,12 @@ export const ABOUT_PAGE_COPY = {
 
 export const CONTACT_PAGE_COPY = {
   heroTitle: "Contact us",
-  heroSubtitle: "Share your workspace requirement and our team will respond with next steps.",
+  heroSubtitle:
+    "Contact One&Only for office furniture quotes, planning, and support in Patna, Ranchi, Bihar and Jharkhand — Steelcase, Featherlite, Humanscale, and other workplace brands.",
   sectionTitle: "Office and support contacts",
-  introTitle: "Start with the right team.",
+  introTitle: "Start with the right office furniture team.",
   introDescription:
-    "Share your requirement, timeline, or category mix. We will route it to the right planning or sales contact and respond with practical next steps.",
+    "Share your brief, timeline, or category mix (workstations, seating, storage, tables). We route planning and sales enquiries for Patna, Ranchi, Bihar, and Jharkhand with practical next steps.",
   resourceDeskLead:
     "Need category packs, technical sheets, or planning references first?",
   resourceDeskCta: "Use the Resource Desk",
@@ -140,8 +141,8 @@ export const TRUSTED_BY_PAGE_COPY = {
 export const PROJECTS_PAGE_COPY = {
   heroTitle: "Projects",
   heroSubtitleTemplate:
-    "{clients} organisations across government, finance, energy, manufacturing, and more.",
-  heroBackgroundImage: "/images/hero/titan-patna-hq.webp",
+    "{clients} organisations across government, finance, energy, manufacturing — Patna, Ranchi, Bihar, Jharkhand and beyond.",
+  heroBackgroundImage: "/images/hero/dmrc-hero.webp",
   featuredLabel: "Selected organisations",
   featuredTitle: "Client roster",
   allLabel: "Extended roster",
@@ -213,7 +214,8 @@ export const PROJECTS_PAGE_CLIENTS: ClientBadgeData[] = [
 
 export const PORTFOLIO_PAGE_COPY = {
   heroTitle: "Portfolio",
-  heroSubtitle: "Real delivery photos grouped by client projects.",
+  heroSubtitle:
+    "Office furniture projects delivered for enterprise clients — real installation photos from Patna, Bihar, Jharkhand, and multi-city rollouts.",
   eyebrow: "Project gallery",
   title: "Excellence.",
   totalTemplate: "{clients} clients - {photos} photos",
@@ -525,11 +527,11 @@ export const SUSTAINABILITY_PAGE_COPY = {
 export const CAREER_PAGE_COPY = {
   heroTitle: "Careers",
   heroSubtitle:
-    "Join a team that builds practical, high-impact workspaces for organizations across India.",
+    "Office furniture careers in Patna, Ranchi, Bihar and Jharkhand — sales, planning, operations, and support for Steelcase, Featherlite, Humanscale, and other workplace brands.",
   introKicker: "Why join us",
-  introTitle: "Build your career in workspace delivery.",
+  introTitle: "Build your career in office furniture delivery.",
   introDescription:
-    "We work across planning, product consulting, project delivery, and support. If you care about reliable execution and customer outcomes, you will fit well here.",
+    "We work across workplace planning, product consulting, project delivery, and after-sales support for enterprise offices across Patna, Ranchi, Bihar, and Jharkhand. If you care about reliable execution and customer outcomes, you will fit well here.",
   pillars: [
     {
       title: "Collaborative teams",
@@ -588,7 +590,7 @@ export const CAREER_PAGE_JOBS = [
   {
     title: "Project Sales Manager",
     department: "Enterprise Sales",
-    location: "Patna",
+    location: "Patna / Ranchi",
   },
   {
     title: "Workspace Planner",
@@ -598,7 +600,7 @@ export const CAREER_PAGE_JOBS = [
   {
     title: "Site Execution Coordinator",
     department: "Operations",
-    location: "Patna and travel",
+    location: "Patna, Ranchi and travel",
   },
   {
     title: "Customer Support Executive",
@@ -952,11 +954,11 @@ export const LEGAL_PAGE_COPY = {
   terms: {
     title: "Terms & Conditions",
     heroSubtitle:
-      "Website, enquiry, quotation, delivery, warranty, and support terms for One&Only.",
+      "Website, enquiry, quotation, delivery, warranty, and support terms for One&Only office furniture in Patna, Ranchi, Bihar and Jharkhand.",
     overviewKicker: "Commercial terms",
     overviewTitle: "The operating terms behind quotations, orders, delivery, and support.",
     overviewDescription:
-      "These terms explain how website information, commercial quotations, project execution, and warranty-backed support are handled in practice.",
+      "These terms explain how website information, commercial quotations, project execution, and warranty-backed support are handled in practice. Company identity and registered office details are included here (imprint retired).",
     sections: [
       {
         heading: "General Terms and Conditions",
@@ -1133,22 +1135,31 @@ export const CATEGORY_ROUTE_COPY = {
 } as const;
 
 export const COMPARE_ROUTE_COPY = {
-  kicker: "Compare products",
-  title: "Compare selected workspace options",
+  kicker: "Compare office furniture",
+  title: "Compare office furniture side by side",
   description:
-    "Review key category, material, warranty, and feature signals side by side before you request a quote or documentation pack.",
+    "Compare up to four office furniture products — category, materials, warranty, certification, and features — before you request a quote or BOQ. Built for shortlists in Patna, Ranchi, Bihar, and Jharkhand.",
   countLabel: "Comparing {count} products",
   mobileHint: "Swipe horizontally on smaller screens to read every specification column.",
-  browseCta: "Browse all categories",
+  browseCta: "Browse products",
   resourceDeskCta: "Open Resource Desk",
   primaryCta: "Request quote",
   viewProductCta: "View product",
   addToQuoteCta: "Add to quote cart",
-  emptyTitle: "No products selected yet.",
+  emptyTitle: "Your comparison shortlist is empty",
   emptyDescription:
-    "Add up to 4 products from category listings or product pages, then return here to compare the details side by side.",
-  emptyPrimaryCta: "Browse all categories",
+    "Add up to 4 products from product or category pages (use Compare on each card). Return here to review materials, warranty, and features side by side before planning or quote.",
+  emptyPrimaryCta: "Browse products",
   emptySecondaryCta: "Open Resource Desk",
+  emptyPlannerCta: "Open guest planner",
+  emptySteps: [
+    "Select up to 4 office furniture products",
+    "Review materials, warranty, and features",
+    "Request quote or continue to planner",
+  ],
+  tableCaption: "Side-by-side specification comparison of selected office furniture products",
+  selectionEmptyHint:
+    "Add products from category or product pages to build this comparison. Your shortlist syncs when you open Compare from the dock.",
 } as const;
 
 export const QUOTE_CART_ROUTE_COPY = {

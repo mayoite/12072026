@@ -49,7 +49,7 @@ export function PlannerHelpPage() {
             <div className="max-w-md">
               <div className="relative">
                 <Search
-                  className="pointer-events-none left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
+                  className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
                   aria-hidden="true"
                 />
                 <input
@@ -58,7 +58,7 @@ export function PlannerHelpPage() {
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search help…"
                   aria-label="Search help topics"
-                  className="typ-body-sm rounded-full border border-soft bg-panel py-3 pl-11 pr-4 text-strong outline-none focus-ring-theme"
+                  className="typ-body-sm w-full min-h-11 rounded-full border border-soft bg-panel py-3 pl-11 pr-4 text-strong outline-none focus-ring-theme"
                 />
               </div>
               <p aria-live="polite" className="typ-micro mt-2 pl-4 text-subtle">

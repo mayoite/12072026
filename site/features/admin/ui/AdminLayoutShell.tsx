@@ -3,22 +3,62 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowUpRight, ArrowSquareOut as ExternalLink, List as Menu, X } from "@phosphor-icons/react";
+import {
+  ArrowUpRight,
+  ArrowSquareOut as ExternalLink,
+  List as Menu,
+  X,
+} from "@phosphor-icons/react";
 import { OneAndOnlyLogo } from "@/components/ui/Logo";
-import { ADMIN_NAV_GROUPS } from "./adminNav";
-const isSvgEditorFocusRoute = (pathname: string) => pathname.startsWith("/admin/svg-editor/");
+import {
+  ADMIN_NAV_GROUPS,
+  ADMIN_NAV_ITEMS,
+  resolveAdminNavItem,
+} from "./adminNav";
 
-function isActivePath(pathname: string, href: string): boolean {
-  if (href === "/admin") return pathname === "/admin" || pathname === "/admin/";
-  return pathname === href || pathname.startsWith(`${href}/`);
+const isSvgEditorFocusRoute = (pathname: string) =>
+  pathname.startsWith("/admin/svg-editor/");
+
+/** True only for the best (longest) matching nav href — avoids /admin/crm lighting up under /admin/crm/projects. */
+function isActivePath(pathname: string, href: string, allHrefs: readonly string[]): boolean {
+  const path =
+    pathname.endsWith("/") && pathname.length > 1 ? pathname.slice(0, -1) : pathname;
+  const normalize = (h: string) =>
+    h.endsWith("/") && h.length > 1 ? h.slice(0, -1) : h;
+
+  let best: string | null = null;
+  for (const candidate of allHrefs) {
+    const c = normalize(candidate);
+    if (c === "/admin") {
+      if (path === "/admin") best = c;
+      continue;
+    }
+    if (path === c || path.startsWith(`${c}/`)) {
+      if (!best || c.length > best.length) best = c;
+    }
+  }
+  return best === normalize(href);
 }
 
-export default function AdminLayoutShell({ children }: { children: React.ReactNode }) {
+export default function AdminLayoutShell({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname() ?? "";
   const editorFocusMode = isSvgEditorFocusRoute(pathname);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>(
+    {},
+  );
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLElement>(null);
+  const currentNav = resolveAdminNavItem(pathname);
+  const allNavHrefs = ADMIN_NAV_ITEMS.map((item) => item.href);
+
+  const toggleGroup = useCallback((title: string) => {
+    setCollapsedGroups((prev) => ({ ...prev, [title]: !prev[title] }));
+  }, []);
 
   const closeMobile = useCallback(() => {
     setMobileOpen(false);
@@ -86,7 +126,7 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
         Skip to main content
       </a>
       {!editorFocusMode && (
-        <header className="shell-admin-header shell-admin-header--brand !bg-primary">
+        <header className="shell-admin-header shell-admin-header--brand">
           <div className="shell-admin-bar shell-admin-bar--brand">
             <div className="shell-admin-bar__group">
               <button
@@ -100,17 +140,39 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
               >
                 {mobileOpen ? <X size={18} /> : <Menu size={18} />}
               </button>
-              <Link href="/admin" className="shell-admin-brand" onClick={closeMobile}>
-                <OneAndOnlyLogo variant="white" className="h-7 w-auto" />
-                <span className="shell-admin-brand__badge">Admin</span>
+              <Link
+                href="/admin"
+                className="shell-admin-brand"
+                onClick={closeMobile}
+                aria-label="One&Only Admin home"
+              >
+                <OneAndOnlyLogo
+                  variant="mark"
+                  className="shell-admin-brand__mark h-8 w-8 md:hidden"
+                />
+                <OneAndOnlyLogo
+                  variant="white"
+                  className="shell-admin-brand__wordmark hidden h-7 w-auto md:flex"
+                />
+                <span className="shell-admin-brand__badge">Console</span>
               </Link>
+              {currentNav ? (
+                <p className="shell-admin-context" aria-live="polite">
+                  <span className="shell-admin-context__label">Now</span>
+                  <span className="shell-admin-context__title">{currentNav.label}</span>
+                </p>
+              ) : null}
             </div>
             <div className="shell-admin-bar__actions">
               <Link href="/" className="shell-admin-header-link" aria-label="View site">
                 <span className="shell-admin-header-link__label">View site</span>
                 <ArrowUpRight size={14} aria-hidden />
               </Link>
-              <Link href="/planner/guest" className="shell-admin-header-cta" aria-label="Open planner">
+              <Link
+                href="/planner/guest"
+                className="shell-admin-header-cta"
+                aria-label="Open planner"
+              >
                 <span className="shell-admin-header-cta__label">Open planner</span>
                 <ExternalLink size={14} aria-hidden />
               </Link>
@@ -120,44 +182,86 @@ export default function AdminLayoutShell({ children }: { children: React.ReactNo
       )}
 
       <div className="shell-admin-frame">
-        {(!editorFocusMode || mobileOpen) ? <aside
-          ref={sidebarRef}
-          id="admin-mobile-sidebar"
-          className={`shell-admin-sidebar ${mobileOpen ? "shell-admin-sidebar--open" : ""}`}
-          role={mobileOpen ? "dialog" : undefined}
-          aria-modal={mobileOpen ? true : undefined}
-          aria-label={mobileOpen ? "Admin navigation menu" : "Admin navigation"}
-        >
-          <nav className="shell-admin-sidebar__nav">
-            {ADMIN_NAV_GROUPS.map((group) => (
-              <div key={group.title} className="shell-admin-nav-group">
-                <p className="shell-admin-nav-group__title">{group.title}</p>
-                {group.items.map((item) => {
-                  const active = isActivePath(pathname, item.href);
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      title={item.description}
-                      onClick={closeMobile}
-                      className={`shell-admin-nav-link${active ? " shell-admin-nav-link--active" : ""}`}
-                      aria-current={active ? "page" : undefined}
+        {!editorFocusMode || mobileOpen ? (
+          <aside
+            ref={sidebarRef}
+            id="admin-mobile-sidebar"
+            className={`shell-admin-sidebar ${mobileOpen ? "shell-admin-sidebar--open" : ""}`}
+            role={mobileOpen ? "dialog" : undefined}
+            aria-modal={mobileOpen ? true : undefined}
+            aria-label={mobileOpen ? "Admin navigation menu" : "Admin navigation"}
+          >
+            <div className="shell-admin-sidebar__scroll">
+            <nav className="shell-admin-sidebar__nav" aria-label="Admin sections">
+              {ADMIN_NAV_GROUPS.map((group) => {
+                const collapsed = Boolean(collapsedGroups[group.title]);
+                const groupHasActive = group.items.some((item) =>
+                  isActivePath(pathname, item.href, allNavHrefs),
+                );
+                const panelId = `admin-nav-group-${group.title.replace(/\s+/g, "-").toLowerCase()}`;
+                return (
+                  <div
+                    key={group.title}
+                    className={`shell-admin-nav-group${groupHasActive ? " shell-admin-nav-group--active" : ""}${collapsed ? " shell-admin-nav-group--collapsed" : ""}`}
+                  >
+                    <button
+                      type="button"
+                      className="shell-admin-nav-group__toggle"
+                      onClick={() => toggleGroup(group.title)}
+                      aria-expanded={!collapsed}
+                      aria-controls={panelId}
                     >
-                      <span className="shell-admin-nav-link__icon" aria-hidden>
-                        <Icon size={16} />
+                      <span className="shell-admin-nav-group__title">{group.title}</span>
+                      <span className="shell-admin-nav-group__chevron" aria-hidden>
+                        {collapsed ? "+" : "−"}
                       </span>
-                      <span className="shell-admin-nav-link__label">{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
-            ))}
-          </nav>
-          <footer className="shell-admin-sidebar__footer">
-            <p className="shell-admin-sidebar__footnote">O&amp;O workspace platform</p>
-          </footer>
-        </aside> : null}
+                    </button>
+                    <div
+                      id={panelId}
+                      className="shell-admin-nav-group__items"
+                      hidden={collapsed}
+                    >
+                      {group.items.map((item) => {
+                        const active = isActivePath(pathname, item.href, allNavHrefs);
+                        const Icon = item.icon;
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            title={item.description}
+                            onClick={closeMobile}
+                            className={`shell-admin-nav-link${active ? " shell-admin-nav-link--active" : ""}`}
+                            aria-current={active ? "page" : undefined}
+                            aria-label={item.label}
+                          >
+                            <span className="shell-admin-nav-link__icon" aria-hidden>
+                              <Icon size={16} />
+                            </span>
+                            <span className="shell-admin-nav-link__text" aria-hidden>
+                              <span className="shell-admin-nav-link__label">{item.label}</span>
+                              <span className="shell-admin-nav-link__hint">
+                                {item.description}
+                              </span>
+                            </span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </nav>
+          </div>
+            <footer className="shell-admin-sidebar__footer">
+              <p className="shell-admin-sidebar__footnote">One&amp;Only Admin</p>
+              {currentNav ? (
+                <p className="shell-admin-sidebar__current" title={currentNav.description}>
+                  {currentNav.label}
+                </p>
+              ) : null}
+            </footer>
+          </aside>
+        ) : null}
 
         {mobileOpen ? (
           <button

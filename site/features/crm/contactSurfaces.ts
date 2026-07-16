@@ -3,9 +3,6 @@ const ROUTES_WITH_CONTACT_TEASER = new Set([
   "/about",
   "/career",
   "/downloads",
-  "/gallery",
-  "/imprint",
-  "/news",
   "/planning",
   "/portfolio",
   "/privacy",
@@ -14,12 +11,9 @@ const ROUTES_WITH_CONTACT_TEASER = new Set([
   "/refund-and-return-policy",
   "/service",
   "/showrooms",
-  "/social",
   "/solutions",
-  "/support-ivr",
   "/sustainability",
   "/terms",
-  "/tracking",
   "/trusted-by",
 ]);
 

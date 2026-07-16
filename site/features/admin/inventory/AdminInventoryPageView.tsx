@@ -138,8 +138,23 @@ export default function AdminInventoryPageView({ csv, generatedAt, rowCount }: P
 
       {rows.length === 0 ? (
         <div className="admin-empty" role="status">
-          Inventory file is missing or empty. Run the generator script to populate{" "}
-          <code className="text-xs">results/app-pages-inventory.csv</code>.
+          <h2 className="admin-empty__title">Inventory not generated</h2>
+          <p className="admin-empty__copy">
+            The live route map is empty until the generator writes{" "}
+            <code className="text-xs">results/app-pages-inventory.csv</code>.
+          </p>
+          <p className="admin-empty__copy">
+            From the repo root run:
+          </p>
+          <pre className="admin-empty__code">node scripts/generate-app-inventory-csv.mjs</pre>
+          <div className="admin-empty__actions">
+            <a href="/admin/settings" className="admin-btn admin-btn--outline">
+              Open settings
+            </a>
+            <a href="/admin" className="admin-btn admin-btn--primary">
+              Back to dashboard
+            </a>
+          </div>
         </div>
       ) : (
         <div className="admin-panel">

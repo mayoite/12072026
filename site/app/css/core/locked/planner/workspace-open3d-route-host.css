@@ -1,45 +1,49 @@
-/* Full-bleed workspace: body is h-dvh overflow-hidden (PlannerBodyTheme). */
+/* Basics: body → main → host → shell all share one viewport. */
+
 html:has(body.planner-workspace) {
-  overflow: hidden !important;
+  height: 100%;
+  overflow: hidden;
 }
 
 body.planner-workspace {
-  overflow: hidden !important;
-  width: 100vw;
-  height: 100dvh;
-}
-#main-content:has(.open3d-route-host) {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
   width: 100%;
-  min-height: 0;
   height: 100dvh;
+  max-height: 100dvh;
   overflow: hidden;
 }
 
-.open3d-route-host {
+body.planner-workspace #main-content,
+#main-content:has(.open3d-route-host),
+#main-content:has([data-planner-workspace-root]),
+#main-content:has(.planner-route-host) {
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
   min-height: 0;
   overflow: hidden;
-  background: var(--surface-page);
-  color: var(--text-strong);
 }
 
-/* Product root uses both names: planner-* (shell tests) + open3d-* (locked host CSS). */
+[data-planner-workspace-root],
+.planner-route-fill,
+.open3d-route-host,
+.planner-route-host,
 .open3d-workspace-root,
 .planner-workspace-root {
   display: flex;
-  flex: 1 1 auto;
   flex-direction: column;
+  flex: 1 1 auto;
   width: 100%;
   height: 100%;
   min-height: 0;
   overflow: hidden;
+}
+
+.open3d-route-host,
+.planner-route-host {
+  background: var(--surface-page);
+  color: var(--text-strong);
 }
 
 .open3d-canvas-with-rail {

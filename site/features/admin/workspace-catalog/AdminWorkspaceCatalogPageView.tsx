@@ -37,63 +37,85 @@ export default function AdminWorkspaceCatalogPageView() {
   );
 
   return (
-    <div className="admin-page">
-      <header className="admin-page__header">
+    <div className="admin-page" data-testid="admin-workspace-catalog-page">
+      <header className="admin-page__header" data-testid="admin-shell-header">
         <div>
-        <p className="admin-page__eyebrow">Static ingest</p>
-        <h1 className="admin-page__title">Workspace element library</h1>
-        <p className="admin-page__copy max-w-3xl">
-          Read-only view of <code>workspaceCatalog</code>, the bundled static layer in the guest
-          planner library. This route is for browse and audit only; editable products live in{" "}
-          <Link href="/admin/catalog" className="text-primary underline underline-offset-2">
-            Standard catalog
-          </Link>{" "}
-          and{" "}
-          <Link href="/admin/planner-catalog" className="text-primary underline underline-offset-2">
-            Configurator catalog
-          </Link>
-          . Live hydration also merges{" "}
-          <Link href="/admin/planner-catalog" className="text-primary underline underline-offset-2">
-            configurator SKUs
-          </Link>{" "}
-          and{" "}
-          <Link href="/admin/catalog" className="text-primary underline underline-offset-2">
-            managed products
-          </Link>
-          . Regenerate static items from CSV via{" "}
-          <code className="rounded bg-subtle px-1">npx tsx scripts/ingest-planner-catalog.ts</code>.
-        </p>
+          <p className="admin-page__eyebrow" data-testid="admin-shell-scope">
+            Catalog · static · read-only
+          </p>
+          <h1 className="admin-page__title" data-testid="admin-shell-title">
+            Read-only workspace element library
+          </h1>
+          <p className="admin-page__copy" data-testid="admin-workspace-catalog-copy">
+            This is the <strong>read-only workspace element library</strong> — browse
+            and audit the bundled static planner layer (
+            <code>workspaceCatalog</code>). You cannot create, edit, or delete items
+            here. Editable products live in{" "}
+            <Link href="/admin/catalog" className="text-primary underline underline-offset-2">
+              Standard catalog
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/admin/planner-catalog"
+              className="text-primary underline underline-offset-2"
+            >
+              Configurator catalog
+            </Link>
+            . Live planner hydration also merges those editable sources. Regenerate
+            static items from CSV via{" "}
+            <code className="rounded bg-subtle px-1">
+              npx tsx scripts/ingest-planner-catalog.ts
+            </code>
+            .
+          </p>
+          <p className="admin-page__meta" data-testid="admin-shell-source">
+            Source: static bundle · not Products DB · not editable
+          </p>
+          <p
+            className="admin-page__meta"
+            role="status"
+            data-testid="admin-shell-state"
+          >
+            State: <strong>{items.length}</strong> shown
+            {query || category ? " (filtered)" : ""} · read-only
+          </p>
         </div>
       </header>
 
-      <div className="mb-4 flex flex-col gap-3 rounded-xl border border-soft bg-panel p-4 sm:flex-row sm:items-end">
-        <label className="min-w-0 flex-1">
-          <span className="mb-1 block text-xs font-medium text-muted">
-            Search
-          </span>
-          <div className="relative">
-            <Search
-              size={14}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-soft"
-              aria-hidden
-            />
+      <div
+        className="admin-alert admin-alert--info"
+        role="status"
+        data-testid="admin-workspace-readonly-banner"
+      >
+        <strong>Read-only workspace element library</strong>
+        Browse only. Do not confuse this with Standard or Configurator catalogs —
+        those are the editable product lanes.
+      </div>
+
+      <div className="admin-toolbar" role="search" aria-label="Filter workspace library">
+        <label className="admin-field admin-field--search min-w-0 flex-1">
+          <span className="admin-field__label">Search</span>
+          <div className="relative min-w-[12.5rem]">
+            <Search size={14} className="admin-field__search-icon" aria-hidden />
             <input
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-lg border border-soft bg-panel py-2 pl-9 pr-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              className="admin-field__control admin-field__input--search"
               placeholder="SKU, name, id…"
+              data-testid="admin-workspace-search"
+              autoComplete="off"
             />
           </div>
         </label>
-        <label className="sm:w-56">
-          <span className="mb-1 block text-xs font-medium text-muted">
-            Category
-          </span>
+        <label className="admin-field">
+          <span className="admin-field__label">Category</span>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full rounded-lg border border-soft bg-panel px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="admin-field__control min-w-[8.75rem]"
+            data-testid="admin-workspace-category"
+            aria-label="Filter by category"
           >
             <option value="">All</option>
             {categories.map((cat) => (
@@ -105,113 +127,145 @@ export default function AdminWorkspaceCatalogPageView() {
         </label>
       </div>
 
-      <p className="mb-3 text-sm text-muted" aria-live="polite">
-        {items.length} items
-      </p>
-
       {items.length === 0 ? (
         <div
-          className="rounded-xl border border-soft bg-panel p-6 text-center"
+          className="admin-empty"
           role="status"
+          data-testid="admin-workspace-empty"
         >
-          <p className="font-medium text-strong">
-            No workspace items match these filters.
+          <p className="admin-empty__title">
+            {PLANNER_CATALOG_ITEMS.length === 0
+              ? "Workspace element library is empty"
+              : "No workspace items match these filters"}
           </p>
-          <p className="mt-1 text-sm text-muted">
-            Change the search or category and try again.
+          <p className="admin-empty__copy">
+            {PLANNER_CATALOG_ITEMS.length === 0
+              ? "This read-only library is fed by the static bundle. Regenerate from CSV with the ingest script, or open Standard / Configurator catalog for editable products."
+              : "Change the search or category, or clear filters. This library stays read-only."}
           </p>
-          <button
-            type="button"
-            className="mt-4 rounded-lg border border-soft px-3 py-2 text-sm font-medium text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            onClick={() => {
-              setQuery("");
-              setCategory("");
-            }}
-          >
-            Clear filters
-          </button>
+          <div className="admin-empty__actions">
+            {query || category ? (
+              <button
+                type="button"
+                className="admin-btn admin-btn--outline"
+                onClick={() => {
+                  setQuery("");
+                  setCategory("");
+                }}
+                data-testid="admin-workspace-clear-filters"
+              >
+                Clear filters
+              </button>
+            ) : null}
+            <Link
+              href="/admin/catalog"
+              className="admin-btn admin-btn--primary"
+              data-testid="admin-workspace-goto-standard"
+            >
+              Open Standard catalog
+            </Link>
+          </div>
         </div>
       ) : (
-        <>
+        <div
+          className="admin-panel admin-workspace-inventory"
+          data-testid="admin-workspace-inventory"
+        >
+          <div className="admin-panel__header">
+            Read-only workspace element library · {items.length} of{" "}
+            {PLANNER_CATALOG_ITEMS.length}
+          </div>
           <ul
-            className="grid gap-3 md:hidden"
+            className="admin-workspace-card-list md:hidden"
             aria-label="Workspace catalog items"
+            data-testid="admin-workspace-cards"
           >
             {items.map((item) => (
-              <li
-                key={item.id}
-                className="rounded-xl border border-soft bg-panel p-4"
-              >
-                <div className="flex items-start justify-between gap-3">
+              <li key={item.id} className="admin-workspace-card">
+                <div className="admin-workspace-card__head">
                   <div className="min-w-0">
-                    <p className="font-medium text-strong">
+                    <p className="admin-table__primary">
                       {item.shortName ?? item.name}
                     </p>
-                    <p className="mt-1 break-all font-mono text-xs text-muted">
+                    <p className="admin-table__secondary break-all font-mono">
                       {item.sku ?? item.id}
                     </p>
                   </div>
-                  <span className="shrink-0 rounded-full bg-subtle px-2 py-1 text-xs text-muted">
+                  <span className="admin-badge admin-badge--hidden shrink-0">
                     {item.category}
                   </span>
                 </div>
-                <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                <dl className="admin-workspace-card__meta">
                   <div>
-                    <dt className="text-xs text-soft">Seats</dt>
-                    <dd className="mt-0.5 text-muted">
-                      {item.seatCount ?? "—"}
-                    </dd>
+                    <dt>Seats</dt>
+                    <dd>{item.seatCount ?? "—"}</dd>
                   </div>
                   <div>
-                    <dt className="text-xs text-soft">Footprint</dt>
-                    <dd className="mt-0.5 text-muted">
-                      {formatCatalogSeatFootprint(item)}
-                    </dd>
+                    <dt>Footprint</dt>
+                    <dd>{formatCatalogSeatFootprint(item)}</dd>
                   </div>
-                  <div className="col-span-2">
-                    <dt className="text-xs text-soft">Dimensions</dt>
-                    <dd className="mt-0.5 text-muted">
-                      {formatCatalogDimensionsLabel(item)}
-                    </dd>
+                  <div className="admin-workspace-card__meta-full">
+                    <dt>Dimensions</dt>
+                    <dd>{formatCatalogDimensionsLabel(item)}</dd>
                   </div>
                 </dl>
               </li>
             ))}
           </ul>
 
-          <div className="hidden overflow-x-auto rounded-xl border border-soft bg-panel md:block">
-            <table className="w-full min-w-[50rem] text-start text-sm">
-              <caption className="sr-only">Workspace catalog items</caption>
-              <thead className="border-b border-soft bg-subtle/50 text-xs uppercase tracking-wide text-soft">
+          <div
+            className="admin-table-wrap hidden md:block"
+            data-phone-layout="cards-priority"
+          >
+            <table
+              className="admin-table"
+              data-testid="admin-workspace-table"
+            >
+              <caption className="sr-only">
+                Read-only workspace element library items
+              </caption>
+              <thead>
                 <tr>
-                  <th scope="col" className="px-4 py-3">SKU / ID</th>
-                  <th scope="col" className="px-4 py-3">Name</th>
-                  <th scope="col" className="px-4 py-3">Category</th>
-                  <th scope="col" className="px-4 py-3">Seats</th>
-                  <th scope="col" className="px-4 py-3">Footprint</th>
-                  <th scope="col" className="px-4 py-3">Raw fields</th>
+                  <th scope="col">SKU / ID</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Seats</th>
+                  <th scope="col">Footprint</th>
+                  <th scope="col">Raw fields</th>
                 </tr>
               </thead>
               <tbody>
                 {items.map((item) => (
-                  <tr key={item.id} className="border-b border-soft last:border-b-0">
-                    <td className="px-4 py-3 font-mono text-xs text-muted">{item.sku ?? item.id}</td>
-                    <td className="px-4 py-3 font-medium text-strong">{item.shortName ?? item.name}</td>
-                    <td className="px-4 py-3 text-muted">{item.category}</td>
-                    <td className="px-4 py-3 text-muted">{item.seatCount ?? "—"}</td>
-                    <td className="px-4 py-3 text-muted">
-                      <p>{formatCatalogSeatFootprint(item)}</p>
-                      <p className="text-xs text-soft">{formatCatalogDimensionsLabel(item)}</p>
+                  <tr key={item.id}>
+                    <td data-label="SKU / ID">
+                      <code className="admin-table__secondary">
+                        {item.sku ?? item.id}
+                      </code>
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs text-soft">
-                      w:{item.widthMm} d:{item.depthMm} h:{item.heightMm}
+                    <td data-label="Name">
+                      <span className="admin-table__primary">
+                        {item.shortName ?? item.name}
+                      </span>
+                    </td>
+                    <td data-label="Category">{item.category}</td>
+                    <td data-label="Seats">{item.seatCount ?? "—"}</td>
+                    <td data-label="Footprint">
+                      <p>{formatCatalogSeatFootprint(item)}</p>
+                      <p className="admin-table__secondary">
+                        {formatCatalogDimensionsLabel(item)}
+                      </p>
+                    </td>
+                    <td data-label="Raw">
+                      <span className="admin-table__secondary font-mono">
+                        w:{item.widthMm} d:{item.depthMm} h:{item.heightMm}
+                      </span>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

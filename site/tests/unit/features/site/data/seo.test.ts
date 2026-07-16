@@ -7,6 +7,7 @@ import {
   buildGlobalJsonLd,
   buildLocaleAlternates,
   buildProductJsonLd,
+  buildCareerJobsJsonLd,
   resolveDocumentTitle,
   LOCALE_HREFLANG,
 } from '@/features/site/data/seo';
@@ -227,6 +228,30 @@ describe('buildPageJsonLd', () => {
   it('supports CollectionPage type', () => {
     const ld = buildPageJsonLd(TEST_SITE_URL, { ...input, pageType: 'CollectionPage' });
     expect(ld['@type']).toBe('CollectionPage');
+  });
+});
+
+describe('buildCareerJobsJsonLd', () => {
+  it('emits JobPosting graph for office furniture openings', () => {
+    const ld = buildCareerJobsJsonLd(TEST_SITE_URL, [
+      {
+        title: 'Workspace Planner',
+        department: 'Planning and Design',
+        location: 'Patna',
+      },
+      {
+        title: 'Project Sales Manager',
+        department: 'Enterprise Sales',
+        location: 'Patna / Ranchi',
+      },
+    ]);
+    expect(ld['@context']).toBe('https://schema.org');
+    expect(ld['@graph']).toHaveLength(2);
+    expect(ld['@graph'][0]['@type']).toBe('JobPosting');
+    expect(ld['@graph'][0].industry).toBe('Office Furniture');
+    expect(ld['@graph'][0].jobLocation.address.addressLocality).toBe('Patna');
+    expect(ld['@graph'][0].jobLocation.address.addressRegion).toBe('Bihar');
+    expect(ld['@graph'][1].description).toMatch(/Ranchi|Bihar|Jharkhand/i);
   });
 });
 

@@ -300,7 +300,8 @@ export function AdminCatalogManager({
       <header className="admin-page__header" data-testid="admin-shell-header">
         <div>
           <p className="admin-page__eyebrow" data-testid="admin-shell-scope">
-            Catalog admin
+            Catalog admin · {isStandard ? "managed products" : "configurator SKUs"} ·
+            editable
           </p>
           <h1 className="admin-page__title" data-testid="admin-shell-title">
             {title}
@@ -418,29 +419,111 @@ export function AdminCatalogManager({
       </div>
 
       {loading && items.length === 0 ? (
-        <div className="admin-inline-row text-sm text-muted" role="status" aria-live="polite">
-          <Loader2 size={16} className="animate-spin" aria-hidden />
-          Loading catalog...
-        </div>
-      ) : error && items.length === 0 ? null
-      : items.length === 0 ? (
-        <div className="admin-empty" role="status">
-          <p>The catalog source returned no items.</p>
-          <p className="admin-page__meta mt-2">
-            Data source: <code>{source ?? "unreported"}</code>. Refresh to check again.
+        <div
+          className="admin-empty"
+          role="status"
+          aria-live="polite"
+          data-testid="admin-catalog-loading"
+        >
+          <p className="admin-empty__title">
+            <Loader2 size={18} className="animate-spin" aria-hidden /> Loading{" "}
+            {isStandard ? "standard" : "configurator"} catalog…
+          </p>
+          <p className="admin-empty__copy">
+            Fetching products from the admin catalog API. This list is for editable
+            inventory — not the read-only workspace element library.
           </p>
         </div>
-      ) : displayItems.length === 0 ? (
-        <div className="admin-empty" role="status">
-          <p>No items match the current filters.</p>
-          {hasActiveFilters ? (
+      ) : error && items.length === 0 ? (
+        <div
+          className="admin-empty"
+          role="alert"
+          data-testid="admin-catalog-error-empty"
+        >
+          <p className="admin-empty__title">Could not load catalog</p>
+          <p className="admin-empty__copy">
+            {error}. Check that the products database (or local fallback) is
+            available, then retry. This page manages{" "}
+            {isStandard ? "planner-managed products" : "configurator SKUs"} only.
+          </p>
+          <div className="admin-empty__actions">
             <button
               type="button"
-              className="admin-btn admin-btn--outline mt-3"
-              onClick={clearFilters}
+              className="admin-btn admin-btn--primary"
+              onClick={() => void loadItems()}
+              data-testid="admin-catalog-retry"
             >
-              Clear filters
+              <RefreshCw size={14} aria-hidden />
+              Retry load
             </button>
+          </div>
+        </div>
+      ) : items.length === 0 ? (
+        <div
+          className="admin-empty"
+          role="status"
+          data-testid="admin-catalog-empty"
+        >
+          <p className="admin-empty__title">
+            {isStandard
+              ? "No managed products yet"
+              : "No configurator SKUs yet"}
+          </p>
+          <p className="admin-empty__copy">
+            {readOnly
+              ? "The catalog source returned no rows (local fallback is connected but empty). Connect managed products or seed inventory to edit here."
+              : isStandard
+                ? "Add a managed product for the planner library: dimensions, mesh, price, and visibility. SVG symbols and the read-only workspace element library are separate routes."
+                : "Add a configurator SKU with sizing type, options, or footprint. Standard managed products and the read-only workspace element library are separate routes."}
+          </p>
+          <p className="admin-page__meta">
+            Data source: <code>{source ?? "unreported"}</code>
+          </p>
+          <div className="admin-empty__actions">
+            {!readOnly ? (
+              <button
+                type="button"
+                className="admin-btn admin-btn--primary"
+                onClick={openCreate}
+                data-testid="admin-catalog-empty-add"
+              >
+                <Plus size={14} aria-hidden />
+                Add item
+              </button>
+            ) : null}
+            <button
+              type="button"
+              className="admin-btn admin-btn--outline"
+              onClick={() => void loadItems()}
+              data-testid="admin-catalog-empty-refresh"
+            >
+              <RefreshCw size={14} aria-hidden />
+              Refresh
+            </button>
+          </div>
+        </div>
+      ) : displayItems.length === 0 ? (
+        <div
+          className="admin-empty"
+          role="status"
+          data-testid="admin-catalog-filter-empty"
+        >
+          <p className="admin-empty__title">No items match these filters</p>
+          <p className="admin-empty__copy">
+            Change search, category, or status — or clear filters to see the full
+            list.
+          </p>
+          {hasActiveFilters ? (
+            <div className="admin-empty__actions">
+              <button
+                type="button"
+                className="admin-btn admin-btn--outline"
+                onClick={clearFilters}
+                data-testid="admin-catalog-clear-filters"
+              >
+                Clear filters
+              </button>
+            </div>
           ) : null}
         </div>
       ) : (

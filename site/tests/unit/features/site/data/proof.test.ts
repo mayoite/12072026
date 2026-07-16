@@ -28,4 +28,11 @@ describe("TRUSTED_BY_CLIENTS", () => {
     const titan = TRUSTED_BY_CLIENTS.find((c) => c.name === "Titan");
     expect(titan?.location).toMatch(/Patna/i);
   });
+
+  it("has a logo file mapping for every roster client", async () => {
+    const { trustedByClientsMissingLogos } = await import(
+      "@/features/site/data/proof"
+    );
+    expect(trustedByClientsMissingLogos()).toEqual([]);
+  });
 });

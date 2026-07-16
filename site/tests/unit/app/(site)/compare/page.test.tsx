@@ -16,6 +16,10 @@ vi.mock('@/components/products/CompareColumnActions', () => ({
   CompareColumnActions: () => <div data-testid="compare-column-actions" />,
 }));
 
+vi.mock('@/components/products/CompareShortlistHydrator', () => ({
+  CompareShortlistHydrator: () => null,
+}));
+
 vi.mock('@/components/ui/TrackedLink', () => ({
   TrackedLink: ({ children, href }: { children: React.ReactNode; href: string }) => (
     <a href={href}>{children}</a>
@@ -27,10 +31,19 @@ describe('app/(site)/compare/page.tsx', () => {
     const page = await ComparePage({});
     render(page);
 
-    expect(screen.getByRole('heading', { level: 1, name: /Compare selected workspace options/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: /Compare office furniture/i,
+      }),
+    ).toBeInTheDocument();
     expect(screen.getByText(COMPARE_ROUTE_COPY.emptyTitle)).toBeInTheDocument();
     expect(screen.queryByText('Specification review')).not.toBeInTheDocument();
-    expect(screen.getByTestId("home-marketing-layout")).toBeInTheDocument();
+    expect(screen.getByTestId('home-marketing-layout')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Open guest planner/i })).toHaveAttribute(
+      'href',
+      '/choose-product?mode=guest',
+    );
     expect(getProducts).not.toHaveBeenCalled();
   });
 
@@ -71,5 +84,6 @@ describe('app/(site)/compare/page.tsx', () => {
     expect(screen.getByText('Chair A')).toBeInTheDocument();
     expect(screen.getByText('Chair B')).toBeInTheDocument();
     expect(screen.queryByText(COMPARE_ROUTE_COPY.emptyTitle)).not.toBeInTheDocument();
+    expect(screen.getByRole('table')).toBeInTheDocument();
   });
 });

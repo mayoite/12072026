@@ -5,7 +5,7 @@
  *
  * Extracted from page.tsx as a client boundary because keyboard roving-tabindex
  * requires DOM focus management (useRef/useState), which an RSC page cannot do.
- * The RSC page (page.tsx) still owns data loading (loadAll()) and only passes
+ * The RSC page (page.tsx) still owns data loading and only passes
  * plain serializable card data across the server/client boundary.
  *
  * Pattern mirrors the established roving-focus keyboard nav in
@@ -77,7 +77,7 @@ export function SvgCatalogGrid({
 
   return (
     <div
-      className="grid grid-cols-1 md:grid-cols-3 gap-4"
+      className="portal-svg-catalog-grid"
       role="list"
       aria-label="SVG catalog blocks"
       onKeyDown={handleKeyDown}
@@ -89,19 +89,19 @@ export function SvgCatalogGrid({
             itemRefs.current[index] = node;
           }}
           href={`/portal/svg-catalog/${card.slug}`}
-          className="block border rounded p-3 hover:bg-muted"
+          className="shell-portal-grid-card portal-svg-catalog-card"
           role="listitem"
           tabIndex={index === focusedIndex ? 0 : -1}
           onFocus={() => setFocusedIndex(index)}
         >
-          <div className="mb-2 svg-catalog-thumb-wrap">
+          <div className="svg-catalog-thumb-wrap shell-portal-thumbnail portal-svg-catalog-card__media">
             {card.svgUrl ? (
               <Image
                 src={card.svgUrl}
                 alt={`${card.slug} vector preview`}
                 width={512}
                 height={256}
-                className="svg-catalog-thumb svg-catalog-thumb--vector w-full h-auto"
+                className="svg-catalog-thumb svg-catalog-thumb--vector"
                 loading="lazy"
                 unoptimized
               />
@@ -111,8 +111,8 @@ export function SvgCatalogGrid({
                 alt={`${card.slug} thumbnail`}
                 width={512}
                 height={256}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 240px"
-                className="svg-catalog-thumb w-full h-auto"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
+                className="svg-catalog-thumb"
                 loading="lazy"
                 unoptimized
                 // Retina variants remain available as metadata for future next/image loaders.
@@ -120,11 +120,13 @@ export function SvgCatalogGrid({
               />
             )}
           </div>
-          <div>
-            <code>{card.slug}</code>
-            <span className="ml-2 text-xs opacity-70">{card.variant}</span>
+          <div className="portal-svg-catalog-card__body">
+            <div className="portal-svg-catalog-card__title-row">
+              <code className="portal-svg-catalog-card__slug">{card.slug}</code>
+              <span className="portal-svg-catalog-card__variant">{card.variant}</span>
+            </div>
+            <div className="portal-svg-catalog-card__meta">v{card.schemaVersion}</div>
           </div>
-          <div className="text-xs text-muted">v{card.schemaVersion}</div>
         </Link>
       ))}
     </div>

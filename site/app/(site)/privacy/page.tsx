@@ -1,8 +1,9 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Hero } from "@/components/home/Hero";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
+import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
 import { SITE_CONTACT } from "@/features/site/data/contact";
 import { PRIVACY_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
@@ -77,15 +78,22 @@ export default async function PrivacyPage() {
         title={t("privacy.title")}
         subtitle={t("privacy.heroSubtitle")}
         showButton={false}
-        backgroundImage="/images/hero/dmrc-hero.webp"
+        backgroundImage={DEFAULT_HERO_FALLBACK}
+        className="page-hero--compact"
+        imageClassName="object-center"
+        contentClassName="py-10 md:py-14"
       />
 
       <HomeSection variant="white" spacing="md">
         <HomeSectionInner>
-          <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-            <aside className="scheme-panel-dark scheme-border rounded-2xl border p-7 md:p-9">
-              <p className="typ-label text-inverse-muted">{t("privacy.overviewKicker")}</p>
-              <h2 className="home-heading mt-3 text-inverse">{t("privacy.overviewTitle")}</h2>
+          <div className="grid gap-5 md:gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+            <aside className="scheme-panel-dark scheme-border legal-aside rounded-2xl border p-6 sm:p-7 md:p-9">
+              <p className="typ-label text-inverse-muted">
+                {t("privacy.overviewKicker")}
+              </p>
+              <h2 className="home-heading legal-aside__title mt-3 text-inverse">
+                {t("privacy.overviewTitle")}
+              </h2>
               <p className="page-copy text-inverse-body mt-4">
                 {t("privacy.overviewDescription")}
               </p>
@@ -101,18 +109,24 @@ export default async function PrivacyPage() {
                 </ul>
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link href="/contact" className="btn-primary">
+              <div className="mt-8 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Link
+                  href="/contact"
+                  className="btn-primary inline-flex min-h-11 w-full items-center justify-center sm:w-auto"
+                >
                   Contact team
                 </Link>
-                <Link href="/downloads" className="btn-outline-light">
+                <Link
+                  href="/downloads"
+                  className="btn-outline-light inline-flex min-h-11 w-full items-center justify-center sm:w-auto"
+                >
                   Open Resource Desk
                 </Link>
               </div>
             </aside>
 
-            <div className="scheme-panel scheme-border rounded-2xl border p-7 md:p-9">
-              <div className="space-y-6">
+            <div className="scheme-panel scheme-border rounded-2xl border p-6 sm:p-7 md:p-9">
+              <div className="space-y-5 sm:space-y-6">
                 {intro.map((paragraph) => (
                   <p key={paragraph} className="page-copy text-body">
                     {paragraph}
@@ -120,54 +134,71 @@ export default async function PrivacyPage() {
                 ))}
               </div>
 
-              <div className="scheme-border mt-10 grid gap-8 border-t pt-10 md:grid-cols-2">
-                <article className="space-y-4">
+              <div className="scheme-border mt-8 grid gap-6 border-t pt-8 sm:mt-10 sm:gap-8 sm:pt-10 md:grid-cols-2">
+                <article className="space-y-3 sm:space-y-4">
                   <h2 className="typ-card text-strong">How we use your information</h2>
                   <p className="page-copy-sm text-body">
-                    We use submitted information to respond to quote requests, follow up on workspace
-                    enquiries, improve service quality, and maintain internal records of sales and
-                    support conversations.
+                    We use submitted information to respond to quote requests, follow up
+                    on workspace enquiries, improve service quality, and maintain internal
+                    records of sales and support conversations.
                   </p>
                   <p className="page-copy-sm text-body">
-                    We do not sell your personal information. We may disclose information when
-                    required by law, to investigate misuse, or to maintain and secure our services.
+                    We do not sell your personal information. We may disclose information
+                    when required by law, to investigate misuse, or to maintain and secure
+                    our services.
                   </p>
                 </article>
 
-                <article className="space-y-4">
+                <article className="space-y-3 sm:space-y-4">
                   <h2 className="typ-card text-strong">Links and security</h2>
                   <p className="page-copy-sm text-body">
-                    Our website may link to external websites. Their privacy practices are separate
-                    from ours, so you should review their policies before sharing information there.
+                    Our website may link to external websites. Their privacy practices are
+                    separate from ours, so you should review their policies before sharing
+                    information there.
                   </p>
                   <p className="page-copy-sm text-body">
-                    We use reasonable technical and organisational measures to protect the information
-                    we collect. No system can guarantee absolute security, but we take steps to
-                    reduce risk and restrict unnecessary access.
+                    We use reasonable technical and organisational measures to protect the
+                    information we collect. No system can guarantee absolute security, but
+                    we take steps to reduce risk and restrict unnecessary access.
                   </p>
                 </article>
               </div>
 
-              <div className="scheme-panel-soft scheme-border mt-10 overflow-hidden rounded-2xl border">
-                <div className="px-6 py-6 md:px-8">
+              <div className="scheme-panel-soft scheme-border mt-8 overflow-hidden rounded-2xl border sm:mt-10">
+                <div className="px-5 py-5 sm:px-6 sm:py-6 md:px-8">
                   <h2 className="typ-card text-strong">
                     Cookies, tags, and similar technologies
                   </h2>
                   <p className="page-copy-sm text-body mt-3">
-                    We use one essential cookie to remember your consent choice and optional analytics
-                    and attribution cookies to record landing page, referrer, and UTM parameters when
-                    you accept them in the cookie banner.
+                    We use one essential cookie to remember your consent choice and optional
+                    analytics and attribution cookies to record landing page, referrer, and
+                    UTM parameters when you accept them in the cookie banner.
                   </p>
                 </div>
 
-                <div className="overflow-x-auto">
+                {/* Mobile: card stack · Desktop: table */}
+                <ul className="legal-cookie-cards md:hidden" aria-label="Cookies used on this site">
+                  {COOKIE_ROWS.map((row) => (
+                    <li key={row.name} className="legal-cookie-card">
+                      <p className="legal-cookie-card__name">{row.name}</p>
+                      <p className="legal-cookie-card__meta">
+                        <span>{row.category}</span>
+                        <span aria-hidden="true"> · </span>
+                        <span>{row.duration}</span>
+                      </p>
+                      <p className="legal-cookie-card__purpose">{row.purpose}</p>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="hidden overflow-x-auto md:block">
                   <table className="legal-cookie-table">
                     <thead>
                       <tr>
-                        <th>Cookie</th>
-                        <th>Category</th>
-                        <th>Purpose</th>
-                        <th>Duration</th>
+                        <th scope="col">Cookie</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Purpose</th>
+                        <th scope="col">Duration</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -184,8 +215,8 @@ export default async function PrivacyPage() {
                 </div>
               </div>
 
-              <div className="scheme-border mt-10 flex flex-col gap-4 border-t pt-8 md:flex-row md:items-center md:justify-between">
-                <div>
+              <div className="scheme-border mt-8 flex flex-col gap-4 border-t pt-8 sm:mt-10 md:flex-row md:items-center md:justify-between">
+                <div className="min-w-0">
                   <h2 className="typ-card text-strong">Questions about privacy?</h2>
                   <p className="page-copy-sm text-body mt-2">
                     For privacy questions or requests, email{" "}
@@ -195,10 +226,14 @@ export default async function PrivacyPage() {
                     >
                       {SITE_CONTACT.salesEmail}
                     </a>
-                    . The latest version of this policy will always be published on this page.
+                    . The latest version of this policy will always be published on this
+                    page.
                   </p>
                 </div>
-                <Link href="/contact" className="btn-outline">
+                <Link
+                  href="/contact"
+                  className="btn-outline inline-flex min-h-11 w-full shrink-0 items-center justify-center md:w-auto"
+                >
                   Contact support
                 </Link>
               </div>

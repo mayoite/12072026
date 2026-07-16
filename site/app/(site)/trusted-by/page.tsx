@@ -19,10 +19,7 @@ export default function TrustedByPage() {
         title={TRUSTED_BY_PAGE_COPY.heroTitle}
         subtitle={TRUSTED_BY_PAGE_COPY.heroSubtitle}
         showButton={false}
-        backgroundImage="/images/projects/FranklinTempleton/hero.webp"
-        imageClassName="!scale-100 object-[center_40%]"
-        contentClassName="py-10 md:py-12"
-        overlayClassName="bg-black/40"
+        backgroundImage="/images/hero/dmrc-hero.webp"
       />
 
       <HomeSection variant="white" spacing="md">
@@ -85,7 +82,10 @@ export default function TrustedByPage() {
             <p className="typ-label mb-4 text-body">{TRUSTED_BY_PAGE_COPY.rosterKicker}</p>
             <h2 className="home-heading">{TRUSTED_BY_PAGE_COPY.rosterTitle}</h2>
           </div>
-          <div className="client-badge-group" data-testid="trusted-by-roster">
+          <div
+            className="client-badge-group client-badge-group--dense"
+            data-testid="trusted-by-roster"
+          >
             {TRUSTED_BY_CLIENTS.map((client) => (
               <ClientBadge key={client.name} {...client} />
             ))}

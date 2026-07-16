@@ -1,18 +1,9 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
 import { ContactPageView } from "@/components/contact/ContactPageView";
-import { buildPageMetadata } from "@/features/site/data/seo";
-import { SITE_URL } from "@/lib/siteUrl";
+import { CONTACT_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("contact");
-  return buildPageMetadata(SITE_URL, {
-    title: t("heroTitle"),
-    description: t("heroSubtitle"),
-    path: "/contact",
-    image: "/images/hero/tvs-patna-enhanced.webp",
-  });
-}
+/** Canonical SEO for /contact (title length, locales, brands, OG). */
+export const metadata: Metadata = CONTACT_PAGE_METADATA;
 
 function firstValue(value: string | string[] | undefined): string | null {
   if (Array.isArray(value)) return value[0] || null;

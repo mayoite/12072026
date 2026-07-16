@@ -944,6 +944,7 @@ export function OOPlannerWorkspace({
 
   const handleExport = useCallback(
     (format = "json") => {
+      const downloadVerb = guestMode ? "Downloaded" : "Exported";
       // First-class project furniture BOQ (JSON / CSV) — all placed furniture.
       if (format === "boq" || format === "boq-json" || format === "boq-csv") {
         const summary = buildPlannerFurnitureBoq(workspaceCanvas.project);
@@ -955,14 +956,14 @@ export function OOPlannerWorkspace({
           const filename = buildPlannerBoqFilename(workspaceCanvas.project, "csv");
           downloadFurnitureBoqCSV(exportPlannerFurnitureBoqToCsv(summary), filename);
           setWorkspaceMessage(
-            `Exported BOQ CSV: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST (demo list prices)`,
+            `${downloadVerb} BOQ CSV: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST (demo list prices)`,
           );
           return;
         }
         const filename = buildPlannerBoqFilename(workspaceCanvas.project, "json");
         downloadFurnitureBoqJSON(exportPlannerFurnitureBoqToJson(summary), filename);
         setWorkspaceMessage(
-          `Exported BOQ JSON: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST (demo list prices)` +
+          `${downloadVerb} BOQ JSON: ${summary.totalItems} items · ${summary.totalLines} lines · ₹${summary.totalInr.toLocaleString("en-IN")} incl. GST (demo list prices)` +
             (summary.unpricedItemCount > 0
               ? ` · ${summary.unpricedItemCount} unpriced`
               : ""),
@@ -1015,12 +1016,12 @@ export function OOPlannerWorkspace({
       }
       if (format === "json") {
         downloadJSON(workspaceCanvas.project, check.filename);
-        setWorkspaceMessage(`Exported ${check.filename}`);
+        setWorkspaceMessage(`${downloadVerb} ${check.filename}`);
         return;
       }
       if (format === "svg") {
         downloadSVG(workspaceCanvas.project);
-        setWorkspaceMessage(`Exported ${check.filename}`);
+        setWorkspaceMessage(`${downloadVerb} ${check.filename}`);
         return;
       }
       if (format === "png") {
@@ -1029,7 +1030,7 @@ export function OOPlannerWorkspace({
           workspaceCanvas.project,
           check.filename,
         ).then(() => {
-          setWorkspaceMessage(`Exported ${check.filename}`);
+          setWorkspaceMessage(`${downloadVerb} ${check.filename}`);
         });
         return;
       }
@@ -1038,7 +1039,7 @@ export function OOPlannerWorkspace({
           (ok) => {
             setWorkspaceMessage(
               ok
-                ? `Exported ${check.filename}`
+                ? `${downloadVerb} ${check.filename}`
                 : "PDF export failed. Try SVG export or reduce plan size.",
             );
           },
@@ -1047,7 +1048,7 @@ export function OOPlannerWorkspace({
       }
       if (format === "dxf") {
         void downloadDXF(workspaceCanvas.project, check.filename).then(() => {
-          setWorkspaceMessage(`Exported ${check.filename}`);
+          setWorkspaceMessage(`${downloadVerb} ${check.filename}`);
         });
         return;
       }
@@ -1056,7 +1057,7 @@ export function OOPlannerWorkspace({
         check.messages[0] ?? `Export unavailable for ${format}`,
       );
     },
-    [workspaceCanvas.project, addQuoteItem],
+    [workspaceCanvas.project, addQuoteItem, guestMode],
   );
 
   const handleImportClick = useCallback(() => {
@@ -1210,7 +1211,7 @@ export function OOPlannerWorkspace({
   }
 
   return (
-    <div className="planner-workspace-root open3d-workspace-root">
+    <div className="planner-workspace-root open3d-workspace-root planner-fill">
       <input
         ref={importInputRef}
         type="file"

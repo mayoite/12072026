@@ -1,10 +1,16 @@
+/* Layers panel — match inventory density; one list scrollport. */
+
 .layersPanel {
   --lp-bg: var(--surface-panel);
   --lp-border: var(--border-soft);
   --lp-text: var(--text-strong);
   --lp-text-muted: var(--text-muted);
+  --lp-text-secondary: var(--text-body);
   --lp-accent: var(--color-primary);
   --lp-accent-soft: color-mix(in srgb, var(--color-primary) 10%, var(--surface-panel));
+  --lp-surface-soft: var(--surface-soft);
+  --lp-row-h: 1.75rem;
+  --lp-pad-x: 0.5rem;
 
   display: flex;
   flex-direction: column;
@@ -12,17 +18,66 @@
   min-height: 0;
   background: var(--lp-bg);
   color: var(--lp-text);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 0.8125rem;
+  line-height: 1.35;
 }
 
 .layersPanelHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  gap: 0.35rem;
+  min-height: 1.75rem;
+  padding: 0.35rem var(--lp-pad-x);
   border-bottom: 1px solid var(--lp-border);
-  font-size: 0.8125rem;
+  flex-shrink: 0;
+}
+
+.layersPanelTitle {
+  font-size: 0.625rem;
   font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lp-text-muted);
+}
+
+.layerCountMeta {
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--lp-text-muted);
+}
+
+.layersToolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem var(--lp-pad-x);
+  border-bottom: 1px solid var(--lp-border);
+  flex-shrink: 0;
+}
+
+.layersToolbarBtn {
+  min-height: 1.5rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--radius-sm);
+  background: var(--lp-bg);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--lp-accent);
+  cursor: pointer;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.layersToolbarBtn:hover {
+  background: var(--lp-accent-soft);
+  border-color: color-mix(in srgb, var(--lp-accent) 35%, var(--lp-border));
+}
+
+.layersToolbarBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
 
 .layersPanelList {
@@ -31,37 +86,43 @@
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: var(--space-1);
+  margin: 0;
+  padding: 0.2rem 0;
+  list-style: none;
+  scrollbar-width: thin;
 }
 
-.layersPanel:not(:has(.layersPanelHeader)) .layersPanelList {
-  padding-top: var(--space-2);
+.layersPanel:not(:has(.layersPanelHeader)) .layersToolbar {
+  border-top: none;
 }
 
 .layerRow {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1.75rem minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--space-2);
+  gap: 0.35rem;
   width: 100%;
-  padding: var(--space-2) var(--space-2);
+  min-height: var(--lp-row-h);
+  padding: 0.2rem var(--lp-pad-x);
   border: 0;
-  border-radius: var(--radius-md);
+  border-bottom: 1px solid color-mix(in srgb, var(--lp-border) 55%, transparent);
   background: transparent;
   color: var(--lp-text);
   font: inherit;
   text-align: left;
-  cursor: pointer;
+  box-sizing: border-box;
 }
 
-.layerRow:hover,
-.layerRow:focus-visible {
-  background: var(--lp-accent-soft);
-  outline: none;
+.layerRow:hover {
+  background: var(--lp-surface-soft);
 }
 
 .layerRow[data-hidden="true"] {
-  opacity: 0.55;
+  opacity: 0.5;
+}
+
+.layerRow[data-empty="true"] .layerLabel {
+  color: var(--lp-text-muted);
 }
 
 .layerVisibilityBtn {
@@ -73,9 +134,14 @@
   padding: 0;
   border: 1px solid var(--lp-border);
   border-radius: var(--radius-sm);
-  background: var(--surface-soft);
+  background: var(--lp-surface-soft);
   color: var(--lp-text-muted);
   cursor: pointer;
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.layerVisibilityBtn:hover {
+  background: var(--lp-accent-soft);
 }
 
 .layerVisibilityBtn[data-visible="true"] {
@@ -83,11 +149,63 @@
   border-color: color-mix(in srgb, var(--lp-accent) 35%, var(--lp-border));
 }
 
+.layerVisibilityBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
 .layerCount {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
   color: var(--lp-text-muted);
+  min-width: 1.25rem;
+  text-align: right;
+}
+
+.layerCount[data-empty="true"] {
+  opacity: 0.55;
 }
 
 .layerLabel {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--lp-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+@media (width < 48rem) {
+  .layersPanel {
+    --lp-row-h: 2.5rem;
+    --lp-pad-x: 0.6rem;
+  }
+
+  .layerVisibilityBtn,
+  .layersToolbarBtn {
+    min-height: var(--planner-touch-target, 2.75rem);
+    min-width: var(--planner-touch-target, 2.75rem);
+  }
+
+  .layersToolbarBtn {
+    padding-inline: 0.65rem;
+    font-size: 0.75rem;
+  }
+
+  .layerRow {
+    min-height: calc(var(--planner-touch-target, 2.75rem) + 0.15rem);
+    padding-block: 0.35rem;
+  }
+
+  .layerLabel {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layerVisibilityBtn,
+  .layersToolbarBtn {
+    transition: none;
+  }
 }

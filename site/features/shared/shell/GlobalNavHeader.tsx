@@ -57,20 +57,20 @@ export function GlobalNavHeader() {
           {
             label: "Choose Product",
             href: "/choose-product",
-            active: pathname === "/choose-product",
+            active: pathname?.startsWith("/choose-product") ?? false,
           },
           { label: "Portal", href: "/portal", active: isPortal },
           {
             label: "Planner",
             href: "/planner/canvas",
-            active: pathname?.startsWith("/planner/canvas"),
+            active: pathname?.startsWith("/planner/canvas") ?? false,
           },
         ].map((link) => (
           <Link
             key={link.href}
             href={link.href}
             aria-current={link.active ? "page" : undefined}
-            className="rounded-lg px-3 py-2 text-[0.8125rem] transition-colors"
+            className="inline-flex min-h-11 items-center rounded-lg px-3 py-2 text-[0.8125rem] transition-colors"
             style={{
               color: link.active ? "var(--color-primary)" : "var(--text-body)",
               fontWeight: link.active ? 600 : 400,

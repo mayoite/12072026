@@ -38,9 +38,10 @@ export function CompareDock() {
           <button
             type="button"
             onClick={clear}
-            className="btn-outline typ-body-sm inline-flex min-h-10 items-center gap-1.5 rounded-md px-3"
+            aria-label="Clear comparison shortlist"
+            className="btn-outline typ-body-sm inline-flex min-h-11 items-center gap-1.5 rounded-md px-3"
           >
-            <Trash2 className="h-3.5 w-3.5" />
+            <Trash2 className="h-3.5 w-3.5" aria-hidden />
             Clear
           </button>
           <Link
@@ -53,9 +54,10 @@ export function CompareDock() {
                 surface: "compare-dock",
               })
             }
-            className="btn-primary typ-body-sm inline-flex min-h-10 items-center gap-2 rounded-md px-4"
+            className="btn-primary typ-body-sm inline-flex min-h-11 items-center gap-2 rounded-md px-4"
+            aria-label={`Compare ${items.length} selected office furniture products`}
           >
-            <GitCompareArrows className="h-3.5 w-3.5" />
+            <GitCompareArrows className="h-3.5 w-3.5" aria-hidden />
             Compare now
           </Link>
         </div>

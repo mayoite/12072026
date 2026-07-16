@@ -316,6 +316,15 @@ export function TopBar({
             {projectName}
           </h1>
         )}
+        {guestMode ? (
+          <span
+            className={styles.brandSub}
+            title="Guest plans save in this browser only — not to an account"
+            data-testid="planner-guest-local-badge"
+          >
+            Local only
+          </span>
+        ) : null}
       </div>
 
       <div className={styles.center}>
@@ -545,7 +554,13 @@ export function TopBar({
           onPress={() => onSave?.()}
           isDisabled={resolvedSaveStatus === "saving"}
           aria-label={saveButtonAriaLabel}
+          title={
+            showGuestActions
+              ? "Save draft to this browser (not cloud)"
+              : "Save plan to this device"
+          }
           data-status={resolvedSaveStatus}
+          data-testid="planner-save-button"
         >
           {saveButtonLabel}
         </Button>
@@ -559,7 +574,12 @@ export function TopBar({
           <div className={styles.fileActions} role="group" aria-label="File actions">
             {showGuestActions && (
               <MenuTrigger>
-                <Button className={styles.btn} aria-label="Export — open export menu">
+                <Button
+                  className={styles.btn}
+                  aria-label="Export — download plan or BOQ to this device"
+                  title="Download files to this device (guest has no cloud export)"
+                  data-testid="planner-guest-export"
+                >
                   Export
                   <CaretDown size={12} weight="bold" aria-hidden />
                 </Button>
@@ -567,15 +587,19 @@ export function TopBar({
                   <Menu
                     className={styles.dropdownMenu}
                     onAction={(key) => onExport?.(key as string)}
+                    aria-label="Guest export downloads"
                   >
                     <MenuItem id="json" className={styles.dropdownItem}>
-                      Export as JSON
+                      Download plan (JSON)
+                    </MenuItem>
+                    <MenuItem id="svg" className={styles.dropdownItem}>
+                      Download plan (SVG)
                     </MenuItem>
                     <MenuItem id="boq-json" className={styles.dropdownItem}>
-                      Export BOQ (JSON)
+                      Download BOQ (JSON)
                     </MenuItem>
                     <MenuItem id="boq-csv" className={styles.dropdownItem}>
-                      Export BOQ (CSV)
+                      Download BOQ (CSV)
                     </MenuItem>
                   </Menu>
                 </Popover>

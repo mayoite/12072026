@@ -61,6 +61,12 @@ describe("DashboardClient", () => {
 
     expect(screen.getByText(/Signed in as user@example.com/)).toBeDefined();
     expect(screen.getByTestId("global-nav-header")).toBeDefined();
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: /Your office furniture planner hub/i,
+      }),
+    ).toBeDefined();
     expect(screen.getByText("Item One")).toBeDefined();
     expect(screen.getByText("Item description")).toBeDefined();
   });

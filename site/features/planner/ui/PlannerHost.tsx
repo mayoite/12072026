@@ -1,6 +1,7 @@
 "use client";
 
 import { OOPlannerWorkspace } from "@/features/planner/editor/OOPlannerWorkspace";
+import { cn } from "@/lib/utils";
 
 /** Live planner host — Fabric 2D + Three 3D. */
 export function PlannerHost({
@@ -11,10 +12,8 @@ export function PlannerHost({
   guestMode?: boolean;
 }) {
   return (
-    // Both class names: planner-* (shell tests) + open3d-* (locked host CSS
-    // height:100%/min-height:0 so Fabric stage cannot blow past the viewport
-    // and shove wall-draw hit targets off-screen via tool scrollIntoView).
-    <div className="planner-route-host open3d-route-host">
+    // planner-* + open3d-* names for locked host CSS; planner-fill = TW4 height chain
+    <div className={cn("planner-route-host open3d-route-host", "planner-fill")}>
       <OOPlannerWorkspace guestMode={guestMode} planId={planId} />
     </div>
   );

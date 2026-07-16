@@ -47,7 +47,7 @@ Canonical planner surface is **`/planner/**`** (`app/planner/`). Legacy `/oando-
 - `/projects` → `app/(site)/projects/page.tsx`
 - `/quote-cart` → `app/(site)/quote-cart/page.tsx`
 - `/refund-and-return-policy` → `app/(site)/refund-and-return-policy/page.tsx`
-- `/repo-store` → `app/(site)/repo-store/page.tsx`
+- `/repo-store` → retired (next.config redirect → `/`)
 - `/service` → `app/(site)/service/page.tsx`
 - `/showrooms` → `app/(site)/showrooms/page.tsx`
 - `/social` → `app/(site)/social/page.tsx`

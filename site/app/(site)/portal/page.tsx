@@ -10,6 +10,27 @@ import {
   type PlannerSaveSummary,
 } from "@/features/planner/cloud-store/plannerSaves";
 
+/** Cap plan-list wait so portal never paints an infinite loading spinner. */
+const PORTAL_LIST_TIMEOUT_MS = 8_000;
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`${label} timed out after ${timeoutMs}ms`));
+    }, timeoutMs);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error: unknown) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
+}
+
 // Thin route layer only. Portal implementation lives in features/planner/portal/.
 export default async function PortalPage() {
   const user = await requireAuthUser("/portal", "planner");
@@ -20,7 +41,11 @@ export default async function PortalPage() {
   let listError: string | null = null;
   if (databaseConfigured) {
     try {
-      plans = await listPlannerDocumentsFromStore({ userId: user.id });
+      plans = await withTimeout(
+        listPlannerDocumentsFromStore({ userId: user.id }),
+        PORTAL_LIST_TIMEOUT_MS,
+        "Portal plan list",
+      );
     } catch (error) {
       // Do not crash the portal shell when DB/table is misconfigured (local/dev).
       if (isMissingOandoPlansTableError(error)) {

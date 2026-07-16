@@ -36,6 +36,35 @@ describe("workspaceStatusLabels", () => {
     });
     expect(idle).toBe("Ready (local)");
     expect(idle.toLowerCase()).not.toContain("cloud");
-    expect(plannerSaveStatusBarLabel("saved", true)).toMatch(/local|draft/i);
+    expect(
+      plannerSaveStatusBarLabel({
+        status: "saved",
+        storage: "local",
+        lastSavedAt: null,
+        cloudEnabled: false,
+        guestMode: true,
+      }),
+    ).toMatch(/local|draft/i);
+  });
+
+  it("never implies cloud save for guest local labels", () => {
+    const guestIdle = plannerSaveStatusLabel({
+      status: "idle",
+      storage: "cloud",
+      lastSavedAt: null,
+      cloudEnabled: false,
+      guestMode: true,
+    });
+    expect(guestIdle).toBe("Guest session (local)");
+    expect(guestIdle.toLowerCase()).not.toMatch(/account|cloud/);
+
+    const guestSaved = plannerSaveStatusLabel({
+      status: "saved",
+      storage: "local",
+      lastSavedAt: null,
+      cloudEnabled: false,
+      guestMode: true,
+    });
+    expect(guestSaved).toBe("Draft saved locally");
   });
 });

@@ -6,8 +6,8 @@ describe("ChooseProductPage", () => {
   it("renders guest mode with the guest canvas entry link", () => {
     render(<ChooseProductPage guestMode authenticated={false} />);
 
-    expect(screen.getByText("Guest access")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Workspace Planner/i })).toHaveAttribute(
+    expect(screen.getByText("Guest session")).toBeInTheDocument();
+    expect(screen.getByTestId("choose-product-planner-launch")).toHaveAttribute(
       "href",
       expect.stringMatching(/^\/planner\/guest(\?|$)/),
     );
@@ -17,8 +17,8 @@ describe("ChooseProductPage", () => {
   it("renders member mode with authenticated portal link", () => {
     render(<ChooseProductPage guestMode={false} authenticated />);
 
-    expect(screen.getByText("Member access")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Workspace Planner/i })).toHaveAttribute(
+    expect(screen.getByText("Signed-in session")).toBeInTheDocument();
+    expect(screen.getByTestId("choose-product-planner-launch")).toHaveAttribute(
       "href",
       expect.stringMatching(/^\/planner\/canvas(\?|$)/),
     );
@@ -28,10 +28,12 @@ describe("ChooseProductPage", () => {
     );
   });
 
-  it("shows access check pending when not authenticated and not guest", () => {
+  it("shows sign-in and guest options when not authenticated and not guest", () => {
     render(<ChooseProductPage guestMode={false} authenticated={false} />);
 
-    expect(screen.getByText("Access check")).toBeInTheDocument();
+    expect(screen.getByText("Sign-in required")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Sign in/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Continue as guest/i })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Open portal" })).not.toBeInTheDocument();
   });
 });

@@ -1,9 +1,7 @@
-/* Workspace shell layout */
-.shell[data-fill-parent="true"] {
-  height: 100%;
-  max-height: 100%;
-  min-height: 0;
-}
+/* Workspace shell layout — basics first:
+   1) one viewport-tall grid
+   2) middle row takes leftover space
+   3) overflow clipped so dock/canvas cannot blow past the shell */
 
 .shell {
   --ws-shell-bg: var(--planner-surface-canvas);
@@ -24,28 +22,33 @@
   --ws-control-h: var(--planner-control-height);
   --ws-header-h: var(--planner-header-height);
   --ws-status-h: var(--planner-status-height, 2.25rem);
-  /* Dense default chrome; density modes override */
   --ws-panel-title-h: 2.25rem;
   --ws-rail-w: var(--planner-tool-rail-width);
 
   display: grid;
   width: 100%;
-  height: 100vh;
   height: 100dvh;
-  max-height: 100vh;
   max-height: 100dvh;
+  min-height: 0;
+  box-sizing: border-box;
   background: var(--ws-shell-bg);
   color: var(--ws-text-primary);
   font-family: var(--font-sans, system-ui, sans-serif);
   font-size: 0.875rem;
   line-height: 1.55;
   overflow: hidden;
-  /* minmax(0,1fr): stop side-panel min-content from blowing canvas to 2k+ px */
   grid-template-rows: auto minmax(0, 1fr) auto;
   grid-template-areas:
     "header"
     "workspace"
     "status";
+}
+
+/* Same size whether parent is filled or body is locked to 100dvh */
+.shell[data-fill-parent="true"] {
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
 }
 
 .shell[data-viewport="small"] {
@@ -307,6 +310,47 @@
   gap: var(--ws-action-gap);
   min-width: 0;
   flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Tablet / narrow desktop: wrap actions so Export/Prefs never clip off-screen */
+@media (max-width: 64rem) and (min-width: 48.0625rem) {
+  .header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "brand actions"
+      "center center";
+    row-gap: 0.35rem;
+  }
+
+  .brand {
+    grid-column: auto;
+    grid-area: brand;
+  }
+
+  .center {
+    grid-column: auto;
+    grid-area: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .actions {
+    grid-column: auto;
+    grid-area: actions;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    overflow: visible;
+  }
+
+  .actionDivider {
+    display: none;
+  }
 }
 
 .historyActions {
@@ -472,8 +516,16 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  height: 100%;
   overflow: hidden;
+}
+
+/* Dock host fills the middle grid row */
+.modularWorkspace > :first-child {
+  flex: 1 1 0%;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+  width: 100%;
 }
 
 .dockEmptyHint {
@@ -1223,6 +1275,9 @@
   flex-shrink: 0;
   overflow-x: auto;
   overflow-y: hidden;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  z-index: 2;
 }
 
 .statusLeft {

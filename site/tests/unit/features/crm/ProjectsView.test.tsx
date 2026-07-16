@@ -15,13 +15,25 @@ const mockClients = [
 const mockAddProject = vi.fn();
 const mockDeleteProject = vi.fn();
 
+const mockStoreState = {
+  projects: mockProjects,
+  clients: mockClients,
+  quotes: [],
+  addProject: mockAddProject,
+  deleteProject: mockDeleteProject,
+  seedDemoData: vi.fn(),
+  clearAll: vi.fn(),
+  exportSnapshot: vi.fn(() => ({ version: 1 as const, exportedAt: '', clients: [], projects: [], quotes: [] })),
+  importSnapshot: vi.fn(() => true),
+};
+
 vi.mock('@/features/crm/stores/crmStore', () => ({
-  useCrmStore: vi.fn(() => ({
-    projects: mockProjects,
-    clients: mockClients,
-    addProject: mockAddProject,
-    deleteProject: mockDeleteProject,
-  })),
+  useCrmStore: (selector?: (s: typeof mockStoreState) => unknown) =>
+    typeof selector === 'function' ? selector(mockStoreState) : mockStoreState,
+}));
+
+vi.mock('@/features/crm/CrmWorkspaceBanner', () => ({
+  CrmWorkspaceBanner: () => <div data-testid="crm-workspace-banner">Browser-only CRM</div>,
 }));
 
 vi.mock('@/features/shared/shell/GlobalNavHeader', () => ({
@@ -40,10 +52,17 @@ describe('ProjectsView Component', () => {
 
   it('displays the projects statistics grid correctly', () => {
     render(<ProjectsView />);
-    expect(screen.getByText('Total Projects').nextElementSibling).toHaveTextContent('2');
-    expect(screen.getByText('Active Projects').nextElementSibling).toHaveTextContent('1');
-    expect(screen.getAllByText('On Hold')[0].nextElementSibling).toHaveTextContent('1');
-    expect(screen.getByText('Completed').nextElementSibling).toHaveTextContent('0');
+    const grid = screen.getByLabelText('Project statistics');
+    expect(grid).toHaveTextContent('Total Projects');
+    expect(grid).toHaveTextContent('2');
+    expect(grid).toHaveTextContent('Active Projects');
+    expect(grid).toHaveTextContent('On Hold');
+    expect(grid).toHaveTextContent('Completed');
+    // Active = 1, On Hold = 1, Completed = 0 (Total = 2 already asserted)
+    const values = Array.from(grid.querySelectorAll('.crm-projects-kpi p:last-child')).map(
+      (el) => el.textContent,
+    );
+    expect(values).toEqual(['2', '1', '1', '0']);
   });
 
   it('groups and lists projects under client categories', () => {
@@ -96,16 +115,15 @@ describe('ProjectsView Component', () => {
   });
 
   it('renders empty state when there are no projects in store', () => {
-    vi.mocked(useCrmStore).mockReturnValueOnce({
-      projects: [],
-      clients: mockClients,
-      addProject: mockAddProject,
-      deleteProject: mockDeleteProject,
-    });
+    const previous = mockStoreState.projects;
+    mockStoreState.projects = [];
 
     render(<ProjectsView />);
 
     expect(screen.getByText('No projects yet')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Get Started' })).toBeInTheDocument();
+
+    mockStoreState.projects = previous;
   });
 });
+

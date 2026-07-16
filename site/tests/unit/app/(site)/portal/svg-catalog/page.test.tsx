@@ -9,29 +9,52 @@ import { render, screen } from "@testing-library/react";
 import { fireEvent } from "@testing-library/react";
 import SvgCatalogIndex from "@/app/(site)/portal/svg-catalog/page";
 import { SvgCatalogGrid } from "@/app/(site)/portal/svg-catalog/SvgCatalogGrid";
-import * as loader from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
+import * as lifecycle from "@/features/admin/svg-editor/lifecycle/catalogLifecycle";
 
-vi.mock("@/features/planner/project/catalog/svg/svgBlockDescriptorLoader", () => ({
-  loadAll: vi.fn(),
-  BLOCK_DESCRIPTORS_DIR_DEFAULT: "mock-dir",
+vi.mock("@/features/admin/svg-editor/lifecycle/catalogLifecycle", () => ({
+  loadBuyerVisibleDescriptors: vi.fn(),
 }));
 
-vi.mock("next/image", () => ({ default: (p: any) => <img {...p} data-testid="thumb" /> }));
+vi.mock("next/image", () => ({
+  default: (p: { alt?: string; src?: string; className?: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element -- unit mock
+    <img alt={p.alt ?? ""} src={typeof p.src === "string" ? p.src : ""} className={p.className} data-testid="thumb" />
+  ),
+}));
 
 describe("app/(site)/portal/svg-catalog/page.tsx", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (loader.loadAll as any).mockReturnValue([]);
+    vi.mocked(lifecycle.loadBuyerVisibleDescriptors).mockReturnValue([]);
   });
 
-  it("renders cards from loadAll (with thumbs)", async () => {
-    (loader.loadAll as any).mockReturnValue([
-      { slug: "side-table-001", variant: "fixed", title: "Side" },
+  it("renders portal chrome and empty state when no buyer-visible blocks", async () => {
+    const Page = await SvgCatalogIndex();
+    render(Page);
+    expect(screen.getByRole("heading", { name: /SVG catalog/i })).toBeInTheDocument();
+    expect(screen.getByTestId("portal-svg-catalog-empty")).toBeInTheDocument();
+    expect(screen.getByText(/No blocks published yet/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Back to portal/i })).toHaveAttribute(
+      "href",
+      "/portal/",
+    );
+  });
+
+  it("renders cards from loadBuyerVisibleDescriptors (with thumbs)", async () => {
+    vi.mocked(lifecycle.loadBuyerVisibleDescriptors).mockReturnValue([
+      {
+        slug: "side-table-001",
+        variant: "fixed",
+        schemaVersion: "2026-07-04.v2",
+        title: "Side",
+      } as ReturnType<typeof lifecycle.loadBuyerVisibleDescriptors>[number],
     ]);
     const Page = await SvgCatalogIndex();
     render(Page);
-    expect(screen.getByText(/SVG catalog/i)).toBeInTheDocument();
-    // cards rendered
+    expect(screen.getByRole("heading", { name: /SVG catalog/i })).toBeInTheDocument();
+    expect(screen.getByText(/1 block available/i)).toBeInTheDocument();
+    expect(screen.getByRole("list", { name: /svg catalog blocks/i })).toBeInTheDocument();
+    expect(screen.getByText("side-table-001")).toBeInTheDocument();
   });
 });
 

@@ -26,6 +26,7 @@ html:has([data-cookie-consent-bar]) {
 }
 
 @utility site-fab-anchor--left {
+  right: auto;
   left: 0.75rem;
   @media (width >= theme(--breakpoint-sm)) {
     left: 1rem;
@@ -33,10 +34,19 @@ html:has([data-cookie-consent-bar]) {
 }
 
 @utility site-fab-anchor--right {
+  /* Explicit left:auto so left anchors never stick FAB mid-content. */
+  left: auto;
   right: 0.75rem;
   @media (width >= theme(--breakpoint-sm)) {
     right: 1.25rem;
   }
+}
+
+/* Vertically centered on the right edge (assistant / secondary FAB option). */
+@utility site-fab-anchor--center-y {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
 }
 
 @utility site-fab-anchor--inset-x {

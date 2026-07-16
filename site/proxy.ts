@@ -73,6 +73,9 @@ export function isPlannerGuestAllowedPath(pathname: string): boolean {
 /** Phase 05: public Puck.Render previews — exempt from member portal auth (I-D live routes). */
 const PORTAL_PUBLIC_SVG_CATALOG_PREFIX = "/portal/svg-catalog";
 
+/** Guest portal entry + shared guest plan view — no member session required. */
+const PORTAL_PUBLIC_GUEST_PREFIX = "/portal/guest";
+
 export function isPublicPortalSvgCatalogPath(pathname: string): boolean {
   const normalizedPathname = normalizePathname(pathname);
   return (
@@ -81,10 +84,23 @@ export function isPublicPortalSvgCatalogPath(pathname: string): boolean {
   );
 }
 
+export function isPublicPortalGuestPath(pathname: string): boolean {
+  const normalizedPathname = normalizePathname(pathname);
+  return (
+    normalizedPathname === PORTAL_PUBLIC_GUEST_PREFIX ||
+    normalizedPathname.startsWith(`${PORTAL_PUBLIC_GUEST_PREFIX}/`)
+  );
+}
+
 export function isProtectedPath(pathname: string): boolean {
   const normalizedPathname = normalizePathname(pathname);
 
   if (isPublicPortalSvgCatalogPath(normalizedPathname)) {
+    return false;
+  }
+
+  // Guest portal shell must stay public so it never hangs behind auth/DB gates.
+  if (isPublicPortalGuestPath(normalizedPathname)) {
     return false;
   }
 

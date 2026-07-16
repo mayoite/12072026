@@ -94,14 +94,20 @@ describe('tech docs package contract', () => {
     }
 
     expect(packageJson.scripts?.dev).toBe('vite')
-    expect(packageJson.scripts?.generate).toBe('node --max-old-space-size=24576 scripts/generate-all.mjs')
-    expect(packageJson.scripts?.test).toBe('node --max-old-space-size=24576 ../node_modules/vitest/vitest.mjs run')
-    expect(packageJson.scripts?.['test:coverage']).toBe('node --max-old-space-size=24576 ../node_modules/vitest/vitest.mjs run --coverage')
-    expect(packageJson.scripts?.check).toBe('node --max-old-space-size=24576 scripts/check.mjs')
-    expect(packageJson.scripts?.build).toBe(
-      'node --max-old-space-size=24576 scripts/generate-all.mjs --stage-only && vite build && node --max-old-space-size=24576 scripts/publish-all.mjs',
+    expect(packageJson.scripts?.generate).toBe('node scripts/generate-all.mjs')
+    expect(packageJson.scripts?.test).toBe('node ../node_modules/vitest/vitest.mjs run')
+    expect(packageJson.scripts?.['test:coverage']).toBe(
+      'node ../node_modules/vitest/vitest.mjs run --coverage',
     )
-    expect(packageJson.scripts?.gate).toBe('node --max-old-space-size=24576 scripts/gate.mjs')
+    expect(packageJson.scripts?.check).toBe('node scripts/check.mjs')
+    expect(packageJson.scripts?.build).toBe(
+      'node scripts/generate-all.mjs --stage-only && vite build && node scripts/publish-all.mjs',
+    )
+    expect(packageJson.scripts?.gate).toBe('node scripts/gate.mjs')
+    // No --max-old-space-size caps in scripts (heap unbounded by package scripts).
+    for (const script of Object.values(packageJson.scripts ?? {})) {
+      expect(script).not.toMatch(/max-old-space-size/)
+    }
   })
 
   it('writes coverage output under root results tooling paths', () => {

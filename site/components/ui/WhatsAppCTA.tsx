@@ -31,6 +31,7 @@ export function WhatsAppCTA() {
 
   if (!isHydrated || routeSuppressesFloatingQuickContact(pathname)) return null;
 
+  /* Always pin to viewport bottom-right (never mid-content / left). */
   const fabAnchor = consentSettled
     ? "site-fab-anchor site-fab-anchor--right site-fab-anchor--bottom"
     : "site-fab-anchor site-fab-anchor--right site-fab-anchor--bottom-raised";

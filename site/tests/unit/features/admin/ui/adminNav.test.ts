@@ -7,9 +7,11 @@ import {
 } from "@/features/crm/crmRoutes";
 import {
   ADMIN_HUB_CARDS,
+  ADMIN_HUB_KPIS,
   ADMIN_HUB_SECTIONS,
   ADMIN_NAV_GROUPS,
   ADMIN_NAV_ITEMS,
+  resolveAdminNavItem,
   type AdminNavItem,
 } from "@/features/admin/ui/adminNav";
 
@@ -25,10 +27,9 @@ describe("adminNav", () => {
     expect(ADMIN_NAV_GROUPS.map((g) => g.title)).toEqual([
       "Overview",
       "Planner",
-      "Catalog Assets",
+      "Catalog",
       "CRM",
-      "Ops",
-      "Platform",
+      "System",
     ]);
   });
 
@@ -41,7 +42,7 @@ describe("adminNav", () => {
     });
   });
 
-  it("lists planner routes", () => {
+  it("lists planner routes including analytics", () => {
     const planner = ADMIN_NAV_GROUPS.find((g) => g.title === "Planner");
     expect(planner?.items.map((i) => i.href)).toEqual([
       "/admin/plans",
@@ -50,8 +51,8 @@ describe("adminNav", () => {
     ]);
   });
 
-  it("lists catalog asset routes including SVG studio and price books", () => {
-    const catalog = ADMIN_NAV_GROUPS.find((g) => g.title === "Catalog Assets");
+  it("lists catalog routes including SVG studio and price books", () => {
+    const catalog = ADMIN_NAV_GROUPS.find((g) => g.title === "Catalog");
     expect(catalog?.items.map((i) => i.href)).toEqual([
       "/admin/catalog",
       "/admin/planner-catalog",
@@ -61,24 +62,23 @@ describe("adminNav", () => {
     ]);
   });
 
-  it("uses canonical CRM admin paths", () => {
+  it("uses canonical CRM admin paths, hub, and customer queries", () => {
     const crm = ADMIN_NAV_GROUPS.find((g) => g.title === "CRM");
     expect(crm?.items.map((i) => i.href)).toEqual([
+      "/admin/crm",
       CRM_CLIENTS_PATH,
       CRM_PROJECTS_PATH,
       CRM_QUOTES_PATH,
+      "/admin/customer-queries",
     ]);
     expect(CRM_CLIENTS_PATH).toBe("/admin/crm/clients");
     expect(CRM_PROJECTS_PATH).toBe("/admin/crm/projects");
     expect(CRM_QUOTES_PATH).toBe("/admin/crm/quotes");
   });
 
-  it("lists ops and platform routes", () => {
-    const ops = ADMIN_NAV_GROUPS.find((g) => g.title === "Ops");
-    expect(ops?.items.map((i) => i.href)).toEqual(["/admin/customer-queries"]);
-
-    const platform = ADMIN_NAV_GROUPS.find((g) => g.title === "Platform");
-    expect(platform?.items.map((i) => i.href)).toEqual([
+  it("lists system routes", () => {
+    const system = ADMIN_NAV_GROUPS.find((g) => g.title === "System");
+    expect(system?.items.map((i) => i.href)).toEqual([
       "/admin/settings",
       "/admin/themes",
       "/admin/inventory",
@@ -101,32 +101,46 @@ describe("adminNav", () => {
     expect(new Set(hrefs).size).toBe(hrefs.length);
   });
 
-  it("builds hub sections from nav groups (CRM + Ops merged)", () => {
+  it("builds hub sections from nav groups", () => {
     expect(ADMIN_HUB_SECTIONS.map((s) => s.title)).toEqual([
       "Planner operations",
-      "Catalog assets",
+      "Catalog",
       "CRM & ops",
-      "Platform",
+      "System",
     ]);
 
     const planner = ADMIN_NAV_GROUPS.find((g) => g.title === "Planner")?.items ?? [];
-    const catalog =
-      ADMIN_NAV_GROUPS.find((g) => g.title === "Catalog Assets")?.items ?? [];
+    const catalog = ADMIN_NAV_GROUPS.find((g) => g.title === "Catalog")?.items ?? [];
     const crm = ADMIN_NAV_GROUPS.find((g) => g.title === "CRM")?.items ?? [];
-    const ops = ADMIN_NAV_GROUPS.find((g) => g.title === "Ops")?.items ?? [];
-    const platform =
-      ADMIN_NAV_GROUPS.find((g) => g.title === "Platform")?.items ?? [];
+    const system = ADMIN_NAV_GROUPS.find((g) => g.title === "System")?.items ?? [];
 
     expect(ADMIN_HUB_SECTIONS[0]?.items).toEqual(planner);
     expect(ADMIN_HUB_SECTIONS[1]?.items).toEqual(catalog);
-    expect(ADMIN_HUB_SECTIONS[2]?.items).toEqual([...crm, ...ops]);
-    expect(ADMIN_HUB_SECTIONS[3]?.items).toEqual(platform);
+    expect(ADMIN_HUB_SECTIONS[2]?.items).toEqual(crm);
+    expect(ADMIN_HUB_SECTIONS[3]?.items).toEqual(system);
+  });
+
+  it("exposes hub KPI shortcuts with distinct hrefs", () => {
+    expect(ADMIN_HUB_KPIS.length).toBe(4);
+    const hrefs = ADMIN_HUB_KPIS.map((k) => k.href);
+    expect(new Set(hrefs).size).toBe(hrefs.length);
+    for (const kpi of ADMIN_HUB_KPIS) {
+      expect(kpi.label.length).toBeGreaterThan(0);
+      expect(kpi.hint.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("resolves the deepest matching nav item for a pathname", () => {
+    expect(resolveAdminNavItem("/admin")?.label).toBe("Dashboard");
+    expect(resolveAdminNavItem("/admin/")?.label).toBe("Dashboard");
+    expect(resolveAdminNavItem("/admin/crm/projects")?.label).toBe("Projects");
+    expect(resolveAdminNavItem("/admin/crm/projects/abc")?.label).toBe("Projects");
+    expect(resolveAdminNavItem("/admin/svg-editor/foo")?.label).toBe("SVG symbols");
   });
 
   it("flattens deprecated ADMIN_HUB_CARDS from hub sections", () => {
     const expected = ADMIN_HUB_SECTIONS.flatMap((s) => s.items);
     expect(ADMIN_HUB_CARDS).toEqual(expected);
-    // Hub omits Overview/Dashboard; cards are not the full nav item list
     expect(ADMIN_HUB_CARDS.length).toBeLessThan(ADMIN_NAV_ITEMS.length);
     expect(ADMIN_HUB_CARDS.some((c) => c.href === "/admin")).toBe(false);
   });

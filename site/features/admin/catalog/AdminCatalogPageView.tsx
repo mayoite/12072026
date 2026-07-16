@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { AdminCatalogListView } from "./AdminCatalogListView";
 
@@ -6,7 +6,7 @@ export default function AdminCatalogPageView() {
   return (
     <AdminCatalogListView
       title="Standard catalog"
-      description="Editable lane for planner-managed products in `planner_managed_products`: dimensions, mesh type, pricing, and planner visibility. Use Workspace library for static read-only browse and Configurator catalog for parametric or footprint-driven SKUs."
+      description="Day-to-day product list: edit managed planner products (name, dimensions, mesh, price, visibility). Not SVG authoring and not the static workspace library. Parametric SKUs → Configurator catalog. 2D symbols → SVG symbols. Static audit → Workspace library."
       catalogType="standard"
     />
   );

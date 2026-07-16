@@ -162,7 +162,7 @@ describe("CustomerQueriesOpsPageView", () => {
         "fresh-token",
       ),
     );
-    expect(await screen.findByText("No queries found.")).toBeInTheDocument();
+    expect(await screen.findByText("No queries yet")).toBeInTheDocument();
 
     fireEvent.change(
       screen.getByPlaceholderText(/Paste CUSTOMER_QUERIES_ADMIN_TOKEN/i),
@@ -207,7 +207,7 @@ describe("CustomerQueriesOpsPageView", () => {
         expect.any(Object),
       ),
     );
-    expect(await screen.findByText("No queries found.")).toBeInTheDocument();
+    expect(await screen.findByText("No queries match this filter")).toBeInTheDocument();
   });
 
   it("shows save failures and renders rows without company or email", async () => {

@@ -1,5 +1,18 @@
 /* Legal pages — privacy, terms, imprint, refund */
 
+.legal-aside {
+  min-width: 0;
+}
+
+.legal-aside__title {
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+  font-size: clamp(1.35rem, 4.2vw, 2rem);
+  line-height: 1.2;
+}
+
 .legal-cookie-table {
   min-width: 100%;
   border-collapse: collapse;
@@ -49,8 +62,99 @@
   color: var(--text-strong);
 }
 
+/* Phone: cookie rows as stacked cards (no horizontal table scroll) */
+.legal-cookie-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 0.0625rem solid var(--border-soft);
+}
+
+.legal-cookie-card {
+  padding: 1rem 1.15rem;
+  border-bottom: 0.0625rem solid var(--border-soft);
+  background: var(--surface-glass-strong);
+}
+
+.legal-cookie-card__name {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-strong);
+  word-break: break-word;
+}
+
+.legal-cookie-card__meta {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.legal-cookie-card__purpose {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--text-body);
+}
+
 .legal-aside-divider {
   margin-top: 2rem;
   padding-top: 1.75rem;
   border-top: 1px solid var(--border-inverse);
+}
+
+/* Projects KPI strip — 3-up even on narrow phones */
+.projects-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+@media (width >= theme(--breakpoint-sm)) {
+  .projects-kpi-grid {
+    gap: 1rem;
+  }
+}
+
+.projects-kpi {
+  min-height: 5.25rem;
+  padding: 0.85rem 0.4rem;
+}
+
+@media (width >= theme(--breakpoint-sm)) {
+  .projects-kpi {
+    min-height: 7.5rem;
+    padding: 1.75rem 1.25rem;
+  }
+}
+
+.projects-kpi__value {
+  font-size: clamp(1.25rem, 5.5vw, 2.5rem);
+  line-height: 1;
+}
+
+.projects-kpi__label {
+  font-size: 0.5625rem;
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+}
+
+@media (width >= theme(--breakpoint-sm)) {
+  .projects-kpi__label {
+    font-size: 0.6875rem;
+  }
+}
+
+/* Compact marketing hero on phones (projects / privacy / legal family) */
+.page-hero--compact.page-hero {
+  min-height: 12.5rem;
+}
+
+@media (width < theme(--breakpoint-md)) {
+  .page-hero--compact.page-hero {
+    height: auto;
+    min-height: 13.5rem;
+    max-height: 42vh;
+  }
 }

@@ -9,6 +9,11 @@ import Link from "next/link";
 import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 import { ACCESS_PAGE_METADATA } from "@/features/site/data/routeMetadata";
 
+/**
+ * Auth entry: noindex, no hreflang (ACCESS_PAGE_METADATA).
+ * Logged-in users hard-redirect via next/navigation (HTTP redirect, not meta-refresh HTML).
+ * `next` is path-sanitized — open redirects rejected in sanitizeNextPath.
+ */
 export const metadata: Metadata = ACCESS_PAGE_METADATA;
 
 export default async function AccessRoute({
@@ -18,11 +23,14 @@ export default async function AccessRoute({
 }) {
   const user = await getOptionalUser();
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
-  const nextPath = sanitizeNextPath(
-    typeof resolvedSearchParams?.next === "string" ? resolvedSearchParams.next : undefined,
-  );
+  const rawNext =
+    typeof resolvedSearchParams?.next === "string"
+      ? resolvedSearchParams.next
+      : undefined;
+  const nextPath = sanitizeNextPath(rawNext);
 
   if (user) {
+    // Server-side redirect only — avoids a11y-critical meta-refresh interstitial.
     redirect(nextPath);
   }
 
@@ -40,7 +48,7 @@ export default async function AccessRoute({
             href="/"
             className="inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-strong transition-colors"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4" aria-hidden />
             {t("backToHome")}
           </Link>
         </div>

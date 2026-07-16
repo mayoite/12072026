@@ -6,10 +6,21 @@ import {
   EditorialHero,
 } from "@/components/site/EditorialRoute";
 import { HomeMarketingLayout, HomeSection, HomeSectionInner } from "@/components/home/layout";
-import { PORTFOLIO_CLIENTS } from "@/features/site/data/routeCopy";
+import { PORTFOLIO_CLIENTS, PORTFOLIO_PAGE_COPY } from "@/features/site/data/routeCopy";
 import { PORTFOLIO_PAGE_METADATA } from "@/features/site/data/routeMetadata";
+import { buildPageJsonLd } from "@/features/site/data/seo";
+import { SITE_URL } from "@/lib/siteUrl";
+import { sanitizeJsonForScript } from "@/lib/security/sanitize";
 
 export const metadata = PORTFOLIO_PAGE_METADATA;
+
+const PORTFOLIO_JSON_LD = buildPageJsonLd(SITE_URL, {
+  path: "/portfolio",
+  title:
+    "Office furniture portfolio | Patna, Ranchi, Bihar & Jharkhand projects | One&Only",
+  description: PORTFOLIO_PAGE_COPY.heroSubtitle,
+  pageType: "CollectionPage",
+});
 
 type ClientPortfolio = (typeof PORTFOLIO_CLIENTS)[number];
 type ClientPortfolioWithPhotos = ClientPortfolio & { photos: string[] };
@@ -42,18 +53,31 @@ export default async function PortfolioPage() {
 
   return (
     <HomeMarketingLayout>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: sanitizeJsonForScript(PORTFOLIO_JSON_LD),
+        }}
+      />
       <EditorialHero lead="Spaces we’ve" accent="delivered." />
+      <p className="sr-only">{PORTFOLIO_PAGE_COPY.heroSubtitle}</p>
 
       <HomeSection variant="white" spacing="md" className="border-t-0">
         <HomeSectionInner className="space-y-16 md:space-y-24">
           {portfolio.map((client, index) => (
-            <article key={client.id} className="portfolio-case">
+            <article
+              key={client.id}
+              className="portfolio-case"
+              aria-labelledby={`portfolio-client-${client.id}`}
+            >
               <div className="mb-6 grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] md:items-end md:gap-10">
                 <div className="min-w-0">
-                  <span className="typ-label text-brand">
+                  <span className="typ-label text-brand" aria-hidden="true">
                     {String(index + 1).padStart(2, "0")}
                   </span>
-                  <h2 className="home-heading mt-3">{client.name}</h2>
+                  <h2 id={`portfolio-client-${client.id}`} className="home-heading mt-3">
+                    {client.name}
+                  </h2>
                   <p className="typ-body-sm mt-2 text-muted">{client.location}</p>
                 </div>
                 <p className="page-copy max-w-2xl text-body md:justify-self-end">

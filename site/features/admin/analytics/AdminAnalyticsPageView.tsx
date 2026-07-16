@@ -1,7 +1,12 @@
-﻿"use client";
+"use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { CircleNotch as Loader2, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  CircleNotch as Loader2,
+  ArrowsClockwise as RefreshCw,
+  ChartBar as BarChart3,
+} from "@phosphor-icons/react";
 import { apiPath, browserApiFetch } from "@/lib/api/browserApi";
 import { AdminField, AdminSelect } from "../ui/AdminFormFields";
 
@@ -24,7 +29,12 @@ type AnalyticsResponse = {
   exports: ExportRow[];
   plansCreated: SeriesPoint[];
   activeUsers: SeriesPoint[];
+  peakDayPlans?: number;
+  periodDays?: number;
+  databaseConfigured?: boolean;
+  furnitureSource?: string;
   source?: string;
+  warning?: string | null;
 };
 
 const PERIODS = [
@@ -33,23 +43,53 @@ const PERIODS = [
   { value: "90d", label: "90 days" },
 ] as const;
 
+function sourceLabel(source: string | undefined): string {
+  switch (source) {
+    case "drizzle_plans":
+      return "Live planner database";
+    case "drizzle_plans-empty":
+      return "Planner database (no plans in period)";
+    case "planner-db-not-configured":
+      return "Planner database not configured";
+    case "planner-db-error":
+      return "Planner database error";
+    case "local-fallbacks":
+      return "Local fallbacks";
+    default:
+      return source ?? "Unknown";
+  }
+}
+
+function formatDayLabel(isoDate: string): string {
+  const d = new Date(`${isoDate}T12:00:00`);
+  if (Number.isNaN(d.getTime())) return isoDate;
+  return d.toLocaleDateString("en-IN", { month: "short", day: "numeric" });
+}
+
 export default function AdminAnalyticsPageView() {
   const [period, setPeriod] = useState<(typeof PERIODS)[number]["value"]>("30d");
   const [data, setData] = useState<AnalyticsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
   const loadAnalytics = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await browserApiFetch(apiPath(`/api/admin/analytics?period=${period}`));
+      const response = await browserApiFetch(
+        apiPath(`/api/admin/analytics?period=${period}`),
+      );
       if (!response.ok) {
         throw new Error(`Failed to load analytics (${response.status})`);
       }
       const payload = (await response.json()) as AnalyticsResponse;
       setData(payload);
     } catch (loadError) {
-      setError(loadError instanceof Error ? loadError.message : "Failed to load analytics");
+      setError(
+        loadError instanceof Error
+          ? loadError.message
+          : "Failed to load analytics",
+      );
     } finally {
       setLoading(false);
     }
@@ -62,6 +102,23 @@ export default function AdminAnalyticsPageView() {
     return () => window.clearTimeout(timeoutId);
   }, [loadAnalytics]);
 
+  const peak = useMemo(() => {
+    if (!data?.plansCreated?.length) return 1;
+    const fromApi = data.peakDayPlans ?? 0;
+    if (fromApi > 0) return fromApi;
+    return Math.max(
+      1,
+      ...data.plansCreated.map((p) => p.count ?? 0),
+    );
+  }, [data]);
+
+  const totalPlans = data?.summary.totalPlans ?? 0;
+  const isEmpty = !loading && data && totalPlans === 0;
+  const chartPoints = data?.plansCreated ?? [];
+  // Show last 14 bars on wide periods for readability
+  const chartSlice =
+    chartPoints.length > 14 ? chartPoints.slice(-14) : chartPoints;
+
   return (
     <div className="admin-page">
       <header className="admin-page__header">
@@ -69,15 +126,25 @@ export default function AdminAnalyticsPageView() {
           <p className="admin-page__eyebrow">Planner usage</p>
           <h1 className="admin-page__title">Analytics</h1>
           <p className="admin-page__copy">
-            Plan volume, furniture popularity, and export breakdown from the planner database.
+            Plan volume over time, furniture mix samples, and export activity
+            from the planner database.
           </p>
-          {data?.source ? <p className="admin-page__meta">Source: {data.source}</p> : null}
+          {data?.source ? (
+            <p className="admin-page__meta">
+              Source: {sourceLabel(data.source)}
+              {data.periodDays ? ` · ${data.periodDays}d window` : ""}
+            </p>
+          ) : null}
         </div>
         <div className="admin-page__actions">
           <AdminField label="Period">
             <AdminSelect
-            value={period}
-            onChange={(event) => setPeriod(event.target.value as (typeof PERIODS)[number]["value"])}
+              value={period}
+              onChange={(event) =>
+                setPeriod(
+                  event.target.value as (typeof PERIODS)[number]["value"],
+                )
+              }
             >
               {PERIODS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -92,7 +159,11 @@ export default function AdminAnalyticsPageView() {
             onClick={() => void loadAnalytics()}
             disabled={loading}
           >
-            {loading ? <Loader2 size={14} className="animate-spin" aria-hidden /> : <RefreshCw size={14} aria-hidden />}
+            {loading ? (
+              <Loader2 size={14} className="animate-spin" aria-hidden />
+            ) : (
+              <RefreshCw size={14} aria-hidden />
+            )}
             Refresh
           </button>
         </div>
@@ -100,96 +171,236 @@ export default function AdminAnalyticsPageView() {
 
       {error ? (
         <div className="admin-alert admin-alert--error" role="alert">
-          {error}
+          <strong>Could not load analytics</strong>
+          <p className="m-0 mt-1">{error}</p>
+          <div className="admin-empty__actions mt-3">
+            <button
+              type="button"
+              className="admin-btn admin-btn--primary"
+              onClick={() => void loadAnalytics()}
+            >
+              Retry
+            </button>
+            <Link href="/admin/plans" className="admin-btn admin-btn--outline">
+              Open plans
+            </Link>
+          </div>
+        </div>
+      ) : null}
+
+      {data?.warning ? (
+        <div className="admin-alert admin-alert--warn" role="status">
+          Database warning: {data.warning}
         </div>
       ) : null}
 
       {loading && !data ? (
-        <div className="admin-inline-row text-sm text-muted" role="status" aria-live="polite">
+        <div
+          className="admin-inline-row text-sm text-muted"
+          role="status"
+          aria-live="polite"
+        >
           <Loader2 size={16} className="animate-spin" aria-hidden />
           Loading analytics…
         </div>
-      ) : data ? (
+      ) : null}
+
+      {data || error ? (
         <div className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="admin-panel p-4">
-              <p className="text-xs uppercase tracking-wide text-soft">Total plans</p>
-              <p className="mt-1 text-2xl font-semibold text-strong">{data.summary.totalPlans}</p>
+              <p className="text-xs uppercase tracking-wide text-soft">
+                Total plans
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-strong">
+                {data ? data.summary.totalPlans : "—"}
+              </p>
             </div>
             <div className="admin-panel p-4">
-              <p className="text-xs uppercase tracking-wide text-soft">Avg items / plan</p>
-              <p className="mt-1 text-2xl font-semibold text-strong">{data.summary.avgItems}</p>
+              <p className="text-xs uppercase tracking-wide text-soft">
+                Avg items / plan
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-strong">
+                {data ? data.summary.avgItems : "—"}
+              </p>
             </div>
             <div className="admin-panel p-4">
-              <p className="text-xs uppercase tracking-wide text-soft">Avg area (m²)</p>
-              <p className="mt-1 text-2xl font-semibold text-strong">{data.summary.avgArea}</p>
+              <p className="text-xs uppercase tracking-wide text-soft">
+                Avg area (m²)
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-strong">
+                {data ? data.summary.avgArea : "—"}
+              </p>
             </div>
           </div>
+
+          {isEmpty ? (
+            <div className="admin-empty admin-panel" role="status">
+              <BarChart3 size={28} aria-hidden className="text-muted" />
+              <h2 className="admin-empty__title">No plan activity yet</h2>
+              <p className="admin-empty__copy">
+                {data?.databaseConfigured === false
+                  ? "The planner database URL is not configured, so live metrics cannot load. Set PRODUCTS / planner DB env and save plans from the canvas."
+                  : "No planner documents were created in this period. Create or open plans, then refresh."}
+              </p>
+              <div className="admin-empty__actions">
+                <Link href="/admin/plans" className="admin-btn admin-btn--primary">
+                  Review plans
+                </Link>
+                <Link
+                  href="/planner/guest"
+                  className="admin-btn admin-btn--outline"
+                >
+                  Open planner
+                </Link>
+              </div>
+            </div>
+          ) : null}
+
+          <section className="admin-panel p-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="m-0 text-sm font-semibold text-strong">
+                Plans created
+              </h2>
+              {chartSlice.length > 0 ? (
+                <p className="m-0 text-xs text-muted">
+                  Peak day: {peak} plan{peak === 1 ? "" : "s"}
+                </p>
+              ) : null}
+            </div>
+            {chartSlice.length === 0 ? (
+              <p className="admin-empty">No plan activity recorded for this period.</p>
+            ) : (
+              <>
+                <div
+                  className="admin-analytics-bars"
+                  role="img"
+                  aria-label="Bar chart of plans created by day"
+                >
+                  {chartSlice.map((point) => {
+                    const count = point.count ?? 0;
+                    const heightPct = Math.max(
+                      count > 0 ? 8 : 2,
+                      Math.round((count / peak) * 100),
+                    );
+                    return (
+                      <div
+                        key={point.date}
+                        className="admin-analytics-bars__col"
+                        title={`${point.date}: ${count}`}
+                      >
+                        <div
+                          className="admin-analytics-bars__bar"
+                          style={{ height: `${heightPct}%` }}
+                          data-count={count}
+                        />
+                        <span className="admin-analytics-bars__label">
+                          {formatDayLabel(point.date)}
+                        </span>
+                        <span className="admin-analytics-bars__value">{count}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div
+                  className="admin-table-wrap mt-4"
+                  role="region"
+                  aria-label="Plan activity table"
+                  tabIndex={0}
+                >
+                  <table className="admin-table min-w-[28rem]">
+                    <caption className="sr-only">
+                      Plans created and activity series by date
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">New plans</th>
+                        <th scope="col">Activity index</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {chartSlice.map((point, index) => {
+                        const offset =
+                          (data?.plansCreated.length ?? 0) - chartSlice.length;
+                        const active =
+                          data?.activeUsers[offset + index]?.activeUsers ?? "—";
+                        return (
+                          <tr key={point.date}>
+                            <td>{point.date}</td>
+                            <td className="admin-table__secondary">
+                              {point.count ?? 0}
+                            </td>
+                            <td className="admin-table__secondary">{active}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </section>
 
           <div className="grid gap-4 lg:grid-cols-2">
             <section className="admin-panel p-4">
               <h2 className="text-sm font-semibold text-strong">Top furniture</h2>
-              <ul className="mt-3 divide-y divide-soft text-sm">
-                {data.topFurniture.map((item) => (
-                  <li key={item.name} className="flex items-center justify-between gap-4 py-2">
-                    <span>{item.name}</span>
-                    <span className="text-muted">
-                      {item.category} · {item.count}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              {data.topFurniture.length === 0 ? (
-                <p className="admin-empty">No furniture usage recorded for this period.</p>
+              {data?.furnitureSource === "catalog-sample" &&
+              (data.topFurniture?.length ?? 0) > 0 ? (
+                <p className="admin-page__meta mt-1">
+                  Catalog sample ranking (not per-placement telemetry yet).
+                </p>
               ) : null}
+              {(data?.topFurniture?.length ?? 0) > 0 ? (
+                <ul className="mt-3 divide-y divide-soft text-sm">
+                  {data?.topFurniture.map((item) => (
+                    <li
+                      key={item.name}
+                      className="flex items-center justify-between gap-4 py-2"
+                    >
+                      <span>{item.name}</span>
+                      <span className="text-muted">
+                        {item.category} · {item.count}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="admin-empty" role="status">
+                  <p className="admin-empty__copy">
+                    No furniture mix for this period. Save plans that include
+                    catalog items to populate usage rankings.
+                  </p>
+                </div>
+              )}
             </section>
 
             <section className="admin-panel p-4">
-              <h2 className="text-sm font-semibold text-strong">Export breakdown</h2>
-              <ul className="mt-3 divide-y divide-soft text-sm">
-                {data.exports.map((row) => (
-                  <li key={row.format} className="flex items-center justify-between gap-4 py-2">
-                    <span>{row.format}</span>
-                    <span className="text-muted">{row.count}</span>
-                  </li>
-                ))}
-              </ul>
-              {data.exports.length === 0 ? (
-                <p className="admin-empty">No exports recorded for this period.</p>
-              ) : null}
+              <h2 className="text-sm font-semibold text-strong">
+                Export breakdown
+              </h2>
+              {(data?.exports?.length ?? 0) > 0 ? (
+                <ul className="mt-3 divide-y divide-soft text-sm">
+                  {data?.exports.map((row) => (
+                    <li
+                      key={row.format}
+                      className="flex items-center justify-between gap-4 py-2"
+                    >
+                      <span>{row.format}</span>
+                      <span className="text-muted">{row.count}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="admin-empty" role="status">
+                  <p className="admin-empty__copy">
+                    No export estimates yet. Estimates appear once plans exist
+                    in the selected window.
+                  </p>
+                </div>
+              )}
             </section>
           </div>
-
-          <section className="admin-panel p-4">
-            <h2 className="text-sm font-semibold text-strong">Plans created</h2>
-            {data.plansCreated.length === 0 ? (
-              <p className="admin-empty">No plan activity recorded for this period.</p>
-            ) : (
-            <div className="admin-table-wrap mt-3" role="region" aria-label="Plan activity table" tabIndex={0}>
-              <table className="admin-table min-w-[28rem]">
-                <caption className="sr-only">Plans created and active users by date</caption>
-                <thead className="text-xs uppercase tracking-wide text-soft">
-                  <tr>
-                    <th scope="col" className="px-2 py-2 font-medium">Date</th>
-                    <th scope="col" className="px-2 py-2 font-medium">New plans</th>
-                    <th scope="col" className="px-2 py-2 font-medium">Active users (series)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.plansCreated.slice(-10).map((point, index) => (
-                    <tr key={point.date} className="border-t border-soft">
-                      <td className="px-2 py-2">{point.date}</td>
-                      <td className="px-2 py-2 text-muted">{point.count ?? 0}</td>
-                      <td className="px-2 py-2 text-muted">
-                        {data.activeUsers[data.plansCreated.length - 10 + index]?.activeUsers ?? "—"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            )}
-          </section>
         </div>
       ) : null}
     </div>

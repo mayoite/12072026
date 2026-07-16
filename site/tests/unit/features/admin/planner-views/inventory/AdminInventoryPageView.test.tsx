@@ -14,7 +14,7 @@ describe("AdminInventoryPageView", () => {
 
   it("renders empty state when CSV is empty", () => {
     render(<AdminInventoryPageView csv="" generatedAt={null} rowCount={0} />);
-    expect(screen.getByText(/Inventory file is missing or empty/i)).toBeInTheDocument();
+    expect(screen.getByText(/Inventory not generated/i)).toBeInTheDocument();
   });
 
   it("parses CSV correctly and displays records", () => {

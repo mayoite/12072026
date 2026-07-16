@@ -142,4 +142,35 @@ describe("useCrmStore Zustand Store", () => {
       expect(state.quotes).toHaveLength(1);
     });
   });
+
+  describe("Workspace bootstrap", () => {
+    it("clears all records and reseeds sample data", () => {
+      const store = useCrmStore.getState();
+      store.clearAll();
+      expect(useCrmStore.getState().clients).toHaveLength(0);
+      expect(useCrmStore.getState().projects).toHaveLength(0);
+      expect(useCrmStore.getState().quotes).toHaveLength(0);
+
+      store.seedDemoData();
+      const seeded = useCrmStore.getState();
+      expect(seeded.clients).toHaveLength(2);
+      expect(seeded.projects).toHaveLength(2);
+      expect(seeded.quotes).toHaveLength(1);
+    });
+
+    it("exports and imports a version-1 snapshot", () => {
+      const store = useCrmStore.getState();
+      const snapshot = store.exportSnapshot();
+      expect(snapshot.version).toBe(1);
+      expect(snapshot.clients).toHaveLength(2);
+
+      store.clearAll();
+      expect(useCrmStore.getState().clients).toHaveLength(0);
+
+      expect(store.importSnapshot(snapshot)).toBe(true);
+      expect(useCrmStore.getState().clients).toHaveLength(2);
+      expect(store.importSnapshot({ version: 99 })).toBe(false);
+    });
+  });
 });
+

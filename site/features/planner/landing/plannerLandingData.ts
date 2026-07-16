@@ -1,11 +1,12 @@
+import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
 import { PLANNER_FEATURE_PAGES } from "./plannerFeaturePages";
 
 export { PLANNER_FEATURE_PAGES };
 
-/** Features hub hero backdrop — floor-plan context only */
+/** Features hub hero backdrop — shared marketing family photo */
 export const PLANNER_HERO_IMAGES = [
   {
-    src: "/images/hero/27-06-2025 Image 03.webp",
+    src: DEFAULT_HERO_FALLBACK,
     alt: "Team reviewing an office floor plan before furniture procurement",
   },
 ] as const;

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { SiteHeader } from '@/components/site/Header';
-import { trackPlannerLaunchClicked, trackSiteSearchSubmitted } from '@/lib/analytics/siteEvents';
+import { trackSiteSearchSubmitted } from '@/lib/analytics/siteEvents';
 
 // Mock phosphor icons
 vi.mock('@phosphor-icons/react', () => ({
@@ -220,29 +220,17 @@ describe('SiteHeader Component', () => {
     }, { timeout: 2000 });
   });
 
-  it('launches guided planner on click and tracks event', async () => {
-    const dispatchSpy = vi.spyOn(window, 'dispatchEvent');
+  it('exposes language dropdown and no Guided Planner in header', async () => {
     await renderSettledHeader();
 
-    const plannerBtn = screen.getByRole('button', { name: /Guided Planner/i });
-    fireEvent.click(plannerBtn);
-
-    expect(trackPlannerLaunchClicked).toHaveBeenCalledWith({
-      sourcePage: '/products',
-      surface: 'header',
-    });
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ type: 'oando-assistant:open' })
-    );
+    expect(screen.getByLabelText('Select Language')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Guided Planner/i })).toBeNull();
   });
 
-  it('names quote cart and announces search status for assistive tech', async () => {
+  it('announces search status for assistive tech (quote cart not in header)', async () => {
     await renderSettledHeader();
 
-    expect(screen.getByRole('link', { name: 'View Quote Cart' })).toHaveAttribute(
-      'href',
-      '/quote-cart',
-    );
+    expect(screen.queryByRole('link', { name: 'View Quote Cart' })).toBeNull();
     expect(screen.getByRole('search', { name: 'Site product search' })).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent(/Search products/i);
   });

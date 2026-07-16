@@ -5,6 +5,7 @@ import { useCallback, useId, useMemo, useRef, useState, type ReactNode } from "r
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
 import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
 import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
+import { cn } from "@/lib/utils";
 
 import { CanvasToolRail } from "../CanvasToolRail";
 import type { PlannerTool } from "../canvasTool";
@@ -191,7 +192,11 @@ export function ModularPlannerShell({
 
   return (
     <div
-      className={styles.shell}
+      className={cn(
+        styles.shell,
+        /* TW4 utilities own the height grid; module keeps chrome tokens/colors */
+        fillParent ? "planner-shell-fill" : "planner-shell",
+      )}
       data-fill-parent={fillParent ? "true" : undefined}
       data-planner-density={density}
       data-modular-dock="true"
@@ -232,7 +237,7 @@ export function ModularPlannerShell({
         {...topBarSaveStatusProps}
       />
 
-      <div className={styles.modularWorkspace}>
+      <div className={cn(styles.modularWorkspace, "planner-shell-main")}>
         <PlannerDockHost
           slots={slots}
           layoutPresetId={layoutPresetId}
@@ -241,7 +246,7 @@ export function ModularPlannerShell({
         />
       </div>
 
-      <footer className={`${styles.status} pw-status-bar`} aria-label="Plan status">
+      <footer className={cn(styles.status, "pw-status-bar")} aria-label="Plan status">
         {planMetrics ? (
           <div className={styles.statusMetrics} data-testid="planner-status-metrics">
             <span>

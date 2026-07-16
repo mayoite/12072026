@@ -1,8 +1,8 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react";
-import { ADMIN_HUB_SECTIONS } from "../ui/adminNav";
+import { ADMIN_HUB_KPIS, ADMIN_HUB_SECTIONS } from "../ui/adminNav";
 
 const CRM_HUB_SECTION_TITLE = "CRM & ops";
 
@@ -14,10 +14,27 @@ export default function AdminDashboardPageView() {
           <p className="admin-page__eyebrow">Admin</p>
           <h1 className="admin-page__title">Dashboard</h1>
           <p className="admin-page__meta">
-            Planner, catalog, CRM, and platform tools in one place.
+            Planner, catalog, CRM, and system tools in one place.
           </p>
         </div>
       </header>
+
+      <section className="admin-kpi-grid" aria-label="Quick operations">
+        {ADMIN_HUB_KPIS.map((kpi) => (
+          <Link
+            key={kpi.href}
+            href={kpi.href}
+            className={`admin-kpi admin-kpi--${kpi.tone}`}
+          >
+            <span className="admin-kpi__label">{kpi.label}</span>
+            <span className="admin-kpi__hint">{kpi.hint}</span>
+            <span className="admin-kpi__cta">
+              Open
+              <ArrowRight size={14} aria-hidden />
+            </span>
+          </Link>
+        ))}
+      </section>
 
       {ADMIN_HUB_SECTIONS.map((section) => {
         const showCrmStorageWarning = section.title === CRM_HUB_SECTION_TITLE;

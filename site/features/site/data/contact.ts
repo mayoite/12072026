@@ -9,10 +9,10 @@ export const SITE_CONTACT = {
   salesPhone: "+91 98356 30940",
   supportPhone: "+91 90310 22875",
   salesEmail: "sales@oando.co.in",
-  regionLine: "Patna, Bihar and Jharkhand, India",
+  regionLine: "Patna, Ranchi, Bihar and Jharkhand, India",
   openingHours: "Mo-Sa 09:00-18:00",
   priceRange: "INR",
-  areaServed: ["Bihar", "Jharkhand", "India"],
+  areaServed: ["Patna", "Ranchi", "Bihar", "Jharkhand", "India"],
   address: {
     streetAddress: "401, Jagat Trade Centre, Frazer Road",
     addressLocality: "Patna",
@@ -65,7 +65,8 @@ export const FOOTER_CONVERSION_PANEL = {
     "Resource Desk routing",
     "Sales and support continuity",
   ],
-  responseLine: "Patna-based team supporting Bihar, Jharkhand, and multi-city rollout briefs.",
+  responseLine:
+    "Patna-based team supporting Patna, Ranchi, Bihar, Jharkhand, and multi-city office furniture rollouts.",
   whatsappPrompt: "Need help choosing the right planning, documentation, or sales lane?",
 } as const;
 

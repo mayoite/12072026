@@ -12,9 +12,12 @@ type ProjectSetupGateProps = {
   children: ReactNode;
 };
 
+/** Max time on skeleton before we force setup UI (deploy P0 — no infinite gate). */
+const HYDRATE_FAILSAFE_MS = 2_000;
+
 /**
  * Blocks the canvas until project setup is complete.
- * Requires persisted metadata — a stale localStorage flag alone is not enough.
+ * Always exits skeleton: setup form, or children if storage says complete.
  */
 export function ProjectSetupGate({
   guestMode = false,
@@ -27,14 +30,31 @@ export function ProjectSetupGate({
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Defer via timeout (avoids direct setState-in-effect report); post-mount hydration for gate skeleton.
-    const timer = setTimeout(() => {
-      setIsHydrated(true);
-      if (isProjectSetupCompleteInStorage(guestMode, planId)) {
-        setIsFullyComplete(true);
+    let cancelled = false;
+    let done = false;
+
+    const finishHydrate = () => {
+      if (cancelled || done) return;
+      done = true;
+      try {
+        if (isProjectSetupCompleteInStorage(guestMode, planId)) {
+          setIsFullyComplete(true);
+        }
+      } catch {
+        setIsFullyComplete(false);
       }
-    }, 0);
-    return () => clearTimeout(timer);
+      setIsHydrated(true);
+    };
+
+    // Immediate tick (tests + snappy guest) + failsafe if timers are delayed.
+    const quick = window.setTimeout(finishHydrate, 0);
+    const failsafe = window.setTimeout(finishHydrate, HYDRATE_FAILSAFE_MS);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(quick);
+      window.clearTimeout(failsafe);
+    };
   }, [guestMode, planId]);
 
   if (!isHydrated) {

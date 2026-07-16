@@ -30,6 +30,7 @@ describe('app/(site)/dashboard/page.tsx', () => {
 
     await expect(DashboardPage({ searchParams: Promise.resolve({}) })).rejects.toThrow('NEXT_REDIRECT');
     expect(redirect).toHaveBeenCalledWith('/access?next=%2Fdashboard');
+    // buildAccessRedirect encodes the same path
   });
 
   it('renders dashboard for authenticated users', async () => {

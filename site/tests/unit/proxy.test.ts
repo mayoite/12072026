@@ -59,7 +59,7 @@ vi.mock('next-intl/middleware', () => {
   };
 });
 
-import { isPlannerGuestAllowedPath, isPublicPortalSvgCatalogPath, isProtectedPath, hasSessionAuthCookies, proxy, buildContentSecurityPolicy, isCanvasHeavyPath } from '../../proxy';
+import { isPlannerGuestAllowedPath, isPublicPortalSvgCatalogPath, isPublicPortalGuestPath, isProtectedPath, hasSessionAuthCookies, proxy, buildContentSecurityPolicy, isCanvasHeavyPath } from '../../proxy';
 import { NextRequest } from 'next/server';
 import { PLANNER_GUEST_COOKIE } from '../../lib/auth/constants';
 
@@ -99,6 +99,19 @@ describe('proxy.ts', () => {
     it('should return false for public Phase 05 /portal/svg-catalog/[slug]', () => {
       expect(isPublicPortalSvgCatalogPath('/portal/svg-catalog/side-table-001')).toBe(true);
       expect(isProtectedPath('/portal/svg-catalog/side-table-001')).toBe(false);
+    });
+
+    it('should return false for public guest portal entry', () => {
+      expect(isPublicPortalGuestPath('/portal/guest')).toBe(true);
+      expect(isPublicPortalGuestPath('/portal/guest/view/abc')).toBe(true);
+      expect(isProtectedPath('/portal/guest')).toBe(false);
+      expect(isProtectedPath('/portal/guest/')).toBe(false);
+      expect(isProtectedPath('/portal/guest/view/abc')).toBe(false);
+    });
+
+    it('should still protect member portal routes', () => {
+      expect(isProtectedPath('/portal')).toBe(true);
+      expect(isProtectedPath('/portal/123')).toBe(true);
     });
 
     it('should return true for /admin', () => {
@@ -166,6 +179,13 @@ describe('proxy.ts', () => {
 
     it('should allow unauthenticated users on public /portal/svg-catalog (Phase 05)', async () => {
       const request = new NextRequest('http://localhost/portal/svg-catalog');
+      const response = await proxy(request as unknown as NextRequest);
+      expect(response.status).toBe(200);
+      expect(response.headers.get('location')).toBeNull();
+    });
+
+    it('should allow unauthenticated users on public /portal/guest', async () => {
+      const request = new NextRequest('http://localhost/portal/guest');
       const response = await proxy(request as unknown as NextRequest);
       expect(response.status).toBe(200);
       expect(response.headers.get('location')).toBeNull();

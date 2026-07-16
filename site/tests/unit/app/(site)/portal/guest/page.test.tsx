@@ -1,20 +1,21 @@
-import { describe, it, expect, vi } from 'vitest';
-import { redirect } from 'next/navigation';
-import GuestPortalPage from '@/app/(site)/portal/guest/page';
-import { buildAccessRedirect } from '@/lib/auth/plannerRedirect';
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import GuestPortalPage from "@/app/(site)/portal/guest/page";
 
-vi.mock('next/navigation', () => ({
-  redirect: vi.fn(),
-}));
+describe("app/(site)/portal/guest/page.tsx", () => {
+  it("renders guest portal shell without redirecting or loading remote plans", () => {
+    render(<GuestPortalPage />);
 
-vi.mock('@/lib/auth/plannerRedirect', () => ({
-  buildAccessRedirect: vi.fn(() => '/access?next=%2Fportal'),
-}));
-
-describe('app/(site)/portal/guest/page.tsx', () => {
-  it('redirects guests using the canonical access redirect helper', () => {
-    GuestPortalPage();
-    expect(buildAccessRedirect).toHaveBeenCalledWith('/portal');
-    expect(redirect).toHaveBeenCalledWith('/access?next=%2Fportal');
+    expect(screen.getByTestId("guest-portal-page")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /guest workspace entry/i })).toBeInTheDocument();
+    expect(screen.getByTestId("guest-portal-empty")).toBeInTheDocument();
+    expect(screen.getByTestId("guest-portal-open-planner")).toHaveAttribute(
+      "href",
+      "/planner/guest/",
+    );
+    expect(screen.getByTestId("guest-portal-sign-in")).toHaveAttribute(
+      "href",
+      "/access?next=%2Fportal",
+    );
   });
 });

@@ -17,13 +17,9 @@ export default mergeConfig(
       pool: 'forks',
       isolate: true,
       fileParallelism: false,
-      // The ts-morph graph/extractor suites each need >4GB. On a many-core
-      // host Vitest would otherwise spawn one fork per core and collectively
-      // exhaust RAM, and even one fork exceeds the default 4GB heap. Bound the
-      // fork count and raise each fork's heap via the Node arg passed to forks.
+      // One fork only — ts-morph suites are heavy; no per-process heap cap.
       maxWorkers: 1,
       minWorkers: 1,
-      execArgv: ['--max-old-space-size=24576'],
       environment: 'jsdom',
       include: ['tests/**/*.test.{ts,tsx}'],
       setupFiles: ['tests/setup.ts'],

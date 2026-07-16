@@ -419,13 +419,18 @@ export function AdminSvgEditorListView({
       </div>
 
       {descriptors.length === 0 ? (
-        <div className="admin-empty" role="status">
-          <p className="admin-table__primary">No SVG symbols yet</p>
-          <p className="admin-table__secondary">
-            Create a symbol in the visual studio. That is the primary authoring
-            path.
+        <div
+          className="admin-empty"
+          role="status"
+          data-testid="admin-svg-inventory-empty-source"
+        >
+          <p className="admin-empty__title">No SVG symbols yet</p>
+          <p className="admin-empty__copy">
+            Create the first product symbol in the visual studio: set identity and
+            footprint, preview the Planner symbol, then publish. You do not need
+            JSON or source code. Bulk import stays under Advanced.
           </p>
-          <div className="admin-section-top">
+          <div className="admin-empty__actions">
             <Link
               href="/admin/svg-editor/new"
               className="admin-btn admin-btn--primary"
@@ -677,12 +682,13 @@ export function AdminSvgEditorListView({
               role="status"
               data-testid="admin-svg-inventory-empty"
             >
-              <p className="admin-table__primary">No symbols match these filters</p>
-              <p className="admin-table__secondary">
-                Clear search or filters to see the full inventory.
+              <p className="admin-empty__title">No symbols match these filters</p>
+              <p className="admin-empty__copy">
+                Clear search or filters to see the full inventory, or create a
+                new symbol if you expected an empty catalog.
               </p>
-              {filtersActive ? (
-                <div className="admin-section-top">
+              <div className="admin-empty__actions">
+                {filtersActive ? (
                   <button
                     type="button"
                     className="admin-btn admin-btn--outline"
@@ -691,8 +697,16 @@ export function AdminSvgEditorListView({
                   >
                     Clear filters
                   </button>
-                </div>
-              ) : null}
+                ) : null}
+                <Link
+                  href="/admin/svg-editor/new"
+                  className="admin-btn admin-btn--primary"
+                  data-testid="admin-svg-primary-new-filtered-empty"
+                >
+                  <Plus size={14} aria-hidden />
+                  New SVG symbol
+                </Link>
+              </div>
             </div>
           ) : (
             <>

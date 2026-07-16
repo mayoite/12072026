@@ -67,9 +67,13 @@ describe('CompareDock Component', () => {
     expect(screen.getByText('Compare products (2/3)')).toBeInTheDocument();
     expect(screen.getByText('Chair A | Chair B')).toBeInTheDocument();
 
-    // Verify buttons
-    expect(screen.getByRole('button', { name: /Clear/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Compare now/i })).toBeInTheDocument();
+    // Verify buttons (aria-labels preferred for accessible names)
+    expect(
+      screen.getByRole('button', { name: /Clear comparison shortlist/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /Compare 2 selected office furniture products/i }),
+    ).toBeInTheDocument();
   });
 
   it('calls clear when clear button is clicked', () => {
@@ -77,7 +81,9 @@ describe('CompareDock Component', () => {
 
     render(<CompareDock />);
 
-    const clearButton = screen.getByRole('button', { name: /Clear/i });
+    const clearButton = screen.getByRole('button', {
+      name: /Clear comparison shortlist/i,
+    });
     fireEvent.click(clearButton);
 
     expect(mockClear).toHaveBeenCalled();
@@ -91,7 +97,9 @@ describe('CompareDock Component', () => {
 
     render(<CompareDock />);
 
-    const compareLink = screen.getByRole('link', { name: /Compare now/i });
+    const compareLink = screen.getByRole('link', {
+      name: /Compare 2 selected office furniture products/i,
+    });
     expect(compareLink).toHaveAttribute('href', '/compare?items=chair-a%2Cchair-b');
 
     fireEvent.click(compareLink);
@@ -112,7 +120,10 @@ describe('CompareDock Component', () => {
 
     render(<CompareDock />);
 
-    const compareLink = screen.getByRole('link', { name: /Compare now/i });
+    const compareLink = screen.getByRole('link', {
+      name: /Compare 2 selected office furniture products/i,
+    });
     expect(compareLink).toHaveAttribute('href', '/compare?items=chair-b');
   });
 });
+

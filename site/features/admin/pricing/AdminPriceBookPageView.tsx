@@ -234,14 +234,40 @@ export function AdminPriceBookPageView({
       </header>
 
       {loading ? (
-        <p className="admin-page__meta" role="status">
-          <Loader2 size={14} className="animate-spin" aria-hidden /> Loading…
-        </p>
+        <div
+          className="admin-empty"
+          role="status"
+          aria-live="polite"
+          data-testid="admin-price-book-loading"
+        >
+          <p className="admin-empty__title">
+            <Loader2 size={18} className="animate-spin" aria-hidden /> Loading
+            price book…
+          </p>
+          <p className="admin-empty__copy">
+            Fetching commercial versions and rules for this family. Activate is
+            the release action once data loads.
+          </p>
+        </div>
       ) : null}
 
       {error ? (
         <div className="admin-alert admin-alert--error" role="alert">
+          <strong>Price book load failed</strong>
           {error}
+          <div className="admin-empty__actions admin-section-top">
+            <button
+              type="button"
+              className="admin-btn admin-btn--primary"
+              onClick={() => {
+                setLoading(true);
+                void load();
+              }}
+              data-testid="admin-price-book-retry"
+            >
+              Retry load
+            </button>
+          </div>
         </div>
       ) : null}
 
@@ -562,7 +588,35 @@ export function AdminPriceBookPageView({
           </div>
         </div>
       ) : !loading && !error ? (
-        <div className="admin-empty" role="status">No price book data is available.</div>
+        <div
+          className="admin-empty"
+          role="status"
+          data-testid="admin-price-book-empty"
+        >
+          <p className="admin-empty__title">No price book data is available</p>
+          <p className="admin-empty__copy">
+            Price books hold versioned currency rules for BOQ commercial release
+            (draft → approve → activate). Seed the default book or open a known
+            book ID. Product SKUs themselves are edited under Standard /
+            Configurator catalog.
+          </p>
+          <p className="admin-page__meta">
+            Expected book: <code>{bookId}</code>
+          </p>
+          <div className="admin-empty__actions">
+            <button
+              type="button"
+              className="admin-btn admin-btn--primary"
+              onClick={() => {
+                setLoading(true);
+                void load();
+              }}
+              data-testid="admin-price-book-empty-retry"
+            >
+              Retry load
+            </button>
+          </div>
+        </div>
       ) : null}
     </div>
   );

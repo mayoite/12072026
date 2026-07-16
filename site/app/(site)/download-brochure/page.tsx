@@ -1,10 +1,10 @@
-import { redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
+/**
+ * Legacy alias only — not a product page.
+ * Canonical public surface: `/downloads` (Resource Desk).
+ * Same class as `/brochure` and `/catalog`.
+ */
 export default function DownloadBrochurePage() {
-  redirect("/downloads");
-  return (
-    <main>
-      <h1 className="text-3xl font-semibold">Download Brochure</h1>
-    </main>
-  );
+  permanentRedirect("/downloads");
 }

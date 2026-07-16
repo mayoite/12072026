@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, CompassTool } from "@phosphor-icons/react";
-import { motion } from "framer-motion";
+import { ArrowRight, CompassTool, SignIn } from "@phosphor-icons/react";
 
 import { PlannerLaunchLink } from "@/components/ui/PlannerLaunchLink";
+import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
 import { PRODUCT_SUITE } from "@/features/site/data/productSuite";
 
 interface ChooseProductPageProps {
@@ -19,103 +19,127 @@ export function ChooseProductPage({
   guestMode,
   authenticated,
 }: ChooseProductPageProps) {
-  const entryHref = guestMode ? PLANNER.routes.guest : PLANNER.routes.canvas;
+  const entryHref = guestMode || !authenticated
+    ? PLANNER.routes.guest
+    : PLANNER.routes.canvas;
   const landingHref = PLANNER.routes.landing;
-  const accessLabel = guestMode
-    ? "Guest access"
+  const sessionLabel = guestMode
+    ? "Guest session"
     : authenticated
-      ? "Member access"
-      : "Access check";
+      ? "Signed-in session"
+      : "Sign-in required";
+
+  const primaryLabel = guestMode
+    ? "Open guest planner"
+    : authenticated
+      ? "Open workspace planner"
+      : "Continue to guest planner";
 
   return (
-    <section className="bg-[var(--surface-page)] pt-16">
+    <section className="bg-[var(--surface-page)] pt-16" aria-labelledby="choose-product-heading">
       <div className="grid lg:min-h-[calc(100vh-4rem)] lg:grid-cols-[0.95fr_1.05fr]">
         <div className="relative flex min-h-[30rem] items-end overflow-hidden bg-[var(--surface-inverse)] px-7 py-10 text-[var(--text-inverse)] md:min-h-[34rem] md:px-12 lg:min-h-full">
           <Image
-            src="/images/hero/tvs-patna-enhanced.webp"
-            alt="Workspace planning preview"
+            src={DEFAULT_HERO_FALLBACK}
+            alt="Office furniture workspace layout preview in planning view"
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 48vw"
             className="object-cover opacity-70"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/10" />
-          <motion.div
-            initial={false}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="relative z-10 max-w-xl"
-          >
-            <p className="typ-label mb-5 text-[var(--color-bronze-300)]">{accessLabel}</p>
-            <h1 className="home-heading !text-[clamp(2.4rem,5vw,4.5rem)] !text-[var(--text-inverse)]">
-              Choose the right <span className="text-accent-italic-on-dark">planning entry.</span>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/10" aria-hidden="true" />
+          <div className="relative z-10 max-w-xl">
+            <p className="typ-label mb-5 text-[var(--color-bronze-300)]">{sessionLabel}</p>
+            <h1
+              id="choose-product-heading"
+              className="home-heading !text-[clamp(2.4rem,5vw,4.5rem)] !text-[var(--text-inverse)]"
+            >
+              Start planning office furniture{" "}
+              <span className="text-accent-italic-on-dark">for real spaces.</span>
             </h1>
             <p className="page-copy mt-6 max-w-lg text-[var(--text-inverse-body)]">
               {guestMode
-                ? "Open the live canvas for layout, catalog placement, 3D review, and export. Guest saves stay restricted until sign-in."
-                : "Continue into the member workspace with saved plans, export history, and dashboard continuity."}
+                ? "Launch the 2D/3D planner with catalog placement and BOQ export. Guest work stays local until you sign in. Built for teams in Patna, Ranchi, Bihar, and Jharkhand."
+                : authenticated
+                  ? "Open the member planner for saved plans, catalog furniture, 3D review, and branded BOQ export."
+                  : "Sign in or continue as guest to place office furniture, review layouts, and prepare a BOQ."}
             </p>
-          </motion.div>
+          </div>
         </div>
 
         <div className="flex items-center px-7 py-12 md:px-12 lg:px-16">
-          <motion.div
-            initial={false}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.6, ease: "easeOut" }}
-            className="w-full max-w-2xl"
-          >
+          <div className="w-full max-w-2xl">
             <div className="border-b border-[var(--border-soft)] pb-8">
-              <p className="typ-label text-[var(--color-bronze-500)]">Planner launch</p>
-              <h2 className="home-heading mt-4">Start with the path that matches the session.</h2>
+              <p className="typ-label text-[var(--color-bronze-500)]">Workspace entry</p>
+              <h2 className="home-heading mt-4">Choose how you enter the planner.</h2>
+              <p className="page-copy-sm mt-4 text-body">
+                One workspace for layout, catalog furniture (including systems from brands we supply), and BOQ handoff to Oando.
+              </p>
             </div>
 
             <PlannerLaunchLink
               href={entryHref}
               surface="choose-product"
               label={PLANNER.label}
-              className="group mt-8 grid gap-6 border border-[var(--border-soft)] bg-[var(--surface-page)] p-6 transition-colors hover:bg-[var(--surface-soft)] md:grid-cols-[4rem_1fr_auto] md:items-center"
+              aria-label={`${primaryLabel}: ${PLANNER.label}`}
+              data-testid="choose-product-planner-launch"
+              className="group mt-8 grid min-h-[5.5rem] gap-6 border border-[var(--border-soft)] bg-[var(--surface-page)] p-6 transition-colors hover:bg-[var(--surface-soft)] md:grid-cols-[4rem_1fr_auto] md:items-center"
             >
               <span className="flex h-16 w-16 items-center justify-center border border-[var(--border-soft)] text-[var(--color-bronze-500)]">
                 <CompassTool size={30} weight="light" aria-hidden="true" />
               </span>
               <span>
-                <span className="typ-label text-[var(--color-bronze-500)]">Unified workspace</span>
+                <span className="typ-label text-[var(--color-bronze-500)]">{primaryLabel}</span>
                 <span className="typ-h3 mt-2 block text-strong">{PLANNER.label}</span>
                 <span className="page-copy-sm mt-3 block text-body">{PLANNER.description}</span>
               </span>
-              <span className="flex h-11 w-11 items-center justify-center border border-[var(--border-soft)] text-strong transition-transform group-hover:translate-x-1">
+              <span className="flex h-11 min-h-11 min-w-11 w-11 items-center justify-center border border-[var(--border-soft)] text-strong transition-transform group-hover:translate-x-1">
                 <ArrowRight size={18} weight="bold" aria-hidden="true" />
               </span>
             </PlannerLaunchLink>
 
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <ul className="mt-8 grid list-none gap-4 p-0 md:grid-cols-3">
               {[
                 "2D edit and 3D preview",
                 "Catalog furniture placement",
                 "BOQ-ready export path",
               ].map((item, index) => (
-                <div key={item} className="border-t border-[var(--border-soft)] pt-4">
-                  <p className="text-[var(--color-bronze-500)]">0{index + 1}</p>
+                <li key={item} className="border-t border-[var(--border-soft)] pt-4">
+                  <p className="text-[var(--color-bronze-500)]" aria-hidden="true">
+                    0{index + 1}
+                  </p>
                   <p className="page-copy-sm mt-2 text-body">{item}</p>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
 
-            <p className="typ-body-sm mt-8 text-muted">
-              <Link href={landingHref} className="text-primary hover:underline">
+            <nav className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2" aria-label="Related workspace links">
+              <Link href={landingHref} className="typ-body-sm text-primary hover:underline min-h-11 inline-flex items-center">
                 View planner overview
               </Link>
               {authenticated ? (
-                <>
-                  {" / "}
-                  <Link href="/portal" className="text-primary hover:underline">
-                    Open portal
-                  </Link>
-                </>
+                <Link href="/portal" className="typ-body-sm text-primary hover:underline min-h-11 inline-flex items-center">
+                  Open portal
+                </Link>
+              ) : (
+                <Link
+                  href="/access?next=%2Fchoose-product%3Fmode%3Dguest"
+                  className="typ-body-sm text-primary hover:underline min-h-11 inline-flex items-center gap-1.5"
+                >
+                  <SignIn size={16} weight="bold" aria-hidden="true" />
+                  Sign in
+                </Link>
+              )}
+              {!guestMode && !authenticated ? (
+                <Link
+                  href="/choose-product?mode=guest"
+                  className="typ-body-sm text-primary hover:underline min-h-11 inline-flex items-center"
+                >
+                  Continue as guest
+                </Link>
               ) : null}
-            </p>
-          </motion.div>
+            </nav>
+          </div>
         </div>
       </div>
     </section>

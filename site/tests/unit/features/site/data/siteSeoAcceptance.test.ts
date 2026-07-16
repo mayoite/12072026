@@ -28,7 +28,6 @@ import {
   ACCESS_PAGE_METADATA,
   CHOOSE_PRODUCT_PAGE_METADATA,
   QUOTE_CART_PAGE_METADATA,
-  REPO_STORE_PAGE_METADATA,
   TRACKING_PAGE_METADATA,
 } from "@/features/site/data/routeMetadata";
 import { metadata as svgCatalogLayoutMetadata } from "@/app/(site)/portal/svg-catalog/layout";
@@ -83,13 +82,17 @@ describe("SITE-SEO-03 sitemap, robots, classification agreement", () => {
     }
   });
 
+  it("classifies retired repo-store as redirect home", () => {
+    expect(getRouteClassification("/repo-store")?.classification).toBe("redirect");
+    expect(getRouteClassification("/repo-store")?.canonicalUrl).toContain("/");
+  });
+
   it("emits robots noindex on utility page metadata", () => {
     for (const meta of [
       QUOTE_CART_PAGE_METADATA,
       TRACKING_PAGE_METADATA,
       ACCESS_PAGE_METADATA,
       CHOOSE_PRODUCT_PAGE_METADATA,
-      REPO_STORE_PAGE_METADATA,
     ]) {
       expect(meta.robots).toEqual({ index: false, follow: false });
     }

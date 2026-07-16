@@ -23,14 +23,17 @@ export function PlannerSaveIndicator({
   lastSavedAt,
   envelopeStatus,
   onRetry,
+  guestMode = false,
 }: {
   status: PlannerSaveStatus;
   lastSavedAt: string | null;
   envelopeStatus?: PlannerEnvelopeStatus;
   onRetry?: () => void;
+  /** When true, never imply cloud/account save. */
+  guestMode?: boolean;
 }) {
   const localSaveState = envelopeStatus?.localSaveState;
-  const syncState = envelopeStatus?.syncState;
+  const syncState = guestMode ? undefined : envelopeStatus?.syncState;
   const hasTruthfulEnvelope = Boolean(envelopeStatus);
 
   const label =
@@ -49,17 +52,24 @@ export function PlannerSaveIndicator({
                 : localSaveState === "saved_local" && lastSavedAt
                   ? `Saved locally ${formatRelativeTime(lastSavedAt)}`
                   : localSaveState === "dirty"
-                    ? "Unsaved changes"
+                    ? guestMode
+                      ? "Unsaved draft"
+                      : "Unsaved changes"
                     : status === "saving"
-                      ? "Saving…"
+                      ? "Saving locally…"
                       : status === "saved" && lastSavedAt
-                        ? `Saved ${formatRelativeTime(lastSavedAt)}`
+                        ? guestMode
+                          ? `Draft saved locally ${formatRelativeTime(lastSavedAt)}`
+                          : `Saved locally ${formatRelativeTime(lastSavedAt)}`
                         : status === "error"
-                          ? "Save failed"
+                          ? "Local save failed"
                           : status === "unsaved"
-                            ? "Unsaved"
-                            : "Ready";
-
+                            ? guestMode
+                              ? "Unsaved draft"
+                              : "Unsaved"
+                            : guestMode
+                              ? "Guest · local only"
+                              : "Ready";
   const pillStatus =
     syncState === "conflict"
       ? "conflict"

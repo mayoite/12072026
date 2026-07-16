@@ -1,23 +1,25 @@
 import { useEffect, useRef, useState } from 'react'
 import mermaid from 'mermaid'
 
+// Mermaid only accepts concrete color strings — not CSS var().
+// Values aligned to dark docs theme (see site theme tokens).
 mermaid.initialize({
   startOnLoad: false,
   theme: 'dark',
   themeVariables: {
-    primaryColor: 'var(--brand-500)',
-    primaryTextColor: 'var(--text-strong)',
-    primaryBorderColor: 'var(--brand-600)',
-    lineColor: 'var(--text-muted)',
-    secondaryColor: 'var(--text-body)',
-    tertiaryColor: 'var(--color-dark-midnight-blue-750)',
-    background: 'var(--color-dark-midnight-blue-750)',
-    mainBkg: 'var(--text-body)',
-    nodeBorder: 'var(--text-heading-soft)',
-    clusterBkg: 'var(--text-body)',
-    titleColor: 'var(--text-strong)',
-    edgeLabelBackground: 'var(--text-body)',
-    fontFamily: 'var(--font-sans)',
+    primaryColor: '#406F99',
+    primaryTextColor: '#F1F5F9',
+    primaryBorderColor: '#36638A',
+    lineColor: '#94A3B8',
+    secondaryColor: '#1B2940',
+    tertiaryColor: '#0E1925',
+    background: '#0E1925',
+    mainBkg: '#152033',
+    nodeBorder: '#3B4756',
+    clusterBkg: '#152033',
+    titleColor: '#F1F5F9',
+    edgeLabelBackground: '#152033',
+    fontFamily: 'system-ui, "Segoe UI", sans-serif',
   },
   flowchart: { curve: 'basis', htmlLabels: true },
   sequence: { actorMargin: 50 },

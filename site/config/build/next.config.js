@@ -214,6 +214,9 @@ const nextConfig = {
       { source: "/ops/customer-queries", destination: "/admin/customer-queries/", permanent: true },
       { source: "/ops/customer-queries/:path*", destination: "/admin/customer-queries/", permanent: true },
       { source: "/ops/:path*", destination: "/admin/customer-queries/", permanent: true },
+      // Retired internal audit surface
+      { source: "/repo-store", destination: "/", permanent: true },
+      { source: "/repo-store/:path*", destination: "/", permanent: true },
     ];
   },
   async headers() {

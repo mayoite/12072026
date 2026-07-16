@@ -13,10 +13,16 @@ function csv(rows: string[]): string {
 describe("AdminInventoryPageView", () => {
   it("shows empty inventory message when CSV has no data rows", () => {
     render(<AdminInventoryPageView csv={HEADER} generatedAt={null} rowCount={0} />);
-    expect(
-      screen.getByText(/Inventory file is missing or empty/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Inventory not generated/i)).toBeInTheDocument();
+    expect(document.querySelector(".admin-empty__code")?.textContent).toMatch(
+      /generate-app-inventory-csv/,
+    );
+    expect(screen.getByRole("link", { name: /Back to dashboard/i })).toHaveAttribute(
+      "href",
+      "/admin",
+    );
   });
+
 
   it("parses CRLF lines and falls back to how_it_works when summary is absent", () => {
     const body = [

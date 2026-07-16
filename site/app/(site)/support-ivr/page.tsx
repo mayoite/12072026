@@ -1,8 +1,6 @@
-import { SupportIvrPageView } from "@/components/support/SupportIvrPageView";
-import { SUPPORT_IVR_PAGE_METADATA } from "@/features/site/data/routeMetadata";
+import { permanentRedirect } from "next/navigation";
 
-export const metadata = SUPPORT_IVR_PAGE_METADATA;
-
-export default function SupportPage() {
-  return <SupportIvrPageView />;
+/** Redundant visual IVR — Service + Contact are the real lanes. */
+export default function SupportIvrPage() {
+  permanentRedirect("/service");
 }

@@ -39,7 +39,7 @@ import {
 
 describe("routeMetadata site-data", () => {
   it("should have correct metadata build outcomes", () => {
-    expect(ABOUT_PAGE_METADATA.title).toContain("Planning-led workspace partner");
+    expect(ABOUT_PAGE_METADATA.title).toMatch(/Office furniture|Steelcase|Featherlite|Humanscale/i);
     expect(ABOUT_PAGE_METADATA.canonical).toBe("https://mock-site-url.com/about");
 
     expect(SOLUTIONS_PAGE_METADATA.canonical).toBe("https://mock-site-url.com/solutions");

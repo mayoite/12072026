@@ -17,7 +17,7 @@ export const SITE_NAV_LINKS = [
   { label: "Sustainability", href: "/sustainability", headerSlot: "more" as const },
   { label: "Contact", href: "/contact" },
   { label: "Portal", href: "/portal", headerSlot: "more" as const },
-  { label: "Login", href: "/login", headerSlot: "more" as const },
+  { label: "Sign in", href: "/access", headerSlot: "more" as const },
 ] as const;
 
 export type SiteNavLink = (typeof SITE_NAV_LINKS)[number];

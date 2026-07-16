@@ -32,11 +32,12 @@ function HubCard({ item }: { item: WorkspaceHubItem }) {
   return (
     <Link
       href={item.href}
-      className="workspace-hub-card workspace-hub-card--link group flex h-full flex-col rounded-[1.35rem] border p-5 transition-[border-color,box-shadow,transform] duration-200"
+      aria-label={`${item.label}: ${item.description}`}
+      className="workspace-hub-card workspace-hub-card--link group flex h-full min-h-[11rem] flex-col rounded-[1.35rem] border p-5 transition-[border-color,box-shadow,transform] duration-200"
     >
       <div className="flex items-start justify-between gap-3">
         <span
-          className="workspace-hub-card__icon inline-flex h-10 w-10 items-center justify-center rounded-xl"
+          className="workspace-hub-card__icon inline-flex h-11 w-11 min-h-11 min-w-11 items-center justify-center rounded-xl"
           aria-hidden
         >
           <Icon size={18} />
@@ -47,9 +48,13 @@ function HubCard({ item }: { item: WorkspaceHubItem }) {
           aria-hidden
         />
       </div>
-      <h3 className="workspace-hub-card__title mt-4 text-base font-semibold tracking-tight">{item.label}</h3>
+      <h3 className="workspace-hub-card__title mt-4 text-base font-semibold tracking-tight">
+        {item.label}
+      </h3>
       <p className="workspace-hub-card__desc mt-2 flex-1 text-sm leading-6">{item.description}</p>
-      <span className="workspace-hub-card__cta mt-4 text-xs font-bold uppercase tracking-[0.1em]">Open</span>
+      <span className="workspace-hub-card__cta mt-4 text-xs font-bold uppercase tracking-[0.1em]">
+        Open
+      </span>
     </Link>
   );
 }
@@ -70,7 +75,7 @@ export function DashboardClient({ userEmail, accessError }: DashboardClientProps
     () =>
       plannerDraftCount > 0
         ? `${plannerDraftCount} saved local planner session${plannerDraftCount === 1 ? "" : "s"} ready to resume.`
-        : "No saved local planner sessions yet — open the canvas to start a layout.",
+        : "No saved local planner sessions yet — open the canvas to start an office furniture layout.",
     [plannerDraftCount],
   );
 
@@ -81,24 +86,39 @@ export function DashboardClient({ userEmail, accessError }: DashboardClientProps
 
   async function handleSignOut() {
     setIsSigningOut(true);
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    document.cookie = `${PLANNER_GUEST_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-    router.replace("/access");
-    router.refresh();
+    try {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+      document.cookie = `${PLANNER_GUEST_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax`;
+      router.replace("/access");
+      router.refresh();
+    } catch {
+      setIsSigningOut(false);
+    }
   }
 
+  const accessMessage = accessErrorMessage(accessError);
+
   return (
-    <section className="workspace-hub min-h-screen">
+    <div className="workspace-hub min-h-screen">
       <GlobalNavHeader />
 
       <div className="workspace-hub__frame mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-8">
-        {accessErrorMessage(accessError) ? (
-          <div className="rounded-2xl border border-accent/30 bg-warning/10 px-5 py-4 text-sm leading-6 text-strong" role="alert">
-            {accessErrorMessage(accessError)}
+        {accessMessage ? (
+          <div
+            className="rounded-2xl border border-accent/30 bg-warning/10 px-5 py-4 text-sm leading-6 text-strong"
+            role="alert"
+          >
+            {accessMessage}
           </div>
         ) : null}
-        <header className="workspace-hub__hero rounded-[2rem] border p-8 lg:p-10">
+
+        {/* region, not <header>, so we keep a single site banner (GlobalNavHeader) */}
+        <div
+          className="workspace-hub__hero rounded-[2rem] border p-8 lg:p-10"
+          role="region"
+          aria-labelledby="dashboard-heading"
+        >
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl">
               <p className="workspace-hub__eyebrow text-[0.6875rem] font-semibold uppercase tracking-[0.3em]">
@@ -107,47 +127,71 @@ export function DashboardClient({ userEmail, accessError }: DashboardClientProps
               <p className="workspace-hub__eyebrow mt-2 text-xs font-medium">
                 {plannerDraftCount > 0 ? "Recent work available" : "Ready for first draft"}
               </p>
-              <h1 className="workspace-hub__title mt-4 text-4xl font-semibold tracking-tight">
-                Your planner workspace
+              <h1
+                id="dashboard-heading"
+                className="workspace-hub__title mt-4 text-4xl font-semibold tracking-tight"
+              >
+                Your office furniture planner hub
               </h1>
               <p className="workspace-hub__lead mt-4 text-sm leading-7 sm:text-base">
                 Signed in as {userEmail}. {plannerSummary}
               </p>
-              <p className="workspace-hub__meta mt-3 text-xs">{destinationCount} destinations available</p>
+              <p className="workspace-hub__meta mt-3 text-xs">
+                {destinationCount} destinations · Patna, Ranchi, Bihar &amp; Jharkhand
+              </p>
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Link href="/planner" className="workspace-hub__primary-btn rounded-full px-5 py-3 text-sm font-semibold">
-                Open planner
+              <Link
+                href="/planner/canvas"
+                className="workspace-hub__primary-btn inline-flex min-h-11 items-center rounded-full px-5 py-3 text-sm font-semibold"
+              >
+                Open canvas
+              </Link>
+              <Link
+                href="/choose-product"
+                className="workspace-hub__ghost-btn inline-flex min-h-11 items-center rounded-full border px-5 py-3 text-sm font-semibold"
+              >
+                Planner entry
               </Link>
               <button
                 type="button"
                 onClick={handleSignOut}
                 disabled={isSigningOut}
-                className="workspace-hub__ghost-btn rounded-full border px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60"
+                className="workspace-hub__ghost-btn inline-flex min-h-11 items-center rounded-full border px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSigningOut ? "Signing out..." : "Sign out"}
               </button>
             </div>
           </div>
-        </header>
+        </div>
 
-        {WORKSPACE_HUB_SECTIONS.map((section) => (
-          <section key={section.title} className="workspace-hub__section" aria-labelledby={`hub-${section.title}`}>
-            <header className="workspace-hub__section-header mb-4">
-              <h2 id={`hub-${section.title}`} className="workspace-hub__section-title text-lg font-semibold tracking-tight">
-                {section.title}
-              </h2>
-              <p className="workspace-hub__section-copy mt-1 text-sm">{section.summary}</p>
-            </header>
-            <div className="workspace-hub__grid grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {section.items.map((item) => (
-                <HubCard key={item.href} item={item} />
-              ))}
-            </div>
-          </section>
-        ))}
+        {WORKSPACE_HUB_SECTIONS.map((section) => {
+          const sectionId = `hub-${section.title.replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase()}`;
+          return (
+            <section
+              key={section.title}
+              className="workspace-hub__section"
+              aria-labelledby={sectionId}
+            >
+              <div className="workspace-hub__section-header mb-4">
+                <h2
+                  id={sectionId}
+                  className="workspace-hub__section-title text-lg font-semibold tracking-tight"
+                >
+                  {section.title}
+                </h2>
+                <p className="workspace-hub__section-copy mt-1 text-sm">{section.summary}</p>
+              </div>
+              <div className="workspace-hub__grid grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {section.items.map((item) => (
+                  <HubCard key={item.href} item={item} />
+                ))}
+              </div>
+            </section>
+          );
+        })}
       </div>
-    </section>
+    </div>
   );
 }

@@ -56,9 +56,9 @@ export function AccessForm({ nextPath, guestHref, requiresAdmin = false }: Acces
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="mb-8">
-        <h2 className="typ-page-title">
+        <h1 className="typ-page-title">
           Welcome to Oando
-        </h2>
+        </h1>
         <p className="mt-3 text-sm text-[var(--text-muted)]">
           {requiresAdmin
             ? "Sign in with a platform admin account to open the admin console."
@@ -66,12 +66,24 @@ export function AccessForm({ nextPath, guestHref, requiresAdmin = false }: Acces
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-5"
+        method="post"
+        autoComplete="on"
+        noValidate={false}
+      >
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <Input
             id="email"
+            name="email"
             type="email"
+            inputMode="email"
+            autoComplete="username"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -83,7 +95,9 @@ export function AccessForm({ nextPath, guestHref, requiresAdmin = false }: Acces
           <Label htmlFor="password">Password</Label>
           <Input
             id="password"
+            name="password"
             type="password"
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -92,7 +106,11 @@ export function AccessForm({ nextPath, guestHref, requiresAdmin = false }: Acces
         </div>
 
         {error && (
-          <div className="p-3 text-sm text-danger bg-danger-soft border border-accent rounded-md">
+          <div
+            role="alert"
+            aria-live="assertive"
+            className="p-3 text-sm text-danger bg-danger-soft border border-accent rounded-md"
+          >
             {error}
           </div>
         )}

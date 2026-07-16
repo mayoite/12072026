@@ -46,7 +46,7 @@ describe('LanguageSwitcher Component', () => {
     });
   });
 
-  it('defaults to en-US / en when no cookie is set', () => {
+  it('defaults to en when no cookie is set', () => {
     render(<LanguageSwitcher />);
 
     const select = screen.getByLabelText('Select Language') as HTMLSelectElement;
@@ -73,5 +73,14 @@ describe('LanguageSwitcher Component', () => {
     expect(mockCookieStore['NEXT_LOCALE']).toBe('fr');
     expect(mockReload).toHaveBeenCalled();
     expect(select.value).toBe('fr');
+  });
+
+  it('renders compact header variant with all marketing locales', () => {
+    render(<LanguageSwitcher variant="header" />);
+
+    const select = screen.getByLabelText('Select Language') as HTMLSelectElement;
+    expect(select).toBeInTheDocument();
+    const values = Array.from(select.options).map((o) => o.value);
+    expect(values).toEqual(['en', 'hi', 'fr', 'de', 'es']);
   });
 });

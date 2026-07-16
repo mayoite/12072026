@@ -19,11 +19,9 @@ import { SITE_HEADER_MORE_LINKS, SITE_HEADER_PRIMARY_LINKS } from "@/features/si
 const HEADER_PRIMARY_LINKS = [...SITE_HEADER_PRIMARY_LINKS];
 const HEADER_MORE_LINKS = [...SITE_HEADER_MORE_LINKS];
 import { MobileNavDrawer } from "@/components/site/MobileNavDrawer";
+import { LanguageSwitcher } from "@/components/site/LanguageSwitcher";
 import { isPlannerEntryHref } from "@/lib/analytics/plannerEntry";
-import {
-  trackPlannerLaunchClicked,
-  trackSiteSearchSubmitted,
-} from "@/lib/analytics/siteEvents";
+import { trackSiteSearchSubmitted } from "@/lib/analytics/siteEvents";
 import { cn } from "@/lib/utils";
 
 function prettify(id: string): string {
@@ -368,14 +366,6 @@ export function SiteHeader() {
     return values;
   }, [groupedCategories]);
 
-  const openGuidedPlanner = () => {
-    trackPlannerLaunchClicked({
-      sourcePage: pathname || "",
-      surface: "header",
-    });
-    window.dispatchEvent(new CustomEvent("oando-assistant:open"));
-  };
-
   return (
     <>
       <header className={cn(siteHeaderBaseClass, scrolled ? siteHeaderScrolledClass : "shadow-none")} suppressHydrationWarning>
@@ -657,25 +647,8 @@ export function SiteHeader() {
                   )}
               </div>
 
-              <Link
-                href="/quote-cart"
-                className="site-header__quote-cart shell-icon-button relative flex h-11 w-11 items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary text-strong hover:text-primary transition-colors"
-                title="View Quote Cart"
-                aria-label="View Quote Cart"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
-                  <path d="M222.14,58.87A8,8,0,0,0,216,56H54.68L49.79,29.14A16,16,0,0,0,34.05,16H16a8,8,0,0,0,0,16h18L59.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42a27.75,27.75,0,0,0-2.71-12h-49.8a8,8,0,0,1-7.75-6H193.7a24.06,24.06,0,0,0,23.57-19.58L231.6,71.58A8,8,0,0,0,222.14,58.87ZM88,216a12,12,0,1,1-12-12A12,12,0,0,1,88,216Zm112,0a12,12,0,1,1-12-12A12,12,0,0,1,200,216Zm16.25-144.4-14.33,75.59A8,8,0,0,1,194.07,154H74.45L60.5,72H216A8,8,0,0,1,216.25,71.6Z"></path>
-                </svg>
-              </Link>
-
-              <button
-                type="button"
-                onClick={openGuidedPlanner}
-                className="btn-primary min-h-11 whitespace-nowrap px-3 text-sm xl:px-4"
-                aria-label="Open Guided Planner"
-              >
-                Guided Planner
-              </button>
+              {/* Site-wide i18n: en · hi · fr · de · es (NEXT_LOCALE cookie) */}
+              <LanguageSwitcher variant="header" />
 
               {/* Hamburger — mobile only */}
               <button

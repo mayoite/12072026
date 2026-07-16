@@ -307,6 +307,63 @@ export function buildPageJsonLd(siteUrl: string, input: PageJsonLdInput) {
   };
 }
 
+export type CareerJobJsonLdInput = {
+  title: string;
+  department: string;
+  location: string;
+  description?: string;
+};
+
+/**
+ * JobPosting graph for careers — office furniture roles only from visible openings.
+ * Does not invent salary or remote flags.
+ */
+export function buildCareerJobsJsonLd(
+  siteUrl: string,
+  jobs: readonly CareerJobJsonLdInput[],
+) {
+  const pageUrl = buildCanonicalUrl(siteUrl, "/career");
+  return {
+    "@context": "https://schema.org",
+    "@graph": jobs.map((job, index) => {
+      const locality = job.location.includes("Ranchi") && !job.location.includes("Patna")
+        ? "Ranchi"
+        : job.location.includes("Patna")
+          ? "Patna"
+          : job.location.split(/[/,]/)[0]?.trim() || "Patna";
+      const region =
+        locality.toLowerCase() === "ranchi" ? "Jharkhand" : "Bihar";
+      return {
+        "@type": "JobPosting",
+        "@id": `${pageUrl}#job-${index + 1}`,
+        title: job.title,
+        description:
+          job.description ||
+          `${job.title} (${job.department}) at One&Only — office furniture careers serving Patna, Ranchi, Bihar and Jharkhand. Location: ${job.location}.`,
+        employmentType: "FULL_TIME",
+        industry: "Office Furniture",
+        hiringOrganization: {
+          "@type": "Organization",
+          name: SITE_BRAND.companyName,
+          sameAs: siteUrl,
+          "@id": `${siteUrl}#organization`,
+        },
+        jobLocation: {
+          "@type": "Place",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: locality,
+            addressRegion: region,
+            addressCountry: "IN",
+          },
+        },
+        directApply: false,
+        url: pageUrl,
+      };
+    }),
+  };
+}
+
 export function buildBreadcrumbJsonLd(siteUrl: string, items: BreadcrumbItem[]) {
   return {
     "@context": "https://schema.org",

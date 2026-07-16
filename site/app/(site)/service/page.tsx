@@ -5,6 +5,7 @@ import { RouteCtaBand } from "@/components/shared/RouteCtaBand";
 import { SectionIntro } from "@/components/shared/SectionIntro";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 import { SITE_CONTACT } from "@/features/site/data/contact";
+import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
 import {
   SERVICE_PAGE_CHANNELS,
   SERVICE_PAGE_COPY,
@@ -17,12 +18,13 @@ export const metadata = SERVICE_PAGE_METADATA;
 export default function ServicePage() {
   return (
     <HomeMarketingLayout>
+      {/* Match planning/privacy/downloads: same small Hero + shared dmrc family photo */}
       <Hero
         variant="small"
         title={SERVICE_PAGE_COPY.heroTitle}
         subtitle={SERVICE_PAGE_COPY.heroSubtitle}
         showButton={false}
-        backgroundImage="/images/hero/usha-hero.webp"
+        backgroundImage={DEFAULT_HERO_FALLBACK}
       />
 
       <HomeSection variant="white" spacing="md">
@@ -107,7 +109,7 @@ export default function ServicePage() {
                 <TrackedLink href="/contact" label={SERVICE_PAGE_COPY.primaryCta} surface="service-support-card" className="btn-primary">
                   {SERVICE_PAGE_COPY.primaryCta}
                 </TrackedLink>
-                <TrackedLink href="/tracking" label={SERVICE_PAGE_COPY.secondaryCta} surface="service-support-card" className="btn-outline">
+                <TrackedLink href="/contact" label={SERVICE_PAGE_COPY.secondaryCta} surface="service-support-card" className="btn-outline">
                   {SERVICE_PAGE_COPY.secondaryCta}
                 </TrackedLink>
                 <TrackedLink href="/downloads" label={SERVICE_PAGE_COPY.tertiaryCta} surface="service-support-card" className="btn-outline">

@@ -1,6 +1,15 @@
-import { redirect } from "next/navigation";
-import { buildAccessRedirect } from "@/lib/auth/plannerRedirect";
+import type { Metadata } from "next";
+import GuestPortalPageView from "@/features/planner/portal/GuestPortalPageView";
 
+export const metadata: Metadata = {
+  title: "Guest portal | One&Only",
+  robots: { index: false, follow: false },
+};
+
+/**
+ * Guest portal entry — renders immediately.
+ * Does not call auth or planner storage (those hung audits on infinite loading).
+ */
 export default function GuestPortalPage() {
-  redirect(buildAccessRedirect("/portal"));
+  return <GuestPortalPageView />;
 }

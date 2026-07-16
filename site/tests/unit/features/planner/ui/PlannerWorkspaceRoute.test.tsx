@@ -4,11 +4,8 @@ import { describe, expect, it, vi } from "vitest";
 
 import { PlannerWorkspaceRoute } from "@/features/planner/ui/PlannerWorkspaceRoute";
 
-vi.mock("next/dynamic", () => ({
-  default: () =>
-    function MockWorkspace() {
-      return <div data-testid="workspace" />;
-    },
+vi.mock("@/features/planner/ui/PlannerHost", () => ({
+  PlannerHost: () => <div data-testid="workspace" />,
 }));
 
 vi.mock("@/features/planner/components/Providers", () => ({

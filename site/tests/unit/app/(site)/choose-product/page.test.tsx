@@ -13,8 +13,18 @@ vi.mock('@/lib/auth/session', () => ({
 }));
 
 vi.mock('@/features/shared/entry/ChooseProductPage', () => ({
-  ChooseProductPage: ({ guestMode }: { guestMode: boolean }) => (
-    <div data-testid="choose-product-page" data-guest={String(guestMode)} />
+  ChooseProductPage: ({
+    guestMode,
+    authenticated,
+  }: {
+    guestMode: boolean;
+    authenticated: boolean;
+  }) => (
+    <div
+      data-testid="choose-product-page"
+      data-guest={String(guestMode)}
+      data-auth={String(authenticated)}
+    />
   ),
 }));
 
@@ -33,19 +43,24 @@ describe('app/(site)/choose-product/page.tsx', () => {
     expect(redirect).not.toHaveBeenCalled();
   });
 
-  it('redirects unauthenticated users without guest mode to access', async () => {
+  it('redirects unauthenticated users without guest mode to access with return to guest chooser', async () => {
     vi.mocked(getOptionalUser).mockResolvedValue(null);
 
     await ChooseProductRoute({});
 
-    expect(redirect).toHaveBeenCalledWith('/access?next=%2Fdashboard');
+    expect(redirect).toHaveBeenCalledWith(
+      '/access?next=%2Fchoose-product%3Fmode%3Dguest',
+    );
   });
 
-  it('redirects authenticated users to the dashboard', async () => {
+  it('shows chooser for authenticated users instead of forcing dashboard', async () => {
     vi.mocked(getOptionalUser).mockResolvedValue({ id: 'user-1' } as never);
 
-    await ChooseProductRoute({});
+    const page = await ChooseProductRoute({});
+    render(page);
 
-    expect(redirect).toHaveBeenCalledWith('/dashboard');
+    expect(redirect).not.toHaveBeenCalled();
+    expect(screen.getByTestId('choose-product-page')).toHaveAttribute('data-auth', 'true');
+    expect(screen.getByTestId('choose-product-page')).toHaveAttribute('data-guest', 'false');
   });
 });

@@ -6,9 +6,16 @@ import AdminLayoutShell from "@/features/admin/ui/AdminLayoutShell";
 import { requireAuthUser } from "@/lib/auth/session";
 
 export const metadata: Metadata = {
-  title: "Admin | One&Only",
-  description: "O&O platform admin console — planner, catalog, and operations.",
+  title: {
+    default: "Admin | One&Only",
+    template: "%s | One&Only Admin",
+  },
+  description: "One&Only admin console — planner, catalog, CRM, and operations.",
   robots: { index: false, follow: false },
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/icon.png" }],
+  },
 };
 
 export default async function AdminLayout({

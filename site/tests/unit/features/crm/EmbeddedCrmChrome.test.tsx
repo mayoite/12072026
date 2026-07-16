@@ -8,11 +8,16 @@ import QuotesView from "@/features/crm/QuotesView";
 const mockUseCrmStore = vi.fn();
 
 vi.mock("@/features/crm/stores/crmStore", () => ({
-  useCrmStore: () => mockUseCrmStore(),
+  useCrmStore: (selector?: (s: unknown) => unknown) => {
+    const state = mockUseCrmStore();
+    return typeof selector === "function" ? selector(state) : state;
+  },
 }));
 
-vi.mock("@/features/crm/CrmDemoBanner", () => ({
-  CrmDemoBanner: () => <div data-testid="crm-demo-banner">Demo workspace</div>,
+vi.mock("@/features/crm/CrmWorkspaceBanner", () => ({
+  CrmWorkspaceBanner: () => (
+    <div data-testid="crm-workspace-banner">Browser-only CRM</div>
+  ),
 }));
 
 vi.mock("@/features/shared/shell/GlobalNavHeader", () => ({
@@ -67,6 +72,10 @@ describe("Embedded CRM chrome", () => {
       addQuote: vi.fn(),
       updateQuote: vi.fn(),
       deleteQuote: vi.fn(),
+      seedDemoData: vi.fn(),
+      clearAll: vi.fn(),
+      exportSnapshot: vi.fn(),
+      importSnapshot: vi.fn(),
     });
   });
 
@@ -74,7 +83,7 @@ describe("Embedded CRM chrome", () => {
     render(<ProjectsView embedded />);
 
     expect(screen.queryByTestId("mock-global-nav-header")).not.toBeInTheDocument();
-    expect(screen.getByTestId("crm-demo-banner")).toBeInTheDocument();
+    expect(screen.getByTestId("crm-workspace-banner")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /New Project/i })).toBeInTheDocument();
     expect(
       screen.queryByRole("heading", { level: 1, name: /Projects Tracker/i }),
@@ -85,7 +94,7 @@ describe("Embedded CRM chrome", () => {
     render(<ClientsView embedded />);
 
     expect(screen.queryByTestId("mock-global-nav-header")).not.toBeInTheDocument();
-    expect(screen.getByTestId("crm-demo-banner")).toBeInTheDocument();
+    expect(screen.getByTestId("crm-workspace-banner")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /New Client/i })).toBeInTheDocument();
     expect(
       screen.queryByRole("heading", { level: 1, name: /Client Directory/i }),
@@ -96,7 +105,7 @@ describe("Embedded CRM chrome", () => {
     render(<QuotesView embedded />);
 
     expect(screen.queryByTestId("mock-global-nav-header")).not.toBeInTheDocument();
-    expect(screen.getByTestId("crm-demo-banner")).toBeInTheDocument();
+    expect(screen.getByTestId("crm-workspace-banner")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Create Quote/i })).toBeInTheDocument();
     expect(
       screen.queryByRole("heading", { level: 1, name: /Deals Pipeline/i }),

@@ -91,7 +91,7 @@ export function HomepageHero() {
             priority={currentIndex === 0}
             loading={currentIndex === 0 ? "eager" : undefined}
             sizes="100vw"
-            className="object-cover object-[68%_52%] md:object-[64%_48%]"
+            className="object-cover object-center md:object-[64%_48%]"
             onError={() => setFailedImageSrc(currentImage.src)}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/62 to-black/48 lg:bg-gradient-to-r lg:from-black/86 lg:via-black/58 lg:to-black/18" />

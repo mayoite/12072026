@@ -2,7 +2,12 @@ import { redirect } from "next/navigation";
 import { DashboardClient } from "@/app/(site)/dashboard/DashboardClient";
 import { SiteWorkspaceShell } from "@/components/home/layout";
 import { getOptionalUser } from "@/lib/auth/session";
+import { buildAccessRedirect } from "@/lib/auth/plannerRedirect";
 
+/**
+ * Critical authenticated hub. Metadata lives in layout (noindex + absolute title).
+ * Unauthenticated visitors return here after sign-in via sanitized `next`.
+ */
 export default async function DashboardPage({
   searchParams,
 }: {
@@ -11,7 +16,7 @@ export default async function DashboardPage({
   const user = await getOptionalUser();
 
   if (!user) {
-    redirect("/access?next=%2Fdashboard");
+    redirect(buildAccessRedirect("/dashboard"));
   }
 
   const resolved = searchParams ? await searchParams : {};

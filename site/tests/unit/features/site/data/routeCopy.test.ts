@@ -175,7 +175,7 @@ describe("route copy — legal and catalog routes", () => {
 
   it("category, compare, quote cart, and PDP route copy expose UI labels", () => {
     expect(CATEGORY_ROUTE_COPY.compareActiveLabel).toContain("{count}");
-    expect(COMPARE_ROUTE_COPY.emptyTitle).toMatch(/No products/i);
+    expect(COMPARE_ROUTE_COPY.emptyTitle).toMatch(/empty|shortlist/i);
     expect(QUOTE_CART_ROUTE_COPY.summaryTitle).toBe("Request summary");
     expect(PDP_ROUTE_COPY.ctas.addToQuote).toBe("Add to Quote Cart");
     expect(PDP_ROUTE_COPY.summary.visualCoverage).toContain("{count}");

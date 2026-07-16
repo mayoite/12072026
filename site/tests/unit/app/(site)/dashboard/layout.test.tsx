@@ -4,9 +4,12 @@ import React from "react";
 import DashboardLayout, { metadata } from "@/app/(site)/dashboard/layout";
 
 describe("app/(site)/dashboard/layout.tsx", () => {
-  it("exports noindex dashboard metadata", () => {
-    expect(metadata.title).toBe("Dashboard | One&Only");
+  it("exports noindex dashboard metadata with absolute title", () => {
+    expect(metadata.title).toEqual({
+      absolute: "Member dashboard | Office furniture workspace | One&Only",
+    });
     expect(metadata.robots).toEqual({ index: false, follow: false });
+    expect(metadata.alternates?.canonical).toMatch(/\/dashboard\/?$/);
   });
 
   it("renders children directly", () => {

@@ -14,8 +14,14 @@ describe("ChooseProductPage", () => {
   it("renders guest mode with guest canvas entry", () => {
     render(<ChooseProductPage guestMode authenticated={false} />);
 
-    expect(screen.getByText("Guest access")).toBeInTheDocument();
-    const entry = screen.getByRole("link", { name: /Workspace Planner/i });
+    expect(screen.getByText("Guest session")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: /Start planning office furniture/i,
+      }),
+    ).toBeInTheDocument();
+    const entry = screen.getByTestId("choose-product-planner-launch");
     expect(entry.getAttribute("href")).toContain("/planner/guest");
     expect(entry.getAttribute("href")).toContain("siteSource=");
     expect(screen.queryByRole("link", { name: "Open portal" })).not.toBeInTheDocument();
@@ -24,8 +30,8 @@ describe("ChooseProductPage", () => {
   it("renders member mode with canvas entry and portal link", () => {
     render(<ChooseProductPage guestMode={false} authenticated />);
 
-    expect(screen.getByText("Member access")).toBeInTheDocument();
-    const entry = screen.getByRole("link", { name: /Workspace Planner/i });
+    expect(screen.getByText("Signed-in session")).toBeInTheDocument();
+    const entry = screen.getByTestId("choose-product-planner-launch");
     expect(entry.getAttribute("href")).toContain("/planner/canvas");
     expect(entry.getAttribute("href")).toContain("siteSource=");
     expect(screen.getByRole("link", { name: "Open portal" })).toHaveAttribute(
@@ -38,8 +44,13 @@ describe("ChooseProductPage", () => {
     );
   });
 
-  it("shows access-check label when neither guest nor authenticated", () => {
+  it("shows sign-in path when neither guest nor authenticated", () => {
     render(<ChooseProductPage guestMode={false} authenticated={false} />);
-    expect(screen.getByText("Access check")).toBeInTheDocument();
+    expect(screen.getByText("Sign-in required")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Sign in/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Continue as guest/i })).toHaveAttribute(
+      "href",
+      "/choose-product?mode=guest",
+    );
   });
 });

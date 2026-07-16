@@ -1,21 +1,20 @@
-import "@/tests/helpers/nextIntlServerEnMock";
-import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { permanentRedirect } from "next/navigation";
 import Page from "@/app/(site)/imprint/page";
 
-vi.mock("@/components/home/Hero", () => ({
-  Hero: () => <div data-testid="Hero" />,
-}));
-vi.mock("@/components/shared/ContactTeaser", () => ({
-  ContactTeaser: () => <div data-testid="ContactTeaser" />,
+vi.mock("next/navigation", () => ({
+  permanentRedirect: vi.fn(() => {
+    throw new Error("NEXT_REDIRECT");
+  }),
 }));
 
 describe("app/(site)/imprint/page.tsx", () => {
-  it("renders successfully", async () => {
-    const page = await Page();
-    render(page);
-    expect(screen.getByTestId("Hero")).toBeInTheDocument();
-    expect(screen.getByTestId("ContactTeaser")).toBeInTheDocument();
-    expect(screen.getByTestId("home-marketing-layout")).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("permanently redirects to /terms (imprint retired)", () => {
+    expect(() => Page()).toThrow("NEXT_REDIRECT");
+    expect(permanentRedirect).toHaveBeenCalledWith("/terms");
   });
 });

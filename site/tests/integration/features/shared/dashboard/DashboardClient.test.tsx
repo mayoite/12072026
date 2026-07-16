@@ -42,9 +42,9 @@ describe("DashboardClient", () => {
       await screen.findByText(/2 saved local planner sessions ready to resume/),
     ).toBeInTheDocument();
     expect(screen.getByText("Recent work available")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Open planner/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /^Open canvas$/i })).toHaveAttribute(
       "href",
-      "/planner",
+      "/planner/canvas",
     );
   });
 

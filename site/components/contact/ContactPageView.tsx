@@ -22,7 +22,8 @@ export async function ContactPageView({ intent, source }: ContactPageViewProps) 
   const offices = t.raw("offices") as ContactOffice[];
   const contactJsonLd = buildPageJsonLd(SITE_URL, {
     path: "/contact",
-    title: t("heroTitle"),
+    title:
+      "Contact office furniture sales | Patna, Ranchi, Bihar & Jharkhand | One&Only",
     description: t("heroSubtitle"),
     pageType: "ContactPage",
   });
@@ -50,7 +51,10 @@ export async function ContactPageView({ intent, source }: ContactPageViewProps) 
                 <p className="page-copy text-body mt-3">{t("introDescription")}</p>
                 <p className="page-copy-sm text-body mt-4">
                   {t("resourceDeskLead")}{" "}
-                  <Link href="/downloads" className="font-semibold text-primary transition-colors hover:text-primary-hover">
+                  <Link
+                    href="/downloads"
+                    className="font-semibold text-primary transition-colors hover:text-primary-hover min-h-11 inline-flex items-center"
+                  >
                     {t("resourceDeskCta")}
                   </Link>{" "}
                   {t("resourceDeskTail")}
@@ -59,54 +63,63 @@ export async function ContactPageView({ intent, source }: ContactPageViewProps) 
 
               <div className="grid gap-4 sm:grid-cols-2">
                 {offices.map((office) => (
-                  <div key={office.title} className="scheme-panel scheme-border flex flex-col gap-4 rounded-2xl border p-6">
-                    <p className="typ-label text-body">{office.title}</p>
-                    <div className="page-copy text-body">
+                  <article
+                    key={office.title}
+                    className="scheme-panel scheme-border flex flex-col gap-4 rounded-2xl border p-6"
+                  >
+                    <h3 className="typ-label text-body font-semibold">{office.title}</h3>
+                    <address className="page-copy text-body not-italic">
                       {office.lines.map((line) => (
                         <p key={`${office.title}-${line}`}>{line}</p>
                       ))}
-                    </div>
-                  </div>
+                    </address>
+                  </article>
                 ))}
               </div>
 
-              <div className="scheme-panel scheme-border flex flex-col gap-4 rounded-2xl border p-6">
+              <div
+                className="scheme-panel scheme-border flex flex-col gap-4 rounded-2xl border p-6"
+                aria-label="Phone, email, and service region"
+              >
                 <div className="contact-channel">
-                  <MapPin className="contact-channel__icon" />
+                  <MapPin className="contact-channel__icon" aria-hidden />
                   <div>
                     <p className="typ-label text-body">Service region</p>
                     <p className="page-copy text-body">{SITE_CONTACT.regionLine}</p>
                   </div>
                 </div>
                 <div className="contact-channel">
-                  <Phone className="contact-channel__icon" />
+                  <Phone className="contact-channel__icon" aria-hidden />
                   <div>
                     <p className="contact-channel__label">Quotes and planning</p>
                     <a
                       href={`tel:${SITE_CONTACT.salesPhone.replace(/\s+/g, "")}`}
-                      className="contact-channel__link"
+                      className="contact-channel__link min-h-11 inline-flex items-center"
                     >
                       {SITE_CONTACT.salesPhone}
                     </a>
                   </div>
                 </div>
                 <div className="contact-channel">
-                  <Phone className="contact-channel__icon" />
+                  <Phone className="contact-channel__icon" aria-hidden />
                   <div>
                     <p className="contact-channel__label">Support and enquiries</p>
                     <a
                       href={`tel:${SITE_CONTACT.supportPhone.replace(/\s+/g, "")}`}
-                      className="contact-channel__link"
+                      className="contact-channel__link min-h-11 inline-flex items-center"
                     >
                       {SITE_CONTACT.supportPhone}
                     </a>
                   </div>
                 </div>
                 <div className="contact-channel">
-                  <Mail className="contact-channel__icon" />
+                  <Mail className="contact-channel__icon" aria-hidden />
                   <div>
                     <p className="contact-channel__label">Email</p>
-                    <a href={`mailto:${SITE_CONTACT.salesEmail}`} className="contact-channel__link">
+                    <a
+                      href={`mailto:${SITE_CONTACT.salesEmail}`}
+                      className="contact-channel__link min-h-11 inline-flex items-center"
+                    >
                       {SITE_CONTACT.salesEmail}
                     </a>
                   </div>

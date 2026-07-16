@@ -106,4 +106,25 @@ describe('app/(site)/portal/page.tsx', () => {
     expect(view).toHaveAttribute('data-plan-count', '0');
     expect(view).toHaveAttribute('data-list-error', '');
   });
+
+  it('surfaces listError when plan list never resolves (timeout path)', async () => {
+    vi.useFakeTimers();
+    vi.mocked(isPlannerDatabaseConfigured).mockReturnValue(true);
+    vi.mocked(listPlannerDocumentsFromStore).mockImplementation(
+      () => new Promise(() => {
+        /* never settles — hang simulation */
+      }),
+    );
+
+    const pagePromise = PortalPage();
+    await vi.advanceTimersByTimeAsync(8_000);
+    const page = await pagePromise;
+    render(page);
+
+    const view = screen.getByTestId('portal-page-view');
+    expect(view).toHaveAttribute('data-plan-count', '0');
+    expect(view.getAttribute('data-list-error') || '').toMatch(/timed out/i);
+
+    vi.useRealTimers();
+  });
 });

@@ -10,6 +10,7 @@ import { PlannerLaunchLink } from "@/components/ui/PlannerLaunchLink";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 import { type GroupedCategory } from "@/lib/navigation";
 import { SITE_NAV_LINKS, SITE_CTA_LINKS } from "@/features/site/data/navigation";
+import { LanguageSwitcher } from "@/components/site/LanguageSwitcher";
 import { isPlannerEntryHref } from "@/lib/analytics/plannerEntry";
 import { trackSiteSearchSubmitted } from "@/lib/analytics/siteEvents";
 import { cn } from "@/lib/utils";
@@ -449,6 +450,10 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef, groupedCategori
           >
             Call +91 98356 30940
           </TrackedLink>
+          <div className="mb-3">
+            <p className="typ-label mb-2 text-muted">Language</p>
+            <LanguageSwitcher variant="header" className="w-full [&>select]:max-w-none [&>select]:w-full" />
+          </div>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {SITE_CTA_LINKS.map((cta) => (
               <TrackedLink

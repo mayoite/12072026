@@ -8,11 +8,26 @@ vi.mock("@/features/site/data/routeMetadata", () => ({
 }));
 
 vi.mock("@/features/site/data/routeCopy", () => ({
+  PORTFOLIO_PAGE_COPY: {
+    heroTitle: "Portfolio",
+    heroSubtitle: "Office furniture projects for test.",
+    eyebrow: "Project gallery",
+    title: "Excellence.",
+    totalTemplate: "{clients} clients - {photos} photos",
+  },
   PORTFOLIO_CLIENTS: [
     { id: "alpha", folder: "Alpha Team", name: "Alpha Team", location: "Patna", summary: "Alpha summary" },
     { id: "beta", folder: "Beta", name: "Beta", location: "Delhi", summary: "Beta summary" },
     { id: "gamma", folder: "Gamma", name: "Gamma", location: "Mumbai", summary: "Gamma summary" },
   ],
+}));
+
+vi.mock("@/features/site/data/seo", () => ({
+  buildPageJsonLd: () => ({ "@type": "CollectionPage" }),
+}));
+
+vi.mock("@/lib/security/sanitize", () => ({
+  sanitizeJsonForScript: (v: unknown) => JSON.stringify(v),
 }));
 
 vi.mock("node:fs/promises", () => ({
