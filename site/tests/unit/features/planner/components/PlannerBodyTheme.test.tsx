@@ -21,6 +21,17 @@ describe("PlannerBodyTheme", () => {
     expect(document.body.classList.contains("scheme-page")).toBe(false);
   });
 
+  it("applies marketing shell class on planner landing route", () => {
+    vi.mocked(usePathname).mockReturnValue("/planner");
+
+    render(<PlannerBodyTheme />);
+
+    expect(document.body.classList.contains("planner-workspace")).toBe(false);
+    expect(document.body.classList.contains("planner-root")).toBe(false);
+    expect(document.body.classList.contains("scheme-page")).toBe(true);
+    expect(document.body.classList.contains("overflow-hidden")).toBe(false);
+  });
+
   it("applies marketing shell class on other routes", () => {
     vi.mocked(usePathname).mockReturnValue("/home");
 

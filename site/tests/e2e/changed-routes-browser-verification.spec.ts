@@ -120,6 +120,9 @@ const ROUTES: RouteCheck[] = [
 
       if (viewport.width < 768) {
         await expect(page.getByRole("button", { name: /Toggle inventory panel/i })).toBeVisible();
+      } else {
+        await expect(page.getByRole("button", { name: "Grid", exact: true })).toBeVisible();
+        await expect(page.getByRole("button", { name: "Snap", exact: true })).toBeVisible();
       }
 
       await expect(page.locator('[data-testid="planner-fabric-stage"], canvas').first()).toBeVisible({
@@ -161,7 +164,10 @@ const ROUTES: RouteCheck[] = [
       await expect(page.getByRole("button", { name: /^Publish$/ })).toBeVisible({
         timeout: 45_000,
       });
-      await expect(page.locator('[data-testid="admin-footprint-mm-proof"]')).toBeVisible();
+      await expect(page.getByTestId("admin-svg-edit-shell")).toBeVisible();
+      await expect(page.getByTestId("admin-svg-studio-status-footprint")).toContainText(
+        /1200.*600/,
+      );
       await assertNoHorizontalOverflow(page, "main, .admin-page, body");
       await runAxe(page, "admin-svg-edit");
     },

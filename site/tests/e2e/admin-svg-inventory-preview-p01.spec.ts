@@ -17,11 +17,9 @@ test.describe("Admin P01 inventory preview", () => {
     await page.goto("/admin/svg-editor/desk-linear-1200-001", {
       waitUntil: "domcontentloaded",
     });
-    const proof = page.locator('[data-testid="admin-footprint-mm-proof"]');
-    await expect(proof).toBeVisible({ timeout: 45_000 });
-    await expect(proof).toHaveAttribute("data-aligned", "true");
-    await expect(proof).toHaveAttribute("data-width-mm", "1200");
-    await expect(proof).toHaveAttribute("data-depth-mm", "600");
+    const footprint = page.getByTestId("admin-svg-studio-status-footprint");
+    await expect(footprint).toBeVisible({ timeout: 45_000 });
+    await expect(footprint).toHaveText(/Footprint 1200×600 mm/);
   });
 
   test("studio stage is legible at default and zoomed-out viewport", async ({ page }) => {

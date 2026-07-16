@@ -24,6 +24,14 @@ async function dismissOnboarding(page) {
   }
 }
 
+async function waitForWorkspaceReady(page) {
+  const preparing = page.getByText(/Preparing your editor/i);
+  if (await preparing.isVisible({ timeout: 3000 }).catch(() => false)) {
+    await preparing.waitFor({ state: "hidden", timeout: 120_000 });
+  }
+  await page.getByTestId("planner-fabric-stage").waitFor({ timeout: 120_000 });
+}
+
 async function enterGuestCanvas(page) {
   await page.goto("http://localhost:3000/planner/guest/?plannerDevTools=1", {
     waitUntil: "domcontentloaded",
@@ -46,7 +54,7 @@ async function enterGuestCanvas(page) {
     await submit.click({ force: true });
   }
 
-  await page.getByTestId("planner-fabric-stage").waitFor({ timeout: 90_000 });
+  await waitForWorkspaceReady(page);
 }
 
 async function main() {
