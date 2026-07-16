@@ -14,6 +14,8 @@ import { AdminSvgEditorFeedbackRegion } from "./AdminSvgEditorFeedbackRegion";
 import { AdminSvgEditorTopBar } from "./AdminSvgEditorTopBar";
 import { AdminSvgPreviewRail } from "./AdminSvgPreviewRail";
 import { AdminSvgStudioSidebar } from "./AdminSvgStudioSidebar";
+import { seedFootprintExcalidrawElements } from "../../editor/seedFootprintExcalidrawElements";
+import { countActiveExcalidrawElements } from "../../editor/excalidrawDocumentGuards";
 import type { AdminSvgEditorShellProps } from "./types";
 
 const ExcalidrawCanvas = dynamic(() => import("../../editor/ExcalidrawClient"), {
@@ -61,6 +63,11 @@ export function AdminSvgEditorShell({
   onDocument,
   onError,
 }: AdminSvgEditorShellProps) {
+  const initialExcalidrawElements =
+    countActiveExcalidrawElements(form.excalidrawElements) > 0
+      ? form.excalidrawElements
+      : seedFootprintExcalidrawElements(form.geometry);
+
   return (
     <div
       className="admin-page admin-page--svg-engine admin-svg-editor-workspace"
@@ -167,7 +174,7 @@ export function AdminSvgEditorShell({
                 }
               />
             )}
-            initialExcalidrawElements={form.excalidrawElements}
+            initialExcalidrawElements={initialExcalidrawElements}
             initialSvg=""
             checksum={artifactStatus.hash ?? ""}
             readRequest={1}

@@ -120,6 +120,18 @@ describe("AdminSvgEditorTopBar", () => {
     );
   });
 
+  it("shows Never published when artifact is missing", () => {
+    render(
+      <AdminSvgEditorTopBar {...baseProps} artifactState="missing" />,
+    );
+    expect(screen.getByTestId("admin-shell-source")).toHaveTextContent(
+      /^Never published$/,
+    );
+    expect(screen.getByTestId("admin-shell-source")).not.toHaveTextContent(
+      /Last published/i,
+    );
+  });
+
   it("disables reset when clean; enables when dirty", async () => {
     const user = userEvent.setup();
     const onReset = vi.fn();

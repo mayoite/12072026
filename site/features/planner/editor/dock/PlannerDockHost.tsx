@@ -1,10 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import {
+  DockviewDefaultTab,
   DockviewReact,
+  themeLight,
   type DockviewApi,
   type DockviewReadyEvent,
+  type IDockviewPanelHeaderProps,
   type IDockviewPanelProps,
 } from "dockview-react";
 import "dockview-react/dist/styles/dockview.css";
@@ -12,8 +15,10 @@ import "dockview-react/dist/styles/dockview.css";
 import type { LayoutPresetId } from "../workspaceLayout";
 import {
   applyPlannerDockPreset,
+  ensurePlannerDockPanel,
   persistDockLayout,
   tryRestoreDockLayout,
+  type PlannerDockPanelId,
 } from "./plannerDockPresets";
 import {
   PlannerDockSlotsProvider,
@@ -21,6 +26,8 @@ import {
   type PlannerDockSlots,
 } from "./plannerDockSlots";
 import styles from "./planner-dock.module.css";
+
+type Disposable = { dispose: () => void };
 
 function SlotPanel({ slot }: { slot: keyof PlannerDockSlots }) {
   const node = usePlannerDockSlot(slot);
@@ -43,6 +50,10 @@ function ToolsPanel(_props: IDockviewPanelProps) {
   return <SlotPanel slot="tools" />;
 }
 
+function PlannerDockTab(props: IDockviewPanelHeaderProps) {
+  return <DockviewDefaultTab {...props} hideClose={props.api.id === "canvas"} />;
+}
+
 const DOCK_COMPONENTS = {
   canvas: CanvasPanel,
   inventory: InventoryPanel,
@@ -61,6 +72,17 @@ export interface PlannerDockHostProps {
   className?: string;
 }
 
+function seedLayout(api: DockviewApi, layoutPresetId: LayoutPresetId | "custom"): void {
+  if (api.panels.length > 0) return;
+  const restored = tryRestoreDockLayout(api);
+  if (!restored || api.panels.length === 0) {
+    applyPlannerDockPreset(
+      api,
+      layoutPresetId === "custom" ? "default" : layoutPresetId,
+    );
+  }
+}
+
 /**
  * Dockview host for modular planner chrome (option 1).
  * react-resizable-panels stays for 2D/3D split only (option 3).
@@ -73,7 +95,9 @@ export function PlannerDockHost({
   className,
 }: PlannerDockHostProps) {
   const apiRef = useRef<DockviewApi | null>(null);
-  const primedRef = useRef(false);
+  const layoutPresetIdRef = useRef(layoutPresetId);
+  layoutPresetIdRef.current = layoutPresetId;
+  const disposablesRef = useRef<Disposable[]>([]);
   const persistTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const schedulePersist = useCallback(() => {
@@ -88,20 +112,24 @@ export function PlannerDockHost({
       apiRef.current = event.api;
       onApiReady?.(event.api);
 
-      if (!primedRef.current) {
-        primedRef.current = true;
-        const restored = tryRestoreDockLayout(event.api);
-        if (!restored) {
-          applyPlannerDockPreset(
-            event.api,
-            layoutPresetId === "custom" ? "default" : layoutPresetId,
-          );
-        }
-      }
+      // Strict Mode remounts Dockview empty while this host instance survives —
+      // always re-seed when the API has no panels.
+      for (const d of disposablesRef.current) d.dispose();
+      disposablesRef.current = [];
 
-      event.api.onDidLayoutChange(() => schedulePersist());
+      seedLayout(event.api, layoutPresetIdRef.current);
+
+      disposablesRef.current.push(
+        event.api.onDidRemovePanel((removed) => {
+          if (removed.id === "canvas") {
+            ensurePlannerDockPanel(event.api, "canvas");
+          }
+          schedulePersist();
+        }),
+        event.api.onDidLayoutChange(() => schedulePersist()),
+      );
     },
-    [layoutPresetId, onApiReady, schedulePersist],
+    [onApiReady, schedulePersist],
   );
 
   useEffect(() => {
@@ -113,6 +141,8 @@ export function PlannerDockHost({
 
   useEffect(() => {
     return () => {
+      for (const d of disposablesRef.current) d.dispose();
+      disposablesRef.current = [];
       if (persistTimer.current) clearTimeout(persistTimer.current);
     };
   }, []);
@@ -128,7 +158,9 @@ export function PlannerDockHost({
         <DockviewReact
           className={styles.dockview}
           components={components}
+          defaultTabComponent={PlannerDockTab}
           onReady={onReady}
+          theme={themeLight}
           disableFloatingGroups={false}
           singleTabMode="fullwidth"
         />
@@ -137,4 +169,5 @@ export function PlannerDockHost({
   );
 }
 
-export type { DockviewApi };
+export type { DockviewApi, PlannerDockPanelId };
+export { ensurePlannerDockPanel };

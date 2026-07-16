@@ -1233,6 +1233,19 @@
   min-width: 0;
 }
 
+.statusMetrics {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  color: var(--ws-text-secondary);
+}
+
+.statusMetrics > span:first-child {
+  white-space: nowrap;
+}
+
 .statusRight {
   display: flex;
   align-items: center;
@@ -1720,6 +1733,7 @@
   }
 
   .status > span,
+  .statusMetrics,
   .statusLeft,
   .statusRight {
     flex: 0 0 auto;

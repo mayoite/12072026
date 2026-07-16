@@ -7,7 +7,8 @@
 import type { BlockDescriptor } from "@/features/planner/project/catalog/svg/svgBlockDescriptorLoader";
 
 export function makeNewBlockDescriptorStub(): BlockDescriptor {
-  const now = Math.floor(Date.now());
+  // Catalog descriptors store Unix seconds (not Date.now() ms).
+  const now = Math.floor(Date.now() / 1000);
   return {
     schemaVersion: "2026-07-04.v2",
     id: "00000000-0000-4000-8000-000000000000",

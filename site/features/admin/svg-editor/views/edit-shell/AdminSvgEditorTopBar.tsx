@@ -42,6 +42,20 @@ function releasedSymbolLabel(state: SvgArtifactState): string {
   }
 }
 
+function revisionSourceLabel(
+  state: SvgArtifactState,
+  updatedAtLabel: string,
+): string {
+  switch (state) {
+    case "missing":
+      return "Never published";
+    case "invalid":
+      return `Released symbol invalid · checked ${updatedAtLabel}`;
+    case "published":
+      return `Last published ${updatedAtLabel}`;
+  }
+}
+
 function publishButtonTitle(args: {
   readonly canPublish: boolean;
   readonly submitting: boolean;
@@ -115,7 +129,14 @@ export function AdminSvgEditorTopBar({
           ) : null}
         </h1>
         <p className="admin-svg-engine-shell__source" data-testid="admin-shell-source">
-          Last published <time dateTime={updatedAtLabel}>{updatedAtLabel}</time>
+          {artifactState === "published" ? (
+            <>
+              Last published{" "}
+              <time dateTime={updatedAtLabel}>{updatedAtLabel}</time>
+            </>
+          ) : (
+            revisionSourceLabel(artifactState, updatedAtLabel)
+          )}
         </p>
         <p className="admin-svg-engine-shell__source" data-testid="admin-shell-state">
           {authoringLifecycleLabel(authoringLifecycle)}

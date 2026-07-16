@@ -156,7 +156,9 @@ export function LiveCompiledSvgPreview({
         >
           <div className="admin-svg-preview__stage admin-svg-preview__stage--empty">
             <span className="admin-svg-preview__empty">
-              {pending ? "Compiling…" : "Edit a field to generate the preview"}
+              {pending
+                ? "Compiling…"
+                : "Draw a shape in the visual studio to generate the preview"}
             </span>
           </div>
         </div>

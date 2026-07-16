@@ -106,6 +106,8 @@ export interface TopBarProps {
   layoutPresetId?: LayoutPresetId | "custom";
   onApplyLayoutPreset?: (presetId: LayoutPresetId) => void;
   onResetLayout?: () => void;
+  /** Slim chrome: open a Dockview module by id. */
+  onShowDockPanel?: (panelId: "inventory" | "tools" | "properties" | "layers") => void;
   /**
    * slim = Dockview owns modules; TopBar is brand + history + view + save + Layout/overflow.
    * full = legacy chrome packs + desktop Grid/Snap strip.
@@ -181,6 +183,7 @@ export function TopBar({
   layoutPresetId = "custom",
   onApplyLayoutPreset,
   onResetLayout,
+  onShowDockPanel,
   chromeMode = "full",
 }: TopBarProps) {
   const [isEditingName, setIsEditingName] = useState(false);
@@ -712,6 +715,15 @@ export function TopBar({
                     onResetLayout?.();
                     return;
                   }
+                  if (keyStr.startsWith("show:")) {
+                    const panelId = keyStr.slice("show:".length) as
+                      | "inventory"
+                      | "tools"
+                      | "properties"
+                      | "layers";
+                    onShowDockPanel?.(panelId);
+                    return;
+                  }
                   if (keyStr.startsWith("restore:")) {
                     const packId = keyStr.slice("restore:".length) as ChromePackId;
                     onChromePlacement?.(packId, "topbar");
@@ -732,6 +744,22 @@ export function TopBar({
                 <MenuItem id="reset" className={styles.dropdownItem}>
                   Reset layout
                 </MenuItem>
+                {onShowDockPanel ? (
+                  <>
+                    <MenuItem id="show:inventory" className={styles.dropdownItem}>
+                      Show Inventory
+                    </MenuItem>
+                    <MenuItem id="show:tools" className={styles.dropdownItem}>
+                      Show Tools
+                    </MenuItem>
+                    <MenuItem id="show:properties" className={styles.dropdownItem}>
+                      Show Properties
+                    </MenuItem>
+                    <MenuItem id="show:layers" className={styles.dropdownItem}>
+                      Show Layers
+                    </MenuItem>
+                  </>
+                ) : null}
                 {overflowPacks.map((pack) => (
                   <MenuItem
                     key={pack.id}

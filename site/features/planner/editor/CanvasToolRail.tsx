@@ -599,9 +599,9 @@ export function CanvasToolRail({
 
       <span className={styles.srOnly}>
         Canvas drawing tools.
-        {dockManaged
-          ? " Drag the Dockview tab to float or dock this module."
-          : " Drag the grip to float. Drop on left or top edge to dock."}
+        {!dockManaged
+          ? " Drag the grip to float. Drop on left or top edge to dock."
+          : null}
       </span>
 
       {renderGroups(dockManaged ? false : rail.splitGroups)}

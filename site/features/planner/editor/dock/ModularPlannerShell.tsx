@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useId, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useId, useMemo, useRef, useState, type ReactNode } from "react";
 
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
 import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
@@ -13,8 +13,9 @@ import type { LayoutPresetId } from "../workspaceLayout";
 import type { PlannerPersistStorage } from "../workspaceStatusLabels";
 import type { WorkspacePlanMetrics } from "../workspacePlanMetrics";
 import styles from "../workspace.module.css";
-import { PlannerDockHost } from "./PlannerDockHost";
+import { PlannerDockHost, type DockviewApi } from "./PlannerDockHost";
 import {
+  ensurePlannerDockPanel,
   PLANNER_DOCKVIEW_STORAGE_KEY,
 } from "./plannerDockPresets";
 import type { PlannerDockSlots } from "./plannerDockSlots";
@@ -119,8 +120,9 @@ export function ModularPlannerShell({
   showTools = true,
 }: ModularPlannerShellProps) {
   const id = useId();
+  const dockApiRef = useRef<DockviewApi | null>(null);
   const [layoutPresetId, setLayoutPresetId] = useState<LayoutPresetId | "custom">(
-    "default",
+    "custom",
   );
   const [layoutEpoch, setLayoutEpoch] = useState(0);
 
@@ -146,6 +148,20 @@ export function ModularPlannerShell({
   const resetLayout = useCallback(() => {
     applyPreset("default");
   }, [applyPreset]);
+
+  const showDockPanel = useCallback(
+    (panelId: "inventory" | "tools" | "properties" | "layers") => {
+      const api = dockApiRef.current;
+      if (!api) return;
+      ensurePlannerDockPanel(api, panelId);
+      setLayoutPresetId("custom");
+    },
+    [],
+  );
+
+  const handleDockApiReady = useCallback((api: DockviewApi) => {
+    dockApiRef.current = api;
+  }, []);
 
   const toolsNode = showTools ? (
     <CanvasToolRail
@@ -211,6 +227,7 @@ export function ModularPlannerShell({
         layoutPresetId={layoutPresetId}
         onApplyLayoutPreset={applyPreset}
         onResetLayout={resetLayout}
+        onShowDockPanel={showDockPanel}
         chromeMode="slim"
         {...topBarSaveStatusProps}
       />
@@ -220,18 +237,23 @@ export function ModularPlannerShell({
           slots={slots}
           layoutPresetId={layoutPresetId}
           layoutEpoch={layoutEpoch}
+          onApiReady={handleDockApiReady}
         />
       </div>
 
       <footer className={`${styles.status} pw-status-bar`} aria-label="Plan status">
         {planMetrics ? (
-          <>
-            <span>{planMetrics.objects} objects</span>
-            <span>{planMetrics.walls} walls</span>
-            <span>{planMetrics.furniture} furniture</span>
-            {planMetrics.workstationSeats > 0 ? (
-              <span>{planMetrics.workstationSeats} seats</span>
-            ) : null}
+          <div className={styles.statusMetrics} data-testid="planner-status-metrics">
+            <span>
+              {planMetrics.objects} objects
+              {planMetrics.walls > 0 ? ` · ${planMetrics.walls} walls` : ""}
+              {planMetrics.furniture > 0
+                ? ` · ${planMetrics.furniture} furniture`
+                : ""}
+              {planMetrics.workstationSeats > 0
+                ? ` · ${planMetrics.workstationSeats} seats`
+                : ""}
+            </span>
             <span
               className={
                 planMetrics.validationErrors > 0
@@ -248,8 +270,7 @@ export function ModularPlannerShell({
                   ? "Quote ready"
                   : "Add furniture for quote"}
             </span>
-            <span>{planMetrics.floorLabel}</span>
-          </>
+          </div>
         ) : null}
         <div className={styles.statusLeft}>{statusLeft}</div>
         <div className={styles.statusRight}>{statusRight}</div>

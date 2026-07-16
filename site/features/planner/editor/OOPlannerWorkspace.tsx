@@ -114,7 +114,6 @@ import { formatLengthDisplay } from "@/features/planner/project/model/units";
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
 import type { PlannerEntityCollection } from "@/features/planner/project/model/actions/projectActions";
 import type { PaletteCommandHandlers } from "@/features/planner/project/lib/commands/paletteCommands";
-import { buildSnapStatusLabel } from "@/features/planner/lib/snapStatusLabel";
 import {
   DEFAULT_PLANNER_WORKSPACE_PREFERENCES,
 } from "@/features/planner/project/store/workspacePreferences";
@@ -1156,14 +1155,14 @@ export function OOPlannerWorkspace({
     },
   });
 
-  const snapPrefsLabel = buildSnapStatusLabel(snapEnabled, gridEnabled);
+  // Only show snap/measure when the canvas is actively reporting — not always-on prefs noise.
   const measurementLabel =
     canvasStatus?.previewLengthMm !== null &&
     canvasStatus?.previewLengthMm !== undefined
       ? formatLengthDisplay(canvasStatus.previewLengthMm, displayUnit)
       : canvasStatus?.snapKind && canvasStatus.snapKind !== "none"
         ? formatSnapStatus(canvasStatus.snapKind)
-        : `Snap: ${snapPrefsLabel}`;
+        : null;
 
   const selectionLabel = formatSelectionStatus(workspaceCanvas.selection);
   const planMetrics = summarizeFloorMetrics(activeFloor, validationResult.errors);
@@ -1380,14 +1379,27 @@ export function OOPlannerWorkspace({
                   : "Loading catalog…"}
               </span>
             ) : null}
-            <span
-              className="open3d-status-pill open3d-status-pill--muted"
-              data-testid="open3d-save-status-bar"
-              data-status={autosave.status}
-              data-storage={saveCloudEnabled ? saveStorage : "local"}
-            >
-              {saveStatusBarLabel}
-            </span>
+            {autosave.status === "saving" ||
+            autosave.status === "unsaved" ||
+            autosave.status === "error" ? (
+              <span
+                className="open3d-status-pill open3d-status-pill--muted"
+                data-testid="open3d-save-status-bar"
+                data-status={autosave.status}
+                data-storage={saveCloudEnabled ? saveStorage : "local"}
+              >
+                {saveStatusBarLabel}
+              </span>
+            ) : (
+              <span
+                className="sr-only"
+                data-testid="open3d-save-status-bar"
+                data-status={autosave.status}
+                data-storage={saveCloudEnabled ? saveStorage : "local"}
+              >
+                {saveStatusBarLabel}
+              </span>
+            )}
             {validationResult.issues.length > 0 ? (
               <button
                 type="button"

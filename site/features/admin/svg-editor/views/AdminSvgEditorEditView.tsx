@@ -37,11 +37,16 @@ import {
   confirmDiscardUnsavedNavigation,
   confirmResetToPublished,
 } from "../contracts/destructiveConfirmMessages";
+import {
+  countActiveExcalidrawElements,
+  isBlankExcalidrawSvg,
+} from "../editor/excalidrawDocumentGuards";
 import { AdminSvgEditorShell } from "./edit-shell/AdminSvgEditorShell";
 import {
   type AdminSvgStudioDocument,
   useAdminSvgEditorPublish,
 } from "./edit-shell/useAdminSvgEditorPublish";
+import type { SvgPreviewResult } from "../publish/previewSvgEditorAction";
 
 export interface AdminSvgEditorEditViewProps {
   readonly slug: string;
@@ -89,17 +94,29 @@ export function AdminSvgEditorEditView({
     setForm(resolved);
   }, []);
 
-  // Store the raw SVG string provided by Excalidraw
+  // Studio SVG from Excalidraw — blank welcome exports must not look "ready".
   const [excalidrawSvg, setExcalidrawSvg] = useState("");
 
-  // Live compiled preview (debounced real compile; no disk I/O).
-  // With Excalidraw, the SVG is generated instantly on the client side, so we don't need server compilation!
-  const preview = useMemo(() => {
+  const preview = useMemo((): SvgPreviewResult | null => {
+    if (!excalidrawSvg.trim()) return null;
+    if (isBlankExcalidrawSvg(excalidrawSvg)) {
+      return {
+        ok: false,
+        phase: "validate",
+        error: "Draw at least one shape in the visual studio before publishing.",
+        issues: [
+          {
+            path: "excalidrawElements",
+            message: "Studio has no drawable shapes",
+          },
+        ],
+      };
+    }
     return {
       ok: true,
-      phase: "ok" as const,
-      svg: excalidrawSvg || "",
-      issues: [] as { path: string; message: string }[],
+      phase: "ok",
+      svg: excalidrawSvg,
+      issues: [],
     };
   }, [excalidrawSvg]);
   const previewPending = false;
@@ -158,29 +175,15 @@ export function AdminSvgEditorEditView({
   const studioDocumentRef = useRef<AdminSvgStudioDocument>(studioScene);
 
   const handleStudioDocumentChange = useCallback((svg: string, excalidrawElements: unknown) => {
-    // We don't have parts, but we want to store the excalidrawElements in form state.
-    // Also, we want to trigger a debounced compile on the SVG.
-    // V1 useDebouncedCompile normally expects form to have the full state, but since we are replacing
-    // the visual drawing with Excalidraw, we can just save it into form.excalidrawElements.
-    // In V1, the preview SVG was re-compiled from `sceneParts`.
-    // Wait, if we use Excalidraw, Excalidraw *is* the SVG generator!
-    // But V1 needs the SVG to convert to GLB.
+    const activeCount = countActiveExcalidrawElements(excalidrawElements);
+    updateDraftForm((prev) => ({
+      ...prev,
+      excalidrawElements,
+    }));
 
-    // For now, we update the draft form with Excalidraw data.
-    updateDraftForm((prev) => {
-      const next = {
-        ...prev,
-        excalidrawElements,
-        // Since Excalidraw provides the SVG directly, we could theoretically bypass the compiler.
-        // But for now, we just save the elements so they persist on publish.
-      };
-      return next;
-    });
-
-    // If we want to support GLB export directly from Excalidraw's SVG:
-    // we can save the raw SVG string somewhere.
     studioDocumentRef.current = { svg, excalidrawElements };
-    setExcalidrawSvg(svg);
+    // Ignore empty / deleted-only scenes so publish stays blocked.
+    setExcalidrawSvg(activeCount > 0 ? svg : "");
   }, [updateDraftForm]);
 
   useEffect(() => {
@@ -337,7 +340,10 @@ export function AdminSvgEditorEditView({
     footprint: `Footprint ${footprintProof.widthMm}\u00D7${footprintProof.depthMm} mm`,
     draft: authoringLifecycleLabel(authoringLifecycle),
     validation: validationStatus,
-    revision: `Last published ${updatedAtLabel}`,
+    revision:
+      artifactStatus.state === "missing"
+        ? "Never published"
+        : `Last published ${updatedAtLabel}`,
   };
 
   return (
