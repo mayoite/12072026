@@ -70,6 +70,7 @@ export function AdminSvgDetailsRail({
       aria-label="Product details and history"
       className="admin-svg-engine-shell__rail admin-svg-engine-shell__rail--details"
       data-testid="admin-svg-details-rail"
+      tabIndex={0}
     >
       <div>
         <DescriptorRevisionPanel slug={slug} />

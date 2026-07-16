@@ -1,6 +1,6 @@
 "use client";
 
-import { type ChangeEvent, type KeyboardEvent, useCallback, useRef, useState } from "react";
+import { type ChangeEvent, type KeyboardEvent, type ReactNode, useCallback, useRef, useState } from "react";
 import { CaretDown, CornersIn, CornersOut } from "@phosphor-icons/react";
 import {
   MenuTrigger,
@@ -15,6 +15,14 @@ import type { PlannerAccessContext } from "@/features/planner/project/lib/comman
 import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
 import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
 import type { PanelId } from "./useDockingSystem";
+import {
+  LAYOUT_PRESET_LABELS,
+  type ChromePackId,
+  type ChromePackLayout,
+  type ChromePackPlacement,
+  type LayoutPresetId,
+} from "./workspaceLayout";
+import { ChromePackFrame } from "./ChromePackFrame";
 import {
   plannerSaveStatusLabel,
   type PlannerPersistStorage,
@@ -87,6 +95,17 @@ export interface TopBarProps {
   onToggleSnap?: () => void;
   /** Called when the project name is edited inline. */
   onProjectNameChange?: (name: string) => void;
+  /** Modular chrome pack placements (history / view / file / prefs / layout). */
+  chromePacks?: ChromePackLayout[];
+  onChromePlacement?: (
+    packId: ChromePackId,
+    placement: ChromePackPlacement,
+    pos?: { x: number; y: number },
+  ) => void;
+  onMoveChromePack?: (packId: ChromePackId, x: number, y: number) => void;
+  layoutPresetId?: LayoutPresetId | "custom";
+  onApplyLayoutPreset?: (presetId: LayoutPresetId) => void;
+  onResetLayout?: () => void;
 }
 
 function resolveSaveStatusFromLegacy(
@@ -151,6 +170,12 @@ export function TopBar({
   onToggleGrid,
   onProjectNameChange,
   onToggleSnap,
+  chromePacks,
+  onChromePlacement,
+  onMoveChromePack,
+  layoutPresetId = "custom",
+  onApplyLayoutPreset,
+  onResetLayout,
 }: TopBarProps) {
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState(projectName);
@@ -198,6 +223,40 @@ export function TopBar({
 
   const unitOptions: PlannerDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
   const activeFloorName = floors.find((f) => f.id === activeFloorId)?.name ?? "Floor";
+
+  const defaultPacks: ChromePackLayout[] = [
+    { id: "history", placement: "topbar", x: 80, y: 56 },
+    { id: "view", placement: "topbar", x: 220, y: 56 },
+    { id: "file", placement: "topbar", x: 400, y: 56 },
+    { id: "prefs", placement: "topbar", x: 560, y: 56 },
+    { id: "layout", placement: "topbar", x: 680, y: 56 },
+  ];
+  const packs = chromePacks ?? defaultPacks;
+  const packById = new Map(packs.map((p) => [p.id, p]));
+  const resolvePack = (id: ChromePackId): ChromePackLayout =>
+    packById.get(id) ?? defaultPacks.find((p) => p.id === id)!;
+
+  const modular = Boolean(onChromePlacement && onMoveChromePack);
+  const wrapPack = (id: ChromePackId, label: string, body: ReactNode) => {
+    if (!modular || !onChromePlacement || !onMoveChromePack) return body;
+    const pack = resolvePack(id);
+    return (
+      <ChromePackFrame
+        packId={id}
+        label={label}
+        placement={pack.placement}
+        x={pack.x}
+        y={pack.y}
+        onPlacementChange={onChromePlacement}
+        onMove={onMoveChromePack}
+      >
+        {body}
+      </ChromePackFrame>
+    );
+  };
+
+  const overflowPacks = packs.filter((p) => p.placement === "overflow");
+  const presetIds = Object.keys(LAYOUT_PRESET_LABELS) as LayoutPresetId[];
 
   const saveButtonLabel =
     resolvedSaveStatus === "error"
@@ -251,92 +310,102 @@ export function TopBar({
       </div>
 
       <div className={styles.center}>
-        <div className={styles.historyActions} role="group" aria-label="Canvas history">
-          <Button
-            className={styles.btn}
-            isDisabled={!canUndo}
-            aria-label={undoLabel ? `Undo: ${undoLabel}` : "Undo unavailable"}
-            onPress={() => onUndo?.()}
-          >
-            Undo
-          </Button>
-          <Button
-            className={styles.btn}
-            isDisabled={!canRedo}
-            aria-label={redoLabel ? `Redo: ${redoLabel}` : "Redo unavailable"}
-            onPress={() => onRedo?.()}
-          >
-            Redo
-          </Button>
-        </div>
+        {wrapPack(
+          "history",
+          "History",
+          <div className={styles.historyActions} role="group" aria-label="Canvas history">
+            <Button
+              className={styles.btn}
+              isDisabled={!canUndo}
+              aria-label={undoLabel ? `Undo: ${undoLabel}` : "Undo unavailable"}
+              onPress={() => onUndo?.()}
+            >
+              Undo
+            </Button>
+            <Button
+              className={styles.btn}
+              isDisabled={!canRedo}
+              aria-label={redoLabel ? `Redo: ${redoLabel}` : "Redo unavailable"}
+              onPress={() => onRedo?.()}
+            >
+              Redo
+            </Button>
+          </div>,
+        )}
 
         <span className={styles.actionDivider} aria-hidden />
 
-        <RadioGroup
-          className={styles.viewToggle}
-          value={viewMode}
-          onChange={(value) => onViewModeChange?.(value as "2d" | "3d")}
-          aria-label="View mode"
-        >
-          <Radio className={styles.viewToggleBtn} value="2d">
-            2D
-          </Radio>
-          <Radio className={styles.viewToggleBtn} value="3d">
-            3D
-          </Radio>
-        </RadioGroup>
-
-        {floors.length > 0 && (
-          <MenuTrigger>
-            <Button className={styles.btn} aria-label={`Active floor: ${activeFloorName}`}>
-              {activeFloorName}
-              <CaretDown size={12} weight="bold" aria-hidden />
-            </Button>
-            <Popover placement="bottom start">
-              <Menu
-                className={styles.dropdownMenu}
-                selectionMode="single"
-                selectedKeys={activeFloorId ? [activeFloorId] : undefined}
-                onAction={(key) => onFloorChange?.(key as string)}
-              >
-                {floors.map((floor) => (
-                  <MenuItem
-                    key={floor.id}
-                    id={floor.id}
-                    className={styles.dropdownItem}
-                  >
-                    {floor.name}
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Popover>
-          </MenuTrigger>
-        )}
-
-        <MenuTrigger>
-          <Button className={styles.btn} aria-label={`Display unit: ${displayUnit}`}>
-            {displayUnit}
-            <CaretDown size={12} weight="bold" aria-hidden />
-          </Button>
-          <Popover placement="bottom start">
-            <Menu
-              className={styles.dropdownMenu}
-              selectionMode="single"
-              selectedKeys={[displayUnit]}
-              onAction={(key) => onDisplayUnitChange?.(key as PlannerDisplayUnit)}
+        {wrapPack(
+          "view",
+          "View",
+          <div className={styles.viewPack} role="group" aria-label="View controls pack">
+            <RadioGroup
+              className={styles.viewToggle}
+              value={viewMode}
+              onChange={(value) => onViewModeChange?.(value as "2d" | "3d")}
+              aria-label="View mode"
             >
-              {unitOptions.map((unit) => (
-                <MenuItem
-                  key={unit}
-                  id={unit}
-                  className={styles.dropdownItem}
+              <Radio className={styles.viewToggleBtn} value="2d">
+                2D
+              </Radio>
+              <Radio className={styles.viewToggleBtn} value="3d">
+                3D
+              </Radio>
+            </RadioGroup>
+
+            {floors.length > 0 && (
+              <MenuTrigger>
+                <Button className={styles.btn} aria-label={`Active floor: ${activeFloorName}`}>
+                  {activeFloorName}
+                  <CaretDown size={12} weight="bold" aria-hidden />
+                </Button>
+                <Popover placement="bottom start">
+                  <Menu
+                    className={styles.dropdownMenu}
+                    selectionMode="single"
+                    selectedKeys={activeFloorId ? [activeFloorId] : undefined}
+                    onAction={(key) => onFloorChange?.(key as string)}
+                  >
+                    {floors.map((floor) => (
+                      <MenuItem
+                        key={floor.id}
+                        id={floor.id}
+                        className={styles.dropdownItem}
+                      >
+                        {floor.name}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Popover>
+              </MenuTrigger>
+            )}
+
+            <MenuTrigger>
+              <Button className={styles.btn} aria-label={`Display unit: ${displayUnit}`}>
+                {displayUnit}
+                <CaretDown size={12} weight="bold" aria-hidden />
+              </Button>
+              <Popover placement="bottom start">
+                <Menu
+                  className={styles.dropdownMenu}
+                  selectionMode="single"
+                  selectedKeys={[displayUnit]}
+                  onAction={(key) => onDisplayUnitChange?.(key as PlannerDisplayUnit)}
                 >
-                  {unit}
-                </MenuItem>
-              ))}
-            </Menu>
-          </Popover>
-        </MenuTrigger>
+                  {unitOptions.map((unit) => (
+                    <MenuItem
+                      key={unit}
+                      id={unit}
+                      className={styles.dropdownItem}
+                    >
+                      {unit}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Popover>
+            </MenuTrigger>
+          </div>,
+        )}
       </div>
 
       <div className={styles.actions}>
@@ -475,121 +544,187 @@ export function TopBar({
 
         <span className={styles.actionDivider} aria-hidden />
 
-        <div className={styles.fileActions} role="group" aria-label="File actions">
-        {/* Guest: honest export surface (JSON + BOQ). No Import / quote-cart / ERP. */}
-        {showGuestActions && (
+        {wrapPack(
+          "file",
+          "File",
+          <div className={styles.fileActions} role="group" aria-label="File actions">
+            {showGuestActions && (
+              <MenuTrigger>
+                <Button className={styles.btn} aria-label="Export — open export menu">
+                  Export
+                  <CaretDown size={12} weight="bold" aria-hidden />
+                </Button>
+                <Popover placement="bottom end">
+                  <Menu
+                    className={styles.dropdownMenu}
+                    onAction={(key) => onExport?.(key as string)}
+                  >
+                    <MenuItem id="json" className={styles.dropdownItem}>
+                      Export as JSON
+                    </MenuItem>
+                    <MenuItem id="boq-json" className={styles.dropdownItem}>
+                      Export BOQ (JSON)
+                    </MenuItem>
+                    <MenuItem id="boq-csv" className={styles.dropdownItem}>
+                      Export BOQ (CSV)
+                    </MenuItem>
+                  </Menu>
+                </Popover>
+              </MenuTrigger>
+            )}
+
+            {showPersistenceActions && (
+              <>
+                <MenuTrigger>
+                  <Button className={styles.btn} aria-label="Import — open import menu">
+                    Import
+                    <CaretDown size={12} weight="bold" aria-hidden />
+                  </Button>
+                  <Popover placement="bottom end">
+                    <Menu
+                      className={styles.dropdownMenu}
+                      onAction={(key) => {
+                        if (key === "file" && onImport) onImport();
+                      }}
+                    >
+                      <MenuItem id="file" className={styles.dropdownItem}>
+                        Import from file...
+                      </MenuItem>
+                      <MenuItem id="url" className={styles.dropdownItem}>
+                        Import from URL...
+                      </MenuItem>
+                    </Menu>
+                  </Popover>
+                </MenuTrigger>
+
+                <MenuTrigger>
+                  <Button className={styles.btn} aria-label="Export — open export menu">
+                    Export
+                    <CaretDown size={12} weight="bold" aria-hidden />
+                  </Button>
+                  <Popover placement="bottom end">
+                    <Menu
+                      className={styles.dropdownMenu}
+                      onAction={(key) => onExport?.(key as string)}
+                    >
+                      <MenuItem id="json" className={styles.dropdownItem}>Export as JSON</MenuItem>
+                      <MenuItem id="svg" className={styles.dropdownItem}>Export as SVG</MenuItem>
+                      <MenuItem id="png" className={styles.dropdownItem}>Export as PNG</MenuItem>
+                      <MenuItem id="pdf" className={styles.dropdownItem}>Export as PDF</MenuItem>
+                      <MenuItem id="dxf" className={styles.dropdownItem}>Export as DXF</MenuItem>
+                      <MenuItem id="boq-json" className={styles.dropdownItem}>
+                        Export BOQ (JSON)
+                      </MenuItem>
+                      <MenuItem id="boq-csv" className={styles.dropdownItem}>
+                        Export BOQ (CSV)
+                      </MenuItem>
+                      <MenuItem id="workstation-boq" className={styles.dropdownItem}>
+                        Export workstation BOQ
+                      </MenuItem>
+                      <MenuItem id="quote" className={styles.dropdownItem}>
+                        Add seats to quote cart
+                      </MenuItem>
+                    </Menu>
+                  </Popover>
+                </MenuTrigger>
+              </>
+            )}
+          </div>,
+        )}
+
+        {wrapPack(
+          "prefs",
+          "Prefs",
           <MenuTrigger>
-            <Button className={styles.btn} aria-label="Export — open export menu">
-              Export
+            <Button className={styles.btn} aria-label="Prefs — open preferences menu">
+              Prefs
               <CaretDown size={12} weight="bold" aria-hidden />
             </Button>
             <Popover placement="bottom end">
               <Menu
                 className={styles.dropdownMenu}
-                onAction={(key) => onExport?.(key as string)}
+                onAction={(key) => {
+                  if (key === "density") onToggleDensity?.();
+                  if (key === "grid") onToggleGrid?.();
+                  if (key === "snap") onToggleSnap?.();
+                }}
               >
-                <MenuItem id="json" className={styles.dropdownItem}>
-                  Export as JSON
+                <MenuItem id="density" className={styles.dropdownItem}>
+                  Toggle density ({density === "touch" ? "compact" : "touch"})
                 </MenuItem>
-                <MenuItem id="boq-json" className={styles.dropdownItem}>
-                  Export BOQ (JSON)
-                </MenuItem>
-                <MenuItem id="boq-csv" className={styles.dropdownItem}>
-                  Export BOQ (CSV)
-                </MenuItem>
+                {onToggleGrid && (
+                  <MenuItem id="grid" className={`${styles.dropdownItem} ${styles.mobileOnly}`}>
+                    {gridEnabled ? "Disable Grid" : "Enable Grid"}
+                  </MenuItem>
+                )}
+                {onToggleSnap && (
+                  <MenuItem id="snap" className={`${styles.dropdownItem} ${styles.mobileOnly}`}>
+                    {snapEnabled ? "Disable Snap" : "Enable Snap"}
+                  </MenuItem>
+                )}
               </Menu>
             </Popover>
-          </MenuTrigger>
+          </MenuTrigger>,
         )}
 
-        {showPersistenceActions && (
-          <>
-            <MenuTrigger>
-              <Button className={styles.btn} aria-label="Import — open import menu">
-                Import
-                <CaretDown size={12} weight="bold" aria-hidden />
-              </Button>
-              <Popover placement="bottom end">
-                <Menu
-                  className={styles.dropdownMenu}
-                  onAction={(key) => {
-                    if (key === "file" && onImport) onImport();
-                  }}
-                >
-                  <MenuItem id="file" className={styles.dropdownItem}>
-                    Import from file...
-                  </MenuItem>
-                  <MenuItem id="url" className={styles.dropdownItem}>
-                    Import from URL...
-                  </MenuItem>
-                </Menu>
-              </Popover>
-            </MenuTrigger>
-
-            <MenuTrigger>
-              <Button className={styles.btn} aria-label="Export — open export menu">
-                Export
-                <CaretDown size={12} weight="bold" aria-hidden />
-              </Button>
-              <Popover placement="bottom end">
-                <Menu
-                  className={styles.dropdownMenu}
-                  onAction={(key) => onExport?.(key as string)}
-                >
-                  <MenuItem id="json" className={styles.dropdownItem}>Export as JSON</MenuItem>
-                  <MenuItem id="svg" className={styles.dropdownItem}>Export as SVG</MenuItem>
-                  <MenuItem id="png" className={styles.dropdownItem}>Export as PNG</MenuItem>
-                  <MenuItem id="pdf" className={styles.dropdownItem}>Export as PDF</MenuItem>
-                  <MenuItem id="dxf" className={styles.dropdownItem}>Export as DXF</MenuItem>
-                  <MenuItem id="boq-json" className={styles.dropdownItem}>
-                    Export BOQ (JSON)
-                  </MenuItem>
-                  <MenuItem id="boq-csv" className={styles.dropdownItem}>
-                    Export BOQ (CSV)
-                  </MenuItem>
-                  <MenuItem id="workstation-boq" className={styles.dropdownItem}>
-                    Export workstation BOQ
-                  </MenuItem>
-                  <MenuItem id="quote" className={styles.dropdownItem}>
-                    Add seats to quote cart
-                  </MenuItem>
-                </Menu>
-              </Popover>
-            </MenuTrigger>
-          </>
-        )}
-        </div>
-
-        <MenuTrigger>
-          <Button className={styles.btn} aria-label="Prefs — open preferences menu">
-            Prefs
-            <CaretDown size={12} weight="bold" aria-hidden />
-          </Button>
-          <Popover placement="bottom end">
-            <Menu
-              className={styles.dropdownMenu}
-              onAction={(key) => {
-                if (key === "density") onToggleDensity?.();
-                if (key === "grid") onToggleGrid?.();
-                if (key === "snap") onToggleSnap?.();
-              }}
+        {wrapPack(
+          "layout",
+          "Layout",
+          <MenuTrigger>
+            <Button
+              className={styles.btn}
+              aria-label={`Layout presets — ${layoutPresetId === "custom" ? "custom" : LAYOUT_PRESET_LABELS[layoutPresetId]}`}
+              data-testid="layout-presets-trigger"
             >
-              <MenuItem id="density" className={styles.dropdownItem}>
-                Toggle density ({density === "touch" ? "compact" : "touch"})
-              </MenuItem>
-              {onToggleGrid && (
-                <MenuItem id="grid" className={`${styles.dropdownItem} ${styles.mobileOnly}`}>
-                  {gridEnabled ? "Disable Grid" : "Enable Grid"}
+              Layout
+              <CaretDown size={12} weight="bold" aria-hidden />
+            </Button>
+            <Popover placement="bottom end">
+              <Menu
+                className={styles.dropdownMenu}
+                onAction={(key) => {
+                  const keyStr = String(key);
+                  if (keyStr.startsWith("preset:")) {
+                    onApplyLayoutPreset?.(keyStr.slice("preset:".length) as LayoutPresetId);
+                    return;
+                  }
+                  if (keyStr === "reset") {
+                    onResetLayout?.();
+                    return;
+                  }
+                  if (keyStr.startsWith("restore:")) {
+                    const packId = keyStr.slice("restore:".length) as ChromePackId;
+                    onChromePlacement?.(packId, "topbar");
+                  }
+                }}
+              >
+                {presetIds.map((id) => (
+                  <MenuItem
+                    key={id}
+                    id={`preset:${id}`}
+                    className={styles.dropdownItem}
+                    data-selected={layoutPresetId === id ? "true" : undefined}
+                  >
+                    {LAYOUT_PRESET_LABELS[id]}
+                    {layoutPresetId === id ? " ✓" : ""}
+                  </MenuItem>
+                ))}
+                <MenuItem id="reset" className={styles.dropdownItem}>
+                  Reset layout
                 </MenuItem>
-              )}
-              {onToggleSnap && (
-                <MenuItem id="snap" className={`${styles.dropdownItem} ${styles.mobileOnly}`}>
-                  {snapEnabled ? "Disable Snap" : "Enable Snap"}
-                </MenuItem>
-              )}
-            </Menu>
-          </Popover>
-        </MenuTrigger>
+                {overflowPacks.map((pack) => (
+                  <MenuItem
+                    key={pack.id}
+                    id={`restore:${pack.id}`}
+                    className={styles.dropdownItem}
+                  >
+                    Restore {pack.id} module
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Popover>
+          </MenuTrigger>,
+        )}
       </div>
     </header>
   );

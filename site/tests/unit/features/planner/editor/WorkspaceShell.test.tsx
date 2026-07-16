@@ -30,10 +30,12 @@ describe("WorkspaceShell", () => {
       </WorkspaceShell>,
     );
 
-    // contentOnly left panel has no title bar; region still labeled Inventory
-    expect(screen.getByRole("region", { name: "Inventory panel" })).toBeInTheDocument();
+    // contentOnly left panel keeps compact dock chrome; region labeled Inventory
+    const inventory = screen.getByRole("region", { name: "Inventory panel" });
+    expect(inventory).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Properties panel" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Properties", level: 2 })).toBeInTheDocument();
+    expect(within(inventory).getByRole("button", { name: "Undock panel" })).toBeInTheDocument();
   });
 
   it("status bar uses customer-facing quote language, not internal BOQ jargon", () => {

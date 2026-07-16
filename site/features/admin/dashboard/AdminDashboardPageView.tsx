@@ -9,47 +9,44 @@ const CRM_HUB_SECTION_TITLE = "CRM & ops";
 export default function AdminDashboardPageView() {
   return (
     <div className="admin-page shell-admin-dashboard">
-      <section className="admin-hero" aria-labelledby="admin-hero-title">
-        <div className="admin-hero__inner">
-          <div className="admin-hero__copy">
-            <p className="admin-page__eyebrow admin-hero__eyebrow">Admin backend</p>
-            <h1 id="admin-hero-title" className="admin-hero__title">
-              Platform control
-            </h1>
-            <p className="admin-hero__lead">
-              Manage planner sessions, catalog products, feature flags, themes, and the live route inventory from one
-              console. Use the sections below to move between planner, catalog, CRM, and platform workflows.
-            </p>
-          </div>
+      <header className="admin-page__header">
+        <div>
+          <p className="admin-page__eyebrow">Admin</p>
+          <h1 className="admin-page__title">Dashboard</h1>
+          <p className="admin-page__meta">
+            Planner, catalog, CRM, and platform tools in one place.
+          </p>
         </div>
-      </section>
+      </header>
 
       {ADMIN_HUB_SECTIONS.map((section) => {
         const showCrmStorageWarning = section.title === CRM_HUB_SECTION_TITLE;
 
         return (
-          <section key={section.title} className="admin-hub-section" aria-labelledby={`hub-${section.title}`}>
-            <header className="admin-hub-section__header">
-              <h2 id={`hub-${section.title}`} className="admin-hub-section__title">
-                {section.title}
-              </h2>
-            </header>
+          <section
+            key={section.title}
+            className="admin-hub-section"
+            aria-labelledby={`hub-${section.title}`}
+          >
+            <h2 id={`hub-${section.title}`} className="admin-hub-section__title">
+              {section.title}
+            </h2>
             {showCrmStorageWarning ? (
               <div className="admin-alert admin-alert--warn" role="status">
                 <p>
-                  <strong>Browser-only CRM storage.</strong> CRM clients, projects, and quotes in this admin lane save
-                  to localStorage on the current browser. They do not sync across users or devices, and clearing site
-                  storage removes them.
+                  <strong>Browser-only CRM storage.</strong> Clients, projects, and
+                  quotes save to this browser only. They do not sync, and clearing
+                  site storage removes them.
                 </p>
               </div>
             ) : null}
-            <div className="admin-grid-cards">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {section.items.map((card) => {
                 const Icon = card.icon;
                 return (
                   <Link key={card.href} href={card.href} className="shell-admin-card">
                     <span className="shell-admin-card__icon" aria-hidden>
-                      <Icon size={18} />
+                      <Icon size={16} />
                     </span>
                     <h3 className="shell-admin-card__title">{card.label}</h3>
                     <p className="shell-admin-card__desc">{card.description}</p>

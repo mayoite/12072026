@@ -32,6 +32,7 @@ export function AdminSvgPreviewRail({
       aria-label="Draft and released previews"
       className="admin-svg-engine-shell__rail admin-svg-engine-shell__rail--preview"
       data-testid="admin-svg-preview-rail"
+      tabIndex={0}
     >
       <div className="admin-panel admin-svg-engine-shell__panel">
         <div className="admin-panel__header">Draft preview</div>

@@ -30,7 +30,12 @@
     font-synthesis-weight: none;
   }
 
-  body.planner-workspace.planner-root {
+  /*
+   * Viewport lock for planner workspace. PlannerBodyTheme puts planner-root on
+   * document.body; keep the selector class-only so any element with the class
+   * still gets the lock (do not require body.planner-workspace.planner-root).
+   */
+  .planner-root {
     overscroll-behavior: none;
     overflow: hidden;
     height: 100dvh;

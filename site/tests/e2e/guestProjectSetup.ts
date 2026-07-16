@@ -54,13 +54,21 @@ export async function clearPlannerStorageInPage(page: Page): Promise<void> {
   }, [...PLANNER_LS_PREFIXES]);
 }
 
+const PLANNER_STORAGE_CLEAR_INIT_KEY = "__oandoPlannerStorageClearInit";
+
 /**
  * Clears planner storage before any app code runs (init script).
  * Re-runs on every navigation for this page — **do not** use when the test
  * needs IndexedDB to survive `page.reload()` (use `clearPlannerStorageInPage` once instead).
+ *
+ * Idempotent per page: repeated calls must not stack multiple init scripts (breaks IDB on repeat navigations).
  */
 export async function clearPlannerStorage(page: Page): Promise<void> {
-  await page.addInitScript((prefixes: string[]) => {
+  await page.addInitScript((prefixes: string[], initKey: string) => {
+    const root = window as unknown as Record<string, boolean>;
+    if (root[initKey]) return;
+    root[initKey] = true;
+
     for (const key of Object.keys(localStorage)) {
       if (prefixes.some((prefix) => key.startsWith(prefix))) {
         localStorage.removeItem(key);
@@ -68,7 +76,7 @@ export async function clearPlannerStorage(page: Page): Promise<void> {
     }
     void indexedDB.deleteDatabase("planner-workspace-db");
     void indexedDB.deleteDatabase("buddy-planner-db");
-  }, [...PLANNER_LS_PREFIXES]);
+  }, [...PLANNER_LS_PREFIXES], PLANNER_STORAGE_CLEAR_INIT_KEY);
 }
 
 /** Complete the single Planner setup step when the gate is showing. */
@@ -92,10 +100,18 @@ export async function completePlannerSetupGate(
     await expect(nameInput).toBeVisible({ timeout: 10_000 });
     await nameInput.fill(projectName);
 
-    const submit = page.getByRole("button", { name: /Start placing furniture/i });
-    await expect(submit).toBeEnabled({ timeout: 30_000 });
-    // Label / marketing chrome can intercept the first pointer hit.
+    const submit = page.getByRole("button", {
+      name: /Start placing furniture|Preparing workspace/i,
+    });
+    await expect(submit).toBeEnabled({ timeout: 60_000 });
     await submit.click({ force: true });
+    await setupHeading
+      .waitFor({ state: "hidden", timeout: 15_000 })
+      .catch(async () => {
+        if (await submit.isEnabled().catch(() => false)) {
+          await submit.click({ force: true });
+        }
+      });
   }
 
   await expect

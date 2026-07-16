@@ -1,9 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useId, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useId, useMemo, useState, type CSSProperties } from "react";
 import { useDockingSystem, type PanelId } from "./useDockingSystem";
 import { PanelContainer } from "./PanelContainer";
+import { DockDropZones } from "./DockDropZones";
 import { TopBar } from "./TopBar";
+import { WorkspaceChromeProvider } from "./workspaceChromeContext";
 import type { PlannerAccessContext } from "@/features/planner/project/lib/commands/plannerAccessContext";
 import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
 import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
@@ -146,14 +148,26 @@ export function WorkspaceShell({
 
   const {
     panels,
+    chrome,
+    rail,
+    presetId,
+    activeDropEdge,
+    dropActive,
     activePanel,
     viewportTier,
     dock,
     undock,
     toggleCollapse,
     move,
+    setDropProbe,
+    commitDrop,
     resize,
     saveLayout,
+    applyPreset,
+    reset,
+    setChromePlacement,
+    moveChromePack,
+    setRailLayout,
     setActivePanel,
     setFocusedPanel,
   } = useDockingSystem();
@@ -202,7 +216,30 @@ export function WorkspaceShell({
       saveLayout();
     }, 1000);
     return () => clearTimeout(timeoutId);
-  }, [panels, saveLayout]);
+  }, [panels, chrome, rail, presetId, saveLayout]);
+
+  const chromeContextValue = useMemo(
+    () => ({
+      chrome,
+      rail,
+      presetId,
+      applyPreset,
+      setChromePlacement,
+      moveChromePack,
+      setRailLayout,
+      resetLayout: reset,
+    }),
+    [
+      chrome,
+      rail,
+      presetId,
+      applyPreset,
+      setChromePlacement,
+      moveChromePack,
+      setRailLayout,
+      reset,
+    ],
+  );
 
   useEffect(() => {
     if (viewportTier !== "small" && activePanel !== null) {
@@ -279,6 +316,7 @@ export function WorkspaceShell({
     !isCanvasMaximized;
 
   return (
+    <WorkspaceChromeProvider value={chromeContextValue}>
     <div
       className={styles.shell}
       data-viewport={dataViewport}
@@ -287,6 +325,7 @@ export function WorkspaceShell({
       data-bottom-panel-open={bottomPanelOpen ? "true" : undefined}
       data-fill-parent={fillParent ? "true" : undefined}
       data-planner-density={density}
+      data-layout-preset={presetId}
       id={`workspace-shell-${id.replace(/:/g, "")}`}
     >
       {/* Top bar */}
@@ -324,6 +363,12 @@ export function WorkspaceShell({
         snapEnabled={snapEnabled}
         onToggleGrid={onToggleGrid}
         onToggleSnap={onToggleSnap}
+        chromePacks={chrome}
+        onChromePlacement={setChromePlacement}
+        onMoveChromePack={moveChromePack}
+        layoutPresetId={presetId}
+        onApplyLayoutPreset={applyPreset}
+        onResetLayout={reset}
         {...topBarSaveStatusProps}
       />
 
@@ -353,6 +398,13 @@ export function WorkspaceShell({
           />
         )}
 
+        {dropActive ? (
+          <DockDropZones
+            activeEdge={activeDropEdge}
+            allowedEdges={["left", "right", "bottom"]}
+          />
+        ) : null}
+
         {/* Left panel - Library */}
         {leftPanel && (
           <PanelContainer
@@ -360,6 +412,7 @@ export function WorkspaceShell({
             title={panelTitles.left}
             contentOnly
             state={panels.left.state}
+            dockEdge={panels.left.dockEdge}
             width={panels.left.width}
             /* Docked: PanelContainer uses height 100% CSS. Floating: docking sets ~400 on undock. */
             height={panels.left.height}
@@ -367,12 +420,14 @@ export function WorkspaceShell({
             y={panels.left.y}
             zIndex={panels.left.zIndex}
             isOpen={resolvePanelOpen("left")}
-            onUndock={() => undock("left")}
+            onUndock={(x, y) => undock("left", x, y)}
             onDock={() => dock("left")}
             onClose={() => handlePanelCollapse("left")}
             onMinimize={() => handlePanelCollapse("left")}
             onMove={(x, y) => move("left", x, y)}
             onResize={(w, h) => resize("left", w, h)}
+            onDropProbe={setDropProbe}
+            onDropCommit={(cx, cy) => commitDrop("left", cx, cy) !== null}
             onFocus={() => setFocusedPanel("left")}
             onBlur={() => setFocusedPanel(null)}
           >
@@ -391,6 +446,7 @@ export function WorkspaceShell({
             id="right"
             title={panelTitles.right}
             state={panels.right.state}
+            dockEdge={panels.right.dockEdge}
             width={panels.right.width}
             /* Docked: PanelContainer uses height 100% CSS. Floating: docking sets ~400 on undock. */
             height={panels.right.height}
@@ -398,12 +454,14 @@ export function WorkspaceShell({
             y={panels.right.y}
             zIndex={panels.right.zIndex}
             isOpen={resolvePanelOpen("right")}
-            onUndock={() => undock("right")}
+            onUndock={(x, y) => undock("right", x, y)}
             onDock={() => dock("right")}
             onClose={() => handlePanelCollapse("right")}
             onMinimize={() => handlePanelCollapse("right")}
             onMove={(x, y) => move("right", x, y)}
             onResize={(w, h) => resize("right", w, h)}
+            onDropProbe={setDropProbe}
+            onDropCommit={(cx, cy) => commitDrop("right", cx, cy) !== null}
             onFocus={() => setFocusedPanel("right")}
             onBlur={() => setFocusedPanel(null)}
           >
@@ -418,18 +476,21 @@ export function WorkspaceShell({
             title={panelTitles.bottom}
             contentOnly
             state={panels.bottom.state}
+            dockEdge={panels.bottom.dockEdge}
             width={0}
             height={panels.bottom.height}
             x={panels.bottom.x}
             y={panels.bottom.y}
             zIndex={panels.bottom.zIndex}
             isOpen={resolvePanelOpen("bottom")}
-            onUndock={() => undock("bottom")}
+            onUndock={(x, y) => undock("bottom", x, y)}
             onDock={() => dock("bottom")}
             onClose={() => handlePanelCollapse("bottom")}
             onMinimize={() => handlePanelCollapse("bottom")}
             onMove={(x, y) => move("bottom", x, y)}
             onResize={(w, h) => resize("bottom", w, h)}
+            onDropProbe={setDropProbe}
+            onDropCommit={(cx, cy) => commitDrop("bottom", cx, cy) !== null}
             onFocus={() => setFocusedPanel("bottom")}
             onBlur={() => setFocusedPanel(null)}
           >
@@ -488,5 +549,6 @@ export function WorkspaceShell({
         </div>
       </footer>
     </div>
+    </WorkspaceChromeProvider>
   );
 }

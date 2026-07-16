@@ -5,6 +5,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
   type MouseEvent,
   type ReactNode,
@@ -34,8 +35,8 @@ export interface PanelContainerProps {
   children: ReactNode;
   /** Called when user clicks dock button */
   onDock?: () => void;
-  /** Called when user clicks undock button */
-  onUndock?: () => void;
+  /** Called when user clicks undock button (optional tear-off position). */
+  onUndock?: (x?: number, y?: number) => void;
   /** Called when user clicks close/collapse button */
   onClose?: () => void;
   /** Called when user clicks minimize button */
@@ -48,8 +49,17 @@ export interface PanelContainerProps {
   onFocus?: () => void;
   /** Called when panel loses focus */
   onBlur?: () => void;
-  /** When true, skip shell title bar (content provides its own tabs). */
+  /**
+   * Compact chrome: grip + dock actions only (no big title).
+   * Use when content already has its own tabs/headers.
+   */
   contentOnly?: boolean;
+  /** Edge this panel occupies when docked (supports left↔right swap). */
+  dockEdge?: "left" | "right" | "bottom";
+  /** Live edge-highlight while dragging a floating panel. */
+  onDropProbe?: (clientX: number | null, clientY?: number) => void;
+  /** On drag end — dock if over an edge zone. Return true if docked. */
+  onDropCommit?: (clientX: number, clientY: number) => boolean;
 }
 
 interface ResizeState {
@@ -60,6 +70,8 @@ interface ResizeState {
   startWidth: number;
   startHeight: number;
 }
+
+const DRAG_UNDOCK_THRESHOLD_PX = 8;
 
 export function PanelContainer({
   id,
@@ -81,6 +93,9 @@ export function PanelContainer({
   onFocus,
   onBlur,
   contentOnly = false,
+  dockEdge,
+  onDropProbe,
+  onDropCommit,
 }: PanelContainerProps) {
   const panelRef = useRef<HTMLElement>(null);
   const titleBarRef = useRef<HTMLDivElement>(null);
@@ -94,13 +109,18 @@ export function PanelContainer({
     startWidth: 0,
     startHeight: 0,
   });
+  /** Drag started while docked — undock once pointer moves past threshold. */
+  const pendingUndockRef = useRef<{
+    startClientX: number;
+    startClientY: number;
+  } | null>(null);
 
-  // Handle keyboard navigation
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLElement>) => {
       if (event.key === "Escape") {
         if (isDragging) {
           setIsDragging(false);
+          pendingUndockRef.current = null;
           return;
         }
         if (resizeState.isResizing) {
@@ -113,25 +133,49 @@ export function PanelContainer({
     [isDragging, resizeState.isResizing, onClose],
   );
 
-  // Handle title bar drag start
   const handleTitleMouseDown = useCallback(
     (event: MouseEvent<HTMLDivElement>) => {
-      if (state !== "floating") return;
       if ((event.target as HTMLElement).closest("button")) return;
+      if (event.button !== 0) return;
 
       event.preventDefault();
-      setIsDragging(true);
-      setDragStart({
-        x: event.clientX,
-        y: event.clientY,
-        panelX: x,
-        panelY: y,
-      });
+
+      if (state === "floating") {
+        setIsDragging(true);
+        setDragStart({
+          x: event.clientX,
+          y: event.clientY,
+          panelX: x,
+          panelY: y,
+        });
+        return;
+      }
+
+      // Docked: drag title bar to tear off into a floating panel
+      if (state === "docked" && onUndock) {
+        pendingUndockRef.current = {
+          startClientX: event.clientX,
+          startClientY: event.clientY,
+        };
+        setIsDragging(true);
+        setDragStart({
+          x: event.clientX,
+          y: event.clientY,
+          panelX: event.clientX - 40,
+          panelY: event.clientY - 16,
+        });
+      }
     },
-    [state, x, y],
+    [state, x, y, onUndock],
   );
 
-  // Handle resize edge mouse down
+  const handleTitleDoubleClick = useCallback(() => {
+    if (state === "floating" && onDock) {
+      onDock();
+      onDropProbe?.(null);
+    }
+  }, [state, onDock, onDropProbe]);
+
   const handleResizeMouseDown = useCallback(
     (event: MouseEvent<HTMLDivElement>, edge: ResizeState["edge"]) => {
       event.preventDefault();
@@ -152,17 +196,37 @@ export function PanelContainer({
     [],
   );
 
-  // Handle mouse move (dragging and resizing)
   useEffect(() => {
     if (!isDragging && !resizeState.isResizing) return;
 
-    const handleMouseMove = (event: MouseEvent) => {
+    const handleMouseMove = (event: globalThis.MouseEvent) => {
       if (isDragging) {
+        const pending = pendingUndockRef.current;
+        if (pending && onUndock) {
+          const dx = event.clientX - pending.startClientX;
+          const dy = event.clientY - pending.startClientY;
+          if (Math.hypot(dx, dy) >= DRAG_UNDOCK_THRESHOLD_PX) {
+            pendingUndockRef.current = null;
+            onUndock(event.clientX - 40, event.clientY - 16);
+            const nextX = event.clientX - 40;
+            const nextY = event.clientY - 16;
+            setDragStart({
+              x: event.clientX,
+              y: event.clientY,
+              panelX: nextX,
+              panelY: nextY,
+            });
+            onMove?.(nextX, nextY);
+            onDropProbe?.(event.clientX, event.clientY);
+            return;
+          }
+          return;
+        }
+
         const deltaX = event.clientX - dragStart.x;
         const deltaY = event.clientY - dragStart.y;
-        const newX = dragStart.panelX + deltaX;
-        const newY = dragStart.panelY + deltaY;
-        onMove?.(newX, newY);
+        onMove?.(dragStart.panelX + deltaX, dragStart.panelY + deltaY);
+        onDropProbe?.(event.clientX, event.clientY);
       }
 
       if (resizeState.isResizing && resizeState.edge) {
@@ -186,20 +250,35 @@ export function PanelContainer({
       }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (event: globalThis.MouseEvent) => {
+      if (isDragging && !pendingUndockRef.current) {
+        const docked = onDropCommit?.(event.clientX, event.clientY) ?? false;
+        if (!docked) onDropProbe?.(null);
+      } else {
+        onDropProbe?.(null);
+      }
       setIsDragging(false);
+      pendingUndockRef.current = null;
       setResizeState((current) => ({ ...current, isResizing: false }));
     };
 
-    document.addEventListener("mousemove", handleMouseMove as unknown as EventListener);
-    document.addEventListener("mouseup", handleMouseUp as unknown as EventListener);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove as unknown as EventListener);
-      document.removeEventListener("mouseup", handleMouseUp as unknown as EventListener);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, dragStart, resizeState, onMove, onResize]);
+  }, [
+    isDragging,
+    dragStart,
+    resizeState,
+    onMove,
+    onResize,
+    onUndock,
+    onDropProbe,
+    onDropCommit,
+  ]);
 
-  // Handle focus
   const handleFocus = useCallback(() => {
     onFocus?.();
   }, [onFocus]);
@@ -213,8 +292,9 @@ export function PanelContainer({
   }
 
   const isFloating = state === "floating";
+  const isDocked = state === "docked";
 
-  const panelStyle: React.CSSProperties = isFloating
+  const panelStyle: CSSProperties = isFloating
     ? {
         position: "absolute",
         left: x,
@@ -228,6 +308,17 @@ export function PanelContainer({
         height: id === "bottom" ? height : "100%",
       };
 
+  /** Canvas-facing edge when docked (follows dockEdge, not panel id). */
+  const effectiveEdge = dockEdge ?? (id === "bottom" ? "bottom" : id);
+  const dockedResizeEdge =
+    effectiveEdge === "left"
+      ? "right"
+      : effectiveEdge === "right"
+        ? "left"
+        : effectiveEdge === "bottom"
+          ? "top"
+          : null;
+
   return (
     <aside
       ref={panelRef}
@@ -238,28 +329,49 @@ export function PanelContainer({
       onKeyDown={handleKeyDown}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      className={`${styles.panel} ${id === "left" ? styles.panelLeft : ""} ${ id === "right" ? styles.panelRight : "" } ${id === "bottom" ? styles.panelBottom : ""}`}
+      className={`${styles.panel} ${id === "left" ? styles.panelLeft : ""} ${id === "right" ? styles.panelRight : ""} ${id === "bottom" ? styles.panelBottom : ""}`}
       data-state={state}
       data-panel-id={id}
+      data-dock-edge={dockEdge ?? (id === "bottom" ? "bottom" : id)}
       data-open={isOpen ? "true" : "false"}
       data-floating={isFloating ? "true" : "false"}
+      data-content-only={contentOnly ? "true" : undefined}
+      data-dragging={isDragging ? "true" : undefined}
       style={panelStyle}
     >
-      {/* Title bar */}
-      {!contentOnly ? (
       <div
         ref={titleBarRef}
-        className={styles.panelTitleBar}
+        className={contentOnly ? styles.panelChromeStrip : styles.panelTitleBar}
         data-floating={isFloating ? "true" : "false"}
+        data-content-only={contentOnly ? "true" : undefined}
         onMouseDown={handleTitleMouseDown}
+        onDoubleClick={handleTitleDoubleClick}
+        title={
+          isFloating
+            ? `Drag to move · drop on edge to dock · double-click to dock ${title}`
+            : onUndock
+              ? `Drag to float ${title}, or use Undock`
+              : undefined
+        }
       >
-        {/* h2 under TopBar brand h1 — avoids Lighthouse heading-order H1→H3 skip */}
-        <h2 className={styles.panelTitle}>
-          {title}
-          {isFloating ? (
-            <span className={styles.panelModeBadge}>Floating</span>
-          ) : null}
-        </h2>
+        <span className={styles.panelGrip} aria-hidden data-testid={`panel-grip-${id}`}>
+          <GripIcon />
+        </span>
+        {!contentOnly ? (
+          <h2 className={styles.panelTitle}>
+            {title}
+            {isFloating ? (
+              <span className={styles.panelModeBadge}>Floating</span>
+            ) : null}
+          </h2>
+        ) : (
+          <span className={styles.panelChromeLabel}>
+            {title}
+            {isFloating ? (
+              <span className={styles.panelModeBadge}>Floating</span>
+            ) : null}
+          </span>
+        )}
         <div className={styles.panelActions}>
           {state === "floating" && onDock && (
             <button
@@ -276,7 +388,7 @@ export function PanelContainer({
             <button
               type="button"
               className={styles.panelActionBtn}
-              onClick={onUndock}
+              onClick={() => onUndock()}
               aria-label="Undock panel"
               title={`Float ${title} over canvas`}
             >
@@ -307,10 +419,9 @@ export function PanelContainer({
           )}
         </div>
       </div>
-      ) : null}
 
-      {/* Resize handles (floating only) */}
-      {isFloating && (
+      {/* Floating: all edges. Docked: canvas-facing edge only. */}
+      {isFloating ? (
         <>
           <div
             className={`${styles.resizeHandle} ${styles.resizeHandleVertical} ${styles.resizeHandleRight}`}
@@ -345,15 +456,50 @@ export function PanelContainer({
             aria-label="Resize panel height"
           />
         </>
-      )}
+      ) : null}
 
-      {/* Panel content */}
+      {isDocked && dockedResizeEdge && onResize ? (
+        <div
+          className={`${styles.resizeHandle} ${
+            dockedResizeEdge === "top"
+              ? styles.resizeHandleHorizontal
+              : styles.resizeHandleVertical
+          } ${
+            dockedResizeEdge === "right"
+              ? styles.resizeHandleRight
+              : dockedResizeEdge === "left"
+                ? styles.resizeHandleLeft
+                : styles.resizeHandleTop
+          }`}
+          data-resizing={resizeState.isResizing && resizeState.edge === dockedResizeEdge}
+          data-docked-resize="true"
+          onMouseDown={(e) => handleResizeMouseDown(e, dockedResizeEdge)}
+          role="separator"
+          aria-orientation={dockedResizeEdge === "top" ? "horizontal" : "vertical"}
+          aria-label={
+            dockedResizeEdge === "top" ? "Resize panel height" : "Resize panel width"
+          }
+        />
+      ) : null}
+
       <div className={styles.panelContent}>{children}</div>
     </aside>
   );
 }
 
-// Simple SVG icons
+function GripIcon() {
+  return (
+    <svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor" aria-hidden>
+      <circle cx="3" cy="2" r="1.25" />
+      <circle cx="7" cy="2" r="1.25" />
+      <circle cx="3" cy="7" r="1.25" />
+      <circle cx="7" cy="7" r="1.25" />
+      <circle cx="3" cy="12" r="1.25" />
+      <circle cx="7" cy="12" r="1.25" />
+    </svg>
+  );
+}
+
 function DockIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

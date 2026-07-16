@@ -43,7 +43,7 @@ body.planner-workspace {
 }
 
 .open3d-canvas-with-rail {
-  /* Positioning root for first-use / placement overlays (must not push layout). */
+  /* Positioning root for first-use / placement overlays + floating tool rail. */
   position: relative;
   display: flex;
   flex-direction: row;
@@ -55,6 +55,35 @@ body.planner-workspace {
   min-width: 0;
   overflow: hidden;
   background: color-mix(in srgb, var(--surface-soft) 88%, var(--surface-page));
+}
+
+/* Floated tool rail is absolute — stage must reclaim the left column. */
+.open3d-canvas-with-rail:has([data-testid="canvas-tool-rail"][data-floating="true"])
+  > [data-testid="planner-fabric-stage"],
+.open3d-canvas-with-rail:has([data-testid="canvas-tool-rail"][data-floating="true"])
+  > .open3d-canvas-embedded {
+  flex: 1 1 0%;
+  width: 100%;
+}
+
+/* Top-docked tool rail sits above the Fabric stage. */
+.open3d-canvas-with-rail:has([data-testid="canvas-tool-rail"][data-docked-top="true"]) {
+  flex-direction: column;
+}
+
+.open3d-canvas-with-rail:has([data-testid="canvas-tool-rail"][data-docked-top="true"])
+  > [data-testid="canvas-tool-rail"] {
+  order: 0;
+  flex: 0 0 auto;
+}
+
+.open3d-canvas-with-rail:has([data-testid="canvas-tool-rail"][data-docked-top="true"])
+  > [data-testid="planner-fabric-stage"],
+.open3d-canvas-with-rail:has([data-testid="canvas-tool-rail"][data-docked-top="true"])
+  > .open3d-canvas-embedded {
+  order: 1;
+  flex: 1 1 0%;
+  width: 100%;
 }
 
 /* Live Fabric stage (testid) + legacy embedded host share the stage flex slot. */

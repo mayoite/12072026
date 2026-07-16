@@ -366,3 +366,65 @@ body:has(.admin-page--svg-engine) {
   }
 }
 
+/* ── Dashboard hub: compact sectioned card grid ── */
+
+.shell-admin-dashboard.admin-page {
+  gap: 1.25rem;
+  max-width: 72rem;
+  /* shell-admin-main already pads; avoid double inset */
+  padding: 0;
+}
+
+.admin-hub-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.admin-hub-section__title {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.shell-admin-dashboard .shell-admin-card {
+  min-height: 0;
+  gap: 0.4rem;
+  padding: 0.9rem 0.95rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+}
+
+.shell-admin-dashboard .shell-admin-card__icon {
+  height: 2rem;
+  width: 2rem;
+  border-radius: var(--radius-sm);
+}
+
+.shell-admin-dashboard .shell-admin-card__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text-strong);
+}
+
+.shell-admin-dashboard .shell-admin-card__desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.shell-admin-dashboard .shell-admin-card__cta {
+  padding-top: 0.45rem;
+  font-size: 0.7rem;
+}
+

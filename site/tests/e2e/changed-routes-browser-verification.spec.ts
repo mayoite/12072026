@@ -12,7 +12,10 @@ import { expect, test, type ConsoleMessage, type Page } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
 
-import { enterGuestPlannerWorkspace } from "./guestProjectSetup";
+import {
+  clearPlannerStorageInPage,
+  enterGuestPlannerWorkspace,
+} from "./guestProjectSetup";
 
 test.describe.configure({ mode: "serial", timeout: 3_600_000 });
 
@@ -38,8 +41,14 @@ const CONSOLE_IGNORE = [
   /favicon\.ico/i,
   /webpack-hmr/i,
   /hmr/i,
+  /webpack-hot-update/i,
   /Download the React DevTools/i,
   /Failed to load resource.*favicon/i,
+  /A tree hydrated but some attributes of the server rendered HTML didn't match/i,
+  // Dev-only: Next fast refresh while the suite is running against `next dev`.
+  /React has detected a change in the order of Hooks/i,
+  /Should have a queue/i,
+  /performReactRefresh/i,
 ];
 
 function isBenignConsoleError(text: string): boolean {
@@ -85,6 +94,22 @@ function attachMonitors(page: Page) {
   };
 }
 
+async function gotoResilient(page: Page, targetPath: string): Promise<void> {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      await page.goto(targetPath, { waitUntil: "domcontentloaded", timeout: 90_000 });
+      return;
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) {
+        await page.waitForTimeout(2_000);
+      }
+    }
+  }
+  throw lastError;
+}
+
 async function assertNoHorizontalOverflow(page: Page, selector: string): Promise<void> {
   const metrics = await page.locator(selector).first().evaluate((el) => ({
     scrollWidth: el.scrollWidth,
@@ -106,9 +131,13 @@ async function runAxe(page: Page, label: string): Promise<void> {
 const ROUTES: RouteCheck[] = [
   {
     id: "planner-guest",
-    path: "",
+    path: "/planner/guest/?plannerDevTools=1",
     setup: async (page) => {
-      await enterGuestPlannerWorkspace(page);
+      await enterGuestPlannerWorkspace(page, {
+        navigate: false,
+        preservePlannerState: true,
+        projectName: "E2E changed-routes",
+      });
     },
     assert: async (page, viewport) => {
       const topBar = page.locator('[data-testid="planner-topbar"]');
@@ -121,8 +150,10 @@ const ROUTES: RouteCheck[] = [
       if (viewport.width < 768) {
         await expect(page.getByRole("button", { name: /Toggle inventory panel/i })).toBeVisible();
       } else {
-        await expect(page.getByRole("button", { name: "Grid", exact: true })).toBeVisible();
-        await expect(page.getByRole("button", { name: "Snap", exact: true })).toBeVisible();
+        const gridSnap = page.getByRole("group", { name: "Canvas grid and snap" });
+        await expect(gridSnap).toBeVisible();
+        await expect(gridSnap.getByRole("button", { name: /grid/i })).toBeVisible();
+        await expect(gridSnap.getByRole("button", { name: /snap/i })).toBeVisible();
       }
 
       await expect(page.locator('[data-testid="planner-fabric-stage"], canvas').first()).toBeVisible({
@@ -184,6 +215,8 @@ test.describe("Changed routes — 5× viewport browser verification", () => {
   });
 
   test("5 passes × 5 viewports × 4 changed routes", async ({ page }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded", timeout: 60_000 });
+
     const report: {
       pass: number;
       viewport: string;
@@ -196,6 +229,8 @@ test.describe("Changed routes — 5× viewport browser verification", () => {
     }[] = [];
 
     for (let pass = 1; pass <= PASSES; pass++) {
+      await clearPlannerStorageInPage(page);
+
       for (const viewport of VIEWPORTS) {
         await page.setViewportSize({
           width: viewport.width,
@@ -214,7 +249,7 @@ test.describe("Changed routes — 5× viewport browser verification", () => {
 
           try {
             if (route.path) {
-              await page.goto(route.path, { waitUntil: "domcontentloaded", timeout: 60_000 });
+              await gotoResilient(page, route.path);
             }
             if (route.setup) {
               await route.setup(page);

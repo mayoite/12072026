@@ -29,31 +29,46 @@ async function waitForWorkspaceReady(page) {
   if (await preparing.isVisible({ timeout: 3000 }).catch(() => false)) {
     await preparing.waitFor({ state: "hidden", timeout: 120_000 });
   }
-  await page.getByTestId("planner-fabric-stage").waitFor({ timeout: 120_000 });
+  await page
+    .locator('[data-testid="planner-fabric-stage"] canvas')
+    .waitFor({ state: "visible", timeout: 120_000 });
 }
 
 async function enterGuestCanvas(page) {
+  await page.addInitScript(() => {
+    localStorage.setItem("oando-onboarding-complete-planner-guest", "true");
+  });
+
   await page.goto("http://localhost:3000/planner/guest/?plannerDevTools=1", {
     waitUntil: "domcontentloaded",
   });
-  await page.evaluate(() => {
+
+  await page.evaluate(async () => {
     for (const key of Object.keys(localStorage)) {
-      if (key.startsWith("planner-") || key.startsWith("oando-onboarding")) {
+      if (key.startsWith("planner-") || key.startsWith("cad-suite:planner:")) {
         localStorage.removeItem(key);
       }
     }
     localStorage.setItem("oando-onboarding-complete-planner-guest", "true");
+    await new Promise((resolve) => {
+      const req = indexedDB.deleteDatabase("planner-workspace-db");
+      req.onsuccess = () => resolve();
+      req.onerror = () => resolve();
+      req.onblocked = () => resolve();
+    });
   });
+
   await page.reload({ waitUntil: "domcontentloaded" });
-  await dismissOnboarding(page);
 
   const setupHeading = page.getByRole("heading", { name: /Set up your space/i });
-  if (await setupHeading.isVisible({ timeout: 5000 }).catch(() => false)) {
+  if (await setupHeading.isVisible({ timeout: 15_000 }).catch(() => false)) {
     await page.getByLabel("Project name").fill("Canvas UX verify");
-    const submit = page.getByRole("button", { name: /Start placing furniture/i });
-    await submit.click({ force: true });
+    await page
+      .getByRole("button", { name: /Start placing furniture/i })
+      .click({ force: true });
   }
 
+  await page.locator(".pw-topbar").waitFor({ timeout: 60_000 }).catch(() => {});
   await waitForWorkspaceReady(page);
 }
 

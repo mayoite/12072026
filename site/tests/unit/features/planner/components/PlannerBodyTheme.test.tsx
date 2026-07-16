@@ -18,6 +18,7 @@ describe("PlannerBodyTheme", () => {
     render(<PlannerBodyTheme />);
 
     expect(document.body.classList.contains("planner-workspace")).toBe(true);
+    expect(document.body.classList.contains("planner-root")).toBe(true);
     expect(document.body.classList.contains("scheme-page")).toBe(false);
   });
 

@@ -302,10 +302,6 @@
   }
 }
 
-.shell-admin-dashboard {
-  max-width: 72rem;
-}
-
 .shell-admin-dashboard__content {
   display: grid;
   gap: 1.5rem;
