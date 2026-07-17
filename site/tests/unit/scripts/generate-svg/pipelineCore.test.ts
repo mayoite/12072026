@@ -75,6 +75,22 @@ describe("pipelineCore (name-mirror)", () => {
     expect(svg).toContain("<title>Demo</title>");
     expect(svg).toContain('class="demo-block"');
     expect(svg).toContain('data-block-variant="union"');
+    // currentColor is unsafe for Fabric/img — defaults to plan grey
+    expect(svg).not.toMatch(/fill="currentColor"/i);
+    expect(svg).toMatch(/fill="#[0-9a-f]{6}"/i);
+  });
+
+  it("buildSvgString uses evenodd on difference variants", () => {
+    const svg = buildSvgString(
+      "cutout",
+      { x: 0, y: 0, width: 100, height: 100 },
+      "M 0 0 L 100 0 L 100 100 L 0 100 Z M 20 20 L 20 40 L 40 40 L 40 20 Z",
+      undefined,
+      "Cut",
+      undefined,
+      "difference",
+    );
+    expect(svg).toContain('fill-rule="evenodd"');
   });
 
   it("buildFallbackSvg emits cross-hatch geometry missing marker", () => {

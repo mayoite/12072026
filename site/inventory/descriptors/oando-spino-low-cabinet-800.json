@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "2026-07-04.v2",
+  "id": "a81e3a1b-16f4-4000-8000-000000000014",
+  "slug": "oando-spino-low-cabinet-800",
+  "sku": "OANDO-SPINO-CAB-800",
+  "sourceProvenance": "native",
+  "createdBy": "seed-block-descriptors-brand-heroes",
+  "geometry": {
+    "widthMm": 800,
+    "depthMm": 450,
+    "heightMm": 900
+  },
+  "viewBox": {
+    "x": 0,
+    "y": 0,
+    "width": 800,
+    "height": 450
+  },
+  "mounting": [
+    "floor"
+  ],
+  "blocks": [
+    {
+      "id": "body",
+      "x": 0,
+      "y": 0,
+      "width": 800,
+      "depth": 450
+    },
+    {
+      "id": "door-l",
+      "x": 20,
+      "y": 20,
+      "width": 360,
+      "depth": 410
+    },
+    {
+      "id": "door-r",
+      "x": 420,
+      "y": 20,
+      "width": 360,
+      "depth": 410
+    }
+  ],
+  "themeTokens": {
+    "currentColor": "currentColor",
+    "--fill-primary": "var(--color-surface-raised)"
+  },
+  "rovingFocus": [],
+  "liveAnnouncementCategories": [
+    "status"
+  ],
+  "generatedAt": 1752000030,
+  "checksum": "f18a5aceee08cc6f779d530e48dcdf554ebf6ae63942e725c864ded79852dd53",
+  "variant": "fixed",
+  "fixed": {
+    "sizingType": "fixed"
+  }
+}

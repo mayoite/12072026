@@ -278,6 +278,47 @@ export interface ThemeTokens {
   [key: string]: string | undefined;
 }
 
+/**
+ * Plan SVGs are painted as raster images in Fabric / inventory thumbs.
+ * `currentColor` and CSS vars resolve to black (or nothing) in that context.
+ * Default to CAD-paper greys so symbols are readable on the light grid.
+ */
+export const PLAN_SVG_DEFAULT_FILL = "#8a8680";
+export const PLAN_SVG_DEFAULT_STROKE = "#2c2a28";
+
+function isImageUnsafePaint(token: string | undefined): boolean {
+  if (!token || !token.trim()) return true;
+  const t = token.trim().toLowerCase();
+  return (
+    t === "currentcolor" ||
+    t.startsWith("var(") ||
+    t === "inherit" ||
+    t === "unset"
+  );
+}
+
+/** Resolve fill/stroke for published plan symbols (image-safe literals only). */
+export function resolvePlanSvgPaint(themeTokens: ThemeTokens | undefined): {
+  fill: string;
+  stroke: string;
+  fillAttr: string;
+  strokeAttr: string;
+} {
+  const tokens = themeTokens ?? {};
+  const rawFill = tokens["fill-primary"] ?? tokens["--fill-primary"];
+  const rawStroke = tokens["stroke-accent"] ?? tokens["--stroke-accent"];
+  const fill = isImageUnsafePaint(rawFill) ? PLAN_SVG_DEFAULT_FILL : String(rawFill).trim();
+  const stroke = isImageUnsafePaint(rawStroke)
+    ? PLAN_SVG_DEFAULT_STROKE
+    : String(rawStroke).trim();
+  return {
+    fill,
+    stroke,
+    fillAttr: ` fill="${escXml(fill)}"`,
+    strokeAttr: ` stroke="${escXml(stroke)}" stroke-width="12"`,
+  };
+}
+
 function blockRectToPath(b: BlockRect): string {
   return [
     `M ${fmt(b.x)} ${fmt(b.y)}`,
@@ -300,13 +341,7 @@ export function buildPerBlockSvgString(
 ): string {
   const titleAttr = `<title>${escXml(title ?? slug)}</title>`;
   const descAttr = desc ? `<desc>${escXml(desc)}</desc>` : "";
-  const tokens = themeTokens ?? {};
-  const fillAttr = tokens["fill-primary"]
-    ? ` fill="${escXml(tokens["fill-primary"])}"`
-    : ` fill="currentColor"`;
-  const strokeAttr = tokens["stroke-accent"]
-    ? ` stroke="${escXml(tokens["stroke-accent"])}"`
-    : "";
+  const paint = resolvePlanSvgPaint(themeTokens);
   const variantAttr = variant ? ` data-block-variant="${escXml(variant)}"` : "";
   const vb = `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
   const inner = blocks
@@ -314,7 +349,9 @@ export function buildPerBlockSvgString(
       const d = blockRectToPath(b);
       const idAttr = b.id ? ` id="${escXml(b.id)}"` : ` id="block-${index}"`;
       const classAttr = slug ? ` class="${slug}"` : "";
-      return `<path d="${d}"${fillAttr}${strokeAttr}${idAttr}${classAttr}/>`;
+      // Slight shade variation so multiparts read as furniture, not one black mass.
+      const fill = index === 0 ? paint.fill : shadeHex(paint.fill, index);
+      return `<path d="${d}" fill="${escXml(fill)}"${paint.strokeAttr}${idAttr}${classAttr}/>`;
     })
     .join("\n");
   return [
@@ -328,6 +365,17 @@ export function buildPerBlockSvgString(
   ].join("\n");
 }
 
+/** Nudge grey fills so seat/top/body are distinct on paper. */
+function shadeHex(hex: string, step: number): string {
+  const m = /^#([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return hex;
+  const n = Number.parseInt(m[1]!, 16);
+  const r = Math.min(255, Math.max(0, ((n >> 16) & 255) + step * 12));
+  const g = Math.min(255, Math.max(0, ((n >> 8) & 255) + step * 12));
+  const b = Math.min(255, Math.max(0, (n & 255) + step * 10));
+  return `#${[r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("")}`;
+}
+
 export function buildSvgString(
   slug: string,
   viewBox: ViewBox,
@@ -339,22 +387,19 @@ export function buildSvgString(
 ): string {
   const titleAttr = `<title>${escXml(title ?? slug)}</title>`;
   const descAttr = desc ? `<desc>${escXml(desc)}</desc>` : "";
-  const tokens = themeTokens ?? {};
-  const fillAttr = tokens["fill-primary"]
-    ? ` fill="${escXml(tokens["fill-primary"])}"`
-    : ` fill="currentColor"`;
-  const strokeAttr = tokens["stroke-accent"]
-    ? ` stroke="${escXml(tokens["stroke-accent"])}"`
-    : "";
+  const { fillAttr, strokeAttr } = resolvePlanSvgPaint(themeTokens);
   const classAttr = slug ? ` class="${slug}"` : "";
   const variantAttr = variant ? ` data-block-variant="${escXml(variant)}"` : "";
+  // Difference booleans need evenodd so cutouts are holes, not solid black.
+  const fillRule =
+    variant === "difference" ? ` fill-rule="evenodd"` : "";
   const vb = `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" viewBox="${vb}" width="${viewBox.width}" height="${viewBox.height}"${variantAttr}>`,
     titleAttr,
     descAttr,
     `<g>`,
-    `<path d="${dPath}"${fillAttr}${strokeAttr}${classAttr}/>`,
+    `<path d="${dPath}"${fillAttr}${strokeAttr}${fillRule}${classAttr}/>`,
     `</g>`,
     `</svg>`,
   ].join("\n");
@@ -471,20 +516,20 @@ function buildMakerPathsSvgString(
 ): string {
   const titleAttr = `<title>${escXml(title ?? slug)}</title>`;
   const descAttr = desc ? `<desc>${escXml(desc)}</desc>` : "";
-  const tokens = themeTokens ?? {};
-  const fillAttr = tokens["fill-primary"]
-    ? ` fill="${escXml(tokens["fill-primary"])}"`
-    : ` fill="currentColor"`;
-  const strokeAttr = tokens["stroke-accent"]
-    ? ` stroke="${escXml(tokens["stroke-accent"])}"`
-    : "";
+  const paint = resolvePlanSvgPaint(themeTokens);
   const variantAttr = variant ? ` data-block-variant="${escXml(variant)}"` : "";
   const vb = `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`;
   const inner = parts
     .map((part, index) => {
       const idAttr = part.id ? ` id="${escXml(part.id)}"` : ` id="maker-part-${index}"`;
       const classAttr = slug ? ` class="${slug}"` : "";
-      return `<path d="${part.dPath}"${fillAttr}${strokeAttr}${idAttr}${classAttr}/>`;
+      const isTop = /top|worksurface/i.test(part.id);
+      const fill = isTop
+        ? shadeHex(paint.fill, -2)
+        : index === 0
+          ? paint.fill
+          : shadeHex(paint.fill, index);
+      return `<path d="${part.dPath}" fill="${escXml(fill)}"${paint.strokeAttr}${idAttr}${classAttr}/>`;
     })
     .join("\n");
   return [

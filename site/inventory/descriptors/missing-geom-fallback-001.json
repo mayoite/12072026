@@ -1,10 +1,10 @@
 {
   "schemaVersion": "2026-07-04.v2",
-  "id": "f81e3a1b-16f4-4000-8000-000000000004",
+  "id": "a81e3a1b-16f4-4000-8000-000000000023",
   "slug": "missing-geom-fallback-001",
   "sku": "OFL-FBK-001",
   "sourceProvenance": "native",
-  "createdBy": "seed-block-descriptors",
+  "createdBy": "seed-block-descriptors-brand-heroes",
   "geometry": {
     "widthMm": 200,
     "depthMm": 200,
@@ -36,8 +36,8 @@
   "liveAnnouncementCategories": [
     "status"
   ],
-  "generatedAt": 1751631003,
-  "checksum": "a0b5bf45770a8a64e2cc092f2ec3cc41925cec25158e123d6e1555fb1a6a3266",
+  "generatedAt": 1752000099,
+  "checksum": "4dfcaeca2028bb3d7a7050048c0a687efac485d4e344bac7994a4bbf43af04a5",
   "variant": "fixed",
   "fixed": {
     "sizingType": "fixed"

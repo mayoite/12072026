@@ -13,8 +13,11 @@ export function humanizeCatalogSlug(slug: string | null | undefined): string {
   const trimmed = slug.trim();
   if (!trimmed) return "Catalog item";
 
-  const withoutSerial = trimmed.replace(/-\d{2,}$/i, "");
-  const spaced = withoutSerial
+  // Drop only padded serials (-001), not size tokens (-1400 / -1600).
+  const withoutSerial = trimmed.replace(/-0\d{2}$/i, "");
+  // Brand prefix → readable label ("oando-fluid-desk-1600" → "Fluid Desk 1600").
+  const withoutBrand = withoutSerial.replace(/^oando[-_]+/i, "");
+  const spaced = withoutBrand
     .replace(/[-_]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -25,11 +28,17 @@ export function humanizeCatalogSlug(slug: string | null | undefined): string {
     .split(" ")
     .map((word) => {
       if (/^v\d+/i.test(word)) return word.toUpperCase();
+      if (/^\d{3,4}$/.test(word)) return word; // mm size token
       if (word.length <= 2 && word === word.toUpperCase()) return word;
+      // Series tokens stay title case
+      if (/^(ws|l|ls)$/i.test(word)) return word.toUpperCase();
       return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
     })
-    .join(" ");
-}
+    .join(" ")
+    .replace(/\bWs\b/g, "Workstation")
+    .replace(/\bLshape\b/gi, "L-Shape")
+    .replace(/\bL Desk\b/gi, "L-Desk");
+
 
 /** Words from a slug usable as search tags (minus pure numeric serials). */
 export function catalogSlugSearchTags(slug: string | null | undefined): string[] {

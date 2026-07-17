@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "2026-07-04.v2",
+  "id": "a81e3a1b-16f4-4000-8000-000000000013",
+  "slug": "oando-halo-meeting-3000",
+  "sku": "OANDO-HALO-MTG-3000",
+  "sourceProvenance": "native",
+  "createdBy": "seed-block-descriptors-brand-heroes",
+  "geometry": {
+    "widthMm": 3000,
+    "depthMm": 1200,
+    "heightMm": 750
+  },
+  "viewBox": {
+    "x": 0,
+    "y": 0,
+    "width": 3000,
+    "height": 1200
+  },
+  "mounting": [
+    "floor"
+  ],
+  "blocks": [
+    {
+      "id": "tabletop",
+      "x": 0,
+      "y": 0,
+      "width": 3000,
+      "depth": 1200
+    },
+    {
+      "id": "leg-nw",
+      "x": 120,
+      "y": 120,
+      "width": 80,
+      "depth": 80
+    },
+    {
+      "id": "leg-ne",
+      "x": 2800,
+      "y": 120,
+      "width": 80,
+      "depth": 80
+    },
+    {
+      "id": "leg-sw",
+      "x": 120,
+      "y": 1000,
+      "width": 80,
+      "depth": 80
+    },
+    {
+      "id": "leg-se",
+      "x": 2800,
+      "y": 1000,
+      "width": 80,
+      "depth": 80
+    }
+  ],
+  "themeTokens": {
+    "currentColor": "currentColor",
+    "--fill-primary": "var(--color-surface-raised)"
+  },
+  "rovingFocus": [],
+  "liveAnnouncementCategories": [
+    "status"
+  ],
+  "generatedAt": 1752000022,
+  "checksum": "34ccbcd6aa115f2299aa05b6bd2bd1ea8fc9c92f01999958c03b1574340d4ab1",
+  "variant": "fixed",
+  "fixed": {
+    "sizingType": "fixed"
+  }
+}
