@@ -193,14 +193,43 @@ export function applyProjectSetup(metadata: PlannerProjectMetadata): void {
   setPurposeFilter(metadata.primaryPurpose);
 }
 
+/** Guest default name when the field is empty or still the legacy draft label. */
+export const GUEST_DEFAULT_PROJECT_NAME = "Guest plan";
+
+const GUEST_DEFAULT_FLOOR_AREA_SQ_FT = 1000;
+const GUEST_DEFAULT_SEAT_TARGET = 50;
+
 export function createDefaultProjectSetupDraft(options?: { guestMode?: boolean }): PlannerProjectSetupDraft {
   return {
-    projectName: options?.guestMode ? "Guest workspace" : "",
+    projectName: options?.guestMode ? GUEST_DEFAULT_PROJECT_NAME : "",
     city: PLANNER_INDIAN_CITIES[0],
-    floorAreaSqFt: 1000,
+    floorAreaSqFt: GUEST_DEFAULT_FLOOR_AREA_SQ_FT,
     primaryPurpose: "workstations",
-    seatTarget: 50,
+    seatTarget: GUEST_DEFAULT_SEAT_TARGET,
   };
+}
+
+/**
+ * Guest submit: empty/legacy name → Guest plan; invalid size/seats → safe defaults.
+ * Enables one-tap continue without multi-field validation errors.
+ */
+export function resolveGuestSetupSubmit(draft: PlannerProjectSetupDraft): {
+  projectName: string;
+  floorAreaSqFt: number;
+  seatTarget: number;
+} {
+  const trimmed = draft.projectName.trim();
+  const projectName =
+    !trimmed || trimmed === "Guest workspace" ? GUEST_DEFAULT_PROJECT_NAME : trimmed;
+  const floorAreaSqFt =
+    Number.isFinite(draft.floorAreaSqFt) && draft.floorAreaSqFt >= 100
+      ? Math.round(draft.floorAreaSqFt)
+      : GUEST_DEFAULT_FLOOR_AREA_SQ_FT;
+  const seatTarget =
+    Number.isFinite(draft.seatTarget) && draft.seatTarget >= 1
+      ? Math.round(draft.seatTarget)
+      : GUEST_DEFAULT_SEAT_TARGET;
+  return { projectName, floorAreaSqFt, seatTarget };
 }
 
 export function metadataToDocumentFields(metadata: PlannerProjectMetadata) {

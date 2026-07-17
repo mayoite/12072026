@@ -42,6 +42,7 @@ import {
   trackQuoteCartAdded,
   trackSiteCtaClick,
 } from "@/lib/analytics/siteEvents";
+import { GUEST_PLANNER_WORKSPACE_HREF } from "@/lib/analytics/plannerEntry";
 import { PDP_ROUTE_COPY } from "@/features/site/data/routeCopy";
 
 interface ProductViewerProps {
@@ -832,13 +833,19 @@ export function ProductViewer({
                   </span>
                   <ArrowLeft className="w-4 h-4 rotate-180 transition-transform group-hover:translate-x-1" />
                 </Link>
+                {/*
+                  Product-aware entry: deep-link guest workspace (not marketing chooser).
+                  Continuity: siteProduct / siteCategory / siteSource via PlannerLaunchLink.
+                  Marketing home/nav still use GUEST_PLANNER_CHOOSER_HREF.
+                */}
                 <PlannerLaunchLink
-                  href="/planner/guest"
+                  href={GUEST_PLANNER_WORKSPACE_HREF}
                   surface="pdp"
                   label={PDP_ROUTE_COPY.ctas.designInPlanner}
                   productSlug={product.slug || product.id}
                   // Only a catalog category id (e.g. seating) — never categoryRoute path.
                   categoryId={categoryId}
+                  data-testid="pdp-design-in-planner"
                   className="pdp-cta-secondary group mb-2 flex w-full items-center justify-between"
                 >
                   <span className="pdp-action-label">

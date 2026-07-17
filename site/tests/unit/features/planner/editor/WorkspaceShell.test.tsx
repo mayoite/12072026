@@ -137,6 +137,39 @@ describe("WorkspaceShell", () => {
     );
   });
 
+  it("guest status is calm — quote message only, no object power density", () => {
+    render(
+      <WorkspaceShell
+        accessContext="guest"
+        projectName="Guest metrics"
+        planMetrics={{
+          objects: 8,
+          walls: 4,
+          furniture: 3,
+          workstationSeats: 6,
+          floorLabel: "Level 1",
+          boqReady: false,
+          validationErrors: 0,
+        }}
+      >
+        <div>canvas</div>
+      </WorkspaceShell>,
+    );
+
+    const metrics = screen.getByTestId("planner-status-metrics");
+    expect(metrics).toHaveAttribute("data-guest-chrome", "true");
+    expect(screen.getByTestId("planner-status-quote")).toHaveTextContent(
+      "Add furniture for quote",
+    );
+    // No dense census for guests (matches ModularPlannerShell desktop).
+    // Match counts only — quote copy may say "furniture".
+    expect(metrics).not.toHaveTextContent(/\d+\s+objects/);
+    expect(metrics).not.toHaveTextContent(/\d+\s+walls/);
+    expect(metrics).not.toHaveTextContent(/\d+\s+furniture/);
+    expect(metrics).not.toHaveTextContent(/\d+\s+seats/);
+    expect(screen.queryByText("Level 1")).not.toBeInTheDocument();
+  });
+
   it("status bar has no fake defaults and no second save chrome (TopBar is sole authority)", () => {
     render(
       <WorkspaceShell

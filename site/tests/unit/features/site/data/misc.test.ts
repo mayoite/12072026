@@ -156,10 +156,13 @@ describe("site navigation data", () => {
     }
   });
 
-  it("search fallback links include planner and access", () => {
+  it("search fallback links include planner entry and help", () => {
     const hrefs = SITE_NAV_SEARCH_FALLBACK_LINKS.map((l) => l.href);
-    expect(hrefs.some((h) => h.includes("/planner"))).toBe(true);
-    expect(hrefs.some((h) => h.includes("access"))).toBe(true);
+    // Guest chooser is public planner entry; help remains a search surface.
+    // /access is intentionally absent (not marketing nav; AccessForm handles auth).
+    expect(hrefs.some((h) => h.includes("choose-product") || h.includes("/planner"))).toBe(true);
+    expect(hrefs.some((h) => h.includes("/planner/help"))).toBe(true);
+    expect(hrefs.some((h) => h.includes("access"))).toBe(false);
   });
 
   it("normalizes footer hrefs by trimming trailing slash", () => {

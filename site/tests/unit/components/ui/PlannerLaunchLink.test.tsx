@@ -51,6 +51,26 @@ describe("PlannerLaunchLink", () => {
     expect(href).not.toContain("utm_medium=");
   });
 
+  it("upgrades bare /planner to guest when productSlug is set", () => {
+    render(
+      <PlannerLaunchLink
+        href="/planner"
+        surface="pdp"
+        label="Design in Planner"
+        productSlug="super-chair"
+        categoryId="seating"
+        data-testid="pdp-planner-launch"
+      >
+        Design in Planner
+      </PlannerLaunchLink>,
+    );
+
+    const href = screen.getByTestId("pdp-planner-launch").getAttribute("href") ?? "";
+    expect(href.startsWith("/planner/guest")).toBe(true);
+    expect(href).toContain("siteProduct=super-chair");
+    expect(href).toContain("siteCategory=seating");
+  });
+
   it("click path tracks with attribution on the navigation href", () => {
     document.cookie = "oando_seo_source=google; path=/";
     document.cookie = "oando_seo_medium=cpc; path=/";

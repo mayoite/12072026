@@ -5,8 +5,12 @@ import {
   buildGuestPlannerEntryHref,
   buildPlannerEntryCampaign,
   buildPlannerEntryHref,
+  buildProductAwareGuestPlannerHref,
   formatSiteProductContinuityMessage,
+  GUEST_PLANNER_CHOOSER_HREF,
+  GUEST_PLANNER_WORKSPACE_HREF,
   humanizeSiteProductSlug,
+  isBarePlannerLandingHref,
   isPlannerEntryHref,
   pickPlannerEntrySearchParams,
   readPlannerEntrySiteProduct,
@@ -32,6 +36,15 @@ describe("plannerEntry", () => {
     expect(isPlannerEntryHref("/planner/help")).toBe(false);
     expect(isPlannerEntryHref("/planner/features/measure")).toBe(false);
     expect(isPlannerEntryHref("/products")).toBe(false);
+    expect(isPlannerEntryHref(GUEST_PLANNER_CHOOSER_HREF)).toBe(false);
+  });
+
+  it("detects bare /planner marketing landing", () => {
+    expect(isBarePlannerLandingHref("/planner")).toBe(true);
+    expect(isBarePlannerLandingHref("/planner/")).toBe(true);
+    expect(isBarePlannerLandingHref("/planner?x=1")).toBe(true);
+    expect(isBarePlannerLandingHref(GUEST_PLANNER_WORKSPACE_HREF)).toBe(false);
+    expect(isBarePlannerLandingHref("/planner/canvas")).toBe(false);
   });
 
   it("builds campaign strings with product, category, surface, and utm", () => {
@@ -48,7 +61,7 @@ describe("plannerEntry", () => {
   });
 
   it("carries site product identity without cookie utm in default href (SSR-safe)", () => {
-    const href = buildPlannerEntryHref("/planner/guest", {
+    const href = buildPlannerEntryHref(GUEST_PLANNER_WORKSPACE_HREF, {
       sourcePage: "/products/seating/chair",
       productSlug: "chair",
       categoryId: "seating",
@@ -60,9 +73,44 @@ describe("plannerEntry", () => {
     expect(href).not.toContain("utm_medium=");
   });
 
+  it("product-aware helper deep-links guest with continuity (not chooser)", () => {
+    const href = buildProductAwareGuestPlannerHref({
+      sourcePage: "/products/seating/super-chair",
+      productSlug: "super-chair",
+      categoryId: "seating",
+    });
+    expect(href.startsWith(`${GUEST_PLANNER_WORKSPACE_HREF}?`)).toBe(true);
+    expect(href).toContain("siteProduct=super-chair");
+    expect(href).toContain("siteCategory=seating");
+    expect(href).toContain("siteSource=%2Fproducts%2Fseating%2Fsuper-chair");
+    expect(href).not.toContain("choose-product");
+    expect(href).not.toMatch(/^\/planner\?/);
+    expect(href).not.toMatch(/^\/planner\/\?/);
+  });
+
+  it("upgrades bare /planner to guest when productSlug is present", () => {
+    const href = buildPlannerEntryHref("/planner", {
+      sourcePage: "/products/seating/chair",
+      productSlug: "chair",
+      categoryId: "seating",
+    });
+    expect(href.startsWith(`${GUEST_PLANNER_WORKSPACE_HREF}?`)).toBe(true);
+    expect(href).toContain("siteProduct=chair");
+    expect(href).not.toMatch(/^\/planner\?/);
+  });
+
+  it("keeps bare /planner when no product context (marketing overview)", () => {
+    const href = buildPlannerEntryHref("/planner", {
+      sourcePage: "/",
+    });
+    expect(href.startsWith("/planner")).toBe(true);
+    expect(href).not.toContain("/planner/guest");
+    expect(href).toContain("siteSource=%2F");
+  });
+
   it("adds cookie utm params only when includeAttribution is set", () => {
     const href = buildPlannerEntryHref(
-      "/planner/guest",
+      GUEST_PLANNER_WORKSPACE_HREF,
       { sourcePage: "/", productSlug: "chair", categoryId: "seating" },
       { includeAttribution: true },
     );

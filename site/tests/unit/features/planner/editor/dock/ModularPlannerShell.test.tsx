@@ -90,4 +90,49 @@ describe("ModularPlannerShell mobile chrome (P3)", () => {
     });
     expect(container.querySelector("[data-chrome-mode='slim']")).not.toBeNull();
   });
+
+  it("W4 guest mobile: calm quote status, no object power density, workflow guest chrome", async () => {
+    render(
+      <ModularPlannerShell
+        accessContext="guest"
+        projectName="Guest phone"
+        inventory={<div>inv</div>}
+        properties={<div>props</div>}
+        activeTool="select"
+        onToolChange={vi.fn()}
+        planMetrics={{
+          objects: 5,
+          walls: 3,
+          furniture: 2,
+          workstationSeats: 4,
+          floorLabel: "Ground",
+          boqReady: true,
+          validationErrors: 0,
+        }}
+      >
+        <div data-testid="guest-plan-stage">plan</div>
+      </ModularPlannerShell>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("planner-mobile-shell")).toBeInTheDocument();
+    });
+
+    // Workflow bar gets guest accessContext (same as desktop modular path).
+    const workflow = document.querySelector("[aria-label='Planner workflow']");
+    expect(workflow).not.toBeNull();
+    expect(workflow).toHaveAttribute("data-guest-chrome", "true");
+
+    // Status bar via WorkspaceShell: quote calm language only.
+    const metrics = screen.getByTestId("planner-status-metrics");
+    expect(metrics).toHaveAttribute("data-guest-chrome", "true");
+    expect(screen.getByTestId("planner-status-quote")).toHaveTextContent(
+      "Quote ready",
+    );
+    // Match counts only — quote copy may say "furniture".
+    expect(metrics).not.toHaveTextContent(/\d+\s+objects/);
+    expect(metrics).not.toHaveTextContent(/\d+\s+walls/);
+    expect(metrics).not.toHaveTextContent(/\d+\s+furniture/);
+    expect(metrics).not.toHaveTextContent(/\d+\s+seats/);
+  });
 });

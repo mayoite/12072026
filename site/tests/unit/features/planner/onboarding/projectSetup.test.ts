@@ -1,5 +1,17 @@
 import { describe, expect, it, vi } from "vitest";
-import { resolveGridMmPerUnit, projectSetupStorageKey, isProjectSetupCompleteInStorage, markProjectSetupCompleteInStorage, filterCatalogItemsByPurpose, applyProjectSetup, createDefaultProjectSetupDraft, metadataToDocumentFields, metadataToSpaceSuggestInput } from "@/features/planner/onboarding/projectSetup";
+import {
+  resolveGridMmPerUnit,
+  projectSetupStorageKey,
+  isProjectSetupCompleteInStorage,
+  markProjectSetupCompleteInStorage,
+  filterCatalogItemsByPurpose,
+  applyProjectSetup,
+  createDefaultProjectSetupDraft,
+  GUEST_DEFAULT_PROJECT_NAME,
+  metadataToDocumentFields,
+  metadataToSpaceSuggestInput,
+  resolveGuestSetupSubmit,
+} from "@/features/planner/onboarding/projectSetup";
 
 vi.mock("@react-three/fiber", () => ({
   Canvas: ({ children }: any) => React.createElement("div", { "data-testid": "mock-canvas" }, children),
@@ -32,6 +44,29 @@ describe("projectSetup", () => {
   });
   it("should have function createDefaultProjectSetupDraft defined", () => {
     expect(createDefaultProjectSetupDraft).toBeTypeOf("function");
+  });
+  it("guest draft defaults to Guest plan with ready size/seats", () => {
+    expect(createDefaultProjectSetupDraft({ guestMode: true })).toMatchObject({
+      projectName: GUEST_DEFAULT_PROJECT_NAME,
+      floorAreaSqFt: 1000,
+      seatTarget: 50,
+    });
+    expect(createDefaultProjectSetupDraft({ guestMode: false }).projectName).toBe("");
+  });
+  it("resolveGuestSetupSubmit fills empty name and invalid numbers", () => {
+    expect(
+      resolveGuestSetupSubmit({
+        projectName: "",
+        city: "Patna",
+        floorAreaSqFt: 10,
+        primaryPurpose: "workstations",
+        seatTarget: -1,
+      }),
+    ).toEqual({
+      projectName: GUEST_DEFAULT_PROJECT_NAME,
+      floorAreaSqFt: 1000,
+      seatTarget: 50,
+    });
   });
   it("should have function metadataToDocumentFields defined", () => {
     expect(metadataToDocumentFields).toBeTypeOf("function");

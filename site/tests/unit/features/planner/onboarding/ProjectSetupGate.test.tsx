@@ -1,12 +1,21 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { ProjectSetupGate } from "@/features/planner/onboarding/ProjectSetupGate";
+import {
+  ProjectSetupGate,
+  tryCompleteGuestSetupWithDefaults,
+} from "@/features/planner/onboarding/ProjectSetupGate";
 import { projectSetupStorageKey } from "@/features/planner/onboarding/projectSetup";
+import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 
 describe("ProjectSetupGate", () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    localStorage.clear();
+    usePlannerWorkspaceStore.setState({
+      projectMetadata: null,
+      pendingBootstrapLayout: null,
+    });
   });
 
   afterEach(() => {
@@ -14,7 +23,7 @@ describe("ProjectSetupGate", () => {
     localStorage.clear();
   });
 
-  it("shows project setup for guests until completion flag is set", () => {
+  it("skips the setup form for guests and opens canvas with defaults", () => {
     render(
       <ProjectSetupGate guestMode planId="guest-plan">
         <div data-testid="canvas-child">Canvas</div>
@@ -25,8 +34,10 @@ describe("ProjectSetupGate", () => {
       vi.advanceTimersByTime(0);
     });
 
-    expect(screen.getByRole("heading", { name: /Set up your space/i })).toBeInTheDocument();
-    expect(screen.queryByTestId("canvas-child")).not.toBeInTheDocument();
+    expect(screen.getByTestId("canvas-child")).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: /Set up your space|Open the canvas/i })).not.toBeInTheDocument();
+    expect(localStorage.getItem(projectSetupStorageKey(true, "guest-plan"))).toBe("true");
+    expect(usePlannerWorkspaceStore.getState().projectMetadata?.projectName).toBe("Guest plan");
   });
 
   it("renders children for guests when setup is already complete in storage", () => {
@@ -43,12 +54,29 @@ describe("ProjectSetupGate", () => {
     });
 
     expect(screen.getByTestId("canvas-child")).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: /Set up your space/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: /Set up your space|Open the canvas/i })).not.toBeInTheDocument();
   });
 
-  it("offers every starting mode in the single blocking setup step", () => {
+  it("shows full project setup for members until completion", () => {
     render(
-      <ProjectSetupGate guestMode planId="one-step-plan">
+      <ProjectSetupGate guestMode={false} planId="member-plan">
+        <div data-testid="canvas-child">Canvas</div>
+      </ProjectSetupGate>,
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+
+    expect(screen.getByRole("heading", { name: /Set up your space/i })).toBeInTheDocument();
+    expect(screen.queryByTestId("canvas-child")).not.toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: /Starter layout/i })).toBeChecked();
+    expect(screen.getByRole("radio", { name: /Blank canvas/i })).toBeInTheDocument();
+  });
+
+  it("member path still requires completing setup before canvas", () => {
+    render(
+      <ProjectSetupGate guestMode={false} planId="member-one-step">
         <div data-testid="canvas-child">Canvas</div>
       </ProjectSetupGate>,
     );
@@ -60,13 +88,24 @@ describe("ProjectSetupGate", () => {
       vi.runAllTimers();
     });
 
-    expect(screen.getByRole("radio", { name: /Starter layout/i })).toBeChecked();
-    expect(screen.getByRole("radio", { name: /Blank canvas/i })).toBeInTheDocument();
-    expect(screen.getByRole("radio", { name: /Import \/ trace/i })).toBeInTheDocument();
-
+    fireEvent.change(screen.getByLabelText("Project name"), {
+      target: { value: "Member HQ" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "Open planner" }));
 
     expect(screen.getByTestId("canvas-child")).toBeInTheDocument();
-    expect(localStorage.getItem(projectSetupStorageKey(true, "one-step-plan"))).toBe("true");
+    expect(localStorage.getItem(projectSetupStorageKey(false, "member-one-step"))).toBe("true");
+  });
+
+  it("tryCompleteGuestSetupWithDefaults marks storage and seeds Guest plan metadata", () => {
+    const ok = tryCompleteGuestSetupWithDefaults("defaults-plan");
+    expect(ok).toBe(true);
+    expect(localStorage.getItem(projectSetupStorageKey(true, "defaults-plan"))).toBe("true");
+    expect(usePlannerWorkspaceStore.getState().projectMetadata).toMatchObject({
+      projectName: "Guest plan",
+      floorAreaSqFt: 1000,
+      seatTarget: 50,
+    });
+    expect(usePlannerWorkspaceStore.getState().pendingBootstrapLayout).not.toBeNull();
   });
 });

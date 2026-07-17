@@ -219,7 +219,7 @@ describe('ProductViewer Component', () => {
     expect(screen.getAllByText('Mesh Red').length).toBeGreaterThan(0);
   });
 
-  it('Design in Planner carries siteProduct/siteCategory/siteSource (SF-08)', async () => {
+  it('Design in Planner deep-links guest with siteProduct/siteCategory/siteSource (SF-08 / W5)', async () => {
     render(
       <ProductViewer
         product={dummyProduct}
@@ -233,9 +233,12 @@ describe('ProductViewer Component', () => {
       expect(global.fetch).toHaveBeenCalled();
     });
 
-    const launch = screen.getByRole('link', { name: /Design in Planner/i });
+    const launch = screen.getByTestId('pdp-design-in-planner');
     const href = launch.getAttribute('href') ?? '';
+    // Product-aware: guest workspace, not marketing chooser or bare /planner overview.
     expect(href.startsWith('/planner/guest')).toBe(true);
+    expect(href).not.toContain('choose-product');
+    expect(href).not.toMatch(/^\/planner(\/)?(\?|$)/);
     expect(href).toContain('siteProduct=super-chair');
     expect(href).toContain('siteCategory=seating');
     expect(href).toContain('siteSource=%2Fproducts%2Fseating%2Fsuper-chair');
@@ -254,8 +257,9 @@ describe('ProductViewer Component', () => {
       expect(global.fetch).toHaveBeenCalled();
     });
 
-    const launch = screen.getByRole('link', { name: /Design in Planner/i });
+    const launch = screen.getByTestId('pdp-design-in-planner');
     const href = launch.getAttribute('href') ?? '';
+    expect(href.startsWith('/planner/guest')).toBe(true);
     expect(href).toContain('siteProduct=super-chair');
     expect(href).toContain('siteSource=%2Fproducts%2Fseating%2Fsuper-chair');
     // Must not stamp a route path as siteCategory (SF-08 continuity).

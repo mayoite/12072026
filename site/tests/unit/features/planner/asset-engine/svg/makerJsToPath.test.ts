@@ -163,6 +163,43 @@ describe("makerJsToPath", () => {
     expect(joined.maxY).toBeLessThanOrEqual(depthMm);
   });
 
+  /**
+   * W3 hard regression: published linear-desk 1600 maker export must land in
+   * plan Y-down [0, depth] with viewBox origin (0,0) — no negative path Y.
+   */
+  it("linear-desk 1600 paths: minY>=0, maxY<=depth, viewBox-aligned", () => {
+    const widthMm = 1600;
+    const depthMm = 800;
+    const recipe = {
+      recipe: "linear-desk" as const,
+      widthMm,
+      depthMm,
+      topThicknessMm: 80,
+    };
+    const { parts, viewBox } = compileMakerRecipeToPaths(recipe);
+    const { dPath } = compileMakerRecipeToPath(recipe);
+
+    expect(viewBox).toEqual({ x: 0, y: 0, width: widthMm, height: depthMm });
+    expect(parts.length).toBeGreaterThanOrEqual(3);
+    expect(dPath).not.toMatch(/L\s+0\s+-/);
+    expect(dPath).not.toMatch(/[ML]\s+[-\d.]+\s+-/);
+
+    for (const part of parts) {
+      expect(part.dPath).not.toMatch(/L\s+0\s+-/);
+      const { minY, maxY } = yBBox(part.dPath);
+      expect(minY, `${part.id} minY`).toBeGreaterThanOrEqual(0);
+      expect(maxY, `${part.id} maxY`).toBeLessThanOrEqual(depthMm);
+      for (const y of absoluteYsFromPathD(part.dPath)) {
+        expect(y, `${part.id} y=${y}`).toBeGreaterThanOrEqual(0);
+        expect(y, `${part.id} y=${y} vs depth`).toBeLessThanOrEqual(depthMm);
+      }
+    }
+
+    const joined = yBBox(dPath);
+    expect(joined.minY).toBeGreaterThanOrEqual(0);
+    expect(joined.maxY).toBeLessThanOrEqual(depthMm);
+  });
+
   it("l-desk path Y fits viewBox plan Y-down (no negative Y)", () => {
     const depthMm = 600;
     const { dPath, viewBox } = compileMakerRecipeToPath({

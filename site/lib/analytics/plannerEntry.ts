@@ -8,6 +8,23 @@ export interface PlannerEntryContext {
   readonly campaign?: string;
 }
 
+/**
+ * Site → Planner entry contract
+ *
+ * 1. Marketing / nav / home (no product identity):
+ *    `GUEST_PLANNER_CHOOSER_HREF` → `/choose-product?mode=guest`
+ *    then chooser opens the guest workspace.
+ * 2. Product-aware (PDP "Design in Planner"):
+ *    deep-link `GUEST_PLANNER_WORKSPACE_HREF` (`/planner/guest`) with
+ *    `siteProduct` / `siteCategory` / `siteSource` via `buildPlannerEntryHref`
+ *    or `PlannerLaunchLink` — lower friction than re-choosing a product.
+ *
+ * Guest draft-id redirect preserves `PLANNER_ENTRY_QUERY_KEYS`.
+ * Guest UI banner (`SiteProductContinuityNotice`) reads `siteProduct`.
+ */
+export const GUEST_PLANNER_WORKSPACE_HREF = "/planner/guest";
+export const GUEST_PLANNER_CHOOSER_HREF = "/choose-product?mode=guest";
+
 /** Site stamps these on planner entry URLs; guest id redirect must keep them. */
 export const PLANNER_ENTRY_QUERY_KEYS = [
   "siteProduct",
@@ -23,12 +40,24 @@ export type PlannerEntrySearchParams = Record<
   string | string[] | undefined
 >;
 
+/** True for workspace entry paths only (not help/features marketing). */
 export function isPlannerEntryHref(href: string): boolean {
   const normalized = href.trim().toLowerCase();
   if (!normalized.startsWith("/planner")) return false;
   if (normalized.startsWith("/planner/help")) return false;
   if (normalized.startsWith("/planner/features")) return false;
   return true;
+}
+
+/** Bare `/planner` overview — not a guest canvas; product deep-links must not land here. */
+export function isBarePlannerLandingHref(href: string): boolean {
+  try {
+    const url = new URL(href, "https://oneonly.in");
+    const path = url.pathname.replace(/\/+$/, "") || "/";
+    return path === "/planner";
+  } catch {
+    return false;
+  }
 }
 
 export function buildPlannerEntryCampaign(context: PlannerEntryContext): string | undefined {
@@ -54,12 +83,21 @@ export interface BuildPlannerEntryHrefOptions {
   readonly includeAttribution?: boolean;
 }
 
+/**
+ * Stamp continuity params onto a planner workspace href.
+ * When a product slug is present and the base is bare `/planner` overview,
+ * upgrade to guest workspace so PDP never drops into marketing landing.
+ */
 export function buildPlannerEntryHref(
   baseHref: string,
   context: Pick<PlannerEntryContext, "sourcePage" | "productSlug" | "categoryId">,
   options?: BuildPlannerEntryHrefOptions,
 ): string {
-  const url = new URL(baseHref, "https://oneonly.in");
+  const resolvedBase =
+    context.productSlug && isBarePlannerLandingHref(baseHref)
+      ? GUEST_PLANNER_WORKSPACE_HREF
+      : baseHref;
+  const url = new URL(resolvedBase, "https://oneonly.in");
   if (context.productSlug) {
     url.searchParams.set("siteProduct", context.productSlug);
   }
@@ -80,6 +118,17 @@ export function buildPlannerEntryHref(
     }
   }
   return `${url.pathname}${url.search}`;
+}
+
+/**
+ * PDP / product-aware deep link: guest workspace + continuity params.
+ * Prefer this over the chooser when the product is already known.
+ */
+export function buildProductAwareGuestPlannerHref(
+  context: Pick<PlannerEntryContext, "sourcePage" | "productSlug" | "categoryId">,
+  options?: BuildPlannerEntryHrefOptions,
+): string {
+  return buildPlannerEntryHref(GUEST_PLANNER_WORKSPACE_HREF, context, options);
 }
 
 /**

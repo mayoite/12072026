@@ -2,8 +2,20 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 
+import {
+  GUEST_DEFAULT_PROJECT_NAME,
+  applyProjectSetup,
+  createDefaultProjectSetupDraft,
+  isProjectSetupCompleteInStorage,
+  markProjectSetupCompleteInStorage,
+  metadataToSpaceSuggestInput,
+  resolveGuestSetupSubmit,
+  writePlannerStartupIntent,
+  type PlannerProjectMetadata,
+} from "./projectSetup";
 import { ProjectSetupStep } from "./ProjectSetupStep";
-import { isProjectSetupCompleteInStorage } from "./projectSetup";
+import { suggestLayoutGridPack } from "@/features/planner/ai/spaceSuggest";
+import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 import { PlannerSkeleton } from "@/features/planner/ui/PlannerSkeleton";
 
 type ProjectSetupGateProps = {
@@ -16,8 +28,43 @@ type ProjectSetupGateProps = {
 const HYDRATE_FAILSAFE_MS = 2_000;
 
 /**
+ * Guest path: defaults fill every required field, so skip the multi-field essay.
+ * Marks storage complete and seeds a starter layout (template).
+ * Returns false on storage failure so the form can still show.
+ */
+export function tryCompleteGuestSetupWithDefaults(planId?: string): boolean {
+  if (typeof window === "undefined") return false;
+
+  try {
+    const draft = {
+      ...createDefaultProjectSetupDraft({ guestMode: true }),
+      projectName: GUEST_DEFAULT_PROJECT_NAME,
+    };
+    const resolved = resolveGuestSetupSubmit(draft);
+    const metadata: PlannerProjectMetadata = {
+      ...draft,
+      projectName: resolved.projectName,
+      floorAreaSqFt: resolved.floorAreaSqFt,
+      seatTarget: resolved.seatTarget,
+      completedAt: new Date().toISOString(),
+    };
+
+    applyProjectSetup(metadata);
+    usePlannerWorkspaceStore.getState().setPendingBootstrapLayout(
+      suggestLayoutGridPack(metadataToSpaceSuggestInput(metadata)),
+    );
+    writePlannerStartupIntent("template", true, planId);
+    markProjectSetupCompleteInStorage(true, planId);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Blocks the canvas until project setup is complete.
- * Always exits skeleton: setup form, or children if storage says complete.
+ * Guest: skip form when storage says complete, or auto-apply defaults (one-step canvas).
+ * Member: always exits skeleton → setup form, or children if storage says complete.
  */
 export function ProjectSetupGate({
   guestMode = false,
@@ -38,7 +85,13 @@ export function ProjectSetupGate({
       done = true;
       try {
         if (isProjectSetupCompleteInStorage(guestMode, planId)) {
+          // Prefer skip when guest (or member) already has a completed draft.
           setIsFullyComplete(true);
+        } else if (guestMode) {
+          // Guest: no required fields missing under defaults — skip multi-field essay.
+          if (tryCompleteGuestSetupWithDefaults(planId)) {
+            setIsFullyComplete(true);
+          }
         }
       } catch {
         setIsFullyComplete(false);

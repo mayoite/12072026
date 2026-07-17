@@ -106,7 +106,10 @@ import {
   CONVERSION_EVENTS,
   trackConversionEvent,
 } from "@/lib/analytics/conversionContract";
-import type { HandoffContactDraft } from "./ReviewQuotePanel";
+import type {
+  HandoffContactDraft,
+  ReviewBoqLinePreview,
+} from "./ReviewQuotePanel";
 import { usePlannerSvgCatalog } from "@/features/planner/catalog/usePlannerWorkspaceCatalog";
 import { CommandPalette } from "./CommandPalette";
 import { CommandsPaletteTrigger } from "./CommandsPaletteTrigger";
@@ -2066,6 +2069,25 @@ export function OOPlannerWorkspace({
   const selectionLabel = formatSelectionStatus(workspaceCanvas.selection);
   const planMetrics = summarizeFloorMetrics(activeFloor, validationResult.errors);
 
+  /**
+   * Live commercial preview for Review — same builder as handleExport / handoff.
+   * No invented prices: unitNote is honesty-only ("demo list" | "unpriced").
+   * Panel displays at most 8 lines; full list length drives "+N more".
+   */
+  const reviewBoqPreview = useMemo(() => {
+    const summary = buildPlannerFurnitureBoq(workspaceCanvas.project);
+    const boqLines: ReviewBoqLinePreview[] = summary.lines.map((line) => ({
+      name: line.name,
+      quantity: line.quantity,
+      unitNote: line.priced ? "demo list" : "unpriced",
+    }));
+    return {
+      pricingMode: summary.pricingMode,
+      unpricedItemCount: summary.unpricedItemCount,
+      boqLines,
+    };
+  }, [workspaceCanvas.project]);
+
   // Prefer autosave honesty exports (storage / cloudEnabled / isLocalSaved).
   // cloudEnabled stays false today — label table must never imply account save.
   const saveStorage = autosave.storage ?? "local";
@@ -2231,6 +2253,9 @@ export function OOPlannerWorkspace({
             guestMode={guestMode}
             handoffBusy={handoffBusy}
             lastHandoffReference={lastHandoffReference}
+            pricingMode={reviewBoqPreview.pricingMode}
+            unpricedItemCount={reviewBoqPreview.unpricedItemCount}
+            boqLines={reviewBoqPreview.boqLines}
             onDownloadBoqCsv={() => handleExport("boq-csv")}
             onDownloadBoqPdf={() => handleExport("boq-pdf")}
             onAddAllToQuote={() => handleExport("quote")}

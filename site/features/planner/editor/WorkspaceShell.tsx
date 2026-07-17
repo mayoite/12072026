@@ -532,17 +532,24 @@ export function WorkspaceShell({
         data-save-authority="topbar"
       >
         {planMetrics ? (
-          <div className={styles.statusMetrics} data-testid="planner-status-metrics">
-            <span>
-              {planMetrics.objects} objects
-              {planMetrics.walls > 0 ? ` · ${planMetrics.walls} walls` : ""}
-              {planMetrics.furniture > 0
-                ? ` · ${planMetrics.furniture} furniture`
-                : ""}
-              {planMetrics.workstationSeats > 0
-                ? ` · ${planMetrics.workstationSeats} seats`
-                : ""}
-            </span>
+          <div
+            className={styles.statusMetrics}
+            data-testid="planner-status-metrics"
+            data-guest-chrome={accessContext === "guest" ? "true" : undefined}
+          >
+            {/* Guest (mobile + legacy shell): quote-ready message only — skip dense object census. */}
+            {accessContext !== "guest" ? (
+              <span>
+                {planMetrics.objects} objects
+                {planMetrics.walls > 0 ? ` · ${planMetrics.walls} walls` : ""}
+                {planMetrics.furniture > 0
+                  ? ` · ${planMetrics.furniture} furniture`
+                  : ""}
+                {planMetrics.workstationSeats > 0
+                  ? ` · ${planMetrics.workstationSeats} seats`
+                  : ""}
+              </span>
+            ) : null}
             <span
               className={
                 planMetrics.validationErrors > 0
@@ -552,6 +559,7 @@ export function WorkspaceShell({
                     : styles.boqNotReady
               }
               data-boq-ready={planMetrics.boqReady ? "true" : "false"}
+              data-testid="planner-status-quote"
             >
               {planMetrics.validationErrors > 0
                 ? `Quote blocked · ${planMetrics.validationErrors} error${planMetrics.validationErrors > 1 ? "s" : ""}`
@@ -559,7 +567,7 @@ export function WorkspaceShell({
                   ? "Quote ready"
                   : "Add furniture for quote"}
             </span>
-            {planMetrics.floorLabel ? (
+            {accessContext !== "guest" && planMetrics.floorLabel ? (
               <span className={styles.statusSecondaryMetric}>{planMetrics.floorLabel}</span>
             ) : null}
           </div>
