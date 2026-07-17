@@ -80,8 +80,13 @@ export function ReviewQuotePanel({
     <section className={styles.panel} aria-label="Review and quote">
       <header className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>Step 3</p>
+          <p className={styles.eyebrow}>Step 3 · Commercial handoff</p>
           <h2 className={styles.title}>Review &amp; quote</h2>
+          <p className={styles.commercialLead} data-testid="review-quote-lead">
+            {guestMode
+              ? "Download a branded BOQ for this browser draft. Sign in to send it to Oando."
+              : "Validate the plan, download a branded BOQ, or send it to Oando."}
+          </p>
         </div>
         <span className={hasBlockingErrors ? styles.blocked : styles.ready}>
           {hasBlockingErrors

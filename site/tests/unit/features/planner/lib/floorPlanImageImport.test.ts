@@ -2,10 +2,14 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildLockedUnderlayFromFloorPlan,
   FLOOR_PLAN_ACCEPTED_MIME_TYPES,
+  FLOOR_PLAN_FILE_ACCEPT,
   FLOOR_PLAN_MAX_BYTES,
   FLOOR_PLAN_MIN_EDGE_PX,
   isAcceptedFloorPlanImageType,
+  parseSvgIntrinsicSize,
   readFloorPlanImageFile,
+  resolveFloorPlanMimeType,
+  SKETCH_TO_PLAN_FILE_ACCEPT,
   validateFloorPlanImageFile,
 } from "@/features/planner/lib/floorPlanImageImport";
 import {
@@ -25,6 +29,21 @@ describe("floorPlanImageImport", () => {
     expect(FLOOR_PLAN_ACCEPTED_MIME_TYPES).toContain("image/svg+xml");
     expect(FLOOR_PLAN_MAX_BYTES).toBe(15 * 1024 * 1024);
     expect(FLOOR_PLAN_MIN_EDGE_PX).toBe(32);
+    expect(FLOOR_PLAN_FILE_ACCEPT).toMatch(/svg/i);
+    expect(SKETCH_TO_PLAN_FILE_ACCEPT).not.toMatch(/svg/i);
+  });
+
+  it("resolves SVG MIME from extension when type is empty", () => {
+    const file = new File(["<svg/>"], "plan.svg", { type: "" });
+    expect(resolveFloorPlanMimeType(file)).toBe("image/svg+xml");
+    expect(validateFloorPlanImageFile(file)).toEqual({ ok: true });
+  });
+
+  it("parses viewBox size from SVG markup", () => {
+    const size = parseSvgIntrinsicSize(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1000"></svg>',
+    );
+    expect(size).toEqual({ width: 2000, height: 1000 });
   });
 
   it("accepts documented image types and rejects PDF", () => {

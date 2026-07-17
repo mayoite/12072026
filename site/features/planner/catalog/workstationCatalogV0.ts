@@ -46,8 +46,8 @@ export function workstationConfigToCatalogItem(
     },
     displayUnit: "mm",
     assets: {
-      imageUrls: [],
-      previewImageUrl: "/placeholder-desk.svg",
+      imageUrls: ["/svg-catalog/workstation-linear.svg"],
+      previewImageUrl: "/svg-catalog/workstation-linear.svg",
     },
     material: {
       marketingMaterial: "Premium laminate",

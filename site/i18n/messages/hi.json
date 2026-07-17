@@ -18,12 +18,12 @@
       ],
       "kicker": "पैन-इंडिया · 2011 से",
       "primaryCta": {
-        "label": "उत्पाद देखें",
-        "href": "/products"
+        "label": "अपना लेआउट डिज़ाइन करें",
+        "href": "/choose-product?mode=guest"
       },
       "secondaryCta": {
-        "label": "कोटेशन अनुरोध",
-        "href": "/#contact"
+        "label": "उत्पाद देखें",
+        "href": "/products"
       },
       "glassProof": {
         "badge": "Trusted by",

@@ -15,18 +15,18 @@ test.describe("site navigation smoke", () => {
     await expect(secondDot).toHaveAttribute("aria-current", "true");
   });
 
-  test("homepage hero exposes product and quote CTAs plus trusted-by glass proof", async ({
+  test("homepage hero exposes guest planner CTA, products, and trusted-by glass proof", async ({
     page,
   }) => {
     await page.goto("/");
 
-    const exploreProducts = page.getByRole("link", { name: "Explore Products" });
-    await expect(exploreProducts).toBeVisible();
-    await expect(exploreProducts).toHaveAttribute("href", /\/products\/?$/);
+    const designLayout = page.getByRole("link", { name: /Design your layout/i }).first();
+    await expect(designLayout).toBeVisible();
+    await expect(designLayout).toHaveAttribute("href", /choose-product.*mode=guest/);
 
-    const requestQuote = page.getByRole("link", { name: "Request a quote" });
-    await expect(requestQuote).toBeVisible();
-    await expect(requestQuote).toHaveAttribute("href", /#contact$/);
+    const browseProducts = page.getByRole("link", { name: /Browse products/i }).first();
+    await expect(browseProducts).toBeVisible();
+    await expect(browseProducts).toHaveAttribute("href", /\/products\/?/);
 
     const glassProof = page.getByRole("link", { name: /View clients/i });
     await expect(glassProof).toBeVisible();

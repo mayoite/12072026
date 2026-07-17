@@ -101,6 +101,9 @@ export interface WorkspaceShellProps {
    * Mobile Modular path must pass slim so the top bar stays deliberate.
    */
   chromeMode?: "full" | "slim";
+  /** In-workspace Help panel (static guides — not AI). */
+  isHelpOpen?: boolean;
+  onToggleHelp?: () => void;
 }
 
 export function WorkspaceShell({
@@ -150,6 +153,8 @@ export function WorkspaceShell({
   onToggleSnap,
   planMetrics,
   chromeMode = "full",
+  isHelpOpen = false,
+  onToggleHelp,
 }: WorkspaceShellProps) {
   const id = useId();
   const [internalViewMode, setInternalViewMode] = useState<"2d" | "3d">(initialViewMode);
@@ -386,6 +391,8 @@ export function WorkspaceShell({
         onApplyLayoutPreset={applyPreset}
         onResetLayout={reset}
         chromeMode={chromeMode}
+        isHelpOpen={isHelpOpen}
+        onToggleHelp={onToggleHelp}
         {...topBarSaveStatusProps}
       />
 

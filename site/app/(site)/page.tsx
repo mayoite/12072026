@@ -8,6 +8,7 @@ import { ShowcaseCarousel } from "@/components/home/ShowcaseCarousel";
 import { InteractiveTools } from "@/components/home/InteractiveTools";
 import { WhyChooseUs } from "@/components/home/WhyChooseUs";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
+import { MobileStickyCta } from "@/components/home/MobileStickyCta";
 
 import { SITE_BRAND } from "@/lib/analytics/seo";
 import { buildPageJsonLd, buildPageMetadata } from "@/lib/analytics/seo";
@@ -65,6 +66,9 @@ export default async function Home() {
         browseLabel={HOMEPAGE_SHOWCASE_CONTENT.browseCta.label}
       />
       <ContactTeaser />
+      {/* Phone: keep guest planner one tap away (Site Tier B). */}
+      <div className="h-20 md:hidden" aria-hidden />
+      <MobileStickyCta />
     </HomeMarketingLayout>
   );
 }

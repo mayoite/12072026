@@ -1,6 +1,6 @@
 "use client";
 
-import { Image as ImageUp, Layout as LayoutTemplate, CursorClick as MousePointerClick, Sparkle as Sparkles } from "@phosphor-icons/react";
+import { Image as ImageUp, Layout as LayoutTemplate, CursorClick as MousePointerClick } from "@phosphor-icons/react";
 
 interface PlannerEmptyCanvasProps {
   guestMode?: boolean;
@@ -8,6 +8,7 @@ interface PlannerEmptyCanvasProps {
   allowCanvasDragThrough?: boolean;
   onDrawWalls: () => void;
   onOpenTemplates: () => void;
+  /** @deprecated AI assist is not a first-60s CTA — use Help / AI bar instead. */
   onQuickLayout?: () => void;
   onUploadFloorPlan?: () => void;
 }
@@ -17,7 +18,7 @@ export function PlannerEmptyCanvas({
   allowCanvasDragThrough: _allowCanvasDragThrough = false,
   onDrawWalls,
   onOpenTemplates,
-  onQuickLayout,
+  onQuickLayout: _onQuickLayout,
   onUploadFloorPlan,
 }: PlannerEmptyCanvasProps) {
   return (
@@ -42,8 +43,8 @@ export function PlannerEmptyCanvas({
         <h2 className="pw-empty-canvas-title">Start your layout</h2>
         <p className="pw-empty-canvas-copy">
           {guestMode
-            ? "Upload a reference image or floor plan, draw walls, or drop catalog furniture. Your work autosaves in this browser."
-            : "Upload a reference image or floor plan, draw walls, or drop catalog furniture to get started."}
+            ? "Upload a floor plan (JPG, PNG, or SVG), draw walls, or place furniture. Work autosaves in this browser only."
+            : "Upload a reference underlay (including SVG), draw walls, or place furniture to get started."}
         </p>
 
         <div className="pw-empty-canvas-actions">
@@ -54,7 +55,7 @@ export function PlannerEmptyCanvas({
               className="pw-empty-canvas-primary btn-primary"
             >
               <ImageUp size={14} aria-hidden />
-              Upload reference image
+              Upload reference
             </button>
           ) : null}
           <button type="button" onClick={onDrawWalls} className="pw-empty-canvas-secondary btn-outline">
@@ -64,12 +65,6 @@ export function PlannerEmptyCanvas({
             <LayoutTemplate size={14} aria-hidden />
             Use template
           </button>
-          {onQuickLayout ? (
-            <button type="button" onClick={onQuickLayout} className="pw-empty-canvas-secondary btn-outline">
-              <Sparkles size={14} aria-hidden />
-              Quick layout
-            </button>
-          ) : null}
         </div>
 
         <p className="pw-empty-canvas-note">

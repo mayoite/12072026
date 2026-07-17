@@ -31,6 +31,15 @@
   line-height: 1.25;
 }
 
+.commercialLead {
+  margin: var(--space-2) 0 0;
+  max-width: 28rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
 .ready,
 .blocked {
   flex: 0 0 auto;

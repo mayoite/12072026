@@ -296,7 +296,7 @@ describe("TopBar", () => {
 
     expect(screen.getByRole("heading", { name: "Demo Plan" })).toBeInTheDocument();
     // Single authoritative save pill (no brand subline duplicate)
-    expect(screen.getAllByText("Unsaved changes")).toHaveLength(1);
+    expect(screen.getAllByText("Unsaved")).toHaveLength(1);
     expect(screen.getByRole("button", { name: /Save project/i })).toHaveTextContent("Save");
 
     fireEvent.click(screen.getByRole("radio", { name: "3D" }));
@@ -316,7 +316,7 @@ describe("TopBar", () => {
 
     const savePill = screen.getByTestId("open3d-save-status");
     expect(savePill).toHaveAttribute("data-status", "unsaved");
-    expect(savePill).toHaveTextContent("Unsaved changes");
+    expect(savePill).toHaveTextContent("Unsaved");
     expect(onSave).not.toHaveBeenCalled();
   });
 });
@@ -597,7 +597,7 @@ describe("WorkspaceShell", () => {
 
     const savePill = screen.getByTestId("open3d-save-status");
     expect(savePill).toHaveAttribute("data-status", "unsaved");
-    expect(savePill).toHaveTextContent("Unsaved changes");
+    expect(savePill).toHaveTextContent("Unsaved");
     expect(onSave).not.toHaveBeenCalled();
 
     const maximize = screen.getByRole("button", { name: /Focus — maximize canvas|Focus - maximize canvas/i });

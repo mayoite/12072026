@@ -18,12 +18,12 @@
       ],
       "kicker": "Ganz Indien · Seit 2011",
       "primaryCta": {
-        "label": "Produkte entdecken",
-        "href": "/products"
+        "label": "Layout gestalten",
+        "href": "/choose-product?mode=guest"
       },
       "secondaryCta": {
-        "label": "Angebot anfordern",
-        "href": "/#contact"
+        "label": "Produkte durchsuchen",
+        "href": "/products"
       },
       "glassProof": {
         "badge": "Vertrauen von",

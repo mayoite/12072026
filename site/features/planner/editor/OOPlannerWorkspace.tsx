@@ -128,7 +128,12 @@ import {
 } from "@/features/planner/ai/sketchToPlanShared";
 import { browserApiFetch } from "@/lib/api/browserApi";
 import { readPlannerApiError } from "@/features/planner/lib/plannerApiError";
-import { readFloorPlanImageFile } from "@/features/planner/lib/floorPlanImageImport";
+import {
+  buildLockedUnderlayFromFloorPlan,
+  FLOOR_PLAN_FILE_ACCEPT,
+  readFloorPlanImageFile,
+  SKETCH_TO_PLAN_FILE_ACCEPT,
+} from "@/features/planner/lib/floorPlanImageImport";
 import type { SketchRecoveryReason } from "@/features/shared/api/schemas";
 import type { ValidationIssue } from "@/features/planner/lib/validation/types";
 import {
@@ -208,6 +213,7 @@ export function OOPlannerWorkspace({
   const canvasRef = useRef<PlannerCanvasStageHandle>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
   const sketchInputRef = useRef<HTMLInputElement>(null);
+  const underlayInputRef = useRef<HTMLInputElement>(null);
   const [sketchUi, setSketchUi] = useState<SketchToPlanUiState>({ status: "idle" });
   const workspaceCanvas = useWorkspaceCanvas({
     projectName,
@@ -1738,6 +1744,39 @@ export function OOPlannerWorkspace({
     sketchInputRef.current?.click();
   }, []);
 
+  const handleUploadUnderlayClick = useCallback(() => {
+    underlayInputRef.current?.click();
+  }, []);
+
+  /** Place JPG/PNG/WebP/GIF/SVG as locked canvas underlay (no AI conversion). */
+  const handleUnderlayFile = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      event.target.value = "";
+      if (!file) return;
+      try {
+        const image = await readFloorPlanImageFile(file);
+        const draft = buildLockedUnderlayFromFloorPlan(image);
+        workspaceCanvas.updateProject((project) =>
+          setBackgroundImage(project, draft).project,
+        );
+        setWorkspaceMessage(
+          `Reference underlay placed from ${image.fileName}. Calibrate scale from Properties if needed.`,
+        );
+        requestAnimationFrame(() => {
+          canvasRef.current?.fitToView?.();
+        });
+      } catch (error) {
+        setWorkspaceMessage(
+          error instanceof Error
+            ? error.message
+            : "Could not place that reference underlay.",
+        );
+      }
+    },
+    [workspaceCanvas],
+  );
+
   const dismissSketchUi = useCallback(() => {
     setSketchUi({ status: "idle" });
   }, []);
@@ -2078,13 +2117,26 @@ export function OOPlannerWorkspace({
       <input
         ref={sketchInputRef}
         type="file"
-        accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"
+        accept={SKETCH_TO_PLAN_FILE_ACCEPT}
         className="sr-only"
         tabIndex={-1}
         aria-hidden
         aria-label="Upload sketch for Sketch to plan"
         onChange={(event) => {
           void handleSketchFile(event);
+        }}
+      />
+      <input
+        ref={underlayInputRef}
+        type="file"
+        accept={FLOOR_PLAN_FILE_ACCEPT}
+        className="sr-only"
+        tabIndex={-1}
+        aria-hidden
+        aria-label="Upload reference floor plan image or SVG underlay"
+        data-testid="planner-underlay-file-input"
+        onChange={(event) => {
+          void handleUnderlayFile(event);
         }}
       />
       <SketchToPlanDialog
@@ -2334,30 +2386,32 @@ export function OOPlannerWorkspace({
               <section
                 className="open3d-first-use"
                 aria-label="Start the office plan"
+                data-testid="planner-first-use"
               >
                 <p className="open3d-first-use__eyebrow">
                   {guestMode
-                    ? "Guest · place from library"
+                    ? "Guest · local draft in this browser"
                     : "Office layout"}
                 </p>
                 <h2>Start the floor plan</h2>
                 <p>
                   {guestMode
-                    ? "Place a workstation from the library, or draw walls to shape the room."
-                    : "Draw walls, drop a starter room, or place a workstation then click the plan."}
+                    ? "Upload a floor plan (JPG, PNG, or SVG), draw walls, or place a workstation from the library."
+                    : "Upload a reference underlay, draw walls, or place a workstation — then refine and export."}
                 </p>
                 <div className="open3d-first-use__actions">
+                  <button
+                    type="button"
+                    onClick={handleUploadUnderlayClick}
+                    data-testid="planner-upload-underlay"
+                  >
+                    Upload reference
+                  </button>
                   <button type="button" onClick={() => setTool("wall")}>
                     Draw walls
                   </button>
-                  <button type="button" onClick={handleStartTemplate}>
-                    Create exact room
-                  </button>
                   <button type="button" onClick={handleStartPlaceWorkstation}>
                     Place workstation
-                  </button>
-                  <button type="button" onClick={handleImportClick}>
-                    Import plan
                   </button>
                 </div>
               </section>

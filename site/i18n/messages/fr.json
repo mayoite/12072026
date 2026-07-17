@@ -18,12 +18,12 @@
       ],
       "kicker": "Partout en Inde · Depuis 2011",
       "primaryCta": {
-        "label": "Explorer les produits",
-        "href": "/products"
+        "label": "Concevez votre plan",
+        "href": "/choose-product?mode=guest"
       },
       "secondaryCta": {
-        "label": "Demander un devis",
-        "href": "/#contact"
+        "label": "Parcourir les produits",
+        "href": "/products"
       },
       "glassProof": {
         "badge": "Ils nous font confiance",

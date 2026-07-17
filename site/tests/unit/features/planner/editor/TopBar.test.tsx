@@ -191,6 +191,32 @@ describe("TopBar", () => {
       expect(screen.queryByTestId("planner-density-toggle")).toBeNull();
     });
 
+    it("exposes Help toggle separate from AI (guest-safe)", async () => {
+      const user = userEvent.setup();
+      const onToggleHelp = vi.fn();
+      render(
+        <TopBar
+          projectName="Help chrome"
+          viewMode="2d"
+          chromeMode="slim"
+          accessContext="guest"
+          isHelpOpen={false}
+          onToggleHelp={onToggleHelp}
+          onSave={vi.fn()}
+        />,
+      );
+
+      const helpPhone = screen.getByTestId("planner-toggle-help");
+      expect(helpPhone).toHaveAttribute("aria-label", "Open help");
+      expect(helpPhone).toHaveAttribute("data-min-tap-px", PHONE_MIN_TAP_PX);
+      await user.click(helpPhone);
+      expect(onToggleHelp).toHaveBeenCalledTimes(1);
+
+      const helpDesktop = screen.getByTestId("planner-toggle-help-desktop");
+      expect(helpDesktop).toHaveAttribute("aria-label", "Open help");
+      expect(helpDesktop.className).toMatch(/desktopOnly/);
+    });
+
     it("keeps floor and unit selectors desktop-only (phone primary = 2D/3D)", () => {
       render(
         <TopBar

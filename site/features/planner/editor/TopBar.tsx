@@ -6,6 +6,7 @@ import {
   CornersIn,
   CornersOut,
   Package,
+  Question,
   SlidersHorizontal,
   Stack,
 } from "@phosphor-icons/react";
@@ -119,6 +120,9 @@ export interface TopBarProps {
    * full = legacy chrome packs + desktop Grid/Snap strip.
    */
   chromeMode?: "full" | "slim";
+  /** In-workspace static Help panel (separate from AI Assist). Always for guests + members. */
+  isHelpOpen?: boolean;
+  onToggleHelp?: () => void;
 }
 
 function resolveSaveStatusFromLegacy(
@@ -191,6 +195,8 @@ export function TopBar({
   onResetLayout,
   onShowDockPanel,
   chromeMode = "full",
+  isHelpOpen = false,
+  onToggleHelp,
 }: TopBarProps) {
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState(projectName);
@@ -221,6 +227,8 @@ export function TopBar({
   const showPersistenceActions = accessContext !== "guest";
   const showGuestActions = accessContext === "guest";
   const guestMode = accessContext === "guest";
+  /** Guest chrome diet: fewer power-user controls (Tier A calm chrome). */
+  const showPowerChrome = !guestMode;
 
   const resolvedSaveStatus: PlannerSaveStatus =
     saveStatus ?? resolveSaveStatusFromLegacy(isModified, isSynced);
@@ -477,7 +485,7 @@ export function TopBar({
           </Button>
         )}
 
-        {(onToggleLeftPanel || onToggleRightPanel) && (
+        {(onToggleLeftPanel || onToggleRightPanel || onToggleHelp) && (
           <div className={styles.mobilePanelActions} role="group" aria-label="Panel toggles">
             {onToggleLeftPanel && (
               <Button
@@ -507,7 +515,38 @@ export function TopBar({
                 <span className={styles.mobilePanelLabel}>Properties</span>
               </Button>
             )}
+            {onToggleHelp && (
+              <Button
+                className={`${styles.btn} ${styles.mobilePanelBtn}`}
+                data-active={isHelpOpen ? "true" : undefined}
+                data-min-tap-px={phoneMinTapPx}
+                data-testid="planner-toggle-help"
+                aria-pressed={isHelpOpen}
+                aria-label={isHelpOpen ? "Close help" : "Open help"}
+                onPress={onToggleHelp}
+              >
+                <Question size={18} aria-hidden />
+                <span className={styles.mobilePanelLabel}>Help</span>
+              </Button>
+            )}
           </div>
+        )}
+
+        {/* Desktop slim: Help stays visible outside phone-only panel strip */}
+        {onToggleHelp && (
+          <Button
+            className={`${styles.btn} ${styles.desktopOnly}`}
+            data-active={isHelpOpen ? "true" : undefined}
+            data-min-tap-px={phoneMinTapPx}
+            data-testid="planner-toggle-help-desktop"
+            aria-pressed={isHelpOpen}
+            aria-label={isHelpOpen ? "Close help" : "Open help"}
+            title="Help (F1 or ?)"
+            onPress={onToggleHelp}
+          >
+            <Question size={16} aria-hidden />
+            Help
+          </Button>
         )}
 
         {onToggleBottomPanel && (
@@ -628,6 +667,7 @@ export function TopBar({
                       if (id === "sketch") onSketchToPlan?.();
                       if (id === "properties") onShowDockPanel?.("properties");
                       if (id === "inventory") onShowDockPanel?.("inventory");
+                      if (id === "help") onToggleHelp?.();
                       if (id === "reset") onResetLayout?.();
                       if (id.startsWith("export:")) onExport?.(id.slice("export:".length));
                     }}
@@ -652,7 +692,12 @@ export function TopBar({
                         Properties
                       </MenuItem>
                     ) : null}
-                    {onResetLayout ? (
+                    {onToggleHelp ? (
+                      <MenuItem id="help" className={styles.dropdownItem} data-testid="planner-more-help">
+                        {isHelpOpen ? "Close help" : "Help"}
+                      </MenuItem>
+                    ) : null}
+                    {showPowerChrome && onResetLayout ? (
                       <MenuItem id="reset" className={styles.dropdownItem}>
                         Reset layout
                       </MenuItem>
@@ -703,7 +748,7 @@ export function TopBar({
                 Properties
               </Button>
             ) : null}
-            {onResetLayout ? (
+            {showPowerChrome && onResetLayout ? (
               <Button
                 className={styles.btn}
                 aria-label="Reset panel layout"
@@ -790,7 +835,7 @@ export function TopBar({
           </div>,
         )}
 
-        {chromeMode === "full" ? wrapPack(
+        {chromeMode === "full" && showPowerChrome && onToggleDensity ? wrapPack(
           "prefs",
           "Density",
           <Button

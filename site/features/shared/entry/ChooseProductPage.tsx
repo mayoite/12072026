@@ -75,11 +75,19 @@ export function ChooseProductPage({
             </h1>
             <p className="page-copy mt-6 max-w-lg text-[var(--text-inverse-body)]">
               {guestMode
-                ? "Launch the 2D/3D planner with catalog placement and BOQ export. Guest work stays local until you sign in. Built for teams in Patna, Ranchi, Bihar, and Jharkhand."
+                ? "Step 1 of planner: open the canvas, upload a floor plan (JPG/PNG/SVG), place catalog furniture, and export a BOQ. Guest drafts stay in this browser until you sign in."
                 : authenticated
-                  ? "Open the member planner for saved plans, catalog furniture, 3D review, and branded BOQ export."
+                  ? "Open the member planner for local drafts, catalog furniture, 3D review, and branded BOQ export."
                   : "Sign in or continue as guest to place office furniture, review layouts, and prepare a BOQ."}
             </p>
+            {guestMode ? (
+              <p
+                className="typ-label mt-4 text-[var(--color-bronze-300)]"
+                data-testid="choose-product-guest-step"
+              >
+                Guest path · no account required
+              </p>
+            ) : null}
           </div>
         </div>
 

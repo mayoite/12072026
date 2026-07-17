@@ -8,6 +8,8 @@ import type { PlannerSaveStatus } from "@/features/planner/persistence/usePlanne
 import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 import { cn } from "@/lib/utils";
 
+import { PlannerHelpPanel } from "@/features/planner/help/PlannerHelpPanel";
+
 import { CanvasToolRail } from "../CanvasToolRail";
 import type { PlannerTool } from "../canvasTool";
 import { LayersPanel } from "../LayersPanel";
@@ -28,6 +30,22 @@ import {
   ensurePlannerDockPanel,
 } from "./plannerDockPresets";
 import type { PlannerDockSlots } from "./plannerDockSlots";
+
+function isEditableHelpTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  const tag = target.tagName;
+  return (
+    tag === "INPUT" ||
+    tag === "TEXTAREA" ||
+    tag === "SELECT" ||
+    target.isContentEditable ||
+    Boolean(
+      target.closest(
+        "input, textarea, select, [contenteditable='true'], [role='textbox'], [role='searchbox'], [role='combobox']",
+      ),
+    )
+  );
+}
 
 export interface ModularPlannerShellProps {
   accessContext?: PlannerAccessContext;
@@ -168,9 +186,84 @@ export function ModularPlannerShell({
   );
   const [layoutEpoch, setLayoutEpoch] = useState(0);
   const [assistantOpen, setAssistantOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const [layersOpen, setLayersOpen] = useState(false);
   const plannerStep = usePlannerWorkspaceStore((state) => state.plannerStep);
   const setPlannerStep = usePlannerWorkspaceStore((state) => state.setPlannerStep);
+
+  const openHelp = useCallback(() => {
+    setAssistantOpen(false);
+    setHelpOpen(true);
+  }, []);
+
+  const closeHelp = useCallback(() => {
+    setHelpOpen(false);
+  }, []);
+
+  const toggleHelp = useCallback(() => {
+    setHelpOpen((open) => {
+      if (open) return false;
+      setAssistantOpen(false);
+      return true;
+    });
+  }, []);
+
+  const openAssistant = useCallback(() => {
+    setHelpOpen(false);
+    setAssistantOpen(true);
+  }, []);
+
+  // F1 / ? open Help; Escape closes Help or AI overlay first (capture so canvas cancel waits).
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && (helpOpen || assistantOpen)) {
+        event.preventDefault();
+        event.stopPropagation();
+        setHelpOpen(false);
+        setAssistantOpen(false);
+        return;
+      }
+
+      if (isEditableHelpTarget(event.target)) return;
+
+      if (event.key === "F1") {
+        event.preventDefault();
+        openHelp();
+        return;
+      }
+
+      // "?" key — static help, not AI
+      if (event.key === "?" && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        event.preventDefault();
+        openHelp();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
+  }, [assistantOpen, helpOpen, openHelp]);
+
+  const helpOverlay =
+    helpOpen ? (
+      <aside
+        className={styles.assistantOverlay}
+        aria-label="Help panel"
+        data-testid="planner-help-overlay"
+        role="dialog"
+        aria-modal="false"
+        aria-labelledby="planner-help-heading"
+      >
+        <button
+          type="button"
+          className={styles.assistantClose}
+          onClick={closeHelp}
+          data-testid="planner-help-overlay-close"
+        >
+          Close help
+        </button>
+        <PlannerHelpPanel accessContext={accessContext} onClose={closeHelp} />
+      </aside>
+    ) : null;
 
   const resolvedLocalSaved = isLocalSaved ?? isSynced;
   const topBarSaveStatusProps = {
@@ -325,6 +418,8 @@ export function ModularPlannerShell({
         onToggleSnap={onToggleSnap}
         planMetrics={planMetrics}
         chromeMode="slim"
+        isHelpOpen={helpOpen}
+        onToggleHelp={toggleHelp}
       >
         <div
           className={styles.mobileCanvasStack}
@@ -334,7 +429,7 @@ export function ModularPlannerShell({
           <PlannerWorkflowBar
             currentStep={plannerStep}
             onStepChange={changePlannerStep}
-            onOpenAssistant={assistant ? () => setAssistantOpen(true) : undefined}
+            onOpenAssistant={assistant ? openAssistant : undefined}
             planMetrics={planMetrics}
           />
           <div
@@ -343,6 +438,7 @@ export function ModularPlannerShell({
             data-testid="planner-mobile-canvas"
           >
             {children}
+            {helpOverlay}
             {assistantOpen && assistant ? (
               <aside className={styles.assistantOverlay} aria-label="AI assistant panel">
                 <button
@@ -445,6 +541,8 @@ export function ModularPlannerShell({
             ? () => setLayersOpen((open) => !open)
             : undefined
         }
+        isHelpOpen={helpOpen}
+        onToggleHelp={toggleHelp}
         {...topBarSaveStatusProps}
       />
 
@@ -452,7 +550,7 @@ export function ModularPlannerShell({
         <PlannerWorkflowBar
           currentStep={plannerStep}
           onStepChange={changePlannerStep}
-          onOpenAssistant={assistant ? () => setAssistantOpen(true) : undefined}
+          onOpenAssistant={assistant ? openAssistant : undefined}
           planMetrics={planMetrics}
         />
         <div className={styles.dockWithRail} data-testid="planner-canvas-stage">
@@ -486,6 +584,7 @@ export function ModularPlannerShell({
                 />
               </aside>
             ) : null}
+            {helpOverlay}
             {assistantOpen && assistant ? (
               <aside className={styles.assistantOverlay} aria-label="AI assistant panel">
                 <button

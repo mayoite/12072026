@@ -12,23 +12,26 @@ import {
 } from "@/features/site/data/homepage";
 
 describe("homepage data", () => {
-  it("hero leads with products not planner", () => {
-    expect(HOMEPAGE_HERO_CONTENT.primaryCta.href).toBe("/products");
-    expect(HOMEPAGE_HERO_CONTENT.secondaryCta.href).toBe("/#contact");
+  it("hero primary CTA is guest planner entry; products secondary", () => {
+    expect(HOMEPAGE_HERO_CONTENT.primaryCta.href).toBe(
+      "/choose-product?mode=guest",
+    );
+    expect(HOMEPAGE_HERO_CONTENT.primaryCta.label).toMatch(/layout/i);
+    expect(HOMEPAGE_HERO_CONTENT.secondaryCta.href).toBe("/products");
   });
 
   it("hero glass proof links to trusted-by with badge and narrative copy", () => {
     expect(HOMEPAGE_HERO_CONTENT.glassProof.href).toBe("/trusted-by");
     expect(HOMEPAGE_HERO_CONTENT.glassProof.badge).toBe("Trusted by");
     expect(HOMEPAGE_HERO_CONTENT.glassProof.lead).toContain("120+");
-    expect(HOMEPAGE_HERO_CONTENT.glassProof.support).toMatch(/government/i);
+    expect(HOMEPAGE_HERO_CONTENT.glassProof.support).toMatch(/BOQ|planner|India/i);
     expect(HOMEPAGE_HERO_CONTENT.glassProof.cta).toBe("View clients");
   });
 
   it("hero uses brand headline and pan-india kicker without subtitle", () => {
     expect(joinAccessibleTitleLines(HOMEPAGE_HERO_CONTENT.title)).toMatch(/your team/i);
     expect(HOMEPAGE_HERO_CONTENT.kicker).toMatch(/India/i);
-    expect(HOMEPAGE_HERO_CONTENT.secondaryCta.label).toBe("Request a quote");
+    expect(HOMEPAGE_HERO_CONTENT.secondaryCta.label).toBe("Browse products");
     expect("description" in HOMEPAGE_HERO_CONTENT).toBe(false);
   });
 

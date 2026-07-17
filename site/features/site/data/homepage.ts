@@ -40,18 +40,23 @@ export interface HomepageHeroContent {
 export const HOMEPAGE_HERO_CONTENT = {
   title: ["Spaces that work", "as hard as", "your team"],
   kicker: "Office furniture for teams across India · Since 2011",
-  primaryCta: { label: "Explore Products", href: "/products" },
-  secondaryCta: { label: "Request a quote", href: "/#contact" },
+  /** Primary path: guest planner entry (choose product → canvas). */
+  primaryCta: {
+    label: "Design your layout",
+    href: "/choose-product?mode=guest",
+  },
+  secondaryCta: { label: "Browse products", href: "/products" },
   glassProof: {
     badge: "Trusted by",
     // Aligned with BUSINESS_STATS_SAFE_DEFAULTS.projectsDelivered (120) and proof/solutions floors.
     lead: "Executed 120+ workplace projects since 2011 — verified through internal project records.",
-    support: "Serving India's biggest companies and government.",
+    support:
+      "Real inventory in the planner · local drafts · branded BOQ to Oando. Serving India offices and government.",
     href: "/trusted-by",
     cta: "View clients",
     source: "Internal project records",
     owner: "Marketing",
-    reviewDate: "2026-07-14",
+    reviewDate: "2026-07-18",
   },
 } as const satisfies HomepageHeroContent;
 

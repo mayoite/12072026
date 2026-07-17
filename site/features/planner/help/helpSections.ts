@@ -22,7 +22,8 @@ export const PLANNER_HELP_SECTIONS: HelpSection[] = [
   {
     id: "reference-images",
     title: "Reference images",
-    summary: "Upload a JPG, PNG, WebP, GIF, or SVG as a non-editable underlay so you can trace or compare against it.",
+    summary:
+      "Upload a JPG, PNG, WebP, GIF, or SVG as a non-editable underlay (Upload reference on the empty canvas, or Help). Trace walls over it; calibrate scale from Properties.",
     keywords: ["reference", "image", "upload", "underlay", "sketch", "floor plan", "svg"],
   },
   {
@@ -88,8 +89,8 @@ export const PLANNER_HELP_SECTIONS: HelpSection[] = [
   {
     id: "keyboard-shortcuts",
     title: "Keyboard shortcuts",
-    summary: "Ctrl+Tab cycles view modes; Escape closes panels.",
-    keywords: ["shortcut", "keyboard", "ctrl"],
+    summary: "F1 or ? opens Help; Ctrl+Tab cycles view modes; Escape closes Help, AI, and other panels.",
+    keywords: ["shortcut", "keyboard", "ctrl", "help", "f1"],
   },
   {
     id: "saving-and-autosave",

@@ -18,17 +18,17 @@
       ],
       "kicker": "Pan-India · Since 2011",
       "primaryCta": {
-        "label": "Explore Products",
-        "href": "/products"
+        "label": "Design your layout",
+        "href": "/choose-product?mode=guest"
       },
       "secondaryCta": {
-        "label": "Request a quote",
-        "href": "/#contact"
+        "label": "Browse products",
+        "href": "/products"
       },
       "glassProof": {
         "badge": "Trusted by",
         "lead": "Executed 120+ workplace projects since 2011 — verified through internal project records.",
-        "support": "Serving India's biggest companies and government.",
+        "support": "Real inventory in the planner · local drafts · branded BOQ to Oando. Serving India offices and government.",
         "href": "/trusted-by",
         "cta": "View clients"
       }

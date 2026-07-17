@@ -18,12 +18,12 @@
       ],
       "kicker": "Toda la India · Desde 2011",
       "primaryCta": {
-        "label": "Explorar productos",
-        "href": "/products"
+        "label": "Diseña tu layout",
+        "href": "/choose-product?mode=guest"
       },
       "secondaryCta": {
-        "label": "Solicitar una cotización",
-        "href": "/#contact"
+        "label": "Explorar productos",
+        "href": "/products"
       },
       "glassProof": {
         "badge": "Con la confianza de",

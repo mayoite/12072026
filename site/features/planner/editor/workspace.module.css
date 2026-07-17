@@ -644,6 +644,13 @@
   box-shadow: var(--ws-shadow-float);
 }
 
+/* AI Assist drawer or Help panel body fills the overlay under the chrome close row */
+.assistantOverlay > :not(.assistantClose) {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .assistantClose {
   flex: 0 0 auto;
   min-height: var(--ws-control-h);
