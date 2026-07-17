@@ -1,16 +1,13 @@
-# Plan
+# Current execution
 
-Four execution tracks. Each has one `CHECKLIST.md` (open work) and one `FEATURES.md` (code map).
+Planner workspace refinement is the only active plan.
 
-| Track | Checklist | Code map |
-|---|---|---|
-| Admin | `Admin/CHECKLIST.md` | `Admin/FEATURES.md` |
-| Planner | `Planner/CHECKLIST.md` | `Planner/FEATURES.md` |
-| Site | `Site/CHECKLIST.md` | `Site/FEATURES.md` |
-| Security | `Security/CHECKLIST.md` | — |
-
-Tracks run in parallel after Admin Step 0 test isolation.
-
-A dependency blocks only the named item — not the whole track.
+| Purpose | File |
+|---|---|
+| Current work | `Planner/CHECKLIST.md` |
+| Planner code map | `Planner/FEATURES.md` |
+| Admin code map | `Admin/FEATURES.md` |
+| Site code map | `Site/FEATURES.md` |
+| Security requirements | `../docs/architecture/10-SECURITY-BENCHMARK.md` |
 
 Active blockers: `../Failures.md`. Facts and commands: `../Readme.md`.

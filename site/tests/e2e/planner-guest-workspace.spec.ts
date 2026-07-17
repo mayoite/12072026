@@ -18,26 +18,28 @@ test.describe("Planner guest workspace — plan 06 UI bar", () => {
     await enterGuestPlannerWorkspace(page);
   });
 
-  test("loads canvas chrome with history, view modes, and catalog", async ({ page }) => {
+  test("loads canvas chrome and opens catalog on demand", async ({ page }) => {
     await expect(page.getByRole("group", { name: "Canvas history" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Undo", exact: true })).toBeVisible();
     await expect(page.getByRole("radio", { name: "2D", exact: true })).toBeVisible();
     await expect(page.getByRole("radio", { name: "3D", exact: true })).toBeVisible();
+
+    await page.getByTestId("layout-presets-trigger").click();
+    const menuSurface = page.locator(".pw-planner-menu-popover");
+    await expect(menuSurface).toBeVisible();
+    await menuSurface.getByRole("menuitem", { name: "Open Inventory" }).click();
+
     await expect(page.getByRole("searchbox", { name: /Search catalog elements/i })).toBeVisible();
     await expect(page.locator(PLANNER_PRIMARY_CANVAS)).toBeVisible();
   });
 
-  test("Start from Scratch seeds a perimeter shell with no furniture", async ({ page }) => {
+  test("Start from Scratch opens a blank canvas", async ({ page }) => {
     await expect(page.locator(".pw-status-bar > span").filter({ hasText: /objects/ })).toBeVisible({
       timeout: 15_000,
     });
 
-    await expect
-      .poll(async () => getWallCount(page), { timeout: 15_000 })
-      .toBeGreaterThanOrEqual(4);
-    await expect
-      .poll(async () => getObjectCount(page), { timeout: 15_000 })
-      .toBeGreaterThan(0);
+    await expect.poll(async () => getWallCount(page), { timeout: 15_000 }).toBe(0);
+    await expect.poll(async () => getObjectCount(page), { timeout: 15_000 }).toBe(0);
 
     const furnitureText = await page
       .locator(".pw-status-bar > span")
@@ -45,6 +47,32 @@ test.describe("Planner guest workspace — plan 06 UI bar", () => {
       .textContent();
     const furnitureMatch = furnitureText?.match(/^(\d+)\s+furniture/i);
     expect(furnitureMatch ? furnitureMatch[1] : "0").toBe("0");
+  });
+
+  test("Dockview toolbar exposes only working tools", async ({ page }) => {
+    const rail = page.getByTestId("canvas-tool-rail");
+    await expect(rail).toBeVisible();
+    await expect(rail).toHaveAttribute("data-dock-managed", "true");
+
+    for (const tool of ["select", "pan", "wall", "opening", "placement"] as const) {
+      await expect(page.getByTestId(`canvas-tool-${tool}`)).toBeVisible();
+    }
+    await expect(page.getByTestId("canvas-tool-room")).toHaveCount(0);
+    await expect(page.getByTestId("canvas-tool-dimension")).toHaveCount(0);
+  });
+
+  test("inventory never requests an unpublished new-block SVG", async ({ page }) => {
+    const missingNewBlock: string[] = [];
+    page.on("response", (response) => {
+      if (response.status() >= 400 && response.url().includes("/svg-catalog/new-block.svg")) {
+        missingNewBlock.push(response.url());
+      }
+    });
+
+    await page.getByTestId("layout-presets-trigger").click();
+    await page.getByRole("menuitem", { name: "Open Inventory" }).click();
+    await expect(page.getByRole("searchbox", { name: /Search catalog elements/i })).toBeVisible();
+    await expect.poll(() => missingNewBlock).toEqual([]);
   });
 
   test("catalog search filters elements", async ({ page }) => {

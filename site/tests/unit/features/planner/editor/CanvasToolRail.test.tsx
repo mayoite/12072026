@@ -12,4 +12,17 @@ describe("CanvasToolRail", () => {
     expect(labels.some((l) => /wall/i.test(l))).toBe(true);
     expect(document.querySelector('[data-testid="canvas-tool-wall"]')).not.toBeNull();
   });
+
+  it("shows only working tools in the Dockview rail", () => {
+    render(
+      <CanvasToolRail activeTool="select" onToolChange={vi.fn()} dockManaged />,
+    );
+
+    expect(screen.getByTestId("canvas-tool-select")).toBeInTheDocument();
+    expect(screen.getByTestId("canvas-tool-wall")).toBeInTheDocument();
+    expect(screen.getByTestId("canvas-tool-opening")).toBeInTheDocument();
+    expect(screen.getByTestId("canvas-tool-placement")).toBeInTheDocument();
+    expect(screen.queryByTestId("canvas-tool-room")).toBeNull();
+    expect(screen.queryByTestId("canvas-tool-dimension")).toBeNull();
+  });
 });

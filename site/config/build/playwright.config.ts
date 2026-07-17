@@ -66,7 +66,6 @@ export default defineConfig({
         // Gate must not attach to a stale dev server left by overlapping Playwright jobs.
         reuseExistingServer: !isCI && process.env.OPEN3D_WORLD_GATE !== "1",
         env: {
-          ...process.env,
           PLAYWRIGHT_BASE_URL: baseURL,
           NEXT_PUBLIC_PLANNER_DEV_TOOLS: "true",
           ...(process.env.DEV_AUTH_BYPASS

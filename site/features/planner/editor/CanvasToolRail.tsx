@@ -52,7 +52,7 @@ import {
   railSnapFromPoint,
   type RailLayoutConfig,
 } from "./workspaceLayout";
-import styles from "./canvas-tool-rail.module.css";
+import styles from "@/app/css/core/locked/planner/canvas-tool-rail.module.css";
 
 const TOOL_ICONS: Record<PlannerTool, Icon> = {
   select: Cursor,
@@ -452,7 +452,9 @@ export function CanvasToolRail({
     }> = [
       { id: "nav", tools: RAIL_NAV_TOOLS, label: "Navigation tools" },
       { id: "draw", tools: RAIL_DRAW_TOOLS, label: "Drawing tools" },
-      { id: "deferred", tools: RAIL_DEFERRED_TOOLS, label: "Coming soon" },
+      ...(!dockManaged
+        ? [{ id: "deferred" as const, tools: RAIL_DEFERRED_TOOLS, label: "Coming soon" }]
+        : []),
     ];
 
     return (

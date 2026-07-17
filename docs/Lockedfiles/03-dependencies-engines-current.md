@@ -46,7 +46,7 @@ Verify use before remove; verify license before add. Prefer existing platform li
 | New packages | None approved for DB-SVG cutover work |
 | **Live SVG** | **Disk** — `inventory/descriptors/`, `public/svg-catalog/` |
 | DB dual-write | Optional on both Admin publish entrypoints when `PRODUCTS_DATABASE_URL` is set — not authority; payload and released revision pointers are not fully wired |
-| Cutover | `DB-SVG-01` … `05` in `plan/Admin/CHECKLIST.md` |
+| Cutover | `DB-SVG-01` … `05` in `docs/architecture/08-DATABASE-SVG-CONTRACT.md` |
 
 ## Catalog assets
 

@@ -15,7 +15,7 @@ Catalog truth and BOQ handoff matter as much as the canvas.
 | Path | Purpose |
 |---|---|
 | `site/` | Next.js product (`oando-site`) — only application code |
-| `plan/` | Execution checklists: `Admin/`, `Site/`, `Planner/`, `Security/`; `Phase-2/` is legacy pointer only |
+| `plan/` | Current Planner checklist plus verified Admin, Planner, and Site code maps |
 | `docs/` | Architecture, API, database reference (`docs/INDEX.md`) |
 | `Agents/` | Agent process and quality bar (`Agents/INDEX.md`) |
 | `scripts/` | Repo-wide gates and layout checks (`check:layout`, `check:docs-purity`, `check:failures`, `guard-workspace-install.mjs`) |
@@ -72,7 +72,7 @@ Do not write under `site/results/` or `site/test-results/`. Cache/tooling dirs (
 
 ## Catalog and SVG authority
 
-**Target:** Products DB owns released SVG truth — `docs/architecture/08-DATABASE-SVG-CONTRACT.md`. Cutover: `plan/Admin/CHECKLIST.md` (`DB-SVG-01` … `05`).
+**Target:** Products DB owns released SVG truth — `docs/architecture/08-DATABASE-SVG-CONTRACT.md`. Active blockers live in `Failures.md`.
 
 | Surface | Live authority | Notes |
 |---|---|---|

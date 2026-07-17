@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createNormalizedRecord } from './normalized-record.mjs'
@@ -22,6 +22,19 @@ const TECH_DOCS = [
   `${SOURCE_PACKAGE_DIR}/README.md`,
 ]
 
+const ARCHITECTURE_DOCS_DIR = 'docs/architecture'
+
+function readMarkdownTitle(filePath) {
+  try {
+    const heading = readFileSync(filePath, 'utf8')
+      .split(/\r?\n/)
+      .find((line) => /^#\s+\S/.test(line.trim()))
+    return heading ? heading.trim().replace(/^#\s+/, '') : path.basename(filePath, '.md')
+  } catch {
+    return path.basename(filePath, '.md')
+  }
+}
+
 const OUTPUT_PATH_SNIPPETS = [
   { label: 'Vite outDir', needle: '.tmp/generated-documents/site', files: TECH_DOCS },
   { label: 'tech-docs generate script', needle: 'tech-docs:generate', files: ['package.json', ...TECH_DOCS] },
@@ -44,6 +57,30 @@ export function extractDocsHealthRecords({ repoRoot = defaultRepoRoot } = {}) {
         factClassification: exists ? 'code-proven' : 'unknown-gap',
       }),
     )
+  }
+
+  const architectureRoot = path.join(repoRoot, ARCHITECTURE_DOCS_DIR)
+  if (existsSync(architectureRoot)) {
+    const architectureDocs = readdirSync(architectureRoot, { withFileTypes: true })
+      .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+      .map((entry) => entry.name)
+      .sort((left, right) => left.localeCompare(right))
+
+    for (const fileName of architectureDocs) {
+      const relativePath = `${ARCHITECTURE_DOCS_DIR}/${fileName}`
+      records.push(
+        createNormalizedRecord({
+          id: `docs-health.architecture.${fileName.replace(/[^a-z0-9]+/gi, '-')}`,
+          category: 'architecture-doc',
+          label: readMarkdownTitle(path.join(architectureRoot, fileName)),
+          value: 'indexed',
+          sourcePath: relativePath,
+          sourceKind: 'architecture-doc',
+          sourcePointer: 'heading.1',
+          factClassification: 'code-proven',
+        }),
+      )
+    }
   }
 
   for (const check of OUTPUT_PATH_SNIPPETS) {

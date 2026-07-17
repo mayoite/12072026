@@ -903,7 +903,9 @@ function buildCoverageMatrix(model, { repoRoot = defaultRepoRoot } = {}) {
       (model.failuresStatus ?? []).some((entry) => entry.category === 'plan-pack')
         ? record('docs-health.plan-packs', 'code-proven', firstEvidenceFromNormalized(model.failuresStatus.filter((entry) => entry.category === 'plan-pack')))
         : record('docs-health.plan-packs', 'unknown-gap', firstEvidence([], 'Docs health plan packs')),
-      record('docs-health.architecture-docs', 'unknown-gap', firstEvidence([], 'Docs health architecture docs')),
+      (model.docsHealth ?? []).some((entry) => entry.category === 'architecture-doc')
+        ? record('docs-health.architecture-docs', 'code-proven', firstEvidenceFromNormalized(model.docsHealth.filter((entry) => entry.category === 'architecture-doc')))
+        : record('docs-health.architecture-docs', 'unknown-gap', firstEvidence([], 'Docs health architecture docs')),
       record('docs-health.api-docs', 'unknown-gap', firstEvidence([], 'Docs health api docs')),
     ],
   }

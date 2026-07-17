@@ -275,11 +275,11 @@ The installed stack already covers the required work:
 | Interactive 2D canvas | `fabric` |
 | Interactive 3D canvas | `three`, `@react-three/fiber`, and `@react-three/drei` |
 | Planner state | `zustand` |
-| Undo and redo history | `zundo` |
+| Undo and redo history | Planner command/history layer (`createPlannerHistory`) |
 | Remote loading and sync state | `@tanstack/react-query` |
 | Catalog search when ranked search is needed | `fuse.js` |
 | Icons | `@phosphor-icons/react` |
-| Transient notifications | `sonner` |
+| Transient notifications | Surface status messages and ARIA live regions |
 | Browser and accessibility proof | `@playwright/test` and `@axe-core/playwright` |
 
 Shared CSS remains under `site/app/css/` and Planner CSS modules.

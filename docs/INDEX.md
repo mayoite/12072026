@@ -1,10 +1,10 @@
 # Documentation index
 
-**Budget: ≤22 live files under `docs/`.** Process → `Agents/`. Execution → `plan/`. Commands → `Readme.md`.
+**Budget: ≤23 live files under `docs/`.** Process → `Agents/`. Execution → `plan/`. Commands → `Readme.md`.
 
 Start: `architecture/README.md` (vision + **current vs target** table). Live SVG = disk; target = Products DB (`08-DATABASE-SVG-CONTRACT.md`).
 
-## Architecture (11)
+## Architecture (12)
 
 | Doc | Content |
 |---|---|
@@ -19,6 +19,7 @@ Start: `architecture/README.md` (vision + **current vs target** table). Live SVG
 | `architecture/08-DATABASE-SVG-CONTRACT.md` | DB SVG publication contract |
 | `architecture/09-SITE-UI-BENCHMARK.md` | Site acceptance |
 | `architecture/10-SECURITY-BENCHMARK.md` | Security acceptance |
+| `architecture/11-RUNTIME-ARCHITECTURE.md` | Live runtime, boundaries, Planner flow, dependency policy |
 
 ## Technical (6)
 

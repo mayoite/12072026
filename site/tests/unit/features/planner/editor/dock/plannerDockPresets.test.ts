@@ -1,7 +1,9 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
 import {
+  clearPersistedDockLayout,
   PLANNER_DOCKVIEW_STORAGE_KEY,
+  PLANNER_DOCKVIEW_SCHEMA_VERSION,
   PLANNER_DOCK_MODULE_IDS,
   applyPlannerDockPreset,
   ensurePlannerDockPanel,
@@ -94,10 +96,49 @@ describe("plannerDockPresets", () => {
     const api = createFakeApi();
     applyPlannerDockPreset(api as never, "default");
     persistDockLayout(api as never);
-    expect(localStorage.getItem(PLANNER_DOCKVIEW_STORAGE_KEY)).toBeTruthy();
+    expect(JSON.parse(localStorage.getItem(PLANNER_DOCKVIEW_STORAGE_KEY) ?? "null")).toEqual(
+      expect.objectContaining({
+        schemaVersion: PLANNER_DOCKVIEW_SCHEMA_VERSION,
+        layout: expect.objectContaining({ panels: expect.any(Object) }),
+      }),
+    );
 
     const next = createFakeApi();
     expect(tryRestoreDockLayout(next as never)).toBe(true);
     expect(next.fromJSON).toHaveBeenCalled();
+  });
+
+  it("discards legacy layouts instead of restoring stale floating panels", () => {
+    localStorage.setItem("planner-dockview-layout-v5", JSON.stringify({ panels: {} }));
+    const api = createFakeApi();
+
+    expect(tryRestoreDockLayout(api as never)).toBe(false);
+    expect(api.fromJSON).not.toHaveBeenCalled();
+    expect(localStorage.getItem("planner-dockview-layout-v5")).toBeNull();
+  });
+
+  it("rejects and clears unknown panels", () => {
+    localStorage.setItem(
+      PLANNER_DOCKVIEW_STORAGE_KEY,
+      JSON.stringify({
+        schemaVersion: PLANNER_DOCKVIEW_SCHEMA_VERSION,
+        layout: { panels: { canvas: {}, injected: {} }, grid: {} },
+      }),
+    );
+    const api = createFakeApi();
+
+    expect(tryRestoreDockLayout(api as never)).toBe(false);
+    expect(api.fromJSON).not.toHaveBeenCalled();
+    expect(localStorage.getItem(PLANNER_DOCKVIEW_STORAGE_KEY)).toBeNull();
+  });
+
+  it("clears current and legacy layout keys", () => {
+    localStorage.setItem(PLANNER_DOCKVIEW_STORAGE_KEY, "current");
+    localStorage.setItem("planner-dockview-layout-v4", "legacy");
+
+    clearPersistedDockLayout();
+
+    expect(localStorage.getItem(PLANNER_DOCKVIEW_STORAGE_KEY)).toBeNull();
+    expect(localStorage.getItem("planner-dockview-layout-v4")).toBeNull();
   });
 });

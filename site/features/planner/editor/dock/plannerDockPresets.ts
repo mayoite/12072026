@@ -2,7 +2,13 @@ import type { DockviewApi } from "dockview-react";
 
 import type { LayoutPresetId } from "../workspaceLayout";
 
-export const PLANNER_DOCKVIEW_STORAGE_KEY = "planner-dockview-layout-v5";
+export const PLANNER_DOCKVIEW_STORAGE_KEY = "planner-dockview-layout";
+export const PLANNER_DOCKVIEW_SCHEMA_VERSION = 1;
+
+const LEGACY_DOCKVIEW_STORAGE_KEYS = [
+  "planner-dockview-layout-v4",
+  "planner-dockview-layout-v5",
+] as const;
 
 export type PlannerDockPanelId =
   | "canvas"
@@ -28,6 +34,43 @@ export const PLANNER_DOCK_MODULE_IDS: Exclude<PlannerDockPanelId, "canvas">[] = 
   "properties",
   "layers",
 ];
+
+const PLANNER_DOCK_PANEL_IDS = new Set<PlannerDockPanelId>([
+  "canvas",
+  ...PLANNER_DOCK_MODULE_IDS,
+]);
+
+type PersistedPlannerDockLayout = {
+  readonly schemaVersion: typeof PLANNER_DOCKVIEW_SCHEMA_VERSION;
+  readonly layout: ReturnType<DockviewApi["toJSON"]>;
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function isSupportedDockLayout(value: unknown): value is PersistedPlannerDockLayout {
+  if (!isRecord(value)) return false;
+  if (value.schemaVersion !== PLANNER_DOCKVIEW_SCHEMA_VERSION) return false;
+  if (!isRecord(value.layout) || !isRecord(value.layout.panels)) return false;
+
+  const panelIds = Object.keys(value.layout.panels);
+  return (
+    panelIds.length > 0 &&
+    panelIds.every((panelId) => PLANNER_DOCK_PANEL_IDS.has(panelId as PlannerDockPanelId))
+  );
+}
+
+export function clearPersistedDockLayout(): void {
+  try {
+    localStorage.removeItem(PLANNER_DOCKVIEW_STORAGE_KEY);
+    for (const key of LEGACY_DOCKVIEW_STORAGE_KEYS) {
+      localStorage.removeItem(key);
+    }
+  } catch {
+    /* private mode / blocked storage */
+  }
+}
 
 function addCanvas(api: DockviewApi): void {
   api.addPanel({
@@ -170,7 +213,14 @@ export function applyPlannerDockPreset(
 
 export function persistDockLayout(api: DockviewApi): void {
   try {
-    localStorage.setItem(PLANNER_DOCKVIEW_STORAGE_KEY, JSON.stringify(api.toJSON()));
+    const persisted: PersistedPlannerDockLayout = {
+      schemaVersion: PLANNER_DOCKVIEW_SCHEMA_VERSION,
+      layout: api.toJSON(),
+    };
+    localStorage.setItem(PLANNER_DOCKVIEW_STORAGE_KEY, JSON.stringify(persisted));
+    for (const key of LEGACY_DOCKVIEW_STORAGE_KEYS) {
+      localStorage.removeItem(key);
+    }
   } catch {
     /* private mode / quota */
   }
@@ -178,16 +228,23 @@ export function persistDockLayout(api: DockviewApi): void {
 
 export function tryRestoreDockLayout(api: DockviewApi): boolean {
   try {
+    for (const key of LEGACY_DOCKVIEW_STORAGE_KEYS) {
+      localStorage.removeItem(key);
+    }
     const raw = localStorage.getItem(PLANNER_DOCKVIEW_STORAGE_KEY);
     if (!raw) return false;
     const parsed = JSON.parse(raw) as unknown;
-    if (!parsed || typeof parsed !== "object") return false;
-    api.fromJSON(parsed as ReturnType<DockviewApi["toJSON"]>);
+    if (!isSupportedDockLayout(parsed)) {
+      clearPersistedDockLayout();
+      return false;
+    }
+    api.fromJSON(parsed.layout);
     if (!api.getPanel("canvas")) {
       addCanvas(api);
     }
     return api.panels.length > 0;
   } catch {
+    clearPersistedDockLayout();
     return false;
   }
 }

@@ -25,7 +25,6 @@ import {
   writePlannerStartupIntent,
 } from "./projectSetup";
 import {
-  buildShellOnlyLayout,
   estimateRoomMm,
   suggestLayoutGridPack,
 } from "@/features/planner/ai/spaceSuggest";
@@ -127,9 +126,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
       setPendingBootstrapLayout(
         startingMode === "template"
           ? suggestLayoutGridPack(metadataToSpaceSuggestInput(metadata))
-          : startingMode === "scratch"
-            ? buildShellOnlyLayout(metadata)
-            : null,
+          : null,
       );
       writePlannerStartupIntent(startingMode, guestMode, _planId);
       markProjectSetupCompleteInStorage(guestMode, _planId);
@@ -314,7 +311,7 @@ export function ProjectSetupStep({ guestMode = false, planId: _planId, onComplet
                 {
                   value: "scratch",
                   label: "Scratch",
-                  description: "Create an editable empty room shell.",
+                  description: "Start with a clean, blank canvas.",
                   icon: PencilSimpleLine,
                 },
                 {

@@ -57,6 +57,16 @@
   padding: var(--space-1) var(--space-2);
   overflow-x: auto;
   overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.rail[data-dock-managed="true"]::-webkit-scrollbar {
+  display: none;
+}
+
+/* Dockview has its own tab chrome. Keep the live rail icon-first and quiet. */
+.rail[data-dock-managed="true"] .shortcut {
+  display: none;
 }
 
 .rail[data-dock-managed="true"] .railChrome {
@@ -558,6 +568,11 @@
     border-bottom: none;
     overflow-x: hidden;
     overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .rail[data-dock-managed="true"]::-webkit-scrollbar {
+    display: none;
   }
 
   .rail[data-dock-managed="true"] .group,
@@ -570,6 +585,10 @@
     width: 1.5rem;
     height: 1px;
     margin: var(--space-1) 0;
+  }
+
+  .rail[data-dock-managed="true"] .toolFace {
+    border-radius: var(--radius-lg);
   }
 }
 

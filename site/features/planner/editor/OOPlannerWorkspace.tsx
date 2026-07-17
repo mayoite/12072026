@@ -37,7 +37,10 @@ import { shouldPlaceModularWithGeneratedGlb } from "@/features/planner/asset-eng
 import { importPlannerPlannerText } from "@/features/planner/project/shared/export/importUtils";
 import { usePlannerWorkspaceAutosave } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
 import { setActiveFloor } from "@/features/planner/project/model/operations/pureActions";
-import { createRectangularRoomProject } from "@/features/planner/project/model/project";
+import {
+  createPlannerProject,
+  createRectangularRoomProject,
+} from "@/features/planner/project/model/project";
 import { addPlannerWall } from "@/features/planner/project/model/actions/walls";
 import {
   addPlannerDoor,
@@ -143,13 +146,6 @@ export function OOPlannerWorkspace({
   const importInputRef = useRef<HTMLInputElement>(null);
   const workspaceCanvas = useWorkspaceCanvas({
     projectName,
-    initialProject: guestMode
-      ? createRectangularRoomProject({
-          name: projectName,
-          widthMm: 5000,
-          depthMm: 4000,
-        })
-      : undefined,
   });
   const handleProjectNameChange = useCallback(
     (name: string) => {
@@ -196,13 +192,12 @@ export function OOPlannerWorkspace({
         usePlannerWorkspaceStore.getState();
       if (!pendingBootstrapLayout) return;
 
-      const { room } = pendingBootstrapLayout;
       replaceProjectRef.current(
-        createRectangularRoomProject({
-          name: room?.label || projectName || "Starter plan",
-          widthMm: room?.widthMm ?? 5000,
-          depthMm: room?.depthMm ?? 4000,
-        }),
+        applyLayoutToWorkspace(
+          createPlannerProject({ name: projectName || "Starter plan" }),
+          pendingBootstrapLayout,
+          catalog.resolveItem,
+        ),
       );
       setPendingBootstrapLayout(null);
     })();
@@ -210,7 +205,7 @@ export function OOPlannerWorkspace({
     return () => {
       cancelled = true;
     };
-  }, [guestMode, planId, projectName]);
+  }, [catalog.resolveItem, guestMode, planId, projectName]);
 
   const [viewMode, setViewMode] = useState<"2d" | "3d">("2d");
 
@@ -221,7 +216,7 @@ export function OOPlannerWorkspace({
     });
     return () => cancelAnimationFrame(frame);
   }, [viewMode]);
-  const [activeTool, setActiveTool] = useState<PlannerTool>("wall");
+  const [activeTool, setActiveTool] = useState<PlannerTool>("select");
   const [displayUnit, setDisplayUnit] = useState<PlannerDisplayUnit>(
     DEFAULT_PLANNER_WORKSPACE_PREFERENCES.units,
   );
@@ -241,7 +236,7 @@ export function OOPlannerWorkspace({
     null,
   );
   const [workspaceMessage, setWorkspaceMessage] = useState<string | null>(null);
-  const armedToolRef = useRef<PlannerTool>("wall");
+  const armedToolRef = useRef<PlannerTool>("select");
 
   useEffect(() => {
     const intent = takePlannerStartupIntent(guestMode, planId);

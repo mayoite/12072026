@@ -15,11 +15,21 @@ import {
 import { SnapManager } from "@/features/planner/lib/snapManager";
 import { appendSnapshot } from "@/features/planner/lib/versioning";
 import { createPlannerDocument } from "@/features/planner/model";
+import { browserApiFetch } from "@/lib/api/browserApi";
+
+vi.mock("@/lib/api/browserApi", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/api/browserApi")>();
+  return {
+    ...actual,
+    browserApiFetch: vi.fn(),
+  };
+});
 
 describe("planner lib branch coverage gaps", () => {
   beforeEach(() => {
     localStorage.clear();
     resetFeatureFlags();
+    vi.mocked(browserApiFetch).mockReset();
   });
 
   afterEach(() => {
@@ -109,7 +119,7 @@ describe("planner lib branch coverage gaps", () => {
   });
 
   it("covers ai advisor plain-text fallbacks and failed feature flag fetch", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+    vi.mocked(browserApiFetch).mockResolvedValue({
       ok: true,
       json: async () => ({ content: "Layout advice in prose" }),
     } as Response);
@@ -130,7 +140,7 @@ describe("planner lib branch coverage gaps", () => {
       "Layout advice in prose",
     );
 
-    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+    vi.mocked(browserApiFetch).mockResolvedValue({
       ok: false,
       statusText: "Service Unavailable",
       json: async () => ({}),

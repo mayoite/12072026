@@ -12,6 +12,7 @@ import { success } from "@/features/shared/api/apiResponse";
 import { mapDescriptorsToCatalogItems } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
 import { filterBuyerFacingCatalogItems } from "@/features/planner/project/catalog/catalogBuyerVisibility";
 import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server";
+import { readSvgArtifactStatus } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
 
 export async function GET(req: NextRequest) {
   const rateError = await enforcePublicApiRateLimit(
@@ -24,7 +25,7 @@ export async function GET(req: NextRequest) {
   const descriptors = await loadBuyerVisibleDescriptorsWithDb();
   const items = filterBuyerFacingCatalogItems(
     mapDescriptorsToCatalogItems(descriptors),
-  );
+  ).filter((item) => readSvgArtifactStatus(item.slug).state === "published");
 
   return success({
     items,

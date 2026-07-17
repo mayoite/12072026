@@ -88,7 +88,7 @@ There is a deliberate split between the current live state and the target. **Whe
 | Planner managed catalog | Products DB — `planner_managed_products` | (same) |
 | Lifecycle + audit | `results/admin/catalog-ops/` (gitignored) | Durable store |
 
-DB dual-write is a best-effort stub: both `publishSvgEditorAction.ts` and `POST /api/admin/svg-editor` inject `dbRepository` when `PRODUCTS_DATABASE_URL` is set (upserting `svg_revisions` + `block_descriptors`), but with a stub payload — disk stays the real authority. Cutover is tracked in `plan/Admin/CHECKLIST.md` (`DB-SVG-01…05`) and `docs/architecture/08-DATABASE-SVG-CONTRACT.md`.
+DB dual-write is a best-effort stub: both `publishSvgEditorAction.ts` and `POST /api/admin/svg-editor` inject `dbRepository` when `PRODUCTS_DATABASE_URL` is set (upserting `svg_revisions` + `block_descriptors`), but with a stub payload — disk stays the real authority. Cutover requirements live in `docs/architecture/08-DATABASE-SVG-CONTRACT.md`; active blockers live in `Failures.md`.
 
 ### i18n
 
@@ -104,7 +104,7 @@ Site marketing uses `next-intl` (locales `en`, `hi`, `fr`, `de`, `es`; `localePr
 
 ## Key pointers
 
-- Execution checklists: `plan/README.md` (`plan/Admin/`, `Planner/`, `Site/`, `Security/`).
+- Current execution: `plan/README.md` and `plan/Planner/CHECKLIST.md`.
 - Architecture & data facts: `docs/INDEX.md`, `docs/site/ARCHITECTURE.md` ("where do I edit?" decision tree).
 - Active blockers & release gate policy: `Failures.md`.
 - Agent process & quality bar: `Agents/INDEX.md`, `Agents/Agents-01-STANDARD.md`.

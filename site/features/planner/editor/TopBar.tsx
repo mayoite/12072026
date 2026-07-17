@@ -12,7 +12,6 @@ import {
 import {
   MenuTrigger,
   Button,
-  Popover,
   Menu,
   MenuItem,
   RadioGroup,
@@ -22,6 +21,7 @@ import type { PlannerAccessContext } from "@/features/planner/project/lib/comman
 import type { PlannerDisplayUnit } from "@/features/planner/project/model/types";
 import type { PlannerSaveStatus } from "@/features/planner/project/persistence/usePlannerWorkspaceAutosave";
 import type { PanelId } from "./useDockingSystem";
+import { PlannerMenuPopover } from "@/features/planner/ui/PlannerMenuPopover";
 import {
   LAYOUT_PRESET_LABELS,
   type ChromePackId,
@@ -389,7 +389,7 @@ export function TopBar({
                   {activeFloorName}
                   <CaretDown size={12} weight="bold" aria-hidden />
                 </Button>
-                <Popover placement="bottom start" className={styles.dropdownPopover}>
+                <PlannerMenuPopover placement="bottom start">
                   <Menu
                     className={styles.dropdownMenu}
                     selectionMode="single"
@@ -406,7 +406,7 @@ export function TopBar({
                       </MenuItem>
                     ))}
                   </Menu>
-                </Popover>
+                </PlannerMenuPopover>
               </MenuTrigger>
             )}
 
@@ -415,7 +415,7 @@ export function TopBar({
                 {displayUnit}
                 <CaretDown size={12} weight="bold" aria-hidden />
               </Button>
-              <Popover placement="bottom start" className={styles.dropdownPopover}>
+              <PlannerMenuPopover placement="bottom start">
                 <Menu
                   className={styles.dropdownMenu}
                   selectionMode="single"
@@ -432,7 +432,7 @@ export function TopBar({
                     </MenuItem>
                   ))}
                 </Menu>
-              </Popover>
+              </PlannerMenuPopover>
             </MenuTrigger>
           </div>,
         )}
@@ -592,7 +592,7 @@ export function TopBar({
                   Export
                   <CaretDown size={12} weight="bold" aria-hidden />
                 </Button>
-                <Popover placement="bottom end" className={styles.dropdownPopover}>
+                <PlannerMenuPopover placement="bottom end">
                   <Menu
                     className={styles.dropdownMenu}
                     onAction={(key) => onExport?.(key as string)}
@@ -611,7 +611,7 @@ export function TopBar({
                       Download BOQ (CSV)
                     </MenuItem>
                   </Menu>
-                </Popover>
+                </PlannerMenuPopover>
               </MenuTrigger>
             )}
 
@@ -622,7 +622,7 @@ export function TopBar({
                     Import
                     <CaretDown size={12} weight="bold" aria-hidden />
                   </Button>
-                  <Popover placement="bottom end" className={styles.dropdownPopover}>
+                  <PlannerMenuPopover placement="bottom end">
                     <Menu
                       className={styles.dropdownMenu}
                       onAction={(key) => {
@@ -636,7 +636,7 @@ export function TopBar({
                         Import from URL...
                       </MenuItem>
                     </Menu>
-                  </Popover>
+                  </PlannerMenuPopover>
                 </MenuTrigger>
 
                 <MenuTrigger>
@@ -644,7 +644,7 @@ export function TopBar({
                     Export
                     <CaretDown size={12} weight="bold" aria-hidden />
                   </Button>
-                  <Popover placement="bottom end" className={styles.dropdownPopover}>
+                  <PlannerMenuPopover placement="bottom end">
                     <Menu
                       className={styles.dropdownMenu}
                       onAction={(key) => onExport?.(key as string)}
@@ -667,7 +667,7 @@ export function TopBar({
                         Add seats to quote cart
                       </MenuItem>
                     </Menu>
-                  </Popover>
+                  </PlannerMenuPopover>
                 </MenuTrigger>
               </>
             )}
@@ -699,7 +699,7 @@ export function TopBar({
               Panels
               <CaretDown size={12} weight="bold" aria-hidden />
             </Button>
-            <Popover placement="bottom end" className={styles.dropdownPopover}>
+            <PlannerMenuPopover placement="bottom end">
               <Menu
                 className={styles.dropdownMenu}
                 onAction={(key) => {
@@ -776,7 +776,7 @@ export function TopBar({
                   </MenuItem>
                 ))}
               </Menu>
-            </Popover>
+            </PlannerMenuPopover>
           </MenuTrigger>,
         )}
       </div>

@@ -1,4 +1,7 @@
-import { CSRF_HEADER_NAME } from "@/lib/security/csrfConstants";
+import {
+  CSRF_HEADER_NAME,
+  CSRF_REJECTION_HEADER_NAME,
+} from "@/lib/security/csrfConstants";
 
 let csrfTokenPromise: Promise<string> | null = null;
 
@@ -20,7 +23,10 @@ export function invalidateCsrfToken(): void {
 
 export async function ensureCsrfToken(): Promise<string> {
   if (!csrfTokenPromise) {
-    csrfTokenPromise = fetch(apiPath("/api/csrf"), { credentials: "include" })
+    csrfTokenPromise = fetch(apiPath("/api/csrf"), {
+      credentials: "include",
+      cache: "no-store",
+    })
       .then(async (response) => {
         if (!response.ok) {
           throw new Error(`CSRF bootstrap failed (${response.status})`);
@@ -66,16 +72,16 @@ export async function browserApiFetch(
     return execute();
   }
 
-  const existingToken = csrfTokenPromise ? await csrfTokenPromise.catch(() => null) : null;
-  let response = await execute(existingToken ?? undefined);
-  if (response.status !== 403) {
+  const token = await ensureCsrfToken();
+  let response = await execute(token);
+  if (response.headers.get(CSRF_REJECTION_HEADER_NAME) !== "1") {
     return response;
   }
 
   invalidateCsrfToken();
   const retryToken = await ensureCsrfToken();
   response = await execute(retryToken);
-  if (response.status === 403) {
+  if (response.headers.get(CSRF_REJECTION_HEADER_NAME) === "1") {
     invalidateCsrfToken();
   }
   return response;

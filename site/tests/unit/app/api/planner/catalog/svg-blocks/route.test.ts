@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import { mapDescriptorsToCatalogItems } from "@/features/planner/project/catalog/svg/descriptorCatalogBridge.server";
 import { loadBuyerVisibleDescriptorsWithDb } from "@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server";
 import { enforcePublicApiRateLimit } from "@/app/api/_lib/public";
+import { readSvgArtifactStatus } from "@/features/admin/svg-editor/publish/svgArtifactStatus.server";
 
 vi.mock("@/app/api/_lib/public", () => ({
   enforcePublicApiRateLimit: vi.fn().mockResolvedValue(null),
@@ -19,12 +20,17 @@ vi.mock("@/features/admin/svg-editor/lifecycle/catalogLifecycle.db.server", () =
   loadBuyerVisibleDescriptorsWithDb: vi.fn(),
 }));
 
+vi.mock("@/features/admin/svg-editor/publish/svgArtifactStatus.server", () => ({
+  readSvgArtifactStatus: vi.fn(),
+}));
+
 import { GET } from "@/app/api/planner/catalog/svg-blocks/route";
 
 describe("app/api/planner/catalog/svg-blocks/route.ts", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(enforcePublicApiRateLimit).mockResolvedValue(null);
+    vi.mocked(readSvgArtifactStatus).mockReturnValue({ state: "published" } as never);
   });
 
   it("returns rate-limit response when public limit is exceeded", async () => {
@@ -101,6 +107,29 @@ describe("app/api/planner/catalog/svg-blocks/route.ts", () => {
         symbolOnly: true,
       },
     ]);
+
+    const res = await GET(
+      new NextRequest("http://localhost/api/planner/catalog/svg-blocks"),
+    );
+    const body = await res.json();
+
+    expect(body.items).toEqual([]);
+    expect(body.source).toBe("none");
+    expect(body.total).toBe(0);
+  });
+
+  it("does not publish a catalog item when its SVG artifact is missing", async () => {
+    vi.mocked(loadBuyerVisibleDescriptorsWithDb).mockResolvedValue([
+      { slug: "new-block" },
+    ] as never);
+    vi.mocked(mapDescriptorsToCatalogItems).mockReturnValue([
+      {
+        id: "new-block",
+        slug: "new-block",
+        name: "New block",
+      },
+    ] as never);
+    vi.mocked(readSvgArtifactStatus).mockReturnValue({ state: "missing" } as never);
 
     const res = await GET(
       new NextRequest("http://localhost/api/planner/catalog/svg-blocks"),

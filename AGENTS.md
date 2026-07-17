@@ -26,9 +26,9 @@
 
 ## Layout
 
-- Execution lives in the checklists under `plan/Admin/`, `plan/Planner/`, `plan/Site/`, and `plan/Security/`.
+- Current execution lives in `plan/Planner/CHECKLIST.md`.
+- Verified code maps live in `plan/Admin/FEATURES.md`, `plan/Planner/FEATURES.md`, and `plan/Site/FEATURES.md`.
 - No work is deferred to a later decision bucket.
-- `plan/Phase-2/README.md` is a legacy pointer only.
 - Product and architecture facts live in `docs/`.
 - Agent process lives in `Agents/`.
 - Agent-authored reports belong only in `agent-reports/`.

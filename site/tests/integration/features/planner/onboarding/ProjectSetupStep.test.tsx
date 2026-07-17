@@ -4,11 +4,20 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { ProjectSetupStep } from "@/features/planner/onboarding/ProjectSetupStep";
 
 import * as projectSetupMod from "@/features/planner/onboarding/projectSetup";
+import { suggestLayoutGridPack } from "@/features/planner/ai/spaceSuggest";
+import { usePlannerWorkspaceStore } from "@/features/planner/cloud-store/workspaceStore";
 
 describe("ProjectSetupStep", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(projectSetupMod, "applyProjectSetup").mockImplementation(vi.fn());
+    usePlannerWorkspaceStore.getState().setPendingBootstrapLayout(
+      suggestLayoutGridPack({
+        seatCount: 6,
+        purpose: "workstations",
+        floorAreaSqFt: 1000,
+      }),
+    );
   });
 
   it("keeps submit disabled until hydration completes", async () => {
@@ -54,5 +63,6 @@ describe("ProjectSetupStep", () => {
 
     await waitFor(() => expect(projectSetupMod.applyProjectSetup).toHaveBeenCalledTimes(1));
     expect(onComplete).toHaveBeenCalledTimes(1);
+    expect(usePlannerWorkspaceStore.getState().pendingBootstrapLayout).toBeNull();
   });
 });

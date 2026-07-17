@@ -10,10 +10,10 @@
 | Architecture | `Agents-08-architecture.md` |
 | CSS | `Agents-09-css.md` |
 
-Admin, Planner, Site, and Security are the active execution tracks.
+Admin, Planner, Site, and Security remain product tracks.
 
-Their checklists may run in parallel after test isolation.
+Planner is the current execution track.
 
-An item waits only for its named dependency.
+Admin and Site retain verified code maps only.
 
-The first execution item is test and catalog isolation.
+Security requirements live in `docs/architecture/10-SECURITY-BENCHMARK.md`.

@@ -2,6 +2,8 @@
 @import "./app-shell.css";
 @import "./planner-tokens.css";
 @import "./planner-shell.css";
+@import "./planner-menu.css";
+@import "./planner-ai-assist.css";
 @import "./workspace-OOPlannerWorkspace.css";
 @import "./workspace-FeasibilityCanvas.css";
 @import "./workspace-route-host.css";

@@ -37,7 +37,7 @@ When docs and code differ, code wins until cutover is proven.
 | Publish dual-write | One DB transaction + pointer | Best-effort stub on both Admin publish entrypoints; disk remains authority |
 | Lifecycle + audit | Durable store | `results/admin/catalog-ops/` |
 
-Remove split authority via `plan/Admin/CHECKLIST.md` (`DB-SVG-01` … `05`) and `08-DATABASE-SVG-CONTRACT.md`.
+Remove split authority via `08-DATABASE-SVG-CONTRACT.md`; active blockers live in `../../Failures.md`.
 
 ## Boundaries (target)
 
@@ -58,6 +58,7 @@ Remove split authority via `plan/Admin/CHECKLIST.md` (`DB-SVG-01` … `05`) and 
 | DB SVG publication | `08-DATABASE-SVG-CONTRACT.md` |
 | Site UI | `09-SITE-UI-BENCHMARK.md` |
 | Security | `10-SECURITY-BENCHMARK.md` |
+| Live runtime | `11-RUNTIME-ARCHITECTURE.md` |
 
 References: [Configura CET](https://www.configura.com/products/cet/commercial-interiors) · [pCon.planner](https://docs.pcon-solutions.com/pCon/planner/8.14/pCon.planner_8.14_Features_EN.pdf) · [WCAG 2.2](https://www.w3.org/TR/WCAG22/) · [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) · [Core Web Vitals](https://web.dev/articles/defining-core-web-vitals-thresholds) · [Google Search](https://developers.google.com/search/docs) · [OpenAPI](https://spec.openapis.org/oas/) · [IFC](https://www.buildingsmart.org/standards/bsi-standards/industry-foundation-classes/)
 

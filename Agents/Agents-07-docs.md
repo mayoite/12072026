@@ -3,7 +3,7 @@
 - Document verified live behavior.
 - Keep intent separate from current capability.
 - Use `docs/` for architecture and operating facts.
-- Use one checklist for each primary track.
+- Keep one checklist for current owner-approved execution.
 - Do not create phase cards or shadow plans.
 - Do not create generated folder manifests.
 - Edit generator sources, not generated output.

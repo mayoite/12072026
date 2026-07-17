@@ -1,10 +1,15 @@
 import { renderHook, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { useAiAdvisor } from "@/lib/ai/useAiAdvisor";
+import { browserApiFetch } from "@/lib/api/browserApi";
+
+vi.mock("@/lib/api/browserApi", () => ({
+  browserApiFetch: vi.fn(),
+}));
 
 describe("useAiAdvisor", () => {
   beforeEach(() => {
-    vi.stubGlobal("fetch", vi.fn());
+    vi.mocked(browserApiFetch).mockReset();
   });
 
   afterEach(() => {
@@ -12,8 +17,7 @@ describe("useAiAdvisor", () => {
   });
 
   it("posts to planner ai-advisor and updates state on success", async () => {
-    const mockFetch = vi.mocked(fetch);
-    mockFetch.mockResolvedValueOnce({
+    vi.mocked(browserApiFetch).mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ success: true, content: "Hello there!" }),
     } as Response);
@@ -40,14 +44,14 @@ describe("useAiAdvisor", () => {
       await promise;
     });
 
-    expect(mockFetch).toHaveBeenCalledWith(
+    expect(browserApiFetch).toHaveBeenCalledWith(
       "/api/planner/ai-advisor",
       expect.objectContaining({
         method: "POST",
         headers: { "Content-Type": "application/json" },
       }),
     );
-    const body = JSON.parse(String(mockFetch.mock.calls[0]?.[1]?.body ?? "{}")) as {
+    const body = JSON.parse(String(vi.mocked(browserApiFetch).mock.calls[0]?.[1]?.body ?? "{}")) as {
       mode?: string;
       context?: Record<string, unknown>;
     };
@@ -67,8 +71,7 @@ describe("useAiAdvisor", () => {
   });
 
   it("handles error response correctly", async () => {
-    const mockFetch = vi.mocked(fetch);
-    mockFetch.mockResolvedValueOnce({
+    vi.mocked(browserApiFetch).mockResolvedValueOnce({
       ok: false,
       status: 500,
       json: () =>
@@ -89,8 +92,7 @@ describe("useAiAdvisor", () => {
   });
 
   it("fails when advisor returns empty content", async () => {
-    const mockFetch = vi.mocked(fetch);
-    mockFetch.mockResolvedValueOnce({
+    vi.mocked(browserApiFetch).mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ success: true, content: "   " }),
     } as Response);

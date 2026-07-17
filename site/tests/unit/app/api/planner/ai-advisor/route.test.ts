@@ -3,9 +3,18 @@ import { NextRequest } from "next/server";
 
 const requestProviderText = vi.hoisted(() => vi.fn());
 const resolveProviderChain = vi.hoisted(() => vi.fn());
+const authCapture = vi.hoisted(() => ({
+  options: null as Record<string, unknown> | null,
+}));
 
 vi.mock("@/features/shared/api/withAuth", () => ({
-  withAuth: (handler: (req: NextRequest) => Promise<Response>) => handler,
+  withAuth: (
+    handler: (req: NextRequest) => Promise<Response>,
+    options: Record<string, unknown>,
+  ) => {
+    authCapture.options = options;
+    return handler;
+  },
 }));
 
 vi.mock("@/lib/ai/providerChain", () => ({
@@ -41,6 +50,12 @@ describe("app/api/planner/ai-advisor/route.ts", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     resolveProviderChain.mockReturnValue([primaryProvider, backupProvider]);
+  });
+
+  it("requires CSRF protection on the mutating guest route", () => {
+    expect(authCapture.options).toEqual(
+      expect.objectContaining({ requireCsrf: true, role: "guest" }),
+    );
   });
 
   it("falls back to backup provider when primary fails", async () => {

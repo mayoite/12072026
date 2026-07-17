@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { browserApiFetch } from "@/lib/api/browserApi";
 
 export interface AiMessage {
   id: string;
@@ -63,7 +64,7 @@ export function useAiAdvisor(options: UseAiAdvisorOptions = {}) {
           content: m.content,
         }));
 
-        const res = await fetch("/api/planner/ai-advisor", {
+        const res = await browserApiFetch("/api/planner/ai-advisor", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

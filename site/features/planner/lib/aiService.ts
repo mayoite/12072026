@@ -9,6 +9,7 @@
 import type { CatalogItem } from "@/features/planner/cloud-store/catalogData";
 import { furnitureCatalog } from "@/features/planner/cloud-store/catalogData";
 import type { Room, FurnitureItem } from "@/features/planner/cloud-store/plannerTypes";
+import { browserApiFetch } from "@/lib/api/browserApi";
 
 export type StylePreset = "Modern" | "Traditional" | "Minimalist";
 
@@ -151,7 +152,7 @@ export async function callAI(
     },
   ];
 
-  const response = await fetch("/api/planner/ai-advisor", {
+  const response = await browserApiFetch("/api/planner/ai-advisor", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ messages }),
@@ -209,7 +210,7 @@ Return a "placements" array with specific x,y coordinates within the room bounds
     },
   ];
 
-  const response = await fetch("/api/planner/ai-advisor", {
+  const response = await browserApiFetch("/api/planner/ai-advisor", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ messages }),
@@ -252,7 +253,7 @@ export async function analyzeSpace(
     },
   ];
 
-  const response = await fetch("/api/planner/ai-advisor", {
+  const response = await browserApiFetch("/api/planner/ai-advisor", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ messages }),

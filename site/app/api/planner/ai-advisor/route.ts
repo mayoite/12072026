@@ -236,5 +236,10 @@ async function handlePlannerAdvisor(req: NextRequest): Promise<NextResponse> {
 /** AI Layout Advisor. Guest auth; rate-limited. */
 export const POST = withAuth(
   async (req) => handlePlannerAdvisor(req as NextRequest),
-  { role: "guest", rateLimitScope: "planner-ai-advisor", rateLimit: 5 },
+  {
+    role: "guest",
+    rateLimitScope: "planner-ai-advisor",
+    rateLimit: 5,
+    requireCsrf: true,
+  },
 );

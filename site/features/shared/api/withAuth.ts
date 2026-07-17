@@ -32,6 +32,7 @@ import {
   isDevAuthBypassEnabled,
 } from "@/lib/auth/devAuthBypass";
 import { validateCsrfRequest } from "@/lib/security/csrf";
+import { CSRF_REJECTION_HEADER_NAME } from "@/lib/security/csrfConstants";
 
 /** Roles supported by {@link withAuth}. */
 export type AuthRole = "admin" | "member" | "guest";
@@ -216,6 +217,7 @@ export function withAuth<TContext = unknown>(
             API_ERROR_CODES.INSUFFICIENT_PERMISSIONS,
             "Invalid or missing CSRF token",
           ),
+          { headers: { [CSRF_REJECTION_HEADER_NAME]: "1" } },
         );
       }
     }

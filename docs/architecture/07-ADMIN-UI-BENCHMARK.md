@@ -233,7 +233,7 @@ The installed stack already covers the work:
 | Form and contract validation | Existing Zod contracts |
 | Remote state | `@tanstack/react-query` |
 | Icons | `@phosphor-icons/react` |
-| Feedback | `sonner` |
+| Feedback | Existing status, alert, and ARIA live-region components |
 | Browser and accessibility proof | `@playwright/test` and `@axe-core/playwright` |
 
 Do not add a second SVG engine.

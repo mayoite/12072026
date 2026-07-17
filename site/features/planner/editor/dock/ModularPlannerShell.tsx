@@ -18,8 +18,8 @@ import { useIsMobile } from "../../hooks/useIsMobile";
 import styles from "../workspace.module.css";
 import { PlannerDockHost, type DockviewApi } from "./PlannerDockHost";
 import {
+  clearPersistedDockLayout,
   ensurePlannerDockPanel,
-  PLANNER_DOCKVIEW_STORAGE_KEY,
 } from "./plannerDockPresets";
 import type { PlannerDockSlots } from "./plannerDockSlots";
 
@@ -140,11 +140,7 @@ export function ModularPlannerShell({
   };
 
   const applyPreset = useCallback((preset: LayoutPresetId) => {
-    try {
-      localStorage.removeItem(PLANNER_DOCKVIEW_STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
+    clearPersistedDockLayout();
     setLayoutPresetId(preset);
     setLayoutEpoch((n) => n + 1);
   }, []);
