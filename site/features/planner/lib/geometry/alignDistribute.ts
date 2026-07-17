@@ -72,8 +72,9 @@ export function distributeEntities(
     axis === "x" ? a.xMm - b.xMm : a.yMm - b.yMm,
   );
 
-  const first = sorted[0]!;
-  const last = sorted[sorted.length - 1]!;
+  const first = sorted[0];
+  const last = sorted[sorted.length - 1];
+  if (!first || !last) return [];
   const firstLeading = axis === "x" ? first.xMm : first.yMm;
   const lastLeading = axis === "x" ? last.xMm : last.yMm;
   const lastSize = axis === "x" ? last.widthMm : last.depthMm;
@@ -89,7 +90,8 @@ export function distributeEntities(
   const updates: EntityPositionUpdate[] = [];
   let leading = firstLeading;
   for (let i = 0; i < sorted.length; i += 1) {
-    const e = sorted[i]!;
+    const e = sorted[i];
+    if (!e) continue;
     const size = axis === "x" ? e.widthMm : e.depthMm;
     if (i === 0) {
       updates.push({ id: e.id, xMm: e.xMm, yMm: e.yMm });
@@ -129,10 +131,13 @@ export function spaceEntitiesWithExactGap(
   );
 
   const updates: EntityPositionUpdate[] = [];
-  let leading = axis === "x" ? sorted[0]!.xMm : sorted[0]!.yMm;
+  const head = sorted[0];
+  if (!head) return [];
+  let leading = axis === "x" ? head.xMm : head.yMm;
 
   for (let i = 0; i < sorted.length; i += 1) {
-    const e = sorted[i]!;
+    const e = sorted[i];
+    if (!e) continue;
     const size = axis === "x" ? e.widthMm : e.depthMm;
     if (i === 0) {
       updates.push({ id: e.id, xMm: e.xMm, yMm: e.yMm });

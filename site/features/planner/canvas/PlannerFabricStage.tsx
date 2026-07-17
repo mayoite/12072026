@@ -1066,7 +1066,7 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
           const floor = activeFloorRef.current;
           const wall = floor?.walls.find((item) => item.id === gripMeta.wallId);
           const anchor =
-            wall == null
+            wall === undefined || wall === null
               ? null
               : wallGripAnchorPoint(wall, gripMeta.endpoint);
           const snapped = snapProjectPoint({
@@ -1636,11 +1636,12 @@ export const PlannerFabricStage = forwardRef<PlannerCanvasStageHandle, PlannerFa
         observer.observe(railRegion);
       }
 
+      const distanceGuideHandle = distanceGuideHandleRef.current;
       return () => {
         canvas.off("object:moving", handleObjectMovingCombined);
         canvas.off("object:modified", handleObjectModifiedWithGuides);
         canvas.off("mouse:up", clearPlacementGuides);
-        clearDistanceGuideOverlay(canvas, distanceGuideHandleRef.current);
+        clearDistanceGuideOverlay(canvas, distanceGuideHandle);
         canvas.off("mouse:down", handleFabricSelectDown);
         canvas.off("selection:created", handleSelection);
         canvas.off("selection:updated", handleSelection);

@@ -27,7 +27,6 @@ describe("alignDistribute", () => {
   it("aligns center on y", () => {
     const updates = alignEntities(entities, "y", "center");
     expect(updates).toHaveLength(3);
-    const centers = updates.map((u, i) => u.yMm + entities[i]!.depthMm / 2);
     // Map order matches input entity order, not y-sort.
     const byId = new Map(updates.map((u) => [u.id, u]));
     const centerOf = (id: string, depth: number) =>

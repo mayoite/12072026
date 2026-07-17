@@ -11,7 +11,7 @@
     "build": "node scripts/generate-all.mjs --stage-only && vite build && node scripts/publish-all.mjs",
     "gate": "node scripts/gate.mjs",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "node scripts/generate-all.mjs --stage-only && tsc --noEmit",
     "test": "node ../node_modules/vitest/vitest.mjs run",
     "sync-css": "node scripts/sync-css.mjs",
     "test:coverage": "node ../node_modules/vitest/vitest.mjs run --coverage",

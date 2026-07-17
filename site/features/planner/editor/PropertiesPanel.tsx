@@ -1260,7 +1260,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                       }
                     }}
                     aria-label="Known underlay segment length"
-                    disabled={underlayCalibratePhase != null}
+                    disabled={underlayCalibratePhase !== null && underlayCalibratePhase !== undefined}
                   />
                 </label>
               ) : null}
@@ -1275,7 +1275,7 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                       }
                       title="Map underlay width to 10 m"
                       aria-label="Calibrate underlay width to 10 metres"
-                      disabled={underlayCalibratePhase != null}
+                      disabled={underlayCalibratePhase !== null && underlayCalibratePhase !== undefined}
                     >
                       10 m
                     </button>
@@ -1287,14 +1287,14 @@ export const PropertiesPanel = memo(function PropertiesPanel({
                       }
                       title="Map underlay width to 5 m"
                       aria-label="Calibrate underlay width to 5 metres"
-                      disabled={underlayCalibratePhase != null}
+                      disabled={underlayCalibratePhase !== null && underlayCalibratePhase !== undefined}
                     >
                       5 m
                     </button>
                   </>
                 ) : null}
                 {callbacks?.onStartTwoPointCalibrate ? (
-                  underlayCalibratePhase != null ? (
+                  underlayCalibratePhase !== null && underlayCalibratePhase !== undefined ? (
                     <button
                       type="button"
                       className={styles.multiActionBtnWide}

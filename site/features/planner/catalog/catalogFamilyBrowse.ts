@@ -260,13 +260,16 @@ export function groupCatalogItemsByFamily(
     }
   }
 
-  return order.map((key) => {
-    const bucket = buckets.get(key)!;
-    return {
-      familyKey: key,
-      familyLabel: bucket.familyLabel,
-      items: bucket.items,
-    };
+  return order.flatMap((key) => {
+    const bucket = buckets.get(key);
+    if (!bucket) return [];
+    return [
+      {
+        familyKey: key,
+        familyLabel: bucket.familyLabel,
+        items: bucket.items,
+      },
+    ];
   });
 }
 
@@ -377,14 +380,14 @@ export function buildCatalogCompareTable(
     itemIds: items.map((i) => i.id),
     names: listMeta.map((m) => m.name),
     attributes: [
-      attr("sku", "SKU", (_i, index) => listMeta[index]!.sku ?? "—"),
-      attr("family", "Family", (_i, index) => listMeta[index]!.family),
+      attr("sku", "SKU", (_i, index) => listMeta[index]?.sku ?? "—"),
+      attr("family", "Family", (_i, index) => listMeta[index]?.family ?? "—"),
       attr(
         "variant",
         "Variant",
-        (_i, index) => listMeta[index]!.variant ?? "—",
+        (_i, index) => listMeta[index]?.variant ?? "—",
       ),
-      attr("dims", "Dimensions", (_i, index) => listMeta[index]!.dimsLabel),
+      attr("dims", "Dimensions", (_i, index) => listMeta[index]?.dimsLabel ?? "—"),
       attr(
         "material",
         "Material",
