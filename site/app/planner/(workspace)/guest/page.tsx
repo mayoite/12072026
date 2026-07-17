@@ -5,6 +5,7 @@ import {
   newEntityId,
 } from "@/features/planner/lib/newEntityId";
 import { PlannerWorkspaceRoute } from "@/features/planner/ui/PlannerWorkspaceRoute";
+import { buildGuestPlannerDraftRedirectHref } from "@/lib/analytics/plannerEntry";
 
 export const dynamic = "force-dynamic";
 
@@ -35,9 +36,10 @@ export default async function PlannerGuestRoute({
   }
 
   // A bare guest URL starts a distinct draft. Its generated URL resumes it.
+  // Preserve Site continuity params (siteProduct / siteSource / utm_*) across the id redirect.
   // The legacy shared guest draft remains available only by explicit request.
   if (!planId && !resumeLegacyDraft) {
-    redirect(`/planner/guest/?id=${newEntityId()}`);
+    redirect(buildGuestPlannerDraftRedirectHref(newEntityId(), resolved));
   }
 
   if (planId && !isEntityUuid(planId)) {

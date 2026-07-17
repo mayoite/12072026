@@ -41,6 +41,34 @@ describe("PlannerGuestRoute", () => {
     expect(isEntityUuid(id ?? "")).toBe(true);
   });
 
+  it("keeps Site continuity params when minting the guest draft id", async () => {
+    let redirectError: unknown;
+    try {
+      await PlannerGuestRoute({
+        searchParams: Promise.resolve({
+          siteProduct: "super-chair",
+          siteCategory: "seating",
+          siteSource: "/products/seating/super-chair",
+          utm_source: "google",
+        }),
+      });
+    } catch (error) {
+      redirectError = error;
+    }
+
+    expect(redirectError).toMatchObject({
+      digest: expect.stringContaining("NEXT_REDIRECT"),
+    });
+    const digest = (redirectError as { digest: string }).digest;
+    const redirectTarget = digest.split(";")[2];
+    const url = new URL(redirectTarget, "http://planner.local");
+    expect(isEntityUuid(url.searchParams.get("id") ?? "")).toBe(true);
+    expect(url.searchParams.get("siteProduct")).toBe("super-chair");
+    expect(url.searchParams.get("siteCategory")).toBe("seating");
+    expect(url.searchParams.get("siteSource")).toBe("/products/seating/super-chair");
+    expect(url.searchParams.get("utm_source")).toBe("google");
+  });
+
   it("renders a valid guest draft with its plan id", async () => {
     render(
       await PlannerGuestRoute({

@@ -2,6 +2,7 @@
 import { getOptionalPlannerUser } from "@/lib/auth/plannerSession";
 import { notFound, redirect } from "next/navigation";
 import { isEntityUuid } from "@/features/planner/lib/newEntityId";
+import { buildGuestPlannerEntryHref } from "@/lib/analytics/plannerEntry";
 
 export const dynamic = "force-dynamic";
 
@@ -11,12 +12,13 @@ export default async function PlannerCanvasRoute({
 }: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const resolvedSearchParams = searchParams ? await searchParams : {};
   const user = await getOptionalPlannerUser();
   if (!user) {
-    redirect("/planner/guest/");
+    // Keep Site continuity params when bouncing unauthenticated canvas traffic to guest.
+    redirect(buildGuestPlannerEntryHref(resolvedSearchParams));
   }
 
-  const resolvedSearchParams = searchParams ? await searchParams : {};
   const rawId = resolvedSearchParams.id;
   if (Array.isArray(rawId)) {
     notFound();

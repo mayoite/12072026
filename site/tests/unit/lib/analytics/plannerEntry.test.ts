@@ -1,9 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import {
+  buildGuestPlannerDraftRedirectHref,
+  buildGuestPlannerEntryHref,
   buildPlannerEntryCampaign,
   buildPlannerEntryHref,
   isPlannerEntryHref,
+  pickPlannerEntrySearchParams,
 } from "@/lib/analytics/plannerEntry";
 
 describe("plannerEntry", () => {
@@ -63,5 +66,54 @@ describe("plannerEntry", () => {
     expect(href).toContain("utm_source=google");
     expect(href).toContain("utm_medium=cpc");
     expect(href).toContain("utm_campaign=spring");
+  });
+
+  it("picks only Site continuity query keys and ignores empty/arrays", () => {
+    const picked = pickPlannerEntrySearchParams({
+      siteProduct: "chair",
+      siteCategory: ["seating", "desks"],
+      siteSource: "/products/seating/chair",
+      utm_source: "google",
+      utm_medium: "  ",
+      utm_campaign: "",
+      id: "should-not-copy",
+      resume: "1",
+    });
+    expect(picked.get("siteProduct")).toBe("chair");
+    expect(picked.get("siteCategory")).toBeNull();
+    expect(picked.get("siteSource")).toBe("/products/seating/chair");
+    expect(picked.get("utm_source")).toBe("google");
+    expect(picked.get("utm_medium")).toBeNull();
+    expect(picked.get("utm_campaign")).toBeNull();
+    expect(picked.get("id")).toBeNull();
+    expect(picked.get("resume")).toBeNull();
+  });
+
+  it("preserves Site params when minting a guest draft id redirect", () => {
+    const href = buildGuestPlannerDraftRedirectHref("aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee", {
+      siteProduct: "chair",
+      siteCategory: "seating",
+      siteSource: "/products/seating/chair",
+      utm_campaign: "spring",
+      id: "ignored-old",
+    });
+    expect(href.startsWith("/planner/guest/?")).toBe(true);
+    const url = new URL(href, "https://oneonly.in");
+    expect(url.searchParams.get("id")).toBe("aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee");
+    expect(url.searchParams.get("siteProduct")).toBe("chair");
+    expect(url.searchParams.get("siteCategory")).toBe("seating");
+    expect(url.searchParams.get("siteSource")).toBe("/products/seating/chair");
+    expect(url.searchParams.get("utm_campaign")).toBe("spring");
+  });
+
+  it("builds guest bounce from canvas with or without continuity params", () => {
+    expect(buildGuestPlannerEntryHref({})).toBe("/planner/guest/");
+    const withParams = buildGuestPlannerEntryHref({
+      siteProduct: "desk",
+      siteSource: "/choose-product",
+    });
+    expect(withParams).toContain("/planner/guest/?");
+    expect(withParams).toContain("siteProduct=desk");
+    expect(withParams).toContain("siteSource=%2Fchoose-product");
   });
 });

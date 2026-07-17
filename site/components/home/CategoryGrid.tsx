@@ -13,6 +13,7 @@ import { CollectionsSectionHeading } from "@/components/home/CollectionsSectionH
 import { HomeSection, HomeSectionInner } from "@/components/home/layout";
 import { SectionIntro } from "@/components/shared/SectionIntro";
 import { DEFAULT_HERO_FALLBACK } from "@/features/site/data/homepage";
+import { CATEGORY_ROUTE_COPY } from "@/features/site/data/routeCopy";
 
 const PILLAR_ICONS = {
   "check-circle": CheckCircle2,
@@ -68,6 +69,19 @@ export async function CategoryGrid() {
         <HomeSectionInner>
           <CollectionsSectionHeading as="h2" className="home-heading mb-6 max-w-3xl md:mb-8" />
 
+          {requestedCatalog.length === 0 ? (
+            <div
+              className="scheme-panel scheme-border rounded-2xl border px-6 py-10 text-center"
+              role="status"
+            >
+              <h3 className="home-heading text-balance">
+                {CATEGORY_ROUTE_COPY.offlineTitle}
+              </h3>
+              <p className="page-copy text-body mt-4 mx-auto max-w-lg">
+                {CATEGORY_ROUTE_COPY.offlineDescription}
+              </p>
+            </div>
+          ) : (
           <div className="grid grid-cols-1 gap-4 min-[32.5rem]:grid-cols-2 sm:gap-5 md:gap-6 lg:grid-cols-3">
             {requestedCatalog.map((category) => {
                 const allProducts = category.series.flatMap((series) => series.products);
@@ -106,6 +120,7 @@ export async function CategoryGrid() {
                 );
               })}
           </div>
+          )}
         </HomeSectionInner>
       </HomeSection>
     </>

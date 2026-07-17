@@ -58,6 +58,7 @@ vi.mock('@/lib/analytics/siteEvents', () => ({
   trackCompareToggled: vi.fn(),
   trackQuoteCartAdded: vi.fn(),
   trackSiteCtaClick: vi.fn(),
+  handlePlannerEntryNavigation: vi.fn(),
 }));
 
 vi.mock('@/features/site/data/routeCopy', () => ({
@@ -216,5 +217,27 @@ describe('ProductViewer Component', () => {
     fireEvent.click(variantBtn);
     expect(screen.getByText('Selected:')).toBeInTheDocument();
     expect(screen.getAllByText('Mesh Red').length).toBeGreaterThan(0);
+  });
+
+  it('Design in Planner carries siteProduct/siteCategory/siteSource (SF-08)', async () => {
+    render(
+      <ProductViewer
+        product={dummyProduct}
+        categoryRoute="/products/seating"
+        categoryId="seating"
+        categoryName="Seating"
+        productRoute="/products/seating/super-chair"
+      />,
+    );
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalled();
+    });
+
+    const launch = screen.getByRole('link', { name: /Design in Planner/i });
+    const href = launch.getAttribute('href') ?? '';
+    expect(href.startsWith('/planner/guest')).toBe(true);
+    expect(href).toContain('siteProduct=super-chair');
+    expect(href).toContain('siteCategory=seating');
+    expect(href).toContain('siteSource=%2Fproducts%2Fseating%2Fsuper-chair');
   });
 });

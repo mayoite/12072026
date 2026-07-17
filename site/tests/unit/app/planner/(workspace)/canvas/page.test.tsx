@@ -48,6 +48,23 @@ describe("PlannerCanvasRoute", () => {
     });
   });
 
+  it("keeps Site continuity params when bouncing unauthenticated canvas to guest", async () => {
+    vi.mocked(getOptionalPlannerUser).mockResolvedValue(null);
+    await expect(
+      PlannerCanvasRoute({
+        searchParams: Promise.resolve({
+          siteProduct: "desk",
+          siteSource: "/choose-product",
+          utm_campaign: "spring",
+        }),
+      }),
+    ).rejects.toMatchObject({
+      digest: expect.stringMatching(
+        /NEXT_REDIRECT;replace;\/planner\/guest\/\?.*siteProduct=desk/,
+      ),
+    });
+  });
+
   it("renders member mode with planId from searchParams", async () => {
     vi.mocked(getOptionalPlannerUser).mockResolvedValue({
       id: "user-1",

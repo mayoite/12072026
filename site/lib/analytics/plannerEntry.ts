@@ -8,6 +8,21 @@ export interface PlannerEntryContext {
   readonly campaign?: string;
 }
 
+/** Site stamps these on planner entry URLs; guest id redirect must keep them. */
+export const PLANNER_ENTRY_QUERY_KEYS = [
+  "siteProduct",
+  "siteCategory",
+  "siteSource",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+] as const;
+
+export type PlannerEntrySearchParams = Record<
+  string,
+  string | string[] | undefined
+>;
+
 export function isPlannerEntryHref(href: string): boolean {
   const normalized = href.trim().toLowerCase();
   if (!normalized.startsWith("/planner")) return false;
@@ -65,4 +80,40 @@ export function buildPlannerEntryHref(
     }
   }
   return `${url.pathname}${url.search}`;
+}
+
+/**
+ * Copy Site continuity params from inbound searchParams.
+ * Ignores arrays (ambiguous) and empty strings.
+ */
+export function pickPlannerEntrySearchParams(
+  searchParams: PlannerEntrySearchParams,
+): URLSearchParams {
+  const out = new URLSearchParams();
+  for (const key of PLANNER_ENTRY_QUERY_KEYS) {
+    const raw = searchParams[key];
+    if (typeof raw === "string" && raw.trim().length > 0) {
+      out.set(key, raw);
+    }
+  }
+  return out;
+}
+
+/** Bare guest URL → new draft id without dropping Site product/source params. */
+export function buildGuestPlannerDraftRedirectHref(
+  planId: string,
+  searchParams?: PlannerEntrySearchParams,
+): string {
+  const params = pickPlannerEntrySearchParams(searchParams ?? {});
+  params.set("id", planId);
+  return `/planner/guest/?${params.toString()}`;
+}
+
+/** Member canvas without session → guest entry, keeping Site continuity params. */
+export function buildGuestPlannerEntryHref(
+  searchParams?: PlannerEntrySearchParams,
+): string {
+  const params = pickPlannerEntrySearchParams(searchParams ?? {});
+  const qs = params.toString();
+  return qs.length > 0 ? `/planner/guest/?${qs}` : "/planner/guest/";
 }

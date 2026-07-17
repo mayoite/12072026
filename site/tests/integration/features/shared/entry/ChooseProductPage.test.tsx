@@ -7,10 +7,12 @@ describe("ChooseProductPage", () => {
     render(<ChooseProductPage guestMode authenticated={false} />);
 
     expect(screen.getByText("Guest session")).toBeInTheDocument();
-    expect(screen.getByTestId("choose-product-planner-launch")).toHaveAttribute(
+    const entry = screen.getByTestId("choose-product-planner-launch");
+    expect(entry).toHaveAttribute(
       "href",
       expect.stringMatching(/^\/planner\/guest(\?|$)/),
     );
+    expect(entry.getAttribute("href")).toContain("siteSource=");
     expect(screen.queryByRole("link", { name: "Open portal" })).not.toBeInTheDocument();
   });
 
@@ -18,10 +20,12 @@ describe("ChooseProductPage", () => {
     render(<ChooseProductPage guestMode={false} authenticated />);
 
     expect(screen.getByText("Signed-in session")).toBeInTheDocument();
-    expect(screen.getByTestId("choose-product-planner-launch")).toHaveAttribute(
+    const entry = screen.getByTestId("choose-product-planner-launch");
+    expect(entry).toHaveAttribute(
       "href",
       expect.stringMatching(/^\/planner\/canvas(\?|$)/),
     );
+    expect(entry.getAttribute("href")).toContain("siteSource=");
     expect(screen.getByRole("link", { name: "Open portal" })).toHaveAttribute(
       "href",
       "/portal",

@@ -17,6 +17,26 @@ describe("resolvePlanSvgUrl", () => {
     );
   });
 
+  it("prefers published SVG revision API over disk slug", () => {
+    expect(
+      resolvePlanSvgUrl({
+        slug: "sectional-sofa-001",
+        publishedSvgRevisionId: "sectional-sofa-001-r-abcdef0123456789abcd",
+      }),
+    ).toBe(
+      "/api/planner/catalog/svg/sectional-sofa-001-r-abcdef0123456789abcd",
+    );
+  });
+
+  it("accepts revision API preview URLs", () => {
+    expect(
+      resolvePlanSvgUrl({
+        previewImageUrl:
+          "/api/planner/catalog/svg/desk-linear-r-0123456789abcdef0123",
+      }),
+    ).toBe("/api/planner/catalog/svg/desk-linear-r-0123456789abcdef0123");
+  });
+
   it("returns null without usable identity", () => {
     expect(resolvePlanSvgUrl({})).toBeNull();
   });
