@@ -342,6 +342,8 @@ export function WorkspaceShell({
       data-planner-surface="paper"
       data-layout-preset={presetId}
       data-chrome-mode={chromeMode}
+      /* Phone: shell grid is auto | minmax(0,1fr) | auto — workspace row grows canvas */
+      data-phone-canvas-grow={viewportTier === "small" ? "true" : undefined}
       id={`workspace-shell-${id.replace(/:/g, "")}`}
     >
       {/* Top bar */}

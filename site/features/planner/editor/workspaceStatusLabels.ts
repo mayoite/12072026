@@ -31,6 +31,21 @@ export function formatSelectionStatus(selection: CanvasSelection): string | null
 
 export type PlannerPersistStorage = "local" | "cloud";
 
+/**
+ * Authoritative save UI state machine (benchmark: one map, not competing verbs).
+ *
+ * - `dirty` maps from persistence `unsaved`
+ * - `offline` is connection overlay (reported when isOffline; labels still carry base persist state)
+ * Persistence machine stays: idle | unsaved | saving | saved | error
+ */
+export type PlannerSaveUiState =
+  | "idle"
+  | "dirty"
+  | "saving"
+  | "saved"
+  | "error"
+  | "offline";
+
 export type PlannerSaveStatusLabelInput = {
   status: PlannerSaveStatus;
   storage: PlannerPersistStorage;
@@ -38,6 +53,21 @@ export type PlannerSaveStatusLabelInput = {
   cloudEnabled: boolean;
   guestMode?: boolean;
   isOffline?: boolean;
+};
+
+export type PlannerSaveChrome = {
+  /** data-status / machine value (unsaved not dirty) */
+  dataStatus: PlannerSaveStatus;
+  /** UI state for the single map (dirty aliases unsaved; offline when disconnected) */
+  uiState: PlannerSaveUiState;
+  /** Primary save CTA only — exclusive home for "Saving…" / "Save draft" / "Retry save" */
+  buttonLabel: string;
+  /** Short status pill next to the button — never a second "Saving" verb */
+  statusLabel: string;
+  buttonAriaLabel: string;
+  storage: PlannerPersistStorage;
+  isOffline: boolean;
+  guestMode: boolean;
 };
 
 /**
@@ -48,68 +78,109 @@ function resolveLabelStorage(input: PlannerSaveStatusLabelInput): PlannerPersist
   return input.cloudEnabled && input.storage === "cloud" ? "cloud" : "local";
 }
 
+/** Map persistence status → UI state (offline wins when disconnected). */
+export function toPlannerSaveUiState(
+  status: PlannerSaveStatus,
+  isOffline = false,
+): PlannerSaveUiState {
+  if (isOffline) return "offline";
+  if (status === "unsaved") return "dirty";
+  return status;
+}
+
 /**
- * Single source of truth for TopBar save copy (W6).
- * When cloudEnabled is false, storage is forced to local for labeling.
- * Status strip uses plannerSaveStatusBarLabel (short) to avoid dual essay.
- * TopBar is the sole customer-facing save authority — do not mirror these
- * full strings into the status bar.
+ * ONE label table for TopBar save chrome.
+ *
+ * Button (CTA) — only user-facing save action copy:
+ * | state   | guest        | member       |
+ * |---------|--------------|--------------|
+ * | idle    | Save draft   | Save         |
+ * | dirty   | Save draft   | Save         |
+ * | saving  | Saving…      | Saving…      |
+ * | saved   | Save draft   | Save         |
+ * | error   | Retry save   | Retry save   |
+ * | offline | (same as base persist state CTA) |
+ *
+ * Status (short, non-CTA) — pill only; never duplicates button save verbs:
+ * | state   | local guest     | local member   | account        |
+ * |---------|-----------------|----------------|----------------|
+ * | idle    | Guest · local   | Ready · local  | Guest / Ready · account |
+ * | dirty   | Unsaved         | Unsaved        | Unsaved        |
+ * | saving  | Local           | Local          | Account        |  ← no "Saving"
+ * | saved   | Draft local     | Saved local    | Account OK     |
+ * | error   | Save failed     | Save failed    | Save failed    |
+ * | offline | Offline · {base short status without Offline prefix} |
+ *
+ * TopBar is sole customer-facing save authority. Status bar must not mirror these.
  */
-export function plannerSaveStatusLabel(input: PlannerSaveStatusLabelInput): string {
-  if (input.isOffline) {
-    return `Offline · ${plannerSaveStatusLabel({ ...input, isOffline: false })}`;
-  }
+export function resolvePlannerSaveChrome(
+  input: PlannerSaveStatusLabelInput,
+): PlannerSaveChrome {
   const guestMode = input.guestMode ?? false;
+  const isOffline = input.isOffline ?? false;
   const storage = resolveLabelStorage(input);
+  const dataStatus = input.status;
+  const uiState = toPlannerSaveUiState(dataStatus, isOffline);
 
-  if (storage === "cloud") {
-    switch (input.status) {
-      case "saving":
-        return "Saving to account…";
-      case "saved":
-        return "Saved to account";
-      case "error":
-        return "Account save failed";
-      case "unsaved":
-        return guestMode ? "Unsaved draft" : "Unsaved changes";
-      case "idle":
-      default:
-        // Cloud path idle: ready to persist to account (not "local").
-        return guestMode ? "Guest session" : "Ready (account)";
-    }
-  }
+  const buttonLabel = resolveButtonLabel(dataStatus, guestMode);
+  const baseStatusLabel = resolveShortStatusLabel(dataStatus, storage, guestMode);
+  const statusLabel = isOffline
+    ? dataStatus === "idle"
+      ? "Offline"
+      : `Offline · ${baseStatusLabel}`
+    : baseStatusLabel;
 
-  switch (input.status) {
-    case "saving":
-      return "Saving locally…";
-    case "saved":
-      return guestMode ? "Draft saved locally" : "Saved locally";
-    case "unsaved":
-      return guestMode ? "Unsaved draft" : "Unsaved changes";
+  const buttonAriaLabel =
+    dataStatus === "error"
+      ? `Retry save — ${statusLabel}`
+      : dataStatus === "saving"
+        ? `Saving — ${statusLabel}`
+        : guestMode
+          ? "Save draft to this device"
+          : "Save project";
+
+  return {
+    dataStatus,
+    uiState,
+    buttonLabel,
+    statusLabel,
+    buttonAriaLabel,
+    storage,
+    isOffline,
+    guestMode,
+  };
+}
+
+function resolveButtonLabel(
+  status: PlannerSaveStatus,
+  guestMode: boolean,
+): string {
+  switch (status) {
     case "error":
-      return "Local save failed";
+      return "Retry save";
+    case "saving":
+      return "Saving…";
     case "idle":
+    case "unsaved":
+    case "saved":
     default:
-      return guestMode ? "Guest session (local)" : "Ready (local)";
+      return guestMode ? "Save draft" : "Save";
   }
 }
 
 /**
- * Short status-strip save pill (e2e: open3d-save-status-bar).
- * Honest local/account wording — never bare "Saved". TopBar keeps full labels.
- * Prefer not rendering this next to TopBar's full pill (one save chrome only).
+ * Short status for the TopBar pill.
+ * When status is "saving", return storage only — button owns the sole "Saving…" verb.
  */
-export function plannerSaveStatusBarLabel(input: PlannerSaveStatusLabelInput): string {
-  if (input.isOffline) {
-    return `Offline · ${plannerSaveStatusBarLabel({ ...input, isOffline: false })}`;
-  }
-  const guestMode = input.guestMode ?? false;
-  const storage = resolveLabelStorage(input);
-
+function resolveShortStatusLabel(
+  status: PlannerSaveStatus,
+  storage: PlannerPersistStorage,
+  guestMode: boolean,
+): string {
   if (storage === "cloud") {
-    switch (input.status) {
+    switch (status) {
       case "saving":
-        return "Saving…";
+        return "Account";
       case "saved":
         return "Account OK";
       case "error":
@@ -118,13 +189,14 @@ export function plannerSaveStatusBarLabel(input: PlannerSaveStatusLabelInput): s
         return "Unsaved";
       case "idle":
       default:
-        return guestMode ? "Guest" : "Account";
+        return guestMode ? "Guest" : "Ready · account";
     }
   }
 
-  switch (input.status) {
+  switch (status) {
     case "saving":
-      return "Saving…";
+      // Storage only — do not say "Saving" here (button already does).
+      return "Local";
     case "saved":
       return guestMode ? "Draft local" : "Saved local";
     case "unsaved":
@@ -133,8 +205,30 @@ export function plannerSaveStatusBarLabel(input: PlannerSaveStatusLabelInput): s
       return "Save failed";
     case "idle":
     default:
-      return guestMode ? "Guest · local" : "Local";
+      return guestMode ? "Guest · local" : "Ready · local";
   }
+}
+
+/**
+ * Short status label from the single map (TopBar pill / parent pass-through).
+ * Prefer resolvePlannerSaveChrome when both button + status are needed.
+ */
+export function plannerSaveStatusLabel(input: PlannerSaveStatusLabelInput): string {
+  return resolvePlannerSaveChrome(input).statusLabel;
+}
+
+/**
+ * Compact status-strip save label — same short map as the pill.
+ * Prefer not rendering this in the bottom status bar next to TopBar (one save chrome only).
+ * Kept for callers/tests that need a short string without a CTA verb.
+ */
+export function plannerSaveStatusBarLabel(input: PlannerSaveStatusLabelInput): string {
+  return resolvePlannerSaveChrome(input).statusLabel;
+}
+
+/** Button CTA from the same map (tests + TopBar). */
+export function plannerSaveButtonLabel(input: PlannerSaveStatusLabelInput): string {
+  return resolvePlannerSaveChrome(input).buttonLabel;
 }
 
 /** Back-compat wrapper — always local-only path used by open3d today. */

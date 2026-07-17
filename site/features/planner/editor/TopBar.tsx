@@ -30,7 +30,7 @@ import {
 } from "./workspaceLayout";
 import { ChromePackFrame } from "./ChromePackFrame";
 import {
-  plannerSaveStatusLabel,
+  resolvePlannerSaveChrome,
   type PlannerPersistStorage,
 } from "./workspaceStatusLabels";
 import styles from "./workspace.module.css";
@@ -38,17 +38,13 @@ import styles from "./workspace.module.css";
 /**
  * Prop contract for WorkspaceShell / OOPlanner wiring:
  *
- * Prefer honest save pill via one of:
- * 1. `saveStatusLabel` — parent already resolved plannerSaveStatusLabel text
- * 2. `saveStatus` (+ optional `saveStorage`, `saveCloudEnabled`) — TopBar calls
- *    plannerSaveStatusLabel; guestMode from accessContext === "guest"
+ * Save chrome is ONE machine via resolvePlannerSaveChrome:
+ * 1. `saveStatus` (+ storage / cloud / offline) — preferred; TopBar builds button + status
+ * 2. `saveStatusLabel` — optional override for the short status pill only
+ * 3. `isModified` / `isSynced` — legacy fallback when saveStatus omitted
  *
- * `isModified` / `isSynced` are fallback for pill status only when saveStatus omitted
- * (never bare "Ready" / "Modified" / /^Saved$/). The pill is the sole save authority —
- * no brand subline duplicate of "Unsaved changes".
- *
- * Chrome: density + spacing + RAC/Phosphor controls only.
- * Do not rewrite save labeling logic here.
+ * Button is the only save CTA. Status pill is short and never a second "Saving" verb.
+ * Do not rewrite the label table here — edit workspaceStatusLabels.ts.
  */
 export interface TopBarProps {
   accessContext?: PlannerAccessContext;
@@ -228,18 +224,24 @@ export function TopBar({
 
   const resolvedSaveStatus: PlannerSaveStatus =
     saveStatus ?? resolveSaveStatusFromLegacy(isModified, isSynced);
-  const effectiveStorage: PlannerPersistStorage =
-    saveCloudEnabled && saveStorage === "cloud" ? "cloud" : "local";
-  const resolvedSaveLabel =
-    saveStatusLabel ??
-    plannerSaveStatusLabel({
-      status: resolvedSaveStatus,
-      storage: saveStorage,
-      lastSavedAt: null,
-      cloudEnabled: saveCloudEnabled,
-      guestMode,
-      isOffline,
-    });
+  const saveChrome = resolvePlannerSaveChrome({
+    status: resolvedSaveStatus,
+    storage: saveStorage,
+    lastSavedAt: null,
+    cloudEnabled: saveCloudEnabled,
+    guestMode,
+    isOffline,
+  });
+  const effectiveStorage = saveChrome.storage;
+  /** Short status from single map; parent override only replaces status text, not button. */
+  const resolvedSaveLabel = saveStatusLabel ?? saveChrome.statusLabel;
+  const saveButtonLabel = saveChrome.buttonLabel;
+  const saveButtonAriaLabel =
+    saveStatusLabel && resolvedSaveStatus === "error"
+      ? `Retry save — ${resolvedSaveLabel}`
+      : saveStatusLabel && resolvedSaveStatus === "saving"
+        ? `Saving — ${resolvedSaveLabel}`
+        : saveChrome.buttonAriaLabel;
 
   const unitOptions: PlannerDisplayUnit[] = ["mm", "cm", "m", "in", "ft-in"];
   const activeFloorName = floors.find((f) => f.id === activeFloorId)?.name ?? "Floor";
@@ -281,22 +283,6 @@ export function TopBar({
   };
 
   const overflowPacks = packs.filter((p) => p.placement === "overflow");
-  const saveButtonLabel =
-    resolvedSaveStatus === "error"
-      ? "Retry save"
-      : resolvedSaveStatus === "saving"
-        ? "Saving…"
-        : showGuestActions
-          ? "Save draft"
-          : "Save";
-  const saveButtonAriaLabel =
-    resolvedSaveStatus === "error"
-      ? `Retry save — ${resolvedSaveLabel}`
-      : resolvedSaveStatus === "saving"
-        ? `Saving — ${resolvedSaveLabel}`
-        : showGuestActions
-          ? "Save draft to this device"
-          : "Save project";
 
   /** WCAG / UI-MOB-03 phone floor (44px). CSS enforces via --planner-touch-target. */
   const phoneMinTapPx = "44";
@@ -309,6 +295,8 @@ export function TopBar({
       data-chrome-mode={chromeMode}
       data-mobile-chrome="top"
       data-phone-layout="two-row"
+      /* Phone height band: two × 44–56px rows ≤ 112px (CSS --ws-phone-topbar-max-h: 7rem) */
+      data-phone-topbar-max-px="112"
       data-testid="planner-topbar"
     >
       {/* Phone row 1: identity (grid-area brand) */}
@@ -402,9 +390,13 @@ export function TopBar({
               </Radio>
             </RadioGroup>
 
+            {/* Floor + unit are desktop secondary chrome — phone keeps 2D/3D only */}
             {floors.length > 0 && (
               <MenuTrigger>
-                <Button className={styles.btn} aria-label={`Active floor: ${activeFloorName}`}>
+                <Button
+                  className={`${styles.btn} ${styles.desktopOnly}`}
+                  aria-label={`Active floor: ${activeFloorName}`}
+                >
                   {activeFloorName}
                   <CaretDown size={12} weight="bold" aria-hidden />
                 </Button>
@@ -430,7 +422,10 @@ export function TopBar({
             )}
 
             <MenuTrigger>
-              <Button className={styles.btn} aria-label={`Display unit: ${displayUnit}`}>
+              <Button
+                className={`${styles.btn} ${styles.desktopOnly}`}
+                aria-label={`Display unit: ${displayUnit}`}
+              >
                 {displayUnit}
                 <CaretDown size={12} weight="bold" aria-hidden />
               </Button>
@@ -573,6 +568,7 @@ export function TopBar({
           aria-atomic="true"
           data-testid="open3d-save-status"
           data-status={resolvedSaveStatus}
+          data-ui-state={saveChrome.uiState}
           data-connection={isOffline ? "offline" : "online"}
           data-storage={effectiveStorage}
           data-modified={isModified || resolvedSaveStatus === "unsaved"}
@@ -597,6 +593,7 @@ export function TopBar({
           isDisabled={resolvedSaveStatus === "saving"}
           aria-label={saveButtonAriaLabel}
           data-status={resolvedSaveStatus}
+          data-ui-state={saveChrome.uiState}
           data-min-tap-px={phoneMinTapPx}
           data-testid="planner-save-button"
         >

@@ -53,19 +53,20 @@ describe("workspaceStatusLabels", () => {
   });
 
   it("formats autosave status for guest and member sessions", () => {
-    expect(formatAutosaveStatus("saved", true)).toBe("Draft saved locally");
-    expect(formatAutosaveStatus("unsaved", false)).toBe("Unsaved changes");
+    expect(formatAutosaveStatus("saved", true)).toBe("Draft local");
+    expect(formatAutosaveStatus("unsaved", false)).toBe("Unsaved");
   });
 });
 
 describe("workspaceStatusLabels full branches (TDD)", () => {
-  it("covers all autosave statuses (honest local labels)", () => {
-    expect(formatAutosaveStatus("saving", false)).toBe("Saving locally…");
-    expect(formatAutosaveStatus("saved", false)).toBe("Saved locally");
-    expect(formatAutosaveStatus("unsaved", true)).toBe("Unsaved draft");
-    expect(formatAutosaveStatus("error", true)).toBe("Local save failed");
-    expect(formatAutosaveStatus("idle", false)).toBe("Ready (local)");
-    expect(formatAutosaveStatus("idle", true)).toBe("Guest session (local)");
+  it("covers all autosave statuses (short status map — no dual Saving verb)", () => {
+    // saving status is storage-only; button owns exclusive "Saving…"
+    expect(formatAutosaveStatus("saving", false)).toBe("Local");
+    expect(formatAutosaveStatus("saved", false)).toBe("Saved local");
+    expect(formatAutosaveStatus("unsaved", true)).toBe("Unsaved");
+    expect(formatAutosaveStatus("error", true)).toBe("Save failed");
+    expect(formatAutosaveStatus("idle", false)).toBe("Ready · local");
+    expect(formatAutosaveStatus("idle", true)).toBe("Guest · local");
   });
 
   it("covers selection multi and snap variants", () => {
@@ -83,16 +84,16 @@ describe("plannerSaveStatusLabel — local-only default (W6)", () => {
     guestMode: boolean;
     expected: string;
   }> = [
-    { status: "idle", guestMode: true, expected: "Guest session (local)" },
-    { status: "idle", guestMode: false, expected: "Ready (local)" },
-    { status: "unsaved", guestMode: true, expected: "Unsaved draft" },
-    { status: "unsaved", guestMode: false, expected: "Unsaved changes" },
-    { status: "saving", guestMode: true, expected: "Saving locally…" },
-    { status: "saving", guestMode: false, expected: "Saving locally…" },
-    { status: "saved", guestMode: true, expected: "Draft saved locally" },
-    { status: "saved", guestMode: false, expected: "Saved locally" },
-    { status: "error", guestMode: true, expected: "Local save failed" },
-    { status: "error", guestMode: false, expected: "Local save failed" },
+    { status: "idle", guestMode: true, expected: "Guest · local" },
+    { status: "idle", guestMode: false, expected: "Ready · local" },
+    { status: "unsaved", guestMode: true, expected: "Unsaved" },
+    { status: "unsaved", guestMode: false, expected: "Unsaved" },
+    { status: "saving", guestMode: true, expected: "Local" },
+    { status: "saving", guestMode: false, expected: "Local" },
+    { status: "saved", guestMode: true, expected: "Draft local" },
+    { status: "saved", guestMode: false, expected: "Saved local" },
+    { status: "error", guestMode: true, expected: "Save failed" },
+    { status: "error", guestMode: false, expected: "Save failed" },
   ];
 
   it.each(cases)(
@@ -118,11 +119,11 @@ describe("plannerSaveStatusLabel — local-only default (W6)", () => {
       cloudEnabled: false,
       guestMode: false,
     });
-    expect(label).toBe("Saved locally");
+    expect(label).toBe("Saved local");
     assertLocalHonesty(label);
   });
 
-  it("cloud branches only when cloudEnabled true", () => {
+  it("cloud branches only when cloudEnabled true (short map; no dual Saving verb)", () => {
     expect(
       plannerSaveStatusLabel({
         status: "saving",
@@ -131,7 +132,7 @@ describe("plannerSaveStatusLabel — local-only default (W6)", () => {
         cloudEnabled: true,
         guestMode: false,
       }),
-    ).toBe("Saving to account…");
+    ).toBe("Account");
     expect(
       plannerSaveStatusLabel({
         status: "saved",
@@ -140,7 +141,7 @@ describe("plannerSaveStatusLabel — local-only default (W6)", () => {
         cloudEnabled: true,
         guestMode: false,
       }),
-    ).toBe("Saved to account");
+    ).toBe("Account OK");
     expect(
       plannerSaveStatusLabel({
         status: "error",
@@ -149,7 +150,7 @@ describe("plannerSaveStatusLabel — local-only default (W6)", () => {
         cloudEnabled: true,
         guestMode: false,
       }),
-    ).toBe("Account save failed");
+    ).toBe("Save failed");
   });
 
   it("forbids synced-to-account style lies across every local status", () => {
@@ -190,11 +191,11 @@ describe("formatAutosaveStatus delegates to same table (no dual drift)", () => {
         guestMode: false,
       }),
     );
-    expect(formatAutosaveStatus("error", false)).toBe("Local save failed");
+    expect(formatAutosaveStatus("error", false)).toBe("Save failed");
   });
 });
 
-describe("plannerSaveStatusBarLabel — compact status strip (not TopBar essay)", () => {
+describe("plannerSaveStatusBarLabel — same short map as TopBar pill (no competing CTA verbs)", () => {
   const local: PlannerPersistStorage = "local";
 
   const barCases: Array<{
@@ -203,11 +204,11 @@ describe("plannerSaveStatusBarLabel — compact status strip (not TopBar essay)"
     expected: string;
   }> = [
     { status: "idle", guestMode: true, expected: "Guest · local" },
-    { status: "idle", guestMode: false, expected: "Local" },
+    { status: "idle", guestMode: false, expected: "Ready · local" },
     { status: "unsaved", guestMode: true, expected: "Unsaved" },
     { status: "unsaved", guestMode: false, expected: "Unsaved" },
-    { status: "saving", guestMode: true, expected: "Saving…" },
-    { status: "saving", guestMode: false, expected: "Saving…" },
+    { status: "saving", guestMode: true, expected: "Local" },
+    { status: "saving", guestMode: false, expected: "Local" },
     { status: "saved", guestMode: true, expected: "Draft local" },
     { status: "saved", guestMode: false, expected: "Saved local" },
     { status: "error", guestMode: true, expected: "Save failed" },

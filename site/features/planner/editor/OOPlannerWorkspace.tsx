@@ -1376,17 +1376,13 @@ export function OOPlannerWorkspace({
 
   const handleSave = useCallback(() => {
     void (async () => {
-      setWorkspaceMessage(
-        guestMode ? "Saving draft locally…" : "Saving plan locally…",
-      );
+      // Align with TopBar single save map — do not dual "Saving…" strings.
+      setWorkspaceMessage(guestMode ? "Saving draft…" : "Saving…");
       try {
         await autosave.flushPersist();
-        // Honest local-only success copy (cloudEnabled stays false — no account strings).
-        setWorkspaceMessage(
-          guestMode ? "Draft saved locally" : "Plan saved locally",
-        );
+        setWorkspaceMessage(guestMode ? "Draft saved on this device" : "Saved on this device");
       } catch {
-        setWorkspaceMessage("Local save failed");
+        setWorkspaceMessage("Save failed");
       }
     })();
   }, [autosave, guestMode]);

@@ -8,6 +8,9 @@ import { TopBar } from "@/features/planner/editor/TopBar";
 /** UI-MOB-03 phone floor (CSS pixels). */
 const PHONE_MIN_TAP_PX = "44";
 const PHONE_MIN_TAP_REM = "2.75";
+/** STRONG-W2: two phone rows × 44–56px ≤ 112px top chrome band. */
+const PHONE_TOPBAR_MAX_PX = "112";
+const PHONE_TOPBAR_MAX_REM = "7rem";
 
 function workspaceCssSource(): string {
   return readFileSync(
@@ -80,8 +83,9 @@ describe("TopBar", () => {
     );
 
     expect(screen.getByTestId("planner-guest-local-badge")).toHaveTextContent(/Local only/i);
-    expect(screen.getByTestId("open3d-save-status").textContent).toMatch(/Guest session \(local\)/i);
+    expect(screen.getByTestId("open3d-save-status").textContent).toMatch(/Guest · local/i);
     expect(screen.getByTestId("open3d-save-status")).toHaveAttribute("data-storage", "local");
+    expect(screen.getByTestId("open3d-save-status")).toHaveAttribute("data-ui-state", "idle");
 
     const saveBtn = screen.getByTestId("planner-save-button");
     expect(saveBtn).toHaveTextContent(/Save draft/i);
@@ -99,7 +103,7 @@ describe("TopBar", () => {
   });
 
   describe("UI-MOB phone chrome (two-row top + 44px targets)", () => {
-    it("declares two-row phone layout and primary/tools row markers", () => {
+    it("declares two-row phone layout, 112px budget, and primary/tools row markers", () => {
       render(
         <TopBar
           projectName="Phone chrome"
@@ -115,6 +119,7 @@ describe("TopBar", () => {
       const topbar = screen.getByTestId("planner-topbar");
       expect(topbar).toHaveAttribute("data-mobile-chrome", "top");
       expect(topbar).toHaveAttribute("data-phone-layout", "two-row");
+      expect(topbar).toHaveAttribute("data-phone-topbar-max-px", PHONE_TOPBAR_MAX_PX);
       expect(topbar).toHaveAttribute("data-chrome-mode", "slim");
 
       const primaryRows = topbar.querySelectorAll('[data-phone-row="primary"]');
@@ -186,7 +191,28 @@ describe("TopBar", () => {
       expect(screen.queryByTestId("planner-density-toggle")).toBeNull();
     });
 
-    it("CSS enforces two-row areas and ≥44px (2.75rem) phone targets", () => {
+    it("keeps floor and unit selectors desktop-only (phone primary = 2D/3D)", () => {
+      render(
+        <TopBar
+          projectName="Secondary hide"
+          viewMode="2d"
+          chromeMode="slim"
+          floors={[{ id: "f1", name: "Ground" }]}
+          activeFloorId="f1"
+          displayUnit="cm"
+          onFloorChange={vi.fn()}
+          onDisplayUnitChange={vi.fn()}
+        />,
+      );
+
+      const floorBtn = screen.getByRole("button", { name: /Active floor: Ground/i });
+      const unitBtn = screen.getByRole("button", { name: /Display unit: cm/i });
+      // desktopOnly class is applied so phone CSS can hide without removing a11y on desktop
+      expect(floorBtn.className).toMatch(/desktopOnly/);
+      expect(unitBtn.className).toMatch(/desktopOnly/);
+    });
+
+    it("CSS enforces ≤112px top chrome budget, two-row areas, ≥44px targets", () => {
       const css = workspaceCssSource();
 
       // Deliberate two-row composition (not three stacked full-width rows)
@@ -197,14 +223,29 @@ describe("TopBar", () => {
       expect(css).toContain('data-phone-row="primary"');
       expect(css).toContain('data-phone-row="tools"');
 
+      // Height budget tokens (7rem = 112px @ 16px root)
+      expect(css).toContain(`--ws-phone-topbar-max-h: ${PHONE_TOPBAR_MAX_REM}`);
+      expect(css).toContain("--ws-phone-topbar-row-h:");
+      expect(css).toMatch(
+        /max-height:\s*calc\(\s*var\(--ws-phone-topbar-max-h/,
+      );
+      // Documented 112px band in comments (prove intent is not open-ended)
+      expect(css).toMatch(/112px/);
+      expect(css).toMatch(/7rem/);
+
       // Touch floor via planner token (2.75rem = 44px at 16px root)
       expect(css).toContain(`min-height: var(--planner-touch-target, ${PHONE_MIN_TAP_REM}rem)`);
       expect(css).toContain(`min-width: var(--planner-touch-target, ${PHONE_MIN_TAP_REM}rem)`);
       expect(css).toMatch(/\.mobilePanelBtn[\s\S]*min-height:\s*var\(--planner-touch-target/);
       expect(css).toMatch(/\.phonePrimaryBtn[\s\S]*min-height:\s*var\(--planner-touch-target/);
 
-      // History stays desktop-only on phone (declutter)
-      expect(css).toMatch(/\.historyActions\s*\{\s*display:\s*none/);
+      // History + guest badge stay desktop-only on phone (declutter)
+      expect(css).toMatch(/\.historyActions\s*\{[\s\S]*?display:\s*none/);
+      expect(css).toMatch(/\.brandSub\s*\{[\s\S]*?display:\s*none/);
+
+      // Canvas flex growth chain documented for phone
+      expect(css).toMatch(/grid-template-rows:\s*auto minmax\(0,\s*1fr\) auto/);
+      expect(css).toMatch(/\.mobileBottomChrome[\s\S]*max-height:/);
     });
   });
 });
