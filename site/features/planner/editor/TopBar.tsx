@@ -585,6 +585,73 @@ export function TopBar({
           "file",
           "File",
           <div className={styles.fileActions} role="group" aria-label="File actions">
+            {chromeMode === "slim" ? (
+              <MenuTrigger>
+                <Button
+                  className={styles.btn}
+                  aria-label="More plan actions"
+                  data-testid="planner-more-actions"
+                >
+                  More
+                  <CaretDown size={12} weight="bold" aria-hidden />
+                </Button>
+                <PlannerMenuPopover placement="bottom end">
+                  <Menu
+                    className={styles.dropdownMenu}
+                    aria-label="More plan actions"
+                    onAction={(key) => {
+                      const id = String(key);
+                      if (id === "import") onImport?.();
+                      if (id === "sketch") onSketchToPlan?.();
+                      if (id === "properties") onShowDockPanel?.("properties");
+                      if (id === "inventory") onShowDockPanel?.("inventory");
+                      if (id === "reset") onResetLayout?.();
+                      if (id.startsWith("export:")) onExport?.(id.slice("export:".length));
+                    }}
+                  >
+                    {onImport ? (
+                      <MenuItem id="import" className={styles.dropdownItem}>
+                        Import plan
+                      </MenuItem>
+                    ) : null}
+                    {onSketchToPlan ? (
+                      <MenuItem id="sketch" className={styles.dropdownItem} data-testid="planner-sketch-to-plan">
+                        Sketch to plan
+                      </MenuItem>
+                    ) : null}
+                    {onShowDockPanel ? (
+                      <MenuItem id="inventory" className={styles.dropdownItem}>
+                        Inventory
+                      </MenuItem>
+                    ) : null}
+                    {onShowDockPanel ? (
+                      <MenuItem id="properties" className={styles.dropdownItem}>
+                        Properties
+                      </MenuItem>
+                    ) : null}
+                    {onResetLayout ? (
+                      <MenuItem id="reset" className={styles.dropdownItem}>
+                        Reset layout
+                      </MenuItem>
+                    ) : null}
+                    {showGuestActions || showPersistenceActions ? (
+                      <>
+                        <MenuItem id="export:json" className={styles.dropdownItem}>
+                          Export plan (JSON)
+                        </MenuItem>
+                        <MenuItem id="export:svg" className={styles.dropdownItem}>
+                          Export plan (SVG)
+                        </MenuItem>
+                        <MenuItem id="export:boq-csv" className={styles.dropdownItem}>
+                          Export BOQ (CSV)
+                        </MenuItem>
+                      </>
+                    ) : null}
+                  </Menu>
+                </PlannerMenuPopover>
+              </MenuTrigger>
+            ) : (
+              <>
             {onImport ? (
               <Button
                 className={styles.btn}
@@ -687,6 +754,8 @@ export function TopBar({
                     </Menu>
                   </PlannerMenuPopover>
                 </MenuTrigger>
+              </>
+            )}
               </>
             )}
           </div>,

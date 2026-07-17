@@ -82,6 +82,7 @@
   scrollbar-width: none;
 }
 
+/* Hide scrollbar chrome in Chromium when dock-managed rail is horizontal. */
 .rail[data-dock-managed="true"]::-webkit-scrollbar {
   display: none;
 }

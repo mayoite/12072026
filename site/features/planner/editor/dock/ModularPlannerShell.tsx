@@ -164,9 +164,11 @@ export function ModularPlannerShell({
   const setPlannerStep = usePlannerWorkspaceStore((state) => state.setPlannerStep);
 
   useEffect(() => {
-    setPlannerStep("draw");
+    // One seed: canvas-first dock. Do not force step back to draw on remount.
     clearPersistedDockLayout();
-  }, [setPlannerStep]);
+    setLayoutPresetId(STEP_PRESET.draw);
+    setLayoutEpoch((n) => n + 1);
+  }, []);
 
   const resolvedLocalSaved = isLocalSaved ?? isSynced;
   const topBarSaveStatusProps = {
