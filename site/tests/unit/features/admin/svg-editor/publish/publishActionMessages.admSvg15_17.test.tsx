@@ -1,13 +1,15 @@
 /**
  * ADM-SVG-15 / 16 / 17 — primary publish names target+versions; failure honesty;
  * success links to artifact + Planner.
+ *
+ * Do not auto-call studio onDocument from a next/dynamic mock with `[props]` deps —
+ * that re-renders forever and OOMs the worker (fail0-w4, 2026-07-17).
  */
 
-import { describe, expect, it } from "vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import fs from "node:fs";
 import path from "node:path";
-import { vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import {
   PLANNER_VERIFY_HREF,
@@ -18,8 +20,11 @@ import {
   releasedSvgHref,
 } from "@/features/admin/svg-editor/publish/publishActionMessages";
 import type { BlockDescriptor } from "@/features/planner/catalog/svg/svgTypes";
+import { AdminSvgEditorEditView } from "@/features/admin/svg-editor/views/AdminSvgEditorEditView";
 
-vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh: vi.fn(), replace: vi.fn(), push: vi.fn() }),
+}));
 vi.mock("@/features/admin/svg-editor/publish/useDebouncedCompile", () => ({
   useDebouncedCompile: () => ({
     result: { ok: true, svg: "<svg></svg>", issues: [], phase: "ok" },
@@ -41,6 +46,7 @@ vi.mock("@/features/admin/svg-editor/lifecycle/DescriptorRevisionPanel", () => (
 vi.mock("@/features/admin/svg-editor/publish/uploadAsset", () => ({
   uploadAssetToSupabase: vi.fn(),
 }));
+// One-shot onDocument: deps must NOT be `[props]` (new object each render → OOM).
 vi.mock("next/dynamic", async () => {
   const React = await import("react");
   return {
@@ -48,13 +54,16 @@ vi.mock("next/dynamic", async () => {
       function MockExcalidrawStudio(props: {
         onDocument?: (svg: string, elements: unknown) => void;
       }) {
+        const onDocument = props.onDocument;
         React.useEffect(() => {
-          props.onDocument?.(
+          onDocument?.(
             '<svg viewBox="0 0 600 600"><rect x="0" y="0" width="100" height="100"/></svg>',
             [{ type: "rectangle", isDeleted: false }],
           );
-        }, [props]);
-        return React.createElement("div", { "data-testid": "mock-excalidraw-studio" });
+        }, [onDocument]);
+        return React.createElement("div", {
+          "data-testid": "mock-excalidraw-studio",
+        });
       },
   };
 });
@@ -72,8 +81,10 @@ vi.mock("next/link", () => ({
     </a>
   ),
 }));
-
-import { AdminSvgEditorEditView } from "@/features/admin/svg-editor/views/AdminSvgEditorEditView";
+vi.mock("@/lib/api/browserApi", () => ({
+  apiPath: (p: string) => p,
+  browserApiFetch: vi.fn(async () => ({ ok: true })),
+}));
 
 const descriptor = JSON.parse(
   fs.readFileSync(
@@ -90,6 +101,10 @@ const artifactStatus = {
   publicUrl: "/symbol.svg",
   markup: "<svg></svg>",
 };
+
+afterEach(() => {
+  cleanup();
+});
 
 describe("ADM-SVG-15 publish names target and versions", () => {
   it("impact and confirm copy name target, draft version, and released revision", () => {
