@@ -14,10 +14,13 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
   useEffect(() => {
     if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 50)
-    } else {
-      setQuery('')
+      const focusTimer = window.setTimeout(() => {
+        inputRef.current?.focus()
+      }, 50)
+      return () => window.clearTimeout(focusTimer)
     }
+    setQuery('')
+    return undefined
   }, [isOpen, setQuery])
 
   useEffect(() => {

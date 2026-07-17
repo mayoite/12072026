@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { BackToTop } from '../src/components/BackToTop'
@@ -42,6 +42,8 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  cleanup()
+  vi.clearAllTimers()
   vi.useRealTimers()
   document.body.innerHTML = ''
 })
@@ -184,8 +186,9 @@ describe('component branch coverage', () => {
   })
 
   it('renders command palette empty, suggestion, and result states', () => {
+    vi.useFakeTimers()
     const onClose = vi.fn()
-    const { rerender } = render(
+    const { rerender, unmount } = render(
       <MemoryRouter>
         <CommandPalette isOpen={false} onClose={onClose} />
       </MemoryRouter>,
@@ -201,6 +204,7 @@ describe('component branch coverage', () => {
         <CommandPalette isOpen onClose={onClose} />
       </MemoryRouter>,
     )
+    vi.runAllTimers()
     expect(screen.getByText('Overview')).toBeTruthy()
     fireEvent.click(screen.getByText('Overview'))
     expect(searchState.setQuery).toHaveBeenCalledWith('Overview')
@@ -213,21 +217,25 @@ describe('component branch coverage', () => {
         <CommandPalette isOpen onClose={onClose} />
       </MemoryRouter>,
     )
+    vi.runAllTimers()
     fireEvent.click(screen.getByText('API'))
     expect(navigate).toHaveBeenCalledWith('/api')
     expect(onClose).toHaveBeenCalled()
+    unmount()
   })
 
   it('handles command palette keyboard shortcuts and overlay close', () => {
+    vi.useFakeTimers()
     const onClose = vi.fn()
     const openListener = vi.fn()
     document.addEventListener('open-command-palette', openListener)
 
-    const { rerender } = render(
+    const { rerender, unmount } = render(
       <MemoryRouter>
         <CommandPalette isOpen onClose={onClose} />
       </MemoryRouter>,
     )
+    vi.runAllTimers()
 
     fireEvent.keyDown(window, { key: 'Escape' })
     expect(onClose).toHaveBeenCalled()
@@ -249,29 +257,33 @@ describe('component branch coverage', () => {
         <CommandPalette isOpen onClose={onClose} />
       </MemoryRouter>,
     )
+    vi.runAllTimers()
     fireEvent.keyDown(window, { key: 'k', metaKey: true })
     expect(onClose).toHaveBeenCalled()
 
     document.removeEventListener('open-command-palette', openListener)
+    unmount()
   })
 
   it('updates command palette query from the input and closes via the X control', () => {
+    vi.useFakeTimers()
     const onClose = vi.fn()
     searchState.query = ''
-    render(
+    const { unmount } = render(
       <MemoryRouter>
         <CommandPalette isOpen onClose={onClose} />
       </MemoryRouter>,
     )
+    vi.runAllTimers()
 
     const input = screen.getByPlaceholderText('Search documentation...')
     fireEvent.change(input, { target: { value: 'security' } })
     expect(searchState.setQuery).toHaveBeenCalledWith('security')
 
-    fireEvent.click(screen.getByRole('button', { name: '' }))
     // X button has no accessible name; click the close control near the kbd.
     const buttons = screen.getAllByRole('button')
     fireEvent.click(buttons[buttons.length - 1]!)
     expect(onClose).toHaveBeenCalled()
+    unmount()
   })
 })
