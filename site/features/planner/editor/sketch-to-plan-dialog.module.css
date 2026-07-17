@@ -50,7 +50,7 @@
 .primary:focus-visible,
 .secondary:focus-visible {
   outline: none;
-  box-shadow: var(--focus-ring, 0 0 0 2px var(--color-primary, #2563eb));
+  box-shadow: var(--focus-ring);
 }
 
 .body {

@@ -5,7 +5,7 @@
   display: grid;
   place-items: center;
   padding: var(--space-4);
-  background: color-mix(in srgb, var(--color-ink, #0f172a) 45%, transparent);
+  background: color-mix(in srgb, var(--color-ink, var(--text-heading)) 45%, transparent);
 }
 
 .dialog {
@@ -14,7 +14,7 @@
   border: 1px solid var(--border-soft);
   background: var(--surface-panel);
   color: var(--text-strong);
-  box-shadow: var(--shadow-float, 0 12px 40px rgb(0 0 0 / 0.25));
+  box-shadow: var(--shadow-float);
 }
 
 .header {
@@ -48,7 +48,7 @@
 .primary:focus-visible,
 .secondary:focus-visible {
   outline: none;
-  box-shadow: var(--focus-ring, 0 0 0 2px var(--color-primary, #2563eb));
+  box-shadow: var(--focus-ring);
 }
 
 .close {
