@@ -226,7 +226,82 @@ describe('MobileNavDrawer Component', () => {
     const closeBtn = screen.getByRole('button', { name: 'Close navigation' });
     expect(closeBtn.className).toMatch(/h-11/);
     expect(closeBtn.className).toMatch(/w-11/);
+    expect(closeBtn.className).toMatch(/min-h-11/);
+    expect(closeBtn.className).toMatch(/min-w-11/);
     expect(screen.getByRole('search', { name: 'Mobile product search' })).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent(/Search products/i);
+  });
+
+  it('uses 44px primary nav targets and contains overflow in drawer shell', async () => {
+    render(
+      <MobileNavDrawer
+        open={true}
+        onClose={vi.fn()}
+        closeButtonRef={closeButtonRef}
+        groupedCategories={categories}
+      />
+    );
+    await act(async () => {});
+
+    const content = screen.getByTestId('drawer-content');
+    expect(content.className).toMatch(/overflow-hidden/);
+    expect(content.className).toMatch(/overscroll-contain/);
+    expect(content.className).toMatch(/max-w-\[100vw\]/);
+    expect(content).toHaveAttribute('role', 'dialog');
+    expect(content).toHaveAttribute('aria-modal', 'true');
+
+    const homeLink = screen.getByRole('link', { name: 'Home' });
+    expect(homeLink.className).toMatch(/min-h-11/);
+
+    const productsBtn = screen.getByRole('button', { name: 'Products' });
+    expect(productsBtn.className).toMatch(/min-h-11/);
+
+    const quoteCta = screen.getByRole('link', { name: 'Quote Cart' });
+    expect(quoteCta.className).toMatch(/min-h-11/);
+
+    const callLink = screen.getByRole('link', { name: /Call \+91/i });
+    expect(callLink.className).toMatch(/min-h-11/);
+
+    const nav = screen.getByRole('navigation', { name: 'Mobile primary navigation' });
+    expect(nav.className).toMatch(/overflow-x-hidden/);
+    expect(nav.className).toMatch(/overflow-y-auto/);
+  });
+
+  it('keeps search results at 44px and truncates long titles', async () => {
+    render(
+      <MobileNavDrawer
+        open={true}
+        onClose={vi.fn()}
+        closeButtonRef={closeButtonRef}
+        groupedCategories={categories}
+      />
+    );
+
+    const searchInput = screen.getByPlaceholderText('Search products...');
+    fireEvent.change(searchInput, { target: { value: 'Task' } });
+
+    await waitFor(() => {
+      expect(screen.getByText('Task Office Chair')).toBeInTheDocument();
+    });
+
+    const resultLink = screen.getByRole('link', { name: /Task Office Chair/i });
+    expect(resultLink.className).toMatch(/min-h-11/);
+    expect(resultLink.querySelector('.truncate')).not.toBeNull();
+  });
+
+  it('closes from the dedicated close control', async () => {
+    const onCloseMock = vi.fn();
+    render(
+      <MobileNavDrawer
+        open={true}
+        onClose={onCloseMock}
+        closeButtonRef={closeButtonRef}
+        groupedCategories={categories}
+      />
+    );
+    await act(async () => {});
+
+    fireEvent.click(screen.getByRole('button', { name: 'Close navigation' }));
+    expect(onCloseMock).toHaveBeenCalled();
   });
 });

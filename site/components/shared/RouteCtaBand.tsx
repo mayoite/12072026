@@ -19,9 +19,10 @@ interface RouteCtaBandProps {
   className?: string;
 }
 
+/** Explicit min-h-11 (≥44px) + full-width stack on phone. */
 const actionVariantClassName: Record<RouteCtaActionVariant, string> = {
-  primary: "btn-primary",
-  "outline-light": "btn-outline-light",
+  primary: "btn-primary min-h-11 w-full justify-center sm:w-auto",
+  "outline-light": "btn-outline-light min-h-11 w-full justify-center sm:w-auto",
 };
 
 export function RouteCtaBand({
@@ -35,12 +36,12 @@ export function RouteCtaBand({
     <div
       className={`marketing-cta-band scheme-panel-dark grid gap-6 lg:grid-cols-[1.1fr_auto] lg:items-end ${className}`.trim()}
     >
-      <div className="max-w-2xl">
+      <div className="max-w-2xl min-w-0">
         {kicker ? <p className="typ-label text-inverse-muted">{kicker}</p> : null}
         <h2 className="home-heading mt-4 text-inverse">{title}</h2>
         <p className="page-copy text-inverse-body mt-4">{description}</p>
       </div>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex w-full min-w-0 flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
         {actions.map((action) => (
           <TrackedLink
             key={`${action.href}-${action.label}`}

@@ -17,9 +17,10 @@ interface RouteActionCardProps {
   panelClassName?: string;
 }
 
+/** Explicit min-h-11 (≥44px) + full-width stack on phone. */
 const actionVariantClassName: Record<RouteActionCardVariant, string> = {
-  primary: "btn-primary",
-  outline: "btn-outline",
+  primary: "btn-primary min-h-11 w-full justify-center sm:w-auto",
+  outline: "btn-outline min-h-11 w-full justify-center sm:w-auto",
 };
 
 const defaultPanelClassName =
@@ -34,11 +35,11 @@ export function RouteActionCard({
   panelClassName = defaultPanelClassName,
 }: RouteActionCardProps) {
   return (
-    <div className={`${panelClassName} ${className}`.trim()}>
+    <div className={`${panelClassName} min-w-0 ${className}`.trim()}>
       {kicker ? <p className="typ-label text-muted mb-3">{kicker}</p> : null}
       <h3 className="typ-h3 text-strong">{title}</h3>
       <p className="page-copy text-body mt-4 max-w-3xl">{description}</p>
-      <div className="mt-6 flex flex-wrap gap-3">
+      <div className="mt-6 flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap">
         {actions.map((action) => (
           <TrackedLink
             key={`${action.href}-${action.label}`}

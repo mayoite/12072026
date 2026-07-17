@@ -22,6 +22,10 @@ vi.mock("@/components/site/LanguageSwitcher", () => ({
   LanguageSwitcher: () => <div data-testid="language-switcher">Language Switcher</div>,
 }));
 
+function expectMinTapTarget(el: HTMLElement) {
+  expect(el.className).toMatch(/min-h-11/);
+}
+
 describe("SiteFooter Component", () => {
   it("renders brand, contact, real footer nav, and legal links", () => {
     render(<SiteFooter />);
@@ -88,5 +92,29 @@ describe("SiteFooter Component", () => {
       expect(label).not.toBe("admin");
     }
     expect(screen.queryByRole("link", { name: /^admin$/i })).not.toBeInTheDocument();
+  });
+
+  it("uses ≥44px tap targets on contact, nav, social, and legal links (mobile readability)", () => {
+    render(<SiteFooter />);
+
+    expectMinTapTarget(screen.getByRole("link", { name: /One&Only - home/i }));
+    expectMinTapTarget(screen.getByRole("link", { name: "9031022875" }));
+    expectMinTapTarget(screen.getByRole("link", { name: SITE_CONTACT.salesEmail }));
+
+    for (const social of SITE_SOCIAL_LINKS) {
+      const socialLink = screen.getByRole("link", { name: social.label });
+      expectMinTapTarget(socialLink);
+      expect(socialLink.className).toMatch(/min-w-11/);
+    }
+
+    for (const col of SITE_FOOTER_NAV) {
+      for (const link of col.links) {
+        expectMinTapTarget(screen.getByRole("link", { name: link.label }));
+      }
+    }
+
+    expectMinTapTarget(screen.getByRole("link", { name: "Refund Policy" }));
+    expectMinTapTarget(screen.getByRole("link", { name: "Privacy Policy" }));
+    expectMinTapTarget(screen.getByRole("link", { name: "Terms" }));
   });
 });

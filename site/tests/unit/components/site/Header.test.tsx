@@ -9,6 +9,7 @@ vi.mock('@phosphor-icons/react', () => ({
   List: () => <span data-testid="hamburger-icon" />,
   MagnifyingGlass: () => <span data-testid="magnifier-icon" />,
   Sparkle: () => <span data-testid="sparkle-icon" />,
+  X: () => <span data-testid="menu-close-icon" />,
 }));
 
 // Mock Logo
@@ -252,15 +253,44 @@ describe('SiteHeader Component', () => {
     await renderSettledHeader();
 
     const burgerBtn = screen.getByRole('button', { name: /Open menu/i });
+    expect(burgerBtn.className).toMatch(/min-h-11/);
+    expect(burgerBtn.className).toMatch(/min-w-11/);
+    expect(burgerBtn).toHaveAttribute('aria-expanded', 'false');
+    expect(burgerBtn).toHaveAttribute('aria-controls', 'mobile-nav-drawer');
+    expect(screen.getByTestId('hamburger-icon')).toBeInTheDocument();
+
     fireEvent.click(burgerBtn);
 
     const drawer = screen.getByTestId('mobile-drawer');
     expect(drawer).toHaveAttribute('data-open', 'true');
+    expect(burgerBtn).toHaveAttribute('aria-expanded', 'true');
+    expect(burgerBtn).toHaveAccessibleName('Close menu');
+    expect(screen.getByTestId('menu-close-icon')).toBeInTheDocument();
+    expect(screen.queryByTestId('hamburger-icon')).toBeNull();
 
     // Close via close button in drawer
     const closeBtn = screen.getByTestId('close-drawer');
     fireEvent.click(closeBtn);
     expect(drawer).toHaveAttribute('data-open', 'false');
+    expect(burgerBtn).toHaveAttribute('aria-expanded', 'false');
+    expect(burgerBtn).toHaveAccessibleName('Open menu');
+    expect(screen.getByTestId('hamburger-icon')).toBeInTheDocument();
+  });
+
+  it('keeps mobile header actions from overflowing the bar', async () => {
+    await renderSettledHeader();
+
+    const banner = screen.getByRole('banner');
+    const shell = banner.querySelector('.shell-container-wide');
+    expect(shell?.className).toMatch(/min-w-0/);
+
+    const burgerBtn = screen.getByRole('button', { name: /Open menu/i });
+    expect(burgerBtn.className).toMatch(/shrink-0/);
+    expect(burgerBtn.className).toMatch(/h-11/);
+    expect(burgerBtn.className).toMatch(/w-11/);
+
+    const locale = screen.getByLabelText('Select Language');
+    expect(locale.className).toMatch(/min-h-11/);
   });
 
   it('adds shadow style class on page scroll', async () => {

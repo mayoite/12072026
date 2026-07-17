@@ -56,7 +56,7 @@ export function LanguageSwitcher({
 
   if (variant === "header") {
     return (
-      <div className={cn("site-header__locale shrink-0", className)}>
+      <div className={cn("site-header__locale min-w-0 shrink", className)}>
         <label htmlFor={selectId} className="sr-only">
           Select Language
         </label>
@@ -65,7 +65,7 @@ export function LanguageSwitcher({
           value={currentLocale}
           onChange={handleChange}
           aria-label="Select Language"
-          className="site-header__locale-select min-h-11 max-w-[7.5rem] cursor-pointer rounded-full border border-soft bg-panel px-3 py-2 text-xs font-semibold text-strong shadow-none transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:max-w-[8.5rem] sm:text-sm"
+          className="site-header__locale-select min-h-11 max-w-[6.75rem] cursor-pointer touch-manipulation rounded-full border border-soft bg-panel px-2.5 py-2 text-xs font-semibold text-strong shadow-none transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:max-w-[8.5rem] sm:px-3 sm:text-sm"
         >
           {Object.entries(names).map(([code, name]) => (
             <option key={code} value={code}>
@@ -78,7 +78,7 @@ export function LanguageSwitcher({
   }
 
   return (
-    <div className={cn("flex flex-col gap-1.5 mt-2", className)}>
+    <div className={cn("mt-2 flex min-w-0 flex-col gap-1.5", className)}>
       <label htmlFor={selectId} className="typ-label text-inverse-muted">
         Select Language
       </label>
@@ -86,7 +86,7 @@ export function LanguageSwitcher({
         id={selectId}
         value={currentLocale}
         onChange={handleChange}
-        className="min-h-11 w-40 cursor-pointer rounded border border-theme-soft bg-panel px-2.5 py-1 text-sm text-strong focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        className="min-h-11 w-40 max-w-full cursor-pointer touch-manipulation rounded border border-theme-soft bg-panel px-2.5 py-1 text-sm text-strong focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
         {Object.entries(names).map(([code, name]) => (
           <option key={code} value={code} className="bg-panel text-strong">

@@ -83,4 +83,19 @@ describe('LanguageSwitcher Component', () => {
     const values = Array.from(select.options).map((o) => o.value);
     expect(values).toEqual(['en', 'hi', 'fr', 'de', 'es']);
   });
+
+  it('keeps header language control at 44px touch height', () => {
+    render(<LanguageSwitcher variant="header" />);
+
+    const select = screen.getByLabelText('Select Language') as HTMLSelectElement;
+    expect(select.className).toMatch(/min-h-11/);
+    expect(select.className).toMatch(/touch-manipulation/);
+  });
+
+  it('keeps footer language control at 44px touch height', () => {
+    render(<LanguageSwitcher variant="footer" />);
+
+    const select = screen.getByLabelText('Select Language') as HTMLSelectElement;
+    expect(select.className).toMatch(/min-h-11/);
+  });
 });

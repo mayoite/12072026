@@ -30,8 +30,15 @@ const SOCIAL_ICON_MAP: Record<string, () => React.JSX.Element> = {
   youtube: YouTubeIcon,
 };
 
+/** Shared focus + hover chrome for footer controls. */
 const footerInteractiveClass =
   "rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+
+/** ≥44px text links (phone, email, nav, legal). */
+const footerTextLinkClass = `site-footer__link ${footerInteractiveClass} inline-flex min-h-11 items-center`;
+
+/** ≥44px square social targets. */
+const footerSocialClass = `site-footer__social ${footerInteractiveClass} inline-flex min-h-11 min-w-11 items-center justify-center`;
 
 export function SiteFooter() {
   const currentYear = new Date().getFullYear();
@@ -40,12 +47,12 @@ export function SiteFooter() {
     <footer className="site-footer w-full surface-inverse text-inverse">
       <div className="shell-container py-12 md:py-14">
         <div className="site-footer__columns">
-          <div className="site-footer__brand-col flex flex-col gap-4">
+          <div className="site-footer__brand-col flex min-w-0 flex-col gap-4">
             <Link
               href="/"
               prefetch={false}
               aria-label="One&Only - home"
-              className={`site-footer__link ${footerInteractiveClass} inline-flex min-h-11 items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary`}
+              className={`${footerTextLinkClass}`}
             >
               <OneAndOnlyLogo variant="orange" className="h-10" />
             </Link>
@@ -56,32 +63,32 @@ export function SiteFooter() {
               </address>
               <a
                 href={toTelHref(SITE_CONTACT.supportPhone)}
-                className={`site-footer__contact-line site-footer__link ${footerInteractiveClass}`}
+                className={`site-footer__contact-line ${footerTextLinkClass}`}
               >
                 9031022875
               </a>
               <a
                 href={buildMailtoHref()}
-                className={`site-footer__contact-line site-footer__link ${footerInteractiveClass}`}
+                className={`site-footer__contact-line ${footerTextLinkClass}`}
               >
                 {SITE_CONTACT.salesEmail}
               </a>
-              <div className="site-footer__social-row flex items-center gap-2.5 pt-1">
-              {SITE_SOCIAL_LINKS.map((social) => {
-                const Icon = SOCIAL_ICON_MAP[social.id];
-                return (
-                  <a
-                    key={social.id}
-                    href={social.href}
-                    aria-label={social.label}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`site-footer__social ${footerInteractiveClass}`}
-                  >
-                    {Icon ? <Icon /> : null}
-                  </a>
-                );
-              })}
+              <div className="site-footer__social-row flex flex-wrap items-center gap-1 pt-1">
+                {SITE_SOCIAL_LINKS.map((social) => {
+                  const Icon = SOCIAL_ICON_MAP[social.id];
+                  return (
+                    <a
+                      key={social.id}
+                      href={social.href}
+                      aria-label={social.label}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={footerSocialClass}
+                    >
+                      {Icon ? <Icon /> : null}
+                    </a>
+                  );
+                })}
               </div>
               <LanguageSwitcher />
             </div>
@@ -90,17 +97,23 @@ export function SiteFooter() {
           {SITE_FOOTER_NAV.map((col, index) => (
             <div
               key={col.heading}
-              className={`site-footer__nav-col ${
+              className={`site-footer__nav-col min-w-0 ${
                 index === 0 ? "site-footer__nav-col--products" : ""
               } ${index === 1 ? "site-footer__nav-col--company" : ""} ${
                 index === 2 ? "site-footer__nav-col--services" : ""
               }`.trim()}
             >
-              <p className="site-footer__heading site-footer__nav-heading typ-overline mb-3">{col.heading}</p>
-              <ul className="flex flex-col gap-2">
+              <p className="site-footer__heading site-footer__nav-heading typ-overline mb-2 md:mb-3">
+                {col.heading}
+              </p>
+              <ul className="flex flex-col gap-0.5">
                 {col.links.map(({ href, label }) => (
                   <li key={`${href}-${label}`}>
-                    <Link href={href} prefetch={false} className={`site-footer__link ${footerInteractiveClass} typ-body-sm`}>
+                    <Link
+                      href={href}
+                      prefetch={false}
+                      className={`${footerTextLinkClass} typ-body-sm`}
+                    >
                       {label}
                     </Link>
                   </li>
@@ -114,17 +127,31 @@ export function SiteFooter() {
       <div className="site-footer__divider mt-2 border-t">
         <div className="site-footer__legal-row typ-body-sm shell-container py-5">
           <div className="site-footer__legal-links">
-            <Link href="/refund-and-return-policy" prefetch={false} className={`site-footer__legal ${footerInteractiveClass}`}>
+            <Link
+              href="/refund-and-return-policy"
+              prefetch={false}
+              className={`site-footer__legal ${footerInteractiveClass} inline-flex min-h-11 items-center`}
+            >
               Refund Policy
             </Link>
-            <Link href="/privacy" prefetch={false} className={`site-footer__legal ${footerInteractiveClass}`}>
+            <Link
+              href="/privacy"
+              prefetch={false}
+              className={`site-footer__legal ${footerInteractiveClass} inline-flex min-h-11 items-center`}
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms" prefetch={false} className={`site-footer__legal ${footerInteractiveClass}`}>
+            <Link
+              href="/terms"
+              prefetch={false}
+              className={`site-footer__legal ${footerInteractiveClass} inline-flex min-h-11 items-center`}
+            >
               Terms
             </Link>
           </div>
-          <p className="site-footer__legal-copy mt-3">&copy; {currentYear} One&Only. All rights reserved.</p>
+          <p className="site-footer__legal-copy mt-3">
+            &copy; {currentYear} One&Only. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

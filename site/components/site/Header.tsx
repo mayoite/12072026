@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { CaretDown, List, MagnifyingGlass, Sparkle } from "@phosphor-icons/react";
+import { CaretDown, List, MagnifyingGlass, Sparkle, X } from "@phosphor-icons/react";
 import { OneAndOnlyLogo } from "@/components/ui/Logo";
 import { PlannerLaunchLink } from "@/components/ui/PlannerLaunchLink";
 import {
@@ -369,16 +369,16 @@ export function SiteHeader() {
   return (
     <>
       <header className={cn(siteHeaderBaseClass, scrolled ? siteHeaderScrolledClass : "shadow-none")} suppressHydrationWarning>
-        <div className="shell-container-wide" suppressHydrationWarning>
-          <div className="flex h-16 items-center justify-between gap-3">
+        <div className="shell-container-wide min-w-0" suppressHydrationWarning>
+          <div className="flex h-16 min-w-0 items-center justify-between gap-2 sm:gap-3">
 
             {/* Logo */}
             <Link
               href="/"
               aria-label="One&Only - home"
-              className="inline-flex h-full shrink-0 items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="inline-flex h-full min-w-0 shrink-0 items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
-              <OneAndOnlyLogo className="h-7.5 md:h-8.5 xl:h-9" variant="orange" />
+              <OneAndOnlyLogo className="h-7.5 max-w-[9.5rem] md:h-8.5 md:max-w-none xl:h-9" variant="orange" />
             </Link>
 
             {/* Center nav — desktop only */}
@@ -543,10 +543,10 @@ export function SiteHeader() {
             </nav>
 
             {/* Right CTAs */}
-            <div className="flex h-full shrink-0 items-center gap-1.5">
+            <div className="flex h-full min-w-0 shrink-0 items-center gap-1 sm:gap-1.5">
               <div
                 ref={searchPanelRef}
-                className="site-header__search relative"
+                className="site-header__search relative min-w-0"
                 onMouseEnter={closeMegaMenu}
               >
                 <form
@@ -652,15 +652,16 @@ export function SiteHeader() {
               </div>
 
               {/* Site-wide i18n: en · hi · fr · de · es (NEXT_LOCALE cookie) */}
-              <LanguageSwitcher variant="header" />
+              <LanguageSwitcher variant="header" className="min-w-0" />
 
-              {/* Hamburger — mobile only */}
+              {/* Hamburger — mobile only; toggles clear open/close affordance */}
               <button
                 ref={hamburgerRef}
                 type="button"
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
                 aria-expanded={mobileOpen}
                 aria-controls="mobile-nav-drawer"
+                aria-haspopup="dialog"
                 onMouseDown={(event) => {
                   if (!mobileOpen) {
                     event.preventDefault();
@@ -675,9 +676,13 @@ export function SiteHeader() {
                     setMobileOpen(true);
                   });
                 }}
-                className="site-header__hamburger shell-icon-button h-11 w-11 items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="site-header__hamburger shell-icon-button inline-flex h-11 w-11 min-h-11 min-w-11 shrink-0 items-center justify-center touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                <List size={20} weight="bold" aria-hidden="true" />
+                {mobileOpen ? (
+                  <X size={20} weight="bold" aria-hidden="true" />
+                ) : (
+                  <List size={20} weight="bold" aria-hidden="true" />
+                )}
               </button>
             </div>
           </div>
