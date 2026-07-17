@@ -77,7 +77,9 @@ jobs:
         working-directory: .
 
       - name: Site UI E2E (wave 1 + 2)
-        run: pnpm --filter oando-site run test:site-ui 2>&1 | tee site/results/site-ui-e2e.log
+        run: |
+          mkdir -p results/site
+          pnpm --filter oando-site run test:site-ui 2>&1 | tee results/site/site-ui-e2e.log
         working-directory: .
         env:
           CI: "true"
@@ -87,5 +89,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: site-ui-e2e-log
-          path: site/results/site-ui-e2e.log
+          path: results/site/site-ui-e2e.log
           if-no-files-found: ignore

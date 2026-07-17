@@ -39,7 +39,9 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           PRODUCTS_DATABASE_URL: ${{ secrets.PRODUCTS_DATABASE_URL }}
-        run: pnpm run release:gate 2>&1 | tee site/results/phase10-release-gate.log
+        run: |
+          mkdir -p results/tooling
+          pnpm run release:gate 2>&1 | tee results/tooling/phase10-release-gate.log
 
       - name: Upload gate logs on failure
         if: failure()
@@ -47,6 +49,6 @@ jobs:
         with:
           name: release-gate-logs
           path: |
-            site/results/phase10-release-gate.log
-            site/results/phase*.log
+            results/tooling/phase10-release-gate.log
+            results/tooling/phase*.log
           if-no-files-found: ignore
