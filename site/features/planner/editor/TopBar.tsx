@@ -429,33 +429,37 @@ export function TopBar({
               </MenuTrigger>
             )}
 
-            <MenuTrigger>
-              <Button
-                className={`${styles.btn} ${styles.desktopOnly}`}
-                aria-label={`Display unit: ${displayUnit}`}
-              >
-                {displayUnit}
-                <CaretDown size={12} weight="bold" aria-hidden />
-              </Button>
-              <PlannerMenuPopover placement="bottom start">
-                <Menu
-                  className={styles.dropdownMenu}
-                  selectionMode="single"
-                  selectedKeys={[displayUnit]}
-                  onAction={(key) => onDisplayUnitChange?.(key as PlannerDisplayUnit)}
+            {/* Guest chrome diet: hide display-unit control (mm remains document default). */}
+            {showPowerChrome ? (
+              <MenuTrigger>
+                <Button
+                  className={`${styles.btn} ${styles.desktopOnly}`}
+                  aria-label={`Display unit: ${displayUnit}`}
+                  data-testid="planner-display-unit"
                 >
-                  {unitOptions.map((unit) => (
-                    <MenuItem
-                      key={unit}
-                      id={unit}
-                      className={styles.dropdownItem}
-                    >
-                      {unit}
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </PlannerMenuPopover>
-            </MenuTrigger>
+                  {displayUnit}
+                  <CaretDown size={12} weight="bold" aria-hidden />
+                </Button>
+                <PlannerMenuPopover placement="bottom start">
+                  <Menu
+                    className={styles.dropdownMenu}
+                    selectionMode="single"
+                    selectedKeys={[displayUnit]}
+                    onAction={(key) => onDisplayUnitChange?.(key as PlannerDisplayUnit)}
+                  >
+                    {unitOptions.map((unit) => (
+                      <MenuItem
+                        key={unit}
+                        id={unit}
+                        className={styles.dropdownItem}
+                      >
+                        {unit}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </PlannerMenuPopover>
+              </MenuTrigger>
+            ) : null}
           </div>,
         )}
       </div>
@@ -672,7 +676,8 @@ export function TopBar({
                       if (id.startsWith("export:")) onExport?.(id.slice("export:".length));
                     }}
                   >
-                    {onImport ? (
+                    {/* Members only — guests keep Help + BOQ-ish exports without import chrome. */}
+                    {onImport && showPowerChrome ? (
                       <MenuItem id="import" className={styles.dropdownItem}>
                         Import plan
                       </MenuItem>
@@ -720,7 +725,7 @@ export function TopBar({
               </MenuTrigger>
             ) : (
               <>
-            {onImport ? (
+            {onImport && showPowerChrome ? (
               <Button
                 className={styles.btn}
                 aria-label="Import Planner JSON file"

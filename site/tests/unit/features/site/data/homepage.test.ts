@@ -3,6 +3,7 @@ import {
   HOMEPAGE_HERO_CONTENT,
   HOMEPAGE_HERO_IMAGES,
   HOMEPAGE_COLLECTIONS_CONTENT,
+  HOMEPAGE_PLANNER_SUITE_CONTENT,
   HOMEPAGE_SHOWCASE_CONTENT,
   HOMEPAGE_PARTNERSHIP_CONTENT,
   HOMEPAGE_CONTACT_CONTENT,
@@ -18,6 +19,14 @@ describe("homepage data", () => {
     );
     expect(HOMEPAGE_HERO_CONTENT.primaryCta.label).toMatch(/layout/i);
     expect(HOMEPAGE_HERO_CONTENT.secondaryCta.href).toBe("/products");
+  });
+
+  it("planner suite launch CTA is guest chooser (not bare /planner overview)", () => {
+    expect(HOMEPAGE_PLANNER_SUITE_CONTENT.launchHref).toBe(
+      "/choose-product?mode=guest",
+    );
+    expect(HOMEPAGE_PLANNER_SUITE_CONTENT.overviewHref).toBe("/planner");
+    expect(HOMEPAGE_PLANNER_SUITE_CONTENT.launchLabel).toMatch(/launch planner/i);
   });
 
   it("hero glass proof links to trusted-by with badge and narrative copy", () => {

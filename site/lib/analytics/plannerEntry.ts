@@ -122,3 +122,45 @@ export function buildGuestPlannerEntryHref(
   const qs = params.toString();
   return `/choose-product/?${qs}`;
 }
+
+/** Non-empty siteProduct from inbound planner entry params. */
+export function readPlannerEntrySiteProduct(
+  searchParams: PlannerEntrySearchParams,
+): string | undefined {
+  const raw = searchParams.siteProduct;
+  if (typeof raw === "string" && raw.trim().length > 0) {
+    return raw.trim();
+  }
+  return undefined;
+}
+
+/**
+ * Humanize a siteProduct slug for guest continuity copy
+ * (`super-chair-001` → `Super Chair`).
+ */
+export function humanizeSiteProductSlug(slug: string): string {
+  const trimmed = slug.trim();
+  if (!trimmed) return "product";
+
+  const withoutSerial = trimmed.replace(/-\d{2,}$/i, "");
+  const spaced = withoutSerial
+    .replace(/[-_]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!spaced) return "product";
+
+  return spaced
+    .split(" ")
+    .map((word) => {
+      if (/^v\d+/i.test(word)) return word.toUpperCase();
+      if (word.length <= 2 && word === word.toUpperCase()) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    })
+    .join(" ");
+}
+
+/** Non-blocking guest banner/toast copy when Site stamped a product. */
+export function formatSiteProductContinuityMessage(productSlug: string): string {
+  return `Designing with ${humanizeSiteProductSlug(productSlug)}`;
+}

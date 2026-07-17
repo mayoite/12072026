@@ -16,7 +16,8 @@ const features = [
     icon: ShieldCheck,
     iconClass: "home-feature-icon--bronze",
     title: "Enterprise durability",
-    tagline: "BIFMA · 5-year warranty",
+    // Product-level honesty: BIFMA/warranty vary by model — not a universal claim.
+    tagline: "Specs & warranty by model",
   },
   {
     icon: Plant,

@@ -45,7 +45,7 @@ describe('TrustStrip Component', () => {
     expect(screen.getByText('Projects completed')).toBeInTheDocument();
 
     expect(screen.getByTestId('kpi-client-organisations')).toHaveTextContent('Value: 120');
-    expect(screen.getByText('Corporate clients')).toBeInTheDocument();
+    expect(screen.getByText('Selected organisations')).toBeInTheDocument();
 
     expect(screen.getByTestId('kpi-locations-served')).toHaveTextContent('Value: 15');
     expect(screen.getByText('Locations serviced')).toBeInTheDocument();

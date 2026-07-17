@@ -5,8 +5,11 @@ import {
   buildGuestPlannerEntryHref,
   buildPlannerEntryCampaign,
   buildPlannerEntryHref,
+  formatSiteProductContinuityMessage,
+  humanizeSiteProductSlug,
   isPlannerEntryHref,
   pickPlannerEntrySearchParams,
+  readPlannerEntrySiteProduct,
 } from "@/lib/analytics/plannerEntry";
 
 describe("plannerEntry", () => {
@@ -116,5 +119,22 @@ describe("plannerEntry", () => {
     expect(withParams).toContain("mode=guest");
     expect(withParams).toContain("siteProduct=desk");
     expect(withParams).toContain("siteSource=%2Fchoose-product");
+  });
+
+  it("reads siteProduct for guest continuity banner", () => {
+    expect(readPlannerEntrySiteProduct({ siteProduct: "super-chair" })).toBe(
+      "super-chair",
+    );
+    expect(readPlannerEntrySiteProduct({ siteProduct: "  " })).toBeUndefined();
+    expect(readPlannerEntrySiteProduct({ siteProduct: ["a", "b"] })).toBeUndefined();
+    expect(readPlannerEntrySiteProduct({})).toBeUndefined();
+  });
+
+  it("humanizes siteProduct slug and formats Designing with message", () => {
+    expect(humanizeSiteProductSlug("super-chair-001")).toBe("Super Chair");
+    expect(humanizeSiteProductSlug("fluid-x")).toBe("Fluid X");
+    expect(formatSiteProductContinuityMessage("super-chair")).toBe(
+      "Designing with Super Chair",
+    );
   });
 });

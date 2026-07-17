@@ -9,8 +9,14 @@
  */
 
 import type { PdfBoqRow, PdfExportOptions } from "./pdfExport";
-import { exportBoqToPdf } from "./pdfExport";
+import {
+  exportBoqToPdf,
+  PDF_DEMO_COMMERCIAL_DISCLAIMER,
+} from "./pdfExport";
 import type { ExportLayout } from "./types";
+
+/** Footer honesty line for demo-list commercial exports. */
+export const BRANDED_PDF_DEMO_DISCLAIMER = PDF_DEMO_COMMERCIAL_DISCLAIMER;
 
 export type BrandedExportOptions = {
   /** Project/layout metadata */
@@ -25,6 +31,16 @@ export type BrandedExportOptions = {
   fileName?: string;
   /** Include cover page with project summary */
   includeCoverPage?: boolean;
+  /**
+   * When true (default), PDF footer states demo-list commercial honesty.
+   * Current BOQ authority is demo-list-partial until live pricing exists.
+   */
+  demoPricing?: boolean;
+  /**
+   * Optional grand total INR from priced demo lines only.
+   * Omit when unknown — never invent totals.
+   */
+  grandTotalInr?: number;
 };
 
 /**
@@ -40,6 +56,8 @@ export async function exportBrandedPdf(options: BrandedExportOptions): Promise<v
     brandName = "One&Only",
     fileName,
     includeCoverPage: _includeCoverPage,
+    demoPricing = true,
+    grandTotalInr,
   } = options;
 
   // Enrich layout with brand context
@@ -63,6 +81,8 @@ export async function exportBrandedPdf(options: BrandedExportOptions): Promise<v
     rows,
     canvasElement,
     fileName: exportFileName,
+    demoPricing,
+    grandTotalInr,
   };
 
   await exportBoqToPdf(pdfOptions);
@@ -75,7 +95,12 @@ export async function exportBrandedPdf(options: BrandedExportOptions): Promise<v
 export async function exportBoqOnly(
   projectName: string,
   rows: PdfBoqRow[],
-  opts?: { clientName?: string; brandName?: string },
+  opts?: {
+    clientName?: string;
+    brandName?: string;
+    demoPricing?: boolean;
+    grandTotalInr?: number;
+  },
 ): Promise<void> {
   const layout: ExportLayout = {
     projectName,
@@ -90,5 +115,7 @@ export async function exportBoqOnly(
     layout,
     rows,
     brandName: opts?.brandName ?? "One&Only",
+    demoPricing: opts?.demoPricing ?? true,
+    grandTotalInr: opts?.grandTotalInr,
   });
 }

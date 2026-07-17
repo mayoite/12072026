@@ -24,8 +24,30 @@ export type MakerPathsResult = {
   readonly viewBox: { readonly x: number; readonly y: number; readonly width: number; readonly height: number };
 };
 
-function pathDataFromModel(model: makerjs.IModel): string {
-  const output = makerjs.exporter.toSVGPathData(model, { origin: [0, 0] });
+type PlanViewBox = {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+};
+
+/**
+ * Maker Y-up → SVG plan Y-down for a shared viewBox.
+ * `origin` is the Maker point that maps to SVG (0,0). Use viewBox top-left in
+ * plan space: X = viewBox.x, Y_maker = viewBox.y + viewBox.height so after the
+ * exporter's Y mirror all path Y land in [0, height] (not negative).
+ * Multipath parts must share this origin so sub-models stay aligned.
+ *
+ * Maker docs: origin [0,0] yields negative SVG Y; default is [0, topmostY].
+ */
+function svgExportOrigin(viewBox: PlanViewBox): [number, number] {
+  return [-viewBox.x, viewBox.y + viewBox.height];
+}
+
+function pathDataFromModel(model: makerjs.IModel, viewBox: PlanViewBox): string {
+  const output = makerjs.exporter.toSVGPathData(model, {
+    origin: svgExportOrigin(viewBox),
+  });
   const dPath =
     typeof output === "string"
       ? output
@@ -42,7 +64,7 @@ export function compileMakerRecipeToPaths(recipe: MakerRecipe): MakerPathsResult
 
   if (model.models) {
     for (const [id, sub] of Object.entries(model.models)) {
-      const dPath = pathDataFromModel(sub);
+      const dPath = pathDataFromModel(sub, viewBox);
       if (dPath.length > 0) {
         parts.push({ id, dPath });
       }
@@ -50,7 +72,7 @@ export function compileMakerRecipeToPaths(recipe: MakerRecipe): MakerPathsResult
   }
 
   if (parts.length === 0) {
-    const dPath = pathDataFromModel(model);
+    const dPath = pathDataFromModel(model, viewBox);
     if (!dPath) {
       throw new Error(`maker recipe "${recipe.recipe}" produced empty path data`);
     }

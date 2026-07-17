@@ -3,7 +3,11 @@ import { render, screen } from '@testing-library/react';
 import { InteractiveTools } from '@/components/home/InteractiveTools';
 
 vi.mock('@/features/planner/landing/PlannerToolsShowcase', () => ({
-  PlannerToolsShowcase: (props: any) => (
+  PlannerToolsShowcase: (props: {
+    title: { lead: string; accent: string };
+    kicker: string;
+    primaryCta: { label: string; href: string };
+  }) => (
     <div data-testid="mock-tools-showcase">
       <span>Title: {props.title.lead} - {props.title.accent}</span>
       <span>Kicker: {props.kicker}</span>
@@ -20,5 +24,12 @@ describe('InteractiveTools Component', () => {
     expect(screen.getByText('Title: Design your - workspace')).toBeInTheDocument();
     expect(screen.getByText('Kicker: Workspace planning')).toBeInTheDocument();
     expect(screen.getByText(/Launch planner/)).toBeInTheDocument();
+  });
+
+  it('Launch planner CTA targets guest chooser entry (not bare /planner overview)', () => {
+    render(<InteractiveTools />);
+    expect(
+      screen.getByText('CTA: Launch planner (/choose-product?mode=guest)'),
+    ).toBeInTheDocument();
   });
 });

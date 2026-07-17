@@ -12,8 +12,8 @@ export function InteractiveTools() {
       title={{ lead: "Design your ", accent: "workspace" }}
       description="True-scale floor plans with catalog furniture, zones, and dimensions — export layouts before you quote."
       primaryCta={{
-        label: "Launch planner",
-        href: HOMEPAGE_PLANNER_SUITE_CONTENT.overviewHref,
+        label: HOMEPAGE_PLANNER_SUITE_CONTENT.launchLabel,
+        href: HOMEPAGE_PLANNER_SUITE_CONTENT.launchHref,
       }}
       demoHref="/planner/"
       demoTestId="home-tools-floorplan"

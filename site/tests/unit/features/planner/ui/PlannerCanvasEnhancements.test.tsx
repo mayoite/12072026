@@ -1,4 +1,4 @@
-import { cleanup, render } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { PlannerCanvasEnhancements } from "@/features/planner/ui/PlannerCanvasEnhancements";
 
@@ -18,6 +18,12 @@ vi.mock("@/features/planner/onboarding/OnboardingCoach", () => ({
   ),
 }));
 
+vi.mock("@/features/planner/ui/SiteProductContinuityNotice", () => ({
+  SiteProductContinuityNotice: () => (
+    <div data-testid="site-product-continuity-banner">Designing with Super Chair</div>
+  ),
+}));
+
 describe("PlannerCanvasEnhancements", () => {
   afterEach(() => cleanup());
 
@@ -33,5 +39,14 @@ describe("PlannerCanvasEnhancements", () => {
     expect(getByTestId("onboarding-coach").getAttribute("data-planner-type")).toBe(
       "planner-guest",
     );
+  });
+
+  it("mounts siteProduct continuity notice only in guest mode", () => {
+    const { unmount } = render(<PlannerCanvasEnhancements />);
+    expect(screen.queryByTestId("site-product-continuity-banner")).toBeNull();
+    unmount();
+
+    render(<PlannerCanvasEnhancements guestMode />);
+    expect(screen.getByTestId("site-product-continuity-banner")).toBeInTheDocument();
   });
 });

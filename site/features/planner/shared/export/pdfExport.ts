@@ -21,7 +21,21 @@ export type PdfExportOptions = {
   fileName?: string;
   /** Optional branded output style preset */
   preset?: ExportPreset;
+  /**
+   * When true, footer includes the demo commercial disclaimer.
+   * Default false for raw callers; branded export opts in.
+   */
+  demoPricing?: boolean;
+  /**
+   * Optional grand total INR (priced demo list only).
+   * Omit when unknown — never invent totals.
+   */
+  grandTotalInr?: number;
 };
+
+/** Footer honesty line for demo-list commercial PDFs. */
+export const PDF_DEMO_COMMERCIAL_DISCLAIMER =
+  "Demo list / not an approved commercial quote";
 
 const BRAND_HEADER = "ONE&ONLY WORKSPACE PLANNER";
 const PAGE_MARGIN = 14;
@@ -55,7 +69,8 @@ async function captureCanvasDataUrl(
 }
 
 export async function exportBoqToPdf(options: PdfExportOptions): Promise<void> {
-  const { layout, rows, canvasElement, fileName } = options;
+  const { layout, rows, canvasElement, fileName, demoPricing = false, grandTotalInr } =
+    options;
 
   const canvasImageDataUrl = canvasElement
     ? await captureCanvasDataUrl(canvasElement)
@@ -207,6 +222,34 @@ export async function exportBoqToPdf(options: PdfExportOptions): Promise<void> {
     PAGE_MARGIN,
     y,
   );
+
+  if (typeof grandTotalInr === "number" && Number.isFinite(grandTotalInr)) {
+    y += 6;
+    if (y > pageHeight - PAGE_MARGIN) {
+      pdf.addPage();
+      y = PAGE_MARGIN;
+    }
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(9);
+    pdf.setTextColor(10, 20, 30);
+    pdf.text(
+      `Grand total (demo list): ₹${Math.round(grandTotalInr).toLocaleString("en-IN")}`,
+      PAGE_MARGIN,
+      y,
+    );
+  }
+
+  if (demoPricing) {
+    y += 7;
+    if (y > pageHeight - PAGE_MARGIN) {
+      pdf.addPage();
+      y = PAGE_MARGIN;
+    }
+    pdf.setFont("helvetica", "italic");
+    pdf.setFontSize(8);
+    pdf.setTextColor(100, 70, 20);
+    pdf.text(PDF_DEMO_COMMERCIAL_DISCLAIMER, PAGE_MARGIN, y);
+  }
 
   const outputFileName = fileName ?? buildFileName(layout);
   pdf.save(outputFileName);

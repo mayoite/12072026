@@ -97,8 +97,12 @@ export const HOMEPAGE_PLANNER_SUITE_CONTENT = {
   description: "Sketch a floor, place catalog furniture, and export a layout before you quote.",
   loginHref: "/login/?next=%2Fplanner%2Fcanvas%2F",
   loginLabel: "Member login",
+  /** Marketing overview (features / learn more). */
   overviewHref: "/planner",
   overviewLabel: "Learn more",
+  /** Guest entry contract — chooser, not bare /planner overview. */
+  launchHref: "/choose-product?mode=guest",
+  launchLabel: "Launch planner",
 } as const;
 
 export interface HomepageTrustContent {

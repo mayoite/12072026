@@ -62,4 +62,39 @@ describe("PlannerWorkflowBar", () => {
     expect(drawBtn.getAttribute("aria-label") ?? "").toMatch(/incomplete/i);
     expect(screen.queryByText("Incomplete")).not.toBeInTheDocument();
   });
+
+  it("guest chrome: short titles and no detail essays under steps", () => {
+    render(
+      <PlannerWorkflowBar
+        currentStep="draw"
+        onStepChange={vi.fn()}
+        accessContext="guest"
+        planMetrics={{
+          objects: 0,
+          walls: 0,
+          furniture: 0,
+          workstationSeats: 0,
+          floorLabel: "Ground",
+          boqReady: false,
+          validationErrors: 0,
+        }}
+      />,
+    );
+
+    const nav = screen.getByRole("navigation", { name: "Planner workflow" });
+    expect(nav).toHaveAttribute("data-guest-chrome", "true");
+
+    expect(screen.getByText("Draw")).toBeInTheDocument();
+    expect(screen.getByText("Place")).toBeInTheDocument();
+    expect(screen.getByText("Quote")).toBeInTheDocument();
+    // Long essays stay off the guest strip.
+    expect(screen.queryByText(/Walls, openings, measurements/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Choose and position furniture/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/Check dimensions, validate, generate quote/i),
+    ).not.toBeInTheDocument();
+
+    const drawBtn = screen.getByRole("button", { name: /1\.\s*Draw/i });
+    expect(drawBtn.getAttribute("aria-label") ?? "").not.toMatch(/Walls, openings/i);
+  });
 });

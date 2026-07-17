@@ -317,4 +317,79 @@ describe("InventoryPanel", () => {
       within(card as HTMLElement).getByText("Walnut / 160"),
     ).toBeInTheDocument();
   });
+
+  it("hides advanced filters until More filters is opened (first paint)", () => {
+    const deskA = sampleItem({
+      id: "desk-a",
+      sku: "DESK-A",
+      name: "Desk Alpha",
+      shortName: "Desk Alpha",
+      material: { marketingMaterial: "Oak", normalizedMaterial: "oak" },
+      availability: "in-stock",
+      dimensions: { widthMm: 900, depthMm: 700, heightMm: 750 },
+    });
+    const deskB = sampleItem({
+      id: "desk-b",
+      sku: "DESK-B",
+      name: "Desk Beta",
+      shortName: "Desk Beta",
+      material: { marketingMaterial: "Walnut", normalizedMaterial: "walnut" },
+      availability: "backorder",
+      dimensions: { widthMm: 1800, depthMm: 800, heightMm: 750 },
+    });
+
+    render(
+      <InventoryPanel
+        catalogItems={[deskA, deskB]}
+        catalogStatus="ready"
+        isLoading={false}
+        officeSystemsInventory
+      />,
+    );
+
+    const toggle = screen.getByTestId("inventory-more-filters-toggle");
+    expect(toggle).toBeInTheDocument();
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByTestId("inventory-advanced-filters")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Filter by material")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Filter by availability")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Filter by width")).not.toBeInTheDocument();
+
+    // Search + Place still present on first paint
+    expect(screen.getByLabelText("Search inventory by name or SKU")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Place — Add Desk Alpha to canvas/i }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    const advanced = screen.getByTestId("inventory-advanced-filters");
+    expect(advanced).toBeInTheDocument();
+    expect(within(advanced).getByLabelText("Filter by material")).toBeInTheDocument();
+    expect(within(advanced).getByLabelText("Filter by availability")).toBeInTheDocument();
+    expect(within(advanced).getByLabelText("Filter by width")).toBeInTheDocument();
+  });
+
+  it("hides empty category chips when catalog data is available", () => {
+    render(
+      <InventoryPanel
+        catalogItems={[
+          sampleItem({
+            category: "Furniture",
+            subCategory: "Desks & Workstations",
+          }),
+        ]}
+        catalogStatus="ready"
+        isLoading={false}
+        officeSystemsInventory
+      />,
+    );
+
+    const nav = screen.getByRole("navigation", { name: "Inventory categories" });
+    expect(within(nav).getByText("Furniture")).toBeInTheDocument();
+    // Office-systems taxonomy also lists Lighting + Symbols — both empty here
+    expect(within(nav).queryByText("Lighting")).not.toBeInTheDocument();
+    expect(within(nav).queryByText("Symbols")).not.toBeInTheDocument();
+    expect(within(nav).queryByText("Outdoor")).not.toBeInTheDocument();
+  });
 });

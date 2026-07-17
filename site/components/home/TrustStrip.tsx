@@ -24,7 +24,7 @@ export function TrustStrip({ stats, embedded = false }: TrustStripProps) {
     },
     {
       value: stats.clientOrganisations,
-      label: "Corporate clients",
+      label: "Selected organisations",
       testId: "kpi-client-organisations",
     },
     {

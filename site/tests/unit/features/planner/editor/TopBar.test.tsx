@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it, vi, afterEach } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { TopBar } from "@/features/planner/editor/TopBar";
 
@@ -100,6 +100,67 @@ describe("TopBar", () => {
     ).toBeInTheDocument();
     // Guest has no Import — persistence actions are member-only.
     expect(screen.queryByRole("button", { name: /Import/i })).toBeNull();
+  });
+
+  it("guest chrome diet: no display-unit control; Help stays available", () => {
+    render(
+      <TopBar
+        accessContext="guest"
+        projectName="Guest diet"
+        viewMode="2d"
+        chromeMode="slim"
+        displayUnit="cm"
+        onDisplayUnitChange={vi.fn()}
+        onImport={vi.fn()}
+        onExport={vi.fn()}
+        onToggleHelp={vi.fn()}
+        isHelpOpen={false}
+        onSave={vi.fn()}
+      />,
+    );
+
+    // Unit selector is member power chrome only.
+    expect(screen.queryByTestId("planner-display-unit")).toBeNull();
+    expect(screen.queryByRole("button", { name: /Display unit:/i })).toBeNull();
+
+    // Help remains for guests (phone + desktop toggles).
+    expect(screen.getByTestId("planner-toggle-help")).toBeInTheDocument();
+    expect(screen.getByTestId("planner-toggle-help-desktop")).toBeInTheDocument();
+
+    // More menu still present for BOQ-ish exports; Import not offered to guests.
+    expect(screen.getByTestId("planner-more-actions")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Import plan/i })).toBeNull();
+  });
+
+  it("guest More menu keeps Help and BOQ exports, hides Import plan", () => {
+    const onToggleHelp = vi.fn();
+    const onExport = vi.fn();
+    const onImport = vi.fn();
+
+    render(
+      <TopBar
+        accessContext="guest"
+        projectName="Guest more"
+        viewMode="2d"
+        chromeMode="slim"
+        onImport={onImport}
+        onExport={onExport}
+        onToggleHelp={onToggleHelp}
+        isHelpOpen={false}
+        onSave={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId("planner-more-actions"));
+
+    expect(screen.getByTestId("planner-more-help")).toHaveTextContent(/^Help$/i);
+    expect(screen.getByRole("menuitem", { name: /Export BOQ \(CSV\)/i })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: /Export plan \(JSON\)/i })).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: /Import plan/i })).toBeNull();
+    expect(onImport).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByTestId("planner-more-help"));
+    expect(onToggleHelp).toHaveBeenCalledTimes(1);
   });
 
   describe("UI-MOB phone chrome (two-row top + 44px targets)", () => {
@@ -232,10 +293,11 @@ describe("TopBar", () => {
       );
 
       const floorBtn = screen.getByRole("button", { name: /Active floor: Ground/i });
-      const unitBtn = screen.getByRole("button", { name: /Display unit: cm/i });
+      const unitBtn = screen.getByTestId("planner-display-unit");
       // desktopOnly class is applied so phone CSS can hide without removing a11y on desktop
       expect(floorBtn.className).toMatch(/desktopOnly/);
       expect(unitBtn.className).toMatch(/desktopOnly/);
+      expect(unitBtn).toHaveAttribute("aria-label", "Display unit: cm");
     });
 
     it("CSS enforces ≤112px top chrome budget, two-row areas, ≥44px targets", () => {

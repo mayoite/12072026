@@ -15,6 +15,16 @@ describe("TRUSTED_BY_STATS", () => {
       expect(stat.label.length).toBeGreaterThan(0);
     }
   });
+
+  it("does not claim a separate inflated corporate-client census", () => {
+    // Same 120+ floor as projects is fine only when labelled as selected orgs.
+    const orgStat = TRUSTED_BY_STATS.find((s) => /organisation/i.test(s.label));
+    expect(orgStat).toBeDefined();
+    expect(orgStat?.label).toMatch(/selected organisations/i);
+    expect(TRUSTED_BY_STATS.some((s) => /corporate clients/i.test(s.label))).toBe(
+      false,
+    );
+  });
 });
 
 describe("TRUSTED_BY_CLIENTS", () => {

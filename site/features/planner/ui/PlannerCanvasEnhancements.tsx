@@ -1,6 +1,9 @@
 "use client";
 
+import { Suspense } from "react";
+
 import { OnboardingCoach } from "@/features/planner/onboarding/OnboardingCoach";
+import { SiteProductContinuityNotice } from "@/features/planner/ui/SiteProductContinuityNotice";
 import { PLANNER_ONBOARDING_STEPS } from "../onboarding/steps";
 
 interface PlannerCanvasEnhancementsProps {
@@ -16,6 +19,11 @@ export function PlannerCanvasEnhancements({ guestMode = false }: PlannerCanvasEn
         plannerType={guestMode ? "planner-guest" : "planner"}
         steps={PLANNER_ONBOARDING_STEPS}
       />
+      {guestMode ? (
+        <Suspense fallback={null}>
+          <SiteProductContinuityNotice />
+        </Suspense>
+      ) : null}
     </>
   );
 }

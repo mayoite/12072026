@@ -9,7 +9,8 @@ import { CLIENT_LOGO_SRC_BY_NAME } from "@/features/site/data/clientLogos";
 export const TRUSTED_BY_STATS = [
   { value: "14+", label: "Years of experience" },
   { value: "120+", label: "Projects completed" },
-  { value: "120+", label: "Corporate clients" },
+  // Same floor as projects — not a separate client census. Label as selected orgs.
+  { value: "120+", label: "Selected organisations" },
   { value: "20+", label: "Locations serviced" },
 ] as const;
 

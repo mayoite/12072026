@@ -160,6 +160,8 @@ export const InventoryPanel = memo(function InventoryPanel({
   /** Compare shortlist (PF-22) — local selection, max PLANNER_CATALOG_COMPARE_MAX */
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [compareOpen, setCompareOpen] = useState(false);
+  /** Advanced attribute filters stay collapsed on first paint (guest / office-systems). */
+  const [moreFiltersExpanded, setMoreFiltersExpanded] = useState(false);
 
   const indexedItems = useMemo(() => {
     const raw: PlannerCatalogItem[] = (() => {
@@ -413,6 +415,39 @@ export const InventoryPanel = memo(function InventoryPanel({
     if (widths.length < 2) return false;
     return Math.max(...widths) - Math.min(...widths) >= 200;
   }, [indexedItems]);
+
+  const hasAdvancedFilters =
+    materialOptions.length > 1
+    || availabilityOptions.length > 1
+    || seatOptions.length > 0
+    || hasDimSpread;
+
+  /** Per-category counts from loaded catalog — hide empty chips when data is available. */
+  const categoryItemCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const category of categories) {
+      let n = 0;
+      for (const item of indexedItems) {
+        if (item.category === category.catalogCategory) n += 1;
+      }
+      counts.set(category.id, n);
+    }
+    return counts;
+  }, [categories, indexedItems]);
+
+  const visibleCategories = useMemo(() => {
+    // No catalog yet: keep full taxonomy so chrome does not flash empty.
+    if (indexedItems.length === 0) return categories;
+    return categories.filter((category) => {
+      const count = categoryItemCounts.get(category.id) ?? 0;
+      return count > 0 || category.id === state.selectedCategoryId;
+    });
+  }, [
+    categories,
+    categoryItemCounts,
+    indexedItems.length,
+    state.selectedCategoryId,
+  ]);
 
   // Fuse + displayed computed early for keyboard closure order (TS block scope)
   // GS: Fuse local rank, RAC a11y.
@@ -712,15 +747,33 @@ export const InventoryPanel = memo(function InventoryPanel({
         </div>
       ) : null}
 
-      {/* PF-22: material / availability / seats / dims when data exists */}
-      {(materialOptions.length > 1
-        || availabilityOptions.length > 1
-        || seatOptions.length > 0
-        || hasDimSpread) && (
+      {/* Advanced filters (material / availability / seats / width) — collapsed on first paint */}
+      {hasAdvancedFilters ? (
+        <div className={styles.sectionHeader}>
+          <button
+            type="button"
+            className={styles.sectionToggle}
+            data-testid="inventory-more-filters-toggle"
+            aria-expanded={moreFiltersExpanded ? "true" : "false"}
+            aria-controls={`inventory-advanced-filters-${id.replace(/:/g, "")}`}
+            onClick={() => setMoreFiltersExpanded((open) => !open)}
+          >
+            <span className={styles.sectionTitle}>More filters</span>
+            <span
+              className={`${styles.chevron} ${moreFiltersExpanded ? styles.chevronOpen : ""}`}
+            >
+              <ChevronIcon />
+            </span>
+          </button>
+        </div>
+      ) : null}
+      {hasAdvancedFilters && moreFiltersExpanded ? (
         <div
+          id={`inventory-advanced-filters-${id.replace(/:/g, "")}`}
           className={styles.quickFilters}
           role="group"
           aria-label="Catalog attribute filters"
+          data-testid="inventory-advanced-filters"
         >
           {materialOptions.length > 1 ? (
             <label className={styles.filterChip}>
@@ -795,7 +848,7 @@ export const InventoryPanel = memo(function InventoryPanel({
             </label>
           ) : null}
         </div>
-      )}
+      ) : null}
 
       {/* Categories */}
       <div className={styles.categoriesSection}>
@@ -814,8 +867,13 @@ export const InventoryPanel = memo(function InventoryPanel({
         </div>
 
         <nav className={styles.categoryList} aria-label="Inventory categories">
-          {categories.map((category) => (
-            <div key={category.id} className={styles.categoryItem}>
+          {visibleCategories.map((category) => (
+            <div
+              key={category.id}
+              className={styles.categoryItem}
+              data-category-id={category.id}
+              data-category-count={categoryItemCounts.get(category.id) ?? 0}
+            >
               <button
                 type="button"
                 className={`${styles.categoryButton} ${state.selectedCategoryId === category.id ? styles.categoryButtonActive : ""}`}

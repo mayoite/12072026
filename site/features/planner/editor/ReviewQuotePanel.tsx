@@ -21,6 +21,17 @@ export type HandoffSendOptions = {
   confirmDemoPricing: true;
 };
 
+/** Compact BOQ preview line for the Review panel (no invented prices). */
+export type ReviewBoqLinePreview = {
+  name: string;
+  quantity: number;
+  /** Honesty label only — e.g. "demo list" or "unpriced". */
+  unitNote: string;
+};
+
+const DEFAULT_PRICING_MODE = "demo-list-partial";
+const MAX_PREVIEW_LINES = 8;
+
 type ReviewQuotePanelProps = {
   validation: ValidationResult;
   furnitureCount: number;
@@ -29,6 +40,18 @@ type ReviewQuotePanelProps = {
   guestMode: boolean;
   handoffBusy: boolean;
   lastHandoffReference?: string | null;
+  /**
+   * Commercial pricing mode label. Defaults to demo-list-partial
+   * (current authority until live pricing exists).
+   */
+  pricingMode?: string;
+  /** Count of furniture items without a unit price. Defaults to 0. */
+  unpricedItemCount?: number;
+  /**
+   * Optional BOQ line previews from the host. Empty by default so the panel
+   * stays self-contained; host may pass later without required wiring.
+   */
+  boqLines?: readonly ReviewBoqLinePreview[];
   onDownloadBoqCsv: () => void;
   onDownloadBoqPdf: () => void;
   onAddAllToQuote: () => void;
@@ -47,6 +70,19 @@ const emptyContact: HandoffContactDraft = {
   notes: "",
 };
 
+function formatPricingModeLabel(mode: string): string {
+  const normalized = mode.trim().toLowerCase();
+  if (
+    normalized === "demo" ||
+    normalized === "demo-list" ||
+    normalized === "demo-list-partial" ||
+    normalized.startsWith("demo")
+  ) {
+    return "Demo list";
+  }
+  return mode.trim() || "Demo list";
+}
+
 export function ReviewQuotePanel({
   validation,
   furnitureCount,
@@ -55,6 +91,9 @@ export function ReviewQuotePanel({
   guestMode,
   handoffBusy,
   lastHandoffReference,
+  pricingMode = DEFAULT_PRICING_MODE,
+  unpricedItemCount = 0,
+  boqLines = [],
   onDownloadBoqCsv,
   onDownloadBoqPdf,
   onAddAllToQuote,
@@ -75,6 +114,11 @@ export function ReviewQuotePanel({
     confirmDemoPricing &&
     contact.name.trim().length > 0 &&
     (contact.email.trim().length > 0 || contact.phone.trim().length > 0);
+
+  const pricingModeLabel = formatPricingModeLabel(pricingMode);
+  const previewLines = boqLines.slice(0, MAX_PREVIEW_LINES);
+  const hiddenLineCount = Math.max(0, boqLines.length - previewLines.length);
+  const showUnpricedNote = unpricedItemCount > 0;
 
   return (
     <section className={styles.panel} aria-label="Review and quote">
@@ -98,24 +142,59 @@ export function ReviewQuotePanel({
       </header>
 
       <div className={styles.content}>
-        <dl className={styles.metrics}>
+        <dl className={styles.metrics} data-testid="review-quote-summary">
           <div>
             <dt>Furniture</dt>
-            <dd>{furnitureCount}</dd>
+            <dd data-testid="review-furniture-count">{furnitureCount}</dd>
           </div>
           <div>
             <dt>Workstation seats</dt>
-            <dd>{workstationSeats}</dd>
+            <dd data-testid="review-seat-count">{workstationSeats}</dd>
           </div>
           <div>
-            <dt>Checks</dt>
-            <dd>
-              {validation.issues.length === 0
-                ? "Clear"
-                : `${validation.issues.length} issue${validation.issues.length === 1 ? "" : "s"}`}
-            </dd>
+            <dt>Pricing mode</dt>
+            <dd data-testid="review-pricing-mode">{pricingModeLabel}</dd>
           </div>
         </dl>
+
+        {showUnpricedNote ? (
+          <p
+            className={styles.unpricedNote}
+            role="status"
+            data-testid="review-unpriced-note"
+          >
+            {unpricedItemCount} item{unpricedItemCount === 1 ? "" : "s"} unpriced
+            — quantity and footprint only (no fabricated prices).
+          </p>
+        ) : null}
+
+        {previewLines.length > 0 ? (
+          <div className={styles.boqPreview} data-testid="review-boq-lines">
+            <h3 className={styles.boqPreviewTitle}>BOQ preview</h3>
+            <ul className={styles.boqLineList}>
+              {previewLines.map((line, index) => (
+                <li
+                  key={`${line.name}-${line.quantity}-${line.unitNote}-${index}`}
+                  className={styles.boqLine}
+                >
+                  <span className={styles.boqLineName}>{line.name}</span>
+                  <span className={styles.boqLineMeta}>
+                    ×{line.quantity}
+                    <span className={styles.boqLineNote} aria-label="Unit note">
+                      {line.unitNote}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            {hiddenLineCount > 0 ? (
+              <p className={styles.boqMore} data-testid="review-boq-more">
+                +{hiddenLineCount} more line{hiddenLineCount === 1 ? "" : "s"} in
+                full BOQ export
+              </p>
+            ) : null}
+          </div>
+        ) : null}
 
         <ValidationPanel result={validation} onFocusIssue={onFocusIssue} />
 
@@ -128,17 +207,19 @@ export function ReviewQuotePanel({
             type="button"
             className={styles.primaryAction}
             disabled={!canExportBoq}
-            onClick={onDownloadBoqCsv}
+            onClick={onDownloadBoqPdf}
+            data-testid="review-download-pdf"
           >
-            Download BOQ CSV
+            Download branded BOQ PDF
           </button>
           <button
             type="button"
             className={styles.secondaryAction}
             disabled={!canExportBoq}
-            onClick={onDownloadBoqPdf}
+            onClick={onDownloadBoqCsv}
+            data-testid="review-download-csv"
           >
-            Download branded BOQ PDF
+            Download BOQ CSV
           </button>
           <button
             type="button"

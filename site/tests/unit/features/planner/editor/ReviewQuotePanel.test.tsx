@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import type { ComponentProps } from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ReviewQuotePanel } from "@/features/planner/editor/ReviewQuotePanel";
 import type { ValidationResult } from "@/features/planner/lib/validation/runValidation";
@@ -170,6 +170,95 @@ describe("ReviewQuotePanel", () => {
     expect(
       screen.getByRole("note"),
     ).toHaveTextContent(/demo list prices only/i);
+  });
+
+  it("shows furniture, seats, and demo pricing mode in the summary", () => {
+    renderPanel({
+      furnitureCount: 7,
+      workstationSeats: 5,
+      pricingMode: "demo-list-partial",
+    });
+    const summary = screen.getByTestId("review-quote-summary");
+    expect(within(summary).getByTestId("review-furniture-count")).toHaveTextContent(
+      "7",
+    );
+    expect(within(summary).getByTestId("review-seat-count")).toHaveTextContent(
+      "5",
+    );
+    expect(within(summary).getByTestId("review-pricing-mode")).toHaveTextContent(
+      "Demo list",
+    );
+  });
+
+  it("defaults pricing mode to Demo list when host omits pricingMode", () => {
+    renderPanel();
+    expect(screen.getByTestId("review-pricing-mode")).toHaveTextContent(
+      "Demo list",
+    );
+  });
+
+  it("shows unpriced honesty note only when unpriced items exist", () => {
+    const { rerender } = renderPanel({ unpricedItemCount: 0 });
+    expect(screen.queryByTestId("review-unpriced-note")).toBeNull();
+
+    rerender(
+      <ReviewQuotePanel
+        validation={clearValidation}
+        furnitureCount={4}
+        workstationSeats={2}
+        pricingNote="Demo list prices only — not approved commercial quotes."
+        guestMode={false}
+        handoffBusy={false}
+        unpricedItemCount={3}
+        onDownloadBoqCsv={vi.fn()}
+        onDownloadBoqPdf={vi.fn()}
+        onAddAllToQuote={vi.fn()}
+        onSendToOando={vi.fn()}
+      />,
+    );
+    expect(screen.getByTestId("review-unpriced-note")).toHaveTextContent(
+      /3 items unpriced/i,
+    );
+    expect(screen.getByTestId("review-unpriced-note")).toHaveTextContent(
+      /no fabricated prices/i,
+    );
+  });
+
+  it("lists up to 8 BOQ preview lines and reports overflow", () => {
+    const lines = Array.from({ length: 10 }, (_, i) => ({
+      name: `Item ${i + 1}`,
+      quantity: i + 1,
+      unitNote: i % 2 === 0 ? "demo list" : "unpriced",
+    }));
+    renderPanel({ boqLines: lines });
+
+    const preview = screen.getByTestId("review-boq-lines");
+    const items = within(preview).getAllByRole("listitem");
+    expect(items).toHaveLength(8);
+    expect(within(preview).getByText("Item 1")).toBeInTheDocument();
+    expect(within(preview).getByText("Item 8")).toBeInTheDocument();
+    expect(within(preview).queryByText("Item 9")).toBeNull();
+    expect(screen.getByTestId("review-boq-more")).toHaveTextContent(
+      /\+2 more lines/i,
+    );
+  });
+
+  it("omits BOQ preview when boqLines is empty (default)", () => {
+    renderPanel();
+    expect(screen.queryByTestId("review-boq-lines")).toBeNull();
+  });
+
+  it("makes branded PDF the primary action and CSV secondary", () => {
+    renderPanel({ guestMode: true });
+    const pdf = screen.getByTestId("review-download-pdf");
+    const csv = screen.getByTestId("review-download-csv");
+    expect(pdf.className).toMatch(/primaryAction/);
+    expect(csv.className).toMatch(/secondaryAction/);
+
+    // PDF appears before CSV in the action stack for guests.
+    expect(
+      pdf.compareDocumentPosition(csv) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
   });
 
   it("disables send while handoff is busy", async () => {

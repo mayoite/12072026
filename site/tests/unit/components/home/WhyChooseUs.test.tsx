@@ -1,53 +1,80 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { WhyChooseUs } from '@/components/home/WhyChooseUs';
-import { HOMEPAGE_WHY_CHOOSE_US_CONTENT } from '@/features/site/data/homepage';
+import { describe, it, expect, vi } from "vitest";
+import type { ReactNode } from "react";
+import { render, screen } from "@testing-library/react";
+import { WhyChooseUs } from "@/components/home/WhyChooseUs";
+import { HOMEPAGE_WHY_CHOOSE_US_CONTENT } from "@/features/site/data/homepage";
 
 // Mock phosphor icons
-vi.mock('@phosphor-icons/react', () => ({
+vi.mock("@phosphor-icons/react", () => ({
   Gauge: () => <span data-testid="gauge-icon" />,
   ShieldCheck: () => <span data-testid="shield-icon" />,
   Plant: () => <span data-testid="plant-icon" />,
-  Stack: () => <span data-testid="stack-icon" />
+  Stack: () => <span data-testid="stack-icon" />,
 }));
 
-// Mock framer-motion
-vi.mock('framer-motion', () => ({
+// Mock framer-motion — strip animation props; keep DOM props.
+vi.mock("framer-motion", () => ({
   motion: {
-    div: ({ children, initial: _initial, animate: _animate, variants: _variants, transition: _transition, whileInView: _whileInView, whileHover: _whileHover, viewport: _viewport, ...props }: any) => <div {...props}>{children}</div>
-  }
+    div: ({
+      children,
+      initial: _initial,
+      animate: _animate,
+      variants: _variants,
+      transition: _transition,
+      whileInView: _whileInView,
+      whileHover: _whileHover,
+      viewport: _viewport,
+      ...props
+    }: {
+      children?: ReactNode;
+      initial?: unknown;
+      animate?: unknown;
+      variants?: unknown;
+      transition?: unknown;
+      whileInView?: unknown;
+      whileHover?: unknown;
+      viewport?: unknown;
+      className?: string;
+      key?: string;
+    }) => <div {...props}>{children}</div>,
+  },
 }));
 
-vi.mock('@/lib/helpers/motion', () => ({
+vi.mock("@/lib/helpers/motion", () => ({
   fadeUp: () => ({}),
   hoverLift: {},
   staggerContainer: {},
-  staggerItem: {}
+  staggerItem: {},
 }));
 
-describe('WhyChooseUs Component', () => {
-  it('renders title and choose us features correctly', () => {
+describe("WhyChooseUs Component", () => {
+  it("renders title and choose us features correctly", () => {
     render(<WhyChooseUs />);
 
-    // Verify Title
-    expect(screen.getByText(HOMEPAGE_WHY_CHOOSE_US_CONTENT.titleLead)).toBeInTheDocument();
-    expect(screen.getByText(HOMEPAGE_WHY_CHOOSE_US_CONTENT.titleAccent)).toBeInTheDocument();
+    expect(
+      screen.getByText(HOMEPAGE_WHY_CHOOSE_US_CONTENT.titleLead),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(HOMEPAGE_WHY_CHOOSE_US_CONTENT.titleAccent),
+    ).toBeInTheDocument();
 
-    // Verify key features
-    expect(screen.getByText('Performance-graded')).toBeInTheDocument();
-    expect(screen.getByText('Load, cycle, ergonomics')).toBeInTheDocument();
-    expect(screen.getByTestId('gauge-icon')).toBeInTheDocument();
+    expect(screen.getByText("Performance-graded")).toBeInTheDocument();
+    expect(screen.getByText("Load, cycle, ergonomics")).toBeInTheDocument();
+    expect(screen.getByTestId("gauge-icon")).toBeInTheDocument();
 
-    expect(screen.getByText('Enterprise durability')).toBeInTheDocument();
-    expect(screen.getByText('BIFMA · 5-year warranty')).toBeInTheDocument();
-    expect(screen.getByTestId('shield-icon')).toBeInTheDocument();
+    expect(screen.getByText("Enterprise durability")).toBeInTheDocument();
+    // Product-level honesty — no universal BIFMA / 5-year warranty claim.
+    expect(screen.getByText("Specs & warranty by model")).toBeInTheDocument();
+    expect(screen.queryByText(/BIFMA/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/5-year warranty/i)).not.toBeInTheDocument();
+    expect(screen.getByTestId("shield-icon")).toBeInTheDocument();
 
-    expect(screen.getByText('Sustainable build')).toBeInTheDocument();
-    expect(screen.getByText('Low-emission materials')).toBeInTheDocument();
-    expect(screen.getByTestId('plant-icon')).toBeInTheDocument();
+    expect(screen.getByText("Sustainable build")).toBeInTheDocument();
+    expect(screen.getByText("Low-emission materials")).toBeInTheDocument();
+    expect(screen.getByTestId("plant-icon")).toBeInTheDocument();
 
-    expect(screen.getByText('Scales with you')).toBeInTheDocument();
-    expect(screen.getByText('Pilot to rollout')).toBeInTheDocument();
-    expect(screen.getByTestId('stack-icon')).toBeInTheDocument();
+    expect(screen.getByText("Scales with you")).toBeInTheDocument();
+    expect(screen.getByText("Pilot to rollout")).toBeInTheDocument();
+    expect(screen.getByTestId("stack-icon")).toBeInTheDocument();
   });
 });
