@@ -31,9 +31,17 @@ function walkFiles(repoRoot, relativeRoot, predicate, out = []) {
     if (!normalizeRepositoryInput(repoRoot, relativePath)) continue
 
     const abs = path.join(repoRoot, relativePath)
-    if (entry.isDirectory()) {
+    // Prefer real stat so symlinks/junctions to dirs never enter the file list
+    // (readFileSync on a directory throws EISDIR and breaks Vercel generate).
+    let stats
+    try {
+      stats = statSync(abs)
+    } catch {
+      continue
+    }
+    if (stats.isDirectory()) {
       walkFiles(repoRoot, relativePath, predicate, out)
-    } else if (predicate(relativePath, abs)) {
+    } else if (stats.isFile() && predicate(relativePath, abs)) {
       out.push(relativePath.replace(/\\/g, '/'))
     }
   }
@@ -266,7 +274,16 @@ export function extractRepoGraph({ repoRoot = defaultRepoRoot } = {}) {
   const sourceFileSet = new Set(sourceFiles)
 
   for (const relativePath of sourceFiles) {
-    const sourceText = readFileSync(path.join(repoRoot, relativePath), 'utf8')
+    const absPath = path.join(repoRoot, relativePath)
+    let sourceText
+    try {
+      const stats = statSync(absPath)
+      if (!stats.isFile()) continue
+      sourceText = readFileSync(absPath, 'utf8')
+    } catch {
+      // Skip unreadable / non-file paths (e.g. EISDIR on odd mounts).
+      continue
+    }
 
     addNode(nodes, nodeIds, {
       id: `file:${relativePath}`,
